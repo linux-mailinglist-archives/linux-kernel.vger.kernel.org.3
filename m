@@ -2,96 +2,383 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A3B9856722F
+	by mail.lfdr.de (Postfix) with ESMTP id 1426C56722D
 	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 17:11:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231208AbiGEPKr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Jul 2022 11:10:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36094 "EHLO
+        id S230030AbiGEPLY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Jul 2022 11:11:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36246 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231307AbiGEPKZ (ORCPT
+        with ESMTP id S230047AbiGEPLF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Jul 2022 11:10:25 -0400
-Received: from mail-yw1-f178.google.com (mail-yw1-f178.google.com [209.85.128.178])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C201186F9;
-        Tue,  5 Jul 2022 08:08:55 -0700 (PDT)
-Received: by mail-yw1-f178.google.com with SMTP id 00721157ae682-31cac89d8d6so42297817b3.2;
-        Tue, 05 Jul 2022 08:08:55 -0700 (PDT)
+        Tue, 5 Jul 2022 11:11:05 -0400
+Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36ED0CEF
+        for <linux-kernel@vger.kernel.org>; Tue,  5 Jul 2022 08:10:21 -0700 (PDT)
+Received: by mail-ej1-x636.google.com with SMTP id d2so22228367ejy.1
+        for <linux-kernel@vger.kernel.org>; Tue, 05 Jul 2022 08:10:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=dkpN1b4wP9gTZUtEgRoxQX0uUzfu9gESHo4XVBhNNPA=;
+        b=jtX3byuXyfc2mF/rBU1M4/i77Y3tRdz2XH46byqIsfIKKhOLkoBSf+LTlU7hrA6X2j
+         8iKu9cxdOL/P9b6KmRtmTaKvprIJ42mVGAdpNqhVtfAnpBOjqNtHWcfnTd9JOfMluq8V
+         3t1exD8XY3OfFVfq50fAeo620chL6sdXcvktq3qjgBgPHwRkEFXmlhFtILjfrXZ7fGPo
+         9FbxvE388pdW6PVWA7jDHcswPCzy/j0JPDhP/6OeXV7RewR9E/G+8J5C9H0gSaM3GiEl
+         K80kZ8LmV8wNAJbNoZM+6zll2pSiw1hlxn0S+ZFqHHULCmt4KZXnUHUeQRnKzYDsKYYQ
+         iG9Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=sPBaAYKtdBQqeaHLjJ6iAYafP3zFv94RDSHIBhViGdE=;
-        b=WNusVV39RST0pnQUXN8oz0TQdpmAlVCoFuQ2IevpA4OqbDlvWgnP0+e4FdejrvOKmS
-         mkf6XJ7lol1njA2uKujFxWw8CDTDiVuZ40km/g75KZn1Kev4JggYqXDP8RqEh+vIVbZx
-         9DWvFUBKgP4qJMoSBAe41j7xyK29kZy5jnzW9/jVz6F1orutBDk6licIsnMYCFluoQ1o
-         RTc7GfY/hDx2E8xUBFW7CwVl91O1cr4fGjcl+LICC6rX/2pOO+QPGkyQm1KQOJjOk1oD
-         CtlZfueqdSNsm+AO/zWDbZQNDjx/LRQPzQpeQgelyTwgC1tn762MdQSmWjQHQfBqO9tq
-         kMGg==
-X-Gm-Message-State: AJIora9RgvKMFaSt/0tAcjEpeuDf0F1TLYsAFBaGGFSj440pLCEomWxl
-        tQ+02Sk9CRQFqHV3IgdzU4p5JYwr4vVbZ57fZFhBPivi
-X-Google-Smtp-Source: AGRyM1tPco0HbPprtHcs7VOv2MFOAPaGUs3UnekDJDT23BYJYkgPuZCZv/mTPfaWpZ4Cqup4ZqKcQrWDBiM/TRCgInE=
-X-Received: by 2002:a0d:d8c8:0:b0:31c:92b1:5dec with SMTP id
- a191-20020a0dd8c8000000b0031c92b15decmr13840166ywe.19.1657033734398; Tue, 05
- Jul 2022 08:08:54 -0700 (PDT)
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=dkpN1b4wP9gTZUtEgRoxQX0uUzfu9gESHo4XVBhNNPA=;
+        b=4M6o90b91PcrZWo3AJOTnaCyp7rIgeMBMH9z3Wykc2/aLnVEsYr8hXbErEBG7IdLjT
+         AT9T6PXGfZgw3cTwOibBotoexO8mOX9bw5Ow31kQdBMA3b4a9a5Dd+8dAOH+aaPtJvbH
+         9buUfZuj7TRJHZCWieNaJn/IoSVX5l3JNcJHCdtasXvoNR8dqoboluin5rTkCIGaS5qu
+         8ZEkY5rq0De9ohf8ePbbEQadGj0+q2rcx57rS1ZfRFkE07v8L6r0GCtZ+BAE8BgJo7n3
+         n73IesdPOD1kloU+Eli+F68GVWBeV+g+h7o85pUDYE7sPs/sQOldg3PcsDYNC3qn/lMr
+         bk3g==
+X-Gm-Message-State: AJIora9XzVoqIDbt3/gxT2CvEYVlSLy3rhD590wUy9cBfFuDYDVqQ4S+
+        rXQk336Btdb3aju45kfEfefNrBrjFt9Ccfw0GBA=
+X-Google-Smtp-Source: AGRyM1t2xhRsfyqVg5935Rq05PnjacmxfFyEeFcbXVcIX7X+PnwWDRi5pnasbbuvQSDhCYj3EMsFY8eF4tcYWyJs1Sc=
+X-Received: by 2002:a17:906:5d0b:b0:726:a043:fcb4 with SMTP id
+ g11-20020a1709065d0b00b00726a043fcb4mr35047447ejt.508.1657033819797; Tue, 05
+ Jul 2022 08:10:19 -0700 (PDT)
 MIME-Version: 1.0
-References: <12026357.O9o76ZdvQC@kreacher> <2657553.mvXUDI8C0e@kreacher>
- <5606189.DvuYhMxLoT@kreacher> <e9666883-3285-36a6-6278-ace219b88f3c@huawei.com>
- <CAHp75Ve-Cm43HhqqxxfmKTbC_Gkx=0aAcj0jJmA=-Nr-NT1FqQ@mail.gmail.com>
- <CAHp75VdT1YZUQbdHupA2RmucUBSzypcPwKBgSa4=sVQAhC+Vsw@mail.gmail.com>
- <61fbd71b-9c36-345c-7aed-561b81c34259@huawei.com> <CAHp75VdxaBG8Sj3j7Wa7BrZOrn1j2eAtJMw0N8z255HwMSohYw@mail.gmail.com>
- <df8c0a5d-e950-1726-5d30-80dcc8b20ff9@huawei.com> <CAJZ5v0hv7nm57QrCYX+aX=fVoE0s0BxEpJfz+a8bsPzzSZt7+g@mail.gmail.com>
- <71dfc3cd-c2ae-8096-9280-67e77c21055e@huawei.com>
-In-Reply-To: <71dfc3cd-c2ae-8096-9280-67e77c21055e@huawei.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Tue, 5 Jul 2022 17:08:43 +0200
-Message-ID: <CAJZ5v0jZqHfZrObyZb=e3faZNrdq+3CMA75AgwgLcJhpj22sSw@mail.gmail.com>
-Subject: Re: [PATCH v3] hisi_lpc: Use acpi_dev_for_each_child()
-To:     John Garry <john.garry@huawei.com>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Linux ACPI <linux-acpi@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Yang Yingliang <yangyingliang@huawei.com>
+References: <20220704134532.103876-1-andrealmeid@igalia.com> <db6ab6f5-e3b1-f068-37ac-807e1ff074a8@amd.com>
+In-Reply-To: <db6ab6f5-e3b1-f068-37ac-807e1ff074a8@amd.com>
+From:   Alex Deucher <alexdeucher@gmail.com>
+Date:   Tue, 5 Jul 2022 11:10:07 -0400
+Message-ID: <CADnq5_O3i2ciutAFS-uzX8bedOXxeOJUNWGRfsuOqpmL-tW64w@mail.gmail.com>
+Subject: Re: [PATCH] drm/amdpgu/debugfs: Simplify some exit paths
+To:     =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>
+Cc:     =?UTF-8?Q?Andr=C3=A9_Almeida?= <andrealmeid@igalia.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Pan Xinhui <Xinhui.Pan@amd.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Hawking Zhang <Hawking.Zhang@amd.com>,
+        Tao Zhou <tao.zhou1@amd.com>,
+        Felix Kuehling <Felix.Kuehling@amd.com>,
+        Jack Xiao <Jack.Xiao@amd.com>,
+        amd-gfx list <amd-gfx@lists.freedesktop.org>,
+        Maling list - DRI developers 
+        <dri-devel@lists.freedesktop.org>,
+        LKML <linux-kernel@vger.kernel.org>, kernel-dev@igalia.com
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jul 5, 2022 at 10:37 AM John Garry <john.garry@huawei.com> wrote:
->
-> On 04/07/2022 20:02, Rafael J. Wysocki wrote:
->
-> Hi Rafael,
->
-> > I've applied the patch from Yang Yingliang and I thought it would be
-> > OK to add your ACK to it based on the conversation so far (please let
-> > me know if that's not the case).  Next, I've added my patch rebased on
-> > top of it with the tags from you and Greg.
-> >
-> > The result is on my bleeding-edge branch:
-> >
-> > https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git/log/?h=bleeding-edge
-> >
-> > and these are the commits in question
-> >
-> > https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git/commit/?h=bleeding-edge&id=d674553009afc9b24cab2bbec71628609edbbb27
-> > https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git/commit/?h=bleeding-edge&id=54872fea6a5ac967ec2272aea525d1438ac6735a
-> >
-> > Please let me know if you see any issues with them.
-> >
->
-> I gave these a quick test on my board and they look fine.
->
-> Acked-by: John Garry <john.garry@huawei.com>
+Applied.  Thanks!
 
-Thank you!
+On Mon, Jul 4, 2022 at 12:23 PM Christian K=C3=B6nig
+<christian.koenig@amd.com> wrote:
+>
+> Am 04.07.22 um 15:45 schrieb Andr=C3=A9 Almeida:
+> > To avoid code repetition, unify the function exit path when possible. N=
+o
+> > functional changes.
+> >
+> > Signed-off-by: Andr=C3=A9 Almeida <andrealmeid@igalia.com>
+>
+> Acked-by: Christian K=C3=B6nig <christian.koenig@amd.com>
+>
+> > ---
+> >   drivers/gpu/drm/amd/amdgpu/amdgpu_debugfs.c | 107 ++++++++-----------=
+-
+> >   1 file changed, 42 insertions(+), 65 deletions(-)
+> >
+> > diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_debugfs.c b/drivers/gpu/=
+drm/amd/amdgpu/amdgpu_debugfs.c
+> > index f3ac7912c29c..f3b3c688e4e7 100644
+> > --- a/drivers/gpu/drm/amd/amdgpu/amdgpu_debugfs.c
+> > +++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_debugfs.c
+> > @@ -383,12 +383,8 @@ static ssize_t amdgpu_debugfs_regs_pcie_read(struc=
+t file *f, char __user *buf,
+> >
+> >               value =3D RREG32_PCIE(*pos);
+> >               r =3D put_user(value, (uint32_t *)buf);
+> > -             if (r) {
+> > -                     pm_runtime_mark_last_busy(adev_to_drm(adev)->dev)=
+;
+> > -                     pm_runtime_put_autosuspend(adev_to_drm(adev)->dev=
+);
+> > -                     amdgpu_virt_disable_access_debugfs(adev);
+> > -                     return r;
+> > -             }
+> > +             if (r)
+> > +                     goto out;
+> >
+> >               result +=3D 4;
+> >               buf +=3D 4;
+> > @@ -396,11 +392,12 @@ static ssize_t amdgpu_debugfs_regs_pcie_read(stru=
+ct file *f, char __user *buf,
+> >               size -=3D 4;
+> >       }
+> >
+> > +     r =3D result;
+> > +out:
+> >       pm_runtime_mark_last_busy(adev_to_drm(adev)->dev);
+> >       pm_runtime_put_autosuspend(adev_to_drm(adev)->dev);
+> > -
+> >       amdgpu_virt_disable_access_debugfs(adev);
+> > -     return result;
+> > +     return r;
+> >   }
+> >
+> >   /**
+> > @@ -441,12 +438,8 @@ static ssize_t amdgpu_debugfs_regs_pcie_write(stru=
+ct file *f, const char __user
+> >               uint32_t value;
+> >
+> >               r =3D get_user(value, (uint32_t *)buf);
+> > -             if (r) {
+> > -                     pm_runtime_mark_last_busy(adev_to_drm(adev)->dev)=
+;
+> > -                     pm_runtime_put_autosuspend(adev_to_drm(adev)->dev=
+);
+> > -                     amdgpu_virt_disable_access_debugfs(adev);
+> > -                     return r;
+> > -             }
+> > +             if (r)
+> > +                     goto out;
+> >
+> >               WREG32_PCIE(*pos, value);
+> >
+> > @@ -456,11 +449,12 @@ static ssize_t amdgpu_debugfs_regs_pcie_write(str=
+uct file *f, const char __user
+> >               size -=3D 4;
+> >       }
+> >
+> > +     r =3D result;
+> > +out:
+> >       pm_runtime_mark_last_busy(adev_to_drm(adev)->dev);
+> >       pm_runtime_put_autosuspend(adev_to_drm(adev)->dev);
+> > -
+> >       amdgpu_virt_disable_access_debugfs(adev);
+> > -     return result;
+> > +     return r;
+> >   }
+> >
+> >   /**
+> > @@ -502,12 +496,8 @@ static ssize_t amdgpu_debugfs_regs_didt_read(struc=
+t file *f, char __user *buf,
+> >
+> >               value =3D RREG32_DIDT(*pos >> 2);
+> >               r =3D put_user(value, (uint32_t *)buf);
+> > -             if (r) {
+> > -                     pm_runtime_mark_last_busy(adev_to_drm(adev)->dev)=
+;
+> > -                     pm_runtime_put_autosuspend(adev_to_drm(adev)->dev=
+);
+> > -                     amdgpu_virt_disable_access_debugfs(adev);
+> > -                     return r;
+> > -             }
+> > +             if (r)
+> > +                     goto out;
+> >
+> >               result +=3D 4;
+> >               buf +=3D 4;
+> > @@ -515,11 +505,12 @@ static ssize_t amdgpu_debugfs_regs_didt_read(stru=
+ct file *f, char __user *buf,
+> >               size -=3D 4;
+> >       }
+> >
+> > +     r =3D result;
+> > +out:
+> >       pm_runtime_mark_last_busy(adev_to_drm(adev)->dev);
+> >       pm_runtime_put_autosuspend(adev_to_drm(adev)->dev);
+> > -
+> >       amdgpu_virt_disable_access_debugfs(adev);
+> > -     return result;
+> > +     return r;
+> >   }
+> >
+> >   /**
+> > @@ -560,12 +551,8 @@ static ssize_t amdgpu_debugfs_regs_didt_write(stru=
+ct file *f, const char __user
+> >               uint32_t value;
+> >
+> >               r =3D get_user(value, (uint32_t *)buf);
+> > -             if (r) {
+> > -                     pm_runtime_mark_last_busy(adev_to_drm(adev)->dev)=
+;
+> > -                     pm_runtime_put_autosuspend(adev_to_drm(adev)->dev=
+);
+> > -                     amdgpu_virt_disable_access_debugfs(adev);
+> > -                     return r;
+> > -             }
+> > +             if (r)
+> > +                     goto out;
+> >
+> >               WREG32_DIDT(*pos >> 2, value);
+> >
+> > @@ -575,11 +562,12 @@ static ssize_t amdgpu_debugfs_regs_didt_write(str=
+uct file *f, const char __user
+> >               size -=3D 4;
+> >       }
+> >
+> > +     r =3D result;
+> > +out:
+> >       pm_runtime_mark_last_busy(adev_to_drm(adev)->dev);
+> >       pm_runtime_put_autosuspend(adev_to_drm(adev)->dev);
+> > -
+> >       amdgpu_virt_disable_access_debugfs(adev);
+> > -     return result;
+> > +     return r;
+> >   }
+> >
+> >   /**
+> > @@ -621,12 +609,8 @@ static ssize_t amdgpu_debugfs_regs_smc_read(struct=
+ file *f, char __user *buf,
+> >
+> >               value =3D RREG32_SMC(*pos);
+> >               r =3D put_user(value, (uint32_t *)buf);
+> > -             if (r) {
+> > -                     pm_runtime_mark_last_busy(adev_to_drm(adev)->dev)=
+;
+> > -                     pm_runtime_put_autosuspend(adev_to_drm(adev)->dev=
+);
+> > -                     amdgpu_virt_disable_access_debugfs(adev);
+> > -                     return r;
+> > -             }
+> > +             if (r)
+> > +                     goto out;
+> >
+> >               result +=3D 4;
+> >               buf +=3D 4;
+> > @@ -634,11 +618,12 @@ static ssize_t amdgpu_debugfs_regs_smc_read(struc=
+t file *f, char __user *buf,
+> >               size -=3D 4;
+> >       }
+> >
+> > +     r =3D result;
+> > +out:
+> >       pm_runtime_mark_last_busy(adev_to_drm(adev)->dev);
+> >       pm_runtime_put_autosuspend(adev_to_drm(adev)->dev);
+> > -
+> >       amdgpu_virt_disable_access_debugfs(adev);
+> > -     return result;
+> > +     return r;
+> >   }
+> >
+> >   /**
+> > @@ -679,12 +664,8 @@ static ssize_t amdgpu_debugfs_regs_smc_write(struc=
+t file *f, const char __user *
+> >               uint32_t value;
+> >
+> >               r =3D get_user(value, (uint32_t *)buf);
+> > -             if (r) {
+> > -                     pm_runtime_mark_last_busy(adev_to_drm(adev)->dev)=
+;
+> > -                     pm_runtime_put_autosuspend(adev_to_drm(adev)->dev=
+);
+> > -                     amdgpu_virt_disable_access_debugfs(adev);
+> > -                     return r;
+> > -             }
+> > +             if (r)
+> > +                     goto out;
+> >
+> >               WREG32_SMC(*pos, value);
+> >
+> > @@ -694,11 +675,12 @@ static ssize_t amdgpu_debugfs_regs_smc_write(stru=
+ct file *f, const char __user *
+> >               size -=3D 4;
+> >       }
+> >
+> > +     r =3D result;
+> > +out:
+> >       pm_runtime_mark_last_busy(adev_to_drm(adev)->dev);
+> >       pm_runtime_put_autosuspend(adev_to_drm(adev)->dev);
+> > -
+> >       amdgpu_virt_disable_access_debugfs(adev);
+> > -     return result;
+> > +     return r;
+> >   }
+> >
+> >   /**
+> > @@ -1090,11 +1072,8 @@ static ssize_t amdgpu_debugfs_gfxoff_write(struc=
+t file *f, const char __user *bu
+> >               uint32_t value;
+> >
+> >               r =3D get_user(value, (uint32_t *)buf);
+> > -             if (r) {
+> > -                     pm_runtime_mark_last_busy(adev_to_drm(adev)->dev)=
+;
+> > -                     pm_runtime_put_autosuspend(adev_to_drm(adev)->dev=
+);
+> > -                     return r;
+> > -             }
+> > +             if (r)
+> > +                     goto out;
+> >
+> >               amdgpu_gfx_off_ctrl(adev, value ? true : false);
+> >
+> > @@ -1104,10 +1083,12 @@ static ssize_t amdgpu_debugfs_gfxoff_write(stru=
+ct file *f, const char __user *bu
+> >               size -=3D 4;
+> >       }
+> >
+> > +     r =3D result;
+> > +out:
+> >       pm_runtime_mark_last_busy(adev_to_drm(adev)->dev);
+> >       pm_runtime_put_autosuspend(adev_to_drm(adev)->dev);
+> >
+> > -     return result;
+> > +     return r;
+> >   }
+> >
+> >
+> > @@ -1139,18 +1120,12 @@ static ssize_t amdgpu_debugfs_gfxoff_read(struc=
+t file *f, char __user *buf,
+> >               uint32_t value;
+> >
+> >               r =3D amdgpu_get_gfx_off_status(adev, &value);
+> > -             if (r) {
+> > -                     pm_runtime_mark_last_busy(adev_to_drm(adev)->dev)=
+;
+> > -                     pm_runtime_put_autosuspend(adev_to_drm(adev)->dev=
+);
+> > -                     return r;
+> > -             }
+> > +             if (r)
+> > +                     goto out;
+> >
+> >               r =3D put_user(value, (uint32_t *)buf);
+> > -             if (r) {
+> > -                     pm_runtime_mark_last_busy(adev_to_drm(adev)->dev)=
+;
+> > -                     pm_runtime_put_autosuspend(adev_to_drm(adev)->dev=
+);
+> > -                     return r;
+> > -             }
+> > +             if (r)
+> > +                     goto out;
+> >
+> >               result +=3D 4;
+> >               buf +=3D 4;
+> > @@ -1158,10 +1133,12 @@ static ssize_t amdgpu_debugfs_gfxoff_read(struc=
+t file *f, char __user *buf,
+> >               size -=3D 4;
+> >       }
+> >
+> > +     r =3D result;
+> > +out:
+> >       pm_runtime_mark_last_busy(adev_to_drm(adev)->dev);
+> >       pm_runtime_put_autosuspend(adev_to_drm(adev)->dev);
+> >
+> > -     return result;
+> > +     return r;
+> >   }
+> >
+> >   static const struct file_operations amdgpu_debugfs_regs2_fops =3D {
+>

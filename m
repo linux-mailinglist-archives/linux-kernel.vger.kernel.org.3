@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 72FFD566C42
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 14:13:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 98438566D0F
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 14:21:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235003AbiGEMNh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Jul 2022 08:13:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46456 "EHLO
+        id S236419AbiGEMU4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Jul 2022 08:20:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53746 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234626AbiGEMHr (ORCPT
+        with ESMTP id S235956AbiGEMN1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Jul 2022 08:07:47 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76B79192BF;
-        Tue,  5 Jul 2022 05:06:48 -0700 (PDT)
+        Tue, 5 Jul 2022 08:13:27 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49F8B18B19;
+        Tue,  5 Jul 2022 05:10:59 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 15D05B817CC;
-        Tue,  5 Jul 2022 12:06:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 575B5C341CB;
-        Tue,  5 Jul 2022 12:06:45 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B99AD619AF;
+        Tue,  5 Jul 2022 12:10:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C771EC341C7;
+        Tue,  5 Jul 2022 12:10:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1657022805;
-        bh=E5YABQN7CX2xcNUWZOZH99E/RjMbQ0oA1Q2OAU7l6Yw=;
+        s=korg; t=1657023058;
+        bh=GpAELpXa6Ga52L9rDUJkSFouJ4QBEHX3NS8TB3eieoE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=RLz7FoVXdSx97ET/zFF6zrEYMNyzadejNNk2aB/4/FbZcbMz3uBGvQeunSCjsfhtN
-         oPbPWs1QBSS+pmf8n2u4Esc7TA2SX9bNtKQEGXPB3pZofzpDlGKs7wWaOCxRRtQWR9
-         Y/5fXxAX44Z28tYK2hV+gr9PM6VmiTJupKs7ROt8=
+        b=YbkxpoV5xGt7JtakyxJehFDnZkRuts3MUzubBbzB+oi+YX5c1UgFIzKkBhTZpk1V4
+         PphaAUnp0DA62T2Y3u03YwhvGbGGgmfDwIdAaDcasgigahDPLr8JI3zphlVuwMAi3R
+         m2t20FwfS1bDT7febtvJW+6dv0o2aisDQOkNFln0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        syzbot+b75c138e9286ac742647@syzkaller.appspotmail.com,
+        stable@vger.kernel.org, Doug Berger <opendmb@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
         Jakub Kicinski <kuba@kernel.org>
-Subject: [PATCH 5.10 17/84] net: tun: unlink NAPI from device on destruction
+Subject: [PATCH 5.15 22/98] net: dsa: bcm_sf2: force pause link settings
 Date:   Tue,  5 Jul 2022 13:57:40 +0200
-Message-Id: <20220705115615.829569288@linuxfoundation.org>
+Message-Id: <20220705115618.221068131@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.0
-In-Reply-To: <20220705115615.323395630@linuxfoundation.org>
-References: <20220705115615.323395630@linuxfoundation.org>
+In-Reply-To: <20220705115617.568350164@linuxfoundation.org>
+References: <20220705115617.568350164@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,34 +55,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jakub Kicinski <kuba@kernel.org>
+From: Doug Berger <opendmb@gmail.com>
 
-commit 3b9bc84d311104906d2b4995a9a02d7b7ddab2db upstream.
+commit 7c97bc0128b2eecc703106112679a69d446d1a12 upstream.
 
-Syzbot found a race between tun file and device destruction.
-NAPIs live in struct tun_file which can get destroyed before
-the netdev so we have to del them explicitly. The current
-code is missing deleting the NAPI if the queue was detached
-first.
+The pause settings reported by the PHY should also be applied to the GMII port
+status override otherwise the switch will not generate pause frames towards the
+link partner despite the advertisement saying otherwise.
 
-Fixes: 943170998b20 ("tun: enable NAPI for TUN/TAP driver")
-Reported-by: syzbot+b75c138e9286ac742647@syzkaller.appspotmail.com
-Link: https://lore.kernel.org/r/20220623042039.2274708-1-kuba@kernel.org
+Fixes: 246d7f773c13 ("net: dsa: add Broadcom SF2 switch driver")
+Signed-off-by: Doug Berger <opendmb@gmail.com>
+Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
+Link: https://lore.kernel.org/r/20220623030204.1966851-1-f.fainelli@gmail.com
 Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/net/tun.c |    1 +
- 1 file changed, 1 insertion(+)
+ drivers/net/dsa/bcm_sf2.c |    5 +++++
+ 1 file changed, 5 insertions(+)
 
---- a/drivers/net/tun.c
-+++ b/drivers/net/tun.c
-@@ -733,6 +733,7 @@ static void tun_detach_all(struct net_de
- 		sock_put(&tfile->sk);
+--- a/drivers/net/dsa/bcm_sf2.c
++++ b/drivers/net/dsa/bcm_sf2.c
+@@ -865,6 +865,11 @@ static void bcm_sf2_sw_mac_link_up(struc
+ 		if (duplex == DUPLEX_FULL)
+ 			reg |= DUPLX_MODE;
+ 
++		if (tx_pause)
++			reg |= TXFLOW_CNTL;
++		if (rx_pause)
++			reg |= RXFLOW_CNTL;
++
+ 		core_writel(priv, reg, offset);
  	}
- 	list_for_each_entry_safe(tfile, tmp, &tun->disabled, next) {
-+		tun_napi_del(tfile);
- 		tun_enable_queue(tfile);
- 		tun_queue_purge(tfile);
- 		xdp_rxq_info_unreg(&tfile->xdp_rxq);
+ 
 
 

@@ -2,56 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 25823567476
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 18:33:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 724E1567482
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 18:36:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233044AbiGEQcw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Jul 2022 12:32:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57962 "EHLO
+        id S230013AbiGEQgk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Jul 2022 12:36:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33288 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232591AbiGEQc2 (ORCPT
+        with ESMTP id S229554AbiGEQgi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Jul 2022 12:32:28 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08E1219292
-        for <linux-kernel@vger.kernel.org>; Tue,  5 Jul 2022 09:32:26 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 98858B81873
-        for <linux-kernel@vger.kernel.org>; Tue,  5 Jul 2022 16:32:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DDC40C341C7;
-        Tue,  5 Jul 2022 16:32:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1657038744;
-        bh=ELTHKRlGh2TFVwLiCwnTc8wlXdeQ+pD6rYi563gQQ6k=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=mgT7xZwlPFkbHzVDL4FfLEz+K3+F0eqFtJeBULjpARFv44dCZBP8Tm6Jfvg5o9/AH
-         6zvB4+zEv9Y40JhDbbNDKTmOzP50QvvQdLfjaZVVXMBJr6q2E+f8XHTIDrBzc00Obc
-         lyDwMpFlmhH3HQB8FrHioEdFazMU3NPn2KoSlFzIDzdxPm/DKcjY7kKg27PJ+m3kd4
-         IPvWjPL5pHPcNMJx1tyLZRFC1H0+8S481xJSzRo8ZaJQRPdv/MMfZpN3MBORe3SI8D
-         9QZJR9HqKtsQNcBV+p03sNN8eg/2A2wAPsc/iVY6+wxAMEg+YtKCEQ+fHPVX54z2iB
-         cp6E822nyYKxQ==
-Date:   Tue, 5 Jul 2022 17:32:19 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Tommaso Merciai <tommaso.merciai@amarulasolutions.com>
-Cc:     Liam Girdwood <lgirdwood@gmail.com>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>, alsa-devel@alsa-project.org,
+        Tue, 5 Jul 2022 12:36:38 -0400
+Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6AB4B62
+        for <linux-kernel@vger.kernel.org>; Tue,  5 Jul 2022 09:36:36 -0700 (PDT)
+Received: by mail-wm1-x32e.google.com with SMTP id f190so7369974wma.5
+        for <linux-kernel@vger.kernel.org>; Tue, 05 Jul 2022 09:36:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=conchuod.ie; s=google;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=EmLnrG7RjmkZkoaedf/AcqY9w1jbh+1fWdmZ7QBondE=;
+        b=Z1oOdheVZJ6dQa0p776tKZDLAYHAcaJOVw+nUPxr64CsjIv0yWyAlaHUUrZpYTcpP+
+         cqFE73JKR3DVixXSjp6tqcrZm12zENvd5UUdlXAcoluzdUX/m/5AdEo3+VjjxqO1keQR
+         c56FElMX+ntpRB7eiyp4c9qM5D5/CliNFRbzJlXulzBghYMI/4Boouno2pVhpiJOQHyr
+         KoiTbDfd/8WHcI0W43kcp/48kUp/xff6++NghjIZtWAZmIni+IirUUHq8yqWKmbppLTH
+         2P463lFjpbEQR2qSZ4E58ejWBnfmhVIG6kfvRV2frF93N7i3nAiQx9zaBEqFh/kOxCmY
+         CUwQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=EmLnrG7RjmkZkoaedf/AcqY9w1jbh+1fWdmZ7QBondE=;
+        b=GFBmH0HCO4URiS5lQn6KvJlzfQ4IXoFdupIMXOFpPZj0xs8YogQ64HMw8s9Vp7Xxzv
+         aLGHZA257DkfwQ8TQLaz0tGvDi9KkJ+q3o6xP0hzIwZQwEeJygkBuEwxC6vbWsZkT08p
+         XGRlWfx+dc7ibhvuDaLr46Lmc399JLlVc4QXssLqf7j85FzH5pKaU1/WPdAwRV7VcXgJ
+         6CoR2ExTJlsLZeA9tvdvgIcYU0EY+TEuojNfMca6kYXg0wLfSPaIkb9ZzxUH8vIIhTBP
+         JqrqahYKcpBKm2KMSEFC/E0ESqlv5k1kHflszg7Xp+kF93ClbUX6XMqnoX71DgUWqfAW
+         FzLA==
+X-Gm-Message-State: AJIora8Ky0L+NJhu1nO8Wb4S/iQ/EbTbxBmcIgmEph9j6t+UlMsST5jO
+        pkIbBDozMP1wJj5bAk4QInz66g==
+X-Google-Smtp-Source: AGRyM1s8cE4Ve852oDDbv/xzRRKOZSh7Hnd8kW0luPTYEl3BHhAHGA2/redgAa8G15v7C7LgFSVKlw==
+X-Received: by 2002:a1c:cc1a:0:b0:3a0:39b1:3408 with SMTP id h26-20020a1ccc1a000000b003a039b13408mr36733506wmb.157.1657038995336;
+        Tue, 05 Jul 2022 09:36:35 -0700 (PDT)
+Received: from henark71.. ([51.37.234.167])
+        by smtp.gmail.com with ESMTPSA id q17-20020adfdfd1000000b0021d4d6355efsm324298wrn.109.2022.07.05.09.36.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 05 Jul 2022 09:36:34 -0700 (PDT)
+From:   Conor Dooley <mail@conchuod.ie>
+To:     palmer@dabbelt.com, linux-riscv@lists.infradead.org,
+        daire.mcnamara@microchip.com, palmer@rivosinc.com,
+        ivan.griffin@microchip.com, conor@kernel.org
+Cc:     Conor Dooley <conor.dooley@microchip.com>,
+        devicetree@vger.kernel.org, paul.walmsley@sifive.com,
+        krzysztof.kozlowski+dt@linaro.org, atishp@atishpatra.org,
+        aou@eecs.berkeley.edu, sudeep.holla@arm.com, robh+dt@kernel.org,
         linux-kernel@vger.kernel.org
-Subject: Re: equalizer cfg in max98088 driver
-Message-ID: <YsRnkxcBWCgtRIn7@sirena.org.uk>
-References: <20220705075500.GA1987744@tom-ThinkPad-T14s-Gen-2i>
- <YsQd7mub0KJdYUDw@sirena.org.uk>
- <20220705162956.GA2676656@tom-ThinkPad-T14s-Gen-2i>
+Subject: Re: [PATCH] riscv: dts: microchip: hook up the mpfs' l2cache
+Date:   Tue,  5 Jul 2022 17:36:23 +0100
+Message-Id: <165703891541.1175279.9783601760471076609.b4-ty@microchip.com>
+X-Mailer: git-send-email 2.37.0
+In-Reply-To: <20220629200732.4039258-1-conor@kernel.org>
+References: <20220629200732.4039258-1-conor@kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="LoH50+dDeMaAE155"
-Content-Disposition: inline
-In-Reply-To: <20220705162956.GA2676656@tom-ThinkPad-T14s-Gen-2i>
-X-Cookie: Only God can make random selections.
-X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -60,38 +76,23 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+From: Conor Dooley <conor.dooley@microchip.com>
 
---LoH50+dDeMaAE155
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+On Wed, 29 Jun 2022 21:07:33 +0100, Conor Dooley wrote:
+> From: Conor Dooley <conor.dooley@microchip.com>
+> 
+> The initial PolarFire SoC devicetree must have been forked off from
+> the fu540 one prior to the addition of l2cache controller support being
+> added there. When the controller node was added to mpfs.dtsi, it was
+> not hooked up to the CPUs & thus sysfs reports an incorrect cache
+> configuration. Hook it up.
+> 
+> [...]
 
-On Tue, Jul 05, 2022 at 06:29:56PM +0200, Tommaso Merciai wrote:
-> On Tue, Jul 05, 2022 at 12:18:06PM +0100, Mark Brown wrote:
+Applied to dt-fixes, thanks!
 
-> > There's plenty of examples of equalisers in the code already.  I don't
-> > know how this specific device works but generally these are either
-> > exposed as a series of volume like sliders or as binary controls.  This
-> > doesn't restrict people to settings from the firmware, making
-> > development of new configuraitons much easier.
+[1/1] riscv: dts: microchip: hook up the mpfs' l2cache
+      https://git.kernel.org/conor/c/efa310ba0071
 
-> Thanks for your reply.
-> I meant somethings like this:
-
-I understood what you meant, like I say this should be a runtime control.
-
---LoH50+dDeMaAE155
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmLEZ5IACgkQJNaLcl1U
-h9AiKQf+McrQlmTh3R3eoil6IjzxS5r8PRIouf93sdRTuAKMBxPiVDQyl+zbeywm
-976+jJEsliyD7V3tJqBivh1bNsbn0Ai3WJ+5wpKqOy0LZdFvCyQgWI+84BrGBzKz
-dkITYXpzVNFOChRNaWjh/LOgpebSATjvwUFpcM0oSxygn8Kez7sdXgZA8Mzxj7Ws
-37/OUPASXphF2cYpiKVx2N+FN63S0a5ZWoRrkd136Zf83bwnzsAZ7jgy3vFwfVd3
-jy6s6biSmxzAEiV2YLvPpJtH3z558y3ILqmtV1HbjtU1LrB9f9sL0F+iBIov66R2
-FpKjgyoX0TEJ7ku7aCKiB5LV32v/2A==
-=nQpp
------END PGP SIGNATURE-----
-
---LoH50+dDeMaAE155--
+Thanks,
+Conor.

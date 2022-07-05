@@ -2,175 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BB52956666E
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 11:43:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 71DC1566674
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 11:44:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230342AbiGEJnp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Jul 2022 05:43:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34652 "EHLO
+        id S230385AbiGEJoI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Jul 2022 05:44:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35038 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230349AbiGEJnm (ORCPT
+        with ESMTP id S230170AbiGEJoH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Jul 2022 05:43:42 -0400
-Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [IPv6:2a01:488:42:1000:50ed:8234::])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BBD3270D
-        for <linux-kernel@vger.kernel.org>; Tue,  5 Jul 2022 02:43:38 -0700 (PDT)
-Received: from [2a02:8108:963f:de38:eca4:7d19:f9a2:22c5]; authenticated
-        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        id 1o8f5i-0007u4-3A; Tue, 05 Jul 2022 11:43:34 +0200
-Message-ID: <6f52ccd2-8411-0c53-2deb-885bb1234ce5@leemhuis.info>
-Date:   Tue, 5 Jul 2022 11:43:33 +0200
+        Tue, 5 Jul 2022 05:44:07 -0400
+Received: from mail-qk1-f169.google.com (mail-qk1-f169.google.com [209.85.222.169])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F8FA25EA;
+        Tue,  5 Jul 2022 02:44:06 -0700 (PDT)
+Received: by mail-qk1-f169.google.com with SMTP id p11so8250886qkg.12;
+        Tue, 05 Jul 2022 02:44:06 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=kIx91exCzZ5dHESFRAFLa43/wrVeA8Y2G2chqGSTvNs=;
+        b=EpZ2Ex/ib2/Vbrv07gZ/CbHahTz66tzX9dF3tAhTbRcYAPUpdmcJIK6dIVCfcvmhbR
+         oHDSn/FYdeB1oSry0lEI/OsUcCjFifGfKQL/0Al98ZWzKWF4K/KgxV1qkoaACErVXIed
+         uDuG1hM9mDhPjzqRg8Z6K3j1XGSHeQkKUMiUy87/5hJ+JCPw0foD/ReAOK1HdUNU2wAX
+         id7WTrN/vjNeYAig+aOk+gb5stjpjh29VP7LMAtjq3QXt9MlR+V4a5uCsk9o+M4VLKGX
+         4R3j8C2CZVzVR9VbpnxUoAfnDnRNnJIgWIBM+uRBFYPxmzOmwYLGHUOt/kFXI1z9Y4tG
+         LOJQ==
+X-Gm-Message-State: AJIora+3fAugXz1js8JGgKROdOagnJEq1hs+wcPQvvExREejXy84d94e
+        uN59YEVA3boXyf+HKlQ4fylpJNOQFAWWGA==
+X-Google-Smtp-Source: AGRyM1u3FwBTKHdTEDRXIccxmWyh3H1KPbcF1VZmA8m2QFBxtT9sCNkP4we9shJ97IcuLXoHs3dJlg==
+X-Received: by 2002:a05:620a:4045:b0:6b1:86a9:c78c with SMTP id i5-20020a05620a404500b006b186a9c78cmr21341141qko.580.1657014245205;
+        Tue, 05 Jul 2022 02:44:05 -0700 (PDT)
+Received: from mail-yw1-f177.google.com (mail-yw1-f177.google.com. [209.85.128.177])
+        by smtp.gmail.com with ESMTPSA id m14-20020a05620a290e00b006b46ad28ba7sm3889045qkp.84.2022.07.05.02.44.04
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 05 Jul 2022 02:44:04 -0700 (PDT)
+Received: by mail-yw1-f177.google.com with SMTP id 00721157ae682-31caffa4a45so31457157b3.3;
+        Tue, 05 Jul 2022 02:44:04 -0700 (PDT)
+X-Received: by 2002:a81:5404:0:b0:31c:c24d:94b0 with SMTP id
+ i4-20020a815404000000b0031cc24d94b0mr3713401ywb.502.1657014244204; Tue, 05
+ Jul 2022 02:44:04 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [Intel-wired-lan] ice: Error setting promisc mode on VSI 6
- (rc=-17) @ 5.18.x
-Content-Language: en-US
-To:     Jaroslav Pulchart <jaroslav.pulchart@gooddata.com>,
-        Michal Wilczynski <michal.wilczynski@intel.com>
-Cc:     intel-wired-lan@lists.osuosl.org,
-        Jesse Brandeburg <jesse.brandeburg@intel.com>,
-        Tony Nguyen <anthony.l.nguyen@intel.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        "regressions@lists.linux.dev" <regressions@lists.linux.dev>
-References: <CAK8fFZ7m-KR57M_rYX6xZN39K89O=LGooYkKsu6HKt0Bs+x6xQ@mail.gmail.com>
- <2596b2c6-71e4-543f-799f-b4b174c21f31@leemhuis.info>
- <CAK8fFZ6hS69JMtnvFnLVt9aiWEivZ9-izNgMHtB+KeAWAfaXaQ@mail.gmail.com>
-From:   Thorsten Leemhuis <regressions@leemhuis.info>
-In-Reply-To: <CAK8fFZ6hS69JMtnvFnLVt9aiWEivZ9-izNgMHtB+KeAWAfaXaQ@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1657014218;586417e5;
-X-HE-SMSGID: 1o8f5i-0007u4-3A
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220618195031.10975-1-max@enpas.org> <20220627150557.qluqtejrddj5nfif@pengutronix.de>
+ <20220627190126.4eb57a2b.max@enpas.org>
+In-Reply-To: <20220627190126.4eb57a2b.max@enpas.org>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Tue, 5 Jul 2022 11:43:52 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdUYCiRC+9UnQB6-2XGp+wOjYq1U_J3bDQT+WNm==mS4qg@mail.gmail.com>
+Message-ID: <CAMuHMdUYCiRC+9UnQB6-2XGp+wOjYq1U_J3bDQT+WNm==mS4qg@mail.gmail.com>
+Subject: Re: [PATCH v9] can, tty: can327 CAN/ldisc driver for ELM327 based
+ OBD-II adapters
+To:     Max Staudt <max@enpas.org>
+Cc:     Marc Kleine-Budde <mkl@pengutronix.de>,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        linux-can@vger.kernel.org,
+        Vincent Mailhol <vincent.mailhol@gmail.com>,
+        Oliver Neukum <oneukum@suse.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Oliver Hartkopp <socketcan@hartkopp.net>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-[adding Michal to the recipients]
+Hi Max,
 
-Hi, this is your Linux kernel regression tracker. Top-posting for once,
-to make this easily accessible to everyone.
+On Mon, Jun 27, 2022 at 7:10 PM Max Staudt <max@enpas.org> wrote:
+> On Mon, 27 Jun 2022 17:05:57 +0200
+> Marc Kleine-Budde <mkl@pengutronix.de> wrote:
+> > On 18.06.2022 21:50:31, Max Staudt wrote:
+> > > This is the can327 driver. It does a surprisingly good job at
+> > > turning ELM327 based OBD-II interfaces into cheap CAN interfaces
+> > > for simple homebrew projects.
+> > >
+> > > Please see the included documentation for details and limitations:
+> > > Documentation/networking/device_drivers/can/can327.rst
+> > >
+> > > Cc: linux-can <linux-can@vger.kernel.org>
+> > > Signed-off-by: Max Staudt <max@enpas.org>
+> > > Reviewed-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+> >
+> > Added with some minor coding style improvements (line breaks and
+> > whitespace changes) to make checkpatch and clang-format happier to
+> > can-next/master!
+>
+> Wonderful, thank you!
 
-Intel network maintainers, help me out here please. Has anything been
-done to address this regression? It looks like Jaroslav didn't even get
-a single reply. What's up there?
+Thanks for your patch, which is now commit 43da2f07622f4137 ("can:
+can327: CAN/ldisc driver for ELM327 based OBD-II adapters") in
+linux-can-next/master
 
-BTW, took a quick look into the issue and noticed a the patch "ice: Fix
-promiscuous mode not turning off" from Michal:
-https://lore.kernel.org/all/20220704131227.2966160-3-michal.wilczynski@intel.com/
+> (+CC: Greg, Oliver Hartkopp)
+>
+> This quite fittingly marks the end of an era for me, so I would like to
+> thank everyone involved, more or less in order of appearance:
+>
+> Oliver Hartkopp    for slcan (the inspiration) and related feedback.
+> Oliver Neukum      for the first reviews, before this went public.
+> Marc Kleine-Budde  for upstream guidance.
+> Greg Kroah-Hartman for TTY and style support.
+> Vincent Mailhol    for intensive reviews up until the end.
+>
+> ...and of course thanks to the numerous people I've been in touch with
+> via GitHub and otherwise. Bug reports, testing, or simply thanks and
+> encouragement - they have all helped.
+>
+> Some stats for those interested: It has been a solid 8 years since the
+> idea for this driver was born in 2014, with occasional on and off work
+> on it since. The oldest code is from 2015, running in userspace and
+> injecting packets via vcan. It became a kernel module in 2016, with
+> link settings via "ip link". The first public version was released in
+> 2018. It then gained in popularity, making upstreaming... inevitable ;)
 
-Is this maybe fixing this? Then it would be good to add Link and
-Reported-by tags to that patch.
+So development started before commit cd6484e1830be260 ("serdev:
+Introduce new bus for serial attached devices").  I guess that is the
+reason why this driver uses a line discipline, instead of the serial
+bus?
 
-Or is this something else and Jaroslav needs to bisect?
+I had a quick glance through the various revisions posted, and it
+doesn't seem like anyone mentioned the serial bus.  Would there be
+any advantage in migrating to the serial bus?
 
-Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
+Thanks!
 
-P.S.: As the Linux kernel's regression tracker I deal with a lot of
-reports and sometimes miss something important when writing mails like
-this. If that's the case here, don't hesitate to tell me in a public
-reply, it's in everyone's interest to set the public record straight.
+Gr{oetje,eeting}s,
 
-#regzbot poke
+                        Geert
 
-On 19.06.22 19:00, Jaroslav Pulchart wrote:
-> Hello,
-> 
-> yes, I revert that commit. Still the promiscs cannot be set and the dmesg
-> error message changed to:
-> ---------------
-> $ ip link set em1 promisc on
-> $ dmesg
-> ...
-> ice 0000:63:00.0 em1: Error setting Multicast promiscuous mode on VSI 6
-> ...
-> ---------------
-> 
-> Jaroslav P.
-> 
-> ne 19. 6. 2022 v 13:51 odesílatel Thorsten Leemhuis
-> <regressions@leemhuis.info> napsal:
-> 
->>
->> [TLDR: I'm adding this regression report to the list of tracked
->> regressions; all text from me you find below is based on a few templates
->> paragraphs you might have encountered already already in similar form.]
->>
->> Hi, this is your Linux kernel regression tracker.
->>
->> On 09.06.22 08:58, Jaroslav Pulchart wrote:
->>>
->>> I'm struggling with broken network connectivity at VMs using linux
->>> bridge at host after update of kernel from 5.17.x to 5.18.x @ Dell
->>> R750 server with E810-XXV NICs.
->>>
->>> I noticed the kernel reports "Error setting promisc mode" in dmesg.
->>>
->>> # dmesg  | grep 'Error setting promisc'
->>> [   24.863557] ice 0000:31:00.0: Error setting promisc mode on VSI 6 (rc=-17)
->>> [   24.878369] ice 0000:31:00.0: Error setting promisc mode on VSI 6 (rc=-17)
->>> [   25.045834] ice 0000:31:00.0: Error setting promisc mode on VSI 6 (rc=-17)
->>> [   25.129840] ice 0000:b1:00.0: Error setting promisc mode on VSI 6 (rc=-17)
->>> [   25.144440] ice 0000:b1:00.0: Error setting promisc mode on VSI 6 (rc=-17)
->>>
->>> # lspci -s 0000:31:00.0
->>> 31:00.0 Ethernet controller: Intel Corporation Ethernet Controller
->>> E810-XXV for SFP (rev 02)
->>> # lspci -s 0000:b1:00.0
->>> b1:00.0 Ethernet controller: Intel Corporation Ethernet Controller
->>> E810-XXV for SFP (rev 02)
->>>
->>> It is easy to reproduce by:
->>>   # ip link set em1 promisc on
->>>   # dmesg -T | tail -n 1
->>>   [Thu Jun  9 08:48:19 2022] ice 0000:31:00.0: Error setting promisc
->>> mode on VSI 6 (rc=-17)
->>>
->>> Could it be an 'ice' driver bug introduced in the 5.18 kernel?
->>
->> CCing the regression mailing list, as it should be in the loop for all
->> regressions, as explained here:
->> https://www.kernel.org/doc/html/latest/admin-guide/reporting-issues.html
->>
->> Jaroslav, did you try to revert the change that was suggested to you in
->> https://lore.kernel.org/all/d993bbb6-e583-5d91-76c0-841cc5da86af@roeck-us.net/
->> Did it help?
->>
->> Anyway: To be sure below issue doesn't fall through the cracks
->> unnoticed, I'm adding it to regzbot, my Linux kernel regression tracking
->> bot:
->>
->> #regzbot ^introduced v5.17 to v5.18
->> #regzbot title net: ice: Error setting promisc mode on VSI 6 (rc=-17) @
->> 5.18.x
->> #regzbot monitor
->> https://lore.kernel.org/all/CAK8fFZ68+xZ2Z0vDWnihF8PeJKEmEwCyyF-8W9PCZJTd8zfp-A@mail.gmail.com/
->> #regzbot monitor
->> https://lore.kernel.org/all/CAK8fFZ61mQ3AYpdWjWtyUXzrs-RVMW61mBLrjRDXBxB-F9GzbA@mail.gmail.com/
->> #regzbot ignore-activity
->>
->> This isn't a regression? This issue or a fix for it are already
->> discussed somewhere else? It was fixed already? You want to clarify when
->> the regression started to happen? Or point out I got the title or
->> something else totally wrong? Then just reply -- ideally with also
->> telling regzbot about it, as explained here:
->> https://linux-regtracking.leemhuis.info/tracked-regression/
->>
->> Reminder for developers: When fixing the issue, add 'Link:' tags
->> pointing to the report (the mail this one replied to), as the kernel's
->> documentation call for; above page explains why this is important for
->> tracked regressions.
->>
->> Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
->>
->> P.S.: As the Linux kernel's regression tracker I deal with a lot of
->> reports and sometimes miss something important when writing mails like
->> this. If that's the case here, don't hesitate to tell me in a public
->> reply, it's in everyone's interest to set the public record straight.
-> 
-> 
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds

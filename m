@@ -2,44 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 338CB566DD4
+	by mail.lfdr.de (Postfix) with ESMTP id A4452566DD5
 	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 14:31:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238134AbiGEM2N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Jul 2022 08:28:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36486 "EHLO
+        id S238151AbiGEM2X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Jul 2022 08:28:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36742 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237176AbiGEMSv (ORCPT
+        with ESMTP id S237201AbiGEMSx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Jul 2022 08:18:51 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF9DF1A813;
-        Tue,  5 Jul 2022 05:14:05 -0700 (PDT)
+        Tue, 5 Jul 2022 08:18:53 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 709881A819;
+        Tue,  5 Jul 2022 05:14:08 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5AB5B61988;
-        Tue,  5 Jul 2022 12:14:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 65284C341C7;
-        Tue,  5 Jul 2022 12:14:04 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 06F91619FC;
+        Tue,  5 Jul 2022 12:14:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 12E88C341C7;
+        Tue,  5 Jul 2022 12:14:06 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1657023244;
-        bh=HAHKvqO6ddqdbzuzqoWJr1Py4+nmgdEASbuixESpxY8=;
+        s=korg; t=1657023247;
+        bh=pAboAkTICLOR0vEJwsgUA/LS2TEY8O+L3OlM3jgH0gA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=S5mZUiZRweR0oK76eelLLGY8usQ5OB3HHbV3tRPeZelHwqNzlLzMBjAsF6pV3oQF5
-         NzAGZQrp6rFNqmFdyD0bdVLPscl5+v6eKsTWBKBEB68cULW0vexEcxlxf/acb8022/
-         Vb7P9OQAxDs+CRU5Ohz26c9M7UPXdYYsbntH5mQY=
+        b=lkwLx1kosY84uBUlve8cnCE7ZyT1fyRPPiAIuSgs8RmrWTM9s9J0cD45c1PZXyKrR
+         MKLKxKeSk/YN9WkYqJgi2Ms1Suz8OH9eYuASWKuerB5fVdt0Jh/zTc1zrrNoJWQyf4
+         BkRQmTVmuDskOz1UeQ5wQfaRXAX0jhF3yUgFbxi4=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Stefan Seyfried <seife+kernel@b1-systems.com>,
-        Hans de Goede <hdegoede@redhat.com>,
+        stable@vger.kernel.org, Hans de Goede <hdegoede@redhat.com>,
         Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 90/98] platform/x86: panasonic-laptop: de-obfuscate button codes
-Date:   Tue,  5 Jul 2022 13:58:48 +0200
-Message-Id: <20220705115620.124592430@linuxfoundation.org>
+Subject: [PATCH 5.15 91/98] platform/x86: panasonic-laptop: sort includes alphabetically
+Date:   Tue,  5 Jul 2022 13:58:49 +0200
+Message-Id: <20220705115620.152854213@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.0
 In-Reply-To: <20220705115617.568350164@linuxfoundation.org>
 References: <20220705115617.568350164@linuxfoundation.org>
@@ -57,68 +55,55 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Stefan Seyfried <seife+kernel@b1-systems.com>
+From: Hans de Goede <hdegoede@redhat.com>
 
-[ Upstream commit 65a3e6c8d3f7c346813a05f3d76fc46b640d76d6 ]
+[ Upstream commit fe4326c8d18dc8a54affdc9ab269ad92dafef659 ]
 
-In the definition of panasonic_keymap[] the key codes are given in
-decimal, later checks are done with hexadecimal values, which does
-not help in understanding the code.
-Additionally use two helper variables to shorten the code and make
-the logic more obvious.
+Sort includes alphabetically, small cleanup patch in preparation of
+further changes.
 
 Fixes: ed83c9171829 ("platform/x86: panasonic-laptop: Resolve hotkey double trigger bug")
-Signed-off-by: Stefan Seyfried <seife+kernel@b1-systems.com>
-Reviewed-by: Hans de Goede <hdegoede@redhat.com>
 Signed-off-by: Hans de Goede <hdegoede@redhat.com>
 Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Link: https://lore.kernel.org/r/20220624112340.10130-3-hdegoede@redhat.com
+Link: https://lore.kernel.org/r/20220624112340.10130-4-hdegoede@redhat.com
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/platform/x86/panasonic-laptop.c | 16 +++++++++++-----
- 1 file changed, 11 insertions(+), 5 deletions(-)
+ drivers/platform/x86/panasonic-laptop.c | 17 ++++++++---------
+ 1 file changed, 8 insertions(+), 9 deletions(-)
 
 diff --git a/drivers/platform/x86/panasonic-laptop.c b/drivers/platform/x86/panasonic-laptop.c
-index d4f444401496..84c16d9d9f8e 100644
+index 84c16d9d9f8e..b89fbbc2fd08 100644
 --- a/drivers/platform/x86/panasonic-laptop.c
 +++ b/drivers/platform/x86/panasonic-laptop.c
-@@ -762,6 +762,8 @@ static void acpi_pcc_generate_keyinput(struct pcc_acpi *pcc)
- 	struct input_dev *hotk_input_dev = pcc->input_dev;
- 	int rc;
- 	unsigned long long result;
-+	unsigned int key;
-+	unsigned int updown;
+@@ -119,20 +119,19 @@
+  *		- v0.1  start from toshiba_acpi driver written by John Belmonte
+  */
  
- 	rc = acpi_evaluate_integer(pcc->handle, METHOD_HKEY_QUERY,
- 				   NULL, &result);
-@@ -770,18 +772,22 @@ static void acpi_pcc_generate_keyinput(struct pcc_acpi *pcc)
- 		return;
- 	}
+-#include <linux/kernel.h>
+-#include <linux/module.h>
+-#include <linux/init.h>
+-#include <linux/types.h>
++#include <linux/acpi.h>
+ #include <linux/backlight.h>
+ #include <linux/ctype.h>
+-#include <linux/seq_file.h>
+-#include <linux/uaccess.h>
+-#include <linux/slab.h>
+-#include <linux/acpi.h>
++#include <linux/init.h>
+ #include <linux/input.h>
+ #include <linux/input/sparse-keymap.h>
++#include <linux/kernel.h>
++#include <linux/module.h>
+ #include <linux/platform_device.h>
+-
++#include <linux/seq_file.h>
++#include <linux/slab.h>
++#include <linux/types.h>
++#include <linux/uaccess.h>
  
-+	key = result & 0xf;
-+	updown = result & 0x80; /* 0x80 == key down; 0x00 = key up */
-+
- 	/* hack: some firmware sends no key down for sleep / hibernate */
--	if ((result & 0xf) == 0x7 || (result & 0xf) == 0xa) {
--		if (result & 0x80)
-+	if (key == 7 || key == 10) {
-+		if (updown)
- 			sleep_keydown_seen = 1;
- 		if (!sleep_keydown_seen)
- 			sparse_keymap_report_event(hotk_input_dev,
--					result & 0xf, 0x80, false);
-+					key, 0x80, false);
- 	}
- 
--	if ((result & 0xf) == 0x7 || (result & 0xf) == 0x9 || (result & 0xf) == 0xa) {
-+	/* for the magic values, see panasonic_keymap[] above */
-+	if (key == 7 || key == 9 || key == 10) {
- 		if (!sparse_keymap_report_event(hotk_input_dev,
--						result & 0xf, result & 0x80, false))
-+						key, updown, false))
- 			pr_err("Unknown hotkey event: 0x%04llx\n", result);
- 	}
- }
+ MODULE_AUTHOR("Hiroshi Miura <miura@da-cha.org>");
+ MODULE_AUTHOR("David Bronaugh <dbronaugh@linuxboxen.org>");
 -- 
 2.35.1
 

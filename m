@@ -2,63 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B13B566F9F
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 15:43:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3CE9B566FA4
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 15:43:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232348AbiGENmr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Jul 2022 09:42:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60050 "EHLO
+        id S233245AbiGENnP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Jul 2022 09:43:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57348 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233011AbiGENlv (ORCPT
+        with ESMTP id S233570AbiGENmm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Jul 2022 09:41:51 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CEB392AE33;
-        Tue,  5 Jul 2022 06:05:55 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 8A7FEB817C7;
-        Tue,  5 Jul 2022 13:05:54 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DB40BC341C7;
-        Tue,  5 Jul 2022 13:05:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1657026353;
-        bh=JQBkUu4mKJ+61sPmOx3J1PpWn2oHFVeWXXnoqB4w36M=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ls4x9dLt5VbUQOgWYXLIaG0V38Bv/2oJESyBpdkEjPkLvXvKqMuJ4MIcaCwVSGppX
-         207y07jkN95AemAivjEDIXG8HmDch1Bv/Y8wg+34c0atTwCVBdLsKTs6FR8PQ86dAz
-         khYccpBL4aGPzMaHCe4nsxkYldDpd8HWOQfI9iOmQh800G6lo0mZ/zJlAEveoovnQD
-         8YF3/HHl36ZZCj+urXRtXFgEwAQxT1DPGYmgXQak7cq1SdXw4SxtteL0P7DX+5GDqa
-         ekkH+f8uBODeYk/ER0moz9Hzxw6M+pFmwWkOZwmnklV34Qy9jysnWhp8wM8nMizeFs
-         ulPBRV3FexPnQ==
-Received: by pali.im (Postfix)
-        id 30FEACBF; Tue,  5 Jul 2022 15:05:50 +0200 (CEST)
-Date:   Tue, 5 Jul 2022 15:05:50 +0200
-From:   Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>
+        Tue, 5 Jul 2022 09:42:42 -0400
+Received: from fllv0016.ext.ti.com (fllv0016.ext.ti.com [198.47.19.142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2BA82C109;
+        Tue,  5 Jul 2022 06:06:46 -0700 (PDT)
+Received: from fllv0034.itg.ti.com ([10.64.40.246])
+        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 265D6Klx008413;
+        Tue, 5 Jul 2022 08:06:20 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1657026380;
+        bh=OCLl2efvQJbg1gKEYvQy4DKv/FH6mV4UXDxc5GoIxbU=;
+        h=Date:From:To:CC:Subject:References:In-Reply-To;
+        b=r/vESOEpmSALGb4RS/Cr1gJCQz7PkXc427MeGgwqNDvPmLpaoJcCrxciM2GCZhWSA
+         5FlY2p4H5zsdxJ9VeG6sV4xXrYHGFL5TLv5ykFOAbk7jZDA4ayr6m68i0lJk81WAX4
+         4Xn2mfmxI4SR2aXHP/s/3NI4YZpOAg5mumtgxLII=
+Received: from DFLE108.ent.ti.com (dfle108.ent.ti.com [10.64.6.29])
+        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 265D6JvG091840
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Tue, 5 Jul 2022 08:06:19 -0500
+Received: from DFLE104.ent.ti.com (10.64.6.25) by DFLE108.ent.ti.com
+ (10.64.6.29) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Tue, 5
+ Jul 2022 08:06:19 -0500
+Received: from fllv0040.itg.ti.com (10.64.41.20) by DFLE104.ent.ti.com
+ (10.64.6.25) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
+ Frontend Transport; Tue, 5 Jul 2022 08:06:19 -0500
+Received: from localhost (ileax41-snat.itg.ti.com [10.172.224.153])
+        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 265D6ION101572;
+        Tue, 5 Jul 2022 08:06:19 -0500
+Date:   Tue, 5 Jul 2022 18:36:18 +0530
+From:   Rahul T R <r-ravikumar@ti.com>
 To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Pavel Machek <pavel@ucw.cz>, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Marek =?utf-8?B?QmVow7pu?= <kabel@kernel.org>,
-        linux-leds@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/2] dt-bindings: leds: Add cznic,turris1x-leds.yaml
- binding
-Message-ID: <20220705130550.uu6ix7tdtswn7vaf@pali>
-References: <20220705000448.14337-1-pali@kernel.org>
- <42d837dd-fbd1-6294-2fa0-8a07ae0f8d44@linaro.org>
- <20220705114238.xwgexavgozqskwbw@pali>
- <90fd55cb-13f4-eac2-2b1a-85ae628ecc89@linaro.org>
- <20220705121541.t7jjcjp4hkqprsdo@pali>
- <3358f88c-5c58-ae0d-2c26-7ba9a954b491@linaro.org>
+CC:     <dri-devel@lists.freedesktop.org>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <andrzej.hajda@intel.com>,
+        <narmstrong@baylibre.com>, <robert.foss@linaro.org>,
+        <jonas@kwiboo.se>, <jernej.skrabec@gmail.com>, <airlied@linux.ie>,
+        <daniel@ffwll.ch>, <p.zabel@pengutronix.de>,
+        <tomi.valkeinen@ideasonboard.com>,
+        <laurent.pinchart@ideasonboard.com>,
+        <linux-kernel@vger.kernel.org>, <jpawar@cadence.com>,
+        <sjakhade@cadence.com>, <mparab@cadence.com>, <a-bhatia1@ti.com>,
+        <devicetree@vger.kernel.org>, <vigneshr@ti.com>,
+        <lee.jones@linaro.org>
+Subject: Re: [PATCH v3 1/4] dt-bindings: display: bridge: Convert
+ cdns,dsi.txt to yaml
+Message-ID: <20220705130617.whrs2icf4bvs7zwg@uda0490373>
+References: <20220620205403.31744-1-r-ravikumar@ti.com>
+ <20220620205403.31744-2-r-ravikumar@ti.com>
+ <7768c848-e91d-12d2-d960-196b47778e85@linaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset="us-ascii"
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <3358f88c-5c58-ae0d-2c26-7ba9a954b491@linaro.org>
-User-Agent: NeoMutt/20180716
-X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+In-Reply-To: <7768c848-e91d-12d2-d960-196b47778e85@linaro.org>
+User-Agent: NeoMutt/20171215
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -67,179 +76,360 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tuesday 05 July 2022 14:55:10 Krzysztof Kozlowski wrote:
-> On 05/07/2022 14:15, Pali Rohár wrote:
-> >>>> You need to describe the items, if it is really two items. However your
-> >>>> example has only one item, so this was not tested and won't work.
-> >>>
-> >>> Ehm? Example has two items in the reg.
-> >>
-> >> No, you have exactly one item.
-> >> <0x13 0x1d>
-> >>
-> >> Two items are for example:
-> >> <0x13 0x1d>, <0x23 0x1d>
+Hi Krzysztof,
+
+On 17:43-20220624, Krzysztof Kozlowski wrote:
+> On 20/06/2022 22:54, Rahul T R wrote:
+> > Convert cdns,dsi.txt binding to yaml format
 > > 
-> > Ok. So I should change maxItems to 1 in this case?
+> > Signed-off-by: Rahul T R <r-ravikumar@ti.com>
+> > ---
+> >  .../bindings/display/bridge/cdns,dsi.txt      | 112 ----------
+> >  .../bindings/display/bridge/cdns,dsi.yaml     | 193 ++++++++++++++++++
+> >  2 files changed, 193 insertions(+), 112 deletions(-)
+> >  delete mode 100644 Documentation/devicetree/bindings/display/bridge/cdns,dsi.txt
+> >  create mode 100644 Documentation/devicetree/bindings/display/bridge/cdns,dsi.yaml
+> > 
+> > diff --git a/Documentation/devicetree/bindings/display/bridge/cdns,dsi.txt b/Documentation/devicetree/bindings/display/bridge/cdns,dsi.txt
+> > deleted file mode 100644
+> > index 525a4bfd8634..000000000000
+> > --- a/Documentation/devicetree/bindings/display/bridge/cdns,dsi.txt
+> > +++ /dev/null
+> > @@ -1,112 +0,0 @@
+> > -Cadence DSI bridge
+> > -==================
+> > -
+> > -The Cadence DSI bridge is a DPI to DSI bridge supporting up to 4 DSI lanes.
+> > -
+> > -Required properties:
+> > -- compatible: should be set to "cdns,dsi".
+> > -- reg: physical base address and length of the controller's registers.
+> > -- interrupts: interrupt line connected to the DSI bridge.
+> > -- clocks: DSI bridge clocks.
+> > -- clock-names: must contain "dsi_p_clk" and "dsi_sys_clk".
+> > -- phys: phandle link to the MIPI D-PHY controller.
+> > -- phy-names: must contain "dphy".
+> > -- #address-cells: must be set to 1.
+> > -- #size-cells: must be set to 0.
+> > -
+> > -Optional properties:
+> > -- resets: DSI reset lines.
+> > -- reset-names: can contain "dsi_p_rst".
+> > -
+> > -Required subnodes:
+> > -- ports: Ports as described in Documentation/devicetree/bindings/graph.txt.
+> > -  2 ports are available:
+> > -  * port 0: this port is only needed if some of your DSI devices are
+> > -	    controlled through  an external bus like I2C or SPI. Can have at
+> > -	    most 4 endpoints. The endpoint number is directly encoding the
+> > -	    DSI virtual channel used by this device.
+> > -  * port 1: represents the DPI input.
+> > -  Other ports will be added later to support the new kind of inputs.
+> > -
+> > -- one subnode per DSI device connected on the DSI bus. Each DSI device should
+> > -  contain a reg property encoding its virtual channel.
+> > -
+> > -Example:
+> > -	dsi0: dsi@fd0c0000 {
+> > -		compatible = "cdns,dsi";
+> > -		reg = <0x0 0xfd0c0000 0x0 0x1000>;
+> > -		clocks = <&pclk>, <&sysclk>;
+> > -		clock-names = "dsi_p_clk", "dsi_sys_clk";
+> > -		interrupts = <1>;
+> > -		phys = <&dphy0>;
+> > -		phy-names = "dphy";
+> > -		#address-cells = <1>;
+> > -		#size-cells = <0>;
+> > -
+> > -		ports {
+> > -			#address-cells = <1>;
+> > -			#size-cells = <0>;
+> > -
+> > -			port@1 {
+> > -				reg = <1>;
+> > -				dsi0_dpi_input: endpoint {
+> > -					remote-endpoint = <&xxx_dpi_output>;
+> > -				};
+> > -			};
+> > -		};
+> > -
+> > -		panel: dsi-dev@0 {
+> > -			compatible = "<vendor,panel>";
+> > -			reg = <0>;
+> > -		};
+> > -	};
+> > -
+> > -or
+> > -
+> > -	dsi0: dsi@fd0c0000 {
+> > -		compatible = "cdns,dsi";
+> > -		reg = <0x0 0xfd0c0000 0x0 0x1000>;
+> > -		clocks = <&pclk>, <&sysclk>;
+> > -		clock-names = "dsi_p_clk", "dsi_sys_clk";
+> > -		interrupts = <1>;
+> > -		phys = <&dphy1>;
+> > -		phy-names = "dphy";
+> > -		#address-cells = <1>;
+> > -		#size-cells = <0>;
+> > -
+> > -		ports {
+> > -			#address-cells = <1>;
+> > -			#size-cells = <0>;
+> > -
+> > -			port@0 {
+> > -				reg = <0>;
+> > -				#address-cells = <1>;
+> > -				#size-cells = <0>;
+> > -
+> > -				dsi0_output: endpoint@0 {
+> > -					reg = <0>;
+> > -					remote-endpoint = <&dsi_panel_input>;
+> > -				};
+> > -			};
+> > -
+> > -			port@1 {
+> > -				reg = <1>;
+> > -				dsi0_dpi_input: endpoint {
+> > -					remote-endpoint = <&xxx_dpi_output>;
+> > -				};
+> > -			};
+> > -		};
+> > -	};
+> > -
+> > -	i2c@xxx {
+> > -		panel: panel@59 {
+> > -			compatible = "<vendor,panel>";
+> > -			reg = <0x59>;
+> > -
+> > -			port {
+> > -				dsi_panel_input: endpoint {
+> > -					remote-endpoint = <&dsi0_output>;
+> > -				};
+> > -			};
+> > -		};
+> > -	};
+> > diff --git a/Documentation/devicetree/bindings/display/bridge/cdns,dsi.yaml b/Documentation/devicetree/bindings/display/bridge/cdns,dsi.yaml
+> > new file mode 100644
+> > index 000000000000..3da47c01dca8
+> > --- /dev/null
+> > +++ b/Documentation/devicetree/bindings/display/bridge/cdns,dsi.yaml
+> > @@ -0,0 +1,193 @@
+> > +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+> > +%YAML 1.2
+> > +---
+> > +$id: http://devicetree.org/schemas/display/bridge/cdns,dsi.yaml#
+> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> > +
+> > +title: Cadence DSI bridge
+> > +
+> > +maintainers:
+> > +  - Boris Brezillon <boris.brezillon@bootlin.com>
+> > +
+> > +description: |
+> > +   CDNS DSI is a bridge device which converts DPI to DSI
+> > +
+> > +properties:
+> > +  compatible:
+> > +    enum:
+> > +      - cdns,dsi
+> > +      - ti,j721e-dsi
 > 
-> Yes
+> It wasn't here before, so this is not a conversion. Split adding new
+> compatibles and features from actual conversion.
 > 
-> > 
-> > And how you want to describe those items?
+> > +
+> > +  reg:
+> > +    minItems: 1
+> > +    items:
+> > +      - description:
+> > +          Register block for controller's registers.
+> > +      - description:
+> > +          Register block for wrapper settings registers in case of TI J7 SoCs.
 > 
-> In that case, no need to describe.
+> This needs allOf with if:then:else constraining number of items per variant.
 > 
-> > 
-> >>>
-> >>>> You'll get warning from Rob's robot soon... but you should test the
-> >>>> bindings instead.
-> >>>
-> >>> I have tested bindings on the real hardware and it is working fine
-> >>> together with the driver from patch 2/2.
-> >>
-> >> Bindings cannot be tested on real hardware. Bindings are tested with
-> >> dt_binding_check, as explained in writing-schema.rst
-> > 
-> > Ou... this is something which I was not able to run, it just does not
-> > work, throws lot of python dependency hell errors and it spend more than
-> > hour with it. So sorry, I really cannot run it. Maybe it would be a wise
-> > to provide web service for these checks for those who cannot run them
-> > locally?
+> > +
+> > +  clocks:
+> > +    items:
+> > +      - description: PSM clock, used by the IP
+> > +      - description: sys clock, used by the IP
+> > +
+> > +  clock-names:
+> > +    items:
+> > +      - const: dsi_p_clk
+> > +      - const: dsi_sys_clk
+> > +
+> > +  phys:
+> > +    minItems: 1
 > 
-> It's one pip command to install and one make command to run... I would
-> say easy to start using, unless of course you use some unusual distro
-> without Python 3 (cannot believe nowadays...) or without pip.
+> instead maxItems: 1
 > 
-> Rob's bot will test it for you.
-
-Ok, so lets wait for the robot. After that I will try to fix found
-issues and send a new patch version.
-
-> Anyway, in such case please mark your bindings always as RFT, so we will
-> not waste time on reviewing obvious stuff which is found by automated
-> tools. I think we both agree that reviewers time should not be used for
-> trivial stuff already pointed out by compiler/linter/automation.
-
-Yes!
-
-> > 
-> >>>
-> >>>>> +
-> >>>>> +  "#address-cells":
-> >>>>> +    const: 1
-> >>>>> +
-> >>>>> +  "#size-cells":
-> >>>>> +    const: 0
-> >>>>> +
-> >>>>> +patternProperties:
-> >>>>> +  "^multi-led@[0-7]$":
-> >>>>> +    type: object
-> >>>>> +    $ref: leds-class-multicolor.yaml#
-> >>>>
-> >>>> This looks incorrect, unless you rebased on my patchset?
-> >>>
-> >>> So what is the correct? (I used inspiration from
-> >>> cznic,turris-omnia-leds.yaml file)
-> >>
-> >> Which according to current multicolor bindings is not correct. Correct
-> >> is pwm-multicolor. However if you rebase on [1], it looks fine, except
-> >> missing unevaluatedProperties.
-> > 
-> > Ok. So does it mean that I should just add
-> > "unevaluatedProperties: false"?
+> > +    description: phandle link to the MIPI D-PHY controller.
+> > +
+> > +  phy-names:
+> > +    const: dphy
+> > +
+> > +  power-domains:
+> > +    maxItems: 1
+> > +
+> > +  interrupts:
+> > +    maxItems: 1
+> > +
+> > +  resets:
+> > +    minItems: 1
 > 
-> Yes, on that level of indentation, so:
->     $ref: leds-class-multicolor.yaml#
->     unevaluatedProperties: false
-
-Ok.
-
-> > 
-> >> [1]
-> >> https://lore.kernel.org/all/20220624112106.111351-1-krzysztof.kozlowski@linaro.org/
-> >>
-> >>>
-> >>>>> +
-> >>>>> +    properties:
-> >>>>> +      reg:
-> >>>>> +        minimum: 0
-> >>>>> +        maximum: 7
-> >>>>> +
-> >>>>> +    required:
-> >>>>> +      - reg
-> >>>>> +
-> >>>>> +additionalProperties: false
-> >>>>> +
-> >>>>> +examples:
-> >>>>> +  - |
-> >>>>> +
-> >>>>
-> >>>> No blank line.
-> >>>
-> >>> Ok.
-> >>>
-> >>>>> +    #include <dt-bindings/leds/common.h>
-> >>>>> +
-> >>>>> +    cpld@3,0 {
-> >>>>
-> >>>> Generic node name.
-> >>>
-> >>> Is not cpld name generic enough?
-> >>
-> >> No, it means nothing to me. Just like "a", "ashjd" or "wrls".
-> > 
-> > If you never heard about it, I would suggest to read something about
-> > Programmable logic devices. It is interesting category of hardware with
-> > which you can play. CPLD and FPGA are very often used in lot of products
-> > and FPGA is very easy for playing and programming custom logic.
+> instead maxItems: 1
 > 
-> The are many different acronyms in the language so without context might
-> be tricky to connect the dots.
-
-Anyway, playing with FPGA is really a fun!
-
-> > 
-> > For example on wikipedia is list of different technologies of
-> > programmable logic devices:
-> > https://en.wikipedia.org/wiki/Programmable_logic_device
-> > 
-> > So if you want more generic name, just name it "pld"? 
+> > +    description: PHY reset.
+> > +
+> > +  reset-names:
+> > +    const: dsi_p_rst
+> > +
+> > +  ports:
+> > +    $ref: /schemas/graph.yaml#/properties/ports
 > 
-> That one would be fine.
+> additionalProperties: false
 > 
-> > But as it is CPLD
-> > device I would suggest to name it really as "cpld". It does not matter
-> > from which manufactor you have CPLD, just like it does not matter from
-> > which manufactor you have NAND.
+> > +
+> > +    properties:
+> > +      port@0:
+> > +        $ref: /schemas/graph.yaml#/properties/port
+> > +        description:
+> > +          Output port representing the DSI output. It can have
+> > +          most 4 endpoints. The endpoint number is directly encoding
+> > +          the DSI virtual channel used by this device.
+> > +
+> > +      port@1:
+> > +        $ref: /schemas/graph.yaml#/properties/port
+> > +        description:
+> > +          Input port representing the DP bridge input.
+> > +
+> > +    required:
+> > +      - port@1
+> > +
+> > +
+> > +required:
+> > +  - compatible
+> > +  - reg
+> > +  - interrupts
+> > +  - clocks
+> > +  - clock-names
+> > +  - phys
+> > +  - phy-names
+> > +  - ports
+> > +
+> > +allOf:
+> > +  - $ref: ../dsi-controller.yaml#
+> > +
+> > +unevaluatedProperties: false
+> > +
+> > +examples:
+> > +  - |
+> > +    dsi@fd0c0000 {
+> > +        compatible = "cdns,dsi";
+> > +        reg = <0x0 0xfd0c0000 0x0 0x1000>;
+> > +        clocks = <&pclk>, <&sysclk>;
+> > +        clock-names = "dsi_p_clk", "dsi_sys_clk";
+> > +        interrupts = <1>;
+> > +        phys = <&dphy0>;
+> > +        phy-names = "dphy";
+> > +
+> > +        #address-cells = <1>;
+> > +        #size-cells = <0>;
+> > +
+> > +        ports {
+> > +            #address-cells = <1>;
+> > +            #size-cells = <0>;
+> > +
+> > +            port@1 {
+> > +                reg = <1>;
+> > +                endpoint {
+> > +                    remote-endpoint = <&xxx_dpi_output>;
+> > +                };
+> > +            };
+> > +        };
+> > +
+> > +        panel@0 {
+> > +            compatible = "panasonic,vvx10f034n00";
+> > +            reg = <0>;
+> > +            power-supply = <&vcc_lcd_reg>;
+> > +        };
+> > +    };
+> > +
+> > +  - |
+> > +    dsi@fd0c0000 {
+> > +        compatible = "cdns,dsi";
+> > +        reg = <0x0 0xfd0c0000 0x0 0x1000>;
+> > +        clocks = <&pclk>, <&sysclk>;
+> > +        clock-names = "dsi_p_clk", "dsi_sys_clk";
+> > +        interrupts = <1>;
+> > +        phys = <&dphy1>;
+> > +        phy-names = "dphy";
+> > +
+> > +        ports {
+> > +            #address-cells = <1>;
+> > +            #size-cells = <0>;
+> > +
+> > +            port@0 {
+> > +                reg = <0>;
+> > +                #address-cells = <1>;
+> > +                #size-cells = <0>;
+> > +
+> > +                dsi0_output: endpoint@0 {
+> > +                    reg = <0>;
+> > +                    remote-endpoint = <&dsi_panel_input>;
+> > +                };
+> > +            };
+> > +
+> > +            port@1 {
+> > +                reg = <1>;
+> > +                endpoint {
+> > +                    remote-endpoint = <&xxx_dpi_output>;
+> > +                };
+> > +            };
+> > +        };
+> > +    };
+> > +
+> > +    i2c {
+> > +        #address-cells = <1>;
+> > +        #size-cells = <0>;
+> > +
+> > +        bridge@2d {
+> > +            compatible = "ti,sn65dsi86";
+> > +            reg = <0x2d>;
+> > +
+> > +            vpll-supply = <&src_pp1800_s4a>;
+> > +            vccio-supply = <&src_pp1800_s4a>;
+> > +            vcca-supply = <&src_pp1200_l2a>;
+> > +            vcc-supply = <&src_pp1200_l2a>;
+> > +
+> > +            ports {
+> > +                #address-cells = <1>;
+> > +                #size-cells = <0>;
+> > +
+> > +                port@0 {
+> > +                    reg = <0>;
+> > +                    dsi_panel_input: endpoint {
+> > +                        remote-endpoint = <&dsi0_output>;
+> > +                    };
+> > +                };
+> > +
+> > +                port@1 {
+> > +                    reg = <1>;
+> > +                    endpoint {
+> > +                        remote-endpoint = <&panel_in_edp>;
+> > +                    };
+> > +                };
+> > +            };
+> > +        };
+> > +    };
+Thanks for the review !
+I have set a v4 addressing the comments
+please review
+
+Regards
+Rahul T R
 > 
-> Then cpld is fine as well.
-
-Ok, so stick with cpld.
-
-> > 
-> > From bus point of view, cpld is like nand or nor nodes in DTS. All of
-> > them refers to specific memory map of chip selects on the local bus.
-> > 
-> >> "The name of a node should be somewhat generic, reflecting the function
-> >> of the device and not its precise programming
-> >>  model. If appropriate, the name should be one of the following choices:"
-> > 
-> > Hm... You forgot to send what are those "choices:"?
 > 
-> I didn't, I just assumed you will Google it (or use other web-search
-> engine of your choice) to get the spec. As this is a quote, Google
-> results should be very accurate. No need to duplicate entire pages of
-> publicly available specification.
-
-This was the first thing which I did when I read email. No usable
-result. So the next thing was that I started git grep on the linux tree.
-Again no result. So at the end I come to the conclusion that you forgot
-to copy+paste whole quote or something like that.
-
-Now I started searching a bit more and found it in following documentation:
-https://devicetree-specification.readthedocs.io/en/latest/chapter2-devicetree-basics.html#generic-names-recommendation
-
-Original link to the quote would be useful (but now I have it).
-
 > Best regards,
 > Krzysztof

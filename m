@@ -2,60 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F8CB566783
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 12:13:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 18782566787
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 12:13:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230463AbiGEKN2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Jul 2022 06:13:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36664 "EHLO
+        id S231351AbiGEKNu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Jul 2022 06:13:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37152 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229473AbiGEKN0 (ORCPT
+        with ESMTP id S229954AbiGEKNt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Jul 2022 06:13:26 -0400
-Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB9462C8
-        for <linux-kernel@vger.kernel.org>; Tue,  5 Jul 2022 03:13:24 -0700 (PDT)
-Received: by mail-lf1-x133.google.com with SMTP id z21so19659213lfb.12
-        for <linux-kernel@vger.kernel.org>; Tue, 05 Jul 2022 03:13:24 -0700 (PDT)
+        Tue, 5 Jul 2022 06:13:49 -0400
+Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E3DFD132
+        for <linux-kernel@vger.kernel.org>; Tue,  5 Jul 2022 03:13:48 -0700 (PDT)
+Received: by mail-lf1-x134.google.com with SMTP id y16so19687846lfb.9
+        for <linux-kernel@vger.kernel.org>; Tue, 05 Jul 2022 03:13:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=message-id:date:mime-version:user-agent:subject:content-language:to
          :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=/c35IP8fT9ZTu8bx278sy5MOBFHS+lNYsk/NFdibXS0=;
-        b=VRUEgCC90iVnU85xU+RHG/DIde70XjpkA5/TrUXjl6G+LF/BF93AqwJbYN4UTsmiSg
-         ZKwoSSubuK5psSk9PwQEwu/gvwmuvxD4JKv+MrMPwkclKYTWK+4bQ4twHvLdU0s+LUi+
-         498PUU+gugxVzUdLER/Ft60zv9ChROOE+IOV2YgMlp8eiB/w/69X6kzRdmvPoXp3hdmN
-         OUCurpOtcG6tVLGmHEQ1VWlPBoKmVSieQs/kYBeyzy9tbsP9x5Fp6QlcK7CgCUbez243
-         plmfL1oa1YytHlkMkW+sOaQGI9XqymTbN9b/JXR4kBz4b7XEU+kvCsLvPXtSaJF0hHJ7
-         nuoQ==
+        bh=cLjhHLrbRBnYiVAOCNhcYbbg+1XpO08dGVEQiEigido=;
+        b=NokVD5aeNj9stoX6SL9K7J5iP98z+qj56ikZljVqZfxNlvBdGGeYXxMh0F5JndN1FC
+         GtOq9Ejxu35KdYEDvApSJA5U7E8l8jCd9wPmco0VlUftMK6OspoEKj0gsE3fkzJdKLRG
+         Y5Lqu69MWowm2utmq73ikL5F63glMys4dDxIU4dVtr7VwlPhsq54UOrAyALxpu/izWK8
+         KpX9f5FLxeVfLqcJ1U4k817QRBe/uxD1DUsNiyxsoy5QQuZmuWLG6Y/ccQS2jaKU/meQ
+         +6NF0zGrSlSfPnlykGS1k0h/Y8yt1ptey2o4l/BFh8H17mwFekV/9ParMWFzH4gp2R/7
+         CwVA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
          :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=/c35IP8fT9ZTu8bx278sy5MOBFHS+lNYsk/NFdibXS0=;
-        b=QIhl18lS2Y8vSvvsKsePMHjalGBsDuh9t6BJvz00b5XeWPxylLjVzw8L/sjRpfUsqj
-         hGxStgHUJh0rE+G1Ws/SQKAHzm0+W7MA824by9P0WoguhX4TWP+GljThME9mw/BCPtAB
-         WNLTkp8ZCze4N2ldqZChToi4jZKhaBmdv1L6uIkTeisxZ/bNrya6+iO/Lwj0HFTZ1b2x
-         kq94rku9qGjkjcOhoXj6idOWJZZxswtlmvNt2m7y6hgkSwTx56ocz8y2GYBdrpaicaJI
-         sy5DzFc0SbrPi2lj4ofdzhz8bp++GgVkBDybZhBFbwE3oLJEjgMhcKRvaTkgTt0Eyf5V
-         lO/A==
-X-Gm-Message-State: AJIora9HaVZrs1bXN9Mp5Ju5cgCEumZeFwdo7qkKlxWpop+aavCC/gdA
-        X3y8FraS8MDcRkJLb0da4Krleg==
-X-Google-Smtp-Source: AGRyM1vnKC4Ilv2ZbR68+xe7F6V4OEip7c6vXCKFCLuc1QNyaaJeIbUmjLXrzEe384x81w08hJ181g==
-X-Received: by 2002:a05:6512:2622:b0:481:5b17:58e7 with SMTP id bt34-20020a056512262200b004815b1758e7mr14581404lfb.600.1657016003330;
-        Tue, 05 Jul 2022 03:13:23 -0700 (PDT)
+        bh=cLjhHLrbRBnYiVAOCNhcYbbg+1XpO08dGVEQiEigido=;
+        b=d5rPU8h7GhKE1v8CFeaKwQyh0PUZpHbOtYqjHeapt3E8AuKX8ZnVg0Xs53bpEZ4Z7Q
+         T2p8Vj7NyGVvhf9F0CxoRdbXX9sL6jAJsRJfEyc2UGQu9762yK0gN5HHtP4fXgcIFMWT
+         PYI9fWeCT4tTr4HaItjhayUt8Ru+BhOV2cCFzF+SgVHxpmE25Vw2p9ENCTG3tMGMDF0b
+         VdsAhR17VDi0tCmWClmXCK6ZAAbKnBQQF9WCRFHiBnjIV3WSjmz//0c68YXetf3sZKNJ
+         h3LYmHv477uIL2NLN2ghDgS/RWd8E84cCvdlbwIT8F7DbyyS8Sd6Rd/XZ35sc5i02NGs
+         nakA==
+X-Gm-Message-State: AJIora/Yho/pU3XOtbK3lWcY41yUUsrXWJLnTXDeLgmTJtN4StPo65Ui
+        8nGwFKni51o6a2725AhmhGSRRg==
+X-Google-Smtp-Source: AGRyM1uZsAzZdN771jYqFkZTGKGgnuxS95JZHOFMEG9qBWCRtFMChuq0B2wnLKhmNJ/+m+DoTVFchw==
+X-Received: by 2002:a05:6512:128f:b0:47f:879b:dc9c with SMTP id u15-20020a056512128f00b0047f879bdc9cmr23369198lfs.478.1657016026738;
+        Tue, 05 Jul 2022 03:13:46 -0700 (PDT)
 Received: from [192.168.1.52] ([84.20.121.239])
-        by smtp.gmail.com with ESMTPSA id f13-20020a2eb5ad000000b0025aa51b069esm5341723ljn.5.2022.07.05.03.13.22
+        by smtp.gmail.com with ESMTPSA id r25-20020a2e9959000000b0025a70f7ea3asm5468127ljj.138.2022.07.05.03.13.45
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 05 Jul 2022 03:13:22 -0700 (PDT)
-Message-ID: <69207215-f53d-c5b9-9cc9-214e2e3723f4@linaro.org>
-Date:   Tue, 5 Jul 2022 12:13:21 +0200
+        Tue, 05 Jul 2022 03:13:45 -0700 (PDT)
+Message-ID: <1db53d76-575f-53f2-d52d-1241e5053f59@linaro.org>
+Date:   Tue, 5 Jul 2022 12:13:44 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.11.0
-Subject: Re: [PATCH 12/43] dt-bindings: phy: qcom,qmp: split out PCIe PHY
- binding
+Subject: Re: [PATCH 13/43] dt-bindings: phy: qcom,qmp-pcie: clean up register
+ constraints
 Content-Language: en-US
 To:     Johan Hovold <johan+linaro@kernel.org>,
         Vinod Koul <vkoul@kernel.org>,
@@ -67,14 +67,14 @@ Cc:     Andy Gross <agross@kernel.org>,
         linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
 References: <20220705094239.17174-1-johan+linaro@kernel.org>
- <20220705094239.17174-13-johan+linaro@kernel.org>
+ <20220705094239.17174-14-johan+linaro@kernel.org>
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220705094239.17174-13-johan+linaro@kernel.org>
+In-Reply-To: <20220705094239.17174-14-johan+linaro@kernel.org>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -83,68 +83,14 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 On 05/07/2022 11:42, Johan Hovold wrote:
-> The QMP PHY DT schema is getting unwieldy. Break out the PCIe PHY
-> binding in a separate file.
+> Only some USB and combo PHYs have a second dp_com control block.
 > 
 > Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
 > ---
->  .../bindings/phy/qcom,qmp-pcie-phy.yaml       | 188 ++++++++++++++++++
->  .../devicetree/bindings/phy/qcom,qmp-phy.yaml |  75 -------
->  2 files changed, 188 insertions(+), 75 deletions(-)
->  create mode 100644 Documentation/devicetree/bindings/phy/qcom,qmp-pcie-phy.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/phy/qcom,qmp-pcie-phy.yaml b/Documentation/devicetree/bindings/phy/qcom,qmp-pcie-phy.yaml
-> new file mode 100644
-> index 000000000000..d1d4a468acc3
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/phy/qcom,qmp-pcie-phy.yaml
-> @@ -0,0 +1,188 @@
-> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-> +
+>  Documentation/devicetree/bindings/phy/qcom,qmp-pcie-phy.yaml | 2 --
+>  1 file changed, 2 deletions(-)
 
-No new line.
-
-> +%YAML 1.2
-> +---
-> +$id: "http://devicetree.org/schemas/phy/qcom,qmp-pcie-phy.yaml#"
-> +$schema: "http://devicetree.org/meta-schemas/core.yaml#"
-
-Drop quotes.
-
-> +
-> +title: Qualcomm QMP PHY controller (PCIe)
-> +
-> +maintainers:
-> +  - Vinod Koul <vkoul@kernel.org>
-> +
-> +description:
-> +  QMP PHY controller supports physical layer functionality for a number of
-> +  controllers on Qualcomm chipsets, such as, PCIe, UFS, and USB.
-> +
-> +properties:
-> +  compatible:
-> +    enum:
-> +      - qcom,ipq6018-qmp-pcie-phy
-> +      - qcom,ipq8074-qmp-pcie-phy
-> +      - qcom,msm8998-qmp-pcie-phy
-> +      - qcom,sc8180x-qmp-pcie-phy
-> +      - qcom,sdm845-qhp-pcie-phy
-> +      - qcom,sdm845-qmp-pcie-phy
-> +      - qcom,sdx55-qmp-pcie-phy
-> +      - qcom,sm8250-qmp-gen3x1-pcie-phy
-> +      - qcom,sm8250-qmp-gen3x2-pcie-phy
-> +      - qcom,sm8250-qmp-modem-pcie-phy
-> +      - qcom,sm8450-qmp-gen3x1-pcie-phy
-> +      - qcom,sm8450-qmp-gen4x2-pcie-phy
-> +
-> +  reg:
-> +    minItems: 1
-> +    items:
-> +      - description: Address and length of PHY's common serdes block.
-> +      - description: Address and length of PHY's DP_COM control block.
-
-All my msm8996-qmp-pcie comments apply.
-
+Squash it. This patch does not make any sense on its own.
 
 Best regards,
 Krzysztof

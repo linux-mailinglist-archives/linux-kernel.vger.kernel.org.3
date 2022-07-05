@@ -2,75 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BFE85567488
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 18:38:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8BA6256748C
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 18:39:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231214AbiGEQiY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Jul 2022 12:38:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34556 "EHLO
+        id S231821AbiGEQjS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Jul 2022 12:39:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35608 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229925AbiGEQiW (ORCPT
+        with ESMTP id S229807AbiGEQjQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Jul 2022 12:38:22 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DB5FB23;
-        Tue,  5 Jul 2022 09:38:21 -0700 (PDT)
-Received: from notapiano (pool-98-113-53-228.nycmny.fios.verizon.net [98.113.53.228])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: nfraprado)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 9300966015BA;
-        Tue,  5 Jul 2022 17:38:18 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1657039099;
-        bh=mWc6XHb8mL1eusk3UePGeV8EpBbDv8OndXbNn53uE8k=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=S8+PfNfmQL2npGJZDLLZYYoVWzfdip/VQa192aX9PcvREJkNeRifqsQ1BQ/7mJpEI
-         oCxZJHpCj79kW9JeFeWFtH6ZxI8AC3NaYcmcDywCVED/rFtDFZQW3RBIHJSPb6UI6j
-         3fAXLHrk1IFq//+3i81DGnxQB0ylHoTlPW2qawACMZIZghhoY0I9IGtSUGlWreLiSu
-         VOxLO+9ZW6vk/nLy5c3KIXyz4RecR5/VUemx4ViwehkTzloeoTvTU40Xi0lP1WGF96
-         2vMdFVhfhiwW79puLni8tKGb6u/H+bzhKD5u1VCgB1E898ysfPN1DdpBmyOMO57+vF
-         2g7dT0MIYwTvg==
-Date:   Tue, 5 Jul 2022 12:38:15 -0400
-From:   =?utf-8?B?TsOtY29sYXMgRi4gUi4gQS4=?= Prado 
-        <nfraprado@collabora.com>
-To:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-Cc:     linus.walleij@linaro.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, matthias.bgg@gmail.com,
-        sean.wang@mediatek.com, linux-gpio@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] dt-bindings: pinctrl: mt8195: Fix name for
- mediatek,rsel-resistance-in-si-unit
-Message-ID: <20220705163815.zxmww4ewclrgxrns@notapiano>
-References: <20220630122334.216903-1-angelogioacchino.delregno@collabora.com>
+        Tue, 5 Jul 2022 12:39:16 -0400
+Received: from mail-io1-f54.google.com (mail-io1-f54.google.com [209.85.166.54])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4875862F2;
+        Tue,  5 Jul 2022 09:39:16 -0700 (PDT)
+Received: by mail-io1-f54.google.com with SMTP id p69so11612322iod.10;
+        Tue, 05 Jul 2022 09:39:16 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=9zmLfujGyrugwJVr+u2X/UngU6N6GyB/BloXYkrJ74w=;
+        b=P9k49MRDrAX3Vq80/xNLyK/0bqO6Mbuf9LdAa2ey3F2LMdnLh1sB4H2p4neyy0IvEj
+         1LCnZMg645EM4HgRCTu5LOKdP+u2Iyvv+SVbtLD0EdzZKXEpvvdXp+0IJ0zlkZQR2RJo
+         sVxJj4Oh6e2ZkR9cWmcCSmomw7FtzmAF7W4FS3EB9ckbK9dYnDozmWQc/SpEPDUCsN4/
+         gcjF6NtcT7uwb93ZwkYvV8ieeZXdLiCwhxlSnDyMdRI4KiTlJcv9pESdBe9Bgx3Sw9jn
+         fyjsitDyyfCjemfwDUxoOYtoMLNmtJur32u5NeiSDT0zBfdpDaYue7rxdSZKtSvICz2O
+         cUOg==
+X-Gm-Message-State: AJIora9VqDti9Dtjkxqt4e5XOm2q9K4qU00i7tKMSFhZNfmlMwwAq5ha
+        v/AihL3q+kxCofWk/RjaKw==
+X-Google-Smtp-Source: AGRyM1veDBs4v9oVVH106fmnEU7/Ou6Mg8CYe75qez47nQMn2d4/1d4FuIDfrS59L/JpyLgX2UzhRw==
+X-Received: by 2002:a05:6638:1347:b0:33e:9dd1:d3f6 with SMTP id u7-20020a056638134700b0033e9dd1d3f6mr15751919jad.131.1657039155522;
+        Tue, 05 Jul 2022 09:39:15 -0700 (PDT)
+Received: from robh.at.kernel.org ([64.188.179.248])
+        by smtp.gmail.com with ESMTPSA id d202-20020a6bb4d3000000b0067275db775fsm15669679iof.36.2022.07.05.09.39.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 05 Jul 2022 09:39:15 -0700 (PDT)
+Received: (nullmailer pid 2236594 invoked by uid 1000);
+        Tue, 05 Jul 2022 16:39:13 -0000
+Date:   Tue, 5 Jul 2022 10:39:13 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Jimmy Chen <jinghung.chen3@hotmail.com>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Douglas Anderson <dianders@chromium.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Alan Huang <alan-huang@quanta.corp-partner.google.com>,
+        devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org
+Subject: Re: [PATCH 1/2] [v3 1/2] arm64: dts: qcom: Add LTE SKUs for
+ sc7280-villager family
+Message-ID: <20220705163913.GA2234759-robh@kernel.org>
+References: <SG2PR03MB5006CBD49DB3052D57A6ABF0CC819@SG2PR03MB5006.apcprd03.prod.outlook.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220630122334.216903-1-angelogioacchino.delregno@collabora.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <SG2PR03MB5006CBD49DB3052D57A6ABF0CC819@SG2PR03MB5006.apcprd03.prod.outlook.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 30, 2022 at 02:23:34PM +0200, AngeloGioacchino Del Regno wrote:
-> When this property was introduced, it contained underscores, but
-> the actual code wants dashes.
-> 
-> Change it from mediatek,rsel_resistance_in_si_unit to
-> mediatek,rsel-resistance-in-si-unit.
-> 
-> Fixes: 91e7edceda96 ("dt-bindings: pinctrl: mt8195: change pull up/down description")
-> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+On Tue, Jul 05, 2022 at 10:57:47AM +0800, Jimmy Chen wrote:
+> This adds a LTE skus for Chromebook Villager to the yaml.
 
-Reviewed-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
+Your subject is wrong. This is not a .dts file change. Use 'git log 
+--oneline' for inspiration as to what the subject should look like for 
+this file/directory.
 
-Thanks,
-Nícolas
+> 
+> Signed-off-by: Jimmy Chen <jinghung.chen3@hotmail.com>
+> ---
+> 
+> The format of the added items is based on the below document.
+> Documentation/arm/google/chromebook-boot-flow.rst
+> 
+> Changes in v2:
+> - Update the patch title and the commit message
+> Changes in v3:
+> - Update patch title
+> 
+> ---
+>  Documentation/devicetree/bindings/arm/qcom.yaml | 15 +++++++++++++++
+>  1 file changed, 15 insertions(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/arm/qcom.yaml b/Documentation/devicetree/bindings/arm/qcom.yaml
+> index 4dd18fbf20b68..a136b1389c2ac 100644
+> --- a/Documentation/devicetree/bindings/arm/qcom.yaml
+> +++ b/Documentation/devicetree/bindings/arm/qcom.yaml
+> @@ -529,11 +529,26 @@ properties:
+>            - const: google,herobrine
+>            - const: qcom,sc7280
+>  
+> +      - description: Google Villager (rev0)
+> +        items:
+> +          - const: google,villager-rev0
+> +          - const: qcom,sc7280
+> +
+>        - description: Google Villager (newest rev)
+>          items:
+>            - const: google,villager
+>            - const: qcom,sc7280
+>  
+> +      - description: Google Villager with LTE (rev0)
+> +        items:
+> +          - const: google,villager-rev0-sku0
+> +          - const: qcom,sc7280
+> +
+> +      - description: Google Villager with LTE (newest rev)
+> +        items:
+> +          - const: google,villager-sku0
+> +          - const: qcom,sc7280
+> +
+>        - items:
+>            - enum:
+>                - lenovo,flex-5g
+> -- 
+> 2.25.1
+> 
+> 

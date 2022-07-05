@@ -2,81 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B3267566FA9
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 15:44:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D54C0566FB8
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 15:46:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232733AbiGENn5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Jul 2022 09:43:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57432 "EHLO
+        id S232978AbiGENoC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Jul 2022 09:44:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57436 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232681AbiGENn1 (ORCPT
+        with ESMTP id S232387AbiGENnm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Jul 2022 09:43:27 -0400
-Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31ABD201BB
-        for <linux-kernel@vger.kernel.org>; Tue,  5 Jul 2022 06:07:34 -0700 (PDT)
-Received: by mail-lf1-x129.google.com with SMTP id y16so20410211lfb.9
-        for <linux-kernel@vger.kernel.org>; Tue, 05 Jul 2022 06:07:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=zbkJQitCCB4JIY77EtUWLU2dvmK4r/1hyyXKadOjVuk=;
-        b=Y5fC7OWZuDKf24I0MV+8pbvacfRq5CpAm7myf5QLNeQ+ruoEM4xzzTMzeWHqAU4rDl
-         meIsa1R/5ZXa6+KXMiGEznU0U6Cx1zVGVsplX31icjx1gfbVm7VPKwsvg++vCIQCfgLh
-         nnJWoZ0vsZWqDkWMLyR3ynZ15eJsd51irIIwFC+OcgSkVmrK2xYypXRlXe+xBXy1ATyj
-         d+HleFZ95SL53prO/dlNuzAKmSzabgXGJmbOb3nwtULUNmsvREbe3gJ+gBwOg4ieICBw
-         G4uLvh4pSWuLay39UzOaB+OvYTJm6QMjxK+wYM30JTtzG7pugXDtnIHQ3QuR/Cd7V9VI
-         uoJg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=zbkJQitCCB4JIY77EtUWLU2dvmK4r/1hyyXKadOjVuk=;
-        b=NyxnvQV7cHbqtp/lfAOraE5lvuzjdgnuxIEtp7/fHWPt1RmJasb0DK9VV3wktjpCfJ
-         d2vNsS5IURQ90m0uVLrTDV5JvVF6gfYHkoKsNqV0RfxhfZKgnI/IjHeqdGV+Wdzm8OBb
-         TosrItpdFRcDnHPY/diwhOdGEX1ELi/Be3n8b5f6X1xSzcOKie29BdrwvG2TC5ldyXyS
-         sbLGeBgzWl1JsPAXil7776EzC3GEMDGezQIk1aeOOoPR+fGOagY1sb9mUcsPhaq8vqJA
-         ZCQJ9FfaPCTl/3Vt4vCpBmsLUu/eRv8ebok1+1dpgElHcHu80DdgnqEA2sFfUCtcyMuq
-         vtPA==
-X-Gm-Message-State: AJIora8Deh7DzV/Cpv4i5vN0B2G8Dl3dWM8+I7tb+smd4yuQPo6hBajz
-        IRHQlVovXA8pIBL/44VwmMiQ4A==
-X-Google-Smtp-Source: AGRyM1unrH7/KXqgrUw0VN4FOA+NEao2KQ6Mp/vj2A5DmtcTSTdiZPVwcD0NO8/kYjMYNCgLInjTKA==
-X-Received: by 2002:a05:6512:2346:b0:484:4837:eba9 with SMTP id p6-20020a056512234600b004844837eba9mr1186235lfu.37.1657026452443;
-        Tue, 05 Jul 2022 06:07:32 -0700 (PDT)
-Received: from [192.168.1.52] ([84.20.121.239])
-        by smtp.gmail.com with ESMTPSA id dt7-20020a0565122a8700b0047f674838a5sm5680112lfb.231.2022.07.05.06.07.31
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 05 Jul 2022 06:07:31 -0700 (PDT)
-Message-ID: <3897aace-bce5-cad4-d92f-40cef4d0e207@linaro.org>
-Date:   Tue, 5 Jul 2022 15:07:30 +0200
+        Tue, 5 Jul 2022 09:43:42 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F274C2C657;
+        Tue,  5 Jul 2022 06:07:40 -0700 (PDT)
+Received: from dggpemm500024.china.huawei.com (unknown [172.30.72.55])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4Lcjbm4NylzkX1h;
+        Tue,  5 Jul 2022 21:06:12 +0800 (CST)
+Received: from dggpemm500013.china.huawei.com (7.185.36.172) by
+ dggpemm500024.china.huawei.com (7.185.36.203) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Tue, 5 Jul 2022 21:07:39 +0800
+Received: from [127.0.0.1] (10.67.108.67) by dggpemm500013.china.huawei.com
+ (7.185.36.172) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Tue, 5 Jul
+ 2022 21:07:38 +0800
+Message-ID: <155be8eb-0255-342f-bac8-46efb868d97c@huawei.com>
+Date:   Tue, 5 Jul 2022 21:07:38 +0800
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH 1/2] dt-bindings: leds: Add cznic,turris1x-leds.yaml
- binding
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.0
+From:   Chen Zhongjin <chenzhongjin@huawei.com>
+Subject: Re: [PATCH v5 08/10] ARM: uaccess: add __{get,put}_kernel_nofault
+Reply-To: <20220201172942.nxop6cjr3xfa4237@maple.lan>
+To:     <daniel.thompson@linaro.org>
+CC:     <arnd@arndb.de>, <arnd@kernel.org>, <linus.walleij@linaro.org>,
+        <linux-arch@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <linux-mm@kvack.org>,
+        <linux@armlinux.org.uk>, <viro@zeniv.linux.org.uk>
 Content-Language: en-US
-To:     =?UTF-8?Q?Pali_Roh=c3=a1r?= <pali@kernel.org>
-Cc:     Pavel Machek <pavel@ucw.cz>, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        =?UTF-8?Q?Marek_Beh=c3=ban?= <kabel@kernel.org>,
-        linux-leds@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220705000448.14337-1-pali@kernel.org>
- <42d837dd-fbd1-6294-2fa0-8a07ae0f8d44@linaro.org>
- <20220705114238.xwgexavgozqskwbw@pali>
- <90fd55cb-13f4-eac2-2b1a-85ae628ecc89@linaro.org>
- <20220705121541.t7jjcjp4hkqprsdo@pali>
- <3358f88c-5c58-ae0d-2c26-7ba9a954b491@linaro.org>
- <20220705130550.uu6ix7tdtswn7vaf@pali>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220705130550.uu6ix7tdtswn7vaf@pali>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+X-Originating-IP: [10.67.108.67]
+X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
+ dggpemm500013.china.huawei.com (7.185.36.172)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -84,20 +56,128 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 05/07/2022 15:05, Pali Rohár wrote:
-> 
-> This was the first thing which I did when I read email. No usable
-> result. So the next thing was that I started git grep on the linux tree.
-> Again no result. So at the end I come to the conclusion that you forgot
-> to copy+paste whole quote or something like that.
-> 
-> Now I started searching a bit more and found it in following documentation:
-> https://devicetree-specification.readthedocs.io/en/latest/chapter2-devicetree-basics.html#generic-names-recommendation
-> 
-> Original link to the quote would be useful (but now I have it).
+Hi,
 
-Good point, thanks for the link. I forgot that devicetree spec is also
-available as webpage.
+It seems that the problem has not been solved so far.
 
-Best regards,
-Krzysztof
+I found that "echo t > /proc/sysrq-trigger" causes the same fault 
+because "print_worker_info()" also calls "copy_from_kernel_nofault()", 
+but "worker->current_pwq" can be zero when copying.
+
+Stack trace:
+
+[   15.303013] 8<--- cut here ---
+[   15.303315] Unhandled fault: page domain fault (0x01b) at 0x00000004
+[   15.303538] [00000004] *pgd=6338f831, *pte=00000000, *ppte=00000000
+[   15.304367] Internal error: : 1b [#1] SMP ARM
+[   15.304721] Modules linked in:
+[   15.305107] CPU: 0 PID: 89 Comm: sh Not tainted 5.19.0-rc5-dirty #332
+[   15.305373] Hardware name: ARM-Versatile Express
+[   15.305529] PC is at copy_from_kernel_nofault+0xf0/0x174
+[   15.305712] LR is at copy_from_kernel_nofault+0x30/0x174
+[   15.305873] pc : [<c0448ea4>]    lr : [<c0448de4>]    psr: 20000013
+[   15.306078] sp : eac4dde8  ip : 0000bff4  fp : eac4de74
+[   15.306233] r10: 00000007  r9 : 00000000  r8 : c1a09700
+[   15.306397] r7 : c1a04cc8  r6 : 00000004  r5 : eac4de18  r4 : 00000004
+[   15.306586] r3 : 00000000  r2 : c2440000  r1 : 00000004  r0 : 00000001
+[   15.306831] Flags: nzCv  IRQs on  FIQs on  Mode SVC_32  ISA ARM  
+Segment none
+[   15.307120] Control: 10c5387d  Table: 633f006a  DAC: 00000051
+...
+[   15.318121]  copy_from_kernel_nofault from print_worker_info+0xd0/0x15c
+[   15.318343]  print_worker_info from sched_show_task+0x134/0x180
+[   15.318534]  sched_show_task from show_state_filter+0x74/0xa8
+[   15.318714]  show_state_filter from sysrq_handle_showstate+0xc/0x14
+[   15.318902]  sysrq_handle_showstate from __handle_sysrq+0x88/0x138
+[   15.319173]  __handle_sysrq from write_sysrq_trigger+0x4c/0x5c
+[   15.319356]  write_sysrq_trigger from proc_reg_write+0xa8/0xd0
+[   15.319541]  proc_reg_write from vfs_write+0xb4/0x388
+[   15.319708]  vfs_write from ksys_write+0x58/0xd0
+[   15.319851]  ksys_write from ret_fast_syscall+0x0/0x54
+
+> On Thu, Jan 13, 2022 at 12:14:50PM +0100, Arnd Bergmann wrote:
+> > On Thu, Jan 13, 2022 at 10:47 AM Daniel Thompson
+> > <daniel.thompson@linaro.org> wrote:
+> > > On Wed, Jan 12, 2022 at 06:08:17PM +0000, Russell King (Oracle) 
+> wrote:
+> > >
+> > > > The kernel attempted to access an address that is in the userspace
+> > > > domain (NULL pointer) and took an exception.
+> > > >
+> > > > I suppose we should handle a domain fault more gracefully - what 
+> are
+> > > > the required semantics if the kernel attempts a userspace access
+> > > > using one of the _nofault() accessors?
+> > >
+> > > I think the best answer might well be that, if the arch provides
+> > > implementations of hooks such as copy_from_kernel_nofault_allowed()
+> > > then the kernel should never attempt a userspace access using the
+> > > _nofault() accessors. That means they can do whatever they like!
+> > >
+> > > In other words something like the patch below looks like a promising
+> > > approach.
+> >
+> > Right, it seems this is the same as on x86.
+>
+> Hmnn...
+>
+> Looking a bit deeper into copy_from_kernel_nofault() there is an odd
+> asymmetry between copy_to_kernel_nofault(). Basically there is
+> copy_from_kernel_nofault_allowed() but no corresponding
+> copy_to_kernel_nofault_allowed() which means we cannot defend memory
+> pokes using a helper function.
+>
+> I checked the behaviour of copy_to_kernel_nofault() on arm, arm64, mips,
+> powerpc, riscv, x86 kernels (which is pretty much everything where I
+> know how to fire up qemu). All except arm gracefully handle an
+> attempt to write to userspace (well, NULL actually) with
+> copy_to_kernel_nofault() so I think there still a few more changes
+> to fully fix this.
+>
+> Looks like we would need a slightly more assertive change, either adding
+> a copy_to_kernel_nofault_allowed() or modifying the arm dabt handlers to
+> avoid faults on userspace access.
+>
+> Any views on which is better?
+>
+I've tested the copy_from_kernel_nofault_allowed() and agree that it's a 
+enough simple and effective solution. There is only one little gap 
+compared to other arch that it returns -ERANGE while actually it should 
+be a -EFAULT (refer to other arches).
+
+Anyway if we want to modify the FSR handlers I guess it's also easy 
+because not we do nothing special for Domain Fault now.
+
+>
+> Daniel.
+>
+> >
+> > > From f66a63b504ff582f261a506c54ceab8c0e77a98c Mon Sep 17 00:00:00 
+> 2001
+> > > From: Daniel Thompson <daniel.thompson@linaro.org>
+> > > Date: Thu, 13 Jan 2022 09:34:45 +0000
+> > > Subject: [PATCH] arm: mm: Implement 
+> copy_from_kernel_nofault_allowed()
+> > >
+> > > Currently copy_from_kernel_nofault() can actually fault (due to 
+> software
+> > > PAN) if we attempt userspace access. In any case, the documented
+> > > behaviour for this function is to return -ERANGE if we attempt an 
+> access
+> > > outside of kernel space.
+> > >
+> > > Implementing copy_from_kernel_nofault_allowed() solves both these
+> > > problems.
+> > >
+> > > Signed-off-by: Daniel Thompson <daniel.thompson@linaro.org>
+> >
+> > Reviewed-by: Arnd Bergmann <arnd@arndb.de>
+
+Tested-by: Chen Zhongjin <chenzhongjin@huawei.com>
+
+Best,
+
+Chen
+
+
+

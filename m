@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 808DE566DB2
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 14:27:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 63A28566E47
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Jul 2022 14:35:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237340AbiGEMZe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Jul 2022 08:25:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37076 "EHLO
+        id S238739AbiGEMde (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Jul 2022 08:33:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44468 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236601AbiGEMR4 (ORCPT
+        with ESMTP id S235796AbiGEMYd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Jul 2022 08:17:56 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 933C0193D6;
-        Tue,  5 Jul 2022 05:13:03 -0700 (PDT)
+        Tue, 5 Jul 2022 08:24:33 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23F0C1F602;
+        Tue,  5 Jul 2022 05:17:11 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 461F0B817C7;
-        Tue,  5 Jul 2022 12:13:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 92B7FC341C7;
-        Tue,  5 Jul 2022 12:13:00 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B5C9161ABC;
+        Tue,  5 Jul 2022 12:17:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C193CC341CB;
+        Tue,  5 Jul 2022 12:17:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1657023181;
-        bh=WajH14n4LRoP5ygMUz/2lERUermXm1YHm+rjDQexCvY=;
+        s=korg; t=1657023430;
+        bh=Pv20hZ6MibaibPaGYKswI47gYlx8KHg9vXJ+EQIoDbI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=04D9ePD91JzSJDxl5qotscU5PqA9x2gI73C1izx8S5oLnw9U10HoS0aYPP4gkJolD
-         kOjv4qZoAsYfKY0RXOJZ/ACjJQ2ctIuHp2hT/dMBV/S4e0udBNER3JYJNZERnmLQq/
-         6yOdyhIceAVdDauWUxd7nJcNXynonG9j6zxVnOGM=
+        b=FK7F1VGs4b1j09cBbvV4L98Up1NYKa4R185wvsudckvppcKoWH/zXn/Z68sPA5nmN
+         SFnfizCX1PdvkSLVZzBRXqFluDC4VKhEO6k06Rf0gPq4/99p6ruMRNvcUV/R+8Q2GJ
+         A+spDmuJ33vdZK13BogWIwX7jkZpGfJEwNgqd5RQ=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>
-Subject: [PATCH 5.15 65/98] selftests/rseq: Remove volatile from __rseq_abi
+        stable@vger.kernel.org, Anton Lundin <glance@acc.umu.se>,
+        Oleksij Rempel <o.rempel@pengutronix.de>,
+        Jakub Kicinski <kuba@kernel.org>
+Subject: [PATCH 5.18 057/102] net: asix: fix "cant send until first packet is send" issue
 Date:   Tue,  5 Jul 2022 13:58:23 +0200
-Message-Id: <20220705115619.424790355@linuxfoundation.org>
+Message-Id: <20220705115620.025886140@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.0
-In-Reply-To: <20220705115617.568350164@linuxfoundation.org>
-References: <20220705115617.568350164@linuxfoundation.org>
+In-Reply-To: <20220705115618.410217782@linuxfoundation.org>
+References: <20220705115618.410217782@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,65 +55,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+From: Oleksij Rempel <o.rempel@pengutronix.de>
 
-commit 94b80a19ebfe347a01301d750040a61c38200e2b upstream.
+commit 805206e66fab4ba1e0ebd19402006d62cd1d4902 upstream.
 
-This is done in preparation for the selftest uplift to become compatible
-with glibc-2.35.
+If cable is attached after probe sequence, the usbnet framework would
+not automatically start processing RX packets except at least one
+packet was transmitted.
 
-All accesses to the __rseq_abi fields are volatile, but remove the
-volatile from the TLS variable declaration, otherwise we are stuck with
-volatile for the upcoming rseq_get_abi() helper.
+On systems with any kind of address auto configuration this issue was
+not detected, because some packets are send immediately after link state
+is changed to "running".
 
-Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-Link: https://lkml.kernel.org/r/20220124171253.22072-5-mathieu.desnoyers@efficios.com
+With this patch we will notify usbnet about link status change provided by the
+PHYlib.
+
+Fixes: e532a096be0e ("net: usb: asix: ax88772: add phylib support")
+Reported-by: Anton Lundin <glance@acc.umu.se>
+Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
+Tested-by: Anton Lundin <glance@acc.umu.se>
+Link: https://lore.kernel.org/r/20220624075139.3139300-1-o.rempel@pengutronix.de
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- tools/testing/selftests/rseq/rseq.c |    4 ++--
- tools/testing/selftests/rseq/rseq.h |    4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ drivers/net/usb/asix_common.c |    1 +
+ 1 file changed, 1 insertion(+)
 
---- a/tools/testing/selftests/rseq/rseq.c
-+++ b/tools/testing/selftests/rseq/rseq.c
-@@ -30,7 +30,7 @@
- #include "../kselftest.h"
- #include "rseq.h"
+--- a/drivers/net/usb/asix_common.c
++++ b/drivers/net/usb/asix_common.c
+@@ -431,6 +431,7 @@ void asix_adjust_link(struct net_device
  
--__thread volatile struct rseq_abi __rseq_abi = {
-+__thread struct rseq_abi __rseq_abi = {
- 	.cpu_id = RSEQ_ABI_CPU_ID_UNINITIALIZED,
- };
- 
-@@ -92,7 +92,7 @@ int rseq_register_current_thread(void)
- 		goto end;
- 	}
- 	if (errno != EBUSY)
--		__rseq_abi.cpu_id = RSEQ_ABI_CPU_ID_REGISTRATION_FAILED;
-+		RSEQ_WRITE_ONCE(__rseq_abi.cpu_id, RSEQ_ABI_CPU_ID_REGISTRATION_FAILED);
- 	ret = -1;
- 	__rseq_refcount--;
- end:
---- a/tools/testing/selftests/rseq/rseq.h
-+++ b/tools/testing/selftests/rseq/rseq.h
-@@ -43,7 +43,7 @@
- #define RSEQ_INJECT_FAILED
- #endif
- 
--extern __thread volatile struct rseq_abi __rseq_abi;
-+extern __thread struct rseq_abi __rseq_abi;
- extern int __rseq_handled;
- 
- #define rseq_likely(x)		__builtin_expect(!!(x), 1)
-@@ -139,7 +139,7 @@ static inline uint32_t rseq_current_cpu(
- 
- static inline void rseq_clear_rseq_cs(void)
- {
--	__rseq_abi.rseq_cs.arch.ptr = 0;
-+	RSEQ_WRITE_ONCE(__rseq_abi.rseq_cs.arch.ptr, 0);
+ 	asix_write_medium_mode(dev, mode, 0);
+ 	phy_print_status(phydev);
++	usbnet_link_change(dev, phydev->link, 0);
  }
  
- /*
+ int asix_write_gpio(struct usbnet *dev, u16 value, int sleep, int in_pm)
 
 

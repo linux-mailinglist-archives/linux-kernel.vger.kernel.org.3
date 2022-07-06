@@ -2,86 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AAD91569154
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 20:02:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0388B56915A
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 20:03:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234229AbiGFSCO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Jul 2022 14:02:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47868 "EHLO
+        id S234251AbiGFSDi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Jul 2022 14:03:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49122 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233810AbiGFSCM (ORCPT
+        with ESMTP id S233076AbiGFSDh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Jul 2022 14:02:12 -0400
-Received: from mail-wr1-f42.google.com (mail-wr1-f42.google.com [209.85.221.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3B8D2982A;
-        Wed,  6 Jul 2022 11:02:11 -0700 (PDT)
-Received: by mail-wr1-f42.google.com with SMTP id s1so23132200wra.9;
-        Wed, 06 Jul 2022 11:02:11 -0700 (PDT)
+        Wed, 6 Jul 2022 14:03:37 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8F9A7193C2
+        for <linux-kernel@vger.kernel.org>; Wed,  6 Jul 2022 11:03:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1657130610;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=VBlFjIiB9ZC4gvoYyy90cQtMpZILwrGOgeqSFzZ8m1s=;
+        b=W2+30qm6LRxDKb5EdriLGiSA/CyflO8u+BQB5X3bVkT7OUUc0NKLyx4dZEXaE2apbtdNIw
+        O1FO/nhwIRDBfuQRDZsk7xwd/KLqhO1NtlB/x+q0oZRyGl9TEvTydgbxCEbFYeFxSPdtBi
+        e96WT8CnIyhXG8KEAZyTp8UttNaqni4=
+Received: from mail-io1-f69.google.com (mail-io1-f69.google.com
+ [209.85.166.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-635-0EjxUftcP6KopqhA22ZC0A-1; Wed, 06 Jul 2022 14:03:29 -0400
+X-MC-Unique: 0EjxUftcP6KopqhA22ZC0A-1
+Received: by mail-io1-f69.google.com with SMTP id x2-20020a6bda02000000b0067590503c08so8445099iob.5
+        for <linux-kernel@vger.kernel.org>; Wed, 06 Jul 2022 11:03:29 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=MasjB4ti5D0nWT5bZJTXtMcJnOkBN1+uFVq/8iV4VKs=;
-        b=yu1aQTs7WkcJ4kh9JGIWPWeCA0t2+XlcbxrWbfoEskEA3JBNk2j353lHwk71M7qL3E
-         vpAnMHxrkNihs5+x3WiCXQpefaFdl5VfUvzPrlbW5WKMznnsCsrfLoShP+8DsACGZzMY
-         qvJog6pv8cGmp8Mvhwv1PdAejAWPoZTDYejDOvaUDyYnOipcoe8JqJlbIi5iYDtC+AMI
-         2CuKzbG1EmovX96TKLFH4w5K94smRFgzvguXj97OUO1BcbyYD5eGza6ex7081udSw8HI
-         OtQeCuYOyQ/vY9gucGhjChEPyEiq9yrFDoHvZhparA7/4lak4M9Phuz718DcwK4GSQRq
-         Qzzg==
-X-Gm-Message-State: AJIora/mg3DzKCbmoWVvsQD862FCNUFFX69hAhBg7j4MSwmgfXX1W/1E
-        h0WrBIkhHHCDGI/x0vgxLsw=
-X-Google-Smtp-Source: AGRyM1tk/U4/6eCYpFPdnfxUnu5ItxivRnpw+FlWiwuiHP6kV0yGCCQgDA5ISI8avG5T8OlQIWHpOg==
-X-Received: by 2002:a05:6000:2cf:b0:21b:a920:182c with SMTP id o15-20020a05600002cf00b0021ba920182cmr39869750wry.317.1657130530233;
-        Wed, 06 Jul 2022 11:02:10 -0700 (PDT)
-Received: from liuwe-devbox-debian-v2 ([51.145.34.42])
-        by smtp.gmail.com with ESMTPSA id u1-20020a5d6ac1000000b0021b95bcaf7fsm8780497wrw.59.2022.07.06.11.02.09
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:in-reply-to
+         :references:organization:mime-version:content-transfer-encoding;
+        bh=VBlFjIiB9ZC4gvoYyy90cQtMpZILwrGOgeqSFzZ8m1s=;
+        b=YsWe8u2INSJwbYpGNxXaTSliGxtD4j0kFJMGrsb6lLpJ+2kKxbJycRMWRNeP+Rtzpk
+         1GjJekXKJaGmezaIUXdEh5GLG/vtC4grDEuyYmbVPInTDiBXypa35BLIeZdrBjlQPMg/
+         h7E523EholU/Qgl7BV1e7MIKFI1k07Ia2+x4WMnicRtdAaVKZNkBMiG++bmCRoksizoX
+         1LjkPIqZcqC2Kbo+IF957RPy4oK4/aef+JIKDMiJerACudv5ghHT7sK/v7IYLRd6OAIt
+         itv5CWbXDQ6yiyXsIzvbKFPeXPgSmw7202S8QNrA8yGEPb0AjGHZpuE9SHV8SDzXmcue
+         XoIA==
+X-Gm-Message-State: AJIora+dWviUMY8fbxXr21YQhY6Ut9kqAssSGQh3Xe/1hUvYscP9WHkw
+        YUE9ZKAMZTgdcfucc7YnRmDq8X4QRSR/jVi0BdW459rwdOkLOXF2k8RPHiyVtusW5YYxaETj/MO
+        GND3laPtfMHkAExtbENeyWE0U
+X-Received: by 2002:a05:6638:218f:b0:33c:caf0:a61c with SMTP id s15-20020a056638218f00b0033ccaf0a61cmr26531512jaj.198.1657130608180;
+        Wed, 06 Jul 2022 11:03:28 -0700 (PDT)
+X-Google-Smtp-Source: AGRyM1tABH1Ic8RqUAALPXzLJn+RofmhnwMLRPJ18ZPWLjNFSi2aNVbpdWUQPpp6mJB+LAKijjE03g==
+X-Received: by 2002:a05:6638:218f:b0:33c:caf0:a61c with SMTP id s15-20020a056638218f00b0033ccaf0a61cmr26531473jaj.198.1657130607865;
+        Wed, 06 Jul 2022 11:03:27 -0700 (PDT)
+Received: from redhat.com ([38.15.36.239])
+        by smtp.gmail.com with ESMTPSA id co14-20020a0566383e0e00b0033efe711a37sm1538401jab.35.2022.07.06.11.03.26
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 06 Jul 2022 11:02:09 -0700 (PDT)
-Date:   Wed, 6 Jul 2022 18:02:02 +0000
-From:   Wei Liu <wei.liu@kernel.org>
-To:     Alexander Atanasov <alexander.atanasov@virtuozzo.com>
-Cc:     "K. Y. Srinivasan" <kys@microsoft.com>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        Stephen Hemminger <sthemmin@microsoft.com>,
-        Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
-        kernel@openvz.org, linux-hyperv@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v1 1/1] Create debugfs file with hyper-v balloon usage
- information
-Message-ID: <20220706180202.bzbm6boi232bruct@liuwe-devbox-debian-v2>
-References: <20220705094410.30050-1-alexander.atanasov@virtuozzo.com>
+        Wed, 06 Jul 2022 11:03:27 -0700 (PDT)
+Date:   Wed, 6 Jul 2022 12:03:25 -0600
+From:   Alex Williamson <alex.williamson@redhat.com>
+To:     Nicolin Chen <nicolinc@nvidia.com>
+Cc:     <joro@8bytes.org>, <will@kernel.org>, <marcan@marcan.st>,
+        <sven@svenpeter.dev>, <robin.murphy@arm.com>,
+        <robdclark@gmail.com>, <baolu.lu@linux.intel.com>,
+        <orsonzhai@gmail.com>, <baolin.wang7@gmail.com>,
+        <zhang.lyra@gmail.com>, <jean-philippe@linaro.org>,
+        <jgg@nvidia.com>, <kevin.tian@intel.com>,
+        <suravee.suthikulpanit@amd.com>, <alyssa@rosenzweig.io>,
+        <dwmw2@infradead.org>, <mjrosato@linux.ibm.com>,
+        <gerald.schaefer@linux.ibm.com>, <thierry.reding@gmail.com>,
+        <vdumpa@nvidia.com>, <jonathanh@nvidia.com>, <cohuck@redhat.com>,
+        <thunder.leizhen@huawei.com>, <christophe.jaillet@wanadoo.fr>,
+        <chenxiang66@hisilicon.com>, <john.garry@huawei.com>,
+        <yangyingliang@huawei.com>, <iommu@lists.linux.dev>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-arm-msm@vger.kernel.org>, <linux-s390@vger.kernel.org>,
+        <linux-tegra@vger.kernel.org>,
+        <virtualization@lists.linux-foundation.org>, <kvm@vger.kernel.org>
+Subject: Re: [PATCH v5 0/5] cover-letter: Simplify vfio_iommu_type1
+ attach/detach routine
+Message-ID: <20220706120325.4741ff34.alex.williamson@redhat.com>
+In-Reply-To: <YsXMMCX5LY/3IOtf@Asurada-Nvidia>
+References: <20220701214455.14992-1-nicolinc@nvidia.com>
+        <20220706114217.105f4f61.alex.williamson@redhat.com>
+        <YsXMMCX5LY/3IOtf@Asurada-Nvidia>
+Organization: Red Hat
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220705094410.30050-1-alexander.atanasov@virtuozzo.com>
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jul 05, 2022 at 09:44:09AM +0000, Alexander Atanasov wrote:
-[...]
-> +/*
-> + * DEBUGFS Interface
-> + */
-> +#ifdef CONFIG_DEBUG_FS
-> +
-> +/**
-> + * virtio_balloon_debug_show - shows statistics of balloon operations.
+On Wed, 6 Jul 2022 10:53:52 -0700
+Nicolin Chen <nicolinc@nvidia.com> wrote:
 
-C&P error here. :-)
+> On Wed, Jul 06, 2022 at 11:42:17AM -0600, Alex Williamson wrote:
+> 
+> > On Fri, 1 Jul 2022 14:44:50 -0700
+> > Nicolin Chen <nicolinc@nvidia.com> wrote:
+> >   
+> > > This is a preparatory series for IOMMUFD v2 patches. It enforces error
+> > > code -EMEDIUMTYPE in iommu_attach_device() and iommu_attach_group() when
+> > > an IOMMU domain and a device/group are incompatible. It also drops the
+> > > useless domain->ops check since it won't fail in current environment.
+> > >
+> > > These allow VFIO iommu code to simplify its group attachment routine, by
+> > > avoiding the extra IOMMU domain allocations and attach/detach sequences
+> > > of the old code.
+> > >
+> > > Worths mentioning the exact match for enforce_cache_coherency is removed
+> > > with this series, since there's very less value in doing that as KVM will
+> > > not be able to take advantage of it -- this just wastes domain memory.
+> > > Instead, we rely on Intel IOMMU driver taking care of that internally.
+> > >
+> > > This is on github:
+> > > https://github.com/nicolinc/iommufd/commits/vfio_iommu_attach  
+> > 
+> > How do you foresee this going in, I'm imagining Joerg would merge the
+> > first patch via the IOMMU tree and provide a topic branch that I'd
+> > merge into the vfio tree along with the remaining patches.  Sound
+> > right?  Thanks,  
+> 
+> We don't have any build dependency between the IOMMU change and
+> VFIO changes, yet, without the IOMMU one, any iommu_attach_group()
+> failure now would be a hard failure without a chance falling back
+> to a new_domain, which is slightly different from the current flow.
+> 
+> For a potential existing use case that relies on reusing existing
+> domain, I think it'd be safer to have Joerg acking the first change
+> so you merge them all? Thank!
 
-> + * @f: pointer to the &struct seq_file.
-> + * @offset: ignored.
-> + *
-> + * Provides the statistics that can be accessed in virtio-balloon in the debugfs.
-> + *
+Works for me, I'll look for buy-in + ack from Joerg.  Thanks,
 
-Ditto.
+Alex
 
-Wei.

@@ -2,49 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B447A568859
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 14:31:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 24A3056885F
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 14:32:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233665AbiGFMbG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Jul 2022 08:31:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35352 "EHLO
+        id S233697AbiGFMbj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Jul 2022 08:31:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35870 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233291AbiGFMbD (ORCPT
+        with ESMTP id S233676AbiGFMbe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Jul 2022 08:31:03 -0400
-Received: from relay07.th.seeweb.it (relay07.th.seeweb.it [IPv6:2001:4b7a:2000:18::168])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DB7526AC8
-        for <linux-kernel@vger.kernel.org>; Wed,  6 Jul 2022 05:31:02 -0700 (PDT)
-Received: from [192.168.1.101] (abxi46.neoplus.adsl.tpnet.pl [83.9.2.46])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by m-r2.th.seeweb.it (Postfix) with ESMTPSA id D06DC3F642;
-        Wed,  6 Jul 2022 14:30:59 +0200 (CEST)
-Message-ID: <3bf68892-9a55-1d6e-fb43-346d9378a866@somainline.org>
-Date:   Wed, 6 Jul 2022 14:30:59 +0200
+        Wed, 6 Jul 2022 08:31:34 -0400
+Received: from mail-oi1-x235.google.com (mail-oi1-x235.google.com [IPv6:2607:f8b0:4864:20::235])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6308826AC9
+        for <linux-kernel@vger.kernel.org>; Wed,  6 Jul 2022 05:31:33 -0700 (PDT)
+Received: by mail-oi1-x235.google.com with SMTP id n66so10624265oia.11
+        for <linux-kernel@vger.kernel.org>; Wed, 06 Jul 2022 05:31:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=RcutWXTnA/WDhwPlx9qo4wsri5JOk1i2qD2fd6gm+Uo=;
+        b=TQtAz7IJdH/RcgD2JhDeWupI3HpDRhSsuMv93XWEktBxg2cUnb7N6Z5TXgViCOwSNQ
+         qduuM1jEM8RgHppmsUYSiMqSyP1mdaql/xEpkAdml3SJJyTp0WZ6AhON3jlOG+8xCuVz
+         HRXyVUW5G9o4GUjIgLLCf5Z0OocWhVV5A8UISGzlBn6/c0dXz9MqBUYr4zr4x765O1uY
+         p0eWt808Z0CAzZCyAC+XxZyLqBfXOc909/5dF55CsM4lAqsGqh9LjLt2gkXxH40JTMpA
+         PfnVGOzaUEqrWd9S5oGXoMtMd99Z23/0XHDjD3JmKlPlwUptGqlnzJeExz374yecRz8o
+         eyjQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=RcutWXTnA/WDhwPlx9qo4wsri5JOk1i2qD2fd6gm+Uo=;
+        b=M+tVNO9i/SZ0UP9BfSVp5G8wemTKsPFNzOlMFt/UKddUpgt3nlEeZ6E7+uhXFRtb9G
+         CLOyhODA8dpX3t/X0Ehb54IVRposiFTsPdAxcLyZBDoihSI/+eGWbUrc/uauowwAcLuN
+         ikqv/AMFgkr7ZGRBwuSSLDFnV9AVmnU3Pjea2NUE3j1H7oP/bcX6AX83lGo6IFyQECtA
+         mYTWANDAIvWagrn31k79Z5Fed6hazs6UZZOms50wB6BMCj7R/zhQ7Tsi/403CjsVeE3X
+         jn3bhDAmNRtlU3+rG4xMuQ2WpvwS0TNhW2BMWW/fsz/5BKOtlTwENkWP3lpYtCC0uZPD
+         ZWcg==
+X-Gm-Message-State: AJIora9AVa8hGm8d7WUBY432RdUmPTJombglM47IhHATmNMFP+Gg9nSt
+        L7IDONeQ9HL0CM1DTdlBoAPFB5qA5WF2s/OTycU53w==
+X-Google-Smtp-Source: AGRyM1tAz1H7e2uwc6cDOZT4xcEqNzp8sUNzevKJ456/ix3zpbw31abTY4nAoXKBmsfvR38p8cMuI5uKZ4Jrf3aXY6A=
+X-Received: by 2002:a05:6808:14ca:b0:335:b401:9054 with SMTP id
+ f10-20020a05680814ca00b00335b4019054mr20168504oiw.241.1657110692604; Wed, 06
+ Jul 2022 05:31:32 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH 2/2] [PATCH v2 2/2] arm64: dts: qcom: Add LTE SKUs for
- sc7280-villager family
-Content-Language: en-US
-To:     Jimmy Chen <jinghung.chen3@hotmail.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Andy Gross <agross@kernel.org>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Douglas Anderson <dianders@chromium.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Alan Huang <alan-huang@quanta.corp-partner.google.com>,
-        devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org
-References: <SG2PR03MB500697A11DA5D0B45DE41B0ECC819@SG2PR03MB5006.apcprd03.prod.outlook.com>
-From:   Konrad Dybcio <konrad.dybcio@somainline.org>
-In-Reply-To: <SG2PR03MB500697A11DA5D0B45DE41B0ECC819@SG2PR03MB5006.apcprd03.prod.outlook.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+References: <20220629160550.433980-1-hsinyi@chromium.org> <20220629160550.433980-2-hsinyi@chromium.org>
+ <20220706022926.GA2357796@anxtwsw-Precision-3640-Tower>
+In-Reply-To: <20220706022926.GA2357796@anxtwsw-Precision-3640-Tower>
+From:   Robert Foss <robert.foss@linaro.org>
+Date:   Wed, 6 Jul 2022 14:31:21 +0200
+Message-ID: <CAG3jFyu2KObuc5CiFFK=NzkE1LOTSFVoA3mNyY6r1aKs2SU3ow@mail.gmail.com>
+Subject: Re: [PATCH 1/4] drm/bridge: anx7625: Convert to devm_i2c_new_dummy_device()
+To:     Xin Ji <xji@analogixsemi.com>
+Cc:     Hsin-Yi Wang <hsinyi@chromium.org>,
+        Andrzej Hajda <andrzej.hajda@intel.com>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+        Jonas Karlman <jonas@kwiboo.se>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Maxime Ripard <maxime@cerno.tech>,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -52,163 +77,156 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hey Hsin-Yi,
 
+On Wed, 6 Jul 2022 at 04:29, Xin Ji <xji@analogixsemi.com> wrote:
+>
+> Hi Hsin-Yi, thanks for your patch, looks good to me.
+>
+> Reviewed-by: Xin Ji <xji@analogixsemi.com>
+>
+> On Thu, Jun 30, 2022 at 12:05:47AM +0800, Hsin-Yi Wang wrote:
+> > Simplify the resource management.
+> >
+> > Signed-off-by: Hsin-Yi Wang <hsinyi@chromium.org>
+> > ---
+> >  drivers/gpu/drm/bridge/analogix/anx7625.c | 96 +++++++----------------
+> >  1 file changed, 27 insertions(+), 69 deletions(-)
+> >
+> > diff --git a/drivers/gpu/drm/bridge/analogix/anx7625.c b/drivers/gpu/drm/bridge/analogix/anx7625.c
+> > index 3710fa9ee0acd..f89e8151475f7 100644
+> > --- a/drivers/gpu/drm/bridge/analogix/anx7625.c
+> > +++ b/drivers/gpu/drm/bridge/analogix/anx7625.c
+> > @@ -2436,82 +2436,44 @@ static const struct drm_bridge_funcs anx7625_bridge_funcs = {
+> >  static int anx7625_register_i2c_dummy_clients(struct anx7625_data *ctx,
+> >                                             struct i2c_client *client)
+> >  {
+> > -     int err = 0;
+> > +     struct device *dev = &ctx->client->dev;
+> >
+> > -     ctx->i2c.tx_p0_client = i2c_new_dummy_device(client->adapter,
+> > -                                                  TX_P0_ADDR >> 1);
+> > +     ctx->i2c.tx_p0_client = devm_i2c_new_dummy_device(dev, client->adapter,
+> > +                                             TX_P0_ADDR >> 1);
+> >       if (IS_ERR(ctx->i2c.tx_p0_client))
+> >               return PTR_ERR(ctx->i2c.tx_p0_client);
+> >
+> > -     ctx->i2c.tx_p1_client = i2c_new_dummy_device(client->adapter,
+> > -                                                  TX_P1_ADDR >> 1);
+> > -     if (IS_ERR(ctx->i2c.tx_p1_client)) {
+> > -             err = PTR_ERR(ctx->i2c.tx_p1_client);
+> > -             goto free_tx_p0;
+> > -     }
+> > +     ctx->i2c.tx_p1_client = devm_i2c_new_dummy_device(dev, client->adapter,
+> > +                                             TX_P1_ADDR >> 1);
+> > +     if (IS_ERR(ctx->i2c.tx_p1_client))
+> > +             return PTR_ERR(ctx->i2c.tx_p1_client);
+> >
+> > -     ctx->i2c.tx_p2_client = i2c_new_dummy_device(client->adapter,
+> > -                                                  TX_P2_ADDR >> 1);
+> > -     if (IS_ERR(ctx->i2c.tx_p2_client)) {
+> > -             err = PTR_ERR(ctx->i2c.tx_p2_client);
+> > -             goto free_tx_p1;
+> > -     }
+> > +     ctx->i2c.tx_p2_client = devm_i2c_new_dummy_device(dev, client->adapter,
+> > +                                             TX_P2_ADDR >> 1);
+> > +     if (IS_ERR(ctx->i2c.tx_p2_client))
+> > +             return PTR_ERR(ctx->i2c.tx_p2_client);
+> >
+> > -     ctx->i2c.rx_p0_client = i2c_new_dummy_device(client->adapter,
+> > -                                                  RX_P0_ADDR >> 1);
+> > -     if (IS_ERR(ctx->i2c.rx_p0_client)) {
+> > -             err = PTR_ERR(ctx->i2c.rx_p0_client);
+> > -             goto free_tx_p2;
+> > -     }
+> > +     ctx->i2c.rx_p0_client = devm_i2c_new_dummy_device(dev, client->adapter,
+> > +                                             RX_P0_ADDR >> 1);
+> > +     if (IS_ERR(ctx->i2c.rx_p0_client))
+> > +             return PTR_ERR(ctx->i2c.rx_p0_client);
+> >
+> > -     ctx->i2c.rx_p1_client = i2c_new_dummy_device(client->adapter,
+> > -                                                  RX_P1_ADDR >> 1);
+> > -     if (IS_ERR(ctx->i2c.rx_p1_client)) {
+> > -             err = PTR_ERR(ctx->i2c.rx_p1_client);
+> > -             goto free_rx_p0;
+> > -     }
+> > +     ctx->i2c.rx_p1_client = devm_i2c_new_dummy_device(dev, client->adapter,
+> > +                                             RX_P1_ADDR >> 1);
+> > +     if (IS_ERR(ctx->i2c.rx_p1_client))
+> > +             return PTR_ERR(ctx->i2c.rx_p1_client);
+> >
+> > -     ctx->i2c.rx_p2_client = i2c_new_dummy_device(client->adapter,
+> > -                                                  RX_P2_ADDR >> 1);
+> > -     if (IS_ERR(ctx->i2c.rx_p2_client)) {
+> > -             err = PTR_ERR(ctx->i2c.rx_p2_client);
+> > -             goto free_rx_p1;
+> > -     }
+> > +     ctx->i2c.rx_p2_client = devm_i2c_new_dummy_device(dev, client->adapter,
+> > +                                             RX_P2_ADDR >> 1);
+> > +     if (IS_ERR(ctx->i2c.rx_p2_client))
+> > +             return PTR_ERR(ctx->i2c.rx_p2_client);
+> >
+> > -     ctx->i2c.tcpc_client = i2c_new_dummy_device(client->adapter,
+> > -                                                 TCPC_INTERFACE_ADDR >> 1);
+> > -     if (IS_ERR(ctx->i2c.tcpc_client)) {
+> > -             err = PTR_ERR(ctx->i2c.tcpc_client);
+> > -             goto free_rx_p2;
+> > -     }
+> > +     ctx->i2c.tcpc_client = devm_i2c_new_dummy_device(dev, client->adapter,
+> > +                                             TCPC_INTERFACE_ADDR >> 1);
+> > +     if (IS_ERR(ctx->i2c.tcpc_client))
+> > +             return PTR_ERR(ctx->i2c.tcpc_client);
+> >
+> >       return 0;
+> > -
+> > -free_rx_p2:
+> > -     i2c_unregister_device(ctx->i2c.rx_p2_client);
+> > -free_rx_p1:
+> > -     i2c_unregister_device(ctx->i2c.rx_p1_client);
+> > -free_rx_p0:
+> > -     i2c_unregister_device(ctx->i2c.rx_p0_client);
+> > -free_tx_p2:
+> > -     i2c_unregister_device(ctx->i2c.tx_p2_client);
+> > -free_tx_p1:
+> > -     i2c_unregister_device(ctx->i2c.tx_p1_client);
+> > -free_tx_p0:
+> > -     i2c_unregister_device(ctx->i2c.tx_p0_client);
+> > -
+> > -     return err;
+> > -}
+> > -
+> > -static void anx7625_unregister_i2c_dummy_clients(struct anx7625_data *ctx)
+> > -{
+> > -     i2c_unregister_device(ctx->i2c.tx_p0_client);
+> > -     i2c_unregister_device(ctx->i2c.tx_p1_client);
+> > -     i2c_unregister_device(ctx->i2c.tx_p2_client);
+> > -     i2c_unregister_device(ctx->i2c.rx_p0_client);
+> > -     i2c_unregister_device(ctx->i2c.rx_p1_client);
+> > -     i2c_unregister_device(ctx->i2c.rx_p2_client);
+> > -     i2c_unregister_device(ctx->i2c.tcpc_client);
+> >  }
+> >
+> >  static int __maybe_unused anx7625_runtime_pm_suspend(struct device *dev)
+> > @@ -2723,8 +2685,6 @@ static int anx7625_i2c_probe(struct i2c_client *client,
+> >       if (!platform->pdata.low_power_mode)
+> >               pm_runtime_put_sync_suspend(&client->dev);
+> >
+> > -     anx7625_unregister_i2c_dummy_clients(platform);
+> > -
+> >  free_wq:
+> >       if (platform->workqueue)
+> >               destroy_workqueue(platform->workqueue);
+> > @@ -2754,8 +2714,6 @@ static int anx7625_i2c_remove(struct i2c_client *client)
+> >       if (!platform->pdata.low_power_mode)
+> >               pm_runtime_put_sync_suspend(&client->dev);
+> >
+> > -     anx7625_unregister_i2c_dummy_clients(platform);
+> > -
+> >       if (platform->pdata.audio_en)
+> >               anx7625_unregister_audio(platform);
+> >
+> > --
+> > 2.37.0.rc0.161.g10f37bed90-goog
 
-On 5.07.2022 04:22, Jimmy Chen wrote:
-> This adds LTE skus for villager device tree files.
-> 
-> Signed-off-by: Jimmy Chen <jinghung.chen3@hotmail.com>
-> ---
-> 
->  arch/arm64/boot/dts/qcom/Makefile                 |  2 ++
->  .../arm64/boot/dts/qcom/sc7280-chrome-common.dtsi | 11 -----------
->  arch/arm64/boot/dts/qcom/sc7280-herobrine-crd.dts |  1 +
->  .../dts/qcom/sc7280-herobrine-herobrine-r1.dts    |  1 +
->  .../boot/dts/qcom/sc7280-herobrine-lte-sku.dtsi   | 15 +++++++++++++++
->  .../dts/qcom/sc7280-herobrine-villager-r0-lte.dts | 14 ++++++++++++++
->  .../dts/qcom/sc7280-herobrine-villager-r1-lte.dts | 14 ++++++++++++++
->  arch/arm64/boot/dts/qcom/sc7280-idp.dts           |  1 +
->  8 files changed, 48 insertions(+), 11 deletions(-)
->  create mode 100644 arch/arm64/boot/dts/qcom/sc7280-herobrine-lte-sku.dtsi
->  create mode 100644 arch/arm64/boot/dts/qcom/sc7280-herobrine-villager-r0-lte.dts
->  create mode 100644 arch/arm64/boot/dts/qcom/sc7280-herobrine-villager-r1-lte.dts
-> 
-> diff --git a/arch/arm64/boot/dts/qcom/Makefile b/arch/arm64/boot/dts/qcom/Makefile
-> index bb9f4eb3e65a0..6d81ff12f5af2 100644
-> --- a/arch/arm64/boot/dts/qcom/Makefile
-> +++ b/arch/arm64/boot/dts/qcom/Makefile
-> @@ -103,6 +103,8 @@ dtb-$(CONFIG_ARCH_QCOM)	+= sc7180-trogdor-r1-lte.dtb
->  dtb-$(CONFIG_ARCH_QCOM)	+= sc7280-herobrine-crd.dtb
->  dtb-$(CONFIG_ARCH_QCOM)	+= sc7280-herobrine-herobrine-r1.dtb
->  dtb-$(CONFIG_ARCH_QCOM)	+= sc7280-herobrine-villager-r0.dtb
-> +dtb-$(CONFIG_ARCH_QCOM)	+= sc7280-herobrine-villager-r0-lte.dtb
-> +dtb-$(CONFIG_ARCH_QCOM)	+= sc7280-herobrine-villager-r1-lte.dtb
->  dtb-$(CONFIG_ARCH_QCOM)	+= sc7280-idp.dtb
->  dtb-$(CONFIG_ARCH_QCOM)	+= sc7280-idp2.dtb
->  dtb-$(CONFIG_ARCH_QCOM)	+= sc7280-crd-r3.dtb
-> diff --git a/arch/arm64/boot/dts/qcom/sc7280-chrome-common.dtsi b/arch/arm64/boot/dts/qcom/sc7280-chrome-common.dtsi
-> index cfe2741456a1a..25f31c81b2b74 100644
-> --- a/arch/arm64/boot/dts/qcom/sc7280-chrome-common.dtsi
-> +++ b/arch/arm64/boot/dts/qcom/sc7280-chrome-common.dtsi
-> @@ -83,17 +83,6 @@ spi_flash: flash@0 {
->  	};
->  };
->  
-> -/* Modem setup is different on Chrome setups than typical Qualcomm setup */
-> -&remoteproc_mpss {
-> -	status = "okay";
-> -	compatible = "qcom,sc7280-mss-pil";
-> -	iommus = <&apps_smmu 0x124 0x0>, <&apps_smmu 0x488 0x7>;
-> -	interconnects = <&mc_virt MASTER_LLCC 0 &mc_virt SLAVE_EBI1 0>;
-> -	memory-region = <&mba_mem>, <&mpss_mem>;
-> -	firmware-name = "qcom/sc7280-herobrine/modem/mba.mbn",
-> -			"qcom/sc7280-herobrine/modem/qdsp6sw.mbn";
-> -};
-> -
->  &remoteproc_wpss {
->  	status = "okay";
->  	firmware-name = "ath11k/WCN6750/hw1.0/wpss.mdt";
-> diff --git a/arch/arm64/boot/dts/qcom/sc7280-herobrine-crd.dts b/arch/arm64/boot/dts/qcom/sc7280-herobrine-crd.dts
-> index e9ca6c5d24a16..921eccfec39ae 100644
-> --- a/arch/arm64/boot/dts/qcom/sc7280-herobrine-crd.dts
-> +++ b/arch/arm64/boot/dts/qcom/sc7280-herobrine-crd.dts
-> @@ -9,6 +9,7 @@
->  
->  #include "sc7280-herobrine.dtsi"
->  #include "sc7280-herobrine-audio-wcd9385.dtsi"
-> +#include "sc7280-herobrine-lte-sku.dtsi"
->  
->  / {
->  	model = "Qualcomm Technologies, Inc. sc7280 CRD platform (rev5+)";
-> diff --git a/arch/arm64/boot/dts/qcom/sc7280-herobrine-herobrine-r1.dts b/arch/arm64/boot/dts/qcom/sc7280-herobrine-herobrine-r1.dts
-> index c1647a85a371a..c1a6719687252 100644
-> --- a/arch/arm64/boot/dts/qcom/sc7280-herobrine-herobrine-r1.dts
-> +++ b/arch/arm64/boot/dts/qcom/sc7280-herobrine-herobrine-r1.dts
-> @@ -8,6 +8,7 @@
->  /dts-v1/;
->  
->  #include "sc7280-herobrine.dtsi"
-> +#include "sc7280-herobrine-lte-sku.dtsi"
->  
->  / {
->  	model = "Google Herobrine (rev1+)";
-> diff --git a/arch/arm64/boot/dts/qcom/sc7280-herobrine-lte-sku.dtsi b/arch/arm64/boot/dts/qcom/sc7280-herobrine-lte-sku.dtsi
-> new file mode 100644
-> index 0000000000000..a4809dd2f4e8a
-> --- /dev/null
-> +++ b/arch/arm64/boot/dts/qcom/sc7280-herobrine-lte-sku.dtsi
-> @@ -0,0 +1,15 @@
-> +// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
-> +/*
-> + * Google Herobrine dts fragment for LTE SKUs
-> + *
-> + * Copyright 2022 Google LLC.
-> + */
-> +/* Modem setup is different on Chrome setups than typical Qualcomm setup */
-> +&remoteproc_mpss {
-Hi, just a minor nit.
-
-It was recently agreed upon that the status property should go last to
-make things consistent with other DTs (qcom is - as usual - a special
-snowflake :D). Could you please fix that up? The rest looks good.
-
-Konrad
-> +	status = "okay";
-> +	compatible = "qcom,sc7280-mss-pil";
-> +	iommus = <&apps_smmu 0x124 0x0>, <&apps_smmu 0x488 0x7>;
-> +	memory-region = <&mba_mem>, <&mpss_mem>;
-> +	firmware-name = "qcom/sc7280-herobrine/modem/mba.mbn",
-> +			"qcom/sc7280-herobrine/modem/qdsp6sw.mbn";
-> +};
-> diff --git a/arch/arm64/boot/dts/qcom/sc7280-herobrine-villager-r0-lte.dts b/arch/arm64/boot/dts/qcom/sc7280-herobrine-villager-r0-lte.dts
-> new file mode 100644
-> index 0000000000000..672cb78e3088f
-> --- /dev/null
-> +++ b/arch/arm64/boot/dts/qcom/sc7280-herobrine-villager-r0-lte.dts
-> @@ -0,0 +1,14 @@
-> +// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
-> +/*
-> + * Google Villager board device tree source
-> + *
-> + * Copyright 2022 Google LLC.
-> + */
-> +
-> +#include "sc7280-herobrine-villager-r0.dts"
-> +#include "sc7280-herobrine-lte-sku.dtsi"
-> +
-> +/ {
-> +	model = "Google Villager (rev0) with LTE";
-> +	compatible = "google,villager-rev0-sku0", "qcom,sc7280";
-> +};
-> diff --git a/arch/arm64/boot/dts/qcom/sc7280-herobrine-villager-r1-lte.dts b/arch/arm64/boot/dts/qcom/sc7280-herobrine-villager-r1-lte.dts
-> new file mode 100644
-> index 0000000000000..2f05a19cc388e
-> --- /dev/null
-> +++ b/arch/arm64/boot/dts/qcom/sc7280-herobrine-villager-r1-lte.dts
-> @@ -0,0 +1,14 @@
-> +// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
-> +/*
-> + * Google Villager board device tree source
-> + *
-> + * Copyright 2022 Google LLC.
-> + */
-> +
-> +#include "sc7280-herobrine-villager-r1.dts"
-> +#include "sc7280-herobrine-lte-sku.dtsi"
-> +
-> +/ {
-> +	model = "Google Villager (rev1+) with LTE";
-> +	compatible = "google,villager-sku0", "qcom,sc7280";
-> +};
-> diff --git a/arch/arm64/boot/dts/qcom/sc7280-idp.dts b/arch/arm64/boot/dts/qcom/sc7280-idp.dts
-> index 6d3ff80582ae9..fba7e938ce35a 100644
-> --- a/arch/arm64/boot/dts/qcom/sc7280-idp.dts
-> +++ b/arch/arm64/boot/dts/qcom/sc7280-idp.dts
-> @@ -10,6 +10,7 @@
->  #include <dt-bindings/iio/qcom,spmi-adc7-pmr735a.h>
->  #include "sc7280-idp.dtsi"
->  #include "pmr735a.dtsi"
-> +#include "sc7280-herobrine-lte-sku.dtsi"
->  
->  / {
->  	model = "Qualcomm Technologies, Inc. sc7280 IDP SKU1 platform";
+Can you fix the checkpatch --strict warnings and formatting issues in
+this series?

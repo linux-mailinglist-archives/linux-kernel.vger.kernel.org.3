@@ -2,92 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 706035688EE
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 15:05:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EA44B5688F2
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 15:06:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231842AbiGFNE4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Jul 2022 09:04:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36048 "EHLO
+        id S233250AbiGFNGM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Jul 2022 09:06:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36938 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233519AbiGFNEt (ORCPT
+        with ESMTP id S231689AbiGFNGL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Jul 2022 09:04:49 -0400
-Received: from relay08.th.seeweb.it (relay08.th.seeweb.it [5.144.164.169])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FBE718E29
-        for <linux-kernel@vger.kernel.org>; Wed,  6 Jul 2022 06:04:47 -0700 (PDT)
-Received: from [192.168.1.101] (abxi46.neoplus.adsl.tpnet.pl [83.9.2.46])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by m-r2.th.seeweb.it (Postfix) with ESMTPSA id 7BBCC3F4EA;
-        Wed,  6 Jul 2022 15:04:45 +0200 (CEST)
-Message-ID: <eadf03c4-7e4c-e2a0-b20d-6e2dff3af1e3@somainline.org>
-Date:   Wed, 6 Jul 2022 15:04:44 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH 06/13] ARM: dts: qcom: enable usb phy by default for
- ipq8064
-Content-Language: en-US
-To:     Christian Marangi <ansuelsmth@gmail.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        Wed, 6 Jul 2022 09:06:11 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9F98DEA1;
+        Wed,  6 Jul 2022 06:06:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
+        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=ce63EBe4Tq2Uux8fPs1Pycd4aTVkng2Wf2+PmZuWupU=; b=aVRTvSA1UJKof07qjOK7lF85rq
+        ppGLIBe1l5SZn2IR5uT/g6O6COcRr9qIFNhOrUBf7LrdEdykgvsuyBJdvMg9PXyfosj9fpdmXiF0s
+        U4pqKxdd1i3JfD6a0LO1134K4hG10jpzzerJRrDhK4wf7bFmhkzQnGlPcOtwONeG3S9YMeOQvToAw
+        t4XbRh2ZYR6dNR6g/g8rXCkhNwookOWkOJ/BmhtWB2xsbU1eH+WXF0fy2WPVP2oUZFfrJ8j0nZesf
+        vEzBEAnewPuz4t/STSKoITyPDmgZoQYgK5XwnJFfIHZkJougC1UEdEiSEoiXak5OcMlE8SOH1lBD2
+        MA3zzhRQ==;
+Received: from hch by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1o94jJ-00A9fn-Ln; Wed, 06 Jul 2022 13:06:09 +0000
+Date:   Wed, 6 Jul 2022 06:06:09 -0700
+From:   Christoph Hellwig <hch@infradead.org>
+To:     Sergei Shtepa <sergei.shtepa@veeam.com>
+Cc:     axboe@kernel.dk, linux-block@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Cc:     Jonathan McDowell <noodles@earth.li>
-References: <20220705133917.8405-1-ansuelsmth@gmail.com>
- <20220705133917.8405-7-ansuelsmth@gmail.com>
-From:   Konrad Dybcio <konrad.dybcio@somainline.org>
-In-Reply-To: <20220705133917.8405-7-ansuelsmth@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Subject: Re: [PATCH 18/20] block, blksnap: Kconfig
+Message-ID: <YsWIwQ7Z2OKesQVI@infradead.org>
+References: <1655135593-1900-1-git-send-email-sergei.shtepa@veeam.com>
+ <1655135593-1900-19-git-send-email-sergei.shtepa@veeam.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1655135593-1900-19-git-send-email-sergei.shtepa@veeam.com>
+X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Mon, Jun 13, 2022 at 06:53:11PM +0300, Sergei Shtepa wrote:
+> +config BLK_SNAP_TRACKING_BLOCK_MINIMUM_SHIFT
+> +	depends on BLK_SNAP
+> +	int "The power of 2 for minimum trackings block size"
 
+> +config BLK_SNAP_TRACKING_BLOCK_MAXIMUM_COUNT
+> +	depends on BLK_SNAP
 
-On 5.07.2022 15:39, Christian Marangi wrote:
-> Enable usb phy by default. When the usb phy were pushed, half of them
-> were flagged as disabled by mistake. Fix this to correctly init dwc3
-> node on any ipq8064 based SoC.
-Are you sure they are used on *all* devices? If not, you will
-lose power by enabling unused hw..
+> +config BLK_SNAP_CHUNK_MINIMUM_SHIFT
+> +	depends on BLK_SNAP
 
-Konrad
-> 
-> Signed-off-by: Christian Marangi <ansuelsmth@gmail.com>
-> Tested-by: Jonathan McDowell <noodles@earth.li>
-> ---
->  arch/arm/boot/dts/qcom-ipq8064.dtsi | 4 ----
->  1 file changed, 4 deletions(-)
-> 
-> diff --git a/arch/arm/boot/dts/qcom-ipq8064.dtsi b/arch/arm/boot/dts/qcom-ipq8064.dtsi
-> index b2faa4a067e9..9c32c637ea46 100644
-> --- a/arch/arm/boot/dts/qcom-ipq8064.dtsi
-> +++ b/arch/arm/boot/dts/qcom-ipq8064.dtsi
-> @@ -1177,8 +1177,6 @@ hs_phy_0: phy@100f8800 {
->  			clocks = <&gcc USB30_0_UTMI_CLK>;
->  			clock-names = "ref";
->  			#phy-cells = <0>;
-> -
-> -			status = "disabled";
->  		};
->  
->  		ss_phy_0: phy@100f8830 {
-> @@ -1187,8 +1185,6 @@ ss_phy_0: phy@100f8830 {
->  			clocks = <&gcc USB30_0_MASTER_CLK>;
->  			clock-names = "ref";
->  			#phy-cells = <0>;
-> -
-> -			status = "disabled";
->  		};
->  
->  		usb3_0: usb3@100f8800 {
+> +config BLK_SNAP_CHUNK_MAXIMUM_COUNT
+> +	depends on BLK_SNAP
+> +	int "The limit of the maximum number of snapshots chunks"
+
+...
+
+Is there any good reason for these to be compile options vs runtime
+settings?
+
+> +config BLK_SNAP_DEBUG_MEMORY_LEAK
+> +	depends on BLK_SNAP
+> +	bool "Enable memory leak detector"
+> +	default n
+> +	help
+> +	  Enables debugging code to monitor memory consumption by the module.
+
+Is there any advantage in this over kmemleak and friends?

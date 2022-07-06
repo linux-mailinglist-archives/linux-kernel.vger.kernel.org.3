@@ -2,233 +2,461 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 22E2E568E9B
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 18:04:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E591568E98
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 18:04:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233965AbiGFQEY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Jul 2022 12:04:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60742 "EHLO
+        id S233849AbiGFQEE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Jul 2022 12:04:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60526 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233786AbiGFQEW (ORCPT
+        with ESMTP id S233786AbiGFQED (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Jul 2022 12:04:22 -0400
-Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37D7A17586;
-        Wed,  6 Jul 2022 09:04:20 -0700 (PDT)
-Received: from sslproxy05.your-server.de ([78.46.172.2])
-        by www62.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
-        (Exim 4.92.3)
-        (envelope-from <daniel@iogearbox.net>)
-        id 1o97VG-0003Og-IK; Wed, 06 Jul 2022 18:03:50 +0200
-Received: from [85.1.206.226] (helo=linux.home)
-        by sslproxy05.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <daniel@iogearbox.net>)
-        id 1o97VG-000V92-4d; Wed, 06 Jul 2022 18:03:50 +0200
-Subject: Re: [PATCH v6 4/5] bpf: Add bpf_verify_pkcs7_signature() helper
-To:     Roberto Sassu <roberto.sassu@huawei.com>, ast@kernel.org,
-        andrii@kernel.org, kpsingh@kernel.org, john.fastabend@gmail.com,
-        songliubraving@fb.com, kafai@fb.com, yhs@fb.com,
-        dhowells@redhat.com
-Cc:     keyrings@vger.kernel.org, bpf@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220628122750.1895107-1-roberto.sassu@huawei.com>
- <20220628122750.1895107-5-roberto.sassu@huawei.com>
-From:   Daniel Borkmann <daniel@iogearbox.net>
-Message-ID: <903b1b6c-b0fd-d624-a24b-5983d8d661b7@iogearbox.net>
-Date:   Wed, 6 Jul 2022 18:03:49 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.2
+        Wed, 6 Jul 2022 12:04:03 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B6641705F;
+        Wed,  6 Jul 2022 09:04:01 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2809B6103A;
+        Wed,  6 Jul 2022 16:04:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2BB7FC3411C;
+        Wed,  6 Jul 2022 16:03:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1657123440;
+        bh=W5p5oPeKDPrD7oGglhn8ybz3tGjJ3LsKQY/9wQO+iZM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=kTMOI2dCXfvz3MfaXIPL7ztZPbf7niEPuvPgqDaVTPPRN0Td7OXH4pZvSanRJF8PU
+         Isr+bQ+TN7nq/zj35oDIM3OO7oQKlJzRs5T7Tqn9k5xqUu+Rz+kJWQz26P6iVkeq4g
+         cCFFXYb98ioa67+SwP1tjzEE9nUBVTA4cVu+NUNDDydX91LIrrGkgY03H3BVSLBmFc
+         hDprw4k8xrpUF87+qqHx9BX16XbWPHjlWey3CCaYC2KiswZGnkZXzVrbUygFBAFSRn
+         UyukhMrGymn2cexJm2jWgs4/P0Aeq4WgcKnaTL/lynmrvw0TlEWttIuqQ8UrRqLjNJ
+         c7IsUg1c8zxlw==
+Date:   Wed, 6 Jul 2022 17:03:57 +0100
+From:   Filipe Manana <fdmanana@kernel.org>
+To:     bingjingc <bingjingc@synology.com>
+Cc:     josef@toxicpanda.com, dsterba@suse.com, clm@fb.com,
+        linux-btrfs@vger.kernel.org, linux-kernel@vger.kernel.org,
+        robbieko@synology.com, bxxxjxxg@gmail.com
+Subject: Re: [PATCH 2/2] btrfs: send: fix a bug that sending a link command
+ on existing file path
+Message-ID: <20220706160357.GA826504@falcondesktop>
+References: <20220706130903.1661-1-bingjingc@synology.com>
+ <20220706130903.1661-3-bingjingc@synology.com>
 MIME-Version: 1.0
-In-Reply-To: <20220628122750.1895107-5-roberto.sassu@huawei.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Authenticated-Sender: daniel@iogearbox.net
-X-Virus-Scanned: Clear (ClamAV 0.103.6/26595/Wed Jul  6 09:53:23 2022)
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220706130903.1661-3-bingjingc@synology.com>
+X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/28/22 2:27 PM, Roberto Sassu wrote:
-> Add the bpf_verify_pkcs7_signature() helper, to give eBPF security modules
-> the ability to check the validity of a signature against supplied data, by
-> using user-provided or system-provided keys as trust anchor.
+On Wed, Jul 06, 2022 at 09:09:03PM +0800, bingjingc wrote:
+> From: BingJing Chang <bingjingc@synology.com>
 > 
-> The new helper makes it possible to enforce mandatory policies, as eBPF
-> programs might be allowed to make security decisions only based on data
-> sources the system administrator approves.
-> 
-> The caller should provide both the data to be verified and the signature as
-> eBPF dynamic pointers (to minimize the number of parameters).
-> 
-> The caller should also provide a trusted keyring serial, together with key
-> lookup-specific flags, to determine which keys can be used for signature
-> verification. Alternatively, the caller could specify zero as serial value
-> (not valid, serials must be positive), and provide instead a special
-> keyring ID.
-> 
-> Key lookup flags are defined in include/linux/key.h and can be: 1, to
-> request that special keyrings be created if referred to directly; 2 to
-> permit partially constructed keys to be found.
-> 
-> Special IDs are defined in include/linux/verification.h and can be: 0 for
-> the primary keyring (immutable keyring of system keys); 1 for both the
-> primary and secondary keyring (where keys can be added only if they are
-> vouched for by existing keys in those keyrings); 2 for the platform keyring
-> (primarily used by the integrity subsystem to verify a kexec'ed kerned
-> image and, possibly, the initramfs signature).
-> 
-> Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
-> Reported-by: kernel test robot <lkp@intel.com> (cast warning)
+> btrfs_ioctl_send processes recorded btrfs_keys in a defined order. (First,
+> we process a btrfs_key with a samller objectid. If btrfs_keys have the same
+> objectid, then we compare their types and offsets accordingly.) 
 
-nit: Given this a new feature not a fix to existing code, there is no need to
-      add the above reported-by from kbuild bot.
+That's a very convoluted way to simply say that send processes keys in the order
+they are found in the btrees, from the leftmost to the rightmost.
 
+> However,
+> reference paths for an inode can be stored in either BTRFS_INODE_REF_KEY
+> btrfs_keys or BTRFS_INODE_EXTREF_KEY btrfs_keys. And due to the limitation
+> of the helper function - iterate_inode_ref, we can only iterate the entries
+> of ONE btrfs_inode_ref or btrfs_inode_extref. That is, there must be a bug
+> in processing the same reference paths, which are stored in different ways.
+
+When you say "there must be a bug", you want to say "there is a bug", and then
+explain what the bug is.
+
+However the bug has nothing to do with the order of how keys are processed.
+
+What happens is that when we are processing an inode we go over all references
+and add all the new names to the "new_refs" list and add all the deleted names
+to the "deleted_refs" list.
+
+Then in the end, when we finish processing the inode, we iterate over all the
+new names in the "new_refs" list and send link commands for those names. After
+that we go over all the names in the "deleted_refs" list and send unlink commands
+for those names.
+
+The problem in this case, is that we have names duplicated in both lists.
+So we try to create them before we remove them, therefore the receiver gets an
+-EEXIST error when trying the link operations.
+
+> 
+> Here is an exmple that btrfs_ioctl_send will send a link command on an
+
+exmple -> example
+
+> existing file path:
+> 
+>   $ btrfs subvolume create test
+> 
+>   # create a file and 2000 hard links to the same inode
+>   $ dd if=/dev/zero of=test/1M bs=1M count=1
+
+touch test/1M
+
+The data is completely irrelevant here, all we care about are the
+hard links of the file. Making the reproducer the minimum necessary
+to trigger a bug, makes it much less distracting and easier to grasp.
+
+>   $ for i in {1..2000}; do link test/1M test/$i ; done
+> 
+>   # take a snapshot for parent snapshot
+>   $ btrfs sub snap -r test snap1
+> 
+>   # remove 2000 hard links and re-create the last 1000 links
+>   $ for i in {1..2000}; do rm test/$i; done;
+>   $ for i in {1001..2000}; do link test/1M test/$i; done
+> 
+>   # take another one for sned snapshot
+
+sned -> send
+
+>   $ btrfs sub snap -r test snap2
+> 
+>   $ mkdir tmp
+>   $ btrfs send -e snap2 -p snap1 | btrfs receive tmp/
+
+The -e is not necessary.
+
+>   At subvol snap2
+>   link 1238 -> 1M
+>   ERROR: link 1238 -> 1M failed: File exists
+> 
+> In the parent snapshot snap1, reference paths 1 - 1237 are stored in a
+> INODE_REF item and the rest ones are stored in other INODE_EXTREF items.
+> But in the send snapshot snap2, all reference paths can be stored within a
+> INODE_REF item. During the send process, btrfs_ioctl_send will process the
+> INODE_REF item first. Then it found that reference paths 1 - 1000 were
+> gone in the send snapshot, so it recorded them in sctx->deleted_refs for
+> unlink. And it found that reference paths 1238 - 2000 were new paths in
+> the send snapshot, so it recorded them in sctx->new_refs for link. Since
+> we do not load all contents of its INODE_EXTREF items to make comparison,
+> afterwards, btrfs_ioctl_send may make a mistake sending a link command on
+> an existing file path.
+
+So this explanation is not correct, it's neither about the names being stored
+in an INODE_REF or INODE_EXTREF item nor about processing one item before or
+after the other. As mentioned before, it's because we always process the
+"new_refs" list before the "deleted_refs" list, and in this case we have the
+same names (paths) in both lists.
+
+> 
+> To fix the bug, we can either remove the duplicated items both in
+> sctx->new_refs and sctx->deleted_refs before generating link/unlink
+> commands or prevent them from being added into list. Both of them require
+> efficient data structures like C++ sets to look up duplicated items.
+
+There's a much more obvious alternative, which is processing first the
+"deleted_refs" list before the "new_refs" list.
+
+It's inefficient because we do a bunch of unlinks followed by links for
+the same paths. On the other hand, it does not require maintaining two
+new rbtrees and allocating memory for records in these rbtrees.
+
+Plus this type of scenario should be very rare. It requires having at least
+hundreds of hard links in an inode in order to trigger the creation of extended
+references, and then removing and recreating a bunch of those hard links in the
+send snapshot. How common is that?
+
+Is this a case you got into in some user workload, or was it found by reading
+and inspecting the code?
+
+I would like to have in the changelog this alternative mentioned, and if it's
+not good, then explain why it is not, and why we must follow a different solution.
+
+It's probably not easy, because at process_recorded_refs() when we unlink we
+need to know if any ancestor was orphanized before, which we figure out when
+we iterate over the "new_refs" list. So it would likely need some reshuffling
+in the logic of how we do things there.
+
+> And
+> we also need to take two scenarios into consideration. One is the most
+> common case that one inode has only one reference path. The other is the
+> worst case that there are ten thousands of hard links of an inode.
+> (BTRFS_LINK_MAX is 65536) So we'd like to introduce rbtree to store the
+> computing references. (The tree depth of the worst cases is just 16. And
+
+computing -> computed
+
+> it takes less memory to store few entries than hash sets.) And in order
+> not to occupy too much moemory, we also introduce
+
+moemory -> memory
+
+> __record_new_ref_if_needed() and __record_deleted_ref_if_needed() for
+> changed_ref() to check and remove the duplications early.
+
+Also, the subject:
+
+"btrfs: send: fix a bug that sending a link command on existing file path"
+
+sounds a bit awkward, mostly because of the "that".
+Something like the following would be more concise:
+
+"btrfs: send: fix sending link commands for existing file paths"
+
+> 
+> Reviewed-by: Robbie Ko <robbieko@synology.com>
+> Signed-off-by: BingJing Chang <bingjingc@synology.com>
 > ---
->   include/uapi/linux/bpf.h       | 24 +++++++++++++
->   kernel/bpf/bpf_lsm.c           | 63 ++++++++++++++++++++++++++++++++++
->   tools/include/uapi/linux/bpf.h | 24 +++++++++++++
->   3 files changed, 111 insertions(+)
+>  fs/btrfs/send.c | 160 ++++++++++++++++++++++++++++++++++++++++++++++--
+>  1 file changed, 156 insertions(+), 4 deletions(-)
 > 
-> diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
-> index e81362891596..b4f5ad863281 100644
-> --- a/include/uapi/linux/bpf.h
-> +++ b/include/uapi/linux/bpf.h
-> @@ -5325,6 +5325,29 @@ union bpf_attr {
->    *		**-EACCES** if the SYN cookie is not valid.
->    *
->    *		**-EPROTONOSUPPORT** if CONFIG_IPV6 is not builtin.
-> + *
-> + * long bpf_verify_pkcs7_signature(struct bpf_dynptr *data_ptr, struct bpf_dynptr *sig_ptr, u32 trusted_keyring_serial, unsigned long lookup_flags, unsigned long trusted_keyring_id)
-
-nit: for the args instead of ulong, just do u64
-
-> + *	Description
-> + *		Verify the PKCS#7 signature *sig_ptr* against the supplied
-> + *		*data_ptr* with keys in a keyring with serial
-> + *		*trusted_keyring_serial*, searched with *lookup_flags*, if the
-> + *		parameter value is positive, or alternatively in a keyring with
-> + *		special ID *trusted_keyring_id* if *trusted_keyring_serial* is
-> + *		zero.
-> + *
-> + *		*lookup_flags* are defined in include/linux/key.h and can be: 1,
-> + *		to request that special keyrings be created if referred to
-> + *		directly; 2 to permit partially constructed keys to be found.
-> + *
-> + *		Special IDs are defined in include/linux/verification.h and can
-> + *		be: 0 for the primary keyring (immutable keyring of system
-> + *		keys); 1 for both the primary and secondary keyring (where keys
-> + *		can be added only if they are vouched for by existing keys in
-> + *		those keyrings); 2 for the platform keyring (primarily used by
-> + *		the integrity subsystem to verify a kexec'ed kerned image and,
-> + *		possibly, the initramfs signature).
-> + *	Return
-> + *		0 on success, a negative value on error.
->    */
->   #define __BPF_FUNC_MAPPER(FN)		\
->   	FN(unspec),			\
-> @@ -5535,6 +5558,7 @@ union bpf_attr {
->   	FN(tcp_raw_gen_syncookie_ipv6),	\
->   	FN(tcp_raw_check_syncookie_ipv4),	\
->   	FN(tcp_raw_check_syncookie_ipv6),	\
-> +	FN(verify_pkcs7_signature),	\
-
-(Needs rebase)
-
->   	/* */
->   
->   /* integer value in 'imm' field of BPF_CALL instruction selects which helper
-> diff --git a/kernel/bpf/bpf_lsm.c b/kernel/bpf/bpf_lsm.c
-> index c1351df9f7ee..401bda01ad84 100644
-> --- a/kernel/bpf/bpf_lsm.c
-> +++ b/kernel/bpf/bpf_lsm.c
-> @@ -16,6 +16,8 @@
->   #include <linux/bpf_local_storage.h>
->   #include <linux/btf_ids.h>
->   #include <linux/ima.h>
-> +#include <linux/verification.h>
-> +#include <linux/key.h>
->   
->   /* For every LSM hook that allows attachment of BPF programs, declare a nop
->    * function where a BPF program can be attached.
-> @@ -132,6 +134,62 @@ static const struct bpf_func_proto bpf_get_attach_cookie_proto = {
->   	.arg1_type	= ARG_PTR_TO_CTX,
->   };
->   
-> +#ifdef CONFIG_SYSTEM_DATA_VERIFICATION
-> +BPF_CALL_5(bpf_verify_pkcs7_signature, struct bpf_dynptr_kern *, data_ptr,
-> +	   struct bpf_dynptr_kern *, sig_ptr, u32, trusted_keyring_serial,
-> +	   unsigned long, lookup_flags, unsigned long, trusted_keyring_id)
+> diff --git a/fs/btrfs/send.c b/fs/btrfs/send.c
+> index 420a86720aa2..23ae631ef23b 100644
+> --- a/fs/btrfs/send.c
+> +++ b/fs/btrfs/send.c
+> @@ -234,6 +234,9 @@ struct send_ctx {
+>  	 * Indexed by the inode number of the directory to be deleted.
+>  	 */
+>  	struct rb_root orphan_dirs;
+> +
+> +	struct rb_root rbtree_new_refs;
+> +	struct rb_root rbtree_deleted_refs;
+>  };
+>  
+>  struct pending_dir_move {
+> @@ -2747,6 +2750,8 @@ struct recorded_ref {
+>  	u64 dir;
+>  	u64 dir_gen;
+>  	int name_len;
+> +	struct rb_node node;
+> +	struct rb_root *root;
+>  };
+>  
+>  static struct recorded_ref *recorded_ref_alloc(void)
+> @@ -2756,6 +2761,7 @@ static struct recorded_ref *recorded_ref_alloc(void)
+>  	ref = kzalloc(sizeof(*ref), GFP_KERNEL);
+>  	if (!ref)
+>  		return NULL;
+> +	RB_CLEAR_NODE(&ref->node);
+>  	INIT_LIST_HEAD(&ref->list);
+>  	return ref;
+>  }
+> @@ -2764,6 +2770,8 @@ static void recorded_ref_free(struct recorded_ref *ref)
+>  {
+>  	if (!ref)
+>  		return;
+> +	if (!RB_EMPTY_NODE(&ref->node))
+> +		rb_erase(&ref->node, ref->root);
+>  	list_del(&ref->list);
+>  	fs_path_free(ref->full_path);
+>  	kfree(ref);
+> @@ -4373,12 +4381,152 @@ static int __record_deleted_ref(int num, u64 dir, int index,
+>  			  &sctx->deleted_refs);
+>  }
+>  
+> +static int rbtree_ref_comp(const void *k, const struct rb_node *node)
 > +{
-> +	key_ref_t trusted_keyring_ref;
-> +	struct key *trusted_keyring;
-> +	int ret;
+> +	const struct recorded_ref *data = k;
+> +	const struct recorded_ref *ref = rb_entry(node, struct recorded_ref, node);
+> +	int result;
 > +
-> +	/* Keep in sync with defs in include/linux/key.h. */
-> +	if (lookup_flags > KEY_LOOKUP_PARTIAL)
-> +		return -EINVAL;
-
-iiuc, the KEY_LOOKUP_* is a mask, so you could also combine the two, e.g.
-KEY_LOOKUP_CREATE | KEY_LOOKUP_PARTIAL. I haven't seen you mentioning anything
-specific on why it is not allowed. What's the rationale, if it's intentional
-if should probably be documented?
-
-At minimum I also think the helper description needs to be improved for people
-to understand enough w/o reading through the kernel source, e.g. wrt lookup_flags
-since I haven't seen it in your selftests either ... when does a user need to
-use the given flags.
-
-nit: when both trusted_keyring_serial and trusted_keyring_id are passed to the
-helper, then this should be rejected as invalid argument? (Kind of feels a bit
-like we're cramming two things in one helper.. KP, thoughts? :))
-
-> +	/* Keep in sync with defs in include/linux/verification.h. */
-> +	if (trusted_keyring_id > (unsigned long)VERIFY_USE_PLATFORM_KEYRING)
-> +		return -EINVAL;
+> +	if (data->dir > ref->dir)
+> +		return 1;
+> +	if (data->dir < ref->dir)
+> +		return -1;
+> +	if (data->dir_gen > ref->dir_gen)
+> +		return 1;
+> +	if (data->dir_gen < ref->dir_gen)
+> +		return -1;
+> +	if (data->name_len > ref->name_len)
+> +		return 1;
+> +	if (data->name_len < ref->name_len)
+> +		return -1;
+> +	result = strcmp(data->name, ref->name);
+> +	if (result > 0)
+> +		return 1;
+> +	if (result < 0)
+> +		return -1;
+> +	return 0;
+> +}
 > +
-> +	if (trusted_keyring_serial) {
-> +		trusted_keyring_ref = lookup_user_key(trusted_keyring_serial,
-> +						      lookup_flags,
-> +						      KEY_NEED_SEARCH);
-> +		if (IS_ERR(trusted_keyring_ref))
-> +			return PTR_ERR(trusted_keyring_ref);
+> +static bool rbtree_ref_less(struct rb_node *node, const struct rb_node *parent)
+> +{
+> +	const struct recorded_ref *entry = rb_entry(node,
+> +						    struct recorded_ref,
+> +						    node);
 > +
-> +		trusted_keyring = key_ref_to_ptr(trusted_keyring_ref);
-> +		goto verify;
+> +	return rbtree_ref_comp(entry, parent) < 0;
+> +}
+> +
+> +static int record_ref2(struct rb_root *root, struct list_head *refs,
+
+This is a terrible function name.
+
+If we end up with this solution, please rename it to something more clear
+like record_ref_in_tree() for example. Almost anything other than an existing
+function name followed by a number is a better choice.
+
+This bug is a very good finding, and has been around since forever.
+
+Thanks.
+
+> +			     struct fs_path *name, u64 dir, u64 dir_gen,
+> +			     struct send_ctx *sctx)
+> +{
+> +	int ret = 0;
+> +	struct fs_path *path = NULL;
+> +	struct recorded_ref *ref = NULL;
+> +
+> +	path = fs_path_alloc();
+> +	if (!path) {
+> +		ret = -ENOMEM;
+> +		goto out;
 > +	}
 > +
-> +	trusted_keyring = (struct key *)trusted_keyring_id;
-> +verify:
-> +	ret = verify_pkcs7_signature(data_ptr->data,
-> +				     bpf_dynptr_get_size(data_ptr),
-> +				     sig_ptr->data,
-> +				     bpf_dynptr_get_size(sig_ptr),
-> +				     trusted_keyring,
-> +				     VERIFYING_UNSPECIFIED_SIGNATURE, NULL,
-> +				     NULL);
-> +	if (trusted_keyring_serial)
-> +		key_put(trusted_keyring);
+> +	ref = recorded_ref_alloc();
+> +	if (!ref) {
+> +		ret = -ENOMEM;
+> +		goto out;
+> +	}
 > +
+> +	ret = get_cur_path(sctx, dir, dir_gen, path);
+> +	if (ret < 0)
+> +		goto out;
+> +	ret = fs_path_add_path(path, name);
+> +	if (ret < 0)
+> +		goto out;
+> +
+> +	ref->dir = dir;
+> +	ref->dir_gen = dir_gen;
+> +	set_ref_path(ref, path);
+> +	list_add_tail(&ref->list, refs);
+> +	rb_add(&ref->node, root, rbtree_ref_less);
+> +	ref->root = root;
+> +out:
+> +	if (ret) {
+> +		if (path && (!ref || !ref->full_path))
+> +			fs_path_free(path);
+> +		recorded_ref_free(ref);
+> +	}
 > +	return ret;
 > +}
 > +
-> +static const struct bpf_func_proto bpf_verify_pkcs7_signature_proto = {
-> +	.func		= bpf_verify_pkcs7_signature,
-> +	.gpl_only	= false,
-> +	.ret_type	= RET_INTEGER,
-> +	.arg1_type	= ARG_PTR_TO_DYNPTR | DYNPTR_TYPE_LOCAL,
-> +	.arg2_type	= ARG_PTR_TO_DYNPTR | DYNPTR_TYPE_LOCAL,
-> +	.arg3_type	= ARG_ANYTHING,
-> +	.arg4_type	= ARG_ANYTHING,
-> +	.arg5_type	= ARG_ANYTHING,
-> +	.allowed	= bpf_ima_inode_hash_allowed,
-> +};
-> +#endif /* CONFIG_SYSTEM_DATA_VERIFICATION */
+> +static int __record_new_ref_if_needed(int num, u64 dir, int index,
+> +				      struct fs_path *name, void *ctx)
+> +{
+> +	int ret = 0;
+> +	struct send_ctx *sctx = ctx;
+> +	struct rb_node *node = NULL;
+> +	struct recorded_ref data;
+> +	struct recorded_ref *ref;
+> +	u64 dir_gen;
 > +
+> +	ret = get_inode_info(sctx->send_root, dir, NULL, &dir_gen, NULL,
+> +			     NULL, NULL, NULL);
+> +	if (ret < 0)
+> +		goto out;
+> +
+> +	data.dir = dir;
+> +	data.dir_gen = dir_gen;
+> +	set_ref_path(&data, name);
+> +	node = rb_find(&data, &sctx->rbtree_deleted_refs, rbtree_ref_comp);
+> +	if (node) {
+> +		ref = rb_entry(node, struct recorded_ref, node);
+> +		recorded_ref_free(ref);
+> +	} else {
+> +		ret = record_ref2(&sctx->rbtree_new_refs, &sctx->new_refs,
+> +				  name, dir, dir_gen, sctx);
+> +	}
+> +out:
+> +	return ret;
+> +}
+> +
+> +static int __record_deleted_ref_if_needed(int num, u64 dir, int index,
+> +			    struct fs_path *name,
+> +			    void *ctx)
+> +{
+> +	int ret = 0;
+> +	struct send_ctx *sctx = ctx;
+> +	struct rb_node *node = NULL;
+> +	struct recorded_ref data;
+> +	struct recorded_ref *ref;
+> +	u64 dir_gen;
+> +
+> +	ret = get_inode_info(sctx->parent_root, dir, NULL, &dir_gen, NULL,
+> +			     NULL, NULL, NULL);
+> +	if (ret < 0)
+> +		goto out;
+> +
+> +	data.dir = dir;
+> +	data.dir_gen = dir_gen;
+> +	set_ref_path(&data, name);
+> +	node = rb_find(&data, &sctx->rbtree_new_refs, rbtree_ref_comp);
+> +	if (node) {
+> +		ref = rb_entry(node, struct recorded_ref, node);
+> +		recorded_ref_free(ref);
+> +	} else {
+> +		ret = record_ref2(&sctx->rbtree_deleted_refs,
+> +				  &sctx->deleted_refs, name, dir, dir_gen,
+> +				  sctx);
+> +	}
+> +out:
+> +	return ret;
+> +}
+> +
+>  static int record_new_ref(struct send_ctx *sctx)
+>  {
+>  	int ret;
+>  
+>  	ret = iterate_inode_ref(sctx->send_root, sctx->left_path,
+> -				sctx->cmp_key, 0, __record_new_ref, sctx);
+> +				sctx->cmp_key, 0, __record_new_ref_if_needed,
+> +				sctx);
+>  	if (ret < 0)
+>  		goto out;
+>  	ret = 0;
+> @@ -4392,7 +4540,8 @@ static int record_deleted_ref(struct send_ctx *sctx)
+>  	int ret;
+>  
+>  	ret = iterate_inode_ref(sctx->parent_root, sctx->right_path,
+> -				sctx->cmp_key, 0, __record_deleted_ref, sctx);
+> +				sctx->cmp_key, 0,
+> +				__record_deleted_ref_if_needed, sctx);
+>  	if (ret < 0)
+>  		goto out;
+>  	ret = 0;
+> @@ -4475,7 +4624,7 @@ static int __record_changed_new_ref(int num, u64 dir, int index,
+>  	ret = find_iref(sctx->parent_root, sctx->right_path,
+>  			sctx->cmp_key, dir, dir_gen, name);
+>  	if (ret == -ENOENT)
+> -		ret = __record_new_ref(num, dir, index, name, sctx);
+> +		ret = __record_new_ref_if_needed(num, dir, index, name, sctx);
+>  	else if (ret > 0)
+>  		ret = 0;
+>  
+> @@ -4498,7 +4647,8 @@ static int __record_changed_deleted_ref(int num, u64 dir, int index,
+>  	ret = find_iref(sctx->send_root, sctx->left_path, sctx->cmp_key,
+>  			dir, dir_gen, name);
+>  	if (ret == -ENOENT)
+> -		ret = __record_deleted_ref(num, dir, index, name, sctx);
+> +		ret = __record_deleted_ref_if_needed(num, dir, index, name,
+> +						     sctx);
+>  	else if (ret > 0)
+>  		ret = 0;
+>  
+> @@ -7576,6 +7726,8 @@ long btrfs_ioctl_send(struct inode *inode, struct btrfs_ioctl_send_args *arg)
+>  	sctx->pending_dir_moves = RB_ROOT;
+>  	sctx->waiting_dir_moves = RB_ROOT;
+>  	sctx->orphan_dirs = RB_ROOT;
+> +	sctx->rbtree_new_refs = RB_ROOT;
+> +	sctx->rbtree_deleted_refs = RB_ROOT;
+>  
+>  	sctx->clone_roots = kvcalloc(sizeof(*sctx->clone_roots),
+>  				     arg->clone_sources_count + 1,
+> -- 
+> 2.37.0
+> 

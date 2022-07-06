@@ -2,102 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C652C568C41
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 17:08:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ADFBD568C47
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 17:08:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233628AbiGFPHW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Jul 2022 11:07:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51580 "EHLO
+        id S233691AbiGFPHl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Jul 2022 11:07:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51924 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233502AbiGFPHR (ORCPT
+        with ESMTP id S232445AbiGFPHi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Jul 2022 11:07:17 -0400
-Received: from mail-lj1-x22a.google.com (mail-lj1-x22a.google.com [IPv6:2a00:1450:4864:20::22a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F5021AF2A
-        for <linux-kernel@vger.kernel.org>; Wed,  6 Jul 2022 08:07:15 -0700 (PDT)
-Received: by mail-lj1-x22a.google.com with SMTP id bx13so18841806ljb.1
-        for <linux-kernel@vger.kernel.org>; Wed, 06 Jul 2022 08:07:15 -0700 (PDT)
+        Wed, 6 Jul 2022 11:07:38 -0400
+Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4EC0925592
+        for <linux-kernel@vger.kernel.org>; Wed,  6 Jul 2022 08:07:33 -0700 (PDT)
+Received: by mail-ed1-x530.google.com with SMTP id x10so12315686edd.13
+        for <linux-kernel@vger.kernel.org>; Wed, 06 Jul 2022 08:07:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=zYC1cAZNMI4fPCA/JdppgAdHhnjAV/K9sV/UY3ZbdgY=;
-        b=rrSK0lSH6xcD+cXYKAeq6nq5btWfRc6kxx24RmPQUa7FpIkWJv+OHbTarF1Mpw3M36
-         k6np8o4mBd7/prlksYArETIApb7BXM/C3LZEWjwNt/+2kjIDjXiy+qT5J3YbN3iRKYP6
-         2v0MdtGlLkzWnddB0t5B7luXBgPJvAXUZlZWt8iuDoRhtBndyDpFpG7gNVBuDSNd0ktS
-         0+ohzgdG8BPVaEmPIYtXIejY7yEMovsaVH6F5bbtE7sDMCi9DrT5yW07qVqgzthOceou
-         iWLnil+/OvO7JqswmXcPelCFnHufYfEq+EZaKKPtM4d7gZivUxLbNXcM3taX6vEk2oIx
-         U55Q==
+        d=bgdev-pl.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=BpcbsEw/20xy+czFl3NKN5RfG+F04MUU4xLklx2RkdY=;
+        b=CAvY5156Pd1hW8HjRa+SbS77+QIlmJ/aqV11spi0db19nP+RAi7RtWtooJIj/uX/Se
+         DWYeNgfzHB4FOLkYeGjRph2dszxVR0ABUofJffAAn8/GAiWJHyK92fFUO43t7x94K91p
+         nWQWMLPSfdtUIChpFdPAwHA2zKPMZNZTUJSrb4gMRml3VrzDKrXvDMX+PLyf1iDFHyoS
+         tg4CFvrLcfN8uUBhOVz/b155e6dw/Djpke/zpHOnNTsxsMtIE8gq0qteoZq/vUvQTBfB
+         McKpzl8tmPOCe+bqTfeW8I54EYkS5SwtdTz2CCm3GBzn29v/WUYWOTlCmp5wirnhJz20
+         cvmw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=zYC1cAZNMI4fPCA/JdppgAdHhnjAV/K9sV/UY3ZbdgY=;
-        b=NpUQ55cjT+Klva3dcNukrmcjyc+CxfVsvRyTOK4VLk6AU/O9d2hyFJgXm6J07odb7y
-         QtJRuybzx1IQn1r24o7dYbNPnolux2CsQrtOZUDldtfEbdM8M7LV0UPu3tKuK+naTr+B
-         zcc+HS3uyWd5vMjUEBe60U63EJrREWTvLNtgncjZapZUj6SXj9rC9KbbVS8ciW8PLfMP
-         C1WNvv9q76xYxi/GUUsNxPBAU7yl4kilDuZ3CseC4JC7hzMpDPJ29XrJg+lwUDrccDSa
-         ORogOjIoOOG5mMXJfONz21H25RwSD4hU7BCi4522tI2ZP7m7b15yqu6MANO2ofKlLFQz
-         UIXQ==
-X-Gm-Message-State: AJIora82pBqOv46tgrAq+BXvDqQH0FnLjSlce2E74DyWJy4BQBUEJWSV
-        5+tnI1RhCZX9jYF9DlE/boUPVQ==
-X-Google-Smtp-Source: AGRyM1vZFVDEcDCV3p5oTwQ75dQ6gh8Jm4BQFnEddiEH4wedRKJRyG0O43CyonUbxZkQzd52uJNZ1Q==
-X-Received: by 2002:a2e:87c7:0:b0:25a:9605:a2b8 with SMTP id v7-20020a2e87c7000000b0025a9605a2b8mr22670802ljj.148.1657120034049;
-        Wed, 06 Jul 2022 08:07:14 -0700 (PDT)
-Received: from [192.168.1.52] ([84.20.121.239])
-        by smtp.gmail.com with ESMTPSA id u16-20020ac258d0000000b0047f6f675ea1sm6317115lfo.161.2022.07.06.08.07.12
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 06 Jul 2022 08:07:13 -0700 (PDT)
-Message-ID: <bcb64218-2d2b-2f6b-dc79-303bac8c3bd3@linaro.org>
-Date:   Wed, 6 Jul 2022 17:07:12 +0200
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=BpcbsEw/20xy+czFl3NKN5RfG+F04MUU4xLklx2RkdY=;
+        b=ybs9TMZBIo59Wq98XtR52r6MdEwqd6n0QhmgdeKDEIwnzrmVFoUVhZlCh7AFx8b1KQ
+         IFAAA4dgmMyZSboKQCqbB2sLDqkSO2fSNPq8Jdzi5ThLe3ptaKi4CoiFrLvDIe06zUFx
+         fSdR6DxHhNibNE2PJPWp98/RnhVZUjiwYM2CZtJCbc4V6flsaCJKVD/nNY2kTm73lfRy
+         Dg9Yab4qclRYUGe6SlaUNEpaa+67+nTKHqpElK8dcTST82gG2qR9ztICx6bKkt9Tz8F8
+         A2wCvMrGVodLmpls6VkDe4fYRzc8V4ci8YlnPkhDF3ehbWjoIdz4xLv+JpJFx80VCUw4
+         xBQA==
+X-Gm-Message-State: AJIora8EvCAcycctsMyiZ6tUVFzFDb5p6bZws5EpJsPzRk3EXBtJcssB
+        OHoQovZtgZqM0Sy4gsLKDE4OvG/P3FLeTgNwWXvPQg==
+X-Google-Smtp-Source: AGRyM1toIUwU2hQGy73CKB+mVxb4qKDrzlrhNmnsT46t+aRA8c854vbii67QfBYKQMCf50W7y/jQJ8Jrdqy0Wyvjcuc=
+X-Received: by 2002:a05:6402:150:b0:437:b93c:3a9 with SMTP id
+ s16-20020a056402015000b00437b93c03a9mr52926716edu.82.1657120051888; Wed, 06
+ Jul 2022 08:07:31 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH 2/5] ARM: DTS: qcom: fix dtbs_check warning with new rpmcc
- clocks
-Content-Language: en-US
-To:     Christian Marangi <ansuelsmth@gmail.com>
-Cc:     Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220705202837.667-1-ansuelsmth@gmail.com>
- <20220705202837.667-3-ansuelsmth@gmail.com>
- <18e40247-7151-b50a-97fe-00ee88f47d9b@linaro.org>
- <62c565dc.1c69fb81.a4566.e9b2@mx.google.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <62c565dc.1c69fb81.a4566.e9b2@mx.google.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+References: <20220705171835.4923-1-brgl@bgdev.pl> <CAHp75Ve3sPhFOZhL=_2p+1avuo96CP995KD+bi+Pn3gyj1F9TA@mail.gmail.com>
+ <CAMRc=MekRvEVjRKJn6CWpbk9GJWS0Y+kB9MYpGFSN9WSSzWC7A@mail.gmail.com> <CAHp75VdepbidJWgLZFk3ns13boZXRYvMqvLvXF_xYw=2ahZMgw@mail.gmail.com>
+In-Reply-To: <CAHp75VdepbidJWgLZFk3ns13boZXRYvMqvLvXF_xYw=2ahZMgw@mail.gmail.com>
+From:   Bartosz Golaszewski <brgl@bgdev.pl>
+Date:   Wed, 6 Jul 2022 17:07:21 +0200
+Message-ID: <CAMRc=MfQgVD3VkY+Pq7UxV8WB-2GSpsSgU9N8djdkK99ycg4Uw@mail.gmail.com>
+Subject: Re: [PATCH] gpio: pxa: schedule a devm action for the clock struct
+To:     Andy Shevchenko <andy.shevchenko@gmail.com>
+Cc:     Stephen Boyd <swboyd@chromium.org>,
+        Robert Jarzmik <robert.jarzmik@free.fr>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Hulk Robot <hulkci@huawei.com>, Yuan Can <yuancan@huawei.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 06/07/2022 12:20, Christian Marangi wrote:
-> On Wed, Jul 06, 2022 at 09:44:04AM +0200, Krzysztof Kozlowski wrote:
->> On 05/07/2022 22:28, Christian Marangi wrote:
->>> Fix dtbs_check warning for new rpmcc Documentation changes and add the
->>> required clocks.
->>
->> There is no warning in the kernel, right? So the commit is not correct.
->>
-> 
-> Oh ok, the warning is generated by the new Documentation.
+On Wed, Jul 6, 2022 at 2:32 PM Andy Shevchenko
+<andy.shevchenko@gmail.com> wrote:
+>
+> On Wed, Jul 6, 2022 at 2:11 PM Bartosz Golaszewski <brgl@bgdev.pl> wrote:
+> > On Wed, Jul 6, 2022 at 1:49 PM Andy Shevchenko
+> > <andy.shevchenko@gmail.com> wrote:
+> > > On Tue, Jul 5, 2022 at 7:29 PM Bartosz Golaszewski <brgl@bgdev.pl> wrote:
+>
+> ...
+>
+> > > > Reported-by: Signed-off-by: Yuan Can <yuancan@huawei.com>
+> > >
+> > > Me puzzled.
+> >
+> > Yuan Can sent the following patch:
+> > https://patchwork.ozlabs.org/project/linux-gpio/patch/20220704130323.104294-1-yuancan@huawei.com/
+> >
+> > I responded that it was not complete and sent this instead.
+>
+> I understand that, I am puzzled with Reported-by: followed by SoB.
+> What is this format? Is it something new and documented?
+>
 
-Patches, especially DTS, might go via different trees, so the moment DTS
-is applied there might be no such warning.
+Ah! No, it's just my brain on not enough coffee I suppose. Thanks, I'll fix it.
 
-Best regards,
-Krzysztof
+Bart

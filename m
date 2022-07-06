@@ -2,231 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8FBF8568510
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 12:18:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 56A2C56850D
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 12:18:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233004AbiGFKRS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Jul 2022 06:17:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57966 "EHLO
+        id S232410AbiGFKRK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Jul 2022 06:17:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57886 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232992AbiGFKRO (ORCPT
+        with ESMTP id S232397AbiGFKRI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Jul 2022 06:17:14 -0400
-Received: from alexa-out-sd-02.qualcomm.com (alexa-out-sd-02.qualcomm.com [199.106.114.39])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3EC32528F;
-        Wed,  6 Jul 2022 03:17:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1657102630; x=1688638630;
-  h=from:to:cc:subject:date:message-id:mime-version;
-  bh=VwlfvnG2tSLYTcnCDSEuoyt5q/+OAYIkK+DH0Z8k1qo=;
-  b=HNAjkkO8/6SDDAVdUlzGY9/YtM3SAmzLWu83JnJ1HKHLJDXn43JzGbFB
-   LwCTiOC00O4UC+2e7nmY8stpO/Db0HHHQRtWIYAm9OQQrX3eDLkvknF91
-   o7OTUpFAlWFgGfgVwoR19WUkIgIDeTSoQN42oJe3etdwt8jb8ngulQfld
-   s=;
-Received: from unknown (HELO ironmsg-SD-alpha.qualcomm.com) ([10.53.140.30])
-  by alexa-out-sd-02.qualcomm.com with ESMTP; 06 Jul 2022 03:17:09 -0700
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg-SD-alpha.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jul 2022 03:17:09 -0700
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Wed, 6 Jul 2022 03:17:08 -0700
-Received: from hu-srivasam-hyd.qualcomm.com (10.80.80.8) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Wed, 6 Jul 2022 03:17:04 -0700
-From:   Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
-To:     <agross@kernel.org>, <bjorn.andersson@linaro.org>,
-        <robh+dt@kernel.org>, <linux-arm-msm@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <quic_rohkumar@quicinc.com>, <srinivas.kandagatla@linaro.org>,
-        <dianders@chromium.org>, <swboyd@chromium.org>,
-        <judyhsiao@chromium.org>
-CC:     Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
-Subject: [PATCH] arm64: dts: qcom: sc7280: Move wcd specific pin conf to common file
-Date:   Wed, 6 Jul 2022 15:46:51 +0530
-Message-ID: <1657102611-20067-1-git-send-email-quic_srivasam@quicinc.com>
-X-Mailer: git-send-email 2.7.4
+        Wed, 6 Jul 2022 06:17:08 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 254731AF3E;
+        Wed,  6 Jul 2022 03:17:08 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id D4304B81BBD;
+        Wed,  6 Jul 2022 10:17:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3A02FC3411C;
+        Wed,  6 Jul 2022 10:17:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1657102625;
+        bh=XVdbRrOp8xLesuL5V+XzvyMnqCaufOFVig9zQuXgRQY=;
+        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+        b=MMlQ+fWvP3JUGhLnjIw6+jbnUaJIQZy5aXlLxlLwdGlx7LGIrIJ/UCzdO610lIwV0
+         DgbeVbiP0un/T9p59vebdHE943xTi9/sEZmhekVZzmIIZzQKVPLumMtjDYw/zGUP17
+         I/5wryk2awc3HeO2mqmIsljW9Sak2cJRzeJ+w5YG2zk+Vdk8yNJPDHA39/XbZDVmhz
+         NuQx+t6jY9l2c6IGeNtNho9GJRXGn+T3zpLDTEbIffTnkPWEh9u1bSvf7K22s2Bx2d
+         XZukslogWRSrfhsMHbHyMIU1Eaoyq22kbloOFSOCqWaLktQ+xu8dF+tZ2YQIiEZ/AW
+         YxVt5p9o2FxwQ==
+From:   Mark Brown <broonie@kernel.org>
+To:     aidanmacdonald.0x0@gmail.com
+Cc:     rafael@kernel.org, m.szyprowski@samsung.com,
+        linux-samsung-soc@vger.kernel.org, andy.shevchenko@gmail.com,
+        gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org
+In-Reply-To: <20220704112847.23844-1-aidanmacdonald.0x0@gmail.com>
+References: <20220704112847.23844-1-aidanmacdonald.0x0@gmail.com>
+Subject: Re: [PATCH] regmap-irq: Fix bug in regmap_irq_get_irq_reg_linear()
+Message-Id: <165710262393.218789.1320369501599674730.b4-ty@kernel.org>
+Date:   Wed, 06 Jul 2022 11:17:03 +0100
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Move wcd specific pin conf to common file to support various
-herbronie variant boards and to avoid duplicate nodes in dts files.
+On Mon, 4 Jul 2022 12:28:47 +0100, Aidan MacDonald wrote:
+> irq_reg_stride in struct regmap_irq_chip is often 0, but that
+> actually means to use the default stride of 1. The effective
+> stride is stored in struct regmap_irq_chip_data->irq_reg_stride
+> and will get the corrected default value.
+> 
+> The default ->get_irq_reg() callback was using the stride from
+> the chip definition, which is wrong; fix it to use the effective
+> stride from the chip data instead.
+> 
+> [...]
 
-Signed-off-by: Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
----
- .../dts/qcom/sc7280-herobrine-audio-wcd9385.dtsi   | 71 ++++++++++++++++++++++
- arch/arm64/boot/dts/qcom/sc7280-herobrine-crd.dts  | 61 -------------------
- 2 files changed, 71 insertions(+), 61 deletions(-)
+Applied to
 
-diff --git a/arch/arm64/boot/dts/qcom/sc7280-herobrine-audio-wcd9385.dtsi b/arch/arm64/boot/dts/qcom/sc7280-herobrine-audio-wcd9385.dtsi
-index 32a1e78..b04d796 100644
---- a/arch/arm64/boot/dts/qcom/sc7280-herobrine-audio-wcd9385.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sc7280-herobrine-audio-wcd9385.dtsi
-@@ -5,6 +5,77 @@
-  * Copyright (c) 2022, The Linux Foundation. All rights reserved.
-  */
- 
-+/* PINCTRL - BOARD-SPECIFIC */
-+
-+/*
-+ * Methodology for gpio-line-names:
-+ * - If a pin goes to CRD board and is named it gets that name.
-+ * - If a pin goes to CRD board and is not named, it gets no name.
-+ * - If a pin is totally internal to Qcard then it gets Qcard name.
-+ * - If a pin is not hooked up on Qcard, it gets no name.
-+ */
-+&lpass_dmic01_clk {
-+	drive-strength = <8>;
-+	bias-disable;
-+};
-+
-+&lpass_dmic01_clk_sleep {
-+	drive-strength = <2>;
-+};
-+
-+&lpass_dmic01_data {
-+	bias-pull-down;
-+};
-+
-+&lpass_dmic23_clk {
-+	drive-strength = <8>;
-+	bias-disable;
-+};
-+
-+&lpass_dmic23_clk_sleep {
-+	drive-strength = <2>;
-+};
-+
-+&lpass_dmic23_data {
-+	bias-pull-down;
-+};
-+
-+&lpass_rx_swr_clk {
-+	drive-strength = <2>;
-+	slew-rate = <1>;
-+	bias-disable;
-+};
-+
-+&lpass_rx_swr_clk_sleep {
-+	bias-pull-down;
-+};
-+
-+&lpass_rx_swr_data {
-+	drive-strength = <2>;
-+	slew-rate = <1>;
-+	bias-bus-hold;
-+};
-+
-+&lpass_rx_swr_data_sleep {
-+	bias-pull-down;
-+};
-+
-+&lpass_tx_swr_clk {
-+	drive-strength = <2>;
-+	slew-rate = <1>;
-+	bias-disable;
-+};
-+
-+&lpass_tx_swr_clk_sleep {
-+	bias-pull-down;
-+};
-+
-+&lpass_tx_swr_data {
-+	drive-strength = <2>;
-+	slew-rate = <1>;
-+	bias-bus-hold;
-+};
-+
- &mi2s1_data0 {
- 	drive-strength = <6>;
- 	bias-disable;
-diff --git a/arch/arm64/boot/dts/qcom/sc7280-herobrine-crd.dts b/arch/arm64/boot/dts/qcom/sc7280-herobrine-crd.dts
-index e9ca6c5..7881bbc 100644
---- a/arch/arm64/boot/dts/qcom/sc7280-herobrine-crd.dts
-+++ b/arch/arm64/boot/dts/qcom/sc7280-herobrine-crd.dts
-@@ -155,67 +155,6 @@ ap_ts_pen_1v8: &i2c13 {
-  * - If a pin is totally internal to Qcard then it gets Qcard name.
-  * - If a pin is not hooked up on Qcard, it gets no name.
-  */
--&lpass_dmic01_clk {
--	drive-strength = <8>;
--	bias-disable;
--};
--
--&lpass_dmic01_clk_sleep {
--	drive-strength = <2>;
--};
--
--&lpass_dmic01_data {
--	bias-pull-down;
--};
--
--&lpass_dmic23_clk {
--	drive-strength = <8>;
--	bias-disable;
--};
--
--&lpass_dmic23_clk_sleep {
--	drive-strength = <2>;
--};
--
--&lpass_dmic23_data {
--	bias-pull-down;
--};
--
--&lpass_rx_swr_clk {
--	drive-strength = <2>;
--	slew-rate = <1>;
--	bias-disable;
--};
--
--&lpass_rx_swr_clk_sleep {
--	bias-pull-down;
--};
--
--&lpass_rx_swr_data {
--	drive-strength = <2>;
--	slew-rate = <1>;
--	bias-bus-hold;
--};
--
--&lpass_rx_swr_data_sleep {
--	bias-pull-down;
--};
--
--&lpass_tx_swr_clk {
--	drive-strength = <2>;
--	slew-rate = <1>;
--	bias-disable;
--};
--
--&lpass_tx_swr_clk_sleep {
--	bias-pull-down;
--};
--
--&lpass_tx_swr_data {
--	drive-strength = <2>;
--	slew-rate = <1>;
--	bias-bus-hold;
--};
- 
- &pm8350c_gpios {
- 	gpio-line-names = "FLASH_STROBE_1",		/* 1 */
--- 
-2.7.4
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/regmap.git for-next
 
+Thanks!
+
+[1/1] regmap-irq: Fix bug in regmap_irq_get_irq_reg_linear()
+      commit: 773d09b4c3acafd35f8b6e90848a39cedc03c52b
+
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
+
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
+
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
+
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+Thanks,
+Mark

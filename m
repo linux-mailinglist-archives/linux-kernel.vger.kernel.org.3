@@ -2,111 +2,271 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 738A5567BD5
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 04:25:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 31644567BDC
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 04:29:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230208AbiGFCZX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Jul 2022 22:25:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59832 "EHLO
+        id S230348AbiGFC3k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Jul 2022 22:29:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33652 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229507AbiGFCZV (ORCPT
+        with ESMTP id S229507AbiGFC3j (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Jul 2022 22:25:21 -0400
-Received: from mail-yw1-x1131.google.com (mail-yw1-x1131.google.com [IPv6:2607:f8b0:4864:20::1131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 561E0B86F
-        for <linux-kernel@vger.kernel.org>; Tue,  5 Jul 2022 19:25:17 -0700 (PDT)
-Received: by mail-yw1-x1131.google.com with SMTP id 00721157ae682-31c89653790so75597797b3.13
-        for <linux-kernel@vger.kernel.org>; Tue, 05 Jul 2022 19:25:17 -0700 (PDT)
+        Tue, 5 Jul 2022 22:29:39 -0400
+Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2098.outbound.protection.outlook.com [40.107.93.98])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA02014D30
+        for <linux-kernel@vger.kernel.org>; Tue,  5 Jul 2022 19:29:37 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=UcERXzO0X8frw4iGox3F5UoJt0P/cqLyTLXYFsEK/Yg7nusvzZjEr06wDBos2cdeJ9dmCUfC+74InAvBr2goNPSO9d/E+NJN59zVCBn0jZniEg6EXUEMzxaJErqHMh/rzXDQtqiXd7W6FRp+uxUwAA6rEOFLYsd7kHOQorW7LiAUp/Zdu3ggovHjP7ov5tfqOLlDJDABxHHMqvDEl8q/VJyCxLNQrLJL5+zYnx4NaEzuiaBhTOgps3KqFm1vEFmJ4FwDWgHxmGbAFJQBGIgfz1psoZxwRc/LFkg+Am6CCQEgJNz56pTEL0eMFnT18XFeurBCZwjHbRiRQNuChyGd5g==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=YoaWDcRx33jUNRKyR55AITG70MQHmB2wFJgEc5+UDVw=;
+ b=N6n+tFUOV3RBExXTA77GNBta9EHNVqq4EYI8VbCT2GZrUvpK4dkRkhmJQdMmdyiAUTVYN8jUauNkXhyNX56f1aC/1XWAsKJ8uOlNH5jy42hAup66mR/O3F/Bek8HE22djNrjAywTqVQgeHLhzeKnOS792uL7zLclLal2EthJYyDQqG0+RJVPYJvHXE3HMbzhzitZ+aG2Dxj1rx1U6S9ZxfnA/wh8+zfa6a252d4C5sBx3Tqmy1N/Ww7kygDL1H0boKSG4XgEBxaRXLNDiuIM1CdcDVQ/1115gS3X8NYTskW0x4J6CMQ+e6xhbLaYErsNMc7/7oDUrnN60xK50y+C7g==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=analogixsemi.com; dmarc=pass action=none
+ header.from=analogixsemi.com; dkim=pass header.d=analogixsemi.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=v16gTYqXX7Kmo1KvNsCtNgX5ZllD8C1dx9oSGDIh2w4=;
-        b=qExZIdQlChbVTBQMag2KMz96xQQWol3P20ZUeAIElxpP8YUTld11yydHChd5fVamnM
-         N+5qpsotZzK0TkuuZ6IizCnl7c+4ebPILh1/soI6S7VgHfeLOBQkjpt4QkW3rb7TgQc3
-         8Y1fBCsxkPnLvc8vUZLAQogjKTeYj5TI0mcLH7Fl5wPK008CHWLhfNWmJM//dGY59H7c
-         SWa55+sGIdonk37XYCC33l3Rlwjqj3eaxLINcgOyLpKBPOvG7/rJprMVpcY5Yk6lk05G
-         LKGuXAgm/AjvU+Y3IiVLZO8DD2khUxrD9ft8LKuN+OCzAUQa9x9mD7Fpt3lejxezx8gY
-         c1+Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=v16gTYqXX7Kmo1KvNsCtNgX5ZllD8C1dx9oSGDIh2w4=;
-        b=lMwg142EWzuMsjFZeBY8bEo8mL/BYBvKGguke3JC7YiUcjIdnecu/zEVqMCbbzjM3R
-         7r3CvfRVLfkznlJogk0pyBgr97K8F9D0h3+3i5Qk08M7mYoaNWCS1J1rVxVqOhQJzSB4
-         ttpUyfVLumPMz1z6y3izp6U9PlrNoIC+y5SzSTnJ4Y4wxl8Lma1uB6WMSwxf+8/jldFP
-         MGLTiP/2y8H0jlN1y2yMNkdr3ZHov05UXm6zfLk1aJCQayT+Fcr5UEmpUgICwmj7PwrP
-         WjTzHLfxrCPXLUVDWCCJuMKKxOfg45sni8i2I8Q5i9elcy/8p5Sfrc3aWEnXdnDJ7XLk
-         gVmA==
-X-Gm-Message-State: AJIora+GdHhawHh5U3n3Ghq1uNDCDDsYzmVYdZ0wcvMCNYjlDDhFir4b
-        WiOsuw/B8/6/+ymaFexPA0sajDWE7bGIkr/F9yDymA==
-X-Google-Smtp-Source: AGRyM1tf/61PNUiHLJCWdhrW5RsdK7YOTSrVaOqqDTQ/dnBIBhZucfiBm9Bp1Z/BftKx+cQNj2c0Hpz4qkNInLWHj3c=
-X-Received: by 2002:a81:34c:0:b0:31c:8b37:6595 with SMTP id
- 73-20020a81034c000000b0031c8b376595mr18858230ywd.126.1657074316081; Tue, 05
- Jul 2022 19:25:16 -0700 (PDT)
+ d=Analogixsemi.onmicrosoft.com; s=selector2-Analogixsemi-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=YoaWDcRx33jUNRKyR55AITG70MQHmB2wFJgEc5+UDVw=;
+ b=BKzxM/tTeEsBqEX9XpJ9zYnnAfs11bEwh9gXxTilt2JhZKipit6vYYmjN/cwOs4TbCphly9+k4WuK647mbE++AOY0CXuxV5kHI3Q6pQhpAwN8Pi9A1ce2UxBiBXMY02TPuammrXhcMFdzV6mOShDd6tUa6ScMNWKBwXX49+2rVQ=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=analogixsemi.com;
+Received: from BY5PR04MB6739.namprd04.prod.outlook.com (2603:10b6:a03:229::8)
+ by CY4PR0401MB3523.namprd04.prod.outlook.com (2603:10b6:910:90::37) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5395.14; Wed, 6 Jul
+ 2022 02:29:35 +0000
+Received: from BY5PR04MB6739.namprd04.prod.outlook.com
+ ([fe80::ec96:5112:c2d5:9377]) by BY5PR04MB6739.namprd04.prod.outlook.com
+ ([fe80::ec96:5112:c2d5:9377%8]) with mapi id 15.20.5395.022; Wed, 6 Jul 2022
+ 02:29:35 +0000
+Date:   Wed, 6 Jul 2022 10:29:26 +0800
+From:   Xin Ji <xji@analogixsemi.com>
+To:     Hsin-Yi Wang <hsinyi@chromium.org>
+Cc:     Robert Foss <robert.foss@linaro.org>,
+        Andrzej Hajda <andrzej.hajda@intel.com>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+        Jonas Karlman <jonas@kwiboo.se>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Maxime Ripard <maxime@cerno.tech>,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/4] drm/bridge: anx7625: Convert to
+ devm_i2c_new_dummy_device()
+Message-ID: <20220706022926.GA2357796@anxtwsw-Precision-3640-Tower>
+References: <20220629160550.433980-1-hsinyi@chromium.org>
+ <20220629160550.433980-2-hsinyi@chromium.org>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220629160550.433980-2-hsinyi@chromium.org>
+X-ClientProxiedBy: TY2PR06CA0010.apcprd06.prod.outlook.com
+ (2603:1096:404:42::22) To BY5PR04MB6739.namprd04.prod.outlook.com
+ (2603:10b6:a03:229::8)
 MIME-Version: 1.0
-References: <20220705131951.1388968-1-michael@walle.cc> <CAGETcx9W3W1P2fHVBuLOJNYz1rOU6hm9fc0=JukhbxJM6gRB1w@mail.gmail.com>
- <7673314425958a56a07899b300226554@walle.cc>
-In-Reply-To: <7673314425958a56a07899b300226554@walle.cc>
-From:   Saravana Kannan <saravanak@google.com>
-Date:   Tue, 5 Jul 2022 19:24:39 -0700
-Message-ID: <CAGETcx-WBOJEANsf+bopmEu-MTsOGiijmFU4UZn-A0bcUCTSTg@mail.gmail.com>
-Subject: Re: [PATCH 1/2] usb: gadget: udc: atmel: check rc of devm_gpiod_get_optional()
-To:     Michael Walle <michael@walle.cc>
-Cc:     Cristian Birsan <cristian.birsan@microchip.com>,
-        Felipe Balbi <balbi@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>,
-        linux-arm-kernel@lists.infradead.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 2bfbaba0-cc8b-4623-b8e7-08da5ef75db7
+X-MS-TrafficTypeDiagnostic: CY4PR0401MB3523:EE_
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 1c8Yaevjb3kPkb5y3xQJTI/EO11+jCDjMOVSqSjCas7i+01gmIqy9OwEmbDkCde2EF2HbhmB/TZV92hLcp9W1i2SMlITzD4SUsY7x73JZcHvgc3lqvZf454DFMY81lL+WOIUSQrHK69UmCuQ5dXIGwkbts9ljtTwJ0EHv3X3UDbNJRI94DwQwgxcKxL/gWKrnqi2asD2zZ1NqQUKeEvOJycgdqO4X++erTgK5GwZQ3TRQLYFF7LSKV6HQVzSAjgSq2S8heMQjWBCUyov9/q8qwmvf8NjyYOu3nrSMtDRkC4nw2Af1ZxB3al69gmH+3eCcfVrgNw499LqmEfI5eKO3U5bC5veK5ecZmBsNadlHDjy37tbHWJVQZ7KV/kmGlGuEr9wcQkP30ThP3wcr72Qq1eTuGy7KVA/Lcg5MrgM4yQ9B14pvnFNsm/9tqLdYafY8TKMUIG9Mzh9bcrUZnEltDHrb3N8iEOcwHsw0hgDeds7NYbRrmkqqjslkpiOvDzD4tteRU0fQH2M+3wzA7pviUzDz4TiXt8PqoGOUfbio8x+A4wzNKjIg5pOWZycb0gD/FYSBfZ8rwaGITfMm7EQU62hewmxzZTswM+9qhjBrTIwSZabVpkt9TCd3Hng7gf3piYr1XFX4JNnBiObp54H6OeHpEq50vcXU9ySMq8WarRZ4RaupIbzZ9FwD2Q2S7dFZ1rmjGxHAw6u4k7Y0M3ptei7UKPOj/JzfswM3hduZyF3ogKulbVVeL9EYzvcZKmJ5XwK4dkfQ94qeJJIEUb9k+EqcC2x3Mo7lbmH4/VPUm16zChnK1V+pNvZaX9MNw1CKgx2/tnwwO9cUlFP3+lThQ==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BY5PR04MB6739.namprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(7916004)(39840400004)(346002)(376002)(366004)(396003)(136003)(1076003)(186003)(26005)(6916009)(6512007)(9686003)(54906003)(83380400001)(2906002)(6666004)(52116002)(8676002)(7416002)(66946007)(55236004)(316002)(41300700001)(66476007)(6506007)(66556008)(33656002)(38350700002)(38100700002)(8936002)(5660300002)(33716001)(4326008)(6486002)(478600001)(86362001)(70780200001);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?f1GDtp9Rr26ZC+W0GNu/3cdXhwa/o94ceD8EJmGa3rRxhWQGiBAVyhjSYDbw?=
+ =?us-ascii?Q?1MXXz45XStO4N7jFflbqUuqXJlT+ty7xFew9GWs+LkG4CDF/NdnIDlKaKnbP?=
+ =?us-ascii?Q?s8jJsA6SzdYb8XyeVAwuCwgAJ2Qk4pQ8KH8MbC1ADKDYrbagN23LyhuJP9ud?=
+ =?us-ascii?Q?ISA+7awgGJOIyL7FPUiMcygpF7v+mmsnxZAtDtUsEXBYU6FihzXZsF+HodJ4?=
+ =?us-ascii?Q?RILhVhdqGlmguLZp+2EtM38FIYLctwB0yCZxDdVwPhYEs/TBcLUeRedqrQiO?=
+ =?us-ascii?Q?oqa9DbSxQx4F954nQJFw00/4+1JoTsrRpsUM7gGW9WcMymUtL7V89ZHIHRcK?=
+ =?us-ascii?Q?x2QpRdWidVLPLdri6QtTO4GZFCvCtAEzDaKEuIEPcv0T/JNBR31rXjEXon9j?=
+ =?us-ascii?Q?L2nZ+T4X9kkYrKaHwwEh+OcAHV09/+DvB017ZGmxw3v1+hA5p7Klwe6FpvQ4?=
+ =?us-ascii?Q?02KGPhA4naOM7FVb7LqKyRRZpjfZR3oS9tndz/aAUW1WzdQ4j7iodBV5krVI?=
+ =?us-ascii?Q?rQucliW0W+jlo++g2QToMraBKHqYUWq1ghc6JNC1VbEKZb/xoilsdOKgc1IX?=
+ =?us-ascii?Q?G44tdL1ulsrBZTUP2jO12XN9PtkwAN9jtCb2byQ1gedb5Hby/JQYjmAww7CD?=
+ =?us-ascii?Q?BsRFDnuiGaRWXdb7/YUPXUsvVVshqLA4hPaDBbmZVwLJoNagRaOJV34QDMh4?=
+ =?us-ascii?Q?+NmRXL9j/74CLMudCDaNzHx+7coioHSTw/bnkpwsIJ3Wy5QfH1cLJ85+3JhK?=
+ =?us-ascii?Q?C+grvBDUZS8om1g0CWaI4vXVBBM/cFHVNvEBbVWxJHuhY6/f45/rfWUOvAFm?=
+ =?us-ascii?Q?rAI6O0vxZENDaiZ//7+TGJcs+rFGG0lDStjQeYNvtQUM+kAibyr4Q22rGthB?=
+ =?us-ascii?Q?PRjNXIum4GA9cpPSQAw4KH3zrcCtv++F5a8tXVRZKrBzzesf4F4eBI3t4pMT?=
+ =?us-ascii?Q?yhaw2UHN/szyyys0+wQNu1Q8Y1eC8vrgSXVVHLscLNLAWG2RASUq5Iy+2BJk?=
+ =?us-ascii?Q?1RxNxHuhuJwBX966w/XmUWcECJ5oE4mMB8J/v5yq1dMrRlKWw/x6TRz5eP7X?=
+ =?us-ascii?Q?+yEwldf+24t9KOJVwkcPhpJp1Xs59mTVmLNU1F+M8ngaP7rojfwKSGLfPVAI?=
+ =?us-ascii?Q?DF3NJa7EQh4d5Aufe9J3kj5+Fww/PkrUyKVSN0RiOqnXyHaXdKEsQ0yqNota?=
+ =?us-ascii?Q?bae/l+Mo/WHaYlTyzbT3OE1OHauD1YFPVvMSGaWReJUe+UfXXDUBFMzZ3qFU?=
+ =?us-ascii?Q?RQ0QShfPVtjFRKX9gm1WPaz+k70wejrxBtfmoujKqSw2r/GeKDiqEJNcF8tV?=
+ =?us-ascii?Q?0gShUVxyZIjIHJPWA/OUYBJXoUt9ljakkASdGnD2qK/C6M0sjd+AtgO1HDAV?=
+ =?us-ascii?Q?S4Ib0eiSp3jD/npnIrDyj3g8ci8r7cZlklLw4eqeiw7SM34O0+i0JkALIw1n?=
+ =?us-ascii?Q?JInPe8m4QiaYzq/C99ca4SJlEm1VtY+OE++NUIfnEJvDIZPr/bzAKFBFEvNt?=
+ =?us-ascii?Q?zCir18+wFUhHrNgizSjU4oYYvRlKy12CrIRrrRDl9I4Qz7A7hKKPfJ5VP1rW?=
+ =?us-ascii?Q?bFT4+qczU24eo9GV72YiaO846Vl9vzRCbwQUw6FA?=
+X-OriginatorOrg: analogixsemi.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 2bfbaba0-cc8b-4623-b8e7-08da5ef75db7
+X-MS-Exchange-CrossTenant-AuthSource: BY5PR04MB6739.namprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Jul 2022 02:29:35.1569
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: b099b0b4-f26c-4cf5-9a0f-d5be9acab205
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: f2QMDFcAczkBiYJQ2iNIuo98qyT0IHoGWqj38f09dgSn9Me4V+nxNk97V5zjOknMZh3IX86g7tgbI9d37iciBA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY4PR0401MB3523
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jul 5, 2022 at 1:56 PM Michael Walle <michael@walle.cc> wrote:
->
-> Am 2022-07-05 20:53, schrieb Saravana Kannan:
-> > On Tue, Jul 5, 2022 at 6:19 AM Michael Walle <michael@walle.cc> wrote:
-> >>
-> >> devm_gpiod_get_optional() might still return an error code, esp.
-> >> EPROBE_DEFER. Return any errors.
-> >>
-> >> Signed-off-by: Michael Walle <michael@walle.cc>
-> >> ---
-> >>  drivers/usb/gadget/udc/atmel_usba_udc.c | 2 ++
-> >>  1 file changed, 2 insertions(+)
-> >>
-> >> diff --git a/drivers/usb/gadget/udc/atmel_usba_udc.c
-> >> b/drivers/usb/gadget/udc/atmel_usba_udc.c
-> >> index ae2bfbac603e..48355e0cee76 100644
-> >> --- a/drivers/usb/gadget/udc/atmel_usba_udc.c
-> >> +++ b/drivers/usb/gadget/udc/atmel_usba_udc.c
-> >> @@ -2165,6 +2165,8 @@ static struct usba_ep * atmel_udc_of_init(struct
-> >> platform_device *pdev,
-> >>
-> >>         udc->vbus_pin = devm_gpiod_get_optional(&pdev->dev,
-> >> "atmel,vbus",
-> >>                                                 GPIOD_IN);
-> >> +       if (IS_ERR(udc->vbus_pin))
-> >> +               return ERR_CAST(udc->vbus_pin);
-> >
-> > I'm confused. Is it really an optional resource if you treat a failure
-> > to get it
-> > as a reason to fail a probe?
->
-> If the gpio isn't found NULL is returned.
+Hi Hsin-Yi, thanks for your patch, looks good to me.
 
-Ah, ok.
+Reviewed-by: Xin Ji <xji@analogixsemi.com>
 
--Saravana
+On Thu, Jun 30, 2022 at 12:05:47AM +0800, Hsin-Yi Wang wrote:
+> Simplify the resource management.
+> 
+> Signed-off-by: Hsin-Yi Wang <hsinyi@chromium.org>
+> ---
+>  drivers/gpu/drm/bridge/analogix/anx7625.c | 96 +++++++----------------
+>  1 file changed, 27 insertions(+), 69 deletions(-)
+> 
+> diff --git a/drivers/gpu/drm/bridge/analogix/anx7625.c b/drivers/gpu/drm/bridge/analogix/anx7625.c
+> index 3710fa9ee0acd..f89e8151475f7 100644
+> --- a/drivers/gpu/drm/bridge/analogix/anx7625.c
+> +++ b/drivers/gpu/drm/bridge/analogix/anx7625.c
+> @@ -2436,82 +2436,44 @@ static const struct drm_bridge_funcs anx7625_bridge_funcs = {
+>  static int anx7625_register_i2c_dummy_clients(struct anx7625_data *ctx,
+>  					      struct i2c_client *client)
+>  {
+> -	int err = 0;
+> +	struct device *dev = &ctx->client->dev;
+>  
+> -	ctx->i2c.tx_p0_client = i2c_new_dummy_device(client->adapter,
+> -						     TX_P0_ADDR >> 1);
+> +	ctx->i2c.tx_p0_client = devm_i2c_new_dummy_device(dev, client->adapter,
+> +						TX_P0_ADDR >> 1);
+>  	if (IS_ERR(ctx->i2c.tx_p0_client))
+>  		return PTR_ERR(ctx->i2c.tx_p0_client);
+>  
+> -	ctx->i2c.tx_p1_client = i2c_new_dummy_device(client->adapter,
+> -						     TX_P1_ADDR >> 1);
+> -	if (IS_ERR(ctx->i2c.tx_p1_client)) {
+> -		err = PTR_ERR(ctx->i2c.tx_p1_client);
+> -		goto free_tx_p0;
+> -	}
+> +	ctx->i2c.tx_p1_client = devm_i2c_new_dummy_device(dev, client->adapter,
+> +						TX_P1_ADDR >> 1);
+> +	if (IS_ERR(ctx->i2c.tx_p1_client))
+> +		return PTR_ERR(ctx->i2c.tx_p1_client);
+>  
+> -	ctx->i2c.tx_p2_client = i2c_new_dummy_device(client->adapter,
+> -						     TX_P2_ADDR >> 1);
+> -	if (IS_ERR(ctx->i2c.tx_p2_client)) {
+> -		err = PTR_ERR(ctx->i2c.tx_p2_client);
+> -		goto free_tx_p1;
+> -	}
+> +	ctx->i2c.tx_p2_client = devm_i2c_new_dummy_device(dev, client->adapter,
+> +						TX_P2_ADDR >> 1);
+> +	if (IS_ERR(ctx->i2c.tx_p2_client))
+> +		return PTR_ERR(ctx->i2c.tx_p2_client);
+>  
+> -	ctx->i2c.rx_p0_client = i2c_new_dummy_device(client->adapter,
+> -						     RX_P0_ADDR >> 1);
+> -	if (IS_ERR(ctx->i2c.rx_p0_client)) {
+> -		err = PTR_ERR(ctx->i2c.rx_p0_client);
+> -		goto free_tx_p2;
+> -	}
+> +	ctx->i2c.rx_p0_client = devm_i2c_new_dummy_device(dev, client->adapter,
+> +						RX_P0_ADDR >> 1);
+> +	if (IS_ERR(ctx->i2c.rx_p0_client))
+> +		return PTR_ERR(ctx->i2c.rx_p0_client);
+>  
+> -	ctx->i2c.rx_p1_client = i2c_new_dummy_device(client->adapter,
+> -						     RX_P1_ADDR >> 1);
+> -	if (IS_ERR(ctx->i2c.rx_p1_client)) {
+> -		err = PTR_ERR(ctx->i2c.rx_p1_client);
+> -		goto free_rx_p0;
+> -	}
+> +	ctx->i2c.rx_p1_client = devm_i2c_new_dummy_device(dev, client->adapter,
+> +						RX_P1_ADDR >> 1);
+> +	if (IS_ERR(ctx->i2c.rx_p1_client))
+> +		return PTR_ERR(ctx->i2c.rx_p1_client);
+>  
+> -	ctx->i2c.rx_p2_client = i2c_new_dummy_device(client->adapter,
+> -						     RX_P2_ADDR >> 1);
+> -	if (IS_ERR(ctx->i2c.rx_p2_client)) {
+> -		err = PTR_ERR(ctx->i2c.rx_p2_client);
+> -		goto free_rx_p1;
+> -	}
+> +	ctx->i2c.rx_p2_client = devm_i2c_new_dummy_device(dev, client->adapter,
+> +						RX_P2_ADDR >> 1);
+> +	if (IS_ERR(ctx->i2c.rx_p2_client))
+> +		return PTR_ERR(ctx->i2c.rx_p2_client);
+>  
+> -	ctx->i2c.tcpc_client = i2c_new_dummy_device(client->adapter,
+> -						    TCPC_INTERFACE_ADDR >> 1);
+> -	if (IS_ERR(ctx->i2c.tcpc_client)) {
+> -		err = PTR_ERR(ctx->i2c.tcpc_client);
+> -		goto free_rx_p2;
+> -	}
+> +	ctx->i2c.tcpc_client = devm_i2c_new_dummy_device(dev, client->adapter,
+> +						TCPC_INTERFACE_ADDR >> 1);
+> +	if (IS_ERR(ctx->i2c.tcpc_client))
+> +		return PTR_ERR(ctx->i2c.tcpc_client);
+>  
+>  	return 0;
+> -
+> -free_rx_p2:
+> -	i2c_unregister_device(ctx->i2c.rx_p2_client);
+> -free_rx_p1:
+> -	i2c_unregister_device(ctx->i2c.rx_p1_client);
+> -free_rx_p0:
+> -	i2c_unregister_device(ctx->i2c.rx_p0_client);
+> -free_tx_p2:
+> -	i2c_unregister_device(ctx->i2c.tx_p2_client);
+> -free_tx_p1:
+> -	i2c_unregister_device(ctx->i2c.tx_p1_client);
+> -free_tx_p0:
+> -	i2c_unregister_device(ctx->i2c.tx_p0_client);
+> -
+> -	return err;
+> -}
+> -
+> -static void anx7625_unregister_i2c_dummy_clients(struct anx7625_data *ctx)
+> -{
+> -	i2c_unregister_device(ctx->i2c.tx_p0_client);
+> -	i2c_unregister_device(ctx->i2c.tx_p1_client);
+> -	i2c_unregister_device(ctx->i2c.tx_p2_client);
+> -	i2c_unregister_device(ctx->i2c.rx_p0_client);
+> -	i2c_unregister_device(ctx->i2c.rx_p1_client);
+> -	i2c_unregister_device(ctx->i2c.rx_p2_client);
+> -	i2c_unregister_device(ctx->i2c.tcpc_client);
+>  }
+>  
+>  static int __maybe_unused anx7625_runtime_pm_suspend(struct device *dev)
+> @@ -2723,8 +2685,6 @@ static int anx7625_i2c_probe(struct i2c_client *client,
+>  	if (!platform->pdata.low_power_mode)
+>  		pm_runtime_put_sync_suspend(&client->dev);
+>  
+> -	anx7625_unregister_i2c_dummy_clients(platform);
+> -
+>  free_wq:
+>  	if (platform->workqueue)
+>  		destroy_workqueue(platform->workqueue);
+> @@ -2754,8 +2714,6 @@ static int anx7625_i2c_remove(struct i2c_client *client)
+>  	if (!platform->pdata.low_power_mode)
+>  		pm_runtime_put_sync_suspend(&client->dev);
+>  
+> -	anx7625_unregister_i2c_dummy_clients(platform);
+> -
+>  	if (platform->pdata.audio_en)
+>  		anx7625_unregister_audio(platform);
+>  
+> -- 
+> 2.37.0.rc0.161.g10f37bed90-goog

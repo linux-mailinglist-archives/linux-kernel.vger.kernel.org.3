@@ -2,117 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B63DB567C52
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 05:08:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 38017567C58
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 05:11:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231600AbiGFDIU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Jul 2022 23:08:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57912 "EHLO
+        id S231463AbiGFDLU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Jul 2022 23:11:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59742 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231482AbiGFDIR (ORCPT
+        with ESMTP id S229821AbiGFDLT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Jul 2022 23:08:17 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9868F1B791;
-        Tue,  5 Jul 2022 20:08:15 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 340CE619D3;
-        Wed,  6 Jul 2022 03:08:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5142EC341C7;
-        Wed,  6 Jul 2022 03:08:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1657076894;
-        bh=QVsieE1u5SR/xKZTre3ny7IyDuUKUvbKp16x93OZKRI=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=BDPGhzQeeVZZ1udLY5lJ/DU1YHrP3ZDp3IvmIxJG14GVW9BoI0n6oFKK4UtUsPgmF
-         r57NhxVcLliBlNgFHD/35Jq9/wC0fKqpjgntzDFMBeLrDLk/WJiBrw2Lf/MfdWFXqC
-         Vas7OR256OIeayzPaeFGn+Uw7VLBQ3gUh9TXv/VP8t68OzneUx7KH8Fv3tOBrglC81
-         K5+jCwy0PGHrNpvRuobr8rw7hn7Y/MaJG6JzNQZIbGcUXqbnIvHSmWOZUE0o3HPCbQ
-         ZxHHkAU2FZ+P49+gJ702CtIXxivGKwTDJ4uwwVZsIeNyBWmu4wxvOD979PC0uuQtBP
-         I7mo7IazM5jOg==
-Date:   Tue, 5 Jul 2022 22:08:12 -0500
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Shunsuke Mie <mie@igel.co.jp>
-Cc:     Kishon Vijay Abraham I <kishon@ti.com>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Hou Zhiqiang <Zhiqiang.Hou@nxp.com>,
-        Li Chen <lchen@ambarella.com>, linux-pci@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] PCI: endpoint: Don't stop EP controller by EP function
-Message-ID: <20220706030812.GA109866@bhelgaas>
+        Tue, 5 Jul 2022 23:11:19 -0400
+Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 039A21BE8C
+        for <linux-kernel@vger.kernel.org>; Tue,  5 Jul 2022 20:11:18 -0700 (PDT)
+Received: by mail-pl1-x633.google.com with SMTP id l12so7204709plk.13
+        for <linux-kernel@vger.kernel.org>; Tue, 05 Jul 2022 20:11:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=adFlPjTSINJCwR4o3G3QqAu+rrKuZ/5CiQjZIvPrt6U=;
+        b=QQVf20B70sKkMkdDRS2X9H/Gy0P9G4+wRlQUDrOOM3ODgwNRc34pZQ6ShWpRZ2VF8b
+         6e0NXc1TdtUMm7dUiy0La2zAHDfAHwL/oAtlw6YpEx1nbyJTwdDvD9rUylkrkrIZRvpc
+         AqruyeXhRmYI0WGztsajKRlP3mfxbiD5T2FlXBv2ZiA8ab9yYzHJJyO6Is14SkPQTS1n
+         FHt3l0mz+8KsFeMI6FPsjkloq75VzeFvb3h8OAcwcJnj76MkAz5rOGv23GzmG6YhSWi7
+         s0zQlap60DojPdxiRU2vuH/0v6wxEmcMoLu7Qh76mEUHQcNIA5yfWZmsqTsjy6lHjezq
+         P9WA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=adFlPjTSINJCwR4o3G3QqAu+rrKuZ/5CiQjZIvPrt6U=;
+        b=bw5HQ8At6RY3Op14U2Eo41lmecjnkpEW+6VA8YPm4KArfsaVe7BNVe+jm7arUJLaQs
+         alKW+ovEXV3SfvSgsks7Jdd4gLkK8+/YKbLU3DvRaq4ZS0XR2BgMSHQEfGEqqPDcLr2k
+         O9PQ/j0DzVHteEyzg4CPj/R9xm67T7MoefQlmyxNU5FbzdlqNEXTSd1x7ABFZXNLHsTs
+         JyHkvLhHKnXJ7Ek+2Mi4R4NOve5nQEFD4Yrcci+zLtWsNnX+2LPPMft6rqbPrIZNnsiR
+         1H+B9MgNI44NzZ4E6xX8Wbc9shSuf+aKiimhdq/gFmuX8pPuMNB03RpLw/UbmKm3jIEj
+         DStw==
+X-Gm-Message-State: AJIora/KtP/Hnqr3fMa0r9wEXfaPmykTR6MSWfEz7ImrKyq7yTtZP6c0
+        XD6mN/JIfJPm7QA+2aTN6GL+Bg==
+X-Google-Smtp-Source: AGRyM1s3V0NQlgPNuKYtnFzkzn7TTCJeEo7FS9YZcDvQY+f/8qJVv7GX3mN/8eXl8vbzPMBuvQyY7g==
+X-Received: by 2002:a17:902:aa05:b0:16a:5113:229d with SMTP id be5-20020a170902aa0500b0016a5113229dmr44555941plb.111.1657077077539;
+        Tue, 05 Jul 2022 20:11:17 -0700 (PDT)
+Received: from localhost ([139.177.225.229])
+        by smtp.gmail.com with ESMTPSA id ij21-20020a170902ab5500b0016bedcced2fsm3399375plb.35.2022.07.05.20.11.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 05 Jul 2022 20:11:17 -0700 (PDT)
+Date:   Wed, 6 Jul 2022 11:11:13 +0800
+From:   Muchun Song <songmuchun@bytedance.com>
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     Matthew Wilcox <willy@infradead.org>, jgg@ziepe.ca,
+        jhubbard@nvidia.com, william.kucharski@oracle.com,
+        dan.j.williams@intel.com, jack@suse.cz, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        nvdimm@lists.linux.dev, stable@vger.kernel.org
+Subject: Re: [PATCH v2] mm: fix missing wake-up event for FSDAX pages
+Message-ID: <YsT9UQoR8cgPRmKZ@FVFYT0MHHV2J.usts.net>
+References: <20220705123532.283-1-songmuchun@bytedance.com>
+ <20220705141819.804eb972d43be3434dc70192@linux-foundation.org>
+ <YsTLgQ45ESpsNEGV@casper.infradead.org>
+ <20220705164710.9541b5cf0e5819193213ea5c@linux-foundation.org>
+ <YsT3xFSLJonnA2XC@FVFYT0MHHV2J.usts.net>
+ <20220705200042.26ddd5e2e106df4e65adcc74@linux-foundation.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CANXvt5qjx6gXhBZD3ndBPCxx++i2oxd5X7=MRgUGrXUj4kRgfw@mail.gmail.com>
-X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220705200042.26ddd5e2e106df4e65adcc74@linux-foundation.org>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jul 06, 2022 at 11:37:29AM +0900, Shunsuke Mie wrote:
-> 2022年7月6日(水) 7:40 Bjorn Helgaas <helgaas@kernel.org>:
-> > On Wed, Jun 22, 2022 at 01:09:24PM +0900, Shunsuke Mie wrote:
-> > > For multi-function endpoint device, an ep function shouldn't stop EP
-> > > controller. Nomally the controller is stopped via configfs.
-> >
-> > Can you please clarify this for me?
-> >
-> > An endpoint function by itself wouldn't stop an endpoint controller.
-> > I assume that some *operation* on an endpoint function currently stops
-> > the endpoint controller, but that operation should not stop the
-> > controller?
-> >
-> > I guess the operation is an "unbind" that detaches an EPF device from
-> > an EPC device?
+On Tue, Jul 05, 2022 at 08:00:42PM -0700, Andrew Morton wrote:
+> On Wed, 6 Jul 2022 10:47:32 +0800 Muchun Song <songmuchun@bytedance.com> wrote:
+> 
+> > > If this wakeup is not one of these, then are there reports from the
+> > > softlockup detector?
+> > > 
+> > > Do we have reports of processes permanently stuck in D state?
+> > >
+> > 
+> > No. The task is in an TASK_INTERRUPTIBLE state (see __fuse_dax_break_layouts). 
+> > The hung task reporter only reports D task (TASK_UNINTERRUPTIBLE).
+> 
+> Thanks, I updated the changelog a bit.
+> 
+> : FSDAX page refcounts are 1-based, rather than 0-based: if refcount is
+> : 1, then the page is freed.  The FSDAX pages can be pinned through GUP,
+> : then they will be unpinned via unpin_user_page() using a folio variant
+> : to put the page, however, folio variants did not consider this special
+> : case, the result will be to miss a wakeup event (like the user of
+> : __fuse_dax_break_layouts()).  This results in a task being permanently
+> : stuck in TASK_INTERRUPTIBLE state.
+> : 
+> : Since FSDAX pages are only possibly obtained by GUP users, so fix GUP
+> : instead of folio_put() to lower overhead.
+> 
+> I believe these details are helpful for -stable maintainers who are
+> wondering why they were sent stuff.  Also for maintainers of
+> downstreeam older kernels who are scratching heads over some user bug
+> report, trying to find a patch which might fix it - for this they want
+> to see a description of the user-visible effects, for matching with
+> that bug report.
 >
-> It is likely that after all of the endpoint functions are unbound, the
-> controller can be stopped safely, but I'm not sure if it is desired behavior
-> for endpoint framework.
 
-I'm not asking about the patch itself.  I'm asking about the commit
-log because "an EP function shouldn't stop EP controller" doesn't
-quite make sense in English.
-
-I suspect it should say something like "unbinding one endpoint
-function of a multi-function device from the endpoint controller
-should not stop the controller."
-
-But I don't know enough about EPF/EPC binding to know whether that
-makes sense either.
-
-> Kishon, could you please comment?
-> 
-> > > Fixes: 349e7a85b25f ("PCI: endpoint: functions: Add an EP function to test PCI")
-> > > Signed-off-by: Shunsuke Mie <mie@igel.co.jp>
-> > > ---
-> > >  drivers/pci/endpoint/functions/pci-epf-test.c | 1 -
-> > >  1 file changed, 1 deletion(-)
-> > >
-> > > diff --git a/drivers/pci/endpoint/functions/pci-epf-test.c b/drivers/pci/endpoint/functions/pci-epf-test.c
-> > > index 5b833f00e980..a5ed779b0a51 100644
-> > > --- a/drivers/pci/endpoint/functions/pci-epf-test.c
-> > > +++ b/drivers/pci/endpoint/functions/pci-epf-test.c
-> > > @@ -627,7 +627,6 @@ static void pci_epf_test_unbind(struct pci_epf *epf)
-> > >
-> > >       cancel_delayed_work(&epf_test->cmd_handler);
-> > >       pci_epf_test_clean_dma_chan(epf_test);
-> > > -     pci_epc_stop(epc);
-> > >       for (bar = 0; bar < PCI_STD_NUM_BARS; bar++) {
-> > >               epf_bar = &epf->bar[bar];
-> > >
-> > > --
-> > > 2.17.1
-> > >
-> 
-> Thanks,
-> Shunsuke
+Thanks Andrew, it's really helpful.

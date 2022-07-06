@@ -2,66 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D424E569341
+	by mail.lfdr.de (Postfix) with ESMTP id 69D28569340
 	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 22:25:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234391AbiGFUYi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Jul 2022 16:24:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34634 "EHLO
+        id S234589AbiGFUZN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Jul 2022 16:25:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35430 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234230AbiGFUYg (ORCPT
+        with ESMTP id S234045AbiGFUZF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Jul 2022 16:24:36 -0400
+        Wed, 6 Jul 2022 16:25:05 -0400
 Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A92DF1A079
-        for <linux-kernel@vger.kernel.org>; Wed,  6 Jul 2022 13:24:29 -0700 (PDT)
-Received: from pps.filterd (m0246629.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 266Iutv8010478;
-        Wed, 6 Jul 2022 20:24:11 GMT
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 597AB2558E
+        for <linux-kernel@vger.kernel.org>; Wed,  6 Jul 2022 13:24:47 -0700 (PDT)
+Received: from pps.filterd (m0246627.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 266Il2I4015771;
+        Wed, 6 Jul 2022 20:24:14 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
  subject : date : message-id : in-reply-to : references :
  content-transfer-encoding : content-type : mime-version;
- s=corp-2021-07-09; bh=woIq4osnSBp8gNWba+juRZH6czD+qLIXHmmBC+ZTdaU=;
- b=bIRsL1LWud9h8hlvAA4fkoOo/z+fr3xuwUm754jCBPdzKrF7XyERxmc9Zz/s98GyNVFq
- Vpoq9PaukkmPlOAUg20Gm51fp3DGvhmp8tnHw6jRzEmH8WT/h8w2BwLtH27e4aEU2mI3
- SWbDmtSoDaT8oxNowaEq99YGKE5d/XkadKv/oJ+sarofF9unPHR1ef/47WReh/ZtYzB0
- MlFUU8OYrfr7I1nik+RJrFURztaQAR+pp2ghu9gEzU3NdNX/zXnElc88z+BrekPMbwP7
- TiYZ+kQgSbpAFgpjtkPwUfj3LqLlLRME24sOfwdOxSb3aPcMqOlYCB6H5zwWWZ564yWD hg== 
-Received: from phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta02.appoci.oracle.com [147.154.114.232])
-        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3h4ubyb3ur-1
+ s=corp-2021-07-09; bh=seh+t+7lpYZ7uIk7rcl3V3IrvZ/ruQR66XXKFOeUdH8=;
+ b=ygDehNYXji0B6MvzD7xwkXguSoTwbpoKfAnXt5IKZDzVvoBPZoIZ6rlvmLnmS4T1H2xL
+ oYHy4ewKpSjxSoXafRIVdrjOElrw9NvMRIWExODajIda9zYhtTi31zN5WwQkZJWsTpQY
+ nCTw4RaUs86wJ14hDVWmu8ozXfkIfLVnMU91cEUCLd54rl9m0hj4mxYB0kmeWo8qkp+P
+ wylyaTtze8TDz02Xmk3PTOXf4z2+QHUF1Sihb2qlb1oMtpTlly+HcGNzQR4Mk7+QzlhP
+ HcAZftNYxqjToJgyWgKgnHDOzmTXMj5FeVxqbLgQ+248Xxe92zozYnOHZLOsbqLrQSqw 7A== 
+Received: from phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta01.appoci.oracle.com [138.1.114.2])
+        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3h4ubyk99y-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 06 Jul 2022 20:24:10 +0000
-Received: from pps.filterd (phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-        by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (8.16.1.2/8.16.1.2) with SMTP id 266KLKn2035231;
-        Wed, 6 Jul 2022 20:24:09 GMT
-Received: from nam11-bn8-obe.outbound.protection.outlook.com (mail-bn8nam11lp2169.outbound.protection.outlook.com [104.47.58.169])
-        by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com with ESMTP id 3h4ud6cu5w-2
+        Wed, 06 Jul 2022 20:24:13 +0000
+Received: from pps.filterd (phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
+        by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (8.16.1.2/8.16.1.2) with SMTP id 266KLJcw016094;
+        Wed, 6 Jul 2022 20:24:13 GMT
+Received: from nam10-mw2-obe.outbound.protection.outlook.com (mail-mw2nam10lp2103.outbound.protection.outlook.com [104.47.55.103])
+        by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com with ESMTP id 3h4ud56ee5-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 06 Jul 2022 20:24:09 +0000
+        Wed, 06 Jul 2022 20:24:12 +0000
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=g3Y+IN3aDwYXCyxXrlT3W0wWu/1aeaCRzj4UYyQnkLt6pQ6W1zR5LQ1Nx6qbTaOmbkS/IkYTZ85ps4bDRSwB2AlHqX4rxiajhvDfrfdBUsgQmzroI/OfxLJ8X+8Aa+1PAQMUHLTazAVMO/JknvpAK6dGGesQUyBAjpCBu4Y58yKnA1q5apMNjMoIMBfmOfVOTtSU6JJIJFpRtqehQ0EA71593Og9zZ4kHZwcyPHpSCeT1u2ODRUZlTCjhzIRIy/VNogsSen9Nj+/xA67W1Y47/QXISDyrJBlk/5vUxcJwzoF0iKbbQqhPjVdllmuMW4M0Ee8Z+byY/7Po6Pi22u8qA==
+ b=ILPuLCeexdPiWZYZDCgeHu+JohxpdbP2aYV872P1qKG92t1MbhRJ2XTEpFxJ1XFlXFhXX0I7qvCEjgeLQnTelxvkqSk7h53K5hd4Tmpz+tX5Fpy2HThj+5j86hRrb8HlP4+Vpz52BZHQeQ0/qZJdxasxWNE+7jUZTYozChnejCi7H0WMy2F/PQyxF/mB7EcA9bZyYMsdDrRY7TT5ixQ8siMR+NzHgPGKRCXA4ILVunU0aX/P68XMpIu6jG3Hne9Snsb0811wLavJ4DSEsxUmI1yAUKLynoyyOrItW6ppCo0Eqmecn79uv+i+04HdIi6WdPUKJ6Ihwzaw69rH2KYFqQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=woIq4osnSBp8gNWba+juRZH6czD+qLIXHmmBC+ZTdaU=;
- b=mIZWIDqkFxaij99e2E1V6euqdnOrAkkMsOx7mqKaAZbKVR5z8m+RBQOMFBMxxb1kiFoo0NpnsqG3u8HfoYvDuCRapG/iIEMn+Ee0vaa72jqsvuqdrcOU5+XXfs1yUuIzRC52MrInJswYZVA+n6oyI0kRG/vFOYWzXCxEJaGG8vvqk5lfk1xuuIx0ZaSkvX2fSXgLR/RxulOI1ji+EjhiShfLKGpvyQtPBDiMngbr93zWRjmCXc7Z+eRU656iyZuXjyoN3YPkhyLv0y2wAheSyrDg5WJhJqUqic+YVNPcXFMmGITEk8ZBnsF6AV2uQt/2f4qEO0E9axnOq2DCK7tQvw==
+ bh=seh+t+7lpYZ7uIk7rcl3V3IrvZ/ruQR66XXKFOeUdH8=;
+ b=IP3iVrCJLZYGXZWnU0rE5O0n60IsPBPmCyebi5ZpyfIfmTQKNj6RLCDVJ39joLm6b98h3BJ5eNUPERy7JbtY8OgUCDVhdz9s3WZYmx9v5IRZPPCQ5RX7FmHa8cdaozCISHUwIiG0DcEZxCtpOw4gSceSoa2e8sj+iK/YC1QOfmmygNzgC1ATdtCaMgoqcgssmdeyfxOBt4bFfWeb2nZNJD5f0itmFfZ+/LburMXcb5BlL06FCWJrLqd81/ceqv6js5ZgxtqQQ52MSYb2tV22VF9XBx5pKaSxD+iBlT0BuYnRqyWI5KJBSiZuVj6rbNo/GnQwGPsLqR5ixVTENcOp5A==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
  dkim=pass header.d=oracle.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=woIq4osnSBp8gNWba+juRZH6czD+qLIXHmmBC+ZTdaU=;
- b=NSV4ghAzzrMQArfku7Ptd+083xO8VUbeNFavQ+tsEgE3PQRqVE4LovqmFFHkuemPIT0D//uZ+dIuc2h6BpUAL/RL8xW3YGRBGTwHZz+A5xWyK4Z+62UVYPURbSWPh/ujdnRpbwOKxsD+ATPgT2fMko+Msbh7oJ+LsDU5sF1ryjU=
+ bh=seh+t+7lpYZ7uIk7rcl3V3IrvZ/ruQR66XXKFOeUdH8=;
+ b=ADOH6yurmd0gBFGOJn2yZWC96KGZS8l6kGfC7Hd3Aq2edVU3CKpDihgRHGzdmx22CF/OLaagcSURZeF2b5gnyzT56NiH6KdqGYxJE0CnRsYeS1GeppyZzTS+1FfvSdolZDFR++2uA7lIboSX3aq4h6AYY6ZIvcoeGkI01eCYCO4=
 Received: from BY5PR10MB4196.namprd10.prod.outlook.com (2603:10b6:a03:20d::23)
- by MN2PR10MB4032.namprd10.prod.outlook.com (2603:10b6:208:181::21) with
+ by SN6PR10MB2847.namprd10.prod.outlook.com (2603:10b6:805:cb::12) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5417.15; Wed, 6 Jul
- 2022 20:24:07 +0000
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5395.18; Wed, 6 Jul
+ 2022 20:24:10 +0000
 Received: from BY5PR10MB4196.namprd10.prod.outlook.com
  ([fe80::c1ba:c197:f81f:ec0]) by BY5PR10MB4196.namprd10.prod.outlook.com
  ([fe80::c1ba:c197:f81f:ec0%6]) with mapi id 15.20.5417.016; Wed, 6 Jul 2022
- 20:24:07 +0000
+ 20:24:10 +0000
 From:   Mike Kravetz <mike.kravetz@oracle.com>
 To:     linux-mm@kvack.org, linux-kernel@vger.kernel.org
 Cc:     Muchun Song <songmuchun@bytedance.com>,
@@ -80,74 +80,74 @@ Cc:     Muchun Song <songmuchun@bytedance.com>,
         Ray Fucillo <Ray.Fucillo@intersystems.com>,
         Andrew Morton <akpm@linux-foundation.org>,
         Mike Kravetz <mike.kravetz@oracle.com>
-Subject: [RFC PATCH v4 6/8] hugetlb: add vma based lock for pmd sharing synchronization
-Date:   Wed,  6 Jul 2022 13:23:45 -0700
-Message-Id: <20220706202347.95150-7-mike.kravetz@oracle.com>
+Subject: [RFC PATCH v4 7/8] hugetlb: create hugetlb_unmap_file_folio to unmap single file folio
+Date:   Wed,  6 Jul 2022 13:23:46 -0700
+Message-Id: <20220706202347.95150-8-mike.kravetz@oracle.com>
 X-Mailer: git-send-email 2.35.3
 In-Reply-To: <20220706202347.95150-1-mike.kravetz@oracle.com>
 References: <20220706202347.95150-1-mike.kravetz@oracle.com>
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
-X-ClientProxiedBy: MW4PR03CA0041.namprd03.prod.outlook.com
- (2603:10b6:303:8e::16) To BY5PR10MB4196.namprd10.prod.outlook.com
+X-ClientProxiedBy: MWHPR18CA0052.namprd18.prod.outlook.com
+ (2603:10b6:300:39::14) To BY5PR10MB4196.namprd10.prod.outlook.com
  (2603:10b6:a03:20d::23)
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 29728986-247c-4a13-6f19-08da5f8d7a5d
-X-MS-TrafficTypeDiagnostic: MN2PR10MB4032:EE_
+X-MS-Office365-Filtering-Correlation-Id: 3fd38465-a142-4385-3330-08da5f8d7c01
+X-MS-TrafficTypeDiagnostic: SN6PR10MB2847:EE_
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: o63xuuAausOwm0WPErDLzSf4SZj6OilP1Gd3lQ9wdK6hjjoq0QADaktSXGvaFUvVVziI5DW+4isj4v5/11AQ2FyypaI9LA37EkUZsJToE9zgn4wlSCMKhYJex65QxJqnd7m/7tpmbx9fTYpg4SFQLCvo5CdGB0ibJIMLQWIzyklWInO2HA333EFHnG/DkOAZ+bS30PqFdNHLZr9/W0CPEnp7f/b8hjmsXkrcYUkfmJe8pRMKzZPUybefNjazSj3oqyLUHdZGLXO9qOuBnlmFFd7RgBJ8utNuDXv4pupiAeBBbzpw4OIYyLbqWZV8tT8Av5eL6O38Yj6dAhU5Qdosu6SuAG4D2qLBnqtRljPzbbRd9IFbdYBWeRfJU/0pRDalHOErOqTc8ERw79NgsBnZUfGvY2Glw0KnxhZ29bJXNSiL2Ryr34gTSmBxMhmz48Yk8uCL7D3Q85xBqBzcAt30HbDL+wslcxkGgoH0TMZ85MMH50UZfbgOQBb7VX2kAhKYtwr+WIg4lCA48fo411c7oGcpmZr++xfUyFY0JtOn4OoFfXJGB0HVqwSUcC44kVDpU3UISBA4smMBfylZ0cO6dl0ADO+odkXKipfYQb7GY3IsdZNzXZIp/TL1XwDNFLuOS9keVMsuZR2mdP6a60aScF2yvJ8qO6BwhapPMKkflzooOieFKFxcjppOFKvv69PiTr5KRe5RMHxhsfsvN+bxl9e26OmwiCpxboY6emWPS53vFav4ALkxO4Chs6O4lii+
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BY5PR10MB4196.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(39860400002)(366004)(136003)(396003)(346002)(376002)(44832011)(8936002)(54906003)(5660300002)(30864003)(7416002)(316002)(478600001)(6486002)(36756003)(66556008)(66476007)(8676002)(6506007)(41300700001)(6512007)(6666004)(4326008)(66946007)(2906002)(26005)(2616005)(107886003)(186003)(1076003)(83380400001)(86362001)(38100700002);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: i8z2meG5AczYSf5r2p/+80l1VemxsyAb7rfVPCgl2hc9mWgVC8G+KUQLbeLY5GHK/ru3IGT+hdbmvSIMJgJ8sGl6nOAAPZc4gNh+x7kF+Ow394sUa6pFLVQapHHS5btbz1xb600Pgf5LpK0pPYVR9IYDYu9tlGBP0X7EBYdJu6WNWQaHhcsMCbaaqchNp0u4Tnc/YvmfXoauYYBZrff8FoGmsUlcHSDQMvUpE7SbFijJFFgDSaqEIMxeUZURCz1FhgyD8KBvbF54jBFIFm/6yNljS4uDt7n9NYxVncnFyG4qnLu1BzeY2s9sKnmhYCY089quAIkD/Tt7iuaSCcXrF7pMvl9/S1C08A6Rm0BHD1H0py4GxTSy2WSXlK2JTbzj1mFDD7ZvotSkBciRKExChQS6hN9A/YBWM+L0rDo2RbGACTLiEcOqoxLui4Y32IiTF2yK9OVKlmPdAYGKVp1R2YSoqvVu9rjKaLEjt2h71c4G2MhvSgqaxgNfwVoXfQzaI7FBBVpz0/RHsxdyYDbEJWY7WsMD5W7S1DxVKsu4ChRuNhIZuf1HFmEFZEgBPgLPINR+CVaGZXvBG3Vsx+X3vHTe89V9LxClRWzxN5gP5dpPTXUYUbvw6Di6RT9KX2Gs7uh0IGYSrr9fD7qkD42MU9IPhHZim+FefmbwoHCeJnfdpvFHE3n4xUElu9nxABTJoPNZEM/snycxXZmA3lzR3nsti80dCh7jXmz6BaMK/swIH0KnN1K7Ev3aNKtqVx9x
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BY5PR10MB4196.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(376002)(366004)(396003)(39860400002)(346002)(136003)(7416002)(478600001)(8936002)(5660300002)(6506007)(2906002)(66476007)(41300700001)(6666004)(8676002)(4326008)(66556008)(38100700002)(54906003)(44832011)(36756003)(26005)(186003)(6486002)(6512007)(86362001)(1076003)(2616005)(107886003)(83380400001)(316002)(66946007);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?3BzSu6o00gwz4qws4ENJVvqfqBiBqrQ5tvz6vDEq3r2xVRrCW6LRh01YKs9M?=
- =?us-ascii?Q?8M2hLXLDEQISIkBAoFK0WPDWxPq6YnmUnoo907Bf0jYWQVhkA+vdzNKBxYOp?=
- =?us-ascii?Q?x2UAMpYokX7LfnmAfM83+7W+VzQk5YoYLqEBxzitZ7LjCnOpxzGKnG3EB4r+?=
- =?us-ascii?Q?txoaD/4645FnYeAz7WBtWVDcpKKTRIfcjDYEfeHVjwknbII2ZpcnL761wCER?=
- =?us-ascii?Q?6cSFATT5y1SaoScv3zrqwUcvyq6YVyqRA5n1sP0SdbQoc4ae25imzX3VIcUP?=
- =?us-ascii?Q?u5w9/Y2yjaqJRt0NKbLrZav4uSNKSTlRll4GF51GkIbs1254Dksluz3GqfJ9?=
- =?us-ascii?Q?9GIX2xqSo8HLnL8mTHS/H9LYxGr1jrYr36PVwxglme7x6pP70TNQKzfZJpNj?=
- =?us-ascii?Q?c/LUT+bcEG7bMMg1ArREih4DxPwYjqkEn26KD60au+IzHtMlfEOkp9xirkHf?=
- =?us-ascii?Q?/G1f1rdSmtgmFFCd2oe58BttI/iU1MLVZ3t3o++nH358CObYt4Skx3g9q/vD?=
- =?us-ascii?Q?LyHyaGebyv+2yqRsivNOb8EjnyQR2pnEjTGTNGuhsOnOqFgyAImR+FTl3HZt?=
- =?us-ascii?Q?DMDf5VSqlIp+wGrSM8WD0SvKQ6jhKBCIfsAaJUrnIW/GSnD6o6CblcuMTkPP?=
- =?us-ascii?Q?RNNz64ekqxNaSWJjaiR6Fao6zFtHY28LLB+UaZLlZ1tIxuh4JTPHwwJYqoKy?=
- =?us-ascii?Q?6Rki0N8q7kbLo6YtgpRybqZ5kD2vjvv5fHu505Bzjo213XdvPfpYKM6kYLbk?=
- =?us-ascii?Q?7oc+QURWlcyXDBtghz0OvNQjp/3qfWJJtToKGyeAjxrR5hAe+6igE1B5uyqr?=
- =?us-ascii?Q?LDU+tdoZe2MAxPXj6fc7tdC1Wr2oqzXYNJNRP5U2HBisEM7DkzGPXJTRxSmN?=
- =?us-ascii?Q?cDPL77VTTs2/PzedIlEusvfN1o9uq+STjdUpRGcHNv8/n++G46wmHTTTJbDO?=
- =?us-ascii?Q?k9kYCcOjTBc1sUXTMXL/YzAZk7Lfv+waAkU80MDB1qN6SNV8cYc9NYfL/aEJ?=
- =?us-ascii?Q?VkAPNp+BtZi3L6KRGnK4xfhHIJbKOVZ7sDiEHP9zp14X4pFZvwbuDjlNgltU?=
- =?us-ascii?Q?BrQs3FjdLEF2DfdFyVc21i3YlFjYa+EAmxeo6u4K30hSvL8Jupnh6sHFlsXp?=
- =?us-ascii?Q?K/54Wt2P7Dbfe2QGmNoUXSFkO/5aOuM9dwQtOsxXp3YrK6iB735OoRDfK+3V?=
- =?us-ascii?Q?3E8PhKAoM01LB7YgO72jTTNqj3pq4ezVfVK1qcNLbH6Vq8GzIINfYKDbebdD?=
- =?us-ascii?Q?gl72VAtyCObIIEhiSp2+uCsULXzAT1Eslsk5QcGACiIQpypUAD5iCw21rdLY?=
- =?us-ascii?Q?TzMkQBnRZuz+4XsFtljZbPPLjOgTNV1L/MzZSmQPA5QErNXarto5LKB/FlF1?=
- =?us-ascii?Q?AeKdIzAVkhC61aXhVNbNRHUrXoLIsdOK5pZz8KGwSON/73lUcQj3XGzjY5Zo?=
- =?us-ascii?Q?ih35pS8CPtoX3qBdZ7KfPpDZXUgIn9GIb5aYEl8iegm0b5RH68IEUOg1pWQC?=
- =?us-ascii?Q?q/mimGj2Oeq4BJiP+0LHw+9S6aiKTGSxoin+Of41YL47a/n7IoFd5UNJoSZz?=
- =?us-ascii?Q?GGwDjtj04T1gdbhDqOmU7A9i+ofROacvTFTbiszBlQWnV/tfA4xRWZfYRrKq?=
- =?us-ascii?Q?1g=3D=3D?=
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?kL5qx0M7/7YqH3pus5MhJ37MXHpANdZpJtUX4eXfJQ3JEA5MMKH+ecHWJMR1?=
+ =?us-ascii?Q?pwMbUWXpGIRVMPl9tNVVKjNOcEE6vfCzR9E08AwCAywFlInjHejxMRxmHz/Y?=
+ =?us-ascii?Q?G7MPZMnhWzGB4Y/HoUhK4JCShAGZCU6jzcFFyXhDx4pGBBJYd3S8oIEHKMlC?=
+ =?us-ascii?Q?O/CBXCvsyq9pV998kWJPc4kAW1q0PRkNRC3HVt2ujhJLZb2eH/dc/s1TMOyy?=
+ =?us-ascii?Q?OFolBSB6UWV/Asbrzu8QBOX+gMg74/7C29n53yZl/ia189FqjO7TBUH5IHEX?=
+ =?us-ascii?Q?CboHNe/7X8z1oCByzYJ1Oc1sAD13g93PEMg5Iuak4dRIe6/qEziBvrSrIXiZ?=
+ =?us-ascii?Q?OM/MB6Qfnetf3+gU82/J9qhZi3A0GokCqrzgF6NvfD8uV77Y3MAv/1gdToYB?=
+ =?us-ascii?Q?tvxNmVPURojw2ZWKV5pDGBuECXv7eBfb2nmdb1H9ES3Q0lNwecLiB6vZdKWk?=
+ =?us-ascii?Q?b4BKI9XjHICpWMWc6T+Qn0A9HRvuscYHzJZQlnwZZgKKBpfIMDeqFu+JRVPR?=
+ =?us-ascii?Q?Z/sGzqcCJB4niyHtFKxMYOZ92rU4lG+he9O4VkBhIY4Kh7s8RR2tg/KvMSIp?=
+ =?us-ascii?Q?S6HHQbDF5s3cHXglNmK3bfybCtKT9m5X34jmGOBqn/PN1hvzasBr2M2+pPjZ?=
+ =?us-ascii?Q?x1qxcMTSJnmcIV6yskXozeVCNMGc7w9B+roQbIC57IalZwa1eAqNZMBOA2Lp?=
+ =?us-ascii?Q?rm4/+dwx2h0pHH82ZP//V8pj+aOvps6N/CjwQR9eg+C8druGY1XfhFCpz3u7?=
+ =?us-ascii?Q?3MmXFC4DhWJy5piGCbA1iPAe6I35xp5Lj7gCQvjZLThOPUqpJgpVRT9LQkn5?=
+ =?us-ascii?Q?hjC/HK7CgPezu+ZJXcLuLj5YlMTqRdV1+H/D/IdXwOL6hTKxpnGl9fK+eSiR?=
+ =?us-ascii?Q?xBZMZWjTXJLJ3J2MIOCsjoj3jvngkjsW4saNXmuJe5NgFKvlx0WlRBm71COT?=
+ =?us-ascii?Q?WlGMS10Oof6+rZirSQnWoOSDjZToKt7OZ/U8fVaO77hhpK1qiXYjvCYCjQ+R?=
+ =?us-ascii?Q?imEgwsCGxIJ6PESYfW20Ej53Nsi8jYKaulEqgRKCI/eJRZVHu6K24Vx/9Y1B?=
+ =?us-ascii?Q?34NolSTnT7R59FWA2kj5MQnwzxgAXkubvQWEr3qKlaHpkYtozasr0g6GXUGe?=
+ =?us-ascii?Q?GsVQwrByGvVPpFEsNcx8MRndtuxO8oK5GDt8l+j6gFt5GKTNgzqbB9KDRGyB?=
+ =?us-ascii?Q?p5LEOepZBCBkCVrYhPUF0pvVpPtQZ45WEGJhL/+WpFclQPVDkQ8mBtv/OQgB?=
+ =?us-ascii?Q?jifN8qqQQ3/BAFIrvXlmaiTkiA8oDUW5zB3iWsoAa5eYVZrBI9R/BbxQulR1?=
+ =?us-ascii?Q?2k9VFQoiKnDGmU+hS5ZP/axsH1mUD5k/fyBIIdoJ4K0BzqVNoLl36z5KYx0T?=
+ =?us-ascii?Q?Q2FUgkP1hpil4hZPV4NMuWVvRazRM8EICllf8s3Ueiu913wR7rqP+OHU3HMQ?=
+ =?us-ascii?Q?WxVsst7Sx1Jh9wHpZk7c0DFOMDnkddxLQdhgrdG/Zdi8XrPg+pKk/U4HA+9g?=
+ =?us-ascii?Q?RVVQkYCjjs50kL0qnXRzMUy7hNB8xXisnIsb/JOe1nMne3f4UzhtRs5rwUpA?=
+ =?us-ascii?Q?zb6pZXhHswdevVxrSKMMBaQUJY53IFKBwq5KC/1SHkJyq98FNk3cyIaRS6gd?=
+ =?us-ascii?Q?7g=3D=3D?=
 X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 29728986-247c-4a13-6f19-08da5f8d7a5d
+X-MS-Exchange-CrossTenant-Network-Message-Id: 3fd38465-a142-4385-3330-08da5f8d7c01
 X-MS-Exchange-CrossTenant-AuthSource: BY5PR10MB4196.namprd10.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Jul 2022 20:24:07.6348
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Jul 2022 20:24:10.3701
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: agGZUhLAszs6ER7PhPLX2jxAzf3MYGn3WLvAQS9ZgEMp+0DqDanZUAH05BOzyX0vIcolpOCTovAiGDqWQJzZUg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR10MB4032
+X-MS-Exchange-CrossTenant-UserPrincipalName: HcEviDu/TnYR2mkzD5GsXQmDtOiz2hWGvENvWuIGhN9YuAkor4q8O69/+3SAPJ68eScvXhCRPGCE7W6lC+oWjA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN6PR10MB2847
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.517,18.0.883
  definitions=2022-07-06_12:2022-06-28,2022-07-06 signatures=0
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 bulkscore=0 suspectscore=0 phishscore=0
- adultscore=0 malwarescore=0 mlxscore=0 spamscore=0 mlxlogscore=999
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 bulkscore=0 suspectscore=0 spamscore=0
+ mlxlogscore=999 phishscore=0 malwarescore=0 mlxscore=0 adultscore=0
  classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2206140000
  definitions=main-2207060078
-X-Proofpoint-GUID: ebqyYBoO9jBRc6USB6ZXkr7-KPBI6vAM
-X-Proofpoint-ORIG-GUID: ebqyYBoO9jBRc6USB6ZXkr7-KPBI6vAM
+X-Proofpoint-GUID: AlEAgMHsMK9UIBXJWx1DE4r5pC9zmHSv
+X-Proofpoint-ORIG-GUID: AlEAgMHsMK9UIBXJWx1DE4r5pC9zmHSv
 X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
         RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
@@ -158,381 +158,171 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Allocate a rw semaphore and hang off vm_private_data for
-synchronization use by vmas that could be involved in pmd sharing.  Only
-add infrastructure for the new lock here.  Actual use will be added in
-subsequent patch.
+Create the new routine hugetlb_unmap_file_folio that will unmap a single
+file folio.  This is refactored code from hugetlb_vmdelete_list.  It is
+modified to do locking within the routine itself and check whether the
+page is mapped within a specific vma before unmapping.
+
+This refactoring will be put to use and expanded upon in a subsequent
+patch adding vma specific locking.
 
 Signed-off-by: Mike Kravetz <mike.kravetz@oracle.com>
 ---
- include/linux/hugetlb.h |  36 +++++++++-
- kernel/fork.c           |   6 +-
- mm/hugetlb.c            | 150 ++++++++++++++++++++++++++++++++++++----
- mm/rmap.c               |   8 ++-
- 4 files changed, 178 insertions(+), 22 deletions(-)
+ fs/hugetlbfs/inode.c | 124 +++++++++++++++++++++++++++++++++----------
+ 1 file changed, 95 insertions(+), 29 deletions(-)
 
-diff --git a/include/linux/hugetlb.h b/include/linux/hugetlb.h
-index 05c3a293dab2..248331c0f140 100644
---- a/include/linux/hugetlb.h
-+++ b/include/linux/hugetlb.h
-@@ -126,7 +126,7 @@ struct hugepage_subpool *hugepage_new_subpool(struct hstate *h, long max_hpages,
- 						long min_hpages);
- void hugepage_put_subpool(struct hugepage_subpool *spool);
- 
--void reset_vma_resv_huge_pages(struct vm_area_struct *vma);
-+void hugetlb_dup_vma_private(struct vm_area_struct *vma);
- void clear_vma_resv_huge_pages(struct vm_area_struct *vma);
- int hugetlb_sysctl_handler(struct ctl_table *, int, void *, size_t *, loff_t *);
- int hugetlb_overcommit_handler(struct ctl_table *, int, void *, size_t *,
-@@ -214,6 +214,13 @@ struct page *follow_huge_pud(struct mm_struct *mm, unsigned long address,
- struct page *follow_huge_pgd(struct mm_struct *mm, unsigned long address,
- 			     pgd_t *pgd, int flags);
- 
-+void hugetlb_vma_lock_read(struct vm_area_struct *vma);
-+void hugetlb_vma_unlock_read(struct vm_area_struct *vma);
-+void hugetlb_vma_lock_write(struct vm_area_struct *vma);
-+void hugetlb_vma_unlock_write(struct vm_area_struct *vma);
-+int hugetlb_vma_trylock_write(struct vm_area_struct *vma);
-+void hugetlb_vma_assert_locked(struct vm_area_struct *vma);
-+
- int pmd_huge(pmd_t pmd);
- int pud_huge(pud_t pud);
- unsigned long hugetlb_change_protection(struct vm_area_struct *vma,
-@@ -225,7 +232,7 @@ void hugetlb_unshare_all_pmds(struct vm_area_struct *vma);
- 
- #else /* !CONFIG_HUGETLB_PAGE */
- 
--static inline void reset_vma_resv_huge_pages(struct vm_area_struct *vma)
-+static inline void hugetlb_dup_vma_private(struct vm_area_struct *vma)
- {
- }
- 
-@@ -336,6 +343,31 @@ static inline int prepare_hugepage_range(struct file *file,
+diff --git a/fs/hugetlbfs/inode.c b/fs/hugetlbfs/inode.c
+index 31bd4325fce5..0eac0ea2a245 100644
+--- a/fs/hugetlbfs/inode.c
++++ b/fs/hugetlbfs/inode.c
+@@ -396,6 +396,94 @@ static int hugetlbfs_write_end(struct file *file, struct address_space *mapping,
  	return -EINVAL;
  }
  
-+static inline void hugetlb_vma_lock_read(struct vm_area_struct *vma)
++/*
++ * Called with i_mmap_rwsem held for inode based vma maps.  This makes
++ * sure vma (and vm_mm) will not go away.  We also hold the hugetlb fault
++ * mutex for the page in the mapping.  So, we can not race with page being
++ * faulted into the vma.
++ */
++static bool hugetlb_vma_maps_page(struct vm_area_struct *vma,
++				unsigned long addr, struct page *page)
 +{
-+}
++	pte_t *ptep, pte;
 +
-+static inline void hugetlb_vma_unlock_read(struct vm_area_struct *vma)
-+{
-+}
++	ptep = huge_pte_offset(vma->vm_mm, addr,
++			huge_page_size(hstate_vma(vma)));
 +
-+static inline void hugetlb_vma_lock_write(struct vm_area_struct *vma)
-+{
-+}
-+
-+static inline void hugetlb_vma_unlock_write(struct vm_area_struct *vma)
-+{
-+}
-+
-+static inline int hugetlb_vma_trylock_write(struct vm_area_struct *vma)
-+{
-+	return 1;
-+}
-+
-+static inline void hugetlb_vma_assert_locked(struct vm_area_struct *vma)
-+{
-+}
-+
- static inline int pmd_huge(pmd_t pmd)
- {
- 	return 0;
-diff --git a/kernel/fork.c b/kernel/fork.c
-index 23f0ba3affe5..ec6e7ddaae12 100644
---- a/kernel/fork.c
-+++ b/kernel/fork.c
-@@ -674,12 +674,10 @@ static __latent_entropy int dup_mmap(struct mm_struct *mm,
- 		}
- 
- 		/*
--		 * Clear hugetlb-related page reserves for children. This only
--		 * affects MAP_PRIVATE mappings. Faults generated by the child
--		 * are not guaranteed to succeed, even if read-only
-+		 * Copy/update hugetlb private vma information.
- 		 */
- 		if (is_vm_hugetlb_page(tmp))
--			reset_vma_resv_huge_pages(tmp);
-+			hugetlb_dup_vma_private(tmp);
- 
- 		/* Link the vma into the MT */
- 		mas.index = tmp->vm_start;
-diff --git a/mm/hugetlb.c b/mm/hugetlb.c
-index 3d5f3c103927..2eca89bb08ab 100644
---- a/mm/hugetlb.c
-+++ b/mm/hugetlb.c
-@@ -90,6 +90,7 @@ struct mutex *hugetlb_fault_mutex_table ____cacheline_aligned_in_smp;
- 
- /* Forward declaration */
- static int hugetlb_acct_memory(struct hstate *h, long delta);
-+static bool vma_pmd_shareable(struct vm_area_struct *vma);
- 
- static inline bool subpool_is_free(struct hugepage_subpool *spool)
- {
-@@ -904,6 +905,89 @@ resv_map_set_hugetlb_cgroup_uncharge_info(struct resv_map *resv_map,
- #endif
- }
- 
-+static bool __vma_shareable_flags_pmd(struct vm_area_struct *vma)
-+{
-+	return vma->vm_flags & (VM_MAYSHARE | VM_SHARED) &&
-+		vma->vm_private_data;
-+}
-+
-+void hugetlb_vma_lock_read(struct vm_area_struct *vma)
-+{
-+	if (__vma_shareable_flags_pmd(vma))
-+		down_read((struct rw_semaphore *)vma->vm_private_data);
-+}
-+
-+void hugetlb_vma_unlock_read(struct vm_area_struct *vma)
-+{
-+	if (__vma_shareable_flags_pmd(vma))
-+		up_read((struct rw_semaphore *)vma->vm_private_data);
-+}
-+
-+void hugetlb_vma_lock_write(struct vm_area_struct *vma)
-+{
-+	if (__vma_shareable_flags_pmd(vma))
-+		down_write((struct rw_semaphore *)vma->vm_private_data);
-+}
-+
-+void hugetlb_vma_unlock_write(struct vm_area_struct *vma)
-+{
-+	if (__vma_shareable_flags_pmd(vma))
-+		up_write((struct rw_semaphore *)vma->vm_private_data);
-+}
-+
-+int hugetlb_vma_trylock_write(struct vm_area_struct *vma)
-+{
-+	if (!__vma_shareable_flags_pmd(vma))
-+		return 1;
-+
-+	return down_write_trylock((struct rw_semaphore *)vma->vm_private_data);
-+}
-+
-+void hugetlb_vma_assert_locked(struct vm_area_struct *vma)
-+{
-+	if (__vma_shareable_flags_pmd(vma))
-+		lockdep_assert_held((struct rw_semaphore *)
-+				vma->vm_private_data);
-+}
-+
-+static void hugetlb_free_vma_lock(struct vm_area_struct *vma)
-+{
-+	/* Only present in sharable vmas */
-+	if (!vma || !(vma->vm_flags & (VM_MAYSHARE | VM_SHARED)))
-+		return;
-+
-+	if (vma->vm_private_data) {
-+		kfree(vma->vm_private_data);
-+		vma->vm_private_data = NULL;
-+	}
-+}
-+
-+static void hugetlb_alloc_vma_lock(struct vm_area_struct *vma)
-+{
-+	struct rw_semaphore *vma_sema;
-+
-+	/* Only establish in (flags) sharable vmas */
-+	if (!vma || !(vma->vm_flags & (VM_MAYSHARE | VM_SHARED)))
-+		return;
-+
-+	if (!vma_pmd_shareable(vma)) {
-+		vma->vm_private_data = NULL;
-+		return;
-+	}
-+
-+	vma_sema = kmalloc(sizeof(*vma_sema), GFP_KERNEL);
-+	if (!vma_sema) {
-+		/*
-+		 * If we can not allocate semaphore, then vma can not
-+		 * participate in pmd sharing.
-+		 */
-+		vma->vm_private_data = NULL;
-+	} else {
-+		init_rwsem(vma_sema);
-+		vma->vm_private_data = vma_sema;
-+	}
-+}
-+
- struct resv_map *resv_map_alloc(void)
- {
- 	struct resv_map *resv_map = kmalloc(sizeof(*resv_map), GFP_KERNEL);
-@@ -1007,12 +1091,22 @@ static int is_vma_resv_set(struct vm_area_struct *vma, unsigned long flag)
- 	return (get_vma_private_data(vma) & flag) != 0;
- }
- 
--/* Reset counters to 0 and clear all HPAGE_RESV_* flags */
--void reset_vma_resv_huge_pages(struct vm_area_struct *vma)
-+void hugetlb_dup_vma_private(struct vm_area_struct *vma)
- {
-+	/*
-+	 * Clear hugetlb-related page reserves for children. This only
-+	 * affects MAP_PRIVATE mappings. Faults generated by the child
-+	 * are not guaranteed to succeed, even if read-only
-+	 */
- 	VM_BUG_ON_VMA(!is_vm_hugetlb_page(vma), vma);
- 	if (!(vma->vm_flags & VM_MAYSHARE))
- 		vma->vm_private_data = (void *)0;
-+
-+	/*
-+	 * Allocate semaphore if pmd sharing is possible.  Private mappings
-+	 * are ignored.
-+	 */
-+	hugetlb_alloc_vma_lock(vma);
- }
- 
- /*
-@@ -1043,7 +1137,7 @@ void clear_vma_resv_huge_pages(struct vm_area_struct *vma)
- 		kref_put(&reservations->refs, resv_map_release);
- 	}
- 
--	reset_vma_resv_huge_pages(vma);
-+	hugetlb_dup_vma_private(vma);
- }
- 
- /* Returns true if the VMA has associated reserve pages */
-@@ -4591,16 +4685,21 @@ static void hugetlb_vm_op_open(struct vm_area_struct *vma)
- 		resv_map_dup_hugetlb_cgroup_uncharge_info(resv);
- 		kref_get(&resv->refs);
- 	}
-+
-+	hugetlb_alloc_vma_lock(vma);
- }
- 
- static void hugetlb_vm_op_close(struct vm_area_struct *vma)
- {
- 	struct hstate *h = hstate_vma(vma);
--	struct resv_map *resv = vma_resv_map(vma);
-+	struct resv_map *resv;
- 	struct hugepage_subpool *spool = subpool_vma(vma);
- 	unsigned long reserve, start, end;
- 	long gbl_reserve;
- 
-+	hugetlb_free_vma_lock(vma);
-+
-+	resv = vma_resv_map(vma);
- 	if (!resv || !is_vma_resv_set(vma, HPAGE_RESV_OWNER))
- 		return;
- 
-@@ -6438,6 +6537,11 @@ bool hugetlb_reserve_pages(struct inode *inode,
- 		return false;
- 	}
- 
-+	/*
-+	 * vma specific semaphore used for pmd sharing synchronization
-+	 */
-+	hugetlb_alloc_vma_lock(vma);
-+
- 	/*
- 	 * Only apply hugepage reservation if asked. At fault time, an
- 	 * attempt will be made for VM_NORESERVE to allocate a page
-@@ -6461,12 +6565,11 @@ bool hugetlb_reserve_pages(struct inode *inode,
- 		resv_map = inode_resv_map(inode);
- 
- 		chg = region_chg(resv_map, from, to, &regions_needed);
--
- 	} else {
- 		/* Private mapping. */
- 		resv_map = resv_map_alloc();
- 		if (!resv_map)
--			return false;
-+			goto out_err;
- 
- 		chg = to - from;
- 
-@@ -6561,6 +6664,7 @@ bool hugetlb_reserve_pages(struct inode *inode,
- 	hugetlb_cgroup_uncharge_cgroup_rsvd(hstate_index(h),
- 					    chg * pages_per_huge_page(h), h_cg);
- out_err:
-+	hugetlb_free_vma_lock(vma);
- 	if (!vma || vma->vm_flags & VM_MAYSHARE)
- 		/* Only call region_abort if the region_chg succeeded but the
- 		 * region_add failed or didn't run.
-@@ -6640,14 +6744,34 @@ static unsigned long page_table_shareable(struct vm_area_struct *svma,
- }
- 
- static bool __vma_aligned_range_pmd_shareable(struct vm_area_struct *vma,
--				unsigned long start, unsigned long end)
-+				unsigned long start, unsigned long end,
-+				bool check_vma_lock)
- {
-+#ifdef CONFIG_USERFAULTFD
-+	if (uffd_disable_huge_pmd_share(vma))
++	if (!ptep)
 +		return false;
-+#endif
- 	/*
- 	 * check on proper vm_flags and page table alignment
++
++	pte = huge_ptep_get(ptep);
++	if (huge_pte_none(pte) || !pte_present(pte))
++		return false;
++
++	if (pte_page(pte) == page)
++		return true;
++
++	return false;	/* WTH??? */
++}
++
++/*
++ * Can vma_offset_start/vma_offset_end overflow on 32-bit arches?
++ * No, because the interval tree returns us only those vmas
++ * which overlap the truncated area starting at pgoff,
++ * and no vma on a 32-bit arch can span beyond the 4GB.
++ */
++static unsigned long vma_offset_start(struct vm_area_struct *vma, pgoff_t start)
++{
++	if (vma->vm_pgoff < start)
++		return (start - vma->vm_pgoff) << PAGE_SHIFT;
++	else
++		return 0;
++}
++
++static unsigned long vma_offset_end(struct vm_area_struct *vma, pgoff_t end)
++{
++	unsigned long t_end;
++
++	if (!end)
++		return vma->vm_end;
++
++	t_end = ((end - vma->vm_pgoff) << PAGE_SHIFT) + vma->vm_start;
++	if (t_end > vma->vm_end)
++		t_end = vma->vm_end;
++	return t_end;
++}
++
++/*
++ * Called with hugetlb fault mutex held.  Therefore, no more mappings to
++ * this folio can be created while executing the routine.
++ */
++static void hugetlb_unmap_file_folio(struct hstate *h,
++					struct address_space *mapping,
++					struct folio *folio, pgoff_t index)
++{
++	struct rb_root_cached *root = &mapping->i_mmap;
++	struct page *page = &folio->page;
++	struct vm_area_struct *vma;
++	unsigned long v_start;
++	unsigned long v_end;
++	pgoff_t start, end;
++
++	start = index * pages_per_huge_page(h);
++	end = ((index + 1) * pages_per_huge_page(h));
++
++	i_mmap_lock_write(mapping);
++
++	vma_interval_tree_foreach(vma, root, start, end - 1) {
++		v_start = vma_offset_start(vma, start);
++		v_end = vma_offset_end(vma, end);
++
++		if (!hugetlb_vma_maps_page(vma, vma->vm_start + v_start, page))
++			continue;
++
++		unmap_hugepage_range(vma, vma->vm_start + v_start, v_end,
++				NULL, ZAP_FLAG_DROP_MARKER);
++	}
++
++	i_mmap_unlock_write(mapping);
++}
++
+ static void
+ hugetlb_vmdelete_list(struct rb_root_cached *root, pgoff_t start, pgoff_t end,
+ 		      zap_flags_t zap_flags)
+@@ -408,30 +496,13 @@ hugetlb_vmdelete_list(struct rb_root_cached *root, pgoff_t start, pgoff_t end,
+ 	 * an inclusive "last".
  	 */
--	if (vma->vm_flags & VM_MAYSHARE && range_in_vma(vma, start, end))
--		return true;
--	return false;
-+	if (!(vma->vm_flags & VM_MAYSHARE))
-+		return false;
-+	if (check_vma_lock && !vma->vm_private_data)
-+		return false;
-+	if (!range_in_vma(vma, start, end))
-+		return false;
-+	return true;
-+}
-+
-+static bool vma_pmd_shareable(struct vm_area_struct *vma)
-+{
-+	unsigned long start = ALIGN(vma->vm_start, PUD_SIZE),
-+		      end = ALIGN_DOWN(vma->vm_end, PUD_SIZE);
-+
-+	if (start >= end)
-+		return false;
-+
-+	return __vma_aligned_range_pmd_shareable(vma, start, end, false);
+ 	vma_interval_tree_foreach(vma, root, start, end ? end - 1 : ULONG_MAX) {
+-		unsigned long v_offset;
++		unsigned long v_start;
+ 		unsigned long v_end;
+ 
+-		/*
+-		 * Can the expression below overflow on 32-bit arches?
+-		 * No, because the interval tree returns us only those vmas
+-		 * which overlap the truncated area starting at pgoff,
+-		 * and no vma on a 32-bit arch can span beyond the 4GB.
+-		 */
+-		if (vma->vm_pgoff < start)
+-			v_offset = (start - vma->vm_pgoff) << PAGE_SHIFT;
+-		else
+-			v_offset = 0;
+-
+-		if (!end)
+-			v_end = vma->vm_end;
+-		else {
+-			v_end = ((end - vma->vm_pgoff) << PAGE_SHIFT)
+-							+ vma->vm_start;
+-			if (v_end > vma->vm_end)
+-				v_end = vma->vm_end;
+-		}
++		v_start = vma_offset_start(vma, start);
++		v_end = vma_offset_end(vma, end);
+ 
+-		unmap_hugepage_range(vma, vma->vm_start + v_offset, v_end,
++		unmap_hugepage_range(vma, vma->vm_start + v_start, v_end,
+ 				     NULL, zap_flags);
+ 	}
  }
+@@ -504,14 +575,9 @@ static void remove_inode_hugepages(struct inode *inode, loff_t lstart,
+ 			 * the fault mutex.  The mutex will prevent faults
+ 			 * until we finish removing the folio.
+ 			 */
+-			if (unlikely(folio_mapped(folio))) {
+-				i_mmap_lock_write(mapping);
+-				hugetlb_vmdelete_list(&mapping->i_mmap,
+-					index * pages_per_huge_page(h),
+-					(index + 1) * pages_per_huge_page(h),
+-					ZAP_FLAG_DROP_MARKER);
+-				i_mmap_unlock_write(mapping);
+-			}
++			if (unlikely(folio_mapped(folio)))
++				hugetlb_unmap_file_folio(h, mapping, folio,
++							index);
  
- static bool vma_addr_pmd_shareable(struct vm_area_struct *vma,
-@@ -6656,15 +6780,11 @@ static bool vma_addr_pmd_shareable(struct vm_area_struct *vma,
- 	unsigned long start = addr & PUD_MASK;
- 	unsigned long end = start + PUD_SIZE;
- 
--	return __vma_aligned_range_pmd_shareable(vma, start, end);
-+	return __vma_aligned_range_pmd_shareable(vma, start, end, true);
- }
- 
- bool want_pmd_share(struct vm_area_struct *vma, unsigned long addr)
- {
--#ifdef CONFIG_USERFAULTFD
--	if (uffd_disable_huge_pmd_share(vma))
--		return false;
--#endif
- 	return vma_addr_pmd_shareable(vma, addr);
- }
- 
-diff --git a/mm/rmap.c b/mm/rmap.c
-index 6593299d3b18..64076c2a49c1 100644
---- a/mm/rmap.c
-+++ b/mm/rmap.c
-@@ -24,7 +24,7 @@
-  *   mm->mmap_lock
-  *     mapping->invalidate_lock (in filemap_fault)
-  *       page->flags PG_locked (lock_page)
-- *         hugetlbfs_i_mmap_rwsem_key (in huge_pmd_share)
-+ *         hugetlbfs_i_mmap_rwsem_key (in huge_pmd_share, see hugetlbfs below)
-  *           mapping->i_mmap_rwsem
-  *             anon_vma->rwsem
-  *               mm->page_table_lock or pte_lock
-@@ -44,6 +44,12 @@
-  * anon_vma->rwsem,mapping->i_mmap_rwsem   (memory_failure, collect_procs_anon)
-  *   ->tasklist_lock
-  *     pte map lock
-+ *
-+ * hugetlbfs PageHuge() take locks in this order:
-+ *   hugetlb_fault_mutex (hugetlbfs specific page fault mutex)
-+ *     vma_lock (hugetlb specific lock for pmd_sharing)
-+ *       mapping->i_mmap_rwsem (also used for hugetlb pmd sharing)
-+ *         page->flags PG_locked (lock_page)
-  */
- 
- #include <linux/mm.h>
+ 			folio_lock(folio);
+ 			/*
 -- 
 2.35.3
 

@@ -2,60 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D35C3567E2B
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 08:03:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 919BA567E2E
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 08:03:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229637AbiGFGDI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Jul 2022 02:03:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43536 "EHLO
+        id S229599AbiGFGDg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Jul 2022 02:03:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43838 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229502AbiGFGC4 (ORCPT
+        with ESMTP id S230032AbiGFGD0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Jul 2022 02:02:56 -0400
-Received: from alexa-out-sd-01.qualcomm.com (alexa-out-sd-01.qualcomm.com [199.106.114.38])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 887C222298;
-        Tue,  5 Jul 2022 23:02:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1657087375; x=1688623375;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version;
-  bh=x69ZXl0q6YPIjoY3r38mvBjwXx/dRoW5Meq0IZxS9z0=;
-  b=N7FF+YvAh83YLCpHxasi6CWXJ0yMnIF9QDOOdjtXzcUrx1zO6NiH+xgw
-   mqR6mzdLiZGbtq1wYP6wKCmKT4/T3SjVpoJ3kFGD6ctMiNyhVpw5/ZuPc
-   gTvJ24yV87gnwahZBbNWJXjEbfHeMEalLXDFRbyABRpl6HOZJf+v50usU
-   c=;
-Received: from unknown (HELO ironmsg05-sd.qualcomm.com) ([10.53.140.145])
-  by alexa-out-sd-01.qualcomm.com with ESMTP; 05 Jul 2022 23:02:53 -0700
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg05-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jul 2022 23:02:53 -0700
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Tue, 5 Jul 2022 23:02:53 -0700
-Received: from hu-clew-lv.qualcomm.com (10.49.16.6) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Tue, 5 Jul 2022 23:02:52 -0700
-From:   Chris Lew <quic_clew@quicinc.com>
-To:     <agross@kernel.org>, <bjorn.andersson@linaro.org>,
-        <konrad.dybcio@somainline.org>
-CC:     <linux-arm-msm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <quic_clew@quicinc.com>, Tao Zhang <quic_taozhan@quicinc.com>
-Subject: [PATCH 4/4] soc: qcom: smp2p: Add remote_id into irq name
-Date:   Tue, 5 Jul 2022 23:02:11 -0700
-Message-ID: <1657087331-32455-5-git-send-email-quic_clew@quicinc.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1657087331-32455-1-git-send-email-quic_clew@quicinc.com>
-References: <1657087331-32455-1-git-send-email-quic_clew@quicinc.com>
+        Wed, 6 Jul 2022 02:03:26 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BFAA2253B;
+        Tue,  5 Jul 2022 23:03:14 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D6A9F61D2D;
+        Wed,  6 Jul 2022 06:03:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3FF9FC341C6;
+        Wed,  6 Jul 2022 06:03:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1657087393;
+        bh=p1ZUq2pNMs+JaHQv52RmH17QKMuz3XFF0vibOHT4vKI=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=sPeRLhGHR+v2UjPV0qwKjV2xSKUJFIpEuZUu9axLWxqi2vn6rcausfFNLf4DVdknc
+         gxkmh0o7uC7vN0aC9nYaH9wTtkHBFxIZBf6A22dGqdAw16uUCzS0e9XJY5xTVHaY13
+         CpwABG6Jsqr+Xu0pVNWXmYMhLSo9hwnsTB7OQpBhVVkDsFihzpGa/6ssm3l3u5JJe0
+         /EaTFCcDOB1hwEnVsZAenuXV2055rxN4b4C7MieAs9wyvjFF7Bbk40+B4vfiuy4uaL
+         3Twt2dJDyfpMKax1t51/YhVXtNIb/9h7kY2fDBL3g2nYR9dgjXpjvw/CyYFmzLHAS2
+         y7ZZ3S8Cq/9cw==
+Received: from johan by xi.lan with local (Exim 4.94.2)
+        (envelope-from <johan@kernel.org>)
+        id 1o8y81-0004aa-Qv; Wed, 06 Jul 2022 08:03:13 +0200
+Date:   Wed, 6 Jul 2022 08:03:13 +0200
+From:   Johan Hovold <johan@kernel.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Johan Hovold <johan+linaro@kernel.org>,
+        Vinod Koul <vkoul@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 16/43] dt-bindings: phy: qcom,qmp-pcie: drop unused
+ vddp-ref-clk supply
+Message-ID: <YsUlob0Cj9WmDzcF@hovoldconsulting.com>
+References: <20220705094239.17174-1-johan+linaro@kernel.org>
+ <20220705094239.17174-17-johan+linaro@kernel.org>
+ <d3a49c05-0fd0-920e-bd0a-f821e8e27b8b@linaro.org>
+ <YsQkmUVla9+CDYly@hovoldconsulting.com>
+ <8d739c84-ba61-a030-ea8a-63a3f45c642c@linaro.org>
+ <YsQx1SMEsMnmoQ2d@hovoldconsulting.com>
+ <5b6f5e15-f3fd-badb-3ada-eb2f58053857@linaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.49.16.6]
-X-ClientProxiedBy: nalasex01c.na.qualcomm.com (10.47.97.35) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SORTED_RECIPS,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <5b6f5e15-f3fd-badb-3ada-eb2f58053857@linaro.org>
+X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -64,47 +71,20 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Tao Zhang <quic_taozhan@quicinc.com>
+On Tue, Jul 05, 2022 at 08:13:55PM +0200, Krzysztof Kozlowski wrote:
+> On 05/07/2022 14:43, Johan Hovold wrote:
 
-Changed smp2p irq devname from "smp2p" to "smp2p_<remote_id>", which
-makes the wakeup source distinguishable in irq wakeup prints.
+> > So you suggest we keep this regulator for all PHY variants even though
+> > it was probably only needed for UFS on some older SoCs?
+> 
+> No. I commented only that reason is not a good one. The proper reason
+> could be: there is or there is no such pin in the device or the history
+> tells that adding it for all variants was a mistake.
 
-Signed-off-by: Tao Zhang <quic_taozhan@quicinc.com>
-Signed-off-by: Chris Lew <quic_clew@quicinc.com>
----
- drivers/soc/qcom/smp2p.c | 9 ++++++++-
- 1 file changed, 8 insertions(+), 1 deletion(-)
+Ok, I'll include it since it was there as an optional regulator from the
+start and hence implicitly made part of the binding for later PHYs even
+though it likely only applies to the older MSM8996/98.
 
-diff --git a/drivers/soc/qcom/smp2p.c b/drivers/soc/qcom/smp2p.c
-index a1ea5f55c228..21a0e84b16f4 100644
---- a/drivers/soc/qcom/smp2p.c
-+++ b/drivers/soc/qcom/smp2p.c
-@@ -541,6 +541,7 @@ static int qcom_smp2p_probe(struct platform_device *pdev)
- 	struct device_node *node;
- 	struct qcom_smp2p *smp2p;
- 	const char *key;
-+	char *name;
- 	int irq;
- 	int ret;
- 
-@@ -632,10 +633,16 @@ static int qcom_smp2p_probe(struct platform_device *pdev)
- 	qcom_smp2p_kick(smp2p);
- 
- 	smp2p->irq = irq;
-+	name = devm_kasprintf(&pdev->dev, GFP_KERNEL, "smp2p_%d",
-+			      smp2p->remote_pid);
-+	if (!name) {
-+		ret = -ENOMEM;
-+		goto unwind_interfaces;
-+	}
- 	ret = devm_request_threaded_irq(&pdev->dev, irq,
- 					NULL, qcom_smp2p_intr,
- 					IRQF_ONESHOT,
--					"smp2p", (void *)smp2p);
-+					name, (void *)smp2p);
- 	if (ret) {
- 		dev_err(&pdev->dev, "failed to request interrupt\n");
- 		goto unwind_interfaces;
--- 
-2.7.4
+If anyone has access to the documentation they can drop it later.
 
+Johan

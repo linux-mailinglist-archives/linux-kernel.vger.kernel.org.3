@@ -2,79 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 419BE568683
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 13:15:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6ADB0568689
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 13:15:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232381AbiGFLPP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Jul 2022 07:15:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52382 "EHLO
+        id S232753AbiGFLPb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Jul 2022 07:15:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52548 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229531AbiGFLPO (ORCPT
+        with ESMTP id S232438AbiGFLP3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Jul 2022 07:15:14 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84EE527FC1;
-        Wed,  6 Jul 2022 04:15:13 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2007561E95;
-        Wed,  6 Jul 2022 11:15:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BE653C3411C;
-        Wed,  6 Jul 2022 11:15:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1657106112;
-        bh=pRerA3xJygyVGxUB0rsgEMwJGDa+LIaQoBEZ8coR4Bg=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=WI7M4B+NfNv6sL6HfTDQMFd/hCPjBYVAh5a8uatMg2HP+ZDWRbd/m360/ChX4OAH3
-         J2iYcfWWC4He9mnHh8EBUNJzjj3sQGbPzvwxSocjZVHRrn2cOF6XpXBZ+VW4DDbHIZ
-         vAJQKrykC2P7uLNa/6W5fgpOqhjgLP4O5FfgnBXkmpdU2ddacIZTsiBKnCoa/R9+iu
-         x3Y3qgUor1wqMS7dX0yMyoaWDz2VKwqg9hGGqDgOWMr2NfWzH5ZZpuCfxXP22g3AkI
-         gh60W0nvSDIzQ/gis+3txub7bHZ4n22FLBM0p9N7J2PK5zC9bq2FHFfM7Whi/tlNFI
-         f0eO3OpsHkNJw==
-Date:   Wed, 6 Jul 2022 13:15:07 +0200
-From:   Marek =?UTF-8?B?QmVow7pu?= <kabel@kernel.org>
-To:     Pali =?UTF-8?B?Um9ow6Fy?= <pali@kernel.org>
-Cc:     Pavel Machek <pavel@ucw.cz>, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-leds@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 1/2] [RFT] dt-bindings: leds: Add
- cznic,turris1x-leds.yaml binding
-Message-ID: <20220706131507.353f0bed@thinkpad>
-In-Reply-To: <20220705155929.25565-1-pali@kernel.org>
-References: <20220705000448.14337-1-pali@kernel.org>
-        <20220705155929.25565-1-pali@kernel.org>
-X-Mailer: Claws Mail 3.19.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        Wed, 6 Jul 2022 07:15:29 -0400
+Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A464227CFF;
+        Wed,  6 Jul 2022 04:15:28 -0700 (PDT)
+Received: by mail-wr1-x42a.google.com with SMTP id s1so21569450wra.9;
+        Wed, 06 Jul 2022 04:15:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=DVIqMuPLzYcOO4HfWaLexMHz/42n1NJarHPePFEhy5w=;
+        b=m5QIzCxTztbi5KfIP3O6LOSDYQiWmkgsJQVhGH/t8ydJoQfPUxc/dKURnvfmJJS9Rz
+         zwG7N+HRzcal5Fdnl/pKbNDvr/8OBXvtkeh9jTsJNQbkSU7qRF4T774IP8yKZmVo7XLT
+         aKQJ0DRnvKnc5YgICzzMfIFF5dQ+A77fZenZFovchl8WEA9kExvAa4/ofYdiEtj7iPyR
+         1sG7yz9QmKsbfjfaMZicR8VwSFT2cUtFK6yMODVdC4t2+7/eLLTXagm6Q+aEID7T/NjA
+         psO6g7drtb9f5UtaCbJfajQyekacMm1av9fCTsbU3juL/Rdo1zDHefTV2y9F0xFJ7wgV
+         NsKQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=DVIqMuPLzYcOO4HfWaLexMHz/42n1NJarHPePFEhy5w=;
+        b=ENqQdjTiVoS78jdLV+kwWzbFBnkRqlEOIu6I1+oJ+pogulOIABSiV7U4Pi2Dl7iG0E
+         u8bLygKHY9p4Ub2uI8E9kaoV/+Y7wdXLOlqgWSwMpjKiLpCyaoTA3MDDAXalr2FQi0JI
+         MJTo+vPr+kcY2tU2hSpIzzRiIuOaEo6IZo2SSRxBK+qatTf7GHXq0dKIxOZg+IONjwGc
+         vnaR0t+1fOCX9daYGBc0Hf9mYSTeGDVKpRK48Iib8AuOuNl3QEDQTGL3CsNft5CIisNW
+         Fr2NZQPziriZp5HUFRr0ApMXzKWaRCPqIohx6gczrncYk9nl7a4c9bMNjCI6djQ6sCyz
+         mOlQ==
+X-Gm-Message-State: AJIora/uis8+ieFrNlP+0ZD7NEKtu3Q8gtfYMGoajV5Hp0BF9HvV/Wtg
+        VPAFaa44Nn/t66etqW0BlKMmk6LYEGY=
+X-Google-Smtp-Source: AGRyM1torpT8rb4PEx6tmQwuKc10pA2UzSAKa80fu6UU6snP+8f2bx4lOwv5uHAt71CsGSJ0lloNKQ==
+X-Received: by 2002:a5d:484c:0:b0:21d:6c71:a053 with SMTP id n12-20020a5d484c000000b0021d6c71a053mr13020335wrs.449.1657106127146;
+        Wed, 06 Jul 2022 04:15:27 -0700 (PDT)
+Received: from localhost.localdomain (host-79-53-109-127.retail.telecomitalia.it. [79.53.109.127])
+        by smtp.gmail.com with ESMTPSA id k1-20020adff5c1000000b0020d07d90b71sm34830696wrp.66.2022.07.06.04.15.24
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 06 Jul 2022 04:15:25 -0700 (PDT)
+From:   "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
+To:     David Sterba <dsterba@suse.com>, Chris Mason <clm@fb.com>,
+        Josef Bacik <josef@toxicpanda.com>,
+        Nick Terrell <terrelln@fb.com>, linux-btrfs@vger.kernel.org,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        Ira Weiny <ira.weiny@intel.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Matthew Wilcox <willy@infradead.org>,
+        Kees Cook <keescook@chromium.org>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        "James E. J. Bottomley" <James.Bottomley@HansenPartnership.com>,
+        Helge Deller <deller@gmx.de>,
+        John David Anglin <dave.anglin@bell.net>,
+        linux-parisc@vger.kernel.org
+Cc:     "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
+Subject: [PATCH v6 0/2] btrfs: Replace kmap() with kmap_local_page() in zstd.c
+Date:   Wed,  6 Jul 2022 13:15:18 +0200
+Message-Id: <20220706111520.12858-1-fmdefrancesco@gmail.com>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue,  5 Jul 2022 17:59:28 +0200
-Pali Roh=C3=A1r <pali@kernel.org> wrote:
+This is a little series which serves the purpose to replace kmap() with
+kmap_local_page() in btrfs/zstd.c. Actually this task is only accomplished
+in patch 2/2.
 
-> +examples:
-> +  - |
-> +    #include <dt-bindings/leds/common.h>
-> +
-> +    cpld@3,0 {
+Instead patch 1/2 is a pre-requisite for the above-mentioned replacement,
+however, above all else, it has the purpose to conform the prototypes of
+__kunmap_{local,atomic}() to their own correct semantics. Since those
+functions don't make changes to the memory pointed by their arguments,
+change the type of those arguments to become pointers to const void.
 
-The generic node name should be just "bus". That it is a CPLD
-implementation should come from compatible string.
+v5 -> v6: Delete an unnecessary assignment in 2/2 (thanks to Ira Weiny).
 
-This is similar to how we have generic names like "led-controller",
-"switch", "ethernet-phy", ...
+v4 -> v5: Use plain page_address() for pages which cannot come from Highmem
+(instead of kmapping them); remove unnecessary initializations to NULL
+in 2/2 (thanks to Ira Weiny).
 
-Pali, I can take over this and get it merged if you are getting
-frustrated here.
+v3 -> v4: Resend and add linux-mm to the list of recipients (thanks to
+Andrew Morton).
 
-Marek
+Fabio M. De Francesco (2):
+  highmem: Make __kunmap_{local,atomic}() take "const void *"
+  btrfs: Replace kmap() with kmap_local_page() in zstd.c
+
+ arch/parisc/include/asm/cacheflush.h |  6 ++---
+ arch/parisc/kernel/cache.c           |  2 +-
+ fs/btrfs/zstd.c                      | 33 +++++++++++-----------------
+ include/linux/highmem-internal.h     | 10 ++++-----
+ mm/highmem.c                         |  2 +-
+ 5 files changed, 23 insertions(+), 30 deletions(-)
+
+-- 
+2.36.1
+

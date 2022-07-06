@@ -2,94 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 844BA568073
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 09:49:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F29C568075
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 09:51:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231768AbiGFHte (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Jul 2022 03:49:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36986 "EHLO
+        id S231126AbiGFHu7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Jul 2022 03:50:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37738 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230359AbiGFHtd (ORCPT
+        with ESMTP id S230359AbiGFHu6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Jul 2022 03:49:33 -0400
-Received: from mail-m972.mail.163.com (mail-m972.mail.163.com [123.126.97.2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8786922B3C;
-        Wed,  6 Jul 2022 00:49:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=I8+m1
-        YAsVZ4gl1y1umKlRTUNyEHJgsOKvTyV1H7WmOY=; b=j9NkHPTE9z+Curz/JVKVq
-        kue+1kmDGWK21Rqd2/5h7I6ui4Kx8hvL5/hX7Fy/n2aRzBAfds0qZy/2CvNxCR7m
-        9AeCYvqaZvx/UNfLPX6ny5fmF8zcH59S8uLbz8UaBUAC5XucDdqD6N3a906bLSNe
-        aZYWETGJh4LkIBYUzt2OHg=
-Received: from localhost.localdomain (unknown [123.112.69.106])
-        by smtp2 (Coremail) with SMTP id GtxpCgAHhyNhPsViyC90Ng--.47709S4;
-        Wed, 06 Jul 2022 15:49:01 +0800 (CST)
-From:   Jianglei Nie <niejianglei2021@163.com>
-To:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com
-Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jianglei Nie <niejianglei2021@163.com>
-Subject: [PATCH] net: macsec: fix potential resource leak in macsec_add_rxsa() and macsec_add_txsa()
-Date:   Wed,  6 Jul 2022 15:48:26 +0800
-Message-Id: <20220706074826.2254689-1-niejianglei2021@163.com>
-X-Mailer: git-send-email 2.25.1
+        Wed, 6 Jul 2022 03:50:58 -0400
+Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A918822B3C
+        for <linux-kernel@vger.kernel.org>; Wed,  6 Jul 2022 00:50:57 -0700 (PDT)
+Received: by mail-lf1-x12f.google.com with SMTP id bf9so1265410lfb.13
+        for <linux-kernel@vger.kernel.org>; Wed, 06 Jul 2022 00:50:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=FlbkSQMuL6DPopX9Jhy9aRGujf7+Ghnha+4ZI42JhKU=;
+        b=WNxpvWiCli1fRyqRMAOZzjflPEJ0tGPc1ystkDWhs+qsREsRWmzGCaGIMD1L88/aEN
+         /eD1C5nA7Ble7aPcAcMVFmIWle/MsPdcsRjidqogMy5AIkWKJzX5w/6ZlGA+HZbWhUqH
+         C+aPSiE4xygcBjDkr4fy8Bli7LA5wB+INObBcGWj2cGx0EVUqNtS4LP2VNZi8owm0t9a
+         tC6muyIS4IxXFW3Jh6BY3lV8W0UNIoc0CksEl3+4vU7qJOjG48EUMiEGAy5pE+MMQ5Jw
+         ompZcU711sHwBdcvaXLNODh7Qa3zxEpNiCQBzpI5RfnVAiF9ny62Gt66UZTBnceVgx15
+         cL/g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=FlbkSQMuL6DPopX9Jhy9aRGujf7+Ghnha+4ZI42JhKU=;
+        b=FlZYuScw16N7+4jGFzkWuZCAj+WOlmP55r3UCF5u7Q+ZC8DHl9kT7SSafme1D/gWY+
+         AVDP/Fijz+E5GEdTmP2ng31E+FZx9tk2yhh0mAdaQtonrEGE3YbKPFtcbpK/9llYGYCl
+         ggyYfn8yr/tcBEG6eJPzTGGckUp/jmao5/OE8Hao1XSLEOSgGyNZZ+UCpK/zSmURkq/P
+         5kAJUe+luNRReZs/8vs8GUk88Irr1BF25h/NUWkQeO4L8wLoJrBMxlNAUulY5GwU+rU5
+         rkib4DlQgxExZ8g0VnIA1ZFfq9JLFnvyIOJms/IJRgBoyzg6rWg/be5HFvPxTgwlucIQ
+         al5Q==
+X-Gm-Message-State: AJIora8OzlR83V+z6whzP4HlKQRNrJ2W1cHbT3/7zZQYUJhBrm6zqyXK
+        Q/rmupnMgSuoRatyt6mMbiz9ag==
+X-Google-Smtp-Source: AGRyM1u0kgzOnSifC1dR3yyTO02hojSssvCg6Op3JAouGsR15Dka0UvjOzpdL38x/YLB691Lm56A4A==
+X-Received: by 2002:a05:6512:68a:b0:480:45d6:c0bb with SMTP id t10-20020a056512068a00b0048045d6c0bbmr22929850lfe.260.1657093854563;
+        Wed, 06 Jul 2022 00:50:54 -0700 (PDT)
+Received: from [192.168.1.52] ([84.20.121.239])
+        by smtp.gmail.com with ESMTPSA id d27-20020ac2545b000000b00482feedb568sm990126lfn.182.2022.07.06.00.50.52
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 06 Jul 2022 00:50:53 -0700 (PDT)
+Message-ID: <7f4101ff-7b91-7f22-9de9-06a650143df4@linaro.org>
+Date:   Wed, 6 Jul 2022 09:50:52 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: GtxpCgAHhyNhPsViyC90Ng--.47709S4
-X-Coremail-Antispam: 1Uf129KBjvJXoW7Ar4rWF4fCF17Zw1xZr43ZFb_yoW8Jw4Dpa
-        15ZwsrCF1qqrWI93ZrCw4UWF1rXayUtryagry7C3yfua4kJw1rWFy0kFyI9Fy5AryxGF48
-        ZrWvyr47AFn8C37anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0zRhqXJUUUUU=
-X-Originating-IP: [123.112.69.106]
-X-CM-SenderInfo: xqlhyxxdqjzvrlsqjii6rwjhhfrp/1tbiPgs2jFxBtJroWQAAsN
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH v10 1/3] dt-bindings: marvell: Document the AC5/AC5X
+ compatibles
+Content-Language: en-US
+To:     Vadym Kochan <vadym.kochan@plvision.eu>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Chris Packham <chris.packham@alliedtelesis.co.nz>,
+        Gregory CLEMENT <gregory.clement@bootlin.com>,
+        Konstantin Porotchkin <kostap@marvell.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Robert Marko <robert.marko@sartura.hr>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+Cc:     Elad Nachman <enachman@marvell.com>
+References: <20220705190934.6168-1-vadym.kochan@plvision.eu>
+ <20220705190934.6168-2-vadym.kochan@plvision.eu>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220705190934.6168-2-vadym.kochan@plvision.eu>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-init_rx_sa() allocates relevant resource for rx_sa->stats and rx_sa->
-key.tfm with alloc_percpu() and macsec_alloc_tfm(). When some error
-occurs after init_rx_sa() is called in macsec_add_rxsa(), the function
-released rx_sa with kfree() without releasing rx_sa->stats and rx_sa->
-key.tfm, which will lead to a resource leak.
+On 05/07/2022 21:09, Vadym Kochan wrote:
+> From: Chris Packham <chris.packham@alliedtelesis.co.nz>
+> 
+> Describe the compatible properties for the Marvell Alleycat5/5X switches
+> with integrated CPUs.
 
-We should call macsec_rxsa_put() instead of kfree() to decrease the ref
-count of rx_sa and release the relevant resource if the refcount is 0.
-The same bug exists in macsec_add_txsa() for tx_sa as well. This patch
-fixes the above two bugs.
 
-Signed-off-by: Jianglei Nie <niejianglei2021@163.com>
----
- drivers/net/macsec.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-diff --git a/drivers/net/macsec.c b/drivers/net/macsec.c
-index 817577e713d7..ac3ff624a8dd 100644
---- a/drivers/net/macsec.c
-+++ b/drivers/net/macsec.c
-@@ -1842,7 +1842,7 @@ static int macsec_add_rxsa(struct sk_buff *skb, struct genl_info *info)
- 	return 0;
- 
- cleanup:
--	kfree(rx_sa);
-+	macsec_rxsa_put(rx_sa);
- 	rtnl_unlock();
- 	return err;
- }
-@@ -2085,7 +2085,7 @@ static int macsec_add_txsa(struct sk_buff *skb, struct genl_info *info)
- 
- cleanup:
- 	secy->operational = was_operational;
--	kfree(tx_sa);
-+	macsec_txsa_put(tx_sa);
- 	rtnl_unlock();
- 	return err;
- }
--- 
-2.25.1
 
+Best regards,
+Krzysztof

@@ -2,98 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E319568919
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 15:14:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DBF6656891F
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 15:14:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232345AbiGFNOA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Jul 2022 09:14:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43538 "EHLO
+        id S233378AbiGFNOo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Jul 2022 09:14:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44158 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231906AbiGFNN5 (ORCPT
+        with ESMTP id S233193AbiGFNOl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Jul 2022 09:13:57 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A56A6E02;
-        Wed,  6 Jul 2022 06:13:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
-        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=Ceb/IjE3f2UpwLk19hSDj3nYch41eBpR+eFC5bU92FE=; b=YhdEUAZhCJrQBU4y3VtlWZhG9q
-        M/NtuJs2tbmvhuK+PEheiK4YG3+5YPcDU5AQKofCzm97vcH7MaR029+b7qVvXRSI8w++dPr+S6SBt
-        FDcN2aHb16Ala+sz7hsGphQz29zTgmyOMpd5MDWSuxKXStBiyJme250NtVTFrGd8fyfWNqkva91oC
-        w9c+cQiZ4ZLDJ0RDygSh5Rt4w1NYcDud9E2EKS+PZqXM1EVd0CqgWLTT6dXVWGZKmyaGi5zWdJ/3o
-        /Un33xFNclg3UvkLx8RCxkTQbH0fqPguDMxOfHF1wo7pVqDjOvS9NQDn4SI82++GPYPgK+uSIxoXV
-        j7ipfoMg==;
-Received: from hch by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1o94qc-00ACuR-Mb; Wed, 06 Jul 2022 13:13:42 +0000
-Date:   Wed, 6 Jul 2022 06:13:42 -0700
-From:   Christoph Hellwig <hch@infradead.org>
-To:     Sergei Shtepa <sergei.shtepa@veeam.com>
-Cc:     axboe@kernel.dk, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 15/20] block, blksnap: snapshot image block device
-Message-ID: <YsWKhjDV18DeyEZ8@infradead.org>
-References: <1655135593-1900-1-git-send-email-sergei.shtepa@veeam.com>
- <1655135593-1900-16-git-send-email-sergei.shtepa@veeam.com>
+        Wed, 6 Jul 2022 09:14:41 -0400
+Received: from relay08.th.seeweb.it (relay08.th.seeweb.it [IPv6:2001:4b7a:2000:18::169])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7B21393;
+        Wed,  6 Jul 2022 06:14:40 -0700 (PDT)
+Received: from [192.168.1.101] (abxi46.neoplus.adsl.tpnet.pl [83.9.2.46])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by m-r2.th.seeweb.it (Postfix) with ESMTPSA id C9B503EEC4;
+        Wed,  6 Jul 2022 15:14:38 +0200 (CEST)
+Message-ID: <fa748405-ca38-8ec8-0e8d-83a99a0c9c57@somainline.org>
+Date:   Wed, 6 Jul 2022 15:14:38 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1655135593-1900-16-git-send-email-sergei.shtepa@veeam.com>
-X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH v5 1/3] clk: qcom: clk-alpha-pll: add support for APSS PLL
+Content-Language: en-US
+To:     Robert Marko <robimarko@gmail.com>, agross@kernel.org,
+        bjorn.andersson@linaro.org, mturquette@baylibre.com,
+        sboyd@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, linux-kernel@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
+        devicetree@vger.kernel.org
+References: <20220705191017.1683716-1-robimarko@gmail.com>
+From:   Konrad Dybcio <konrad.dybcio@somainline.org>
+In-Reply-To: <20220705191017.1683716-1-robimarko@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> +#include <linux/cdrom.h>
 
-What do you need this for?
 
-> +static int new_minor(int *minor, void *ptr)
-> +{
-> +	int ret;
-> +
-> +	idr_preload(GFP_KERNEL);
-> +	spin_lock(&_minor_lock);
-> +
-> +	ret = idr_alloc(&_minor_idr, ptr, 0, 1 << MINORBITS, GFP_NOWAIT);
-> +
-> +	spin_unlock(&_minor_lock);
-> +	idr_preload_end();
-> +
-> +	if (ret < 0)
-> +		return ret;
-> +
-> +	*minor = ret;
-> +	return 0;
-> +}
+On 5.07.2022 21:10, Robert Marko wrote:
+> APSS PLL type will be used by the IPQ8074 APSS driver for providing the
+> CPU core clocks and enabling CPU Frequency scaling.
+> 
+> This is ported from the downstream 5.4 kernel.
+> 
+> Signed-off-by: Robert Marko <robimarko@gmail.com>
+> ---
+>  drivers/clk/qcom/clk-alpha-pll.c | 12 ++++++++++++
+>  drivers/clk/qcom/clk-alpha-pll.h |  1 +
+>  2 files changed, 13 insertions(+)
+> 
+> diff --git a/drivers/clk/qcom/clk-alpha-pll.c b/drivers/clk/qcom/clk-alpha-pll.c
+> index 4406cf609aae..8270363ff98e 100644
+> --- a/drivers/clk/qcom/clk-alpha-pll.c
+> +++ b/drivers/clk/qcom/clk-alpha-pll.c
+> @@ -154,6 +154,18 @@ const u8 clk_alpha_pll_regs[][PLL_OFF_MAX_REGS] = {
+>  		[PLL_OFF_TEST_CTL_U] = 0x30,
+>  		[PLL_OFF_TEST_CTL_U1] = 0x34,
+>  	},
+> +	[CLK_ALPHA_PLL_TYPE_APSS] = {
+The name is surely not correct, can somebody from qcom chime in
+and suggest what it should be?
 
-alloc_disk not automatically allocates minors for you if you don't
-set the ->major and ->first_minor fields, which could simply this
-a lot.
-
-> +static int snapimage_init_request(struct blk_mq_tag_set *set,
-> +				  struct request *rq, unsigned int hctx_idx,
-> +				  unsigned int numa_node)
-> +{
-> +	struct snapimage_cmd *cmd = blk_mq_rq_to_pdu(rq);
-> +
-> +	kthread_init_work(&cmd->work, snapimage_queue_work);
-> +	return 0;
-> +}
-
-I'm a little confused on why this both has a blk-mq interface and
-the new bio filter interface.  Whow is going to submit I/O to this
-blk-mq interface?
-
-> +	//.open = snapimage_open,
-> +	//.ioctl = snapimage_ioctl,
-> +	//.release = snapimage_close,
-
-Please don't leave commented out code around.
+Konrad
+> +		[PLL_OFF_L_VAL] = 0x08,
+> +		[PLL_OFF_ALPHA_VAL] = 0x10,
+> +		[PLL_OFF_ALPHA_VAL_U] = 0xff,
+> +		[PLL_OFF_USER_CTL] = 0x18,
+> +		[PLL_OFF_USER_CTL_U] = 0xff,
+> +		[PLL_OFF_CONFIG_CTL] = 0x20,
+> +		[PLL_OFF_CONFIG_CTL_U] = 0x24,
+> +		[PLL_OFF_TEST_CTL] = 0x30,
+> +		[PLL_OFF_TEST_CTL_U] = 0x34,
+> +		[PLL_OFF_STATUS] = 0x28,
+> +	},
+>  };
+>  EXPORT_SYMBOL_GPL(clk_alpha_pll_regs);
+>  
+> diff --git a/drivers/clk/qcom/clk-alpha-pll.h b/drivers/clk/qcom/clk-alpha-pll.h
+> index 6e9907deaf30..626fdf80336d 100644
+> --- a/drivers/clk/qcom/clk-alpha-pll.h
+> +++ b/drivers/clk/qcom/clk-alpha-pll.h
+> @@ -18,6 +18,7 @@ enum {
+>  	CLK_ALPHA_PLL_TYPE_AGERA,
+>  	CLK_ALPHA_PLL_TYPE_ZONDA,
+>  	CLK_ALPHA_PLL_TYPE_LUCID_EVO,
+> +	CLK_ALPHA_PLL_TYPE_APSS,
+>  	CLK_ALPHA_PLL_TYPE_MAX,
+>  };
+>  

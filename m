@@ -2,139 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BA745568320
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 11:17:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BADF4568326
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 11:17:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231326AbiGFJLS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Jul 2022 05:11:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53884 "EHLO
+        id S233056AbiGFJLf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Jul 2022 05:11:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54942 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233182AbiGFJLE (ORCPT
+        with ESMTP id S232926AbiGFJLS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Jul 2022 05:11:04 -0400
-Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E405E252A3;
-        Wed,  6 Jul 2022 02:07:49 -0700 (PDT)
-Received: from localhost.localdomain.localdomain (unknown [10.2.5.46])
-        by mail.loongson.cn (Coremail) with SMTP id AQAAf9Axn+LbUMVi83YMAA--.37951S2;
-        Wed, 06 Jul 2022 17:07:44 +0800 (CST)
-From:   Hongchen Zhang <zhanghongchen@loongson.cn>
-To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Hongchen Zhang <zhanghongchen@loongson.cn>
-Subject: [PATCH] MIPS: fix pmd_mkinvalid
-Date:   Wed,  6 Jul 2022 17:07:36 +0800
-Message-Id: <1657098456-29244-1-git-send-email-zhanghongchen@loongson.cn>
-X-Mailer: git-send-email 1.8.3.1
-X-CM-TRANSID: AQAAf9Axn+LbUMVi83YMAA--.37951S2
-X-Coremail-Antispam: 1UD129KBjvJXoWxuryDZw1ftw4DtrW3Ww4DJwb_yoW5Cw1fp3
-        WkAa9YkrW5K34IyFW3tr1ftr15ZrZrKF9Ygryqgr1jya43X397Jrn3G34ktFy8Ja1qvFy8
-        Gr13XFs8GrWxZaDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUkI14x267AKxVWUJVW8JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
-        1l84ACjcxK6xIIjxv20xvE14v26ryj6F1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4j
-        6F4UM28EF7xvwVC2z280aVAFwI0_Cr1j6rxdM28EF7xvwVC2z280aVCY1x0267AKxVW0oV
-        Cq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0
-        I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r
-        4UM4x0Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwCY02Avz4vE-syl42xK
-        82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGw
-        C20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r126r1DMIIYrxkI7VAKI48J
-        MIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r1j6r4UMI
-        IF0xvE42xK8VAvwI8IcIk0rVWrZr1j6s0DMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvE
-        x4A2jsIEc7CjxVAFwI0_Jr0_GrUvcSsGvfC2KfnxnUUI43ZEXa7VUbrMaUUUUUU==
-X-CM-SenderInfo: x2kd0w5krqwupkhqwqxorr0wxvrqhubq/
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        Wed, 6 Jul 2022 05:11:18 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 51E872872E;
+        Wed,  6 Jul 2022 02:08:10 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 2673115A1;
+        Wed,  6 Jul 2022 02:08:10 -0700 (PDT)
+Received: from [10.57.9.19] (unknown [10.57.9.19])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 08F243F66F;
+        Wed,  6 Jul 2022 02:08:06 -0700 (PDT)
+Message-ID: <95d76278-ce40-aab8-1418-322f8b4a3072@arm.com>
+Date:   Wed, 6 Jul 2022 10:08:05 +0100
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH 4/4] cpufreq: scmi: Support the power scale in micro-Watts
+ in SCMI v3.1
+Content-Language: en-US
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>
+Cc:     amitk@kernel.org, rui.zhang@intel.com, viresh.kumar@linaro.org,
+        rafael@kernel.org, dietmar.eggemann@arm.com, nm@ti.com,
+        sboyd@kernel.org, sudeep.holla@arm.com, cristian.marussi@arm.com,
+        linux-kernel@vger.kernel.org, matthias.bgg@gmail.com,
+        linux-mediatek@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-pm@vger.kernel.org
+References: <20220622145802.13032-1-lukasz.luba@arm.com>
+ <20220622145802.13032-5-lukasz.luba@arm.com>
+ <653f63e5-c794-27fb-115a-7b051850991b@linaro.org>
+From:   Lukasz Luba <lukasz.luba@arm.com>
+In-Reply-To: <653f63e5-c794-27fb-115a-7b051850991b@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When a pmd entry is invalidated by pmd_mkinvalid,pmd_present should
-return true.
-So introduce a _PAGE_PRESENT_INVALID_SHIFT bit to check if a pmd is
-present but invalidated by pmd_mkinvalid.
 
-Signed-off-by: Hongchen Zhang <zhanghongchen@loongson.cn>
----
- arch/mips/include/asm/pgtable-64.h   | 2 +-
- arch/mips/include/asm/pgtable-bits.h | 5 +++++
- arch/mips/include/asm/pgtable.h      | 3 ++-
- 3 files changed, 8 insertions(+), 2 deletions(-)
 
-diff --git a/arch/mips/include/asm/pgtable-64.h b/arch/mips/include/asm/pgtable-64.h
-index 41921ac..1c5ef41 100644
---- a/arch/mips/include/asm/pgtable-64.h
-+++ b/arch/mips/include/asm/pgtable-64.h
-@@ -265,7 +265,7 @@ static inline int pmd_present(pmd_t pmd)
- {
- #ifdef CONFIG_MIPS_HUGE_TLB_SUPPORT
- 	if (unlikely(pmd_val(pmd) & _PAGE_HUGE))
--		return pmd_val(pmd) & _PAGE_PRESENT;
-+		return pmd_val(pmd) & (_PAGE_PRESENT | _PAGE_PRESENT_INVALID);
- #endif
- 
- 	return pmd_val(pmd) != (unsigned long) invalid_pte_table;
-diff --git a/arch/mips/include/asm/pgtable-bits.h b/arch/mips/include/asm/pgtable-bits.h
-index 2362842..3c176a1e 100644
---- a/arch/mips/include/asm/pgtable-bits.h
-+++ b/arch/mips/include/asm/pgtable-bits.h
-@@ -49,6 +49,7 @@ enum pgtable_bits {
- 
- 	/* Used only by software (masked out before writing EntryLo*) */
- 	_PAGE_PRESENT_SHIFT = 24,
-+	_PAGE_PRESENT_INVALID_SHIFT,
- 	_PAGE_WRITE_SHIFT,
- 	_PAGE_ACCESSED_SHIFT,
- 	_PAGE_MODIFIED_SHIFT,
-@@ -80,6 +81,7 @@ enum pgtable_bits {
- 
- 	/* Used only by software (masked out before writing EntryLo*) */
- 	_PAGE_PRESENT_SHIFT = _CACHE_SHIFT + 3,
-+	_PAGE_PRESENT_INVALID_SHIFT,
- 	_PAGE_NO_READ_SHIFT,
- 	_PAGE_WRITE_SHIFT,
- 	_PAGE_ACCESSED_SHIFT,
-@@ -98,6 +100,7 @@ enum pgtable_bits {
- enum pgtable_bits {
- 	/* Used only by software (writes to EntryLo ignored) */
- 	_PAGE_PRESENT_SHIFT,
-+	_PAGE_PRESENT_INVALID_SHIFT,
- 	_PAGE_NO_READ_SHIFT,
- 	_PAGE_WRITE_SHIFT,
- 	_PAGE_ACCESSED_SHIFT,
-@@ -122,6 +125,7 @@ enum pgtable_bits {
- enum pgtable_bits {
- 	/* Used only by software (masked out before writing EntryLo*) */
- 	_PAGE_PRESENT_SHIFT,
-+	_PAGE_PRESENT_INVALID_SHIFT,
- #if !defined(CONFIG_CPU_HAS_RIXI)
- 	_PAGE_NO_READ_SHIFT,
- #endif
-@@ -152,6 +156,7 @@ enum pgtable_bits {
- 
- /* Used only by software */
- #define _PAGE_PRESENT		(1 << _PAGE_PRESENT_SHIFT)
-+#define _PAGE_PRESENT_INVALID	(1 << _PAGE_PRESENT_INVALID_SHIFT)
- #define _PAGE_WRITE		(1 << _PAGE_WRITE_SHIFT)
- #define _PAGE_ACCESSED		(1 << _PAGE_ACCESSED_SHIFT)
- #define _PAGE_MODIFIED		(1 << _PAGE_MODIFIED_SHIFT)
-diff --git a/arch/mips/include/asm/pgtable.h b/arch/mips/include/asm/pgtable.h
-index 374c632..cc80211 100644
---- a/arch/mips/include/asm/pgtable.h
-+++ b/arch/mips/include/asm/pgtable.h
-@@ -698,7 +698,8 @@ static inline pmd_t pmd_modify(pmd_t pmd, pgprot_t newprot)
- 
- static inline pmd_t pmd_mkinvalid(pmd_t pmd)
- {
--	pmd_val(pmd) &= ~(_PAGE_PRESENT | _PAGE_VALID | _PAGE_DIRTY);
-+	pmd_val(pmd) |= _PAGE_PRESENT_INVALID;
-+	pmd_val(pmd) &= ~(_PAGE_PRESENT | _PAGE_VALID);
- 
- 	return pmd;
- }
--- 
-1.8.3.1
+On 7/5/22 10:25, Daniel Lezcano wrote:
+> On 22/06/2022 16:58, Lukasz Luba wrote:
+>> The SCMI v3.1 adds support for power values in micro-Watts. They are not
+>> always in milli-Watts anymore (ignoring the bogo-Watts). Thus, the power
+>> must be converted conditionally before sending to Energy Model. Add the
+>> logic which handles the needed checks and conversions.
+>>
+>> Signed-off-by: Lukasz Luba <lukasz.luba@arm.com>
+>> ---
+>>   drivers/cpufreq/scmi-cpufreq.c | 15 ++++++++++-----
+>>   1 file changed, 10 insertions(+), 5 deletions(-)
+>>
+>> diff --git a/drivers/cpufreq/scmi-cpufreq.c 
+>> b/drivers/cpufreq/scmi-cpufreq.c
+>> index bfd35583d653..513a071845c2 100644
+>> --- a/drivers/cpufreq/scmi-cpufreq.c
+>> +++ b/drivers/cpufreq/scmi-cpufreq.c
+>> @@ -100,7 +100,7 @@ static int __maybe_unused
+>>   scmi_get_cpu_power(struct device *cpu_dev, unsigned long *power,
+>>              unsigned long *KHz)
+>>   {
+>> -    bool power_scale_mw = perf_ops->power_scale_mw_get(ph);
+>> +    enum scmi_power_scale power_scale = perf_ops->power_scale_get(ph);
+>>       unsigned long Hz;
+>>       int ret, domain;
+>> @@ -114,8 +114,8 @@ scmi_get_cpu_power(struct device *cpu_dev, 
+>> unsigned long *power,
+>>       if (ret)
+>>           return ret;
+>> -    /* Provide bigger resolution power to the Energy Model */
+>> -    if (power_scale_mw)
+>> +    /* Convert the power to uW if it is mW (ignore bogoW) */
+>> +    if (power_scale == SCMI_POWER_MILLIWATTS)
+>>           *power *= MICROWATT_PER_MILLIWATT;
+>>       /* The EM framework specifies the frequency in KHz. */
+>> @@ -255,8 +255,9 @@ static int scmi_cpufreq_exit(struct cpufreq_policy 
+>> *policy)
+>>   static void scmi_cpufreq_register_em(struct cpufreq_policy *policy)
+>>   {
+>>       struct em_data_callback em_cb = EM_DATA_CB(scmi_get_cpu_power);
+>> -    bool power_scale_mw = perf_ops->power_scale_mw_get(ph);
+>> +    enum scmi_power_scale power_scale = perf_ops->power_scale_get(ph);
+>>       struct scmi_data *priv = policy->driver_data;
+>> +    bool em_power_scale = false;
+> 
+> Just pass 'false' to em_dev_register_perf_domain()
 
+We cannot,
+
+> 
+>>       /*
+>>        * This callback will be called for each policy, but we don't 
+>> need to
+>> @@ -268,9 +269,13 @@ static void scmi_cpufreq_register_em(struct 
+>> cpufreq_policy *policy)
+>>       if (!priv->nr_opp)
+>>           return;
+>> +    if (power_scale == SCMI_POWER_MILLIWATTS
+>> +        || power_scale == SCMI_POWER_MICROWATTS)
+>> +        em_power_scale = true;
+>> +
+
+because sometimes it's 'true'.
+
+>>       em_dev_register_perf_domain(get_cpu_device(policy->cpu), 
+>> priv->nr_opp,
+>>                       &em_cb, priv->opp_shared_cpus,
+>> -                    power_scale_mw);
+>> +                    em_power_scale);
+
+Then we just use the variable here in single call.
+
+>>   }
+>>   static struct cpufreq_driver scmi_cpufreq_driver = {
+> 
+> 

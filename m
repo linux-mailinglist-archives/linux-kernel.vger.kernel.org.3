@@ -2,110 +2,175 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 432D256855B
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 12:22:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 14070568557
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 12:22:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232483AbiGFKWF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Jul 2022 06:22:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60886 "EHLO
+        id S229558AbiGFKWM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Jul 2022 06:22:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32792 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231935AbiGFKVj (ORCPT
+        with ESMTP id S233192AbiGFKVs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Jul 2022 06:21:39 -0400
-Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A55D2714D;
-        Wed,  6 Jul 2022 03:21:15 -0700 (PDT)
-Received: by mail-pl1-x631.google.com with SMTP id m14so13286771plg.5;
-        Wed, 06 Jul 2022 03:21:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=UzsK5A/Pd2DS/q+pu2TPIXsF74uXoZ2jR8FiWqOBTf0=;
-        b=jPknnkWS+HyznwuLvLZ32EFNaMi2kYHUveXX06LBsxWi8WWk54fdGGslOYuaNSzAC1
-         +C/+81V/BTWAnyuW8zpzEOQ+3m5kTKePsPyILyW85ZxloaLy8smIa1RrjtcLHK+50AnN
-         yH5/1g7GUFT38DXkivHkyB65dBQ5OBuhhzy8EUzkCEJTf3ZiONObArhVTtB/OcViMTCO
-         X8KJZBJU4Y7DZ7cizzptUG1IJyL3aKSnpY0xM5e5mg68r1rnl3nGzJWE9g1ZeO/yvMHJ
-         7jvS9E7520rHkopiOmyafXJGnjCstN3kCYMy2ZH1/+Y8EfKqhyAZCsV/fFXXHCJrvG+e
-         ygDw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=UzsK5A/Pd2DS/q+pu2TPIXsF74uXoZ2jR8FiWqOBTf0=;
-        b=w2Y6SpmJBMIP8pXWlIVkOuLu0pbSMIpNPyIM57uEV3EpEgf4KrkJWXTBPF1fkEzlzk
-         3fjU0rN2xN/hQyIl3nVIbu/4f35SanMyY5MH5PLpgvUCGC4IknXEB1H71B7jei9iEN1C
-         Nh07tWJCVfBAaI0AJh8yJ1TOAfLiVvfItTSP35E/c+yX9ijfmK1nOkqw6FEhft2onbP5
-         GtujuryDzNnKM3yhd8BWxEg4gUPoavz2sVhbsdgpLp7Y2eJSPUx58xjPKQEuqg63244C
-         g8JYmAt/zwanWcDzlhPT9lj/X8GSQ98Q/3N8u2u+YxNGjVipJvdTCvISXwz1VlbcWV33
-         dFOg==
-X-Gm-Message-State: AJIora9HhR2u8Q3E16508TwNPd967xYkTau5ZDOBObafM29Dcav9ET0f
-        J7u/ZP2RySDr7b4/ze+q/PM=
-X-Google-Smtp-Source: AGRyM1u62ff8Zjp/L+wMPt2MQjdQjkuAxTYu9AnfGkSn1v7kxGjrvXqT5UyLr/SkNP7QrlRhVQcR8g==
-X-Received: by 2002:a17:90a:c7cc:b0:1ef:775e:8df1 with SMTP id gf12-20020a17090ac7cc00b001ef775e8df1mr26574178pjb.28.1657102874543;
-        Wed, 06 Jul 2022 03:21:14 -0700 (PDT)
-Received: from ?IPV6:2404:f801:0:5:8000::75b? ([2404:f801:9000:1a:efea::75b])
-        by smtp.gmail.com with ESMTPSA id w21-20020a656955000000b0041282c423e6sm2085990pgq.71.2022.07.06.03.21.04
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 06 Jul 2022 03:21:13 -0700 (PDT)
-Message-ID: <71242da1-8a7a-53ca-06d6-7a1363141bd8@gmail.com>
-Date:   Wed, 6 Jul 2022 18:21:02 +0800
+        Wed, 6 Jul 2022 06:21:48 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2481825EB0;
+        Wed,  6 Jul 2022 03:21:32 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id CF17BB81BD1;
+        Wed,  6 Jul 2022 10:21:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1243CC3411C;
+        Wed,  6 Jul 2022 10:21:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1657102889;
+        bh=cGtpdU/SvI9xWtgOfWGAOSHnE9hhzh3DtdPifSULvu8=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=ZzXFpr164ZpZdDLWgqJSQGOIXk8aL7ehM+hG1bHHmRygRA0O529gdfBnST8R08laV
+         P52OT6yw7hFJ70bosoM1vNXT67K1g7KyE7YNPf5pqaejjB41hFIfeobnhdgQTdvXrn
+         vILe1feFkfMYCNpfhm7/5825V4IHHlzd7vijf1tM=
+Date:   Wed, 6 Jul 2022 12:21:26 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Varad Gautam <varadgautam@google.com>
+Cc:     Zhang Rui <rui.zhang@intel.com>, linux-kernel@vger.kernel.org,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>, linux-pm@vger.kernel.org,
+        stable@vger.kernel.org
+Subject: Re: [PATCH] thermal: sysfs: Perform bounds check when storing
+ thermal states
+Message-ID: <YsViJpAnkqW1QTwW@kroah.com>
+References: <20220705150002.2016207-1-varadgautam@google.com>
+ <YsRkPUcrMj+JU0Om@kroah.com>
+ <CAOLDJOJ_v75WqGt2mZa0h-GgF+NThFBY5DvasH+9LLVgLrrvog@mail.gmail.com>
+ <YsUvgWmrk+ZfUy3t@kroah.com>
+ <CAOLDJOJug5jYpaSjY1tAYWNo0QRM4NB+wM2Vd2=Lf_O7TRjVCg@mail.gmail.com>
+ <6eed01c90fafe681cccba2f227d65f2e9bfb8348.camel@intel.com>
+ <YsVUB76c2b0EkRBb@kroah.com>
+ <CAOLDJOJLvSUMqF37H13aiH59Pm4_t6esRxy7Ej3Grhr4fmSGQA@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH 2/2] x86/ACPI: Set swiotlb area according to the number of
- lapic entry in MADT
-Content-Language: en-US
-To:     Christoph Hellwig <hch@infradead.org>
-Cc:     corbet@lwn.net, rafael@kernel.org, len.brown@intel.com,
-        pavel@ucw.cz, tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
-        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
-        m.szyprowski@samsung.com, robin.murphy@arm.com, paulmck@kernel.org,
-        akpm@linux-foundation.org, keescook@chromium.org,
-        songmuchun@bytedance.com, rdunlap@infradead.org,
-        damien.lemoal@opensource.wdc.com, michael.h.kelley@microsoft.com,
-        kys@microsoft.com, Tianyu Lan <Tianyu.Lan@microsoft.com>,
-        iommu@lists.linux-foundation.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        vkuznets@redhat.com, wei.liu@kernel.org, parri.andrea@gmail.com,
-        thomas.lendacky@amd.com, linux-hyperv@vger.kernel.org,
-        kirill.shutemov@intel.com, andi.kleen@intel.com,
-        Andi Kleen <ak@linux.intel.com>
-References: <20220627153150.106995-1-ltykernel@gmail.com>
- <20220627153150.106995-3-ltykernel@gmail.com>
- <YrxcCZKvFYjxLf9n@infradead.org>
- <a876f862-c005-108d-e6f9-68336a8d89f0@gmail.com>
- <YsVBKgxiQKfnCjvn@infradead.org>
- <10062b7d-f0a6-6724-4ccb-506da09a8533@gmail.com>
- <YsVPwYGHUoctAKjs@infradead.org>
-From:   Tianyu Lan <ltykernel@gmail.com>
-In-Reply-To: <YsVPwYGHUoctAKjs@infradead.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAOLDJOJLvSUMqF37H13aiH59Pm4_t6esRxy7Ej3Grhr4fmSGQA@mail.gmail.com>
+X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 7/6/2022 5:02 PM, Christoph Hellwig wrote:
-> On Wed, Jul 06, 2022 at 04:57:33PM +0800, Tianyu Lan wrote:
->> Swiotlb_init() is called in the mem_init() of different architects and
->> memblock free pages are released to the buddy allocator just after
->> calling swiotlb_init() via memblock_free_all().
+On Wed, Jul 06, 2022 at 12:01:19PM +0200, Varad Gautam wrote:
+> On Wed, Jul 6, 2022 at 11:21 AM Greg KH <gregkh@linuxfoundation.org> wrote:
+> >
+> > On Wed, Jul 06, 2022 at 04:51:59PM +0800, Zhang Rui wrote:
+> > > On Wed, 2022-07-06 at 09:16 +0200, Varad Gautam wrote:
+> > > > On Wed, Jul 6, 2022 at 8:45 AM Greg KH <gregkh@linuxfoundation.org>
+> > > > wrote:
+> > > > >
+> > > > > On Tue, Jul 05, 2022 at 11:02:50PM +0200, Varad Gautam wrote:
+> > > > > > On Tue, Jul 5, 2022 at 6:18 PM Greg KH <
+> > > > > > gregkh@linuxfoundation.org> wrote:
+> > > > > > >
+> > > > > > > On Tue, Jul 05, 2022 at 03:00:02PM +0000, Varad Gautam wrote:
+> > > > > > > > Check that a user-provided thermal state is within the
+> > > > > > > > maximum
+> > > > > > > > thermal states supported by a given driver before attempting
+> > > > > > > > to
+> > > > > > > > apply it. This prevents a subsequent OOB access in
+> > > > > > > > thermal_cooling_device_stats_update() while performing
+> > > > > > > > state-transition accounting on drivers that do not have this
+> > > > > > > > check
+> > > > > > > > in their set_cur_state() handle.
+> > > > > > > >
+> > > > > > > > Signed-off-by: Varad Gautam <varadgautam@google.com>
+> > > > > > > > Cc: stable@vger.kernel.org
+> > > > > > > > ---
+> > > > > > > >  drivers/thermal/thermal_sysfs.c | 12 +++++++++++-
+> > > > > > > >  1 file changed, 11 insertions(+), 1 deletion(-)
+> > > > > > > >
+> > > > > > > > diff --git a/drivers/thermal/thermal_sysfs.c
+> > > > > > > > b/drivers/thermal/thermal_sysfs.c
+> > > > > > > > index 1c4aac8464a7..0c6b0223b133 100644
+> > > > > > > > --- a/drivers/thermal/thermal_sysfs.c
+> > > > > > > > +++ b/drivers/thermal/thermal_sysfs.c
+> > > > > > > > @@ -607,7 +607,7 @@ cur_state_store(struct device *dev,
+> > > > > > > > struct device_attribute *attr,
+> > > > > > > >               const char *buf, size_t count)
+> > > > > > > >  {
+> > > > > > > >       struct thermal_cooling_device *cdev =
+> > > > > > > > to_cooling_device(dev);
+> > > > > > > > -     unsigned long state;
+> > > > > > > > +     unsigned long state, max_state;
+> > > > > > > >       int result;
+> > > > > > > >
+> > > > > > > >       if (sscanf(buf, "%ld\n", &state) != 1)
+> > > > > > > > @@ -618,10 +618,20 @@ cur_state_store(struct device *dev,
+> > > > > > > > struct device_attribute *attr,
+> > > > > > > >
+> > > > > > > >       mutex_lock(&cdev->lock);
+> > > > > > > >
+> > > > > > > > +     result = cdev->ops->get_max_state(cdev, &max_state);
+> > > > > > > > +     if (result)
+> > > > > > > > +             goto unlock;
+> > > > > > > > +
+> > > > > > > > +     if (state > max_state) {
+> > > > > > > > +             result = -EINVAL;
+> > > > > > > > +             goto unlock;
+> > > > > > > > +     }
+> > > > > > > > +
+> > > > > > > >       result = cdev->ops->set_cur_state(cdev, state);
+> > > > > > >
+> > > > > > > Why doesn't set_cur_state() check the max state before setting
+> > > > > > > it?  Why
+> > > > > > > are the callers forced to always check it before?  That feels
+> > > > > > > wrong...
+> > > > > > >
+> > > > > >
+> > > > > > The problem lies in thermal_cooling_device_stats_update(), not
+> > > > > > set_cur_state().
+> > > > > >
+> > > > > > If ->set_cur_state() doesn't error out on invalid state,
+> > > > > > thermal_cooling_device_stats_update() does a:
+> > > > > >
+> > > > > > stats->trans_table[stats->state * stats->max_states +
+> > > > > > new_state]++;
+> > > > > >
+> > > > > > stats->trans_table reserves space depending on max_states, but
+> > > > > > we'd end up
+> > > > > > reading/writing outside it. cur_state_store() can prevent this
+> > > > > > regardless of
+> > > > > > the driver's ->set_cur_state() implementation.
+> > > > >
+> > > > > Why wouldn't cur_state_store() check for an out-of-bounds condition
+> > > > > by
+> > > > > calling get_max_state() and then return an error if it is invalid,
+> > > > > preventing thermal_cooling_device_stats_update() from ever being
+> > > > > called?
+> > > > >
+> > > >
+> > > > That's what this patch does, it adds the out-of-bounds check.
+> > >
+> > > No, I think Greg' question is
+> > > why cdev->ops->set_cur_state() return 0 when setting a cooling state
+> > > that exceeds the maximum cooling state?
+> >
+> > Yes, that is what I am asking, it should not allow a state to be
+> > exceeded.
+> >
 > 
-> Yes.
+> Indeed, it is upto the driver to return !0 from cdev->ops->set_cur_state()
+> when setting state > max - and it is a driver bug for not doing so.
 > 
->> The mem_init() is called before smp_init().
-> 
-> But why would that matter?  cpu_possible_map is set up from
-> setup_arch(), which is called before that.
+> But a buggy driver should not lead to cur_state_store() performing an OOB
+> access.
 
-Sorry. I just still focus online cpu number and the number is got after
-smp_init(). Possible cpu number includes some offline cpus. I will have 
-a try. Thanks for suggestion.
+Agreed, which is why the code that does the access should check before
+it does so.  Right now you are relying on the sysfs code to do so, which
+seems very wrong.
+
+thanks,
+
+greg k-h

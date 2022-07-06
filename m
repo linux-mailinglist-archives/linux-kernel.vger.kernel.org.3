@@ -2,159 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A6371567B8E
+	by mail.lfdr.de (Postfix) with ESMTP id 5F1AF567B8D
 	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 03:33:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230045AbiGFBds (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Jul 2022 21:33:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36512 "EHLO
+        id S230041AbiGFBdn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Jul 2022 21:33:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36460 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229493AbiGFBdp (ORCPT
+        with ESMTP id S229493AbiGFBdl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Jul 2022 21:33:45 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 934D61166
-        for <linux-kernel@vger.kernel.org>; Tue,  5 Jul 2022 18:33:43 -0700 (PDT)
-Received: from dggpemm500020.china.huawei.com (unknown [172.30.72.53])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4Ld27S35BMzhYyS;
-        Wed,  6 Jul 2022 09:31:16 +0800 (CST)
-Received: from dggpemm500007.china.huawei.com (7.185.36.183) by
- dggpemm500020.china.huawei.com (7.185.36.49) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Wed, 6 Jul 2022 09:33:34 +0800
-Received: from [10.174.178.174] (10.174.178.174) by
- dggpemm500007.china.huawei.com (7.185.36.183) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Wed, 6 Jul 2022 09:33:33 +0800
-Subject: Re: [PATCH -next 2/2] xtensa: iss: change the return type of
- iss_net_configure() to void
-To:     Max Filippov <jcmvbkbc@gmail.com>
-CC:     LKML <linux-kernel@vger.kernel.org>,
-        "open list:TENSILICA XTENSA PORT (xtensa)" 
-        <linux-xtensa@linux-xtensa.org>, Chris Zankel <chris@zankel.net>
-References: <20220705132032.702972-1-yangyingliang@huawei.com>
- <20220705132032.702972-2-yangyingliang@huawei.com>
- <CAMo8BfJvXaDnsXrA1ELKJz1QZmW+8NcQpkhkjKbkp1zxMTePCg@mail.gmail.com>
-From:   Yang Yingliang <yangyingliang@huawei.com>
-Message-ID: <87706ab7-29d3-b56b-2912-70c6ad7d28cc@huawei.com>
-Date:   Wed, 6 Jul 2022 09:33:32 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:68.0) Gecko/20100101
- Thunderbird/68.7.0
+        Tue, 5 Jul 2022 21:33:41 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3C3B1166;
+        Tue,  5 Jul 2022 18:33:40 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6E382617F7;
+        Wed,  6 Jul 2022 01:33:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 671BFC341C7;
+        Wed,  6 Jul 2022 01:33:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1657071219;
+        bh=tXEAZbbXq7CDfjwXrTIalrmS21O6jO7l8pSeMA9eCHU=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=gkjUQNVS3u/Ex/MmEc3uAl7KIt0dBzdCHd87d3Os/WzjETTZEa+8zBF/CnPb5TdyZ
+         Ct7k1VIyZeRTkW36Pm90AB68DT/gR5cB+vRgb3VwOCFdvL6JboI4v07C7D9I4fy47h
+         8XeTV69IcbJopNUFIvUeVqg5Xig0IDBKfAXVgsVL2Vb1qdqgCrOph+zqcrMecolQCB
+         qqxTOJR8EohJ8artUd/9opfx7mNi0Vdsgy8WPkv7dWC9cCvtMhXt9+J61RVBZ3jbsv
+         jPPm/6oU891QpMvBR19g99t8LdrfwumD575JiHrqBGSjmsqDEj/E5QkqaRpvPc/KSk
+         TML4vpA0F76Bw==
+Date:   Tue, 5 Jul 2022 18:33:38 -0700
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     Ratheesh Kannoth <rkannoth@marvell.com>
+Cc:     <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <sgoutham@marvell.com>, <davem@davemloft.net>,
+        <edumazet@google.com>, <pabeni@redhat.com>
+Subject: Re: [PATCH 02/12] octeontx2-af: Exact match support
+Message-ID: <20220705183338.375b948d@kernel.org>
+In-Reply-To: <20220705104923.2113935-3-rkannoth@marvell.com>
+References: <20220705104923.2113935-1-rkannoth@marvell.com>
+        <20220705104923.2113935-3-rkannoth@marvell.com>
 MIME-Version: 1.0
-In-Reply-To: <CAMo8BfJvXaDnsXrA1ELKJz1QZmW+8NcQpkhkjKbkp1zxMTePCg@mail.gmail.com>
-Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-Content-Language: en-US
-X-Originating-IP: [10.174.178.174]
-X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
- dggpemm500007.china.huawei.com (7.185.36.183)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On Tue, 5 Jul 2022 16:19:13 +0530 Ratheesh Kannoth wrote:
+> Change-Id: Id9f72c1d9e08b44eef45b67e52fe2fd2a0e7e535
 
-On 2022/7/5 23:59, Max Filippov wrote:
-> Hi Yang,
->
-> On Tue, Jul 5, 2022 at 6:10 AM Yang Yingliang <yangyingliang@huawei.com> wrote:
->> Change the return type of iss_net_configure() to void, because it's not used.
->>
->> Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
->> ---
->>   arch/xtensa/platforms/iss/network.c | 23 +++++++++--------------
->>   1 file changed, 9 insertions(+), 14 deletions(-)
-> This change removes a lot of code that was added in the previous change.
-> Maybe fold both patches into one to avoid that pattern of adding and then
-> immediately removing code? Or, if you feel that changing the return type
-> of the iss_net_configure is an important separate step, maybe do it first?
-I will send a v2 with these changes in one patch.
-
-Thanks,
-Yang
->
->> diff --git a/arch/xtensa/platforms/iss/network.c b/arch/xtensa/platforms/iss/network.c
->> index 5e475f7472e4..e38ff51ce833 100644
->> --- a/arch/xtensa/platforms/iss/network.c
->> +++ b/arch/xtensa/platforms/iss/network.c
->> @@ -472,16 +472,15 @@ static const struct net_device_ops iss_netdev_ops = {
->>          .ndo_set_rx_mode        = iss_net_set_multicast_list,
->>   };
->>
->> -static int iss_net_configure(int index, char *init)
->> +static void iss_net_configure(int index, char *init)
->>   {
->>          struct net_device *dev;
->>          struct iss_net_private *lp;
->> -       int err;
->>
->>          dev = alloc_etherdev(sizeof(*lp));
->>          if (dev == NULL) {
->>                  pr_err("eth_configure: failed to allocate device\n");
->> -               return -ENOMEM;
->> +               return;
->>          }
->>
->>          /* Initialize private element. */
->> @@ -509,7 +508,6 @@ static int iss_net_configure(int index, char *init)
->>          if (!tuntap_probe(lp, index, init)) {
->>                  pr_err("%s: invalid arguments. Skipping device!\n",
->>                         dev->name);
->> -               err = -EINVAL;
->>                  goto err_free_netdev;
->>          }
->>
->> @@ -518,8 +516,7 @@ static int iss_net_configure(int index, char *init)
->>          /* sysfs register */
->>
->>          if (!driver_registered) {
->> -               err = platform_driver_register(&iss_net_driver);
->> -               if (err)
->> +               if (platform_driver_register(&iss_net_driver))
->>                          goto err_free_netdev;
->>                  driver_registered = 1;
->>          }
->> @@ -530,8 +527,7 @@ static int iss_net_configure(int index, char *init)
->>
->>          lp->pdev.id = index;
->>          lp->pdev.name = DRIVER_NAME;
->> -       err = platform_device_register(&lp->pdev);
->> -       if (err)
->> +       if (platform_device_register(&lp->pdev))
->>                  goto err_free_netdev;
->>          SET_NETDEV_DEV(dev, &lp->pdev.dev);
->>
->> @@ -541,23 +537,22 @@ static int iss_net_configure(int index, char *init)
->>          dev->irq = -1;
->>
->>          rtnl_lock();
->> -       err = register_netdevice(dev);
->> -       rtnl_unlock();
->> -
->> -       if (err) {
->> +       if (register_netdevice(dev)) {
->> +               rtnl_unlock();
->>                  pr_err("%s: error registering net device!\n", dev->name);
->>                  goto err_unregister_device;
->>          }
->> +       rtnl_unlock();
->>
->>          timer_setup(&lp->tl, iss_net_user_timer_expire, 0);
->>
->> -       return 0;
->> +       return;
->>
->>   err_unregister_device:
->>          platform_device_unregister(&lp->pdev);
->>   err_free_netdev:
->>          free_netdev(dev);
->> -       return err;
->> +       return;
-> No need for 'return' at the end of the void function.
->
+Please drop the change ids

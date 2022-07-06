@@ -2,69 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A55FC5684C3
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 12:09:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F35975684B4
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 12:08:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232603AbiGFKIb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Jul 2022 06:08:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46366 "EHLO
+        id S232746AbiGFKHV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Jul 2022 06:07:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45424 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232856AbiGFKHq (ORCPT
+        with ESMTP id S232589AbiGFKHA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Jul 2022 06:07:46 -0400
-Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1BBF25C48
-        for <linux-kernel@vger.kernel.org>; Wed,  6 Jul 2022 03:07:36 -0700 (PDT)
-Received: by mail-wm1-x32e.google.com with SMTP id c131-20020a1c3589000000b003a19b2bce36so5703322wma.4
-        for <linux-kernel@vger.kernel.org>; Wed, 06 Jul 2022 03:07:36 -0700 (PDT)
+        Wed, 6 Jul 2022 06:07:00 -0400
+Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E5B52528F
+        for <linux-kernel@vger.kernel.org>; Wed,  6 Jul 2022 03:06:58 -0700 (PDT)
+Received: by mail-lf1-x132.google.com with SMTP id i18so25035096lfu.8
+        for <linux-kernel@vger.kernel.org>; Wed, 06 Jul 2022 03:06:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=D8DtgYwJoP/V2130+PGEO/pkL1xXDKz8qmvliOW/LJI=;
-        b=MAbBA1ZvhfFw4fDm6wOAOKOuxS/qKDxsuvcH1T72Dugsw9aoGSmRktizFEXOJn/XZo
-         VzGmTecvl7q22iDePjsT21Y+RpDifbceiBq4CyuIxr5uz7lnkMy25yZYiuMgA9p5tWMm
-         JU7caoTydExMRtKdVO/svDNqO2CG5mtnOENdjFLoDWWUJtH5OouT0+meYHPcNxEx+vLU
-         k7Er1mT0v30LUtgolRto1kXf6ilOqpuOOu8yvS0e/JN/5puHNHMcf6caIvaRNiwQ5FbB
-         gC9dRkZ/+veunifxFt07o3AwkXlvYOC+6AiiKZb008NbXoMKU4JWAnTeyRn4x+JxH3I5
-         umgw==
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=o/JI08us7vL24f4s2bZjdnzknLcJKDlQAeiE558KAis=;
+        b=KN0X8kX9WhJxJK4/kKMKHEZoc2zJhbOciZhqDlTpiqOahrwQy59NBTHG3BxxidxG7m
+         67bhQWO1Fs7NcpSyyBgrGPymXr5wZkwBcziPGklMAb5E3NBvx/p9g/iqCxn6x/VJkm1A
+         PmzjaLP3ZqbE1EVYUS8Lrv8UI1sopmhz7jP7IQxJBEaI2lleD6FRmwhphOaOICEJkKn2
+         7zNsDlY4gdRINoYkfsphM3/92q3sySrWB+Av6pPfwsAKt/pc5IEOttCtubLBfbg3wE0O
+         q1zWJU3oGo7cirC74MKe9oyKGNSnE4CmNIaHU+X4niYJ6RYwWySoawAQM2K9XMfWBAL8
+         N88A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=D8DtgYwJoP/V2130+PGEO/pkL1xXDKz8qmvliOW/LJI=;
-        b=UWQxetYWRAM33TyxN2Zt/KRMqBo+QqRz1jYcc7TtjIBubjG451bLDlTMFzfTMC4oQ5
-         OTy6J3XcpBmW7IABG/d03sBJ0GPP/XtjYRDXiD0WviIuK45GYkyGbZJCLIaNGi7C8k2t
-         bcv77GOnJ3/rH/J19wERMzUrIGgHphQQX3WSkqSxXiudaZWL1Z6UN7XfMNH1tP2Riqmc
-         +qhlCZy5AhICZlLhs3n/M3Tv/jzX8MZY9exujaP/XO1CzG35eijTdPCqlFTEzLbeFgev
-         piklu9Gev38M/hOHOrfDX9kSRhlkNfeeMN4U/YVbzhz8NS3p9gW6LjnZaiAnxjdeNDJR
-         V+3Q==
-X-Gm-Message-State: AJIora+4DOpQr8uTlZrdr4zSceqUm8qr2iz1RTjCh8QgkBbKw6/TQQje
-        XvcR8B/SsPWVPnSUxC0m/WHZ4w==
-X-Google-Smtp-Source: AGRyM1sTiuaoxWI3ZvWwLGuTZmjpKap/Ril3DCU2PyAV7HdhhcPy4GNOJ1qVBRpsmcrHbFW2K3KwPQ==
-X-Received: by 2002:a7b:cb98:0:b0:3a2:afc8:72cd with SMTP id m24-20020a7bcb98000000b003a2afc872cdmr13222310wmi.98.1657102055591;
-        Wed, 06 Jul 2022 03:07:35 -0700 (PDT)
-Received: from srini-hackbase.lan (cpc90716-aztw32-2-0-cust825.18-1.cable.virginm.net. [86.26.103.58])
-        by smtp.gmail.com with ESMTPSA id n35-20020a05600c3ba300b003a039054567sm24678143wms.18.2022.07.06.03.07.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 06 Jul 2022 03:07:35 -0700 (PDT)
-From:   Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-To:     gregkh@linuxfoundation.org
-Cc:     linux-kernel@vger.kernel.org,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-Subject: [PATCH 7/7] nvmem: mtk-efuse: Simplify with devm_platform_get_and_ioremap_resource()
-Date:   Wed,  6 Jul 2022 11:06:27 +0100
-Message-Id: <20220706100627.6534-8-srinivas.kandagatla@linaro.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220706100627.6534-1-srinivas.kandagatla@linaro.org>
-References: <20220706100627.6534-1-srinivas.kandagatla@linaro.org>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=o/JI08us7vL24f4s2bZjdnzknLcJKDlQAeiE558KAis=;
+        b=ywy1//qUjou9oo/sIIRDG0YoiC/wBZ1QnhGQzIaF2hvaZtQrSMHzn+6LXB+kBWa62l
+         XpKt32g55GRfKfLf3vLMBzshX70rs4Nm+ekammfos0ozH51ieAz5f+zlAvDJtmle4+iv
+         FS97MwLmsiw8EHFJ4CuuqBtR9SfL52/Jo910WUYx2wiav+9Jw8fEzB76e4QKUGvtPqWf
+         PKZxPhIQaSlSjoHfffnwWyIQn4IOfDu+G9lDiGdX0ieqEeIqvch2gbi8BYm9aP44+oQE
+         T1zSSq4svLZhPgTxORfjH+zm6qja/ZxzuW/VF6bCrRup7p1Zapm0hCkEmmXyA8My6X3t
+         1SvA==
+X-Gm-Message-State: AJIora/Cg++q0fZYquTYH1DGjksfVuIPT5HnFKtKodjgOxdpV4UkLbcP
+        j7FpIcVHxswrtWGc9Df4T9ylwQ==
+X-Google-Smtp-Source: AGRyM1uRSIf3VLsyNglEEsS5S8MByTBNN1VD5w4WP3bbUucHWwXC/emiIf6KMm+pT6aFgJzFoOJ9cw==
+X-Received: by 2002:a05:6512:31d1:b0:47f:5d39:1d9d with SMTP id j17-20020a05651231d100b0047f5d391d9dmr25517702lfe.140.1657102015414;
+        Wed, 06 Jul 2022 03:06:55 -0700 (PDT)
+Received: from [192.168.1.52] ([84.20.121.239])
+        by smtp.gmail.com with ESMTPSA id h4-20020ac250c4000000b00483e5f0192esm769001lfm.87.2022.07.06.03.06.54
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 06 Jul 2022 03:06:54 -0700 (PDT)
+Message-ID: <2829e71b-1769-ce24-f810-d63e619aa5f0@linaro.org>
+Date:   Wed, 6 Jul 2022 12:06:53 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH V3 02/11] dt-bindings: pci: tegra: Convert to json-schema
+Content-Language: en-US
+To:     Vidya Sagar <vidyas@nvidia.com>, Rob Herring <robh@kernel.org>
+Cc:     bhelgaas@google.com, lorenzo.pieralisi@arm.com,
+        thierry.reding@gmail.com, jonathanh@nvidia.com, kishon@ti.com,
+        vkoul@kernel.org, kw@linux.com, p.zabel@pengutronix.de,
+        mperttunen@nvidia.com, linux-pci@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-tegra@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-phy@lists.infradead.org,
+        kthota@nvidia.com, mmaddireddy@nvidia.com, sagar.tv@gmail.com,
+        Thierry Reding <treding@nvidia.com>
+References: <20220629060435.25297-1-vidyas@nvidia.com>
+ <20220629060435.25297-3-vidyas@nvidia.com>
+ <20220630210449.GA3283899-robh@kernel.org>
+ <e971a557-3387-efcf-87ec-983b998c5e93@nvidia.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <e971a557-3387-efcf-87ec-983b998c5e93@nvidia.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,34 +83,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+On 06/07/2022 11:53, Vidya Sagar wrote:
+>>> +  nvidia,bpmp:
+>>> +    $ref: /schemas/types.yaml#/definitions/phandle-array
+>>> +    description: |
+>>> +      Must contain a pair of phandle to BPMP controller node followed by controller ID. Following
+>>> +      are the controller IDs for each controller:
+>>> +
+>>> +        0: C0
+>>> +        1: C1
+>>> +        2: C2
+>>> +        3: C3
+>>> +        4: C4
+>>> +        5: C5
+>>> +    items:
+>>> +      - items:
+>>> +          - minimum: 0
+>>> +            maximum: 0xffffffff
+>>
+>> That's already the limit. Just a description is fine.
+>>
+>>> +          - enum: [ 0, 1, 2, 3, 4, 5 ]
+>>
+>> maximum: 5
+> 
+> Setting the maximum to '5' is resulting in the following error.
+> 
+> pcie-ep@141a0000: nvidia,bpmp:0:0: 4294967295 is greater than the 
+> maximum of 5
+> 
+> Could you please help me understand why I'm seeing this error?
 
-Convert platform_get_resource(), devm_ioremap_resource() to a single
-call to devm_platform_get_and_ioremap_resource(), as this is exactly
-what this function does.
+Trim your replies.
 
-No functional changes.
+Why adding minimum:5 to the phandle? Rob said add a description. Nothing
+about minimum.
 
-Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-Signed-off-by: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
----
- drivers/nvmem/mtk-efuse.c | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
-
-diff --git a/drivers/nvmem/mtk-efuse.c b/drivers/nvmem/mtk-efuse.c
-index e9a375dd84af..a08e0aedd21c 100644
---- a/drivers/nvmem/mtk-efuse.c
-+++ b/drivers/nvmem/mtk-efuse.c
-@@ -41,8 +41,7 @@ static int mtk_efuse_probe(struct platform_device *pdev)
- 	if (!priv)
- 		return -ENOMEM;
- 
--	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
--	priv->base = devm_ioremap_resource(dev, res);
-+	priv->base = devm_platform_get_and_ioremap_resource(pdev, 0, &res);
- 	if (IS_ERR(priv->base))
- 		return PTR_ERR(priv->base);
- 
--- 
-2.25.1
-
+Best regards,
+Krzysztof

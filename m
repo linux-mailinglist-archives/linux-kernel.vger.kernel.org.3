@@ -2,79 +2,206 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 358BE568853
+	by mail.lfdr.de (Postfix) with ESMTP id F14F8568855
 	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 14:30:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233406AbiGFMac (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Jul 2022 08:30:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34766 "EHLO
+        id S233568AbiGFMai (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Jul 2022 08:30:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34858 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231171AbiGFMa3 (ORCPT
+        with ESMTP id S233502AbiGFMaf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Jul 2022 08:30:29 -0400
-Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DD5FBCBA;
-        Wed,  6 Jul 2022 05:30:27 -0700 (PDT)
-Received: from zn.tnic (p200300ea970ff625329c23fffea6a903.dip0.t-ipconnect.de [IPv6:2003:ea:970f:f625:329c:23ff:fea6:a903])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id CC75E1EC0554;
-        Wed,  6 Jul 2022 14:30:21 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1657110621;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=A8YeipasNUa+nZK2qY6DMG4HWJuyiUL/qtd8MoraKqk=;
-        b=UydwJakmDSfmpaKz40d0a+zNKNFI7iga7v2uaNqZ/4B/8XS8bL/H8k++sM7V/gnhE9Rr1O
-        EcopuNzg9Kg+kVR20v0qEqUqBfhI4vIaJZZ5Yy9UPH7snM78Ii+XZY+bPGmbYoeSEwCXBv
-        s/QKl04EfA0Hi3H2Kcan8PKuQESvmHM=
-Date:   Wed, 6 Jul 2022 14:30:21 +0200
-From:   Borislav Petkov <bp@alien8.de>
-To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
-Cc:     "H. Peter Anvin" <hpa@zytor.com>,
-        linux-arm-kernel@lists.infradead.org,
-        linuxppc-dev@lists.ozlabs.org, linux-s390@vger.kernel.org,
-        linux-kernel@vger.kernel.org, x86@kernel.org,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Arnd Bergmann <arnd@arndb.de>
-Subject: Re: [PATCH] random: remove CONFIG_ARCH_RANDOM and "nordrand"
-Message-ID: <YsWAXYhyuh2WXVuL@zn.tnic>
-References: <20220705190121.293703-1-Jason@zx2c4.com>
- <YsSStCQQf008hF2F@zn.tnic>
- <YsSUkapje04MP2a1@zx2c4.com>
- <YsSXkNBtB6Ciy9iN@zn.tnic>
- <11C903CC-22A7-48EE-AD63-E71CC8D28B88@zytor.com>
- <YsTXI3J+ptkN/vb4@zx2c4.com>
+        Wed, 6 Jul 2022 08:30:35 -0400
+Received: from mail-pg1-x530.google.com (mail-pg1-x530.google.com [IPv6:2607:f8b0:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F8EB26ACA
+        for <linux-kernel@vger.kernel.org>; Wed,  6 Jul 2022 05:30:33 -0700 (PDT)
+Received: by mail-pg1-x530.google.com with SMTP id s206so13926612pgs.3
+        for <linux-kernel@vger.kernel.org>; Wed, 06 Jul 2022 05:30:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=LWyDRhw1Ryj5/lJcoPXAxjZYikuxUdKDTEhYaUzG0H8=;
+        b=p/C2LU7MqYGnX/AfeKzQRKYaUunnCc6B/PT887P6lJyV39Nu0F+yV9FraOW0gCsAsN
+         zvAgeKhJWrKHRXjEPgjwDLk+xyukLU8rvtvwMiieYXPpx9tJxPBpgRdJlSZRMpgj8MHL
+         r4kDjtHdTfkyscWw+ZhbnkFL9/M1S7i8xwSvimAJGNPt4atzN2F6btrK2YSSxytJ4u1o
+         1QbBrnOtllIQ5QmuAnjiY/XLQGIY1YybDduR32RlEaOpWF+65eKAYjXrfdcm+SBcVbck
+         1IEjz/Kr9BmSZI77jyIRkmq8tORZOLw1DhQgN50szVXolovJmZ2suFdTa9ghyzz5jFU8
+         wMOg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=LWyDRhw1Ryj5/lJcoPXAxjZYikuxUdKDTEhYaUzG0H8=;
+        b=reXsT2/TsLQShFuu9SbRUXtB0EMEDuDHS958BTcxNti5jrKUPuMGk5eXdJTEIWWrfU
+         CJSdL3DoAglp2x+wfcUsoNIweqH+sb5U/B/XFlih+wbTWmBoJ9grE3SqsYzGzLvyz3Yv
+         KWc4SjnW3KAkGY/sRjyXt+46Dvm2K7Xji6Lxv8Ln8pqwkiNw/4rp5odAZikCKGiJ9/Fx
+         PmqDF3DaaBMSz4th4MbVtPRS99Uom5NA5PVy5z8C0lZeA3fMmU4tW+JeYzGdYNaiSLPA
+         WFC29MFvd+fTzex/gd5pabb4Z7Ja/xQSfzIU0NTSzbK/5sJrAOOZ8fgMsv2WuzPUJkj+
+         sGhA==
+X-Gm-Message-State: AJIora9A7xzTFoLTqqOIBUyLjha4NM0BJhSGwQ38wPTfHydf1A7DlKMw
+        0nyC4/lWgf5YBBY5c7eBy4uBnx4skx1xTxTePTZFTg==
+X-Google-Smtp-Source: AGRyM1uWhk3YeIHY9/Zu/eStbvU59h1Y8V/eJ4SpB/j3gN1pzfBzDXjK5kaKEhlJUFpKy389ZYnYoMuIYkS2CFGZOJQ=
+X-Received: by 2002:a63:4d5f:0:b0:412:12cb:b09f with SMTP id
+ n31-20020a634d5f000000b0041212cbb09fmr18573280pgl.26.1657110632917; Wed, 06
+ Jul 2022 05:30:32 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <YsTXI3J+ptkN/vb4@zx2c4.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220705150002.2016207-1-varadgautam@google.com>
+ <YsRkPUcrMj+JU0Om@kroah.com> <CAOLDJOJ_v75WqGt2mZa0h-GgF+NThFBY5DvasH+9LLVgLrrvog@mail.gmail.com>
+ <YsUvgWmrk+ZfUy3t@kroah.com> <CAOLDJOJug5jYpaSjY1tAYWNo0QRM4NB+wM2Vd2=Lf_O7TRjVCg@mail.gmail.com>
+ <6eed01c90fafe681cccba2f227d65f2e9bfb8348.camel@intel.com>
+ <YsVUB76c2b0EkRBb@kroah.com> <CAOLDJOJLvSUMqF37H13aiH59Pm4_t6esRxy7Ej3Grhr4fmSGQA@mail.gmail.com>
+ <YsViJpAnkqW1QTwW@kroah.com>
+In-Reply-To: <YsViJpAnkqW1QTwW@kroah.com>
+From:   Varad Gautam <varadgautam@google.com>
+Date:   Wed, 6 Jul 2022 14:30:21 +0200
+Message-ID: <CAOLDJOK0Ti2hyskS68LRrd=G5opMz4fnzduj5-d3MF0JLwxS6w@mail.gmail.com>
+Subject: Re: [PATCH] thermal: sysfs: Perform bounds check when storing thermal states
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     Zhang Rui <rui.zhang@intel.com>, linux-kernel@vger.kernel.org,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>, linux-pm@vger.kernel.org,
+        stable@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jul 06, 2022 at 02:28:19AM +0200, Jason A. Donenfeld wrote:
-> Maybe you're not grepping the right tree?
-> 
-> zx2c4@thinkpad ~/Projects/random-linux $ grep trust_cpu Documentation/admin-guide/kernel-parameters.txt
->         random.trust_cpu={on,off}
+On Wed, Jul 6, 2022 at 12:21 PM Greg KH <gregkh@linuxfoundation.org> wrote:
+>
+> On Wed, Jul 06, 2022 at 12:01:19PM +0200, Varad Gautam wrote:
+> > On Wed, Jul 6, 2022 at 11:21 AM Greg KH <gregkh@linuxfoundation.org> wrote:
+> > >
+> > > On Wed, Jul 06, 2022 at 04:51:59PM +0800, Zhang Rui wrote:
+> > > > On Wed, 2022-07-06 at 09:16 +0200, Varad Gautam wrote:
+> > > > > On Wed, Jul 6, 2022 at 8:45 AM Greg KH <gregkh@linuxfoundation.org>
+> > > > > wrote:
+> > > > > >
+> > > > > > On Tue, Jul 05, 2022 at 11:02:50PM +0200, Varad Gautam wrote:
+> > > > > > > On Tue, Jul 5, 2022 at 6:18 PM Greg KH <
+> > > > > > > gregkh@linuxfoundation.org> wrote:
+> > > > > > > >
+> > > > > > > > On Tue, Jul 05, 2022 at 03:00:02PM +0000, Varad Gautam wrote:
+> > > > > > > > > Check that a user-provided thermal state is within the
+> > > > > > > > > maximum
+> > > > > > > > > thermal states supported by a given driver before attempting
+> > > > > > > > > to
+> > > > > > > > > apply it. This prevents a subsequent OOB access in
+> > > > > > > > > thermal_cooling_device_stats_update() while performing
+> > > > > > > > > state-transition accounting on drivers that do not have this
+> > > > > > > > > check
+> > > > > > > > > in their set_cur_state() handle.
+> > > > > > > > >
+> > > > > > > > > Signed-off-by: Varad Gautam <varadgautam@google.com>
+> > > > > > > > > Cc: stable@vger.kernel.org
+> > > > > > > > > ---
+> > > > > > > > >  drivers/thermal/thermal_sysfs.c | 12 +++++++++++-
+> > > > > > > > >  1 file changed, 11 insertions(+), 1 deletion(-)
+> > > > > > > > >
+> > > > > > > > > diff --git a/drivers/thermal/thermal_sysfs.c
+> > > > > > > > > b/drivers/thermal/thermal_sysfs.c
+> > > > > > > > > index 1c4aac8464a7..0c6b0223b133 100644
+> > > > > > > > > --- a/drivers/thermal/thermal_sysfs.c
+> > > > > > > > > +++ b/drivers/thermal/thermal_sysfs.c
+> > > > > > > > > @@ -607,7 +607,7 @@ cur_state_store(struct device *dev,
+> > > > > > > > > struct device_attribute *attr,
+> > > > > > > > >               const char *buf, size_t count)
+> > > > > > > > >  {
+> > > > > > > > >       struct thermal_cooling_device *cdev =
+> > > > > > > > > to_cooling_device(dev);
+> > > > > > > > > -     unsigned long state;
+> > > > > > > > > +     unsigned long state, max_state;
+> > > > > > > > >       int result;
+> > > > > > > > >
+> > > > > > > > >       if (sscanf(buf, "%ld\n", &state) != 1)
+> > > > > > > > > @@ -618,10 +618,20 @@ cur_state_store(struct device *dev,
+> > > > > > > > > struct device_attribute *attr,
+> > > > > > > > >
+> > > > > > > > >       mutex_lock(&cdev->lock);
+> > > > > > > > >
+> > > > > > > > > +     result = cdev->ops->get_max_state(cdev, &max_state);
+> > > > > > > > > +     if (result)
+> > > > > > > > > +             goto unlock;
+> > > > > > > > > +
+> > > > > > > > > +     if (state > max_state) {
+> > > > > > > > > +             result = -EINVAL;
+> > > > > > > > > +             goto unlock;
+> > > > > > > > > +     }
+> > > > > > > > > +
+> > > > > > > > >       result = cdev->ops->set_cur_state(cdev, state);
+> > > > > > > >
+> > > > > > > > Why doesn't set_cur_state() check the max state before setting
+> > > > > > > > it?  Why
+> > > > > > > > are the callers forced to always check it before?  That feels
+> > > > > > > > wrong...
+> > > > > > > >
+> > > > > > >
+> > > > > > > The problem lies in thermal_cooling_device_stats_update(), not
+> > > > > > > set_cur_state().
+> > > > > > >
+> > > > > > > If ->set_cur_state() doesn't error out on invalid state,
+> > > > > > > thermal_cooling_device_stats_update() does a:
+> > > > > > >
+> > > > > > > stats->trans_table[stats->state * stats->max_states +
+> > > > > > > new_state]++;
+> > > > > > >
+> > > > > > > stats->trans_table reserves space depending on max_states, but
+> > > > > > > we'd end up
+> > > > > > > reading/writing outside it. cur_state_store() can prevent this
+> > > > > > > regardless of
+> > > > > > > the driver's ->set_cur_state() implementation.
+> > > > > >
+> > > > > > Why wouldn't cur_state_store() check for an out-of-bounds condition
+> > > > > > by
+> > > > > > calling get_max_state() and then return an error if it is invalid,
+> > > > > > preventing thermal_cooling_device_stats_update() from ever being
+> > > > > > called?
+> > > > > >
+> > > > >
+> > > > > That's what this patch does, it adds the out-of-bounds check.
+> > > >
+> > > > No, I think Greg' question is
+> > > > why cdev->ops->set_cur_state() return 0 when setting a cooling state
+> > > > that exceeds the maximum cooling state?
+> > >
+> > > Yes, that is what I am asking, it should not allow a state to be
+> > > exceeded.
+> > >
+> >
+> > Indeed, it is upto the driver to return !0 from cdev->ops->set_cur_state()
+> > when setting state > max - and it is a driver bug for not doing so.
+> >
+> > But a buggy driver should not lead to cur_state_store() performing an OOB
+> > access.
+>
+> Agreed, which is why the code that does the access should check before
+> it does so.  Right now you are relying on the sysfs code to do so, which
+> seems very wrong.
+>
 
-I was looking at the wrong option, sorry about that.
+I see the point.
 
--- 
-Regards/Gruss,
-    Boris.
+The OOB access happens in thermal_cooling_device_stats_update().
 
-https://people.kernel.org/tglx/notes-about-netiquette
+By placing the check in cur_state_store(), I'm trying to ensure
+two things for a buggy driver:
+1. The driver's cdev->ops->set_cur_state() doesn't get called if
+the new state is > max state. This is to prevent the driver
+from storing the new (invalid) state internally. If the driver
+didn't realise/reject an invalid state, chances are it will try
+to propagate it internally and take actions according to that,
+which can have side effects on system stability.
+2. The kernel doesn't do an OOB access in
+thermal_cooling_device_stats_update().
+
+> thanks,
+>
+> greg k-h

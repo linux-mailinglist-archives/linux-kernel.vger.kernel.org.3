@@ -2,122 +2,163 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F35975684B4
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 12:08:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D002C568571
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 12:24:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232746AbiGFKHV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Jul 2022 06:07:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45424 "EHLO
+        id S232149AbiGFKXz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Jul 2022 06:23:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39064 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232589AbiGFKHA (ORCPT
+        with ESMTP id S231867AbiGFKXw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Jul 2022 06:07:00 -0400
-Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E5B52528F
-        for <linux-kernel@vger.kernel.org>; Wed,  6 Jul 2022 03:06:58 -0700 (PDT)
-Received: by mail-lf1-x132.google.com with SMTP id i18so25035096lfu.8
-        for <linux-kernel@vger.kernel.org>; Wed, 06 Jul 2022 03:06:58 -0700 (PDT)
+        Wed, 6 Jul 2022 06:23:52 -0400
+Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5AE26248E2;
+        Wed,  6 Jul 2022 03:23:51 -0700 (PDT)
+Received: by mail-ej1-x635.google.com with SMTP id lg18so6489634ejb.0;
+        Wed, 06 Jul 2022 03:23:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=o/JI08us7vL24f4s2bZjdnzknLcJKDlQAeiE558KAis=;
-        b=KN0X8kX9WhJxJK4/kKMKHEZoc2zJhbOciZhqDlTpiqOahrwQy59NBTHG3BxxidxG7m
-         67bhQWO1Fs7NcpSyyBgrGPymXr5wZkwBcziPGklMAb5E3NBvx/p9g/iqCxn6x/VJkm1A
-         PmzjaLP3ZqbE1EVYUS8Lrv8UI1sopmhz7jP7IQxJBEaI2lleD6FRmwhphOaOICEJkKn2
-         7zNsDlY4gdRINoYkfsphM3/92q3sySrWB+Av6pPfwsAKt/pc5IEOttCtubLBfbg3wE0O
-         q1zWJU3oGo7cirC74MKe9oyKGNSnE4CmNIaHU+X4niYJ6RYwWySoawAQM2K9XMfWBAL8
-         N88A==
+        d=gmail.com; s=20210112;
+        h=message-id:date:from:to:cc:subject:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=A9xeNdZDUIjr4l2jLGqq1SJhUmTfqKYqMsJa/JfV6ag=;
+        b=MGaI+JsM9XJwL7VpB7yT/Oaz4A474xJtZQz5NEzLu+9WfWoK4TQlRBDHRfW8qbKSdc
+         GA7/T3yW7vazdXBIpLnKhiU0pLqxuWc8lpHotv9baCvj5Bgwt1WsU5jweCEm25CzchXl
+         2XE6d1IQsFAjT/8LuxxYSv8PrgMyAzlhBDiOPjsIeeegZfLwxBsvZ5DW2WY5on1snlSq
+         LxuSxGOA+TYtKNPD9Dt85W+gKmwIHQw7ct/NT769ISTPlqF6uNhD8M/DXujRgIABePDr
+         VFiq5fXuGBvud8h4T0442F3t94nsT5PcCZ/l0kObS9cNukhRS5yC4tsaft7aqTUg1j1k
+         CWqw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=o/JI08us7vL24f4s2bZjdnzknLcJKDlQAeiE558KAis=;
-        b=ywy1//qUjou9oo/sIIRDG0YoiC/wBZ1QnhGQzIaF2hvaZtQrSMHzn+6LXB+kBWa62l
-         XpKt32g55GRfKfLf3vLMBzshX70rs4Nm+ekammfos0ozH51ieAz5f+zlAvDJtmle4+iv
-         FS97MwLmsiw8EHFJ4CuuqBtR9SfL52/Jo910WUYx2wiav+9Jw8fEzB76e4QKUGvtPqWf
-         PKZxPhIQaSlSjoHfffnwWyIQn4IOfDu+G9lDiGdX0ieqEeIqvch2gbi8BYm9aP44+oQE
-         T1zSSq4svLZhPgTxORfjH+zm6qja/ZxzuW/VF6bCrRup7p1Zapm0hCkEmmXyA8My6X3t
-         1SvA==
-X-Gm-Message-State: AJIora/Cg++q0fZYquTYH1DGjksfVuIPT5HnFKtKodjgOxdpV4UkLbcP
-        j7FpIcVHxswrtWGc9Df4T9ylwQ==
-X-Google-Smtp-Source: AGRyM1uRSIf3VLsyNglEEsS5S8MByTBNN1VD5w4WP3bbUucHWwXC/emiIf6KMm+pT6aFgJzFoOJ9cw==
-X-Received: by 2002:a05:6512:31d1:b0:47f:5d39:1d9d with SMTP id j17-20020a05651231d100b0047f5d391d9dmr25517702lfe.140.1657102015414;
-        Wed, 06 Jul 2022 03:06:55 -0700 (PDT)
-Received: from [192.168.1.52] ([84.20.121.239])
-        by smtp.gmail.com with ESMTPSA id h4-20020ac250c4000000b00483e5f0192esm769001lfm.87.2022.07.06.03.06.54
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 06 Jul 2022 03:06:54 -0700 (PDT)
-Message-ID: <2829e71b-1769-ce24-f810-d63e619aa5f0@linaro.org>
-Date:   Wed, 6 Jul 2022 12:06:53 +0200
+        h=x-gm-message-state:message-id:date:from:to:cc:subject:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=A9xeNdZDUIjr4l2jLGqq1SJhUmTfqKYqMsJa/JfV6ag=;
+        b=Ee5hj6VDaM0SOqExC6k7vcVSvgI8KQIwsqBbBM4CPXly9y/oCe6DDn2tLuFo2/cMpd
+         z9oUGkAmqEGTZbCEma+8/SqVZZ3vtJG8lUOaB0ZCnH6/arhtT+0gssAHhBE3d1gELBOp
+         PlHOSlR8NX9Jo3GvJXcErDQnKgI6CfHyZu7ioGo5dOvyJtMFPevMVXah8aXpG5BOIj8v
+         AryU/4VFlOQMyhqhI+eaMvctaPBIf4b0V5OwQfBeBPbKezJKBWzWHMrr5AkEaxifGz0r
+         JIIsAvHygMsi0NKtA0G9QzEIKg9/vqPXv1iho+YINEPwlhiYzErFPMxh8KDtlhrmhfF8
+         i5Ag==
+X-Gm-Message-State: AJIora+CnENvccohGFJTtwo1oQ6Nx5TI+9tGQCaOKDFoxRCH4cUHAEPl
+        RRZL36mm7Tzq4PC1OStUbGk=
+X-Google-Smtp-Source: AGRyM1vG14ChU514xvqFxRVaxYHsajgsNZGdG9Vwh2mJxfoeSO8ko8QGjp0eczHjU6mfpOj75LWtXg==
+X-Received: by 2002:a17:907:16a6:b0:726:574d:d31f with SMTP id hc38-20020a17090716a600b00726574dd31fmr37626967ejc.514.1657103029693;
+        Wed, 06 Jul 2022 03:23:49 -0700 (PDT)
+Received: from Ansuel-xps. (93-42-70-190.ip85.fastwebnet.it. [93.42.70.190])
+        by smtp.gmail.com with ESMTPSA id p17-20020a056402501100b0043787ad7cfasm20919288eda.22.2022.07.06.03.23.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 06 Jul 2022 03:23:49 -0700 (PDT)
+Message-ID: <62c562b5.1c69fb81.d69fc.4079@mx.google.com>
+X-Google-Original-Message-ID: <YsVe0Pu4FooN5XYt@Ansuel-xps.>
+Date:   Wed, 6 Jul 2022 12:07:12 +0200
+From:   Christian Marangi <ansuelsmth@gmail.com>
+To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Cc:     Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
+Subject: Re: [PATCH v2 3/3] clk: qcom: lcc-ipq806x: convert to parent data
+References: <20220621163326.16858-1-ansuelsmth@gmail.com>
+ <20220621163326.16858-3-ansuelsmth@gmail.com>
+ <CAA8EJpqQTTevQa4pQg3E+x4_AOjYo8ajOqUrfwGsVtC8N=bpOw@mail.gmail.com>
+ <62b228b6.1c69fb81.e4673.34a2@mx.google.com>
+ <CAA8EJprb=xV9+gZMANAYrt_JnKAtC89h1RAosL+g517_-Ugd2g@mail.gmail.com>
+ <62c4a38b.1c69fb81.4d58e.ce99@mx.google.com>
+ <CAA8EJprGf6V9K1gFDCE+bnKwhjVgLvruTRAZ-AOqfPsbmmYRLA@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH V3 02/11] dt-bindings: pci: tegra: Convert to json-schema
-Content-Language: en-US
-To:     Vidya Sagar <vidyas@nvidia.com>, Rob Herring <robh@kernel.org>
-Cc:     bhelgaas@google.com, lorenzo.pieralisi@arm.com,
-        thierry.reding@gmail.com, jonathanh@nvidia.com, kishon@ti.com,
-        vkoul@kernel.org, kw@linux.com, p.zabel@pengutronix.de,
-        mperttunen@nvidia.com, linux-pci@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-tegra@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-phy@lists.infradead.org,
-        kthota@nvidia.com, mmaddireddy@nvidia.com, sagar.tv@gmail.com,
-        Thierry Reding <treding@nvidia.com>
-References: <20220629060435.25297-1-vidyas@nvidia.com>
- <20220629060435.25297-3-vidyas@nvidia.com>
- <20220630210449.GA3283899-robh@kernel.org>
- <e971a557-3387-efcf-87ec-983b998c5e93@nvidia.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <e971a557-3387-efcf-87ec-983b998c5e93@nvidia.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAA8EJprGf6V9K1gFDCE+bnKwhjVgLvruTRAZ-AOqfPsbmmYRLA@mail.gmail.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 06/07/2022 11:53, Vidya Sagar wrote:
->>> +  nvidia,bpmp:
->>> +    $ref: /schemas/types.yaml#/definitions/phandle-array
->>> +    description: |
->>> +      Must contain a pair of phandle to BPMP controller node followed by controller ID. Following
->>> +      are the controller IDs for each controller:
->>> +
->>> +        0: C0
->>> +        1: C1
->>> +        2: C2
->>> +        3: C3
->>> +        4: C4
->>> +        5: C5
->>> +    items:
->>> +      - items:
->>> +          - minimum: 0
->>> +            maximum: 0xffffffff
->>
->> That's already the limit. Just a description is fine.
->>
->>> +          - enum: [ 0, 1, 2, 3, 4, 5 ]
->>
->> maximum: 5
+On Wed, Jul 06, 2022 at 10:34:04AM +0300, Dmitry Baryshkov wrote:
+> On Tue, 5 Jul 2022 at 23:48, Christian Marangi <ansuelsmth@gmail.com> wrote:
+> >
+> > On Tue, Jun 21, 2022 at 11:43:10PM +0300, Dmitry Baryshkov wrote:
+> > > On Tue, 21 Jun 2022 at 23:23, Christian Marangi <ansuelsmth@gmail.com> wrote:
+> > > >
+> > > > On Tue, Jun 21, 2022 at 08:15:57PM +0300, Dmitry Baryshkov wrote:
+> > > > > On Tue, 21 Jun 2022 at 19:33, Christian Marangi <ansuelsmth@gmail.com> wrote:
+> > > > > >
+> > > > > > Convert lcc-ipq806x driver to parent_data API.
+> > > > > >
+> > > > > > Signed-off-by: Christian Marangi <ansuelsmth@gmail.com>
+> > > > > > ---
+> > > > > > v2:
+> > > > > > - Fix Sob tag
+> > > > > >
+> > > > > >  drivers/clk/qcom/lcc-ipq806x.c | 79 +++++++++++++++++++---------------
+> > > > > >  1 file changed, 44 insertions(+), 35 deletions(-)
+> > > > > >
+> > > > > > diff --git a/drivers/clk/qcom/lcc-ipq806x.c b/drivers/clk/qcom/lcc-ipq806x.c
+> > > > > > index ba90bebba597..c07ca8dc6e3a 100644
+> > > > > > --- a/drivers/clk/qcom/lcc-ipq806x.c
+> > > > > > +++ b/drivers/clk/qcom/lcc-ipq806x.c
+> > > > > > @@ -24,6 +24,10 @@
+> > > > > >  #include "clk-regmap-mux.h"
+> > > > > >  #include "reset.h"
+> > > > > >
+> > > > > > +static const struct clk_parent_data gcc_pxo[] = {
+> > > > > > +       { .fw_name = "pxo", .name = "pxo" },
+> > > > >
+> > > > > I think you'd use .name = "pxo_board" here. You don't need to use the
+> > > > > interim clock.
+> > > > >
+> > > >
+> > > > In gcc and in the rest of this driver we use pxo. Wonder what is right?
+> > >
+> > > I'd use .fw_name = "pxo", .name = "pxo_board", like the rest of drivers do.
+> > >
+> >
+> > Will do the change, but I need an explaination... Is the use of
+> > pxo_board correct?
+> >
+> > I'm sending a patch that sets the pxo_board fixed clock in dts to output
+> > "pxo". The only clock that still use pxo_board is rpm, everything else
+> > at least for ipq806x use pxo and i'm sending a patch to use pxo for rpm.
+> >
+> > Considering pxo is always present and pxo_board should be dropped
+> > because every ipq806x driver use "pxo".
+> >
+> > What is correct naming pxo or pxo_board? I assume pxo right?
 > 
-> Setting the maximum to '5' is resulting in the following error.
+> This might be not the case for the ipq806x, but here is the story for
+> all other (old) platforms:
+> - gcc driver manually registered pxo/cxo/xo fixed factor clocks.
+> - Then we started adding *xo_board clocks to the DT, as they represent
+> the external oscillators
+> -  PXO clock consumers receive a clocks entry with clock-names = "pxo"
+> which points to the pxo_board
+> - All clock drivers are now being switched to use .fw_name = "pxo",
+> .name = "pxo_board" to use the DT-defined pxo_board clock.
 > 
-> pcie-ep@141a0000: nvidia,bpmp:0:0: 4294967295 is greater than the 
-> maximum of 5
-> 
-> Could you please help me understand why I'm seeing this error?
+> Hopefully at some point we can then drop the manually registered pxo
+> clock and always use the DT-based one.
+>
 
-Trim your replies.
+Okok. I got confused since looking at the code factor clock is really
+just a hack to handle both driver that use pxo_board and pxo cause from
+what I notice it's the same clock with different naming.
 
-Why adding minimum:5 to the phandle? Rob said add a description. Nothing
-about minimum.
+Sooo keep using pxo_board with the fact that pxo is always present seems
+to be redundant but if that's the pattern then I will just keep
+pxo_board in .name where it's used.
 
-Best regards,
-Krzysztof
+> -- 
+> With best wishes
+> Dmitry
+
+-- 
+	Ansuel

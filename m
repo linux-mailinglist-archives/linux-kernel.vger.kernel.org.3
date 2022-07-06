@@ -2,59 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DAF3B5688AB
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 14:50:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E51A45688AC
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 14:50:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233368AbiGFMuG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Jul 2022 08:50:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52342 "EHLO
+        id S233638AbiGFMud (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Jul 2022 08:50:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52634 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230233AbiGFMuC (ORCPT
+        with ESMTP id S230233AbiGFMu3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Jul 2022 08:50:02 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0333BB5E;
-        Wed,  6 Jul 2022 05:50:01 -0700 (PDT)
-Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        Wed, 6 Jul 2022 08:50:29 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE8D814015
+        for <linux-kernel@vger.kernel.org>; Wed,  6 Jul 2022 05:50:28 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 519CC66019A9;
-        Wed,  6 Jul 2022 13:49:59 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1657111799;
-        bh=Lx6CLz1kr9O2ozQR9usOEE/FDQenTT+4HsaadEWYqIM=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=OMgTIWt3U+1cB9BYr+gOcyOsPqK7v8e8P/WBhNWMbDxkYH5kYMpttkvgY5+5W5nSu
-         v105C1/AilNKoz3pMZRnKRHPj/fuZ6YHE9pxaV2DLodX3d9ifVJbRT0QhB/1oE1lAt
-         RmmXxuAk23goJrllyrOfqZFccEOCIrrdfTyUu+9DLpCTFKne2PVrzkCs7xDyBFs5zE
-         BsOevQASYsIP6JGyauvP1uTQ01Miu9hiSni2n6Oyo0OvyTgnOaIKFLvGulj8YMyYq/
-         XLFC3pwezEXn9trqoX5eeEUwmLlYjVVO9k73mYvUDUoxDQQvRvxPBwkINmbrLRh5o6
-         BSbqQr8aNjDxA==
-Message-ID: <57367b11-f2d4-476b-b92d-16c1726316c0@collabora.com>
-Date:   Wed, 6 Jul 2022 14:49:56 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH v3 RESEND 0/4] MediaTek Helio X10 MT6795 - MT6331/6332
- Regulators
-Content-Language: en-US
-To:     Mark Brown <broonie@kernel.org>
-Cc:     lgirdwood@gmail.com, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, matthias.bgg@gmail.com,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org
-References: <20220706100912.200698-1-angelogioacchino.delregno@collabora.com>
- <YsV9IerWCoa/xtwM@sirena.org.uk>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <YsV9IerWCoa/xtwM@sirena.org.uk>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 84654222D7;
+        Wed,  6 Jul 2022 12:50:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1657111827; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=rAg/aAM0J45A3TDXizSENjASaUbjCJLx7BuRpQuqz/A=;
+        b=nmRVG3RQDPqmhwJW8kS5x64X2b9TdtB2nf+4df33VlQYkf9/knejSOs3Nf7tPcyJdegaVR
+        p1KK1MLEpQ9X0n9bu0N+jy/gXOemkIMWeUuKk+O0y7EgMqNiiEcuHEBNW88l+MElCmTwto
+        DiCZF3E52hibXM6bmVkV0Sl8j6jjA0A=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1657111827;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=rAg/aAM0J45A3TDXizSENjASaUbjCJLx7BuRpQuqz/A=;
+        b=SqZi7IG16VJWs30h44AFezM7TT0jhw1XK7npqdI3kIxaxKyPdbmqBkfLF5Tq6oSlSVz99a
+        VVe8vDK4eM4Z0wCg==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 60291134CF;
+        Wed,  6 Jul 2022 12:50:27 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id O4eDFhOFxWIlGgAAMHmgww
+        (envelope-from <tiwai@suse.de>); Wed, 06 Jul 2022 12:50:27 +0000
+Date:   Wed, 06 Jul 2022 14:50:26 +0200
+Message-ID: <87k08qs8vh.wl-tiwai@suse.de>
+From:   Takashi Iwai <tiwai@suse.de>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Mark Brown <broonie@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: [GIT PULL] sound fixes for 5.19-rc6
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) Emacs/27.2 Mule/6.0
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=ISO-8859-2
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -63,21 +69,143 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 06/07/22 14:16, Mark Brown ha scritto:
-> On Wed, Jul 06, 2022 at 12:09:08PM +0200, AngeloGioacchino Del Regno wrote:
->> In an effort to give some love to the apparently forgotten MT6795 SoC,
->> I am upstreaming more components that are necessary to support platforms
->> powered by this one apart from a simple boot to serial console.
-> 
-> This previously got 0day failures due to missing dependencies which
-> need would need a merge with IIRC MFD, I see no reference in the cover
-> letter to dependencies?
+Linus,
 
-The only blocker for this series was the MFD patch, which got picked and
-it's present in next-20220706 (as you suggested me to resend when things
-were picked... I decided to wait until they actually landed on -next...)
+please pull sound fixes for v5.19-rc6 from:
 
-https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit/?h=next-20220706&id=ad7f984a6aa9722443c1db9e8f72609bf06a8910
+  git://git.kernel.org/pub/scm/linux/kernel/git/tiwai/sound.git tags/sound-5.19-rc6
 
-Regards,
-Angelo
+The topmost commit is c5e58c4545a69677d078b4c813b5d10d3481be9c
+
+----------------------------------------------------------------
+
+sound fixes for 5.19-rc6
+
+This became largish as it includes the pending ASoC fixes.
+Almost all changes are device-specific small fixes, while many of
+them are coverage for mixer issues that were detected by selftest.
+In addition, usual suspects for HD/USB-audio are there.
+
+----------------------------------------------------------------
+
+Amadeusz S³awiñski (2):
+      ASoC: Intel: avs: Fix parsing UUIDs in topology
+      ASoC: Remove unused hw_write_t type
+
+Charles Keepax (8):
+      ASoC: wm_adsp: Fix event for preloader
+      ASoC: wm5110: Fix DRE control
+      ASoC: cs35l41: Correct some control names
+      ASoC: dapm: Initialise kcontrol data for mux/demux controls
+      ASoC: cs35l41: Add ASP TX3/4 source to register patch
+      ASoC: cs47l15: Fix event generation for low power mux control
+      ASoC: madera: Fix event generation for OUT1 demux
+      ASoC: madera: Fix event generation for rate controls
+
+Dan Carpenter (1):
+      ASoC: SOF: mediatek: Fix error code in probe
+
+Egor Vorontsov (2):
+      ALSA: usb-audio: Add quirk for Fiero SC-01
+      ALSA: usb-audio: Add quirk for Fiero SC-01 (fw v1.0.0)
+
+Hans de Goede (1):
+      ASoC: Intel: bytcr_wm5102: Fix GPIO related probe-ordering problem
+
+John Veness (1):
+      ALSA: usb-audio: Add quirks for MacroSilicon MS2100/MS2106 devices
+
+Judy Hsiao (1):
+      ASoC: rockchip: i2s: switch BCLK to GPIO
+
+Kuninori Morimoto (1):
+      ASoC: ak4613: cares Simple-Audio-Card case for TDM
+
+Mark Brown (3):
+      ASoC: ops: Fix off by one in range control validation
+      ASoC: wcd9335: Fix spurious event generation
+      ASoC: wcd938x: Fix event generation for some controls
+
+Peter Ujfalusi (5):
+      ASoC: SOF: Intel: hda-dsp: Expose hda_dsp_core_power_up()
+      ASoC: SOF: Intel: hda-loader: Make sure that the fw load sequence is followed
+      ASoC: SOF: Intel: hda-loader: Clarify the cl_dsp_init() flow
+      ASoC: SOF: ipc3-topology: Move and correct size checks in sof_ipc3_control_load_bytes()
+      ASoC: SOF: Intel: hda: Fix compressed stream position tracking
+
+Pierre-Louis Bossart (11):
+      ASoC: Realtek/Maxim SoundWire codecs: disable pm_runtime on remove
+      ASoC: rt711-sdca-sdw: fix calibrate mutex initialization
+      ASoC: Intel: sof_sdw: handle errors on card registration
+      ASoC: rt711: fix calibrate mutex initialization
+      ASoC: rt7*-sdw: harden jack_detect_handler
+      ASoC: codecs: rt700/rt711/rt711-sdca: initialize workqueues in probe
+      ASoC: codecs: rt700/rt711/rt711-sdca: resume bus/codec in .set_jack_detect
+      MAINTAINERS: update ASoC/Intel/SOF maintainers
+      ASoC: SOF: pm: add explicit behavior for ACPI S1 and S2
+      ASoC: SOF: pm: add definitions for S4 and S5 states
+      ASoC: SOF: Intel: disable IMR boot when resuming from ACPI S4 and S5 states
+
+Shuming Fan (1):
+      ASoC: rt711-sdca: fix kernel NULL pointer dereference when IO error
+
+Srinivas Kandagatla (2):
+      ASoC: qdsp6: q6apm-dai: unprepare stream if its already prepared
+      MAINTAINERS: update ASoC Qualcomm maintainer email-id
+
+Takashi Iwai (2):
+      ALSA: usb-audio: Workarounds for Behringer UMC 204/404 HD
+      ALSA: cs46xx: Fix missing snd_card_free() call at probe error
+
+Tim Crawford (1):
+      ALSA: hda/realtek: Add quirk for Clevo L140PU
+
+Yassine Oudjana (1):
+      ASoC: wcd9335: Remove RX channel from old list before adding it to a new one
+
+---
+ MAINTAINERS                            |  11 +-
+ include/sound/soc.h                    |   2 -
+ sound/pci/cs46xx/cs46xx.c              |  22 +--
+ sound/pci/hda/patch_realtek.c          |   1 +
+ sound/soc/codecs/ak4613.c              |   6 +-
+ sound/soc/codecs/cs35l41-lib.c         |  10 +-
+ sound/soc/codecs/cs35l41.c             |  12 +-
+ sound/soc/codecs/cs47l15.c             |   5 +-
+ sound/soc/codecs/madera.c              |  14 +-
+ sound/soc/codecs/max98373-sdw.c        |  12 +-
+ sound/soc/codecs/rt1308-sdw.c          |  11 ++
+ sound/soc/codecs/rt1316-sdw.c          |  11 ++
+ sound/soc/codecs/rt5682-sdw.c          |   5 +-
+ sound/soc/codecs/rt700-sdw.c           |   6 +-
+ sound/soc/codecs/rt700.c               |  30 ++--
+ sound/soc/codecs/rt711-sdca-sdw.c      |   9 +-
+ sound/soc/codecs/rt711-sdca.c          |  44 +++---
+ sound/soc/codecs/rt711-sdw.c           |   9 +-
+ sound/soc/codecs/rt711.c               |  40 +++---
+ sound/soc/codecs/rt715-sdca-sdw.c      |  12 ++
+ sound/soc/codecs/rt715-sdw.c           |  12 ++
+ sound/soc/codecs/wcd9335.c             |   8 +-
+ sound/soc/codecs/wcd938x.c             |  12 ++
+ sound/soc/codecs/wm5110.c              |   8 +-
+ sound/soc/codecs/wm_adsp.c             |   2 +-
+ sound/soc/intel/avs/topology.c         |   4 +-
+ sound/soc/intel/boards/bytcr_wm5102.c  |  13 +-
+ sound/soc/intel/boards/sof_sdw.c       |  51 ++++---
+ sound/soc/qcom/qdsp6/q6apm-dai.c       |   6 +
+ sound/soc/rockchip/rockchip_i2s.c      | 160 ++++++++++++++++-----
+ sound/soc/soc-dapm.c                   |   5 +
+ sound/soc/soc-ops.c                    |   4 +-
+ sound/soc/sof/intel/hda-dsp.c          |  10 +-
+ sound/soc/sof/intel/hda-loader.c       |  13 +-
+ sound/soc/sof/intel/hda-pcm.c          |  74 +---------
+ sound/soc/sof/intel/hda-stream.c       |  94 ++++++++++++-
+ sound/soc/sof/intel/hda.h              |   4 +
+ sound/soc/sof/ipc3-topology.c          |  23 ++-
+ sound/soc/sof/mediatek/mt8186/mt8186.c |   2 +-
+ sound/soc/sof/pm.c                     |  21 ++-
+ sound/soc/sof/sof-priv.h               |   2 +
+ sound/usb/quirks-table.h               | 248 +++++++++++++++++++++++++++++++++
+ sound/usb/quirks.c                     |  13 ++
+ 43 files changed, 812 insertions(+), 249 deletions(-)
+

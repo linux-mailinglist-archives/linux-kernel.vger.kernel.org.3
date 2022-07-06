@@ -2,108 +2,163 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D63195695B1
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 01:14:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AF1655695BD
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 01:17:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234342AbiGFXOE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Jul 2022 19:14:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59938 "EHLO
+        id S234404AbiGFXQB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Jul 2022 19:16:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33418 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234351AbiGFXN4 (ORCPT
+        with ESMTP id S233992AbiGFXP4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Jul 2022 19:13:56 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DEEDE2BB05
-        for <linux-kernel@vger.kernel.org>; Wed,  6 Jul 2022 16:13:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1657149226; x=1688685226;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=MsH9VfZ6s5BBxdiYFO1xXZm3xVBgILtliRATJrH+FVI=;
-  b=dAUi/dSFMUqofWzUUR98KwSecIZanummffzuBDzXro1RSQF/jRLeorgA
-   Qsn90W3mFo62zEpSkifugJ/EBA4Ktd1xfqVTw1mDdbQZEYiaGqCyV87pY
-   UCivTkvDCbEkY6ltVrS5H2yzWOpnBz2lHye87MoxGY/Vf5gkuJtTklBk4
-   NhmFVuZfpLwPAs295cefOsehCReoMKoXhDJlkP/xn7eenc7Ydsx4iZDmL
-   CBT4ROJbpp/NC6FMpGTEfr/DZNkBdu4eAoiRTAtSYa3lUeCd+CCPsXP8G
-   51OoVHrpnFkIh04nV7Wh2E9HomQLcGCLaCnaCYfbRQwlbRS10JCdr20vt
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10400"; a="272680677"
-X-IronPort-AV: E=Sophos;i="5.92,251,1650956400"; 
-   d="scan'208";a="272680677"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jul 2022 16:13:46 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,251,1650956400"; 
-   d="scan'208";a="770216669"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by orsmga005.jf.intel.com with ESMTP; 06 Jul 2022 16:13:42 -0700
-Received: by black.fi.intel.com (Postfix, from userid 1000)
-        id A5F0E11D; Thu,  7 Jul 2022 02:13:49 +0300 (EEST)
-Date:   Thu, 7 Jul 2022 02:13:49 +0300
-From:   "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
-To:     Alexander Potapenko <glider@google.com>
-Cc:     Dave Hansen <dave.hansen@linux.intel.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        the arch/x86 maintainers <x86@kernel.org>,
-        Kostya Serebryany <kcc@google.com>,
-        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
-        Andrey Konovalov <andreyknvl@gmail.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        "H . J . Lu" <hjl.tools@gmail.com>,
-        Andi Kleen <ak@linux.intel.com>,
-        Rick Edgecombe <rick.p.edgecombe@intel.com>,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCHv4 3/8] mm: Pass down mm_struct to untagged_addr()
-Message-ID: <20220706231349.4ghhewbfpzjln56u@black.fi.intel.com>
-References: <20220622162230.83474-1-kirill.shutemov@linux.intel.com>
- <20220622162230.83474-4-kirill.shutemov@linux.intel.com>
- <CAG_fn=WgyitSd9h2ni2xpBBvgnoGTcwZOpWyNE5QRSRn+PcC=A@mail.gmail.com>
+        Wed, 6 Jul 2022 19:15:56 -0400
+Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FF642B610;
+        Wed,  6 Jul 2022 16:15:55 -0700 (PDT)
+Received: from ip5b412258.dynamic.kabel-deutschland.de ([91.65.34.88] helo=phil.lan)
+        by gloria.sntech.de with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <heiko@sntech.de>)
+        id 1o9EFC-0002yn-Oq; Thu, 07 Jul 2022 01:15:42 +0200
+From:   Heiko Stuebner <heiko@sntech.de>
+To:     palmer@dabbelt.com, paul.walmsley@sifive.com
+Cc:     linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+        wefu@redhat.com, guoren@kernel.org, cmuellner@linux.com,
+        philipp.tomsich@vrull.eu, hch@lst.de, samuel@sholland.org,
+        atishp@atishpatra.org, anup@brainfault.org, mick@ics.forth.gr,
+        robh+dt@kernel.org, krzk+dt@kernel.org, devicetree@vger.kernel.org,
+        drew@beagleboard.org, rdunlap@infradead.org,
+        Heiko Stuebner <heiko@sntech.de>
+Subject: [PATCH v7 0/4] riscv: implement Zicbom-based CMO instructions + the t-head variant
+Date:   Thu,  7 Jul 2022 01:15:32 +0200
+Message-Id: <20220706231536.2041855-1-heiko@sntech.de>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAG_fn=WgyitSd9h2ni2xpBBvgnoGTcwZOpWyNE5QRSRn+PcC=A@mail.gmail.com>
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,T_SPF_HELO_TEMPERROR autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jul 05, 2022 at 05:42:21PM +0200, Alexander Potapenko wrote:
-> Kirill,
-> 
-> 
-> > diff --git a/lib/strnlen_user.c b/lib/strnlen_user.c
-> > index feeb935a2299..abc096a68f05 100644
-> > --- a/lib/strnlen_user.c
-> > +++ b/lib/strnlen_user.c
-> > @@ -97,7 +97,7 @@ long strnlen_user(const char __user *str, long count)
-> >                 return 0;
-> >
-> >         max_addr = TASK_SIZE_MAX;
-> > -       src_addr = (unsigned long)untagged_addr(str);
-> > +       src_addr = (unsigned long)untagged_addr(current->mm, str);
-> 
-> In a downstream kernel with LAM disabled I'm seeing current->mm being
-> NULL at this point, because strnlen_user() is being called by
-> kdevtmpfs.
-> IIUC current->mm is only guaranteed to be non-NULL in the userspace
-> process context, whereas untagged_addr() may get called in random
-> places.
-> 
-> Am I missing something?
+This series is based on the alternatives changes done in my svpbmt series
+and thus also depends on Atish's isa-extension parsing series.
 
-Hm. Could you show a traceback?
+It implements using the cache-management instructions from the  Zicbom-
+extension to handle cache flush, etc actions on platforms needing them.
 
-As strnlen_user() intended to be used on an user string I expected it to
-be called from a process context. I guess I'm wrong, but I don't yet
-understand why.
+SoCs using cpu cores from T-Head like the Allwinne D1 implement a
+different set of cache instructions. But while they are different,
+instructions they provide the same functionality, so a variant can
+easly hook into the existing alternatives mechanism on those.
+
+
+An ongoing discussion is about the currently used pre-coded
+instructions. Palmer's current thinking is that we should wait
+until the relevant instructions have landed in binutils.
+
+The main Zicbom instructions are in toolchains now and at least
+Debian also carries a binutils snapshot with it, but the T-Head
+variant still uses pre-coded instructions for now.
+
+The series sits on top of my svpbmt fixup series, which
+for example includes the conversion away from function pointers
+for the check-functions.
+
+
+It also uses my nops-series to shorten multiple nop statements:
+https://lore.kernel.org/r/20220607143059.1054074-1-heiko@sntech.de
+
+
+A new dma-noncoherent property was added for the devicetree-specification
+and dt-schema in:
+- https://www.spinics.net/lists/devicetree-spec/msg01053.html
+- https://github.com/devicetree-org/dt-schema/pull/78
+
+The dtschema-patch was already merged and patch1 in this series
+got a reviewed-by from Rob, so I guess that new property should be
+ok to use.
+
+changes in v7:
+- add recently received review-tags
+- fix wrong rv32 mabi when testing for Zicbom in Kconfig
+
+changes in v6:
+- add recently received review-tags
+- adapt non-coherent patch subject as suggested by Christoph Hellwig
+
+changes in v5:
+- beautify of_dma_is_coherent as suggested by Christoph Hellwig
+- WARN_TAINT when ARCH_DMA_MINALIGN smaller than riscv,cbom-block-size
+  (similar to how arm64 does this)
+- add a function to track if non-coherent handling is available
+- WARN_TAINT if a device is non-coherent but no non-coherent handling
+- use clean instead of inval in arch_sync_dma_for_device:DMA_FROM_DEVICE
+  hopefully I understood
+    https://lore.kernel.org/linux-arm-kernel/20220610151228.4562-1-will@kernel.org/T/
+  correctly in this
+
+changes in v4:
+- modify of_dma_is_coherent() also handle coherent system
+  with maybe noncoherent devices
+- move Zicbom to use real instructions
+- split off the actual dma-noncoherent code from the Zicbom
+  extension
+- Don't assumes devices are non-coherent, instead default to
+  coherent and require the non-coherent ones to be marked
+- CPUFEATURE_ZICBOM instead of CPUFEATURE_CMO
+- fix used cache addresses
+- drop some unused headers from dma-noncoherent.c
+- move unsigned long cast when calling ALT_CMO_OP
+- remove unneeded memset-0
+- define ARCH_DMA_MINALIGN
+- use flush instead of inval in arch_sync_dma_for_cpu()
+- depend on !XIP_KERNEL
+- trim some line lengths
+- improve Kconfig description
+
+changes in v3:
+- rebase onto 5.19-rc1 + svpbmt-fixup-series
+- adapt wording for block-size binding
+- include asm/cacheflush.h into dma-noncoherent to fix the
+  no-prototype error clang seems to generate
+- use __nops macro for readability
+- add some received tags
+- add a0 to the clobber list
+
+changes in v2:
+- cbom-block-size is hardware-specific and comes from firmware
+- update Kconfig name to use the ISA extension name
+- select the ALTERNATIVES symbol when enabled
+- shorten the line lengths of the errata-assembly
+
+Heiko Stuebner (4):
+  of: also handle dma-noncoherent in of_dma_is_coherent()
+  dt-bindings: riscv: document cbom-block-size
+  riscv: Add support for non-coherent devices using zicbom extension
+  riscv: implement cache-management errata for T-Head SoCs
+
+ .../devicetree/bindings/riscv/cpus.yaml       |   5 +
+ arch/riscv/Kconfig                            |  31 +++++
+ arch/riscv/Kconfig.erratas                    |  11 ++
+ arch/riscv/Makefile                           |   4 +
+ arch/riscv/errata/thead/errata.c              |  20 ++++
+ arch/riscv/include/asm/cache.h                |   4 +
+ arch/riscv/include/asm/cacheflush.h           |  10 ++
+ arch/riscv/include/asm/errata_list.h          |  59 ++++++++-
+ arch/riscv/include/asm/hwcap.h                |   1 +
+ arch/riscv/kernel/cpu.c                       |   1 +
+ arch/riscv/kernel/cpufeature.c                |  24 ++++
+ arch/riscv/kernel/setup.c                     |   2 +
+ arch/riscv/mm/Makefile                        |   1 +
+ arch/riscv/mm/dma-noncoherent.c               | 112 ++++++++++++++++++
+ drivers/of/address.c                          |  17 +--
+ 15 files changed, 293 insertions(+), 9 deletions(-)
+ create mode 100644 arch/riscv/mm/dma-noncoherent.c
 
 -- 
- Kirill A. Shutemov
+2.35.1
+

@@ -2,58 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2633C568775
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 13:56:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C31156877C
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 13:59:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232789AbiGFL4r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Jul 2022 07:56:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57088 "EHLO
+        id S233352AbiGFL55 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Jul 2022 07:57:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57638 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229804AbiGFL4q (ORCPT
+        with ESMTP id S231816AbiGFL5r (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Jul 2022 07:56:46 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1C692872D;
-        Wed,  6 Jul 2022 04:56:45 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Wed, 6 Jul 2022 07:57:47 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 53B7D28738
+        for <linux-kernel@vger.kernel.org>; Wed,  6 Jul 2022 04:57:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1657108665;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=WAo9GYuIhcJZzsSVZdCnRCWgE9wNAJi2c7UqzRAk9fo=;
+        b=jARAXnmvXzCOKX50rfWYGNaE3Iw6tlm5s94rtQrqdErkRN99ImVM4mSV5t26WjJROSpq75
+        NMMd1JoeL9WiEWZ6C02WRMkWi2BU70AQUcmLwdYyJbFf5hiijEyRhHv0kg1E591fmy3x92
+        uOLeSLM8LD7rJnHl5wIQ8aZnLlRmP9k=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-562-aR6uzQfFM12HDy-IUuvHBg-1; Wed, 06 Jul 2022 07:57:35 -0400
+X-MC-Unique: aR6uzQfFM12HDy-IUuvHBg-1
+Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 91A2F61EF0;
-        Wed,  6 Jul 2022 11:56:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0BBF2C341C0;
-        Wed,  6 Jul 2022 11:56:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1657108605;
-        bh=JhfNIBk6QV+You43ySQJl94/5cn2lk5MAMXG7si7Ar4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=n/XQDNnHedixbjgH5tLXVkiiS6yP2P29RGmNN5aGNS9kjcwJYBr1jfoklSS6NGgNs
-         UZzlaIe/sNXx963pZsvf1uWRgJjTKF+ZbzRgEkiBVQvumbK6D2cdTdxMMdZoapsNM0
-         Hs8iTTrk1RmrS0fcpA6hWUbba/aGm+wtnLj+YFKoOE9B9LoNTWcCARJV5eujMdtMD+
-         F41ha2s2HXU9wR02GaG7zMoJcoIOiBLUcMVLimqybrXgeD7zKGClr/BNsw++YsLTlG
-         2pTjEfRCzdxoJa1nrxwuw9IQM9wK8Z4cZKRYXCNkPmNndi+1VTHcqn5vkRcVMtRoTV
-         EMvD8ncAdj7bA==
-Date:   Wed, 6 Jul 2022 12:56:39 +0100
-From:   Will Deacon <will@kernel.org>
-To:     Sai Prakash Ranjan <quic_saipraka@quicinc.com>
-Cc:     Robin Murphy <robin.murphy@arm.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        iommu@lists.linux-foundation.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, quic_guptap@quicinc.com,
-        Rob Clark <robdclark@chromium.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>
-Subject: Re: [PATCHv2] iommu/arm-smmu-qcom: Add debug support for TLB sync
- timeouts
-Message-ID: <20220706115638.GD2403@willie-the-truck>
-References: <20220526041403.9984-1-quic_saipraka@quicinc.com>
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 2297489C8B3;
+        Wed,  6 Jul 2022 11:57:35 +0000 (UTC)
+Received: from starship (unknown [10.40.194.38])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id C6F4840CF8E7;
+        Wed,  6 Jul 2022 11:57:32 +0000 (UTC)
+Message-ID: <1521442faa5abeb4449209550015040f2b2db849.camel@redhat.com>
+Subject: Re: [PATCH v2 05/21] KVM: nVMX: Prioritize TSS T-flag #DBs over
+ Monitor Trap Flag
+From:   Maxim Levitsky <mlevitsk@redhat.com>
+To:     Sean Christopherson <seanjc@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>
+Cc:     Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Oliver Upton <oupton@google.com>,
+        Peter Shier <pshier@google.com>
+Date:   Wed, 06 Jul 2022 14:57:31 +0300
+In-Reply-To: <20220614204730.3359543-6-seanjc@google.com>
+References: <20220614204730.3359543-1-seanjc@google.com>
+         <20220614204730.3359543-6-seanjc@google.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.36.5 (3.36.5-2.fc32) 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220526041403.9984-1-quic_saipraka@quicinc.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 2.84 on 10.11.54.1
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -61,36 +69,70 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 26, 2022 at 09:44:03AM +0530, Sai Prakash Ranjan wrote:
-> TLB sync timeouts can be due to various reasons such as TBU power down
-> or pending TCU/TBU invalidation/sync and so on. Debugging these often
-> require dumping of some implementation defined registers to know the
-> status of TBU/TCU operations and some of these registers are not
-> accessible in non-secure world such as from kernel and requires SMC
-> calls to read them in the secure world. So, add this debug support
-> to dump implementation defined registers for TLB sync timeout issues.
+On Tue, 2022-06-14 at 20:47 +0000, Sean Christopherson wrote:
+> Service TSS T-flag #DBs prior to pending MTFs, as such #DBs are higher
+> priority than MTF. 
+>  KVM itself doesn't emulate TSS #DBs, and any such
+> exceptions injected from L1 will be handled by hardware (or morphed to
+> a fault-like exception if injection fails), but theoretically userspace
+> could pend a TSS T-flag #DB in conjunction with a pending MTF.
+
+
+After reading the Jim's table 6-2, this makes sense, however note that
+*check_nested_events is a bit different in the regard that CPU checks
+the events when the previous instruction fully done committing it state,
+and all it is left of it is maybe pending trap like events,
+
+but in the KVM, the *check_nested_events, happens when we still didn't deliver
+the fault like exception from the previous instruction, and thus,
+a fault like exception appears to have higher priority than a pending MTF.
+
+Assuming that my analysis is right:
+
+Reviewed-by: Maxim Levitsky <mlevitsk@redhat.com>
+
+Best regards,
+	Maxim Levitsky
+
+
 > 
-> Signed-off-by: Sai Prakash Ranjan <quic_saipraka@quicinc.com>
+> Note, there's no known use case this fixes, it's purely to be technically
+> correct with respect to Intel's SDM.
+> 
+> Cc: Oliver Upton <oupton@google.com>
+> Cc: Peter Shier <pshier@google.com>
+> Fixes: 5ef8acbdd687 ("KVM: nVMX: Emulate MTF when performing instruction emulation")
+> Signed-off-by: Sean Christopherson <seanjc@google.com>
 > ---
+>  arch/x86/kvm/vmx/nested.c | 8 +++++---
+>  1 file changed, 5 insertions(+), 3 deletions(-)
 > 
-> Changes in v2:
->  * Use scm call consistently so that it works on older chipsets where
->    some of these regs are secure registers.
->  * Add device specific data to get the implementation defined register
->    offsets.
-> 
-> ---
->  drivers/iommu/arm/arm-smmu/arm-smmu-qcom.c | 161 ++++++++++++++++++---
->  drivers/iommu/arm/arm-smmu/arm-smmu.c      |   2 +
->  drivers/iommu/arm/arm-smmu/arm-smmu.h      |   1 +
->  3 files changed, 146 insertions(+), 18 deletions(-)
+> diff --git a/arch/x86/kvm/vmx/nested.c b/arch/x86/kvm/vmx/nested.c
+> index 61bc80fc4cfa..e794791a6bdd 100644
+> --- a/arch/x86/kvm/vmx/nested.c
+> +++ b/arch/x86/kvm/vmx/nested.c
+> @@ -3943,15 +3943,17 @@ static int vmx_check_nested_events(struct kvm_vcpu *vcpu)
+>  	}
+>  
+>  	/*
+> -	 * Process any exceptions that are not debug traps before MTF.
+> +	 * Process exceptions that are higher priority than Monitor Trap Flag:
+> +	 * fault-like exceptions, TSS T flag #DB (not emulated by KVM, but
+> +	 * could theoretically come in from userspace), and ICEBP (INT1).
+>  	 *
+>  	 * Note that only a pending nested run can block a pending exception.
+>  	 * Otherwise an injected NMI/interrupt should either be
+>  	 * lost or delivered to the nested hypervisor in the IDT_VECTORING_INFO,
+>  	 * while delivering the pending exception.
+>  	 */
+> -
+> -	if (vcpu->arch.exception.pending && !vmx_get_pending_dbg_trap(vcpu)) {
+> +	if (vcpu->arch.exception.pending &&
+> +	    !(vmx_get_pending_dbg_trap(vcpu) & ~DR6_BT)) {
+>  		if (vmx->nested.nested_run_pending)
+>  			return -EBUSY;
+>  		if (!nested_vmx_check_exception(vcpu, &exit_qual))
 
-If this is useful to you, then I suppose it's something we could support,
-however I'm pretty worried about our ability to maintain/scale this stuff
-as it is extended to support additional SoCs and other custom debugging
-features.
 
-Perhaps you could stick it all in arm-smmu-qcom-debug.c and have a new
-config option for that, so at least it's even further out of the way?
 
-Will
+

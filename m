@@ -2,137 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 45AA85680E0
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 10:13:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 25BD5568121
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 10:24:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231260AbiGFINf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Jul 2022 04:13:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54130 "EHLO
+        id S232026AbiGFIXK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Jul 2022 04:23:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60014 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229599AbiGFINd (ORCPT
+        with ESMTP id S231642AbiGFIWz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Jul 2022 04:13:33 -0400
-Received: from mail-lj1-x233.google.com (mail-lj1-x233.google.com [IPv6:2a00:1450:4864:20::233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90F6B62F7
-        for <linux-kernel@vger.kernel.org>; Wed,  6 Jul 2022 01:13:31 -0700 (PDT)
-Received: by mail-lj1-x233.google.com with SMTP id r9so17451296ljp.9
-        for <linux-kernel@vger.kernel.org>; Wed, 06 Jul 2022 01:13:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :references:from:in-reply-to:content-transfer-encoding;
-        bh=q5HVmA8sCnStfWK2o12uYQzpyK3n2MMa6yOBkWT5nc4=;
-        b=UJKrwkK63DRqwhebPcgtSGFbf7L+yQsuZmf9S5ZHrdlc6imWTd1nqHKtSlKQehwDPh
-         hQB+zUPmYC2sxSjkvPh3bWn9xlglh/esdgKNDgT9pC5KoS+/qCdZLsN69ezSikNawyqb
-         5D1sWBTiEVCKSbWnB4MYAoS4DxLz+fgDk0Wrh5Sfzz8SW4HpAi8ajwFmRDv8xxxgVvmg
-         3RJvE32/5ItiWrjQoo42fJFHMeh5TXzpK6l2UpD1tP+eww+YVfYmNIeiU5kBc8vao9Ez
-         rukvHk7q5byYRDYQX/CnjsKbIHzKPNNo/M4d/wFXiFTVLKeByVHAn2+kQUiEAvPYyzPL
-         S8bA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=q5HVmA8sCnStfWK2o12uYQzpyK3n2MMa6yOBkWT5nc4=;
-        b=vLAgz0cLkBf4t6OzhayvnNaPatliP0crcK3NJtKefNZ0Gih5ZGJWkrPSOv60Mgy8D1
-         81PlHMMf+Ny02P1Gu4wcsdZPgX8OfPu25nuyQ57rrkXhv3gdUhp1T6h3Nz73EIztzH74
-         ZvgQL4QLRSOKX5jWwL1BaXuCUIOTIj7haYDImBafNsVlGSwPQq01nMgkUjWILXzTsgKD
-         c3SBuHfxqWbGH5BVTc8V6BGf5U7aFTEfx4QSGkav6pWxv1mtvMaAOszWgoqHyllHE8Qj
-         mifQTsCs/t878bwNHj2PdRhqTFIhSvBnNrw90aTGQVrK3jrHzi0a57uMA1oGmCnNQHpz
-         kJBw==
-X-Gm-Message-State: AJIora/TYzSiX814OWYmbg3h3+9sKUPmo51KBJGiAcUFXAE2LxjCsMDO
-        I5DIedNUUNA3S1xMOh7r6QEvDxvLRsdaDw==
-X-Google-Smtp-Source: AGRyM1vHeSTTD8DYfDtNiJtCXkLRLR8Aas+YPJtmy/Ovp5zENmXzxSMK84WqWuvevJD+G+V8OJfG8g==
-X-Received: by 2002:a05:651c:623:b0:25d:30c0:22e9 with SMTP id k35-20020a05651c062300b0025d30c022e9mr5275970lje.290.1657095209978;
-        Wed, 06 Jul 2022 01:13:29 -0700 (PDT)
-Received: from [192.168.1.52] ([84.20.121.239])
-        by smtp.gmail.com with ESMTPSA id a19-20020a05651c031300b0025d4853f35dsm104129ljp.62.2022.07.06.01.13.28
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 06 Jul 2022 01:13:28 -0700 (PDT)
-Message-ID: <93926f8a-6c40-a953-0435-34fc1b9ae120@linaro.org>
-Date:   Wed, 6 Jul 2022 10:13:27 +0200
+        Wed, 6 Jul 2022 04:22:55 -0400
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 004C6248D1
+        for <linux-kernel@vger.kernel.org>; Wed,  6 Jul 2022 01:22:49 -0700 (PDT)
+Received: from fraeml701-chm.china.huawei.com (unknown [172.18.147.200])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4LdCC94M8qz67gQT;
+        Wed,  6 Jul 2022 16:20:05 +0800 (CST)
+Received: from lhreml724-chm.china.huawei.com (10.201.108.75) by
+ fraeml701-chm.china.huawei.com (10.206.15.50) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
+ 15.1.2375.24; Wed, 6 Jul 2022 10:22:47 +0200
+Received: from localhost.localdomain (10.69.192.58) by
+ lhreml724-chm.china.huawei.com (10.201.108.75) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Wed, 6 Jul 2022 09:22:44 +0100
+From:   John Garry <john.garry@huawei.com>
+To:     <kbusch@kernel.org>, <axboe@fb.com>, <hch@lst.de>,
+        <sagi@grimberg.me>
+CC:     <linux-nvme@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
+        "John Garry" <john.garry@huawei.com>
+Subject: [PATCH] nvme: Fix nvme_setup_command metadata trace event for cdw10
+Date:   Wed, 6 Jul 2022 16:16:38 +0800
+Message-ID: <1657095398-114310-1-git-send-email-john.garry@huawei.com>
+X-Mailer: git-send-email 2.8.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH v6 11/12] arm64: dts: qcom: add PMP8074 DTSI
-Content-Language: en-US
-To:     Robert Marko <robimarko@gmail.com>, agross@kernel.org,
-        bjorn.andersson@linaro.org, konrad.dybcio@somainline.org,
-        lee.jones@linaro.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, linus.walleij@linaro.org,
-        lgirdwood@gmail.com, broonie@kernel.org, jic23@kernel.org,
-        lars@metafoo.de, linux-arm-msm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-gpio@vger.kernel.org, linux-iio@vger.kernel.org
-References: <20220704212402.1715182-1-robimarko@gmail.com>
- <20220704212402.1715182-11-robimarko@gmail.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220704212402.1715182-11-robimarko@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.69.192.58]
+X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
+ lhreml724-chm.china.huawei.com (10.201.108.75)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 04/07/2022 23:24, Robert Marko wrote:
-> PMP8074 is a companion PMIC to the Qualcomm IPQ8074 series that is
-> controlled via SPMI.
-> 
-> Add DTSI for it providing GPIO, regulator and RTC support.
-> 
-> RTC is disabled by default as there is no built-in battery so it will
-> loose time unless board vendor added a battery, so make it optional.
-> 
-> Signed-off-by: Robert Marko <robimarko@gmail.com>
-> ---
-> Changes in v6:
-> * Add RTC and GPIO nodes
-> 
-> Changes in v5:
-> * Remove #address-cells and #size-cells as they are not required for
-> regulator subnodes
-> ---
->  arch/arm64/boot/dts/qcom/pmp8074.dtsi | 125 ++++++++++++++++++++++++++
->  1 file changed, 125 insertions(+)
->  create mode 100644 arch/arm64/boot/dts/qcom/pmp8074.dtsi
-> 
-> diff --git a/arch/arm64/boot/dts/qcom/pmp8074.dtsi b/arch/arm64/boot/dts/qcom/pmp8074.dtsi
-> new file mode 100644
-> index 000000000000..a3b395e4d78f
-> --- /dev/null
-> +++ b/arch/arm64/boot/dts/qcom/pmp8074.dtsi
-> @@ -0,0 +1,125 @@
-> +// SPDX-License-Identifier: GPL-2.0-only
-> +
-> +#include <dt-bindings/spmi/spmi.h>
-> +#include <dt-bindings/iio/qcom,spmi-vadc.h>
-> +
-> +&spmi_bus {
-> +	pmic@0 {
-> +		compatible = "qcom,pmp8074", "qcom,spmi-pmic";
-> +		reg = <0x0 SPMI_USID>;
-> +		#address-cells = <1>;
-> +		#size-cells = <0>;
-> +
-> +		pmp8074_adc: adc@3100 {
-> +			compatible = "qcom,spmi-adc-rev2";
-> +			reg = <0x3100>;
-> +			interrupts = <0x0 0x31 0x0 IRQ_TYPE_EDGE_RISING>;
-> +			#address-cells = <1>;
-> +			#size-cells = <0>;
-> +			#io-channel-cells = <1>;
-> +
-> +			ref_gnd@0 {
+For x86_64 allmodconfig I get this warning:
 
-Don't use underscores in node names, unless something depends on this.
+In function ‘fortify_memcpy_chk’,
+    inlined from ‘perf_trace_nvme_setup_cmd’ at drivers/nvme/host/./trace.h:47:1:
+./include/linux/fortify-string.h:352:4: error: call to ‘__read_overflow2_field’ declared with attribute warning: detected read beyond size of field (2nd parameter); maybe use struct_group()? [-Werror]
+    __read_overflow2_field(q_size_field, size);
+    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+In function ‘fortify_memcpy_chk’,
+    inlined from ‘trace_event_raw_event_nvme_setup_cmd’ at drivers/nvme/host/./trace.h:47:1:
+./include/linux/fortify-string.h:352:4: error: call to ‘__read_overflow2_field’ declared with attribute warning: detected read beyond size of field (2nd parameter); maybe use struct_group()? [-Werror]
+    __read_overflow2_field(q_size_field, size);
+    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+cdw10 metadata is 24 bytes, and we try to copy size of cdw10 metadata from
+nvme_command.common.cdw10 into that cdw10 metadata, but
+nvme_command.common.cdw10 is only 4 bytes in size.
 
+Fix by making the trace metadata size as 4 bytes.
 
-Best regards,
-Krzysztof
+I find that this warning started first appearing from commit f68f2ff91512
+("fortify: Detect struct member overflows in memcpy() at compile-time").
+
+Signed-off-by: John Garry <john.garry@huawei.com>
+
+diff --git a/drivers/nvme/host/trace.h b/drivers/nvme/host/trace.h
+index b5f85259461a..d6d35f935006 100644
+--- a/drivers/nvme/host/trace.h
++++ b/drivers/nvme/host/trace.h
+@@ -57,7 +57,7 @@ TRACE_EVENT(nvme_setup_cmd,
+ 		__field(u16, cid)
+ 		__field(u32, nsid)
+ 		__field(bool, metadata)
+-		__array(u8, cdw10, 24)
++		__array(u8, cdw10, 4)
+ 	    ),
+ 	    TP_fast_assign(
+ 		__entry->ctrl_id = nvme_req(req)->ctrl->instance;
+-- 
+2.35.3
+

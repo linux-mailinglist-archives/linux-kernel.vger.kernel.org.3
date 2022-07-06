@@ -2,91 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9FE1A56850E
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 12:18:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 99D37568519
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 12:21:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233064AbiGFKRW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Jul 2022 06:17:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57976 "EHLO
+        id S233062AbiGFKSX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Jul 2022 06:18:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58640 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232413AbiGFKRO (ORCPT
+        with ESMTP id S233108AbiGFKSN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Jul 2022 06:17:14 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0910C24BDE
-        for <linux-kernel@vger.kernel.org>; Wed,  6 Jul 2022 03:17:14 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A1AB7B81BCF
-        for <linux-kernel@vger.kernel.org>; Wed,  6 Jul 2022 10:17:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3E36FC341CA;
-        Wed,  6 Jul 2022 10:17:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1657102631;
-        bh=XjcKeAQVQG+yHoXVErP9byRJUVznXxdAWaloT3bDLRY=;
-        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=gkRjDnNXXMGna0mJreuuYeUMV0GkNwIXr0wbe8fz+MD8VQe3tFFagJ7KZ6l2ay6tz
-         oQbzJvYD4bWyH2gJgvGnWMpBzM1nsxIn730j/r0ve9o9iKpEWc7eQJfEXjrATwjfpl
-         b6fbOiwHuCjUvWxOj51k8sEPYZrkg0xIdbRlghexl9rx247d9v1inrixebFqxzoqB3
-         QO1MqkRzcC97kRm8T3jv527d59sLz+vgbdEQSrotG5NL809pO/cLxD/7gJyzvnfmt9
-         Ase/YPrYnHr0N9IJqT8JbMbUtR57zzZcuetWcbsp60nUYVZPsVC+7oDZgRf6T5QK3u
-         vrL2eMyE4qu8g==
-From:   Mark Brown <broonie@kernel.org>
-To:     lee.jones@linaro.org, naresh.solanki@9elements.com,
-        linux-kernel@vger.kernel.org
-Cc:     Naresh.Solanki@9elements.com, patrick.rudolph@9elements.com,
-        sylv@sylv.io
-In-Reply-To: <20220705122244.472894-2-Naresh.Solanki@9elements.com>
-References: <20220705122244.472894-2-Naresh.Solanki@9elements.com>
-Subject: Re: (subset) [PATCH 1/5] dt-bindings: mfd: Add bindings for MAX5970 and MAX5978
-Message-Id: <165710262998.218847.2059131000668986827.b4-ty@kernel.org>
-Date:   Wed, 06 Jul 2022 11:17:09 +0100
+        Wed, 6 Jul 2022 06:18:13 -0400
+Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C716A255BA;
+        Wed,  6 Jul 2022 03:18:11 -0700 (PDT)
+Received: by mail-wm1-x32c.google.com with SMTP id g39-20020a05600c4ca700b003a03ac7d540so11296781wmp.3;
+        Wed, 06 Jul 2022 03:18:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=MLpBgzOegxkPueNCcd9RuELHHNmoFrpxAWlGqgmIe48=;
+        b=Q8P8jmx0eRWtDHSREQGdVtn9QJhXJXHvi4iQbBDAE5UbTswr/asBx7O1+HSlorEj/7
+         haaCMFS3zmO4VlDhgrKRKBTMnffQiP7Pr/Hxbe4rKNtdmQiIZF3XcCkqxUej1EletlBL
+         MsyMM4JKQzEg53RdUZsa8PGTUs/WPavqnN/sU8jG1LS1eYHUw6iYwezeAm3w6hQi38L2
+         hJi47PlGUWpCF6twkyPlZY6OGFB1bqZGYGPRhP5OS4oIviKoIbG3VWYCAjNjtORA4ImE
+         agDW8t2iqbfdODMt+UwSRwBuEd0DH9xOVsxojEP2XOK87OuwUPdRw7OHQ/uQ2+cgUWeA
+         uRzg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=MLpBgzOegxkPueNCcd9RuELHHNmoFrpxAWlGqgmIe48=;
+        b=LHio4HGTNPEnA5S5sy0au/AfggXoxTBDq4NjLaaQiyvg0jl3cuL8CafoojLpVrKA6r
+         eeMqqHsCWFibAFoVNyZxhytpacgACQDVBKlZR2Z983r8+GewzeSPI5zHRg0czF8lJiNI
+         ZyFVKK/adYMV1cfDSWXeQgbzgf1eO1NCx8LeDqRzMs/RFfT/iNv4peEP0WRPvgDBmyl5
+         jqsSFcD9GD+e/4RdE5S5RRfcF5F9TnGmPbc8FWx84p8qRkPNXONKOyE3De4ZpkeZrNed
+         Zvv/9j+jee2wGqHCK2ZIQpsxc1tD5FpZzwCFJkRk0IVEZ/lWpolEYcXDiK3fqH5XyFuG
+         OLCg==
+X-Gm-Message-State: AJIora+R4x+EOEP791VGCGjvSjvyTNDFPqktM9uAErZIwS9vpPLjhO8/
+        5GnghaRP8k3wTXpCTATc1sw=
+X-Google-Smtp-Source: AGRyM1u6cjj1wubk6f6VtqGHM6XSGi1s7KLVMeBbBAAfgecJZEqA7bpXalLmuFp1JFEhAE9Cy8WZWQ==
+X-Received: by 2002:a05:600c:3510:b0:3a0:f957:116e with SMTP id h16-20020a05600c351000b003a0f957116emr40106170wmq.179.1657102690164;
+        Wed, 06 Jul 2022 03:18:10 -0700 (PDT)
+Received: from debian ([167.98.27.226])
+        by smtp.gmail.com with ESMTPSA id l1-20020a5d5601000000b0021d7799cf4csm2910921wrv.61.2022.07.06.03.18.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 06 Jul 2022 03:18:09 -0700 (PDT)
+Date:   Wed, 6 Jul 2022 11:18:08 +0100
+From:   "Sudip Mukherjee (Codethink)" <sudipm.mukherjee@gmail.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, slade@sladewatkins.com
+Subject: Re: [PATCH 5.10 00/84] 5.10.129-rc1 review
+Message-ID: <YsVhYBCbj77Iza4d@debian>
+References: <20220705115615.323395630@linuxfoundation.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220705115615.323395630@linuxfoundation.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 5 Jul 2022 14:22:39 +0200, Naresh Solanki wrote:
-> From: Marcello Sylvester Bauer <sylv@sylv.io>
+Hi Greg,
+
+On Tue, Jul 05, 2022 at 01:57:23PM +0200, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.10.129 release.
+> There are 84 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
 > 
-> The MAX597x is a hot swap controller with configurable fault protection.
-> It also has 10bit ADC for current & voltage measurements.
-> 
-> 
+> Responses should be made by Thu, 07 Jul 2022 11:55:56 +0000.
+> Anything received after that time might be too late.
 
-Applied to
+Build test (gcc version 11.3.1 20220627):
+mips: 63 configs -> no failure
+arm: 104 configs -> no failure
+arm64: 3 configs -> no failure
+x86_64: 4 configs -> no failure
+alpha allmodconfig -> no failure
+powerpc allmodconfig -> no failure
+riscv allmodconfig -> no failure
+s390 allmodconfig -> no failure
+xtensa allmodconfig -> no failure
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/regulator.git for-next
+Boot test:
+x86_64: Booted on my test laptop. No regression.
+x86_64: Booted on qemu. No regression. [1]
+arm64: Booted on rpi4b (4GB model). No regression. [2]
 
-Thanks!
+[1]. https://openqa.qa.codethink.co.uk/tests/1457
+[2]. https://openqa.qa.codethink.co.uk/tests/1460
 
-[3/5] regulator: max597x: Add support for max597x regulator
-      commit: 38493f008deb435577361d4c4cdd69f7bb30f4b9
 
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
+Tested-by: Sudip Mukherjee <sudip.mukherjee@codethink.co.uk>
 
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
-
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
-
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-Thanks,
-Mark
+--
+Regards
+Sudip

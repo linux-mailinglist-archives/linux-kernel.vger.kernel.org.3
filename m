@@ -2,98 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D1333567CDD
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 05:56:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 28E6E567CE0
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 05:58:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230223AbiGFD4J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Jul 2022 23:56:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58336 "EHLO
+        id S230344AbiGFD6d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Jul 2022 23:58:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59556 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229617AbiGFD4G (ORCPT
+        with ESMTP id S230145AbiGFD62 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Jul 2022 23:56:06 -0400
-Received: from wout5-smtp.messagingengine.com (wout5-smtp.messagingengine.com [64.147.123.21])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FA3B19286;
-        Tue,  5 Jul 2022 20:56:01 -0700 (PDT)
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-        by mailout.west.internal (Postfix) with ESMTP id CB602320094E;
-        Tue,  5 Jul 2022 23:55:56 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute5.internal (MEProxy); Tue, 05 Jul 2022 23:55:58 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sholland.org; h=
-        cc:cc:content-transfer-encoding:content-type:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to; s=fm3; t=1657079756; x=
-        1657166156; bh=Xp5o6gyxdCzArszMKlaxjCeE8en69xtf9sJ/OOknFpw=; b=t
-        QjgxdFTZ/sUqBixmaQRr4hw6EYwdgHYSkiRP0iuxNrvlEdqAMUACl2Hcgldpg859
-        KvrASy01+4n+WZM6RjXvjDI1hgy4Hqbaftix4Le1sY39cRnl7hZcm9UMwHtm8QLS
-        JR7I8VuZlm9BglD346DCV2XbU8raU8FU9C1/X1ZNHStFdS0NMHvTtwApdFGzjoBL
-        plbJtCniV2B0pyqlyLv8HRVneulIbXgUG6xJySofMQGSIiDFHYYhPBavmBw/lIXw
-        X5EhS+xxIZwg2Hkh4QFc5NIOHFnq+HqW6wYKZpSw3WY5kblUFviu6bFx6nr7vcJ7
-        pMyRD98EeahoZjdEXMAoA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding
-        :content-type:date:date:feedback-id:feedback-id:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
-        :x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=1657079756; x=
-        1657166156; bh=Xp5o6gyxdCzArszMKlaxjCeE8en69xtf9sJ/OOknFpw=; b=i
-        +wBPw2eDYxdbbxq2CljoEg2WZ4X6XY95ngfukq2ibo4Mgp/V2vrNPbKscpiyRRtH
-        XAMbey+IW8pqctdRHFPNYG2lC2zbkKR1Ea6sLnvTeIri4CPV7TZT3Kg5q5kguvQN
-        K2PBaBGKgZDMn+zhLBiQT6ThtxnXDJFZi6viX4m67YrNUe6qS8+yC0Co0tHpbsYX
-        +xsdz58PEQgVmuuwBIepVSMgQGPs1AVS3eAaXw2LTSd86nSuUDiakhVVcvIYtQRQ
-        CkQKv92ZfCc40rnbIrCrlVByfv3kgdzORWIDxR+GLDeIEThxCJgd4zs3A7uUHV45
-        h99YlaDrf9GwjtBfj1Suw==
-X-ME-Sender: <xms:ywfFYkpEwjKqpg_RCclvnqXfNW6z6CTowdmENDLwkFyzpKPumTcqDg>
-    <xme:ywfFYqqrP471WWg2kOkAUfglarASmf18wOd0j56inmJTvP7TAwyydJs6rVBvq8qrs
-    XUg-FkJ8XNdFq4LsA>
-X-ME-Received: <xmr:ywfFYpMrb2l3Bd3fbMc1WA6w3Vi2MBG5a2nQ1IxnKd16WTB3ti_L-_kx4sl2JTCEhBgsA_EaMzbFAp9ZIQNdNzz7P-9lyMuEQMoK5xDuM0URg9SPF_hZTRbLvQ>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrudeivddgjeefucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhephffuvfevfhfkffgfgggjtgfgsehtjeertddtfeejnecuhfhrohhmpefurghm
-    uhgvlhcujfholhhlrghnugcuoehsrghmuhgvlhesshhhohhllhgrnhgurdhorhhgqeenuc
-    ggtffrrghtthgvrhhnpedthefhheevffegvdehkeehieffkeegffethfejteelieejffdu
-    veejkeduleeltdenucffohhmrghinhepghhithhhuhgsrdgtohhmnecuvehluhhsthgvrh
-    fuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepshgrmhhuvghlsehshhholhhl
-    rghnugdrohhrgh
-X-ME-Proxy: <xmx:ywfFYr4L468_Mqq1TBX6j7WTTY6Y90bk6HT-rAROHGRWJw51CGB1zQ>
-    <xmx:ywfFYj54pLMF3-jpJMy7WkcOVUGaR3Jq1QTtV-U-3qNf2G6U_x4zfQ>
-    <xmx:ywfFYriCHV_1o9BkG_FtzD82xZHcVS3HudHTtGMqxkYBVj20QciZVg>
-    <xmx:zAfFYqIs_oBKvV1qh5lPpLrnF6KoOTns_NvTkgy-EyIi7o2GsLajcw>
-Feedback-ID: i0ad843c9:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
- 5 Jul 2022 23:55:54 -0400 (EDT)
-From:   Samuel Holland <samuel@sholland.org>
-Subject: Re: [PATCH v12 1/7] dt-bindings: arm: sunxi: Add H616 EMAC compatible
-To:     Andre Przywara <andre.przywara@arm.com>
-Cc:     Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org
-References: <20220701112453.2310722-1-andre.przywara@arm.com>
- <20220701112453.2310722-2-andre.przywara@arm.com>
- <b2661412-5fce-a20d-c7c4-6df58efdb930@sholland.org>
- <20220705111906.3c553f23@donnerap.cambridge.arm.com>
-Message-ID: <b3149c47-7fbf-53b2-f0d7-a45942bb819c@sholland.org>
-Date:   Tue, 5 Jul 2022 22:55:54 -0500
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.6.0
+        Tue, 5 Jul 2022 23:58:28 -0400
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83472BE1A
+        for <linux-kernel@vger.kernel.org>; Tue,  5 Jul 2022 20:58:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1657079904; x=1688615904;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=EAdXzx5Lllf14F28DD21r/lTfnEgHmeW44/wqPxVY4U=;
+  b=V4Jn56Jg5dpwG+IDJ2haw73+q1d05xhZr6ye89FgyP2ASJTtighrycps
+   VTPHzUMn6Hlxm96JUEGmSsYAwZhLS7MNeyHdprokqdAf1djQ76FzglLVo
+   w3o1m/PqWoNtRiGaed+XPzjoGySQow/caarAcOPaTapIUIeu3Q1fnhBd5
+   Ln0TIvYoQqvwGaGOMyshQZq1CRy8wlxgY5wCyWMwBo9kgFfp/OHostsIS
+   TigLJBms6piXo8IwJXsg1/AwEDuyIFnUOnHBGxsv0xMnOEXew969A3MSv
+   5ATLtAT0aZyL5h0FA9SL6XN+eJo+r+dYmQJAuHuVLzyTC0Rdsrix8ur5L
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10399"; a="263421963"
+X-IronPort-AV: E=Sophos;i="5.92,248,1650956400"; 
+   d="scan'208";a="263421963"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jul 2022 20:58:24 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.92,248,1650956400"; 
+   d="scan'208";a="567891433"
+Received: from lkp-server01.sh.intel.com (HELO 68b931ab7ac1) ([10.239.97.150])
+  by orsmga006.jf.intel.com with ESMTP; 05 Jul 2022 20:58:22 -0700
+Received: from kbuild by 68b931ab7ac1 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1o8wBB-000JyP-He;
+        Wed, 06 Jul 2022 03:58:21 +0000
+Date:   Wed, 6 Jul 2022 11:58:20 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Alex Deucher <alexander.deucher@amd.com>
+Subject: [agd5f:drm-next 350/388]
+ drivers/gpu/drm/amd/amdgpu/../display/dc/dcn30/dcn30_resource.c:1902:5:
+ warning: no previous prototype for 'get_refresh_rate'
+Message-ID: <202207061138.fLHTrZu1-lkp@intel.com>
 MIME-Version: 1.0
-In-Reply-To: <20220705111906.3c553f23@donnerap.cambridge.arm.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -101,83 +63,354 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Andre,
+tree:   https://gitlab.freedesktop.org/agd5f/linux.git drm-next
+head:   fc25fd602b1e101a45650475a8d2f00d7bb8e971
+commit: 00fa7f031dd4b885175da390e24cb02f6a45977e [350/388] drm/amd/display: Add basic infrastructure for enabling FAMS
+config: i386-allyesconfig (https://download.01.org/0day-ci/archive/20220706/202207061138.fLHTrZu1-lkp@intel.com/config)
+compiler: gcc-11 (Debian 11.3.0-3) 11.3.0
+reproduce (this is a W=1 build):
+        git remote add agd5f https://gitlab.freedesktop.org/agd5f/linux.git
+        git fetch --no-tags agd5f drm-next
+        git checkout 00fa7f031dd4b885175da390e24cb02f6a45977e
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        make W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/gpu/drm/
 
-On 7/5/22 5:19 AM, Andre Przywara wrote:
-> On Mon, 4 Jul 2022 18:53:14 -0500
-> Samuel Holland <samuel@sholland.org> wrote:
->> On 7/1/22 6:24 AM, Andre Przywara wrote:
->>> The Allwinner H616 contains an "EMAC" Ethernet MAC compatible to the A64
->>> version.
->>>
->>> Add it to the list of compatible strings.
->>>
->>> Signed-off-by: Andre Przywara <andre.przywara@arm.com>
->>> ---
->>>  .../devicetree/bindings/net/allwinner,sun8i-a83t-emac.yaml       | 1 +
->>>  1 file changed, 1 insertion(+)
->>>
->>> diff --git a/Documentation/devicetree/bindings/net/allwinner,sun8i-a83t-emac.yaml b/Documentation/devicetree/bindings/net/allwinner,sun8i-a83t-emac.yaml
->>> index 6a4831fd3616c..87f1306831cc9 100644
->>> --- a/Documentation/devicetree/bindings/net/allwinner,sun8i-a83t-emac.yaml
->>> +++ b/Documentation/devicetree/bindings/net/allwinner,sun8i-a83t-emac.yaml
->>> @@ -22,6 +22,7 @@ properties:
->>>            - enum:
->>>                - allwinner,sun20i-d1-emac
->>>                - allwinner,sun50i-h6-emac
->>> +              - allwinner,sun50i-h616-emac  
->>
->> The H616 manual has register fields for an internal PHY, like H3. Are these not
->> hooked up for either EMAC?
-> 
-> Which register fields do you mean, exactly?
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-I mean bits 15-31 of EMAC_EPHY_CLK_REG0.
+All warnings (new ones prefixed by >>):
 
-> The H616 uses the same internal PHY solution as the H6: an AC200 die
-> co-packaged on the carrier (or whatever integration solution they actually
-> chose). The difference to the H6 is that EMAC0 is hardwired to the external
-> RGMII pins, whereas EMAC1 is hardwired to the internal AC200 RMII pins.
-> From all I could see that does not impact the actual MAC IP: both are the
-> same as in the H6, or A64, for that matter.
+         |                   ^~~~~~~~~~
+   drivers/gpu/drm/amd/amdgpu/../display/dc/dcn30/dcn30_resource.c:118:29: note: in expansion of macro 'BASE'
+     118 |                 .reg_name = BASE(mm ## reg_name ## _BASE_IDX) +  \
+         |                             ^~~~
+   drivers/gpu/drm/amd/amdgpu/../display/dc/dce/dce_hwseq.h:386:9: note: in expansion of macro 'SR'
+     386 |         SR(MPC_CRC_RESULT_GB), \
+         |         ^~
+   drivers/gpu/drm/amd/amdgpu/../display/dc/dcn30/dcn30_resource.c:624:17: note: in expansion of macro 'HWSEQ_DCN30_REG_LIST'
+     624 |                 HWSEQ_DCN30_REG_LIST()
+         |                 ^~~~~~~~~~~~~~~~~~~~
+   drivers/gpu/drm/amd/amdgpu/../include/sienna_cichlid_ip_offset.h:373:52: note: (near initialization for 'hwseq_reg.MPC_CRC_RESULT_GB')
+     373 | #define DCN_BASE__INST0_SEG3                       0x00009000
+         |                                                    ^~~~~~~~~~
+   drivers/gpu/drm/amd/amdgpu/../display/dc/dcn30/dcn30_resource.c:113:25: note: in expansion of macro 'DCN_BASE__INST0_SEG3'
+     113 | #define BASE_INNER(seg) DCN_BASE__INST0_SEG ## seg
+         |                         ^~~~~~~~~~~~~~~~~~~
+   drivers/gpu/drm/amd/amdgpu/../display/dc/dcn30/dcn30_resource.c:115:19: note: in expansion of macro 'BASE_INNER'
+     115 | #define BASE(seg) BASE_INNER(seg)
+         |                   ^~~~~~~~~~
+   drivers/gpu/drm/amd/amdgpu/../display/dc/dcn30/dcn30_resource.c:118:29: note: in expansion of macro 'BASE'
+     118 |                 .reg_name = BASE(mm ## reg_name ## _BASE_IDX) +  \
+         |                             ^~~~
+   drivers/gpu/drm/amd/amdgpu/../display/dc/dce/dce_hwseq.h:386:9: note: in expansion of macro 'SR'
+     386 |         SR(MPC_CRC_RESULT_GB), \
+         |         ^~
+   drivers/gpu/drm/amd/amdgpu/../display/dc/dcn30/dcn30_resource.c:624:17: note: in expansion of macro 'HWSEQ_DCN30_REG_LIST'
+     624 |                 HWSEQ_DCN30_REG_LIST()
+         |                 ^~~~~~~~~~~~~~~~~~~~
+   drivers/gpu/drm/amd/amdgpu/../include/sienna_cichlid_ip_offset.h:373:52: warning: initialized field overwritten [-Woverride-init]
+     373 | #define DCN_BASE__INST0_SEG3                       0x00009000
+         |                                                    ^~~~~~~~~~
+   drivers/gpu/drm/amd/amdgpu/../display/dc/dcn30/dcn30_resource.c:113:25: note: in expansion of macro 'DCN_BASE__INST0_SEG3'
+     113 | #define BASE_INNER(seg) DCN_BASE__INST0_SEG ## seg
+         |                         ^~~~~~~~~~~~~~~~~~~
+   drivers/gpu/drm/amd/amdgpu/../display/dc/dcn30/dcn30_resource.c:115:19: note: in expansion of macro 'BASE_INNER'
+     115 | #define BASE(seg) BASE_INNER(seg)
+         |                   ^~~~~~~~~~
+   drivers/gpu/drm/amd/amdgpu/../display/dc/dcn30/dcn30_resource.c:118:29: note: in expansion of macro 'BASE'
+     118 |                 .reg_name = BASE(mm ## reg_name ## _BASE_IDX) +  \
+         |                             ^~~~
+   drivers/gpu/drm/amd/amdgpu/../display/dc/dce/dce_hwseq.h:387:9: note: in expansion of macro 'SR'
+     387 |         SR(MPC_CRC_RESULT_C), \
+         |         ^~
+   drivers/gpu/drm/amd/amdgpu/../display/dc/dcn30/dcn30_resource.c:624:17: note: in expansion of macro 'HWSEQ_DCN30_REG_LIST'
+     624 |                 HWSEQ_DCN30_REG_LIST()
+         |                 ^~~~~~~~~~~~~~~~~~~~
+   drivers/gpu/drm/amd/amdgpu/../include/sienna_cichlid_ip_offset.h:373:52: note: (near initialization for 'hwseq_reg.MPC_CRC_RESULT_C')
+     373 | #define DCN_BASE__INST0_SEG3                       0x00009000
+         |                                                    ^~~~~~~~~~
+   drivers/gpu/drm/amd/amdgpu/../display/dc/dcn30/dcn30_resource.c:113:25: note: in expansion of macro 'DCN_BASE__INST0_SEG3'
+     113 | #define BASE_INNER(seg) DCN_BASE__INST0_SEG ## seg
+         |                         ^~~~~~~~~~~~~~~~~~~
+   drivers/gpu/drm/amd/amdgpu/../display/dc/dcn30/dcn30_resource.c:115:19: note: in expansion of macro 'BASE_INNER'
+     115 | #define BASE(seg) BASE_INNER(seg)
+         |                   ^~~~~~~~~~
+   drivers/gpu/drm/amd/amdgpu/../display/dc/dcn30/dcn30_resource.c:118:29: note: in expansion of macro 'BASE'
+     118 |                 .reg_name = BASE(mm ## reg_name ## _BASE_IDX) +  \
+         |                             ^~~~
+   drivers/gpu/drm/amd/amdgpu/../display/dc/dce/dce_hwseq.h:387:9: note: in expansion of macro 'SR'
+     387 |         SR(MPC_CRC_RESULT_C), \
+         |         ^~
+   drivers/gpu/drm/amd/amdgpu/../display/dc/dcn30/dcn30_resource.c:624:17: note: in expansion of macro 'HWSEQ_DCN30_REG_LIST'
+     624 |                 HWSEQ_DCN30_REG_LIST()
+         |                 ^~~~~~~~~~~~~~~~~~~~
+   drivers/gpu/drm/amd/amdgpu/../include/sienna_cichlid_ip_offset.h:373:52: warning: initialized field overwritten [-Woverride-init]
+     373 | #define DCN_BASE__INST0_SEG3                       0x00009000
+         |                                                    ^~~~~~~~~~
+   drivers/gpu/drm/amd/amdgpu/../display/dc/dcn30/dcn30_resource.c:113:25: note: in expansion of macro 'DCN_BASE__INST0_SEG3'
+     113 | #define BASE_INNER(seg) DCN_BASE__INST0_SEG ## seg
+         |                         ^~~~~~~~~~~~~~~~~~~
+   drivers/gpu/drm/amd/amdgpu/../display/dc/dcn30/dcn30_resource.c:115:19: note: in expansion of macro 'BASE_INNER'
+     115 | #define BASE(seg) BASE_INNER(seg)
+         |                   ^~~~~~~~~~
+   drivers/gpu/drm/amd/amdgpu/../display/dc/dcn30/dcn30_resource.c:118:29: note: in expansion of macro 'BASE'
+     118 |                 .reg_name = BASE(mm ## reg_name ## _BASE_IDX) +  \
+         |                             ^~~~
+   drivers/gpu/drm/amd/amdgpu/../display/dc/dce/dce_hwseq.h:388:9: note: in expansion of macro 'SR'
+     388 |         SR(MPC_CRC_RESULT_AR), \
+         |         ^~
+   drivers/gpu/drm/amd/amdgpu/../display/dc/dcn30/dcn30_resource.c:624:17: note: in expansion of macro 'HWSEQ_DCN30_REG_LIST'
+     624 |                 HWSEQ_DCN30_REG_LIST()
+         |                 ^~~~~~~~~~~~~~~~~~~~
+   drivers/gpu/drm/amd/amdgpu/../include/sienna_cichlid_ip_offset.h:373:52: note: (near initialization for 'hwseq_reg.MPC_CRC_RESULT_AR')
+     373 | #define DCN_BASE__INST0_SEG3                       0x00009000
+         |                                                    ^~~~~~~~~~
+   drivers/gpu/drm/amd/amdgpu/../display/dc/dcn30/dcn30_resource.c:113:25: note: in expansion of macro 'DCN_BASE__INST0_SEG3'
+     113 | #define BASE_INNER(seg) DCN_BASE__INST0_SEG ## seg
+         |                         ^~~~~~~~~~~~~~~~~~~
+   drivers/gpu/drm/amd/amdgpu/../display/dc/dcn30/dcn30_resource.c:115:19: note: in expansion of macro 'BASE_INNER'
+     115 | #define BASE(seg) BASE_INNER(seg)
+         |                   ^~~~~~~~~~
+   drivers/gpu/drm/amd/amdgpu/../display/dc/dcn30/dcn30_resource.c:118:29: note: in expansion of macro 'BASE'
+     118 |                 .reg_name = BASE(mm ## reg_name ## _BASE_IDX) +  \
+         |                             ^~~~
+   drivers/gpu/drm/amd/amdgpu/../display/dc/dce/dce_hwseq.h:388:9: note: in expansion of macro 'SR'
+     388 |         SR(MPC_CRC_RESULT_AR), \
+         |         ^~
+   drivers/gpu/drm/amd/amdgpu/../display/dc/dcn30/dcn30_resource.c:624:17: note: in expansion of macro 'HWSEQ_DCN30_REG_LIST'
+     624 |                 HWSEQ_DCN30_REG_LIST()
+         |                 ^~~~~~~~~~~~~~~~~~~~
+>> drivers/gpu/drm/amd/amdgpu/../display/dc/dcn30/dcn30_resource.c:1902:5: warning: no previous prototype for 'get_refresh_rate' [-Wmissing-prototypes]
+    1902 | int get_refresh_rate(struct dc_state *context)
+         |     ^~~~~~~~~~~~~~~~
+>> drivers/gpu/drm/amd/amdgpu/../display/dc/dcn30/dcn30_resource.c:1933:5: warning: no previous prototype for 'get_frame_rate_at_max_stretch_100hz' [-Wmissing-prototypes]
+    1933 | int get_frame_rate_at_max_stretch_100hz(struct dc_state *context)
+         |     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>> drivers/gpu/drm/amd/amdgpu/../display/dc/dcn30/dcn30_resource.c:1963:6: warning: no previous prototype for 'is_refresh_rate_support_mclk_switch_using_fw_based_vblank_stretch' [-Wmissing-prototypes]
+    1963 | bool is_refresh_rate_support_mclk_switch_using_fw_based_vblank_stretch(struct dc_state *context)
+         |      ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>> drivers/gpu/drm/amd/amdgpu/../display/dc/dcn30/dcn30_resource.c:1980:6: warning: no previous prototype for 'dcn30_can_support_mclk_switch_using_fw_based_vblank_stretch' [-Wmissing-prototypes]
+    1980 | bool dcn30_can_support_mclk_switch_using_fw_based_vblank_stretch(struct dc *dc, struct dc_state *context)
+         |      ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>> drivers/gpu/drm/amd/amdgpu/../display/dc/dcn30/dcn30_resource.c:2040:5: warning: no previous prototype for 'dcn30_find_dummy_latency_index_for_fw_based_mclk_switch' [-Wmissing-prototypes]
+    2040 | int dcn30_find_dummy_latency_index_for_fw_based_mclk_switch(struct dc *dc, struct dc_state *context,
+         |     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   In file included from drivers/gpu/drm/amd/amdgpu/../display/dc/inc/core_types.h:32,
+                    from drivers/gpu/drm/amd/amdgpu/../display/dc/inc/resource.h:28,
+                    from drivers/gpu/drm/amd/amdgpu/../display/dc/dcn30/dcn30_resource.c:32:
+   drivers/gpu/drm/amd/amdgpu/../display/include/ddc_service_types.h:137:22: warning: 'SYNAPTICS_DEVICE_ID' defined but not used [-Wunused-const-variable=]
+     137 | static const uint8_t SYNAPTICS_DEVICE_ID[] = "SYNA";
+         |                      ^~~~~~~~~~~~~~~~~~~
+   drivers/gpu/drm/amd/amdgpu/../display/include/ddc_service_types.h:134:17: warning: 'DP_SINK_BRANCH_DEV_NAME_7580' defined but not used [-Wunused-const-variable=]
+     134 | static const u8 DP_SINK_BRANCH_DEV_NAME_7580[] = "7580\x80u";
+         |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/gpu/drm/amd/amdgpu/../display/include/ddc_service_types.h:132:22: warning: 'DP_SINK_DEVICE_STR_ID_2' defined but not used [-Wunused-const-variable=]
+     132 | static const uint8_t DP_SINK_DEVICE_STR_ID_2[] = {7, 1, 8, 7, 5, 0};
+         |                      ^~~~~~~~~~~~~~~~~~~~~~~
+   drivers/gpu/drm/amd/amdgpu/../display/include/ddc_service_types.h:131:22: warning: 'DP_SINK_DEVICE_STR_ID_1' defined but not used [-Wunused-const-variable=]
+     131 | static const uint8_t DP_SINK_DEVICE_STR_ID_1[] = {7, 1, 8, 7, 3, 0};
+         |                      ^~~~~~~~~~~~~~~~~~~~~~~
+--
+>> drivers/gpu/drm/amd/amdgpu/../display/dc/dc_dmub_srv.c:273:9: warning: no previous prototype for 'dc_dmub_srv_get_pipes_for_stream' [-Wmissing-prototypes]
+     273 | uint8_t dc_dmub_srv_get_pipes_for_stream(struct dc *dc, struct dc_stream_state *stream)
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>> drivers/gpu/drm/amd/amdgpu/../display/dc/dc_dmub_srv.c:287:5: warning: no previous prototype for 'dc_dmub_srv_get_timing_generator_offset' [-Wmissing-prototypes]
+     287 | int dc_dmub_srv_get_timing_generator_offset(struct dc *dc, struct dc_stream_state *stream)
+         |     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/gpu/drm/amd/amdgpu/../display/dc/dc_dmub_srv.c:636:6: warning: no previous prototype for 'dc_dmub_setup_subvp_dmub_command' [-Wmissing-prototypes]
+     636 | void dc_dmub_setup_subvp_dmub_command(struct dc *dc,
+         |      ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   In file included from drivers/gpu/drm/amd/amdgpu/../display/dc/inc/core_types.h:32,
+                    from drivers/gpu/drm/amd/amdgpu/../display/dc/dc_dmub_srv.c:31:
+   drivers/gpu/drm/amd/amdgpu/../display/include/ddc_service_types.h:137:22: warning: 'SYNAPTICS_DEVICE_ID' defined but not used [-Wunused-const-variable=]
+     137 | static const uint8_t SYNAPTICS_DEVICE_ID[] = "SYNA";
+         |                      ^~~~~~~~~~~~~~~~~~~
+   drivers/gpu/drm/amd/amdgpu/../display/include/ddc_service_types.h:134:17: warning: 'DP_SINK_BRANCH_DEV_NAME_7580' defined but not used [-Wunused-const-variable=]
+     134 | static const u8 DP_SINK_BRANCH_DEV_NAME_7580[] = "7580\x80u";
+         |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/gpu/drm/amd/amdgpu/../display/include/ddc_service_types.h:132:22: warning: 'DP_SINK_DEVICE_STR_ID_2' defined but not used [-Wunused-const-variable=]
+     132 | static const uint8_t DP_SINK_DEVICE_STR_ID_2[] = {7, 1, 8, 7, 5, 0};
+         |                      ^~~~~~~~~~~~~~~~~~~~~~~
+   drivers/gpu/drm/amd/amdgpu/../display/include/ddc_service_types.h:131:22: warning: 'DP_SINK_DEVICE_STR_ID_1' defined but not used [-Wunused-const-variable=]
+     131 | static const uint8_t DP_SINK_DEVICE_STR_ID_1[] = {7, 1, 8, 7, 3, 0};
+         |                      ^~~~~~~~~~~~~~~~~~~~~~~
 
-If those bits in EMAC_EPHY_CLK_REG0 have no effect, then I agree. But if
-switching bit 15 to internal PHY causes Ethernet to stop working, then the mux
-really does exist (even if one side is not connected to anything). In that case,
-we need to make sure the mux is set to the external PHY, using the code from H3.
 
-> There is one twist, though: the second EMAC uses a separate EMAC clock
-> register in the syscon. I came up with this patch to support that:
-> https://github.com/apritzel/linux/commit/078f591017794a0ec689345b0eeb7150908cf85a
-> That extends the syscon to take an optional(!) index. So EMAC0 works
-> exactly like before (both as "<&syscon>;", or "<&syscon 0>;", but for EMAC1
-> we need the index: "<&syscon 4>;".
-> But in my opinion this should not affect the MAC binding, at least not for
-> MAC0.
+vim +/get_refresh_rate +1902 drivers/gpu/drm/amd/amdgpu/../display/dc/dcn30/dcn30_resource.c
 
-It definitely affects the MAC binding, because we have to change the definition
-of the syscon property. We should still get that reviewed before doing anything
-that depends on it. (And I think EMAC0 support depends on it.)
+  1901	
+> 1902	int get_refresh_rate(struct dc_state *context)
+  1903	{
+  1904		int refresh_rate = 0;
+  1905		int h_v_total = 0;
+  1906		struct dc_crtc_timing *timing = NULL;
+  1907	
+  1908		if (context == NULL || context->streams[0] == NULL)
+  1909			return 0;
+  1910	
+  1911		/* check if refresh rate at least 120hz */
+  1912		timing = &context->streams[0]->timing;
+  1913		if (timing == NULL)
+  1914			return 0;
+  1915	
+  1916		h_v_total = timing->h_total * timing->v_total;
+  1917		if (h_v_total == 0)
+  1918			return 0;
+  1919	
+  1920		refresh_rate = ((timing->pix_clk_100hz * 100) / (h_v_total)) + 1;
+  1921		return refresh_rate;
+  1922	}
+  1923	
+  1924	#define MAX_STRETCHED_V_BLANK 500 // in micro-seconds
+  1925	/*
+  1926	 * Scaling factor for v_blank stretch calculations considering timing in
+  1927	 * micro-seconds and pixel clock in 100hz.
+  1928	 * Note: the parenthesis are necessary to ensure the correct order of
+  1929	 * operation where V_SCALE is used.
+  1930	 */
+  1931	#define V_SCALE (10000 / MAX_STRETCHED_V_BLANK)
+  1932	
+> 1933	int get_frame_rate_at_max_stretch_100hz(struct dc_state *context)
+  1934	{
+  1935		struct dc_crtc_timing *timing = NULL;
+  1936		uint32_t sec_per_100_lines;
+  1937		uint32_t max_v_blank;
+  1938		uint32_t curr_v_blank;
+  1939		uint32_t v_stretch_max;
+  1940		uint32_t stretched_frame_pix_cnt;
+  1941		uint32_t scaled_stretched_frame_pix_cnt;
+  1942		uint32_t scaled_refresh_rate;
+  1943	
+  1944		if (context == NULL || context->streams[0] == NULL)
+  1945			return 0;
+  1946	
+  1947		/* check if refresh rate at least 120hz */
+  1948		timing = &context->streams[0]->timing;
+  1949		if (timing == NULL)
+  1950			return 0;
+  1951	
+  1952		sec_per_100_lines = timing->pix_clk_100hz / timing->h_total + 1;
+  1953		max_v_blank = sec_per_100_lines / V_SCALE + 1;
+  1954		curr_v_blank = timing->v_total - timing->v_addressable;
+  1955		v_stretch_max = (max_v_blank > curr_v_blank) ? (max_v_blank - curr_v_blank) : (0);
+  1956		stretched_frame_pix_cnt = (v_stretch_max + timing->v_total) * timing->h_total;
+  1957		scaled_stretched_frame_pix_cnt = stretched_frame_pix_cnt / 10000;
+  1958		scaled_refresh_rate = (timing->pix_clk_100hz) / scaled_stretched_frame_pix_cnt + 1;
+  1959	
+  1960		return scaled_refresh_rate;
+  1961	}
+  1962	
+> 1963	bool is_refresh_rate_support_mclk_switch_using_fw_based_vblank_stretch(struct dc_state *context)
+  1964	{
+  1965		int refresh_rate_max_stretch_100hz;
+  1966		int min_refresh_100hz;
+  1967	
+  1968		if (context == NULL || context->streams[0] == NULL)
+  1969			return false;
+  1970	
+  1971		refresh_rate_max_stretch_100hz = get_frame_rate_at_max_stretch_100hz(context);
+  1972		min_refresh_100hz = context->streams[0]->timing.min_refresh_in_uhz / 10000;
+  1973	
+  1974		if (refresh_rate_max_stretch_100hz < min_refresh_100hz)
+  1975			return false;
+  1976	
+  1977		return true;
+  1978	}
+  1979	
+> 1980	bool dcn30_can_support_mclk_switch_using_fw_based_vblank_stretch(struct dc *dc, struct dc_state *context)
+  1981	{
+  1982		int refresh_rate = 0;
+  1983		const int minimum_refreshrate_supported = 120;
+  1984	
+  1985		if (context == NULL || context->streams[0] == NULL)
+  1986			return false;
+  1987	
+  1988		if (context->streams[0]->sink->edid_caps.panel_patch.disable_fams)
+  1989			return false;
+  1990	
+  1991		if (dc->debug.disable_fams)
+  1992			return false;
+  1993	
+  1994		if (!dc->caps.dmub_caps.mclk_sw)
+  1995			return false;
+  1996	
+  1997		if (context->bw_ctx.bw.dcn.clk.fw_based_mclk_switching_shut_down)
+  1998			return false;
+  1999	
+  2000		/* more then 1 monitor connected */
+  2001		if (context->stream_count != 1)
+  2002			return false;
+  2003	
+  2004		refresh_rate = get_refresh_rate(context);
+  2005		if (refresh_rate < minimum_refreshrate_supported)
+  2006			return false;
+  2007	
+  2008		if (!is_refresh_rate_support_mclk_switch_using_fw_based_vblank_stretch(context))
+  2009			return false;
+  2010	
+  2011		// check if freesync enabled
+  2012		if (!context->streams[0]->allow_freesync)
+  2013			return false;
+  2014	
+  2015		if (context->streams[0]->vrr_active_variable)
+  2016			return false;
+  2017	
+  2018		return true;
+  2019	}
+  2020	
+  2021	/*
+  2022	 * set up FPO watermarks, pstate, dram latency
+  2023	 */
+  2024	void dcn30_setup_mclk_switch_using_fw_based_vblank_stretch(struct dc *dc, struct dc_state *context)
+  2025	{
+  2026		ASSERT(dc != NULL && context != NULL);
+  2027		if (dc == NULL || context == NULL)
+  2028			return;
+  2029	
+  2030		/* Set wm_a.pstate so high natural MCLK switches are impossible: 4 seconds */
+  2031		context->bw_ctx.bw.dcn.watermarks.a.cstate_pstate.pstate_change_ns = 4U * 1000U * 1000U * 1000U;
+  2032	}
+  2033	
+  2034	/*
+  2035	 * Finds dummy_latency_index when MCLK switching using firmware based
+  2036	 * vblank stretch is enabled. This function will iterate through the
+  2037	 * table of dummy pstate latencies until the lowest value that allows
+  2038	 * dm_allow_self_refresh_and_mclk_switch to happen is found
+  2039	 */
+> 2040	int dcn30_find_dummy_latency_index_for_fw_based_mclk_switch(struct dc *dc, struct dc_state *context,
+  2041			display_e2e_pipe_params_st *pipes, int pipe_cnt, int vlevel)
+  2042	{
+  2043		const int max_latency_table_entries = 4;
+  2044		int dummy_latency_index = 0;
+  2045	
+  2046		while (dummy_latency_index < max_latency_table_entries) {
+  2047			context->bw_ctx.dml.soc.dram_clock_change_latency_us =
+  2048					dc->clk_mgr->bw_params->dummy_pstate_table[dummy_latency_index].dummy_pstate_latency_us;
+  2049			dcn30_internal_validate_bw(dc, context, pipes, &pipe_cnt, &vlevel, false);
+  2050	
+  2051			if (context->bw_ctx.dml.soc.allow_dram_self_refresh_or_dram_clock_change_in_vblank ==
+  2052				dm_allow_self_refresh_and_mclk_switch)
+  2053				break;
+  2054	
+  2055			dummy_latency_index++;
+  2056		}
+  2057	
+  2058		if (dummy_latency_index == max_latency_table_entries) {
+  2059			ASSERT(dummy_latency_index != max_latency_table_entries);
+  2060			/* If the execution gets here, it means dummy p_states are
+  2061			 * not possible. This should never happen and would mean
+  2062			 * something is severely wrong.
+  2063			 * Here we reset dummy_latency_index to 3, because it is
+  2064			 * better to have underflows than system crashes.
+  2065			 */
+  2066			dummy_latency_index = 3;
+  2067		}
+  2068	
+  2069		return dummy_latency_index;
+  2070	}
+  2071	
 
-> And I think we should get away without a different compatible string
-> for EMAC1, since the MAC IP is technically the same, it's just the
-> connection that is different.
-
-If you claim that both EMACs are compatible with allwinner,sun50i-a64-emac, then
-you are saying that any existing driver for allwinner,sun50i-a64-emac will also
-work with both of the H616 EMACs. But this is not true. If I hook up both EMACs
-in the DT per the binding, and use the driver in master, at best only EMAC0 will
-work, and likely neither will work.
-
-So at minimum you need a new compatible for the second EMAC, so it only binds to
-drivers that know about the syscon offset specifier.
-
-> In any case I think this does not affect the level of support we promise
-> today: EMAC0 with an external PHY only.
-
-This can work if you introduce a second compatible for EMAC1. But at that point
-you don't need the syscon offset specifier; it can be part of the driver data,
-like for R40. (And any future EMAC1 could likely fall back to this compatible.)
-
-Regards,
-Samuel
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

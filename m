@@ -2,160 +2,219 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B4869569213
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 20:44:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9018356921A
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 20:46:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234240AbiGFSo5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Jul 2022 14:44:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56648 "EHLO
+        id S234272AbiGFSqj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Jul 2022 14:46:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57830 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234051AbiGFSoy (ORCPT
+        with ESMTP id S231715AbiGFSqh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Jul 2022 14:44:54 -0400
-Received: from mail-pg1-x52a.google.com (mail-pg1-x52a.google.com [IPv6:2607:f8b0:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2332425EA8
-        for <linux-kernel@vger.kernel.org>; Wed,  6 Jul 2022 11:44:52 -0700 (PDT)
-Received: by mail-pg1-x52a.google.com with SMTP id g4so14710449pgc.1
-        for <linux-kernel@vger.kernel.org>; Wed, 06 Jul 2022 11:44:52 -0700 (PDT)
+        Wed, 6 Jul 2022 14:46:37 -0400
+Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06E8228704
+        for <linux-kernel@vger.kernel.org>; Wed,  6 Jul 2022 11:46:36 -0700 (PDT)
+Received: by mail-wr1-x430.google.com with SMTP id bk26so8203811wrb.11
+        for <linux-kernel@vger.kernel.org>; Wed, 06 Jul 2022 11:46:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=sq6qcos9XNbTRumjT46X79ghULTNnNg9dBEgItaotRg=;
-        b=UiM407N8Ln1qohMz5R08dtWO1lpCPUaHlBkxBwsRUs3WY2BJLH3d2iXtUZ7jBHtfFH
-         COL5eqVAz9+PBz4XepDF5fWW5Kq+gd00vYE37UwqJrpYMxLqtzBNmvVgVtDuUFXAM/tI
-         r8JDpaZwE0dnfsR3kyP6p2bXAC8fjZ3kjy2/OIpmXfctqjTEqbNlsxrS1S1fJr1hN1Rz
-         eYPilgvjTpA4DD6ius19pGlyky5Z5+PhU5yKehg2UMPrivnvBjNz2ydKvwrg3w4a+eCZ
-         PVcSErKmW8h87YuBkoDCnf62jhu6CPzQUx0pkQTV7jt6aNdlll/Yp7E86+kfmDO9QNZm
-         BAVw==
+        d=conchuod.ie; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=FGvdz6Rm9o6IiK39KaZUlJWK5Ze9j+QdwV7tWQUA7MU=;
+        b=Li8ztQ8ExNO98qv/gkCCl4oswxBwJHWf8Bm9oWaRjJHFNYPxPlYLiX0mSCO0sOMqOZ
+         Jhydkww51gb4Uzdx+NtkZTefyLEIV6NWETM39flo7p/dKteM1j/ggg7MnYCvVObggzGx
+         /6ylVdcmljUpSq9OA/i9kO9GcpyjtCl9dga4EYhHfBnP7Q17+zwBX7nU4w7dZBFsqalY
+         Yd7k/sCuBcRMkaWfTcuX72xrU6115zPPyaV02AFu/3IWfD56DXTDQ3eyM0oGlHJ8lAU+
+         A78ff5CDf76QCWcY5fxSv7JIhD3rFlS+r++abSr30I0PZjAV+bzU7DYvLwYqstqyn6Dj
+         x4Ag==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=sq6qcos9XNbTRumjT46X79ghULTNnNg9dBEgItaotRg=;
-        b=P7OxeSrajMhCNnmC8Sj9BuqCrmArRCXj3FM6GWgLrL6HSeIAFcHVND4zka9nZy3rC1
-         O8ST/jk9o3sbMerPcgTqsB2fxuLhnE/mVgyZbn2ox7eyf6QcU2l1Ve2dR+//Kme9Fwz6
-         GIYEUjjd+NPlaIuB10yRJKNb7jaaFFi+Xi7ZAdVV7M8OAaQ8t3GfpRaUecRGcWEWTEXb
-         z8BeYwpn8QjmWrxLMg78pXv1YGg1z+AhhpXITfdjk1yJ/ehV2yTtMXS3e1tKtQyokev0
-         ACUn8mniNGO02AazJZ8IIUloWZiwFSZjP+MkiaWDQ+vN6YPWBwd/Z6dyhWG5aI8DRZv7
-         WZpw==
-X-Gm-Message-State: AJIora9pn7zxz46kMKO1PMclvBXhRCIb7p6uXRCb20VeGfKFlI9CHFe+
-        flWF70W95QuLtSh9IV2k4p4lNw==
-X-Google-Smtp-Source: AGRyM1u3p5z/7I2/9J4cfRGN7XazRx99bmivFsfVOoZ7Ho+YDb5U8qfRpc1ZHvSjssvvBUq/9S0cMg==
-X-Received: by 2002:a65:4d45:0:b0:411:83dc:9625 with SMTP id j5-20020a654d45000000b0041183dc9625mr34831547pgt.359.1657133091569;
-        Wed, 06 Jul 2022 11:44:51 -0700 (PDT)
-Received: from google.com (123.65.230.35.bc.googleusercontent.com. [35.230.65.123])
-        by smtp.gmail.com with ESMTPSA id v16-20020a170902e8d000b0015e8d4eb24fsm25884936plg.153.2022.07.06.11.44.51
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=FGvdz6Rm9o6IiK39KaZUlJWK5Ze9j+QdwV7tWQUA7MU=;
+        b=YNQ8poKe40XVKG+OYrWFSp0NVAUib8MojGwR7mLQe0SZSXy5agICQnZwCjYHqdiseH
+         29x3dUOwSyRVBjfHfAsyaBSC7mot/2xno+dAJCwzq2a0YrcZhVg/dOdenqIDrqiWRKS0
+         WYC8PGGDR/qHe7uoZ6xO5tI+wvXSxXB8gVOJkHBzetQqJ3AMjpe4bLbm/wocBabfj/V6
+         +ddAZUXbr2Tukx+R4X9rt+7lvLVL0f+7eFz3pbhi5D+6I8BXTqlbi3Bl3dGH2++qwxCJ
+         5wDCcSucGxPLTK1WkHBfTX2BS6zgbgLGpTui8LWeem/Jo6WDd7UiNLv8LUIsbNcdfzA1
+         Hztg==
+X-Gm-Message-State: AJIora9LWbSBHtY/JU1C8V81U6PIPzGjuXD8+qe1kXWI5+XDZBMVfyLj
+        I6CmJC7WIgtmbxbzcnUQkxJd9Q==
+X-Google-Smtp-Source: AGRyM1tc8cpgGWi82HnlRM0HYNg5vNvrHP5xofK1RdiRUlhPNGD8kzJ0a8PCmA+MWR+HU7nadb1BmQ==
+X-Received: by 2002:a5d:6488:0:b0:203:b628:70d2 with SMTP id o8-20020a5d6488000000b00203b62870d2mr37474998wri.83.1657133194465;
+        Wed, 06 Jul 2022 11:46:34 -0700 (PDT)
+Received: from henark71.. ([51.37.234.167])
+        by smtp.gmail.com with ESMTPSA id f7-20020a05600c4e8700b003a17ab4e7c8sm26876310wmq.39.2022.07.06.11.46.32
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 06 Jul 2022 11:44:51 -0700 (PDT)
-Date:   Wed, 6 Jul 2022 18:44:47 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Vitaly Kuznetsov <vkuznets@redhat.com>
-Cc:     kvm@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
-        Anirudh Rayabharam <anrayabh@linux.microsoft.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Maxim Levitsky <mlevitsk@redhat.com>,
-        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 15/28] KVM: VMX: Check
- CPU_BASED_{INTR,NMI}_WINDOW_EXITING in setup_vmcs_config()
-Message-ID: <YsXYH43clik02kZ9@google.com>
-References: <20220629150625.238286-1-vkuznets@redhat.com>
- <20220629150625.238286-16-vkuznets@redhat.com>
+        Wed, 06 Jul 2022 11:46:33 -0700 (PDT)
+From:   Conor Dooley <mail@conchuod.ie>
+To:     Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Palmer Dabbelt <palmer@rivosinc.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Sudeep Holla <sudeep.holla@arm.com>
+Cc:     Daire McNamara <daire.mcnamara@microchip.com>,
+        Conor Dooley <conor.dooley@microchip.com>,
+        Niklas Cassel <niklas.cassel@wdc.com>,
+        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Zong Li <zong.li@sifive.com>,
+        Emil Renner Berthing <kernel@esmil.dk>,
+        Jonas Hahnfeld <hahnjo@hahnjo.de>, Guo Ren <guoren@kernel.org>,
+        Anup Patel <anup@brainfault.org>,
+        Atish Patra <atishp@atishpatra.org>,
+        Changbin Du <changbin.du@intel.com>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Philipp Tomsich <philipp.tomsich@vrull.eu>,
+        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Brice Goglin <Brice.Goglin@inria.fr>
+Subject: [PATCH] riscv: arch-topology: fix default topology reporting
+Date:   Wed,  6 Jul 2022 19:45:59 +0100
+Message-Id: <20220706184558.2557301-1-mail@conchuod.ie>
+X-Mailer: git-send-email 2.37.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220629150625.238286-16-vkuznets@redhat.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 29, 2022, Vitaly Kuznetsov wrote:
-> CPU_BASED_{INTR,NMI}_WINDOW_EXITING controls are toggled dynamically by
-> vmx_enable_{irq,nmi}_window, handle_interrupt_window(), handle_nmi_window()
-> but setup_vmcs_config() doesn't check their existence. Add the check and
-> filter the controls out in vmx_exec_control().
-> 
-> No (real) functional change intended as all existing CPUs supporting
-> VMX are supposed to have these controls.
-> 
-> Signed-off-by: Vitaly Kuznetsov <vkuznets@redhat.com>
-> ---
->  arch/x86/kvm/vmx/vmx.c | 8 +++++++-
->  1 file changed, 7 insertions(+), 1 deletion(-)
-> 
-> diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
-> index da8bbba38d0e..89a3bbafa5af 100644
-> --- a/arch/x86/kvm/vmx/vmx.c
-> +++ b/arch/x86/kvm/vmx/vmx.c
-> @@ -2487,7 +2487,9 @@ static __init int setup_vmcs_config(struct vmcs_config *vmcs_conf,
->  	      CPU_BASED_MWAIT_EXITING |
->  	      CPU_BASED_MONITOR_EXITING |
->  	      CPU_BASED_INVLPG_EXITING |
-> -	      CPU_BASED_RDPMC_EXITING;
-> +	      CPU_BASED_RDPMC_EXITING |
-> +	      CPU_BASED_INTR_WINDOW_EXITING |
-> +	      CPU_BASED_NMI_WINDOW_EXITING;
+From: Conor Dooley <conor.dooley@microchip.com>
 
-Requiring NMI_WINDOW_EXITING is wrong, KVM doesn't use NMI_WINDOW_EXITING if
-enable_vnmi == false:
+RISC-V has no sane defaults to fall back on where there is no cpu-map
+in the devicetree.
+Without sane defaults, the package, core and thread IDs are all set to
+-1. This causes user-visible inaccuracies for tools like hwloc/lstopo
+which rely on the sysfs cpu topology files to detect a system's
+topology.
 
-	if (!enable_vnmi ||
-	    vmcs_read32(GUEST_INTERRUPTIBILITY_INFO) & GUEST_INTR_STATE_STI) {
-		vmx_enable_irq_window(vcpu);
-		return;
-	}
+Add sane defaults in ~the exact same way as ARM64.
 
-	exec_controls_setbit(to_vmx(vcpu), CPU_BASED_NMI_WINDOW_EXITING);
+CC: stable@vger.kernel.org
+Fixes: 03f11f03dbfe ("RISC-V: Parse cpu topology during boot.")
+Reported-by: Brice Goglin <Brice.Goglin@inria.fr>
+Link: https://github.com/open-mpi/hwloc/issues/536
+Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
+---
 
-And enable_vnmi is cleared if PIN_BASED_VIRTUAL_NMIS are unsupported:
+Sudeep suggested that this be backported rather than the changes to
+the devicetrees adding cpu-map since that property is optional.
+That patchset is still valid in it's own right.
 
-	if (!cpu_has_virtual_nmis())
-		enable_vnmi = 0;
+ arch/riscv/include/asm/topology.h | 13 +++++++++++++
+ arch/riscv/kernel/Makefile        |  1 +
+ arch/riscv/kernel/smpboot.c       |  4 ++++
+ arch/riscv/kernel/topology.c      | 32 +++++++++++++++++++++++++++++++
+ 4 files changed, 50 insertions(+)
+ create mode 100644 arch/riscv/include/asm/topology.h
+ create mode 100644 arch/riscv/kernel/topology.c
 
-I suspect CPUs that don't support VIRTUAL_NMIS also don't support NMI_WINDOW_EXITING,
-and KVM explicitly supports such CPUs.  See commit 8a1b43922d0d ("kvm: vmx: Reinstate
-support for CPUs without virtual NMI").
-
-Making NMI_WINDOW_EXITING optional and then adding it to cpu_has_virtual_nmis()
-seems like the correct approach.
-
-diff --git a/arch/x86/kvm/vmx/capabilities.h b/arch/x86/kvm/vmx/capabilities.h
-index 069d8d298e1d..c34890e9fc2a 100644
---- a/arch/x86/kvm/vmx/capabilities.h
-+++ b/arch/x86/kvm/vmx/capabilities.h
-@@ -82,7 +82,8 @@ static inline bool cpu_has_vmx_basic_inout(void)
-
- static inline bool cpu_has_virtual_nmis(void)
+diff --git a/arch/riscv/include/asm/topology.h b/arch/riscv/include/asm/topology.h
+new file mode 100644
+index 000000000000..36bc6ecda898
+--- /dev/null
++++ b/arch/riscv/include/asm/topology.h
+@@ -0,0 +1,13 @@
++/* SPDX-License-Identifier: GPL-2.0-only */
++/*
++ * Copyright (c) 2022 Microchip Technology Inc. and its subsidiaries
++ */
++
++#ifndef _ASM_RISCV_TOPOLOGY_H
++#define _ASM_RISCV_TOPOLOGY_H
++
++#include <asm-generic/topology.h>
++
++void store_cpu_topology(unsigned int cpuid);
++
++#endif /* _ASM_RISCV_TOPOLOGY_H */
+diff --git a/arch/riscv/kernel/Makefile b/arch/riscv/kernel/Makefile
+index c71d6591d539..9518882ba6f9 100644
+--- a/arch/riscv/kernel/Makefile
++++ b/arch/riscv/kernel/Makefile
+@@ -50,6 +50,7 @@ obj-y	+= riscv_ksyms.o
+ obj-y	+= stacktrace.o
+ obj-y	+= cacheinfo.o
+ obj-y	+= patch.o
++obj-y	+= topology.o
+ obj-y	+= probes/
+ obj-$(CONFIG_MMU) += vdso.o vdso/
+ 
+diff --git a/arch/riscv/kernel/smpboot.c b/arch/riscv/kernel/smpboot.c
+index f1e4948a4b52..d551c7f452d4 100644
+--- a/arch/riscv/kernel/smpboot.c
++++ b/arch/riscv/kernel/smpboot.c
+@@ -32,6 +32,7 @@
+ #include <asm/sections.h>
+ #include <asm/sbi.h>
+ #include <asm/smp.h>
++#include <asm/topology.h>
+ 
+ #include "head.h"
+ 
+@@ -40,6 +41,8 @@ static DECLARE_COMPLETION(cpu_running);
+ void __init smp_prepare_boot_cpu(void)
  {
--       return vmcs_config.pin_based_exec_ctrl & PIN_BASED_VIRTUAL_NMIS;
-+       return vmcs_config.pin_based_exec_ctrl & PIN_BASED_VIRTUAL_NMIS &&
-+              vmcs_config.cpu_based_exec_ctrl & CPU_BASED_NMI_WINDOW_EXITING;
+ 	init_cpu_topology();
++
++	store_cpu_topology(smp_processor_id());
  }
+ 
+ void __init smp_prepare_cpus(unsigned int max_cpus)
+@@ -161,6 +164,7 @@ asmlinkage __visible void smp_callin(void)
+ 	mmgrab(mm);
+ 	current->active_mm = mm;
+ 
++	store_cpu_topology(curr_cpuid);
+ 	notify_cpu_starting(curr_cpuid);
+ 	numa_add_cpu(curr_cpuid);
+ 	update_siblings_masks(curr_cpuid);
+diff --git a/arch/riscv/kernel/topology.c b/arch/riscv/kernel/topology.c
+new file mode 100644
+index 000000000000..db72862bd5b5
+--- /dev/null
++++ b/arch/riscv/kernel/topology.c
+@@ -0,0 +1,32 @@
++// SPDX-License-Identifier: GPL-2.0-only
++/*
++ * Copyright (c) 2022 Microchip Technology Inc. and its subsidiaries
++ *
++ * Based on the arm64 version, which was in turn based on arm32, which was
++ * ultimately based on sh's.
++ * The arm64 version was listed as:
++ * Copyright (C) 2011,2013,2014 Linaro Limited.
++ */
++
++#include <linux/arch_topology.h>
++#include <linux/topology.h>
++#include <asm/topology.h>
++
++void store_cpu_topology(unsigned int cpuid)
++{
++	struct cpu_topology *cpuid_topo = &cpu_topology[cpuid];
++
++	if (cpuid_topo->package_id != -1)
++		goto topology_populated;
++
++	cpuid_topo->thread_id = -1;
++	cpuid_topo->core_id = cpuid;
++	cpuid_topo->package_id = cpu_to_node(cpuid);
++
++	pr_debug("CPU%u: package %d core %d thread %d\n",
++		 cpuid, cpuid_topo->package_id, cpuid_topo->core_id,
++		 cpuid_topo->thread_id);
++
++topology_populated:
++	update_siblings_masks(cpuid);
++}
 
- static inline bool cpu_has_vmx_preemption_timer(void)
+base-commit: b6f1f2fa2bddd69ff46a190b8120bd440fd50563
+-- 
+2.37.0
 
-
->  	opt = CPU_BASED_TPR_SHADOW |
->  	      CPU_BASED_USE_MSR_BITMAPS |
-> @@ -4300,6 +4302,10 @@ static u32 vmx_exec_control(struct vcpu_vmx *vmx)
->  {
->  	u32 exec_control = vmcs_config.cpu_based_exec_ctrl;
->  
-> +	/* INTR_WINDOW_EXITING and NMI_WINDOW_EXITING are toggled dynamically */
-> +	exec_control &= ~(CPU_BASED_INTR_WINDOW_EXITING |
-> +			  CPU_BASED_NMI_WINDOW_EXITING);
-> +
->  	if (vmx->vcpu.arch.switch_db_regs & KVM_DEBUGREG_WONT_EXIT)
->  		exec_control &= ~CPU_BASED_MOV_DR_EXITING;
->  
-> -- 
-> 2.35.3
-> 

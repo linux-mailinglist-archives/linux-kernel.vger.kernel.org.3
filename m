@@ -2,181 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 425C55692C5
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 21:42:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 897A55692C8
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 21:43:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233270AbiGFTl4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Jul 2022 15:41:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35932 "EHLO
+        id S233058AbiGFTn1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Jul 2022 15:43:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37312 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234193AbiGFTlr (ORCPT
+        with ESMTP id S232584AbiGFTnZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Jul 2022 15:41:47 -0400
-Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B47E1FCE6
-        for <linux-kernel@vger.kernel.org>; Wed,  6 Jul 2022 12:41:43 -0700 (PDT)
-Received: by mail-wm1-x32a.google.com with SMTP id o19-20020a05600c4fd300b003a0489f414cso9521981wmq.4
-        for <linux-kernel@vger.kernel.org>; Wed, 06 Jul 2022 12:41:43 -0700 (PDT)
+        Wed, 6 Jul 2022 15:43:25 -0400
+Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 790442C5
+        for <linux-kernel@vger.kernel.org>; Wed,  6 Jul 2022 12:43:22 -0700 (PDT)
+Received: by mail-ej1-x634.google.com with SMTP id o25so28848783ejm.3
+        for <linux-kernel@vger.kernel.org>; Wed, 06 Jul 2022 12:43:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=tGS8MF/Xhbljo/V0X6FBR6Q+x7h80TWkximSoLlEBGs=;
-        b=bNBEpmvX2QfzrR6lILsXG6WHpLniE3Y+yH24C5dTXtslVhyxCu926tN5/DRb8rPaGW
-         Gzq58ib+Bqjegyt4Jg69dEzdSx0tofEdELldaitVi8RLhUWV4hd0MyjsSsX7SgVqQkjm
-         wsm6DyX8kBL0NEXR9roGh4FgWC4AucXmQnSaE0eep0TX2AV8nRsi8kt+Krc/jW0j/lQ7
-         H2/+7vcuOYmByBv55vH048IeakzS4eQiTfy0fXNYJ2bmaEl6gRJZ+YsJLqgOs4pnoCNb
-         Y71hA2m6JcYvenutz9ujtvSmqEhfg0JyhrouBg2Oaqaat/OlzGNKrsnzt+AIvHzZp9pF
-         BUyw==
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=uQRsnwv9u5IuL08Zu0b0BsRI6BGP8zbhAD30ZwGOKSY=;
+        b=mc2otIGuBDLviocnQmzsnPStf1y6s1B8oLQEpaEnJtA0+MhjEcCuE30cMfGGAr7rSh
+         3Dr+s6Pq80xvdUdJzHes1T7/9AA0thSKQDzO8jdRKCx/jKghZOSQ9ETfXVLnGPdTwil6
+         YDPfTfKxnb2LaQl8RkQ3y+tiJAmuG0fB0CeL8X+/DYZUN3JT+7gdh67sPEmSki5WhIoF
+         WdvK6x7P72Dk0c42qx+TzcKjLMUxLwGXY6RVlcH+FFIsckcUPUL3IIxSzX0jDxe5SCG9
+         qDcgUqD5ezsCVoOgcbhaMd/uKZiYkiToHfbQe3QmzCyWk6hKAKVHVi4ivbx2H0hQ1hjd
+         Y0qA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=tGS8MF/Xhbljo/V0X6FBR6Q+x7h80TWkximSoLlEBGs=;
-        b=AGHsFxG1YRRK2umcrYCGCd5jCyMb1sFdasFd1oKjG1v4L/wiEMnclyQNBQn7H4+tSE
-         1IY36ooI1Es1awdWTci8C/lIxSOay4f7U8SJDgg6TV+qAh3nK6oWdX9WjjJ2u2SjswsU
-         wmK7fpBB+uF3ulNF/7nDo6PvROZtZD1g2RziWmWFOe7Tt0DEYD2GcrU8Bpebhfwwv7Xl
-         RJdlitm2bYigQXYFTrvyKFOHru8YBIk2SKBDHo2Zh8Q2y2I3rfHRcNWbR4tWej0GLUxH
-         lvFHyHvNRBaUNnS+PWx82ZcyKJFng3m6bJpXJsy8T/XqbB2lWlEffvpFciY5RoIRgyrn
-         WwyQ==
-X-Gm-Message-State: AJIora9WTGXCZ8WOoLHo621WjlF1PtbTlfkIRMy19nh7iKfE0otI+Byb
-        L4T00wDl+zZ6BbnSEZ4uwLPmKQ==
-X-Google-Smtp-Source: AGRyM1sNxd/8XhYC3F5aYfNgv+Nhpu3gpUZPoFmwCOrA8M7/vH3awkPM/0tATAQwTG+RQ1UYvfGdlA==
-X-Received: by 2002:a1c:44c3:0:b0:3a0:5f25:498f with SMTP id r186-20020a1c44c3000000b003a05f25498fmr248976wma.124.1657136501688;
-        Wed, 06 Jul 2022 12:41:41 -0700 (PDT)
-Received: from localhost.localdomain (88-107-17-60.dynamic.dsl.as9105.com. [88.107.17.60])
-        by smtp.gmail.com with ESMTPSA id f190-20020a1c38c7000000b0039c5328ad92sm23387320wma.41.2022.07.06.12.41.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 06 Jul 2022 12:41:40 -0700 (PDT)
-From:   Caleb Connolly <caleb.connolly@linaro.org>
-To:     caleb.connolly@linaro.org, Sebastian Reichel <sre@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Tom Rix <trix@redhat.com>, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, llvm@lists.linux.dev,
-        phone-devel@vger.kernel.org
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH v4 2/2] dt-bindings: power: supply: qcom,pmi8998-charger: add bindings for smb2 driver
-Date:   Wed,  6 Jul 2022 20:41:25 +0100
-Message-Id: <20220706194125.1861256-3-caleb.connolly@linaro.org>
-X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220706194125.1861256-1-caleb.connolly@linaro.org>
-References: <20220706194125.1861256-1-caleb.connolly@linaro.org>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=uQRsnwv9u5IuL08Zu0b0BsRI6BGP8zbhAD30ZwGOKSY=;
+        b=HZyeltmN511GI3hJGyJg48wukS0IhGgWeXhKgmm1tI8yOoFqlEHKdeHqGghdbw6gZ2
+         hi7Sv9B43GhsK2nQ7o/3oi6DLIdILifHq6ocTkMLh72OKAc5nFYsXYfOLGnnna0VDnMx
+         qExYLIFI8i5CbWqlVJ9Z30x2gfoZ8J+yac3EeQIAgzRCkWZIg2bQ+GwwKBL+EPhSPLI0
+         DYkK5hCxgCwIQYXBUIiy5TrUaGPM43K7KAiMOzuDdbZRjeg57tV4KuG5ZP4p+yN/ja1p
+         yiPdXJzqk2ljEsejpeiYXeDpNZ+Gqt7mCo0Vk8wpD+C81Om2iWgjvVR4JwDHEmVxk4Lu
+         T3kw==
+X-Gm-Message-State: AJIora90TBpfuimq/l3BR0ZbEdwG8bzGTFo4N4pVcoVFJXX7fDpA4FYp
+        p1YiR+T6VQP3kgYQXCVA5c34uUWq0J3XZMr5lgNnIA==
+X-Google-Smtp-Source: AGRyM1t4dRFvvQJAo3o+9zwoctngRDgoPiYrC8YooMHhSrERSiGT4kieKFmITMD8tdqHtO7K0lhat2uj3BHpxqC84aA=
+X-Received: by 2002:a17:907:168c:b0:726:c521:25aa with SMTP id
+ hc12-20020a170907168c00b00726c52125aamr40430672ejc.46.1657136600905; Wed, 06
+ Jul 2022 12:43:20 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+References: <20220518073232.526443-1-davidgow@google.com> <CAGS_qxrOUYC5iycS436Rb-gEoEnYDa2OJLkQhEVXcDN0BEJ4YA@mail.gmail.com>
+ <CANpmjNPSm8eZX7nAJyMts-4XdYB2ChXK17HApUpoHN-SOo7fRA@mail.gmail.com>
+ <CABVgOS=X51T_=hwTumnzL2yECgcshWBp1RT0F3GiT3+Fe_vang@mail.gmail.com> <CAGS_qxqsF-soqSM7-cO+tRD1Rg5fqrA07TGLRruxPE4i_rLdJw@mail.gmail.com>
+In-Reply-To: <CAGS_qxqsF-soqSM7-cO+tRD1Rg5fqrA07TGLRruxPE4i_rLdJw@mail.gmail.com>
+From:   Brendan Higgins <brendanhiggins@google.com>
+Date:   Wed, 6 Jul 2022 15:43:09 -0400
+Message-ID: <CAFd5g44dp05DaEot23_a2QdOGfmg=eehtoe24=6yo_UKiGNukA@mail.gmail.com>
+Subject: Re: [PATCH 1/2] kunit: tool: Add x86_64-smp architecture for SMP testing
+To:     Daniel Latypov <dlatypov@google.com>
+Cc:     David Gow <davidgow@google.com>, Marco Elver <elver@google.com>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        KUnit Development <kunit-dev@googlegroups.com>,
+        kasan-dev <kasan-dev@googlegroups.com>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add devicetree bindings for the Qualcomm PMI8998/PM660 SMB2 charger
-driver.
+On Thu, May 19, 2022 at 1:11 PM Daniel Latypov <dlatypov@google.com> wrote:
+>
+> On Thu, May 19, 2022 at 6:15 AM David Gow <davidgow@google.com> wrote:
+> >
+> > I tend to agree that having both would be nice: I think there are
+> > enough useful "machine configs" that trying to maintain, e.g, a 1:1
+> > mapping with kernel architectures is going to leave a bunch of things
+> > on the table, particularly as we add more tests for, e.g., drivers and
+> > specific CPU models.
+>
+> I agree that we don't necessarily need to maintain a 1:1 mapping.
+> But I feel like we should have a pretty convincing reason for doing
+> so, e.g. support for a CPU that requires we add in a bunch of
+> kconfigs.
 
-Signed-off-by: Caleb Connolly <caleb.connolly@linaro.org>
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
----
- .../power/supply/qcom,pmi8998-charger.yaml    | 82 +++++++++++++++++++
- 1 file changed, 82 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/power/supply/qcom,pmi8998-charger.yaml
+Agreed. That being said, if we have a good convention for archs that
+are not in arch/, then it should be OK. The biggest thing is that all
+archs passed into ARCH=, if supported, should have a default with the
+same value for kunittool; as long as that is the case, I don't think
+anyone will get confused.
 
-diff --git a/Documentation/devicetree/bindings/power/supply/qcom,pmi8998-charger.yaml b/Documentation/devicetree/bindings/power/supply/qcom,pmi8998-charger.yaml
-new file mode 100644
-index 000000000000..277c47e048b6
---- /dev/null
-+++ b/Documentation/devicetree/bindings/power/supply/qcom,pmi8998-charger.yaml
-@@ -0,0 +1,82 @@
-+# SPDX-License-Identifier: GPL-2.0 OR BSD-2-Clause
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/power/supply/qcom,pmi8998-charger.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Qualcomm PMI8998/PM660 Switch-Mode Battery Charger "2"
-+
-+maintainers:
-+  - Caleb Connolly <caleb.connolly@linaro.org>
-+
-+properties:
-+  compatible:
-+    enum:
-+      - qcom,pmi8998-charger
-+      - qcom,pm660-charger
-+
-+  reg:
-+    maxItems: 1
-+
-+  interrupts:
-+    maxItems: 4
-+
-+  interrupt-names:
-+    items:
-+      - const: usb-plugin
-+      - const: bat-ov
-+      - const: wdog-bark
-+      - const: usbin-icl-change
-+
-+  io-channels:
-+    items:
-+      - description: USB in current in uA
-+      - description: USB in voltage in uV
-+
-+  io-channel-names:
-+    items:
-+      - const: usbin_i
-+      - const: usbin_v
-+
-+  monitored-battery:
-+    description: phandle to the simple-battery node
-+    $ref: /schemas/types.yaml#/definitions/phandle
-+
-+required:
-+  - compatible
-+  - reg
-+  - interrupts
-+  - interrupt-names
-+  - io-channels
-+  - io-channel-names
-+  - monitored-battery
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    #include <dt-bindings/interrupt-controller/irq.h>
-+
-+    pmic {
-+      #address-cells = <1>;
-+      #size-cells = <0>;
-+      #interrupt-cells = <4>;
-+
-+      charger@1000 {
-+        compatible = "qcom,pmi8998-charger";
-+        reg = <0x1000>;
-+
-+        interrupts = <0x2 0x12 0x2 IRQ_TYPE_EDGE_BOTH>,
-+                     <0x2 0x13 0x4 IRQ_TYPE_EDGE_BOTH>,
-+                     <0x2 0x13 0x6 IRQ_TYPE_EDGE_RISING>,
-+                     <0x2 0x16 0x1 IRQ_TYPE_EDGE_RISING>;
-+        interrupt-names = "usb-plugin", "bat-ov", "wdog-bark", "usbin-icl-change";
-+
-+        io-channels = <&pmi8998_rradc 3>,
-+                      <&pmi8998_rradc 4>;
-+        io-channel-names = "usbin_i",
-+                           "usbin_v";
-+
-+        monitored-battery = <&battery>;
-+      };
-+    };
--- 
-2.36.1
+> This particular one feels simple enough to me.
+> Given we already have to put specific instructions in the
+> kcsan/.kunitconfig, I don't know if there's much of a difference in
+> cost between these two commands
+>
+> $ ./tools/testing/kunit/kunit.py run --kunitconfig=kernel/kcsan
+> --arch=x86_64-smp
+> $ ./tools/testing/kunit/kunit.py run --kunitconfig=kernel/kcsan
+> --arch=x86_64 --kconfig_add CONFIG_SMP=y --qemu_args "-smp 8"
 
+Also agree.
+
+> I've generally learned to prefer more explicit commands like the
+> second, even if they're quite a bit longer.
+
+I agree, but I think I learned this from you :-)
+
+> But I have the following biases
+> * I use FZF heavily, so I don't re-type long commands much
+
+Same.
+
+> * I'm the person who proposed --kconfig_add and --qemu_args, so of
+> course I'd think the longer form is easy to understand.
+> so I'm not in a position to object to this change.
+
+Yeah, I think I am a bit biased on this too, but I don't terribly care
+one way or the other.
+
+> Changing topics:
+> Users can overwrite the '-smp 8' here via --qemu_args [1], so I'm much
+> less worried about hard-coding any specific value in this file
+> anymore.
+> And given that, I think a more "natural" value for this file would be "-smp 2".
+> I think anything that needs more than that should explicitly should --qemu_args.
+>
+> Thoughts?
+
+If we have time, we could bring this topic up at LPC?
+
+> [1] tested with --qemu_args='-smp 4' --qemu_args='-smp 8'
+> and I see the following in the test.log
+>  smpboot: Allowing 8 CPUs, 0 hotplug CPUs
+> so QEMU respects the last value passed in, as expected.
+>
+> >
+> > The problem, of course, is that the --kconfig_add flags don't allow us
+> > to override anything explicitly stated in either the kunitconfig or
+> > qemu_config (and I imagine there could be problems with --qemu_config,
+> > too).
+>
+> This patch would fix that.
+> https://lore.kernel.org/linux-kselftest/20220519164512.3180360-1-dlatypov@google.com
+>
+> It introduces an overwriting priority of
+> * --kconfig_add
+> * kunitconfig / --kunitconfig
+> * qemu_config

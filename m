@@ -2,55 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 254E0568FA7
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 18:50:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A1586568FAF
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 18:51:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233912AbiGFQuq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Jul 2022 12:50:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44562 "EHLO
+        id S234242AbiGFQuy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Jul 2022 12:50:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44620 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233615AbiGFQuo (ORCPT
+        with ESMTP id S233615AbiGFQut (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Jul 2022 12:50:44 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC3C22A41D;
-        Wed,  6 Jul 2022 09:50:43 -0700 (PDT)
+        Wed, 6 Jul 2022 12:50:49 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D6B92A425
+        for <linux-kernel@vger.kernel.org>; Wed,  6 Jul 2022 09:50:48 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 46B6961E02;
-        Wed,  6 Jul 2022 16:50:43 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9C588C3411C;
-        Wed,  6 Jul 2022 16:50:39 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 14BE5B81E30
+        for <linux-kernel@vger.kernel.org>; Wed,  6 Jul 2022 16:50:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 252E7C341CB;
+        Wed,  6 Jul 2022 16:50:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1657126242;
-        bh=0pOVIbCNmcN/nm8RoI711i6Sp2Cnnc7ILx8PHcMjOhc=;
+        s=k20201202; t=1657126245;
+        bh=huZALYPFKBr4Np8d7D2qyaWr0GwXSIislDPcn8eFpkg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=iuBzYQOx/x119o/XKj4ad95UQ07vgkKRljfmsnYkmmrirzmMQjHuby+c86rVqRooj
-         e62NitvEEgbRi/AkzT7cg7TPO5SEkCwOZhTG7qYwx9ou9gdEYHoqM7GHTxceb5Z/h0
-         umIFpmDdt4evqfV+29PgG+EcUn3IfZqFDGD/sIoHZaLdcOTBCGKDbHcPwi54S2RqpB
-         aXx9RrWGAtvmFF3iPDr7aaQfWbAYYGqMazIZgoSiRZEh1pgfK4M8g8OOlQ8fXf38YE
-         VIXsvv+bqBqh/aL0z7bhbqJtvVoEYVcl4U3sRSY1zUXsLWJFf2MCnW9ZgAGMpF69bi
-         bS877EsNGSq2Q==
+        b=aBzQlPV1dZT3PFatvoynD8ldDTQl8Zwj3jb35ihkPVgvSTGXYsDDh7SCKL0KwQPmY
+         8jTUHHXrFDW6apWQjBCeMA3a5xVkpFhcr32fac4VWuVLUm8X6WkD74juqSm26iPVLZ
+         MGUt9RCQD8DGJV1f7hLnHQuJNZ8LiXBbuCo1gMvA2m0U/SRJuTjwEYoeqJQ8CmPDMi
+         6bv+Q+hUpqKadeTymHbyjPAUbiCaeZR7Ja6iP0YlmHCArxo9tA3jW9aRvA+0Wncgap
+         wrgvORyVScpUecTMCevWM0Z6xnS45DvYqOkIFob9w/xic2n+0OKl6+/Gw/mWtYGQbh
+         aoRzEkAUyhzBg==
 From:   Will Deacon <will@kernel.org>
-To:     Jordan Crouse <jcrouse@codeaurora.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Rob Clark <robdclark@gmail.com>,
-        freedreno@lists.freedesktop.org, Emma Anholt <emma@anholt.net>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        dri-devel@lists.freedesktop.org, Joerg Roedel <joro@8bytes.org>,
-        Andy Gross <agross@kernel.org>, linux-arm-msm@vger.kernel.org
+To:     linux-riscv@lists.infradead.org, palmer@dabbelt.com,
+        anup@brainfault.org, Eric Lin <eric.lin@sifive.com>,
+        atishp@atishpatra.org, atishp@rivosinc.com, mark.rutland@arm.com,
+        linux-kernel@vger.kernel.org, paul.walmsley@sifive.com,
+        aou@eecs.berkeley.edu, linux-arm-kernel@lists.infradead.org
 Cc:     catalin.marinas@arm.com, kernel-team@android.com,
-        Will Deacon <will@kernel.org>,
-        iommu@lists.linux-foundation.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/2] iommu: arm-smmu-impl: Add 8250 display compatible to the client list.
-Date:   Wed,  6 Jul 2022 17:50:30 +0100
-Message-Id: <165710831607.931151.17780533895560931345.b4-ty@kernel.org>
+        Will Deacon <will@kernel.org>, greentime.hu@sifive.com
+Subject: Re: [PATCH] drivers/perf: riscv_pmu: Add riscv pmu pm notifier
+Date:   Wed,  6 Jul 2022 17:50:31 +0100
+Message-Id: <165710145080.2497812.7883037173076290820.b4-ty@kernel.org>
 X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20220614230136.3726047-1-emma@anholt.net>
-References: <20220614230136.3726047-1-emma@anholt.net>
+In-Reply-To: <20220705091920.27432-1-eric.lin@sifive.com>
+References: <20220705091920.27432-1-eric.lin@sifive.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -64,17 +59,21 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 14 Jun 2022 16:01:35 -0700, Emma Anholt wrote:
-> Required for turning on per-process page tables for the GPU.
+On Tue, 5 Jul 2022 17:19:20 +0800, Eric Lin wrote:
+> Currently, when the CPU is doing suspend to ram, we don't
+> save pmu counter register and its content will be lost.
 > 
+> To ensure perf profiling is not affected by suspend to ram,
+> this patch is based on arm_pmu CPU_PM notifier and implements riscv
+> pmu pm notifier. In the pm notifier, we stop the counter and update
+> the counter value before suspend and start the counter after resume.
 > 
+> [...]
 
-Applied to will (for-joerg/arm-smmu/updates), thanks!
+Applied to will (for-next/perf), thanks!
 
-[1/2] iommu: arm-smmu-impl: Add 8250 display compatible to the client list.
-      https://git.kernel.org/will/c/3482c0b73073
-[2/2] arm64: dts: qcom: sm8250: Enable per-process page tables.
-      (no commit info)
+[1/1] drivers/perf: riscv_pmu: Add riscv pmu pm notifier
+      https://git.kernel.org/will/c/e9a023f2b73a
 
 Cheers,
 -- 

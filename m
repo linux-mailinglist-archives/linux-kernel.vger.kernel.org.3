@@ -2,137 +2,165 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E8675684CE
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 12:11:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 363365684E5
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 12:14:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230070AbiGFKLP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Jul 2022 06:11:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51042 "EHLO
+        id S232890AbiGFKM3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Jul 2022 06:12:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52724 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232801AbiGFKLH (ORCPT
+        with ESMTP id S232385AbiGFKMR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Jul 2022 06:11:07 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CA3512D23;
-        Wed,  6 Jul 2022 03:11:04 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E341AB81BA8;
-        Wed,  6 Jul 2022 10:11:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 74D29C3411C;
-        Wed,  6 Jul 2022 10:11:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1657102261;
-        bh=dKEeKNqJpoL5hH00p3yVGSgJ+P+GEsFV9D+wcQU4tt0=;
-        h=From:To:Cc:Subject:Date:From;
-        b=SDJHfaBi68ceMUFS0St1t1mYWHA4SAQ26COFTBXCh1zmzWCp6lq52k1WPvY1BzJkd
-         zIIzGFlW6lgV6TMaLhGW4GfaDrLNnrSJt9Jj3NpW5Z+F7tYH4iu8Ze2mvUoA8+bcAm
-         uHF2/AjnvuRuX5V61+/DdvxZAhH25mEL+aSUyD2VpB1jzu+G+XnuMqgJRUiVe4FFK4
-         p8i6Gp8BMq/LXqT7x0mpgOgwySVh8SaPAhdcp2SA2Ws2EuJgfuJfOAK1W5Qfivbg7o
-         RSYdsz9ApTWn6kCsh6UJLLYI+LUg4HBEyIlbObLF4qikTOE1luuNGfHkrn6dY2i9ZC
-         /cBorrxLjUJww==
-Received: by pali.im (Postfix)
-        id 911F37BA; Wed,  6 Jul 2022 12:10:58 +0200 (CEST)
-From:   =?UTF-8?q?Pali=20Roh=C3=A1r?= <pali@kernel.org>
-To:     Michael Ellerman <mpe@ellerman.id.au>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Bjorn Helgaas <bhelgaas@google.com>
-Cc:     linuxppc-dev@lists.ozlabs.org, linux-pci@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] powerpc/fsl-pci: Fix Class Code of PCIe Root Port
-Date:   Wed,  6 Jul 2022 12:10:43 +0200
-Message-Id: <20220706101043.4867-1-pali@kernel.org>
-X-Mailer: git-send-email 2.20.1
+        Wed, 6 Jul 2022 06:12:17 -0400
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD74FB8D;
+        Wed,  6 Jul 2022 03:12:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=Tkl3lxTOKWGbOCuxxKNckxHNjYRI3zGLuGc8imHNxDs=; b=WpgGH4+Y6U9gQSSnMVR6OLMxva
+        3xYxeAZ7USH+mmbkdac+gWqkqSUncCao79OXiiUot5IPHXuNd6BKu4KcdJ/3wd9E6vbdtwdlfX++8
+        YHg9SPa4d3D+hoJ+xHEd64U2BB0PxnnwhjCX34YKvpd3mB9eaqJ+9sCf1Ma6Y4Sc+A5HLQFse3wc3
+        7p9dt+e0Yzacjyq/2QRyinJn3DEvx+LTPjMD8J3/m/+8JP5Q5o8reLw6djHCmeIC4Lr1NoUT74Cpg
+        hLfvPld/nyGauGdSHTmpv4A/geUNh2jHXRL3BD0xt9eK7uievOocsG0NSTJd7nMGZkXKKLQVVrNY/
+        fCxnd6CA==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1o9207-000QRU-BY; Wed, 06 Jul 2022 10:11:19 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 6964C3001AE;
+        Wed,  6 Jul 2022 12:11:15 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 43F7A20207235; Wed,  6 Jul 2022 12:11:15 +0200 (CEST)
+Date:   Wed, 6 Jul 2022 12:11:15 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Sven Schnelle <svens@linux.ibm.com>
+Cc:     Steven Rostedt <rostedt@goodmis.org>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        "Eric W. Biederman" <ebiederm@xmission.com>,
+        linux-kernel@vger.kernel.org, rjw@rjwysocki.net,
+        Oleg Nesterov <oleg@redhat.com>, mingo@kernel.org,
+        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
+        mgorman@suse.de, bigeasy@linutronix.de,
+        Will Deacon <will@kernel.org>, tj@kernel.org,
+        linux-pm@vger.kernel.org, Richard Weinberger <richard@nod.at>,
+        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+        Johannes Berg <johannes@sipsolutions.net>,
+        linux-um@lists.infradead.org, Chris Zankel <chris@zankel.net>,
+        Max Filippov <jcmvbkbc@gmail.com>,
+        linux-xtensa@linux-xtensa.org, Kees Cook <keescook@chromium.org>,
+        Jann Horn <jannh@google.com>, linux-ia64@vger.kernel.org
+Subject: Re: [PATCH v4 12/12] sched,signal,ptrace: Rework TASK_TRACED,
+ TASK_STOPPED state
+Message-ID: <YsVfw3dy7smrpEbn@hirez.programming.kicks-ass.net>
+References: <YrHA5UkJLornOdCz@li-4a3a4a4c-28e5-11b2-a85c-a8d192c6f089.ibm.com>
+ <877d5ajesi.fsf@email.froward.int.ebiederm.org>
+ <YrHgo8GKFPWwoBoJ@li-4a3a4a4c-28e5-11b2-a85c-a8d192c6f089.ibm.com>
+ <20220628191541.34a073fc@gandalf.local.home>
+ <yt9d5ykbekn3.fsf@linux.ibm.com>
+ <yt9dpmijcvu6.fsf@linux.ibm.com>
+ <YsSQRmCZSIQ1ewzo@worktop.programming.kicks-ass.net>
+ <yt9dsfneaczk.fsf@linux.ibm.com>
+ <YsVO1NU3bXGg9YJ3@worktop.programming.kicks-ass.net>
+ <yt9da69ma8wm.fsf@linux.ibm.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <yt9da69ma8wm.fsf@linux.ibm.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-By default old pre-3.0 Freescale PCIe controllers reports invalid PCI Class
-Code 0x0b20 for PCIe Root Port. It can be seen by lspci -b output on P2020
-board which has this pre-3.0 controller:
+On Wed, Jul 06, 2022 at 11:27:05AM +0200, Sven Schnelle wrote:
+> Peter Zijlstra <peterz@infradead.org> writes:
+> 
+> > On Wed, Jul 06, 2022 at 09:58:55AM +0200, Sven Schnelle wrote:
+> >
+> >> >> [   86.218551] kill_chi-343805    6d.... 79990141us : ptrace_stop: JOBCTL_TRACED already set, state=0 <------ valid combination of flags?
+> >> >
+> >> > Yeah, that's not supposed to be so. JOBCTL_TRACED is supposed to follow
+> >> > __TASK_TRACED for now. Set when __TASK_TRACED, cleared when
+> >> > TASK_RUNNING.
+> >> >
+> >> > Specifically {ptrace_,}signal_wake_up() in signal.h clear JOBCTL_TRACED
+> >> > when they would wake a __TASK_TRACED task.
+> >> 
+> >> try_to_wake_up() clears TASK_TRACED in this case because a signal
+> >> (SIGKILL) has to be delivered. As a test I put the following change
+> >> on top, and it "fixes" the problem:
+> >> 
+> >> diff --git a/kernel/sched/core.c b/kernel/sched/core.c
+> >> index da0bf6fe9ecd..f2e0f5e70e77 100644
+> >> --- a/kernel/sched/core.c
+> >> +++ b/kernel/sched/core.c
+> >> @@ -4141,6 +4149,9 @@ try_to_wake_up(struct task_struct *p, unsigned int state, int wake_flags)
+> >>          * TASK_WAKING such that we can unlock p->pi_lock before doing the
+> >>          * enqueue, such as ttwu_queue_wakelist().
+> >>          */
+> >> +       if (p->__state & TASK_TRACED)
+> >> +               trace_printk("clearing TASK_TRACED 2\n");
+> >> +       p->jobctl &= ~JOBCTL_TRACED;
+> >>         WRITE_ONCE(p->__state, TASK_WAKING);
+> >> 
+> >>         /*
+> >> 
+> >> There are several places where the state is changed from TASK_TRACED to
+> >> something else without clearing JOBCTL_TRACED.
+> >
+> > I'm having difficulty spotting them; I find:
+> >
+> > TASK_WAKEKILL: signal_wake_up()
+> > __TASK_TRACED: ptrace_signal_wake_up(), ptrace_unfreeze_traced(), ptrace_resume()
+> >
+> > And all those sites dutifully clear JOBCTL_TRACED.
+> >
+> > I'd be most interested in the calstack for the 'clearing TASK_TRACED 2'
+> > events to see where we miss a spot.
+> 
+> The calltrace is:
+> [    9.863613] Call Trace:
+> [    9.863616]  [<00000000d3105f0e>] try_to_wake_up+0xae/0x620
+> [    9.863620] ([<00000000d3106164>] try_to_wake_up+0x304/0x620)
+> [    9.863623]  [<00000000d30d1e46>] ptrace_unfreeze_traced+0x9e/0xa8
+> [    9.863629]  [<00000000d30d2ef0>] __s390x_sys_ptrace+0xc0/0x160
+> [    9.863633]  [<00000000d3c5d8f4>] __do_syscall+0x1d4/0x200
+> [    9.863678]  [<00000000d3c6c332>] system_call+0x82/0xb0
+> [    9.863685] Last Breaking-Event-Address:
+> [    9.863686]  [<00000000d3106176>] try_to_wake_up+0x316/0x620
+> [    9.863688] ---[ end trace 0000000000000000 ]---
+> 
+> ptrace_unfreeze_traced() is:
+> 
+> static void ptrace_unfreeze_traced(struct task_struct *task)
+> {
+>         unsigned long flags;
+> 
+>         /*
+>          * The child may be awake and may have cleared
+>          * JOBCTL_PTRACE_FROZEN (see ptrace_resume).  The child will
+>          * not set JOBCTL_PTRACE_FROZEN or enter __TASK_TRACED anew.
+>          */
+>         if (lock_task_sighand(task, &flags)) {
+>                 task->jobctl &= ~JOBCTL_PTRACE_FROZEN;
+>                 if (__fatal_signal_pending(task)) {
+>                         task->jobctl &= ~TASK_TRACED;
+> 
+> Looking at this, shouldn't the line above read task->jobctl &= ~JOBCTL_TRACED?
 
-  $ lspci -bvnn
-  00:00.0 Power PC [0b20]: Freescale Semiconductor Inc P2020E [1957:0070] (rev 21)
-          !!! Invalid class 0b20 for header type 01
-          Capabilities: [4c] Express Root Port (Slot-), MSI 00
+YES! Absolutely.
 
-Fix this issue by programming correct PCI Class Code 0x0604 for PCIe Root
-Port to the Freescale specific PCIe register 0x474.
-
-With this change lspci -b output is:
-
-  $ lspci -bvnn
-  00:00.0 PCI bridge [0604]: Freescale Semiconductor Inc P2020E [1957:0070] (rev 21) (prog-if 00 [Normal decode])
-          Capabilities: [4c] Express Root Port (Slot-), MSI 00
-
-Without any "Invalid class" error. So class code was properly reflected
-into standard (read-only) PCI register 0x08.
-
-Same fix is already implemented in U-Boot pcie_fsl.c driver in commit:
-http://source.denx.de/u-boot/u-boot/-/commit/d18d06ac35229345a0af80977a408cfbe1d1015b
-
-Fix activated by U-Boot stay active also after booting Linux kernel.
-But boards which use older U-Boot version without that fix are affected and
-still require this fix.
-
-So implement this class code fix also in kernel fsl_pci.c driver.
-
-Cc: stable@vger.kernel.org
-Signed-off-by: Pali Rohár <pali@kernel.org>
----
- arch/powerpc/sysdev/fsl_pci.c | 8 ++++++++
- arch/powerpc/sysdev/fsl_pci.h | 1 +
- 2 files changed, 9 insertions(+)
-
-diff --git a/arch/powerpc/sysdev/fsl_pci.c b/arch/powerpc/sysdev/fsl_pci.c
-index 1011cfea2e32..bfbb8c8fc9aa 100644
---- a/arch/powerpc/sysdev/fsl_pci.c
-+++ b/arch/powerpc/sysdev/fsl_pci.c
-@@ -521,6 +521,7 @@ int fsl_add_bridge(struct platform_device *pdev, int is_primary)
- 	struct resource rsrc;
- 	const int *bus_range;
- 	u8 hdr_type, progif;
-+	u32 class_code;
- 	struct device_node *dev;
- 	struct ccsr_pci __iomem *pci;
- 	u16 temp;
-@@ -594,6 +595,13 @@ int fsl_add_bridge(struct platform_device *pdev, int is_primary)
- 			PPC_INDIRECT_TYPE_SURPRESS_PRIMARY_BUS;
- 		if (fsl_pcie_check_link(hose))
- 			hose->indirect_type |= PPC_INDIRECT_TYPE_NO_PCIE_LINK;
-+		/* Fix Class Code to PCI_CLASS_BRIDGE_PCI_NORMAL for pre-3.0 controller */
-+		if (in_be32(&pci->block_rev1) < PCIE_IP_REV_3_0) {
-+			early_read_config_dword(hose, 0, 0, PCIE_FSL_CSR_CLASSCODE, &class_code);
-+			class_code &= 0xff;
-+			class_code |= PCI_CLASS_BRIDGE_PCI_NORMAL << 8;
-+			early_write_config_dword(hose, 0, 0, PCIE_FSL_CSR_CLASSCODE, class_code);
-+		}
- 	} else {
- 		/*
- 		 * Set PBFR(PCI Bus Function Register)[10] = 1 to
-diff --git a/arch/powerpc/sysdev/fsl_pci.h b/arch/powerpc/sysdev/fsl_pci.h
-index cdbde2e0c96e..093a875d7d1e 100644
---- a/arch/powerpc/sysdev/fsl_pci.h
-+++ b/arch/powerpc/sysdev/fsl_pci.h
-@@ -18,6 +18,7 @@ struct platform_device;
- 
- #define PCIE_LTSSM	0x0404		/* PCIE Link Training and Status */
- #define PCIE_LTSSM_L0	0x16		/* L0 state */
-+#define PCIE_FSL_CSR_CLASSCODE	0x474	/* FSL GPEX CSR */
- #define PCIE_IP_REV_2_2		0x02080202 /* PCIE IP block version Rev2.2 */
- #define PCIE_IP_REV_3_0		0x02080300 /* PCIE IP block version Rev3.0 */
- #define PIWAR_EN		0x80000000	/* Enable */
--- 
-2.20.1
-
+>                         wake_up_state(task, __TASK_TRACED);
+>                 }
+>                 unlock_task_sighand(task, &flags);
+>         }
+> }

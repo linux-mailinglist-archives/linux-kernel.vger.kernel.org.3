@@ -2,60 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F004E567EF1
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 08:50:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D2070567EED
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 08:50:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230157AbiGFGuf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Jul 2022 02:50:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45942 "EHLO
+        id S230217AbiGFGuB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Jul 2022 02:50:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45482 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229941AbiGFGuc (ORCPT
+        with ESMTP id S229459AbiGFGuA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Jul 2022 02:50:32 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EAE4F193D0
-        for <linux-kernel@vger.kernel.org>; Tue,  5 Jul 2022 23:50:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1657090231; x=1688626231;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=AbwUZbN44hYJupb+OP0Wy3af7ypx0DOwuTDv059I7xc=;
-  b=NgMGEtuuY5mqiZ0v+FKIGjfm1kVuZCI9EjUouE+QC4YI4NCkMdJxXh1p
-   A0SnY8CX5AH1YGsYcShumHAdWBt5NM5RjGOHHXLpZQUdswqE3Ki56ZqXs
-   6PUoAELAwHPCxDMrhCrCdxjuN8Va14pqCjhwRNIlDaiUCwndpAos4KRUq
-   t94/Wyk/8xAas0Q1AR79xyTwiZ75x2yHYSDDYjHzdxDUlumLC1Ir+hMte
-   dB9FC1nF/wO+ZTsShJR0i5U/XH4D++Si7ZOrhTOCDKlsC2aG2M3YRpzBj
-   Ewv+njzboD8cw3rKZxg7lOZDN6Xf8uBVLFRRD8jc+AdmRhfB/hAF69Ley
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10399"; a="263449059"
-X-IronPort-AV: E=Sophos;i="5.92,249,1650956400"; 
-   d="scan'208";a="263449059"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jul 2022 23:50:31 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,249,1650956400"; 
-   d="scan'208";a="920028283"
-Received: from lkp-server01.sh.intel.com (HELO 68b931ab7ac1) ([10.239.97.150])
-  by fmsmga005.fm.intel.com with ESMTP; 05 Jul 2022 23:50:30 -0700
-Received: from kbuild by 68b931ab7ac1 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1o8yrl-000KAL-Fn;
-        Wed, 06 Jul 2022 06:50:29 +0000
-Date:   Wed, 6 Jul 2022 14:49:44 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org, Vinod Koul <vkoul@kernel.org>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-Subject: [vkoul-soundwire:next 1/6] drivers/soundwire/qcom.c:1312:9: error:
- no member named 'audio_cgcr' in 'struct qcom_swrm_ctrl'
-Message-ID: <202207061401.0ckPaFMr-lkp@intel.com>
+        Wed, 6 Jul 2022 02:50:00 -0400
+Received: from mail-io1-xd29.google.com (mail-io1-xd29.google.com [IPv6:2607:f8b0:4864:20::d29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 223A5186EB
+        for <linux-kernel@vger.kernel.org>; Tue,  5 Jul 2022 23:49:59 -0700 (PDT)
+Received: by mail-io1-xd29.google.com with SMTP id d3so13165725ioi.9
+        for <linux-kernel@vger.kernel.org>; Tue, 05 Jul 2022 23:49:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=uFDUO2lAtaxUOCJBS2ybIr+5lde/InUJE8Yl1U+lpWs=;
+        b=wQhWsZSXlYZuc3tsKlLEY8XAEjPfpGE2UyUV+CBOptqTUv2bzGDoxw+POl3QYd8cfQ
+         h13vT8ZBNDjIVgCySlXafLhltyfjaRyFoO0PmcfExZ7h00nhrPQWTf+cSScpLcgTkN8o
+         Nh3NevvAS6oxyjJOlp9pd3ADcyqkacvZZkQXr1WAG+Eqw0cb1VjmoT4KRQcPUYltO6J3
+         QhxTET39/MzUpkLRnEJDog/dSKRxph/5TSC81EoOzrgjAwAalrI0z0GwwodSQqzLjh+y
+         y69DHlokDfiyfMKsikhziXr0jjLlfL405IPE5SQHHr2LjdxSLFUgducWnnTepAYdFqHK
+         p/cQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=uFDUO2lAtaxUOCJBS2ybIr+5lde/InUJE8Yl1U+lpWs=;
+        b=dgHpBXCXScfsCBlNVNRzOLhGxUC2Bwsd1uQL+pmyM0Ol6aE3jwMiJj0ScTCrkHKlsp
+         +kYtjZn5R63qvO/ufQBWoXi/jaIHkHm3XxKmvfm43SX25yUdcnJzQexedLLObgpSXK8U
+         hMY7ylrMosPn+fz5myUkCa37K41ynifhuvG5aSc19GEd/uCx0t9I3QevrNS+FlxVgEUQ
+         LW7Uan83dQOCSuuYWHati9INs4lkmyXiVxHZe6NcMW4RN3mEfupCUK8tgYoCvYxSwuq5
+         ovWrduXbZeU/xDI3LWp3sjv/wyaucBxhjaE52A2l/hl9Ws4LnO5bd3iOiVcbRr+B1Mst
+         Poqg==
+X-Gm-Message-State: AJIora/D+gwNNIqQjI+Es9nzwhp6Hik2CdxLUFG/YTkIL4doZBjW3lWo
+        ZHj2Hro1I/Db/DpoQ8Hj6pKnCofzRxp9+/ihnfP9vw==
+X-Google-Smtp-Source: AGRyM1tI4BnB0IlXUrHASo+brHHOLx1UgGRWVVnIaNTUbtgW7nOuQQCrO9CknvMTDJrOqBfgm1faDTCdr/sPMdxyWE0=
+X-Received: by 2002:a02:606f:0:b0:335:ae88:68c6 with SMTP id
+ d47-20020a02606f000000b00335ae8868c6mr22946278jaf.320.1657090198340; Tue, 05
+ Jul 2022 23:49:58 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+References: <20220705115615.323395630@linuxfoundation.org>
+In-Reply-To: <20220705115615.323395630@linuxfoundation.org>
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Wed, 6 Jul 2022 12:19:47 +0530
+Message-ID: <CA+G9fYs4NHw8c5ROriWtTr5rZK=LtBTTNfE_YOoYvdB-k2k=4w@mail.gmail.com>
+Subject: Re: [PATCH 5.10 00/84] 5.10.129-rc1 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        slade@sladewatkins.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -63,193 +71,118 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/vkoul/soundwire.git next
-head:   89ac225d323b8ab0cc4c416316bb1c72e6706917
-commit: 37a0ca7e5cdf175a1a820adb3adba904612fed46 [1/6] soundwire: qcom: Add flag for software clock gating check
-config: hexagon-randconfig-r012-20220703 (https://download.01.org/0day-ci/archive/20220706/202207061401.0ckPaFMr-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project f553287b588916de09c66e3e32bf75e5060f967f)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/vkoul/soundwire.git/commit/?id=37a0ca7e5cdf175a1a820adb3adba904612fed46
-        git remote add vkoul-soundwire https://git.kernel.org/pub/scm/linux/kernel/git/vkoul/soundwire.git
-        git fetch --no-tags vkoul-soundwire next
-        git checkout 37a0ca7e5cdf175a1a820adb3adba904612fed46
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/soundwire/
+On Tue, 5 Jul 2022 at 17:37, Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
+>
+> This is the start of the stable review cycle for the 5.10.129 release.
+> There are 84 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>
+> Responses should be made by Thu, 07 Jul 2022 11:55:56 +0000.
+> Anything received after that time might be too late.
+>
+> The whole patch series can be found in one patch at:
+>         https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-=
+5.10.129-rc1.gz
+> or in the git tree and branch at:
+>         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
+-rc.git linux-5.10.y
+> and the diffstat can be found below.
+>
+> thanks,
+>
+> greg k-h
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+Results from Linaro=E2=80=99s test farm.
+No regressions on arm64, arm, x86_64, and i386.
 
-All errors (new ones prefixed by >>):
+Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
 
->> drivers/soundwire/qcom.c:1312:9: error: no member named 'audio_cgcr' in 'struct qcom_swrm_ctrl'
-                   ctrl->audio_cgcr = devm_reset_control_get_exclusive(dev, "swr_audio_cgcr");
-                   ~~~~  ^
->> drivers/soundwire/qcom.c:1312:22: error: call to undeclared function 'devm_reset_control_get_exclusive'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-                   ctrl->audio_cgcr = devm_reset_control_get_exclusive(dev, "swr_audio_cgcr");
-                                      ^
-   drivers/soundwire/qcom.c:1313:28: error: no member named 'audio_cgcr' in 'struct qcom_swrm_ctrl'
-                   if (IS_ERR_OR_NULL(ctrl->audio_cgcr)) {
-                                      ~~~~  ^
-   drivers/soundwire/qcom.c:1315:24: error: no member named 'audio_cgcr' in 'struct qcom_swrm_ctrl'
-                           ret = PTR_ERR(ctrl->audio_cgcr);
-                                         ~~~~  ^
-   4 errors generated.
+## Build
+* kernel: 5.10.129-rc1
+* git: https://gitlab.com/Linaro/lkft/mirrors/stable/linux-stable-rc
+* git branch: linux-5.10.y
+* git commit: 29ca824cd19ac67c8cffb76d419103432e92223a
+* git describe: v5.10.128-85-g29ca824cd19a
+* test details:
+https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-5.10.y/build/v5.10=
+.128-85-g29ca824cd19a
 
+## Test Regressions (compared to v5.10.128)
+No test regressions found.
 
-vim +1312 drivers/soundwire/qcom.c
+## Metric Regressions (compared to v5.10.128)
+No metric regressions found.
 
-  1275	
-  1276	static int qcom_swrm_probe(struct platform_device *pdev)
-  1277	{
-  1278		struct device *dev = &pdev->dev;
-  1279		struct sdw_master_prop *prop;
-  1280		struct sdw_bus_params *params;
-  1281		struct qcom_swrm_ctrl *ctrl;
-  1282		const struct qcom_swrm_data *data;
-  1283		int ret;
-  1284		u32 val;
-  1285	
-  1286		ctrl = devm_kzalloc(dev, sizeof(*ctrl), GFP_KERNEL);
-  1287		if (!ctrl)
-  1288			return -ENOMEM;
-  1289	
-  1290		data = of_device_get_match_data(dev);
-  1291		ctrl->rows_index = sdw_find_row_index(data->default_rows);
-  1292		ctrl->cols_index = sdw_find_col_index(data->default_cols);
-  1293	#if IS_REACHABLE(CONFIG_SLIMBUS)
-  1294		if (dev->parent->bus == &slimbus_bus) {
-  1295	#else
-  1296		if (false) {
-  1297	#endif
-  1298			ctrl->reg_read = qcom_swrm_ahb_reg_read;
-  1299			ctrl->reg_write = qcom_swrm_ahb_reg_write;
-  1300			ctrl->regmap = dev_get_regmap(dev->parent, NULL);
-  1301			if (!ctrl->regmap)
-  1302				return -EINVAL;
-  1303		} else {
-  1304			ctrl->reg_read = qcom_swrm_cpu_reg_read;
-  1305			ctrl->reg_write = qcom_swrm_cpu_reg_write;
-  1306			ctrl->mmio = devm_platform_ioremap_resource(pdev, 0);
-  1307			if (IS_ERR(ctrl->mmio))
-  1308				return PTR_ERR(ctrl->mmio);
-  1309		}
-  1310	
-  1311		if (data->sw_clk_gate_required) {
-> 1312			ctrl->audio_cgcr = devm_reset_control_get_exclusive(dev, "swr_audio_cgcr");
-  1313			if (IS_ERR_OR_NULL(ctrl->audio_cgcr)) {
-  1314				dev_err(dev, "Failed to get cgcr reset ctrl required for SW gating\n");
-  1315				ret = PTR_ERR(ctrl->audio_cgcr);
-  1316				goto err_init;
-  1317			}
-  1318		}
-  1319	
-  1320		ctrl->irq = of_irq_get(dev->of_node, 0);
-  1321		if (ctrl->irq < 0) {
-  1322			ret = ctrl->irq;
-  1323			goto err_init;
-  1324		}
-  1325	
-  1326		ctrl->hclk = devm_clk_get(dev, "iface");
-  1327		if (IS_ERR(ctrl->hclk)) {
-  1328			ret = PTR_ERR(ctrl->hclk);
-  1329			goto err_init;
-  1330		}
-  1331	
-  1332		clk_prepare_enable(ctrl->hclk);
-  1333	
-  1334		ctrl->dev = dev;
-  1335		dev_set_drvdata(&pdev->dev, ctrl);
-  1336		mutex_init(&ctrl->port_lock);
-  1337		init_completion(&ctrl->broadcast);
-  1338		init_completion(&ctrl->enumeration);
-  1339	
-  1340		ctrl->bus.ops = &qcom_swrm_ops;
-  1341		ctrl->bus.port_ops = &qcom_swrm_port_ops;
-  1342		ctrl->bus.compute_params = &qcom_swrm_compute_params;
-  1343		ctrl->bus.clk_stop_timeout = 300;
-  1344	
-  1345		ret = qcom_swrm_get_port_config(ctrl);
-  1346		if (ret)
-  1347			goto err_clk;
-  1348	
-  1349		params = &ctrl->bus.params;
-  1350		params->max_dr_freq = DEFAULT_CLK_FREQ;
-  1351		params->curr_dr_freq = DEFAULT_CLK_FREQ;
-  1352		params->col = data->default_cols;
-  1353		params->row = data->default_rows;
-  1354		ctrl->reg_read(ctrl, SWRM_MCP_STATUS, &val);
-  1355		params->curr_bank = val & SWRM_MCP_STATUS_BANK_NUM_MASK;
-  1356		params->next_bank = !params->curr_bank;
-  1357	
-  1358		prop = &ctrl->bus.prop;
-  1359		prop->max_clk_freq = DEFAULT_CLK_FREQ;
-  1360		prop->num_clk_gears = 0;
-  1361		prop->num_clk_freq = MAX_FREQ_NUM;
-  1362		prop->clk_freq = &qcom_swrm_freq_tbl[0];
-  1363		prop->default_col = data->default_cols;
-  1364		prop->default_row = data->default_rows;
-  1365	
-  1366		ctrl->reg_read(ctrl, SWRM_COMP_HW_VERSION, &ctrl->version);
-  1367	
-  1368		ret = devm_request_threaded_irq(dev, ctrl->irq, NULL,
-  1369						qcom_swrm_irq_handler,
-  1370						IRQF_TRIGGER_RISING |
-  1371						IRQF_ONESHOT,
-  1372						"soundwire", ctrl);
-  1373		if (ret) {
-  1374			dev_err(dev, "Failed to request soundwire irq\n");
-  1375			goto err_clk;
-  1376		}
-  1377	
-  1378		ctrl->wake_irq = of_irq_get(dev->of_node, 1);
-  1379		if (ctrl->wake_irq > 0) {
-  1380			ret = devm_request_threaded_irq(dev, ctrl->wake_irq, NULL,
-  1381							qcom_swrm_wake_irq_handler,
-  1382							IRQF_TRIGGER_HIGH | IRQF_ONESHOT,
-  1383							"swr_wake_irq", ctrl);
-  1384			if (ret) {
-  1385				dev_err(dev, "Failed to request soundwire wake irq\n");
-  1386				goto err_init;
-  1387			}
-  1388		}
-  1389	
-  1390		ret = sdw_bus_master_add(&ctrl->bus, dev, dev->fwnode);
-  1391		if (ret) {
-  1392			dev_err(dev, "Failed to register Soundwire controller (%d)\n",
-  1393				ret);
-  1394			goto err_clk;
-  1395		}
-  1396	
-  1397		qcom_swrm_init(ctrl);
-  1398		wait_for_completion_timeout(&ctrl->enumeration,
-  1399					    msecs_to_jiffies(TIMEOUT_MS));
-  1400		ret = qcom_swrm_register_dais(ctrl);
-  1401		if (ret)
-  1402			goto err_master_add;
-  1403	
-  1404		dev_info(dev, "Qualcomm Soundwire controller v%x.%x.%x Registered\n",
-  1405			 (ctrl->version >> 24) & 0xff, (ctrl->version >> 16) & 0xff,
-  1406			 ctrl->version & 0xffff);
-  1407	
-  1408		pm_runtime_set_autosuspend_delay(dev, 3000);
-  1409		pm_runtime_use_autosuspend(dev);
-  1410		pm_runtime_mark_last_busy(dev);
-  1411		pm_runtime_set_active(dev);
-  1412		pm_runtime_enable(dev);
-  1413	
-  1414		/* Clk stop is not supported on WSA Soundwire masters */
-  1415		if (ctrl->version <= 0x01030000) {
-  1416			ctrl->clock_stop_not_supported = true;
-  1417		} else {
-  1418			ctrl->reg_read(ctrl, SWRM_COMP_MASTER_ID, &val);
-  1419			if (val == MASTER_ID_WSA)
-  1420				ctrl->clock_stop_not_supported = true;
-  1421		}
-  1422	
+## Test Fixes (compared to v5.10.128)
+No test fixes found.
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+## Metric Fixes (compared to v5.10.128)
+No metric fixes found.
+
+## Test result summary
+total: 127412, pass: 114362, fail: 281, skip: 12114, xfail: 655
+
+## Build Summary
+* arc: 10 total, 10 passed, 0 failed
+* arm: 308 total, 308 passed, 0 failed
+* arm64: 62 total, 62 passed, 0 failed
+* i386: 52 total, 49 passed, 3 failed
+* mips: 48 total, 48 passed, 0 failed
+* parisc: 12 total, 12 passed, 0 failed
+* powerpc: 51 total, 51 passed, 0 failed
+* riscv: 27 total, 27 passed, 0 failed
+* s390: 21 total, 21 passed, 0 failed
+* sh: 24 total, 24 passed, 0 failed
+* sparc: 12 total, 12 passed, 0 failed
+* x86_64: 56 total, 55 passed, 1 failed
+
+## Test suites summary
+* fwts
+* igt-gpu-tools
+* kunit
+* kvm-unit-tests
+* libgpiod
+* libhugetlbfs
+* log-parser-boot
+* log-parser-test
+* ltp-cap_bounds
+* ltp-commands
+* ltp-containers
+* ltp-controllers
+* ltp-cpuhotplug
+* ltp-crypto
+* ltp-cve
+* ltp-dio
+* ltp-fcntl-locktests
+* ltp-filecaps
+* ltp-fs
+* ltp-fs_bind
+* ltp-fs_perms_simple
+* ltp-fsx
+* ltp-hugetlb
+* ltp-io
+* ltp-ipc
+* ltp-math
+* ltp-mm
+* ltp-nptl
+* ltp-open-posix-tests
+* ltp-pty
+* ltp-sched
+* ltp-securebits
+* ltp-smoke
+* ltp-syscalls
+* ltp-tracing
+* network-basic-tests
+* packetdrill
+* perf
+* perf/Zstd-perf.data-compression
+* rcutorture
+* ssuite
+* v4l2-compliance
+* vdso
+
+--
+Linaro LKFT
+https://lkft.linaro.org

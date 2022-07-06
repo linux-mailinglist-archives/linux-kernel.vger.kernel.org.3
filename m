@@ -2,119 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A157D568C6A
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 17:12:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4FA65568C6D
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 17:12:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233200AbiGFPLQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Jul 2022 11:11:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56234 "EHLO
+        id S233240AbiGFPMF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Jul 2022 11:12:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56966 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232706AbiGFPLP (ORCPT
+        with ESMTP id S232706AbiGFPMC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Jul 2022 11:11:15 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BAD3865D7;
-        Wed,  6 Jul 2022 08:11:14 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 55C7061F97;
-        Wed,  6 Jul 2022 15:11:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 41565C3411C;
-        Wed,  6 Jul 2022 15:11:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1657120273;
-        bh=0t4+0NuMhuKyhwYE96uObn+Fn7wgjaM3o2VchjRzaXs=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=gw8mON+xl+eQZmkqxAgwIhnso4d59umDNj6K4PGfjWW/FO0S61A6g52NhqKfboWoS
-         JQUCnAHe5SqBTSHrQWH+CEkJ3yb07oIOsID5bF4XYGrdOZENOIAsUoFGf+QW9atfa9
-         Y/vG3j6mnbZqtXUkIwWeLV7LHiDRJ7LNmXhVeUSbrrbR7Vqm/90nH1OgeBkDrwcNZE
-         Mc6L1vNr7YJ0uNRcNaTrDhQsePdrHASKZQRhXulpN6a2b+8kWJq/KhlWIUDWwMRGzz
-         VUOQaki583qvQmgazlzxIRrtsRyWB0XPo8+U6Xkv9beaG6CB1t5blrx2GfgUTa5EFO
-         Fz7rZOVR3YfwA==
-Message-ID: <f335b268-7334-372a-2993-03259e1b90a5@kernel.org>
-Date:   Wed, 6 Jul 2022 09:11:11 -0600
+        Wed, 6 Jul 2022 11:12:02 -0400
+Received: from mail-qt1-f180.google.com (mail-qt1-f180.google.com [209.85.160.180])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33D0813D4F
+        for <linux-kernel@vger.kernel.org>; Wed,  6 Jul 2022 08:12:01 -0700 (PDT)
+Received: by mail-qt1-f180.google.com with SMTP id ck6so18599285qtb.7
+        for <linux-kernel@vger.kernel.org>; Wed, 06 Jul 2022 08:12:01 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=u094c1pWAuc2qjFRYuYIiBLyQBzCT6qd8wf4uxXSTSI=;
+        b=ACSjlXyddhi5EaW5WOef3D1vif2MeOWYcJ2Qw7Jwge3SWdJVJHQDHgfBOHdwp7bB4r
+         E1Vu8pzZckmBVeHJQTopmqxzOf+lZqIYUHIX4SW+1FeA/SL0Gzb+f8y2vKROOZ9MgXEc
+         u93WULI24pobdOz5oktNiKp6GJesgLSK3Uai7nBewmpT+B/wI9Cnt2CEuDMLJD+0qcG2
+         DI4JPKVORLb5LSnuVec0cQBMZ0+jWGPiwLJDdix4kFVRPdqVWsVDPaq1n1zyc1qbAHLh
+         j44w477LZW5QSIDaCutnMR4pC2C1msOe0VTk/s0vSf1/9SJbm0W+gMgfevBkt0hhioeS
+         ebGw==
+X-Gm-Message-State: AJIora/YsGi3NJoWayyut+5XcoA5hEwPixMgdQP/Nxsav+fj6DWCqvGR
+        eo8GRdA0ozQ3BOaIqfKkvF45
+X-Google-Smtp-Source: AGRyM1tmmHS3hmEoSfozfOq3OFvufYVLm+WLqowCSt0K1ZgT8OE07PhhFHfBTGi7f9mSyqrGwqz2Lg==
+X-Received: by 2002:ac8:5985:0:b0:31d:3ea5:12f4 with SMTP id e5-20020ac85985000000b0031d3ea512f4mr18144555qte.274.1657120320113;
+        Wed, 06 Jul 2022 08:12:00 -0700 (PDT)
+Received: from localhost (pool-68-160-176-52.bstnma.fios.verizon.net. [68.160.176.52])
+        by smtp.gmail.com with ESMTPSA id j4-20020a05620a410400b006a6278a2b31sm20037145qko.75.2022.07.06.08.11.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 06 Jul 2022 08:11:59 -0700 (PDT)
+Date:   Wed, 6 Jul 2022 11:11:58 -0400
+From:   Mike Snitzer <snitzer@kernel.org>
+To:     Kees Cook <keescook@chromium.org>
+Cc:     Alasdair Kergon <agk@redhat.com>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        James Morris <jmorris@namei.org>,
+        "Serge E . Hallyn" <serge@hallyn.com>,
+        linux-kernel@vger.kernel.org, dm-devel@redhat.com,
+        Douglas Anderson <dianders@chromium.org>,
+        linux-raid@vger.kernel.org, Song Liu <song@kernel.org>,
+        linux-security-module@vger.kernel.org,
+        Milan Broz <gmazyland@gmail.com>
+Subject: Re: [PATCH v7 0/3] LoadPin: Enable loading from trusted dm-verity
+ devices
+Message-ID: <YsWmPt7xwTlvTfAf@redhat.com>
+References: <20220627153526.3750341-1-mka@chromium.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.11.0
-Subject: Re: [RFC net-next v3 05/29] net: bvec specific path in
- zerocopy_sg_from_iter
-Content-Language: en-US
-To:     Pavel Begunkov <asml.silence@gmail.com>
-Cc:     io-uring@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        "David S . Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Jonathan Lemon <jonathan.lemon@gmail.com>,
-        Willem de Bruijn <willemb@google.com>,
-        Jens Axboe <axboe@kernel.dk>, kernel-team@fb.com
-References: <cover.1653992701.git.asml.silence@gmail.com>
- <5143111391e771dc97237e2a5e6a74223ef8f15f.1653992701.git.asml.silence@gmail.com>
- <20220628225204.GA27554@u2004-local>
- <2840ec03-1d2b-f9c8-f215-61430f758925@gmail.com>
- <ee35a179-e9a1-39c7-d054-40b10ca9a1f3@kernel.org>
- <e453322f-bf33-d7c5-26c2-06896fb1a691@gmail.com>
- <6943e4a8-0b19-c35a-d6e5-9329dc03cc3e@gmail.com>
-From:   David Ahern <dsahern@kernel.org>
-In-Reply-To: <6943e4a8-0b19-c35a-d6e5-9329dc03cc3e@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220627153526.3750341-1-mka@chromium.org>
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 7/5/22 4:09 PM, Pavel Begunkov wrote:
-> On 7/5/22 15:03, Pavel Begunkov wrote:
->> On 7/5/22 03:28, David Ahern wrote:
->>> On 7/4/22 7:31 AM, Pavel Begunkov wrote:
->>>> If the series is going to be picked up for 5.20, how about we delay
->>>> this one for 5.21? I'll have time to think about it (maybe moving
->>>> the skb managed flag setup inside?), and will anyway need to send
->>>> some omitted patches then.
->>>>
->>>
->>> I think it reads better for io_uring and future extensions for io_uring
->>> to contain the optimized bvec iter handler and setting the managed flag.
->>> Too many disjointed assumptions the way the code is now. By pulling that
->>> into io_uring, core code does not make assumptions that "managed" means
->>> bvec and no page references - rather that is embedded in the code that
->>> cares.
->>
->> Core code would still need to know when to remove the skb's managed
->> flag, e.g. in case of mixing. Can be worked out but with assumptions,
->> which doesn't look better that it currently is. I'll post a 5.20
->> rebased version and will iron it out on the way then.
+On Mon, Jun 27 2022 at 11:35P -0400,
+Matthias Kaehlcke <mka@chromium.org> wrote:
 
-Sure. My comment was that MANAGED means something else (not core code)
-manages the page references on the skb frags. That flag does not need to
-be linked to a customized bvec.
+> As of now LoadPin restricts loading of kernel files to a single pinned
+> filesystem, typically the rootfs. This works for many systems, however it
+> can result in a bloated rootfs (and OTA updates) on platforms where
+> multiple boards with different hardware configurations use the same rootfs
+> image. Especially when 'optional' files are large it may be preferable to
+> download/install them only when they are actually needed by a given board.
+> Chrome OS uses Downloadable Content (DLC) [1] to deploy certain 'packages'
+> at runtime. As an example a DLC package could contain firmware for a
+> peripheral that is not present on all boards. DLCs use dm-verity [2] to
+> verify the integrity of the DLC content.
+> 
+> This series extends LoadPin to allow loading of kernel files from trusted
+> dm-verity devices. LoadPin maintains a list of root digests of verity
+> devices it considers trusted. Userspace can populate this list through an
+> ioctl on the new LoadPin securityfs entry 'dm-verity'. The ioctl receives
+> a file descriptor of a file with verity digests as parameter. Verity reads
+> the digests from this file after confirming that the file is located on the
+> pinned root. The digest file must contain one digest per line. The list of
+> trusted digests can only be set up once, which is typically done at boot
+> time.
+> 
+> When a kernel file is read LoadPin first checks (as usual) whether the file
+> is located on the pinned root, if so the file can be loaded. Otherwise, if
+> the verity extension is enabled, LoadPin determines whether the file is
+> located on a verity backed device and whether the root digest of that
+> device is in the list of trusted digests. The file can be loaded if the
+> verity device has a trusted root digest.
+> 
+> [1] https://chromium.googlesource.com/chromiumos/platform2/+/HEAD/dlcservice/docs/developer.md
+> [2] https://www.kernel.org/doc/html/latest/admin-guide/device-mapper/verity.html
 
-> @@ -66,16 +68,13 @@ struct msghdr {
->      };
->      bool        msg_control_is_user : 1;
->      bool        msg_get_inq : 1;/* return INQ after receive */
-> -    /*
-> -     * The data pages are pinned and won't be released before ->msg_ubuf
-> -     * is released. ->msg_iter should point to a bvec and ->msg_ubuf has
-> -     * to be non-NULL.
-> -     */
-> -    bool        msg_managed_data : 1;
->      unsigned int    msg_flags;    /* flags on received message */
->      __kernel_size_t    msg_controllen;    /* ancillary data buffer
-> length */
->      struct kiocb    *msg_iocb;    /* ptr to iocb for async requests */
->      struct ubuf_info *msg_ubuf;
-> +
-> +    int (*sg_from_iter)(struct sock *sk, struct sk_buff *skb,
-> +                struct iov_iter *from, size_t length);
->  };
->  
+Hi Kees,
 
-Putting in msghdr works too. I chose ubuf_info because it is directly
-related to the ZC path, but that struct is getting tight on space.
+Please pick this series up, thanks.
+
+Mike

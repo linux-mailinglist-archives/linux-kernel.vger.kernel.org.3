@@ -2,179 +2,246 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 25AFF56959C
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 01:06:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8EBA056959D
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 01:07:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233846AbiGFXGe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Jul 2022 19:06:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54724 "EHLO
+        id S233982AbiGFXHf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Jul 2022 19:07:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55434 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233491AbiGFXGb (ORCPT
+        with ESMTP id S231776AbiGFXHd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Jul 2022 19:06:31 -0400
-Received: from JPN01-OS0-obe.outbound.protection.outlook.com (mail-os0jpn01on2066.outbound.protection.outlook.com [40.107.113.66])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 416B42B24E
-        for <linux-kernel@vger.kernel.org>; Wed,  6 Jul 2022 16:06:30 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Gmw5mAig/nagYP92AFhnfqTjElghopCEDqNpuG6TcoW4Vvbj1nT+g91EHuP9CVrsAq8StXVStQhri8q0FVrXJUHnBOE2uqufDca6SsL6jVDStCoUn7gydiFpNWZc14Ef9c7tSOhZIcvTL147UsA+rnaml+6+chzdKDrQOEn8owr0UzQOMGdEunriya1crAzC61hCSQiXk5c8KN3gA50DLY51ci070jLt0pYqac90npC3Mwg+802xSLElrc1tHZAcFL2xDILySBOSxwi/wxbEpSaCWJ0CyxWYf4qa1TugYmLuDnRWk5sqDbZaI/shaxXHnXt1c/fLqgxTmELZXQrcyw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=GwqcCfhzUNfCdObMhTQP3hYfWINRj7742RQ88apcQMY=;
- b=bCI1b2+RWjt85bcxM53NTBVL8ao8yMZhzxJi0jShGqSnPv5giz0gDw+Sav7xYPdjmFDPXygAaeAgKFvH7+k2htr3mQwraqqNGFdD5ayyVEvpy6YM1fDM/xKQjX8rVdCUnDfILRll+w8AZrzSuo4nbaF04ucSESj/eLtj1nyBm7u9nSNMSxs2FlGuq5nz8fucxPmUwNm69wqXsZWseK9w+cLiIshDLZgaJ/9YGWstnj3ZfJMfe3xVWrAGAogUuRbxGtzT2S8iGK8d+9pDD5IYvv1yl4sG5nve/mvvGqlETI4WoE8zuHubUXEhrCsrExJs75GtUwyNICOfqm+3tVgi3A==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nec.com; dmarc=pass action=none header.from=nec.com; dkim=pass
- header.d=nec.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nec.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=GwqcCfhzUNfCdObMhTQP3hYfWINRj7742RQ88apcQMY=;
- b=dSpjqzhqH37ZSA9Z6P+r0PzcySxry7y/ga7+ro6eiUMn0p5t4GtHlyJtupMV4+TjYB49rLrSEWyfKvKwKsUThuwa/lJ+GlHDl1YtvHC2Bb6LyzTMGreZLW3r87KheblMcMfsOLqJXh5lyjvrLXZ2XoH6CmMUkRjM67q0+f17wec=
-Received: from TYWPR01MB8591.jpnprd01.prod.outlook.com (2603:1096:400:13c::10)
- by TYCPR01MB6654.jpnprd01.prod.outlook.com (2603:1096:400:9b::9) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5417.15; Wed, 6 Jul
- 2022 23:06:28 +0000
-Received: from TYWPR01MB8591.jpnprd01.prod.outlook.com
- ([fe80::5d07:3dbc:2b8c:d836]) by TYWPR01MB8591.jpnprd01.prod.outlook.com
- ([fe80::5d07:3dbc:2b8c:d836%6]) with mapi id 15.20.5395.021; Wed, 6 Jul 2022
- 23:06:28 +0000
-From:   =?utf-8?B?SE9SSUdVQ0hJIE5BT1lBKOWggOWPo+OAgOebtOS5nyk=?= 
-        <naoya.horiguchi@nec.com>
-To:     Miaohe Lin <linmiaohe@huawei.com>
-CC:     Naoya Horiguchi <naoya.horiguchi@linux.dev>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        David Hildenbrand <david@redhat.com>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Liu Shixin <liushixin2@huawei.com>,
-        Yang Shi <shy828301@gmail.com>,
-        Oscar Salvador <osalvador@suse.de>,
-        Muchun Song <songmuchun@bytedance.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [mm-unstable PATCH v4 5/9] mm, hwpoison: make unpoison aware of
- raw error info in hwpoisoned hugepage
-Thread-Topic: [mm-unstable PATCH v4 5/9] mm, hwpoison: make unpoison aware of
- raw error info in hwpoisoned hugepage
-Thread-Index: AQHYkOR4nIqzf3Z5RkmHICXrERFsHa1x+EGA
-Date:   Wed, 6 Jul 2022 23:06:28 +0000
-Message-ID: <20220706230627.GB2560241@hori.linux.bs1.fc.nec.co.jp>
-References: <20220704013312.2415700-1-naoya.horiguchi@linux.dev>
- <20220704013312.2415700-6-naoya.horiguchi@linux.dev>
- <9aba706c-b38f-f887-486e-b60c0025d9d8@huawei.com>
-In-Reply-To: <9aba706c-b38f-f887-486e-b60c0025d9d8@huawei.com>
-Accept-Language: ja-JP, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nec.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: c15e4ad6-918b-4bd3-9371-08da5fa42881
-x-ms-traffictypediagnostic: TYCPR01MB6654:EE_
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: xd85y3PSyxegYIkLDyDoYhXK/a95UA8IQF26YFH5Co2XRTKkdptbgsfLpLiH8a9vV5dmgvgPAK6mQHy5emTn76zY+hdIfBfmM1ZCfpCD25WR9SX4O8pN4mIrYpvdzxO089dXJ4OwBra1uxGspZSVhCaYxT27ORwImu2qDGAhsk12/OJrMZUN+8LtkvRpTuDO4GPuH4ADCppjmjrMkZQWuQRiaf5zA22XXFDShYPgYq0sVenUoDysD2kFkMd9NAZX75s/YwZicxLQ4/0o+ia0MWqBTsisCQyV1KMLqKHXt/rwZQVcyr/vz28Mi3C5+tDPmklq3SJTUnG5asSIDYho/w5WWwAjzWBdoUBNaSLD0jecYAcQ7VqF0/YLwfz95TloL9KosGq8DkbKHVPU+f9PJICBBcF8OWOj6qrmYaXpxQdV74TcDSgWmc8LzdH0O0X+/Wc8NVOFpw4yNKtpr6ZNbw8r2/suA1TRTEE6kziCmYvagsHr9WjeeMhMm6b0sRvf/1yo/q5ZBdjJr0AMo8LiEVbd+2Vopaoj906iftzj40rDmbAsiRq2uA9mb2FdNExX1xSgYyEB0zEND1AU/nVOr3Zx6IZmPWTSTA9zrdzrHZSOgl6wxVjUbI5wEdJd605ffvPIpm9K8HCJ5Z0LwlQbEdpV6xhaD7TPNNF2WIEOdcLz/Jzy60O0Fx8+kYVLmabCbKExREz4Nj5XgY81PzLKMIGi+KG7vzqWIk5eCQ+Q7WFSt0iS11GF5d291NDXzBIeN9d56czmUZJBMWD3a2ZBYMDmwvrG/040e3mmgIk6aGe4gtO8tBfCxLyJTMtK84CbLvJuR/7OrzU/ePEey1TN5xO/GBFrO4tVPluZytv7pwY=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:TYWPR01MB8591.jpnprd01.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(396003)(366004)(136003)(39860400002)(346002)(376002)(76116006)(66556008)(66476007)(66946007)(6916009)(8676002)(66446008)(41300700001)(53546011)(6506007)(55236004)(33656002)(38070700005)(82960400001)(4326008)(38100700002)(64756008)(122000001)(86362001)(1076003)(186003)(8936002)(71200400001)(5660300002)(7416002)(6486002)(2906002)(316002)(6512007)(9686003)(478600001)(26005)(83380400001)(54906003)(85182001)(309714004);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?SnA1T01lL3dPNGhsanJkc1Jzdi9HaDVXVFN3bTZraDVZN2oyZTdZSngyQUlo?=
- =?utf-8?B?OG5FbnlrTkNUY2lqUEIvT295NnNpemUwRHAvaE5vQThvVnFjLzNnaW5iRnhx?=
- =?utf-8?B?MGpIUW55ZC9GelhyRkYybWZLRHAyQ3c4T1JYR2Rkc3NzWjB0cUxUa2htd1pG?=
- =?utf-8?B?RlZBNUJ1TVBzWjM4dU9hZlN3TVBpYnBQb2lDTGluQmdJMWtaVGtOS01oQmdI?=
- =?utf-8?B?R012OENvRG0xQVJFd2t6bmZTbVpKeE1DVGt6b05tZysvK1FycTVQdFV3eTNi?=
- =?utf-8?B?c0Q5cnd4QytGVllCRHF4UUVZOEZONjlRNERFTklmVy9QMDhYaFBuVjBiVTRm?=
- =?utf-8?B?WW4wSTZMWTdxWUNwWWN3WnZMS2FqL2l6TFdKUVBJUlhIakZDQ0xYSksvQWZa?=
- =?utf-8?B?Z0FyNFB4QW5VdFFncEQ1S1pUdW9VYVJPcDNJc1BnV3lEaUVnRFlEVmN2d0NS?=
- =?utf-8?B?Y2dXY0lQemhvMkZ6aXpnTVI3ZDFLaHhzOWxwaDZBN2ZCZ0F1elRzOUZYcjVy?=
- =?utf-8?B?WGk4OW8wcUIxVnlXRTUyaUY0ejJMSG93SjlNWHNaSUNpZ2pZNitNTG5RM1o4?=
- =?utf-8?B?R2dEb2pPQ3lneFcrQlFTTjFjUDhhZlJFWUFRSWFKbmgxanA1UnZtZkFSTVpp?=
- =?utf-8?B?WmRLZ0NTUkdWc3pleEh6dTZPdHJxYkVXbkREc0MvU1J5TEdkQ1lnV21jc1Jk?=
- =?utf-8?B?U2t5VEh3MVNveDNEajVYck51Y1BlUzEwR20rMnd3ZlNkWS9FaHVVZENoZ1JC?=
- =?utf-8?B?czNtZ3JrUUIxZnlGRTBkbldnRUN5RTJZVGcxbEdvaXNwZ2o5d24xUnRKR0tp?=
- =?utf-8?B?VzlDMXpQbnJrb2FmdGx5WHRWenJmZGV0SGdpNmNXb2Q0ZDFkTmtLSGl4Z1RV?=
- =?utf-8?B?ck9tdCtJN3NoMm5ub0sxYStkS0JndjFaS05rRjJTUU5XeEJzbllYVmR1TTF6?=
- =?utf-8?B?ZUhSdGJiQWh2VWRPZVR0Rmh2aUpmSS9vdU9HV1kvVENHdXpmYVBxK1FLUlcv?=
- =?utf-8?B?MXdQZ2tIaEtVVmw1SjJJZ0NpeUZ2Q2w5dDZQRmUyai9ta1dtMzY4TkhsemNw?=
- =?utf-8?B?NHFlUFZUWWN0MEUzNEd3MEQwek5qTnd3OFhLc0VWWFVLSk5xbTluMm1oVFB4?=
- =?utf-8?B?YWtzOWg2U1hkbEdMUTlTTkovbEJxanpBRFd5NEZQSDc2N1JCQmZubVJSMnJr?=
- =?utf-8?B?a3h1TDNoUTBkT3ZzblNFZUQxVkd0OVJzSzJuVkpkSjc0bDV0czYxL2dpTjAx?=
- =?utf-8?B?SXhhNHlPOFN1SzJwZUVCbGxYaUxEUGpuREtXNGV2VHRzNUFwSzhua2h3M3dw?=
- =?utf-8?B?dnRWVUd3U3YvYldseG43RG0wbnV3anhBUFpWNGZ5N3BjVTFteTNYMHh2ZVhZ?=
- =?utf-8?B?VENFRGV3UE15VEVlTVRSM1RQeW9odW5MWGlEa2VzN1BsRXJHbmFQbmtOa2hi?=
- =?utf-8?B?ZnFacUZqSDRZN2EySnpia2M4NnlNSEpneE5yeVRYTFREcjY1MW0vR3pSc3hP?=
- =?utf-8?B?SmdyU1Z4TlpPVDJnRHRGNy9jSENKU2RINFI3M2ZhM0ZyV0RMdnJ0b2lCZ0RS?=
- =?utf-8?B?SnZLUjduVzkrTFkvS0ZIVTcwRWV5Mm54MkdsSldvbnp4cU9vdVg2Vm5GL3BO?=
- =?utf-8?B?MlJ6OU0zaksyV28xZEV2R09nUzQ5NXJyKzJCNVBiVkNleDhBYU0zQ0l3YlNi?=
- =?utf-8?B?bU0zUWt6M2RsbXo5KzNPQlVHMHdlQjZNcXpadHJWYldtbzR2bzlYY1kxU1pm?=
- =?utf-8?B?UWUvcEZZVVZuWkE0eFJKaVB1QWRxcDN6SHU5aGZ2SWlQUVdFUWlLSUtlNTk5?=
- =?utf-8?B?WDFOdk5WK3hFdHA4bXdOKzVndVRWVUYxQlBZeHgyUmN5NlNNRVBUMStNTVFG?=
- =?utf-8?B?dE9lOEdiMzJJeitlU2NEWG8wQVIwa1dKN2I1Rm03RnMwblRnN25RMjhXWEFI?=
- =?utf-8?B?VVA4TDhtdmEwZ2JPZUdESjMzbzN5eHFzVEZ2ZVRBTjBxSjg4Y3gyZXhOZmNq?=
- =?utf-8?B?NVNpeWVFUEF3bVY4cjd3NWc1S1FoQ3lycmU0WkVmWTBYOHRwandtWTUxbDh4?=
- =?utf-8?B?RU5XbldGdFBFMVZBcjdIUFc3N2h3QlRMbmJPVS9ETWtNM2xXSUlXV3k1aHVN?=
- =?utf-8?B?d29kS2RBb0RmSlNxS2l5eWE4RzRaczJHOFhIZTR5SjQzRWQvWEVUQmlaNVRk?=
- =?utf-8?B?OWc9PQ==?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <403793A40143CE47AD6AC87FF1A793D7@jpnprd01.prod.outlook.com>
-Content-Transfer-Encoding: base64
+        Wed, 6 Jul 2022 19:07:33 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 824AC2B260
+        for <linux-kernel@vger.kernel.org>; Wed,  6 Jul 2022 16:07:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1657148852; x=1688684852;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=AE2UvYsp2+nwmNULN4I1AI/1pvsKh05W3/jaVcEyk/g=;
+  b=m3VKP9koof/VyoZ+nQohqVnYtYeuH8xsAnNAi2DevBuhbRWZ+CWmh32C
+   JU/WXu4IWTNZPyy9LxUk4E2t+V/w6bbpz1bwK90r/RSVlidguNKHuciaA
+   fCbig2SP+VvXZ58fxYIXwVgkF8Ho+RIoToi14ZiL3Nms/t/ndAJbuAqir
+   RtIcaheCECEAEo2C2lIjGTATq4j6c4TNwUDW/sUD9bAX/pmIJECrygAk/
+   KY5RCtcn3eEjcPhkXnmx5OjlcsSyfMuO4y8tvNt9ztVN5zzSjdaSL1wUU
+   oYOOOKpmnf+y+kFjOdnJ8DtUnpbAY1OK3pCKvpwiwF+s11bEaCN7FSI/c
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10400"; a="283913360"
+X-IronPort-AV: E=Sophos;i="5.92,251,1650956400"; 
+   d="scan'208";a="283913360"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jul 2022 16:07:32 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.92,251,1650956400"; 
+   d="scan'208";a="683103119"
+Received: from lkp-server01.sh.intel.com (HELO 68b931ab7ac1) ([10.239.97.150])
+  by FMSMGA003.fm.intel.com with ESMTP; 06 Jul 2022 16:07:30 -0700
+Received: from kbuild by 68b931ab7ac1 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1o9E7G-000LCY-1l;
+        Wed, 06 Jul 2022 23:07:30 +0000
+Date:   Thu, 7 Jul 2022 07:07:19 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Vijendar Mukunda <Vijendar.Mukunda@amd.com>
+Cc:     kbuild-all@lists.01.org,
+        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
+        linux-kernel@vger.kernel.org, Mark Brown <broonie@kernel.org>
+Subject: [ammarfaizi2-block:broonie/sound/for-next 328/353]
+ sound/soc/soc-acpi.c:34:1: error: redefinition of
+ 'snd_soc_acpi_find_machine'
+Message-ID: <202207070640.BouQoaUc-lkp@intel.com>
 MIME-Version: 1.0
-X-OriginatorOrg: nec.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: TYWPR01MB8591.jpnprd01.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: c15e4ad6-918b-4bd3-9371-08da5fa42881
-X-MS-Exchange-CrossTenant-originalarrivaltime: 06 Jul 2022 23:06:28.4889
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: e67df547-9d0d-4f4d-9161-51c6ed1f7d11
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: WCkBLLniG20T3nGvT9xVoxlMSIhBU1OMPDM4vDOTu2nuJ4tPS076ZZjufRN8lYsQw95vtTjMbUSKvYDHi4sxnA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: TYCPR01MB6654
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-T24gV2VkLCBKdWwgMDYsIDIwMjIgYXQgMTA6NTg6NTNBTSArMDgwMCwgTWlhb2hlIExpbiB3cm90
-ZToNCj4gT24gMjAyMi83LzQgOTozMywgTmFveWEgSG9yaWd1Y2hpIHdyb3RlOg0KPiA+IEZyb206
-IE5hb3lhIEhvcmlndWNoaSA8bmFveWEuaG9yaWd1Y2hpQG5lYy5jb20+DQo+ID4gDQo+ID4gUmF3
-IGVycm9yIGluZm8gbGlzdCBuZWVkcyB0byBiZSByZW1vdmVkIHdoZW4gaHdwb2lzb25lZCBodWdl
-dGxiIGlzDQo+ID4gdW5wb2lzb25lZC4gIEFuZCB1bnBvaXNvbiBoYW5kbGVyIG5lZWRzIHRvIGtu
-b3cgaG93IG1hbnkgZXJyb3JzIHRoZXJlDQo+ID4gYXJlIGluIHRoZSB0YXJnZXQgaHVnZXBhZ2Uu
-IFNvIGFkZCB0aGVtLg0KPiA+IA0KPiA+IFNpZ25lZC1vZmYtYnk6IE5hb3lhIEhvcmlndWNoaSA8
-bmFveWEuaG9yaWd1Y2hpQG5lYy5jb20+DQo+ID4gLS0tDQo+ID4gQEAgLTIyODcsNiArMjMwMSw3
-IEBAIGludCB1bnBvaXNvbl9tZW1vcnkodW5zaWduZWQgbG9uZyBwZm4pDQo+IA0KPiBJcyBpdCBz
-YWZlIHRvIHVucG9pc29uIGh1Z2VwYWdlIHdoZW4gSFBhZ2VSYXdId3BVbnJlbGlhYmxlPyBJJ20g
-YWZyYWlkIGJlY2F1c2UNCj4gc29tZSByYXcgZXJyb3IgaW5mbyBpcyBtaXNzaW5nLi4NCg0KQWgs
-IHJpZ2h0LiBXZSBuZWVkIHByZXZlbnQgaXQuICBJJ2xsIGZpeCBpdCBieSBpbnNlcnRpbmcgdGhl
-IGNoZWNrLg0KDQogc3RhdGljIGlubGluZSBsb25nIGZyZWVfcmF3X2h3cF9wYWdlcyhzdHJ1Y3Qg
-cGFnZSAqaHBhZ2UsIGJvb2wgbW92ZV9mbGFnKQ0KIHsNCiAgICAgICAgIHN0cnVjdCBsbGlzdF9o
-ZWFkICpoZWFkOw0KICAgICAgICAgc3RydWN0IGxsaXN0X25vZGUgKnQsICp0bm9kZTsNCiAgICAg
-ICAgIGxvbmcgY291bnQgPSAwOw0KIA0KKyAgICAgICAgaWYgKCFIUGFnZVJhd0h3cFVucmVsaWFi
-bGUoaHBhZ2UpKQ0KKyAgICAgICAgICAgICAgICByZXR1cm4gMDsNCg0KVGhhbmtzLA0KTmFveWEg
-SG9yaWd1Y2hpDQoNCj4gVGhhbmtzLg0KPiANCj4gPiAgCXN0cnVjdCBwYWdlICpwOw0KPiA+ICAJ
-aW50IHJldCA9IC1FQlVTWTsNCj4gPiAgCWludCBmcmVlaXQgPSAwOw0KPiA+ICsJbG9uZyBjb3Vu
-dCA9IDE7DQo+ID4gIAlzdGF0aWMgREVGSU5FX1JBVEVMSU1JVF9TVEFURSh1bnBvaXNvbl9ycywg
-REVGQVVMVF9SQVRFTElNSVRfSU5URVJWQUwsDQo+ID4gIAkJCQkJREVGQVVMVF9SQVRFTElNSVRf
-QlVSU1QpOw0KPiA+ICANCj4gPiBAQCAtMjMzNCw2ICsyMzQ5LDggQEAgaW50IHVucG9pc29uX21l
-bW9yeSh1bnNpZ25lZCBsb25nIHBmbikNCj4gPiAgDQo+ID4gIAlyZXQgPSBnZXRfaHdwb2lzb25f
-cGFnZShwLCBNRl9VTlBPSVNPTik7DQo+ID4gIAlpZiAoIXJldCkgew0KPiA+ICsJCWlmIChQYWdl
-SHVnZShwKSkNCj4gPiArCQkJY291bnQgPSBmcmVlX3Jhd19od3BfcGFnZXMocGFnZSwgZmFsc2Up
-Ow0KPiA+ICAJCXJldCA9IFRlc3RDbGVhclBhZ2VIV1BvaXNvbihwYWdlKSA/IDAgOiAtRUJVU1k7
-DQo+ID4gIAl9IGVsc2UgaWYgKHJldCA8IDApIHsNCj4gPiAgCQlpZiAocmV0ID09IC1FSFdQT0lT
-T04pIHsNCj4gPiBAQCAtMjM0Miw2ICsyMzU5LDggQEAgaW50IHVucG9pc29uX21lbW9yeSh1bnNp
-Z25lZCBsb25nIHBmbikNCj4gPiAgCQkJdW5wb2lzb25fcHJfaW5mbygiVW5wb2lzb246IGZhaWxl
-ZCB0byBncmFiIHBhZ2UgJSNseFxuIiwNCj4gPiAgCQkJCQkgcGZuLCAmdW5wb2lzb25fcnMpOw0K
-PiA+ICAJfSBlbHNlIHsNCj4gPiArCQlpZiAoUGFnZUh1Z2UocCkpDQo+ID4gKwkJCWNvdW50ID0g
-ZnJlZV9yYXdfaHdwX3BhZ2VzKHBhZ2UsIGZhbHNlKTsNCj4gPiAgCQlmcmVlaXQgPSAhIVRlc3RD
-bGVhclBhZ2VIV1BvaXNvbihwKTsNCj4gPiAgDQo+ID4gIAkJcHV0X3BhZ2UocGFnZSk7DQo+ID4g
-QEAgLTIzNTQsNyArMjM3Myw3IEBAIGludCB1bnBvaXNvbl9tZW1vcnkodW5zaWduZWQgbG9uZyBw
-Zm4pDQo+ID4gIHVubG9ja19tdXRleDoNCj4gPiAgCW11dGV4X3VubG9jaygmbWZfbXV0ZXgpOw0K
-PiA+ICAJaWYgKCFyZXQgfHwgZnJlZWl0KSB7DQo+ID4gLQkJbnVtX3BvaXNvbmVkX3BhZ2VzX2Rl
-YygpOw0KPiA+ICsJCW51bV9wb2lzb25lZF9wYWdlc19zdWIoY291bnQpOw0KPiA+ICAJCXVucG9p
-c29uX3ByX2luZm8oIlVucG9pc29uOiBTb2Z0d2FyZS11bnBvaXNvbmVkIHBhZ2UgJSNseFxuIiwN
-Cj4gPiAgCQkJCSBwYWdlX3RvX3BmbihwKSwgJnVucG9pc29uX3JzKTsNCj4gPiAgCX0NCj4gPiA=
+Hi Vijendar,
+
+First bad commit (maybe != root cause):
+
+tree:   https://github.com/ammarfaizi2/linux-block broonie/sound/for-next
+head:   3f4322bb413adb7f9d8b5e9005eb1b9bc85f9312
+commit: f94fa84058014f81ad526641f1b1f583ca2cf32f [328/353] ASoC: amd: enable machine driver build for Jadeite platform
+config: alpha-allyesconfig (https://download.01.org/0day-ci/archive/20220707/202207070640.BouQoaUc-lkp@intel.com/config)
+compiler: alpha-linux-gcc (GCC) 11.3.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/ammarfaizi2/linux-block/commit/f94fa84058014f81ad526641f1b1f583ca2cf32f
+        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
+        git fetch --no-tags ammarfaizi2-block broonie/sound/for-next
+        git checkout f94fa84058014f81ad526641f1b1f583ca2cf32f
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=alpha SHELL=/bin/bash
+
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>):
+
+>> sound/soc/soc-acpi.c:34:1: error: redefinition of 'snd_soc_acpi_find_machine'
+      34 | snd_soc_acpi_find_machine(struct snd_soc_acpi_mach *machines)
+         | ^~~~~~~~~~~~~~~~~~~~~~~~~
+   In file included from sound/soc/soc-acpi.c:9:
+   include/sound/soc-acpi.h:38:1: note: previous definition of 'snd_soc_acpi_find_machine' with type 'struct snd_soc_acpi_mach *(struct snd_soc_acpi_mach *)'
+      38 | snd_soc_acpi_find_machine(struct snd_soc_acpi_mach *machines)
+         | ^~~~~~~~~~~~~~~~~~~~~~~~~
+   sound/soc/soc-acpi.c: In function 'snd_soc_acpi_find_package':
+>> sound/soc/soc-acpi.c:58:36: error: implicit declaration of function 'acpi_fetch_acpi_dev'; did you mean 'device_match_acpi_dev'? [-Werror=implicit-function-declaration]
+      58 |         struct acpi_device *adev = acpi_fetch_acpi_dev(handle);
+         |                                    ^~~~~~~~~~~~~~~~~~~
+         |                                    device_match_acpi_dev
+   sound/soc/soc-acpi.c:58:36: warning: initialization of 'struct acpi_device *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
+>> sound/soc/soc-acpi.c:64:25: error: invalid use of undefined type 'struct acpi_device'
+      64 |         if (adev && adev->status.present && adev->status.functional) {
+         |                         ^~
+   sound/soc/soc-acpi.c:64:49: error: invalid use of undefined type 'struct acpi_device'
+      64 |         if (adev && adev->status.present && adev->status.functional) {
+         |                                                 ^~
+>> sound/soc/soc-acpi.c:80:26: error: implicit declaration of function 'acpi_extract_package' [-Werror=implicit-function-declaration]
+      80 |                 status = acpi_extract_package(myobj,
+         |                          ^~~~~~~~~~~~~~~~~~~~
+   sound/soc/soc-acpi.c: At top level:
+>> sound/soc/soc-acpi.c:95:6: error: redefinition of 'snd_soc_acpi_find_package_from_hid'
+      95 | bool snd_soc_acpi_find_package_from_hid(const u8 hid[ACPI_ID_LEN],
+         |      ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   In file included from sound/soc/soc-acpi.c:9:
+   include/sound/soc-acpi.h:44:1: note: previous definition of 'snd_soc_acpi_find_package_from_hid' with type 'bool(const u8 *, struct snd_soc_acpi_package_context *)' {aka '_Bool(const unsigned char *, struct snd_soc_acpi_package_context *)'}
+      44 | snd_soc_acpi_find_package_from_hid(const u8 hid[ACPI_ID_LEN],
+         | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>> sound/soc/soc-acpi.c:109:27: error: redefinition of 'snd_soc_acpi_codec_list'
+     109 | struct snd_soc_acpi_mach *snd_soc_acpi_codec_list(void *arg)
+         |                           ^~~~~~~~~~~~~~~~~~~~~~~
+   In file included from sound/soc/soc-acpi.c:9:
+   include/sound/soc-acpi.h:51:41: note: previous definition of 'snd_soc_acpi_codec_list' with type 'struct snd_soc_acpi_mach *(void *)'
+      51 | static inline struct snd_soc_acpi_mach *snd_soc_acpi_codec_list(void *arg)
+         |                                         ^~~~~~~~~~~~~~~~~~~~~~~
+   cc1: some warnings being treated as errors
+--
+   sound/soc/amd/acp-es8336.c: In function 'st_es8336_late_probe':
+>> sound/soc/amd/acp-es8336.c:204:33: error: invalid use of undefined type 'struct acpi_device'
+     204 |                 put_device(&adev->dev);
+         |                                 ^~
+   sound/soc/amd/acp-es8336.c:200:13: warning: variable 'ret' set but not used [-Wunused-but-set-variable]
+     200 |         int ret;
+         |             ^~~
+
+
+vim +/snd_soc_acpi_find_machine +34 sound/soc/soc-acpi.c
+
+cafa39b650ec3b sound/soc/soc-acpi.c                    Brent Lu             2021-10-30   32  
+7feb2f786a46d3 sound/soc/soc-acpi.c                    Pierre-Louis Bossart 2017-10-12   33  struct snd_soc_acpi_mach *
+7feb2f786a46d3 sound/soc/soc-acpi.c                    Pierre-Louis Bossart 2017-10-12  @34  snd_soc_acpi_find_machine(struct snd_soc_acpi_mach *machines)
+95f098014815b3 sound/soc/intel/common/sst-match-acpi.c Vinod Koul           2015-11-05   35  {
+7feb2f786a46d3 sound/soc/soc-acpi.c                    Pierre-Louis Bossart 2017-10-12   36  	struct snd_soc_acpi_mach *mach;
+a3e620f8422832 sound/soc/soc-acpi.c                    Keyon Jie            2018-11-16   37  	struct snd_soc_acpi_mach *mach_alt;
+95f098014815b3 sound/soc/intel/common/sst-match-acpi.c Vinod Koul           2015-11-05   38  
+cafa39b650ec3b sound/soc/soc-acpi.c                    Brent Lu             2021-10-30   39  	for (mach = machines; mach->id[0] || mach->comp_ids; mach++) {
+cafa39b650ec3b sound/soc/soc-acpi.c                    Brent Lu             2021-10-30   40  		if (snd_soc_acpi_id_present(mach)) {
+a3e620f8422832 sound/soc/soc-acpi.c                    Keyon Jie            2018-11-16   41  			if (mach->machine_quirk) {
+a3e620f8422832 sound/soc/soc-acpi.c                    Keyon Jie            2018-11-16   42  				mach_alt = mach->machine_quirk(mach);
+a3e620f8422832 sound/soc/soc-acpi.c                    Keyon Jie            2018-11-16   43  				if (!mach_alt)
+a3e620f8422832 sound/soc/soc-acpi.c                    Keyon Jie            2018-11-16   44  					continue; /* not full match, ignore */
+a3e620f8422832 sound/soc/soc-acpi.c                    Keyon Jie            2018-11-16   45  				mach = mach_alt;
+a3e620f8422832 sound/soc/soc-acpi.c                    Keyon Jie            2018-11-16   46  			}
+a3e620f8422832 sound/soc/soc-acpi.c                    Keyon Jie            2018-11-16   47  
+7827d66946ad3a sound/soc/intel/common/sst-match-acpi.c Naveen M             2017-05-15   48  			return mach;
+7827d66946ad3a sound/soc/intel/common/sst-match-acpi.c Naveen M             2017-05-15   49  		}
+7827d66946ad3a sound/soc/intel/common/sst-match-acpi.c Naveen M             2017-05-15   50  	}
+95f098014815b3 sound/soc/intel/common/sst-match-acpi.c Vinod Koul           2015-11-05   51  	return NULL;
+95f098014815b3 sound/soc/intel/common/sst-match-acpi.c Vinod Koul           2015-11-05   52  }
+7feb2f786a46d3 sound/soc/soc-acpi.c                    Pierre-Louis Bossart 2017-10-12   53  EXPORT_SYMBOL_GPL(snd_soc_acpi_find_machine);
+8ceffd229f0ef1 sound/soc/intel/common/sst-match-acpi.c Vinod Koul           2016-02-08   54  
+7feb2f786a46d3 sound/soc/soc-acpi.c                    Pierre-Louis Bossart 2017-10-12   55  static acpi_status snd_soc_acpi_find_package(acpi_handle handle, u32 level,
+3421894765a345 sound/soc/intel/common/sst-match-acpi.c Pierre-Louis Bossart 2016-11-12   56  					     void *context, void **ret)
+3421894765a345 sound/soc/intel/common/sst-match-acpi.c Pierre-Louis Bossart 2016-11-12   57  {
+ff4865b3c8cd74 sound/soc/soc-acpi.c                    Rafael J. Wysocki    2022-01-26  @58  	struct acpi_device *adev = acpi_fetch_acpi_dev(handle);
+59ce3233a538fc sound/soc/soc-acpi.c                    Pierre-Louis Bossart 2021-04-16   59  	acpi_status status;
+7feb2f786a46d3 sound/soc/soc-acpi.c                    Pierre-Louis Bossart 2017-10-12   60  	struct snd_soc_acpi_package_context *pkg_ctx = context;
+3421894765a345 sound/soc/intel/common/sst-match-acpi.c Pierre-Louis Bossart 2016-11-12   61  
+3421894765a345 sound/soc/intel/common/sst-match-acpi.c Pierre-Louis Bossart 2016-11-12   62  	pkg_ctx->data_valid = false;
+3421894765a345 sound/soc/intel/common/sst-match-acpi.c Pierre-Louis Bossart 2016-11-12   63  
+ff4865b3c8cd74 sound/soc/soc-acpi.c                    Rafael J. Wysocki    2022-01-26  @64  	if (adev && adev->status.present && adev->status.functional) {
+3421894765a345 sound/soc/intel/common/sst-match-acpi.c Pierre-Louis Bossart 2016-11-12   65  		struct acpi_buffer buffer = {ACPI_ALLOCATE_BUFFER, NULL};
+3421894765a345 sound/soc/intel/common/sst-match-acpi.c Pierre-Louis Bossart 2016-11-12   66  		union acpi_object  *myobj = NULL;
+3421894765a345 sound/soc/intel/common/sst-match-acpi.c Pierre-Louis Bossart 2016-11-12   67  
+3421894765a345 sound/soc/intel/common/sst-match-acpi.c Pierre-Louis Bossart 2016-11-12   68  		status = acpi_evaluate_object_typed(handle, pkg_ctx->name,
+3421894765a345 sound/soc/intel/common/sst-match-acpi.c Pierre-Louis Bossart 2016-11-12   69  						NULL, &buffer,
+3421894765a345 sound/soc/intel/common/sst-match-acpi.c Pierre-Louis Bossart 2016-11-12   70  						ACPI_TYPE_PACKAGE);
+3421894765a345 sound/soc/intel/common/sst-match-acpi.c Pierre-Louis Bossart 2016-11-12   71  		if (ACPI_FAILURE(status))
+3421894765a345 sound/soc/intel/common/sst-match-acpi.c Pierre-Louis Bossart 2016-11-12   72  			return AE_OK;
+3421894765a345 sound/soc/intel/common/sst-match-acpi.c Pierre-Louis Bossart 2016-11-12   73  
+3421894765a345 sound/soc/intel/common/sst-match-acpi.c Pierre-Louis Bossart 2016-11-12   74  		myobj = buffer.pointer;
+3421894765a345 sound/soc/intel/common/sst-match-acpi.c Pierre-Louis Bossart 2016-11-12   75  		if (!myobj || myobj->package.count != pkg_ctx->length) {
+3421894765a345 sound/soc/intel/common/sst-match-acpi.c Pierre-Louis Bossart 2016-11-12   76  			kfree(buffer.pointer);
+3421894765a345 sound/soc/intel/common/sst-match-acpi.c Pierre-Louis Bossart 2016-11-12   77  			return AE_OK;
+3421894765a345 sound/soc/intel/common/sst-match-acpi.c Pierre-Louis Bossart 2016-11-12   78  		}
+3421894765a345 sound/soc/intel/common/sst-match-acpi.c Pierre-Louis Bossart 2016-11-12   79  
+3421894765a345 sound/soc/intel/common/sst-match-acpi.c Pierre-Louis Bossart 2016-11-12  @80  		status = acpi_extract_package(myobj,
+3421894765a345 sound/soc/intel/common/sst-match-acpi.c Pierre-Louis Bossart 2016-11-12   81  					pkg_ctx->format, pkg_ctx->state);
+3421894765a345 sound/soc/intel/common/sst-match-acpi.c Pierre-Louis Bossart 2016-11-12   82  		if (ACPI_FAILURE(status)) {
+3421894765a345 sound/soc/intel/common/sst-match-acpi.c Pierre-Louis Bossart 2016-11-12   83  			kfree(buffer.pointer);
+3421894765a345 sound/soc/intel/common/sst-match-acpi.c Pierre-Louis Bossart 2016-11-12   84  			return AE_OK;
+3421894765a345 sound/soc/intel/common/sst-match-acpi.c Pierre-Louis Bossart 2016-11-12   85  		}
+3421894765a345 sound/soc/intel/common/sst-match-acpi.c Pierre-Louis Bossart 2016-11-12   86  
+3421894765a345 sound/soc/intel/common/sst-match-acpi.c Pierre-Louis Bossart 2016-11-12   87  		kfree(buffer.pointer);
+3421894765a345 sound/soc/intel/common/sst-match-acpi.c Pierre-Louis Bossart 2016-11-12   88  		pkg_ctx->data_valid = true;
+3421894765a345 sound/soc/intel/common/sst-match-acpi.c Pierre-Louis Bossart 2016-11-12   89  		return AE_CTRL_TERMINATE;
+3421894765a345 sound/soc/intel/common/sst-match-acpi.c Pierre-Louis Bossart 2016-11-12   90  	}
+3421894765a345 sound/soc/intel/common/sst-match-acpi.c Pierre-Louis Bossart 2016-11-12   91  
+3421894765a345 sound/soc/intel/common/sst-match-acpi.c Pierre-Louis Bossart 2016-11-12   92  	return AE_OK;
+3421894765a345 sound/soc/intel/common/sst-match-acpi.c Pierre-Louis Bossart 2016-11-12   93  }
+3421894765a345 sound/soc/intel/common/sst-match-acpi.c Pierre-Louis Bossart 2016-11-12   94  
+7feb2f786a46d3 sound/soc/soc-acpi.c                    Pierre-Louis Bossart 2017-10-12  @95  bool snd_soc_acpi_find_package_from_hid(const u8 hid[ACPI_ID_LEN],
+7feb2f786a46d3 sound/soc/soc-acpi.c                    Pierre-Louis Bossart 2017-10-12   96  				struct snd_soc_acpi_package_context *ctx)
+3421894765a345 sound/soc/intel/common/sst-match-acpi.c Pierre-Louis Bossart 2016-11-12   97  {
+3421894765a345 sound/soc/intel/common/sst-match-acpi.c Pierre-Louis Bossart 2016-11-12   98  	acpi_status status;
+3421894765a345 sound/soc/intel/common/sst-match-acpi.c Pierre-Louis Bossart 2016-11-12   99  
+7feb2f786a46d3 sound/soc/soc-acpi.c                    Pierre-Louis Bossart 2017-10-12  100  	status = acpi_get_devices(hid, snd_soc_acpi_find_package, ctx, NULL);
+3421894765a345 sound/soc/intel/common/sst-match-acpi.c Pierre-Louis Bossart 2016-11-12  101  
+3421894765a345 sound/soc/intel/common/sst-match-acpi.c Pierre-Louis Bossart 2016-11-12  102  	if (ACPI_FAILURE(status) || !ctx->data_valid)
+3421894765a345 sound/soc/intel/common/sst-match-acpi.c Pierre-Louis Bossart 2016-11-12  103  		return false;
+3421894765a345 sound/soc/intel/common/sst-match-acpi.c Pierre-Louis Bossart 2016-11-12  104  
+3421894765a345 sound/soc/intel/common/sst-match-acpi.c Pierre-Louis Bossart 2016-11-12  105  	return true;
+3421894765a345 sound/soc/intel/common/sst-match-acpi.c Pierre-Louis Bossart 2016-11-12  106  }
+7feb2f786a46d3 sound/soc/soc-acpi.c                    Pierre-Louis Bossart 2017-10-12  107  EXPORT_SYMBOL_GPL(snd_soc_acpi_find_package_from_hid);
+3421894765a345 sound/soc/intel/common/sst-match-acpi.c Pierre-Louis Bossart 2016-11-12  108  
+7feb2f786a46d3 sound/soc/soc-acpi.c                    Pierre-Louis Bossart 2017-10-12 @109  struct snd_soc_acpi_mach *snd_soc_acpi_codec_list(void *arg)
+54746dabf770eb sound/soc/intel/common/sst-match-acpi.c Naveen M             2017-05-15  110  {
+7feb2f786a46d3 sound/soc/soc-acpi.c                    Pierre-Louis Bossart 2017-10-12  111  	struct snd_soc_acpi_mach *mach = arg;
+7feb2f786a46d3 sound/soc/soc-acpi.c                    Pierre-Louis Bossart 2017-10-12  112  	struct snd_soc_acpi_codecs *codec_list =
+7feb2f786a46d3 sound/soc/soc-acpi.c                    Pierre-Louis Bossart 2017-10-12  113  		(struct snd_soc_acpi_codecs *) mach->quirk_data;
+54746dabf770eb sound/soc/intel/common/sst-match-acpi.c Naveen M             2017-05-15  114  	int i;
+54746dabf770eb sound/soc/intel/common/sst-match-acpi.c Naveen M             2017-05-15  115  
+54746dabf770eb sound/soc/intel/common/sst-match-acpi.c Naveen M             2017-05-15  116  	if (mach->quirk_data == NULL)
+54746dabf770eb sound/soc/intel/common/sst-match-acpi.c Naveen M             2017-05-15  117  		return mach;
+54746dabf770eb sound/soc/intel/common/sst-match-acpi.c Naveen M             2017-05-15  118  
+54746dabf770eb sound/soc/intel/common/sst-match-acpi.c Naveen M             2017-05-15  119  	for (i = 0; i < codec_list->num_codecs; i++) {
+0d5ea120abc020 sound/soc/soc-acpi.c                    Jeremy Cline         2018-01-05  120  		if (!acpi_dev_present(codec_list->codecs[i], NULL, -1))
+54746dabf770eb sound/soc/intel/common/sst-match-acpi.c Naveen M             2017-05-15  121  			return NULL;
+54746dabf770eb sound/soc/intel/common/sst-match-acpi.c Naveen M             2017-05-15  122  	}
+54746dabf770eb sound/soc/intel/common/sst-match-acpi.c Naveen M             2017-05-15  123  
+54746dabf770eb sound/soc/intel/common/sst-match-acpi.c Naveen M             2017-05-15  124  	return mach;
+54746dabf770eb sound/soc/intel/common/sst-match-acpi.c Naveen M             2017-05-15  125  }
+7feb2f786a46d3 sound/soc/soc-acpi.c                    Pierre-Louis Bossart 2017-10-12  126  EXPORT_SYMBOL_GPL(snd_soc_acpi_codec_list);
+54746dabf770eb sound/soc/intel/common/sst-match-acpi.c Naveen M             2017-05-15  127  
+
+:::::: The code at line 34 was first introduced by commit
+:::::: 7feb2f786a46d34cac760d5e246dfbdafafa0e96 ASoC: move ACPI common code out of Intel/sst tree
+
+:::::: TO: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
+:::::: CC: Mark Brown <broonie@kernel.org>
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

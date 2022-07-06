@@ -2,111 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A02F5568EF5
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 18:21:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ED55C568EFB
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 18:22:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233823AbiGFQVX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Jul 2022 12:21:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48132 "EHLO
+        id S234071AbiGFQV6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Jul 2022 12:21:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48644 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232523AbiGFQVQ (ORCPT
+        with ESMTP id S233393AbiGFQV4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Jul 2022 12:21:16 -0400
-Received: from mail-io1-f42.google.com (mail-io1-f42.google.com [209.85.166.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC24313D1E;
-        Wed,  6 Jul 2022 09:21:15 -0700 (PDT)
-Received: by mail-io1-f42.google.com with SMTP id v185so14445190ioe.11;
-        Wed, 06 Jul 2022 09:21:15 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=46WFx0LHKHo7IAjx9SQsto+DNFSa6rkI9h3YC0DlQ/0=;
-        b=bgqFOdwH1VqsnFwXFXuF1zFEqPWatdgv33CfgxiZsS8XU8CMuzOUktLEQpgTgOgonF
-         qvBVKpWCD0dNEmRpJyFsDSiufxKgNuxnobBZUpy5P8iq5FxLdVwLfItn8nlbgBrLP3j4
-         u80fGIs1fLIIpzxDh/EETpEkVhX+UnsdEHT2iVI1iLPMRxiiGKYIhlPxEKhAnwru3RGm
-         AX3i14Q9wNERuWjJfWtM2KGTWi7dj1QSGLf3Hp2qyKmrDfs70OnOBKrDsscaHCpNnaHL
-         wvI5fhlBUChtK+0gsjBUTBHQ7SaX8KHqKMO/KvU5yvBYZJOeU18htsDhmdoaWE5o5RTI
-         YlhA==
-X-Gm-Message-State: AJIora/IBopWcz2zOIwKf3gVmWzkzzg4ZLeJ+iTHqrUhyrCRZYGrK6wP
-        l2clu6N2KvfrGexh1k9ApjINNYNYdw==
-X-Google-Smtp-Source: AGRyM1uzgpPbhEro+IwOoGJCq5wslAcjXi1VJdWM93SO/U9U4sSTIx/BH4UE5y/3LRenbByBT6eqIw==
-X-Received: by 2002:a05:6638:2110:b0:33b:b100:551e with SMTP id n16-20020a056638211000b0033bb100551emr26646242jaj.116.1657124473556;
-        Wed, 06 Jul 2022 09:21:13 -0700 (PDT)
-Received: from robh.at.kernel.org ([64.188.179.248])
-        by smtp.gmail.com with ESMTPSA id r16-20020a02b110000000b0032e271a558csm15967124jah.168.2022.07.06.09.21.12
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 06 Jul 2022 09:21:13 -0700 (PDT)
-Received: (nullmailer pid 151818 invoked by uid 1000);
-        Wed, 06 Jul 2022 16:21:11 -0000
-Date:   Wed, 6 Jul 2022 10:21:11 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Pali =?iso-8859-1?Q?Roh=E1r?= <pali@kernel.org>
-Cc:     Pavel Machek <pavel@ucw.cz>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Marek =?iso-8859-1?Q?Beh=FAn?= <kabel@kernel.org>,
-        linux-leds@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/2] dt-bindings: leds: register-bit-led: Add value
- property
-Message-ID: <20220706162111.GA145516-robh@kernel.org>
-References: <20220706112828.27278-1-pali@kernel.org>
+        Wed, 6 Jul 2022 12:21:56 -0400
+Received: from smtp-fw-2101.amazon.com (smtp-fw-2101.amazon.com [72.21.196.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A719B27FE3;
+        Wed,  6 Jul 2022 09:21:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
+  t=1657124517; x=1688660517;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=Eaj9/yOg2UhCILgc9XiB3gHB5uE1RD3Q9WqGHLjhDQY=;
+  b=ufwIsmTp0oy3Zcu7NrNgwfwttvjYZtsk/g5JJaseR+1+mNI3Dl5HyX1t
+   lbSN7EmLPimhAJK3p9BDE8VmLEokiBRcOJZ8IeUnAa2/vKxp3LvoWQuT5
+   nPZNw3KkL22s6p0fCjHUkuPzYde/jxgx2lWYYSH820edGM+7zO15uwEXB
+   M=;
+X-IronPort-AV: E=Sophos;i="5.92,250,1650931200"; 
+   d="scan'208";a="215373612"
+Received: from iad12-co-svc-p1-lb1-vlan2.amazon.com (HELO email-inbound-relay-pdx-2c-7d0c7241.us-west-2.amazon.com) ([10.43.8.2])
+  by smtp-border-fw-2101.iad2.amazon.com with ESMTP; 06 Jul 2022 16:21:43 +0000
+Received: from EX13MTAUWB001.ant.amazon.com (pdx1-ws-svc-p6-lb9-vlan3.pdx.amazon.com [10.236.137.198])
+        by email-inbound-relay-pdx-2c-7d0c7241.us-west-2.amazon.com (Postfix) with ESMTPS id 9FA2F43B76;
+        Wed,  6 Jul 2022 16:21:41 +0000 (UTC)
+Received: from EX19D004ANA001.ant.amazon.com (10.37.240.138) by
+ EX13MTAUWB001.ant.amazon.com (10.43.161.207) with Microsoft SMTP Server (TLS)
+ id 15.0.1497.36; Wed, 6 Jul 2022 16:21:41 +0000
+Received: from 88665a182662.ant.amazon.com (10.43.162.55) by
+ EX19D004ANA001.ant.amazon.com (10.37.240.138) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.1118.9;
+ Wed, 6 Jul 2022 16:21:38 +0000
+From:   Kuniyuki Iwashima <kuniyu@amazon.com>
+To:     <rostedt@goodmis.org>
+CC:     <davem@davemloft.net>, <edumazet@google.com>, <kuniyu@amazon.com>,
+        <linux-kernel@vger.kernel.org>, <netdev@vger.kernel.org>,
+        <nhorman@tuxdriver.com>
+Subject: Re: [PATCH] net: sock: tracing: Fix sock_exceed_buf_limit not to dereference stale pointer
+Date:   Wed, 6 Jul 2022 09:21:13 -0700
+Message-ID: <20220706162113.47275-1-kuniyu@amazon.com>
+X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20220706105040.54fc03b0@gandalf.local.home>
+References: <20220706105040.54fc03b0@gandalf.local.home>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220706112828.27278-1-pali@kernel.org>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.43.162.55]
+X-ClientProxiedBy: EX13D17UWC002.ant.amazon.com (10.43.162.61) To
+ EX19D004ANA001.ant.amazon.com (10.37.240.138)
+X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jul 06, 2022 at 01:28:27PM +0200, Pali Rohár wrote:
-> Allow to define inverted logic (0 - enable LED, 1 - disable LED) via value
-> property. This property name is already used by other syscon drivers, e.g.
-> syscon-reboot.
+From:   Steven Rostedt <rostedt@goodmis.org>
+Date:   Wed, 6 Jul 2022 10:50:40 -0400
+> From: "Steven Rostedt (Google)" <rostedt@goodmis.org>
+> 
+> The trace event sock_exceed_buf_limit saves the prot->sysctl_mem pointer
+> and then dereferences it in the TP_printk() portion. This is unsafe as the
+> TP_printk() portion is executed at the time the buffer is read. That is,
+> it can be seconds, minutes, days, months, even years later. If the proto
+> is freed, then this dereference will can also lead to a kernel crash.
+> 
+> Instead, save the sysctl_mem array into the ring buffer and have the
+> TP_printk() reference that instead. This is the proper and safe way to
+> read pointers in trace events.
+> 
+> Link: https://lore.kernel.org/all/20220706052130.16368-12-kuniyu@amazon.com/
+> 
+> Cc: stable@vger.kernel.org
+> Fixes: 3847ce32aea9f ("core: add tracepoints for queueing skb to rcvbuf")
+> Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
 
-Yes, but those are potentially multi-bit values. This is a single bit 
-value, and the only value that's ever needed is 0. Why not just use 
-'active-low' here?
+Acked-by: Kuniyuki Iwashima <kuniyu@amazon.com>
 
-> 
-> Signed-off-by: Pali Rohár <pali@kernel.org>
-> ---
->  .../devicetree/bindings/leds/register-bit-led.yaml    | 11 +++++++++++
->  1 file changed, 11 insertions(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/leds/register-bit-led.yaml b/Documentation/devicetree/bindings/leds/register-bit-led.yaml
-> index 79b8fc0f9d23..d6054a3f9087 100644
-> --- a/Documentation/devicetree/bindings/leds/register-bit-led.yaml
-> +++ b/Documentation/devicetree/bindings/leds/register-bit-led.yaml
-> @@ -43,6 +43,17 @@ properties:
->          0x100000, 0x200000, 0x400000, 0x800000, 0x1000000, 0x2000000, 0x4000000,
->          0x8000000, 0x10000000, 0x20000000, 0x40000000, 0x80000000 ]
->  
-> +  value:
-> +    description:
-> +      bit value of ON state for the bit controlling this LED in the register
-> +      when not specified it is same as the mask
-> +    $ref: /schemas/types.yaml#/definitions/uint32
-> +    enum:
-> +      [ 0x0, 0x1, 0x2, 0x4, 0x8, 0x10, 0x20, 0x40, 0x80, 0x100, 0x200, 0x400, 0x800,
-> +        0x1000, 0x2000, 0x4000, 0x8000, 0x10000, 0x20000, 0x40000, 0x80000,
-> +        0x100000, 0x200000, 0x400000, 0x800000, 0x1000000, 0x2000000, 0x4000000,
-> +        0x8000000, 0x10000000, 0x20000000, 0x40000000, 0x80000000 ]
-> +
->    offset:
->      description:
->        register offset to the register controlling this LED
-> -- 
-> 2.20.1
-> 
-> 
+Thanks for shipping the proper fix quickly!

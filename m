@@ -2,175 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E8C9568346
+	by mail.lfdr.de (Postfix) with ESMTP id DF23E568348
 	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 11:17:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233150AbiGFJPj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Jul 2022 05:15:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59018 "EHLO
+        id S233092AbiGFJQs convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 6 Jul 2022 05:16:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60276 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233165AbiGFJPd (ORCPT
+        with ESMTP id S232648AbiGFJQq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Jul 2022 05:15:33 -0400
-Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0ABAB7CE;
-        Wed,  6 Jul 2022 02:15:30 -0700 (PDT)
-Received: by mail-pj1-x1034.google.com with SMTP id g16-20020a17090a7d1000b001ea9f820449so19707343pjl.5;
-        Wed, 06 Jul 2022 02:15:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=heBhDPAZZcza0ZAAL/XaeCAoRWcoC2O1hG9RrLQTw+Q=;
-        b=SiAFl/uCcoQQbxAciu9Sn4YY+1os4B3LfvgPMpNoFHJZET+MPChoGxCZJprfbp6v6E
-         N91BbYFyo7Dqfm3lIBmveiOhD+UI0xRcD+KpbNlQxCThmRq2t8gPLgc8mc998KjSDckM
-         F9jS+v2pA7zJ3z9dvpCGUa+jKi1DcttlBdrqXtgx3YiYAykwU+NE4ANj+FRM/xfGC+9w
-         NS+unZ9EpTs56Wh0Vl/pH0V5Zm4MKHjHL2EZGXsqUTJGVUT6AfHqEO6K4ZUgXLoh/cHP
-         7kunI1PBzYBi2NuBvTue8+z50mizOLVz3xAIznzywqFIO3TMGWo8fPjvLvvSQYcMIBH3
-         Tfaw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=heBhDPAZZcza0ZAAL/XaeCAoRWcoC2O1hG9RrLQTw+Q=;
-        b=acnhygCblwKHl6pbSttNA7kALWB+EeoLOOw6YFuGept63nGx1t80R+h1sw/RHtFuNE
-         3YORlQmhKInXrR4NJYwsOSuxWAEeCj5Yn0spd9cZWXcrsGzHuMCgFj13WCbgDxzzp4MJ
-         HnhZ79Mk/KLN+hsrLmFH6cR1dEZfxF1hLiExoFtD0Bg6rTauyij5EKOO5KDVqonb8DtW
-         qX5xB1VqaSOJZbPWUrkuXpZUg2NA327ZGwrOz45lBqp3dN379KDdYYBC0ZK8IQG6Tlqw
-         49Ko3vqmZEu3e4KRgwlUdFNpXvdKB0Y7CF/WMtvtuTAJkD4ubHR0P3+z1Gf0lfhbUDGf
-         IiiQ==
-X-Gm-Message-State: AJIora8Iq1Y9IsfZeKCC9gyT63mTUABvpji6iwizs3iKrKOiONsw8Tg6
-        IL1CyNMI9o+U8b6V2wEUwpYlO2iBXNxZow==
-X-Google-Smtp-Source: AGRyM1sf/WnWaGWp85yrdFZgYzGzuzrJhJYkkNYI+LwYbZl0m4pyUiA2SsFaYprMKjDKb26Myuuwww==
-X-Received: by 2002:a17:902:dad1:b0:16a:75cb:5d97 with SMTP id q17-20020a170902dad100b0016a75cb5d97mr46194698plx.64.1657098929770;
-        Wed, 06 Jul 2022 02:15:29 -0700 (PDT)
-Received: from localhost.localdomain (ec2-13-113-80-70.ap-northeast-1.compute.amazonaws.com. [13.113.80.70])
-        by smtp.gmail.com with ESMTPSA id y23-20020a63ce17000000b004123c6a084dsm5422582pgf.22.2022.07.06.02.15.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 06 Jul 2022 02:15:28 -0700 (PDT)
-From:   Zhang Boyang <zhangboyang.id@gmail.com>
-To:     linux-block@vger.kernel.org
-Cc:     Jens Axboe <axboe@kernel.dk>, Christoph Hellwig <hch@lst.de>,
-        linux-kernel@vger.kernel.org,
-        Zhang Boyang <zhangboyang.id@gmail.com>
-Subject: [PATCH] loop: introduce LO_FLAGS_NODEALLOC
-Date:   Wed,  6 Jul 2022 17:14:55 +0800
-Message-Id: <20220706091455.35063-1-zhangboyang.id@gmail.com>
-X-Mailer: git-send-email 2.30.2
+        Wed, 6 Jul 2022 05:16:46 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1088B38
+        for <linux-kernel@vger.kernel.org>; Wed,  6 Jul 2022 02:16:45 -0700 (PDT)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <p.zabel@pengutronix.de>)
+        id 1o919C-0003MH-IH; Wed, 06 Jul 2022 11:16:38 +0200
+Received: from [2a0a:edc0:0:900:1d::4e] (helo=lupine)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
+        (envelope-from <p.zabel@pengutronix.de>)
+        id 1o9195-004jQf-K4; Wed, 06 Jul 2022 11:16:35 +0200
+Received: from pza by lupine with local (Exim 4.94.2)
+        (envelope-from <p.zabel@pengutronix.de>)
+        id 1o9198-0003QN-9M; Wed, 06 Jul 2022 11:16:34 +0200
+Message-ID: <f28de0c61c06396e36756f2d4f3379fab26abdbf.camel@pengutronix.de>
+Subject: Re: [PATCH RESEND v5 6/8] clk: baikal-t1: Move reset-controls code
+ into a dedicated module
+From:   Philipp Zabel <p.zabel@pengutronix.de>
+To:     Serge Semin <fancer.lancer@gmail.com>
+Cc:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        linux-clk@vger.kernel.org, linux-mips@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Date:   Wed, 06 Jul 2022 11:16:34 +0200
+In-Reply-To: <20220705220757.dwzmrx34t2nsxfzl@mobilestation>
+References: <20220624141853.7417-1-Sergey.Semin@baikalelectronics.ru>
+         <20220624141853.7417-7-Sergey.Semin@baikalelectronics.ru>
+         <e0869ae1b10ec19eaf87dc5fa53498f82e7deaac.camel@pengutronix.de>
+         <20220705220757.dwzmrx34t2nsxfzl@mobilestation>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+User-Agent: Evolution 3.38.3-1 
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: p.zabel@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Previously, for file-backed loop devices, REQ_OP_DISCARD and
-REQ_OP_WRITE_ZEROES (without REQ_NOUNMAP) are implemented using
-fallocate(FALLOC_FL_PUNCH_HOLE), which will cause the underlying file to
-be sparse and disk space freed. The users have no choice to prevent this
-this from happening.
+Hi Serge,
 
-This patch introduces LO_FLAGS_NODEALLOC. With this flag set,
-REQ_OP_DISCARD and REQ_OP_WRITE_ZEROES are forced to use
-fallocate(FALLOC_FL_ZERO_RANGE). The disk space of underlying file is
-kept allocated. This is useful if users, for example, want to use a
-preallocated file as the backing file.
+On Mi, 2022-07-06 at 01:07 +0300, Serge Semin wrote:
+[...]
+> > What is the reason for separating ccu-rst.c and clk-ccu-rst.c?
+> > 
+> > I expect implementing the reset ops and registering the reset
+> > controller in the same compilation unit would be easier.
+> 
+> From the very beginning of the Baikal-T1 driver live the Clock/Reset functionality
+> has been split up into two parts:
+> 1. ccu-{div,pll}.c - Clock/Reset operations implementation.
+> 2. clk-ccu-{div,pll}.c - Clock/Reset kernel interface implementation.
+> At least for the clk-part it has made the driver much easier to read.
+> Code in 1. provides the interface methods like
+> ccu_{div,pll}_hw_register() to register a clock provider corresponding
+> to the CCU divider/PLL of the particular type. Code in 2. uses these
+> methods to create the CCU Dividers/PLL clock descriptors and register
+> the of-based clocks in the system. The reset functionality was
+> redistributed in the same manner in the framework of the ccu-div.c and
+> clk-ccu-div.c modules.
+> 
+> A similar approach I was trying to utilize in the framework of the
+> separate CCU Resets implementation. Although it turned out to be not as
+> handy as it was for the clock-part due to the different clock and
+> reset subsystems API (clock subsystem provides a single clock
+> source based API, while the reset subsystem expects to have the whole
+> resets controller described). Anyway I've decided to preserve as much
+> similarities as possible for the sake of the code unification and
+> better readability/maintainability. Thus the reset lines control
+> methods have been placed in the ccu-rst.c object file, while the reset
+> control registration has been implemented in the clk-ccu-rst.c module.
 
-Signed-off-by: Zhang Boyang <zhangboyang.id@gmail.com>
----
- drivers/block/loop.c      | 17 +++++++++++++++--
- include/uapi/linux/loop.h | 15 +++++++++++----
- 2 files changed, 26 insertions(+), 6 deletions(-)
+Thank you for the detailed explanation. I think that splitting doesn't
+help readability much in this case, but I realize that may just be a
+matter of preference.
 
-diff --git a/drivers/block/loop.c b/drivers/block/loop.c
-index 084f9b8a0ba3..a52ef0787202 100644
---- a/drivers/block/loop.c
-+++ b/drivers/block/loop.c
-@@ -483,11 +483,15 @@ static int do_req_filebacked(struct loop_device *lo, struct request *rq)
- 		 * write zeroes the range.  Otherwise, punch them out.
- 		 */
- 		return lo_fallocate(lo, rq, pos,
--			(rq->cmd_flags & REQ_NOUNMAP) ?
-+			((rq->cmd_flags & REQ_NOUNMAP) ||
-+			 (lo->lo_flags & LO_FLAGS_NODEALLOC)) ?
- 				FALLOC_FL_ZERO_RANGE :
- 				FALLOC_FL_PUNCH_HOLE);
- 	case REQ_OP_DISCARD:
--		return lo_fallocate(lo, rq, pos, FALLOC_FL_PUNCH_HOLE);
-+		return lo_fallocate(lo, rq, pos,
-+			(lo->lo_flags & LO_FLAGS_NODEALLOC) ?
-+				FALLOC_FL_ZERO_RANGE :
-+				FALLOC_FL_PUNCH_HOLE);
- 	case REQ_OP_WRITE:
- 		if (cmd->use_aio)
- 			return lo_rw_aio(lo, cmd, pos, WRITE);
-@@ -719,12 +723,20 @@ static ssize_t loop_attr_dio_show(struct loop_device *lo, char *buf)
- 	return sysfs_emit(buf, "%s\n", dio ? "1" : "0");
- }
- 
-+static ssize_t loop_attr_nodealloc_show(struct loop_device *lo, char *buf)
-+{
-+	int nodealloc = (lo->lo_flags & LO_FLAGS_NODEALLOC);
-+
-+	return sysfs_emit(buf, "%s\n", nodealloc ? "1" : "0");
-+}
-+
- LOOP_ATTR_RO(backing_file);
- LOOP_ATTR_RO(offset);
- LOOP_ATTR_RO(sizelimit);
- LOOP_ATTR_RO(autoclear);
- LOOP_ATTR_RO(partscan);
- LOOP_ATTR_RO(dio);
-+LOOP_ATTR_RO(nodealloc);
- 
- static struct attribute *loop_attrs[] = {
- 	&loop_attr_backing_file.attr,
-@@ -733,6 +745,7 @@ static struct attribute *loop_attrs[] = {
- 	&loop_attr_autoclear.attr,
- 	&loop_attr_partscan.attr,
- 	&loop_attr_dio.attr,
-+	&loop_attr_nodealloc.attr,
- 	NULL,
- };
- 
-diff --git a/include/uapi/linux/loop.h b/include/uapi/linux/loop.h
-index 6f63527dd2ed..a6afd06ffa07 100644
---- a/include/uapi/linux/loop.h
-+++ b/include/uapi/linux/loop.h
-@@ -18,17 +18,24 @@ enum {
- 	LO_FLAGS_AUTOCLEAR	= 4,
- 	LO_FLAGS_PARTSCAN	= 8,
- 	LO_FLAGS_DIRECT_IO	= 16,
-+	LO_FLAGS_NODEALLOC	= 32,
- };
- 
- /* LO_FLAGS that can be set using LOOP_SET_STATUS(64) */
--#define LOOP_SET_STATUS_SETTABLE_FLAGS (LO_FLAGS_AUTOCLEAR | LO_FLAGS_PARTSCAN)
-+#define LOOP_SET_STATUS_SETTABLE_FLAGS (LO_FLAGS_AUTOCLEAR		\
-+					| LO_FLAGS_PARTSCAN		\
-+					| LO_FLAGS_NODEALLOC)
- 
- /* LO_FLAGS that can be cleared using LOOP_SET_STATUS(64) */
--#define LOOP_SET_STATUS_CLEARABLE_FLAGS (LO_FLAGS_AUTOCLEAR)
-+#define LOOP_SET_STATUS_CLEARABLE_FLAGS (LO_FLAGS_AUTOCLEAR		\
-+					 | LO_FLAGS_NODEALLOC)
- 
- /* LO_FLAGS that can be set using LOOP_CONFIGURE */
--#define LOOP_CONFIGURE_SETTABLE_FLAGS (LO_FLAGS_READ_ONLY | LO_FLAGS_AUTOCLEAR \
--				       | LO_FLAGS_PARTSCAN | LO_FLAGS_DIRECT_IO)
-+#define LOOP_CONFIGURE_SETTABLE_FLAGS (LO_FLAGS_READ_ONLY		\
-+				       | LO_FLAGS_AUTOCLEAR		\
-+				       | LO_FLAGS_PARTSCAN		\
-+				       | LO_FLAGS_DIRECT_IO		\
-+				       | LO_FLAGS_NODEALLOC)
- 
- #include <asm/posix_types.h>	/* for __kernel_old_dev_t */
- #include <linux/types.h>	/* for __u64 */
--- 
-2.30.2
+[...]
+> > I don't think this is necessary, see my comments below. Since the reset
+> > ids are contiguous, just setting nr_resets and using the default
+> > .of_xlate should be enough to make sure this is never called with an
+> > invalid id.
+> 
+> Using non-contiguous !Clock! IDs turned to be unexpectedly handy. Due to
+> that design I was able to add the internal clock providers hidden from
+> the DTS users but still visible in the clocks hierarchy. It has made the
+> clocks implementation as detailed as possible and protected from the
+> improper clocks usage. It also simplified a new clock providers adding
+> in future (though there won't be clock sources left undefined in the
+> SoC after this patchset is applied).
+> 
+> All of that made me thinking that the same approach can be useful in
+> the framework of the CCU reset controls implementation too at the very
+> least for the code unification. Although after the next patch in the
+> series is applied there won't be resets left undefined in the
+> Baikal-T1 SoC. So from another side you might be partly right on
+> suggesting to drop the independent reset IDs/descriptors design and
+> just assume the IDs contiguousness.
+> 
+> So could you please confirm that you still insists on dropping it?
 
+Please drop it, then. I don't think there is value in carrying this
+complexity just because it makes the code more similar to the
+neighboring clk code.
+
+I'd prefer to keep the reset ids contiguous, so future hardware should
+just get a different set of contiguous IDs, or new IDs appended
+contiguously as you do in patch 7.
+
+[...]
+> > 
+> > 
+> > 
+> > I would fold this into ccu_rst_hw_unregister().
+> 
+> I disagree in this part. Splitting up the interface methods in a set
+> of the small coherent methods like protagonists and respective
+> antagonists makes the code much easier to read and maintain. So I
+> will insist on having the ccu_rst_free_data() method even if it is
+> left with only a single kfree() function invocation.
+[...]
+> I have to disagree for the same reason as I would preserve the
+> ccu_rst_free_data() method here. Please see my comment above.
+
+I'm fine with that.
+
+> 
+regards
+Philipp

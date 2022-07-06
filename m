@@ -2,118 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C4A85568258
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 11:01:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C02CB568248
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 10:59:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232633AbiGFJAg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Jul 2022 05:00:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39798 "EHLO
+        id S232347AbiGFI7e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Jul 2022 04:59:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38990 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232642AbiGFJA1 (ORCPT
+        with ESMTP id S230428AbiGFI7b (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Jul 2022 05:00:27 -0400
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EABC41A3A1;
-        Wed,  6 Jul 2022 02:00:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=Lc1nfuTmRLJC5zrVjNH0l/duy5mbZIyykH5a0W+voY8=; b=i8xduWRVHzPycpj4aYcRorY6TA
-        XTVVYE1I11IukCdv42nkSkB4f3OUjy3AJBnUNvj4TUakkooAJ1n5Jxvz/d11wUl5GqYcIieozQ864
-        B2Kq4qM14Ou6J9CVLN/3LK5EtRqKlxLdn/RmXRZRjVpX8V+q58etmYn1WtdVfrGKd1PjTnLKIclOH
-        a+kaMIxwNo1ZpUXKKhskeM8BfC/efZCZUI/kLzOIUxKfbHx5WlpT/PAfH8HC0Vsd+kQRpn60lp6J6
-        7jOYxvTDvKgYfoTkv2ZeG6LX11dKbzDctVwLJJNREnMQMKg8yLBMcQhZCodE4KYfbJDXW00LAylze
-        g1pP64tw==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=worktop.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1o90sB-000N9S-20; Wed, 06 Jul 2022 08:59:15 +0000
-Received: by worktop.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 875EF980050; Wed,  6 Jul 2022 10:59:00 +0200 (CEST)
-Date:   Wed, 6 Jul 2022 10:59:00 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Sven Schnelle <svens@linux.ibm.com>
-Cc:     Steven Rostedt <rostedt@goodmis.org>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        "Eric W. Biederman" <ebiederm@xmission.com>,
-        linux-kernel@vger.kernel.org, rjw@rjwysocki.net,
-        Oleg Nesterov <oleg@redhat.com>, mingo@kernel.org,
-        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
-        mgorman@suse.de, bigeasy@linutronix.de,
-        Will Deacon <will@kernel.org>, tj@kernel.org,
-        linux-pm@vger.kernel.org, Richard Weinberger <richard@nod.at>,
-        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
-        Johannes Berg <johannes@sipsolutions.net>,
-        linux-um@lists.infradead.org, Chris Zankel <chris@zankel.net>,
-        Max Filippov <jcmvbkbc@gmail.com>,
-        linux-xtensa@linux-xtensa.org, Kees Cook <keescook@chromium.org>,
-        Jann Horn <jannh@google.com>, linux-ia64@vger.kernel.org
-Subject: Re: [PATCH v4 12/12] sched,signal,ptrace: Rework TASK_TRACED,
- TASK_STOPPED state
-Message-ID: <YsVO1NU3bXGg9YJ3@worktop.programming.kicks-ass.net>
-References: <87a6bv6dl6.fsf_-_@email.froward.int.ebiederm.org>
- <20220505182645.497868-12-ebiederm@xmission.com>
- <YrHA5UkJLornOdCz@li-4a3a4a4c-28e5-11b2-a85c-a8d192c6f089.ibm.com>
- <877d5ajesi.fsf@email.froward.int.ebiederm.org>
- <YrHgo8GKFPWwoBoJ@li-4a3a4a4c-28e5-11b2-a85c-a8d192c6f089.ibm.com>
- <20220628191541.34a073fc@gandalf.local.home>
- <yt9d5ykbekn3.fsf@linux.ibm.com>
- <yt9dpmijcvu6.fsf@linux.ibm.com>
- <YsSQRmCZSIQ1ewzo@worktop.programming.kicks-ass.net>
- <yt9dsfneaczk.fsf@linux.ibm.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <yt9dsfneaczk.fsf@linux.ibm.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        Wed, 6 Jul 2022 04:59:31 -0400
+Received: from out30-42.freemail.mail.aliyun.com (out30-42.freemail.mail.aliyun.com [115.124.30.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E612C397;
+        Wed,  6 Jul 2022 01:59:29 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R381e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045170;MF=baolin.wang@linux.alibaba.com;NM=1;PH=DS;RN=33;SR=0;TI=SMTPD_---0VIXd7j9_1657097961;
+Received: from localhost(mailfrom:baolin.wang@linux.alibaba.com fp:SMTPD_---0VIXd7j9_1657097961)
+          by smtp.aliyun-inc.com;
+          Wed, 06 Jul 2022 16:59:22 +0800
+From:   Baolin Wang <baolin.wang@linux.alibaba.com>
+To:     akpm@linux-foundation.org
+Cc:     rppt@linux.ibm.com, willy@infradead.org, will@kernel.org,
+        aneesh.kumar@linux.ibm.com, npiggin@gmail.com,
+        peterz@infradead.org, catalin.marinas@arm.com,
+        chenhuacai@kernel.org, kernel@xen0n.name,
+        tsbogend@alpha.franken.de, dave.hansen@linux.intel.com,
+        luto@kernel.org, tglx@linutronix.de, mingo@redhat.com,
+        bp@alien8.de, hpa@zytor.com, arnd@arndb.de, guoren@kernel.org,
+        monstr@monstr.eu, jonas@southpole.se,
+        stefan.kristiansson@saunalahti.fi, shorne@gmail.com,
+        baolin.wang@linux.alibaba.com, x86@kernel.org,
+        linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        loongarch@lists.linux.dev, linux-mips@vger.kernel.org,
+        linux-csky@vger.kernel.org, openrisc@lists.librecores.org,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org
+Subject: [PATCH 0/3] Add PUD and kernel PTE level pagetable account
+Date:   Wed,  6 Jul 2022 16:59:14 +0800
+Message-Id: <cover.1657096412.git.baolin.wang@linux.alibaba.com>
+X-Mailer: git-send-email 1.8.3.1
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jul 06, 2022 at 09:58:55AM +0200, Sven Schnelle wrote:
+Hi,
 
-> >> [   86.218551] kill_chi-343805    6d.... 79990141us : ptrace_stop: JOBCTL_TRACED already set, state=0 <------ valid combination of flags?
-> >
-> > Yeah, that's not supposed to be so. JOBCTL_TRACED is supposed to follow
-> > __TASK_TRACED for now. Set when __TASK_TRACED, cleared when
-> > TASK_RUNNING.
-> >
-> > Specifically {ptrace_,}signal_wake_up() in signal.h clear JOBCTL_TRACED
-> > when they would wake a __TASK_TRACED task.
-> 
-> try_to_wake_up() clears TASK_TRACED in this case because a signal
-> (SIGKILL) has to be delivered. As a test I put the following change
-> on top, and it "fixes" the problem:
-> 
-> diff --git a/kernel/sched/core.c b/kernel/sched/core.c
-> index da0bf6fe9ecd..f2e0f5e70e77 100644
-> --- a/kernel/sched/core.c
-> +++ b/kernel/sched/core.c
-> @@ -4141,6 +4149,9 @@ try_to_wake_up(struct task_struct *p, unsigned int state, int wake_flags)
->          * TASK_WAKING such that we can unlock p->pi_lock before doing the
->          * enqueue, such as ttwu_queue_wakelist().
->          */
-> +       if (p->__state & TASK_TRACED)
-> +               trace_printk("clearing TASK_TRACED 2\n");
-> +       p->jobctl &= ~JOBCTL_TRACED;
->         WRITE_ONCE(p->__state, TASK_WAKING);
-> 
->         /*
-> 
-> There are several places where the state is changed from TASK_TRACED to
-> something else without clearing JOBCTL_TRACED.
+Now we will miss to account the PUD level pagetable and kernel PTE level
+pagetable, as well as missing to set the PG_table flags for these pagetable
+pages, which will get an inaccurate pagetable accounting, and miss
+PageTable() validation in some cases. So this patch set introduces new
+helpers to help to account PUD and kernel PTE pagetable pages.
 
-I'm having difficulty spotting them; I find:
+Note there are still some architectures specific pagetable allocation
+that need to account the pagetable pages, which need more investigation
+and cleanup in future.
 
-TASK_WAKEKILL: signal_wake_up()
-__TASK_TRACED: ptrace_signal_wake_up(), ptrace_unfreeze_traced(), ptrace_resume()
+Changes from RFC v3:
+ - Rebased on 20220706 linux-next.
+ - Introduce new pgtable_pud_page_ctor/dtor() and rename the helpers.
+ - Change back to use inc_lruvec_page_state()/dec_lruvec_page_state().
+ - Update some commit message.
+link: https://lore.kernel.org/all/cover.1656586863.git.baolin.wang@linux.alibaba.com/
 
-And all those sites dutifully clear JOBCTL_TRACED.
+Changes from RFC v2:
+ - Convert to use mod_lruvec_page_state() for non-order-0 case.
+ - Rename the helpers.
+ - Update some commit messages.
+ - Remove unnecessary __GFP_HIGHMEM clear.
+link: https://lore.kernel.org/all/cover.1655887440.git.baolin.wang@linux.alibaba.com/
 
-I'd be most interested in the calstack for the 'clearing TASK_TRACED 2'
-events to see where we miss a spot.
+Changes from RFC v1:
+ - Update some commit message.
+ - Add missing pgtable_clear_and_dec() on X86 arch.
+ - Use __free_page() to free pagetable which can avoid duplicated virt_to_page().
+link: https://lore.kernel.org/all/cover.1654271618.git.baolin.wang@linux.alibaba.com/
+
+Baolin Wang (3):
+  mm: Factor out the pagetable pages account into new helper function
+  mm: Add PUD level pagetable account
+  mm: Add kernel PTE level pagetable pages account
+
+ arch/arm64/include/asm/tlb.h         |  5 ++++-
+ arch/csky/include/asm/pgalloc.h      |  2 +-
+ arch/loongarch/include/asm/pgalloc.h | 12 +++++++++---
+ arch/microblaze/mm/pgtable.c         |  2 +-
+ arch/mips/include/asm/pgalloc.h      | 12 +++++++++---
+ arch/openrisc/mm/ioremap.c           |  2 +-
+ arch/x86/mm/pgtable.c                |  7 +++++--
+ include/asm-generic/pgalloc.h        | 26 ++++++++++++++++++++++----
+ include/linux/mm.h                   | 34 ++++++++++++++++++++++++++--------
+ 9 files changed, 78 insertions(+), 24 deletions(-)
+
+-- 
+1.8.3.1
+

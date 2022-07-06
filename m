@@ -2,197 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F5835692B3
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 21:39:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D43775692B6
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 21:39:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234084AbiGFTiu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Jul 2022 15:38:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34386 "EHLO
+        id S234151AbiGFTjR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Jul 2022 15:39:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34716 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230029AbiGFTis (ORCPT
+        with ESMTP id S230029AbiGFTjQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Jul 2022 15:38:48 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3036112771;
-        Wed,  6 Jul 2022 12:38:47 -0700 (PDT)
+        Wed, 6 Jul 2022 15:39:16 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A66BE9A;
+        Wed,  6 Jul 2022 12:39:15 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id BA8A4620A3;
-        Wed,  6 Jul 2022 19:38:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0B18EC341C8;
-        Wed,  6 Jul 2022 19:38:44 +0000 (UTC)
-Date:   Wed, 6 Jul 2022 15:38:43 -0400
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Song Liu <song@kernel.org>
-Cc:     <netdev@vger.kernel.org>, <bpf@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <ast@kernel.org>,
-        <daniel@iogearbox.net>, <andrii@kernel.org>, <kernel-team@fb.com>,
-        <jolsa@kernel.org>, <mhiramat@kernel.org>
-Subject: Re: [PATCH v2 bpf-next 5/5] bpf: trampoline: support
- FTRACE_OPS_FL_SHARE_IPMODIFY
-Message-ID: <20220706153843.37584b5b@gandalf.local.home>
-In-Reply-To: <20220602193706.2607681-6-song@kernel.org>
-References: <20220602193706.2607681-1-song@kernel.org>
-        <20220602193706.2607681-6-song@kernel.org>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 365B4620A3;
+        Wed,  6 Jul 2022 19:39:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 64F88C341CA;
+        Wed,  6 Jul 2022 19:39:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1657136354;
+        bh=E3mfOerdYVWrCZ85sBYMTVxIttCanPdxxYhCAoaTxh0=;
+        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+        b=siU6TN1IeX526SjcOgSuPyzEj/JgCuq+FuMuZNxyKU0OLqM6MpzgBtG8m9MsdHHlt
+         nX2FJF+Yhl0ILejyjZfTuLjOC3AuKgDWk1gv+pWvun1rqcwIwzQP+IqTlnUgAnfpCV
+         xbjBso9+oXiNgDtYyTxM6EuCqpZVKe7zM4d1Wi9ExnNbCy997XFXS/VvFkRuBb5PBL
+         T1DL0MdNwc5dCOUFZWLC0lGZCDd+37DlnuAZFzdWDfcFhcwoVN9P/BO/WEyePbdKrn
+         g6xeb/6wLbpgdO5+Iiw2gerULqS7TDVwmCbQTURnZ4UXjY98kzC8TcRoJ+sJDcZrJX
+         UWJcRNyyviwrg==
+From:   Mark Brown <broonie@kernel.org>
+To:     cristian.ciocaltea@collabora.com, sanju.mehta@amd.com
+Cc:     linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        vacharakis@o2mail.de, kernel@collabora.com
+In-Reply-To: <20220706100626.1234731-1-cristian.ciocaltea@collabora.com>
+References: <20220706100626.1234731-1-cristian.ciocaltea@collabora.com>
+Subject: Re: [PATCH 0/5] AMD SPI controller driver bug fix and cleanups
+Message-Id: <165713635311.1162444.8799219504785646991.b4-ty@kernel.org>
+Date:   Wed, 06 Jul 2022 20:39:13 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 2 Jun 2022 12:37:06 -0700
-Song Liu <song@kernel.org> wrote:
-
-
-> --- a/kernel/bpf/trampoline.c
-> +++ b/kernel/bpf/trampoline.c
-> @@ -27,6 +27,44 @@ static struct hlist_head trampoline_table[TRAMPOLINE_TABLE_SIZE];
->  /* serializes access to trampoline_table */
->  static DEFINE_MUTEX(trampoline_mutex);
->  
-> +#ifdef CONFIG_DYNAMIC_FTRACE_WITH_DIRECT_CALLS
-> +static int bpf_trampoline_update(struct bpf_trampoline *tr, bool lock_direct_mutex);
-> +
-> +static int bpf_tramp_ftrace_ops_func(struct ftrace_ops *ops, enum ftrace_ops_cmd cmd)
-> +{
-> +	struct bpf_trampoline *tr = ops->private;
-> +	int ret;
-> +
-> +	/*
-> +	 * The normal locking order is
-> +	 *    tr->mutex => direct_mutex (ftrace.c) => ftrace_lock (ftrace.c)
-> +	 *
-> +	 * This is called from prepare_direct_functions_for_ipmodify, with
-> +	 * direct_mutex locked. Use mutex_trylock() to avoid dead lock.
-> +	 * Also, bpf_trampoline_update here should not lock direct_mutex.
-> +	 */
-> +	if (!mutex_trylock(&tr->mutex))
-
-Can you comment here that returning -EAGAIN will not cause this to repeat.
-That it will change things where the next try will not return -EGAIN?
-
-> +		return -EAGAIN;
-> +
-> +	switch (cmd) {
-> +	case FTRACE_OPS_CMD_ENABLE_SHARE_IPMODIFY:
-> +		tr->indirect_call = true;
-> +		ret = bpf_trampoline_update(tr, false /* lock_direct_mutex */);
-> +		break;
-> +	case FTRACE_OPS_CMD_DISABLE_SHARE_IPMODIFY:
-> +		tr->indirect_call = false;
-> +		tr->fops->flags &= ~FTRACE_OPS_FL_SHARE_IPMODIFY;
-> +		ret = bpf_trampoline_update(tr, false /* lock_direct_mutex */);
-> +		break;
-> +	default:
-> +		ret = -EINVAL;
-> +		break;
-> +	};
-> +	mutex_unlock(&tr->mutex);
-> +	return ret;
-> +}
-> +#endif
-> +
+On Wed, 6 Jul 2022 13:06:21 +0300, Cristian Ciocaltea wrote:
+> This patch series addresses an issue in the spi-amd driver and, while
+> there, performs some additional cleanups, like simplifying the error
+> handling in the probe function and removing an unused struct member.
 > 
+> For improving code readability, it also adds some kernel-doc comments.
+> 
+> Cristian Ciocaltea (5):
+>   spi: amd: Limit max transfer and message size
+>   spi: amd: Make use of devm_spi_alloc_master()
+>   spi: amd: Make use of dev_err_probe()
+>   spi: amd: Drop io_base_addr member from struct amd_spi
+>   spi: amd: Add struct and enum kernel-doc comments
+> 
+> [...]
 
+Applied to
 
-> @@ -330,7 +387,7 @@ static struct bpf_tramp_image *bpf_tramp_image_alloc(u64 key, u32 idx)
->  	return ERR_PTR(err);
->  }
->  
-> -static int bpf_trampoline_update(struct bpf_trampoline *tr)
-> +static int bpf_trampoline_update(struct bpf_trampoline *tr, bool lock_direct_mutex)
->  {
->  	struct bpf_tramp_image *im;
->  	struct bpf_tramp_links *tlinks;
-> @@ -363,20 +420,45 @@ static int bpf_trampoline_update(struct bpf_trampoline *tr)
->  	if (ip_arg)
->  		flags |= BPF_TRAMP_F_IP_ARG;
->  
-> +#ifdef CONFIG_DYNAMIC_FTRACE_WITH_DIRECT_CALLS
-> +again:
-> +	if (tr->indirect_call)
-> +		flags |= BPF_TRAMP_F_ORIG_STACK;
-> +#endif
-> +
->  	err = arch_prepare_bpf_trampoline(im, im->image, im->image + PAGE_SIZE,
->  					  &tr->func.model, flags, tlinks,
->  					  tr->func.addr);
->  	if (err < 0)
->  		goto out;
->  
-> +#ifdef CONFIG_DYNAMIC_FTRACE_WITH_DIRECT_CALLS
-> +	if (tr->indirect_call)
-> +		tr->fops->flags |= FTRACE_OPS_FL_SHARE_IPMODIFY;
-> +#endif
-> +
->  	WARN_ON(tr->cur_image && tr->selector == 0);
->  	WARN_ON(!tr->cur_image && tr->selector);
->  	if (tr->cur_image)
->  		/* progs already running at this address */
-> -		err = modify_fentry(tr, tr->cur_image->image, im->image);
-> +		err = modify_fentry(tr, tr->cur_image->image, im->image, lock_direct_mutex);
->  	else
->  		/* first time registering */
->  		err = register_fentry(tr, im->image);
-> +
-> +#ifdef CONFIG_DYNAMIC_FTRACE_WITH_DIRECT_CALLS
-> +	if (err == -EAGAIN) {
-> +		if (WARN_ON_ONCE(tr->indirect_call))
-> +			goto out;
-> +		/* should only retry on the first register */
-> +		if (WARN_ON_ONCE(tr->cur_image))
-> +			goto out;
-> +		tr->indirect_call = true;
-> +		tr->fops->func = NULL;
-> +		tr->fops->trampoline = 0;
-> +		goto again;
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
 
-I'm assuming that the above will prevent a return of -EAGAIN again. As if
-it can, then this could turn into a dead lock.
+Thanks!
 
-Can you please comment that?
+[1/5] spi: amd: Limit max transfer and message size
+      commit: 6ece49c56965544262523dae4a071ace3db63507
+[2/5] spi: amd: Make use of devm_spi_alloc_master()
+      commit: 2e063bb1d4272e7b64ef813566691ea8ea192f9c
+[3/5] spi: amd: Make use of dev_err_probe()
+      commit: deef4da8be2f7e94a0807e56f856d3e20addce4d
+[4/5] spi: amd: Drop io_base_addr member from struct amd_spi
+      commit: 1e71ffee97ac02b83b6ff75b52fa7b21b9149f7d
+[5/5] spi: amd: Add struct and enum kernel-doc comments
+      commit: 55861e36b663f6e584d1b0659c1c5cec0ce26a5d
+
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
+
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
+
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
+
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
 
 Thanks,
-
--- Steve
-
-> +	}
-> +#endif
->  	if (err)
->  		goto out;
->  	if (tr->cur_image)
-> @@ -460,7 +542,7 @@ int bpf_trampoline_link_prog(struct bpf_tramp_link *link, struct bpf_trampoline
->  
->  	hlist_add_head(&link->tramp_hlist, &tr->progs_hlist[kind]);
->  	tr->progs_cnt[kind]++;
-> -	err = bpf_trampoline_update(tr);
-> +	err = bpf_trampoline_update(tr, true /* lock_direct_mutex */);
->  	if (err) {
->  		hlist_del_init(&link->tramp_hlist);
->  		tr->progs_cnt[kind]--;
-> @@ -487,7 +569,7 @@ int bpf_trampoline_unlink_prog(struct bpf_tramp_link *link, struct bpf_trampolin
->  	}
->  	hlist_del_init(&link->tramp_hlist);
->  	tr->progs_cnt[kind]--;
-> -	err = bpf_trampoline_update(tr);
-> +	err = bpf_trampoline_update(tr, true /* lock_direct_mutex */);
->  out:
->  	mutex_unlock(&tr->mutex);
->  	return err;
-> @@ -535,6 +617,7 @@ void bpf_trampoline_put(struct bpf_trampoline *tr)
->  	 * multiple rcu callbacks.
->  	 */
->  	hlist_del(&tr->hlist);
-> +	kfree(tr->fops);
->  	kfree(tr);
->  out:
->  	mutex_unlock(&trampoline_mutex);
-
+Mark

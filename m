@@ -2,91 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ED55C568EFB
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 18:22:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E67EB568EFD
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 18:22:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234071AbiGFQV6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Jul 2022 12:21:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48644 "EHLO
+        id S234086AbiGFQWD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Jul 2022 12:22:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48646 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233393AbiGFQV4 (ORCPT
+        with ESMTP id S233473AbiGFQV4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 6 Jul 2022 12:21:56 -0400
-Received: from smtp-fw-2101.amazon.com (smtp-fw-2101.amazon.com [72.21.196.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A719B27FE3;
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73A9827FDF;
         Wed,  6 Jul 2022 09:21:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
-  t=1657124517; x=1688660517;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=Eaj9/yOg2UhCILgc9XiB3gHB5uE1RD3Q9WqGHLjhDQY=;
-  b=ufwIsmTp0oy3Zcu7NrNgwfwttvjYZtsk/g5JJaseR+1+mNI3Dl5HyX1t
-   lbSN7EmLPimhAJK3p9BDE8VmLEokiBRcOJZ8IeUnAa2/vKxp3LvoWQuT5
-   nPZNw3KkL22s6p0fCjHUkuPzYde/jxgx2lWYYSH820edGM+7zO15uwEXB
-   M=;
-X-IronPort-AV: E=Sophos;i="5.92,250,1650931200"; 
-   d="scan'208";a="215373612"
-Received: from iad12-co-svc-p1-lb1-vlan2.amazon.com (HELO email-inbound-relay-pdx-2c-7d0c7241.us-west-2.amazon.com) ([10.43.8.2])
-  by smtp-border-fw-2101.iad2.amazon.com with ESMTP; 06 Jul 2022 16:21:43 +0000
-Received: from EX13MTAUWB001.ant.amazon.com (pdx1-ws-svc-p6-lb9-vlan3.pdx.amazon.com [10.236.137.198])
-        by email-inbound-relay-pdx-2c-7d0c7241.us-west-2.amazon.com (Postfix) with ESMTPS id 9FA2F43B76;
-        Wed,  6 Jul 2022 16:21:41 +0000 (UTC)
-Received: from EX19D004ANA001.ant.amazon.com (10.37.240.138) by
- EX13MTAUWB001.ant.amazon.com (10.43.161.207) with Microsoft SMTP Server (TLS)
- id 15.0.1497.36; Wed, 6 Jul 2022 16:21:41 +0000
-Received: from 88665a182662.ant.amazon.com (10.43.162.55) by
- EX19D004ANA001.ant.amazon.com (10.37.240.138) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.1118.9;
- Wed, 6 Jul 2022 16:21:38 +0000
-From:   Kuniyuki Iwashima <kuniyu@amazon.com>
-To:     <rostedt@goodmis.org>
-CC:     <davem@davemloft.net>, <edumazet@google.com>, <kuniyu@amazon.com>,
-        <linux-kernel@vger.kernel.org>, <netdev@vger.kernel.org>,
-        <nhorman@tuxdriver.com>
-Subject: Re: [PATCH] net: sock: tracing: Fix sock_exceed_buf_limit not to dereference stale pointer
-Date:   Wed, 6 Jul 2022 09:21:13 -0700
-Message-ID: <20220706162113.47275-1-kuniyu@amazon.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20220706105040.54fc03b0@gandalf.local.home>
-References: <20220706105040.54fc03b0@gandalf.local.home>
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1657124515; x=1688660515;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=9dxRKMclWJPU8zdojzP6bZuaqj6umfAl3NNcbfX/f80=;
+  b=un67AWPXt33Pe3Twi/GYjkiOSolk+yewPI0rIoBK9ae8n6YrW1Fzn7RA
+   rjMQyDHAxfdHRleAmDzAijUIQKeXJpCcagV0eYjuU9oVL5bm+B3nLrYuO
+   E1zPvljdofNgXwj087v+8Ja1If6j3PHJ//XJ3jFHgu57Ry0SWt7MRdL1t
+   mW6nY6KqFu6exdBv9wk6ep1uVzMTZbRsCsylSIDwsr+gLKYuiCEEcDmBo
+   FVUpfwTlulX/duAlCFqQLMWoGnt0eBk1IcwNXP5o8FZlhGbWjFdLZF+eG
+   9cwuhnSO3Hw5IW6Ne6+TG9tJizUIYAL9Fc7WcHeXq0CgXwN58CAhA28b+
+   w==;
+X-IronPort-AV: E=Sophos;i="5.92,250,1650956400"; 
+   d="scan'208";a="171302345"
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa3.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 06 Jul 2022 09:21:54 -0700
+Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
+ chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.17; Wed, 6 Jul 2022 09:21:53 -0700
+Received: from ryan-Precision-5560.microchip.com (10.10.115.15) by
+ chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server id
+ 15.1.2375.17 via Frontend Transport; Wed, 6 Jul 2022 09:21:53 -0700
+From:   <Ryan.Wanner@microchip.com>
+To:     <Claudiu.Beznea@microchip.com>, <nicolas.ferre@microchip.com>,
+        <alexandre.berna@microchip.com>, <robh+dt@kernel.org>,
+        <broonie@kernel.org>, <lgirdwood@gmail.com>,
+        <alsa-devel@alsa-project.org>, <krzysztof.kozlowski+dt@linaro.org>
+CC:     <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        Ryan Wanner <Ryan.Wanner@microchip.com>
+Subject: [PATCH v2] Fixes: 1ca81883c557 ("ARM: dts: at91: sama5d2: add nodes for I2S controllers")
+Date:   Wed, 6 Jul 2022 09:21:44 -0700
+Message-ID: <20220706162144.66831-1-Ryan.Wanner@microchip.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
-X-Originating-IP: [10.43.162.55]
-X-ClientProxiedBy: EX13D17UWC002.ant.amazon.com (10.43.162.61) To
- EX19D004ANA001.ant.amazon.com (10.37.240.138)
-X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From:   Steven Rostedt <rostedt@goodmis.org>
-Date:   Wed, 6 Jul 2022 10:50:40 -0400
-> From: "Steven Rostedt (Google)" <rostedt@goodmis.org>
-> 
-> The trace event sock_exceed_buf_limit saves the prot->sysctl_mem pointer
-> and then dereferences it in the TP_printk() portion. This is unsafe as the
-> TP_printk() portion is executed at the time the buffer is read. That is,
-> it can be seconds, minutes, days, months, even years later. If the proto
-> is freed, then this dereference will can also lead to a kernel crash.
-> 
-> Instead, save the sysctl_mem array into the ring buffer and have the
-> TP_printk() reference that instead. This is the proper and safe way to
-> read pointers in trace events.
-> 
-> Link: https://lore.kernel.org/all/20220706052130.16368-12-kuniyu@amazon.com/
-> 
-> Cc: stable@vger.kernel.org
-> Fixes: 3847ce32aea9f ("core: add tracepoints for queueing skb to rcvbuf")
-> Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
+From: Ryan Wanner <Ryan.Wanner@microchip.com>
 
-Acked-by: Kuniyuki Iwashima <kuniyu@amazon.com>
+Fixed typo in i2s1 node
 
-Thanks for shipping the proper fix quickly!
+Signed-off-by: Ryan Wanner <Ryan.Wanner@microchip.com>
+---
+Changes since v1:
+1. Corrected commit 
+---
+ arch/arm/boot/dts/sama5d2.dtsi | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/arch/arm/boot/dts/sama5d2.dtsi b/arch/arm/boot/dts/sama5d2.dtsi
+index 89c71d419f82..659a17fc755c 100644
+--- a/arch/arm/boot/dts/sama5d2.dtsi
++++ b/arch/arm/boot/dts/sama5d2.dtsi
+@@ -1124,7 +1124,7 @@ AT91_XDMAC_DT_PERID(33))>,
+ 				clocks = <&pmc PMC_TYPE_PERIPHERAL 55>, <&pmc PMC_TYPE_GCK 55>;
+ 				clock-names = "pclk", "gclk";
+ 				assigned-clocks = <&pmc PMC_TYPE_CORE PMC_I2S1_MUX>;
+-				assigned-parrents = <&pmc PMC_TYPE_GCK 55>;
++				assigned-clock-parents = <&pmc PMC_TYPE_GCK 55>;
+ 				status = "disabled";
+ 			};
+ 
+-- 
+2.34.1
+

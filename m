@@ -2,104 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D3DD556824C
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 11:01:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 636E856825A
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 11:01:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232642AbiGFJAh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Jul 2022 05:00:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39348 "EHLO
+        id S232644AbiGFJBI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Jul 2022 05:01:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40404 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231289AbiGFJAd (ORCPT
+        with ESMTP id S232261AbiGFJBG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Jul 2022 05:00:33 -0400
-Received: from mail-qk1-f179.google.com (mail-qk1-f179.google.com [209.85.222.179])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0671B1658B
-        for <linux-kernel@vger.kernel.org>; Wed,  6 Jul 2022 02:00:30 -0700 (PDT)
-Received: by mail-qk1-f179.google.com with SMTP id b125so10540726qkg.11
-        for <linux-kernel@vger.kernel.org>; Wed, 06 Jul 2022 02:00:29 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=z+A5o8tUrRNDtNylm0pOuZuXmTXA18iZkAubQygVne4=;
-        b=ktQSztUoRKB+qdv5EeIGoLTSMMQdx2NlwFvQIuYLQXuwaz3+x/zVaj+Hz81s7AC1AY
-         8l116GzNcsQQfSQmdhJH7f0xo3pMA8bexqJwBbl6BikJ1riQoSciomS7D7dN7JHvB/X9
-         YzyCoGSkWZx1htimOab1wiYYbqvM0ieCKTndq74wYSJYmw2KGtnmslZtF8+so7KEiyfP
-         SnJW7wxhHhl0hES1rcjekenESIYQjJcSOersRUcxTLveXu80YAb5dUykj79hF6LrvPAn
-         Y7vJTmlL89bPgkWx9N1TJITyN+ImuWooqQ+K/rD1jM6nXCFoLDOUIiYC5O6hFSExdu+c
-         RyYQ==
-X-Gm-Message-State: AJIora/TzsfjU2nH38cZ7Vqj7n6jOQATMDcxBSrfy/IcQ81t9s4dulLZ
-        wwcRtxweg+pdGKEtfLmn7WXZPpmT3dJ1XQ==
-X-Google-Smtp-Source: AGRyM1t9a1yjKoKjgRjEquB8cMasLZH0JofQcx1LWYxmoDPQzF0oRKxFwXp0rsZ8t5tCoSex8Gixiw==
-X-Received: by 2002:a05:620a:2408:b0:6b2:3000:3c39 with SMTP id d8-20020a05620a240800b006b230003c39mr23136524qkn.730.1657098028851;
-        Wed, 06 Jul 2022 02:00:28 -0700 (PDT)
-Received: from mail-yw1-f170.google.com (mail-yw1-f170.google.com. [209.85.128.170])
-        by smtp.gmail.com with ESMTPSA id ay4-20020a05622a228400b002f39b99f69csm23094383qtb.54.2022.07.06.02.00.28
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 06 Jul 2022 02:00:28 -0700 (PDT)
-Received: by mail-yw1-f170.google.com with SMTP id 00721157ae682-2ef5380669cso133086257b3.9
-        for <linux-kernel@vger.kernel.org>; Wed, 06 Jul 2022 02:00:28 -0700 (PDT)
-X-Received: by 2002:a81:5404:0:b0:31c:c24d:94b0 with SMTP id
- i4-20020a815404000000b0031cc24d94b0mr9877031ywb.502.1657098028124; Wed, 06
- Jul 2022 02:00:28 -0700 (PDT)
+        Wed, 6 Jul 2022 05:01:06 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F38CD2B9
+        for <linux-kernel@vger.kernel.org>; Wed,  6 Jul 2022 02:01:05 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8A02D61A0C
+        for <linux-kernel@vger.kernel.org>; Wed,  6 Jul 2022 09:01:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DF1BAC3411C;
+        Wed,  6 Jul 2022 09:01:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1657098065;
+        bh=O5vfaJOmY630S2iHMOlIuDMP+z2m4nLFH7uCskj1on4=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=CzA8UfW/I+II685vuTyCAKfooW2Cq099Oh1HZOkqOQtkLW5tIQNnLHzw9Xy+z1S4A
+         nEDOXvzmB4BcQBa3PNv6R7C/jUK7LnT5SvnhQMwHlLmq1A+IFgupp1qOdk1rc99mPu
+         bekuL/Qsqg0lGPbKd2oRufOtJfOfaqeQAor6WXg6qwd8/YunGN+B10LuDcI+0+hn7J
+         XkMsgBeI6gN5RRiQGpdN3vZVCDL/EZVxMPWhcoEbVFKDiTEz6h7M2TdT6WHFP9jvO4
+         Y5LewcW69v7JmWmEl8lDvsD7ltOSnTtol7pTtsjR3TI8UdqUxIKpzQ+2/uTdUyp0V8
+         Xw4XxwiSjVz1g==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=valley-girl.lan)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <maz@kernel.org>)
+        id 1o90u6-005Zti-TJ;
+        Wed, 06 Jul 2022 10:01:02 +0100
+From:   Marc Zyngier <maz@kernel.org>
+To:     kvmarm@lists.cs.columbia.edu, Will Deacon <will@kernel.org>,
+        Alexandru Elisei <alexandru.elisei@arm.com>,
+        Oliver Upton <oliver.upton@linux.dev>,
+        linux-arm-kernel@lists.infradead.org,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        linux-kernel@vger.kernel.org, Quentin Perret <qperret@google.com>,
+        James Morse <james.morse@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>
+Cc:     kernel-team@android.com
+Subject: Re: [PATCH] KVM: arm64: Don't return from void function
+Date:   Wed,  6 Jul 2022 10:00:58 +0100
+Message-Id: <165709805020.885966.4815879973915586287.b4-ty@kernel.org>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20220705142310.3847918-1-qperret@google.com>
+References: <20220705142310.3847918-1-qperret@google.com>
 MIME-Version: 1.0
-References: <Yrg6BzpKIJBTAVmO@zx2c4.com> <20220626111509.330159-1-Jason@zx2c4.com>
-In-Reply-To: <20220626111509.330159-1-Jason@zx2c4.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Wed, 6 Jul 2022 11:00:16 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdX3WH6ixwGjit6-z8iWe2-9ukeExDc5YWu1degJzcGKzw@mail.gmail.com>
-Message-ID: <CAMuHMdX3WH6ixwGjit6-z8iWe2-9ukeExDc5YWu1degJzcGKzw@mail.gmail.com>
-Subject: Re: [PATCH v2] m68k: virt: use RNG seed from bootinfo block
-To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
-Cc:     Laurent Vivier <laurent@vivier.eu>,
-        linux-m68k <linux-m68k@lists.linux-m68k.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: kvmarm@lists.cs.columbia.edu, will@kernel.org, alexandru.elisei@arm.com, oliver.upton@linux.dev, linux-arm-kernel@lists.infradead.org, catalin.marinas@arm.com, linux-kernel@vger.kernel.org, qperret@google.com, james.morse@arm.com, suzuki.poulose@arm.com, kernel-team@android.com
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Jun 26, 2022 at 1:15 PM Jason A. Donenfeld <Jason@zx2c4.com> wrote:
-> Other virt VMs can pass RNG seeds via the "rng-seed" device tree
-> property or via UEFI, but m68k doesn't have either. Instead it has its
-> own bootinfo protocol. So this commit adds support for receiving a RNG
-> seed from it, which will be used at the earliest possible time in boot,
-> just like device tree.
->
-> Reviewed-by: Laurent Vivier <laurent@vivier.eu>
-> Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
+On Tue, 5 Jul 2022 14:23:10 +0000, Quentin Perret wrote:
+> Although harmless, the return statement in kvm_unexpected_el2_exception
+> is rather confusing as the function itself has a void return type. The
+> C standard is also pretty clear that "A return statement with an
+> expression shall not appear in a function whose return type is void".
+> Given that this return statement does not seem to add any actual value,
+> let's not pointlessly violate the standard.
+> 
+> [...]
 
-> --- a/arch/m68k/include/uapi/asm/bootinfo-virt.h
-> +++ b/arch/m68k/include/uapi/asm/bootinfo-virt.h
-> @@ -13,6 +13,13 @@
->  #define BI_VIRT_VIRTIO_BASE    0x8004
->  #define BI_VIRT_CTRL_BASE      0x8005
->
-> +/* A random seed used to initialize the RNG. Record format:
-> + *
-> + *   - length       [ 2 bytes, 16-bit big endian ]
-> + *   - seed data    [ `length` bytes ]
+Applied to kvm-arm64/misc-5.20, thanks!
 
-", padded to preserve 2-byte alignment"
+[1/1] KVM: arm64: Don't return from void function
+      commit: 1c3ace2b8b3995d3213c5e2d2aca01a0577a3b0f
 
-Reviewed-by: Geert Uytterhoeven <geert@linux-m68k.org>
-i.e. will queue in the m68k for-v5.20 branch with the above fixed.
-No need to resend.
+Cheers,
 
-Gr{oetje,eeting}s,
+	M.
+-- 
+Marc Zyngier <maz@kernel.org>
 
-                        Geert
-
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds

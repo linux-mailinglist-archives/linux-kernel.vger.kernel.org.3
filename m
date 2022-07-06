@@ -2,82 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 242A15693A7
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 22:53:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B65B75693A2
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 22:52:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233876AbiGFUxg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Jul 2022 16:53:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55434 "EHLO
+        id S234256AbiGFUwg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Jul 2022 16:52:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54488 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231724AbiGFUx2 (ORCPT
+        with ESMTP id S234075AbiGFUwb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Jul 2022 16:53:28 -0400
-Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58A63F4E;
-        Wed,  6 Jul 2022 13:53:27 -0700 (PDT)
-Received: by mail-ej1-x635.google.com with SMTP id ay16so29118347ejb.6;
-        Wed, 06 Jul 2022 13:53:27 -0700 (PDT)
+        Wed, 6 Jul 2022 16:52:31 -0400
+Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D00701DA5E;
+        Wed,  6 Jul 2022 13:52:29 -0700 (PDT)
+Received: by mail-ej1-x62a.google.com with SMTP id u12so29060716eja.8;
+        Wed, 06 Jul 2022 13:52:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=VPC/yhfBicbTkni4vtlss9W8xSqhwhJaJcOTmjPfh0o=;
-        b=lwg0PHFNAPPG6e06TPmruHtjs7+YR9Wp1EDyfHxJdFrJEd2ToYUYkLtjUVwtyvRu31
-         jhCeS821Zb94D3G+7AKE7YkGEvpQA8uPDOfsWI/z0nVHAfi8Nn/0i8psDpIV8+wC1oxc
-         6rPfzCXKilO+lzFQ/ABSu4DJdEN3YJDI0Dpd0oMKAuScjgQ21k9z/r8DQlJeyKuGE6XW
-         8oCbt1SNeqiwGAFU2WvRUv8/68b1GB202XCHCqrnnToF7t+nTfpUTWS5gwiDW1sRWMTY
-         /uQEWrOS0ps2tyfpv/k9CVXSWOEdS+lEPob+Qvd5RXQ2xLk02kzOgh1TbFL0elN7oILn
-         nkwA==
+        h=references:from:to:cc:subject:in-reply-to:date:message-id
+         :mime-version;
+        bh=0oY4gap3TRwLTtcF3gSbbfZZEWWnO/s07oBC4LBZLoI=;
+        b=bdO+++3upnx+oi3mTBDx64vJsbxbunSAVJ72P1Wg9Ls5kg1jyw90zYb9fUyks7rGAq
+         hfe4rh0kVzbYa50kA+D1CbuzAp+Uk1/TRCDt/9R9vYfAOlzzjvAKhkh9LN1OrcqTSHPk
+         KOZsHGgTTN0uWgWG7NwrWMIdchOn7g82ENW36yzFwooCgJ0cNeECU4ijALbSW9iJ5NPe
+         OCQARHJ9XobsakLfbWAfH70x5sk2d7/UGIt6uR/0daP9WxluMOIQ2yy2rcptqbouwxh0
+         wQmHZqocdgf99hNSgM1iDG8+jvfdDZFq2eYEZkS4eqET/dIw0mIAsEoKBB8U2IvLk0EQ
+         cYSA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=VPC/yhfBicbTkni4vtlss9W8xSqhwhJaJcOTmjPfh0o=;
-        b=g2rx7kdUSt2OSijcF/i/sD8sAH5oAR9MyoKxMsENhUxNzF+l9xGQpq5fvD6M9CBydL
-         qQcTFFYgJC0t7Rc9uDXrNXEsieCcySIdIiwylCkDrbvJglYlbmLVsmLCtG773iRh4pFP
-         fFUc6SSm/RfydnkBbpx3TAq+SHM//kufxm5UAYpuAY4yC8vQELWxWJ5H0H5dhcduBw20
-         dmONQ8crrfUvpmSGQJ8ZvxpEvvB6PCC3G8W+HHAPZY5P9/gQcOKVukvD22beWZWjMxU+
-         S75kbjD29ZuH04BQ6llZ7lqlbSZbJsFMbb8iH6vNkWLaiiMeBUxRJrF91U9B9RIzoUvg
-         s6TQ==
-X-Gm-Message-State: AJIora9Nv9COYQnHRV/LMaucWiqbpbH4iXAmipEVpkkQ9XOfpXYtY8eg
-        z0psjPpOzO8WJpu+FgRiazA=
-X-Google-Smtp-Source: AGRyM1v4ijRGj37RkVp8PRGE7A61QWZQ6+sovPmwEiF/371QlMaGphMjRoqWQ0BcXbVKp7g8+meo3Q==
-X-Received: by 2002:a17:907:160f:b0:726:a7a4:c626 with SMTP id hb15-20020a170907160f00b00726a7a4c626mr41364469ejc.449.1657140805887;
-        Wed, 06 Jul 2022 13:53:25 -0700 (PDT)
-Received: from reki (87-168-253.netrunf.cytanet.com.cy. [87.228.168.253])
-        by smtp.gmail.com with ESMTPSA id d11-20020a1709064c4b00b0070cac22060esm17735511ejw.95.2022.07.06.13.53.23
+        h=x-gm-message-state:references:from:to:cc:subject:in-reply-to:date
+         :message-id:mime-version;
+        bh=0oY4gap3TRwLTtcF3gSbbfZZEWWnO/s07oBC4LBZLoI=;
+        b=JMiM7bo5gy9Pa8J5G2np5kYFsWfzkQcpItwYXG8ulLW5enu6rdsrn1o76PtIVzddKy
+         IcsufNJR583XN4mefX7YL33Q4b+r8RNdHaf4X9RB7tyiej0qhDiNTKlAwum7tTaeV1mi
+         CmEW1dtrEfmsKKbsvZiq3OyCV6EARBrb0NQulJTBPsIyDOukBULey43iy3/M2zngGna3
+         LszGbfubYwYfOaEAxBqk8uMCkTLnoV2A/iv2zXfvU0K8mhh+AcLJijNmTytM+5DdK4jB
+         TzD91CErL5qSjiQdv66xop6rcqRM0mU+1WjVRJR0+LyKSjVLUlgECCTKJ13ig9bJOhdc
+         tBug==
+X-Gm-Message-State: AJIora96NOal26H1axyYs6597z2tHVnB/vGwTXl0nvhsApQceDGqaz0b
+        hlfDjG4zc0oWtYB5kL7HeDk=
+X-Google-Smtp-Source: AGRyM1tLUh67ZeMeuui0Z/nGcNVm7oENy27fJUrmht9yXGN16ZynddjFjllrPUaVYjEQcSZhxD2MGQ==
+X-Received: by 2002:a17:906:8d6:b0:723:42c3:657 with SMTP id o22-20020a17090608d600b0072342c30657mr39613070eje.657.1657140748472;
+        Wed, 06 Jul 2022 13:52:28 -0700 (PDT)
+Received: from localhost (92.40.202.8.threembb.co.uk. [92.40.202.8])
+        by smtp.gmail.com with ESMTPSA id s15-20020a170906500f00b00722dceb3f8bsm17877565ejj.151.2022.07.06.13.52.27
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 06 Jul 2022 13:53:25 -0700 (PDT)
-Date:   Wed, 6 Jul 2022 23:53:22 +0300
-From:   Maxim Devaev <mdevaev@gmail.com>
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     linux-usb@vger.kernel.org, stern@rowland.harvard.edu,
-        balbi@kernel.org, caihuoqing@baidu.com,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] usb: gadget: f_mass_storage: forced_eject attribute
-Message-ID: <20220706235322.01f677bf@reki>
-In-Reply-To: <YsXQ4hFDVjO+xm3s@kroah.com>
-References: <20220706174634.20639-1-mdevaev@gmail.com>
-        <YsXQ4hFDVjO+xm3s@kroah.com>
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-pc-linux-gnu)
+        Wed, 06 Jul 2022 13:52:28 -0700 (PDT)
+References: <20220703111057.23246-1-aidanmacdonald.0x0@gmail.com>
+ <20220703111057.23246-4-aidanmacdonald.0x0@gmail.com>
+ <CACRpkdamknwRPGEeGGQGQPtKw=dPXa79GAJy+E6y+03NakN=cA@mail.gmail.com>
+ <GrX3yDSwNOGIBcWmKqusaJ3dDqNGLr3Y@localhost>
+ <CAHp75Vd9P3Mf75TcXeWB3QE4n_rn7QcWz6g5fDYpPiLVOMsAig@mail.gmail.com>
+From:   Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
+To:     Andy Shevchenko <andy.shevchenko@gmail.com>
+Cc:     Linus Walleij <linus.walleij@linaro.org>,
+        Michael Walle <michael@walle.cc>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH 3/3] gpio: regmap: Support a custom ->to_irq() hook
+In-reply-to: <CAHp75Vd9P3Mf75TcXeWB3QE4n_rn7QcWz6g5fDYpPiLVOMsAig@mail.gmail.com>
+Date:   Wed, 06 Jul 2022 21:53:36 +0100
+Message-ID: <7EciRXW2jHHdJoybh7lao4eux9khP3Sc@localhost>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-=D0=92 Wed, 6 Jul 2022 20:13:54 +0200
-Greg KH <gregkh@linuxfoundation.org> wrote:
 
-> You have to document sysfs files in Documentation/ABI/ in order for us
-> to be able to accept them.
+Andy Shevchenko <andy.shevchenko@gmail.com> writes:
 
-I've added this and also the documentation for configfs. Submitted as v2 pa=
-tch.
+> On Tue, Jul 5, 2022 at 1:22 PM Aidan MacDonald
+> <aidanmacdonald.0x0@gmail.com> wrote:
+>
+> ...
+>
+>> Is that really better than simply using ->to_irq()?
+>
+> We have Intel PMIC drivers (that are in MFD) and they have respective
+> GPIO drivers, none of them is using ->to_irq() and all of them provide
+> IRQ functionality. Can it be taken as an example or is it something
+> quite different to your hardware?
+
+In the Intel PMICs the MFD irqchip has a single interrupt for all GPIOs.
+The GPIO driver then has its own irqchip and it looks at other registers
+to find out which GPIO interrupt fired. It's a typical cascaded setup.
+
+In my case the MFD irqchip has one interrupt per GPIO. The GPIO driver
+does not need its own irqchip; everything is handled by the MFD irqchip.
+Existing examples include wm831x, wm8994, da9052, and tps6586x.

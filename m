@@ -2,73 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C561567F2E
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 09:00:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 18728567F2B
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 09:00:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231158AbiGFHAY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Jul 2022 03:00:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53432 "EHLO
+        id S230323AbiGFHAO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Jul 2022 03:00:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53332 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230420AbiGFHAS (ORCPT
+        with ESMTP id S229592AbiGFHAL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Jul 2022 03:00:18 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5D021F2DC;
-        Wed,  6 Jul 2022 00:00:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
-        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=R46HUaC7dh3ENW3T9JD/LPCN0Q73/N8vSw6Q2zMi/zs=; b=vOm/O/oIezRVCyIO8pt7RST9FS
-        c0ALDfi9HMbz8Vxvmsju3KsbI2eUJASfRzM4wlPSLViIZ2jp5PRhygeJUzgVObOSIkUA818QIL6hv
-        7VIjlRE+GoqmMDDguZDLAKkOHSXH1rS5lfUiRQkoWEykBEpe8/1T7r0wGqNRtefDwq0OYdx4p99vW
-        XvAJZPD5k5+KjlJWgqthaCHi1G2ngvYWMK7HFsZ8SaIcD9xnsidmEW81T7CX3BeIAKbRmJr1cdemD
-        cxfyt0z128b5NXZj95mP2YrSMk1zswZ681CgAorn3aHZ07qd++0Wr7WCShFW+i4dzdAIuIHFKeQ1X
-        1uzohvaA==;
-Received: from hch by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1o8z10-006tU3-EX; Wed, 06 Jul 2022 07:00:03 +0000
-Date:   Wed, 6 Jul 2022 00:00:02 -0700
-From:   Christoph Hellwig <hch@infradead.org>
-To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Cc:     Christoph Hellwig <hch@infradead.org>,
-        Alan Maguire <alan.maguire@oracle.com>,
-        Yixun Lan <dlan@gentoo.org>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        linux-riscv@lists.infradead.org,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>
-Subject: Re: [PATCH] RISC-V/bpf: Enable bpf_probe_read{, str}()
-Message-ID: <YsUy8jBpt11zoc5E@infradead.org>
-References: <20220703130924.57240-1-dlan@gentoo.org>
- <YsKAZUJRo5cjtZ3n@infradead.org>
- <CAEf4BzbCswMd6KU7f9SEU6xHBBPu_rTL5f+KE0OkYj63e-h-bA@mail.gmail.com>
+        Wed, 6 Jul 2022 03:00:11 -0400
+Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 873991EAFC;
+        Wed,  6 Jul 2022 00:00:08 -0700 (PDT)
+Received: from canpemm500007.china.huawei.com (unknown [172.30.72.56])
+        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4Ld9Px3n0TzYd5p;
+        Wed,  6 Jul 2022 14:59:17 +0800 (CST)
+Received: from [10.174.179.215] (10.174.179.215) by
+ canpemm500007.china.huawei.com (7.192.104.62) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Wed, 6 Jul 2022 15:00:05 +0800
+Subject: Re: [PATCH v2 -next] soc/tegra: fuse: Add missing DMADEVICES
+ dependency
+To:     <thierry.reding@gmail.com>, <jonathanh@nvidia.com>,
+        <digetx@gmail.com>, <dmitry.osipenko@collabora.com>
+CC:     <linux-tegra@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+References: <20220629015429.24332-1-yuehaibing@huawei.com>
+From:   YueHaibing <yuehaibing@huawei.com>
+Message-ID: <70bfcb37-a347-f627-1ba1-694c7a4b1609@huawei.com>
+Date:   Wed, 6 Jul 2022 15:00:04 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.5.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAEf4BzbCswMd6KU7f9SEU6xHBBPu_rTL5f+KE0OkYj63e-h-bA@mail.gmail.com>
-X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20220629015429.24332-1-yuehaibing@huawei.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.174.179.215]
+X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
+ canpemm500007.china.huawei.com (7.192.104.62)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jul 05, 2022 at 10:00:42PM -0700, Andrii Nakryiko wrote:
-> riscv existed as of [0], so I'd argue it is a proper bug fix, as
-> corresponding select ARCH_HAS_NON_OVERLAPPING_ADDRESS_SPACE should
-> have been added back then.
+Pls ignore this.
 
-How much of an eBPF ecosystem was there on RISC-V at the point?
+On 2022/6/29 9:54, YueHaibing wrote:
+> WARNING: unmet direct dependencies detected for TEGRA20_APB_DMA
+>   Depends on [n]: DMADEVICES [=n] && (ARCH_TEGRA [=y] || COMPILE_TEST [=n])
+>   Selected by [y]:
+>   - SOC_TEGRA_FUSE [=y] && ARCH_TEGRA [=y] && ARCH_TEGRA_2x_SOC [=y]
+> 
+> TEGRA20_APB_DMA depends on DMADEVICES, so SOC_TEGRA_FUSE also should depends on it
+> before select it.
+> 
+> Fixes: 19d41e5e9c68 ("soc/tegra: fuse: Add APB DMA dependency for Tegra20")
+> Reported-by: Hulk Robot <hulkci@huawei.com>
+> Signed-off-by: YueHaibing <yuehaibing@huawei.com>
+> ---
+>  drivers/soc/tegra/Kconfig | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/drivers/soc/tegra/Kconfig b/drivers/soc/tegra/Kconfig
+> index 5725c8ef0406..2b6ba0f798fa 100644
+> --- a/drivers/soc/tegra/Kconfig
+> +++ b/drivers/soc/tegra/Kconfig
+> @@ -135,6 +135,7 @@ endif
+>  config SOC_TEGRA_FUSE
+>  	def_bool y
+>  	depends on ARCH_TEGRA
+> +	depends on DMADEVICES
+>  	select SOC_BUS
+>  	select TEGRA20_APB_DMA if ARCH_TEGRA_2x_SOC
+>  
+> 

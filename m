@@ -2,172 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E642569370
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 22:38:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 42A81569372
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 22:39:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234094AbiGFUiw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Jul 2022 16:38:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46016 "EHLO
+        id S232385AbiGFUi4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Jul 2022 16:38:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46034 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231622AbiGFUiu (ORCPT
+        with ESMTP id S233932AbiGFUiw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Jul 2022 16:38:50 -0400
-Received: from mail-oa1-x35.google.com (mail-oa1-x35.google.com [IPv6:2001:4860:4864:20::35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84C211C11A
-        for <linux-kernel@vger.kernel.org>; Wed,  6 Jul 2022 13:38:47 -0700 (PDT)
-Received: by mail-oa1-x35.google.com with SMTP id 586e51a60fabf-10bffc214ffso12126035fac.1
-        for <linux-kernel@vger.kernel.org>; Wed, 06 Jul 2022 13:38:47 -0700 (PDT)
+        Wed, 6 Jul 2022 16:38:52 -0400
+Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DAA7A1A82E
+        for <linux-kernel@vger.kernel.org>; Wed,  6 Jul 2022 13:38:50 -0700 (PDT)
+Received: by mail-ej1-x62a.google.com with SMTP id sb34so28983861ejc.11
+        for <linux-kernel@vger.kernel.org>; Wed, 06 Jul 2022 13:38:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=V4iWsM3zDJ62xZk9JpVza3Ty+C3Hx5QJjdlOMIUkfEI=;
-        b=EDdwTSV2Gu4vOdeLlT31P2HN/4NychO6ng/goB8uYDSxRqx5+20DP6v25Jr2mVjy14
-         ffhPDZJ7bWPeYiCsTfSOEF5WOm1Wxu2lXrMfGSYjEXgZc59MvMsUXgTcw4J0d6fuNzsp
-         Mch07cuS0FZGE2DmmohXSTThXt/yjeW2guxvrmxiYla0Z9dtCY/5FGQ07LtKY5FACfUZ
-         PhL0i7l/whYaj1re0ZgZkOsFkMpBA8KUnbu5ceOH9v/mS7aYoZwi+g1O6esuCjwfo0KH
-         APsWNPcJNtLUQ53HjSWKhkIfgbVTevM4BT3D44v7miQ7aeRGtZS8e3TvTaqaLhAqc9x/
-         NWuQ==
+        bh=vZwr/3vScMTpIxRMv4WjBuRiSizQBnezajqPVx3a7e0=;
+        b=Si4QPqbtDaLn6pEEQtLRwxF4fYosbpF3ECvovEmamZp6mRc+rAEE4GEuQ1GA75QJNL
+         nT5vIiBeCYuWROYx7uLVrwrygeWtrzI4KqiAnNecy3vj45ZwRrP44UCSDGRJalFr35+v
+         XGT4GZ5JqGMYJimhJwHqNQ2Hb+k3JYeZ+eifljoPOqgoPE8y/++uz/BePLXB2KueIs+r
+         0kjqLOLNielZc+j0wai/ds7sORTK/n1ErXJZjzv1m/tPaFdA/noEhrGjQlWnOPGA+Kjr
+         AMe9D/cmbU6GzFJ9kIeTDxrT/59ynOFSiotyLbC3mHfTujW4dRJK1o6Nb49Y/B9ETLha
+         GO5Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=V4iWsM3zDJ62xZk9JpVza3Ty+C3Hx5QJjdlOMIUkfEI=;
-        b=paRAGeDJywgRNlM9e9WHY9N/pEG1rD4GFjIZP5Uib3qTd8uqHa6DzniTtad8NEzRQ9
-         nwjublAuu4fwqvTHtqcQjRo/Kz36DUOlY/xlPhLUZ3VH8P2Mm8YLQ6Ktb/Rb+tuucnrJ
-         3zMeQAD0SDYgIFx2IuSc/qo8V2Jl32SwlG6bdQP/Xe/yQ2d6T0G/O1Zm1JQ45e2kn02t
-         LCaiBgTFR6ezqnYXhUFbvc08A20jZ3BF+RltRLijSgCr8T0S/hQa64eB0x6+Ni5l1Kww
-         jem97K8qm/UoPxmKZUIRx+Y8I1mb8et291M098dwAxtuwt1TdE/EbypURs0zgFd+c6se
-         CXow==
-X-Gm-Message-State: AJIora+GOD6lM+LuuUKPhoqEXyuno3rmizPCU/9pBKR+hCrqKkdLHP9G
-        2sFgxqJyd2S9SjPiXAN87H/kj0ScEBY7IjJvZR5m7g==
-X-Google-Smtp-Source: AGRyM1syzblqUeyuUT+ro5BC+DlgiV8XGC8iARTfNRkNnhH/DBFePHvxiPweRw/BZRmhp+UNC73NHnBI+gsLazNmznY=
-X-Received: by 2002:a05:6870:56aa:b0:10b:f4fb:8203 with SMTP id
- p42-20020a05687056aa00b0010bf4fb8203mr312197oao.181.1657139926714; Wed, 06
- Jul 2022 13:38:46 -0700 (PDT)
+        bh=vZwr/3vScMTpIxRMv4WjBuRiSizQBnezajqPVx3a7e0=;
+        b=waUaomSxTHs7kzQgne3moAjn5a3UMSFrR+g8pPFm5f+mYd3qul/Z0JDdciEELUxVZK
+         ZhfHqi67Je2cE8GiUwxlolu69v1OwWN5y2BuD7T8rMoHFJTP2aOB0SAmoBg4Y1GoTKCU
+         u98xLdwvzSHES7vjFfTbn3oCjSaDdhujWgMP7tD5YAYnBhqo/4hJEpB0BnhSTlKL7zEd
+         WTrDRwwyRu/TO3JKzgweShz2aPEnzgPpX1GauhO3w0+9anB2jO8BcKwBybTH/jvmve6G
+         XuJ9Yuv9ooCuJMO1EIoxWrQaBTTJYB1C5sTFFyjTdQe0UYk5A5o/Y5+q9Mc7aHK7tIjQ
+         dQoQ==
+X-Gm-Message-State: AJIora/ezqGvF9gd55Bzux9mUdPqM4n8cJgB685C4HSOigVxKEUkiMM/
+        5HTeqGTC+F+WpGwp6jq/pYCixPQEFEAK7shkmFtRQQ==
+X-Google-Smtp-Source: AGRyM1vxTeQHfdIzYEDhVghCJRnsbHpY4JGNvAe08IGkmOJUZpH5AMO7hQ2aFcT2bjUbbSyKueyvirg7NJR8Stdijos=
+X-Received: by 2002:a17:906:5d04:b0:722:f46c:b891 with SMTP id
+ g4-20020a1709065d0400b00722f46cb891mr42210274ejt.4.1657139929289; Wed, 06 Jul
+ 2022 13:38:49 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220621150902.46126-1-mlevitsk@redhat.com> <20220621150902.46126-12-mlevitsk@redhat.com>
- <CALMp9eSe5jtvmOPWLYCcrMmqyVBeBkg90RwtR4bwxay99NAF3g@mail.gmail.com>
- <42da1631c8cdd282e5d9cfd0698b6df7deed2daf.camel@redhat.com>
- <CALMp9eRNZ8D5aRyUEkc7CORz-=bqzfVCSf6nOGZhqQfWfte0dw@mail.gmail.com>
- <289c2dd941ecbc3c32514fc0603148972524b22d.camel@redhat.com>
- <CALMp9eS2gxzWU1+OpfBTqCZsmyq8qoCW_Qs84xv=rGo1ranG1Q@mail.gmail.com> <5ff3c2b4712f6446d2c1361315b972ddad48836f.camel@redhat.com>
-In-Reply-To: <5ff3c2b4712f6446d2c1361315b972ddad48836f.camel@redhat.com>
-From:   Jim Mattson <jmattson@google.com>
-Date:   Wed, 6 Jul 2022 13:38:35 -0700
-Message-ID: <CALMp9eRCV187TsdnOr9PWo+MMNT71+2uU8YNvc89EBgYYvxRQQ@mail.gmail.com>
-Subject: Re: [PATCH v2 11/11] KVM: x86: emulator/smm: preserve interrupt
- shadow in SMRAM
-To:     Maxim Levitsky <mlevitsk@redhat.com>
-Cc:     kvm@vger.kernel.org, Sean Christopherson <seanjc@google.com>,
-        x86@kernel.org, Kees Cook <keescook@chromium.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        linux-kernel@vger.kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
-        Borislav Petkov <bp@alien8.de>, Joerg Roedel <joro@8bytes.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>
+References: <20220627221446.82157-1-dlatypov@google.com> <20220627221446.82157-3-dlatypov@google.com>
+In-Reply-To: <20220627221446.82157-3-dlatypov@google.com>
+From:   Brendan Higgins <brendanhiggins@google.com>
+Date:   Wed, 6 Jul 2022 16:38:38 -0400
+Message-ID: <CAFd5g45hnC81WHyOmU3Jd2Ov3-KZOZSSOfjPsptqkTfiK73MQA@mail.gmail.com>
+Subject: Re: [PATCH v3 3/3] kunit: add coverage_uml.config to enable GCOV on UML
+To:     Daniel Latypov <dlatypov@google.com>
+Cc:     davidgow@google.com, linux-kernel@vger.kernel.org,
+        kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
+        skhan@linuxfoundation.org
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
         ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jul 6, 2022 at 1:00 PM Maxim Levitsky <mlevitsk@redhat.com> wrote:
+On Mon, Jun 27, 2022 at 6:15 PM 'Daniel Latypov' via KUnit Development
+<kunit-dev@googlegroups.com> wrote:
 >
-> On Wed, 2022-07-06 at 11:13 -0700, Jim Mattson wrote:
-> > On Tue, Jul 5, 2022 at 6:38 AM Maxim Levitsky <mlevitsk@redhat.com> wrote:
-...
-> > > Plus our SMI layout (at least for 32 bit) doesn't confirm to the X86 spec anyway,
-> > > we as I found out flat out write over the fields that have other meaning in the X86 spec.
-> >
-> > Shouldn't we fix that?
-> I am afraid we can't because that will break (in theory) the backward compatibility
-> (e.g if someone migrates a VM while in SMM).
-
-Every time someone says, "We can't fix this, because it breaks
-backward compatibility," I think, "Another potential use of
-KVM_CAP_DISABLE_QUIRKS2?"
-
-...
-> But then after looking at SDM I also found out that Intel and AMD have completely
-> different SMM layout for 64 bit. We follow the AMD's layout, but we don't
-> implement many fields, including some that are barely/not documented.
-> (e.g what is svm_guest_virtual_int?)
+> Now that kunit.py's --kunitconfig is repeatable, let's create a file to
+> hold the various options needed to enable coverage under UML.
 >
-> In theory we could use Intel's layout when we run with Intel's vendor ID,
-> and AMD's vise versa, but we probably won't bother + once again there
-> is an issue of backward compatibility.
-
-This seems pretty egregious, since the SDM specifically states, "Some
-of the registers in the SMRAM state save area (marked YES in column 3)
-may be read and changed by the
-SMI handler, with the changed values restored to the processor
-registers by the RSM instruction." How can that possibly work with
-AMD's layout?
-(See my comment above regarding backwards compatibility.)
-
-<soapbox>I wish KVM would stop offering virtual CPU features that are
-completely broken.</soapbox>
-
-> > The vNMI feature isn't available in any shipping processor yet, is it?
-> Yes, but one of its purposes is to avoid single stepping the guest,
-> which is especially painful on AMD, because there is no MTF, so
-> you have to 'borrow' the TF flag in the EFLAGS, and that can leak into
-> the guest state (e.g pushed onto the stack).
-
-So, what's the solution for all of today's SVM-capable processors? KVM
-will probably be supporting AMD CPUs without vNMI for the next decade
-or two.
-
-
-> (Actually looking at clause of default treatment of SMIs in Intel's PRM,
-> they do mention that they preserve the int shadow somewhere at least
-> on some Intel's CPUs).
-
-Yes, this is a required part of VMX-critical state for processors that
-support SMI recognition while there is blocking by STI or by MOV SS.
-However, I don't believe that KVM actually saves VMX-critical state on
-delivery of a virtual SMI.
-
+> This can be used like so:
+> $ ./tools/testing/kunit/kunit.py run \
+>   --kunitconfig=tools/testing/kunit/configs/all_tests_uml.config \
+>   --kunitconfig=tools/testing/kunit/configs/coverage_uml.config \
+>   --make_options=CC=/usr/bin/gcc-6
 >
-> BTW, according to my observations, it is really hard to hit this problem,
-> because it looks like when the CPU is in interrupt shadow, it doesn't process
-> _real_ interrupts as well (despite the fact that in VM, real interrupts
-> should never be blocked(*), but yet, that is what I observed on both AMD and Intel.
+> which on my system is enough to get coverage working [1].
 >
-> (*) You can allow the guest to control the real EFLAGS.IF on both VMX and SVM,
-> (in which case int shadow should indeed work as on bare metal)
-> but KVM of course doesn't do it.
+> This is still a clunky command, but far better than before.
+>
+> [1] at the time of this commit, I get:
+>   Overall coverage rate:
+>     lines......: 11.6% (34112 of 295033 lines)
+>     functions..: 15.3% (3721 of 24368 functions)
+>
+> Signed-off-by: Daniel Latypov <dlatypov@google.com>
+> Reviewed-by: David Gow <davidgow@google.com>
 
-It doesn't surprise me that hardware treats a virtual interrupt shadow
-as a physical interrupt shadow. IIRC, each vendor has a way of
-breaking an endless chain of interrupt shadows, so a malicious guest
-can't defer interrupts indefinitely.
-
-> I observed that when KVM sends #SMI from other vCPU, it sends a vCPU kick,
-> and the kick never arrives inside the interrupt shadow.
-> I have seen it on both VMX and SVM.
->
-> What still triggers this problem, is that the instruction which is in the interrupt
-> shadow can still get a VM exit, (e.g EPT/NPT violation) and then it can notice
-> the pending SMI.
->
-> I think it has to be EPT/NPT violation btw, because, IMHO most if not all other VM exits I
-> think are instruction intercepts, which will cause KVM to emulate the instruction
-> and clear the interrupt shadow, and only after that it will enter SMM.
->
-> Even MMIO/IOPORT access is emulated by the KVM.
->
-> Its not the case with EPT/NPT violation, because the KVM will in this case re-execute
-> the instruction after it 'fixes' the fault.
-
-Probably #PF as well, then, if TDP is disabled.
+Reviewed-by: Brendan Higgins <brendanhiggins@google.com>

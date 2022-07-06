@@ -2,66 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D13D568ED7
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 18:17:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 12702568EDB
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 18:18:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233185AbiGFQQu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Jul 2022 12:16:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44278 "EHLO
+        id S233953AbiGFQRr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Jul 2022 12:17:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45250 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234558AbiGFQQq (ORCPT
+        with ESMTP id S232248AbiGFQRq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Jul 2022 12:16:46 -0400
-Received: from mail-io1-f51.google.com (mail-io1-f51.google.com [209.85.166.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8080275D3;
-        Wed,  6 Jul 2022 09:16:44 -0700 (PDT)
-Received: by mail-io1-f51.google.com with SMTP id r133so14460469iod.3;
-        Wed, 06 Jul 2022 09:16:44 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=XzyTkDSXajruLqTE2xOuZnQbOGvVcuO7PmEw4yPs+sE=;
-        b=UcKAlat+LBqkG3IHsZgH4mwzQqhzVEZ/dD+qSXAz4vwBhobkSrzn+/wpRhOw3nVzCZ
-         IvRnmQnIrOMH/lo1HXZ2N7+MrZZa5v7LOaUfnaaKy+TnqttBf+RkVLgMSlKzkjrwbO64
-         S0SpLEarRSGgQpJCiFlk7noHbxFUTQ7JQCb1SChr6Fftrb7yLZIa/xSn3i7ma2/Yvm6p
-         ajOnVvLGKJ9izTfCRqcD9PedQo6fnHm/765cb+aZ6iJhwB8bH36q09IUZJpeCT2+ypoi
-         EHqURO3fuvCDGT7sQOXrbeaO4pxua/FnmlcEHZgtdnh5tCGhS/Y3g/aUz8c5Aq7Rld4T
-         waGg==
-X-Gm-Message-State: AJIora+GJpoxV8aY0eCJv1qzJ0pjpFfv/GTHUx9KhQbHISk9OFotCLGy
-        m9XetLg+LpVIJbzb/e/gNIClw/Ebgg==
-X-Google-Smtp-Source: AGRyM1uDa4GL6K2rquloBK7cKl0fYOjHzpTx5KP1xd8XsypkXLrzvI4+d5FGPx37gauwr0rhO7or+Q==
-X-Received: by 2002:a05:6638:2684:b0:33b:afc4:298d with SMTP id o4-20020a056638268400b0033bafc4298dmr26482105jat.49.1657124203923;
-        Wed, 06 Jul 2022 09:16:43 -0700 (PDT)
-Received: from robh.at.kernel.org ([64.188.179.248])
-        by smtp.gmail.com with ESMTPSA id f11-20020a92cb4b000000b002dc1e44860fsm2560161ilq.87.2022.07.06.09.16.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 06 Jul 2022 09:16:43 -0700 (PDT)
-Received: (nullmailer pid 145417 invoked by uid 1000);
-        Wed, 06 Jul 2022 16:16:42 -0000
-Date:   Wed, 6 Jul 2022 10:16:42 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     devicetree@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-samsung-soc@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Rob Herring <robh+dt@kernel.org>,
-        Chanho Park <chanho61.park@samsung.com>,
-        Alim Akhtar <alim.akhtar@samsung.com>
-Subject: Re: [PATCH 3/3] dt-bindings: soc: samsung: exynos-pmu: add
- reboot-mode
-Message-ID: <20220706161642.GA145360-robh@kernel.org>
-References: <20220706095037.78542-1-krzysztof.kozlowski@linaro.org>
- <20220706095037.78542-3-krzysztof.kozlowski@linaro.org>
+        Wed, 6 Jul 2022 12:17:46 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85283275FB;
+        Wed,  6 Jul 2022 09:17:45 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 28BB1617B6;
+        Wed,  6 Jul 2022 16:17:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DB619C3411C;
+        Wed,  6 Jul 2022 16:17:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1657124264;
+        bh=iUXQ5zeCn7F+rXGeQUyYPSpHic8CAZ/oIMDK22tyFWQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=QkkCc5ixzpkLNHQqiXnFn3xxqX9vX6/7pjTO+beEcU7867jQ3yUN0tTRIumCfmw+l
+         XIzzqW2j9D9B4/2+IOEa8BfZuC023EPkTIIlI8emhIRxwe64emyKhFAv8lGeUgTcta
+         zuKnzfTcaivcT4wJUjtBnHQQwH0fDfbzXEQueHNwys3LxQLZfsPGxzK6XZS8PPJ8Yv
+         t7y/jusImrBI66nsaI/PsqnHq6INlZtHblL2bL1nkSyj1G94GXsiCOgO9K8+nIKVlU
+         JtGIYAGbNiHAni7AOCmeuagLTlruDxGIa8OywwwNA7QEwHE9BvWtCfy+YX0GOinCgL
+         usB4BDoSQG4Xg==
+Date:   Wed, 6 Jul 2022 17:17:37 +0100
+From:   Will Deacon <will@kernel.org>
+To:     Huacai Chen <chenhuacai@kernel.org>
+Cc:     Dan Williams <dan.j.williams@intel.com>,
+        Huacai Chen <chenhuacai@loongson.cn>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        loongarch@lists.linux.dev, linux-arch <linux-arch@vger.kernel.org>,
+        Xuefeng Li <lixuefeng@loongson.cn>,
+        Guo Ren <guoren@kernel.org>, Xuerui Wang <kernel@xen0n.name>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linux-MM <linux-mm@kvack.org>,
+        "open list:MIPS" <linux-mips@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        Feiyang Chen <chenfeiyang@loongson.cn>
+Subject: Re: [PATCH V4 3/4] mm/sparse-vmemmap: Generalise
+ vmemmap_populate_hugepages()
+Message-ID: <20220706161736.GC3204@willie-the-truck>
+References: <20220704112526.2492342-1-chenhuacai@loongson.cn>
+ <20220704112526.2492342-4-chenhuacai@loongson.cn>
+ <20220705092937.GA552@willie-the-truck>
+ <CAAhV-H5r8HDaxt8fkO97in5-eH8X9gokVNervmUWn6km4S0e-w@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220706095037.78542-3-krzysztof.kozlowski@linaro.org>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+In-Reply-To: <CAAhV-H5r8HDaxt8fkO97in5-eH8X9gokVNervmUWn6km4S0e-w@mail.gmail.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,16 +75,73 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 06 Jul 2022 11:50:37 +0200, Krzysztof Kozlowski wrote:
-> ExynosAutov9 gained a reboot-mode node, so document the property to fix
-> warning:
-> 
->   exynosautov9-sadk.dtb: system-controller@10460000: 'reboot-mode' does not match any of the regexes: 'pinctrl-[0-9]+'
-> 
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> ---
->  .../devicetree/bindings/soc/samsung/exynos-pmu.yaml         | 6 ++++++
->  1 file changed, 6 insertions(+)
-> 
+On Tue, Jul 05, 2022 at 09:07:59PM +0800, Huacai Chen wrote:
+> On Tue, Jul 5, 2022 at 5:29 PM Will Deacon <will@kernel.org> wrote:
+> > On Mon, Jul 04, 2022 at 07:25:25PM +0800, Huacai Chen wrote:
+> > > diff --git a/mm/sparse-vmemmap.c b/mm/sparse-vmemmap.c
+> > > index 33e2a1ceee72..6f2e40bb695d 100644
+> > > --- a/mm/sparse-vmemmap.c
+> > > +++ b/mm/sparse-vmemmap.c
+> > > @@ -686,6 +686,60 @@ int __meminit vmemmap_populate_basepages(unsigned long start, unsigned long end,
+> > >       return vmemmap_populate_range(start, end, node, altmap, NULL);
+> > >  }
+> > >
+> > > +void __weak __meminit vmemmap_set_pmd(pmd_t *pmd, void *p, int node,
+> > > +                                   unsigned long addr, unsigned long next)
+> > > +{
+> > > +}
+> > > +
+> > > +int __weak __meminit vmemmap_check_pmd(pmd_t *pmd, int node, unsigned long addr,
+> > > +                                    unsigned long next)
+> > > +{
+> > > +     return 0;
+> > > +}
+> > > +
+> > > +int __meminit vmemmap_populate_hugepages(unsigned long start, unsigned long end,
+> > > +                                      int node, struct vmem_altmap *altmap)
+> > > +{
+> > > +     unsigned long addr;
+> > > +     unsigned long next;
+> > > +     pgd_t *pgd;
+> > > +     p4d_t *p4d;
+> > > +     pud_t *pud;
+> > > +     pmd_t *pmd;
+> > > +
+> > > +     for (addr = start; addr < end; addr = next) {
+> > > +             next = pmd_addr_end(addr, end);
+> > > +
+> > > +             pgd = vmemmap_pgd_populate(addr, node);
+> > > +             if (!pgd)
+> > > +                     return -ENOMEM;
+> > > +
+> > > +             p4d = vmemmap_p4d_populate(pgd, addr, node);
+> > > +             if (!p4d)
+> > > +                     return -ENOMEM;
+> > > +
+> > > +             pud = vmemmap_pud_populate(p4d, addr, node);
+> > > +             if (!pud)
+> > > +                     return -ENOMEM;
+> > > +
+> > > +             pmd = pmd_offset(pud, addr);
+> > > +             if (pmd_none(READ_ONCE(*pmd))) {
+> > > +                     void *p;
+> > > +
+> > > +                     p = vmemmap_alloc_block_buf(PMD_SIZE, node, altmap);
+> > > +                     if (p) {
+> > > +                             vmemmap_set_pmd(pmd, p, node, addr, next);
+> > > +                             continue;
+> > > +                     } else if (altmap)
+> > > +                             return -ENOMEM; /* no fallback */
+> >
+> > Why do you return -ENOMEM if 'altmap' here? That seems to be different to
+> > what we currently have on arm64 and it's not clear to me why we're happy
+> > with an altmap for the pmd case, but not for the pte case.
+> The generic version is the same as X86. It seems that ARM64 always
+> fallback whether there is an altmap, but X86 only fallback in the no
+> altmap case. I don't know the reason of X86, can Dan Williams give
+> some explaination?
 
-Reviewed-by: Rob Herring <robh@kernel.org>
+Right, I think we need to understand the new behaviour here before we adopt
+it on arm64.
+
+Will

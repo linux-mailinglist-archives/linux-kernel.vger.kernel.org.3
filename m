@@ -2,107 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EEEF7567CD4
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 05:51:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6BE77567CD5
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 05:51:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231331AbiGFDv0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Jul 2022 23:51:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55402 "EHLO
+        id S231939AbiGFDvk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Jul 2022 23:51:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55878 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231907AbiGFDvD (ORCPT
+        with ESMTP id S231386AbiGFDvS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Jul 2022 23:51:03 -0400
-Received: from esa6.hgst.iphmx.com (esa6.hgst.iphmx.com [216.71.154.45])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60FF71E3FB
-        for <linux-kernel@vger.kernel.org>; Tue,  5 Jul 2022 20:49:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
-  t=1657079399; x=1688615399;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=nWXv72h/88bA9KDqkdclJQLLn1UNVvDpSy3/LQXeW3c=;
-  b=Qm3LRsZXeUUOBBaYEB9HLsJiaBSCcrcutWr7Z46AhKe+9k3ZwBGEHRI2
-   +2G3GxNJCz58f0SZmQejTCJdK3cOpIgNB0Xq1B6kdx8yjDf1KH+fDQxcI
-   CuFAul04TyjK9Ms/SKyTSI5Mp62NjNCy2w7jktpM9mLBn1Skvg3+VUAWq
-   ECL9YOYu4+KCn7GtsMEs3/0/3RzmxRjAoCXmfTU8BE4TI7dVSJzrWRlOI
-   t5CRzchbznlypMtiKR9SAlHzWYZR7C7Xo5j6DIFZ9esQtLwNZejW6/NFX
-   iNDx3pwxJGnqYQhyLZF0xC+5BLBN8fWriYvTWZpbRaU3yQyarRnEGBN39
-   g==;
-X-IronPort-AV: E=Sophos;i="5.92,248,1650902400"; 
-   d="scan'208";a="205653587"
-Received: from h199-255-45-15.hgst.com (HELO uls-op-cesaep02.wdc.com) ([199.255.45.15])
-  by ob1.hgst.iphmx.com with ESMTP; 06 Jul 2022 11:49:58 +0800
-IronPort-SDR: 63CFAoHyGhzzSDQHagMtnu2ReKoyH3zZvAluyKdIpgYPwSDEEphEnbn4wOmE6+M9UoUineVkXi
- oUl5nz/5kENmo6td+mORQyUaRYvnpr9VGr9JBJ5jNdFR8xg3epfSjRylYmnVpm2uqorzJpAgKE
- Yr4xefFc5rOTI5pzMN6iCXy3a04Il4odKWeYg3Etw0ZrYAqnTJO5sDshGO1LqdmAnhB0mwo9qA
- Vkp1KLEdU3fnlWGF6UKLpRZl1kkIODaUWCv3f5AChAZh0VHIV4W+w0ckVc5JgfSH0WtRgG95sH
- 9oMWzt/I5lDTMrvPyiO/R5MK
-Received: from uls-op-cesaip01.wdc.com ([10.248.3.36])
-  by uls-op-cesaep02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 05 Jul 2022 20:07:16 -0700
-IronPort-SDR: eSV4xuAWo+hdTfnqnO7G1J2G4J1iTJ/v32GyE7DHK+b/4KLySSMA2qOldO9steFyothqeT2Npo
- VVVLkWR8v3t8JSvIfluHucE26x6Wl80s+im6pbMJQoI3MLhMVgT4yRzOECv49eMUNg7qR0LkLI
- JZ9DNjo5p+76wSctz9AdC1NGS077qRnTpsQ0yGnqygmynGpmUSYcU3TsqLquOwg6Q3rXC8SzMq
- bGv3cFrjjIT7bvc9DqIgqZMKu4VzBYSVxeEq9dFTqfwUxt0JI7yDzQtrr1yY+yjbghQltGoien
- t14=
-WDCIronportException: Internal
-Received: from usg-ed-osssrv.wdc.com ([10.3.10.180])
-  by uls-op-cesaip01.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 05 Jul 2022 20:49:58 -0700
-Received: from usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1])
-        by usg-ed-osssrv.wdc.com (Postfix) with ESMTP id 4Ld5CN3fPpz1Rws0
-        for <linux-kernel@vger.kernel.org>; Tue,  5 Jul 2022 20:49:52 -0700 (PDT)
-Authentication-Results: usg-ed-osssrv.wdc.com (amavisd-new); dkim=pass
-        reason="pass (just generated, assumed good)"
-        header.d=opensource.wdc.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=
-        opensource.wdc.com; h=content-transfer-encoding:content-type
-        :in-reply-to:organization:from:references:to:content-language
-        :subject:user-agent:mime-version:date:message-id; s=dkim; t=
-        1657079391; x=1659671392; bh=nWXv72h/88bA9KDqkdclJQLLn1UNVvDpSy3
-        /LQXeW3c=; b=nsPEh3kxlE7MqhvN3ZaDyASIGDCsqRg1j2EfcgKLG7Vy/56o+nO
-        gTH2/zWFVqqi/8O91Lt2+Ne0RNdzEdBhpu6VbUqoWACPLWwx1OIniYii0AB2/Uyu
-        H/uPpkOILPvsZYZCrZVkDTP5Cvyh/J+5y2e9azvx6X/wZkUamLwakVCSueTTqpfh
-        4yNO76Ic1bibrnnbqYS52T/TPW4kT6e22aepwGJsEeVZx8fAKyH6AS8Evx7mYCVj
-        PHhpDMgw8x3qXycgDjWY9Ai+Yx6fJHxL+122RCb+ALDPD8jM1NqrSBH9PKxtoxgH
-        p2797YK5vNvqIsrIz56kcxEjGygqerYWYwA==
-X-Virus-Scanned: amavisd-new at usg-ed-osssrv.wdc.com
-Received: from usg-ed-osssrv.wdc.com ([127.0.0.1])
-        by usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id xIFnJhWQ3Q2q for <linux-kernel@vger.kernel.org>;
-        Tue,  5 Jul 2022 20:49:51 -0700 (PDT)
-Received: from [10.225.163.110] (unknown [10.225.163.110])
-        by usg-ed-osssrv.wdc.com (Postfix) with ESMTPSA id 4Ld5CJ61Zxz1RtVk;
-        Tue,  5 Jul 2022 20:49:48 -0700 (PDT)
-Message-ID: <53aa543b-a109-046d-beda-91a15ef5a487@opensource.wdc.com>
-Date:   Wed, 6 Jul 2022 12:49:47 +0900
+        Tue, 5 Jul 2022 23:51:18 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E53D201B1;
+        Tue,  5 Jul 2022 20:50:44 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 874D3B81A9A;
+        Wed,  6 Jul 2022 03:50:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1AE93C341C6;
+        Wed,  6 Jul 2022 03:50:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1657079441;
+        bh=WwiHJSeRBZFKvms17mk/wSwuZWColXmfzza+DkWK/JY=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=Y4/j4UrKcJh/mGFMIzfu+3oynOUiV6EojftD++Awyy9BoR96P2CFZ97KOoBzXKzH2
+         DGmbpNFWc+NF4W0bqHnUz2JFzrFYv3Cmi8KYiU8C7MNdG4NC/C/WXkVeEVw+kV9ukC
+         izb/ZIR5Z4r20QEsRh0cfHKXYqXO+1+Ih0LefeEDt46KAX+YOjtfA5eRrGNqrG6bWc
+         doiM6o0iP4yo0UpPzHkjDp5guBnnmob6t/HW8jPbPWg4EXKf/pqsqMryvqW9AbCgB1
+         C80OFCFhDj05Ot4nevYurvtUwXCMZrCORlEQb+l6rJC+hYrZT8lZ5AjFZ48Wnkvobu
+         eXCRtXCSHKdFQ==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id B0FE85C05ED; Tue,  5 Jul 2022 20:50:40 -0700 (PDT)
+Date:   Tue, 5 Jul 2022 20:50:40 -0700
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     "Zhang, Qiang1" <qiang1.zhang@intel.com>
+Cc:     "frederic@kernel.org" <frederic@kernel.org>,
+        "quic_neeraju@quicinc.com" <quic_neeraju@quicinc.com>,
+        "rcu@vger.kernel.org" <rcu@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v2] rcu: Make tiny RCU support leak callbacks for
+ debug-object errors
+Message-ID: <20220706035040.GG1790663@paulmck-ThinkPad-P17-Gen-1>
+Reply-To: paulmck@kernel.org
+References: <20220701024404.2228367-1-qiang1.zhang@intel.com>
+ <20220705174109.GD1790663@paulmck-ThinkPad-P17-Gen-1>
+ <PH0PR11MB5880370195C11E8E943069CBDA809@PH0PR11MB5880.namprd11.prod.outlook.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH 5/5] riscv: dts: canaan: Add k210 topology information
-Content-Language: en-US
-To:     Conor Dooley <mail@conchuod.ie>, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Daire McNamara <daire.mcnamara@microchip.com>,
-        Conor Dooley <conor.dooley@microchip.com>,
-        Niklas Cassel <niklas.cassel@wdc.com>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Zong Li <zong.li@sifive.com>,
-        Emil Renner Berthing <kernel@esmil.dk>,
-        Jonas Hahnfeld <hahnjo@hahnjo.de>
-Cc:     devicetree@vger.kernel.org, linux-riscv@lists.infradead.org,
-        linux-kernel@vger.kernel.org, Brice Goglin <Brice.Goglin@inria.fr>
-References: <20220705190435.1790466-1-mail@conchuod.ie>
- <20220705190435.1790466-6-mail@conchuod.ie>
-From:   Damien Le Moal <damien.lemoal@opensource.wdc.com>
-Organization: Western Digital Research
-In-Reply-To: <20220705190435.1790466-6-mail@conchuod.ie>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <PH0PR11MB5880370195C11E8E943069CBDA809@PH0PR11MB5880.namprd11.prod.outlook.com>
+X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -110,49 +62,310 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 7/6/22 04:04, Conor Dooley wrote:
-> From: Conor Dooley <conor.dooley@microchip.com>
+On Wed, Jul 06, 2022 at 02:00:51AM +0000, Zhang, Qiang1 wrote:
+> On Fri, Jul 01, 2022 at 10:44:04AM +0800, Zqiang wrote:
+> > Currently, only tree RCU support leak callbacks setting when do
+> > duplicate call_rcu(). this commit add leak callbacks setting when
+> > fo duplicate call_rcu() for tiny RCU.
+> > 
+> > Signed-off-by: Zqiang <qiang1.zhang@intel.com>
 > 
-> The k210 has no cpu-map node, so tools like hwloc cannot correctly
-> parse the topology. Add the node using the existing node labels.
+> >This does look plausible, thank you!
+> >
+> >What testing have you done?
+> >
+> >One important test for Tiny RCU is that the size of the kernel not
+> >grow without a very good reason.  In this case, the added code should
+> >be dead code in a production build (CONFIG_DEBUG_OBJECTS_RCU_HEAD=n),
+> >but it is good to check.
+> >
+> >It is of course also good to check that the messages print as expected,
+> >which is what rcutorture.object_debug is there to help with.
 > 
-> Reported-by: Brice Goglin <Brice.Goglin@inria.fr>
-> Link: https://github.com/open-mpi/hwloc/issues/536
-> Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
-
-Looks good to me.
-
-Reviewed-by: Damien Le Moal <damien.lemoal@opensource.wdc.com>
-
-> ---
->  arch/riscv/boot/dts/canaan/k210.dtsi | 12 ++++++++++++
->  1 file changed, 12 insertions(+)
+> In the condition that the CONFIG_DEBUG_OBJECTS_RCU_HEAD=n, the function directly returns zero.
 > 
-> diff --git a/arch/riscv/boot/dts/canaan/k210.dtsi b/arch/riscv/boot/dts/canaan/k210.dtsi
-> index 44d338514761..ec944d1537dc 100644
-> --- a/arch/riscv/boot/dts/canaan/k210.dtsi
-> +++ b/arch/riscv/boot/dts/canaan/k210.dtsi
-> @@ -65,6 +65,18 @@ cpu1_intc: interrupt-controller {
->  				compatible = "riscv,cpu-intc";
->  			};
->  		};
-> +
-> +		cpu-map {
-> +			cluster0 {
-> +				core0 {
-> +					cpu = <&cpu0>;
-> +				};
-> +
-> +				core1 {
-> +					cpu = <&cpu1>;
-> +				};
-> +			};
-> +		};
->  	};
->  
->  	sram: memory@80000000 {
+> #else   /* !CONFIG_DEBUG_OBJECTS_RCU_HEAD */
+> static inline int debug_rcu_head_queue(struct rcu_head *head)
+> {
+>         return 0;
+> }
 
+Yes, like I said, the added code -should- be dead code.  But there is
+often a gap between "should" and "is", for example, compilers don't
+always do what we would like them to.  So please use the "size vmlinux"
+command with and without your patch for a kernel built (both times)
+with CONFIG_TINY_RCU=y and CONFIG_DEBUG_OBJECTS_RCU_HEAD==n.
 
--- 
-Damien Le Moal
-Western Digital Research
+The rest of the test results look good, thank you!
+
+							Thanx, Paul
+
+> My test results are as follows:
+> 
+> runqemu kvm slirp nographic qemuparams="-m 2048 -smp 1" bootparams="rcutorture.object_debug=1" -d
+> 
+> log:
+> root@qemux86-64:/# zcat /proc/config.gz | grep RCU
+> # RCU Subsystem
+> CONFIG_TINY_RCU=y
+> CONFIG_DEBUG_OBJECTS_RCU_HEAD=y
+> 
+> [    1.015657] rcutorture: WARN: Duplicate call_rcu() test starting.
+> [    1.015659] ------------[ cut here ]------------
+> [    1.015659] ODEBUG: activate active (active state 1) object type: rcu_head hint: 0x0
+> [    1.015680] WARNING: CPU: 0 PID: 1 at lib/debugobjects.c:502 debug_print_object+0xda/0x100
+> [    1.016329] Modules linked in:
+> [    1.016329] CPU: 0 PID: 1 Comm: swapper Not tainted 5.19.0-rc3-yoctodev-standard+ #214
+> [    1.016329] Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS rel-1.16.0-0-gd239552ce722-prebuilt.qemu.org 04/01/2014
+> [    1.016329] RIP: 0010:debug_print_object+0xda/0x100
+> [    1.016329] Code: 60 ec 45 92 e8 a7 7b a0 ff 4d 89 f9 4d 89 e8 44 89 e1 48 8b 14 dd 60 ec 45 92 4c 89 f6 48 c7 c7 e0 e1 45 92 e8 f9 d1 b3 00 90 <0f> e
+> [    1.016329] RSP: 0000:ffff888001337be0 EFLAGS: 00010086
+> [    1.016329] RAX: 0000000000000000 RBX: 0000000000000003 RCX: 0000000000000000
+> [    1.016329] RDX: 00000000ffffffd8 RSI: 0000000000000004 RDI: ffffed1000266f6e
+> [    1.016329] RBP: ffff888001337c10 R08: ffffffff90a56ee6 R09: fffffbfff25df5c2
+> [    1.016329] R10: ffffffff92efae0b R11: fffffbfff25df5c1 R12: 0000000000000001
+> [    1.016329] R13: ffffffff9227f520 R14: ffffffff9245e8a0 R15: 0000000000000000
+> [    1.016329] FS:  0000000000000000(0000) GS:ffffffff92cbb000(0000) knlGS:0000000000000000
+> [    1.016329] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> [    1.016329] CR2: ffff888017401000 CR3: 0000000015a3c000 CR4: 00000000001506f0
+> [    1.016329] Call Trace:
+> [    1.016329]  <TASK>
+> [    1.016329]  debug_object_activate+0x2b9/0x300
+> [    1.016329]  ? debug_object_assert_init+0x220/0x220
+> [    1.016329]  ? lockdep_hardirqs_on_prepare+0x13/0x210
+> [    1.016329]  ? call_rcu+0xde/0x150
+> [    1.016329]  ? trace_hardirqs_on+0x54/0x120
+> [    1.016329]  ? rcu_torture_fwd_cb_hist.cold+0xe9/0xe9
+> [    1.016329]  call_rcu+0x20/0x150
+> [    1.016329]  rcu_torture_init+0x1687/0x1759
+> [    1.016329]  ? srcu_init+0xaa/0xaa
+> [    1.016329]  ? irq_debugfs_copy_devname+0x70/0x70
+> [    1.016329]  ? rcu_torture_barrier1cb+0x40/0x40
+> [    1.016329]  ? rcu_torture_barrier1cb+0x40/0x40
+> [    1.016329]  ? irq_pm_init_ops+0x19/0x19
+> [    1.016329]  ? mutex_unlock+0x12/0x20
+> [    1.016329]  ? srcu_init+0xaa/0xaa
+> [    1.016329]  do_one_initcall+0xc1/0x310
+> [    1.016329]  ? initcall_blacklisted+0x140/0x140
+> [    1.016329]  ? parameq+0x20/0x90
+> [    1.016329]  ? __kmalloc+0x238/0x5d0
+> [    1.016329]  ? rcu_read_lock_sched_held+0xe/0x50
+> [    1.016329]  kernel_init_freeable+0x20a/0x268
+> [    1.016329]  ? rest_init+0x160/0x160
+> [    1.016329]  kernel_init+0x1e/0x140
+> [    1.016329]  ret_from_fork+0x22/0x30
+> [    1.016329]  </TASK>
+> [    1.016329] irq event stamp: 152
+> [    1.016329] hardirqs last  enabled at (151): [<ffffffff91da7a4c>] _raw_spin_unlock_irqrestore+0x4c/0x60
+> [    1.016329] hardirqs last disabled at (152): [<ffffffff91da7811>] _raw_spin_lock_irqsave+0x71/0x90
+> [    1.016329] softirqs last  enabled at (0): [<ffffffff908a230c>] copy_process+0xc8c/0x31b0
+> [    1.016329] softirqs last disabled at (0): [<0000000000000000>] 0x0
+> [    1.016329] ---[ end trace 0000000000000000 ]---
+> [    1.016329] ------------[ cut here ]------------
+> [    1.016329] ODEBUG: active_state active (active state 1) object type: rcu_head hint: 0x0
+> [    1.016329] WARNING: CPU: 0 PID: 1 at lib/debugobjects.c:502 debug_print_object+0xda/0x100
+> [    1.016329] Modules linked in:
+> [    1.016329] CPU: 0 PID: 1 Comm: swapper Tainted: G        W         5.19.0-rc3-yoctodev-standard+ #214
+> [    1.016329] Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS rel-1.16.0-0-gd239552ce722-prebuilt.qemu.org 04/01/2014
+> [    1.016329] RIP: 0010:debug_print_object+0xda/0x100
+> [    1.016329] Code: 60 ec 45 92 e8 a7 7b a0 ff 4d 89 f9 4d 89 e8 44 89 e1 48 8b 14 dd 60 ec 45 92 4c 89 f6 48 c7 c7 e0 e1 45 92 e8 f9 d1 b3 00 90 <0f> e
+> [    1.016329] RSP: 0000:ffff888001337bd0 EFLAGS: 00010082
+> [    1.016329] RAX: 0000000000000000 RBX: 0000000000000003 RCX: 0000000000000000
+> [    1.016329] RDX: 00000000ffffffd8 RSI: 0000000000000004 RDI: ffffed1000266f6c
+> [    1.016329] RBP: ffff888001337c00 R08: ffffffff90a56ee6 R09: fffffbfff25df5c2
+> [    1.016329] R10: ffffffff92efae0b R11: fffffbfff25df5c1 R12: 0000000000000001
+> [    1.016329] R13: ffffffff9227f520 R14: ffffffff9245e640 R15: 0000000000000000
+> [    1.016329] FS:  0000000000000000(0000) GS:ffffffff92cbb000(0000) knlGS:0000000000000000
+> [    1.016329] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> [    1.016329] CR2: ffff888017401000 CR3: 0000000015a3c000 CR4: 00000000001506f0
+> [    1.016329] Call Trace:
+> [    1.016329]  <TASK>
+> [    1.016329]  debug_object_active_state+0x1d7/0x210
+> [    1.016329]  ? debug_object_deactivate+0x210/0x210
+> [    1.016329]  ? lockdep_hardirqs_on_prepare+0x13/0x210
+> [    1.016329]  ? call_rcu+0xde/0x150
+> [    1.016329]  ? trace_hardirqs_on+0x54/0x120
+> [    1.016329]  ? rcu_torture_fwd_cb_hist.cold+0xe9/0xe9
+> [    1.016329]  call_rcu+0x39/0x150
+> [    1.016329]  rcu_torture_init+0x1687/0x1759
+> [    1.016329]  ? srcu_init+0xaa/0xaa
+> [    1.016329]  ? irq_debugfs_copy_devname+0x70/0x70
+> [    1.016329]  ? rcu_torture_barrier1cb+0x40/0x40
+> [    1.016329]  ? rcu_torture_barrier1cb+0x40/0x40
+> [    1.016329]  ? irq_pm_init_ops+0x19/0x19
+> [    1.016329]  ? mutex_unlock+0x12/0x20
+> [    1.016329]  ? srcu_init+0xaa/0xaa
+> [    1.016329]  do_one_initcall+0xc1/0x310
+> [    1.016329]  ? initcall_blacklisted+0x140/0x140
+> [    1.016329]  ? parameq+0x20/0x90
+> [    1.016329]  ? __kmalloc+0x238/0x5d0
+> [    1.016329]  ? rcu_read_lock_sched_held+0xe/0x50
+> [    1.016329]  kernel_init_freeable+0x20a/0x268
+> [    1.016329]  ? rest_init+0x160/0x160
+> [    1.016329]  kernel_init+0x1e/0x140
+> [    1.016329]  ret_from_fork+0x22/0x30
+> [    1.016329]  </TASK>
+> [    1.016329] irq event stamp: 152
+> [    1.016329] hardirqs last  enabled at (151): [<ffffffff91da7a4c>] _raw_spin_unlock_irqrestore+0x4c/0x60
+> [    1.016329] hardirqs last disabled at (152): [<ffffffff91da7811>] _raw_spin_lock_irqsave+0x71/0x90
+> [    1.016329] softirqs last  enabled at (0): [<ffffffff908a230c>] copy_process+0xc8c/0x31b0
+> [    1.016329] softirqs last disabled at (0): [<0000000000000000>] 0x0
+> [    1.016329] ---[ end trace 0000000000000000 ]---
+> [    1.016329] call_rcu(): Double-freed CB (____ptrval____)->rcu_torture_leak_cb+0x0/0x10()!!!   non-slab/vmalloc memory
+> [    1.016329] ------------[ cut here ]------------
+> [    1.016329] ODEBUG: activate active (active state 1) object type: rcu_head hint: 0x0
+> [    1.016329] WARNING: CPU: 0 PID: 1 at lib/debugobjects.c:502 debug_print_object+0xda/0x100
+> [    1.016329] Modules linked in:
+> [    1.016329] CPU: 0 PID: 1 Comm: swapper Tainted: G        W         5.19.0-rc3-yoctodev-standard+ #214
+> [    1.016329] Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS rel-1.16.0-0-gd239552ce722-prebuilt.qemu.org 04/01/2014
+> [    1.016329] RIP: 0010:debug_print_object+0xda/0x100
+> [    1.016329] Code: 60 ec 45 92 e8 a7 7b a0 ff 4d 89 f9 4d 89 e8 44 89 e1 48 8b 14 dd 60 ec 45 92 4c 89 f6 48 c7 c7 e0 e1 45 92 e8 f9 d1 b3 00 90 <0f> e
+> [    1.016329] RSP: 0000:ffff888001337be0 EFLAGS: 00010086
+> [    1.016329] RAX: 0000000000000000 RBX: 0000000000000003 RCX: 0000000000000000
+> [    1.016329] RDX: 00000000ffffffd8 RSI: 0000000000000004 RDI: ffffed1000266f6e
+> [    1.016329] RBP: ffff888001337c10 R08: ffffffff90a56ee6 R09: fffffbfff25df5c2
+> [    1.016329] R10: ffffffff92efae0b R11: fffffbfff25df5c1 R12: 0000000000000001
+> [    1.016329] R13: ffffffff9227f520 R14: ffffffff9245e8a0 R15: 0000000000000000
+> [    1.016329] FS:  0000000000000000(0000) GS:ffffffff92cbb000(0000) knlGS:0000000000000000
+> [    1.016329] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> [    1.016329] CR2: ffff888017401000 CR3: 0000000015a3c000 CR4: 00000000001506f0
+> [    1.016329] Call Trace:
+> [    1.016329]  <TASK>
+> [    1.016329]  debug_object_activate+0x2b9/0x300
+> [    1.016329]  ? debug_object_assert_init+0x220/0x220
+> [    1.016329]  ? _raw_spin_unlock+0x23/0x30
+> [    1.016329]  ? find_vmap_area+0x5c/0x90
+> [    1.016329]  ? do_raw_spin_unlock+0x85/0xe0
+> [    1.016329]  ? rcu_torture_fwd_cb_hist.cold+0xe9/0xe9
+> [    1.016329]  call_rcu+0x20/0x150
+> [    1.016329]  rcu_torture_init+0x16aa/0x1759
+> [    1.016329]  ? srcu_init+0xaa/0xaa
+> [    1.016329]  ? irq_debugfs_copy_devname+0x70/0x70
+> [    1.016329]  ? rcu_torture_barrier1cb+0x40/0x40
+> [    1.016329]  ? srcu_torture_completed+0x10/0x10
+> [    1.016329]  ? irq_pm_init_ops+0x19/0x19
+> [    1.016329]  ? mutex_unlock+0x12/0x20
+> [    1.016329]  ? srcu_init+0xaa/0xaa
+> [    1.016329]  do_one_initcall+0xc1/0x310
+> [    1.016329]  ? initcall_blacklisted+0x140/0x140
+> [    1.016329]  ? parameq+0x20/0x90
+> [    1.016329]  ? __kmalloc+0x238/0x5d0
+> [    1.016329]  ? rcu_read_lock_sched_held+0xe/0x50
+> [    1.016329]  kernel_init_freeable+0x20a/0x268
+> [    1.016329]  ? rest_init+0x160/0x160
+> [    1.016329]  kernel_init+0x1e/0x140
+> [    1.016329]  ret_from_fork+0x22/0x30
+> [    1.016329]  </TASK>
+> [    1.016329] irq event stamp: 152
+> [    1.016329] hardirqs last  enabled at (151): [<ffffffff91da7a4c>] _raw_spin_unlock_irqrestore+0x4c/0x60
+> [    1.016329] hardirqs last disabled at (152): [<ffffffff91da7811>] _raw_spin_lock_irqsave+0x71/0x90
+> [    1.016329] softirqs last  enabled at (0): [<ffffffff908a230c>] copy_process+0xc8c/0x31b0
+> [    1.016329] softirqs last disabled at (0): [<0000000000000000>] 0x0
+> [    1.016329] ---[ end trace 0000000000000000 ]---
+> [    1.016329] ------------[ cut here ]------------
+> [    1.016329] ODEBUG: active_state active (active state 1) object type: rcu_head hint: 0x0
+> [    1.016329] WARNING: CPU: 0 PID: 1 at lib/debugobjects.c:502 debug_print_object+0xda/0x100
+> [    1.016329] Modules linked in:
+> [    1.016329] CPU: 0 PID: 1 Comm: swapper Tainted: G        W         5.19.0-rc3-yoctodev-standard+ #214
+> [    1.016329] Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS rel-1.16.0-0-gd239552ce722-prebuilt.qemu.org 04/01/2014
+> [    1.016329] RIP: 0010:debug_print_object+0xda/0x100
+> [    1.016329] Code: 60 ec 45 92 e8 a7 7b a0 ff 4d 89 f9 4d 89 e8 44 89 e1 48 8b 14 dd 60 ec 45 92 4c 89 f6 48 c7 c7 e0 e1 45 92 e8 f9 d1 b3 00 90 <0f> e
+> [    1.016329] RSP: 0000:ffff888001337bd0 EFLAGS: 00010082
+> [    1.016329] RAX: 0000000000000000 RBX: 0000000000000003 RCX: 0000000000000000
+> [    1.016329] RDX: 00000000ffffffd8 RSI: 0000000000000004 RDI: ffffed1000266f6c
+> [    1.016329] RBP: ffff888001337c00 R08: ffffffff90a56ee6 R09: fffffbfff25df5c2
+> [    1.016329] R10: ffffffff92efae0b R11: fffffbfff25df5c1 R12: 0000000000000001
+> [    1.016329] R13: ffffffff9227f520 R14: ffffffff9245e640 R15: 0000000000000000
+> [    1.016329] FS:  0000000000000000(0000) GS:ffffffff92cbb000(0000) knlGS:0000000000000000
+> [    1.016329] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> [    1.016329] CR2: ffff888017401000 CR3: 0000000015a3c000 CR4: 00000000001506f0
+> [    1.016329] Call Trace:
+> [    1.016329]  <TASK>
+> [    1.016329]  debug_object_active_state+0x1d7/0x210
+> [    1.016329]  ? debug_object_deactivate+0x210/0x210
+> [    1.016329]  ? _raw_spin_unlock+0x23/0x30
+> [    1.016329]  ? find_vmap_area+0x5c/0x90
+> [    1.016329]  ? do_raw_spin_unlock+0x85/0xe0
+> [    1.016329]  ? rcu_torture_fwd_cb_hist.cold+0xe9/0xe9
+> [    1.016329]  call_rcu+0x39/0x150
+> [    1.016329]  rcu_torture_init+0x16aa/0x1759
+> [    1.016329]  ? srcu_init+0xaa/0xaa
+> [    1.016329]  ? irq_debugfs_copy_devname+0x70/0x70
+> [    1.016329]  ? rcu_torture_barrier1cb+0x40/0x40
+> [    1.016329]  ? srcu_torture_completed+0x10/0x10
+> [    1.016329]  ? irq_pm_init_ops+0x19/0x19
+> [    1.016329]  ? mutex_unlock+0x12/0x20
+> [    1.016329]  ? srcu_init+0xaa/0xaa
+> [    1.016329]  do_one_initcall+0xc1/0x310
+> [    1.016329]  ? initcall_blacklisted+0x140/0x140
+> [    1.016329]  ? parameq+0x20/0x90
+> [    1.016329]  ? __kmalloc+0x238/0x5d0
+> [    1.016329]  ? rcu_read_lock_sched_held+0xe/0x50
+> [    1.016329]  kernel_init_freeable+0x20a/0x268
+> [    1.016329]  ? rest_init+0x160/0x160
+> [    1.016329]  kernel_init+0x1e/0x140
+> [    1.016329]  ret_from_fork+0x22/0x30
+> [    1.016329]  </TASK>
+> [    1.016329] irq event stamp: 152
+> [    1.016329] hardirqs last  enabled at (151): [<ffffffff91da7a4c>] _raw_spin_unlock_irqrestore+0x4c/0x60
+> [    1.016329] hardirqs last disabled at (152): [<ffffffff91da7811>] _raw_spin_lock_irqsave+0x71/0x90
+> [    1.016329] softirqs last  enabled at (0): [<ffffffff908a230c>] copy_process+0xc8c/0x31b0
+> [    1.016329] softirqs last disabled at (0): [<0000000000000000>] 0x0
+> [    1.016329] ---[ end trace 0000000000000000 ]---
+> [    1.016329] call_rcu(): Double-freed CB (____ptrval____)->rcu_torture_leak_cb+0x0/0x10()!!!   slab kmalloc-16 start ffff888003f49240 pointer offset 06
+> [    1.101401] rcu-torture: rcu_torture_read_exit: Start of test
+> 
+> Thanks
+> Zqiang
+> 
+> 
+> >
+> >							Thanx, Paul
+> 
+> > ---
+> >  v1->v2:
+> >  for do duplicate kvfree_call_rcu(), not set leak callbacks. 
+> > 
+> >  kernel/rcu/tiny.c | 17 ++++++++++++++++-
+> >  1 file changed, 16 insertions(+), 1 deletion(-)
+> > 
+> > diff --git a/kernel/rcu/tiny.c b/kernel/rcu/tiny.c
+> > index f0561ee16b9c..943d431b908f 100644
+> > --- a/kernel/rcu/tiny.c
+> > +++ b/kernel/rcu/tiny.c
+> > @@ -158,6 +158,10 @@ void synchronize_rcu(void)
+> >  }
+> >  EXPORT_SYMBOL_GPL(synchronize_rcu);
+> >  
+> > +static void tiny_rcu_leak_callback(struct rcu_head *rhp)
+> > +{
+> > +}
+> > +
+> >  /*
+> >   * Post an RCU callback to be invoked after the end of an RCU grace
+> >   * period.  But since we have but one CPU, that would be after any
+> > @@ -165,9 +169,20 @@ EXPORT_SYMBOL_GPL(synchronize_rcu);
+> >   */
+> >  void call_rcu(struct rcu_head *head, rcu_callback_t func)
+> >  {
+> > +	static atomic_t doublefrees;
+> >  	unsigned long flags;
+> >  
+> > -	debug_rcu_head_queue(head);
+> > +	if (debug_rcu_head_queue(head)) {
+> > +		if (atomic_inc_return(&doublefrees) < 4) {
+> > +			pr_err("%s(): Double-freed CB %p->%pS()!!!  ", __func__, head, head->func);
+> > +			mem_dump_obj(head);
+> > +		}
+> > +
+> > +		if (!__is_kvfree_rcu_offset((unsigned long)head->func))
+> > +			WRITE_ONCE(head->func, tiny_rcu_leak_callback);
+> > +		return;
+> > +	}
+> > +
+> >  	head->func = func;
+> >  	head->next = NULL;
+> >  
+> > -- 
+> > 2.25.1
+> > 

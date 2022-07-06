@@ -2,75 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C651356867F
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 13:14:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 419BE568683
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 13:15:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232036AbiGFLOI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Jul 2022 07:14:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51872 "EHLO
+        id S232381AbiGFLPP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Jul 2022 07:15:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52382 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231270AbiGFLOH (ORCPT
+        with ESMTP id S229531AbiGFLPO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Jul 2022 07:14:07 -0400
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DB4027CFA
-        for <linux-kernel@vger.kernel.org>; Wed,  6 Jul 2022 04:14:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=fztPrfHXm7UR9PifETIZb3gX7gg3+lc6nr3BVtjGe6w=; b=Wv6eN4GBkESm3pqWaxQbSSV5OP
-        Bd6MKMO338Jv6zkquc+4paSRj+DhTsT4Q6NZeciH0jKnQAZjHe3c0eQTrj0BJyJprWGg3kv40jroc
-        lIMddxsQb4YSe3ILrLs0ftgvLEtLTlzyK//RWH+UCsVdsu3S+7Kubhiww3GEWZnlt4v926vocTQLN
-        3k/qiX4dtqH8c02lUT4/X8D+mBdD0rHShLcqqxam0el4Dub2rbTyTlwv5LZuayAz2Vf2uFPxahk5g
-        Kyt+C1db4+gmeT7V4cDzPq79jvWG3mkWap3BfOplEJEy31rHcrSMw0YfS+H2XWsjPiNhwY+e0t5J5
-        5eSfwNLQ==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=worktop.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1o92yb-000X59-CB; Wed, 06 Jul 2022 11:13:50 +0000
-Received: by worktop.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 24BAF980050; Wed,  6 Jul 2022 13:13:47 +0200 (CEST)
-Date:   Wed, 6 Jul 2022 13:13:46 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Oleg Nesterov <oleg@redhat.com>
-Cc:     Sven Schnelle <svens@linux.ibm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        "Eric W. Biederman" <ebiederm@xmission.com>,
-        Kees Cook <keescook@chromium.org>, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] ptrace: fix clearing of JOBCTL_TRACED in
- ptrace_unfreeze_traced()
-Message-ID: <YsVuak0/upU2Rvm6@worktop.programming.kicks-ass.net>
-References: <20220706101625.2100298-1-svens@linux.ibm.com>
- <20220706110438.GB9868@redhat.com>
+        Wed, 6 Jul 2022 07:15:14 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84EE527FC1;
+        Wed,  6 Jul 2022 04:15:13 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2007561E95;
+        Wed,  6 Jul 2022 11:15:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BE653C3411C;
+        Wed,  6 Jul 2022 11:15:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1657106112;
+        bh=pRerA3xJygyVGxUB0rsgEMwJGDa+LIaQoBEZ8coR4Bg=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=WI7M4B+NfNv6sL6HfTDQMFd/hCPjBYVAh5a8uatMg2HP+ZDWRbd/m360/ChX4OAH3
+         J2iYcfWWC4He9mnHh8EBUNJzjj3sQGbPzvwxSocjZVHRrn2cOF6XpXBZ+VW4DDbHIZ
+         vAJQKrykC2P7uLNa/6W5fgpOqhjgLP4O5FfgnBXkmpdU2ddacIZTsiBKnCoa/R9+iu
+         x3Y3qgUor1wqMS7dX0yMyoaWDz2VKwqg9hGGqDgOWMr2NfWzH5ZZpuCfxXP22g3AkI
+         gh60W0nvSDIzQ/gis+3txub7bHZ4n22FLBM0p9N7J2PK5zC9bq2FHFfM7Whi/tlNFI
+         f0eO3OpsHkNJw==
+Date:   Wed, 6 Jul 2022 13:15:07 +0200
+From:   Marek =?UTF-8?B?QmVow7pu?= <kabel@kernel.org>
+To:     Pali =?UTF-8?B?Um9ow6Fy?= <pali@kernel.org>
+Cc:     Pavel Machek <pavel@ucw.cz>, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-leds@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 1/2] [RFT] dt-bindings: leds: Add
+ cznic,turris1x-leds.yaml binding
+Message-ID: <20220706131507.353f0bed@thinkpad>
+In-Reply-To: <20220705155929.25565-1-pali@kernel.org>
+References: <20220705000448.14337-1-pali@kernel.org>
+        <20220705155929.25565-1-pali@kernel.org>
+X-Mailer: Claws Mail 3.19.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220706110438.GB9868@redhat.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jul 06, 2022 at 01:04:38PM +0200, Oleg Nesterov wrote:
-> On 07/06, Sven Schnelle wrote:
-> >
-> > --- a/kernel/ptrace.c
-> > +++ b/kernel/ptrace.c
-> > @@ -222,7 +222,7 @@ static void ptrace_unfreeze_traced(struct task_struct *task)
-> >  	if (lock_task_sighand(task, &flags)) {
-> >  		task->jobctl &= ~JOBCTL_PTRACE_FROZEN;
-> >  		if (__fatal_signal_pending(task)) {
-> > -			task->jobctl &= ~TASK_TRACED;
-> > +			task->jobctl &= ~JOBCTL_TRACED;
-> 
-> Heh. I have read this code many times, but I'm afraid I could read it
-> 1000 times more and didn't notice the problem ;)
+On Tue,  5 Jul 2022 17:59:28 +0200
+Pali Roh=C3=A1r <pali@kernel.org> wrote:
 
-Heh, same here, I've read it today and didn't spot the problem. Brains
-are weird.
+> +examples:
+> +  - |
+> +    #include <dt-bindings/leds/common.h>
+> +
+> +    cpld@3,0 {
+
+The generic node name should be just "bus". That it is a CPLD
+implementation should come from compatible string.
+
+This is similar to how we have generic names like "led-controller",
+"switch", "ethernet-phy", ...
+
+Pali, I can take over this and get it merged if you are getting
+frustrated here.
+
+Marek

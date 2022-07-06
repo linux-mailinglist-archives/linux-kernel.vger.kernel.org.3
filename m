@@ -2,174 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 72F72568B1D
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 16:22:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D6423568B1B
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 16:22:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232280AbiGFOVv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Jul 2022 10:21:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46890 "EHLO
+        id S232922AbiGFOVp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Jul 2022 10:21:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46808 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232943AbiGFOVr (ORCPT
+        with ESMTP id S232280AbiGFOVn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Jul 2022 10:21:47 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 060E523BFB
-        for <linux-kernel@vger.kernel.org>; Wed,  6 Jul 2022 07:21:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1657117305; x=1688653305;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=rANpPC1k8ntNoM9UbPaxTmHG5k84FYQtX4k3gZlotro=;
-  b=fyQ4xFgN/axPASZ5hJrxCrXFwKTbzjCIj2nCAMGyRkJm1QS1frSUa/By
-   kIKWIBKdsScHB7Ex9jGkHtSV2yzzI+Fnf7PjPPyWZKTPQ8gqxzsrQLraF
-   5UkDSc8n6Hfaz31/8F/6YZ8DntiYWDg91VjfD1g3sDwNVO+65MQKFnWs6
-   3qgjh+5mArSvO0kyJ4jkv0BqdMOpo+nWmTpGMxrmtxwbl4VBXZXm8tsZj
-   0XaybRIZvq7053AkLPj/jjseRbYU2+/XV9DZ3tAWBebOC6gxTqOetaLO4
-   ajctck1tsp89Hj/54DAlBbDt16NE1Wr92nXGAHQzYMhGVg8QQCAvKv6mU
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10399"; a="283783802"
-X-IronPort-AV: E=Sophos;i="5.92,250,1650956400"; 
-   d="scan'208";a="283783802"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jul 2022 07:21:45 -0700
-X-IronPort-AV: E=Sophos;i="5.92,250,1650956400"; 
-   d="scan'208";a="650683204"
-Received: from xsang-optiplex-9020.sh.intel.com (HELO xsang-OptiPlex-9020) ([10.239.159.143])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jul 2022 07:21:42 -0700
-Date:   Wed, 6 Jul 2022 22:21:36 +0800
-From:   Oliver Sang <oliver.sang@intel.com>
-To:     Mel Gorman <mgorman@techsingularity.net>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        0day robot <lkp@intel.com>,
-        LKML <linux-kernel@vger.kernel.org>, linux-mm@kvack.org,
-        lkp@lists.01.org, Nicolas Saenz Julienne <nsaenzju@redhat.com>,
-        Marcelo Tosatti <mtosatti@redhat.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Michal Hocko <mhocko@kernel.org>,
-        Hugh Dickins <hughd@google.com>
-Subject: Re: [mm/page_alloc]  2bd8eec68f:
- BUG:sleeping_function_called_from_invalid_context_at_mm/gup.c
-Message-ID: <YsWacP1k8wMgGfXx@xsang-OptiPlex-9020>
-References: <20220613125622.18628-8-mgorman@techsingularity.net>
- <YsFk/qU+QtWun04h@xsang-OptiPlex-9020>
- <20220703132209.875b823d1cb7169a8d51d56d@linux-foundation.org>
- <YsRB3fZHAfik0M/q@xsang-OptiPlex-9020>
- <20220706095535.GD27531@techsingularity.net>
- <20220706115328.GE27531@techsingularity.net>
+        Wed, 6 Jul 2022 10:21:43 -0400
+Received: from mail-vs1-xe2c.google.com (mail-vs1-xe2c.google.com [IPv6:2607:f8b0:4864:20::e2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B81C416586
+        for <linux-kernel@vger.kernel.org>; Wed,  6 Jul 2022 07:21:42 -0700 (PDT)
+Received: by mail-vs1-xe2c.google.com with SMTP id j6so15276111vsi.0
+        for <linux-kernel@vger.kernel.org>; Wed, 06 Jul 2022 07:21:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=mr+iAGjByavtVLAQKiAQDHpjl6ae/h58WRbLzWLbqk4=;
+        b=VXG1Zc0nmwQDFHrO1ctMcS+KBC6B4O+4I6MEpNukeCiKofkIxH8l23boU9XaVIQTc1
+         fW0K9UQIP+ruSDkPjmLr/97R1IZp8/WfAmllM8E63pu51JU6LXaD/LEPrlklGvh4GaGB
+         eSYJ/tON2yogrvwOdTYlFNYfhG21Hju40YMHCOKuey3RfwH2Vg2iKxukAPN+9ZlBsewm
+         2+ZxCjKDhWBU7WIqlxnCMFtdFarWJ075qscG56PwRLYx3V0iM8kcVctlAE1t93k7j/Kh
+         VC6hRp2lqMZznM981XipN+FKb9WRsEfSg+5C+BbkLkS3pjB3hWIqCsFjrVo0+GL1/lyh
+         74dw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=mr+iAGjByavtVLAQKiAQDHpjl6ae/h58WRbLzWLbqk4=;
+        b=prcm4slIVERj+IqYaUbnuO07icNL5Uh6r+Wc/P/uIJJL9KSM9xEB5PEkXclvTdPE6y
+         8uDn+5Wy97s6o0Gz+mSt+KrmRXuwm4BfsCw8Lv5dmUw9O6cNiZROkxYOBlP961sPM+na
+         rpKDtrl8SpYGPyYf/ndfSFydqeU1d4dVy+A7vUA0b8Ov9Npx3TPX+I76UBYeHUysgmXN
+         Y0jmFpaT2RnRWWiExBnj9k8zkRsJ92DeFxc0KXwyk4GLeh6iXr2vjm0Ay5Yhkk77PHco
+         cNCE6c+Vg/YOe+SZutip3y7VF4BQWImd6kaqZsXEH9QKcuFIgWKSCYYV7CkzNiq/Y25b
+         z4mw==
+X-Gm-Message-State: AJIora+4qEk5XkdBppnspKVVjFRtycXxjMskeWUdyRgus2v2V3qi82eR
+        G8DbYZ6ylaAns0NFNhewR7uv6W5dnk16oW616l8=
+X-Google-Smtp-Source: AGRyM1sa2bqKPsrT2vlzYuHD3mdK1uK6ZW6HE3vNe+nzgMqRmxOub2sw8pYmE5PM7na9XpN+JP3LXYg2+WapPlAevbk=
+X-Received: by 2002:a67:6e47:0:b0:354:52a0:8ac2 with SMTP id
+ j68-20020a676e47000000b0035452a08ac2mr23478502vsc.65.1657117301649; Wed, 06
+ Jul 2022 07:21:41 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220706115328.GE27531@techsingularity.net>
-X-Spam-Status: No, score=-6.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLACK autolearn=ham
+Received: by 2002:a59:d911:0:b0:2d1:df97:7e86 with HTTP; Wed, 6 Jul 2022
+ 07:21:41 -0700 (PDT)
+Reply-To: aminataabdullahi270@gmail.co
+From:   Aminata Abdullahi <mpbvcg@gmail.com>
+Date:   Wed, 6 Jul 2022 07:21:41 -0700
+Message-ID: <CAHpgNGGg=f6TS6gUw8KBgTgSe_Uf11pYPzDOLtPH2uTx70w3Zg@mail.gmail.com>
+Subject: Good day
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: Yes, score=7.7 required=5.0 tests=BAYES_50,DEAR_FRIEND,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        HK_RANDOM_ENVFROM,HK_RANDOM_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNDISC_MONEY autolearn=no
         autolearn_force=no version=3.4.6
+X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2607:f8b0:4864:20:0:0:0:e2c listed in]
+        [list.dnswl.org]
+        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.5006]
+        *  1.0 HK_RANDOM_FROM From username looks random
+        *  1.0 HK_RANDOM_ENVFROM Envelope sender username looks random
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [mpbvcg[at]gmail.com]
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  2.6 DEAR_FRIEND BODY: Dear Friend? That's not very dear!
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
+        *  2.6 UNDISC_MONEY Undisclosed recipients + money/fraud signs
+X-Spam-Level: *******
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-hi, Mel Gorman,
-
-On Wed, Jul 06, 2022 at 12:53:29PM +0100, Mel Gorman wrote:
-> On Wed, Jul 06, 2022 at 10:55:35AM +0100, Mel Gorman wrote:
-> > On Tue, Jul 05, 2022 at 09:51:25PM +0800, Oliver Sang wrote:
-> > > Hi Andrew Morton,
-> > > 
-> > > On Sun, Jul 03, 2022 at 01:22:09PM -0700, Andrew Morton wrote:
-> > > > On Sun, 3 Jul 2022 17:44:30 +0800 kernel test robot <oliver.sang@intel.com> wrote:
-> > > > 
-> > > > > FYI, we noticed the following commit (built with gcc-11):
-> > > > > 
-> > > > > commit: 2bd8eec68f740608db5ea58ecff06965228764cb ("[PATCH 7/7] mm/page_alloc: Replace local_lock with normal spinlock")
-> > > > > url: https://github.com/intel-lab-lkp/linux/commits/Mel-Gorman/Drain-remote-per-cpu-directly/20220613-230139
-> > > > > base: https://git.kernel.org/cgit/linux/kernel/git/torvalds/linux.git b13baccc3850ca8b8cccbf8ed9912dbaa0fdf7f3
-> > > > > patch link: https://lore.kernel.org/lkml/20220613125622.18628-8-mgorman@techsingularity.net
-> > > > > 
-> > > > 
-> > > > Did this test include the followup patch
-> > > > mm-page_alloc-replace-local_lock-with-normal-spinlock-fix.patch?
-> > > 
-> > > no, we just fetched original patch set and test upon it.
-> > > 
-> > > now we applied the patch you pointed to us upon 2bd8eec68f and found the issue
-> > > still exist.
-> > > (attached dmesg FYI)
-> > > 
-> > 
-> > Thanks Oliver.
-> > 
-> > The trace is odd in that it hits in GUP when the page allocator is no
-> > longer active and the context is a syscall. First, is this definitely
-> > the first patch the problem occurs?
-> > 
-> 
-> I tried reproducing this on a 2-socket machine with Xeon
-> Gold Gold 5218R CPUs. It was necessary to set timeouts in both
-> vm/settings and kselftest/runner.sh to avoid timeouts. Testing with
-> a standard config on my original 5.19-rc3 baseline and the baseline
-> b13baccc3850ca8b8cccbf8ed9912dbaa0fdf7f3 both passed. I tried your kernel
-> config with i915 disabled (would not build) and necessary storage drivers
-> and network drivers enabled (for boot and access). The kernel log shows
-> a bunch of warnings related to USBAN during boot and during some of the
-> tests but otherwise compaction_test completed successfully as well as
-> the other VM tests.
-> 
-> Is this always reproducible?
-
-not always but high rate.
-we actually also observed other dmesgs stats for both 2bd8eec68f74 and its
-parent, but those dmesg.BUG:sleeping_function_called_from_invalid_context_at*
-seem only happen on 2bd8eec68f74 as well as the '-fix' commit.
-
-=========================================================================================
-compiler/group/kconfig/rootfs/sc_nr_hugepages/tbox_group/testcase/ucode:
-  gcc-11/vm/x86_64-rhel-8.3-kselftests/debian-11.1-x86_64-20220510.cgz/2/lkp-csl-2sp9/kernel-selftests/0x500320a
-
-commit:
-  eec0ff5df294 ("mm/page_alloc: Remotely drain per-cpu lists")
-  2bd8eec68f74 ("mm/page_alloc: Replace local_lock with normal spinlock")
-  292baeb4c714 ("mm/page_alloc: replace local_lock with normal spinlock -fix")
-
-eec0ff5df2945d19 2bd8eec68f740608db5ea58ecff 292baeb4c7149ac2cb844137481
----------------- --------------------------- ---------------------------
-       fail:runs  %reproduction    fail:runs  %reproduction    fail:runs
-           |             |             |             |             |
-           :20          75%          15:20          70%          14:21    dmesg.BUG:scheduling_while_atomic
-           :20           5%           1:20           0%            :21    dmesg.BUG:sleeping_function_called_from_invalid_context_at_fs/binfmt_elf.c
-           :20           5%           1:20          10%           2:21    dmesg.BUG:sleeping_function_called_from_invalid_context_at_fs/dcache.c
-           :20           5%           1:20           5%           1:21    dmesg.BUG:sleeping_function_called_from_invalid_context_at_include/linux/freezer.h
-           :20          10%           2:20          25%           5:21    dmesg.BUG:sleeping_function_called_from_invalid_context_at_include/linux/mmu_notifier.h
-           :20           5%           1:20           0%            :21    dmesg.BUG:sleeping_function_called_from_invalid_context_at_include/linux/percpu-rwsem.h
-           :20          40%           8:20          40%           8:21    dmesg.BUG:sleeping_function_called_from_invalid_context_at_include/linux/sched/mm.h
-           :20          10%           2:20           0%            :21    dmesg.BUG:sleeping_function_called_from_invalid_context_at_kernel/locking/mutex.c
-           :20          10%           2:20          10%           2:21    dmesg.BUG:sleeping_function_called_from_invalid_context_at_lib/strncpy_from_user.c
-           :20          55%          11:20          65%          13:21    dmesg.BUG:sleeping_function_called_from_invalid_context_at_mm/gup.c
-           :20          15%           3:20           5%           1:21    dmesg.BUG:sleeping_function_called_from_invalid_context_at_mm/memory.c
-           :20          60%          12:20          55%          11:21    dmesg.BUG:sleeping_function_called_from_invalid_context_at_mm/migrate.c
-           :20           5%           1:20           5%           1:21    dmesg.BUG:sleeping_function_called_from_invalid_context_at_mm/page_alloc.c
-           :20           0%            :20           5%           1:21    dmesg.BUG:sleeping_function_called_from_invalid_context_at_mm/rmap.c
-           :20          15%           3:20           0%            :21    dmesg.BUG:sleeping_function_called_from_invalid_context_at_mm/vmalloc.c
-           :20          45%           9:20          45%           9:21    dmesg.BUG:workqueue_leaked_lock_or_atomic
-           :20          25%           5:20          15%           3:21    dmesg.Kernel_panic-not_syncing:Attempted_to_kill_init!exitcode=
-           :20           5%           1:20           0%            :21    dmesg.RIP:__clear_user
-         20:20           0%          20:20           5%          21:21    dmesg.RIP:rcu_eqs_exit
-         20:20           0%          20:20           5%          21:21    dmesg.RIP:sched_clock_tick
-           :20           5%           1:20           0%            :21    dmesg.RIP:smp_call_function_many_cond
-         20:20           0%          20:20           5%          21:21    dmesg.WARNING:at_kernel/rcu/tree.c:#rcu_eqs_exit
-         20:20           0%          20:20           5%          21:21    dmesg.WARNING:at_kernel/sched/clock.c:#sched_clock_tick
-           :20           5%           1:20           0%            :21    dmesg.WARNING:at_kernel/smp.c:#smp_call_function_many_cond
-         20:20           0%          20:20           5%          21:21    dmesg.WARNING:suspicious_RCU_usage
-         20:20           0%          20:20           5%          21:21    dmesg.boot_failures
-          9:20         -15%           6:20          -5%           8:21    dmesg.include/linux/rcupdate.h:#rcu_read_lock()used_illegally_while_idle
-          9:20         -15%           6:20          -5%           8:21    dmesg.include/linux/rcupdate.h:#rcu_read_unlock()used_illegally_while_idle
-         20:20           0%          20:20           5%          21:21    dmesg.include/trace/events/error_report.h:#suspicious_rcu_dereference_check()usage
-         20:20           0%          20:20           5%          21:21    dmesg.include/trace/events/lock.h:#suspicious_rcu_dereference_check()usage
-
-
-> 
-> -- 
-> Mel Gorman
-> SUSE Labs
+Dear friend, Greetings to you. Honestly, I got your email through the
+internet, while searching for a reliable person I can partner with, I
+believe you can be the right person to partner with me in a genuine
+business transaction which I will be delighted to explain in detail if
+you grant me the opportunity. Note the benefits are fantastic, very
+attractive and risk free.
+Warms Regards
+Mrs Aminata Abdullahi

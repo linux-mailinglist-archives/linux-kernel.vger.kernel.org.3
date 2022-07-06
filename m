@@ -2,55 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 70CCF5686C4
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 13:37:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B4DA5686C3
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 13:37:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231892AbiGFLhR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Jul 2022 07:37:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37302 "EHLO
+        id S232274AbiGFLhT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Jul 2022 07:37:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37304 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229531AbiGFLhP (ORCPT
+        with ESMTP id S229898AbiGFLhQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Jul 2022 07:37:15 -0400
+        Wed, 6 Jul 2022 07:37:16 -0400
 Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8B2A237E8;
-        Wed,  6 Jul 2022 04:37:14 -0700 (PDT)
-Date:   Wed, 06 Jul 2022 11:37:11 -0000
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12F40237E9;
+        Wed,  6 Jul 2022 04:37:15 -0700 (PDT)
+Date:   Wed, 06 Jul 2022 11:37:12 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1657107432;
+        s=2020; t=1657107433;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=2bL/YIYy7J9s+zOR/CI+diiMMcmSKmXQ5zmPghbjrAs=;
-        b=kuD1MjxcGnW9ZS/3a5zb3GzXyZ4KmvpUMfY5I0JvhQWhgdN8SXe5c9pkNZL7HxBAzHZJJA
-        NRsAm5ZmadVWMuGxYBXMuP4UT6GqhSgDyO+Ce9h/ZS6EXxxV6s/UnPGIunO2mYLqaGYAED
-        6K/EsL5H3Bc8WQYn72EH50/yeDHnMEcWOcQJ+TuoIptyRVI0x80D110qNr6SdSWTwbNQ+3
-        ZeO4+Uef/RWiN5IQXBFesfd6JNtINuIOY/o5rIWGjfTbREKEbMMqaXpcjQWqEcOQMtMjvK
-        HIPI6Syhgb4vZg65yMTg9pmyNl859O1udCnv+HON2cLVMPEZe5MHNe0H6rrQmw==
+        bh=pnFEP30906b4Edt/fgcggscUXaptYq0c9bLgh4Tdzhc=;
+        b=rpHEDvzPLv92TMiq83i2+Dqpoi7t+Y4lHYO3LBIVSNiuxFMKzmQo/aG29gaDt1DmBrTRUW
+        TW7E781q4PfpkVtA3Q7yxXW5B0969+KoUSl8SRaHYWa5nJbJiiR8hxcSElyN5pQJYr6mta
+        z+6Bgo4ZYQG7bF0B7E9Jmh/jUhoREYmBPFX+QD0ZQx49HqlfdkjQmBRkRqrjUoPT4oGqY1
+        e3AdlTO0LrheOJMGqsLAEjpehom5mmKDkGceY1K3okEQXiXyKXNlTnaHFW9GX5xpGnAEy8
+        bIGooSGS/lvw9RpZfMFSwMzfQ7HlVw8oprz9eCGUWCDytRcz47a0phyJGosbAA==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1657107432;
+        s=2020e; t=1657107433;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=2bL/YIYy7J9s+zOR/CI+diiMMcmSKmXQ5zmPghbjrAs=;
-        b=KO5u+oyzEylWJApDtdUOt9eABO0gCAYM93irLyFsEC3OW3OLsMwib5r9uvof3wvdGkOq6i
-        WiDWvMQOHBEu4fBw==
-From:   "tip-bot2 for Uros Bizjak" <tip-bot2@linutronix.de>
+        bh=pnFEP30906b4Edt/fgcggscUXaptYq0c9bLgh4Tdzhc=;
+        b=QNGZkdqzbfn1ASjeaL29ytqfctOM3RVvldyO+0OgqQCvnZzadlLEGt4P23K7HGv7S5j1JS
+        ifQJxDQNE/ty1mAQ==
+From:   "tip-bot2 for Josh Don" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: sched/core] sched/core: Use try_cmpxchg in set_nr_{and_not,if}_polling
-Cc:     Uros Bizjak <ubizjak@gmail.com>,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>, x86@kernel.org,
+Subject: [tip: sched/core] sched/core: add forced idle accounting for cgroups
+Cc:     Josh Don <joshdon@google.com>,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+        Tejun Heo <tj@kernel.org>, x86@kernel.org,
         linux-kernel@vger.kernel.org
-In-Reply-To: <20220629151552.6015-1-ubizjak@gmail.com>
-References: <20220629151552.6015-1-ubizjak@gmail.com>
+In-Reply-To: <20220629211426.3329954-1-joshdon@google.com>
+References: <20220629211426.3329954-1-joshdon@google.com>
 MIME-Version: 1.0
-Message-ID: <165710743153.15455.1044580694574122081.tip-bot2@tip-bot2>
+Message-ID: <165710743261.15455.2981731024307596274.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -67,101 +68,222 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 The following commit has been merged into the sched/core branch of tip:
 
-Commit-ID:     c02d5546ea34d589c83eda5055dbd727a396642b
-Gitweb:        https://git.kernel.org/tip/c02d5546ea34d589c83eda5055dbd727a396642b
-Author:        Uros Bizjak <ubizjak@gmail.com>
-AuthorDate:    Wed, 29 Jun 2022 17:15:52 +02:00
+Commit-ID:     1fcf54deb767d474181ad7cf33c92bb2a33607fb
+Gitweb:        https://git.kernel.org/tip/1fcf54deb767d474181ad7cf33c92bb2a33607fb
+Author:        Josh Don <joshdon@google.com>
+AuthorDate:    Wed, 29 Jun 2022 14:14:26 -07:00
 Committer:     Peter Zijlstra <peterz@infradead.org>
-CommitterDate: Mon, 04 Jul 2022 09:23:08 +02:00
+CommitterDate: Mon, 04 Jul 2022 09:23:07 +02:00
 
-sched/core: Use try_cmpxchg in set_nr_{and_not,if}_polling
+sched/core: add forced idle accounting for cgroups
 
-Use try_cmpxchg instead of cmpxchg (*ptr, old, new) != old in
-set_nr_{and_not,if}_polling. x86 cmpxchg returns success in ZF flag,
-so this change saves a compare after cmpxchg.
+4feee7d1260 previously added per-task forced idle accounting. This patch
+extends this to also include cgroups.
 
-The definition of cmpxchg based fetch_or was changed in the
-same way as atomic_fetch_##op definitions were changed
-in e6790e4b5d5e97dc287f3496dd2cf2dbabdfdb35.
+rstat is used for cgroup accounting, except for the root, which uses
+kcpustat in order to bypass the need for doing an rstat flush when
+reading root stats.
 
-Also declare these two functions as inline to ensure inlining. In the
-case of set_nr_and_not_polling, the compiler (gcc) tries to outsmart
-itself by constructing the boolean return value with logic operations
-on the fetched value, and these extra operations enlarge the function
-over the inlining threshold value.
+Only cgroup v2 is supported. Similar to the task accounting, the cgroup
+accounting requires that schedstats is enabled.
 
-Signed-off-by: Uros Bizjak <ubizjak@gmail.com>
+Signed-off-by: Josh Don <joshdon@google.com>
 Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-Link: https://lkml.kernel.org/r/20220629151552.6015-1-ubizjak@gmail.com
+Acked-by: Tejun Heo <tj@kernel.org>
+Link: https://lkml.kernel.org/r/20220629211426.3329954-1-joshdon@google.com
 ---
- kernel/sched/core.c | 24 +++++++++---------------
- 1 file changed, 9 insertions(+), 15 deletions(-)
+ include/linux/cgroup-defs.h |  4 +++-
+ include/linux/kernel_stat.h |  7 ++++++-
+ kernel/cgroup/rstat.c       | 44 +++++++++++++++++++++++++++++++-----
+ kernel/sched/core_sched.c   |  6 ++++-
+ kernel/sched/cputime.c      | 15 ++++++++++++-
+ 5 files changed, 69 insertions(+), 7 deletions(-)
 
-diff --git a/kernel/sched/core.c b/kernel/sched/core.c
-index dd69e85..c703d17 100644
---- a/kernel/sched/core.c
-+++ b/kernel/sched/core.c
-@@ -873,15 +873,11 @@ static inline void hrtick_rq_init(struct rq *rq)
- 	({								\
- 		typeof(ptr) _ptr = (ptr);				\
- 		typeof(mask) _mask = (mask);				\
--		typeof(*_ptr) _old, _val = *_ptr;			\
-+		typeof(*_ptr) _val = *_ptr;				\
- 									\
--		for (;;) {						\
--			_old = cmpxchg(_ptr, _val, _val | _mask);	\
--			if (_old == _val)				\
--				break;					\
--			_val = _old;					\
--		}							\
--	_old;								\
-+		do {							\
-+		} while (!try_cmpxchg(_ptr, &_val, _val | _mask));	\
-+	_val;								\
- })
+diff --git a/include/linux/cgroup-defs.h b/include/linux/cgroup-defs.h
+index 1bfcfb1..025fd0e 100644
+--- a/include/linux/cgroup-defs.h
++++ b/include/linux/cgroup-defs.h
+@@ -287,6 +287,10 @@ struct css_set {
  
- #if defined(CONFIG_SMP) && defined(TIF_POLLING_NRFLAG)
-@@ -890,7 +886,7 @@ static inline void hrtick_rq_init(struct rq *rq)
-  * this avoids any races wrt polling state changes and thereby avoids
-  * spurious IPIs.
-  */
--static bool set_nr_and_not_polling(struct task_struct *p)
-+static inline bool set_nr_and_not_polling(struct task_struct *p)
- {
- 	struct thread_info *ti = task_thread_info(p);
- 	return !(fetch_or(&ti->flags, _TIF_NEED_RESCHED) & _TIF_POLLING_NRFLAG);
-@@ -905,30 +901,28 @@ static bool set_nr_and_not_polling(struct task_struct *p)
- static bool set_nr_if_polling(struct task_struct *p)
- {
- 	struct thread_info *ti = task_thread_info(p);
--	typeof(ti->flags) old, val = READ_ONCE(ti->flags);
-+	typeof(ti->flags) val = READ_ONCE(ti->flags);
+ struct cgroup_base_stat {
+ 	struct task_cputime cputime;
++
++#ifdef CONFIG_SCHED_CORE
++	u64 forceidle_sum;
++#endif
+ };
  
- 	for (;;) {
- 		if (!(val & _TIF_POLLING_NRFLAG))
- 			return false;
- 		if (val & _TIF_NEED_RESCHED)
- 			return true;
--		old = cmpxchg(&ti->flags, val, val | _TIF_NEED_RESCHED);
--		if (old == val)
-+		if (try_cmpxchg(&ti->flags, &val, val | _TIF_NEED_RESCHED))
- 			break;
--		val = old;
+ /*
+diff --git a/include/linux/kernel_stat.h b/include/linux/kernel_stat.h
+index 69ae6b2..ddb5a35 100644
+--- a/include/linux/kernel_stat.h
++++ b/include/linux/kernel_stat.h
+@@ -28,6 +28,9 @@ enum cpu_usage_stat {
+ 	CPUTIME_STEAL,
+ 	CPUTIME_GUEST,
+ 	CPUTIME_GUEST_NICE,
++#ifdef CONFIG_SCHED_CORE
++	CPUTIME_FORCEIDLE,
++#endif
+ 	NR_STATS,
+ };
+ 
+@@ -115,4 +118,8 @@ extern void account_process_tick(struct task_struct *, int user);
+ 
+ extern void account_idle_ticks(unsigned long ticks);
+ 
++#ifdef CONFIG_SCHED_CORE
++extern void __account_forceidle_time(struct task_struct *tsk, u64 delta);
++#endif
++
+ #endif /* _LINUX_KERNEL_STAT_H */
+diff --git a/kernel/cgroup/rstat.c b/kernel/cgroup/rstat.c
+index 24b5c2a..feb5938 100644
+--- a/kernel/cgroup/rstat.c
++++ b/kernel/cgroup/rstat.c
+@@ -310,6 +310,9 @@ static void cgroup_base_stat_add(struct cgroup_base_stat *dst_bstat,
+ 	dst_bstat->cputime.utime += src_bstat->cputime.utime;
+ 	dst_bstat->cputime.stime += src_bstat->cputime.stime;
+ 	dst_bstat->cputime.sum_exec_runtime += src_bstat->cputime.sum_exec_runtime;
++#ifdef CONFIG_SCHED_CORE
++	dst_bstat->forceidle_sum += src_bstat->forceidle_sum;
++#endif
+ }
+ 
+ static void cgroup_base_stat_sub(struct cgroup_base_stat *dst_bstat,
+@@ -318,6 +321,9 @@ static void cgroup_base_stat_sub(struct cgroup_base_stat *dst_bstat,
+ 	dst_bstat->cputime.utime -= src_bstat->cputime.utime;
+ 	dst_bstat->cputime.stime -= src_bstat->cputime.stime;
+ 	dst_bstat->cputime.sum_exec_runtime -= src_bstat->cputime.sum_exec_runtime;
++#ifdef CONFIG_SCHED_CORE
++	dst_bstat->forceidle_sum -= src_bstat->forceidle_sum;
++#endif
+ }
+ 
+ static void cgroup_base_stat_flush(struct cgroup *cgrp, int cpu)
+@@ -398,6 +404,11 @@ void __cgroup_account_cputime_field(struct cgroup *cgrp,
+ 	case CPUTIME_SOFTIRQ:
+ 		rstatc->bstat.cputime.stime += delta_exec;
+ 		break;
++#ifdef CONFIG_SCHED_CORE
++	case CPUTIME_FORCEIDLE:
++		rstatc->bstat.forceidle_sum += delta_exec;
++		break;
++#endif
+ 	default:
+ 		break;
  	}
- 	return true;
+@@ -411,8 +422,9 @@ void __cgroup_account_cputime_field(struct cgroup *cgrp,
+  * with how it is done by __cgroup_account_cputime_field for each bit of
+  * cpu time attributed to a cgroup.
+  */
+-static void root_cgroup_cputime(struct task_cputime *cputime)
++static void root_cgroup_cputime(struct cgroup_base_stat *bstat)
+ {
++	struct task_cputime *cputime = &bstat->cputime;
+ 	int i;
+ 
+ 	cputime->stime = 0;
+@@ -438,6 +450,10 @@ static void root_cgroup_cputime(struct task_cputime *cputime)
+ 		cputime->sum_exec_runtime += user;
+ 		cputime->sum_exec_runtime += sys;
+ 		cputime->sum_exec_runtime += cpustat[CPUTIME_STEAL];
++
++#ifdef CONFIG_SCHED_CORE
++		bstat->forceidle_sum += cpustat[CPUTIME_FORCEIDLE];
++#endif
+ 	}
  }
  
- #else
--static bool set_nr_and_not_polling(struct task_struct *p)
-+static inline bool set_nr_and_not_polling(struct task_struct *p)
+@@ -445,27 +461,43 @@ void cgroup_base_stat_cputime_show(struct seq_file *seq)
  {
- 	set_tsk_need_resched(p);
- 	return true;
+ 	struct cgroup *cgrp = seq_css(seq)->cgroup;
+ 	u64 usage, utime, stime;
+-	struct task_cputime cputime;
++	struct cgroup_base_stat bstat;
++#ifdef CONFIG_SCHED_CORE
++	u64 forceidle_time;
++#endif
+ 
+ 	if (cgroup_parent(cgrp)) {
+ 		cgroup_rstat_flush_hold(cgrp);
+ 		usage = cgrp->bstat.cputime.sum_exec_runtime;
+ 		cputime_adjust(&cgrp->bstat.cputime, &cgrp->prev_cputime,
+ 			       &utime, &stime);
++#ifdef CONFIG_SCHED_CORE
++		forceidle_time = cgrp->bstat.forceidle_sum;
++#endif
+ 		cgroup_rstat_flush_release();
+ 	} else {
+-		root_cgroup_cputime(&cputime);
+-		usage = cputime.sum_exec_runtime;
+-		utime = cputime.utime;
+-		stime = cputime.stime;
++		root_cgroup_cputime(&bstat);
++		usage = bstat.cputime.sum_exec_runtime;
++		utime = bstat.cputime.utime;
++		stime = bstat.cputime.stime;
++#ifdef CONFIG_SCHED_CORE
++		forceidle_time = bstat.forceidle_sum;
++#endif
+ 	}
+ 
+ 	do_div(usage, NSEC_PER_USEC);
+ 	do_div(utime, NSEC_PER_USEC);
+ 	do_div(stime, NSEC_PER_USEC);
++#ifdef CONFIG_SCHED_CORE
++	do_div(forceidle_time, NSEC_PER_USEC);
++#endif
+ 
+ 	seq_printf(seq, "usage_usec %llu\n"
+ 		   "user_usec %llu\n"
+ 		   "system_usec %llu\n",
+ 		   usage, utime, stime);
++
++#ifdef CONFIG_SCHED_CORE
++	seq_printf(seq, "core_sched.force_idle_usec %llu\n", forceidle_time);
++#endif
+ }
+diff --git a/kernel/sched/core_sched.c b/kernel/sched/core_sched.c
+index 38a2cec..5103502 100644
+--- a/kernel/sched/core_sched.c
++++ b/kernel/sched/core_sched.c
+@@ -277,7 +277,11 @@ void __sched_core_account_forceidle(struct rq *rq)
+ 		if (p == rq_i->idle)
+ 			continue;
+ 
+-		__schedstat_add(p->stats.core_forceidle_sum, delta);
++		/*
++		 * Note: this will account forceidle to the current cpu, even
++		 * if it comes from our SMT sibling.
++		 */
++		__account_forceidle_time(p, delta);
+ 	}
  }
  
- #ifdef CONFIG_SMP
--static bool set_nr_if_polling(struct task_struct *p)
-+static inline bool set_nr_if_polling(struct task_struct *p)
- {
- 	return false;
+diff --git a/kernel/sched/cputime.c b/kernel/sched/cputime.c
+index 78a233d..95fc778 100644
+--- a/kernel/sched/cputime.c
++++ b/kernel/sched/cputime.c
+@@ -226,6 +226,21 @@ void account_idle_time(u64 cputime)
+ 		cpustat[CPUTIME_IDLE] += cputime;
  }
+ 
++
++#ifdef CONFIG_SCHED_CORE
++/*
++ * Account for forceidle time due to core scheduling.
++ *
++ * REQUIRES: schedstat is enabled.
++ */
++void __account_forceidle_time(struct task_struct *p, u64 delta)
++{
++	__schedstat_add(p->stats.core_forceidle_sum, delta);
++
++	task_group_account_field(p, CPUTIME_FORCEIDLE, delta);
++}
++#endif
++
+ /*
+  * When a guest is interrupted for a longer amount of time, missed clock
+  * ticks are not redelivered later. Due to that, this function may on

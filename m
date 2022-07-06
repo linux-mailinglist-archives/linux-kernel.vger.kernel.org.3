@@ -2,49 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 570ED568666
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 13:08:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C44B568668
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 13:08:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233097AbiGFLIK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Jul 2022 07:08:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46468 "EHLO
+        id S233185AbiGFLIM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Jul 2022 07:08:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46478 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232920AbiGFLIF (ORCPT
+        with ESMTP id S233025AbiGFLIF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 6 Jul 2022 07:08:05 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C602726AE2
-        for <linux-kernel@vger.kernel.org>; Wed,  6 Jul 2022 04:08:03 -0700 (PDT)
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2780627148
+        for <linux-kernel@vger.kernel.org>; Wed,  6 Jul 2022 04:08:05 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 6FCC1B81BE2
-        for <linux-kernel@vger.kernel.org>; Wed,  6 Jul 2022 11:08:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CF0FDC3411C;
-        Wed,  6 Jul 2022 11:07:58 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id ABCDD61E62
+        for <linux-kernel@vger.kernel.org>; Wed,  6 Jul 2022 11:08:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 96D17C341CE;
+        Wed,  6 Jul 2022 11:08:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1657105681;
-        bh=V1oSo1AQmycapa1vVwI/k7VAl2IrguFLziT4xpVLFFg=;
+        s=k20201202; t=1657105684;
+        bh=BZCKP5tZSxu06QM9jLVz19aqimTq9g4sT3WFL7FeJ4E=;
         h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=opTtOxdI5xvrP0TP3NAnHQpjFjAMLrMAhnVoku5qb5xPU7gWUyHerSDmeyaCbYOit
-         RkN+XAn8A8veCuvPoDJNKriz2hO16NHYRLA9lkdM5hNjSxMkoaNqTt+/NlXWs7Yz7g
-         F9oqzQddZ31R1ex2saHY4LfHVVMhFw2ianPouThUpl+AnsSvJUI6inqBqvd/CiSRIH
-         5qmoiqG/bih+0OazWwJx6TiCw/L+l/BHiG0ie2C80XcalQEM9om6ebY5k1aVhKmbDA
-         BdYFRCernxQpN6CvPILbxUvPzG3gxiq7TM0NAWXDVsck/7YZl3Dpk2DdkRWcvmRbLa
-         Aps25WXt0hUBQ==
+        b=O/7alNDvspGn+ZqprEjuMKPkSKP26SZSop292NkkrTG8BsJx5GMSdUjndI/d1X7ZQ
+         Ycz/B4nBUt9dBclWPJmC7QlzEsPRcWrSyDnwfdyTYBUxd0SkODNAX2Ig1EPUu3FNOi
+         2Xq/0pBw5ft+FMxg/YujRFrE9TpOvWlyKfO/4AILfzhOHdaWnuR1Nqos7QTTnBAAk6
+         T6pO++OEfDcVUorOvziBsXRn9ks3qxLyz5yCiRqCdwCCD265bGGB4tKhb4n6EUciNw
+         Tx2L9yE4z7ZYKo73ICdTCKMrJFEd5Me+HvUf+bgO9m3o5EBR1os8F0bDO9s9/qog8N
+         AJ2C6Qu+NeqHA==
 From:   Mark Brown <broonie@kernel.org>
-To:     linux-kernel@vger.kernel.org, alsa-devel@alsa-project.org,
-        andriy.shevchenko@linux.intel.com
-Cc:     pierre-louis.bossart@linux.intel.com,
-        peter.ujfalusi@linux.intel.com, ranjani.sridharan@linux.intel.com,
-        yung-chuan.liao@linux.intel.com, liam.r.girdwood@linux.intel.com,
-        kai.vehmanen@linux.intel.com, cezary.rojewski@intel.com,
-        Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>
-In-Reply-To: <20220705155813.75917-1-andriy.shevchenko@linux.intel.com>
-References: <20220705155813.75917-1-andriy.shevchenko@linux.intel.com>
-Subject: Re: [PATCH v3 1/1] ASoC: Intel: catpt: remove duplicating driver data retrieval
-Message-Id: <165710567856.237380.17954574328777286737.b4-ty@kernel.org>
-Date:   Wed, 06 Jul 2022 12:07:58 +0100
+To:     linux-kernel@vger.kernel.org, peter.ujfalusi@linux.intel.com,
+        pierre-louis.bossart@linux.intel.com, alsa-devel@alsa-project.org,
+        andriy.shevchenko@linux.intel.com,
+        sound-open-firmware@alsa-project.org
+Cc:     ranjani.sridharan@linux.intel.com, yung-chuan.liao@linux.intel.com,
+        kai.vehmanen@linux.intel.com, Jaroslav Kysela <perex@perex.cz>,
+        Liam Girdwood <lgirdwood@gmail.com>, daniel.baluta@nxp.com,
+        Takashi Iwai <tiwai@suse.com>
+In-Reply-To: <20220705161102.76250-1-andriy.shevchenko@linux.intel.com>
+References: <20220705161102.76250-1-andriy.shevchenko@linux.intel.com>
+Subject: Re: [PATCH v2 1/2] ASoC: SOF: Intel: bdw: remove duplicating driver data retrieval
+Message-Id: <165710568133.237380.11160938064727349127.b4-ty@kernel.org>
+Date:   Wed, 06 Jul 2022 12:08:01 +0100
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -58,7 +59,7 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 5 Jul 2022 18:58:13 +0300, Andy Shevchenko wrote:
+On Tue, 5 Jul 2022 19:11:01 +0300, Andy Shevchenko wrote:
 > device_get_match_data() in ACPI case calls similar to acpi_match_device().
 > Hence there is no need to duplicate the call. Just assign what is in
 > the id->driver_data.
@@ -71,8 +72,10 @@ Applied to
 
 Thanks!
 
-[1/1] ASoC: Intel: catpt: remove duplicating driver data retrieval
-      commit: b03bd215742c620812e47a9ef5f08e4e0e5f0a1a
+[1/2] ASoC: SOF: Intel: bdw: remove duplicating driver data retrieval
+      commit: 0d356c186ffd6d4c3e10abb283379d09a93d2515
+[2/2] ASoC: SOF: Intel: byt: remove duplicating driver data retrieval
+      commit: 65b6851d243ff54cbd4adfb887a8af9d04b7f286
 
 All being well this means that it will be integrated into the linux-next
 tree (usually sometime in the next 24 hours) and sent to Linus during

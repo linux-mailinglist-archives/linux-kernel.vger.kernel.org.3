@@ -2,95 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3BA225689B9
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 15:41:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6DFA35689BD
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 15:41:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232849AbiGFNl0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Jul 2022 09:41:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40632 "EHLO
+        id S233054AbiGFNln (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Jul 2022 09:41:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40972 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232579AbiGFNlX (ORCPT
+        with ESMTP id S232712AbiGFNll (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Jul 2022 09:41:23 -0400
-Received: from mail-qk1-x732.google.com (mail-qk1-x732.google.com [IPv6:2607:f8b0:4864:20::732])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0D9B24BE4
-        for <linux-kernel@vger.kernel.org>; Wed,  6 Jul 2022 06:41:21 -0700 (PDT)
-Received: by mail-qk1-x732.google.com with SMTP id b125so10997394qkg.11
-        for <linux-kernel@vger.kernel.org>; Wed, 06 Jul 2022 06:41:21 -0700 (PDT)
+        Wed, 6 Jul 2022 09:41:41 -0400
+Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7C3324BE4;
+        Wed,  6 Jul 2022 06:41:39 -0700 (PDT)
+Received: by mail-wm1-x331.google.com with SMTP id v67-20020a1cac46000000b003a1888b9d36so9197507wme.0;
+        Wed, 06 Jul 2022 06:41:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=tHSKlvMGkv1jpA5A5SMLM9ENueVd+m4sc9yzrKgH5As=;
-        b=tdJHZF+S3YNuq+J1C/YZfx7geIiJ8GM0cgdNBSb+HD3tkKT7XqFthGWedqgKvYJGKY
-         2rrZqfDgts0l9pX3U9RLrndFnHEaovza8DmkvVgi8JnOfL9MQJmMQ4tjc5Qv4Vl4DIcW
-         fcoj+4BtYzi2hHkqFu0W7Ufxw6txWu/jq/NZsyZfU3/fcZkU7w+9aiWkZ4QWZYLowddE
-         vL8OhTWsWvbZSan+E7ldv/wxbG/bD5OV1NUru5KvSNDjmISrDBRoJ6ZKdFZMB2I3cOYH
-         MDhObyIXZVpFQGm7wvjBfhC6ob7B6DZY4nloFIaXhM1Hecfu/dDWEZtvP/ps9RnrhdtP
-         NX1g==
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=J37bnxv35AKNMkkxULLkWayVHEaMjv0zIAo9khsK/xs=;
+        b=Jlle0rhzTTAnWZ/MNh25r/iMQIdPg+Nu4CyuUQnEB3+XRfZWe+9CZwdtvObPWmIv6g
+         d913Ju/S7mnMovkMbGewR/EJ+C5hKF2jryill+Reaw1pTWmgv8OAkwAghmrTDutguk4Q
+         SDRosAPaNN+hGVT71HuA/B9Esxx0cYVXiQjFvXDsdTGo7ASRZIONNC4+54ApG9tqpPi8
+         dAp/BlYJDauy6Cy12yvpidH/bodG8wQQhyC1J0YUuQOVTwNttLSB8AvN8+SX88WjcVbl
+         b+DKOSfFHI1jNA6LLUabbhounPawG5AlMa6HNpwSyCeqBqtN+6gRteWmi1fx+JReOXzf
+         dCzg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=tHSKlvMGkv1jpA5A5SMLM9ENueVd+m4sc9yzrKgH5As=;
-        b=VUwhSM7Dobmshig7bhOCYXsj0Py/+bOILzS0+8xRjItHy3I56JMtqPBbTS7G6wnDxr
-         /AiR7WhKyHARAxd3NyS2BXi3Ibs2FZlFoX0p5/QfzG8iG7+Zi8rKv8l3I8dGh+xd8WvN
-         h11VJemVOeK64jZI6L3zWku/0aHn2ka7dy7PQvtkNd9nbhUbFyv1CXjGbnzJ2Nl1JEO1
-         0VjprYq2Ol4QXwdWtKqpaGvCi00LvpuJ0aWeJ7HaKM3LGvzehWdqrT0uTY0LaPD6ryo5
-         xdDDrxYwbuuw5cRJgKfDDU4rTaYE8/RKrmQqpZhExsbV4Zr4DtC6lc6pMT03cD/1/KlU
-         ORVg==
-X-Gm-Message-State: AJIora94xTQ+Td3MeXIdPsFiTY6gvc/JCF9y986Htv5bsB3jA13lA7pu
-        qqfxWhrATu84wNzK2meutpZUfeNr2+SVgordgEdngFBmR/o=
-X-Google-Smtp-Source: AGRyM1tOjUM5+iQr5E5SnPFxhjWcK2SxQVuNTQqxyehUosjE+wLpxhrXdcOkgplr5ZDw0Hdz468XCEMKDlXBr5ugv/w=
-X-Received: by 2002:a05:620a:4305:b0:6a9:3829:c03 with SMTP id
- u5-20020a05620a430500b006a938290c03mr25162746qko.363.1657114880728; Wed, 06
- Jul 2022 06:41:20 -0700 (PDT)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=J37bnxv35AKNMkkxULLkWayVHEaMjv0zIAo9khsK/xs=;
+        b=uj5GSzqN3K6buano1Woj+R6wCARO1hqx5b2NyxD//ZyxP481bZRFakKDAHTAnQnmhb
+         6bBRnLhAmbBgeQ9Fa6nHk/clrQmugVgO8uf/MrwFfrjVGFKR3mN0GuxV56PvSGX8gPSw
+         BZNEdYpaPKFC+Mc/HxiYYkARltDdIbUBt9f9DETUGtcYXTDpoKqSKJxO+UiFwyG+papd
+         02yE337vg3EN9N1+MW7CWBWuAMyjpjqIHZzGs+rHWjGQj7p2PAbFLgONukIAe5kOWEMb
+         btwh8QYPx+hY1IJIfsnuINOyEtDfig7bgeb02MmhSV40EpDGjedVPoUnzyjWU7RcW17U
+         eFVg==
+X-Gm-Message-State: AJIora+zZ7whJxJuCHgN/ihCkdbbMe0li6h1aZCBlWf738jN9CUNsT/J
+        RFKu6zOZPaTXG9ZC3g76zxc=
+X-Google-Smtp-Source: AGRyM1uzrUL3jgHl7v16xkNIYUGr+iA0aegNeob2FrKF9QFhYl/5MRV7Rool8Fm50IsaKRG6foS/1A==
+X-Received: by 2002:a05:600c:274b:b0:3a0:47e8:ca85 with SMTP id 11-20020a05600c274b00b003a047e8ca85mr45800324wmw.156.1657114898287;
+        Wed, 06 Jul 2022 06:41:38 -0700 (PDT)
+Received: from [192.168.0.14] ([37.223.147.254])
+        by smtp.gmail.com with ESMTPSA id h16-20020a5d4310000000b0021d7b41255esm2225662wrq.98.2022.07.06.06.41.36
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 06 Jul 2022 06:41:37 -0700 (PDT)
+Message-ID: <17203a8a-407e-30cf-79de-352716c3ebce@gmail.com>
+Date:   Wed, 6 Jul 2022 15:41:36 +0200
 MIME-Version: 1.0
-References: <20220705133917.8405-1-ansuelsmth@gmail.com> <20220705133917.8405-10-ansuelsmth@gmail.com>
- <a56f2941-b386-19f3-a6ad-b5a0738c8458@somainline.org>
-In-Reply-To: <a56f2941-b386-19f3-a6ad-b5a0738c8458@somainline.org>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Date:   Wed, 6 Jul 2022 16:41:09 +0300
-Message-ID: <CAA8EJpohZMg5MVJiqxZ7axcr1Cf3AhJEE7c5nBOdTvmZQCrT1g@mail.gmail.com>
-Subject: Re: [PATCH 09/13] ARM: dts: qcom: add smem node for ipq8064
-To:     Konrad Dybcio <konrad.dybcio@somainline.org>
-Cc:     Christian Marangi <ansuelsmth@gmail.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH v1 08/16] arm64: dts: mt8195: Add power domains controller
+Content-Language: en-US
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Tinghan Shen <tinghan.shen@mediatek.com>,
+        Yong Wu <yong.wu@mediatek.com>, Joerg Roedel <joro@8bytes.org>,
+        Will Deacon <will@kernel.org>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Jonathan McDowell <noodles@earth.li>
-Content-Type: text/plain; charset="UTF-8"
+        Chun-Jie Chen <chun-jie.chen@mediatek.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Enric Balletbo i Serra <enric.balletbo@collabora.com>,
+        Weiyi Lu <weiyi.lu@mediatek.com>
+Cc:     iommu@lists.linux-foundation.org,
+        linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        Project_Global_Chrome_Upstream_Group@mediatek.com
+References: <20220704100028.19932-1-tinghan.shen@mediatek.com>
+ <20220704100028.19932-9-tinghan.shen@mediatek.com>
+ <3b65405d-167f-a0c7-d15e-5da6f08d99b3@linaro.org>
+From:   Matthias Brugger <matthias.bgg@gmail.com>
+In-Reply-To: <3b65405d-167f-a0c7-d15e-5da6f08d99b3@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 6 Jul 2022 at 16:11, Konrad Dybcio <konrad.dybcio@somainline.org> wrote:
->
->
->
-> On 5.07.2022 15:39, Christian Marangi wrote:
-> > Add missing smem node for ipq8064.
-> >
-> > Signed-off-by: Christian Marangi <ansuelsmth@gmail.com>
-> > Tested-by: Jonathan McDowell <noodles@earth.li>
-> > ---
-> I can't find a downstream kernel for these router SoCs, but
-> I wonder if the 8x64 family DTs couldn't be somewhat
-> unified? It looks like they share quite some code..
 
-Let's modernize them first, using the other one as an example. We can
-merge them afterwards. And don't forget the foster child, msm8960.
 
->
+On 04/07/2022 14:38, Krzysztof Kozlowski wrote:
+> On 04/07/2022 12:00, Tinghan Shen wrote:
+>> Add power domains controller node for mt8195.
+>>
+>> Signed-off-by: Weiyi Lu <weiyi.lu@mediatek.com>
+>> Signed-off-by: Tinghan Shen <tinghan.shen@mediatek.com>
+>> ---
+>>   arch/arm64/boot/dts/mediatek/mt8195.dtsi | 327 +++++++++++++++++++++++
+>>   1 file changed, 327 insertions(+)
+>>
+>> diff --git a/arch/arm64/boot/dts/mediatek/mt8195.dtsi b/arch/arm64/boot/dts/mediatek/mt8195.dtsi
+>> index 8d59a7da3271..d52e140d9271 100644
+>> --- a/arch/arm64/boot/dts/mediatek/mt8195.dtsi
+>> +++ b/arch/arm64/boot/dts/mediatek/mt8195.dtsi
+>> @@ -10,6 +10,7 @@
+>>   #include <dt-bindings/interrupt-controller/irq.h>
+>>   #include <dt-bindings/phy/phy.h>
+>>   #include <dt-bindings/pinctrl/mt8195-pinfunc.h>
+>> +#include <dt-bindings/power/mt8195-power.h>
+>>   
+>>   / {
+>>   	compatible = "mediatek,mt8195";
+>> @@ -338,6 +339,332 @@
+>>   			#interrupt-cells = <2>;
+>>   		};
+>>   
+>> +		scpsys: syscon@10006000 {
+>> +			compatible = "syscon", "simple-mfd";
+> 
+> These compatibles cannot be alone.
+> 
 
--- 
-With best wishes
-Dmitry
+You mean we would need something like "mediatek,scpsys" as dummy compatible 
+that's not bound to any driver?
+
+>> +			reg = <0 0x10006000 0 0x1000>;
+>> +			#power-domain-cells = <1>;
+> 
+> If it is simple MFD, then probably it is not a power domain provider.
+> Decide.
+
+The SCPSYS IP block of MediaTek SoCs group several functionality, one is the 
+power domain controller. Others are not yet implemented, but defining the scpsys 
+as a MFD will give us the possibility to do so in the future.
+
+Regards,
+Matthias
+
+> 
+> Best regards,
+> Krzysztof

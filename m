@@ -2,52 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E550D5695E6
+	by mail.lfdr.de (Postfix) with ESMTP id 9A3AB5695E5
 	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 01:34:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233857AbiGFXdl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Jul 2022 19:33:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44422 "EHLO
+        id S234127AbiGFXdu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Jul 2022 19:33:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44486 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231373AbiGFXdj (ORCPT
+        with ESMTP id S234036AbiGFXdp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Jul 2022 19:33:39 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 047A42C135;
-        Wed,  6 Jul 2022 16:33:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=+ziVL8l45N1j8hHSl9LgmfhnTA7yOdWor6E4r8/k7yg=; b=UH/OkfVs7Cpj/LrUgT0DHqZLoi
-        S7s1dgLIMpSKGh48el+4LoYQfgSeyCS9ZMSXx/0pvWGHVKnMhhXPuCmRFtItIy4LadtG9Z/+2Ybd+
-        dmeABV+cOZC2tgvQEFkUbrKC4OBqEgIhMyW7e/51PoY0Lm7pRK0frAfGfTB4xNuMVg0kfYQXuFnrh
-        uo0gJMxkwfqXOyI5UlFWAcLrN8uy8lIn/Nsy+Zu1n5XIUUM7R5o+VX/TXotM0SUDJla/6ElxsdvKH
-        /CqaunG0R0DfE5gkROjyLtb8vE0CWih8lrUYA8kdoA3XfjomaTg1D3Vkhi6KkvSGmjtPHnLcVdhAu
-        SzQF3bEQ==;
-Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1o9EWU-00ClG8-VB; Wed, 06 Jul 2022 23:33:34 +0000
-Date:   Wed, 6 Jul 2022 16:33:34 -0700
-From:   Luis Chamberlain <mcgrof@kernel.org>
-To:     Aaron Tomlin <atomlin@redhat.com>
-Cc:     Christophe Leroy <christophe.leroy@csgroup.eu>,
-        "linux-modules@vger.kernel.org" <linux-modules@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 2/2] module: Show the last unloaded module's taint flag(s)
-Message-ID: <YsYbzgnO2KL9eFvc@bombadil.infradead.org>
-References: <20220627164052.2416485-1-atomlin@redhat.com>
- <20220627164052.2416485-2-atomlin@redhat.com>
- <4ddb64da-58f0-a4af-cf57-a870015a0077@csgroup.eu>
- <20220628074708.fg3ocx3vu7affkxl@ava.usersys.com>
- <20220703142218.65dacvxozppgct6y@ava.usersys.com>
+        Wed, 6 Jul 2022 19:33:45 -0400
+Received: from mail-pg1-x534.google.com (mail-pg1-x534.google.com [IPv6:2607:f8b0:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A73A2C659;
+        Wed,  6 Jul 2022 16:33:44 -0700 (PDT)
+Received: by mail-pg1-x534.google.com with SMTP id q82so8229139pgq.6;
+        Wed, 06 Jul 2022 16:33:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=q8RDTkB3VF0pgClV/p2M6N17iiEnC2cE1WV3SlVJSA0=;
+        b=FIlpUuQ9LaMQxhJBFRnqT+jVe4QY6P+S5rJuiaR9tGtvCKuZyGJNZEDsVt6pIt9Jtw
+         C+0nI6BMDWq3J5p3/htA/T1K1aAbE2HQm6T3ajyjcEm/vNF08HuDxKHWbRjUcyxqxUKr
+         6JgOzszqV0TWTTlcHLtma+edwyfnz+FFttLJnPvgEgg19UQa29wLvKOHwN4IrdM0Fq6E
+         BAcWK1kDWsQhM8ATrdyyJTYyACmYN7FLjPDLTvYbItiHbriEBOAqe1elWLF2KxlaQQ9T
+         FaGdAINE0SW/n+UcXxUDL/oPPhoHszJnRBJL04X/JOVzhsDEcX5R+z1vENNHm3S3mB8t
+         Fx6A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=q8RDTkB3VF0pgClV/p2M6N17iiEnC2cE1WV3SlVJSA0=;
+        b=HDORgh+TmdDIGt9GKLR5eRnmYFli0OVme1L/CVYjuuZZqZucCju/mdXy51Hf40+Ogb
+         MNSJXuSUlCTGiVQxwv6fopmJ1obcwG5jUwhNNLCtk3WaxyAB1UZye8bXuVAZlp9EnG2R
+         f+KPeVGJivE8ISLe6t4STAzOhy+slGdxWksvNrS4eEvpXVcKwePepxp2jps72HIvj2oL
+         +yPcqLhaB+a65Krst4hEYcKDot+JynNlXsEuP+9i4vpkC5lXqsQVfiGMQy7jzRTxSLrC
+         cIVs3CyZVkx5PvUJqOr2U4jsjZew6+o86yMwcCpg0hFTmmaTp43tZzIbkBrRU9C39hT2
+         0jKA==
+X-Gm-Message-State: AJIora+XkwO2mclQM+1B5HbYGiEj+4FJz1+pk3HRhJ6HIVHccsB/5XJ5
+        zTGTkfq9InikcWjyhe4HAxg=
+X-Google-Smtp-Source: AGRyM1uj5JNZdwlNSFPppS5J6cDP80PVhRj9doksttKjBMI0kkdJ4K3vKUnIbXyAaBuaWJdqQkMeFw==
+X-Received: by 2002:a17:90b:4b8e:b0:1ed:3a07:caad with SMTP id lr14-20020a17090b4b8e00b001ed3a07caadmr1424455pjb.194.1657150423930;
+        Wed, 06 Jul 2022 16:33:43 -0700 (PDT)
+Received: from google.com ([2620:15c:202:201:9d70:ed48:26b7:35fc])
+        by smtp.gmail.com with ESMTPSA id q10-20020a635c0a000000b0040c40b022fbsm23980491pgb.94.2022.07.06.16.33.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 06 Jul 2022 16:33:42 -0700 (PDT)
+Date:   Wed, 6 Jul 2022 16:33:40 -0700
+From:   Dmitry Torokhov <dmitry.torokhov@gmail.com>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     Hans de Goede <hdegoede@redhat.com>, linux-input@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Bastien Nocera <hadess@hadess.net>
+Subject: Re: [PATCH v1 1/1] Input: goodix - switch use of
+ acpi_gpio_get_*_resource() APIs
+Message-ID: <YsYb1AqZk0nK/Hd9@google.com>
+References: <20220705180252.963-1-andriy.shevchenko@linux.intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220703142218.65dacvxozppgct6y@ava.usersys.com>
-Sender: Luis Chamberlain <mcgrof@infradead.org>
-X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+In-Reply-To: <20220705180252.963-1-andriy.shevchenko@linux.intel.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -55,28 +71,13 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Jul 03, 2022 at 03:22:18PM +0100, Aaron Tomlin wrote:
-> On Tue 2022-06-28 08:47 +0100, Aaron Tomlin wrote:
-> > On Tue 2022-06-28 05:54 +0000, Christophe Leroy wrote:
-> > > > -	/* Store the name of the last unloaded module for diagnostic purposes */
-> > > >   	strlcpy(last_unloaded_module, mod->name, sizeof(last_unloaded_module));
-> > > > +	strcat(last_unloaded_module, module_flags(mod, buf, false));
-> > > 
-> > > You replace a bounded string copy by an unbounded strict contat.
-> > > 
-> > > Should you use strlcat() instead ?
-> > 
-> > Hi Christophe,
-> > 
-> > Why? If I understand correctly, both the destination and source string are
-> > NULL-terminated (see module_flags()). So, strcat() should be sufficient.
+On Tue, Jul 05, 2022 at 09:02:51PM +0300, Andy Shevchenko wrote:
+> No need to open code functionality that is provided by the
+> acpi_gpio_get_irq_resource() and acpi_gpio_get_io_resource().
 > 
-> Hi Luis,
-> 
-> Any thoughts on this? As far as I can tell, the destination string cannot
-> be overwritten; albeit, I can use the safer option if you prefer.
+> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 
-Yeah I don't like this as-is, it makes it not so easy to follow, I'll
-reply in my review of your patch now.
+Applied, thank you.
 
-  Luis
+-- 
+Dmitry

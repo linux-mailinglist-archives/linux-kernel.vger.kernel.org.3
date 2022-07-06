@@ -2,67 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 81729569167
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 20:11:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DA78B569169
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 20:11:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233254AbiGFSLE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Jul 2022 14:11:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53864 "EHLO
+        id S233593AbiGFSLe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Jul 2022 14:11:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54276 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230291AbiGFSLB (ORCPT
+        with ESMTP id S233289AbiGFSLc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Jul 2022 14:11:01 -0400
-Received: from fllv0016.ext.ti.com (fllv0016.ext.ti.com [198.47.19.142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FEBC28E28;
-        Wed,  6 Jul 2022 11:11:01 -0700 (PDT)
-Received: from fllv0035.itg.ti.com ([10.64.41.0])
-        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 266IAvWS009357;
-        Wed, 6 Jul 2022 13:10:57 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1657131057;
-        bh=mYqyAiq5ehGUf6IoQZIVZVf2MHlbWHt5NT9zBcqkp2I=;
-        h=Date:Subject:To:CC:References:From:In-Reply-To;
-        b=Gw+BcOdE2y1dmryHTvOCOc+tmfeUQ0WCXVhc/B3rbmX8MYkgRjw7tBSwQ0XTmEHTn
-         0UtiOubc4g7FyXSqnHA0J9FDa5g73XMLt3zXdL3AOdD7KsXHIoDUQAoeP+FwW1CQ6j
-         VHHluaoQdwsyNRSzaJGUZlCPlajzuor0rhwgKipE=
-Received: from DLEE114.ent.ti.com (dlee114.ent.ti.com [157.170.170.25])
-        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 266IAvhF017632
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Wed, 6 Jul 2022 13:10:57 -0500
-Received: from DLEE115.ent.ti.com (157.170.170.26) by DLEE114.ent.ti.com
- (157.170.170.25) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Wed, 6
- Jul 2022 13:10:56 -0500
-Received: from fllv0040.itg.ti.com (10.64.41.20) by DLEE115.ent.ti.com
- (157.170.170.26) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
- Frontend Transport; Wed, 6 Jul 2022 13:10:56 -0500
-Received: from [10.250.33.129] (ileax41-snat.itg.ti.com [10.172.224.153])
-        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 266IAugH090962;
-        Wed, 6 Jul 2022 13:10:56 -0500
-Message-ID: <16319b56-4b14-6f51-23c6-6b78b87119d7@ti.com>
-Date:   Wed, 6 Jul 2022 13:10:56 -0500
+        Wed, 6 Jul 2022 14:11:32 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB5F629808;
+        Wed,  6 Jul 2022 11:11:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1657131091; x=1688667091;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=0zWzCdVc4rRVUioOFiMduDaq3HrqzT/oA494L3FgPAA=;
+  b=M5YmG2ziK6V3KL6QYP2iBCjAIJ13qmxfcwc7BoJu1CO33pXBaYMSFKhV
+   MC7QRFbvbJZto7lU4/dwlXnE7Tr/qSye8UbKHtBwxh9Soej7A0uCFHdFj
+   jphGPk0L0VPpyIOuw0oxldTVWnHEFa6vbBu5VgwvCzZmm6MtvMVzIPgxy
+   5H15fIV71+DwGGrLfTKm+2HZTv4ZPrryqEErgKsa5+bmUKvUm89Z2oLZu
+   m0Cr60pi7pvFc95SuUXFMuktvq3CJpAz2+OgD5VpikAfcIV07G5zu9sEZ
+   e+mcwJgX1MJ1+GykuuPJX7JM56Ge4tsirw7DAEOPTA9J/wm41UJ4/2VNn
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10400"; a="281381358"
+X-IronPort-AV: E=Sophos;i="5.92,250,1650956400"; 
+   d="scan'208";a="281381358"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jul 2022 11:11:31 -0700
+X-IronPort-AV: E=Sophos;i="5.92,250,1650956400"; 
+   d="scan'208";a="620436130"
+Received: from ahunter6-mobl1.ger.corp.intel.com (HELO [10.0.2.15]) ([10.252.34.11])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jul 2022 11:11:28 -0700
+Message-ID: <51f6d094-22b8-ddca-4851-f07a7749af0a@intel.com>
+Date:   Wed, 6 Jul 2022 21:11:25 +0300
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH 6/6] arm64: dts: ti: k3-j7200-mcu-wakeup: Add SA2UL node
+ Firefox/91.0 Thunderbird/91.9.1
+Subject: Re: [PATCH v2] scsi: ufs: ufs-pci: Enable WriteBooster capability on
+ ADL
 Content-Language: en-US
-To:     Nishanth Menon <nm@ti.com>
-CC:     Vignesh Raghavendra <vigneshr@ti.com>,
-        Tero Kristo <kristo@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-References: <20220705170340.26719-1-afd@ti.com>
- <20220705170340.26719-6-afd@ti.com> <20220706180446.cyzujuasovjvsofk@lively>
-From:   Andrew Davis <afd@ti.com>
-In-Reply-To: <20220706180446.cyzujuasovjvsofk@lively>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+To:     Daniil Lunev <dlunev@chromium.org>
+Cc:     Alim Akhtar <alim.akhtar@samsung.com>,
+        Avri Altman <avri.altman@wdc.com>,
+        Bart Van Assche <bvanassche@acm.org>,
+        Bean Huo <beanhuo@micron.com>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        linux-kernel@vger.kernel.org, linux-scsi@vger.kernel.org
+References: <20220705165316.v2.1.Ib5ebec952d9a59f5c69c89b694777f517d22466d@changeid>
+From:   Adrian Hunter <adrian.hunter@intel.com>
+Organization: Intel Finland Oy, Registered Address: PL 281, 00181 Helsinki,
+ Business Identity Code: 0357606 - 4, Domiciled in Helsinki
+In-Reply-To: <20220705165316.v2.1.Ib5ebec952d9a59f5c69c89b694777f517d22466d@changeid>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,64 +70,32 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 7/6/22 1:04 PM, Nishanth Menon wrote:
-> On 12:03-20220705, Andrew Davis wrote:
->> J7200 has an instance of SA2UL in the MCU domain.
->> Add DT node for the same.
->>
->> Signed-off-by: Andrew Davis <afd@ti.com>
->> ---
->>   .../boot/dts/ti/k3-j7200-mcu-wakeup.dtsi      | 20 +++++++++++++++++++
->>   1 file changed, 20 insertions(+)
+On 5/07/22 09:53, Daniil Lunev wrote:
+> Sets the WriteBooster capability flag when ADL's UFS controller is used.
 > 
-> Please split this series into what crypto maintainers need to pick up vs
-> what I need to pick up for dts. patches for my tree need to have lakml
-> in cc as a rule (see MAINTAINERS file).
+> Signed-off-by: Daniil Lunev <dlunev@chromium.org>
+
+Acked-by: Adrian Hunter <adrian.hunter@intel.com>
+
 > 
-
-Okay, I'll break the first two into their own series. Adding LAKML folks
-for v2.
-
->>
->> diff --git a/arch/arm64/boot/dts/ti/k3-j7200-mcu-wakeup.dtsi b/arch/arm64/boot/dts/ti/k3-j7200-mcu-wakeup.dtsi
->> index 1044ec6c4b0d4..ebad3642c8e30 100644
->> --- a/arch/arm64/boot/dts/ti/k3-j7200-mcu-wakeup.dtsi
->> +++ b/arch/arm64/boot/dts/ti/k3-j7200-mcu-wakeup.dtsi
->> @@ -375,4 +375,24 @@ mcu_r5fss0_core1: r5f@41400000 {
->>   			ti,loczrama = <1>;
->>   		};
->>   	};
->> +
->> +	mcu_crypto: crypto@40900000 {
->> +		compatible = "ti,j721e-sa2ul";
->> +		reg = <0x00 0x40900000 0x00 0x1200>;
->> +		power-domains = <&k3_pds 265 TI_SCI_PD_SHARED>;
->> +		#address-cells = <2>;
->> +		#size-cells = <2>;
->> +		ranges = <0x00 0x40900000 0x00 0x40900000 0x00 0x30000>;
->> +		dmas = <&mcu_udmap 0xf501>, <&mcu_udmap 0x7502>,
->> +		       <&mcu_udmap 0x7503>;
->> +		dma-names = "tx", "rx1", "rx2";
->> +		dma-coherent;
->> +
->> +		rng: rng@40910000 {
->> +			compatible = "inside-secure,safexcel-eip76";
->> +			reg = <0x00 0x40910000 0x00 0x7d>;
->> +			interrupts = <GIC_SPI 945 IRQ_TYPE_LEVEL_HIGH>;
+> ---
 > 
-> Please document why disabled.
+> Changes in v2:
+> - Fixed typo in commit message
 > 
-
-Sure thing, will add background info to the commit message.
-
-Thanks,
-Andrew
-
->> +			status = "disabled";
->> +		};
->> +	};
->>   };
->> -- 
->> 2.36.1
->>
+>  drivers/scsi/ufs/ufshcd-pci.c | 1 +
+>  1 file changed, 1 insertion(+)
 > 
+> diff --git a/drivers/scsi/ufs/ufshcd-pci.c b/drivers/scsi/ufs/ufshcd-pci.c
+> index e892b9feffb11..fb7285a756969 100644
+> --- a/drivers/scsi/ufs/ufshcd-pci.c
+> +++ b/drivers/scsi/ufs/ufshcd-pci.c
+> @@ -425,6 +425,7 @@ static int ufs_intel_adl_init(struct ufs_hba *hba)
+>  {
+>  	hba->nop_out_timeout = 200;
+>  	hba->quirks |= UFSHCD_QUIRK_BROKEN_AUTO_HIBERN8;
+> +	hba->caps |= UFSHCD_CAP_WB_EN;
+>  	return ufs_intel_common_init(hba);
+>  }
+>  
+

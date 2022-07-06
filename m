@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B605E5691A5
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 20:23:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A6B75691A6
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 20:23:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233865AbiGFSXO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Jul 2022 14:23:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35832 "EHLO
+        id S233896AbiGFSXR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Jul 2022 14:23:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35852 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232010AbiGFSXF (ORCPT
+        with ESMTP id S229901AbiGFSXH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Jul 2022 14:23:05 -0400
-Received: from mail-qk1-x734.google.com (mail-qk1-x734.google.com [IPv6:2607:f8b0:4864:20::734])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25DFD28E33
-        for <linux-kernel@vger.kernel.org>; Wed,  6 Jul 2022 11:23:05 -0700 (PDT)
-Received: by mail-qk1-x734.google.com with SMTP id z7so11662139qko.8
-        for <linux-kernel@vger.kernel.org>; Wed, 06 Jul 2022 11:23:05 -0700 (PDT)
+        Wed, 6 Jul 2022 14:23:07 -0400
+Received: from mail-qt1-x82f.google.com (mail-qt1-x82f.google.com [IPv6:2607:f8b0:4864:20::82f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A82C20193
+        for <linux-kernel@vger.kernel.org>; Wed,  6 Jul 2022 11:23:06 -0700 (PDT)
+Received: by mail-qt1-x82f.google.com with SMTP id h19so19451728qtp.6
+        for <linux-kernel@vger.kernel.org>; Wed, 06 Jul 2022 11:23:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=6QLssyCPgTwVHYtmN9nUGGfabZPbS3KXlULG75HB9Jo=;
-        b=mL8HIkzYN4g3cRiyyVzzxpeuOXI14Sqnatn1QJ4dEH0JuXJ43HOa8gWZoFdveOyrLO
-         u+t3prHckc0JBC/F06XNPlzZdsW4uaNbV3tYA+Ah2tcRIhGkk+/MRUldytBdfQVAr1C4
-         QlqcE3lQkJ8aaSfaZnGSYel3GmBmCBCbO2BQThR4T3b8CJWEhZald0/2lqPVx77aaNeo
-         cToqpxyRpy5h8oVP4K4weqGMpHOfZHjPp3hfUQXzODg40BfLjYrBG2b8/KEjTt9bmf7t
-         bTFUzJD9r2uIo7rtLkfDvkun+AU3ycreyX3BqqOBNcy8wpNjCJjKoolgRKiH7hPg89f4
-         g95Q==
+        bh=hy1Cll65BZP8JO4Jpuyg4IGmFUmacl9SpleS3IvscpM=;
+        b=nmgqjfLsvKj1hpB3WD2dAqde/v8ZbkHNCp1gle0xYqg8ojb8HqI9laswQ7QP6n78MP
+         iwZ4P07GtZEGMy/B0qmlyxfpuxVWjrsvKBKzHahnRKhUn1IIoTB2P9Wi0LAdc3Fx+Lnb
+         KvnRuITTi8Fmx2oWrleoCsC3oiqE69JX1s1mCuTxvPESO3ziUVn1oRWOmlKVZTVx/0Ir
+         sjH6zW0yMTFBz3032wkKCAE/HA28GCX7SSVJWK/zuuYl217pgC+VKeX9SqqdkFZkzRR2
+         zAZVtflmXkAF/gdVYwBoqusSwLtunXiHYjQZDivGuVtuIu3V0AVAg/hb096zHtPG+GQa
+         puhw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=6QLssyCPgTwVHYtmN9nUGGfabZPbS3KXlULG75HB9Jo=;
-        b=LfbY+O1eSQVNQqXuX51TTVwM1WD0hbRVhTt+xRazw3Mx7l44BVe/QcYEWjv4N4choK
-         jTVyYRPG5qfts2MKVT50EvUq2ed8cpiUK7UEdqOZNnOou2w30IKoSuTjL98z9dtg0CSi
-         V1AUITFmQd3c4ATCkBlFYkzHHlF6OxLsMnlUTbD//ySsmarFfPJNnoyhu9WqSKJZFa6/
-         0niT8khdyWStMp5eEf490NBwk+zp6TWiI9+mTfgEwhzlPctqyVS0NKOIg6D0hV4fe5du
-         sD+0vr661FdJ6+q0JvFTKjYzcAoyTbyQ6xtFGFuvdl8hgWLFsJFY7Qn12f7kSxwKkkUm
-         Guxw==
-X-Gm-Message-State: AJIora+EhXxvA7OajBD7nt8pd94K5u42YR7jURmJb1P9v3fGRW+cuzNh
-        Oj4JNqYb9Oj0I4LNlUs4SUyj3drbgavdfA==
-X-Google-Smtp-Source: AGRyM1sgGM1He2HakssDW7NQLjfHwUcwTLNmAlSSIKkpO6F4atqLGRBjELlHqmuSKtZjWzrHPNGfPA==
-X-Received: by 2002:a05:620a:1710:b0:6b2:583b:c0ce with SMTP id az16-20020a05620a171000b006b2583bc0cemr19966884qkb.471.1657131784116;
-        Wed, 06 Jul 2022 11:23:04 -0700 (PDT)
+        bh=hy1Cll65BZP8JO4Jpuyg4IGmFUmacl9SpleS3IvscpM=;
+        b=6HniR9JQbSnVDzYIPMQfydmPGuPl4n/+0XhSuuJRErwjT5iivcLIOlewmPnWYGBlAB
+         Cvh0QdHuFgO/NXEPfIGhKjDMyRG3X7k2fWjRNHoTcbltT4xrbcOZ+aYHK5Y2m7k8dzKy
+         wWffZcZHyueMLGiqOC2hHKFaCaGQxheddHplLebtoWDtuCQXyAgqLNMoNLUDQXiNcdlx
+         PpDNh2a2HjvBKUfdiv7i2lmURIJ0dpGt/ckmM5E+pwNoB8QSzl9VJIcraaEw8UFWiM2E
+         kWEYp44TvtkLlmBPIxeRoB1vpL15xsCLnfrnYTGWG7au6c4b7KVEfi0rj7UaIrAqeTWm
+         qgyQ==
+X-Gm-Message-State: AJIora/xB5RDBtFwWV+UY2nuTXTaYgg8IULw+QL8k9p3xh4xY3OKJ9eu
+        P0O325d8pcAZFKzB6KbqglzHZqcDRX1Ijg==
+X-Google-Smtp-Source: AGRyM1sXwH/92sewGs9iSo+ylW6KFna6nLt4ZI+flx/x9kz+/TNp6ZoAEKE+iD2jAbfLqbhU0FKAQQ==
+X-Received: by 2002:a05:622a:1305:b0:31d:3d10:fd88 with SMTP id v5-20020a05622a130500b0031d3d10fd88mr20986122qtk.168.1657131785197;
+        Wed, 06 Jul 2022 11:23:05 -0700 (PDT)
 Received: from localhost (c-69-254-185-160.hsd1.fl.comcast.net. [69.254.185.160])
-        by smtp.gmail.com with ESMTPSA id r18-20020ac87ef2000000b00304e33f21f7sm24192517qtc.68.2022.07.06.11.23.03
+        by smtp.gmail.com with ESMTPSA id ey14-20020a05622a4c0e00b002fcb0d95f65sm24639528qtb.90.2022.07.06.11.23.04
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 06 Jul 2022 11:23:03 -0700 (PDT)
+        Wed, 06 Jul 2022 11:23:05 -0700 (PDT)
 From:   Yury Norov <yury.norov@gmail.com>
 To:     linux-kernel@vger.kernel.org,
         Alexander Lobakin <alexandr.lobakin@intel.com>,
@@ -64,9 +64,9 @@ To:     linux-kernel@vger.kernel.org,
         Steven Rostedt <rostedt@goodmis.org>,
         =?UTF-8?q?Toke=20H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
 Cc:     Yury Norov <yury.norov@gmail.com>
-Subject: [PATCH 2/5] lib/bitmap: add tests for find_nth_bit()
-Date:   Wed,  6 Jul 2022 11:22:57 -0700
-Message-Id: <20220706182300.70862-3-yury.norov@gmail.com>
+Subject: [PATCH 3/5] lib/bitmap: remove bitmap_ord_to_pos
+Date:   Wed,  6 Jul 2022 11:22:58 -0700
+Message-Id: <20220706182300.70862-4-yury.norov@gmail.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220706182300.70862-1-yury.norov@gmail.com>
 References: <20220706182300.70862-1-yury.norov@gmail.com>
@@ -82,117 +82,109 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add functional and performance tests for find_nth_bit().
+Now that we have find_nth_bit(), we can drop bitmap_ord_to_pos().
 
 Signed-off-by: Yury Norov <yury.norov@gmail.com>
 ---
- lib/find_bit_benchmark.c | 17 +++++++++++++++++
- lib/test_bitmap.c        | 36 ++++++++++++++++++++++++++++++++++--
- 2 files changed, 51 insertions(+), 2 deletions(-)
+ include/linux/bitmap.h |  1 -
+ lib/bitmap.c           | 36 +++---------------------------------
+ lib/nodemask.c         |  3 +--
+ 3 files changed, 4 insertions(+), 36 deletions(-)
 
-diff --git a/lib/find_bit_benchmark.c b/lib/find_bit_benchmark.c
-index db904b57d4b8..aad769c6ca84 100644
---- a/lib/find_bit_benchmark.c
-+++ b/lib/find_bit_benchmark.c
-@@ -115,6 +115,22 @@ static int __init test_find_last_bit(const void *bitmap, unsigned long len)
- 	return 0;
+diff --git a/include/linux/bitmap.h b/include/linux/bitmap.h
+index b2198665a064..91506057b240 100644
+--- a/include/linux/bitmap.h
++++ b/include/linux/bitmap.h
+@@ -222,7 +222,6 @@ void bitmap_copy_le(unsigned long *dst, const unsigned long *src, unsigned int n
+ #else
+ #define bitmap_copy_le bitmap_copy
+ #endif
+-unsigned int bitmap_ord_to_pos(const unsigned long *bitmap, unsigned int ord, unsigned int nbits);
+ int bitmap_print_to_pagebuf(bool list, char *buf,
+ 				   const unsigned long *maskp, int nmaskbits);
+ 
+diff --git a/lib/bitmap.c b/lib/bitmap.c
+index b580b381eca1..0b1082aa0b2c 100644
+--- a/lib/bitmap.c
++++ b/lib/bitmap.c
+@@ -956,36 +956,6 @@ static int bitmap_pos_to_ord(const unsigned long *buf, unsigned int pos, unsigne
+ 	return __bitmap_weight(buf, pos);
  }
  
-+static int __init test_find_nth_bit(const unsigned long *bitmap, unsigned long len)
-+{
-+	unsigned long l, n, w = bitmap_weight(bitmap, len);
-+	ktime_t time;
-+
-+	time = ktime_get();
-+	for (n = 1; n <= w; n++) {
-+		l = find_nth_bit(bitmap, len, n);
-+		WARN_ON(l >= len);
-+	}
-+	time = ktime_get() - time;
-+	pr_err("find_nth_bit:       %18llu ns, %6ld iterations\n", time, w);
-+
-+	return 0;
-+}
-+
- static int __init test_find_next_and_bit(const void *bitmap,
- 		const void *bitmap2, unsigned long len)
- {
-@@ -142,6 +158,7 @@ static int __init find_bit_test(void)
- 	test_find_next_bit(bitmap, BITMAP_LEN);
- 	test_find_next_zero_bit(bitmap, BITMAP_LEN);
- 	test_find_last_bit(bitmap, BITMAP_LEN);
-+	test_find_nth_bit(bitmap, BITMAP_LEN/10);
- 
- 	/*
- 	 * test_find_first_bit() may take some time, so
-diff --git a/lib/test_bitmap.c b/lib/test_bitmap.c
-index d5923a640457..b4b53d8c66ae 100644
---- a/lib/test_bitmap.c
-+++ b/lib/test_bitmap.c
-@@ -16,6 +16,8 @@
- 
- #include "../tools/testing/selftests/kselftest_module.h"
- 
-+#define EXP1_IN_BITS	(sizeof(exp1) * 8)
-+
- KSTM_MODULE_GLOBALS();
- 
- static char pbl_buffer[PAGE_SIZE] __initdata;
-@@ -219,6 +221,36 @@ static void __init test_zero_clear(void)
- 	expect_eq_pbl("", bmap, 1024);
- }
- 
-+static void __init test_find_nth_bit(void)
-+{
-+	unsigned long b, bit, cnt = 0;
-+	DECLARE_BITMAP(bmap, 64 * 3);
-+
-+	bitmap_zero(bmap, 64 * 3);
-+	__set_bit(10, bmap);
-+	__set_bit(20, bmap);
-+	__set_bit(30, bmap);
-+	__set_bit(40, bmap);
-+	__set_bit(50, bmap);
-+	__set_bit(60, bmap);
-+	__set_bit(80, bmap);
-+	__set_bit(123, bmap);
-+
-+	expect_eq_uint(10,  find_nth_bit(bmap, 64 * 3, 1));
-+	expect_eq_uint(20,  find_nth_bit(bmap, 64 * 3, 2));
-+	expect_eq_uint(30,  find_nth_bit(bmap, 64 * 3, 3));
-+	expect_eq_uint(40,  find_nth_bit(bmap, 64 * 3, 4));
-+	expect_eq_uint(50,  find_nth_bit(bmap, 64 * 3, 5));
-+	expect_eq_uint(60,  find_nth_bit(bmap, 64 * 3, 6));
-+	expect_eq_uint(80,  find_nth_bit(bmap, 64 * 3, 7));
-+	expect_eq_uint(123, find_nth_bit(bmap, 64 * 3, 8));
-+
-+	for_each_set_bit(bit, exp1, EXP1_IN_BITS) {
-+		b = find_nth_bit(exp1, EXP1_IN_BITS, ++cnt);
-+		expect_eq_uint(b, bit);
-+	}
-+}
-+
- static void __init test_fill_set(void)
- {
- 	DECLARE_BITMAP(bmap, 1024);
-@@ -557,8 +589,6 @@ static void __init test_bitmap_parse(void)
+-/**
+- * bitmap_ord_to_pos - find position of n-th set bit in bitmap
+- *	@buf: pointer to bitmap
+- *	@ord: ordinal bit position (n-th set bit, n >= 0)
+- *	@nbits: number of valid bit positions in @buf
+- *
+- * Map the ordinal offset of bit @ord in @buf to its position in @buf.
+- * Value of @ord should be in range 0 <= @ord < weight(buf). If @ord
+- * >= weight(buf), returns @nbits.
+- *
+- * If for example, just bits 4 through 7 are set in @buf, then @ord
+- * values 0 through 3 will get mapped to 4 through 7, respectively,
+- * and all other @ord values returns @nbits.  When @ord value 3
+- * gets mapped to (returns) @pos value 7 in this example, that means
+- * that the 3rd set bit (starting with 0th) is at position 7 in @buf.
+- *
+- * The bit positions 0 through @nbits-1 are valid positions in @buf.
+- */
+-unsigned int bitmap_ord_to_pos(const unsigned long *buf, unsigned int ord, unsigned int nbits)
+-{
+-	unsigned int pos;
+-
+-	for (pos = find_first_bit(buf, nbits);
+-	     pos < nbits && ord;
+-	     pos = find_next_bit(buf, nbits, pos + 1))
+-		ord--;
+-
+-	return pos;
+-}
+-
+ /**
+  * bitmap_remap - Apply map defined by a pair of bitmaps to another bitmap
+  *	@dst: remapped result
+@@ -1035,7 +1005,7 @@ void bitmap_remap(unsigned long *dst, const unsigned long *src,
+ 		if (n < 0 || w == 0)
+ 			set_bit(oldbit, dst);	/* identity map */
+ 		else
+-			set_bit(bitmap_ord_to_pos(new, n % w, nbits), dst);
++			set_bit(find_nth_bit(new, nbits, n % w + 1), dst);
  	}
  }
- 
--#define EXP1_IN_BITS	(sizeof(exp1) * 8)
--
- static void __init test_bitmap_arr32(void)
- {
- 	unsigned int nbits, next_bit;
-@@ -884,6 +914,8 @@ static void __init selftest(void)
- 	test_for_each_set_clump8();
- 	test_bitmap_cut();
- 	test_bitmap_print_buf();
-+
-+	test_find_nth_bit();
+ EXPORT_SYMBOL(bitmap_remap);
+@@ -1074,7 +1044,7 @@ int bitmap_bitremap(int oldbit, const unsigned long *old,
+ 	if (n < 0 || w == 0)
+ 		return oldbit;
+ 	else
+-		return bitmap_ord_to_pos(new, n % w, bits);
++		return find_nth_bit(new, bits, n % w + 1);
  }
+ EXPORT_SYMBOL(bitmap_bitremap);
  
- KSTM_MODULE_LOADERS(test_bitmap);
+@@ -1198,7 +1168,7 @@ void bitmap_onto(unsigned long *dst, const unsigned long *orig,
+ 	 * The following code is a more efficient, but less
+ 	 * obvious, equivalent to the loop:
+ 	 *	for (m = 0; m < bitmap_weight(relmap, bits); m++) {
+-	 *		n = bitmap_ord_to_pos(orig, m, bits);
++	 *		n = find_nth_bit(orig, bits, m + 1);
+ 	 *		if (test_bit(m, orig))
+ 	 *			set_bit(n, dst);
+ 	 *	}
+diff --git a/lib/nodemask.c b/lib/nodemask.c
+index e22647f5181b..7dad4ce8ff59 100644
+--- a/lib/nodemask.c
++++ b/lib/nodemask.c
+@@ -24,8 +24,7 @@ int node_random(const nodemask_t *maskp)
+ 
+ 	w = nodes_weight(*maskp);
+ 	if (w)
+-		bit = bitmap_ord_to_pos(maskp->bits,
+-			get_random_int() % w, MAX_NUMNODES);
++		bit = find_nth_bit(maskp->bits, MAX_NUMNODES, get_random_int() % w + 1);
+ 	return bit;
+ }
+ #endif
 -- 
 2.34.1
 

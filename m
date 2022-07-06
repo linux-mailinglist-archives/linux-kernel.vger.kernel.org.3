@@ -2,141 +2,167 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 57FDD5684DC
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 12:11:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 952F356857E
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 12:26:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232833AbiGFKK3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Jul 2022 06:10:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46468 "EHLO
+        id S231875AbiGFK0Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Jul 2022 06:26:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41046 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232532AbiGFKJu (ORCPT
+        with ESMTP id S230115AbiGFK0T (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Jul 2022 06:09:50 -0400
-Received: from mail-qt1-f176.google.com (mail-qt1-f176.google.com [209.85.160.176])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED099A467;
-        Wed,  6 Jul 2022 03:09:46 -0700 (PDT)
-Received: by mail-qt1-f176.google.com with SMTP id c13so17480565qtq.10;
-        Wed, 06 Jul 2022 03:09:46 -0700 (PDT)
+        Wed, 6 Jul 2022 06:26:19 -0400
+Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 956B125EA1;
+        Wed,  6 Jul 2022 03:26:18 -0700 (PDT)
+Received: by mail-ed1-x530.google.com with SMTP id r18so18656956edb.9;
+        Wed, 06 Jul 2022 03:26:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:from:to:cc:subject:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=m51M7aOH5FnJwLofP0W607fIK7M775HfSh2WEy0mTWo=;
+        b=JJZXb8nugrU4hB99yEftnyX099Qa8+XsZFeQfNMyE9Js8PCpj07zB1+fVtGZAmj4UW
+         NGRLyoxucyp6S57S5jMPV/IMlUKAeUmI27IAud4oJZce87gRrxXi58dhsMnwRHdivOgp
+         TWokJk6BnRhb2dFySMHHaEDuqFHv6DB2ZvqaOFO/KYMOBJfecwonKssNRMGjgDh4yZUm
+         Km54CjtSPIywNcEFl+hS6wC4BZeCseVERyDgMlPpB08RCJdVr5y0fgoSVb/BpuA4cA7I
+         59RK4YRScLqaSjzZeLG2pSMUWA83CfTchlSs0VNOhP0H/6qeZ0mSo4Mwiq0E3iSwZeMq
+         2GZQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=kx69JRXRHaP9bPHWeCJjLQ/KjVRjWJF5OqT3P9q0cBs=;
-        b=lAzdRd1By0sHsBk/HkiVBJYiSBscgl0i1ZLAsUpFAIe8qAFmd4kDffUF8y1jY0FzOQ
-         vVQfqo0DLW7HANISepVttWLbihN1jcWLZBXtujKa69KSjCNBQbl+XqnRi2/a+OCql/Tc
-         G8X6soaObeyIiRaLHtBaDSvM4cEzvyuPysp+OQZs4wHtBIWH/haIhn4mW1FvFW+t+ti0
-         qBHP0Vmz2rWXotho0cLXnoEcZVjtPVWLkVQDIOQaZYE5+Ub0Ua9c2gW8CKiGhkL+io3k
-         qVkdq0txxNz1x/GETY20MSUDfZmIuHQf2qN1c1YuF5B4VJ9m9c4sskMn3wC6HuqqW6ET
-         4sEA==
-X-Gm-Message-State: AJIora+fQVLRC2JPBJguYfUYsik9hV+zeKmHAXEqN5WBunFzox/ZpMxo
-        yPE6Majlkyis7OxP4gCWrdsz3ayypng1TNvl
-X-Google-Smtp-Source: AGRyM1uRi24Ome6ymG0bopZ8WaKaGL4MX+ul7f2gDeb/y4XMxl60luZgTxp4X64UGyjAH5lS0Ja8GQ==
-X-Received: by 2002:a05:622a:4cc:b0:31d:26a1:2538 with SMTP id q12-20020a05622a04cc00b0031d26a12538mr31085549qtx.498.1657102185760;
-        Wed, 06 Jul 2022 03:09:45 -0700 (PDT)
-Received: from mail-yw1-f169.google.com (mail-yw1-f169.google.com. [209.85.128.169])
-        by smtp.gmail.com with ESMTPSA id d71-20020a379b4a000000b006a6a1e4aec2sm28819484qke.49.2022.07.06.03.09.44
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 06 Jul 2022 03:09:44 -0700 (PDT)
-Received: by mail-yw1-f169.google.com with SMTP id 00721157ae682-31c86fe1dddso87249647b3.1;
-        Wed, 06 Jul 2022 03:09:44 -0700 (PDT)
-X-Received: by 2002:a81:5404:0:b0:31c:c24d:94b0 with SMTP id
- i4-20020a815404000000b0031cc24d94b0mr10209449ywb.502.1657102184115; Wed, 06
- Jul 2022 03:09:44 -0700 (PDT)
+        h=x-gm-message-state:message-id:date:from:to:cc:subject:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=m51M7aOH5FnJwLofP0W607fIK7M775HfSh2WEy0mTWo=;
+        b=p3mt8D8Q6G8Dqp6Oq5KzAl5MLa3jWxF9Z00/I+tBOwfDxp7fsrg0M7ce/9CXCXdND0
+         bOG7kjV5Yrzg9G119HqppTuRxcdAKeneVqFBmLXomGp55cwhThbE0rZUiV3XQIij1LDK
+         80BP2seUH8D6aARsN7s9VEiV8sDUawQ9/K9ELQi8BPFKiZovv9+QqnQ9mxMT09tE1FVG
+         DbHwbDN7AamewM+9ii3l3txHZI9JKfmUP90gtro0RWMtYfasDYbZtfCRy1CwByn8B2TR
+         /mYSkQ2pbTlsK432xZ5lkm3aDT7j39svGjJQ4g/82Jd3SOOPuGQ5EjBwvOqYKErOLnRK
+         aImA==
+X-Gm-Message-State: AJIora/LAWzv6NQXF1xvfoNYCQowe3QF1Cb/ya+j5lpUqfvqeUZKWd/n
+        wtDmdeznxA7qOxHURLfihVM=
+X-Google-Smtp-Source: AGRyM1teWvIdZYx1txxcSxtn7EDb6uif4hNEcDyJI+h0PwivdUZtKJ5qLCm8F/LlRHOFsgcI0CojKA==
+X-Received: by 2002:a05:6402:12d8:b0:43a:6a70:9039 with SMTP id k24-20020a05640212d800b0043a6a709039mr18588969edx.379.1657103177039;
+        Wed, 06 Jul 2022 03:26:17 -0700 (PDT)
+Received: from Ansuel-xps. (93-42-70-190.ip85.fastwebnet.it. [93.42.70.190])
+        by smtp.gmail.com with ESMTPSA id y14-20020a170906448e00b0072737733f9asm10563605ejo.106.2022.07.06.03.26.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 06 Jul 2022 03:26:16 -0700 (PDT)
+Message-ID: <62c56348.1c69fb81.d2cad.2584@mx.google.com>
+X-Google-Original-Message-ID: <YsVfY6MZxOMeahXp@Ansuel-xps.>
+Date:   Wed, 6 Jul 2022 12:09:39 +0200
+From:   Christian Marangi <ansuelsmth@gmail.com>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Jonathan McDowell <noodles@earth.li>
+Subject: Re: [PATCH 03/13] ARM: dts: qcom: add missing rpm regulators and
+ cells for ipq8064
+References: <20220705133917.8405-1-ansuelsmth@gmail.com>
+ <20220705133917.8405-4-ansuelsmth@gmail.com>
+ <e81344f6-7da5-a209-2785-d540e41f3958@linaro.org>
 MIME-Version: 1.0
-References: <20220624121313.2382500-1-alexandr.lobakin@intel.com> <20220624121313.2382500-4-alexandr.lobakin@intel.com>
-In-Reply-To: <20220624121313.2382500-4-alexandr.lobakin@intel.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Wed, 6 Jul 2022 12:09:33 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdWB8CjbOarttKSaY2=kASbqU2UBCe9bpU17=MdZP_rGUA@mail.gmail.com>
-Message-ID: <CAMuHMdWB8CjbOarttKSaY2=kASbqU2UBCe9bpU17=MdZP_rGUA@mail.gmail.com>
-Subject: Re: [PATCH v5 3/9] bitops: unify non-atomic bitops prototypes across architectures
-To:     Alexander Lobakin <alexandr.lobakin@intel.com>
-Cc:     Arnd Bergmann <arnd@arndb.de>, Yury Norov <yury.norov@gmail.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Matt Turner <mattst88@gmail.com>,
-        Brian Cain <bcain@quicinc.com>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Rich Felker <dalias@libc.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Kees Cook <keescook@chromium.org>,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
-        Marco Elver <elver@google.com>, Borislav Petkov <bp@suse.de>,
-        Tony Luck <tony.luck@intel.com>,
-        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
-        Jesse Brandeburg <jesse.brandeburg@intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Tom Rix <trix@redhat.com>, kernel test robot <lkp@intel.com>,
-        alpha <linux-alpha@vger.kernel.org>,
-        "open list:QUALCOMM HEXAGON..." <linux-hexagon@vger.kernel.org>,
-        "linux-ia64@vger.kernel.org" <linux-ia64@vger.kernel.org>,
-        linux-m68k <linux-m68k@lists.linux-m68k.org>,
-        Linux-sh list <linux-sh@vger.kernel.org>,
-        sparclinux <sparclinux@vger.kernel.org>,
-        Linux-Arch <linux-arch@vger.kernel.org>, llvm@lists.linux.dev,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <e81344f6-7da5-a209-2785-d540e41f3958@linaro.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 24, 2022 at 2:13 PM Alexander Lobakin
-<alexandr.lobakin@intel.com> wrote:
-> Currently, there is a mess with the prototypes of the non-atomic
-> bitops across the different architectures:
+On Wed, Jul 06, 2022 at 10:34:16AM +0200, Krzysztof Kozlowski wrote:
+> On 05/07/2022 15:39, Christian Marangi wrote:
+> > Add cells definition for rpm node and add missing regulators for the 4
+> > regulator present on ipq8064. There regulators are controlled by rpm and
+> > to correctly works gsbi4_i2c require to be NEVER disabled or rpm will
+> > reject any regulator change request.
+> > 
+> > Signed-off-by: Christian Marangi <ansuelsmth@gmail.com>
+> > Tested-by: Jonathan McDowell <noodles@earth.li>
+> > ---
+> >  arch/arm/boot/dts/qcom-ipq8064.dtsi | 36 +++++++++++++++++++++++++++++
+> >  1 file changed, 36 insertions(+)
+> > 
+> > diff --git a/arch/arm/boot/dts/qcom-ipq8064.dtsi b/arch/arm/boot/dts/qcom-ipq8064.dtsi
+> > index 1b4b72723ead..c0b05d2a2d6d 100644
+> > --- a/arch/arm/boot/dts/qcom-ipq8064.dtsi
+> > +++ b/arch/arm/boot/dts/qcom-ipq8064.dtsi
+> > @@ -844,10 +844,46 @@ rpm: rpm@108000 {
+> >  			clocks = <&gcc RPM_MSG_RAM_H_CLK>;
+> >  			clock-names = "ram";
+> >  
+> > +			#address-cells = <1>;
+> > +			#size-cells = <0>;
+> 
+> Why adding these?
 >
-> ret     bool, int, unsigned long
-> nr      int, long, unsigned int, unsigned long
-> addr    volatile unsigned long *, volatile void *
->
-> Thankfully, it doesn't provoke any bugs, but can sometimes make
-> the compiler angry when it's not handy at all.
-> Adjust all the prototypes to the following standard:
->
-> ret     bool                            retval can be only 0 or 1
-> nr      unsigned long                   native; signed makes no sense
-> addr    volatile unsigned long *        bitmaps are arrays of ulongs
->
-> Next, some architectures don't define 'arch_' versions as they don't
-> support instrumentation, others do. To make sure there is always the
-> same set of callables present and to ease any potential future
-> changes, make them all follow the rule:
->  * architecture-specific files define only 'arch_' versions;
->  * non-prefixed versions can be defined only in asm-generic files;
-> and place the non-prefixed definitions into a new file in
-> asm-generic to be included by non-instrumented architectures.
->
-> Finally, add some static assertions in order to prevent people from
-> making a mess in this room again.
-> I also used the %__always_inline attribute consistently, so that
-> they always get resolved to the actual operations.
->
-> Suggested-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> Signed-off-by: Alexander Lobakin <alexandr.lobakin@intel.com>
-> Acked-by: Mark Rutland <mark.rutland@arm.com>
-> Reviewed-by: Yury Norov <yury.norov@gmail.com>
-> Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 
->  arch/m68k/include/asm/bitops.h                | 49 ++++++++++-----
+Fix dt warning, will split and put it in a separate commit.
 
-Reviewed-by: Geert Uytterhoeven <geert@linux-m68k.org>
-Acked-by: Geert Uytterhoeven <geert@linux-m68k.org>
+> > +
+> >  			rpmcc: clock-controller {
+> >  				compatible = "qcom,rpmcc-ipq806x", "qcom,rpmcc";
+> >  				#clock-cells = <1>;
+> >  			};
+> > +
+> > +			smb208_regulators: regulators {
+> > +				compatible = "qcom,rpm-smb208-regulators";
+> > +				status = "okay";
+> 
+> Was the node disabled?
+> 
 
-Gr{oetje,eeting}s,
+smb208 is the normal and advised way to handle regulators on this
+platform. Some device may want to not follow that and implement their
+own regulator bypassing rpm so we add a status and on the current device
+present upstream we set it disabled as it does use different regulators
+implementation.
 
-                        Geert
+> > +
+> > +				smb208_s1a: s1a {
+> > +					regulator-min-microvolt = <1050000>;
+> > +					regulator-max-microvolt = <1150000>;
+> > +
+> > +					qcom,switch-mode-frequency = <1200000>;
+> > +				};
+> > +
+> > +				smb208_s1b: s1b {
+> > +					regulator-min-microvolt = <1050000>;
+> > +					regulator-max-microvolt = <1150000>;
+> > +
+> > +					qcom,switch-mode-frequency = <1200000>;
+> > +				};
+> > +
+> > +				smb208_s2a: s2a {
+> > +					regulator-min-microvolt = < 800000>;
+> > +					regulator-max-microvolt = <1250000>;
+> > +
+> > +					qcom,switch-mode-frequency = <1200000>;
+> > +				};
+> > +
+> > +				smb208_s2b: s2b {
+> > +					regulator-min-microvolt = < 800000>;
+> > +					regulator-max-microvolt = <1250000>;
+> > +
+> > +					qcom,switch-mode-frequency = <1200000>;
+> > +				};
+> > +			};
+> >  		};
+> >  
+> >  		tcsr: syscon@1a400000 {
+> 
+> 
+> Best regards,
+> Krzysztof
 
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+-- 
+	Ansuel

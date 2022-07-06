@@ -2,290 +2,530 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C371A568937
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 15:18:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E308756892C
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 15:17:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233865AbiGFNRp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Jul 2022 09:17:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47186 "EHLO
+        id S233543AbiGFNRE convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 6 Jul 2022 09:17:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46488 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233870AbiGFNRf (ORCPT
+        with ESMTP id S232155AbiGFNRC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Jul 2022 09:17:35 -0400
-Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0226ADF0A;
-        Wed,  6 Jul 2022 06:17:31 -0700 (PDT)
-Received: from pps.filterd (m0246632.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 266Cmx1J017970;
-        Wed, 6 Jul 2022 13:16:50 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : content-type :
- mime-version; s=corp-2021-07-09;
- bh=IiQIJN69PD5IJ10FmgQqijE0q3+yD1jjO2zKNLsotHo=;
- b=l+xyy4PGWb0Tok0k1M3md5ZQxaK5WRXLL57KilREbpHVRAgXoKfyNQMFvLKeU6MzmHfR
- uBu6IfiJMMKgqRIm6Gv1uYOqPAs2AdjHX+T23pJsDOshEIQG5icwZ4d9amZnJu2HCZ4O
- DWJoU/w5hZtBgTZcLfG17lvu5XzLwk6uF2WOWWyyzFqVk55oV3M35vkZnalTesD0zl6D
- UFJUH2za9wNpdAxRt2Cxnfhp2z8akhp2c22HDKk/s+RGpo9w9pHTpR4N1goFjvny3Icx
- N3b26D5n6vI7YdEM1VLMsJQCdtCvb0EzQzQp/roEpJfnZkci7OE9OwWyZAFZLBluoEXl ng== 
-Received: from iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta02.appoci.oracle.com [147.154.18.20])
-        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3h4uby1xrj-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 06 Jul 2022 13:16:49 +0000
-Received: from pps.filterd (iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-        by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (8.16.1.2/8.16.1.2) with SMTP id 266DB1Ks023774;
-        Wed, 6 Jul 2022 13:16:48 GMT
-Received: from nam11-bn8-obe.outbound.protection.outlook.com (mail-bn8nam11lp2169.outbound.protection.outlook.com [104.47.58.169])
-        by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com with ESMTP id 3h4ud0tj2y-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 06 Jul 2022 13:16:48 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Yg7XaO4+BTntMsJnm/CQr2N/BSpOsu7gy1QdVLxXtVatjIb5kQ1VxdkUAvlQCWexxQhQk2Wv8a4bnm5K8ryA3nMK9mCCjHdRDEO2ABKJXPqQpHOn+0WVBSoSV11mWK/4/v1ojOZRD59zWz2g6MZAHqVrn45BVcFUE6sP81n5XlSdm+V3ZUGp4jJKoAh+sgSRJpi0rB2V4IlpbwDolb2OWt4T5grrSBOlzzxUY6O22C053nHVELFCvzTD15MH03iXaSHOh50AKkvJ0qRKxbaDeqmWnmz3U/iLNRDSllJPJ37nvtWMzhVhv1Y+6O03H9BlRJ/fMijux+dr7rciF5TTCw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=IiQIJN69PD5IJ10FmgQqijE0q3+yD1jjO2zKNLsotHo=;
- b=H2zGFKO5q7l2NWK6FMC86mDpQCQEMMyYAeHsspA5RDHY0XTvCMcL1VuRJG9KXhw3GYAcvBgsKXStzUA5w7lG28bcoG351RzMX17KmRQEHrjaWg5FZ7MfkWGlw7v/QukRCW1HMhLrTzenybG0DJfOtAYpZOp4hK3S6JOrYyi7YCAotQHPYZ5at8Ul7HPvwdIA0RmumPyMavnKqJW243Dqc/3ZV0NDj+ylrl0Lx09onLRfV6k2adQpRakJkbF5d5//9gCkZdBZOxmqS+ThhA/myjfB2GrXjeZQBHXfzP1uaC6q3QlwxadM9RJVNs0OzY2wZv+FrTxfN+iQ8oLoHi1XGQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
- dkim=pass header.d=oracle.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=IiQIJN69PD5IJ10FmgQqijE0q3+yD1jjO2zKNLsotHo=;
- b=njOZ4Z9tsoTgSRBMu4/+rxcDOC2DhpWw7W/agB49yXWHrEdFYyrVhHWhsYwYXRv39X7HBbXiMnLNwfhstHQN0SM2HNvGYyThOuIgoBoL7eMu360rrtZHDWBphjTmokpmdRYKQZtLCUK3ceTbQXuHaBqicBWXBooIvM7HiBUl4yw=
-Received: from BLAPR10MB5267.namprd10.prod.outlook.com (2603:10b6:208:30e::22)
- by MWHPR10MB1421.namprd10.prod.outlook.com (2603:10b6:300:24::21) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5395.17; Wed, 6 Jul
- 2022 13:16:46 +0000
-Received: from BLAPR10MB5267.namprd10.prod.outlook.com
- ([fe80::ec7b:27cb:a958:e05e]) by BLAPR10MB5267.namprd10.prod.outlook.com
- ([fe80::ec7b:27cb:a958:e05e%7]) with mapi id 15.20.5395.022; Wed, 6 Jul 2022
- 13:16:46 +0000
-From:   Alan Maguire <alan.maguire@oracle.com>
-To:     ast@kernel.org, andrii@kernel.org, daniel@iogearbox.net
-Cc:     kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
-        john.fastabend@gmail.com, kpsingh@kernel.org, jolsa@kernel.org,
-        mhiramat@kernel.org, akpm@linux-foundation.org, void@manifault.com,
-        swboyd@chromium.org, ndesaulniers@google.com,
-        9erthalion6@gmail.com, kennyyu@fb.com, geliang.tang@suse.com,
-        kuniyu@amazon.co.jp, bpf@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v4 bpf-next 2/2] selftests/bpf: add a ksym iter subtest
-Date:   Wed,  6 Jul 2022 14:16:31 +0100
-Message-Id: <1657113391-5624-3-git-send-email-alan.maguire@oracle.com>
-X-Mailer: git-send-email 1.8.3.1
-In-Reply-To: <1657113391-5624-1-git-send-email-alan.maguire@oracle.com>
-References: <1657113391-5624-1-git-send-email-alan.maguire@oracle.com>
-Content-Type: text/plain
-X-ClientProxiedBy: AS4P190CA0027.EURP190.PROD.OUTLOOK.COM
- (2603:10a6:20b:5d0::16) To BLAPR10MB5267.namprd10.prod.outlook.com
- (2603:10b6:208:30e::22)
+        Wed, 6 Jul 2022 09:17:02 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 09F87D99;
+        Wed,  6 Jul 2022 06:17:01 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 2118C106F;
+        Wed,  6 Jul 2022 06:17:01 -0700 (PDT)
+Received: from donnerap.cambridge.arm.com (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 6860C3F792;
+        Wed,  6 Jul 2022 06:16:59 -0700 (PDT)
+Date:   Wed, 6 Jul 2022 14:16:55 +0100
+From:   Andre Przywara <andre.przywara@arm.com>
+To:     Jernej =?UTF-8?B?xaBrcmFiZWM=?= <jernej.skrabec@gmail.com>
+Cc:     Samuel Holland <samuel@sholland.org>, Chen-Yu Tsai <wens@csie.org>,
+        Rob Herring <robh@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Icenowy Zheng <icenowy@aosc.io>,
+        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v11 3/6] arm64: dts: allwinner: Add Allwinner H616 .dtsi
+ file
+Message-ID: <20220706141655.15d2dd0e@donnerap.cambridge.arm.com>
+In-Reply-To: <5278570.Sb9uPGUboI@kista>
+References: <20220428230933.15262-1-andre.przywara@arm.com>
+        <22699277.6Emhk5qWAg@kista>
+        <20220704225534.3e1a901a@slackpad.lan>
+        <5278570.Sb9uPGUboI@kista>
+Organization: ARM
+X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.32; aarch64-unknown-linux-gnu)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 80450b46-6080-4f6a-2dc1-08da5f51c4c3
-X-MS-TrafficTypeDiagnostic: MWHPR10MB1421:EE_
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: lOvnjRXedUo9FMwSvjyWi9GAhxs4gg4CrEk0uByCeBd/zOoxMbG/fiSMpPKDSKpkMXutmjmFJtDYzerf6u1H3QSQ1fWjsgwI4TtkpqO9m3iM9hCgKhs+S0laS2+wLUKv7kllEorPIkC2qNznx8HYGZL4S8xyAx8/0eWW/JHih/8+0IK37yIzn4lNPTk2ZTJZUR9GG27GzHw9+bvMwHq7TFcGadKPSasa3rO1oGVs1hJkDV5V27N0uq2XuEqZW1KHkTt6HrYwcrJx1pFtgEDLlRsSQc/e0nGCYISpnkoyfllsfgzVGFiambCnaU2/DPmZZcfPLUujdCep/6JmyCbQ/dERGWQ+Z5S4MOGnIP28lqTZogV+OO66Q41WdAryQXvw4ZLB27YLMpKTIn2D+g/UKc5SibGoGjzkfqEf1U3BJmjNCfG+Jidpf7wbumSu9xNInjSn9CwyjABxc9YqK5EnZ2TlxZofzb40riYqs+Uvqt1JVosoPmVNyz1ErPJXb2Nyxvt6TMhTd1bEVfW8cnB/zBoXGwC+y+nUkhiCNR4gEY/k65xbOdkUGTvzMqKxPPqLV7/01lqLnrO5Lify2xIkZQf/M6sl8xyMg9VSD5sKBMXE5PLubLzzqfxN1uQmaol7Kya72NHHKOPXffK90EIRecU/dKpOVosKW/vEI3jHok6Q470gAXmB1vvO9xYA7u3vFvrZ/rYRhhIwf2TGf/ABiazZNrK0bqyfRlyuveS4rLGYnqrUONFngL97TAb8xy4KEoPgHFHzxu3Zm+QO/5x+Y+jL0WkOeJbZ+E45+2AyhyFyOSWEhv1EV76+cM6AKMhC
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BLAPR10MB5267.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(366004)(376002)(346002)(396003)(136003)(39860400002)(316002)(83380400001)(36756003)(6512007)(26005)(186003)(6506007)(86362001)(5660300002)(7416002)(44832011)(2906002)(38350700002)(66556008)(66476007)(38100700002)(66946007)(8676002)(4326008)(6666004)(478600001)(6486002)(41300700001)(52116002)(2616005)(8936002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?uEynSxJ11LO+4L6isQXZo8Ff58uC2liugSBhqVUafwm6Q2SYR/xqyVZtcvY6?=
- =?us-ascii?Q?2yFVEl5REzItir80RNVPTEY51GTwRXXq7Hzr9n2KoZY28HfBxivUAgybPK0b?=
- =?us-ascii?Q?H29NeAdG7+ITWDsZkHmF0eTFOr/ConJMH96KF7dA8XryMQ+VBJGYm30Fwjn4?=
- =?us-ascii?Q?v1gp0bJMF5Tw7rjTjH2tst9cD0rjDx4ZLfVTpSVv8qD8DhHfJPmWo+8/Q6gO?=
- =?us-ascii?Q?DAPRPH/H+kDMBr5ysX0ReSwceO+w0OqhRDw2iCbhULC5Nme8jMUkb6Uirr9m?=
- =?us-ascii?Q?lASILTj/6pvABGYKrRI3/25ajqVkss8tbI1BOhuJewWlzk0hOlTxjZniS+DG?=
- =?us-ascii?Q?6g3Cwcg28IOG1ytAufVwiZHSWHRaT9iy5N2340lUfF6E1jrGwQRVALLdJHO3?=
- =?us-ascii?Q?fBKx4m+pLfmt5TlPbNkFsX22KMUEUj9RTp5Nl8dDK1QY10Hj3hMFHdGowMjc?=
- =?us-ascii?Q?9z5s6ZKfw1uYSs3XRKm7rXkyVuOtTy/07IlrOBBP2069JIxv0gx5GQcUjTEK?=
- =?us-ascii?Q?HctxLYTpw5JxxGmXfoW24FUq4HmdWcoSBlxxDdH0k/H3+J7ZjpX9gmawUvXj?=
- =?us-ascii?Q?X0t9vdmuFyfUVh/Q0bDOXigErWm6vqO6n7XudIgKw6xojvU6vgclGNKGwckR?=
- =?us-ascii?Q?kdAqL7qIqwt9vl7hdhjE6kNv9qGPrAidosiuhPzlAdHAGaXmG/FnYKXC5d1T?=
- =?us-ascii?Q?ST72uTGvnfDnSbXU1auoAQklHDGlMQGLIn/YjiDgHxF9UQvecVs8GxdfL3hJ?=
- =?us-ascii?Q?7QDtrPsXtGVzlavGbHU9jMHVAX/uCU6bK1yZvPObPyCPi9KLVwwWdpUHPo/g?=
- =?us-ascii?Q?tuOOY4NMhBKTQudDY2tpwF2NX5t8QsJtS+tx17/F64wnQjjJE6OY6JQMdsc1?=
- =?us-ascii?Q?MWNV/l7WdmAY1VuNM7kqDS41LfTpoA509Hfu+L3sTqQwXOyoq4eBpB6HJ4zo?=
- =?us-ascii?Q?nIhoDTDCJ3iV5oE1zMMkH8T0cb8lxxg2ozF92CptiqZ3/iGYeJxFk22NDHXJ?=
- =?us-ascii?Q?yUpBwHGBx59ACx3/CY6kxuW804vMzJWWYJSI7ZXlxPtwPgaTi7kiAhTYRW/m?=
- =?us-ascii?Q?/cBAFbIwj4M92vr49mPhKX8hs7EZFLR6bBQ4sTnae+YB4jGieffVcwxAgcAp?=
- =?us-ascii?Q?84ETlvRh0ts9x9dZgrg5AsM2l7uSsX67iA9xCzWlBpcMgOXQh48GoOLBdgMD?=
- =?us-ascii?Q?+H/I+cE7UOIu+GAehjNLcGMa6w3V+RjdT3PNlta5kPzmBo1swREPrBuSJGwD?=
- =?us-ascii?Q?zSb+KGa/dxBVh9QjJxBppgl7X+Sqq05YsArcdxdaC2tVqV2JwrLCLLe8bcry?=
- =?us-ascii?Q?U+CWXVE3BkKrK72Ul9bDj+sjtxUGxQiQv0Hn0oZa/0mBg8p/VVzJE63YV75w?=
- =?us-ascii?Q?W7SC3H2hO+3bQZ2qqMoS3N9yUUgcgjYHLfRGgPvVomdPly/F9y5kXmSvaK9X?=
- =?us-ascii?Q?8LNh2p30LLPT6mPhZEECgZQhLJOj0B53KDE6RyNhP8E1vFtAxFgqXqeaFjvT?=
- =?us-ascii?Q?l+e63Xmi/9oVZ05aJJ7ieMR8j4NTilSnuJw10AhLq/cr1bZr29c4A+pQx+B9?=
- =?us-ascii?Q?6S8ClkyClKJS4hQisQ/1hJltEjrMdr0P7HE6ESmu?=
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 80450b46-6080-4f6a-2dc1-08da5f51c4c3
-X-MS-Exchange-CrossTenant-AuthSource: BLAPR10MB5267.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Jul 2022 13:16:42.6805
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: L7JI0+2hEDsROrOYyLE1hQVjKiKMn2U3X44YzJVFntS0cvc0wWO2SImFpDAZfWPSpZQo9gND2yTLCahh1M8DfQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MWHPR10MB1421
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.517,18.0.883
- definitions=2022-07-06_08:2022-06-28,2022-07-06 signatures=0
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 adultscore=0 spamscore=0
- phishscore=0 malwarescore=0 mlxscore=0 mlxlogscore=999 bulkscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2206140000
- definitions=main-2207060052
-X-Proofpoint-ORIG-GUID: EFxXgvfKh5Q0b61qvNmaU5GjebcWWUTq
-X-Proofpoint-GUID: EFxXgvfKh5Q0b61qvNmaU5GjebcWWUTq
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-add subtest verifying BPF ksym iter behaviour.  The BPF ksym
-iter program shows an example of dumping a format different to
-/proc/kallsyms.  It adds KIND and MAX_SIZE fields which represent the
-kind of symbol (core kernel, module, ftrace, bpf, or kprobe) and
-the maximum size the symbol can be.  The latter is calculated from
-the difference between current symbol value and the next symbol
-value.
+On Tue, 05 Jul 2022 19:32:26 +0200
+Jernej Škrabec <jernej.skrabec@gmail.com> wrote:
 
-The key benefit for this iterator will likely be supporting in-kernel
-data-gathering rather than dumping symbol details to userspace and
-parsing the results.
+Hi Jernej,
 
-Signed-off-by: Alan Maguire <alan.maguire@oracle.com>
-Acked-by: Yonghong Song <yhs@fb.com>
----
- tools/testing/selftests/bpf/prog_tests/bpf_iter.c | 16 +++++
- tools/testing/selftests/bpf/progs/bpf_iter_ksym.c | 74 +++++++++++++++++++++++
- 2 files changed, 90 insertions(+)
- create mode 100644 tools/testing/selftests/bpf/progs/bpf_iter_ksym.c
+so after seemingly having finished writing this email, I realised that
+this won't really help, as I think this diverts the discussion. And the
+problem has been around for a while, and won't probably be solved easily
+or quickly. I think we agree to disagree here, or we should admit that
+there are different approaches ("bundled firmware" vs. "UEFI"), so in the
+interest of not blocking the H616 series:
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/bpf_iter.c b/tools/testing/selftests/bpf/prog_tests/bpf_iter.c
-index 7ff5fa9..a33874b 100644
---- a/tools/testing/selftests/bpf/prog_tests/bpf_iter.c
-+++ b/tools/testing/selftests/bpf/prog_tests/bpf_iter.c
-@@ -27,6 +27,7 @@
- #include "bpf_iter_test_kern5.skel.h"
- #include "bpf_iter_test_kern6.skel.h"
- #include "bpf_iter_bpf_link.skel.h"
-+#include "bpf_iter_ksym.skel.h"
- 
- static int duration;
- 
-@@ -1120,6 +1121,19 @@ static void test_link_iter(void)
- 	bpf_iter_bpf_link__destroy(skel);
- }
- 
-+static void test_ksym_iter(void)
-+{
-+	struct bpf_iter_ksym *skel;
-+
-+	skel = bpf_iter_ksym__open_and_load();
-+	if (!ASSERT_OK_PTR(skel, "bpf_iter_ksym__open_and_load"))
-+		return;
-+
-+	do_dummy_read(skel->progs.dump_ksym);
-+
-+	bpf_iter_ksym__destroy(skel);
-+}
-+
- #define CMP_BUFFER_SIZE 1024
- static char task_vma_output[CMP_BUFFER_SIZE];
- static char proc_maps_output[CMP_BUFFER_SIZE];
-@@ -1267,4 +1281,6 @@ void test_bpf_iter(void)
- 		test_buf_neg_offset();
- 	if (test__start_subtest("link-iter"))
- 		test_link_iter();
-+	if (test__start_subtest("ksym"))
-+		test_ksym_iter();
- }
-diff --git a/tools/testing/selftests/bpf/progs/bpf_iter_ksym.c b/tools/testing/selftests/bpf/progs/bpf_iter_ksym.c
-new file mode 100644
-index 0000000..285c008
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/bpf_iter_ksym.c
-@@ -0,0 +1,74 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/* Copyright (c) 2022, Oracle and/or its affiliates. */
-+#include "bpf_iter.h"
-+#include <bpf/bpf_helpers.h>
-+
-+char _license[] SEC("license") = "GPL";
-+
-+unsigned long last_sym_value = 0;
-+
-+static inline char tolower(char c)
-+{
-+	if (c >= 'A' && c <= 'Z')
-+		c += ('a' - 'A');
-+	return c;
-+}
-+
-+static inline char toupper(char c)
-+{
-+	if (c >= 'a' && c <= 'z')
-+		c -= ('a' - 'A');
-+	return c;
-+}
-+
-+/* Dump symbols with max size; the latter is calculated by caching symbol N value
-+ * and when iterating on symbol N+1, we can print max size of symbol N via
-+ * address of N+1 - address of N.
-+ */
-+SEC("iter/ksym")
-+int dump_ksym(struct bpf_iter__ksym *ctx)
-+{
-+	struct seq_file *seq = ctx->meta->seq;
-+	struct kallsym_iter *iter = ctx->ksym;
-+	__u32 seq_num = ctx->meta->seq_num;
-+	unsigned long value;
-+	char type;
-+	int ret;
-+
-+	if (!iter)
-+		return 0;
-+
-+	if (seq_num == 0) {
-+		BPF_SEQ_PRINTF(seq, "ADDR TYPE NAME MODULE_NAME KIND MAX_SIZE\n");
-+		return 0;
-+	}
-+	if (last_sym_value)
-+		BPF_SEQ_PRINTF(seq, "0x%x\n", iter->value - last_sym_value);
-+	else
-+		BPF_SEQ_PRINTF(seq, "\n");
-+
-+	value = iter->show_value ? iter->value : 0;
-+
-+	last_sym_value = value;
-+
-+	type = iter->type;
-+
-+	if (iter->module_name[0]) {
-+		type = iter->exported ? toupper(type) : tolower(type);
-+		BPF_SEQ_PRINTF(seq, "0x%llx %c %s [ %s ] ",
-+			       value, type, iter->name, iter->module_name);
-+	} else {
-+		BPF_SEQ_PRINTF(seq, "0x%llx %c %s ", value, type, iter->name);
-+	}
-+	if (!iter->pos_arch_end || iter->pos_arch_end > iter->pos)
-+		BPF_SEQ_PRINTF(seq, "CORE ");
-+	else if (!iter->pos_mod_end || iter->pos_mod_end > iter->pos)
-+		BPF_SEQ_PRINTF(seq, "MOD ");
-+	else if (!iter->pos_ftrace_mod_end || iter->pos_ftrace_mod_end > iter->pos)
-+		BPF_SEQ_PRINTF(seq, "FTRACE_MOD ");
-+	else if (!iter->pos_bpf_end || iter->pos_bpf_end > iter->pos)
-+		BPF_SEQ_PRINTF(seq, "BPF ");
-+	else
-+		BPF_SEQ_PRINTF(seq, "KPROBE ");
-+	return 0;
-+}
--- 
-1.8.3.1
+Shall I just keep the firmware node? This would work both ways, whereas
+dropping the node would impede the "bundled firmware" approach?
+
+Answers and replies, as mentioned going potentially a bit off-topic, below.
+
+> Dne ponedeljek, 04. julij 2022 ob 23:58:02 CEST je Andre Przywara napisal(a):
+> > On Mon, 04 Jul 2022 20:42:47 +0200
+> > Jernej Škrabec <jernej.skrabec@gmail.com> wrote:
+> > 
+> > Hi Jernej,
+> >   
+> > > Dne ponedeljek, 04. julij 2022 ob 15:30:57 CEST je Andre Przywara   
+> napisal(a):
+> > > > On Sat, 02 Jul 2022 23:16:53 +0200
+> > > > Jernej Škrabec <jernej.skrabec@gmail.com> wrote:
+> > > > 
+> > > > Hi Jernej,
+> > > >   
+> > > > > Dne četrtek, 30. junij 2022 ob 02:04:10 CEST je Andre Przywara   
+> napisal(a):
+> > > > > > On Tue, 03 May 2022 21:05:11 +0200
+> > > > > > Jernej Škrabec <jernej.skrabec@gmail.com> wrote:
+> > > > > > 
+> > > > > > Hi Jernej,
+> > > > > > 
+> > > > > > many thanks for taking the time to wade through this file!
+> > > > > >   
+> > > > > > > Dne petek, 29. april 2022 ob 01:09:30 CEST je Andre Przywara  
+> > > 
+> > > napisal(a):  
+> > > > > > > > This (relatively) new SoC is similar to the H6, but drops the  
+> > > 
+> > > (broken)
+> > >   
+> > > > > > > > PCIe support and the USB 3.0 controller. It also gets the
+> > > > > > > > management
+> > > > > > > > controller removed, which in turn removes *some*, but not all of
+> > > > > > > > the
+> > > > > > > > devices formerly dedicated to the ARISC (CPUS).
+> > > > > > > > And while there is still the extra sunxi interrupt controller,
+> > > > > > > > the
+> > > > > > > > package lacks the corresponding NMI pin, so no interrupts for
+> > > > > > > > the  
+> > > 
+> > > PMIC.
+> > >   
+> > > > > > > > The reserved memory node is actually handled by Trusted Firmware  
+> > > 
+> > > now,
+> > >   
+> > > > > > > > but U-Boot fails to propagate this to a separately loaded DTB,
+> > > > > > > > so we
+> > > > > > > > keep it in here for now, until U-Boot learns to do this
+> > > > > > > > properly.
+> > > > > > > > 
+> > > > > > > > Signed-off-by: Andre Przywara <andre.przywara@arm.com>
+> > > > > > > > ---
+> > > > > > > > 
+> > > > > > > >  .../arm64/boot/dts/allwinner/sun50i-h616.dtsi | 574
+> > > > > > > >  +++++++++++++++  
+> > > 
+> > > +++
+> > >   
+> > > > > > > >  1 file changed, 574 insertions(+)
+> > > > > > > >  create mode 100644
+> > > > > > > >  arch/arm64/boot/dts/allwinner/sun50i-h616.dtsi
+> > > > > > > > 
+> > > > > > > > diff --git a/arch/arm64/boot/dts/allwinner/sun50i-h616.dtsi
+> > > > > > > > b/arch/arm64/  
+> > > > > > > 
+> > > > > > > boot/dts/allwinner/sun50i-h616.dtsi
+> > > > > > >   
+> > > > > > > > new file mode 100644
+> > > > > > > > index 000000000000..cc06cdd15ba5
+> > > > > > > > --- /dev/null
+> > > > > > > > +++ b/arch/arm64/boot/dts/allwinner/sun50i-h616.dtsi
+> > > > > > > > @@ -0,0 +1,574 @@
+> > > > > > > > +// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
+> > > > > > > > +// Copyright (C) 2020 Arm Ltd.
+> > > > > > > > +// based on the H6 dtsi, which is:
+> > > > > > > > +//   Copyright (C) 2017 Icenowy Zheng <icenowy@aosc.io>
+> > > > > > > > +
+> > > > > > > > +#include <dt-bindings/interrupt-controller/arm-gic.h>
+> > > > > > > > +#include <dt-bindings/clock/sun50i-h616-ccu.h>
+> > > > > > > > +#include <dt-bindings/clock/sun50i-h6-r-ccu.h>
+> > > > > > > > +#include <dt-bindings/reset/sun50i-h616-ccu.h>
+> > > > > > > > +#include <dt-bindings/reset/sun50i-h6-r-ccu.h>
+> > > > > > > > +
+> > > > > > > > +/ {
+> > > > > > > > +	interrupt-parent = <&gic>;
+> > > > > > > > +	#address-cells = <2>;
+> > > > > > > > +	#size-cells = <2>;
+> > > > > > > > +
+> > > > > > > > +	cpus {
+> > > > > > > > +		#address-cells = <1>;
+> > > > > > > > +		#size-cells = <0>;
+> > > > > > > > +
+> > > > > > > > +		cpu0: cpu@0 {
+> > > > > > > > +			compatible = "arm,cortex-a53";
+> > > > > > > > +			device_type = "cpu";
+> > > > > > > > +			reg = <0>;
+> > > > > > > > +			enable-method = "psci";
+> > > > > > > > +			clocks = <&ccu CLK_CPUX>;
+> > > > > > > > +		};
+> > > > > > > > +
+> > > > > > > > +		cpu1: cpu@1 {
+> > > > > > > > +			compatible = "arm,cortex-a53";
+> > > > > > > > +			device_type = "cpu";
+> > > > > > > > +			reg = <1>;
+> > > > > > > > +			enable-method = "psci";
+> > > > > > > > +			clocks = <&ccu CLK_CPUX>;
+> > > > > > > > +		};
+> > > > > > > > +
+> > > > > > > > +		cpu2: cpu@2 {
+> > > > > > > > +			compatible = "arm,cortex-a53";
+> > > > > > > > +			device_type = "cpu";
+> > > > > > > > +			reg = <2>;
+> > > > > > > > +			enable-method = "psci";
+> > > > > > > > +			clocks = <&ccu CLK_CPUX>;
+> > > > > > > > +		};
+> > > > > > > > +
+> > > > > > > > +		cpu3: cpu@3 {
+> > > > > > > > +			compatible = "arm,cortex-a53";
+> > > > > > > > +			device_type = "cpu";
+> > > > > > > > +			reg = <3>;
+> > > > > > > > +			enable-method = "psci";
+> > > > > > > > +			clocks = <&ccu CLK_CPUX>;
+> > > > > > > > +		};
+> > > > > > > > +	};
+> > > > > > > > +
+> > > > > > > > +	reserved-memory {
+> > > > > > > > +		#address-cells = <2>;
+> > > > > > > > +		#size-cells = <2>;
+> > > > > > > > +		ranges;
+> > > > > > > > +
+> > > > > > > > +		/* 512KiB reserved for ARM Trusted Firmware (BL31)   
+> */
+> > > > > > > > +		secmon_reserved: secmon@40000000 {
+> > > > > > > > +			reg = <0x0 0x40000000 0x0 0x80000>;
+> > > > > > > > +			no-map;
+> > > > > > > > +		};
+> > > > > > > > +	};  
+> > > > > > > 
+> > > > > > > I'm not a fan of above. If anything changes in future in BL31,
+> > > > > > > U-Boot
+> > > > > > > would
+> > > > > > > need to reconfigure it anyway. Can we just skip it?  
+> > > > > > 
+> > > > > > I am not a fan neither, but last time I checked this is needed to
+> > > > > > boot.
+> > > > > > Indeed TF-A inserts this node, with the right values, into U-Boot's
+> > > > > > DT.
+> > > > > > And that's nicely preserved if you use that DT ($fdtcontroladdr) for
+> > > > > > the kernel as well.
+> > > > > > But if someone *loads* a DTB into U-Boot (to $fdt_addr_r), then
+> > > > > > U-Boot fails to propagate the /reserved-memory node into that copy.
+> > > > > > There does not seem to be a global notion of reserved memory in
+> > > > > > U-Boot.
+> > > > > > Some commands (like tftp) explicitly parse the control DT to find
+> > > > > > and
+> > > > > > respect reserved memory regions. bootm does that also, but only to
+> > > > > > avoid placing the ramdisk or DTB into reserved memory. The
+> > > > > > information
+> > > > > > ends up in images->lmb, but is not used to generate or amend nodes
+> > > > > > in
+> > > > > > the target DT.
+> > > > > > So the bits and pieces are there, but it will require some code to
+> > > > > > be
+> > > > > > added to the generic U-Boot code.
+> > > > > > 
+> > > > > > So what do you think? Leaving this out will prevent loading DTBs
+> > > > > > into
+> > > > > > U-Boot, at the moment, which sounds bad. I suggest we keep it in,
+> > > > > > for
+> > > > > > now, it should not really hurt. U-Boot will hopefully start to do
+> > > > > > the
+> > > > > > right thing soon, then we can either phase it out here (maybe when
+> > > > > > we
+> > > > > > actually change something in TF-A), or let U-Boot fix it.  
+> > > > > 
+> > > > > TBH, if "soon" is really soon, I would rather wait with H616 DT until
+> > > > > U-  
+> > > 
+> > > Boot
+> > >   
+> > > > > supports carrying over reserved memory nodes.  
+> > > > 
+> > > > But this also carries compatibility issues. U-Boot support the H616 for
+> > > > more than a year now, and the earliest possible U-Boot release having
+> > > > that
+> > > > propagation code would be the one released in October.  
+> > > 
+> > > I was hoping you would say July (next U-Boot release) :).  
+> > 
+> > Well, 2022.07 was supposed to be released today, and even if that is
+> > delayed by a bit, that's obviously far too late ;-)
+> >   
+> > > > And then people
+> > > > would still need to update first, so that's quite some months out.
+> > > > And I was actually hoping to get at least the H616 DT patches off my
+> > > > plate, and get them into the tree to have a stable and agreed upon base
+> > > > (before this series turns into a teenager ;-)  
+> > > 
+> > > Yeah, I would like that too.
+> > >   
+> > > > Then we could for instance update the U-Boot H616 support.
+> > > >   
+> > > > > Whatever we do now, it will have
+> > > > > compatibility issues. If we introduce reserved memory node now, we
+> > > > > can't
+> > > > > easily drop it later. Bootloaders are not very often updated, but
+> > > > > kernels  
+> > > 
+> > > and
+> > >   
+> > > > > DTB files are, at least in my experience. So when we decide to drop
+> > > > > the  
+> > > 
+> > > node?
+> > >   
+> > > > I think of the three possibilities:
+> > > > - Drop the node now, and ask people to not load DTBs explicitly
+> > > > - Drop the node when U-Boot learned to propagate the reservation
+> > > > - Keep the node
+> > > > the last one is the least painful: having this node in does not really
+> > > > hurt, so we can be very relaxed with this removal decision:
+> > > > - If U-Boot does not add the reserved node, we are covered.
+> > > > - If U-Boot adds the node, it will do so in a way where it deals with
+> > > > existing reservations. So either it doesn't actually change anything, or
+> > > > it extends the reservation.
+> > > > - Should the TF-A location actually move (and we have no plans or needs
+> > > > to
+> > > > do that), people would only get this by updating the firmware, at which
+> > > > point the U-Boot part would surely be in place already. We don't really
+> > > > support updating just BL31 in an existing binary firmware image, so you
+> > > > would get an updated U-Boot as well.
+> > > > 
+> > > > I think the worst case scenario is that users end up with an unneeded
+> > > > 512K
+> > > > reservation. If they care, a firmware update should solve this problem.
+> > > > 
+> > > > As for the time to remove that node: we could do that at the time when
+> > > > (or rather: if) we actually change the TF-A reservation. At the moment
+> > > > there are no plans to do this, and the size reservation is more than
+> > > > generous (the current debug build is actually 77 KB or so only). If
+> > > > there
+> > > > is no change, and the node stays in the .dtsi, it doesn't really hurt,
+> > > > see
+> > > > above.  
+> > > 
+> > > I see your point, but I would like to get some input from Samuel first.
+> > > 
+> > > Samuel, what do you think?
+> > >   
+> > > > > After 10 years? Alternatively, reserved memory node can be just
+> > > > > dropped  
+> > > 
+> > > and
+> > >   
+> > > > > anyone loading DTB file from outside would need to make sure it's
+> > > > > patched.  
+> > > 
+> > > But
+> > >   
+> > > > > that's unexpected from user perspective, although patching DT files is
+> > > > > done  
+> > > 
+> > > by
+> > >   
+> > > > > some distros.  
+> > > > 
+> > > > Yeah, let's not go there. As you know, I already dislike the idea of
+> > > > explicitly loading DTBs at all, but I understand this is what people,
+> > > > and
+> > > > distributions, do, so I'd rather have them covered. Hence the node to
+> > > > work with existing firmware.  
+> > > 
+> > > Reusing DTB from U-Boot is only useful when you're happy with completeness
+> > > of DT and with the lack of bugs in it. Then you can save troubles with
+> > > skipping external DTB load step and life is easier. But as you know,
+> > > features and thus nodes are added in steps and sometimes some bugs are
+> > > fixed, which means it's extremely handy to have easily updatable DTB
+> > > file.  
+> > 
+> > Yes, definitely, see my reply to Samuel. I just held back with the DT
+> > update in U-Boot because of the conflict between "we only take pure
+> > kernel tree DTs" and "there is a breaking change" (r_intc binding).
+> > 
+> > If we find a way forward with the DT stability problem, I am happy to
+> > push for a much more frequent DT update, or even update just the DT in
+> > an existing firmware installation. This can be automated, since the DTB
+> > is just a member in the FIT image, which can be re-assembled with an
+> > updated DTB by some tool or script. Or we use capsule updates, of just
+> > the DTB, separately (if this is possible)?  
+> 
+> I would like to have forward compatibility too, but IMO it's not very 
+> realistic. Sooner or later we'll find something, like r_intc, again that won't 
+> be possible to integrate in forward compatible manner. 
+
+That's a shame, I think we should at least try. And with my x86 background
+let me tell you: there are solutions to those compatibility problems ;-)
+The more nasty ones might be borderline hackish, but it's a question of
+priorities, I guess.
+
+> > > Yes, U-Boot can be
+> > > automated, but it's tedious for distro to maintain one bootloader package
+> > > per board. Ideally, distro shouldn't care at all about that,  
+> > 
+> > Yes, I totally agree, distros should not ship firmware. Since leaving
+> > this to the board vendors is not realistic, I wonder if we (as "the
+> > sunxi community") should step up here, and provide binary builds (purely
+> > for convenience reasons) of board firmware? That could be updated from
+> > a running Linux, or put on an SD card, or fetched by distros to
+> > generate an installer? Wasn't there even some central storage offered
+> > lately by Linux, to hold (UEFI) firmware update files?  
+> 
+> As someone who's working on distro which supports many SoCs from variety of 
+> vendors,
+
+But that is relative, isn't it? I count 23 supported Allwinner devices in
+LibreELEC, out of the 160 defconfigs in U-Boot or >180 sunxi .dts files in
+the kernel.
+So as most distributions, even with your ARM device focus, you chose to
+limit the number of supported devices, as that approach inherently
+doesn't scale.
+
+I see the reasons behind this, because of the special focus of LibreELEC,
+and probably the idea of giving a smooth user experience, but you could
+potentially cover much more devices by offering a generic UEFI image, as
+most *generic* distributions do, and as LE does for x86. But this relies
+on having a stable DT for the platform.
+
+I think conceptually this problem has been solved a long time ago: there
+is some interface between firmware and the kernel, which allows a generic
+kernel to configure itself accordingly. I refuse the idea that Arm based
+device should be any different in this respect. Historically, because many
+Arm based machines have a strong embedded background, that was not the
+case, but I think we should move on from those dark ages (in terms of
+support and maintainability).
+
+> I can tell you that we'll ship bootloader integrated into our image 
+> for years to come. Anyway, I also like to build U-Boot using my own options. 
+> For example, I disable HDMI driver for A64, H3 and H5, because it turns out 
+> that at least on H5, it can clash with Linux driver.
+
+That is good to hear, please tell the sunxi U-Boot maintainer, so that we
+can fix it ;-)
+
+> Other distros prefer to 
+> show some splash screen, etc. One size fits all solution doesn't seems 
+> realistic to me. Maybe only if *everything* would be configurable and there 
+> would be a way for distro to preconfigure it.
+> 
+> TBH, building U-Boot, Crust and TF-A is easy and ability to customize them is 
+> very handy.
+> > > but many boards don't
+> > > have designated bootloader storage (SPI NOR flash in AW case), so they
+> > > have to be combined on same storage, partition even, as distro.  
+> > 
+> > Have you tried eMMC boot partitions? I found them equally convenient as
+> > SPI flash, and while not too many boards actually have SPI flash,
+> > quite some have eMMC (thinking about TV boxes). I recently even
+> > used "dual boot" with a BSP installation.
+> > And even the smallest eMMCs seem to have 4 MB per boot partition, so
+> > plenty of space for U-Boot (plus TF-A plus crust).  
+> 
+> No, I didn't. I don't see any benefit of using eMMC boot partition over 
+> treating eMMC as usual SD card and installing bootloader to sector 16.
+
+The firmware is out of the way of normal (accidental) accesses, as it
+lives in a separate block device, which is read-only, initially.
+And it doesn't clash with partition tables. This gives the kind of
+separation that people are used to on other computers: the firmware
+belongs to the device, the OS is provided by the user.
+We documented how to install firmware there in U-Boot's sunxi.rst. 
+
+> Anyway, that won't change situation at all. SD card image with integrated 
+> bootloader is still king.
+
+Sure, if you don't have any other storage, then SD card it is. But this
+still does not require marrying firmware and OS: you could start with a
+"just firmware SD card", then install the OS from a USB device, or from a
+generic image file copied to some SD partition. And then suddenly the
+pure firmware image becomes OS/distro agnostic.
+And conceptually this approach doesn't *prevent* separating firmware and
+kernel/distro, it just allows you to get away with it.
+
+> There are several reasons for that:
+> - cheapest boards are most popular and usually have only SD card for storage 
+> (think OrangePi PC). There is nothing that you can do about it, except 
+> including bootloader on SD card image.
+> - if you want to switch from Android to our distro, you need bootable SD card 
+> due to higher boot priority (speaking for AW SoCs)
+> - not everyone wants to overwrite eMMC. Some prefer keeping Android, so it can 
+> be used later for whatever purpose.
+> - some users have several distros for same board, each on it's own SD card. 
+> Needless to say, each distro adjusted bootloader to its needs.
+
+All fine, but I don't see how this affects this discussion here. Yes, you
+can treat those machines like embedded devices, and bundle firmware and
+OS, but this is surely not the only way of deployment we should support.
+Being able to just offer one generic UEFI based image seems much more
+scalable to me.
+
+> I like to offer flexibility in boot options, especially because it's currently 
+> easy, thanks to integrated customized bootloader and external loading of dtb 
+> files :)
+
+Though I don't understand why you require external DTB loading: if you
+marry distro and firmware anyway, you could as well put your DTB of choice
+into U-Boot (in the U-Boot source tree, or replace it in the generated FIT
+image). That looks like a one-time effort in your build system?
+
+> > > On the other hand,
+> > > when building kernel, you automatically build all relevant DTB files,
+> > > which you can then just copy to common place. No device specific handling
+> > > needed. Also, U-Boot doesn't sync DT files every release, so latest
+> > > U-Boot doesn't necessarly mean latest DT.  
+> > 
+> > Yes, for the compatibility reasons mentioned. I am more than happy to
+> > make this a regular exercise (say at each kernel's -rc3 or so).  
+> 
+> What about breaking changes? They can be important for new, useful 
+> functionality but older kernels won't know what to do.
+
+Yes, that is the core of this discussion. Doing this relies on not having
+them in the first place. There is no problem when this affects new
+features, or functionality that the old kernel didn't support anyway.
+But we must avoid change affecting older kernels.
+At least I would like to ask for us to try: in my experience with some
+thinking and clever code we can pull this off. Other platforms seem to be
+able to commit to this.
+
+As a compromise, I was wondering if we should define some time of grace
+period, initially, were we don't guarantee non-breaking changes only.
+So the first, say three, kernels could include breaking changes, but
+afterwards we stick to support at least this kernel, with every new DT to
+come.
+
+> > Sadly, I don't think we're even close to avoiding shipping bootloader in   
+> distro images or even external DTB loading.
+> > > Above is a bit off topic, but I hope you understand why distros opt to use
+> > > external DTB files (speaking from my own experiences).  
+> > 
+> > Yes, I understand where they (including LE) are coming from, to provide
+> > a pragmatic solution to the users' problems. And that's why I wanted to
+> > still give the possibility to load a DTB, even though I think this
+> > should not be the standard way.  
+> 
+> I think loading external DTB support is important and shouldn't be ditched 
+> anytime soon. If I understand correctly, that's an issue only on SoCs with TF-
+> A, which means only 64-bit AW SoCs. Yes, 32-bit AW SoCs are still a thing and 
+> still used and no, I don't want TF-A there :).
+
+I think it's a conceptual issue, not TF-A related: A DT was always meant
+to be amended by firmware (think of the memory node, or the MAC address).
+U-Boot just decided to make those changes very late, just before launching
+the kernel, so that this newly loaded DTB is already available. But if the
+SPL decides to make changes, or picks a certain DT, you have this problem
+as well.
+
+Cheers,
+Andre
+
 

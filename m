@@ -2,113 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 16F5E5680E4
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 10:16:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 707415680C8
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 10:10:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231215AbiGFIQK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Jul 2022 04:16:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55412 "EHLO
+        id S230151AbiGFIJ6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Jul 2022 04:09:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51210 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229592AbiGFIQB (ORCPT
+        with ESMTP id S229592AbiGFIJ4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Jul 2022 04:16:01 -0400
-Received: from mail-vs1-f54.google.com (mail-vs1-f54.google.com [209.85.217.54])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4D701DA6D;
-        Wed,  6 Jul 2022 01:16:00 -0700 (PDT)
-Received: by mail-vs1-f54.google.com with SMTP id o185so1866456vsc.7;
-        Wed, 06 Jul 2022 01:16:00 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=pNNZ2G3zXs1oo3JcBfsTX3whovGatUAPfm1YVK9uZPI=;
-        b=oldjN0zReoqhuAgGlziquy7fZz+ZOD7S1CBQq9AJHwlq/vBMztVIggYJT/Vknzpert
-         Tp2JhRo2kDjKe4sQ5AIaHfDo0AiW+ngvBa8G/yZ8wuurOK1/pJ8XxBMMtmo7P2Y4xQCD
-         ZHHdeUN27Vgmi0nmirrJjHcAytCJIVuIfGtJzx/9WCMv38f3H071fEmD1GGo4cbMXGB+
-         S84FmnrvosZsG/tkRnL9SGmzRZa0tdzZ/QM+llZowljOql8qK9rVl6QfwtUgOOFY8gdb
-         8aB+dFFpP9RkdEglH70rWiPinbWZ+OCybmMgKX1Zr1QPoqfAEegg3Aiw0LmH1H/fSoxB
-         vIkg==
-X-Gm-Message-State: AJIora91RCx/UZVOcj7mWGchHZ+M8d263JpjSqUaNb+ijVDuT25MZRBT
-        AGxwuRv60/4K8kWBScwns9zwwiI/TjAJ0A==
-X-Google-Smtp-Source: AGRyM1uVzuPT53m8JitCqfLOzvOk/8XU7TAOhKz3cNKhgvVKMBZTFBqWrSAu5c3cJkQHBbfm2wk2wQ==
-X-Received: by 2002:a05:6102:23f1:b0:356:97b0:29bf with SMTP id p17-20020a05610223f100b0035697b029bfmr14487158vsc.87.1657095359702;
-        Wed, 06 Jul 2022 01:15:59 -0700 (PDT)
-Received: from mail-ua1-f45.google.com (mail-ua1-f45.google.com. [209.85.222.45])
-        by smtp.gmail.com with ESMTPSA id s7-20020a1f4507000000b0036bf47b519asm9587768vka.54.2022.07.06.01.15.59
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 06 Jul 2022 01:15:59 -0700 (PDT)
-Received: by mail-ua1-f45.google.com with SMTP id n3so2926546uak.13;
-        Wed, 06 Jul 2022 01:15:59 -0700 (PDT)
-X-Received: by 2002:a25:be49:0:b0:64a:2089:f487 with SMTP id
- d9-20020a25be49000000b0064a2089f487mr27921915ybm.202.1657094998024; Wed, 06
- Jul 2022 01:09:58 -0700 (PDT)
+        Wed, 6 Jul 2022 04:09:56 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7971F18381;
+        Wed,  6 Jul 2022 01:09:55 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 3D6E51596;
+        Wed,  6 Jul 2022 01:09:55 -0700 (PDT)
+Received: from [10.57.42.44] (unknown [10.57.42.44])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 8F28C3F792;
+        Wed,  6 Jul 2022 01:09:51 -0700 (PDT)
+Message-ID: <ca5b2602-358c-ce37-c698-8aaf4f579945@arm.com>
+Date:   Wed, 6 Jul 2022 09:09:50 +0100
 MIME-Version: 1.0
-References: <20220705215213.1802496-1-mail@conchuod.ie>
-In-Reply-To: <20220705215213.1802496-1-mail@conchuod.ie>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Wed, 6 Jul 2022 10:09:46 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdXrVsvYRth+edCs6_bdDTWDacxegMDmgy9HeaKPRaWfkg@mail.gmail.com>
-Message-ID: <CAMuHMdXrVsvYRth+edCs6_bdDTWDacxegMDmgy9HeaKPRaWfkg@mail.gmail.com>
-Subject: Re: [PATCH v5 00/13] Canaan devicetree fixes
-To:     Conor Dooley <mail@conchuod.ie>
-Cc:     David Airlie <airlied@linux.ie>, Daniel Vetter <daniel@ffwll.ch>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH V3 02/20] OPP: Make dev_pm_opp_set_regulators() accept
+ NULL terminated list
+Content-Language: en-GB
+To:     Viresh Kumar <viresh.kumar@linaro.org>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Kyungmin Park <kyungmin.park@samsung.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Qiang Yu <yuq825@gmail.com>, Rob Herring <robh@kernel.org>,
+        Tomeu Vizoso <tomeu.vizoso@collabora.com>,
+        Alyssa Rosenzweig <alyssa.rosenzweig@collabora.com>,
+        Nishanth Menon <nm@ti.com>, Stephen Boyd <sboyd@kernel.org>,
         Thierry Reding <thierry.reding@gmail.com>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        Eugeniy Paltsev <Eugeniy.Paltsev@synopsys.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Serge Semin <fancer.lancer@gmail.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Palmer Dabbelt <palmer@rivosinc.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Conor Dooley <conor.dooley@microchip.com>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
-        Niklas Cassel <niklas.cassel@wdc.com>,
-        Dillon Min <dillon.minfei@gmail.com>,
-        DRI Development <dri-devel@lists.freedesktop.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        dmaengine <dmaengine@vger.kernel.org>,
-        linux-riscv <linux-riscv@lists.infradead.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        linux-pm@vger.kernel.org,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        dri-devel@lists.freedesktop.org, lima@lists.freedesktop.org,
+        linux-tegra@vger.kernel.org
+References: <cover.1656935522.git.viresh.kumar@linaro.org>
+ <9730e011004b7526e79c6f409f5147fb235b414a.1656935522.git.viresh.kumar@linaro.org>
+ <48d865e8-6c0d-99c0-a43b-89793d5c3f85@arm.com>
+ <20220705043439.xlrxusxrhwjupiyt@vireshk-i7>
+From:   Steven Price <steven.price@arm.com>
+In-Reply-To: <20220705043439.xlrxusxrhwjupiyt@vireshk-i7>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Conor,
+On 05/07/2022 05:34, Viresh Kumar wrote:
+> On 04-07-22, 15:35, Steven Price wrote:
+>> I have to say the 'new improved' list ending with NULL approach doesn't
+>> work out so well for Panfrost. We already have to have a separate
+>> 'num_supplies' variable for devm_regulator_bulk_get() /
+>> regulator_bulk_{en,dis}able(), so the keeping everything in sync
+>> argument is lost here.
+>>
+>> I would suggest added the NULL on the end of the lists in panfrost_drv.c
+>> but then it would break the use of ARRAY_SIZE() to automagically keep
+>> the length correct...
+> 
+> Actually we can still make it work.
+> 
+>> For now the approach isn't too bad because Panfrost doesn't yet support
+>> enabling devfreq with more than one supply. But that array isn't going
+>> to work so nicely when that restriction is removed.
+>>
+>> The only sane way I can see of handling this in Panfrost would be
+>> replicating the loop to count the supplies in the Panfrost code which
+>> would allow dropping num_supplies from struct panfrost_compatible and
+>> then supply_names in the same struct could be NULL terminated ready for
+>> devm_pm_opp_set_regulators().
+> 
+> Or doing this, which will simplify both the cases.
 
-On Tue, Jul 5, 2022 at 11:52 PM Conor Dooley <mail@conchuod.ie> wrote:
-> This series should rid us of dtbs_check errors for the RISC-V Canaan k210
-> based boards. To make keeping it that way a little easier, I changed the
-> Canaan devicetree Makefile so that it would build all of the devicetrees
-> in the directory if SOC_CANAAN.
->
-> I *DO NOT* have any Canaan hardware so I have not tested any of this in
-> action. Since I sent v1, I tried to buy some since it's cheap - but could
-> out of the limited stockists none seemed to want to deliver to Ireland :(
-> I based the series on next-20220617.
+Yes the below works, it's just a bit ugly having the "- 1", and
+potentially easy to forgot when adding another. However I don't suppose
+it would get far in that case so I think it would be spotted quickly
+when adding a new compatible.
 
-Boots fine on SiPEED MAiX BiT, so
-Tested-by: Geert Uytterhoeven <geert@linux-m68k.org>
+It's probably the best solution at the moment.
 
-Gr{oetje,eeting}s,
+Thanks,
 
-                        Geert
+Steve
 
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+> 
+> diff --git a/drivers/gpu/drm/panfrost/panfrost_drv.c b/drivers/gpu/drm/panfrost/panfrost_drv.c
+> index 7fcbc2a5b6cd..b3b55565b8ef 100644
+> --- a/drivers/gpu/drm/panfrost/panfrost_drv.c
+> +++ b/drivers/gpu/drm/panfrost/panfrost_drv.c
+> @@ -625,24 +625,29 @@ static int panfrost_remove(struct platform_device *pdev)
+>         return 0;
+>  }
+>  
+> -static const char * const default_supplies[] = { "mali" };
+> +/*
+> + * The OPP core wants the supply names to be NULL terminated, but we need the
+> + * correct num_supplies value for regulator core. Hence, we NULL terminate here
+> + * and then initialize num_supplies with ARRAY_SIZE - 1.
+> + */
+> +static const char * const default_supplies[] = { "mali", NULL };
+>  static const struct panfrost_compatible default_data = {
+> -       .num_supplies = ARRAY_SIZE(default_supplies),
+> +       .num_supplies = ARRAY_SIZE(default_supplies) - 1,
+>         .supply_names = default_supplies,
+>         .num_pm_domains = 1, /* optional */
+>         .pm_domain_names = NULL,
+>  };
+>  
+>  static const struct panfrost_compatible amlogic_data = {
+> -       .num_supplies = ARRAY_SIZE(default_supplies),
+> +       .num_supplies = ARRAY_SIZE(default_supplies) - 1,
+>         .supply_names = default_supplies,
+>         .vendor_quirk = panfrost_gpu_amlogic_quirk,
+>  };
+>  
+> -static const char * const mediatek_mt8183_supplies[] = { "mali", "sram" };
+> +static const char * const mediatek_mt8183_supplies[] = { "mali", "sram", NULL };
+>  static const char * const mediatek_mt8183_pm_domains[] = { "core0", "core1", "core2" };
+>  static const struct panfrost_compatible mediatek_mt8183_data = {
+> -       .num_supplies = ARRAY_SIZE(mediatek_mt8183_supplies),
+> +       .num_supplies = ARRAY_SIZE(mediatek_mt8183_supplies) - 1,
+>         .supply_names = mediatek_mt8183_supplies,
+>         .num_pm_domains = ARRAY_SIZE(mediatek_mt8183_pm_domains),
+>         .pm_domain_names = mediatek_mt8183_pm_domains,
+> 
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds

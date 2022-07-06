@@ -2,147 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E7A1568E0E
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 17:51:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C996E568E3E
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 17:51:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234728AbiGFPuI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Jul 2022 11:50:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43778 "EHLO
+        id S234753AbiGFPuk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Jul 2022 11:50:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45790 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234724AbiGFPtQ (ORCPT
+        with ESMTP id S234557AbiGFPuX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Jul 2022 11:49:16 -0400
-Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D83682AE33
-        for <linux-kernel@vger.kernel.org>; Wed,  6 Jul 2022 08:43:49 -0700 (PDT)
-Received: by mail-ed1-x52f.google.com with SMTP id r6so8376972edd.7
-        for <linux-kernel@vger.kernel.org>; Wed, 06 Jul 2022 08:43:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:subject:date:message-id:in-reply-to:references:mime-version
-         :content-transfer-encoding;
-        bh=bp6TrRUNMz/647uXOjAc4r6XoFgzEUxaQ9GO/reUgGE=;
-        b=YHSY9u3k8ifgLH/tyyQ4TL9kKBhTKzADcNreVymdeon0SS7kHJSla2DX5rqli7rN5r
-         Tx0x4igA0cIcY0KI9WVJX56kKU3/68ys5CjZNLTWvq7t5SebyR5HrjXf9vpbmrLj7tJs
-         H0m3SHVvEn5zDsf5fN7mtkjD08kAdHY77xaalMcs/uAbyl1peQD0KKrn7Hbtn6TVZo6d
-         uZNLOWCVx/Ut8l9XqqEfuQACQb9IbMNwNn2/7zbQzr0aHZwHDavq13crBJHTUyVk4sUk
-         m0U4BPWMQ6QbjQ6C5sN2vuiAerLQx0bGgML5Cj1VtM9fi1wy+oCSFYQX5YhzfiocM8Xz
-         R5UA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=bp6TrRUNMz/647uXOjAc4r6XoFgzEUxaQ9GO/reUgGE=;
-        b=vSMk4E2Z8A/hKhYzvgXojweQR+0+foxeiHY2qP6d3fnJc1FggyP9jHf3vIhYnLCt5H
-         SgibTxeruzp2peIl3w/1Kk557CrW2Dpwn+EnNWJncwxoZEBLMpS4yjMRoEMoY/OwfXqa
-         F7hjkH3KmNUqlAnCjQgzl0ajO1V4ATPmohkDtRTmHunOAlSIz692jGybwO4kRz1Nw045
-         FEVXyOEvesep4Hl25QabCpu2qfgPH6/ct1dgIKJNXQ95pNu+JINs4qz8YxxNsEP3GM5Z
-         iV6vCzGosRKS1okOHbrrOzMq5mgfcO6wibQidnn8nb51dQDwakXZiNmAewv7nEY3B8XW
-         buIw==
-X-Gm-Message-State: AJIora9FuK89jL3bHpUJozycZI9F8cbAp0Y0hYpSh0XQDHLNr9WakYik
-        YVVHNKpLOTbCDbELDmFWxGstniRCf87W5u14
-X-Google-Smtp-Source: AGRyM1vbUDyHqObESgfdXMVT/M+3wsImImnG65+RGNI0KYbw6m+BOekmUiqQv1KnlZuVjS/JiUqvjg==
-X-Received: by 2002:a05:6402:440c:b0:43a:1124:e56a with SMTP id y12-20020a056402440c00b0043a1124e56amr30031299eda.134.1657122229465;
-        Wed, 06 Jul 2022 08:43:49 -0700 (PDT)
-Received: from prec5560.. (freifunk-gw.bsa1-cpe1.syseleven.net. [176.74.57.43])
-        by smtp.gmail.com with ESMTPSA id fi18-20020a056402551200b0043a43fcde13sm7711033edb.13.2022.07.06.08.43.47
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 06 Jul 2022 08:43:48 -0700 (PDT)
-From:   Robert Foss <robert.foss@linaro.org>
-To:     agross@kernel.org, bjorn.andersson@linaro.org,
-        konrad.dybcio@somainline.org, mturquette@baylibre.com,
-        sboyd@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, jonathan@marek.ca,
-        robert.foss@linaro.org, linux-arm-msm@vger.kernel.org,
-        linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Vinod Koul <vkoul@kernel.org>
-Subject: [PATCH v8 5/5] arm64: dts: qcom: sm8350: Add DISPCC node
-Date:   Wed,  6 Jul 2022 17:43:37 +0200
-Message-Id: <20220706154337.2026269-6-robert.foss@linaro.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220706154337.2026269-1-robert.foss@linaro.org>
-References: <20220706154337.2026269-1-robert.foss@linaro.org>
+        Wed, 6 Jul 2022 11:50:23 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB890222B8;
+        Wed,  6 Jul 2022 08:46:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=ZMPiGOu1gsOrP+OcjmrgLm7lfQsrjdxIxBZ6JkHGY4s=; b=Igpy4Ztjw6EHxP2kGcUQABTJik
+        ouxzd2xaG1VFa/TwwQyX8nCf+NZbuPs26JHzK8ELixfm2UjEcG99xdhcY0ijhI1LtxN1TtWXXB1wL
+        QBSZiM37PnQUgp8ys5M4sk1urMtXH3tFmEn9tXn80WEy5ywwwpHY/B24cPAjwB804VrzcVjUODNMU
+        REYwWnm8SDyYQhQI+K8NRNdHOXn/LjDqfABaVA7ReWa7TfKrCSZdNUB/0bU3yR8JvVOT6qXB4SQlS
+        6cZwAeAkpFg6LyYLh9cFFeOAo0nQow7O0grI47Vbdv0rczao6tql2aINzX6orwdtuyV46iQV7irPy
+        1bIWikBQ==;
+Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1o97DI-001lBg-0s; Wed, 06 Jul 2022 15:45:16 +0000
+Date:   Wed, 6 Jul 2022 16:45:15 +0100
+From:   Matthew Wilcox <willy@infradead.org>
+To:     Baolin Wang <baolin.wang@linux.alibaba.com>
+Cc:     akpm@linux-foundation.org, rppt@linux.ibm.com, will@kernel.org,
+        aneesh.kumar@linux.ibm.com, npiggin@gmail.com,
+        peterz@infradead.org, catalin.marinas@arm.com,
+        chenhuacai@kernel.org, kernel@xen0n.name,
+        tsbogend@alpha.franken.de, dave.hansen@linux.intel.com,
+        luto@kernel.org, tglx@linutronix.de, mingo@redhat.com,
+        bp@alien8.de, hpa@zytor.com, arnd@arndb.de, guoren@kernel.org,
+        monstr@monstr.eu, jonas@southpole.se,
+        stefan.kristiansson@saunalahti.fi, shorne@gmail.com,
+        x86@kernel.org, linux-arch@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, loongarch@lists.linux.dev,
+        linux-mips@vger.kernel.org, linux-csky@vger.kernel.org,
+        openrisc@lists.librecores.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 3/3] mm: Add kernel PTE level pagetable pages account
+Message-ID: <YsWuC9+b3JaEAr0Q@casper.infradead.org>
+References: <cover.1657096412.git.baolin.wang@linux.alibaba.com>
+ <398ead25695e530f766849be5edafaf62c1c864d.1657096412.git.baolin.wang@linux.alibaba.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <398ead25695e530f766849be5edafaf62c1c864d.1657096412.git.baolin.wang@linux.alibaba.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add the dispcc clock-controller DT node for sm8350.
+On Wed, Jul 06, 2022 at 04:59:17PM +0800, Baolin Wang wrote:
+> Now the kernel PTE level ptes are always protected by mm->page_table_lock
+> instead of split pagetable lock, so the kernel PTE level pagetable pages
+> are not accounted. Especially the vmalloc()/vmap() can consume lots of
+> kernel pagetable, so to get an accurate pagetable accounting, calling new
+> helpers page_{set,clear}_pgtable() when allocating or freeing a kernel
+> PTE level pagetable page.
+> 
+> Meanwhile converting architectures to use corresponding generic PTE pagetable
+> allocation and freeing functions.
+> 
+> Note this patch only adds accounting to the page tables allocated after boot.
+> 
+> Signed-off-by: Baolin Wang <baolin.wang@linux.alibaba.com>
+> Reported-by: kernel test robot <oliver.sang@intel.com>
 
-Signed-off-by: Robert Foss <robert.foss@linaro.org>
-Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Reviewed-by: Konrad Dybcio <konrad.dybcio@somainline.org>
----
+What does this Reported-by: even mean?  the kernel test robot told you
+that the page tables weren't being accounted?
 
-Changes since v2
- - Remove interconnect include - Bjorn
-
-Changes since v3
- - Switch from .fw_name to .index
-
-Changes since v5
- - Revert .fw_name to .index change
-
-Changes since v6
- - Add r-b - Konrad
-
-
- arch/arm64/boot/dts/qcom/sm8350.dtsi | 26 ++++++++++++++++++++++++++
- 1 file changed, 26 insertions(+)
-
-diff --git a/arch/arm64/boot/dts/qcom/sm8350.dtsi b/arch/arm64/boot/dts/qcom/sm8350.dtsi
-index 447a02f10463..aa0ca45ca184 100644
---- a/arch/arm64/boot/dts/qcom/sm8350.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sm8350.dtsi
-@@ -4,6 +4,7 @@
-  */
- 
- #include <dt-bindings/interrupt-controller/arm-gic.h>
-+#include <dt-bindings/clock/qcom,dispcc-sm8350.h>
- #include <dt-bindings/clock/qcom,gcc-sm8350.h>
- #include <dt-bindings/clock/qcom,rpmh.h>
- #include <dt-bindings/dma/qcom-gpi.h>
-@@ -2531,6 +2532,31 @@ usb_2_dwc3: usb@a800000 {
- 			};
- 		};
- 
-+		dispcc: clock-controller@af00000 {
-+			compatible = "qcom,sm8350-dispcc";
-+			reg = <0 0x0af00000 0 0x10000>;
-+			clocks = <&rpmhcc RPMH_CXO_CLK>,
-+				 <0>,
-+				 <0>,
-+				 <0>,
-+				 <0>,
-+				 <0>,
-+				 <0>;
-+			clock-names = "bi_tcxo",
-+				      "dsi0_phy_pll_out_byteclk",
-+				      "dsi0_phy_pll_out_dsiclk",
-+				      "dsi1_phy_pll_out_byteclk",
-+				      "dsi1_phy_pll_out_dsiclk",
-+				      "dp_phy_pll_link_clk",
-+				      "dp_phy_pll_vco_div_clk";
-+			#clock-cells = <1>;
-+			#reset-cells = <1>;
-+			#power-domain-cells = <1>;
-+
-+			power-domains = <&rpmhpd SM8350_MMCX>;
-+			power-domain-names = "mmcx";
-+		};
-+
- 		adsp: remoteproc@17300000 {
- 			compatible = "qcom,sm8350-adsp-pas";
- 			reg = <0 0x17300000 0 0x100>;
--- 
-2.34.1
-
+I don't understand why we want to start accounting kernel page tables.
+an we have a *discussion* about that with a sensible thread name instead
+of just trying to sneak it in as patch 3/3?

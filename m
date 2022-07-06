@@ -2,111 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E712568BD7
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 16:53:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A96E4568BF0
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 16:56:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232442AbiGFOxd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Jul 2022 10:53:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41986 "EHLO
+        id S231451AbiGFO4C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Jul 2022 10:56:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43396 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233543AbiGFOx3 (ORCPT
+        with ESMTP id S230146AbiGFOz6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Jul 2022 10:53:29 -0400
-Received: from outbound-smtp30.blacknight.com (outbound-smtp30.blacknight.com [81.17.249.61])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A7D4A1B0
-        for <linux-kernel@vger.kernel.org>; Wed,  6 Jul 2022 07:53:28 -0700 (PDT)
-Received: from mail.blacknight.com (pemlinmail02.blacknight.ie [81.17.254.11])
-        by outbound-smtp30.blacknight.com (Postfix) with ESMTPS id ABF94BAB38
-        for <linux-kernel@vger.kernel.org>; Wed,  6 Jul 2022 15:53:26 +0100 (IST)
-Received: (qmail 22138 invoked from network); 6 Jul 2022 14:53:26 -0000
-Received: from unknown (HELO techsingularity.net) (mgorman@techsingularity.net@[84.203.198.246])
-  by 81.17.254.9 with ESMTPSA (AES256-SHA encrypted, authenticated); 6 Jul 2022 14:53:26 -0000
-Date:   Wed, 6 Jul 2022 15:53:24 +0100
-From:   Mel Gorman <mgorman@techsingularity.net>
-To:     Oliver Sang <oliver.sang@intel.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        0day robot <lkp@intel.com>,
-        LKML <linux-kernel@vger.kernel.org>, linux-mm@kvack.org,
-        lkp@lists.01.org, Nicolas Saenz Julienne <nsaenzju@redhat.com>,
-        Marcelo Tosatti <mtosatti@redhat.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Michal Hocko <mhocko@kernel.org>,
-        Hugh Dickins <hughd@google.com>
-Subject: Re: [mm/page_alloc]  2bd8eec68f:
- BUG:sleeping_function_called_from_invalid_context_at_mm/gup.c
-Message-ID: <20220706145324.GH27531@techsingularity.net>
-References: <20220613125622.18628-8-mgorman@techsingularity.net>
- <YsFk/qU+QtWun04h@xsang-OptiPlex-9020>
- <20220703132209.875b823d1cb7169a8d51d56d@linux-foundation.org>
- <YsRB3fZHAfik0M/q@xsang-OptiPlex-9020>
- <20220706095535.GD27531@techsingularity.net>
- <YsWbWsN2qPbWsNWZ@xsang-OptiPlex-9020>
+        Wed, 6 Jul 2022 10:55:58 -0400
+Received: from outgoing.mit.edu (outgoing-auth-1.mit.edu [18.9.28.11])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A05CAD58;
+        Wed,  6 Jul 2022 07:55:57 -0700 (PDT)
+Received: from cwcc.thunk.org (pool-173-48-118-63.bstnma.fios.verizon.net [173.48.118.63])
+        (authenticated bits=0)
+        (User authenticated as tytso@ATHENA.MIT.EDU)
+        by outgoing.mit.edu (8.14.7/8.12.4) with ESMTP id 266Et4Za026327
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 6 Jul 2022 10:55:05 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mit.edu; s=outgoing;
+        t=1657119313; bh=ifFZJvbfIGVslUHWRDtftSqDp9BgS1ySpd5as638KpQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To;
+        b=jicRkedUge0cSrNp9dsPHkw4QFRERSGTRFWvzKMGECE7ezizOgSv9HxyR9V4F8S7F
+         B3Z4cvkvhwTV+vUCLQyyRapiOOXIrh6qq6H06KmAU7CGQ4aXhLrDnNGj3ClQF1Na0r
+         MfGlG/hzw6ibcSaN/qBTJnkql+Zzo+d40NlqpzyzX5ybtU1W3uQ2ySVzntVa7l0jYs
+         tkDnbU64G7GfM2KZH9XpIvp8dnasZ7d1RvfrjUt2khPyFMDRUSqvqcK3+Ex61hsi7X
+         BhyDG4ghY/zpMytxNISsWRBgmgGJllOR34RpeYEAVqRhNsCrgwz8QoCs3CgyKgd2Qk
+         zZPwW6kHfDl3A==
+Received: by cwcc.thunk.org (Postfix, from userid 15806)
+        id 75A9215C3E94; Wed,  6 Jul 2022 10:55:04 -0400 (EDT)
+Date:   Wed, 6 Jul 2022 10:55:04 -0400
+From:   "Theodore Ts'o" <tytso@mit.edu>
+To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
+Cc:     linux-arm-kernel@lists.infradead.org,
+        linuxppc-dev@lists.ozlabs.org, linux-s390@vger.kernel.org,
+        linux-kernel@vger.kernel.org, x86@kernel.org,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        "H . Peter Anvin" <hpa@zytor.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Arnd Bergmann <arnd@arndb.de>
+Subject: Re: [PATCH] random: remove CONFIG_ARCH_RANDOM and "nordrand"
+Message-ID: <YsWiSH4BrY5oNJuM@mit.edu>
+References: <20220705190121.293703-1-Jason@zx2c4.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-15
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <YsWbWsN2qPbWsNWZ@xsang-OptiPlex-9020>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20220705190121.293703-1-Jason@zx2c4.com>
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jul 06, 2022 at 10:25:30PM +0800, Oliver Sang wrote:
-> hi, Mel Gorman,
-> 
-> On Wed, Jul 06, 2022 at 10:55:35AM +0100, Mel Gorman wrote:
-> > On Tue, Jul 05, 2022 at 09:51:25PM +0800, Oliver Sang wrote:
-> > > Hi Andrew Morton,
-> > > 
-> > > On Sun, Jul 03, 2022 at 01:22:09PM -0700, Andrew Morton wrote:
-> > > > On Sun, 3 Jul 2022 17:44:30 +0800 kernel test robot <oliver.sang@intel.com> wrote:
-> > > > 
-> > > > > FYI, we noticed the following commit (built with gcc-11):
-> > > > > 
-> > > > > commit: 2bd8eec68f740608db5ea58ecff06965228764cb ("[PATCH 7/7] mm/page_alloc: Replace local_lock with normal spinlock")
-> > > > > url: https://github.com/intel-lab-lkp/linux/commits/Mel-Gorman/Drain-remote-per-cpu-directly/20220613-230139
-> > > > > base: https://git.kernel.org/cgit/linux/kernel/git/torvalds/linux.git b13baccc3850ca8b8cccbf8ed9912dbaa0fdf7f3
-> > > > > patch link: https://lore.kernel.org/lkml/20220613125622.18628-8-mgorman@techsingularity.net
-> > > > > 
-> > > > 
-> > > > Did this test include the followup patch
-> > > > mm-page_alloc-replace-local_lock-with-normal-spinlock-fix.patch?
-> > > 
-> > > no, we just fetched original patch set and test upon it.
-> > > 
-> > > now we applied the patch you pointed to us upon 2bd8eec68f and found the issue
-> > > still exist.
-> > > (attached dmesg FYI)
-> > > 
-> > 
-> > Thanks Oliver.
-> > 
-> > The trace is odd in that it hits in GUP when the page allocator is no
-> > longer active and the context is a syscall. First, is this definitely
-> > the first patch the problem occurs?
-> > 
-> > Second, it's possible for IRQs to be enabled and an IRQ delivered before
-> > preemption is enabled. It's not clear why that would be a problem other
-> > than lacking symmetry or how it could result in the reported BUG but
-> > might as well rule it out. This is build tested only
-> 
-> do you want us test below patch?
-> if so, should we apply it upon the patch
-> "mm/page_alloc: Replace local_lock with normal spinlock"
-> or
-> "mm/page_alloc: replace local_lock with normal spinlock -fix"?
-> 
+On Tue, Jul 05, 2022 at 09:01:21PM +0200, Jason A. Donenfeld wrote:
+> Later the thinking evolved. With a properly designed RNG, using RDRAND
+> values alone won't harm anything, even if the outputs are malicious.
 
-On top of "mm/page_alloc: replace local_lock with normal spinlock -fix"
-please. The -fix patch is cosmetic but it'd still be better to test on
-top.
+I personally think it's totally fine to remove nordrand.  However, the
+reason why it was there was that there were some rather extreme
+tin-foil-hatters who believed that if (the completely unavailable to
+the public for auditing) RDRAND implementation *were* malicious *and*
+the microcode had access to the register file and/or the instruction
+pipeline, then in theory, a malicious CPU could subvert how the RDRAND
+is mixed into the getrandom output to force a particular output.
 
-Thanks!
+Personally, I've always considered it to be insane, since a much
+easier way to compromise a CPU would be to drop a Minix system hidden
+into the CPU running a web server that had massive security bugs in it
+that were only discovered years later.  And if you don't trust the CPU
+manufacture to that extent, you should probably simply not use CPU's
+from that manufacturer.  :-)
 
--- 
-Mel Gorman
-SUSE Labs
+							- Ted

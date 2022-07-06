@@ -2,88 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CED855688E4
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 15:03:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 620815688E8
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 15:04:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233528AbiGFNDj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Jul 2022 09:03:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34082 "EHLO
+        id S233542AbiGFND4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Jul 2022 09:03:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34970 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233494AbiGFNDg (ORCPT
+        with ESMTP id S229804AbiGFNDz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Jul 2022 09:03:36 -0400
-Received: from relay06.th.seeweb.it (relay06.th.seeweb.it [5.144.164.167])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E030117A9D
-        for <linux-kernel@vger.kernel.org>; Wed,  6 Jul 2022 06:03:34 -0700 (PDT)
-Received: from [192.168.1.101] (abxi46.neoplus.adsl.tpnet.pl [83.9.2.46])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by m-r2.th.seeweb.it (Postfix) with ESMTPSA id 1DDEB3F740;
-        Wed,  6 Jul 2022 15:03:33 +0200 (CEST)
-Message-ID: <8a394fa3-92fb-d162-b4ee-df010a09aed0@somainline.org>
-Date:   Wed, 6 Jul 2022 15:03:32 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH 04/13] ARM: dts: qcom: disable smb208 regulators for
- ipq8064-rb3011
-Content-Language: en-US
-To:     Christian Marangi <ansuelsmth@gmail.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        Wed, 6 Jul 2022 09:03:55 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B60091582D;
+        Wed,  6 Jul 2022 06:03:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
+        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=nD/aqJU0V41bWXT6P36l4XHLuMfgkO3GGtQpfGI2ywI=; b=x0EJkDkXitmxoeJzqogaK4bQIE
+        ALOdZhyoMDBwdqovGnEVunRzWDjLmdJD7U2J6RwLOl1puU8yIeRivZxF4q4Ax6fto1InE3pfp98gk
+        K1M40Ttxtf70UOwCeDCL2fE9yacGmp/Ua7BCk7/o82lMaVh0GYutMzor1uSyLX5BMJzPyT37Cwquo
+        cQNp0Co+6aR+lhHx/vFu1gafDL8fIHec4YA8m1Ha2NpXIGaRH2BgaLtUrhykhgiXxF5piFC4EAGFB
+        N3UFVeO6/pnSsT6xiKP/FvrczIcZLb39/v8QIuFnuymcj7F/VQxSJbwLpnU4w5KTwo33T5ilQ8Rlp
+        n2SClWhg==;
+Received: from hch by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1o94h7-00A938-DJ; Wed, 06 Jul 2022 13:03:53 +0000
+Date:   Wed, 6 Jul 2022 06:03:53 -0700
+From:   Christoph Hellwig <hch@infradead.org>
+To:     Sergei Shtepa <sergei.shtepa@veeam.com>
+Cc:     axboe@kernel.dk, linux-block@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Cc:     Jonathan McDowell <noodles@earth.li>
-References: <20220705133917.8405-1-ansuelsmth@gmail.com>
- <20220705133917.8405-5-ansuelsmth@gmail.com>
-From:   Konrad Dybcio <konrad.dybcio@somainline.org>
-In-Reply-To: <20220705133917.8405-5-ansuelsmth@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Subject: Re: [PATCH 02/20] block, blksnap: header file of the module interface
+Message-ID: <YsWIOYqO4QVnd2Ru@infradead.org>
+References: <1655135593-1900-1-git-send-email-sergei.shtepa@veeam.com>
+ <1655135593-1900-3-git-send-email-sergei.shtepa@veeam.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1655135593-1900-3-git-send-email-sergei.shtepa@veeam.com>
+X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Mon, Jun 13, 2022 at 06:52:55PM +0300, Sergei Shtepa wrote:
+> The header file contains a set of declarations, structures and control
+> requests (ioctl) that allows to manage the module from the user space.
 
+I think this should go into include/uapi/ if you want it in a global
+place.
 
-On 5.07.2022 15:39, Christian Marangi wrote:
-> Mikrotik RB3011 have a special configuration where the regulators are
-> not the common smb208 controlled by RPM but they use a TPS563900
-> controlled via i2c. Disable the smb208 for this specific device.
-Ok, so that answers my question from the previous email.
-Please define the SMB208 regulators only in the DTs of
-boards that actually use it, as it is not a SoC component as
-far as I can tell.
+> +#pragma once
 
-Konrad
-> 
-> Signed-off-by: Christian Marangi <ansuelsmth@gmail.com>
-> Reviewed-by: Jonathan McDowell <noodles@earth.li>
-> Tested-by: Jonathan McDowell <noodles@earth.li>
-> ---
->  arch/arm/boot/dts/qcom-ipq8064-rb3011.dts | 4 ++++
->  1 file changed, 4 insertions(+)
-> 
-> diff --git a/arch/arm/boot/dts/qcom-ipq8064-rb3011.dts b/arch/arm/boot/dts/qcom-ipq8064-rb3011.dts
-> index 9034f00f2bd8..f651e813d75a 100644
-> --- a/arch/arm/boot/dts/qcom-ipq8064-rb3011.dts
-> +++ b/arch/arm/boot/dts/qcom-ipq8064-rb3011.dts
-> @@ -218,6 +218,10 @@ led@7 {
->  	};
->  };
->  
-> +&smb208_regulators {
-> +	status = "disabled";
-> +};
+In the kernel we use classic #ifdef based guards.
+
+> +#include <linux/types.h>
+> +#include <linux/uuid.h>
+
+The uuid_t type can't be used in a userspae API.  Please use a raw
+__u8 API and then use import_uuid.
+
+> +#define BLK_SNAP_MODULE_NAME "blksnap"
+
+Does this belong into a user interface?
+
+> +#define BLK_SNAP_IMAGE_NAME "blksnap-image"
+> +#define BLK_SNAP 'V'
 > +
->  &adm_dma {
->  	status = "okay";
->  };
+> +enum blk_snap_ioctl {
+> +	/*
+> +	 * Service controls
+> +	 */
+> +	blk_snap_ioctl_version,
+> +	/*
+> +	 * Contols for tracking
+> +	 */
+> +	blk_snap_ioctl_tracker_remove,
+> +	blk_snap_ioctl_tracker_collect,
+> +	blk_snap_ioctl_tracker_read_cbt_map,
+> +	blk_snap_ioctl_tracker_mark_dirty_blocks,
+> +	/*
+> +	 * Snapshot contols
+> +	 */
+> +	blk_snap_ioctl_snapshot_create,
+> +	blk_snap_ioctl_snapshot_destroy,
+> +	blk_snap_ioctl_snapshot_append_storage,
+> +	blk_snap_ioctl_snapshot_take,
+> +	blk_snap_ioctl_snapshot_collect,
+> +	blk_snap_ioctl_snapshot_collect_images,
+> +	blk_snap_ioctl_snapshot_wait_event,
+> +	blk_snap_ioctl_end,
+
+For uapis classic #defines have the adnvantage that userspace can test
+for their presence if new ones get added.  Also the _end one should not
+be in an UAPI header as new ones can be added at any time.
+

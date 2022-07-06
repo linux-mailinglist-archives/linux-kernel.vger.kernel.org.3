@@ -2,65 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6764A5687BE
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 14:05:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E0B265687C7
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 14:07:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233488AbiGFMFq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Jul 2022 08:05:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40704 "EHLO
+        id S233411AbiGFMGM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Jul 2022 08:06:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41204 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233467AbiGFMFj (ORCPT
+        with ESMTP id S232052AbiGFMGE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Jul 2022 08:05:39 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3D7562A267
-        for <linux-kernel@vger.kernel.org>; Wed,  6 Jul 2022 05:05:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1657109127;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=e+UeVNoDDIWPJg4xB4qyPAufcsuGQ6KT0GwIgobfcyw=;
-        b=CJoXOCzt/YvBy+O7KEEZD72K8xcJUphFse1t5a1lDt+uZGADeA1M70a82+4L4HPZyaYKXw
-        Wu8YcFuEITcXhq0MEKF713CP078FzqwOS+0czBgBM8HOmN0yHrystn+8ynHnt9TVcoW1ri
-        02DYDPj6ThXhlxAyvMFtjM/F2zjNgA4=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-609-6Zz0fdp-MveGMh3UjMHMVQ-1; Wed, 06 Jul 2022 08:05:21 -0400
-X-MC-Unique: 6Zz0fdp-MveGMh3UjMHMVQ-1
-Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id AFB7C299E76E;
-        Wed,  6 Jul 2022 12:05:20 +0000 (UTC)
-Received: from starship (unknown [10.40.194.38])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 5EBDB2EF97;
-        Wed,  6 Jul 2022 12:05:18 +0000 (UTC)
-Message-ID: <c046a4d0d97f1f15dcdcdba1790f7c31edde2c72.camel@redhat.com>
-Subject: Re: [PATCH v2 16/21] KVM: x86: Evaluate ability to inject
- SMI/NMI/IRQ after potential VM-Exit
-From:   Maxim Levitsky <mlevitsk@redhat.com>
-To:     Sean Christopherson <seanjc@google.com>,
-        Paolo Bonzini <pbonzini@redhat.com>
-Cc:     Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Oliver Upton <oupton@google.com>,
-        Peter Shier <pshier@google.com>
-Date:   Wed, 06 Jul 2022 15:05:17 +0300
-In-Reply-To: <20220614204730.3359543-17-seanjc@google.com>
-References: <20220614204730.3359543-1-seanjc@google.com>
-         <20220614204730.3359543-17-seanjc@google.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.36.5 (3.36.5-2.fc32) 
+        Wed, 6 Jul 2022 08:06:04 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DACD02982F
+        for <linux-kernel@vger.kernel.org>; Wed,  6 Jul 2022 05:06:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1657109163; x=1688645163;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=zxL04VaxVE567Eropn8E/Xy28wSTQqFoMmVBALQrmoY=;
+  b=RCmUhbNJVVRGuxoFFxUw9bRpcrr/kVtnJ/BslJpDxEbTPDBCgh3KjEcC
+   PlSpRWs2W0o7rmneM7eSjRmdCyp6wdmzRcwsSfmSTa8U0Y6watS6IMw8t
+   Mp2n3mkWBemJMON2D5XxglfwW4GqSBdFga0SaiPGGEbl+pAnA8gaZJzGW
+   Hpcrp79hS27SihT+H33FgLEw2j6kK+CyVZl3ieBtKXl5/ofptuh8F4oY7
+   lfcmA/1vq8IO89UU2Bj6d12X1NvP6bVHjZAu//anRCQ+z3Ua942lNS47g
+   7ALKA69IxAYsg93uNw2Hy5EWHDZFZk6E4IeF5UdcD5/gdFjs7n3vy94al
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10399"; a="370045349"
+X-IronPort-AV: E=Sophos;i="5.92,249,1650956400"; 
+   d="scan'208";a="370045349"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jul 2022 05:06:03 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.92,249,1650956400"; 
+   d="scan'208";a="543373484"
+Received: from lkp-server01.sh.intel.com (HELO 68b931ab7ac1) ([10.239.97.150])
+  by orsmga003.jf.intel.com with ESMTP; 06 Jul 2022 05:06:02 -0700
+Received: from kbuild by 68b931ab7ac1 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1o93n7-000KYS-Ae;
+        Wed, 06 Jul 2022 12:06:01 +0000
+Date:   Wed, 6 Jul 2022 20:05:29 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Jason A. Donenfeld" <zx2c4@kernel.org>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
+        linux-kernel@vger.kernel.org
+Subject: [ammarfaizi2-block:crng/random/master 1/1]
+ include/linux/random.h:109:10: fatal error: 'asm/archrandom.h' file not
+ found
+Message-ID: <202207061956.AGbuqVuj-lkp@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 2.79 on 10.11.54.5
-X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -69,49 +64,50 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 2022-06-14 at 20:47 +0000, Sean Christopherson wrote:
-> Determine whether or not new events can be injected after checking nested
-> events.  If a VM-Exit occurred during nested event handling, any previous
-> event that needed re-injection is gone from's KVM perspective; the event
-> is captured in the vmc*12 VM-Exit information, but doesn't exist in terms
-> of what needs to be done for entry to L1.
-> 
-> Signed-off-by: Sean Christopherson <seanjc@google.com>
-> ---
->  arch/x86/kvm/x86.c | 10 ++++++++--
->  1 file changed, 8 insertions(+), 2 deletions(-)
-> 
-> diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
-> index 930de833aa2b..1a301a1730a5 100644
-> --- a/arch/x86/kvm/x86.c
-> +++ b/arch/x86/kvm/x86.c
-> @@ -9502,7 +9502,7 @@ static void kvm_inject_exception(struct kvm_vcpu *vcpu)
->  
->  static int inject_pending_event(struct kvm_vcpu *vcpu, bool *req_immediate_exit)
->  {
-> -	bool can_inject = !kvm_event_needs_reinjection(vcpu);
-> +	bool can_inject;
->  	int r;
->  
->  	/*
-> @@ -9567,7 +9567,13 @@ static int inject_pending_event(struct kvm_vcpu *vcpu, bool *req_immediate_exit)
->  	if (r < 0)
->  		goto out;
->  
-> -	/* try to inject new event if pending */
-> +	/*
-> +	 * New events, other than exceptions, cannot be injected if KVM needs
-> +	 * to re-inject a previous event.  See above comments on re-injecting
-> +	 * for why pending exceptions get priority.
-> +	 */
-> +	can_inject = !kvm_event_needs_reinjection(vcpu);
-> +
->  	if (vcpu->arch.exception.pending) {
->  		/*
->  		 * Fault-class exceptions, except #DBs, set RF=1 in the RFLAGS
+tree:   https://github.com/ammarfaizi2/linux-block crng/random/master
+head:   b06ae5cc5acfc776074b6fa7580a3e33fd999734
+commit: b06ae5cc5acfc776074b6fa7580a3e33fd999734 [1/1] random: remove CONFIG_ARCH_RANDOM
+config: hexagon-randconfig-r041-20220703 (https://download.01.org/0day-ci/archive/20220706/202207061956.AGbuqVuj-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project f553287b588916de09c66e3e32bf75e5060f967f)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/ammarfaizi2/linux-block/commit/b06ae5cc5acfc776074b6fa7580a3e33fd999734
+        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
+        git fetch --no-tags ammarfaizi2-block crng/random/master
+        git checkout b06ae5cc5acfc776074b6fa7580a3e33fd999734
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash
 
-Reviewed-by: Maxim Levitsky <mlevitsk@redhat.com>
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-Best regards,
-	Maxim Levitsky
+All errors (new ones prefixed by >>):
 
+   In file included from drivers/base/core.c:27:
+   In file included from include/linux/netdevice.h:38:
+   In file included from include/net/net_namespace.h:40:
+   In file included from include/linux/skbuff.h:26:
+   In file included from include/linux/net.h:18:
+>> include/linux/random.h:109:10: fatal error: 'asm/archrandom.h' file not found
+   #include <asm/archrandom.h>
+            ^~~~~~~~~~~~~~~~~~
+   1 error generated.
+
+
+vim +109 include/linux/random.h
+
+5960164fde9bc2 Joe Eykholt        2010-05-26  108  
+63d77173266c17 H. Peter Anvin     2011-07-31 @109  #include <asm/archrandom.h>
+b06ae5cc5acfc7 Jason A. Donenfeld 2022-07-05  110  
+
+:::::: The code at line 109 was first introduced by commit
+:::::: 63d77173266c1791f1553e9e8ccea65dc87c4485 random: Add support for architectural random hooks
+
+:::::: TO: H. Peter Anvin <hpa@zytor.com>
+:::::: CC: H. Peter Anvin <hpa@zytor.com>
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

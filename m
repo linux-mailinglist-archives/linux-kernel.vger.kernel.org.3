@@ -2,65 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3EA0956879E
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 14:01:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B2DB56879C
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 14:01:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232862AbiGFMAw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Jul 2022 08:00:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33798 "EHLO
+        id S230269AbiGFMAz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Jul 2022 08:00:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33812 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233001AbiGFMAr (ORCPT
+        with ESMTP id S231861AbiGFMAr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 6 Jul 2022 08:00:47 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id ECC97237DD
-        for <linux-kernel@vger.kernel.org>; Wed,  6 Jul 2022 05:00:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1657108845;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=fI8zpSYJcp3SecHdqF+x/6bDajtJusuvKvSKLk/wVpM=;
-        b=D7m03Yp6Kon5TbHGhs1GTx6oVy1NmUipyuMr9ljLV3ozNEky7kMySI43kXglByQbGtfrAF
-        3WXssQ8BdJMnCPF/Oq8Q2BjM2PIgQzEKZpkv1qVtLvti4GpKvvpXjcY+CvMFdCrrmyOQ6I
-        P4T1DswIJXC9JHzvV0W5/6vKJcdy5T0=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-102-y8nhbP4DOZep3qUJfycw8Q-1; Wed, 06 Jul 2022 08:00:42 -0400
-X-MC-Unique: y8nhbP4DOZep3qUJfycw8Q-1
-Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 83C6C2932480;
-        Wed,  6 Jul 2022 12:00:41 +0000 (UTC)
-Received: from starship (unknown [10.40.194.38])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 31D752026D64;
-        Wed,  6 Jul 2022 12:00:39 +0000 (UTC)
-Message-ID: <599b352e16c970885d3f6bfaf7d1a254627ef5dd.camel@redhat.com>
-Subject: Re: [PATCH v2 09/21] KVM: nVMX: Unconditionally clear mtf_pending
- on nested VM-Exit
-From:   Maxim Levitsky <mlevitsk@redhat.com>
-To:     Sean Christopherson <seanjc@google.com>,
-        Paolo Bonzini <pbonzini@redhat.com>
-Cc:     Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Oliver Upton <oupton@google.com>,
-        Peter Shier <pshier@google.com>
-Date:   Wed, 06 Jul 2022 15:00:38 +0300
-In-Reply-To: <20220614204730.3359543-10-seanjc@google.com>
-References: <20220614204730.3359543-1-seanjc@google.com>
-         <20220614204730.3359543-10-seanjc@google.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.36.5 (3.36.5-2.fc32) 
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C58899FE1;
+        Wed,  6 Jul 2022 05:00:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1657108846; x=1688644846;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=lSsbiZV4i1tfq1voLAnABNCQGrd6cW+m6LcWKau0lI8=;
+  b=JfbcplSe7ObJwnS1xTwEhqSqtCRcanNrSDStmJDOSf0xkMlrDr3jeqic
+   R6BqzNJmmkznGvlBeF7T594WdriP4BHflNtuei8zA7CpiuZdemcgNsn5E
+   eDnR1HCK+6iOtpfFtH345FxI98RIWh55cVYFGrDsxWXbR9OUbkO/j10wu
+   TrMlHhKij7NgPu46+w4JHBzlxmHVM4sseIt/aroUvQISCaoHf4BL+q8iv
+   QvvaoemitnIv8ycetbj/h/TW6pmwxLOiViHZj2FbJfmXh73PDCIUMMdnC
+   ejUeNzmahoFPPV7hZBIImIaSO5Cgn8tXGSzAkUl0calTNTJ7X0V8rQc9k
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10399"; a="345411669"
+X-IronPort-AV: E=Sophos;i="5.92,249,1650956400"; 
+   d="scan'208";a="345411669"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jul 2022 05:00:46 -0700
+X-IronPort-AV: E=Sophos;i="5.92,249,1650956400"; 
+   d="scan'208";a="568041214"
+Received: from xingzhen-mobl.ccr.corp.intel.com (HELO [10.255.28.72]) ([10.255.28.72])
+  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jul 2022 05:00:43 -0700
+Message-ID: <4b9d07a2-8d2b-d025-e3da-e2af38a07c67@linux.intel.com>
+Date:   Wed, 6 Jul 2022 20:00:41 +0800
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 2.78 on 10.11.54.4
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH 1/2] perf record: Fix "--per-thread" option for hybrid
+ machines
+Content-Language: en-US
+To:     "Liang, Kan" <kan.liang@linux.intel.com>, acme@kernel.org,
+        peterz@infradead.org, mingo@redhat.com,
+        alexander.shishkin@intel.com, jolsa@kernel.org, namhyung@kernel.org
+Cc:     linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
+        irogers@google.com, ak@linux.intel.com,
+        Adrian Hunter <adrian.hunter@intel.com>
+References: <20220702023536.2661899-1-zhengjun.xing@linux.intel.com>
+ <9fde1c3a-3fdb-b2b7-7448-8de608853bd2@linux.intel.com>
+From:   Xing Zhengjun <zhengjun.xing@linux.intel.com>
+In-Reply-To: <9fde1c3a-3fdb-b2b7-7448-8de608853bd2@linux.intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -69,96 +67,72 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 2022-06-14 at 20:47 +0000, Sean Christopherson wrote:
-> Clear mtf_pending on nested VM-Exit instead of handling the clear on a
-> case-by-case basis in vmx_check_nested_events().  The pending MTF should
-> rever survive nested VM-Exit, as it is a property of KVM's run of the
-^^ typo: never
-
-Also it is not clear what the 'case by case' means.
-
-I see that the vmx_check_nested_events always clears it unless nested run is pending
-or we re-inject an event.
 
 
-
-> current L2, i.e. should never affect the next L2 run by L1.  In practice,
-> this is likely a nop as getting to L1 with nested_run_pending is
-> impossible, and KVM doesn't correctly handle morphing a pending exception
-> that occurs on a prior injected exception (need for re-injected exception
-> being the other case where MTF isn't cleared).  However, KVM will
-> hopefully soon correctly deal with a pending exception on top of an
-> injected exception.
-
-
-
+On 7/4/2022 9:22 PM, Liang, Kan wrote:
 > 
-> Signed-off-by: Sean Christopherson <seanjc@google.com>
-> ---
->  arch/x86/kvm/vmx/nested.c | 16 +++++++---------
->  1 file changed, 7 insertions(+), 9 deletions(-)
 > 
-> diff --git a/arch/x86/kvm/vmx/nested.c b/arch/x86/kvm/vmx/nested.c
-> index d080bfca16ef..7b644513c82b 100644
-> --- a/arch/x86/kvm/vmx/nested.c
-> +++ b/arch/x86/kvm/vmx/nested.c
-> @@ -3909,16 +3909,8 @@ static int vmx_check_nested_events(struct kvm_vcpu *vcpu)
->  	unsigned long exit_qual;
->  	bool block_nested_events =
->  	    vmx->nested.nested_run_pending || kvm_event_needs_reinjection(vcpu);
-> -	bool mtf_pending = vmx->nested.mtf_pending;
->  	struct kvm_lapic *apic = vcpu->arch.apic;
->  
-> -	/*
-> -	 * Clear the MTF state. If a higher priority VM-exit is delivered first,
-> -	 * this state is discarded.
-> -	 */
-> -	if (!block_nested_events)
-> -		vmx->nested.mtf_pending = false;
-> -
->  	if (lapic_in_kernel(vcpu) &&
->  		test_bit(KVM_APIC_INIT, &apic->pending_events)) {
->  		if (block_nested_events)
-> @@ -3927,6 +3919,9 @@ static int vmx_check_nested_events(struct kvm_vcpu *vcpu)
->  		clear_bit(KVM_APIC_INIT, &apic->pending_events);
->  		if (vcpu->arch.mp_state != KVM_MP_STATE_INIT_RECEIVED)
->  			nested_vmx_vmexit(vcpu, EXIT_REASON_INIT_SIGNAL, 0, 0);
-> +
-> +		/* MTF is discarded if the vCPU is in WFS. */
-> +		vmx->nested.mtf_pending = false;
->  		return 0;
+> On 7/1/2022 10:35 PM, zhengjun.xing@linux.intel.com wrote:
+>> From: Zhengjun Xing <zhengjun.xing@linux.intel.com>
+>>
+>> Commit b91e5492f9d7 ("perf record: Add a dummy event on hybrid systems to
+>> collect metadata records") adds a dummy event on hybrid systems to fix 
+>> the
+>> symbol "unknown" issue when the workload is created in a P-core but runs
+>> on an E-core. When "--per-thread" is enabled, the nr_cpus is reduced 
+>> to 1,
+>>   adding a dummy event is useless for this issue, and it will also cause
+> 
+> A dummy event is required since a mmap event may be loaded at runtime on 
+> any CPU. Thanks Adrian to point it out.
+> 
 
-I guess MTF should also be discarded if we enter SMM, and I see that
-VMX also enter SMM with a pseudo VM exit (in vmx_enter_smm) which
-will clear the MTF. Good.
-
->  	}
->  
-> @@ -3964,7 +3959,7 @@ static int vmx_check_nested_events(struct kvm_vcpu *vcpu)
->  		return 0;
->  	}
->  
-> -	if (mtf_pending) {
-> +	if (vmx->nested.mtf_pending) {
->  		if (block_nested_events)
->  			return -EBUSY;
->  		nested_vmx_update_pending_dbg(vcpu);
-> @@ -4562,6 +4557,9 @@ void nested_vmx_vmexit(struct kvm_vcpu *vcpu, u32 vm_exit_reason,
->  	struct vcpu_vmx *vmx = to_vmx(vcpu);
->  	struct vmcs12 *vmcs12 = get_vmcs12(vcpu);
->  
-> +	/* Pending MTF traps are discarded on VM-Exit. */
-> +	vmx->nested.mtf_pending = false;
-> +
->  	/* trying to cancel vmlaunch/vmresume is a bug */
->  	WARN_ON_ONCE(vmx->nested.nested_run_pending);
->  
+There will be a kernel patch to fix the "mmap fail" issue, I will drop 
+this one and continue to fix other "per-thread" issues based on the 
+kernel patch.
 
 
-Reviewed-by: Maxim Levitsky <mlevitsk@redhat.com>
+> Thanks,
+> Kan
+> 
+>> "failed to mmap with 22 (Invalid argument)". This patch stops adding 
+>> dummy
+>> events when the option "--per-thread" is enabled, then the option can 
+>> work
+>> on hybrid machines.
+>>
+>> Before:
+>>
+>>   # ./perf record -e cycles:u --per-thread  sleep 1
+>>   failed to mmap with 22 (Invalid argument)
+>>
+>> After:
+>>
+>>   # ./perf record -e cycles:u --per-thread  sleep 1
+>> [ perf record: Woken up 1 times to write data ]
+>> [ perf record: Captured and wrote 0.002 MB perf.data (6 samples) ]
+>>
+>> Fixes: b91e5492f9d7 ("perf record: Add a dummy event on hybrid systems 
+>> to collect metadata records")
+>> Signed-off-by: Zhengjun Xing <zhengjun.xing@linux.intel.com>
+>> Reviewed-by: Kan Liang <kan.liang@linux.intel.com>
+>> ---
+>>   tools/perf/builtin-record.c | 2 +-
+>>   1 file changed, 1 insertion(+), 1 deletion(-)
+>>
+>> diff --git a/tools/perf/builtin-record.c b/tools/perf/builtin-record.c
+>> index e1edd4e98358..44ea2dd424fe 100644
+>> --- a/tools/perf/builtin-record.c
+>> +++ b/tools/perf/builtin-record.c
+>> @@ -1223,7 +1223,7 @@ static int record__open(struct record *rec)
+>>        * of waiting or event synthesis.
+>>        */
+>>       if (opts->initial_delay || target__has_cpu(&opts->target) ||
+>> -        perf_pmu__has_hybrid()) {
+>> +        (perf_pmu__has_hybrid() && !opts->target.per_thread)) {
+>>           pos = evlist__get_tracking_event(evlist);
+>>           if (!evsel__is_dummy_event(pos)) {
+>>               /* Set up dummy event. */
 
-Best regards,
-	Maxim Levitsky
-
-
-
+-- 
+Zhengjun Xing

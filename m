@@ -2,88 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4DEDC5689DC
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 15:44:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 826585689E0
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 15:44:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233532AbiGFNnv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Jul 2022 09:43:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43658 "EHLO
+        id S233355AbiGFNoO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Jul 2022 09:44:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44152 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229757AbiGFNnt (ORCPT
+        with ESMTP id S232632AbiGFNoM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Jul 2022 09:43:49 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 143FE5FF1;
-        Wed,  6 Jul 2022 06:43:48 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 25437106F;
-        Wed,  6 Jul 2022 06:43:48 -0700 (PDT)
-Received: from [10.57.86.2] (unknown [10.57.86.2])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id C7F813F792;
-        Wed,  6 Jul 2022 06:43:45 -0700 (PDT)
-Message-ID: <3d613192-f673-852e-9c52-b8a913d25616@arm.com>
-Date:   Wed, 6 Jul 2022 14:43:40 +0100
+        Wed, 6 Jul 2022 09:44:12 -0400
+Received: from mail-pg1-x52c.google.com (mail-pg1-x52c.google.com [IPv6:2607:f8b0:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8811DEF2;
+        Wed,  6 Jul 2022 06:44:11 -0700 (PDT)
+Received: by mail-pg1-x52c.google.com with SMTP id 145so14034885pga.12;
+        Wed, 06 Jul 2022 06:44:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=LHHGKToiM1OUemXzX1dDbHxH26W+LzkLaTBpHG8rWNM=;
+        b=TT/oSCYu+RUKuk7ccRpLt1nm/t7zLtTvvSxoKpYj4CbZEgxKomziH0eGBeqMkmMzNa
+         dfhemGBsKyD0qBXgg/jL8pLeyma1d15C5rTu+1AoZuQl7PqVGdHYxRVr76BFgr/6+qFz
+         ezeRM1dfChTcTiZSQHbzgYBIeqsGNvaa8uBpcu6tzMrMvMDg4ivBwkpmkT8ejeY/2NgP
+         CJUAYwDtr8UIvHmlYpzKYlQzw6HTZHG564GH8Ts4iYnlnSJpkntUDI1bjBIDpsxLrzah
+         mbuDOi/iYHHkUIm97Kwg8RG4ILtVTq/oBu5je3ooDJ7lL9Xo52XnVZosp4IpPJ8wlhQz
+         ZRrg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to;
+        bh=LHHGKToiM1OUemXzX1dDbHxH26W+LzkLaTBpHG8rWNM=;
+        b=HvHKbov22hJzk+lwT8BgDshPMTemo+TW5NT2q7EshLfDIYcY0FENrjHtth2u5WPiSH
+         18QCHclb+p8NXsEwqcyDyiO1j4fowk1FOuZfpxmt3VTMKiGWEVVDUzmjwBjSa0nds0SM
+         CM2+v5YCm4cetp8ymPu8yMt9Sn5t9BJeuXbenajrLswrqA2Ef+5Ko9HUga8IO8LffueF
+         plEVIdwB3lBaLyskn2dRx1nWUQnWWisgex4QRUJLfoo0gjlbK0IIA5SEZLHRPbDB95AH
+         neNtJXwnS3Nv4oibVNorVecSMtzvcPYpDAXfCR0ZWu3GBZUYNgr3jlMwrX3p+/UY4ZUK
+         d+Zw==
+X-Gm-Message-State: AJIora/QTfYmnmXq3TfqZHwKo0MGvcYIFCrhbXhgnOscr6GR7WMGIPH/
+        NXCC7PsgsL4Rxj9vfgosrJo=
+X-Google-Smtp-Source: AGRyM1vGZc3ZXZl/gU/2ubN5ixjl8fD7LwgQW+Z7SUfcqW82dzc2Id8BN5mCvouL35W0B20sGBTIIA==
+X-Received: by 2002:a05:6a00:1992:b0:527:c201:ef52 with SMTP id d18-20020a056a00199200b00527c201ef52mr47273913pfl.59.1657115051388;
+        Wed, 06 Jul 2022 06:44:11 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id d18-20020a170903231200b0016bf7981d0bsm3164280plh.86.2022.07.06.06.44.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 06 Jul 2022 06:44:10 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Wed, 6 Jul 2022 06:44:10 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        slade@sladewatkins.com
+Subject: Re: [PATCH 5.10 00/84] 5.10.129-rc1 review
+Message-ID: <20220706134410.GE769692@roeck-us.net>
+References: <20220705115615.323395630@linuxfoundation.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH v3 03/15] iommu: Always register bus notifiers
-Content-Language: en-GB
-To:     Baolu Lu <baolu.lu@linux.intel.com>, joro@8bytes.org
-Cc:     will@kernel.org, iommu@lists.linux.dev,
-        linux-arm-kernel@lists.infradead.org,
-        suravee.suthikulpanit@amd.com, vasant.hegde@amd.com,
-        mjrosato@linux.ibm.com, gerald.schaefer@linux.ibm.com,
-        schnelle@linux.ibm.com, linux-s390@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <cover.1657034827.git.robin.murphy@arm.com>
- <8c380309f264cd0dfc73ba2ec060adc9515af2f2.1657034828.git.robin.murphy@arm.com>
- <1fab4c8a-7bc5-9a50-d48a-0dc590cac7a6@linux.intel.com>
-From:   Robin Murphy <robin.murphy@arm.com>
-In-Reply-To: <1fab4c8a-7bc5-9a50-d48a-0dc590cac7a6@linux.intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220705115615.323395630@linuxfoundation.org>
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-07-06 02:53, Baolu Lu wrote:
-> On 2022/7/6 01:08, Robin Murphy wrote:
->>   /*
->>    * Use a function instead of an array here because the domain-type is a
->>    * bit-field, so an array would waste memory.
->> @@ -152,6 +172,10 @@ static int __init iommu_subsys_init(void)
->>               (iommu_cmd_line & IOMMU_CMD_LINE_STRICT) ?
->>                   "(set via kernel command line)" : "");
->> +    /* If the system is so broken that this fails, it will WARN 
->> anyway */
+On Tue, Jul 05, 2022 at 01:57:23PM +0200, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.10.129 release.
+> There are 84 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
 > 
-> Can you please elaborate a bit on this? iommu_bus_init() still return
-> errors.
-
-Indeed, it's commenting on the fact that we don't try to clean up or 
-propagate an error value further even if it did ever manage to return 
-one. I feared that if I strip the error handling out of iommu_bus_init() 
-itself on the same reasoning, we'll just get constant patches from the 
-static checker brigade trying to add it back, so it seemed like the 
-neatest compromise to keep that decision where it's obviously in an 
-early initcall, rather than in the helper function which can be viewed 
-out of context. However, I'm happy to either expand this comment or go 
-the whole way and make iommu_bus_init() return void if you think it's 
-worthwhile.
-
-Cheers,
-Robin.
-
+> Responses should be made by Thu, 07 Jul 2022 11:55:56 +0000.
+> Anything received after that time might be too late.
 > 
->> +    for (int i = 0; i < ARRAY_SIZE(iommu_buses); i++)
->> +        iommu_bus_init(iommu_buses[i]);
->> +
->>       return 0;
-> 
-> Best regards,
-> baolu
+
+Build results:
+	total: 163 pass: 163 fail: 0
+Qemu test results:
+	total: 477 pass: 477 fail: 0
+
+Tested-by: Guenter Roeck <linux@roeck-us.net>
+
+Guenter

@@ -2,106 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C34B568B62
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 16:38:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BC6D7568B76
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 16:39:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232050AbiGFOhW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Jul 2022 10:37:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56782 "EHLO
+        id S232913AbiGFOjF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Jul 2022 10:39:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58652 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232287AbiGFOhR (ORCPT
+        with ESMTP id S232424AbiGFOjC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Jul 2022 10:37:17 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 17B8A237E0;
-        Wed,  6 Jul 2022 07:37:14 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 26DD4106F;
-        Wed,  6 Jul 2022 07:37:14 -0700 (PDT)
-Received: from [10.57.86.2] (unknown [10.57.86.2])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 82D193F792;
-        Wed,  6 Jul 2022 07:37:11 -0700 (PDT)
-Message-ID: <71835610-7798-5fbe-556a-fc44dc9e168b@arm.com>
-Date:   Wed, 6 Jul 2022 15:37:06 +0100
+        Wed, 6 Jul 2022 10:39:02 -0400
+Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE75F1BEB1
+        for <linux-kernel@vger.kernel.org>; Wed,  6 Jul 2022 07:39:00 -0700 (PDT)
+Received: by mail-lf1-x135.google.com with SMTP id d12so2948641lfq.12
+        for <linux-kernel@vger.kernel.org>; Wed, 06 Jul 2022 07:39:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=zZOCnL2sk3pByrLKpJXQRiEZ7lTe3lvaSXFyozjR1Sk=;
+        b=lmT7TvAXdlwO8MoznJL41ScqnCxhsPkyj3eO8uJVObJgBwMjkbz/dZ39ZBM2Q6uKVU
+         OYmvbwv02NdsHcN62nEMsrORHyzmxAYZmIPxYaTFaaaS18SQGiG0Vbpy5rd8u60KuOm7
+         BZZCXPyYtByZ51BH/XuE3XmjOHA+E+ksnsjvnO4Vv5MRk6ia//DlfQXbATqtc/M32+0W
+         Vkyn6341a4yx3S6P9qKA/V1h+VyuGk/bMIBNVaiOI9euzs7WrBD5hJ//1OG1vpriTMQP
+         FvgjjPgQIC4C0Bs6jZFH0oQ3q2vOxEvDkO7uPZLvwfSJqE2C/qslvt4ZbHZUZi/wFXmx
+         eOMg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=zZOCnL2sk3pByrLKpJXQRiEZ7lTe3lvaSXFyozjR1Sk=;
+        b=yTqiGoZbAKcnMM1KdzyZOGfyZitAAS3Bwygku8b7DTHDZCHK2r5Zeby9qTBDvzMZmD
+         QtV6kMv2gD2UhV0/uNisLSs1HQplG3RUX/l6UGwLSs03+31CqvXSdqi6nOwtkVTvAva7
+         yOit3zfS6OesC+S4YM8vjQjD/OlYjkUn1F6uL5pJcHxOVEVcll5dzNw84yYaCJ0Oe3+s
+         LI0rqtNqmIJqygfpDZdCYlUzhZ9BqiKS+5DTZ+abKLkp/g19IkRO2IHE3gVl+jjk0TJe
+         gmA02dyxQRLpoobqWfz4hNKufd9y6qQIcibdKMRYbeznDVaw6SRVNafwG6gNXcgVKMXo
+         XOyg==
+X-Gm-Message-State: AJIora9449nFZ2oScvLkFVLCfFWEqI5Fj7+gwdBjLesPv8p2ObuVDx87
+        LXqfKD/BuWMYbZtuF/2BoNQG3A==
+X-Google-Smtp-Source: AGRyM1tvr1UuDnYcmSJc30YkpAaFP4aCC6wjkMinKdciZeRPBO4Q4W7IOip5cYIkpaF2vYVKHyb7wA==
+X-Received: by 2002:a05:6512:2204:b0:484:e8eb:4169 with SMTP id h4-20020a056512220400b00484e8eb4169mr4366900lfu.472.1657118339097;
+        Wed, 06 Jul 2022 07:38:59 -0700 (PDT)
+Received: from [192.168.1.52] ([84.20.121.239])
+        by smtp.gmail.com with ESMTPSA id b29-20020ac25e9d000000b00486bf193d23sm267876lfq.299.2022.07.06.07.38.57
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 06 Jul 2022 07:38:58 -0700 (PDT)
+Message-ID: <4c3443f4-a65d-331b-851a-01f5275bbf4b@linaro.org>
+Date:   Wed, 6 Jul 2022 16:38:57 +0200
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:91.0) Gecko/20100101
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.11.0
-Subject: Re: [PATCH v3 04/15] iommu: Move bus setup to IOMMU device
- registration
-Content-Language: en-GB
-To:     Baolu Lu <baolu.lu@linux.intel.com>, joro@8bytes.org
-Cc:     will@kernel.org, iommu@lists.linux.dev,
-        linux-arm-kernel@lists.infradead.org,
-        suravee.suthikulpanit@amd.com, vasant.hegde@amd.com,
-        mjrosato@linux.ibm.com, gerald.schaefer@linux.ibm.com,
-        schnelle@linux.ibm.com, linux-s390@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <cover.1657034827.git.robin.murphy@arm.com>
- <5b9b608af21b3c4353af042355973bac55397962.1657034828.git.robin.murphy@arm.com>
- <d6a8e85b-ab7d-f5c9-a8cb-79dd8e68c967@linux.intel.com>
-From:   Robin Murphy <robin.murphy@arm.com>
-In-Reply-To: <d6a8e85b-ab7d-f5c9-a8cb-79dd8e68c967@linux.intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Subject: Re: [PATCH v1 02/16] dt-bindings: memory: mediatek: Update condition
+ for mt8195 smi node
+Content-Language: en-US
+To:     Matthias Brugger <matthias.bgg@gmail.com>,
+        Tinghan Shen <tinghan.shen@mediatek.com>,
+        Yong Wu <yong.wu@mediatek.com>, Joerg Roedel <joro@8bytes.org>,
+        Will Deacon <will@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Chun-Jie Chen <chun-jie.chen@mediatek.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Enric Balletbo i Serra <enric.balletbo@collabora.com>,
+        Weiyi Lu <weiyi.lu@mediatek.com>
+Cc:     iommu@lists.linux-foundation.org,
+        linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        Project_Global_Chrome_Upstream_Group@mediatek.com
+References: <20220704100028.19932-1-tinghan.shen@mediatek.com>
+ <20220704100028.19932-3-tinghan.shen@mediatek.com>
+ <119f2a98-ef56-7b99-631f-221b737939ae@linaro.org>
+ <9757b32c-c196-f7e0-3c61-1d4edae854dc@gmail.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <9757b32c-c196-f7e0-3c61-1d4edae854dc@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-07-06 03:35, Baolu Lu wrote:
-> On 2022/7/6 01:08, Robin Murphy wrote:
->> @@ -202,12 +210,32 @@ int iommu_device_register(struct iommu_device 
->> *iommu,
->>       spin_lock(&iommu_device_lock);
->>       list_add_tail(&iommu->list, &iommu_device_list);
->>       spin_unlock(&iommu_device_lock);
->> +
->> +    for (int i = 0; i < ARRAY_SIZE(iommu_buses); i++) {
->> +        struct bus_type *bus = iommu_buses[i];
->> +        int err;
->> +
->> +        if (bus->iommu_ops && bus->iommu_ops != ops) {
->> +            err = -EBUSY;
->> +        } else {
->> +            bus->iommu_ops = ops;
->> +            err = bus_iommu_probe(bus);
->> +        }
->> +        if (err) {
->> +            iommu_device_unregister(iommu);
->> +            return err;
->> +        }
->> +    }
->> +
->>       return 0;
->>   }
->>   EXPORT_SYMBOL_GPL(iommu_device_register);
+On 06/07/2022 15:48, Matthias Brugger wrote:
 > 
-> With bus_set_iommu() retired, my understanding is that now we embrace
-> the first-come-first-serve policy for bus->iommu_ops setting. This will
-> lead to problem in different iommu_ops for different bus case. Did I
-> overlook anything?
+> 
+> On 04/07/2022 14:36, Krzysztof Kozlowski wrote:
+>> On 04/07/2022 12:00, Tinghan Shen wrote:
+>>> The max clock items for the dts node with compatible
+>>> 'mediatek,mt8195-smi-sub-common' should be 3.
+>>>
+>>> However, the dtbs_check of such node will get following message,
+>>> arch/arm64/boot/dts/mediatek/mt8195-evb.dtb: smi@14010000: clock-names: ['apb', 'smi', 'gals0'] is too long
+>>>           From schema: Documentation/devicetree/bindings/memory-controllers/mediatek,smi-common.yaml
+>>>
+>>> Remove the last 'else' checking to fix this error.
+>>
+>> Missing fixes tag.
+>>
+> 
+>  From my understanding, fixes tags are for patches that fix bugs (hw is not 
+> working etc) and not a warning message from dtbs_check. So my point of view 
+> would be to not add a fixes tag here.
 
-This is just formalising the de-facto situation that we don't actually 
-have any combination of drivers that could load on the same system 
-without already attempting to claim at least one bus in common. It's 
-also only temporary until the bus ops are removed completely and we 
-fully support multiple drivers coexisting, which only actually takes a 
-handful more patches - I've realised I could even bring that change 
-*ahead* of the big job of converting iommu_domain_alloc() (I'm not 
-convinced that the tree-wide flag-day patch for that I currently have in 
-the dev branch is really viable, nor that I've actually got the correct 
-device at some of the callsites), although whether it's worth the 
-potentially-surprising behaviour that might result I'm less sure.
+Not conforming to bindings is also a bug. Missing properties or wrong
+properties, even if hardware is working, is still a bug. If such bug is
+not visible now in Linux, might be visible later in the future or
+visible in different OS (DTS are used by other systems and pieces of
+software like bootloaders). Limiting this only to Linux and to current
+version (hardware still works) is OK for Linux drivers, but not for DTS.
 
-If we already had systems where in-tree drivers successfully coexisted 
-on different buses then I'd have split this up and done something a bit 
-more involved to keep a vestigial bus_set_iommu() around until the final 
-bus ops removal, but since we don't, it seemed neatest to do all the 
-related work in one go.
+Therefore Fixes tag in general is applicable. Of course maybe to this
+one not really, maybe this is too trivial, or whatever, so I do not
+insist. But I insist on the principle - reasonable dtbs_check warnings
+are like compiler warnings - bugs which have to be fixed.
 
-Thanks,
-Robin.
+
+Best regards,
+Krzysztof

@@ -2,136 +2,172 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AFED156936C
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 22:38:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E642569370
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 22:38:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231500AbiGFUi3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Jul 2022 16:38:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45478 "EHLO
+        id S234094AbiGFUiw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Jul 2022 16:38:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46016 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233372AbiGFUi1 (ORCPT
+        with ESMTP id S231622AbiGFUiu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Jul 2022 16:38:27 -0400
-Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F936222;
-        Wed,  6 Jul 2022 13:38:22 -0700 (PDT)
-Received: by mail-ed1-x52c.google.com with SMTP id m16so5219583edb.11;
-        Wed, 06 Jul 2022 13:38:22 -0700 (PDT)
+        Wed, 6 Jul 2022 16:38:50 -0400
+Received: from mail-oa1-x35.google.com (mail-oa1-x35.google.com [IPv6:2001:4860:4864:20::35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84C211C11A
+        for <linux-kernel@vger.kernel.org>; Wed,  6 Jul 2022 13:38:47 -0700 (PDT)
+Received: by mail-oa1-x35.google.com with SMTP id 586e51a60fabf-10bffc214ffso12126035fac.1
+        for <linux-kernel@vger.kernel.org>; Wed, 06 Jul 2022 13:38:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:from:to:cc:subject:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=lzj4BKwrft3c5BU1ClV/hDkBP+dSx6Tr19/Gf1TGgU8=;
-        b=icUqwG/0vVMdN/r6A7nm84dsxBrS9omrMTkearHOYkfRh2YcCP+LSvH3sNtu1cITM5
-         4Yip53urCrq5u5wYXEfwsotwx1POpz/E/HDg1prnbAIpVB3JdwtPCPgBkxWXF/FH3EM0
-         MKNdUISvpeRNG8WWsab8WUqvpPE7awWI4urkqUL2QOsaodKt0fMiSCMf8dNvLSmN6HTu
-         dFL96bf7rzTCUS0nFpEmxjr+bp85gv0il6HIoS/55tkd4rBffUnNbQx7Bw3qUXhajKRH
-         32p5c/Fb44Cu84NGIPdtFKnmw/RpFRMDD/cIoqpY/h05fWXg8wGxv75uGYyz2QooEwuF
-         IfpQ==
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=V4iWsM3zDJ62xZk9JpVza3Ty+C3Hx5QJjdlOMIUkfEI=;
+        b=EDdwTSV2Gu4vOdeLlT31P2HN/4NychO6ng/goB8uYDSxRqx5+20DP6v25Jr2mVjy14
+         ffhPDZJ7bWPeYiCsTfSOEF5WOm1Wxu2lXrMfGSYjEXgZc59MvMsUXgTcw4J0d6fuNzsp
+         Mch07cuS0FZGE2DmmohXSTThXt/yjeW2guxvrmxiYla0Z9dtCY/5FGQ07LtKY5FACfUZ
+         PhL0i7l/whYaj1re0ZgZkOsFkMpBA8KUnbu5ceOH9v/mS7aYoZwi+g1O6esuCjwfo0KH
+         APsWNPcJNtLUQ53HjSWKhkIfgbVTevM4BT3D44v7miQ7aeRGtZS8e3TvTaqaLhAqc9x/
+         NWuQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:from:to:cc:subject:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=lzj4BKwrft3c5BU1ClV/hDkBP+dSx6Tr19/Gf1TGgU8=;
-        b=Nx+9xPwaDJT3yyFVtz9SJmOBTed34PNwfxeSsZTQ3AuD7Xy1I9eO0ppe+WmnLzTEgy
-         B5MLXrQfwXXdPWyjMLEXQnngxE2LYDSRwo//4TP7Um+xN5rzmi4V7KG8XhASLLrW5tG+
-         buIABSpZE2NEA9vgoqT953S6pS675Vi/O8R3A5GaBi5BpKUXKCu50NB6Mn9fH1tQfpfO
-         fYzH3lK1VEUOxZHMhr496VeZ8Af901eG7B4aN7syvtADzTsEqyDrp/8Nc+R8Ee9awWWl
-         By2M3AumC5CIlecG7nachGEOTKx5AGQQqQlkjuI2PkylgwJHj9CUVFL95WercrikUzt+
-         wCPA==
-X-Gm-Message-State: AJIora9lEwJCBJYfTYrfiwVOc4XFIqNzhis5rPGDpBdIK6o0wb0khVCa
-        jUDr8ENkI+zJLWjLyo3BuEpGWhs+0xY=
-X-Google-Smtp-Source: AGRyM1uxDOb+Rm2+yptTJ52Ii4vEGGlQQ09xk5evqcRzCdX/oTW0/44spaHEX9PSIRJGt976ptsJZw==
-X-Received: by 2002:a05:6402:11cd:b0:439:5cd:1ab7 with SMTP id j13-20020a05640211cd00b0043905cd1ab7mr50402275edw.394.1657139900782;
-        Wed, 06 Jul 2022 13:38:20 -0700 (PDT)
-Received: from Ansuel-xps. (93-42-70-190.ip85.fastwebnet.it. [93.42.70.190])
-        by smtp.gmail.com with ESMTPSA id ew6-20020a056402538600b0043a6dc3c4b0sm6495538edb.41.2022.07.06.13.38.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 06 Jul 2022 13:38:20 -0700 (PDT)
-Message-ID: <62c5f2bc.1c69fb81.90a5.aec9@mx.google.com>
-X-Google-Original-Message-ID: <YsXyulhxHhaYOqtN@Ansuel-xps.>
-Date:   Wed, 6 Jul 2022 22:38:18 +0200
-From:   Christian Marangi <ansuelsmth@gmail.com>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/5] ARM: DTS: qcom: fix dtbs_check warning with new
- rpmcc clocks
-References: <20220705202837.667-1-ansuelsmth@gmail.com>
- <20220705202837.667-3-ansuelsmth@gmail.com>
- <18e40247-7151-b50a-97fe-00ee88f47d9b@linaro.org>
- <62c565dc.1c69fb81.a4566.e9b2@mx.google.com>
- <bcb64218-2d2b-2f6b-dc79-303bac8c3bd3@linaro.org>
- <62c5de27.1c69fb81.c73fe.02c5@mx.google.com>
- <e1fed734-8629-5bf2-60ba-ee62243def6f@linaro.org>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=V4iWsM3zDJ62xZk9JpVza3Ty+C3Hx5QJjdlOMIUkfEI=;
+        b=paRAGeDJywgRNlM9e9WHY9N/pEG1rD4GFjIZP5Uib3qTd8uqHa6DzniTtad8NEzRQ9
+         nwjublAuu4fwqvTHtqcQjRo/Kz36DUOlY/xlPhLUZ3VH8P2Mm8YLQ6Ktb/Rb+tuucnrJ
+         3zMeQAD0SDYgIFx2IuSc/qo8V2Jl32SwlG6bdQP/Xe/yQ2d6T0G/O1Zm1JQ45e2kn02t
+         LCaiBgTFR6ezqnYXhUFbvc08A20jZ3BF+RltRLijSgCr8T0S/hQa64eB0x6+Ni5l1Kww
+         jem97K8qm/UoPxmKZUIRx+Y8I1mb8et291M098dwAxtuwt1TdE/EbypURs0zgFd+c6se
+         CXow==
+X-Gm-Message-State: AJIora+GOD6lM+LuuUKPhoqEXyuno3rmizPCU/9pBKR+hCrqKkdLHP9G
+        2sFgxqJyd2S9SjPiXAN87H/kj0ScEBY7IjJvZR5m7g==
+X-Google-Smtp-Source: AGRyM1syzblqUeyuUT+ro5BC+DlgiV8XGC8iARTfNRkNnhH/DBFePHvxiPweRw/BZRmhp+UNC73NHnBI+gsLazNmznY=
+X-Received: by 2002:a05:6870:56aa:b0:10b:f4fb:8203 with SMTP id
+ p42-20020a05687056aa00b0010bf4fb8203mr312197oao.181.1657139926714; Wed, 06
+ Jul 2022 13:38:46 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <e1fed734-8629-5bf2-60ba-ee62243def6f@linaro.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20220621150902.46126-1-mlevitsk@redhat.com> <20220621150902.46126-12-mlevitsk@redhat.com>
+ <CALMp9eSe5jtvmOPWLYCcrMmqyVBeBkg90RwtR4bwxay99NAF3g@mail.gmail.com>
+ <42da1631c8cdd282e5d9cfd0698b6df7deed2daf.camel@redhat.com>
+ <CALMp9eRNZ8D5aRyUEkc7CORz-=bqzfVCSf6nOGZhqQfWfte0dw@mail.gmail.com>
+ <289c2dd941ecbc3c32514fc0603148972524b22d.camel@redhat.com>
+ <CALMp9eS2gxzWU1+OpfBTqCZsmyq8qoCW_Qs84xv=rGo1ranG1Q@mail.gmail.com> <5ff3c2b4712f6446d2c1361315b972ddad48836f.camel@redhat.com>
+In-Reply-To: <5ff3c2b4712f6446d2c1361315b972ddad48836f.camel@redhat.com>
+From:   Jim Mattson <jmattson@google.com>
+Date:   Wed, 6 Jul 2022 13:38:35 -0700
+Message-ID: <CALMp9eRCV187TsdnOr9PWo+MMNT71+2uU8YNvc89EBgYYvxRQQ@mail.gmail.com>
+Subject: Re: [PATCH v2 11/11] KVM: x86: emulator/smm: preserve interrupt
+ shadow in SMRAM
+To:     Maxim Levitsky <mlevitsk@redhat.com>
+Cc:     kvm@vger.kernel.org, Sean Christopherson <seanjc@google.com>,
+        x86@kernel.org, Kees Cook <keescook@chromium.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        linux-kernel@vger.kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
+        Borislav Petkov <bp@alien8.de>, Joerg Roedel <joro@8bytes.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jul 06, 2022 at 10:09:05PM +0200, Krzysztof Kozlowski wrote:
-> On 06/07/2022 21:10, Christian Marangi wrote:
-> > On Wed, Jul 06, 2022 at 05:07:12PM +0200, Krzysztof Kozlowski wrote:
-> >> On 06/07/2022 12:20, Christian Marangi wrote:
-> >>> On Wed, Jul 06, 2022 at 09:44:04AM +0200, Krzysztof Kozlowski wrote:
-> >>>> On 05/07/2022 22:28, Christian Marangi wrote:
-> >>>>> Fix dtbs_check warning for new rpmcc Documentation changes and add the
-> >>>>> required clocks.
-> >>>>
-> >>>> There is no warning in the kernel, right? So the commit is not correct.
-> >>>>
-> >>>
-> >>> Oh ok, the warning is generated by the new Documentation.
-> >>
-> >> Patches, especially DTS, might go via different trees, so the moment DTS
-> >> is applied there might be no such warning.
-> >>
-> > 
-> > I'm still confused about this topic...
-> > With this kind of change, I notice I sent Documentation change and then
-> > rob bot complain about dtbs_check having warning...
-> > 
-> > So the correct way is to send Documentation change and fix dtbs_check
-> > warning in the same commit OR keep what I'm doing with sending
-> > Documentation changes and fix DTS in a separate commit?
-> 
-> Binding is almost always separate from DTS and always separate from
-> driver. The order depends on what you're doing. If you bring ABI break
-> change to bindings, then the order does not matter, because each order
-> will be non-bisectable. Because you broke ABI. That's the case in this
-> patchset.
-> 
-> For other cases, usually bindings patches should be the first in patchset.
-> 
-> How it goes via maintainer trees is not your problem here. Patches might
-> go together or might go separate.
-> 
-> Anyway it was not the topic of my comment. Comment was about not
-> specific commit msg which does not fit the Linux kernel process and does
-> not fit git history once applied by maintainer. It fits even less when
-> backported to stable kernels, which you commit msg encourages to do.
+On Wed, Jul 6, 2022 at 1:00 PM Maxim Levitsky <mlevitsk@redhat.com> wrote:
 >
+> On Wed, 2022-07-06 at 11:13 -0700, Jim Mattson wrote:
+> > On Tue, Jul 5, 2022 at 6:38 AM Maxim Levitsky <mlevitsk@redhat.com> wrote:
+...
+> > > Plus our SMI layout (at least for 32 bit) doesn't confirm to the X86 spec anyway,
+> > > we as I found out flat out write over the fields that have other meaning in the X86 spec.
+> >
+> > Shouldn't we fix that?
+> I am afraid we can't because that will break (in theory) the backward compatibility
+> (e.g if someone migrates a VM while in SMM).
 
-It was a more generic question so sorry for the OT.
+Every time someone says, "We can't fix this, because it breaks
+backward compatibility," I think, "Another potential use of
+KVM_CAP_DISABLE_QUIRKS2?"
 
-Will reword the commit description, thanks again for the clarification
-about this generic topic.
+...
+> But then after looking at SDM I also found out that Intel and AMD have completely
+> different SMM layout for 64 bit. We follow the AMD's layout, but we don't
+> implement many fields, including some that are barely/not documented.
+> (e.g what is svm_guest_virtual_int?)
+>
+> In theory we could use Intel's layout when we run with Intel's vendor ID,
+> and AMD's vise versa, but we probably won't bother + once again there
+> is an issue of backward compatibility.
 
--- 
-	Ansuel
+This seems pretty egregious, since the SDM specifically states, "Some
+of the registers in the SMRAM state save area (marked YES in column 3)
+may be read and changed by the
+SMI handler, with the changed values restored to the processor
+registers by the RSM instruction." How can that possibly work with
+AMD's layout?
+(See my comment above regarding backwards compatibility.)
+
+<soapbox>I wish KVM would stop offering virtual CPU features that are
+completely broken.</soapbox>
+
+> > The vNMI feature isn't available in any shipping processor yet, is it?
+> Yes, but one of its purposes is to avoid single stepping the guest,
+> which is especially painful on AMD, because there is no MTF, so
+> you have to 'borrow' the TF flag in the EFLAGS, and that can leak into
+> the guest state (e.g pushed onto the stack).
+
+So, what's the solution for all of today's SVM-capable processors? KVM
+will probably be supporting AMD CPUs without vNMI for the next decade
+or two.
+
+
+> (Actually looking at clause of default treatment of SMIs in Intel's PRM,
+> they do mention that they preserve the int shadow somewhere at least
+> on some Intel's CPUs).
+
+Yes, this is a required part of VMX-critical state for processors that
+support SMI recognition while there is blocking by STI or by MOV SS.
+However, I don't believe that KVM actually saves VMX-critical state on
+delivery of a virtual SMI.
+
+>
+> BTW, according to my observations, it is really hard to hit this problem,
+> because it looks like when the CPU is in interrupt shadow, it doesn't process
+> _real_ interrupts as well (despite the fact that in VM, real interrupts
+> should never be blocked(*), but yet, that is what I observed on both AMD and Intel.
+>
+> (*) You can allow the guest to control the real EFLAGS.IF on both VMX and SVM,
+> (in which case int shadow should indeed work as on bare metal)
+> but KVM of course doesn't do it.
+
+It doesn't surprise me that hardware treats a virtual interrupt shadow
+as a physical interrupt shadow. IIRC, each vendor has a way of
+breaking an endless chain of interrupt shadows, so a malicious guest
+can't defer interrupts indefinitely.
+
+> I observed that when KVM sends #SMI from other vCPU, it sends a vCPU kick,
+> and the kick never arrives inside the interrupt shadow.
+> I have seen it on both VMX and SVM.
+>
+> What still triggers this problem, is that the instruction which is in the interrupt
+> shadow can still get a VM exit, (e.g EPT/NPT violation) and then it can notice
+> the pending SMI.
+>
+> I think it has to be EPT/NPT violation btw, because, IMHO most if not all other VM exits I
+> think are instruction intercepts, which will cause KVM to emulate the instruction
+> and clear the interrupt shadow, and only after that it will enter SMM.
+>
+> Even MMIO/IOPORT access is emulated by the KVM.
+>
+> Its not the case with EPT/NPT violation, because the KVM will in this case re-execute
+> the instruction after it 'fixes' the fault.
+
+Probably #PF as well, then, if TDP is disabled.

@@ -2,148 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 39CB8569396
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 22:50:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BD87C56939C
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 22:52:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231322AbiGFUuN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Jul 2022 16:50:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53356 "EHLO
+        id S233473AbiGFUwA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Jul 2022 16:52:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54140 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230268AbiGFUuL (ORCPT
+        with ESMTP id S233108AbiGFUv5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Jul 2022 16:50:11 -0400
-Received: from wout5-smtp.messagingengine.com (wout5-smtp.messagingengine.com [64.147.123.21])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 438591AD82
-        for <linux-kernel@vger.kernel.org>; Wed,  6 Jul 2022 13:50:10 -0700 (PDT)
-Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
-        by mailout.west.internal (Postfix) with ESMTP id A1EB8320098D;
-        Wed,  6 Jul 2022 16:50:06 -0400 (EDT)
-Received: from imap44 ([10.202.2.94])
-  by compute4.internal (MEProxy); Wed, 06 Jul 2022 16:50:07 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
-        cc:cc:content-transfer-encoding:content-type:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to; s=fm1; t=1657140606; x=
-        1657227006; bh=JWPNKX/+pD9teKBNPYO1ogTvnIYrOYoB5uZTtDcno+w=; b=g
-        TE30MsPFqwzhMvCPXnTClEyzGXA9D736g0XkXWI5Q/SOClMttShto/W4QETzqE+r
-        2pdbzMeXNNlYZtzg60gMNU28fffmiXNYEI7ll9hfRLovzxRYXMPTjA32x0hrdG7O
-        1VB9b2dwozSKeyCO46cAe+4TfzMn3gaoTcSaE0L5MAeiejfx/YWUOU27uBe63yAW
-        9QZU7TMD5kljikCQ/+OTG7BVvZfJW4W1As1EsrXLJyW6gqf3RojMRXKuWxIaOa7q
-        Q43opW3cxlLPZuBzDtWM4Qx4ocoF2vnQaXLhYeQ7uqZw2IuhNrOOnb77qj7FsvnV
-        zqC9Z+dYHRd19DZWH9lPQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding
-        :content-type:date:date:feedback-id:feedback-id:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
-        :x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=1657140606; x=
-        1657227006; bh=JWPNKX/+pD9teKBNPYO1ogTvnIYrOYoB5uZTtDcno+w=; b=r
-        tzbgRpQ0jMJzMZYVJx+UElhZxURVEJuN4jl6HAfTUsjppvmEe5+6v3o/OW/Z3Cwj
-        2En+RT2iPFZPOoDc17EeMEIy617wwsiS8I+3uXT+qMSmpLvW89TJ9Me/EHg7YTye
-        YqnLmvfv3b6Jyl/RIhw8swXJrnQcBejDLJrKdtpoxk7D3CMIEU5VBLyoE0KiawL3
-        2W6pn70fY0qccak5gzLT7yUsdb/t+SX761aH7ScQNIga11tn1TBFGhRupgJxfrU5
-        iCzH5tkvEkqrZ0UT/GXamBzrMdGl8BQ1ZtoFARoQz8Fxphgpv3A/yP9K/xfpa99I
-        1zLX1QOTURYZsy6OTdghw==
-X-ME-Sender: <xms:ffXFYsYuzcVr81WI2XnxCLjH6Nkm4odiMh57yYYzVP9tvPuIX7aIkw>
-    <xme:ffXFYnbq4KqAVq5ERJ8WGfBJGYRvXLvk2ioyOLorEkRQ3ZHz9dsqVdQ02iXH2Dczk
-    MG9nkz26o5wBcxoWIo>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrudeifedgudehfecutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enucfjughrpefofgggkfgjfhffhffvvefutgfgsehtqhertderreejnecuhfhrohhmpedf
-    lfhirgiguhhnucgjrghnghdfuceojhhirgiguhhnrdihrghnghesfhhlhihgohgrthdrtg
-    homheqnecuggftrfgrthhtvghrnhepudefgeeftedugeehffdtheefgfevffelfefghefh
-    jeeugeevtefhudduvdeihefgnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpe
-    hmrghilhhfrhhomhepjhhirgiguhhnrdihrghnghesfhhlhihgohgrthdrtghomh
-X-ME-Proxy: <xmx:ffXFYm8wkkT6IFd0ehmRqt2ybjfcF_lcUH3J6yQw71c-7GxS9mc-Yg>
-    <xmx:ffXFYmrF-bbl9lmFDP5Ezif0Ms-MOHOYzYHykvYPJRjxoB8bJ531JA>
-    <xmx:ffXFYnoOsnUJ25leddjdhcbEyN1RCTjbQg9pZPvD7PZ3GQNp1r23-g>
-    <xmx:fvXFYmVMwYN06ME0fxQmlLqrPBzyTo0C2aupo0c2FmSwHDXNNvRalQ>
-Feedback-ID: ifd894703:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id DCC8336A0071; Wed,  6 Jul 2022 16:50:04 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.7.0-alpha0-719-gc39a70fa89-fm-20220629.002-gc39a70fa
-Mime-Version: 1.0
-Message-Id: <9d064771-9402-4e84-96f8-4713cddf42f2@www.fastmail.com>
-In-Reply-To: <c824b9ca-c9c4-1912-7845-99a0989277a4@loongson.cn>
-References: <20220704153612.314112-1-huqi@loongson.cn>
- <4273e104-8392-6a06-5d18-a1933978d8c3@xen0n.name>
- <22a1ba993e298ce12a374decefebeca484240883.camel@xry111.site>
- <16c9ccaa5e5a2ffd39272cff6f66e487c659b571.camel@xry111.site>
- <CAAhV-H5+qd1ZrOqE8fgRmWshXy57AfEFpyKSK8ZstZZEQ53owQ@mail.gmail.com>
- <ac46f5cb4c8d1154cfc3e862fb5211e869839c9a.camel@xry111.site>
- <c824b9ca-c9c4-1912-7845-99a0989277a4@loongson.cn>
-Date:   Wed, 06 Jul 2022 21:49:43 +0100
-From:   "Jiaxun Yang" <jiaxun.yang@flygoat.com>
-To:     "Qi Hu" <huqi@loongson.cn>, "Xi Ruoyao" <xry111@xry111.site>,
-        "Huacai Chen" <chenhuacai@kernel.org>
-Cc:     "Xuerui Wang" <kernel@xen0n.name>, loongarch@lists.linux.dev,
-        LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v2] LoongArch: Clean useless vcsr in loongarch_fpu.
-Content-Type: text/plain;charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        Wed, 6 Jul 2022 16:51:57 -0400
+Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B0671C11A
+        for <linux-kernel@vger.kernel.org>; Wed,  6 Jul 2022 13:51:55 -0700 (PDT)
+Received: by mail-ed1-x535.google.com with SMTP id y8so14994912eda.3
+        for <linux-kernel@vger.kernel.org>; Wed, 06 Jul 2022 13:51:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=VmZUiPaBEY+cXoKQEoYr43kUreC3uQvFIkJqH2JKuKw=;
+        b=QD1S/pElGHXVUsbOmqKCJB4tIT2LfKNYBwHeoK3ZI0DUMJILHVe6a82Q51su0piYKu
+         wuNjrhR6iGEs41/j83fS0VOXdLGDC6asG7vO4XB5AOJHml40d/7E81YUshGRRsZLp7yK
+         YgqESFS3mE58ornuH7MKbtS1MNrDqi8gLHYc0cJ10T1Vjl8lFv/u/9nVoNAzXNq2yu5d
+         KKY+GZniHeVduR4B1nopMwBhJcXsqDnVKsx/9Nkcv1kOzPPl0sgrgRyDMbTdTHSRX5nL
+         ZDmD6e+7ToOKGWtMTrJ9o4Zr6WB6gnClrjpkjlWmxx2lI5hXctf5yaGv4ROswY0vcywN
+         Jgbg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=VmZUiPaBEY+cXoKQEoYr43kUreC3uQvFIkJqH2JKuKw=;
+        b=aYqaLS0lzqs3JUqxxkiVMha1i5LEuamFpz4SDuxISCJhqUVtJ1T62wn7v+zJNyhhZ1
+         pzFKjzmTYiBZvcpo2wEMuQXClPCVNqhlEOZAzbpt0b5zvpz2g4Zm2cFCB+1xmrotJPzl
+         aTRCI6amox27lK4xn+n/Mzz4ckG694pS1vg8VRkUIhUk/Wlf43OzVbGIpdoDYg+FtSfW
+         Ny+TKtkk81YedFGO3gbpdTRV1DaYZaMI/zYR8YYBgo4A2hO3/RDrwEr02bUzZhwUD+d/
+         5PH29L8WT6P0T1dComE9yKkgv8jthve/bonEaQCoMn3bhCGYhSNyfibsvb3LNd3+Pigc
+         ni2A==
+X-Gm-Message-State: AJIora/67+/qw9wM4ZCjQ+E+v+zw6zh3VBnEOmpCYOh1QD3RMcT/3NdN
+        x7g8+Zc/5o8bs99lbcNFZa2EeTMCAUP4q2cgbPRAww==
+X-Google-Smtp-Source: AGRyM1uXmEISRIAhzaxjULC8UcUDmf4l9YHviL80jd8DC+UnXMdhKjYQ9ycbYK2+NxJjLT6FGvT1yqEgJqWM6jd2Bvk=
+X-Received: by 2002:a05:6402:43c4:b0:43a:6309:6c9b with SMTP id
+ p4-20020a05640243c400b0043a63096c9bmr23105912edc.91.1657140713645; Wed, 06
+ Jul 2022 13:51:53 -0700 (PDT)
+MIME-Version: 1.0
+References: <20220702040959.3232874-1-davidgow@google.com> <20220702040959.3232874-4-davidgow@google.com>
+In-Reply-To: <20220702040959.3232874-4-davidgow@google.com>
+From:   Brendan Higgins <brendanhiggins@google.com>
+Date:   Wed, 6 Jul 2022 16:51:42 -0400
+Message-ID: <CAFd5g44q5EPS=v_DDUxBJnO1htMSyB=GNXpP0KkVNuOapehk-A@mail.gmail.com>
+Subject: Re: [PATCH v5 4/4] selftest: Taint kernel when test module loaded
+To:     David Gow <davidgow@google.com>
+Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Kees Cook <keescook@chromium.org>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        "Guilherme G . Piccoli" <gpiccoli@igalia.com>,
+        Sebastian Reichel <sre@kernel.org>,
+        John Ogness <john.ogness@linutronix.de>,
+        Joe Fradley <joefradley@google.com>,
+        Daniel Latypov <dlatypov@google.com>,
+        kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        Lucas De Marchi <lucas.demarchi@intel.com>,
+        Aaron Tomlin <atomlin@redhat.com>,
+        linux-fsdevel@vger.kernel.org, linux-block@vger.kernel.org,
+        Michal Marek <michal.lkml@markovi.net>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        linux-kbuild@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-=E5=9C=A82022=E5=B9=B47=E6=9C=886=E6=97=A5=E4=B8=83=E6=9C=88 =E4=B8=8A=E5=
-=8D=885:00=EF=BC=8CQi Hu=E5=86=99=E9=81=93=EF=BC=9A
-> On 2022/7/6 10:51, Xi Ruoyao wrote:
->> On Wed, 2022-07-06 at 10:35 +0800, Huacai Chen wrote:
->>
->>> Maybe Xuerui and Ruoyao have some misunderstanding. LSX/LASX will
->>> surely be upstream, this has nothing to do with cleanup VCSR16.
->>> Because FP/LSX/LASX share the same control bits in FCSR now.
->> My guess:
->>
->> Almost all behavior of vector unit is controlled by FCSR (for example,
->> the rounding of both FPU and vector unit should be controlled by FCSR
->> altogether), except one bit similar to the bit 24 of MSACSR ("flush to
->> zero") is in VCSR [^1].  And "flush to zero" is not really useful so =
-it
->> will be removed in 3A6000, and we'll not use it for 3A5000.
-> Actually, flush to zero has been removed in 3A5000.
->>
->> [^1]: A more bold guess: the hardware engineers could have just said
->> "let's wire this register called MSACSR in GS464V as FCSR16/VCSR in
->> LA464, maybe it will be useful and who knows?"  But now in practice i=
-t's
->> not useful.
->>
->> Am I correct?
-> The hardware(LA464) has removed the vcsr("has but not use" is=20
-> incorrect), and here are some details:
+On Sat, Jul 2, 2022 at 12:10 AM David Gow <davidgow@google.com> wrote:
 >
-> - For all FP operations, including LSX/LASX, they are controlled by=20
-> fcsr0/1/2/3.
+> Make any kselftest test module (using the kselftest_module framework)
+> taint the kernel with TAINT_TEST on module load.
 >
-> - For LSX/LASX other operations, they are *not* controlled by any othe=
-r=20
-> CSR now. And fcsr16 to fcsr31 are reserved to control these operations=20
-> (now they are *undefined*).
-Sorry but what do you meant by =E2=80=9Cthese=E2=80=9D here?
-If it means LSX/LASX, are you trying to say that future chip=E2=80=99s L=
-SX/LASX won=E2=80=99t be
-compatible with present 3A5000? As your said fcsr16 and fcsr31 are undef=
-ined
-for now.
-
-Thanks
--
-
+> Also mark the module as a test module using MODULE_INFO(test, "Y") so
+> that other tools can tell this is a test module. We can't rely solely
+> on this, though, as these test modules are also often built-in.
 >
-> - Flush to zero(MSACSR.FS) is removed and not supported.
+> Finally, update the kselftest documentation to mention that the kernel
+> should be tainted, and how to do so manually (as below).
 >
-> - If you use "movfcsr2gr" to read the fcsr16, the value is *UNDEFINED*.
+> Note that several selftests use kernel modules which are not based on
+> the kselftest_module framework, and so will not automatically taint the
+> kernel.
+>
+> This can be done in two ways:
+> - Moving the module to the tools/testing directory. All modules under
+>   this directory will taint the kernel.
+> - Adding the 'test' module property with:
+>   MODULE_INFO(test, "Y")
+>
+> Similarly, selftests which do not load modules into the kernel generally
+> should not taint the kernel (or possibly should only do so on failure),
+> as it's assumed that testing from user-space should be safe. Regardless,
+> they can write to /proc/sys/kernel/tainted if required.
+>
+> Reviewed-by: Luis Chamberlain <mcgrof@kernel.org>
+> Signed-off-by: David Gow <davidgow@google.com>
 
---=20
-- Jiaxun
+Acked-by: Brendan Higgins <brendanhiggins@google.com>

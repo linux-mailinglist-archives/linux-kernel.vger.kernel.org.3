@@ -2,90 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A3B6E56885E
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 14:32:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 358BE568853
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 14:30:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233750AbiGFMby (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Jul 2022 08:31:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36252 "EHLO
+        id S233406AbiGFMac (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Jul 2022 08:30:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34766 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233718AbiGFMbt (ORCPT
+        with ESMTP id S231171AbiGFMa3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Jul 2022 08:31:49 -0400
-Received: from mail.intenta.de (mail.intenta.de [178.249.25.132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E36F127153
-        for <linux-kernel@vger.kernel.org>; Wed,  6 Jul 2022 05:31:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=intenta.de;
-        s=dkim1; h=In-Reply-To:Content-Transfer-Encoding:Content-Type:MIME-Version:
-        References:Message-ID:Subject:CC:To:From:Date:Sender:Reply-To:Content-ID:
-        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-        :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
-        List-Post:List-Owner:List-Archive;
-        bh=EF7HWvqhWpKU7bA7LZSnMlfunbzGQc4QRNwktShveWA=; b=fF5/AQrli0W2CXPfDAQ7eI4lES
-        AOks4sZD+/6M4BmdrinXOL+IBmbPPbdldPoKi+J/eOpXZ1J3TIWGv+0mndgVj7uvaUCJ+vyFhKgpl
-        c5lYB6W1n4Qv/LBVKRGO6AEYfkWFVNcle2lSDVFyJ8TCNnWjXYGubnkyGzshb59SHcGdWrmulLccX
-        R1W0CdQjt9DeSDh/c5xtSDuhumCk5C9uF3IyY+/5XgQQnrejXj/H6QO7tNW4gT4FewTiJzX3NkHqi
-        mQ7NyrRM7wbwm0QkGz2FvefqKJaZw13Ne7QP7RQLpcG518OyETrkGFCQeVgXZMJnWNloJ2w+rHFgN
-        6Jk29Kow==;
-Date:   Wed, 6 Jul 2022 14:30:06 +0200
-From:   Helmut Grohne <helmut.grohne@intenta.de>
-To:     Support Opensource <support.opensource@diasemi.com>,
-        Lee Jones <lee.jones@linaro.org>
-CC:     <linux-kernel@vger.kernel.org>,
-        Adam Thomson <Adam.Thomson.Opensource@diasemi.com>,
-        Mark Brown <broonie@kernel.org>,
-        Wolfram Sang <wsa@the-dreams.de>
-Subject: [PATCH v4 2/2] dt-bindings: mfd: da9062 can be a system power
- controller
-Message-ID: <fde0a8136c773a11def5127d4acad627ec5a9b27.1657104160.git.helmut.grohne@intenta.de>
-References: <c6e19670802355222a228061f37aadace2764933.1657104160.git.helmut.grohne@intenta.de>
+        Wed, 6 Jul 2022 08:30:29 -0400
+Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DD5FBCBA;
+        Wed,  6 Jul 2022 05:30:27 -0700 (PDT)
+Received: from zn.tnic (p200300ea970ff625329c23fffea6a903.dip0.t-ipconnect.de [IPv6:2003:ea:970f:f625:329c:23ff:fea6:a903])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id CC75E1EC0554;
+        Wed,  6 Jul 2022 14:30:21 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1657110621;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=A8YeipasNUa+nZK2qY6DMG4HWJuyiUL/qtd8MoraKqk=;
+        b=UydwJakmDSfmpaKz40d0a+zNKNFI7iga7v2uaNqZ/4B/8XS8bL/H8k++sM7V/gnhE9Rr1O
+        EcopuNzg9Kg+kVR20v0qEqUqBfhI4vIaJZZ5Yy9UPH7snM78Ii+XZY+bPGmbYoeSEwCXBv
+        s/QKl04EfA0Hi3H2Kcan8PKuQESvmHM=
+Date:   Wed, 6 Jul 2022 14:30:21 +0200
+From:   Borislav Petkov <bp@alien8.de>
+To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
+Cc:     "H. Peter Anvin" <hpa@zytor.com>,
+        linux-arm-kernel@lists.infradead.org,
+        linuxppc-dev@lists.ozlabs.org, linux-s390@vger.kernel.org,
+        linux-kernel@vger.kernel.org, x86@kernel.org,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Arnd Bergmann <arnd@arndb.de>
+Subject: Re: [PATCH] random: remove CONFIG_ARCH_RANDOM and "nordrand"
+Message-ID: <YsWAXYhyuh2WXVuL@zn.tnic>
+References: <20220705190121.293703-1-Jason@zx2c4.com>
+ <YsSStCQQf008hF2F@zn.tnic>
+ <YsSUkapje04MP2a1@zx2c4.com>
+ <YsSXkNBtB6Ciy9iN@zn.tnic>
+ <11C903CC-22A7-48EE-AD63-E71CC8D28B88@zytor.com>
+ <YsTXI3J+ptkN/vb4@zx2c4.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <c6e19670802355222a228061f37aadace2764933.1657104160.git.helmut.grohne@intenta.de>
-X-EXCLAIMER-MD-CONFIG: 0e788d66-80ec-4ac3-b2f1-4d8c6f55fd77
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <YsTXI3J+ptkN/vb4@zx2c4.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The DA9062 can be used to power off a system if it is appropriately
-wired.
+On Wed, Jul 06, 2022 at 02:28:19AM +0200, Jason A. Donenfeld wrote:
+> Maybe you're not grepping the right tree?
+> 
+> zx2c4@thinkpad ~/Projects/random-linux $ grep trust_cpu Documentation/admin-guide/kernel-parameters.txt
+>         random.trust_cpu={on,off}
 
-Signed-off-by: Helmut Grohne <helmut.grohne@intenta.de>
-Acked-by: Rob Herring <robh@kernel.org>
----
- Documentation/devicetree/bindings/mfd/da9062.txt | 1 +
- 1 file changed, 1 insertion(+)
+I was looking at the wrong option, sorry about that.
 
-diff --git a/Documentation/devicetree/bindings/mfd/da9062.txt b/Documentation/devicetree/bindings/mfd/da9062.txt
-index bab0d0e66cb3..4861c3ad97e9 100644
---- a/Documentation/devicetree/bindings/mfd/da9062.txt
-+++ b/Documentation/devicetree/bindings/mfd/da9062.txt
-@@ -41,6 +41,7 @@ further information on IRQ bindings.
- 
- Optional properties:
- 
-+- system-power-controller
- - gpio-controller : Marks the device as a gpio controller.
- - #gpio-cells     : Should be two. The first cell is the pin number and the
-                     second cell is used to specify the gpio polarity.
 -- 
-2.30.2
- 
-Dipl.-Inf. Helmut Grohne
-Research and Development
-Application Engineering
- 
-Phone: +49 (371) 24354 0 ∙ Fax:  +49 (371) 24354 020
-helmut.grohne@intenta.de ∙ https://www.intenta.de
- 
-Intenta GmbH ∙ Ahornstraße 55 ∙ 09112 Chemnitz, Germany
-Managing Director: Dr.-Ing. Basel Fardi ∙ VAT/USt-IdNr.: DE 275745394
-Commercial register: HRB 26404 Amtsgericht Chemnitz
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette

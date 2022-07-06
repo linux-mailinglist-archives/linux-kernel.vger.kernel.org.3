@@ -2,207 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EB1F956836A
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 11:26:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E201E568371
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 11:26:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229680AbiGFJWo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Jul 2022 05:22:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36982 "EHLO
+        id S231992AbiGFJXk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Jul 2022 05:23:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37912 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233206AbiGFJWm (ORCPT
+        with ESMTP id S231970AbiGFJXd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Jul 2022 05:22:42 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id AE1E315805;
-        Wed,  6 Jul 2022 02:22:40 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id C64E515A1;
-        Wed,  6 Jul 2022 02:22:40 -0700 (PDT)
-Received: from bogus (unknown [10.57.39.193])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 75A713F66F;
-        Wed,  6 Jul 2022 02:22:37 -0700 (PDT)
-Date:   Wed, 6 Jul 2022 10:21:26 +0100
-From:   Sudeep Holla <sudeep.holla@arm.com>
-To:     Conor.Dooley@microchip.com
-Cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        paul.walmsley@sifive.com, palmer@dabbelt.com,
-        aou@eecs.berkeley.edu, Daire.McNamara@microchip.com,
-        niklas.cassel@wdc.com, damien.lemoal@opensource.wdc.com,
-        geert@linux-m68k.org, zong.li@sifive.com, kernel@esmil.dk,
-        hahnjo@hahnjo.de, devicetree@vger.kernel.org,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Brice.Goglin@inria.fr
-Subject: Re: [PATCH 0/5] RISC-V: Add cpu-map topology information nodes
-Message-ID: <20220706092126.k6zaknwcwzyg22ak@bogus>
-References: <20220705190435.1790466-1-mail@conchuod.ie>
- <20220705201931.nfwi5rlku7ykmydr@bogus>
- <8f07796a-d9a2-3301-aafb-7fbec4d5b1a2@microchip.com>
- <fb7be22c-cf19-0e06-f231-bb5b9167e179@microchip.com>
+        Wed, 6 Jul 2022 05:23:33 -0400
+Received: from mail-qt1-f175.google.com (mail-qt1-f175.google.com [209.85.160.175])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06362B77
+        for <linux-kernel@vger.kernel.org>; Wed,  6 Jul 2022 02:23:31 -0700 (PDT)
+Received: by mail-qt1-f175.google.com with SMTP id i11so17386466qtr.4
+        for <linux-kernel@vger.kernel.org>; Wed, 06 Jul 2022 02:23:31 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=jPeOBkcoQYbxVD0wRneW2mTNAwjpOVPDYXCesVf/zic=;
+        b=v4WiqqyUHJQmhA2GUc1xKb7Gi1T3oE83qkvew2LZdxI6KB2aZZMcJdHMFZcnzDbsrX
+         jzZKpuGfwCwF/XWsx4pe6KVPDsyTF/1lVlAp0FNHrrF8usLipb7mjIUpzJ1B3sQIsXmx
+         QCZHDZx+CbgaYC9BwX0rvTacnCQMYee9woZcTFxtQhrf02y6sJp8OPM0aJNVseIDzyFO
+         j9xynqrq8SbE7hz+53KR51QCNp1byX8SlxMz/V2k8R88yrKV1sbOaUEuiY7jR9QRgmT+
+         PD6baIiFBZeoFP1+zJgv3jgx5K/9ymqjqI7N1TMJEOBQp7OiSK+8VGTndhCJ4ps2nTRt
+         8D1Q==
+X-Gm-Message-State: AJIora+lw71073WVHv3eqXuAkShi7LPsDXB9ZAoj0NCQBBruOd0GEK1h
+        Jp7HVFZyAiwCNU6CE8/nUnt0jmSpSfr45g==
+X-Google-Smtp-Source: AGRyM1vGk8aHacRFkEI0CkZkgXbqFRUGvVXuvFYlevIxgyeL8G4slLRWBqZg2uDsRtcvmlItncC1MA==
+X-Received: by 2002:ac8:5c08:0:b0:317:e856:bcff with SMTP id i8-20020ac85c08000000b00317e856bcffmr31963889qti.615.1657099410629;
+        Wed, 06 Jul 2022 02:23:30 -0700 (PDT)
+Received: from mail-yb1-f178.google.com (mail-yb1-f178.google.com. [209.85.219.178])
+        by smtp.gmail.com with ESMTPSA id q15-20020ac8450f000000b003177f0fb61esm23021378qtn.75.2022.07.06.02.23.30
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 06 Jul 2022 02:23:30 -0700 (PDT)
+Received: by mail-yb1-f178.google.com with SMTP id e80so19084540ybb.4
+        for <linux-kernel@vger.kernel.org>; Wed, 06 Jul 2022 02:23:30 -0700 (PDT)
+X-Received: by 2002:a05:6902:701:b0:66e:a06d:53d7 with SMTP id
+ k1-20020a056902070100b0066ea06d53d7mr762670ybt.604.1657099410009; Wed, 06 Jul
+ 2022 02:23:30 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <fb7be22c-cf19-0e06-f231-bb5b9167e179@microchip.com>
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220524075848.21684-1-juergh@canonical.com> <20220524075848.21684-2-juergh@canonical.com>
+In-Reply-To: <20220524075848.21684-2-juergh@canonical.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Wed, 6 Jul 2022 11:23:18 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdXrQXhc8MtzGML596podVrT6gkr7XrSAOSCppMc+6qPqA@mail.gmail.com>
+Message-ID: <CAMuHMdXrQXhc8MtzGML596podVrT6gkr7XrSAOSCppMc+6qPqA@mail.gmail.com>
+Subject: Re: [PATCH 1/3] m68k: Kconfig.cpu: Fix indentation and add endif comments
+To:     Juerg Haefliger <juerg.haefliger@canonical.com>
+Cc:     linux-m68k <linux-m68k@lists.linux-m68k.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Juerg Haefliger <juergh@canonical.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jul 05, 2022 at 11:03:54PM +0000, Conor.Dooley@microchip.com wrote:
-> 
-> 
-> On 05/07/2022 21:33, Conor.Dooley@microchip.com wrote:
-> > 
-> > 
-> > On 05/07/2022 21:19, Sudeep Holla wrote:
-> >> On Tue, Jul 05, 2022 at 08:04:31PM +0100, Conor Dooley wrote:
-> >>> From: Conor Dooley <conor.dooley@microchip.com>
-> >>>
-> >>> It was reported to me that the Hive Unmatched incorrectly reports
-> >>> its topology to hwloc, but the StarFive VisionFive did in [0] &
-> >>> a subsequent off-list email from Brice (the hwloc maintainer).
-> >>> This turned out not to be entirely true, the /downstream/ version
-> >>> of the VisionFive does work correctly but not upstream, as the
-> >>> downstream devicetree has a cpu-map node that was added recently.
-> >>>
-> >>> This series adds a cpu-map node to all upstream devicetrees, which
-> >>> I have tested on mpfs & fu540. The first patch is lifted directly
-> >>> from the downstream StarFive devicetree.
-> >>>
-> >>
-> >> Reviewed-by: Sudeep Holla <sudeep.holla@arm.com>
-> >>
-> >> I would recommend to have sane defaults in core risc-v code in case of
-> >> absence of /cpu-map node as it is optional. The reason I mentioned is that
-> >> Conor mentioned how the default values in absence of the node looked quite
-> >> wrong. I don't know if it is possible on RISC-V but on ARM64 we do have
-> >> default values if arch_topology fails to set based on DT/ACPI.
-> >>
-> > 
-> > Yeah the defaults are all -1. I'll add some sane defaults for a v2.
-> > Thanks,
-> > Conor.
-> 
-> I shamelessly stole from arm64... Seems to work, but have done minimal
-> testing (only PolarFire SoC).
-> 
-> Author: Conor Dooley <conor.dooley@microchip.com>
-> Date:   Wed Jul 6 00:00:34 2022 +0100
-> 
->     riscv: arch-topology: add sane defaults
->     
->     RISC-V has no sane defaults to fall back on where there is no cpu-map
->     in the devicetree. Add sane defaults in ~the exact same way as ARM64.
->     
->     Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
-> 
-> diff --git a/arch/riscv/include/asm/topology.h b/arch/riscv/include/asm/topology.h
-> new file mode 100644
-> index 000000000000..71c80710f00e
-> --- /dev/null
-> +++ b/arch/riscv/include/asm/topology.h
-> @@ -0,0 +1,13 @@
-> +/* SPDX-License-Identifier: GPL-2.0-only */
-> +/*
-> + * Copyright (c) 2022 Microchip Technology Inc. and its subsidiaries
-> + */
-> +
-> +#ifndef _ASM_RISCV_TOPOLOGY_H
-> +#define _ASM_RISCV_TOPOLOGY_H
-> +
-> +#include <asm-generic/topology.h>
-> +
-> +void store_cpu_topology(unsigned int cpuid);
-> +
-> +#endif /* _ASM_RISCV_TOPOLOGY_H */
-> \ No newline at end of file
-> diff --git a/arch/riscv/kernel/Makefile b/arch/riscv/kernel/Makefile
-> index c71d6591d539..9518882ba6f9 100644
-> --- a/arch/riscv/kernel/Makefile
-> +++ b/arch/riscv/kernel/Makefile
-> @@ -50,6 +50,7 @@ obj-y += riscv_ksyms.o
->  obj-y  += stacktrace.o
->  obj-y  += cacheinfo.o
->  obj-y  += patch.o
-> +obj-y  += topology.o
->  obj-y  += probes/
->  obj-$(CONFIG_MMU) += vdso.o vdso/
->  
-> diff --git a/arch/riscv/kernel/smpboot.c b/arch/riscv/kernel/smpboot.c
-> index f1e4948a4b52..d551c7f452d4 100644
-> --- a/arch/riscv/kernel/smpboot.c
-> +++ b/arch/riscv/kernel/smpboot.c
-> @@ -32,6 +32,7 @@
->  #include <asm/sections.h>
->  #include <asm/sbi.h>
->  #include <asm/smp.h>
-> +#include <asm/topology.h>
->  
->  #include "head.h"
->  
-> @@ -40,6 +41,8 @@ static DECLARE_COMPLETION(cpu_running);
->  void __init smp_prepare_boot_cpu(void)
->  {
->         init_cpu_topology();
-> +
-> +       store_cpu_topology(smp_processor_id());
->  }
->  
->  void __init smp_prepare_cpus(unsigned int max_cpus)
-> @@ -161,6 +164,7 @@ asmlinkage __visible void smp_callin(void)
->         mmgrab(mm);
->         current->active_mm = mm;
->  
-> +       store_cpu_topology(curr_cpuid);
->         notify_cpu_starting(curr_cpuid);
->         numa_add_cpu(curr_cpuid);
->         update_siblings_masks(curr_cpuid);
-> diff --git a/arch/riscv/kernel/topology.c b/arch/riscv/kernel/topology.c
-> new file mode 100644
-> index 000000000000..799b3423e0bc
-> --- /dev/null
-> +++ b/arch/riscv/kernel/topology.c
-> @@ -0,0 +1,30 @@
-> +// SPDX-License-Identifier: GPL-2.0-only
-> +/*
-> + * Based on the arm64 version, which was in turn based on arm32, which was
-> + * ultimately based on sh's.
-> + * The arm64 version was listed as:
-> + * Copyright (C) 2011,2013,2014 Linaro Limited.
-> + *
-> + */
-> +#include <linux/arch_topology.h>
-> +#include <linux/topology.h>
-> +#include <asm/topology.h>
-> +
-> +void store_cpu_topology(unsigned int cpuid)
-> +{
-> +       struct cpu_topology *cpuid_topo = &cpu_topology[cpuid];
-> +
-> +       if (cpuid_topo->package_id != -1)
-> +               goto topology_populated;
-> +
-> +       cpuid_topo->thread_id = -1;
-> +       cpuid_topo->core_id = cpuid;
-> +       cpuid_topo->package_id = cpu_to_node(cpuid);
-> +
-> +       pr_info("CPU%u: cluster %d core %d thread %d\n",
-> +                cpuid, cpuid_topo->package_id, cpuid_topo->core_id,
-> +                cpuid_topo->thread_id);
-> +
-> +topology_populated:
-> +       update_siblings_masks(cpuid);
-> +}
+On Tue, May 24, 2022 at 9:58 AM Juerg Haefliger
+<juerg.haefliger@canonical.com> wrote:
+> The convention for indentation seems to be a single tab. Help text is
+> further indented by an additional two whitespaces. Fix the lines that
+> violate these rules.
 >
+> While add it, add missing trailing endif comments and squeeze multiple
+> empty lines.
+>
+> Signed-off-by: Juerg Haefliger <juergh@canonical.com>
 
-Looks good. Again package id is not cluster. This is what my series is
-addressing. So update the log as Package instead of Cluster above. The
-cluster id will be -1 unless you can get that for DT.
+Reviewed-by: Geert Uytterhoeven <geert@linux-m68k.org>
+i.e. will queue in the m68k for-v5.20 branch.
 
+Gr{oetje,eeting}s,
 
--- 
-Regards,
-Sudeep
+                        Geert
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds

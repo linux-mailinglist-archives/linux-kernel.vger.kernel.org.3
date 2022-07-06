@@ -2,152 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EF79E5691B1
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 20:26:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B3B725691B4
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 20:27:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233786AbiGFS0e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Jul 2022 14:26:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39102 "EHLO
+        id S233897AbiGFS1J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Jul 2022 14:27:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39518 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232295AbiGFS0d (ORCPT
+        with ESMTP id S233644AbiGFS1H (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Jul 2022 14:26:33 -0400
-Received: from mail-yw1-x1129.google.com (mail-yw1-x1129.google.com [IPv6:2607:f8b0:4864:20::1129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5332CCCE
-        for <linux-kernel@vger.kernel.org>; Wed,  6 Jul 2022 11:26:30 -0700 (PDT)
-Received: by mail-yw1-x1129.google.com with SMTP id 00721157ae682-31c89111f23so98388747b3.0
-        for <linux-kernel@vger.kernel.org>; Wed, 06 Jul 2022 11:26:30 -0700 (PDT)
+        Wed, 6 Jul 2022 14:27:07 -0400
+Received: from mail-vs1-xe32.google.com (mail-vs1-xe32.google.com [IPv6:2607:f8b0:4864:20::e32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EB40EBE
+        for <linux-kernel@vger.kernel.org>; Wed,  6 Jul 2022 11:27:06 -0700 (PDT)
+Received: by mail-vs1-xe32.google.com with SMTP id j1so15921276vsj.12
+        for <linux-kernel@vger.kernel.org>; Wed, 06 Jul 2022 11:27:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=AKNzyuxVbT+auUhZLi3IyFDil3epaFKjcWDvpCGicX8=;
-        b=Uxpv0YELVEct5DKRBFz2Fhk7QOvnqJthA8Ckw5wBsDZGh8wJXJiOrindJG/RdyVU2K
-         5kOY4qIummQC7LrVENX11WZTxRSqjS7URB43qjRq8OGIZqeDgCN81GIPSiMWTmCOOup2
-         QQdGRwejIFzn0MvwrWJWBomzFz7wDHAU+ejoU=
+        d=vanguardiasur-com-ar.20210112.gappssmtp.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=uCuvC3KKARgxwjZu+UWwv64ohDgzISxggCsLmmOKaJg=;
+        b=CW026Qhnh/Fg/pcdz5SXChnvNjXWW9GEWSXnDFiIJ2KUVgt7Yc+3C8zyJ/fesnlZWs
+         017Hyvi4L1ztyiqEG8QcTM/wCugeYn2jQHMZ882tSMwEeGudbwf7z13Xxwl3GwAg4Ofo
+         stDgBo1K/Du4YZE80dzrdtXICRcNHZ7so8fKLe6YcCZ1GqqMMNeldsa4mj0AIWvr3WPz
+         KfC8sGr/E5Gy/BguKD3Cnvg5+bRau7Q69HVynuyobysZx70HRjyzl3I5mDYgfId1QZgf
+         u+I+GTpiGI05bfIfFecM1o1mBr40PVSaD4LR/H5PyGUUytI4ZLyLnjiTRYuV5oXpkLc6
+         7ivg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=AKNzyuxVbT+auUhZLi3IyFDil3epaFKjcWDvpCGicX8=;
-        b=R727dVksDPJfuz8WxpkrjNDNfAJGTZ2pQ+QY3SAZipp6TCNh4/LFut8HmXyrIoR+sI
-         LV7Dzx44SdB3Xe+2PXpwEj7EqPiWlb776vk66pDzPHJEDvvu5OMHzJeA/zCdKGLyfT+B
-         ReAnZxqhJiEtui0WQWRKJ5XPd9c7kh46hSaiWa3Mqo3NeXcrD4LDQGR3yGBI9yxRObLK
-         p0iU/K1n+XgsU2jzjykD4ooEexz/uFTriHurmCEGxHQPRFkSouhXyjDIjt3VgYZsowB5
-         omWqwziKXnk8eZMCJqfuOtCObqRP16i5lGvegk5LjHhGKy64cN0iVHap4AZOcB8P2aCJ
-         rX2w==
-X-Gm-Message-State: AJIora9QOyX7jYXz7NrdH/4sHPH/SYhx//hO0dvE3GIbDjwmw1GDtQyJ
-        q3iCV917toa5TM3ICzqlWzZNd1cWZbVN2iQJJAG8KA==
-X-Google-Smtp-Source: AGRyM1udr5yyAZaFO4FJIEc1fs4jCrlvFfgCL6OO6ePlgo7ORdpuX2cwPgLlDUrByF02oMjAX082RxZNAQZV1iQkw1A=
-X-Received: by 2002:a0d:c787:0:b0:31b:a963:e1de with SMTP id
- j129-20020a0dc787000000b0031ba963e1demr47186325ywd.283.1657131989488; Wed, 06
- Jul 2022 11:26:29 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=uCuvC3KKARgxwjZu+UWwv64ohDgzISxggCsLmmOKaJg=;
+        b=ZTSnuRUBV2RiuTBAqzC2bsFojNEPVXWmi/mFHY39vb5vVB0hwXUoOcu8rbVOr/A4zz
+         JN02bBnOJPSimgrEaVF9bLrvaLHqsIkWdm76ObAaZOsB8+gNW+OyP5k5dVN8IgOgkoCI
+         Wz/Wjmr7a5oFX2Tlsm3uvWIeens8TXxcQpTO3fVskrwMiK6uWr/gKQqLDozSfCNGzv0B
+         8SkTl6dDH1147rKhzZvExt4CXusjWYFmxkPlVkCNcbuCfHihesxxU115SEvlhfGSZdqS
+         +m6NazYB+Hq1uPOxP2bP2j9WQECUd6bD+z4LD/NUxGi7VamNKyWYFJO9863kAwMMbdBm
+         lDBA==
+X-Gm-Message-State: AJIora+2K58eyCEzowKDML10e7WhYCals90weRdtPo0o28exPTAAbTv5
+        HH995La9Lc1xMtL8OxvzNEscIw==
+X-Google-Smtp-Source: AGRyM1s7Nq2UFcr8QMUWBH5PneMXg23yKHFlH21Yzq/ZtPRc3+93wCZfXf/5BjDupWoP35R+BA1gUw==
+X-Received: by 2002:a67:ba09:0:b0:354:5d45:67ed with SMTP id l9-20020a67ba09000000b003545d4567edmr23472142vsn.18.1657132025124;
+        Wed, 06 Jul 2022 11:27:05 -0700 (PDT)
+Received: from zeta-build.. ([190.190.187.68])
+        by smtp.gmail.com with ESMTPSA id bl9-20020a056102508900b003563680212asm7445539vsb.27.2022.07.06.11.27.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 06 Jul 2022 11:27:04 -0700 (PDT)
+From:   Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
+To:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Tomasz Figa <tfiga@chromium.org>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
+Subject: [PATCH 0/8] videobuf2: Replace vb2_find_timestamp() with vb2_find_buffer()
+Date:   Wed,  6 Jul 2022 15:26:49 -0300
+Message-Id: <20220706182657.210650-1-ezequiel@vanguardiasur.com.ar>
+X-Mailer: git-send-email 2.34.3
 MIME-Version: 1.0
-References: <20220622173605.1168416-1-pmalani@chromium.org>
- <20220622173605.1168416-6-pmalani@chromium.org> <CAE-0n517BB8YbN5AZG6M3ZrZGOJDV=+t0R9d8wD+gVqO1aD1Xg@mail.gmail.com>
- <CACeCKafR8hFke_tc2=1VGDNF-CFrZoAG1aUKuxGJG-6pd37hbg@mail.gmail.com>
- <CAE-0n50XbO5Wu4-429Ao05A4QrbSXoi1wBjTpGFjKm3pZj1Ybg@mail.gmail.com>
- <CACeCKafzB0wW_B2TOEWywLMyB+UhYCpXYDVBV=UbyxBiGnv1Rw@mail.gmail.com>
- <CAE-0n50Akd8QikGhaAQgxLkJBhE-7KQf5aJ_P2ajOmCjLk555g@mail.gmail.com> <CACeCKafQT_RBrkHJNE2ezahSsHLPrbnS69QbfnjxBoUhi6hjwQ@mail.gmail.com>
-In-Reply-To: <CACeCKafQT_RBrkHJNE2ezahSsHLPrbnS69QbfnjxBoUhi6hjwQ@mail.gmail.com>
-From:   Prashant Malani <pmalani@chromium.org>
-Date:   Wed, 6 Jul 2022 11:26:19 -0700
-Message-ID: <CACeCKafya_XA+C3eJUvT4vjQSgsjdewVkCb+Jr2tA1605jjfjg@mail.gmail.com>
-Subject: Re: [PATCH v5 5/9] drm/bridge: anx7625: Add typec_mux_set callback function
-To:     Stephen Boyd <swboyd@chromium.org>
-Cc:     linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        bleung@chromium.org, heikki.krogerus@linux.intel.com,
-        Pin-Yen Lin <treapking@chromium.org>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        =?UTF-8?B?TsOtY29sYXMgRiAuIFIgLiBBIC4gUHJhZG8=?= 
-        <nfraprado@collabora.com>, Allen Chen <allen.chen@ite.com.tw>,
-        Andrzej Hajda <andrzej.hajda@intel.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        David Airlie <airlied@linux.ie>, devicetree@vger.kernel.org,
-        dri-devel@lists.freedesktop.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Hsin-Yi Wang <hsinyi@chromium.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Jonas Karlman <jonas@kwiboo.se>,
-        =?UTF-8?B?Sm9zw6kgRXhww7NzaXRv?= <jose.exposito89@gmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
-        Maxime Ripard <maxime@cerno.tech>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Robert Foss <robert.foss@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Xin Ji <xji@analogixsemi.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 30, 2022 at 4:38 PM Prashant Malani <pmalani@chromium.org> wrote:
->
-> On Thu, Jun 30, 2022 at 4:21 PM Stephen Boyd <swboyd@chromium.org> wrote:
-> >
-> > Quoting Prashant Malani (2022-06-28 13:56:22)
-> > > On Tue, Jun 28, 2022 at 1:40 PM Stephen Boyd <swboyd@chromium.org> wrote:
-> > > >
-> > > > I suppose none of those things matter though as long as there is some
-> > > > typec switch registered here so that the driver can be informed of the
-> > > > pin assignment. Is it right that the "mode-switch" property is only
-> > > > required in DT if this device is going to control the mode of the
-> > > > connector, i.e. USB+DP, or just DP? Where this device can't do that
-> > > > because it doesn't support only DP.
-> > >
-> > > If the anx7625 is used just to route all lanes from 1 usb-c-connector (i.e
-> > > the USB+DP case), a mode-switch wouldn't be of much use, since one
-> > > would also route the CC lines to the built-in PD controller; so it will
-> > > already have knowledge of what mode the switch is in.
-> > >
-> > > The mode-switch is likely only relevant for this hardware configuration(
-> > > it's "DP only" in the sense that the USB pins to the SoC never go anywhere).
-> > > One only has 2 SS lanes each (from each usb-c-connector).
-> > >
-> > > Since there is no CC-line, the anx7625 needs to know which one has DP
-> > > enabled on it.
-> >
-> > Can the CC line be "captured" and not actually sent to the anx7625?
->
-> That's what happens on Chrome OS. The cc line goes to the EC (and is "consumed"
-> by the TCPM (Type C Port Manager)) and signals are then sent to the AP
-> over the Host command interface to `cros-ec-typec`. The signals here being all
-> the PD messages communicated between the peripheral and the port.
->
-> > I imagine if that is possible, maybe the CC lines would go to some
-> > micro-controller or something that did more typec management things and
-> > then the anx7625 driver would need to do software control of the mode
-> > and orientation control.
->
-> I _guess_ that is possible (though it would seem odd to not use all the PD
-> control hardware in that configuration)? If an system implements it in
-> such a way
-> then:
-> 1. mode-switch: Can be updated to do something when num_typec_switches == 1 (
-> in the mux_set function imp.l I haven't looked into what registers
-> need to be configured, since we
-> don't have this hardware implementation.
-> 2. orientation-switch: This should be registered, and then flip the
-> lanes when the port
-> driver tells it the orientation is one way or another.
->
-> So, if someone uses it that way, I think the driver needs only minor
-> updates to support it.
+All users of vb2_find_timestamp() combine it with vb2_get_buffer()
+to retrieve a videobuf2 buffer, given a u64 timestamp.
 
-Stephen, any pending concerns?
-If not,I will post a v6 series with the suggested changes:
-- Drop typec-switch binding; instead add a new top-level port with
-end-points for each Type-C connector's switch.
-- Drop it6505 patches.
-- Squash anx7625 driver patches into one patch.
-- Add a comment mentioning that we aren't registering the orientation-switch.
+Therefore, this series removes vb2_find_timestamp() and instead
+introduces a vb2_find_buffer, which is more suitable, making
+videobuf2 API slightly cleaner.
+
+Ezequiel Garcia (8):
+  videobuf2: Introduce vb2_find_buffer()
+  mediatek: vcodec: Use vb2_find_buffer
+  tegra-vde: Use vb2_find_buffer
+  vicodec: Use vb2_find_buffer
+  hantro: Use vb2_find_buffer
+  rkvdec: Use vb2_find_buffer
+  cedrus: Use vb2_find_buffer
+  videobuf2: Remove vb2_find_timestamp()
+
+ .../media/common/videobuf2/videobuf2-v4l2.c   | 12 ++---
+ .../vcodec/vdec/vdec_h264_req_common.c        |  7 ++-
+ .../mediatek/vcodec/vdec/vdec_vp8_req_if.c    |  7 ++-
+ .../vcodec/vdec/vdec_vp9_req_lat_if.c         |  8 +--
+ .../media/platform/nvidia/tegra-vde/h264.c    |  9 ++--
+ .../media/test-drivers/vicodec/vicodec-core.c |  8 +--
+ drivers/staging/media/hantro/hantro_drv.c     |  6 +--
+ .../staging/media/hantro/hantro_g2_vp9_dec.c  | 10 ++--
+ drivers/staging/media/rkvdec/rkvdec-h264.c    | 41 ++++++---------
+ drivers/staging/media/rkvdec/rkvdec-vp9.c     | 10 ++--
+ drivers/staging/media/sunxi/cedrus/cedrus.h   | 13 +----
+ .../staging/media/sunxi/cedrus/cedrus_h264.c  | 16 +++---
+ .../staging/media/sunxi/cedrus/cedrus_h265.c  | 16 +++---
+ .../staging/media/sunxi/cedrus/cedrus_mpeg2.c | 36 ++++++-------
+ .../staging/media/sunxi/cedrus/cedrus_vp8.c   | 50 ++++++-------------
+ include/media/videobuf2-v4l2.h                | 12 ++---
+ 16 files changed, 100 insertions(+), 161 deletions(-)
+
+-- 
+2.34.3
+

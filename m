@@ -2,249 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 217CF569283
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 21:19:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 78C0256928B
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 21:22:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234149AbiGFTTN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Jul 2022 15:19:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51116 "EHLO
+        id S233932AbiGFTWL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Jul 2022 15:22:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52918 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233680AbiGFTTL (ORCPT
+        with ESMTP id S233917AbiGFTWH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Jul 2022 15:19:11 -0400
-Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2059.outbound.protection.outlook.com [40.107.93.59])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF07B24F32
-        for <linux-kernel@vger.kernel.org>; Wed,  6 Jul 2022 12:19:09 -0700 (PDT)
+        Wed, 6 Jul 2022 15:22:07 -0400
+Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2047.outbound.protection.outlook.com [40.107.220.47])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF93525E98;
+        Wed,  6 Jul 2022 12:22:05 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=eNThaMrUpaHd8trbrAi0C6OZ6lot5a/WLgtwDdcxsaATIJaetpTyEKFy++VGSw8eO+PFek0mKgpVsId8HpKvZ3Aiy1gJYpX6DIeE2VY79JieqRmyIZRanizPx/tKJ0ACwVXxEHLt/J0ETrtSUd4eVtOdP4snddcAmVPhi+NRpRar3JBSJwc6xG1xd9f21x/HeC6U9mBNuIEj+1OE4FEUPluQAqW8mOtJnKqiXlIoki7+xUNT/S1Da+iATarLP8D24dZCrzyabDTso4D5n+IhZue7FxqJ2Y8yHaG9L3SfDNJFNiJ3OCL0530Jn1zuJG/zIw76wGYjhZAWcQULfjzVQw==
+ b=ma0BQwdFkrw6VVHAzlZEryQrJMg0hKNOyuZNadKd7Xr9mByX5YMGxQxPSRHQyPI5Np0BGSz23ee9qcp1XymYi0uCwNnmnWSUi/+8Bk6Ne5SAFwpsQtjvLA5ur07oLgc4ZdRKrvGoiRgRQTwo/WznPjzALL1kfo3/mDcPYgXG6R+0/7gPjI4/09KiG1NFs8DeDPD+qvKUJqAaPzqDOOPNDmQ4jn56S/AWSnE7atDq9DBZe3QWlchVa+11gD6gaYthqOY/N1BZzfsp9RmDovwv66q6oNNBnr4UG+Py9msnex1zvrrhnk7nmImXBgBRCrqZTsjDLJGwmKPonOOhb7fjpg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=SatsY24or/0/iPeK45BZ+1aDXJVqbmT5yo+R8cl+YGg=;
- b=XNsLjn6bMW4OuMWFo+ew08Lg2Z0BPWs5K3XwHyb+GuQMalK9ddAIrSFbqMz/Cbq2sT92m0O9VsLJRaZLfJj2/QBJ+AMTD8mb8T3gophp7xHwqGYdb0RrN4mkx2yy3c4ufX6oMMFWyIzGCDDME1o3pRssxw6EUO1S+xDokLQGU5XtgMhk2gGJGdDX7SOKP9X7sICZJKE+ENJu1sxO/Xp+o/43X3t8gikA73VW5Z7ko5CDNI8Bahs1dLjsWECBHDKwXX6G/rKy8OQ7IKgbkW6XDoNjk0P1rKToEWrYgSYjXiAZeBPkq8HfqPLsLk6MwlB46FI1gVTc0xSDN2RTU6jtrQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ bh=NeZwEm/1KRVzduBRmFgNgutF607+1j9ieydRtDVGNns=;
+ b=UPPaQPlOh4REZluaNEt0fk/UpXAT2uNI42qqcJu05dACZqEj2zYPMlEtzdF0omV5VbUF+hg2/iDlXWxl/b4iR/i2DpbhQ85W0kdUzKdC0KtuuX6tilbBSGsMA72gtSEsPLKZOqVK0Cc4ab44f+OotaATsmrqUxbYhUCTdVWbqwjPqEPTq21melSslMSoT3phDheE8dbcQq7+QRrs+DBFuBlZeCIglntpUYWBudG7WmowUz/FP94sUfftrjYbirP1latiARpnDitXYopx9iEmDslZpgZblXbGdDkT6TaTRgnSyyFt5dfk45dfDE4punUhb/AWUAzx3bmil9fLujsIDA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 12.22.5.235) smtp.rcpttodomain=linux.ibm.com smtp.mailfrom=nvidia.com;
+ dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=SatsY24or/0/iPeK45BZ+1aDXJVqbmT5yo+R8cl+YGg=;
- b=PXKfOpVWtVDYqEq03bzjgDCaHIi0eAVm31l245MloRdCRrN2uuYh/JWLG4p7PcYuKvjr1P6waK0fnJ3lhfp3pgeaWkE8AdsmuPZCV+aGyQaViWZqbkI8hISlIIIjoK7lBzEZov2fiYLjEfw4dxWe8iJTu0DCHD9CauMQyV8Hpao=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from DM6PR12MB4123.namprd12.prod.outlook.com (2603:10b6:5:21f::23)
- by MN2PR12MB3615.namprd12.prod.outlook.com (2603:10b6:208:c9::18) with
+ bh=NeZwEm/1KRVzduBRmFgNgutF607+1j9ieydRtDVGNns=;
+ b=Jcoxtu8AINzcYTP4YZRB/JOfIbtfpKp3fwxGQkewz21PkpFLY2/bEdL4NnRaS17N1vTIF+F/c7Zkg2VghxGBP39V6/yqx/o/x45pez/hqCChEzRqgRSNGL7z6rVJaZ3LLgg0KYIUnmBR2ee7VLbBxMIna0gaCW+ib39xNJULVLOIIQIte6tskiEY633G/rBvOL7avX9vaz61bXIE2NsPmxNBeoHno4IbsCLJoI1oxoHx3VLJalgQLUODxIYh42RtTMzXJ64ONvA3YOHJD6EiVb5HYLyfPpNKVwd08RUrO75koFoOiKD27bL7IDwg+gYBGEumGVbchbHPYPGiH144xg==
+Received: from MW4PR03CA0229.namprd03.prod.outlook.com (2603:10b6:303:b9::24)
+ by BY5PR12MB4934.namprd12.prod.outlook.com (2603:10b6:a03:1db::18) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5417.15; Wed, 6 Jul
- 2022 19:19:00 +0000
-Received: from DM6PR12MB4123.namprd12.prod.outlook.com
- ([fe80::6d50:f6c5:cea4:1d95]) by DM6PR12MB4123.namprd12.prod.outlook.com
- ([fe80::6d50:f6c5:cea4:1d95%6]) with mapi id 15.20.5395.021; Wed, 6 Jul 2022
- 19:19:00 +0000
-Message-ID: <3ce00e2e-6fe5-2f7a-8aab-d630a7235d61@amd.com>
-Date:   Thu, 7 Jul 2022 00:51:25 +0530
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [ammarfaizi2-block:broonie/sound/for-next 328/352]
- sound/soc/soc-acpi.c:58:36: warning: initialization of 'struct acpi_device *'
- from 'int' makes pointer from integer without a cast
-Content-Language: en-US
-To:     kernel test robot <lkp@intel.com>
-Cc:     kbuild-all@lists.01.org,
-        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
-        linux-kernel@vger.kernel.org, Mark Brown <broonie@kernel.org>
-References: <202207070102.kkRe03MS-lkp@intel.com>
-From:   "Mukunda,Vijendar" <vijendar.mukunda@amd.com>
-In-Reply-To: <202207070102.kkRe03MS-lkp@intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: PN2PR01CA0237.INDPRD01.PROD.OUTLOOK.COM
- (2603:1096:c01:eb::19) To DM6PR12MB4123.namprd12.prod.outlook.com
- (2603:10b6:5:21f::23)
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5395.15; Wed, 6 Jul
+ 2022 19:22:04 +0000
+Received: from CO1NAM11FT065.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:303:b9::4) by MW4PR03CA0229.outlook.office365.com
+ (2603:10b6:303:b9::24) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5417.15 via Frontend
+ Transport; Wed, 6 Jul 2022 19:22:04 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 12.22.5.235)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 12.22.5.235 as permitted sender) receiver=protection.outlook.com;
+ client-ip=12.22.5.235; helo=mail.nvidia.com; pr=C
+Received: from mail.nvidia.com (12.22.5.235) by
+ CO1NAM11FT065.mail.protection.outlook.com (10.13.174.62) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.20.5417.15 via Frontend Transport; Wed, 6 Jul 2022 19:22:03 +0000
+Received: from rnnvmail202.nvidia.com (10.129.68.7) by DRHQMAIL107.nvidia.com
+ (10.27.9.16) with Microsoft SMTP Server (TLS) id 15.0.1497.32; Wed, 6 Jul
+ 2022 19:22:03 +0000
+Received: from rnnvmail202.nvidia.com (10.129.68.7) by rnnvmail202.nvidia.com
+ (10.129.68.7) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.26; Wed, 6 Jul 2022
+ 12:22:02 -0700
+Received: from Asurada-Nvidia (10.127.8.14) by mail.nvidia.com (10.129.68.7)
+ with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.26 via Frontend
+ Transport; Wed, 6 Jul 2022 12:22:00 -0700
+Date:   Wed, 6 Jul 2022 12:21:59 -0700
+From:   Nicolin Chen <nicolinc@nvidia.com>
+To:     Jason Gunthorpe <jgg@nvidia.com>
+CC:     <kwankhede@nvidia.com>, <corbet@lwn.net>, <hca@linux.ibm.com>,
+        <gor@linux.ibm.com>, <agordeev@linux.ibm.com>,
+        <borntraeger@linux.ibm.com>, <svens@linux.ibm.com>,
+        <zhenyuw@linux.intel.com>, <zhi.a.wang@intel.com>,
+        <jani.nikula@linux.intel.com>, <joonas.lahtinen@linux.intel.com>,
+        <rodrigo.vivi@intel.com>, <tvrtko.ursulin@linux.intel.com>,
+        <airlied@linux.ie>, <daniel@ffwll.ch>, <farman@linux.ibm.com>,
+        <mjrosato@linux.ibm.com>, <pasic@linux.ibm.com>,
+        <vneethv@linux.ibm.com>, <oberpar@linux.ibm.com>,
+        <freude@linux.ibm.com>, <akrowiak@linux.ibm.com>,
+        <jjherne@linux.ibm.com>, <alex.williamson@redhat.com>,
+        <cohuck@redhat.com>, <kevin.tian@intel.com>, <hch@infradead.org>,
+        <jchrist@linux.ibm.com>, <kvm@vger.kernel.org>,
+        <linux-doc@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-s390@vger.kernel.org>,
+        <intel-gvt-dev@lists.freedesktop.org>,
+        <intel-gfx@lists.freedesktop.org>,
+        <dri-devel@lists.freedesktop.org>
+Subject: Re: [RFT][PATCH v2 4/9] vfio: Pass in starting IOVA to
+ vfio_pin/unpin_pages API
+Message-ID: <YsXg10vCMBMaOM9V@Asurada-Nvidia>
+References: <20220706062759.24946-1-nicolinc@nvidia.com>
+ <20220706062759.24946-5-nicolinc@nvidia.com>
+ <20220706174923.GL693670@nvidia.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <20220706174923.GL693670@nvidia.com>
+X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 51234fa4-8fb4-458a-f901-08da5f846138
-X-MS-TrafficTypeDiagnostic: MN2PR12MB3615:EE_
+X-MS-Office365-Filtering-Correlation-Id: fb61a67b-efd5-4113-fb72-08da5f84cf0f
+X-MS-TrafficTypeDiagnostic: BY5PR12MB4934:EE_
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: fgLoLGTEVSemMiHASc07UVEU0R9AwgcRF7W2SSUxnOmaoEywHScKdPG1lP5ifVX7vFhh9Q2OtGc2lb4lGEw6S1EKDWksL7gkF2Dd47PZJatG3/H2mS3nvqD63FUlhjMs7b9uLtgGc28HpDjQ/LuM/bPZmTJh0/EzhfhAum0oS+CyHPhUxkWNIxMcvAoYxSL+ALwPVujUJsYenJdkRovXOiHKe1oX4pXO6Kta93DgYYIBSi/nhjhdSGiQXWYwsdynpW9J4irQox7PoJpy4wEgxP9wyjBIxOOXXu6c/QPKYeUPfnly2E654Sbvu6MEhN1oEc1noLdnoM3kez8tgI36FAdg8TPBG8d6oXPd+ROohVrvaQySvq2TUPS90Vk37ARmmvQBYga66pobC1+Aq3ubXlRkE1ZN7crx+D89E29CHfDU042PJTY7qlsjY6CG/XqQsNzx3z6TEbyKxTMOTU7Dj/t3h48EGpoiNEGPBNV1YVnEQ0w3quMmeV9v7iJEtCgJuWEEdfGzZrOrKTyuHNOpW3g+tlSdbAHQOYH6p/wsVImHfGEpkQ3QsN5KKjoJ2ZMmD1khNXmM11S4d+QLClDMOGU26N4Foo/yh7nhXqmHcwIgX+M5gjlzH7FzDau+sC/rMuJw5cWpSS4ejG+iHZVjmbhqZI3Fax1MkpKBfMnpQ3qCeuwOKSImhqpuZOwMXZsxIKFS76IUCKIBQNSWQtu3cmXmKOGWyRpvtiNITggN0kgaRDrcdgnGcCLcq7rXOC1GOjZC358mvgZ93a3gLE0e6AnBjMo23DmHqB1/yrzsrwLvj+z+L+lFip1ZECvW4ffnJGejquiuM6gE6A2IPXZRc9uHL+z/PPph7FEvEQK+fP3bDfj9vysPUlFrdQvTKo+MLgbgU6ZMs0+KlJtyTwhYd07bnY+HjFf0oHmpPiijdE4=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR12MB4123.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(346002)(366004)(396003)(39860400002)(376002)(136003)(186003)(6512007)(26005)(2616005)(86362001)(316002)(45080400002)(38100700002)(31686004)(5660300002)(53546011)(41300700001)(6506007)(6666004)(31696002)(8676002)(478600001)(66556008)(2906002)(66476007)(66946007)(4326008)(83380400001)(6916009)(54906003)(30864003)(966005)(6486002)(36756003)(4001150100001)(8936002)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?cjZZMDFldTExSm1TeFdDOEZUVEIyM2dnN0o4RkNJdVJlYVVncmNHMnJsZHRQ?=
- =?utf-8?B?TmxUMXRxUTlKdE1xVXNqVHJXUFdnbElQU2pOOFF5MjlLbkhBd0IrSkN2Zm14?=
- =?utf-8?B?K3dwaGw3Z1p3WDZxQ29lTHlvSkN4cGpldnk4eHlqRlk4dXYvZDkzMkVPWkVj?=
- =?utf-8?B?Z1I1OTRLQnNVcnFIb2RCZG5XN2h6dUo4Wm5Tb253bUdqSXZWeC9aam9pSWV5?=
- =?utf-8?B?azU3b2VKL2IzQWYvbHUvZzB0aFRTblVMUXdXamVKamMzbzN3VDhOK3A0WUdN?=
- =?utf-8?B?clkwTUtXTG9Fc1NldTRsckMvTzNtWk5uemg2SGlQWkF4cHVya0RZcVZFUUVa?=
- =?utf-8?B?YUNtNWVBcHFzc3NtODdkWWpjQzZHYW1USGR1OXcvWlFLK1dSYWhYamJ4Q3I1?=
- =?utf-8?B?dncyTGNqMEgzQk1PY2tsSHd3MThwNFFOcGFia0pFeDhxRGhKMG1oVXNhcWM5?=
- =?utf-8?B?aWZKMTUvVEZIUnJrNkl4dXZIbjFDaHR4SXA5MXV3VXdoSlMycGJ0MG1vcU5U?=
- =?utf-8?B?YjcyY0w3bFliSWVsd3ZvRlFEVTgyWlRkenFWbUtGdmhBWEYyUURPa003b081?=
- =?utf-8?B?VlUyUHVFL1VwTGVUZlZMaU02d2ZaNmxmOTNjai9ObDg1ZVVzbkNuU3NuNXRV?=
- =?utf-8?B?NkFsTUhaMTkrc0hHV1VpWFBlZWp1V2hEVysyQ01BcURJZ0kxT21GbzNZWFFl?=
- =?utf-8?B?bTR2UG1FUmt2cXczTVllTFBBN3hxWXN3MnVpZkozZEtDbjZYVUJVZFVOZDRT?=
- =?utf-8?B?YlVMUyt5Y00vV2Y0a2xJT2JjSGZ1K0Y3am5XZm1IVzhXc0czM1ZVc2QwbGJC?=
- =?utf-8?B?dWk1cG1OUWN3SzVEK1hlclJsZWpDT1RJVm1zalVoU1FNVWdIaURRSCtSNFNB?=
- =?utf-8?B?SURqckUzdlkxNG45aGVVbWllN25tWWJ3a2dkZEQ3bkhIOGJ6Y25LZ1k0ODQx?=
- =?utf-8?B?ZFJhL2Y3MHFXc05OSGNpNC9pQVAvU3hyN0dnRE42S0ZrVjJYb016cFlRYS9Q?=
- =?utf-8?B?Nkh2U3B0MzEzd3R4bEpsWGY0M09aSGxWNkdweW4yZy9VLzRQRGM2YkVDaWxp?=
- =?utf-8?B?WTBaVEU1aXUwTXF5MTJLVHU5clcvZ0kyQ1hmQTF5UEl0L1BiT2Q3VzlXZ1Y3?=
- =?utf-8?B?TTArelZrVjJpV2pSUGlzNUdqdUJHdVhidUw1QmIvcmhIQnVUMHJIaXBDbUx3?=
- =?utf-8?B?bXExeTFtbWtCbEU2YmJYWERERTU5QzdpM3V2SVYzMkNBMnhNNHlaOHV0Y0o3?=
- =?utf-8?B?R0Y0VlNRVGszakR6elRIOTVkRXBITnIyVnN5ODdWT3h2MmJ1OG5VLzVSN2pT?=
- =?utf-8?B?NnM5b1BVY1FmbzJMbFROMzB1YUJFdW1GbXpxeDdzOGRlenlnM0FDTGJMSml1?=
- =?utf-8?B?dGh0cGhQTzYxY2h2cFF0SzA0bWtSdklFZUU1V2lEL2kwTC9BNzFkTWVNbDgz?=
- =?utf-8?B?ZDU5NnlUOWtUeGx4dUNPV0Y5bG1LNHNHRmFPeFZmMTZaSXdRdm5lNWx5NmdG?=
- =?utf-8?B?MTc3bHBJU0hKZUJQRnZEaUhtUHU5RGwrelFtVk8xSkM1UlB3MjZIbFZGYlk2?=
- =?utf-8?B?b29Tc1dDZUJHMDBYYXpEMUdBNWxBTjkyN0JTdG5zV1ByM2EwaHhUaHhtRmJu?=
- =?utf-8?B?S3hMZkt6QTFCaXhDQVVuMS9NcDJycnpWRERoRmt2TUY0aHJZT1lyaTRJZ29K?=
- =?utf-8?B?cjd1ZGxacCtpbWprOUg2dHZVQWpCcndYMVlobWFETnliamZycUxQUmpvTTdS?=
- =?utf-8?B?dnVQTDdlUFZmQjNFOEVIS0lWcEt2Qm9QbW9vTUl3SFdSQ21IdEpMWlM3S3Iw?=
- =?utf-8?B?Z0oydjY5TWs2MkZDdGhaMVExR3ZhOS9DSXkxODlLdXJGU1pXZi80UENaRmE0?=
- =?utf-8?B?Slh6TlNLWUhSclpnVEd0OC9xa1ZCcGV6VVhSZ1VDZ1dVaDI1emxabUxtNWhJ?=
- =?utf-8?B?WWVNWWdFdFZhUmVxVEl1U2hZamwrVXc4Ny9XNTFIWllEc1l3Sk5NR29MclRV?=
- =?utf-8?B?dEdUZ0xlNjB0S3VVVm1LQXh2dWRMajdLLy9xQ1hFZkNvWGlsWEpjK2RIaHpw?=
- =?utf-8?B?Q2NXaWxWVHRqc044RUZBYlFXTzVwdFdQL0UvM2sxajRoYWs3UVczTy9ZRnR6?=
- =?utf-8?Q?bsJLuBIlRea9aaGaiEAfOFfB0?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 51234fa4-8fb4-458a-f901-08da5f846138
-X-MS-Exchange-CrossTenant-AuthSource: DM6PR12MB4123.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Jul 2022 19:19:00.1386
+X-Microsoft-Antispam-Message-Info: e/pqWNJ20i8pZ3TizkQWtvkb8gVJcKQFxD7L758uvczAszrwUMFWUZ/iWzUaMW8aq5KlP0MmrTr0WRdb2QmkrmpwaZXbazQFqI+n5Fi+p8PAXOvbwR2zQDJ3AhXRQZpjhPOADXkCWCJVlyb2cnxHpHV5r/+S5Q96+q/OZjfGnCcD4+d6kOIpYFfY8tzv9bKf0Vpwecc4hcL7sVo7cf93KTnxtJWiENMFn3Zj6rxqKeZdomPT84aAGnMIsSH9Vyi0JeTJFr0n+WbtCFsMxLB6q/tObgY6Lb3qhCM+L9akGL/ovp1tom7kxKSL1v1nE0fpML0Yxf+tDepvN0IKnYPfowhrSXEwPO9ywrKXMQwy2yJd49/jOWywOk1kMGgjHCJoSm7x2t4guRhbyRROZoEnoeLrn3A81pvEqk5FJIOCw9dmLaDCmnqjw1tQUvBh1ewBCuTjzYYhNoJFwuhoCwIWRovp1tTFn6fCJnVnK3rz69agDn2C6Khkl5mvcpOiLFTX+gci3/YrhkM/gu47KWJxedRkhMRznSmKNnFpkQeWwbtgA9JHbne5QDu1hL37dBwhPEIaajueF8czj9dH1RQ60MGpXK7GahUTWIVeNRE0TEK6pU0h3HPI2Inb3l+rIe2yovOmjfOzkv+clKbkmtsbctoQQQVhuBOgP7hcJFGuWqaRI/Cm3T9b+M6kDW4kiiTbxfD6wQdRe6SReQR5saCSzWxcS6khZoBmm3xblXnmDofniXk2SV0YE/LzoMTCgDfZ8uLEWSOon+Giml96jBl37rglT4BNn+je/2us+eUrWxqnwRika5iRZw1OFxv8naukBmgeWNki1fNZLngX4E2XyvMfo1SbI68of0/oaV6JOlI=
+X-Forefront-Antispam-Report: CIP:12.22.5.235;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:InfoNoRecords;CAT:NONE;SFS:(13230016)(4636009)(39860400002)(136003)(376002)(396003)(346002)(36840700001)(40470700004)(46966006)(36860700001)(82310400005)(5660300002)(40460700003)(33716001)(478600001)(356005)(82740400003)(6862004)(86362001)(7406005)(41300700001)(7416002)(2906002)(81166007)(8936002)(316002)(4744005)(336012)(4326008)(6636002)(70586007)(70206006)(8676002)(47076005)(40480700001)(55016003)(54906003)(186003)(26005)(9686003)(426003)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Jul 2022 19:22:03.9505
  (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: paiI8ZUOVUEPh7THBcexO0OniMisKCkGPLhJ1VVf/TnqEZ/QyJ3XRDcD5d4OASqBa/IAhSuxqWr27CLzRb9zUw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR12MB3615
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-MS-Exchange-CrossTenant-Network-Message-Id: fb61a67b-efd5-4113-fb72-08da5f84cf0f
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[12.22.5.235];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT065.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BY5PR12MB4934
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 7/6/22 11:11 PM, kernel test robot wrote:
-> tree:   https://nam11.safelinks.protection.outlook.com/?url=https%3A%2F%2Fgithub.com%2Fammarfaizi2%2Flinux-block&amp;data=05%7C01%7CVijendar.Mukunda%40amd.com%7Cef10db08c5534596339908da5f76dfa5%7C3dd8961fe4884e608e11a82d994e183d%7C0%7C0%7C637927261404326072%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C3000%7C%7C%7C&amp;sdata=4nJNUAze7X8XcRNnQMsVjN4fcOxaryEqbHl%2Fxt4EWs8%3D&amp;reserved=0 broonie/sound/for-next
-> head:   6abb4d7d17ffe320e9b7e22f474e5631c0464524
-> commit: f94fa84058014f81ad526641f1b1f583ca2cf32f [328/352] ASoC: amd: enable machine driver build for Jadeite platform
-> config: alpha-allyesconfig (https://nam11.safelinks.protection.outlook.com/?url=https%3A%2F%2Fdownload.01.org%2F0day-ci%2Farchive%2F20220707%2F202207070102.kkRe03MS-lkp%40intel.com%2Fconfig&amp;data=05%7C01%7CVijendar.Mukunda%40amd.com%7Cef10db08c5534596339908da5f76dfa5%7C3dd8961fe4884e608e11a82d994e183d%7C0%7C0%7C637927261404326072%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C3000%7C%7C%7C&amp;sdata=xT%2B7AxR7Er7aOpEfVpsZAAyN%2FYjlPQIfiUJnvy%2BCYH4%3D&amp;reserved=0)
-> compiler: alpha-linux-gcc (GCC) 11.3.0
-> reproduce (this is a W=1 build):
->         wget https://nam11.safelinks.protection.outlook.com/?url=https%3A%2F%2Fraw.githubusercontent.com%2Fintel%2Flkp-tests%2Fmaster%2Fsbin%2Fmake.cross&amp;data=05%7C01%7CVijendar.Mukunda%40amd.com%7Cef10db08c5534596339908da5f76dfa5%7C3dd8961fe4884e608e11a82d994e183d%7C0%7C0%7C637927261404326072%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C3000%7C%7C%7C&amp;sdata=4wY5Qb%2BnNN9N4dpLqvjmQhjR%2BonqxNSdeI1i733u7wY%3D&amp;reserved=0 -O ~/bin/make.cross
->         chmod +x ~/bin/make.cross
->         # https://nam11.safelinks.protection.outlook.com/?url=https%3A%2F%2Fgithub.com%2Fammarfaizi2%2Flinux-block%2Fcommit%2Ff94fa84058014f81ad526641f1b1f583ca2cf32f&amp;data=05%7C01%7CVijendar.Mukunda%40amd.com%7Cef10db08c5534596339908da5f76dfa5%7C3dd8961fe4884e608e11a82d994e183d%7C0%7C0%7C637927261404326072%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C3000%7C%7C%7C&amp;sdata=WF9J9A5GimbiqqQiHNsj3InTKUrdQ%2BnzymYIP81bsDo%3D&amp;reserved=0
->         git remote add ammarfaizi2-block https://nam11.safelinks.protection.outlook.com/?url=https%3A%2F%2Fgithub.com%2Fammarfaizi2%2Flinux-block&amp;data=05%7C01%7CVijendar.Mukunda%40amd.com%7Cef10db08c5534596339908da5f76dfa5%7C3dd8961fe4884e608e11a82d994e183d%7C0%7C0%7C637927261404326072%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C3000%7C%7C%7C&amp;sdata=4nJNUAze7X8XcRNnQMsVjN4fcOxaryEqbHl%2Fxt4EWs8%3D&amp;reserved=0
->         git fetch --no-tags ammarfaizi2-block broonie/sound/for-next
->         git checkout f94fa84058014f81ad526641f1b1f583ca2cf32f
->         # save the config file
->         mkdir build_dir && cp config build_dir/.config
->         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=alpha SHELL=/bin/bash sound/soc/
+On Wed, Jul 06, 2022 at 02:49:23PM -0300, Jason Gunthorpe wrote:
+> On Tue, Jul 05, 2022 at 11:27:54PM -0700, Nicolin Chen wrote:
 > 
-> If you fix the issue, kindly add following tag where applicable
-> Reported-by: kernel test robot <lkp@intel.com>
-> 
-> All warnings (new ones prefixed by >>):
-> 
->    sound/soc/soc-acpi.c:34:1: error: redefinition of 'snd_soc_acpi_find_machine'
->       34 | snd_soc_acpi_find_machine(struct snd_soc_acpi_mach *machines)
+> >  These functions call back into the back-end IOMMU module by using the pin_pages
+> > diff --git a/drivers/gpu/drm/i915/gvt/kvmgt.c b/drivers/gpu/drm/i915/gvt/kvmgt.c
+> > index 8c67c9aba82d..ea6041fa48ac 100644
+> > --- a/drivers/gpu/drm/i915/gvt/kvmgt.c
+> > +++ b/drivers/gpu/drm/i915/gvt/kvmgt.c
 
-JD platform Machine driver has ACPI dependency. With out ACPI CONFIG
-enabled, ACP machine driver shouldn't be compiled.
-Will modify the ACPI dependency as "depends on SND_SOC_AMD_ACP && ACPI"
-and push the new patch.
+> > +	vfio_unpin_pages(&vgpu->vfio_device, gfn << PAGE_SHIFT,
+> > +			 roundup(size, PAGE_SIZE) / PAGE_SIZE);
+> 
+> These maths are DIV_ROUND_UP()
 
--
-Vijendar
->          | ^~~~~~~~~~~~~~~~~~~~~~~~~
->    In file included from sound/soc/soc-acpi.c:9:
->    include/sound/soc-acpi.h:38:1: note: previous definition of 'snd_soc_acpi_find_machine' with type 'struct snd_soc_acpi_mach *(struct snd_soc_acpi_mach *)'
->       38 | snd_soc_acpi_find_machine(struct snd_soc_acpi_mach *machines)
->          | ^~~~~~~~~~~~~~~~~~~~~~~~~
->    sound/soc/soc-acpi.c: In function 'snd_soc_acpi_find_package':
->    sound/soc/soc-acpi.c:58:36: error: implicit declaration of function 'acpi_fetch_acpi_dev'; did you mean 'device_match_acpi_dev'? [-Werror=implicit-function-declaration]
->       58 |         struct acpi_device *adev = acpi_fetch_acpi_dev(handle);
->          |                                    ^~~~~~~~~~~~~~~~~~~
->          |                                    device_match_acpi_dev
->>> sound/soc/soc-acpi.c:58:36: warning: initialization of 'struct acpi_device *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
->    sound/soc/soc-acpi.c:64:25: error: invalid use of undefined type 'struct acpi_device'
->       64 |         if (adev && adev->status.present && adev->status.functional) {
->          |                         ^~
->    sound/soc/soc-acpi.c:64:49: error: invalid use of undefined type 'struct acpi_device'
->       64 |         if (adev && adev->status.present && adev->status.functional) {
->          |                                                 ^~
->    sound/soc/soc-acpi.c:80:26: error: implicit declaration of function 'acpi_extract_package' [-Werror=implicit-function-declaration]
->       80 |                 status = acpi_extract_package(myobj,
->          |                          ^~~~~~~~~~~~~~~~~~~~
->    sound/soc/soc-acpi.c: At top level:
->    sound/soc/soc-acpi.c:95:6: error: redefinition of 'snd_soc_acpi_find_package_from_hid'
->       95 | bool snd_soc_acpi_find_package_from_hid(const u8 hid[ACPI_ID_LEN],
->          |      ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->    In file included from sound/soc/soc-acpi.c:9:
->    include/sound/soc-acpi.h:44:1: note: previous definition of 'snd_soc_acpi_find_package_from_hid' with type 'bool(const u8 *, struct snd_soc_acpi_package_context *)' {aka '_Bool(const unsigned char *, struct snd_soc_acpi_package_context *)'}
->       44 | snd_soc_acpi_find_package_from_hid(const u8 hid[ACPI_ID_LEN],
->          | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->    sound/soc/soc-acpi.c:109:27: error: redefinition of 'snd_soc_acpi_codec_list'
->      109 | struct snd_soc_acpi_mach *snd_soc_acpi_codec_list(void *arg)
->          |                           ^~~~~~~~~~~~~~~~~~~~~~~
->    In file included from sound/soc/soc-acpi.c:9:
->    include/sound/soc-acpi.h:51:41: note: previous definition of 'snd_soc_acpi_codec_list' with type 'struct snd_soc_acpi_mach *(void *)'
->       51 | static inline struct snd_soc_acpi_mach *snd_soc_acpi_codec_list(void *arg)
->          |                                         ^~~~~~~~~~~~~~~~~~~~~~~
->    cc1: some warnings being treated as errors
-> 
-> 
-> vim +58 sound/soc/soc-acpi.c
-> 
-> 8ceffd229f0ef1 sound/soc/intel/common/sst-match-acpi.c Vinod Koul           2016-02-08  54  
-> 7feb2f786a46d3 sound/soc/soc-acpi.c                    Pierre-Louis Bossart 2017-10-12  55  static acpi_status snd_soc_acpi_find_package(acpi_handle handle, u32 level,
-> 3421894765a345 sound/soc/intel/common/sst-match-acpi.c Pierre-Louis Bossart 2016-11-12  56  					     void *context, void **ret)
-> 3421894765a345 sound/soc/intel/common/sst-match-acpi.c Pierre-Louis Bossart 2016-11-12  57  {
-> ff4865b3c8cd74 sound/soc/soc-acpi.c                    Rafael J. Wysocki    2022-01-26 @58  	struct acpi_device *adev = acpi_fetch_acpi_dev(handle);
-> 59ce3233a538fc sound/soc/soc-acpi.c                    Pierre-Louis Bossart 2021-04-16  59  	acpi_status status;
-> 7feb2f786a46d3 sound/soc/soc-acpi.c                    Pierre-Louis Bossart 2017-10-12  60  	struct snd_soc_acpi_package_context *pkg_ctx = context;
-> 3421894765a345 sound/soc/intel/common/sst-match-acpi.c Pierre-Louis Bossart 2016-11-12  61  
-> 3421894765a345 sound/soc/intel/common/sst-match-acpi.c Pierre-Louis Bossart 2016-11-12  62  	pkg_ctx->data_valid = false;
-> 3421894765a345 sound/soc/intel/common/sst-match-acpi.c Pierre-Louis Bossart 2016-11-12  63  
-> ff4865b3c8cd74 sound/soc/soc-acpi.c                    Rafael J. Wysocki    2022-01-26  64  	if (adev && adev->status.present && adev->status.functional) {
-> 3421894765a345 sound/soc/intel/common/sst-match-acpi.c Pierre-Louis Bossart 2016-11-12  65  		struct acpi_buffer buffer = {ACPI_ALLOCATE_BUFFER, NULL};
-> 3421894765a345 sound/soc/intel/common/sst-match-acpi.c Pierre-Louis Bossart 2016-11-12  66  		union acpi_object  *myobj = NULL;
-> 3421894765a345 sound/soc/intel/common/sst-match-acpi.c Pierre-Louis Bossart 2016-11-12  67  
-> 3421894765a345 sound/soc/intel/common/sst-match-acpi.c Pierre-Louis Bossart 2016-11-12  68  		status = acpi_evaluate_object_typed(handle, pkg_ctx->name,
-> 3421894765a345 sound/soc/intel/common/sst-match-acpi.c Pierre-Louis Bossart 2016-11-12  69  						NULL, &buffer,
-> 3421894765a345 sound/soc/intel/common/sst-match-acpi.c Pierre-Louis Bossart 2016-11-12  70  						ACPI_TYPE_PACKAGE);
-> 3421894765a345 sound/soc/intel/common/sst-match-acpi.c Pierre-Louis Bossart 2016-11-12  71  		if (ACPI_FAILURE(status))
-> 3421894765a345 sound/soc/intel/common/sst-match-acpi.c Pierre-Louis Bossart 2016-11-12  72  			return AE_OK;
-> 3421894765a345 sound/soc/intel/common/sst-match-acpi.c Pierre-Louis Bossart 2016-11-12  73  
-> 3421894765a345 sound/soc/intel/common/sst-match-acpi.c Pierre-Louis Bossart 2016-11-12  74  		myobj = buffer.pointer;
-> 3421894765a345 sound/soc/intel/common/sst-match-acpi.c Pierre-Louis Bossart 2016-11-12  75  		if (!myobj || myobj->package.count != pkg_ctx->length) {
-> 3421894765a345 sound/soc/intel/common/sst-match-acpi.c Pierre-Louis Bossart 2016-11-12  76  			kfree(buffer.pointer);
-> 3421894765a345 sound/soc/intel/common/sst-match-acpi.c Pierre-Louis Bossart 2016-11-12  77  			return AE_OK;
-> 3421894765a345 sound/soc/intel/common/sst-match-acpi.c Pierre-Louis Bossart 2016-11-12  78  		}
-> 3421894765a345 sound/soc/intel/common/sst-match-acpi.c Pierre-Louis Bossart 2016-11-12  79  
-> 3421894765a345 sound/soc/intel/common/sst-match-acpi.c Pierre-Louis Bossart 2016-11-12  80  		status = acpi_extract_package(myobj,
-> 3421894765a345 sound/soc/intel/common/sst-match-acpi.c Pierre-Louis Bossart 2016-11-12  81  					pkg_ctx->format, pkg_ctx->state);
-> 3421894765a345 sound/soc/intel/common/sst-match-acpi.c Pierre-Louis Bossart 2016-11-12  82  		if (ACPI_FAILURE(status)) {
-> 3421894765a345 sound/soc/intel/common/sst-match-acpi.c Pierre-Louis Bossart 2016-11-12  83  			kfree(buffer.pointer);
-> 3421894765a345 sound/soc/intel/common/sst-match-acpi.c Pierre-Louis Bossart 2016-11-12  84  			return AE_OK;
-> 3421894765a345 sound/soc/intel/common/sst-match-acpi.c Pierre-Louis Bossart 2016-11-12  85  		}
-> 3421894765a345 sound/soc/intel/common/sst-match-acpi.c Pierre-Louis Bossart 2016-11-12  86  
-> 3421894765a345 sound/soc/intel/common/sst-match-acpi.c Pierre-Louis Bossart 2016-11-12  87  		kfree(buffer.pointer);
-> 3421894765a345 sound/soc/intel/common/sst-match-acpi.c Pierre-Louis Bossart 2016-11-12  88  		pkg_ctx->data_valid = true;
-> 3421894765a345 sound/soc/intel/common/sst-match-acpi.c Pierre-Louis Bossart 2016-11-12  89  		return AE_CTRL_TERMINATE;
-> 3421894765a345 sound/soc/intel/common/sst-match-acpi.c Pierre-Louis Bossart 2016-11-12  90  	}
-> 3421894765a345 sound/soc/intel/common/sst-match-acpi.c Pierre-Louis Bossart 2016-11-12  91  
-> 3421894765a345 sound/soc/intel/common/sst-match-acpi.c Pierre-Louis Bossart 2016-11-12  92  	return AE_OK;
-> 3421894765a345 sound/soc/intel/common/sst-match-acpi.c Pierre-Louis Bossart 2016-11-12  93  }
-> 3421894765a345 sound/soc/intel/common/sst-match-acpi.c Pierre-Louis Bossart 2016-11-12  94  
-> 
-> :::::: The code at line 58 was first introduced by commit
-> :::::: ff4865b3c8cd746ef72f59bdd485848b4cebd43d ALSA: Replace acpi_bus_get_device()
-> 
-> :::::: TO: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> :::::: CC: Takashi Iwai <tiwai@suse.de>
-> 
-
+Actually I see two places in this file doing the same roundup.
+So I am going to add a prep patch in v3 to fix them separately.

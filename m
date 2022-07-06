@@ -2,51 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8488A567F91
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 09:09:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6893E56806A
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 09:44:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231476AbiGFHJL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Jul 2022 03:09:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35604 "EHLO
+        id S231915AbiGFHoh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Jul 2022 03:44:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33066 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229740AbiGFHJJ (ORCPT
+        with ESMTP id S231991AbiGFHoK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Jul 2022 03:09:09 -0400
-Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4076220C1;
-        Wed,  6 Jul 2022 00:09:08 -0700 (PDT)
-Received: from dggpemm500023.china.huawei.com (unknown [172.30.72.56])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4Ld9ZT3lBrz19G1p;
-        Wed,  6 Jul 2022 15:06:41 +0800 (CST)
-Received: from dggpemm100009.china.huawei.com (7.185.36.113) by
- dggpemm500023.china.huawei.com (7.185.36.83) with Microsoft SMTP Server
+        Wed, 6 Jul 2022 03:44:10 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30A77237D8
+        for <linux-kernel@vger.kernel.org>; Wed,  6 Jul 2022 00:44:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1657093448; x=1688629448;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=qKkHo7U93i0xJGO/erKhvmEQKF0npn2IZsa8m4BvJe4=;
+  b=nParLiFyuWaSr2TKP9Z9+49/+tEEZe5iepOJKvqLZFdCkxM+2NKTBWYQ
+   GfGvbghU3ox13GiS2oWVBC5MYRzjPnXB6LPa1H45oocqE6Ce2UqxgM3NM
+   vF+7f3rxxbYBcPstqTUt8NbZQZy9VyQBr4lQ5prxoCKXxu8LkQdRJMvjp
+   pJysfeajchovaueKwc1amZl0lJiLvpPf7gUHd6CvfA3oZ72aaIqrfHS+T
+   iE4NDX2sQbVTaM3YEoDX+mpbKKTTLMS8IUdGIFwAR6mD8c0LgXAI5StfB
+   R8SfiY3qiQo0/Ywuq8tlCu8ACDnNqsB7BITlwzlDiyEpRLzOr85beyF8g
+   g==;
+X-IronPort-AV: E=Sophos;i="5.92,249,1650956400"; 
+   d="scan'208";a="171229271"
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa3.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 06 Jul 2022 00:44:08 -0700
+Received: from chn-vm-ex02.mchp-main.com (10.10.85.144) by
+ chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Wed, 6 Jul 2022 15:08:52 +0800
-Received: from huawei.com (10.175.113.32) by dggpemm100009.china.huawei.com
- (7.185.36.113) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Wed, 6 Jul
- 2022 15:08:51 +0800
-From:   Liu Shixin <liushixin2@huawei.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Matthew Wilcox <willy@infradead.org>, Jan Kara <jack@suse.cz>,
-        William Kucharski <william.kucharski@oracle.com>,
-        "Christoph Hellwig" <hch@lst.de>
-CC:     <linux-kernel@vger.kernel.org>, <stable@vger.kernel.org>,
-        Liu Shixin <liushixin2@huawei.com>
-Subject: [PATCH 5.15 v3] mm/filemap: fix UAF in find_lock_entries
-Date:   Wed, 6 Jul 2022 15:45:27 +0800
-Message-ID: <20220706074527.1406924-1-liushixin2@huawei.com>
-X-Mailer: git-send-email 2.25.1
+ 15.1.2375.17; Wed, 6 Jul 2022 00:44:07 -0700
+Received: from localhost.localdomain (10.10.115.15) by
+ chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server id
+ 15.1.2375.17 via Frontend Transport; Wed, 6 Jul 2022 00:44:05 -0700
+From:   Claudiu Beznea <claudiu.beznea@microchip.com>
+To:     <tglx@linutronix.de>, <maz@kernel.org>,
+        <nicolas.ferre@microchip.com>, <alexandre.belloni@bootlin.com>
+CC:     <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>
+Subject: [PATCH 1/2] irqchip/atmel-aic: remove #ifdef CONFIG_PM
+Date:   Wed, 6 Jul 2022 10:46:29 +0300
+Message-ID: <20220706074630.829607-1-claudiu.beznea@microchip.com>
+X-Mailer: git-send-email 2.33.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.113.32]
-X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
- dggpemm100009.china.huawei.com (7.185.36.113)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -54,76 +62,44 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Release refcount after xas_set to fix UAF which may cause panic like this:
+Remove #ifdef CONFIG_PM around aic_suspend() function. Coding style
+recommends (at chapter Conditional Compilation) to avoid using
+preprocessor conditional in .c files.
+gc->chip_types->chip.irq_suspend()/gc->chip_types->chip.irq_resume() is
+called in irq_gc_suspend()/irq_gc_resume() which is NULL in case CONFIG_PM
+is not defined. With this gc->chip_types->chip.irq_pm_shutdown is
+populated all the time as it should be as irq_gc_shutdown() is not
+conditioned by CONFIG_PM.
 
- page:ffffea000491fa40 refcount:1 mapcount:0 mapping:0000000000000000 index:0x1 pfn:0x1247e9
- head:ffffea000491fa00 order:3 compound_mapcount:0 compound_pincount:0
- memcg:ffff888104f91091
- flags: 0x2fffff80010200(slab|head|node=0|zone=2|lastcpupid=0x1fffff)
-...
-page dumped because: VM_BUG_ON_PAGE(PageTail(page))
- ------------[ cut here ]------------
- kernel BUG at include/linux/page-flags.h:632!
- invalid opcode: 0000 [#1] SMP DEBUG_PAGEALLOC KASAN
- CPU: 1 PID: 7642 Comm: sh Not tainted 5.15.51-dirty #26
-...
- Call Trace:
-  <TASK>
-  __invalidate_mapping_pages+0xe7/0x540
-  drop_pagecache_sb+0x159/0x320
-  iterate_supers+0x120/0x240
-  drop_caches_sysctl_handler+0xaa/0xe0
-  proc_sys_call_handler+0x2b4/0x480
-  new_sync_write+0x3d6/0x5c0
-  vfs_write+0x446/0x7a0
-  ksys_write+0x105/0x210
-  do_syscall_64+0x35/0x80
-  entry_SYSCALL_64_after_hwframe+0x44/0xae
- RIP: 0033:0x7f52b5733130
-...
-
-This problem has been fixed on mainline by patch 6b24ca4a1a8d ("mm: Use
-multi-index entries in the page cache") since it deletes the related code.
-
-Fixes: 5c211ba29deb ("mm: add and use find_lock_entries")
-Signed-off-by: Liu Shixin <liushixin2@huawei.com>
+Signed-off-by: Claudiu Beznea <claudiu.beznea@microchip.com>
 ---
- mm/filemap.c | 12 +++++++-----
- 1 file changed, 7 insertions(+), 5 deletions(-)
+ drivers/irqchip/irq-atmel-aic.c | 6 ------
+ 1 file changed, 6 deletions(-)
 
-diff --git a/mm/filemap.c b/mm/filemap.c
-index 00e391e75880..c3e1fc0520dc 100644
---- a/mm/filemap.c
-+++ b/mm/filemap.c
-@@ -2090,7 +2090,11 @@ unsigned find_lock_entries(struct address_space *mapping, pgoff_t start,
+diff --git a/drivers/irqchip/irq-atmel-aic.c b/drivers/irqchip/irq-atmel-aic.c
+index 4631f6847953..02a9f45a7d2e 100644
+--- a/drivers/irqchip/irq-atmel-aic.c
++++ b/drivers/irqchip/irq-atmel-aic.c
+@@ -102,7 +102,6 @@ static int aic_set_type(struct irq_data *d, unsigned type)
+ 	return 0;
+ }
  
- 	rcu_read_lock();
- 	while ((page = find_get_entry(&xas, end, XA_PRESENT))) {
-+		unsigned long next_idx = xas.xa_index;
-+
- 		if (!xa_is_value(page)) {
-+			if (PageTransHuge(page))
-+				next_idx = page->index + thp_nr_pages(page);
- 			if (page->index < start)
- 				goto put;
- 			if (page->index + thp_nr_pages(page) - 1 > end)
-@@ -2111,13 +2115,11 @@ unsigned find_lock_entries(struct address_space *mapping, pgoff_t start,
- put:
- 		put_page(page);
- next:
--		if (!xa_is_value(page) && PageTransHuge(page)) {
--			unsigned int nr_pages = thp_nr_pages(page);
--
-+		if (next_idx != xas.xa_index) {
- 			/* Final THP may cross MAX_LFS_FILESIZE on 32-bit */
--			xas_set(&xas, page->index + nr_pages);
--			if (xas.xa_index < nr_pages)
-+			if (next_idx < xas.xa_index)
- 				break;
-+			xas_set(&xas, next_idx);
- 		}
- 	}
- 	rcu_read_unlock();
+-#ifdef CONFIG_PM
+ static void aic_suspend(struct irq_data *d)
+ {
+ 	struct irq_chip_generic *gc = irq_data_get_irq_chip_data(d);
+@@ -132,11 +131,6 @@ static void aic_pm_shutdown(struct irq_data *d)
+ 	irq_reg_writel(gc, 0xffffffff, AT91_AIC_ICCR);
+ 	irq_gc_unlock(gc);
+ }
+-#else
+-#define aic_suspend		NULL
+-#define aic_resume		NULL
+-#define aic_pm_shutdown		NULL
+-#endif /* CONFIG_PM */
+ 
+ static void __init aic_hw_init(struct irq_domain *domain)
+ {
 -- 
-2.25.1
+2.34.1
 

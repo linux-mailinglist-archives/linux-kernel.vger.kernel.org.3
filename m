@@ -2,127 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F0FA568918
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 15:13:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C4645688CE
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 14:58:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233338AbiGFNNQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Jul 2022 09:13:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42204 "EHLO
+        id S232740AbiGFM6G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Jul 2022 08:58:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58038 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231906AbiGFNNM (ORCPT
+        with ESMTP id S231508AbiGFM6C (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Jul 2022 09:13:12 -0400
-Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B018B205FB;
-        Wed,  6 Jul 2022 06:13:06 -0700 (PDT)
-Received: by mail-ed1-x533.google.com with SMTP id m16so3742235edb.11;
-        Wed, 06 Jul 2022 06:13:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:from:to:cc:subject:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=tz1OH9dY7H/mCELNT2HvP/qa+IhAYUEkLGRiUHfIoDw=;
-        b=CP3oj1/tEMc0jScYrEhT9iJR8MnFIRQQr4ZN60ltqz10Yy7KBpRgRPRmbg7rwhxGQF
-         +6c0e+lgbPgmx582/b1As5PjF5DjeeUx/L99i0VP31AGdTNdiZGIXH2a2wqWralB7VFB
-         sWFukuzzQdPZLFvAk2id8AfopNyYRjH0HCyDAJTqYEX9yoewC0m8lPctdGcdObRXonw5
-         zt8Wa4tI3X3PSaJKJsW2GDsfO45hajBGf6i8t7WrUNXUJJfwrTYepN2iLeon6rqzo1ox
-         e+OUjagLaw93s9fIOcDAvPHX+HRgOyeqf52wbbS7YUV7q3MZsgeXqKCVKADLPLtYXx/H
-         EqPA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:from:to:cc:subject:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=tz1OH9dY7H/mCELNT2HvP/qa+IhAYUEkLGRiUHfIoDw=;
-        b=Zwf45i65BN5kl50ac6nUtFis0JF4KERIjb6KNjoMjjs3lsxlHxcrZng/7YlaqPEVG3
-         7Cook8AnDS8RcgpsPJa/3pfuGIWO7ljJD4a8Wfki0vHP26TFmPcOXz7Vk5rLM4ZY6H2u
-         uyV5U2S2eP5Q9te51bePnP6rnvHlIr/iZZSBCangc2DHryrfC4x7wlj+FXUAd651KjbY
-         EU5r2XNiZ/huahcLO8W4W9TIHHISfqPwpDStEHo6YKl3OJxmRYvrM6IjxxvQnyXGqEBU
-         swsx+fjpqKbGhF24oZnJtVjjfZXFw5X1Bs5gXt25PgXyxBITFpc2w2jDhwb/RqvjgQIl
-         Ytdw==
-X-Gm-Message-State: AJIora87vRy5M0zFNNKtAUQ6KPQqN9gjGfGSo50McFOA7i3hYPU/Mx0I
-        rm2CnJQMFcToLsXlKNsA804=
-X-Google-Smtp-Source: AGRyM1tdRp8VQxMu6lPUKZZuuY7tnzIpWG4sHFf8GtVhskX9iVa/cyLXBcIir2AD31AsmvafpWrKUQ==
-X-Received: by 2002:a05:6402:358c:b0:435:9daf:e825 with SMTP id y12-20020a056402358c00b004359dafe825mr54134935edc.375.1657113185232;
-        Wed, 06 Jul 2022 06:13:05 -0700 (PDT)
-Received: from Ansuel-xps. (93-42-70-190.ip85.fastwebnet.it. [93.42.70.190])
-        by smtp.gmail.com with ESMTPSA id t4-20020a17090605c400b00706242d297fsm17147042ejt.212.2022.07.06.06.13.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 06 Jul 2022 06:13:04 -0700 (PDT)
-Message-ID: <62c58a60.1c69fb81.25b26.e72a@mx.google.com>
-X-Google-Original-Message-ID: <YsWGe/Ufbb/AR+aR@Ansuel-xps.>
-Date:   Wed, 6 Jul 2022 14:56:27 +0200
-From:   Christian Marangi <ansuelsmth@gmail.com>
-To:     Konrad Dybcio <konrad.dybcio@somainline.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Jonathan McDowell <noodles@earth.li>
-Subject: Re: [PATCH 04/13] ARM: dts: qcom: disable smb208 regulators for
- ipq8064-rb3011
-References: <20220705133917.8405-1-ansuelsmth@gmail.com>
- <20220705133917.8405-5-ansuelsmth@gmail.com>
- <8a394fa3-92fb-d162-b4ee-df010a09aed0@somainline.org>
+        Wed, 6 Jul 2022 08:58:02 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5EC4122;
+        Wed,  6 Jul 2022 05:58:01 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 98ED4B81CE2;
+        Wed,  6 Jul 2022 12:58:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5A908C3411C;
+        Wed,  6 Jul 2022 12:57:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1657112279;
+        bh=QrNdip0xbegVVlOqR8agmJ+S77ZMuuDeifkGOEZ2+TI=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=h9Uig1t7Ar00l00Xt4taBoCN6h5RQu9EZAnamu3fXB/uTXiccnGvppLS0jB7hHFwT
+         R6EgCw1YnyZnV27o8IufOEasTu1V/4W0a2exQ0itloEXU/4Ls985hwAu0KFLeRe5X5
+         9E7J25N/jFGJXtz63JHueVtN/ibiJyPHbVTgYOwik9BJH++cP14ve0p09F/aYmTCr9
+         oV6LTQ3RSqgQ/tPvYNR2Iifqa8NqiLWDa7SqekSZkXXhfdYA6eHdurHqbCt/EuaVPK
+         Bm1NTBotjtAIxC2i6JL1/bZESfFwBOsYJOhoZe3cLB7mL9aOJ6ckd/LfC2nHgo7xWY
+         vaeeeYSWrKA1Q==
+Date:   Wed, 6 Jul 2022 13:57:54 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+Cc:     lgirdwood@gmail.com, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, matthias.bgg@gmail.com,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org
+Subject: Re: [PATCH v3 RESEND 0/4] MediaTek Helio X10 MT6795 - MT6331/6332
+ Regulators
+Message-ID: <YsWG0jfqAf4EqojE@sirena.org.uk>
+References: <20220706100912.200698-1-angelogioacchino.delregno@collabora.com>
+ <YsV9IerWCoa/xtwM@sirena.org.uk>
+ <57367b11-f2d4-476b-b92d-16c1726316c0@collabora.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="MIMUgHtOMspXsyrA"
 Content-Disposition: inline
-In-Reply-To: <8a394fa3-92fb-d162-b4ee-df010a09aed0@somainline.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <57367b11-f2d4-476b-b92d-16c1726316c0@collabora.com>
+X-Cookie: Only God can make random selections.
+X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jul 06, 2022 at 03:03:32PM +0200, Konrad Dybcio wrote:
-> 
-> 
-> On 5.07.2022 15:39, Christian Marangi wrote:
-> > Mikrotik RB3011 have a special configuration where the regulators are
-> > not the common smb208 controlled by RPM but they use a TPS563900
-> > controlled via i2c. Disable the smb208 for this specific device.
-> Ok, so that answers my question from the previous email.
-> Please define the SMB208 regulators only in the DTs of
-> boards that actually use it, as it is not a SoC component as
-> far as I can tell.
-> 
-> Konrad
 
-This was already discuessed, rb3011 is the exception, qcom for ipq8064
-recommends to use smb208 but gives the option to implement it in their
-own way. So again we have 28 device with smb208 and 1 device that use
-its own special way...
+--MIMUgHtOMspXsyrA
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Wonder if a separate dtsi can be used for this if we really can't put
-smb208 in ipq8064 dtsi?
+On Wed, Jul 06, 2022 at 02:49:56PM +0200, AngeloGioacchino Del Regno wrote:
+> Il 06/07/22 14:16, Mark Brown ha scritto:
 
-> > 
-> > Signed-off-by: Christian Marangi <ansuelsmth@gmail.com>
-> > Reviewed-by: Jonathan McDowell <noodles@earth.li>
-> > Tested-by: Jonathan McDowell <noodles@earth.li>
-> > ---
-> >  arch/arm/boot/dts/qcom-ipq8064-rb3011.dts | 4 ++++
-> >  1 file changed, 4 insertions(+)
-> > 
-> > diff --git a/arch/arm/boot/dts/qcom-ipq8064-rb3011.dts b/arch/arm/boot/dts/qcom-ipq8064-rb3011.dts
-> > index 9034f00f2bd8..f651e813d75a 100644
-> > --- a/arch/arm/boot/dts/qcom-ipq8064-rb3011.dts
-> > +++ b/arch/arm/boot/dts/qcom-ipq8064-rb3011.dts
-> > @@ -218,6 +218,10 @@ led@7 {
-> >  	};
-> >  };
-> >  
-> > +&smb208_regulators {
-> > +	status = "disabled";
-> > +};
-> > +
-> >  &adm_dma {
-> >  	status = "okay";
-> >  };
+> > This previously got 0day failures due to missing dependencies which
+> > need would need a merge with IIRC MFD, I see no reference in the cover
+> > letter to dependencies?
 
--- 
-	Ansuel
+> The only blocker for this series was the MFD patch, which got picked and
+> it's present in next-20220706 (as you suggested me to resend when things
+> were picked... I decided to wait until they actually landed on -next...)
+
+Right, I also said I'd need a pull request - if I apply the patches
+without having the MFD bits they depend on in my tree then it will fail
+to build.
+
+--MIMUgHtOMspXsyrA
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmLFhtEACgkQJNaLcl1U
+h9ALhwf+LcbvrKU5D7gTwFnixM5NNn/A9PB/fB/gEcbgteuZ6nZvu7YIWEjhmeik
+ZSY3RIskvA/4Ms51cN1SlkhylcUXcqeT5+/p5iI4Oaa6UEfvxtN1TE6rWwaLU/9/
+7DbQEJJdZvyEm5BEI51pGX8cYLlacS+izmLX28NNXB6gloekTUP7212Ip8x7FYas
+yTQueiiLvH1oUJfRRnqp80BoT12VnABkilqA7RLAVpn4ZlkmOqC9Fd6v4LVyBv0G
+QV7BPsE+qpR3K53VEGqCRhkmbf5elbDpf5FGy5FVsb3izC80yUT2RDY2FELtXwD3
+n4McJcj/rC50Pqj1PYrv7xOy4ErKsw==
+=BF98
+-----END PGP SIGNATURE-----
+
+--MIMUgHtOMspXsyrA--

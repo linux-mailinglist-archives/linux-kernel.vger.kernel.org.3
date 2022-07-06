@@ -2,80 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D935568B95
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 16:45:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 14FE9568B99
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 16:46:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233557AbiGFOpS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Jul 2022 10:45:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35878 "EHLO
+        id S233580AbiGFOp4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Jul 2022 10:45:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36448 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233505AbiGFOpQ (ORCPT
+        with ESMTP id S233470AbiGFOpw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Jul 2022 10:45:16 -0400
-Received: from mail-lj1-x230.google.com (mail-lj1-x230.google.com [IPv6:2a00:1450:4864:20::230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FA9025594
-        for <linux-kernel@vger.kernel.org>; Wed,  6 Jul 2022 07:45:15 -0700 (PDT)
-Received: by mail-lj1-x230.google.com with SMTP id r9so18731233ljp.9
-        for <linux-kernel@vger.kernel.org>; Wed, 06 Jul 2022 07:45:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=fqggrorsOMK1/Q3LUERXKOHSnzzVH9VjKHdlcLxDeU8=;
-        b=UfNLXzs0clDz1kFDTuFHM401TPlWx0oEXl4Zy45Pkg6e8i4u2He8PpJj1gbdHcWXTH
-         ITrRZ7pdfMEe2ucnr8u7TZlIYGuHU9BoOF4WquKu00uCRsscYv2rMr9U/UUXt39tvZB4
-         Ath1M8cJJAa3bjfz+DLhUuYZZm1Zal6rwQwQFhfqTkRrJD/cXMnHmDZHKcMC7v8kWrVl
-         OJtUgTqPEe+OslFWI0usaktZOVwUfG1mnZ++TW468AHCgqhnz2Ld4xBSfgYnDCgZGW81
-         lUpdNAKH3j1Wv21f+8N0rZZrI7UbEF0TrrWq4DBHliqjNxVDytprutNVJK/xXu8zmCrt
-         zHBg==
+        Wed, 6 Jul 2022 10:45:52 -0400
+Received: from mail-io1-f42.google.com (mail-io1-f42.google.com [209.85.166.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 156E125583;
+        Wed,  6 Jul 2022 07:45:52 -0700 (PDT)
+Received: by mail-io1-f42.google.com with SMTP id h85so14210609iof.4;
+        Wed, 06 Jul 2022 07:45:52 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=fqggrorsOMK1/Q3LUERXKOHSnzzVH9VjKHdlcLxDeU8=;
-        b=qZbScb3Spb9msDzz5msbEyScPO+pHjtEguJT8X53N0k05Sz5wEwGNkhnkaJbE41FI7
-         /vvfdahbJp3GBWCLqerpBLXFeYHH6y6hd6hLXtXekROsZsC87xIV3845JyEJGridLSi0
-         VvmMlpz+wpJgo6oV6swfO5spWeOApu8EHJNvmUgH8IpAdopyf+tijzW/GyIunjRDGQ/3
-         7i3IG+DtzHwruFOzlbypVBtBK4iBm09r6rITMmgAWRC1BnsurmHGASL2u5rcPOoeoNS+
-         i58OokNLHV2f7RYqh25Uh6sHdyKG7VfTkotdM6zOTJxVn4EEVv4fsjlsF+F3PlG3qpWX
-         dMzg==
-X-Gm-Message-State: AJIora936CH6y1dVZgvEBN7pI/7eR0Ye2WaxQ/ArS0VQk6vr3LlPyGh1
-        y5ciVrmcsN/aicLuwhfZZrOdSQ==
-X-Google-Smtp-Source: AGRyM1tFs7JadmbYZAM8ur0wEsMyO4m9qic6SDkHuwKo06yaUIEjfU7a5sI+qBgJGUo1SzK9Os5xYw==
-X-Received: by 2002:a05:651c:a0c:b0:25b:ba85:6db5 with SMTP id k12-20020a05651c0a0c00b0025bba856db5mr24652786ljq.351.1657118713236;
-        Wed, 06 Jul 2022 07:45:13 -0700 (PDT)
-Received: from [192.168.1.52] ([84.20.121.239])
-        by smtp.gmail.com with ESMTPSA id m10-20020a056512358a00b0047255d21129sm6337867lfr.88.2022.07.06.07.45.12
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 06 Jul 2022 07:45:12 -0700 (PDT)
-Message-ID: <58371fc0-ef6e-dbb4-88bf-221e8e1c93e5@linaro.org>
-Date:   Wed, 6 Jul 2022 16:45:11 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH 08/13] ARM: dts: qcom: fix dtc warning for missing
- #address-cells for ipq8064
-Content-Language: en-US
-To:     Christian Marangi <ansuelsmth@gmail.com>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Rob Herring <robh+dt@kernel.org>,
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=F76AWoKe++Zx0dD2zE8V7c1BPtYAI5oZL0brUD35ZU4=;
+        b=nk81Y+XTxsC/EAj0V/MCsVqOcIKcWuGcelJZg39LX1NEJHu+mwHM2zBW4Ton0q32U8
+         ppTozwUDqcSEaNaQ+f891Kjps4M9AN1k6q5SpwGlLCOPpI3xnvG9xm1GBeTG+mi3CUi8
+         n8p6yPnO4AiPfoSy0eaMvMDFaZFRjTc+jRyyif18ouMQ+2jfP1caQymv7MaIqofk5WkS
+         yUcGes9SKSDobWUP1G6ABGUcOaiZZ2KI894lrE/exn+CB1itZdVrJSuwrvL/zrZHO3Iy
+         2ysIxpNK1JiMoSh684a3fLNlH3WS8ovl92mOLAyFqah2zxj7IdBw5Q1KJb3P76M3ocqs
+         y0Dg==
+X-Gm-Message-State: AJIora/SONXTxYc5udTbhJ2SAaNhP3XIkH8/UHd4cmB/+weHpfta+Nb+
+        y5C2ead+6EyA4CyjAx3deA==
+X-Google-Smtp-Source: AGRyM1vKo7aMrFmy88OiMPEw21lorx1jy+GJycUjUFI4kV845M26Rh/j6xZk5qDb9m21R56dJw3dpQ==
+X-Received: by 2002:a5e:a506:0:b0:66a:2cdc:e6f7 with SMTP id 6-20020a5ea506000000b0066a2cdce6f7mr22203877iog.113.1657118751286;
+        Wed, 06 Jul 2022 07:45:51 -0700 (PDT)
+Received: from robh.at.kernel.org ([64.188.179.248])
+        by smtp.gmail.com with ESMTPSA id k30-20020a02335e000000b00339e6f88235sm15999225jak.61.2022.07.06.07.45.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 06 Jul 2022 07:45:50 -0700 (PDT)
+Received: (nullmailer pid 18250 invoked by uid 1000);
+        Wed, 06 Jul 2022 14:45:49 -0000
+Date:   Wed, 6 Jul 2022 08:45:49 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Andy Gross <agross@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Jonathan McDowell <noodles@earth.li>
-References: <20220705133917.8405-1-ansuelsmth@gmail.com>
- <20220705133917.8405-9-ansuelsmth@gmail.com>
- <7c3ef50a-2a4d-4b75-3aab-3bfbf12e06c4@linaro.org>
- <62c563dc.1c69fb81.e405a.e7c0@mx.google.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <62c563dc.1c69fb81.e405a.e7c0@mx.google.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Kumar Gala <galak@codeaurora.org>, devicetree@vger.kernel.org,
+        Rob Herring <robh+dt@kernel.org>
+Subject: Re: [PATCH v6 1/3] dt-bindings: arm: qcom: document qcom,msm-id and
+ qcom,board-id
+Message-ID: <20220706144549.GA18217-robh@kernel.org>
+References: <20220705130300.100882-1-krzysztof.kozlowski@linaro.org>
+ <20220705130300.100882-2-krzysztof.kozlowski@linaro.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220705130300.100882-2-krzysztof.kozlowski@linaro.org>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -83,22 +69,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 06/07/2022 12:12, Christian Marangi wrote:
-> On Wed, Jul 06, 2022 at 10:37:47AM +0200, Krzysztof Kozlowski wrote:
->> On 05/07/2022 15:39, Christian Marangi wrote:
->>> Fix dtc warning for missing #address-cells for ipq8064.
->>
->> Paste the applicable part of warning in the commit log.
->>
->>>
->>
->>
->> Best regards,
->> Krzysztof
+On Tue, 05 Jul 2022 15:02:58 +0200, Krzysztof Kozlowski wrote:
+> The top level qcom,msm-id and qcom,board-id properties are utilized by
+> bootloaders on Qualcomm MSM platforms to determine which device tree
+> should be used and passed to the kernel.
 > 
-> Can I squash here the warning from the smb patch?
+> The commit b32e592d3c28 ("devicetree: bindings: Document qcom board
+> compatible format") from 2015 was a consensus during discussion about
+> upstreaming qcom,msm-id and qcom,board-id fields.  There are however still
+> problems with that consensus:
+> 1. It was reached 7 years ago but it turned out its implementation did
+>    not reach all possible products.
+> 
+> 2. Initially additional tool (dtbTool) was needed for parsing these
+>    fields to create a QCDT image consisting of multiple DTBs, later the
+>    bootloaders were improved and they use these qcom,msm-id and
+>    qcom,board-id properties directly.
+> 
+> 3. Extracting relevant information from the board compatible requires
+>    this additional tool (dtbTool), which makes the build process more
+>    complicated and not easily reproducible (DTBs are modified after the
+>    kernel build).
+> 
+> 4. Some versions of Qualcomm bootloaders expect these properties even
+>    when booting with a single DTB.  The community is stuck with these
+>    bootloaders thus they require properties in the DTBs.
+> 
+> Since several upstreamed Qualcomm SoC-based boards require these
+> properties to properly boot and the properties are reportedly used by
+> bootloaders, document them along with the bindings header with constants
+> used by: bootloader, some DTS and socinfo driver.
+> 
+> Link: https://lore.kernel.org/r/a3c932d1-a102-ce18-deea-18cbbd05ecab@linaro.org/
+> Co-developed-by: Kumar Gala <galak@codeaurora.org>
+> Signed-off-by: Kumar Gala <galak@codeaurora.org>
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+> ---
+>  .../devicetree/bindings/arm/qcom.yaml         | 120 ++++++++++++++
+>  include/dt-bindings/arm/qcom,ids.h            | 152 ++++++++++++++++++
+>  2 files changed, 272 insertions(+)
+>  create mode 100644 include/dt-bindings/arm/qcom,ids.h
+> 
 
-Do you fix the same stuff in both commits?
-
-Best regards,
-Krzysztof
+Reviewed-by: Rob Herring <robh@kernel.org>

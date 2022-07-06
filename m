@@ -2,112 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C40FE569635
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 01:37:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 528F6569654
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 01:39:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234687AbiGFXhN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Jul 2022 19:37:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47650 "EHLO
+        id S234744AbiGFXi2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Jul 2022 19:38:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49822 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234627AbiGFXhH (ORCPT
+        with ESMTP id S234713AbiGFXi1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Jul 2022 19:37:07 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 595092CDC6;
-        Wed,  6 Jul 2022 16:37:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=D09A+SL0PWvZ3ThuAmaRek+4bTTKIaie6FGwPac4dZI=; b=tyLYzUJ5gXXykof2FQlMnmuiWx
-        c8qCBX6FN6VtidXXPgM0uCcjYG6jF4nSLSN5iFPTHZtp6ALwAMMhgXuhI8Ek11YZ58lOrrPll6/wN
-        WzcQgPAOt+/WL9hogQ9/UfZ34VmkIG4HBTwfwkmg+DT00ojP2rvycN05j1Ss5dFwAg8LzBvzeb5F5
-        bzfqxfsncAhtlP5el8PsfP3DIOAktWALp6Fmzs8CDXI0CXZ5K2NiO4rTvuOxe4nxUnAydrcN2wSJg
-        JGR1G/fblzjbKIcNV6I152J/bBaNjPcgE6vuv8/DJ5zQlLS27fAJ9mKAv+6Ls1a9hU2gdvOn5nRfp
-        ZU6qCWYA==;
-Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1o9EZt-00CloN-E7; Wed, 06 Jul 2022 23:37:05 +0000
-Date:   Wed, 6 Jul 2022 16:37:05 -0700
-From:   Luis Chamberlain <mcgrof@kernel.org>
-To:     Aaron Tomlin <atomlin@redhat.com>
-Cc:     linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/2] module: Show the last unloaded module's taint flag(s)
-Message-ID: <YsYcoVKA0KzxykqN@bombadil.infradead.org>
-References: <20220627164052.2416485-1-atomlin@redhat.com>
- <20220627164052.2416485-2-atomlin@redhat.com>
+        Wed, 6 Jul 2022 19:38:27 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE3532725
+        for <linux-kernel@vger.kernel.org>; Wed,  6 Jul 2022 16:38:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1657150705; x=1688686705;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=QAZsvJf1BerwqsqDWfz9Ex516FwclGK3+0CKzld2eyU=;
+  b=kvEv3/1OOt+k0Z4z5VdISLGb/ZWq7D5PZr7UFdWBNtMGLZhqImNuGjW4
+   CyCK3dJa7eQ8Fz+q4NYzOZ9KpGai1FrG49EQQxZlZI9gWDfZPy352iw7G
+   CZEzcpLwDz7gkmYW59st/pPDFn0Ju0+yzV8jD6uObnQy9NabfYfx37/US
+   J6EWU/4qYsdYfZiDMkHiVLzX5747g4mDHxjkJ/YQg61xDTLeVsRvYgNUE
+   SSQ6LJwmccUW0MfzGg46ZdC/YuF8jllmelYvXPhDbFx2na0FEcdOgyZrI
+   NeNDuixAvxfhY4/ES2zlBerjBQm+ypGhyBKzy26csUEHkC0Go61liNPqn
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10400"; a="272683635"
+X-IronPort-AV: E=Sophos;i="5.92,251,1650956400"; 
+   d="scan'208";a="272683635"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jul 2022 16:38:24 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.92,251,1650956400"; 
+   d="scan'208";a="593525909"
+Received: from lkp-server01.sh.intel.com (HELO 68b931ab7ac1) ([10.239.97.150])
+  by orsmga002.jf.intel.com with ESMTP; 06 Jul 2022 16:38:15 -0700
+Received: from kbuild by 68b931ab7ac1 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1o9Eb0-000LG5-Nu;
+        Wed, 06 Jul 2022 23:38:14 +0000
+Date:   Thu, 7 Jul 2022 07:38:01 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Conor Dooley <mail@conchuod.ie>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Sudeep Holla <sudeep.holla@arm.com>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        Daire McNamara <daire.mcnamara@microchip.com>,
+        Conor Dooley <conor.dooley@microchip.com>,
+        Niklas Cassel <niklas.cassel@wdc.com>,
+        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Zong Li <zong.li@sifive.com>,
+        Emil Renner Berthing <kernel@esmil.dk>,
+        Jonas Hahnfeld <hahnjo@hahnjo.de>, Guo Ren <guoren@kernel.org>,
+        Anup Patel <anup@brainfault.org>,
+        Atish Patra <atishp@atishpatra.org>,
+        Changbin Du <changbin.du@intel.com>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Philipp Tomsich <philipp.tomsich@vrull.eu>,
+        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Brice Goglin <Brice.Goglin@inria.fr>
+Subject: Re: [PATCH] riscv: arch-topology: fix default topology reporting
+Message-ID: <202207070728.MiQn5fv0-lkp@intel.com>
+References: <20220706184558.2557301-1-mail@conchuod.ie>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220627164052.2416485-2-atomlin@redhat.com>
-Sender: Luis Chamberlain <mcgrof@infradead.org>
-X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220706184558.2557301-1-mail@conchuod.ie>
+X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 27, 2022 at 05:40:52PM +0100, Aaron Tomlin wrote:
-> For diagnostic purposes, this patch, in addition to keeping a record/or
-> track of the last known unloaded module, we now will include the
-> module's taint flag(s) too e.g: " [last unloaded: fpga_mgr_mod(OE)]"
-> 
-> Signed-off-by: Aaron Tomlin <atomlin@redhat.com>
-> ---
->  kernel/module/main.c | 10 ++++++++--
->  1 file changed, 8 insertions(+), 2 deletions(-)
-> 
-> diff --git a/kernel/module/main.c b/kernel/module/main.c
-> index dcb83cf18d84..0ca6fd38b903 100644
-> --- a/kernel/module/main.c
-> +++ b/kernel/module/main.c
-> @@ -524,7 +524,12 @@ static struct module_attribute modinfo_##field = {                    \
->  MODINFO_ATTR(version);
->  MODINFO_ATTR(srcversion);
->  
-> -static char last_unloaded_module[MODULE_NAME_LEN+1];
-> +/*
-> + * Maximum number of characters written by module_flags()
-> + * without a module's state information.
-> + */
-> +#define LAST_UNLOADED_MODULE_NAME_LEN (MODULE_NAME_LEN + MODULE_FLAGS_BUF_SIZE - 2 + 1)
-> +static char last_unloaded_module[LAST_UNLOADED_MODULE_NAME_LEN];
+Hi Conor,
 
-First of all this then confuses a reader easily as one would expect
-last_unloaded_module always just has the module. Second, "module flags"
-really throws a user off, as one would expect a module flag is some sort
-of parameter, but in reality these are just taint flags.
+I love your patch! Yet something to improve:
 
-So I'd much prefer we split the taint flags out to its own buffer and
-dump the data to it alone.
+[auto build test ERROR on b6f1f2fa2bddd69ff46a190b8120bd440fd50563]
 
-The first patch seems sensible.
+url:    https://github.com/intel-lab-lkp/linux/commits/Conor-Dooley/riscv-arch-topology-fix-default-topology-reporting/20220707-024856
+base:   b6f1f2fa2bddd69ff46a190b8120bd440fd50563
+config: riscv-randconfig-r042-20220706 (https://download.01.org/0day-ci/archive/20220707/202207070728.MiQn5fv0-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project f553287b588916de09c66e3e32bf75e5060f967f)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install riscv cross compiling tool for clang build
+        # apt-get install binutils-riscv-linux-gnu
+        # https://github.com/intel-lab-lkp/linux/commit/824f4c3cb56ada865e6e3b14457c0582fa255cbf
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Conor-Dooley/riscv-arch-topology-fix-default-topology-reporting/20220707-024856
+        git checkout 824f4c3cb56ada865e6e3b14457c0582fa255cbf
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash arch/riscv/kernel/
 
-  Luis
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
->  #ifdef CONFIG_MODULE_UNLOAD
->  
-> @@ -694,6 +699,7 @@ SYSCALL_DEFINE2(delete_module, const char __user *, name_user,
->  {
->  	struct module *mod;
->  	char name[MODULE_NAME_LEN];
-> +	char buf[LAST_UNLOADED_MODULE_NAME_LEN];
->  	int ret, forced = 0;
->  
->  	if (!capable(CAP_SYS_MODULE) || modules_disabled)
-> @@ -753,8 +759,8 @@ SYSCALL_DEFINE2(delete_module, const char __user *, name_user,
->  
->  	async_synchronize_full();
->  
-> -	/* Store the name of the last unloaded module for diagnostic purposes */
->  	strlcpy(last_unloaded_module, mod->name, sizeof(last_unloaded_module));
-> +	strcat(last_unloaded_module, module_flags(mod, buf, false));
->  
->  	free_module(mod);
->  	/* someone could wait for the module in add_unformed_module() */
-> -- 
-> 2.34.3
-> 
+All errors (new ones prefixed by >>):
+
+>> arch/riscv/kernel/topology.c:17:37: error: use of undeclared identifier 'cpu_topology'
+           struct cpu_topology *cpuid_topo = &cpu_topology[cpuid];
+                                              ^
+>> arch/riscv/kernel/topology.c:31:2: error: call to undeclared function 'update_siblings_masks'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+           update_siblings_masks(cpuid);
+           ^
+   2 errors generated.
+
+
+vim +/cpu_topology +17 arch/riscv/kernel/topology.c
+
+    14	
+    15	void store_cpu_topology(unsigned int cpuid)
+    16	{
+  > 17		struct cpu_topology *cpuid_topo = &cpu_topology[cpuid];
+    18	
+    19		if (cpuid_topo->package_id != -1)
+    20			goto topology_populated;
+    21	
+    22		cpuid_topo->thread_id = -1;
+    23		cpuid_topo->core_id = cpuid;
+    24		cpuid_topo->package_id = cpu_to_node(cpuid);
+    25	
+    26		pr_debug("CPU%u: package %d core %d thread %d\n",
+    27			 cpuid, cpuid_topo->package_id, cpuid_topo->core_id,
+    28			 cpuid_topo->thread_id);
+    29	
+    30	topology_populated:
+  > 31		update_siblings_masks(cpuid);
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

@@ -2,91 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3DEBF568071
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 09:48:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 844BA568073
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 09:49:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230342AbiGFHrF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Jul 2022 03:47:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35410 "EHLO
+        id S231768AbiGFHte (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Jul 2022 03:49:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36986 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229599AbiGFHrE (ORCPT
+        with ESMTP id S230359AbiGFHtd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Jul 2022 03:47:04 -0400
-Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BAAA922BE1;
-        Wed,  6 Jul 2022 00:47:01 -0700 (PDT)
-Received: by mail-pf1-x435.google.com with SMTP id 128so13627926pfv.12;
-        Wed, 06 Jul 2022 00:47:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=n2THw/2ch+7BfHEoDU2EE1L3hnFG9rBbIWEZ3J6rMMM=;
-        b=ljhAEM8a/4ak2si07DvB8Jb3UHMoDso/Rm0fhiZlhQJmuB5oDu0VGrMs2k8HhN8tPq
-         H471uaUd9s+hdzRHWyGzrMBiOL8ZSLJaQu9mu+AtPWFasvuryVgdc6yk2Nyf5sG4EzHF
-         ZfGZRDA1nMulstdi70uDIa2xjvG/tdwCncmTYIx/42Hq60VA2cMbIiG4RV7/4c/UO+VO
-         jc48DbXlFDgEpQ94j1jyZRTVEuIIXVUUj8yKnL5eO7p1LoQmcx6XjStYI2tvkBCWgL88
-         ViyWcQi4PPN0L2Q7FZXY+3HKLeRATvtbFy2sTkDtku23cmIuDszcPBcWTfe6UvCwY5xY
-         DhEQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=n2THw/2ch+7BfHEoDU2EE1L3hnFG9rBbIWEZ3J6rMMM=;
-        b=F0jGK4pqwnsd0oRRk2sOTnTxsz+ob/UoDmhR/uE5cjXsGh8mttp0T6Lq6kcu1NBSON
-         1V6Dmj8SgYCw4hjHE36rRDzLWE7rGIAfaA2/fhIM4BO4Q4k1m8kUfS/IjYWixG76Z6zZ
-         KogytgFece6s2IpV3daQKchRNO1Iwz6B3nloyJSY51oMUkBJxetnWAjbGQJ/7EDew199
-         WGa4U4hxaqiAeimQ/Y/eTofjfUXOuFpb4+RaKlpHYpA9ECg73/+XUALijMVgX5Pb0lvA
-         IS2Y+gpJ+uPXOG9ysOmsyZ4ZEBNI4RJ5r5iRe0pgEPtCUnvsoUWT2u5lvRM93DjCKjtY
-         jCRg==
-X-Gm-Message-State: AJIora8BQcvWWHoI+B2hgDjgJieU5qmTf0O47ysTZKnK12vHEmZQolg8
-        ikecKvAN1wR9XsWL30/bFXw=
-X-Google-Smtp-Source: AGRyM1sPt73d/PnYTpHPFp0GNH1m7ee1PvmynEuFMLTTMTxGHp6XOdPcWpYbaOGIAmLgzM2rWtY+Ig==
-X-Received: by 2002:a63:5346:0:b0:412:9544:1ff2 with SMTP id t6-20020a635346000000b0041295441ff2mr1826529pgl.504.1657093621344;
-        Wed, 06 Jul 2022 00:47:01 -0700 (PDT)
-Received: from debian.me (subs02-180-214-232-23.three.co.id. [180.214.232.23])
-        by smtp.gmail.com with ESMTPSA id l8-20020a17090a384800b001ecd954f3b6sm14132863pjf.7.2022.07.06.00.47.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 06 Jul 2022 00:47:00 -0700 (PDT)
-Received: by debian.me (Postfix, from userid 1000)
-        id 6263B1039C1; Wed,  6 Jul 2022 14:46:57 +0700 (WIB)
-Date:   Wed, 6 Jul 2022 14:46:57 +0700
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        slade@sladewatkins.com
-Subject: Re: [PATCH 5.15 00/98] 5.15.53-rc1 review
-Message-ID: <YsU98eRZWPPg5PBt@debian.me>
-References: <20220705115617.568350164@linuxfoundation.org>
+        Wed, 6 Jul 2022 03:49:33 -0400
+Received: from mail-m972.mail.163.com (mail-m972.mail.163.com [123.126.97.2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8786922B3C;
+        Wed,  6 Jul 2022 00:49:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=I8+m1
+        YAsVZ4gl1y1umKlRTUNyEHJgsOKvTyV1H7WmOY=; b=j9NkHPTE9z+Curz/JVKVq
+        kue+1kmDGWK21Rqd2/5h7I6ui4Kx8hvL5/hX7Fy/n2aRzBAfds0qZy/2CvNxCR7m
+        9AeCYvqaZvx/UNfLPX6ny5fmF8zcH59S8uLbz8UaBUAC5XucDdqD6N3a906bLSNe
+        aZYWETGJh4LkIBYUzt2OHg=
+Received: from localhost.localdomain (unknown [123.112.69.106])
+        by smtp2 (Coremail) with SMTP id GtxpCgAHhyNhPsViyC90Ng--.47709S4;
+        Wed, 06 Jul 2022 15:49:01 +0800 (CST)
+From:   Jianglei Nie <niejianglei2021@163.com>
+To:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com
+Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Jianglei Nie <niejianglei2021@163.com>
+Subject: [PATCH] net: macsec: fix potential resource leak in macsec_add_rxsa() and macsec_add_txsa()
+Date:   Wed,  6 Jul 2022 15:48:26 +0800
+Message-Id: <20220706074826.2254689-1-niejianglei2021@163.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20220705115617.568350164@linuxfoundation.org>
-X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: GtxpCgAHhyNhPsViyC90Ng--.47709S4
+X-Coremail-Antispam: 1Uf129KBjvJXoW7Ar4rWF4fCF17Zw1xZr43ZFb_yoW8Jw4Dpa
+        15ZwsrCF1qqrWI93ZrCw4UWF1rXayUtryagry7C3yfua4kJw1rWFy0kFyI9Fy5AryxGF48
+        ZrWvyr47AFn8C37anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0zRhqXJUUUUU=
+X-Originating-IP: [123.112.69.106]
+X-CM-SenderInfo: xqlhyxxdqjzvrlsqjii6rwjhhfrp/1tbiPgs2jFxBtJroWQAAsN
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jul 05, 2022 at 01:57:18PM +0200, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.15.53 release.
-> There are 98 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
-> 
+init_rx_sa() allocates relevant resource for rx_sa->stats and rx_sa->
+key.tfm with alloc_percpu() and macsec_alloc_tfm(). When some error
+occurs after init_rx_sa() is called in macsec_add_rxsa(), the function
+released rx_sa with kfree() without releasing rx_sa->stats and rx_sa->
+key.tfm, which will lead to a resource leak.
 
-Successfully cross-compiled for arm64 (bcm2711_defconfig, GCC 10.2.0)
-and powerpc (ps3_defconfig, GCC 12.1.0).
+We should call macsec_rxsa_put() instead of kfree() to decrease the ref
+count of rx_sa and release the relevant resource if the refcount is 0.
+The same bug exists in macsec_add_txsa() for tx_sa as well. This patch
+fixes the above two bugs.
 
-Tested-by: Bagas Sanjaya <bagasdotme@gmail.com>
+Signed-off-by: Jianglei Nie <niejianglei2021@163.com>
+---
+ drivers/net/macsec.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
+diff --git a/drivers/net/macsec.c b/drivers/net/macsec.c
+index 817577e713d7..ac3ff624a8dd 100644
+--- a/drivers/net/macsec.c
++++ b/drivers/net/macsec.c
+@@ -1842,7 +1842,7 @@ static int macsec_add_rxsa(struct sk_buff *skb, struct genl_info *info)
+ 	return 0;
+ 
+ cleanup:
+-	kfree(rx_sa);
++	macsec_rxsa_put(rx_sa);
+ 	rtnl_unlock();
+ 	return err;
+ }
+@@ -2085,7 +2085,7 @@ static int macsec_add_txsa(struct sk_buff *skb, struct genl_info *info)
+ 
+ cleanup:
+ 	secy->operational = was_operational;
+-	kfree(tx_sa);
++	macsec_txsa_put(tx_sa);
+ 	rtnl_unlock();
+ 	return err;
+ }
 -- 
-An old man doll... just what I always wanted! - Clara
+2.25.1
+

@@ -2,117 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A8AB8569140
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 19:58:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 59CD9569146
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 19:59:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234260AbiGFR6o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Jul 2022 13:58:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45572 "EHLO
+        id S234268AbiGFR7F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Jul 2022 13:59:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45942 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233338AbiGFR6m (ORCPT
+        with ESMTP id S234069AbiGFR7D (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Jul 2022 13:58:42 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 180821F2E3;
-        Wed,  6 Jul 2022 10:58:39 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 96E98B81CE4;
-        Wed,  6 Jul 2022 17:58:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4BD24C3411C;
-        Wed,  6 Jul 2022 17:58:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1657130317;
-        bh=h25aVeHEgkHaVPyaTQr5NxvSyXw5BSGKREwTzlwDrdI=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=puo1g9AzHSF2FmBYwXNs3dIOkZ8TEaRDawW6Pr+xvcVxPLtBfLMZMliI9LWQh9NIV
-         1OuRFJJxLGB2bbue4AE1urp81PylCCvJ+f8Er6QWRT+WHg98Ya+cs08AxiIggsE95k
-         1Uy3aqCA22UGDzNR792frvmHrovEHlF7LhhPUWtlgeQKKB1YEO+POwkL6I//qkYpm1
-         5VZPEpUmG3TnKoW7wzMFD5v/44rCe4AldKQOKiULNm8qNZZh2fymtcP1//jZvW+GIa
-         FPqIEEuYvpsbrVN/qSyteauJRbituHTuRUuQB89E3myAtwvDQWsaq2DhkB+OLPueze
-         WG/JTs7KMMvYg==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id D58AA5C0F78; Wed,  6 Jul 2022 10:58:36 -0700 (PDT)
-Date:   Wed, 6 Jul 2022 10:58:36 -0700
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     Uladzislau Rezki <urezki@gmail.com>
-Cc:     Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
-        "Alex Xu (Hello71)" <alex_y_xu@yahoo.ca>,
-        wireguard@lists.zx2c4.com, "Jason A. Donenfeld" <Jason@zx2c4.com>,
-        Joel Fernandes <joel@joelfernandes.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Xinhui.Pan@amd.com, linux-kernel@vger.kernel.org,
-        amd-gfx@lists.freedesktop.org,
-        Suren Baghdasaryan <surenb@google.com>, rcu@vger.kernel.org,
-        Hridya Valsaraju <hridya@google.com>,
-        Arve =?iso-8859-1?B?SGr4bm5lduVn?= <arve@android.com>,
-        Theodore Ts'o <tytso@mit.edu>, alexander.deucher@amd.com,
-        Todd Kjos <tkjos@android.com>, uladzislau.rezki@sony.com,
-        Martijn Coenen <maco@android.com>,
-        Christian Brauner <christian@brauner.io>
-Subject: Re: CONFIG_ANDROID (was: rcu_sched detected expedited stalls in
- amdgpu after suspend)
-Message-ID: <20220706175836.GI1790663@paulmck-ThinkPad-P17-Gen-1>
-Reply-To: paulmck@kernel.org
-References: <1656357116.rhe0mufk6a.none@localhost>
- <20220627204139.GL1790663@paulmck-ThinkPad-P17-Gen-1>
- <1656379893.q9yb069erk.none@localhost>
- <20220628041252.GV1790663@paulmck-ThinkPad-P17-Gen-1>
- <1656421946.ic03168yc3.none@localhost>
- <20220628185437.GA1790663@paulmck-ThinkPad-P17-Gen-1>
- <1656443915.mdjoauhqe0.none@localhost>
- <YrtgeSmwLmpzN/zw@pc638>
- <79c6ad70-47d9-47fe-4bb4-33fcf356dd37@amd.com>
- <YsXK5A0MiVgHd8Je@pc638.lan>
+        Wed, 6 Jul 2022 13:59:03 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42FFB29C84;
+        Wed,  6 Jul 2022 10:58:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=OYgCfPr17FuNNS3i7T8/+pPqO4BBUG/Cc2fFpfiZ7Oo=; b=P7V+Trm6JddmaQmgCWxREId4CA
+        F0lXawIaH9L5F/RFLUFqOexOpc3VUiSq33esaDgmRJTQcLap1u5PsMyXl67McsfQzPWGknlJLjEj1
+        gt0Bo9JKUxvcMlv5a2NRmvXwNnQqJn3JBtvHyC0XPbzVqmcWFcyb/raI+B/+et1axPSuBIwvxdrSy
+        Y3kiW7OV6cDBix9zGGu0TAhLa2CAcNNaUz7/kX5o1+anc9AvAWSnfCSTBmH76gbsHPxsdkUexQz7z
+        uRZrQicD7cqdVeTJAhQ4YcVNlBYfdNlS3zABJtnF3ea1irGha1HGGmFS6Sj++EbDFUqvKayYDK0Vv
+        dLfXGnGA==;
+Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1o99IT-00BsCZ-HS; Wed, 06 Jul 2022 17:58:45 +0000
+Date:   Wed, 6 Jul 2022 10:58:45 -0700
+From:   Luis Chamberlain <mcgrof@kernel.org>
+To:     Aaron Tomlin <atomlin@redhat.com>
+Cc:     rostedt@goodmis.org, cl@linux.com, pmladek@suse.com,
+        mbenes@suse.cz, christophe.leroy@csgroup.eu,
+        akpm@linux-foundation.org, linux-kernel@vger.kernel.org,
+        linux-modules@vger.kernel.org, atomlin@atomlin.com,
+        ghalat@redhat.com, oleksandr@natalenko.name, neelx@redhat.com,
+        daniel.thompson@linaro.org, hch@infradead.org, tglx@linutronix.de,
+        linux-rt-users@vger.kernel.org
+Subject: Re: [PATCH v2] module: kallsyms: Ensure preemption in add_kallsyms()
+ with PREEMPT_RT
+Message-ID: <YsXNVSAtO+VDggcI@bombadil.infradead.org>
+References: <20220704161753.4033684-1-atomlin@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <YsXK5A0MiVgHd8Je@pc638.lan>
-X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220704161753.4033684-1-atomlin@redhat.com>
+Sender: Luis Chamberlain <mcgrof@infradead.org>
+X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jul 06, 2022 at 07:48:20PM +0200, Uladzislau Rezki wrote:
-> Hello.
-> 
-> On Mon, Jul 04, 2022 at 01:30:50PM +0200, Christian König wrote:
-> > Hi guys,
-> > 
-> > Am 28.06.22 um 22:11 schrieb Uladzislau Rezki:
-> > > > Excerpts from Paul E. McKenney's message of June 28, 2022 2:54 pm:
-> > > > > All you need to do to get the previous behavior is to add something like
-> > > > > this to your defconfig file:
-> > > > > 
-> > > > > CONFIG_RCU_EXP_CPU_STALL_TIMEOUT=21000
-> > > > > 
-> > > > > Any reason why this will not work for you?
-> > 
-> > sorry for jumping in so later, I was on vacation for a week.
-> > 
-> > Well when any RCU period is longer than 20ms and amdgpu in the backtrace my
-> > educated guess is that we messed up some timeout waiting for the hw.
-> > 
-> > We usually do wait a few us, but it can be that somebody is waiting for ms
-> > instead.
-> > 
-> > So there are some todos here as far as I can see and It would be helpful to
-> > get a cleaner backtrace if possible.
-> > 
-> Actually CONFIG_ANDROID looks like is going to be removed, so the CONFIG_RCU_EXP_CPU_STALL_TIMEOUT
-> will not have any dependencies on the CONFIG_ANDROID anymore:
-> 
-> https://lkml.org/lkml/2022/6/29/756
+Hey Aaron, thanks again!
 
-But you can set the RCU_EXP_CPU_STALL_TIMEOUT Kconfig option, if you
-wish.  Setting this option to 20 will get you the behavior previously
-obtained by setting the now-defunct ANDROID Kconfig option.
+On Mon, Jul 04, 2022 at 05:17:53PM +0100, Aaron Tomlin wrote:
+> To disable preemption in the context of add_kallsyms() is incorrect.
 
-							Thanx, Paul
+Why, what broke? Did this used to work? Was the commit in question a
+regression then? Clarifying all this will help a lot.
+
+The commit log is better but yet doesn't make it easy for me to tell
+if I should send this to Linus as a fix in the rc series.
+
+  Luis
+
+> Before kallsyms-specific data is prepared/or set-up, we ensure that
+> the unformed module is known to be unique i.e. does not already exist
+> (see load_module()). Therefore, we can fix this by using the common RCU
+> primitive as this section of code can be safely preempted.
+> 
+> Reported-by: Steven Rostedt <rostedt@goodmis.org>
+> Fixes: 08126db5ff73 ("module: kallsyms: Fix suspicious rcu usage")
+> Signed-off-by: Aaron Tomlin <atomlin@redhat.com>
+> ---
+>  kernel/module/kallsyms.c | 24 ++++++++++++------------
+>  1 file changed, 12 insertions(+), 12 deletions(-)
+> 
+> diff --git a/kernel/module/kallsyms.c b/kernel/module/kallsyms.c
+> index 3e11523bc6f6..0b6fd82d5898 100644
+> --- a/kernel/module/kallsyms.c
+> +++ b/kernel/module/kallsyms.c
+> @@ -174,14 +174,14 @@ void add_kallsyms(struct module *mod, const struct load_info *info)
+>  	mod->kallsyms = (void __rcu *)mod->init_layout.base +
+>  		info->mod_kallsyms_init_off;
+>  
+> -	preempt_disable();
+> +	rcu_read_lock();
+>  	/* The following is safe since this pointer cannot change */
+> -	rcu_dereference_sched(mod->kallsyms)->symtab = (void *)symsec->sh_addr;
+> -	rcu_dereference_sched(mod->kallsyms)->num_symtab = symsec->sh_size / sizeof(Elf_Sym);
+> +	rcu_dereference(mod->kallsyms)->symtab = (void *)symsec->sh_addr;
+> +	rcu_dereference(mod->kallsyms)->num_symtab = symsec->sh_size / sizeof(Elf_Sym);
+>  	/* Make sure we get permanent strtab: don't use info->strtab. */
+> -	rcu_dereference_sched(mod->kallsyms)->strtab =
+> +	rcu_dereference(mod->kallsyms)->strtab =
+>  		(void *)info->sechdrs[info->index.str].sh_addr;
+> -	rcu_dereference_sched(mod->kallsyms)->typetab = mod->init_layout.base + info->init_typeoffs;
+> +	rcu_dereference(mod->kallsyms)->typetab = mod->init_layout.base + info->init_typeoffs;
+>  
+>  	/*
+>  	 * Now populate the cut down core kallsyms for after init
+> @@ -190,22 +190,22 @@ void add_kallsyms(struct module *mod, const struct load_info *info)
+>  	mod->core_kallsyms.symtab = dst = mod->data_layout.base + info->symoffs;
+>  	mod->core_kallsyms.strtab = s = mod->data_layout.base + info->stroffs;
+>  	mod->core_kallsyms.typetab = mod->data_layout.base + info->core_typeoffs;
+> -	src = rcu_dereference_sched(mod->kallsyms)->symtab;
+> -	for (ndst = i = 0; i < rcu_dereference_sched(mod->kallsyms)->num_symtab; i++) {
+> -		rcu_dereference_sched(mod->kallsyms)->typetab[i] = elf_type(src + i, info);
+> +	src = rcu_dereference(mod->kallsyms)->symtab;
+> +	for (ndst = i = 0; i < rcu_dereference(mod->kallsyms)->num_symtab; i++) {
+> +		rcu_dereference(mod->kallsyms)->typetab[i] = elf_type(src + i, info);
+>  		if (i == 0 || is_livepatch_module(mod) ||
+>  		    is_core_symbol(src + i, info->sechdrs, info->hdr->e_shnum,
+>  				   info->index.pcpu)) {
+>  			mod->core_kallsyms.typetab[ndst] =
+> -			    rcu_dereference_sched(mod->kallsyms)->typetab[i];
+> +			    rcu_dereference(mod->kallsyms)->typetab[i];
+>  			dst[ndst] = src[i];
+>  			dst[ndst++].st_name = s - mod->core_kallsyms.strtab;
+> -			s += strscpy(s,
+> -				     &rcu_dereference_sched(mod->kallsyms)->strtab[src[i].st_name],
+> +			s += strlcpy(s,
+> +				     &rcu_dereference(mod->kallsyms)->strtab[src[i].st_name],
+>  				     KSYM_NAME_LEN) + 1;
+>  		}
+>  	}
+> -	preempt_enable();
+> +	rcu_read_unlock();
+>  	mod->core_kallsyms.num_symtab = ndst;
+>  }
+>  
+> -- 
+> 2.34.3
+> 

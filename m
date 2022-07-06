@@ -2,110 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E6F65568439
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 11:56:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EE1BC568471
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 11:59:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232499AbiGFJzK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Jul 2022 05:55:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34576 "EHLO
+        id S231414AbiGFJ4l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Jul 2022 05:56:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35482 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232444AbiGFJyC (ORCPT
+        with ESMTP id S232644AbiGFJ4Q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Jul 2022 05:54:02 -0400
-Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id BA58824F02;
-        Wed,  6 Jul 2022 02:53:58 -0700 (PDT)
-Received: by linux.microsoft.com (Postfix, from userid 1127)
-        id 7098020DDCC6; Wed,  6 Jul 2022 02:53:58 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 7098020DDCC6
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1657101238;
-        bh=nqWFIU1UiRFLTOpHJIOQKgm3cC14TJ1i84bjg1AGMUQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=KBDbzW9JfJw0HvDn0Ey1qx6FMF/Bd0qdu1ll02ZueIe9HzHVzzCII+Vgxpy577IXI
-         3HK6hg00b3wcconubFbLgJ2kEB2l+qnzPSOoob9N/1ryz2TfjejHyf3IW3Ze5D/t1J
-         AjezB/Yg9xIYo+WBr+8xxXs+gbOB2wwx4EahYJhU=
-Date:   Wed, 6 Jul 2022 02:53:58 -0700
-From:   Saurabh Singh Sengar <ssengar@linux.microsoft.com>
-To:     Praveen Kumar <kumarpraveen@linux.microsoft.com>
-Cc:     kys@microsoft.com, haiyangz@microsoft.com, sthemmin@microsoft.com,
-        wei.liu@kernel.org, decui@microsoft.com, jejb@linux.ibm.com,
-        martin.petersen@oracle.com, linux-hyperv@vger.kernel.org,
-        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        ssengar@microsoft.com, mikelley@microsoft.com
-Subject: Re: [PATCH] scsi: storvsc: Prevent running tasklet for long
-Message-ID: <20220706095358.GA3320@linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net>
-References: <1657035141-2132-1-git-send-email-ssengar@linux.microsoft.com>
- <b4fea161-41c5-a03e-747b-316c74eb986c@linux.microsoft.com>
+        Wed, 6 Jul 2022 05:56:16 -0400
+Received: from outbound-smtp40.blacknight.com (outbound-smtp40.blacknight.com [46.22.139.223])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A964252A8
+        for <linux-kernel@vger.kernel.org>; Wed,  6 Jul 2022 02:55:38 -0700 (PDT)
+Received: from mail.blacknight.com (pemlinmail04.blacknight.ie [81.17.254.17])
+        by outbound-smtp40.blacknight.com (Postfix) with ESMTPS id D4D111C3C34
+        for <linux-kernel@vger.kernel.org>; Wed,  6 Jul 2022 10:55:36 +0100 (IST)
+Received: (qmail 18395 invoked from network); 6 Jul 2022 09:55:36 -0000
+Received: from unknown (HELO techsingularity.net) (mgorman@techsingularity.net@[84.203.198.246])
+  by 81.17.254.9 with ESMTPSA (AES256-SHA encrypted, authenticated); 6 Jul 2022 09:55:36 -0000
+Date:   Wed, 6 Jul 2022 10:55:35 +0100
+From:   Mel Gorman <mgorman@techsingularity.net>
+To:     Oliver Sang <oliver.sang@intel.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        0day robot <lkp@intel.com>,
+        LKML <linux-kernel@vger.kernel.org>, linux-mm@kvack.org,
+        lkp@lists.01.org, Nicolas Saenz Julienne <nsaenzju@redhat.com>,
+        Marcelo Tosatti <mtosatti@redhat.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Michal Hocko <mhocko@kernel.org>,
+        Hugh Dickins <hughd@google.com>
+Subject: Re: [mm/page_alloc]  2bd8eec68f:
+ BUG:sleeping_function_called_from_invalid_context_at_mm/gup.c
+Message-ID: <20220706095535.GD27531@techsingularity.net>
+References: <20220613125622.18628-8-mgorman@techsingularity.net>
+ <YsFk/qU+QtWun04h@xsang-OptiPlex-9020>
+ <20220703132209.875b823d1cb7169a8d51d56d@linux-foundation.org>
+ <YsRB3fZHAfik0M/q@xsang-OptiPlex-9020>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-15
 Content-Disposition: inline
-In-Reply-To: <b4fea161-41c5-a03e-747b-316c74eb986c@linux.microsoft.com>
-User-Agent: Mutt/1.5.21 (2010-09-15)
-X-Spam-Status: No, score=-19.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,
-        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <YsRB3fZHAfik0M/q@xsang-OptiPlex-9020>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jul 06, 2022 at 02:44:42PM +0530, Praveen Kumar wrote:
-> On 05-07-2022 21:02, Saurabh Sengar wrote:
-> > There can be scenarios where packets in ring buffer are continuously
-> > getting queued from upper layer and dequeued from storvsc interrupt
-> > handler, such scenarios can hold the foreach_vmbus_pkt loop (which is
-> > executing as a tasklet) for a long duration. Theoretically its possible
-> > that this loop executes forever. Add a condition to limit execution of
-> > this tasklet for finite amount of time to avoid such hazardous scenarios.
+On Tue, Jul 05, 2022 at 09:51:25PM +0800, Oliver Sang wrote:
+> Hi Andrew Morton,
+> 
+> On Sun, Jul 03, 2022 at 01:22:09PM -0700, Andrew Morton wrote:
+> > On Sun, 3 Jul 2022 17:44:30 +0800 kernel test robot <oliver.sang@intel.com> wrote:
 > > 
-> > Signed-off-by: Saurabh Sengar <ssengar@linux.microsoft.com>
-> > ---
-> >  drivers/scsi/storvsc_drv.c | 7 +++++++
-> >  1 file changed, 7 insertions(+)
+> > > FYI, we noticed the following commit (built with gcc-11):
+> > > 
+> > > commit: 2bd8eec68f740608db5ea58ecff06965228764cb ("[PATCH 7/7] mm/page_alloc: Replace local_lock with normal spinlock")
+> > > url: https://github.com/intel-lab-lkp/linux/commits/Mel-Gorman/Drain-remote-per-cpu-directly/20220613-230139
+> > > base: https://git.kernel.org/cgit/linux/kernel/git/torvalds/linux.git b13baccc3850ca8b8cccbf8ed9912dbaa0fdf7f3
+> > > patch link: https://lore.kernel.org/lkml/20220613125622.18628-8-mgorman@techsingularity.net
+> > > 
 > > 
-> > diff --git a/drivers/scsi/storvsc_drv.c b/drivers/scsi/storvsc_drv.c
-> > index fe000da..0c428cb 100644
-> > --- a/drivers/scsi/storvsc_drv.c
-> > +++ b/drivers/scsi/storvsc_drv.c
-> > @@ -60,6 +60,9 @@
-> >  #define VMSTOR_PROTO_VERSION_WIN8_1	VMSTOR_PROTO_VERSION(6, 0)
-> >  #define VMSTOR_PROTO_VERSION_WIN10	VMSTOR_PROTO_VERSION(6, 2)
-> >  
-> > +/* channel callback timeout in ms */
-> > +#define CALLBACK_TIMEOUT		5
+> > Did this test include the followup patch
+> > mm-page_alloc-replace-local_lock-with-normal-spinlock-fix.patch?
 > 
-> If I may, it would be good if we have the CALLBACK_TIMEOUT configurable based upon user's requirement with default value to '5'.
-> I assume, this value '5' fits best to the use-case which we are trying to resolve here. Thanks.
+> no, we just fetched original patch set and test upon it.
+> 
+> now we applied the patch you pointed to us upon 2bd8eec68f and found the issue
+> still exist.
+> (attached dmesg FYI)
+> 
 
-Agree, how about adding a sysfs entry for this parameter
+Thanks Oliver.
 
-> 
-> > +
-> >  /*  Packet structure describing virtual storage requests. */
-> >  enum vstor_packet_operation {
-> >  	VSTOR_OPERATION_COMPLETE_IO		= 1,
-> > @@ -1204,6 +1207,7 @@ static void storvsc_on_channel_callback(void *context)
-> >  	struct hv_device *device;
-> >  	struct storvsc_device *stor_device;
-> >  	struct Scsi_Host *shost;
-> > +	unsigned long expire = jiffies + msecs_to_jiffies(CALLBACK_TIMEOUT);
-> >  
-> >  	if (channel->primary_channel != NULL)
-> >  		device = channel->primary_channel->device_obj;
-> > @@ -1224,6 +1228,9 @@ static void storvsc_on_channel_callback(void *context)
-> >  		u32 minlen = rqst_id ? sizeof(struct vstor_packet) :
-> >  			sizeof(enum vstor_packet_operation);
-> >  
-> > +		if (time_after(jiffies, expire))
-> > +			break;
-> > +
-> >  		if (pktlen < minlen) {
-> >  			dev_err(&device->device,
-> >  				"Invalid pkt: id=%llu, len=%u, minlen=%u\n",
-> 
-> Regards,
-> 
-> ~Praveen.
+The trace is odd in that it hits in GUP when the page allocator is no
+longer active and the context is a syscall. First, is this definitely
+the first patch the problem occurs?
+
+Second, it's possible for IRQs to be enabled and an IRQ delivered before
+preemption is enabled. It's not clear why that would be a problem other
+than lacking symmetry or how it could result in the reported BUG but
+might as well rule it out. This is build tested only
+
+diff --git a/mm/page_alloc.c b/mm/page_alloc.c
+index 934d1b5a5449..d0141e51e613 100644
+--- a/mm/page_alloc.c
++++ b/mm/page_alloc.c
+@@ -192,14 +192,14 @@ static DEFINE_MUTEX(pcp_batch_high_lock);
+ 
+ #define pcpu_spin_unlock(member, ptr)					\
+ ({									\
+-	spin_unlock(&ptr->member);					\
+ 	pcpu_task_unpin();						\
++	spin_unlock(&ptr->member);					\
+ })
+ 
+ #define pcpu_spin_unlock_irqrestore(member, ptr, flags)			\
+ ({									\
+-	spin_unlock_irqrestore(&ptr->member, flags);			\
+ 	pcpu_task_unpin();						\
++	spin_unlock_irqrestore(&ptr->member, flags);			\
+ })
+ 
+ /* struct per_cpu_pages specific helpers. */
+ 
+
+

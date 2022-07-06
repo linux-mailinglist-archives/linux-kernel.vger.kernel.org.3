@@ -2,75 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4EDF356883E
+	by mail.lfdr.de (Postfix) with ESMTP id 077FA56883D
 	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 14:24:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233671AbiGFMX6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Jul 2022 08:23:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58512 "EHLO
+        id S233676AbiGFMYV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Jul 2022 08:24:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58910 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232905AbiGFMX4 (ORCPT
+        with ESMTP id S232223AbiGFMYR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Jul 2022 08:23:56 -0400
-Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4130A1AF31
-        for <linux-kernel@vger.kernel.org>; Wed,  6 Jul 2022 05:23:55 -0700 (PDT)
-Received: by mail-wm1-x32d.google.com with SMTP id o16-20020a05600c379000b003a02eaea815so9141703wmr.0
-        for <linux-kernel@vger.kernel.org>; Wed, 06 Jul 2022 05:23:55 -0700 (PDT)
+        Wed, 6 Jul 2022 08:24:17 -0400
+Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 810A820F77
+        for <linux-kernel@vger.kernel.org>; Wed,  6 Jul 2022 05:24:16 -0700 (PDT)
+Received: by mail-ed1-x52b.google.com with SMTP id v12so6435093edc.10
+        for <linux-kernel@vger.kernel.org>; Wed, 06 Jul 2022 05:24:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=5KHAdDcwX24NbzKDAvafzAtUGJGDqZUpioC/hxvH8ww=;
-        b=YOn5npfdMjt1/r8szulBt6rTdFj6qGfwHDuhJY2PuDnjluIUztjJMzr6hgUuSRSBhl
-         lkoC44nQXvdC7Q5O1RFglOvfMx1z/nxXl5FDN+Itlf+AgilBSq4fzrmn64lSUDrfj3fC
-         O+m11xW8/+KlcN65vAA1xncU4WiEiPmMdOW0RYodCekqGOnjr3sYyyeFeQyQnM67ZWBJ
-         Et/mzTE+6h4RHNGKL3pmR0KJ2zg//aTSo54D4iKo5sqRPDHkEGmrvddgQRLXQw4VgE0v
-         1npiY7eT2I13//lFrIMivwIc+VTfdJebv6wFllxVKU0YNpeZ0yhfz5beSDGxXTIcpp7W
-         4v1A==
+        d=bgdev-pl.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=RFoPbjkSjdmVurjLAdQHIZMmbqCDP9ZVm/F67iJ6N8g=;
+        b=va4yl0z+19I3hSaQDNSfPEsm9G9b8bwhbQgo1duQ0EhsPKhxl9oo2FWEdN0qUaUiYu
+         B4V+2QhOTX2TWW2luDLlWlWgVzz/85Q8atkjEGE/JikJthJSQbPy61A2Hz8/nX53ythb
+         Q7/oFzKQ+g/9TijPFwoYhhxMnFn0HmdkfZWcx0q2YxlTgv368e0+smEY+p1fGuBqXbeB
+         4W8aD5flsniUayPEnRHe+zxkAZ84Ndz35pLI8MNwHbsG6hHc/GDJQkP3d2Vhk7MZQHWK
+         lyKBcrf72LUNM9sWu9xFBLIT9t5nviJd2JA9IvpCwMCEzm2QHqUVmkXVaqK97h8pc5T4
+         VrAQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=5KHAdDcwX24NbzKDAvafzAtUGJGDqZUpioC/hxvH8ww=;
-        b=Z27Qf6sBb5VuxHeT9kNwPjgn0kmhTU2vmTUsgzhr1yomULnNeVoXUJ6SwrLgiAsHpU
-         5VhL+5aIgh8vjgzBNBnc01cHrU0kW+XJ9rlUiZOJOB+EQtbrrVRDc8nEJpcE1RQWKOYa
-         vBSTtJIZ/5zq7Yr2uWd4rpHouEW/sOhuXZfsMivqHqTIQ+tBNa4zqqejn5vW9XEuLtnU
-         pPuKboHes21DOJpgdHY4iut2fuapTcwLKJGD9ZKmypu90EuYvISLzxEXn/eToi7h1dJL
-         V2uJHxeIjaUNeRKvMaJIftDEcM+boIAnKeLFGx7F6V6XKTgoyjPitjxUrvhUo5V9Ja/N
-         FMXw==
-X-Gm-Message-State: AJIora+WZSnJvktcdQDfp2gBscXXIAxh8V+Om9boJ9lUSM7S2oTVaKvd
-        zEc95L0BEsLOg6ujYvSLI21lwI8KaAI34g==
-X-Google-Smtp-Source: AGRyM1s8pbcxPA7bUbV0T+xiYTeDMY3a909i6c7eZwEIlshJcOKVCYxEY2JgBSfJM15EErYJF1lrnQ==
-X-Received: by 2002:a05:600c:3b1d:b0:3a2:60a1:fe6a with SMTP id m29-20020a05600c3b1d00b003a260a1fe6amr15263688wms.3.1657110233895;
-        Wed, 06 Jul 2022 05:23:53 -0700 (PDT)
-Received: from Red ([2a01:cb1d:3d5:a100:264b:feff:fe03:2806])
-        by smtp.googlemail.com with ESMTPSA id i30-20020a1c541e000000b003a032c88877sm21834833wmb.15.2022.07.06.05.23.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 06 Jul 2022 05:23:53 -0700 (PDT)
-Date:   Wed, 6 Jul 2022 14:23:48 +0200
-From:   LABBE Corentin <clabbe@baylibre.com>
-To:     Christoph Hellwig <hch@lst.de>
-Cc:     Ben Dooks <ben.dooks@codethink.co.uk>, herbert@gondor.apana.org.au,
-        heiko@sntech.de, linux-crypto@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
-        linux-sunxi@lists.linux.dev
-Subject: Re: [RFC PATCH] crypto: flush poison data
-Message-ID: <YsV+1DQzJ/KFnqBk@Red>
-References: <20220701132735.1594822-1-clabbe@baylibre.com>
- <4570f6d8-251f-2cdb-1ea6-c3a8d6bb9fcf@codethink.co.uk>
- <YsP0eekTthD4jWGV@Red>
- <20220705164213.GA14484@lst.de>
- <ec401a51-5895-fce7-1075-a2c964466d2b@codethink.co.uk>
- <20220706115807.GA16222@lst.de>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=RFoPbjkSjdmVurjLAdQHIZMmbqCDP9ZVm/F67iJ6N8g=;
+        b=1q8hMv1ZKwZcJs03ytMEm8bNjUtLMe6ioPg9K/gatxkzdWUX6tN4vY0fR0Ecj9mWFK
+         /HdsxshOdsazmav8Q+65+/T7dy4OSDeIZqjLvEZ3gk/PmCzCL/Na4FWA+ZiL0Naldoms
+         tg+i5sXNtE5BktNHqS2f9JkAjYjcGc/hiHN9t3EWhNfgA6iFGKYfY3FeeL5kaa3tCsML
+         bvlDdM2cQxR6XmI+ytHUkzpejIjd3SJjc6+4ry/bGFyU5/Oq77VcQYnboY2pk7TwcsDx
+         yWPWplZ4B1ih9hh4pEAjJJ+/IXk+3kj5+sS8WWCuSo4Vd2YHNunL2y9bIAUJUK4KOxlM
+         gvJQ==
+X-Gm-Message-State: AJIora99jYCwqa4UTrX74ZRLPGxvtPk/DGpr0zV+opBivb8hNEAFewh6
+        iSI1z2pj84fk8Ubd0zXJ+c9No1GMA5EFGgKoLNle1mNF+ZU=
+X-Google-Smtp-Source: AGRyM1tzSRMxo/trUzyuH0aunDnCaFlnf2AvSDNMzsf0mK160rae+QSv+YAg5wiIvXzzzdx2BzJGGy8NRImg2tCi9DU=
+X-Received: by 2002:a05:6402:18:b0:435:9a79:9a40 with SMTP id
+ d24-20020a056402001800b004359a799a40mr52615584edu.328.1657110255176; Wed, 06
+ Jul 2022 05:24:15 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220706115807.GA16222@lst.de>
+References: <20220628193906.36350-1-andriy.shevchenko@linux.intel.com>
+ <20220628193906.36350-3-andriy.shevchenko@linux.intel.com>
+ <SJ0PR03MB6253C3D92FFF37717D48C7618EBB9@SJ0PR03MB6253.namprd03.prod.outlook.com>
+ <CAHp75VfR6XwW1HZDKoxhxs0i9R6s=uim1-dTtwJeXrA9AGWGQA@mail.gmail.com>
+ <PH0PR03MB67861277E1AE456A316DFFEB99BB9@PH0PR03MB6786.namprd03.prod.outlook.com>
+ <CAHp75VfeZ9jbWvFwL+Sae0h8DG36GeV4PKtskVQe10hpWGf28w@mail.gmail.com>
+ <PH0PR03MB6786A0E94BEC148D3547D90A99BB9@PH0PR03MB6786.namprd03.prod.outlook.com>
+ <YsV86YmZNpieqxiB@smile.fi.intel.com>
+In-Reply-To: <YsV86YmZNpieqxiB@smile.fi.intel.com>
+From:   Bartosz Golaszewski <brgl@bgdev.pl>
+Date:   Wed, 6 Jul 2022 14:24:04 +0200
+Message-ID: <CAMRc=MdUXcuXF1WX5NMD2Y5DexpVfcYzzSirJcbG8mh0XRDrXw@mail.gmail.com>
+Subject: Re: [PATCH v1 3/3] gpio: adp5588: sort header inclusion alphabetically
+To:     Andy Shevchenko <andy.shevchenko@gmail.com>
+Cc:     "Sa, Nuno" <Nuno.Sa@analog.com>,
+        "Hennerich, Michael" <Michael.Hennerich@analog.com>,
+        "linux-gpio@vger.kernel.org" <linux-gpio@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,18 +75,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Le Wed, Jul 06, 2022 at 01:58:07PM +0200, Christoph Hellwig a écrit :
-> On Wed, Jul 06, 2022 at 10:47:24AM +0100, Ben Dooks wrote:
-> > I'm not sure that the dma-mapping code for non-coherent riscv systems
-> > did get sorted. I couldn't find any when looking in 5.17.
-> 
-> Yes, none of that is upstream.  But as supporting it is essential for
-> the allwinner SOCs I'm pretty sure Corentin is not actually using an
-> upstream kernel anyway.
+On Wed, Jul 6, 2022 at 2:15 PM Andy Shevchenko
+<andy.shevchenko@gmail.com> wrote:
+>
+> On Wed, Jun 29, 2022 at 10:40:00AM +0000, Sa, Nuno wrote:
+> > > From: Andy Shevchenko <andy.shevchenko@gmail.com>
+> > > Sent: Wednesday, June 29, 2022 12:33 PM
+> > > On Wed, Jun 29, 2022 at 12:10 PM Sa, Nuno <Nuno.Sa@analog.com>
+> > > wrote:
+>
+> ...
+>
+> > > Ah, Okay, I was thinking about a week or two from now. Let's see how
+> > > it will go and let Linus decide how to proceed.
+> >
+> > Yeah, if it does not happen today, I will only get into it again next
+> > Wednesday (so in this case, might make sense).
+>
+> If I'm not mistaken, that didn't happen.
+>
+> Bart, can you apply this series then?
+>
+> --
+> With Best Regards,
+> Andy Shevchenko
+>
+>
 
-I use an upstream kernel + some "not yet merged but sent for review" patch serie like
-"riscv: implement Zicbom-based CMO instructions + the t-head variant"
+Now queued.
 
-And good news, I just updated to use the v6 of this serie (just posted today) and my problem disappear.
-
-Regards
+Bart

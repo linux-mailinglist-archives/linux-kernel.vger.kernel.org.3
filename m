@@ -2,50 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C44B568668
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 13:08:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F5BB56866B
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 13:08:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233185AbiGFLIM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Jul 2022 07:08:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46478 "EHLO
+        id S233249AbiGFLIQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Jul 2022 07:08:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46516 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233025AbiGFLIF (ORCPT
+        with ESMTP id S233071AbiGFLIJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Jul 2022 07:08:05 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2780627148
-        for <linux-kernel@vger.kernel.org>; Wed,  6 Jul 2022 04:08:05 -0700 (PDT)
+        Wed, 6 Jul 2022 07:08:09 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2151126AE2;
+        Wed,  6 Jul 2022 04:08:08 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id ABCDD61E62
-        for <linux-kernel@vger.kernel.org>; Wed,  6 Jul 2022 11:08:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 96D17C341CE;
-        Wed,  6 Jul 2022 11:08:01 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A98E061E80;
+        Wed,  6 Jul 2022 11:08:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9469CC341CA;
+        Wed,  6 Jul 2022 11:08:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1657105684;
-        bh=BZCKP5tZSxu06QM9jLVz19aqimTq9g4sT3WFL7FeJ4E=;
+        s=k20201202; t=1657105687;
+        bh=tJJ+5MPN/oG82eYpJBXpRDJ/8GpcbhDDoR+MV9YNgrs=;
         h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=O/7alNDvspGn+ZqprEjuMKPkSKP26SZSop292NkkrTG8BsJx5GMSdUjndI/d1X7ZQ
-         Ycz/B4nBUt9dBclWPJmC7QlzEsPRcWrSyDnwfdyTYBUxd0SkODNAX2Ig1EPUu3FNOi
-         2Xq/0pBw5ft+FMxg/YujRFrE9TpOvWlyKfO/4AILfzhOHdaWnuR1Nqos7QTTnBAAk6
-         T6pO++OEfDcVUorOvziBsXRn9ks3qxLyz5yCiRqCdwCCD265bGGB4tKhb4n6EUciNw
-         Tx2L9yE4z7ZYKo73ICdTCKMrJFEd5Me+HvUf+bgO9m3o5EBR1os8F0bDO9s9/qog8N
-         AJ2C6Qu+NeqHA==
+        b=klhrRaPFnI9RN+S7/luot2a7VHGRsjzSF3kxGEdUWAFasuw50Ah2kERLVj+AW1XNj
+         oh8RLLzGt2UDszMS9IAq0z97fI1bhswPaEGYw5VTgOwr/fzfGv4YIvgB90aQ3XJmTT
+         vveMtPMvIuju9pE30CPq+xal8/WupA6ztfUfK7MASA+bHyYpzSxEpUfRqs8YhR1JG7
+         tc6l6Eu0dARYWq+8uQw+TVUPhCoPN0ncMWoI7WifIPW5uH5urjzv++LEen5fuNcBo7
+         wWMhMRVMiuLrxkeeAFQluKxkRssDC1aef8q+I1v6YReiU4MN5Y9N8TbtieTebHhdoI
+         KZK6ZUs3MNx4Q==
 From:   Mark Brown <broonie@kernel.org>
-To:     linux-kernel@vger.kernel.org, peter.ujfalusi@linux.intel.com,
-        pierre-louis.bossart@linux.intel.com, alsa-devel@alsa-project.org,
-        andriy.shevchenko@linux.intel.com,
-        sound-open-firmware@alsa-project.org
-Cc:     ranjani.sridharan@linux.intel.com, yung-chuan.liao@linux.intel.com,
-        kai.vehmanen@linux.intel.com, Jaroslav Kysela <perex@perex.cz>,
-        Liam Girdwood <lgirdwood@gmail.com>, daniel.baluta@nxp.com,
-        Takashi Iwai <tiwai@suse.com>
-In-Reply-To: <20220705161102.76250-1-andriy.shevchenko@linux.intel.com>
-References: <20220705161102.76250-1-andriy.shevchenko@linux.intel.com>
-Subject: Re: [PATCH v2 1/2] ASoC: SOF: Intel: bdw: remove duplicating driver data retrieval
-Message-Id: <165710568133.237380.11160938064727349127.b4-ty@kernel.org>
-Date:   Wed, 06 Jul 2022 12:08:01 +0100
+To:     linux-kernel@vger.kernel.org, alsa-devel@alsa-project.org,
+        agross@kernel.org, linux-arm-msm@vger.kernel.org,
+        srinivas.kandagatla@linaro.org, krzysztof.kozlowski+dt@linaro.org,
+        konrad.dybcio@somainline.org, Rob Herring <robh+dt@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        devicetree@vger.kernel.org, krzysztof.kozlowski@linaro.org,
+        bjorn.andersson@linaro.org
+Cc:     stephan@gerhold.net
+In-Reply-To: <20220705182802.775803-1-krzysztof.kozlowski@linaro.org>
+References: <20220705182802.775803-1-krzysztof.kozlowski@linaro.org>
+Subject: Re: [PATCH v3] ASoC: dt-bindings: qcom,sm8250: add SDM845 sound
+Message-Id: <165710568432.237380.17718065730024815126.b4-ty@kernel.org>
+Date:   Wed, 06 Jul 2022 12:08:04 +0100
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -59,10 +59,10 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 5 Jul 2022 19:11:01 +0300, Andy Shevchenko wrote:
-> device_get_match_data() in ACPI case calls similar to acpi_match_device().
-> Hence there is no need to duplicate the call. Just assign what is in
-> the id->driver_data.
+On Tue, 5 Jul 2022 20:28:02 +0200, Krzysztof Kozlowski wrote:
+> The Qualcomm SDM845 sound card bindings are almost the same as SM8250,
+> except "pin-switches" and "widgets" properties.  These were not
+> documented in SDM845 text bindings but are actually valid for SDM845.
 > 
 > 
 
@@ -72,10 +72,8 @@ Applied to
 
 Thanks!
 
-[1/2] ASoC: SOF: Intel: bdw: remove duplicating driver data retrieval
-      commit: 0d356c186ffd6d4c3e10abb283379d09a93d2515
-[2/2] ASoC: SOF: Intel: byt: remove duplicating driver data retrieval
-      commit: 65b6851d243ff54cbd4adfb887a8af9d04b7f286
+[1/1] ASoC: dt-bindings: qcom,sm8250: add SDM845 sound
+      commit: 50791dcb7de32f9f78061f7f460966ac5616b38e
 
 All being well this means that it will be integrated into the linux-next
 tree (usually sometime in the next 24 hours) and sent to Linus during

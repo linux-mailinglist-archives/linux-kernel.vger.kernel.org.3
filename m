@@ -2,104 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 164FD568DAF
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 17:44:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3486C568DC3
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 17:44:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233927AbiGFPju (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Jul 2022 11:39:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55178 "EHLO
+        id S234683AbiGFPjm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Jul 2022 11:39:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59210 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234728AbiGFPht (ORCPT
+        with ESMTP id S234738AbiGFPht (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 6 Jul 2022 11:37:49 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1518529833;
+Received: from mail-yw1-f176.google.com (mail-yw1-f176.google.com [209.85.128.176])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CDDC25EB3;
         Wed,  6 Jul 2022 08:34:21 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B2FA5B81D99;
-        Wed,  6 Jul 2022 15:34:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7B4C9C3411C;
-        Wed,  6 Jul 2022 15:34:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1657121658;
-        bh=Z2HQGLIkBvZtpzj7Pa3bonQkifFz6NyE9g0PSFGompU=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=qlxhbJHw/mcpagYj2YJ0bPiOplfMPMWC5sROjJZrH9bD0e+OuSla6HC3x35t9zz4t
-         aZTbCJAYy/SxliaocDkvAZ/fEmLJXV8+RAhUnmy0G9edyjgMPz0xMUJ9wMfTeifXIt
-         8UPotw/5Em1FNn1lXwcyXejK0hQtqIEn40mvXd8VXxHkW4oQVdXpmuAIe32ibgM/az
-         Az0xZ3myu8IPpsVX8dQvpUGbD1CCdOD3h6yOJBOJFsOQJjKSZ1rplZIJZkKZm11kOd
-         2uDTlEfFoeOF4Uftvjq8KUOGw1oWig6/tcqe7+Lbr3YiDo0+GDWSavNOUYHHZCCx+U
-         NfENv2rDf7bjQ==
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Michael Walle <michael@walle.cc>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        "David S . Miller" <davem@davemloft.net>,
-        Sasha Levin <sashal@kernel.org>, netdev@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.9 5/5] NFC: nxp-nci: don't print header length mismatch on i2c error
-Date:   Wed,  6 Jul 2022 11:34:07 -0400
-Message-Id: <20220706153407.1598915-5-sashal@kernel.org>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220706153407.1598915-1-sashal@kernel.org>
-References: <20220706153407.1598915-1-sashal@kernel.org>
+Received: by mail-yw1-f176.google.com with SMTP id 00721157ae682-31c8a1e9e33so91637247b3.5;
+        Wed, 06 Jul 2022 08:34:21 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=e+Fsv8R6El10zE4fRO1Zb3LQa9YV3Qjec5+0V8sZOL8=;
+        b=abA2kxiYOK5w7K6qOsyYQIZT4hWfSiQncZj/EO7rhLYaVAk6FGpU6Kr98ibYzDhH5Y
+         oUgbjATbtc8CW95p7wGQgCqYGSEgL8QD6Mcg7T7Lj0HS3ghwrtlI/kxflVkm861jzK3N
+         03x/T0/empdgiEvnlxIZWNloj8euVPnMObTXrIvMbVztLSA1hUb0EcseNozh8WpSfPzi
+         Ocn3mTICmZ2lIZto4x4gXGIGNJxQZv6Hop0U3ETSKWv22x5b81WalOmLNTWM9CX+rF7s
+         aa3+sOZ845mI96bXxCxxJdJmr53azPXBHoImOmdq54vrnj6ICLDZS0mqxP62rGvX2zuA
+         5kVw==
+X-Gm-Message-State: AJIora+ZUm1wIAlfeVCNpW41toSLZCq+b8F0KDutM6G8Njt+/V+MzgfT
+        FJv4rQAhJehPy8VEOOM5xcAkEkWIEYVdpxe2e6T4CdXSeBg=
+X-Google-Smtp-Source: AGRyM1u7ABPiXSFcDKj/c4I09BwgdOZnzeJIsTesqlFtEdqGMBzTO/wiiq9rxvUww5aXa3RBPwaMfL4Aazj2igIKYaE=
+X-Received: by 2002:a81:6943:0:b0:31c:ee3e:47c6 with SMTP id
+ e64-20020a816943000000b0031cee3e47c6mr3379106ywc.515.1657121660817; Wed, 06
+ Jul 2022 08:34:20 -0700 (PDT)
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <8c3d50faf8811e86136fb3f9c459e43fc3c50bc0.1653565641.git.viresh.kumar@linaro.org>
+ <426bf6edc80b2e944d459fa7b8dffbe8b73bb3d9.1653623526.git.viresh.kumar@linaro.org>
+ <CAJZ5v0gswDEdK9-gC1dPr9BFPv3G9rs+JYe-7=1JZ11OMoBb-g@mail.gmail.com>
+ <20220615045957.55ocdyddcac3vwct@vireshk-i7> <CAJZ5v0gDCS8mkoFjnqOAi9gGuhTheE79FwvRWgeoxagMj3Ok0Q@mail.gmail.com>
+ <20220706152333.fvgybznz3j6ffmre@vireshk-i7>
+In-Reply-To: <20220706152333.fvgybznz3j6ffmre@vireshk-i7>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Wed, 6 Jul 2022 17:34:09 +0200
+Message-ID: <CAJZ5v0hnjeTYDfGvwrAEY8hNa6bfD6MDGEiuTOgVV+g6LEaGLQ@mail.gmail.com>
+Subject: Re: [PATCH V2 2/3] cpufreq: Panic if policy is active in cpufreq_policy_free()
+To:     Viresh Kumar <viresh.kumar@linaro.org>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        kernel test robot <oliver.sang@intel.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Michael Walle <michael@walle.cc>
+On Wed, Jul 6, 2022 at 5:23 PM Viresh Kumar <viresh.kumar@linaro.org> wrote:
+>
+> On 06-07-22, 15:49, Rafael J. Wysocki wrote:
+> > WARN_ON() would be somewhat better, but then I'm not sure if having a
+> > full call trace in this case is really useful, because we know when
+> > cpufreq_policy_free() can be called anyway.
+> >
+> > Maybe just print a warning message.
+>
+> The warning will get printed, yes, but I am sure everyone will end up
+> ignoring it, once it happens.
+>
+> One of the benefits of printing the call-stack is people will take it
+> seriously and report it, and we won't miss a bug, if one gets in
+> somehow.
 
-[ Upstream commit 9577fc5fdc8b07b891709af6453545db405e24ad ]
+I'd rather not go into discussing things that people may or may not do and why.
 
-Don't print a misleading header length mismatch error if the i2c call
-returns an error. Instead just return the error code without any error
-message.
-
-Signed-off-by: Michael Walle <michael@walle.cc>
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Signed-off-by: David S. Miller <davem@davemloft.net>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- drivers/nfc/nxp-nci/i2c.c | 8 ++++++--
- 1 file changed, 6 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/nfc/nxp-nci/i2c.c b/drivers/nfc/nxp-nci/i2c.c
-index 7eab97585f22..1fc8a3621814 100644
---- a/drivers/nfc/nxp-nci/i2c.c
-+++ b/drivers/nfc/nxp-nci/i2c.c
-@@ -139,7 +139,9 @@ static int nxp_nci_i2c_fw_read(struct nxp_nci_i2c_phy *phy,
- 	memcpy(skb_put(*skb, NXP_NCI_FW_HDR_LEN), &header, NXP_NCI_FW_HDR_LEN);
- 
- 	r = i2c_master_recv(client, skb_put(*skb, frame_len), frame_len);
--	if (r != frame_len) {
-+	if (r < 0) {
-+		goto fw_read_exit_free_skb;
-+	} else if (r != frame_len) {
- 		nfc_err(&client->dev,
- 			"Invalid frame length: %u (expected %zu)\n",
- 			r, frame_len);
-@@ -181,7 +183,9 @@ static int nxp_nci_i2c_nci_read(struct nxp_nci_i2c_phy *phy,
- 	       NCI_CTRL_HDR_SIZE);
- 
- 	r = i2c_master_recv(client, skb_put(*skb, header.plen), header.plen);
--	if (r != header.plen) {
-+	if (r < 0) {
-+		goto nci_read_exit_free_skb;
-+	} else if (r != header.plen) {
- 		nfc_err(&client->dev,
- 			"Invalid frame payload length: %u (expected %u)\n",
- 			r, header.plen);
--- 
-2.35.1
-
+My point is that if WARN_ON() gets converted to panic(), they will not
+see the message at all and if the message gets printed, they will have
+a chance to see it even in that case.  Whether or not they use that
+chance as desirable is beyond the scope of engineering IMV.

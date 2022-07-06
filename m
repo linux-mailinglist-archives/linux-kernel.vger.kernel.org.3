@@ -2,56 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4DF5C569029
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 18:59:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2709656902E
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 19:01:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233270AbiGFQ7M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Jul 2022 12:59:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50672 "EHLO
+        id S233205AbiGFRBk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Jul 2022 13:01:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56634 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233054AbiGFQ6y (ORCPT
+        with ESMTP id S231454AbiGFRBh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Jul 2022 12:58:54 -0400
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E83932A42D
-        for <linux-kernel@vger.kernel.org>; Wed,  6 Jul 2022 09:58:52 -0700 (PDT)
-Received: from fraeml715-chm.china.huawei.com (unknown [172.18.147.200])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4LdQfb5Grpz67pCt;
-        Thu,  7 Jul 2022 00:56:07 +0800 (CST)
-Received: from lhreml724-chm.china.huawei.com (10.201.108.75) by
- fraeml715-chm.china.huawei.com (10.206.15.34) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Wed, 6 Jul 2022 18:58:50 +0200
-Received: from [10.126.171.66] (10.126.171.66) by
- lhreml724-chm.china.huawei.com (10.201.108.75) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Wed, 6 Jul 2022 17:58:49 +0100
-Message-ID: <db3958dc-d714-f361-f349-06317a0e0cec@huawei.com>
-Date:   Wed, 6 Jul 2022 17:58:49 +0100
+        Wed, 6 Jul 2022 13:01:37 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A69213E09
+        for <linux-kernel@vger.kernel.org>; Wed,  6 Jul 2022 10:01:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1657126897; x=1688662897;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=PcO8QiwDz7uOVn9a7f/+veYZTkuAp/A2fAVf+lWbA2s=;
+  b=h+9mTqACRVC4MqYcbRD2fxDXzz1tYMRosgIJw+pHAky6A/yMuvHapua6
+   lR1QU1C5xOO0zaIZxT4wgUT3CLx6qUdZFdaBIfARIkpbZv/gmGHlp3o5t
+   XJl87s00g1Kaaiz8fcEdA5O0R7t6O05jq0GWYcRL4fnorE20gV3y3MgQW
+   Y2WfHu9kvCq8S4fPZ9yShSrGWUkfvyOs2h+zcIYWE0sx+vCUgGj4kCtv+
+   JGUdfPPC3tIABchA78Hffk5b8dXEnXKxLflO/8W5lPxkFwp7yJy9msQZY
+   UAzobcnBAXaoS+rDk0KRTcnkGRbDz4bR+oKMvvxwpT0/FVout2NYB5Tn6
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10400"; a="272602810"
+X-IronPort-AV: E=Sophos;i="5.92,250,1650956400"; 
+   d="scan'208";a="272602810"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jul 2022 10:01:16 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.92,250,1650956400"; 
+   d="scan'208";a="620409044"
+Received: from lkp-server01.sh.intel.com (HELO 68b931ab7ac1) ([10.239.97.150])
+  by orsmga008.jf.intel.com with ESMTP; 06 Jul 2022 10:01:14 -0700
+Received: from kbuild by 68b931ab7ac1 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1o98On-000Kop-QN;
+        Wed, 06 Jul 2022 17:01:13 +0000
+Date:   Thu, 7 Jul 2022 01:00:30 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Alexander Lobakin <alexandr.lobakin@intel.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: [alobakin:xdp_hints 5/52] net/bpf/prog_ops.c:895:31: sparse: sparse:
+ symbol 'xdp_verifier_ops' was not declared. Should it be static?
+Message-ID: <202207070053.RTwePsFp-lkp@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.1
-Subject: Re: [PATCH] nvme: Fix nvme_setup_command metadata trace event for
- cdw10
-To:     Keith Busch <kbusch@kernel.org>, Christoph Hellwig <hch@lst.de>
-CC:     <axboe@fb.com>, <sagi@grimberg.me>,
-        <linux-nvme@lists.infradead.org>, <linux-kernel@vger.kernel.org>
-References: <1657095398-114310-1-git-send-email-john.garry@huawei.com>
- <YsW0orMaDFfrHbx+@kbusch-mbp.dhcp.thefacebook.com>
- <20220706161825.GA1962@lst.de>
- <YsW3oXcCe6/y6iRb@kbusch-mbp.dhcp.thefacebook.com>
- <20220706163434.GA2222@lst.de>
- <YsW7+Lsy0ENSA/il@kbusch-mbp.dhcp.thefacebook.com>
-From:   John Garry <john.garry@huawei.com>
-In-Reply-To: <YsW7+Lsy0ENSA/il@kbusch-mbp.dhcp.thefacebook.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.126.171.66]
-X-ClientProxiedBy: lhreml732-chm.china.huawei.com (10.201.108.83) To
- lhreml724-chm.china.huawei.com (10.201.108.75)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -59,39 +61,29 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 06/07/2022 17:44, Keith Busch wrote:
-> On Wed, Jul 06, 2022 at 06:34:34PM +0200, Christoph Hellwig wrote:
->> On Wed, Jul 06, 2022 at 10:26:09AM -0600, Keith Busch wrote:
->>> On Wed, Jul 06, 2022 at 06:18:25PM +0200, Christoph Hellwig wrote:
->>>> On Wed, Jul 06, 2022 at 10:13:22AM -0600, Keith Busch wrote:
->>>>> Did you test what the trace looks like afte this? We're losing valuable trace
->>>>> data here. The field is supposed to get CDW's 10 - 15, so that's 24 bytes.
+tree:   https://github.com/alobakin/linux xdp_hints
+head:   e9f4215398901c2e3f477da53abc668ce7b7e320
+commit: 40ce0c8bf2731c92fb015a03a7f9b26d90d547d0 [5/52] net, xdp: decouple XDP code from the core networking code
+config: i386-randconfig-s001 (https://download.01.org/0day-ci/archive/20220707/202207070053.RTwePsFp-lkp@intel.com/config)
+compiler: gcc-11 (Debian 11.3.0-3) 11.3.0
+reproduce:
+        # apt-get install sparse
+        # sparse version: v0.6.4-39-gce1a6720-dirty
+        # https://github.com/alobakin/linux/commit/40ce0c8bf2731c92fb015a03a7f9b26d90d547d0
+        git remote add alobakin https://github.com/alobakin/linux
+        git fetch --no-tags alobakin xdp_hints
+        git checkout 40ce0c8bf2731c92fb015a03a7f9b26d90d547d0
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        make W=1 C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=i386 SHELL=/bin/bash net/bpf/
 
-ok, I just thought it was a typo, but did not know why you were using an 
-array macro.
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-> I
->>>>> don't know why it cares that the address of the field being read is only 4
->>>>> bytes; we want everything that comes after it too.
->>>>
->>>> Because accesses should not spawn boundaries of members in structs unless
->>>> copying the entire struct.  If we want to trace the various fields we
->>>> need to individually assign them.
->>>>
->>>> Anyway, I'm dropping this patch from nvme-5.19 for now to let the
->>>> discussion conclude.
->>>
->>> How about this instead?
->>
->> Maybe a better option would be to use struct_group().
-> 
-> Good call, I'd never used that macro before. The result produces anonymous
-> unions like I just proposed, so yes, I like that option.
-> .
 
-The warning hints at using struct_group() also ...
+sparse warnings: (new ones prefixed by >>)
+>> net/bpf/prog_ops.c:895:31: sparse: sparse: symbol 'xdp_verifier_ops' was not declared. Should it be static?
 
-Anyway, Keith, do you want to write a new patch or shall I?
-
-Thanks,
-John
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

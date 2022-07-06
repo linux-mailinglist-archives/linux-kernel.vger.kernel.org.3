@@ -2,61 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B1A0C567E98
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 08:31:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 09F4B567E94
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 08:31:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230231AbiGFGbF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Jul 2022 02:31:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57960 "EHLO
+        id S230362AbiGFGbI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Jul 2022 02:31:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57106 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230425AbiGFGak (ORCPT
+        with ESMTP id S231210AbiGFGam (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Jul 2022 02:30:40 -0400
-Received: from alexa-out-sd-02.qualcomm.com (alexa-out-sd-02.qualcomm.com [199.106.114.39])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C747C1D302;
-        Tue,  5 Jul 2022 23:30:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1657089014; x=1688625014;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=HKgGNtH5+ZCmlx68r1yZkOpQeKz/TE7pn1yL+4sruqo=;
-  b=v6hTFnjtFFVpnBWK+rFPSYNAF0EAcxCanXPIhI4ncLYhImJ1QQ83JUnz
-   DRTGr5ZgoBC1SFmEPTG7CFOcGB9GIXjfBoSJBnTDQZb5Mdee4iIJhP4mZ
-   FXoPfBXt1EmCvZIz0AwSu8Ws/RmU3Jv1hm92tJPxzjfToa4mZr+/1if8d
-   U=;
-Received: from unknown (HELO ironmsg05-sd.qualcomm.com) ([10.53.140.145])
-  by alexa-out-sd-02.qualcomm.com with ESMTP; 05 Jul 2022 23:30:13 -0700
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg05-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jul 2022 23:30:13 -0700
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Tue, 5 Jul 2022 23:30:12 -0700
-Received: from [10.216.8.139] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Tue, 5 Jul 2022
- 23:30:10 -0700
-Message-ID: <91421440-578a-ccd1-21b3-7b8e2e8e2e8d@quicinc.com>
-Date:   Wed, 6 Jul 2022 12:00:07 +0530
+        Wed, 6 Jul 2022 02:30:42 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6BB41A3BF
+        for <linux-kernel@vger.kernel.org>; Tue,  5 Jul 2022 23:30:27 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 84FC0B81AEC
+        for <linux-kernel@vger.kernel.org>; Wed,  6 Jul 2022 06:30:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6A4DAC3411C;
+        Wed,  6 Jul 2022 06:30:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1657089025;
+        bh=PTwnVLqCKTknxTFPAXpZG38/BbOEsnQ5HZjLPj6vgEs=;
+        h=From:To:Cc:Subject:Date:From;
+        b=gstNkweOe/7+xVYqNE9xStimSVujj9AmDdhf5JgNcY5MCoHU+lKImBc2a262m+QrI
+         hEDZUnc4ayavXp2ngUY6KKKAdX7DnEROSBPN1e1YXy8dTLwJioeHX0uMQkHwodNRQV
+         YEOXPjgIX1wBqEMsWUicf9kFm7esDf1ZlvdlvLYxVqyRP2HjUtEx8dPt0hNTnBtoHJ
+         vZh3YWduf+didN2wppVq7rBH7GzYrJicp5xkUYbYoFdHw29KLPDmBSbJ/c/PdQh2WE
+         xn/seLHvCSW3ZkCSAc4UtyWZVhjHRE8FleBkC+u6N6aTVGSVUpyBrmOxHV8+Sd66kc
+         buJSafA3cxPIQ==
+From:   Chao Yu <chao@kernel.org>
+To:     jaegeuk@kernel.org
+Cc:     linux-f2fs-devel@lists.sourceforge.net,
+        linux-kernel@vger.kernel.org, Chao Yu <chao@kernel.org>,
+        Hyeong-Jun Kim <hj514.kim@samsung.com>,
+        Chao Yu <chao.yu@oppo.com>
+Subject: [PATCH] f2fs: fix to invalidate META_MAPPING before DIO write
+Date:   Wed,  6 Jul 2022 14:30:15 +0800
+Message-Id: <20220706063015.29727-1-chao@kernel.org>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.0
-Subject: Re: [PATCH] PM: QoS: Add check to make sure CPU freq is non-negative
-Content-Language: en-US
-To:     <rafael@kernel.org>, <len.brown@intel.com>, <pavel@ucw.cz>
-CC:     <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-References: <20220623064605.2538969-1-quic_kshivnan@quicinc.com>
-From:   Shivnandan Kumar <quic_kshivnan@quicinc.com>
-In-Reply-To: <20220623064605.2538969-1-quic_kshivnan@quicinc.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -65,48 +54,80 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Gentle reminder,
+Quoted from commit e3b49ea36802 ("f2fs: invalidate META_MAPPING before
+IPU/DIO write")
 
-Thanks,
+"
+Encrypted pages during GC are read and cached in META_MAPPING.
+However, due to cached pages in META_MAPPING, there is an issue where
+newly written pages are lost by IPU or DIO writes.
 
-Shivnandan
+Thread A - f2fs_gc()            Thread B
+/* phase 3 */
+down_write(i_gc_rwsem)
+ra_data_block()       ---- (a)
+up_write(i_gc_rwsem)
+                                f2fs_direct_IO() :
+                                 - down_read(i_gc_rwsem)
+                                 - __blockdev_direct_io()
+                                 - get_data_block_dio_write()
+                                 - f2fs_dio_submit_bio()  ---- (b)
+                                 - up_read(i_gc_rwsem)
+/* phase 4 */
+down_write(i_gc_rwsem)
+move_data_block()     ---- (c)
+up_write(i_gc_rwsem)
 
-On 6/23/2022 12:16 PM, Shivnandan Kumar wrote:
-> 	CPU frequency should never be non-negative.
-> 	If some client driver calls freq_qos_update_request with some
-> 	value greater than INT_MAX, then it will set max CPU freq at
-> 	fmax but it will add plist node with some negative priority.
-> 	plist node has priority from INT_MIN (highest) to INT_MAX
-> 	(lowest). Once priority is set as negative, another client
-> 	will not be able to reduce max CPU frequency. Adding check
-> 	to make sure CPU freq is non-negative will fix this problem.
-> Signed-off-by: Shivnandan Kumar <quic_kshivnan@quicinc.com>
->
-> ---
->   kernel/power/qos.c | 6 ++++--
->   1 file changed, 4 insertions(+), 2 deletions(-)
->
-> diff --git a/kernel/power/qos.c b/kernel/power/qos.c
-> index ec7e1e85923e..41e96fe34bfd 100644
-> --- a/kernel/power/qos.c
-> +++ b/kernel/power/qos.c
-> @@ -531,7 +531,8 @@ int freq_qos_add_request(struct freq_constraints *qos,
->   {
->   	int ret;
->   
-> -	if (IS_ERR_OR_NULL(qos) || !req)
-> +	if (IS_ERR_OR_NULL(qos) || !req || value < FREQ_QOS_MIN_DEFAULT_VALUE
-> +		|| value > FREQ_QOS_MAX_DEFAULT_VALUE)
->   		return -EINVAL;
->   
->   	if (WARN(freq_qos_request_active(req),
-> @@ -563,7 +564,8 @@ EXPORT_SYMBOL_GPL(freq_qos_add_request);
->    */
->   int freq_qos_update_request(struct freq_qos_request *req, s32 new_value)
->   {
-> -	if (!req)
-> +	if (!req || new_value < FREQ_QOS_MIN_DEFAULT_VALUE ||
-> +		new_value > FREQ_QOS_MAX_DEFAULT_VALUE)
->   		return -EINVAL;
->   
->   	if (WARN(!freq_qos_request_active(req),
+(a) In phase 3 of f2fs_gc(), up-to-date page is read from storage and
+    cached in META_MAPPING.
+(b) In thread B, writing new data by IPU or DIO write on same blkaddr as
+    read in (a). cached page in META_MAPPING become out-dated.
+(c) In phase 4 of f2fs_gc(), out-dated page in META_MAPPING is copied to
+    new blkaddr. In conclusion, the newly written data in (b) is lost.
+
+To address this issue, invalidating pages in META_MAPPING before IPU or
+DIO write.
+"
+
+In previous commit, we missed to cover extent cache hit case, and passed
+wrong value for parameter @end of invalidate_mapping_pages(), fix both
+issues.
+
+Fixes: 6aa58d8ad20a ("f2fs: readahead encrypted block during GC")
+Fixes: e3b49ea36802 ("f2fs: invalidate META_MAPPING before IPU/DIO write")
+Cc: Hyeong-Jun Kim <hj514.kim@samsung.com>
+Signed-off-by: Chao Yu <chao.yu@oppo.com>
+---
+ fs/f2fs/data.c | 7 +++++--
+ 1 file changed, 5 insertions(+), 2 deletions(-)
+
+diff --git a/fs/f2fs/data.c b/fs/f2fs/data.c
+index c448c3ee7ac3..2d027505d5f6 100644
+--- a/fs/f2fs/data.c
++++ b/fs/f2fs/data.c
+@@ -1479,9 +1479,12 @@ int f2fs_map_blocks(struct inode *inode, struct f2fs_map_blocks *map,
+ 			*map->m_next_extent = pgofs + map->m_len;
+ 
+ 		/* for hardware encryption, but to avoid potential issue in future */
+-		if (flag == F2FS_GET_BLOCK_DIO)
++		if (flag == F2FS_GET_BLOCK_DIO) {
+ 			f2fs_wait_on_block_writeback_range(inode,
+ 						map->m_pblk, map->m_len);
++			invalidate_mapping_pages(META_MAPPING(sbi),
++				map->m_pblk, map->m_pblk + map->m_len - 1);
++		}
+ 
+ 		if (map->m_multidev_dio) {
+ 			block_t blk_addr = map->m_pblk;
+@@ -1698,7 +1701,7 @@ int f2fs_map_blocks(struct inode *inode, struct f2fs_map_blocks *map,
+ 		f2fs_wait_on_block_writeback_range(inode,
+ 						map->m_pblk, map->m_len);
+ 		invalidate_mapping_pages(META_MAPPING(sbi),
+-						map->m_pblk, map->m_pblk);
++				map->m_pblk, map->m_pblk + map->m_len - 1);
+ 
+ 		if (map->m_multidev_dio) {
+ 			block_t blk_addr = map->m_pblk;
+-- 
+2.25.1
+

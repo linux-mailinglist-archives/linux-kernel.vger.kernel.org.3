@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 56A2C56850D
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 12:18:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B10956850B
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 12:18:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232410AbiGFKRK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Jul 2022 06:17:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57886 "EHLO
+        id S233003AbiGFKRP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Jul 2022 06:17:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57918 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232397AbiGFKRI (ORCPT
+        with ESMTP id S232397AbiGFKRL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Jul 2022 06:17:08 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 254731AF3E;
-        Wed,  6 Jul 2022 03:17:08 -0700 (PDT)
+        Wed, 6 Jul 2022 06:17:11 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C497124BFF
+        for <linux-kernel@vger.kernel.org>; Wed,  6 Jul 2022 03:17:10 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id D4304B81BBD;
-        Wed,  6 Jul 2022 10:17:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3A02FC3411C;
-        Wed,  6 Jul 2022 10:17:04 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5A54B61DD6
+        for <linux-kernel@vger.kernel.org>; Wed,  6 Jul 2022 10:17:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B79C9C3411C;
+        Wed,  6 Jul 2022 10:17:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1657102625;
-        bh=XVdbRrOp8xLesuL5V+XzvyMnqCaufOFVig9zQuXgRQY=;
+        s=k20201202; t=1657102629;
+        bh=tzHUM5AbMxYYDOX4wtqvv6WhtlHhikUXAgRZwor5N2k=;
         h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=MMlQ+fWvP3JUGhLnjIw6+jbnUaJIQZy5aXlLxlLwdGlx7LGIrIJ/UCzdO610lIwV0
-         DgbeVbiP0un/T9p59vebdHE943xTi9/sEZmhekVZzmIIZzQKVPLumMtjDYw/zGUP17
-         I/5wryk2awc3HeO2mqmIsljW9Sak2cJRzeJ+w5YG2zk+Vdk8yNJPDHA39/XbZDVmhz
-         NuQx+t6jY9l2c6IGeNtNho9GJRXGn+T3zpLDTEbIffTnkPWEh9u1bSvf7K22s2Bx2d
-         XZukslogWRSrfhsMHbHyMIU1Eaoyq22kbloOFSOCqWaLktQ+xu8dF+tZ2YQIiEZ/AW
-         YxVt5p9o2FxwQ==
+        b=ISFrSBBUjkxuuslNUrgH8+OGaSErg64jDORerQhk/d/aobeWM2wJVbprS6x7zm/IG
+         36alyjqv1hvDfrbjPd90lMgJxg69CwrUNY7V1ZK8x5Vig+AN5B2khbH2YMx2rp4cPO
+         WJVYMgQJ6NToY6xJDhRDPc6Cam3J5iFZLnAYf5tjfaGT41uRKqo6k2I3fdoxleLeDm
+         tPu9avGiexae8T7GqSIXNXs1g8bX/41sW6IC0hGZvqE7RSiJnKsrHvciZs03bOytzg
+         DvuVXsIlFAK0dcRi9lM1uO4LmW63fULkdBDqeTRfoGp9K4zVQUn5kAxwIPxyBP/+uN
+         aTedKCQWUEpJQ==
 From:   Mark Brown <broonie@kernel.org>
-To:     aidanmacdonald.0x0@gmail.com
-Cc:     rafael@kernel.org, m.szyprowski@samsung.com,
-        linux-samsung-soc@vger.kernel.org, andy.shevchenko@gmail.com,
-        gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org
-In-Reply-To: <20220704112847.23844-1-aidanmacdonald.0x0@gmail.com>
-References: <20220704112847.23844-1-aidanmacdonald.0x0@gmail.com>
-Subject: Re: [PATCH] regmap-irq: Fix bug in regmap_irq_get_irq_reg_linear()
-Message-Id: <165710262393.218789.1320369501599674730.b4-ty@kernel.org>
-Date:   Wed, 06 Jul 2022 11:17:03 +0100
+To:     lgirdwood@gmail.com, jiaming@nfschina.com
+Cc:     renyu@nfschina.com, linux-kernel@vger.kernel.org,
+        liqiong@nfschina.com
+In-Reply-To: <20220705071445.21124-1-jiaming@nfschina.com>
+References: <20220705071445.21124-1-jiaming@nfschina.com>
+Subject: Re: [PATCH] regulator: Fix parameter declaration and spelling mistake.
+Message-Id: <165710262848.218847.17997439381141698785.b4-ty@kernel.org>
+Date:   Wed, 06 Jul 2022 11:17:08 +0100
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -55,26 +54,20 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 4 Jul 2022 12:28:47 +0100, Aidan MacDonald wrote:
-> irq_reg_stride in struct regmap_irq_chip is often 0, but that
-> actually means to use the default stride of 1. The effective
-> stride is stored in struct regmap_irq_chip_data->irq_reg_stride
-> and will get the corrected default value.
+On Tue, 5 Jul 2022 15:14:45 +0800, Zhang Jiaming wrote:
+> Use Complete data type declaration of 'sel' in ti_abb_set_voltage_sel().
+> Fix spelling of 'are'nt' in comments.
 > 
-> The default ->get_irq_reg() callback was using the stride from
-> the chip definition, which is wrong; fix it to use the effective
-> stride from the chip data instead.
 > 
-> [...]
 
 Applied to
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/regmap.git for-next
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/regulator.git for-next
 
 Thanks!
 
-[1/1] regmap-irq: Fix bug in regmap_irq_get_irq_reg_linear()
-      commit: 773d09b4c3acafd35f8b6e90848a39cedc03c52b
+[1/1] regulator: Fix parameter declaration and spelling mistake.
+      commit: d08412328e4ff4928a60438e62e34e67f687a740
 
 All being well this means that it will be integrated into the linux-next
 tree (usually sometime in the next 24 hours) and sent to Linus during

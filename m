@@ -2,87 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D93CC56806E
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 09:45:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8488A567F91
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 09:09:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231922AbiGFHpW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Jul 2022 03:45:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34246 "EHLO
+        id S231476AbiGFHJL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Jul 2022 03:09:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35604 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231827AbiGFHpT (ORCPT
+        with ESMTP id S229740AbiGFHJJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Jul 2022 03:45:19 -0400
-Received: from out30-56.freemail.mail.aliyun.com (out30-56.freemail.mail.aliyun.com [115.124.30.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E169813E0A
-        for <linux-kernel@vger.kernel.org>; Wed,  6 Jul 2022 00:45:17 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R131e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046051;MF=cruzzhao@linux.alibaba.com;NM=1;PH=DS;RN=10;SR=0;TI=SMTPD_---0VIXa9DY_1657093513;
-Received: from 30.97.49.75(mailfrom:cruzzhao@linux.alibaba.com fp:SMTPD_---0VIXa9DY_1657093513)
-          by smtp.aliyun-inc.com;
-          Wed, 06 Jul 2022 15:45:14 +0800
-Message-ID: <2f2b3592-9cf8-95ad-7150-6fb430906231@linux.alibaba.com>
-Date:   Wed, 6 Jul 2022 15:45:13 +0800
+        Wed, 6 Jul 2022 03:09:09 -0400
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4076220C1;
+        Wed,  6 Jul 2022 00:09:08 -0700 (PDT)
+Received: from dggpemm500023.china.huawei.com (unknown [172.30.72.56])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4Ld9ZT3lBrz19G1p;
+        Wed,  6 Jul 2022 15:06:41 +0800 (CST)
+Received: from dggpemm100009.china.huawei.com (7.185.36.113) by
+ dggpemm500023.china.huawei.com (7.185.36.83) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Wed, 6 Jul 2022 15:08:52 +0800
+Received: from huawei.com (10.175.113.32) by dggpemm100009.china.huawei.com
+ (7.185.36.113) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Wed, 6 Jul
+ 2022 15:08:51 +0800
+From:   Liu Shixin <liushixin2@huawei.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Matthew Wilcox <willy@infradead.org>, Jan Kara <jack@suse.cz>,
+        William Kucharski <william.kucharski@oracle.com>,
+        "Christoph Hellwig" <hch@lst.de>
+CC:     <linux-kernel@vger.kernel.org>, <stable@vger.kernel.org>,
+        Liu Shixin <liushixin2@huawei.com>
+Subject: [PATCH 5.15 v3] mm/filemap: fix UAF in find_lock_entries
+Date:   Wed, 6 Jul 2022 15:45:27 +0800
+Message-ID: <20220706074527.1406924-1-liushixin2@huawei.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.9.0
-Subject: Re: [PATCH 2/3] sched/core: Introduce nr_running percpu for each
- cookie
-Content-Language: en-US
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     mingo@redhat.com, juri.lelli@redhat.com,
-        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
-        rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
-        bristot@redhat.com, linux-kernel@vger.kernel.org
-References: <1656403045-100840-1-git-send-email-CruzZhao@linux.alibaba.com>
- <1656403045-100840-3-git-send-email-CruzZhao@linux.alibaba.com>
- <YsK2riNersXeRgKM@hirez.programming.kicks-ass.net>
-From:   cruzzhao <cruzzhao@linux.alibaba.com>
-In-Reply-To: <YsK2riNersXeRgKM@hirez.programming.kicks-ass.net>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.113.32]
+X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
+ dggpemm100009.china.huawei.com (7.185.36.113)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Release refcount after xas_set to fix UAF which may cause panic like this:
 
+ page:ffffea000491fa40 refcount:1 mapcount:0 mapping:0000000000000000 index:0x1 pfn:0x1247e9
+ head:ffffea000491fa00 order:3 compound_mapcount:0 compound_pincount:0
+ memcg:ffff888104f91091
+ flags: 0x2fffff80010200(slab|head|node=0|zone=2|lastcpupid=0x1fffff)
+...
+page dumped because: VM_BUG_ON_PAGE(PageTail(page))
+ ------------[ cut here ]------------
+ kernel BUG at include/linux/page-flags.h:632!
+ invalid opcode: 0000 [#1] SMP DEBUG_PAGEALLOC KASAN
+ CPU: 1 PID: 7642 Comm: sh Not tainted 5.15.51-dirty #26
+...
+ Call Trace:
+  <TASK>
+  __invalidate_mapping_pages+0xe7/0x540
+  drop_pagecache_sb+0x159/0x320
+  iterate_supers+0x120/0x240
+  drop_caches_sysctl_handler+0xaa/0xe0
+  proc_sys_call_handler+0x2b4/0x480
+  new_sync_write+0x3d6/0x5c0
+  vfs_write+0x446/0x7a0
+  ksys_write+0x105/0x210
+  do_syscall_64+0x35/0x80
+  entry_SYSCALL_64_after_hwframe+0x44/0xae
+ RIP: 0033:0x7f52b5733130
+...
 
-在 2022/7/4 下午5:45, Peter Zijlstra 写道:
-> On Tue, Jun 28, 2022 at 03:57:24PM +0800, Cruz Zhao wrote:
-> 
->>  static unsigned long sched_core_alloc_cookie(void)
->>  {
->>  	struct sched_core_cookie *ck = kmalloc(sizeof(*ck), GFP_KERNEL);
->> +	int cpu;
->> +
->>  	if (!ck)
->>  		return 0;
->>  
->>  	refcount_set(&ck->refcnt, 1);
->> +
->> +	ck->nr_running = alloc_percpu(unsigned int);
-> 
-> 	if (!ck->nr_running)
-> 		// do something
-> 
->> +	for_each_possible_cpu(cpu)
->> +		*per_cpu_ptr(ck->nr_running, cpu) = 0;
-> 
-> So I really, as in *really* dislike how this blows up the size of
-> cookies. Esp. with 100s of CPUs not actually being rare these days.
+This problem has been fixed on mainline by patch 6b24ca4a1a8d ("mm: Use
+multi-index entries in the page cache") since it deletes the related code.
 
-My idea is to get the distribution of cookie'd tasks on each runqueue
-through ck->nr_running, so as to facilitate optimization of load
-balance. Sorry for not stating this in the change log.
+Fixes: 5c211ba29deb ("mm: add and use find_lock_entries")
+Signed-off-by: Liu Shixin <liushixin2@huawei.com>
+---
+ mm/filemap.c | 12 +++++++-----
+ 1 file changed, 7 insertions(+), 5 deletions(-)
 
-This does blow up the size of cookies in scenarios with a large number
-of CPUs, and I'll try to get around this problem.
+diff --git a/mm/filemap.c b/mm/filemap.c
+index 00e391e75880..c3e1fc0520dc 100644
+--- a/mm/filemap.c
++++ b/mm/filemap.c
+@@ -2090,7 +2090,11 @@ unsigned find_lock_entries(struct address_space *mapping, pgoff_t start,
+ 
+ 	rcu_read_lock();
+ 	while ((page = find_get_entry(&xas, end, XA_PRESENT))) {
++		unsigned long next_idx = xas.xa_index;
++
+ 		if (!xa_is_value(page)) {
++			if (PageTransHuge(page))
++				next_idx = page->index + thp_nr_pages(page);
+ 			if (page->index < start)
+ 				goto put;
+ 			if (page->index + thp_nr_pages(page) - 1 > end)
+@@ -2111,13 +2115,11 @@ unsigned find_lock_entries(struct address_space *mapping, pgoff_t start,
+ put:
+ 		put_page(page);
+ next:
+-		if (!xa_is_value(page) && PageTransHuge(page)) {
+-			unsigned int nr_pages = thp_nr_pages(page);
+-
++		if (next_idx != xas.xa_index) {
+ 			/* Final THP may cross MAX_LFS_FILESIZE on 32-bit */
+-			xas_set(&xas, page->index + nr_pages);
+-			if (xas.xa_index < nr_pages)
++			if (next_idx < xas.xa_index)
+ 				break;
++			xas_set(&xas, next_idx);
+ 		}
+ 	}
+ 	rcu_read_unlock();
+-- 
+2.25.1
 
-Many thanks for reviewing.
-Best wishes,
-Cruz Zhao

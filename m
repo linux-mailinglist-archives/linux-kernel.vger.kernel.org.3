@@ -2,51 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D43775692B6
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 21:39:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2DFE55692BE
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 21:41:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234151AbiGFTjR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Jul 2022 15:39:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34716 "EHLO
+        id S233466AbiGFTlp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Jul 2022 15:41:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35844 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230029AbiGFTjQ (ORCPT
+        with ESMTP id S232953AbiGFTlm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Jul 2022 15:39:16 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A66BE9A;
-        Wed,  6 Jul 2022 12:39:15 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 365B4620A3;
-        Wed,  6 Jul 2022 19:39:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 64F88C341CA;
-        Wed,  6 Jul 2022 19:39:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1657136354;
-        bh=E3mfOerdYVWrCZ85sBYMTVxIttCanPdxxYhCAoaTxh0=;
-        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=siU6TN1IeX526SjcOgSuPyzEj/JgCuq+FuMuZNxyKU0OLqM6MpzgBtG8m9MsdHHlt
-         nX2FJF+Yhl0ILejyjZfTuLjOC3AuKgDWk1gv+pWvun1rqcwIwzQP+IqTlnUgAnfpCV
-         xbjBso9+oXiNgDtYyTxM6EuCqpZVKe7zM4d1Wi9ExnNbCy997XFXS/VvFkRuBb5PBL
-         T1DL0MdNwc5dCOUFZWLC0lGZCDd+37DlnuAZFzdWDfcFhcwoVN9P/BO/WEyePbdKrn
-         g6xeb/6wLbpgdO5+Iiw2gerULqS7TDVwmCbQTURnZ4UXjY98kzC8TcRoJ+sJDcZrJX
-         UWJcRNyyviwrg==
-From:   Mark Brown <broonie@kernel.org>
-To:     cristian.ciocaltea@collabora.com, sanju.mehta@amd.com
-Cc:     linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        vacharakis@o2mail.de, kernel@collabora.com
-In-Reply-To: <20220706100626.1234731-1-cristian.ciocaltea@collabora.com>
-References: <20220706100626.1234731-1-cristian.ciocaltea@collabora.com>
-Subject: Re: [PATCH 0/5] AMD SPI controller driver bug fix and cleanups
-Message-Id: <165713635311.1162444.8799219504785646991.b4-ty@kernel.org>
-Date:   Wed, 06 Jul 2022 20:39:13 +0100
+        Wed, 6 Jul 2022 15:41:42 -0400
+Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C3D9220F4
+        for <linux-kernel@vger.kernel.org>; Wed,  6 Jul 2022 12:41:40 -0700 (PDT)
+Received: by mail-wr1-x42f.google.com with SMTP id v16so12000680wrd.13
+        for <linux-kernel@vger.kernel.org>; Wed, 06 Jul 2022 12:41:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=dqftkVeBULFujgeW5u4Q72fmCV3i4BBjke3zKWOEy1A=;
+        b=KcYSiIzyauYf2ZzkUlAvW4Roc8Wmt2dFij6im1jGYtHZTnB1gQJ9kLTN9uq2gU8k0W
+         c8Ug4bvmQnuATs0Pyd3YuNLkkYCGo9NOyDZmTd2TODbApNfFoVdJnWYIEQauviZkfj1W
+         aXwLKrSltHgl9GeHYJHjMzCezWfhq+U6+AwURORi8yrRX//1hQvzd1ZnWS70OzDJ9D0s
+         fszyGefSzCfnIwSPI4WbjjJ4PH3V2X1ew8Oma0/QmB7hgR1mVLkU4y1i8DacjfuMlxs6
+         OV4ARrk9xeF/jIG5r0vcL4QGXscG1QWOG9D7maiux8M51zF1fA7jbQTevAICTukeXrrB
+         ZPJg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=dqftkVeBULFujgeW5u4Q72fmCV3i4BBjke3zKWOEy1A=;
+        b=TnqlTJ9diTuVHsPdR9leMl3mjVq9XQyhXeW7KrCdV56DbcZVZwuuWVH4NZYlTMAN8Y
+         dnuQxf0e0IHe5o9nBzUXbbEybEdTbGiQxPKa9PIvNOsbXI4VTs+A6gAmJeG0pp+2E6qE
+         681gPCxuJWjOq3R9bc59mJi3VORNGDaOlAMpAyDvtiJcxOyLulu4nCxZUli1isIwWdCw
+         hyYMtYOP7r7jNGEfNK/Zpx3+ke1oqaN9qs7mz7X+JyZYmIgxtHu0pN/ccaZspEHERmJF
+         SGugg0mYyGpsjmDEjUxSSLilyNIi7zy7fwbOiR3oLWMHqamu8uybVvF1AnNrKd5DwlNa
+         W57Q==
+X-Gm-Message-State: AJIora8RDObr3CGIVDgeg5dl944b+Fv+3UMGFEay5V6AuThtuIXYAZvn
+        2zUtVs9RJeogNvQwrwNk9j/QNQ==
+X-Google-Smtp-Source: AGRyM1sOu1aQFKgXk7TMbVOZRLxFaQ8UCtknqdZPyDoTSVFsby64OJ1WDVQbiTCNnRRxKrtq1QoATw==
+X-Received: by 2002:adf:f705:0:b0:21d:74fa:c043 with SMTP id r5-20020adff705000000b0021d74fac043mr10132920wrp.77.1657136499186;
+        Wed, 06 Jul 2022 12:41:39 -0700 (PDT)
+Received: from localhost.localdomain (88-107-17-60.dynamic.dsl.as9105.com. [88.107.17.60])
+        by smtp.gmail.com with ESMTPSA id f190-20020a1c38c7000000b0039c5328ad92sm23387320wma.41.2022.07.06.12.41.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 06 Jul 2022 12:41:38 -0700 (PDT)
+From:   Caleb Connolly <caleb.connolly@linaro.org>
+To:     caleb.connolly@linaro.org, Sebastian Reichel <sre@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Tom Rix <trix@redhat.com>, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, llvm@lists.linux.dev,
+        phone-devel@vger.kernel.org
+Subject: [PATCH v4 0/2] power: supply: introduce support for the Qualcomm smb2 charger
+Date:   Wed,  6 Jul 2022 20:41:23 +0100
+Message-Id: <20220706194125.1861256-1-caleb.connolly@linaro.org>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -54,54 +76,53 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 6 Jul 2022 13:06:21 +0300, Cristian Ciocaltea wrote:
-> This patch series addresses an issue in the spi-amd driver and, while
-> there, performs some additional cleanups, like simplifying the error
-> handling in the probe function and removing an unused struct member.
-> 
-> For improving code readability, it also adds some kernel-doc comments.
-> 
-> Cristian Ciocaltea (5):
->   spi: amd: Limit max transfer and message size
->   spi: amd: Make use of devm_spi_alloc_master()
->   spi: amd: Make use of dev_err_probe()
->   spi: amd: Drop io_base_addr member from struct amd_spi
->   spi: amd: Add struct and enum kernel-doc comments
-> 
-> [...]
+Add a driver for the Qualcomm PMI8998/PM660 Switch-Mode Battery Charger.
+This is the second generation SMB charger, and replaces the previous
+SMBB hardware found in older PMICs.
 
-Applied to
+This driver provides basic support for initialising the hardware,
+configuring the USB input current limit and reporting information about
+the state of the charger. Features like type-c dual role support and OTG
+switching will be added in future patches.
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
+This patch series depends on my previous series adding support for
+the Round Robin ADC which is used for reading the USB voltage and
+current, it is currently queued in linux-next, and can be found here:
+https://lore.kernel.org/linux-arm-msm/20220429220904.137297-1-caleb.connolly@linaro.org/
 
-Thanks!
+Changes since v3:
+ * Drop DTS patches, to be sent in a future series
+ * Add POWER_SUPPLY_PROP_CHARGE_CONTROL_LIMIT so that the charger will
+   be exposed as a cooling device,
+   see https://lore.kernel.org/linux-pm/164f2458-fb66-f238-7143-bdbe1e200870@linaro.org
+ * Run clang-format and prevent it from breaking the formatting of the
+   defines
+ * Apply Sebastian's suggested fixes
 
-[1/5] spi: amd: Limit max transfer and message size
-      commit: 6ece49c56965544262523dae4a071ace3db63507
-[2/5] spi: amd: Make use of devm_spi_alloc_master()
-      commit: 2e063bb1d4272e7b64ef813566691ea8ea192f9c
-[3/5] spi: amd: Make use of dev_err_probe()
-      commit: deef4da8be2f7e94a0807e56f856d3e20addce4d
-[4/5] spi: amd: Drop io_base_addr member from struct amd_spi
-      commit: 1e71ffee97ac02b83b6ff75b52fa7b21b9149f7d
-[5/5] spi: amd: Add struct and enum kernel-doc comments
-      commit: 55861e36b663f6e584d1b0659c1c5cec0ce26a5d
+Changes since v2:
+ * Use devm_delayed_work_autocancel
+ * Minor driver fixes
+ * Pick up Krzysztof's R-b on the DT patch
 
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
+Changes since v1:
+ * Rename the driver to pmi8998_charger
+ * Drop unnecessary (and very broken) mutex
+ * Rework the driver based on feedback to v1
+ * Fix some minor bugs and improve Automatic Input Current Limit support
 
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
+Caleb Connolly (2):
+  power: supply: add Qualcomm PMI8998 SMB2 Charger driver
+  dt-bindings: power: supply: qcom,pmi8998-charger: add bindings for
+    smb2 driver
 
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
+ .../power/supply/qcom,pmi8998-charger.yaml    |   82 ++
+ drivers/power/supply/Kconfig                  |    9 +
+ drivers/power/supply/Makefile                 |    1 +
+ drivers/power/supply/qcom_pmi8998_charger.c   | 1044 +++++++++++++++++
+ 4 files changed, 1136 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/power/supply/qcom,pmi8998-charger.yaml
+ create mode 100644 drivers/power/supply/qcom_pmi8998_charger.c
 
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
+-- 
+2.36.1
 
-Thanks,
-Mark

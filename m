@@ -2,80 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DCE7656876B
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 13:55:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D9EF56876E
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 13:56:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233273AbiGFLzi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Jul 2022 07:55:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55812 "EHLO
+        id S233289AbiGFLz6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Jul 2022 07:55:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56248 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231718AbiGFLzg (ORCPT
+        with ESMTP id S233034AbiGFLzz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Jul 2022 07:55:36 -0400
-Received: from alexa-out-sd-01.qualcomm.com (alexa-out-sd-01.qualcomm.com [199.106.114.38])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DE1D2870D;
-        Wed,  6 Jul 2022 04:55:35 -0700 (PDT)
+        Wed, 6 Jul 2022 07:55:55 -0400
+Received: from mail-qt1-x836.google.com (mail-qt1-x836.google.com [IPv6:2607:f8b0:4864:20::836])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 546B528735
+        for <linux-kernel@vger.kernel.org>; Wed,  6 Jul 2022 04:55:54 -0700 (PDT)
+Received: by mail-qt1-x836.google.com with SMTP id z13so17798165qts.12
+        for <linux-kernel@vger.kernel.org>; Wed, 06 Jul 2022 04:55:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1657108535; x=1688644535;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=TBeCC6CuwXOAfe6GFkEG68qD/N/2tTfMoJl3F0H1S08=;
-  b=d7LXPDfuXjOPnjPvOO2aHH9kUwYZ3sAyqQiiYRjVJ/F1Fb/8Pa2Rw1sS
-   RSiVhY37vvNPrYSBlPc7AmcheH9zX0NwQzWB0xHguSOsX2Mm/Pd7j0A9V
-   AKjARfs10tgoc2909yHdm0vFgCXv8Y7pVcMD7a1BpyVFhiujumasP7bdM
-   c=;
-Received: from unknown (HELO ironmsg02-sd.qualcomm.com) ([10.53.140.142])
-  by alexa-out-sd-01.qualcomm.com with ESMTP; 06 Jul 2022 04:55:35 -0700
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg02-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jul 2022 04:55:34 -0700
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Wed, 6 Jul 2022 04:55:33 -0700
-Received: from [10.216.40.209] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Wed, 6 Jul 2022
- 04:55:27 -0700
-Message-ID: <9de4c3a0-eb95-f4e9-b828-2343241fff41@quicinc.com>
-Date:   Wed, 6 Jul 2022 17:25:24 +0530
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=2xPPvWkX/4qbcpxkLhSz37/dg2kQ2TdyfBGP0fDH2yg=;
+        b=cUsjsTcPftdO60OMEiKQ4hv8X2Er3f5roF3uW5EmdRGuZxAt/jWMXPjAFX7itH5ZFK
+         vUSSJa1ffxzdS1t6yW4ILO0SO/fDZPzYPyH4Nt7i1uHMmC3hY0YSLaeS3011WTAs4uWR
+         bds1oCBPN1inb2QCOT8bOgd94l08GVVEAmsNXaO+wyOWil6Iwlc8uKbI4k0uaAI3hEc9
+         N4VQ2NN1Xs6DUhn8t2R3MD3pnuVo6r5iApPFC98RxCk9bZE+XG2wOXUXHWgQ584D+med
+         rNquHLcX0owEgVrBbSfHJ4SCfHaUWCGTwwwcYTnergywH4lO9IpTV+DUUQRw20149ZSK
+         BI+Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=2xPPvWkX/4qbcpxkLhSz37/dg2kQ2TdyfBGP0fDH2yg=;
+        b=SBdbu6wAYTOBxPxn9M8e9S95B0ZYGhv/NYFQTxg4r2hircGCKcjatrUquODqTCfXGh
+         z68YqbfGwOyjfzupDZ7ZSJXBwZX7pK2rJ8bKyU2YaGhFHWK2EAvgd29u8EP06pRbFdXn
+         umf4EGF9dO/woiHjGI83+dY3GApYLn792RWU9f3DUDtsBc9XKj8lqQutQgSZCYp/kL8e
+         NOcA+tpyJ9hDk6jZelrqBvQfUpGUk0v9M3vGCpDL9IHoCCmMdF1vJZY/TXUQYu++eAti
+         jwbM4qf/txZKfISV8IPEqW41GioaowHPVV2kFGHfnXL1Jqe0TBWj0qSD+2mtg7RTc8t/
+         gexw==
+X-Gm-Message-State: AJIora+jYiF2fYJkS2S+p3umE9AFz5LGus2D7Ta5bBnjNuYnFqpps+hN
+        PwfY77/hPueLSZdmh6HNJoV0f5Ta+L0LxcxsOqOU6Q==
+X-Google-Smtp-Source: AGRyM1txd771wD0DyBtRq3n3JR0SKeoIUILx/nX4kQwQ9L56f1AyAZjwRJ1FoLu0egJmYMS134eL+7pj4xks9LiP5WA=
+X-Received: by 2002:a0c:f501:0:b0:472:f72c:7947 with SMTP id
+ j1-20020a0cf501000000b00472f72c7947mr11667047qvm.119.1657108553408; Wed, 06
+ Jul 2022 04:55:53 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH v2 2/3] dt-bindings: pci: QCOM Adding sc7280 aggre0,
- aggre1 clocks
-Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        <helgaas@kernel.org>
-CC:     <linux-pci@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <mka@chromium.org>,
-        <quic_vbadigan@quicinc.com>, <quic_hemantk@quicinc.com>,
-        <quic_nitegupt@quicinc.com>, <quic_skananth@quicinc.com>,
-        <quic_ramkri@quicinc.com>, <manivannan.sadhasivam@linaro.org>,
-        <swboyd@chromium.org>, <dmitry.baryshkov@linaro.org>,
+References: <20220705133917.8405-1-ansuelsmth@gmail.com> <20220705133917.8405-4-ansuelsmth@gmail.com>
+ <e81344f6-7da5-a209-2785-d540e41f3958@linaro.org> <62c56348.1c69fb81.d2cad.2584@mx.google.com>
+In-Reply-To: <62c56348.1c69fb81.d2cad.2584@mx.google.com>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Date:   Wed, 6 Jul 2022 14:55:41 +0300
+Message-ID: <CAA8EJprzV_MFa8gS4=vR_mz3RvLAdHYrvH2=D9P5FWGTaviSyQ@mail.gmail.com>
+Subject: Re: [PATCH 03/13] ARM: dts: qcom: add missing rpm regulators and
+ cells for ipq8064
+To:     Christian Marangi <ansuelsmth@gmail.com>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
         Andy Gross <agross@kernel.org>,
         Bjorn Andersson <bjorn.andersson@linaro.org>,
-        "Bjorn Helgaas" <bhelgaas@google.com>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
         Rob Herring <robh+dt@kernel.org>,
-        "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
-        Stanimir Varbanov <svarbanov@mm-sol.com>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>
-References: <1656062391-14567-1-git-send-email-quic_krichai@quicinc.com>
- <1656691899-21315-1-git-send-email-quic_krichai@quicinc.com>
- <1656691899-21315-3-git-send-email-quic_krichai@quicinc.com>
- <1fb5f0c6-ff72-b9ba-175a-b5197ed658a7@linaro.org>
-From:   Krishna Chaitanya Chundru <quic_krichai@quicinc.com>
-In-Reply-To: <1fb5f0c6-ff72-b9ba-175a-b5197ed658a7@linaro.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Jonathan McDowell <noodles@earth.li>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -83,57 +74,60 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Wed, 6 Jul 2022 at 13:26, Christian Marangi <ansuelsmth@gmail.com> wrote:
+> On Wed, Jul 06, 2022 at 10:34:16AM +0200, Krzysztof Kozlowski wrote:
+> > On 05/07/2022 15:39, Christian Marangi wrote:
+> > > Add cells definition for rpm node and add missing regulators for the 4
+> > > regulator present on ipq8064. There regulators are controlled by rpm and
+> > > to correctly works gsbi4_i2c require to be NEVER disabled or rpm will
+> > > reject any regulator change request.
+> > >
+> > > Signed-off-by: Christian Marangi <ansuelsmth@gmail.com>
+> > > Tested-by: Jonathan McDowell <noodles@earth.li>
 
-On 7/4/2022 1:54 PM, Krzysztof Kozlowski wrote:
-> On 01/07/2022 18:11, Krishna chaitanya chundru wrote:
->> Adding aggre0 and aggre1 clock entries to PCIe node.
->>
->> Signed-off-by: Krishna chaitanya chundru <quic_krichai@quicinc.com>
->> ---
->>   Documentation/devicetree/bindings/pci/qcom,pcie.yaml | 6 ++++--
->>   1 file changed, 4 insertions(+), 2 deletions(-)
->>
->> diff --git a/Documentation/devicetree/bindings/pci/qcom,pcie.yaml b/Documentation/devicetree/bindings/pci/qcom,pcie.yaml
->> index 0b69b12..8f29bdd 100644
->> --- a/Documentation/devicetree/bindings/pci/qcom,pcie.yaml
->> +++ b/Documentation/devicetree/bindings/pci/qcom,pcie.yaml
->> @@ -423,8 +423,8 @@ allOf:
->>       then:
->>         properties:
->>           clocks:
->> -          minItems: 11
->> -          maxItems: 11
->> +          minItems: 13
->> +          maxItems: 13
->>           clock-names:
->>             items:
->>               - const: pipe # PIPE clock
->> @@ -437,6 +437,8 @@ allOf:
->>               - const: bus_slave # Slave AXI clock
->>               - const: slave_q2a # Slave Q2A clock
->>               - const: tbu # PCIe TBU clock
->> +            - const: aggre0 # Aggre NoC PCIe CENTER SF AXI clock
->> +            - const: aggre1 # Aggre NoC PCIe1 AXI clock
-> You ignored my comments from v1 - please don't. This is not accepted.
+[...]
+
 >
-> Also, please do not send new versions of patchset as reply to some other
-> threads. It's extremely confusing to find it under something else.
+> > > +
+> > >                     rpmcc: clock-controller {
+> > >                             compatible = "qcom,rpmcc-ipq806x", "qcom,rpmcc";
+> > >                             #clock-cells = <1>;
+> > >                     };
+> > > +
+> > > +                   smb208_regulators: regulators {
+> > > +                           compatible = "qcom,rpm-smb208-regulators";
+> > > +                           status = "okay";
+> >
+> > Was the node disabled?
+> >
 >
-> Best regards,
-> Krzysztof
-Hi
+> smb208 is the normal and advised way to handle regulators on this
+> platform. Some device may want to not follow that and implement their
+> own regulator bypassing rpm so we add a status and on the current device
+> present upstream we set it disabled as it does use different regulators
+> implementation.
 
-Krzysztof,
+Yep, this is correct. But you don't have to define status = 'okay'. It
+is the default.
 
-Sorry for confusion created which replying this patch.
+There are two typical patterns:
+1) Disable by default
+foo.dtsi:
+    abc: def {
+        status = "disabled";
+    };
+foo-bar.dtsi:
+    &abc { status = "okay"; }
 
-The only comment I got from v1 from you is to run make dtbs_check.
+2) Enable by default
+foo.dtsi:
+    abc: def {
+        /* usual properties */
+    };
+foo-bar.dtsi:
+    &abc { status = "disabled"; }
 
-I ran that command I found the errors and fixed them and I ran the make dtbs_check again
-before on v2 and made sure there are no errors.
 
-Can you please tell me is there any steps I missed.
-
-Thanks & Regards,
-Krishna Chaitanya.
-
+-- 
+With best wishes
+Dmitry

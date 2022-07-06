@@ -2,107 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D7615567F7F
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 09:06:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8BD96567F74
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 09:06:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231678AbiGFHFp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Jul 2022 03:05:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58906 "EHLO
+        id S231712AbiGFHFs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Jul 2022 03:05:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59462 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231549AbiGFHFX (ORCPT
+        with ESMTP id S231657AbiGFHFY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Jul 2022 03:05:23 -0400
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B019922536;
-        Wed,  6 Jul 2022 00:05:20 -0700 (PDT)
-Received: from mail-yw1-f174.google.com ([209.85.128.174]) by
- mrelayeu.kundenserver.de (mreue009 [213.165.67.97]) with ESMTPSA (Nemesis) id
- 1MQMm9-1nvYz6481J-00MIfJ; Wed, 06 Jul 2022 09:05:18 +0200
-Received: by mail-yw1-f174.google.com with SMTP id 00721157ae682-31c86fe1dddso83275417b3.1;
-        Wed, 06 Jul 2022 00:05:15 -0700 (PDT)
-X-Gm-Message-State: AJIora/yyXFuxC0iH8udXG4GKzeQDfZVFj5/5/aXY+3OG8rcG8jffJLV
-        2V+NVKVyV6CbxZT52ddqge0oe5EQDCQFt7Y66jU=
-X-Google-Smtp-Source: AGRyM1sFkLoTiaaVIBkcDzO6lGV11chQSm3x6oRhEtv1xOtqIu5uDObFEe7OPQNG4jMZlSfDIkbGiGD4cv9otOB20XA=
-X-Received: by 2002:a81:f8f:0:b0:31c:bd9f:31ce with SMTP id
- 137-20020a810f8f000000b0031cbd9f31cemr10731679ywp.347.1657091114041; Wed, 06
- Jul 2022 00:05:14 -0700 (PDT)
+        Wed, 6 Jul 2022 03:05:24 -0400
+Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30F3817E03
+        for <linux-kernel@vger.kernel.org>; Wed,  6 Jul 2022 00:05:23 -0700 (PDT)
+Received: by mail-lf1-x12b.google.com with SMTP id bu42so4490193lfb.0
+        for <linux-kernel@vger.kernel.org>; Wed, 06 Jul 2022 00:05:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=DjJWh0nZiIzVQSxYKq4yhd4wJ+ppDdUOImr4L84iPRA=;
+        b=xO5fKweKllcZX+2MUtldeM5jwT4QinDo+e97vjMvl5RbPLKiQllk/+p4iimxBh+DRu
+         lWZz95YrwzqyWhanulsCMzJSaLadyxX9dIrOa2WP749BX5GV2lp7/wla/G6ohtQMkP/C
+         yv06XL4akgD6w4WiAsMSuTmWN3m/5KEOCJ2NZx2afxLChZjhSPk+So4eCo7A3lY2CO0v
+         cuJiQXWksjTbYIf0pmRQH+ZmcGXoNoqo/TBp4y/zqwCZp37p8AwcNnmM9FxNCIAibaTj
+         xAgDqBby7fCQcTdsBmnVEu8WUBPwjIm69c8uGSrcGc+IpojAO7z2YpgyRZRapJk82RzL
+         dBGg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=DjJWh0nZiIzVQSxYKq4yhd4wJ+ppDdUOImr4L84iPRA=;
+        b=NH9G5kDm1iZmhzlJaf1gxYsyTy3YLeeYgRnK2UrcQXEDjyJsi1WStKe3XAuWPj3eDu
+         YdV9HZM9HuLrdstTFe52YCeVKYGyCvmawApaCCzMcsPaO8+N9yGBaSlyPAiRQWr+fV4J
+         hpKyjhUVASoVpaZHTOq60Z4CIiQJVyuxCHL0b04yU+o7BcX8bwlexQFb81KH8NIFQvW0
+         NDg3etHxcJxZ4gqSFl1Be27UFLNkasOPk1OwqQf2h9WROCjXytSmO5iKKNOJxJY4TGr3
+         +a8aVYTF7zNFCDx0ICaca0MyJPVa33wJ9WkHsB9oLH3zsx+Jo/Rx725BwPgnQlxD7jAy
+         BJcQ==
+X-Gm-Message-State: AJIora/Y2cYEQaUYSR4fdxvribX3hAbux9mah/bO7qXz9Pgj4aqrhLYv
+        vsGWJoktXOCfpfjqZUNwRZ8wiA==
+X-Google-Smtp-Source: AGRyM1sczTtMVM/629rXprfOKAwXlLvM6SuOehwWrAwoiNnjNx+FYlhZrV3x5PftKLTUiSSrk01rNg==
+X-Received: by 2002:a05:6512:3e07:b0:482:ba6c:64ae with SMTP id i7-20020a0565123e0700b00482ba6c64aemr7459413lfv.512.1657091121452;
+        Wed, 06 Jul 2022 00:05:21 -0700 (PDT)
+Received: from [192.168.1.52] ([84.20.121.239])
+        by smtp.gmail.com with ESMTPSA id u11-20020ac248ab000000b004837dbe7ef2sm781324lfg.120.2022.07.06.00.05.20
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 06 Jul 2022 00:05:20 -0700 (PDT)
+Message-ID: <f0f1f652-f219-1e33-47e4-2679315da46c@linaro.org>
+Date:   Wed, 6 Jul 2022 09:05:19 +0200
 MIME-Version: 1.0
-References: <20220630051630.1718927-1-anshuman.khandual@arm.com>
- <8a6ccbae-7d7c-6e08-cc28-eeb649f86112@arm.com> <85fff3f6-373f-3e6a-325e-0fa8ad46273a@csgroup.eu>
-In-Reply-To: <85fff3f6-373f-3e6a-325e-0fa8ad46273a@csgroup.eu>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Wed, 6 Jul 2022 09:04:56 +0200
-X-Gmail-Original-Message-ID: <CAK8P3a1gb1Xrg4AGnncFpN=aDxVKfjkt1TmSvZXXADZTv7eE-g@mail.gmail.com>
-Message-ID: <CAK8P3a1gb1Xrg4AGnncFpN=aDxVKfjkt1TmSvZXXADZTv7eE-g@mail.gmail.com>
-Subject: Re: [PATCH V6 00/26] mm/mmap: Drop __SXXX/__PXXX macros from across platforms
-To:     Christophe Leroy <christophe.leroy@csgroup.eu>
-Cc:     Anshuman Khandual <anshuman.khandual@arm.com>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
-        "linux-xtensa@linux-xtensa.org" <linux-xtensa@linux-xtensa.org>,
-        "linux-ia64@vger.kernel.org" <linux-ia64@vger.kernel.org>,
-        "linux-parisc@vger.kernel.org" <linux-parisc@vger.kernel.org>,
-        "linux-s390@vger.kernel.org" <linux-s390@vger.kernel.org>,
-        "linux-sh@vger.kernel.org" <linux-sh@vger.kernel.org>,
-        "linux-hexagon@vger.kernel.org" <linux-hexagon@vger.kernel.org>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "linux-um@lists.infradead.org" <linux-um@lists.infradead.org>,
-        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
-        "linux-csky@vger.kernel.org" <linux-csky@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "hch@infradead.org" <hch@infradead.org>,
-        "linux-m68k@lists.linux-m68k.org" <linux-m68k@lists.linux-m68k.org>,
-        "openrisc@lists.librecores.org" <openrisc@lists.librecores.org>,
-        "linux-alpha@vger.kernel.org" <linux-alpha@vger.kernel.org>,
-        "sparclinux@vger.kernel.org" <sparclinux@vger.kernel.org>,
-        "linux-riscv@lists.infradead.org" <linux-riscv@lists.infradead.org>,
-        "linux-snps-arc@lists.infradead.org" 
-        <linux-snps-arc@lists.infradead.org>,
-        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:eoj/BCXKdmN3+Jtii2tnT9++PxDX3Qg7gtjTIvPC9UxI/6aBcxJ
- tTae1o1xAarRHKJSP3rYt1b1/eDeegzTy0D2zVasyMJuuUa+41stGutBBXc1JX0IWj+OuEm
- 4ASghrYondSGEJVdD4r91TCAANQlj5byQGbFpEa9jhmxGwVvHYU/Vtoar9ZPDQqoHW43WeM
- R3ozEe+h4nV01gc2XgZ2Q==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:prrS9+g5wIQ=:AH9lcMoXqt1xOcLbdnz0v3
- FlSve9D0sISO715668G4rmmOOym/lRAuFwSwKOrEgM87WsNd50hr6zzm6CkRQaWsQNRfb3JMD
- pcZW7ztueF93/tWxu/udv1r5lnePhIz3byRArXnmXPWihtuIM7AQ9Ky3KkRQOmYKT78as29UQ
- r0cGiEnz6bcQpvcqYSjK3TJdLhS7PpmL3x90cG6xm+NZ6gIxuJEClno37wYHSZUPbBMVs/C9A
- IOAAi+/oi7gWMWmtjHJarqw8Y+I2uYCh9CrF0dt8bUjvuK2QFTKEwKPEsaHgVWA42u9wlem+y
- 4sIgHUzW0/TuymIwELBXL/ElFVOdfLORt8KL4MTwAICBILbSZS3XVWwMDkjgBf8D4QCI5c+R9
- 00HOPOriisiG7YnK8L6mjd+xGcjfeCvzVC9XOhM+28BR7CteM5su05ac/6hzrpkJLyILrKNRs
- HvaTSN1FwRqUy9Kj+WI1P6jXqu8d2IBxZMLKsnAXha4VVlcdtrH2kDJLkchXUmu8Y/f31xGor
- TVUj0G1hyIitAC5nxF36puqdvyGzqw1EjycEk73/bwY8lkE1YYSQMhVTNIdROMV1pqvwgLPdl
- IaRqUJkq0ZbXME5jinzrOPR2K+0f/rNmGTOO72ZJ2xElw39Q0uqHGgmN6++BKG4JNqK9MlBbi
- DSfhIbUxaRzTzPoPxj2i8ePp+cVwJBWGqB9PqvGAd6DX6y27uTIL9evkQviyXz4YCMv3vnrFq
- lsDcsJpMxdcr5+T5dz0YqL8w/tJakl/IqUgEw6m0VYya+EPCL+0rI2VwcHBY2Xj2z72Kibici
- 54Y/uROUkJKI0rqrBWN7XoacPQ1MfP1Mq5mgKzoRwHNbT+W58ZL9IU8OR3lzsTjY6dj34FUgG
- OKtnA6/3GxUCV6shdv1Q==
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [V5 2/2] dt-bindings: remoteproc: qcom: Convert SC7180 MSS
+ bindings to YAML
+Content-Language: en-US
+To:     Sibi Sankar <quic_sibis@quicinc.com>, bjorn.andersson@linaro.org,
+        swboyd@chromium.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org
+Cc:     mathieu.poirier@linaro.org, agross@kernel.org,
+        konrad.dybcio@somainline.org, linux-remoteproc@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, mka@chromium.org
+References: <1657020721-24939-1-git-send-email-quic_sibis@quicinc.com>
+ <1657020721-24939-3-git-send-email-quic_sibis@quicinc.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <1657020721-24939-3-git-send-email-quic_sibis@quicinc.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jul 6, 2022 at 8:33 AM Christophe Leroy
-<christophe.leroy@csgroup.eu> wrote:
+On 05/07/2022 13:32, Sibi Sankar wrote:
+> Add a separate YAML binding to act as a superset of the PAS and non-PAS
+> compatible for SC7180 MSS PIL. This also serves as a way to increase
+> readability.
+> 
+> Signed-off-by: Sibi Sankar <quic_sibis@quicinc.com>
+> ---
+> 
+> Depends on Krzysztof's remoteproc cleanups and improvements:
+> https://patchwork.kernel.org/project/linux-arm-msm/cover/20220517070113.18023-1-krzysztof.kozlowski@linaro.org/
+> 
+> Previous discussion on PAS vs non-PAS bindings:
+> https://lore.kernel.org/lkml/YUps1JfGtf6JdbCx@ripper/ [Bjorn]
+> https://lore.kernel.org/lkml/CAE-0n51KBYjZvwGNy06_okmEWjEfRLQO54CYaY6-JnbBk6kOhA@mail.gmail.com/ [Stephen]
+> 
+> v5:
+>  * Improve phandle-array schemas [Stephen/Rob/Krzysztof]
+>  * Add more details to the firmware-name/memory region string array [Stephen/Rob]
+>  * Drop 'items' from label [Rob]
+> 
 
-> As far as I can see in Kconfig, CONFIG_MMU is user selectable on the
-> following architectures:
-> - ARM
-> - M68K
-> - RISCV
-> - SH
->
-> And is disabled by default on XTENSA.
+Looks good, thanks!
 
-Right, the list is complete, though it's also default-enabled for
-every CPU core on xtensa, and you can only disable it for
-"custom" CPU cores.
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-        Arnd
+Best regards,
+Krzysztof

@@ -2,139 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8683F569274
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 21:15:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 83FF356927A
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 21:16:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233871AbiGFTPI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Jul 2022 15:15:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48170 "EHLO
+        id S233933AbiGFTQE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Jul 2022 15:16:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48924 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230224AbiGFTPE (ORCPT
+        with ESMTP id S230224AbiGFTQB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Jul 2022 15:15:04 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2632C19C19
-        for <linux-kernel@vger.kernel.org>; Wed,  6 Jul 2022 12:15:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1657134901;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=fe2Xwz5G0SOLEGSbWZeizefklyOtEuVCF/HmgAiG5W8=;
-        b=NOClT1bnzEoubqinkjt6Ke9Hy9ieDcOFJAa9+eIkZtytdYPX5DzL7JLmT+cAaJ4pjlKykF
-        fl+oAzh3mgqJxfa6ODwvoNtEewtRYT1q6meLl4XpvrNWJgenXRz4+7G//CPgLCvxs2q/DA
-        Q0VXi75W0gnaP8Mag0SyxWpp7onrTsY=
-Received: from mail-il1-f199.google.com (mail-il1-f199.google.com
- [209.85.166.199]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-563-NcxX9MlkPHS_1GFEg0Paag-1; Wed, 06 Jul 2022 15:15:00 -0400
-X-MC-Unique: NcxX9MlkPHS_1GFEg0Paag-1
-Received: by mail-il1-f199.google.com with SMTP id b8-20020a92c568000000b002dc0d54f7b1so5349972ilj.19
-        for <linux-kernel@vger.kernel.org>; Wed, 06 Jul 2022 12:15:00 -0700 (PDT)
+        Wed, 6 Jul 2022 15:16:01 -0400
+Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D06C1237CC
+        for <linux-kernel@vger.kernel.org>; Wed,  6 Jul 2022 12:16:00 -0700 (PDT)
+Received: by mail-ed1-x535.google.com with SMTP id v12so7852006edc.10
+        for <linux-kernel@vger.kernel.org>; Wed, 06 Jul 2022 12:16:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=DaD3IQOOIYs922HyFPt3gDuoj5LcEWxvvwoxeXt8fJI=;
+        b=ZeMq41JUS362BA1pO+hs1g2s3LKOhlzv1jrk65JQSknyJksYY+pxTiKeIET5RZQJVf
+         FK/VdDQZj/Up11J0mvYVWS3uVPxXDvB0D4JJHSbJz4J4cu/dOcPZmwqkjrv0BSyXHNgD
+         Z1nmWVoA/X0QrsJG7l6gPcmWiGNa3CRKF8AdAspTGM46JtQiAflLEkKM3WwhKd0C2BEP
+         AFmrQ7oLwyo8CFCFzNyKtUzsNUzavZGVATpXGfdikHQDIDXl9dAKWkpMQzOmrK+PN2Yr
+         7yCXnKnSLgptGiXgNa4EhubV4krJ6TU1oL40NRaWTo3fzZ2hizJbS0Z41hkm6ZZCYDJV
+         WIeg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:in-reply-to
-         :references:organization:mime-version:content-transfer-encoding;
-        bh=fe2Xwz5G0SOLEGSbWZeizefklyOtEuVCF/HmgAiG5W8=;
-        b=LYQwisAhEoK76VSr2QmSPf/VW+Xu6S4HBTmUb2D/VBU+438yLxEyWJiPtiPO63Tj1C
-         wmkGzwW33S1dxBMNQqNJ7FYh5C28kgwHw2TCiAitNOZ+A/mjCVl4jP/tea2AkiYu/Vnl
-         /8F1ZCm3RtRFIRtHHmICAZ7hkBzAOxalgjpUiOqPLtQ2iimux7BdkYmlwJt0bc2M3LFO
-         ZVs3lifSPh9dd9cmgPnEFKNblpvuoHOm0LtFWPz/dGUqsEHuosezifZCnqZtrxKmL91W
-         UWa6Nt1QQXgtjhifyG7kLKU7P5tS70R+SSw9jt/P1rUcBgK9iPCjbQPknBXjbuUtYVto
-         xOzw==
-X-Gm-Message-State: AJIora/ct5wPS8Bw4luCEifPgipbs4x8L0A410Ou1iNBV6FA7BHlbFpD
-        kkmTKwoo3YQwMrXw7elZIpiQ7feeDYIhKg2IqLCjUEDWumd9JlYC7LLykFYM+6SAbntwoulTdvS
-        xP44niyt8mj5VxohB0WOqaOgc
-X-Received: by 2002:a05:6638:f81:b0:33c:5393:c0ff with SMTP id h1-20020a0566380f8100b0033c5393c0ffmr25986100jal.231.1657134899820;
-        Wed, 06 Jul 2022 12:14:59 -0700 (PDT)
-X-Google-Smtp-Source: AGRyM1uU5DNOvzd0f8YLcM9RN/fjk8aTWDGW1pdOba6lI2hg5z6GFsfHePI/n1aNOqFJfFXMJ9bwLg==
-X-Received: by 2002:a05:6638:f81:b0:33c:5393:c0ff with SMTP id h1-20020a0566380f8100b0033c5393c0ffmr25986091jal.231.1657134899640;
-        Wed, 06 Jul 2022 12:14:59 -0700 (PDT)
-Received: from redhat.com ([38.15.36.239])
-        by smtp.gmail.com with ESMTPSA id g93-20020a028566000000b003319a68d2f5sm16176468jai.125.2022.07.06.12.14.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 06 Jul 2022 12:14:58 -0700 (PDT)
-Date:   Wed, 6 Jul 2022 13:14:56 -0600
-From:   Alex Williamson <alex.williamson@redhat.com>
-To:     Deming Wang <wangdeming@inspur.com>
-Cc:     <cohuck@redhat.com>, <kvm@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        Alexey Kardashevskiy <aik@ozlabs.ru>
-Subject: Re: [PATCH] vfio/spapr_tce: Remove the unused parameters container
-Message-ID: <20220706131456.3c08c2b7.alex.williamson@redhat.com>
-In-Reply-To: <20220702064613.5293-1-wangdeming@inspur.com>
-References: <20220702064613.5293-1-wangdeming@inspur.com>
-Organization: Red Hat
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=DaD3IQOOIYs922HyFPt3gDuoj5LcEWxvvwoxeXt8fJI=;
+        b=2KGhD+LHeqhjUJScXJ5Z6Ij2MrbpMOhVTZ6E1xcPALmWQXRLqK9HQdda2BLjdDm/K6
+         dCirt0vQHDo3HZno+iPv35clBtexldqOQYJcoLSKqcvnbnEDJhOwG5/6wtmd1TGgRFSj
+         ChTY82Gncx2ToKZjOAz/Z86KWNrCaBS4FkxQH9lAzzAu2ikJSGSyOVDgO47o+kTdlYVE
+         PavsBhgT9qUtyPvkWKG5c1n6oraxsEu0/gYNyhW6WyFdS+1kvJrCEWRi7BNDshWVdxr4
+         o2BQp9sGZFV6KVRrYWrH0PKjG6U4jWA9/bTb8FTB9VOp0FTk/9uVI5pUl+hiHfSqygfu
+         5vWA==
+X-Gm-Message-State: AJIora9ImNek13A88gz0JXtUBQMGjp4gSLdI1OeN7t6m+Jt7J1WCJ6w3
+        Gz8lLOdvoj/REgX/U1shpIDSOpBRGoHGqJuLsiLuSA==
+X-Google-Smtp-Source: AGRyM1sOey+POJ+Y5USlhkWKMWJsVPhoCEdbACkBANOF7Hi0zw3wy4fWP4WiuCsaJTBBnj0TsyDNQryCVOXBic+/9KE=
+X-Received: by 2002:a05:6402:4488:b0:43a:7b6e:4b04 with SMTP id
+ er8-20020a056402448800b0043a7b6e4b04mr12750837edb.202.1657134959282; Wed, 06
+ Jul 2022 12:15:59 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220516194730.1546328-1-dlatypov@google.com> <20220516194730.1546328-3-dlatypov@google.com>
+ <CABVgOSn1Hq6AX-+=+m_uLwKne3wuUadrsE=uPRsgYH3+TFBEuA@mail.gmail.com> <CAGS_qxqJNpoZkv0==q_yMTuWzATTtUsXw3o1ZOR=n+fjVS+ghA@mail.gmail.com>
+In-Reply-To: <CAGS_qxqJNpoZkv0==q_yMTuWzATTtUsXw3o1ZOR=n+fjVS+ghA@mail.gmail.com>
+From:   Brendan Higgins <brendanhiggins@google.com>
+Date:   Wed, 6 Jul 2022 15:15:47 -0400
+Message-ID: <CAFd5g44=q40gbcbRTpfCEWVPAjU442=4c17pj4C3as5fmfg45w@mail.gmail.com>
+Subject: Re: [PATCH 3/3] kunit: tool: refactoring printing logic into kunit_printer.py
+To:     Daniel Latypov <dlatypov@google.com>
+Cc:     David Gow <davidgow@google.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        KUnit Development <kunit-dev@googlegroups.com>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        Shuah Khan <skhan@linuxfoundation.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, 2 Jul 2022 02:46:13 -0400
-Deming Wang <wangdeming@inspur.com> wrote:
+On Wed, May 18, 2022 at 11:51 AM Daniel Latypov <dlatypov@google.com> wrote:
+>
+> On Wed, May 18, 2022 at 12:48 AM David Gow <davidgow@google.com> wrote:
+> >
+> > On Tue, May 17, 2022 at 3:48 AM Daniel Latypov <dlatypov@google.com> wrote:
+> > >
+> > > Context:
+> > > * kunit_kernel.py is importing kunit_parser.py just to use the
+> > >   print_with_timestamp() function
+> > > * the parser is directly printing to stdout, which will become an issue
+> > >   if we ever try to run multiple kernels in parallel
+> > >
+> > > This patch introduces a kunit_printer.py file and migrates callers of
+> > > kunit_parser.print_with_timestamp() to call
+> > > kunit_printer.stdout.print_with_timestamp() instead.
+> > >
+> > > Future changes:
+> > > If we want to support showing results for parallel runs, we could then
+> > > create new Printer's that don't directly write to stdout and refactor
+> > > the code to pass around these Printer objects.
+> > >
+> > > Signed-off-by: Daniel Latypov <dlatypov@google.com>
+> > > ---
+> >
+> > I agree that this will be useful down the line, as running multiple
+> > kernels in parallel is definitely something which could be useful. I
+> > know the original idea for that was to have multiple parsers, and just
+> > to combine the results they gave after the fact, but given that
+> > incremental output is so useful, I agree that this is the better path.
+> >
+> > My only super-minor gripe (which I can live with) is that importing
+> > 'stdout' and using it as 'stdout.print_with_timestamp()' is a little
+> > confusing: I'd've assumed an stdout variable imported into the global
+> > namespace was sys.stdout, not a wrapper. Explicitly using
+> > kunit_printer.stdout would be a little clearer, IMO. Up to you,
+> > though.
+>
+> I was initially writing it that way, but then the following pattern
+> got super long
+>
+> Old:
+> print_with_timestamp(red("[ERROR]") + " some error")
+>
+> New options:
+> stdout.print_with_timestamp(stdout.red("[ERROR]") + " some error")
 
-> The parameter of container has been unused for tce_iommu_unuse_page.
-> So, we should delete it.
-> 
-> Signed-off-by: Deming Wang <wangdeming@inspur.com>
-> ---
->  drivers/vfio/vfio_iommu_spapr_tce.c | 9 ++++-----
->  1 file changed, 4 insertions(+), 5 deletions(-)
+Kind of late to mention this (and we might have already talked about
+this offline), but I am fine with what you have done here with the
+stdout.
 
-I'll give Alexey a chance to ack this, but agree that it seems this arg
-has never had any purpose.  Perhaps a debugging remnant.  Thanks,
+My initial reaction was similar to David's, but after thinking about
+it, I don't think it is prone to misuse, and I think it is clear - and
+allows for easy refactoring in the future.
 
-Alex
-
-> 
-> diff --git a/drivers/vfio/vfio_iommu_spapr_tce.c b/drivers/vfio/vfio_iommu_spapr_tce.c
-> index 708a95e61831..ea3d17a94e94 100644
-> --- a/drivers/vfio/vfio_iommu_spapr_tce.c
-> +++ b/drivers/vfio/vfio_iommu_spapr_tce.c
-> @@ -378,8 +378,7 @@ static void tce_iommu_release(void *iommu_data)
->  	kfree(container);
->  }
->  
-> -static void tce_iommu_unuse_page(struct tce_container *container,
-> -		unsigned long hpa)
-> +static void tce_iommu_unuse_page(unsigned long hpa)
->  {
->  	struct page *page;
->  
-> @@ -474,7 +473,7 @@ static int tce_iommu_clear(struct tce_container *container,
->  			continue;
->  		}
->  
-> -		tce_iommu_unuse_page(container, oldhpa);
-> +		tce_iommu_unuse_page(oldhpa);
->  	}
->  
->  	iommu_tce_kill(tbl, firstentry, pages);
-> @@ -524,7 +523,7 @@ static long tce_iommu_build(struct tce_container *container,
->  		ret = iommu_tce_xchg_no_kill(container->mm, tbl, entry + i,
->  				&hpa, &dirtmp);
->  		if (ret) {
-> -			tce_iommu_unuse_page(container, hpa);
-> +			tce_iommu_unuse_page(hpa);
->  			pr_err("iommu_tce: %s failed ioba=%lx, tce=%lx, ret=%ld\n",
->  					__func__, entry << tbl->it_page_shift,
->  					tce, ret);
-> @@ -532,7 +531,7 @@ static long tce_iommu_build(struct tce_container *container,
->  		}
->  
->  		if (dirtmp != DMA_NONE)
-> -			tce_iommu_unuse_page(container, hpa);
-> +			tce_iommu_unuse_page(hpa);
->  
->  		tce += IOMMU_PAGE_SIZE(tbl);
->  	}
-
+> kunit_printer.stdout.print_with_timestamp(kunit_printer.stdout.red("[ERROR]")
+> + " some error")
+>
+> But yeah, I see what you mean about potential confusion with sys.stdout.
+> I couldn't think of a better (while still short name) for it.
+> E.g. "default_printer", "stdout_printer", etc.
+>
+> FWIW, I have a local patch that drops 99% of the direct uses of
+> kunit_printer.stdout in the parser and passes around buffered
+> printers.
+> And in that case, the use of stdout becomes small enough that we could
+> do `kunit_printer.stdout` w/o as much pain/noise.
+>
+> But I have no plans of sending that out until we need it, since it
+> muddies up the code quite a bit.
+> And I don't have a clear idea of what the interface to parallel
+> testing should look like, so that day is still far off.

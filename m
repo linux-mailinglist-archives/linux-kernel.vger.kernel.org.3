@@ -2,133 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6FA9B56906F
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 19:16:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F31B656907C
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 19:17:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233564AbiGFRQQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Jul 2022 13:16:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38760 "EHLO
+        id S233719AbiGFRRU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Jul 2022 13:17:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39336 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233056AbiGFRQP (ORCPT
+        with ESMTP id S233705AbiGFRRR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Jul 2022 13:16:15 -0400
-Received: from mail-pg1-x52d.google.com (mail-pg1-x52d.google.com [IPv6:2607:f8b0:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C54792A70D
-        for <linux-kernel@vger.kernel.org>; Wed,  6 Jul 2022 10:16:13 -0700 (PDT)
-Received: by mail-pg1-x52d.google.com with SMTP id i190so1905068pge.7
-        for <linux-kernel@vger.kernel.org>; Wed, 06 Jul 2022 10:16:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=pWXRp5NIoHyhpRcNJ8PbAa5aXIlOP8l12Bd4AXe9kl8=;
-        b=aqRws9t920RS++2cRfQdhRuZqu/9tP3h3Gm9Q372N5Mb9rqUvb1V6aNHOQHnvsdpF+
-         +rian41fTpmSnWlLJ+kEBQ238DR/gvKkfVdawPUA8zI2YmZRaQPI8IvCp9WnU3RP1u/s
-         IBKR0p0BOh8GiiXuW+hHREqlCSwiRtqxTAEc4=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=pWXRp5NIoHyhpRcNJ8PbAa5aXIlOP8l12Bd4AXe9kl8=;
-        b=klCt20/wmJt7iNA8LWyEvyvabjbaD+mhf76UNDoJrfiTpU13I5+1bpgOe96hEGemCV
-         1tIiwOCk1cIMjNLkdQlQZQYcJ+xOXmyKEpOrSyOhlYd11rPZ+GdyGp+IXNn+vqVhZp1B
-         WGfsgJPPGvMwX82xAWlNSRU3PMmAPHFYRfiDoJGeki74djq/UrkKN9pIaP42A7nAnPeC
-         HV/wT0ZVyuFNWR/msU9XPURvZAleV4zJCaD9x1NEPBrJOI46wdqLDJzdSKJNRFZBs/75
-         K9Hw1nAmenhrvMnKhpjl2Pcs67TrXOKcxSuekR4yBvdnT78JQjIQlGozqMNHvbecEfW5
-         x5zQ==
-X-Gm-Message-State: AJIora/Fu/oya+yMh+HolcHOsuFnpe184o4hk3Yk39rY+xwX7DQPqtpP
-        Vg3LM8/RL81rJuLmSh6fpABEtjpXTLkT6Q==
-X-Google-Smtp-Source: AGRyM1tG3SsP+RFG7E3/NDUcbQK96rM/ehX0lO+/jKnmPnExRWXzRxoUIUmY/e4pLxxS4Ckpls1B3g==
-X-Received: by 2002:a63:914a:0:b0:40c:f778:9bf with SMTP id l71-20020a63914a000000b0040cf77809bfmr34337527pge.526.1657127773124;
-        Wed, 06 Jul 2022 10:16:13 -0700 (PDT)
-Received: from pmalani.c.googlers.com.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id h14-20020a170902f7ce00b0016be0d5483asm7514953plw.252.2022.07.06.10.16.12
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 06 Jul 2022 10:16:12 -0700 (PDT)
-From:   Prashant Malani <pmalani@chromium.org>
-To:     linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        chrome-platform@lists.linux.dev
-Cc:     bleung@chromium.org, heikki.krogerus@linux.intel.com,
-        Prashant Malani <pmalani@chromium.org>,
-        Daisuke Nojiri <dnojiri@chromium.org>,
-        "Dustin L. Howett" <dustin@howett.net>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Guenter Roeck <groeck@chromium.org>,
-        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Sebastian Reichel <sebastian.reichel@collabora.com>,
-        Tzung-Bi Shih <tzungbi@kernel.org>
-Subject: [PATCH v2 0/9] platform/chrome: Type-C switch driver and Type-C framework updates
-Date:   Wed,  6 Jul 2022 17:15:04 +0000
-Message-Id: <20220706171601.807042-1-pmalani@chromium.org>
-X-Mailer: git-send-email 2.37.0.rc0.161.g10f37bed90-goog
+        Wed, 6 Jul 2022 13:17:17 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5EE2F2A737;
+        Wed,  6 Jul 2022 10:17:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1657127831; x=1688663831;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=k/GJ1Ocu6NSTbZWVHRMDXxNhqdLrEsXDfyhMdsiS/Fk=;
+  b=BDxWCV0EK4dz8dFSd90CjRwejnvf4mqYI5mhhMHVU40Ht7BI0+JmowO4
+   30mWzAjWt4PcgVZ0zlJTHwlbrpMPCzVn5kEzTt7LEGs+FShaTrc/Dr1P3
+   7G739puc/lylZTUmKK9T3rNq6YcvdGOOQmroBLHxpk4zvPxPD1Jnh5dAT
+   PoR3XoOWc+F6dgm/1dAnMbU+W2sm9DHCymWscMMvp6PtqQRMUCzumb8u8
+   7qfCbLdeADErd0gIFVPudS8W8MMwX9Ee50BEJiynWWf9/YZDtl0/xRUad
+   PS1HwjoYXVZGZEo5gZxWOSathufC8KzPQfitrTQWic3sf2CZQyTMMPaqO
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10400"; a="370134896"
+X-IronPort-AV: E=Sophos;i="5.92,250,1650956400"; 
+   d="scan'208";a="370134896"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jul 2022 10:17:10 -0700
+X-IronPort-AV: E=Sophos;i="5.92,250,1650956400"; 
+   d="scan'208";a="620415107"
+Received: from tjsteven-mobl3.amr.corp.intel.com (HELO [10.255.228.25]) ([10.255.228.25])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jul 2022 10:17:10 -0700
+Message-ID: <2a2411f0-60a9-cf7d-b34d-b1756ad499a5@intel.com>
+Date:   Wed, 6 Jul 2022 10:15:05 -0700
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH 04/22] x86/sgx: fix kernel-doc markups
+Content-Language: en-US
+To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Linux Doc Mailing List <linux-doc@vger.kernel.org>
+Cc:     "H. Peter Anvin" <hpa@zytor.com>, Jonathan Corbet <corbet@lwn.net>,
+        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        linux-kernel@vger.kernel.org, linux-sgx@vger.kernel.org,
+        x86@kernel.org
+References: <cover.1656409369.git.mchehab@kernel.org>
+ <49f0900ca467867917182a4428b731e55608ca67.1656409369.git.mchehab@kernel.org>
+From:   Dave Hansen <dave.hansen@intel.com>
+In-Reply-To: <49f0900ca467867917182a4428b731e55608ca67.1656409369.git.mchehab@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This series introduces a retimer class to the USB Type-C framework,
-It also introduces a Chrome EC (Embedded Controller) switch driver which
-registers the aforementioned retimer switches as well as mode-switches.
+On 6/28/22 02:46, Mauro Carvalho Chehab wrote:
+> + * @rdi:	snapshot of DI register at enclave exit
+> + * @rsi:	snapshot of SI register at enclave exit
+> + * @rdx:	snapshot of DX register at enclave exit
+> + * @rsp:	snapshot of SP register at enclave exit
+> + * @r8:		snapshot of R8 register at enclave exit
+> + * @r9:		snapshot of R9 register at enclave exit
 
-Patch 1 and 2 introduce the retimer class and associated functions to
-the Type-C common code.
+The 'DX register' really is different than RDX.
 
-Patches 3-7 add the cros-typec-switch driver
+These should all have the full register names, like:
 
-Patches 8-9 update cros-ec-typec to get and use retimer switch handles
+	snapshot of RSP register at enclave exit
 
-Submission suggestion (as always, open to better suggestions):
-- Patch 1 and 2 can go through the USB repo.
-- Patch 3-9 can go through the chrome-platform repo. Since they depend
-  on patches 1 and 2, we can create an "topic branch" off of usb-next
-  once Patch 1 and 2 are submitted, and then apply Patches 3-9 on top
-  of that "topic branch" before merging it back into chrome-platform's
-  for-next branch
+With that fixed:
 
-
-v1: https://lore.kernel.org/linux-usb/20220629233314.3540377-1-pmalani@chromium.org/
-
-Changes since v1:
-- Changed class name and retimer device type name, and fixed
-  retimer reference release issue.
-
-Prashant Malani (9):
-  usb: typec: Add support for retimers
-  usb: typec: Add retimer handle to port
-  platform/chrome: Add Type-C mux set command definitions
-  platform/chrome: cros_typec_switch: Add switch driver
-  platform/chrome: cros_typec_switch: Set EC retimer
-  platform/chrome: cros_typec_switch: Add event check
-  platform/chrome: cros_typec_switch: Register mode switches
-  platform/chrome: cros_ec_typec: Cleanup switch handle return paths
-  platform/chrome: cros_ec_typec: Get retimer handle
-
- MAINTAINERS                                   |   1 +
- drivers/platform/chrome/Kconfig               |  11 +
- drivers/platform/chrome/Makefile              |   1 +
- drivers/platform/chrome/cros_ec_typec.c       |  50 ++-
- drivers/platform/chrome/cros_typec_switch.c   | 332 ++++++++++++++++++
- drivers/usb/typec/Makefile                    |   2 +-
- drivers/usb/typec/class.c                     |  18 +-
- drivers/usb/typec/class.h                     |   2 +
- drivers/usb/typec/retimer.c                   | 168 +++++++++
- drivers/usb/typec/retimer.h                   |  15 +
- .../linux/platform_data/cros_ec_commands.h    |  18 +
- include/linux/usb/typec_retimer.h             |  45 +++
- 12 files changed, 654 insertions(+), 9 deletions(-)
- create mode 100644 drivers/platform/chrome/cros_typec_switch.c
- create mode 100644 drivers/usb/typec/retimer.c
- create mode 100644 drivers/usb/typec/retimer.h
- create mode 100644 include/linux/usb/typec_retimer.h
-
--- 
-2.37.0.rc0.161.g10f37bed90-goog
-
+Acked-by: Dave Hansen <dave.hansen@linux.intel.com>

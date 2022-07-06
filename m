@@ -2,61 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C3F7A568727
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 13:47:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C562F56872C
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 13:47:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233364AbiGFLq2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Jul 2022 07:46:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44404 "EHLO
+        id S233451AbiGFLqY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Jul 2022 07:46:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44396 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233342AbiGFLqM (ORCPT
+        with ESMTP id S233338AbiGFLqL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Jul 2022 07:46:12 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51E2328E1B;
-        Wed,  6 Jul 2022 04:45:44 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Wed, 6 Jul 2022 07:46:11 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4A13727FD6
+        for <linux-kernel@vger.kernel.org>; Wed,  6 Jul 2022 04:45:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1657107943;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=RROrfdIIY329D1ocOTSvuKdK47EBK1sQYB2AEucsQ0s=;
+        b=eLKKvqcoRvY1cDSMH5Q5JxDJ76EmThOC30TD0QYsGDTvpx/tBzcUoWanKJEekePef0aKs2
+        xVrSRv4+042I2brWZxP/Q8RGTCaZ09If1Lpy6OV7NYJWiH5xxK04+pVAgKSRPaytJngBJ2
+        hOmU1+gQ4MdYI8Khpiw/yzeXpPs9v68=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-49-vPWsJ9miNaSlwYPb-7hXKA-1; Wed, 06 Jul 2022 07:45:42 -0400
+X-MC-Unique: vPWsJ9miNaSlwYPb-7hXKA-1
+Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 499B261EEF;
-        Wed,  6 Jul 2022 11:45:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 51827C3411C;
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id BDF1C8001EA;
         Wed,  6 Jul 2022 11:45:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1657107943;
-        bh=aBdtVMhRidxJCeoJx5DEXlpzuQlURSLwQpWLFBNxTts=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=KMVJJ+JukHbibk6ztwsiqZjPY7NNGnu5ye/kkkr65U8rnR50ws1YnUZgNFk5+4LZc
-         qrbPtRrZznfI6mp0+7/SBCTIuK0aG3D3ThJ7VLx2nNaiiNl9OpsfDK46GwzWVI7h2s
-         5Ddwh1l7nAR/g30vK7bn6t3ky+UZJFIeAD7s8RkA/GT1UGOlPd+fv2yaHwJZYA+LeP
-         oGdC0e0RO7pFN3Q/dmlVtqZVcVLeIuY7H1u1dOPKEtzBve5qL1g19QKv7seksr02zn
-         lbmy3N4magjeo+Y2st5Z7HoMGPOHMilLgnLHgoDR52kgWGTLrcjbXaeFhwRj7HJn5l
-         E+rKgbU5XqcVA==
-Date:   Wed, 6 Jul 2022 12:45:37 +0100
-From:   Will Deacon <will@kernel.org>
-To:     Luca Weiss <luca@z3ntu.xyz>
-Cc:     linux-arm-msm@vger.kernel.org,
-        ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Joerg Roedel <joro@8bytes.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        iommu@lists.linux-foundation.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 1/4] dt-bindings: qcom-iommu: Add Qualcomm MSM8953
- compatible
-Message-ID: <20220706114536.GA2403@willie-the-truck>
-References: <20220612092218.424809-1-luca@z3ntu.xyz>
- <20220612092218.424809-2-luca@z3ntu.xyz>
+Received: from starship (unknown [10.40.194.38])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 6A38E40CFD0A;
+        Wed,  6 Jul 2022 11:45:39 +0000 (UTC)
+Message-ID: <f025784c144c63b05266433756070862aef5f6d5.camel@redhat.com>
+Subject: Re: [PATCH v2 04/21] KVM: nVMX: Treat General Detect #DB (DR7.GD=1)
+ as fault-like
+From:   Maxim Levitsky <mlevitsk@redhat.com>
+To:     Sean Christopherson <seanjc@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>
+Cc:     Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Oliver Upton <oupton@google.com>,
+        Peter Shier <pshier@google.com>
+Date:   Wed, 06 Jul 2022 14:45:38 +0300
+In-Reply-To: <20220614204730.3359543-5-seanjc@google.com>
+References: <20220614204730.3359543-1-seanjc@google.com>
+         <20220614204730.3359543-5-seanjc@google.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.36.5 (3.36.5-2.fc32) 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220612092218.424809-2-luca@z3ntu.xyz>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 2.84 on 10.11.54.1
+X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -64,27 +69,104 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Jun 12, 2022 at 11:22:13AM +0200, Luca Weiss wrote:
-> Document the compatible used for IOMMU on the msm8953 SoC.
+On Tue, 2022-06-14 at 20:47 +0000, Sean Christopherson wrote:
+> Exclude General Detect #DBs, which have fault-like behavior but also have
+> a non-zero payload (DR6.BD=1), from nVMX's handling of pending debug
+> traps.  Opportunistically rewrite the comment to better document what is
+> being checked, i.e. "has a non-zero payload" vs. "has a payload", and to
+> call out the many caveats surrounding #DBs that KVM dodges one way or
+> another.
 > 
-> Signed-off-by: Luca Weiss <luca@z3ntu.xyz>
+> Cc: Oliver Upton <oupton@google.com>
+> Cc: Peter Shier <pshier@google.com>
+> Fixes: 684c0422da71 ("KVM: nVMX: Handle pending #DB when injecting INIT VM-exit")
+> Signed-off-by: Sean Christopherson <seanjc@google.com>
 > ---
-> Changes from v1:
-> - new patch
+>  arch/x86/kvm/vmx/nested.c | 36 +++++++++++++++++++++++++-----------
+>  1 file changed, 25 insertions(+), 11 deletions(-)
 > 
->  Documentation/devicetree/bindings/iommu/qcom,iommu.txt | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/iommu/qcom,iommu.txt b/Documentation/devicetree/bindings/iommu/qcom,iommu.txt
-> index 059139abce35..e6cecfd360eb 100644
-> --- a/Documentation/devicetree/bindings/iommu/qcom,iommu.txt
-> +++ b/Documentation/devicetree/bindings/iommu/qcom,iommu.txt
-> @@ -10,6 +10,7 @@ to non-secure vs secure interrupt line.
->  - compatible       : Should be one of:
+> diff --git a/arch/x86/kvm/vmx/nested.c b/arch/x86/kvm/vmx/nested.c
+> index 33ffc8bcf9cd..61bc80fc4cfa 100644
+> --- a/arch/x86/kvm/vmx/nested.c
+> +++ b/arch/x86/kvm/vmx/nested.c
+> @@ -3857,16 +3857,29 @@ static void nested_vmx_inject_exception_vmexit(struct kvm_vcpu *vcpu,
+>  }
 >  
->                          "qcom,msm8916-iommu"
-> +                        "qcom,msm8953-iommu"
+>  /*
+> - * Returns true if a debug trap is pending delivery.
+> + * Returns true if a debug trap is (likely) pending delivery.  Infer the class
+> + * of a #DB (trap-like vs. fault-like) from the exception payload (to-be-DR6).
+> + * Using the payload is flawed because code breakpoints (fault-like) and data
+> + * breakpoints (trap-like) set the same bits in DR6 (breakpoint detected), i.e.
+> + * this will return false positives if a to-be-injected code breakpoint #DB is
+> + * pending (from KVM's perspective, but not "pending" across an instruction
+> + * boundary).  ICEBP, a.k.a. INT1, is also not reflected here even though it
+> + * too is trap-like.
+>   *
+> - * In KVM, debug traps bear an exception payload. As such, the class of a #DB
+> - * exception may be inferred from the presence of an exception payload.
+> + * KVM "works" despite these flaws as ICEBP isn't currently supported by the
+> + * emulator, Monitor Trap Flag is not marked pending on intercepted #DBs (the
+> + * #DB has already happened), and MTF isn't marked pending on code breakpoints
+> + * from the emulator (because such #DBs are fault-like and thus don't trigger
+> + * actions that fire on instruction retire).
 
-I'm assuming Andy or Bjorn will pick this up.
+Makes sense overall, but I am still not 100% sure to be honest I understand that
+new description fully.
 
-Will
+The patch itself seems to be correct, so,
+
+Reviewed-by: Maxim Levitsky <mlevitsk@redhat.com>
+
+Best regards,
+	Maxim Levitsky
+
+
+
+
+>   */
+> -static inline bool vmx_pending_dbg_trap(struct kvm_vcpu *vcpu)
+> +static inline unsigned long vmx_get_pending_dbg_trap(struct kvm_vcpu *vcpu)
+>  {
+> -	return vcpu->arch.exception.pending &&
+> -			vcpu->arch.exception.nr == DB_VECTOR &&
+> -			vcpu->arch.exception.payload;
+> +	if (!vcpu->arch.exception.pending ||
+> +	    vcpu->arch.exception.nr != DB_VECTOR)
+> +		return 0;
+> +
+> +	/* General Detect #DBs are always fault-like. */
+> +	return vcpu->arch.exception.payload & ~DR6_BD;
+>  }
+>  
+>  /*
+> @@ -3878,9 +3891,10 @@ static inline bool vmx_pending_dbg_trap(struct kvm_vcpu *vcpu)
+>   */
+>  static void nested_vmx_update_pending_dbg(struct kvm_vcpu *vcpu)
+>  {
+> -	if (vmx_pending_dbg_trap(vcpu))
+> -		vmcs_writel(GUEST_PENDING_DBG_EXCEPTIONS,
+> -			    vcpu->arch.exception.payload);
+> +	unsigned long pending_dbg = vmx_get_pending_dbg_trap(vcpu);
+> +
+> +	if (pending_dbg)
+> +		vmcs_writel(GUEST_PENDING_DBG_EXCEPTIONS, pending_dbg);
+>  }
+>  
+>  static bool nested_vmx_preemption_timer_pending(struct kvm_vcpu *vcpu)
+> @@ -3937,7 +3951,7 @@ static int vmx_check_nested_events(struct kvm_vcpu *vcpu)
+>  	 * while delivering the pending exception.
+>  	 */
+>  
+> -	if (vcpu->arch.exception.pending && !vmx_pending_dbg_trap(vcpu)) {
+> +	if (vcpu->arch.exception.pending && !vmx_get_pending_dbg_trap(vcpu)) {
+>  		if (vmx->nested.nested_run_pending)
+>  			return -EBUSY;
+>  		if (!nested_vmx_check_exception(vcpu, &exit_qual))
+
+
+
+
+
+
+

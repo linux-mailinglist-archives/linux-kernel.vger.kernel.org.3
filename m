@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C7B25691C6
+	by mail.lfdr.de (Postfix) with ESMTP id C46775691C7
 	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 20:29:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234279AbiGFS3R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Jul 2022 14:29:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42908 "EHLO
+        id S231500AbiGFS3U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Jul 2022 14:29:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42924 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233954AbiGFS3P (ORCPT
+        with ESMTP id S230443AbiGFS3Q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Jul 2022 14:29:15 -0400
-Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D0CADD;
-        Wed,  6 Jul 2022 11:29:14 -0700 (PDT)
-Received: by mail-wm1-x32e.google.com with SMTP id g39-20020a05600c4ca700b003a03ac7d540so12079794wmp.3;
-        Wed, 06 Jul 2022 11:29:14 -0700 (PDT)
+        Wed, 6 Jul 2022 14:29:16 -0400
+Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92546E6;
+        Wed,  6 Jul 2022 11:29:15 -0700 (PDT)
+Received: by mail-wr1-x431.google.com with SMTP id z12so13613823wrq.7;
+        Wed, 06 Jul 2022 11:29:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=2bRAz+V8z3pbOVqJIvMC22fUwjtIMw6EhAN0Gm4k1FY=;
-        b=miWWCHqgX9+cNJIAA+hGwGKjjHXe/e2nn6A2ApevKTQP6jpyPOAKTDSlC04B1S3kuR
-         js93xv19t9mp12q+k788vFTDsTQR8OSaA8DdvXG3O/wdYyV8NbYaIHDvkD/NPPBdA9eQ
-         P7tFKMaW7yQoHMRDI5+QDw2wrLDk9j3+A1VwP7HClPJlq0l6lbffuBaeI3H6c/KE79V1
-         lURYEjsLFa+WHjJAOmc68m1jMhgngavWp3baL8e4FtkxkzTYFvwa1pL+k8C5y2ia7E5r
-         XKGgeLNp1LaLzaN9v9rBAyPkxuhBmkyNL1GwtqlB/3P7cQRMjWvFWNU5cVuMjsEndAkQ
-         ZQEA==
+        bh=4Izef/YFAeykVDGIGibt/PVLWMHaIRGslbYjaSahqjs=;
+        b=k4mS3Sqaow+E8TCUFRnHPjBJR9MZIDkEknhRLUALIVlExSdfszMO5lehrsQXWZMDH+
+         R1SYbl7BJ3wwHPZ60085AH9sjMc7Njs7RnBhZJdP8bDSL9i/f7y0jf9jV1QcnsxysMLo
+         gBHMjsgdJU8TQCK8UCUj8yfzGGQmskkH79S9a6uZRHl0TIG0pXQQgZSZqgxx7AhJPlsl
+         p1+7LHXw7Wyzp8mxuGJEMbr+Gkw/5ws3sW+k1Be5+8Dvk+gRn2X1dheyqreGe/SeeqxW
+         0b9megdN7uHp0jifoz4awH1ZqDgppqhJjXQBOfqhe0CAoGrKL2qBLa/bJWUeSImSzF2O
+         nVXQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=2bRAz+V8z3pbOVqJIvMC22fUwjtIMw6EhAN0Gm4k1FY=;
-        b=yLS4p/w213pGuTAWlbdu3GM6zMGA+NBObE9E6cG7bBULH6Wf4oGh5RAq3RRfQEfQf0
-         t2Hr+3D662qj/P7D9VD+tIyL4hJ7i/N3PpYkfWJdRHMT+TZff0nYf1JgtjVLV5sFQoj7
-         zRlfKHaqK4uoNw9hsFL8hAg92VdGRNI2N05T4pr25sCHr88f/4mpkeTKmi4JCS664rgU
-         /RvkZ0p6rVh5WAJ+Rklq6TX/t8JGPkgTRgvIa60XGzFgcrU4/y0d4Tbf9XsaaYkYD/b8
-         qERpFpO9A2HD1MVeZwijN4AXBKap5snj36RXjIMl9RwYXha+YgCj3z/TCzQwwwoIty/2
-         uDug==
-X-Gm-Message-State: AJIora/AJcaY63Xx7y5TjEQjzhQCgs7AzsZCUs5GJ7l430TBmjB1yGOv
-        SWdCoAbqB1dZZHKgJGs9S1s=
-X-Google-Smtp-Source: AGRyM1vCgYRYlyrNQ8s7hMV5pQYcLqocChJlpFqO05hUHknwmryQnbY68ISabmphPDEBZeHQFkzGrQ==
-X-Received: by 2002:a05:600c:a07:b0:39e:da6e:fc49 with SMTP id z7-20020a05600c0a0700b0039eda6efc49mr42986943wmp.143.1657132152988;
-        Wed, 06 Jul 2022 11:29:12 -0700 (PDT)
+        bh=4Izef/YFAeykVDGIGibt/PVLWMHaIRGslbYjaSahqjs=;
+        b=Ocp3mFnr04PBpBadg6wbKGtIOC4es6uiIIIEyN+m8nuNUwZCFA7N41HvvIHGY+AKSP
+         5k4wlHy1eQ48+IBlEEmf9SonwuiBhx2I2/foiUFw/zstmtAdJthtQaHic+EAqVIaf7x4
+         PhAbOQ6/VzcwZzJcXMFa7bo4/V99R65D4TLgTBR6WE0q8vldt5h/3YYh8bN5c8mfQfW0
+         GlcL4MgAykNXMB7xdM0PKdqeansQbCKjkuUiJbkB0Le2NzkuG2ctz9wMWoQZA7OGX/W+
+         4Q9I3n5ts2cjNImJ7eN4f/dm9BOOWH5E3To9sNvLizFHU8NExrkLNa1Af+Dpt+Iuqdnq
+         PFAA==
+X-Gm-Message-State: AJIora927GhPAnFfhzIg0Yg9iXV+a2gkOjM26OC74Zk8EruyeuGMEhLV
+        whyI1+slAvaSbzSGvxQvNP+Kc2rIApLxGw==
+X-Google-Smtp-Source: AGRyM1vm6h/6hghpmed7QW/eRjmbMAMh/PS7rCXzlLna67B6WT5dqfs2NwgIOVJ614pVtnZpDbgwHQ==
+X-Received: by 2002:adf:d1e9:0:b0:21d:2154:2bc7 with SMTP id g9-20020adfd1e9000000b0021d21542bc7mr36880429wrd.105.1657132154166;
+        Wed, 06 Jul 2022 11:29:14 -0700 (PDT)
 Received: from kista.localdomain (213-161-3-76.dynamic.telemach.net. [213.161.3.76])
-        by smtp.gmail.com with ESMTPSA id r15-20020a0560001b8f00b0021d74906683sm5142406wru.28.2022.07.06.11.29.11
+        by smtp.gmail.com with ESMTPSA id r15-20020a0560001b8f00b0021d74906683sm5142406wru.28.2022.07.06.11.29.13
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 06 Jul 2022 11:29:12 -0700 (PDT)
+        Wed, 06 Jul 2022 11:29:13 -0700 (PDT)
 From:   Jernej Skrabec <jernej.skrabec@gmail.com>
 To:     ezequiel@vanguardiasur.com.ar, p.zabel@pengutronix.de
 Cc:     mchehab@kernel.org, hverkuil-cisco@xs4all.nl,
@@ -57,9 +57,9 @@ Cc:     mchehab@kernel.org, hverkuil-cisco@xs4all.nl,
         linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
         linux-rockchip@lists.infradead.org,
         Jernej Skrabec <jernej.skrabec@gmail.com>
-Subject: [PATCH v3 1/7] media: Add P010 tiled format
-Date:   Wed,  6 Jul 2022 20:28:55 +0200
-Message-Id: <20220706182901.78949-2-jernej.skrabec@gmail.com>
+Subject: [PATCH v3 2/7] media: hantro: Support format filtering by depth
+Date:   Wed,  6 Jul 2022 20:28:56 +0200
+Message-Id: <20220706182901.78949-3-jernej.skrabec@gmail.com>
 X-Mailer: git-send-email 2.37.0
 In-Reply-To: <20220706182901.78949-1-jernej.skrabec@gmail.com>
 References: <20220706182901.78949-1-jernej.skrabec@gmail.com>
@@ -75,102 +75,154 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
+In preparation for supporting 10-bit formats, add mechanism which will
+filter formats based on pixel depth.
 
-Add P010 tiled format
+Hantro G2 supports only one decoding format natively and that is based
+on bit depth of current video frame. Additionally, it makes no sense to
+upconvert bitness, so filter those out too.
 
+Reviewed-by: Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
 Tested-by: Benjamin Gaignard <benjamin.gaignard@collabora.com>
-Signed-off-by: Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
-[rebased, updated pixel format name and added description]
 Signed-off-by: Jernej Skrabec <jernej.skrabec@gmail.com>
 ---
- .../media/v4l/pixfmt-yuv-planar.rst            | 18 +++++++++++++++---
- drivers/media/v4l2-core/v4l2-common.c          |  1 +
- drivers/media/v4l2-core/v4l2-ioctl.c           |  1 +
- include/uapi/linux/videodev2.h                 |  1 +
- 4 files changed, 18 insertions(+), 3 deletions(-)
+ drivers/staging/media/hantro/hantro.h      |  4 ++
+ drivers/staging/media/hantro/hantro_v4l2.c | 48 ++++++++++++++++++++--
+ drivers/staging/media/hantro/hantro_v4l2.h |  1 +
+ 3 files changed, 50 insertions(+), 3 deletions(-)
 
-diff --git a/Documentation/userspace-api/media/v4l/pixfmt-yuv-planar.rst b/Documentation/userspace-api/media/v4l/pixfmt-yuv-planar.rst
-index a900ff66911a..faba259a2b92 100644
---- a/Documentation/userspace-api/media/v4l/pixfmt-yuv-planar.rst
-+++ b/Documentation/userspace-api/media/v4l/pixfmt-yuv-planar.rst
-@@ -116,6 +116,13 @@ All components are stored with the same number of bits per component.
-       - Cb, Cr
-       - Yes
-       - Linear
-+    * - V4L2_PIX_FMT_P010_4L4
-+      - 'T010'
-+      - 10
-+      - 4:2:0
-+      - Cb, Cr
-+      - Yes
-+      - 4x4 tiles
-     * - V4L2_PIX_FMT_NV16
-       - 'NV16'
-       - 8
-@@ -528,11 +535,12 @@ number of lines as the luma plane.
-       - Cr\ :sub:`33`
+diff --git a/drivers/staging/media/hantro/hantro.h b/drivers/staging/media/hantro/hantro.h
+index 26308bb29adc..2989ebc631cc 100644
+--- a/drivers/staging/media/hantro/hantro.h
++++ b/drivers/staging/media/hantro/hantro.h
+@@ -227,6 +227,7 @@ struct hantro_dev {
+  *
+  * @ctrl_handler:	Control handler used to register controls.
+  * @jpeg_quality:	User-specified JPEG compression quality.
++ * @bit_depth:		Bit depth of current frame
+  *
+  * @codec_ops:		Set of operations related to codec mode.
+  * @postproc:		Post-processing context.
+@@ -252,6 +253,7 @@ struct hantro_ctx {
  
- .. _V4L2_PIX_FMT_P010:
-+.. _V4L2-PIX-FMT-P010-4L4:
+ 	struct v4l2_ctrl_handler ctrl_handler;
+ 	int jpeg_quality;
++	int bit_depth;
  
--P010
------
-+P010 and tiled P010
-+-------------------
+ 	const struct hantro_codec_ops *codec_ops;
+ 	struct hantro_postproc_ctx postproc;
+@@ -277,6 +279,7 @@ struct hantro_ctx {
+  * @enc_fmt:	Format identifier for encoder registers.
+  * @frmsize:	Supported range of frame sizes (only for bitstream formats).
+  * @postprocessed: Indicates if this format needs the post-processor.
++ * @match_depth: Indicates if format bit depth must match video bit depth
+  */
+ struct hantro_fmt {
+ 	char *name;
+@@ -287,6 +290,7 @@ struct hantro_fmt {
+ 	enum hantro_enc_fmt enc_fmt;
+ 	struct v4l2_frmsize_stepwise frmsize;
+ 	bool postprocessed;
++	bool match_depth;
+ };
  
--Like NV12 with 10 bits per component, expanded to 16 bits.
-+P010 is like NV12 with 10 bits per component, expanded to 16 bits.
- Data in the 10 high bits, zeros in the 6 low bits, arranged in little endian order.
+ struct hantro_reg {
+diff --git a/drivers/staging/media/hantro/hantro_v4l2.c b/drivers/staging/media/hantro/hantro_v4l2.c
+index 29cc61d53b71..334f18a4120d 100644
+--- a/drivers/staging/media/hantro/hantro_v4l2.c
++++ b/drivers/staging/media/hantro/hantro_v4l2.c
+@@ -64,6 +64,42 @@ hantro_get_postproc_formats(const struct hantro_ctx *ctx,
+ 	return ctx->dev->variant->postproc_fmts;
+ }
  
- .. flat-table:: Sample 4x4 P010 Image
-@@ -570,6 +578,10 @@ Data in the 10 high bits, zeros in the 6 low bits, arranged in little endian ord
-       - Cb\ :sub:`11`
-       - Cr\ :sub:`11`
- 
-+``V4L2_PIX_FMT_P010_4L4`` stores pixels in 4x4 tiles, and stores tiles linearly
-+in memory. The line stride must be aligned to multiple of 8 and image height to
-+a multiple of 4. The layouts of the luma and chroma planes are identical.
++int hantro_get_format_depth(u32 fourcc)
++{
++	switch (fourcc) {
++	case V4L2_PIX_FMT_P010:
++	case V4L2_PIX_FMT_P010_4L4:
++		return 10;
++	default:
++		return 8;
++	}
++}
 +
- .. raw:: latex
++static bool
++hantro_check_depth_match(const struct hantro_ctx *ctx,
++			 const struct hantro_fmt *fmt)
++{
++	int fmt_depth, ctx_depth = 8;
++
++	if (!fmt->match_depth && !fmt->postprocessed)
++		return true;
++
++	/* 0 means default depth, which is 8 */
++	if (ctx->bit_depth)
++		ctx_depth = ctx->bit_depth;
++
++	fmt_depth = hantro_get_format_depth(fmt->fourcc);
++
++	/*
++	 * Allow only downconversion for postproc formats for now.
++	 * It may be possible to relax that on some HW.
++	 */
++	if (!fmt->match_depth)
++		return fmt_depth <= ctx_depth;
++
++	return fmt_depth == ctx_depth;
++}
++
+ static const struct hantro_fmt *
+ hantro_find_format(const struct hantro_ctx *ctx, u32 fourcc)
+ {
+@@ -91,7 +127,8 @@ hantro_get_default_fmt(const struct hantro_ctx *ctx, bool bitstream)
+ 	formats = hantro_get_formats(ctx, &num_fmts);
+ 	for (i = 0; i < num_fmts; i++) {
+ 		if (bitstream == (formats[i].codec_mode !=
+-				  HANTRO_MODE_NONE))
++				  HANTRO_MODE_NONE) &&
++		    hantro_check_depth_match(ctx, &formats[i]))
+ 			return &formats[i];
+ 	}
+ 	return NULL;
+@@ -162,11 +199,13 @@ static int vidioc_enum_fmt(struct file *file, void *priv,
+ 	formats = hantro_get_formats(ctx, &num_fmts);
+ 	for (i = 0; i < num_fmts; i++) {
+ 		bool mode_none = formats[i].codec_mode == HANTRO_MODE_NONE;
++		fmt = &formats[i];
  
-     \endgroup
-diff --git a/drivers/media/v4l2-core/v4l2-common.c b/drivers/media/v4l2-core/v4l2-common.c
-index 1e38ad8906a2..e0fbe6ba4b6c 100644
---- a/drivers/media/v4l2-core/v4l2-common.c
-+++ b/drivers/media/v4l2-core/v4l2-common.c
-@@ -278,6 +278,7 @@ const struct v4l2_format_info *v4l2_format_info(u32 format)
+ 		if (skip_mode_none == mode_none)
+ 			continue;
++		if (!hantro_check_depth_match(ctx, fmt))
++			continue;
+ 		if (j == f->index) {
+-			fmt = &formats[i];
+ 			f->pixelformat = fmt->fourcc;
+ 			return 0;
+ 		}
+@@ -182,8 +221,11 @@ static int vidioc_enum_fmt(struct file *file, void *priv,
+ 		return -EINVAL;
+ 	formats = hantro_get_postproc_formats(ctx, &num_fmts);
+ 	for (i = 0; i < num_fmts; i++) {
++		fmt = &formats[i];
++
++		if (!hantro_check_depth_match(ctx, fmt))
++			continue;
+ 		if (j == f->index) {
+-			fmt = &formats[i];
+ 			f->pixelformat = fmt->fourcc;
+ 			return 0;
+ 		}
+diff --git a/drivers/staging/media/hantro/hantro_v4l2.h b/drivers/staging/media/hantro/hantro_v4l2.h
+index 18bc682c8556..b17e84c82582 100644
+--- a/drivers/staging/media/hantro/hantro_v4l2.h
++++ b/drivers/staging/media/hantro/hantro_v4l2.h
+@@ -22,5 +22,6 @@ extern const struct v4l2_ioctl_ops hantro_ioctl_ops;
+ extern const struct vb2_ops hantro_queue_ops;
  
- 		/* Tiled YUV formats */
- 		{ .format = V4L2_PIX_FMT_NV12_4L4, .pixel_enc = V4L2_PIXEL_ENC_YUV, .mem_planes = 1, .comp_planes = 2, .bpp = { 1, 2, 0, 0 }, .hdiv = 2, .vdiv = 2 },
-+		{ .format = V4L2_PIX_FMT_P010_4L4, .pixel_enc = V4L2_PIXEL_ENC_YUV, .mem_planes = 1, .comp_planes = 2, .bpp = { 2, 4, 0, 0 }, .hdiv = 2, .vdiv = 2 },
+ void hantro_reset_fmts(struct hantro_ctx *ctx);
++int hantro_get_format_depth(u32 fourcc);
  
- 		/* YUV planar formats, non contiguous variant */
- 		{ .format = V4L2_PIX_FMT_YUV420M, .pixel_enc = V4L2_PIXEL_ENC_YUV, .mem_planes = 3, .comp_planes = 3, .bpp = { 1, 1, 1, 0 }, .hdiv = 2, .vdiv = 2 },
-diff --git a/drivers/media/v4l2-core/v4l2-ioctl.c b/drivers/media/v4l2-core/v4l2-ioctl.c
-index e2526701294e..7aa3af389b51 100644
---- a/drivers/media/v4l2-core/v4l2-ioctl.c
-+++ b/drivers/media/v4l2-core/v4l2-ioctl.c
-@@ -1310,6 +1310,7 @@ static void v4l_fill_fmtdesc(struct v4l2_fmtdesc *fmt)
- 	case V4L2_PIX_FMT_NV12_4L4:	descr = "Y/CbCr 4:2:0 (4x4 Linear)"; break;
- 	case V4L2_PIX_FMT_NV12_16L16:	descr = "Y/CbCr 4:2:0 (16x16 Linear)"; break;
- 	case V4L2_PIX_FMT_NV12_32L32:   descr = "Y/CbCr 4:2:0 (32x32 Linear)"; break;
-+	case V4L2_PIX_FMT_P010_4L4:	descr = "10-bit Y/CbCr 4:2:0 (4x4 Linear)"; break;
- 	case V4L2_PIX_FMT_NV12M:	descr = "Y/CbCr 4:2:0 (N-C)"; break;
- 	case V4L2_PIX_FMT_NV21M:	descr = "Y/CrCb 4:2:0 (N-C)"; break;
- 	case V4L2_PIX_FMT_NV16M:	descr = "Y/CbCr 4:2:2 (N-C)"; break;
-diff --git a/include/uapi/linux/videodev2.h b/include/uapi/linux/videodev2.h
-index 5311ac4fde35..32bedeb04152 100644
---- a/include/uapi/linux/videodev2.h
-+++ b/include/uapi/linux/videodev2.h
-@@ -630,6 +630,7 @@ struct v4l2_pix_format {
- #define V4L2_PIX_FMT_NV12_4L4 v4l2_fourcc('V', 'T', '1', '2')   /* 12  Y/CbCr 4:2:0  4x4 tiles */
- #define V4L2_PIX_FMT_NV12_16L16 v4l2_fourcc('H', 'M', '1', '2') /* 12  Y/CbCr 4:2:0 16x16 tiles */
- #define V4L2_PIX_FMT_NV12_32L32 v4l2_fourcc('S', 'T', '1', '2') /* 12  Y/CbCr 4:2:0 32x32 tiles */
-+#define V4L2_PIX_FMT_P010_4L4 v4l2_fourcc('T', '0', '1', '0') /* 12  Y/CbCr 4:2:0 10-bit 4x4 macroblocks */
- 
- /* Tiled YUV formats, non contiguous planes */
- #define V4L2_PIX_FMT_NV12MT  v4l2_fourcc('T', 'M', '1', '2') /* 12  Y/CbCr 4:2:0 64x32 tiles */
+ #endif /* HANTRO_V4L2_H_ */
 -- 
 2.37.0
 

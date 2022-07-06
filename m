@@ -2,117 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C1D4567FC6
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 09:25:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 72360567FC9
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 09:26:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231584AbiGFHZl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Jul 2022 03:25:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45660 "EHLO
+        id S231637AbiGFHZ7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Jul 2022 03:25:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46034 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231506AbiGFHZj (ORCPT
+        with ESMTP id S229706AbiGFHZ6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Jul 2022 03:25:39 -0400
-Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AAC1EDF70
-        for <linux-kernel@vger.kernel.org>; Wed,  6 Jul 2022 00:25:38 -0700 (PDT)
-Received: by mail-lf1-x135.google.com with SMTP id m18so5955332lfg.10
-        for <linux-kernel@vger.kernel.org>; Wed, 06 Jul 2022 00:25:38 -0700 (PDT)
+        Wed, 6 Jul 2022 03:25:58 -0400
+Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 002062251C
+        for <linux-kernel@vger.kernel.org>; Wed,  6 Jul 2022 00:25:56 -0700 (PDT)
+Received: by mail-wr1-x42b.google.com with SMTP id cl1so20686955wrb.4
+        for <linux-kernel@vger.kernel.org>; Wed, 06 Jul 2022 00:25:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :references:from:in-reply-to:content-transfer-encoding;
-        bh=TKgVE+FdRItJeaW6dhefsVPxfJCQGgpO5M7VhRxCZBs=;
-        b=nHhgznajaCxrzWCH2A4/BuARFHu6ryIA9o+y8LRsICfDCzg5O1T2AmjP9vOaeVOTzc
-         /sLLh8jiGlBoj6Rc/RKVKAbkylBMv0+IOiNy/InfqrsQUnP+pQhXRUUdntYOYIZLyB8D
-         nAWWhy96J2BTOPnbX8Z3dzgNkr8UcjDFiGKWqiP06ADI3NIjFV6mqH4Csz69tMsiRy1h
-         5KYbYGrL+YIQ86Y4Vm19hV0HwClrLpdf3gd+0PuEiGPC69h4Q60Cn5hC5vcFmlpiIHsQ
-         ecvwUkN9Qes9OCs+jwji8OPWVd6rDnp6AFxD7fGvyL0Ve11hb5amHuL480nyGEnAjCRK
-         W27A==
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=RNGv+/8XLL3pLmqx9QBeEgEnepJuAQVAPCFO8Yi+Cro=;
+        b=3mUI2v7SV28d9VmjYj0Fyg+1wNOzEcpQ4VMVHukiS0/GQw88kM3nJjZIj9oUc5CyOn
+         HWcWTODnZgR+0wizfsFWughub1yC23i2CW45v0j3SfQ6zbxNdXA8w2tH0HZO1N5WWZah
+         9l6I3qFan41NyCXQCm14R222BXC4hhrZWPm5nFJfGfc6eKig5tAO1KCC1MsEvu1oJO56
+         ArveHYEYcNb5z55A57UdWFcrxHRuCxGREVvxJZ2XM2ZrBPzy2YGruospChNnGUgoleU1
+         b1QGJDfEz9UYeOIri0rx7Nqk+wtupPIUNQYC3rxhUem/IABM7T9tuf5TB0uUF0jZB69F
+         o/Uw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=TKgVE+FdRItJeaW6dhefsVPxfJCQGgpO5M7VhRxCZBs=;
-        b=JE5U6YHB+qYmPVYC0Pd5PksOMvnp58T4T9xAu7wiFlB6whQ42myEILftVhw0FpsqHE
-         7GTDhrKD3XhD8SH/ZPOJWxaYo74Biwmql2gE3y/9PC4usOMMZkEqYiICxFhVYeyfkCAQ
-         fMRKYO7HI11lwg5KJUHql+uAIoN/5v2yqxQc51gSI9WAmePmKDxM5Ex7pWm6JeBu6SaC
-         YNZlWYAoBmwIT8LZQKfsWGxEy+xyV/qdJs/MiStVOuWyekJIMbQBRaOChdnGGaDvtXk9
-         /djRCye7xcrrWbhflLp2mnRAGceD2LSeJDrbwSzO56KW+X5QRvJ9Rd0naGozdiTkwCip
-         K70A==
-X-Gm-Message-State: AJIora8maeCGdtib4cNtNfK4Zyn1Yxg5ga6lYW4B0cGVFLU5U1D/OGYo
-        z/5jHxadpi4xbzvHdPuJtFr9/vcXnES3Ww==
-X-Google-Smtp-Source: AGRyM1smhRl80gqSMQfoa7qwtQIgMtoDBKy3Wp4dx2r7HgVVLxlfayMZVy483HkqsJxy/MRP9Qu/9w==
-X-Received: by 2002:a05:6512:3c99:b0:483:7dfc:931b with SMTP id h25-20020a0565123c9900b004837dfc931bmr4976947lfv.6.1657092337045;
-        Wed, 06 Jul 2022 00:25:37 -0700 (PDT)
-Received: from [192.168.1.52] ([84.20.121.239])
-        by smtp.gmail.com with ESMTPSA id b13-20020a2eb90d000000b0025aa03fba32sm5987441ljb.12.2022.07.06.00.25.36
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 06 Jul 2022 00:25:36 -0700 (PDT)
-Message-ID: <64b08d73-0973-6074-7285-dd59d4bef9cd@linaro.org>
-Date:   Wed, 6 Jul 2022 09:25:35 +0200
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=RNGv+/8XLL3pLmqx9QBeEgEnepJuAQVAPCFO8Yi+Cro=;
+        b=3immzu3a3KdPJXhDcPmn+PErloHRDCfpebFcIXCTcETQpOiUyFvoIS4nyiyHReZ0T2
+         gPSMi5aHtAqmXWrh6n9go1I0nnqAaOomQX3gYOrzpRnzSKc0W9I8Sghc6SWmwva4ckhG
+         UW2FFA8ZnjOqt81QfAAQgVFd1Pf4HEVxvQzqNHoHACpnSBqF/QOwoCpeKDLLn/+kh64O
+         UZqxMeMDgxZph8fLEXXux0lH4lofk0+Kp/EaO8ahjWXPVFcXAn+pF75dFJXl3hnPouql
+         lW7zEPth6y8rS9s9KxG2VMTeJIlZVQ0bdYfIRzObltnEYr+aSDabkkyOlsRGnaSxmUdL
+         LNeQ==
+X-Gm-Message-State: AJIora9ebQ3dUr3JG9TraflA5hfKdbb6ajIXPymu3cJR+EA8fXGkSq6U
+        fSl10xyAcQrn/IZWDevEP7zosA==
+X-Google-Smtp-Source: AGRyM1sjjoD72QqN/kPda1ll5BXRtL8M7g0zel6AU2vN3d7fDNT6a5wzNwnXMciWvstWpJaNyTIO/g==
+X-Received: by 2002:a5d:468a:0:b0:21d:6dc8:9e60 with SMTP id u10-20020a5d468a000000b0021d6dc89e60mr11671635wrq.595.1657092355613;
+        Wed, 06 Jul 2022 00:25:55 -0700 (PDT)
+Received: from Red ([2a01:cb1d:3d5:a100:264b:feff:fe03:2806])
+        by smtp.googlemail.com with ESMTPSA id a1-20020a05600c348100b003a03be22f9fsm20272887wmq.18.2022.07.06.00.25.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 06 Jul 2022 00:25:55 -0700 (PDT)
+Date:   Wed, 6 Jul 2022 09:25:50 +0200
+From:   LABBE Corentin <clabbe@baylibre.com>
+To:     Christoph Hellwig <hch@lst.de>
+Cc:     Ben Dooks <ben.dooks@codethink.co.uk>, herbert@gondor.apana.org.au,
+        heiko@sntech.de, linux-crypto@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
+        linux-sunxi@lists.linux.dev
+Subject: Re: [RFC PATCH] crypto: flush poison data
+Message-ID: <YsU4/qrnxG8yjFwC@Red>
+References: <20220701132735.1594822-1-clabbe@baylibre.com>
+ <4570f6d8-251f-2cdb-1ea6-c3a8d6bb9fcf@codethink.co.uk>
+ <YsP0eekTthD4jWGV@Red>
+ <20220705164213.GA14484@lst.de>
+ <YsR7O4q4IRI14Wkc@Red>
+ <20220705175834.GA15815@lst.de>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH 2/2] Add an entry for MOXA platform board
-Content-Language: en-US
-To:     =?UTF-8?B?SmltbXkgQ2hlbiAo6Zmz5rC46YGUKQ==?= <jimmy.chen@moxa.com>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "krzysztof.kozlowski+dt@linaro.org" 
-        <krzysztof.kozlowski+dt@linaro.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-References: <SEYPR01MB4272F28F81FB51152496D9CBFA809@SEYPR01MB4272.apcprd01.prod.exchangelabs.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <SEYPR01MB4272F28F81FB51152496D9CBFA809@SEYPR01MB4272.apcprd01.prod.exchangelabs.com>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220705175834.GA15815@lst.de>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 06/07/2022 09:22, Jimmy Chen (陳永達) wrote:
-> UC-8220 & UC-8210 hardware compatibility model
+Le Tue, Jul 05, 2022 at 07:58:34PM +0200, Christoph Hellwig a �crit :
+> On Tue, Jul 05, 2022 at 07:56:11PM +0200, LABBE Corentin wrote:
+> > My problem is that a dma_sync on the data buffer corrupt the poison buffer as collateral dommage.
+> > Probably because the sync operate on a larger region than the requested dma_sync length.
+> > So I try to flush poison data in the cryptoAPI.
 > 
-> Signed-off-by: Jimmy Chen <jimmy.chen@moxa.com>
-> ---
->  .../devicetree/bindings/arm/moxa.yaml         | 21 +++++++++++++++++++
->  1 file changed, 21 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/arm/moxa.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/arm/moxa.yaml b/Documentation/devicetree/bindings/arm/moxa.yaml
-> new file mode 100644
-> index 000000000000..73f4bf883b06
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/arm/moxa.yaml
-This goes to fsl file.
+> Data structures that are DMAed to must be aligned to
+> the value returned by dma_get_cache_alignment(), as non-coherent DMA
+> by definition can disturb the data inside that boundary.  That is not
+> a bug but fundamentally part of how DMA works when the device attachment
+> is not cache coherent.
 
-> @@ -0,0 +1,21 @@
-> +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/arm/moxa.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: MOXA platform device tree bindings
-> +
-> +maintainers:
-> +  - Jimmy Chen <jimmy.chen@moxa.com>
-> +
-> +properties:
-> +  compatible:
-> +    description: UC-82XX-LX embedded computer
-> +    items:
-> +      - const: moxa,uc-8210
-> +      - const: moxa,uc-8220
-
-Does not match your DTS and should fail the tests (dtbs_check).
-
-Best regards,
-Krzysztof
+I am sorry but I dont see how this can help my problem.

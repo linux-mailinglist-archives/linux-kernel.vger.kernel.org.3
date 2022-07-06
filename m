@@ -2,94 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0388B56915A
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 20:03:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AC16C56915D
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 20:05:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234251AbiGFSDi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Jul 2022 14:03:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49122 "EHLO
+        id S234349AbiGFSFF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Jul 2022 14:05:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50032 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233076AbiGFSDh (ORCPT
+        with ESMTP id S234242AbiGFSE7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Jul 2022 14:03:37 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8F9A7193C2
-        for <linux-kernel@vger.kernel.org>; Wed,  6 Jul 2022 11:03:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1657130610;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=VBlFjIiB9ZC4gvoYyy90cQtMpZILwrGOgeqSFzZ8m1s=;
-        b=W2+30qm6LRxDKb5EdriLGiSA/CyflO8u+BQB5X3bVkT7OUUc0NKLyx4dZEXaE2apbtdNIw
-        O1FO/nhwIRDBfuQRDZsk7xwd/KLqhO1NtlB/x+q0oZRyGl9TEvTydgbxCEbFYeFxSPdtBi
-        e96WT8CnIyhXG8KEAZyTp8UttNaqni4=
-Received: from mail-io1-f69.google.com (mail-io1-f69.google.com
- [209.85.166.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-635-0EjxUftcP6KopqhA22ZC0A-1; Wed, 06 Jul 2022 14:03:29 -0400
-X-MC-Unique: 0EjxUftcP6KopqhA22ZC0A-1
-Received: by mail-io1-f69.google.com with SMTP id x2-20020a6bda02000000b0067590503c08so8445099iob.5
-        for <linux-kernel@vger.kernel.org>; Wed, 06 Jul 2022 11:03:29 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:in-reply-to
-         :references:organization:mime-version:content-transfer-encoding;
-        bh=VBlFjIiB9ZC4gvoYyy90cQtMpZILwrGOgeqSFzZ8m1s=;
-        b=YsWe8u2INSJwbYpGNxXaTSliGxtD4j0kFJMGrsb6lLpJ+2kKxbJycRMWRNeP+Rtzpk
-         1GjJekXKJaGmezaIUXdEh5GLG/vtC4grDEuyYmbVPInTDiBXypa35BLIeZdrBjlQPMg/
-         h7E523EholU/Qgl7BV1e7MIKFI1k07Ia2+x4WMnicRtdAaVKZNkBMiG++bmCRoksizoX
-         1LjkPIqZcqC2Kbo+IF957RPy4oK4/aef+JIKDMiJerACudv5ghHT7sK/v7IYLRd6OAIt
-         itv5CWbXDQ6yiyXsIzvbKFPeXPgSmw7202S8QNrA8yGEPb0AjGHZpuE9SHV8SDzXmcue
-         XoIA==
-X-Gm-Message-State: AJIora+dWviUMY8fbxXr21YQhY6Ut9kqAssSGQh3Xe/1hUvYscP9WHkw
-        YUE9ZKAMZTgdcfucc7YnRmDq8X4QRSR/jVi0BdW459rwdOkLOXF2k8RPHiyVtusW5YYxaETj/MO
-        GND3laPtfMHkAExtbENeyWE0U
-X-Received: by 2002:a05:6638:218f:b0:33c:caf0:a61c with SMTP id s15-20020a056638218f00b0033ccaf0a61cmr26531512jaj.198.1657130608180;
-        Wed, 06 Jul 2022 11:03:28 -0700 (PDT)
-X-Google-Smtp-Source: AGRyM1tABH1Ic8RqUAALPXzLJn+RofmhnwMLRPJ18ZPWLjNFSi2aNVbpdWUQPpp6mJB+LAKijjE03g==
-X-Received: by 2002:a05:6638:218f:b0:33c:caf0:a61c with SMTP id s15-20020a056638218f00b0033ccaf0a61cmr26531473jaj.198.1657130607865;
-        Wed, 06 Jul 2022 11:03:27 -0700 (PDT)
-Received: from redhat.com ([38.15.36.239])
-        by smtp.gmail.com with ESMTPSA id co14-20020a0566383e0e00b0033efe711a37sm1538401jab.35.2022.07.06.11.03.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 06 Jul 2022 11:03:27 -0700 (PDT)
-Date:   Wed, 6 Jul 2022 12:03:25 -0600
-From:   Alex Williamson <alex.williamson@redhat.com>
-To:     Nicolin Chen <nicolinc@nvidia.com>
-Cc:     <joro@8bytes.org>, <will@kernel.org>, <marcan@marcan.st>,
-        <sven@svenpeter.dev>, <robin.murphy@arm.com>,
-        <robdclark@gmail.com>, <baolu.lu@linux.intel.com>,
-        <orsonzhai@gmail.com>, <baolin.wang7@gmail.com>,
-        <zhang.lyra@gmail.com>, <jean-philippe@linaro.org>,
-        <jgg@nvidia.com>, <kevin.tian@intel.com>,
-        <suravee.suthikulpanit@amd.com>, <alyssa@rosenzweig.io>,
-        <dwmw2@infradead.org>, <mjrosato@linux.ibm.com>,
-        <gerald.schaefer@linux.ibm.com>, <thierry.reding@gmail.com>,
-        <vdumpa@nvidia.com>, <jonathanh@nvidia.com>, <cohuck@redhat.com>,
-        <thunder.leizhen@huawei.com>, <christophe.jaillet@wanadoo.fr>,
-        <chenxiang66@hisilicon.com>, <john.garry@huawei.com>,
-        <yangyingliang@huawei.com>, <iommu@lists.linux.dev>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-arm-msm@vger.kernel.org>, <linux-s390@vger.kernel.org>,
-        <linux-tegra@vger.kernel.org>,
-        <virtualization@lists.linux-foundation.org>, <kvm@vger.kernel.org>
-Subject: Re: [PATCH v5 0/5] cover-letter: Simplify vfio_iommu_type1
- attach/detach routine
-Message-ID: <20220706120325.4741ff34.alex.williamson@redhat.com>
-In-Reply-To: <YsXMMCX5LY/3IOtf@Asurada-Nvidia>
-References: <20220701214455.14992-1-nicolinc@nvidia.com>
-        <20220706114217.105f4f61.alex.williamson@redhat.com>
-        <YsXMMCX5LY/3IOtf@Asurada-Nvidia>
-Organization: Red Hat
+        Wed, 6 Jul 2022 14:04:59 -0400
+Received: from fllv0016.ext.ti.com (fllv0016.ext.ti.com [198.47.19.142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CC5D1CFD7;
+        Wed,  6 Jul 2022 11:04:57 -0700 (PDT)
+Received: from fllv0035.itg.ti.com ([10.64.41.0])
+        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 266I4lsW007844;
+        Wed, 6 Jul 2022 13:04:47 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1657130687;
+        bh=XpbkBEGGYKqTiMJ2YYdbdlpLwVJebHMbh9qvZvd6lWA=;
+        h=Date:From:To:CC:Subject:References:In-Reply-To;
+        b=q/KBKYvgy004QBAesCVKWEL+0AfDjCWlxp5DQmGoMdu2iYcfAViCyUHviNUjLcZSa
+         9CYov34FBmP2riDC1QvRC/tqitu2ox9Y+LfZXnSbqQst4uVlHlv6jXqxlgoRotNc8n
+         yoF6d61g0Gtvo6n+dbwA3F29cFl4G/i6VigIHKuk=
+Received: from DLEE112.ent.ti.com (dlee112.ent.ti.com [157.170.170.23])
+        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 266I4lUr014768
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Wed, 6 Jul 2022 13:04:47 -0500
+Received: from DLEE113.ent.ti.com (157.170.170.24) by DLEE112.ent.ti.com
+ (157.170.170.23) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Wed, 6
+ Jul 2022 13:04:46 -0500
+Received: from fllv0040.itg.ti.com (10.64.41.20) by DLEE113.ent.ti.com
+ (157.170.170.24) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
+ Frontend Transport; Wed, 6 Jul 2022 13:04:46 -0500
+Received: from localhost (ileax41-snat.itg.ti.com [10.172.224.153])
+        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 266I4klu082914;
+        Wed, 6 Jul 2022 13:04:46 -0500
+Date:   Wed, 6 Jul 2022 13:04:46 -0500
+From:   Nishanth Menon <nm@ti.com>
+To:     Andrew Davis <afd@ti.com>
+CC:     Vignesh Raghavendra <vigneshr@ti.com>,
+        Tero Kristo <kristo@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH 6/6] arm64: dts: ti: k3-j7200-mcu-wakeup: Add SA2UL node
+Message-ID: <20220706180446.cyzujuasovjvsofk@lively>
+References: <20220705170340.26719-1-afd@ti.com>
+ <20220705170340.26719-6-afd@ti.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <20220705170340.26719-6-afd@ti.com>
+User-Agent: NeoMutt/20171215
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -97,46 +68,57 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 6 Jul 2022 10:53:52 -0700
-Nicolin Chen <nicolinc@nvidia.com> wrote:
-
-> On Wed, Jul 06, 2022 at 11:42:17AM -0600, Alex Williamson wrote:
+On 12:03-20220705, Andrew Davis wrote:
+> J7200 has an instance of SA2UL in the MCU domain.
+> Add DT node for the same.
 > 
-> > On Fri, 1 Jul 2022 14:44:50 -0700
-> > Nicolin Chen <nicolinc@nvidia.com> wrote:
-> >   
-> > > This is a preparatory series for IOMMUFD v2 patches. It enforces error
-> > > code -EMEDIUMTYPE in iommu_attach_device() and iommu_attach_group() when
-> > > an IOMMU domain and a device/group are incompatible. It also drops the
-> > > useless domain->ops check since it won't fail in current environment.
-> > >
-> > > These allow VFIO iommu code to simplify its group attachment routine, by
-> > > avoiding the extra IOMMU domain allocations and attach/detach sequences
-> > > of the old code.
-> > >
-> > > Worths mentioning the exact match for enforce_cache_coherency is removed
-> > > with this series, since there's very less value in doing that as KVM will
-> > > not be able to take advantage of it -- this just wastes domain memory.
-> > > Instead, we rely on Intel IOMMU driver taking care of that internally.
-> > >
-> > > This is on github:
-> > > https://github.com/nicolinc/iommufd/commits/vfio_iommu_attach  
-> > 
-> > How do you foresee this going in, I'm imagining Joerg would merge the
-> > first patch via the IOMMU tree and provide a topic branch that I'd
-> > merge into the vfio tree along with the remaining patches.  Sound
-> > right?  Thanks,  
+> Signed-off-by: Andrew Davis <afd@ti.com>
+> ---
+>  .../boot/dts/ti/k3-j7200-mcu-wakeup.dtsi      | 20 +++++++++++++++++++
+>  1 file changed, 20 insertions(+)
+
+Please split this series into what crypto maintainers need to pick up vs
+what I need to pick up for dts. patches for my tree need to have lakml
+in cc as a rule (see MAINTAINERS file).
+
 > 
-> We don't have any build dependency between the IOMMU change and
-> VFIO changes, yet, without the IOMMU one, any iommu_attach_group()
-> failure now would be a hard failure without a chance falling back
-> to a new_domain, which is slightly different from the current flow.
+> diff --git a/arch/arm64/boot/dts/ti/k3-j7200-mcu-wakeup.dtsi b/arch/arm64/boot/dts/ti/k3-j7200-mcu-wakeup.dtsi
+> index 1044ec6c4b0d4..ebad3642c8e30 100644
+> --- a/arch/arm64/boot/dts/ti/k3-j7200-mcu-wakeup.dtsi
+> +++ b/arch/arm64/boot/dts/ti/k3-j7200-mcu-wakeup.dtsi
+> @@ -375,4 +375,24 @@ mcu_r5fss0_core1: r5f@41400000 {
+>  			ti,loczrama = <1>;
+>  		};
+>  	};
+> +
+> +	mcu_crypto: crypto@40900000 {
+> +		compatible = "ti,j721e-sa2ul";
+> +		reg = <0x00 0x40900000 0x00 0x1200>;
+> +		power-domains = <&k3_pds 265 TI_SCI_PD_SHARED>;
+> +		#address-cells = <2>;
+> +		#size-cells = <2>;
+> +		ranges = <0x00 0x40900000 0x00 0x40900000 0x00 0x30000>;
+> +		dmas = <&mcu_udmap 0xf501>, <&mcu_udmap 0x7502>,
+> +		       <&mcu_udmap 0x7503>;
+> +		dma-names = "tx", "rx1", "rx2";
+> +		dma-coherent;
+> +
+> +		rng: rng@40910000 {
+> +			compatible = "inside-secure,safexcel-eip76";
+> +			reg = <0x00 0x40910000 0x00 0x7d>;
+> +			interrupts = <GIC_SPI 945 IRQ_TYPE_LEVEL_HIGH>;
+
+Please document why disabled.
+
+> +			status = "disabled";
+> +		};
+> +	};
+>  };
+> -- 
+> 2.36.1
 > 
-> For a potential existing use case that relies on reusing existing
-> domain, I think it'd be safer to have Joerg acking the first change
-> so you merge them all? Thank!
 
-Works for me, I'll look for buy-in + ack from Joerg.  Thanks,
-
-Alex
-
+-- 
+Regards,
+Nishanth Menon
+Key (0xDDB5849D1736249D) / Fingerprint: F8A2 8693 54EB 8232 17A3  1A34 DDB5 849D 1736 249D

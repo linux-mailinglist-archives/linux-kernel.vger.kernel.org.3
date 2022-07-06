@@ -2,73 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 453D5568B26
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 16:25:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F1D4568B27
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 16:25:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233150AbiGFOZB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Jul 2022 10:25:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49052 "EHLO
+        id S233264AbiGFOZv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Jul 2022 10:25:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49512 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230420AbiGFOY6 (ORCPT
+        with ESMTP id S232839AbiGFOZu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Jul 2022 10:24:58 -0400
-Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CE191AF00
-        for <linux-kernel@vger.kernel.org>; Wed,  6 Jul 2022 07:24:56 -0700 (PDT)
-Received: by mail-lf1-x12c.google.com with SMTP id y16so26173514lfb.9
-        for <linux-kernel@vger.kernel.org>; Wed, 06 Jul 2022 07:24:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=y0+hemKCm9KoLcdJVlDwowemoYH5rpN+Hagnel9ijRQ=;
-        b=omXZrna0gxIYOazn7dGSQ7WvQGEYaiftOCQUxfDqPa5w+1/OLqJq8uvIyGgBHkh8zG
-         9StaSLqmtiC++EBHnpfHQg4he4T37Hj1jxHflwWnMXc3gqIUe9gPq3WCAcdsp+s+2A3k
-         VrH2kCLpJsCMT7K6KTLi//AB2RG+tSx0/Kt51DWW1YXgTGeB+LdeM7Yubl1VaevlPI6W
-         wF7AKTUrmEaEU8dwOESUd3SQGKWBP/ipS3jCHfC0y8aIWEEQuBS4EgPw9kiZxRFXCwcS
-         YtyGi6h+7/VfY39HZmzZ6fMF3Mf3AV3oUgt4z9v5BCBRR3hYosw9wyz7yWCEfjyAfLEG
-         JuoQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=y0+hemKCm9KoLcdJVlDwowemoYH5rpN+Hagnel9ijRQ=;
-        b=7ayKGw+rlB2LPPrFI6CvaRdtYdME6fqHPNeO/bXzlt3XXgkyzN60Mm0n9mvGUPJRQ9
-         OQPQgN7Zqss6AI4dhm6rRvG8y4evH1Lw92jJo7Dn3oz0LqWHZ9sGVSYQUCMSwlOexXOd
-         0KjRaii1hkJQdGnzg4I+9ekp+al3vgQ9Vk9bUV/a+OAecBEtn/IVm/4xAfg2PTSk3qY4
-         wCIKc1+1+WeJpHUphhUMFI6OPO4AhH/51jh1Ork/84fiTD6GXKy2Tz/hR5nOLe5GbJIx
-         yjbkmJYMdvCd048SWE+kYBYZRJMiTIVoEaoMzprp9H62eFOWmew6bDPIyn37MGOd26vK
-         Xogw==
-X-Gm-Message-State: AJIora+ekiiUtK+WaoNibfDiJFrrw52KTAPGFtXDClSUrmqvSCZNN5/8
-        zhHC6UXO7louCNANCFBOyZfT3/MLiueSAC7p+YQOgA==
-X-Google-Smtp-Source: AGRyM1uDeNrP78kQbE4GCyT6VGpyQpPl0h+HaGsEaZJSOZN/gnHdPOD4IO3m6JYnJJttm/k1+C81vMOjQAuEaHVjx1g=
-X-Received: by 2002:a05:6512:2205:b0:484:e296:62fa with SMTP id
- h5-20020a056512220500b00484e29662famr4062867lfu.142.1657117494567; Wed, 06
- Jul 2022 07:24:54 -0700 (PDT)
+        Wed, 6 Jul 2022 10:25:50 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E60320F75
+        for <linux-kernel@vger.kernel.org>; Wed,  6 Jul 2022 07:25:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1657117549; x=1688653549;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=ekAnkxlyo5a77ZXv/WDjstgTFIs6FVRj0ddynjjv0EY=;
+  b=bY50CIYts4ouFEvqT4pHIc+julpwyp5PBOAKv020IQ2GIgTNPipbWOPw
+   Rg3O3jahh4yDyXGHW2LVu96NU3z2jp8+LR8h1QF9NAux0pPTnAlzxntM6
+   9Mx+biMDYHGVvWIDOaMtGgeA93g/yKDyXsEAFwIq+MQG/8lbMvKJQty76
+   8tgWwbMtkBV5rPESn+f5O/MFWyASJw2hN0FpyScy+BNOXqE3f9VWhjaaF
+   lO7o8ZcVu9eZ7ePvJP/C4bEfqq2c9ylrJa6emZorZqKM9t7S8fhgVVPsa
+   qDizqWwwZW9e/A+Zv3+o+E9WNpQkfxRMjI0/EIeG8isMjaKwPxD19ukGx
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10399"; a="284881295"
+X-IronPort-AV: E=Sophos;i="5.92,250,1650956400"; 
+   d="scan'208";a="284881295"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jul 2022 07:25:38 -0700
+X-IronPort-AV: E=Sophos;i="5.92,250,1650956400"; 
+   d="scan'208";a="568086315"
+Received: from xsang-optiplex-9020.sh.intel.com (HELO xsang-OptiPlex-9020) ([10.239.159.143])
+  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jul 2022 07:25:33 -0700
+Date:   Wed, 6 Jul 2022 22:25:30 +0800
+From:   Oliver Sang <oliver.sang@intel.com>
+To:     Mel Gorman <mgorman@techsingularity.net>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        0day robot <lkp@intel.com>,
+        LKML <linux-kernel@vger.kernel.org>, linux-mm@kvack.org,
+        lkp@lists.01.org, Nicolas Saenz Julienne <nsaenzju@redhat.com>,
+        Marcelo Tosatti <mtosatti@redhat.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Michal Hocko <mhocko@kernel.org>,
+        Hugh Dickins <hughd@google.com>
+Subject: Re: [mm/page_alloc]  2bd8eec68f:
+ BUG:sleeping_function_called_from_invalid_context_at_mm/gup.c
+Message-ID: <YsWbWsN2qPbWsNWZ@xsang-OptiPlex-9020>
+References: <20220613125622.18628-8-mgorman@techsingularity.net>
+ <YsFk/qU+QtWun04h@xsang-OptiPlex-9020>
+ <20220703132209.875b823d1cb7169a8d51d56d@linux-foundation.org>
+ <YsRB3fZHAfik0M/q@xsang-OptiPlex-9020>
+ <20220706095535.GD27531@techsingularity.net>
 MIME-Version: 1.0
-References: <20220702213724.3949-1-semen.protsenko@linaro.org>
- <CAPLW+4kYbG7PRYo_L6N5xMa+F9DFBpyph4B+zb2R4kBbE3EKHg@mail.gmail.com> <67943ec4dcfe85d6d616a5507437d99f6c5638a2.camel@gmail.com>
-In-Reply-To: <67943ec4dcfe85d6d616a5507437d99f6c5638a2.camel@gmail.com>
-From:   Sam Protsenko <semen.protsenko@linaro.org>
-Date:   Wed, 6 Jul 2022 17:24:43 +0300
-Message-ID: <CAPLW+4k9DBbX6PupEk-J_KFbLmwgbfuDrfuVgyapT=d4WMG7yQ@mail.gmail.com>
-Subject: Re: [PATCH 0/4] iommu/exynos: Add basic support for SysMMU v7
-To:     Janghyuck Kim <janghyuck.kim@samsung.com>
-Cc:     Marek Szyprowski <m.szyprowski@samsung.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
-        Robin Murphy <robin.murphy@arm.com>,
-        David Virag <virag.david003@gmail.com>,
-        Cho KyongHo <pullip.cho@samsung.com>,
-        Daniel Mentz <danielmentz@google.com>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        iommu@lists.linux-foundation.org, iommu@lists.linux.dev,
-        linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220706095535.GD27531@techsingularity.net>
+X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,54 +70,72 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, 3 Jul 2022 at 13:47, David Virag <virag.david003@gmail.com> wrote:
->
-> On Sun, 2022-07-03 at 00:48 +0300, Sam Protsenko wrote:
-> [...]
-> > Hi Marek,
-> >
-> > As I understand, you have some board with SysMMU v7, which is not VM
-> > capable (judging from the patches you shared earlier). Could you
-> > please somehow verify if this series works fine for you? For example,
-> > this testing driver [1] can be helpful.
-> >
-> > Thanks!
-> >
-> > [1]
-> > https://github.com/joe-skb7/linux/commit/bbadd46fa525fe1fef2ccbdfff81f7d29caf0506
->
-> Hi Sam,
->
-> Not Marek here, but I wanted to try this on my jackpotlte (Exynos
-> 7885). The driver reports it's DPU sysmmu as version 7.2, and manually
-> reading the capabilities registers it looks like it has the 2nd
-> capability register but not the VM capability.
->
-> After applying your patches, adding your test driver (with SYSMMU_BASE
-> corrected to 7885 value), and adding the sysmmu to dt, I tried to cat
-> the test file that it creates in debugfs and I got an SError kernel
-> panic.
->
-> I tried tracing where the SError happens and it looks like it's this
-> line:
->         /* Preload for emulation */
->         iowrite32(rw | vpn, obj->reg_base + MMU_EMU_PRELOAD);
->
-> Trying to read the EMU registers using devmem results in a "Bus error".
->
-> Could these emulation registers be missing from my SysMMU? Do you have
-> any info on what version should have it? Or maybe some capability bit?
-> I'll try testing it with DECON/DPP later and see if it works that way.
->
+hi, Mel Gorman,
 
-Hi Janghyuck,
+On Wed, Jul 06, 2022 at 10:55:35AM +0100, Mel Gorman wrote:
+> On Tue, Jul 05, 2022 at 09:51:25PM +0800, Oliver Sang wrote:
+> > Hi Andrew Morton,
+> > 
+> > On Sun, Jul 03, 2022 at 01:22:09PM -0700, Andrew Morton wrote:
+> > > On Sun, 3 Jul 2022 17:44:30 +0800 kernel test robot <oliver.sang@intel.com> wrote:
+> > > 
+> > > > FYI, we noticed the following commit (built with gcc-11):
+> > > > 
+> > > > commit: 2bd8eec68f740608db5ea58ecff06965228764cb ("[PATCH 7/7] mm/page_alloc: Replace local_lock with normal spinlock")
+> > > > url: https://github.com/intel-lab-lkp/linux/commits/Mel-Gorman/Drain-remote-per-cpu-directly/20220613-230139
+> > > > base: https://git.kernel.org/cgit/linux/kernel/git/torvalds/linux.git b13baccc3850ca8b8cccbf8ed9912dbaa0fdf7f3
+> > > > patch link: https://lore.kernel.org/lkml/20220613125622.18628-8-mgorman@techsingularity.net
+> > > > 
+> > > 
+> > > Did this test include the followup patch
+> > > mm-page_alloc-replace-local_lock-with-normal-spinlock-fix.patch?
+> > 
+> > no, we just fetched original patch set and test upon it.
+> > 
+> > now we applied the patch you pointed to us upon 2bd8eec68f and found the issue
+> > still exist.
+> > (attached dmesg FYI)
+> > 
+> 
+> Thanks Oliver.
+> 
+> The trace is odd in that it hits in GUP when the page allocator is no
+> longer active and the context is a syscall. First, is this definitely
+> the first patch the problem occurs?
+> 
+> Second, it's possible for IRQs to be enabled and an IRQ delivered before
+> preemption is enabled. It's not clear why that would be a problem other
+> than lacking symmetry or how it could result in the reported BUG but
+> might as well rule it out. This is build tested only
 
-Do you have by chance any info on SysMMU v7.2, which is present e.g.
-on Exynos7885? David is trying to use emulation registers there with
-no luck, so it would be nice if you can provide some details on
-questions above.
+do you want us test below patch?
+if so, should we apply it upon the patch
+"mm/page_alloc: Replace local_lock with normal spinlock"
+or
+"mm/page_alloc: replace local_lock with normal spinlock -fix"?
 
-Thanks!
-
-> Best regards,
-> David
+> 
+> diff --git a/mm/page_alloc.c b/mm/page_alloc.c
+> index 934d1b5a5449..d0141e51e613 100644
+> --- a/mm/page_alloc.c
+> +++ b/mm/page_alloc.c
+> @@ -192,14 +192,14 @@ static DEFINE_MUTEX(pcp_batch_high_lock);
+>  
+>  #define pcpu_spin_unlock(member, ptr)					\
+>  ({									\
+> -	spin_unlock(&ptr->member);					\
+>  	pcpu_task_unpin();						\
+> +	spin_unlock(&ptr->member);					\
+>  })
+>  
+>  #define pcpu_spin_unlock_irqrestore(member, ptr, flags)			\
+>  ({									\
+> -	spin_unlock_irqrestore(&ptr->member, flags);			\
+>  	pcpu_task_unpin();						\
+> +	spin_unlock_irqrestore(&ptr->member, flags);			\
+>  })
+>  
+>  /* struct per_cpu_pages specific helpers. */
+>  
+> 
+> 

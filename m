@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E4CB5690E6
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 19:43:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B7D705690EB
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 19:43:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234115AbiGFRn3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Jul 2022 13:43:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59966 "EHLO
+        id S234196AbiGFRnc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Jul 2022 13:43:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59814 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234156AbiGFRnQ (ORCPT
+        with ESMTP id S233997AbiGFRnR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Jul 2022 13:43:16 -0400
-Received: from mail-qk1-x733.google.com (mail-qk1-x733.google.com [IPv6:2607:f8b0:4864:20::733])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FC732AE0B;
-        Wed,  6 Jul 2022 10:43:08 -0700 (PDT)
-Received: by mail-qk1-x733.google.com with SMTP id p11so11565559qkg.12;
-        Wed, 06 Jul 2022 10:43:08 -0700 (PDT)
+        Wed, 6 Jul 2022 13:43:17 -0400
+Received: from mail-qt1-x831.google.com (mail-qt1-x831.google.com [IPv6:2607:f8b0:4864:20::831])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A1B02AC7B;
+        Wed,  6 Jul 2022 10:43:09 -0700 (PDT)
+Received: by mail-qt1-x831.google.com with SMTP id g14so19280087qto.9;
+        Wed, 06 Jul 2022 10:43:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=RTX+2ZmhNLKv9X3CqjJGf6dksV/0DVIM74S01uC3qWA=;
-        b=UqIyAfWAmZmjeU+EenLlPE0VmOtNlBXkBvRtQFrmqf8vibXabUa6dSf+8yGO0vHnKp
-         KDVdg7apxQvX4d1b8Ws9MgOGuWWx8V/RiOVVlGerPweObz2WTWdlCIU0lScSj3Z/zWed
-         q86ogK3mNR3AWuWOAsbWQ/bfhMEX3ZWqlFhL1Cj1RyXz064GT0JeUAYIvGOqpnRpqwgI
-         sL0MyAgDqQorU98niV7Gl6c5Yflqp4eoXbBJ3F21nx5ktSlXFQyJD430kkNgeoYhfc9N
-         XW/wra8Tu8vQbBtgs3K5c+Mp9Xr+d8y5EozH1/A69cPUbirDxHP4lfMr/YOp/uIZVUgG
-         oCqA==
+        bh=yfeDuyRYNoVK5OuNHYtPJI0+qGNG77BF8q+9jUECqCA=;
+        b=k+hw5BFlf7mL7dQoYsqsOVto8IsXSzSQEDJE/tC5hTf1lqeb3BMECvvjJCW6bwePV1
+         ckL/HbfUQC5aWcsdRq9+Q49oKYYnRnxKhZvHOnI2vBvNzs1mcXZGcIe9/pY8KerEmTCE
+         Cl3SwHrWiru7RFqlHB6bItSpCSENPIVaLiVrPMha3FjFswNagqp9KsYtv5Q7z57nlCHM
+         Km4CpS4NBXzO4cGWIgxODzB3vaadiNCjFi7jBEHIV3XpOdlx2CtCrwUpn8ttbtT//C6l
+         7Xw3+indiZaDKs3WYOy7bUugUGAuZodOL+uvzYv1DU8OYoClITXJPknBdYJOjfWMqv1J
+         gybw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=RTX+2ZmhNLKv9X3CqjJGf6dksV/0DVIM74S01uC3qWA=;
-        b=5SUtGyoDleKWR1sHq4FJnE3f9+hhyBOyzs55jgwLXs6tEi7ysMLCRnU1rqR+mDroTP
-         DnrafOc2cQseHO8T9uekT222vMHvdCfyE0BgfSiDzr2pLRdlmAHMjvMX+dOwVz0Nbxh2
-         +T4kpCV+rvgTy3No33KtU2Puh9a7PUMrb1pQFrDGTm+3I8q2zw3yzTLVk+cKxKor9sTU
-         De0Ln4FEEld8jRCsPIIxt0v46uwbinZoBT29jyzsPDrXW+ydZDyE87mmmtYu7B78Ebhw
-         C33MkCbd+jEur4AmCvRmIc5xax9xKypF75hTgE/J6iL4JBes6aGrcaha3soq5Oc1IqTi
-         /snQ==
-X-Gm-Message-State: AJIora/ioIo9Vpue6eLjqV+SXA8Tm2JjvjoZWoI6D17Ka2zmqBzSNNLx
-        g1qR3Ug9qciTZUCoo2vgWyNvc6XiQ3GQ7g==
-X-Google-Smtp-Source: AGRyM1tpnu+LAuLYoIyI9/LCG9g4Hwiof2ASLOuavcg0x5s9g9u1zNCfiYJuBjjfPsO8eZ6Udpuckg==
-X-Received: by 2002:a05:620a:1206:b0:6b5:1758:de95 with SMTP id u6-20020a05620a120600b006b51758de95mr2855134qkj.100.1657129387265;
-        Wed, 06 Jul 2022 10:43:07 -0700 (PDT)
+        bh=yfeDuyRYNoVK5OuNHYtPJI0+qGNG77BF8q+9jUECqCA=;
+        b=zeQqGn0jGSNZZLPOLKHEs61UzlEwK4RXXR2g6V4eIY86x31v5l2M79zvy/acXZ8DV4
+         onMaHQDB+A8ZJgHQxTs+29N51oZkscDtVFbpzyH0lM9ehoNWGBiduxHfNcFOqjJ6xxMv
+         //YCmsSyxhpkwHti5s8NCP+LHS9x+J3v4IpRCcA10vqzN2rGdJYOhqyYmBD4Ikd+1E5Q
+         OmGdt83QlCr46cIMyH9FArk6JZHg2ErMIB/kreo5LqNZs+9NufR7X5RhugkCWvpjoGUL
+         42q41hBTyrIYIU9GZ2LrNoe6Jpt6UQTRQTal/cRF1d1VbPS/Kyw1eY0yzLnxOubPerk3
+         o+dA==
+X-Gm-Message-State: AJIora8jPOldvlRlj3dqCzvb5LLZRBlzz4TYq4Iu9LG0NV/a6hakRG5d
+        f7wBc10piZWPuQpJFRpgXtJTq2uACIOcxQ==
+X-Google-Smtp-Source: AGRyM1seazjmesyL9M4iNmZaGp7i7fIpXiCBQjdNbxLsOqkRBXmMNAquyaefluz7IpklOU2eeireYw==
+X-Received: by 2002:a05:622a:1983:b0:31b:f165:8538 with SMTP id u3-20020a05622a198300b0031bf1658538mr33409402qtc.358.1657129388361;
+        Wed, 06 Jul 2022 10:43:08 -0700 (PDT)
 Received: from localhost (c-69-254-185-160.hsd1.ar.comcast.net. [69.254.185.160])
-        by smtp.gmail.com with ESMTPSA id f10-20020a05620a280a00b006a69d7f390csm30803845qkp.103.2022.07.06.10.43.06
+        by smtp.gmail.com with ESMTPSA id v18-20020a05620a441200b006a701d8a43bsm24772765qkp.79.2022.07.06.10.43.07
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 06 Jul 2022 10:43:06 -0700 (PDT)
+        Wed, 06 Jul 2022 10:43:08 -0700 (PDT)
 From:   Yury Norov <yury.norov@gmail.com>
 To:     linux-kernel@vger.kernel.org,
         Andrew Morton <akpm@linux-foundation.org>,
@@ -66,9 +66,9 @@ To:     linux-kernel@vger.kernel.org,
         linux-doc@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-mm@kvack.org
 Cc:     Yury Norov <yury.norov@gmail.com>
-Subject: [PATCH 09/10] headers/deps: mm: align MANITAINERS and Docs with new gfp.h structure
-Date:   Wed,  6 Jul 2022 10:42:52 -0700
-Message-Id: <20220706174253.4175492-10-yury.norov@gmail.com>
+Subject: [PATCH 10/10] lib/cpumask: move some one-line wrappers to header file
+Date:   Wed,  6 Jul 2022 10:42:53 -0700
+Message-Id: <20220706174253.4175492-11-yury.norov@gmail.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220706174253.4175492-1-yury.norov@gmail.com>
 References: <20220706174253.4175492-1-yury.norov@gmail.com>
@@ -84,57 +84,106 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-After moving gfp types out of gfp.h, we have to align MAINTAINERS
-and Docs, to avoid warnings like this:
-
->> include/linux/gfp.h:1: warning: 'Page mobility and placement hints' not found
->> include/linux/gfp.h:1: warning: 'Watermark modifiers' not found
->> include/linux/gfp.h:1: warning: 'Reclaim modifiers' not found
->> include/linux/gfp.h:1: warning: 'Useful GFP flag combinations' not found
+After moving gfp flags to a separate header, it's possible to move some
+cpumask allocators into headers, and avoid creating real functions.
 
 Signed-off-by: Yury Norov <yury.norov@gmail.com>
 ---
- Documentation/core-api/mm-api.rst | 8 ++++----
- MAINTAINERS                       | 1 +
- 2 files changed, 5 insertions(+), 4 deletions(-)
+ include/linux/cpumask.h | 34 +++++++++++++++++++++++++++++++---
+ lib/cpumask.c           | 28 ----------------------------
+ 2 files changed, 31 insertions(+), 31 deletions(-)
 
-diff --git a/Documentation/core-api/mm-api.rst b/Documentation/core-api/mm-api.rst
-index f5b2f92822c8..1ebcc6c3fafe 100644
---- a/Documentation/core-api/mm-api.rst
-+++ b/Documentation/core-api/mm-api.rst
-@@ -22,16 +22,16 @@ Memory Allocation Controls
- .. kernel-doc:: include/linux/gfp.h
-    :internal:
+diff --git a/include/linux/cpumask.h b/include/linux/cpumask.h
+index ea3de2c2c180..80627362c774 100644
+--- a/include/linux/cpumask.h
++++ b/include/linux/cpumask.h
+@@ -12,6 +12,8 @@
+ #include <linux/bitmap.h>
+ #include <linux/atomic.h>
+ #include <linux/bug.h>
++#include <linux/gfp_types.h>
++#include <linux/numa.h>
  
--.. kernel-doc:: include/linux/gfp.h
-+.. kernel-doc:: include/linux/gfp_types.h
-    :doc: Page mobility and placement hints
+ /* Don't assign or return these: may not be this big! */
+ typedef struct cpumask { DECLARE_BITMAP(bits, NR_CPUS); } cpumask_t;
+@@ -794,9 +796,35 @@ typedef struct cpumask *cpumask_var_t;
+ #define __cpumask_var_read_mostly	__read_mostly
  
--.. kernel-doc:: include/linux/gfp.h
-+.. kernel-doc:: include/linux/gfp_types.h
-    :doc: Watermark modifiers
+ bool alloc_cpumask_var_node(cpumask_var_t *mask, gfp_t flags, int node);
+-bool alloc_cpumask_var(cpumask_var_t *mask, gfp_t flags);
+-bool zalloc_cpumask_var_node(cpumask_var_t *mask, gfp_t flags, int node);
+-bool zalloc_cpumask_var(cpumask_var_t *mask, gfp_t flags);
++
++static inline
++bool zalloc_cpumask_var_node(cpumask_var_t *mask, gfp_t flags, int node)
++{
++	return alloc_cpumask_var_node(mask, flags | __GFP_ZERO, node);
++}
++
++/**
++ * alloc_cpumask_var - allocate a struct cpumask
++ * @mask: pointer to cpumask_var_t where the cpumask is returned
++ * @flags: GFP_ flags
++ *
++ * Only defined when CONFIG_CPUMASK_OFFSTACK=y, otherwise is
++ * a nop returning a constant 1 (in <linux/cpumask.h>).
++ *
++ * See alloc_cpumask_var_node.
++ */
++static inline
++bool alloc_cpumask_var(cpumask_var_t *mask, gfp_t flags)
++{
++	return alloc_cpumask_var_node(mask, flags, NUMA_NO_NODE);
++}
++
++static inline
++bool zalloc_cpumask_var(cpumask_var_t *mask, gfp_t flags)
++{
++	return alloc_cpumask_var(mask, flags | __GFP_ZERO);
++}
++
+ void alloc_bootmem_cpumask_var(cpumask_var_t *mask);
+ void free_cpumask_var(cpumask_var_t mask);
+ void free_bootmem_cpumask_var(cpumask_var_t mask);
+diff --git a/lib/cpumask.c b/lib/cpumask.c
+index cb7262ff8633..f0ae119be8c4 100644
+--- a/lib/cpumask.c
++++ b/lib/cpumask.c
+@@ -70,34 +70,6 @@ bool alloc_cpumask_var_node(cpumask_var_t *mask, gfp_t flags, int node)
+ }
+ EXPORT_SYMBOL(alloc_cpumask_var_node);
  
--.. kernel-doc:: include/linux/gfp.h
-+.. kernel-doc:: include/linux/gfp_types.h
-    :doc: Reclaim modifiers
- 
--.. kernel-doc:: include/linux/gfp.h
-+.. kernel-doc:: include/linux/gfp_types.h
-    :doc: Useful GFP flag combinations
- 
- The Slab Cache
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 3cf9842d9233..7c0b8f28aa25 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -12850,6 +12850,7 @@ T:	quilt https://ozlabs.org/~akpm/mmotm/
- T:	quilt https://ozlabs.org/~akpm/mmots/
- T:	git git://github.com/hnaz/linux-mm.git
- F:	include/linux/gfp.h
-+F:	include/linux/gfp_types.h
- F:	include/linux/memory_hotplug.h
- F:	include/linux/mm.h
- F:	include/linux/mmzone.h
+-bool zalloc_cpumask_var_node(cpumask_var_t *mask, gfp_t flags, int node)
+-{
+-	return alloc_cpumask_var_node(mask, flags | __GFP_ZERO, node);
+-}
+-EXPORT_SYMBOL(zalloc_cpumask_var_node);
+-
+-/**
+- * alloc_cpumask_var - allocate a struct cpumask
+- * @mask: pointer to cpumask_var_t where the cpumask is returned
+- * @flags: GFP_ flags
+- *
+- * Only defined when CONFIG_CPUMASK_OFFSTACK=y, otherwise is
+- * a nop returning a constant 1 (in <linux/cpumask.h>).
+- *
+- * See alloc_cpumask_var_node.
+- */
+-bool alloc_cpumask_var(cpumask_var_t *mask, gfp_t flags)
+-{
+-	return alloc_cpumask_var_node(mask, flags, NUMA_NO_NODE);
+-}
+-EXPORT_SYMBOL(alloc_cpumask_var);
+-
+-bool zalloc_cpumask_var(cpumask_var_t *mask, gfp_t flags)
+-{
+-	return alloc_cpumask_var(mask, flags | __GFP_ZERO);
+-}
+-EXPORT_SYMBOL(zalloc_cpumask_var);
+-
+ /**
+  * alloc_bootmem_cpumask_var - allocate a struct cpumask from the bootmem arena.
+  * @mask: pointer to cpumask_var_t where the cpumask is returned
 -- 
 2.34.1
 

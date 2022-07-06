@@ -2,94 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D307568080
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 09:53:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 59C94568084
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 09:54:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230244AbiGFHxf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Jul 2022 03:53:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39516 "EHLO
+        id S231184AbiGFHyD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Jul 2022 03:54:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40164 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231441AbiGFHxb (ORCPT
+        with ESMTP id S229793AbiGFHyB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Jul 2022 03:53:31 -0400
-Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1572C237D8
-        for <linux-kernel@vger.kernel.org>; Wed,  6 Jul 2022 00:53:20 -0700 (PDT)
-Received: by mail-lf1-x129.google.com with SMTP id e12so24493298lfr.6
-        for <linux-kernel@vger.kernel.org>; Wed, 06 Jul 2022 00:53:20 -0700 (PDT)
+        Wed, 6 Jul 2022 03:54:01 -0400
+Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B5EEE0;
+        Wed,  6 Jul 2022 00:54:01 -0700 (PDT)
+Received: by mail-wr1-x42d.google.com with SMTP id s1so20761798wra.9;
+        Wed, 06 Jul 2022 00:54:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=h+bbHSPueC00viurENXKckyisi5g4je6s9N60gJDofs=;
-        b=Hvboouj7AP8T1aQrkHArFUkYyIp275VDLRHTMsJ29X4740TB65mRCmNc5FpwA1MbJo
-         V3cyMYplxSoANxavt8NZYfn6pfb96pqY4zqMhUF6ldcsnkfEETYrYby5LCgunRjKX3M1
-         bhtROR6d07Mk5oWOQj10I/q06iqLhAd3xZXHNv43eZQoFkvVwF454+VvqrULZ6iLvcA6
-         TSqxF4CmaDo4Sz1vvdTcFyp9Xc4v8JQ8SiNGOQMZc0zl4jawZ6VJwzG6thFqw/bs5Lg6
-         ECvei3bcDU1sKcxtQG/n2Ach/w3aAjMX2jp325ySIaOsxMI1YdeMl2/q4CVVM//cH7bV
-         z5mg==
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:mail-followup-to:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=wTaiitSYSTKAftb+sClK9RtM/bwgI7yK3/X/dGn1Cl8=;
+        b=lzERZhMa6lH6qQHZNTOfPP9/N9alWnSobQKvmKTnYSjEhm4umwKblSeZZtCPFnm7hk
+         dltwLuFztcyV00xuK3HbZ+Eq7RyNB+HLyJj1D7RMuYkR+K6zkkHiw+MdAca0vnEe8BbZ
+         HTVnhCRlrISL6vZEqWG8BGLblBTFWlrqXdlxg43cJd+GyCAmjE916yhWPD7slhWmeJFU
+         iHXvCvXrZYVbI8fSO6ZSzACX+c7VmaueluPbmzQ0f6nuM7rzkyKLOrdstkED5j0Ozklh
+         WEyT9hZpbHLxqQUDFZ3DfIZFO6fICj2SbQzLgop12Zh1zUx9fwNFmR5wPfvVcVtkwBQe
+         ZI4A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=h+bbHSPueC00viurENXKckyisi5g4je6s9N60gJDofs=;
-        b=GdFkvZWeEwDJ4Jlx91GaG4enVSnp6dqahNu4UKPICurPvGI/mw+hkb894hVs88xR2O
-         eL5bHRWRF8iNwIwH+AATO1NcR7PvfhjEI8CeVlVZ5Lpmdr365hUV2MHUo3bTMV0mKF8n
-         vKGKGXiYau0ISvrT/g4/V3A283KRGFeoPgEXhTtMKVbckTvzwi55yhakburOMVMm1eK2
-         8VjRHFuaVCXxsGXx3Kju9EsPyGu+j6flZdAr3wxEOUjdiDFW0AUyHmmn4IqSCVpwKtF6
-         VV/sXAE6fcpLllA7mwldaYmpa3qIsH5gYPI8N/4TFSg0cDsqR4Pp3iZWIqqjqT+0Zajk
-         9TOg==
-X-Gm-Message-State: AJIora/SOlFyEnY3sSvcl1m8BQ9a7IKhtiw+QJV4CUIgmXYqgub0QQ1e
-        K5Ol5oXu3s73oMsdDV8Ipj8byQ==
-X-Google-Smtp-Source: AGRyM1vHtPiW4+AiTbJ8OolLiKzwYkxgs1joX+hBnsqDIuIIDY/NjV4d5x0dMPnjA1eE68UC/07uyw==
-X-Received: by 2002:a05:6512:a82:b0:483:6de9:4f18 with SMTP id m2-20020a0565120a8200b004836de94f18mr5052290lfu.447.1657093999283;
-        Wed, 06 Jul 2022 00:53:19 -0700 (PDT)
-Received: from [192.168.1.52] ([84.20.121.239])
-        by smtp.gmail.com with ESMTPSA id t6-20020a056512208600b0047f79487758sm6135446lfr.133.2022.07.06.00.53.17
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 06 Jul 2022 00:53:18 -0700 (PDT)
-Message-ID: <e2a1e0a5-6138-089a-c803-9f1b95b08f41@linaro.org>
-Date:   Wed, 6 Jul 2022 09:53:17 +0200
+        h=x-gm-message-state:date:from:to:cc:subject:message-id
+         :mail-followup-to:references:mime-version:content-disposition
+         :in-reply-to;
+        bh=wTaiitSYSTKAftb+sClK9RtM/bwgI7yK3/X/dGn1Cl8=;
+        b=WA5zkfuORSHzAjgB5ycG93q6k4xfFcfeaHsdWcnPR21S14frIjADKKCvh5ARou0k2L
+         7vyo33mfAU8XPecHJLpWZrmFi1aIHHVAl85M7umMa8mTiB1bIHPGe/3vmrUVFcHovdqE
+         msLYQ8ds+tGacrJbIVsvebhOGOFM8V0ik8u9ExJf2JG8cq7Gg9PqKEZKKaUxF81LE4MF
+         zr5xR19kZqz5/lhhBytyHy/bHdJvVtKr+OzVdKiDifxVp4ZNnf8oAAdmCg1omHHe1dUl
+         MCzxr1m2hPVzQyn37dx/m9xzLCaZfi8mj/yD+XoM2b19gXjHzLCqHHA0OQ2Nz5JseXkN
+         N4cg==
+X-Gm-Message-State: AJIora/nh3KLMjRyV8MDhM642Nn3ehQkH1xBXfo1/Abjpn41rviUwW5K
+        QfrP5NoymcIUbrWD1ielQpo=
+X-Google-Smtp-Source: AGRyM1v2VfNRofCEEnbrLHBU/cC3GaWRmsG8bFKUDwxemNUW6rQAZsF0k5vzR89zOpfDKyq6N+GzgQ==
+X-Received: by 2002:a5d:4b05:0:b0:21d:79fb:88d5 with SMTP id v5-20020a5d4b05000000b0021d79fb88d5mr3541245wrq.54.1657094039639;
+        Wed, 06 Jul 2022 00:53:59 -0700 (PDT)
+Received: from gmail.com ([81.168.73.77])
+        by smtp.gmail.com with ESMTPSA id s1-20020a5d4ec1000000b0021004d7d75asm9147970wrv.84.2022.07.06.00.53.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 06 Jul 2022 00:53:58 -0700 (PDT)
+Date:   Wed, 6 Jul 2022 08:53:56 +0100
+From:   Martin Habets <habetsm.xilinx@gmail.com>
+To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Cc:     Edward Cree <ecree.xilinx@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, linux-kernel@vger.kernel.org,
+        kernel-janitors@vger.kernel.org, netdev@vger.kernel.org
+Subject: Re: [PATCH] sfc: falcon: Use the bitmap API to allocate bitmaps
+Message-ID: <YsU/lJUM0fIXubKY@gmail.com>
+Mail-Followup-To: Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        Edward Cree <ecree.xilinx@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+        linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
+        netdev@vger.kernel.org
+References: <c62c1774e6a34bc64323ce526b385aa87c1ca575.1657049799.git.christophe.jaillet@wanadoo.fr>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH 1/9] dt-bindings: arm: add BCM63138 SoC
-Content-Language: en-US
-To:     William Zhang <william.zhang@broadcom.com>,
-        Linux ARM List <linux-arm-kernel@lists.infradead.org>
-Cc:     joel.peshkin@broadcom.com, kursad.oney@broadcom.com,
-        f.fainelli@gmail.com, anand.gore@broadcom.com,
-        Broadcom Kernel List <bcm-kernel-feedback-list@broadcom.com>,
-        philippe.reynes@softathome.com, dan.beygelman@broadcom.com,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220705172613.21152-1-william.zhang@broadcom.com>
- <20220705172613.21152-2-william.zhang@broadcom.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220705172613.21152-2-william.zhang@broadcom.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <c62c1774e6a34bc64323ce526b385aa87c1ca575.1657049799.git.christophe.jaillet@wanadoo.fr>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 05/07/2022 19:26, William Zhang wrote:
-> Add BCM63138 SoC device tree description to bcmbca binding document.
+On Tue, Jul 05, 2022 at 09:36:51PM +0200, Christophe JAILLET wrote:
+> Use bitmap_zalloc()/bitmap_free() instead of hand-writing them.
 > 
-> Signed-off-by: William Zhang <william.zhang@broadcom.com>
+> It is less verbose and it improves the semantic.
+> 
+> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+
+Acked-by: Martin Habets <habetsm.xilinx@gmail.com>
+
 > ---
-
-
-Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-
-
-Best regards,
-Krzysztof
+>  drivers/net/ethernet/sfc/falcon/farch.c | 6 ++----
+>  1 file changed, 2 insertions(+), 4 deletions(-)
+> 
+> diff --git a/drivers/net/ethernet/sfc/falcon/farch.c b/drivers/net/ethernet/sfc/falcon/farch.c
+> index 2c91792cec01..c64623c2e80c 100644
+> --- a/drivers/net/ethernet/sfc/falcon/farch.c
+> +++ b/drivers/net/ethernet/sfc/falcon/farch.c
+> @@ -2711,7 +2711,7 @@ void ef4_farch_filter_table_remove(struct ef4_nic *efx)
+>  	enum ef4_farch_filter_table_id table_id;
+>  
+>  	for (table_id = 0; table_id < EF4_FARCH_FILTER_TABLE_COUNT; table_id++) {
+> -		kfree(state->table[table_id].used_bitmap);
+> +		bitmap_free(state->table[table_id].used_bitmap);
+>  		vfree(state->table[table_id].spec);
+>  	}
+>  	kfree(state);
+> @@ -2740,9 +2740,7 @@ int ef4_farch_filter_table_probe(struct ef4_nic *efx)
+>  		table = &state->table[table_id];
+>  		if (table->size == 0)
+>  			continue;
+> -		table->used_bitmap = kcalloc(BITS_TO_LONGS(table->size),
+> -					     sizeof(unsigned long),
+> -					     GFP_KERNEL);
+> +		table->used_bitmap = bitmap_zalloc(table->size, GFP_KERNEL);
+>  		if (!table->used_bitmap)
+>  			goto fail;
+>  		table->spec = vzalloc(array_size(sizeof(*table->spec),
+> -- 
+> 2.34.1

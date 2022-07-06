@@ -2,131 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C73D4569019
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 18:56:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DAB61568FC4
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 18:54:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234682AbiGFQzC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Jul 2022 12:55:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48456 "EHLO
+        id S234102AbiGFQyR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Jul 2022 12:54:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48254 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234478AbiGFQy2 (ORCPT
+        with ESMTP id S231454AbiGFQyP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Jul 2022 12:54:28 -0400
-Received: from maillog.nuvoton.com (maillog.nuvoton.com [202.39.227.15])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id F17E328725;
-        Wed,  6 Jul 2022 09:54:25 -0700 (PDT)
-Received: from NTHCCAS01.nuvoton.com (NTHCCAS01.nuvoton.com [10.1.8.28])
-        by maillog.nuvoton.com (Postfix) with ESMTP id 61C161C81199;
-        Thu,  7 Jul 2022 00:54:20 +0800 (CST)
-Received: from NTHCML01A.nuvoton.com (10.1.8.177) by NTHCCAS01.nuvoton.com
- (10.1.8.28) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.7; Thu, 7 Jul 2022
- 00:54:20 +0800
-Received: from NTHCCAS01.nuvoton.com (10.1.8.28) by NTHCML01A.nuvoton.com
- (10.1.8.177) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2176.2; Thu, 7 Jul 2022
- 00:54:19 +0800
-Received: from taln60.nuvoton.co.il (10.191.1.180) by NTHCCAS01.nuvoton.com
- (10.1.12.25) with Microsoft SMTP Server id 15.1.2375.7 via Frontend
- Transport; Thu, 7 Jul 2022 00:54:19 +0800
-Received: by taln60.nuvoton.co.il (Postfix, from userid 10070)
-        id CE9A463A57; Wed,  6 Jul 2022 19:54:17 +0300 (IDT)
-From:   Tomer Maimon <tmaimon77@gmail.com>
-To:     <avifishman70@gmail.com>, <tali.perry1@gmail.com>,
-        <joel@jms.id.au>, <venture@google.com>, <yuenn@google.com>,
-        <benjaminfair@google.com>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <mturquette@baylibre.com>,
-        <sboyd@kernel.org>, <p.zabel@pengutronix.de>,
-        <gregkh@linuxfoundation.org>, <daniel.lezcano@linaro.org>,
-        <tglx@linutronix.de>, <wim@linux-watchdog.org>,
-        <linux@roeck-us.net>, <catalin.marinas@arm.com>, <will@kernel.org>,
-        <arnd@arndb.de>, <olof@lixom.net>, <jirislaby@kernel.org>,
-        <shawnguo@kernel.org>, <bjorn.andersson@linaro.org>,
-        <geert+renesas@glider.be>, <marcel.ziswiler@toradex.com>,
-        <vkoul@kernel.org>, <biju.das.jz@bp.renesas.com>,
-        <nobuhiro1.iwamatsu@toshiba.co.jp>, <robert.hancock@calian.com>,
-        <j.neuschaefer@gmx.net>, <lkundrak@v3.sk>
-CC:     <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-clk@vger.kernel.org>, <linux-serial@vger.kernel.org>,
-        <linux-watchdog@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        Tomer Maimon <tmaimon77@gmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH v7 15/16] arm64: dts: nuvoton: Add initial NPCM845 EVB device tree
-Date:   Wed, 6 Jul 2022 19:54:05 +0300
-Message-ID: <20220706165406.117349-16-tmaimon77@gmail.com>
-X-Mailer: git-send-email 2.33.0
-In-Reply-To: <20220706165406.117349-1-tmaimon77@gmail.com>
-References: <20220706165406.117349-1-tmaimon77@gmail.com>
+        Wed, 6 Jul 2022 12:54:15 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BE58FFD;
+        Wed,  6 Jul 2022 09:54:14 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id AD99AB81E32;
+        Wed,  6 Jul 2022 16:54:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CA11CC3411C;
+        Wed,  6 Jul 2022 16:54:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1657126451;
+        bh=9r5Y9Yn5s5SAzlP+sF4PprOxv81oeve51QeGRGMHl3w=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=DP/6QUw9yVcsXxyrI9IVW/i4PPosw0gBm+2nyH29CspyjWHF7iPLLrXINnbLamU2o
+         oVyq0Znp9zaWZxjd9bSsNkqFJneCj3BYL02kUWWWkSb4klpnHljPlkC63E07HRhvxW
+         72321dZ7DBeTjIFMmZiYg1oQ6g7Gq8tEijYnAUu0cmU/SQvFfRrQjXaz17+OoT4y/y
+         mkdN4Az1sZvKkvu8hyEuEFVbkbPA/hQroF1OxuUXILgYam70XyMLQmPLRxz+6qsRQD
+         qxp9rnV78YSEoGGZpudfCCuRPvL90larrBIv7ri0hqvuUDuBHsVMskrSi5cdA9NVyr
+         5AyFTSk7xEeYg==
+Date:   Wed, 6 Jul 2022 22:24:06 +0530
+From:   Vinod Koul <vkoul@kernel.org>
+To:     Kuogee Hsieh <quic_khsieh@quicinc.com>
+Cc:     dri-devel@lists.freedesktop.org, robdclark@gmail.com,
+        sean@poorly.run, swboyd@chromium.org, dianders@chromium.org,
+        daniel@ffwll.ch, airlied@linux.ie, agross@kernel.org,
+        dmitry.baryshkov@linaro.org, bjorn.andersson@linaro.org,
+        quic_abhinavk@quicinc.com, quic_aravindh@quicinc.com,
+        quic_sbillaka@quicinc.com, freedreno@lists.freedesktop.org,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v16 0/3] eDP/DP Phy vdda realted function
+Message-ID: <YsW+LhSuOUFeuFFc@matsya>
+References: <1657038556-2231-1-git-send-email-quic_khsieh@quicinc.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Spam-Status: No, score=0.5 required=5.0 tests=BAYES_00,DKIM_ADSP_CUSTOM_MED,
-        FORGED_GMAIL_RCVD,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,NML_ADSP_CUSTOM_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1657038556-2231-1-git-send-email-quic_khsieh@quicinc.com>
+X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add initial Nuvoton NPCM845 evaluation board device tree.
+On 05-07-22, 09:29, Kuogee Hsieh wrote:
+> 0) rebase on https://git.kernel.org/pub/scm/linux/kernel/git/phy/linux-phy.git tree
+> 1) add regulator_set_load() to eDP phy
+> 2) add regulator_set_load() to DP phy
+> 3) remove vdda related function out of eDP/DP controller
 
-Signed-off-by: Tomer Maimon <tmaimon77@gmail.com>
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
----
- arch/arm64/boot/dts/nuvoton/Makefile          |  2 ++
- .../boot/dts/nuvoton/nuvoton-npcm845-evb.dts  | 30 +++++++++++++++++++
- 2 files changed, 32 insertions(+)
- create mode 100644 arch/arm64/boot/dts/nuvoton/Makefile
- create mode 100644 arch/arm64/boot/dts/nuvoton/nuvoton-npcm845-evb.dts
+Applied, thanks
 
-diff --git a/arch/arm64/boot/dts/nuvoton/Makefile b/arch/arm64/boot/dts/nuvoton/Makefile
-new file mode 100644
-index 000000000000..a99dab90472a
---- /dev/null
-+++ b/arch/arm64/boot/dts/nuvoton/Makefile
-@@ -0,0 +1,2 @@
-+# SPDX-License-Identifier: GPL-2.0
-+dtb-$(CONFIG_ARCH_NPCM) += nuvoton-npcm845-evb.dtb
-diff --git a/arch/arm64/boot/dts/nuvoton/nuvoton-npcm845-evb.dts b/arch/arm64/boot/dts/nuvoton/nuvoton-npcm845-evb.dts
-new file mode 100644
-index 000000000000..a5ab2bc0f835
---- /dev/null
-+++ b/arch/arm64/boot/dts/nuvoton/nuvoton-npcm845-evb.dts
-@@ -0,0 +1,30 @@
-+// SPDX-License-Identifier: GPL-2.0
-+// Copyright (c) 2021 Nuvoton Technology tomer.maimon@nuvoton.com
-+
-+/dts-v1/;
-+#include "nuvoton-npcm845.dtsi"
-+
-+/ {
-+	model = "Nuvoton npcm845 Development Board (Device Tree)";
-+	compatible = "nuvoton,npcm845-evb", "nuvoton,npcm845";
-+
-+	aliases {
-+		serial0 = &serial0;
-+	};
-+
-+	chosen {
-+		stdout-path = &serial0;
-+	};
-+
-+	memory {
-+		reg = <0x0 0x0 0x0 0x40000000>;
-+	};
-+};
-+
-+&serial0 {
-+	status = "okay";
-+};
-+
-+&watchdog1 {
-+	status = "okay";
-+};
 -- 
-2.33.0
-
+~Vinod

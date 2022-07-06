@@ -2,87 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 32A42569691
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 01:50:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 941E9569692
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 01:51:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234530AbiGFXuF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Jul 2022 19:50:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60916 "EHLO
+        id S234655AbiGFXvI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Jul 2022 19:51:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33260 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229580AbiGFXuC (ORCPT
+        with ESMTP id S229580AbiGFXvG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Jul 2022 19:50:02 -0400
-Received: from fllv0016.ext.ti.com (fllv0016.ext.ti.com [198.47.19.142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5DCD2CE23;
-        Wed,  6 Jul 2022 16:50:01 -0700 (PDT)
-Received: from lelv0265.itg.ti.com ([10.180.67.224])
-        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 266NnsEA082042;
-        Wed, 6 Jul 2022 18:49:54 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1657151394;
-        bh=of5JiEt1iFY14OacP2FqTG/+x7r4yvZd4DpxUx3T+bU=;
-        h=Date:From:To:CC:Subject:References:In-Reply-To;
-        b=b0Yh0irMnsY154clkkDEX/ZY7saqKOJqZUT8tlOcDapB0EW9wfBr+S/20zR9jGenl
-         BBT2GLdr9gldw0qC6rk1RuLqA+lOlepX2gt3HXnD0dK9q7oly1hMIyv3K0iYdFuI0o
-         bfmSpoqlXbisITxRYAOs0JlHI5LIS1BLm8v6IHbw=
-Received: from DFLE114.ent.ti.com (dfle114.ent.ti.com [10.64.6.35])
-        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 266NnsMS019548
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Wed, 6 Jul 2022 18:49:54 -0500
-Received: from DFLE106.ent.ti.com (10.64.6.27) by DFLE114.ent.ti.com
- (10.64.6.35) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Wed, 6
- Jul 2022 18:49:54 -0500
-Received: from fllv0039.itg.ti.com (10.64.41.19) by DFLE106.ent.ti.com
- (10.64.6.27) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
- Frontend Transport; Wed, 6 Jul 2022 18:49:54 -0500
-Received: from localhost (ileax41-snat.itg.ti.com [10.172.224.153])
-        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 266NnsUu063516;
-        Wed, 6 Jul 2022 18:49:54 -0500
-Date:   Wed, 6 Jul 2022 18:49:54 -0500
-From:   Nishanth Menon <nm@ti.com>
-To:     Julien Panis <jpanis@baylibre.com>
-CC:     <vigneshr@ti.com>, <kristo@kernel.org>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] arm64: dts: ti: k3-am62: add watchdog nodes
-Message-ID: <20220706234954.7r2qdm5ebuboby6x@deceptive>
-References: <20220630070826.11074-1-jpanis@baylibre.com>
+        Wed, 6 Jul 2022 19:51:06 -0400
+Received: from mail-il1-x136.google.com (mail-il1-x136.google.com [IPv6:2607:f8b0:4864:20::136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C174B2D1DB
+        for <linux-kernel@vger.kernel.org>; Wed,  6 Jul 2022 16:51:04 -0700 (PDT)
+Received: by mail-il1-x136.google.com with SMTP id a12so4989578ilp.13
+        for <linux-kernel@vger.kernel.org>; Wed, 06 Jul 2022 16:51:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=azufkNPmRwbrIbp+/oMcurf+3VkObt2rdfnsu3lrwHw=;
+        b=ZqIfFB11n+7z1TFBbo0A8qnT25SClBBvtAYu6FWph/AH9RDV1ekgNb2VVioY5cqZwe
+         Pn9m9LdVCAEgul551JaHJdvdosRqRh0IjnHV8lfd5a8pjD2wpixvwJmEVC9wNPx4jGp+
+         ueuR6AbKh3aEsMDaZqIT+DkMAhCPg/kYr6yGQ=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=azufkNPmRwbrIbp+/oMcurf+3VkObt2rdfnsu3lrwHw=;
+        b=jWksOycXY7hWXbSehppPRvfmqN/ibuyrza7IicwRgj+H0ysBcSbqlXCj0Anc0b7UVj
+         K/HnLVJKgLVbHglKpdc7xEPiuyXDR11byFT1pp2y5ZxAWOyyrvYrFxqlQUcKtoRUoTL9
+         k4d/9KWOP6Mq3+9sJHfUOPpU/rJ0u9yc0y0fIGeKctkB/sIRg1b+QkEl1IuhMIioQm74
+         pKp3ZDPmkgDGGFr2p4737tskuSlWikKtW7/x4jPR5QU07btuLtAfU4+vPIzEGfyf4US1
+         dPPFzR7vVIA3qPy7uVQI35KCeV8vnXDdMAMedt071r7EfYOLUq+4w7jsKduIBYknBocr
+         ry7A==
+X-Gm-Message-State: AJIora8XH52CHTHYlyWTNalpV33H9sjYwvDhJP77KZRii5e8ETjSVTBc
+        ZDv2pooOEiD7hYVXpThQIrdw3w==
+X-Google-Smtp-Source: AGRyM1vID52ax7cH4ykYMh6J3cyTIdkwg+GDzCmeyr4ZUQirTvA/u5c9gULrupkdvIDbgcYEatMWJw==
+X-Received: by 2002:a05:6e02:1947:b0:2da:9897:47f1 with SMTP id x7-20020a056e02194700b002da989747f1mr27346214ilu.136.1657151464184;
+        Wed, 06 Jul 2022 16:51:04 -0700 (PDT)
+Received: from [192.168.1.128] ([38.15.45.1])
+        by smtp.gmail.com with ESMTPSA id i83-20020a6bb856000000b0065a47e16f53sm17288954iof.37.2022.07.06.16.51.03
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 06 Jul 2022 16:51:03 -0700 (PDT)
+Subject: Re: [PATCH 5.18 000/181] 5.18.8-rc1 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org
+Cc:     stable@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com,
+        sudipm.mukherjee@gmail.com, slade@sladewatkins.com,
+        Shuah Khan <skhan@linuxfoundation.org>
+References: <20220627111944.553492442@linuxfoundation.org>
+From:   Shuah Khan <skhan@linuxfoundation.org>
+Message-ID: <daa65eb0-85ce-d83a-8279-caf1645c945d@linuxfoundation.org>
+Date:   Wed, 6 Jul 2022 17:51:02 -0600
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.8.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20220630070826.11074-1-jpanis@baylibre.com>
-User-Agent: NeoMutt/20171215
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220627111944.553492442@linuxfoundation.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 09:08-20220630, Julien Panis wrote:
-> Add nodes for watchdogs :
-> - 5 in main domain
-> - 1 in MCU domain
-> - 1 in wakeup domain
-
-True, but note: MCU wdt is typically used by M4F and wakeup WDT is
-typically used by DM (R5) firmware. Is'nt it better we mark them
-reserved (with device tree comments) to indicate the same?
-
-This can allow the kernel device tree to be used by zephyr on M4 for example..
-
+On 6/27/22 5:19 AM, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.18.8 release.
+> There are 181 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+> 
+> Responses should be made by Wed, 29 Jun 2022 11:19:09 +0000.
+> Anything received after that time might be too late.
+> 
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.18.8-rc1.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.18.y
+> and the diffstat can be found below.
+> 
+> thanks,
+> 
+> greg k-h
 > 
 
-[...]
+Compiled and booted on my test system. No dmesg regressions.
 
--- 
-Regards,
-Nishanth Menon
-Key (0xDDB5849D1736249D) / Fingerprint: F8A2 8693 54EB 8232 17A3  1A34 DDB5 849D 1736 249D
+Tested-by: Shuah Khan <skhan@linuxfoundation.org>
+
+thanks,
+-- Shuah

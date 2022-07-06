@@ -2,90 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 126E55685A3
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 12:32:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 941195685A6
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 12:33:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232347AbiGFKcK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Jul 2022 06:32:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46980 "EHLO
+        id S232329AbiGFKc6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Jul 2022 06:32:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47572 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231726AbiGFKcI (ORCPT
+        with ESMTP id S231347AbiGFKc4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Jul 2022 06:32:08 -0400
-Received: from mail-yw1-f181.google.com (mail-yw1-f181.google.com [209.85.128.181])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8B8627170;
-        Wed,  6 Jul 2022 03:32:06 -0700 (PDT)
-Received: by mail-yw1-f181.google.com with SMTP id 00721157ae682-31c9b70c382so72848487b3.6;
-        Wed, 06 Jul 2022 03:32:06 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=1m+ZKiB2sb7HrzVoAUSPctumZcgZ3EP8gbbHyC8OoYA=;
-        b=HKsw0LL9leRQTSNa1JCFWFHWXUK04tIDKw2ZZgPLwk3IOW0/af347bXtX7ZGSh7CCj
-         TgwCP2VFQjUpqb7+ysSweTHPugsJkB11SVd8Z/c+RgkXhNrpLfvB8cdsnGnM3tyBwwJ/
-         RmFDcOZcWxBFtysERqPnrO5lcnm09qByhmTNgP8yWTaiUjcM5pC2KWkvdM+r9vbOp5W/
-         R53JwsIIPK6S3FSw03yaeHwWjTqdbzbxCKQ+H5NbZy04oNhpKyskfogAb3icQc3gmUJM
-         M/F8sOhzXHEViPb3jdcjBs4vHR2kAXpVRsNwzCt7wMRzhWXn65UjbVmDm9HASyZ7KAGS
-         eU+w==
-X-Gm-Message-State: AJIora+vbYwFl4ynWyA42Hwd3NBGzZpKLQQ8CrZFazEhBBVtZCR1VDox
-        X8hWub42SspwswU31JWeP+LcAdsTNtFQi3GbM8cnVnRMKvY=
-X-Google-Smtp-Source: AGRyM1s6pLDVipu6C8/ARY5l4EQq27mpST555pN9zVhce+RtJsOYmX0/F6b+WUQU89mH/rdpTj+1954PG41P0rgiuWI=
-X-Received: by 2002:a0d:c486:0:b0:31c:3b63:91fe with SMTP id
- g128-20020a0dc486000000b0031c3b6391femr39955412ywd.7.1657103526222; Wed, 06
- Jul 2022 03:32:06 -0700 (PDT)
+        Wed, 6 Jul 2022 06:32:56 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D574D27163;
+        Wed,  6 Jul 2022 03:32:55 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 706AF61E3A;
+        Wed,  6 Jul 2022 10:32:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 17FD6C3411C;
+        Wed,  6 Jul 2022 10:32:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1657103574;
+        bh=RC0sAMRYDT1U59SwYYLhHEAvAo1xmi55rfLw6xp/hmg=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=UgfrUtZk32S41NHaKv+WfBqTPZlu2oza7bjcv+s3TEpmawoudj5uBSZZKfSBG8efZ
+         urt/MVxszctw0h5NiIiu1BmNNw+3UKQpA3PVHDfUwDRQym2H3hEPz/mpKUtFzEgLHY
+         T6hM/X1CSsJ0iKeI1FPHIuYpnW8vRWiIGBndHjqX1XZzyOzpjsScCKtUJABqNvD6U6
+         wLmZQgnxxSXhfvNIazf4WU26qZQHVsHhsC+8k8nIn1rf+eS1zgnxbyL8GCBFoMrGbQ
+         fPF3PJq2ceV6v1Pv7dBADOWvrqv6uy2WAd+gF9jd220BsReHN+RCGq840wxP0M8F7k
+         e6/A70Iyzuapg==
+Date:   Wed, 6 Jul 2022 12:32:48 +0200
+From:   Wolfram Sang <wsa@kernel.org>
+To:     Conor.Dooley@microchip.com
+Cc:     linux-i2c@vger.kernel.org, ben.dooks@codethink.co.uk,
+        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
+        Daire.McNamara@microchip.com
+Subject: Re: [PATCH v6 1/2] i2c: add support for microchip fpga i2c
+ controllers
+Message-ID: <YsVk0Gg1x7juHcZU@shikoro>
+Mail-Followup-To: Wolfram Sang <wsa@kernel.org>, Conor.Dooley@microchip.com,
+        linux-i2c@vger.kernel.org, ben.dooks@codethink.co.uk,
+        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
+        Daire.McNamara@microchip.com
+References: <20220621074238.957177-1-conor.dooley@microchip.com>
+ <YsU3eLA3PrceFS65@shikoro>
+ <ac070176-93b9-3bc4-5589-ec57d4d38af4@microchip.com>
 MIME-Version: 1.0
-References: <20220706014404.3191-1-zeming@nfschina.com>
-In-Reply-To: <20220706014404.3191-1-zeming@nfschina.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Wed, 6 Jul 2022 12:31:54 +0200
-Message-ID: <CAJZ5v0jtB6KxzQLv7AC6fzAKFj6oRfkEBS3Nbi-g0RsK4VSwyw@mail.gmail.com>
-Subject: Re: [PATCH] acpi/sleep: Add header file macro definition
-To:     Li zeming <zeming@nfschina.com>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <lenb@kernel.org>,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        kernel@nfschina.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="pqWsQi0x7XBD8P6y"
+Content-Disposition: inline
+In-Reply-To: <ac070176-93b9-3bc4-5589-ec57d4d38af4@microchip.com>
+X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jul 6, 2022 at 3:44 AM Li zeming <zeming@nfschina.com> wrote:
->
-> Add header file macro definition.
 
-Please explain why you want to make this change.
+--pqWsQi0x7XBD8P6y
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-> Signed-off-by: Li zeming <zeming@nfschina.com>
-> ---
->  drivers/acpi/sleep.h | 4 ++++
->  1 file changed, 4 insertions(+)
->
-> diff --git a/drivers/acpi/sleep.h b/drivers/acpi/sleep.h
-> index 7fe41ee489d6..adb3b5c13f90 100644
-> --- a/drivers/acpi/sleep.h
-> +++ b/drivers/acpi/sleep.h
-> @@ -1,4 +1,6 @@
->  /* SPDX-License-Identifier: GPL-2.0 */
-> +#ifndef _SLEEP_H
-> +#define _SLEEP_H
->
->  extern void acpi_enable_wakeup_devices(u8 sleep_state);
->  extern void acpi_disable_wakeup_devices(u8 sleep_state);
-> @@ -30,3 +32,5 @@ extern bool acpi_sleep_default_s3;
->  #else
->  #define acpi_sleep_default_s3  (1)
->  #endif
-> +
-> +#endif
-> --
-> 2.18.2
->
+
+> I'd prefer the latter. Being called "core" is unfortunate and I
+> did think about that. i2c-microchip-corei2c would have been my
+> first choice but I thought the double usage of i2c would've been
+> disapproved of haha
+
+:) Well, double "i2c" is not exactly pretty but since it is the name of
+that IP core...
+
+> >> +		if (idev->msg_len <=3D 0)
+> >> +			finished =3D true;
+> >=20
+> > How can it happen that len is < 0? Wouldn't that be an error case?
+
+Is it to be on the safe side?
+
+> > Have you testes SMBUS_QUICK as well?
+>=20
+> Not specifically SMBUS_QUICK, but I did test with hardware
+> that uses "zero-length" messages.
+
+Good!
+
+> Thanks for the review :)
+
+You are welcome.
+
+
+--pqWsQi0x7XBD8P6y
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmLFZMwACgkQFA3kzBSg
+KbaFgw/8D7lDj4vUyKcwMGPx6bwOENbvQni8vymREU+9j3FAApPuYtvbkg3ulzqO
+Vr31LTbwZB6zYrnafuKPofGuJa9L3D7BkoovGGq8F/029h55FNksZm7jssnQkdgF
+ianlDedgOsyaLBvsGyxhpOpbJ9sG4DiGHvrlnOzy+L9wJ/dKfPnGKaZHh5BR0ZN6
+5WvSxdxTFFkLiNrOadLO9Wb8r0tTkw2gsrr5SeR8wbKEQJZlIlSy30vnqbD7VZ4i
+TOIisHPJpjtHIlOQ+ijbGpDvIZ7ZhNm2rwH24Sze0N9wUr4V2p3eQxeG4FfPf9IR
+HfFHJ2F/ZBcPPTHfkPqHvbLQIwMBvGcJ916SX6hc+ag0hrA488dDv84Qi8YaEZlR
+ddJqEF0XYN+uKG3tt8qpO5pAMw8PTJOKCT7RM6hM4SRE3GNF2FZkTZvzQfkzG75e
+d4N5wMW+yp76cVwTHx29aH9BL46rrQXgJLRBSPcfSPqoNWHBS7sC7X582UWs7R+t
+S3TDm2eYA6Y+t5a500BhqHcgCtuA/PZK0QeMkcDT4ljRpQVo17B5QdNlwAPY/SCW
+opdR3rlRHEG077SSLP6Ns3tkm2yl6uZrg2lJJ/hNOvBpsfEEXa9FecrjZtq8E63E
+8fNxY0M7OdQ3Yvd2+FNLcLuHioEtsz/h2sJKz82nZjcRhhshFfA=
+=uow+
+-----END PGP SIGNATURE-----
+
+--pqWsQi0x7XBD8P6y--

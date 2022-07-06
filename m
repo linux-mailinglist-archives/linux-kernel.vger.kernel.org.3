@@ -2,50 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A4D13568E74
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 17:58:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D6FC7568EB2
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 18:11:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231454AbiGFP47 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Jul 2022 11:56:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54360 "EHLO
+        id S234244AbiGFQLi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Jul 2022 12:11:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38676 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230247AbiGFP46 (ORCPT
+        with ESMTP id S234174AbiGFQLg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Jul 2022 11:56:58 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D6FC2F4;
-        Wed,  6 Jul 2022 08:56:57 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id DA325B81DA8;
-        Wed,  6 Jul 2022 15:56:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2897BC3411C;
-        Wed,  6 Jul 2022 15:56:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1657123014;
-        bh=lTSwJ5wODwZqrldSHc5BFPXMnZHNUb/6g50d+0FvaWI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ynSskVbRdSidHqLkwrL6tnVYL50v5wTp3hBw1MgBHRbb0iMuE9lC3Rr+eLJYFXAxT
-         fH04Vql5k9Zn5YflQoGZnEkHeqERNgrnTVI7DPHyIIDyjGTzbl/VliT8exm0ooicSQ
-         Q/9Y/aIOR7vY+gKo9Gwfkk7Kmo0Hn4Oy1vsvySCk=
-Date:   Wed, 6 Jul 2022 17:56:51 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Abel Vesa <abel.vesa@linaro.org>
-Cc:     Saravana Kannan <saravanak@google.com>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        linux-arm-msm@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: [RFC v2] driver core: Fix repeated device_is_dependent check for
- same link
-Message-ID: <YsWww/WJH0gv+dbf@kroah.com>
-References: <20220706155347.778762-1-abel.vesa@linaro.org>
+        Wed, 6 Jul 2022 12:11:36 -0400
+X-Greylist: delayed 582 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 06 Jul 2022 09:11:34 PDT
+Received: from mx08-0057a101.pphosted.com (mx08-0057a101.pphosted.com [185.183.31.45])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B45622B0B
+        for <linux-kernel@vger.kernel.org>; Wed,  6 Jul 2022 09:11:34 -0700 (PDT)
+Received: from pps.filterd (m0214196.ppops.net [127.0.0.1])
+        by mx07-0057a101.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 2667L2HQ012353;
+        Wed, 6 Jul 2022 18:01:25 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=westermo.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-transfer-encoding :
+ content-type; s=12052020; bh=xbZt/QN8NoPfTPY59kA+cN+jOThglCveIz09DPZUCa0=;
+ b=lGYnj3rXNSBrlfP/L0x56M0ed1Vl0LGmOalHQ0SHPMWI6uRyOI1S22Cq31zCmrav23Em
+ obTqD42Sy3h64pA8+oum3//UAPdXQUj1/dz/9PZS/Sxspgx2gytds4U+WHbArydl2lHV
+ kR8vBZS3bM4spSYPeZVBv1AKAgUlEXykUs+OgT8x07CbHXW1AI20wwsWSWBJ6A7FAqkv
+ LV1OG6LgeiraVY1Y4BWt5aLI/Oo4X/bIzIGo+6aB7ny488U3UuO88iR52t1Zvhd7VFdz
+ ibnpMzfHJfWM0nOsLmGBpyKrUi4fbNb7/OfdejNYyLKUpUE1AsH6qAqXLamo6cN9nvrf tw== 
+Received: from mail.beijerelectronics.com ([195.67.87.131])
+        by mx07-0057a101.pphosted.com (PPS) with ESMTPS id 3h4ubyrwtn-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT);
+        Wed, 06 Jul 2022 18:01:24 +0200
+Received: from Orpheus.nch.westermo.com (172.29.100.2) by
+ EX01GLOBAL.beijerelectronics.com (10.101.10.25) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384_P384) id
+ 15.1.2375.17; Wed, 6 Jul 2022 18:01:23 +0200
+From:   Matthias May <matthias.may@westermo.com>
+To:     <netdev@vger.kernel.org>
+CC:     <davem@davemloft.net>, <yoshfuji@linux-ipv6.org>,
+        <dsahern@kernel.org>, <edumazet@google.com>, <kuba@kernel.org>,
+        <pabeni@redhat.com>, <linux-kernel@vger.kernel.org>,
+        Matthias May <matthias.may@westermo.com>
+Subject: [PATCH net-next v2] ip_tunnel: allow to inherit from VLAN encapsulated IP frames
+Date:   Wed, 6 Jul 2022 18:00:22 +0200
+Message-ID: <20220706160021.10710-1-matthias.may@westermo.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220706155347.778762-1-abel.vesa@linaro.org>
-X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [172.29.100.2]
+X-ClientProxiedBy: wsevst-s0023.westermo.com (192.168.130.120) To
+ EX01GLOBAL.beijerelectronics.com (10.101.10.25)
+X-Proofpoint-GUID: SswlMR5Y5zZsk8tlMIimxaubmOl0nNzO
+X-Proofpoint-ORIG-GUID: SswlMR5Y5zZsk8tlMIimxaubmOl0nNzO
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -54,72 +63,91 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jul 06, 2022 at 06:53:47PM +0300, Abel Vesa wrote:
-> In case of a cyclic dependency, if the supplier is not yet available,
-> the parent of the supplier is checked for dependency. But if there are
-> more than one suppliers with the same parent, the first check returns
-> true while the next ones skip that specific link entirely because of
-> having DL_FLAG_MANAGED and DL_FLAG_SYNC_STATE_ONLY set, which is what
-> the relaxing of the link does. But if we check for the target being
-> a consumer before the check for those flags, we can check as many
-> times as needed the same link and it will always return true, This is
-> safe to do, since the relaxing of the link will be done only once
-> because those flags will be set and it will bail early.
-> 
-> Signed-off-by: Abel Vesa <abel.vesa@linaro.org>
-> ---
->  drivers/base/core.c | 6 +++---
->  1 file changed, 3 insertions(+), 3 deletions(-)
-> 
-> diff --git a/drivers/base/core.c b/drivers/base/core.c
-> index 753e7cca0f40..2c3b860dfe80 100644
-> --- a/drivers/base/core.c
-> +++ b/drivers/base/core.c
-> @@ -297,13 +297,13 @@ int device_is_dependent(struct device *dev, void *target)
->  		return ret;
-> 
->  	list_for_each_entry(link, &dev->links.consumers, s_node) {
-> +		if (link->consumer == target)
-> +			return 1;
-> +
->  		if ((link->flags & ~DL_FLAG_INFERRED) ==
->  		    (DL_FLAG_SYNC_STATE_ONLY | DL_FLAG_MANAGED))
->  			continue;
-> 
-> -		if (link->consumer == target)
-> -			return 1;
-> -
->  		ret = device_is_dependent(link->consumer, target);
->  		if (ret)
->  			break;
-> --
-> 2.34.3
-> 
+The current code allows to inherit the TOS, TTL, DF from the payload
+when skb->protocol is ETH_P_IP or ETH_P_IPV6.
+However when the payload is VLAN encapsulated (e.g because the tunnel
+is of type GRETAP), then this inheriting does not work, because the
+visible skb->protocol is of type ETH_P_8021Q.
 
-Hi,
+Add a check on ETH_P_8021Q and subsequently check the payload protocol.
 
-This is the friendly patch-bot of Greg Kroah-Hartman.  You have sent him
-a patch that has triggered this response.  He used to manually respond
-to these common problems, but in order to save his sanity (he kept
-writing the same thing over and over, yet to different people), I was
-created.  Hopefully you will not take offence and will fix the problem
-in your patch and resubmit it so that it can be accepted into the Linux
-kernel tree.
+Signed-off-by: Matthias May <matthias.may@westermo.com>
+---
+v1 -> v2:
+ - Add support for ETH_P_8021AD as suggested by Jakub Kicinski.
+---
+ net/ipv4/ip_tunnel.c | 22 ++++++++++++++--------
+ 1 file changed, 14 insertions(+), 8 deletions(-)
 
-You are receiving this message because of the following common error(s)
-as indicated below:
+diff --git a/net/ipv4/ip_tunnel.c b/net/ipv4/ip_tunnel.c
+index 94017a8c3994..bdcc0f1e83c8 100644
+--- a/net/ipv4/ip_tunnel.c
++++ b/net/ipv4/ip_tunnel.c
+@@ -648,6 +648,13 @@ void ip_tunnel_xmit(struct sk_buff *skb, struct net_device *dev,
+ 	u8 tos, ttl;
+ 	__be32 dst;
+ 	__be16 df;
++	__be16 *payload_protocol;
++
++	if (skb->protocol == htons(ETH_P_8021Q) ||
++	    skb->protocol == htons(ETH_P_8021AD))
++		payload_protocol = (__be16 *)(skb->head + skb->network_header - 2);
++	else
++		payload_protocol = &skb->protocol;
+ 
+ 	inner_iph = (const struct iphdr *)skb_inner_network_header(skb);
+ 	connected = (tunnel->parms.iph.daddr != 0);
+@@ -670,13 +677,12 @@ void ip_tunnel_xmit(struct sk_buff *skb, struct net_device *dev,
+ 			dst = tun_info->key.u.ipv4.dst;
+ 			md = true;
+ 			connected = true;
+-		}
+-		else if (skb->protocol == htons(ETH_P_IP)) {
++		} else if (*payload_protocol == htons(ETH_P_IP)) {
+ 			rt = skb_rtable(skb);
+ 			dst = rt_nexthop(rt, inner_iph->daddr);
+ 		}
+ #if IS_ENABLED(CONFIG_IPV6)
+-		else if (skb->protocol == htons(ETH_P_IPV6)) {
++		else if (*payload_protocol == htons(ETH_P_IPV6)) {
+ 			const struct in6_addr *addr6;
+ 			struct neighbour *neigh;
+ 			bool do_tx_error_icmp;
+@@ -716,10 +722,10 @@ void ip_tunnel_xmit(struct sk_buff *skb, struct net_device *dev,
+ 	tos = tnl_params->tos;
+ 	if (tos & 0x1) {
+ 		tos &= ~0x1;
+-		if (skb->protocol == htons(ETH_P_IP)) {
++		if (*payload_protocol == htons(ETH_P_IP)) {
+ 			tos = inner_iph->tos;
+ 			connected = false;
+-		} else if (skb->protocol == htons(ETH_P_IPV6)) {
++		} else if (*payload_protocol == htons(ETH_P_IPV6)) {
+ 			tos = ipv6_get_dsfield((const struct ipv6hdr *)inner_iph);
+ 			connected = false;
+ 		}
+@@ -765,7 +771,7 @@ void ip_tunnel_xmit(struct sk_buff *skb, struct net_device *dev,
+ 	}
+ 
+ 	df = tnl_params->frag_off;
+-	if (skb->protocol == htons(ETH_P_IP) && !tunnel->ignore_df)
++	if (*payload_protocol == htons(ETH_P_IP) && !tunnel->ignore_df)
+ 		df |= (inner_iph->frag_off & htons(IP_DF));
+ 
+ 	if (tnl_update_pmtu(dev, skb, rt, df, inner_iph, 0, 0, false)) {
+@@ -786,10 +792,10 @@ void ip_tunnel_xmit(struct sk_buff *skb, struct net_device *dev,
+ 	tos = ip_tunnel_ecn_encap(tos, inner_iph, skb);
+ 	ttl = tnl_params->ttl;
+ 	if (ttl == 0) {
+-		if (skb->protocol == htons(ETH_P_IP))
++		if (*payload_protocol == htons(ETH_P_IP))
+ 			ttl = inner_iph->ttl;
+ #if IS_ENABLED(CONFIG_IPV6)
+-		else if (skb->protocol == htons(ETH_P_IPV6))
++		else if (*payload_protocol == htons(ETH_P_IPV6))
+ 			ttl = ((const struct ipv6hdr *)inner_iph)->hop_limit;
+ #endif
+ 		else
+-- 
+2.35.1
 
-- This looks like a new version of a previously submitted patch, but you
-  did not list below the --- line any changes from the previous version.
-  Please read the section entitled "The canonical patch format" in the
-  kernel file, Documentation/SubmittingPatches for what needs to be done
-  here to properly describe this.
-
-If you wish to discuss this problem further, or you have questions about
-how to resolve this issue, please feel free to respond to this email and
-Greg will reply once he has dug out from the pending patches received
-from other developers.
-
-thanks,
-
-greg k-h's patch email bot

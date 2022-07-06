@@ -2,50 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 52108568DC1
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 17:44:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D5BCD568D92
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 17:44:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234490AbiGFPhB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Jul 2022 11:37:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44402 "EHLO
+        id S234509AbiGFPhL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Jul 2022 11:37:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55178 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234141AbiGFPgG (ORCPT
+        with ESMTP id S234395AbiGFPgL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Jul 2022 11:36:06 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A7052A71B;
-        Wed,  6 Jul 2022 08:33:38 -0700 (PDT)
+        Wed, 6 Jul 2022 11:36:11 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23CE626571;
+        Wed,  6 Jul 2022 08:33:40 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id C2935CE2071;
-        Wed,  6 Jul 2022 15:33:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CD5ACC3411C;
-        Wed,  6 Jul 2022 15:33:33 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 879D1B81D8E;
+        Wed,  6 Jul 2022 15:33:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 85254C3411C;
+        Wed,  6 Jul 2022 15:33:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1657121615;
-        bh=mYgorTCKW9dcyIfBO3uoP1zk+o/ZbssEvug0p5OqzbA=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=j/PJq5YAZpDgnCey5CraDZ+oc08HiOqjShHm7ZYaZswoM2nxQkPbmt4q44LFvCy5z
-         dsBZ5tHgTQtqbXm+3DyPtrmyU0ywVUPcRHO6dqv3BmQPo+99wBu5wLhnAMNVu2YHEq
-         lmZoFBN7WRLpZkVc3icMdQQIlKJOPduRYk14z1TvFtqNQueCXCkPRDjMYyACezPq0P
-         s6FZN1QnBl+XCBhGhp/auRt9QU2cPhOG05cyXsrgekRLhrlfLB51kzDvY0eV+anLpB
-         vkEnz9aKErJvO94bsPQLEPqCoXePvMY4BUxTXNn3QshE+5n2J5m3T1qOgeRwdY1ZrL
-         SSHHzCptIxsBg==
+        s=k20201202; t=1657121618;
+        bh=hpgqN9gPyrD+s6Zv2Qf9lSxoie1Cst3YbDw+RW+CBV8=;
+        h=From:To:Cc:Subject:Date:From;
+        b=qJkUnMGK6/W6w/JcCHj5fJscqmiwFHyeByDrTFDacnZpH2+tnR2YdcAd3Vctl2BA6
+         wxCMYqHVlwb4ADxVDPbuMycPF1CAFUOjSMS8ZiuDQ8REVVhPj78YySXg73BjD5lcp7
+         4Y88x6+8aHxIH2zLq4XgFtBPYKOHqV3Bg59j31wfobviKrH60Ku1I5irNKj606S2zZ
+         Ywe3LIyFUikO4Kg90MLRUj8XP/PmN7NfQ3bPXTbqfFpjX4HhByaLAvX4ibutrUIayi
+         FoBIwd0rcOZhRkCaY38c+zAkmeTufHRy4BNqhhMOB0rPDnPwx6xz50NfAF1apP3/XD
+         lroiOKV7oqc7A==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Jianglei Nie <niejianglei2021@163.com>,
-        Russell King <rmk+kernel@armlinux.org.uk>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Sasha Levin <sashal@kernel.org>, linux@armlinux.org.uk,
-        andrew@lunn.ch, hkallweit1@gmail.com, davem@davemloft.net,
-        edumazet@google.com, kuba@kernel.org, netdev@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.4 9/9] net: sfp: fix memory leak in sfp_probe()
-Date:   Wed,  6 Jul 2022 11:33:15 -0400
-Message-Id: <20220706153316.1598554-9-sashal@kernel.org>
+Cc:     Stephan Gerhold <stephan.gerhold@kernkonzept.com>,
+        "Michael S . Tsirkin" <mst@redhat.com>,
+        Sasha Levin <sashal@kernel.org>, jasowang@redhat.com,
+        virtualization@lists.linux-foundation.org
+Subject: [PATCH AUTOSEL 4.19 1/8] virtio_mmio: Add missing PM calls to freeze/restore
+Date:   Wed,  6 Jul 2022 11:33:28 -0400
+Message-Id: <20220706153335.1598699-1-sashal@kernel.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220706153316.1598554-1-sashal@kernel.org>
-References: <20220706153316.1598554-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -60,36 +56,78 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jianglei Nie <niejianglei2021@163.com>
+From: Stephan Gerhold <stephan.gerhold@kernkonzept.com>
 
-[ Upstream commit 0a18d802d65cf662644fd1d369c86d84a5630652 ]
+[ Upstream commit ed7ac37fde33ccd84e4bd2b9363c191f925364c7 ]
 
-sfp_probe() allocates a memory chunk from sfp with sfp_alloc(). When
-devm_add_action() fails, sfp is not freed, which leads to a memory leak.
+Most virtio drivers provide freeze/restore callbacks to finish up
+device usage before suspend and to reinitialize the virtio device after
+resume. However, these callbacks are currently only called when using
+virtio_pci. virtio_mmio does not have any PM ops defined.
 
-We should use devm_add_action_or_reset() instead of devm_add_action().
+This causes problems for example after suspend to disk (hibernation),
+since the virtio devices might lose their state after the VMM is
+restarted. Calling virtio_device_freeze()/restore() ensures that
+the virtio devices are re-initialized correctly.
 
-Signed-off-by: Jianglei Nie <niejianglei2021@163.com>
-Reviewed-by: Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
-Link: https://lore.kernel.org/r/20220629075550.2152003-1-niejianglei2021@163.com
-Signed-off-by: Paolo Abeni <pabeni@redhat.com>
+Fix this by implementing the dev_pm_ops for virtio_mmio,
+similar to virtio_pci_common.
+
+Signed-off-by: Stephan Gerhold <stephan.gerhold@kernkonzept.com>
+Message-Id: <20220621110621.3638025-2-stephan.gerhold@kernkonzept.com>
+Signed-off-by: Michael S. Tsirkin <mst@redhat.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/phy/sfp.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/virtio/virtio_mmio.c | 23 +++++++++++++++++++++++
+ 1 file changed, 23 insertions(+)
 
-diff --git a/drivers/net/phy/sfp.c b/drivers/net/phy/sfp.c
-index 5657c604602e..beaa00342a13 100644
---- a/drivers/net/phy/sfp.c
-+++ b/drivers/net/phy/sfp.c
-@@ -1878,7 +1878,7 @@ static int sfp_probe(struct platform_device *pdev)
+diff --git a/drivers/virtio/virtio_mmio.c b/drivers/virtio/virtio_mmio.c
+index c69c755bf553..79474bd0c52c 100644
+--- a/drivers/virtio/virtio_mmio.c
++++ b/drivers/virtio/virtio_mmio.c
+@@ -66,6 +66,7 @@
+ #include <linux/list.h>
+ #include <linux/module.h>
+ #include <linux/platform_device.h>
++#include <linux/pm.h>
+ #include <linux/slab.h>
+ #include <linux/spinlock.h>
+ #include <linux/virtio.h>
+@@ -508,6 +509,25 @@ static const struct virtio_config_ops virtio_mmio_config_ops = {
+ 	.bus_name	= vm_bus_name,
+ };
  
- 	platform_set_drvdata(pdev, sfp);
++#ifdef CONFIG_PM_SLEEP
++static int virtio_mmio_freeze(struct device *dev)
++{
++	struct virtio_mmio_device *vm_dev = dev_get_drvdata(dev);
++
++	return virtio_device_freeze(&vm_dev->vdev);
++}
++
++static int virtio_mmio_restore(struct device *dev)
++{
++	struct virtio_mmio_device *vm_dev = dev_get_drvdata(dev);
++
++	return virtio_device_restore(&vm_dev->vdev);
++}
++
++static const struct dev_pm_ops virtio_mmio_pm_ops = {
++	SET_SYSTEM_SLEEP_PM_OPS(virtio_mmio_freeze, virtio_mmio_restore)
++};
++#endif
  
--	err = devm_add_action(sfp->dev, sfp_cleanup, sfp);
-+	err = devm_add_action_or_reset(sfp->dev, sfp_cleanup, sfp);
- 	if (err < 0)
- 		return err;
+ static void virtio_mmio_release_dev(struct device *_d)
+ {
+@@ -761,6 +781,9 @@ static struct platform_driver virtio_mmio_driver = {
+ 		.name	= "virtio-mmio",
+ 		.of_match_table	= virtio_mmio_match,
+ 		.acpi_match_table = ACPI_PTR(virtio_mmio_acpi_match),
++#ifdef CONFIG_PM_SLEEP
++		.pm	= &virtio_mmio_pm_ops,
++#endif
+ 	},
+ };
  
 -- 
 2.35.1

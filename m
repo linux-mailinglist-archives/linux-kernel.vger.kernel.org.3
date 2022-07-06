@@ -2,134 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BB54E5694A5
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 23:45:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4CF665694A7
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 23:47:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233540AbiGFVpo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Jul 2022 17:45:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34824 "EHLO
+        id S234325AbiGFVq6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Jul 2022 17:46:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35388 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230029AbiGFVpn (ORCPT
+        with ESMTP id S233573AbiGFVq4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Jul 2022 17:45:43 -0400
-Received: from mail-qt1-f182.google.com (mail-qt1-f182.google.com [209.85.160.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 473BA201B5
-        for <linux-kernel@vger.kernel.org>; Wed,  6 Jul 2022 14:45:42 -0700 (PDT)
-Received: by mail-qt1-f182.google.com with SMTP id z13so20203403qts.12
-        for <linux-kernel@vger.kernel.org>; Wed, 06 Jul 2022 14:45:42 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=PEhHuL2rf2OqYhNIoNagWMkBVp66HkNFO4TGyz8+m94=;
-        b=XiXp5q37x44ETaesOJad4rUE41xecOCYZsli2+GzX6DnQ6T/sOGJmL3Doq+Cq74GZW
-         NvMAWV8Rmpk0wwxEjwl0d/ZRMNPISODQUjMtCUt93h85C3wBIHwPF7OGWnCPtuuXV6ON
-         8WOHaPf+0ngk6BesP/a1kn3uUmRE/38+d/R2MhU2SDzNHog0+vBhUZzwKQR2Rc825ObW
-         4Zg7ppQfMA1x0IG2l92svd8yXkmL9ON/Qeu0fGNmNZq3Ds+ulvvoPytdhk8FSfVTFyuH
-         NwW7p3MyXV3DWTCXh5K7OmE7zprY+LWsFQEKG+tPT0Mrbf7hrew7oLT7t30afvwlXmIC
-         bZ4w==
-X-Gm-Message-State: AJIora/bsMST1XPz76Ni6jOAGNArmrxohiv2xKvSMZbwBYcuQ+8OK1Vc
-        F5eCMkwjOUWXMT4R4dNMU4V/usbrx3ne0Alj
-X-Google-Smtp-Source: AGRyM1uMPnJ9Vc24B3wMMDWG7kg+GWdHpxZroKVrEVfJ9u6fRMboJhYIAfmCm2JJ69Jhs+n2D/ZJYw==
-X-Received: by 2002:a05:6214:202f:b0:432:4810:1b34 with SMTP id 15-20020a056214202f00b0043248101b34mr18819070qvf.35.1657143941278;
-        Wed, 06 Jul 2022 14:45:41 -0700 (PDT)
-Received: from mail-yb1-f172.google.com (mail-yb1-f172.google.com. [209.85.219.172])
-        by smtp.gmail.com with ESMTPSA id i11-20020a05620a248b00b006af4f9b77fdsm24252039qkn.44.2022.07.06.14.45.40
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 06 Jul 2022 14:45:40 -0700 (PDT)
-Received: by mail-yb1-f172.google.com with SMTP id g4so29459529ybg.9
-        for <linux-kernel@vger.kernel.org>; Wed, 06 Jul 2022 14:45:40 -0700 (PDT)
-X-Received: by 2002:a05:6902:701:b0:66e:a06d:53d7 with SMTP id
- k1-20020a056902070100b0066ea06d53d7mr4141554ybt.604.1657143940425; Wed, 06
- Jul 2022 14:45:40 -0700 (PDT)
+        Wed, 6 Jul 2022 17:46:56 -0400
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66D6522291
+        for <linux-kernel@vger.kernel.org>; Wed,  6 Jul 2022 14:46:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1657144015; x=1688680015;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=vWGrL0p+451e0Urj9P6SW1C0mu9h/ERUe2NztInapK8=;
+  b=fv06xmWop10W3UAZmjL2uS9XurvUwo748M4pj1V6u5eWZlNK0YoylKa2
+   tGkSXvuMr19NqsaZsH4gaxleq5/gR2pJWM/c82eqSByw1CDAmiGfU2PgV
+   GD4BWIqPMgk7yf5PF794VeHesZGGd9z7jyPMcntNsDauL+y8ePvliC9Qq
+   Rf7w5IQYhERkrLbSQ0ebNOcTNogNMMCfKppYdfofiy6XaPsyc7VNCfGnf
+   JUaTDBNmwRjh/U9a3u29s6375OAumiUkgul3BXuDv8PTcQj575pZwprfF
+   D35dx+CgRQFI/z6pMJewfI4W4K3Ef9zC/5iSXbpjMqukjfJkMsZRtq0VX
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10400"; a="263661223"
+X-IronPort-AV: E=Sophos;i="5.92,251,1650956400"; 
+   d="scan'208";a="263661223"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jul 2022 14:46:55 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.92,251,1650956400"; 
+   d="scan'208";a="568248435"
+Received: from lkp-server01.sh.intel.com (HELO 68b931ab7ac1) ([10.239.97.150])
+  by orsmga006.jf.intel.com with ESMTP; 06 Jul 2022 14:46:53 -0700
+Received: from kbuild by 68b931ab7ac1 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1o9CrE-000L5h-NV;
+        Wed, 06 Jul 2022 21:46:52 +0000
+Date:   Thu, 7 Jul 2022 05:46:03 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Shengjiu Wang <shengjiu.wang@nxp.com>
+Cc:     kbuild-all@lists.01.org,
+        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
+        linux-kernel@vger.kernel.org, Mark Brown <broonie@kernel.org>,
+        Viorel Suman <viorel.suman@nxp.com>
+Subject: [ammarfaizi2-block:broonie/sound/for-next 322/353]
+ sound/soc/fsl/fsl_utils.c:125:31: sparse: sparse: Using plain integer as
+ NULL pointer
+Message-ID: <202207070521.JjRAUeas-lkp@intel.com>
 MIME-Version: 1.0
-References: <20220706164606.68528-1-f.fainelli@gmail.com> <CAMuHMdVJG0cA4v+pfyeO8PpzFxtrggNeRrfEB8QFBiEZjYPt3A@mail.gmail.com>
- <dba1161c-4cee-0dfd-df62-385396e62679@gmail.com>
-In-Reply-To: <dba1161c-4cee-0dfd-df62-385396e62679@gmail.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Wed, 6 Jul 2022 23:45:29 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdWovMGhUuMp5To96V-OD5nBQ7CNQPnx_ZxtCQFhbUQuYA@mail.gmail.com>
-Message-ID: <CAMuHMdWovMGhUuMp5To96V-OD5nBQ7CNQPnx_ZxtCQFhbUQuYA@mail.gmail.com>
-Subject: Re: [PATCH v2] ARM: Fix MAX_DMA_ADDRESS overflow
-To:     Florian Fainelli <f.fainelli@gmail.com>
-Cc:     Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Grygorii Strashko <grygorii.strashko@ti.com>,
-        open list <linux-kernel@vger.kernel.org>,
-        Santosh Shilimkar <ssantosh@kernel.org>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,
+        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Florian,
+Hi Shengjiu,
 
-On Wed, Jul 6, 2022 at 10:27 PM Florian Fainelli <f.fainelli@gmail.com> wrote:
-> On 7/6/22 12:44, Geert Uytterhoeven wrote:
-> > On Wed, Jul 6, 2022 at 6:46 PM Florian Fainelli <f.fainelli@gmail.com> wrote:
-> >> Commit 26f09e9b3a06 ("mm/memblock: add memblock memory allocation apis")
-> >> added a check to determine whether arm_dma_zone_size is exceeding the
-> >> amount of kernel virtual address space available between the upper 4GB
-> >> virtual address limit and PAGE_OFFSET in order to provide a suitable
-> >> definition of MAX_DMA_ADDRESS that should fit within the 32-bit virtual
-> >> address space. The quantity used for comparison was off by a missing
-> >> trailing 0, leading to MAX_DMA_ADDRESS to be overflowing a 32-bit
-> >> quantity.
-> >>
-> >> This was caught with the bcm2711 platforms which defines a dma_zone_size
-> >> of 1GB, and using a PAGE_OFFSET of 0xc000_0000 (CONFIG_VMSPLIT_3G) with
-> >> CONFIG_DEBUG_VIRTUAL enabled would lead to MAX_DMA_ADDRESS being
-> >> 0x1_0000_0000 which overflows the unsigned long type used throughout
-> >> __pa() and __virt_addr_valid(). Because the virtual address passed to
-> >> __virt_addr_valid() would now be 0, the function would loudly warn, thus
-> >> making the platform unable to boot properly.
-> >>
-> >> Fixes: 26f09e9b3a06 ("mm/memblock: add memblock memory allocation apis")
-> >> Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
-> >> ---
-> >> Changes in v2:
-> >>
-> >> - simplify the patch and drop the first patch that attempted to fix an
-> >>    off by one in the calculation.
-> >
-> > Thanks for the update!
-> >
-> >> --- a/arch/arm/include/asm/dma.h
-> >> +++ b/arch/arm/include/asm/dma.h
-> >> @@ -10,7 +10,7 @@
-> >>   #else
-> >>   #define MAX_DMA_ADDRESS        ({ \
-> >>          extern phys_addr_t arm_dma_zone_size; \
-> >> -       arm_dma_zone_size && arm_dma_zone_size < (0x10000000 - PAGE_OFFSET) ? \
-> >                                                    ^^^^^^^^^^
-> > 0x10000000ULL, as the constant doesn't fit in 32-bit.
-> > However, both gcc (9.4.0) and sparse don't seem to complain about
-> > the missing suffix (anymore?).
->
-> Thanks, I will the ULL suffix in v3.
+First bad commit (maybe != root cause):
 
-I just remembered the suffix is not needed (but doesn't hurt), because
-hexadecimal constants automatically have the right unsigned type.
+tree:   https://github.com/ammarfaizi2/linux-block broonie/sound/for-next
+head:   3f4322bb413adb7f9d8b5e9005eb1b9bc85f9312
+commit: 93f54100fbdedc22e8d88d037a8a3e32101724eb [322/353] ASoC: fsl_micfil: Add support for PLL switch at runtime
+config: powerpc-randconfig-s031-20220706 (https://download.01.org/0day-ci/archive/20220707/202207070521.JjRAUeas-lkp@intel.com/config)
+compiler: powerpc-linux-gcc (GCC) 11.3.0
+reproduce:
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # apt-get install sparse
+        # sparse version: v0.6.4-39-gce1a6720-dirty
+        # https://github.com/ammarfaizi2/linux-block/commit/93f54100fbdedc22e8d88d037a8a3e32101724eb
+        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
+        git fetch --no-tags ammarfaizi2-block broonie/sound/for-next
+        git checkout 93f54100fbdedc22e8d88d037a8a3e32101724eb
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=powerpc SHELL=/bin/bash sound/soc/fsl/
 
-Gr{oetje,eeting}s,
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-                        Geert
 
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+sparse warnings: (new ones prefixed by >>)
+>> sound/soc/fsl/fsl_utils.c:125:31: sparse: sparse: Using plain integer as NULL pointer
+   sound/soc/fsl/fsl_utils.c:125:42: sparse: sparse: Using plain integer as NULL pointer
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+vim +125 sound/soc/fsl/fsl_utils.c
+
+7bad8125549cda Shengjiu Wang 2022-07-01  109  
+7bad8125549cda Shengjiu Wang 2022-07-01  110  /**
+7bad8125549cda Shengjiu Wang 2022-07-01  111   * fsl_asoc_reparent_pll_clocks - set clock parent if necessary
+7bad8125549cda Shengjiu Wang 2022-07-01  112   *
+7bad8125549cda Shengjiu Wang 2022-07-01  113   * @dev: device pointer
+7bad8125549cda Shengjiu Wang 2022-07-01  114   * @clk: root clock pointer
+7bad8125549cda Shengjiu Wang 2022-07-01  115   * @pll8k_clk: PLL clock pointer for 8kHz
+7bad8125549cda Shengjiu Wang 2022-07-01  116   * @pll11k_clk: PLL clock pointer for 11kHz
+7bad8125549cda Shengjiu Wang 2022-07-01  117   * @ratio: target requency for root clock
+7bad8125549cda Shengjiu Wang 2022-07-01  118   *
+7bad8125549cda Shengjiu Wang 2022-07-01  119   * This function set root clock parent according to the target ratio
+7bad8125549cda Shengjiu Wang 2022-07-01  120   */
+7bad8125549cda Shengjiu Wang 2022-07-01  121  void fsl_asoc_reparent_pll_clocks(struct device *dev, struct clk *clk,
+7bad8125549cda Shengjiu Wang 2022-07-01  122  				  struct clk *pll8k_clk,
+7bad8125549cda Shengjiu Wang 2022-07-01  123  				  struct clk *pll11k_clk, u64 ratio)
+7bad8125549cda Shengjiu Wang 2022-07-01  124  {
+7bad8125549cda Shengjiu Wang 2022-07-01 @125  	struct clk *p, *pll = 0, *npll = 0;
+7bad8125549cda Shengjiu Wang 2022-07-01  126  	bool reparent = false;
+7bad8125549cda Shengjiu Wang 2022-07-01  127  	int ret = 0;
+7bad8125549cda Shengjiu Wang 2022-07-01  128  
+7bad8125549cda Shengjiu Wang 2022-07-01  129  	if (!clk || !pll8k_clk || !pll11k_clk)
+7bad8125549cda Shengjiu Wang 2022-07-01  130  		return;
+7bad8125549cda Shengjiu Wang 2022-07-01  131  
+7bad8125549cda Shengjiu Wang 2022-07-01  132  	p = clk;
+7bad8125549cda Shengjiu Wang 2022-07-01  133  	while (p && pll8k_clk && pll11k_clk) {
+7bad8125549cda Shengjiu Wang 2022-07-01  134  		struct clk *pp = clk_get_parent(p);
+7bad8125549cda Shengjiu Wang 2022-07-01  135  
+7bad8125549cda Shengjiu Wang 2022-07-01  136  		if (clk_is_match(pp, pll8k_clk) ||
+7bad8125549cda Shengjiu Wang 2022-07-01  137  		    clk_is_match(pp, pll11k_clk)) {
+7bad8125549cda Shengjiu Wang 2022-07-01  138  			pll = pp;
+7bad8125549cda Shengjiu Wang 2022-07-01  139  			break;
+7bad8125549cda Shengjiu Wang 2022-07-01  140  		}
+7bad8125549cda Shengjiu Wang 2022-07-01  141  		p = pp;
+7bad8125549cda Shengjiu Wang 2022-07-01  142  	}
+7bad8125549cda Shengjiu Wang 2022-07-01  143  
+7bad8125549cda Shengjiu Wang 2022-07-01  144  	npll = (do_div(ratio, 8000) ? pll11k_clk : pll8k_clk);
+7bad8125549cda Shengjiu Wang 2022-07-01  145  	reparent = (pll && !clk_is_match(pll, npll));
+7bad8125549cda Shengjiu Wang 2022-07-01  146  
+7bad8125549cda Shengjiu Wang 2022-07-01  147  	if (reparent) {
+7bad8125549cda Shengjiu Wang 2022-07-01  148  		ret = clk_set_parent(p, npll);
+7bad8125549cda Shengjiu Wang 2022-07-01  149  		if (ret < 0)
+7bad8125549cda Shengjiu Wang 2022-07-01  150  			dev_warn(dev, "failed to set parent %s: %d\n", __clk_get_name(npll), ret);
+7bad8125549cda Shengjiu Wang 2022-07-01  151  	}
+7bad8125549cda Shengjiu Wang 2022-07-01  152  }
+7bad8125549cda Shengjiu Wang 2022-07-01  153  EXPORT_SYMBOL(fsl_asoc_reparent_pll_clocks);
+7bad8125549cda Shengjiu Wang 2022-07-01  154  
+
+:::::: The code at line 125 was first introduced by commit
+:::::: 7bad8125549cda14d9ccf97d7d76f7ef6ac9d206 ASoC: fsl_utils: Add function to handle PLL clock source
+
+:::::: TO: Shengjiu Wang <shengjiu.wang@nxp.com>
+:::::: CC: Mark Brown <broonie@kernel.org>
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

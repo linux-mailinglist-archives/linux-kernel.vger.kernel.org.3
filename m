@@ -2,59 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 32F25568C87
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 17:21:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 57DAB568C89
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 17:22:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233306AbiGFPVL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Jul 2022 11:21:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34730 "EHLO
+        id S233414AbiGFPVr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Jul 2022 11:21:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35140 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233097AbiGFPVK (ORCPT
+        with ESMTP id S232441AbiGFPVp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Jul 2022 11:21:10 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 502DDE0B6;
-        Wed,  6 Jul 2022 08:21:08 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E39A961FBA;
-        Wed,  6 Jul 2022 15:21:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5DADEC3411C;
-        Wed,  6 Jul 2022 15:21:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1657120867;
-        bh=z71O/ITN488i5KX40dxQ6dsaUURgmwPe6NqAizltJYA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=TU+H4NBV8ymbWcslJ98nVx2m9fcqFmzgvnQPaCNbbJuUiVRVK9l8hPaW/PB3R8pHW
-         xKY9kSRKrlR7rbGUOIciwg9P4c0NniB+uAZGyvH3r3m8OyqHqkqZ1D9vCHh1NoWmgy
-         9ptuo4f0xkjQprCBuYJZgRcSA3uwQ+LNBG5llHjSckmd1ossz9ZoTkPloOxRgfOG9b
-         zYI0mgyH5q8vLbqL5hEAutF26KvAt6idTnLiDTTmK0fDJxHczdOfW5j6wUDqn9kqXX
-         lv1OPRoVpaZ04n0fBxywjdBUD0qVE0Kwuzx8gpQAI1RElxRTM4UQocqyP9Mp6ew05P
-         5E2SfyVc/gWzQ==
-Date:   Wed, 6 Jul 2022 16:21:01 +0100
-From:   Will Deacon <will@kernel.org>
-To:     Sebastian Ene <sebastianene@google.com>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Dragan Cvetic <dragan.cvetic@xilinx.com>,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        maz@kernel.org, vdonnefort@google.com,
-        Guenter Roeck <linux@roeck-us.net>
-Subject: Re: [PATCH v9 2/2] misc: Add a mechanism to detect stalls on guest
- vCPUs
-Message-ID: <20220706152101.GA3003@willie-the-truck>
-References: <20220701144013.1085272-1-sebastianene@google.com>
- <20220701144013.1085272-3-sebastianene@google.com>
+        Wed, 6 Jul 2022 11:21:45 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 13E46E0B6
+        for <linux-kernel@vger.kernel.org>; Wed,  6 Jul 2022 08:21:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1657120903;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=HcS3uejzMuAs7Fc/x+INtudJrA9wFk21WgYmtKtnXTU=;
+        b=ZbbWau7HQcLj6hFROEfdBn62kGaedhPVCG5lC0524vbYuOTReh6MyBIungG/0yJ55eLV6V
+        hEVxosfAk6DmWZS+Xl9DBsJ5pwC9wOG5CMHrBFJ+SsNcarVUpmEfI9JVKSi7v/kVVr1w7/
+        8NHOtZdiSA3ItnLqFd3byjlNiihfM/M=
+Received: from mail-ua1-f70.google.com (mail-ua1-f70.google.com
+ [209.85.222.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-537-But2eeVyMcaAoUyjnHtdog-1; Wed, 06 Jul 2022 11:21:42 -0400
+X-MC-Unique: But2eeVyMcaAoUyjnHtdog-1
+Received: by mail-ua1-f70.google.com with SMTP id g5-20020ab060c5000000b00378f363f03bso4805538uam.15
+        for <linux-kernel@vger.kernel.org>; Wed, 06 Jul 2022 08:21:42 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=HcS3uejzMuAs7Fc/x+INtudJrA9wFk21WgYmtKtnXTU=;
+        b=cdhn3Xji6+kgyTkxoGzh0yZBpGcpBRRykuRox+OJk0V46jmNGjqW8UzwQe48f5ZQxi
+         JKI/eBvxXuks0ysd7YOsD42UlN1e8HgmUYBkTlZRESecauhg5wZBYVjdeFZMhXSrh24B
+         zwKhnJ1oEB70ANFhUliCOQqKorQFzwGAzNdrgDwuYveYwIaVOzBOeHGBzpubocJpuEzD
+         XbbzzhhsEHh/5GMo/9B2I3tJovBHhgFzuZRvfRR0F3t8MjMBPeJkAnSbg0UsVW0UwyhD
+         B6n7R5AnXZBtnk6QAUoitHjmMzMNxJhSJljZfaJ3HcmxYjJvGXomsoVyUrmqegGccaTw
+         OgBQ==
+X-Gm-Message-State: AJIora99ypMKr+7UjpwODj82S++D+wP4oXBi0F0SqRcVN7ZqSGIjY8NW
+        sj3BezwhfDsE9Z30WZD1uWZaZPt7OeIaemDzXFptQaObcgKaklj54qqIbbucxFScx+BQR+oSJkp
+        4ey+J8/zGs/Kjhr9xV+SKvGmvNg4vjU4p2++sNRSW
+X-Received: by 2002:a67:4347:0:b0:356:37f7:6fa3 with SMTP id q68-20020a674347000000b0035637f76fa3mr24958239vsa.40.1657120902146;
+        Wed, 06 Jul 2022 08:21:42 -0700 (PDT)
+X-Google-Smtp-Source: AGRyM1s2+Xffu3s3AfptA3eZWELbrOWi/CqyYzom+y2gsOdu+DMe8X2B0ID45kOQWpCgGgbCy69x8Nld6DIcmyOzSyw=
+X-Received: by 2002:a67:4347:0:b0:356:37f7:6fa3 with SMTP id
+ q68-20020a674347000000b0035637f76fa3mr24958223vsa.40.1657120901924; Wed, 06
+ Jul 2022 08:21:41 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220701144013.1085272-3-sebastianene@google.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+References: <20220531081412.22db88cc@kernel.org> <1654011382-2453-1-git-send-email-chen45464546@163.com>
+ <20220531084704.480133fa@kernel.org> <CAKgT0UfQsbAzsJ1e__irHY2xBRevpB9m=FBYDis3C1fMua+Zag@mail.gmail.com>
+ <3498989.c69f.1811f41186e.Coremail.chen45464546@163.com> <CAKgT0UdoGJ_dG9vZ3aqQhTagCGf_J3H9A8yJbO5mWCgrt6vd4Q@mail.gmail.com>
+In-Reply-To: <CAKgT0UdoGJ_dG9vZ3aqQhTagCGf_J3H9A8yJbO5mWCgrt6vd4Q@mail.gmail.com>
+From:   Maurizio Lombardi <mlombard@redhat.com>
+Date:   Wed, 6 Jul 2022 17:21:31 +0200
+Message-ID: <CAFL455=bAEXeyUPjDPZm-hK-K8aKJSw7wRQ0CCYoKWO8VMJUqw@mail.gmail.com>
+Subject: Re: Re: [PATCH v2] mm: page_frag: Warn_on when frag_alloc size is
+ bigger than PAGE_SIZE
+To:     Alexander Duyck <alexander.duyck@gmail.com>
+Cc:     =?UTF-8?B?5oSa5qCR?= <chen45464546@163.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        linux-mm <linux-mm@kvack.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Netdev <netdev@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -62,366 +81,65 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Sebastian,
+st 1. 6. 2022 v 17:05 odes=C3=ADlatel Alexander Duyck
+<alexander.duyck@gmail.com> napsal:
+> > diff --git a/mm/page_alloc.c b/mm/page_alloc.c
+> > index e6f211d..ac60a97 100644
+> > --- a/mm/page_alloc.c
+> > +++ b/mm/page_alloc.c
+> > @@ -5580,6 +5580,7 @@ void *page_frag_alloc_align(struct page_frag_cach=
+e *nc,
+> >                 /* reset page count bias and offset to start of new fra=
+g */
+> >                 nc->pagecnt_bias =3D PAGE_FRAG_CACHE_MAX_SIZE + 1;
+> >                 offset =3D size - fragsz;
+> > +               BUG_ON(offset < 0);
+> >         }
+> >
+> >         nc->pagecnt_bias--;
+> >
+>
+>
+> I think I could be onboard with a patch like this. The test shouldn't
+> add more than 1 instruction since it is essentially just a jump if
+> signed test which will be performed after the size - fragsz check.
 
-Thanks for working on this and apologies it's taken so long for me to
-review your changes.
+FYI, I hit this problem a few days ago with the nfp network driver, it uses
+page_frag_alloc() with a frag size larger than PAGE_SIZE when MTU is
+set to 9000,
+this may result in memory corruptions when the system runs out of memory.
 
-On Fri, Jul 01, 2022 at 02:40:14PM +0000, Sebastian Ene wrote:
-> This driver creates per-cpu hrtimers which are required to do the
-> periodic 'pet' operation. On a conventional watchdog-core driver, the
-> userspace is responsible for delivering the 'pet' events by writing to
-> the particular /dev/watchdogN node. In this case we require a strong
-> thread affinity to be able to account for lost time on a per vCPU.
-> 
-> This part of the driver is the 'frontend' which is reponsible for
-> delivering the periodic 'pet' events, configuring the virtual peripheral
-> and listening for cpu hotplug events. The other part of the driver is
-> an emulated MMIO device which is part of the KVM virtual machine
-> monitor and this part accounts for lost time by looking at the
-> /proc/{}/task/{}/stat entries.
-> 
-> Signed-off-by: Sebastian Ene <sebastianene@google.com>
-> ---
->  drivers/misc/Kconfig               |  13 ++
->  drivers/misc/Makefile              |   1 +
->  drivers/misc/vcpu_stall_detector.c | 212 +++++++++++++++++++++++++++++
->  3 files changed, 226 insertions(+)
->  create mode 100644 drivers/misc/vcpu_stall_detector.c
-> 
-> diff --git a/drivers/misc/Kconfig b/drivers/misc/Kconfig
-> index 41d2bb0ae23a..83afb41a85cf 100644
-> --- a/drivers/misc/Kconfig
-> +++ b/drivers/misc/Kconfig
-> @@ -483,6 +483,19 @@ config OPEN_DICE
->  
->  	  If unsure, say N.
->  
-> +config VCPU_STALL_DETECTOR
-> +	tristate "VCPU stall detector"
+The solution I was working on was something like the following, this
+makes the allocation
+fail if fragsz is greater than the cache size.
 
-I'd probably stick "Guest" in here somewhere, as this driver won't be
-useful on the host. So something like "Guest vCPU stall detector".
+diff --git a/mm/page_alloc.c b/mm/page_alloc.c
+index 4dc0d333279f..c6b40b85c55d 100644
+--- a/mm/page_alloc.c
++++ b/mm/page_alloc.c
+@@ -5544,12 +5544,17 @@ void *page_frag_alloc_align(struct page_frag_cache =
+*nc,
+                /* if size can vary use size else just use PAGE_SIZE */
+                size =3D nc->size;
+ #endif
+-               /* OK, page count is 0, we can safely set it */
+-               set_page_count(page, PAGE_FRAG_CACHE_MAX_SIZE + 1);
+-
+                /* reset page count bias and offset to start of new frag */
+                nc->pagecnt_bias =3D PAGE_FRAG_CACHE_MAX_SIZE + 1;
+                offset =3D size - fragsz;
++               if (unlikely(offset < 0)) {
++                       free_the_page(page, compound_order(page));
++                       nc->va =3D NULL;
++                       return NULL;
++               }
++
++               /* OK, page count is 0, we can safely set it */
++               set_page_count(page, PAGE_FRAG_CACHE_MAX_SIZE + 1);
+        }
 
-> +	select LOCKUP_DETECTOR
-> +	depends on OF
-> +	help
-> +	  Detect CPU locks on a kvm virtual machine. This driver relies on
-> +	  the hrtimers which are CPU-binded to do the 'pet' operation. When a
-> +	  vCPU has to do a 'pet', it exits the guest through MMIO write and
-> +	  the backend driver takes into account the lost ticks for this
-> +	  particular CPU.
-> +	  To compile this driver as a module, choose M here: the
-> +	  module will be called vcpu_stall_detector.
+        nc->pagecnt_bias--;
 
-I suggest rewording this along the lines of:
 
-  When this driver is bound inside a KVM guest, it will periodically
-  "pet" an MMIO stall detector device from each vCPU and allow the host
-  to detect vCPU stalls.
+Maurizio
 
-  To compile this driver as a module, choose M here: the module will
-  be called vcpu_stall_detector.
-
-  If you do not intend to run this kernel as a guest, say N.
-
-but up to you.
-
->  source "drivers/misc/c2port/Kconfig"
->  source "drivers/misc/eeprom/Kconfig"
->  source "drivers/misc/cb710/Kconfig"
-> diff --git a/drivers/misc/Makefile b/drivers/misc/Makefile
-> index 70e800e9127f..2be8542616dd 100644
-> --- a/drivers/misc/Makefile
-> +++ b/drivers/misc/Makefile
-> @@ -60,3 +60,4 @@ obj-$(CONFIG_XILINX_SDFEC)	+= xilinx_sdfec.o
->  obj-$(CONFIG_HISI_HIKEY_USB)	+= hisi_hikey_usb.o
->  obj-$(CONFIG_HI6421V600_IRQ)	+= hi6421v600-irq.o
->  obj-$(CONFIG_OPEN_DICE)		+= open-dice.o
-> +obj-$(CONFIG_VCPU_STALL_DETECTOR)	+= vcpu_stall_detector.o
-> \ No newline at end of file
-> diff --git a/drivers/misc/vcpu_stall_detector.c b/drivers/misc/vcpu_stall_detector.c
-> new file mode 100644
-> index 000000000000..039ac54564c1
-> --- /dev/null
-> +++ b/drivers/misc/vcpu_stall_detector.c
-> @@ -0,0 +1,212 @@
-> +// SPDX-License-Identifier: GPL-2.0
-
-This should probably be "GPL-2.0-only" for the avoidance of doubt.
-
-> +//
-> +// VCPU stall detector.
-> +//  Copyright (C) Google, 2022
-> +
-> +#include <linux/cpu.h>
-> +#include <linux/init.h>
-> +#include <linux/io.h>
-> +#include <linux/kernel.h>
-> +
-> +#include <linux/device.h>
-> +#include <linux/interrupt.h>
-> +#include <linux/module.h>
-> +#include <linux/nmi.h>
-> +#include <linux/of.h>
-> +#include <linux/of_device.h>
-> +#include <linux/param.h>
-> +#include <linux/percpu.h>
-> +#include <linux/platform_device.h>
-> +#include <linux/slab.h>
-> +
-> +#define REG_STATUS		(0x00)
-> +#define REG_LOAD_CNT		(0x04)
-> +#define REG_CURRENT_CNT		(0x08)
-> +#define REG_CLOCK_FREQ_HZ	(0x0C)
-> +#define REG_LEN			(0x10)
-> +
-> +#define DEFAULT_CLOCK_HZ	(10)
-> +#define DEFAULT_TIMEOT_SEC	(8)
-
-TIMEOUT instead of TIMEOT?
-
-Generally, I'd probably also prefix these definitions with VCPU_STALL_
-or something to avoid the potential for conflicting with the headers.
-
-> +struct vm_stall_detect_s {
-> +	void __iomem *membase;
-> +	u32 clock_freq;
-> +	u32 expiration_sec;
-> +	u32 ping_timeout_ms;
-> +	struct hrtimer per_cpu_hrtimer;
-> +	struct platform_device *dev;
-> +};
-> +
-> +#define vcpu_stall_detect_reg_write(stall_detect, reg, value)	\
-> +	iowrite32((value), (stall_detect)->membase + (reg))
-
-You can use writel_relaxed() here as you don't require ordering guarantees
-against DMA.
-
-> +#define vcpu_stall_detect_reg_read(stall_detect, reg)		\
-> +	io32read((stall_detect)->membase + (reg))
-
-io32read() doesn't exist, but you also don't use this macro so just remove
-it :)
-
-> +
-> +static struct vm_stall_detect_s __percpu *vm_stall_detect;
-> +
-> +static enum hrtimer_restart
-> +vcpu_stall_detect_timer_fn(struct hrtimer *hrtimer)
-> +{
-> +	struct vm_stall_detect_s *cpu_stall_detect;
-> +	u32 ticks;
-> +
-> +	cpu_stall_detect = container_of(hrtimer, struct vm_stall_detect_s,
-> +					per_cpu_hrtimer);
-> +	ticks = cpu_stall_detect->clock_freq * cpu_stall_detect->expiration_sec;
-> +	vcpu_stall_detect_reg_write(cpu_stall_detect, REG_LOAD_CNT, ticks);
-> +	hrtimer_forward_now(hrtimer,
-> +			    ms_to_ktime(cpu_stall_detect->ping_timeout_ms));
-> +
-> +	return HRTIMER_RESTART;
-> +}
-> +
-> +static void vcpu_stall_detect_start(void *arg)
-> +{
-> +	u32 ticks;
-> +	struct vm_stall_detect_s *cpu_stall_detect = arg;
-> +	struct hrtimer *hrtimer = &cpu_stall_detect->per_cpu_hrtimer;
-> +
-> +	vcpu_stall_detect_reg_write(cpu_stall_detect, REG_CLOCK_FREQ_HZ,
-> +				    cpu_stall_detect->clock_freq);
-> +
-> +	/* Compute the number of ticks required for the stall detector counter
-> +	 * register based on the internal clock frequency and the timeout
-> +	 * value given from the device tree.
-> +	 */
-> +	ticks = cpu_stall_detect->clock_freq *
-> +		cpu_stall_detect->expiration_sec;
-> +	vcpu_stall_detect_reg_write(cpu_stall_detect, REG_LOAD_CNT, ticks);
-> +
-> +	/* Enable the internal clock and start the stall detector */
-> +	vcpu_stall_detect_reg_write(cpu_stall_detect, REG_STATUS, 1);
-> +
-> +	hrtimer_init(hrtimer, CLOCK_MONOTONIC, HRTIMER_MODE_REL);
-> +	hrtimer->function = vcpu_stall_detect_timer_fn;
-> +	hrtimer_start(hrtimer, ms_to_ktime(cpu_stall_detect->ping_timeout_ms),
-> +		      HRTIMER_MODE_REL_PINNED);
-> +}
-> +
-> +static void vcpu_stall_detect_stop(void *arg)
-> +{
-> +	struct vm_stall_detect_s *cpu_stall_detect = arg;
-> +	struct hrtimer *hrtimer = &cpu_stall_detect->per_cpu_hrtimer;
-> +
-> +	hrtimer_cancel(hrtimer);
-> +
-> +	/* Disable the stall detector */
-> +	vcpu_stall_detect_reg_write(cpu_stall_detect, REG_STATUS, 0);
-> +}
-> +
-> +static int start_stall_detector_on_cpu(unsigned int cpu)
-> +{
-> +	vcpu_stall_detect_start(this_cpu_ptr(vm_stall_detect));
-> +	return 0;
-> +}
-> +
-> +static int stop_stall_detector_on_cpu(unsigned int cpu)
-> +{
-> +	vcpu_stall_detect_stop(this_cpu_ptr(vm_stall_detect));
-> +	return 0;
-> +}
-> +
-> +static int vcpu_stall_detect_probe(struct platform_device *dev)
-> +{
-> +	int cpu, ret, err;
-> +	void __iomem *membase;
-> +	struct resource *r;
-> +	u32 stall_detect_clock, stall_detect_timeout_sec = 0;
-> +
-> +	r = platform_get_resource(dev, IORESOURCE_MEM, 0);
-> +	if (r == NULL)
-> +		return -ENODEV;
-> +
-> +	vm_stall_detect = alloc_percpu(typeof(struct vm_stall_detect_s));
-> +	if (!vm_stall_detect)
-> +		return -ENOMEM;
-> +
-> +	membase = ioremap(r->start, resource_size(r));
-> +	if (!membase) {
-> +		ret = -ENOMEM;
-> +		goto err_withmem;
-> +	}
-
-Can you use devm_platform_get_and_ioremap_resource() to avoid calling
-both platform_get_resource() and ioremap() explicitly? I think the devm_
-handling there also means you don't need to worry about the iounmap(),
-which seems to be missing here anyway.
-
-> +
-> +	if (of_property_read_u32(dev->dev.of_node, "clock-frequency",
-> +				 &stall_detect_clock))
-> +		stall_detect_clock = DEFAULT_CLOCK_HZ;
-> +
-> +	if (of_property_read_u32(dev->dev.of_node, "timeout-sec",
-> +				 &stall_detect_timeout_sec))
-> +		stall_detect_timeout_sec = DEFAULT_TIMEOT_SEC;
-> +
-> +	for_each_cpu_and(cpu, cpu_online_mask, &watchdog_cpumask) {
-
-What prevents CPUs from coming up and down during this loop?
-
-I also don't think we should be using 'watchdog_cpumask' here -- that's
-part of the watchdog core; instead we should either take the mask in the
-DT description or rely on the device exposing an interface for every CPU
-in the system.
-
-> +		struct vm_stall_detect_s *cpu_stall_detect;
-> +
-> +		cpu_stall_detect = per_cpu_ptr(vm_stall_detect, cpu);
-> +		cpu_stall_detect->membase = membase + cpu * REG_LEN;
-> +		cpu_stall_detect->clock_freq = stall_detect_clock;
-> +		cpu_stall_detect->expiration_sec = stall_detect_timeout_sec;
-> +
-> +		/* Pet the stall detector at half of its expiration timeout
-> +		 * to prevent spurios resets.
-
-typo: spurious
-
-> +		 */
-> +		cpu_stall_detect->ping_timeout_ms = stall_detect_timeout_sec *
-> +			MSEC_PER_SEC / 2;
-
-All of these fields are the same for each core apart from the membase,
-which a CPU can compute locally using its smp_processor_id() so I don't
-think you need to include these in the per-cpu structure. It would be
-simpler if you tracked these invariants in a separate structure (either
-a global static structure or indirected by a per-cpu pointer).
-
-Then the only thing left for the per-cpu structure would be the hrtimer.
-
-> +		smp_call_function_single(cpu, vcpu_stall_detect_start,
-> +					 cpu_stall_detect, true);
-> +	}
-> +
-> +	err = cpuhp_setup_state_nocalls(CPUHP_AP_ONLINE_DYN,
-> +					"virt/vcpu_stall_detector:online",
-> +					start_stall_detector_on_cpu,
-> +					stop_stall_detector_on_cpu);
-
-If you drop the "_nocalls" variant then I think you can avoid the explicit
-previous call to smp_call_function_single() entirely and just rely on the
-notifiers to do the right thing. That also solves the hotplug race I
-mentioned.
-
-> +	if (err < 0) {
-> +		dev_err(&dev->dev, "failed to install cpu hotplug");
-> +		ret = err;
-> +		goto err_withmem;
-> +	}
-> +
-> +	return 0;
-> +
-> +err_withmem:
-> +	free_percpu(vm_stall_detect);
-
-Looks like there's a devm_alloc_percpu() which might make this a bit
-simpler.
-
-> +	return ret;
-> +}
-> +
-> +static int vcpu_stall_detect_remove(struct platform_device *dev)
-> +{
-> +	int cpu;
-> +
-> +	for_each_cpu_and(cpu, cpu_online_mask, &watchdog_cpumask) {
-> +		struct vm_stall_detect_s *cpu_stall_detect;
-> +
-> +		cpu_stall_detect = per_cpu_ptr(vm_stall_detect, cpu);
-> +		smp_call_function_single(cpu, vcpu_stall_detect_stop,
-> +					 cpu_stall_detect, true);
-> +	}
-
-I don't think you need to cross-call here, and it looks racy again with
-hotplug; you should be able to do something like:
-
-  1. Unregister the hotplug notifier (looks like you're missing this?)
-  2. Call hrtimer_cancel() for each percpu timer
-  3. Disable the watchdog for each CPU
-
-> +	free_percpu(vm_stall_detect);
-> +	vm_stall_detect = NULL;
-> +	return 0;
-> +}
-> +
-> +static const struct of_device_id vcpu_stall_detect_of_match[] = {
-> +	{ .compatible = "qemu,vcpu-stall-detector", },
-
-I'm not sure why we're mentioning qemu here; something as boring as "virt"
-(like you use for the cpuhp notifier) or "dummy" might be better, but given
-that Rob is happy with the binding then I won't complain further. We can
-always add extra strings later if we need to.
-
-> +	{}
-> +};
-> +
-> +MODULE_DEVICE_TABLE(of, vcpu_stall_detect_of_match);
-> +
-> +static struct platform_driver vcpu_stall_detect_driver = {
-> +	.probe  = vcpu_stall_detect_probe,
-> +	.remove = vcpu_stall_detect_remove,
-> +	.driver = {
-> +		.name           = KBUILD_MODNAME,
-> +		.of_match_table = vcpu_stall_detect_of_match,
-> +	},
-> +};
-> +
-> +module_platform_driver(vcpu_stall_detect_driver);
-> +
-> +MODULE_LICENSE("GPL");
-
-This needs to be "GPL v2".
-
-Will

@@ -2,142 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6BF59567C7D
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 05:15:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AC429567C82
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 05:21:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230021AbiGFDPy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Jul 2022 23:15:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34962 "EHLO
+        id S229771AbiGFDVd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Jul 2022 23:21:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37240 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229535AbiGFDPx (ORCPT
+        with ESMTP id S229535AbiGFDVb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Jul 2022 23:15:53 -0400
-Received: from mail-lj1-x234.google.com (mail-lj1-x234.google.com [IPv6:2a00:1450:4864:20::234])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7916B1CB04
-        for <linux-kernel@vger.kernel.org>; Tue,  5 Jul 2022 20:15:52 -0700 (PDT)
-Received: by mail-lj1-x234.google.com with SMTP id r9so16807245ljp.9
-        for <linux-kernel@vger.kernel.org>; Tue, 05 Jul 2022 20:15:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=igel-co-jp.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=3G8AJUPNdeXHxdK11v2ens9rp8pWF9KEJuCg9Xy8WOI=;
-        b=UQXvkK3e0+BUuLrhVL9zEaoMNJgJ/1uW7iD9TZYFbvle2tITMyV1culntFFAk7Hmkj
-         cVGlCapiIK2i8juSYgtsF6Y0zITaiL8K7z5Wx+vcJrHM1CKwkJEykqkLKYf73Zgrz76H
-         /BIVVNK2V8zb5vw3K/fXUwYgahiowXZh0b1V6xLPStvKZJkYmsz6rk75F3PrY8eO8vyo
-         G1cambYG1XfxOtZAvPQzRrJ9Tv3HyI1YZtjXDZG8kbyd95XI4/fIUDZ564ffjD5Xy/sX
-         uwCg33tg7iSNl+BX1u6Zv+pJ2P+/FVk+tPJE4xmJlJ8KNeSH35syZHhFXGTHhwjoOfBU
-         ZBjg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=3G8AJUPNdeXHxdK11v2ens9rp8pWF9KEJuCg9Xy8WOI=;
-        b=EC9fE6PUyhk0RH0+4nE425NY0PEgNCNsoSRyp+C/ElpHzRgxarm/A6TWamknJYrU49
-         ES8sHqQt6BUaX7UTHRWknbPEnEKj6wpmS+2oJXhatMrWzJk5+SJEh0Ox77QMVzL8uyYC
-         4bYx8+VrKEAbbZVjqgjHcyf6A6zkUEmSH/2jNxE2ACORMfh0krvOdHaMf7iVPlYZghBX
-         GNkyKGDW3rsHUFtJbmpWjmVn6mGd7ex62ezZQrqccUeNjvA+v3eNYIkTmUkIokfF0Bfr
-         3r5dk+S/lmggXiJKukGnDJXQvU76UA8Fqgqmsxrr+lQ+LunQa2UqRhZMZ7ZrpEcAl4d1
-         kp2g==
-X-Gm-Message-State: AJIora+PkWh28tH+IaZBy0YOnLM53VoiH3+sN8ViTaaHGvElnJZ2mMaa
-        ywTQu5xz0fZCFyqyUYcZc3nb9p2uMd589kMEMBTe4Lrl6jI=
-X-Google-Smtp-Source: AGRyM1vAX5WpM+PWUidEjVteiohH2A9OnZY9W6tH18+Y6jl+xCfnaMAWQ+tE55YbvX2n4CNqwjWtuxBWykJfU5KsFtM=
-X-Received: by 2002:a2e:bb88:0:b0:25a:6ec7:a1a0 with SMTP id
- y8-20020a2ebb88000000b0025a6ec7a1a0mr22324641lje.360.1657077350779; Tue, 05
- Jul 2022 20:15:50 -0700 (PDT)
+        Tue, 5 Jul 2022 23:21:31 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 264901658E;
+        Tue,  5 Jul 2022 20:21:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=U90vDWhmtLUBjb7uR4WRLKqovMSNNsXOIU8h7uSvzmI=; b=O9ay8Sm1HAiGOn+laSqNQ9UT9I
+        qjvjJX34w8wZjox8wlNh/CeF4TXKKy7kerRsOZGMMhDbvIjl2NeMVSyXnQuOCSu9QYWEPwieQnfcY
+        NKn7BmjFe881o29UvYRJBp4s1F2I8K6cnsvKAC8LwbmhpI7r8iL2Wr/1QkjBP9Ixer1B4QpXY8K9E
+        u8JTeRPFLuekwEWD2lRmWVE2nTdibJQr6tO1kPMWgOtqRN1bsLYaWR0TZDiR3pv2gDOS3AIs5OFn8
+        cKhZ3WbKhylEqTuOWZD85CVkeXBC77TbMHkq8CiE05Ur9YQG8tx4YfF7twXLQHJI8/0ZtAEBVrlOt
+        Yq94NsLA==;
+Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1o8vbE-0019a9-4Y; Wed, 06 Jul 2022 03:21:12 +0000
+Date:   Wed, 6 Jul 2022 04:21:12 +0100
+From:   Matthew Wilcox <willy@infradead.org>
+To:     Liu Shixin <liushixin2@huawei.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Jan Kara <jack@suse.cz>,
+        William Kucharski <william.kucharski@oracle.com>,
+        Christoph Hellwig <hch@lst.de>, linux-kernel@vger.kernel.org,
+        stable@vger.kernel.org
+Subject: Re: [PATCH 5.15] mm/filemap: fix UAF in find_lock_entries
+Message-ID: <YsT/qAPruIimH3+R@casper.infradead.org>
+References: <20220706032434.579610-1-liushixin2@huawei.com>
 MIME-Version: 1.0
-References: <CANXvt5qjx6gXhBZD3ndBPCxx++i2oxd5X7=MRgUGrXUj4kRgfw@mail.gmail.com>
- <20220706030812.GA109866@bhelgaas>
-In-Reply-To: <20220706030812.GA109866@bhelgaas>
-From:   Shunsuke Mie <mie@igel.co.jp>
-Date:   Wed, 6 Jul 2022 12:15:38 +0900
-Message-ID: <CANXvt5rn3NdV63c6-22UqxBpxCNeSdog6Sr+SiZjt7K5pkKbLw@mail.gmail.com>
-Subject: Re: [PATCH] PCI: endpoint: Don't stop EP controller by EP function
-To:     Bjorn Helgaas <helgaas@kernel.org>
-Cc:     Kishon Vijay Abraham I <kishon@ti.com>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        =?UTF-8?Q?Krzysztof_Wilczy=C5=84ski?= <kw@linux.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Hou Zhiqiang <Zhiqiang.Hou@nxp.com>,
-        Li Chen <lchen@ambarella.com>, linux-pci@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220706032434.579610-1-liushixin2@huawei.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-2022=E5=B9=B47=E6=9C=886=E6=97=A5(=E6=B0=B4) 12:08 Bjorn Helgaas <helgaas@k=
-ernel.org>:
->
-> On Wed, Jul 06, 2022 at 11:37:29AM +0900, Shunsuke Mie wrote:
-> > 2022=E5=B9=B47=E6=9C=886=E6=97=A5(=E6=B0=B4) 7:40 Bjorn Helgaas <helgaa=
-s@kernel.org>:
-> > > On Wed, Jun 22, 2022 at 01:09:24PM +0900, Shunsuke Mie wrote:
-> > > > For multi-function endpoint device, an ep function shouldn't stop E=
-P
-> > > > controller. Nomally the controller is stopped via configfs.
-> > >
-> > > Can you please clarify this for me?
-> > >
-> > > An endpoint function by itself wouldn't stop an endpoint controller.
-> > > I assume that some *operation* on an endpoint function currently stop=
-s
-> > > the endpoint controller, but that operation should not stop the
-> > > controller?
-> > >
-> > > I guess the operation is an "unbind" that detaches an EPF device from
-> > > an EPC device?
-> >
-> > It is likely that after all of the endpoint functions are unbound, the
-> > controller can be stopped safely, but I'm not sure if it is desired beh=
-avior
-> > for endpoint framework.
->
-> I'm not asking about the patch itself.  I'm asking about the commit
-> log because "an EP function shouldn't stop EP controller" doesn't
-> quite make sense in English.
-I'm sorry.
+On Wed, Jul 06, 2022 at 11:24:34AM +0800, Liu Shixin wrote:
+> Release refcount after xas_set to fix UAF which may cause panic like this:
 
-> I suspect it should say something like "unbinding one endpoint
-> function of a multi-function device from the endpoint controller
-> should not stop the controller."
-Yes, it is correct and represents the commit clearly.
+I think we can do better.  How about this?
 
-> But I don't know enough about EPF/EPC binding to know whether that
-> makes sense either.
->
-> > Kishon, could you please comment?
-> >
-> > > > Fixes: 349e7a85b25f ("PCI: endpoint: functions: Add an EP function =
-to test PCI")
-> > > > Signed-off-by: Shunsuke Mie <mie@igel.co.jp>
-> > > > ---
-> > > >  drivers/pci/endpoint/functions/pci-epf-test.c | 1 -
-> > > >  1 file changed, 1 deletion(-)
-> > > >
-> > > > diff --git a/drivers/pci/endpoint/functions/pci-epf-test.c b/driver=
-s/pci/endpoint/functions/pci-epf-test.c
-> > > > index 5b833f00e980..a5ed779b0a51 100644
-> > > > --- a/drivers/pci/endpoint/functions/pci-epf-test.c
-> > > > +++ b/drivers/pci/endpoint/functions/pci-epf-test.c
-> > > > @@ -627,7 +627,6 @@ static void pci_epf_test_unbind(struct pci_epf =
-*epf)
-> > > >
-> > > >       cancel_delayed_work(&epf_test->cmd_handler);
-> > > >       pci_epf_test_clean_dma_chan(epf_test);
-> > > > -     pci_epc_stop(epc);
-> > > >       for (bar =3D 0; bar < PCI_STD_NUM_BARS; bar++) {
-> > > >               epf_bar =3D &epf->bar[bar];
-> > > >
-> > > > --
-> > > > 2.17.1
-> > > >
-> >
-> > Thanks,
-> > Shunsuke
+diff --git a/mm/filemap.c b/mm/filemap.c
+index 00e391e75880..11ae38cc4fd3 100644
+--- a/mm/filemap.c
++++ b/mm/filemap.c
+@@ -2090,7 +2090,9 @@ unsigned find_lock_entries(struct address_space *mapping, pgoff_t start,
+ 
+ 	rcu_read_lock();
+ 	while ((page = find_get_entry(&xas, end, XA_PRESENT))) {
++		unsigned long next_idx = xas.xa_index + 1;
+ 		if (!xa_is_value(page)) {
++			next_idx = page->index + thp_nr_pages(page);
+ 			if (page->index < start)
+ 				goto put;
+ 			if (page->index + thp_nr_pages(page) - 1 > end)
+@@ -2111,14 +2113,11 @@ unsigned find_lock_entries(struct address_space *mapping, pgoff_t start,
+ put:
+ 		put_page(page);
+ next:
+-		if (!xa_is_value(page) && PageTransHuge(page)) {
+-			unsigned int nr_pages = thp_nr_pages(page);
+-
+-			/* Final THP may cross MAX_LFS_FILESIZE on 32-bit */
+-			xas_set(&xas, page->index + nr_pages);
+-			if (xas.xa_index < nr_pages)
+-				break;
+-		}
++		/* Final THP may cross MAX_LFS_FILESIZE on 32-bit */
++		if (next_idx < xas.xa_index)
++			break;
++		if (next_idx != xas.xa_index + 1)
++			xas_set(&xas, next_idx);
+ 	}
+ 	rcu_read_unlock();
+ 

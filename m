@@ -2,67 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 36A9D567FB2
+	by mail.lfdr.de (Postfix) with ESMTP id C6724567FB4
 	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 09:20:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231488AbiGFHUQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Jul 2022 03:20:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41698 "EHLO
+        id S231549AbiGFHUX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Jul 2022 03:20:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41802 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229566AbiGFHUO (ORCPT
+        with ESMTP id S231521AbiGFHUT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Jul 2022 03:20:14 -0400
-Received: from mail-io1-xd30.google.com (mail-io1-xd30.google.com [IPv6:2607:f8b0:4864:20::d30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E73112ADD
-        for <linux-kernel@vger.kernel.org>; Wed,  6 Jul 2022 00:20:13 -0700 (PDT)
-Received: by mail-io1-xd30.google.com with SMTP id p128so13266407iof.1
-        for <linux-kernel@vger.kernel.org>; Wed, 06 Jul 2022 00:20:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=loTq7rEvgKrqQnwoGVcHxXoIsT4GorDsH+IvPT1Ky3k=;
-        b=D28CKGi6mwprrzxUSa4VMGwMIJRO0z5T4j/d1LFCs3m2aIZGkQ6T5XZ8E7ecOeAxYX
-         yqiJtNJXVxILtzzqq1OH7+HZ5ZqEpl5XvAtTUKERQ18gcUer4KCbR90dm6HFSW8M7yWw
-         JqG0U2b4Qzk2XrdKrXzGEyXvIN5d4fd/utdiNpxvqZ9KPTj+OGXYuzWxDtlDC5OLak0U
-         vJLHjorcrOpA+CFuVNQjGAzj/H98VsHEti8WcavXzCbrlXVMa7958qSjXEX3L7YqFoXy
-         kQrzhlf79+awGjPwVv0dLVoLZGRG8KJwHMgMLBkj9Juqrbh31sre9nWsMxOwP4ivmHdR
-         ivLw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=loTq7rEvgKrqQnwoGVcHxXoIsT4GorDsH+IvPT1Ky3k=;
-        b=RPk3DpK5kQxcHWzCo3DCvjIFSqaeuunbBfVTvfaf/IZjo2v4yQLxV1qwHYsl5QgVyV
-         hMnXm6AGm9N8fDKW2jM04Rkg+PLkx9enxhePWOm7P495t+iyQGvC2qmzKp7z8RfyMvx3
-         hQ+/mo4t78O2d/78FSzDrboQEsQj7UhZT295152js6O5SuX4RXSIS6MEBFkDumYcPwDH
-         LyKbDdlQYfYvoYrKmhb1ALdJ35jEZy3ixoT9IhO67EmBm+Q0PtEWynXabYF9259zDjgi
-         nT0AAliVNsDRD9DH0MtpmrMtrU64DpZBiM1VqkjMvYo1nP0+IQ8FJ46pLTGtGM5qFXIA
-         lI/A==
-X-Gm-Message-State: AJIora8NSP/qRRp+pDtuKgILgRQBA4IjpbpF6H9NGPLPFH6kIA8mLhK6
-        EKH7PdSEel9y9TKCiAGr2wK8hyztyHtt3qDVdjpmRLinuHD0Mg==
-X-Google-Smtp-Source: AGRyM1u10IN+LBw1SfVxu9FfDpV16jurdbtW8izFjPpUX5UC511ao223aouhdpZVBlSHvpWhRTafkgAstU6WSbbOGv0=
-X-Received: by 2002:a5d:981a:0:b0:672:4ea1:5f55 with SMTP id
- a26-20020a5d981a000000b006724ea15f55mr20367382iol.186.1657092012859; Wed, 06
- Jul 2022 00:20:12 -0700 (PDT)
+        Wed, 6 Jul 2022 03:20:19 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8CC4222BC;
+        Wed,  6 Jul 2022 00:20:18 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 67419B81B37;
+        Wed,  6 Jul 2022 07:20:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 1CE6BC341CB;
+        Wed,  6 Jul 2022 07:20:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1657092016;
+        bh=T4cV8xgwyibbhFJKPEWOheCwq4TI+nkD/YMstmO3nN8=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=Hn6rJQO0wJgHqLQVdOaS8q+olo+NWBaxma5kKehhmOSnkkqR/yURap4Jp7+ev+O+T
+         7DVu1yXlcP5weIcwCqRiIEpmBjPnX5UWSy/WW+iBGxv+dEl+0wkJDYldhHsnKVsPLL
+         jCkyE9NyjvP/eymd8g0Q4oyFCugFnPJJgHyJmF7k54nQy1FST3ZsaoqLoMCoJatKvo
+         szd2Z5MHIfGnOGFkrnofvi83lUffLXld/dRguDGmETUEBGsTo79tYljFQXypXKs3hL
+         RNnxx6Jag5HQym1ehgyNPrgm8di+pVDLg9lhwCm1R7k71CeoYffzWQjtepGDCeNqZS
+         J+WEiyP5fDEJg==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id EE4C2E45BDE;
+        Wed,  6 Jul 2022 07:20:15 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-References: <20220705115606.709817198@linuxfoundation.org>
-In-Reply-To: <20220705115606.709817198@linuxfoundation.org>
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Wed, 6 Jul 2022 12:50:01 +0530
-Message-ID: <CA+G9fYsuCHiVCzENy3+kVmA5rRvq5k7DtY3S7fgn84eR2ej0Lw@mail.gmail.com>
-Subject: Re: [PATCH 4.19 00/33] 4.19.251-rc1 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        slade@sladewatkins.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH V1 00/12] *** Exact Match Table ***
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <165709201597.20840.6578848345104586479.git-patchwork-notify@kernel.org>
+Date:   Wed, 06 Jul 2022 07:20:15 +0000
+References: <20220706034442.2308670-1-rkannoth@marvell.com>
+In-Reply-To: <20220706034442.2308670-1-rkannoth@marvell.com>
+To:     Ratheesh Kannoth <rkannoth@marvell.com>
+Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        sgoutham@marvell.com, davem@davemloft.net, edumazet@google.com,
+        kuba@kernel.org, pabeni@redhat.com
+X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -71,114 +58,50 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 5 Jul 2022 at 17:33, Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
->
-> This is the start of the stable review cycle for the 4.19.251 release.
-> There are 33 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
->
-> Responses should be made by Thu, 07 Jul 2022 11:55:56 +0000.
-> Anything received after that time might be too late.
->
-> The whole patch series can be found in one patch at:
->         https://www.kernel.org/pub/linux/kernel/v4.x/stable-review/patch-=
-4.19.251-rc1.gz
-> or in the git tree and branch at:
->         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
--rc.git linux-4.19.y
-> and the diffstat can be found below.
->
-> thanks,
->
-> greg k-h
+Hello:
 
-Results from Linaro=E2=80=99s test farm.
-No regressions on arm64, arm, x86_64, and i386.
+This series was applied to netdev/net-next.git (master)
+by David S. Miller <davem@davemloft.net>:
 
-Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
+On Wed, 6 Jul 2022 09:14:30 +0530 you wrote:
+> *** Exact match table and Field hash support for CN10KB silicon ***
+> 
+> ChangeLog
+> ---------
+>   1) V0 to V1
+> 	a) Removed change IDs from all patches.
+> 
+> [...]
 
-## Build
-* kernel: 4.19.251-rc1
-* git: https://gitlab.com/Linaro/lkft/mirrors/stable/linux-stable-rc
-* git branch: linux-4.19.y
-* git commit: b9f174a70c6f609b6132c3a65883b16d552984b8
-* git describe: v4.19.250-34-gb9f174a70c6f
-* test details:
-https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-4.19.y/build/v4.19=
-.250-34-gb9f174a70c6f
+Here is the summary with links:
+  - [V1,01/12] octeontx2-af: Use hashed field in MCAM key
+    https://git.kernel.org/netdev/net-next/c/a95ab93550d3
+  - [V1,02/12] octeontx2-af: Exact match support
+    https://git.kernel.org/netdev/net-next/c/017691914c11
+  - [V1,03/12] octeontx2-af: Exact match scan from kex profile
+    https://git.kernel.org/netdev/net-next/c/60ec39311750
+  - [V1,04/12] octeontx2-af: devlink configuration support
+    https://git.kernel.org/netdev/net-next/c/ffd92c57469d
+  - [V1,05/12] octeontx2-af: FLR handler for exact match table.
+    https://git.kernel.org/netdev/net-next/c/799f02ef2ce3
+  - [V1,06/12] octeontx2-af: Drop rules for NPC MCAM
+    https://git.kernel.org/netdev/net-next/c/c6238bc0614d
+  - [V1,07/12] octeontx2-af: Debugsfs support for exact match.
+    https://git.kernel.org/netdev/net-next/c/01b9228b20ad
+  - [V1,08/12] octeontx2: Modify mbox request and response structures
+    https://git.kernel.org/netdev/net-next/c/68793a8bbfcd
+  - [V1,09/12] octeontx2-af: Wrapper functions for MAC addr add/del/update/reset
+    https://git.kernel.org/netdev/net-next/c/87e91f92cdcd
+  - [V1,10/12] octeontx2-af: Invoke exact match functions if supported
+    https://git.kernel.org/netdev/net-next/c/84926eb57dbf
+  - [V1,11/12] octeontx2-pf: Add support for exact match table.
+    https://git.kernel.org/netdev/net-next/c/e56468377fa0
+  - [V1,12/12] octeontx2-af: Enable Exact match flag in kex profile
+    https://git.kernel.org/netdev/net-next/c/7189d28e7e2d
 
-## Test Regressions (compared to v4.19.250)
-No test regressions found.
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
-## Metric Regressions (compared to v4.19.250)
-No metric regressions found.
 
-## Test Fixes (compared to v4.19.250)
-No test fixes found.
-
-## Metric Fixes (compared to v4.19.250)
-No metric fixes found.
-
-## Test result summary
-total: 110465, pass: 97549, fail: 274, skip: 11512, xfail: 1130
-
-## Build Summary
-* arc: 10 total, 10 passed, 0 failed
-* arm: 291 total, 286 passed, 5 failed
-* arm64: 58 total, 57 passed, 1 failed
-* i386: 26 total, 23 passed, 3 failed
-* mips: 38 total, 38 passed, 0 failed
-* parisc: 12 total, 12 passed, 0 failed
-* powerpc: 55 total, 54 passed, 1 failed
-* s390: 12 total, 12 passed, 0 failed
-* sh: 24 total, 24 passed, 0 failed
-* sparc: 12 total, 12 passed, 0 failed
-* x86_64: 52 total, 51 passed, 1 failed
-
-## Test suites summary
-* fwts
-* igt-gpu-tools
-* kunit
-* kvm-unit-tests
-* libhugetlbfs
-* log-parser-boot
-* log-parser-test
-* ltp-cap_bounds
-* ltp-commands
-* ltp-containers
-* ltp-controllers
-* ltp-cpuhotplug
-* ltp-crypto
-* ltp-cve
-* ltp-dio
-* ltp-fcntl-locktests
-* ltp-filecaps
-* ltp-fs
-* ltp-fs_bind
-* ltp-fs_perms_simple
-* ltp-fsx
-* ltp-hugetlb
-* ltp-io
-* ltp-ipc
-* ltp-math
-* ltp-mm
-* ltp-nptl
-* ltp-open-posix-tests
-* ltp-pty
-* ltp-sched
-* ltp-securebits
-* ltp-smoke
-* ltp-syscalls
-* ltp-tracing
-* network-basic-tests
-* packetdrill
-* rcutorture
-* ssuite
-* v4l2-compliance
-* vdso
-
---
-Linaro LKFT
-https://lkft.linaro.org

@@ -2,883 +2,205 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2454D56908C
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 19:22:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 11FF8569088
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 19:21:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233812AbiGFRVz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Jul 2022 13:21:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42746 "EHLO
+        id S233721AbiGFRVV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Jul 2022 13:21:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42300 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233797AbiGFRVw (ORCPT
+        with ESMTP id S232385AbiGFRVS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Jul 2022 13:21:52 -0400
-Received: from smtp.uniroma2.it (smtp.uniroma2.it [160.80.6.16])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9619F1D326;
-        Wed,  6 Jul 2022 10:21:48 -0700 (PDT)
-Received: from smtpauth-2019-1.uniroma2.it (smtpauth-2019-1.uniroma2.it [160.80.5.46])
-        by smtp-2015.uniroma2.it (8.14.4/8.14.4/Debian-8) with ESMTP id 266HL4la013760;
-        Wed, 6 Jul 2022 19:21:09 +0200
-Received: from lubuntu-18.04 (unknown [160.80.103.126])
-        by smtpauth-2019-1.uniroma2.it (Postfix) with ESMTPSA id B3B0D121E39;
-        Wed,  6 Jul 2022 19:20:59 +0200 (CEST)
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=uniroma2.it;
-        s=ed201904; t=1657128060; h=from:from:sender:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=BPUr/pHnRLef3BxAuKnYjY1dX/9D2UGmjfNkchQv3b0=;
-        b=dWU8ax7GmWwFT/hVmikqqCzlH+l/zg130wQLANc6WmopTjyUlR34haYGE1AFwqrVbiTbam
-        037DZAx7K1LFNDCg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=uniroma2.it; s=rsa201904;
-        t=1657128060; h=from:from:sender:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=BPUr/pHnRLef3BxAuKnYjY1dX/9D2UGmjfNkchQv3b0=;
-        b=YeFHH8aJgOZdBUA+iouCkufnwKsEgDbJoFi0EQatxdb0E/CzlC9VeAXRGZwOLjjxvrQ2rh
-        tuS1ZMnPcnidAK2QhiyxHIqJqlUQvgPCa85bZNTg4Uad1bKC8hOM9/w6R1kB22HUeQzXs4
-        SPju1juG4a+LsuxOOvzYwnPXx6GcfCJIk9tiM3Lql8bvShD0+nrfOHLBLc4/xsaXMUu4jL
-        RSzf963D6Yk9W60Nu+UWtM24p1S/93Hg7Tj6lEPxbw3dtY9Wgn8ehJ4VMFwXVNf1Xsb9DB
-        07QtM36bhFMAOXHvWFBG82GG0YfyA62YgGVyIAPlr5eZUtZvPcfkz7NeBy7BeQ==
-Date:   Wed, 6 Jul 2022 19:20:59 +0200
-From:   Andrea Mayer <andrea.mayer@uniroma2.it>
-To:     Paolo Abeni <pabeni@redhat.com>
-Cc:     "David S. Miller" <davem@davemloft.net>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        David Ahern <dsahern@kernel.org>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Anton Makarov <anton.makarov11235@gmail.com>,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kselftest@vger.kernel.org,
-        Stefano Salsano <stefano.salsano@uniroma2.it>,
-        Paolo Lungaroni <paolo.lungaroni@uniroma2.it>,
-        Ahmed Abdelsalam <ahabdels.dev@gmail.com>,
-        Andrea Mayer <andrea.mayer@uniroma2.it>
-Subject: Re: [net-next v4 3/4] selftests: seg6: add selftest for SRv6
- H.Encaps.Red behavior
-Message-Id: <20220706192059.ef7a2d1daed663549b5a5b4f@uniroma2.it>
-In-Reply-To: <78dbedad777bc10ad2310a1efd0c65bd69e1dc2b.camel@redhat.com>
-References: <20220701150152.24103-1-andrea.mayer@uniroma2.it>
-        <20220701150152.24103-4-andrea.mayer@uniroma2.it>
-        <78dbedad777bc10ad2310a1efd0c65bd69e1dc2b.camel@redhat.com>
-X-Mailer: Sylpheed 3.5.1 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Virus-Scanned: clamav-milter 0.100.0 at smtp-2015
-X-Virus-Status: Clean
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        Wed, 6 Jul 2022 13:21:18 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 341241D326
+        for <linux-kernel@vger.kernel.org>; Wed,  6 Jul 2022 10:21:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1657128077; x=1688664077;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=LhXrWWvYnUqkX7TzLt9/skPJ6SEYWxFlcnGeYF3kcN0=;
+  b=f3wNavEz04UmvF6pfonC3Geer+ZOkrNbEPeaPMl97H8nBt7/aF4hIQBc
+   6o4ep/wbPwvmBvtkSh2wo5VHOhlxJH1WiHmAyT+dpWm3miNDqXuAb9Qkc
+   K7toDdPLxAnR7lpslsXxh44hAskMBRKDeVSHjFtWWRyMZN7YlTnm5m5wT
+   +Ei9ooV8qlIvDxyXHbOXKNkn3W3f1tsK2NcuPcfUuTE6XmQNOnhrwYmuJ
+   cP6X9Tvx/eJ7eCz4CLJBBJNOB8Qx9JxnhBVnohLjHGkpn73bVOGRLyNAn
+   JLW3wmWXDMyDnsygdav4IX4IkVjIFj71u16gyCN7oBPAN0baoT383obDc
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10400"; a="347802033"
+X-IronPort-AV: E=Sophos;i="5.92,250,1650956400"; 
+   d="scan'208";a="347802033"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jul 2022 10:21:16 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.92,250,1650956400"; 
+   d="scan'208";a="735651861"
+Received: from lkp-server01.sh.intel.com (HELO 68b931ab7ac1) ([10.239.97.150])
+  by fmsmga001.fm.intel.com with ESMTP; 06 Jul 2022 10:21:15 -0700
+Received: from kbuild by 68b931ab7ac1 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1o98iA-000Kpx-Er;
+        Wed, 06 Jul 2022 17:21:14 +0000
+Date:   Thu, 7 Jul 2022 01:21:05 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Rob Clark <robdclark@gmail.com>
+Subject: drivers/gpu/drm/msm/dsi/phy/dsi_phy.c:350
+ msm_dsi_dphy_timing_calc_v3() warn: inconsistent indenting
+Message-ID: <202207070115.5JsGmGry-lkp@intel.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Paolo,
-thanks for your time, please see below.
+Hi Christian,
 
-On Tue, 05 Jul 2022 09:48:53 +0200
-Paolo Abeni <pabeni@redhat.com> wrote:
+First bad commit (maybe != root cause):
 
-> On Fri, 2022-07-01 at 17:01 +0200, Andrea Mayer wrote:
-> > This selftest is designed for testing the H.Encaps.Red behavior. It
-> > instantiates a virtual network composed of several nodes: hosts and SRv6
-> > routers. Each node is realized using a network namespace that is
-> > properly interconnected to others through veth pairs.
-> > The test considers SRv6 routers implementing L3 VPNs leveraged by hosts
-> > for communicating with each other. Such routers make use of the SRv6
-> > H.Encaps.Red behavior for applying SRv6 policies to L3 traffic coming
-> > from hosts.
-> > 
-> > The correct execution of the behavior is verified through reachability
-> > tests carried out between hosts belonging to the same VPN.
-> > 
-> > Signed-off-by: Andrea Mayer <andrea.mayer@uniroma2.it>
-> > ---
-> >  tools/testing/selftests/net/Makefile          |   1 +
-> >  .../net/srv6_hencap_red_l3vpn_test.sh         | 742 ++++++++++++++++++
-> >  2 files changed, 743 insertions(+)
-> >  create mode 100755 tools/testing/selftests/net/srv6_hencap_red_l3vpn_test.sh
-> > 
-> > diff --git a/tools/testing/selftests/net/Makefile b/tools/testing/selftests/net/Makefile
-> > index ddad703ace34..3b0e9bef196b 100644
-> > --- a/tools/testing/selftests/net/Makefile
-> > +++ b/tools/testing/selftests/net/Makefile
-> > @@ -35,6 +35,7 @@ TEST_PROGS += cmsg_time.sh cmsg_ipv6.sh
-> >  TEST_PROGS += srv6_end_dt46_l3vpn_test.sh
-> >  TEST_PROGS += srv6_end_dt4_l3vpn_test.sh
-> >  TEST_PROGS += srv6_end_dt6_l3vpn_test.sh
-> > +TEST_PROGS += srv6_hencap_red_l3vpn_test.sh
-> >  TEST_PROGS += vrf_strict_mode_test.sh
-> >  TEST_PROGS += arp_ndisc_evict_nocarrier.sh
-> >  TEST_PROGS += ndisc_unsolicited_na_test.sh
-> > diff --git a/tools/testing/selftests/net/srv6_hencap_red_l3vpn_test.sh b/tools/testing/selftests/net/srv6_hencap_red_l3vpn_test.sh
-> > new file mode 100755
-> > index 000000000000..3b97f187b189
-> > --- /dev/null
-> > +++ b/tools/testing/selftests/net/srv6_hencap_red_l3vpn_test.sh
-> > @@ -0,0 +1,742 @@
-> > +#!/bin/bash
-> > +# SPDX-License-Identifier: GPL-2.0
-> > +#
-> > +# author: Andrea Mayer <andrea.mayer@uniroma2.it>
-> > +#
-> > +# This script is designed for testing the SRv6 H.Encaps.Red behavior.
-> > +#
-> > +# Below is depicted the IPv6 network of an operator which offers advanced
-> > +# IPv4/IPv6 VPN services to hosts, enabling them to communicate with each
-> > +# other.
-> > +# In this example, hosts hs-1 and hs-2 are connected through an IPv4/IPv6 VPN
-> > +# service, while hs-3 and hs-4 are connected using an IPv6 only VPN.
-> > +#
-> > +# Routers rt-1,rt-2,rt-3 and rt-4 implement IPv4/IPv6 L3 VPN services
-> > +# leveraging the SRv6 architecture. The key components for such VPNs are:
-> > +#
-> > +#   i) The SRv6 H.Encaps.Red behavior applies SRv6 Policies on traffic received
-> > +#      by connected hosts, initiating the VPN tunnel. Such a behavior is an
-> > +#      optimization of the SRv6 H.Encap aiming to reduce the length of the SID
-> > +#      List carried in the pushed SRH. Specifically, the H.Encaps.Red removes
-> > +#      the first SID contained in the SID List (i.e. SRv6 Policy) by storing it
-> > +#      into the IPv6 Destination Address. When a SRv6 Policy is made of only one
-> > +#      SID, the SRv6 H.Encaps.Red behavior omits the SRH at all and pushes that
-> > +#      SID directly into the IPv6 DA;
-> > +#
-> > +#  ii) The SRv6 End behavior advances the active SID in the SID List carried by
-> > +#      the SRH;
-> > +#
-> > +# iii) The SRv6 End.DT46 behavior is used for removing the SRv6 Policy and,
-> > +#      thus, it terminates the VPN tunnel. Such a behavior is capable of
-> > +#      handling, at the same time, both tunneled IPv4 and IPv6 traffic.
-> > +#
-> > +#
-> > +#               cafe::1                      cafe::2
-> > +#              10.0.0.1                     10.0.0.2
-> > +#             +--------+                   +--------+
-> > +#             |        |                   |        |
-> > +#             |  hs-1  |                   |  hs-2  |
-> > +#             |        |                   |        |
-> > +#             +---+----+                   +--- +---+
-> > +#    cafe::/64    |                             |      cafe::/64
-> > +#  10.0.0.0/24    |                             |    10.0.0.0/24
-> > +#             +---+----+                   +----+---+
-> > +#             |        |  fcf0:0:1:2::/64  |        |
-> > +#             |  rt-1  +-------------------+  rt-2  |
-> > +#             |        |                   |        |
-> > +#             +---+----+                   +----+---+
-> > +#                 |      .               .      |
-> > +#                 |  fcf0:0:1:3::/64   .        |
-> > +#                 |          .       .          |
-> > +#                 |            .   .            |
-> > +# fcf0:0:1:4::/64 |              .              | fcf0:0:2:3::/64
-> > +#                 |            .   .            |
-> > +#                 |          .       .          |
-> > +#                 |  fcf0:0:2:4::/64   .        |
-> > +#                 |      .               .      |
-> > +#             +---+----+                   +----+---+
-> > +#             |        |                   |        |
-> > +#             |  rt-4  +-------------------+  rt-3  |
-> > +#             |        |  fcf0:0:3:4::/64  |        |
-> > +#             +---+----+                   +----+---+
-> > +#    cafe::/64    |                             |      cafe::/64
-> > +#  10.0.0.0/24    |                             |    10.0.0.0/24
-> > +#             +---+----+                   +--- +---+
-> > +#             |        |                   |        |
-> > +#             |  hs-4  |                   |  hs-3  |
-> > +#             |        |                   |        |
-> > +#             +--------+                   +--------+
-> > +#               cafe::4                      cafe::3
-> > +#              10.0.0.4                     10.0.0.3
-> > +#
-> > +#
-> > +# Every fcf0:0:x:y::/64 network interconnects the SRv6 routers rt-x with rt-y
-> > +# in the IPv6 operator network.
-> > +#
-> > +# Local SID table
-> > +# ===============
-> > +#
-> > +# Each SRv6 router is configured with a Local SID table in which SIDs are
-> > +# stored. Considering the given SRv6 router rt-x, at least two SIDs are
-> > +# configured in the Local SID table:
-> > +#
-> > +#   Local SID table for SRv6 router rt-x
-> > +#   +----------------------------------------------------------+
-> > +#   |fcff:x:e is associated with the SRv6 End behavior         |
-> > +#   |fcff:x:d46 is associated with the SRv6 End.DT46 behavior  |
-> > +#   +----------------------------------------------------------+
-> > +#
-> > +# The fcff:/16 prefix is reserved by the operator for implementing SRv6 VPN
-> > +# services. Reachability of SIDs is ensured by proper configuration of the IPv6
-> > +# operator's network and SRv6 routers.
-> > +#
-> > +# # SRv6 Policies
-> > +# ===============
-> > +#
-> > +# An SRv6 ingress router applies SRv6 policies to the traffic received from a
-> > +# connected host. SRv6 policy enforcement consists of encapsulating the
-> > +# received traffic into a new IPv6 packet with a given SID List contained in
-> > +# the SRH.
-> > +#
-> > +# IPv4/IPv6 VPN between hs-1 and hs-2
-> > +# -----------------------------------
-> > +#
-> > +# Hosts hs-1 and hs-2 are connected using dedicated IPv4/IPv6 VPNs.
-> > +# Specifically, packets generated from hs-1 and directed towards hs-2 are
-> > +# handled by rt-1 which applies the following SRv6 Policies:
-> > +#
-> > +#   i.a) IPv6 traffic, SID List=fcff:3::e,fcff:4::e,fcff:2::d46
-> > +#  ii.a) IPv4 traffic, SID List=fcff:2::d46
-> > +#
-> > +# Policy (i.a) steers tunneled IPv6 traffic through SRv6 routers
-> > +# rt-3,rt-4,rt-2. Instead, Policy (ii.b) steers tunneled IPv4 traffic through
-> > +# rt-2.
-> > +# The H.Encaps.Red reduces the SID List (i.a) carried in SRH by removing the
-> > +# first SID (fcff:3::e) and pushing it into the IPv6 DA. In case of IPv4
-> > +# traffic, the H.Encaps.Red omits the presence of SRH at all, since the SID
-> > +# List (ii.a) consists of only one SID that can be stored directly in the IPv6
-> > +# DA.
-> > +#
-> > +# On the reverse path (i.e. from hs-2 to hs-1), rt-2 applies the following
-> > +# policies:
-> > +#
-> > +#   i.b) IPv6 traffic, SID List=fcff:1:d46
-> > +#  ii.b) IPv4 traffic, SID List=fcff:4::e,fcff:3::e,fcff:1::d46
-> > +#
-> > +# Policy (i.b) steers tunneled IPv6 traffic through the SRv6 router rt-1.
-> > +# Conversely, Policy (ii.b) steers tunneled IPv4 traffic through SRv6 routers
-> > +# rt-4,rt-3,rt-1.
-> > +# The H.Encaps.Red omits the SRH at all in case of (i.b) by pushing the single
-> > +# SID (fcff::1:d46) inside the IPv6 DA.
-> > +# The H.Encaps.Red reduces the SID List (ii.b) in the SRH by removing the first
-> > +# SID (fcff:4::e) and pushing it into the IPv6 DA.
-> > +#
-> > +# In summary:
-> > +#  * hs-1 -> hs-2 |IPv6 DA=fcff:3::e|SRH SIDs=fcff:4::e,fcff:2::d46|IPv6|...| (i.a)
-> > +#  * hs-1 -> hs-2 |IPv6 DA=fcff:2::d46|IPv4|...|                              (ii.a)
-> > +#
-> > +#  * hs-2 -> hs-1 |IPv6 DA=fcff:1::d46|IPv6|...|                              (i.b)
-> > +#  * hs-2 -> hs-1 |IPv6 DA=fcff:4::e|SRH SIDs=fcff:3::e,fcff:1::d46|IPv4|...| (ii.b)
-> > +#
-> > +#
-> > +# IPv6 VPN between hs-3 and hs-4
-> > +# ------------------------------
-> > +#
-> > +# Hosts hs-3 and hs-4 are connected using a dedicated IPv6 only VPN.
-> > +# Specifically, packets generated from hs-3 and directed towards hs-4 are
-> > +# handled by rt-3 which applies the following SRv6 Policy:
-> > +#
-> > +#  i.c) IPv6 traffic, SID List=fcff:2::e,fcff:4::d46
-> > +#
-> > +# Policy (i.c) steers tunneled IPv6 traffic through SRv6 routers rt-2,rt-4.
-> > +# The H.Encaps.Red reduces the SID List (i.c) carried in SRH by pushing the
-> > +# first SID (fcff:2::e) in the IPv6 DA.
-> > +#
-> > +# On the reverse path (i.e. from hs-4 to hs-3) the router rt-4 applies the
-> > +# following SRv6 Policy:
-> > +#
-> > +#  i.d) IPv6 traffic, SID List=fcff:1::e,fcff:3::d46.
-> > +#
-> > +# Policy (i.d) steers tunneled IPv6 traffic through SRv6 routers rt-1,rt-3.
-> > +# The H.Encaps.Red reduces the SID List (i.d) carried in SRH by pushing the
-> > +# first SID (fcff:1::e) in the IPv6 DA.
-> > +#
-> > +# In summary:
-> > +#  * hs-3 -> hs-4 |IPv6 DA=fcff:2::e|SRH SIDs=fcff:4::d46|IPv6|...| (i.c)
-> > +#  * hs-4 -> hs-3 |IPv6 DA=fcff:1::e|SRH SIDs=fcff:3::d46|IPv6|...| (i.d)
-> > +#
-> > +
-> > +# Kselftest framework requirement - SKIP code is 4.
-> > +ksft_skip=4
-> > +
-> > +readonly VRF_TID=100
-> > +readonly LOCALSID_TABLE_ID=90
-> > +readonly IPv6_RT_NETWORK=fcf0:0
-> > +readonly IPv6_HS_NETWORK=cafe
-> > +readonly IPv4_HS_NETWORK=10.0.0
-> > +readonly VPN_LOCATOR_SERVICE=fcff
-> > +readonly END_FUNC=000e
-> > +readonly DT46_FUNC=0d46
-> > +PING_TIMEOUT_SEC=4
-> > +
-> > +# global vars initialized during the setup of the selftest network
-> > +ROUTERS=''
-> > +HOSTS=''
-> > +
-> > +ret=0
-> > +
-> > +PAUSE_ON_FAIL=${PAUSE_ON_FAIL:=no}
-> > +
-> > +log_test()
-> > +{
-> > +	local rc=$1
-> > +	local expected=$2
-> > +	local msg="$3"
-> > +
-> > +	if [ ${rc} -eq ${expected} ]; then
-> > +		nsuccess=$((nsuccess+1))
-> > +		printf "\n    TEST: %-60s  [ OK ]\n" "${msg}"
-> > +	else
-> > +		ret=1
-> > +		nfail=$((nfail+1))
-> > +		printf "\n    TEST: %-60s  [FAIL]\n" "${msg}"
-> > +		if [ "${PAUSE_ON_FAIL}" = "yes" ]; then
-> > +			echo
-> > +			echo "hit enter to continue, 'q' to quit"
-> > +			read a
-> > +			[ "$a" = "q" ] && exit 1
-> > +		fi
-> > +	fi
-> > +}
-> > +
-> > +print_log_test_results()
-> > +{
-> > +	if [ "$TESTS" != "none" ]; then
-> > +		printf "\nTests passed: %3d\n" ${nsuccess}
-> > +		printf "Tests failed: %3d\n"   ${nfail}
-> > +	fi
-> > +}
-> > +
-> > +log_section()
-> > +{
-> > +	echo
-> > +	echo "################################################################################"
-> > +	echo "TEST SECTION: $*"
-> > +	echo "################################################################################"
-> > +}
-> > +
-> > +test_command_or_ksft_skip()
-> > +{
-> > +	local cmd="$1"
-> > +
-> > +	if [ ! -x "$(command -v "${cmd}")" ]; then
-> > +		echo "SKIP: Could not run test without \"${cmd}\" tool";
-> > +		exit ${ksft_skip}
-> > +	fi
-> > +}
-> > +
-> > +cleanup()
-> > +{
-> > +	local ifnames
-> > +	local dev
-> > +
-> > +	ifnames="$(ip -o link show | grep -oE "veth-rt-[0-9]+-[0-9]" | sort -n | uniq)"
-> > +
-> > +	# destroy any pending device
-> > +	for dev in ${ifnames}; do
-> > +		ip link del ${dev} || true
-> > +	done
-> 
-> It's better if you create/place all the virtual devices you need in
-> some netns: the cleanup will be easier, and the self-test will not be
-> impacted by some unexpected configuration in the main netns.
-> 
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   e35e5b6f695d241ffb1d223207da58a1fbcdff4b
+commit: b3ed524f84f573ece1aa2f26e9db3c34a593e0d1 drm/msm: allow compile_test on !ARM
+date:   9 months ago
+config: csky-randconfig-m031-20220706 (https://download.01.org/0day-ci/archive/20220707/202207070115.5JsGmGry-lkp@intel.com/config)
+compiler: csky-linux-gcc (GCC) 11.3.0
 
-Ok.
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-> > +
-> > +	# destroy routers rt-* and hosts hs-*
-> > +	for ns in $(ip netns show | grep -E 'rt-*|hs-*'); do
-> 
-> It's better if you add to your netns name some random suffix to avoid
-> possible conflicts with unexpected system configuration. 
-> 
+New smatch warnings:
+drivers/gpu/drm/msm/dsi/phy/dsi_phy.c:350 msm_dsi_dphy_timing_calc_v3() warn: inconsistent indenting
+drivers/gpu/drm/msm/dsi/dsi_host.c:2380 msm_dsi_host_power_on() warn: missing error code 'ret'
 
-Ok, fine.
+Old smatch warnings:
+drivers/gpu/drm/msm/dsi/phy/dsi_phy.c:812 msm_dsi_phy_enable() warn: variable dereferenced before check 'phy' (see line 809)
 
-> > +		ip netns del ${ns} || true
-> > +	done
-> > +}
-> > +
-> > +add_link_rt_pairs()
-> > +{
-> > +	local rt=$1
-> > +	local rt_neighs="$2"
-> > +	local neigh
-> > +
-> > +	for neigh in ${rt_neighs}; do
-> > +		ip link add veth-rt-${rt}-${neigh} type veth \
-> > +			peer name veth-rt-${neigh}-${rt}
-> > +	done
-> > +}
-> > +
-> > +get_network_prefix()
-> > +{
-> > +	local rt=$1
-> > +	local neigh=$2
-> > +	local p=${rt}
-> > +	local q=${neigh}
-> > +
-> > +	if [ "${p}" -gt "${q}" ]; then
-> > +		p=${q}; q=${rt};
-> > +	fi
-> > +
-> > +	echo "${IPv6_RT_NETWORK}:${p}:${q}"
-> > +}
-> > +
-> > +# Setup the basic networking for the routers
-> > +setup_rt_networking()
-> > +{
-> > +	local rt=$1
-> > +	local rt_neighs="$2"
-> > +	local nsname=rt-${rt}
-> > +	local net_prefix
-> > +	local devname
-> > +	local neigh
-> > +
-> > +	ip netns add ${nsname}
-> > +
-> > +	for neigh in ${rt_neighs}; do
-> > +		devname=veth-rt-${rt}-${neigh}
-> > +		ip link set ${devname} netns ${nsname}
-> > +
-> > +		net_prefix="$(get_network_prefix ${rt} ${neigh})"
-> > +
-> > +		ip -netns ${nsname} addr add ${net_prefix}::${rt}/64 \
-> > +			dev ${devname} nodad
-> > +
-> > +		ip -netns ${nsname} link set ${devname} up
-> > +	done
-> > +
-> > +	ip -netns ${nsname} link set lo up
-> > +
-> > +	ip netns exec ${nsname} sysctl -wq net.ipv6.conf.all.accept_dad=0
-> > +	ip netns exec ${nsname} sysctl -wq net.ipv6.conf.default.accept_dad=0
-> > +	ip netns exec ${nsname} sysctl -wq net.ipv6.conf.all.forwarding=1
-> > +
-> > +	ip netns exec ${nsname} sysctl -wq net.ipv4.conf.all.rp_filter=0
-> > +	ip netns exec ${nsname} sysctl -wq net.ipv4.conf.default.rp_filter=0
-> > +	ip netns exec ${nsname} sysctl -wq net.ipv4.ip_forward=1
-> > +}
-> > +
-> > +# Setup local SIDs for an SRv6 router
-> > +setup_rt_local_sids()
-> > +{
-> > +	local rt=$1
-> > +	local rt_neighs="$2"
-> > +	local nsname=rt-${rt}
-> > +	local rtveth=veth-t${VRF_TID}
-> > +	local net_prefix
-> > +	local devname
-> > +	local neigh
-> > +
-> > +	for neigh in ${rt_neighs}; do
-> > +		devname=veth-rt-${rt}-${neigh}
-> > +
-> > +		net_prefix="$(get_network_prefix ${rt} ${neigh})"
-> > +
-> > +		# set underlay network routes for SIDs reachability
-> > +		ip -netns ${nsname} -6 route add ${VPN_LOCATOR_SERVICE}:${neigh}::/32 \
-> > +			table ${LOCALSID_TABLE_ID} \
-> > +			via ${net_prefix}::${neigh} dev ${devname}
-> > +	done
-> > +
-> > +	# Local End behavior (note that "dev" is dummy and the VRF is chosen
-> > +	# for the sake of simplicity).
-> > +	ip -netns ${nsname} -6 route add ${VPN_LOCATOR_SERVICE}:${rt}::${END_FUNC} \
-> > +		table ${LOCALSID_TABLE_ID} \
-> > +		encap seg6local action End count dev vrf-${VRF_TID}
-> > +
-> > +	# Local End.DT46 behavior
-> > +	ip -netns ${nsname} -6 route add ${VPN_LOCATOR_SERVICE}:${rt}::${DT46_FUNC} \
-> > +		table ${LOCALSID_TABLE_ID} \
-> > +		encap seg6local action End.DT46 vrftable ${VRF_TID} count dev vrf-${VRF_TID}
-> > +
-> > +	# all SIDs for VPNs start with a common locator. Routes and SRv6
-> > +	# Endpoint behaviors instaces are grouped together in the 'localsid'
-> > +	# table.
-> > +	ip -netns ${nsname} -6 rule add \
-> > +			to ${VPN_LOCATOR_SERVICE}::/16 \
-> > +			lookup ${LOCALSID_TABLE_ID} prio 999
-> > +
-> > +	# set default routes to unreachable for both ipv4 and ipv6
-> > +	ip -netns ${nsname} -6 route add unreachable default metric 4278198272 \
-> > +		vrf vrf-${VRF_TID}
-> > +
-> > +	ip -netns ${nsname} -4 route add unreachable default metric 4278198272 \
-> > +		vrf vrf-${VRF_TID}
-> > +}
-> > +
-> > +# build and install the SRv6 policy into the ingress SRv6 router.
-> > +# args:
-> > +#  $1 - destination host (i.e. cafe::x host)
-> > +#  $2 - SRv6 router configured for enforcing the SRv6 Policy
-> > +#  $3 - SRv6 routers configured for steering traffic (End behaviors)
-> > +#  $4 - SRv6 router configured for removing the SRv6 Policy (router connected
-> > +#       to the destination host)
-> > +#  $5 - encap mode (full or red)
-> > +#  $6 - traffic type (IPv6 or IPv4)
-> > +__setup_rt_policy()
-> > +{
-> > +	local dst=$1
-> > +	local encap=$2
-> > +	local end_rts="$3"
-> > +	local dec_rt=$4
-> > +	local mode="$5"
-> > +	local traffic=$6
-> > +	local nsname=rt-${encap}
-> > +	local rtveth=veth-t${VRF_TID}
-> > +	local policy=''
-> > +	local n
-> > +
-> > +	for n in ${end_rts}; do
-> > +		policy=${policy}"${VPN_LOCATOR_SERVICE}:${n}::${END_FUNC},"
-> > +	done
-> > +
-> > +	policy=${policy}"${VPN_LOCATOR_SERVICE}:${dec_rt}::${DT46_FUNC}"
-> > +
-> > +	# add SRv6 policy to incoming traffic sent by attached hosts
-> > +	if [ "${traffic}" -eq 6 ]; then
-> > +		ip -netns ${nsname} -6 route add ${IPv6_HS_NETWORK}::${dst} vrf vrf-${VRF_TID} \
-> > +			encap seg6 mode ${mode} segs ${policy} dev vrf-${VRF_TID}
-> > +
-> > +		ip -netns ${nsname} -6 neigh add proxy ${IPv6_HS_NETWORK}::${dst} dev ${rtveth}
-> > +	else
-> > +		# "dev" must be different from the one where the packet is
-> > +		# received, otherwise the proxy arp does not work.
-> > +		ip -netns ${nsname} -4 route add ${IPv4_HS_NETWORK}.${dst} vrf vrf-${VRF_TID} \
-> > +			encap seg6 mode ${mode} segs ${policy} dev vrf-${VRF_TID}
-> > +	fi
-> > +}
-> > +
-> > +# see __setup_rt_policy
-> > +setup_rt_policy_ipv6()
-> > +{
-> > +	__setup_rt_policy "$1" "$2" "$3" "$4" "$5" 6
-> > +}
-> > +
-> > +#see __setup_rt_policy
-> > +setup_rt_policy_ipv4()
-> > +{
-> > +	__setup_rt_policy "$1" "$2" "$3" "$4" "$5" 4
-> > +}
-> > +
-> > +setup_hs()
-> > +{
-> > +	local hs=$1
-> > +	local rt=$2
-> > +	local hsname=hs-${hs}
-> > +	local rtname=rt-${rt}
-> > +	local rtveth=veth-t${VRF_TID}
-> > +
-> > +	# set the networking for the host
-> > +	ip netns add ${hsname}
-> > +
-> > +	ip netns exec ${hsname} sysctl -wq net.ipv6.conf.all.accept_dad=0
-> > +	ip netns exec ${hsname} sysctl -wq net.ipv6.conf.default.accept_dad=0
-> > +
-> > +	ip -netns ${hsname} link add veth0 type veth peer name ${rtveth}
-> > +	ip -netns ${hsname} link set ${rtveth} netns ${rtname}
-> > +	ip -netns ${hsname} addr add ${IPv6_HS_NETWORK}::${hs}/64 dev veth0 nodad
-> > +	ip -netns ${hsname} addr add ${IPv4_HS_NETWORK}.${hs}/24 dev veth0
-> > +	ip -netns ${hsname} link set veth0 up
-> > +	ip -netns ${hsname} link set lo up
-> > +
-> > +	# configure the VRF on the router which is directly connected to the
-> > +	# source host.
-> > +	ip -netns ${rtname} link add vrf-${VRF_TID} type vrf table ${VRF_TID}
-> > +	ip -netns ${rtname} link set vrf-${VRF_TID} up
-> > +
-> > +	# enslave the veth-tX interface to the vrf-X in the access router
-> > +	ip -netns ${rtname} link set ${rtveth} master vrf-${VRF_TID}
-> > +	ip -netns ${rtname} addr add ${IPv6_HS_NETWORK}::254/64 dev ${rtveth} nodad
-> > +	ip -netns ${rtname} addr add ${IPv4_HS_NETWORK}.254/24 dev ${rtveth}
-> > +	ip -netns ${rtname} link set ${rtveth} up
-> > +
-> > +	ip netns exec ${rtname} sysctl -wq net.ipv6.conf.${rtveth}.proxy_ndp=1
-> > +	ip netns exec ${rtname} sysctl -wq net.ipv4.conf.${rtveth}.proxy_arp=1
-> > +
-> > +	# disable the rp_filter otherwise the kernel gets confused about how
-> > +	# to route decap ipv4 packets.
-> > +	ip netns exec ${rtname} sysctl -wq net.ipv4.conf.${rtveth}.rp_filter=0
-> > +
-> > +	ip netns exec ${rtname} sh -c "echo 1 > /proc/sys/net/vrf/strict_mode"
-> > +}
-> > +
-> > +setup()
-> > +{
-> > +	# set up the links for connecting routers
-> > +	add_link_rt_pairs 1 "2 3 4"
-> > +	add_link_rt_pairs 2 "3 4"
-> > +	add_link_rt_pairs 3 "4"
-> > +
-> > +	# set up the basic connectivity of routers and routes required for
-> > +	# reachability of SIDs.
-> > +	ROUTERS="1 2 3 4"
-> > +	setup_rt_networking 1 "2 3 4"
-> > +	setup_rt_networking 2 "1 3 4"
-> > +	setup_rt_networking 3 "1 2 4"
-> > +	setup_rt_networking 4 "1 2 3"
-> > +
-> > +	# set up the hosts connected to routers
-> > +	HOSTS="1 2 3 4"
-> > +	setup_hs 1 1
-> > +	setup_hs 2 2
-> > +	setup_hs 3 3
-> > +	setup_hs 4 4
-> > +
-> > +	# set up default SRv6 Endpoints (i.e. SRv6 End and SRv6 End.DT46)
-> > +	setup_rt_local_sids 1 "2 3 4"
-> > +	setup_rt_local_sids 2 "1 3 4"
-> > +	setup_rt_local_sids 3 "1 2 4"
-> > +	setup_rt_local_sids 4 "1 2 3"
-> > +
-> > +	# set up SRv6 policies
-> > +
-> > +	# create an IPv6 VPN between hosts hs-1 and hs-2.
-> > +	# the network path between hs-1 and hs-2 traverses several routers
-> > +	# depending on the direction of traffic.
-> > +	#
-> > +	# Direction hs-1 -> hs-2 (H.Encaps.Red)
-> > +	#  - rt-3,rt-4 (SRv6 End behaviors)
-> > +	#  - rt-2 (SRv6 End.DT46 behavior)
-> > +	#
-> > +	# Direction hs-2 -> hs-1 (H.Encaps.Red)
-> > +	#  - rt-1 (SRv6 End.DT46 behavior)
-> > +	setup_rt_policy_ipv6 2 1 "3 4" 2 encap.red
-> > +	setup_rt_policy_ipv6 1 2 "" 1 encap.red
-> > +
-> > +	# create an IPv4 VPN between hosts hs-1 and hs-2
-> > +	# the network path between hs-1 and hs-2 traverses several routers
-> > +	# depending on the direction of traffic.
-> > +	#
-> > +	# Direction hs-1 -> hs-2 (H.Encaps.Red)
-> > +	# - rt-2 (SRv6 End.DT46 behavior)
-> > +	#
-> > +	# Direction hs-2 -> hs-1 (H.Encaps.Red)
-> > +	#  - rt-4,rt-3 (SRv6 End behaviors)
-> > +	#  - rt-1 (SRv6 End.DT46 behavior)
-> > +	setup_rt_policy_ipv4 2 1 "" 2 encap.red
-> > +	setup_rt_policy_ipv4 1 2 "4 3" 1 encap.red
-> > +
-> > +	# create an IPv6 VPN between hosts hs-3 and hs-4
-> > +	# the network path between hs-3 and hs-4 traverses several routers
-> > +	# depending on the direction of traffic.
-> > +	#
-> > +	# Direction hs-3 -> hs-4 (H.Encaps.Red)
-> > +	# - rt-2 (SRv6 End Behavior)
-> > +	# - rt-4 (SRv6 End.DT46 behavior)
-> > +	#
-> > +	# Direction hs-4 -> hs-3 (H.Encaps.Red)
-> > +	#  - rt-1 (SRv6 End behavior)
-> > +	#  - rt-3 (SRv6 End.DT46 behavior)
-> > +	setup_rt_policy_ipv6 4 3 "2" 4 encap.red
-> > +	setup_rt_policy_ipv6 3 4 "1" 3 encap.red
-> > +}
-> > +
-> > +check_rt_connectivity()
-> > +{
-> > +	local rtsrc=$1
-> > +	local rtdst=$2
-> > +	local prefix
-> > +
-> > +	prefix="$(get_network_prefix ${rtsrc} ${rtdst})"
-> > +
-> > +	ip netns exec rt-${rtsrc} ping -c 1 -W 1 ${prefix}::${rtdst} \
-> > +		>/dev/null 2>&1
-> > +}
-> > +
-> > +check_and_log_rt_connectivity()
-> > +{
-> > +	local rtsrc=$1
-> > +	local rtdst=$2
-> > +
-> > +	check_rt_connectivity ${rtsrc} ${rtdst}
-> > +	log_test $? 0 "Routers connectivity: rt-${rtsrc} -> rt-${rtdst}"
-> > +}
-> > +
-> > +check_hs_ipv6_connectivity()
-> > +{
-> > +	local hssrc=$1
-> > +	local hsdst=$2
-> > +
-> > +	ip netns exec hs-${hssrc} ping -c 1 -W ${PING_TIMEOUT_SEC} \
-> > +		${IPv6_HS_NETWORK}::${hsdst} >/dev/null 2>&1
-> > +}
-> > +
-> > +check_hs_ipv4_connectivity()
-> > +{
-> > +	local hssrc=$1
-> > +	local hsdst=$2
-> > +
-> > +	ip netns exec hs-${hssrc} ping -c 1 -W ${PING_TIMEOUT_SEC} \
-> > +		${IPv4_HS_NETWORK}.${hsdst} >/dev/null 2>&1
-> > +}
-> > +
-> > +check_and_log_hs2gw_connectivity()
-> > +{
-> > +	local hssrc=$1
-> > +
-> > +	check_hs_ipv6_connectivity ${hssrc} 254
-> > +	log_test $? 0 "IPv6 Hosts connectivity: hs-${hssrc} -> gw"
-> > +
-> > +	check_hs_ipv4_connectivity ${hssrc} 254
-> > +	log_test $? 0 "IPv4 Hosts connectivity: hs-${hssrc} -> gw"
-> > +}
-> > +
-> > +check_and_log_hs_ipv6_connectivity()
-> > +{
-> > +	local hssrc=$1
-> > +	local hsdst=$2
-> > +
-> > +	check_hs_ipv6_connectivity ${hssrc} ${hsdst}
-> > +	log_test $? 0 "IPv6 Hosts connectivity: hs-${hssrc} -> hs-${hsdst}"
-> > +}
-> > +
-> > +check_and_log_hs_ipv4_connectivity()
-> > +{
-> > +	local hssrc=$1
-> > +	local hsdst=$2
-> > +
-> > +	check_hs_ipv4_connectivity ${hssrc} ${hsdst}
-> > +	log_test $? 0 "IPv4 Hosts connectivity: hs-${hssrc} -> hs-${hsdst}"
-> > +}
-> > +
-> > +check_and_log_hs_connectivity()
-> > +{
-> > +	local hssrc=$1
-> > +	local hsdst=$2
-> > +
-> > +	check_and_log_hs_ipv4_connectivity ${hssrc} ${hsdst}
-> > +	check_and_log_hs_ipv6_connectivity ${hssrc} ${hsdst}
-> > +}
-> > +
-> > +check_and_log_hs_ipv6_isolation()
-> > +{
-> > +	local hssrc=$1
-> > +	local hsdst=$2
-> > +
-> > +	check_hs_ipv6_connectivity ${hssrc} ${hsdst}
-> > +	log_test $? 1 "IPv6 Hosts isolation: hs-${hssrc} -X-> hs-${hsdst}"
-> > +}
-> > +
-> > +check_and_log_hs_ipv4_isolation()
-> > +{
-> > +	local hssrc=$1
-> > +	local hsdst=$2
-> > +
-> > +	check_hs_ipv4_connectivity ${hssrc} ${hsdst}
-> > +	log_test $? 1 "IPv4 Hosts isolation: hs-${hssrc} -X-> hs-${hsdst}"
-> > +}
-> > +
-> > +check_and_log_hs_isolation()
-> > +{
-> > +	local hssrc=$1
-> > +	local hsdst=$2
-> > +
-> > +	check_and_log_hs_ipv6_isolation ${hssrc} ${hsdst}
-> > +	check_and_log_hs_ipv4_isolation ${hssrc} ${hsdst}
-> > +}
-> > +
-> > +router_tests()
-> > +{
-> > +	local i
-> > +	local j
-> > +
-> > +	log_section "IPv6 routers connectivity test"
-> > +
-> > +	for i in ${ROUTERS}; do
-> > +		for j in ${ROUTERS}; do
-> > +			if [ ${i} -eq ${j} ]; then
-> > +				continue
-> > +			fi
-> > +
-> > +			check_and_log_rt_connectivity ${i} ${j}
-> > +		done
-> > +	done
-> > +}
-> > +
-> > +host2gateway_tests()
-> > +{
-> > +	local hs
-> > +
-> > +	log_section "IPv4/IPv6 connectivity test among hosts and gateways"
-> > +
-> > +	for hs in ${HOSTS}; do
-> > +		check_and_log_hs2gw_connectivity ${hs}
-> > +	done
-> > +}
-> > +
-> > +host_vpn_tests()
-> > +{
-> > +	log_section "SRv6 VPN connectivity test hosts (h1 <-> h2, IPv4/IPv6)"
-> > +
-> > +	check_and_log_hs_connectivity 1 2
-> > +	check_and_log_hs_connectivity 2 1
-> > +
-> > +	log_section "SRv6 VPN connectivity test hosts (h3 <-> h4, IPv6 only)"
-> > +
-> > +	check_and_log_hs_ipv6_connectivity 3 4
-> > +	check_and_log_hs_ipv6_connectivity 4 3
-> > +}
-> > +
-> > +host_vpn_isolation_tests()
-> > +{
-> > +	local l1="1 2"
-> > +	local l2="3 4"
-> > +	local tmp
-> > +	local i
-> > +	local j
-> > +	local k
-> > +
-> > +	log_section "SRv6 VPN isolation test among hosts"
-> > +
-> > +	for k in 0 1; do
-> > +		for i in ${l1}; do
-> > +			for j in ${l2}; do
-> > +				check_and_log_hs_isolation ${i} ${j}
-> > +			done
-> > +		done
-> > +
-> > +		# let us test the reverse path
-> > +		tmp="${l1}"; l1="${l2}"; l2="${tmp}"
-> > +		tmp=${t1}; t1=${t2}; t2=${tmp}
-> > +	done
-> > +
-> > +	log_section "SRv6 VPN isolation test among hosts (h2 <-> h4, IPv4 only)"
-> > +
-> > +	check_and_log_hs_ipv4_isolation 2 4
-> > +	check_and_log_hs_ipv4_isolation 4 2
-> > +}
-> > +
-> > +test_vrf_or_ksft_skip()
-> > +{
-> > +	modprobe vrf &>/dev/null
-> > +	if [ ! -e /proc/sys/net/vrf/strict_mode ]; then
-> > +		echo "SKIP: vrf sysctl does not exist"
-> > +		exit ${ksft_skip}
-> > +	fi
-> > +}
-> > +
-> > +if [ "$(id -u)" -ne 0 ];then
-> > +	echo "SKIP: Need root privileges"
-> > +	exit ${ksft_skip}
-> > +fi
-> > +
-> > +# required programs to carry out this selftest
-> > +test_command_or_ksft_skip ip
-> > +test_command_or_ksft_skip grep
-> > +test_command_or_ksft_skip sort
-> > +test_command_or_ksft_skip uniq
-> > +
-> > +test_vrf_or_ksft_skip
-> > +
-> > +cleanup &>/dev/null
-> 
-> If you use:
-> 
-> trap cleanup EXIT
-> 
-> you don't need this "strange" inital cleanup and the self-test will be
-> more resilient WRT unexected interruptions.
-> 
+vim +350 drivers/gpu/drm/msm/dsi/phy/dsi_phy.c
 
-Ok, thanks.
+a4df68fa232e97 Hai Li        2017-01-03  260  
+f1fa7ff4405697 Abhinav Kumar 2018-04-17  261  int msm_dsi_dphy_timing_calc_v3(struct msm_dsi_dphy_timing *timing,
+f1fa7ff4405697 Abhinav Kumar 2018-04-17  262  	struct msm_dsi_phy_clk_request *clk_req)
+f1fa7ff4405697 Abhinav Kumar 2018-04-17  263  {
+f1fa7ff4405697 Abhinav Kumar 2018-04-17  264  	const unsigned long bit_rate = clk_req->bitclk_rate;
+f1fa7ff4405697 Abhinav Kumar 2018-04-17  265  	const unsigned long esc_rate = clk_req->escclk_rate;
+7264af3ed8d409 zhengbin      2019-10-10  266  	s32 ui, ui_x8;
+f1fa7ff4405697 Abhinav Kumar 2018-04-17  267  	s32 tmax, tmin;
+f1fa7ff4405697 Abhinav Kumar 2018-04-17  268  	s32 pcnt0 = 50;
+f1fa7ff4405697 Abhinav Kumar 2018-04-17  269  	s32 pcnt1 = 50;
+f1fa7ff4405697 Abhinav Kumar 2018-04-17  270  	s32 pcnt2 = 10;
+f1fa7ff4405697 Abhinav Kumar 2018-04-17  271  	s32 pcnt3 = 30;
+f1fa7ff4405697 Abhinav Kumar 2018-04-17  272  	s32 pcnt4 = 10;
+f1fa7ff4405697 Abhinav Kumar 2018-04-17  273  	s32 pcnt5 = 2;
+f1fa7ff4405697 Abhinav Kumar 2018-04-17  274  	s32 coeff = 1000; /* Precision, should avoid overflow */
+f1fa7ff4405697 Abhinav Kumar 2018-04-17  275  	s32 hb_en, hb_en_ckln;
+f1fa7ff4405697 Abhinav Kumar 2018-04-17  276  	s32 temp;
+f1fa7ff4405697 Abhinav Kumar 2018-04-17  277  
+f1fa7ff4405697 Abhinav Kumar 2018-04-17  278  	if (!bit_rate || !esc_rate)
+f1fa7ff4405697 Abhinav Kumar 2018-04-17  279  		return -EINVAL;
+f1fa7ff4405697 Abhinav Kumar 2018-04-17  280  
+f1fa7ff4405697 Abhinav Kumar 2018-04-17  281  	timing->hs_halfbyte_en = 0;
+f1fa7ff4405697 Abhinav Kumar 2018-04-17  282  	hb_en = 0;
+f1fa7ff4405697 Abhinav Kumar 2018-04-17  283  	timing->hs_halfbyte_en_ckln = 0;
+f1fa7ff4405697 Abhinav Kumar 2018-04-17  284  	hb_en_ckln = 0;
+f1fa7ff4405697 Abhinav Kumar 2018-04-17  285  
+f1fa7ff4405697 Abhinav Kumar 2018-04-17  286  	ui = mult_frac(NSEC_PER_MSEC, coeff, bit_rate / 1000);
+f1fa7ff4405697 Abhinav Kumar 2018-04-17  287  	ui_x8 = ui << 3;
+f1fa7ff4405697 Abhinav Kumar 2018-04-17  288  
+f1fa7ff4405697 Abhinav Kumar 2018-04-17  289  	temp = S_DIV_ROUND_UP(38 * coeff, ui_x8);
+f1fa7ff4405697 Abhinav Kumar 2018-04-17  290  	tmin = max_t(s32, temp, 0);
+f1fa7ff4405697 Abhinav Kumar 2018-04-17  291  	temp = (95 * coeff) / ui_x8;
+f1fa7ff4405697 Abhinav Kumar 2018-04-17  292  	tmax = max_t(s32, temp, 0);
+f1fa7ff4405697 Abhinav Kumar 2018-04-17  293  	timing->clk_prepare = linear_inter(tmax, tmin, pcnt0, 0, false);
+f1fa7ff4405697 Abhinav Kumar 2018-04-17  294  
+f1fa7ff4405697 Abhinav Kumar 2018-04-17  295  	temp = 300 * coeff - (timing->clk_prepare << 3) * ui;
+f1fa7ff4405697 Abhinav Kumar 2018-04-17  296  	tmin = S_DIV_ROUND_UP(temp, ui_x8) - 1;
+f1fa7ff4405697 Abhinav Kumar 2018-04-17  297  	tmax = (tmin > 255) ? 511 : 255;
+f1fa7ff4405697 Abhinav Kumar 2018-04-17  298  	timing->clk_zero = linear_inter(tmax, tmin, pcnt5, 0, false);
+f1fa7ff4405697 Abhinav Kumar 2018-04-17  299  
+f1fa7ff4405697 Abhinav Kumar 2018-04-17  300  	tmin = DIV_ROUND_UP(60 * coeff + 3 * ui, ui_x8);
+f1fa7ff4405697 Abhinav Kumar 2018-04-17  301  	temp = 105 * coeff + 12 * ui - 20 * coeff;
+f1fa7ff4405697 Abhinav Kumar 2018-04-17  302  	tmax = (temp + 3 * ui) / ui_x8;
+f1fa7ff4405697 Abhinav Kumar 2018-04-17  303  	timing->clk_trail = linear_inter(tmax, tmin, pcnt3, 0, false);
+f1fa7ff4405697 Abhinav Kumar 2018-04-17  304  
+f1fa7ff4405697 Abhinav Kumar 2018-04-17  305  	temp = S_DIV_ROUND_UP(40 * coeff + 4 * ui, ui_x8);
+f1fa7ff4405697 Abhinav Kumar 2018-04-17  306  	tmin = max_t(s32, temp, 0);
+f1fa7ff4405697 Abhinav Kumar 2018-04-17  307  	temp = (85 * coeff + 6 * ui) / ui_x8;
+f1fa7ff4405697 Abhinav Kumar 2018-04-17  308  	tmax = max_t(s32, temp, 0);
+f1fa7ff4405697 Abhinav Kumar 2018-04-17  309  	timing->hs_prepare = linear_inter(tmax, tmin, pcnt1, 0, false);
+f1fa7ff4405697 Abhinav Kumar 2018-04-17  310  
+f1fa7ff4405697 Abhinav Kumar 2018-04-17  311  	temp = 145 * coeff + 10 * ui - (timing->hs_prepare << 3) * ui;
+f1fa7ff4405697 Abhinav Kumar 2018-04-17  312  	tmin = S_DIV_ROUND_UP(temp, ui_x8) - 1;
+f1fa7ff4405697 Abhinav Kumar 2018-04-17  313  	tmax = 255;
+f1fa7ff4405697 Abhinav Kumar 2018-04-17  314  	timing->hs_zero = linear_inter(tmax, tmin, pcnt4, 0, false);
+f1fa7ff4405697 Abhinav Kumar 2018-04-17  315  
+f1fa7ff4405697 Abhinav Kumar 2018-04-17  316  	tmin = DIV_ROUND_UP(60 * coeff + 4 * ui, ui_x8) - 1;
+f1fa7ff4405697 Abhinav Kumar 2018-04-17  317  	temp = 105 * coeff + 12 * ui - 20 * coeff;
+f1fa7ff4405697 Abhinav Kumar 2018-04-17  318  	tmax = (temp / ui_x8) - 1;
+f1fa7ff4405697 Abhinav Kumar 2018-04-17  319  	timing->hs_trail = linear_inter(tmax, tmin, pcnt3, 0, false);
+f1fa7ff4405697 Abhinav Kumar 2018-04-17  320  
+f1fa7ff4405697 Abhinav Kumar 2018-04-17  321  	temp = 50 * coeff + ((hb_en << 2) - 8) * ui;
+f1fa7ff4405697 Abhinav Kumar 2018-04-17  322  	timing->hs_rqst = S_DIV_ROUND_UP(temp, ui_x8);
+f1fa7ff4405697 Abhinav Kumar 2018-04-17  323  
+f1fa7ff4405697 Abhinav Kumar 2018-04-17  324  	tmin = DIV_ROUND_UP(100 * coeff, ui_x8) - 1;
+f1fa7ff4405697 Abhinav Kumar 2018-04-17  325  	tmax = 255;
+f1fa7ff4405697 Abhinav Kumar 2018-04-17  326  	timing->hs_exit = linear_inter(tmax, tmin, pcnt2, 0, false);
+f1fa7ff4405697 Abhinav Kumar 2018-04-17  327  
+f1fa7ff4405697 Abhinav Kumar 2018-04-17  328  	temp = 50 * coeff + ((hb_en_ckln << 2) - 8) * ui;
+f1fa7ff4405697 Abhinav Kumar 2018-04-17  329  	timing->hs_rqst_ckln = S_DIV_ROUND_UP(temp, ui_x8);
+f1fa7ff4405697 Abhinav Kumar 2018-04-17  330  
+f1fa7ff4405697 Abhinav Kumar 2018-04-17  331  	temp = 60 * coeff + 52 * ui - 43 * ui;
+f1fa7ff4405697 Abhinav Kumar 2018-04-17  332  	tmin = DIV_ROUND_UP(temp, ui_x8) - 1;
+f1fa7ff4405697 Abhinav Kumar 2018-04-17  333  	tmax = 63;
+f1fa7ff4405697 Abhinav Kumar 2018-04-17  334  	timing->shared_timings.clk_post =
+f1fa7ff4405697 Abhinav Kumar 2018-04-17  335  		linear_inter(tmax, tmin, pcnt2, 0, false);
+f1fa7ff4405697 Abhinav Kumar 2018-04-17  336  
+f1fa7ff4405697 Abhinav Kumar 2018-04-17  337  	temp = 8 * ui + (timing->clk_prepare << 3) * ui;
+f1fa7ff4405697 Abhinav Kumar 2018-04-17  338  	temp += (((timing->clk_zero + 3) << 3) + 11) * ui;
+f1fa7ff4405697 Abhinav Kumar 2018-04-17  339  	temp += hb_en_ckln ? (((timing->hs_rqst_ckln << 3) + 4) * ui) :
+f1fa7ff4405697 Abhinav Kumar 2018-04-17  340  		(((timing->hs_rqst_ckln << 3) + 8) * ui);
+f1fa7ff4405697 Abhinav Kumar 2018-04-17  341  	tmin = S_DIV_ROUND_UP(temp, ui_x8) - 1;
+f1fa7ff4405697 Abhinav Kumar 2018-04-17  342  	tmax = 63;
+f1fa7ff4405697 Abhinav Kumar 2018-04-17  343  	if (tmin > tmax) {
+f1fa7ff4405697 Abhinav Kumar 2018-04-17  344  		temp = linear_inter(tmax << 1, tmin, pcnt2, 0, false);
+f1fa7ff4405697 Abhinav Kumar 2018-04-17  345  		timing->shared_timings.clk_pre = temp >> 1;
+f1fa7ff4405697 Abhinav Kumar 2018-04-17  346  		timing->shared_timings.clk_pre_inc_by_2 = 1;
+f1fa7ff4405697 Abhinav Kumar 2018-04-17  347  	} else {
+f1fa7ff4405697 Abhinav Kumar 2018-04-17  348  		timing->shared_timings.clk_pre =
+f1fa7ff4405697 Abhinav Kumar 2018-04-17  349  			linear_inter(tmax, tmin, pcnt2, 0, false);
+f1fa7ff4405697 Abhinav Kumar 2018-04-17 @350  			timing->shared_timings.clk_pre_inc_by_2 = 0;
+f1fa7ff4405697 Abhinav Kumar 2018-04-17  351  	}
+f1fa7ff4405697 Abhinav Kumar 2018-04-17  352  
+f1fa7ff4405697 Abhinav Kumar 2018-04-17  353  	timing->ta_go = 3;
+f1fa7ff4405697 Abhinav Kumar 2018-04-17  354  	timing->ta_sure = 0;
+f1fa7ff4405697 Abhinav Kumar 2018-04-17  355  	timing->ta_get = 4;
+f1fa7ff4405697 Abhinav Kumar 2018-04-17  356  
+f1fa7ff4405697 Abhinav Kumar 2018-04-17  357  	DBG("%d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d",
+f1fa7ff4405697 Abhinav Kumar 2018-04-17  358  		timing->shared_timings.clk_pre, timing->shared_timings.clk_post,
+f1fa7ff4405697 Abhinav Kumar 2018-04-17  359  		timing->shared_timings.clk_pre_inc_by_2, timing->clk_zero,
+f1fa7ff4405697 Abhinav Kumar 2018-04-17  360  		timing->clk_trail, timing->clk_prepare, timing->hs_exit,
+f1fa7ff4405697 Abhinav Kumar 2018-04-17  361  		timing->hs_zero, timing->hs_prepare, timing->hs_trail,
+f1fa7ff4405697 Abhinav Kumar 2018-04-17  362  		timing->hs_rqst, timing->hs_rqst_ckln, timing->hs_halfbyte_en,
+f1fa7ff4405697 Abhinav Kumar 2018-04-17  363  		timing->hs_halfbyte_en_ckln, timing->hs_prep_dly,
+f1fa7ff4405697 Abhinav Kumar 2018-04-17  364  		timing->hs_prep_dly_ckln);
+f1fa7ff4405697 Abhinav Kumar 2018-04-17  365  
+f1fa7ff4405697 Abhinav Kumar 2018-04-17  366  	return 0;
+f1fa7ff4405697 Abhinav Kumar 2018-04-17  367  }
+f1fa7ff4405697 Abhinav Kumar 2018-04-17  368  
 
-Ciao,
-Andrea
+:::::: The code at line 350 was first introduced by commit
+:::::: f1fa7ff4405697603f5e3901623533c54091f130 drm/msm/dsi: implement auto PHY timing calculator for 10nm PHY
+
+:::::: TO: Abhinav Kumar <abhinavk@codeaurora.org>
+:::::: CC: Rob Clark <robdclark@gmail.com>
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

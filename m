@@ -2,60 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AF6FA5693FA
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 23:13:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 81CBE569400
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 23:13:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234647AbiGFVNJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Jul 2022 17:13:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39646 "EHLO
+        id S234662AbiGFVNO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Jul 2022 17:13:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39456 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234589AbiGFVM5 (ORCPT
+        with ESMTP id S234583AbiGFVM5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 6 Jul 2022 17:12:57 -0400
-Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8EA9D29CA3;
+Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC6E75FD3;
         Wed,  6 Jul 2022 14:12:55 -0700 (PDT)
-Received: by mail-ej1-x62d.google.com with SMTP id dn9so23882486ejc.7;
+Received: by mail-ej1-x62c.google.com with SMTP id ay16so29188584ejb.6;
         Wed, 06 Jul 2022 14:12:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=Ot4wRXZEFrjMcEpIgIGqrJ2+/NIs1mmDnW8eBaCbRmg=;
-        b=pXn/zgG37fA4vrVG8yBFSuhqnS8A9mtgnUfIhO7sQCN27/+C5FRqmP1JXHoaw7/3MD
-         JBAZc1gc+y3Z+iT/ncrT44XgUf5Wu/JQPXiJcfSXCNF/oFoPRoB8UIJGm76qBJXU3YE5
-         reX0MIzAlUadWZ0zhZ6ZyHO4CT3/PwRC8z56JDzf8ajmRqj0XNcn7XkpeU1JxUTwIeoS
-         2QmOck0y4fAdLnfssHFVMAhpaBbuYXU9xv0aQ64w/drDdI8eehj20PHtw00uAYfmep4W
-         +56Z4+6uF8B3KZ1VPBf7lf7KffOuu5dJLDj4G3O5UUEs6U0Kuc362jDCw8aXpx+z5Zot
-         mPyw==
+        bh=XAfqs/8JoYVOURGYaByruwTWNVivg3YFx+gXMAB1ZgI=;
+        b=gXXFVnarcaND4v/W/V/r074iFLqKVhZouMi1RM0jKkZAF33Yun+1aZyrmyr8+IIe8T
+         Hl51zZjY6U8FEfDVYyqbdQIngwdN/gYZOZ7lrU3gOu1IZbDtqVLS/OSKa8Jqvo2xtefr
+         BFezmvdV4IpWVBX1DQu4bzCUCLZU7uE7CN4Xv5xEjTzSvXLiLbH66aqc88zSemZadc+M
+         /rgMcE16ynRMCcDIMe9riP6YEA5Na56H+TsKo0py4d986VDivaAIxnDrF1XWwK1tRVJf
+         5qaw1MhY9th6PAX3yivXpfq5pQcenI5Hl5LWR2vck7PkhmdYY4FogzFkEgqJB3/DNC0N
+         VOgQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=Ot4wRXZEFrjMcEpIgIGqrJ2+/NIs1mmDnW8eBaCbRmg=;
-        b=sUrTTF4rsFZO6+TVjwNGQ3eXBAQDcG6yNgKU7P2XUH6JeV4BgdA5Z1ILKqfYA9VlvW
-         uwqGEnVpUsmzJRAFE+zOwRbtmGF5nGqv9fxLB2HJV6nhzZyvYP2fnfTlSnQrEERtSUlC
-         QX4xW5sFuYKLGY9TsMrxYFGx7vJIgg6tjRgw8FZ3TQ+ooa5hEd9V9Mjr5zii7yVOZAqK
-         W5SS2hZt3/yPYScO3XxddB4xfVl7W7WQyIfdhq4lYCtGAptGHoiBlk1tV8DJPOC6aQlI
-         7LVc+jxPUcTDt+RbNU+r2dpb55PmWFdCPSsUMxX2hfA9UFVlsxmhoexvnFF4yLUnunWv
-         npMA==
-X-Gm-Message-State: AJIora+g7E/oHYb07a0N9uWfPRillO82A9+6Ismvgl7K5Ji3MpBlCSOE
-        ujUCzG8UZqa6N1bXC/JAzgs=
-X-Google-Smtp-Source: AGRyM1sM8kddgZ5/eeHLd9YPd0vlZfNr18WKSi0CW2svJW92/WrLnqZLNuH36I3tsUFoumDX58peAw==
-X-Received: by 2002:a17:906:2c12:b0:726:94a0:2708 with SMTP id e18-20020a1709062c1200b0072694a02708mr41313645ejh.179.1657141973676;
-        Wed, 06 Jul 2022 14:12:53 -0700 (PDT)
+        bh=XAfqs/8JoYVOURGYaByruwTWNVivg3YFx+gXMAB1ZgI=;
+        b=t4DNsFAMoFfpPvmpb4iKHP2eDqiYCnO/bWvCGCUUmhBa7WUaRqh82Qaw9DXDRwqgk7
+         aSeIp2oOYOf+t7daL7IsXVxsnLDU2NP0FAT8jaNNJH9JNiVLxF0edLIJr4/bcHkSbyYl
+         DT5hjQ4zG/71oZuvOrLU5L6Q2pYhy6AsQtJLuithoxrpX1lMBCZ5egV/xFqmZAOFlVJ1
+         0XmV26Gxzhne5o27upNBhliD8UZfVt8Td/6OpBeyRDgmDiBPDgYf7S1KwW4JZHAwph/Y
+         z7l49gTdjfwTzk5kvCAcvoNpG8LsKb/z7aFZvu+ie6mYJksokYw2PGrorcmVgghyV3Ir
+         GdWg==
+X-Gm-Message-State: AJIora8FLos409K9sKcIRwz3ftA/jfR4XD8IJ17LCCokSKnct6LyA+1p
+        yLeUv26t8nwOYIvwRJPxWHgECURpE0M=
+X-Google-Smtp-Source: AGRyM1tvfi9p6iVcY5U+EZv4ogz4yhivruSEX08JC0QJ+OKOY6pfg1JD+ubvgDueYiSZ5amHUfCy7g==
+X-Received: by 2002:a17:907:3f0a:b0:726:324c:5bc2 with SMTP id hq10-20020a1709073f0a00b00726324c5bc2mr43645247ejc.32.1657141975370;
+        Wed, 06 Jul 2022 14:12:55 -0700 (PDT)
 Received: from localhost (92.40.202.8.threembb.co.uk. [92.40.202.8])
-        by smtp.gmail.com with ESMTPSA id l23-20020aa7cad7000000b004356afc7009sm26534782edt.59.2022.07.06.14.12.52
+        by smtp.gmail.com with ESMTPSA id i21-20020a17090639d500b006fe98fb9523sm17980408eje.129.2022.07.06.14.12.54
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 06 Jul 2022 14:12:53 -0700 (PDT)
+        Wed, 06 Jul 2022 14:12:54 -0700 (PDT)
 From:   Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
 To:     paul@crapouillou.net, lgirdwood@gmail.com, broonie@kernel.org,
         perex@perex.cz, tiwai@suse.com
 Cc:     linux-mips@vger.kernel.org, alsa-devel@alsa-project.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH 10/11] ASoC: jz4740-i2s: Support S20_LE and S24_LE sample formats
-Date:   Wed,  6 Jul 2022 22:13:29 +0100
-Message-Id: <20220706211330.120198-11-aidanmacdonald.0x0@gmail.com>
+Subject: [PATCH 11/11] ASoC: jz4740-i2s: Support continuous sample rate
+Date:   Wed,  6 Jul 2022 22:13:30 +0100
+Message-Id: <20220706211330.120198-12-aidanmacdonald.0x0@gmail.com>
 In-Reply-To: <20220706211330.120198-1-aidanmacdonald.0x0@gmail.com>
 References: <20220706211330.120198-1-aidanmacdonald.0x0@gmail.com>
 MIME-Version: 1.0
@@ -70,47 +70,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The audio controller on JZ47xx SoCs supports 20- and 24-bit
-samples coming from memory. Allow those formats to be used
-with the I2S driver.
+The I2S controller on JZ47xx SoCs doesn't impose restrictions on
+sample rate and the driver doesn't make any assumptions about it,
+so the DAI should advertise a continuous sample rate range.
 
 Signed-off-by: Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
 ---
- sound/soc/jz4740/jz4740-i2s.c | 12 ++++++++++--
- 1 file changed, 10 insertions(+), 2 deletions(-)
+ sound/soc/jz4740/jz4740-i2s.c | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
 diff --git a/sound/soc/jz4740/jz4740-i2s.c b/sound/soc/jz4740/jz4740-i2s.c
-index 80b355d715ce..ee99c5e781ec 100644
+index ee99c5e781ec..053697c7f19e 100644
 --- a/sound/soc/jz4740/jz4740-i2s.c
 +++ b/sound/soc/jz4740/jz4740-i2s.c
-@@ -222,9 +222,15 @@ static int jz4740_i2s_hw_params(struct snd_pcm_substream *substream,
- 	case SNDRV_PCM_FORMAT_S8:
- 		sample_size = 0;
- 		break;
--	case SNDRV_PCM_FORMAT_S16:
-+	case SNDRV_PCM_FORMAT_S16_LE:
- 		sample_size = 1;
- 		break;
-+	case SNDRV_PCM_FORMAT_S20_LE:
-+		sample_size = 3;
-+		break;
-+	case SNDRV_PCM_FORMAT_S24_LE:
-+		sample_size = 4;
-+		break;
- 	default:
- 		return -EINVAL;
- 	}
-@@ -362,7 +368,9 @@ static const struct snd_soc_dai_ops jz4740_i2s_dai_ops = {
- };
- 
- #define JZ4740_I2S_FMTS (SNDRV_PCM_FMTBIT_S8 | \
--		SNDRV_PCM_FMTBIT_S16_LE)
-+			 SNDRV_PCM_FMTBIT_S16_LE | \
-+			 SNDRV_PCM_FMTBIT_S20_LE | \
-+			 SNDRV_PCM_FMTBIT_S24_LE)
- 
- static struct snd_soc_dai_driver jz4740_i2s_dai = {
- 	.probe = jz4740_i2s_dai_probe,
+@@ -378,13 +378,13 @@ static struct snd_soc_dai_driver jz4740_i2s_dai = {
+ 	.playback = {
+ 		.channels_min = 1,
+ 		.channels_max = 2,
+-		.rates = SNDRV_PCM_RATE_8000_48000,
++		.rates = SNDRV_PCM_RATE_CONTINUOUS,
+ 		.formats = JZ4740_I2S_FMTS,
+ 	},
+ 	.capture = {
+ 		.channels_min = 2,
+ 		.channels_max = 2,
+-		.rates = SNDRV_PCM_RATE_8000_48000,
++		.rates = SNDRV_PCM_RATE_CONTINUOUS,
+ 		.formats = JZ4740_I2S_FMTS,
+ 	},
+ 	.symmetric_rate = 1,
+@@ -415,13 +415,13 @@ static struct snd_soc_dai_driver jz4770_i2s_dai = {
+ 	.playback = {
+ 		.channels_min = 1,
+ 		.channels_max = 2,
+-		.rates = SNDRV_PCM_RATE_8000_48000,
++		.rates = SNDRV_PCM_RATE_CONTINUOUS,
+ 		.formats = JZ4740_I2S_FMTS,
+ 	},
+ 	.capture = {
+ 		.channels_min = 2,
+ 		.channels_max = 2,
+-		.rates = SNDRV_PCM_RATE_8000_48000,
++		.rates = SNDRV_PCM_RATE_CONTINUOUS,
+ 		.formats = JZ4740_I2S_FMTS,
+ 	},
+ 	.ops = &jz4740_i2s_dai_ops,
 -- 
 2.35.1
 

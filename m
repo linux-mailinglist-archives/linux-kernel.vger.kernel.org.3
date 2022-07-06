@@ -2,102 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A0B4D569554
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 00:30:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B20DC56955A
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 00:33:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234048AbiGFWaN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Jul 2022 18:30:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36094 "EHLO
+        id S233491AbiGFWdK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Jul 2022 18:33:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37714 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233999AbiGFWaM (ORCPT
+        with ESMTP id S231529AbiGFWdJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Jul 2022 18:30:12 -0400
-Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C58624964
-        for <linux-kernel@vger.kernel.org>; Wed,  6 Jul 2022 15:30:11 -0700 (PDT)
-Received: by mail-pf1-x42c.google.com with SMTP id j3so3034137pfb.6
-        for <linux-kernel@vger.kernel.org>; Wed, 06 Jul 2022 15:30:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=iKA8akOzbkf4tNDc6jfn4CUsITOKN9yZnmEgDBs/SyQ=;
-        b=q6a3Irt0falLmlOdgWGFnxHk8Agc+WjZBDzCqkjggQvyzWvyJRYgbbruahzFU3UMAO
-         rijRQsr2J25PLeGwnp+Nykv+fu5KZ8KAIRn2Q00ZTduG2VN33D6+E27CZ57cDZdylV07
-         NGSStd34KnxDkaHKTrMxnFoF4CUspgWJjmiE4D/WBVxvDyAjl2H1FZ6p2AbC8JZY1oYF
-         erHmqIE7H/fr1T38eniUYrxC2g1AMIk390+P4dpRtGWvxFy6wzItDj0zY+M4iJdkYYRY
-         ypV3OPyDukfxEG109qbDOAESZ4G9jHLj7AoAPelNTdiXLGhTOATvm5xkVn0zI6l2OrF3
-         uABQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=iKA8akOzbkf4tNDc6jfn4CUsITOKN9yZnmEgDBs/SyQ=;
-        b=J+FOK7xLiFcOh9gkWUFDV0Sg72MwqbDOv5l2V2FSVOeUbNUXve09T79Xvzew+E/8n0
-         VQp0DugG04RB00PBxfyOKmk0/ZS254drTjJaM/phM0oicRL57nTdSnFIZnqopi8luy33
-         eno1FoN+3qIcGe1nXB8H4E4m1NXwh6ihmHPVmAgDOlzeTbfHuNDOLg/vMcv3HRJxf1ou
-         1mDARz6P85WJxmg05SyONqU0vYuptgE/FHi2KXa/nKX8JdMS06E5hf84Dl2EtVul051R
-         NEwotn1Cp3hialVHp2W0JHD4fw/HWq9U4gPb5FtSG1xVlEfauvFb/5GdZBMt+hr7yy7e
-         naWA==
-X-Gm-Message-State: AJIora/ecqNG3P6LwJoc8TxknGWzTgci5l/BoyT8hWPb2zmiVBF8ME2l
-        dg8aWRoNFoO40IQ237mySaQ/eA==
-X-Google-Smtp-Source: AGRyM1sLT1U7pR8GVCabA1hqq2+btL+DQYe73v4JeLKC365avmWaP7/FZnlh9V7Qy3kZGK00OgD8og==
-X-Received: by 2002:a17:902:dad1:b0:16a:75cb:5d97 with SMTP id q17-20020a170902dad100b0016a75cb5d97mr49535733plx.64.1657146610443;
-        Wed, 06 Jul 2022 15:30:10 -0700 (PDT)
-Received: from google.com (123.65.230.35.bc.googleusercontent.com. [35.230.65.123])
-        by smtp.gmail.com with ESMTPSA id n11-20020a170902968b00b0016a11b9aeb3sm26092000plp.224.2022.07.06.15.30.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 06 Jul 2022 15:30:09 -0700 (PDT)
-Date:   Wed, 6 Jul 2022 22:30:05 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Jim Mattson <jmattson@google.com>
-Cc:     Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Anirudh Rayabharam <anrayabh@linux.microsoft.com>,
-        kvm@vger.kernel.org, Wanpeng Li <wanpengli@tencent.com>,
-        Maxim Levitsky <mlevitsk@redhat.com>,
-        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 00/14] KVM: nVMX: Use vmcs_config for setting up nested
- VMX MSRs
-Message-ID: <YsYM7VbPRQKflZrZ@google.com>
-References: <20220627160440.31857-1-vkuznets@redhat.com>
- <CALMp9eQL2a+mStk-cLwVX6NVqwAso2UYxAO7UD=Xi2TSGwUM2A@mail.gmail.com>
- <87y1xgubot.fsf@redhat.com>
- <CALMp9eSBLcvuNDquvSfUnaF3S3f4ZkzqDRSsz-v93ZeX=xnssg@mail.gmail.com>
- <87letgu68x.fsf@redhat.com>
- <CALMp9eQ35g8GpwObYBJRxjuxZAC8P_HNMMaC0v0uZeC+pMeW_Q@mail.gmail.com>
- <87czeru9cp.fsf@redhat.com>
- <CALMp9eQ5Sqv3RP8kipSbpfnvef_Sc1xr1+g53fwr0a=bhzgAhg@mail.gmail.com>
+        Wed, 6 Jul 2022 18:33:09 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08D9E14D17;
+        Wed,  6 Jul 2022 15:33:07 -0700 (PDT)
+Date:   Wed, 06 Jul 2022 22:33:03 -0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1657146785;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=m1d6tssk1qKROgDUlojal0QK0+AWMxs+toYm3o4QLIE=;
+        b=pXqCJ8F856WDnrMSzbfyIBP6n7vAKVRVAhbgv9wDsxDMYlQVSvq5QGDXKaX8H1b5BnVYBK
+        gV2tPJu3/LQKKof4ZMxCdFWMNH1gOIn8bAi2n9D5zjhMFQLEcAdU0OEXO3Zdq9OcZynlab
+        7rm0MELUH5ITOuyqfIDeJQjz0sgn6DAeMAn4QfAtViGoQb/+vO/T/1t1bIMc4La9XRISnK
+        2k6qr+GOGfTzCL4sqGe1aQejUNsif4/xIay98CB4//toaZ4zme/IJ8NOte4Q4u9yG6IKMk
+        78vXlGqyzrot9vygzj54CMpErQyd4+6Eg4dUMsszepaId5YEd6reyCOM0VdAzA==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1657146785;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=m1d6tssk1qKROgDUlojal0QK0+AWMxs+toYm3o4QLIE=;
+        b=L6GaqmRhSIkyvG2pXZFW8w3/5QxnlYw6VyPiSz0Wahm4rXXl5NVFdAMvuXZMBZ4lBH/jRp
+        9OhaX1vhw+DFOlBQ==
+From:   "tip-bot2 for Nathan Chancellor" <tip-bot2@linutronix.de>
+Sender: tip-bot2@linutronix.de
+Reply-to: linux-kernel@vger.kernel.org
+To:     linux-tip-commits@vger.kernel.org
+Subject: [tip: x86/build] x86/Kconfig: Fix CONFIG_CC_HAS_SANE_STACKPROTECTOR
+ when cross compiling with clang
+Cc:     Nathan Chancellor <nathan@kernel.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        linux-kernel@vger.kernel.org
+In-Reply-To: <20220617180845.2788442-1-nathan@kernel.org>
+References: <20220617180845.2788442-1-nathan@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CALMp9eQ5Sqv3RP8kipSbpfnvef_Sc1xr1+g53fwr0a=bhzgAhg@mail.gmail.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Message-ID: <165714678380.15455.941309204578354056.tip-bot2@tip-bot2>
+Robot-ID: <tip-bot2@linutronix.de>
+Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 29, 2022, Jim Mattson wrote:
-> On Wed, Jun 29, 2022 at 2:06 AM Vitaly Kuznetsov <vkuznets@redhat.com> wrote:
-> 
-> > For PERF_GLOBAL_CTRL errata:
-> > - We can move the filtering to vmx_vmexit_ctrl()/vmx_vmentry_ctrl()
-> > preserving the status quo: KVM doesn't use the feature but it is exposed
-> > to L1 hypervisor (and L1 hypervisor presumably has the same check and
-> > doesn't use the feature. FWIW, the workaround was added in 2011 and the
-> > erratas it references appeared in 2010, this means that the affected
-> > CPUs are quite old, modern proprietary hypervisors won't likely boot
-> > there).
-> Sadly, Nehalem and Westmere are well-supported by KVM today, and we
-> will probably still continue to support them for at least another
-> decade. They both have EPT, unrestricted guest, and other VT-x2
-> features that KVM still considers optional.
+The following commit has been merged into the x86/build branch of tip:
 
-Nehalem doesn't have unrestricted guest.  Nehalem is the only generation with EPT
-but not unrestricted guest.
+Commit-ID:     b230402b0dbd6930a616a07641f0bbc30325881e
+Gitweb:        https://git.kernel.org/tip/b230402b0dbd6930a616a07641f0bbc30325881e
+Author:        Nathan Chancellor <nathan@kernel.org>
+AuthorDate:    Fri, 17 Jun 2022 11:08:46 -07:00
+Committer:     Dave Hansen <dave.hansen@linux.intel.com>
+CommitterDate: Wed, 06 Jul 2022 14:57:10 -07:00
+
+x86/Kconfig: Fix CONFIG_CC_HAS_SANE_STACKPROTECTOR when cross compiling with clang
+
+Chimera Linux notes that CONFIG_CC_HAS_SANE_STACKPROTECTOR cannot be
+enabled when cross compiling an x86_64 kernel with clang, even though it
+does work when natively compiling.
+
+When building on aarch64:
+
+  $ make -sj"$(nproc)" ARCH=x86_64 LLVM=1 defconfig
+
+  $ grep STACKPROTECTOR .config
+
+When building on x86_64:
+
+  $ make -sj"$(nproc)" ARCH=x86_64 LLVM=1 defconfig
+
+  $ grep STACKPROTECTOR .config
+  CONFIG_CC_HAS_SANE_STACKPROTECTOR=y
+  CONFIG_HAVE_STACKPROTECTOR=y
+  CONFIG_STACKPROTECTOR=y
+  CONFIG_STACKPROTECTOR_STRONG=y
+
+When clang is invoked without a '--target' flag, code is generated for
+the default target, which is usually the host (it is configurable via
+cmake). As a result, the has-stack-protector scripts will generate code
+for the default target but check for x86 specific segment registers,
+which cannot succeed if the default target is not x86.
+
+$(CLANG_FLAGS) contains an explicit '--target' flag so pass that
+variable along to the has-stack-protector scripts so that the stack
+protector can be enabled when cross compiling with clang. The 32-bit
+stack protector cannot currently be enabled with clang, as it does not
+support '-mstack-protector-guard-symbol', so this results in no
+functional change for ARCH=i386 when cross compiling.
+
+Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+Signed-off-by: Dave Hansen <dave.hansen@linux.intel.com>
+Link: https://github.com/chimera-linux/cports/commit/0fb7e506d5f83fdf2104feb22cdac34934561226
+Link: https://github.com/llvm/llvm-project/issues/48553
+Link: https://lkml.kernel.org/r/20220617180845.2788442-1-nathan@kernel.org
+---
+ arch/x86/Kconfig | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
+index b0142e0..b7767ba 100644
+--- a/arch/x86/Kconfig
++++ b/arch/x86/Kconfig
+@@ -386,8 +386,8 @@ config PGTABLE_LEVELS
+ 
+ config CC_HAS_SANE_STACKPROTECTOR
+ 	bool
+-	default $(success,$(srctree)/scripts/gcc-x86_64-has-stack-protector.sh $(CC)) if 64BIT
+-	default $(success,$(srctree)/scripts/gcc-x86_32-has-stack-protector.sh $(CC))
++	default $(success,$(srctree)/scripts/gcc-x86_64-has-stack-protector.sh $(CC) $(CLANG_FLAGS)) if 64BIT
++	default $(success,$(srctree)/scripts/gcc-x86_32-has-stack-protector.sh $(CC) $(CLANG_FLAGS))
+ 	help
+ 	   We have to make sure stack protector is unconditionally disabled if
+ 	   the compiler produces broken code or if it does not let us control

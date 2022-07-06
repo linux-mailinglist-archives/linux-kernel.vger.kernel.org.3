@@ -2,219 +2,181 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 636FE569387
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 22:45:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6679B569391
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 22:49:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234255AbiGFUpO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Jul 2022 16:45:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50492 "EHLO
+        id S233881AbiGFUtF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Jul 2022 16:49:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52648 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234102AbiGFUpL (ORCPT
+        with ESMTP id S231500AbiGFUtD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Jul 2022 16:45:11 -0400
-Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C93228722;
-        Wed,  6 Jul 2022 13:45:10 -0700 (PDT)
-Received: by mail-ed1-x536.google.com with SMTP id k30so12602914edk.8;
-        Wed, 06 Jul 2022 13:45:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=references:from:to:cc:subject:in-reply-to:date:message-id
-         :mime-version;
-        bh=p5Y3W/tQDWHyEnQCsxi+bfhl3tfjXhD7avvenD4bCMY=;
-        b=dIdk2NRzLMV2jvU6+mVJ8sO1Ahsq4BPs3KyRcXImquuSOCpOh2Iz3vJvwsVLdXCevu
-         k2Dy/QHO6svF5j8rWEM9VH4lTiF9atBSzPwwsFnAUsfvdg10pPUekEmpVNzhm6RKzMCM
-         +jJ7+lImr7UtMEe61hzdZQZrsyO9+iehmnzno5uyFDv7eF1PlggRfC96j9CRd2b6Dzr1
-         J03O8aefWOWJ17FUgZJCjPz7vUxqzBSlcDpaT4LeWVYwE0pLQ2SHET6jjrmwSvPJd5ts
-         1hqYRFnEJMBHBZM4JrnsBpEtqPnkqHPhAVYMMo4m89M/rwNhHkNdR7IRjeylU5BqNMn0
-         Z6mQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:references:from:to:cc:subject:in-reply-to:date
-         :message-id:mime-version;
-        bh=p5Y3W/tQDWHyEnQCsxi+bfhl3tfjXhD7avvenD4bCMY=;
-        b=1A2j5og2Bq25LVX/2gemn7Yh9Qh9sRpGWVGS0LLy288YaPRFxTdbIQMuGlY2NgQEOA
-         s5FU4uZjlgZVbv/nBW+Gnnl+FM3WgM8ok8Zait0LKKCAewm2nOOKnilNMnNgrEYDMAqE
-         2L+G3T3mpmbh0AAF7wWrD83FKX4ceEQ+NkJ84MQFVXQqYPAplygRIok4x1/6qaM7eNDn
-         LlGRXenhdH+oGL2PCWFqyjpKz2wJmMn/uQVlxxWxOwCajXAYqQE+prtotsUMwUGy2LsE
-         Kyv9jI2tVUD2xlY43NC14o06BngJgMJC9Tz4I1xjIus2JvVctpEClK1rV0LlrU/FIEND
-         scog==
-X-Gm-Message-State: AJIora83FhXAjlD2T7B4ovYky3uMjsXLpNbN50wJ0hpJtlzvQhrfG3uu
-        TgFp8SuZ9nH5QGPXgp2eaxU=
-X-Google-Smtp-Source: AGRyM1uw/Czt6yAlsyO0mILs8jhoBIiYUY7Z8Ys95Pix0WzkWyEb4AaOVs+xWRZmgLl7i5kT1NyAdA==
-X-Received: by 2002:a05:6402:2549:b0:437:788d:b363 with SMTP id l9-20020a056402254900b00437788db363mr55404355edb.406.1657140308585;
-        Wed, 06 Jul 2022 13:45:08 -0700 (PDT)
-Received: from localhost (92.40.202.5.threembb.co.uk. [92.40.202.5])
-        by smtp.gmail.com with ESMTPSA id g15-20020a056402320f00b0043a85d7d15esm2723306eda.12.2022.07.06.13.45.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 06 Jul 2022 13:45:07 -0700 (PDT)
-References: <20220703111057.23246-1-aidanmacdonald.0x0@gmail.com>
- <20220703111057.23246-2-aidanmacdonald.0x0@gmail.com>
- <4c9092d20a35ef3fd6a1723e07adad79@walle.cc>
- <R11Wg2gY4kEFeq6ZSy2mXbGejo7XRfjG@localhost>
- <4ca4580a3f5157e3ac7a5c8943ef607b@walle.cc>
-From:   Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
-To:     Michael Walle <michael@walle.cc>
-Cc:     linus.walleij@linaro.org, brgl@bgdev.pl,
-        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Andy Shevchenko <andy.shevchenko@gmail.com>
-Subject: Re: [PATCH 1/3] gpio: regmap: Support registers with more than one
- bit per GPIO
-In-reply-to: <4ca4580a3f5157e3ac7a5c8943ef607b@walle.cc>
-Date:   Wed, 06 Jul 2022 21:46:15 +0100
-Message-ID: <DfKGwB5bggV3msX63bZrjjUX37ipAwv7@localhost>
+        Wed, 6 Jul 2022 16:49:03 -0400
+Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2055.outbound.protection.outlook.com [40.107.237.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFC0118E0C;
+        Wed,  6 Jul 2022 13:49:02 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=LeUj6rsylO9bhR1hTBc0+MOe9j6fjP3noPYPqSt6YIi909WAVi485BHF0okvNuiGIoJhQvq1MGqeh1Eq2mCW8Pv9o5j6rR97nkpiuaLplb6wODCJEjE7sReLQ1jgKKmcV5ZRzgtohsrGeu4izH4HqrM5Etx316P1ANc2cogpG1cmgy2nIVyskuDFdts5EDqi4HG4vuoULKnVIP4zRtIJr3XhhTM0tUsKJNqNWuZcud/t5U7XrQ2oC8Ebj5z1VQqKS1j8kJ0e/l5aewCpInibFwQuROUvqG+PSgUVEisLqJJ5WxP5ByqyHpzNTA/la1L4PMjDrz4tx2XSvbxArXUpTg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=iX6Q6P1IoAJ2CkTx8LEfIMjYvNAfln/DtFmyuBm7N4s=;
+ b=M/tFV+hx2SByHbVAGuoopw6oV5C4BWVbNeGiWgXbEFEsBzyHj/6W2nL0DvqGSq9e+Uak1YooCqt/oilUW1r6Dn7KDEPruqexaqBVS6SlKjAQqgv/b7EAFgerw2loMktF8pqT7VvhRVUKhI/vfv015zcIiWDnTvyJpEiuG/7VHE7+CbNxJ3X6PfgCl6GRS8SDC+ak1hwC+lt96sf/ktWmU51k3niuR5qxh9dzfF37vaL6styTOopru4fzihENTzi01bp0DE7PNbm3Jh6C6jl5H00F7t9iO9+/xPq+08ZOmtoV9Z7Vi7oEnjtfda/1F1z6WL8Y3IAc0v1koL3kqTuyIw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=iX6Q6P1IoAJ2CkTx8LEfIMjYvNAfln/DtFmyuBm7N4s=;
+ b=fMz4lh4ly0YDP/NOeOOK8YaOc+dn/xM1NeIeRt7a2UGw3OsmxhwCZZHHh0JmlWBpMu3NcAanHKxQh1Eo8NhciEe423yghtaa+gFS3VKEYHHx3e4Dsi3OpDiuhL4h6Nb3km7avLffLd8xowwjV+posHDltAaEx+e5j0mZlV2DrdEwLq8QCJFqBjEGI/hQmFMMHVxYsmgBpFQ/9MkyPWAE3IE8xA3uwwH+vFNstgwV7lT6KY3DKsn7ADHEZE0LcJCKhfK4EtaExHaSQqcCKm60aa9Y51D1qMoOkc50XnC9Ek0Qt413ibIc/kKf/FzSRLnl+v6jpqM5PuV99sVvPBTlKw==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from BY5PR12MB4116.namprd12.prod.outlook.com (2603:10b6:a03:210::13)
+ by BN8PR12MB3602.namprd12.prod.outlook.com (2603:10b6:408:49::22) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5395.14; Wed, 6 Jul
+ 2022 20:49:00 +0000
+Received: from BY5PR12MB4116.namprd12.prod.outlook.com
+ ([fe80::dda2:7b0a:3280:5365]) by BY5PR12MB4116.namprd12.prod.outlook.com
+ ([fe80::dda2:7b0a:3280:5365%7]) with mapi id 15.20.5395.021; Wed, 6 Jul 2022
+ 20:49:00 +0000
+Message-ID: <7e536472-60cd-c81f-254e-bab9fda7ed37@nvidia.com>
+Date:   Wed, 6 Jul 2022 13:48:58 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH 02/12] docs: tegra194-hte.rst: don't include gpiolib.c
+ twice
+Content-Language: en-US
+To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Linux Doc Mailing List <linux-doc@vger.kernel.org>
+Cc:     Jonathan Corbet <corbet@lwn.net>,
+        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        linux-kernel@vger.kernel.org, linux-tegra@vger.kernel.org
+References: <cover.1656759988.git.mchehab@kernel.org>
+ <de81b472f552bd651f140f0aa779a29652fffa62.1656759989.git.mchehab@kernel.org>
+X-Nvconfidentiality: public
+From:   Dipen Patel <dipenp@nvidia.com>
+In-Reply-To: <de81b472f552bd651f140f0aa779a29652fffa62.1656759989.git.mchehab@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: SJ0PR03CA0181.namprd03.prod.outlook.com
+ (2603:10b6:a03:2ef::6) To BY5PR12MB4116.namprd12.prod.outlook.com
+ (2603:10b6:a03:210::13)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: e613f4fe-b6bd-4177-e6fb-08da5f90f45e
+X-MS-TrafficTypeDiagnostic: BN8PR12MB3602:EE_
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: D3sSt1EZGFiVhY/XuBTg4uO5faBdMO83fo3Nt1OX8nFXB8fcA7piv6Je4ZTPr0SaoYCsEmRVihspcJ/MCVrOVwJ7clttbdmCMwOzFLdc7O3HHFLKJhjECedBtnwiY8IJfbbFAqRUD61oMxYJleyUtquma0ctzBcIkP+9uy/l3oIG4Kwi4pDyfAPPtQriH3tlqtq3NyK6fpKeeoBQC+pyWq++//EyXIGTLvjU2btBIrnT5xQMdyO3ajDShcuigIDcKyMSTpYUQArZvBp3g3vDO85xbTKQzLJOzAsPcm450Um5D/cA08vZpiKBusMd/9ldgMAwt82fNrYZYnS5pdZgvqTm8uUnfyogXgjsJi9OLnZHXJX3zOePQE4Aoc4gt1ez9OyvlJ9msKzI2ZYyi/lb4txY5fk09jvNeo4XHtk9PN+6TJRTkB548RO47f9PfywVZcJ6Ajo8SSPJUe8sJ1258+ZgSn8D2/rTlgwQne0p1W2EM94vbAzSM1FGXcB0ovb5e2/ZvecDEU65uhZhFHuzemvbIbJPl/xJ3dqRhgr5dPZUdKT8MfpMUxKDyNHt6xbkJDn269/gJbj4EpctZHRkVOt5/zVP151Qe0vWjYoFtIeX6uSM9fpuQWw2B1SfsfT/sm9fuSYj+40hZhhbd1+3bPrscA5yrFMU4ZjCXgvyG0QlDZkOv22HnPok04+63q4WJHYFHflSSRPhkpQPYVP87T/F6+Z9n8C+bAI6mi/fjHOfpvoAcG1mZEzNwd2q+l6hZ+oTtlAnljfeXbRVwaSueXm+QA4LBXyf4YDMYzHMl/JaU5NznBMJnhMxkBfjenkWqfLidkgp2gfZqXmPizdaDfNu1NoOOx195gL4CQU6YDG58SdJO6Bm91L+qRkdhI8+uKoMMkKijXz2BswUiCYQnfxqpnmOT4HK/rnph99kAB11KvtJAt7LsYQVlSSpWw0v
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BY5PR12MB4116.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(376002)(346002)(136003)(39860400002)(366004)(396003)(110136005)(31696002)(83380400001)(6486002)(966005)(478600001)(86362001)(2906002)(53546011)(2616005)(31686004)(186003)(6506007)(38100700002)(36756003)(26005)(66476007)(66556008)(4326008)(8676002)(6512007)(66946007)(41300700001)(8936002)(316002)(5660300002)(54906003)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?V2tYbVl0YVE4NVA4UmRYQldFR2tGWVhWbk9iVUNxdjlGSjcvVFBaS214bE1h?=
+ =?utf-8?B?UEtWQjZWbDZVSXI5TnZWYnUvdHFSUml3SXF5bmc5Y3cxVldrRHZIeDlVTDVm?=
+ =?utf-8?B?Yk5XVmQ0Yy9QazBGNnVZMmIwZURSdFljSEZ5blNxOWRVRjRKTC91UTJtMGJ1?=
+ =?utf-8?B?VE9DQnBSdk5vMmg1dWtyRExCcDZ5S1lHWVJ5QTlqbFNWVUxXN1hzc05hMG5U?=
+ =?utf-8?B?WXIyV1J2UndXN3BFR2pobFBhdFdOOXNGaHdWTURiOTFXRW9DYzhCVHlnd2sy?=
+ =?utf-8?B?dXI2eFVhRU9kQVZ3bTIwTGtkeThlWENpUDF0bHhFcFRKVzhxK091TnNkUzJl?=
+ =?utf-8?B?ZGUwQzlnaFd1Q3ZTYmlYMDcwVjlHV0I3anJUR0RxZVlPWkk0SXdiYkJkanNv?=
+ =?utf-8?B?UUMxaEFneDZ5SE9Hd1IxZ2ZmenF4NHFXVjZlY1EyV0ZKUC9Zb1htZEFQT0tq?=
+ =?utf-8?B?NUUvMzVxWFU1THR0N2pxRS8xU09vMTdKa2ZaMWVYOGNxY1B6eDVheDJlQzQ3?=
+ =?utf-8?B?Q01Vd0FNdm16T0IwaVlnYVZFNXV4ellPZW1mK2NWSmpXd2Rtd29kVnA1N01O?=
+ =?utf-8?B?bThBZ3F4a2NIdklRcHZLYlh5N3N1L0p5cy9uekNnSE43Um11djE5ZUhObGw2?=
+ =?utf-8?B?NmZKbUpFNG9GYUdRRVBBdGdQYU1Sc3Q5Sk43TURSaktyVEk3MVVQOGtwT25W?=
+ =?utf-8?B?SjRFOHU3YlFpUkI1clEram1ObmpGRm5RalNtVFZmZDdrdlZIeTRJZG9GZnRQ?=
+ =?utf-8?B?d2h4OWkvZU4wU3VHRHZ0cDk5dEdubUZhTkNVQWppRkVQRXFWOTM2Qmo5TUlM?=
+ =?utf-8?B?NmpXR1VpNXU3VEhRVzdBQStqdURCaGhsRkNLLy9jLzNSOWI2VjQzYms0Wkk0?=
+ =?utf-8?B?VWlxd1JWdmppNkQyR2NGUm1za3U1WjU0VHNrV1lxZHRPYk1uZUdQTnYvcER6?=
+ =?utf-8?B?b1BCSzZZTmFIeC9lM0hUTGxNL3piYnpEM3hrMldsK3ErUkp6RGFvM2ZZKzdX?=
+ =?utf-8?B?RVdFN3Z5R2UrUGwwVUFWbC9iV2lnWm5LTWJqTkprRzJMTHpUSzhuOHNCaWRy?=
+ =?utf-8?B?MGpGV0RieFZ0eGt0eXRsTHBnWFcrdnA5R2cyVTNtNHQveC9OdDFmaEg4S0dW?=
+ =?utf-8?B?TTdNaTFSMzRrd0YvSmwzVVg1eG1WaFg1MnA3MU9pQURIWFl3dGpPOVg3Q0xw?=
+ =?utf-8?B?RzZoVXprYXJYNWkrdG5JM0hXWnVGSkJWOGJWcWdrRExIc29uWnpDMWIwWjBN?=
+ =?utf-8?B?Q294RURTLzFESzZHT2hoempOSmRnME40LzNvejYrTFc1eGxJelJCM0w5Umk3?=
+ =?utf-8?B?c0o0WUhuZ0xCbHNvaXpURzVEbnN3d2hNdjhQOGY3VEFwamVyLzcvcVcwNWNh?=
+ =?utf-8?B?d0VyeTdGUkVQOTdGMk42YTc4ZThKZktTQ05od2c4N2tzTmsrWXEzdS9kN2hU?=
+ =?utf-8?B?cFlDaGdDd2NSTWJKQ3lRUFpTa2crOTY5eFZPWGtKcU8zbFFoc2haRlBkbmpl?=
+ =?utf-8?B?cEVsR25yK3RkcHU3T1pzclNYSmo5anh5SENQbi82cWl3NzY5cU5GSVM2VXJu?=
+ =?utf-8?B?eGN2RzhQcVNGa0l0SmZ0SUgwY0tqM3JoRjVZSnBxZ2U5Vk94ZW1uSDJRcDFP?=
+ =?utf-8?B?QVljOUU0MjlCcTBlYlhDd1k0dEJWSSsxM3ByS01HU1ppODYvNHdNeitMc1hv?=
+ =?utf-8?B?ZEpQamhXSGNuWmREalFMUkRPcW0vQ2lldjA5K0ZoUjAwaTJ3OTBJSnRLTGg4?=
+ =?utf-8?B?bjlVYzNsN2djZHIremR0dW8rRE9RRGxkZ2RyQks0dFdXeVBPN3RFSm5yTFh6?=
+ =?utf-8?B?bm4yU2wvWmFCbU90aDFZdzQvWlNJdDR1c3JhOW5tQUlma1RzL3MzMjlVdlEw?=
+ =?utf-8?B?UWFWVEJMUGpOK2g1T2lXMk14Ums3QVNHcCtiY1I4UWIvRjNNald3UjFnYzRz?=
+ =?utf-8?B?ZEE5bFNNeVgzWG5ZdFRtMTVGNEVzMU5mNkt5dlgxbk9IUGl3YXdOWDBTMThM?=
+ =?utf-8?B?VThEQVJCNlo0VHFxZXF4R2RlUUs0aVpsdzB0R3o4QVZ6Rk5NcFpnaEUxVnBW?=
+ =?utf-8?B?Z1VlbXB3L0VvaTg4Z1N2YkNTb2ZEa0xZelZjcDJQbEx4RUR0UjgvMDB6TXR3?=
+ =?utf-8?Q?ddf64OWfX0Hrf1gcxkHMeMxd+?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: e613f4fe-b6bd-4177-e6fb-08da5f90f45e
+X-MS-Exchange-CrossTenant-AuthSource: BY5PR12MB4116.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Jul 2022 20:49:00.7063
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 9fWkwkRY9fg0bXBoo3jBhuOfGKlNKMM/DODFbtFrWyg6zll4p05nJCe763udZsjWZWGzs5DpmJ9iqH02SyyNeQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN8PR12MB3602
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 7/2/22 4:07 AM, Mauro Carvalho Chehab wrote:
+> All extern functions of drivers/gpio/gpiolib.c are already
+> inside the Kernel documentation, as driver-api/gpio/index.rst
+> already includes it.
+>
+> Placing a kernel-doc here will only cause mess, as the same symbol
+> will be placed on two parts of the document, causing breakages
+> in cross-references.
+>
+> So, instead, add a cross-reference there.
+>
+> This solves those Sphinx 3.1+ warnings:
+>     .../Documentation/driver-api/hte/tegra194-hte:28: ./drivers/gpio/gpiolib.c:2464: WARNING: Duplicate C declaration, also defined at driver-api/gpio/index:2464.
+>     .../Documentation/driver-api/hte/tegra194-hte:28: ./drivers/gpio/gpiolib.c:2493: WARNING: Duplicate C declaration, also defined at driver-api/gpio/index:2493.
+>     .../Documentation/driver-api/hte/tegra194-hte.rst:2464: WARNING: Duplicate C declaration, also defined at driver-api/gpio/index:2464.
+>     .../Documentation/driver-api/hte/tegra194-hte.rst:2464: WARNING: Duplicate C declaration, also defined at driver-api/gpio/index:2464.
+>     .../Documentation/driver-api/hte/tegra194-hte.rst:2464: WARNING: Duplicate C declaration, also defined at driver-api/gpio/index:2464.
+>     .../Documentation/driver-api/hte/tegra194-hte.rst:2493: WARNING: Duplicate C declaration, also defined at driver-api/gpio/index:2493.
+>     .../Documentation/driver-api/hte/tegra194-hte.rst:2493: WARNING: Duplicate C declaration, also defined at driver-api/gpio/index:2493.
+>     .../Documentation/driver-api/hte/tegra194-hte.rst:2493: WARNING: Duplicate C declaration, also defined at driver-api/gpio/index:2493.
+>
+> Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
+> ---
+>
+> To avoid mailbombing on a large number of people, only mailing lists were C/C on the cover.
+> See [PATCH 00/12] at: https://lore.kernel.org/all/cover.1656759988.git.mchehab@kernel.org/
+>
+>  Documentation/driver-api/hte/tegra194-hte.rst | 3 +--
+>  1 file changed, 1 insertion(+), 2 deletions(-)
+>
+> diff --git a/Documentation/driver-api/hte/tegra194-hte.rst b/Documentation/driver-api/hte/tegra194-hte.rst
+> index d29b7fe86f31..f2d617265546 100644
+> --- a/Documentation/driver-api/hte/tegra194-hte.rst
+> +++ b/Documentation/driver-api/hte/tegra194-hte.rst
+> @@ -25,8 +25,7 @@ and userspace consumers. The kernel space consumers can directly talk to HTE
+>  subsystem while userspace consumers timestamp requests go through GPIOLIB CDEV
+>  framework to HTE subsystem.
+>  
+> -.. kernel-doc:: drivers/gpio/gpiolib.c
+> -   :functions: gpiod_enable_hw_timestamp_ns gpiod_disable_hw_timestamp_ns
+> +See gpiod_enable_hw_timestamp_ns() and gpiod_disable_hw_timestamp_ns().
+>  
+>  For userspace consumers, GPIO_V2_LINE_FLAG_EVENT_CLOCK_HTE flag must be
+>  specified during IOCTL calls. Refer to ``tools/gpio/gpio-event-mon.c``, which
 
-Michael Walle <michael@walle.cc> writes:
+Acked-by: Dipen Patel <dipenp@nvidia.com>
 
-> Am 2022-07-04 18:01, schrieb Aidan MacDonald:
->> Michael Walle <michael@walle.cc> writes:
->> 
->>> Am 2022-07-03 13:10, schrieb Aidan MacDonald:
->>>> Some devices use a multi-bit register field to change the GPIO
->>>> input/output direction. Add the ->reg_field_xlate() callback to
->>>> support such devices in gpio-regmap.
->>>> ->reg_field_xlate() builds on ->reg_mask_xlate() by allowing the
->>>> driver to return a mask and values to describe a register field.
->>>> gpio-regmap will use the mask to isolate the field and compare or
->>>> update it using the values to implement GPIO level and direction
->>>> get and set ops.
->>> Thanks for working on this. Here are my thoughts on how to improve
->>> it:
->>>  - I'm wary on the value translation of the set and get, you
->>>    don't need that at the moment, correct? I'd concentrate on
->>>    the direction for now.
->>>  - I'd add a xlate_direction(), see below for an example
->> Yeah, I only need direction, but there's no advantage to creating a
->> specific mechanism. I'm not opposed to doing that but I don't see
->> how it can be done cleanly. Being more general is more consistent
->> for the API and implementation -- even if the extra flexibility
->> probably won't be needed, it doesn't hurt.
->
-> I'd prefer to keep it to the current use case. I'm not sure if
-> there are many controllers which have more than one bit for
-> the input and output state. And if, we are still limited to
-> one register, what if the bits are distributed among multiple
-> registers..
->
-
-I found three drivers (not exhaustive) that have fields for setting the
-output level: gpio-amd8111, gpio-creg-snps, and gpio-lp3943. Admittedly
-that's more than I expected, so maybe we shouldn't dismiss the idea of
-multi-bit output fields.
-
-If you still think the API you're suggesting is better then I can go
-with it, but IMHO it's more code and more special cases, even if only
-a little bit.
-
->>>  - because we can then handle the value too, we don't need the
->>>    invert handling in the {set,get}_direction. drop it there
->>>    and handle it in a simple_xlat. In gpio_regmap,
->>>    store "reg_dir_base" and "invert_direction", derived from
->>>    config->reg_dir_in_base and config->reg_dir_out_base.
->>> 
->> I think this is more complicated and less consistent than handling
->> reg_dir_in/out_base separately.
->
-> It is just an internal implementation detail; I'm not talking
-> about changing the configuration. And actually, there was
-> once confusion about the reg_dir_in_base and reg_dir_out_base, IIRC.
-> I'd need to find that thread again. But for now, I'd keep the
-> configuration anyway.
->
-> Think about it. If you already have the value translation (which you
->  need), why would you still do the invert inside the
-> {set,get}_direction? It is just a use case of the translation
-> function actually. (Also, an invert only makes sense with a one
-> bit value).
->
-> You could do something like:
-> if (config->reg_dir_out_base) {
->    gpio->xlat_direction = gpio_regmap_simple_xlat_direction;
->    gpio->reg_dir_base = config->reg_dir_out_base;
-> }
-> if (config->reg_dir_in_base) {
->    gpio->xlat_direction = gpio_regmap_simple_xlat_direction_inverted;
->    gpio->reg_dir_base = config->reg_dir_in_base;
-> }
->
-> But both of these function would be almost the same, thus my
-> example below.
->
-> Mhh. Actually I just noticed while writing this.. we need a new
-> config->reg_dir_base anyway, otherwise you'd need to either pick
-> reg_dir_in_base or reg_dir_out_base to work with a custom
-> .xlat_direction callback.
->
-> if (config->xlat_direction) {
->    gpio->xlat_direction = config->gpio_xlat_direction;
->    gpio->reg_dir_base = config->reg_dir_base;
-> }
->
-> Since there are no users of config->reg_dir_in_base, we can just kill
-> that one. These were just added because it was based on bgpio. Then
-> it will just be:
->
-> gpio->reg_dir_base = config->reg_dir_base;
-> gpio->direction_xlat = config->direction_xlat;
-> if (!gpio->direction_xlat)
->   gpio->direction_xlat = gpio_regmap_simple_direction_xlat;
->
-> If someone needs an inverted direction, he can either have a custom
-> direction_xlat or we'll introduce a config->invert_direction option.
->
->>> static int gpio_regmap_simple_xlat_direction(struct gpio_regmap *gpio
->>>                                              unsigend int base,
->>>                                              unsigned int offset,
->>>                                              unsigned int *dir_out,
->>>                                              unsigned int *dir_in)
->>> {
->>>     unsigned int line = offset % gpio->ngpio_per_reg;
->>>     unsigned int mask = BIT(line);
->>>     if (!gpio->invert_direction) {
->>>         *dir_out = mask;
->>>         *dir_in = 0;
->>>     } else {
->>>         *dir_out = 0;
->>>         *dir_in = mask;
->>>     }
->>>     return 0;
->>> }
->> This isn't really an independent function: what do *dir_out and *dir_in
->> mean on their own? You need use the matching mask from ->reg_mask_xlate
->> for those values to be of any use. And those two functions have to match
->> up because they need to agree on the same mask.
->
-> Yes. I was thinking it isn't an issue because the driver implementing this
-> will need to know the mask anyway. But maybe it is better to also pass
-> the mask, which was obtained by the .reg_mask_xlat(). Or we could just
-> repeat the corresponding value within the value and the caller could
-> also apply the mask to this returned value.
->
-> I.e. if you have a two bit value 01 for output and 10 for input and
-> you have a 32bit register with 16 values, you can use
->  *dir_out = 0x55555555;
->  *dir_in = 0xaaaaaaaa;
->
-> Not that easy to understand. But maybe you find it easier than me
-> to write documentation ;)
->
-> -michael
->
->>> And in the {set,get}_direction() you can then check both
->>> values and convert it from or to GPIO_LINE_DIRECTION_{OUT,IN}.
->> Agreed, checking both values and erroring out if the register has an
->> unexpected value is a good idea.
->> 
->>> Thoughts?

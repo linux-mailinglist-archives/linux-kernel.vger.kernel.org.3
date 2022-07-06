@@ -2,135 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B5105692EE
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 21:58:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5EA7F5692F0
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 21:59:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234230AbiGFT6s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Jul 2022 15:58:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46540 "EHLO
+        id S234278AbiGFT7A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Jul 2022 15:59:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46690 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233898AbiGFT6r (ORCPT
+        with ESMTP id S234218AbiGFT67 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Jul 2022 15:58:47 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BAD5A17A81;
-        Wed,  6 Jul 2022 12:58:43 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 60921B81EB7;
-        Wed,  6 Jul 2022 19:58:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D67D1C3411C;
-        Wed,  6 Jul 2022 19:58:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1657137521;
-        bh=oFb69u//HpNXjs5TOfyJYyYjVRtzdr/CioBwb3NZ9Zc=;
-        h=From:To:Cc:Subject:Date:From;
-        b=BeJcw5YXsXvkbIs8t58CCQJBd7hoze5weHIpdTtnB+IURKWXqHynzbDZBHb3goTUL
-         3HdAlp1H1eDzu8lc/p0cla3/srRywizZ+c/3LAQ3YH0zIjAZdU8jsqoitDYtwgKpXk
-         jKE6EjsKIFpTg20JIgdwHcvXtKR3Mmd6rp5QspyiAPR3lwjJKIbWoax0nMXeqlz882
-         h5ji3gUA4kk4YoMREZDycJED2S+bgRMcVYFJuqX8Sk+Z4aM3GmG/xxPZrjbOb9Fp17
-         0y/fmB+BhlMYlCT8Fvp8z4bp0dny/ZkpVEvZJOJfnZnDckQ3K+96Pkv0GStXTZ77VV
-         WajNqVAvktuyA==
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Pratyush Anand <pratyush.anand@gmail.com>,
-        Toan Le <toan@os.amperecomputing.com>
-Cc:     Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Rob Herring <robh@kernel.org>,
-        =?UTF-8?q?Krzysztof=20Wilczy=C5=84ski?= <kw@linux.com>,
-        linux-arm-kernel@lists.infradead.org, linux-pci@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Bjorn Helgaas <bhelgaas@google.com>
-Subject: [PATCH] PCI: Drop of_match_ptr() to avoid unused variables
-Date:   Wed,  6 Jul 2022 14:58:38 -0500
-Message-Id: <20220706195838.217054-1-helgaas@kernel.org>
-X-Mailer: git-send-email 2.25.1
+        Wed, 6 Jul 2022 15:58:59 -0400
+Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5793F17A81
+        for <linux-kernel@vger.kernel.org>; Wed,  6 Jul 2022 12:58:58 -0700 (PDT)
+Received: by mail-ej1-x62d.google.com with SMTP id j22so2637173ejs.2
+        for <linux-kernel@vger.kernel.org>; Wed, 06 Jul 2022 12:58:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=hTNGgjqkz2i9jOPOcItVEbeQ0jxQ0QpDjfjTJFVrwkU=;
+        b=M2WUc3yqCrQNl6IC5KPsFmi9IMNMddHBmWopzsOro7NzVcBYgK9Znk35UelqCq7o+5
+         GF0I5TsuOGb/zpp81C5iDvkXEmiy9wO6kKmNUUa7wK2gH44wewzM/7vLadCmCEftVSne
+         aSoFHeY19PpvlSXBCDrEpPr65YD6HLHsBK+m3X5sLARERrp7fR5J6NMSoAg1TGYsjiLD
+         Q9kuge5amCUR6csjXshl7HJbWFLzpCxwpq16nWtz8y0hyYZcNmIeZ6jjJd3Jub1yd6fm
+         Nf8IY4oBRRQ7S2ew3rvwNqT+FaeKErGm7ZZTwfNF8iyrb641lTzD7SCcp9IjqdkmiLiU
+         oTQQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=hTNGgjqkz2i9jOPOcItVEbeQ0jxQ0QpDjfjTJFVrwkU=;
+        b=cdXaF07+CYit64JPmce0Dc9jZyXqhoXL12yasgKEb8m8XmupmemXMrrKw+Infyyetj
+         COil7RLeVpFMmN3iXyCsHpVTudB7hWgPpLTOcPStBEfVASQIQHIEXp/ZTI3fGc0W3acR
+         FsR02ee2lehLjj3v2XPDKzXAzJx9vgrqHYrJYR103bclnILn5QQfd2mNvKdSBnqW5NAJ
+         LvLP1r6VWS76mC1GdVa/gTn+Ljqx2eOSv6aFxg1z7MWuLwJHdVA61IlW3iteTBDOT2sN
+         4qVWm5JRJg+0HDCSSROipp6bMdNOn7otRQm7aRfvd4vAjGnpLXnw6qXnS8BcWiSINYoV
+         LpGw==
+X-Gm-Message-State: AJIora9G/jwL3FM7M5PKdqTRY2nX0FmsdPUwVmXAIcr/q8UHVnQep4LB
+        dQOQ2PMaKsP9u2TWXEqDjivJMHKkM9qoxi2XzmHUmA==
+X-Google-Smtp-Source: AGRyM1v7A/MquaHP5PJo1EWlwJrbCKNfY4bpW1A9o0wbsht2xfrGiZcfDPvidtmZAMizypVoC5VQo2xPBqsuSAufP18=
+X-Received: by 2002:a17:906:5d04:b0:722:f46c:b891 with SMTP id
+ g4-20020a1709065d0400b00722f46cb891mr42052343ejt.4.1657137536835; Wed, 06 Jul
+ 2022 12:58:56 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220513181032.24484-1-dlatypov@google.com>
+In-Reply-To: <20220513181032.24484-1-dlatypov@google.com>
+From:   Brendan Higgins <brendanhiggins@google.com>
+Date:   Wed, 6 Jul 2022 15:58:45 -0400
+Message-ID: <CAFd5g47g6Tb4nMB-NQQAF3vXZ9FZj9YwcdP=E_-=5A6fBTbfNw@mail.gmail.com>
+Subject: Re: [PATCH v2] kunit: tool: cosmetic: don't specify duplicate kernel
+ cmdline options
+To:     Daniel Latypov <dlatypov@google.com>
+Cc:     davidgow@google.com, linux-kernel@vger.kernel.org,
+        kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
+        skhan@linuxfoundation.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Bjorn Helgaas <bhelgaas@google.com>
+On Fri, May 13, 2022 at 2:10 PM Daniel Latypov <dlatypov@google.com> wrote:
+>
+> Context:
+> When using a non-UML arch, kunit.py will boot the test kernel with
+> options like these by default (this is x86_64):
+> > mem=1G console=tty kunit_shutdown=halt console=ttyS0 kunit_shutdown=reboot
+>
+> The first three options are added unconditionally but are only intended
+> for UML.
+>
+> 1. 'mem=1G' is redundant with the '-m 1024' that we hard-code into the
+>    qemu commandline.
+>
+> 2. We specify a 'console' for all tools/testing/kunit/qemu_configs/*.py
+>    already, so 'console=tty' gets overwritten.
+>
+> 3. For QEMU, we need to use 'reboot', and for UML we need to use 'halt'.
+>    If you switch them, kunit.py will hang until the --timeout expires.
+>
+> This patch:
+> Having these duplicate options is a bit noisy.
+> Switch so we only add UML-specific options for UML.
+>
+> I.e. we now get
+> UML: 'mem=1G console=tty kunit_shutdown=halt' (unchanged)
+> x86_64: 'console=ttyS0 kunit_shutdown=reboot'
+>
+> Side effect: you can't overwrite these options on UML w/ --kernel_arg.
+> But you already couldn't for QEMU (console, kunit_shutdown), and why
+> would you want to?
+>
+> Signed-off-by: Daniel Latypov <dlatypov@google.com>
+> Reviewed-by: David Gow <davidgow@google.com>
 
-We have stubs for most OF interfaces even when CONFIG_OF is not set, so we
-allow building of most controller drivers in that case for compile testing.
-
-When CONFIG_OF is not set, "of_match_ptr(<match_table>)" compiles to NULL,
-which leaves <match_table> unused, resulting in errors like this:
-
-  $ make W=1
-  drivers/pci/controller/pci-xgene.c:636:34: error: ‘xgene_pcie_match_table’ defined but not used [-Werror=unused-const-variable=]
-
-Drop of_match_ptr() to avoid the unused variable warning.
-
-Signed-off-by: Bjorn Helgaas <bhelgaas@google.com>
----
- drivers/pci/controller/dwc/pci-keystone.c   | 2 +-
- drivers/pci/controller/dwc/pcie-armada8k.c  | 2 +-
- drivers/pci/controller/dwc/pcie-spear13xx.c | 2 +-
- drivers/pci/controller/pci-xgene.c          | 2 +-
- 4 files changed, 4 insertions(+), 4 deletions(-)
-
-diff --git a/drivers/pci/controller/dwc/pci-keystone.c b/drivers/pci/controller/dwc/pci-keystone.c
-index d10e5fd0f83c..602909f712b9 100644
---- a/drivers/pci/controller/dwc/pci-keystone.c
-+++ b/drivers/pci/controller/dwc/pci-keystone.c
-@@ -1324,7 +1324,7 @@ static struct platform_driver ks_pcie_driver __refdata = {
- 	.remove = __exit_p(ks_pcie_remove),
- 	.driver = {
- 		.name	= "keystone-pcie",
--		.of_match_table = of_match_ptr(ks_pcie_of_match),
-+		.of_match_table = ks_pcie_of_match,
- 	},
- };
- builtin_platform_driver(ks_pcie_driver);
-diff --git a/drivers/pci/controller/dwc/pcie-armada8k.c b/drivers/pci/controller/dwc/pcie-armada8k.c
-index 4e2552dcf982..8391417fad41 100644
---- a/drivers/pci/controller/dwc/pcie-armada8k.c
-+++ b/drivers/pci/controller/dwc/pcie-armada8k.c
-@@ -343,7 +343,7 @@ static struct platform_driver armada8k_pcie_driver = {
- 	.probe		= armada8k_pcie_probe,
- 	.driver = {
- 		.name	= "armada8k-pcie",
--		.of_match_table = of_match_ptr(armada8k_pcie_of_match),
-+		.of_match_table = armada8k_pcie_of_match,
- 		.suppress_bind_attrs = true,
- 	},
- };
-diff --git a/drivers/pci/controller/dwc/pcie-spear13xx.c b/drivers/pci/controller/dwc/pcie-spear13xx.c
-index 1569e82b5568..48af5170a8e7 100644
---- a/drivers/pci/controller/dwc/pcie-spear13xx.c
-+++ b/drivers/pci/controller/dwc/pcie-spear13xx.c
-@@ -258,7 +258,7 @@ static struct platform_driver spear13xx_pcie_driver = {
- 	.probe		= spear13xx_pcie_probe,
- 	.driver = {
- 		.name	= "spear-pcie",
--		.of_match_table = of_match_ptr(spear13xx_pcie_of_match),
-+		.of_match_table = spear13xx_pcie_of_match,
- 		.suppress_bind_attrs = true,
- 	},
- };
-diff --git a/drivers/pci/controller/pci-xgene.c b/drivers/pci/controller/pci-xgene.c
-index eb6240958bb0..549d3bd6d1c2 100644
---- a/drivers/pci/controller/pci-xgene.c
-+++ b/drivers/pci/controller/pci-xgene.c
-@@ -641,7 +641,7 @@ static const struct of_device_id xgene_pcie_match_table[] = {
- static struct platform_driver xgene_pcie_driver = {
- 	.driver = {
- 		.name = "xgene-pcie",
--		.of_match_table = of_match_ptr(xgene_pcie_match_table),
-+		.of_match_table = xgene_pcie_match_table,
- 		.suppress_bind_attrs = true,
- 	},
- 	.probe = xgene_pcie_probe,
--- 
-2.25.1
-
+Reviewed-by: Brendan Higgins <brendanhiggins@google.com>

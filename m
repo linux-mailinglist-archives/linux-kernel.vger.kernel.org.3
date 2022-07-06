@@ -2,167 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 952F356857E
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 12:26:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E8675684CE
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 12:11:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231875AbiGFK0Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Jul 2022 06:26:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41046 "EHLO
+        id S230070AbiGFKLP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Jul 2022 06:11:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51042 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230115AbiGFK0T (ORCPT
+        with ESMTP id S232801AbiGFKLH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Jul 2022 06:26:19 -0400
-Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 956B125EA1;
-        Wed,  6 Jul 2022 03:26:18 -0700 (PDT)
-Received: by mail-ed1-x530.google.com with SMTP id r18so18656956edb.9;
-        Wed, 06 Jul 2022 03:26:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:from:to:cc:subject:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=m51M7aOH5FnJwLofP0W607fIK7M775HfSh2WEy0mTWo=;
-        b=JJZXb8nugrU4hB99yEftnyX099Qa8+XsZFeQfNMyE9Js8PCpj07zB1+fVtGZAmj4UW
-         NGRLyoxucyp6S57S5jMPV/IMlUKAeUmI27IAud4oJZce87gRrxXi58dhsMnwRHdivOgp
-         TWokJk6BnRhb2dFySMHHaEDuqFHv6DB2ZvqaOFO/KYMOBJfecwonKssNRMGjgDh4yZUm
-         Km54CjtSPIywNcEFl+hS6wC4BZeCseVERyDgMlPpB08RCJdVr5y0fgoSVb/BpuA4cA7I
-         59RK4YRScLqaSjzZeLG2pSMUWA83CfTchlSs0VNOhP0H/6qeZ0mSo4Mwiq0E3iSwZeMq
-         2GZQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:from:to:cc:subject:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=m51M7aOH5FnJwLofP0W607fIK7M775HfSh2WEy0mTWo=;
-        b=p3mt8D8Q6G8Dqp6Oq5KzAl5MLa3jWxF9Z00/I+tBOwfDxp7fsrg0M7ce/9CXCXdND0
-         bOG7kjV5Yrzg9G119HqppTuRxcdAKeneVqFBmLXomGp55cwhThbE0rZUiV3XQIij1LDK
-         80BP2seUH8D6aARsN7s9VEiV8sDUawQ9/K9ELQi8BPFKiZovv9+QqnQ9mxMT09tE1FVG
-         DbHwbDN7AamewM+9ii3l3txHZI9JKfmUP90gtro0RWMtYfasDYbZtfCRy1CwByn8B2TR
-         /mYSkQ2pbTlsK432xZ5lkm3aDT7j39svGjJQ4g/82Jd3SOOPuGQ5EjBwvOqYKErOLnRK
-         aImA==
-X-Gm-Message-State: AJIora/LAWzv6NQXF1xvfoNYCQowe3QF1Cb/ya+j5lpUqfvqeUZKWd/n
-        wtDmdeznxA7qOxHURLfihVM=
-X-Google-Smtp-Source: AGRyM1teWvIdZYx1txxcSxtn7EDb6uif4hNEcDyJI+h0PwivdUZtKJ5qLCm8F/LlRHOFsgcI0CojKA==
-X-Received: by 2002:a05:6402:12d8:b0:43a:6a70:9039 with SMTP id k24-20020a05640212d800b0043a6a709039mr18588969edx.379.1657103177039;
-        Wed, 06 Jul 2022 03:26:17 -0700 (PDT)
-Received: from Ansuel-xps. (93-42-70-190.ip85.fastwebnet.it. [93.42.70.190])
-        by smtp.gmail.com with ESMTPSA id y14-20020a170906448e00b0072737733f9asm10563605ejo.106.2022.07.06.03.26.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 06 Jul 2022 03:26:16 -0700 (PDT)
-Message-ID: <62c56348.1c69fb81.d2cad.2584@mx.google.com>
-X-Google-Original-Message-ID: <YsVfY6MZxOMeahXp@Ansuel-xps.>
-Date:   Wed, 6 Jul 2022 12:09:39 +0200
-From:   Christian Marangi <ansuelsmth@gmail.com>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Jonathan McDowell <noodles@earth.li>
-Subject: Re: [PATCH 03/13] ARM: dts: qcom: add missing rpm regulators and
- cells for ipq8064
-References: <20220705133917.8405-1-ansuelsmth@gmail.com>
- <20220705133917.8405-4-ansuelsmth@gmail.com>
- <e81344f6-7da5-a209-2785-d540e41f3958@linaro.org>
+        Wed, 6 Jul 2022 06:11:07 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CA3512D23;
+        Wed,  6 Jul 2022 03:11:04 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E341AB81BA8;
+        Wed,  6 Jul 2022 10:11:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 74D29C3411C;
+        Wed,  6 Jul 2022 10:11:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1657102261;
+        bh=dKEeKNqJpoL5hH00p3yVGSgJ+P+GEsFV9D+wcQU4tt0=;
+        h=From:To:Cc:Subject:Date:From;
+        b=SDJHfaBi68ceMUFS0St1t1mYWHA4SAQ26COFTBXCh1zmzWCp6lq52k1WPvY1BzJkd
+         zIIzGFlW6lgV6TMaLhGW4GfaDrLNnrSJt9Jj3NpW5Z+F7tYH4iu8Ze2mvUoA8+bcAm
+         uHF2/AjnvuRuX5V61+/DdvxZAhH25mEL+aSUyD2VpB1jzu+G+XnuMqgJRUiVe4FFK4
+         p8i6Gp8BMq/LXqT7x0mpgOgwySVh8SaPAhdcp2SA2Ws2EuJgfuJfOAK1W5Qfivbg7o
+         RSYdsz9ApTWn6kCsh6UJLLYI+LUg4HBEyIlbObLF4qikTOE1luuNGfHkrn6dY2i9ZC
+         /cBorrxLjUJww==
+Received: by pali.im (Postfix)
+        id 911F37BA; Wed,  6 Jul 2022 12:10:58 +0200 (CEST)
+From:   =?UTF-8?q?Pali=20Roh=C3=A1r?= <pali@kernel.org>
+To:     Michael Ellerman <mpe@ellerman.id.au>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Bjorn Helgaas <bhelgaas@google.com>
+Cc:     linuxppc-dev@lists.ozlabs.org, linux-pci@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] powerpc/fsl-pci: Fix Class Code of PCIe Root Port
+Date:   Wed,  6 Jul 2022 12:10:43 +0200
+Message-Id: <20220706101043.4867-1-pali@kernel.org>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <e81344f6-7da5-a209-2785-d540e41f3958@linaro.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jul 06, 2022 at 10:34:16AM +0200, Krzysztof Kozlowski wrote:
-> On 05/07/2022 15:39, Christian Marangi wrote:
-> > Add cells definition for rpm node and add missing regulators for the 4
-> > regulator present on ipq8064. There regulators are controlled by rpm and
-> > to correctly works gsbi4_i2c require to be NEVER disabled or rpm will
-> > reject any regulator change request.
-> > 
-> > Signed-off-by: Christian Marangi <ansuelsmth@gmail.com>
-> > Tested-by: Jonathan McDowell <noodles@earth.li>
-> > ---
-> >  arch/arm/boot/dts/qcom-ipq8064.dtsi | 36 +++++++++++++++++++++++++++++
-> >  1 file changed, 36 insertions(+)
-> > 
-> > diff --git a/arch/arm/boot/dts/qcom-ipq8064.dtsi b/arch/arm/boot/dts/qcom-ipq8064.dtsi
-> > index 1b4b72723ead..c0b05d2a2d6d 100644
-> > --- a/arch/arm/boot/dts/qcom-ipq8064.dtsi
-> > +++ b/arch/arm/boot/dts/qcom-ipq8064.dtsi
-> > @@ -844,10 +844,46 @@ rpm: rpm@108000 {
-> >  			clocks = <&gcc RPM_MSG_RAM_H_CLK>;
-> >  			clock-names = "ram";
-> >  
-> > +			#address-cells = <1>;
-> > +			#size-cells = <0>;
-> 
-> Why adding these?
->
+By default old pre-3.0 Freescale PCIe controllers reports invalid PCI Class
+Code 0x0b20 for PCIe Root Port. It can be seen by lspci -b output on P2020
+board which has this pre-3.0 controller:
 
-Fix dt warning, will split and put it in a separate commit.
+  $ lspci -bvnn
+  00:00.0 Power PC [0b20]: Freescale Semiconductor Inc P2020E [1957:0070] (rev 21)
+          !!! Invalid class 0b20 for header type 01
+          Capabilities: [4c] Express Root Port (Slot-), MSI 00
 
-> > +
-> >  			rpmcc: clock-controller {
-> >  				compatible = "qcom,rpmcc-ipq806x", "qcom,rpmcc";
-> >  				#clock-cells = <1>;
-> >  			};
-> > +
-> > +			smb208_regulators: regulators {
-> > +				compatible = "qcom,rpm-smb208-regulators";
-> > +				status = "okay";
-> 
-> Was the node disabled?
-> 
+Fix this issue by programming correct PCI Class Code 0x0604 for PCIe Root
+Port to the Freescale specific PCIe register 0x474.
 
-smb208 is the normal and advised way to handle regulators on this
-platform. Some device may want to not follow that and implement their
-own regulator bypassing rpm so we add a status and on the current device
-present upstream we set it disabled as it does use different regulators
-implementation.
+With this change lspci -b output is:
 
-> > +
-> > +				smb208_s1a: s1a {
-> > +					regulator-min-microvolt = <1050000>;
-> > +					regulator-max-microvolt = <1150000>;
-> > +
-> > +					qcom,switch-mode-frequency = <1200000>;
-> > +				};
-> > +
-> > +				smb208_s1b: s1b {
-> > +					regulator-min-microvolt = <1050000>;
-> > +					regulator-max-microvolt = <1150000>;
-> > +
-> > +					qcom,switch-mode-frequency = <1200000>;
-> > +				};
-> > +
-> > +				smb208_s2a: s2a {
-> > +					regulator-min-microvolt = < 800000>;
-> > +					regulator-max-microvolt = <1250000>;
-> > +
-> > +					qcom,switch-mode-frequency = <1200000>;
-> > +				};
-> > +
-> > +				smb208_s2b: s2b {
-> > +					regulator-min-microvolt = < 800000>;
-> > +					regulator-max-microvolt = <1250000>;
-> > +
-> > +					qcom,switch-mode-frequency = <1200000>;
-> > +				};
-> > +			};
-> >  		};
-> >  
-> >  		tcsr: syscon@1a400000 {
-> 
-> 
-> Best regards,
-> Krzysztof
+  $ lspci -bvnn
+  00:00.0 PCI bridge [0604]: Freescale Semiconductor Inc P2020E [1957:0070] (rev 21) (prog-if 00 [Normal decode])
+          Capabilities: [4c] Express Root Port (Slot-), MSI 00
 
+Without any "Invalid class" error. So class code was properly reflected
+into standard (read-only) PCI register 0x08.
+
+Same fix is already implemented in U-Boot pcie_fsl.c driver in commit:
+http://source.denx.de/u-boot/u-boot/-/commit/d18d06ac35229345a0af80977a408cfbe1d1015b
+
+Fix activated by U-Boot stay active also after booting Linux kernel.
+But boards which use older U-Boot version without that fix are affected and
+still require this fix.
+
+So implement this class code fix also in kernel fsl_pci.c driver.
+
+Cc: stable@vger.kernel.org
+Signed-off-by: Pali Rohár <pali@kernel.org>
+---
+ arch/powerpc/sysdev/fsl_pci.c | 8 ++++++++
+ arch/powerpc/sysdev/fsl_pci.h | 1 +
+ 2 files changed, 9 insertions(+)
+
+diff --git a/arch/powerpc/sysdev/fsl_pci.c b/arch/powerpc/sysdev/fsl_pci.c
+index 1011cfea2e32..bfbb8c8fc9aa 100644
+--- a/arch/powerpc/sysdev/fsl_pci.c
++++ b/arch/powerpc/sysdev/fsl_pci.c
+@@ -521,6 +521,7 @@ int fsl_add_bridge(struct platform_device *pdev, int is_primary)
+ 	struct resource rsrc;
+ 	const int *bus_range;
+ 	u8 hdr_type, progif;
++	u32 class_code;
+ 	struct device_node *dev;
+ 	struct ccsr_pci __iomem *pci;
+ 	u16 temp;
+@@ -594,6 +595,13 @@ int fsl_add_bridge(struct platform_device *pdev, int is_primary)
+ 			PPC_INDIRECT_TYPE_SURPRESS_PRIMARY_BUS;
+ 		if (fsl_pcie_check_link(hose))
+ 			hose->indirect_type |= PPC_INDIRECT_TYPE_NO_PCIE_LINK;
++		/* Fix Class Code to PCI_CLASS_BRIDGE_PCI_NORMAL for pre-3.0 controller */
++		if (in_be32(&pci->block_rev1) < PCIE_IP_REV_3_0) {
++			early_read_config_dword(hose, 0, 0, PCIE_FSL_CSR_CLASSCODE, &class_code);
++			class_code &= 0xff;
++			class_code |= PCI_CLASS_BRIDGE_PCI_NORMAL << 8;
++			early_write_config_dword(hose, 0, 0, PCIE_FSL_CSR_CLASSCODE, class_code);
++		}
+ 	} else {
+ 		/*
+ 		 * Set PBFR(PCI Bus Function Register)[10] = 1 to
+diff --git a/arch/powerpc/sysdev/fsl_pci.h b/arch/powerpc/sysdev/fsl_pci.h
+index cdbde2e0c96e..093a875d7d1e 100644
+--- a/arch/powerpc/sysdev/fsl_pci.h
++++ b/arch/powerpc/sysdev/fsl_pci.h
+@@ -18,6 +18,7 @@ struct platform_device;
+ 
+ #define PCIE_LTSSM	0x0404		/* PCIE Link Training and Status */
+ #define PCIE_LTSSM_L0	0x16		/* L0 state */
++#define PCIE_FSL_CSR_CLASSCODE	0x474	/* FSL GPEX CSR */
+ #define PCIE_IP_REV_2_2		0x02080202 /* PCIE IP block version Rev2.2 */
+ #define PCIE_IP_REV_3_0		0x02080300 /* PCIE IP block version Rev3.0 */
+ #define PIWAR_EN		0x80000000	/* Enable */
 -- 
-	Ansuel
+2.20.1
+

@@ -2,59 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CF9185692EA
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 21:58:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B5105692EE
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 21:58:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233705AbiGFT6O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Jul 2022 15:58:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45484 "EHLO
+        id S234230AbiGFT6s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Jul 2022 15:58:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46540 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233254AbiGFT6M (ORCPT
+        with ESMTP id S233898AbiGFT6r (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Jul 2022 15:58:12 -0400
+        Wed, 6 Jul 2022 15:58:47 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D2C11ADB1;
-        Wed,  6 Jul 2022 12:58:11 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BAD5A17A81;
+        Wed,  6 Jul 2022 12:58:43 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id ADB13B81EB5;
-        Wed,  6 Jul 2022 19:58:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DA66EC341C8;
-        Wed,  6 Jul 2022 19:58:07 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 60921B81EB7;
+        Wed,  6 Jul 2022 19:58:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D67D1C3411C;
+        Wed,  6 Jul 2022 19:58:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1657137488;
-        bh=HafG7D5C2mU7+7hsuowZQ2J6LPO+uk5WMARyqJgqnWM=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=VxoCbt+x3l5jZX7ENcAhWshBoMmU2KaKTehZYJrw/Cw2NTPdckUuv9I2EOOP5bNsc
-         0EH+nLFiHLouTLJRd02oXYWPDhZhy9xn97YhOBGpzidACNMM+QTg9WqAnot1OzNvzF
-         G79I/42RlZuZM/vYkxN9a700rCO+FKpBZtke3/sTctONf4bcewr/TAxtX3J1vypPj5
-         jv99xZXJevosgHB5UwM1PoujL8U3L6Kry+uMu9klNc55pSt0ZuF6R+AXzpK/xR7cKb
-         slsHbFnMVzHpa2b2b3JC4h8iBAWfiGt7EmHOYrw3TjtGHtzKVtUq7tzYV/laxj5iGl
-         OBGWEhypV6WUA==
-Date:   Wed, 6 Jul 2022 12:58:06 -0700
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     shaozhengchao <shaozhengchao@huawei.com>
-Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "jhs@mojatatu.com" <jhs@mojatatu.com>,
-        "xiyou.wangcong@gmail.com" <xiyou.wangcong@gmail.com>,
-        "jiri@resnulli.us" <jiri@resnulli.us>,
-        "davem@davemloft.net" <davem@davemloft.net>,
-        "edumazet@google.com" <edumazet@google.com>,
-        "pabeni@redhat.com" <pabeni@redhat.com>,
-        "weiyongjun (A)" <weiyongjun1@huawei.com>,
-        yuehaibing <yuehaibing@huawei.com>
-Subject: Re: [PATCH net-next] net/sched: remove return value of
- unregister_tcf_proto_ops
-Message-ID: <20220706125806.4362d1ad@kernel.org>
-In-Reply-To: <a92ed8b2b01e499b986ad7b9b0fe93a8@huawei.com>
-References: <20220704124322.355211-1-shaozhengchao@huawei.com>
-        <20220705184326.649a4e04@kernel.org>
-        <a92ed8b2b01e499b986ad7b9b0fe93a8@huawei.com>
+        s=k20201202; t=1657137521;
+        bh=oFb69u//HpNXjs5TOfyJYyYjVRtzdr/CioBwb3NZ9Zc=;
+        h=From:To:Cc:Subject:Date:From;
+        b=BeJcw5YXsXvkbIs8t58CCQJBd7hoze5weHIpdTtnB+IURKWXqHynzbDZBHb3goTUL
+         3HdAlp1H1eDzu8lc/p0cla3/srRywizZ+c/3LAQ3YH0zIjAZdU8jsqoitDYtwgKpXk
+         jKE6EjsKIFpTg20JIgdwHcvXtKR3Mmd6rp5QspyiAPR3lwjJKIbWoax0nMXeqlz882
+         h5ji3gUA4kk4YoMREZDycJED2S+bgRMcVYFJuqX8Sk+Z4aM3GmG/xxPZrjbOb9Fp17
+         0y/fmB+BhlMYlCT8Fvp8z4bp0dny/ZkpVEvZJOJfnZnDckQ3K+96Pkv0GStXTZ77VV
+         WajNqVAvktuyA==
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        Pratyush Anand <pratyush.anand@gmail.com>,
+        Toan Le <toan@os.amperecomputing.com>
+Cc:     Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Rob Herring <robh@kernel.org>,
+        =?UTF-8?q?Krzysztof=20Wilczy=C5=84ski?= <kw@linux.com>,
+        linux-arm-kernel@lists.infradead.org, linux-pci@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Bjorn Helgaas <bhelgaas@google.com>
+Subject: [PATCH] PCI: Drop of_match_ptr() to avoid unused variables
+Date:   Wed,  6 Jul 2022 14:58:38 -0500
+Message-Id: <20220706195838.217054-1-helgaas@kernel.org>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -65,11 +58,79 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 6 Jul 2022 01:52:38 +0000 shaozhengchao wrote:
-> 	Thank you for your apply. This patch does just remove the
-> return value and change the function type from int to void. It
-> doesn't remove the function.
+From: Bjorn Helgaas <bhelgaas@google.com>
 
-I understand. I'm asking you to replace the word "useless" with
-"unused". Additionally I'm asking to consider if instead of returning
-an error code the function should print a warning if error has occured. 
+We have stubs for most OF interfaces even when CONFIG_OF is not set, so we
+allow building of most controller drivers in that case for compile testing.
+
+When CONFIG_OF is not set, "of_match_ptr(<match_table>)" compiles to NULL,
+which leaves <match_table> unused, resulting in errors like this:
+
+  $ make W=1
+  drivers/pci/controller/pci-xgene.c:636:34: error: ‘xgene_pcie_match_table’ defined but not used [-Werror=unused-const-variable=]
+
+Drop of_match_ptr() to avoid the unused variable warning.
+
+Signed-off-by: Bjorn Helgaas <bhelgaas@google.com>
+---
+ drivers/pci/controller/dwc/pci-keystone.c   | 2 +-
+ drivers/pci/controller/dwc/pcie-armada8k.c  | 2 +-
+ drivers/pci/controller/dwc/pcie-spear13xx.c | 2 +-
+ drivers/pci/controller/pci-xgene.c          | 2 +-
+ 4 files changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/drivers/pci/controller/dwc/pci-keystone.c b/drivers/pci/controller/dwc/pci-keystone.c
+index d10e5fd0f83c..602909f712b9 100644
+--- a/drivers/pci/controller/dwc/pci-keystone.c
++++ b/drivers/pci/controller/dwc/pci-keystone.c
+@@ -1324,7 +1324,7 @@ static struct platform_driver ks_pcie_driver __refdata = {
+ 	.remove = __exit_p(ks_pcie_remove),
+ 	.driver = {
+ 		.name	= "keystone-pcie",
+-		.of_match_table = of_match_ptr(ks_pcie_of_match),
++		.of_match_table = ks_pcie_of_match,
+ 	},
+ };
+ builtin_platform_driver(ks_pcie_driver);
+diff --git a/drivers/pci/controller/dwc/pcie-armada8k.c b/drivers/pci/controller/dwc/pcie-armada8k.c
+index 4e2552dcf982..8391417fad41 100644
+--- a/drivers/pci/controller/dwc/pcie-armada8k.c
++++ b/drivers/pci/controller/dwc/pcie-armada8k.c
+@@ -343,7 +343,7 @@ static struct platform_driver armada8k_pcie_driver = {
+ 	.probe		= armada8k_pcie_probe,
+ 	.driver = {
+ 		.name	= "armada8k-pcie",
+-		.of_match_table = of_match_ptr(armada8k_pcie_of_match),
++		.of_match_table = armada8k_pcie_of_match,
+ 		.suppress_bind_attrs = true,
+ 	},
+ };
+diff --git a/drivers/pci/controller/dwc/pcie-spear13xx.c b/drivers/pci/controller/dwc/pcie-spear13xx.c
+index 1569e82b5568..48af5170a8e7 100644
+--- a/drivers/pci/controller/dwc/pcie-spear13xx.c
++++ b/drivers/pci/controller/dwc/pcie-spear13xx.c
+@@ -258,7 +258,7 @@ static struct platform_driver spear13xx_pcie_driver = {
+ 	.probe		= spear13xx_pcie_probe,
+ 	.driver = {
+ 		.name	= "spear-pcie",
+-		.of_match_table = of_match_ptr(spear13xx_pcie_of_match),
++		.of_match_table = spear13xx_pcie_of_match,
+ 		.suppress_bind_attrs = true,
+ 	},
+ };
+diff --git a/drivers/pci/controller/pci-xgene.c b/drivers/pci/controller/pci-xgene.c
+index eb6240958bb0..549d3bd6d1c2 100644
+--- a/drivers/pci/controller/pci-xgene.c
++++ b/drivers/pci/controller/pci-xgene.c
+@@ -641,7 +641,7 @@ static const struct of_device_id xgene_pcie_match_table[] = {
+ static struct platform_driver xgene_pcie_driver = {
+ 	.driver = {
+ 		.name = "xgene-pcie",
+-		.of_match_table = of_match_ptr(xgene_pcie_match_table),
++		.of_match_table = xgene_pcie_match_table,
+ 		.suppress_bind_attrs = true,
+ 	},
+ 	.probe = xgene_pcie_probe,
+-- 
+2.25.1
+

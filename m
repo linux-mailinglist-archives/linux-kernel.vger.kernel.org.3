@@ -2,111 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 14DDE5681B4
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 10:36:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D520A5681A4
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 10:36:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232351AbiGFIfC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Jul 2022 04:35:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47046 "EHLO
+        id S232301AbiGFIfN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Jul 2022 04:35:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47282 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231326AbiGFIe6 (ORCPT
+        with ESMTP id S232190AbiGFIfG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Jul 2022 04:34:58 -0400
-Received: from NAM04-BN8-obe.outbound.protection.outlook.com (mail-bn8nam04on2133.outbound.protection.outlook.com [40.107.100.133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD81F248CB;
-        Wed,  6 Jul 2022 01:34:56 -0700 (PDT)
+        Wed, 6 Jul 2022 04:35:06 -0400
+Received: from NAM04-BN8-obe.outbound.protection.outlook.com (mail-bn8nam04on2122.outbound.protection.outlook.com [40.107.100.122])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43FEF248CB;
+        Wed,  6 Jul 2022 01:35:05 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=YYJBvZiHF845CN+rT+INF5GBIvTkw+CiI09o3pSg7JknTuV+MZgGX0OaqrBdmT2TUEPZ1VZh7hnULw+ySc6WDQaqNg2ufJyde2vtyFgWO83/EqVwxZa2IjW+HalXaR9/VsuHYMirYTzI5wlbhVx4Jg1PEbUpUuJmZUndVLyJ5jd4R2J7cixwxyH8ScgZA394NSDeUTAtFg3NZi3GkMJBm4Y8dsMDqrcM/NW6P0AjD0ZaxJcXhcpBqtFtskU1UDSg0ZYYkLCTTvO9Da/v/x7swy7KNp+c+NQsupZHksJbCaA5rL32qCkmp5oGgFchDrB9ujKx3m2R3p74pvWPXYkHrQ==
+ b=og1oIh3E/7s9bvOCmr10hy9KqiVypFYzTJokTbUDhZFhOab4JrE7pYqHpIdhlGv8uCPp0NjvJYqVeXxs+cybsxBHSpzfObCT/rsIhyMhiPJ8fRMxPpgDFxW1rPphSZ6V+5n9alFKWUmMJK1FLMdA99gzSBE7cpvU3bzFL4BToquOl5xWEW/LQHjMcFzRHdVld8CabQqeOovyYTRGO6aQpQBjPBF+hlpa1J9LrMC/i6RN4jxMmACf6Tux0HPZPxH6b45e0a2JAAG5ammfdQyXv/cSq8ZFJurc2eJQydi8Q6gTNAcxW7nHwFCL3ULNi0Uq3sxpLidMs5fahmJS/OGYBA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=sGfzsoXJkyPafAfFD9ICTdIP4sAg+iiYn910Rf8B5o8=;
- b=WcuPRhKf1r+H5GSMfyKNywVyrdcWn7nMFJe5zeL6j7ImD/gI4lVLqsJ02bK/9r3Fm6zO9KgjcpBvfet9vuwSK2KTIMfQ2ipw0mY+Qfi/2T9hKFzJiChyVJ+Q0ynnke5B66uQvZEMgnrE9wtEtkGALnPweJo/PkPxzONncGW478/T+x9nYDm9dHCsJePxcOB10pFU4lmiZwwVv+YhAMllR1nIQ2PAK5o4T73OCrHIAEks+hnMy4c4ns+8T31+qu+9tJg3yAaAxm20b4mEdRqNrOrwrkOBbDFaM+S0Yh+c254WWVJl7sVo5HKw7Yt6ijVsvENSJAiHaloxAdy9TVwP9w==
+ bh=cNt7iIU9Y/Ty25n/uAU1tIwBPqXeI5YIvYg+W7IPePY=;
+ b=gp2G2y8FhIqntmTHP2/JG+2fDy9akxIs3Yd+0qIwWvZi7LdzoPloJkEfjuwYwSwfV957NrabfCfJrxFsB5z3tqwYbhOx5X9Ru5anUsO1p151xCWrmteiGqzAZuT4aggFbdQQ0oI8yC6i6yIiiaqs61Mzpig2sodbXKmw2YQmj/UgmoB+9gn8tRdV2Ega8VbZbYpiT3g9CMlh4hAvhyiAkt4H3XfaMf0/PwXvgfWIjycoBhrTlW8au45JAuHygR3l8JQ0A2X+QMC4CnhLd/lo2AJpK4GZSKACbZPpUSg49/s//E6MDLr+V3Mo5nKSMIR2FvagpHKQUS1bjal8p3VL0w==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=analogixsemi.com; dmarc=pass action=none
  header.from=analogixsemi.com; dkim=pass header.d=analogixsemi.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=Analogixsemi.onmicrosoft.com; s=selector2-Analogixsemi-onmicrosoft-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=sGfzsoXJkyPafAfFD9ICTdIP4sAg+iiYn910Rf8B5o8=;
- b=JcO7J4yavZGEMKZxOGTfjzKMtD3iaod3GgLxyknnuzTtP06fPaA/E/79H6pp/acs3gRXCKvCkn1bJRLHjhooawOXQRIShPnVcK3V4urdbXkJvTzvmZWcmbsrPsdtW0oHZwKVNSBY+9HN5hFRZSZtuad1DOKzpFLV3LHoOYKycwE=
+ bh=cNt7iIU9Y/Ty25n/uAU1tIwBPqXeI5YIvYg+W7IPePY=;
+ b=aU3LM/fSmJ/2BisoKCtZ8TyagovwFlUbUesuZfaJzHyzocHyFnsm3c+EZZzgRLU9SVWlS286Mm4CxqfZEqBCWuqAC+IuQDvMK4xzVlmFVO3SNoHB2Q0unHf13IPUPfquW33uQeDPfwxKbLQ8KwYvulhiZq2rMpcFF7pOxrnhWVA=
 Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=analogixsemi.com;
 Received: from CH2PR04MB6741.namprd04.prod.outlook.com (2603:10b6:610:96::19)
  by CO6PR04MB7827.namprd04.prod.outlook.com (2603:10b6:303:139::17) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5417.16; Wed, 6 Jul
- 2022 08:34:53 +0000
+ 2022 08:35:03 +0000
 Received: from CH2PR04MB6741.namprd04.prod.outlook.com
  ([fe80::5400:a1a0:be8f:34bc]) by CH2PR04MB6741.namprd04.prod.outlook.com
  ([fe80::5400:a1a0:be8f:34bc%6]) with mapi id 15.20.5395.022; Wed, 6 Jul 2022
- 08:34:53 +0000
+ 08:35:03 +0000
 From:   Xin Ji <xji@analogixsemi.com>
-To:     Guenter Roeck <linux@roeck-us.net>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Xin Ji <xji@analogixsemi.com>
 Cc:     bliang@analogixsemi.com, qwen@analogixsemi.com,
-        jli@analogixsemi.com, Xin Ji <xji@analogixsemi.com>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org
-Subject: [PATCH v14 1/3] usb: typec: tcpci: move tcpci.h to include/linux/usb/
-Date:   Wed,  6 Jul 2022 16:34:31 +0800
-Message-Id: <20220706083433.2415524-1-xji@analogixsemi.com>
+        jli@analogixsemi.com, Rob Herring <robh@kernel.org>,
+        linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v14 2/3] dt-bindings: usb: Add analogix anx7411 PD binding
+Date:   Wed,  6 Jul 2022 16:34:32 +0800
+Message-Id: <20220706083433.2415524-2-xji@analogixsemi.com>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20220706083433.2415524-1-xji@analogixsemi.com>
+References: <20220706083433.2415524-1-xji@analogixsemi.com>
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
-X-ClientProxiedBy: TYCP286CA0070.JPNP286.PROD.OUTLOOK.COM
- (2603:1096:400:31a::14) To CH2PR04MB6741.namprd04.prod.outlook.com
+X-ClientProxiedBy: TYCPR01CA0079.jpnprd01.prod.outlook.com
+ (2603:1096:405:3::19) To CH2PR04MB6741.namprd04.prod.outlook.com
  (2603:10b6:610:96::19)
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: f82740bf-04b8-47bf-6811-08da5f2a6611
+X-MS-Office365-Filtering-Correlation-Id: a0275a38-a3ba-41b2-5b3b-08da5f2a6c1b
 X-MS-TrafficTypeDiagnostic: CO6PR04MB7827:EE_
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: QFs0KD0tdnqAAl5+Q7sCdCBb7YYanpDGYRRHAbM8TUNcnDx5twAxQ5vXE+jQb7h0b9OTnaeEnvvOgf8q0b59FRtWLUchvapdqei7e2XFz0q9m+eMUFqsQ1Sr270moKjihoUiLVaj6E441LI+TbHjGSWhjwI4sq8CDFpP3ST4mhYm7W+fj241b9Ti5hgzVZfaJh5bz4D7fNRMkeZgFPRhBEmWvNreILXWV7f454IFAzDsLrLwqGc9492o1A/F/AANmg1mBcyCKcpr0A7Kwxu7WbzHHglALyD/qXNCds3NR02e29oZKfVttxhoMATSNxpRhgvDhb0nqkTkxM/9DXBY/ddFjpWKuaPLnzKvSK0kwA0osWW2LRCpOoRVR0MttG2mLc8jDAwbJ9ZdTvKtcYYhx/NvkM8mBzvGWl8iXTJwhqJBdWNl7k0BKr5cswsHj6ENlQkdS3V7gVsIJEaKXZgK1GBkUoC91kg4P4pjh9q4NG0Kv4ZjYNWt9spVaEn0iROYrS+VBIDlvddJglKzkwe7nh7d7zyNREbHew1Df9btSDaGSEb+KHe83148umIKS7oWL86vikCblB3ZViZLtjwN7G8zlBSgGtGaPnukmEd5pgmI/dBVPoItd5MGd/wXhZ+mj/SlVX2Vrx8yDGd/nsQhfo5ZnYV5p2TQoDBNIZ0G3Hq3PiNsASFQY67iFbJxEMelHCQqExKvWOipA/pKOMgRENF9+4nY0q4ofooXuslvrFWEoEGRL8y+NeFNScPP8AmlryP5nNkcX6C1tRA8KC4X26NBPk9JkLWAfG+cpiPg5piDnjwT7+NZKb2ubUZq+hhv
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CH2PR04MB6741.namprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(396003)(366004)(39840400004)(376002)(136003)(346002)(41300700001)(6666004)(316002)(6512007)(1076003)(26005)(186003)(2616005)(110136005)(55236004)(52116002)(6506007)(83380400001)(86362001)(38100700002)(38350700002)(5660300002)(2906002)(6486002)(8936002)(478600001)(8676002)(4326008)(66556008)(66476007)(66946007)(36756003);DIR:OUT;SFP:1102;
+X-Microsoft-Antispam-Message-Info: DYyu10lm7CHuLtl6YS//+Zp02pCrarlBs1Wy7Dg83acpl16FjLFV6+RWFMoo/vQfHE3FR2HoG41CDgYDqOMamnHe4R7PNNhFEgZs/ZANuTOrligsh3QtSMOJlXXahVtGFErd7J91HXhNDun7p/ESmsdvS4uc0vf8FHgaZJ01V4BxalofDTVIbqYI7R3L6i0KJmV/ieyML1YZwt8d0FUS+PdwslAjDUYScHDavM6rufQT205TIrgrfMKO4C8V5cJYlDfHH3Laap0ktiJGeYXR5TUq+KnPTTHueYLloI739kvuVTTVjWKWQ/AQYTHVTrE9gq4NbUaqgofBFhCZgBhvFiBXo5f4qawrCQyyD7sYssD02SNSb6Ee23RwIbWmnGPNLeOGzDdi6oG33Cdv8V35pDnxuN/vlq6KQV2p1uaLpJ0o6ZO0liQyXJSt+FyR+fGZs4QoH9DV6l5i1IYCS1WWcMARuBubF1mcm7KqLzRrjEIh+8Y4NXyWYwKEdS1UVdiwt9gbz/WE/vFAIR2OARn444fiM+CVl9eWOh81mjJrv9QdzNz0TPAwNsuomP/8oPYCwu3D7GT9pvET/9JjEjrr/MGoVkUNmHEclaQ4oMFKDf8WcltjvQY+gA8aCHcgZxcJgPtYdgPrLeDVszBn7fZOwRnwcJYaEo8HLrgpEAYxV8y6x8jVUlCxuS+YpLVnC5UILOGGyUIQEzeYTIvRq7KtVEVNgv4eoRUU8xAxSzkt+04CzTkskb5nz4uxlTNLZEGQF9hD7MI7VVAX3lhlKUJGegZbpLGfchO7u+WjWEHyvuhQJLy7d9Av134zKYMWC+p5yicoGBh2wNRqEW+F+PkIN9mTfAoRdUV5ehhpznT0Ap8=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CH2PR04MB6741.namprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(396003)(366004)(39840400004)(376002)(136003)(346002)(41300700001)(6666004)(316002)(6512007)(1076003)(26005)(186003)(2616005)(7049001)(110136005)(55236004)(52116002)(6506007)(86362001)(38100700002)(38350700002)(5660300002)(2906002)(966005)(6486002)(8936002)(478600001)(8676002)(4326008)(66556008)(66476007)(66946007)(36756003);DIR:OUT;SFP:1102;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?fMRtLH3gxTFOgpFJh8EHPto8mfswmzGPjeE011UhGtfYr4P/EpYPdXY++TJ6?=
- =?us-ascii?Q?q6fO8bZazWdZQs/4YLVI+FNito7N4Vahru70LIJeaZJWPA3Rz5WdUk85BBea?=
- =?us-ascii?Q?rtk+IB8cVjK6A2wMoOQzQ7a42BXqfsXNK6ozfe43w/FYrbwGtP6W7hrJG5PB?=
- =?us-ascii?Q?poUSza1WZ6vQPjwFp04SfGJiBOOCthZiV2Iuco2JTEj6FTEZSF3ufXpnOIQL?=
- =?us-ascii?Q?q4uf0d3yG/HGtcoK7aHCRl7OHbaN6Rr5lAlU5UaoQYKxHiWVNOzs8S4jDBF+?=
- =?us-ascii?Q?gejGRU0UDmCFHx+eGrQkJCvesu6tcG9g1+Z1QjDe6Ihmr6mT1oKgX9QJX0EB?=
- =?us-ascii?Q?l/YTNnvJxBatPC04MjGljIfC4h9MmjaAX4tKffhxAtBZHpy9TthrY9f9lj/i?=
- =?us-ascii?Q?WTyYfgPx6szDVBP/aZfyR1eFqBLfuhXA9LvbDjUwnsyPhCj7dcq1a2z6RcWp?=
- =?us-ascii?Q?Aq6+pFK6COEveysYR+WGiqJEarMlXIVoMj6QCOvWE72c34Py+MawbomkgqRg?=
- =?us-ascii?Q?c+WsjQ/1tkI6jLh8fPMK1tXqJMLm9ORsQyWH+HBh8VKkMeP3B9hMHjq8JOfq?=
- =?us-ascii?Q?iiYQURP6YocR8Y/EizPo8dtQ4FHH/re27uKTNfuk6FcUzQkG998GbtTT7JT5?=
- =?us-ascii?Q?+WIzWvnxOVJTrlC0Og3c/JqfrvXrHR+n0Gid0D+0xo+HLAuCldYWMBwpf8AK?=
- =?us-ascii?Q?tPnsDZDlgqlYwDudcxh9ORAaWU//1AipLtAom4/0+EdBUzQkhTpccZtjtrzm?=
- =?us-ascii?Q?Fu0dRgIizdZ6ZZT6LQZTrk+rJazuomXXF4c53IyJHgKFB5tpLTHuS0GliPRC?=
- =?us-ascii?Q?jLCWotHT0htTD79TBYkPPR3TLiUHfxt6f3k3ZBFlEsaNRB0OEJC+nJo0q6fD?=
- =?us-ascii?Q?Wy2R5nf2PISYdd6T0ESV/4Q9w0XfXp6x0gpbMVJCDhN8LTbFKVyNHz7fBTl1?=
- =?us-ascii?Q?Y2cP8Va3nxbLKwvpGczxAaiZJHyQkRozB9LcXWQYxKwpd7wSWkPQo3emOVYF?=
- =?us-ascii?Q?sU9damDf4xNBxlAz/z5DtOb2soJRa6I6ClhCu5eXSFpRw5p1xAzO8BnXk55l?=
- =?us-ascii?Q?FxkQmG5pyaKslmy+jXgy1Yt/gCR2F/nYR6YNuMTaY7IzJhDb9OiqV/nSINfB?=
- =?us-ascii?Q?uSQrC1IybPNvEjAxAVwCJ/wb6ktpazGMuWtxoydrF7eQtsesuwaNThrF+1tz?=
- =?us-ascii?Q?a8T6g+YJV1OBX0/aNYwI99d3r5ForxQ6EFWF2Mlep/xxPUEM8ySSQmwILs1A?=
- =?us-ascii?Q?kj1uvf2AMHB3YF+2nJ2uFcOWksolWnir+csIIt9m+Irt4r9esnhjj7ZZlkOt?=
- =?us-ascii?Q?ByWBwEYXFUqWXz3/NwusWcBBqOguAkJpGO8vDRetchVHbcyXqtFBxhsgt21+?=
- =?us-ascii?Q?OKE39KLueBrZHjiFNJJpUUAib0OjscvMaV8f010XNNFOJbtYfawNVfyddcdI?=
- =?us-ascii?Q?/Cz/RIW2Ss1T1k6hQiEXuycEIuTkGj2o+0VZyL0WiIwbFVF+Syf0YQVBKe7Q?=
- =?us-ascii?Q?LMRNidCyibexqc/KUY5hjVDH/yzp9sSofEqeXaUmBacmdeph8H5fqw4J/xnI?=
- =?us-ascii?Q?hPlzdRcD58agpTWgz/nTaRgOpmsvZXPf5ZjTD+6K?=
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?f5Kvp7eLsPmUhzKQUvuknJMEtCWp3+AVfY4Ts9wfqdu22IezrYOOBMCDfYka?=
+ =?us-ascii?Q?1WCuSSuAYnx2iUCc64XCD+MNSAXVLk2u/VPZxWuIJSqTIHpMgPR0TunX+98s?=
+ =?us-ascii?Q?H8yMporImgp/I1RxwM+Mo6vK9yyS3xq1e1JOYpEYe92ewuBL2Hue4HHOQTaR?=
+ =?us-ascii?Q?J3YnEEeQ7n3PXj1obv6hraTMEROATIRSXDq31C+HYhBAQ+a3IZ91RMdbSNf4?=
+ =?us-ascii?Q?3Ir0THReoxhyZBmbISgIaUoJddnbehTBWrS9XxP2N439fVx2FLvfhHe1A081?=
+ =?us-ascii?Q?6YD6gcWtBqa+yV+/qqULIsMs/2Q/Nw/1nRhgAm3k6R35McjlkV1tp5y8Jkzq?=
+ =?us-ascii?Q?O0Z1AptwtkY1Xro0dhDgI6tWBXpfqTYJBtT5yLbX2ADbVZW1/HTJTIjzbgCV?=
+ =?us-ascii?Q?RC5bXF2zTwjRIvXY3oTyH13mP+q7UA2eyhbd5xta7lUeYf7u2DiefmjSlQnK?=
+ =?us-ascii?Q?HoskbPrteBs8dZRnewbCV1nLwv/HhMRd9FRR6giktfN0PdIG1oNhSzhvGH0y?=
+ =?us-ascii?Q?GkCkAGKxc/YOUEF++jTtzR1Ss7pVsv7Ubtg1dlMeZRM5vKknGsBOVEaP1oaY?=
+ =?us-ascii?Q?ed08yB7yZd1lg1/O4d83ZHQP/0GzRO99wTDGicunEVuP2ff72REtVqK0+w/L?=
+ =?us-ascii?Q?BEp+v2t0h1Oq5b0Xx6Z3ChiDcYbadhxcph4QT+a+s6MXor0C00AAhXW70uLN?=
+ =?us-ascii?Q?IdWRculN5gx29wwDz9uv2QmFD5p2pGL4XOtOMKdG8x5xBcmgKgaOQSAo1OWI?=
+ =?us-ascii?Q?veNj/kXgi9W/2WAkT4IT9HlET76CAYkoNobS2vg2CpZuHtfMZfGYniZpHC6H?=
+ =?us-ascii?Q?Seq60J3YF7joov2+gfQ0z13ZsxvUWUg6bZDYEuqwfnAEnGUdhIyLt4M9g6xu?=
+ =?us-ascii?Q?RXlqG7jHGeI4ltBhJxJ+tEeU5JdMt6ExC11OfviFgPjEVrPdYaVsEATn95uf?=
+ =?us-ascii?Q?3T2RPmF/4Tiwr2OgNOzyZII6aasOHa33SgR0SGZ47lyP6bNq9p+AAiuzgHSL?=
+ =?us-ascii?Q?B3ZUbI4VRlH5oAM+jyOJznsuUU+t+7hPZpkTG3lJPnzhN7mnVaMgq43fKJFV?=
+ =?us-ascii?Q?FB9iBKZ9hpYlWKxVfz+r3HLhO7UFXSBGyltYl2wesKVdaeDwNtU5ADQCck/T?=
+ =?us-ascii?Q?itrWhLwVarB+ph7hY3ER+a7E9TpqjRzVPXENDMR7cjym1L5AHHsV8hxyZ4CE?=
+ =?us-ascii?Q?OUsN5tWIn4AEHSUUaFdKV1YOEGIr02WJX5AD6xSj3OTeopUqOzJ/QwDvllQc?=
+ =?us-ascii?Q?LD52xQp7smfdpcq2a0XJAeuT5AXHlXYhu2K6q/D/qE2Iqx9z0Crnk14LTreZ?=
+ =?us-ascii?Q?w1erQEa61wlR3qhU33YjA3TE3yb1R96JuY3LkQPdF1l2Vk6OeUMral+OUJhp?=
+ =?us-ascii?Q?R3IpJvPLY/1XQcJoE0ItP5EKBeOasOmR4mvJQboL3WIbD3hsLuEHfp0GSPQN?=
+ =?us-ascii?Q?ju/NuJaKO7YmiWCxPsQFJnrXPWfNVJm2rRp1rCpnRMpUVZSho71xlMwhJSnh?=
+ =?us-ascii?Q?fPeRAOfFiLK/BKzRWm2SOrOcp+xyDyQvC6d0YHOPl1hEJVdKBTDrqFCHbHSu?=
+ =?us-ascii?Q?BFK6E1G+Plsj5u0lnPRW7+Izl6GeC/Jqq2uRjH3+?=
 X-OriginatorOrg: analogixsemi.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: f82740bf-04b8-47bf-6811-08da5f2a6611
+X-MS-Exchange-CrossTenant-Network-Message-Id: a0275a38-a3ba-41b2-5b3b-08da5f2a6c1b
 X-MS-Exchange-CrossTenant-AuthSource: CH2PR04MB6741.namprd04.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Jul 2022 08:34:53.3746
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Jul 2022 08:35:03.5843
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: b099b0b4-f26c-4cf5-9a0f-d5be9acab205
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: mD8rqm+L2bSSzUSpD+lQL8fo3P5abQYL0sDB1n7fV2wiMTU2/pA9Uf+saqoZrthDUKkRWx6Lu196x77x6B8PnQ==
+X-MS-Exchange-CrossTenant-UserPrincipalName: SXiqgXpP8JYuiWVqU9QlDAiRddRKF6uxW63c7obhGAoaCDhnAPlScmPahaBgdqwvRge7h4Aa4B8/sw0wuPrshQ==
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: CO6PR04MB7827
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
@@ -117,110 +118,115 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-USB PD controllers which consisting of a microcontroller (acting as the TCPM)
-and a port controller (TCPC) - may require that the driver for the PD
-controller accesses directly also the on-chip port controller in some cases.
+Add analogix PD chip anx7411 device binding
 
-Move tcpci.h to include/linux/usb/ is convenience access TCPC registers.
-
-Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+Reviewed-by: Rob Herring <robh@kernel.org>
 Signed-off-by: Xin Ji <xji@analogixsemi.com>
 
 ---
-V9 -> V10: Rebase on the latest code
-V8 -> V9 : Add more commit message
-V7 -> V8 : Fix Guanter's comment, remove unnecessary explain
+v13 -> v14 :
+    1. Fix Robot compile error. Fix node name not correct.
+    2. Change HEX to lowercase.
+    3. Use "ports" property.
+v12 -> v13 :
+    1. Drop the quotes for "$id" and "$schema"
+    2. Remove "allOf" label
+    3. Change node name from "i2c1" to "i2c"
+    4. Change node name from "typec" to "usb-typec"
 
 Signed-off-by: Xin Ji <xji@analogixsemi.com>
 ---
- drivers/usb/typec/tcpm/tcpci.c                        | 3 +--
- drivers/usb/typec/tcpm/tcpci_maxim.c                  | 3 +--
- drivers/usb/typec/tcpm/tcpci_mt6360.c                 | 3 +--
- drivers/usb/typec/tcpm/tcpci_rt1711h.c                | 2 +-
- {drivers/usb/typec/tcpm => include/linux/usb}/tcpci.h | 1 +
- 5 files changed, 5 insertions(+), 7 deletions(-)
- rename {drivers/usb/typec/tcpm => include/linux/usb}/tcpci.h (99%)
+ .../bindings/usb/analogix,anx7411.yaml        | 81 +++++++++++++++++++
+ 1 file changed, 81 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/usb/analogix,anx7411.yaml
 
-diff --git a/drivers/usb/typec/tcpm/tcpci.c b/drivers/usb/typec/tcpm/tcpci.c
-index f33e08eb7670..812784702d53 100644
---- a/drivers/usb/typec/tcpm/tcpci.c
-+++ b/drivers/usb/typec/tcpm/tcpci.c
-@@ -13,11 +13,10 @@
- #include <linux/property.h>
- #include <linux/regmap.h>
- #include <linux/usb/pd.h>
-+#include <linux/usb/tcpci.h>
- #include <linux/usb/tcpm.h>
- #include <linux/usb/typec.h>
- 
--#include "tcpci.h"
--
- #define	PD_RETRY_COUNT_DEFAULT			3
- #define	PD_RETRY_COUNT_3_0_OR_HIGHER		2
- #define	AUTO_DISCHARGE_DEFAULT_THRESHOLD_MV	3500
-diff --git a/drivers/usb/typec/tcpm/tcpci_maxim.c b/drivers/usb/typec/tcpm/tcpci_maxim.c
-index df2505570f07..4b6705f3d7b7 100644
---- a/drivers/usb/typec/tcpm/tcpci_maxim.c
-+++ b/drivers/usb/typec/tcpm/tcpci_maxim.c
-@@ -11,11 +11,10 @@
- #include <linux/module.h>
- #include <linux/regmap.h>
- #include <linux/usb/pd.h>
-+#include <linux/usb/tcpci.h>
- #include <linux/usb/tcpm.h>
- #include <linux/usb/typec.h>
- 
--#include "tcpci.h"
--
- #define PD_ACTIVITY_TIMEOUT_MS				10000
- 
- #define TCPC_VENDOR_ALERT				0x80
-diff --git a/drivers/usb/typec/tcpm/tcpci_mt6360.c b/drivers/usb/typec/tcpm/tcpci_mt6360.c
-index 8a952eaf9016..1b7c31278ebb 100644
---- a/drivers/usb/typec/tcpm/tcpci_mt6360.c
-+++ b/drivers/usb/typec/tcpm/tcpci_mt6360.c
-@@ -11,10 +11,9 @@
- #include <linux/of.h>
- #include <linux/platform_device.h>
- #include <linux/regmap.h>
-+#include <linux/usb/tcpci.h>
- #include <linux/usb/tcpm.h>
- 
--#include "tcpci.h"
--
- #define MT6360_REG_PHYCTRL1	0x80
- #define MT6360_REG_PHYCTRL3	0x82
- #define MT6360_REG_PHYCTRL7	0x86
-diff --git a/drivers/usb/typec/tcpm/tcpci_rt1711h.c b/drivers/usb/typec/tcpm/tcpci_rt1711h.c
-index b56a0880a044..3291ca4948da 100644
---- a/drivers/usb/typec/tcpm/tcpci_rt1711h.c
-+++ b/drivers/usb/typec/tcpm/tcpci_rt1711h.c
-@@ -10,9 +10,9 @@
- #include <linux/i2c.h>
- #include <linux/interrupt.h>
- #include <linux/gpio/consumer.h>
-+#include <linux/usb/tcpci.h>
- #include <linux/usb/tcpm.h>
- #include <linux/regmap.h>
--#include "tcpci.h"
- 
- #define RT1711H_VID		0x29CF
- #define RT1711H_PID		0x1711
-diff --git a/drivers/usb/typec/tcpm/tcpci.h b/include/linux/usb/tcpci.h
-similarity index 99%
-rename from drivers/usb/typec/tcpm/tcpci.h
-rename to include/linux/usb/tcpci.h
-index b2edd45f13c6..20c0bedb8ec8 100644
---- a/drivers/usb/typec/tcpm/tcpci.h
-+++ b/include/linux/usb/tcpci.h
-@@ -9,6 +9,7 @@
- #define __LINUX_USB_TCPCI_H
- 
- #include <linux/usb/typec.h>
-+#include <linux/usb/tcpm.h>
- 
- #define TCPC_VENDOR_ID			0x0
- #define TCPC_PRODUCT_ID			0x2
+diff --git a/Documentation/devicetree/bindings/usb/analogix,anx7411.yaml b/Documentation/devicetree/bindings/usb/analogix,anx7411.yaml
+new file mode 100644
+index 000000000000..bbd071ba338f
+--- /dev/null
++++ b/Documentation/devicetree/bindings/usb/analogix,anx7411.yaml
+@@ -0,0 +1,81 @@
++# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/usb/analogix,anx7411.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Analogix ANX7411 Type-C controller bindings
++
++maintainers:
++  - Xin Ji <xji@analogixsemi.com>
++
++properties:
++  compatible:
++    enum:
++      - analogix,anx7411
++
++  reg:
++    maxItems: 1
++
++  interrupts:
++    maxItems: 1
++
++  connector:
++    type: object
++    $ref: ../connector/usb-connector.yaml
++    description:
++      Properties for usb c connector.
++
++    properties:
++      compatible:
++        const: usb-c-connector
++
++      power-role: true
++
++      data-role: true
++
++      try-power-role: true
++
++    required:
++      - compatible
++
++required:
++  - compatible
++  - reg
++  - connector
++
++additionalProperties: false
++
++examples:
++  - |
++    #include <dt-bindings/interrupt-controller/irq.h>
++    i2c {
++        #address-cells = <1>;
++        #size-cells = <0>;
++
++        anx7411@2c {
++            compatible = "analogix,anx7411";
++            reg = <0x2c>;
++            interrupts = <8 IRQ_TYPE_EDGE_FALLING>;
++            interrupt-parent = <&gpio0>;
++
++            typec_con: connector {
++                compatible = "usb-c-connector";
++                power-role = "dual";
++                data-role = "dual";
++                try-power-role = "source";
++
++                ports {
++                    #address-cells = <1>;
++                    #size-cells = <0>;
++                    port@0 {
++                        reg = <0>;
++                        typec_con_ep: endpoint {
++                            remote-endpoint = <&usbotg_hs_ep>;
++                        };
++                    };
++                };
++            };
++        };
++    };
++...
 -- 
 2.25.1
 

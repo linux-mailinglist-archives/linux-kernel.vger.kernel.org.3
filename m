@@ -2,60 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 47734568C63
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 17:10:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E2B2B568C66
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 17:10:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232640AbiGFPK2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Jul 2022 11:10:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55590 "EHLO
+        id S233075AbiGFPKm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Jul 2022 11:10:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55856 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231892AbiGFPKZ (ORCPT
+        with ESMTP id S232890AbiGFPKk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Jul 2022 11:10:25 -0400
-Received: from mail-io1-f53.google.com (mail-io1-f53.google.com [209.85.166.53])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7666F65D7;
-        Wed,  6 Jul 2022 08:10:25 -0700 (PDT)
-Received: by mail-io1-f53.google.com with SMTP id r133so14274237iod.3;
-        Wed, 06 Jul 2022 08:10:25 -0700 (PDT)
+        Wed, 6 Jul 2022 11:10:40 -0400
+Received: from mail-il1-f181.google.com (mail-il1-f181.google.com [209.85.166.181])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C455CBC22;
+        Wed,  6 Jul 2022 08:10:39 -0700 (PDT)
+Received: by mail-il1-f181.google.com with SMTP id h16so1391085ila.2;
+        Wed, 06 Jul 2022 08:10:39 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=ti4zmV4GUapG/KcWvw/wcUeeD0JIk7jWHgtf+D9XkUc=;
-        b=gcp5efh9IvLopr3Lpz1ts+1tQeSI9tYpaFLMloOaVkUtU3rR8YErYcqMVpeADjAQPH
-         L/tEth+C5zSU1+Ege44JpucqvWygPXcLpLVIuMLfHQGNtPEgREPmCk4qmX8a1Dbo8cEE
-         fGNSSuLI56duo+xNiJk8jM0GTqwGVh8yYM8Hqb1TUVvV1KjxEt1fEMygw+FqJpXk+Qlk
-         +zQVe0K4gineQt0IvxENZz/QYVheXgPKakrnW6e32ntME4V+8Li7Qk42HLXIsjOMPiqY
-         CCtt+p4KWGSjco4P64s6AWSqzO6aRStlCDesYV+4o3QsuNnw/nt9uk5pOHnNF9Cjeern
-         5inQ==
-X-Gm-Message-State: AJIora+xyJv8zutRzul5LWkskupPULp6RSmKYUc14lCkVFYZJnnbVR7E
-        lJd5uKF3F7TLE5YVmzfHGg==
-X-Google-Smtp-Source: AGRyM1u7Si3EOMaQg8tfbk3/6gmgmrta74QsCxtc71g6m2mKVZfQnkfBZeJHPq5m0IW/hXHFwWK01w==
-X-Received: by 2002:a05:6638:304:b0:33e:9d12:99f5 with SMTP id w4-20020a056638030400b0033e9d1299f5mr18195671jap.45.1657120224755;
-        Wed, 06 Jul 2022 08:10:24 -0700 (PDT)
+        bh=zdjs07DYAhmei3cQmKh7rMmTcQmZl8SHjo2pXmSEwmE=;
+        b=jQluPyyvgk392D6V29Imo3jnlqPJxoRz6ubrTTn09eWLCKL11s7ylccyjzuvDWuYF+
+         w1jZ7slDcFsnq7ybs2q3xv/wZThejMWk94QKuY+a+JdfQoBoNiTbEZSFFiz9wyZ1Na1f
+         U3VaikdiHshHFdWyOQWpiT8/exS/EIsiq1SBuDDZ0ZtPjPLZdL0C20XpN559q81i79wO
+         n8L9EZuj8w9R7Kfpw3azCX1DbQvVJ9F9ok3ouguS17XMCqXVb2GZTw4gwKtJdO6jE7DW
+         pI49SDRSWcJpxW7P9CH4WTE4Q6pMbcL60bMuH63gTZKCzGwZM2RnjTOiNmxeumI/+4rT
+         Y36A==
+X-Gm-Message-State: AJIora8/wtE5KCoqAsmANKmPvDu8Y2hNaj6+1DebpC8XSsblFQW28dZj
+        SziEx6L7cf5aSd3Zx29n8Q==
+X-Google-Smtp-Source: AGRyM1ukR/q19o2G5RRh5INK5veEH8Jp0n9LvRhhRZ5m/iy7CTOt7IJCw4YpeHMhXstT1Zh2H3yAmg==
+X-Received: by 2002:a92:d190:0:b0:2d9:4461:f2a1 with SMTP id z16-20020a92d190000000b002d94461f2a1mr24104284ilz.143.1657120239050;
+        Wed, 06 Jul 2022 08:10:39 -0700 (PDT)
 Received: from robh.at.kernel.org ([64.188.179.248])
-        by smtp.gmail.com with ESMTPSA id cn27-20020a0566383a1b00b0033efc8857c0sm1475754jab.50.2022.07.06.08.10.23
+        by smtp.gmail.com with ESMTPSA id c1-20020a92d3c1000000b002dc1d6652cesm2587203ilh.13.2022.07.06.08.10.37
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 06 Jul 2022 08:10:24 -0700 (PDT)
-Received: (nullmailer pid 52757 invoked by uid 1000);
-        Wed, 06 Jul 2022 15:10:22 -0000
-Date:   Wed, 6 Jul 2022 09:10:22 -0600
+        Wed, 06 Jul 2022 08:10:38 -0700 (PDT)
+Received: (nullmailer pid 53287 invoked by uid 1000);
+        Wed, 06 Jul 2022 15:10:36 -0000
+Date:   Wed, 6 Jul 2022 09:10:36 -0600
 From:   Rob Herring <robh@kernel.org>
 To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, Vignesh Raghavendra <vigneshr@ti.com>,
+Cc:     linux-kernel@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
+        linux-samsung-soc@vger.kernel.org,
         Alim Akhtar <alim.akhtar@samsung.com>,
-        Rob Herring <robh+dt@kernel.org>, Nishanth Menon <nm@ti.com>,
+        Nishanth Menon <nm@ti.com>, devicetree@vger.kernel.org,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        linux-arm-kernel@lists.infradead.org,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         Tero Kristo <kristo@kernel.org>
-Subject: Re: [PATCH v3 1/2] dt-bindings: hwinfo: group Chip ID-like devices
-Message-ID: <20220706151022.GA52709-robh@kernel.org>
+Subject: Re: [PATCH v3 2/2] dt-bindings: hwinfo: samsung,s5pv210-chipid: add
+ S5PV210 ChipID
+Message-ID: <20220706151036.GA53233-robh@kernel.org>
 References: <20220705154613.453096-1-krzysztof.kozlowski@linaro.org>
+ <20220705154613.453096-2-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220705154613.453096-1-krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220705154613.453096-2-krzysztof.kozlowski@linaro.org>
 X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
         FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
         HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
@@ -67,25 +70,23 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 05 Jul 2022 17:46:12 +0200, Krzysztof Kozlowski wrote:
-> Group devices like Chip ID or SoC information under "hwinfo" directory.
+On Tue, 05 Jul 2022 17:46:13 +0200, Krzysztof Kozlowski wrote:
+> Document already used S5PV210 ChipID block.
 > 
 > Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 > 
 > ---
 > 
 > Changes since v2:
-> 1. Spllit renesas,prr.yaml into separate patchset.
+> 1. None.
 > 
 > Changes since v1:
-> 1. New patch
+> 1. Move to hwinfo and rename.
+> 2. Mention that device is already used.
 > ---
->  .../exynos-chipid.yaml => hwinfo/samsung,exynos-chipid.yaml}    | 2 +-
->  .../{soc/ti/k3-socinfo.yaml => hwinfo/ti,k3-socinfo.yaml}       | 2 +-
->  MAINTAINERS                                                     | 2 ++
->  3 files changed, 4 insertions(+), 2 deletions(-)
->  rename Documentation/devicetree/bindings/{soc/samsung/exynos-chipid.yaml => hwinfo/samsung,exynos-chipid.yaml} (92%)
->  rename Documentation/devicetree/bindings/{soc/ti/k3-socinfo.yaml => hwinfo/ti,k3-socinfo.yaml} (92%)
+>  .../hwinfo/samsung,s5pv210-chipid.yaml        | 30 +++++++++++++++++++
+>  1 file changed, 30 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/hwinfo/samsung,s5pv210-chipid.yaml
 > 
 
 Applied, thanks!

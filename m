@@ -2,71 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6215B568C32
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 17:04:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D4300568C38
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 17:06:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233308AbiGFPEp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Jul 2022 11:04:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49890 "EHLO
+        id S233168AbiGFPGY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Jul 2022 11:06:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50858 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232803AbiGFPEm (ORCPT
+        with ESMTP id S232625AbiGFPGX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Jul 2022 11:04:42 -0400
-Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7649715A33
-        for <linux-kernel@vger.kernel.org>; Wed,  6 Jul 2022 08:04:41 -0700 (PDT)
-Received: by mail-wr1-x435.google.com with SMTP id v16so11040606wrd.13
-        for <linux-kernel@vger.kernel.org>; Wed, 06 Jul 2022 08:04:41 -0700 (PDT)
+        Wed, 6 Jul 2022 11:06:23 -0400
+Received: from mail-lj1-x22c.google.com (mail-lj1-x22c.google.com [IPv6:2a00:1450:4864:20::22c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C64F1AF06
+        for <linux-kernel@vger.kernel.org>; Wed,  6 Jul 2022 08:06:21 -0700 (PDT)
+Received: by mail-lj1-x22c.google.com with SMTP id i17so14059913ljj.12
+        for <linux-kernel@vger.kernel.org>; Wed, 06 Jul 2022 08:06:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=zUHjRI1jr+Yrh9dUueZjZWr58/iaqkxDRzBkA9rclyI=;
-        b=Yl8J/2mhUuzM78REsuhuyap1UbHG6jdWDrIww75VUghGmOO1FjKfKNKXB/9Jp/9baS
-         XXISx1pqBW+IX9dbVVg4tYE1JTNlP7PEE0HUQN7dN7emEZchaX/5dz/gcvFy9Px1w/Jf
-         ofxWJej6Yn+VNo7jevmxhUvjmrWPZAX7Eayn/M9MNecMAKCFbcyPP0bWYTswl/wIZuMz
-         oaAb+dLxOjW/phWNhUD5/2D0SqTFvt7/S3Q9ym15HCDID55+fCYiHs+sMyKjeHliWxD6
-         DghaBfeRDY8lfxK+W6f72lWjdn6uZuGHNH16kWf0nZU4ubnNsRFto1uxHN9N762AOiLs
-         cqxg==
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=8AO+J2LE63gF/pEN0vFhWdC06z7hhSAJ2kzbzBHJQYc=;
+        b=Yu53js0MAGepvew3Gnozocl206vgIuj1V+C5/ECHoEY/DsvpqGEjcqt9GF843uMUbq
+         pQ+tva9G6ED+y3/e+AW1/Ps8GTtgDscD/JVWR9FPTXdrGy1qaglB5p2jZT/BklBtWKdB
+         b4f3q9wxnYksxsCI/Qh1Nc2PvsultWSf+E75bmnz+hFZoQCKo93Bp7HMq6ol62rfOzvf
+         Tny/uz1AzSMVNa5L5yvbYaLDLDKxZqQxJ6eRjmA45XDrLad4VXyCyv3ppg9S6vtL89UN
+         0XPd9vLhnjdD+fLgTl4RgVSv19MpSZqBHxwd291COOaZp5Hv4g1Rz9Db2zssJiWuYbVl
+         4XJA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=zUHjRI1jr+Yrh9dUueZjZWr58/iaqkxDRzBkA9rclyI=;
-        b=Ic4MyYwjWiHKgPjvEXQToA0XGwKAoeJf1GwOG+y7SxaqHIRkaHMvz8yDnE8xaYlmlK
-         eRcfRN0OPLJzucQmf2pXCGzjqBhApMzCZQ6iL8HtG5SmPOKGmkDqsU5DaUO73p7aef6K
-         o0uJvGdoyntbmrKKoFdYw9Zg6I0cpdXOt411he8u/oL8bsPheJ+Jms2/9g2itRlpCuMP
-         p/1bfetliVh+6zxek8RCXB4roEn1pe9aXeRN7oM1XYkQNspyJMJzSMBHU/y2eLsGQXpZ
-         6JJ9lXUIdVMCNUngDv9VG4lsLAlhJsoS6s3+pSs0JWKCp9j/nkiKhNJrYY+lGbRyLc1Z
-         6JmA==
-X-Gm-Message-State: AJIora9w/uvBuLzxLBNdDvC7LPHsk86QnDAQ16aUiAEz0QOiV3D9ra90
-        ShDIO9/IoTeIGQ99aiswciLRrQ==
-X-Google-Smtp-Source: AGRyM1sTX0EBykUUNSxnDmNCn71gGdN1WibbHuKtCzZndxVWdMyf1gXg/h9NxH+czj+cg9UVEO/qCQ==
-X-Received: by 2002:a05:6000:1446:b0:21d:2245:ab65 with SMTP id v6-20020a056000144600b0021d2245ab65mr37797391wrx.315.1657119879727;
-        Wed, 06 Jul 2022 08:04:39 -0700 (PDT)
-Received: from localhost.localdomain ([94.52.112.99])
-        by smtp.gmail.com with ESMTPSA id v7-20020a1cac07000000b003a04e6410e0sm22443420wme.33.2022.07.06.08.04.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 06 Jul 2022 08:04:39 -0700 (PDT)
-From:   Abel Vesa <abel.vesa@linaro.org>
-To:     Mike Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>
-Cc:     linux-clk@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-arm-msm@vger.kernel.org, Abel Vesa <abel.vesa@linaro.org>
-Subject: [RFC 2/2] clk: qcom: sdm845: Add clk_sync_state_disable_unused as sync_state
-Date:   Wed,  6 Jul 2022 18:04:11 +0300
-Message-Id: <20220706150411.708213-2-abel.vesa@linaro.org>
-X-Mailer: git-send-email 2.34.3
-In-Reply-To: <20220706150411.708213-1-abel.vesa@linaro.org>
-References: <20220706150411.708213-1-abel.vesa@linaro.org>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=8AO+J2LE63gF/pEN0vFhWdC06z7hhSAJ2kzbzBHJQYc=;
+        b=29LoQ2GYPWYCHxiEYq531Ny7IJMMRitxCi7Lbcm7ijfo9rDY9/AdgvZfzL2/deReoB
+         AfVQgy9TXx71K3JwIUnQXveGYfoJvZD61tsrdbs04lhIlhT4sgaetdh8R1UokjRafVop
+         x+w2Xa2w3KMOh4Zb9+ng+xgojDzJo/NKbeG2N7tYF4PuGvTa7W0+qxjQ0ReHaCcEdTth
+         YRcaWypjVrZy8tCrdUEPTP+zOgHzVDhn5vugYGpnAV19BPxohpA4tsyQ/as38CL5+psr
+         l8WhBOGZEhJ68XYp/arihN4AGHPDlnvC1nduxhpXSK4giPGMPsLyvFkp0FDFsny7AgDM
+         l9gA==
+X-Gm-Message-State: AJIora8uNOQkkN0+X7+vczATLBHC6cBQJfQP/pMo0VPowh2DEPWcbwoo
+        Pgk9sNGugEQU96UdsOQJYH9dXQ==
+X-Google-Smtp-Source: AGRyM1vvRukpDW59hhuCkomJfS5xKDFgaLXYid6bqitubs0npzp+fQmvLDn1pZEU+L4JkcWZYMhIxA==
+X-Received: by 2002:a2e:a26c:0:b0:25a:6dad:8bf5 with SMTP id k12-20020a2ea26c000000b0025a6dad8bf5mr23877254ljm.136.1657119979530;
+        Wed, 06 Jul 2022 08:06:19 -0700 (PDT)
+Received: from [192.168.1.52] ([84.20.121.239])
+        by smtp.gmail.com with ESMTPSA id g1-20020a0565123b8100b0047f9d9a4186sm6330501lfv.165.2022.07.06.08.06.18
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 06 Jul 2022 08:06:18 -0700 (PDT)
+Message-ID: <bce8c598-9075-d643-59b5-c2397a55b52f@linaro.org>
+Date:   Wed, 6 Jul 2022 17:06:16 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH V3 02/11] dt-bindings: pci: tegra: Convert to json-schema
+Content-Language: en-US
+To:     Vidya Sagar <vidyas@nvidia.com>, Rob Herring <robh@kernel.org>
+Cc:     bhelgaas@google.com, lorenzo.pieralisi@arm.com,
+        thierry.reding@gmail.com, jonathanh@nvidia.com, kishon@ti.com,
+        vkoul@kernel.org, kw@linux.com, p.zabel@pengutronix.de,
+        mperttunen@nvidia.com, linux-pci@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-tegra@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-phy@lists.infradead.org,
+        kthota@nvidia.com, mmaddireddy@nvidia.com, sagar.tv@gmail.com,
+        Thierry Reding <treding@nvidia.com>
+References: <20220629060435.25297-1-vidyas@nvidia.com>
+ <20220629060435.25297-3-vidyas@nvidia.com>
+ <20220630210449.GA3283899-robh@kernel.org>
+ <e971a557-3387-efcf-87ec-983b998c5e93@nvidia.com>
+ <2829e71b-1769-ce24-f810-d63e619aa5f0@linaro.org>
+ <398a9370-6c2d-319c-2e23-038588fbf004@nvidia.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <398a9370-6c2d-319c-2e23-038588fbf004@nvidia.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -75,69 +85,66 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-By adding the newly added clk_sync_state_disable_unused as sync_state
-callback to all sdm845 clock providers, we make sure that no clock
-belonging to these providers gets disabled on clk_disable_unused,
-but rather they are disabled on sync_state, when it is safe, since
-all the consumers build as modules have their chance of enabling
-their own clocks.
+On 06/07/2022 12:46, Vidya Sagar wrote:
+> 
+> 
+> On 7/6/2022 3:36 PM, Krzysztof Kozlowski wrote:
+>> External email: Use caution opening links or attachments
+>>
+>>
+>> On 06/07/2022 11:53, Vidya Sagar wrote:
+>>>>> +  nvidia,bpmp:
+>>>>> +    $ref: /schemas/types.yaml#/definitions/phandle-array
+>>>>> +    description: |
+>>>>> +      Must contain a pair of phandle to BPMP controller node followed by controller ID. Following
+>>>>> +      are the controller IDs for each controller:
+>>>>> +
+>>>>> +        0: C0
+>>>>> +        1: C1
+>>>>> +        2: C2
+>>>>> +        3: C3
+>>>>> +        4: C4
+>>>>> +        5: C5
+>>>>> +    items:
+>>>>> +      - items:
+>>>>> +          - minimum: 0
+>>>>> +            maximum: 0xffffffff
+>>>>
+>>>> That's already the limit. Just a description is fine.
+>>>>
+>>>>> +          - enum: [ 0, 1, 2, 3, 4, 5 ]
+>>>>
+>>>> maximum: 5
+>>>
+>>> Setting the maximum to '5' is resulting in the following error.
+>>>
+>>> pcie-ep@141a0000: nvidia,bpmp:0:0: 4294967295 is greater than the
+>>> maximum of 5
+>>>
+>>> Could you please help me understand why I'm seeing this error?
+>>
+>> Trim your replies.
+>>
+>> Why adding minimum:5 to the phandle? Rob said add a description. Nothing
+>> about minimum.
+> 
+> I'm sorry I didn't understand the review comment clearly.
+> There is one description added above already. Are you (and Rob) saying 
+> that one more description is needed?
 
-Signed-off-by: Abel Vesa <abel.vesa@linaro.org>
----
- drivers/clk/qcom/camcc-sdm845.c  | 1 +
- drivers/clk/qcom/dispcc-sdm845.c | 1 +
- drivers/clk/qcom/gcc-sdm845.c    | 1 +
- drivers/clk/qcom/gpucc-sdm845.c  | 1 +
- 4 files changed, 4 insertions(+)
+You have description of entire property. The property consists of
+phandles ("items", with only one item) and each phandle of two items
+(second nested "items"). The first item in phandle is actual phandle, so
+it does not need any constraints/schema, just a description. This was
+missing.
 
-diff --git a/drivers/clk/qcom/camcc-sdm845.c b/drivers/clk/qcom/camcc-sdm845.c
-index 27d44188a7ab..e5aeb832e47b 100644
---- a/drivers/clk/qcom/camcc-sdm845.c
-+++ b/drivers/clk/qcom/camcc-sdm845.c
-@@ -1743,6 +1743,7 @@ static struct platform_driver cam_cc_sdm845_driver = {
- 	.driver	= {
- 		.name = "sdm845-camcc",
- 		.of_match_table = cam_cc_sdm845_match_table,
-+		.sync_state = clk_sync_state_disable_unused,
- 	},
- };
- 
-diff --git a/drivers/clk/qcom/dispcc-sdm845.c b/drivers/clk/qcom/dispcc-sdm845.c
-index 735adfefc379..1810d58bad09 100644
---- a/drivers/clk/qcom/dispcc-sdm845.c
-+++ b/drivers/clk/qcom/dispcc-sdm845.c
-@@ -869,6 +869,7 @@ static struct platform_driver disp_cc_sdm845_driver = {
- 	.driver		= {
- 		.name	= "disp_cc-sdm845",
- 		.of_match_table = disp_cc_sdm845_match_table,
-+		.sync_state = clk_sync_state_disable_unused,
- 	},
- };
- 
-diff --git a/drivers/clk/qcom/gcc-sdm845.c b/drivers/clk/qcom/gcc-sdm845.c
-index 58aa3ec9a7fc..5db75d5ba584 100644
---- a/drivers/clk/qcom/gcc-sdm845.c
-+++ b/drivers/clk/qcom/gcc-sdm845.c
-@@ -3624,6 +3624,7 @@ static struct platform_driver gcc_sdm845_driver = {
- 	.driver		= {
- 		.name	= "gcc-sdm845",
- 		.of_match_table = gcc_sdm845_match_table,
-+		.sync_state = clk_sync_state_disable_unused,
- 	},
- };
- 
-diff --git a/drivers/clk/qcom/gpucc-sdm845.c b/drivers/clk/qcom/gpucc-sdm845.c
-index 110b54401bc6..622a54a67d32 100644
---- a/drivers/clk/qcom/gpucc-sdm845.c
-+++ b/drivers/clk/qcom/gpucc-sdm845.c
-@@ -205,6 +205,7 @@ static struct platform_driver gpu_cc_sdm845_driver = {
- 	.driver = {
- 		.name = "sdm845-gpucc",
- 		.of_match_table = gpu_cc_sdm845_match_table,
-+		.sync_state = clk_sync_state_disable_unused,
- 	},
- };
- 
--- 
-2.34.3
+Something like this:
+https://elixir.bootlin.com/linux/v5.18-rc1/source/Documentation/devicetree/bindings/soc/samsung/exynos-usi.yaml#L42
 
+except that in your case second item (in the nested items) have actual
+schema, not description, which is good.
+
+
+
+Best regards,
+Krzysztof

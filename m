@@ -2,154 +2,201 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4CF665694A7
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 23:47:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EE8D15694AB
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 23:47:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234325AbiGFVq6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Jul 2022 17:46:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35388 "EHLO
+        id S233780AbiGFVrp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Jul 2022 17:47:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35822 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233573AbiGFVq4 (ORCPT
+        with ESMTP id S234618AbiGFVrm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Jul 2022 17:46:56 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66D6522291
-        for <linux-kernel@vger.kernel.org>; Wed,  6 Jul 2022 14:46:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1657144015; x=1688680015;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=vWGrL0p+451e0Urj9P6SW1C0mu9h/ERUe2NztInapK8=;
-  b=fv06xmWop10W3UAZmjL2uS9XurvUwo748M4pj1V6u5eWZlNK0YoylKa2
-   tGkSXvuMr19NqsaZsH4gaxleq5/gR2pJWM/c82eqSByw1CDAmiGfU2PgV
-   GD4BWIqPMgk7yf5PF794VeHesZGGd9z7jyPMcntNsDauL+y8ePvliC9Qq
-   Rf7w5IQYhERkrLbSQ0ebNOcTNogNMMCfKppYdfofiy6XaPsyc7VNCfGnf
-   JUaTDBNmwRjh/U9a3u29s6375OAumiUkgul3BXuDv8PTcQj575pZwprfF
-   D35dx+CgRQFI/z6pMJewfI4W4K3Ef9zC/5iSXbpjMqukjfJkMsZRtq0VX
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10400"; a="263661223"
-X-IronPort-AV: E=Sophos;i="5.92,251,1650956400"; 
-   d="scan'208";a="263661223"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jul 2022 14:46:55 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,251,1650956400"; 
-   d="scan'208";a="568248435"
-Received: from lkp-server01.sh.intel.com (HELO 68b931ab7ac1) ([10.239.97.150])
-  by orsmga006.jf.intel.com with ESMTP; 06 Jul 2022 14:46:53 -0700
-Received: from kbuild by 68b931ab7ac1 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1o9CrE-000L5h-NV;
-        Wed, 06 Jul 2022 21:46:52 +0000
-Date:   Thu, 7 Jul 2022 05:46:03 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Shengjiu Wang <shengjiu.wang@nxp.com>
-Cc:     kbuild-all@lists.01.org,
-        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
-        linux-kernel@vger.kernel.org, Mark Brown <broonie@kernel.org>,
-        Viorel Suman <viorel.suman@nxp.com>
-Subject: [ammarfaizi2-block:broonie/sound/for-next 322/353]
- sound/soc/fsl/fsl_utils.c:125:31: sparse: sparse: Using plain integer as
- NULL pointer
-Message-ID: <202207070521.JjRAUeas-lkp@intel.com>
+        Wed, 6 Jul 2022 17:47:42 -0400
+Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com [IPv6:2607:f8b0:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCB9A29806
+        for <linux-kernel@vger.kernel.org>; Wed,  6 Jul 2022 14:47:40 -0700 (PDT)
+Received: by mail-pf1-x42f.google.com with SMTP id a15so15471651pfv.13
+        for <linux-kernel@vger.kernel.org>; Wed, 06 Jul 2022 14:47:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=Z3+rDoUCYe8RPmhoz8u2hYqTYAf8ITefM+d2gAxFnNQ=;
+        b=FNSlrUv53kCFN0bEt0sjfXf4U7vixRGQfYV6M8pKQRGmbfLtd0r2mPn9Qxu56b0coM
+         GiakKYX+CsPjP5vBCsHL6xNarxueFBlu7KrsOXeuBwCnHwqLLgtGbGV4e8wV+fyFKkr6
+         egvF8X0n20EGcXBooEeLkTyKCaCsqOmHiwNXA=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=Z3+rDoUCYe8RPmhoz8u2hYqTYAf8ITefM+d2gAxFnNQ=;
+        b=WtN9MiVD2UAqKWGczbNBNEsr5Rxycp2GDeGijsEeVktirfg0mUh0pcGebkJrvw4vc8
+         x6gQT/Nhx+ZpZlNfvgxTaXFJZ0ZKfQ+iCyXvHa7Oq4fCo70ghZTdtntwMbPqM8TZTlSW
+         R/V+fL5UrTTJUHQ4AkHsGxRpfioHKo46x/AOjbk598xP758UWDkFRu9PHxDHjkqDeDtB
+         MMhCXn++gz+7dNZ3j4DQv0FSxQYzxrbeS4pfoW0t8gZ+gkEdNTnCAm4g5p4eDSW1FeGp
+         gkXt6dL4L3dci88cKnQLar7qofDIxaGk2oRXeUmvNLVWBMilYPlk6//nr+6k2wZUqwEH
+         lHKA==
+X-Gm-Message-State: AJIora/eCCoWSDxyUAuvGLwW6du+L/aV5c2AfjEynVaJUvv9g3Pr/bGp
+        1IuX8SADqgGTOVtQAK+AhNGUkQ==
+X-Google-Smtp-Source: AGRyM1v4DdP0bgdN+M2+/vmQSOBYu9OTCiY3gGS7tau41Tm51BpIRne1Egmhuz4VIo95Zya5vZw9+g==
+X-Received: by 2002:a05:6a00:174b:b0:525:4eea:8ff2 with SMTP id j11-20020a056a00174b00b005254eea8ff2mr48611592pfc.23.1657144060398;
+        Wed, 06 Jul 2022 14:47:40 -0700 (PDT)
+Received: from tictac2.mtv.corp.google.com ([2620:15c:202:201:db48:9018:c59f:cffd])
+        by smtp.gmail.com with ESMTPSA id u16-20020a170902e81000b0015e8d4eb2e3sm3348955plg.301.2022.07.06.14.47.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 06 Jul 2022 14:47:40 -0700 (PDT)
+From:   Douglas Anderson <dianders@chromium.org>
+To:     Bjorn Andersson <bjorn.andersson@linaro.org>
+Cc:     swboyd@chromium.org, Bhupesh Sharma <bhupesh.sharma@linaro.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Douglas Anderson <dianders@chromium.org>,
+        Andy Gross <agross@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] Revert "arm64: dts: qcom: Fix 'reg-names' for sdhci nodes"
+Date:   Wed,  6 Jul 2022 14:47:33 -0700
+Message-Id: <20220706144706.1.I48f35820bf3670d54940110462555c2d0a6d5eb2@changeid>
+X-Mailer: git-send-email 2.37.0.rc0.161.g10f37bed90-goog
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,
-        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Shengjiu,
+This reverts commit afcbe252e9c19161e4d4c95f33faaf592f1de086.
 
-First bad commit (maybe != root cause):
+The commit in question caused my sc7280-herobrine-herobrine-r1 board
+not to boot anymore. This shouldn't be too surprising since the driver
+is relying on the name "cqhci".
 
-tree:   https://github.com/ammarfaizi2/linux-block broonie/sound/for-next
-head:   3f4322bb413adb7f9d8b5e9005eb1b9bc85f9312
-commit: 93f54100fbdedc22e8d88d037a8a3e32101724eb [322/353] ASoC: fsl_micfil: Add support for PLL switch at runtime
-config: powerpc-randconfig-s031-20220706 (https://download.01.org/0day-ci/archive/20220707/202207070521.JjRAUeas-lkp@intel.com/config)
-compiler: powerpc-linux-gcc (GCC) 11.3.0
-reproduce:
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # apt-get install sparse
-        # sparse version: v0.6.4-39-gce1a6720-dirty
-        # https://github.com/ammarfaizi2/linux-block/commit/93f54100fbdedc22e8d88d037a8a3e32101724eb
-        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
-        git fetch --no-tags ammarfaizi2-block broonie/sound/for-next
-        git checkout 93f54100fbdedc22e8d88d037a8a3e32101724eb
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=powerpc SHELL=/bin/bash sound/soc/fsl/
+The issue seems to be that someone decided to change the names of
+things when the binding moved from .txt to .yaml. We should go back to
+the names that the bindings have historically specified.
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+For some history, see commit d3392339cae9 ("mmc: cqhci: Update cqhci
+memory ioresource name") and commit d79100c91ae5 ("dt-bindings: mmc:
+sdhci-msm: Add CQE reg map").
 
+Fixes: afcbe252e9c1 ("arm64: dts: qcom: Fix 'reg-names' for sdhci nodes")
+Signed-off-by: Douglas Anderson <dianders@chromium.org>
+---
+This is just a straight revert. That presumably means we'll get some
+"make dtbs_check" warnings that were fixed by the commit being
+reverted. I'll leave it to the authors of the original commit to
+adjust the bindings to fix those.
 
-sparse warnings: (new ones prefixed by >>)
->> sound/soc/fsl/fsl_utils.c:125:31: sparse: sparse: Using plain integer as NULL pointer
-   sound/soc/fsl/fsl_utils.c:125:42: sparse: sparse: Using plain integer as NULL pointer
+ arch/arm64/boot/dts/qcom/qcs404.dtsi | 2 +-
+ arch/arm64/boot/dts/qcom/sc7180.dtsi | 2 +-
+ arch/arm64/boot/dts/qcom/sc7280.dtsi | 2 +-
+ arch/arm64/boot/dts/qcom/sdm630.dtsi | 4 ++--
+ arch/arm64/boot/dts/qcom/sm6125.dtsi | 4 ++--
+ arch/arm64/boot/dts/qcom/sm6350.dtsi | 2 +-
+ 6 files changed, 8 insertions(+), 8 deletions(-)
 
-vim +125 sound/soc/fsl/fsl_utils.c
-
-7bad8125549cda Shengjiu Wang 2022-07-01  109  
-7bad8125549cda Shengjiu Wang 2022-07-01  110  /**
-7bad8125549cda Shengjiu Wang 2022-07-01  111   * fsl_asoc_reparent_pll_clocks - set clock parent if necessary
-7bad8125549cda Shengjiu Wang 2022-07-01  112   *
-7bad8125549cda Shengjiu Wang 2022-07-01  113   * @dev: device pointer
-7bad8125549cda Shengjiu Wang 2022-07-01  114   * @clk: root clock pointer
-7bad8125549cda Shengjiu Wang 2022-07-01  115   * @pll8k_clk: PLL clock pointer for 8kHz
-7bad8125549cda Shengjiu Wang 2022-07-01  116   * @pll11k_clk: PLL clock pointer for 11kHz
-7bad8125549cda Shengjiu Wang 2022-07-01  117   * @ratio: target requency for root clock
-7bad8125549cda Shengjiu Wang 2022-07-01  118   *
-7bad8125549cda Shengjiu Wang 2022-07-01  119   * This function set root clock parent according to the target ratio
-7bad8125549cda Shengjiu Wang 2022-07-01  120   */
-7bad8125549cda Shengjiu Wang 2022-07-01  121  void fsl_asoc_reparent_pll_clocks(struct device *dev, struct clk *clk,
-7bad8125549cda Shengjiu Wang 2022-07-01  122  				  struct clk *pll8k_clk,
-7bad8125549cda Shengjiu Wang 2022-07-01  123  				  struct clk *pll11k_clk, u64 ratio)
-7bad8125549cda Shengjiu Wang 2022-07-01  124  {
-7bad8125549cda Shengjiu Wang 2022-07-01 @125  	struct clk *p, *pll = 0, *npll = 0;
-7bad8125549cda Shengjiu Wang 2022-07-01  126  	bool reparent = false;
-7bad8125549cda Shengjiu Wang 2022-07-01  127  	int ret = 0;
-7bad8125549cda Shengjiu Wang 2022-07-01  128  
-7bad8125549cda Shengjiu Wang 2022-07-01  129  	if (!clk || !pll8k_clk || !pll11k_clk)
-7bad8125549cda Shengjiu Wang 2022-07-01  130  		return;
-7bad8125549cda Shengjiu Wang 2022-07-01  131  
-7bad8125549cda Shengjiu Wang 2022-07-01  132  	p = clk;
-7bad8125549cda Shengjiu Wang 2022-07-01  133  	while (p && pll8k_clk && pll11k_clk) {
-7bad8125549cda Shengjiu Wang 2022-07-01  134  		struct clk *pp = clk_get_parent(p);
-7bad8125549cda Shengjiu Wang 2022-07-01  135  
-7bad8125549cda Shengjiu Wang 2022-07-01  136  		if (clk_is_match(pp, pll8k_clk) ||
-7bad8125549cda Shengjiu Wang 2022-07-01  137  		    clk_is_match(pp, pll11k_clk)) {
-7bad8125549cda Shengjiu Wang 2022-07-01  138  			pll = pp;
-7bad8125549cda Shengjiu Wang 2022-07-01  139  			break;
-7bad8125549cda Shengjiu Wang 2022-07-01  140  		}
-7bad8125549cda Shengjiu Wang 2022-07-01  141  		p = pp;
-7bad8125549cda Shengjiu Wang 2022-07-01  142  	}
-7bad8125549cda Shengjiu Wang 2022-07-01  143  
-7bad8125549cda Shengjiu Wang 2022-07-01  144  	npll = (do_div(ratio, 8000) ? pll11k_clk : pll8k_clk);
-7bad8125549cda Shengjiu Wang 2022-07-01  145  	reparent = (pll && !clk_is_match(pll, npll));
-7bad8125549cda Shengjiu Wang 2022-07-01  146  
-7bad8125549cda Shengjiu Wang 2022-07-01  147  	if (reparent) {
-7bad8125549cda Shengjiu Wang 2022-07-01  148  		ret = clk_set_parent(p, npll);
-7bad8125549cda Shengjiu Wang 2022-07-01  149  		if (ret < 0)
-7bad8125549cda Shengjiu Wang 2022-07-01  150  			dev_warn(dev, "failed to set parent %s: %d\n", __clk_get_name(npll), ret);
-7bad8125549cda Shengjiu Wang 2022-07-01  151  	}
-7bad8125549cda Shengjiu Wang 2022-07-01  152  }
-7bad8125549cda Shengjiu Wang 2022-07-01  153  EXPORT_SYMBOL(fsl_asoc_reparent_pll_clocks);
-7bad8125549cda Shengjiu Wang 2022-07-01  154  
-
-:::::: The code at line 125 was first introduced by commit
-:::::: 7bad8125549cda14d9ccf97d7d76f7ef6ac9d206 ASoC: fsl_utils: Add function to handle PLL clock source
-
-:::::: TO: Shengjiu Wang <shengjiu.wang@nxp.com>
-:::::: CC: Mark Brown <broonie@kernel.org>
-
+diff --git a/arch/arm64/boot/dts/qcom/qcs404.dtsi b/arch/arm64/boot/dts/qcom/qcs404.dtsi
+index 1721c72d591a..19fd8a2b551e 100644
+--- a/arch/arm64/boot/dts/qcom/qcs404.dtsi
++++ b/arch/arm64/boot/dts/qcom/qcs404.dtsi
+@@ -809,7 +809,7 @@ pcie_phy: phy@7786000 {
+ 		sdcc1: mmc@7804000 {
+ 			compatible = "qcom,qcs404-sdhci", "qcom,sdhci-msm-v5";
+ 			reg = <0x07804000 0x1000>, <0x7805000 0x1000>;
+-			reg-names = "hc_mem", "cqe_mem";
++			reg-names = "hc", "cqhci";
+ 
+ 			interrupts = <GIC_SPI 123 IRQ_TYPE_LEVEL_HIGH>,
+ 				     <GIC_SPI 138 IRQ_TYPE_LEVEL_HIGH>;
+diff --git a/arch/arm64/boot/dts/qcom/sc7180.dtsi b/arch/arm64/boot/dts/qcom/sc7180.dtsi
+index 47ce5787ed5b..881e30953c0f 100644
+--- a/arch/arm64/boot/dts/qcom/sc7180.dtsi
++++ b/arch/arm64/boot/dts/qcom/sc7180.dtsi
+@@ -697,7 +697,7 @@ sdhc_1: mmc@7c4000 {
+ 			compatible = "qcom,sc7180-sdhci", "qcom,sdhci-msm-v5";
+ 			reg = <0 0x7c4000 0 0x1000>,
+ 				<0 0x07c5000 0 0x1000>;
+-			reg-names = "hc_mem", "cqe_mem";
++			reg-names = "hc", "cqhci";
+ 
+ 			iommus = <&apps_smmu 0x60 0x0>;
+ 			interrupts = <GIC_SPI 641 IRQ_TYPE_LEVEL_HIGH>,
+diff --git a/arch/arm64/boot/dts/qcom/sc7280.dtsi b/arch/arm64/boot/dts/qcom/sc7280.dtsi
+index 40e700cebe56..c398485fec2d 100644
+--- a/arch/arm64/boot/dts/qcom/sc7280.dtsi
++++ b/arch/arm64/boot/dts/qcom/sc7280.dtsi
+@@ -866,7 +866,7 @@ sdhc_1: mmc@7c4000 {
+ 
+ 			reg = <0 0x007c4000 0 0x1000>,
+ 			      <0 0x007c5000 0 0x1000>;
+-			reg-names = "hc_mem", "cqe_mem";
++			reg-names = "hc", "cqhci";
+ 
+ 			iommus = <&apps_smmu 0xc0 0x0>;
+ 			interrupts = <GIC_SPI 652 IRQ_TYPE_LEVEL_HIGH>,
+diff --git a/arch/arm64/boot/dts/qcom/sdm630.dtsi b/arch/arm64/boot/dts/qcom/sdm630.dtsi
+index 0f4c22be0224..1bc9091cad2a 100644
+--- a/arch/arm64/boot/dts/qcom/sdm630.dtsi
++++ b/arch/arm64/boot/dts/qcom/sdm630.dtsi
+@@ -1280,7 +1280,7 @@ qusb2phy1: phy@c014000 {
+ 		sdhc_2: mmc@c084000 {
+ 			compatible = "qcom,sdm630-sdhci", "qcom,sdhci-msm-v5";
+ 			reg = <0x0c084000 0x1000>;
+-			reg-names = "hc_mem";
++			reg-names = "hc";
+ 
+ 			interrupts = <GIC_SPI 125 IRQ_TYPE_LEVEL_HIGH>,
+ 					<GIC_SPI 221 IRQ_TYPE_LEVEL_HIGH>;
+@@ -1335,7 +1335,7 @@ sdhc_1: mmc@c0c4000 {
+ 			reg = <0x0c0c4000 0x1000>,
+ 			      <0x0c0c5000 0x1000>,
+ 			      <0x0c0c8000 0x8000>;
+-			reg-names = "hc_mem", "cqe_mem", "ice_mem";
++			reg-names = "hc", "cqhci", "ice";
+ 
+ 			interrupts = <GIC_SPI 110 IRQ_TYPE_LEVEL_HIGH>,
+ 					<GIC_SPI 112 IRQ_TYPE_LEVEL_HIGH>;
+diff --git a/arch/arm64/boot/dts/qcom/sm6125.dtsi b/arch/arm64/boot/dts/qcom/sm6125.dtsi
+index 94e427abbfd2..77bff81af433 100644
+--- a/arch/arm64/boot/dts/qcom/sm6125.dtsi
++++ b/arch/arm64/boot/dts/qcom/sm6125.dtsi
+@@ -438,7 +438,7 @@ rpm_msg_ram: sram@45f0000 {
+ 		sdhc_1: mmc@4744000 {
+ 			compatible = "qcom,sm6125-sdhci", "qcom,sdhci-msm-v5";
+ 			reg = <0x04744000 0x1000>, <0x04745000 0x1000>;
+-			reg-names = "hc_mem", "core_mem";
++			reg-names = "hc", "core";
+ 
+ 			interrupts = <GIC_SPI 348 IRQ_TYPE_LEVEL_HIGH>,
+ 				     <GIC_SPI 352 IRQ_TYPE_LEVEL_HIGH>;
+@@ -459,7 +459,7 @@ sdhc_1: mmc@4744000 {
+ 		sdhc_2: mmc@4784000 {
+ 			compatible = "qcom,sm6125-sdhci", "qcom,sdhci-msm-v5";
+ 			reg = <0x04784000 0x1000>;
+-			reg-names = "hc_mem";
++			reg-names = "hc";
+ 
+ 			interrupts = <GIC_SPI 350 IRQ_TYPE_LEVEL_HIGH>,
+ 				     <GIC_SPI 353 IRQ_TYPE_LEVEL_HIGH>;
+diff --git a/arch/arm64/boot/dts/qcom/sm6350.dtsi b/arch/arm64/boot/dts/qcom/sm6350.dtsi
+index c702235f0291..bb9349bc2d35 100644
+--- a/arch/arm64/boot/dts/qcom/sm6350.dtsi
++++ b/arch/arm64/boot/dts/qcom/sm6350.dtsi
+@@ -477,7 +477,7 @@ sdhc_1: mmc@7c4000 {
+ 			reg = <0 0x007c4000 0 0x1000>,
+ 				<0 0x007c5000 0 0x1000>,
+ 				<0 0x007c8000 0 0x8000>;
+-			reg-names = "hc_mem", "cqe_mem", "ice_mem";
++			reg-names = "hc", "cqhci", "ice";
+ 
+ 			interrupts = <GIC_SPI 641 IRQ_TYPE_LEVEL_HIGH>,
+ 				     <GIC_SPI 644 IRQ_TYPE_LEVEL_HIGH>;
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+2.37.0.rc0.161.g10f37bed90-goog
+

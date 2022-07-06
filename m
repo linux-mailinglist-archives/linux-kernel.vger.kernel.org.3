@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C46775691C7
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 20:29:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 897395691CD
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 20:29:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231500AbiGFS3U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Jul 2022 14:29:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42924 "EHLO
+        id S234457AbiGFS33 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Jul 2022 14:29:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42960 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230443AbiGFS3Q (ORCPT
+        with ESMTP id S234364AbiGFS3S (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Jul 2022 14:29:16 -0400
-Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92546E6;
-        Wed,  6 Jul 2022 11:29:15 -0700 (PDT)
-Received: by mail-wr1-x431.google.com with SMTP id z12so13613823wrq.7;
-        Wed, 06 Jul 2022 11:29:15 -0700 (PDT)
+        Wed, 6 Jul 2022 14:29:18 -0400
+Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE20FE6;
+        Wed,  6 Jul 2022 11:29:16 -0700 (PDT)
+Received: by mail-wr1-x42a.google.com with SMTP id d16so16901686wrv.10;
+        Wed, 06 Jul 2022 11:29:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=4Izef/YFAeykVDGIGibt/PVLWMHaIRGslbYjaSahqjs=;
-        b=k4mS3Sqaow+E8TCUFRnHPjBJR9MZIDkEknhRLUALIVlExSdfszMO5lehrsQXWZMDH+
-         R1SYbl7BJ3wwHPZ60085AH9sjMc7Njs7RnBhZJdP8bDSL9i/f7y0jf9jV1QcnsxysMLo
-         gBHMjsgdJU8TQCK8UCUj8yfzGGQmskkH79S9a6uZRHl0TIG0pXQQgZSZqgxx7AhJPlsl
-         p1+7LHXw7Wyzp8mxuGJEMbr+Gkw/5ws3sW+k1Be5+8Dvk+gRn2X1dheyqreGe/SeeqxW
-         0b9megdN7uHp0jifoz4awH1ZqDgppqhJjXQBOfqhe0CAoGrKL2qBLa/bJWUeSImSzF2O
-         nVXQ==
+        bh=3Ng520tfT/9dnjqNSA5HxUd0fXaeQJf409msGmKJXxE=;
+        b=QSGqlueQamjDuyg6EZa3X4lckicOrxLkBSe/7TAyQdhDhiPLG+QwhYvM28E7VewXGi
+         FpxnSAscazmX38EOzgzJJMvWbA2HU1NnBhj9c1nU/HAVK5aK7iqBv0/soD0YOUI3WN2U
+         FfkRKaTlORIj9P8bDOshunF6VvhSszvEAcRoYoFCkGtM9Kv5MCkNYHnrrfVsXqgON6DU
+         CLWvD2qcfPc/WgES8Bo9vod2QQnbtzOAehXHmXSarL4nxcfjt6nY6OLzegZ9wJglZhQ4
+         ozUE6jmQYdt2GVhuQ7cQW/qoCSg1MZabvz0HIFpm82PRWjXE6klk4MkR7146In7cD1wf
+         rnpA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=4Izef/YFAeykVDGIGibt/PVLWMHaIRGslbYjaSahqjs=;
-        b=Ocp3mFnr04PBpBadg6wbKGtIOC4es6uiIIIEyN+m8nuNUwZCFA7N41HvvIHGY+AKSP
-         5k4wlHy1eQ48+IBlEEmf9SonwuiBhx2I2/foiUFw/zstmtAdJthtQaHic+EAqVIaf7x4
-         PhAbOQ6/VzcwZzJcXMFa7bo4/V99R65D4TLgTBR6WE0q8vldt5h/3YYh8bN5c8mfQfW0
-         GlcL4MgAykNXMB7xdM0PKdqeansQbCKjkuUiJbkB0Le2NzkuG2ctz9wMWoQZA7OGX/W+
-         4Q9I3n5ts2cjNImJ7eN4f/dm9BOOWH5E3To9sNvLizFHU8NExrkLNa1Af+Dpt+Iuqdnq
-         PFAA==
-X-Gm-Message-State: AJIora927GhPAnFfhzIg0Yg9iXV+a2gkOjM26OC74Zk8EruyeuGMEhLV
-        whyI1+slAvaSbzSGvxQvNP+Kc2rIApLxGw==
-X-Google-Smtp-Source: AGRyM1vm6h/6hghpmed7QW/eRjmbMAMh/PS7rCXzlLna67B6WT5dqfs2NwgIOVJ614pVtnZpDbgwHQ==
-X-Received: by 2002:adf:d1e9:0:b0:21d:2154:2bc7 with SMTP id g9-20020adfd1e9000000b0021d21542bc7mr36880429wrd.105.1657132154166;
-        Wed, 06 Jul 2022 11:29:14 -0700 (PDT)
+        bh=3Ng520tfT/9dnjqNSA5HxUd0fXaeQJf409msGmKJXxE=;
+        b=Qrz8BUqtZ4/L2DJgLWBNiw5Om3aGRx69um3gTjjruCHSw+aQrUmVNEE2DGeNeXf9vb
+         hBUsBZ37TnOIhwuNxeqgLFVRYCL1beqqWrkvx8W2dElP52C2cPziO8eFdB/geX8RSDyJ
+         cWQR0QRcL0EzhxUZlRStRHPBTru7b517eZcjrJ91yvjPyaKm1r5EHhxUzzHJb9RmC3p1
+         Wh7a57gsavVcT6YPZqHAkXwabZa0JpLIPtd8+GCbIhBXGfAVd7kOOiDJEjiHtz6UKSgU
+         sfgcgaFIZtLpnAW5mbKWDVYm3pk/TvuY8QW9UUgMcorUnyQg9x+hgnQuqaA/x6GgVkFC
+         Fmtw==
+X-Gm-Message-State: AJIora9IKa259uWS9fphPFGyQP6I5G4yn7PzwUJA+SOHBSTbiWsh3W7I
+        mzNu/LApGYM339gnbjq1Al0=
+X-Google-Smtp-Source: AGRyM1s/r/lLwDka7D3KXMQF65LRPr8LVbQmfB0CAHva2jwjYZmYhq6Ifu8oEswmnJGw2DbnRpDNOg==
+X-Received: by 2002:a5d:5c0c:0:b0:21b:c9cb:f973 with SMTP id cc12-20020a5d5c0c000000b0021bc9cbf973mr37430152wrb.424.1657132155439;
+        Wed, 06 Jul 2022 11:29:15 -0700 (PDT)
 Received: from kista.localdomain (213-161-3-76.dynamic.telemach.net. [213.161.3.76])
-        by smtp.gmail.com with ESMTPSA id r15-20020a0560001b8f00b0021d74906683sm5142406wru.28.2022.07.06.11.29.13
+        by smtp.gmail.com with ESMTPSA id r15-20020a0560001b8f00b0021d74906683sm5142406wru.28.2022.07.06.11.29.14
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 06 Jul 2022 11:29:13 -0700 (PDT)
+        Wed, 06 Jul 2022 11:29:14 -0700 (PDT)
 From:   Jernej Skrabec <jernej.skrabec@gmail.com>
 To:     ezequiel@vanguardiasur.com.ar, p.zabel@pengutronix.de
 Cc:     mchehab@kernel.org, hverkuil-cisco@xs4all.nl,
@@ -57,9 +57,9 @@ Cc:     mchehab@kernel.org, hverkuil-cisco@xs4all.nl,
         linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
         linux-rockchip@lists.infradead.org,
         Jernej Skrabec <jernej.skrabec@gmail.com>
-Subject: [PATCH v3 2/7] media: hantro: Support format filtering by depth
-Date:   Wed,  6 Jul 2022 20:28:56 +0200
-Message-Id: <20220706182901.78949-3-jernej.skrabec@gmail.com>
+Subject: [PATCH v3 3/7] media: hantro: postproc: Fix buffer size calculation
+Date:   Wed,  6 Jul 2022 20:28:57 +0200
+Message-Id: <20220706182901.78949-4-jernej.skrabec@gmail.com>
 X-Mailer: git-send-email 2.37.0
 In-Reply-To: <20220706182901.78949-1-jernej.skrabec@gmail.com>
 References: <20220706182901.78949-1-jernej.skrabec@gmail.com>
@@ -75,152 +75,92 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In preparation for supporting 10-bit formats, add mechanism which will
-filter formats based on pixel depth.
-
-Hantro G2 supports only one decoding format natively and that is based
-on bit depth of current video frame. Additionally, it makes no sense to
-upconvert bitness, so filter those out too.
+When allocating aux buffers for postprocessing, it's assumed that base
+buffer size is the same as that of output. Coincidentally, that's true
+most of the time, but not always. 10-bit source also needs aux buffer
+size which is appropriate for 10-bit native format, even if the output
+format is 8-bit. Similarly, mv sizes and other extra buffer size also
+depends on source width/height, not destination.
 
 Reviewed-by: Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
 Tested-by: Benjamin Gaignard <benjamin.gaignard@collabora.com>
 Signed-off-by: Jernej Skrabec <jernej.skrabec@gmail.com>
 ---
- drivers/staging/media/hantro/hantro.h      |  4 ++
- drivers/staging/media/hantro/hantro_v4l2.c | 48 ++++++++++++++++++++--
- drivers/staging/media/hantro/hantro_v4l2.h |  1 +
- 3 files changed, 50 insertions(+), 3 deletions(-)
+ .../staging/media/hantro/hantro_postproc.c    | 24 +++++++++++++------
+ drivers/staging/media/hantro/hantro_v4l2.c    |  2 +-
+ drivers/staging/media/hantro/hantro_v4l2.h    |  2 ++
+ 3 files changed, 20 insertions(+), 8 deletions(-)
 
-diff --git a/drivers/staging/media/hantro/hantro.h b/drivers/staging/media/hantro/hantro.h
-index 26308bb29adc..2989ebc631cc 100644
---- a/drivers/staging/media/hantro/hantro.h
-+++ b/drivers/staging/media/hantro/hantro.h
-@@ -227,6 +227,7 @@ struct hantro_dev {
-  *
-  * @ctrl_handler:	Control handler used to register controls.
-  * @jpeg_quality:	User-specified JPEG compression quality.
-+ * @bit_depth:		Bit depth of current frame
-  *
-  * @codec_ops:		Set of operations related to codec mode.
-  * @postproc:		Post-processing context.
-@@ -252,6 +253,7 @@ struct hantro_ctx {
+diff --git a/drivers/staging/media/hantro/hantro_postproc.c b/drivers/staging/media/hantro/hantro_postproc.c
+index ab168c1c0d28..b77cc55e43ea 100644
+--- a/drivers/staging/media/hantro/hantro_postproc.c
++++ b/drivers/staging/media/hantro/hantro_postproc.c
+@@ -12,6 +12,7 @@
+ #include "hantro_hw.h"
+ #include "hantro_g1_regs.h"
+ #include "hantro_g2_regs.h"
++#include "hantro_v4l2.h"
  
- 	struct v4l2_ctrl_handler ctrl_handler;
- 	int jpeg_quality;
-+	int bit_depth;
+ #define HANTRO_PP_REG_WRITE(vpu, reg_name, val) \
+ { \
+@@ -174,18 +175,27 @@ int hantro_postproc_alloc(struct hantro_ctx *ctx)
+ 	struct v4l2_m2m_ctx *m2m_ctx = ctx->fh.m2m_ctx;
+ 	struct vb2_queue *cap_queue = &m2m_ctx->cap_q_ctx.q;
+ 	unsigned int num_buffers = cap_queue->num_buffers;
++	struct v4l2_pix_format_mplane pix_mp;
++	const struct hantro_fmt *fmt;
+ 	unsigned int i, buf_size;
  
- 	const struct hantro_codec_ops *codec_ops;
- 	struct hantro_postproc_ctx postproc;
-@@ -277,6 +279,7 @@ struct hantro_ctx {
-  * @enc_fmt:	Format identifier for encoder registers.
-  * @frmsize:	Supported range of frame sizes (only for bitstream formats).
-  * @postprocessed: Indicates if this format needs the post-processor.
-+ * @match_depth: Indicates if format bit depth must match video bit depth
-  */
- struct hantro_fmt {
- 	char *name;
-@@ -287,6 +290,7 @@ struct hantro_fmt {
- 	enum hantro_enc_fmt enc_fmt;
- 	struct v4l2_frmsize_stepwise frmsize;
- 	bool postprocessed;
-+	bool match_depth;
- };
+-	buf_size = ctx->dst_fmt.plane_fmt[0].sizeimage;
++	/* this should always pick native format */
++	fmt = hantro_get_default_fmt(ctx, false);
++	if (!fmt)
++		return -EINVAL;
++	v4l2_fill_pixfmt_mp(&pix_mp, fmt->fourcc, ctx->src_fmt.width,
++			    ctx->src_fmt.height);
++
++	buf_size = pix_mp.plane_fmt[0].sizeimage;
+ 	if (ctx->vpu_src_fmt->fourcc == V4L2_PIX_FMT_H264_SLICE)
+-		buf_size += hantro_h264_mv_size(ctx->dst_fmt.width,
+-						ctx->dst_fmt.height);
++		buf_size += hantro_h264_mv_size(pix_mp.width,
++						pix_mp.height);
+ 	else if (ctx->vpu_src_fmt->fourcc == V4L2_PIX_FMT_VP9_FRAME)
+-		buf_size += hantro_vp9_mv_size(ctx->dst_fmt.width,
+-					       ctx->dst_fmt.height);
++		buf_size += hantro_vp9_mv_size(pix_mp.width,
++					       pix_mp.height);
+ 	else if (ctx->vpu_src_fmt->fourcc == V4L2_PIX_FMT_HEVC_SLICE)
+-		buf_size += hantro_hevc_mv_size(ctx->dst_fmt.width,
+-						ctx->dst_fmt.height);
++		buf_size += hantro_hevc_mv_size(pix_mp.width,
++						pix_mp.height);
  
- struct hantro_reg {
+ 	for (i = 0; i < num_buffers; ++i) {
+ 		struct hantro_aux_buf *priv = &ctx->postproc.dec_q[i];
 diff --git a/drivers/staging/media/hantro/hantro_v4l2.c b/drivers/staging/media/hantro/hantro_v4l2.c
-index 29cc61d53b71..334f18a4120d 100644
+index 334f18a4120d..2c7a805289e7 100644
 --- a/drivers/staging/media/hantro/hantro_v4l2.c
 +++ b/drivers/staging/media/hantro/hantro_v4l2.c
-@@ -64,6 +64,42 @@ hantro_get_postproc_formats(const struct hantro_ctx *ctx,
- 	return ctx->dev->variant->postproc_fmts;
+@@ -118,7 +118,7 @@ hantro_find_format(const struct hantro_ctx *ctx, u32 fourcc)
+ 	return NULL;
  }
  
-+int hantro_get_format_depth(u32 fourcc)
-+{
-+	switch (fourcc) {
-+	case V4L2_PIX_FMT_P010:
-+	case V4L2_PIX_FMT_P010_4L4:
-+		return 10;
-+	default:
-+		return 8;
-+	}
-+}
-+
-+static bool
-+hantro_check_depth_match(const struct hantro_ctx *ctx,
-+			 const struct hantro_fmt *fmt)
-+{
-+	int fmt_depth, ctx_depth = 8;
-+
-+	if (!fmt->match_depth && !fmt->postprocessed)
-+		return true;
-+
-+	/* 0 means default depth, which is 8 */
-+	if (ctx->bit_depth)
-+		ctx_depth = ctx->bit_depth;
-+
-+	fmt_depth = hantro_get_format_depth(fmt->fourcc);
-+
-+	/*
-+	 * Allow only downconversion for postproc formats for now.
-+	 * It may be possible to relax that on some HW.
-+	 */
-+	if (!fmt->match_depth)
-+		return fmt_depth <= ctx_depth;
-+
-+	return fmt_depth == ctx_depth;
-+}
-+
- static const struct hantro_fmt *
- hantro_find_format(const struct hantro_ctx *ctx, u32 fourcc)
+-static const struct hantro_fmt *
++const struct hantro_fmt *
+ hantro_get_default_fmt(const struct hantro_ctx *ctx, bool bitstream)
  {
-@@ -91,7 +127,8 @@ hantro_get_default_fmt(const struct hantro_ctx *ctx, bool bitstream)
- 	formats = hantro_get_formats(ctx, &num_fmts);
- 	for (i = 0; i < num_fmts; i++) {
- 		if (bitstream == (formats[i].codec_mode !=
--				  HANTRO_MODE_NONE))
-+				  HANTRO_MODE_NONE) &&
-+		    hantro_check_depth_match(ctx, &formats[i]))
- 			return &formats[i];
- 	}
- 	return NULL;
-@@ -162,11 +199,13 @@ static int vidioc_enum_fmt(struct file *file, void *priv,
- 	formats = hantro_get_formats(ctx, &num_fmts);
- 	for (i = 0; i < num_fmts; i++) {
- 		bool mode_none = formats[i].codec_mode == HANTRO_MODE_NONE;
-+		fmt = &formats[i];
- 
- 		if (skip_mode_none == mode_none)
- 			continue;
-+		if (!hantro_check_depth_match(ctx, fmt))
-+			continue;
- 		if (j == f->index) {
--			fmt = &formats[i];
- 			f->pixelformat = fmt->fourcc;
- 			return 0;
- 		}
-@@ -182,8 +221,11 @@ static int vidioc_enum_fmt(struct file *file, void *priv,
- 		return -EINVAL;
- 	formats = hantro_get_postproc_formats(ctx, &num_fmts);
- 	for (i = 0; i < num_fmts; i++) {
-+		fmt = &formats[i];
-+
-+		if (!hantro_check_depth_match(ctx, fmt))
-+			continue;
- 		if (j == f->index) {
--			fmt = &formats[i];
- 			f->pixelformat = fmt->fourcc;
- 			return 0;
- 		}
+ 	const struct hantro_fmt *formats;
 diff --git a/drivers/staging/media/hantro/hantro_v4l2.h b/drivers/staging/media/hantro/hantro_v4l2.h
-index 18bc682c8556..b17e84c82582 100644
+index b17e84c82582..64f6f57e9d7a 100644
 --- a/drivers/staging/media/hantro/hantro_v4l2.h
 +++ b/drivers/staging/media/hantro/hantro_v4l2.h
-@@ -22,5 +22,6 @@ extern const struct v4l2_ioctl_ops hantro_ioctl_ops;
- extern const struct vb2_ops hantro_queue_ops;
+@@ -23,5 +23,7 @@ extern const struct vb2_ops hantro_queue_ops;
  
  void hantro_reset_fmts(struct hantro_ctx *ctx);
-+int hantro_get_format_depth(u32 fourcc);
+ int hantro_get_format_depth(u32 fourcc);
++const struct hantro_fmt *
++hantro_get_default_fmt(const struct hantro_ctx *ctx, bool bitstream);
  
  #endif /* HANTRO_V4L2_H_ */
 -- 

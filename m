@@ -2,129 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2BEF55692CA
+	by mail.lfdr.de (Postfix) with ESMTP id 747B85692CB
 	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 21:45:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233270AbiGFTox (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Jul 2022 15:44:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38228 "EHLO
+        id S233847AbiGFToz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Jul 2022 15:44:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38230 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232014AbiGFTow (ORCPT
+        with ESMTP id S232499AbiGFTow (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 6 Jul 2022 15:44:52 -0400
-Received: from mail-qt1-f171.google.com (mail-qt1-f171.google.com [209.85.160.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E3B9CE10
+Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39F6FDFE7
         for <linux-kernel@vger.kernel.org>; Wed,  6 Jul 2022 12:44:51 -0700 (PDT)
-Received: by mail-qt1-f171.google.com with SMTP id i11so19775303qtr.4
+Received: by mail-ed1-x52a.google.com with SMTP id n8so20603645eda.0
         for <linux-kernel@vger.kernel.org>; Wed, 06 Jul 2022 12:44:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=VKmMBf94dqxoTjWi2eeMymoq1+LEzz8Mcbmk6X430xs=;
+        b=QPubt1JaNqnaKlW47bNlowu/ISfn+jldi2xTy+EQoJxWPeFKU1fXtIqSlnaQ8geZHU
+         MyvpCrrdhsuyiSBK+8oQiezGplmIzd1ibjpsPY7r1nTUJDsIiNTYLER5QwE1NLeFpA19
+         iIrvQWcpJT0nLE+z508HT85iQwzfr5pljAOsy8D3idure2AMS1yrkyPmGOnTiRJnbR6y
+         vfsitWxWiyV9kh0Z2Y/7UcBx17U28/UW7p9TCdRqChlAdRXvP9StjGp8cyWAWpSj1e8/
+         ew2J8IUH9SX1FwlSZno2E428zLDu8QV6+yZB/5ZGOSQUFVF0oD3aERzIAc8AfrqM2KlO
+         3h2w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=Xk9jCiZm2Js85fOqnIyfJ1E/QY9zrE8vBax6/mtwBTY=;
-        b=K6RLQ2ZXMkrMqtdRQQoj1wZA99YoTs5ZvXoXJX5yWeRpJdHyT+388bFQtwXjqgTVj9
-         WRSukJS1Rp/u2Y6W1xEo1X90ZGjq8Ue2DADZL1QhEUAWKykXxgRbta647sOMxU2FatkC
-         1XVWQLkHVpV+9W3xwu9uneqe33t+OW+ODyHezF/no73UU75ByC++H3FhyDkKIiSdr+A4
-         9TBLPao1IA5BH+gpauFsWEXOt004U/tGwsu9fREp/qdYHt+qG9RSdwEASStHGrdECT0k
-         BJCeED51H6eRC6ryAxJ2lb78syq8bwQUEQAL9or2YhiI/l5frTpy+vBEndvOqZw8AG0K
-         0HIg==
-X-Gm-Message-State: AJIora/s02VgwpgiZeLwVoffgNAmXNlpP4ZPl85a19yTZmC0L8UbaJ5a
-        gUcDGJhh+AKrd3IzjGGWkM2+pet56gFegHKo
-X-Google-Smtp-Source: AGRyM1s0g+gaJcMjbzWj/h4nMdVSFvE3MYDpLf/AEBuCkOucShO9FoHZpXx7LdUYcm+FxeoGEwD0gg==
-X-Received: by 2002:a05:622a:138b:b0:31e:8086:a31a with SMTP id o11-20020a05622a138b00b0031e8086a31amr11175354qtk.320.1657136689989;
-        Wed, 06 Jul 2022 12:44:49 -0700 (PDT)
-Received: from mail-yw1-f175.google.com (mail-yw1-f175.google.com. [209.85.128.175])
-        by smtp.gmail.com with ESMTPSA id bp13-20020a05620a458d00b006af10bd3635sm24954604qkb.57.2022.07.06.12.44.49
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 06 Jul 2022 12:44:49 -0700 (PDT)
-Received: by mail-yw1-f175.google.com with SMTP id 00721157ae682-31c86fe1dddso103016077b3.1
-        for <linux-kernel@vger.kernel.org>; Wed, 06 Jul 2022 12:44:49 -0700 (PDT)
-X-Received: by 2002:a81:1090:0:b0:31c:9be5:6c95 with SMTP id
- 138-20020a811090000000b0031c9be56c95mr19613587ywq.384.1657136688673; Wed, 06
- Jul 2022 12:44:48 -0700 (PDT)
+        bh=VKmMBf94dqxoTjWi2eeMymoq1+LEzz8Mcbmk6X430xs=;
+        b=Nad6tzOscSW4lEjV7M3liZu9lvkdjVEp06UJ3CYTvWCOc7wYIhq1KQNQz4V4C581W/
+         pYDR7mwxMHov2poFncJV4mCnuRXd/RFMCJd+ykye1avjRk9gTidoy3NcdEXCt6r0F6r/
+         57NDil7az0y6x1hCeUrjhKnkzk5Gpu0iRr12ByjjPhxMCgMCMJFEjWT4Ol2iP05T/Fd1
+         pZWJX6HIkWf3YXMq2vyYo/uR4Kh0A4n9eAPD0KHpmnAOre3JNT7sh2qdFRPhOHdlg3Zk
+         9IVJNfJwgdMoKLUbeZqVu4n2yMmsk3rtJefIQQoiFipyJXSMmE3p1sfHnCDQ4sIMbwC1
+         aqoQ==
+X-Gm-Message-State: AJIora+A+3mRiGDL1nhjeYP7Qj+JoB1U64KHQpkTaPESXx8DaIIQ3YSB
+        jzGH3bdOA8SM+vdaLrQZfY0hrTiLHfTkMwi6V+qgWA==
+X-Google-Smtp-Source: AGRyM1tge25mCnt5shj9Yd6ABquNh8Ngrj9+FG84cVXYuPEcBT7yP71dGJsOKb6Fute1Sq/P9W4rWnjLnVhHKaJMjtI=
+X-Received: by 2002:a05:6402:43c4:b0:43a:6309:6c9b with SMTP id
+ p4-20020a05640243c400b0043a63096c9bmr22725476edc.91.1657136689614; Wed, 06
+ Jul 2022 12:44:49 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220706164606.68528-1-f.fainelli@gmail.com>
-In-Reply-To: <20220706164606.68528-1-f.fainelli@gmail.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Wed, 6 Jul 2022 21:44:37 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdVJG0cA4v+pfyeO8PpzFxtrggNeRrfEB8QFBiEZjYPt3A@mail.gmail.com>
-Message-ID: <CAMuHMdVJG0cA4v+pfyeO8PpzFxtrggNeRrfEB8QFBiEZjYPt3A@mail.gmail.com>
-Subject: Re: [PATCH v2] ARM: Fix MAX_DMA_ADDRESS overflow
-To:     Florian Fainelli <f.fainelli@gmail.com>
-Cc:     Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Grygorii Strashko <grygorii.strashko@ti.com>,
-        open list <linux-kernel@vger.kernel.org>,
-        Santosh Shilimkar <ssantosh@kernel.org>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>
+References: <20220518073232.526443-1-davidgow@google.com>
+In-Reply-To: <20220518073232.526443-1-davidgow@google.com>
+From:   Brendan Higgins <brendanhiggins@google.com>
+Date:   Wed, 6 Jul 2022 15:44:38 -0400
+Message-ID: <CAFd5g44i2rQf8KVPc00bZzMx5zPtjoxesqyTd1aawVc10-0kyw@mail.gmail.com>
+Subject: Re: [PATCH 1/2] kunit: tool: Add x86_64-smp architecture for SMP testing
+To:     David Gow <davidgow@google.com>
+Cc:     Daniel Latypov <dlatypov@google.com>,
+        Marco Elver <elver@google.com>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Dmitry Vyukov <dvyukov@google.com>, kunit-dev@googlegroups.com,
+        kasan-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Florian,
-
-On Wed, Jul 6, 2022 at 6:46 PM Florian Fainelli <f.fainelli@gmail.com> wrote:
-> Commit 26f09e9b3a06 ("mm/memblock: add memblock memory allocation apis")
-> added a check to determine whether arm_dma_zone_size is exceeding the
-> amount of kernel virtual address space available between the upper 4GB
-> virtual address limit and PAGE_OFFSET in order to provide a suitable
-> definition of MAX_DMA_ADDRESS that should fit within the 32-bit virtual
-> address space. The quantity used for comparison was off by a missing
-> trailing 0, leading to MAX_DMA_ADDRESS to be overflowing a 32-bit
-> quantity.
+On Wed, May 18, 2022 at 3:32 AM 'David Gow' via KUnit Development
+<kunit-dev@googlegroups.com> wrote:
 >
-> This was caught with the bcm2711 platforms which defines a dma_zone_size
-> of 1GB, and using a PAGE_OFFSET of 0xc000_0000 (CONFIG_VMSPLIT_3G) with
-> CONFIG_DEBUG_VIRTUAL enabled would lead to MAX_DMA_ADDRESS being
-> 0x1_0000_0000 which overflows the unsigned long type used throughout
-> __pa() and __virt_addr_valid(). Because the virtual address passed to
-> __virt_addr_valid() would now be 0, the function would loudly warn, thus
-> making the platform unable to boot properly.
+> Add a new QEMU config for kunit_tool, x86_64-smp, which provides an
+> 8-cpu SMP setup. No other kunit_tool configurations provide an SMP
+> setup, so this is the best bet for testing things like KCSAN, which
+> require a multicore/multi-cpu system.
 >
-> Fixes: 26f09e9b3a06 ("mm/memblock: add memblock memory allocation apis")
-> Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
-> ---
-> Changes in v2:
+> The choice of 8 CPUs is pretty arbitrary: it's enough to get tests like
+> KCSAN to run with a nontrivial number of worker threads, while still
+> working relatively quickly on older machines.
 >
-> - simplify the patch and drop the first patch that attempted to fix an
->   off by one in the calculation.
+> Signed-off-by: David Gow <davidgow@google.com>
 
-Thanks for the update!
+I know there is some discussion on this patch, but I think this patch
+is good as implemented; we could always delete this config if we
+change our policies later.
 
-> --- a/arch/arm/include/asm/dma.h
-> +++ b/arch/arm/include/asm/dma.h
-> @@ -10,7 +10,7 @@
->  #else
->  #define MAX_DMA_ADDRESS        ({ \
->         extern phys_addr_t arm_dma_zone_size; \
-> -       arm_dma_zone_size && arm_dma_zone_size < (0x10000000 - PAGE_OFFSET) ? \
-                                                  ^^^^^^^^^^
-0x10000000ULL, as the constant doesn't fit in 32-bit.
-However, both gcc (9.4.0) and sparse don't seem to complain about
-the missing suffix (anymore?).
-
-> +       arm_dma_zone_size && arm_dma_zone_size < (0x100000000 - PAGE_OFFSET) ? \
->                 (PAGE_OFFSET + arm_dma_zone_size) : 0xffffffffUL; })
->  #endif
-
-Gr{oetje,eeting}s,
-
-                        Geert
-
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+Reviewed-by: Brendan Higgins <brendanhiggins@google.com>

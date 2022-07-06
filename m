@@ -2,304 +2,261 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EA5C15695C5
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 01:23:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 339655695D4
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 01:25:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234150AbiGFXXG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Jul 2022 19:23:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37348 "EHLO
+        id S234531AbiGFXYs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Jul 2022 19:24:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38818 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233939AbiGFXXE (ORCPT
+        with ESMTP id S234381AbiGFXYk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Jul 2022 19:23:04 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9051B2BB1F
-        for <linux-kernel@vger.kernel.org>; Wed,  6 Jul 2022 16:23:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1657149781;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=BOwyqfyXCGaZLm/NYG/xDFnwRI3ekzoanClZ8gigevg=;
-        b=U7Gq2+l7tbmAt9JbG9/cWdDvgs2OuV14fPJaeU89+L2/3YpJZPXev65TdxHUH5vnq+3l5r
-        0rPqc3GI+mqN+RGl2JEA3NfjyemKsIdBJ3o5Zm8ndpv+GFmdnqW4KxMoE+BglhgSD1P2u7
-        7RWtyjmlv81TmjIOF/OhgIewFWGZW04=
-Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com
- [209.85.208.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-371-OeOt1Wd9Oc2dwHl-A6ONyQ-1; Wed, 06 Jul 2022 19:22:59 -0400
-X-MC-Unique: OeOt1Wd9Oc2dwHl-A6ONyQ-1
-Received: by mail-ed1-f71.google.com with SMTP id j6-20020a05640211c600b0043a8ea2c138so1971442edw.2
-        for <linux-kernel@vger.kernel.org>; Wed, 06 Jul 2022 16:22:59 -0700 (PDT)
+        Wed, 6 Jul 2022 19:24:40 -0400
+Received: from mail-qk1-x72f.google.com (mail-qk1-x72f.google.com [IPv6:2607:f8b0:4864:20::72f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B6942C107
+        for <linux-kernel@vger.kernel.org>; Wed,  6 Jul 2022 16:24:33 -0700 (PDT)
+Received: by mail-qk1-x72f.google.com with SMTP id b24so12231841qkn.4
+        for <linux-kernel@vger.kernel.org>; Wed, 06 Jul 2022 16:24:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=feedback-id:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=/+0CAJbOyjsas1X7A1vkt4Tt9nvsPEUgYWuh48Q1k+k=;
+        b=PenlFnQtOvbrIVbx4fB+YVDm8+n2VIAMykhGK9G+6FOlTdbYtyu3kLSVEDBSvAlAZ+
+         f2iHQnngAIz5qe29sGJ3dPqvpRKJljyOJNLw/Ys3A6QUXGrN78ZyMX69LWl5Llj51iCh
+         cUJfiffvUPPuXojlKXmzeGAc1wdSu+BzZ/rxY8iKGbzRZMu/klti1bk8we7qFoFw323K
+         oLWCVkfkwi0qc66NFSRSXhQFTsY8JY0zmtLLyCaBIhILkrTAXlr+3mx/2EEXWnaVimwp
+         qXpRsEBvRLivejzbm+VqwmBbvWSDRwJW2FEzYqlYA2t1PsOOwBu6WIWBvbGz7VkMvQ69
+         1QtQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
-         :message-id:mime-version;
-        bh=BOwyqfyXCGaZLm/NYG/xDFnwRI3ekzoanClZ8gigevg=;
-        b=mSe4QXZ/rGLJDhrrZzklRULg96w3EU7RAUGSmS0QH4XM+G6B8lfIHjmGALuvwA/OfU
-         K8bPFC9IlwHho3c3PHwHS2uUrLSxEqb1x7H4X6z0jKDxTDCjG1CAnfhT1GTFQlF3GVCV
-         UlEuADDg4+en52vGJHX8m3+lZ0dFkWig7p93ye/bX8DuImtd5/g7B5Nf4LKSCJ0uA48K
-         mM6JI9qJ0AEB23ftyPZvc6xszx0b7mlzJjXysrY+h1OvSNoxA12JhLvPvLRMYTgzQKO7
-         8p3lWj3uHyJ4OZwaZHf1UwdVLbYiCltahpitLFUBQaqEGpRIl8CX7++yc1EWUm6JHAEo
-         Hknw==
-X-Gm-Message-State: AJIora8Es+hkEAVqiI/kz5eytWomg7Tz30Y34YJ+PKX1icFd/vogIpDO
-        KNqLv/lEUxix3BOOtt9kp8wURQMEwaiuPo+TqdohdFiNkzYBv8TviVacodFhn/nLK9ck+KWX/U3
-        fz3542eDlanm9J1q4KwfpCR37
-X-Received: by 2002:a17:906:5512:b0:726:be2c:a2e5 with SMTP id r18-20020a170906551200b00726be2ca2e5mr41546543ejp.88.1657149777559;
-        Wed, 06 Jul 2022 16:22:57 -0700 (PDT)
-X-Google-Smtp-Source: AGRyM1uSG4zUzhePcSlYVWM8vT42gwF7wOFTx2QihYXUDSQAzcrxzkkXmexJ9eElcWCYYxoAEc9Ypw==
-X-Received: by 2002:a17:906:5512:b0:726:be2c:a2e5 with SMTP id r18-20020a170906551200b00726be2ca2e5mr41546469ejp.88.1657149776719;
-        Wed, 06 Jul 2022 16:22:56 -0700 (PDT)
-Received: from alrua-x1.borgediget.toke.dk ([2a0c:4d80:42:443::2])
-        by smtp.gmail.com with ESMTPSA id y21-20020a170906559500b00726dbb16b8dsm12355793ejp.65.2022.07.06.16.22.55
+        h=x-gm-message-state:feedback-id:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to;
+        bh=/+0CAJbOyjsas1X7A1vkt4Tt9nvsPEUgYWuh48Q1k+k=;
+        b=wXBUMHsjmYDZ2ARTi9VoiV4oAwkyPMeA66y0iZfPD9CF7cSM4yNqfpz53ihXZghmcP
+         JssV03ts8h3aRz/kNq8SXPDwJQU2rzRIz02HUA6qH2zwY3yzw6Zb1hzJqzUh0s0K8Ad+
+         UTyzBhtf4nAgUGXHOtKKjUKNisOuziQDdjkPjckN+PeCyxR9+bDL2r2tit5neV2XLM0W
+         CZi4Bua/vSJKbG1nXLVQv+MCM5XtuZtNLllomJMVi3qs3fYW1zHtms2l3GgzaGxXpjMv
+         wenuY6Y39+1hlG+rRb2Xlo6Z+MhNpZeQXlGpNiAUHvnZoSfzElLtOjhD2fqqMQAlU1v4
+         bTFw==
+X-Gm-Message-State: AJIora+9ALnVBN0iapQWKysA9tiqeNi/iVIqZbBi+FXhqZX4T+V1UVxm
+        mXDPSbMK10UTwIaPV6cAUNc=
+X-Google-Smtp-Source: AGRyM1tCsm1ZSfHuKvJB8/AQX27IlEZAc0dkOVknITzngStP0p9FQANZ25tRLJpDRLfA1/gCwnhsYg==
+X-Received: by 2002:a05:620a:46a5:b0:6af:6638:e811 with SMTP id bq37-20020a05620a46a500b006af6638e811mr29589349qkb.35.1657149872026;
+        Wed, 06 Jul 2022 16:24:32 -0700 (PDT)
+Received: from auth1-smtp.messagingengine.com (auth1-smtp.messagingengine.com. [66.111.4.227])
+        by smtp.gmail.com with ESMTPSA id c4-20020a05620a268400b006aee03a95dfsm30284284qkp.124.2022.07.06.16.24.30
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 06 Jul 2022 16:22:55 -0700 (PDT)
-Received: by alrua-x1.borgediget.toke.dk (Postfix, from userid 1000)
-        id 354274AAF97; Thu,  7 Jul 2022 01:22:55 +0200 (CEST)
-From:   Toke =?utf-8?Q?H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
-To:     Alexander Lobakin <alexandr.lobakin@intel.com>
-Cc:     John Fastabend <john.fastabend@gmail.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Larysa Zaremba <larysa.zaremba@intel.com>,
-        Michal Swiatkowski <michal.swiatkowski@linux.intel.com>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        =?utf-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>,
-        Magnus Karlsson <magnus.karlsson@intel.com>,
-        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
-        Jonathan Lemon <jonathan.lemon@gmail.com>,
-        Lorenzo Bianconi <lorenzo@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Jesse Brandeburg <jesse.brandeburg@intel.com>,
-        Yajun Deng <yajun.deng@linux.dev>,
-        Willem de Bruijn <willemb@google.com>, bpf@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        xdp-hints@xdp-project.net
-Subject: Re: [xdp-hints] Re: [PATCH RFC bpf-next 00/52] bpf, xdp: introduce
- and use Generic Hints/metadata
-In-Reply-To: <20220706135023.1464979-1-alexandr.lobakin@intel.com>
-References: <20220628194812.1453059-1-alexandr.lobakin@intel.com>
- <62bbedf07f44a_2181420830@john.notmuch> <87iloja8ly.fsf@toke.dk>
- <20220704154440.7567-1-alexandr.lobakin@intel.com>
- <87a69o94wz.fsf@toke.dk>
- <20220705154120.22497-1-alexandr.lobakin@intel.com>
- <87pmij75r1.fsf@toke.dk>
- <20220706135023.1464979-1-alexandr.lobakin@intel.com>
-X-Clacks-Overhead: GNU Terry Pratchett
-Date:   Thu, 07 Jul 2022 01:22:55 +0200
-Message-ID: <87edyxaks0.fsf@toke.dk>
+        Wed, 06 Jul 2022 16:24:31 -0700 (PDT)
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+        by mailauth.nyi.internal (Postfix) with ESMTP id 9E89B27C0054;
+        Wed,  6 Jul 2022 19:24:30 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute3.internal (MEProxy); Wed, 06 Jul 2022 19:24:30 -0400
+X-ME-Sender: <xms:rhnGYlvpgp-bRAlaw7TlIT_KFL7YWIS211BqUDXzfycsV4EP0uzqrA>
+    <xme:rhnGYuc5P9p2GpSoCPBt-RGpeeVsp7g3quq045vMXQpovEdsDamKPL3FOyroiRie7
+    3ebWoV5XCAx18hsFA>
+X-ME-Received: <xmr:rhnGYoyJRWU7TjEF2My_6-11Jzz_LMBO4q3oZbbOW4Q13Hr0otS7DXkrvoWpbw>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrudeigedgvddvucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepfffhvfevuffkfhggtggujgesthdtredttddtvdenucfhrhhomhepuehoqhhu
+    nhcuhfgvnhhguceosghoqhhunhdrfhgvnhhgsehgmhgrihhlrdgtohhmqeenucggtffrrg
+    htthgvrhhnpeehudfgudffffetuedtvdehueevledvhfelleeivedtgeeuhfegueeviedu
+    ffeivdenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
+    gsohhquhhnodhmvghsmhhtphgruhhthhhpvghrshhonhgrlhhithihqdeiledvgeehtdei
+    gedqudejjeekheehhedvqdgsohhquhhnrdhfvghngheppehgmhgrihhlrdgtohhmsehfih
+    igmhgvrdhnrghmvg
+X-ME-Proxy: <xmx:rhnGYsPEIhKZAbjvF-htLSEoWtuXKvrPclueJaPdpUiVBBxbhNqqkA>
+    <xmx:rhnGYl-9nK8V0ufRtqUovyoV4g61Ki4l7gL2Zjyjpu-sArM7yfYaVQ>
+    <xmx:rhnGYsWXWg46DolVNLzMESPRv9HoJ1EWAoyFixVDCibujFjvyw_MqQ>
+    <xmx:rhnGYomKxWQC1fTZoiP_18HDSzoTV0yBXhXlTbaptd7pNFxjHAd8Fw>
+Feedback-ID: iad51458e:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
+ 6 Jul 2022 19:24:29 -0400 (EDT)
+Date:   Wed, 6 Jul 2022 16:23:36 -0700
+From:   Boqun Feng <boqun.feng@gmail.com>
+To:     Nicholas Piggin <npiggin@gmail.com>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
+        Waiman Long <longman@redhat.com>, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 01/13] locking/qspinlock: remove pv_node abstraction
+Message-ID: <YsYZeMJHsHwrOAe7@boqun-archlinux>
+References: <20220704143820.3071004-1-npiggin@gmail.com>
+ <20220704143820.3071004-2-npiggin@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220704143820.3071004-2-npiggin@gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Alexander Lobakin <alexandr.lobakin@intel.com> writes:
+On Tue, Jul 05, 2022 at 12:38:08AM +1000, Nicholas Piggin wrote:
+> There isn't much point trying to separate struct qnode from struct pv_node
+> when struct qnode has to know about pv_node anyway.
+> 
+> Signed-off-by: Nicholas Piggin <npiggin@gmail.com>
+> ---
+>  kernel/locking/qspinlock.c          |  3 ++-
+>  kernel/locking/qspinlock_paravirt.h | 34 ++++++++++++-----------------
+>  2 files changed, 16 insertions(+), 21 deletions(-)
+> 
+> diff --git a/kernel/locking/qspinlock.c b/kernel/locking/qspinlock.c
+> index 65a9a10caa6f..a0fc21d99199 100644
+> --- a/kernel/locking/qspinlock.c
+> +++ b/kernel/locking/qspinlock.c
+> @@ -82,7 +82,8 @@
+>  struct qnode {
+>  	struct mcs_spinlock mcs;
+>  #ifdef CONFIG_PARAVIRT_SPINLOCKS
+> -	long reserved[2];
+> +	int			cpu;
+> +	u8			state;
+>  #endif
+>  };
+>  
+> diff --git a/kernel/locking/qspinlock_paravirt.h b/kernel/locking/qspinlock_paravirt.h
+> index e84d21aa0722..b6a175155f36 100644
+> --- a/kernel/locking/qspinlock_paravirt.h
+> +++ b/kernel/locking/qspinlock_paravirt.h
+> @@ -47,12 +47,6 @@ enum vcpu_state {
+>  	vcpu_hashed,		/* = pv_hash'ed + vcpu_halted */
+>  };
+>  
+> -struct pv_node {
+> -	struct mcs_spinlock	mcs;
+> -	int			cpu;
+> -	u8			state;
+> -};
+> -
+>  /*
+>   * Hybrid PV queued/unfair lock
+>   *
+> @@ -170,7 +164,7 @@ static __always_inline int trylock_clear_pending(struct qspinlock *lock)
+>   */
+>  struct pv_hash_entry {
+>  	struct qspinlock *lock;
+> -	struct pv_node   *node;
+> +	struct qnode   *node;
+>  };
+>  
+>  #define PV_HE_PER_LINE	(SMP_CACHE_BYTES / sizeof(struct pv_hash_entry))
+> @@ -209,7 +203,7 @@ void __init __pv_init_lock_hash(void)
+>  	     offset < (1 << pv_lock_hash_bits);						\
+>  	     offset++, he = &pv_lock_hash[(hash + offset) & ((1 << pv_lock_hash_bits) - 1)])
+>  
+> -static struct qspinlock **pv_hash(struct qspinlock *lock, struct pv_node *node)
+> +static struct qspinlock **pv_hash(struct qspinlock *lock, struct qnode *node)
+>  {
+>  	unsigned long offset, hash = hash_ptr(lock, pv_lock_hash_bits);
+>  	struct pv_hash_entry *he;
+> @@ -236,11 +230,11 @@ static struct qspinlock **pv_hash(struct qspinlock *lock, struct pv_node *node)
+>  	BUG();
+>  }
+>  
+> -static struct pv_node *pv_unhash(struct qspinlock *lock)
+> +static struct qnode *pv_unhash(struct qspinlock *lock)
+>  {
+>  	unsigned long offset, hash = hash_ptr(lock, pv_lock_hash_bits);
+>  	struct pv_hash_entry *he;
+> -	struct pv_node *node;
+> +	struct qnode *node;
+>  
+>  	for_each_hash_entry(he, offset, hash) {
+>  		if (READ_ONCE(he->lock) == lock) {
+> @@ -264,7 +258,7 @@ static struct pv_node *pv_unhash(struct qspinlock *lock)
+>   * in a running state.
+>   */
+>  static inline bool
+> -pv_wait_early(struct pv_node *prev, int loop)
+> +pv_wait_early(struct qnode *prev, int loop)
+>  {
+>  	if ((loop & PV_PREV_CHECK_MASK) != 0)
+>  		return false;
+> @@ -277,9 +271,9 @@ pv_wait_early(struct pv_node *prev, int loop)
+>   */
+>  static void pv_init_node(struct mcs_spinlock *node)
+>  {
+> -	struct pv_node *pn = (struct pv_node *)node;
+> +	struct qnode *pn = (struct qnode *)node;
+>  
+> -	BUILD_BUG_ON(sizeof(struct pv_node) > sizeof(struct qnode));
+> +	BUILD_BUG_ON(sizeof(struct qnode) > sizeof(struct qnode));
 
-> From: Toke H??iland-J??rgensen <toke@redhat.com>
-> Date: Tue, 05 Jul 2022 20:51:14 +0200
->
->> Alexander Lobakin <alexandr.lobakin@intel.com> writes:
->> 
->> [... snipping a bit of context here ...]
->> 
->> >> >> Yeah, I'd agree this kind of configuration is something that can be
->> >> >> added later, and also it's sort of orthogonal to the consumption of the
->> >> >> metadata itself.
->> >> >> 
->> >> >> Also, tying this configuration into the loading of an XDP program is a
->> >> >> terrible interface: these are hardware configuration options, let's just
->> >> >> put them into ethtool or 'ip link' like any other piece of device
->> >> >> configuration.
->> >> >
->> >> > I don't believe it fits there, especially Ethtool. Ethtool is for
->> >> > hardware configuration, XDP/AF_XDP is 95% software stuff (apart from
->> >> > offload bits which is purely NFP's for now).
->> >> 
->> >> But XDP-hints is about consuming hardware features. When you're
->> >> configuring which metadata items you want, you're saying "please provide
->> >> me with these (hardware) features". So ethtool is an excellent place to
->> >> do that :)
->> >
->> > With Ethtool you configure the hardware, e.g. it won't strip VLAN
->> > tags if you disable rx-cvlan-stripping. With configuring metadata
->> > you only tell what you want to see there, don't you?
->> 
->> Ah, I think we may be getting closer to identifying the disconnect
->> between our way of thinking about this!
->> 
->> In my mind, there's no separate "configuration of the metadata" step.
->> You simply tell the hardware what features you want (say, "enable
->> timestamps and VLAN offload"), and the driver will then provide the
->> information related to these features in the metadata area
->> unconditionally. All XDP hints is about, then, is a way for the driver
->> to inform the rest of the system how that information is actually laid
->> out in the metadata area.
->> 
->> Having a separate configuration knob to tell the driver "please lay out
->> these particular bits of metadata this way" seems like a totally
->> unnecessary (and quite complicated) feature to have when we can just let
->> the driver decide and use CO-RE to consume it?
->
-> Magnus (he's currently on vacation) told me it would be useful for
-> AF_XDP to enable/disable particular metadata, at least from perf
-> perspective. Let's say, just fetching of one "checksum ok" bit in
-> the driver is faster than walking through all the descriptor words
-> and driver logics (i.e. there's several hundred locs in ice which
-> just parse descriptor data and build an skb or metadata from it).
-> But if we would just enable/disable corresponding features through
-> Ethtool, that would hurt XDP_PASS. Maybe it's a bad example, but
-> what if I want to have only RSS hash in the metadata (and don't
-> want to spend cycles on parsing the rest), but at the same time
-> still want skb path to have checksum status to not die at CPU
-> checksum calculation?
+This line can actually be removed ;-)
 
-Hmm, so this feels a little like a driver-specific optimisation? I.e.,
-my guess is that not all drivers have a measurable overhead for pulling
-out the metadata. Also, once the XDP metadata bits are in place, we can
-move in the direction of building SKBs from the same source, so I'm not
-sure it's a good idea to assume that the XDP metadata is separate from
-what the stack consumes...
+Other part looks good to me.
 
-In any case, if such an optimisation does turn out to be useful, we can
-add it later (backed by rigorous benchmarks, of course), so I think we
-can still start with the simple case and iterate from there?
+Acked-by: Boqun Feng <boqun.feng@gmail.com>
 
->> >> > I follow that way:
->> >> >
->> >> > 1) you pick a program you want to attach;
->> >> > 2) usually they are written for special needs and usecases;
->> >> > 3) so most likely that program will be tied with metadata/driver/etc
->> >> >    in some way;
->> >> > 4) so you want to enable Hints of a particular format primarily for
->> >> >    this program and usecase, same with threshold and everything
->> >> >    else.
->> >> >
->> >> > Pls explain how you see it, I might be wrong for sure.
->> >> 
->> >> As above: XDP hints is about giving XDP programs (and AF_XDP consumers)
->> >> access to metadata that is not currently available. Tying the lifetime
->> >> of that hardware configuration (i.e., which information to provide) to
->> >> the lifetime of an XDP program is not a good interface: for one thing,
->> >> how will it handle multiple programs? What about when XDP is not used at
->> >
->> > Multiple progs is stuff I didn't cover, but will do later (as you
->> > all say to me, "let's start with something simple" :)). Aaaand
->> > multiple XDP progs (I'm not talking about attaching progs in
->> > differeng modes) is not a kernel feature, rather a libpf feature,
->> > so I believe it should be handled there later...
->> 
->> Right, but even if we don't *implement* it straight away we still need
->> to take it into consideration in the design. And expecting libxdp to
->> arbitrate between different XDP programs' metadata formats sounds like a
->> royal PITA :)
->> 
->> >> all but you still want to configure the same features?
->> >
->> > What's the point of configuring metadata when there are no progs
->> > attached? To configure it once and not on every prog attach? I'm
->> > not saying I don't like it, just want to clarify.
->> 
->> See above: you turn on the features because you want the stack to
->> consume them.
->> 
->> > Maybe I need opinions from some more people, just to have an
->> > overview of how most of folks see it and would like to configure
->> > it. 'Cause I heard from at least one of the consumers that
->> > libpf API is a perfect place for Hints to him :)
->> 
->> Well, as a program author who wants to consume hints, you'd use
->> lib{bpf,xdp} APIs to do so (probably in the form of suitable CO-RE
->> macros)...
->> 
->> >> In addition, in every other case where we do dynamic data access (with
->> >> CO-RE) the BPF program is a consumer that modifies itself to access the
->> >> data provided by the kernel. I get that this is harder to achieve for
->> >> AF_XDP, but then let's solve that instead of making a totally
->> >> inconsistent interface for XDP.
->> >
->> > I also see CO-RE more fitting and convenient way to use them, but
->> > didn't manage to solve two things:
->> >
->> > 1) AF_XDP programs, so what to do with them? Prepare patches for
->> >    LLVM to make it able to do CO-RE on AF_XDP program load? Or
->> >    just hardcode them for particular usecases and NICs? What about
->> >    "general-purpose" programs?
->> 
->> You provide a library to read the fields. Jesper actually already
->> implemented this, did you look at his code?
->> 
->> https://github.com/xdp-project/bpf-examples/tree/master/AF_XDP-interaction
->> 
->> It basically builds a lookup table at load-time using BTF information
->> from the kernel, keyed on BTF ID and field name, resolving them into
->> offsets. It's not quite the zero-overhead of CO-RE, but it's fairly
->> close and can be improved upon (CO-RE for userspace being one way of
->> doing that).
->
-> Aaaah, sorry, I completely missed that. I thought of something
-> similar as well, but then thought "variable field offsets, that
-> would annihilate optimization and performance", and our Xsk team
-> is super concerned about performance hits when using Hints.
->
->> 
->> >    And if hardcode, what's the point then to do Generic Hints at
->> >    all? Then all it needs is making driver building some meta in
->> >    front of frames via on-off button and that's it? Why BTF ID in
->> >    the meta then if consumers will access meta hardcoded (via CO-RE
->> >    or literally hardcoded, doesn't matter)?
->> 
->> You're quite right, we could probably implement all the access to
->> existing (fixed) metadata without using any BTF at all - just define a
->> common struct and some flags to designate which fields are set. In my
->> mind, there are a couple of reasons for going the BTF route instead:
->> 
->> - We can leverage CO-RE to get close to optimal efficiency in field
->>   access.
->> 
->> and, more importantly:
->> 
->> - It's infinitely extensible. With the infrastructure in place to make
->>   it really easy to consume metadata described by BTF, we lower the bar
->>   for future innovation in hardware offloads. Both for just adding new
->>   fixed-function stuff to hardware, but especially for fully
->>   programmable hardware.
->
-> Agree :) That libxdp lookup translator fixed lots of stuff in my
-> mind.
+Regards,
+Boqun
 
-Great! Looks like we're slowly converging towards a shared
-understanding, then! :)
-
->> > 2) In-kernel metadata consumers? Also do CO-RE? Otherwise, with no
->> >    generic metadata structure they won't be able to benefit from
->> >    Hints. But I guess we still need to provide kernel with meta?
->> >    Or no?
->> 
->> In the short term, I think the "generic structure" approach is fine for
->> leveraging this in the stack. Both your and Jesper's series include
->> this, and I think that's totally fine. Longer term, if it turns out to
->> be useful to have something more dynamic for the stack consumption as
->> well, we could extend it to be CO-RE based as well (most likely by
->> having the stack load a "translator" BPF program or something along
->> those lines).
->
-> Oh, that translator prog sounds nice BTW!
-
-Yeah, it's only a rough idea Jesper and I discussed at some point, but I
-think it could have potential (see also point above re: making XDP hints
-*the* source of metadata for the whole stack; wouldn't it be nice if
-drivers didn't have to deal with the intricacies of assembling SKBs?).
-
--Toke
-
+>  
+>  	pn->cpu = smp_processor_id();
+>  	pn->state = vcpu_running;
+> @@ -292,8 +286,8 @@ static void pv_init_node(struct mcs_spinlock *node)
+>   */
+>  static void pv_wait_node(struct mcs_spinlock *node, struct mcs_spinlock *prev)
+>  {
+> -	struct pv_node *pn = (struct pv_node *)node;
+> -	struct pv_node *pp = (struct pv_node *)prev;
+> +	struct qnode *pn = (struct qnode *)node;
+> +	struct qnode *pp = (struct qnode *)prev;
+>  	int loop;
+>  	bool wait_early;
+>  
+> @@ -359,7 +353,7 @@ static void pv_wait_node(struct mcs_spinlock *node, struct mcs_spinlock *prev)
+>   */
+>  static void pv_kick_node(struct qspinlock *lock, struct mcs_spinlock *node)
+>  {
+> -	struct pv_node *pn = (struct pv_node *)node;
+> +	struct qnode *pn = (struct qnode *)node;
+>  
+>  	/*
+>  	 * If the vCPU is indeed halted, advance its state to match that of
+> @@ -402,7 +396,7 @@ static void pv_kick_node(struct qspinlock *lock, struct mcs_spinlock *node)
+>  static u32
+>  pv_wait_head_or_lock(struct qspinlock *lock, struct mcs_spinlock *node)
+>  {
+> -	struct pv_node *pn = (struct pv_node *)node;
+> +	struct qnode *pn = (struct qnode *)node;
+>  	struct qspinlock **lp = NULL;
+>  	int waitcnt = 0;
+>  	int loop;
+> @@ -492,7 +486,7 @@ pv_wait_head_or_lock(struct qspinlock *lock, struct mcs_spinlock *node)
+>  __visible void
+>  __pv_queued_spin_unlock_slowpath(struct qspinlock *lock, u8 locked)
+>  {
+> -	struct pv_node *node;
+> +	struct qnode *node;
+>  
+>  	if (unlikely(locked != _Q_SLOW_VAL)) {
+>  		WARN(!debug_locks_silent,
+> @@ -517,14 +511,14 @@ __pv_queued_spin_unlock_slowpath(struct qspinlock *lock, u8 locked)
+>  	node = pv_unhash(lock);
+>  
+>  	/*
+> -	 * Now that we have a reference to the (likely) blocked pv_node,
+> +	 * Now that we have a reference to the (likely) blocked qnode,
+>  	 * release the lock.
+>  	 */
+>  	smp_store_release(&lock->locked, 0);
+>  
+>  	/*
+>  	 * At this point the memory pointed at by lock can be freed/reused,
+> -	 * however we can still use the pv_node to kick the CPU.
+> +	 * however we can still use the qnode to kick the CPU.
+>  	 * The other vCPU may not really be halted, but kicking an active
+>  	 * vCPU is harmless other than the additional latency in completing
+>  	 * the unlock.
+> -- 
+> 2.35.1
+> 

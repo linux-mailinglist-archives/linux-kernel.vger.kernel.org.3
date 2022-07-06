@@ -2,176 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B7F45568C8B
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 17:22:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D886568C9F
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 17:24:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233613AbiGFPWc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Jul 2022 11:22:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35730 "EHLO
+        id S231431AbiGFPYJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Jul 2022 11:24:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37166 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233589AbiGFPWa (ORCPT
+        with ESMTP id S232585AbiGFPXw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Jul 2022 11:22:30 -0400
-Received: from mail-lj1-x233.google.com (mail-lj1-x233.google.com [IPv6:2a00:1450:4864:20::233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17F6013D0E
-        for <linux-kernel@vger.kernel.org>; Wed,  6 Jul 2022 08:22:29 -0700 (PDT)
-Received: by mail-lj1-x233.google.com with SMTP id bx13so18895582ljb.1
-        for <linux-kernel@vger.kernel.org>; Wed, 06 Jul 2022 08:22:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=+mU56Z0jln9tpZcCLBMTlNZ0DlKw6qLIcuR6s049GPk=;
-        b=vShMHcD/GMWr3dbVy8g+QKecwTcuyMMhc5OSwqdKK3JXCju22+2a197RniNwmYGEbC
-         egQW6E6eN+93TQbnli2LcQ/zei2/nAkyiZdLhPH1LNxI42wOmkc+haHgKbMBBA/eZTbO
-         FUPS81v7+jfisZRrRVv2L2EEWsNBQjWtH7lvxUGdsmKmWEm1bVjhA0fYG2FwgaJ0+0FQ
-         fqjhPDvPhVUzusff7LGhjS5B6xOsGi+vdi52eZXRht8y/NHpCxfs69c3pnU0ni2lhUoJ
-         7L91oCQG6lFv6tGF7p1hexhsmdQJlm8gRSBpcH7hjgodUB7fURteQoDcMxSn28EcpoVN
-         Cdtw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=+mU56Z0jln9tpZcCLBMTlNZ0DlKw6qLIcuR6s049GPk=;
-        b=Xm0+WNSim6dN9GtBggASP+l617sm4g2iyXdOQSqMBN5Qjx3Xene1k1v7Eay6tVkqL5
-         4zJyNI8HaDRwS1MsbKvvTrbsE9zoONzGaC0gfC0dqIANnNSDa9oOprtmup2dy2Maj4KH
-         un1TqGmhl4RdXKEsR/m4oQhdXi3E2L+XnZP6wH4v6tcROs8+8fvrZDAWlCtYS53qXegN
-         zLzw+CYRk6Gf+Yax6+CdqkGT6xCHaa0eH/j4HdOXNllUGY01+TSo7XPlF08Xz0Ix19xG
-         v5O5dPDt1ddjahXylJfzcWPOKAnrAsKdi69okFXc0RSN4GUCzXmaYy7CK2lZRbk4C7t4
-         cnqQ==
-X-Gm-Message-State: AJIora8Stw/0I1PhKaJptod7Gs16tmmbVJ7AJdxcJeT0CcxaJWL9XXfL
-        cHLwd07+qDSBs+KZqNVzalVV8A==
-X-Google-Smtp-Source: AGRyM1ucbiikEj80bXWZmGd+F7/xuIxpbwt2UKm2XOLOlDdQ47QQZ5LOsrYW5G39Xi0FO1/mgtQaLw==
-X-Received: by 2002:a2e:a483:0:b0:25b:c3c6:8559 with SMTP id h3-20020a2ea483000000b0025bc3c68559mr24099648lji.273.1657120947479;
-        Wed, 06 Jul 2022 08:22:27 -0700 (PDT)
-Received: from [192.168.1.52] ([84.20.121.239])
-        by smtp.gmail.com with ESMTPSA id bu35-20020a05651216a300b0047255d211b9sm6325799lfb.232.2022.07.06.08.22.26
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 06 Jul 2022 08:22:27 -0700 (PDT)
-Message-ID: <fca15370-f977-687a-ff62-22ae43046b58@linaro.org>
-Date:   Wed, 6 Jul 2022 17:22:26 +0200
+        Wed, 6 Jul 2022 11:23:52 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24BAD1EC43;
+        Wed,  6 Jul 2022 08:23:51 -0700 (PDT)
+Received: from pps.filterd (m0098419.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 266EWNj2008525;
+        Wed, 6 Jul 2022 15:23:39 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : date : message-id : mime-version : content-transfer-encoding; s=pp1;
+ bh=GqfdF8L1josTjn4gSKMpVt2e0w3DxLAN0XMqncZijg8=;
+ b=a9xKkZ/o84iXC1aTc03gyo+GcQmCDIVOR47/iBPOXzKhG4N6xE7tjbKkyhSLQNREage1
+ Pwx2bc343HnMaghT4+5JD+mJENXPHDsfkHrtDt1m9AZ7QsanYPXwzb/IfpbxVcXGPeyE
+ DGF3kw2KF+xatgzTN9LPV/bT4v1Fq6B3QkVnMc41K3qqyxM6LUNSWQkoFQ/9mygJr8xG
+ ZpYy/4B1HooUP+QZCbuT9C2vbXFGTLoY6kFH8RP96lRpZ0A0ScwpSiG9xeSbMrCqAONZ
+ YiHPc5tvnkU1hSmPO5l4opPx3ZOlDWynnXlPruVpylKgjC9js8Q7TKj/vzomACRZBzZy BQ== 
+Received: from ppma01wdc.us.ibm.com (fd.55.37a9.ip4.static.sl-reverse.com [169.55.85.253])
+        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3h5as4c91b-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 06 Jul 2022 15:23:39 +0000
+Received: from pps.filterd (ppma01wdc.us.ibm.com [127.0.0.1])
+        by ppma01wdc.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 266FLTkq002931;
+        Wed, 6 Jul 2022 15:23:39 GMT
+Received: from b01cxnp22033.gho.pok.ibm.com (b01cxnp22033.gho.pok.ibm.com [9.57.198.23])
+        by ppma01wdc.us.ibm.com with ESMTP id 3h4ud1n7yx-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 06 Jul 2022 15:23:39 +0000
+Received: from b01ledav004.gho.pok.ibm.com (b01ledav004.gho.pok.ibm.com [9.57.199.109])
+        by b01cxnp22033.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 266FNccK32506212
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 6 Jul 2022 15:23:38 GMT
+Received: from b01ledav004.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 40B82112061;
+        Wed,  6 Jul 2022 15:23:38 +0000 (GMT)
+Received: from b01ledav004.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 27BD9112064;
+        Wed,  6 Jul 2022 15:23:38 +0000 (GMT)
+Received: from sbct-3.pok.ibm.com (unknown [9.47.158.153])
+        by b01ledav004.gho.pok.ibm.com (Postfix) with ESMTP;
+        Wed,  6 Jul 2022 15:23:38 +0000 (GMT)
+From:   Stefan Berger <stefanb@linux.ibm.com>
+To:     kexec@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org
+Cc:     nayna@linux.ibm.com, nasastry@in.ibm.com, mpe@ellerman.id.au,
+        Stefan Berger <stefanb@linux.ibm.com>
+Subject: [PATCH v5 0/6] tpm: Preserve TPM measurement log across kexec (ppc64)
+Date:   Wed,  6 Jul 2022 11:23:23 -0400
+Message-Id: <20220706152329.665636-1-stefanb@linux.ibm.com>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH v7 1/3] dt-bindings: mfd: Convert atmel-flexcom to
- json-schema
-Content-Language: en-US
-To:     Kavyasree Kotagiri <kavyasree.kotagiri@microchip.com>,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        nicolas.ferre@microchip.com, alexandre.belloni@bootlin.com,
-        claudiu.beznea@microchip.com, UNGLinuxDriver@microchip.com
-Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-References: <20220706110619.71729-1-kavyasree.kotagiri@microchip.com>
- <20220706110619.71729-2-kavyasree.kotagiri@microchip.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220706110619.71729-2-kavyasree.kotagiri@microchip.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: 74g5zCz-hh4mOnUkq2FRI6sXOvCKh7b6
+X-Proofpoint-ORIG-GUID: 74g5zCz-hh4mOnUkq2FRI6sXOvCKh7b6
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
+ definitions=2022-07-06_09,2022-06-28_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 phishscore=0
+ impostorscore=0 adultscore=0 mlxlogscore=605 lowpriorityscore=0
+ bulkscore=0 clxscore=1015 priorityscore=1501 suspectscore=0 mlxscore=0
+ spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2206140000 definitions=main-2207060060
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 06/07/2022 13:06, Kavyasree Kotagiri wrote:
-> Convert the Atmel flexcom device tree bindings to json schema.
-> 
-> Signed-off-by: Kavyasree Kotagiri <kavyasree.kotagiri@microchip.com>
-> ---
-> v6 -> v7:
->  - Change filename to atmel,sama5d2-flexcom.yaml
->  - Add #address-cells, #size-cells to flexcom node - Fixed warnings.
-> 
-> v5 -> v6:
->  - Removed spi node from example as suggested by Rob and
->    also pattern properties(spi dt-bindings conversion to yaml patch is under review).
->    Once that is accepted, I will add back spi example through new patch.
-> 
-> v4 -> v5:
->  - Fixed indentations.
-> 
-> v3 -> v4:
->  - Corrected format of enum used for compatible string.
-> 
-> v2 -> v3:
->  - used enum for compatible string.
->  - changed irq flag to IRQ_TYPE_LEVEL_HIGH in example.
->  - fixed dtschema errors.
-> 
-> v1 -> v2:
->  - Fix title.
-> 
->  .../bindings/mfd/atmel,sama5d2-flexcom.yaml   | 74 +++++++++++++++++++
->  .../devicetree/bindings/mfd/atmel-flexcom.txt | 63 ----------------
->  2 files changed, 74 insertions(+), 63 deletions(-)
->  create mode 100644 Documentation/devicetree/bindings/mfd/atmel,sama5d2-flexcom.yaml
->  delete mode 100644 Documentation/devicetree/bindings/mfd/atmel-flexcom.txt
-> 
-> diff --git a/Documentation/devicetree/bindings/mfd/atmel,sama5d2-flexcom.yaml b/Documentation/devicetree/bindings/mfd/atmel,sama5d2-flexcom.yaml
-> new file mode 100644
-> index 000000000000..864f490ffb83
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/mfd/atmel,sama5d2-flexcom.yaml
-> @@ -0,0 +1,74 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/mfd/atmel,sama5d2-flexcom.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Atmel Flexcom (Flexible Serial Communication Unit)
-> +
-> +maintainers:
-> +  - Kavyasree Kotagiri <kavyasree.kotagiri@microchip.com>
-> +
-> +description:
-> +  The Atmel Flexcom is just a wrapper which embeds a SPI controller,
-> +  an I2C controller and an USART. Only one function can be used at a
-> +  time and is chosen at boot time according to the device tree.
-> +
-> +properties:
-> +  compatible:
-> +    enum:
-> +      - atmel,sama5d2-flexcom
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  clocks:
-> +    maxItems: 1
-> +
-> +  "#address-cells":
-> +    const: 1
-> +
-> +  "#size-cells":
-> +    const: 1
-> +
-> +  ranges:
-> +    description:
-> +      One range for the full I/O register region. (including USART,
-> +      TWI and SPI registers).
-> +    items:
-> +      maxItems: 3
-> +
-> +  atmel,flexcom-mode:
-> +    description: |
-> +      Specifies the flexcom mode as follows:
-> +      1: USART
-> +      2: SPI
-> +      3: I2C.
-> +    $ref: /schemas/types.yaml#/definitions/uint32
-> +    enum: [1, 2, 3]
-> +
+The of-tree subsystem does not currently preserve the IBM vTPM 1.2 and
+vTPM 2.0 measurement logs across a kexec on PowerVM and PowerKVM. This
+series fixes this for the kexec_file_load() syscall using the flattened
+device tree (fdt) to carry the TPM measurement log's buffer across kexec.
 
-As pointed out by Rob's bot - why do you not allow the protocol-specific
-children here? spi, serial etc?
+   Stefan
+
+v5:
+ - Rebased on 1 more patch that would otherwise create merge conflicts
+
+v4:
+ - Rebased on 2 patches that would otherwise create merge conflicts;
+   posting these patches in this series with several tags removed so
+   krobot can test the series already
+ - Changes to individual patches documented in patch descripitons
+
+v3:
+ - Moved TPM Open Firmware related function to drivers/char/tpm/eventlog/tpm_of.c
+
+v2:
+ - rearranged patches
+ - fixed compilation issues for x86
+
+Jonathan McDowell (1):
+  x86/kexec: Carry forward IMA measurement log on kexec
+
+Palmer Dabbelt (1):
+  drivers: of: kexec ima: Support 32-bit platforms
+
+Stefan Berger (3):
+  tpm: of: Make of-tree specific function commonly available
+  of: kexec: Refactor IMA buffer related functions to make them reusable
+  tpm/kexec: Duplicate TPM measurement log in of-tree for kexec
+
+Vaibhav Jain (1):
+  of: check previous kernel's ima-kexec-buffer against memory bounds
+
+ arch/x86/Kconfig                      |   1 +
+ arch/x86/include/uapi/asm/bootparam.h |   9 +
+ arch/x86/kernel/e820.c                |   6 +-
+ arch/x86/kernel/kexec-bzimage64.c     |  42 +++-
+ arch/x86/kernel/setup.c               |  63 +++++
+ drivers/char/tpm/eventlog/of.c        |  31 +--
+ drivers/of/kexec.c                    | 341 ++++++++++++++++++++++----
+ include/linux/ima.h                   |   5 +
+ include/linux/kexec.h                 |   6 +
+ include/linux/of.h                    |  10 +-
+ include/linux/tpm.h                   |  27 ++
+ kernel/kexec_file.c                   |   6 +
+ security/integrity/ima/ima_kexec.c    |   2 +-
+ 13 files changed, 467 insertions(+), 82 deletions(-)
 
 
-Best regards,
-Krzysztof
+base-commit: 03c765b0e3b4cb5063276b086c76f7a612856a9a
+-- 
+2.35.1
+

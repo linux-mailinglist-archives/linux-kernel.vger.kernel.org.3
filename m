@@ -2,111 +2,181 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BE43056846D
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 11:59:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F1E3E568489
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 12:04:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232549AbiGFJ6y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Jul 2022 05:58:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40046 "EHLO
+        id S232206AbiGFKBi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Jul 2022 06:01:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41192 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232507AbiGFJ6w (ORCPT
+        with ESMTP id S231226AbiGFKBd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Jul 2022 05:58:52 -0400
-Received: from mail-lj1-x236.google.com (mail-lj1-x236.google.com [IPv6:2a00:1450:4864:20::236])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C92F0205C5
-        for <linux-kernel@vger.kernel.org>; Wed,  6 Jul 2022 02:58:49 -0700 (PDT)
-Received: by mail-lj1-x236.google.com with SMTP id a39so17783016ljq.11
-        for <linux-kernel@vger.kernel.org>; Wed, 06 Jul 2022 02:58:49 -0700 (PDT)
+        Wed, 6 Jul 2022 06:01:33 -0400
+Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8548824BF7
+        for <linux-kernel@vger.kernel.org>; Wed,  6 Jul 2022 03:01:31 -0700 (PDT)
+Received: by mail-pl1-x631.google.com with SMTP id r1so13227667plo.10
+        for <linux-kernel@vger.kernel.org>; Wed, 06 Jul 2022 03:01:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=GpoFCpZ8O+svTpauDAo3u58PUgHKFYEWbYXLRGlqYoI=;
-        b=fQBiNzPcw6khJIZ+MJnKxSLu+xO+uEeNhlVX/9O2EgoZjfKxokGTrBAI639jhnFbss
-         Tu5EexKI/sj5GBhoLe/lMSdh/gpRDpmMhOPsqpDYKdbtLpz+Wq6zWykcUg6je1Cc9l4A
-         e5xDnh5fN4sDrwjqPstLnQmQ+RZ1iqBSYFYmYlkXRYOg1eDOahK5I6mLFCDE24sMd/qQ
-         IEbqgkoQcSz3BA8l6RasVmJHESsATl3g/r31ztbHw3OCPOb8rjdHUdP/jEf7zs8aaCXd
-         lrwDnUw15bQa7iqxN7t7jOl/xSizN0VJ3rMc/lnG4QA9yjiUSl7T3gNnN4584rxZ4VY2
-         wXFA==
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=izBSDhEo5LkaKfHP1dONDKBae8Gt8mJVPobNlAoGfDM=;
+        b=MlcF3wqO/V85e/FqvG2aKl03wiSIMQfXYBvfKy2OGFsF7Hq0mu82AfoCPBm8llGBTi
+         4JMDyKlzabIHgWrhoKInoq421y2c1Fy+ra3rx6oynfgzzzqzKSXoAOIlwV+blu87b7TZ
+         Mc67S/8G/Oqyk4Yarl2CubxK1nBLs4lAAte3QXQ54vehyNTVD8VpE39mr2OtOvLwKkCf
+         ld3D8IE4H08vVLiRaDxZCkNz/wRYxAoZrLaECNgWa3VQCWJQbOE/gHbhpZCQCUf2Zc2x
+         2cJxnn/piI3hVeWPvn0No/DgH8UqaieLhSfEnTVVN8VLArdT41QJg+BwwbXhttkk5ZR5
+         gwOw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=GpoFCpZ8O+svTpauDAo3u58PUgHKFYEWbYXLRGlqYoI=;
-        b=vH80wDxAQ1ZaZZOgeTjJAbRsXBz9YYDMdqdgI5XvaG8id02n4sr8UYHG/TcHucusbi
-         OOmlqb8Nw3fdMWjK3qAP8okOOgeZfmvN/1WGNz6vL7kiMlIUej569oPMoXWeoXJXwcMb
-         h/TCtVCXNl4tA136wEKL5WelBlqtsvnXSl7TBRgnl0ykaP8AhxD7o9vTaxvhv0ywH4Fc
-         Ln0IbYkTUWC1ZRy/pcun5JIXM2ucL4spGB9+46c8B65PjOcHqGVXpmMYkijBo3kqHF9I
-         jMD9udW76yI1m9ATNcjxKVc2gPoi0tC0il2tIUcLiojeE/kAU6uyeV17VtQDWV05PozZ
-         MxRw==
-X-Gm-Message-State: AJIora8Pa4d5i5wukpYkWBJcY1E0CGADShNRorh11xoTfuVus1m0iqUJ
-        /DaBQDSKrT7GSJOgfNt6lXklGg==
-X-Google-Smtp-Source: AGRyM1vcERb/TA5ylNvEDQakZ4PfRptsZ/M6Y8Wo3syi8+/XiLTxJb4Yj1R8b80RGJ3L7PBUAGQwvQ==
-X-Received: by 2002:a2e:9b89:0:b0:25d:1c51:6c6a with SMTP id z9-20020a2e9b89000000b0025d1c516c6amr10198982lji.158.1657101528176;
-        Wed, 06 Jul 2022 02:58:48 -0700 (PDT)
-Received: from [192.168.1.52] ([84.20.121.239])
-        by smtp.gmail.com with ESMTPSA id s1-20020a197701000000b0047f6e84f532sm6194015lfc.38.2022.07.06.02.58.46
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 06 Jul 2022 02:58:47 -0700 (PDT)
-Message-ID: <e7ba92aa-c501-929b-6962-4cb4c6a1dc48@linaro.org>
-Date:   Wed, 6 Jul 2022 11:58:46 +0200
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=izBSDhEo5LkaKfHP1dONDKBae8Gt8mJVPobNlAoGfDM=;
+        b=ofY5Sf+Hgd5emmtrbL5laHSH5NJSIj4a7LZDN381aHOw96zTOtYLtUNbhelr7+sNSW
+         dPMwjaXmwL9n4im33V9ls/ELJ2lvzsQa5mqRPPh8CK7gKyjW08sjlFtHAfpGf8FJvn/G
+         xlhv+a5Op6okJ9pxO27QJDD33/TzRkZM8GLqgu+lA0YrKoM1USPfaesUXEnajWWW/Beu
+         Kxrbvr19UxolLt3Pi5FDuXdrFkI3/Z4SGHjCf4mDBM8slpBtvjw/axbU04ygeCJDSlFg
+         72/EXPNvw78Am4UA9p6TQhvMwPzq+YgGmKYd02BcLD/W8xPmMThKFKfrtOc81gZ8aos6
+         Zt6g==
+X-Gm-Message-State: AJIora8gaPXEPOwJ08V8B6SKLGd9VrG8VGbbvFcTW2bkcp6nB/2y/4tp
+        Kowcv5TsWP4KITMEC/1ONM2hiP6sd62UL+RbSEAmug==
+X-Google-Smtp-Source: AGRyM1v3ziWKPv53EFicedDG8HWTa+LjL5AiWoFupEyKusVCvS/6LLjFV+/tJzX/UcthosxH8pT/GY30l6NARdYD9xs=
+X-Received: by 2002:a17:90b:38c2:b0:1ed:474a:a668 with SMTP id
+ nn2-20020a17090b38c200b001ed474aa668mr47273440pjb.201.1657101690952; Wed, 06
+ Jul 2022 03:01:30 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH V3 02/11] dt-bindings: pci: tegra: Convert to json-schema
-Content-Language: en-US
-To:     Vidya Sagar <vidyas@nvidia.com>, bhelgaas@google.com,
-        lorenzo.pieralisi@arm.com, robh+dt@kernel.org,
-        thierry.reding@gmail.com, jonathanh@nvidia.com
-Cc:     kishon@ti.com, vkoul@kernel.org, kw@linux.com,
-        p.zabel@pengutronix.de, mperttunen@nvidia.com,
-        linux-pci@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-phy@lists.infradead.org, kthota@nvidia.com,
-        mmaddireddy@nvidia.com, sagar.tv@gmail.com,
-        Thierry Reding <treding@nvidia.com>
-References: <20220629060435.25297-1-vidyas@nvidia.com>
- <20220629060435.25297-3-vidyas@nvidia.com>
- <cab66a0d-18d1-77ba-c0ac-06f802874c0a@linaro.org>
- <3e21dbaa-b478-5713-5355-319d2843167f@nvidia.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <3e21dbaa-b478-5713-5355-319d2843167f@nvidia.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+References: <20220705150002.2016207-1-varadgautam@google.com>
+ <YsRkPUcrMj+JU0Om@kroah.com> <CAOLDJOJ_v75WqGt2mZa0h-GgF+NThFBY5DvasH+9LLVgLrrvog@mail.gmail.com>
+ <YsUvgWmrk+ZfUy3t@kroah.com> <CAOLDJOJug5jYpaSjY1tAYWNo0QRM4NB+wM2Vd2=Lf_O7TRjVCg@mail.gmail.com>
+ <6eed01c90fafe681cccba2f227d65f2e9bfb8348.camel@intel.com> <YsVUB76c2b0EkRBb@kroah.com>
+In-Reply-To: <YsVUB76c2b0EkRBb@kroah.com>
+From:   Varad Gautam <varadgautam@google.com>
+Date:   Wed, 6 Jul 2022 12:01:19 +0200
+Message-ID: <CAOLDJOJLvSUMqF37H13aiH59Pm4_t6esRxy7Ej3Grhr4fmSGQA@mail.gmail.com>
+Subject: Re: [PATCH] thermal: sysfs: Perform bounds check when storing thermal states
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     Zhang Rui <rui.zhang@intel.com>, linux-kernel@vger.kernel.org,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>, linux-pm@vger.kernel.org,
+        stable@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 06/07/2022 11:51, Vidya Sagar wrote:
->>> +  phy-names:
->>> +    minItems: 1
->>> +    maxItems: 16
->>> +    items:
->>> +      pattern: "^p2u-[0-9]+$"
->>
->> No, because this allows any/unspecified order. Please list the items, so
->> the order is fixed.
-> 
-> Not all controllers are going to have all of them specified. Number of
-> these entries depend on the number of lanes assigned to that particular 
-> controller. In this scenario, I thought specifying it using 'pattern' 
-> should be fine. Please let me know if there is any other better way to 
-> specify this.
+On Wed, Jul 6, 2022 at 11:21 AM Greg KH <gregkh@linuxfoundation.org> wrote:
+>
+> On Wed, Jul 06, 2022 at 04:51:59PM +0800, Zhang Rui wrote:
+> > On Wed, 2022-07-06 at 09:16 +0200, Varad Gautam wrote:
+> > > On Wed, Jul 6, 2022 at 8:45 AM Greg KH <gregkh@linuxfoundation.org>
+> > > wrote:
+> > > >
+> > > > On Tue, Jul 05, 2022 at 11:02:50PM +0200, Varad Gautam wrote:
+> > > > > On Tue, Jul 5, 2022 at 6:18 PM Greg KH <
+> > > > > gregkh@linuxfoundation.org> wrote:
+> > > > > >
+> > > > > > On Tue, Jul 05, 2022 at 03:00:02PM +0000, Varad Gautam wrote:
+> > > > > > > Check that a user-provided thermal state is within the
+> > > > > > > maximum
+> > > > > > > thermal states supported by a given driver before attempting
+> > > > > > > to
+> > > > > > > apply it. This prevents a subsequent OOB access in
+> > > > > > > thermal_cooling_device_stats_update() while performing
+> > > > > > > state-transition accounting on drivers that do not have this
+> > > > > > > check
+> > > > > > > in their set_cur_state() handle.
+> > > > > > >
+> > > > > > > Signed-off-by: Varad Gautam <varadgautam@google.com>
+> > > > > > > Cc: stable@vger.kernel.org
+> > > > > > > ---
+> > > > > > >  drivers/thermal/thermal_sysfs.c | 12 +++++++++++-
+> > > > > > >  1 file changed, 11 insertions(+), 1 deletion(-)
+> > > > > > >
+> > > > > > > diff --git a/drivers/thermal/thermal_sysfs.c
+> > > > > > > b/drivers/thermal/thermal_sysfs.c
+> > > > > > > index 1c4aac8464a7..0c6b0223b133 100644
+> > > > > > > --- a/drivers/thermal/thermal_sysfs.c
+> > > > > > > +++ b/drivers/thermal/thermal_sysfs.c
+> > > > > > > @@ -607,7 +607,7 @@ cur_state_store(struct device *dev,
+> > > > > > > struct device_attribute *attr,
+> > > > > > >               const char *buf, size_t count)
+> > > > > > >  {
+> > > > > > >       struct thermal_cooling_device *cdev =
+> > > > > > > to_cooling_device(dev);
+> > > > > > > -     unsigned long state;
+> > > > > > > +     unsigned long state, max_state;
+> > > > > > >       int result;
+> > > > > > >
+> > > > > > >       if (sscanf(buf, "%ld\n", &state) != 1)
+> > > > > > > @@ -618,10 +618,20 @@ cur_state_store(struct device *dev,
+> > > > > > > struct device_attribute *attr,
+> > > > > > >
+> > > > > > >       mutex_lock(&cdev->lock);
+> > > > > > >
+> > > > > > > +     result = cdev->ops->get_max_state(cdev, &max_state);
+> > > > > > > +     if (result)
+> > > > > > > +             goto unlock;
+> > > > > > > +
+> > > > > > > +     if (state > max_state) {
+> > > > > > > +             result = -EINVAL;
+> > > > > > > +             goto unlock;
+> > > > > > > +     }
+> > > > > > > +
+> > > > > > >       result = cdev->ops->set_cur_state(cdev, state);
+> > > > > >
+> > > > > > Why doesn't set_cur_state() check the max state before setting
+> > > > > > it?  Why
+> > > > > > are the callers forced to always check it before?  That feels
+> > > > > > wrong...
+> > > > > >
+> > > > >
+> > > > > The problem lies in thermal_cooling_device_stats_update(), not
+> > > > > set_cur_state().
+> > > > >
+> > > > > If ->set_cur_state() doesn't error out on invalid state,
+> > > > > thermal_cooling_device_stats_update() does a:
+> > > > >
+> > > > > stats->trans_table[stats->state * stats->max_states +
+> > > > > new_state]++;
+> > > > >
+> > > > > stats->trans_table reserves space depending on max_states, but
+> > > > > we'd end up
+> > > > > reading/writing outside it. cur_state_store() can prevent this
+> > > > > regardless of
+> > > > > the driver's ->set_cur_state() implementation.
+> > > >
+> > > > Why wouldn't cur_state_store() check for an out-of-bounds condition
+> > > > by
+> > > > calling get_max_state() and then return an error if it is invalid,
+> > > > preventing thermal_cooling_device_stats_update() from ever being
+> > > > called?
+> > > >
+> > >
+> > > That's what this patch does, it adds the out-of-bounds check.
+> >
+> > No, I think Greg' question is
+> > why cdev->ops->set_cur_state() return 0 when setting a cooling state
+> > that exceeds the maximum cooling state?
+>
+> Yes, that is what I am asking, it should not allow a state to be
+> exceeded.
+>
 
-As I understood previous bindings and your message above, these are all
-incremented by one, so just list them and drop maxItems.
+Indeed, it is upto the driver to return !0 from cdev->ops->set_cur_state()
+when setting state > max - and it is a driver bug for not doing so.
 
-Trim the context, it makes it easier to spot the actual response. You
-quoted a lot above and a lot below. I do not know if there is something
-more to discuss? Usually quote means there is but I could not find... If
-there is, use replying style matching mailing list.
+But a buggy driver should not lead to cur_state_store() performing an OOB
+access.
 
-Best regards,
-Krzysztof
+> thanks,
+>
+> greg k-h

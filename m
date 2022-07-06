@@ -2,144 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5CB545690BA
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 19:36:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 049815690BE
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 19:39:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233546AbiGFRgs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Jul 2022 13:36:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54752 "EHLO
+        id S233768AbiGFRiw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Jul 2022 13:38:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56274 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233160AbiGFRgq (ORCPT
+        with ESMTP id S233075AbiGFRit (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Jul 2022 13:36:46 -0400
-Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A1EE1E3E8
-        for <linux-kernel@vger.kernel.org>; Wed,  6 Jul 2022 10:36:45 -0700 (PDT)
-Received: by mail-pj1-x1034.google.com with SMTP id 89-20020a17090a09e200b001ef7638e536so12866250pjo.3
-        for <linux-kernel@vger.kernel.org>; Wed, 06 Jul 2022 10:36:45 -0700 (PDT)
+        Wed, 6 Jul 2022 13:38:49 -0400
+Received: from alexa-out-sd-02.qualcomm.com (alexa-out-sd-02.qualcomm.com [199.106.114.39])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52E9C20BD4;
+        Wed,  6 Jul 2022 10:38:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=n6GVhQmBGVKBhGa5woMm6aogTfqoCNqPgCzOl2ffqrA=;
-        b=e1xeUsyT+W+flSShjjnjyN4TfbfrsLh9Fog2om/V0KJWvgtiMuK0jePKuTI8hlaAHX
-         F+WQOOR1u9I03ck70NXzlfW2Ygp/WcfDkgRBchk7NZc7ZqXNjn4u3fDUoFwioxc1YUvK
-         d37Fx05W0yx3P7PROVg1GXABbwtaeqIPhrIiEO+0I80c0W53bDFXFkgwYgv+qOrQELuP
-         knK+IRouM8+hNF24Z5WPGNAVnI8ObiAWhbj1IEPrTV1rDci+wsq+4IR3OLINoGimlxfK
-         D+4cB9HnimksBtqJ2Rg97LOR/dbhF0dYnp2I4jX7mtF0XsBublRREU029Pl4DpQdNiNj
-         QCvQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=n6GVhQmBGVKBhGa5woMm6aogTfqoCNqPgCzOl2ffqrA=;
-        b=WRggsP9MUgmFfXIZQ6toDzdPx/QRv0Gj04PcyfHhtcWU4jNDSe+S8lyyArw1J0PADG
-         PVXb+23FCmlNj/j+ZZWDYDb00YQnczbH0C9/5hSpmsIa4ns6ZsaPs8rFdVFuy/WC70MJ
-         kNMN54cWBKzi1jKWlhPrqbQeKV49pIU0dYq+tiCv8URiE+ZaSpiZrQeGSzYzkimgnuZo
-         Q7KfNjBbP1FhPuq5+elyeQGqq5BY3a8AsqepShE/6qaCONgq7121pdS9WbbPTnNAufLm
-         0146jkmipFl8UX6GfiwnatzyeWaot00PjySYehveIBId7teEsSdQG26AZdFnchLIApmT
-         fMlA==
-X-Gm-Message-State: AJIora/udz8d6MNFcHolA4WVDFJmejbKRIAuu85nGu7PtbhmeI8FwDP/
-        5k6kPHdSKwPuDjLNYqFduVEX/w==
-X-Google-Smtp-Source: AGRyM1vjGjONL95pIBy9rQ/rmpXePKjqmhuUe9hjzvPPN9BnuEaq7l6jpCjoLYhkAbm/LaFvVtKcxA==
-X-Received: by 2002:a17:903:2443:b0:16a:29ac:27c2 with SMTP id l3-20020a170903244300b0016a29ac27c2mr46952180pls.46.1657129004700;
-        Wed, 06 Jul 2022 10:36:44 -0700 (PDT)
-Received: from google.com (123.65.230.35.bc.googleusercontent.com. [35.230.65.123])
-        by smtp.gmail.com with ESMTPSA id g15-20020a63564f000000b004129741dd9dsm1519871pgm.51.2022.07.06.10.36.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 06 Jul 2022 10:36:43 -0700 (PDT)
-Date:   Wed, 6 Jul 2022 17:36:39 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Maxim Levitsky <mlevitsk@redhat.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Oliver Upton <oupton@google.com>,
-        Peter Shier <pshier@google.com>
-Subject: Re: [PATCH v2 13/21] KVM: x86: Formalize blocking of nested pending
- exceptions
-Message-ID: <YsXIJ50adC+TVejy@google.com>
-References: <20220614204730.3359543-1-seanjc@google.com>
- <20220614204730.3359543-14-seanjc@google.com>
- <cd9be62e3c2018a4f779f65fed46954e9431e0b0.camel@redhat.com>
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1657129129; x=1688665129;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=FhWHWnzInvaXJrJbum0+QXz2cZCZEz6fJfsM5k6flbA=;
+  b=JQySdDoZaCeWKZaLKEiTwWK7MFi/Tu5fg47LeHGTX0QoYtRTanKNscpe
+   lZj/vD7AhPfgdcBsh5MbQmA2VayP8+1q0I4dgSRqGi/tTC3dZhlsZmN79
+   uDEWaBtkcC/CVWPEXgtbthSQJ0fYifZZ2KSPjrK46EFwdjMQyGjHMgjEy
+   w=;
+Received: from unknown (HELO ironmsg04-sd.qualcomm.com) ([10.53.140.144])
+  by alexa-out-sd-02.qualcomm.com with ESMTP; 06 Jul 2022 10:38:49 -0700
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg04-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jul 2022 10:38:48 -0700
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Wed, 6 Jul 2022 10:38:48 -0700
+Received: from [10.110.5.247] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Wed, 6 Jul 2022
+ 10:38:46 -0700
+Message-ID: <949ae061-8191-2497-af56-1df74432272d@quicinc.com>
+Date:   Wed, 6 Jul 2022 10:38:46 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <cd9be62e3c2018a4f779f65fed46954e9431e0b0.camel@redhat.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH v3] drm/msm/dp: make eDP panel as the first connected
+ connector
+Content-Language: en-US
+To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        <robdclark@gmail.com>, <sean@poorly.run>, <swboyd@chromium.org>,
+        <dianders@chromium.org>, <vkoul@kernel.org>, <daniel@ffwll.ch>,
+        <airlied@linux.ie>, <agross@kernel.org>,
+        <bjorn.andersson@linaro.org>
+CC:     <quic_abhinavk@quicinc.com>, <quic_aravindh@quicinc.com>,
+        <quic_sbillaka@quicinc.com>, <freedreno@lists.freedesktop.org>,
+        <dri-devel@lists.freedesktop.org>, <linux-arm-msm@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+References: <1657128246-15929-1-git-send-email-quic_khsieh@quicinc.com>
+ <86ee9636-8827-7bad-6bd9-22191b2d293c@linaro.org>
+From:   Kuogee Hsieh <quic_khsieh@quicinc.com>
+In-Reply-To: <86ee9636-8827-7bad-6bd9-22191b2d293c@linaro.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jul 06, 2022, Maxim Levitsky wrote:
-> On Tue, 2022-06-14 at 20:47 +0000, Sean Christopherson wrote:
-> > Capture nested_run_pending as block_pending_exceptions so that the logic
-> > of why exceptions are blocked only needs to be documented once instead of
-> > at every place that employs the logic.
-> > 
-> > No functional change intended.
-> > 
-> > Signed-off-by: Sean Christopherson <seanjc@google.com>
-> > ---
-> >  arch/x86/kvm/svm/nested.c | 20 ++++++++++----------
-> >  arch/x86/kvm/vmx/nested.c | 23 ++++++++++++-----------
-> >  2 files changed, 22 insertions(+), 21 deletions(-)
-> > 
-> > diff --git a/arch/x86/kvm/svm/nested.c b/arch/x86/kvm/svm/nested.c
-> > index 471d40e97890..460161e67ce5 100644
-> > --- a/arch/x86/kvm/svm/nested.c
-> > +++ b/arch/x86/kvm/svm/nested.c
-> > @@ -1347,10 +1347,16 @@ static inline bool nested_exit_on_init(struct vcpu_svm *svm)
-> >  
-> >  static int svm_check_nested_events(struct kvm_vcpu *vcpu)
-> >  {
-> > -	struct vcpu_svm *svm = to_svm(vcpu);
-> > -	bool block_nested_events =
-> > -		kvm_event_needs_reinjection(vcpu) || svm->nested.nested_run_pending;
-> >  	struct kvm_lapic *apic = vcpu->arch.apic;
-> > +	struct vcpu_svm *svm = to_svm(vcpu);
-> > +	/*
-> > +	 * Only a pending nested run blocks a pending exception.  If there is a
-> > +	 * previously injected event, the pending exception occurred while said
-> > +	 * event was being delivered and thus needs to be handled.
-> > +	 */
-> 
-> Tiny nitpick about the comment:
-> 
-> One can say that if there is an injected event, this means that we
-> are in the middle of handling it, thus we are not on instruction boundary,
-> and thus we don't process events (e.g interrupts).
-> 
-> So maybe write something like that?
 
-Hmm, that's another way to look at things.  My goal with the comment was to try
-and call out that any pending exception is a continuation of the injected event,
-i.e. that the injected event won't be lost.  Talking about instruction boundaries
-only explains why non-exception events are blocked, it doesn't explain why exceptions
-are _not_ blocked.
+On 7/6/2022 10:25 AM, Dmitry Baryshkov wrote:
+> On 06/07/2022 20:24, Kuogee Hsieh wrote:
+>> Some userspace presumes that the first connected connector is the main
+>> display, where it's supposed to display e.g. the login screen. For
+>> laptops, this should be the main panel.
+>>
+>> This patch call drm_helper_move_panel_connectors_to_head() after
+>> drm_bridge_connector_init() to make sure eDP stay at head of
+>> connected connector list. This fixes unexpected corruption happen
+>> at eDP panel if eDP is not placed at head of connected connector
+>> list.
+>>
+>> Changes in v2:
+>> -- move drm_helper_move_panel_connectors_to_head() to
+>>         dpu_kms_drm_obj_init()
+>>
+>> Signed-off-by: Kuogee Hsieh <quic_khsieh@quicinc.com>
+>> ---
+>>   drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c | 2 ++
+>>   1 file changed, 2 insertions(+)
+>>
+>> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c 
+>> b/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c
+>> index 2b9d931..50ff666 100644
+>> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c
+>> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c
+>> @@ -763,6 +763,8 @@ static int _dpu_kms_drm_obj_init(struct dpu_kms 
+>> *dpu_kms)
+>>       if (ret)
+>>           return ret;
+>>   +    drm_helper_move_panel_connectors_to_head(dev);
+>
+> This should be in msm_drv.c unless you have a strong reason to have it 
+> here.
+Can you please  provide more info why should be in msm_drv.c?
+> _dpu_kms_drm_obj_init() create and initialize drm obj one by one and 
+> _dpu_kms_setup_displays() had created system wide connectors/interfaces .
 
-I'll add a second comment above block_nested_events to capture the instruction
-boundary angle.
+After that should be fine to move edp to head of connector list.
 
-> > +	bool block_nested_exceptions = svm->nested.nested_run_pending;
-> > +	bool block_nested_events = block_nested_exceptions ||
-> > +				   kvm_event_needs_reinjection(vcpu);
-> 
-> Tiny nitpick: I don't like that much the name 'nested' as
-> it can also mean a nested exception (e.g exception that
-> happened while jumping to an exception  handler).
-> 
-> Here we mean just exception/events for the guest, so I would suggest
-> to just drop the word 'nested'.
-
-I don't disagree, but I'd prefer to keep the current naming because the helper
-itself is *_check_nested_events().  I'm not opposed to renaming things in the
-future, but I don't want to do that in this series.
+>> +
+>>       num_encoders = 0;
+>>       drm_for_each_encoder(encoder, dev)
+>>           num_encoders++;
+>
+>

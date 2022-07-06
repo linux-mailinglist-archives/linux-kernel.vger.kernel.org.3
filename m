@@ -2,205 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 77CCB568B8D
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 16:43:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 26FCA568B8E
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 16:44:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233569AbiGFOnJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Jul 2022 10:43:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33498 "EHLO
+        id S232239AbiGFOoP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Jul 2022 10:44:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34672 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233557AbiGFOnH (ORCPT
+        with ESMTP id S231162AbiGFOoO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Jul 2022 10:43:07 -0400
-Received: from mail-io1-f44.google.com (mail-io1-f44.google.com [209.85.166.44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 650DA25583;
-        Wed,  6 Jul 2022 07:43:06 -0700 (PDT)
-Received: by mail-io1-f44.google.com with SMTP id n7so3623643ioo.7;
-        Wed, 06 Jul 2022 07:43:06 -0700 (PDT)
+        Wed, 6 Jul 2022 10:44:14 -0400
+Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74CFF23166;
+        Wed,  6 Jul 2022 07:44:13 -0700 (PDT)
+Received: by mail-ej1-x62f.google.com with SMTP id j22so1245055ejs.2;
+        Wed, 06 Jul 2022 07:44:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=mT/RRR0q2krpQza4SQONoGJNf6L6P3d7WWsnXLKGbq8=;
+        b=ElncPov73QAOpqBGAJC6f5+Ka/ZM2MGnqkBkCHKbrvnHFscloo64QKsFunlPhOpfYX
+         ReqVW0t+g//JS11zPGGnmFjryzk6ztLYqjPWo4b4CxtJuKWpccn8zMsTxmQJMnQQ9Cwg
+         fvrhrep08sTjNNJiQCmIGj4JpbjrgFhzbL94JwKBTPT2JsCFgH7P/FyzWBfBFlwl/gQq
+         +SpPQ4MN3lb8n84j7uQOHHun4v6YfUxlPgvmLP35ud+43Gsj9av1SfvyGxSu5CF1/EGA
+         ych3djr5OuMPna/MgfjH75fD+zyZ7c0rMQ2ENDhnKNC7EqN1Ujw0mZnoGHkICboJwOxd
+         qgag==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=AyjSqRF0XP81OAbpDNXqK+W5+Y6NGmvzX2G9WERFxDU=;
-        b=F1a8Cu9LxzjZQIMiQO3LEU5iWChuoJpCuVrTHDFXILGMSwcbSeILJNxOsdRJDclzRE
-         r1xN9Zod+1mF89WQF2tdUuWICkaECv7+f21zyFMJIssdX82LhJueB/AL3PKnZT0pyzDF
-         US7sPpUaoIoYZHZiRzF8Rc8Of9IYVAqiQzbAtVkjVRl5MnFzQQiPDE25wc6BCqrZhZDg
-         sRoYd0OcERlHH+nxApcCDw20siByhMCrB8nEJz1BwmXzbRfjZxf6u3IrTd17jyb1s82j
-         eqwBt9lBI7kBQdoV19G6jc7aLpleLd6tPu0+qYbztzUhezs3Pzdppk6Gsdrmc1HWPQTX
-         w14Q==
-X-Gm-Message-State: AJIora+EjcnsUMGse1Pa/tXjIPweJM6f2yQ8LHbGjckrQXQZLTwUFsJx
-        Ae1MEph405B5HMrx9gHcRg==
-X-Google-Smtp-Source: AGRyM1sd9D4Of7II1GBhcAtxmhMMB6f9wzCQzwAiSB39QHBVVQICj+jC2l1whI9A6744EbKNczmzlQ==
-X-Received: by 2002:a02:85e3:0:b0:339:cf24:68f6 with SMTP id d90-20020a0285e3000000b00339cf2468f6mr25307234jai.161.1657118585525;
-        Wed, 06 Jul 2022 07:43:05 -0700 (PDT)
-Received: from robh.at.kernel.org ([64.188.179.248])
-        by smtp.gmail.com with ESMTPSA id v28-20020a02b09c000000b0032e0851ea0fsm16013453jah.10.2022.07.06.07.43.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 06 Jul 2022 07:43:05 -0700 (PDT)
-Received: (nullmailer pid 14333 invoked by uid 1000);
-        Wed, 06 Jul 2022 14:43:03 -0000
-Date:   Wed, 6 Jul 2022 08:43:03 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Kavyasree Kotagiri <kavyasree.kotagiri@microchip.com>
-Cc:     krzysztof.kozlowski+dt@linaro.org, nicolas.ferre@microchip.com,
-        alexandre.belloni@bootlin.com, claudiu.beznea@microchip.com,
-        UNGLinuxDriver@microchip.com, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v7 2/3] dt-bindings: mfd: atmel,sama5d2-flexcom: Add new
- compatible string for lan966x
-Message-ID: <20220706144303.GA7885-robh@kernel.org>
-References: <20220706110619.71729-1-kavyasree.kotagiri@microchip.com>
- <20220706110619.71729-3-kavyasree.kotagiri@microchip.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=mT/RRR0q2krpQza4SQONoGJNf6L6P3d7WWsnXLKGbq8=;
+        b=MsPT7hZm3mleVRiLOQwqAPnUkVds+YPaXPtH52YzhMES1sevnICVxKdhbzUXDcE6+C
+         Mbpi2ySdwewhvYlK5ItRsKgNT6eV6QFJRphPzGuzrQ6CZvwFYWiIEXsqkFht0ruV3PUH
+         0GbP+yQQozFSrCCXRPNivBANp+O0Y1URNvOAqzT2v9uoVgTaZrTAQnnL/8s3WcUdzF19
+         hBm4FjaOf6StnGK0FOLTYOimKSw/AeCy1F2SPsPHcHbV37+PFfSi5pmwB7bMj4cDJzUQ
+         HqQNNvk9gcLQj2NbvbHVh01coil6y15XThEvybX92xEKWjo/6GU5rp6Rl6bB9zGDHxdJ
+         eceg==
+X-Gm-Message-State: AJIora/F71ZZWODSHTssf5CYYCI0szibEc5e/5hCROS2rvB8waj961rn
+        DNq6MpSYVSrPcaZK5NfqrLuQRH+elzeOT6/lWQQ=
+X-Google-Smtp-Source: AGRyM1ufdjho1nB5oX1vLj0QNnI5W8VKz9cjYxKIGoUI4SuOHcFWWvas8RfAGVbH0/2Wfp9o8Yp1SdorwTOwTFjHd+8=
+X-Received: by 2002:a17:907:7627:b0:72a:9098:e4d3 with SMTP id
+ jy7-20020a170907762700b0072a9098e4d3mr27044101ejc.389.1657118652003; Wed, 06
+ Jul 2022 07:44:12 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220706110619.71729-3-kavyasree.kotagiri@microchip.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+References: <20220630071013.1710594-1-o.rempel@pengutronix.de>
+In-Reply-To: <20220630071013.1710594-1-o.rempel@pengutronix.de>
+From:   Vladimir Oltean <olteanv@gmail.com>
+Date:   Wed, 6 Jul 2022 17:43:59 +0300
+Message-ID: <CA+h21hrTxNM93M34iusYAO+L=37o-BJ33o7UXW0rwyKk2EOoKw@mail.gmail.com>
+Subject: Re: [PATCH net-next v1 1/1] net: dsa: sja1105: silent spi_device_id warnings
+To:     Oleksij Rempel <o.rempel@pengutronix.de>
+Cc:     Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, kernel@pengutronix.de,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jul 06, 2022 at 09:06:18AM -0200, Kavyasree Kotagiri wrote:
-> LAN966x SoC flexcoms has two optional I/O lines. Namely, CS0 and CS1
-> in flexcom SPI mode. CTS and RTS in flexcom USART mode. These pins
-> can be mapped to lan966x FLEXCOM_SHARED[0-20] pins and usage depends on
-> functions being configured.
-> 
-> Signed-off-by: Kavyasree Kotagiri <kavyasree.kotagiri@microchip.com>
+Hi Oleksij,
+
+On Thu, 30 Jun 2022 at 10:10, Oleksij Rempel <o.rempel@pengutronix.de> wrote:
+> Add spi_device_id entries to silent following warnings:
+>  SPI driver sja1105 has no spi_device_id for nxp,sja1105e
+>  SPI driver sja1105 has no spi_device_id for nxp,sja1105t
+>  SPI driver sja1105 has no spi_device_id for nxp,sja1105p
+>  SPI driver sja1105 has no spi_device_id for nxp,sja1105q
+>  SPI driver sja1105 has no spi_device_id for nxp,sja1105r
+>  SPI driver sja1105 has no spi_device_id for nxp,sja1105s
+>  SPI driver sja1105 has no spi_device_id for nxp,sja1110a
+>  SPI driver sja1105 has no spi_device_id for nxp,sja1110b
+>  SPI driver sja1105 has no spi_device_id for nxp,sja1110c
+>  SPI driver sja1105 has no spi_device_id for nxp,sja1110d
+>
+> Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
 > ---
-> v6 -> v7:
->  - Add #address-cells, #size-cells to flx3 example.
-> 
-> v5 -> v6:
->  - Removed spi node from flx3 example.
-> 
-> v4 -> v5:
->  - Fixed indentations and dt-schema errors.
->  - No errors seen with 'make dt_binding_check'.
-> 
-> v3 -> v4:
->  - Added else condition to allOf:if:then.
-> 
-> v2 -> v3:
->  - Add reg property of lan966x missed in v2.
-> 
-> v1 -> v2:
->  - Use allOf:if:then for lan966x dt properties
-> 
->  .../bindings/mfd/atmel,sama5d2-flexcom.yaml   | 65 ++++++++++++++++++-
->  1 file changed, 64 insertions(+), 1 deletion(-)
-> 
-> diff --git a/Documentation/devicetree/bindings/mfd/atmel,sama5d2-flexcom.yaml b/Documentation/devicetree/bindings/mfd/atmel,sama5d2-flexcom.yaml
-> index 864f490ffb83..b4b47accab49 100644
-> --- a/Documentation/devicetree/bindings/mfd/atmel,sama5d2-flexcom.yaml
-> +++ b/Documentation/devicetree/bindings/mfd/atmel,sama5d2-flexcom.yaml
-> @@ -18,9 +18,11 @@ properties:
->    compatible:
->      enum:
->        - atmel,sama5d2-flexcom
-> +      - microchip,lan966x-flexcom
 
-Don't use wildcards in compatible strings.
+This was marked as "Changes Requested" in patchwork. Could you please
+slap a Fixes: tag onto it and resend to net?
+Also, would you mind applying the same treatment to
+vitesse-vsc73xx-spi.c so that we get rid of the warnings for all DSA
+drivers?
+You can blame the spi.c commit that introduced the warning.
 
->  
->    reg:
-> -    maxItems: 1
-> +    minItems: 1
-> +    maxItems: 2
->  
->    clocks:
->      maxItems: 1
-> @@ -47,6 +49,27 @@ properties:
->      $ref: /schemas/types.yaml#/definitions/uint32
->      enum: [1, 2, 3]
->  
-> +  microchip,flx-shrd-pins:
-> +    description: Specify the Flexcom shared pins to be used for flexcom
-> +      chip-selects.
-> +    $ref: /schemas/types.yaml#/definitions/uint32-array
-> +    minItems: 1
-> +    maxItems: 2
-> +    items:
-> +      minimum: 0
-> +      maximum: 20
-
-It's not clear how one uses this. It's selecting 2 pins, or a range of 
-pins, or ???
-
-> +
-> +  microchip,flx-cs:
-> +    description: Flexcom chip selects. Here, value of '0' represents "cts" line
-> +      of flexcom USART or "cs0" line of flexcom SPI and value of '1' represents
-> +      "rts" line of flexcom USART or "cs1" line of flexcom SPI.
-> +    $ref: /schemas/types.yaml#/definitions/uint32-array
-> +    minItems: 1
-> +    maxItems: 2
-> +    items:
-> +      minimum: 0
-> +      maximum: 1
-> +
->  required:
->    - compatible
->    - reg
-> @@ -56,6 +79,31 @@ required:
->    - ranges
->    - atmel,flexcom-mode
->  
-> +allOf:
-> +  - if:
-> +      properties:
-> +        compatible:
-> +          contains:
-> +            const: microchip,lan966x-flexcom
-> +
-> +    then:
-> +      properties:
-> +        reg:
-> +          items:
-> +            - description: Flexcom base registers map
-> +            - description: Flexcom shared registers map
-> +      required:
-> +        - microchip,flx-shrd-pins
-> +        - microchip,flx-cs
-> +
-> +    else:
-> +      properties:
-> +        reg:
-> +          items:
-> +            - description: Flexcom base registers map
-> +        microchip,flx-shrd-pins: false
-> +        microchip,flx-cs: false
-> +
->  additionalProperties: false
->  
->  examples:
-> @@ -71,4 +119,19 @@ examples:
->          ranges = <0x0 0xf8034000 0x800>;
->          atmel,flexcom-mode = <2>;
->      };
-> +  - |
-> +    #include <dt-bindings/interrupt-controller/arm-gic.h>
-> +
-> +    flx3: flexcom@e0064000 {
-> +        compatible = "microchip,lan966x-flexcom";
-> +        reg = <0xe0064000 0x100>,
-> +              <0xe2004180 0x8>;
-> +        clocks = <&flx0_clk>;
-> +        #address-cells = <1>;
-> +        #size-cells = <1>;
-> +        ranges = <0x0 0xe0040000 0x800>;
-> +        atmel,flexcom-mode = <2>;
-> +        microchip,flx-shrd-pins = <9>;
-> +        microchip,flx-cs = <0>;
-> +    };
->  ...
-> -- 
-> 2.25.1
-> 
-> 
+Thanks!

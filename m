@@ -2,102 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BC505568064
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 09:44:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C136568060
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 09:44:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230114AbiGFHno (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Jul 2022 03:43:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59580 "EHLO
+        id S231913AbiGFHoE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Jul 2022 03:44:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60770 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231965AbiGFHn3 (ORCPT
+        with ESMTP id S231922AbiGFHnv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Jul 2022 03:43:29 -0400
-Received: from mail-qk1-f182.google.com (mail-qk1-f182.google.com [209.85.222.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BD1B22BE1;
-        Wed,  6 Jul 2022 00:43:28 -0700 (PDT)
-Received: by mail-qk1-f182.google.com with SMTP id o26so3362911qkl.6;
-        Wed, 06 Jul 2022 00:43:28 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=kjnCdbt6inqH5uX2FYdrJz59MYQX17h31Der8YuPd8E=;
-        b=WMYG/kOWoAlZyRMbEILO7QNILBaSnADuRgWs2gaOwGqJ972RlKP67uA+3JFOGKq14k
-         fKjbvMZUuMOc6aH0DNbwgI4hE4kzor9PcSLNef4WV8GuwQqIXavIfKyMGDNR0mMeqJWz
-         AHhDZ/ALTae3xqJtWimZgCSvoJnoKSGScFy7K69I26IDNoHS0Qty393wd1AOiMRoYyIj
-         +O9X916bWQhFnb+eLL5uejTRy+AT33Lsocvy+BY2PcdpQUV9orpMsm6QGQDXTO+LbheC
-         iWEdLXe0v/lYZqzg92mv/pmHfkgFLWtvnu+fUFhAvCmwMkCGHMn4DQegIfUZYB3ferNe
-         n95w==
-X-Gm-Message-State: AJIora8UxxKebHj5Fyy4xXEI3EOgaakRz1lN8XEzJ5aJd4bvFFL0i8bY
-        wRVqukBoM7WFTy2di1rCAmZclZR8mFMtAg==
-X-Google-Smtp-Source: AGRyM1uHPHoOk+wyT+BH/wmqkxdIhsHz5Txnvb42inmI3c1qCLUfdkq0dlSP7E/FE00K3rK3Pryk7g==
-X-Received: by 2002:a05:620a:2845:b0:6ab:8e0c:1938 with SMTP id h5-20020a05620a284500b006ab8e0c1938mr25700778qkp.315.1657093407102;
-        Wed, 06 Jul 2022 00:43:27 -0700 (PDT)
-Received: from mail-yb1-f172.google.com (mail-yb1-f172.google.com. [209.85.219.172])
-        by smtp.gmail.com with ESMTPSA id bm9-20020a05620a198900b006a73ad95d40sm28610139qkb.55.2022.07.06.00.43.26
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 06 Jul 2022 00:43:26 -0700 (PDT)
-Received: by mail-yb1-f172.google.com with SMTP id 64so16684183ybt.12;
-        Wed, 06 Jul 2022 00:43:26 -0700 (PDT)
-X-Received: by 2002:a5b:6c1:0:b0:669:a7c3:4c33 with SMTP id
- r1-20020a5b06c1000000b00669a7c34c33mr41944626ybq.543.1657093406099; Wed, 06
- Jul 2022 00:43:26 -0700 (PDT)
+        Wed, 6 Jul 2022 03:43:51 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08AD623156
+        for <linux-kernel@vger.kernel.org>; Wed,  6 Jul 2022 00:43:46 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 8C017B81B10
+        for <linux-kernel@vger.kernel.org>; Wed,  6 Jul 2022 07:43:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A3F2EC3411C;
+        Wed,  6 Jul 2022 07:43:40 +0000 (UTC)
+Date:   Wed, 6 Jul 2022 08:43:36 +0100
+From:   Catalin Marinas <catalin.marinas@arm.com>
+To:     "guanghui.fgh" <guanghuifeng@linux.alibaba.com>
+Cc:     Mike Rapoport <rppt@kernel.org>, Will Deacon <will@kernel.org>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        baolin.wang@linux.alibaba.com, akpm@linux-foundation.org,
+        david@redhat.com, jianyong.wu@arm.com, james.morse@arm.com,
+        quic_qiancai@quicinc.com, christophe.leroy@csgroup.eu,
+        jonathan@marek.ca, mark.rutland@arm.com,
+        thunder.leizhen@huawei.com, anshuman.khandual@arm.com,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        geert+renesas@glider.be, linux-mm@kvack.org,
+        yaohongbo@linux.alibaba.com, alikernel-developer@linux.alibaba.com
+Subject: Re: [PATCH v4] arm64: mm: fix linear mem mapping access performance
+ degradation
+Message-ID: <YsU9KF5abYe/LHAA@arm.com>
+References: <CAMj1kXEvY5QXOUrXZ7rBp9As=65uTTFRSSq+FPt-n4M2P-_VtQ@mail.gmail.com>
+ <20220705095231.GB552@willie-the-truck>
+ <5d044fdd-a61a-d60f-d294-89e17de37712@linux.alibaba.com>
+ <20220705121115.GB1012@willie-the-truck>
+ <YsRSajyMxahXe7ZS@kernel.org>
+ <YsRZ8V8mQ+HM31D6@arm.com>
+ <YsRfgX7FFZLxQU50@kernel.org>
+ <YsRvPTORdvIwzShL@arm.com>
+ <YsSi9HAOOzbPYN+w@kernel.org>
+ <7bf7c5ea-16eb-b02f-8ef5-bb94c157236d@linux.alibaba.com>
 MIME-Version: 1.0
-References: <20220705210143.315151-1-emil.renner.berthing@canonical.com> <20220705210143.315151-4-emil.renner.berthing@canonical.com>
-In-Reply-To: <20220705210143.315151-4-emil.renner.berthing@canonical.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Wed, 6 Jul 2022 09:43:15 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdV4QVoN53cqrbmVn3YJVHSdbB78xd120AO0FNz74qeGyA@mail.gmail.com>
-Message-ID: <CAMuHMdV4QVoN53cqrbmVn3YJVHSdbB78xd120AO0FNz74qeGyA@mail.gmail.com>
-Subject: Re: [PATCH v1 3/4] leds: pwm-multicolor: Support active-low LEDs
-To:     Emil Renner Berthing <emil.renner.berthing@canonical.com>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Pavel Machek <pavel@ucw.cz>, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Vincent Pelletier <plr.vincent@gmail.com>,
-        Bin Meng <bin.meng@windriver.com>,
-        Aurelien Jarno <aurelien@aurel32.net>,
-        Ron Economos <w6rz@comcast.net>,
-        Qiu Wenbo <qiuwenbo@kylinos.com.cn>,
-        Stephen L Arnold <nerdboy@gentoo.org>,
-        Jianlong Huang <jianlong.huang@starfivetech.com>,
-        Mark Kettenis <kettenis@openbsd.org>,
-        Sven Schwermer <sven.schwermer@disruptive-technologies.com>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>,
-        David Abdurachmanov <davidlt@rivosinc.com>,
-        linux-leds <linux-leds@vger.kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        linux-riscv <linux-riscv@lists.infradead.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <7bf7c5ea-16eb-b02f-8ef5-bb94c157236d@linux.alibaba.com>
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jul 5, 2022 at 11:01 PM Emil Renner Berthing
-<emil.renner.berthing@canonical.com> wrote:
-> Add support for LEDs wired up to light when the PWM output is low, just
-> like the regular PWM LEDs.
->
-> Signed-off-by: Emil Renner Berthing <emil.renner.berthing@canonical.com>
+On Wed, Jul 06, 2022 at 10:49:43AM +0800, guanghui.fgh wrote:
+> 在 2022/7/6 4:45, Mike Rapoport 写道:
+> > On Tue, Jul 05, 2022 at 06:05:01PM +0100, Catalin Marinas wrote:
+> > > On Tue, Jul 05, 2022 at 06:57:53PM +0300, Mike Rapoport wrote:
+> > > > On Tue, Jul 05, 2022 at 04:34:09PM +0100, Catalin Marinas wrote:
+> > > > > On Tue, Jul 05, 2022 at 06:02:02PM +0300, Mike Rapoport wrote:
+> > > > > > +void __init remap_crashkernel(void)
+> > > > > > +{
+> > > > > > +#ifdef CONFIG_KEXEC_CORE
+> > > > > > +	phys_addr_t start, end, size;
+> > > > > > +	phys_addr_t aligned_start, aligned_end;
+> > > > > > +
+> > > > > > +	if (can_set_direct_map() || IS_ENABLED(CONFIG_KFENCE))
+> > > > > > +	    return;
+> > > > > > +
+> > > > > > +	if (!crashk_res.end)
+> > > > > > +	    return;
+> > > > > > +
+> > > > > > +	start = crashk_res.start & PAGE_MASK;
+> > > > > > +	end = PAGE_ALIGN(crashk_res.end);
+> > > > > > +
+> > > > > > +	aligned_start = ALIGN_DOWN(crashk_res.start, PUD_SIZE);
+> > > > > > +	aligned_end = ALIGN(end, PUD_SIZE);
+> > > > > > +
+> > > > > > +	/* Clear PUDs containing crash kernel memory */
+> > > > > > +	unmap_hotplug_range(__phys_to_virt(aligned_start),
+> > > > > > +			    __phys_to_virt(aligned_end), false, NULL);
+> > > > > 
+> > > > > What I don't understand is what happens if there's valid kernel data
+> > > > > between aligned_start and crashk_res.start (or the other end of the
+> > > > > range).
+> > > > 
+> > > > Data shouldn't go anywhere :)
+> > > > 
+> > > > There is
+> > > > 
+> > > > +	/* map area from PUD start to start of crash kernel with large pages */
+> > > > +	size = start - aligned_start;
+> > > > +	__create_pgd_mapping(swapper_pg_dir, aligned_start,
+> > > > +			     __phys_to_virt(aligned_start),
+> > > > +			     size, PAGE_KERNEL, early_pgtable_alloc, 0);
+> > > > 
+> > > > and
+> > > > 
+> > > > +	/* map area from end of crash kernel to PUD end with large pages */
+> > > > +	size = aligned_end - end;
+> > > > +	__create_pgd_mapping(swapper_pg_dir, end, __phys_to_virt(end),
+> > > > +			     size, PAGE_KERNEL, early_pgtable_alloc, 0);
+> > > > 
+> > > > after the unmap, so after we tear down a part of a linear map we
+> > > > immediately recreate it, just with a different page size.
+> > > > 
+> > > > This all happens before SMP, so there is no concurrency at that point.
+> > > 
+> > > That brief period of unmap worries me. The kernel text, data and stack
+> > > are all in the vmalloc space but any other (memblock) allocation to this
+> > > point may be in the unmapped range before and after the crashkernel
+> > > reservation. The interrupts are off, so I think the only allocation and
+> > > potential access that may go in this range is the page table itself. But
+> > > it looks fragile to me.
+> > 
+> > I agree there are chances there will be an allocation from the unmapped
+> > range.
+> > 
+> > We can make sure this won't happen, though. We can cap the memblock
+> > allocations with memblock_set_current_limit(aligned_end) or
+> > memblock_reserve(algined_start, aligned_end) until the mappings are
+> > restored.
+> 
+> I think there is no need to worry about vmalloc mem.
 
-Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
+That's not what I'm worried about. It's about memblock allocations that
+are accessed through the linear map.
 
-Gr{oetje,eeting}s,
-
-                        Geert
-
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+-- 
+Catalin

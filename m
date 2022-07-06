@@ -2,99 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0DF51569684
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 01:44:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A395256966B
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 01:43:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234854AbiGFXnz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Jul 2022 19:43:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56596 "EHLO
+        id S234749AbiGFXlT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Jul 2022 19:41:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52072 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234852AbiGFXnm (ORCPT
+        with ESMTP id S234723AbiGFXlN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Jul 2022 19:43:42 -0400
-Received: from smtp-fw-6001.amazon.com (smtp-fw-6001.amazon.com [52.95.48.154])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B8792D1C5;
-        Wed,  6 Jul 2022 16:43:39 -0700 (PDT)
+        Wed, 6 Jul 2022 19:41:13 -0400
+Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D1F72CDF4
+        for <linux-kernel@vger.kernel.org>; Wed,  6 Jul 2022 16:41:12 -0700 (PDT)
+Received: by mail-ej1-x636.google.com with SMTP id r21so830414eju.0
+        for <linux-kernel@vger.kernel.org>; Wed, 06 Jul 2022 16:41:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
-  t=1657151021; x=1688687021;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=gTSC9dkHnErNPeQoDYC86G80+g9Bjz1N0PmHh2qX/hI=;
-  b=va/p6SB0UvtgxIrhBHDizX12KqKIjN0ncHUEfHGpAyQ8UWZNI3+r06cb
-   wJIvkoT+Qq4Q0iLxMya5relNPv8KiDOHbGbtNK2etIwao9w3oKYSYMgYC
-   i3gdab+3osOV57ZfIbwyPktL7NNo5OxEH6d60rghfSxyNtJ8FUDSaG64E
-   0=;
-Received: from iad12-co-svc-p1-lb1-vlan3.amazon.com (HELO email-inbound-relay-iad-1a-b27d4a00.us-east-1.amazon.com) ([10.43.8.6])
-  by smtp-border-fw-6001.iad6.amazon.com with ESMTP; 06 Jul 2022 23:43:39 +0000
-Received: from EX13MTAUWB001.ant.amazon.com (iad12-ws-svc-p26-lb9-vlan3.iad.amazon.com [10.40.163.38])
-        by email-inbound-relay-iad-1a-b27d4a00.us-east-1.amazon.com (Postfix) with ESMTPS id 04F33811CF;
-        Wed,  6 Jul 2022 23:43:35 +0000 (UTC)
-Received: from EX19D004ANA001.ant.amazon.com (10.37.240.138) by
- EX13MTAUWB001.ant.amazon.com (10.43.161.207) with Microsoft SMTP Server (TLS)
- id 15.0.1497.36; Wed, 6 Jul 2022 23:43:35 +0000
-Received: from 88665a182662.ant.amazon.com (10.43.160.106) by
- EX19D004ANA001.ant.amazon.com (10.37.240.138) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.1118.9;
- Wed, 6 Jul 2022 23:43:31 +0000
-From:   Kuniyuki Iwashima <kuniyu@amazon.com>
-To:     "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Iurii Zaikin <yzaikin@google.com>
-CC:     Kuniyuki Iwashima <kuniyu@amazon.com>,
-        Kuniyuki Iwashima <kuni1840@gmail.com>,
-        <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        David Ahern <dsahern@kernel.org>
-Subject: [PATCH v2 net 12/12] ipv4: Fix a data-race around sysctl_fib_sync_mem.
-Date:   Wed, 6 Jul 2022 16:40:03 -0700
-Message-ID: <20220706234003.66760-13-kuniyu@amazon.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20220706234003.66760-1-kuniyu@amazon.com>
-References: <20220706234003.66760-1-kuniyu@amazon.com>
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=xSETzouKg/rOxXWWzl1JwOt0BuNPakzEaOoj6a2GoLI=;
+        b=IxBqK5tmc7tpVhb7wmWPyrj0hlivFlyKIYSCqREINUK8iTsa7zWRJhaslDLxs2uoNw
+         JxRJN6oAY+Sqr8U7Vun8GgpL6l9X7v3p/fbPzYKnSBLmakeWsndk6lzcxanwF6nNkDUM
+         XuqXjIqH5DE60sp8jfIobG3ZRDjsRgc6TBUlY=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=xSETzouKg/rOxXWWzl1JwOt0BuNPakzEaOoj6a2GoLI=;
+        b=QeaV0jtzE6aGcfvKxr0wD1GgAihCtsGwxgYAe5ZnLXLsOwMdyAgqCaLMGDweub5nO+
+         IfD9dH7QBgx9N6F07EBAJdzmpfqvVEum9F31qslh+E8KTFlOaUIa4KY+QOgRP8vGYyF2
+         kg7K4wpqkjHTbZwAu1vKxxJpYMXe0WIWoy8Y+B1MWbBx6sVeDI1JmU6xD1gQO+bV+flK
+         3VUwOai1wFsc6v+ZX0+9JaN/gl6qZ1nbAqiOxP6aShzFT4uk0MgkzgQuIKMuLVyCiOmI
+         fk2BOG/ocsPMhP0+JIMvy0UeijKICtgS2ORM6gj7UUXT/XxhDFgYDLWTpGZlxuegwwYr
+         MHAQ==
+X-Gm-Message-State: AJIora/rNYvPde2fb3kukoMBmTUhY2ol58GB6KcM6xA1MbLGzyt1eF1G
+        9JmOmwu3Aa4B+k5MA+toum6pYFqGF8wl14/NOBU=
+X-Google-Smtp-Source: AGRyM1tDcdIJT/k855+XW1Urk/ov8LKJqg5qPMNvcIO3Cpk6mV3Uc+8IDnC9jwf1+Rp+AD3XXElPEw==
+X-Received: by 2002:a17:907:2cf6:b0:72a:5268:c05e with SMTP id hz22-20020a1709072cf600b0072a5268c05emr38105775ejc.38.1657150870986;
+        Wed, 06 Jul 2022 16:41:10 -0700 (PDT)
+Received: from mail-wm1-f50.google.com (mail-wm1-f50.google.com. [209.85.128.50])
+        by smtp.gmail.com with ESMTPSA id t17-20020a1709067c1100b00711d5baae0esm18249595ejo.145.2022.07.06.16.41.07
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 06 Jul 2022 16:41:08 -0700 (PDT)
+Received: by mail-wm1-f50.google.com with SMTP id be14-20020a05600c1e8e00b003a04a458c54so9773650wmb.3
+        for <linux-kernel@vger.kernel.org>; Wed, 06 Jul 2022 16:41:07 -0700 (PDT)
+X-Received: by 2002:a05:600c:2049:b0:3a0:536b:c01b with SMTP id
+ p9-20020a05600c204900b003a0536bc01bmr1115145wmg.151.1657150867195; Wed, 06
+ Jul 2022 16:41:07 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.43.160.106]
-X-ClientProxiedBy: EX13D36UWB001.ant.amazon.com (10.43.161.84) To
- EX19D004ANA001.ant.amazon.com (10.37.240.138)
-X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <cfc2c27a-444d-8bd8-84a7-b6b1f99258f9@linaro.org>
+ <SG2PR03MB5006AB4C7E356CE321F628D9CC809@SG2PR03MB5006.apcprd03.prod.outlook.com>
+ <8f9651b2-ca9a-413c-d94f-9ecf3717343c@linaro.org>
+In-Reply-To: <8f9651b2-ca9a-413c-d94f-9ecf3717343c@linaro.org>
+From:   Doug Anderson <dianders@chromium.org>
+Date:   Wed, 6 Jul 2022 16:40:54 -0700
+X-Gmail-Original-Message-ID: <CAD=FV=WtKRFQr5jSQvsr08x9dgHrvenUWWtX_SKuCLuSvSH7WQ@mail.gmail.com>
+Message-ID: <CAD=FV=WtKRFQr5jSQvsr08x9dgHrvenUWWtX_SKuCLuSvSH7WQ@mail.gmail.com>
+Subject: Re: [PATCH 1/2] [V1,1/2] arm64: dts: qcom: Add LTE SKUs for
+ sc7280-villager family
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Jimmy Chen <jinghung.chen3@hotmail.com>,
+        Andy Gross <agross@kernel.org>,
+        alan-huang@quanta.corp-partner.google.com,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Rob Herring <robh+dt@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-While reading sysctl_fib_sync_mem, it can be changed concurrently.
-So, we need to add READ_ONCE() to avoid a data-race.
+Hi,
 
-Fixes: 9ab948a91b2c ("ipv4: Allow amount of dirty memory from fib resizing to be controllable")
-Signed-off-by: Kuniyuki Iwashima <kuniyu@amazon.com>
----
-CC: David Ahern <dsahern@kernel.org>
----
- net/ipv4/fib_trie.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+On Wed, Jul 6, 2022 at 3:04 AM Krzysztof Kozlowski
+<krzysztof.kozlowski@linaro.org> wrote:
+>
+> On 06/07/2022 11:36, Jimmy Chen wrote:
+> > To keep the consistency of the format for Chromebook items,
+> > we basically add these items based on the rules discussed in the previo=
+us patch series here
+> > https://lore.kernel.org/all/20220520143502.v4.1.I71e42c6174f1cec17da302=
+4c9f73ba373263b9b6@changeid/.
+> >
+> > We are little configured with =E2=80=9Cone entry - one enum =E2=80=9C. =
+Do you mean something like below example?
+> > We suggest keep items separated as it is more readable.
+> >
+> >       - description: Google Villager
+> >         items:
+> >           - const: google,villager-rev0
+> >           - const: google,villager
+> >           - const: google,villager-rev0-sku0
+> >           - const: google,villager-sku0
+> >           - const: qcom,sc7280
+> >
+>
+> Is this a reply to something we discussed? There is no quote here, but I
+> remember pointing out some issues with one of Google patches recently.
+> Unfortunately my mailbox receives like 300 mails per day, so this does
+> not help...
 
-diff --git a/net/ipv4/fib_trie.c b/net/ipv4/fib_trie.c
-index 2734c3af7e24..46e8a5125853 100644
---- a/net/ipv4/fib_trie.c
-+++ b/net/ipv4/fib_trie.c
-@@ -498,7 +498,7 @@ static void tnode_free(struct key_vector *tn)
- 		tn = container_of(head, struct tnode, rcu)->kv;
- 	}
- 
--	if (tnode_free_size >= sysctl_fib_sync_mem) {
-+	if (tnode_free_size >= READ_ONCE(sysctl_fib_sync_mem)) {
- 		tnode_free_size = 0;
- 		synchronize_rcu();
- 	}
--- 
-2.30.2
+Jimmy did add a link to the series where the previous discussion was
+in his reply, though he provided a link to patch #1 in the series and
+not patch #4 (where the discussion was).
 
+Relevant links:
+
+* You saying you liked the enum [1].
+* Me saying I liked them separate and that switching from a
+"description" to a comment was opposite of what Stephen had previous
+voted for [2], but could change if there was overwhelming need to make
+them an enum.
+* Rob saying he prefers an enum but lets sub-arch maintainers decide [3].
+* Bjorn (the sub-arch maintainer) landing the patch without the enum [4].
+
+[1] https://lore.kernel.org/r/a2bcac04-23ad-d1ae-84f1-924c4dbad42b@linaro.o=
+rg/
+[2] https://lore.kernel.org/r/CAD=3DFV=3DWgYbD9GN_wiR29ikZMzEjKUSZGH588+nny=
+d3O-dNgChQ@mail.gmail.com/
+[3] https://lore.kernel.org/r/20220601232614.GA504337-robh@kernel.org/
+[4] https://git.kernel.org/pub/scm/linux/kernel/git/qcom/linux.git/commit/?=
+h=3Dfor-next&id=3D5069fe941f76c9f37abc98636a7db33a5ac72840
+
+Reviewed-by: Douglas Anderson <dianders@chromium.org>
+
+-Doug

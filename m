@@ -2,234 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 984265688C6
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 14:56:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F0FA568918
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 15:13:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233079AbiGFM4S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Jul 2022 08:56:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57258 "EHLO
+        id S233338AbiGFNNQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Jul 2022 09:13:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42204 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231549AbiGFM4R (ORCPT
+        with ESMTP id S231906AbiGFNNM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Jul 2022 08:56:17 -0400
-Received: from mail-vs1-xe33.google.com (mail-vs1-xe33.google.com [IPv6:2607:f8b0:4864:20::e33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FA73122
-        for <linux-kernel@vger.kernel.org>; Wed,  6 Jul 2022 05:56:16 -0700 (PDT)
-Received: by mail-vs1-xe33.google.com with SMTP id k2so5343641vsc.5
-        for <linux-kernel@vger.kernel.org>; Wed, 06 Jul 2022 05:56:16 -0700 (PDT)
+        Wed, 6 Jul 2022 09:13:12 -0400
+Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B018B205FB;
+        Wed,  6 Jul 2022 06:13:06 -0700 (PDT)
+Received: by mail-ed1-x533.google.com with SMTP id m16so3742235edb.11;
+        Wed, 06 Jul 2022 06:13:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=ftHZZjzjHuQ5RstQIIDyF6vKwdb+4jCrB5fE7wJXhXI=;
-        b=OYMHe00vhSCdQKounufbbnq7t4ywQ/6Qz1qrQd965AUAXyEOlAWrR9cwKIK/kx6wc9
-         dqafYJyTSY+T9AZIcn5RnkMFQ1uVu+SI2QMxoF36hlh4WBXbaOzx1n5OOeBH9ihVB3M4
-         caIlT0KaYNUnbxTywtFHT8PYllnBRE0fbPRZQ=
+        d=gmail.com; s=20210112;
+        h=message-id:date:from:to:cc:subject:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=tz1OH9dY7H/mCELNT2HvP/qa+IhAYUEkLGRiUHfIoDw=;
+        b=CP3oj1/tEMc0jScYrEhT9iJR8MnFIRQQr4ZN60ltqz10Yy7KBpRgRPRmbg7rwhxGQF
+         +6c0e+lgbPgmx582/b1As5PjF5DjeeUx/L99i0VP31AGdTNdiZGIXH2a2wqWralB7VFB
+         sWFukuzzQdPZLFvAk2id8AfopNyYRjH0HCyDAJTqYEX9yoewC0m8lPctdGcdObRXonw5
+         zt8Wa4tI3X3PSaJKJsW2GDsfO45hajBGf6i8t7WrUNXUJJfwrTYepN2iLeon6rqzo1ox
+         e+OUjagLaw93s9fIOcDAvPHX+HRgOyeqf52wbbS7YUV7q3MZsgeXqKCVKADLPLtYXx/H
+         EqPA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=ftHZZjzjHuQ5RstQIIDyF6vKwdb+4jCrB5fE7wJXhXI=;
-        b=TxQ8RzZfb4FHoLAi1oiBHozbleFstlBd886dGL70nzxjj4Ipk2/R3tzqaNYxSItTzT
-         RcSgJp2s7h9jbJWOvM81Yu8oGjKsAOKmr42CvSE7PVIWw4rPPLMSjsRwNG0V3PA6b7p2
-         l6AbWeuxse9u4+yLUAjv62EHNd22dlaXK6Q4wpaN9sBulbxQas92Ug4RQ1NUfBh3BWTV
-         hq8jgXzuTQQFwllwAFiTEP0Y3zQOcoO2ppLdm+c9L8OaPnWXqNsEUCqmqg3gawXM65sc
-         ewhaG3EiJPNbvPRIG2wA36/AwSRFiubKXCt0Wpp6vXyDuvLJrNwlAE61InmtMxrBw2gn
-         HqjA==
-X-Gm-Message-State: AJIora+jayKmBHXfL+N/vFLo4cFNr/Prb91LvgSDIdOH6mIklmsMimbc
-        yBTj6GFkl5mqRucY9bQG/GnVMDEU0RueXD8ubNslGg==
-X-Google-Smtp-Source: AGRyM1v8+1lLl6CxRomPKuorDgyLBosxmWFekpHYOOEPWv1JdKZP/TrygR3Ms8/Co+uxT6oA8JlZ8VyKJzwG6s7mGJ0=
-X-Received: by 2002:a67:e196:0:b0:356:f35c:a5d with SMTP id
- e22-20020a67e196000000b00356f35c0a5dmr5343260vsl.19.1657112175366; Wed, 06
- Jul 2022 05:56:15 -0700 (PDT)
+        h=x-gm-message-state:message-id:date:from:to:cc:subject:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=tz1OH9dY7H/mCELNT2HvP/qa+IhAYUEkLGRiUHfIoDw=;
+        b=Zwf45i65BN5kl50ac6nUtFis0JF4KERIjb6KNjoMjjs3lsxlHxcrZng/7YlaqPEVG3
+         7Cook8AnDS8RcgpsPJa/3pfuGIWO7ljJD4a8Wfki0vHP26TFmPcOXz7Vk5rLM4ZY6H2u
+         uyV5U2S2eP5Q9te51bePnP6rnvHlIr/iZZSBCangc2DHryrfC4x7wlj+FXUAd651KjbY
+         EU5r2XNiZ/huahcLO8W4W9TIHHISfqPwpDStEHo6YKl3OJxmRYvrM6IjxxvQnyXGqEBU
+         swsx+fjpqKbGhF24oZnJtVjjfZXFw5X1Bs5gXt25PgXyxBITFpc2w2jDhwb/RqvjgQIl
+         Ytdw==
+X-Gm-Message-State: AJIora87vRy5M0zFNNKtAUQ6KPQqN9gjGfGSo50McFOA7i3hYPU/Mx0I
+        rm2CnJQMFcToLsXlKNsA804=
+X-Google-Smtp-Source: AGRyM1tdRp8VQxMu6lPUKZZuuY7tnzIpWG4sHFf8GtVhskX9iVa/cyLXBcIir2AD31AsmvafpWrKUQ==
+X-Received: by 2002:a05:6402:358c:b0:435:9daf:e825 with SMTP id y12-20020a056402358c00b004359dafe825mr54134935edc.375.1657113185232;
+        Wed, 06 Jul 2022 06:13:05 -0700 (PDT)
+Received: from Ansuel-xps. (93-42-70-190.ip85.fastwebnet.it. [93.42.70.190])
+        by smtp.gmail.com with ESMTPSA id t4-20020a17090605c400b00706242d297fsm17147042ejt.212.2022.07.06.06.13.04
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 06 Jul 2022 06:13:04 -0700 (PDT)
+Message-ID: <62c58a60.1c69fb81.25b26.e72a@mx.google.com>
+X-Google-Original-Message-ID: <YsWGe/Ufbb/AR+aR@Ansuel-xps.>
+Date:   Wed, 6 Jul 2022 14:56:27 +0200
+From:   Christian Marangi <ansuelsmth@gmail.com>
+To:     Konrad Dybcio <konrad.dybcio@somainline.org>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Jonathan McDowell <noodles@earth.li>
+Subject: Re: [PATCH 04/13] ARM: dts: qcom: disable smb208 regulators for
+ ipq8064-rb3011
+References: <20220705133917.8405-1-ansuelsmth@gmail.com>
+ <20220705133917.8405-5-ansuelsmth@gmail.com>
+ <8a394fa3-92fb-d162-b4ee-df010a09aed0@somainline.org>
 MIME-Version: 1.0
-References: <20220629160550.433980-1-hsinyi@chromium.org> <20220629160550.433980-2-hsinyi@chromium.org>
- <20220706022926.GA2357796@anxtwsw-Precision-3640-Tower> <CAG3jFyu2KObuc5CiFFK=NzkE1LOTSFVoA3mNyY6r1aKs2SU3ow@mail.gmail.com>
-In-Reply-To: <CAG3jFyu2KObuc5CiFFK=NzkE1LOTSFVoA3mNyY6r1aKs2SU3ow@mail.gmail.com>
-From:   Hsin-Yi Wang <hsinyi@chromium.org>
-Date:   Wed, 6 Jul 2022 20:55:49 +0800
-Message-ID: <CAJMQK-gaOPJeSSionbG=WXvf9adF6ZFYeWV3duqcu+3TCtfXcA@mail.gmail.com>
-Subject: Re: [PATCH 1/4] drm/bridge: anx7625: Convert to devm_i2c_new_dummy_device()
-To:     Robert Foss <robert.foss@linaro.org>
-Cc:     Xin Ji <xji@analogixsemi.com>,
-        Andrzej Hajda <andrzej.hajda@intel.com>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
-        Jonas Karlman <jonas@kwiboo.se>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Maxime Ripard <maxime@cerno.tech>,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <8a394fa3-92fb-d162-b4ee-df010a09aed0@somainline.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jul 6, 2022 at 8:31 PM Robert Foss <robert.foss@linaro.org> wrote:
->
-> Hey Hsin-Yi,
->
-> On Wed, 6 Jul 2022 at 04:29, Xin Ji <xji@analogixsemi.com> wrote:
-> >
-> > Hi Hsin-Yi, thanks for your patch, looks good to me.
-> >
-> > Reviewed-by: Xin Ji <xji@analogixsemi.com>
-> >
-> > On Thu, Jun 30, 2022 at 12:05:47AM +0800, Hsin-Yi Wang wrote:
-> > > Simplify the resource management.
-> > >
-> > > Signed-off-by: Hsin-Yi Wang <hsinyi@chromium.org>
-> > > ---
-> > >  drivers/gpu/drm/bridge/analogix/anx7625.c | 96 +++++++----------------
-> > >  1 file changed, 27 insertions(+), 69 deletions(-)
-> > >
-> > > diff --git a/drivers/gpu/drm/bridge/analogix/anx7625.c b/drivers/gpu/drm/bridge/analogix/anx7625.c
-> > > index 3710fa9ee0acd..f89e8151475f7 100644
-> > > --- a/drivers/gpu/drm/bridge/analogix/anx7625.c
-> > > +++ b/drivers/gpu/drm/bridge/analogix/anx7625.c
-> > > @@ -2436,82 +2436,44 @@ static const struct drm_bridge_funcs anx7625_bridge_funcs = {
-> > >  static int anx7625_register_i2c_dummy_clients(struct anx7625_data *ctx,
-> > >                                             struct i2c_client *client)
-> > >  {
-> > > -     int err = 0;
-> > > +     struct device *dev = &ctx->client->dev;
-> > >
-> > > -     ctx->i2c.tx_p0_client = i2c_new_dummy_device(client->adapter,
-> > > -                                                  TX_P0_ADDR >> 1);
-> > > +     ctx->i2c.tx_p0_client = devm_i2c_new_dummy_device(dev, client->adapter,
-> > > +                                             TX_P0_ADDR >> 1);
-> > >       if (IS_ERR(ctx->i2c.tx_p0_client))
-> > >               return PTR_ERR(ctx->i2c.tx_p0_client);
-> > >
-> > > -     ctx->i2c.tx_p1_client = i2c_new_dummy_device(client->adapter,
-> > > -                                                  TX_P1_ADDR >> 1);
-> > > -     if (IS_ERR(ctx->i2c.tx_p1_client)) {
-> > > -             err = PTR_ERR(ctx->i2c.tx_p1_client);
-> > > -             goto free_tx_p0;
-> > > -     }
-> > > +     ctx->i2c.tx_p1_client = devm_i2c_new_dummy_device(dev, client->adapter,
-> > > +                                             TX_P1_ADDR >> 1);
-> > > +     if (IS_ERR(ctx->i2c.tx_p1_client))
-> > > +             return PTR_ERR(ctx->i2c.tx_p1_client);
-> > >
-> > > -     ctx->i2c.tx_p2_client = i2c_new_dummy_device(client->adapter,
-> > > -                                                  TX_P2_ADDR >> 1);
-> > > -     if (IS_ERR(ctx->i2c.tx_p2_client)) {
-> > > -             err = PTR_ERR(ctx->i2c.tx_p2_client);
-> > > -             goto free_tx_p1;
-> > > -     }
-> > > +     ctx->i2c.tx_p2_client = devm_i2c_new_dummy_device(dev, client->adapter,
-> > > +                                             TX_P2_ADDR >> 1);
-> > > +     if (IS_ERR(ctx->i2c.tx_p2_client))
-> > > +             return PTR_ERR(ctx->i2c.tx_p2_client);
-> > >
-> > > -     ctx->i2c.rx_p0_client = i2c_new_dummy_device(client->adapter,
-> > > -                                                  RX_P0_ADDR >> 1);
-> > > -     if (IS_ERR(ctx->i2c.rx_p0_client)) {
-> > > -             err = PTR_ERR(ctx->i2c.rx_p0_client);
-> > > -             goto free_tx_p2;
-> > > -     }
-> > > +     ctx->i2c.rx_p0_client = devm_i2c_new_dummy_device(dev, client->adapter,
-> > > +                                             RX_P0_ADDR >> 1);
-> > > +     if (IS_ERR(ctx->i2c.rx_p0_client))
-> > > +             return PTR_ERR(ctx->i2c.rx_p0_client);
-> > >
-> > > -     ctx->i2c.rx_p1_client = i2c_new_dummy_device(client->adapter,
-> > > -                                                  RX_P1_ADDR >> 1);
-> > > -     if (IS_ERR(ctx->i2c.rx_p1_client)) {
-> > > -             err = PTR_ERR(ctx->i2c.rx_p1_client);
-> > > -             goto free_rx_p0;
-> > > -     }
-> > > +     ctx->i2c.rx_p1_client = devm_i2c_new_dummy_device(dev, client->adapter,
-> > > +                                             RX_P1_ADDR >> 1);
-> > > +     if (IS_ERR(ctx->i2c.rx_p1_client))
-> > > +             return PTR_ERR(ctx->i2c.rx_p1_client);
-> > >
-> > > -     ctx->i2c.rx_p2_client = i2c_new_dummy_device(client->adapter,
-> > > -                                                  RX_P2_ADDR >> 1);
-> > > -     if (IS_ERR(ctx->i2c.rx_p2_client)) {
-> > > -             err = PTR_ERR(ctx->i2c.rx_p2_client);
-> > > -             goto free_rx_p1;
-> > > -     }
-> > > +     ctx->i2c.rx_p2_client = devm_i2c_new_dummy_device(dev, client->adapter,
-> > > +                                             RX_P2_ADDR >> 1);
-> > > +     if (IS_ERR(ctx->i2c.rx_p2_client))
-> > > +             return PTR_ERR(ctx->i2c.rx_p2_client);
-> > >
-> > > -     ctx->i2c.tcpc_client = i2c_new_dummy_device(client->adapter,
-> > > -                                                 TCPC_INTERFACE_ADDR >> 1);
-> > > -     if (IS_ERR(ctx->i2c.tcpc_client)) {
-> > > -             err = PTR_ERR(ctx->i2c.tcpc_client);
-> > > -             goto free_rx_p2;
-> > > -     }
-> > > +     ctx->i2c.tcpc_client = devm_i2c_new_dummy_device(dev, client->adapter,
-> > > +                                             TCPC_INTERFACE_ADDR >> 1);
-> > > +     if (IS_ERR(ctx->i2c.tcpc_client))
-> > > +             return PTR_ERR(ctx->i2c.tcpc_client);
-> > >
-> > >       return 0;
-> > > -
-> > > -free_rx_p2:
-> > > -     i2c_unregister_device(ctx->i2c.rx_p2_client);
-> > > -free_rx_p1:
-> > > -     i2c_unregister_device(ctx->i2c.rx_p1_client);
-> > > -free_rx_p0:
-> > > -     i2c_unregister_device(ctx->i2c.rx_p0_client);
-> > > -free_tx_p2:
-> > > -     i2c_unregister_device(ctx->i2c.tx_p2_client);
-> > > -free_tx_p1:
-> > > -     i2c_unregister_device(ctx->i2c.tx_p1_client);
-> > > -free_tx_p0:
-> > > -     i2c_unregister_device(ctx->i2c.tx_p0_client);
-> > > -
-> > > -     return err;
-> > > -}
-> > > -
-> > > -static void anx7625_unregister_i2c_dummy_clients(struct anx7625_data *ctx)
-> > > -{
-> > > -     i2c_unregister_device(ctx->i2c.tx_p0_client);
-> > > -     i2c_unregister_device(ctx->i2c.tx_p1_client);
-> > > -     i2c_unregister_device(ctx->i2c.tx_p2_client);
-> > > -     i2c_unregister_device(ctx->i2c.rx_p0_client);
-> > > -     i2c_unregister_device(ctx->i2c.rx_p1_client);
-> > > -     i2c_unregister_device(ctx->i2c.rx_p2_client);
-> > > -     i2c_unregister_device(ctx->i2c.tcpc_client);
-> > >  }
-> > >
-> > >  static int __maybe_unused anx7625_runtime_pm_suspend(struct device *dev)
-> > > @@ -2723,8 +2685,6 @@ static int anx7625_i2c_probe(struct i2c_client *client,
-> > >       if (!platform->pdata.low_power_mode)
-> > >               pm_runtime_put_sync_suspend(&client->dev);
-> > >
-> > > -     anx7625_unregister_i2c_dummy_clients(platform);
-> > > -
-> > >  free_wq:
-> > >       if (platform->workqueue)
-> > >               destroy_workqueue(platform->workqueue);
-> > > @@ -2754,8 +2714,6 @@ static int anx7625_i2c_remove(struct i2c_client *client)
-> > >       if (!platform->pdata.low_power_mode)
-> > >               pm_runtime_put_sync_suspend(&client->dev);
-> > >
-> > > -     anx7625_unregister_i2c_dummy_clients(platform);
-> > > -
-> > >       if (platform->pdata.audio_en)
-> > >               anx7625_unregister_audio(platform);
-> > >
-> > > --
-> > > 2.37.0.rc0.161.g10f37bed90-goog
->
-> Can you fix the checkpatch --strict warnings and formatting issues in
-> this series?
+On Wed, Jul 06, 2022 at 03:03:32PM +0200, Konrad Dybcio wrote:
+> 
+> 
+> On 5.07.2022 15:39, Christian Marangi wrote:
+> > Mikrotik RB3011 have a special configuration where the regulators are
+> > not the common smb208 controlled by RPM but they use a TPS563900
+> > controlled via i2c. Disable the smb208 for this specific device.
+> Ok, so that answers my question from the previous email.
+> Please define the SMB208 regulators only in the DTs of
+> boards that actually use it, as it is not a SoC component as
+> far as I can tell.
+> 
+> Konrad
 
-Done. Fix them in v2.
+This was already discuessed, rb3011 is the exception, qcom for ipq8064
+recommends to use smb208 but gives the option to implement it in their
+own way. So again we have 28 device with smb208 and 1 device that use
+its own special way...
 
-Thanks.
+Wonder if a separate dtsi can be used for this if we really can't put
+smb208 in ipq8064 dtsi?
+
+> > 
+> > Signed-off-by: Christian Marangi <ansuelsmth@gmail.com>
+> > Reviewed-by: Jonathan McDowell <noodles@earth.li>
+> > Tested-by: Jonathan McDowell <noodles@earth.li>
+> > ---
+> >  arch/arm/boot/dts/qcom-ipq8064-rb3011.dts | 4 ++++
+> >  1 file changed, 4 insertions(+)
+> > 
+> > diff --git a/arch/arm/boot/dts/qcom-ipq8064-rb3011.dts b/arch/arm/boot/dts/qcom-ipq8064-rb3011.dts
+> > index 9034f00f2bd8..f651e813d75a 100644
+> > --- a/arch/arm/boot/dts/qcom-ipq8064-rb3011.dts
+> > +++ b/arch/arm/boot/dts/qcom-ipq8064-rb3011.dts
+> > @@ -218,6 +218,10 @@ led@7 {
+> >  	};
+> >  };
+> >  
+> > +&smb208_regulators {
+> > +	status = "disabled";
+> > +};
+> > +
+> >  &adm_dma {
+> >  	status = "okay";
+> >  };
+
+-- 
+	Ansuel

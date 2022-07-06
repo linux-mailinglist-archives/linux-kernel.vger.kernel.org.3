@@ -2,58 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 95D6A5690E0
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 19:42:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 69B175690DC
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 19:42:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233905AbiGFRmW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Jul 2022 13:42:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58722 "EHLO
+        id S234060AbiGFRmd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Jul 2022 13:42:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58828 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231431AbiGFRmT (ORCPT
+        with ESMTP id S233990AbiGFRm0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Jul 2022 13:42:19 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BD2EB87C
-        for <linux-kernel@vger.kernel.org>; Wed,  6 Jul 2022 10:42:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1657129338; x=1688665338;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=id27GaKfdc/LaUJ5IInwpXGIPa9O9rQUx2Zc+9nNpks=;
-  b=FFJM402O6I0a+vc12A03/rAJYzdKkrRYMD/F8e3qIJdFZi2tNRemA97O
-   tTGIQ1Iicpot+mBwXuIiVr/EUe6ip9k4cU5YU6CXNhHYItBMls9qWw/kf
-   O94lZCSQdpm0kDWIW2KOWd2TQ/9bN+mAgfH0mfLe3yZJxwT2YjeGpPcmP
-   Dck4mGHSsm+xAvveXdenKDIsB1xT0QwbT6niXmw7jGDp08aKPwk9uNKLX
-   FHtrxXtHrddV5e+dndD6vHZX/FRFf36mknPwIi37sLCwbMv3Pk/LBqz7N
-   sAMRUtwUFofRMFMWEq1g4Nz46BEkSqnRVdafYkdJljSDe+PWujprxRmJw
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10400"; a="282575720"
-X-IronPort-AV: E=Sophos;i="5.92,250,1650956400"; 
-   d="scan'208";a="282575720"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jul 2022 10:42:17 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,250,1650956400"; 
-   d="scan'208";a="568167863"
-Received: from lkp-server01.sh.intel.com (HELO 68b931ab7ac1) ([10.239.97.150])
-  by orsmga006.jf.intel.com with ESMTP; 06 Jul 2022 10:42:16 -0700
-Received: from kbuild by 68b931ab7ac1 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1o992V-000KrH-Lb;
-        Wed, 06 Jul 2022 17:42:15 +0000
-Date:   Thu, 7 Jul 2022 01:41:30 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Alexander Lobakin <alexandr.lobakin@intel.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Subject: [alobakin:xdp_hints 27/52] net/bpf/core.c:801:37: sparse: sparse:
- incorrect type in argument 2 (different base types)
-Message-ID: <202207070123.NXIiCz5W-lkp@intel.com>
+        Wed, 6 Jul 2022 13:42:26 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4CE3220BD4
+        for <linux-kernel@vger.kernel.org>; Wed,  6 Jul 2022 10:42:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1657129344;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=Bm6ni0e0Z3ZqDaHM6VmzfCaa2VxT43x1YW4zQJliK1o=;
+        b=Ph56QsOt4O4p6CyqrzHLBwCWxbwLVB38pmIPAI+WO00VTukDz0Q1ZywioJ8yJrM8KQ+sP/
+        GIfKaJdtE7raTMLSlJFp7S/bTJZ22FvCel5plTNmvpvBXdKmWr0GnK2qZfkJ03h+y8Olex
+        7lNyLrlHD2n221D7KVCeiUs6rV9sO+o=
+Received: from mail-il1-f199.google.com (mail-il1-f199.google.com
+ [209.85.166.199]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-453-yEBB8VLzPWu5-aqsowrSVA-1; Wed, 06 Jul 2022 13:42:20 -0400
+X-MC-Unique: yEBB8VLzPWu5-aqsowrSVA-1
+Received: by mail-il1-f199.google.com with SMTP id y13-20020a056e021bed00b002dc2f0ab426so2163393ilv.14
+        for <linux-kernel@vger.kernel.org>; Wed, 06 Jul 2022 10:42:20 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:in-reply-to
+         :references:organization:mime-version:content-transfer-encoding;
+        bh=Bm6ni0e0Z3ZqDaHM6VmzfCaa2VxT43x1YW4zQJliK1o=;
+        b=B4N7dJSojlZ1AQ7IYnKMOv3ci2yj5c8W7wEZNT7OZYPT8TCCvxfubADOtWIWQocY48
+         FeIDL65kYe3l036oAQujJ8kcW0fpamQJJF8RBFYoAbhAjd7HGE3bcwYou46Ep1jNOfLg
+         zoLNgE5/AqDT0QjBvHfdRnHYjuW4HtqT51B8+Iw1zSZO85Ylv5mGFhZ8S/4T1OrF8rix
+         4LFvS/tiaW7rFhlJchP0+UWNNuKGPFxuqei2HZfcqPK3sGeliKQ7Y8Vz3yC6lBNlgj5L
+         DJBCcGr/XWUz4CKHotufYy78ZDRDXGRFgDzAXahvqoFny3j094b5o5G6ac8CGc6Npb3+
+         dq4A==
+X-Gm-Message-State: AJIora/j6Lkgy9k6fT8hvuN1fGjC8QaDKdkyamnwxFF5UU0UxSnArFzz
+        xbakHyb63K9glyI0eTUzYEe9RRg+8isG1V7E6K8gpV3NSv2NYmsJBlyuuJczjteLLe0dh5vm2Db
+        TUbh3qkzH53+n22bd6e1I2PRs
+X-Received: by 2002:a05:6e02:1be6:b0:2db:ea7f:10c4 with SMTP id y6-20020a056e021be600b002dbea7f10c4mr17220919ilv.248.1657129340288;
+        Wed, 06 Jul 2022 10:42:20 -0700 (PDT)
+X-Google-Smtp-Source: AGRyM1tKW5hHrIbN8D8MKAPlov0FsaTgJJCZrivyPi82ikNP5NQmibHb26OWtdHiMispm5nOi3tbJA==
+X-Received: by 2002:a05:6e02:1be6:b0:2db:ea7f:10c4 with SMTP id y6-20020a056e021be600b002dbea7f10c4mr17220872ilv.248.1657129339926;
+        Wed, 06 Jul 2022 10:42:19 -0700 (PDT)
+Received: from redhat.com ([38.15.36.239])
+        by smtp.gmail.com with ESMTPSA id i83-20020a6bb856000000b0065a47e16f53sm17005663iof.37.2022.07.06.10.42.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 06 Jul 2022 10:42:19 -0700 (PDT)
+Date:   Wed, 6 Jul 2022 11:42:17 -0600
+From:   Alex Williamson <alex.williamson@redhat.com>
+To:     Nicolin Chen <nicolinc@nvidia.com>
+Cc:     <joro@8bytes.org>, <will@kernel.org>, <marcan@marcan.st>,
+        <sven@svenpeter.dev>, <robin.murphy@arm.com>,
+        <robdclark@gmail.com>, <baolu.lu@linux.intel.com>,
+        <orsonzhai@gmail.com>, <baolin.wang7@gmail.com>,
+        <zhang.lyra@gmail.com>, <jean-philippe@linaro.org>,
+        <jgg@nvidia.com>, <kevin.tian@intel.com>,
+        <suravee.suthikulpanit@amd.com>, <alyssa@rosenzweig.io>,
+        <dwmw2@infradead.org>, <mjrosato@linux.ibm.com>,
+        <gerald.schaefer@linux.ibm.com>, <thierry.reding@gmail.com>,
+        <vdumpa@nvidia.com>, <jonathanh@nvidia.com>, <cohuck@redhat.com>,
+        <thunder.leizhen@huawei.com>, <christophe.jaillet@wanadoo.fr>,
+        <chenxiang66@hisilicon.com>, <john.garry@huawei.com>,
+        <yangyingliang@huawei.com>, <iommu@lists.linux.dev>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-arm-msm@vger.kernel.org>, <linux-s390@vger.kernel.org>,
+        <linux-tegra@vger.kernel.org>,
+        <virtualization@lists.linux-foundation.org>, <kvm@vger.kernel.org>
+Subject: Re: [PATCH v5 0/5] cover-letter: Simplify vfio_iommu_type1
+ attach/detach routine
+Message-ID: <20220706114217.105f4f61.alex.williamson@redhat.com>
+In-Reply-To: <20220701214455.14992-1-nicolinc@nvidia.com>
+References: <20220701214455.14992-1-nicolinc@nvidia.com>
+Organization: Red Hat
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -61,101 +95,87 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/alobakin/linux xdp_hints
-head:   e9f4215398901c2e3f477da53abc668ce7b7e320
-commit: 7f869a161c7f4f95855a6bbcb1f5ea86cd926e50 [27/52] net, xdp: add &sk_buff <-> &xdp_meta_generic converters
-config: i386-randconfig-s001 (https://download.01.org/0day-ci/archive/20220707/202207070123.NXIiCz5W-lkp@intel.com/config)
-compiler: gcc-11 (Debian 11.3.0-3) 11.3.0
-reproduce:
-        # apt-get install sparse
-        # sparse version: v0.6.4-39-gce1a6720-dirty
-        # https://github.com/alobakin/linux/commit/7f869a161c7f4f95855a6bbcb1f5ea86cd926e50
-        git remote add alobakin https://github.com/alobakin/linux
-        git fetch --no-tags alobakin xdp_hints
-        git checkout 7f869a161c7f4f95855a6bbcb1f5ea86cd926e50
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        make W=1 C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=i386 SHELL=/bin/bash net/bpf/
+On Fri, 1 Jul 2022 14:44:50 -0700
+Nicolin Chen <nicolinc@nvidia.com> wrote:
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+> This is a preparatory series for IOMMUFD v2 patches. It enforces error
+> code -EMEDIUMTYPE in iommu_attach_device() and iommu_attach_group() when
+> an IOMMU domain and a device/group are incompatible. It also drops the
+> useless domain->ops check since it won't fail in current environment.
+> 
+> These allow VFIO iommu code to simplify its group attachment routine, by
+> avoiding the extra IOMMU domain allocations and attach/detach sequences
+> of the old code.
+> 
+> Worths mentioning the exact match for enforce_cache_coherency is removed
+> with this series, since there's very less value in doing that as KVM will
+> not be able to take advantage of it -- this just wastes domain memory.
+> Instead, we rely on Intel IOMMU driver taking care of that internally.
+> 
+> This is on github:
+> https://github.com/nicolinc/iommufd/commits/vfio_iommu_attach
 
+How do you foresee this going in, I'm imagining Joerg would merge the
+first patch via the IOMMU tree and provide a topic branch that I'd
+merge into the vfio tree along with the remaining patches.  Sound
+right?  Thanks,
 
-sparse warnings: (new ones prefixed by >>)
->> net/bpf/core.c:801:37: sparse: sparse: incorrect type in argument 2 (different base types) @@     expected unsigned int [usertype] val @@     got restricted __wsum const [usertype] csum @@
-   net/bpf/core.c:801:37: sparse:     expected unsigned int [usertype] val
-   net/bpf/core.c:801:37: sparse:     got restricted __wsum const [usertype] csum
->> net/bpf/core.c:844:19: sparse: sparse: incorrect type in assignment (different base types) @@     expected restricted __wsum [usertype] csum @@     got unsigned int @@
-   net/bpf/core.c:844:19: sparse:     expected restricted __wsum [usertype] csum
-   net/bpf/core.c:844:19: sparse:     got unsigned int
+Alex
 
-vim +801 net/bpf/core.c
+ 
+> Changelog
+> v5:
+>  * Rebased on top of Robin's "Simplify bus_type determination".
+>  * Fixed a wrong change returning -EMEDIUMTYPE in arm-smmu driver.
+>  * Added Baolu's "Reviewed-by".
+> v4:
+>  * Dropped -EMEDIUMTYPE change in mtk_v1 driver per Robin's input
+>  * Added Baolu's and Kevin's Reviewed-by lines
+> v3: https://lore.kernel.org/kvm/20220623200029.26007-1-nicolinc@nvidia.com/
+>  * Dropped all dev_err since -EMEDIUMTYPE clearly indicates what error.
+>  * Updated commit message of enforce_cache_coherency removing patch.
+>  * Updated commit message of domain->ops removing patch.
+>  * Replaced "goto out_unlock" with simply mutex_unlock() and return.
+>  * Added a line of comments for -EMEDIUMTYPE return check.
+>  * Moved iommu_get_msi_cookie() into alloc_attach_domain() as a cookie
+>    should be logically tied to the lifetime of a domain itself.
+>  * Added Kevin's "Reviewed-by".
+> v2: https://lore.kernel.org/kvm/20220616000304.23890-1-nicolinc@nvidia.com/
+>  * Added -EMEDIUMTYPE to more IOMMU drivers that fit the category.
+>  * Changed dev_err to dev_dbg for -EMEDIUMTYPE to avoid kernel log spam.
+>  * Dropped iommu_ops patch, and removed domain->ops in VFIO directly,
+>    since there's no mixed-driver use case that would fail the sanity.
+>  * Updated commit log of the patch removing enforce_cache_coherency.
+>  * Fixed a misplace of "num_non_pinned_groups--" in detach_group patch.
+>  * Moved "num_non_pinned_groups++" in PATCH-5 to the common path between
+>    domain-reusing and new-domain pathways, like the code previously did.
+>  * Fixed a typo in EMEDIUMTYPE patch.
+> v1: https://lore.kernel.org/kvm/20220606061927.26049-1-nicolinc@nvidia.com/
+> 
+> Jason Gunthorpe (1):
+>   vfio/iommu_type1: Prefer to reuse domains vs match enforced cache
+>     coherency
+> 
+> Nicolin Chen (4):
+>   iommu: Return -EMEDIUMTYPE for incompatible domain and device/group
+>   vfio/iommu_type1: Remove the domain->ops comparison
+>   vfio/iommu_type1: Clean up update_dirty_scope in detach_group()
+>   vfio/iommu_type1: Simplify group attachment
+> 
+>  drivers/iommu/amd/iommu.c                   |   2 +-
+>  drivers/iommu/apple-dart.c                  |   4 +-
+>  drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c |  15 +-
+>  drivers/iommu/arm/arm-smmu/arm-smmu.c       |   5 +-
+>  drivers/iommu/arm/arm-smmu/qcom_iommu.c     |   9 +-
+>  drivers/iommu/intel/iommu.c                 |  10 +-
+>  drivers/iommu/iommu.c                       |  28 ++
+>  drivers/iommu/ipmmu-vmsa.c                  |   4 +-
+>  drivers/iommu/omap-iommu.c                  |   3 +-
+>  drivers/iommu/s390-iommu.c                  |   2 +-
+>  drivers/iommu/sprd-iommu.c                  |   6 +-
+>  drivers/iommu/tegra-gart.c                  |   2 +-
+>  drivers/iommu/virtio-iommu.c                |   3 +-
+>  drivers/vfio/vfio_iommu_type1.c             | 352 ++++++++++----------
+>  14 files changed, 229 insertions(+), 216 deletions(-)
+> 
 
-   781	
-   782	/**
-   783	 * ___xdp_build_meta_generic_from_skb - fill a generic metadata from an skb
-   784	 * @rx_md: a pointer to the XDP generic metadata to be filled
-   785	 * @skb: a pointer to the skb to take the info from
-   786	 *
-   787	 * Fills a given generic metadata struct with the info set previously in
-   788	 * an skb. @md can point to anywhere and the function doesn't use the
-   789	 * skb_metadata_{end,len}().
-   790	 */
-   791	void ___xdp_build_meta_generic_from_skb(struct xdp_meta_generic_rx *rx_md,
-   792						const struct sk_buff *skb)
-   793	{
-   794		struct xdp_meta_generic *md = to_gen_md(rx_md);
-   795		ktime_t ts;
-   796	
-   797		xdp_meta_init(rx_md, xdp_meta_generic_id);
-   798	
-   799		xdp_meta_rx_csum_level_set(md, skb->csum_level);
-   800		xdp_meta_rx_csum_status_set(md, skb->ip_summed);
- > 801		xdp_meta_rx_csum_set(md, skb->csum);
-   802	
-   803		xdp_meta_rx_hash_set(md, skb_get_hash_raw(skb));
-   804		xdp_meta_rx_hash_type_set(md, xdp_meta_rx_hash_type_from_skb(skb));
-   805	
-   806		if (likely(skb_rx_queue_recorded(skb))) {
-   807			xdp_meta_rx_qid_present_set(md, 1);
-   808			xdp_meta_rx_qid_set(md, skb_get_rx_queue(skb));
-   809		}
-   810	
-   811		if (skb_vlan_tag_present(skb)) {
-   812			xdp_meta_rx_vlan_type_set(md, xdp_meta_rx_vlan_from_prot(skb));
-   813			xdp_meta_rx_vid_set(md, skb_vlan_tag_get(skb));
-   814		}
-   815	
-   816		ts = skb_hwtstamps(skb)->hwtstamp;
-   817		if (ts) {
-   818			xdp_meta_rx_tstamp_present_set(md, 1);
-   819			xdp_meta_rx_tstamp_set(md, ktime_to_ns(ts));
-   820		}
-   821	}
-   822	EXPORT_SYMBOL_GPL(___xdp_build_meta_generic_from_skb);
-   823	
-   824	/**
-   825	 * ___xdp_populate_skb_meta_generic - fill the skb fields from a generic meta
-   826	 * @skb: a pointer to the skb to be filled
-   827	 * @rx_md: a pointer to the generic metadata to take the values from
-   828	 *
-   829	 * Populates the &sk_buff fields from a given XDP generic metadata. A meta
-   830	 * can be from anywhere, the function doesn't use skb_metadata_{end,len}().
-   831	 * Checks whether the metadata is generic-compatible before accessing other
-   832	 * fields.
-   833	 */
-   834	void ___xdp_populate_skb_meta_generic(struct sk_buff *skb,
-   835					      const struct xdp_meta_generic_rx *rx_md)
-   836	{
-   837		const struct xdp_meta_generic *md = to_gen_md(rx_md);
-   838	
-   839		if (unlikely(!xdp_meta_has_generic(md + 1)))
-   840			return;
-   841	
-   842		skb->csum_level = xdp_meta_rx_csum_level_get(md);
-   843		skb->ip_summed = xdp_meta_rx_csum_status_get(md);
- > 844		skb->csum = xdp_meta_rx_csum_get(md);
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp

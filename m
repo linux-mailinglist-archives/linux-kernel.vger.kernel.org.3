@@ -2,435 +2,235 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B5B9E56882A
+	by mail.lfdr.de (Postfix) with ESMTP id 00AA8568828
 	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 14:18:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233592AbiGFMR4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Jul 2022 08:17:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53196 "EHLO
+        id S233640AbiGFMSe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Jul 2022 08:18:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54338 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233587AbiGFMRu (ORCPT
+        with ESMTP id S233511AbiGFMSa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Jul 2022 08:17:50 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 921B325EAE
-        for <linux-kernel@vger.kernel.org>; Wed,  6 Jul 2022 05:17:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1657109867;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=DpKcYFxeJ3MY4VZ+hbefPz0OoreLzS/6OIK0xfvUDLs=;
-        b=AHyq16tXBXfHTCmC9KtIE6Ss0TsYFfH+jFSr2Qm4RCbTk0ZNlgLJwC6tlhm1p+Aml7qA48
-        3xgjKFFn2q9ReA8AEz5MIQ6f9YlMQ1W9Rfdz6zAN4O8RZM3M+4BEv44Sj4j+8b32pbDR4a
-        Bswl0AmV/8bdhFJilntpsiyQBt5A/CQ=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-22-44uvoDi6PnWeOmqJxouoxw-1; Wed, 06 Jul 2022 08:17:44 -0400
-X-MC-Unique: 44uvoDi6PnWeOmqJxouoxw-1
-Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id F39019389C4;
-        Wed,  6 Jul 2022 12:17:43 +0000 (UTC)
-Received: from starship (unknown [10.40.194.38])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 6D99A18EC9;
-        Wed,  6 Jul 2022 12:17:40 +0000 (UTC)
-Message-ID: <47c01b3e7806be0ad668d3e8ea64ae3a4de1d602.camel@redhat.com>
-Subject: Re: [PATCH v2 21/21] KVM: selftests: Add an x86-only test to verify
- nested exception queueing
-From:   Maxim Levitsky <mlevitsk@redhat.com>
-To:     Sean Christopherson <seanjc@google.com>,
-        Paolo Bonzini <pbonzini@redhat.com>
-Cc:     Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Oliver Upton <oupton@google.com>,
-        Peter Shier <pshier@google.com>
-Date:   Wed, 06 Jul 2022 15:17:39 +0300
-In-Reply-To: <20220614204730.3359543-22-seanjc@google.com>
-References: <20220614204730.3359543-1-seanjc@google.com>
-         <20220614204730.3359543-22-seanjc@google.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.36.5 (3.36.5-2.fc32) 
+        Wed, 6 Jul 2022 08:18:30 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A6A2B7F6;
+        Wed,  6 Jul 2022 05:18:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=K1Y7ptrT7Er2IK1W4YVha+bOOd1wacvtD6sKDOTjhDI=; b=T9Iub2y3szS+osiCqWJlAKFFN6
+        fEBaxB+/vywIQlou7UGu+d3PWSi1mre+UKTJZgLTyHjCCQZTdb6cs7csA4JViC4yYJnQjO/n/YGPV
+        UrpVXuwqh9kc9QWxI9uo0e9z2iMY8M3evGnDtgaB8TfZWlf3Gb3sH0TW4wPTnx430fIkyCPLxxRev
+        6H6OZ/g9RzR2FT8jG+KKQ/MVy0jes/numMC9qL8IJETTu6DfK+oIHxyyc8UxKxCq5RNl1E1j7E79s
+        gHfXY07tVW362XGQtGinYSLyI5PDNvaqc2ZEsx/qZnmwHlj1K+hhPFAnODTpvZXM9Z93uWvcPtnZ0
+        pIXibGPg==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1o93yx-001dRt-AY; Wed, 06 Jul 2022 12:18:15 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id A1B1C300478;
+        Wed,  6 Jul 2022 14:18:12 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 6728F2020A599; Wed,  6 Jul 2022 14:18:12 +0200 (CEST)
+Date:   Wed, 6 Jul 2022 14:18:12 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Florian Westphal <fw@strlen.de>
+Cc:     Kajetan Puchalski <kajetan.puchalski@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Pablo Neira Ayuso <pablo@netfilter.org>,
+        Jozsef Kadlecsik <kadlec@netfilter.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, Mel Gorman <mgorman@suse.de>,
+        lukasz.luba@arm.com, dietmar.eggemann@arm.com,
+        mark.rutland@arm.com, broonie@kernel.org,
+        netfilter-devel@vger.kernel.org, coreteam@netfilter.org,
+        netdev@vger.kernel.org, stable@vger.kernel.org,
+        regressions@lists.linux.dev, linux-kernel@vger.kernel.org
+Subject: Re: [Regression] stress-ng udp-flood causes kernel panic on Ampere
+ Altra
+Message-ID: <YsV9hDD4iMAGV9yU@hirez.programming.kicks-ass.net>
+References: <YsAnPhPfWRjpkdmn@e126311.manchester.arm.com>
+ <20220702205651.GB15144@breakpoint.cc>
+ <YsKxTAaIgvKMfOoU@e126311.manchester.arm.com>
+ <YsLGoU7q5hP67TJJ@e126311.manchester.arm.com>
+ <YsQYIoJK3iqJ68Tq@e126311.manchester.arm.com>
+ <20220705105749.GA711@willie-the-truck>
+ <20220705110724.GB711@willie-the-truck>
+ <20220705112449.GA931@willie-the-truck>
+ <YsVmbOqzACeo1rO4@e126311.manchester.arm.com>
+ <20220706120201.GA7996@breakpoint.cc>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 2.79 on 10.11.54.5
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220706120201.GA7996@breakpoint.cc>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 2022-06-14 at 20:47 +0000, Sean Christopherson wrote:
-> Add a test to verify that KVM_{G,S}ET_EVENTS play nice with pending vs.
-> injected exceptions when an exception is being queued for L2, and that
-> KVM correctly handles L1's exception intercept wants.
+On Wed, Jul 06, 2022 at 02:02:01PM +0200, Florian Westphal wrote:
+
+> Subject: [nf] netfilter: conntrack: fix crash due to confirmed bit load reordering
 > 
-> Signed-off-by: Sean Christopherson <seanjc@google.com>
+> Kajetan Puchalski reports crash on ARM, with backtrace of:
+> 
+> __nf_ct_delete_from_lists
+> nf_ct_delete
+> early_drop
+> __nf_conntrack_alloc
+> 
+> Unlike atomic_inc_not_zero, refcount_inc_not_zero is not a full barrier.
+> conntrack uses SLAB_TYPESAFE_BY_RCU, i.e. it is possible that a 'newly'
+> allocated object is still in use on another CPU:
+> 
+> CPU1						CPU2
+> 						enounters 'ct' during hlist walk
+>  delete_from_lists
+>  refcount drops to 0
+>  kmem_cache_free(ct);
+>  __nf_conntrack_alloc() // returns same object
+> 						refcount_inc_not_zero(ct); /* might fail */
+> 
+> 						/* If set, ct is public/in the hash table */
+> 						test_bit(IPS_CONFIRMED_BIT, &ct->status);
+> 
+> In case CPU1 already set refcount back to 1, refcount_inc_not_zero()
+> will succeed.
+> 
+> The expected possibilities for a CPU that obtained the object 'ct'
+> (but no reference so far) are:
+> 
+> 1. refcount_inc_not_zero() fails.  CPU2 ignores the object and moves to
+>    the next entry in the list.  This happens for objects that are about
+>    to be free'd, that have been free'd, or that have been reallocated
+>    by __nf_conntrack_alloc(), but where the refcount has not been
+>    increased back to 1 yet.
+> 
+> 2. refcount_inc_not_zero() succeeds. CPU2 checks the CONFIRMED bit
+>    in ct->status.  If set, the object is public/in the table.
+> 
+>    If not, the object must be skipped; CPU2 calls nf_ct_put() to
+>    un-do the refcount increment and moves to the next object.
+> 
+> Parallel deletion from the hlists is prevented by a
+> 'test_and_set_bit(IPS_DYING_BIT, &ct->status);' check, i.e. only one
+> cpu will do the unlink, the other one will only drop its reference count.
+> 
+> Because refcount_inc_not_zero is not a full barrier, CPU2 may try to
+> delete an object that is not on any list:
+> 
+> 1. refcount_inc_not_zero() successful (refcount inited to 1 on other CPU)
+> 2. CONFIRMED test also successful (load was reordered or zeroing
+>    of ct->status not yet visible)
+> 3. delete_from_lists unlinks entry not on the hlist, because
+>    IPS_DYING_BIT is 0 (already cleared).
+> 
+> 2) is already wrong: CPU2 will handle a partially initited object
+> that is supposed to be private to CPU1.
+> 
+> This change adds smp_rmb() whenever refcount_inc_not_zero() was successful.
+> 
+> It also inserts a smp_wmb() before the refcount is set to 1 during
+> allocation.
+> 
+> Because other CPU might still 'see' the object, refcount_set(1)
+> "resurrects" the object, so we need to make sure that other CPUs will
+> also observe the right contents.  In particular, the CONFIRMED bit test
+> must only pass once the object is fully initialised and either in the
+> hash or about to be inserted (with locks held to delay possible unlink from
+> early_drop or gc worker).
+> 
+> I did not change flow_offload_alloc(), as far as I can see it should call
+> refcount_inc(), not refcount_inc_not_zero(): the ct object is attached to
+> the skb so its refcount should be >= 1 in all cases.
+> 
+> Reported-by: Kajetan Puchalski <kajetan.puchalski@arm.com>
+> Diagnosed-by: Will Deacon <will@kernel.org>
+> Fixes: 719774377622 ("netfilter: conntrack: convert to refcount_t api")
+> Signed-off-by: Florian Westphal <fw@strlen.de>
 > ---
->  tools/testing/selftests/kvm/.gitignore        |   1 +
->  tools/testing/selftests/kvm/Makefile          |   1 +
->  .../kvm/x86_64/nested_exceptions_test.c       | 295 ++++++++++++++++++
->  3 files changed, 297 insertions(+)
->  create mode 100644 tools/testing/selftests/kvm/x86_64/nested_exceptions_test.c
+>  include/net/netfilter/nf_conntrack.h |  3 +++
+>  net/netfilter/nf_conntrack_core.c    | 19 +++++++++++++++++++
+>  2 files changed, 22 insertions(+)
 > 
-> diff --git a/tools/testing/selftests/kvm/.gitignore b/tools/testing/selftests/kvm/.gitignore
-> index 0ab0e255d292..7c8adb8cff83 100644
-> --- a/tools/testing/selftests/kvm/.gitignore
-> +++ b/tools/testing/selftests/kvm/.gitignore
-> @@ -27,6 +27,7 @@
->  /x86_64/hyperv_svm_test
->  /x86_64/max_vcpuid_cap_test
->  /x86_64/mmio_warning_test
-> +/x86_64/nested_exceptions_test
->  /x86_64/platform_info_test
->  /x86_64/pmu_event_filter_test
->  /x86_64/set_boot_cpu_id
-> diff --git a/tools/testing/selftests/kvm/Makefile b/tools/testing/selftests/kvm/Makefile
-> index 2ca5400220b9..6db2dd5eca96 100644
-> --- a/tools/testing/selftests/kvm/Makefile
-> +++ b/tools/testing/selftests/kvm/Makefile
-> @@ -83,6 +83,7 @@ TEST_GEN_PROGS_x86_64 += x86_64/hyperv_svm_test
->  TEST_GEN_PROGS_x86_64 += x86_64/kvm_clock_test
->  TEST_GEN_PROGS_x86_64 += x86_64/kvm_pv_test
->  TEST_GEN_PROGS_x86_64 += x86_64/mmio_warning_test
-> +TEST_GEN_PROGS_x86_64 += x86_64/nested_exceptions_test
->  TEST_GEN_PROGS_x86_64 += x86_64/platform_info_test
->  TEST_GEN_PROGS_x86_64 += x86_64/pmu_event_filter_test
->  TEST_GEN_PROGS_x86_64 += x86_64/set_boot_cpu_id
-> diff --git a/tools/testing/selftests/kvm/x86_64/nested_exceptions_test.c b/tools/testing/selftests/kvm/x86_64/nested_exceptions_test.c
-> new file mode 100644
-> index 000000000000..ac33835f78f4
-> --- /dev/null
-> +++ b/tools/testing/selftests/kvm/x86_64/nested_exceptions_test.c
-> @@ -0,0 +1,295 @@
-> +// SPDX-License-Identifier: GPL-2.0-only
-> +#define _GNU_SOURCE /* for program_invocation_short_name */
+> diff --git a/include/net/netfilter/nf_conntrack.h b/include/net/netfilter/nf_conntrack.h
+> index a32be8aa7ed2..3dc3646ffba2 100644
+> --- a/include/net/netfilter/nf_conntrack.h
+> +++ b/include/net/netfilter/nf_conntrack.h
+> @@ -300,6 +300,9 @@ static inline bool nf_ct_is_expired(const struct nf_conn *ct)
+>  /* use after obtaining a reference count */
+>  static inline bool nf_ct_should_gc(const struct nf_conn *ct)
+>  {
+> +	/* ->status and ->timeout loads must happen after refcount increase */
+> +	smp_rmb();
 > +
-> +#include "test_util.h"
-> +#include "kvm_util.h"
-> +#include "processor.h"
-> +#include "vmx.h"
-> +#include "svm_util.h"
+>  	return nf_ct_is_expired(ct) && nf_ct_is_confirmed(ct) &&
+>  	       !nf_ct_is_dying(ct);
+>  }
+> diff --git a/net/netfilter/nf_conntrack_core.c b/net/netfilter/nf_conntrack_core.c
+> index 082a2fd8d85b..072cabf1b296 100644
+> --- a/net/netfilter/nf_conntrack_core.c
+> +++ b/net/netfilter/nf_conntrack_core.c
+> @@ -795,6 +795,9 @@ __nf_conntrack_find_get(struct net *net, const struct nf_conntrack_zone *zone,
+>  		 */
+>  		ct = nf_ct_tuplehash_to_ctrack(h);
+>  		if (likely(refcount_inc_not_zero(&ct->ct_general.use))) {
+> +			/* re-check key after refcount */
+> +			smp_rmb();
 > +
-> +#define L2_GUEST_STACK_SIZE 256
+>  			if (likely(nf_ct_key_equal(h, tuple, zone, net)))
+>  				goto found;
+>  
+> @@ -1393,7 +1396,11 @@ static unsigned int early_drop_list(struct net *net,
+>  		 * We steal the timer reference.  If that fails timer has
+>  		 * already fired or someone else deleted it. Just drop ref
+>  		 * and move to next entry.
+> +		 *
+> +		 * smp_rmb to ensure ->ct_net and ->status are loaded after
+> +		 * refcount increase.
+>  		 */
+> +		smp_rmb();
+>  		if (net_eq(nf_ct_net(tmp), net) &&
+>  		    nf_ct_is_confirmed(tmp) &&
+>  		    nf_ct_delete(tmp, 0, 0))
+> @@ -1536,6 +1543,8 @@ static void gc_worker(struct work_struct *work)
+>  			if (!refcount_inc_not_zero(&tmp->ct_general.use))
+>  				continue;
+>  
+> +			/* load ct->status after refcount */
+> +			smp_rmb();
+>  			if (gc_worker_skip_ct(tmp)) {
+>  				nf_ct_put(tmp);
+>  				continue;
+> @@ -1775,6 +1784,16 @@ init_conntrack(struct net *net, struct nf_conn *tmpl,
+>  	if (!exp)
+>  		__nf_ct_try_assign_helper(ct, tmpl, GFP_ATOMIC);
+>  
+> +	/* Other CPU might have obtained a pointer to this object before it was
+> +	 * released.  Because refcount is 0, refcount_inc_not_zero() will fail.
+> +	 *
+> +	 * After refcount_set(1) it will succeed; ensure that zeroing of
+> +	 * ct->status and the correct ct->net pointer are visible; else other
+> +	 * core might observe CONFIRMED bit which means the entry is valid and
+> +	 * in the hash table, but its not (anymore).
+> +	 */
+> +	smp_wmb();
 > +
-> +/*
-> + * Arbitrary, never shoved into KVM/hardware, just need to avoid conflict with
-> + * the "real" exceptions used, #SS/#GP/#DF (12/13/8).
-> + */
-> +#define FAKE_TRIPLE_FAULT_VECTOR       0xaa
-> +
-> +/* Arbitrary 32-bit error code injected by this test. */
-> +#define SS_ERROR_CODE 0xdeadbeef
-> +
-> +/*
-> + * Bit '0' is set on Intel if the exception occurs while delivering a previous
-> + * event/exception.  AMD's wording is ambiguous, but presumably the bit is set
-> + * if the exception occurs while delivering an external event, e.g. NMI or INTR,
-> + * but not for exceptions that occur when delivering other exceptions or
-> + * software interrupts.
-> + *
-> + * Note, Intel's name for it, "External event", is misleading and much more
-> + * aligned with AMD's behavior, but the SDM is quite clear on its behavior.
-WOW, I never noticed that in the SDM, I guess learing something new.
-I was sure that Ext bit is only set when an interrupt event delivery was 'interrupted'
-by an exception (like non present IDT entry or something).
+>  	/* Now it is going to be associated with an sk_buff, set refcount to 1. */
+>  	refcount_set(&ct->ct_general.use, 1);
 
-However intel does exclude software interrupts from that:
-
-"When set, indicates that the exception occurred during delivery of an
-event external to the program, such as an interrupt or an earlier exception. 5 The bit is cleared if the
-exception occurred during delivery of a software interrupt (INT n, INT3, or INTO)."
-
-
-
-
-> + */
-> +#define ERROR_CODE_EXT_FLAG    BIT(0)
-> +
-> +/*
-> + * Bit '1' is set if the fault occurred when looking up a descriptor in the
-> + * IDT, which is the case here as the IDT is empty/NULL.
-> + */
-> +#define ERROR_CODE_IDT_FLAG    BIT(1)
-> +
-> +/*
-> + * The #GP that occurs when vectoring #SS should show the index into the IDT
-> + * for #SS, plus have the "IDT flag" set.
-> + */
-> +#define GP_ERROR_CODE_AMD ((SS_VECTOR * 8) | ERROR_CODE_IDT_FLAG)
-> +#define GP_ERROR_CODE_INTEL ((SS_VECTOR * 8) | ERROR_CODE_IDT_FLAG | ERROR_CODE_EXT_FLAG)
-> +
-> +/*
-> + * Intel and AMD both shove '0' into the error code on #DF, regardless of what
-> + * led to the double fault.
-> + */
-> +#define DF_ERROR_CODE 0
-> +
-> +#define INTERCEPT_SS           (BIT_ULL(SS_VECTOR))
-> +#define INTERCEPT_SS_DF                (INTERCEPT_SS | BIT_ULL(DF_VECTOR))
-> +#define INTERCEPT_SS_GP_DF     (INTERCEPT_SS_DF | BIT_ULL(GP_VECTOR))
-> +
-> +static void l2_ss_pending_test(void)
-> +{
-> +       GUEST_SYNC(SS_VECTOR);
-> +}
-> +
-> +static void l2_ss_injected_gp_test(void)
-> +{
-> +       GUEST_SYNC(GP_VECTOR);
-> +}
-> +
-> +static void l2_ss_injected_df_test(void)
-> +{
-> +       GUEST_SYNC(DF_VECTOR);
-> +}
-> +
-> +static void l2_ss_injected_tf_test(void)
-> +{
-> +       GUEST_SYNC(FAKE_TRIPLE_FAULT_VECTOR);
-> +}
-> +
-> +static void svm_run_l2(struct svm_test_data *svm, void *l2_code, int vector,
-> +                      uint32_t error_code)
-> +{
-> +       struct vmcb *vmcb = svm->vmcb;
-> +       struct vmcb_control_area *ctrl = &vmcb->control;
-> +
-> +       vmcb->save.rip = (u64)l2_code;
-> +       run_guest(vmcb, svm->vmcb_gpa);
-> +
-> +       if (vector == FAKE_TRIPLE_FAULT_VECTOR)
-> +               return;
-> +
-> +       GUEST_ASSERT_EQ(ctrl->exit_code, (SVM_EXIT_EXCP_BASE + vector));
-> +       GUEST_ASSERT_EQ(ctrl->exit_info_1, error_code);
-> +}
-> +
-> +static void l1_svm_code(struct svm_test_data *svm)
-> +{
-> +       struct vmcb_control_area *ctrl = &svm->vmcb->control;
-> +       unsigned long l2_guest_stack[L2_GUEST_STACK_SIZE];
-> +
-> +       generic_svm_setup(svm, NULL, &l2_guest_stack[L2_GUEST_STACK_SIZE]);
-> +       svm->vmcb->save.idtr.limit = 0;
-> +       ctrl->intercept |= BIT_ULL(INTERCEPT_SHUTDOWN);
-> +
-> +       ctrl->intercept_exceptions = INTERCEPT_SS_GP_DF;
-> +       svm_run_l2(svm, l2_ss_pending_test, SS_VECTOR, SS_ERROR_CODE);
-> +       svm_run_l2(svm, l2_ss_injected_gp_test, GP_VECTOR, GP_ERROR_CODE_AMD);
-> +
-> +       ctrl->intercept_exceptions = INTERCEPT_SS_DF;
-> +       svm_run_l2(svm, l2_ss_injected_df_test, DF_VECTOR, DF_ERROR_CODE);
-> +
-> +       ctrl->intercept_exceptions = INTERCEPT_SS;
-> +       svm_run_l2(svm, l2_ss_injected_tf_test, FAKE_TRIPLE_FAULT_VECTOR, 0);
-> +       GUEST_ASSERT_EQ(ctrl->exit_code, SVM_EXIT_SHUTDOWN);
-> +
-> +       GUEST_DONE();
-> +}
-> +
-> +static void vmx_run_l2(void *l2_code, int vector, uint32_t error_code)
-> +{
-> +       GUEST_ASSERT(!vmwrite(GUEST_RIP, (u64)l2_code));
-> +
-> +       GUEST_ASSERT_EQ(vector == SS_VECTOR ? vmlaunch() : vmresume(), 0);
-> +
-> +       if (vector == FAKE_TRIPLE_FAULT_VECTOR)
-> +               return;
-> +
-> +       GUEST_ASSERT_EQ(vmreadz(VM_EXIT_REASON), EXIT_REASON_EXCEPTION_NMI);
-> +       GUEST_ASSERT_EQ((vmreadz(VM_EXIT_INTR_INFO) & 0xff), vector);
-> +       GUEST_ASSERT_EQ(vmreadz(VM_EXIT_INTR_ERROR_CODE), error_code);
-> +}
-> +
-> +static void l1_vmx_code(struct vmx_pages *vmx)
-> +{
-> +       unsigned long l2_guest_stack[L2_GUEST_STACK_SIZE];
-> +
-> +       GUEST_ASSERT_EQ(prepare_for_vmx_operation(vmx), true);
-> +
-> +       GUEST_ASSERT_EQ(load_vmcs(vmx), true);
-> +
-> +       prepare_vmcs(vmx, NULL, &l2_guest_stack[L2_GUEST_STACK_SIZE]);
-> +       GUEST_ASSERT_EQ(vmwrite(GUEST_IDTR_LIMIT, 0), 0);
-> +
-> +       /*
-> +        * VMX disallows injecting an exception with error_code[31:16] != 0,
-> +        * and hardware will never generate a VM-Exit with bits 31:16 set.
-> +        * KVM should likewise truncate the "bad" userspace value.
-> +        */
-> +       GUEST_ASSERT_EQ(vmwrite(EXCEPTION_BITMAP, INTERCEPT_SS_GP_DF), 0);
-> +       vmx_run_l2(l2_ss_pending_test, SS_VECTOR, (u16)SS_ERROR_CODE);
-> +       vmx_run_l2(l2_ss_injected_gp_test, GP_VECTOR, GP_ERROR_CODE_INTEL);
-> +
-> +       GUEST_ASSERT_EQ(vmwrite(EXCEPTION_BITMAP, INTERCEPT_SS_DF), 0);
-> +       vmx_run_l2(l2_ss_injected_df_test, DF_VECTOR, DF_ERROR_CODE);
-> +
-> +       GUEST_ASSERT_EQ(vmwrite(EXCEPTION_BITMAP, INTERCEPT_SS), 0);
-> +       vmx_run_l2(l2_ss_injected_tf_test, FAKE_TRIPLE_FAULT_VECTOR, 0);
-> +       GUEST_ASSERT_EQ(vmreadz(VM_EXIT_REASON), EXIT_REASON_TRIPLE_FAULT);
-> +
-> +       GUEST_DONE();
-> +}
-> +
-> +static void __attribute__((__flatten__)) l1_guest_code(void *test_data)
-> +{
-> +       if (this_cpu_has(X86_FEATURE_SVM))
-> +               l1_svm_code(test_data);
-> +       else
-> +               l1_vmx_code(test_data);
-> +}
-> +
-> +static void assert_ucall_vector(struct kvm_vcpu *vcpu, int vector)
-> +{
-> +       struct kvm_run *run = vcpu->run;
-> +       struct ucall uc;
-> +
-> +       TEST_ASSERT(run->exit_reason == KVM_EXIT_IO,
-> +                   "Unexpected exit reason: %u (%s),\n",
-> +                   run->exit_reason, exit_reason_str(run->exit_reason));
-> +
-> +       switch (get_ucall(vcpu, &uc)) {
-> +       case UCALL_SYNC:
-> +               TEST_ASSERT(vector == uc.args[1],
-> +                           "Expected L2 to ask for %d, got %ld", vector, uc.args[1]);
-> +               break;
-> +       case UCALL_DONE:
-> +               TEST_ASSERT(vector == -1,
-> +                           "Expected L2 to ask for %d, L2 says it's done", vector);
-> +               break;
-> +       case UCALL_ABORT:
-> +               TEST_FAIL("%s at %s:%ld (0x%lx != 0x%lx)",
-> +                         (const char *)uc.args[0], __FILE__, uc.args[1],
-> +                         uc.args[2], uc.args[3]);
-> +               break;
-> +       default:
-> +               TEST_FAIL("Expected L2 to ask for %d, got unexpected ucall %lu", vector, uc.cmd);
-> +       }
-> +}
-> +
-> +static void queue_ss_exception(struct kvm_vcpu *vcpu, bool inject)
-> +{
-> +       struct kvm_vcpu_events events;
-> +
-> +       vcpu_events_get(vcpu, &events);
-> +
-> +       TEST_ASSERT(!events.exception.pending,
-> +                   "Vector %d unexpectedlt pending", events.exception.nr);
-> +       TEST_ASSERT(!events.exception.injected,
-> +                   "Vector %d unexpectedly injected", events.exception.nr);
-> +
-> +       events.flags = KVM_VCPUEVENT_VALID_PAYLOAD;
-> +       events.exception.pending = !inject;
-> +       events.exception.injected = inject;
-> +       events.exception.nr = SS_VECTOR;
-> +       events.exception.has_error_code = true;
-> +       events.exception.error_code = SS_ERROR_CODE;
-> +       vcpu_events_set(vcpu, &events);
-> +}
-> +
-> +/*
-> + * Verify KVM_{G,S}ET_EVENTS play nice with pending vs. injected exceptions
-> + * when an exception is being queued for L2.  Specifically, verify that KVM
-> + * honors L1 exception intercept controls when a #SS is pending/injected,
-> + * triggers a #GP on vectoring the #SS, morphs to #DF if #GP isn't intercepted
-> + * by L1, and finally causes (nested) SHUTDOWN if #DF isn't intercepted by L1.
-> + */
-> +int main(int argc, char *argv[])
-> +{
-> +       vm_vaddr_t nested_test_data_gva;
-> +       struct kvm_vcpu_events events;
-> +       struct kvm_vcpu *vcpu;
-> +       struct kvm_vm *vm;
-> +
-> +       TEST_REQUIRE(kvm_has_cap(KVM_CAP_EXCEPTION_PAYLOAD));
-> +       TEST_REQUIRE(kvm_cpu_has(X86_FEATURE_SVM) || kvm_cpu_has(X86_FEATURE_VMX));
-> +
-> +       vm = vm_create_with_one_vcpu(&vcpu, l1_guest_code);
-> +       vm_enable_cap(vm, KVM_CAP_EXCEPTION_PAYLOAD, -2ul);
-> +
-> +       if (kvm_cpu_has(X86_FEATURE_SVM))
-> +               vcpu_alloc_svm(vm, &nested_test_data_gva);
-> +       else
-> +               vcpu_alloc_vmx(vm, &nested_test_data_gva);
-> +
-> +       vcpu_args_set(vcpu, 1, nested_test_data_gva);
-> +
-> +       /* Run L1 => L2.  L2 should sync and request #SS. */
-> +       vcpu_run(vcpu);
-> +       assert_ucall_vector(vcpu, SS_VECTOR);
-> +
-> +       /* Pend #SS and request immediate exit.  #SS should still be pending. */
-> +       queue_ss_exception(vcpu, false);
-> +       vcpu->run->immediate_exit = true;
-> +       vcpu_run_complete_io(vcpu);
-> +
-> +       /* Verify the pending events comes back out the same as it went in. */
-> +       vcpu_events_get(vcpu, &events);
-> +       ASSERT_EQ(events.flags & KVM_VCPUEVENT_VALID_PAYLOAD,
-> +                 KVM_VCPUEVENT_VALID_PAYLOAD);
-> +       ASSERT_EQ(events.exception.pending, true);
-> +       ASSERT_EQ(events.exception.nr, SS_VECTOR);
-> +       ASSERT_EQ(events.exception.has_error_code, true);
-> +       ASSERT_EQ(events.exception.error_code, SS_ERROR_CODE);
-> +
-> +       /*
-> +        * Run for real with the pending #SS, L1 should get a VM-Exit due to
-> +        * #SS interception and re-enter L2 to request #GP (via injected #SS).
-> +        */
-> +       vcpu->run->immediate_exit = false;
-> +       vcpu_run(vcpu);
-> +       assert_ucall_vector(vcpu, GP_VECTOR);
-> +
-> +       /*
-> +        * Inject #SS, the #SS should bypass interception and cause #GP, which
-> +        * L1 should intercept before KVM morphs it to #DF.  L1 should then
-> +        * disable #GP interception and run L2 to request #DF (via #SS => #GP).
-> +        */
-> +       queue_ss_exception(vcpu, true);
-> +       vcpu_run(vcpu);
-> +       assert_ucall_vector(vcpu, DF_VECTOR);
-> +
-> +       /*
-> +        * Inject #SS, the #SS should bypass interception and cause #GP, which
-> +        * L1 is no longer interception, and so should see a #DF VM-Exit.  L1
-> +        * should then signal that is done.
-> +        */
-> +       queue_ss_exception(vcpu, true);
-> +       vcpu_run(vcpu);
-> +       assert_ucall_vector(vcpu, FAKE_TRIPLE_FAULT_VECTOR);
-> +
-> +       /*
-> +        * Inject #SS yet again.  L1 is not intercepting #GP or #DF, and so
-> +        * should see nested TRIPLE_FAULT / SHUTDOWN.
-> +        */
-> +       queue_ss_exception(vcpu, true);
-> +       vcpu_run(vcpu);
-> +       assert_ucall_vector(vcpu, -1);
-> +
-> +       kvm_vm_free(vm);
-> +}
-
-Reviewed-by: Maxim Levitsky <mlevitsk@redhat.com>
-
-
-Few more tests, maybe done in kvm-unit-tests, won't hurt, especially
-tests that test the interaction between L1 which does EVENTINJ and nested exceptions.
-
-Also a test that causes an interrupt to cause a nested exception, I wrote it for kvm-unit-tests,
-don't remember if it was accepted upstream.
-
-
-Best regards,
-	Maxim Levitsky
+FWIW, the old code, that used atomic_inc() instead of refcount_set()
+would have had the exact sample problem. There was no implied order vs
+the earlier stores.
 

@@ -2,336 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B337B569463
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 23:31:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8895856945F
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 23:31:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234448AbiGFVaf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Jul 2022 17:30:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53026 "EHLO
+        id S234533AbiGFVax (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Jul 2022 17:30:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53426 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234391AbiGFVac (ORCPT
+        with ESMTP id S234627AbiGFVas (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Jul 2022 17:30:32 -0400
-Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4E92240A5
-        for <linux-kernel@vger.kernel.org>; Wed,  6 Jul 2022 14:30:29 -0700 (PDT)
-Received: by mail-wr1-x435.google.com with SMTP id v14so23765729wra.5
-        for <linux-kernel@vger.kernel.org>; Wed, 06 Jul 2022 14:30:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=rQw39tPtKwwT0TwawC+SleFl+XxjNJEpZjL17UZWqD0=;
-        b=TJ0JwctkW4FEMEufZxjl6PXg89sMUFNRoAy0Z5jhygDZZFckNW8E4XxJ8eCgL/hDjV
-         hpoomx5AObK3ULKhJgcDQLBiab+fZf8xg/BY/LryOR1DX8vA3JDoAj8gpSib9lNy/s/e
-         /jzooYkBVmWDEH5zOICcV4QgtMCIhgJSD6R5rt6p8JNkeUND/+ROwETEoXbXZcSx3Pw5
-         +kO8Eawr7OH8uiz5h4pEiZrUnntkQIZncf0aUqDcaOyWbRd8t3dclS0SKnZIHTtW5x8L
-         dikFgDoKYwxUBoOszJ6rcwJsmQibZ2dVNTX63FmKNc/RgDWCF4smHfVSDETfonEAlYnp
-         OgTQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=rQw39tPtKwwT0TwawC+SleFl+XxjNJEpZjL17UZWqD0=;
-        b=j919Dnq25fPLKQDfo3WqEZb1sdnTO82aOq9TSjF8Tg+GcXc0D840/wjrIgpRbyxNFX
-         sbXB82Njt8pa4g+v0S0b7sOOCdEQ1Ca/imG+Z5Z0JJu6flPdwz71IutgAPeWrtdff++P
-         NTEbrGcthamJRFmbZrVkuFXWwm3AfGSgBLcJQnDPXs+ip/p2yP1LU+t2/Ibhaz/DEYCw
-         1zbG/cxN6ToNPq0cHzOUGiRl5R6hDcvEPVIjhCcfI5WP5QLTmp2W/tbpNsDz1Qf3gc31
-         IBz7ovr0iCQtmgFqKYch9KSMdfh/xNfILZ7qR8NBmYdL3b+YQWjePc8vdWZgIkiTfcg3
-         mmmw==
-X-Gm-Message-State: AJIora+2pXBGR0UKkDK2Ny4Q3nWE2DUjBVxCq9rRAPPuxSWUP042FUI6
-        famQ3RLJxF+NkI1Mw77lhcEuWVgbRszSAOHlRGfv6A==
-X-Google-Smtp-Source: AGRyM1sa1KLvVwiqE5w//w51IOO4ULLgKKe5OZNbipaSgJ+tftt4F/w5yFFO60u5gE8GvclfS23cyFQEJzqOqzwpxUg=
-X-Received: by 2002:a5d:664d:0:b0:21a:3b82:6bb2 with SMTP id
- f13-20020a5d664d000000b0021a3b826bb2mr39462129wrw.534.1657143028112; Wed, 06
- Jul 2022 14:30:28 -0700 (PDT)
+        Wed, 6 Jul 2022 17:30:48 -0400
+Received: from ale.deltatee.com (ale.deltatee.com [204.191.154.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E3412A94F;
+        Wed,  6 Jul 2022 14:30:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=deltatee.com; s=20200525; h=Subject:In-Reply-To:From:References:Cc:To:
+        MIME-Version:Date:Message-ID:content-disposition;
+        bh=8YduW0eS5FyJqaOqaP8Ime9Kxv0Nz0ax91qwOz8aVq0=; b=tJ8pa1OCY41/griklmW+EWfOVD
+        GWRX3NjEHhYKoa1dirAXu9tcLaN+qpf0nzpSUt6AE2hSTAMaGkgPgv4NcYCGYPyn5+QpenS+wTnVf
+        dzwHgdTgxI67I3CmK0cMnjTb734bjxbjYx7DQA9orlsLZwJnT7/WMP2dzbiZ7YbAQzYQu/y+kd36E
+        NWKd/LUDPN2BcSU2j0kYeELLqOgQTg66ewIFq/UnLnPvN5w4UmYxGdTvEJEsZFKMhHTjiXUcAJU+a
+        56SmKOp2xezp85myJotIUFWF91GMeRTiTwry5HfRHn7/M0IWeMCxtQww2OKOWXkI2zuBZnUl0FPwc
+        DaJoW4Qg==;
+Received: from s0106ac1f6bb1ecac.cg.shawcable.net ([70.73.163.230] helo=[192.168.11.155])
+        by ale.deltatee.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+        (Exim 4.94.2)
+        (envelope-from <logang@deltatee.com>)
+        id 1o9CbT-008LWu-KY; Wed, 06 Jul 2022 15:30:36 -0600
+Message-ID: <e40595f9-f398-d43f-b09d-08d3e88b3950@deltatee.com>
+Date:   Wed, 6 Jul 2022 15:30:30 -0600
 MIME-Version: 1.0
-References: <20220610194435.2268290-1-yosryahmed@google.com>
- <20220610194435.2268290-9-yosryahmed@google.com> <00df1932-38fe-c6f8-49d0-3a44affb1268@fb.com>
- <CAJD7tkaNnx6ebFrMxWgkJbtx=Qoe+cEwnjtWeY5=EAaVktrenw@mail.gmail.com>
- <CAJD7tkZ3AEPEUD9V-5nxUgmS5SLc6qp50ZyrRoAQgdzPM=a-Hg@mail.gmail.com>
- <CAJD7tkarwnbcqR1DUN-iJmt0k_njwBfDMd=P8ket8DfEfRRYjw@mail.gmail.com>
- <6dc9d46b-f1df-fb1d-8efd-580b7a6a7a6e@fb.com> <CAJD7tkYsAyFguCOFCKYCaGyaqipCrTE1Q0ecvnrpY1fwG4j=Pg@mail.gmail.com>
- <d144ca6b-7f25-f3fa-def7-6c63a6dfc1aa@fb.com>
-In-Reply-To: <d144ca6b-7f25-f3fa-def7-6c63a6dfc1aa@fb.com>
-From:   Yosry Ahmed <yosryahmed@google.com>
-Date:   Wed, 6 Jul 2022 14:29:51 -0700
-Message-ID: <CAJD7tkYpiuHi0aFNUoeELPi=o0v=owexMgf_HhC7qqr6X9jG8A@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v2 8/8] bpf: add a selftest for cgroup
- hierarchical stats collection
-To:     Yonghong Song <yhs@fb.com>
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>, Hao Luo <haoluo@google.com>,
-        Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Michal Hocko <mhocko@kernel.org>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        David Rientjes <rientjes@google.com>,
-        Stanislav Fomichev <sdf@google.com>,
-        Greg Thelen <gthelen@google.com>,
-        Shakeel Butt <shakeelb@google.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
-        Cgroups <cgroups@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Content-Language: en-US
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Christoph Hellwig <hch@lst.de>
+Cc:     Jason Gunthorpe <jgg@ziepe.ca>, linux-kernel@vger.kernel.org,
+        linux-nvme@lists.infradead.org, linux-block@vger.kernel.org,
+        linux-pci@vger.kernel.org, linux-mm@kvack.org,
+        iommu@lists.linux-foundation.org,
+        Stephen Bates <sbates@raithlin.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
+        John Hubbard <jhubbard@nvidia.com>,
+        Don Dutile <ddutile@redhat.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Daniel Vetter <daniel.vetter@ffwll.ch>,
+        Minturn Dave B <dave.b.minturn@intel.com>,
+        Jason Ekstrand <jason@jlekstrand.net>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Xiong Jianxin <jianxin.xiong@intel.com>,
+        Bjorn Helgaas <helgaas@kernel.org>,
+        Ira Weiny <ira.weiny@intel.com>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Martin Oliveira <martin.oliveira@eideticom.com>,
+        Chaitanya Kulkarni <ckulkarnilinux@gmail.com>,
+        Ralph Campbell <rcampbell@nvidia.com>,
+        Bjorn Helgaas <bhelgaas@google.com>
+References: <20220705161240.GB13721@lst.de>
+ <a509b13c-244b-23fc-f989-339750a733a5@deltatee.com>
+ <20220705164315.GB14484@lst.de>
+ <acb91f37-0470-8ce4-19e4-426903cbc3a1@deltatee.com>
+ <20220705165039.GB14566@lst.de> <YsRzNqmZYlgkL7fI@kroah.com>
+ <1bd43ef7-0403-bd25-087c-d54d5af677e4@deltatee.com>
+ <YsR4CNDgtt4JWonv@kroah.com>
+ <b3deacdd-cb76-6ebb-0e29-ef6a5a426a0d@deltatee.com>
+ <20220706065127.GA27132@lst.de> <YsU0Cb0rRbW8FGPX@kroah.com>
+From:   Logan Gunthorpe <logang@deltatee.com>
+In-Reply-To: <YsU0Cb0rRbW8FGPX@kroah.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-SA-Exim-Connect-IP: 70.73.163.230
+X-SA-Exim-Rcpt-To: gregkh@linuxfoundation.org, hch@lst.de, jgg@ziepe.ca, linux-kernel@vger.kernel.org, linux-nvme@lists.infradead.org, linux-block@vger.kernel.org, linux-pci@vger.kernel.org, linux-mm@kvack.org, iommu@lists.linux-foundation.org, sbates@raithlin.com, dan.j.williams@intel.com, christian.koenig@amd.com, jhubbard@nvidia.com, ddutile@redhat.com, willy@infradead.org, daniel.vetter@ffwll.ch, dave.b.minturn@intel.com, jason@jlekstrand.net, dave.hansen@linux.intel.com, jianxin.xiong@intel.com, helgaas@kernel.org, ira.weiny@intel.com, robin.murphy@arm.com, martin.oliveira@eideticom.com, ckulkarnilinux@gmail.com, rcampbell@nvidia.com, bhelgaas@google.com
+X-SA-Exim-Mail-From: logang@deltatee.com
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+X-Spam-Level: 
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
+Subject: Re: [PATCH v7 20/21] PCI/P2PDMA: Introduce pci_mmap_p2pmem()
+X-SA-Exim-Version: 4.2.1 (built Sat, 13 Feb 2021 17:57:42 +0000)
+X-SA-Exim-Scanned: Yes (on ale.deltatee.com)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jul 1, 2022 at 5:55 PM Yonghong Song <yhs@fb.com> wrote:
->
->
->
-> On 6/29/22 1:04 AM, Yosry Ahmed wrote:
-> > On Tue, Jun 28, 2022 at 11:48 PM Yonghong Song <yhs@fb.com> wrote:
-> >>
-> >>
-> >>
-> >> On 6/28/22 5:09 PM, Yosry Ahmed wrote:
-> >>> On Tue, Jun 28, 2022 at 12:14 AM Yosry Ahmed <yosryahmed@google.com> wrote:
-> >>>>
-> >>>> On Mon, Jun 27, 2022 at 11:47 PM Yosry Ahmed <yosryahmed@google.com> wrote:
-> >>>>>
-> >>>>> On Mon, Jun 27, 2022 at 11:14 PM Yonghong Song <yhs@fb.com> wrote:
-> >>>>>>
-> >>>>>>
-> >>>>>>
-> >>>>>> On 6/10/22 12:44 PM, Yosry Ahmed wrote:
-> >>>>>>> Add a selftest that tests the whole workflow for collecting,
-> >>>>>>> aggregating (flushing), and displaying cgroup hierarchical stats.
-> >>>>>>>
-> >>>>>>> TL;DR:
-> >>>>>>> - Whenever reclaim happens, vmscan_start and vmscan_end update
-> >>>>>>>      per-cgroup percpu readings, and tell rstat which (cgroup, cpu) pairs
-> >>>>>>>      have updates.
-> >>>>>>> - When userspace tries to read the stats, vmscan_dump calls rstat to flush
-> >>>>>>>      the stats, and outputs the stats in text format to userspace (similar
-> >>>>>>>      to cgroupfs stats).
-> >>>>>>> - rstat calls vmscan_flush once for every (cgroup, cpu) pair that has
-> >>>>>>>      updates, vmscan_flush aggregates cpu readings and propagates updates
-> >>>>>>>      to parents.
-> >>>>>>>
-> >>>>>>> Detailed explanation:
-> >>>>>>> - The test loads tracing bpf programs, vmscan_start and vmscan_end, to
-> >>>>>>>      measure the latency of cgroup reclaim. Per-cgroup ratings are stored in
-> >>>>>>>      percpu maps for efficiency. When a cgroup reading is updated on a cpu,
-> >>>>>>>      cgroup_rstat_updated(cgroup, cpu) is called to add the cgroup to the
-> >>>>>>>      rstat updated tree on that cpu.
-> >>>>>>>
-> >>>>>>> - A cgroup_iter program, vmscan_dump, is loaded and pinned to a file, for
-> >>>>>>>      each cgroup. Reading this file invokes the program, which calls
-> >>>>>>>      cgroup_rstat_flush(cgroup) to ask rstat to propagate the updates for all
-> >>>>>>>      cpus and cgroups that have updates in this cgroup's subtree. Afterwards,
-> >>>>>>>      the stats are exposed to the user. vmscan_dump returns 1 to terminate
-> >>>>>>>      iteration early, so that we only expose stats for one cgroup per read.
-> >>>>>>>
-> >>>>>>> - An ftrace program, vmscan_flush, is also loaded and attached to
-> >>>>>>>      bpf_rstat_flush. When rstat flushing is ongoing, vmscan_flush is invoked
-> >>>>>>>      once for each (cgroup, cpu) pair that has updates. cgroups are popped
-> >>>>>>>      from the rstat tree in a bottom-up fashion, so calls will always be
-> >>>>>>>      made for cgroups that have updates before their parents. The program
-> >>>>>>>      aggregates percpu readings to a total per-cgroup reading, and also
-> >>>>>>>      propagates them to the parent cgroup. After rstat flushing is over, all
-> >>>>>>>      cgroups will have correct updated hierarchical readings (including all
-> >>>>>>>      cpus and all their descendants).
-> >>>>>>>
-> >>>>>>> Signed-off-by: Yosry Ahmed <yosryahmed@google.com>
-> >>>>>>
-> >>>>>> There are a selftest failure with test:
-> >>>>>>
-> >>>>>> get_cgroup_vmscan_delay:PASS:output format 0 nsec
-> >>>>>> get_cgroup_vmscan_delay:PASS:cgroup_id 0 nsec
-> >>>>>> get_cgroup_vmscan_delay:PASS:vmscan_reading 0 nsec
-> >>>>>> get_cgroup_vmscan_delay:PASS:read cgroup_iter 0 nsec
-> >>>>>> get_cgroup_vmscan_delay:PASS:output format 0 nsec
-> >>>>>> get_cgroup_vmscan_delay:PASS:cgroup_id 0 nsec
-> >>>>>> get_cgroup_vmscan_delay:FAIL:vmscan_reading unexpected vmscan_reading:
-> >>>>>> actual 0 <= expected 0
-> >>>>>> check_vmscan_stats:FAIL:child1_vmscan unexpected child1_vmscan: actual
-> >>>>>> 781874 != expected 382092
-> >>>>>> check_vmscan_stats:FAIL:child2_vmscan unexpected child2_vmscan: actual
-> >>>>>> -1 != expected -2
-> >>>>>> check_vmscan_stats:FAIL:test_vmscan unexpected test_vmscan: actual
-> >>>>>> 781874 != expected 781873
-> >>>>>> check_vmscan_stats:FAIL:root_vmscan unexpected root_vmscan: actual 0 <
-> >>>>>> expected 781874
-> >>>>>> destroy_progs:PASS:remove cgroup_iter pin 0 nsec
-> >>>>>> destroy_progs:PASS:remove cgroup_iter pin 0 nsec
-> >>>>>> destroy_progs:PASS:remove cgroup_iter pin 0 nsec
-> >>>>>> destroy_progs:PASS:remove cgroup_iter pin 0 nsec
-> >>>>>> destroy_progs:PASS:remove cgroup_iter pin 0 nsec
-> >>>>>> destroy_progs:PASS:remove cgroup_iter pin 0 nsec
-> >>>>>> destroy_progs:PASS:remove cgroup_iter pin 0 nsec
-> >>>>>> destroy_progs:PASS:remove cgroup_iter root pin 0 nsec
-> >>>>>> cleanup_bpffs:PASS:rmdir /sys/fs/bpf/vmscan/ 0 nsec
-> >>>>>> #33      cgroup_hierarchical_stats:FAIL
-> >>>>>>
-> >>>>>
-> >>>>> The test is passing on my setup. I am trying to figure out if there is
-> >>>>> something outside the setup done by the test that can cause the test
-> >>>>> to fail.
-> >>>>>
-> >>>>
-> >>>> I can't reproduce the failure on my machine. It seems like for some
-> >>>> reason reclaim is not invoked in one of the test cgroups which results
-> >>>> in the expected stats not being there. I have a few suspicions as to
-> >>>> what might cause this but I am not sure.
-> >>>>
-> >>>> If you have the capacity, do you mind re-running the test with the
-> >>>> attached diff1.patch? (and maybe diff2.patch if that fails, this will
-> >>>> cause OOMs in the test cgroup, you might see some process killed
-> >>>> warnings).
-> >>>> Thanks!
-> >>>>
-> >>>
-> >>> In addition to that, it looks like one of the cgroups has a "0" stat
-> >>> which shouldn't happen unless one of the map update/lookup operations
-> >>> failed, which should log something using bpf_printk. I need to
-> >>> reproduce the test failure to investigate this properly. Did you
-> >>> observe this failure on your machine or in CI? Any instructions on how
-> >>> to reproduce or system setup?
-> >>
-> >> I got "0" as well.
-> >>
-> >> get_cgroup_vmscan_delay:FAIL:vmscan_reading unexpected vmscan_reading:
-> >> actual 0 <= expected 0
-> >> check_vmscan_stats:FAIL:child1_vmscan unexpected child1_vmscan: actual
-> >> 676612 != expected 339142
-> >> check_vmscan_stats:FAIL:child2_vmscan unexpected child2_vmscan: actual
-> >> -1 != expected -2
-> >> check_vmscan_stats:FAIL:test_vmscan unexpected test_vmscan: actual
-> >> 676612 != expected 676611
-> >> check_vmscan_stats:FAIL:root_vmscan unexpected root_vmscan: actual 0 <
-> >> expected 676612
-> >>
-> >> I don't have special config. I am running on qemu vm, similar to
-> >> ci environment but may have a slightly different config.
-> >>
-> >> The CI for this patch set won't work since the sleepable kfunc support
-> >> patch is not available. Once you have that patch, bpf CI should be able
-> >> to compile the patch set and run the tests.
-> >>
-> >
-> > I will include this patch in the next version anyway, but I am trying
-> > to find out why this selftest is failing for you before I send it out.
-> > I am trying to reproduce the problem but no luck so far.
->
-> I debugged this a little bit and found that this two programs
->
-> SEC("tp_btf/mm_vmscan_memcg_reclaim_begin")
-> int BPF_PROG(vmscan_start, struct lruvec *lruvec, struct scan_control *sc)
->
-> and
->
-> SEC("tp_btf/mm_vmscan_memcg_reclaim_end")
-> int BPF_PROG(vmscan_end, struct lruvec *lruvec, struct scan_control *sc)
->
-> are not triggered.
 
-Thanks so much for doing this. I am still failing to reproduce the
-problem so this is very useful. I believe if those programs are not
-triggered at all then we are not walking the memcg reclaim path, which
-shouldn't happen since we are setting memory.high to a limit and then
-allocating more memory, which should trigger memcg reclaim.
 
-I am looking at the code now, and there are some conditions that will
-cause memory.high to not invoke reclaim (at least synchronously). Did
-you try diff2.patch attached in the previous email? It changes the
-test to use memory.max instead of memory.high, this will cause an OOM
-kill of the test child process, but it should be a stronger guarantee
-that reclaim happens and we hit mm_vmscan_memcg_reclaim_begin/end().
-If diff2.patch above works, is it okay to keep it? Is it okay to have
-some test processes OOM killed during testing?
+On 2022-07-06 01:04, Greg Kroah-Hartman wrote:
+> On Wed, Jul 06, 2022 at 08:51:27AM +0200, Christoph Hellwig wrote:
+>> On Tue, Jul 05, 2022 at 12:16:45PM -0600, Logan Gunthorpe wrote:
+>>> The current version does it through a char device, but that requires
+>>> creating a simple_fs and anon_inode for teardown on driver removal, plus
+>>> a bunch of hooks through the driver that exposes it (NVMe, in this case)
+>>> to set this all up.
+>>>
+>>> Christoph is suggesting a sysfs interface which could potentially avoid
+>>> the anon_inode and all of the extra hooks. It has some significant
+>>> benefits and maybe some small downsides, but I wouldn't describe it as
+>>> horrid.
+>>
+>> Yeah, I don't think is is horrible, it fits in with the resource files
+>> for the BARs, and solves a lot of problems.  Greg, can you explain
+>> what would be so bad about it?
+> 
+> As you mention, you will have to pass different things down into sysfs
+> in order for that to be possible.  If it matches the resource files like
+> we currently have today, that might not be that bad, but it still feels
+> odd to me.  Let's see an implementation and a Documentation/ABI/ entry
+> first though.
 
->
-> I do have CONFIG_MEMCG enabled in my config file:
-> ...
-> CONFIG_MEMCG=y
-> CONFIG_MEMCG_SWAP=y
-> CONFIG_MEMCG_KMEM= > ...
->
-> Maybe when cgroup_rstat_flush() is called, some code path won't trigger
-> mm_vmscan_memcg_reclaim_begin/end()?
->
+I'll work something up in the coming weeks.
 
-cgroup_rstat_flush() should be completely separate in this regard, and
-should not affect the code path that triggers
-mm_vmscan_memcg_reclaim_begin/end().
+Thanks,
 
-> >
-> >>>
-> >>>>
-> >>>>>>
-> >>>>>> Also an existing test also failed.
-> >>>>>>
-> >>>>>> btf_dump_data:PASS:find type id 0 nsec
-> >>>>>>
-> >>>>>>
-> >>>>>> btf_dump_data:PASS:failed/unexpected type_sz 0 nsec
-> >>>>>>
-> >>>>>>
-> >>>>>> btf_dump_data:FAIL:ensure expected/actual match unexpected ensure
-> >>>>>> expected/actual match: actual '(union bpf_iter_link_info){.map =
-> >>>>>> (struct){.map_fd = (__u32)1,},.cgroup '
-> >>>>>> test_btf_dump_struct_data:PASS:find struct sk_buff 0 nsec
-> >>>>>>
-> >>>>>
-> >>>>> Yeah I see what happened there. bpf_iter_link_info was changed by the
-> >>>>> patch that introduced cgroup_iter, and this specific union is used by
-> >>>>> the test to test the "union with nested struct" btf dumping. I will
-> >>>>> add a patch in the next version that updates the btf_dump_data test
-> >>>>> accordingly. Thanks.
-> >>>>>
-> >>>>>>
-> >>>>>> test_btf_dump_struct_data:PASS:unexpected return value dumping sk_buff 0
-> >>>>>> nsec
-> >>>>>>
-> >>>>>> btf_dump_data:PASS:verify prefix match 0 nsec
-> >>>>>>
-> >>>>>>
-> >>>>>> btf_dump_data:PASS:find type id 0 nsec
-> >>>>>>
-> >>>>>>
-> >>>>>> btf_dump_data:PASS:failed to return -E2BIG 0 nsec
-> >>>>>>
-> >>>>>>
-> >>>>>> btf_dump_data:PASS:ensure expected/actual match 0 nsec
-> >>>>>>
-> >>>>>>
-> >>>>>> btf_dump_data:PASS:verify prefix match 0 nsec
-> >>>>>>
-> >>>>>>
-> >>>>>> btf_dump_data:PASS:find type id 0 nsec
-> >>>>>>
-> >>>>>>
-> >>>>>> btf_dump_data:PASS:failed to return -E2BIG 0 nsec
-> >>>>>>
-> >>>>>>
-> >>>>>> btf_dump_data:PASS:ensure expected/actual match 0 nsec
-> >>>>>>
-> >>>>>>
-> >>>>>> #21/14   btf_dump/btf_dump: struct_data:FAIL
-> >>>>>>
-> >>>>>> please take a look.
-> >>>>>>
-> >>>>>>> ---
-> >>>>>>>     .../prog_tests/cgroup_hierarchical_stats.c    | 351 ++++++++++++++++++
-> >>>>>>>     .../bpf/progs/cgroup_hierarchical_stats.c     | 234 ++++++++++++
-> >>>>>>>     2 files changed, 585 insertions(+)
-> >>>>>>>     create mode 100644 tools/testing/selftests/bpf/prog_tests/cgroup_hierarchical_stats.c
-> >>>>>>>     create mode 100644 tools/testing/selftests/bpf/progs/cgroup_hierarchical_stats.c
-> >>>>>>>
-> >> [...]
+Logan

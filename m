@@ -2,118 +2,337 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CEA37568F83
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 18:45:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A66DE568F8D
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 18:46:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234224AbiGFQpb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Jul 2022 12:45:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39138 "EHLO
+        id S234286AbiGFQp5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Jul 2022 12:45:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40374 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234193AbiGFQpY (ORCPT
+        with ESMTP id S234242AbiGFQpv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Jul 2022 12:45:24 -0400
-Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D520C28E09
-        for <linux-kernel@vger.kernel.org>; Wed,  6 Jul 2022 09:45:22 -0700 (PDT)
-Received: by mail-pj1-x1030.google.com with SMTP id 89-20020a17090a09e200b001ef7638e536so12727173pjo.3
-        for <linux-kernel@vger.kernel.org>; Wed, 06 Jul 2022 09:45:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=8qMqNPKdwEB+Xj55W1lFVgPi5kuDOPaSuG9HBIEp++0=;
-        b=LmnZ/QbsPiVvbhlR+0zsAWB1dPXgA0N55j2iDxMMu/VF/aLnqXjS2x+LtThefPrNT5
-         D50MgQKn+2JgIuBjTsjA2UHACE+WUmOI53oXTyK9ZGWjOCHBcvohtRS/+HBFuagKYQDk
-         td1tya88QXz2LPsV8ZOV7r0W46UqVOqh4zo2C/bRTrW8Y+yFSjziQhUgnRb573WyqlHG
-         2UCpaF24qJwnhq6xXUUAbaKhmE7JXf/Sr1UWmCDss4rESRHxiOAnI75HsolAgrTiiXQo
-         qyQL37dwX16wyKc32eB6XoUb1pRntRYX0eR08vMMgUa+krX7ZzxztJg+gX+hmoml8L52
-         HebA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=8qMqNPKdwEB+Xj55W1lFVgPi5kuDOPaSuG9HBIEp++0=;
-        b=XpWg7xZLVg34SdT57TJjFB1/s4/DZwcrDyPuapWkrl0Wo0HoxITUBltLNuorxpGe4I
-         tfJITiWBV91n+mNTkfAK3lPjcJjUki/s7lFa1h6k+J9shL4GbtPD9+fTLNbv6TmmvIZo
-         Wd9+dgEDnhls9CXZDDGBYcHSpfekBHzx3KkHA+OhFSIzeBh0ktlCdyx+4W3Ndn47+M/f
-         pjZQwppf8lbzDYsvNN1B5TSmaQNQQYXGYrtljwfMor1+/vbLbgf4rhcMQNDGuFxIpKyR
-         yeVldRqP9FgUwjFaWSQ17pwQkGXhUeKz2tRglWC0g7Cb/FVGqTZ957LQMbYO0G/J5r35
-         DqnA==
-X-Gm-Message-State: AJIora8CGbYTJBx4W2foq2v/lE8FJKu2w+per5P/IPcKsvscBy47p9vM
-        J9fuclBvKsxoU29iG1kSCxb4gg==
-X-Google-Smtp-Source: AGRyM1sTasdxEfmgq5i+f38pCD1K7Ikdjn0kmJ10W4PbQjK+Jxjw+EkUnz+pSaD/hHsOxyhR1U0sWg==
-X-Received: by 2002:a17:902:f543:b0:16a:54c6:78c0 with SMTP id h3-20020a170902f54300b0016a54c678c0mr46544913plf.22.1657125921966;
-        Wed, 06 Jul 2022 09:45:21 -0700 (PDT)
-Received: from google.com (123.65.230.35.bc.googleusercontent.com. [35.230.65.123])
-        by smtp.gmail.com with ESMTPSA id p22-20020a1709027ed600b0016a0fe1a1fbsm26057570plb.220.2022.07.06.09.45.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 06 Jul 2022 09:45:21 -0700 (PDT)
-Date:   Wed, 6 Jul 2022 16:45:17 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Maxim Levitsky <mlevitsk@redhat.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Oliver Upton <oupton@google.com>,
-        Peter Shier <pshier@google.com>
-Subject: Re: [PATCH v2 09/21] KVM: nVMX: Unconditionally clear mtf_pending on
- nested VM-Exit
-Message-ID: <YsW8He/1b1xBWLwz@google.com>
-References: <20220614204730.3359543-1-seanjc@google.com>
- <20220614204730.3359543-10-seanjc@google.com>
- <599b352e16c970885d3f6bfaf7d1a254627ef5dd.camel@redhat.com>
+        Wed, 6 Jul 2022 12:45:51 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3B403286D6;
+        Wed,  6 Jul 2022 09:45:49 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id D4692106F;
+        Wed,  6 Jul 2022 09:45:48 -0700 (PDT)
+Received: from [10.57.86.2] (unknown [10.57.86.2])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id A9D373F66F;
+        Wed,  6 Jul 2022 09:45:46 -0700 (PDT)
+Message-ID: <bfc9cd29-31b9-f7c2-66a7-1fb177a72daf@arm.com>
+Date:   Wed, 6 Jul 2022 17:45:42 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <599b352e16c970885d3f6bfaf7d1a254627ef5dd.camel@redhat.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCHv2] iommu/arm-smmu-qcom: Add debug support for TLB sync
+ timeouts
+Content-Language: en-GB
+To:     Sai Prakash Ranjan <quic_saipraka@quicinc.com>,
+        Will Deacon <will@kernel.org>, Joerg Roedel <joro@8bytes.org>
+Cc:     iommu@lists.linux-foundation.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, quic_guptap@quicinc.com,
+        Rob Clark <robdclark@chromium.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>
+References: <20220526041403.9984-1-quic_saipraka@quicinc.com>
+From:   Robin Murphy <robin.murphy@arm.com>
+In-Reply-To: <20220526041403.9984-1-quic_saipraka@quicinc.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jul 06, 2022, Maxim Levitsky wrote:
-> On Tue, 2022-06-14 at 20:47 +0000, Sean Christopherson wrote:
-> > Clear mtf_pending on nested VM-Exit instead of handling the clear on a
-> > case-by-case basis in vmx_check_nested_events().  The pending MTF should
-> > rever survive nested VM-Exit, as it is a property of KVM's run of the
-> ^^ typo: never
+On 2022-05-26 05:14, Sai Prakash Ranjan wrote:
+> TLB sync timeouts can be due to various reasons such as TBU power down
+> or pending TCU/TBU invalidation/sync and so on. Debugging these often
+> require dumping of some implementation defined registers to know the
+> status of TBU/TCU operations and some of these registers are not
+> accessible in non-secure world such as from kernel and requires SMC
+> calls to read them in the secure world. So, add this debug support
+> to dump implementation defined registers for TLB sync timeout issues.
 > 
-> Also it is not clear what the 'case by case' means.
+> Signed-off-by: Sai Prakash Ranjan <quic_saipraka@quicinc.com>
+> ---
 > 
-> I see that the vmx_check_nested_events always clears it unless nested run is pending
-> or we re-inject an event.
-
-Those two "unless ..." are the "cases".  The point I'm trying to make in the changelog
-is that there's no need for any conditional logic whatsoever.
-
-> > @@ -3927,6 +3919,9 @@ static int vmx_check_nested_events(struct kvm_vcpu *vcpu)
-> >  		clear_bit(KVM_APIC_INIT, &apic->pending_events);
-> >  		if (vcpu->arch.mp_state != KVM_MP_STATE_INIT_RECEIVED)
-> >  			nested_vmx_vmexit(vcpu, EXIT_REASON_INIT_SIGNAL, 0, 0);
-> > +
-> > +		/* MTF is discarded if the vCPU is in WFS. */
-> > +		vmx->nested.mtf_pending = false;
-> >  		return 0;
+> Changes in v2:
+>   * Use scm call consistently so that it works on older chipsets where
+>     some of these regs are secure registers.
+>   * Add device specific data to get the implementation defined register
+>     offsets.
 > 
-> I guess MTF should also be discarded if we enter SMM, and I see that
-> VMX also enter SMM with a pseudo VM exit (in vmx_enter_smm) which
-> will clear the MTF. Good.
+> ---
+>   drivers/iommu/arm/arm-smmu/arm-smmu-qcom.c | 161 ++++++++++++++++++---
+>   drivers/iommu/arm/arm-smmu/arm-smmu.c      |   2 +
+>   drivers/iommu/arm/arm-smmu/arm-smmu.h      |   1 +
+>   3 files changed, 146 insertions(+), 18 deletions(-)
+> 
+> diff --git a/drivers/iommu/arm/arm-smmu/arm-smmu-qcom.c b/drivers/iommu/arm/arm-smmu/arm-smmu-qcom.c
+> index 7820711c4560..bb68aa85b28b 100644
+> --- a/drivers/iommu/arm/arm-smmu/arm-smmu-qcom.c
+> +++ b/drivers/iommu/arm/arm-smmu/arm-smmu-qcom.c
+> @@ -5,13 +5,27 @@
+>   
+>   #include <linux/acpi.h>
+>   #include <linux/adreno-smmu-priv.h>
+> +#include <linux/delay.h>
+>   #include <linux/of_device.h>
+>   #include <linux/qcom_scm.h>
+>   
+>   #include "arm-smmu.h"
+>   
+> +#define QCOM_DUMMY_VAL	-1
+> +
+> +enum qcom_smmu_impl_reg_offset {
+> +	QCOM_SMMU_TBU_PWR_STATUS,
+> +	QCOM_SMMU_STATS_SYNC_INV_TBU_ACK,
+> +	QCOM_SMMU_MMU2QSS_AND_SAFE_WAIT_CNTR,
+> +};
+> +
+> +struct qcom_smmu_config {
+> +	const u32 *reg_offset;
+> +};
+> +
+>   struct qcom_smmu {
+>   	struct arm_smmu_device smmu;
+> +	const struct qcom_smmu_config *cfg;
+>   	bool bypass_quirk;
+>   	u8 bypass_cbndx;
+>   	u32 stall_enabled;
+> @@ -22,6 +36,56 @@ static struct qcom_smmu *to_qcom_smmu(struct arm_smmu_device *smmu)
+>   	return container_of(smmu, struct qcom_smmu, smmu);
+>   }
+>   
+> +static void qcom_smmu_tlb_sync(struct arm_smmu_device *smmu, int page,
+> +				int sync, int status)
+> +{
+> +	int ret;
+> +	unsigned int spin_cnt, delay;
+> +	u32 reg, tbu_pwr_status, sync_inv_ack, sync_inv_progress;
+> +	struct qcom_smmu *qsmmu = to_qcom_smmu(smmu);
+> +	const struct qcom_smmu_config *cfg;
+> +
+> +	arm_smmu_writel(smmu, page, sync, QCOM_DUMMY_VAL);
+> +	for (delay = 1; delay < TLB_LOOP_TIMEOUT; delay *= 2) {
+> +		for (spin_cnt = TLB_SPIN_COUNT; spin_cnt > 0; spin_cnt--) {
+> +			reg = arm_smmu_readl(smmu, page, status);
+> +			if (!(reg & ARM_SMMU_sTLBGSTATUS_GSACTIVE))
+> +				return;
+> +			cpu_relax();
+> +		}
+> +		udelay(delay);
+> +	}
+> +
+> +	dev_err_ratelimited(smmu->dev,
+> +			    "TLB sync timed out -- SMMU may be deadlocked\n");
 
-No, a pending MTF should be preserved across SMI.  It's not a regression because
-KVM incorrectly prioritizes MTF (and trap-like #DBs) over SMI (and because if KVM
-did prioritize SMI, the existing code would also drop the pending MTF).  Note, this
-isn't the only flaw that needs to be addressed in order to correctly prioritize SMIs,
-e.g. KVM_{G,S}ET_NESTED_STATE would need to save/restore a pending MTF if the vCPU is
-in SMM after an SMI that arrived while L2 was active.
+Maybe consider a single ratelimit state for the whole function so all 
+the output stays together. If things go sufficiently wrong, mixed up 
+bits of partial output from different events may be misleadingly 
+unhelpful (and at the very least it'll be up to 5x more effective at the 
+intent of limiting log spam).
 
-Tangentially related, KVM's pseudo VM-Exit on SMI emulation is completely wrong[*].
+> +	cfg = qsmmu->cfg;
+> +	if (!cfg)
+> +		return;
+> +
+> +	ret = qcom_scm_io_readl(smmu->ioaddr + cfg->reg_offset[QCOM_SMMU_TBU_PWR_STATUS],
+> +				&tbu_pwr_status);
+> +	if (ret)
+> +		dev_err_ratelimited(smmu->dev,
+> +				    "Failed to read TBU power status: %d\n", ret);
+> +
+> +	ret = qcom_scm_io_readl(smmu->ioaddr + cfg->reg_offset[QCOM_SMMU_STATS_SYNC_INV_TBU_ACK],
+> +				&sync_inv_ack);
+> +	if (ret)
+> +		dev_err_ratelimited(smmu->dev,
+> +				    "Failed to read TBU sync/inv ack status: %d\n", ret);
+> +
+> +	ret = qcom_scm_io_readl(smmu->ioaddr + cfg->reg_offset[QCOM_SMMU_MMU2QSS_AND_SAFE_WAIT_CNTR],
+> +				&sync_inv_progress);
+> +	if (ret)
+> +		dev_err_ratelimited(smmu->dev,
+> +				    "Failed to read TCU syn/inv progress: %d\n", ret);
+> +
+> +	dev_err_ratelimited(smmu->dev,
+> +			    "TBU: power_status %#x sync_inv_ack %#x sync_inv_progress %#x\n",
+> +			    tbu_pwr_status, sync_inv_ack, sync_inv_progress);
+> +}
+> +
+>   static void qcom_adreno_smmu_write_sctlr(struct arm_smmu_device *smmu, int idx,
+>   		u32 reg)
+>   {
+> @@ -374,6 +438,7 @@ static const struct arm_smmu_impl qcom_smmu_impl = {
+>   	.def_domain_type = qcom_smmu_def_domain_type,
+>   	.reset = qcom_smmu500_reset,
+>   	.write_s2cr = qcom_smmu_write_s2cr,
+> +	.tlb_sync = qcom_smmu_tlb_sync,
+>   };
+>   
+>   static const struct arm_smmu_impl qcom_adreno_smmu_impl = {
+> @@ -382,12 +447,84 @@ static const struct arm_smmu_impl qcom_adreno_smmu_impl = {
+>   	.reset = qcom_smmu500_reset,
+>   	.alloc_context_bank = qcom_adreno_smmu_alloc_context_bank,
+>   	.write_sctlr = qcom_adreno_smmu_write_sctlr,
+> +	.tlb_sync = qcom_smmu_tlb_sync,
+> +};
+> +
+> +/* Implementation Defined Register Space 0 register offsets */
+> +static const u32 qcom_smmu_impl0_reg_offset[] = {
+> +	[QCOM_SMMU_TBU_PWR_STATUS]		= 0x2204,
+> +	[QCOM_SMMU_STATS_SYNC_INV_TBU_ACK]	= 0x25dc,
+> +	[QCOM_SMMU_MMU2QSS_AND_SAFE_WAIT_CNTR]	= 0x2670,
+> +};
+> +
+> +static const struct qcom_smmu_config qcm2290_smmu_cfg = {
+> +	.reg_offset = qcom_smmu_impl0_reg_offset,
+> +};
+> +
+> +static const struct qcom_smmu_config sc7180_smmu_cfg = {
+> +	.reg_offset = qcom_smmu_impl0_reg_offset,
+> +};
+> +
+> +static const struct qcom_smmu_config sc7280_smmu_cfg = {
+> +	.reg_offset = qcom_smmu_impl0_reg_offset,
+> +};
+> +
+> +static const struct qcom_smmu_config sc8180x_smmu_cfg = {
+> +	.reg_offset = qcom_smmu_impl0_reg_offset,
+> +};
+> +
+> +static const struct qcom_smmu_config sc8280xp_smmu_cfg = {
+> +	.reg_offset = qcom_smmu_impl0_reg_offset,
+> +};
+> +
+> +static const struct qcom_smmu_config sm6125_smmu_cfg = {
+> +	.reg_offset = qcom_smmu_impl0_reg_offset,
+> +};
+> +
+> +static const struct qcom_smmu_config sm6350_smmu_cfg = {
+> +	.reg_offset = qcom_smmu_impl0_reg_offset,
+> +};
+> +
+> +static const struct qcom_smmu_config sm8150_smmu_cfg = {
+> +	.reg_offset = qcom_smmu_impl0_reg_offset,
+> +};
+> +
+> +static const struct qcom_smmu_config sm8250_smmu_cfg = {
+> +	.reg_offset = qcom_smmu_impl0_reg_offset,
+> +};
+> +
+> +static const struct qcom_smmu_config sm8350_smmu_cfg = {
+> +	.reg_offset = qcom_smmu_impl0_reg_offset,
+> +};
+> +
+> +static const struct qcom_smmu_config sm8450_smmu_cfg = {
+> +	.reg_offset = qcom_smmu_impl0_reg_offset,
+> +};
+> +
+> +static const struct of_device_id __maybe_unused qcom_smmu_impl_of_match[] = {
+> +	{ .compatible = "qcom,msm8998-smmu-v2" },
+> +	{ .compatible = "qcom,qcm2290-smmu-500", .data = &qcm2290_smmu_cfg },
+> +	{ .compatible = "qcom,sc7180-smmu-500", .data = &sc7180_smmu_cfg },
+> +	{ .compatible = "qcom,sc7280-smmu-500", .data = &sc7280_smmu_cfg},
+> +	{ .compatible = "qcom,sc8180x-smmu-500", .data = &sc8180x_smmu_cfg },
+> +	{ .compatible = "qcom,sc8280xp-smmu-500", .data = &sc8280xp_smmu_cfg },
+> +	{ .compatible = "qcom,sdm630-smmu-v2" },
+> +	{ .compatible = "qcom,sdm845-smmu-500" },
+> +	{ .compatible = "qcom,sm6125-smmu-500", .data = &sm6125_smmu_cfg},
+> +	{ .compatible = "qcom,sm6350-smmu-500", .data = &sm6350_smmu_cfg},
+> +	{ .compatible = "qcom,sm8150-smmu-500", .data = &sm8150_smmu_cfg },
+> +	{ .compatible = "qcom,sm8250-smmu-500", .data = &sm8250_smmu_cfg },
+> +	{ .compatible = "qcom,sm8350-smmu-500", .data = &sm8350_smmu_cfg },
+> +	{ .compatible = "qcom,sm8450-smmu-500", .data = &sm8450_smmu_cfg },
+> +	{ }
+>   };
+>   
+>   static struct arm_smmu_device *qcom_smmu_create(struct arm_smmu_device *smmu,
+>   		const struct arm_smmu_impl *impl)
+>   {
+>   	struct qcom_smmu *qsmmu;
+> +	const struct of_device_id *match;
+> +	const struct device_node *np = smmu->dev->of_node;
+>   
+>   	/* Check to make sure qcom_scm has finished probing */
+>   	if (!qcom_scm_is_available())
+> @@ -398,28 +535,16 @@ static struct arm_smmu_device *qcom_smmu_create(struct arm_smmu_device *smmu,
+>   		return ERR_PTR(-ENOMEM);
+>   
+>   	qsmmu->smmu.impl = impl;
+> +	match = of_match_node(qcom_smmu_impl_of_match, np);
+> +	if (!match)
+> +		goto out;
+> +
+> +	qsmmu->cfg = match->data;
 
-[*] https://lore.kernel.org/all/Yobt1XwOfb5M6Dfa@google.com
+I haven't been the of_device_get_match_data() police for quite some time 
+now, but it's never too late :)
+
+> +out:
+>   	return &qsmmu->smmu;
+>   }
+>   
+> -static const struct of_device_id __maybe_unused qcom_smmu_impl_of_match[] = {
+> -	{ .compatible = "qcom,msm8998-smmu-v2" },
+> -	{ .compatible = "qcom,qcm2290-smmu-500" },
+> -	{ .compatible = "qcom,sc7180-smmu-500" },
+> -	{ .compatible = "qcom,sc7280-smmu-500" },
+> -	{ .compatible = "qcom,sc8180x-smmu-500" },
+> -	{ .compatible = "qcom,sc8280xp-smmu-500" },
+> -	{ .compatible = "qcom,sdm630-smmu-v2" },
+> -	{ .compatible = "qcom,sdm845-smmu-500" },
+> -	{ .compatible = "qcom,sm6125-smmu-500" },
+> -	{ .compatible = "qcom,sm6350-smmu-500" },
+> -	{ .compatible = "qcom,sm8150-smmu-500" },
+> -	{ .compatible = "qcom,sm8250-smmu-500" },
+> -	{ .compatible = "qcom,sm8350-smmu-500" },
+> -	{ .compatible = "qcom,sm8450-smmu-500" },
+> -	{ }
+> -};
+> -
+>   #ifdef CONFIG_ACPI
+>   static struct acpi_platform_list qcom_acpi_platlist[] = {
+>   	{ "LENOVO", "CB-01   ", 0x8180, ACPI_SIG_IORT, equal, "QCOM SMMU" },
+> diff --git a/drivers/iommu/arm/arm-smmu/arm-smmu.c b/drivers/iommu/arm/arm-smmu/arm-smmu.c
+> index 2ed3594f384e..4c5b51109835 100644
+> --- a/drivers/iommu/arm/arm-smmu/arm-smmu.c
+> +++ b/drivers/iommu/arm/arm-smmu/arm-smmu.c
+> @@ -2099,6 +2099,8 @@ static int arm_smmu_device_probe(struct platform_device *pdev)
+>   	if (IS_ERR(smmu->base))
+>   		return PTR_ERR(smmu->base);
+>   	ioaddr = res->start;
+> +	smmu->ioaddr = ioaddr;
+
+It slightly bothers me to add something to the common structure that's 
+only needed by some weird imp-def feature, but there's plenty of wasted 
+space in there already, and I suppose it is information that the core 
+driver does at least use in passing, so overall I think that's a 
+resounding "meh". Maybe remove the local variable entirely to make it 
+look less redundant?
+
+Thanks,
+Robin.
+
+> +
+>   	/*
+>   	 * The resource size should effectively match the value of SMMU_TOP;
+>   	 * stash that temporarily until we know PAGESIZE to validate it with.
+> diff --git a/drivers/iommu/arm/arm-smmu/arm-smmu.h b/drivers/iommu/arm/arm-smmu/arm-smmu.h
+> index 2b9b42fb6f30..703fd5817ec1 100644
+> --- a/drivers/iommu/arm/arm-smmu/arm-smmu.h
+> +++ b/drivers/iommu/arm/arm-smmu/arm-smmu.h
+> @@ -278,6 +278,7 @@ struct arm_smmu_device {
+>   	struct device			*dev;
+>   
+>   	void __iomem			*base;
+> +	phys_addr_t			ioaddr;
+>   	unsigned int			numpage;
+>   	unsigned int			pgshift;
+>   

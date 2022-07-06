@@ -2,107 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9054D568C4A
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 17:08:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F525568C45
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 17:08:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233602AbiGFPHh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Jul 2022 11:07:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51780 "EHLO
+        id S233466AbiGFPH4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Jul 2022 11:07:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52184 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233748AbiGFPHa (ORCPT
+        with ESMTP id S233678AbiGFPHn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Jul 2022 11:07:30 -0400
-Received: from mail-io1-f45.google.com (mail-io1-f45.google.com [209.85.166.45])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6748418390;
-        Wed,  6 Jul 2022 08:07:29 -0700 (PDT)
-Received: by mail-io1-f45.google.com with SMTP id z191so14254075iof.6;
-        Wed, 06 Jul 2022 08:07:29 -0700 (PDT)
+        Wed, 6 Jul 2022 11:07:43 -0400
+Received: from mail-ua1-x933.google.com (mail-ua1-x933.google.com [IPv6:2607:f8b0:4864:20::933])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 137CE2611C
+        for <linux-kernel@vger.kernel.org>; Wed,  6 Jul 2022 08:07:41 -0700 (PDT)
+Received: by mail-ua1-x933.google.com with SMTP id x31so569443uaf.10
+        for <linux-kernel@vger.kernel.org>; Wed, 06 Jul 2022 08:07:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=Zfcy3m2aUEnWeUHn5XfX6u8AAnHVyZsNCC+cc8UeCsE=;
+        b=le4jtK2QSjWURfVESc5K7w8QK2lwcPWnZWbLUUO5UuMF9/35xMgYsUlcS8EoJblZfS
+         2HLA4JCYWWpa8fawH5oFR/7yHQVoeSVnVWi0ibMvNwlJaTV6k7WPA90fWRuq0LSivG+r
+         uuVxQdQ0iuGfT+ao/jFhsgyrxsXM4YBEaOF8/TVlOom9nT9kvIhoJ53MuHloR4dzJ66l
+         zsbbvO596XWQF9CUWoehgIJ414gSGLnYzHtIZgrKcz9Fxc648RDB09C/Kb5kjZ4IfskQ
+         X1myZp1L6dcOveSxUwxkpOZ0nCqiqKjugJ0E+cqlLCuTQNctl8HNc9MBQjZTUwgEnPR0
+         SNtg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=I+N5AebuQqH0jlQLRd239QoK9Ox33sEr2sOU9qmAdeI=;
-        b=XCnztQaDgc/sNAitwWmgRKjOmHoJ17a8DU7mosO8cYyuO5/yKDdIOzY80Tc45zxiZB
-         3eCFiP1CW8oeTSgYuJDxM3CqINWb9wA4kQUNPOu8jupxUpQjrW6O1AydeUfTmLcCvmUJ
-         BsTGIsqLt0raL05IUFiXNWLrVqBk3QlRd960EX4Ba2NCwSqQwYobILeaB5gJO2gflbqf
-         BkhsyymuRPI6ff8ol3wQpx8y8tM4BcG0seEtbQZd6AGJJppao0xxS5EYW8DGSyS+iJ8x
-         nW3QeSEF37MtTjWGU10jzUn8vWM7ckI7twku820jtbHEGvHFxNFmOjl2vPZKqAyp7mXV
-         vwXQ==
-X-Gm-Message-State: AJIora/Lbs5ZQ7qZ2YOHXdu+5B+l/NDhRpsj8YzdgmsKuXkmRQWcnGP/
-        VLIfqyznZrLDLNzpxJgffFL5mzPrWg==
-X-Google-Smtp-Source: AGRyM1u/v+SlHrKVZCbVrdRrUDL35cvfBUpgBdQqM1X6lZXvh4bPTZSzxIS4OlVZ6WnVzumcugqeVw==
-X-Received: by 2002:a02:aa1a:0:b0:331:9183:9136 with SMTP id r26-20020a02aa1a000000b0033191839136mr24435755jam.242.1657120048487;
-        Wed, 06 Jul 2022 08:07:28 -0700 (PDT)
-Received: from robh.at.kernel.org ([64.188.179.248])
-        by smtp.gmail.com with ESMTPSA id k1-20020a926f01000000b002dbee570531sm5683827ilc.18.2022.07.06.08.07.27
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 06 Jul 2022 08:07:28 -0700 (PDT)
-Received: (nullmailer pid 48246 invoked by uid 1000);
-        Wed, 06 Jul 2022 15:07:26 -0000
-Date:   Wed, 6 Jul 2022 09:07:26 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Pali =?iso-8859-1?Q?Roh=E1r?= <pali@kernel.org>
-Cc:     Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        linux-watchdog@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 1/2] dt-bindings: watchdog: max63xx: Add GPIO binding
-Message-ID: <20220706150726.GA40600-robh@kernel.org>
-References: <20220705001023.14660-1-pali@kernel.org>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Zfcy3m2aUEnWeUHn5XfX6u8AAnHVyZsNCC+cc8UeCsE=;
+        b=qC2XMoEDb9v70tQHI0B47ppg2FbfyiD3hV3wUILaRa1P28hFJRrKwKBPGlGVZxXKfN
+         HzBd40lbjB8v/nswFv626xEeqXtf18oL7pNv58a8OvviAHTrOMRl3JiNEXQIfKbzj8ph
+         geOV65+wbJ++ChV8dJY2CP4T/DQhhvyfhyOxr/m1lJAH3fU5NuaxxTB7oLi/NGhD9X1Z
+         gyZiBKsazd88NI8IzHU88XbmPDdt5kElZ+KpeFQF/mxyB6Cxd2hInCMsK11cfzPvSdId
+         3alko2hUuUafo4z85pbncfkvel8mqKdB/JYBWs/IRINL54eFwKfHz23qLMeuYF+2puYU
+         Y8Zw==
+X-Gm-Message-State: AJIora/oWgFi780uul9hXKweP9HcJwaozYiHnhmeM6U26Xd2hPU9Ysw7
+        lUOi8FpLOnwdN82QxZWwoOCs5PCRDufyataufzUusQ==
+X-Google-Smtp-Source: AGRyM1s48ooDVEVNaeipULKJ2uDLBt3vYCsJKr6Eh7LXVrZLaUsYil8k83ks7YpwaJ30mf1NQKDBiHb0MxOt/ut8QD8=
+X-Received: by 2002:a9f:3155:0:b0:382:9191:6c4d with SMTP id
+ n21-20020a9f3155000000b0038291916c4dmr8314242uab.98.1657120060698; Wed, 06
+ Jul 2022 08:07:40 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220705001023.14660-1-pali@kernel.org>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+References: <20220701165045.4074471-1-juew@google.com> <20220701165045.4074471-2-juew@google.com>
+ <181c484aa33.6db8a9c7835812.4939150843849434525@siddh.me>
+In-Reply-To: <181c484aa33.6db8a9c7835812.4939150843849434525@siddh.me>
+From:   Jue Wang <juew@google.com>
+Date:   Wed, 6 Jul 2022 08:07:29 -0700
+Message-ID: <CAPcxDJ51EQwTZzNOzckRGXgE9s6X+rpDWFxvb8JZpAQQVjm1iQ@mail.gmail.com>
+Subject: Re: [PATCH 2/2] KVM: x86: Fix access to vcpu->arch.apic when the
+ irqchip is not in kernel
+To:     Siddh Raman Pant <code@siddh.me>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Jim Mattson <jmattson@google.com>,
+        Xiaoyao Li <xiaoyao.li@intel.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        David Matlack <dmatlack@google.com>,
+        Tony Luck <tony.luck@intel.com>, kvm <kvm@vger.kernel.org>,
+        Jiaqi Yan <jiaqiyan@google.com>,
+        linux-kernel <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jul 05, 2022 at 02:10:22AM +0200, Pali Rohár wrote:
-> GPIO is optional and used for WDI logic.
-> 
-> Signed-off-by: Pali Rohár <pali@kernel.org>
-> ---
-> Changes in v3:
-> * Extend description
-> ---
->  Documentation/devicetree/bindings/watchdog/maxim,max63xx.yaml | 4 ++++
->  1 file changed, 4 insertions(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/watchdog/maxim,max63xx.yaml b/Documentation/devicetree/bindings/watchdog/maxim,max63xx.yaml
-> index ab9641e845db..a0cf9e6c371d 100644
-> --- a/Documentation/devicetree/bindings/watchdog/maxim,max63xx.yaml
-> +++ b/Documentation/devicetree/bindings/watchdog/maxim,max63xx.yaml
-> @@ -27,6 +27,10 @@ properties:
->      description: This is a 1-byte memory-mapped address
->      maxItems: 1
->  
-> +  gpios:
+Hi Siddh,
 
-As I said before, add a name prefix: wdi-gpios
+Thanks for the note.
 
-> +    description: Optional GPIO used for controlling WDI (watchdog input) when WDI bit is not mapped to memory
+I've sent out an updated v2 patch:
+https://lore.kernel.org/kvm/20220706145957.32156-2-juew@google.com/T/#u
 
-Wrap lines at 80 unless wrapping at 100 provides some benefit.
-
-yamllint is set to 110 because I don't want to fix everyone's line wrap, 
-not because that's the standard.
+Thanks,
+-Jue
 
 
-> +    maxItems: 1
-> +
->  required:
->    - compatible
->    - reg
-> -- 
-> 2.20.1
-> 
-> 
+On Sun, Jul 3, 2022 at 7:44 AM Siddh Raman Pant <code@siddh.me> wrote:
+>
+> On Fri, 01 Jul 2022 22:20:45 +0530  Jue Wang <juew@google.com> wrote
+> > Fix an access to vcpu->arch.apic when KVM_X86_SETUP_MCE is called
+> > without KVM_CREATE_IRQCHIP called or KVM_CAP_SPLIT_IRQCHIP is
+> > enabled.
+> >
+> > Fixes: 4b903561ec49 ("KVM: x86: Add Corrected Machine Check Interrupt (CMCI) emulation to lapic.")
+> > Signed-off-by: Jue Wang <juew@google.com>
+> > ---
+> >  arch/x86/kvm/x86.c | 5 +++--
+> >  1 file changed, 3 insertions(+), 2 deletions(-)
+> >
+> > diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
+> > index 4322a1365f74..d81020dd0fea 100644
+> > --- a/arch/x86/kvm/x86.c
+> > +++ b/arch/x86/kvm/x86.c
+> > @@ -4820,8 +4820,9 @@ static int kvm_vcpu_ioctl_x86_setup_mce(struct kvm_vcpu *vcpu,
+> >          if (mcg_cap & MCG_CMCI_P)
+> >              vcpu->arch.mci_ctl2_banks[bank] = 0;
+> >      }
+> > -    vcpu->arch.apic->nr_lvt_entries =
+> > -        KVM_APIC_MAX_NR_LVT_ENTRIES - !(mcg_cap & MCG_CMCI_P);
+> > +    if (vcpu->arch.apic)
+> > +        vcpu->arch.apic->nr_lvt_entries =
+> > +            KVM_APIC_MAX_NR_LVT_ENTRIES - !(mcg_cap & MCG_CMCI_P);
+> >
+> >      static_call(kvm_x86_setup_mce)(vcpu);
+> >  out:
+> > --
+> > 2.37.0.rc0.161.g10f37bed90-goog
+> >
+> >
+>
+> Hello Jue,
+>
+> There is a syzkaller bug regarding null ptr dereference which is caused by
+> vcpu->arch.apic being NULL, first reported on 27th June. You might want to
+> add it's reported-by line so that it can be marked as fixed.
+>
+> Link: https://syzkaller.appspot.com/bug?id=10b9b238e087a6c9bef2cc48bee2375f58fabbfc
+>
+> I was looking at this bug too and fixed it (i.e. reproducer won't crash)
+> using lapic_in_kernel(vcpu) as a condition instead of null ptr check on
+> vcpu->arch.apic, as it makes more sense to the code reader (the lapic is
+> not there since during kvm_arch_vcpu_create(), it isn't created due to
+> irqchip_in_kernel() check being false).
+>
+> May I suggest that lapic_in_kernel(vcpu) be used instead of the null ptr
+> check?
+>
+> Thanks,
+> Siddh

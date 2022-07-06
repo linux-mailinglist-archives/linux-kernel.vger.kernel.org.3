@@ -2,233 +2,364 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 98FDB5680EF
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 10:18:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8FCF75680F2
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 10:19:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231305AbiGFISi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Jul 2022 04:18:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56904 "EHLO
+        id S231411AbiGFITF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Jul 2022 04:19:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57558 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229650AbiGFISe (ORCPT
+        with ESMTP id S231314AbiGFITA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Jul 2022 04:18:34 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A59DDF5F;
-        Wed,  6 Jul 2022 01:18:31 -0700 (PDT)
-Received: from pps.filterd (m0187473.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 26685gK6036271;
-        Wed, 6 Jul 2022 08:18:22 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : cc :
- subject : in-reply-to : in-reply-to : references : date : message-id :
- mime-version : content-type; s=pp1;
- bh=V2CZ4gY54/pQbJxuXJAl8m7gTB+wm6t3bS+kX/vImVo=;
- b=jwlCdiPOIy7I7CjM6N5ZSfxsRTquU3h0+eoTDG+mCAf7KxwfroPezZyg4/Hkqwf5IDK5
- blWH1UIkvVN+zT137bwLeh3E9lMm4JfCPwOgkGaXyiYUU0j6D0yj3lJ07KTyD7tyAVM2
- Ibjl7XBZ5JQ6c9muMe4XoaPQOtXp3sO2qOGUsAPiZEZ3SImYOkA1mAV7z/tIFGDwPowY
- 7FtiCtyEg+U+WNNP/V2xcAusXyGNI2ADPj3yvLp4o1P8HIwOiFE9acC0XrLDHvVfy/zl
- +9fr4weqAUfgQ1jzu0oqDkfCOJVGuDuxRxHqowzOX9/bx7lD2QqNtDvnZbqFNt6WVcIH EQ== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3h55xfh3j7-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 06 Jul 2022 08:18:22 +0000
-Received: from m0187473.ppops.net (m0187473.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 2667a5cn012417;
-        Wed, 6 Jul 2022 08:18:22 GMT
-Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3h55xfh3hj-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 06 Jul 2022 08:18:21 +0000
-Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
-        by ppma03ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 26686beW013087;
-        Wed, 6 Jul 2022 08:18:19 GMT
-Received: from b06cxnps4074.portsmouth.uk.ibm.com (d06relay11.portsmouth.uk.ibm.com [9.149.109.196])
-        by ppma03ams.nl.ibm.com with ESMTP id 3h4ujsgp5e-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 06 Jul 2022 08:18:19 +0000
-Received: from d06av26.portsmouth.uk.ibm.com (d06av26.portsmouth.uk.ibm.com [9.149.105.62])
-        by b06cxnps4074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 2668IG0615008116
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 6 Jul 2022 08:18:16 GMT
-Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 2F830AE055;
-        Wed,  6 Jul 2022 08:18:16 +0000 (GMT)
-Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 12FF6AE045;
-        Wed,  6 Jul 2022 08:18:16 +0000 (GMT)
-Received: from localhost (unknown [9.171.42.49])
-        by d06av26.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Wed,  6 Jul 2022 08:18:16 +0000 (GMT)
-From:   Alexander Egorenkov <egorenar@linux.ibm.com>
-To:     Alexander Gordeev <agordeev@linux.ibm.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>
-Cc:     Matthew Wilcox <willy@infradead.org>, Baoquan He <bhe@redhat.com>,
-        Christoph Hellwig <hch@lst.de>, linux-kernel@vger.kernel.org,
-        linux-s390@vger.kernel.org
-Subject: Re: [PATCH 1/1] s390/crash: allow multi-segment iterators
-In-Reply-To: <3e713ce3865246766feca8397af2860cbe46854d.1657049033.git.agordeev@linux.ibm.com>
-In-Reply-To: 
-References: <cover.1657049033.git.agordeev@linux.ibm.com>
- <3e713ce3865246766feca8397af2860cbe46854d.1657049033.git.agordeev@linux.ibm.com>
-Date:   Wed, 06 Jul 2022 10:18:15 +0200
-Message-ID: <877d4q3b94.fsf@oc8242746057.ibm.com>
+        Wed, 6 Jul 2022 04:19:00 -0400
+Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B90BD1F2D2
+        for <linux-kernel@vger.kernel.org>; Wed,  6 Jul 2022 01:18:58 -0700 (PDT)
+Received: by mail-pj1-x1035.google.com with SMTP id x18-20020a17090a8a9200b001ef83b332f5so9272052pjn.0
+        for <linux-kernel@vger.kernel.org>; Wed, 06 Jul 2022 01:18:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=NqXzjmPYyKxRNJu+3EE3ctlFFdR9chxtKAJZd/jje28=;
+        b=bWOaqY+oD2MoE3bAUV542QSF69+/YjuH0KSMBb93mlMaBM9SkSmw4M/Eww9Etumq5w
+         EOz3wwH/DGCSmEMW8iBWuf6FNTZ5/Vg7Xyn1l5OCy3/kPWAjkm0f5TNUF9drdXooTFnN
+         3cY3fZIlG0yoD7TV4lcYVrGkY5FHaz0brIDCRxm8Tw7TOtmIQznTH0n745mku1l4xq1N
+         W+DRfuLqtIaM+4SSZA96/icF6VqKypcjJbRe7pEe6DluRxl4nFz35WQ0r6u6qgnyb+ZM
+         TWW/sNIMvXN2gqStPI8Cr/1LpN6CA9PWIfEB3EYHy5DTP/kVF3sBKRylLRrm0gtE3dx9
+         f0zA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=NqXzjmPYyKxRNJu+3EE3ctlFFdR9chxtKAJZd/jje28=;
+        b=vjPVtK02jB1mb2n9M14s9F605V+OJKFyL8Ps280u49e+9kuculdQ4KZ9BwnDA4szMa
+         BYEks794MI07RH2yB0VmH/SrdZbofhVyyMOSmepQIoxfVRvsE/43M915Y4tFoRMoyl12
+         +w/9XmtEiBoA4Mo68XbyD/k51y0/EtoWeN161MidBfvAH9F7LWnkRSH//Mfp5W6qg1s/
+         UEo4/WKbmiZL845Y6636EbkyZ7gYQRRmFT8FTN0uHhDNgRKOWJAqflrKmVRyCHoCGvys
+         MmAmicusc38rR57dBxOjYYbKRNIJt9igpRgW1ySYG1WTec8BUj5egiD5H01c6aBqTv+E
+         M8wg==
+X-Gm-Message-State: AJIora9zjhj0xL3fwd0KHHeAWPJiDlHDohlk5JvQ0pHo2w/f0Reu4sC0
+        VJQNaAREGn+Myg25E1nT5Glgow==
+X-Google-Smtp-Source: AGRyM1vt9yUrP6MoG5193YDPSXa0cl6x1FFMtkPhXDvjGRGTz4KSpoNBOFHZ2yK8hfpclXRzbZO0qA==
+X-Received: by 2002:a17:90b:1bc5:b0:1ee:9563:2fca with SMTP id oa5-20020a17090b1bc500b001ee95632fcamr46186864pjb.87.1657095538233;
+        Wed, 06 Jul 2022 01:18:58 -0700 (PDT)
+Received: from localhost ([122.171.18.80])
+        by smtp.gmail.com with ESMTPSA id k8-20020a170902c40800b0016bf2dc1724sm3158688plk.247.2022.07.06.01.18.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 06 Jul 2022 01:18:57 -0700 (PDT)
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     Viresh Kumar <viresh.kumar@linaro.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Kyungmin Park <kyungmin.park@samsung.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Qiang Yu <yuq825@gmail.com>, Rob Herring <robh@kernel.org>,
+        Tomeu Vizoso <tomeu.vizoso@collabora.com>,
+        Steven Price <steven.price@arm.com>,
+        Alyssa Rosenzweig <alyssa.rosenzweig@collabora.com>,
+        Nishanth Menon <nm@ti.com>, Stephen Boyd <sboyd@kernel.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>
+Cc:     linux-pm@vger.kernel.org,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        dri-devel@lists.freedesktop.org, lima@lists.freedesktop.org,
+        linux-tegra@vger.kernel.org, linux-mediatek@lists.infradead.org
+Subject: [PATCH V3.1 02/20] OPP: Make dev_pm_opp_set_regulators() accept NULL terminated list
+Date:   Wed,  6 Jul 2022 13:48:51 +0530
+Message-Id: <bcabb1a90a5158628ee1633c10f8886544723fb9.1657095331.git.viresh.kumar@linaro.org>
+X-Mailer: git-send-email 2.31.1.272.g89b43f80a514
+In-Reply-To: <9730e011004b7526e79c6f409f5147fb235b414a.1656935522.git.viresh.kumar@linaro.org>
+References: <9730e011004b7526e79c6f409f5147fb235b414a.1656935522.git.viresh.kumar@linaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: CrDlVV1nYjvMRfWgYvpb2dGx4YW7EOSL
-X-Proofpoint-ORIG-GUID: w0SkKzNZ_rFmb5tc2JT46Gy2kpuUtxxF
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
- definitions=2022-07-06_04,2022-06-28_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 clxscore=1011
- impostorscore=0 mlxlogscore=999 mlxscore=0 suspectscore=0 bulkscore=0
- lowpriorityscore=0 priorityscore=1501 malwarescore=0 spamscore=0
- phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2206140000 definitions=main-2207060030
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Alexander,
+Make dev_pm_opp_set_regulators() accept a NULL terminated list of names
+instead of making the callers keep the two parameters in sync, which
+creates an opportunity for bugs to get in.
 
-Alexander Gordeev <agordeev@linux.ibm.com> writes:
+Suggested-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
+---
+V3->V3.1:
+- Update panfrost_drv.c to include the NULL element.
 
-> Rework copy_oldmem_page() to allow multi-segment iterators.
-> Reuse existing iterate_iovec macro as is and only relevant
-> bits from __iterate_and_advance macro.
->
-> Fixes: 49b11524d648 ("s390/crash: add missing iterator advance in copy_oldmem_page())
-> Signed-off-by: Alexander Gordeev <agordeev@linux.ibm.com>
-> ---
->  arch/s390/kernel/crash_dump.c | 65 +++++++++++++++++++++++++++--------
->  1 file changed, 50 insertions(+), 15 deletions(-)
->
-> diff --git a/arch/s390/kernel/crash_dump.c b/arch/s390/kernel/crash_dump.c
-> index 28124d0fa1d5..ac873245d6f0 100644
-> --- a/arch/s390/kernel/crash_dump.c
-> +++ b/arch/s390/kernel/crash_dump.c
-> @@ -210,6 +210,52 @@ static int copy_oldmem_user(void __user *dst, unsigned long src, size_t count)
->  	return 0;
->  }
->  
-> +#define iterate_iovec(i, n, base, len, off, __p, STEP) {	\
-> +	size_t off = 0;						\
-> +	size_t skip = i->iov_offset;				\
-> +	do {							\
-> +		len = min(n, __p->iov_len - skip);		\
-> +		if (likely(len)) {				\
-> +			base = __p->iov_base + skip;		\
-> +			len -= (STEP);				\
-> +			off += len;				\
-> +			skip += len;				\
-> +			n -= len;				\
-> +			if (skip < __p->iov_len)		\
-> +				break;				\
-> +		}						\
-> +		__p++;						\
-> +		skip = 0;					\
-> +	} while (n);						\
-> +	i->iov_offset = skip;					\
-> +	n = off;						\
-> +}
-> +
-> +#define __iterate_and_advance(i, n, base, len, off, I, K) {	\
-> +	if (unlikely(i->count < n))				\
-> +		n = i->count;					\
-> +	if (likely(n)) {					\
-> +		if (likely(iter_is_iovec(i))) {			\
-> +			const struct iovec *iov = i->iov;	\
-> +			void __user *base;			\
-> +			size_t len;				\
-> +			iterate_iovec(i, n, base, len, off,	\
-> +						iov, (I))	\
-> +			i->nr_segs -= iov - i->iov;		\
-> +			i->iov = iov;				\
-> +		} else if (iov_iter_is_kvec(i)) {		\
-> +			const struct kvec *kvec = i->kvec;	\
-> +			void *base;				\
-> +			size_t len;				\
-> +			iterate_iovec(i, n, base, len, off,	\
-> +						kvec, (K))	\
-> +			i->nr_segs -= kvec - i->kvec;		\
-> +			i->kvec = kvec;				\
-> +		}						\
-> +		i->count -= n;					\
-> +	}							\
-> +}
-> +
->  /*
->   * Copy one page from "oldmem"
->   */
-> @@ -217,25 +263,14 @@ ssize_t copy_oldmem_page(struct iov_iter *iter, unsigned long pfn, size_t csize,
->  			 unsigned long offset)
->  {
->  	unsigned long src;
-> -	int rc;
->  
->  	if (!(iter_is_iovec(iter) || iov_iter_is_kvec(iter)))
->  		return -EINVAL;
-> -	/* Multi-segment iterators are not supported */
-> -	if (iter->nr_segs > 1)
-> -		return -EINVAL;
-> -	if (!csize)
-> -		return 0;
->  	src = pfn_to_phys(pfn) + offset;
-> -
-> -	/* XXX: pass the iov_iter down to a common function */
-> -	if (iter_is_iovec(iter))
-> -		rc = copy_oldmem_user(iter->iov->iov_base, src, csize);
-> -	else
-> -		rc = copy_oldmem_kernel(iter->kvec->iov_base, src, csize);
-> -	if (rc < 0)
-> -		return rc;
-> -	iov_iter_advance(iter, csize);
-> +	__iterate_and_advance(iter, csize, base, len, off,
-> +		({ copy_oldmem_user(base, src + off, len) < 0 ? csize : 0; }),
-> +		({ copy_oldmem_kernel(base, src + off, len) < 0 ? csize : 0; })
+ drivers/cpufreq/cpufreq-dt.c                |  9 ++++-----
+ drivers/cpufreq/ti-cpufreq.c                |  7 +++----
+ drivers/devfreq/exynos-bus.c                |  4 ++--
+ drivers/gpu/drm/lima/lima_devfreq.c         |  3 ++-
+ drivers/gpu/drm/panfrost/panfrost_devfreq.c |  3 +--
+ drivers/gpu/drm/panfrost/panfrost_drv.c     | 15 ++++++++++-----
+ drivers/opp/core.c                          | 18 ++++++++++++------
+ drivers/soc/tegra/pmc.c                     |  4 ++--
+ include/linux/pm_opp.h                      |  9 ++++-----
+ 9 files changed, 40 insertions(+), 32 deletions(-)
 
-Question
---------
-About return value of STEP in iterate_iovec().
-We return "csize" in case copy_oldmem_*() fails.
-If i'm not mistaken this could lead to an overflow in iterate_iovec():
+diff --git a/drivers/cpufreq/cpufreq-dt.c b/drivers/cpufreq/cpufreq-dt.c
+index 8fcaba541539..be0c19b3ffa5 100644
+--- a/drivers/cpufreq/cpufreq-dt.c
++++ b/drivers/cpufreq/cpufreq-dt.c
+@@ -193,7 +193,7 @@ static int dt_cpufreq_early_init(struct device *dev, int cpu)
+ 	struct private_data *priv;
+ 	struct device *cpu_dev;
+ 	bool fallback = false;
+-	const char *reg_name;
++	const char *reg_name[] = { NULL, NULL };
+ 	int ret;
+ 
+ 	/* Check if this CPU is already covered by some other policy */
+@@ -218,10 +218,9 @@ static int dt_cpufreq_early_init(struct device *dev, int cpu)
+ 	 * OPP layer will be taking care of regulators now, but it needs to know
+ 	 * the name of the regulator first.
+ 	 */
+-	reg_name = find_supply_name(cpu_dev);
+-	if (reg_name) {
+-		priv->opp_table = dev_pm_opp_set_regulators(cpu_dev, &reg_name,
+-							    1);
++	reg_name[0] = find_supply_name(cpu_dev);
++	if (reg_name[0]) {
++		priv->opp_table = dev_pm_opp_set_regulators(cpu_dev, reg_name);
+ 		if (IS_ERR(priv->opp_table)) {
+ 			ret = PTR_ERR(priv->opp_table);
+ 			if (ret != -EPROBE_DEFER)
+diff --git a/drivers/cpufreq/ti-cpufreq.c b/drivers/cpufreq/ti-cpufreq.c
+index 8f9fdd864391..560d67a6bef1 100644
+--- a/drivers/cpufreq/ti-cpufreq.c
++++ b/drivers/cpufreq/ti-cpufreq.c
+@@ -173,7 +173,7 @@ static struct ti_cpufreq_soc_data omap34xx_soc_data = {
+  *    seems to always read as 0).
+  */
+ 
+-static const char * const omap3_reg_names[] = {"cpu0", "vbb"};
++static const char * const omap3_reg_names[] = {"cpu0", "vbb", NULL};
+ 
+ static struct ti_cpufreq_soc_data omap36xx_soc_data = {
+ 	.reg_names = omap3_reg_names,
+@@ -326,7 +326,7 @@ static int ti_cpufreq_probe(struct platform_device *pdev)
+ 	const struct of_device_id *match;
+ 	struct opp_table *ti_opp_table;
+ 	struct ti_cpufreq_data *opp_data;
+-	const char * const default_reg_names[] = {"vdd", "vbb"};
++	const char * const default_reg_names[] = {"vdd", "vbb", NULL};
+ 	int ret;
+ 
+ 	match = dev_get_platdata(&pdev->dev);
+@@ -387,8 +387,7 @@ static int ti_cpufreq_probe(struct platform_device *pdev)
+ 		if (opp_data->soc_data->reg_names)
+ 			reg_names = opp_data->soc_data->reg_names;
+ 		ti_opp_table = dev_pm_opp_set_regulators(opp_data->cpu_dev,
+-							 reg_names,
+-							 ARRAY_SIZE(default_reg_names));
++							 reg_names);
+ 		if (IS_ERR(ti_opp_table)) {
+ 			dev_pm_opp_put_supported_hw(opp_data->opp_table);
+ 			ret =  PTR_ERR(ti_opp_table);
+diff --git a/drivers/devfreq/exynos-bus.c b/drivers/devfreq/exynos-bus.c
+index e689101abc93..541baff93ee8 100644
+--- a/drivers/devfreq/exynos-bus.c
++++ b/drivers/devfreq/exynos-bus.c
+@@ -180,10 +180,10 @@ static int exynos_bus_parent_parse_of(struct device_node *np,
+ {
+ 	struct device *dev = bus->dev;
+ 	struct opp_table *opp_table;
+-	const char *vdd = "vdd";
++	const char *supplies[] = { "vdd", NULL };
+ 	int i, ret, count, size;
+ 
+-	opp_table = dev_pm_opp_set_regulators(dev, &vdd, 1);
++	opp_table = dev_pm_opp_set_regulators(dev, supplies);
+ 	if (IS_ERR(opp_table)) {
+ 		ret = PTR_ERR(opp_table);
+ 		dev_err(dev, "failed to set regulators %d\n", ret);
+diff --git a/drivers/gpu/drm/lima/lima_devfreq.c b/drivers/gpu/drm/lima/lima_devfreq.c
+index 8989e215dfc9..dc83c5421125 100644
+--- a/drivers/gpu/drm/lima/lima_devfreq.c
++++ b/drivers/gpu/drm/lima/lima_devfreq.c
+@@ -111,6 +111,7 @@ int lima_devfreq_init(struct lima_device *ldev)
+ 	struct dev_pm_opp *opp;
+ 	unsigned long cur_freq;
+ 	int ret;
++	const char *regulator_names[] = { "mali", NULL };
+ 
+ 	if (!device_property_present(dev, "operating-points-v2"))
+ 		/* Optional, continue without devfreq */
+@@ -122,7 +123,7 @@ int lima_devfreq_init(struct lima_device *ldev)
+ 	if (ret)
+ 		return ret;
+ 
+-	ret = devm_pm_opp_set_regulators(dev, (const char *[]){ "mali" }, 1);
++	ret = devm_pm_opp_set_regulators(dev, regulator_names);
+ 	if (ret) {
+ 		/* Continue if the optional regulator is missing */
+ 		if (ret != -ENODEV)
+diff --git a/drivers/gpu/drm/panfrost/panfrost_devfreq.c b/drivers/gpu/drm/panfrost/panfrost_devfreq.c
+index 194af7f607a6..5110cd9b2425 100644
+--- a/drivers/gpu/drm/panfrost/panfrost_devfreq.c
++++ b/drivers/gpu/drm/panfrost/panfrost_devfreq.c
+@@ -101,8 +101,7 @@ int panfrost_devfreq_init(struct panfrost_device *pfdev)
+ 		return 0;
+ 	}
+ 
+-	ret = devm_pm_opp_set_regulators(dev, pfdev->comp->supply_names,
+-					 pfdev->comp->num_supplies);
++	ret = devm_pm_opp_set_regulators(dev, pfdev->comp->supply_names);
+ 	if (ret) {
+ 		/* Continue if the optional regulator is missing */
+ 		if (ret != -ENODEV) {
+diff --git a/drivers/gpu/drm/panfrost/panfrost_drv.c b/drivers/gpu/drm/panfrost/panfrost_drv.c
+index 7fcbc2a5b6cd..8a4bef65d38c 100644
+--- a/drivers/gpu/drm/panfrost/panfrost_drv.c
++++ b/drivers/gpu/drm/panfrost/panfrost_drv.c
+@@ -625,24 +625,29 @@ static int panfrost_remove(struct platform_device *pdev)
+ 	return 0;
+ }
+ 
+-static const char * const default_supplies[] = { "mali" };
++/*
++ * The OPP core wants the supply names to be NULL terminated, but we need the
++ * correct num_supplies value for regulator core. Hence, we NULL terminate here
++ * and then initialize num_supplies with ARRAY_SIZE - 1.
++ */
++static const char * const default_supplies[] = { "mali", NULL };
+ static const struct panfrost_compatible default_data = {
+-	.num_supplies = ARRAY_SIZE(default_supplies),
++	.num_supplies = ARRAY_SIZE(default_supplies) - 1,
+ 	.supply_names = default_supplies,
+ 	.num_pm_domains = 1, /* optional */
+ 	.pm_domain_names = NULL,
+ };
+ 
+ static const struct panfrost_compatible amlogic_data = {
+-	.num_supplies = ARRAY_SIZE(default_supplies),
++	.num_supplies = ARRAY_SIZE(default_supplies) - 1,
+ 	.supply_names = default_supplies,
+ 	.vendor_quirk = panfrost_gpu_amlogic_quirk,
+ };
+ 
+-static const char * const mediatek_mt8183_supplies[] = { "mali", "sram" };
++static const char * const mediatek_mt8183_supplies[] = { "mali", "sram", NULL };
+ static const char * const mediatek_mt8183_pm_domains[] = { "core0", "core1", "core2" };
+ static const struct panfrost_compatible mediatek_mt8183_data = {
+-	.num_supplies = ARRAY_SIZE(mediatek_mt8183_supplies),
++	.num_supplies = ARRAY_SIZE(mediatek_mt8183_supplies) - 1,
+ 	.supply_names = mediatek_mt8183_supplies,
+ 	.num_pm_domains = ARRAY_SIZE(mediatek_mt8183_pm_domains),
+ 	.pm_domain_names = mediatek_mt8183_pm_domains,
+diff --git a/drivers/opp/core.c b/drivers/opp/core.c
+index e166bfe5fc90..4e4593957ec5 100644
+--- a/drivers/opp/core.c
++++ b/drivers/opp/core.c
+@@ -2105,13 +2105,20 @@ EXPORT_SYMBOL_GPL(dev_pm_opp_put_prop_name);
+  * This must be called before any OPPs are initialized for the device.
+  */
+ struct opp_table *dev_pm_opp_set_regulators(struct device *dev,
+-					    const char * const names[],
+-					    unsigned int count)
++					    const char * const names[])
+ {
+ 	struct dev_pm_opp_supply *supplies;
++	const char * const *temp = names;
+ 	struct opp_table *opp_table;
+ 	struct regulator *reg;
+-	int ret, i;
++	int count = 0, ret, i;
++
++	/* Count number of regulators */
++	while (*temp++)
++		count++;
++
++	if (!count)
++		return ERR_PTR(-EINVAL);
+ 
+ 	opp_table = _add_opp_table(dev, false);
+ 	if (IS_ERR(opp_table))
+@@ -2236,12 +2243,11 @@ static void devm_pm_opp_regulators_release(void *data)
+  * Return: 0 on success and errorno otherwise.
+  */
+ int devm_pm_opp_set_regulators(struct device *dev,
+-			       const char * const names[],
+-			       unsigned int count)
++			       const char * const names[])
+ {
+ 	struct opp_table *opp_table;
+ 
+-	opp_table = dev_pm_opp_set_regulators(dev, names, count);
++	opp_table = dev_pm_opp_set_regulators(dev, names);
+ 	if (IS_ERR(opp_table))
+ 		return PTR_ERR(opp_table);
+ 
+diff --git a/drivers/soc/tegra/pmc.c b/drivers/soc/tegra/pmc.c
+index 5611d14d3ba2..6a4b8f7e7948 100644
+--- a/drivers/soc/tegra/pmc.c
++++ b/drivers/soc/tegra/pmc.c
+@@ -1384,7 +1384,7 @@ tegra_pmc_core_pd_opp_to_performance_state(struct generic_pm_domain *genpd,
+ static int tegra_pmc_core_pd_add(struct tegra_pmc *pmc, struct device_node *np)
+ {
+ 	struct generic_pm_domain *genpd;
+-	const char *rname = "core";
++	const char *rname[] = { "core", NULL};
+ 	int err;
+ 
+ 	genpd = devm_kzalloc(pmc->dev, sizeof(*genpd), GFP_KERNEL);
+@@ -1395,7 +1395,7 @@ static int tegra_pmc_core_pd_add(struct tegra_pmc *pmc, struct device_node *np)
+ 	genpd->set_performance_state = tegra_pmc_core_pd_set_performance_state;
+ 	genpd->opp_to_performance_state = tegra_pmc_core_pd_opp_to_performance_state;
+ 
+-	err = devm_pm_opp_set_regulators(pmc->dev, &rname, 1);
++	err = devm_pm_opp_set_regulators(pmc->dev, rname);
+ 	if (err)
+ 		return dev_err_probe(pmc->dev, err,
+ 				     "failed to set core OPP regulator\n");
+diff --git a/include/linux/pm_opp.h b/include/linux/pm_opp.h
+index 6708b4ec244d..4c490865d574 100644
+--- a/include/linux/pm_opp.h
++++ b/include/linux/pm_opp.h
+@@ -159,9 +159,9 @@ void dev_pm_opp_put_supported_hw(struct opp_table *opp_table);
+ int devm_pm_opp_set_supported_hw(struct device *dev, const u32 *versions, unsigned int count);
+ struct opp_table *dev_pm_opp_set_prop_name(struct device *dev, const char *name);
+ void dev_pm_opp_put_prop_name(struct opp_table *opp_table);
+-struct opp_table *dev_pm_opp_set_regulators(struct device *dev, const char * const names[], unsigned int count);
++struct opp_table *dev_pm_opp_set_regulators(struct device *dev, const char * const names[]);
+ void dev_pm_opp_put_regulators(struct opp_table *opp_table);
+-int devm_pm_opp_set_regulators(struct device *dev, const char * const names[], unsigned int count);
++int devm_pm_opp_set_regulators(struct device *dev, const char * const names[]);
+ struct opp_table *dev_pm_opp_set_clkname(struct device *dev, const char *name);
+ void dev_pm_opp_put_clkname(struct opp_table *opp_table);
+ int devm_pm_opp_set_clkname(struct device *dev, const char *name);
+@@ -379,7 +379,7 @@ static inline struct opp_table *dev_pm_opp_set_prop_name(struct device *dev, con
+ 
+ static inline void dev_pm_opp_put_prop_name(struct opp_table *opp_table) {}
+ 
+-static inline struct opp_table *dev_pm_opp_set_regulators(struct device *dev, const char * const names[], unsigned int count)
++static inline struct opp_table *dev_pm_opp_set_regulators(struct device *dev, const char * const names[])
+ {
+ 	return ERR_PTR(-EOPNOTSUPP);
+ }
+@@ -387,8 +387,7 @@ static inline struct opp_table *dev_pm_opp_set_regulators(struct device *dev, co
+ static inline void dev_pm_opp_put_regulators(struct opp_table *opp_table) {}
+ 
+ static inline int devm_pm_opp_set_regulators(struct device *dev,
+-					     const char * const names[],
+-					     unsigned int count)
++					     const char * const names[])
+ {
+ 	return -EOPNOTSUPP;
+ }
+-- 
+2.31.1.272.g89b43f80a514
 
-  len -= (STEP);
-
-Because len could be less than csize in case iovec consists of multiple
-segments, one of which is less than csize.
-
-Better to return len ?
-
-({ copy_oldmem_user(base, src + off, len) < 0 ? len : 0; })
-
-> +	)
->  	return csize;
->  }
-
-Another thing is that now we never report any errors in contrast to
-the version before. This is OK ?
-Maybe set an error flag while iterating and then when the iteration is
-done, check the flag and return an error ?
-
-
-
->  
-> -- 
-> 2.34.1
-
-
-Otherwise, looks good to me.
-Tested on LPAR and zVM , all our tela-kernel kdump tests in
-tests/dump/kdump work now.
-
-Reviewed-by: Alexander Egorenkov <egorenar@linux.ibm.com>
-Tested-by: Alexander Egorenkov <egorenar@linux.ibm.com>
-
-Regards
-Alex

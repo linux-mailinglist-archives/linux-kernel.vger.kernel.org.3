@@ -2,120 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B888C568F70
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 18:43:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C71E568F74
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 18:44:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233997AbiGFQn0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Jul 2022 12:43:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37114 "EHLO
+        id S233844AbiGFQne (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Jul 2022 12:43:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37420 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233911AbiGFQnX (ORCPT
+        with ESMTP id S234076AbiGFQn3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Jul 2022 12:43:23 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38957B49;
-        Wed,  6 Jul 2022 09:43:22 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C3A3861D79;
-        Wed,  6 Jul 2022 16:43:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 576F5C3411C;
-        Wed,  6 Jul 2022 16:43:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1657125801;
-        bh=uuvO6hwMB/05Fk/2j7qomQDw+oi4Q/WszQAc44DK4Rc=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=ZMiAS9h2OpJH8Irih8f56zubw7vxasOIr6wRvBgtX0iEpcYo7rxOWxMV5dNpScwL4
-         HvJqGmO43DmPKvnwiExhH7aZB0FC83MBNjCQmrTANlmtFWIiTScrJLPd2GufUwTQ3Z
-         HxrhZVkvZuDOKN1aRgL99zOxXgp3+CbpLegRe0I5rROQCkgBNZFcJabWiMjFUMJX1H
-         K/FJGnh/EQ2TQ4BxZ5vK4CYD+SdmMXrRVmz1mix5esPHFccRgbPPm71IZdexcZET7y
-         +5fHCqOdDftgZhtFtHJvWXVZOMT/1KxgW+wr4Gmuetq8/+4QDVUcPHIfETDhrvT+wB
-         SGARfITZQuGgg==
-Date:   Wed, 6 Jul 2022 18:43:01 +0200
-From:   Marek =?UTF-8?B?QmVow7pu?= <kabel@kernel.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Pali =?UTF-8?B?Um9ow6Fy?= <pali@kernel.org>,
-        Pavel Machek <pavel@ucw.cz>, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-leds@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 1/2] [RFT] dt-bindings: leds: Add
- cznic,turris1x-leds.yaml binding
-Message-ID: <20220706184301.3f42a692@thinkpad>
-In-Reply-To: <25b43586-eeb3-4b7b-7362-2d599aa89cf0@linaro.org>
-References: <20220705000448.14337-1-pali@kernel.org>
-        <20220705155929.25565-1-pali@kernel.org>
-        <20220706131507.353f0bed@thinkpad>
-        <20220706111912.hz2mx4dc35lgq6l5@pali>
-        <20220706172732.6228d180@thinkpad>
-        <25b43586-eeb3-4b7b-7362-2d599aa89cf0@linaro.org>
-X-Mailer: Claws Mail 3.19.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        Wed, 6 Jul 2022 12:43:29 -0400
+Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A3431582D;
+        Wed,  6 Jul 2022 09:43:28 -0700 (PDT)
+Received: by mail-pj1-x1030.google.com with SMTP id o31-20020a17090a0a2200b001ef7bd037bbso11004071pjo.0;
+        Wed, 06 Jul 2022 09:43:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=oraZyyvVir1700yNQVzrP9Zwaxp7xrxcJj7xCrbOwKY=;
+        b=EfJh9o7U1fzaM7uW6JPnPBco1gx5afL8OEXdBvSEwnnQzDqzqN65FghE6rrrlQ2L3+
+         p+Dpmz5ngc/Ntn6shHZm/lOtJEfedW0os2igAWzQR37X8hcZ2mpJBjSIEM3Su+YB8ggR
+         NDR6nWv0pqQxrt/gpcDp1CBhiKkQBpST2EnW8i2hECHMUd4yb0oekQ+A+59+p5DdB2M9
+         HRQyC99nu2wVuQp0CuL9qk4b4mz7oaFl42gUL2z5dA/gG7QCBZAdFPVfviLOe3u5zMes
+         BeLQ9rQRBPQIIhcx2FvpZHMjFgb8pW+fn5nHqQaVW52Ua25EzRK5osDhv2Z9NxlJUe5s
+         3hpQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to;
+        bh=oraZyyvVir1700yNQVzrP9Zwaxp7xrxcJj7xCrbOwKY=;
+        b=MEEBikBkpo/f5XHbxDtHFaap+Za40g3nU+o+ICTzPeQiC3DFo07YtBipR9Uhr5jGBL
+         G9zilPRBoq9OFzwfC5ZF1ll3WV/fndl6mcwUKT6tIhjA6tuAYl8Ki95JTXd8qxbHPBM8
+         Ojo8thCgohFB4PdgsULVKGvz3GJH188mm5NCA1pEAiED1DZemwx4b29fPKcg5AV4RXjn
+         As/wr2dbYncCX8p/mVR4pvvumlr4IHnIQnpsJ3CbkBM2U6pkxTyAz1/IXNK3DNGLI2Dp
+         5hJStcwA+YQOfg2vN4bKXLD8H9i0PbRvQ5OWFSX1G6fVNpeKeCsnlHMY1a0q4hCLL1jr
+         rYZA==
+X-Gm-Message-State: AJIora8SD1bV3cTJa0mBHxxsUkhM7tWJ4Vrc5kxoj3nBoq4UL4sG7mn7
+        e2IZjRqsadF/YWbtPNq9IBU=
+X-Google-Smtp-Source: AGRyM1skinJBZte4Q+yq3FR+y6tbCuPsShkOzB4+jvtzpcNoq/exAfYvBFN41bB15wIBO1q8dnwGig==
+X-Received: by 2002:a17:90b:38c4:b0:1ef:84e0:90f5 with SMTP id nn4-20020a17090b38c400b001ef84e090f5mr23618932pjb.149.1657125808122;
+        Wed, 06 Jul 2022 09:43:28 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id x67-20020a628646000000b005252ab25363sm25121974pfd.206.2022.07.06.09.43.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 06 Jul 2022 09:43:26 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Wed, 6 Jul 2022 09:43:25 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Jerome Brunet <jbrunet@baylibre.com>
+Cc:     Neil Armstrong <narmstrong@baylibre.com>,
+        Philippe Boos <pboos@baylibre.com>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        linux-watchdog@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v1] watchdog: meson: keep running if already active
+Message-ID: <20220706164325.GA776177@roeck-us.net>
+References: <20220705142444.17063-1-pboos@baylibre.com>
+ <f756b2d5-56e7-6e52-2739-eca4bb33508b@baylibre.com>
+ <1jmtdnwd7y.fsf@starbuckisacylon.baylibre.com>
+ <20220706124139.GB492220@roeck-us.net>
+ <1j8rp6z720.fsf@starbuckisacylon.baylibre.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1j8rp6z720.fsf@starbuckisacylon.baylibre.com>
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 6 Jul 2022 17:36:43 +0200
-Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org> wrote:
+On Wed, Jul 06, 2022 at 03:24:27PM +0200, Jerome Brunet wrote:
+> 
+[ ... ]
 
-> On 06/07/2022 17:27, Marek Beh=C3=BAn wrote:
-> > On Wed, 6 Jul 2022 13:19:12 +0200
-> > Pali Roh=C3=A1r <pali@kernel.org> wrote:
-> >  =20
-> >> On Wednesday 06 July 2022 13:15:07 Marek Beh=C3=BAn wrote: =20
-> >>> On Tue,  5 Jul 2022 17:59:28 +0200
-> >>> Pali Roh=C3=A1r <pali@kernel.org> wrote:
-> >>>    =20
-> >>>> +examples:
-> >>>> +  - |
-> >>>> +    #include <dt-bindings/leds/common.h>
-> >>>> +
-> >>>> +    cpld@3,0 {   =20
-> >>>
-> >>> The generic node name should be just "bus". That it is a CPLD
-> >>> implementation should come from compatible string.   =20
-> >>
-> >> Sorry, I do not understand why "bus". Why other memory chips are named
-> >> e.g. "nand" or "nor" and not "bus" too? =20
-> >=20
-> > As far as I understand this is because that is the preferred name for
-> > busses and this is a bus, since there is also the simple-bus compatible.
-> >  =20
-> >> By this logic should not be _every_ node called just "bus"? Hm... and=
-=20
-> >> are names needed at all then? =20
-> >=20
-> > :-)
-> >=20
-> > The schema
-> >   https://github.com/devicetree-org/dt-schema/blob/main/dtschema/schema=
-s/simple-bus.yaml
-> > allows for different names (soc|axi|ahb|*-bus) to avoid warnings on
-> > existing old dts files.
-> >=20
-> > The preferred way is to not have the implementation in nodename,
-> > similar to how we use 'switch' instead of 'mv88e6xxx', or
-> > 'ethernet-phy' instead of 'mv88e151x', or 'led-controller', ... =20
->=20
-> Thanks Marek for detailed explanation.
-> The cases above rather trigger my comments and this one here, after
-> Pali's explanation, do not fit them. pld is a generic class of a device,
-> so it is okay here. cpld probably as well (although one could argue that
-> it is a subset of pld, so the generic name is pld, but then one would
-> say fpga also should be called pld). For me it does not have to be bus,
-> just don't want mv88e6xxx or any other vendor/model names. Therefore
-> cpld is fine.
+> 
+> No worries. That being said, I have gone over 
+> 
+> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/Documentation/process/submitting-patches.rst
+> 
+> It just says that Reviewed-by sent on the list should be collected for
+> the following version. Nothing against adding the tag if the job has
+> been done, on or off list. Same goes for Suggested-by, Tested-by, etc.
+> 
+> If I missed something or it is non-written rule, please let me know.
 
-What about cpld-bus? It is used as a bus (simple-bus compatible) and
-would work with the *-bus pattern in dt-schema.
+Your interpretation is quite a strict one. I don't think there is a rule
+that states that tags not sent to a list must not be collected.
 
-Marek
+Anyway, I would have called it common sense, especially since it does
+happen that someone accidentally hits "reply" instead of "reply all"
+and replies end up not being sent to the list. If you expect me to dig
+through e-mail headers to determine if you meant your tags to be published
+or not, sorry, that won't happen. Do not send me e-mails with any tags
+unless you accept that they may be published.
+
+Guenter

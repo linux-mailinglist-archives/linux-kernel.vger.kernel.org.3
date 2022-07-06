@@ -2,178 +2,166 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 888BB569135
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 19:55:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E01D056913A
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 19:57:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234253AbiGFRzZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Jul 2022 13:55:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42786 "EHLO
+        id S234194AbiGFR5Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Jul 2022 13:57:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44038 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232736AbiGFRzX (ORCPT
+        with ESMTP id S233240AbiGFR5M (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Jul 2022 13:55:23 -0400
-Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2084.outbound.protection.outlook.com [40.107.237.84])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82C4C237DF;
-        Wed,  6 Jul 2022 10:55:22 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=TaWtvd19aulZbPhwD9qcSquW7kMVXuXPvZRmKnKrxGhMDEGeGwOocL3jfUAD3J3tkx6EYYJFODcfoneqM6qx+0PFntX6lR1X9660C8vrrBdXIZNCYIPNO3iWoe6JnB2SJZV4IqTfJ0YLFdFuP+3iUt1BErRutsurdc312BWjhfp4yqGuJwonffS47l98BWeQPiz1c2B9qSzVlz54ef9pYx5MuJvUB/N8XsTIr8z/3l0LnQQMbz/GmiJ1Z1CoLLtrrgQY/vwfS5nuVmRYsmHH9g7HU2vEKKqOMYpLgEEocmkX30t2CaLn0PXHvzGROcAiADn6wkclXtrnHZzaPoGtCA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=h5cTevNhm/cTglUKGGCWZ5XUBJxNK4qv5jWcrX81SHQ=;
- b=LXF7RJfrX7HFnGQo13bBInBO3twjndpmwfjIkNUi4YbaRgQMP3rbLLail4IZlzZBTUHUC/6kPjWFGUHJZQsdhR+beFxddE+C8eV6UZ0rws4jv6laJ6IOw03BiR5fFN6T6yeiUeS+CWkVmrBhupig4wKQOpUdw/N/MCSPVCGF5KK4YU811uvHd9ZGmgSSguMHu3VJbykkCuNZvzomIUd8UGmjtVM1I1YVbMxB5YnHsihZHCFqv3kZLWXmpDUI3uamFWVpqG+6i1ctV9+R3wRL6Jc+TUz8aT67CjcWW/yO2HYdoClUbrEcDn8WSS7DZd5smcSxypfROvwl+uFqw41bdw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=h5cTevNhm/cTglUKGGCWZ5XUBJxNK4qv5jWcrX81SHQ=;
- b=hPG8rLDpi3E4m8QvjphSmjaIgtvwck3AIQdVpm8kntfgRZfw+DF3suSRBGEY28gXEetqI9wX28H5Xeonlp1IURyDNppstWFJ0ikcMcQVck9ftPpcbJxJ8Ss3kN3a5Wl8gNsfw5KlwhMjlOEqt3s0TkZs2dhOF7DgNdF1blWRbSrjcl5PAAsaednETrrwXFVkmKv2gbuE6om5UoeTz1Rv1ZjBdFM2HOo8uqPoc1KIT8l8F0c3wirPKVNlhosm0Eig5lnIgJVCvrb6fG1BdE18XSf94GPh6wKMKsmbGwODo0xqrrVx1LrxhHfD4SEa2/NUKUeLCyPyh9q9uYAq2gcthw==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from MN2PR12MB4192.namprd12.prod.outlook.com (2603:10b6:208:1d5::15)
- by MN0PR12MB6296.namprd12.prod.outlook.com (2603:10b6:208:3d3::9) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5395.20; Wed, 6 Jul
- 2022 17:55:20 +0000
-Received: from MN2PR12MB4192.namprd12.prod.outlook.com
- ([fe80::ac35:7c4b:3282:abfb]) by MN2PR12MB4192.namprd12.prod.outlook.com
- ([fe80::ac35:7c4b:3282:abfb%3]) with mapi id 15.20.5395.021; Wed, 6 Jul 2022
- 17:55:20 +0000
-Date:   Wed, 6 Jul 2022 14:55:19 -0300
-From:   Jason Gunthorpe <jgg@nvidia.com>
-To:     Nicolin Chen <nicolinc@nvidia.com>
-Cc:     kwankhede@nvidia.com, corbet@lwn.net, hca@linux.ibm.com,
-        gor@linux.ibm.com, agordeev@linux.ibm.com,
-        borntraeger@linux.ibm.com, svens@linux.ibm.com,
-        zhenyuw@linux.intel.com, zhi.a.wang@intel.com,
-        jani.nikula@linux.intel.com, joonas.lahtinen@linux.intel.com,
-        rodrigo.vivi@intel.com, tvrtko.ursulin@linux.intel.com,
-        airlied@linux.ie, daniel@ffwll.ch, farman@linux.ibm.com,
-        mjrosato@linux.ibm.com, pasic@linux.ibm.com, vneethv@linux.ibm.com,
-        oberpar@linux.ibm.com, freude@linux.ibm.com,
-        akrowiak@linux.ibm.com, jjherne@linux.ibm.com,
-        alex.williamson@redhat.com, cohuck@redhat.com,
-        kevin.tian@intel.com, hch@infradead.org, jchrist@linux.ibm.com,
-        kvm@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-s390@vger.kernel.org,
-        intel-gvt-dev@lists.freedesktop.org,
-        intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org
-Subject: Re: [RFT][PATCH v2 5/9] vfio/ap: Remove redundant pfn
-Message-ID: <20220706175519.GM693670@nvidia.com>
-References: <20220706062759.24946-1-nicolinc@nvidia.com>
- <20220706062759.24946-6-nicolinc@nvidia.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220706062759.24946-6-nicolinc@nvidia.com>
-X-ClientProxiedBy: MN2PR19CA0035.namprd19.prod.outlook.com
- (2603:10b6:208:178::48) To MN2PR12MB4192.namprd12.prod.outlook.com
- (2603:10b6:208:1d5::15)
+        Wed, 6 Jul 2022 13:57:12 -0400
+Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF8EC27B1D
+        for <linux-kernel@vger.kernel.org>; Wed,  6 Jul 2022 10:57:08 -0700 (PDT)
+Received: by mail-lf1-x12a.google.com with SMTP id i18so27164897lfu.8
+        for <linux-kernel@vger.kernel.org>; Wed, 06 Jul 2022 10:57:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=KyeJu7Pv1QH2NAw8ZXO0O0Q3YavVpXrf7zh8GRdLwvk=;
+        b=kXMlyHPleiim0LxLGGugSxP4isDfWv/bnhuzecQaIHiPxuztzyxy/S2K3FmB64xlhR
+         owXS413HeCskcDKsN4XuwJUjtSG2g5kYyT3UyC2va68oonPJFTAF55058q3HxKwRyEKI
+         OlloJpAFrZ24gdufjItc1pBh2vOjokbhLd4xK2wtDUUPfFWTJOjDq/cLRgF1doksrrM/
+         /wMWbF1RrzMiq+1qEq8yiESVH5MFYMLpgVjvRqBuszC/TuqlGeoOzZoCTpSE4lE+yX2v
+         cSwXP+UyBG58pGVIkloVV8B9WOvLkOYIOdU4kC7AGSWvnZOOxpgrav2WNVy59DAbwhlZ
+         3Uqw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=KyeJu7Pv1QH2NAw8ZXO0O0Q3YavVpXrf7zh8GRdLwvk=;
+        b=6DqvmtPd+b6omeK41P2BBPCJu3cAKso1KzAYFclYGNTJ5MWyJE/RrLttlihF2KD8f1
+         chnybqQo6Xvo850krMH1NiAaJJyBf4VcuyMMXaRYa0uMBZXO9hdWQadlbTr6VXViiqya
+         g9syCcCTfn3qRNeNqNgLmjqOZ8ToDj2j/Ig1VNGI0DCLbCV48uo1V44fuU4Lzf+2TlZ8
+         rGLwBlMGa6ozMPCYrQ/nF+lAcq8wVHyyYKlLRZMWjR/MMMiEDy70Tm1wfctJt6wGy0Ed
+         +KAHo80IkCIWYt6S4Eo579aPbW8sqE6BrMhlafH+7DXOMtpm1jrH2OKLoqmAk9iF70fJ
+         18+Q==
+X-Gm-Message-State: AJIora/p9YLljg4bnv5NDt6mt1rr1SKey96nc6rnXu2bF3wBumXV+2dj
+        ucf+wcg43Rhl2PCi3lywlzza2Q==
+X-Google-Smtp-Source: AGRyM1vmzrDA/Ula763E/UE8BewNmnYF1s0LMrcmAblE2Z+RDqVJTDgMgsBwplsf/zTfww3H3eqciA==
+X-Received: by 2002:ac2:53a8:0:b0:486:777f:a1b6 with SMTP id j8-20020ac253a8000000b00486777fa1b6mr2653233lfh.298.1657130227110;
+        Wed, 06 Jul 2022 10:57:07 -0700 (PDT)
+Received: from [192.168.1.211] ([37.153.55.125])
+        by smtp.gmail.com with ESMTPSA id p7-20020a05651238c700b0047f66294ff4sm6355064lft.151.2022.07.06.10.57.06
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 06 Jul 2022 10:57:06 -0700 (PDT)
+Message-ID: <c6b64751-fd37-09d4-9b31-a4aa112c51ef@linaro.org>
+Date:   Wed, 6 Jul 2022 20:57:06 +0300
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 97333205-4dac-4854-c829-08da5f78b13e
-X-MS-TrafficTypeDiagnostic: MN0PR12MB6296:EE_
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: QNFGHl6/RhePSPbBFS+Db5oSXnbssQ7wLudWtQTTP6Ksz+Xt00WSheQ4PsI+kARzx8bq+Hazfxuys/tkPg4FBTV+WZ5v6dGTW/CjzxweIk3+bHY5ATh+xo22H8NVKOOf7xSLnA9GsE4LJSWVHqgX7sy4Mc/XMPT5+xBavMez9gDIg7lNVdQ0ew3ZvVkqbhbzuNbnfMeO0qWoHptiLi9kmNxuNogXoVEdG1NZQc5maQrurKJeDsk9wYEOqLyeSy3wY1jZ+N7CztpC/AI6AIM/KqePaaRlXzS0QAN32lVOS8h+b1YhPHzAJIcPVFMAODy9zD1UCYfSjauuWkdATI/qLFnkKSWRYA7Sv17ugGpx0MKVIZgexRjNXatvmcqlBou5B4SdTYynXnldz2L3cL7UbP6+SeLrA9xVNSpjZgsCe8a4jzUqZ5diXjXUB8ZXHti3zmGVh63Xd1A3gTpbim1RsEsej26QaSHEvSgYinGmxonIrOthC4RCr1moAwufKhr+9H9bZfV57PoH9aK1kQzMhxmXdx2JN00o1H0gVKVbFawdWh8aMQfl0hoSDB1LM6Sqi2tZY1kY7yRny3hdrFSZu6DCt4UhSyien3DPw+0FP5I2B10k+AazDNZcffAMioNPsK6uGw+i9YO4SJrz1wha/3YsWuzoF+YXEKuQ7Cw2ps34iTYW6PGt/BDnzJWJWcbrO/f0vHXRD4nY3a1ZKFthRhHj3qsox+kqIkB4xDU8+WriiYhQcNTQDemBKJEPnaKpo+D90RKVuoex1dPGSwKfD2M0lXR3OX9czGXaXv+ZkcoZ6kD9oN03aOfxVoWOM2qB
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN2PR12MB4192.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(346002)(136003)(396003)(376002)(366004)(39860400002)(478600001)(5660300002)(6862004)(7416002)(8936002)(316002)(66556008)(37006003)(7406005)(8676002)(6636002)(4326008)(6486002)(66946007)(66476007)(33656002)(86362001)(83380400001)(2616005)(186003)(1076003)(26005)(6512007)(38100700002)(6506007)(36756003)(2906002)(41300700001)(27376004);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?kZDq6NxBcCZ/wRPySc8Wv+INmVWafff6iAxwgpHnuDqfh7i9uyZ7Z2Pi44ZW?=
- =?us-ascii?Q?Ldv5lxqRpVa3nDc2yK3QUfVS7OxQ99SrU/gnYkZvzFPhVjKtI8P55K1dcaxv?=
- =?us-ascii?Q?V68l+HCQftGTdidaph6FNEDiuYXzEEUq8fyKzmY83faqqTpmAu3lLLdhLYTs?=
- =?us-ascii?Q?m0G1Csc6F4qMuFmiG+9kyr059tv/IwZ4oSAvjKvDgNf8/V3z+Ca4Y31AqK9t?=
- =?us-ascii?Q?dmJVQKKBSEAGGcu+HKhIh4HNiip/T0lnwlEp6jGpA8tLFqgF5RYwC1M8PMSO?=
- =?us-ascii?Q?BHC/fG50VN4r2awKtD5gvjxvXalwagkXNjPvfFcTQqmwz07OaWwMH/uZjZQe?=
- =?us-ascii?Q?I7oUUOqWGxwBYbex404e02YaumtORD5CCYlgZrg4wn8JO9XexcSIoef8f0mH?=
- =?us-ascii?Q?TfeDuqgBrVqXNMoeisWGr4XQvPMHz2OkjIv57bt19OISL6b4HSUKaIK0LRGU?=
- =?us-ascii?Q?nIcBA8MO18dikSh/Ow2GCHmsW6mjFn7/QQMwFVty2A6E53jX6eXvYy/zUHk4?=
- =?us-ascii?Q?wPBrco0OgkANybOGEUUNFqQgZCrDj+SHblYQ5Foi+jxRpdzW6PmA/qRouxWC?=
- =?us-ascii?Q?0uDyvw+dSKkM0JZq64qE4N38c6sQiLwCMvmUwk9iKT61iBDk7juxQXVmRh5j?=
- =?us-ascii?Q?TSxwbnOH7qS/dhTet2bXpHeACilKlYBotkurOgEodk831owwbv+LhkOT0GUy?=
- =?us-ascii?Q?eQogBeszuhWi+ZX96vCpjqkpsFUO7mefw5WaCAMOcZoeuKaqZLRXYC8kwzbs?=
- =?us-ascii?Q?qOqyWkURcD6zVprAGrh3SnoB31DvuOv+kXsW3tOvwplJjrNsItilfTF6oBQz?=
- =?us-ascii?Q?6mkW4YREpl2ZFVMHtX4wxgcAkc20AfZMK2HeOjmBsq/F1cNaS6hfNF9OeLSe?=
- =?us-ascii?Q?6PvXX2pE9sWrERhwxBR9+PTWvZOVXgKE21muIGv8ut7zRThSo8OCPRX+JL7u?=
- =?us-ascii?Q?1ToyzyfHHuCfUJ/VHpqAiP8XdPSlE7V73v7A+fpAee2MRas7NN/ll8DQN9ad?=
- =?us-ascii?Q?2B6cJdF5347XVA+u2TB4+8nhqhetKHEMlVMX2n4B/AlpR+wL4wJRm1GngadH?=
- =?us-ascii?Q?JvaLI4WvTjgLex7QUbMpvON9jB+brAlJk++FfKKc242LWSz+if8Ed6rq0vzQ?=
- =?us-ascii?Q?ffqYhir3sHhJvRR4YaGZWoDJCzo7nfPDTfBk2CtlZAuyddiBlZUwf656wgt1?=
- =?us-ascii?Q?HqbfrTSIdXsvn7e1vFA9j2CHqdvtcXKV/MRipy78vMjRxjy8c2S2eVrRGygt?=
- =?us-ascii?Q?NJgkLrxsFNmnmIwOIFPHSfbHIIiseft8/wEhzBoajN2VhXPSZMycng/nwPzP?=
- =?us-ascii?Q?voPNTVbAFoonYuO7aKInEMPicNnZoxGlKBoDbNUeLb/OA0p7IgINhrK7IYZh?=
- =?us-ascii?Q?reeo3Vz08qrOiEgTcqOWwf2bX3TvKOiWkgMEtA9ooPk1fi+oaE70Wyr4UUrd?=
- =?us-ascii?Q?H57CQG2mzWJTfYDbCsu3pXMUpWjdYty3eTC/0JCHtgm40x63jsvMTTFjpjXl?=
- =?us-ascii?Q?KR5/7EIxK2+R+W73xjrpykVKbcTUA0htw324/JcVNs9rr9kSeBzobSpWS+Fl?=
- =?us-ascii?Q?BaxJc6kKj0Kald9P2n+jjI03Wwac3JRTm+IpMoja?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 97333205-4dac-4854-c829-08da5f78b13e
-X-MS-Exchange-CrossTenant-AuthSource: MN2PR12MB4192.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Jul 2022 17:55:20.2304
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: aLqRGVOde5F/Dg2d+amEbiFZzO+RP4FcOHOMTF4nRIrIGze4Mez2jgMh0+rGKMnj
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN0PR12MB6296
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH v3] drm/msm/dp: make eDP panel as the first connected
+ connector
+Content-Language: en-GB
+To:     Kuogee Hsieh <quic_khsieh@quicinc.com>, robdclark@gmail.com,
+        sean@poorly.run, swboyd@chromium.org, dianders@chromium.org,
+        vkoul@kernel.org, daniel@ffwll.ch, airlied@linux.ie,
+        agross@kernel.org, bjorn.andersson@linaro.org
+Cc:     quic_abhinavk@quicinc.com, quic_aravindh@quicinc.com,
+        quic_sbillaka@quicinc.com, freedreno@lists.freedesktop.org,
+        dri-devel@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <1657128246-15929-1-git-send-email-quic_khsieh@quicinc.com>
+ <86ee9636-8827-7bad-6bd9-22191b2d293c@linaro.org>
+ <949ae061-8191-2497-af56-1df74432272d@quicinc.com>
+ <b85a7423-44ec-1f58-7465-e5322bc32cd3@linaro.org>
+ <cdbfbad1-83a3-b15d-3000-eec425ae140c@quicinc.com>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+In-Reply-To: <cdbfbad1-83a3-b15d-3000-eec425ae140c@quicinc.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jul 05, 2022 at 11:27:55PM -0700, Nicolin Chen wrote:
-> The vfio_ap_ops code maintains both nib address and its PFN, which
-> is redundant, merely because vfio_pin/unpin_pages API wanted pfn.
-> Since vfio_pin/unpin_pages() now accept "iova", remove duplicated
-> pfn code in their callers too.
+On 06/07/2022 20:54, Kuogee Hsieh wrote:
+> 
+> On 7/6/2022 10:41 AM, Dmitry Baryshkov wrote:
+>> On 06/07/2022 20:38, Kuogee Hsieh wrote:
+>>>
+>>> On 7/6/2022 10:25 AM, Dmitry Baryshkov wrote:
+>>>> On 06/07/2022 20:24, Kuogee Hsieh wrote:
+>>>>> Some userspace presumes that the first connected connector is the main
+>>>>> display, where it's supposed to display e.g. the login screen. For
+>>>>> laptops, this should be the main panel.
+>>>>>
+>>>>> This patch call drm_helper_move_panel_connectors_to_head() after
+>>>>> drm_bridge_connector_init() to make sure eDP stay at head of
+>>>>> connected connector list. This fixes unexpected corruption happen
+>>>>> at eDP panel if eDP is not placed at head of connected connector
+>>>>> list.
+>>>>>
+>>>>> Changes in v2:
+>>>>> -- move drm_helper_move_panel_connectors_to_head() to
+>>>>>         dpu_kms_drm_obj_init()
+>>>>>
+>>>>> Signed-off-by: Kuogee Hsieh <quic_khsieh@quicinc.com>
+>>>>> ---
+>>>>>   drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c | 2 ++
+>>>>>   1 file changed, 2 insertions(+)
+>>>>>
+>>>>> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c 
+>>>>> b/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c
+>>>>> index 2b9d931..50ff666 100644
+>>>>> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c
+>>>>> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c
+>>>>> @@ -763,6 +763,8 @@ static int _dpu_kms_drm_obj_init(struct dpu_kms 
+>>>>> *dpu_kms)
+>>>>>       if (ret)
+>>>>>           return ret;
+>>>>>   +    drm_helper_move_panel_connectors_to_head(dev);
+>>>>
+>>>> This should be in msm_drv.c unless you have a strong reason to have 
+>>>> it here.
+>>> Can you please  provide more info why should be in msm_drv.c?
+>>
+>> Let me quote my message from v1 review:
+>>
+>> Please move this call to the msm_drm_init(). Calling this function 
+>> somewhere after the ->kms_init() would make sure that all panel 
+>> connectors are close to the top of the list, whichever MDP/DPU driver 
+>> is used and whichever actual interface is bound to this panel.
+>>
+> Below are the call flow in timing order, ->kms_init does not create 
+> connectors/interfaces, hw_init does that.
+> 
+> 1) ->kms_init
+> 
+> 2) ->hw_init -> dpu_kms_hw_init --> _dpu_kms_drm_obj_init()  --> 
+> _dpu_kms_setup_displays()--> msm_dp_modeset_init() --> creator 
+> connectors/interfaces
+> 
+> 3) drm_helper_move_panel_connectors_to_head() <== add here??
 
-I would describe this as renaming saved_pfn to saved_iova
+Yes.
 
->   *
->   * @vcpu: the object representing the vcpu executing the PQAP(AQIC) instruction.
->   * @nib: the location for storing the nib address.
-> - * @g_pfn: the location for storing the page frame number of the page containing
-> - *	   the nib.
->   *
->   * When the PQAP(AQIC) instruction is executed, general register 2 contains the
->   * address of the notification indicator byte (nib) used for IRQ notification.
-> - * This function parses the nib from gr2 and calculates the page frame
-> - * number for the guest of the page containing the nib. The values are
-> - * stored in @nib and @g_pfn respectively.
-> - *
-> - * The g_pfn of the nib is then validated to ensure the nib address is valid.
-> + * This function parses and validate the nib from gr2.
->   *
->   * Return: returns zero if the nib address is a valid; otherwise, returns
->   *	   -EINVAL.
->   */
-> -static int vfio_ap_validate_nib(struct kvm_vcpu *vcpu, unsigned long *nib,
-> -				unsigned long *g_pfn)
-> +static int vfio_ap_validate_nib(struct kvm_vcpu *vcpu, dma_addr_t *nib)
->  {
->  	*nib = vcpu->run->s.regs.gprs[2];
-> -	*g_pfn = *nib >> PAGE_SHIFT;
->  
-> -	if (kvm_is_error_hva(gfn_to_hva(vcpu->kvm, *g_pfn)))
-> +	if (kvm_is_error_hva(gfn_to_hva(vcpu->kvm, *nib >> PAGE_SHIFT)))
->  		return -EINVAL;
+> 
+>>>> _dpu_kms_drm_obj_init() create and initialize drm obj one by one and 
+>>>> _dpu_kms_setup_displays() had created system wide 
+>>>> connectors/interfaces .
+>>>
+>>> After that should be fine to move edp to head of connector list.
+>>>
+>>>>> +
+>>>>>       num_encoders = 0;
+>>>>>       drm_for_each_encoder(encoder, dev)
+>>>>>           num_encoders++;
+>>>>
+>>>>
+>>
+>>
 
-This existing code is fishy. nib is either an IOVA passed to
-vfio_pin_pages() or a GFN passed to gfn_to_hva(). These are not the
-same thing and are not interchangable - writing code like this assumes
-that the guest is running with iommu=pt or no iommu.
 
-Someone should look at it..
-
-Otherwise it looks OK
-
-Reviewed-by: Jason Gunthorpe <jgg@nvidia.com>
-
-Jason
+-- 
+With best wishes
+Dmitry

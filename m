@@ -2,155 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 897A55692C8
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 21:43:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2BEF55692CA
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 21:45:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233058AbiGFTn1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Jul 2022 15:43:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37312 "EHLO
+        id S233270AbiGFTox (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Jul 2022 15:44:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38228 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232584AbiGFTnZ (ORCPT
+        with ESMTP id S232014AbiGFTow (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Jul 2022 15:43:25 -0400
-Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 790442C5
-        for <linux-kernel@vger.kernel.org>; Wed,  6 Jul 2022 12:43:22 -0700 (PDT)
-Received: by mail-ej1-x634.google.com with SMTP id o25so28848783ejm.3
-        for <linux-kernel@vger.kernel.org>; Wed, 06 Jul 2022 12:43:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=uQRsnwv9u5IuL08Zu0b0BsRI6BGP8zbhAD30ZwGOKSY=;
-        b=mc2otIGuBDLviocnQmzsnPStf1y6s1B8oLQEpaEnJtA0+MhjEcCuE30cMfGGAr7rSh
-         3Dr+s6Pq80xvdUdJzHes1T7/9AA0thSKQDzO8jdRKCx/jKghZOSQ9ETfXVLnGPdTwil6
-         YDPfTfKxnb2LaQl8RkQ3y+tiJAmuG0fB0CeL8X+/DYZUN3JT+7gdh67sPEmSki5WhIoF
-         WdvK6x7P72Dk0c42qx+TzcKjLMUxLwGXY6RVlcH+FFIsckcUPUL3IIxSzX0jDxe5SCG9
-         qDcgUqD5ezsCVoOgcbhaMd/uKZiYkiToHfbQe3QmzCyWk6hKAKVHVi4ivbx2H0hQ1hjd
-         Y0qA==
+        Wed, 6 Jul 2022 15:44:52 -0400
+Received: from mail-qt1-f171.google.com (mail-qt1-f171.google.com [209.85.160.171])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E3B9CE10
+        for <linux-kernel@vger.kernel.org>; Wed,  6 Jul 2022 12:44:51 -0700 (PDT)
+Received: by mail-qt1-f171.google.com with SMTP id i11so19775303qtr.4
+        for <linux-kernel@vger.kernel.org>; Wed, 06 Jul 2022 12:44:51 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=uQRsnwv9u5IuL08Zu0b0BsRI6BGP8zbhAD30ZwGOKSY=;
-        b=HZyeltmN511GI3hJGyJg48wukS0IhGgWeXhKgmm1tI8yOoFqlEHKdeHqGghdbw6gZ2
-         hi7Sv9B43GhsK2nQ7o/3oi6DLIdILifHq6ocTkMLh72OKAc5nFYsXYfOLGnnna0VDnMx
-         qExYLIFI8i5CbWqlVJ9Z30x2gfoZ8J+yac3EeQIAgzRCkWZIg2bQ+GwwKBL+EPhSPLI0
-         DYkK5hCxgCwIQYXBUIiy5TrUaGPM43K7KAiMOzuDdbZRjeg57tV4KuG5ZP4p+yN/ja1p
-         yiPdXJzqk2ljEsejpeiYXeDpNZ+Gqt7mCo0Vk8wpD+C81Om2iWgjvVR4JwDHEmVxk4Lu
-         T3kw==
-X-Gm-Message-State: AJIora90TBpfuimq/l3BR0ZbEdwG8bzGTFo4N4pVcoVFJXX7fDpA4FYp
-        p1YiR+T6VQP3kgYQXCVA5c34uUWq0J3XZMr5lgNnIA==
-X-Google-Smtp-Source: AGRyM1t4dRFvvQJAo3o+9zwoctngRDgoPiYrC8YooMHhSrERSiGT4kieKFmITMD8tdqHtO7K0lhat2uj3BHpxqC84aA=
-X-Received: by 2002:a17:907:168c:b0:726:c521:25aa with SMTP id
- hc12-20020a170907168c00b00726c52125aamr40430672ejc.46.1657136600905; Wed, 06
- Jul 2022 12:43:20 -0700 (PDT)
+        bh=Xk9jCiZm2Js85fOqnIyfJ1E/QY9zrE8vBax6/mtwBTY=;
+        b=K6RLQ2ZXMkrMqtdRQQoj1wZA99YoTs5ZvXoXJX5yWeRpJdHyT+388bFQtwXjqgTVj9
+         WRSukJS1Rp/u2Y6W1xEo1X90ZGjq8Ue2DADZL1QhEUAWKykXxgRbta647sOMxU2FatkC
+         1XVWQLkHVpV+9W3xwu9uneqe33t+OW+ODyHezF/no73UU75ByC++H3FhyDkKIiSdr+A4
+         9TBLPao1IA5BH+gpauFsWEXOt004U/tGwsu9fREp/qdYHt+qG9RSdwEASStHGrdECT0k
+         BJCeED51H6eRC6ryAxJ2lb78syq8bwQUEQAL9or2YhiI/l5frTpy+vBEndvOqZw8AG0K
+         0HIg==
+X-Gm-Message-State: AJIora/s02VgwpgiZeLwVoffgNAmXNlpP4ZPl85a19yTZmC0L8UbaJ5a
+        gUcDGJhh+AKrd3IzjGGWkM2+pet56gFegHKo
+X-Google-Smtp-Source: AGRyM1s0g+gaJcMjbzWj/h4nMdVSFvE3MYDpLf/AEBuCkOucShO9FoHZpXx7LdUYcm+FxeoGEwD0gg==
+X-Received: by 2002:a05:622a:138b:b0:31e:8086:a31a with SMTP id o11-20020a05622a138b00b0031e8086a31amr11175354qtk.320.1657136689989;
+        Wed, 06 Jul 2022 12:44:49 -0700 (PDT)
+Received: from mail-yw1-f175.google.com (mail-yw1-f175.google.com. [209.85.128.175])
+        by smtp.gmail.com with ESMTPSA id bp13-20020a05620a458d00b006af10bd3635sm24954604qkb.57.2022.07.06.12.44.49
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 06 Jul 2022 12:44:49 -0700 (PDT)
+Received: by mail-yw1-f175.google.com with SMTP id 00721157ae682-31c86fe1dddso103016077b3.1
+        for <linux-kernel@vger.kernel.org>; Wed, 06 Jul 2022 12:44:49 -0700 (PDT)
+X-Received: by 2002:a81:1090:0:b0:31c:9be5:6c95 with SMTP id
+ 138-20020a811090000000b0031c9be56c95mr19613587ywq.384.1657136688673; Wed, 06
+ Jul 2022 12:44:48 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220518073232.526443-1-davidgow@google.com> <CAGS_qxrOUYC5iycS436Rb-gEoEnYDa2OJLkQhEVXcDN0BEJ4YA@mail.gmail.com>
- <CANpmjNPSm8eZX7nAJyMts-4XdYB2ChXK17HApUpoHN-SOo7fRA@mail.gmail.com>
- <CABVgOS=X51T_=hwTumnzL2yECgcshWBp1RT0F3GiT3+Fe_vang@mail.gmail.com> <CAGS_qxqsF-soqSM7-cO+tRD1Rg5fqrA07TGLRruxPE4i_rLdJw@mail.gmail.com>
-In-Reply-To: <CAGS_qxqsF-soqSM7-cO+tRD1Rg5fqrA07TGLRruxPE4i_rLdJw@mail.gmail.com>
-From:   Brendan Higgins <brendanhiggins@google.com>
-Date:   Wed, 6 Jul 2022 15:43:09 -0400
-Message-ID: <CAFd5g44dp05DaEot23_a2QdOGfmg=eehtoe24=6yo_UKiGNukA@mail.gmail.com>
-Subject: Re: [PATCH 1/2] kunit: tool: Add x86_64-smp architecture for SMP testing
-To:     Daniel Latypov <dlatypov@google.com>
-Cc:     David Gow <davidgow@google.com>, Marco Elver <elver@google.com>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        KUnit Development <kunit-dev@googlegroups.com>,
-        kasan-dev <kasan-dev@googlegroups.com>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+References: <20220706164606.68528-1-f.fainelli@gmail.com>
+In-Reply-To: <20220706164606.68528-1-f.fainelli@gmail.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Wed, 6 Jul 2022 21:44:37 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdVJG0cA4v+pfyeO8PpzFxtrggNeRrfEB8QFBiEZjYPt3A@mail.gmail.com>
+Message-ID: <CAMuHMdVJG0cA4v+pfyeO8PpzFxtrggNeRrfEB8QFBiEZjYPt3A@mail.gmail.com>
+Subject: Re: [PATCH v2] ARM: Fix MAX_DMA_ADDRESS overflow
+To:     Florian Fainelli <f.fainelli@gmail.com>
+Cc:     Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Russell King <linux@armlinux.org.uk>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Grygorii Strashko <grygorii.strashko@ti.com>,
+        open list <linux-kernel@vger.kernel.org>,
+        Santosh Shilimkar <ssantosh@kernel.org>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 19, 2022 at 1:11 PM Daniel Latypov <dlatypov@google.com> wrote:
+Hi Florian,
+
+On Wed, Jul 6, 2022 at 6:46 PM Florian Fainelli <f.fainelli@gmail.com> wrote:
+> Commit 26f09e9b3a06 ("mm/memblock: add memblock memory allocation apis")
+> added a check to determine whether arm_dma_zone_size is exceeding the
+> amount of kernel virtual address space available between the upper 4GB
+> virtual address limit and PAGE_OFFSET in order to provide a suitable
+> definition of MAX_DMA_ADDRESS that should fit within the 32-bit virtual
+> address space. The quantity used for comparison was off by a missing
+> trailing 0, leading to MAX_DMA_ADDRESS to be overflowing a 32-bit
+> quantity.
 >
-> On Thu, May 19, 2022 at 6:15 AM David Gow <davidgow@google.com> wrote:
-> >
-> > I tend to agree that having both would be nice: I think there are
-> > enough useful "machine configs" that trying to maintain, e.g, a 1:1
-> > mapping with kernel architectures is going to leave a bunch of things
-> > on the table, particularly as we add more tests for, e.g., drivers and
-> > specific CPU models.
+> This was caught with the bcm2711 platforms which defines a dma_zone_size
+> of 1GB, and using a PAGE_OFFSET of 0xc000_0000 (CONFIG_VMSPLIT_3G) with
+> CONFIG_DEBUG_VIRTUAL enabled would lead to MAX_DMA_ADDRESS being
+> 0x1_0000_0000 which overflows the unsigned long type used throughout
+> __pa() and __virt_addr_valid(). Because the virtual address passed to
+> __virt_addr_valid() would now be 0, the function would loudly warn, thus
+> making the platform unable to boot properly.
 >
-> I agree that we don't necessarily need to maintain a 1:1 mapping.
-> But I feel like we should have a pretty convincing reason for doing
-> so, e.g. support for a CPU that requires we add in a bunch of
-> kconfigs.
-
-Agreed. That being said, if we have a good convention for archs that
-are not in arch/, then it should be OK. The biggest thing is that all
-archs passed into ARCH=, if supported, should have a default with the
-same value for kunittool; as long as that is the case, I don't think
-anyone will get confused.
-
-> This particular one feels simple enough to me.
-> Given we already have to put specific instructions in the
-> kcsan/.kunitconfig, I don't know if there's much of a difference in
-> cost between these two commands
+> Fixes: 26f09e9b3a06 ("mm/memblock: add memblock memory allocation apis")
+> Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
+> ---
+> Changes in v2:
 >
-> $ ./tools/testing/kunit/kunit.py run --kunitconfig=kernel/kcsan
-> --arch=x86_64-smp
-> $ ./tools/testing/kunit/kunit.py run --kunitconfig=kernel/kcsan
-> --arch=x86_64 --kconfig_add CONFIG_SMP=y --qemu_args "-smp 8"
+> - simplify the patch and drop the first patch that attempted to fix an
+>   off by one in the calculation.
 
-Also agree.
+Thanks for the update!
 
-> I've generally learned to prefer more explicit commands like the
-> second, even if they're quite a bit longer.
+> --- a/arch/arm/include/asm/dma.h
+> +++ b/arch/arm/include/asm/dma.h
+> @@ -10,7 +10,7 @@
+>  #else
+>  #define MAX_DMA_ADDRESS        ({ \
+>         extern phys_addr_t arm_dma_zone_size; \
+> -       arm_dma_zone_size && arm_dma_zone_size < (0x10000000 - PAGE_OFFSET) ? \
+                                                  ^^^^^^^^^^
+0x10000000ULL, as the constant doesn't fit in 32-bit.
+However, both gcc (9.4.0) and sparse don't seem to complain about
+the missing suffix (anymore?).
 
-I agree, but I think I learned this from you :-)
+> +       arm_dma_zone_size && arm_dma_zone_size < (0x100000000 - PAGE_OFFSET) ? \
+>                 (PAGE_OFFSET + arm_dma_zone_size) : 0xffffffffUL; })
+>  #endif
 
-> But I have the following biases
-> * I use FZF heavily, so I don't re-type long commands much
+Gr{oetje,eeting}s,
 
-Same.
+                        Geert
 
-> * I'm the person who proposed --kconfig_add and --qemu_args, so of
-> course I'd think the longer form is easy to understand.
-> so I'm not in a position to object to this change.
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
 
-Yeah, I think I am a bit biased on this too, but I don't terribly care
-one way or the other.
-
-> Changing topics:
-> Users can overwrite the '-smp 8' here via --qemu_args [1], so I'm much
-> less worried about hard-coding any specific value in this file
-> anymore.
-> And given that, I think a more "natural" value for this file would be "-smp 2".
-> I think anything that needs more than that should explicitly should --qemu_args.
->
-> Thoughts?
-
-If we have time, we could bring this topic up at LPC?
-
-> [1] tested with --qemu_args='-smp 4' --qemu_args='-smp 8'
-> and I see the following in the test.log
->  smpboot: Allowing 8 CPUs, 0 hotplug CPUs
-> so QEMU respects the last value passed in, as expected.
->
-> >
-> > The problem, of course, is that the --kconfig_add flags don't allow us
-> > to override anything explicitly stated in either the kunitconfig or
-> > qemu_config (and I imagine there could be problems with --qemu_config,
-> > too).
->
-> This patch would fix that.
-> https://lore.kernel.org/linux-kselftest/20220519164512.3180360-1-dlatypov@google.com
->
-> It introduces an overwriting priority of
-> * --kconfig_add
-> * kunitconfig / --kunitconfig
-> * qemu_config
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds

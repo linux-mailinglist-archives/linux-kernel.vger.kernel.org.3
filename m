@@ -2,144 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CEB8E56918C
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 20:17:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C340569193
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 20:17:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231715AbiGFSQ6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Jul 2022 14:16:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59464 "EHLO
+        id S233906AbiGFSRX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Jul 2022 14:17:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59844 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229895AbiGFSQ4 (ORCPT
+        with ESMTP id S234059AbiGFSRR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Jul 2022 14:16:56 -0400
-Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A21CB5FF0
-        for <linux-kernel@vger.kernel.org>; Wed,  6 Jul 2022 11:16:55 -0700 (PDT)
-Received: by mail-lf1-x12b.google.com with SMTP id bu42so7425027lfb.0
-        for <linux-kernel@vger.kernel.org>; Wed, 06 Jul 2022 11:16:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=OD75XxCwnED+FS5wDk/RwNU3mc/oEXTZU6iEW1jy/AA=;
-        b=enNCpRpLSPco3263TwwGPuW4YQAoukdfvw/6dI4TtK37J4vjsMgQ6a+FaWF+Mhkx7b
-         MHGt7Vtsu584ZOHcOR6sFOlvSm1O1ITZdbBV6KB+L5wUy/eSiYMVHdHz+o6gOI6io9NZ
-         fYWPuTdmOpRUbFI0Y8y2clDj9A96EKH0v0BEf5khCNOd+pLvDxOybz8VSMY/3obRIMvQ
-         B+BxoFvQINouX+nOwZ+SayABbwAONw9RmhLlZLbWDfFnyxP8lbKxinwgHIIl8YUSPA05
-         5DAZCqje0eNjwIK0ZdAJKHlBu++M7G+AIKo/n4d6ewKfygCI0p/Y4JtdNV1kqrHeGQId
-         /7tw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=OD75XxCwnED+FS5wDk/RwNU3mc/oEXTZU6iEW1jy/AA=;
-        b=0pSzMQgTCT4jRqorLUVBEBieuupRyWOP6auDDELjbdCJpX1uOC77gGpGnax9KRKxqn
-         7ecKPEPh4/IeD0+pPzmiDPslAZiueCzABDACr2cQiwUsbLIAwKisw8fmPuzDNPEDFv3E
-         0dnPp5PMi9/e9t/ANuO6xnRHkQ2/wP+s16GK3yIlIHoCzZt77S0mJE7DpedAr+/npX8n
-         zfw/uI95y+wk8KcbEF+BRxFSy9XiKiFRccVgFjfLBD4sbMtNUy3StnHly/TiWbPGRqFn
-         wy1UjecgqcIE6rYtYenIm6Bxq7bujROWNQ9sFVD9ym/67maGHXTLEXPxm0RaNRzRC370
-         kwIQ==
-X-Gm-Message-State: AJIora/8LvgcZMuRTbmN5rib+XZuWPD9KHt+rKHSSFC5JMlMrEnMKXeE
-        mho6Abnu5kSkhEjX9MB8Tij8xA==
-X-Google-Smtp-Source: AGRyM1vlTSDepPmb4CPBwh36YAfQLpzXxUXnSgiBNoiUoqkpIvuHzue1UGpTOo0IR7n2mqEABuaTsA==
-X-Received: by 2002:a05:6512:118b:b0:46b:a9ae:3a3b with SMTP id g11-20020a056512118b00b0046ba9ae3a3bmr3697317lfr.188.1657131413946;
-        Wed, 06 Jul 2022 11:16:53 -0700 (PDT)
-Received: from [192.168.1.52] ([84.20.121.239])
-        by smtp.gmail.com with ESMTPSA id i17-20020a2ea231000000b002555d6ca497sm6343498ljm.115.2022.07.06.11.16.52
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 06 Jul 2022 11:16:53 -0700 (PDT)
-Message-ID: <c285332f-dde9-2e71-8637-0526c4baeb1e@linaro.org>
-Date:   Wed, 6 Jul 2022 20:16:52 +0200
+        Wed, 6 Jul 2022 14:17:17 -0400
+Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2040.outbound.protection.outlook.com [40.107.94.40])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F8052A272;
+        Wed,  6 Jul 2022 11:17:15 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=nD0mZK/iWrilnkplbeolFnPUtzot9Tq48dnUc5hnqqd46ZE7b21+ClT2hQin7nodsLpmRS9gapNJ4CoIW9NuySvUUIarwaBt5zgu6tYGlvfwEea6LiKy2gpMbcoFDt7WatDWn3hvFS7SALc07LObsXkJcMlhwhXNw6axr1wdXpgLNEy+Dv3PqkNEqnKe2szPJbp+a/H7hUNQzW4A9u6weKivC1iI26k8MwanbAkrRqRvamX2O977ecmPgGOsWmjUaOB3v/tHyP4owHQcJAt9lK3TnrAtrANQxoQ54twiuG906FyhmZIx0ONP3jAiz/QkbBGo/rMJ1Zs3V09FnzIu9Q==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=cqqCaJUTDwkQzINKh1omiIkhvxtSOljICtjbbMkdZYc=;
+ b=hCqzOAApaRWSvzsvuPOUXEKyyEer4Kur5uVoUosgduBsvj5/XeOE3TLtJWv4Y0DMpzG/47pQZMoMD6MT6mDyNj75+jmYHXr/v9ol9E7sLR5THp9Izp+BGXsCzXmyCCbY2z3Pn9nXifdJmC8UNANt4MGJmXEM/iI2vZJkCi8CgkXtc3ry/r77Sa48SR2PFfUSf8AVf1YCSd9qQ12NThXuayjXvvuPXe0Xs7ya88oaZVHIHSStPasGOZI2n1vSYdRqLgwE2PJAQvtYun3J3wchYPJv2vr03LgR47G9F0Obe6awbPbfFaUEKv3hG1aePGkZ4fpBF9Wx8oyyymzU5G9RHA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=cqqCaJUTDwkQzINKh1omiIkhvxtSOljICtjbbMkdZYc=;
+ b=RkbgEhTQBgjXp0//QP2/R1wDlsDBSNH6WnZKv+kzKmuT92ZDD31wSt1wCwkZtpWCAQyD4Azn2dfmJL3//mO+/AscWhiii5n2Om5KSssUrbUIL6ZGnRPF65jcQ9zypRZa9ufrKxJBH3t8wLKMk0Shh4vZXEObMsEMn9+9Q+Y2nIFTeJH7NKbO2kF0tcxtSTE4TvXnqqm/4AiJnNp8z3ePbUAlTqkxZAfCLtKuSzr3PwezCZKUPFnW6htPWvyBdaXh3sE2J9x630NPkIY63NqBh8wjIEgBfW+WDKeRaVqakxDejAYoJp2O0hNAxn4PzQkN+SbzRZXd++tXE2+ryma/vA==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from MN2PR12MB4192.namprd12.prod.outlook.com (2603:10b6:208:1d5::15)
+ by BY5PR12MB4952.namprd12.prod.outlook.com (2603:10b6:a03:1d8::19) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5395.15; Wed, 6 Jul
+ 2022 18:17:05 +0000
+Received: from MN2PR12MB4192.namprd12.prod.outlook.com
+ ([fe80::ac35:7c4b:3282:abfb]) by MN2PR12MB4192.namprd12.prod.outlook.com
+ ([fe80::ac35:7c4b:3282:abfb%3]) with mapi id 15.20.5395.021; Wed, 6 Jul 2022
+ 18:17:05 +0000
+Date:   Wed, 6 Jul 2022 15:17:04 -0300
+From:   Jason Gunthorpe <jgg@nvidia.com>
+To:     Nicolin Chen <nicolinc@nvidia.com>
+Cc:     kwankhede@nvidia.com, corbet@lwn.net, hca@linux.ibm.com,
+        gor@linux.ibm.com, agordeev@linux.ibm.com,
+        borntraeger@linux.ibm.com, svens@linux.ibm.com,
+        zhenyuw@linux.intel.com, zhi.a.wang@intel.com,
+        jani.nikula@linux.intel.com, joonas.lahtinen@linux.intel.com,
+        rodrigo.vivi@intel.com, tvrtko.ursulin@linux.intel.com,
+        airlied@linux.ie, daniel@ffwll.ch, farman@linux.ibm.com,
+        mjrosato@linux.ibm.com, pasic@linux.ibm.com, vneethv@linux.ibm.com,
+        oberpar@linux.ibm.com, freude@linux.ibm.com,
+        akrowiak@linux.ibm.com, jjherne@linux.ibm.com,
+        alex.williamson@redhat.com, cohuck@redhat.com,
+        kevin.tian@intel.com, hch@infradead.org, jchrist@linux.ibm.com,
+        kvm@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-s390@vger.kernel.org,
+        intel-gvt-dev@lists.freedesktop.org,
+        intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org
+Subject: Re: [RFT][PATCH v2 8/9] vfio/ccw: Add kmap_local_page() for memcpy
+Message-ID: <20220706181704.GP693670@nvidia.com>
+References: <20220706062759.24946-1-nicolinc@nvidia.com>
+ <20220706062759.24946-9-nicolinc@nvidia.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220706062759.24946-9-nicolinc@nvidia.com>
+X-ClientProxiedBy: MN2PR13CA0011.namprd13.prod.outlook.com
+ (2603:10b6:208:160::24) To MN2PR12MB4192.namprd12.prod.outlook.com
+ (2603:10b6:208:1d5::15)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH v2 1/2] [RFT] dt-bindings: leds: Add
- cznic,turris1x-leds.yaml binding
-Content-Language: en-US
-To:     =?UTF-8?Q?Marek_Beh=c3=ban?= <kabel@kernel.org>
-Cc:     =?UTF-8?Q?Pali_Roh=c3=a1r?= <pali@kernel.org>,
-        Pavel Machek <pavel@ucw.cz>, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-leds@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220705000448.14337-1-pali@kernel.org>
- <20220705155929.25565-1-pali@kernel.org> <20220706131507.353f0bed@thinkpad>
- <20220706111912.hz2mx4dc35lgq6l5@pali> <20220706172732.6228d180@thinkpad>
- <25b43586-eeb3-4b7b-7362-2d599aa89cf0@linaro.org>
- <20220706184301.3f42a692@thinkpad>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220706184301.3f42a692@thinkpad>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: f95bc4ff-7b64-414a-86fc-08da5f7bbaf5
+X-MS-TrafficTypeDiagnostic: BY5PR12MB4952:EE_
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 2bxRzMFuYYft40WJXyfzt0IkuKUb2W6CkHcVeeagcsTs8/UkPIJhTaBEl8O1AJMfbqOJg3cpeGkZx3gI2szskQIMzwyt4fFcqm8kHOr9nEGbKKYOQN9XInuszWPXSRef57gLqjcScNB0IHsYw5pEOkBB1J6i6xAQ9TPB+lk5UfRS7GuF18W3ie9+5IMQRDoPWdTXiOrtY+Oxg9boKZO/6i6UH+BPh+NExTqEdpwWjFRlrmpPRr2iWsMjCmofWZKNcStDDs8ycsFTHCf6+IKOxUeF0SWAxUP7h7TO8obSQ/tAZPlighgQ3rJ584Ark62mj4cIWe5zUBeWZrR/LGCXzF066UPoA0q5hIRngCL3js+I2y/mT7AfwhADARHsw+BkEm0HMcPkUf373NrlorgswSqKF7NdGQZNonLVJsJYLfdz9+9U2vq6KH4zQiZWBJil88ZFZg4JAeHDtcIReDFFLfPB/UWar0LLcUVL1mCaH6XdepIo9T34U6eYX73JMD+G0b+tjGn6xErea8yQHd9xRON72MWv73wPWrl/Tkwj4mkG0wxe7a1qsV2aOVSP+gpZ4ECCkHjXLJl/ZBQfI0VblhJpgjFhWGf/J1eEZ55BSZqW2JRnFXQ8TKSCG7aucjGBONb5mvc6AhfGGihfxA7eT2NMECIAo0X9UnFjDsasr+xgCj42JjjucYBd7BHhxRHjjycla5zhJ+AI+1dy+zVe1ztQT17ILTzGqLGMKoIHT7hFcq6okbfVj53Z6ZiEx5/yZXXBW1PmO3qI2SvHsFSyqsG7yHESOj9yYz0/Q7TvovXEQxEO6SfQv8gHR9AQFDYR
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN2PR12MB4192.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(136003)(376002)(346002)(366004)(39860400002)(396003)(478600001)(6486002)(38100700002)(2906002)(36756003)(2616005)(1076003)(33656002)(186003)(6506007)(66476007)(41300700001)(316002)(6862004)(86362001)(7416002)(5660300002)(7406005)(8936002)(6636002)(37006003)(26005)(6512007)(4326008)(83380400001)(66946007)(66556008)(8676002)(27376004);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?FW25mylLFsUnbbLT8GuwYAGaEQioW664t5vCnay2iSu3OQd+2u6/DkDH7qjI?=
+ =?us-ascii?Q?Ek0cV7i3JV3XfPNAQiP0fJBSpBlDjcMfj3vjEw8J5EglI8S4rNWf3Q/6CcD0?=
+ =?us-ascii?Q?PKphuhVwMhW/zIJ8P2fyM4mSXn2XhdP0gVGmlS6JiJ5JsnwatjmqQXzLqW6/?=
+ =?us-ascii?Q?8oZZlNx0v1M9XcZUibQ0QGddVr+er4SdkukNda4sWU0Nsti0x+mCxm1SFLFa?=
+ =?us-ascii?Q?zmPPMrul1K1850oHJ8W93Ka/loHPflZsVweFobJvR6Nb826D7qD9O2eF33wF?=
+ =?us-ascii?Q?9WhAkDEymGOuIYTV7C+y52GdbHkQufFhhfSXp+zmNh2Iys7DHbPEcKl5IkRZ?=
+ =?us-ascii?Q?jrMXPUDUjV2zPnIRRUqpn6Bgei2Hyr7bh6kv97rlOW7x9BTytq6T5gFIBpMn?=
+ =?us-ascii?Q?O72FqHPxLPdxI9FN1T5RF6U8RILFYSa8YxA+LyVuphpf3oV6RosFpL+PxU26?=
+ =?us-ascii?Q?zRzkRWMYkyNS+BIEcKCifVW5FzYaWDlyDtnL+AW2ULPNXS0+GL3zNS+hVqfA?=
+ =?us-ascii?Q?5X6YZc0lWm4KkYNKJHlnYMdlOAhUeNWCQrZsjvI/SSd3m03MmS/zhAJrxLlg?=
+ =?us-ascii?Q?9Kx4RV54uVqTCCGe0quqNkvENMv2Yg9fKI+DXWHOZOOC9MYiYbP0gVlzowxJ?=
+ =?us-ascii?Q?J7qb2tfS5rJY86+i0rOd1QsmvMkyHh+GsxB382TB10kP8jf+3OA95njmd2ZY?=
+ =?us-ascii?Q?QrY8DcKYGSpAnK4msb+4657yOkD6dWVArRy/uXEo/kgsG87u959niHCmwE+6?=
+ =?us-ascii?Q?EoZ71IgHr8niNW3a07Wt7Hb+ciDBBxI6iy7NYiG25kZd6LXFDKv7qdHabrzJ?=
+ =?us-ascii?Q?eBRbe3mczesu2zUY/76Ru701DXuipJsGCD4Wlo+nSN9fFy/Ssz8U/INbJeth?=
+ =?us-ascii?Q?14vk3iAxp6Baq9u7hPYeQjKnUMuYof+Fg/nwyMDyOSTcavDMieO2gegvqC8k?=
+ =?us-ascii?Q?ugJJJSTDhnyf1PrQKcbTTHhGOd5hV1l+BhrGwAiuEXldi9VTovGXi8BO86a2?=
+ =?us-ascii?Q?J8V/APElEnYOVpD8G80jckvZFC58djyjJ5Gt1c9XL7vKOV/ef/vHXkkEMA6p?=
+ =?us-ascii?Q?sdMgTlyrmYMUCitcmUVJScnqc4/IVXd5kBtFSvS8tE13cpgmPtDqbC9kBTkp?=
+ =?us-ascii?Q?ylikwLBxW7QyngWXxjwnj5InqZeQPC99Gk0WBVwTtYkcr7Rea5jBi1U53gwP?=
+ =?us-ascii?Q?ujCBJyZo0tACXECoFdKdhPR6RTafIkGRrpnyzCBLvnT7hdK1ZRESfaZmR95A?=
+ =?us-ascii?Q?KQeHbq74sUkqs9yeCLmdgOEG3it+pYLB7iqJ8QTV/Lm51L4j210r0oNBQx3Z?=
+ =?us-ascii?Q?XK0VsxaOSwGuAGr+Lh2Z+AR8eHK0n7e30iHOhI0VFBTVswsMJuRfHqGJpL+s?=
+ =?us-ascii?Q?obc1VyF8phOecCuFcV4xMdbo202FhqdDgDO7vWRIottkcaLHcfOsEerXlwwq?=
+ =?us-ascii?Q?k8K1OCvuEDvCmscIzpcGzO/JTV5kH1RJzHyU7IIZoHMTqboq4akWZOM25q9K?=
+ =?us-ascii?Q?YYIPndM/Z+c0yigTr7ox8EYtwduj5Yazolf4jkt5Qu2IP39T+FbsI6KPNQsF?=
+ =?us-ascii?Q?DJROoXT8hGBDA9SENdb66Bl7G0HQFRtP/QevXP+M?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: f95bc4ff-7b64-414a-86fc-08da5f7bbaf5
+X-MS-Exchange-CrossTenant-AuthSource: MN2PR12MB4192.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Jul 2022 18:17:05.0646
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: O3a+ZyPY2LJd01cSjVrtFF5jWPWm/L5Fn056qIPPu+4tBX7vzDUfK4Mn7/tBjEKq
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BY5PR12MB4952
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 06/07/2022 18:43, Marek Behún wrote:
-> On Wed, 6 Jul 2022 17:36:43 +0200
-> Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org> wrote:
+On Tue, Jul 05, 2022 at 11:27:58PM -0700, Nicolin Chen wrote:
+> A PFN is not secure enough to promise that the memory is not IO. And
+> direct access via memcpy() that only handles CPU memory will crash on
+> S390 if the PFN is an IO PFN, as we have to use the memcpy_to/fromio()
+> that uses the special S390 IO access instructions. On the other hand,
+> a "struct page *" is always a CPU coherent thing that fits memcpy().
 > 
->> On 06/07/2022 17:27, Marek Behún wrote:
->>> On Wed, 6 Jul 2022 13:19:12 +0200
->>> Pali Rohár <pali@kernel.org> wrote:
->>>   
->>>> On Wednesday 06 July 2022 13:15:07 Marek Behún wrote:  
->>>>> On Tue,  5 Jul 2022 17:59:28 +0200
->>>>> Pali Rohár <pali@kernel.org> wrote:
->>>>>     
->>>>>> +examples:
->>>>>> +  - |
->>>>>> +    #include <dt-bindings/leds/common.h>
->>>>>> +
->>>>>> +    cpld@3,0 {    
->>>>>
->>>>> The generic node name should be just "bus". That it is a CPLD
->>>>> implementation should come from compatible string.    
->>>>
->>>> Sorry, I do not understand why "bus". Why other memory chips are named
->>>> e.g. "nand" or "nor" and not "bus" too?  
->>>
->>> As far as I understand this is because that is the preferred name for
->>> busses and this is a bus, since there is also the simple-bus compatible.
->>>   
->>>> By this logic should not be _every_ node called just "bus"? Hm... and 
->>>> are names needed at all then?  
->>>
->>> :-)
->>>
->>> The schema
->>>   https://github.com/devicetree-org/dt-schema/blob/main/dtschema/schemas/simple-bus.yaml
->>> allows for different names (soc|axi|ahb|*-bus) to avoid warnings on
->>> existing old dts files.
->>>
->>> The preferred way is to not have the implementation in nodename,
->>> similar to how we use 'switch' instead of 'mv88e6xxx', or
->>> 'ethernet-phy' instead of 'mv88e151x', or 'led-controller', ...  
->>
->> Thanks Marek for detailed explanation.
->> The cases above rather trigger my comments and this one here, after
->> Pali's explanation, do not fit them. pld is a generic class of a device,
->> so it is okay here. cpld probably as well (although one could argue that
->> it is a subset of pld, so the generic name is pld, but then one would
->> say fpga also should be called pld). For me it does not have to be bus,
->> just don't want mv88e6xxx or any other vendor/model names. Therefore
->> cpld is fine.
+> Also, casting a PFN to "void *" for memcpy() is not a proper practice,
+> kmap_local_page() is the correct API to call here, though S390 doesn't
+> use highmem, which means kmap_local_page() is a NOP.
 > 
-> What about cpld-bus? It is used as a bus (simple-bus compatible) and
-> would work with the *-bus pattern in dt-schema.
+> There's a following patch changing the vfio_pin_pages() API to return
+> a list of "struct page *" instead of PFNs. It will block any IO memory
+> from ever getting into this call path, for such a security purpose. In
+> this patch, add kmap_local_page() to prepare for that.
+> 
+> Suggested-by: Jason Gunthorpe <jgg@nvidia.com>
+> Signed-off-by: Nicolin Chen <nicolinc@nvidia.com>
+> ---
+>  drivers/s390/cio/vfio_ccw_cp.c | 9 ++++++---
+>  1 file changed, 6 insertions(+), 3 deletions(-)
 
-If we talk about the example - it does not use any compatible, so we are
-focusing on unimportant piece. Anyway using a simple-bus compatible does
-not necessarily mean it is a bus. "soc" nodes also use it, but these are
-not buses.
+Reviewed-by: Jason Gunthorpe <jgg@nvidia.com>
 
-
-Best regards,
-Krzysztof
+Jason

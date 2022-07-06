@@ -2,64 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 20AB4567D15
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 06:23:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E13F6567D48
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 06:26:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230424AbiGFEV2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Jul 2022 00:21:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43412 "EHLO
+        id S231461AbiGFE0W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Jul 2022 00:26:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46176 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231130AbiGFEVZ (ORCPT
+        with ESMTP id S229522AbiGFE0T (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Jul 2022 00:21:25 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25EE3167F4;
-        Tue,  5 Jul 2022 21:21:25 -0700 (PDT)
+        Wed, 6 Jul 2022 00:26:19 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E1CF1BE86;
+        Tue,  5 Jul 2022 21:26:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1657081285; x=1688617285;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=TYwiYZ0ZNBBmTQZ6MpJbG1wGZesenEs5jSJYL6XhHBE=;
-  b=TyNSoi7jdRYfAL0wFBW/hiPNikAPa1WLkYIiFfeTpb9OUtIBHaAI4IAf
-   EsN6gS7GkBqY1ceAnwFzsMS8ytIn4aAkH7W1Af+S45G5B3WVLQIBnd5/M
-   nVj4oxGH8g6hEhzubqnRvjErw5BJA08LOVOoJSchrozW0hljLC1kTpCjb
-   /apm0w4eJXjJIg9rfeELNUvssF3ohIe8QBrhMmTzMLwz+oknB1W80CMGa
-   QbPY3ItbvlMfTrdvHWeTR6Pj5vra3mZqn0MI2zrse2q5/s5yyvYnWk1XK
-   3SHbY7HIULb1QOqJ2jpib3N7SEQ6f6cghx6yQFgkx3WsMQgAM2wNW5a3s
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10399"; a="264057350"
+  t=1657081579; x=1688617579;
+  h=from:to:cc:subject:date:message-id;
+  bh=CpMC0XBJdC4PpHI7lyH7PNL5lXsRI1A2EpfQo/IPNhk=;
+  b=W9jK1Be0OhZUmcVmOP6Ws+H7oNvmkvjXftbSM8qjKXXgttRnDPl2D1ty
+   YO7E2JBUhqRoL+rnDGCZWCsw2eRJ1ntQP8a8LXOmbzd/ojU5Gdt0Fd7Xc
+   ntYOQYM4lWjqMECgyWUsfKLIJIPkORdJro7SwRP4i4VXH650g2y9KwIbj
+   eJUTNN/DTKKU3Eg5qvDs+lxenUneeJN/EpDAoKPPBF6/b5vT0IKJo2Ph5
+   c/J0VGZFLSELpTqZK6ovDzeqHi9pv8Jkr1CZh5lSnSq2TYDmuOy8V+vP9
+   O7pPA3Z5PujBo9elopr79e8tS/fafkUBz55nCzp4tDRFIcUxZNGvhAC8q
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10399"; a="283663236"
 X-IronPort-AV: E=Sophos;i="5.92,248,1650956400"; 
-   d="scan'208";a="264057350"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jul 2022 21:21:24 -0700
+   d="scan'208";a="283663236"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jul 2022 21:26:18 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.92,248,1650956400"; 
-   d="scan'208";a="735412357"
-Received: from lkp-server01.sh.intel.com (HELO 68b931ab7ac1) ([10.239.97.150])
-  by fmsmga001.fm.intel.com with ESMTP; 05 Jul 2022 21:21:22 -0700
-Received: from kbuild by 68b931ab7ac1 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1o8wXS-000Jz9-2r;
-        Wed, 06 Jul 2022 04:21:22 +0000
-Date:   Wed, 6 Jul 2022 12:20:21 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Steven Rostedt <rostedt@goodmis.org>, linux-kernel@vger.kernel.org
-Cc:     kbuild-all@lists.01.org, Ingo Molnar <mingo@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        Dennis Dalessandro <dennis.dalessandro@cornelisnetworks.com>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        Leon Romanovsky <leon@kernel.org>, linux-rdma@vger.kernel.org
-Subject: Re: [PATCH 02/13] tracing/IB/hfi1: Use the new __vstring() helper
-Message-ID: <202207061250.oSPdYi3E-lkp@intel.com>
-References: <20220705224749.239494531@goodmis.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220705224749.239494531@goodmis.org>
-X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+   d="scan'208";a="769895409"
+Received: from srikandan-ilbpg12.png.intel.com ([10.88.229.69])
+  by orsmga005.jf.intel.com with ESMTP; 05 Jul 2022 21:26:14 -0700
+From:   nandhini.srikandan@intel.com
+To:     fancer.lancer@gmail.com, broonie@kernel.org, robh+dt@kernel.org,
+        linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     devicetree@vger.kernel.org, mgross@linux.intel.com,
+        kris.pan@intel.com, kenchappa.demakkanavar@intel.com,
+        furong.zhou@intel.com, mallikarjunappa.sangannavar@intel.com,
+        mahesh.r.vaidya@intel.com, nandhini.srikandan@intel.com,
+        rashmi.a@intel.com
+Subject: [PATCH v5 0/4] Add support for Intel Thunder Bay SPI controller
+Date:   Wed,  6 Jul 2022 12:20:35 +0800
+Message-Id: <20220706042039.5763-1-nandhini.srikandan@intel.com>
+X-Mailer: git-send-email 2.17.1
+X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -68,87 +59,93 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Steven,
+From: Nandhini Srikandan <nandhini.srikandan@intel.com>
 
-Thank you for the patch! Perhaps something to improve:
+Hi,
 
-[auto build test WARNING on rostedt-trace/for-next]
-[also build test WARNING on wireless-next/main]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
+This patch enables support for DW SPI on Intel Thunder Bay.
+This patch set also enables master mode for latest Designware SPI versions.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Steven-Rostedt/tracing-events-Add-__vstring-and-__assign_vstr-helpers/20220706-065125
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/rostedt/linux-trace.git for-next
-config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20220706/202207061250.oSPdYi3E-lkp@intel.com/config)
-compiler: gcc-11 (Debian 11.3.0-3) 11.3.0
-reproduce (this is a W=1 build):
-        # https://github.com/intel-lab-lkp/linux/commit/e742b16f3b984d761db2d898c15e7632e9166d4a
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Steven-Rostedt/tracing-events-Add-__vstring-and-__assign_vstr-helpers/20220706-065125
-        git checkout e742b16f3b984d761db2d898c15e7632e9166d4a
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/infiniband/hw/hfi1/
+Patch 1: Fixed dw_spi_ip_is macro with the missing underscore.
+Patch 2: DW SPI DT bindings for Intel Thunder Bay SoC.
+Patch 3: Adds master mode support for Designware SPI controller.
+Patch 4: Adds support for Designware SPI on Intel Thunder Bay SoC.
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+The driver is tested on Keem Bay and Thunder Bay evaluation board
 
-All warnings (new ones prefixed by >>):
+Summary:
+Changes from v4:
+1) Reordered master mode selection patch and Thunder Bay support patch.
+2) The typo fix for macro dw_spi_ip_is is made into seperate patch.
 
-   In file included from include/trace/define_trace.h:102,
-                    from drivers/infiniband/hw/hfi1/trace_dbg.h:111,
-                    from drivers/infiniband/hw/hfi1/trace.h:15,
-                    from drivers/infiniband/hw/hfi1/trace.c:6:
-   drivers/infiniband/hw/hfi1/./trace_dbg.h: In function 'trace_event_get_offsets_hfi1_trace_template':
->> include/trace/trace_events.h:261:16: warning: function 'trace_event_get_offsets_hfi1_trace_template' might be a candidate for 'gnu_printf' format attribute [-Wsuggest-attribute=format]
-     261 |         struct trace_event_raw_##call __maybe_unused *entry;            \
-         |                ^~~~~~~~~~~~~~~~
-   drivers/infiniband/hw/hfi1/./trace_dbg.h:25:1: note: in expansion of macro 'DECLARE_EVENT_CLASS'
-      25 | DECLARE_EVENT_CLASS(hfi1_trace_template,
-         | ^~~~~~~~~~~~~~~~~~~
-   In file included from include/trace/define_trace.h:102,
-                    from drivers/infiniband/hw/hfi1/trace_dbg.h:111,
-                    from drivers/infiniband/hw/hfi1/trace.h:15,
-                    from drivers/infiniband/hw/hfi1/trace.c:6:
-   drivers/infiniband/hw/hfi1/./trace_dbg.h: In function 'trace_event_raw_event_hfi1_trace_template':
-   include/trace/trace_events.h:386:16: warning: function 'trace_event_raw_event_hfi1_trace_template' might be a candidate for 'gnu_printf' format attribute [-Wsuggest-attribute=format]
-     386 |         struct trace_event_raw_##call *entry;                           \
-         |                ^~~~~~~~~~~~~~~~
-   drivers/infiniband/hw/hfi1/./trace_dbg.h:25:1: note: in expansion of macro 'DECLARE_EVENT_CLASS'
-      25 | DECLARE_EVENT_CLASS(hfi1_trace_template,
-         | ^~~~~~~~~~~~~~~~~~~
-   In file included from include/trace/define_trace.h:103,
-                    from drivers/infiniband/hw/hfi1/trace_dbg.h:111,
-                    from drivers/infiniband/hw/hfi1/trace.h:15,
-                    from drivers/infiniband/hw/hfi1/trace.c:6:
-   drivers/infiniband/hw/hfi1/./trace_dbg.h: In function 'perf_trace_hfi1_trace_template':
-   include/trace/perf.h:64:16: warning: function 'perf_trace_hfi1_trace_template' might be a candidate for 'gnu_printf' format attribute [-Wsuggest-attribute=format]
-      64 |         struct hlist_head *head;                                        \
-         |                ^~~~~~~~~~
-   drivers/infiniband/hw/hfi1/./trace_dbg.h:25:1: note: in expansion of macro 'DECLARE_EVENT_CLASS'
-      25 | DECLARE_EVENT_CLASS(hfi1_trace_template,
-         | ^~~~~~~~~~~~~~~~~~~
+Changes from v3:
+1) Dropped SSTE support in this patch.
+2) Rebased to the latest code.
+
+Changes from v2:
+1) SSTE support made using dt and created seperate patches.
+2) SPI controller master mode selection made common to all DW SPI controllers.
+3) Using a common init function for both keem bay and thunder bay.
+
+Changes from v1:
+1) Designware CR0 specific macros are named in a generic way.
+2) SPI CAP macros are named in generic way rather than naming project specific.
+3) SPI KEEM BAY specific macros are replaced by generic macros.
+4) Resued the existing SPI deassert API instead of adding another reset
 
 
-vim +261 include/trace/trace_events.h
+Changes in patches:
+Patch 1:
+--------
+Changes from v4:
+1) Newly introduced in v5 as seperate patch.
 
-55de2c0b5610cb include/trace/trace_events.h Masami Hiramatsu         2021-11-22  253  
-091ad3658e3c76 include/trace/ftrace.h       Ingo Molnar              2009-11-26  254  #undef DECLARE_EVENT_CLASS
-091ad3658e3c76 include/trace/ftrace.h       Ingo Molnar              2009-11-26  255  #define DECLARE_EVENT_CLASS(call, proto, args, tstruct, assign, print)	\
-d0ee8f4a1f5f3d include/trace/trace_events.h Steven Rostedt (Red Hat  2015-05-13  256) static inline notrace int trace_event_get_offsets_##call(		\
-62323a148fbeb0 include/trace/trace_events.h Steven Rostedt (Red Hat  2015-05-13  257) 	struct trace_event_data_offsets_##call *__data_offsets, proto)	\
-7fcb7c472f455d include/trace/ftrace.h       Li Zefan                 2009-06-01  258  {									\
-7fcb7c472f455d include/trace/ftrace.h       Li Zefan                 2009-06-01  259  	int __data_size = 0;						\
-114e7b52dee69c include/trace/ftrace.h       Filipe Brandenburger     2014-02-28  260  	int __maybe_unused __item_length;				\
-a7237765730a10 include/trace/trace_events.h Steven Rostedt (Red Hat  2015-05-13 @261) 	struct trace_event_raw_##call __maybe_unused *entry;		\
-7fcb7c472f455d include/trace/ftrace.h       Li Zefan                 2009-06-01  262  									\
-7fcb7c472f455d include/trace/ftrace.h       Li Zefan                 2009-06-01  263  	tstruct;							\
-7fcb7c472f455d include/trace/ftrace.h       Li Zefan                 2009-06-01  264  									\
-7fcb7c472f455d include/trace/ftrace.h       Li Zefan                 2009-06-01  265  	return __data_size;						\
-7fcb7c472f455d include/trace/ftrace.h       Li Zefan                 2009-06-01  266  }
-7fcb7c472f455d include/trace/ftrace.h       Li Zefan                 2009-06-01  267  
+Patch 2:
+--------
+Changes from v4/v3/v2/v1:
+1) No change in this patch.
+
+
+Patch 3:
+--------
+Changes from v4:
+1) Reordered the patch.
+2) Setting CTRLR0 BIT31 is done conditionally for 1.02a version.
+
+Changes from v3:
+1) Corrected dw_spi_ip_is macro with the missing underscore.
+2) Setting CTRLR0 BIT31 without any condition check as in older version of
+   DW SPI controller this bit is reserved.
+
+Changes from v2/v1:
+1)Newly introduced in v3 to make master mode selection as seperate patch
+
+Patch 4:
+--------
+Changes from v4:
+1) Reordered the patch.
+
+Changes from v3:
+1) No changes.
+
+Changes from v2:
+1) Init function is made common for Keem Bay and Thunder Bay.
+
+Thanks & Regards,
+Nandhini
+
+Nandhini Srikandan (4):
+  spi: dw: Fix IP-core versions macro
+  dt-bindings: spi: Add bindings for Intel Thunder Bay SoC
+  spi: dw: Add support for master mode selection for DWC SSI controller
+  spi: dw: Add support for Intel Thunder Bay SPI controller
+
+ .../devicetree/bindings/spi/snps,dw-apb-ssi.yaml    |  2 ++
+ drivers/spi/spi-dw-core.c                           |  5 +++--
+ drivers/spi/spi-dw-mmio.c                           |  8 ++++----
+ drivers/spi/spi-dw.h                                | 13 +++----------
+ 4 files changed, 12 insertions(+), 16 deletions(-)
 
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+2.17.1
+

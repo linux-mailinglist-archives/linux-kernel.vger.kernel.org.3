@@ -2,62 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5AF9856865F
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 13:07:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5180B568664
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 13:08:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232833AbiGFLHV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Jul 2022 07:07:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46158 "EHLO
+        id S232925AbiGFLIA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Jul 2022 07:08:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46398 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231414AbiGFLHT (ORCPT
+        with ESMTP id S231414AbiGFLH5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Jul 2022 07:07:19 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7414824BFA;
-        Wed,  6 Jul 2022 04:07:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1657105638; x=1688641638;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=yKgc2vjQmrk87jfSMbEcfhFBP8f5/gvb4tTG7hDrz7s=;
-  b=ewOE+abbpbfx+2toSy5qRJh4gibl/drSKWi67/nXwcPzTukcGRt4+0nA
-   9itqt7gbpbZWwp87olDhChDvegsyvaGe2wwAKNFvi10aGOQU6w+HRdQyy
-   faNl2tZaHcVMEPTpcUWWZeXeK9gyYc+qz3p+VB9nT9P7xJ9ceJe9cu6J9
-   UA77x7O97U26pbd/kD5qunVxLkCuSl9MCHINZ0ZX716ukSUxl2B88O74N
-   lx1HhE3rS0o81R2wr2iwtC3372hazGCxMsiFaxf4/ncakXrjDuejVdJRk
-   sEOD4ov8tcteU5w6pWIbEXnB7rZ8c79tLt1Qzas6oS5PWGNadR8LGn0wP
-   g==;
-X-IronPort-AV: E=Sophos;i="5.92,249,1650956400"; 
-   d="scan'208";a="166602186"
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa2.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 06 Jul 2022 04:07:17 -0700
-Received: from chn-vm-ex02.mchp-main.com (10.10.85.144) by
- chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.17; Wed, 6 Jul 2022 04:07:17 -0700
-Received: from kavya.microchip.com (10.10.115.15) by chn-vm-ex02.mchp-main.com
- (10.10.85.144) with Microsoft SMTP Server id 15.1.2375.17 via Frontend
- Transport; Wed, 6 Jul 2022 04:07:13 -0700
-From:   Kavyasree Kotagiri <kavyasree.kotagiri@microchip.com>
-To:     <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
-        <nicolas.ferre@microchip.com>, <alexandre.belloni@bootlin.com>,
-        <claudiu.beznea@microchip.com>, <UNGLinuxDriver@microchip.com>
-CC:     <devicetree@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <Kavyasree.Kotagiri@microchip.com>
-Subject: [PATCH v7 3/3] mfd: atmel-flexcom: Add support for lan966x flexcom chip-select configuration
-Date:   Wed, 6 Jul 2022 09:06:19 -0200
-Message-ID: <20220706110619.71729-4-kavyasree.kotagiri@microchip.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220706110619.71729-1-kavyasree.kotagiri@microchip.com>
-References: <20220706110619.71729-1-kavyasree.kotagiri@microchip.com>
+        Wed, 6 Jul 2022 07:07:57 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A53F2611C;
+        Wed,  6 Jul 2022 04:07:56 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 21869B81BE6;
+        Wed,  6 Jul 2022 11:07:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 14C19C341C0;
+        Wed,  6 Jul 2022 11:07:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1657105673;
+        bh=RogpuoWy8qfianqaIwi0HDTIG8Zn33CeVTw7+2LWNGQ=;
+        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+        b=XUcji2VE1GH/yJAccMlqJmGX0h6ZBd5R8LRiC9OaRG0uDwBqxqlhCmqjVlRjhJfAD
+         N0lAZaQtIpe0OP+aLyMsWfD8PaPoSqGhfUP+c4m4qfx30BGvlZTF++GwieR1iETy4m
+         t4GzDXxBcf1Lw6hb+fr/DMboarL5m/W4DMCR/B3onWgwtHZldBLDUXhuD1CMzaBUty
+         5nQhsmK002eNqDee0PNneUgAHm1CfebXbiNclRTam2QUVtlOqcnL9riOBmFRLFsp3S
+         /d9CrVeuUgg5C0ipIp6n8xqTmwKglW6JAPpxGdWCZaaZBia8TEaXqDfoNoW2RJSaC9
+         MSO6RMlS7GiaA==
+From:   Mark Brown <broonie@kernel.org>
+To:     alsa-devel@alsa-project.org, lgirdwood@gmail.com, tiwai@suse.com,
+        robh+dt@kernel.org, festevam@gmail.com, shengjiu.wang@nxp.com,
+        krzk+dt@kernel.org, nicoleotsuka@gmail.com,
+        devicetree@vger.kernel.org, perex@perex.cz, Xiubo.Lee@gmail.com,
+        shengjiu.wang@gmail.com
+Cc:     linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org
+In-Reply-To: <1656667961-1799-1-git-send-email-shengjiu.wang@nxp.com>
+References: <1656667961-1799-1-git-send-email-shengjiu.wang@nxp.com>
+Subject: Re: [PATCH v2 0/6] Add support of two Audio PLL source
+Message-Id: <165710567079.237380.5026373305183588583.b4-ty@kernel.org>
+Date:   Wed, 06 Jul 2022 12:07:50 +0100
 MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -65,168 +57,50 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-LAN966x SoC have 5 flexcoms. Each flexcom has 2 chip-selects
-which are optional I/O lines. For each chip select of each
-flexcom there is a configuration register FLEXCOM_SHARED[0-4]:SS_MASK[0-1].
-The width of configuration register is 21 because there are
-21 shared pins on each of which the chip select can be mapped.
-Each bit of the register represents a different FLEXCOM_SHARED pin.
+On Fri, 1 Jul 2022 17:32:35 +0800, Shengjiu Wang wrote:
+> i.MX8MQ/MN/MM/MP platforms typically have 2 AUDIO PLLs being
+> configured to handle 8kHz and 11kHz series audio rates.
+> 
+> The patches implement the functionality to select at runtime
+> the appropriate AUDIO PLL for root clock, if there is no
+> two PLL registered, then no action taken.
+> 
+> [...]
 
-Signed-off-by: Kavyasree Kotagiri <kavyasree.kotagiri@microchip.com>
-Reviewed-by: Claudiu Beznea <claudiu.beznea@microchip.com>
----
-v6 -> v7:
- - No changes.
+Applied to
 
-v5 -> v6:
- - No changes.
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/sound.git for-next
 
-v4 -> v5:
- - No changes.
+Thanks!
 
-v3 -> v4:
- - Add condition for a flexcom whether to configure chip-select lines
-   or not, based on "microchip,flx-shrd-pins" property existence because
-   chip-select lines are optional.
+[1/6] ASoC: fsl_utils: Add function to handle PLL clock source
+      commit: 7bad8125549cda14d9ccf97d7d76f7ef6ac9d206
+[2/6] ASoC: fsl_spdif: Add support for PLL switch at runtime.
+      commit: 34dcdebecf2f05e1b275e1da8352f8e4c1aab6f6
+[3/6] ASoC: fsl_micfil: Add support for PLL switch at runtime
+      commit: 93f54100fbdedc22e8d88d037a8a3e32101724eb
+[4/6] ASoC: fsl_sai: Add support for PLL switch at runtime
+      commit: 7cb7f07d2491a3435578ab97eeeb70fadac6385c
+[5/6] ASoC: dt-bindings: fsl_spdif: Add two PLL clock source
+      commit: df0835a810c1585bd54ffb10db92b455e922c7ec
+[6/6] ASoC: dt-bindings: fsl-sai: Add two PLL clock source
+      commit: 6c06ad34eda9e1990313ff80999e1a75a02fa1c0
 
-v2 -> v3:
- - used goto label for clk_disable in error cases.
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
 
-v1 -> v2:
- - use GENMASK for mask, macros for maximum allowed values.
- - use u32 values for flexcom chipselects instead of strings.
- - disable clock in case of errors.
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
 
- drivers/mfd/atmel-flexcom.c | 94 ++++++++++++++++++++++++++++++++++++-
- 1 file changed, 93 insertions(+), 1 deletion(-)
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
 
-diff --git a/drivers/mfd/atmel-flexcom.c b/drivers/mfd/atmel-flexcom.c
-index 33caa4fba6af..430b6783b5a7 100644
---- a/drivers/mfd/atmel-flexcom.c
-+++ b/drivers/mfd/atmel-flexcom.c
-@@ -28,15 +28,68 @@
- #define FLEX_MR_OPMODE(opmode)	(((opmode) << FLEX_MR_OPMODE_OFFSET) &	\
- 				 FLEX_MR_OPMODE_MASK)
- 
-+/* LAN966x flexcom shared register offsets */
-+#define FLEX_SHRD_SS_MASK_0	0x0
-+#define FLEX_SHRD_SS_MASK_1	0x4
-+#define FLEX_SHRD_PIN_MAX	20
-+#define FLEX_CS_MAX		1
-+#define FLEX_SHRD_MASK		GENMASK(20, 0)
-+
-+struct atmel_flex_caps {
-+	bool has_flx_cs;
-+};
-+
- struct atmel_flexcom {
- 	void __iomem *base;
-+	void __iomem *flexcom_shared_base;
- 	u32 opmode;
- 	struct clk *clk;
- };
- 
-+static int atmel_flexcom_lan966x_cs_config(struct platform_device *pdev)
-+{
-+	struct atmel_flexcom *ddata = dev_get_drvdata(&pdev->dev);
-+	struct device_node *np = pdev->dev.of_node;
-+	u32 flx_shrd_pins[2], flx_cs[2], val;
-+	int err, i, count;
-+
-+	count = of_property_count_u32_elems(np, "microchip,flx-shrd-pins");
-+	if (count <= 0 || count > 2) {
-+		dev_err(&pdev->dev, "Invalid %s property (%d)\n", "flx-shrd-pins",
-+				count);
-+		return -EINVAL;
-+	}
-+
-+	err = of_property_read_u32_array(np, "microchip,flx-shrd-pins", flx_shrd_pins, count);
-+	if (err)
-+		return err;
-+
-+	err = of_property_read_u32_array(np, "microchip,flx-cs", flx_cs, count);
-+	if (err)
-+		return err;
-+
-+	for (i = 0; i < count; i++) {
-+		if (flx_shrd_pins[i] > FLEX_SHRD_PIN_MAX)
-+			return -EINVAL;
-+
-+		if (flx_cs[i] > FLEX_CS_MAX)
-+			return -EINVAL;
-+
-+		val = ~(1 << flx_shrd_pins[i]) & FLEX_SHRD_MASK;
-+
-+		if (flx_cs[i] == 0)
-+			writel(val, ddata->flexcom_shared_base + FLEX_SHRD_SS_MASK_0);
-+		else
-+			writel(val, ddata->flexcom_shared_base + FLEX_SHRD_SS_MASK_1);
-+	}
-+
-+	return 0;
-+}
-+
- static int atmel_flexcom_probe(struct platform_device *pdev)
- {
- 	struct device_node *np = pdev->dev.of_node;
-+	const struct atmel_flex_caps *caps;
- 	struct resource *res;
- 	struct atmel_flexcom *ddata;
- 	int err;
-@@ -76,13 +129,52 @@ static int atmel_flexcom_probe(struct platform_device *pdev)
- 	 */
- 	writel(FLEX_MR_OPMODE(ddata->opmode), ddata->base + FLEX_MR);
- 
-+	caps = of_device_get_match_data(&pdev->dev);
-+	if (!caps) {
-+		dev_err(&pdev->dev, "Could not retrieve flexcom caps\n");
-+		err = -EINVAL;
-+		goto clk_disable;
-+	}
-+
-+	if (caps->has_flx_cs && of_property_read_bool(np, "microchip,flx-shrd-pins")) {
-+		ddata->flexcom_shared_base = devm_platform_get_and_ioremap_resource(pdev, 1, NULL);
-+		if (IS_ERR(ddata->flexcom_shared_base)) {
-+			err = dev_err_probe(&pdev->dev,
-+					PTR_ERR(ddata->flexcom_shared_base),
-+					"failed to get flexcom shared base address\n");
-+			goto clk_disable;
-+		}
-+
-+		err = atmel_flexcom_lan966x_cs_config(pdev);
-+		if (err)
-+			goto clk_disable;
-+	}
-+
-+clk_disable:
- 	clk_disable_unprepare(ddata->clk);
-+	if (err)
-+		return err;
- 
- 	return devm_of_platform_populate(&pdev->dev);
- }
- 
-+static const struct atmel_flex_caps atmel_flexcom_caps = {};
-+
-+static const struct atmel_flex_caps lan966x_flexcom_caps = {
-+	.has_flx_cs = true,
-+};
-+
- static const struct of_device_id atmel_flexcom_of_match[] = {
--	{ .compatible = "atmel,sama5d2-flexcom" },
-+	{
-+		.compatible = "atmel,sama5d2-flexcom",
-+		.data = &atmel_flexcom_caps,
-+	},
-+
-+	{
-+		.compatible = "microchip,lan966x-flexcom",
-+		.data = &lan966x_flexcom_caps,
-+	},
-+
- 	{ /* sentinel */ }
- };
- MODULE_DEVICE_TABLE(of, atmel_flexcom_of_match);
--- 
-2.25.1
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
 
+Thanks,
+Mark

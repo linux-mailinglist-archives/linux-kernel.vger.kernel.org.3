@@ -2,109 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0BBBD569542
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 00:25:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 07F1856948A
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 23:36:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234363AbiGFWZS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Jul 2022 18:25:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60516 "EHLO
+        id S233870AbiGFVgF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Jul 2022 17:36:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57074 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233780AbiGFWZP (ORCPT
+        with ESMTP id S231872AbiGFVgD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Jul 2022 18:25:15 -0400
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9CCD2AE21;
-        Wed,  6 Jul 2022 15:25:14 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4LdYyG0z8lz4xRC;
-        Thu,  7 Jul 2022 08:25:09 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1657146310;
-        bh=0WVIHiCwdw66BCg6iN9KJByN6VzAlrzYMCtrXOOxbn8=;
-        h=Date:From:To:Cc:Subject:From;
-        b=ArjAsBByIJhZKIw833cALzEG5M1elhZFUiRtHqUQeIP/YxIIoRwyg0DSEGhXQ5eCE
-         2Rttyw/LfkJrJ7Pd2ArwjA2xGujpvd8S2DImYRJDnQ0SQ1gsp9BUnBbr9hyGF2zYrJ
-         Uz3PixF/a0fIgSdiutht3AmC40Rl2/Ri70EGeXgm17BdbL93E14ZNmFgC03lssq7q5
-         3IkC/RQtKD4wWFx8zoZobEL/flLgFNvAXflfuHrGOf/yZwKc9ltmcYq5rBdKghEkr1
-         6tu6ttoT4OkorHFsM67zCf6fZhGHV9nzVdkO9aqUMP/bmCaIBBy3ODa5+4LiL3BVUD
-         STXVJZK8CthzQ==
-Date:   Thu, 7 Jul 2022 07:35:54 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc:     Mario Limonciello <mario.limonciello@amd.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: Fixes tagis need some work in the pm tree
-Message-ID: <20220707073554.01b962df@canb.auug.org.au>
+        Wed, 6 Jul 2022 17:36:03 -0400
+Received: from mail-pg1-x535.google.com (mail-pg1-x535.google.com [IPv6:2607:f8b0:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2FC1E02
+        for <linux-kernel@vger.kernel.org>; Wed,  6 Jul 2022 14:36:01 -0700 (PDT)
+Received: by mail-pg1-x535.google.com with SMTP id 145so14978733pga.12
+        for <linux-kernel@vger.kernel.org>; Wed, 06 Jul 2022 14:36:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=E//5ZA8uzfUdBafNOuQKisK6Qx4fv09+u0puRM54Yd4=;
+        b=WYNY3+EZM7O23aAqdPFVrW/DUF8fqtHeku8lTPTokWqu4qo5ihKYdUaHcZWbwvv/uk
+         8pSXVp4lrwvMkWw/I3pmkDXmnaHZGzkKLQfFWknorNkRdOAZ34z44bGUwMJFTFtav0az
+         gm4V27G3TiZgAd6SfIrgB9fz0EOxM2PT3QKrjXYqlTNYE/nVNyiGONlx9/iQi7rRbONh
+         /hlEJz3SBbw/A6hPaYmMguUx2TWyvJ5D43pCulKKsZ+mosv9JeeNvxWS8RbOy2/4uIVU
+         gwHVRrlkgfaDmSmmD1HpaixNY4NrKhE4Mc0jzJ3HGiknRzhAmLsbIGxApWqP6xhzhjwU
+         Sung==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=E//5ZA8uzfUdBafNOuQKisK6Qx4fv09+u0puRM54Yd4=;
+        b=2HEa/VxRW8QYW2w1JqdaCFS5bCuQg35FQaEtIHExx/FhJiv2RkZiR9FeFWymfZ3wtg
+         7veV3bquHK23DCEWP9masAKNLwp+CJpD1azFvhPGaCjI5R+2/1ujWTKAYXtfm5Waj6Q2
+         RWALmQn8sk+xDdS4lcG8OeMaP24Bjnm0dGpDHszwQUOUwatqY33vw4DrfmsIMjn4MFAm
+         ftmdHefoW0TQrho7D/AfFpfLqJbZ0uMn9sQ3JnTRSWi+iJfTslRgpgaSTKiWDpsbQ1Zp
+         EoJUOQvLhqcbui+UXGbqrQfl8ziG+NOjBA2GlldNdCXTuesEKT+3UuFQtS/Xj6+ZShH9
+         OO3w==
+X-Gm-Message-State: AJIora/5rKQEsCmnfEk7KiVCohfP8uI8bEHvBNANbxWyCM+uRonCAIUu
+        SH87qkGXp6i/TjEYFB5rSZefTw==
+X-Google-Smtp-Source: AGRyM1vTi5E2bFkpKPPnm+ygtjra8noxOqMQi4yVuvfE/qj8l2tXrHYCvXKpy5UhaMgSliBROIV24A==
+X-Received: by 2002:a05:6a00:80d:b0:525:520a:1736 with SMTP id m13-20020a056a00080d00b00525520a1736mr48216477pfk.36.1657143361099;
+        Wed, 06 Jul 2022 14:36:01 -0700 (PDT)
+Received: from google.com (123.65.230.35.bc.googleusercontent.com. [35.230.65.123])
+        by smtp.gmail.com with ESMTPSA id i1-20020a17090a718100b001ef87123615sm7423406pjk.37.2022.07.06.14.36.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 06 Jul 2022 14:36:00 -0700 (PDT)
+Date:   Wed, 6 Jul 2022 21:35:56 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Vitaly Kuznetsov <vkuznets@redhat.com>
+Cc:     kvm@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
+        Anirudh Rayabharam <anrayabh@linux.microsoft.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Maxim Levitsky <mlevitsk@redhat.com>,
+        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 06/28] KVM: nVMX: Introduce
+ KVM_CAP_HYPERV_ENLIGHTENED_VMCS2
+Message-ID: <YsYAPL1UUKJB3/MJ@google.com>
+References: <20220629150625.238286-1-vkuznets@redhat.com>
+ <20220629150625.238286-7-vkuznets@redhat.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/VrtyW8RDDX89KJSkEh7+7.u";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220629150625.238286-7-vkuznets@redhat.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/VrtyW8RDDX89KJSkEh7+7.u
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Wed, Jun 29, 2022, Vitaly Kuznetsov wrote:
+> Turns out Enlightened VMCS can gain new fields without version change
+> and KVM_CAP_HYPERV_ENLIGHTENED_VMCS which KVM currently has cant's
+> handle this reliably. In particular, just updating the current definition
+> of eVMCSv1 with the new fields and adjusting the VMX MSR filtering will
+> inevitably break live migration to older KVMs. Note: enabling eVMCS and
+> setting VMX feature MSR can happen in any order.
+> 
+> Introduce a notion of KVM internal "Enlightened VMCS revision" and add
+> a new capability allowing to add fields to Enlightened VMCS while keeping
+> its version.
 
-Hi all,
+Bumping a "minor" version number in KVM is going to be a nightmare.  KVM is going
+to be stuck "supporting" old revisions in perpetuity, and userspace will be forced
+to keep track of which features are available with which arbitrary revision (is
+that information even communicated to userspace?).
 
-In commit
+I think a more maintainable approach would be to expose the "filtered" VMX MSRs to
+userspace, e.g. add KVM_GET_EVMCS_VMX_MSRS.  Then KVM just needs to document what
+the "filters" are for KVM versions that don't support KVM_GET_EVMCS_VMX_MSRS.
+KVM itself doesn't need to maintain version information because it's userspace's
+responsibility to ensure that userspace doesn't try to migrate to a KVM that doesn't
+support the desired feature set.
 
-  8b356e536e69 ("ACPI: CPPC: Don't require _OSC if X86_FEATURE_CPPC is supp=
-orted")
-
-Fixes tag
-
-  Fixes: 72f2ecb7ece7 ("Set CPPC _OSC bits for all and when CPPC_LIB is sup=
-ported")
-
-has these problem(s):
-
-  - Subject does not match target commit subject
-
-In commit
-
-  7feec7430edd ("ACPI: CPPC: Only probe for _CPC if CPPC v2 is acked")
-
-Fixes tag
-
-  Fixes: 2ca8e6285250 ("Revert "ACPI Pass the same capabilities to the _OSC=
- regardless of the query flag"")
-
-has these problem(s):
-
-  - Subject does not match target commit subject
-
-Just use
-	git log -1 --format=3D'Fixes: %h ("%s")'
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/VrtyW8RDDX89KJSkEh7+7.u
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmLGADoACgkQAVBC80lX
-0Gx4Ogf+KDaHbnwNIr3x8Sj3csBrdEBT21PG0iZbGCEetmkCpQypH5/RIUPOwPO4
-57X1oi4NBdnt8WmK9T/PoNcfemkTU/EvNZ/MfKnPnhFubC+/+mhAoplDaVEli7RO
-oARlHnfuhmHdkSH2ADB6Rw1ruKQ333OaQGW/x3D4MYDQIjrf/knq8dEWkRzgEGIt
-xjNxFxKU7/rvWPRAnY1IRnHsnVW81+GMgxf9fqMlFnaIo4LAvBKc4LhomaBNIaxJ
-kwxD5Uaw/lzv9MDKdF4acNmuslSDQZt35atZWppPRW3LzR7l8KbRZL6Q3VKTg9rd
-sl16zlPkgju7OVY00dmtLka8HEB14w==
-=3qS6
------END PGP SIGNATURE-----
-
---Sig_/VrtyW8RDDX89KJSkEh7+7.u--
+That also avoids messes like unnecessarily blocking migration from "incompatible"
+revisions when running on hardware that doesn't even support the control.

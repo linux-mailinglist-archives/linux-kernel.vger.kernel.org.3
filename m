@@ -2,153 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DF23E568348
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 11:17:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E954568360
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 11:26:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233092AbiGFJQs convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 6 Jul 2022 05:16:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60276 "EHLO
+        id S232019AbiGFJRl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Jul 2022 05:17:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60948 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232648AbiGFJQq (ORCPT
+        with ESMTP id S231305AbiGFJRj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Jul 2022 05:16:46 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1088B38
-        for <linux-kernel@vger.kernel.org>; Wed,  6 Jul 2022 02:16:45 -0700 (PDT)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <p.zabel@pengutronix.de>)
-        id 1o919C-0003MH-IH; Wed, 06 Jul 2022 11:16:38 +0200
-Received: from [2a0a:edc0:0:900:1d::4e] (helo=lupine)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <p.zabel@pengutronix.de>)
-        id 1o9195-004jQf-K4; Wed, 06 Jul 2022 11:16:35 +0200
-Received: from pza by lupine with local (Exim 4.94.2)
-        (envelope-from <p.zabel@pengutronix.de>)
-        id 1o9198-0003QN-9M; Wed, 06 Jul 2022 11:16:34 +0200
-Message-ID: <f28de0c61c06396e36756f2d4f3379fab26abdbf.camel@pengutronix.de>
-Subject: Re: [PATCH RESEND v5 6/8] clk: baikal-t1: Move reset-controls code
- into a dedicated module
-From:   Philipp Zabel <p.zabel@pengutronix.de>
-To:     Serge Semin <fancer.lancer@gmail.com>
-Cc:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
-        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        linux-clk@vger.kernel.org, linux-mips@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Date:   Wed, 06 Jul 2022 11:16:34 +0200
-In-Reply-To: <20220705220757.dwzmrx34t2nsxfzl@mobilestation>
-References: <20220624141853.7417-1-Sergey.Semin@baikalelectronics.ru>
-         <20220624141853.7417-7-Sergey.Semin@baikalelectronics.ru>
-         <e0869ae1b10ec19eaf87dc5fa53498f82e7deaac.camel@pengutronix.de>
-         <20220705220757.dwzmrx34t2nsxfzl@mobilestation>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-User-Agent: Evolution 3.38.3-1 
+        Wed, 6 Jul 2022 05:17:39 -0400
+Received: from mail-qt1-f173.google.com (mail-qt1-f173.google.com [209.85.160.173])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E943F1D
+        for <linux-kernel@vger.kernel.org>; Wed,  6 Jul 2022 02:17:35 -0700 (PDT)
+Received: by mail-qt1-f173.google.com with SMTP id bs20so17373300qtb.11
+        for <linux-kernel@vger.kernel.org>; Wed, 06 Jul 2022 02:17:35 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=N5bac8l9SxzDPCg8iINwZ/ihRJfBHL5uFQtEx4wJI88=;
+        b=y6z3DMha2liFgpENA6KifpWCPnxnR3MF52rrpZO0trFRvPd069l3q4mjccd0jF5n83
+         x73D5N7GokdTyDhNMF1Nf/zYn31ZaztXk5NQGRuUoDSx3090HvrP/GviziKMDJQRj7d6
+         tNyMrbioqXiy3RQvacNwj7gKxK2yRAwULG4VPFGB+1fGbgWEOSoQhaeGBY311oes0fWF
+         EtwXh4+eebJMVOLbRPCjuJE9Sd8XPQHwXA5GvK+JssbtT83sUKKDiDsWpEG2Cyp6+RZG
+         KmHqDHLc5w1hYlQylyew4x2O5cbMzvOfDtxzXdCBEcyK0wqjRSGSHll83NZi1JyPrV4/
+         SQ3A==
+X-Gm-Message-State: AJIora98/c1W5slSeD2YB5HJWsXN2aFy8s/fxMG/WS+1gWkBL9eKdyvN
+        p6XydEmP1Fea+V3Ke0IW4WhFSf+NmmYrNg==
+X-Google-Smtp-Source: AGRyM1v6Ax7NuZ6jjlFLaMHF0fIErMH9lXZZPm1eLDChTOZ+cNTuqTmTSb3kB75N1USmE+gJ9PfQ6A==
+X-Received: by 2002:ad4:5dc1:0:b0:462:194:bc7a with SMTP id m1-20020ad45dc1000000b004620194bc7amr36751615qvh.87.1657099054355;
+        Wed, 06 Jul 2022 02:17:34 -0700 (PDT)
+Received: from mail-yb1-f179.google.com (mail-yb1-f179.google.com. [209.85.219.179])
+        by smtp.gmail.com with ESMTPSA id f15-20020ac87f0f000000b00304e8938800sm25213055qtk.96.2022.07.06.02.17.33
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 06 Jul 2022 02:17:34 -0700 (PDT)
+Received: by mail-yb1-f179.google.com with SMTP id c143so17765388ybf.3
+        for <linux-kernel@vger.kernel.org>; Wed, 06 Jul 2022 02:17:33 -0700 (PDT)
+X-Received: by 2002:a5b:6c1:0:b0:669:a7c3:4c33 with SMTP id
+ r1-20020a5b06c1000000b00669a7c34c33mr42274477ybq.543.1657099053737; Wed, 06
+ Jul 2022 02:17:33 -0700 (PDT)
 MIME-Version: 1.0
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: p.zabel@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+References: <20220628084903.3147123-1-yangyingliang@huawei.com>
+In-Reply-To: <20220628084903.3147123-1-yangyingliang@huawei.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Wed, 6 Jul 2022 11:17:22 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdV=YG_EMFO0jq7s4nH=VN3aWox3=+fWuF46HVHdWCDdMg@mail.gmail.com>
+Message-ID: <CAMuHMdV=YG_EMFO0jq7s4nH=VN3aWox3=+fWuF46HVHdWCDdMg@mail.gmail.com>
+Subject: Re: [PATCH -next v2] m68k: virt: platform: fix missing
+ platform_device_unregister() on error in virt_platform_init()
+To:     Yang Yingliang <yangyingliang@huawei.com>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-m68k <linux-m68k@lists.linux-m68k.org>,
+        Laurent Vivier <laurent@vivier.eu>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Serge,
+On Tue, Jun 28, 2022 at 10:39 AM Yang Yingliang
+<yangyingliang@huawei.com> wrote:
+> Add the missing platform_device_unregister() before return
+> from virt_platform_init() in the error handling case.
+>
+> Fixes: 05d51e42df06 ("m68k: Introduce a virtual m68k machine")
+> Reported-by: Hulk Robot <hulkci@huawei.com>
+> Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
+> ---
+> v2:
+>   change for loop to while at lable err_unregister_rtc_virtio.
 
-On Mi, 2022-07-06 at 01:07 +0300, Serge Semin wrote:
-[...]
-> > What is the reason for separating ccu-rst.c and clk-ccu-rst.c?
-> > 
-> > I expect implementing the reset ops and registering the reset
-> > controller in the same compilation unit would be easier.
-> 
-> From the very beginning of the Baikal-T1 driver live the Clock/Reset functionality
-> has been split up into two parts:
-> 1. ccu-{div,pll}.c - Clock/Reset operations implementation.
-> 2. clk-ccu-{div,pll}.c - Clock/Reset kernel interface implementation.
-> At least for the clk-part it has made the driver much easier to read.
-> Code in 1. provides the interface methods like
-> ccu_{div,pll}_hw_register() to register a clock provider corresponding
-> to the CCU divider/PLL of the particular type. Code in 2. uses these
-> methods to create the CCU Dividers/PLL clock descriptors and register
-> the of-based clocks in the system. The reset functionality was
-> redistributed in the same manner in the framework of the ccu-div.c and
-> clk-ccu-div.c modules.
-> 
-> A similar approach I was trying to utilize in the framework of the
-> separate CCU Resets implementation. Although it turned out to be not as
-> handy as it was for the clock-part due to the different clock and
-> reset subsystems API (clock subsystem provides a single clock
-> source based API, while the reset subsystem expects to have the whole
-> resets controller described). Anyway I've decided to preserve as much
-> similarities as possible for the sake of the code unification and
-> better readability/maintainability. Thus the reset lines control
-> methods have been placed in the ccu-rst.c object file, while the reset
-> control registration has been implemented in the clk-ccu-rst.c module.
+Reviewed-by: Geert Uytterhoeven <geert@linux-m68k.org>
+i.e. will queue in the m68k for-v5.20 branch.
 
-Thank you for the detailed explanation. I think that splitting doesn't
-help readability much in this case, but I realize that may just be a
-matter of preference.
+Gr{oetje,eeting}s,
 
-[...]
-> > I don't think this is necessary, see my comments below. Since the reset
-> > ids are contiguous, just setting nr_resets and using the default
-> > .of_xlate should be enough to make sure this is never called with an
-> > invalid id.
-> 
-> Using non-contiguous !Clock! IDs turned to be unexpectedly handy. Due to
-> that design I was able to add the internal clock providers hidden from
-> the DTS users but still visible in the clocks hierarchy. It has made the
-> clocks implementation as detailed as possible and protected from the
-> improper clocks usage. It also simplified a new clock providers adding
-> in future (though there won't be clock sources left undefined in the
-> SoC after this patchset is applied).
-> 
-> All of that made me thinking that the same approach can be useful in
-> the framework of the CCU reset controls implementation too at the very
-> least for the code unification. Although after the next patch in the
-> series is applied there won't be resets left undefined in the
-> Baikal-T1 SoC. So from another side you might be partly right on
-> suggesting to drop the independent reset IDs/descriptors design and
-> just assume the IDs contiguousness.
-> 
-> So could you please confirm that you still insists on dropping it?
+                        Geert
 
-Please drop it, then. I don't think there is value in carrying this
-complexity just because it makes the code more similar to the
-neighboring clk code.
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
 
-I'd prefer to keep the reset ids contiguous, so future hardware should
-just get a different set of contiguous IDs, or new IDs appended
-contiguously as you do in patch 7.
-
-[...]
-> > 
-> > 
-> > 
-> > I would fold this into ccu_rst_hw_unregister().
-> 
-> I disagree in this part. Splitting up the interface methods in a set
-> of the small coherent methods like protagonists and respective
-> antagonists makes the code much easier to read and maintain. So I
-> will insist on having the ccu_rst_free_data() method even if it is
-> left with only a single kfree() function invocation.
-[...]
-> I have to disagree for the same reason as I would preserve the
-> ccu_rst_free_data() method here. Please see my comment above.
-
-I'm fine with that.
-
-> 
-regards
-Philipp
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds

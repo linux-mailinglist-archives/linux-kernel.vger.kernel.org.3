@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D14435690F8
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 19:43:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A42E85690EE
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 19:43:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234142AbiGFRnM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Jul 2022 13:43:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59612 "EHLO
+        id S234149AbiGFRnN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Jul 2022 13:43:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59652 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234071AbiGFRnD (ORCPT
+        with ESMTP id S234086AbiGFRnE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Jul 2022 13:43:03 -0400
-Received: from mail-qk1-x730.google.com (mail-qk1-x730.google.com [IPv6:2607:f8b0:4864:20::730])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 033D2255AB;
+        Wed, 6 Jul 2022 13:43:04 -0400
+Received: from mail-qk1-x729.google.com (mail-qk1-x729.google.com [IPv6:2607:f8b0:4864:20::729])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA2E42A27B;
         Wed,  6 Jul 2022 10:43:02 -0700 (PDT)
-Received: by mail-qk1-x730.google.com with SMTP id b125so11570337qkg.11;
-        Wed, 06 Jul 2022 10:43:01 -0700 (PDT)
+Received: by mail-qk1-x729.google.com with SMTP id n10so11572014qkn.10;
+        Wed, 06 Jul 2022 10:43:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=JCJEdfzYxuANLNWAxL8CQ7FpG0f6ZAq5X4D5qi7db0c=;
-        b=DlO/3qfZ5SSLrurU8TbdBO3ykda2jyUu5uXNtEnQ4tu3AGC7cNFHyY+D2NSEg6ZaBG
-         1f6immiGZzz70rKonuz5vWo1KVSlX0yJmmc0sbvOGdHX1cC0RmG10khnUrBzCRi8xfdj
-         e1IOH+ymxc4QGC09nAE3BsZS/vpSFggfxT/Ju/dUGOqNC9xdApSAk20YhCGMFyCt+7uv
-         KSrryPl+vZMQccCl8cj7RgYIjlZjztJPJYwO+odSVn9Y0JMChn/k/c7/UCgw3I8NwDH/
-         MWN1A/cf2aveIjoTbKiyR2goy4betfbXx4oxkhBynEasZGgcFPpIIdLcbAcok+M/6nbs
-         SwaQ==
+        bh=dALoUA4TxajQrqRALn6VbZI9jeqizcyFDqXo6cANVYg=;
+        b=nyC2+Sd3jhh/LEdWlSwYv/Wi4xBn2p0D6oGj4gyhLtswzAziH455Bo9wgTrHjKchaV
+         CgUOBfvEIp05FREyeEJMqK5TnX3mvRi6YSZnByT/LapbrtBBCTloUMHia4TbdAzGAGGH
+         yY1KGijCX0HOQO/4Fwk0fjkWegstt6IE3XkXQbCLYVn+Fhs3HUBfRuSjlDJWq7bBd1FO
+         MyD9Gvd/RAl4BUcDs/vKsJGcH5CMvMnBRnNZLsbxy5ZsmvDEmVUou6TFYWQuwlwqmDWf
+         XQFta9TFMS1sbaW+k3Fb4Zoa0W/mQbOCznzdToKyxHsXU+B5RB7a6dgcM8Q8VepDZxAo
+         6lTw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=JCJEdfzYxuANLNWAxL8CQ7FpG0f6ZAq5X4D5qi7db0c=;
-        b=tahzNX2ZBi2u7WpC/wFhk6D+gBAMJctkiPJB+8mBTbo9BR6aHpgn5reqYwuKmTawWe
-         fks6mufVpx8dZUlzQtI4L39rznv+To1harJFOVhx8cha4mvd6FO8o1MlH5TFK1AKy7y/
-         gHd2ZwpKIafs7+3XK6G4brb9F6xbtXgamwGXZv1/6DrLjOfPfr3ly+ko9yWoUdKLUuVo
-         /TXIgCgPOajApnxZyP/ArruyY1AlVOb8KaW1XHbYs/vvU0DVHu1WOycXAadEZjMkAscN
-         P39FSK7kCGwbmhZt2+dnXBj0eOe92xXsjJ0h96SGBMrRyUilgAK2hiocEurTFYNFxyEC
-         j9cA==
-X-Gm-Message-State: AJIora9X/mxRCvqTgtw0idpNXvWunWOsTDPCyk60yAS0zTYEb3mQSIlC
-        N47+gPVGInpaHfWba++PpENTI38pUXyXyA==
-X-Google-Smtp-Source: AGRyM1s+B46jQkrgWjQT9gY1k2Eac7Vkm7juIehWaTjcv9o5gxS0vNO3Xns1iF8qG2/K8x0tu2kPTQ==
-X-Received: by 2002:a05:620a:4505:b0:6b3:7c51:537c with SMTP id t5-20020a05620a450500b006b37c51537cmr11461188qkp.69.1657129380906;
-        Wed, 06 Jul 2022 10:43:00 -0700 (PDT)
-Received: from localhost (c-69-254-185-160.hsd1.ar.comcast.net. [69.254.185.160])
-        by smtp.gmail.com with ESMTPSA id a21-20020a05620a16d500b006a7502d0070sm28319377qkn.21.2022.07.06.10.43.00
+        bh=dALoUA4TxajQrqRALn6VbZI9jeqizcyFDqXo6cANVYg=;
+        b=qBUHOetWn9doC5NI0W1B1p1G3N/pgMsfWpdVwI8GdkLH3Zql1E2xFr+hITrEjIeZ8V
+         n6TogJSRbsIia8N9EBxuWBFabLqD91X6NR2TCbXwb9cF9SgE0NxrUuEvTwbP6fG7XCJ4
+         zerzg4W3TYPr2+w+yCFNhygnDP2f5K1NrMO6tEx5z2RaiJlqnuuVVfwIxt60ixcNd+4N
+         RQLQyyKdcnAtmG0fCOPhPYcgXb2J6ZgLdgiSiAfSY1/CdOx9SEKraZLY6emHsLUXx3bH
+         kqfopoKMvleX/d9S9IhMun/tTq8qPZ1i5tdSN1HjIBjV3e2fmfN/rnHnWmOuGJDpTMxz
+         +9bQ==
+X-Gm-Message-State: AJIora+3nulDQgEq1iEZWa2GS92cQTYWSfGDiCxw2t83Rjc+MuaOtr0N
+        FImzWCV8To/9dV45j1/97ynug/toN7S0ZQ==
+X-Google-Smtp-Source: AGRyM1uJ3hnFVUVKR+5A0tRR91nKmtjdOKPHZTHRMDZPsx7tXoYTXb9HZejmviIagEKCPhwWCBzbHg==
+X-Received: by 2002:a37:644b:0:b0:6af:3529:2bb8 with SMTP id y72-20020a37644b000000b006af35292bb8mr27450858qkb.341.1657129381738;
+        Wed, 06 Jul 2022 10:43:01 -0700 (PDT)
+Received: from localhost (c-69-254-185-160.hsd1.fl.comcast.net. [69.254.185.160])
+        by smtp.gmail.com with ESMTPSA id v38-20020a05622a18a600b0031a84ecd4d1sm20818859qtc.95.2022.07.06.10.43.01
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 06 Jul 2022 10:43:00 -0700 (PDT)
+        Wed, 06 Jul 2022 10:43:01 -0700 (PDT)
 From:   Yury Norov <yury.norov@gmail.com>
 To:     linux-kernel@vger.kernel.org,
         Andrew Morton <akpm@linux-foundation.org>,
@@ -66,9 +66,9 @@ To:     linux-kernel@vger.kernel.org,
         linux-doc@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-mm@kvack.org
 Cc:     Yury Norov <yury.norov@gmail.com>
-Subject: [PATCH 04/10] cpumask: change return types to bool where appropriate
-Date:   Wed,  6 Jul 2022 10:42:47 -0700
-Message-Id: <20220706174253.4175492-5-yury.norov@gmail.com>
+Subject: [PATCH 05/10] lib/cpumask: change return types to unsigned where appropriate
+Date:   Wed,  6 Jul 2022 10:42:48 -0700
+Message-Id: <20220706174253.4175492-6-yury.norov@gmail.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220706174253.4175492-1-yury.norov@gmail.com>
 References: <20220706174253.4175492-1-yury.norov@gmail.com>
@@ -84,94 +84,127 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Some cpumask functions have integer return types where return values
-are naturally booleans.
+Switch return types to unsigned int where return values cannot be negative.
 
 Signed-off-by: Yury Norov <yury.norov@gmail.com>
 ---
- include/linux/cpumask.h | 24 ++++++++++++------------
- 1 file changed, 12 insertions(+), 12 deletions(-)
+ include/linux/cpumask.h | 14 +++++++-------
+ lib/cpumask.c           | 18 +++++++++---------
+ 2 files changed, 16 insertions(+), 16 deletions(-)
 
 diff --git a/include/linux/cpumask.h b/include/linux/cpumask.h
-index fe29ac7cc469..b54e27d9da6b 100644
+index b54e27d9da6b..760022bcb925 100644
 --- a/include/linux/cpumask.h
 +++ b/include/linux/cpumask.h
-@@ -372,9 +372,9 @@ static __always_inline void __cpumask_clear_cpu(int cpu, struct cpumask *dstp)
-  * @cpu: cpu number (< nr_cpu_ids)
-  * @cpumask: the cpumask pointer
-  *
-- * Returns 1 if @cpu is set in @cpumask, else returns 0
-+ * Returns true if @cpu is set in @cpumask, else returns false
-  */
--static __always_inline int cpumask_test_cpu(int cpu, const struct cpumask *cpumask)
-+static __always_inline bool cpumask_test_cpu(int cpu, const struct cpumask *cpumask)
- {
- 	return test_bit(cpumask_check(cpu), cpumask_bits((cpumask)));
+@@ -176,12 +176,12 @@ static inline unsigned int cpumask_local_spread(unsigned int i, int node)
+ 	return 0;
  }
-@@ -384,11 +384,11 @@ static __always_inline int cpumask_test_cpu(int cpu, const struct cpumask *cpuma
-  * @cpu: cpu number (< nr_cpu_ids)
-  * @cpumask: the cpumask pointer
-  *
-- * Returns 1 if @cpu is set in old bitmap of @cpumask, else returns 0
-+ * Returns true if @cpu is set in old bitmap of @cpumask, else returns false
-  *
-  * test_and_set_bit wrapper for cpumasks.
-  */
--static __always_inline int cpumask_test_and_set_cpu(int cpu, struct cpumask *cpumask)
-+static __always_inline bool cpumask_test_and_set_cpu(int cpu, struct cpumask *cpumask)
- {
- 	return test_and_set_bit(cpumask_check(cpu), cpumask_bits(cpumask));
+ 
+-static inline int cpumask_any_and_distribute(const struct cpumask *src1p,
++static inline unsigned int cpumask_any_and_distribute(const struct cpumask *src1p,
+ 					     const struct cpumask *src2p) {
+ 	return cpumask_first_and(src1p, src2p);
  }
-@@ -398,11 +398,11 @@ static __always_inline int cpumask_test_and_set_cpu(int cpu, struct cpumask *cpu
-  * @cpu: cpu number (< nr_cpu_ids)
-  * @cpumask: the cpumask pointer
-  *
-- * Returns 1 if @cpu is set in old bitmap of @cpumask, else returns 0
-+ * Returns true if @cpu is set in old bitmap of @cpumask, else returns false
-  *
-  * test_and_clear_bit wrapper for cpumasks.
-  */
--static __always_inline int cpumask_test_and_clear_cpu(int cpu, struct cpumask *cpumask)
-+static __always_inline bool cpumask_test_and_clear_cpu(int cpu, struct cpumask *cpumask)
+ 
+-static inline int cpumask_any_distribute(const struct cpumask *srcp)
++static inline unsigned int cpumask_any_distribute(const struct cpumask *srcp)
  {
- 	return test_and_clear_bit(cpumask_check(cpu), cpumask_bits(cpumask));
+ 	return cpumask_first(srcp);
  }
-@@ -431,9 +431,9 @@ static inline void cpumask_clear(struct cpumask *dstp)
-  * @src1p: the first input
-  * @src2p: the second input
+@@ -258,12 +258,12 @@ static inline unsigned int cpumask_next_zero(int n, const struct cpumask *srcp)
+ 	return find_next_zero_bit(cpumask_bits(srcp), nr_cpumask_bits, n+1);
+ }
+ 
+-int __pure cpumask_next_and(int n, const struct cpumask *, const struct cpumask *);
+-int __pure cpumask_any_but(const struct cpumask *mask, unsigned int cpu);
++unsigned int __pure cpumask_next_and(int n, const struct cpumask *, const struct cpumask *);
++unsigned int __pure cpumask_any_but(const struct cpumask *mask, unsigned int cpu);
+ unsigned int cpumask_local_spread(unsigned int i, int node);
+-int cpumask_any_and_distribute(const struct cpumask *src1p,
++unsigned int cpumask_any_and_distribute(const struct cpumask *src1p,
+ 			       const struct cpumask *src2p);
+-int cpumask_any_distribute(const struct cpumask *srcp);
++unsigned int cpumask_any_distribute(const struct cpumask *srcp);
+ 
+ /**
+  * for_each_cpu - iterate over every cpu in a mask
+@@ -289,7 +289,7 @@ int cpumask_any_distribute(const struct cpumask *srcp);
+ 		(cpu) = cpumask_next_zero((cpu), (mask)),	\
+ 		(cpu) < nr_cpu_ids;)
+ 
+-extern int cpumask_next_wrap(int n, const struct cpumask *mask, int start, bool wrap);
++unsigned int cpumask_next_wrap(int n, const struct cpumask *mask, int start, bool wrap);
+ 
+ /**
+  * for_each_cpu_wrap - iterate over every cpu in a mask, starting at a specified location
+diff --git a/lib/cpumask.c b/lib/cpumask.c
+index a971a82d2f43..da68f6bbde44 100644
+--- a/lib/cpumask.c
++++ b/lib/cpumask.c
+@@ -31,7 +31,7 @@ EXPORT_SYMBOL(cpumask_next);
   *
-- * If *@dstp is empty, returns 0, else returns 1
-+ * If *@dstp is empty, returns false, else returns true
+  * Returns >= nr_cpu_ids if no further cpus set in both.
   */
--static inline int cpumask_and(struct cpumask *dstp,
-+static inline bool cpumask_and(struct cpumask *dstp,
- 			       const struct cpumask *src1p,
+-int cpumask_next_and(int n, const struct cpumask *src1p,
++unsigned int cpumask_next_and(int n, const struct cpumask *src1p,
+ 		     const struct cpumask *src2p)
+ {
+ 	/* -1 is a legal arg here. */
+@@ -50,7 +50,7 @@ EXPORT_SYMBOL(cpumask_next_and);
+  * Often used to find any cpu but smp_processor_id() in a mask.
+  * Returns >= nr_cpu_ids if no cpus set.
+  */
+-int cpumask_any_but(const struct cpumask *mask, unsigned int cpu)
++unsigned int cpumask_any_but(const struct cpumask *mask, unsigned int cpu)
+ {
+ 	unsigned int i;
+ 
+@@ -74,9 +74,9 @@ EXPORT_SYMBOL(cpumask_any_but);
+  * Note: the @wrap argument is required for the start condition when
+  * we cannot assume @start is set in @mask.
+  */
+-int cpumask_next_wrap(int n, const struct cpumask *mask, int start, bool wrap)
++unsigned int cpumask_next_wrap(int n, const struct cpumask *mask, int start, bool wrap)
+ {
+-	int next;
++	unsigned int next;
+ 
+ again:
+ 	next = cpumask_next(n, mask);
+@@ -205,7 +205,7 @@ void __init free_bootmem_cpumask_var(cpumask_var_t mask)
+  */
+ unsigned int cpumask_local_spread(unsigned int i, int node)
+ {
+-	int cpu;
++	unsigned int cpu;
+ 
+ 	/* Wrap: we always want a cpu. */
+ 	i %= num_online_cpus();
+@@ -243,10 +243,10 @@ static DEFINE_PER_CPU(int, distribute_cpu_mask_prev);
+  *
+  * Returns >= nr_cpu_ids if the intersection is empty.
+  */
+-int cpumask_any_and_distribute(const struct cpumask *src1p,
++unsigned int cpumask_any_and_distribute(const struct cpumask *src1p,
  			       const struct cpumask *src2p)
  {
-@@ -474,9 +474,9 @@ static inline void cpumask_xor(struct cpumask *dstp,
-  * @src1p: the first input
-  * @src2p: the second input
-  *
-- * If *@dstp is empty, returns 0, else returns 1
-+ * If *@dstp is empty, returns false, else returns true
-  */
--static inline int cpumask_andnot(struct cpumask *dstp,
-+static inline bool cpumask_andnot(struct cpumask *dstp,
- 				  const struct cpumask *src1p,
- 				  const struct cpumask *src2p)
+-	int next, prev;
++	unsigned int next, prev;
+ 
+ 	/* NOTE: our first selection will skip 0. */
+ 	prev = __this_cpu_read(distribute_cpu_mask_prev);
+@@ -262,9 +262,9 @@ int cpumask_any_and_distribute(const struct cpumask *src1p,
+ }
+ EXPORT_SYMBOL(cpumask_any_and_distribute);
+ 
+-int cpumask_any_distribute(const struct cpumask *srcp)
++unsigned int cpumask_any_distribute(const struct cpumask *srcp)
  {
-@@ -539,9 +539,9 @@ static inline bool cpumask_intersects(const struct cpumask *src1p,
-  * @src1p: the first input
-  * @src2p: the second input
-  *
-- * Returns 1 if *@src1p is a subset of *@src2p, else returns 0
-+ * Returns true if *@src1p is a subset of *@src2p, else returns false
-  */
--static inline int cpumask_subset(const struct cpumask *src1p,
-+static inline bool cpumask_subset(const struct cpumask *src1p,
- 				 const struct cpumask *src2p)
- {
- 	return bitmap_subset(cpumask_bits(src1p), cpumask_bits(src2p),
+-	int next, prev;
++	unsigned int next, prev;
+ 
+ 	/* NOTE: our first selection will skip 0. */
+ 	prev = __this_cpu_read(distribute_cpu_mask_prev);
 -- 
 2.34.1
 

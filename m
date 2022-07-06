@@ -2,90 +2,185 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C5CA8567C42
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 05:02:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 681AE567C4D
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 05:05:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231779AbiGFDBY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Jul 2022 23:01:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51704 "EHLO
+        id S230042AbiGFDFF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Jul 2022 23:05:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56202 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231699AbiGFDBG (ORCPT
+        with ESMTP id S229582AbiGFDFE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Jul 2022 23:01:06 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 962B71EC4A;
-        Tue,  5 Jul 2022 20:00:44 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3037761A1B;
-        Wed,  6 Jul 2022 03:00:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 30997C341C7;
-        Wed,  6 Jul 2022 03:00:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
-        s=korg; t=1657076443;
-        bh=p9zi6uyM9qZDm3W0u/jsISQwFAYeuS6nldtEVEqNG/E=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=Rt/h9LdUOjMjJYbJ2H8AHVZ59vIHrgzVmYFUT5T9rfYDXGF2TXl6GJtUTSbGD+Xsv
-         R7Twty8/1D88fxTyrvcgCU4W2qvrjUYDAGMI5sGnHaVX/xfY88uNktnLe2dyLI/cqk
-         okhBcnw6gUg1JOHo8MX6rjp0Vjo+rk76AfiFT6k4=
-Date:   Tue, 5 Jul 2022 20:00:42 -0700
-From:   Andrew Morton <akpm@linux-foundation.org>
-To:     Muchun Song <songmuchun@bytedance.com>
-Cc:     Matthew Wilcox <willy@infradead.org>, jgg@ziepe.ca,
-        jhubbard@nvidia.com, william.kucharski@oracle.com,
-        dan.j.williams@intel.com, jack@suse.cz, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        nvdimm@lists.linux.dev, stable@vger.kernel.org
-Subject: Re: [PATCH v2] mm: fix missing wake-up event for FSDAX pages
-Message-Id: <20220705200042.26ddd5e2e106df4e65adcc74@linux-foundation.org>
-In-Reply-To: <YsT3xFSLJonnA2XC@FVFYT0MHHV2J.usts.net>
-References: <20220705123532.283-1-songmuchun@bytedance.com>
-        <20220705141819.804eb972d43be3434dc70192@linux-foundation.org>
-        <YsTLgQ45ESpsNEGV@casper.infradead.org>
-        <20220705164710.9541b5cf0e5819193213ea5c@linux-foundation.org>
-        <YsT3xFSLJonnA2XC@FVFYT0MHHV2J.usts.net>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Tue, 5 Jul 2022 23:05:04 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B2171AF15
+        for <linux-kernel@vger.kernel.org>; Tue,  5 Jul 2022 20:05:02 -0700 (PDT)
+Received: from canpemm500002.china.huawei.com (unknown [172.30.72.55])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4Ld49G50BNzcg10;
+        Wed,  6 Jul 2022 11:02:58 +0800 (CST)
+Received: from [10.174.177.76] (10.174.177.76) by
+ canpemm500002.china.huawei.com (7.192.104.244) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Wed, 6 Jul 2022 11:04:46 +0800
+Subject: Re: [mm-unstable PATCH v4 1/9] mm/hugetlb: check
+ gigantic_page_runtime_supported() in return_unused_surplus_pages()
+To:     =?UTF-8?B?SE9SSUdVQ0hJIE5BT1lBKOWggOWPoyDnm7TkuZ8p?= 
+        <naoya.horiguchi@nec.com>
+CC:     Naoya Horiguchi <naoya.horiguchi@linux.dev>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        David Hildenbrand <david@redhat.com>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Liu Shixin <liushixin2@huawei.com>,
+        Yang Shi <shy828301@gmail.com>,
+        Oscar Salvador <osalvador@suse.de>,
+        Muchun Song <songmuchun@bytedance.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+References: <20220704013312.2415700-1-naoya.horiguchi@linux.dev>
+ <20220704013312.2415700-2-naoya.horiguchi@linux.dev>
+ <865207df-b272-c7c9-e90c-5748262d3d87@huawei.com>
+ <20220705063918.GA2508809@hori.linux.bs1.fc.nec.co.jp>
+From:   Miaohe Lin <linmiaohe@huawei.com>
+Message-ID: <185c2a5e-8987-c679-b522-418b5072f1bd@huawei.com>
+Date:   Wed, 6 Jul 2022 11:04:46 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.6.0
+MIME-Version: 1.0
+In-Reply-To: <20220705063918.GA2508809@hori.linux.bs1.fc.nec.co.jp>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.174.177.76]
+X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
+ canpemm500002.china.huawei.com (7.192.104.244)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 6 Jul 2022 10:47:32 +0800 Muchun Song <songmuchun@bytedance.com> wrote:
-
-> > If this wakeup is not one of these, then are there reports from the
-> > softlockup detector?
-> > 
-> > Do we have reports of processes permanently stuck in D state?
-> >
+On 2022/7/5 14:39, HORIGUCHI NAOYA(堀口 直也) wrote:
+> On Tue, Jul 05, 2022 at 10:16:39AM +0800, Miaohe Lin wrote:
+>> On 2022/7/4 9:33, Naoya Horiguchi wrote:
+>>> From: Naoya Horiguchi <naoya.horiguchi@nec.com>
+>>>
+>>> I found a weird state of 1GB hugepage pool, caused by the following
+>>> procedure:
+>>>
+>>>   - run a process reserving all free 1GB hugepages,
+>>>   - shrink free 1GB hugepage pool to zero (i.e. writing 0 to
+>>>     /sys/kernel/mm/hugepages/hugepages-1048576kB/nr_hugepages), then
+>>>   - kill the reserving process.
+>>>
+>>> , then all the hugepages are free *and* surplus at the same time.
+>>>
+>>>   $ cat /sys/kernel/mm/hugepages/hugepages-1048576kB/nr_hugepages
+>>>   3
+>>>   $ cat /sys/kernel/mm/hugepages/hugepages-1048576kB/free_hugepages
+>>>   3
+>>>   $ cat /sys/kernel/mm/hugepages/hugepages-1048576kB/resv_hugepages
+>>>   0
+>>>   $ cat /sys/kernel/mm/hugepages/hugepages-1048576kB/surplus_hugepages
+>>>   3
+>>>
+>>> This state is resolved by reserving and allocating the pages then
+>>> freeing them again, so this seems not to result in serious problem.
+>>> But it's a little surprising (shrinking pool suddenly fails).
+>>>
+>>> This behavior is caused by hstate_is_gigantic() check in
+>>> return_unused_surplus_pages(). This was introduced so long ago in 2008
+>>> by commit aa888a74977a ("hugetlb: support larger than MAX_ORDER"), and
+>>> at that time the gigantic pages were not supposed to be allocated/freed
+>>> at run-time.  Now kernel can support runtime allocation/free, so let's
+>>> check gigantic_page_runtime_supported() together.
+>>>
+>>> Signed-off-by: Naoya Horiguchi <naoya.horiguchi@nec.com>
+>>
+>> This patch looks good to me with a few question below.
 > 
-> No. The task is in an TASK_INTERRUPTIBLE state (see __fuse_dax_break_layouts). 
-> The hung task reporter only reports D task (TASK_UNINTERRUPTIBLE).
+> Thank you for reviewing.
+> 
+>>
+>>> ---
+>>> v2 -> v3:
+>>> - Fixed typo in patch description,
+>>> - add !gigantic_page_runtime_supported() check instead of removing
+>>>   hstate_is_gigantic() check (suggested by Miaohe and Muchun)
+>>> - add a few more !gigantic_page_runtime_supported() check in
+>>>   set_max_huge_pages() (by Mike).
+>>> ---
+>>>  mm/hugetlb.c | 19 ++++++++++++++++---
+>>>  1 file changed, 16 insertions(+), 3 deletions(-)
+>>>
+>>> diff --git a/mm/hugetlb.c b/mm/hugetlb.c
+>>> index 2a554f006255..bdc4499f324b 100644
+>>> --- a/mm/hugetlb.c
+>>> +++ b/mm/hugetlb.c
+>>> @@ -2432,8 +2432,7 @@ static void return_unused_surplus_pages(struct hstate *h,
+>>>  	/* Uncommit the reservation */
+>>>  	h->resv_huge_pages -= unused_resv_pages;
+>>>  
+>>> -	/* Cannot return gigantic pages currently */
+>>> -	if (hstate_is_gigantic(h))
+>>> +	if (hstate_is_gigantic(h) && !gigantic_page_runtime_supported())
+>>>  		goto out;
+>>>  
+>>>  	/*
+>>> @@ -3315,7 +3314,8 @@ static int set_max_huge_pages(struct hstate *h, unsigned long count, int nid,
+>>>  	 * the user tries to allocate gigantic pages but let the user free the
+>>>  	 * boottime allocated gigantic pages.
+>>>  	 */
+>>> -	if (hstate_is_gigantic(h) && !IS_ENABLED(CONFIG_CONTIG_ALLOC)) {
+>>> +	if (hstate_is_gigantic(h) && (!IS_ENABLED(CONFIG_CONTIG_ALLOC) ||
+>>> +				      !gigantic_page_runtime_supported())) {
+>>>  		if (count > persistent_huge_pages(h)) {
+>>>  			spin_unlock_irq(&hugetlb_lock);
+>>>  			mutex_unlock(&h->resize_lock);
+>>> @@ -3363,6 +3363,19 @@ static int set_max_huge_pages(struct hstate *h, unsigned long count, int nid,
+>>>  			goto out;
+>>>  	}
+>>>  
+>>> +	/*
+>>> +	 * We can not decrease gigantic pool size if runtime modification
+>>> +	 * is not supported.
+>>> +	 */
+>>> +	if (hstate_is_gigantic(h) && !gigantic_page_runtime_supported()) {
+>>> +		if (count < persistent_huge_pages(h)) {
+>>> +			spin_unlock_irq(&hugetlb_lock);
+>>> +			mutex_unlock(&h->resize_lock);
+>>> +			NODEMASK_FREE(node_alloc_noretry);
+>>> +			return -EINVAL;
+>>> +		}
+>>> +	}
+>>
+>> With above change, we're not allowed to decrease the pool size now. But it was allowed previously
+>> even if !gigantic_page_runtime_supported. Does this will break user?
+> 
+> Yes, it does. I might get the wrong idea about the definition of
+> gigantic_page_runtime_supported(), which shows that runtime pool *extension*
+> is supported or not (implying that pool shrinking is always possible).
+> If this is right, this new if-block is not necessary.
 
-Thanks, I updated the changelog a bit.
+I tend to remove above new if-block to keep pool shrinking available.
 
-: FSDAX page refcounts are 1-based, rather than 0-based: if refcount is
-: 1, then the page is freed.  The FSDAX pages can be pinned through GUP,
-: then they will be unpinned via unpin_user_page() using a folio variant
-: to put the page, however, folio variants did not consider this special
-: case, the result will be to miss a wakeup event (like the user of
-: __fuse_dax_break_layouts()).  This results in a task being permanently
-: stuck in TASK_INTERRUPTIBLE state.
-: 
-: Since FSDAX pages are only possibly obtained by GUP users, so fix GUP
-: instead of folio_put() to lower overhead.
+Thanks.
 
-I believe these details are helpful for -stable maintainers who are
-wondering why they were sent stuff.  Also for maintainers of
-downstreeam older kernels who are scratching heads over some user bug
-report, trying to find a patch which might fix it - for this they want
-to see a description of the user-visible effects, for matching with
-that bug report.
+> 
+>>
+>> And it seems it's not allowed to adjust the max_huge_pages now if !gigantic_page_runtime_supported
+>> for gigantic huge page. Should we just return for such case as there should be nothing to do now?
+>> Or am I miss something?
+> 
+> If pool shrinking is always allowed, we need uptdate max_huge_pages so,
+> the above if-block should have "goto out;", but it will be removed anyway
+> so we don't have to care for it.
+> 
+> Thank you for the valuable comment.
+> 
+> - Naoya Horiguchi
+> 
+

@@ -2,73 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9FE8C568636
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 12:54:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4534E5685C2
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 12:39:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233190AbiGFKy3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Jul 2022 06:54:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38202 "EHLO
+        id S232957AbiGFKio (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Jul 2022 06:38:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52052 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231766AbiGFKy1 (ORCPT
+        with ESMTP id S232953AbiGFKig (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Jul 2022 06:54:27 -0400
-Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9396827CC9;
-        Wed,  6 Jul 2022 03:54:25 -0700 (PDT)
-Received: by mail-ej1-x633.google.com with SMTP id j22so153622ejs.2;
-        Wed, 06 Jul 2022 03:54:25 -0700 (PDT)
+        Wed, 6 Jul 2022 06:38:36 -0400
+Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5D0B64F9;
+        Wed,  6 Jul 2022 03:38:35 -0700 (PDT)
+Received: by mail-wm1-x32d.google.com with SMTP id 205-20020a1c02d6000000b003a03567d5e9so10909466wmc.1;
+        Wed, 06 Jul 2022 03:38:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=message-id:date:from:to:cc:subject:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=9iLfp3rSvq5HD4T1obBpdS6jjmeDrv6o8UGa12ZUzfc=;
-        b=H72fofPdYrTAe5CoRu1qcLDQQNXcOf4IHWV7YVu9Pbc2lXn40BGIO0WYtnqS0JTXac
-         E9QPyR+kORnd438aaOwOL7NKA7VTd7zm5c6Q0L+hhjG5uYdUiiMe+G789TICkpFnrLbf
-         1JuG/0MecqLV8tF34PF4mt2km54fN/QaHGya4RGTRbZnzpKl4bnPKchHZf7xsixv/cNH
-         0E/7NivY/AOyd1Zn9p+/OHDNTU43BWDIPd09tWYE6Quq2sYPtjjaljHFMNAtA1IT3to8
-         qOd58Bxduoe845txFG9kZWrjdOv+7Q3vkE2gMQx6kFqDYWm1Z646aGn1D5RibrHx5/DV
-         rvGQ==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=YU7/aTVmwMw1xiBrffIxn8qMUTw+gm+umroriH5I92o=;
+        b=ghSozxp8QV21TAro3RolO4UMKa+ccDr5PJ59lVX3tlVeCT7KTpO1FEbFAWdQL9A9Q/
+         Vulcqud9QeYF5LlhpGGu5zFNVp7E0Pw1H5AKFUDG2J0sEw8BNJTPrOLa23xwxFGdYjKf
+         If5VMtxoBF9DKYqHHkC2gisg2D1nGqpEv3ZjaQf+aDUmlgQG8PyPmHQ+p87NZ5pL+DU2
+         tsWjcMEmSKV+k8rV0ibunpSkVo4CpOltRtd0xY3hltVRq/6bETrZpMViQfqwdm2LZJvt
+         ozlHQfX4HjQlurVfc5cKdfTFBC0fE5p4WvIIqSK2UZfiEAdpOcjGjgmTgMXFZg9Ud90k
+         DzNg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:from:to:cc:subject:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=9iLfp3rSvq5HD4T1obBpdS6jjmeDrv6o8UGa12ZUzfc=;
-        b=Ml8gm+bo9Ve6bJcKuej6LBv6n3lfBr3PUY/gcXciHJYriSifjdnElvctvGY9sm4WRd
-         VnZoJT7dlAPqtTB02qHbRqGyI8dARJlOrWIklRzCZE90nD3mh5O7s9jkMV4qhh1/G9sg
-         l+cv0ELZo2idiriKMhh6xi8BzLVluWlO0C55B5B+TDi0PWGz5qgLVL3WzNQKFwdBQMHl
-         L1OefVgREzIjwxQ89P9zXIIRfqMY7kxGn/djMoy049RQEP/zTBNEfNX+Ujc6+vQhPPUL
-         No+RITFl7l80FHXlM5fh254C+x58Fsv3S+d2rOrGSNVnBRyEVNlLtaXDslZg0526eS/1
-         aCmA==
-X-Gm-Message-State: AJIora/pGrDxiF/JPLIK4DhiTpcrU9WXp2cbsonTC82K3Z3HsGAF/5r5
-        Q1z/UjWhzjMy5FS4IW3Eo2k=
-X-Google-Smtp-Source: AGRyM1sV36e8JK8dqGp1E+M2/fik9hmkeJb/JD4LABvWsvPg/GD2XDc0bg4y0QXlpUdYCkF8C73GMA==
-X-Received: by 2002:a17:906:2086:b0:712:1257:77bf with SMTP id 6-20020a170906208600b00712125777bfmr40111648ejq.655.1657104864099;
-        Wed, 06 Jul 2022 03:54:24 -0700 (PDT)
-Received: from Ansuel-xps. (93-42-70-190.ip85.fastwebnet.it. [93.42.70.190])
-        by smtp.gmail.com with ESMTPSA id v9-20020a170906292900b00722e50dab2csm486351ejd.109.2022.07.06.03.54.23
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=YU7/aTVmwMw1xiBrffIxn8qMUTw+gm+umroriH5I92o=;
+        b=uJtSFpx5B/Cli1bD+7gHQL9eS3jlQSI6P0UMXxWGRCqWKvA1Yh/LASR5s2FWD3Yhse
+         3LuG7jIgzAofQoyJ+mCvnD6WVjEP+8uElqCnDCTFsCohNfEYZaJWxfGJwnpUKHJuNztH
+         SOWEGIKHiH/SwcqCrQGX+azYbn+pi1WeqXgg1iZyEUimFgUQBbD5gC2MqObTgqLXQ//m
+         2exhvtMgth4jwUL93gGOwJhDfz80qtX+v0HpdVpfMXT6z9Fwv3buR8nkjlNnCWm+lTMM
+         l1yy5ejy8UIxkYZWp9U5a3w+z79oeiOQeRbkXAdZBrRbERg8WRSOgvOjWkOYtst1Kpu0
+         h6gA==
+X-Gm-Message-State: AJIora/mhFm4KLIdifXqu2G+74T1nkv6ES+lC0mBBqZUytz6TaFDodIb
+        oI094RcXjLGbAfNgwMNbIws=
+X-Google-Smtp-Source: AGRyM1t7dpxKdmG7n71wWdoedPFPmkmnYg17fxZqQSno2zFUho02OLAK4wpsuebRyha/rsbvmeEh0Q==
+X-Received: by 2002:a7b:c4cb:0:b0:3a2:b45a:e344 with SMTP id g11-20020a7bc4cb000000b003a2b45ae344mr12785004wmk.157.1657103914353;
+        Wed, 06 Jul 2022 03:38:34 -0700 (PDT)
+Received: from opensuse.localnet (host-79-53-109-127.retail.telecomitalia.it. [79.53.109.127])
+        by smtp.gmail.com with ESMTPSA id g1-20020adffc81000000b00213ba3384aesm36323831wrr.35.2022.07.06.03.38.31
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 06 Jul 2022 03:54:23 -0700 (PDT)
-Message-ID: <62c569df.1c69fb81.9be2b.0cd0@mx.google.com>
-X-Google-Original-Message-ID: <YsVl+uXAVdEkMiFs@Ansuel-xps.>
-Date:   Wed, 6 Jul 2022 12:37:46 +0200
-From:   Christian Marangi <ansuelsmth@gmail.com>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Jonathan McDowell <noodles@earth.li>
-Subject: Re: [PATCH 09/13] ARM: dts: qcom: add smem node for ipq8064
-References: <20220705133917.8405-1-ansuelsmth@gmail.com>
- <20220705133917.8405-10-ansuelsmth@gmail.com>
- <c5bf6246-a350-8a87-71bc-bc13d502a8af@linaro.org>
- <62c56477.1c69fb81.8ec4c.f1ac@mx.google.com>
+        Wed, 06 Jul 2022 03:38:32 -0700 (PDT)
+From:   "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
+To:     Ira Weiny <ira.weiny@intel.com>
+Cc:     David Sterba <dsterba@suse.com>, Chris Mason <clm@fb.com>,
+        Josef Bacik <josef@toxicpanda.com>,
+        Nick Terrell <terrelln@fb.com>, linux-btrfs@vger.kernel.org,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Matthew Wilcox <willy@infradead.org>,
+        Kees Cook <keescook@chromium.org>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        "James E. J. Bottomley" <James.Bottomley@hansenpartnership.com>,
+        Helge Deller <deller@gmx.de>,
+        John David Anglin <dave.anglin@bell.net>,
+        linux-parisc@vger.kernel.org, Filipe Manana <fdmanana@kernel.org>
+Subject: Re: [PATCH v5 2/2] btrfs: Replace kmap() with kmap_local_page() in zstd.c
+Date:   Wed, 06 Jul 2022 12:38:29 +0200
+Message-ID: <2250236.ElGaqSPkdT@opensuse>
+In-Reply-To: <YsSLJBzwB5bCyuNR@iweiny-desk3>
+References: <20220704152322.20955-1-fmdefrancesco@gmail.com> <20220704152322.20955-3-fmdefrancesco@gmail.com> <YsSLJBzwB5bCyuNR@iweiny-desk3>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <62c56477.1c69fb81.8ec4c.f1ac@mx.google.com>
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -79,73 +80,124 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jul 06, 2022 at 12:14:42PM +0200, Christian Marangi wrote:
-> On Wed, Jul 06, 2022 at 10:39:16AM +0200, Krzysztof Kozlowski wrote:
-> > On 05/07/2022 15:39, Christian Marangi wrote:
-> > > Add missing smem node for ipq8064.
-> > > 
-> > > Signed-off-by: Christian Marangi <ansuelsmth@gmail.com>
-> > > Tested-by: Jonathan McDowell <noodles@earth.li>
-> > > ---
-> > >  arch/arm/boot/dts/qcom-ipq8064.dtsi | 18 ++++++++++++++++++
-> > >  1 file changed, 18 insertions(+)
-> > > 
-> > > diff --git a/arch/arm/boot/dts/qcom-ipq8064.dtsi b/arch/arm/boot/dts/qcom-ipq8064.dtsi
-> > > index b5aede3d7ccf..98527a7d885e 100644
-> > > --- a/arch/arm/boot/dts/qcom-ipq8064.dtsi
-> > > +++ b/arch/arm/boot/dts/qcom-ipq8064.dtsi
-> > > @@ -908,6 +908,11 @@ lcc: clock-controller@28000000 {
-> > >  			#reset-cells = <1>;
-> > >  		};
-> > >  
-> > > +		sfpb_mutex_block: syscon@1200600 {
-> > > +			compatible = "syscon";
-> > 
-> > syscon alone is not allowed.
-> >
-> 
-> Mh... This is problematic. How this should be handled?
-> This should be put in sfpb_mutex and change the driver to use regs if
-> present instead of syscon?
->
+On marted=C3=AC 5 luglio 2022 21:04:04 CEST Ira Weiny wrote:
+> On Mon, Jul 04, 2022 at 05:23:22PM +0200, Fabio M. De Francesco wrote:
+> > The use of kmap() is being deprecated in favor of kmap_local_page().=20
+With
+> > kmap_local_page(), the mapping is per thread, CPU local and not=20
+globally
+> > visible.
+> >=20
+> > Therefore, use kmap_local_page() / kunmap_local() in zstd.c because in=
+=20
+this
+> > file the mappings are per thread and are not visible in other contexts.=
+=20
+In
+> > the meanwhile use plain page_address() on pages allocated with the=20
+GFP_NOFS
+> > flag instead of calling kmap*() on them (since they are always=20
+allocated
+> > from ZONE_NORMAL).
+> >=20
+> > Tested with xfstests on QEMU + KVM 32 bits VM with 4GB of RAM and
+> > booting a kernel with HIGHMEM64G enabled.
+> >=20
+> > Cc: Filipe Manana <fdmanana@kernel.org>
+> > Suggested-by: Ira Weiny <ira.weiny@intel.com>
+> > Signed-off-by: Fabio M. De Francesco <fmdefrancesco@gmail.com>
+> > ---
+> >  fs/btrfs/zstd.c | 34 ++++++++++++++--------------------
+> >  1 file changed, 14 insertions(+), 20 deletions(-)
+> >=20
+> > diff --git a/fs/btrfs/zstd.c b/fs/btrfs/zstd.c
+> > index 0fe31a6f6e68..78e0272e770e 100644
+> > --- a/fs/btrfs/zstd.c
+> > +++ b/fs/btrfs/zstd.c
+> > @@ -403,7 +403,7 @@ int zstd_compress_pages(struct list_head *ws,=20
+struct address_space *mapping,
+> > =20
+> >  	/* map in the first page of input data */
+> >  	in_page =3D find_get_page(mapping, start >> PAGE_SHIFT);
+> > -	workspace->in_buf.src =3D kmap(in_page);
+> > +	workspace->in_buf.src =3D kmap_local_page(in_page);
+> >  	workspace->in_buf.pos =3D 0;
+> >  	workspace->in_buf.size =3D min_t(size_t, len, PAGE_SIZE);
+> > =20
+> > @@ -415,7 +415,7 @@ int zstd_compress_pages(struct list_head *ws,=20
+struct address_space *mapping,
+> >  		goto out;
+> >  	}
+> >  	pages[nr_pages++] =3D out_page;
+> > -	workspace->out_buf.dst =3D kmap(out_page);
+> > +	workspace->out_buf.dst =3D page_address(out_page);
+> >  	workspace->out_buf.pos =3D 0;
+> >  	workspace->out_buf.size =3D min_t(size_t, max_out, PAGE_SIZE);
+> > =20
+> > @@ -450,9 +450,7 @@ int zstd_compress_pages(struct list_head *ws,=20
+struct address_space *mapping,
+> >  		if (workspace->out_buf.pos =3D=3D workspace->out_buf.size)=20
+{
+> >  			tot_out +=3D PAGE_SIZE;
+> >  			max_out -=3D PAGE_SIZE;
+> > -			kunmap(out_page);
+> >  			if (nr_pages =3D=3D nr_dest_pages) {
+> > -				out_page =3D NULL;
+> >  				ret =3D -E2BIG;
+> >  				goto out;
+> >  			}
+> > @@ -462,7 +460,7 @@ int zstd_compress_pages(struct list_head *ws,=20
+struct address_space *mapping,
+> >  				goto out;
+> >  			}
+> >  			pages[nr_pages++] =3D out_page;
+> > -			workspace->out_buf.dst =3D kmap(out_page);
+> > +			workspace->out_buf.dst =3D=20
+page_address(out_page);
+> >  			workspace->out_buf.pos =3D 0;
+> >  			workspace->out_buf.size =3D min_t(size_t,=20
+max_out,
+> >  						=09
+PAGE_SIZE);
+> > @@ -477,15 +475,15 @@ int zstd_compress_pages(struct list_head *ws,=20
+struct address_space *mapping,
+> >  		/* Check if we need more input */
+> >  		if (workspace->in_buf.pos =3D=3D workspace->in_buf.size) {
+> >  			tot_in +=3D PAGE_SIZE;
+> > -			kunmap(in_page);
+> > +			kunmap_local(workspace->in_buf.src);
+> >  			put_page(in_page);
+> > -
+> >  			start +=3D PAGE_SIZE;
+> >  			len -=3D PAGE_SIZE;
+> >  			in_page =3D find_get_page(mapping, start >>=20
+PAGE_SHIFT);
+> > -			workspace->in_buf.src =3D kmap(in_page);
+> > +			workspace->in_buf.src =3D=20
+kmap_local_page(in_page);
+> >  			workspace->in_buf.pos =3D 0;
+> >  			workspace->in_buf.size =3D min_t(size_t, len,=20
+PAGE_SIZE);
+> > +			workspace->out_buf.dst =3D=20
+page_address(out_page);
+>=20
+> Why is this needed?
 
-Found an alternative solution used in ipq807x so I can drop the syscon
-only node.
+Sorry. This initialization is not needed at all.
+Probably made a mistake with copy-pasting snippets of code.
 
-> > > +			reg = <0x01200600 0x100>;
-> > > +		};
-> > > +
-> > >  		pcie0: pci@1b500000 {
-> > >  			compatible = "qcom,pcie-ipq8064";
-> > >  			reg = <0x1b500000 0x1000
-> > > @@ -1332,4 +1337,17 @@ sdcc3: mmc@12180000 {
-> > >  			};
-> > >  		};
-> > >  	};
-> > > +
-> > > +	sfpb_mutex: sfpb-mutex {
-> > 
-> > Generic node names, so hwlock
-> > 
-> > > +		compatible = "qcom,sfpb-mutex";
-> > > +		syscon = <&sfpb_mutex_block 4 4>;
-> > > +
-> > > +		#hwlock-cells = <1>;
-> > > +	};
-> > > +
-> > > +	smem {
-> > > +		compatible = "qcom,smem";
-> > > +		memory-region = <&smem>;
-> > > +		hwlocks = <&sfpb_mutex 3>;
-> > > +	};
-> > >  };
-> > 
-> > 
-> > Best regards,
-> > Krzysztof
-> 
-> -- 
-> 	Ansuel
+I'm going to send ASAP the fifth version of this series.
 
--- 
-	Ansuel
+> The rest looks good,
+
+Thanks,
+
+=46abio
+
+> Ira
+>=20
+> [snip]
+>=20
+
+
+

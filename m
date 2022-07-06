@@ -2,104 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 27F13568446
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 11:56:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AC818568424
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 11:56:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230126AbiGFJvT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Jul 2022 05:51:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59652 "EHLO
+        id S232228AbiGFJwH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Jul 2022 05:52:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60530 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232274AbiGFJvK (ORCPT
+        with ESMTP id S230226AbiGFJv5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Jul 2022 05:51:10 -0400
-Received: from mail-pg1-x532.google.com (mail-pg1-x532.google.com [IPv6:2607:f8b0:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF979237C5
-        for <linux-kernel@vger.kernel.org>; Wed,  6 Jul 2022 02:51:09 -0700 (PDT)
-Received: by mail-pg1-x532.google.com with SMTP id s27so13580237pga.13
-        for <linux-kernel@vger.kernel.org>; Wed, 06 Jul 2022 02:51:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=r1faCCbpwuJs+63ct9VRdewdZst2dG8crzL/4+J76wA=;
-        b=ScEMHaRsijt3hSkxJi+SScwnSzfFtNtijtg4hYFEFOSjWvcvugBwq9J3hy5/jJw41O
-         R1a6Gg7VXg8+KbWjKDjtknrm7r2Rd4e/251eF+XlRbvoiFuIMEyfaEfhk7bu25hHZVgg
-         SrHnfI0ZfIsIlrlKPnb+fXQsGrU/vZ+CJKsnhG9VbdCwog1ZSXR326rVb/jFdTLveVQv
-         u3C4/twG9vAt+MaZTFlUJlzDZhyRAadX1GQSwRv58ZmkXhVEjWrFM2UP3MnKr5MZ3c0J
-         5ZDeosOFQDql3UvmDDiF5p0djCjmVkUKnncezVBeWRDeCYfoN0MSd/R8ADw5/I74nCWi
-         wXlA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=r1faCCbpwuJs+63ct9VRdewdZst2dG8crzL/4+J76wA=;
-        b=S1Mi+fw2TgvZQ4zIXsF/WpravfMvORMhRld5l7VfA27m5UdtslE8aZjSEQn0jfc1N8
-         VTxqSRgAehY/xkDOhV9gMPSRDMNq5m0g3JlI3r8MuN1E927GfMvSXfocm3SHjEGseWAW
-         ZXsSGyeDjJGIbaEm4u4Js1h1aWC/jSpLyspZHAXiakrQhtTycejT13N+FyPHz5EGBvzT
-         SmvHPC7LxMjPuhGFHlgQ6gdGbfeQFoMMEgVJ+Bzlw1HkFoYYgFOyVSa81Nad8NfvdbJA
-         LIMLzV7ltiOvYn7lr5TmOfxXufczxjtE31NbSZvjIy12lTadV9YuDZV2E6MzO2wAJ8cQ
-         gvRw==
-X-Gm-Message-State: AJIora8CT7jAPp2Qdqs1m+6FviSizt3ew1ll7HMVbz0Q2xauY1+XYAs4
-        cqs6WBq8tIoPkpwfPiGXRwqsYw==
-X-Google-Smtp-Source: AGRyM1vlBGjG3PomDfm+yHSHvdBrg4Wi1oxEpywq8Yk8TM7elOdauLD++YSIPhMkFToiNvol649yfw==
-X-Received: by 2002:a05:6a00:1819:b0:528:a43a:9ea8 with SMTP id y25-20020a056a00181900b00528a43a9ea8mr3172504pfa.70.1657101069274;
-        Wed, 06 Jul 2022 02:51:09 -0700 (PDT)
-Received: from [10.4.115.37] ([139.177.225.250])
-        by smtp.gmail.com with ESMTPSA id 123-20020a621481000000b00527bb6fff6csm17254820pfu.119.2022.07.06.02.51.05
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 06 Jul 2022 02:51:08 -0700 (PDT)
-Message-ID: <f3c045a6-2ed9-c948-04c9-325649b1dfe0@bytedance.com>
-Date:   Wed, 6 Jul 2022 17:51:03 +0800
+        Wed, 6 Jul 2022 05:51:57 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CC4C237FA;
+        Wed,  6 Jul 2022 02:51:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1657101116; x=1688637116;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=hIrJs9ihsTLQ0p0bXK5jE65wktLVv5IEhLVWqw8Slew=;
+  b=jjjbehWLpmDZnqQy+DTsNCppJBgXbZ7hJcG0DzXltocjJvU7xk+OeM+g
+   4D+rt8dUrqORFVDJeWa1bjV3nR07opnh3hUA5eh+1W+Vu20EJslRC7M0y
+   l4ErhHamB8heIWZWANtGnRMuUroxbgGAg05/4GAjsuT2Uuy7eMzHKe8o6
+   SmqzVfhmPQPfVz6HLdakVcqCJteAips21or4JutpohcX/uJxeIAax3KdO
+   TltK1jZjFM3ezeI6jUar9K68r4IGy1O1GoJ02aPfEonM0p7oksYiaLpKP
+   H0MzMOnAoYrWI/CqB6WdhLGo4lyej1rZWaKJdq38NZ/lEIOFT7DKKVmid
+   g==;
+X-IronPort-AV: E=Sophos;i="5.92,249,1650956400"; 
+   d="scan'208";a="163537819"
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa4.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 06 Jul 2022 02:51:55 -0700
+Received: from chn-vm-ex02.mchp-main.com (10.10.85.144) by
+ chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.17; Wed, 6 Jul 2022 02:51:53 -0700
+Received: from wendy.microchip.com (10.10.115.15) by chn-vm-ex02.mchp-main.com
+ (10.10.85.144) with Microsoft SMTP Server id 15.1.2375.17 via Frontend
+ Transport; Wed, 6 Jul 2022 02:51:50 -0700
+From:   Conor Dooley <conor.dooley@microchip.com>
+To:     "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>
+CC:     <netdev@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-riscv@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
+        "Conor Dooley" <conor.dooley@microchip.com>
+Subject: [net-next PATCH v3 0/5] PolarFire SoC macb reset support
+Date:   Wed, 6 Jul 2022 10:51:24 +0100
+Message-ID: <20220706095129.828253-1-conor.dooley@microchip.com>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.11.0
-Subject: Re: [PATCH v4 0/7] sched/fair: improve scan efficiency of SIS
-Content-Language: en-US
-To:     Peter Zijlstra <peterz@infradead.org>,
-        Mel Gorman <mgorman@suse.de>,
-        Vincent Guittot <vincent.guittot@linaro.org>
-Cc:     Josh Don <joshdon@google.com>, Chen Yu <yu.c.chen@intel.com>,
-        Tim Chen <tim.c.chen@linux.intel.com>,
-        K Prateek Nayak <kprateek.nayak@amd.com>,
-        "Gautham R . Shenoy" <gautham.shenoy@amd.com>,
-        linux-kernel@vger.kernel.org
-References: <20220619120451.95251-1-wuyun.abel@bytedance.com>
-From:   Abel Wu <wuyun.abel@bytedance.com>
-In-Reply-To: <20220619120451.95251-1-wuyun.abel@bytedance.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Gentle ping
+Hey all,
+Jakub requested that these patches be split off from the series
+adding the reset controller itself that I sent ~yesterday~ last
+week [0].
 
-On 6/19/22 8:04 PM, Abel Wu Wrote:
-> The wakeup fastpath (select_idle_sibling or SIS) plays an important role
-> in maximizing the usage of cpu resources and can greatly affect overall
-> performance of the system.
-> 
-> The SIS tries to find an idle cpu inside that LLC to place the woken-up
-> task. The cache hot cpus will be checked first, then other cpus of that
-> LLC (domain scan) if the hot ones are not idle.
-> 
-> The domain scan works well under light workload by simply traversing
-> the cpus of the LLC due to lots of idle cpus can be available. But this
-> doesn’t scale well once the LLC gets bigger and the load increases, so
-> SIS_PROP was born to limit the scan cost. For now SIS_PROP just limits
-> the number of cpus to be scanned, but the way of how it scans is not
-> changed.
-> 
-> This patchset introduces the SIS filter to help improving scan efficiency
-> when scan depth is limited. The filter only contains the unoccupied cpus,
-> and is updated during SMT level load balancing. It is expected that the
-> more overloaded the system is, the less cpus will be scanned.
-> 
-> ...
-> 
+The Cadence MACBs on PolarFire SoC (MPFS) have reset capability and are
+compatible with the zynqmp's init function. I have removed the zynqmp
+specific comments from that function & renamed it to reflect what it
+does, since it is no longer zynqmp only.
+
+MPFS's MACB had previously used the generic binding, so I also added
+the required specific binding.
+
+For v2, I noticed some low hanging cleanup fruit so there are extra
+patches added for that:
+moving the init function out of the config structs, aligning the
+alignment of the zynqmp & default config structs with the other dozen
+or so structs & simplifing the error paths to use dev_err_probe().
+
+Feel free to apply as many or as few of those as you like.
+
+Thanks,
+Conor.
+
+Changes since v2:
+- Fix a commit message typo
+
+Changes since v1:
+- added the 3 aforementioned cleanup patches
+- fixed two stylistic complaints from Claudiu
+
+
+Conor Dooley (5):
+  dt-bindings: net: cdns,macb: document polarfire soc's macb
+  net: macb: add polarfire soc reset support
+  net: macb: unify macb_config alignment style
+  net: macb: simplify error paths in init_reset_optional()
+  net: macb: sort init_reset_optional() with other init()s
+
+ .../devicetree/bindings/net/cdns,macb.yaml    |   1 +
+ drivers/net/ethernet/cadence/macb_main.c      | 106 +++++++++---------
+ 2 files changed, 56 insertions(+), 51 deletions(-)
+
+-- 
+2.36.1
+

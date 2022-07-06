@@ -2,72 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6DADF569163
+	by mail.lfdr.de (Postfix) with ESMTP id E03E9569164
 	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 20:10:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232712AbiGFSKC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Jul 2022 14:10:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53102 "EHLO
+        id S231573AbiGFSJ6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Jul 2022 14:09:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53096 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230291AbiGFSJz (ORCPT
+        with ESMTP id S230073AbiGFSJz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 6 Jul 2022 14:09:55 -0400
-Received: from mail-qk1-x732.google.com (mail-qk1-x732.google.com [IPv6:2607:f8b0:4864:20::732])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CE3928E1D
-        for <linux-kernel@vger.kernel.org>; Wed,  6 Jul 2022 11:09:55 -0700 (PDT)
-Received: by mail-qk1-x732.google.com with SMTP id c137so11651806qkg.5
-        for <linux-kernel@vger.kernel.org>; Wed, 06 Jul 2022 11:09:55 -0700 (PDT)
+Received: from mail-lj1-x236.google.com (mail-lj1-x236.google.com [IPv6:2a00:1450:4864:20::236])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39B2428E16;
+        Wed,  6 Jul 2022 11:09:54 -0700 (PDT)
+Received: by mail-lj1-x236.google.com with SMTP id w2so3095608ljj.7;
+        Wed, 06 Jul 2022 11:09:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=h6S/EAPbHUNIbmXXj14hsIbltK0duF8Y5acVLSRIfKw=;
-        b=N/tz9N/SSFLMmYTQkaNJ4CB/sp6wy/327SJpmlqKizg2sWBvXoEy9Vh2lS3aS6xaCa
-         LlruG9ZOcCe9uvWdBlil1sAXdWp63Sz9I6ezEZf9LPSTlVzjfga4mD+uAlT7mqwl+YCa
-         cyaIExJTh3p49QKh9Mv3MLaNm7p43+EUUvTKPzH+j4lEKbLtq+VGU32/3GS8+HGEo2I4
-         jM3LmTW8JRbiSHyhrQ8tAwvFF+Y//z57gUNtLIDYxYXWK362M0fZ2SImpQTkOu6U5yM2
-         t/G52UUaYu2ERcukpw/GbD46CoMzdS4QM4cUwA08LxtAugO31qDRH7K5VxI41zMvDwfx
-         7ABg==
+        h=from:date:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=0A598iVSKLysRfv2sRXRDO6tMHET5VOceIuNiuD58/Y=;
+        b=RCq4RtcmZ8gfFAM/viGpnHBX7b6YJzB9+TxM8v7brC+iSNmhLCX/k75uH2OP1T7/a8
+         bS8oBg/Viter1LXQ7eHV8v2nY5lEBb4Rv3iw0GJ1bZSN0TQm1ffZiqD4NXwPV4veIWVe
+         XB1ZUQDinD2dOVWeGYnETXE+m19508Y6Ozq/PcicZqcTgtPcNoKDObAq4iyCDwVYYrq8
+         RIkiNu3SHadjcqE0XTgclmFT9xK2C1KbizaIxzPjJEENCITLg1FV+XIOB6MZfdvVcnWl
+         4SmvktWXdPoqTf+km4bX9tnC7oUfSZzFD/c6028NywVvCMaAdd7bZ50ArulnCB4I/0vw
+         Oqrg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=h6S/EAPbHUNIbmXXj14hsIbltK0duF8Y5acVLSRIfKw=;
-        b=Kbceamnn/ZkjGZ5ZVZmaoA5RPcRUSLoKAIlaEZCv9kC3GNqFxTCTJoAJ/QNbLAW231
-         O7pI7vP6UILFuGHsgrBpaCGaKCBfb/JV70r9mNMMcv+dPXT7BrN0a6Iu6Q7c5PiFTH85
-         61kCbOudgmuxEbDg7x/wkfEGj1YAyn8YAR0bBVtVGhz4si3DspQTki23nFIuHk/1YCGN
-         Cj5ffzSBlo2zsOAO9/FqBdxpy3y2C8yY0piFxiE5esrUdzZsqWUQGhsBvfSz6fudiyh/
-         1c72FAGYxLRYh3+jRal+xSwgFx7YXa7uWgQMeEB/KZA9fns1BtMsPClhJx2OERHgSO7X
-         7BWQ==
-X-Gm-Message-State: AJIora+BxxGYZSb6kp8sB/7jRmn7EVb+dD3yfFjjkjKjg7ruN2sv3kQH
-        laosCZi3/iVPA6kZRp7N04Y=
-X-Google-Smtp-Source: AGRyM1vFl7hDJFPMFghBlMz/Jd+3l5fu20aimU9k0iPTh3/REAhiyl63Jo0aOq8wzu5j+wRFOZZsag==
-X-Received: by 2002:a05:620a:1996:b0:6b2:59b7:2636 with SMTP id bm22-20020a05620a199600b006b259b72636mr19808413qkb.782.1657130994269;
-        Wed, 06 Jul 2022 11:09:54 -0700 (PDT)
-Received: from [10.67.48.245] ([192.19.223.252])
-        by smtp.googlemail.com with ESMTPSA id n4-20020a05620a294400b006b24d912ab7sm16022959qkp.46.2022.07.06.11.09.50
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 06 Jul 2022 11:09:53 -0700 (PDT)
-Message-ID: <29684681-2f0f-e887-20d9-dddda4977512@gmail.com>
-Date:   Wed, 6 Jul 2022 11:09:48 -0700
+        h=x-gm-message-state:from:date:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=0A598iVSKLysRfv2sRXRDO6tMHET5VOceIuNiuD58/Y=;
+        b=KMWHR6n94SUKnvXfF1Uhq5dfKTnVRc25846iBaq+Kk3XHUmezBXgKmXu/R8ns4pbd/
+         xG/omqZBLOX7jmRJHHLu5JXRijT+Q0x7oaj+4TyX2MFDyimisRAdqkiJxPwib6zXxtGe
+         LJMHp1kFFxq9uy+AUOfTqd8fBbTe+LrGwkArNgH4KrPskylfOkulzCA8L40bdEpLvQpm
+         IjrAAos5HixRp3Z1UeQF5XrGC89cPmKAyvYSZIjKXUf9zeGqT0EbUmBiYSCsMXXD/rV3
+         87+DhWLWbZqnxR0sAimfYZpU3xWRY43X5RczgsfeLn5poinnniKcF2b60b42bO5mZo0y
+         3OhA==
+X-Gm-Message-State: AJIora+46Wsmq+LxfmTQbpWVmPwr09PkV2YdLBXiM6dwwoSurzXv7ve/
+        MlQGdRwR6/gH4qTm09LRye9luzcpKAi9LwmPh3A=
+X-Google-Smtp-Source: AGRyM1tVGz9tZcQBzGZVPndJH1FRtpjeuQp7KHQvu/ovYzoH3JzfCWBp9GXAxjZSPbrMCtpzNemUuA==
+X-Received: by 2002:a2e:b209:0:b0:25a:705d:c4ba with SMTP id l9-20020a2eb209000000b0025a705dc4bamr22643914ljm.468.1657130992430;
+        Wed, 06 Jul 2022 11:09:52 -0700 (PDT)
+Received: from pc638.lan ([155.137.26.201])
+        by smtp.gmail.com with ESMTPSA id n24-20020a05651203f800b0047863e5649esm6413063lfq.86.2022.07.06.11.09.51
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 06 Jul 2022 11:09:51 -0700 (PDT)
+From:   Uladzislau Rezki <urezki@gmail.com>
+X-Google-Original-From: Uladzislau Rezki <urezki@pc638.lan>
+Date:   Wed, 6 Jul 2022 20:09:49 +0200
+To:     "Paul E. McKenney" <paulmck@kernel.org>
+Cc:     Uladzislau Rezki <urezki@gmail.com>,
+        Christian =?utf-8?B?S8O2bmln?= <christian.koenig@amd.com>,
+        "Alex Xu (Hello71)" <alex_y_xu@yahoo.ca>,
+        wireguard@lists.zx2c4.com, "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Xinhui.Pan@amd.com, linux-kernel@vger.kernel.org,
+        amd-gfx@lists.freedesktop.org,
+        Suren Baghdasaryan <surenb@google.com>, rcu@vger.kernel.org,
+        Hridya Valsaraju <hridya@google.com>,
+        Arve =?utf-8?B?SGrDuG5uZXbDpWc=?= <arve@android.com>,
+        Theodore Ts'o <tytso@mit.edu>, alexander.deucher@amd.com,
+        Todd Kjos <tkjos@android.com>, uladzislau.rezki@sony.com,
+        Martijn Coenen <maco@android.com>,
+        Christian Brauner <christian@brauner.io>
+Subject: Re: CONFIG_ANDROID (was: rcu_sched detected expedited stalls in
+ amdgpu after suspend)
+Message-ID: <YsXP7ZwHh/GvWM82@pc638.lan>
+References: <20220627204139.GL1790663@paulmck-ThinkPad-P17-Gen-1>
+ <1656379893.q9yb069erk.none@localhost>
+ <20220628041252.GV1790663@paulmck-ThinkPad-P17-Gen-1>
+ <1656421946.ic03168yc3.none@localhost>
+ <20220628185437.GA1790663@paulmck-ThinkPad-P17-Gen-1>
+ <1656443915.mdjoauhqe0.none@localhost>
+ <YrtgeSmwLmpzN/zw@pc638>
+ <79c6ad70-47d9-47fe-4bb4-33fcf356dd37@amd.com>
+ <YsXK5A0MiVgHd8Je@pc638.lan>
+ <20220706175836.GI1790663@paulmck-ThinkPad-P17-Gen-1>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH] ARM: module: Teach unwinder about PLTs
-Content-Language: en-US
-To:     Alexander A Sverdlin <alexander.sverdlin@nokia.com>,
-        linux-arm-kernel@lists.infradead.org
-Cc:     Kursad Oney <kursad.oney@broadcom.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Ard Biesheuvel <ardb@kernel.org>, linux-kernel@vger.kernel.org
-References: <20220706163135.53874-1-alexander.sverdlin@nokia.com>
-From:   Florian Fainelli <f.fainelli@gmail.com>
-In-Reply-To: <20220706163135.53874-1-alexander.sverdlin@nokia.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220706175836.GI1790663@paulmck-ThinkPad-P17-Gen-1>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -76,22 +96,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 7/6/22 09:31, Alexander A Sverdlin wrote:
-> From: Alexander Sverdlin <alexander.sverdlin@nokia.com>
+On Wed, Jul 06, 2022 at 10:58:36AM -0700, Paul E. McKenney wrote:
+> On Wed, Jul 06, 2022 at 07:48:20PM +0200, Uladzislau Rezki wrote:
+> > Hello.
+> > 
+> > On Mon, Jul 04, 2022 at 01:30:50PM +0200, Christian König wrote:
+> > > Hi guys,
+> > > 
+> > > Am 28.06.22 um 22:11 schrieb Uladzislau Rezki:
+> > > > > Excerpts from Paul E. McKenney's message of June 28, 2022 2:54 pm:
+> > > > > > All you need to do to get the previous behavior is to add something like
+> > > > > > this to your defconfig file:
+> > > > > > 
+> > > > > > CONFIG_RCU_EXP_CPU_STALL_TIMEOUT=21000
+> > > > > > 
+> > > > > > Any reason why this will not work for you?
+> > > 
+> > > sorry for jumping in so later, I was on vacation for a week.
+> > > 
+> > > Well when any RCU period is longer than 20ms and amdgpu in the backtrace my
+> > > educated guess is that we messed up some timeout waiting for the hw.
+> > > 
+> > > We usually do wait a few us, but it can be that somebody is waiting for ms
+> > > instead.
+> > > 
+> > > So there are some todos here as far as I can see and It would be helpful to
+> > > get a cleaner backtrace if possible.
+> > > 
+> > Actually CONFIG_ANDROID looks like is going to be removed, so the CONFIG_RCU_EXP_CPU_STALL_TIMEOUT
+> > will not have any dependencies on the CONFIG_ANDROID anymore:
+> > 
+> > https://lkml.org/lkml/2022/6/29/756
 > 
-> "unwind: Index not found eef26358" warnings keep popping up on
-> CONFIG_ARM_MODULE_PLTS-enabled systems if the PC points to a PLT veneer.
-> Teach the unwinder how to deal with them, taking into account they don't
-> change state of the stack or register file except loading PC.
+> But you can set the RCU_EXP_CPU_STALL_TIMEOUT Kconfig option, if you
+> wish.  Setting this option to 20 will get you the behavior previously
+> obtained by setting the now-defunct ANDROID Kconfig option.
 > 
-> Tested-by: Kursad Oney <kursad.oney@broadcom.com>
-> Link: https://lore.kernel.org/linux-arm-kernel/20200402153845.30985-1-kursad.oney@broadcom.com/
-> Signed-off-by: Alexander Sverdlin <alexander.sverdlin@nokia.com>
+Right. Or over boot parameter. So for us it is not a big issue :)
 
-I would be inclined to slap a Fixes tag to this patch so we get it back 
-ported where appropriate, however it is not clear to me which specific
-commit(s) we should be listing here.
-
-Thanks Alexander!
--- 
-Florian
+--
+Uladzislau Rezki

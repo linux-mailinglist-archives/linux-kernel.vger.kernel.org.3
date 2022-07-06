@@ -2,126 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AB2E8569336
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 22:22:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4884A569338
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 22:22:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234429AbiGFUVm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Jul 2022 16:21:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60388 "EHLO
+        id S232797AbiGFUWf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Jul 2022 16:22:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33022 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231916AbiGFUVh (ORCPT
+        with ESMTP id S229664AbiGFUWe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Jul 2022 16:21:37 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FD6020F77;
-        Wed,  6 Jul 2022 13:21:36 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 2D2CFB81ECC;
-        Wed,  6 Jul 2022 20:21:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 93301C341C0;
-        Wed,  6 Jul 2022 20:21:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1657138893;
-        bh=gOcE8HPlzWbrrVF7KpH0louwUHrwrtqqE+BWqbjxFQg=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=SPWDMNZbK0/XjRSnLQOxqLWkLpqI/1rDlyOvfopFPr/oagPQAbxHsApeJAjQGKPvY
-         mWJ9UoUz0D0URe53P+Rsy0Aj8v8exukL0e3cGmwCS/fkTBCRffl69ZNE/yHeQmvYMN
-         TbhdJpEX8hHIAUPJMZMg+A6/A5vmttfMObCxsZZoLYf3wJloH4cZLJSxBgiwHZaFdG
-         BtuUEuJ5motTuKyZp20CNwuHiBBu4eOwJ+O79oE3ljhP9eyVNpzvnC22l5kvrNJpEd
-         3yt1CNi04owS5mOaTyM6J4kSV9fVMMqmV0T57BLo4YvaxftGXT4YzIAx+uko9iZeO4
-         +dyzDVuUMKHNw==
-Date:   Wed, 6 Jul 2022 15:21:31 -0500
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Pierre Gondois <pierre.gondois@arm.com>
-Cc:     linux-kernel@vger.kernel.org, Bjorn Helgaas <bhelgaas@google.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <lenb@kernel.org>, linux-pci@vger.kernel.org,
-        linux-acpi@vger.kernel.org
-Subject: Re: [PATCH RESEND v1 1/2] ACPI/PCI: Make _SRS optional for link
- device
-Message-ID: <20220706202131.GA218207@bhelgaas>
+        Wed, 6 Jul 2022 16:22:34 -0400
+Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77D9F20F77
+        for <linux-kernel@vger.kernel.org>; Wed,  6 Jul 2022 13:22:33 -0700 (PDT)
+Received: by mail-ej1-x629.google.com with SMTP id q6so28929407eji.13
+        for <linux-kernel@vger.kernel.org>; Wed, 06 Jul 2022 13:22:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=s/tKQNx7+nrPdH0yxzOZpF+/pY4bKPXut4ezANEyBGU=;
+        b=oMOR51YGtPRJu9Q618/bSPmTNM5Kc8blSenFvdaztyvAeDeRRgmQqg32+u66QqI1hQ
+         u/Svp9qcKsF7uxGLBv8+rfPpgqTW4lAhrg99nwwrefEfCm4zxEgyMf5m4l0dSUovqsDq
+         BpDYuZr5FNGFCKsHvYz8qq4a8zYEiM+G6wVcc1YxsYPP+iGOnFo1y2zofhTZwERrGT7Q
+         1EowSTKxLPrkeT4815mrstyDFTrmzDMB8WqUYhVisDiIOHfh5RBNq3xnCcIf6ZWx/GMp
+         9SqYWYq7UV5GHAX+QquxVXWhfc0AttthcTH/vhBgZ2ujlsa/QXICbiJG8FOUqCMMK2qt
+         qWqA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=s/tKQNx7+nrPdH0yxzOZpF+/pY4bKPXut4ezANEyBGU=;
+        b=gYZw7SurUo3C0QqeVrm2Qkb+OqWBJjWBXqaCKWUbT//Cy/TfZfKVpJDdSIqkHLm7ng
+         8dOjxCYXpOHwF2JHt5gWa/c8BNmp2OYg7+GZ5NyoAIaN/9pgbwy2P/ThatXf5Q9+AXXM
+         o7qFzLPOfjfVjMLHG9W/22qjPY/WQS0gp09bB7pYAVlPsBEwIU7NFSMdKUsvqZQ+//wH
+         Kq8sp3iU0BbCM6QCij48kADf/MEyJLjw4K0hewIumSGzQmrS28W99ubmlek+bIA1QYDQ
+         j/qWRgh867MXR83CUYEFwvuAc7OgHm1uCE4SUnZ3c/4O48kLsVZs3jjgzmjsJidoAHen
+         gpMQ==
+X-Gm-Message-State: AJIora9gzRzUxGoG+YK/rEU+RQQlCrB2F331qwKFJciaJmf2sMq5Lihe
+        STdqLkigV/0wM33uKYdqZoMap7THXxTKZpAUFs/d1m4RUq/IDGYw
+X-Google-Smtp-Source: AGRyM1uLPe2jm00lXplPCQ5WhZMfM1wnXI+YNyu+WftgYpoP9HK2pylmt+XGiT91HpbsZdtGFcE0BaK//qEDAc8kc1w=
+X-Received: by 2002:a17:906:cc96:b0:728:baf0:ba03 with SMTP id
+ oq22-20020a170906cc9600b00728baf0ba03mr40255410ejb.52.1657138951883; Wed, 06
+ Jul 2022 13:22:31 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <35de3948-d8f2-c2da-05f9-995eecf275ce@arm.com>
-X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220627221446.82157-1-dlatypov@google.com>
+In-Reply-To: <20220627221446.82157-1-dlatypov@google.com>
+From:   Brendan Higgins <brendanhiggins@google.com>
+Date:   Wed, 6 Jul 2022 16:22:20 -0400
+Message-ID: <CAFd5g453WqsP49HVpD6zT3181xFhwbXFmodPPZwQriWcbnjZXQ@mail.gmail.com>
+Subject: Re: [PATCH v3 1/3] kunit: tool: refactor internal kconfig handling,
+ allow overriding
+To:     Daniel Latypov <dlatypov@google.com>
+Cc:     davidgow@google.com, linux-kernel@vger.kernel.org,
+        kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
+        skhan@linuxfoundation.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jul 06, 2022 at 11:52:56AM +0200, Pierre Gondois wrote:
-> On 7/5/22 19:29, Bjorn Helgaas wrote:
-> > On Fri, Jul 01, 2022 at 06:16:23PM +0200, Pierre Gondois wrote:
-> > > From: Pierre Gondois <Pierre.Gondois@arm.com>
-> > > 
-> > > In ACPI 6.4, s6.2.13 "_PRT (PCI Routing Table)", PCI legacy
-> > > interrupts can be described though a link device (first model).
-> > >  From s6.2.16 "_SRS (Set Resource Settings)":
-> > > "This optional control method [...]"
-> > > 
-> > > Make it optional to have a _SRS method for link devices.
-> > 
-> > I think it would be helpful to outline the reason for wanting these
-> > changes in the commit log.  Otherwise we don't know the benefit and
-> > it's harder to justify making the change since it's not an obvious
-> > cleanup.
-> > 
-> > IIRC from [1] there *is* a good reason: you need to use Interrupt Link
-> > devices so you can specify "level triggered, active high".
-> > 
-> > Without an Interrupt Link, you would get the default "level triggered,
-> > active low" setting, which apparently isn't compatible with GICv2.
-> > 
-> > I assume this fixes a device that previously didn't work correctly,
-> > but I don't see the details of that in the bugzilla.  I'm a little
-> > confused about this.  Isn't GICv2 widely used already?  How are things
-> > working now?  Or are there just a lot of broken devices?
-> 
-> It was unsure which of the 2 models described in ACPI 6.4, s6.2.13
-> "_PRT (PCI Routing Table)" would be used for UEFI for kvmtool.
-> 
-> Remainder:
-> The first model allows to accurately describe interrupts: level/edge
-> triggered and active high/low. Interrupts are also configurable with
-> _CRS/_PRS/_SRS/_DIS methods
-> The second model allows to describe hardwired interrupts, and are
-> by default level triggered, active low.
-> 
-> The kernel is aware that GivV2 interrupts are active high, so there
-> was actually no need to accurately describe them. Thus the second
-> model was used.
-> While experimenting, we temporarily had a configuration using
-> the first model, and only had a _CRS method (no _PRS/_SRS), which
-> triggered some warnings.
+On Mon, Jun 27, 2022 at 6:14 PM 'Daniel Latypov' via KUnit Development
+<kunit-dev@googlegroups.com> wrote:
+>
+> Currently, you cannot ovewrwrite what's in your kunitconfig via
+> --kconfig_add.
+> Nor can you override something in a qemu_config via either means.
+>
+> This patch makes it so we have this level of priority
+> * --kconfig_add
+> * kunitconfig file (the default or the one from --kunitconfig)
+> * qemu_config
+>
+> The rationale for this order is that the more "dynamic" sources of
+> kconfig options should take priority.
+>
+> --kconfig_add is obviously the most dynamic.
+> And for kunitconfig, users probably tweak the file manually or specify
+> --kunitconfig more often than they delve into qemu_config python files.
+>
+> And internally, we convert the kconfigs from a python list into a set or
+> dict fairly often. We should just use a dict internally.
+> We exposed the set transform in the past since we didn't define __eq__,
+> so also take the chance to shore up the kunit_kconfig.Kconfig interface.
+>
+> Example
+> =======
+>
+> Let's consider the unrealistic example where someone would want to
+> disable CONFIG_KUNIT.
+> I.e. they run
+> $ ./tools/testing/kunit/kunit.py config --kconfig_add=CONFIG_KUNIT=n
+>
+> Before
+> ------
+> We'd write the following
+> > # CONFIG_KUNIT is not set
+> > CONFIG_KUNIT_ALL_TESTS=y
+> > CONFIG_KUNIT_TEST=y
+> > CONFIG_KUNIT=y
+> > CONFIG_KUNIT_EXAMPLE_TEST=y
+>
+> And we'd error out with
+> > ERROR:root:Not all Kconfig options selected in kunitconfig were in the generated .config.
+> > This is probably due to unsatisfied dependencies.
+> > Missing: # CONFIG_KUNIT is not set
+>
+> After
+> -----
+> We'd write the following
+> > # CONFIG_KUNIT is not set
+> > CONFIG_KUNIT_TEST=y
+> > CONFIG_KUNIT_ALL_TESTS=y
+> > CONFIG_KUNIT_EXAMPLE_TEST=y
+>
+> And we'd error out with
+> > ERROR:root:Not all Kconfig options selected in kunitconfig were in the generated .config.
+> > This is probably due to unsatisfied dependencies.
+> > Missing: CONFIG_KUNIT_EXAMPLE_TEST=y, CONFIG_KUNIT_TEST=y, CONFIG_KUNIT_ALL_TESTS=y
+>
+> Signed-off-by: Daniel Latypov <dlatypov@google.com>
+> Reviewed-by: David Gow <davidgow@google.com>
 
-OK, thanks.  So it sounds like there is some existing kernel code that
-special-cases GICv2 interrupts to make them level/high, and that code
-would not have been necessary if _PRS/_SRS had been optional from the
-beginning.
-
-I don't think we could ever *remove* that code because there's
-firmware in the field that relies on it, and that firmware will never
-be updated.
-
-> So these patches are not fixes for existing platforms, but merely
-> to make _PRS/_SRS methods optional.
-> 
-> In [1] I said I would submit patches to change that. If you think
-> this is not necessary as the configuration is non-existing, I am
-> perfectly fine to drop the patches.
-> 
-> Also as Rafael noted, the _DIS method should also be taken into
-> consideration if _PRS/_SRS are made optional.
-
-But that said, I'm not opposed to making _PRS/_SRS optional if that
-makes legal and reasonable _PRT descriptions work, and if all the
-considerations Rafael mentioned are taken care of.
-
-Bjorn
+Reviewed-by: Brendan Higgins <brendanhiggins@google.com>

@@ -2,74 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E243568E22
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 17:51:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B8D1B568E0D
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 17:51:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234633AbiGFPpu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Jul 2022 11:45:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39804 "EHLO
+        id S233205AbiGFPsA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Jul 2022 11:48:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40216 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234494AbiGFPpa (ORCPT
+        with ESMTP id S233773AbiGFPrR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Jul 2022 11:45:30 -0400
-Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CEBC31367;
-        Wed,  6 Jul 2022 08:39:08 -0700 (PDT)
-Received: by mail-ej1-x62a.google.com with SMTP id u12so27752950eja.8;
-        Wed, 06 Jul 2022 08:39:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=UpB4V/X0i/RXIT4mM23nTV8Xeo9GU4ipcxDVNsDMRIk=;
-        b=dUCVMshO8wJSmXpVerdRgpYex6b0rIdo5vd/3+6FSG+YKemn5QEvv8R7V7+bOfJ1rc
-         12zvTezkM6yR6wUSkwRz3jFbxkrj4+SNrFSbVm8p+iQnSsXfIRWhKdAkQDe3pKPoqV0F
-         9kObq2zi178giYn40XUsjkCU4GJWMk1XjvwrrkN7OMlVqD86fH9fibXUrHdZ6e36vcKP
-         6rmOV66uC5T2h0Oeo8FUoThDj/JRfPu+PwLz8Ewxl+pBEO6MlHqlYKuKfZLeLENlB1Rj
-         uPvsJhNeavL6CbFm2RpErePydYPp5/rWExW7jyxaVZNmUug6Fx9stbwQGV6K7k4Rg7wJ
-         OhOA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=UpB4V/X0i/RXIT4mM23nTV8Xeo9GU4ipcxDVNsDMRIk=;
-        b=6o2fwtFUPkwsKgky2aaahGXCkOhQn5qDIh0fStMNil/G28JuUA+B/Y0eWtEf4z0IOH
-         uLLq+WGbVWe4TYDdRg3Iwy5kGCLq4lOR16MwioEphSv/nEho3VKX6xywhubntryQmd1V
-         /ojioXgd6M4TtBWdSOMKdkh2D1lYQnr/uREDJGiLuIku/+WREV7+Pj+fRKy9Knx2npfl
-         edUwdL/JfLB9HEu6hqP0yORBsQ270FBupDymvmfA9DTaDJaDllVQbYDrNpIDDo+vzsMS
-         tb3k8MUa1e+3HvNnjPNNy3UCfMuIw4DXvhsPa5kcnfIomBfNBQr0MvW9ThSQ9GKDUzkz
-         X0gQ==
-X-Gm-Message-State: AJIora/Q7vI7/uJ2DbnRdB+pRiGEX9rIjWXyy2ES1AxHFdUum3qQyl1U
-        HSWWqw8BGTVd3PsTE5RR2cymoCH5BWc01dpO
-X-Google-Smtp-Source: AGRyM1uhb1KQuofOv9C4q0pwxUFVNmJwOKVNdXS9cNw3e6pbR0GR1HBhX/NPCIf/6WewJE7FNRRNEw==
-X-Received: by 2002:a17:906:77c8:b0:722:e753:fbbe with SMTP id m8-20020a17090677c800b00722e753fbbemr38469079ejn.692.1657121946479;
-        Wed, 06 Jul 2022 08:39:06 -0700 (PDT)
-Received: from skbuf ([188.26.185.61])
-        by smtp.gmail.com with ESMTPSA id hb10-20020a170906b88a00b007266185ca67sm15425197ejb.150.2022.07.06.08.39.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 06 Jul 2022 08:39:05 -0700 (PDT)
-Date:   Wed, 6 Jul 2022 18:39:04 +0300
-From:   Vladimir Oltean <olteanv@gmail.com>
-To:     Christian Marangi <ansuelsmth@gmail.com>
-Cc:     Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, Jens Axboe <axboe@kernel.dk>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [net-next PATCH RFC] net: dsa: qca8k: move driver to qca dir
-Message-ID: <20220706153904.jtu2qxczjjcgcoty@skbuf>
-References: <20220630134606.25847-1-ansuelsmth@gmail.com>
+        Wed, 6 Jul 2022 11:47:17 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC60D338AE
+        for <linux-kernel@vger.kernel.org>; Wed,  6 Jul 2022 08:40:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1657122012; x=1688658012;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=AKh4mr1uPByPYABv1mpl6RRugd2DcaAFD/hiBVNUfF4=;
+  b=AWlB9E7GnHZfYgnh/F8cBOh3rVNw/XsdZpLw0BIq2lZusLQ0HyiG5Vzi
+   i1Xh5o499+uMIEDTE1fZSWh0p8KThCoy5N74NpYQa0piv5oi/wd8KHvEk
+   qciS31L7aOJGI0jGWESfTnN1zptg6leKBIVVxIr5xf9HiWtPoqxJxR7az
+   rqnyOIOoE4WlkpP+9mu+J/SSSrsRcJ8FgJ1bwcs6GM1Ru7nJPzE8H/At0
+   Xmu8NwWmM0YZePn5zwu/wHIf4z/eFy8xDdhDfuN6+iRVtgcmnoGHnC7Xm
+   DhQHN3+XC/pz4Ra7HrPl/33//FI2O4Qs8ulX10tzjFU+wpT7FcosQnZON
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10400"; a="370096840"
+X-IronPort-AV: E=Sophos;i="5.92,250,1650956400"; 
+   d="scan'208";a="370096840"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jul 2022 08:40:12 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.92,250,1650956400"; 
+   d="scan'208";a="661012580"
+Received: from lkp-server01.sh.intel.com (HELO 68b931ab7ac1) ([10.239.97.150])
+  by fmsmga004.fm.intel.com with ESMTP; 06 Jul 2022 08:40:11 -0700
+Received: from kbuild by 68b931ab7ac1 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1o978M-000KkH-J0;
+        Wed, 06 Jul 2022 15:40:10 +0000
+Date:   Wed, 6 Jul 2022 23:39:37 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Martin Habets <habetsm.xilinx@gmail.com>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org, Jakub Kicinski <kuba@kernel.org>
+Subject: drivers/net/ethernet/sfc/siena/selftest.c:46:15: warning: field ip
+ within 'struct efx_loopback_payload' is less aligned than 'struct iphdr' and
+ is usually due to 'struct efx_loopback_payload' being packed, which can lead
+ to unaligned accesses
+Message-ID: <202207062332.BG1QJUUo-lkp@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220630134606.25847-1-ansuelsmth@gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,43 +64,64 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 30, 2022 at 03:46:06PM +0200, Christian Marangi wrote:
-> Move qca8k driver to qca dir in preparation for code split and
-> introduction of ipq4019 switch based on qca8k.
-> 
-> Signed-off-by: Christian Marangi <ansuelsmth@gmail.com>
-> ---
-> 
-> Posting this as a RFC to discuss the problems of such change.
-> 
-> This is needed as in the next future the qca8k driver will be split
-> to a common code. This needs to be done as the ipq4019 is based on qca8k
-> but will have some additional configuration thing and other phylink
-> handling so it will require different setup function. Aside from these
-> difference almost all the regs are the same of qca8k.
-> 
-> For this reason keeping the driver in the generic dsa dir would create
-> some caos and I think it would be better to move it the dedicated qca
-> dir.
-> 
-> This will for sure creates some problems with backporting patch.
-> 
-> So the question is... Is this change acceptable or we are cursed to
-> keeping this driver in the generic dsa directory?
-> 
-> Additional bonus question, since the ethernet part still requires some
-> time to get merged, wonder if it's possible to send the code split with
-> qca8k as the only user (currently) and later just add the relevant
-> ipq4019 changes.
-> 
-> (this ideally is to prepare stuff and not send a big scary series when
-> it's time to send ipq4019 changes)
+Hi Martin,
 
-I think we discussed this before. You can make the driver migration but
-you need to be willing to manually backport bug fixes if/when the stable
-team reports that backporting to a certain kernel failed. It has been
-done before, see commit a9770eac511a ("net: mdio: Move MDIO drivers into
-a new subdirectory") as an example. I think "git cherry-pick" has magic
-to detect file movement, while "git am" doesn't. Here I'm not 100%
-certain which command is used to backport to stable. If it's by cherry
-picking it shouldn't even require manual intervention.
+First bad commit (maybe != root cause):
+
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   e35e5b6f695d241ffb1d223207da58a1fbcdff4b
+commit: c5a13c319e10e795850b61bc7e3447b08024be2e sfc: Add a basic Siena module
+date:   8 weeks ago
+config: arm-randconfig-r004-20220706 (https://download.01.org/0day-ci/archive/20220706/202207062332.BG1QJUUo-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project f553287b588916de09c66e3e32bf75e5060f967f)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install arm cross compiling tool for clang build
+        # apt-get install binutils-arm-linux-gnueabi
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=c5a13c319e10e795850b61bc7e3447b08024be2e
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout c5a13c319e10e795850b61bc7e3447b08024be2e
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash drivers/net/ethernet/sfc/siena/
+
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+>> drivers/net/ethernet/sfc/siena/selftest.c:46:15: warning: field ip within 'struct efx_loopback_payload' is less aligned than 'struct iphdr' and is usually due to 'struct efx_loopback_payload' being packed, which can lead to unaligned accesses [-Wunaligned-access]
+           struct iphdr ip;
+                        ^
+   1 warning generated.
+
+
+vim +46 drivers/net/ethernet/sfc/siena/selftest.c
+
+d48523cb88e0703 Martin Habets 2022-05-09  37  
+d48523cb88e0703 Martin Habets 2022-05-09  38  /*
+d48523cb88e0703 Martin Habets 2022-05-09  39   * Loopback test packet structure
+d48523cb88e0703 Martin Habets 2022-05-09  40   *
+d48523cb88e0703 Martin Habets 2022-05-09  41   * The self-test should stress every RSS vector, and unfortunately
+d48523cb88e0703 Martin Habets 2022-05-09  42   * Falcon only performs RSS on TCP/UDP packets.
+d48523cb88e0703 Martin Habets 2022-05-09  43   */
+d48523cb88e0703 Martin Habets 2022-05-09  44  struct efx_loopback_payload {
+d48523cb88e0703 Martin Habets 2022-05-09  45  	struct ethhdr header;
+d48523cb88e0703 Martin Habets 2022-05-09 @46  	struct iphdr ip;
+d48523cb88e0703 Martin Habets 2022-05-09  47  	struct udphdr udp;
+d48523cb88e0703 Martin Habets 2022-05-09  48  	__be16 iteration;
+d48523cb88e0703 Martin Habets 2022-05-09  49  	char msg[64];
+d48523cb88e0703 Martin Habets 2022-05-09  50  } __packed;
+d48523cb88e0703 Martin Habets 2022-05-09  51  
+
+:::::: The code at line 46 was first introduced by commit
+:::::: d48523cb88e0703055c1b33e61eb644a7976f92b sfc: Copy shared files needed for Siena (part 2)
+
+:::::: TO: Martin Habets <martinh@xilinx.com>
+:::::: CC: Jakub Kicinski <kuba@kernel.org>
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

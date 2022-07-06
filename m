@@ -2,107 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C54925689AA
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 15:38:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 480125689A4
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 15:38:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233726AbiGFNhv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Jul 2022 09:37:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37546 "EHLO
+        id S233691AbiGFNin (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Jul 2022 09:38:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39232 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233573AbiGFNhj (ORCPT
+        with ESMTP id S231576AbiGFNik (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Jul 2022 09:37:39 -0400
-Received: from relay05.th.seeweb.it (relay05.th.seeweb.it [5.144.164.166])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B37022B0D
-        for <linux-kernel@vger.kernel.org>; Wed,  6 Jul 2022 06:37:39 -0700 (PDT)
-Received: from [192.168.1.101] (abxi46.neoplus.adsl.tpnet.pl [83.9.2.46])
+        Wed, 6 Jul 2022 09:38:40 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A5B71F601;
+        Wed,  6 Jul 2022 06:38:38 -0700 (PDT)
+Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
         (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by m-r2.th.seeweb.it (Postfix) with ESMTPSA id 221B13F715;
-        Wed,  6 Jul 2022 15:37:37 +0200 (CEST)
-Message-ID: <43572937-8505-ddf0-1fe0-99ddfe486c11@somainline.org>
-Date:   Wed, 6 Jul 2022 15:37:36 +0200
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id B8A7466019A9;
+        Wed,  6 Jul 2022 14:38:36 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1657114717;
+        bh=qOtVS41pFz0Cve8LG+rZ2GhjzM5M5kZoqRvDnnf0RBk=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=fmP6bXbo4NwE3MRbQ27Ib9ENErWkf3QTl7Z28jEeOLe1o/C29AscjQJhM4P5kWJRD
+         RfewV9nXGULjUsuoB08jqa1bJhqa9mJEZSXOWvvR0EcfC00hNO04eBfnqYeFvKW0MX
+         DYDlmYguGCfGcGeV0cXZfBe1ti7YDySZ+5ywsICO2ryDZ4uQjXE19SM8wgyK4i9ScQ
+         C3+p0Pk3IddEr/NCcs2JACVysqr6Xno1O/LDjEGwz1dWszeuvBIV83IAVrSEQ9Gapt
+         SOgHc5ECUR3inWCl/95IVAJU59iVWklvznwdlf2CnLxvhQdfWjXol/o1lx6acc81rc
+         c1iK12Jxu3Tgg==
+Message-ID: <82736173-b3b8-1e1a-3e2e-25d9ca3287eb@collabora.com>
+Date:   Wed, 6 Jul 2022 15:38:34 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH 04/13] ARM: dts: qcom: disable smb208 regulators for
- ipq8064-rb3011
+ Thunderbird/91.10.0
+Subject: Re: [PATCH v3 RESEND 0/4] MediaTek Helio X10 MT6795 - MT6331/6332
+ Regulators
 Content-Language: en-US
-To:     Christian Marangi <ansuelsmth@gmail.com>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Jonathan McDowell <noodles@earth.li>
-References: <20220705133917.8405-1-ansuelsmth@gmail.com>
- <20220705133917.8405-5-ansuelsmth@gmail.com>
- <8a394fa3-92fb-d162-b4ee-df010a09aed0@somainline.org>
- <62c58a60.1c69fb81.25b26.e72a@mx.google.com>
- <36a68a0b-0c18-deb5-609c-2128aa3fc21f@somainline.org>
- <62c58fca.1c69fb81.76f6a.15f4@mx.google.com>
-From:   Konrad Dybcio <konrad.dybcio@somainline.org>
-In-Reply-To: <62c58fca.1c69fb81.76f6a.15f4@mx.google.com>
-Content-Type: text/plain; charset=UTF-8
+To:     Mark Brown <broonie@kernel.org>
+Cc:     lgirdwood@gmail.com, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, matthias.bgg@gmail.com,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org
+References: <20220706100912.200698-1-angelogioacchino.delregno@collabora.com>
+ <YsV9IerWCoa/xtwM@sirena.org.uk>
+ <57367b11-f2d4-476b-b92d-16c1726316c0@collabora.com>
+ <YsWG0jfqAf4EqojE@sirena.org.uk>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <YsWG0jfqAf4EqojE@sirena.org.uk>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Il 06/07/22 14:57, Mark Brown ha scritto:
+> On Wed, Jul 06, 2022 at 02:49:56PM +0200, AngeloGioacchino Del Regno wrote:
+>> Il 06/07/22 14:16, Mark Brown ha scritto:
+> 
+>>> This previously got 0day failures due to missing dependencies which
+>>> need would need a merge with IIRC MFD, I see no reference in the cover
+>>> letter to dependencies?
+> 
+>> The only blocker for this series was the MFD patch, which got picked and
+>> it's present in next-20220706 (as you suggested me to resend when things
+>> were picked... I decided to wait until they actually landed on -next...)
+> 
+> Right, I also said I'd need a pull request - if I apply the patches
+> without having the MFD bits they depend on in my tree then it will fail
+> to build.
 
+I remember writing that to Lee... how do we proceed in this case?
+Should we add him to the Cc's of this patch to notify him or..?
 
-On 6.07.2022 15:19, Christian Marangi wrote:
-> On Wed, Jul 06, 2022 at 03:31:55PM +0200, Konrad Dybcio wrote:
->>
->>
->> On 6.07.2022 14:56, Christian Marangi wrote:
->>> On Wed, Jul 06, 2022 at 03:03:32PM +0200, Konrad Dybcio wrote:
->>>>
->>>>
->>>> On 5.07.2022 15:39, Christian Marangi wrote:
->>>>> Mikrotik RB3011 have a special configuration where the regulators are
->>>>> not the common smb208 controlled by RPM but they use a TPS563900
->>>>> controlled via i2c. Disable the smb208 for this specific device.
->>>> Ok, so that answers my question from the previous email.
->>>> Please define the SMB208 regulators only in the DTs of
->>>> boards that actually use it, as it is not a SoC component as
->>>> far as I can tell.
->>>>
->>>> Konrad
->>>
->>> This was already discuessed,
->> Yeah sorry, I didn't notice earlier and started reviewing patches
->> that were already reviewed by others.
->>
-> 
-> Np, thanks for the review.
-> 
->>
->> rb3011 is the exception, qcom for ipq8064
->>> recommends to use smb208 but gives the option to implement it in their
->>> own way. So again we have 28 device with smb208 and 1 device that use
->>> its own special way...
->>>
->>> Wonder if a separate dtsi can be used for this if we really can't put
->>> smb208 in ipq8064 dtsi?
->> There's msm8916-pm8916.dtsi. You can follow.
-> 
-> Ok, will put the smb208 definition to a separate dtsi, something like
-> ipq8064-smb208.dtsi? or ipq8064-rpm-smb208.dtsi? Looks also cleaner that
-> way.
-You can create ipq8064-smb208.dtsi that will also contain every ipq8064-plus-smb208-specific
-configuration, such as regulator assignemnts to in-SoC components (like PHYs, SDHCIs etc.).
-
-Konrad
-> 
->>
->> Konrad
->>
->> [...]
-> 
+P.S.: Sorry, this is the first time that I deal with MFD...

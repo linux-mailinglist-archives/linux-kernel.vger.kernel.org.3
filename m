@@ -2,78 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 57DAB568C89
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 17:22:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B7F45568C8B
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 17:22:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233414AbiGFPVr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Jul 2022 11:21:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35140 "EHLO
+        id S233613AbiGFPWc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Jul 2022 11:22:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35730 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232441AbiGFPVp (ORCPT
+        with ESMTP id S233589AbiGFPWa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Jul 2022 11:21:45 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 13E46E0B6
-        for <linux-kernel@vger.kernel.org>; Wed,  6 Jul 2022 08:21:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1657120903;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=HcS3uejzMuAs7Fc/x+INtudJrA9wFk21WgYmtKtnXTU=;
-        b=ZbbWau7HQcLj6hFROEfdBn62kGaedhPVCG5lC0524vbYuOTReh6MyBIungG/0yJ55eLV6V
-        hEVxosfAk6DmWZS+Xl9DBsJ5pwC9wOG5CMHrBFJ+SsNcarVUpmEfI9JVKSi7v/kVVr1w7/
-        8NHOtZdiSA3ItnLqFd3byjlNiihfM/M=
-Received: from mail-ua1-f70.google.com (mail-ua1-f70.google.com
- [209.85.222.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-537-But2eeVyMcaAoUyjnHtdog-1; Wed, 06 Jul 2022 11:21:42 -0400
-X-MC-Unique: But2eeVyMcaAoUyjnHtdog-1
-Received: by mail-ua1-f70.google.com with SMTP id g5-20020ab060c5000000b00378f363f03bso4805538uam.15
-        for <linux-kernel@vger.kernel.org>; Wed, 06 Jul 2022 08:21:42 -0700 (PDT)
+        Wed, 6 Jul 2022 11:22:30 -0400
+Received: from mail-lj1-x233.google.com (mail-lj1-x233.google.com [IPv6:2a00:1450:4864:20::233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17F6013D0E
+        for <linux-kernel@vger.kernel.org>; Wed,  6 Jul 2022 08:22:29 -0700 (PDT)
+Received: by mail-lj1-x233.google.com with SMTP id bx13so18895582ljb.1
+        for <linux-kernel@vger.kernel.org>; Wed, 06 Jul 2022 08:22:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=+mU56Z0jln9tpZcCLBMTlNZ0DlKw6qLIcuR6s049GPk=;
+        b=vShMHcD/GMWr3dbVy8g+QKecwTcuyMMhc5OSwqdKK3JXCju22+2a197RniNwmYGEbC
+         egQW6E6eN+93TQbnli2LcQ/zei2/nAkyiZdLhPH1LNxI42wOmkc+haHgKbMBBA/eZTbO
+         FUPS81v7+jfisZRrRVv2L2EEWsNBQjWtH7lvxUGdsmKmWEm1bVjhA0fYG2FwgaJ0+0FQ
+         fqjhPDvPhVUzusff7LGhjS5B6xOsGi+vdi52eZXRht8y/NHpCxfs69c3pnU0ni2lhUoJ
+         7L91oCQG6lFv6tGF7p1hexhsmdQJlm8gRSBpcH7hjgodUB7fURteQoDcMxSn28EcpoVN
+         Cdtw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=HcS3uejzMuAs7Fc/x+INtudJrA9wFk21WgYmtKtnXTU=;
-        b=cdhn3Xji6+kgyTkxoGzh0yZBpGcpBRRykuRox+OJk0V46jmNGjqW8UzwQe48f5ZQxi
-         JKI/eBvxXuks0ysd7YOsD42UlN1e8HgmUYBkTlZRESecauhg5wZBYVjdeFZMhXSrh24B
-         zwKhnJ1oEB70ANFhUliCOQqKorQFzwGAzNdrgDwuYveYwIaVOzBOeHGBzpubocJpuEzD
-         XbbzzhhsEHh/5GMo/9B2I3tJovBHhgFzuZRvfRR0F3t8MjMBPeJkAnSbg0UsVW0UwyhD
-         B6n7R5AnXZBtnk6QAUoitHjmMzMNxJhSJljZfaJ3HcmxYjJvGXomsoVyUrmqegGccaTw
-         OgBQ==
-X-Gm-Message-State: AJIora99ypMKr+7UjpwODj82S++D+wP4oXBi0F0SqRcVN7ZqSGIjY8NW
-        sj3BezwhfDsE9Z30WZD1uWZaZPt7OeIaemDzXFptQaObcgKaklj54qqIbbucxFScx+BQR+oSJkp
-        4ey+J8/zGs/Kjhr9xV+SKvGmvNg4vjU4p2++sNRSW
-X-Received: by 2002:a67:4347:0:b0:356:37f7:6fa3 with SMTP id q68-20020a674347000000b0035637f76fa3mr24958239vsa.40.1657120902146;
-        Wed, 06 Jul 2022 08:21:42 -0700 (PDT)
-X-Google-Smtp-Source: AGRyM1s2+Xffu3s3AfptA3eZWELbrOWi/CqyYzom+y2gsOdu+DMe8X2B0ID45kOQWpCgGgbCy69x8Nld6DIcmyOzSyw=
-X-Received: by 2002:a67:4347:0:b0:356:37f7:6fa3 with SMTP id
- q68-20020a674347000000b0035637f76fa3mr24958223vsa.40.1657120901924; Wed, 06
- Jul 2022 08:21:41 -0700 (PDT)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=+mU56Z0jln9tpZcCLBMTlNZ0DlKw6qLIcuR6s049GPk=;
+        b=Xm0+WNSim6dN9GtBggASP+l617sm4g2iyXdOQSqMBN5Qjx3Xene1k1v7Eay6tVkqL5
+         4zJyNI8HaDRwS1MsbKvvTrbsE9zoONzGaC0gfC0dqIANnNSDa9oOprtmup2dy2Maj4KH
+         un1TqGmhl4RdXKEsR/m4oQhdXi3E2L+XnZP6wH4v6tcROs8+8fvrZDAWlCtYS53qXegN
+         zLzw+CYRk6Gf+Yax6+CdqkGT6xCHaa0eH/j4HdOXNllUGY01+TSo7XPlF08Xz0Ix19xG
+         v5O5dPDt1ddjahXylJfzcWPOKAnrAsKdi69okFXc0RSN4GUCzXmaYy7CK2lZRbk4C7t4
+         cnqQ==
+X-Gm-Message-State: AJIora8Stw/0I1PhKaJptod7Gs16tmmbVJ7AJdxcJeT0CcxaJWL9XXfL
+        cHLwd07+qDSBs+KZqNVzalVV8A==
+X-Google-Smtp-Source: AGRyM1ucbiikEj80bXWZmGd+F7/xuIxpbwt2UKm2XOLOlDdQ47QQZ5LOsrYW5G39Xi0FO1/mgtQaLw==
+X-Received: by 2002:a2e:a483:0:b0:25b:c3c6:8559 with SMTP id h3-20020a2ea483000000b0025bc3c68559mr24099648lji.273.1657120947479;
+        Wed, 06 Jul 2022 08:22:27 -0700 (PDT)
+Received: from [192.168.1.52] ([84.20.121.239])
+        by smtp.gmail.com with ESMTPSA id bu35-20020a05651216a300b0047255d211b9sm6325799lfb.232.2022.07.06.08.22.26
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 06 Jul 2022 08:22:27 -0700 (PDT)
+Message-ID: <fca15370-f977-687a-ff62-22ae43046b58@linaro.org>
+Date:   Wed, 6 Jul 2022 17:22:26 +0200
 MIME-Version: 1.0
-References: <20220531081412.22db88cc@kernel.org> <1654011382-2453-1-git-send-email-chen45464546@163.com>
- <20220531084704.480133fa@kernel.org> <CAKgT0UfQsbAzsJ1e__irHY2xBRevpB9m=FBYDis3C1fMua+Zag@mail.gmail.com>
- <3498989.c69f.1811f41186e.Coremail.chen45464546@163.com> <CAKgT0UdoGJ_dG9vZ3aqQhTagCGf_J3H9A8yJbO5mWCgrt6vd4Q@mail.gmail.com>
-In-Reply-To: <CAKgT0UdoGJ_dG9vZ3aqQhTagCGf_J3H9A8yJbO5mWCgrt6vd4Q@mail.gmail.com>
-From:   Maurizio Lombardi <mlombard@redhat.com>
-Date:   Wed, 6 Jul 2022 17:21:31 +0200
-Message-ID: <CAFL455=bAEXeyUPjDPZm-hK-K8aKJSw7wRQ0CCYoKWO8VMJUqw@mail.gmail.com>
-Subject: Re: Re: [PATCH v2] mm: page_frag: Warn_on when frag_alloc size is
- bigger than PAGE_SIZE
-To:     Alexander Duyck <alexander.duyck@gmail.com>
-Cc:     =?UTF-8?B?5oSa5qCR?= <chen45464546@163.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        linux-mm <linux-mm@kvack.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Netdev <netdev@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH v7 1/3] dt-bindings: mfd: Convert atmel-flexcom to
+ json-schema
+Content-Language: en-US
+To:     Kavyasree Kotagiri <kavyasree.kotagiri@microchip.com>,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        nicolas.ferre@microchip.com, alexandre.belloni@bootlin.com,
+        claudiu.beznea@microchip.com, UNGLinuxDriver@microchip.com
+Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+References: <20220706110619.71729-1-kavyasree.kotagiri@microchip.com>
+ <20220706110619.71729-2-kavyasree.kotagiri@microchip.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220706110619.71729-2-kavyasree.kotagiri@microchip.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -81,65 +79,99 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-st 1. 6. 2022 v 17:05 odes=C3=ADlatel Alexander Duyck
-<alexander.duyck@gmail.com> napsal:
-> > diff --git a/mm/page_alloc.c b/mm/page_alloc.c
-> > index e6f211d..ac60a97 100644
-> > --- a/mm/page_alloc.c
-> > +++ b/mm/page_alloc.c
-> > @@ -5580,6 +5580,7 @@ void *page_frag_alloc_align(struct page_frag_cach=
-e *nc,
-> >                 /* reset page count bias and offset to start of new fra=
-g */
-> >                 nc->pagecnt_bias =3D PAGE_FRAG_CACHE_MAX_SIZE + 1;
-> >                 offset =3D size - fragsz;
-> > +               BUG_ON(offset < 0);
-> >         }
-> >
-> >         nc->pagecnt_bias--;
-> >
->
->
-> I think I could be onboard with a patch like this. The test shouldn't
-> add more than 1 instruction since it is essentially just a jump if
-> signed test which will be performed after the size - fragsz check.
+On 06/07/2022 13:06, Kavyasree Kotagiri wrote:
+> Convert the Atmel flexcom device tree bindings to json schema.
+> 
+> Signed-off-by: Kavyasree Kotagiri <kavyasree.kotagiri@microchip.com>
+> ---
+> v6 -> v7:
+>  - Change filename to atmel,sama5d2-flexcom.yaml
+>  - Add #address-cells, #size-cells to flexcom node - Fixed warnings.
+> 
+> v5 -> v6:
+>  - Removed spi node from example as suggested by Rob and
+>    also pattern properties(spi dt-bindings conversion to yaml patch is under review).
+>    Once that is accepted, I will add back spi example through new patch.
+> 
+> v4 -> v5:
+>  - Fixed indentations.
+> 
+> v3 -> v4:
+>  - Corrected format of enum used for compatible string.
+> 
+> v2 -> v3:
+>  - used enum for compatible string.
+>  - changed irq flag to IRQ_TYPE_LEVEL_HIGH in example.
+>  - fixed dtschema errors.
+> 
+> v1 -> v2:
+>  - Fix title.
+> 
+>  .../bindings/mfd/atmel,sama5d2-flexcom.yaml   | 74 +++++++++++++++++++
+>  .../devicetree/bindings/mfd/atmel-flexcom.txt | 63 ----------------
+>  2 files changed, 74 insertions(+), 63 deletions(-)
+>  create mode 100644 Documentation/devicetree/bindings/mfd/atmel,sama5d2-flexcom.yaml
+>  delete mode 100644 Documentation/devicetree/bindings/mfd/atmel-flexcom.txt
+> 
+> diff --git a/Documentation/devicetree/bindings/mfd/atmel,sama5d2-flexcom.yaml b/Documentation/devicetree/bindings/mfd/atmel,sama5d2-flexcom.yaml
+> new file mode 100644
+> index 000000000000..864f490ffb83
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/mfd/atmel,sama5d2-flexcom.yaml
+> @@ -0,0 +1,74 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/mfd/atmel,sama5d2-flexcom.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Atmel Flexcom (Flexible Serial Communication Unit)
+> +
+> +maintainers:
+> +  - Kavyasree Kotagiri <kavyasree.kotagiri@microchip.com>
+> +
+> +description:
+> +  The Atmel Flexcom is just a wrapper which embeds a SPI controller,
+> +  an I2C controller and an USART. Only one function can be used at a
+> +  time and is chosen at boot time according to the device tree.
+> +
+> +properties:
+> +  compatible:
+> +    enum:
+> +      - atmel,sama5d2-flexcom
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  clocks:
+> +    maxItems: 1
+> +
+> +  "#address-cells":
+> +    const: 1
+> +
+> +  "#size-cells":
+> +    const: 1
+> +
+> +  ranges:
+> +    description:
+> +      One range for the full I/O register region. (including USART,
+> +      TWI and SPI registers).
+> +    items:
+> +      maxItems: 3
+> +
+> +  atmel,flexcom-mode:
+> +    description: |
+> +      Specifies the flexcom mode as follows:
+> +      1: USART
+> +      2: SPI
+> +      3: I2C.
+> +    $ref: /schemas/types.yaml#/definitions/uint32
+> +    enum: [1, 2, 3]
+> +
 
-FYI, I hit this problem a few days ago with the nfp network driver, it uses
-page_frag_alloc() with a frag size larger than PAGE_SIZE when MTU is
-set to 9000,
-this may result in memory corruptions when the system runs out of memory.
-
-The solution I was working on was something like the following, this
-makes the allocation
-fail if fragsz is greater than the cache size.
-
-diff --git a/mm/page_alloc.c b/mm/page_alloc.c
-index 4dc0d333279f..c6b40b85c55d 100644
---- a/mm/page_alloc.c
-+++ b/mm/page_alloc.c
-@@ -5544,12 +5544,17 @@ void *page_frag_alloc_align(struct page_frag_cache =
-*nc,
-                /* if size can vary use size else just use PAGE_SIZE */
-                size =3D nc->size;
- #endif
--               /* OK, page count is 0, we can safely set it */
--               set_page_count(page, PAGE_FRAG_CACHE_MAX_SIZE + 1);
--
-                /* reset page count bias and offset to start of new frag */
-                nc->pagecnt_bias =3D PAGE_FRAG_CACHE_MAX_SIZE + 1;
-                offset =3D size - fragsz;
-+               if (unlikely(offset < 0)) {
-+                       free_the_page(page, compound_order(page));
-+                       nc->va =3D NULL;
-+                       return NULL;
-+               }
-+
-+               /* OK, page count is 0, we can safely set it */
-+               set_page_count(page, PAGE_FRAG_CACHE_MAX_SIZE + 1);
-        }
-
-        nc->pagecnt_bias--;
+As pointed out by Rob's bot - why do you not allow the protocol-specific
+children here? spi, serial etc?
 
 
-Maurizio
-
+Best regards,
+Krzysztof

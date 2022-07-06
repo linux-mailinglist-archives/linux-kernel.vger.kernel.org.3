@@ -2,165 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 363365684E5
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 12:14:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AF836568586
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 12:28:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232890AbiGFKM3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Jul 2022 06:12:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52724 "EHLO
+        id S231986AbiGFK2O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Jul 2022 06:28:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42384 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232385AbiGFKMR (ORCPT
+        with ESMTP id S231359AbiGFK2J (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Jul 2022 06:12:17 -0400
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD74FB8D;
-        Wed,  6 Jul 2022 03:12:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=Tkl3lxTOKWGbOCuxxKNckxHNjYRI3zGLuGc8imHNxDs=; b=WpgGH4+Y6U9gQSSnMVR6OLMxva
-        3xYxeAZ7USH+mmbkdac+gWqkqSUncCao79OXiiUot5IPHXuNd6BKu4KcdJ/3wd9E6vbdtwdlfX++8
-        YHg9SPa4d3D+hoJ+xHEd64U2BB0PxnnwhjCX34YKvpd3mB9eaqJ+9sCf1Ma6Y4Sc+A5HLQFse3wc3
-        7p9dt+e0Yzacjyq/2QRyinJn3DEvx+LTPjMD8J3/m/+8JP5Q5o8reLw6djHCmeIC4Lr1NoUT74Cpg
-        hLfvPld/nyGauGdSHTmpv4A/geUNh2jHXRL3BD0xt9eK7uievOocsG0NSTJd7nMGZkXKKLQVVrNY/
-        fCxnd6CA==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1o9207-000QRU-BY; Wed, 06 Jul 2022 10:11:19 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 6964C3001AE;
-        Wed,  6 Jul 2022 12:11:15 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 43F7A20207235; Wed,  6 Jul 2022 12:11:15 +0200 (CEST)
-Date:   Wed, 6 Jul 2022 12:11:15 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Sven Schnelle <svens@linux.ibm.com>
-Cc:     Steven Rostedt <rostedt@goodmis.org>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        "Eric W. Biederman" <ebiederm@xmission.com>,
-        linux-kernel@vger.kernel.org, rjw@rjwysocki.net,
-        Oleg Nesterov <oleg@redhat.com>, mingo@kernel.org,
-        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
-        mgorman@suse.de, bigeasy@linutronix.de,
-        Will Deacon <will@kernel.org>, tj@kernel.org,
-        linux-pm@vger.kernel.org, Richard Weinberger <richard@nod.at>,
-        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
-        Johannes Berg <johannes@sipsolutions.net>,
-        linux-um@lists.infradead.org, Chris Zankel <chris@zankel.net>,
-        Max Filippov <jcmvbkbc@gmail.com>,
-        linux-xtensa@linux-xtensa.org, Kees Cook <keescook@chromium.org>,
-        Jann Horn <jannh@google.com>, linux-ia64@vger.kernel.org
-Subject: Re: [PATCH v4 12/12] sched,signal,ptrace: Rework TASK_TRACED,
- TASK_STOPPED state
-Message-ID: <YsVfw3dy7smrpEbn@hirez.programming.kicks-ass.net>
-References: <YrHA5UkJLornOdCz@li-4a3a4a4c-28e5-11b2-a85c-a8d192c6f089.ibm.com>
- <877d5ajesi.fsf@email.froward.int.ebiederm.org>
- <YrHgo8GKFPWwoBoJ@li-4a3a4a4c-28e5-11b2-a85c-a8d192c6f089.ibm.com>
- <20220628191541.34a073fc@gandalf.local.home>
- <yt9d5ykbekn3.fsf@linux.ibm.com>
- <yt9dpmijcvu6.fsf@linux.ibm.com>
- <YsSQRmCZSIQ1ewzo@worktop.programming.kicks-ass.net>
- <yt9dsfneaczk.fsf@linux.ibm.com>
- <YsVO1NU3bXGg9YJ3@worktop.programming.kicks-ass.net>
- <yt9da69ma8wm.fsf@linux.ibm.com>
+        Wed, 6 Jul 2022 06:28:09 -0400
+Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E965B26541;
+        Wed,  6 Jul 2022 03:27:58 -0700 (PDT)
+Received: by mail-ej1-x62f.google.com with SMTP id sb34so26247468ejc.11;
+        Wed, 06 Jul 2022 03:27:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:from:to:cc:subject:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=vrf7eRxXaX9GHkQGDtqblfgAf3cTIp7nBk4kt/XYpbg=;
+        b=l7zVez+bUSMxXQaNR1Jwjnqj0xNlULk790ESjdcfTxECiQs524tPYiv6NOTnP8HFFK
+         2rpdiKj9/9Qg5RdbT5fqjkpvMpxp5wqKS+oltGIKXZql/Ohi8Xn3GsZ0zLDP/zD7CZLi
+         homJqMQ8jw+97uG8LR2fVniAP5lWRerCeYC1X/UtegI+LQtG16r6snCzaRXICBKoX2WE
+         svoVAT9OCHPMvuea1wcnLaRbSPlogMYm2NBDt2/xilC4Lnn90Si41uodWVVhAyD3TjXO
+         A6d1foj/NNK9kFRICm38ssz6KdNmb92C0HhkN9+cz9hhG/AX40wThidvLFl9tibhflIh
+         VUvw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:from:to:cc:subject:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=vrf7eRxXaX9GHkQGDtqblfgAf3cTIp7nBk4kt/XYpbg=;
+        b=JNjI8iym7Q8r0zq60vpZXdn7YHQ4sYFYRo9ASWGBj2BUpGfmEUhL632IIXgp2kg1Hd
+         B5zCcep962xj58xENU9Z1VJRM1f1bbc4p4YNUT9rOPMR/P/Jq76prm/PmWiqCxc1ZdKw
+         P4ytU+hReKq+Jn01V6mpphiwmFxdFZd+IG2oyX3VVGnDpCKWItCSmdkGLMvWiEnNqSsA
+         oQOUaKVs5fdyRhyOTtclw0X3FjqVlC/U7AWMhzbQALLWvJyiu5Z+E1ZTf7ertwkmeSqQ
+         rL/rAHEgTn2Ld+dQ2FSgBL5vsjgr+vEUsl8ySVd4UZjewnDXx5ByurmiN+Osw3zBtqdV
+         lkNA==
+X-Gm-Message-State: AJIora+vNN+2xSGlxRCrYW6XHBVI0zg84/ANd3fkyTtf4o11N8o3KoWA
+        3rdm0GAbPTp+ivbIGOPC7l4=
+X-Google-Smtp-Source: AGRyM1uV8klfxOZtkNXehCupH/7CcG+HJ+DinCI0tfrbaOf1C+ligau7apYkgHDeKVHe75F7rB+6gQ==
+X-Received: by 2002:a17:906:4fc6:b0:722:e739:53cb with SMTP id i6-20020a1709064fc600b00722e73953cbmr38557664ejw.128.1657103277374;
+        Wed, 06 Jul 2022 03:27:57 -0700 (PDT)
+Received: from Ansuel-xps. (93-42-70-190.ip85.fastwebnet.it. [93.42.70.190])
+        by smtp.gmail.com with ESMTPSA id e17-20020a170906505100b006fece722508sm17109947ejk.135.2022.07.06.03.27.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 06 Jul 2022 03:27:56 -0700 (PDT)
+Message-ID: <62c563ac.1c69fb81.d3170.dfa4@mx.google.com>
+X-Google-Original-Message-ID: <YsVfyMySheM7+0TP@Ansuel-xps.>
+Date:   Wed, 6 Jul 2022 12:11:20 +0200
+From:   Christian Marangi <ansuelsmth@gmail.com>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Jonathan McDowell <noodles@earth.li>
+Subject: Re: [PATCH 04/13] ARM: dts: qcom: disable smb208 regulators for
+ ipq8064-rb3011
+References: <20220705133917.8405-1-ansuelsmth@gmail.com>
+ <20220705133917.8405-5-ansuelsmth@gmail.com>
+ <ad7b4082-fe79-3f01-eaa6-b9809a55aac3@linaro.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <yt9da69ma8wm.fsf@linux.ibm.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <ad7b4082-fe79-3f01-eaa6-b9809a55aac3@linaro.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jul 06, 2022 at 11:27:05AM +0200, Sven Schnelle wrote:
-> Peter Zijlstra <peterz@infradead.org> writes:
+On Wed, Jul 06, 2022 at 10:34:50AM +0200, Krzysztof Kozlowski wrote:
+> On 05/07/2022 15:39, Christian Marangi wrote:
+> > Mikrotik RB3011 have a special configuration where the regulators are
+> > not the common smb208 controlled by RPM but they use a TPS563900
+> > controlled via i2c. Disable the smb208 for this specific device.
+> > 
+> > Signed-off-by: Christian Marangi <ansuelsmth@gmail.com>
+> > Reviewed-by: Jonathan McDowell <noodles@earth.li>
+> > Tested-by: Jonathan McDowell <noodles@earth.li>
 > 
-> > On Wed, Jul 06, 2022 at 09:58:55AM +0200, Sven Schnelle wrote:
-> >
-> >> >> [   86.218551] kill_chi-343805    6d.... 79990141us : ptrace_stop: JOBCTL_TRACED already set, state=0 <------ valid combination of flags?
-> >> >
-> >> > Yeah, that's not supposed to be so. JOBCTL_TRACED is supposed to follow
-> >> > __TASK_TRACED for now. Set when __TASK_TRACED, cleared when
-> >> > TASK_RUNNING.
-> >> >
-> >> > Specifically {ptrace_,}signal_wake_up() in signal.h clear JOBCTL_TRACED
-> >> > when they would wake a __TASK_TRACED task.
-> >> 
-> >> try_to_wake_up() clears TASK_TRACED in this case because a signal
-> >> (SIGKILL) has to be delivered. As a test I put the following change
-> >> on top, and it "fixes" the problem:
-> >> 
-> >> diff --git a/kernel/sched/core.c b/kernel/sched/core.c
-> >> index da0bf6fe9ecd..f2e0f5e70e77 100644
-> >> --- a/kernel/sched/core.c
-> >> +++ b/kernel/sched/core.c
-> >> @@ -4141,6 +4149,9 @@ try_to_wake_up(struct task_struct *p, unsigned int state, int wake_flags)
-> >>          * TASK_WAKING such that we can unlock p->pi_lock before doing the
-> >>          * enqueue, such as ttwu_queue_wakelist().
-> >>          */
-> >> +       if (p->__state & TASK_TRACED)
-> >> +               trace_printk("clearing TASK_TRACED 2\n");
-> >> +       p->jobctl &= ~JOBCTL_TRACED;
-> >>         WRITE_ONCE(p->__state, TASK_WAKING);
-> >> 
-> >>         /*
-> >> 
-> >> There are several places where the state is changed from TASK_TRACED to
-> >> something else without clearing JOBCTL_TRACED.
-> >
-> > I'm having difficulty spotting them; I find:
-> >
-> > TASK_WAKEKILL: signal_wake_up()
-> > __TASK_TRACED: ptrace_signal_wake_up(), ptrace_unfreeze_traced(), ptrace_resume()
-> >
-> > And all those sites dutifully clear JOBCTL_TRACED.
-> >
-> > I'd be most interested in the calstack for the 'clearing TASK_TRACED 2'
-> > events to see where we miss a spot.
+> This is the first version of patchset. How did the Rb/Tb tags appear?
 > 
-> The calltrace is:
-> [    9.863613] Call Trace:
-> [    9.863616]  [<00000000d3105f0e>] try_to_wake_up+0xae/0x620
-> [    9.863620] ([<00000000d3106164>] try_to_wake_up+0x304/0x620)
-> [    9.863623]  [<00000000d30d1e46>] ptrace_unfreeze_traced+0x9e/0xa8
-> [    9.863629]  [<00000000d30d2ef0>] __s390x_sys_ptrace+0xc0/0x160
-> [    9.863633]  [<00000000d3c5d8f4>] __do_syscall+0x1d4/0x200
-> [    9.863678]  [<00000000d3c6c332>] system_call+0x82/0xb0
-> [    9.863685] Last Breaking-Event-Address:
-> [    9.863686]  [<00000000d3106176>] try_to_wake_up+0x316/0x620
-> [    9.863688] ---[ end trace 0000000000000000 ]---
-> 
-> ptrace_unfreeze_traced() is:
-> 
-> static void ptrace_unfreeze_traced(struct task_struct *task)
-> {
->         unsigned long flags;
-> 
->         /*
->          * The child may be awake and may have cleared
->          * JOBCTL_PTRACE_FROZEN (see ptrace_resume).  The child will
->          * not set JOBCTL_PTRACE_FROZEN or enter __TASK_TRACED anew.
->          */
->         if (lock_task_sighand(task, &flags)) {
->                 task->jobctl &= ~JOBCTL_PTRACE_FROZEN;
->                 if (__fatal_signal_pending(task)) {
->                         task->jobctl &= ~TASK_TRACED;
-> 
-> Looking at this, shouldn't the line above read task->jobctl &= ~JOBCTL_TRACED?
+> Best regards,
+> Krzysztof
 
-YES! Absolutely.
+Will add in the cover letter where this comes from. Didn't add this as
+this series contains less patch and other changes than the prev series
+but now I will do so we know where these tags comes from.
 
->                         wake_up_state(task, __TASK_TRACED);
->                 }
->                 unlock_task_sighand(task, &flags);
->         }
-> }
+-- 
+	Ansuel

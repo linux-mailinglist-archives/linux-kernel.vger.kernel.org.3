@@ -2,77 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B042F567E22
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 08:00:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D9B1567E2A
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 08:03:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231447AbiGFGA5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Jul 2022 02:00:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42752 "EHLO
+        id S229793AbiGFGDA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Jul 2022 02:03:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43522 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229522AbiGFGAz (ORCPT
+        with ESMTP id S229469AbiGFGCz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Jul 2022 02:00:55 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7CF312AD2;
-        Tue,  5 Jul 2022 23:00:54 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6F07B61CB0;
-        Wed,  6 Jul 2022 06:00:54 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 425A5C3411C;
-        Wed,  6 Jul 2022 06:00:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1657087253;
-        bh=QxLabDfGGa0boLjx8uK7OSPiiu9DN2HnJiPLYUEQi7s=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=STPky/rxNlut0gbGbY07fE2xRNRfdygV8WyWcsA6iyecWAjtZh9SoJKMDfaBN/YF+
-         /qcd7E4jCIo3Mz64srjitN4J3V0RTsJa6kZybvGaXcJHe847jOKtCT9cHbK9mRnhHT
-         L4QkA1eoHeiUMQEjWX1jYrHw754NqUP7JpS/Im0qh57Cuza3m36Janzo2bRFqVtBP8
-         He+sI4N7UM8Tgp26K7mp+N4dglUTblTzkgduu89m0yvnZNceiv373VKs1Ng/zS2EYy
-         iA0sVpMNxyiq2pEfztE1d6YFJFqYKCPG28LvCXvN2Btld8wkyL2eXyZYiRYb0u7JjX
-         +mSAXYZ1ClkWQ==
-Date:   Wed, 6 Jul 2022 11:30:49 +0530
-From:   Vinod Koul <vkoul@kernel.org>
-To:     Shengjiu Wang <shengjiu.wang@nxp.com>
-Cc:     shawnguo@kernel.org, s.hauer@pengutronix.de, kernel@pengutronix.de,
-        festevam@gmail.com, shengjiu.wang@gmail.com, joy.zou@nxp.com,
-        linux-imx@nxp.com, dmaengine@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3] dmaengine: imx-sdma: Add FIFO stride support for
- multi FIFO script
-Message-ID: <YsUlESAPklVFxpzy@matsya>
-References: <1655782566-21386-1-git-send-email-shengjiu.wang@nxp.com>
+        Wed, 6 Jul 2022 02:02:55 -0400
+Received: from alexa-out-sd-01.qualcomm.com (alexa-out-sd-01.qualcomm.com [199.106.114.38])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0842922292;
+        Tue,  5 Jul 2022 23:02:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1657087373; x=1688623373;
+  h=from:to:cc:subject:date:message-id:mime-version;
+  bh=N05CHbczPI9zZVzdDqPThkTIquD1MZLOkgQOD3jseKU=;
+  b=coCxXaRqmQJjHjmkfH0iqcXXFpvkC58ov5BhJcUsAVUvNS+zjn6cBIVz
+   DUVN0eP9+5Q1xy9uc2sFjm3udqRUwpl/1jpu6+LxBnRWgEcx/El1W0bUW
+   mbaswMUCOl1sCA7xsogyUzVjUD0eqqDWp97M6L51nqd3h1zmGv0ROblJ9
+   Y=;
+Received: from unknown (HELO ironmsg03-sd.qualcomm.com) ([10.53.140.143])
+  by alexa-out-sd-01.qualcomm.com with ESMTP; 05 Jul 2022 23:02:52 -0700
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg03-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jul 2022 23:02:52 -0700
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Tue, 5 Jul 2022 23:02:51 -0700
+Received: from hu-clew-lv.qualcomm.com (10.49.16.6) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Tue, 5 Jul 2022 23:02:51 -0700
+From:   Chris Lew <quic_clew@quicinc.com>
+To:     <agross@kernel.org>, <bjorn.andersson@linaro.org>,
+        <konrad.dybcio@somainline.org>
+CC:     <linux-arm-msm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <quic_clew@quicinc.com>
+Subject: [PATCH 0/4] Add smp2p retrigger support
+Date:   Tue, 5 Jul 2022 23:02:07 -0700
+Message-ID: <1657087331-32455-1-git-send-email-quic_clew@quicinc.com>
+X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1655782566-21386-1-git-send-email-shengjiu.wang@nxp.com>
-X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.49.16.6]
+X-ClientProxiedBy: nalasex01c.na.qualcomm.com (10.47.97.35) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 21-06-22, 11:36, Shengjiu Wang wrote:
-> The peripheral may have several FIFOs, but some case just select
-> some FIFOs from them for data transfer, which means FIFO0 and FIFO2
-> may be selected. So add FIFO address stride support, 0 means all FIFOs
-> are continuous, 1 means 1 word stride between FIFOs. All stride between
-> FIFOs should be same.
-> 
-> Another option words_per_fifo means how many audio channel data copied
-> to one FIFO one time, 1 means one channel per FIFO, 2 means 2 channels
-> per FIFO.
-> 
-> If 'n_fifos_src =  4' and 'words_per_fifo = 2', it means the first two
-> words(channels) fetch from FIFO0 and then jump to FIFO1 for next two words,
-> and so on after the last FIFO3 fetched, roll back to FIFO0.
+The remoteproc framework keeps interrupts disabled until it powers on a
+remote proc to prevent spurious interrupts. There is a case where the
+remote proc can finish booting before remoteproc enables the interrupt.
+If this happens, the remoteproc framework will miss the notification
+and eventually timeout waiting for the remoteproc to finish "booting".
 
-this fails to apply for me, pls rebase on dmaengine/next and revise
+Add support into smp2p to retrigger an interrupt if it was missed while
+the interrupt was disabled. The interrupt should retrigger once the
+interrupt is enabled. This will make the bootup sequence for remoteproc
+less racy.
+
+Chris Lew (3):
+  soc: qcom: smp2p: Introduce pending state for virtual irq
+  soc: qcom: smp2p: Add proper retrigger detection
+  soc: qcom: smp2p: Add memory barrier for irq_pending
+
+Tao Zhang (1):
+  soc: qcom: smp2p: Add remote_id into irq name
+
+ drivers/soc/qcom/smp2p.c | 42 ++++++++++++++++++++++++++++++++++++------
+ 1 file changed, 36 insertions(+), 6 deletions(-)
 
 -- 
-~Vinod
+2.7.4
+

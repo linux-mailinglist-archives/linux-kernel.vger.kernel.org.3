@@ -2,139 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C136568060
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 09:44:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 208CB568069
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 09:44:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231913AbiGFHoE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Jul 2022 03:44:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60770 "EHLO
+        id S231809AbiGFHoe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Jul 2022 03:44:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33062 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231922AbiGFHnv (ORCPT
+        with ESMTP id S231986AbiGFHoK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Jul 2022 03:43:51 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08AD623156
-        for <linux-kernel@vger.kernel.org>; Wed,  6 Jul 2022 00:43:46 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 8C017B81B10
-        for <linux-kernel@vger.kernel.org>; Wed,  6 Jul 2022 07:43:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A3F2EC3411C;
-        Wed,  6 Jul 2022 07:43:40 +0000 (UTC)
-Date:   Wed, 6 Jul 2022 08:43:36 +0100
-From:   Catalin Marinas <catalin.marinas@arm.com>
-To:     "guanghui.fgh" <guanghuifeng@linux.alibaba.com>
-Cc:     Mike Rapoport <rppt@kernel.org>, Will Deacon <will@kernel.org>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        baolin.wang@linux.alibaba.com, akpm@linux-foundation.org,
-        david@redhat.com, jianyong.wu@arm.com, james.morse@arm.com,
-        quic_qiancai@quicinc.com, christophe.leroy@csgroup.eu,
-        jonathan@marek.ca, mark.rutland@arm.com,
-        thunder.leizhen@huawei.com, anshuman.khandual@arm.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        geert+renesas@glider.be, linux-mm@kvack.org,
-        yaohongbo@linux.alibaba.com, alikernel-developer@linux.alibaba.com
-Subject: Re: [PATCH v4] arm64: mm: fix linear mem mapping access performance
- degradation
-Message-ID: <YsU9KF5abYe/LHAA@arm.com>
-References: <CAMj1kXEvY5QXOUrXZ7rBp9As=65uTTFRSSq+FPt-n4M2P-_VtQ@mail.gmail.com>
- <20220705095231.GB552@willie-the-truck>
- <5d044fdd-a61a-d60f-d294-89e17de37712@linux.alibaba.com>
- <20220705121115.GB1012@willie-the-truck>
- <YsRSajyMxahXe7ZS@kernel.org>
- <YsRZ8V8mQ+HM31D6@arm.com>
- <YsRfgX7FFZLxQU50@kernel.org>
- <YsRvPTORdvIwzShL@arm.com>
- <YsSi9HAOOzbPYN+w@kernel.org>
- <7bf7c5ea-16eb-b02f-8ef5-bb94c157236d@linux.alibaba.com>
+        Wed, 6 Jul 2022 03:44:10 -0400
+Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30358237D5
+        for <linux-kernel@vger.kernel.org>; Wed,  6 Jul 2022 00:44:07 -0700 (PDT)
+Received: by mail-lf1-x129.google.com with SMTP id f39so24489399lfv.3
+        for <linux-kernel@vger.kernel.org>; Wed, 06 Jul 2022 00:44:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :references:from:in-reply-to:content-transfer-encoding;
+        bh=TKtOmU40I0PUl50L6vzWbju5L1un8dLolA/wVeGLNsY=;
+        b=Rr6Gww0YYOAWIJPTkzmTj1EksjkDVCborzvqk1T4ai+taLNzlmUbbYvFG2zDZokRca
+         89CwRWtqqVobU6euxqVyxJMoxEpQhS0fKjWtDOg+mXsCRnnaw8hcDv86P75yNTOWfVc7
+         RyFY7oIQ7udCTVqYx+Gp3IzIMD3OLhkgGl6HVPCThRxukrNCavEo9zDC4wBVuAaSjuWU
+         NON9SBpcnxTjEjoVbbrWQ8oHW1UWDeAyJW2+NdSc+XLyRZUARHsfGc/jA6OH/pD1Kq1o
+         HeCuU9aYMmd8KcunwBRYVCysmcOuMc1DJCaypokmrsdUoUhbBj6SUS9wvs9xjhu984wI
+         NLSw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=TKtOmU40I0PUl50L6vzWbju5L1un8dLolA/wVeGLNsY=;
+        b=fT1n+pjl2oU0giK/ve2oBS2OsagOk8ZU4L4d4i81bIdTIhrDaUGblkM0AgzYATZuH9
+         vcBfPbD8SGwaIZRPz3Js5GMwZn0o3ZVFuK/+MEMgXIXQ5urPwqIA05Gughyfl2a6ilhH
+         tSzaXoI9RTPJHfZfmfS0AnVutBTQu782bk/Y6wV6z68h7GR9HuAhEobkgesRSssad5w/
+         qa3nVMTm1PHARe2DTtzf4hFh+kK07R4+J5LWxr4N5MYiZRtDi/3cvxtDJJd+clBRxBhr
+         9toppcBG8pD5qskspmFZHzg42Z6Z0zq2C9v42x3Kh/lqMwfM3zKEqEZQvVJ4vMHZ1AwB
+         a07w==
+X-Gm-Message-State: AJIora+SWlCPu2ZkOAfVcohaMdKP65k8zeeKB6EZkcMvdDcC8v+mwkKE
+        7nadAVAWM+f+/GSDA99jpmaXOA==
+X-Google-Smtp-Source: AGRyM1vxk/QhmIZGTEXTY9O9WCE+a3P2JkZ23N45jsZ36w/x4GSakc/YWr2IjX44OLNvuoRPjz3xyQ==
+X-Received: by 2002:a05:6512:3147:b0:487:2557:9d9c with SMTP id s7-20020a056512314700b0048725579d9cmr29340lfi.566.1657093446259;
+        Wed, 06 Jul 2022 00:44:06 -0700 (PDT)
+Received: from [192.168.1.52] ([84.20.121.239])
+        by smtp.gmail.com with ESMTPSA id v22-20020a056512349600b0047fac1feb6fsm6137453lfr.210.2022.07.06.00.44.04
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 06 Jul 2022 00:44:05 -0700 (PDT)
+Message-ID: <18e40247-7151-b50a-97fe-00ee88f47d9b@linaro.org>
+Date:   Wed, 6 Jul 2022 09:44:04 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <7bf7c5ea-16eb-b02f-8ef5-bb94c157236d@linux.alibaba.com>
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH 2/5] ARM: DTS: qcom: fix dtbs_check warning with new rpmcc
+ clocks
+Content-Language: en-US
+To:     Christian Marangi <ansuelsmth@gmail.com>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220705202837.667-1-ansuelsmth@gmail.com>
+ <20220705202837.667-3-ansuelsmth@gmail.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220705202837.667-3-ansuelsmth@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jul 06, 2022 at 10:49:43AM +0800, guanghui.fgh wrote:
-> 在 2022/7/6 4:45, Mike Rapoport 写道:
-> > On Tue, Jul 05, 2022 at 06:05:01PM +0100, Catalin Marinas wrote:
-> > > On Tue, Jul 05, 2022 at 06:57:53PM +0300, Mike Rapoport wrote:
-> > > > On Tue, Jul 05, 2022 at 04:34:09PM +0100, Catalin Marinas wrote:
-> > > > > On Tue, Jul 05, 2022 at 06:02:02PM +0300, Mike Rapoport wrote:
-> > > > > > +void __init remap_crashkernel(void)
-> > > > > > +{
-> > > > > > +#ifdef CONFIG_KEXEC_CORE
-> > > > > > +	phys_addr_t start, end, size;
-> > > > > > +	phys_addr_t aligned_start, aligned_end;
-> > > > > > +
-> > > > > > +	if (can_set_direct_map() || IS_ENABLED(CONFIG_KFENCE))
-> > > > > > +	    return;
-> > > > > > +
-> > > > > > +	if (!crashk_res.end)
-> > > > > > +	    return;
-> > > > > > +
-> > > > > > +	start = crashk_res.start & PAGE_MASK;
-> > > > > > +	end = PAGE_ALIGN(crashk_res.end);
-> > > > > > +
-> > > > > > +	aligned_start = ALIGN_DOWN(crashk_res.start, PUD_SIZE);
-> > > > > > +	aligned_end = ALIGN(end, PUD_SIZE);
-> > > > > > +
-> > > > > > +	/* Clear PUDs containing crash kernel memory */
-> > > > > > +	unmap_hotplug_range(__phys_to_virt(aligned_start),
-> > > > > > +			    __phys_to_virt(aligned_end), false, NULL);
-> > > > > 
-> > > > > What I don't understand is what happens if there's valid kernel data
-> > > > > between aligned_start and crashk_res.start (or the other end of the
-> > > > > range).
-> > > > 
-> > > > Data shouldn't go anywhere :)
-> > > > 
-> > > > There is
-> > > > 
-> > > > +	/* map area from PUD start to start of crash kernel with large pages */
-> > > > +	size = start - aligned_start;
-> > > > +	__create_pgd_mapping(swapper_pg_dir, aligned_start,
-> > > > +			     __phys_to_virt(aligned_start),
-> > > > +			     size, PAGE_KERNEL, early_pgtable_alloc, 0);
-> > > > 
-> > > > and
-> > > > 
-> > > > +	/* map area from end of crash kernel to PUD end with large pages */
-> > > > +	size = aligned_end - end;
-> > > > +	__create_pgd_mapping(swapper_pg_dir, end, __phys_to_virt(end),
-> > > > +			     size, PAGE_KERNEL, early_pgtable_alloc, 0);
-> > > > 
-> > > > after the unmap, so after we tear down a part of a linear map we
-> > > > immediately recreate it, just with a different page size.
-> > > > 
-> > > > This all happens before SMP, so there is no concurrency at that point.
-> > > 
-> > > That brief period of unmap worries me. The kernel text, data and stack
-> > > are all in the vmalloc space but any other (memblock) allocation to this
-> > > point may be in the unmapped range before and after the crashkernel
-> > > reservation. The interrupts are off, so I think the only allocation and
-> > > potential access that may go in this range is the page table itself. But
-> > > it looks fragile to me.
-> > 
-> > I agree there are chances there will be an allocation from the unmapped
-> > range.
-> > 
-> > We can make sure this won't happen, though. We can cap the memblock
-> > allocations with memblock_set_current_limit(aligned_end) or
-> > memblock_reserve(algined_start, aligned_end) until the mappings are
-> > restored.
-> 
-> I think there is no need to worry about vmalloc mem.
+On 05/07/2022 22:28, Christian Marangi wrote:
+> Fix dtbs_check warning for new rpmcc Documentation changes and add the
+> required clocks.
 
-That's not what I'm worried about. It's about memblock allocations that
-are accessed through the linear map.
+There is no warning in the kernel, right? So the commit is not correct.
 
--- 
-Catalin
+Only the second part of your sentence applies, but you should extend it.
+
+
+
+Best regards,
+Krzysztof

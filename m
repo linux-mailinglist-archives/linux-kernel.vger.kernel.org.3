@@ -2,139 +2,203 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BBF2D56861E
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 12:50:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 11819568633
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 12:54:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232329AbiGFKuw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Jul 2022 06:50:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35306 "EHLO
+        id S233173AbiGFKyV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Jul 2022 06:54:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38078 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231744AbiGFKuu (ORCPT
+        with ESMTP id S231766AbiGFKyT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Jul 2022 06:50:50 -0400
-Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AEFD6240A3;
-        Wed,  6 Jul 2022 03:50:49 -0700 (PDT)
-Received: by mail-lf1-x132.google.com with SMTP id i18so25218789lfu.8;
-        Wed, 06 Jul 2022 03:50:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=s+q827ZniPXycxKLiM0xPTvpKaI1JDTtDjXCsRL3qZQ=;
-        b=gT714tFHkXoTKMfbUpgxKkW2K2oYW4ONVyvMufPlhqJsrJd2NYI7eGtvOq3XgGn8MY
-         YMAqMtOP9H18zowv26OC9D0u/yR/8qsE8HbCu1Q/EkauLM6UlW6iZvjsW3utodTU/hwS
-         hO62kLvaquWMMTigi14HG1C5yOaDWs8yZRwRBqZBrBVg+dpcR4rS/f79WNZyj9C/H52U
-         e/npQzHqmVmberjrmYkiXkyBpXaO7vw7NGPc76YGu57yDFtziKOzEJs4slM/hjyZnbPa
-         Poxv7bBmGeU+qFQVZZJjzcQzm02CwYgCbksFT5sQRBe3DgkIcGGHQHQdMA7xJ2RiBa7I
-         jV/A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=s+q827ZniPXycxKLiM0xPTvpKaI1JDTtDjXCsRL3qZQ=;
-        b=mW0DD2irnHpET4FzM6HG3L6MKWhuxJVzHLQfBf3rLWC+TDDl2HLQVLMs0MLTKLvzZQ
-         6Hg2JraRuMvtV3oWcF60QP7gFWMzTb0GH13Mxe4e/RaR9lXZgfyOXht7lnpwHt9eYf7y
-         jktHCSwExI/JnNXR0jS4hEejiCJ8Fr567SWJ5QB8H/bRm4zKHLG52Hou7LpJukSl+dmz
-         raXyL1S1XdMilnDyzgeHmzeg/VdWpz3a0WOB0rOsPzzpwUf5xi/gsiiIxe991YYeCRgw
-         484GpxKnK4RykbgczE8AzXaybIACA/gEESt+dLwJbfGFI4C1Tbfh81DWKiCrtiNfJnJr
-         Hxcw==
-X-Gm-Message-State: AJIora/mqShfNQp6xr9GpeMwxtWqDzQH7SofAt2jZvELY7CKtPLtg+Py
-        iuvrodTvd36bYobk1UpR4WU=
-X-Google-Smtp-Source: AGRyM1t3BP1zL2SviM6NZwsEF2DrMu5o2khwV2zQFTx8V3ANhcBijGqTTLavEM7tcWOFReHlcu2Mgg==
-X-Received: by 2002:a05:6512:a96:b0:485:6bfa:e346 with SMTP id m22-20020a0565120a9600b004856bfae346mr2760031lfu.52.1657104648054;
-        Wed, 06 Jul 2022 03:50:48 -0700 (PDT)
-Received: from fedora.. ([46.235.67.63])
-        by smtp.gmail.com with ESMTPSA id q17-20020a0565123a9100b0047f70a14c95sm6219403lfu.42.2022.07.06.03.50.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 06 Jul 2022 03:50:47 -0700 (PDT)
-From:   Pavel Skripkin <paskripkin@gmail.com>
-To:     vladimir.oltean@nxp.com, claudiu.manoil@nxp.com,
-        alexandre.belloni@bootlin.com, davem@davemloft.net,
-        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com
-Cc:     clement.leger@bootlin.com, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Pavel Skripkin <paskripkin@gmail.com>,
-        Andrew Lunn <andrew@lunn.ch>
-Subject: [PATCH v3] net: ocelot: fix wrong time_after usage
-Date:   Wed,  6 Jul 2022 13:50:44 +0300
-Message-Id: <20220706105044.8071-1-paskripkin@gmail.com>
-X-Mailer: git-send-email 2.36.1
+        Wed, 6 Jul 2022 06:54:19 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FF4327B06;
+        Wed,  6 Jul 2022 03:54:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1657104858; x=1688640858;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=qrEumAiCGHwpWr14nERu9HZ9oiyvzZusQBL2z+Vav/k=;
+  b=QOYlxB+fisZAK/zoGiBYCkBRTNnpgHGnovUFEpzusz7Nebdlc0cL5lhz
+   scFgaw9+ShACFcllSipQRNyFJn7qlq4qu+7JyYO4QrG3dr2qaxVhyWRnV
+   nb1DgZT53TgjpVlXl1RcA4qap5dge3S/H6Px7EzDQnaPqlJhBl8XATddA
+   YDqzgvJ/jNDVTo0k8OPBEkaWqJhbVwfmMDRFtDmmt9X7SUyT+j/YAm3w0
+   +DIsAGZfoV9h3yD9JPwFt4SduhzqvABpfk2guxm9n1Uyh1UJID1JEqla5
+   Ts2i5HiRaR1eng0tVazwIujiV9dDlTHUzCkCr4oQ/YxdxuHZrHgPxHgvS
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10399"; a="264131974"
+X-IronPort-AV: E=Sophos;i="5.92,249,1650956400"; 
+   d="scan'208";a="264131974"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jul 2022 03:51:39 -0700
+X-IronPort-AV: E=Sophos;i="5.92,249,1650956400"; 
+   d="scan'208";a="620260611"
+Received: from mropara-mobl1.ger.corp.intel.com (HELO intel.com) ([10.252.49.154])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jul 2022 03:51:33 -0700
+Date:   Wed, 6 Jul 2022 12:51:31 +0200
+From:   Andi Shyti <andi.shyti@linux.intel.com>
+To:     Mauro Carvalho Chehab <mchehab@kernel.org>
+Cc:     Chris Wilson <chris.p.wilson@intel.com>,
+        Bruce Chang <yu.bruce.chang@intel.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        David Airlie <airlied@linux.ie>,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        John Harrison <John.C.Harrison@intel.com>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Lucas De Marchi <lucas.demarchi@intel.com>,
+        Matt Roper <matthew.d.roper@intel.com>,
+        Matthew Brost <matthew.brost@intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Tejas Upadhyay <tejaskumarx.surendrakumar.upadhyay@intel.com>,
+        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+        Umesh Nerlige Ramappa <umesh.nerlige.ramappa@intel.com>,
+        dri-devel@lists.freedesktop.org, intel-gfx@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        Mika Kuoppala <mika.kuoppala@linux.intel.com>,
+        Chris Wilson <chris@chris-wilson.co.uk>,
+        Thomas =?iso-8859-15?Q?Hellstr=F6m?= 
+        <thomas.hellstrom@linux.intel.com>
+Subject: Re: [PATCH v3 1/2] drm/i915/gt: Serialize GRDOM access between
+ multiple engine resets
+Message-ID: <YsVpM1f86FAIEO8i@alfio.lan>
+References: <cover.1656921701.git.mchehab@kernel.org>
+ <ccc54757d89d38af35e5c5885edfb980c7b227f6.1656921701.git.mchehab@kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-15
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <ccc54757d89d38af35e5c5885edfb980c7b227f6.1656921701.git.mchehab@kernel.org>
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Accidentally noticed, that this driver is the only user of
-while (time_after(jiffies...)).
+Hi Mauro and Chris,
 
-It looks like typo, because likely this while loop will finish after 1st
-iteration, because time_after() returns true when 1st argument _is after_
-2nd one.
+On Mon, Jul 04, 2022 at 09:09:28AM +0100, Mauro Carvalho Chehab wrote:
+> From: Chris Wilson <chris.p.wilson@intel.com>
+> 
+> Don't allow two engines to be reset in parallel, as they would both
+> try to select a reset bit (and send requests to common registers)
+> and wait on that register, at the same time. Serialize control of
+> the reset requests/acks using the uncore->lock, which will also ensure
+> that no other GT state changes at the same time as the actual reset.
+> 
+> Cc: stable@vger.kernel.org # Up to 4.4
+> Reported-by: Mika Kuoppala <mika.kuoppala@linux.intel.com>
+> Signed-off-by: Chris Wilson <chris@chris-wilson.co.uk>
+> Cc: Mika Kuoppala <mika.kuoppala@linux.intel.com>
+> Reviewed-by: Andi Shyti <andi.shyti@intel.com>
+> Acked-by: Thomas Hellström <thomas.hellstrom@linux.intel.com>
+> Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
 
-There is one possible problem with this poll loop: the scheduler could put
-the thread to sleep, and it does not get woken up for
-OCELOT_FDMA_CH_SAFE_TIMEOUT_US. During that time, the hardware has done
-its thing, but you exit the while loop and return -ETIMEDOUT.
+sorry for the delay but I wanted to understand what has been
+agreed between you and Tvrtko about the Cc'ing the stable list.
 
-Fix it by using sane poll API that avoids all problems described above
+Anyway, I confirm my review here.
 
-Fixes: 753a026cfec1 ("net: ocelot: add FDMA support")
-Suggested-by: Andrew Lunn <andrew@lunn.ch>
-Signed-off-by: Pavel Skripkin <paskripkin@gmail.com>
----
+Andi
 
-Changes since v2:
-	- Use _atomic variant of readx_poll_timeout
-
-Changes since v1:
-	- Fixed typos in title and commit message
-	- Remove while loop and use readx_poll_timeout as suggested by
-	  Andrew
-
----
- drivers/net/ethernet/mscc/ocelot_fdma.c | 17 ++++++++---------
- 1 file changed, 8 insertions(+), 9 deletions(-)
-
-diff --git a/drivers/net/ethernet/mscc/ocelot_fdma.c b/drivers/net/ethernet/mscc/ocelot_fdma.c
-index 083fddd263ec..c93fba0a2a7d 100644
---- a/drivers/net/ethernet/mscc/ocelot_fdma.c
-+++ b/drivers/net/ethernet/mscc/ocelot_fdma.c
-@@ -94,19 +94,18 @@ static void ocelot_fdma_activate_chan(struct ocelot *ocelot, dma_addr_t dma,
- 	ocelot_fdma_writel(ocelot, MSCC_FDMA_CH_ACTIVATE, BIT(chan));
- }
- 
-+static u32 ocelot_fdma_read_ch_safe(struct ocelot *ocelot)
-+{
-+	return ocelot_fdma_readl(ocelot, MSCC_FDMA_CH_SAFE);
-+}
-+
- static int ocelot_fdma_wait_chan_safe(struct ocelot *ocelot, int chan)
- {
--	unsigned long timeout;
- 	u32 safe;
- 
--	timeout = jiffies + usecs_to_jiffies(OCELOT_FDMA_CH_SAFE_TIMEOUT_US);
--	do {
--		safe = ocelot_fdma_readl(ocelot, MSCC_FDMA_CH_SAFE);
--		if (safe & BIT(chan))
--			return 0;
--	} while (time_after(jiffies, timeout));
--
--	return -ETIMEDOUT;
-+	return readx_poll_timeout_atomic(ocelot_fdma_read_ch_safe, ocelot, safe,
-+				  safe & BIT(chan), 0,
-+				  OCELOT_FDMA_CH_SAFE_TIMEOUT_US);
- }
- 
- static void ocelot_fdma_dcb_set_data(struct ocelot_fdma_dcb *dcb,
--- 
-2.35.1
-
+> ---
+> 
+> To avoid mailbombing on a large number of people, only mailing lists were C/C on the cover.
+> See [PATCH v3 0/2] at: https://lore.kernel.org/all/cover.1656921701.git.mchehab@kernel.org/
+> 
+>  drivers/gpu/drm/i915/gt/intel_reset.c | 37 ++++++++++++++++++++-------
+>  1 file changed, 28 insertions(+), 9 deletions(-)
+> 
+> diff --git a/drivers/gpu/drm/i915/gt/intel_reset.c b/drivers/gpu/drm/i915/gt/intel_reset.c
+> index a5338c3fde7a..c68d36fb5bbd 100644
+> --- a/drivers/gpu/drm/i915/gt/intel_reset.c
+> +++ b/drivers/gpu/drm/i915/gt/intel_reset.c
+> @@ -300,9 +300,9 @@ static int gen6_hw_domain_reset(struct intel_gt *gt, u32 hw_domain_mask)
+>  	return err;
+>  }
+>  
+> -static int gen6_reset_engines(struct intel_gt *gt,
+> -			      intel_engine_mask_t engine_mask,
+> -			      unsigned int retry)
+> +static int __gen6_reset_engines(struct intel_gt *gt,
+> +				intel_engine_mask_t engine_mask,
+> +				unsigned int retry)
+>  {
+>  	struct intel_engine_cs *engine;
+>  	u32 hw_mask;
+> @@ -321,6 +321,20 @@ static int gen6_reset_engines(struct intel_gt *gt,
+>  	return gen6_hw_domain_reset(gt, hw_mask);
+>  }
+>  
+> +static int gen6_reset_engines(struct intel_gt *gt,
+> +			      intel_engine_mask_t engine_mask,
+> +			      unsigned int retry)
+> +{
+> +	unsigned long flags;
+> +	int ret;
+> +
+> +	spin_lock_irqsave(&gt->uncore->lock, flags);
+> +	ret = __gen6_reset_engines(gt, engine_mask, retry);
+> +	spin_unlock_irqrestore(&gt->uncore->lock, flags);
+> +
+> +	return ret;
+> +}
+> +
+>  static struct intel_engine_cs *find_sfc_paired_vecs_engine(struct intel_engine_cs *engine)
+>  {
+>  	int vecs_id;
+> @@ -487,9 +501,9 @@ static void gen11_unlock_sfc(struct intel_engine_cs *engine)
+>  	rmw_clear_fw(uncore, sfc_lock.lock_reg, sfc_lock.lock_bit);
+>  }
+>  
+> -static int gen11_reset_engines(struct intel_gt *gt,
+> -			       intel_engine_mask_t engine_mask,
+> -			       unsigned int retry)
+> +static int __gen11_reset_engines(struct intel_gt *gt,
+> +				 intel_engine_mask_t engine_mask,
+> +				 unsigned int retry)
+>  {
+>  	struct intel_engine_cs *engine;
+>  	intel_engine_mask_t tmp;
+> @@ -583,8 +597,11 @@ static int gen8_reset_engines(struct intel_gt *gt,
+>  	struct intel_engine_cs *engine;
+>  	const bool reset_non_ready = retry >= 1;
+>  	intel_engine_mask_t tmp;
+> +	unsigned long flags;
+>  	int ret;
+>  
+> +	spin_lock_irqsave(&gt->uncore->lock, flags);
+> +
+>  	for_each_engine_masked(engine, gt, engine_mask, tmp) {
+>  		ret = gen8_engine_reset_prepare(engine);
+>  		if (ret && !reset_non_ready)
+> @@ -612,17 +629,19 @@ static int gen8_reset_engines(struct intel_gt *gt,
+>  	 * This is best effort, so ignore any error from the initial reset.
+>  	 */
+>  	if (IS_DG2(gt->i915) && engine_mask == ALL_ENGINES)
+> -		gen11_reset_engines(gt, gt->info.engine_mask, 0);
+> +		__gen11_reset_engines(gt, gt->info.engine_mask, 0);
+>  
+>  	if (GRAPHICS_VER(gt->i915) >= 11)
+> -		ret = gen11_reset_engines(gt, engine_mask, retry);
+> +		ret = __gen11_reset_engines(gt, engine_mask, retry);
+>  	else
+> -		ret = gen6_reset_engines(gt, engine_mask, retry);
+> +		ret = __gen6_reset_engines(gt, engine_mask, retry);
+>  
+>  skip_reset:
+>  	for_each_engine_masked(engine, gt, engine_mask, tmp)
+>  		gen8_engine_reset_cancel(engine);
+>  
+> +	spin_unlock_irqrestore(&gt->uncore->lock, flags);
+> +
+>  	return ret;
+>  }
+>  
+> -- 
+> 2.36.1

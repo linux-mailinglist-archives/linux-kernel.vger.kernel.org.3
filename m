@@ -2,85 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D1D55689F2
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 15:48:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 785595689F7
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 15:48:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233128AbiGFNsN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Jul 2022 09:48:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46896 "EHLO
+        id S233093AbiGFNsg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Jul 2022 09:48:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47368 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233133AbiGFNsL (ORCPT
+        with ESMTP id S233467AbiGFNsa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Jul 2022 09:48:11 -0400
-Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CE6424F12;
-        Wed,  6 Jul 2022 06:48:10 -0700 (PDT)
-Received: by mail-wr1-x434.google.com with SMTP id a5so7470658wrx.12;
-        Wed, 06 Jul 2022 06:48:10 -0700 (PDT)
+        Wed, 6 Jul 2022 09:48:30 -0400
+Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C88EABF1;
+        Wed,  6 Jul 2022 06:48:28 -0700 (PDT)
+Received: by mail-wr1-x431.google.com with SMTP id h17so9013049wrx.0;
+        Wed, 06 Jul 2022 06:48:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=Ys6nhaWDkYktLlUqq0SwlRalsF7YwG4ENbLhHnvqbhY=;
-        b=fV8aJ9j+yuHCeCJsnseihO3elQIXDVuluuk4eEAuWmKG+ZK7rCd24w3roTCv9M3cST
-         X5kMf3UXuNCGkNWELxZKURXY0ztY/VKtR6/sCuBqAOOoH759XuEGDMn/RcFj0qaYKaLe
-         kTRu9z4IqfmlqILQRbqADqlV2hrVFq77785WL1jQIwYmp+9cY0tfQOInOH7Enyih4OQy
-         6QzZVmfouiDIElYWsH34+xwHK6E3jiSnOTph+07cgrvKE00fQA4IeucMqhvFgxJVPpbh
-         Fjf7bydjRVlNfviN68vi9tA2pbet372RqOUYk7ePKh4exRP1IaJp4myFJmdOIavAtPu3
-         TN+Q==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=7VGDIlKV6gAV8St0jIFraWnG2EvF6VYrYLOYj9aX/Sc=;
+        b=GmdcHEVeVUWW4yGaLtIyHZprjnISw5pW33LwCwJJ7/fDA6Hcfxby9OeEN4idkGEUJr
+         tlORqJvsztOQN74ymQ3E4sWlPqW/6bsqHfxN0YB8ADgv1BjiKCRCjYDOh7lZQBb3Tgl5
+         BdUozqnyBMsdWXGwJFWBmb35kvsmDF2WLkvQp9mRsWZPmu6EbUWcypm8pcp2H715FnU4
+         ipRQuQXENffTeeb6WWoDToEU9RkLs53PtRT5L1YrX7g0bef34vYKUzk1UcPVf5OSAeT5
+         XYbuV7KUIBSkcnstqa0uuwHszYv7gMD72sraYPrXUBZl/08SljwdSVHfeHp5mJ+welFO
+         bGEg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=Ys6nhaWDkYktLlUqq0SwlRalsF7YwG4ENbLhHnvqbhY=;
-        b=HIRDzxkRCmlFy2evCMis/b7qaFCu8ZplTIUdsIK+8YxsdbHJAh2R6KXtwbqrONUblU
-         lJ2PoFXeci7aO4E76i+8Iqx0Bl1rebVLiZ7S+tIOkTmxYEYkz/Iii4D0yYpakVA0vIdt
-         E6Yue1qNWDZlfobW9UeXr9FEOuNeKn4IqfCRPsJbqn0TpOq3h7JpCYrQZmMzfKhmPK1F
-         nqw/UsvUHrqlI0b0Q+UJbzft1iJzXp2xguQJTfn3C7RENRwHDvtiocglA8iX9sf9t7Qk
-         qBkFph+bHzaWY+SMucuwGT555F1RySVnj49tH1QiIrSZG+zBHBzt+Lob7FQ6L55J2YLL
-         xf/w==
-X-Gm-Message-State: AJIora/MTWSMGqMM644hiP0gQGtR/R59W0need5K7YEm0d9kXNLorKzs
-        qaqzHI0EcbUQ0NYX/Hs8fBtQ1IGmngtt0A==
-X-Google-Smtp-Source: AGRyM1uKokpPXD3KIW+1SGhOJH0F4Ot+3fwFEVIyD8thjoxNU4UTGfcWYVexdf/YGnIyZIvbYxqHnQ==
-X-Received: by 2002:a5d:4201:0:b0:21d:7b63:1b43 with SMTP id n1-20020a5d4201000000b0021d7b631b43mr3917188wrq.225.1657115288718;
-        Wed, 06 Jul 2022 06:48:08 -0700 (PDT)
-Received: from [192.168.0.14] ([37.223.147.254])
-        by smtp.gmail.com with ESMTPSA id m1-20020a7bcb81000000b003a05621dc53sm25703913wmi.29.2022.07.06.06.48.07
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 06 Jul 2022 06:48:07 -0700 (PDT)
-Message-ID: <9757b32c-c196-f7e0-3c61-1d4edae854dc@gmail.com>
-Date:   Wed, 6 Jul 2022 15:48:06 +0200
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=7VGDIlKV6gAV8St0jIFraWnG2EvF6VYrYLOYj9aX/Sc=;
+        b=4SGArS9OC4LziXmsCsYGBgdBut5nCJLRneBTOep1W7bemhUtqfIXrekVF67eIirlnl
+         GGLZaa5QLfz07mIiFg03Zo69c42rKFquZpchF6qqqAD+Dl6igxNKpCHcp8jr3GIUkC9v
+         9x+jgKQ30wRklijN3fRNF03YA1/kFHmeOJ/ctjTU8/PJAHlVwI4IFJP8kCairBzNHU4k
+         n3rjdd6EpcwSZBdOCEvPoyxWllYdm899foiwhOZZP4kaM7+SuxB045F738yXyqQRc2TV
+         uF75t1EIMcSLKebub7a61VRGAfF1sl504bbiIBptTUq9TG8AY6+LQFGsNkRf08BhjTPG
+         5jig==
+X-Gm-Message-State: AJIora+rB9gU/Ub/Zqaq0Ru4H+PBZ1X7Os2KqIhodVOtQqoAp0U3/2rj
+        HDZ4UsbHFpQD1afYGZpnT48TnQ6xwuXsYfhKSSo=
+X-Google-Smtp-Source: AGRyM1ts1iVFzqxNpdFOtNBXP9pYfOs+b0mF015rNdoOcHmF9GTVipUoZ3vq1ks20WVLwoAkcEDLb99UfUxDajaENIY=
+X-Received: by 2002:a5d:658d:0:b0:21d:6e90:c2ed with SMTP id
+ q13-20020a5d658d000000b0021d6e90c2edmr11899137wru.113.1657115307223; Wed, 06
+ Jul 2022 06:48:27 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH v1 02/16] dt-bindings: memory: mediatek: Update condition
- for mt8195 smi node
-Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Tinghan Shen <tinghan.shen@mediatek.com>,
-        Yong Wu <yong.wu@mediatek.com>, Joerg Roedel <joro@8bytes.org>,
-        Will Deacon <will@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Chun-Jie Chen <chun-jie.chen@mediatek.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Enric Balletbo i Serra <enric.balletbo@collabora.com>,
-        Weiyi Lu <weiyi.lu@mediatek.com>
-Cc:     iommu@lists.linux-foundation.org,
-        linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        Project_Global_Chrome_Upstream_Group@mediatek.com
-References: <20220704100028.19932-1-tinghan.shen@mediatek.com>
- <20220704100028.19932-3-tinghan.shen@mediatek.com>
- <119f2a98-ef56-7b99-631f-221b737939ae@linaro.org>
-From:   Matthias Brugger <matthias.bgg@gmail.com>
-In-Reply-To: <119f2a98-ef56-7b99-631f-221b737939ae@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+References: <20220524152144.40527-1-schultz.hans+netdev@gmail.com>
+ <20220524152144.40527-4-schultz.hans+netdev@gmail.com> <20220627180557.xnxud7d6ol22lexb@skbuf>
+ <CAKUejP7ugMB9d3MVX3m9Brw12_ocFoT+nuJJucYdQH70kzC7=w@mail.gmail.com>
+ <CAKUejP5u9rrH8tODODG0a1PLXfLhk7NLe5LUYkefkbs15uU=BQ@mail.gmail.com> <20220706132834.rdw7mmpbwt55kt4r@skbuf>
+In-Reply-To: <20220706132834.rdw7mmpbwt55kt4r@skbuf>
+From:   Hans S <schultz.hans@gmail.com>
+Date:   Wed, 6 Jul 2022 15:48:16 +0200
+Message-ID: <CAKUejP7DjCoEjyzGWs4ZQF3_gfy6tBhCYs+H9Ja7hXcFw09qww@mail.gmail.com>
+Subject: Re: [PATCH V3 net-next 3/4] net: dsa: mv88e6xxx: mac-auth/MAB implementation
+To:     Vladimir Oltean <olteanv@gmail.com>
+Cc:     "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>, netdev@vger.kernel.org,
+        Hans Schultz <schultz.hans+netdev@gmail.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>, Jiri Pirko <jiri@resnulli.us>,
+        Ivan Vecera <ivecera@redhat.com>,
+        Roopa Prabhu <roopa@nvidia.com>,
+        Nikolay Aleksandrov <razor@blackwall.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Ido Schimmel <idosch@nvidia.com>, linux-kernel@vger.kernel.org,
+        bridge@lists.linux-foundation.org, linux-kselftest@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -89,58 +82,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Wed, Jul 6, 2022 at 3:28 PM Vladimir Oltean <olteanv@gmail.com> wrote:
+>
+> On Tue, Jul 05, 2022 at 05:05:52PM +0200, Hans S wrote:
+> > Hi, does anybody know what it going on with this variable?
+> > struct dsa_port *dp ->ageing_time;
+> >
+> > I experience that it changes value like a factor ~10 at times.
+>
+> Could you be a bit more specific? Are you talking about STP Topology
+> Change Notification BPDUs, which trigger this code path?
+>
+> diff --git a/net/bridge/br_stp.c b/net/bridge/br_stp.c
+> index 7d27b2e6038f..9b25bc2dcb3e 100644
+> --- a/net/bridge/br_stp.c
+> +++ b/net/bridge/br_stp.c
+> @@ -671,10 +671,10 @@ void __br_set_topology_change(struct net_bridge *br, unsigned char val)
+>
+>                 if (val) {
+>                         t = 2 * br->forward_delay;
+> -                       br_debug(br, "decreasing ageing time to %lu\n", t);
+> +                       br_info(br, "decreasing ageing time to %lu\n", t);
+>                 } else {
+>                         t = br->bridge_ageing_time;
+> -                       br_debug(br, "restoring ageing time to %lu\n", t);
+> +                       br_info(br, "restoring ageing time to %lu\n", t);
+>                 }
+>
+>                 err = __set_ageing_time(br->dev, t);
+>
+> Coincidentally the default values of 2 * br->forward_delay and br->bridge_ageing_time
+> are 1 order of magnitude apart from each other.
+>
+> [  139.998310] br0: topology change detected, propagating
+> [  140.003490] br0: decreasing ageing time to 3000
+> [  175.193054] br0: restoring ageing time to 30000
+>
+> What's the problem anyway?
 
+It might be a topology change as you indicate, though I am not sure.
+So I am not using that variable any more for determining the ageing
+time for the locked FDB entries, but instead I have made a function to
+read the time from the chip instead.
 
-On 04/07/2022 14:36, Krzysztof Kozlowski wrote:
-> On 04/07/2022 12:00, Tinghan Shen wrote:
->> The max clock items for the dts node with compatible
->> 'mediatek,mt8195-smi-sub-common' should be 3.
->>
->> However, the dtbs_check of such node will get following message,
->> arch/arm64/boot/dts/mediatek/mt8195-evb.dtb: smi@14010000: clock-names: ['apb', 'smi', 'gals0'] is too long
->>           From schema: Documentation/devicetree/bindings/memory-controllers/mediatek,smi-common.yaml
->>
->> Remove the last 'else' checking to fix this error.
-> 
-> Missing fixes tag.
-> 
-
- From my understanding, fixes tags are for patches that fix bugs (hw is not 
-working etc) and not a warning message from dtbs_check. So my point of view 
-would be to not add a fixes tag here.
-
-Regards,
-Matthias
-
->>
->> Signed-off-by: Tinghan Shen <tinghan.shen@mediatek.com>
->> ---
->>   .../memory-controllers/mediatek,smi-common.yaml        | 10 +++++++++-
->>   1 file changed, 9 insertions(+), 1 deletion(-)
->>
->> diff --git a/Documentation/devicetree/bindings/memory-controllers/mediatek,smi-common.yaml b/Documentation/devicetree/bindings/memory-controllers/mediatek,smi-common.yaml
->> index a98b359bf909..e5f553e2e12a 100644
->> --- a/Documentation/devicetree/bindings/memory-controllers/mediatek,smi-common.yaml
->> +++ b/Documentation/devicetree/bindings/memory-controllers/mediatek,smi-common.yaml
->> @@ -143,7 +143,15 @@ allOf:
->>               - const: gals0
->>               - const: gals1
->>   
->> -    else:  # for gen2 HW that don't have gals
->> +  - if:  # for gen2 HW that don't have gals
->> +      properties:
->> +        compatible:
->> +          enum:
->> +            - mediatek,mt2712-smi-common
->> +            - mediatek,mt8167-smi-common
->> +            - mediatek,mt8173-smi-common
->> +
-> 
-> Without looking at the code, it's impossible to understand what you are
-> doing here. The commit msg says one, but you are doing something else.
-> 
-> Write commit msg explaining what you want to achieve and what you are doing.
-> 
-> 
-> Best regards,
-> Krzysztof
+The problem with that, I have mentioned in my latest reply to the
+mac-auth patch set...

@@ -2,103 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D2DC4567B54
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 03:10:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2918F567B5A
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 03:12:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229849AbiGFBKJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Jul 2022 21:10:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54354 "EHLO
+        id S229898AbiGFBMG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Jul 2022 21:12:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55092 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229453AbiGFBKI (ORCPT
+        with ESMTP id S229453AbiGFBME (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Jul 2022 21:10:08 -0400
-Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83EFB17E39
-        for <linux-kernel@vger.kernel.org>; Tue,  5 Jul 2022 18:10:06 -0700 (PDT)
-Received: by mail-wm1-x32f.google.com with SMTP id n185so7966689wmn.4
-        for <linux-kernel@vger.kernel.org>; Tue, 05 Jul 2022 18:10:06 -0700 (PDT)
+        Tue, 5 Jul 2022 21:12:04 -0400
+Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B449D17E3B;
+        Tue,  5 Jul 2022 18:12:03 -0700 (PDT)
+Received: by mail-wr1-x435.google.com with SMTP id h17so6662273wrx.0;
+        Tue, 05 Jul 2022 18:12:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=jms.id.au; s=google;
+        d=gmail.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=MeZrF+fXW4l5esJnk9r1b/wD32Xz1hSKmtwgLlZ9RiE=;
-        b=G3KI0q17WpJNaKsjNhQSmZfQxeHjSkcXcQt13xn8pqOyL9wlD5MbiC027203d/lJQN
-         Rq9su7qeL0r1cE9bzKttpD7R3t8obDJBOH6O2dYw/hzgZJ7gzhDV9h0mG8SMpnKaMNvh
-         5maY1Ah0AOCgUfe9fxSC+ouUiIM4tFMJd3Cus=
+         :cc:content-transfer-encoding;
+        bh=5aHvbPnFc3WrMNwBi3yAbFFZyJSqQyCqgLMTVPf4RLU=;
+        b=Kc8vqNE2IGoqlLDiZ+FSqlnPMExF5NIN1pe0GVo228I4/ps9+EPKOFtOoAjww6DkN7
+         D3wAOQREyUjj9xFZsxi/9P1VkL2umDintLoR3mqOCyarg6D+20MKs8DKKp8KyL91icZl
+         b8RWC2eyMAH+mRGKu/2v2Xic3pokUFFld53cdPko425fHnmg7xHTLhHz4IeV+g8UKzqW
+         2Od0FoVavukSxMtI94JeibQJyzqxJKzTeRC/x3z2dUz+BSB95FDZtUj8niJgYUYtqwgT
+         631dYIcVdX+TSm4Kcph3oa9DwpDRgTBOtz6nTmyJ9ahi7K+AcI3HoIIjyMNbM/E+K06m
+         ExQA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=MeZrF+fXW4l5esJnk9r1b/wD32Xz1hSKmtwgLlZ9RiE=;
-        b=KrCTnKeViFmevGu8rRZ2GXDgW/LY56B7aUEWFMASEGA10BU5lv3exyRcxCuCLSqF3W
-         a07zUokmRNTuHVBW6gS7Or39dAUr5Vl+Q2sEXtAoEmqgcZPGa97gYdURjpod4SqwAOqw
-         rcWp4RzNXRbpa5iAXC4HnT72MO7lSLTf6Svyx0CWozC4iQqjunESCtiv6TU7HLJfoEAa
-         +cAqDQd0Jq1XdutgUQvrGcqbtCetCknieHAbSCin0f6ftDXICKpp1O8T8fYTAhQwRwwv
-         62sHjjeZZXv/Vy4IdTLIP+e2swLDx+HIAtb6wRUrJStwZsubV5naABCTqK5SiH0/zmUm
-         pbWw==
-X-Gm-Message-State: AJIora+pX3QFqNDIVqsYBcFI3DQvGFOLPlvHyO2Nb/YB15VLcRQYnFst
-        CuCg64xSQnDZa261UgNMSNkbR2L0kune9M7uBMA=
-X-Google-Smtp-Source: AGRyM1vktHfnuXL5Anl54md0PtlVs1D+ae12aBNtQlRz7HBaaA/a9kGsCjaysgjjErUlY2s5RIglUfOEAEJmxPehRS4=
-X-Received: by 2002:a05:600c:2315:b0:3a1:772e:b9a6 with SMTP id
- 21-20020a05600c231500b003a1772eb9a6mr36093026wmo.34.1657069805107; Tue, 05
- Jul 2022 18:10:05 -0700 (PDT)
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=5aHvbPnFc3WrMNwBi3yAbFFZyJSqQyCqgLMTVPf4RLU=;
+        b=5hKaehKzFQIW6aQOP1eAA1zvEalobt5A2zNVFOycXrcAksn/8azX3SK/fqv9lNhuIU
+         IT7l+sKziOHHvHPEbwIL7eEWcJzZf9VNuivm1t9YtDjdi6A3wqLFlI7wlBRV3Z8Ae+Ww
+         T0bJ0j6psCvaue6h+vi3dIhsNAPc/pI7ZQIo8BEj6YFHx3a2IABPOguJpqka3jnySv4b
+         EjBgta0btZihh1y1cbUJ7LPAI5/++XBLaWgpGL32iMC4bV+O6bLakhSxjRMpYAY+fR+W
+         ODl/HDB/AzV8cirAcok9b5wDrXpQ89X7FVDfoxrpjiqgOSZrIdSkiY36ZtqbXsMF75R/
+         YLLg==
+X-Gm-Message-State: AJIora9FlqQYO91BI2nXRtFqWFZmCnskKxad6Iq/HZ0mKq7cUpG3phvy
+        8QalDMyDN7d2tZBKkAULNBV6eOgqbTD/MKCa3e8=
+X-Google-Smtp-Source: AGRyM1sdTmzdRD2GUYAi9SAT8RRwNuwCu1WxK/TW2ZV5+qb5KAVwcP2Y6E3q1zrMXKRo9/VS1fNTY93liJO4UFoMeTA=
+X-Received: by 2002:adf:f90c:0:b0:21a:3dcb:d106 with SMTP id
+ b12-20020adff90c000000b0021a3dcbd106mr33713209wrr.448.1657069922265; Tue, 05
+ Jul 2022 18:12:02 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220705152757.27843-1-luoxueqin66@gmail.com>
-In-Reply-To: <20220705152757.27843-1-luoxueqin66@gmail.com>
-From:   Joel Stanley <joel@jms.id.au>
-Date:   Wed, 6 Jul 2022 01:09:53 +0000
-Message-ID: <CACPK8Xd1vK2ap6AbDqpqQ_BLJT9b0APtbGRNEv5=9iK4ken59A@mail.gmail.com>
-Subject: Re: [RESEND PATCH v2] fsi: Fix typo in comment
-To:     Luo Xueqin <luoxueqin66@gmail.com>
-Cc:     Jeremy Kerr <jk@ozlabs.org>,
-        Alistair Popple <alistair@popple.id.au>,
-        Eddie James <eajames@linux.ibm.com>,
-        linux-fsi@lists.ozlabs.org,
+References: <1657038252-31360-1-git-send-email-u0084500@gmail.com>
+ <1657038252-31360-3-git-send-email-u0084500@gmail.com> <CAHp75VeV6vByZXGLraLes+94Rfs23ZjPXGaXzUf-YY=sb_1=2Q@mail.gmail.com>
+In-Reply-To: <CAHp75VeV6vByZXGLraLes+94Rfs23ZjPXGaXzUf-YY=sb_1=2Q@mail.gmail.com>
+From:   ChiYuan Huang <u0084500@gmail.com>
+Date:   Wed, 6 Jul 2022 09:11:50 +0800
+Message-ID: <CADiBU3_7hbwesbXTHBhqo7orQmYp=bY_8b7yhNDKB6m6-CCEtA@mail.gmail.com>
+Subject: Re: [PATCH v4 2/2] iio: adc: Add rtq6056 support
+To:     Andy Shevchenko <andy.shevchenko@gmail.com>
+Cc:     Jonathan Cameron <jic23@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        cy_huang <cy_huang@richtek.com>,
+        linux-iio <linux-iio@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Luo Xueqin <luoxueqin@kylinos.cn>
+        devicetree <devicetree@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 5 Jul 2022 at 15:28, Luo Xueqin <luoxueqin66@gmail.com> wrote:
+Andy Shevchenko <andy.shevchenko@gmail.com> =E6=96=BC 2022=E5=B9=B47=E6=9C=
+=886=E6=97=A5 =E9=80=B1=E4=B8=89 =E5=87=8C=E6=99=A83:09=E5=AF=AB=E9=81=93=
+=EF=BC=9A
 >
-> From: Luo Xueqin <luoxueqin@kylinos.cn>
+> On Tue, Jul 5, 2022 at 6:31 PM cy_huang <u0084500@gmail.com> wrote:
+> >
+> > From: ChiYuan Huang <cy_huang@richtek.com>
+> >
+> > Add Richtek rtq6056 supporting.
+> >
+> > It can be used for the system to monitor load current and power with 16=
+-bit
+> > resolution.
+> >
+> > Signed-off-by: ChiYuan Huang <cy_huang@richtek.com>
+> > Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
 >
-> Spelling mistake in comment.
+> Since you sent a new version:
+> I said explicitly that the kernel version mustn't be not stable nor devel=
+oping.
 >
-> Reported-by: k2ci <kernel-bot@kylinos.cn>
-> Signed-off-by: Luo Xueqin <luoxueqin@kylinos.cn>
-
-Thanks, applied.
-
-> ---
+Sorry, and this.
+Are you saying that patch series need to depend on the stable kernel versio=
+n?
+I cannot always sync the latest one and have to use the tag to grab
+the stable one.
+Right?
+> ...
 >
-> v2: add discoverers
+> > +KernelVersion: 5.15.31
 >
->  drivers/fsi/fsi-master.h | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/drivers/fsi/fsi-master.h b/drivers/fsi/fsi-master.h
-> index cd6bee5e12a7..4762315a46ba 100644
-> --- a/drivers/fsi/fsi-master.h
-> +++ b/drivers/fsi/fsi-master.h
-> @@ -51,7 +51,7 @@
->  #define FSI_MMODE_CRS1SHFT     8               /* Clk rate selection 1 shift */
->  #define FSI_MMODE_CRS1MASK     0x3ff           /* Clk rate selection 1 mask */
->
-> -/* MRESB: Reset brindge */
-> +/* MRESB: Reset bridge */
->  #define FSI_MRESB_RST_GEN      0x80000000      /* General reset */
->  #define FSI_MRESB_RST_ERR      0x40000000      /* Error Reset */
+> ^^^ Wrong
 >
 > --
-> 2.25.1
->
+> With Best Regards,
+> Andy Shevchenko

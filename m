@@ -2,68 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8562E568F0F
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 18:25:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 45DA9568F12
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 18:26:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232923AbiGFQZo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Jul 2022 12:25:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52048 "EHLO
+        id S233910AbiGFQ0S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Jul 2022 12:26:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52478 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232413AbiGFQZl (ORCPT
+        with ESMTP id S233680AbiGFQ0P (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Jul 2022 12:25:41 -0400
-Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F130A24BEC
-        for <linux-kernel@vger.kernel.org>; Wed,  6 Jul 2022 09:25:39 -0700 (PDT)
-Received: by mail-lf1-x133.google.com with SMTP id bf9so3570281lfb.13
-        for <linux-kernel@vger.kernel.org>; Wed, 06 Jul 2022 09:25:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:subject:date:message-id:in-reply-to:references:mime-version
-         :content-transfer-encoding;
-        bh=JIashhGYeFkYbR7kffcxLHDD+hAhV8QuuTTEgk9FK6w=;
-        b=SSDkiH9n4YUDAEgzeFf1wijKsdU1ygC2Uyrcwx3gg8zkLNpuo/dxGqL9ivnDrIvWyk
-         K7yIk7BMjOc6IC/9b4aQTUqXeBnTDeHPL2xwu4cOGWLdCvJ9GySyewAp8xjALGKyBPn4
-         wrsgaRflmgDS7gopEhVKYyjKWrASbY+yuOsZRblk4Dz4T/xpYr5ti5UqzEO+kUH0j0ev
-         EsvgVCkjESXJvQtWvCzUzKH6nhBTNYjyCqwaLce8Z/sswjrLjQA/pyjdGHbUo2hfwQJp
-         WmHOcsagFJ1ypodUlhsfFtJOhHYm0I4etlRQwLGimh/qRSggOHY1Q3wVmFvSc2m+5FKR
-         8Eow==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=JIashhGYeFkYbR7kffcxLHDD+hAhV8QuuTTEgk9FK6w=;
-        b=2rbPZ+gJBwKjwrWI/BvzHY7kyJ2Jt+F0BSnRK+tbWE52Wn+On6Ljejr+A4WhFvd4O/
-         6hXbh2c5hoBh05wRVjb5Tvg807vYEUZb3QKNeJVOgsred3GA902dQNFguHJQ+/ysWvxQ
-         bY6SAPFl+TMCsQcMgACuTv/n+oZcqILWx/ZaB16/ojt18scE3n7pXNB1TLFMzxfdi9sJ
-         F0zeJ1NWJRbHDihpkr56bIRscdfcnJI9itNFlxWAJCEfPGukBbRpAIt4KgAB3nbK7q+D
-         vPCSw/yolR3x+SemasFaF2Tl8cfwNoh3/UkHInY2OBVUrLFpmt1OEQq1uOTp1dJzu4oQ
-         R2WA==
-X-Gm-Message-State: AJIora8lgrNYuYlD4gfZzd4DELTRlQ9fqz9ORCBLdkYqC/ajjcwfA5uE
-        muq26tAsI5UTL8S0IWQ1Yr8EUg==
-X-Google-Smtp-Source: AGRyM1v3dY3SIkHzldafEjg4djIqTpd+Td8TJMqE++IEKyQClDARm8w1I4/mKmWXRyPnpi9Alj+NTQ==
-X-Received: by 2002:a05:6512:b8d:b0:47f:74f0:729b with SMTP id b13-20020a0565120b8d00b0047f74f0729bmr25713700lfv.403.1657124738237;
-        Wed, 06 Jul 2022 09:25:38 -0700 (PDT)
-Received: from krzk-bin.home ([84.20.121.239])
-        by smtp.gmail.com with ESMTPSA id 14-20020a2e154e000000b0025bf58c5338sm4025232ljv.15.2022.07.06.09.25.37
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 06 Jul 2022 09:25:37 -0700 (PDT)
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     krzysztof.kozlowski@linaro.org, linux-samsung-soc@vger.kernel.org,
-        devicetree@vger.kernel.org, alim.akhtar@samsung.com,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 1/3] dt-bindings: soc: samsung: exynos-pmu: cleanup assigned clocks
-Date:   Wed,  6 Jul 2022 18:25:35 +0200
-Message-Id: <165712469638.30806.13604483011536770069.b4-ty@linaro.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220706160257.27579-1-krzysztof.kozlowski@linaro.org>
-References: <20220706160257.27579-1-krzysztof.kozlowski@linaro.org>
+        Wed, 6 Jul 2022 12:26:15 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D7D8275D7
+        for <linux-kernel@vger.kernel.org>; Wed,  6 Jul 2022 09:26:14 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C57A661CAA
+        for <linux-kernel@vger.kernel.org>; Wed,  6 Jul 2022 16:26:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9B832C3411C;
+        Wed,  6 Jul 2022 16:26:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1657124773;
+        bh=/XMuQfK+Lx5qvBfgupKs0ht8LEtOx5afaMDwU0HsGuU=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=hsAHIOUM1bH816MW4VoaIMkqlTjFmdAQLDxa48L3ZbcvY5OhYyJKIdbBRkGBouV8V
+         2XRlDzGKY6hUm4SKcKEcd3rRFiigNFUK2zczsL8EN1fP8qmUsAdKw27UT5ZBgghPXN
+         9rkb9zWSw6N/XN0kyLpHIY0rHPUgxpxGQTWP3Ymt8kvyySCPERpiK9KzaFHEjz6SvW
+         OLqqEDZW0hORJ1j2P8m0aputLwgKO0J2WrOWeUDNbtI9IJUpHnM8YL8CGAtqHRWFrp
+         4uNqt2oqQ7LnYfm29sX8zSt0DM+LI8bviwABuDqiS23JAS7oGTDYvmvjBrzIh7GCCa
+         HwCzsE9B9MsIQ==
+Date:   Wed, 6 Jul 2022 10:26:09 -0600
+From:   Keith Busch <kbusch@kernel.org>
+To:     Christoph Hellwig <hch@lst.de>
+Cc:     John Garry <john.garry@huawei.com>, axboe@fb.com, sagi@grimberg.me,
+        linux-nvme@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] nvme: Fix nvme_setup_command metadata trace event for
+ cdw10
+Message-ID: <YsW3oXcCe6/y6iRb@kbusch-mbp.dhcp.thefacebook.com>
+References: <1657095398-114310-1-git-send-email-john.garry@huawei.com>
+ <YsW0orMaDFfrHbx+@kbusch-mbp.dhcp.thefacebook.com>
+ <20220706161825.GA1962@lst.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220706161825.GA1962@lst.de>
+X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -72,23 +57,62 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 6 Jul 2022 18:02:55 +0200, Krzysztof Kozlowski wrote:
-> "assigned-clocks" are not needed in the device schema as they come from
-> core schema.
+On Wed, Jul 06, 2022 at 06:18:25PM +0200, Christoph Hellwig wrote:
+> On Wed, Jul 06, 2022 at 10:13:22AM -0600, Keith Busch wrote:
+> > Did you test what the trace looks like afte this? We're losing valuable trace
+> > data here. The field is supposed to get CDW's 10 - 15, so that's 24 bytes. I
+> > don't know why it cares that the address of the field being read is only 4
+> > bytes; we want everything that comes after it too.
 > 
+> Because accesses should not spawn boundaries of members in structs unless
+> copying the entire struct.  If we want to trace the various fields we
+> need to individually assign them.
 > 
+> Anyway, I'm dropping this patch from nvme-5.19 for now to let the
+> discussion conclude.
 
-Applied with Rob's tags carried over from v1.
+How about this instead?
 
-Applied, thanks!
-
-[1/3] dt-bindings: soc: samsung: exynos-pmu: cleanup assigned clocks
-      https://git.kernel.org/krzk/linux/c/38aed2e0aa406de6dda64515cc3937976a27038e
-[2/3] dt-bindings: soc: samsung: exynos-pmu: use abolute ref paths
-      https://git.kernel.org/krzk/linux/c/61bebc2902901cc2f1cac496dc81be38ca74d7d4
-[3/3] dt-bindings: soc: samsung: exynos-pmu: add reboot-mode
-      https://git.kernel.org/krzk/linux/c/3e27bf719303b1b19edd37bd04e9e586c73f6511
-
-Best regards,
--- 
-Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+---
+diff --git a/drivers/nvme/host/trace.h b/drivers/nvme/host/trace.h
+index b5f85259461a..3c5e7fa03707 100644
+--- a/drivers/nvme/host/trace.h
++++ b/drivers/nvme/host/trace.h
+@@ -69,7 +69,7 @@ TRACE_EVENT(nvme_setup_cmd,
+ 		__entry->metadata = !!blk_integrity_rq(req);
+ 		__entry->fctype = cmd->fabrics.fctype;
+ 		__assign_disk_name(__entry->disk, req->q->disk);
+-		memcpy(__entry->cdw10, &cmd->common.cdw10,
++		memcpy(__entry->cdw10, &cmd->common.bytes,
+ 			sizeof(__entry->cdw10));
+ 	    ),
+ 	    TP_printk("nvme%d: %sqid=%d, cmdid=%u, nsid=%u, flags=0x%x, meta=0x%x, cmd=(%s %s)",
+diff --git a/include/linux/nvme.h b/include/linux/nvme.h
+index e3934003f239..1be226871763 100644
+--- a/include/linux/nvme.h
++++ b/include/linux/nvme.h
+@@ -906,12 +906,17 @@ struct nvme_common_command {
+ 	__le32			cdw2[2];
+ 	__le64			metadata;
+ 	union nvme_data_ptr	dptr;
+-	__le32			cdw10;
+-	__le32			cdw11;
+-	__le32			cdw12;
+-	__le32			cdw13;
+-	__le32			cdw14;
+-	__le32			cdw15;
++	union {
++		struct {
++			__le32	cdw10;
++			__le32	cdw11;
++			__le32	cdw12;
++			__le32	cdw13;
++			__le32	cdw14;
++			__le32	cdw15;
++		};
++		__u8 bytes[24];
++	};
+ };
+ 
+ struct nvme_rw_command {
+--

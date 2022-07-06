@@ -2,140 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F1D4568B27
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 16:25:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0FC06568B2C
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 16:28:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233264AbiGFOZv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Jul 2022 10:25:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49512 "EHLO
+        id S233467AbiGFO1u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Jul 2022 10:27:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50314 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232839AbiGFOZu (ORCPT
+        with ESMTP id S231906AbiGFO1t (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Jul 2022 10:25:50 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E60320F75
-        for <linux-kernel@vger.kernel.org>; Wed,  6 Jul 2022 07:25:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1657117549; x=1688653549;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=ekAnkxlyo5a77ZXv/WDjstgTFIs6FVRj0ddynjjv0EY=;
-  b=bY50CIYts4ouFEvqT4pHIc+julpwyp5PBOAKv020IQ2GIgTNPipbWOPw
-   Rg3O3jahh4yDyXGHW2LVu96NU3z2jp8+LR8h1QF9NAux0pPTnAlzxntM6
-   9Mx+biMDYHGVvWIDOaMtGgeA93g/yKDyXsEAFwIq+MQG/8lbMvKJQty76
-   8tgWwbMtkBV5rPESn+f5O/MFWyASJw2hN0FpyScy+BNOXqE3f9VWhjaaF
-   lO7o8ZcVu9eZ7ePvJP/C4bEfqq2c9ylrJa6emZorZqKM9t7S8fhgVVPsa
-   qDizqWwwZW9e/A+Zv3+o+E9WNpQkfxRMjI0/EIeG8isMjaKwPxD19ukGx
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10399"; a="284881295"
-X-IronPort-AV: E=Sophos;i="5.92,250,1650956400"; 
-   d="scan'208";a="284881295"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jul 2022 07:25:38 -0700
-X-IronPort-AV: E=Sophos;i="5.92,250,1650956400"; 
-   d="scan'208";a="568086315"
-Received: from xsang-optiplex-9020.sh.intel.com (HELO xsang-OptiPlex-9020) ([10.239.159.143])
-  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jul 2022 07:25:33 -0700
-Date:   Wed, 6 Jul 2022 22:25:30 +0800
-From:   Oliver Sang <oliver.sang@intel.com>
-To:     Mel Gorman <mgorman@techsingularity.net>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        0day robot <lkp@intel.com>,
-        LKML <linux-kernel@vger.kernel.org>, linux-mm@kvack.org,
-        lkp@lists.01.org, Nicolas Saenz Julienne <nsaenzju@redhat.com>,
-        Marcelo Tosatti <mtosatti@redhat.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Michal Hocko <mhocko@kernel.org>,
-        Hugh Dickins <hughd@google.com>
-Subject: Re: [mm/page_alloc]  2bd8eec68f:
- BUG:sleeping_function_called_from_invalid_context_at_mm/gup.c
-Message-ID: <YsWbWsN2qPbWsNWZ@xsang-OptiPlex-9020>
-References: <20220613125622.18628-8-mgorman@techsingularity.net>
- <YsFk/qU+QtWun04h@xsang-OptiPlex-9020>
- <20220703132209.875b823d1cb7169a8d51d56d@linux-foundation.org>
- <YsRB3fZHAfik0M/q@xsang-OptiPlex-9020>
- <20220706095535.GD27531@techsingularity.net>
+        Wed, 6 Jul 2022 10:27:49 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9829021831
+        for <linux-kernel@vger.kernel.org>; Wed,  6 Jul 2022 07:27:47 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 31CF661EA6
+        for <linux-kernel@vger.kernel.org>; Wed,  6 Jul 2022 14:27:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A18A0C3411C;
+        Wed,  6 Jul 2022 14:27:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1657117666;
+        bh=AqYKdoA9FLd1G1LCk3C1+7u1lQg7N8l1i5b7UcNhb2g=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=W+bHK5c2gd9jzkU7diwCyrMzC+1smiCjHNYkX81108IqSzsZqkxt8iEAZc/UDg6Ts
+         NFLzQBo+YZPexyYLaM/tBzCD7wZAY73J+7bYoosX8WRb24E2gxGnOr/D0uBIbU0DO6
+         mJjPkr2Igm8XxD6QDbNbZ+FVuhQxEG9dXLsz0JuDrwMjH1fi4XxOUFHUOtEn3PRSfQ
+         ZOM+AWHotV5kFHBCoBAXPRi26zYUpfs0CYRyog3LA7H1L0wTVjS0mjqwatqGtKFQ5Y
+         gOXMCW0BILY1HTanXIDSlv6dc9uBx98CPb/a7LtO1fZss5oYJGj/4NErbWcbTVydfE
+         H98jg6lW5Od2g==
+Message-ID: <c181672a-faa2-2f2a-b495-b9c9fee56d50@kernel.org>
+Date:   Wed, 6 Jul 2022 22:27:44 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220706095535.GD27531@techsingularity.net>
-X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH] f2fs: allow compression of files without blocks
+Content-Language: en-US
+To:     Chao Liu <chaoliu719@gmail.com>
+Cc:     Jaegeuk Kim <jaegeuk@kernel.org>,
+        linux-f2fs-devel@lists.sourceforge.net,
+        linux-kernel@vger.kernel.org, Yue Hu <huyue2@coolpad.com>,
+        Wayne Zhang <zhangwen@coolpad.com>,
+        Chao Liu <liuchao@coolpad.com>
+References: <20220621064202.1078536-1-chaoliu719@gmail.com>
+ <7fb689d9-11ba-a173-8ad4-a328a03298a8@kernel.org>
+ <YrPq5N61W9vFGTub@liuchao-VM>
+From:   Chao Yu <chao@kernel.org>
+In-Reply-To: <YrPq5N61W9vFGTub@liuchao-VM>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-hi, Mel Gorman,
+On 2022/6/23 12:24, Chao Liu wrote:
+> On Wed, Jun 22, 2022 at 08:50:33PM +0800, Chao Yu wrote:
+>> On 2022/6/21 14:42, Chao Liu wrote:
+>>> From: Chao Liu <liuchao@coolpad.com>
+>>>
+>>> Files created by truncate have a size but no blocks, so
+>>
+>> I didn't get it, how can we create file by truncation...
+> 
+> I'm sorry I didn't make it clear. We can create a file
+> by passing a FILE parameter that does not exist
+> to the user command truncate(1) [1].
+> 
+> How about using truncate(1) instead of truncate
+> in the description of the change?
 
-On Wed, Jul 06, 2022 at 10:55:35AM +0100, Mel Gorman wrote:
-> On Tue, Jul 05, 2022 at 09:51:25PM +0800, Oliver Sang wrote:
-> > Hi Andrew Morton,
-> > 
-> > On Sun, Jul 03, 2022 at 01:22:09PM -0700, Andrew Morton wrote:
-> > > On Sun, 3 Jul 2022 17:44:30 +0800 kernel test robot <oliver.sang@intel.com> wrote:
-> > > 
-> > > > FYI, we noticed the following commit (built with gcc-11):
-> > > > 
-> > > > commit: 2bd8eec68f740608db5ea58ecff06965228764cb ("[PATCH 7/7] mm/page_alloc: Replace local_lock with normal spinlock")
-> > > > url: https://github.com/intel-lab-lkp/linux/commits/Mel-Gorman/Drain-remote-per-cpu-directly/20220613-230139
-> > > > base: https://git.kernel.org/cgit/linux/kernel/git/torvalds/linux.git b13baccc3850ca8b8cccbf8ed9912dbaa0fdf7f3
-> > > > patch link: https://lore.kernel.org/lkml/20220613125622.18628-8-mgorman@techsingularity.net
-> > > > 
-> > > 
-> > > Did this test include the followup patch
-> > > mm-page_alloc-replace-local_lock-with-normal-spinlock-fix.patch?
-> > 
-> > no, we just fetched original patch set and test upon it.
-> > 
-> > now we applied the patch you pointed to us upon 2bd8eec68f and found the issue
-> > still exist.
-> > (attached dmesg FYI)
-> > 
-> 
-> Thanks Oliver.
-> 
-> The trace is odd in that it hits in GUP when the page allocator is no
-> longer active and the context is a syscall. First, is this definitely
-> the first patch the problem occurs?
-> 
-> Second, it's possible for IRQs to be enabled and an IRQ delivered before
-> preemption is enabled. It's not clear why that would be a problem other
-> than lacking symmetry or how it could result in the reported BUG but
-> might as well rule it out. This is build tested only
+Fine to me, as f2fs_disable_compressed_file() uses the same check
+condition. ;)
 
-do you want us test below patch?
-if so, should we apply it upon the patch
-"mm/page_alloc: Replace local_lock with normal spinlock"
-or
-"mm/page_alloc: replace local_lock with normal spinlock -fix"?
+Thanks,
 
 > 
-> diff --git a/mm/page_alloc.c b/mm/page_alloc.c
-> index 934d1b5a5449..d0141e51e613 100644
-> --- a/mm/page_alloc.c
-> +++ b/mm/page_alloc.c
-> @@ -192,14 +192,14 @@ static DEFINE_MUTEX(pcp_batch_high_lock);
->  
->  #define pcpu_spin_unlock(member, ptr)					\
->  ({									\
-> -	spin_unlock(&ptr->member);					\
->  	pcpu_task_unpin();						\
-> +	spin_unlock(&ptr->member);					\
->  })
->  
->  #define pcpu_spin_unlock_irqrestore(member, ptr, flags)			\
->  ({									\
-> -	spin_unlock_irqrestore(&ptr->member, flags);			\
->  	pcpu_task_unpin();						\
-> +	spin_unlock_irqrestore(&ptr->member, flags);			\
->  })
->  
->  /* struct per_cpu_pages specific helpers. */
->  
+> Thanks,
 > 
-> 
+> [1] truncate(1): https://man7.org/linux/man-pages/man1/truncate.1.html

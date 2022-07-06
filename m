@@ -2,285 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5BE46568322
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 11:17:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B999568337
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 11:17:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232868AbiGFJN3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Jul 2022 05:13:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54154 "EHLO
+        id S232732AbiGFJOq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Jul 2022 05:14:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54742 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232926AbiGFJM0 (ORCPT
+        with ESMTP id S233205AbiGFJOY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Jul 2022 05:12:26 -0400
-Received: from mail-qk1-x736.google.com (mail-qk1-x736.google.com [IPv6:2607:f8b0:4864:20::736])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01274237CE;
-        Wed,  6 Jul 2022 02:09:27 -0700 (PDT)
-Received: by mail-qk1-x736.google.com with SMTP id v6so10587165qkh.2;
-        Wed, 06 Jul 2022 02:09:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=vxiJQMa2a6ScrGhpzgzV+Tp/u0829jq0BqEczNesPFg=;
-        b=o5doXy6hGI66V3VIS5tzxrBUc2XInriDflyet203f8a6lpypa36zQtQtV2M0B4mN+m
-         LyUa6Hlr7zBWOwlrlfa/Vmk6gFSzsJnnGqRdjOURDPzefqTJzGgVi+M1iDn7QSNcAbwA
-         ZxmYxzAO0vicXMCMAgZxEFcshx+08cRa+aeyZ76nqJw6mhaXWtXQ7BDS1XsPjnaO4Fi8
-         nGQl10+JvuZiY+LJv5uglQFkyzzUHGpxG0A4EE+T56VRjncNJDhhjrH8CdXyrUxJ2SMw
-         eJvghUk/u1iSD923K7V3eWGwg+3PkhBgjFdskqMbDORqT/Y4TCKYYgW1IpAKEkWC3VON
-         AfdA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=vxiJQMa2a6ScrGhpzgzV+Tp/u0829jq0BqEczNesPFg=;
-        b=SD8I+IZCzfXFRPmcZBCAmqHEpxLTNeRJbi96OotCHk/C7Sd8QH5FL301bsMeIebgFA
-         uubc65uOnKGk9rByKtlugtNnaPBLvKFZHSyUWnP31Munbtiq3my3XFBwdPYq4Yo+K/TB
-         Q8wRv8oH5Qgpkx07Gh9di4DsQHtZaqremqt8DrhLhaiRf2EFff3Y+PiAccwyqU7XH1RL
-         BLvkK9OqaMv2cBCXvPTPMRY8BPqBCLdZ0gRrSTHs6KbYWXPGxgmwRVszWwGxtgwUvrko
-         Uyd/DenHC3zZWW4VFkEFOwP6On3JsATcvdXPcPefT6egkKa2q8NYJHAwqCiY/zUqHguy
-         YuyA==
-X-Gm-Message-State: AJIora9n3pb6rNk5fie+U6FG5orwgBY2w71keH1623dJxCOhhWCRpoDw
-        wZCWKIEitSGPHIjMqTIis8E=
-X-Google-Smtp-Source: AGRyM1u05qeTfN+/HiKZW7k0MqRT9HazAjC+mvjUvYovZJgAZylA2VnE3JRJMa+53lspajs/Ln8Qjw==
-X-Received: by 2002:a05:620a:254d:b0:6ab:84b8:25eb with SMTP id s13-20020a05620a254d00b006ab84b825ebmr26293265qko.383.1657098566068;
-        Wed, 06 Jul 2022 02:09:26 -0700 (PDT)
-Received: from [10.176.68.61] ([192.19.148.250])
-        by smtp.gmail.com with ESMTPSA id a21-20020a05620a16d500b006a7502d0070sm27504807qkn.21.2022.07.06.02.09.23
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 06 Jul 2022 02:09:25 -0700 (PDT)
-Message-ID: <0aa190fb-b761-6114-93c0-347aa5950a2e@gmail.com>
-Date:   Wed, 6 Jul 2022 11:09:22 +0200
+        Wed, 6 Jul 2022 05:14:24 -0400
+Received: from APC01-SG2-obe.outbound.protection.outlook.com (mail-sgaapc01on2090.outbound.protection.outlook.com [40.107.215.90])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D123E10EC
+        for <linux-kernel@vger.kernel.org>; Wed,  6 Jul 2022 02:14:01 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=mrxKc/xE3GUZtV85qIQ4rxUdHxu6QhJGowQ/29o7BHnEhykMH4pAxySYvkoomEVLQ4MjCuh4S1R8aICql5FUQwrovFh/P+BZElnF7HwyBt1twyPFHfD8ogc/o4AqVxgz/9S8WYK992Em+TQf6vv4fDHR1QvYBw9EY62k32RIlF4+RP1iDGQtZkr8DOyH0akwiO04vw4wJKkRLuV/xWEO/qVJoSXvqJBaOFyVIzeR08wPTgAAm8feldsYLT01S6AmURIC1lxdSf3/r//97kaj3YzS1W4EXl9zn4IZHfY32PzRP0e21ZLg0laJJ3aVmK4xlZpf3a8Qijcn6REXiaBVpw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=7rNbLZUpRrbHGGuwAWKGyGWO4nihs2eiCveyXEvYcTk=;
+ b=U14gcL0CpnoMBfgA6oV8gno/nBj1qN5Prd/dQOadXoDtPovCNvsG7XTg/pBRReCpXTbCMtmY5am6u+hjBEP8MCVu9QecktGKbTY3SQrFIWITCMT/lgjTrMIfJ9+2ZqOF6cCSYv5VH1ANjuBDmRPvZQHHi25U6IB0U9AASuecpn7hapthRp8oQIChjqgM/vhjRifLlObHI/5YfYcYNZAKgERV3biIa4Gv8Brd63KPqwcTNzClPNoZjLF9oEoByQoforKixvYLrRkSdBDXDMpnPRlHqTWjf3HNckvmFXlW4f7g5MZckEX85MXLNqAje9WAWU+UINtBBnTToSkxHELLyw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=vivo.com; dmarc=pass action=none header.from=vivo.com;
+ dkim=pass header.d=vivo.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vivo0.onmicrosoft.com;
+ s=selector2-vivo0-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=7rNbLZUpRrbHGGuwAWKGyGWO4nihs2eiCveyXEvYcTk=;
+ b=Zp+gKqUBA8jJFia3DMecQiNZujGgP9YYxU53YciYCEAIDOwOFZSaWwMvhtPW9q2AuDYbJ7pMe9BPUUchxVDjY6A0LQyA0uyt3r4T0XxYcGiswEsPT1FZ8ijqTPTfv5cCxnKmLDNKzLvlUthfzT2O70wPu/cMesn4lhgXW6yj3qg=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=vivo.com;
+Received: from PS2PR06MB3493.apcprd06.prod.outlook.com (2603:1096:300:63::20)
+ by SEZPR06MB5271.apcprd06.prod.outlook.com (2603:1096:101:7a::10) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5395.20; Wed, 6 Jul
+ 2022 09:13:59 +0000
+Received: from PS2PR06MB3493.apcprd06.prod.outlook.com
+ ([fe80::d9bb:28b5:8ef8:952e]) by PS2PR06MB3493.apcprd06.prod.outlook.com
+ ([fe80::d9bb:28b5:8ef8:952e%7]) with mapi id 15.20.5395.021; Wed, 6 Jul 2022
+ 09:13:58 +0000
+From:   Guo Zhengkui <guozhengkui@vivo.com>
+To:     Harry Wentland <harry.wentland@amd.com>,
+        Leo Li <sunpeng.li@amd.com>,
+        Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
+        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Guo Zhengkui <guozhengkui@vivo.com>,
+        Jimmy Kizito <Jimmy.Kizito@amd.com>,
+        amd-gfx@lists.freedesktop.org (open list:AMD DISPLAY CORE),
+        dri-devel@lists.freedesktop.org (open list:DRM DRIVERS),
+        linux-kernel@vger.kernel.org (open list)
+Cc:     zhengkui_guo@outlook.com
+Subject: [PATCH] drm/amd/display: remove repeated includes
+Date:   Wed,  6 Jul 2022 17:13:27 +0800
+Message-Id: <20220706091329.62192-1-guozhengkui@vivo.com>
+X-Mailer: git-send-email 2.20.1
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: SI2PR01CA0029.apcprd01.prod.exchangelabs.com
+ (2603:1096:4:192::8) To PS2PR06MB3493.apcprd06.prod.outlook.com
+ (2603:1096:300:63::20)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH 04/13] tracing/brcm: Use the new __vstring() helper
-Content-Language: en-US
-To:     Steven Rostedt <rostedt@goodmis.org>,
-        kernel test robot <lkp@intel.com>
-Cc:     linux-kernel@vger.kernel.org, kbuild-all@lists.01.org,
-        Ingo Molnar <mingo@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        Franky Lin <franky.lin@broadcom.com>,
-        Hante Meuleman <hante.meuleman@broadcom.com>,
-        Kalle Valo <kvalo@kernel.org>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        linux-wireless@vger.kernel.org,
-        brcm80211-dev-list.pdl@broadcom.com,
-        SHA-cyfmac-dev-list@infineon.com, netdev@vger.kernel.org
-References: <20220705224749.622796175@goodmis.org>
- <202207061019.0zRrehFH-lkp@intel.com>
- <20220705225049.665db869@gandalf.local.home>
-From:   Arend Van Spriel <aspriel@gmail.com>
-In-Reply-To: <20220705225049.665db869@gandalf.local.home>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 35a74bbf-788b-47e9-cc38-08da5f2fdbc6
+X-MS-TrafficTypeDiagnostic: SEZPR06MB5271:EE_
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 5idwzV/FSSeCbADzPASLPDyhGGRG4y6xMeh7zUxRA7avdMsizN7AjugsRcbF+9BHUEJVz0TO+WJT9o4LumwM9/XYF+4NbTm9ivSsYTZgyR80HHTN6GALuBeYL8+RxOWJpKNpUL0xnLz95jAw6U9Cm3QzO3/5OdmDARmA1gO1gSn2M0YnIIMPoq4fwTR/TLEH+jUkiY0wsPV3rtaewE7/OeONo6tCTWwGzZt7Bbc6ky4j4dcqrcGF18yfcPAlClKAnyouY4QqdXhCWABp9OXj2qv4szsMZVOq7a5vPSTryhFyhIZRgDyhe9B/9LSSYKoPe3g9/RU9t3K6DYBbYF1kGwJuUBolo5cO4A1SC03wFtMKT36VYZlyA9z73OCAZNdR7fLcIW8lmTdHGHYlluhOqV9rDmiuArP3Io1ppnmA99zHOaFAFSliAnNLqWI7W6hl0GI99KcQ3OPEfOBs9vet71edb7dNPB7rymxAa1dppgU5nf1g8r4MmYBatetSIfJDS7HXnUpWr80WYTXb12JbNunWAu9ZBidtObct7tDH7hWS1jP9MSWWaFRfujhx0btdx0n9JV+rFZvfyNpkyFGcDdsGjJbJap+ig7xqg/Z4Y206LiwVMCLanRKG04QL4BHqS+a4wiX633ok45AVyAXIK2FBO/EBM6G/+fhCJoe/baGXiXpYq/XH6JM8xqtj5tcSaDI1d/GnXTjV5b1Qzeo2SLx4C4cmm+TUY/KUJVG4mgjZsOBzRrvS88OIsLTqi0Ld+1kEBK+2bcMiS1AmlAIbcPBJGXsusiLpuSdODmssBoQO+186LwbGcKMUQQotdtQxe++ctZ3ch9fanbLcmpux2Q==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PS2PR06MB3493.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(396003)(39860400002)(376002)(346002)(136003)(366004)(26005)(6512007)(1076003)(52116002)(186003)(86362001)(83380400001)(2616005)(6666004)(2906002)(41300700001)(36756003)(6506007)(38350700002)(38100700002)(8936002)(66556008)(7416002)(110136005)(921005)(478600001)(5660300002)(4744005)(6486002)(4326008)(66946007)(66476007)(8676002)(316002);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?GnAuSeBSs4P32zF8TDhQ35zuw9T43eI0CQ39yyFum3UtCW/gbV6mpdGcfq1J?=
+ =?us-ascii?Q?SvUe4yIBzfC7tpp1C4Q38OlAAeC9JcZ8GBh59S+KFpkxtHFapjhHpEttJxoG?=
+ =?us-ascii?Q?E+5EwAsp8MYq720t5gAQRXXGcJxuvbh5kBQ2N9KVlXbW2M+xn+3deYKiMuGv?=
+ =?us-ascii?Q?4JOWNIr9rfKXdK8S94Gv9JcLhPVKNCsiblcu5rr3d86LdKfQUSvZRgmColco?=
+ =?us-ascii?Q?13NC9GtKFzStyJp33QWB2Pc2P2EgiCyv7D/K9b+uFphgBGQfLKV7bDDoTAvi?=
+ =?us-ascii?Q?D+5+TAvVsWCo9Vqh1N1r57SENBVWe/gxgkKCwRKxet1lBhNhVP2h2c2jkl4X?=
+ =?us-ascii?Q?e2eLVT+ksFEgPtf878R03xXrKW2OgSF/MNi8D0F8MDZaslJsxIx0pnm4zi4f?=
+ =?us-ascii?Q?iaUSGzlTg5h7GdlzxX4JxuvHh16plM5v9iTlACN1NvIVG2v0d2sU5ZuwKI5N?=
+ =?us-ascii?Q?ybHkzZpzDCffSFrH5hrlQ6u7ly/ksnRijepOriWQqHOPSwhXFYbxFj+G8oa/?=
+ =?us-ascii?Q?+aDJW4FrFu9lPod9PyqlVg3p71wMLAjcnHsLcfd3DQ5S5YAs1/qE6YQ8uC49?=
+ =?us-ascii?Q?TxhPLhE294MzFGS23PT24lbUpSJX0ewiIGG5oZSqv23aOKBHh7ChZu9thF6h?=
+ =?us-ascii?Q?HbbtUv4EoOx2yII/CtfhCjeO70CfMeTsEW+V34SMP/zefo5HsnrpgCEvO92K?=
+ =?us-ascii?Q?jEbBb0el1Lt9rCYT0+RV+QTzcOz/zR5//KsnptCDQYDmV+XX+vT1XCjQ3/SB?=
+ =?us-ascii?Q?gkQFfTNm6psUPbo0vnuw89XuSEN51hyi98rHM+brozxD9kdQX9TgLpeYfggY?=
+ =?us-ascii?Q?67OVkyTH/4Mv4DAzIeacx/BFqp3y4ytbuGMBgnHWrQVwYE5jlmJ4h8HmeMuB?=
+ =?us-ascii?Q?rZTiRWHZxj4m2sjo5BNbc//WPtNNpnfiWz2kNP8t4iXM2fp8Akc1Bm3/2xpE?=
+ =?us-ascii?Q?96R8kMYNyA1bd6eZfWxWsPIYxdx+Yteip0oYFiQkeLgoEY2ZIQyp0rXDJlw6?=
+ =?us-ascii?Q?h9dYDN8XcZHX8SnKrLAycpWANBtTy4C1szkSm2bqePRNc2/z73TxgF69gdot?=
+ =?us-ascii?Q?veRbNOYJG6++8X15u2FLJWUak3tE14OOysHJ+DdnwUCtIlUo8OHZ/MRxNbTp?=
+ =?us-ascii?Q?Ub6Ir9ZjVOm2WZyblec4j0Rs/udEZ1EeY7TA1jTLssHuGnEDM7G0OzIAycJB?=
+ =?us-ascii?Q?aiKVEXeLLOY/7OwuedrdzgYzilQ8n66OMPIdyz7tD0H8aLCOZCHjKZuoPWzy?=
+ =?us-ascii?Q?EIiAHTgy946UB2GvxK1PtC5g+ky5KqsjlSNM5cjgi1l7RyqeRxf51JC2oizC?=
+ =?us-ascii?Q?DPgek1XAGNK2JA4xfPxV2FuDZaj4lYJS/Ox0ct6/wEOjjooMS0R2Le+cIwTf?=
+ =?us-ascii?Q?IHGC6nUxL3KB3YeWzry72E/C7u6Yr30ZMVYrYyiCbYLS9tAZwJ4iqHmnG6Qi?=
+ =?us-ascii?Q?uWdTm5raMwrZAf7JSmc9hBNbGSYZf32wqWtfl4CriTZuL6EVzWK+G6GH6jWR?=
+ =?us-ascii?Q?QKGDpNpZDSzmlRWzHjURpMSesYklIedR45y5Yzwsp83AcAPjyt8KpJ+ARuGR?=
+ =?us-ascii?Q?5mEnV9Fn5A3Ar/5UxhgozRhI4JbcZilNPoYHjUoE?=
+X-OriginatorOrg: vivo.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 35a74bbf-788b-47e9-cc38-08da5f2fdbc6
+X-MS-Exchange-CrossTenant-AuthSource: PS2PR06MB3493.apcprd06.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Jul 2022 09:13:58.7467
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 923e42dc-48d5-4cbe-b582-1a797a6412ed
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: u7N6a+aGMgsI/Koh535CGsu9xlg1q5dwiyc1sYn0jGCW9pYEVoSDxPZ7ezWyV+OBRgT5Zt7+gYu2pzOJBchnkQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SEZPR06MB5271
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 7/6/2022 4:50 AM, Steven Rostedt wrote:
-> On Wed, 6 Jul 2022 10:35:50 +0800
-> kernel test robot <lkp@intel.com> wrote:
-> 
->> Hi Steven,
->>
->> Thank you for the patch! Perhaps something to improve:
->>
->> [auto build test WARNING on rostedt-trace/for-next]
->> [also build test WARNING on wireless-next/main wireless/main linus/master v5.19-rc5 next-20220705]
->> [If your patch is applied to the wrong git tree, kindly drop us a note.
->> And when submitting patch, we suggest to use '--base' as documented in
->> https://git-scm.com/docs/git-format-patch]
->>
-> 
-> 
->> If you fix the issue, kindly add following tag where applicable
->> Reported-by: kernel test robot <lkp@intel.com>
->>
->> All warnings (new ones prefixed by >>):
-> 
-> OK, let's look at all the warnings.
-> 
->>
->>     In file included from include/trace/define_trace.h:102,
->>                      from drivers/net/wireless/broadcom/brcm80211/brcmfmac/tracepoint.h:133,
->>                      from drivers/net/wireless/broadcom/brcm80211/brcmfmac/tracepoint.c:12:
->>     drivers/net/wireless/broadcom/brcm80211/brcmfmac/./tracepoint.h: In function 'trace_event_get_offsets_brcmf_err':
->>>> include/trace/trace_events.h:261:16: warning: function 'trace_event_get_offsets_brcmf_err' might be a candidate for 'gnu_printf' format attribute [-Wsuggest-attribute=format]
-> 
->   1. "might be a candidate for 'gnu_printf' format attribute"
-> 
->>       261 |         struct trace_event_raw_##call __maybe_unused *entry;            \
->>           |                ^~~~~~~~~~~~~~~~
->>     include/trace/trace_events.h:40:9: note: in expansion of macro 'DECLARE_EVENT_CLASS'
->>        40 |         DECLARE_EVENT_CLASS(name,                              \
->>           |         ^~~~~~~~~~~~~~~~~~~
->>     drivers/net/wireless/broadcom/brcm80211/brcmfmac/./tracepoint.h:31:1: note: in expansion of macro 'TRACE_EVENT'
->>        31 | TRACE_EVENT(brcmf_err,
->>           | ^~~~~~~~~~~
->>     drivers/net/wireless/broadcom/brcm80211/brcmfmac/./tracepoint.h: In function 'trace_event_get_offsets_brcmf_dbg':
->>>> include/trace/trace_events.h:261:16: warning: function 'trace_event_get_offsets_brcmf_dbg' might be a candidate for 'gnu_printf' format attribute [-Wsuggest-attribute=format]
-> 
->   2. "might be a candidate for 'gnu_printf' format attribute"
-> 
->>       261 |         struct trace_event_raw_##call __maybe_unused *entry;            \
->>           |                ^~~~~~~~~~~~~~~~
->>     include/trace/trace_events.h:40:9: note: in expansion of macro 'DECLARE_EVENT_CLASS'
->>        40 |         DECLARE_EVENT_CLASS(name,                              \
->>           |         ^~~~~~~~~~~~~~~~~~~
->>     drivers/net/wireless/broadcom/brcm80211/brcmfmac/./tracepoint.h:45:1: note: in expansion of macro 'TRACE_EVENT'
->>        45 | TRACE_EVENT(brcmf_dbg,
->>           | ^~~~~~~~~~~
->>     In file included from include/trace/define_trace.h:102,
->>                      from drivers/net/wireless/broadcom/brcm80211/brcmfmac/tracepoint.h:133,
->>                      from drivers/net/wireless/broadcom/brcm80211/brcmfmac/tracepoint.c:12:
->>     drivers/net/wireless/broadcom/brcm80211/brcmfmac/./tracepoint.h: In function 'trace_event_raw_event_brcmf_err':
->>     include/trace/trace_events.h:386:16: warning: function 'trace_event_raw_event_brcmf_err' might be a candidate for 'gnu_printf' format attribute [-Wsuggest-attribute=format]
-> 
->   3. "might be a candidate for 'gnu_printf' format attribute"
-> 
->>       386 |         struct trace_event_raw_##call *entry;                           \
->>           |                ^~~~~~~~~~~~~~~~
->>     include/trace/trace_events.h:40:9: note: in expansion of macro 'DECLARE_EVENT_CLASS'
->>        40 |         DECLARE_EVENT_CLASS(name,                              \
->>           |         ^~~~~~~~~~~~~~~~~~~
->>     drivers/net/wireless/broadcom/brcm80211/brcmfmac/./tracepoint.h:31:1: note: in expansion of macro 'TRACE_EVENT'
->>        31 | TRACE_EVENT(brcmf_err,
->>           | ^~~~~~~~~~~
->>     drivers/net/wireless/broadcom/brcm80211/brcmfmac/./tracepoint.h: In function 'trace_event_raw_event_brcmf_dbg':
->>     include/trace/trace_events.h:386:16: warning: function 'trace_event_raw_event_brcmf_dbg' might be a candidate for 'gnu_printf' format attribute [-Wsuggest-attribute=format]
-> 
->   4. "might be a candidate for 'gnu_printf' format attribute"
-> 
->>       386 |         struct trace_event_raw_##call *entry;                           \
->>           |                ^~~~~~~~~~~~~~~~
->>     include/trace/trace_events.h:40:9: note: in expansion of macro 'DECLARE_EVENT_CLASS'
->>        40 |         DECLARE_EVENT_CLASS(name,                              \
->>           |         ^~~~~~~~~~~~~~~~~~~
->>     drivers/net/wireless/broadcom/brcm80211/brcmfmac/./tracepoint.h:45:1: note: in expansion of macro 'TRACE_EVENT'
->>        45 | TRACE_EVENT(brcmf_dbg,
->>           | ^~~~~~~~~~~
->>     In file included from include/trace/define_trace.h:103,
->>                      from drivers/net/wireless/broadcom/brcm80211/brcmfmac/tracepoint.h:133,
->>                      from drivers/net/wireless/broadcom/brcm80211/brcmfmac/tracepoint.c:12:
->>     drivers/net/wireless/broadcom/brcm80211/brcmfmac/./tracepoint.h: In function 'perf_trace_brcmf_err':
->>     include/trace/perf.h:64:16: warning: function 'perf_trace_brcmf_err' might be a candidate for 'gnu_printf' format attribute [-Wsuggest-attribute=format]
-> 
->   5. "might be a candidate for 'gnu_printf' format attribute"
-> 
->>        64 |         struct hlist_head *head;                                        \
->>           |                ^~~~~~~~~~
->>     include/trace/trace_events.h:40:9: note: in expansion of macro 'DECLARE_EVENT_CLASS'
->>        40 |         DECLARE_EVENT_CLASS(name,                              \
->>           |         ^~~~~~~~~~~~~~~~~~~
->>     drivers/net/wireless/broadcom/brcm80211/brcmfmac/./tracepoint.h:31:1: note: in expansion of macro 'TRACE_EVENT'
->>        31 | TRACE_EVENT(brcmf_err,
->>           | ^~~~~~~~~~~
->>     drivers/net/wireless/broadcom/brcm80211/brcmfmac/./tracepoint.h: In function 'perf_trace_brcmf_dbg':
->>     include/trace/perf.h:64:16: warning: function 'perf_trace_brcmf_dbg' might be a candidate for 'gnu_printf' format attribute [-Wsuggest-attribute=format]
-> 
->   6. "might be a candidate for 'gnu_printf' format attribute"
-> 
->>        64 |         struct hlist_head *head;                                        \
->>           |                ^~~~~~~~~~
->>     include/trace/trace_events.h:40:9: note: in expansion of macro 'DECLARE_EVENT_CLASS'
->>        40 |         DECLARE_EVENT_CLASS(name,                              \
->>           |         ^~~~~~~~~~~~~~~~~~~
->>     drivers/net/wireless/broadcom/brcm80211/brcmfmac/./tracepoint.h:45:1: note: in expansion of macro 'TRACE_EVENT'
->>        45 | TRACE_EVENT(brcmf_dbg,
->>           | ^~~~~~~~~~~
->> --
->>     In file included from include/trace/define_trace.h:102,
->>                      from drivers/net/wireless/broadcom/brcm80211/brcmsmac/brcms_trace_brcmsmac_msg.h:82,
->>                      from drivers/net/wireless/broadcom/brcm80211/brcmsmac/brcms_trace_events.h:38,
->>                      from drivers/net/wireless/broadcom/brcm80211/brcmsmac/brcms_trace_events.c:22:
->>     drivers/net/wireless/broadcom/brcm80211/brcmsmac/./brcms_trace_brcmsmac_msg.h: In function 'trace_event_get_offsets_brcms_dbg':
->>>> include/trace/trace_events.h:261:16: warning: function 'trace_event_get_offsets_brcms_dbg' might be a candidate for 'gnu_printf' format attribute [-Wsuggest-attribute=format]
-> 
->   7. "might be a candidate for 'gnu_printf' format attribute"
-> 
->>       261 |         struct trace_event_raw_##call __maybe_unused *entry;            \
->>           |                ^~~~~~~~~~~~~~~~
->>     include/trace/trace_events.h:40:9: note: in expansion of macro 'DECLARE_EVENT_CLASS'
->>        40 |         DECLARE_EVENT_CLASS(name,                              \
->>           |         ^~~~~~~~~~~~~~~~~~~
->>     drivers/net/wireless/broadcom/brcm80211/brcmsmac/./brcms_trace_brcmsmac_msg.h:59:1: note: in expansion of macro 'TRACE_EVENT'
->>        59 | TRACE_EVENT(brcms_dbg,
->>           | ^~~~~~~~~~~
->>     In file included from include/trace/define_trace.h:102,
->>                      from drivers/net/wireless/broadcom/brcm80211/brcmsmac/brcms_trace_brcmsmac_msg.h:82,
->>                      from drivers/net/wireless/broadcom/brcm80211/brcmsmac/brcms_trace_events.h:38,
->>                      from drivers/net/wireless/broadcom/brcm80211/brcmsmac/brcms_trace_events.c:22:
->>     drivers/net/wireless/broadcom/brcm80211/brcmsmac/./brcms_trace_brcmsmac_msg.h: In function 'trace_event_raw_event_brcms_dbg':
->>     include/trace/trace_events.h:386:16: warning: function 'trace_event_raw_event_brcms_dbg' might be a candidate for 'gnu_printf' format attribute [-Wsuggest-attribute=format]
-> 
->   8. "might be a candidate for 'gnu_printf' format attribute"
-> 
-> 
->>       386 |         struct trace_event_raw_##call *entry;                           \
->>           |                ^~~~~~~~~~~~~~~~
->>     include/trace/trace_events.h:40:9: note: in expansion of macro 'DECLARE_EVENT_CLASS'
->>        40 |         DECLARE_EVENT_CLASS(name,                              \
->>           |         ^~~~~~~~~~~~~~~~~~~
->>     drivers/net/wireless/broadcom/brcm80211/brcmsmac/./brcms_trace_brcmsmac_msg.h:59:1: note: in expansion of macro 'TRACE_EVENT'
->>        59 | TRACE_EVENT(brcms_dbg,
->>           | ^~~~~~~~~~~
->>     In file included from include/trace/define_trace.h:103,
->>                      from drivers/net/wireless/broadcom/brcm80211/brcmsmac/brcms_trace_brcmsmac_msg.h:82,
->>                      from drivers/net/wireless/broadcom/brcm80211/brcmsmac/brcms_trace_events.h:38,
->>                      from drivers/net/wireless/broadcom/brcm80211/brcmsmac/brcms_trace_events.c:22:
->>     drivers/net/wireless/broadcom/brcm80211/brcmsmac/./brcms_trace_brcmsmac_msg.h: In function 'perf_trace_brcms_dbg':
->>     include/trace/perf.h:64:16: warning: function 'perf_trace_brcms_dbg' might be a candidate for 'gnu_printf' format attribute [-Wsuggest-attribute=format]
-> 
->   9. "might be a candidate for 'gnu_printf' format attribute"
-> 
->>        64 |         struct hlist_head *head;                                        \
->>           |                ^~~~~~~~~~
->>     include/trace/trace_events.h:40:9: note: in expansion of macro 'DECLARE_EVENT_CLASS'
->>        40 |         DECLARE_EVENT_CLASS(name,                              \
->>           |         ^~~~~~~~~~~~~~~~~~~
->>     drivers/net/wireless/broadcom/brcm80211/brcmsmac/./brcms_trace_brcmsmac_msg.h:59:1: note: in expansion of macro 'TRACE_EVENT'
->>        59 | TRACE_EVENT(brcms_dbg,
->>           | ^~~~~~~~~~~
->>
->>
->> vim +261 include/trace/trace_events.h
->>
->> 55de2c0b5610cb include/trace/trace_events.h Masami Hiramatsu         2021-11-22  253
->> 091ad3658e3c76 include/trace/ftrace.h       Ingo Molnar              2009-11-26  254  #undef DECLARE_EVENT_CLASS
->> 091ad3658e3c76 include/trace/ftrace.h       Ingo Molnar              2009-11-26  255  #define DECLARE_EVENT_CLASS(call, proto, args, tstruct, assign, print)	\
->> d0ee8f4a1f5f3d include/trace/trace_events.h Steven Rostedt (Red Hat  2015-05-13  256) static inline notrace int trace_event_get_offsets_##call(		\
->> 62323a148fbeb0 include/trace/trace_events.h Steven Rostedt (Red Hat  2015-05-13  257) 	struct trace_event_data_offsets_##call *__data_offsets, proto)	\
->> 7fcb7c472f455d include/trace/ftrace.h       Li Zefan                 2009-06-01  258  {									\
->> 7fcb7c472f455d include/trace/ftrace.h       Li Zefan                 2009-06-01  259  	int __data_size = 0;						\
->> 114e7b52dee69c include/trace/ftrace.h       Filipe Brandenburger     2014-02-28  260  	int __maybe_unused __item_length;				\
->> a7237765730a10 include/trace/trace_events.h Steven Rostedt (Red Hat  2015-05-13 @261) 	struct trace_event_raw_##call __maybe_unused *entry;		\
->> 7fcb7c472f455d include/trace/ftrace.h       Li Zefan                 2009-06-01  262  									\
->> 7fcb7c472f455d include/trace/ftrace.h       Li Zefan                 2009-06-01  263  	tstruct;							\
->> 7fcb7c472f455d include/trace/ftrace.h       Li Zefan                 2009-06-01  264  									\
->> 7fcb7c472f455d include/trace/ftrace.h       Li Zefan                 2009-06-01  265  	return __data_size;						\
->> 7fcb7c472f455d include/trace/ftrace.h       Li Zefan                 2009-06-01  266  }
->> 7fcb7c472f455d include/trace/ftrace.h       Li Zefan                 2009-06-01  267
->>
-> 
-> Really? 9 warnings about something that *MIGHT* be a candidate for
-> gnu_printf format attribute?  This is a macro that expanded into something
-> that could possibly use the printf format, but is nested deep in macro
-> magic.
-> 
-> Can we please shut this up?
+Remove a repeated "#include <drm/drm_print.h>"
 
-Need a vote? Here it is: +1
+Signed-off-by: Guo Zhengkui <guozhengkui@vivo.com>
+---
+ drivers/gpu/drm/amd/display/dc/os_types.h | 2 --
+ 1 file changed, 2 deletions(-)
 
-Regards,
-Arend
+diff --git a/drivers/gpu/drm/amd/display/dc/os_types.h b/drivers/gpu/drm/amd/display/dc/os_types.h
+index 795dd486b6d6..6b88ae14f1f9 100644
+--- a/drivers/gpu/drm/amd/display/dc/os_types.h
++++ b/drivers/gpu/drm/amd/display/dc/os_types.h
+@@ -39,8 +39,6 @@
+ #include <drm/display/drm_dp_helper.h>
+ #include <drm/drm_print.h>
+ 
+-#include <drm/drm_print.h>
+-
+ #include "cgs_common.h"
+ 
+ #if defined(__BIG_ENDIAN) && !defined(BIGENDIAN_CPU)
+-- 
+2.20.1
+

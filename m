@@ -2,133 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A763056916A
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 20:12:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B4D0569170
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 20:12:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233289AbiGFSLr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Jul 2022 14:11:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54490 "EHLO
+        id S229854AbiGFSMV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Jul 2022 14:12:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54994 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233692AbiGFSLp (ORCPT
+        with ESMTP id S233692AbiGFSMS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Jul 2022 14:11:45 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFB4E29C92;
-        Wed,  6 Jul 2022 11:11:44 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7CAE561FE3;
-        Wed,  6 Jul 2022 18:11:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DB382C3411C;
-        Wed,  6 Jul 2022 18:11:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1657131103;
-        bh=c7Cx7lWTrDQaho+shcjrP2iASNe68MqPSBAKq2zNm4w=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=ooydOsgIWt4EHDZ2OXmRHLrdlmzSbtfypB3EJnw1yD0ZCs0+Glj/m6e+856RxARxQ
-         uy71BTVy45+LbMfmNx4Z1KuiuwwZrEBJIBa8jl1pAuhlCvxbNOWVhYNLY1JcvczHyM
-         CVOJhXLsXXKgsVVEYrsCXBLjDBE13H1m/q3ZxGPB2QWVXugNL/5Rc+evqtBvV7on2D
-         L6q5mrWTXqhop6F1z6VAU0lKaTQpSQSiV+Vj9Gp0XUuoSLY9MrZdEDBHzaZxOo980l
-         cap/p6ZApUL/aEGvQ0t5wib5RQ0rOvAPvh6OpRJGFN59lCkyPbafmyF8yJ4s3RSSK0
-         8c0my55tAfIyA==
-Received: by mail-vs1-f44.google.com with SMTP id a184so6816414vsa.1;
-        Wed, 06 Jul 2022 11:11:43 -0700 (PDT)
-X-Gm-Message-State: AJIora/kUx48csSvOyIDuh1Nhj0LbypuMOAogzLd+CSLL1heC+RJgDKw
-        2POs4RwgMF9wdpC8hG4OU7xqQgWP/GsJUSSOVg==
-X-Google-Smtp-Source: AGRyM1trwyvSUtHyHigzbb6dGeQLAewwyn/Ih2DDQyVDcW25FgSTk48k8uDxAPcTpwGjJUVaOHaJHNB/o6IeRy5qfXQ=
-X-Received: by 2002:a67:c187:0:b0:354:3ab2:ba65 with SMTP id
- h7-20020a67c187000000b003543ab2ba65mr23005594vsj.53.1657131102853; Wed, 06
- Jul 2022 11:11:42 -0700 (PDT)
+        Wed, 6 Jul 2022 14:12:18 -0400
+Received: from mail-wr1-f43.google.com (mail-wr1-f43.google.com [209.85.221.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52D5A2980A;
+        Wed,  6 Jul 2022 11:12:17 -0700 (PDT)
+Received: by mail-wr1-f43.google.com with SMTP id a5so8477482wrx.12;
+        Wed, 06 Jul 2022 11:12:17 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=t5lVZBdH+VjmOv7FmgoklMRu15YQcElApUVo2YVt++0=;
+        b=otMuRHN172XZeqyhVFgwkE27iwSAidfqMrUonZZRp4ZJV981mKXyjt1P2OeH6/emTq
+         6HwTy/6hJpabZUAi7r0dzPakYyBmZZk90Ft3SHg7FW85cKSlm7aQOcWMuVdUsXmESzxZ
+         7ZDoElT9inUCz68Vpy0xoWELT/zfftUPXWs+8R7/kW/d2dWF/bUZ9P/xFCX1Lw4QZZmo
+         bCusZWvBShjkqZmo0H6hMOvzgATa8ucnKkVP2ouZYlXkJPV2Kzixy3f5fRHF1Ps1plJV
+         QjMj0wuiuh1wR1yMluuEOOOGMOC0CQxf89e3TUSvYrwKhwCI2ogqJGz7vF6dg+a4nmvW
+         XsoA==
+X-Gm-Message-State: AJIora+X9r0Oz/QHHY0XVlK4pS2m6bpFcaB1W0j0z93Oyv0tmZXtWF4Y
+        pWLNevnBi15ZGB9WgvBTTOfOvz9BmY4=
+X-Google-Smtp-Source: AGRyM1vT7YJXzo3GS2N25x4F2ofy2jQWon0j79AeOBImfzZaECW5hYXin+Fg10Ycf6KTS8CflYRwWg==
+X-Received: by 2002:adf:d206:0:b0:21d:6434:a158 with SMTP id j6-20020adfd206000000b0021d6434a158mr21449469wrh.37.1657131135743;
+        Wed, 06 Jul 2022 11:12:15 -0700 (PDT)
+Received: from liuwe-devbox-debian-v2 ([51.145.34.42])
+        by smtp.gmail.com with ESMTPSA id az42-20020a05600c602a00b003a1a02c6d7bsm11576777wmb.35.2022.07.06.11.12.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 06 Jul 2022 11:12:15 -0700 (PDT)
+Date:   Wed, 6 Jul 2022 18:12:07 +0000
+From:   Wei Liu <wei.liu@kernel.org>
+To:     Michael Kelley <mikelley@microsoft.com>
+Cc:     kys@microsoft.com, haiyangz@microsoft.com, sthemmin@microsoft.com,
+        wei.liu@kernel.org, decui@microsoft.com, corbet@lwn.net,
+        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-hyperv@vger.kernel.org
+Subject: Re: [PATCH 0/3] Documentation: hyperv: Add basic info on Hyper-V
+ enlightenments
+Message-ID: <20220706181207.45jcurksoblsrerq@liuwe-devbox-debian-v2>
+References: <1657035822-47950-1-git-send-email-mikelley@microsoft.com>
 MIME-Version: 1.0
-References: <20220629060435.25297-1-vidyas@nvidia.com> <20220629060435.25297-3-vidyas@nvidia.com>
- <20220630210449.GA3283899-robh@kernel.org> <e971a557-3387-efcf-87ec-983b998c5e93@nvidia.com>
-In-Reply-To: <e971a557-3387-efcf-87ec-983b998c5e93@nvidia.com>
-From:   Rob Herring <robh@kernel.org>
-Date:   Wed, 6 Jul 2022 12:11:31 -0600
-X-Gmail-Original-Message-ID: <CAL_JsqJQVJerfojCku9tmSa1_b2EDkvVgCs+2SvCmjCMe+gfyA@mail.gmail.com>
-Message-ID: <CAL_JsqJQVJerfojCku9tmSa1_b2EDkvVgCs+2SvCmjCMe+gfyA@mail.gmail.com>
-Subject: Re: [PATCH V3 02/11] dt-bindings: pci: tegra: Convert to json-schema
-To:     Vidya Sagar <vidyas@nvidia.com>
-Cc:     Bjorn Helgaas <bhelgaas@google.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jon Hunter <jonathanh@nvidia.com>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Vinod <vkoul@kernel.org>, Krzysztof Wilczynski <kw@linux.com>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Mikko Perttunen <mperttunen@nvidia.com>,
-        PCI <linux-pci@vger.kernel.org>, devicetree@vger.kernel.org,
-        linux-tegra <linux-tegra@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "open list:GENERIC PHY FRAMEWORK" <linux-phy@lists.infradead.org>,
-        Krishna Thota <kthota@nvidia.com>,
-        Manikanta Maddireddy <mmaddireddy@nvidia.com>,
-        sagar.tv@gmail.com, Thierry Reding <treding@nvidia.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1657035822-47950-1-git-send-email-mikelley@microsoft.com>
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jul 6, 2022 at 3:53 AM Vidya Sagar <vidyas@nvidia.com> wrote:
->
->
->
-> On 7/1/2022 2:34 AM, Rob Herring wrote:
-> > External email: Use caution opening links or attachments
-> >
-> >
-> > On Wed, Jun 29, 2022 at 11:34:26AM +0530, Vidya Sagar wrote:
-> >> From: Thierry Reding <treding@nvidia.com>
-> >>
-> >> Convert the Tegra194 PCIe bindings from the free-form text format to
-> >> json-schema.
-> >>
-> >> Signed-off-by: Vidya Sagar <vidyas@nvidia.com>
-> >> Signed-off-by: Thierry Reding <treding@nvidia.com>
-> >> ---
+On Tue, Jul 05, 2022 at 08:43:39AM -0700, Michael Kelley wrote:
+> This documentation is a high level overview to explain the basics
+> of Linux running as a guest on Hyper-V. The intent is to document
+> the forest, not the trees. The Hyper-V Top Level Functional Spec
+> provides conceptual material and API details for the core Hyper-V
+> hypervisor, and this documentation provides additional info on
+> how that functionality is applied to Linux. Also, there's no
+> public documentation on VMbus or the VMbus synthetic devices, so
+> this documentation helps fill that gap at a conceptual level. This
+> documentation is not API-level documentation, which can be seen
+> in the code and associated comments.
+> 
+> More topics will be added in future patches, including:
+> 
+> * Miscellaneous synthetic devices like KVP, timesync, VSS, etc.
 
-> >> +  nvidia,bpmp:
-> >> +    $ref: /schemas/types.yaml#/definitions/phandle-array
-> >> +    description: |
-> >> +      Must contain a pair of phandle to BPMP controller node followed by controller ID. Following
-> >> +      are the controller IDs for each controller:
-> >> +
-> >> +        0: C0
-> >> +        1: C1
-> >> +        2: C2
-> >> +        3: C3
-> >> +        4: C4
-> >> +        5: C5
-> >> +    items:
-> >> +      - items:
-> >> +          - minimum: 0
-> >> +            maximum: 0xffffffff
-> >
-> > That's already the limit. Just a description is fine.
-> >
-> >> +          - enum: [ 0, 1, 2, 3, 4, 5 ]
-> >
-> > maximum: 5
->
-> Setting the maximum to '5' is resulting in the following error.
->
-> pcie-ep@141a0000: nvidia,bpmp:0:0: 4294967295 is greater than the
-> maximum of 5
->
-> Could you please help me understand why I'm seeing this error?
+There is an UIO driver for Hyper-V. I think that falls under this
+category. Not sure if that's on your radar to cover?
 
-This is what you need:
-
-items:
-  - items:
-      - description: phandle to BPMP controller node
-      - description: controller ID
-        maximum: 5
+Thanks,
+Wei.

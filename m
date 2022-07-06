@@ -2,100 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 26B8E5689A1
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 15:36:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C54925689AA
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 15:38:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232632AbiGFNgw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Jul 2022 09:36:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36944 "EHLO
+        id S233726AbiGFNhv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Jul 2022 09:37:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37546 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232239AbiGFNgu (ORCPT
+        with ESMTP id S233573AbiGFNhj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Jul 2022 09:36:50 -0400
-Received: from mail.ispras.ru (mail.ispras.ru [83.149.199.84])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED44B5F66;
-        Wed,  6 Jul 2022 06:36:48 -0700 (PDT)
-Received: from andrey-lpc.intra.ispras.ru (unknown [83.149.199.65])
-        by mail.ispras.ru (Postfix) with ESMTPS id D6A4740737B9;
-        Wed,  6 Jul 2022 13:36:44 +0000 (UTC)
-From:   Andrey Strachuk <strochuk@ispras.ru>
-To:     "Darrick J. Wong" <djwong@kernel.org>
-Cc:     Andrey Strachuk <strochuk@ispras.ru>,
-        Dave Chinner <dchinner@redhat.com>,
-        Allison Henderson <allison.henderson@oracle.com>,
-        Chandan Babu R <chandan.babu@oracle.com>,
-        linux-xfs@vger.kernel.org, linux-kernel@vger.kernel.org,
-        ldv-project@linuxtesting.org
-Subject: [PATCH] xfs: removed useless condition in function xfs_attr_node_get
-Date:   Wed,  6 Jul 2022 16:36:27 +0300
-Message-Id: <20220706133627.11198-1-strochuk@ispras.ru>
-X-Mailer: git-send-email 2.25.1
+        Wed, 6 Jul 2022 09:37:39 -0400
+Received: from relay05.th.seeweb.it (relay05.th.seeweb.it [5.144.164.166])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B37022B0D
+        for <linux-kernel@vger.kernel.org>; Wed,  6 Jul 2022 06:37:39 -0700 (PDT)
+Received: from [192.168.1.101] (abxi46.neoplus.adsl.tpnet.pl [83.9.2.46])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by m-r2.th.seeweb.it (Postfix) with ESMTPSA id 221B13F715;
+        Wed,  6 Jul 2022 15:37:37 +0200 (CEST)
+Message-ID: <43572937-8505-ddf0-1fe0-99ddfe486c11@somainline.org>
+Date:   Wed, 6 Jul 2022 15:37:36 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH 04/13] ARM: dts: qcom: disable smb208 regulators for
+ ipq8064-rb3011
+Content-Language: en-US
+To:     Christian Marangi <ansuelsmth@gmail.com>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Jonathan McDowell <noodles@earth.li>
+References: <20220705133917.8405-1-ansuelsmth@gmail.com>
+ <20220705133917.8405-5-ansuelsmth@gmail.com>
+ <8a394fa3-92fb-d162-b4ee-df010a09aed0@somainline.org>
+ <62c58a60.1c69fb81.25b26.e72a@mx.google.com>
+ <36a68a0b-0c18-deb5-609c-2128aa3fc21f@somainline.org>
+ <62c58fca.1c69fb81.76f6a.15f4@mx.google.com>
+From:   Konrad Dybcio <konrad.dybcio@somainline.org>
+In-Reply-To: <62c58fca.1c69fb81.76f6a.15f4@mx.google.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-At line 1561, variable "state" is being compared
-with NULL every loop iteration.
 
--------------------------------------------------------------------
-1561	for (i = 0; state != NULL && i < state->path.active; i++) {
-1562		xfs_trans_brelse(args->trans, state->path.blk[i].bp);
-1563		state->path.blk[i].bp = NULL;
-1564	}
--------------------------------------------------------------------
 
-However, it cannot be NULL.
+On 6.07.2022 15:19, Christian Marangi wrote:
+> On Wed, Jul 06, 2022 at 03:31:55PM +0200, Konrad Dybcio wrote:
+>>
+>>
+>> On 6.07.2022 14:56, Christian Marangi wrote:
+>>> On Wed, Jul 06, 2022 at 03:03:32PM +0200, Konrad Dybcio wrote:
+>>>>
+>>>>
+>>>> On 5.07.2022 15:39, Christian Marangi wrote:
+>>>>> Mikrotik RB3011 have a special configuration where the regulators are
+>>>>> not the common smb208 controlled by RPM but they use a TPS563900
+>>>>> controlled via i2c. Disable the smb208 for this specific device.
+>>>> Ok, so that answers my question from the previous email.
+>>>> Please define the SMB208 regulators only in the DTs of
+>>>> boards that actually use it, as it is not a SoC component as
+>>>> far as I can tell.
+>>>>
+>>>> Konrad
+>>>
+>>> This was already discuessed,
+>> Yeah sorry, I didn't notice earlier and started reviewing patches
+>> that were already reviewed by others.
+>>
+> 
+> Np, thanks for the review.
+> 
+>>
+>> rb3011 is the exception, qcom for ipq8064
+>>> recommends to use smb208 but gives the option to implement it in their
+>>> own way. So again we have 28 device with smb208 and 1 device that use
+>>> its own special way...
+>>>
+>>> Wonder if a separate dtsi can be used for this if we really can't put
+>>> smb208 in ipq8064 dtsi?
+>> There's msm8916-pm8916.dtsi. You can follow.
+> 
+> Ok, will put the smb208 definition to a separate dtsi, something like
+> ipq8064-smb208.dtsi? or ipq8064-rpm-smb208.dtsi? Looks also cleaner that
+> way.
+You can create ipq8064-smb208.dtsi that will also contain every ipq8064-plus-smb208-specific
+configuration, such as regulator assignemnts to in-SoC components (like PHYs, SDHCIs etc.).
 
-----------------------------------------
-1546	state = xfs_da_state_alloc(args);
-----------------------------------------
-
-xfs_da_state_alloc calls kmem_cache_zalloc. kmem_cache_zalloc is
-called with __GFP_NOFAIL flag and, therefore, it cannot return NULL.
-
---------------------------------------------------------------------------
-	struct xfs_da_state *
-	xfs_da_state_alloc(
-	struct xfs_da_args	*args)
-	{
-		struct xfs_da_state	*state;
-
-		state = kmem_cache_zalloc(xfs_da_state_cache, GFP_NOFS | __GFP_NOFAIL);
-		state->args = args;
-		state->mp = args->dp->i_mount;
-		return state;
-	}
---------------------------------------------------------------------------
-
-Found by Linux Verification Center (linuxtesting.org) with SVACE.
-
-Signed-off-by: Andrey Strachuk <strochuk@ispras.ru>
-
-Fixes: 4d0cdd2bb8f0 ("xfs: clean up xfs_attr_node_hasname")
----
- fs/xfs/libxfs/xfs_attr.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/fs/xfs/libxfs/xfs_attr.c b/fs/xfs/libxfs/xfs_attr.c
-index 224649a76cbb..6b8857e53add 100644
---- a/fs/xfs/libxfs/xfs_attr.c
-+++ b/fs/xfs/libxfs/xfs_attr.c
-@@ -1558,7 +1558,7 @@ xfs_attr_node_get(
- 	 * If not in a transaction, we have to release all the buffers.
- 	 */
- out_release:
--	for (i = 0; state != NULL && i < state->path.active; i++) {
-+	for (i = 0; i < state->path.active; i++) {
- 		xfs_trans_brelse(args->trans, state->path.blk[i].bp);
- 		state->path.blk[i].bp = NULL;
- 	}
--- 
-2.25.1
-
+Konrad
+> 
+>>
+>> Konrad
+>>
+>> [...]
+> 

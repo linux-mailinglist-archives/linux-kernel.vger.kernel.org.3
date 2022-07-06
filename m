@@ -2,79 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A3CA056874A
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 13:50:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2525756874C
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 13:50:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232994AbiGFLum (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Jul 2022 07:50:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51624 "EHLO
+        id S233130AbiGFLur (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Jul 2022 07:50:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51680 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232824AbiGFLuk (ORCPT
+        with ESMTP id S233029AbiGFLuo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Jul 2022 07:50:40 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2946286F7
-        for <linux-kernel@vger.kernel.org>; Wed,  6 Jul 2022 04:50:39 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Wed, 6 Jul 2022 07:50:44 -0400
+X-Greylist: delayed 11289 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 06 Jul 2022 04:50:42 PDT
+Received: from mout-p-202.mailbox.org (mout-p-202.mailbox.org [IPv6:2001:67c:2050:0:465::202])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38980286E2;
+        Wed,  6 Jul 2022 04:50:42 -0700 (PDT)
+Received: from smtp2.mailbox.org (smtp2.mailbox.org [IPv6:2001:67c:2050:b231:465::2])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id AD472B81C0D
-        for <linux-kernel@vger.kernel.org>; Wed,  6 Jul 2022 11:50:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E43FFC3411C;
-        Wed,  6 Jul 2022 11:50:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1657108237;
-        bh=pIkja7u4jVh70cjtOcr/icdaQPCTUe5JoMbq34s2vCA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=AZcs/8PQUqBcCYbonWkSDNfeylddwt8DzSYGJceY9yQoymUm1LGtSSG4b7LjShl/7
-         WZ2qs49p9ECdbmNoFL8nhUg0Q0m7QIs0zLU37eHfOGr1GFyMoHEh8juucfoVjyMmIR
-         ajvq7TmLNCUyZHv4keoy/mTWt3SOqE0iwG5syLwvpZymYoObj/wihM6BGcOawmgbrz
-         9uQ1gruOt4q9DFe5vAQv1ino7n6NpOQ+V3+FOiz3OSXF0FdnoZ5C9r6yFG2643vVpN
-         9/N7yibHBWvj1Zmjy0dc0nHzxgb9JO/SxG+7fIHDKcyvqfDrpbhM0h+SSJGjUP1So6
-         OMmUMmPsp7dHw==
-Date:   Wed, 6 Jul 2022 12:50:31 +0100
-From:   Will Deacon <will@kernel.org>
-To:     yf.wang@mediatek.com
-Cc:     Robin Murphy <robin.murphy@arm.com>,
-        Joerg Roedel <joro@8bytes.org>, Yong Wu <Yong.Wu@mediatek.com>,
-        Miles Chen <miles.chen@mediatek.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        wsd_upstream@mediatek.com, Libo Kang <Libo.Kang@mediatek.com>,
-        Ning Li <ning.li@mediatek.com>,
-        linux-arm-kernel@lists.infradead.org,
-        iommu@lists.linux-foundation.org, linux-kernel@vger.kernel.org,
-        linux-mediatek@lists.infradead.org
-Subject: Re: [PATCH v12 0/2] iommu/mediatek: TTBR up to 35bit support
-Message-ID: <20220706115028.GC2403@willie-the-truck>
-References: <20220630092927.24925-1-yf.wang@mediatek.com>
+        by mout-p-202.mailbox.org (Postfix) with ESMTPS id 4LdHt53CyRz9sWy;
+        Wed,  6 Jul 2022 13:50:37 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mailbox.org; s=mail20150812;
+        t=1657108237;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=X4wqxoMq5oR8WkvTArbbG1sxY1bReFEEjrwDGNLdXas=;
+        b=dxyQbe93rW3+y0ijBIAK8fWQHkSfmwz01/hLaCPeTK/37mShVNU59E70jutpBIcXDmF3hK
+        MTP8dxh4tddo70cZsSHAVz+U2wBBRiZkzvlvit+8snXOqN+1umZth1Le+ORp3Zpvkw9+Fx
+        PtA55w7U12dLXNO3JK0VzCL4p20f1SMY/O4L8dsAPPEpqJ0iNXOTSsIIYunc9X8jUJlmoM
+        JvSjs4d5OjMUP8Gb5Gq4WOGG8dXBdzGITPqDmsRgIUQZ+rb+7VuEYZsTCz01L2S4325NdE
+        KLo6aNZU+lvDKNmyAlvTdMnAel2ESQ2YuuvMRLK3b7SSiPFB9kgwOzDovPa0hg==
+Date:   Wed, 6 Jul 2022 13:50:36 +0200 (CEST)
+From:   torvic9@mailbox.org
+To:     "Limonciello, Mario" <Mario.Limonciello@amd.com>
+Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "platform-driver-x86@vger.kernel.org" 
+        <platform-driver-x86@vger.kernel.org>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Jani Nikula <jani.nikula@intel.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>
+Message-ID: <404021154.598.1657108236295@office.mailbox.org>
+In-Reply-To: <MN0PR12MB61015A04C6E4202B2E8E08A9E2819@MN0PR12MB6101.namprd12.prod.outlook.com>
+References: <272584304.305738.1657029005216@office.mailbox.org>
+ <CAHk-=wivGGgs9K_TfQYTW4RzH_C-JVfLZKNA5+hKQU0eNFBeiw@mail.gmail.com>
+ <MN0PR12MB61015A04C6E4202B2E8E08A9E2819@MN0PR12MB6101.namprd12.prod.outlook.com>
+Subject: RE: [Regression?] Linux 5.19-rc5 gets stuck on boot, not rc4
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220630092927.24925-1-yf.wang@mediatek.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Priority: 3
+Importance: Normal
+X-MBO-RS-ID: b1a714af9c1f0358d8e
+X-MBO-RS-META: 6zsa5ug3yrfakz3br9dnuoxmu8jjz41c
+X-Rspamd-Queue-Id: 4LdHt53CyRz9sWy
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 30, 2022 at 05:29:24PM +0800, yf.wang@mediatek.com wrote:
-> This patchset adds MediaTek TTBR up to 35bit support for single normal zone.
+
+> Limonciello, Mario <mario.limonciello@amd.com> hat am 05.07.2022 17:10 GMT geschrieben:
 > 
-> Changes in v12:
-> - Update [PATCH 1/2]: remove GENMASK(31, 7)
-> - Update [PATCH 2/2]: remove MMU_PT_ADDR_MASK definition.
+>  
+> [Public]
+> 
+> > -----Original Message-----
+> > From: Linus Torvalds <torvalds@linux-foundation.org>
+> > Sent: Tuesday, July 5, 2022 11:40
+> > To: Tor Vic <torvic9@mailbox.org>
+> > Cc: linux-kernel@vger.kernel.org; platform-driver-x86@vger.kernel.org;
+> > Hans de Goede <hdegoede@redhat.com>; Jani Nikula
+> > <jani.nikula@intel.com>
+> > Subject: Re: [Regression?] Linux 5.19-rc5 gets stuck on boot, not rc4
+> > 
+> > On Tue, Jul 5, 2022 at 6:50 AM <torvic9@mailbox.org> wrote:
+> > >
+> > > Linux 5.19-rc5 does not boot on my Kaby Lake Thinkpad.
+> > > rc3 and rc4 were still fine, so I guess something between rc4 and rc5
+> > > introduced a regression.
+> > 
+> > Sounds that way.
+> > 
+> > > Unfortunately, there are no errors or warning messages.
+> > > It gets stuck quite early on boot, about the time USB is initialized,
+> > > so less than 1 second into post-bootloader boot.
+> > > It then just sits there doing nothing - SysRq still works though.
+> > 
+> > There aren't all that many changes in rc5, and your hardware looks
+> > *very* standard (all intel chipset, and a Samsung SM961 SSD).
+> > 
+> > And with the lack of details, we'll either need a bisect:
+> > 
+> > > I don't have time for a bisect, but I thought I'll let you know about
+> > > this issue, and maybe someone already has an idea.
+> > 
+> > or we'll need more reports..
+> > 
+> > > Some system information below. Root filesystem is f2fs.
+> > 
+> > Ok, f2fs is certainly unusual, but there are no f2fs changes in rc5.
+> > 
+> > There's some PM changes for i915 ("drm/i915/dgfx: Disable d3cold at
+> > gfx root port") and a couple of thinkpad-acpi platform driver updates,
+> > so I'm adding a few random people to the cc in case somebody goes
+> > "ahh..."
+> > 
+> 
+> If a bisect isn't possible for you the kernel command line should be pretty
+> helpful to isolate which area the problem is introduced.
+> I'd say start out with "nomodeset" on the kernel command line to prevent
+> i915 from loading.  If that fixes it, hopefully it's a small number of commits
+> to peel back like the one Linus mentioned.
+> 
+> For thinkpad_acpi you can try modprobe.blacklist=thinkpad_acpi.
+> 
+> > But otherwise I think we'll just need more reports or info to even
+> > start guessing.
+> > 
+> >               Linus
 
-For both patches:
+Reverting the three i915 and the two thinkpad_acpi commits introduced with rc5
+does not solve this problem. Maybe I missed something else...
 
-Acked-by: Will Deacon <will@kernel.org>
-
-Joerg -- please can you pick these up for 5.20?
-
-Thanks,
-
-Will
+Tor

@@ -2,58 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BB859568CBA
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 17:27:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 44846568CBF
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 17:28:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233240AbiGFP1t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Jul 2022 11:27:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41222 "EHLO
+        id S233331AbiGFP2j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Jul 2022 11:28:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42168 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231500AbiGFP1s (ORCPT
+        with ESMTP id S231927AbiGFP2h (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Jul 2022 11:27:48 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58A36C29;
-        Wed,  6 Jul 2022 08:27:47 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id C9DE6CE1FF3;
-        Wed,  6 Jul 2022 15:27:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A993EC3411C;
-        Wed,  6 Jul 2022 15:27:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1657121263;
-        bh=pzDkkZF4zwiLIMVduMcEQXRah9THlaVSc9/xibzqO6w=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=kpKrtpkIIHrOr2yO/+Ok6rPw50lR92dFVr8RjKtD2T3XE+XGs/yh7qem2hvYYkmpI
-         UYgJ4/LStRM9ZAd7ddEWAQJciintk4J0HXlmt2OFiJUKUntODyKVo+iCnkmMs3iHaO
-         7PAb8GuIuMeZD8q+bUQ15EhFFGxccev3QjgTqnv6eUgm5LnJ2AqbonImE2NjGvMCYt
-         mf1x1iKNjrTz/WGwKtxfbZUy/16HBne7F6rG91NFN+mAZLy31B4rIyieH5EZweRWRA
-         Lc65a1XiU62XXny+RW1NWHdO8gk8MZNktBpLuhv7eJDXGUZ1+xyqyvBgkXHe3x69+2
-         AHUtumixbliug==
-Date:   Wed, 6 Jul 2022 17:27:32 +0200
-From:   Marek =?UTF-8?B?QmVow7pu?= <kabel@kernel.org>
-To:     Pali =?UTF-8?B?Um9ow6Fy?= <pali@kernel.org>
-Cc:     Pavel Machek <pavel@ucw.cz>, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-leds@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 1/2] [RFT] dt-bindings: leds: Add
- cznic,turris1x-leds.yaml binding
-Message-ID: <20220706172732.6228d180@thinkpad>
-In-Reply-To: <20220706111912.hz2mx4dc35lgq6l5@pali>
-References: <20220705000448.14337-1-pali@kernel.org>
-        <20220705155929.25565-1-pali@kernel.org>
-        <20220706131507.353f0bed@thinkpad>
-        <20220706111912.hz2mx4dc35lgq6l5@pali>
-X-Mailer: Claws Mail 3.19.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        Wed, 6 Jul 2022 11:28:37 -0400
+Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A21841AD87
+        for <linux-kernel@vger.kernel.org>; Wed,  6 Jul 2022 08:28:35 -0700 (PDT)
+Received: by mail-ej1-x636.google.com with SMTP id q6so27676765eji.13
+        for <linux-kernel@vger.kernel.org>; Wed, 06 Jul 2022 08:28:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=bJT7FdOWxd+3nnySZrE0QuUxvv8Z3Xa//ZmqvjylFS4=;
+        b=ILCUdFHtPfMH9nrZAwCzEevwotaKhk0OQgaUs/4ENgCUDl7RZKhGEEsgoQZWZOv6HE
+         CG6pGyfMEQcf29ZqnrjOR6esGyDTcV99LO/5b5mZPj3ZRyp0UCguyLsCWlNLB0WsxLcd
+         SGkjI2x5Z2bnhnAqME6nZtsatFNz2+H14zAeWluepv5Rqh2X1XBJY2LwQQzdW8tZSIzM
+         WI70UTNuJwCiarSla8Wnzm2+mlKwGCc596aqBnEV+wHKZ2W/LhUm0jvktIIjvt3UGcwB
+         dGPfX4JsTe60C/r8M2SKZD9amq7D0oRO9fnm2RucDiWiwZHG2RiOxcBlcUlUEsMlChZL
+         1Q1Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=bJT7FdOWxd+3nnySZrE0QuUxvv8Z3Xa//ZmqvjylFS4=;
+        b=EOBv0l+hDsrhknIMxhZvCj0+ghqmoE4Oo3uhuPj5rTJ/grmnf2uiM9uhgv+eff4tUT
+         WxResyVVOdS8r0yk9fZPVA5StWp7uobP1hkF9vmKtR0gjz4t8/nW81/hRarPItfJUEfe
+         NQPU0u0zKIXCwsMIqTKzaakVB2Sfy84lZUrXoyXbMLC6tJp4FzLiiu6jWUa6H+LxREd0
+         A/+wiYAaaQvDUaHbaPvRKJeGmQs91iLleLSOm2WlZJKCK/rB/+juivZSsZ4Wa55oq5Wb
+         Zrutc9uTfnVTKyGlDH3IgO7o87pfuNoCevBpZWdXGvSPzUz74KitzpNiu55iKrrQG85m
+         ODlQ==
+X-Gm-Message-State: AJIora8LbYY8ZW7JcvfXDNm1VsSB4LXBQElnIHvP/9tu3SWpHjN0+31r
+        42nCx4Gbg9SMpBAb/HTC8XBF4Q==
+X-Google-Smtp-Source: AGRyM1us+WTKDCZDbDNiudzERluNIKifdOpVHHRXxQ9XkzJpDtUXKV36gyo706/NYT8yWO9XgGOfOA==
+X-Received: by 2002:a17:906:3989:b0:70c:2090:b498 with SMTP id h9-20020a170906398900b0070c2090b498mr38979157eje.56.1657121314194;
+        Wed, 06 Jul 2022 08:28:34 -0700 (PDT)
+Received: from prec5560.. (freifunk-gw.bsa1-cpe1.syseleven.net. [176.74.57.43])
+        by smtp.gmail.com with ESMTPSA id s12-20020a1709064d8c00b00722e50e259asm17340684eju.102.2022.07.06.08.28.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 06 Jul 2022 08:28:33 -0700 (PDT)
+From:   Robert Foss <robert.foss@linaro.org>
+To:     agross@kernel.org, bjorn.andersson@linaro.org,
+        konrad.dybcio@somainline.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, linux-arm-msm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Cc:     Robert Foss <robert.foss@linaro.org>, Vinod Koul <vkoul@kernel.org>
+Subject: [PATCH v8] arm64: dts: qcom: sm8350: Replace integers with rpmpd defines
+Date:   Wed,  6 Jul 2022 17:28:30 +0200
+Message-Id: <20220706152830.2021197-1-robert.foss@linaro.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -61,46 +71,74 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 6 Jul 2022 13:19:12 +0200
-Pali Roh=C3=A1r <pali@kernel.org> wrote:
+Replace &rpmhpd power domain integers with their respective defines
+in order to improve legibility.
 
-> On Wednesday 06 July 2022 13:15:07 Marek Beh=C3=BAn wrote:
-> > On Tue,  5 Jul 2022 17:59:28 +0200
-> > Pali Roh=C3=A1r <pali@kernel.org> wrote:
-> >  =20
-> > > +examples:
-> > > +  - |
-> > > +    #include <dt-bindings/leds/common.h>
-> > > +
-> > > +    cpld@3,0 { =20
-> >=20
-> > The generic node name should be just "bus". That it is a CPLD
-> > implementation should come from compatible string. =20
->=20
-> Sorry, I do not understand why "bus". Why other memory chips are named
-> e.g. "nand" or "nor" and not "bus" too?
+Signed-off-by: Robert Foss <robert.foss@linaro.org>
+Reviewed-by: Konrad Dybcio <konrad.dybcio@somainline.org>
+Reviewed-by: Vinod Koul <vkoul@kernel.org>
+---
 
-As far as I understand this is because that is the preferred name for
-busses and this is a bus, since there is also the simple-bus compatible.
 
-> By this logic should not be _every_ node called just "bus"? Hm... and=20
-> are names needed at all then?
+Changes since v6
+ - Add r-b - Konrad
 
-:-)
+Changes since v7
+ - Add r-b - Vinod
+ - Split off from series
 
-The schema
-  https://github.com/devicetree-org/dt-schema/blob/main/dtschema/schemas/si=
-mple-bus.yaml
-allows for different names (soc|axi|ahb|*-bus) to avoid warnings on
-existing old dts files.
 
-The preferred way is to not have the implementation in nodename,
-similar to how we use 'switch' instead of 'mv88e6xxx', or
-'ethernet-phy' instead of 'mv88e151x', or 'led-controller', ...
+ arch/arm64/boot/dts/qcom/sm8350.dtsi | 16 ++++++++--------
+ 1 file changed, 8 insertions(+), 8 deletions(-)
 
-I wasn't there when people started requesting for this to be that way,
-but I guess it makes some sense to make it more readable and less
-redundant (the generic name in nodename and the implementation in
-compatible string...).
+diff --git a/arch/arm64/boot/dts/qcom/sm8350.dtsi b/arch/arm64/boot/dts/qcom/sm8350.dtsi
+index 6eb78d7ae8c5..447a02f10463 100644
+--- a/arch/arm64/boot/dts/qcom/sm8350.dtsi
++++ b/arch/arm64/boot/dts/qcom/sm8350.dtsi
+@@ -1656,8 +1656,8 @@ mpss: remoteproc@4080000 {
+ 			clocks = <&rpmhcc RPMH_CXO_CLK>;
+ 			clock-names = "xo";
+ 
+-			power-domains = <&rpmhpd 0>,
+-					<&rpmhpd 12>;
++			power-domains = <&rpmhpd SM8350_CX>,
++					<&rpmhpd SM8350_MSS>;
+ 			power-domain-names = "cx", "mss";
+ 
+ 			interconnects = <&mc_virt MASTER_LLCC &mc_virt SLAVE_EBI1>;
+@@ -2166,8 +2166,8 @@ slpi: remoteproc@5c00000 {
+ 			clocks = <&rpmhcc RPMH_CXO_CLK>;
+ 			clock-names = "xo";
+ 
+-			power-domains = <&rpmhpd 4>,
+-					<&rpmhpd 5>;
++			power-domains = <&rpmhpd SM8350_LCX>,
++					<&rpmhpd SM8350_LMX>;
+ 			power-domain-names = "lcx", "lmx";
+ 
+ 			memory-region = <&pil_slpi_mem>;
+@@ -2234,8 +2234,8 @@ cdsp: remoteproc@98900000 {
+ 			clocks = <&rpmhcc RPMH_CXO_CLK>;
+ 			clock-names = "xo";
+ 
+-			power-domains = <&rpmhpd 0>,
+-					<&rpmhpd 10>;
++			power-domains = <&rpmhpd SM8350_CX>,
++					<&rpmhpd SM8350_MXC>;
+ 			power-domain-names = "cx", "mxc";
+ 
+ 			interconnects = <&compute_noc MASTER_CDSP_PROC &mc_virt SLAVE_EBI1>;
+@@ -2546,8 +2546,8 @@ adsp: remoteproc@17300000 {
+ 			clocks = <&rpmhcc RPMH_CXO_CLK>;
+ 			clock-names = "xo";
+ 
+-			power-domains = <&rpmhpd 4>,
+-					<&rpmhpd 5>;
++			power-domains = <&rpmhpd SM8350_LCX>,
++					<&rpmhpd SM8350_LMX>;
+ 			power-domain-names = "lcx", "lmx";
+ 
+ 			memory-region = <&pil_adsp_mem>;
+-- 
+2.34.1
 
-Marek

@@ -2,62 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A735569356
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 22:30:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C36B0569359
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 22:31:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234158AbiGFUa2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Jul 2022 16:30:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40408 "EHLO
+        id S233974AbiGFUbR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Jul 2022 16:31:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40938 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232460AbiGFUaZ (ORCPT
+        with ESMTP id S233519AbiGFUbO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Jul 2022 16:30:25 -0400
-Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A283523146
-        for <linux-kernel@vger.kernel.org>; Wed,  6 Jul 2022 13:30:24 -0700 (PDT)
-Received: by mail-ej1-x62d.google.com with SMTP id dn9so23728064ejc.7
-        for <linux-kernel@vger.kernel.org>; Wed, 06 Jul 2022 13:30:24 -0700 (PDT)
+        Wed, 6 Jul 2022 16:31:14 -0400
+Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DB662494D
+        for <linux-kernel@vger.kernel.org>; Wed,  6 Jul 2022 13:31:13 -0700 (PDT)
+Received: by mail-lf1-x12e.google.com with SMTP id bu42so7944116lfb.0
+        for <linux-kernel@vger.kernel.org>; Wed, 06 Jul 2022 13:31:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=Ome3WV2zqgpoz6nNvDZ5tdpmyA06nr+gyTTqL4RUa1Y=;
-        b=dGPHJYDYBYSWeHXfrzUTPGHm+/9Y/wG6x2JFcNxydb3lhzUQmgBIVLXE/ATZjAODNt
-         d8V4dc40KhU3cCopsYwoT9aRB2Goj8PqlcQrq56fSKI14AehA2DIPlCHp13fWgsLqrxI
-         /BQRB1sc6ZzzdyFNaDuCffblFf0HHnyoLBskvSfV6XjU587xk2GEqp9eyHM3aHofwAQC
-         zeAtesQVATHBqbRqvE5GuuyDqGLddl0FhlcjsB5j9T72bd7ZEc6oPApUY+SrcB9zjlZi
-         zDxoMQIiYNb1muQd8Ize97vYw84eA7OpV3U07JBPbykqgkeGb4oeEdqeKBm6uWG3u6oD
-         3sbQ==
+         :cc:content-transfer-encoding;
+        bh=sLAB7PPgRJS7FBUcfBXuPogoYxwCOXpRzrraHJLqWfE=;
+        b=YHlBoPSJuPoCecofCvpCH4tmscl+28DBd8wK50hy4bthb6jphDprUKrGdG13GhRe+u
+         X/AfJXnFGGeZhoOHuSQsipNPRMWzx4kR5pABv7w668ayE5GKkdUWl3yvMursxjLsvM8e
+         Y3zMol3FS7vEhujIcXUWqzJwz8fx4PxlMkt6j+Sfb8BptT4P45z0fb594wOqvRYIc2K7
+         AGTT2Xa1k/mXHjlJve+o+IrgXTAJdWOTOa23QcRvUpEVV6OgY31stizTEvIv3fT7j4lE
+         hMAOAY5hzFOL1C4dU0Pg3xrS3CBqrOFLCiorK+3GE1cAscIjpENyCxd/dx9XtJmEhKFz
+         eccw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Ome3WV2zqgpoz6nNvDZ5tdpmyA06nr+gyTTqL4RUa1Y=;
-        b=rN3y+YEGAnjwV7jgraPbotHj5zosQ3CQepUkiwJ4Dz6WkHZGIc1GYBmgCRhYCDzSR+
-         XxTep1IFjNE7/eByUuZqZ6fAF3BjPZMQrRCJ9yLqXFT4xgGx6LMkzlGQfiH5d+i/2bnL
-         JLeHiNvb7IIf26i/7hjcL4CMrPmliFPvlXvtRiynYl5GjCPW6b8gBWVDtuE3T7WxK7NM
-         5y3a20LQqt3dCfEUe0vh4P+ngM0barC79yNhjxQh82nqonALQCWYNDsh5KC2Dln3hXNu
-         kTww23F7YuTLCqFziUbt4sjW6KQB156O2PhVLTBFEDGyFYL1Lz6zV9G2sY8LKjDWU1yI
-         F+tA==
-X-Gm-Message-State: AJIora/SSjotfo7B5pcEX6z2Q3vO49pZDJLp2OlvTuGOAfx8exOxi8/7
-        9gA0oD4ZNE4eZoQbukxtCxMiQpiNYlaehRKumUKV8y5QQEhCpc+9
-X-Google-Smtp-Source: AGRyM1v+7p/rqQVvu0vi9jgaIPa9wTC18p3aoE53Cy8xHxVk7Erhm3tAegYPdFtN0V0JhXWagYt5tPT8Riy5PA/gOzU=
-X-Received: by 2002:a17:907:168c:b0:726:c521:25aa with SMTP id
- hc12-20020a170907168c00b00726c52125aamr40617053ejc.46.1657139423066; Wed, 06
- Jul 2022 13:30:23 -0700 (PDT)
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=sLAB7PPgRJS7FBUcfBXuPogoYxwCOXpRzrraHJLqWfE=;
+        b=pZfs798eTMiwaGzbhf7gA7sidJ3eEkRsT52FCZNW44VKw4zD45/sJOuIB0ZrJLZvZJ
+         9OUmybVnTVtVVahrpUwa/tR/UmsJdgrZqDTyZ0fX00kiEh38oLaqp4OMc9kYzPIn11XD
+         Moz2BqoBcwonpjiF0MzKXxY0RfKG6rq9TfjtDYY5sKfLt8bQ32Qr+ekNnCIjbNbx7ke2
+         unvmhzjP/F7RcAU/jTkU/okelQspUEpFpmD8Y6u/XdUUDbnPqY5sHEJZKCWjmpIEw0E9
+         HQaW/IdggQRvUvy9mOkGdSP0eY7paZbhSQZh0ez/ByrvSKXwE7c9Uwn1Lnc2RWckR+N4
+         46IA==
+X-Gm-Message-State: AJIora+gwWVz/wJGPjB3R0E6zdInoPY3kcXeLXEHotY9z2xoHyy0PJQt
+        KIGRlbu70LdRHKc5G7L+fdMV5B+vGEJQ4yHoQfc7w4/1mBqPtw==
+X-Google-Smtp-Source: AGRyM1vSDOBH7B9iAAHVjpTbPd3tKPUPLTeCrocbC7VW2zzKMNmJfLigIa8R9o8iO9nBgX/88zOV/6kdmmjeOMD7f3U=
+X-Received: by 2002:a05:6512:1188:b0:481:2eb7:f2 with SMTP id
+ g8-20020a056512118800b004812eb700f2mr26513384lfr.401.1657139471312; Wed, 06
+ Jul 2022 13:31:11 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220627221446.82157-1-dlatypov@google.com> <20220627221446.82157-2-dlatypov@google.com>
-In-Reply-To: <20220627221446.82157-2-dlatypov@google.com>
-From:   Brendan Higgins <brendanhiggins@google.com>
-Date:   Wed, 6 Jul 2022 16:30:11 -0400
-Message-ID: <CAFd5g44AkBpQeNr2WMf3e=-bHuEree_vH2sj3+JnsbBp=mQgyg@mail.gmail.com>
-Subject: Re: [PATCH v3 2/3] kunit: tool: make --kunitconfig repeatable,
- blindly concat
-To:     Daniel Latypov <dlatypov@google.com>
-Cc:     davidgow@google.com, linux-kernel@vger.kernel.org,
-        kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
-        skhan@linuxfoundation.org
+References: <202207060054.o8GrfMhS-lkp@intel.com> <20220706134523.00000555@Huawei.com>
+In-Reply-To: <20220706134523.00000555@Huawei.com>
+From:   Nick Desaulniers <ndesaulniers@google.com>
+Date:   Wed, 6 Jul 2022 13:30:59 -0700
+Message-ID: <CAKwvOdm9+UEXCepJGDzjNibYTss5joek-3FMC6K2Z7w1EPLdGQ@mail.gmail.com>
+Subject: Re: drivers/iio/adc/ad7476.c:29:8: warning: Excessive padding in
+ 'struct ad7476_chip_info' (10 padding bytes, where 2 is optimal). Optimal
+ fields order: reset, channel, convst_channel, int_vref_uv, has_vref,
+ has_vdrive, consider reordering the fields or addin...
+To:     Jonathan Cameron <Jonathan.Cameron@huawei.com>
+Cc:     kernel test robot <lkp@intel.com>, llvm@lists.linux.dev,
+        kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Lars-Peter Clausen <lars@metafoo.de>
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
         ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
@@ -69,60 +72,99 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 27, 2022 at 6:14 PM 'Daniel Latypov' via KUnit Development
-<kunit-dev@googlegroups.com> wrote:
+On Wed, Jul 6, 2022 at 5:45 AM Jonathan Cameron
+<Jonathan.Cameron@huawei.com> wrote:
 >
-> It's come up a few times that it would be useful to have --kunitconfig
-> be repeatable [1][2].
 >
-> This could be done before with a bit of shell-fu, e.g.
->   $ find fs/ -name '.kunitconfig' -exec cat {} + | \
->     ./tools/testing/kunit/kunit.py run --kunitconfig=/dev/stdin
-> or equivalently:
->   $ cat fs/ext4/.kunitconfig fs/fat/.kunitconfig | \
->     ./tools/testing/kunit/kunit.py run --kunitconfig=/dev/stdin
 >
-> But this can be fairly clunky to use in practice.
+> >    Use -header-filter=3D.* to display errors from all non-system header=
+s. Use -system-headers to display errors from system headers as well.
+> >    21 warnings generated.
+> > >> drivers/iio/adc/ad7476.c:29:8: warning: Excessive padding in 'struct=
+ ad7476_chip_info' (10 padding bytes, where 2 is optimal). Optimal fields o=
+rder: reset, channel, convst_channel, int_vref_uv, has_vref, has_vdrive, co=
+nsider reordering the fields or adding explicit padding members [clang-anal=
+yzer-optin.performance.Padding]
+> >    struct ad7476_chip_info {
+> >    ~~~~~~~^~~~~~~~~~~~~~~~~~
+> >    drivers/iio/adc/ad7476.c:29:8: note: Excessive padding in 'struct ad=
+7476_chip_info' (10 padding bytes, where 2 is optimal). Optimal fields orde=
+r: reset, channel, convst_channel, int_vref_uv, has_vref, has_vdrive, consi=
+der reordering the fields or adding explicit padding members
+> >    struct ad7476_chip_info {
+> >    ~~~~~~~^~~~~~~~~~~~~~~~~~
+> > >> drivers/iio/adc/ad7476.c:39:8: warning: Excessive padding in 'struct=
+ ad7476_state' (472 padding bytes, where 216 is optimal). Optimal fields or=
+der: data, spi, chip_info, ref_reg, convst_gpio, msg, xfer, consider reorde=
+ring the fields or adding explicit padding members [clang-analyzer-optin.pe=
+rformance.Padding]
+> >    struct ad7476_state {
 >
-> And having explicit support in kunit.py opens the door to having more
-> config fragments of interest, e.g. options for PCI on UML [1], UML
-> coverage [2], variants of tests [3].
-> There's another argument to be made that users can just use multiple
-> --kconfig_add's, but this gets very clunky very fast (e.g. [2]).
->
-> Note: there's a big caveat here that some kconfig options might be
-> incompatible. We try to give a clearish error message in the simple case
-> where the same option appears multiple times with conflicting values,
-> but more subtle ones (e.g. mutually exclusive options) will be
-> potentially very confusing for the user. I don't know we can do better.
->
-> Note 2: if you want to combine a --kunitconfig with the default, you
-> either have to do to specify the current build_dir
-> > --kunitconfig=.kunit --kunitconfig=additional.config
-> or
-> > --kunitconfig=tools/testing/kunit/configs/default.config --kunitconifg=additional.config
-> each of which have their downsides (former depends on --build_dir,
-> doesn't work if you don't have a .kunitconfig yet), etc.
->
-> Example with conflicting values:
-> > $ ./tools/testing/kunit/kunit.py config --kunitconfig=lib/kunit --kunitconfig=/dev/stdin <<EOF
-> > CONFIG_KUNIT_TEST=n
-> > CONFIG_KUNIT=m
-> > EOF
-> > ...
-> > kunit_kernel.ConfigError: Multiple values specified for 2 options in kunitconfig:
-> > CONFIG_KUNIT=y
-> >   vs from /dev/stdin
-> > CONFIG_KUNIT=m
-> >
-> > CONFIG_KUNIT_TEST=y
-> >   vs from /dev/stdin
-> > # CONFIG_KUNIT_TEST is not set
->
-> [1] https://lists.freedesktop.org/archives/dri-devel/2022-June/357616.html
-> [2] https://lore.kernel.org/linux-kselftest/CAFd5g45f3X3xF2vz2BkTHRqOC4uW6GZxtUUMaP5mwwbK8uNVtA@mail.gmail.com/
-> [3] https://lore.kernel.org/linux-kselftest/CANpmjNOdSy6DuO6CYZ4UxhGxqhjzx4tn0sJMbRqo2xRFv9kX6Q@mail.gmail.com/
->
-> Signed-off-by: Daniel Latypov <dlatypov@google.com>
+> For this one and I'm guessing some of the other IIO cases, if there is an=
+y way to suppress the warning where we have specific
+> alignments specified then that would be great. These are padded to ensure=
+ the buffers are DMA safe.
 
-Reviewed-by: Brendan Higgins <brendanhiggins@google.com>
+I didn't see anything during a quick scan of:
+https://github.com/llvm/llvm-project/blob/main/clang/lib/StaticAnalyzer/Che=
+ckers/PaddingChecker.cpp#L73
+to disable this warning when it's a false positive.
+
+Though
+https://clang.llvm.org/extra/clang-tidy/#suppressing-undesired-diagnostics
+mentions NOLINT.
+
+>
+> Thanks,
+>
+> Jonathan
+>
+>
+> >    ~~~~~~~^~~~~~~~~~~~~~
+> >    drivers/iio/adc/ad7476.c:39:8: note: Excessive padding in 'struct ad=
+7476_state' (472 padding bytes, where 216 is optimal). Optimal fields order=
+: data, spi, chip_info, ref_reg, convst_gpio, msg, xfer, consider reorderin=
+g the fields or adding explicit padding members
+> >    struct ad7476_state {
+> >    ~~~~~~~^~~~~~~~~~~~~~
+> >    Suppressed 19 warnings (7 in non-user code, 12 with check filters).
+> >    Use -header-filter=3D.* to display errors from all non-system header=
+s. Use -system-headers to display errors from system headers as well.
+> >    20 warnings generated.
+> >    drivers/iio/adc/ad7766.c:35:8: warning: Excessive padding in 'struct=
+ ad7766' (392 padding bytes, where 136 is optimal). Optimal fields order: d=
+ata, chip_info, spi, mclk, pd_gpio, trig, reg, msg, xfer, consider reorderi=
+ng the fields or adding explicit padding members [clang-analyzer-optin.perf=
+ormance.Padding]
+> >    struct ad7766 {
+> >    ~~~~~~~^~~~~~~~
+> >    drivers/iio/adc/ad7766.c:35:8: note: Excessive padding in 'struct ad=
+7766' (392 padding bytes, where 136 is optimal). Optimal fields order: data=
+, chip_info, spi, mclk, pd_gpio, trig, reg, msg, xfer, consider reordering =
+the fields or adding explicit padding members
+> >    struct ad7766 {
+> >    ~~~~~~~^~~~~~~~
+> >    Suppressed 19 warnings (7 in non-user code, 12 with check filters).
+> >    Use -header-filter=3D.* to display errors from all non-system header=
+s. Use -system-headers to display errors from system headers as well.
+> >    20 warnings generated.
+> >    drivers/iio/adc/ad7768-1.c:154:8: warning: Excessive padding in 'str=
+uct ad7768_state' (388 padding bytes, where 132 is optimal). Optimal fields=
+ order: data, mclk_freq, spi, vref, mclk, trig, gpio_sync_in, labels, lock,=
+ completion, samp_freq, consider reordering the fields or adding explicit p=
+adding members [clang-analyzer-optin.performance.Padding]
+> >    struct ad7768_state {
+> >    ~~~~~~~^~~~~~~~~~~~~~
+> >    drivers/iio/adc/ad7768-1.c:154:8: note: Excessive padding in 'struct=
+ ad7768_state' (388 padding bytes, where 132 is optimal). Optimal fields or=
+der: data, mclk_freq, spi, vref, mclk, trig, gpio_sync_in, labels, lock, co=
+mpletion, samp_freq, consider reordering the fields or adding explicit padd=
+ing members
+> >    struct ad7768_state {
+> >    ~~~~~~~^~~~~~~~~~~~~~
+>
+
+
+--=20
+Thanks,
+~Nick Desaulniers

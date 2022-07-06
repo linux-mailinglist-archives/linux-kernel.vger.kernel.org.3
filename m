@@ -2,88 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 00BE1569548
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 00:27:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A760856954B
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 00:27:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233928AbiGFW1Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Jul 2022 18:27:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33598 "EHLO
+        id S234404AbiGFW1o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Jul 2022 18:27:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33854 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233947AbiGFW1O (ORCPT
+        with ESMTP id S233419AbiGFW1l (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Jul 2022 18:27:14 -0400
-Received: from mail-pg1-x52a.google.com (mail-pg1-x52a.google.com [IPv6:2607:f8b0:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 646142B1A6
-        for <linux-kernel@vger.kernel.org>; Wed,  6 Jul 2022 15:27:13 -0700 (PDT)
-Received: by mail-pg1-x52a.google.com with SMTP id bh13so9239982pgb.4
-        for <linux-kernel@vger.kernel.org>; Wed, 06 Jul 2022 15:27:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=8En5VcDzJpRZUJVBlGHl7Q0Kg1P7kPCrXjhE+LYfN5M=;
-        b=kUIIVGCvERQEwyak3xqYOSlBxS1t7NuI8dhRO8VQaU9LIJ4OHWPVFlkNrzzG8/4+4h
-         9bMaqgsk8h471N0EWcKC28ueATACcd427UQJ08RGW/XfwbnTa9KOCj6Gj5+JKtgkIYNg
-         mV42Sjkr8T7U+CFhVFGY2RkyxyF1dHwogJs/8kX8bMg77uOzJehO6zidjkXV+rS4rx28
-         aX5yARkMcygsr/w43e7dqgSElHUG8h+okUWK+0TP0E7BCzKWbPcwMXc08LxXEtzyKbNl
-         9oG04V8LDumUHN+BuX8c1em1gW0L+Y2EwVQw3ihOm5eJlblVDdaqBA/R8rsisN0ySVGr
-         ownA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=8En5VcDzJpRZUJVBlGHl7Q0Kg1P7kPCrXjhE+LYfN5M=;
-        b=ffhyUbnLEX7D1kv8k0os3bPzetsXe1J9sgZvGFaGvovlq3qcwt07ikcAxttwDyk2+k
-         o+6DqYC/iXQJzlV4+TRPjZ2oaDu7QyyWY3aSvmiyL3pQqeMuB3QiY7Y6G4TwDbA3ORcF
-         aT3wlIphvh2zX2Rfzl29j/ER84/Ne4jDImInyofTheZCGySki0SQl4AkBs2/3w4TXxoy
-         zDX0m6cHipd/Nro/ld3FGu6I4JGwzORUtbzZOEiA91QeJIxEmCRtW1U2X7w9Yu1ZXvHz
-         EltCqqr65DQ6nlLNREPFKqUkDcFRToNPoUPFDgy8uP/fH+lcyxLEVq85PKW5+KFy6XPi
-         7ysA==
-X-Gm-Message-State: AJIora+2SlXmRLjK+CMtKnQn0KJWkS36husEgj9apk8vTPyRgNQjpoG7
-        tXfLLihRR4+h7nlOCA3To0mZxw==
-X-Google-Smtp-Source: AGRyM1vHvu+U2FyKN0UOsLIZn0q60hIVl9H32PwcOuMvAe5bhsFNxwgb8QQ+Rs8X2STgT9XFwF4Qyw==
-X-Received: by 2002:a17:902:f708:b0:153:839f:bf2c with SMTP id h8-20020a170902f70800b00153839fbf2cmr49549892plo.113.1657146432846;
-        Wed, 06 Jul 2022 15:27:12 -0700 (PDT)
-Received: from google.com (123.65.230.35.bc.googleusercontent.com. [35.230.65.123])
-        by smtp.gmail.com with ESMTPSA id e17-20020aa798d1000000b00525496442ccsm25310656pfm.216.2022.07.06.15.27.12
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 06 Jul 2022 15:27:12 -0700 (PDT)
-Date:   Wed, 6 Jul 2022 22:27:08 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Vitaly Kuznetsov <vkuznets@redhat.com>
-Cc:     kvm@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
-        Anirudh Rayabharam <anrayabh@linux.microsoft.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Maxim Levitsky <mlevitsk@redhat.com>,
-        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 13/28] KVM: VMX: Get rid of eVMCS specific VMX
- controls sanitization
-Message-ID: <YsYMPCr3/ig0xPFj@google.com>
-References: <20220629150625.238286-1-vkuznets@redhat.com>
- <20220629150625.238286-14-vkuznets@redhat.com>
+        Wed, 6 Jul 2022 18:27:41 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C825B2B1B4
+        for <linux-kernel@vger.kernel.org>; Wed,  6 Jul 2022 15:27:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1657146460; x=1688682460;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=RVLT8rJ9x5ZWWb04/HzX/gD4RqrjVQt6kKfYwghXiqs=;
+  b=FjI7s9B7dtHaO23GCNJhMRFlu6lxitZ4ybhraff3bgfezLeMBR5Xf1YN
+   VSq7QYocysGL3WGYVxh9zA/cq7x2xttfZOLb8vW7uWlUHv4VKz76tUZwp
+   mdQN7m8SXCrnd95cc+u7h3o8msOcGfPJafL8pe5pRNvVp29E3baOMACbT
+   8FQubxHATqKlUs8CDS0X2WPE2k0N8OdNAIwGhby0oIcqfczAfdSg7BxGs
+   zV4BIcjgHJkSlNHjqfZbtFUJ/f14GCT6D87JGGtGJgYIRWHv0gDaLRzpa
+   0P+2FhejOedgPt5ZuVFPc1xrjPUyq+OrC8UNAjGoHd0JT2dLN/IeasBQe
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10400"; a="281430224"
+X-IronPort-AV: E=Sophos;i="5.92,251,1650956400"; 
+   d="scan'208";a="281430224"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jul 2022 15:27:40 -0700
+X-IronPort-AV: E=Sophos;i="5.92,251,1650956400"; 
+   d="scan'208";a="920351252"
+Received: from leejust1-mobl.amr.corp.intel.com (HELO [10.212.160.225]) ([10.212.160.225])
+  by fmsmga005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jul 2022 15:27:39 -0700
+Message-ID: <e92c570e-29c0-e6d1-88e8-cb6344c01859@linux.intel.com>
+Date:   Wed, 6 Jul 2022 15:27:39 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220629150625.238286-14-vkuznets@redhat.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Firefox/91.0 Thunderbird/91.9.1
+Subject: Re: [PATCH v8 1/5] x86/tdx: Add TDX Guest attestation interface
+ driver
+Content-Language: en-US
+To:     Kai Huang <kai.huang@intel.com>,
+        Dave Hansen <dave.hansen@intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org
+Cc:     "H . Peter Anvin" <hpa@zytor.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        Tony Luck <tony.luck@intel.com>,
+        Andi Kleen <ak@linux.intel.com>,
+        Wander Lairson Costa <wander@redhat.com>,
+        Isaku Yamahata <isaku.yamahata@gmail.com>,
+        marcelo.cerri@canonical.com, tim.gardner@canonical.com,
+        khalid.elmously@canonical.com, philip.cox@canonical.com,
+        linux-kernel@vger.kernel.org
+References: <20220609025220.2615197-1-sathyanarayanan.kuppuswamy@linux.intel.com>
+ <20220609025220.2615197-2-sathyanarayanan.kuppuswamy@linux.intel.com>
+ <0f6bedbb-14cc-bf93-5d9f-bfd2c49dc7b2@intel.com>
+ <48b9d807-2d9e-016f-bada-906911d6ecb0@linux.intel.com>
+ <f26f88ee-1226-3e32-77cc-fc86bc65e0b7@intel.com>
+ <ca73d2bd-5d40-d385-aeb0-8c04811690ff@linux.intel.com>
+ <331abea18e728061979301772a9d0d61543f59fb.camel@intel.com>
+ <0b5884b8-9240-63b2-ca4c-20c86fd2e8c1@linux.intel.com>
+ <8b6f3f9f-71c8-2b6f-20a3-5e9c259a1b9a@intel.com>
+ <74383158-460e-0cd1-94bc-faca5b8175ea@linux.intel.com>
+ <932869b757b384426ada376cd9791697353c2247.camel@intel.com>
+From:   Sathyanarayanan Kuppuswamy 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>
+In-Reply-To: <932869b757b384426ada376cd9791697353c2247.camel@intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 29, 2022, Vitaly Kuznetsov wrote:
-> With the updated eVMCSv1 definition, there's no known 'problematic'
-> controls which are exposed in VMX control MSRs but are not present in
-> eVMCSv1. Get rid of the filtering.
 
-Ah, this patch is confusing until one realizes that this is dropping the "filtering"
-for what controls/features _KVM_ uses, whereas nested_evmcs_filter_control_msr()
-filters controls that are presented to L1.
 
-Can you add something to clarify that in the changelog?
+On 7/5/22 3:31 PM, Kai Huang wrote:
+> On Tue, 2022-07-05 at 14:21 -0700, Sathyanarayanan Kuppuswamy wrote:
+>> SGX is a related feature. It also uses IOCTL approach for enclave provisioning.
+>>
+>> arch/x86/kernel/cpu/sgx/ioctl.c
+> 
+> SGX isn't a good example here.  The IOCTLs are used to create enclaves, but not
+> for attestation.  SGX attestation relies on enclave itself to get/verify the
+> report, etc, so has no interaction with the kernel.
+
+If you are looking for an attestation specific example, you can only check the AMD
+code.
+
+https://patchwork.kernel.org/project/linux-mm/patch/20220307213356.2797205-44-brijesh.singh@amd.com/
+
+Also, sev_get_attestation_report() in arch/x86/kvm/svm/sev.c also implements attestation
+IOCTL specific to KVM.
+
+-- 
+Sathyanarayanan Kuppuswamy
+Linux Kernel Developer

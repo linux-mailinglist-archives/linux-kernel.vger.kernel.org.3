@@ -2,112 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A25405684FF
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 12:16:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 84147568501
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 12:16:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231718AbiGFKPs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Jul 2022 06:15:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56598 "EHLO
+        id S232689AbiGFKQM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Jul 2022 06:16:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56978 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229949AbiGFKPn (ORCPT
+        with ESMTP id S232151AbiGFKQL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Jul 2022 06:15:43 -0400
-Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2CE3B1FE;
-        Wed,  6 Jul 2022 03:15:42 -0700 (PDT)
-Received: by mail-wm1-x32c.google.com with SMTP id be14-20020a05600c1e8e00b003a04a458c54so8697516wmb.3;
-        Wed, 06 Jul 2022 03:15:42 -0700 (PDT)
+        Wed, 6 Jul 2022 06:16:11 -0400
+Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BEF161AF3E
+        for <linux-kernel@vger.kernel.org>; Wed,  6 Jul 2022 03:16:09 -0700 (PDT)
+Received: by mail-ej1-x632.google.com with SMTP id li14so4333548ejb.2
+        for <linux-kernel@vger.kernel.org>; Wed, 06 Jul 2022 03:16:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=8iSPnCQlsn+unzEqQcxOovCWHEse64Sct+b/T3iSIHY=;
-        b=aj0FxjuXf5+sYxguaPR56ZprS55VHe5p8rrpzjIRCgOqycEJExWkGLaeRK3bPBodEJ
-         Gfg9DK1JRt2nsD/jT3t+r5R4BzX9VYkUj+62J3DYIKHyNHnGGqMsRvmvfV3YwHP/NiGj
-         q8kqKp0caReF+UEGk7/Qe/2J3lBVLMTwAONjOsuz1HvtgF+Bsg1twpdOUr/kVYxu8TPS
-         ZLhsaEK3atv4PCC+o8S0tUw7fma2qXrFc4jq3R58hS3/fPCZva/3808NI7u/atFvHxU3
-         O/v8IOQDlpGCzudIpAW6jMZ3QnELL7udgODcy4IRqEKr+afWPOBEZjjSY2GAQkCeHdWs
-         C7sg==
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=H8DPFziGiKNi5nRNQtYIFR0t52W/RWnWSC/Y3HjVJnk=;
+        b=V2FipfaEWIhy+1g0Nw+5gBk2f2qeT0QGig0t1MJ6VEMEAun9a4+C18LvOFPGSN0AiH
+         JtLYRK3F/VKzb17Lq1xfUyL9SHblOIIut5/aVlByVZNPHQ0Yg3z34b8SJUUIBjfOxNM0
+         YU37suCqYrbMYeCh8j42UINO39Hg2IPHHkuvSH8dbS0SdjfQiRbZSgFYKSlfPGDz/Ctw
+         5PcP0RhKwYiJ3kyVHxlkkymeHcBHpNOYH7EqDp6xXrXup7eqV/z8BkwYDfI57bDlyQ7/
+         EtZRDFcTzkSOJhf2BtTBqXVGuBOSL9elztG7OqiDH+6PhVOY/nhmpLOVQZzAnZSRxuh6
+         AQNg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=8iSPnCQlsn+unzEqQcxOovCWHEse64Sct+b/T3iSIHY=;
-        b=WbWk62TTg5Lo7KjzoL67vnXGFWaCnExSSr0ypF6v/2C/t830YIAYFiVIBETVf7LOVl
-         kN+eOTPa004UiXUX9M3IUu56+a1tghBARcSgQ3CtKHEw/gl2kRByvvgjTYe2g8zpS1RX
-         yB6ba0Feqth/yDudjQvCuc8T7jwrJa8xWcMXDzWphDp52BCRdh1QrWiJUYh7dRmrlB11
-         ayHYvkxHFUBdcSP9/BNUeUP9YKkPpPzqTB89CJFeH4DvRD50dmKid27iVM102as0WFw5
-         dArTHOZ4Kgw3n8uWkQI95YtEHabS28Gr2YcRpwwFGjFj+1WWvSwjOoMuPPCnEAUchDYx
-         DoFQ==
-X-Gm-Message-State: AJIora+LOh3Ou7ObhtKyTcbsvFRPYDwGdVbNWkywKc7LUGkTlW7R0B/w
-        KkdefzzqU0Nzzgc3Wtql5mo=
-X-Google-Smtp-Source: AGRyM1trurU8mdAXWWae97aHNRdGMRp2KksttXISCTNRtIBYP+sMAcFFNPp2a9M21Jsx8Lfhhyqd/w==
-X-Received: by 2002:a7b:c8d2:0:b0:3a0:2fd0:177 with SMTP id f18-20020a7bc8d2000000b003a02fd00177mr42782003wml.23.1657102541471;
-        Wed, 06 Jul 2022 03:15:41 -0700 (PDT)
-Received: from debian ([167.98.27.226])
-        by smtp.gmail.com with ESMTPSA id q11-20020adfea0b000000b0020fff0ea0a3sm34783485wrm.116.2022.07.06.03.15.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 06 Jul 2022 03:15:41 -0700 (PDT)
-Date:   Wed, 6 Jul 2022 11:15:39 +0100
-From:   "Sudip Mukherjee (Codethink)" <sudipm.mukherjee@gmail.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, slade@sladewatkins.com
-Subject: Re: [PATCH 5.15 00/98] 5.15.53-rc1 review
-Message-ID: <YsVgy1TGlldNqADK@debian>
-References: <20220705115617.568350164@linuxfoundation.org>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=H8DPFziGiKNi5nRNQtYIFR0t52W/RWnWSC/Y3HjVJnk=;
+        b=iqFR1yAFZxNwSdQYnw3436Sii31U1r3pkKOwEMT7DclAp7qh4JcJ/mcpCkEElJ8BpF
+         HfiC9zF2Xa33c9mlx/T7AH8q/LmzjdO2fhrxRX9kANffPnVl3UGrLJ4bvl7/N0fW14tM
+         3VmCfo3me+2QvgxfcD9Z8i+gL1zxhQOwnYlTjoRhEKMdvVmSVW4FPtY4Gg+IzUQLko9J
+         L1/O85Sgr9G8jj991LicUPrsC9qiyOfXQoHZCTqkbqQI41ph0dVab/6cYeHv4xS2yhyf
+         ECIaQsBlX1PTtNQbhFhAnny83AzsAaz2KUmgv+FBydrHLLYNT4WbBJzzKSKwncjlRixf
+         aEOg==
+X-Gm-Message-State: AJIora8HQvzlfozWc7NMHqnQgT2I0BSOUQiy0T0H8Ixu77Dhw9BT5KWl
+        +7xWpC9y1JNvg5Bevr2aWcRpAs5ww34i9N38tGlq
+X-Google-Smtp-Source: AGRyM1vFqq6tHuOPBaT9pqYUzBmlAKAzxPz8taUHx54478aY2ySGWo6h1lAi8x1HC58K/Qd+7WZ1grpwKwKCwRQuwZY=
+X-Received: by 2002:a17:907:9715:b0:726:2a3b:9f84 with SMTP id
+ jg21-20020a170907971500b007262a3b9f84mr37883629ejc.414.1657102568333; Wed, 06
+ Jul 2022 03:16:08 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220705115617.568350164@linuxfoundation.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20220706050503.171-1-xieyongji@bytedance.com> <CACGkMEv1tzenaGSUvYXEuxdmXyaZxQ24QspXRRA_95mMp4PWSg@mail.gmail.com>
+In-Reply-To: <CACGkMEv1tzenaGSUvYXEuxdmXyaZxQ24QspXRRA_95mMp4PWSg@mail.gmail.com>
+From:   Yongji Xie <xieyongji@bytedance.com>
+Date:   Wed, 6 Jul 2022 18:15:57 +0800
+Message-ID: <CACycT3u3kOzzQjKBYNAB5vtpgcmPg7FjJ5yTYMtQo0SJVrBmZg@mail.gmail.com>
+Subject: Re: [PATCH v2 0/5] VDUSE: Support registering userspace memory as
+ bounce buffer
+To:     Jason Wang <jasowang@redhat.com>
+Cc:     mst <mst@redhat.com>, Liu Xiaodong <xiaodong.liu@intel.com>,
+        Maxime Coquelin <maxime.coquelin@redhat.com>,
+        Stefan Hajnoczi <stefanha@redhat.com>,
+        songmuchun@bytedance.com,
+        virtualization <virtualization@lists.linux-foundation.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Greg,
+On Wed, Jul 6, 2022 at 5:30 PM Jason Wang <jasowang@redhat.com> wrote:
+>
+> On Wed, Jul 6, 2022 at 1:05 PM Xie Yongji <xieyongji@bytedance.com> wrote:
+> >
+> > Hi all,
+> >
+> > This series introduces some new ioctls: VDUSE_IOTLB_GET_INFO,
+> > VDUSE_IOTLB_REG_UMEM and VDUSE_IOTLB_DEREG_UMEM to support
+> > registering and de-registering userspace memory for IOTLB
+> > as bounce buffer in virtio-vdpa case.
+> >
+> > The VDUSE_IOTLB_GET_INFO ioctl can help user to query IOLTB
+> > information such as bounce buffer size. Then user can use
+> > those information on VDUSE_IOTLB_REG_UMEM and
+> > VDUSE_IOTLB_DEREG_UMEM ioctls to register and de-register
+> > userspace memory for IOTLB.
+> >
+> > During registering and de-registering, the DMA data in use
+> > would be copied from kernel bounce pages to userspace bounce
+> > pages and back.
+> >
+> > With this feature, some existing application such as SPDK
+> > and DPDK can leverage the datapath of VDUSE directly and
+> > efficiently as discussed before [1][2]. They can register
+> > some preallocated hugepages to VDUSE to avoid an extra
+> > memcpy from bounce-buffer to hugepages.
+>
+> This is really interesting.
+>
+> But a small concern on uAPI is that this seems to expose the VDUSE
+> internal implementation (bounce buffer) to userspace. We tried hard to
+> hide it via the GET_FD before. Anyway can we keep it?
+>
 
-On Tue, Jul 05, 2022 at 01:57:18PM +0200, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.15.53 release.
-> There are 98 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
-> 
-> Responses should be made by Thu, 07 Jul 2022 11:55:56 +0000.
-> Anything received after that time might be too late.
+Another way is changing GET_FD ioctl to add a flag or reuse 'perm'
+field to indicate whether a IOVA region supports userspace memory
+registration. Then userspace can use
+VDUSE_IOTLB_REG_UMEM/VDUSE_IOTLB_DEREG_UMEM to register/deregister
+userspace memory for this IOVA region. Any suggestions?
 
-Build test (gcc version 11.3.1 20220627):
-mips: 62 configs -> no failure
-arm: 99 configs -> no failure
-arm64: 3 configs -> no failure
-x86_64: 4 configs -> no failure
-alpha allmodconfig -> no failure
-csky allmodconfig -> no failure
-powerpc allmodconfig -> no failure
-riscv allmodconfig -> no failure
-s390 allmodconfig -> no failure
-xtensa allmodconfig -> no failure
-
-Boot test:
-x86_64: Booted on my test laptop. No regression.
-x86_64: Booted on qemu. No regression. [1]
-arm64: Booted on rpi4b (4GB model). No regression. [2]
-mips: Booted on ci20 board. No regression. [3]
-
-[1]. https://openqa.qa.codethink.co.uk/tests/1458
-[2]. https://openqa.qa.codethink.co.uk/tests/1461
-[3]. https://openqa.qa.codethink.co.uk/tests/1464
-
-Tested-by: Sudip Mukherjee <sudip.mukherjee@codethink.co.uk>
-
---
-Regards
-Sudip
+Thanks,
+Yongji

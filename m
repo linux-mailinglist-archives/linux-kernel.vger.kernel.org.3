@@ -2,317 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B470569309
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 22:08:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2CCF7569313
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 22:09:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234274AbiGFUHq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Jul 2022 16:07:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52752 "EHLO
+        id S233914AbiGFUJP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Jul 2022 16:09:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54000 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231772AbiGFUHo (ORCPT
+        with ESMTP id S232418AbiGFUJK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Jul 2022 16:07:44 -0400
-Received: from out0.migadu.com (out0.migadu.com [IPv6:2001:41d0:2:267::])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA89C1EEF5;
-        Wed,  6 Jul 2022 13:07:42 -0700 (PDT)
-Date:   Thu, 7 Jul 2022 04:08:35 +0800
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1657138056;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=fQpfWv3ooUZxpy2MTMOxGZlpcCsuZbo8crZuItPLldQ=;
-        b=o4zkBFFyUqBN4yAvvaM0hyxq7Xeu8W4RiGF5C7DmWbn8Ixyo1D+oftzJuFDd6soyiWmfWc
-        /ut1ktR+NKqcMWxQKt9Znl/qs7/TlzZJn7oLKv2ZwLBUci5o0dy3cW3KtbbaUOUJF3s2fe
-        Jl+7Ttb3rm1gjDbaxQzxaVosuoiYoTs=
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From:   Tao Zhou <tao.zhou@linux.dev>
-To:     Daniel Bristot de Oliveira <bristot@kernel.org>
-Cc:     Steven Rostedt <rostedt@goodmis.org>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Ingo Molnar <mingo@redhat.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Will Deacon <will@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Marco Elver <elver@google.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Gabriele Paoloni <gpaoloni@redhat.com>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Clark Williams <williams@redhat.com>,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-trace-devel@vger.kernel.org, Tao Zhou <tao.zhou@linux.dev>
-Subject: Re: [PATCH V4 10/20] rv/monitor: Add the wwnr monitor skeleton
- created by dot2k
-Message-ID: <YsXrw40DP2ckPHuC@geo.homenetwork>
-References: <cover.1655368610.git.bristot@kernel.org>
- <7d1b2238aa5c805501ae3dc80b213d06f6588cb3.1655368610.git.bristot@kernel.org>
+        Wed, 6 Jul 2022 16:09:10 -0400
+Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 273AC14099
+        for <linux-kernel@vger.kernel.org>; Wed,  6 Jul 2022 13:09:09 -0700 (PDT)
+Received: by mail-lf1-x132.google.com with SMTP id e12so27703265lfr.6
+        for <linux-kernel@vger.kernel.org>; Wed, 06 Jul 2022 13:09:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=L8DTfq0A17haA8PrzESImW0A0vAqb2TTX88eAMxkKSs=;
+        b=BaNAZAN8Ey3DxRg4kZ1FW0Knr+92LENOOrVvEW1b7mEpGbZtBjo6ZKoXdgZERe4j2f
+         +EohmvdmnP0KXho1Ux+wHF+zvqgZg/a9DCNbk86vfgrKJ4aYVlqdPvyZaMO5dXerOGL6
+         Jc9P5kacpUNDKRipouaPFFFBigel1xZIkBLvzBmDHkpO6p76cz6HTGVTj37Vr6ke74ob
+         RQr5R5cr+vfWOrYwOUOQCm1ivgcyl4uEu+wJn9ZAxbt8OecFKgIPyhDyH47MVQuxmIfe
+         WX63XPJtz06tRUYg9oOeRICMsOrnKqAbRJi201rfpNWdX6amBUw+tNBHbUIi+avzDl9X
+         AyYQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=L8DTfq0A17haA8PrzESImW0A0vAqb2TTX88eAMxkKSs=;
+        b=iXO51vsAONHCyufpPs1c5HP0g5H9sFnEa3DB8gTbS3Puti9CvfVK/Jgc2ckAj0f2V/
+         OnOqTsVu2lzp5JbR2a42qHxuLpKhCCGnXE2iEJbKhP5L7JRWDrKwq3LRnoutLRS/6+Qu
+         wm73+ZsJbvKpyIA5GC09aYks4TTQ8kgPurw2qnhTduXHVJU6mE4pi058O7xZkygPwcu2
+         CurWu3NYX+1vlaymR2Kbic8KRmFOA3jEQ5qZZTH1rwSg7kvpzKU/fGp0ZnjNntLZ6sEf
+         IGmFkEu+g7ybHPbx/CZidK5LmiloyZZU7nO9zkRgxVInOfmQwyk7kCtIEWOGz7TSZC3y
+         6JfQ==
+X-Gm-Message-State: AJIora/c4f2OUnEXtqV5wiGrm4hCNXGWznswiy6C3vEbuhLd1ELvNqho
+        d5/gr1YpI3vUa3BlMOpLI7sVaQ==
+X-Google-Smtp-Source: AGRyM1tJTPfDmRl23fBqdP0m32ujrkJ0ZHgPEbSUIojL6Gcc1siGm1BZ2LGNfZluNXw7Sd4UGqL0Yw==
+X-Received: by 2002:ac2:5b02:0:b0:481:286d:afdc with SMTP id v2-20020ac25b02000000b00481286dafdcmr25785099lfn.24.1657138147418;
+        Wed, 06 Jul 2022 13:09:07 -0700 (PDT)
+Received: from [192.168.1.52] ([84.20.121.239])
+        by smtp.gmail.com with ESMTPSA id 2-20020a05651c00c200b0025bd4ec3ef2sm3472926ljr.81.2022.07.06.13.09.06
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 06 Jul 2022 13:09:06 -0700 (PDT)
+Message-ID: <e1fed734-8629-5bf2-60ba-ee62243def6f@linaro.org>
+Date:   Wed, 6 Jul 2022 22:09:05 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <7d1b2238aa5c805501ae3dc80b213d06f6588cb3.1655368610.git.bristot@kernel.org>
-X-Migadu-Flow: FLOW_OUT
-X-Migadu-Auth-User: linux.dev
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH 2/5] ARM: DTS: qcom: fix dtbs_check warning with new rpmcc
+ clocks
+Content-Language: en-US
+To:     Christian Marangi <ansuelsmth@gmail.com>
+Cc:     Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220705202837.667-1-ansuelsmth@gmail.com>
+ <20220705202837.667-3-ansuelsmth@gmail.com>
+ <18e40247-7151-b50a-97fe-00ee88f47d9b@linaro.org>
+ <62c565dc.1c69fb81.a4566.e9b2@mx.google.com>
+ <bcb64218-2d2b-2f6b-dc79-303bac8c3bd3@linaro.org>
+ <62c5de27.1c69fb81.c73fe.02c5@mx.google.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <62c5de27.1c69fb81.c73fe.02c5@mx.google.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 16, 2022 at 10:44:52AM +0200, Daniel Bristot de Oliveira wrote:
+On 06/07/2022 21:10, Christian Marangi wrote:
+> On Wed, Jul 06, 2022 at 05:07:12PM +0200, Krzysztof Kozlowski wrote:
+>> On 06/07/2022 12:20, Christian Marangi wrote:
+>>> On Wed, Jul 06, 2022 at 09:44:04AM +0200, Krzysztof Kozlowski wrote:
+>>>> On 05/07/2022 22:28, Christian Marangi wrote:
+>>>>> Fix dtbs_check warning for new rpmcc Documentation changes and add the
+>>>>> required clocks.
+>>>>
+>>>> There is no warning in the kernel, right? So the commit is not correct.
+>>>>
+>>>
+>>> Oh ok, the warning is generated by the new Documentation.
+>>
+>> Patches, especially DTS, might go via different trees, so the moment DTS
+>> is applied there might be no such warning.
+>>
+> 
+> I'm still confused about this topic...
+> With this kind of change, I notice I sent Documentation change and then
+> rob bot complain about dtbs_check having warning...
+> 
+> So the correct way is to send Documentation change and fix dtbs_check
+> warning in the same commit OR keep what I'm doing with sending
+> Documentation changes and fix DTS in a separate commit?
 
-> Per task wakeup while not running (wwnr) monitor, generated by dot2k
-> with this command line:
-> 
->   $ dot2k -d wwnr.dot -t per_task
-> 
-> The model is:
->  ----- %< -----
-> digraph state_automaton {
-> 	center = true;
-> 	size = "7,11";
-> 	{node [shape = plaintext, style=invis, label=""] "__init_not_running"};
-> 	{node [shape = ellipse] "not_running"};
-> 	{node [shape = plaintext] "not_running"};
-> 	{node [shape = plaintext] "running"};
-> 	"__init_not_running" -> "not_running";
-> 	"not_running" [label = "not_running", color = green3];
-> 	"not_running" -> "not_running" [ label = "wakeup" ];
-> 	"not_running" -> "running" [ label = "switch_in" ];
-> 	"running" [label = "running"];
-> 	"running" -> "not_running" [ label = "switch_out" ];
-> 	{ rank = min ;
-> 		"__init_not_running";
-> 		"not_running";
-> 	}
-> }
->  ----- >% -----
-> 
-> This model is broken, the reason is that a task can be running in the
-> processor without being set as RUNNABLE. Think about a task about to
-> sleep:
-> 
-> 1:	set_current_state(TASK_UNINTERRUPTIBLE);
-> 2:	schedule();
-> 
-> And then imagine an IRQ happening in between the lines one and two,
-> waking the task up. BOOM, the wakeup will happen while the task is
-> running.
-> 
-> Q: Why do we need this model, so?
-> A: To test the reactors.
-> 
-> Cc: Wim Van Sebroeck <wim@linux-watchdog.org>
-> Cc: Guenter Roeck <linux@roeck-us.net>
-> Cc: Jonathan Corbet <corbet@lwn.net>
-> Cc: Steven Rostedt <rostedt@goodmis.org>
-> Cc: Ingo Molnar <mingo@redhat.com>
-> Cc: Thomas Gleixner <tglx@linutronix.de>
-> Cc: Peter Zijlstra <peterz@infradead.org>
-> Cc: Will Deacon <will@kernel.org>
-> Cc: Catalin Marinas <catalin.marinas@arm.com>
-> Cc: Marco Elver <elver@google.com>
-> Cc: Dmitry Vyukov <dvyukov@google.com>
-> Cc: "Paul E. McKenney" <paulmck@kernel.org>
-> Cc: Shuah Khan <skhan@linuxfoundation.org>
-> Cc: Gabriele Paoloni <gpaoloni@redhat.com>
-> Cc: Juri Lelli <juri.lelli@redhat.com>
-> Cc: Clark Williams <williams@redhat.com>
-> Cc: linux-doc@vger.kernel.org
-> Cc: linux-kernel@vger.kernel.org
-> Cc: linux-trace-devel@vger.kernel.org
-> Signed-off-by: Daniel Bristot de Oliveira <bristot@kernel.org>
-> ---
->  kernel/trace/rv/monitors/wwnr/wwnr.c | 115 +++++++++++++++++++++++++++
->  kernel/trace/rv/monitors/wwnr/wwnr.h |  38 +++++++++
->  2 files changed, 153 insertions(+)
->  create mode 100644 kernel/trace/rv/monitors/wwnr/wwnr.c
->  create mode 100644 kernel/trace/rv/monitors/wwnr/wwnr.h
-> 
-> diff --git a/kernel/trace/rv/monitors/wwnr/wwnr.c b/kernel/trace/rv/monitors/wwnr/wwnr.c
-> new file mode 100644
-> index 000000000000..8ba01f0f0df8
-> --- /dev/null
-> +++ b/kernel/trace/rv/monitors/wwnr/wwnr.c
-> @@ -0,0 +1,115 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +#include <linux/ftrace.h>
-> +#include <linux/tracepoint.h>
-> +#include <linux/kernel.h>
-> +#include <linux/module.h>
-> +#include <linux/init.h>
-> +#include <linux/rv.h>
-> +#include <rv/instrumentation.h>
-> +#include <rv/da_monitor.h>
-> +
-> +#define MODULE_NAME "wwnr"
-> +
-> +/*
-> + * XXX: include required tracepoint headers, e.g.,
-> + * #include <linux/trace/events/sched.h>
-> + */
-> +#include <trace/events/rv.h>
-> +
-> +/*
-> + * This is the self-generated part of the monitor. Generally, there is no need
-> + * to touch this section.
-> + */
-> +#include "wwnr.h"
-> +
-> +/*
-> + * Declare the deterministic automata monitor.
-> + *
-> + * The rv monitor reference is needed for the monitor declaration.
-> + */
-> +struct rv_monitor rv_wwnr;
-> +DECLARE_DA_MON_PER_TASK(wwnr, char);
-> +
-> +/*
-> + * This is the instrumentation part of the monitor.
-> + *
-> + * This is the section where manual work is required. Here the kernel events
-> + * are translated into model's event.
-> + *
-> + */
-> +static void handle_switch_in(void *data, /* XXX: fill header */)
-> +{
-> +	struct task_struct *p = /* XXX: how do I get p? */;
-> +	da_handle_event_wwnr(p, switch_in_wwnr);
-> +}
-> +
-> +static void handle_switch_out(void *data, /* XXX: fill header */)
-> +{
-> +	struct task_struct *p = /* XXX: how do I get p? */;
-> +	da_handle_event_wwnr(p, switch_out_wwnr);
-> +}
-> +
-> +static void handle_wakeup(void *data, /* XXX: fill header */)
-> +{
-> +	struct task_struct *p = /* XXX: how do I get p? */;
-> +	da_handle_event_wwnr(p, wakeup_wwnr);
-> +}
-> +
-> +static int start_wwnr(void)
-> +{
-> +	int retval;
-> +
-> +	retval = da_monitor_init_wwnr();
-> +	if (retval)
-> +		return retval;
-> +
-> +	rv_attach_trace_probe("wwnr", /* XXX: tracepoint */, handle_switch_in);
-> +	rv_attach_trace_probe("wwnr", /* XXX: tracepoint */, handle_switch_out);
-> +	rv_attach_trace_probe("wwnr", /* XXX: tracepoint */, handle_wakeup);
-> +
-> +	return 0;
-> +}
-> +
-> +static void stop_wwnr(void)
-> +{
-> +	rv_wwnr.enabled = 0;
-> +
-> +	rv_detach_trace_probe("wwnr", /* XXX: tracepoint */, handle_switch_in);
-> +	rv_detach_trace_probe("wwnr", /* XXX: tracepoint */, handle_switch_out);
-> +	rv_detach_trace_probe("wwnr", /* XXX: tracepoint */, handle_wakeup);
-> +
-> +	da_monitor_destroy_wwnr();
-> +}
-> +
-> +/*
-> + * This is the monitor register section.
-> + */
-> +struct rv_monitor rv_wwnr = {
-> +	.name = "wwnr",
-> +	.description = "auto-generated wwnr",
-> +	.start = start_wwnr,
-> +	.stop = stop_wwnr,
-> +	.reset = da_monitor_reset_all_wwnr,
-> +	.enabled = 0,
-> +};
-> +
-> +int register_wwnr(void)
-> +{
-> +	rv_register_monitor(&rv_wwnr);
-> +	return 0;
-> +}
-> +
-> +void unregister_wwnr(void)
-> +{
-> +	if (rv_wwnr.enabled)
-> +		stop_wwnr();
-> +
-> +	rv_unregister_monitor(&rv_wwnr);
-> +}
-> +
-> +module_init(register_wwnr);
-> +module_exit(unregister_wwnr);
-> +
-> +MODULE_LICENSE("GPL");
-> +MODULE_AUTHOR("dot2k: auto-generated");
-> +MODULE_DESCRIPTION("wwnr");
-> diff --git a/kernel/trace/rv/monitors/wwnr/wwnr.h b/kernel/trace/rv/monitors/wwnr/wwnr.h
-> new file mode 100644
-> index 000000000000..f3dc160642bf
-> --- /dev/null
-> +++ b/kernel/trace/rv/monitors/wwnr/wwnr.h
-> @@ -0,0 +1,38 @@
-> +enum states_wwnr {
-> +	not_running_wwnr = 0,
-> +	running_wwnr,
-> +	state_max_wwnr
-> +};
-> +
-> +enum events_wwnr {
-> +	switch_in_wwnr = 0,
-> +	switch_out_wwnr,
-> +	wakeup_wwnr,
-> +	event_max_wwnr
-> +};
-> +
-> +struct automaton_wwnr {
-> +	char *state_names[state_max_wwnr];
-> +	char *event_names[event_max_wwnr];
-> +	char function[state_max_wwnr][event_max_wwnr];
-> +	char initial_state;
-> +	char final_states[state_max_wwnr];
-> +};
-> +
-> +struct automaton_wwnr automaton_wwnr = {
-> +	.state_names = {
-> +		"not_running",
-> +		"running"
-> +	},
-> +	.event_names = {
-> +		"switch_in",
-> +		"switch_out",
-> +		"wakeup"
-> +	},
+Binding is almost always separate from DTS and always separate from
+driver. The order depends on what you're doing. If you bring ABI break
+change to bindings, then the order does not matter, because each order
+will be non-bisectable. Because you broke ABI. That's the case in this
+patchset.
 
-The .state_names and .event_names lack the wwnr postfix.
-If they generated aotomatically, something need to fix,
-if not, can manually change to the consistent name.
+For other cases, usually bindings patches should be the first in patchset.
 
-If the state change from running to non-running(initial state),
-in the next patch in handle_switch() where there checked
-TASK_INTERRUPTABLE to set initial state. Why can not check
-TASK_UNINTERURPTABLE to set initial state there, confused.
-This model is not completed for me now.
+How it goes via maintainer trees is not your problem here. Patches might
+go together or might go separate.
 
-> +	.function = {
-> +		{     running_wwnr,               -1, not_running_wwnr },
-> +		{               -1, not_running_wwnr,               -1 },
-> +	},
-> +	.initial_state = not_running_wwnr,
-> +	.final_states = { 1, 0 },
-> +};
-> -- 
-> 2.35.1
-> 
+Anyway it was not the topic of my comment. Comment was about not
+specific commit msg which does not fit the Linux kernel process and does
+not fit git history once applied by maintainer. It fits even less when
+backported to stable kernels, which you commit msg encourages to do.
+
+Best regards,
+Krzysztof

@@ -2,113 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9388A567C15
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 04:48:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2DE03567C19
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 04:50:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229477AbiGFCri (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Jul 2022 22:47:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43302 "EHLO
+        id S231180AbiGFCty (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Jul 2022 22:49:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44660 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229955AbiGFCrh (ORCPT
+        with ESMTP id S229648AbiGFCtx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Jul 2022 22:47:37 -0400
-Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com [IPv6:2607:f8b0:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 259EC1A052
-        for <linux-kernel@vger.kernel.org>; Tue,  5 Jul 2022 19:47:36 -0700 (PDT)
-Received: by mail-pf1-x42f.google.com with SMTP id j3so521698pfb.6
-        for <linux-kernel@vger.kernel.org>; Tue, 05 Jul 2022 19:47:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=IW/MEisRImp3/lPYkYpqCnuHv6idrwG0D60CzTjNlbg=;
-        b=quxpqfHGltM89OLv0TIHtu7OKPWuWQXFLM4J5R8qY/nAAEfFdhcnS14yGAp7e1n5di
-         0cPJ3TwSSrAVYbIoskwpc480ETBLPHs54TGThC3k8J6KBnpMusgr90miFBdiJXUsgyx6
-         xbcBdflNaQMiKApuZJoTRU7zlZz1DXl+8lm3R3P+HoO978TYfORR5vSSDjUYmLmMp+q2
-         8+aRcqXKO5YpZtPafnyRV4D8vzdXVFr3Rjt474WTm4VlDURJ0P/FMc8TZKJU2Zh/WdmC
-         J5Q75J6DZ33YaXiwTDBD8ENDZbyIyeSUYrwFljyI0x6EjCVPN6pn2bzzWd7Pt1oEpfHk
-         cdSQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=IW/MEisRImp3/lPYkYpqCnuHv6idrwG0D60CzTjNlbg=;
-        b=hvvfVKF25Smt6Jb1bm3XJ3zOi/GLugM1wWSkPXnr1oYl+5BfXQx6A7OWxwMavJDGsy
-         RFdECRMhQ2AbwhsA8CUhSuh2kOS/tqgVEfTZG6cK6a8rTA8tZbdLPkfjIpqitMeb+cvn
-         bGwCURhz8cIn9vGvL+C2HRZ7OHJJe6vGeSU0MCzSEZAnLsMjyHqrKvajU4TiGid2xjvL
-         0Q1FqfcOslOfcl/kCI90+9iRYiHZkD7e1aNancfzm5hqqchuVfpMq4oc4DMOhBGs1ORB
-         AycyWWjZsC9UtH6F0lsMjATBm2TwVOYWro0SahKSWRk11gpvkgVp1ydL4a9jqwFE4jGN
-         0YCw==
-X-Gm-Message-State: AJIora8lbvLCFReuJKoUW50KN6oJuE9F1YIO95qWILDGHKrLhIzPPkNg
-        R9OM4PINi3rxiO+FycU3B3LUGA==
-X-Google-Smtp-Source: AGRyM1uTdJ3o4LNsP4D1e5S082o3mxjqvUnFNizEKLHJoOTPoitYvcw6+5ewIYS0dZ1OpE+R98mpjQ==
-X-Received: by 2002:aa7:910b:0:b0:524:f8d9:a4c4 with SMTP id 11-20020aa7910b000000b00524f8d9a4c4mr45971995pfh.5.1657075655655;
-        Tue, 05 Jul 2022 19:47:35 -0700 (PDT)
-Received: from localhost ([139.177.225.229])
-        by smtp.gmail.com with ESMTPSA id q13-20020a17090311cd00b0016bdeb58611sm6180279plh.112.2022.07.05.19.47.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 05 Jul 2022 19:47:35 -0700 (PDT)
-Date:   Wed, 6 Jul 2022 10:47:32 +0800
-From:   Muchun Song <songmuchun@bytedance.com>
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     Matthew Wilcox <willy@infradead.org>, jgg@ziepe.ca,
-        jhubbard@nvidia.com, william.kucharski@oracle.com,
-        dan.j.williams@intel.com, jack@suse.cz, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        nvdimm@lists.linux.dev, stable@vger.kernel.org
-Subject: Re: [PATCH v2] mm: fix missing wake-up event for FSDAX pages
-Message-ID: <YsT3xFSLJonnA2XC@FVFYT0MHHV2J.usts.net>
-References: <20220705123532.283-1-songmuchun@bytedance.com>
- <20220705141819.804eb972d43be3434dc70192@linux-foundation.org>
- <YsTLgQ45ESpsNEGV@casper.infradead.org>
- <20220705164710.9541b5cf0e5819193213ea5c@linux-foundation.org>
+        Tue, 5 Jul 2022 22:49:53 -0400
+Received: from out199-6.us.a.mail.aliyun.com (out199-6.us.a.mail.aliyun.com [47.90.199.6])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9918915A3E
+        for <linux-kernel@vger.kernel.org>; Tue,  5 Jul 2022 19:49:51 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R101e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046049;MF=guanghuifeng@linux.alibaba.com;NM=1;PH=DS;RN=21;SR=0;TI=SMTPD_---0VIW9-BM_1657075784;
+Received: from 30.225.28.170(mailfrom:guanghuifeng@linux.alibaba.com fp:SMTPD_---0VIW9-BM_1657075784)
+          by smtp.aliyun-inc.com;
+          Wed, 06 Jul 2022 10:49:45 +0800
+Message-ID: <7bf7c5ea-16eb-b02f-8ef5-bb94c157236d@linux.alibaba.com>
+Date:   Wed, 6 Jul 2022 10:49:43 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220705164710.9541b5cf0e5819193213ea5c@linux-foundation.org>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH v4] arm64: mm: fix linear mem mapping access performance
+ degradation
+To:     Mike Rapoport <rppt@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>
+Cc:     Will Deacon <will@kernel.org>, Ard Biesheuvel <ardb@kernel.org>,
+        baolin.wang@linux.alibaba.com, akpm@linux-foundation.org,
+        david@redhat.com, jianyong.wu@arm.com, james.morse@arm.com,
+        quic_qiancai@quicinc.com, christophe.leroy@csgroup.eu,
+        jonathan@marek.ca, mark.rutland@arm.com,
+        thunder.leizhen@huawei.com, anshuman.khandual@arm.com,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        geert+renesas@glider.be, linux-mm@kvack.org,
+        yaohongbo@linux.alibaba.com, alikernel-developer@linux.alibaba.com
+References: <6977c692-78ca-5a67-773e-0389c85f2650@linux.alibaba.com>
+ <20220704163815.GA32177@willie-the-truck>
+ <CAMj1kXEvY5QXOUrXZ7rBp9As=65uTTFRSSq+FPt-n4M2P-_VtQ@mail.gmail.com>
+ <20220705095231.GB552@willie-the-truck>
+ <5d044fdd-a61a-d60f-d294-89e17de37712@linux.alibaba.com>
+ <20220705121115.GB1012@willie-the-truck> <YsRSajyMxahXe7ZS@kernel.org>
+ <YsRZ8V8mQ+HM31D6@arm.com> <YsRfgX7FFZLxQU50@kernel.org>
+ <YsRvPTORdvIwzShL@arm.com> <YsSi9HAOOzbPYN+w@kernel.org>
+From:   "guanghui.fgh" <guanghuifeng@linux.alibaba.com>
+In-Reply-To: <YsSi9HAOOzbPYN+w@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jul 05, 2022 at 04:47:10PM -0700, Andrew Morton wrote:
-> On Wed, 6 Jul 2022 00:38:41 +0100 Matthew Wilcox <willy@infradead.org> wrote:
-> 
-> > On Tue, Jul 05, 2022 at 02:18:19PM -0700, Andrew Morton wrote:
-> > > On Tue,  5 Jul 2022 20:35:32 +0800 Muchun Song <songmuchun@bytedance.com> wrote:
-> > > 
-> > > > FSDAX page refcounts are 1-based, rather than 0-based: if refcount is
-> > > > 1, then the page is freed.  The FSDAX pages can be pinned through GUP,
-> > > > then they will be unpinned via unpin_user_page() using a folio variant
-> > > > to put the page, however, folio variants did not consider this special
-> > > > case, the result will be to miss a wakeup event (like the user of
-> > > > __fuse_dax_break_layouts()).  Since FSDAX pages are only possible get
-> > > > by GUP users, so fix GUP instead of folio_put() to lower overhead.
-> > > > 
-> > > 
-> > > What are the user visible runtime effects of this bug?
-> > 
-> > "missing wake up event" seems pretty obvious to me?  Something goes to
-> > sleep waiting for a page to become unused, and is never woken.
-> 
-> No, missed wakeups are often obscured by another wakeup coming in
-> shortly afterwards.
-> 
-
-I need to clarify the task will never be woken up.
-
-> If this wakeup is not one of these, then are there reports from the
-> softlockup detector?
-> 
-> Do we have reports of processes permanently stuck in D state?
->
-
-No. The task is in an TASK_INTERRUPTIBLE state (see __fuse_dax_break_layouts). 
-The hung task reporter only reports D task (TASK_UNINTERRUPTIBLE).
-
 Thanks.
+
+在 2022/7/6 4:45, Mike Rapoport 写道:
+> On Tue, Jul 05, 2022 at 06:05:01PM +0100, Catalin Marinas wrote:
+>> On Tue, Jul 05, 2022 at 06:57:53PM +0300, Mike Rapoport wrote:
+>>> On Tue, Jul 05, 2022 at 04:34:09PM +0100, Catalin Marinas wrote:
+>>>> On Tue, Jul 05, 2022 at 06:02:02PM +0300, Mike Rapoport wrote:
+>>>>> +void __init remap_crashkernel(void)
+>>>>> +{
+>>>>> +#ifdef CONFIG_KEXEC_CORE
+>>>>> +	phys_addr_t start, end, size;
+>>>>> +	phys_addr_t aligned_start, aligned_end;
+>>>>> +
+>>>>> +	if (can_set_direct_map() || IS_ENABLED(CONFIG_KFENCE))
+>>>>> +	    return;
+>>>>> +
+>>>>> +	if (!crashk_res.end)
+>>>>> +	    return;
+>>>>> +
+>>>>> +	start = crashk_res.start & PAGE_MASK;
+>>>>> +	end = PAGE_ALIGN(crashk_res.end);
+>>>>> +
+>>>>> +	aligned_start = ALIGN_DOWN(crashk_res.start, PUD_SIZE);
+>>>>> +	aligned_end = ALIGN(end, PUD_SIZE);
+>>>>> +
+>>>>> +	/* Clear PUDs containing crash kernel memory */
+>>>>> +	unmap_hotplug_range(__phys_to_virt(aligned_start),
+>>>>> +			    __phys_to_virt(aligned_end), false, NULL);
+>>>>
+>>>> What I don't understand is what happens if there's valid kernel data
+>>>> between aligned_start and crashk_res.start (or the other end of the
+>>>> range).
+>>>
+>>> Data shouldn't go anywhere :)
+>>>
+>>> There is
+>>>
+>>> +	/* map area from PUD start to start of crash kernel with large pages */
+>>> +	size = start - aligned_start;
+>>> +	__create_pgd_mapping(swapper_pg_dir, aligned_start,
+>>> +			     __phys_to_virt(aligned_start),
+>>> +			     size, PAGE_KERNEL, early_pgtable_alloc, 0);
+>>>
+>>> and
+>>>
+>>> +	/* map area from end of crash kernel to PUD end with large pages */
+>>> +	size = aligned_end - end;
+>>> +	__create_pgd_mapping(swapper_pg_dir, end, __phys_to_virt(end),
+>>> +			     size, PAGE_KERNEL, early_pgtable_alloc, 0);
+>>>
+>>> after the unmap, so after we tear down a part of a linear map we
+>>> immediately recreate it, just with a different page size.
+>>>
+>>> This all happens before SMP, so there is no concurrency at that point.
+>>
+>> That brief period of unmap worries me. The kernel text, data and stack
+>> are all in the vmalloc space but any other (memblock) allocation to this
+>> point may be in the unmapped range before and after the crashkernel
+>> reservation. The interrupts are off, so I think the only allocation and
+>> potential access that may go in this range is the page table itself. But
+>> it looks fragile to me.
 > 
+> I agree there are chances there will be an allocation from the unmapped
+> range.
+> 
+> We can make sure this won't happen, though. We can cap the memblock
+> allocations with memblock_set_current_limit(aligned_end) or
+> memblock_reserve(algined_start, aligned_end) until the mappings are
+> restored.
+>   
+>> -- 
+>> Catalin
+> 
+I think there is no need to worry about vmalloc mem.
+
+1.As mentioned above,
+When reserving crashkernel and remapping linear mem mapping, there is 
+only one boot cpu running. There is no other cpu/thread running at the 
+same time.
+
+2.Although vmalloc may alloc mem from the ummaped area, but we will 
+rebuid remapping using pte level mapping which keeps virtual address to 
+the same physical address
+(At the same time, no other cpu/thread is access vmalloc mem).
+
+As a result, it has no effect to vmalloc mem.

@@ -2,120 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5BB745692FF
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 22:04:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E542F569305
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 22:06:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234360AbiGFUEM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Jul 2022 16:04:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49918 "EHLO
+        id S233644AbiGFUGr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Jul 2022 16:06:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51992 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233871AbiGFUEI (ORCPT
+        with ESMTP id S231724AbiGFUGp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Jul 2022 16:04:08 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1A41C1D33C
-        for <linux-kernel@vger.kernel.org>; Wed,  6 Jul 2022 13:04:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1657137847;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=LayklR/S19h1wCQtjwIoLcNMOFevjKh5pX4dbOQsh/M=;
-        b=XpnaZsGTlBxcGTdtaF0F7Ye5mPReZbOlCfatIGnLKlz7DVtW/w7YsC3r4hJKNMGr1Cfw9B
-        q/kFu8BkkcS4FXzpbbzevSNkqNDSYVEPovzG6a1BmwBpvyBKOdWz2tKfTkkyucN8PVKlOV
-        Bjhc5CHEScSP685bv2ZpWfDsix4iQD8=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-382-4sLMvAJwP7u0so2ngqNs2w-1; Wed, 06 Jul 2022 16:03:57 -0400
-X-MC-Unique: 4sLMvAJwP7u0so2ngqNs2w-1
-Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 380F9802C16;
-        Wed,  6 Jul 2022 20:03:57 +0000 (UTC)
-Received: from starship (unknown [10.40.194.38])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id DC1112EF97;
-        Wed,  6 Jul 2022 20:03:54 +0000 (UTC)
-Message-ID: <bffaf01772a42d90512ee4d7240ead253083f23b.camel@redhat.com>
-Subject: Re: [PATCH v2 00/21] KVM: x86: Event/exception fixes and cleanups
-From:   Maxim Levitsky <mlevitsk@redhat.com>
-To:     Sean Christopherson <seanjc@google.com>,
-        Jim Mattson <jmattson@google.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Oliver Upton <oupton@google.com>,
-        Peter Shier <pshier@google.com>
-Date:   Wed, 06 Jul 2022 23:03:53 +0300
-In-Reply-To: <YsXL6qfSMHc0ENz8@google.com>
-References: <20220614204730.3359543-1-seanjc@google.com>
-         <7e05e0befa13af05f1e5f0fd8658bc4e7bdf764f.camel@redhat.com>
-         <CALMp9eSkdj=kwh=4WHPsWZ1mKr9+0VSB527D5CMEx+wpgEGjGw@mail.gmail.com>
-         <cab59dcca8490cbedda3c7cf5f93e579b96a362e.camel@redhat.com>
-         <CALMp9eT_C3tixwK_aZMd-0jQHBSsdrzhYvWk6ZrYkxcC8Pe=CQ@mail.gmail.com>
-         <YsXL6qfSMHc0ENz8@google.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.36.5 (3.36.5-2.fc32) 
+        Wed, 6 Jul 2022 16:06:45 -0400
+Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FA6F1EEF5
+        for <linux-kernel@vger.kernel.org>; Wed,  6 Jul 2022 13:06:44 -0700 (PDT)
+Received: by mail-ed1-x534.google.com with SMTP id z41so20654299ede.1
+        for <linux-kernel@vger.kernel.org>; Wed, 06 Jul 2022 13:06:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=7PiCfuqqFQMm4Z7Pxo/Mkp0vSHbF19ROVfmwHiEwIp8=;
+        b=nP8OozGQwV0hugk+1RizuLBuHeDBhO9I1ymaTbz9SVKu5nYndfbg6U0LGPb6gwFfHJ
+         ToZbABTlGJpV7Fyk+IMRHWjt2JHxQ45DWhkDuCmFXEEaQbf6RfOr5CSueAaKi6gUsh5a
+         Re0l7tzCHIGJ1Dw5CTE7fLIk/lTWUfy8Zu6/EVTWwCBo21YLl5rgE+ag9/k0RxO6uPdv
+         GIBGew/Ulw3raH0Q/cIqfI03t9KZH/OVjZiX7syD/4LdZeoIB5GkytSbgTT0CvCF6QEF
+         nNNtaoJCr1mmiucox/7veCDibYCx6ha7KADLG+MsqE7dMs9RavPoTfk7C/J1RzUZvtv6
+         dOFg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=7PiCfuqqFQMm4Z7Pxo/Mkp0vSHbF19ROVfmwHiEwIp8=;
+        b=sw4mz7Ve9G4ZHdOnFMC+nQIoymDTzuDCoz05lbLoH2+ImEICZzH6qZah5aPFwd944L
+         kJ90eUz1YvK3aSacNbO4w0vezWESjdz+p0pUUCw9aIYAhuU/jbrnmkYXDykAYgfJiDzO
+         jdIp97WHTHXcpkO6MBgShVjmnVWJqerlVDpBa1kkNjbOlSefSFR3XjHu9Ok1Aw4+q4UA
+         l9vbZtc2uaQTbpRdhPUCKNj1+jx96fSLnh8RJFplQpCExj+tIbIa33qL7reHXlmA5Eot
+         GXLJaafv4UjoOqneikb6OSrNrBJSf9pAa8tVDWFcEK9FNh2wNmFHKxbEQQ8uYAhq/gAC
+         Rp+g==
+X-Gm-Message-State: AJIora9bXtj5wfm1KQbEwCFTL0n+y4MFCdVker2H6t5lmL+6wrnioAdB
+        eGRCWNNHPxr2yluKiAyaxcvBmj0WCDsko7aFXC9c7g==
+X-Google-Smtp-Source: AGRyM1vVw8FO9mBPy3IYwxvYYV3o1j35+YKTnPDfsskfWqT5lbva7gMmrRyi07uXl3B4HhdRXqCM45LkaGsIUGz65VE=
+X-Received: by 2002:a05:6402:40c3:b0:439:6b72:483e with SMTP id
+ z3-20020a05640240c300b004396b72483emr43951638edb.154.1657138003142; Wed, 06
+ Jul 2022 13:06:43 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.79 on 10.11.54.5
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220518170124.2849497-1-dlatypov@google.com> <20220518170124.2849497-3-dlatypov@google.com>
+In-Reply-To: <20220518170124.2849497-3-dlatypov@google.com>
+From:   Brendan Higgins <brendanhiggins@google.com>
+Date:   Wed, 6 Jul 2022 16:06:31 -0400
+Message-ID: <CAFd5g44RLKbDHLeMMsJYeBK+smeioJKQVeBmHwk5uccD-vKvUA@mail.gmail.com>
+Subject: Re: [PATCH 2/3] kunit: tool: simplify creating LinuxSourceTreeOperations
+To:     Daniel Latypov <dlatypov@google.com>
+Cc:     davidgow@google.com, elver@google.com,
+        linux-kernel@vger.kernel.org, kasan-dev@googlegroups.com,
+        kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
+        skhan@linuxfoundation.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 2022-07-06 at 17:52 +0000, Sean Christopherson wrote:
-> On Wed, Jul 06, 2022, Jim Mattson wrote:
-> > On Wed, Jul 6, 2022 at 4:55 AM Maxim Levitsky <mlevitsk@redhat.com> wrote:
-> > 
-> > > 1. Since #SMI is higher priority than the #MTF, that means that unless dual monitor treatment is used,
-> > >    and the dual monitor handler figures out that #MTF was pending and re-injects it when it
-> > >    VMRESUME's the 'host', the MTF gets lost, and there is no way for a normal hypervisor to
-> > >    do anything about it.
-> > > 
-> > >    Or maybe pending MTF is saved to SMRAM somewhere.
-> > > 
-> > >    In case you will say that I am inventing this again, I am saying now that the above is
-> > >    just a guess.
-> > 
-> > This is covered in the SDM, volume 3, section 31.14.1: "Default
-> > Treatment of SMI Delivery:"
-> > 
-> > The pseudocode above makes reference to the saving of VMX-critical
-> > state. This state consists of the following:
-> > (1) SS.DPL (the current privilege level); (2) RFLAGS.VM2; (3) the
-> > state of blocking by STI and by MOV SS (see
-> > Table 24-3 in Section 24.4.2); (4) the state of virtual-NMI blocking
-> > (only if the processor is in VMX non-root oper-
-> > ation and the “virtual NMIs” VM-execution control is 1); and (5) an
-> > indication of whether an MTF VM exit is pending
-> > (see Section 25.5.2). These data may be saved internal to the
-> > processor or in the VMCS region of the current
-> > VMCS. Processors that do not support SMI recognition while there is
-> > blocking by STI or by MOV SS need not save
-> > the state of such blocking.
-> > 
-> > Saving VMX-critical state to SMRAM is not documented as an option.
-> 
-> Hmm, I'm not entirely convinced that Intel doesn't interpret "internal to the
-> processor" as "undocumented SMRAM fields".  But I could also be misremembering
-> the SMI flows.
-> 
-> Regardless, I do like the idea of using vmcs12 instead of SMRAM.  That would provide
-> some extra motivation for moving away from KVM's broken pseudo VM-Exit implementation.
-> 
+On Wed, May 18, 2022 at 1:01 PM Daniel Latypov <dlatypov@google.com> wrote:
+>
+> Drop get_source_tree_ops() and just call what used to be
+> get_source_tree_ops_from_qemu_config() in both cases.
+>
+> Also rename the functions to have shorter names and add a "_" prefix to
+> note they're not meant to be used outside this function.
+>
+> Signed-off-by: Daniel Latypov <dlatypov@google.com>
 
-For preserving pending MTF, I guess it makes sense to use vmcb12, especially since we own
-its format.
-
-Best regards,
-	Maxim Levitsky
-
+Reviewed-by: Brendan Higgins <brendanhiggins@google.com>

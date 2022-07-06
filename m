@@ -2,154 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CA56E567D8E
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 06:59:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 11C39567D90
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 07:00:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230115AbiGFE6k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Jul 2022 00:58:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33124 "EHLO
+        id S230177AbiGFFAY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Jul 2022 01:00:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34064 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230080AbiGFE6h (ORCPT
+        with ESMTP id S230120AbiGFFAX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Jul 2022 00:58:37 -0400
-Received: from alexa-out-sd-01.qualcomm.com (alexa-out-sd-01.qualcomm.com [199.106.114.38])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 227391571D;
-        Tue,  5 Jul 2022 21:58:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1657083516; x=1688619516;
-  h=subject:to:cc:references:from:message-id:date:
-   mime-version:in-reply-to:content-transfer-encoding;
-  bh=WXjdQsds+XZxZZX7SRcqQV+eu4pHZKuRykJohRSEZyc=;
-  b=uVd9oFokqqfnlikGBJHDfJWPra9NR9Cp7I3hz8ug144eRRSptSZ4dius
-   voA2sbdfR2sYWU5vUzepStVM74X21JmX2fty8Dhcq+rgImsrLeQpXDyWh
-   J3Rr/Ze84XkEf83IEiuWFhGE0uTLE46fWJPiLMT66+LrvuH5XfU4k1E1x
-   o=;
-Received: from unknown (HELO ironmsg05-sd.qualcomm.com) ([10.53.140.145])
-  by alexa-out-sd-01.qualcomm.com with ESMTP; 05 Jul 2022 21:58:35 -0700
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg05-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jul 2022 21:58:35 -0700
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Tue, 5 Jul 2022 21:58:35 -0700
-Received: from [192.168.142.6] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Tue, 5 Jul 2022
- 21:58:34 -0700
-Subject: Re: [PATCH 1/2] remoteproc: core: Introduce rproc_del_carveout
-To:     Arnaud POULIQUEN <arnaud.pouliquen@foss.st.com>,
-        <bjorn.andersson@linaro.org>, <mathieu.poirier@linaro.org>
-CC:     <linux-remoteproc@vger.kernel.org>,
-        <linux-arm-msm@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-References: <1654888985-3846-1-git-send-email-quic_clew@quicinc.com>
- <1654888985-3846-2-git-send-email-quic_clew@quicinc.com>
- <7881ee36-89f6-3ba9-f4ac-7c4e614728dd@foss.st.com>
-From:   Chris Lew <quic_clew@quicinc.com>
-Message-ID: <42e27ed9-1e31-9943-4e82-84c3b3090383@quicinc.com>
-Date:   Tue, 5 Jul 2022 21:57:25 -0700
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.7.1
+        Wed, 6 Jul 2022 01:00:23 -0400
+Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E15B51BE91;
+        Tue,  5 Jul 2022 22:00:21 -0700 (PDT)
+Received: from lelv0266.itg.ti.com ([10.180.67.225])
+        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 266504Eo103202;
+        Wed, 6 Jul 2022 00:00:04 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1657083604;
+        bh=D9PtAo2EJpNoBvQxSpTmULzcTbmQj+LZIpS5Xpqazeo=;
+        h=Date:CC:Subject:To:References:From:In-Reply-To;
+        b=jGUJ6DRG9+t8J72nViRq2yQ3hK913hh39fAsLY20CD9me3DUaGelXsTKdva0hPY9D
+         xujnZOQfq8w3ZvjbjPQFajIi4FiaYlNSR6UtjsSYFGdi77K1U7CdTSOFD7F+KPTf76
+         uvVUh48BxpwjqrrEc3TIkj39GiAJmUQzD2YtafZQ=
+Received: from DFLE100.ent.ti.com (dfle100.ent.ti.com [10.64.6.21])
+        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 266504Ce070534
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Wed, 6 Jul 2022 00:00:04 -0500
+Received: from DFLE103.ent.ti.com (10.64.6.24) by DFLE100.ent.ti.com
+ (10.64.6.21) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Wed, 6
+ Jul 2022 00:00:02 -0500
+Received: from fllv0039.itg.ti.com (10.64.41.19) by DFLE103.ent.ti.com
+ (10.64.6.24) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
+ Frontend Transport; Wed, 6 Jul 2022 00:00:02 -0500
+Received: from [172.24.222.108] (ileax41-snat.itg.ti.com [10.172.224.153])
+        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 2664xwDn117319;
+        Tue, 5 Jul 2022 23:59:59 -0500
+Message-ID: <19b9e05e-f750-8bb5-542e-6e9590812c3c@ti.com>
+Date:   Wed, 6 Jul 2022 10:29:57 +0530
 MIME-Version: 1.0
-In-Reply-To: <7881ee36-89f6-3ba9-f4ac-7c4e614728dd@foss.st.com>
-Content-Type: text/plain; charset="utf-8"; format=flowed
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+CC:     <davem@davemloft.net>, <linux@armlinux.org.uk>,
+        <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <kishon@ti.com>, <vigneshr@ti.com>, <grygorii.strashko@ti.com>,
+        <s-vadapalli@ti.com>
+Subject: Re: [PATCH net v2] net: ethernet: ti: am65-cpsw: Fix devlink port
+ register sequence
 Content-Language: en-US
+To:     Jakub Kicinski <kuba@kernel.org>
+References: <20220704073040.7542-1-s-vadapalli@ti.com>
+ <20220705183901.2a536d50@kernel.org>
+From:   Siddharth Vadapalli <s-vadapalli@ti.com>
+In-Reply-To: <20220705183901.2a536d50@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hello Jakub,
 
-
-On 6/30/2022 9:36 AM, Arnaud POULIQUEN wrote:
-> Hi,
-> 
-> On 6/10/22 21:23, Chris Lew wrote:
->> To mirror the exported rproc_add_carveout(), add a rproc_del_carveout()
->> so memory carveout resources added by devices outside of remoteproc can
->> manage the resource lifetime more accurately.
->>
->> Signed-off-by: Chris Lew <quic_clew@quicinc.com>
->> ---
->>   drivers/remoteproc/remoteproc_core.c | 20 ++++++++++++++++++++
->>   include/linux/remoteproc.h           |  1 +
->>   2 files changed, 21 insertions(+)
->>
->> diff --git a/drivers/remoteproc/remoteproc_core.c b/drivers/remoteproc/remoteproc_core.c
->> index 02a04ab34a23..ee71fccae970 100644
->> --- a/drivers/remoteproc/remoteproc_core.c
->> +++ b/drivers/remoteproc/remoteproc_core.c
->> @@ -1001,6 +1001,26 @@ void rproc_add_carveout(struct rproc *rproc, struct rproc_mem_entry *mem)
->>   EXPORT_SYMBOL(rproc_add_carveout);
->>   
->>   /**
->> + * rproc_del_carveout() - remove an allocated carveout region
->> + * @rproc: rproc handle
->> + * @mem: memory entry to register
->> + *
->> + * This function removes specified memory entry in @rproc carveouts list.
->> + */
->> +void rproc_del_carveout(struct rproc *rproc, struct rproc_mem_entry *mem)
->> +{
->> +	struct rproc_mem_entry *entry, *tmp;
+On 06/07/22 07:09, Jakub Kicinski wrote:
+> On Mon, 4 Jul 2022 13:00:40 +0530 Siddharth Vadapalli wrote:
+>> @@ -2527,6 +2527,10 @@ static int am65_cpsw_nuss_register_ndevs(struct am65_cpsw_common *common)
+>>  		return ret;
+>>  	}
+>>  
+>> +	ret = am65_cpsw_nuss_register_devlink(common);
+>> +	if (ret)
+>> +		goto err_cleanup_ndev;
 >> +
->> +	list_for_each_entry_safe(entry, tmp, &rproc->carveouts, node) {
->> +		if (entry == mem) {
->> +			list_del(&mem->node);
->> +			return;
->> +		}
->> +	}
->> +}
->> +EXPORT_SYMBOL(rproc_del_carveout);
-> 
-> This API seems to me quite dangerous because it can be called while carveouts are in use.
-> At least some checks should be added...
-> 
-> What about using rproc_resource_cleanup instead?
-> 
-> Regards,
-> Arnaud
-> 
-
-The intended users of this API would be devices who negotiate with the 
-device and know when the carveouts it has added are in use or can be 
-reclaimed. I had looked at rproc_resource_cleanup() and that seemed more 
-like a blanket cleanup rather than being able to cleanup a specific 
-carveout.
-
-I agree the API seems dangerous, but I wasn't quite sure what kind of 
-checks could be put here since remoteproc itself doesn't have any 
-mechanisms to monitor the carveout state itself. We're relying on the 
-fact that the device who added the carveout shouldn't make any mistakes 
-which is fairly fragile.
-
-Thanks!
-Chris
-
+>>  	for (i = 0; i < common->port_num; i++) {
+>>  		port = &common->ports[i];
+>>  
+>> @@ -2539,23 +2543,21 @@ static int am65_cpsw_nuss_register_ndevs(struct am65_cpsw_common *common)
+>>  				i, ret);
+>>  			goto err_cleanup_ndev;
+>>  		}
 >> +
->> +/**
->>    * rproc_mem_entry_init() - allocate and initialize rproc_mem_entry struct
->>    * @dev: pointer on device struct
->>    * @va: virtual address
->> diff --git a/include/linux/remoteproc.h b/include/linux/remoteproc.h
->> index 7c943f0a2fc4..43112aa78ffe 100644
->> --- a/include/linux/remoteproc.h
->> +++ b/include/linux/remoteproc.h
->> @@ -658,6 +658,7 @@ struct rproc *devm_rproc_alloc(struct device *dev, const char *name,
->>   int devm_rproc_add(struct device *dev, struct rproc *rproc);
->>   
->>   void rproc_add_carveout(struct rproc *rproc, struct rproc_mem_entry *mem);
->> +void rproc_del_carveout(struct rproc *rproc, struct rproc_mem_entry *mem);
->>   
->>   struct rproc_mem_entry *
->>   rproc_mem_entry_init(struct device *dev,
+>> +		dl_port = &port->devlink_port;
+>> +		devlink_port_type_eth_set(dl_port, port->ndev);
+>>  	}
+>>  
+>>  	ret = am65_cpsw_register_notifiers(common);
+>>  	if (ret)
+>>  		goto err_cleanup_ndev;
+>>  
+>> -	ret = am65_cpsw_nuss_register_devlink(common);
+>> -	if (ret)
+>> -		goto clean_unregister_notifiers;
+>> -
+>>  	/* can't auto unregister ndev using devm_add_action() due to
+>>  	 * devres release sequence in DD core for DMA
+>>  	 */
+>>  
+>>  	return 0;
+>> -clean_unregister_notifiers:
+>> -	am65_cpsw_unregister_notifiers(common);
+>> +
+>>  err_cleanup_ndev:
+>>  	am65_cpsw_nuss_cleanup_ndev(common);
+> 
+> No additions to the error handling path? Slightly suspicious.
+> Do the devlink ports not have to be removed if netdev registration
+> fails?
+
+Thank you for pointing it out. I had missed adding the cleanup for the register
+devlink function call. I will add it and post the v3 patch.
+
+Regards,
+Siddharth.

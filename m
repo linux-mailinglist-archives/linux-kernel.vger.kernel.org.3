@@ -2,58 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 72340568976
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 15:30:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 61FA656896F
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 15:30:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232013AbiGFN3O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Jul 2022 09:29:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57232 "EHLO
+        id S233634AbiGFN3S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Jul 2022 09:29:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57242 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233496AbiGFN3K (ORCPT
+        with ESMTP id S232435AbiGFN3L (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Jul 2022 09:29:10 -0400
-Received: from mail-il1-f173.google.com (mail-il1-f173.google.com [209.85.166.173])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BD1A22BE2;
-        Wed,  6 Jul 2022 06:29:07 -0700 (PDT)
-Received: by mail-il1-f173.google.com with SMTP id h5so9170019ili.3;
-        Wed, 06 Jul 2022 06:29:07 -0700 (PDT)
+        Wed, 6 Jul 2022 09:29:11 -0400
+Received: from mail-io1-f41.google.com (mail-io1-f41.google.com [209.85.166.41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7153D22536;
+        Wed,  6 Jul 2022 06:29:09 -0700 (PDT)
+Received: by mail-io1-f41.google.com with SMTP id v185so13950660ioe.11;
+        Wed, 06 Jul 2022 06:29:09 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:in-reply-to:references:subject:date
          :message-id;
-        bh=bL71fy7BLG4i0HSqgZRBo3aR1jRlA0eAtGzp+APcptI=;
-        b=y9bkXaWy1jzrEnjmY+jHTnni2nrJNudGT8uQYkoApzxv0E2DtmfVAbn3I2Qm6nhgFk
-         Z8MsymzKR3pIg+sU7ojRT74lak0Khs9ZSWrm85E0yZMZYVR+5xHRAl/UGcZgqPJn9Ria
-         893Xrhf4fxxsDK/GWrL8fQX5UW/hJsFqsgp6/ZK9XJHYnfK1NmKi3EYcc3NxEmPiRKz1
-         yS+gBC/Ym3JSwHp9sV0mJF/2GI2bxcs59z0cXrpk351/M8Ev/utSF0r1FBMWD38WvZxM
-         V0eif+dFFi2bqAqDmrVMVEi2ghXuJnbtd8ZdJO9F+zhkmv9FQfdpmRu1bCVoPtlmwToW
-         ABxA==
-X-Gm-Message-State: AJIora/Gp7P6wdttzoyf6ktO6UicaBs99DZnvBNvIkl65D/r0twMG/Vg
-        4Ed0eZQ7BPKK2zXnGTIBnA==
-X-Google-Smtp-Source: AGRyM1tJGJIVlx7VpB8IkYCckD9b2GDYj12b9uIMBx8AyD4cJrWgClMUDYkNKE6zsrsxzt8Q5IB69w==
-X-Received: by 2002:a05:6e02:1848:b0:2da:af35:e7c3 with SMTP id b8-20020a056e02184800b002daaf35e7c3mr23641658ilv.265.1657114146897;
-        Wed, 06 Jul 2022 06:29:06 -0700 (PDT)
+        bh=aH9lY+PqiINzwORzIiO0qDw6/f8iZmksmBw46FQhWpk=;
+        b=ZU4k9EwsJe71bEPuMPK0lbyWmxGQAMOcEW+n3oeNXf+dG44xu97oBkS7Qcg6vlxvOc
+         aXozB4uMFAkOWHj2TzaGsjgpnN+swxtskIn8I+ysyolbCTOgK9jDeqb91SYyTxX8YG3T
+         2+q3siFL/rNhs9SQ3H54jemXv3/oK0P37qq+Y39mFhMd2plJ/yElZNBspE94HPMvPhw/
+         g/opXiWUgdG+lrH0NVUqpemNI8gmTttsanaKSHA6uiXxEb1oQK0uY/vZRvDTI12bnzYU
+         yvOcebMTJIn41/iIG9X8vwtanjzMSb6s7ptHtPGZ989APzrEwUGUoSa55AUxM6rxX6MR
+         gACA==
+X-Gm-Message-State: AJIora89V2XVJ6gqO1jGsw3L+/KfyoDjZWRSCTmsrI5atb4Q4jGBB1ZU
+        61TNpKgGObrf6PsVzzsO/A==
+X-Google-Smtp-Source: AGRyM1siwmsKZBGMzZqo+DCW0UuVyEgykE4URqCkd6D2y8wK9hzr/wCXAIdebsXRMO5/8F/INeU8rg==
+X-Received: by 2002:a05:6602:29d1:b0:669:428e:8c59 with SMTP id z17-20020a05660229d100b00669428e8c59mr21345697ioq.85.1657114148656;
+        Wed, 06 Jul 2022 06:29:08 -0700 (PDT)
 Received: from robh.at.kernel.org ([64.188.179.248])
-        by smtp.gmail.com with ESMTPSA id z10-20020a92650a000000b002dc100ab6fdsm3675172ilb.35.2022.07.06.06.29.05
+        by smtp.gmail.com with ESMTPSA id 19-20020a056e0211b300b002dc0d743570sm3817592ilj.43.2022.07.06.06.29.07
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 06 Jul 2022 06:29:06 -0700 (PDT)
-Received: (nullmailer pid 4099934 invoked by uid 1000);
+        Wed, 06 Jul 2022 06:29:08 -0700 (PDT)
+Received: (nullmailer pid 4099937 invoked by uid 1000);
         Wed, 06 Jul 2022 13:29:04 -0000
 From:   Rob Herring <robh@kernel.org>
-To:     Corentin Labbe <clabbe@baylibre.com>
-Cc:     john@metanate.com, heiko@sntech.de, p.zabel@pengutronix.de,
-        krzysztof.kozlowski+dt@linaro.org, robh+dt@kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-crypto@vger.kernel.org,
-        linux-kernel@vger.kernel.org, didi.debian@cknow.org,
-        herbert@gondor.apana.org.au, sboyd@kernel.org,
-        mturquette@baylibre.com, linux-rockchip@lists.infradead.org,
-        devicetree@vger.kernel.org, linux-clk@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220706090412.806101-26-clabbe@baylibre.com>
-References: <20220706090412.806101-1-clabbe@baylibre.com> <20220706090412.806101-26-clabbe@baylibre.com>
-Subject: Re: [PATCH v8 25/33] dt-bindings: crypto: rockchip: convert to new driver bindings
+To:     Kavyasree Kotagiri <kavyasree.kotagiri@microchip.com>
+Cc:     nicolas.ferre@microchip.com, robh+dt@kernel.org,
+        alexandre.belloni@bootlin.com, linux-kernel@vger.kernel.org,
+        Kavyasree.Kotagiri@microchip.com, UNGLinuxDriver@microchip.com,
+        krzysztof.kozlowski+dt@linaro.org,
+        linux-arm-kernel@lists.infradead.org, claudiu.beznea@microchip.com,
+        devicetree@vger.kernel.org
+In-Reply-To: <20220706110619.71729-2-kavyasree.kotagiri@microchip.com>
+References: <20220706110619.71729-1-kavyasree.kotagiri@microchip.com> <20220706110619.71729-2-kavyasree.kotagiri@microchip.com>
+Subject: Re: [PATCH v7 1/3] dt-bindings: mfd: Convert atmel-flexcom to json-schema
 Date:   Wed, 06 Jul 2022 07:29:04 -0600
-Message-Id: <1657114144.957232.4099933.nullmailer@robh.at.kernel.org>
+Message-Id: <1657114144.966195.4099936.nullmailer@robh.at.kernel.org>
 X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
         FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
         HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
@@ -65,67 +63,149 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 06 Jul 2022 09:04:04 +0000, Corentin Labbe wrote:
-> The latest addition to the rockchip crypto driver need to update the
-> driver bindings.
+On Wed, 06 Jul 2022 09:06:17 -0200, Kavyasree Kotagiri wrote:
+> Convert the Atmel flexcom device tree bindings to json schema.
 > 
-> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> Signed-off-by: Corentin Labbe <clabbe@baylibre.com>
+> Signed-off-by: Kavyasree Kotagiri <kavyasree.kotagiri@microchip.com>
 > ---
->  .../crypto/rockchip,rk3288-crypto.yaml        | 85 +++++++++++++++++--
->  1 file changed, 77 insertions(+), 8 deletions(-)
+> v6 -> v7:
+>  - Change filename to atmel,sama5d2-flexcom.yaml
+>  - Add #address-cells, #size-cells to flexcom node - Fixed warnings.
+> 
+> v5 -> v6:
+>  - Removed spi node from example as suggested by Rob and
+>    also pattern properties(spi dt-bindings conversion to yaml patch is under review).
+>    Once that is accepted, I will add back spi example through new patch.
+> 
+> v4 -> v5:
+>  - Fixed indentations.
+> 
+> v3 -> v4:
+>  - Corrected format of enum used for compatible string.
+> 
+> v2 -> v3:
+>  - used enum for compatible string.
+>  - changed irq flag to IRQ_TYPE_LEVEL_HIGH in example.
+>  - fixed dtschema errors.
+> 
+> v1 -> v2:
+>  - Fix title.
+> 
+>  .../bindings/mfd/atmel,sama5d2-flexcom.yaml   | 74 +++++++++++++++++++
+>  .../devicetree/bindings/mfd/atmel-flexcom.txt | 63 ----------------
+>  2 files changed, 74 insertions(+), 63 deletions(-)
+>  create mode 100644 Documentation/devicetree/bindings/mfd/atmel,sama5d2-flexcom.yaml
+>  delete mode 100644 Documentation/devicetree/bindings/mfd/atmel-flexcom.txt
 > 
 
-My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
-on your patch (DT_CHECKER_FLAGS is new in v5.13):
+Running 'make dtbs_check' with the schema in this patch gives the
+following warnings. Consider if they are expected or the schema is
+incorrect. These may not be new warnings.
 
-yamllint warnings/errors:
+Note that it is not yet a requirement to have 0 warnings for dtbs_check.
+This will change in the future.
 
-dtschema/dtc warnings/errors:
-/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/crypto/rockchip,rk3288-crypto.yaml: allOf:0:then:properties:clock-names: 'oneOf' conditional failed, one must be fixed:
-	[{'const': 'aclk'}, {'const': 'hclk'}, {'const': 'sclk'}, {'const': 'apb_pclk'}] is too long
-	[{'const': 'aclk'}, {'const': 'hclk'}, {'const': 'sclk'}, {'const': 'apb_pclk'}] is too short
-	False schema does not allow 4
-	1 was expected
-	4 is greater than the maximum of 2
-	4 is greater than the maximum of 3
-	hint: "minItems" is only needed if less than the "items" list length
-	from schema $id: http://devicetree.org/meta-schemas/items.yaml#
-/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/crypto/rockchip,rk3288-crypto.yaml: allOf:0:then:properties:reset-names: {'items': [{'const': 'crypto-rst'}], 'maxItems': 1} should not be valid under {'required': ['maxItems']}
-	hint: "maxItems" is not needed with an "items" list
-	from schema $id: http://devicetree.org/meta-schemas/items.yaml#
-/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/crypto/rockchip,rk3288-crypto.yaml: allOf:1:then:properties:clock-names: {'items': [{'const': 'hclk_master'}, {'const': 'hclk_slave'}, {'const': 'sclk'}], 'maxItems': 3} should not be valid under {'required': ['maxItems']}
-	hint: "maxItems" is not needed with an "items" list
-	from schema $id: http://devicetree.org/meta-schemas/items.yaml#
-/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/crypto/rockchip,rk3288-crypto.yaml: allOf:1:then:properties:reset-names: {'items': [{'const': 'crypto-rst'}], 'maxItems': 1} should not be valid under {'required': ['maxItems']}
-	hint: "maxItems" is not needed with an "items" list
-	from schema $id: http://devicetree.org/meta-schemas/items.yaml#
-/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/crypto/rockchip,rk3288-crypto.yaml: allOf:2:then:properties:clock-names: {'items': [{'const': 'hclk_master'}, {'const': 'hclk_slave'}, {'const': 'sclk'}], 'maxItems': 3} should not be valid under {'required': ['maxItems']}
-	hint: "maxItems" is not needed with an "items" list
-	from schema $id: http://devicetree.org/meta-schemas/items.yaml#
-/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/crypto/rockchip,rk3288-crypto.yaml: allOf:2:then:properties:reset-names: 'oneOf' conditional failed, one must be fixed:
-	[{'const': 'rst_master'}, {'const': 'rst_slave'}, {'const': 'crypto-rst'}] is too long
-	[{'const': 'rst_master'}, {'const': 'rst_slave'}, {'const': 'crypto-rst'}] is too short
-	False schema does not allow 3
-	1 was expected
-	3 is greater than the maximum of 2
-	hint: "minItems" is only needed if less than the "items" list length
-	from schema $id: http://devicetree.org/meta-schemas/items.yaml#
-/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/crypto/rockchip,rk3288-crypto.yaml: ignoring, error in schema: allOf: 0: then: properties: reset-names
-Documentation/devicetree/bindings/crypto/rockchip,rk3288-crypto.example.dtb:0:0: /example-0/crypto@ff8a0000: failed to match any schema with compatible: ['rockchip,rk3288-crypto']
+Full log is available here: https://patchwork.ozlabs.org/patch/
 
-doc reference errors (make refcheckdocs):
 
-See https://patchwork.ozlabs.org/patch/
+flexcom@e0040000: 'i2c@600', 'serial@200', 'spi@400' do not match any of the regexes: 'pinctrl-[0-9]+'
+	arch/arm/boot/dts/lan966x-kontron-kswitch-d10-mmt-6g-2gs.dtb
+	arch/arm/boot/dts/lan966x-kontron-kswitch-d10-mmt-8g.dtb
+	arch/arm/boot/dts/lan966x-pcb8291.dtb
 
-This check can fail if there are any dependencies. The base for a patch
-series is generally the most recent rc1.
+flexcom@e0044000: 'i2c@600', 'serial@200', 'spi@400' do not match any of the regexes: 'pinctrl-[0-9]+'
+	arch/arm/boot/dts/lan966x-kontron-kswitch-d10-mmt-6g-2gs.dtb
+	arch/arm/boot/dts/lan966x-kontron-kswitch-d10-mmt-8g.dtb
+	arch/arm/boot/dts/lan966x-pcb8291.dtb
 
-If you already ran 'make dt_binding_check' and didn't see the above
-error(s), then make sure 'yamllint' is installed and dt-schema is up to
-date:
+flexcom@e0060000: 'i2c@600', 'serial@200', 'spi@400' do not match any of the regexes: 'pinctrl-[0-9]+'
+	arch/arm/boot/dts/lan966x-kontron-kswitch-d10-mmt-6g-2gs.dtb
+	arch/arm/boot/dts/lan966x-kontron-kswitch-d10-mmt-8g.dtb
+	arch/arm/boot/dts/lan966x-pcb8291.dtb
 
-pip3 install dtschema --upgrade
+flexcom@e0064000: 'i2c@600', 'serial@200', 'spi@400' do not match any of the regexes: 'pinctrl-[0-9]+'
+	arch/arm/boot/dts/lan966x-kontron-kswitch-d10-mmt-6g-2gs.dtb
+	arch/arm/boot/dts/lan966x-kontron-kswitch-d10-mmt-8g.dtb
+	arch/arm/boot/dts/lan966x-pcb8291.dtb
 
-Please check and re-submit.
+flexcom@e0070000: 'i2c@600', 'serial@200', 'spi@400' do not match any of the regexes: 'pinctrl-[0-9]+'
+	arch/arm/boot/dts/lan966x-kontron-kswitch-d10-mmt-6g-2gs.dtb
+	arch/arm/boot/dts/lan966x-kontron-kswitch-d10-mmt-8g.dtb
+	arch/arm/boot/dts/lan966x-pcb8291.dtb
+
+flexcom@e1818000: 'serial@200' does not match any of the regexes: 'pinctrl-[0-9]+'
+	arch/arm/boot/dts/at91-sama7g5ek.dtb
+
+flexcom@e181c000: 'i2c@600' does not match any of the regexes: 'pinctrl-[0-9]+'
+	arch/arm/boot/dts/at91-sama7g5ek.dtb
+
+flexcom@e1824000: 'serial@200' does not match any of the regexes: 'pinctrl-[0-9]+'
+	arch/arm/boot/dts/at91-sama7g5ek.dtb
+
+flexcom@e2018000: 'serial@200' does not match any of the regexes: 'pinctrl-[0-9]+'
+	arch/arm/boot/dts/at91-sama7g5ek.dtb
+
+flexcom@e2024000: 'serial@200' does not match any of the regexes: 'pinctrl-[0-9]+'
+	arch/arm/boot/dts/at91-sama7g5ek.dtb
+
+flexcom@e2818000: 'i2c@600' does not match any of the regexes: 'pinctrl-[0-9]+'
+	arch/arm/boot/dts/at91-sama7g5ek.dtb
+
+flexcom@e281c000: 'i2c@600' does not match any of the regexes: 'pinctrl-[0-9]+'
+	arch/arm/boot/dts/at91-sama7g5ek.dtb
+
+flexcom@e2824000: 'spi@400' does not match any of the regexes: 'pinctrl-[0-9]+'
+	arch/arm/boot/dts/at91-sama7g5ek.dtb
+
+flexcom@f0000000: 'spi@400' does not match any of the regexes: 'pinctrl-[0-9]+'
+	arch/arm/boot/dts/at91-sam9x60ek.dtb
+
+flexcom@f0004000: 'serial@200' does not match any of the regexes: 'pinctrl-[0-9]+'
+	arch/arm/boot/dts/at91-sam9x60ek.dtb
+
+flexcom@f8010000: 'i2c@600' does not match any of the regexes: 'pinctrl-[0-9]+'
+	arch/arm/boot/dts/at91-sam9x60ek.dtb
+
+flexcom@f801c000: 'i2c@600' does not match any of the regexes: 'pinctrl-[0-9]+'
+	arch/arm/boot/dts/at91-sam9x60ek.dtb
+
+flexcom@f8034000: 'i2c@600', 'serial@200', 'spi@400' do not match any of the regexes: 'pinctrl-[0-9]+'
+	arch/arm/boot/dts/at91-kizbox3-hs.dtb
+	arch/arm/boot/dts/at91-sama5d27_som1_ek.dtb
+	arch/arm/boot/dts/at91-sama5d27_wlsom1_ek.dtb
+	arch/arm/boot/dts/at91-sama5d2_icp.dtb
+	arch/arm/boot/dts/at91-sama5d2_ptc_ek.dtb
+	arch/arm/boot/dts/at91-sama5d2_xplained.dtb
+
+flexcom@f8038000: 'i2c@600', 'serial@200', 'spi@400' do not match any of the regexes: 'pinctrl-[0-9]+'
+	arch/arm/boot/dts/at91-kizbox3-hs.dtb
+	arch/arm/boot/dts/at91-sama5d27_som1_ek.dtb
+	arch/arm/boot/dts/at91-sama5d27_wlsom1_ek.dtb
+	arch/arm/boot/dts/at91-sama5d2_icp.dtb
+	arch/arm/boot/dts/at91-sama5d2_ptc_ek.dtb
+	arch/arm/boot/dts/at91-sama5d2_xplained.dtb
+
+flexcom@fc010000: 'i2c@600', 'serial@200', 'spi@400' do not match any of the regexes: 'pinctrl-[0-9]+'
+	arch/arm/boot/dts/at91-kizbox3-hs.dtb
+	arch/arm/boot/dts/at91-sama5d27_som1_ek.dtb
+	arch/arm/boot/dts/at91-sama5d27_wlsom1_ek.dtb
+	arch/arm/boot/dts/at91-sama5d2_icp.dtb
+	arch/arm/boot/dts/at91-sama5d2_ptc_ek.dtb
+	arch/arm/boot/dts/at91-sama5d2_xplained.dtb
+
+flexcom@fc014000: 'i2c@600', 'serial@200', 'spi@400' do not match any of the regexes: 'pinctrl-[0-9]+'
+	arch/arm/boot/dts/at91-kizbox3-hs.dtb
+	arch/arm/boot/dts/at91-sama5d27_som1_ek.dtb
+	arch/arm/boot/dts/at91-sama5d27_wlsom1_ek.dtb
+	arch/arm/boot/dts/at91-sama5d2_icp.dtb
+	arch/arm/boot/dts/at91-sama5d2_ptc_ek.dtb
+	arch/arm/boot/dts/at91-sama5d2_xplained.dtb
+
+flexcom@fc018000: 'i2c@600', 'serial@200', 'spi@400' do not match any of the regexes: 'pinctrl-[0-9]+'
+	arch/arm/boot/dts/at91-kizbox3-hs.dtb
+	arch/arm/boot/dts/at91-sama5d27_som1_ek.dtb
+	arch/arm/boot/dts/at91-sama5d27_wlsom1_ek.dtb
+	arch/arm/boot/dts/at91-sama5d2_icp.dtb
+	arch/arm/boot/dts/at91-sama5d2_ptc_ek.dtb
+	arch/arm/boot/dts/at91-sama5d2_xplained.dtb
 

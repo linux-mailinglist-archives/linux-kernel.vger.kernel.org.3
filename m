@@ -2,64 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D1E956872E
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 13:47:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 59F4C568707
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 13:44:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233411AbiGFLpb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Jul 2022 07:45:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43542 "EHLO
+        id S232895AbiGFLoL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Jul 2022 07:44:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43408 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232351AbiGFLor (ORCPT
+        with ESMTP id S232801AbiGFLoE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Jul 2022 07:44:47 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3DE827FEE
-        for <linux-kernel@vger.kernel.org>; Wed,  6 Jul 2022 04:44:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1657107885; x=1688643885;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=l3f4kmL/e4Vs46eZCsUJjbE/qwAE8WJvTMJVgsuz57I=;
-  b=j9wUfDv6oXfQF3WfzXaJkI3GPRH62eQWllzZ6o65WisvueLsrWPbXVve
-   MriCt5yisbDphq6QF83TA+Yrm5Gccehw6MYeiCV35sDIeLsNfr7EWv1pB
-   0ZOQf3LVFlFJ7s+GQZEgM81KYah2nl/Hei0ySUezHZHJGuFReO4J+RnxI
-   nFkJ2abpT32ec2Pyyl7NINPIc5dcmrD5pDK39MrUjlkZCeTRTmKK/fgUD
-   WX4YhMZl/qmbYEJO5eztqoBII0PEkyr4NUnHugAmPj6hwa5JYSwcf33vw
-   y3GlCFMzVZYZUKl+13iLeAES0oZcFfkAzMVrnO39lu/NZiPp/yclSO1qY
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10399"; a="347707591"
-X-IronPort-AV: E=Sophos;i="5.92,249,1650956400"; 
-   d="scan'208";a="347707591"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jul 2022 04:44:45 -0700
-X-IronPort-AV: E=Sophos;i="5.92,249,1650956400"; 
-   d="scan'208";a="650630315"
-Received: from sannilnx.jer.intel.com ([10.12.26.175])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jul 2022 04:44:42 -0700
-From:   Alexander Usyskin <alexander.usyskin@intel.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>
-Cc:     Tomas Winkler <tomas.winkler@intel.com>,
-        Alexander Usyskin <alexander.usyskin@intel.com>,
-        Vitaly Lubart <vitaly.lubart@intel.com>,
-        intel-gfx@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        Daniele Ceraolo Spurio <daniele.ceraolospurio@intel.com>
-Subject: [PATCH v5 14/14] HAX: drm/i915: force INTEL_MEI_GSC on for CI
-Date:   Wed,  6 Jul 2022 14:43:45 +0300
-Message-Id: <20220706114345.1128018-15-alexander.usyskin@intel.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220706114345.1128018-1-alexander.usyskin@intel.com>
-References: <20220706114345.1128018-1-alexander.usyskin@intel.com>
+        Wed, 6 Jul 2022 07:44:04 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C1FC221A
+        for <linux-kernel@vger.kernel.org>; Wed,  6 Jul 2022 04:44:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1657107842;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=4qBFj/falt5wlCjO0QFUH2Aq6wUuCp0x5wyiWtRWTgE=;
+        b=S/ATMM9cg03tIfQQibO6xxl1CCyRncpMEoutdChdSsCRthJjmhpoQ41KYdYtjAhP7xU7ht
+        ucQcTVBnvHOdsJTpPYn5SFchNu1mqzC0hAf66yGXJiJgyfeln+zNGI0XH+XdcHsoK3M2eo
+        Q0gHRXI0HkISSBpSqmRN4KlfI0OgL88=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-333-wz1CfbnbPyyqiRDfP0ZL_Q-1; Wed, 06 Jul 2022 07:43:59 -0400
+X-MC-Unique: wz1CfbnbPyyqiRDfP0ZL_Q-1
+Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 57FB8805AF5;
+        Wed,  6 Jul 2022 11:43:59 +0000 (UTC)
+Received: from starship (unknown [10.40.194.38])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 07231C44AE3;
+        Wed,  6 Jul 2022 11:43:56 +0000 (UTC)
+Message-ID: <bfe5ccd26f1b09df2ac1bfbf7c5a4cf20cc5c8d0.camel@redhat.com>
+Subject: Re: [PATCH v2 03/21] KVM: x86: Don't check for code breakpoints
+ when emulating on exception
+From:   Maxim Levitsky <mlevitsk@redhat.com>
+To:     Sean Christopherson <seanjc@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>
+Cc:     Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Oliver Upton <oupton@google.com>,
+        Peter Shier <pshier@google.com>
+Date:   Wed, 06 Jul 2022 14:43:55 +0300
+In-Reply-To: <20220614204730.3359543-4-seanjc@google.com>
+References: <20220614204730.3359543-1-seanjc@google.com>
+         <20220614204730.3359543-4-seanjc@google.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.36.5 (3.36.5-2.fc32) 
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 2.85 on 10.11.54.8
+X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
         SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -68,30 +69,72 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Daniele Ceraolo Spurio <daniele.ceraolospurio@intel.com>
+On Tue, 2022-06-14 at 20:47 +0000, Sean Christopherson wrote:
+> Don't check for code breakpoints during instruction emulation if the
+> emulation was triggered by exception interception.  Code breakpoints are
+> the highest priority fault-like exception, and KVM only emulates on
+> exceptions that are fault-like.  Thus, if hardware signaled a different
+> exception, then the vCPU is already passed the stage of checking for
+> hardware breakpoints.
+> 
+> This is likely a glorified nop in terms of functionality, and is more for
+> clarification and is technically an optimization.  Intel's SDM explicitly
+> states vmcs.GUEST_RFLAGS.RF on exception interception is the same as the
+> value that would have been saved on the stack had the exception not been
+> intercepted, i.e. will be '1' due to all fault-like exceptions setting RF
+> to '1'.  AMD says "guest state saved ... is the processor state as of the
+> moment the intercept triggers", but that begs the question, "when does
+> the intercept trigger?".
+> 
+> Signed-off-by: Sean Christopherson <seanjc@google.com>
+> ---
+>  arch/x86/kvm/x86.c | 21 ++++++++++++++++++---
+>  1 file changed, 18 insertions(+), 3 deletions(-)
+> 
+> diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
+> index 2318a99139fa..c5db31b4bd6f 100644
+> --- a/arch/x86/kvm/x86.c
+> +++ b/arch/x86/kvm/x86.c
+> @@ -8364,8 +8364,24 @@ int kvm_skip_emulated_instruction(struct kvm_vcpu *vcpu)
+>  }
+>  EXPORT_SYMBOL_GPL(kvm_skip_emulated_instruction);
+>  
+> -static bool kvm_vcpu_check_code_breakpoint(struct kvm_vcpu *vcpu, int *r)
+> +static bool kvm_vcpu_check_code_breakpoint(struct kvm_vcpu *vcpu,
+> +					   int emulation_type, int *r)
+>  {
+> +	WARN_ON_ONCE(emulation_type & EMULTYPE_NO_DECODE);
+> +
+> +	/*
+> +	 * Do not check for code breakpoints if hardware has already done the
+> +	 * checks, as inferred from the emulation type.  On NO_DECODE and SKIP,
+> +	 * the instruction has passed all exception checks, and all intercepted
+> +	 * exceptions that trigger emulation have lower priority than code
+> +	 * breakpoints, i.e. the fact that the intercepted exception occurred
+> +	 * means any code breakpoints have already been serviced.
+> +	 */
+> +	if (emulation_type & (EMULTYPE_NO_DECODE | EMULTYPE_SKIP |
+> +			      EMULTYPE_TRAP_UD | EMULTYPE_TRAP_UD_FORCED |
+> +			      EMULTYPE_VMWARE_GP | EMULTYPE_PF))
+> +		return false;
+> +
+>  	if (unlikely(vcpu->guest_debug & KVM_GUESTDBG_USE_HW_BP) &&
+>  	    (vcpu->arch.guest_debug_dr7 & DR7_BP_EN_MASK)) {
+>  		struct kvm_run *kvm_run = vcpu->run;
+> @@ -8487,8 +8503,7 @@ int x86_emulate_instruction(struct kvm_vcpu *vcpu, gpa_t cr2_or_gpa,
+>  		 * are fault-like and are higher priority than any faults on
+>  		 * the code fetch itself.
+>  		 */
+> -		if (!(emulation_type & EMULTYPE_SKIP) &&
+> -		    kvm_vcpu_check_code_breakpoint(vcpu, &r))
+> +		if (kvm_vcpu_check_code_breakpoint(vcpu, emulation_type, &r))
+>  			return r;
+>  
+>  		r = x86_decode_emulated_instruction(vcpu, emulation_type,
 
-After the new config option is merged we'll enable it by default in the
-CI config, but for now just force it on via the i915 Kconfig so we can
-get pre-merge CI results for it.
 
-Signed-off-by: Daniele Ceraolo Spurio <daniele.ceraolospurio@intel.com>
-Signed-off-by: Alexander Usyskin <alexander.usyskin@intel.com>
----
- drivers/gpu/drm/i915/Kconfig.debug | 1 +
- 1 file changed, 1 insertion(+)
+Reviewed-by: Maxim Levitsky <mlevitsk@redhat.com>
 
-diff --git a/drivers/gpu/drm/i915/Kconfig.debug b/drivers/gpu/drm/i915/Kconfig.debug
-index e7fd3e76f8a2..be4ef485d6c1 100644
---- a/drivers/gpu/drm/i915/Kconfig.debug
-+++ b/drivers/gpu/drm/i915/Kconfig.debug
-@@ -48,6 +48,7 @@ config DRM_I915_DEBUG
- 	select DRM_I915_DEBUG_RUNTIME_PM
- 	select DRM_I915_SW_FENCE_DEBUG_OBJECTS
- 	select DRM_I915_SELFTEST
-+	select INTEL_MEI_GSC
- 	select BROKEN # for prototype uAPI
- 	default n
- 	help
--- 
-2.34.1
+Best regards,
+	Maxim Levitsky
 

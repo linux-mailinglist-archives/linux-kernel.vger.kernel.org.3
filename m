@@ -2,96 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D3CB5694F5
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 00:03:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 30A4C569504
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 00:07:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234756AbiGFWCP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Jul 2022 18:02:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44470 "EHLO
+        id S230481AbiGFWHw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Jul 2022 18:07:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49452 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234630AbiGFWBd (ORCPT
+        with ESMTP id S230334AbiGFWHu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Jul 2022 18:01:33 -0400
-Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5FA702AC64
-        for <linux-kernel@vger.kernel.org>; Wed,  6 Jul 2022 15:01:13 -0700 (PDT)
-Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-2dc7bdd666fso114730647b3.7
-        for <linux-kernel@vger.kernel.org>; Wed, 06 Jul 2022 15:01:13 -0700 (PDT)
+        Wed, 6 Jul 2022 18:07:50 -0400
+Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 090F2A1B0
+        for <linux-kernel@vger.kernel.org>; Wed,  6 Jul 2022 15:07:49 -0700 (PDT)
+Received: by mail-pf1-x434.google.com with SMTP id y141so15578185pfb.7
+        for <linux-kernel@vger.kernel.org>; Wed, 06 Jul 2022 15:07:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
-         :cc:content-transfer-encoding;
-        bh=Y7M5+uMCyjK2Tw3gtvlFnf3s0uMKtiqOOKU+iupOzGc=;
-        b=RaJYVCw6kQFWZr57Fj6Z+M7CjIu+Fy2mkXaD9icGpAKOAxyz1uufDA95qkMfXqksCy
-         CttyIsR4+X5trkDvd0W5HTI3/XFLKoLEsiRSAv23qebNkIOkH8cPlNd2JsU/+DVzJUpM
-         TGOZ6teMB/sFPIH8IZKMODnpg+VxKIyScGqlsqOiDoxcPPCMP8e0zolM240kI1HmhYsj
-         WxZdSDL+OZnX2V8pTDz516/mmCsEM23W0x65TiLdKDGOIFAAkNP/EIcvQWWj8SBUz/dL
-         a0IGdBEhZobBNts8S/4QPXOFk1zc9TBNhY+OPo4y5YJG3duUWWVQ+373DmVdZPluRI23
-         DgVQ==
+        d=broadcom.com; s=google;
+        h=message-id:date:mime-version:user-agent:subject:to:cc:references
+         :from:in-reply-to;
+        bh=elvek2GWUPi7f+aJcLa3gAdL5aLhEJVmABZzXow+vRE=;
+        b=HUB3xscXMJcfFjyrm0TbVAbSzLROu74FPlRPQGw8icXuiyE+U72hfx0EE+ZEfwrJyJ
+         r0EtIja3H1uF7D3rijJiEFxpbW8sV+VHeepnBJsXaEXN/zll/oha1iNNrt7uJLB2MNXa
+         cPGNrCA4TPuWubrIK1mIGmlwBUi0Elj0YHAz8=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
-         :references:subject:from:to:cc:content-transfer-encoding;
-        bh=Y7M5+uMCyjK2Tw3gtvlFnf3s0uMKtiqOOKU+iupOzGc=;
-        b=offhrl+XMGlCu7bYKVidWsf4KMkffw2oyBXxGNBU7oC6hA7aljuHh9D4XcbpXPmpdN
-         63PNrCW7UBTMe9EwA9K9M7llibegzThqUqxHteU1pZFG3eZgcZHPd0oyfFeurdxXaMce
-         EO+yI9YXZbGf5P2zj9bV8BEndEm6KRsQg2MWUnERcHzZ+ecmX4k2gj/d4NkwNo7C6oOx
-         pEmZsW+PD+ep7iZbgCueBSt6idID4IXXownRf2zzl0VebwxjoA2Dos5Yp2hDmPuv9iXt
-         Pq/e2yT0mmwLIcbG29ASVuPrH4Awu5idfP79dWWZcTJj1tedsl+oypqaHA4+0rRG6phu
-         GOig==
-X-Gm-Message-State: AJIora+wFKEM3HFLN/L+TrgmkTh2N9UmHF5155fhrQrmgKpNCo9C14Hq
-        P3MDcIn/AndblfEtviF33HfiZyiX+VM=
-X-Google-Smtp-Source: AGRyM1tPyG6w7lg37p0dKVbMplDSUgwZboH2lG42opEnpdXZgbjOhtWD7cZCMHKO+sLemtrKnNTphNyTinE=
-X-Received: from yuzhao.bld.corp.google.com ([2620:15c:183:200:b89c:e10a:466e:cf7d])
- (user=yuzhao job=sendgmr) by 2002:a25:b806:0:b0:663:d35d:8b8a with SMTP id
- v6-20020a25b806000000b00663d35d8b8amr45647399ybj.69.1657144872662; Wed, 06
- Jul 2022 15:01:12 -0700 (PDT)
-Date:   Wed,  6 Jul 2022 16:00:23 -0600
-In-Reply-To: <20220706220022.968789-1-yuzhao@google.com>
-Message-Id: <20220706220022.968789-15-yuzhao@google.com>
-Mime-Version: 1.0
-References: <20220706220022.968789-1-yuzhao@google.com>
-X-Mailer: git-send-email 2.37.0.rc0.161.g10f37bed90-goog
-Subject: [PATCH v13 14/14] mm: multi-gen LRU: design doc
-From:   Yu Zhao <yuzhao@google.com>
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     Andi Kleen <ak@linux.intel.com>,
-        Aneesh Kumar <aneesh.kumar@linux.ibm.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Hillf Danton <hdanton@sina.com>, Jens Axboe <axboe@kernel.dk>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Matthew Wilcox <willy@infradead.org>,
-        Mel Gorman <mgorman@suse.de>,
-        Michael Larabel <Michael@michaellarabel.com>,
-        Michal Hocko <mhocko@kernel.org>,
-        Mike Rapoport <rppt@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Tejun Heo <tj@kernel.org>, Vlastimil Babka <vbabka@suse.cz>,
-        Will Deacon <will@kernel.org>,
-        linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org, x86@kernel.org,
-        page-reclaim@google.com, Yu Zhao <yuzhao@google.com>,
-        Brian Geffon <bgeffon@google.com>,
-        Jan Alexander Steffens <heftig@archlinux.org>,
-        Oleksandr Natalenko <oleksandr@natalenko.name>,
-        Steven Barrett <steven@liquorix.net>,
-        Suleiman Souhlal <suleiman@google.com>,
-        Daniel Byrne <djbyrne@mtu.edu>,
-        Donald Carr <d@chaos-reins.com>,
-        "=?UTF-8?q?Holger=20Hoffst=C3=A4tte?=" 
-        <holger@applied-asynchrony.com>,
-        Konstantin Kharlamov <Hi-Angel@yandex.ru>,
-        Shuang Zhai <szhai2@cs.rochester.edu>,
-        Sofia Trinh <sofia.trinh@edi.works>,
-        Vaibhav Jain <vaibhav@linux.ibm.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :to:cc:references:from:in-reply-to;
+        bh=elvek2GWUPi7f+aJcLa3gAdL5aLhEJVmABZzXow+vRE=;
+        b=1LK35JZa1whm9iOTvbR4LRRRLiz23qIHCZ4cXcZMmPeSj4oSHDZ+3SRq0EdPyrSM2E
+         7TYw3JGF2c/RH7bSCZjPW4Ts6jU720/xhNWI4dnA0TF7ZBjn9nvkmSUrVloJIj+HX+nj
+         SFPSQDlPMtvpiByS5Gzk7vPc/q4z8R8acGy1vzFE8A2Z1DSu2ksbd+8Tfd3YdENXA8Yl
+         ogT8HW4tVEc3N3Wd1sBesb9GIOZQr0u30+BvbuQ8LnTicG1RuFA5UKJ904R/JT6mXkiq
+         nqGiucUW52P6/FAfB89qCPZ9FYaTvREH2LjcffnvhnTvfbUb0xHetW6DNnbT1niFE6MN
+         JpsA==
+X-Gm-Message-State: AJIora9cpSTFpMdzJjXkuJ1gpMdo6hodpJR8T0CoI6uhjy3ORZuZ9yte
+        yQpSM5lSv3h61QcCP9fe9RVsDA==
+X-Google-Smtp-Source: AGRyM1uH42gZqv+YrGkXSXNOY37X13sy6cCM9xydgyGFaRKx8BVHLWnaQfHmLhNBU7+weC6DS02TDA==
+X-Received: by 2002:a65:6054:0:b0:411:5e12:21b2 with SMTP id a20-20020a656054000000b004115e1221b2mr35556526pgp.222.1657145268341;
+        Wed, 06 Jul 2022 15:07:48 -0700 (PDT)
+Received: from [192.168.52.129] ([192.19.222.250])
+        by smtp.gmail.com with ESMTPSA id ft22-20020a17090b0f9600b001ef917f1c30sm5597871pjb.6.2022.07.06.15.07.46
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 06 Jul 2022 15:07:47 -0700 (PDT)
+Message-ID: <27b3a1b7-a5ce-fc98-99d6-824ca6f67d9d@broadcom.com>
+Date:   Wed, 6 Jul 2022 15:07:45 -0700
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH 3/9] ARM: dts: update dts files for bcmbca SoC BCM63138
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Linux ARM List <linux-arm-kernel@lists.infradead.org>
+Cc:     joel.peshkin@broadcom.com, kursad.oney@broadcom.com,
+        f.fainelli@gmail.com, anand.gore@broadcom.com,
+        Broadcom Kernel List <bcm-kernel-feedback-list@broadcom.com>,
+        philippe.reynes@softathome.com, dan.beygelman@broadcom.com,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220705172613.21152-1-william.zhang@broadcom.com>
+ <20220705172613.21152-4-william.zhang@broadcom.com>
+ <326247d4-28ae-87ca-6929-0833eafad3a0@linaro.org>
+From:   William Zhang <william.zhang@broadcom.com>
+In-Reply-To: <326247d4-28ae-87ca-6929-0833eafad3a0@linaro.org>
+Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
+        boundary="0000000000001678f005e32a33a9"
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -99,206 +77,174 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add a design doc.
+--0000000000001678f005e32a33a9
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-Signed-off-by: Yu Zhao <yuzhao@google.com>
-Acked-by: Brian Geffon <bgeffon@google.com>
-Acked-by: Jan Alexander Steffens (heftig) <heftig@archlinux.org>
-Acked-by: Oleksandr Natalenko <oleksandr@natalenko.name>
-Acked-by: Steven Barrett <steven@liquorix.net>
-Acked-by: Suleiman Souhlal <suleiman@google.com>
-Tested-by: Daniel Byrne <djbyrne@mtu.edu>
-Tested-by: Donald Carr <d@chaos-reins.com>
-Tested-by: Holger Hoffst=C3=A4tte <holger@applied-asynchrony.com>
-Tested-by: Konstantin Kharlamov <Hi-Angel@yandex.ru>
-Tested-by: Shuang Zhai <szhai2@cs.rochester.edu>
-Tested-by: Sofia Trinh <sofia.trinh@edi.works>
-Tested-by: Vaibhav Jain <vaibhav@linux.ibm.com>
----
- Documentation/vm/index.rst        |   1 +
- Documentation/vm/multigen_lru.rst | 159 ++++++++++++++++++++++++++++++
- 2 files changed, 160 insertions(+)
- create mode 100644 Documentation/vm/multigen_lru.rst
 
-diff --git a/Documentation/vm/index.rst b/Documentation/vm/index.rst
-index 575ccd40e30c..4aa12b8be278 100644
---- a/Documentation/vm/index.rst
-+++ b/Documentation/vm/index.rst
-@@ -51,6 +51,7 @@ above structured documentation, or deleted if it has serv=
-ed its purpose.
-    ksm
-    memory-model
-    mmu_notifier
-+   multigen_lru
-    numa
-    overcommit-accounting
-    page_migration
-diff --git a/Documentation/vm/multigen_lru.rst b/Documentation/vm/multigen_=
-lru.rst
-new file mode 100644
-index 000000000000..d7062c6a8946
---- /dev/null
-+++ b/Documentation/vm/multigen_lru.rst
-@@ -0,0 +1,159 @@
-+.. SPDX-License-Identifier: GPL-2.0
-+
-+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-+Multi-Gen LRU
-+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-+The multi-gen LRU is an alternative LRU implementation that optimizes
-+page reclaim and improves performance under memory pressure. Page
-+reclaim decides the kernel's caching policy and ability to overcommit
-+memory. It directly impacts the kswapd CPU usage and RAM efficiency.
-+
-+Design overview
-+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-+Objectives
-+----------
-+The design objectives are:
-+
-+* Good representation of access recency
-+* Try to profit from spatial locality
-+* Fast paths to make obvious choices
-+* Simple self-correcting heuristics
-+
-+The representation of access recency is at the core of all LRU
-+implementations. In the multi-gen LRU, each generation represents a
-+group of pages with similar access recency. Generations establish a
-+(time-based) common frame of reference and therefore help make better
-+choices, e.g., between different memcgs on a computer or different
-+computers in a data center (for job scheduling).
-+
-+Exploiting spatial locality improves efficiency when gathering the
-+accessed bit. A rmap walk targets a single page and does not try to
-+profit from discovering a young PTE. A page table walk can sweep all
-+the young PTEs in an address space, but the address space can be too
-+sparse to make a profit. The key is to optimize both methods and use
-+them in combination.
-+
-+Fast paths reduce code complexity and runtime overhead. Unmapped pages
-+do not require TLB flushes; clean pages do not require writeback.
-+These facts are only helpful when other conditions, e.g., access
-+recency, are similar. With generations as a common frame of reference,
-+additional factors stand out. But obvious choices might not be good
-+choices; thus self-correction is necessary.
-+
-+The benefits of simple self-correcting heuristics are self-evident.
-+Again, with generations as a common frame of reference, this becomes
-+attainable. Specifically, pages in the same generation can be
-+categorized based on additional factors, and a feedback loop can
-+statistically compare the refault percentages across those categories
-+and infer which of them are better choices.
-+
-+Assumptions
-+-----------
-+The protection of hot pages and the selection of cold pages are based
-+on page access channels and patterns. There are two access channels:
-+
-+* Accesses through page tables
-+* Accesses through file descriptors
-+
-+The protection of the former channel is by design stronger because:
-+
-+1. The uncertainty in determining the access patterns of the former
-+   channel is higher due to the approximation of the accessed bit.
-+2. The cost of evicting the former channel is higher due to the TLB
-+   flushes required and the likelihood of encountering the dirty bit.
-+3. The penalty of underprotecting the former channel is higher because
-+   applications usually do not prepare themselves for major page
-+   faults like they do for blocked I/O. E.g., GUI applications
-+   commonly use dedicated I/O threads to avoid blocking rendering
-+   threads.
-+
-+There are also two access patterns:
-+
-+* Accesses exhibiting temporal locality
-+* Accesses not exhibiting temporal locality
-+
-+For the reasons listed above, the former channel is assumed to follow
-+the former pattern unless ``VM_SEQ_READ`` or ``VM_RAND_READ`` is
-+present, and the latter channel is assumed to follow the latter
-+pattern unless outlying refaults have been observed.
-+
-+Workflow overview
-+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-+Evictable pages are divided into multiple generations for each
-+``lruvec``. The youngest generation number is stored in
-+``lrugen->max_seq`` for both anon and file types as they are aged on
-+an equal footing. The oldest generation numbers are stored in
-+``lrugen->min_seq[]`` separately for anon and file types as clean file
-+pages can be evicted regardless of swap constraints. These three
-+variables are monotonically increasing.
-+
-+Generation numbers are truncated into ``order_base_2(MAX_NR_GENS+1)``
-+bits in order to fit into the gen counter in ``folio->flags``. Each
-+truncated generation number is an index to ``lrugen->lists[]``. The
-+sliding window technique is used to track at least ``MIN_NR_GENS`` and
-+at most ``MAX_NR_GENS`` generations. The gen counter stores a value
-+within ``[1, MAX_NR_GENS]`` while a page is on one of
-+``lrugen->lists[]``; otherwise it stores zero.
-+
-+Each generation is divided into multiple tiers. A page accessed ``N``
-+times through file descriptors is in tier ``order_base_2(N)``. Unlike
-+generations, tiers do not have dedicated ``lrugen->lists[]``. In
-+contrast to moving across generations, which requires the LRU lock,
-+moving across tiers only involves atomic operations on
-+``folio->flags`` and therefore has a negligible cost. A feedback loop
-+modeled after the PID controller monitors refaults over all the tiers
-+from anon and file types and decides which tiers from which types to
-+evict or protect.
-+
-+There are two conceptually independent procedures: the aging and the
-+eviction. They form a closed-loop system, i.e., the page reclaim.
-+
-+Aging
-+-----
-+The aging produces young generations. Given an ``lruvec``, it
-+increments ``max_seq`` when ``max_seq-min_seq+1`` approaches
-+``MIN_NR_GENS``. The aging promotes hot pages to the youngest
-+generation when it finds them accessed through page tables; the
-+demotion of cold pages happens consequently when it increments
-+``max_seq``. The aging uses page table walks and rmap walks to find
-+young PTEs. For the former, it iterates ``lruvec_memcg()->mm_list``
-+and calls ``walk_page_range()`` with each ``mm_struct`` on this list
-+to scan PTEs, and after each iteration, it increments ``max_seq``. For
-+the latter, when the eviction walks the rmap and finds a young PTE,
-+the aging scans the adjacent PTEs. For both, on finding a young PTE,
-+the aging clears the accessed bit and updates the gen counter of the
-+page mapped by this PTE to ``(max_seq%MAX_NR_GENS)+1``.
-+
-+Eviction
-+--------
-+The eviction consumes old generations. Given an ``lruvec``, it
-+increments ``min_seq`` when ``lrugen->lists[]`` indexed by
-+``min_seq%MAX_NR_GENS`` becomes empty. To select a type and a tier to
-+evict from, it first compares ``min_seq[]`` to select the older type.
-+If both types are equally old, it selects the one whose first tier has
-+a lower refault percentage. The first tier contains single-use
-+unmapped clean pages, which are the best bet. The eviction sorts a
-+page according to its gen counter if the aging has found this page
-+accessed through page tables and updated its gen counter. It also
-+moves a page to the next generation, i.e., ``min_seq+1``, if this page
-+was accessed multiple times through file descriptors and the feedback
-+loop has detected outlying refaults from the tier this page is in. To
-+this end, the feedback loop uses the first tier as the baseline, for
-+the reason stated earlier.
-+
-+Summary
-+-------
-+The multi-gen LRU can be disassembled into the following parts:
-+
-+* Generations
-+* Rmap walks
-+* Page table walks
-+* Bloom filters
-+* PID controller
-+
-+The aging and the eviction form a producer-consumer model;
-+specifically, the latter drives the former by the sliding window over
-+generations. Within the aging, rmap walks drive page table walks by
-+inserting hot densely populated page tables to the Bloom filters.
-+Within the eviction, the PID controller uses refaults as the feedback
-+to select types to evict and tiers to protect.
---=20
-2.37.0.rc0.161.g10f37bed90-goog
 
+On 7/6/22 00:54, Krzysztof Kozlowski wrote:
+> On 05/07/2022 19:26, William Zhang wrote:
+>> Update compatible string and UART node and clock name based on device tree
+>> binding documents.
+>>
+>> Signed-off-by: William Zhang <william.zhang@broadcom.com>
+>> ---
+>>
+>>   arch/arm/boot/dts/bcm63138.dtsi    | 18 +++++++++---------
+>>   arch/arm/boot/dts/bcm963138dvt.dts |  8 ++++----
+>>   2 files changed, 13 insertions(+), 13 deletions(-)
+>>
+>> diff --git a/arch/arm/boot/dts/bcm63138.dtsi b/arch/arm/boot/dts/bcm63138.dtsi
+>> index cca49a2e2d62..bec13ed9f73b 100644
+>> --- a/arch/arm/boot/dts/bcm63138.dtsi
+>> +++ b/arch/arm/boot/dts/bcm63138.dtsi
+>> @@ -9,13 +9,13 @@
+>>   / {
+>>   	#address-cells = <1>;
+>>   	#size-cells = <1>;
+>> -	compatible = "brcm,bcm63138";
+>> -	model = "Broadcom BCM63138 DSL SoC";
+>> +	compatible = "brcm,bcm63138", "brcm,bcmbca";
+> 
+> Changing compatibles affects ABI, so you should not combine it with some
+> node renaming/cleanup patch. Split these.
+> 
+>> +	model = "Broadcom BCM963138 Reference Board";
+>>   	interrupt-parent = <&gic>;
+>>   
+>>   	aliases {
+>> -		uart0 = &serial0;
+>> -		uart1 = &serial1;
+>> +		serial0 = &uart0;
+>> +		serial1 = &uart1;
+>>   	};
+>>   
+>>   	cpus {
+>> @@ -174,7 +174,7 @@ sata_phy0: sata-phy@0 {
+>>   	};
+>>   
+>>   	/* Legacy UBUS base */
+>> -	ubus@fffe8000 {
+>> +	bus@fffe8000 {
+>>   		compatible = "simple-bus";
+>>   		#address-cells = <1>;
+>>   		#size-cells = <1>;
+>> @@ -185,21 +185,21 @@ timer: timer@80 {
+>>   			reg = <0x80 0x3c>;
+>>   		};
+>>   
+>> -		serial0: serial@600 {
+>> +		uart0: serial@600 {
+>>   			compatible = "brcm,bcm6345-uart";
+>>   			reg = <0x600 0x1b>;
+>>   			interrupts = <GIC_SPI 32 IRQ_TYPE_LEVEL_HIGH>;
+>>   			clocks = <&periph_clk>;
+>> -			clock-names = "periph";
+>> +			clock-names = "refclk";
+>>   			status = "disabled";
+>>   		};
+>>   
+>> -		serial1: serial@620 {
+>> +		uart1: serial@620 {
+>>   			compatible = "brcm,bcm6345-uart";
+>>   			reg = <0x620 0x1b>;
+>>   			interrupts = <GIC_SPI 33 IRQ_TYPE_LEVEL_HIGH>;
+>>   			clocks = <&periph_clk>;
+>> -			clock-names = "periph";
+>> +			clock-names = "refclk";
+> 
+> This is even more confusing. You now rename clock-names. How is this
+> related to board compatible or to node names?
+Not related to board compatible string but it is the same board dts file 
+that require some updates.  Anyway I don't have to change anything else 
+other than the compatible string for this patchset.  So I will revert 
+those changes.
+> 
+> 
+> 
+> Best regards,
+> Krzysztof
+
+--0000000000001678f005e32a33a9
+Content-Type: application/pkcs7-signature; name="smime.p7s"
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment; filename="smime.p7s"
+Content-Description: S/MIME Cryptographic Signature
+
+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
+TltlrAeBKRJ1M9O/DY5v7L1Yrs//7XIRg/d2ZPAOSGBQzFYjYTFWwNBiR1s1zP0m2y56DPbS5gwj
+fqAN/I4PJHIvTh3zUgHXNKadYoYRiPHXfaTWO9UhzysOpQIDAQABo4IB2zCCAdcwDgYDVR0PAQH/
+BAQDAgWgMIGjBggrBgEFBQcBAQSBljCBkzBOBggrBgEFBQcwAoZCaHR0cDovL3NlY3VyZS5nbG9i
+YWxzaWduLmNvbS9jYWNlcnQvZ3NnY2NyM3BlcnNvbmFsc2lnbjJjYTIwMjAuY3J0MEEGCCsGAQUF
+BzABhjVodHRwOi8vb2NzcC5nbG9iYWxzaWduLmNvbS9nc2djY3IzcGVyc29uYWxzaWduMmNhMjAy
+MDBNBgNVHSAERjBEMEIGCisGAQQBoDIBKAowNDAyBggrBgEFBQcCARYmaHR0cHM6Ly93d3cuZ2xv
+YmFsc2lnbi5jb20vcmVwb3NpdG9yeS8wCQYDVR0TBAIwADBJBgNVHR8EQjBAMD6gPKA6hjhodHRw
+Oi8vY3JsLmdsb2JhbHNpZ24uY29tL2dzZ2NjcjNwZXJzb25hbHNpZ24yY2EyMDIwLmNybDAlBgNV
+HREEHjAcgRp3aWxsaWFtLnpoYW5nQGJyb2FkY29tLmNvbTATBgNVHSUEDDAKBggrBgEFBQcDBDAf
+BgNVHSMEGDAWgBSWM9HmWBdbNHWKgVZk1b5I3qGPzzAdBgNVHQ4EFgQUohM5GmNlGWe5wpzDxzIy
++EgzbRswDQYJKoZIhvcNAQELBQADggEBACKu9JSQAYTlmC+JTniO/C/UcXGonATI/muBjWTxtkHc
+abZtz0uwzzrRrpV+mbHLGVFFeRbXSLvcEzqHp8VomXifEZlfsE9LajSehzaqhd+np+tmUPz1RlI/
+ibZ7vW+1VF18lfoL+wHs2H0fsG6JfoqZldEWYXASXnUrs0iTLgXxvwaQj69cSMuzfFm1X5kWqWCP
+W0KkR8025J0L5L4yXfkSO6psD/k4VcTsMJHLN4RfMuaXIT6EM0cNO6h3GypyTuPf1N1X+F6WQPKb
+1u+rvdML63P9fX7e7mwwGt5klRnf8aK2VU7mIdYCcrFHaKDTW3fkG6kIgrE1wWSgiZYL400xggJt
+MIICaQIBATBrMFsxCzAJBgNVBAYTAkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMTEwLwYD
+VQQDEyhHbG9iYWxTaWduIEdDQyBSMyBQZXJzb25hbFNpZ24gMiBDQSAyMDIwAgw28eX6TfvsbNfu
+SIMwDQYJYIZIAWUDBAIBBQCggdQwLwYJKoZIhvcNAQkEMSIEIB7/qG2+UkMeYpOY1iDIb2pHR4XY
+kvfJ4o+BqIg2Q/eIMBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcNAQkFMQ8XDTIy
+MDcwNjIyMDc0OFowaQYJKoZIhvcNAQkPMVwwWjALBglghkgBZQMEASowCwYJYIZIAWUDBAEWMAsG
+CWCGSAFlAwQBAjAKBggqhkiG9w0DBzALBgkqhkiG9w0BAQowCwYJKoZIhvcNAQEHMAsGCWCGSAFl
+AwQCATANBgkqhkiG9w0BAQEFAASCAQDZzmF/0AGFvFaRWHojUJg66AGbFSYqgH4NsG36COtU1M+o
+01ltfePIc3sdrK4LbF7OeSkqZsR97QSXhRATCdY6KMW3+7UVdUDAoDRgQDtBKMfMQuwy8B0pKR1z
+UD8YbtLbrPSe3yb5Erwms5QgxeAchbs7YG2nxaLoXAUA3wprFrJs7ghGW/mlqH6VZjaVD2lAYJ8p
+f13kZPwP3ZBe9zRcVNn0hSUcDRzBxlnEopd800tX69pkD99q/CaKVSML+uVHrLqQwFopwt7h83iE
+zf8aJ1EgVqGD5XtJR7CNYybI5CmCp+DMbhDsP3ee2NYgMdZyhPUOOrpvU+3yHOzb21H8
+--0000000000001678f005e32a33a9--

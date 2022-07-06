@@ -2,141 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DAAB6568A84
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 16:01:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C3D67568AC3
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 16:04:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230146AbiGFOBg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Jul 2022 10:01:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58786 "EHLO
+        id S233745AbiGFODy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Jul 2022 10:03:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32876 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233210AbiGFOBY (ORCPT
+        with ESMTP id S233865AbiGFODs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Jul 2022 10:01:24 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58E371AF0E;
-        Wed,  6 Jul 2022 07:01:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=ouRvW6OEP3qkY26xFcBJ9tiIR5hvG8wwzWSrM+uEL/I=; b=r22GQMcjL2cTA+cmoNxVKQaYIQ
-        dwhyEH3B7jMmYNkgOavl/Jkw8ahF4pUqGA50knBcMnA+T7sUrrZ34FNLk4CpwNXFlmdCBQuXuMgC6
-        AwUQVVNBvUsYsvtg7SJXC+mM8yy+m6Yfn9zYum2In+mCHyjoDJoEwkrrZFDQZ6zu2qEi08X4EGXjG
-        nqFhc+W39vckzfBqTLqNhD57KglAOvtgqwC9xCwGrEpzefP77PX2X4XR0rU0k/TUHqxUt8Hfpbgu0
-        VA0+lOt3y9ds9A8wP/CLThg+mPx0CMIJgQ3BWj69BlplgxU6U7cObaHqud6BY2yAxc6mtQbeVyZWS
-        MeY41few==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1o95aN-001hHB-5i; Wed, 06 Jul 2022 14:00:59 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 727A9300779;
-        Wed,  6 Jul 2022 16:00:58 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 53F5E201E7FAD; Wed,  6 Jul 2022 16:00:58 +0200 (CEST)
-Date:   Wed, 6 Jul 2022 16:00:58 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Will Deacon <will@kernel.org>
-Cc:     Florian Westphal <fw@strlen.de>,
-        Kajetan Puchalski <kajetan.puchalski@arm.com>,
-        Pablo Neira Ayuso <pablo@netfilter.org>,
-        Jozsef Kadlecsik <kadlec@netfilter.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, Mel Gorman <mgorman@suse.de>,
-        lukasz.luba@arm.com, dietmar.eggemann@arm.com,
-        mark.rutland@arm.com, broonie@kernel.org,
-        netfilter-devel@vger.kernel.org, coreteam@netfilter.org,
-        netdev@vger.kernel.org, stable@vger.kernel.org,
-        regressions@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: Re: [Regression] stress-ng udp-flood causes kernel panic on Ampere
- Altra
-Message-ID: <YsWVmrMA6aFE8oDr@hirez.programming.kicks-ass.net>
-References: <20220702205651.GB15144@breakpoint.cc>
- <YsKxTAaIgvKMfOoU@e126311.manchester.arm.com>
- <YsLGoU7q5hP67TJJ@e126311.manchester.arm.com>
- <YsQYIoJK3iqJ68Tq@e126311.manchester.arm.com>
- <20220705105749.GA711@willie-the-truck>
- <20220705110724.GB711@willie-the-truck>
- <20220705112449.GA931@willie-the-truck>
- <YsVmbOqzACeo1rO4@e126311.manchester.arm.com>
- <20220706120201.GA7996@breakpoint.cc>
- <20220706122246.GI2403@willie-the-truck>
+        Wed, 6 Jul 2022 10:03:48 -0400
+Received: from smtp.gentoo.org (mail.gentoo.org [IPv6:2001:470:ea4a:1:5054:ff:fec7:86e4])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E732824BC3;
+        Wed,  6 Jul 2022 07:03:35 -0700 (PDT)
+From:   Yixun Lan <dlan@gentoo.org>
+To:     linux-riscv@lists.infradead.org,
+        =?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn@kernel.org>,
+        bpf@vger.kernel.org
+Cc:     Palmer Dabbelt <palmer@dabbelt.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Hengqi Chen <chenhengqi@outlook.com>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Yixun Lan <dlan@gentoo.org>
+Subject: [PATCH] riscv, libbpf: use a0 for RC register
+Date:   Wed,  6 Jul 2022 22:02:04 +0800
+Message-Id: <20220706140204.47926-1-dlan@gentoo.org>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220706122246.GI2403@willie-the-truck>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jul 06, 2022 at 01:22:50PM +0100, Will Deacon wrote:
+According to the RISC-V calling convention register usage here[1],
+a0 is used as return value register, so rename it to make it consistent
+with the spec.
 
-> > @@ -300,6 +300,9 @@ static inline bool nf_ct_is_expired(const struct nf_conn *ct)
-> >  /* use after obtaining a reference count */
-> >  static inline bool nf_ct_should_gc(const struct nf_conn *ct)
-> >  {
-> > +	/* ->status and ->timeout loads must happen after refcount increase */
-> > +	smp_rmb();
-> 
-> Sorry I didn't suggest this earlier, but if all of these smp_rmb()s are
-> for upgrading the ordering from refcount_inc_not_zero() then you should
-> use smp_acquire__after_ctrl_dep() instead. It's the same under the hood,
-> but it illustrates what's going on a bit better.
+[1] section 18.2, table 18.2
+https://riscv.org/wp-content/uploads/2015/01/riscv-calling.pdf
 
-But in that case if had better also be near an actual condition,
-otherwise things become too murky for words :/
+Fixes: 589fed479ba1 ("riscv, libbpf: Add RISC-V (RV64) support to bpf_tracing.h")
+Signed-off-by: Yixun Lan <dlan@gentoo.org>
 
-That is, why is this sprinkled all over instead of right after
-an successfull refcount_inc_not_zero() ?
+---
 
-Code like:
+I'm adding a Fixes tag here, although the original version may just work fine,
+and shouldn't be considered as a real error. But, the benefit is that we could
+make it consistent with RISC-V spec, and all other tools will follow the same usage.
 
-	if (!refcount_inc_not_zero())
-		return;
+thanks, and let's me if there is any issue that I may not noticed..
+---
+ tools/lib/bpf/bpf_tracing.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-	smp_acquire__after_ctrl_dep();
+diff --git a/tools/lib/bpf/bpf_tracing.h b/tools/lib/bpf/bpf_tracing.h
+index 01ce121c302df..11f9096407fc4 100644
+--- a/tools/lib/bpf/bpf_tracing.h
++++ b/tools/lib/bpf/bpf_tracing.h
+@@ -233,7 +233,7 @@ struct pt_regs___arm64 {
+ #define __PT_PARM5_REG a4
+ #define __PT_RET_REG ra
+ #define __PT_FP_REG s0
+-#define __PT_RC_REG a5
++#define __PT_RC_REG a0
+ #define __PT_SP_REG sp
+ #define __PT_IP_REG pc
+ /* riscv does not select ARCH_HAS_SYSCALL_WRAPPER. */
+-- 
+2.35.1
 
-is fairly self-evident, whereas encountering an
-smp_acquire__after_ctrl_dep() in a different function, completely
-unrelated to any condition is quite crazy.
-
-> > @@ -1775,6 +1784,16 @@ init_conntrack(struct net *net, struct nf_conn *tmpl,
-> >  	if (!exp)
-> >  		__nf_ct_try_assign_helper(ct, tmpl, GFP_ATOMIC);
-> >  
-> > +	/* Other CPU might have obtained a pointer to this object before it was
-> > +	 * released.  Because refcount is 0, refcount_inc_not_zero() will fail.
-> > +	 *
-> > +	 * After refcount_set(1) it will succeed; ensure that zeroing of
-> > +	 * ct->status and the correct ct->net pointer are visible; else other
-> > +	 * core might observe CONFIRMED bit which means the entry is valid and
-> > +	 * in the hash table, but its not (anymore).
-> > +	 */
-> > +	smp_wmb();
-> > +
-> >  	/* Now it is going to be associated with an sk_buff, set refcount to 1. */
-> >  	refcount_set(&ct->ct_general.use, 1);
-> 
-> Ideally that refcount_set() would be a release, but this is definitely
-> (ab)using refcount_t in way that isn't anticipated by the API! It looks
-> like a similar pattern exists in net/core/sock.c as well, so I wonder if
-> it's worth extending the API.
-> 
-> Peter, what do you think?
-
-Bah; you have reminded me that I have a fairly sizable amount of
-refcount patches from when Linus complained about it last that don't
-seem to have gone anywhere :/
-
-Anyway, I suppose we could do a refcount_set_release(), but it had
-better get a fairly big comment on how you're on your own if you use it.

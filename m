@@ -2,45 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A03B656887B
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 14:39:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A12C556887F
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 14:40:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231831AbiGFMjB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Jul 2022 08:39:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42862 "EHLO
+        id S232302AbiGFMkT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Jul 2022 08:40:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43548 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230440AbiGFMjA (ORCPT
+        with ESMTP id S230362AbiGFMkS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Jul 2022 08:39:00 -0400
-Received: from m-r2.th.seeweb.it (m-r2.th.seeweb.it [IPv6:2001:4b7a:2000:18::171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBD7924F08
-        for <linux-kernel@vger.kernel.org>; Wed,  6 Jul 2022 05:38:59 -0700 (PDT)
-Received: from [192.168.1.101] (abxi46.neoplus.adsl.tpnet.pl [83.9.2.46])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by m-r2.th.seeweb.it (Postfix) with ESMTPSA id F30D33F756;
-        Wed,  6 Jul 2022 14:38:57 +0200 (CEST)
-Message-ID: <b75e45fc-eede-d44d-9c0d-535923de2f9d@somainline.org>
-Date:   Wed, 6 Jul 2022 14:38:57 +0200
+        Wed, 6 Jul 2022 08:40:18 -0400
+Received: from Chamillionaire.breakpoint.cc (Chamillionaire.breakpoint.cc [IPv6:2a0a:51c0:0:12e:520::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58C28252AA;
+        Wed,  6 Jul 2022 05:40:17 -0700 (PDT)
+Received: from fw by Chamillionaire.breakpoint.cc with local (Exim 4.92)
+        (envelope-from <fw@strlen.de>)
+        id 1o94K7-0004EF-24; Wed, 06 Jul 2022 14:40:07 +0200
+Date:   Wed, 6 Jul 2022 14:40:07 +0200
+From:   Florian Westphal <fw@strlen.de>
+To:     Will Deacon <will@kernel.org>
+Cc:     Florian Westphal <fw@strlen.de>,
+        Kajetan Puchalski <kajetan.puchalski@arm.com>,
+        Pablo Neira Ayuso <pablo@netfilter.org>,
+        Jozsef Kadlecsik <kadlec@netfilter.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, Mel Gorman <mgorman@suse.de>,
+        lukasz.luba@arm.com, dietmar.eggemann@arm.com,
+        mark.rutland@arm.com, broonie@kernel.org,
+        netfilter-devel@vger.kernel.org, coreteam@netfilter.org,
+        netdev@vger.kernel.org, stable@vger.kernel.org,
+        regressions@lists.linux.dev, linux-kernel@vger.kernel.org,
+        peterz@infradead.org
+Subject: Re: [Regression] stress-ng udp-flood causes kernel panic on Ampere
+ Altra
+Message-ID: <20220706124007.GB7996@breakpoint.cc>
+References: <20220702205651.GB15144@breakpoint.cc>
+ <YsKxTAaIgvKMfOoU@e126311.manchester.arm.com>
+ <YsLGoU7q5hP67TJJ@e126311.manchester.arm.com>
+ <YsQYIoJK3iqJ68Tq@e126311.manchester.arm.com>
+ <20220705105749.GA711@willie-the-truck>
+ <20220705110724.GB711@willie-the-truck>
+ <20220705112449.GA931@willie-the-truck>
+ <YsVmbOqzACeo1rO4@e126311.manchester.arm.com>
+ <20220706120201.GA7996@breakpoint.cc>
+ <20220706122246.GI2403@willie-the-truck>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [V3 1/7] remoteproc: qcom: pas: Add decrypt shutdown support for
- modem
-Content-Language: en-US
-To:     Sibi Sankar <quic_sibis@quicinc.com>, bjorn.andersson@linaro.org
-Cc:     agross@kernel.org, mathieu.poirier@linaro.org,
-        dmitry.baryshkov@linaro.org, linux-arm-msm@vger.kernel.org,
-        linux-remoteproc@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <1657022900-2049-1-git-send-email-quic_sibis@quicinc.com>
- <1657022900-2049-2-git-send-email-quic_sibis@quicinc.com>
-From:   Konrad Dybcio <konrad.dybcio@somainline.org>
-In-Reply-To: <1657022900-2049-2-git-send-email-quic_sibis@quicinc.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220706122246.GI2403@willie-the-truck>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -48,17 +62,14 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 5.07.2022 14:08, Sibi Sankar wrote:
-> The initial shutdown request to modem on SM8450 SoCs would start the
-> decryption process and will keep returning errors until the modem shutdown
-> is complete. Fix this by retrying shutdowns in fixed intervals.
+Will Deacon <will@kernel.org> wrote:
+> On Wed, Jul 06, 2022 at 02:02:01PM +0200, Florian Westphal wrote:
+> > +	/* ->status and ->timeout loads must happen after refcount increase */
+> > +	smp_rmb();
 > 
-I'm sorry, but this message seems a bit cryptic to me.. What
-is being decrypted? How is it related to the shutdown sequence?
-Why does it need to finish first?
+> Sorry I didn't suggest this earlier, but if all of these smp_rmb()s are
+> for upgrading the ordering from refcount_inc_not_zero() then you should
+> use smp_acquire__after_ctrl_dep() instead. It's the same under the hood,
+> but it illustrates what's going on a bit better.
 
-Konrad
-
-[snipped the rest]
+Ok, I can replace it and send a v2, no problem.

@@ -2,69 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DA1A2569349
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 22:26:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A55B56934A
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 22:26:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233512AbiGFU02 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Jul 2022 16:26:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37104 "EHLO
+        id S234286AbiGFU0e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Jul 2022 16:26:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37128 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232042AbiGFU01 (ORCPT
+        with ESMTP id S232042AbiGFU03 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Jul 2022 16:26:27 -0400
-Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29464175BC
-        for <linux-kernel@vger.kernel.org>; Wed,  6 Jul 2022 13:26:25 -0700 (PDT)
-Received: by mail-wr1-x42b.google.com with SMTP id s1so23572248wra.9
-        for <linux-kernel@vger.kernel.org>; Wed, 06 Jul 2022 13:26:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=pd/cz1ZdOZDG0dGUCc56UGlwZRbZux/IHLKbAzN98Js=;
-        b=LO0ddP6IpeapDsidsXkOEyQ+saT7ncixARK9nt1HA3oZyERRJd0FQIIojqRBKqfaFz
-         +XAcZ/GkXc3ZoXDRmqbwdZr1aEGsNnJtxJDN6nCxM3+mS5+gJPJY3WiIHUVlHcEmCo6h
-         bGqElsZBwf6tPPCxLXYqPk0Ck2d1yig7FYAo2XTcWBNBcT2YYh/w9HGa3R2LMILBmZl5
-         HdANoc64OsBGuwzVhgklcWy1Q9fF9ay/YNUaTVkTTswIPjotbWfiRKD/knMEqTkodlVa
-         3Hraa3O9LLAv2Y76IEP8SWpKXcTJ3WIX9jaAe1FCAiRiOHP8Uxm0VNG0Udp0FIflMYFi
-         sHOQ==
+        Wed, 6 Jul 2022 16:26:29 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6C8CE175BC
+        for <linux-kernel@vger.kernel.org>; Wed,  6 Jul 2022 13:26:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1657139187;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=4Hwo8z020LeTeWlRuuo4HAd1S0dCDtVbRtMDTaTwRBo=;
+        b=ejeK9DIOX3xVaqkEeI9e5HLAq/TLWpQZ0AQmh6HGOTclj8fGJLl++UtaDkQaYrPrElPUUl
+        mHGia1zfc88GpiC7wUzr4SOGG0nzqd5M1tRNFmG4eob4D+J3ufD735xuoeHz2iaC6XJ5sA
+        ngQBl/hJZxNx2A0N0PQlK9QrwCzzZuc=
+Received: from mail-ej1-f72.google.com (mail-ej1-f72.google.com
+ [209.85.218.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-326-wukfxnikOimILhkgfZjzDA-1; Wed, 06 Jul 2022 16:26:26 -0400
+X-MC-Unique: wukfxnikOimILhkgfZjzDA-1
+Received: by mail-ej1-f72.google.com with SMTP id sh39-20020a1709076ea700b0072aa3156a68so2975030ejc.19
+        for <linux-kernel@vger.kernel.org>; Wed, 06 Jul 2022 13:26:26 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=pd/cz1ZdOZDG0dGUCc56UGlwZRbZux/IHLKbAzN98Js=;
-        b=N+rLFYWLgzMB5640QuFWj+NjWYaQMwul5t7MFQsdzvxdHLsDjib9MijhUyf2UhC6dD
-         nipHj05nGz4sFDy5HnpT+64wXPDdn8EnpYn49j8AObae67LDPlE5T2U/JgpzzqZW2BW/
-         qmabHlsB0Rs+heUXIlIpBLtmRsOVZOh/1T4seVhMU1RyIVRryzvgOxgXbYUSACX7fSHe
-         15xDRKDyI6eVBNmfLmlHf0n7dOPqJAZWJ2xOoW96MxXK/Gyn8phtgLbpjF4VCxNb9FTY
-         TP9jHkKv+sMIepY5FFKpxn2Jm+Fb3XFTw5brKoVoR4a9Lko/pbj4/8+4bi/b4fAxP3CA
-         ZoBw==
-X-Gm-Message-State: AJIora9XNKFynFif/vAft7SckU9ca1eiVa1KgN/lbat3HBiGwpGjBEtY
-        +8SEu0KgYvBEcfBY4RIjoYyQuBlGVHYXOy2TJ0FSSQ==
-X-Google-Smtp-Source: AGRyM1sNVUzqOT1mNnsuofu3XsFHxkgXs0ehkhiv3SeOIcmUkR73MU7bT2mshl83m+mxZRZwlMqFJSMZpSlgzKEnHTM=
-X-Received: by 2002:a05:6000:8e:b0:21d:7e97:67ed with SMTP id
- m14-20020a056000008e00b0021d7e9767edmr4443868wrx.343.1657139183331; Wed, 06
- Jul 2022 13:26:23 -0700 (PDT)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=4Hwo8z020LeTeWlRuuo4HAd1S0dCDtVbRtMDTaTwRBo=;
+        b=oSevnN2P6o9Uw0+mlWQoDzJTe61fsfu1N3xFRlgV3aBJVrevtvoFXFhmeLEyNh5tv8
+         Zv233cYS2xI65BohspPt2Vpvhfkhc7T+oR3eykIGesOHjmdAjGVePJj18Jy8vilDyWBw
+         bE+GvcUOPBSZF8Qtj/bdJ09T2oK5pGI9MJR85rBuHQZGCPmG3p2tHAAcx9IiihxSWG3Q
+         cipGi7OjFL/jiXCR4g6c8VbOico+ZPlV/H0t03ZwkHqoDCcRX/YgL9K24oSnuFyoBu5p
+         /Fj3P4hcCFefOvF3dkFK7sGx6Szf2koXWDesR8UDOzez6NRUYNuMTR/DOqsGtgij+UFY
+         ZRCw==
+X-Gm-Message-State: AJIora/xuxqAdGqGjypsPF2857Ajjn+OboB0LImaE1j1Frke0t1z5ZNh
+        U/MZjS//BF3/ZQMfodhU/5QBZ0vY7jlkbNxQcRA0AC36YMmzPm5F6m4b6k/b6T2EH8JSJTKE0oi
+        L09k4hdPR3P3so09ZSjbRVFGx
+X-Received: by 2002:a17:907:6d1e:b0:726:abf9:cb90 with SMTP id sa30-20020a1709076d1e00b00726abf9cb90mr39141418ejc.685.1657139185172;
+        Wed, 06 Jul 2022 13:26:25 -0700 (PDT)
+X-Google-Smtp-Source: AGRyM1stSh0sgO2t5SPZoQVNYoYGxZ7B79qOA1aObb55Rkl5ftoOw1kl+bnhUEKWqBDT9am0abeQRQ==
+X-Received: by 2002:a17:907:6d1e:b0:726:abf9:cb90 with SMTP id sa30-20020a1709076d1e00b00726abf9cb90mr39141402ejc.685.1657139184895;
+        Wed, 06 Jul 2022 13:26:24 -0700 (PDT)
+Received: from ?IPV6:2001:1c00:c1e:bf00:d69d:5353:dba5:ee81? (2001-1c00-0c1e-bf00-d69d-5353-dba5-ee81.cable.dynamic.v6.ziggo.nl. [2001:1c00:c1e:bf00:d69d:5353:dba5:ee81])
+        by smtp.gmail.com with ESMTPSA id bm4-20020a0564020b0400b0043a8f40a038sm1770337edb.93.2022.07.06.13.26.24
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 06 Jul 2022 13:26:24 -0700 (PDT)
+Message-ID: <be219334-456f-c2f1-7102-4a3b01e8cd59@redhat.com>
+Date:   Wed, 6 Jul 2022 22:26:23 +0200
 MIME-Version: 1.0
-References: <d1ff3c27-e248-56ff-89b8-7b75c0f817ba@gmail.com>
-In-Reply-To: <d1ff3c27-e248-56ff-89b8-7b75c0f817ba@gmail.com>
-From:   Ian Rogers <irogers@google.com>
-Date:   Wed, 6 Jul 2022 13:26:10 -0700
-Message-ID: <CAP-5=fW+g85Mh19DdBPGKMzs+VMzEjhVvUX4R-5D+SZ2zpLuow@mail.gmail.com>
-Subject: Re: [GIT PULL] tools/perf/pmu-events: Fix some typo (2022-07-05
- 05:10:43 +0900)
-To:     hayashizaki.masayuki@gmail.com, perfmon-discuss@lists.01.org
-Cc:     torvalds@linux-foundation.org, linux-kernel@vger.kernel.org,
-        linux-perf-users <linux-perf-users@vger.kernel.org>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Jiri Olsa <jolsa@kernel.org>, Kan Liang <kan.liang@intel.com>,
-        Zhengjun Xing <zhengjun.xing@linux.intel.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Subject: Re: [RFC][PATCH] ACPI: EC: Make evaluate acpi_ec_add() _REG for EC
+ operation regions
+Content-Language: en-US
+To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Linux ACPI <linux-acpi@vger.kernel.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>
+References: <5592689.DvuYhMxLoT@kreacher>
+From:   Hans de Goede <hdegoede@redhat.com>
+In-Reply-To: <5592689.DvuYhMxLoT@kreacher>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,373 +82,133 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jul 5, 2022 at 1:09 AM Hayashizaki Masayuki
-<hayashizaki.masayuki@gmail.com> wrote:
->
-> Hello:
->
-> I sent a pull request. Please review and merge.
->
-> Reason:
-> Fix some typo.
->
-> Git repository URL:
-> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
->
-> Branch name:
-> pmu-events-fixes-5.19-5
->
-> Pull request log:
-> git request-pull origin/master pmu-events-fixes-5.19-5
-> fatal: 'pmu-events-fixes-5.19-5' does not appear to be a git repository
-> fatal: Could not read from remote repository.
->
-> Please make sure you have the correct access rights
-> and the repository exists.
-> warn: No match for commit 2a3f9ec126ba4bb036b638ede6794c3ce313c6c4 found
-> at pmu-events-fixes-5.19-5
-> warn: Are you sure you pushed 'HEAD' there?
-> The following changes since commit c1084b6c5620a743f86947caca66d90f24060f56:
->
->    Merge tag 'soc-fixes-5.19-2' of
-> git://git.kernel.org/pub/scm/linux/kernel/git/soc/soc (2022-07-04
-> 10:41:59 -0700)
->
-> are available in the Git repository at:
->
->    pmu-events-fixes-5.19-5
->
-> for you to fetch changes up to 2a3f9ec126ba4bb036b638ede6794c3ce313c6c4:
->
->    tools/perf/pmu-events: Fix some typo (2022-07-05 05:10:43 +0900)
->
-> ----------------------------------------------------------------
-> Hayashizaki Masayuki (1):
->        tools/perf/pmu-events: Fix some typo
->
->   tools/perf/pmu-events/arch/x86/broadwell/pipeline.json   | 10 +++++-----
->   tools/perf/pmu-events/arch/x86/broadwellde/pipeline.json | 10 +++++-----
->   tools/perf/pmu-events/arch/x86/broadwellx/pipeline.json  | 10 +++++-----
->   tools/perf/pmu-events/arch/x86/haswell/pipeline.json     | 10 +++++-----
->   tools/perf/pmu-events/arch/x86/haswellx/pipeline.json    | 10 +++++-----
->   5 files changed, 25 insertions(+), 25 deletions(-)
+Hi,
 
-These files are generated from json files here:
-https://download.01.org/perfmon/
-Using scripts here:
-https://github.com/intel/event-converter-for-linux-perf
-Fixing the spelling in the Linux tree will mean future updates will
-need to manually also fix the spelling, it is better we fix the
-spelling in the files on 01.org. I've added
-perfmon-discuss@lists.01.org in the to-s of this e-mail, so hopefully
-the files will be revised in the next 01.org update.
+On 7/6/22 14:37, Rafael J. Wysocki wrote:
+> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> 
+> acpi_ec_ecdt_probe() is called between acpi_load_tables() and
+> acpi_enable_subsystem().  It passes ACPI_ROOT_OBJECT as ec->handle
+> to acpi_ec_setup() and so ACPI_ROOT_OBJECT is passed to
+> acpi_install_address_space_handler() via ec_install_handlers().
+> 
+> Next, acpi_ns_validate_handle() converts it to acpi_gbl_root_node
+> which is passed to acpi_ev_install_space_handler() and the handler is
+> installed for acpi_gbl_root_node.
+> 
+> Now, acpi_gbl_root_node is passed to acpi_ev_execute_reg_methods() which
+> evaluates _REG for any ACPI_ADR_SPACE_EC regions it can find in the
+> namespace which should not be necessary, because the OS is expected to
+> make the ECDT operation regions available before evaluating any AML, so
+> in particular AML is not expected to check the evaluation of _REG before
+> it accesses these operation regions (see ACPI 6.4, Section 6.5.4,
+> exception 2 [1]).  Doing that is also problematic, because the _REG
+> methods for the ACPI_ADR_SPACE_EC regions may depend on various _INI, so
+> they should be be evaluated before running acpi_initialize_objects() [2].
+> 
+> Address this problem by modifying acpi_install_address_space_handler()
+> to avoid evaluating _REG for ACPI_ADR_SPACE_EC regions when the handler
+> is installed for acpi_gbl_root_node which indicates the ECDT case.
+> 
+> However, this needs to be accompanied by an EC driver change to
+> actually trigger the evaluation of _REG for the ACPI_ADR_SPACE_EC
+> regions when it finds the EC object in the namespace.
+> 
+> Link: https://uefi.org/specs/ACPI/6.4/06_Device_Configuration/Device_Configuration.html#reg-region # [1]
+> Link: https://github.com/acpica/acpica/pull/786 # [2]
+> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> ---
+> 
+> Note: This change doesn't make any practical difference on any of the systems
+> in my office.
+> 
+> ---
+>  drivers/acpi/acpica/evxfregn.c |   12 ++++++++++++
+>  drivers/acpi/ec.c              |    7 +++++++
+>  2 files changed, 19 insertions(+)
+> 
+> Index: linux-pm/drivers/acpi/ec.c
+> ===================================================================
+> --- linux-pm.orig/drivers/acpi/ec.c
+> +++ linux-pm/drivers/acpi/ec.c
+> @@ -1632,6 +1632,13 @@ static int acpi_ec_add(struct acpi_devic
+>  			acpi_handle_debug(ec->handle, "duplicated.\n");
+>  			acpi_ec_free(ec);
+>  			ec = boot_ec;
+> +			/*
+> +			 * Uninstall the EC address space handler and let
+> +			 * acpi_ec_setup() install it again along with
+> +			 * evaluating _REG methogs associated with
+> +			 * ACPI_ADR_SPACE_EC operation regions.
+> +			 */
+> +			ec_remove_handlers(ec);
 
-Thanks,
-Ian
+This will call the _REG method to get called with ACPI_REG_DISCONNECT (0)
+as second argument which may lead to unexpected consequences so I'm not
+in favor of doing things this way.
 
-> Diff:
-> diff --git a/tools/perf/pmu-events/arch/x86/broadwell/pipeline.json
-> b/tools/perf/pmu-events/arch/x86/broadwell/pipeline.json
-> index 18d21b94a4b9..23e0c3fadc53 100644
-> --- a/tools/perf/pmu-events/arch/x86/broadwell/pipeline.json
-> +++ b/tools/perf/pmu-events/arch/x86/broadwell/pipeline.json
-> @@ -1133,7 +1133,7 @@
->       },
->       {
->           "AnyThread": "1",
-> -        "BriefDescription": "Cycles per core when uops are exectuted in
-> port 0.",
-> +        "BriefDescription": "Cycles per core when uops are executed in
-> port 0.",
->           "Counter": "0,1,2,3",
->           "CounterHTOff": "0,1,2,3,4,5,6,7",
->           "EventCode": "0xA1",
-> @@ -1153,7 +1153,7 @@
->       },
->       {
->           "AnyThread": "1",
-> -        "BriefDescription": "Cycles per core when uops are exectuted in
-> port 1.",
-> +        "BriefDescription": "Cycles per core when uops are executed in
-> port 1.",
->           "Counter": "0,1,2,3",
->           "CounterHTOff": "0,1,2,3,4,5,6,7",
->           "EventCode": "0xA1",
-> @@ -1213,7 +1213,7 @@
->       },
->       {
->           "AnyThread": "1",
-> -        "BriefDescription": "Cycles per core when uops are exectuted in
-> port 4.",
-> +        "BriefDescription": "Cycles per core when uops are executed in
-> port 4.",
->           "Counter": "0,1,2,3",
->           "CounterHTOff": "0,1,2,3,4,5,6,7",
->           "EventCode": "0xA1",
-> @@ -1233,7 +1233,7 @@
->       },
->       {
->           "AnyThread": "1",
-> -        "BriefDescription": "Cycles per core when uops are exectuted in
-> port 5.",
-> +        "BriefDescription": "Cycles per core when uops are executed in
-> port 5.",
->           "Counter": "0,1,2,3",
->           "CounterHTOff": "0,1,2,3,4,5,6,7",
->           "EventCode": "0xA1",
-> @@ -1253,7 +1253,7 @@
->       },
->       {
->           "AnyThread": "1",
-> -        "BriefDescription": "Cycles per core when uops are exectuted in
-> port 6.",
-> +        "BriefDescription": "Cycles per core when uops are executed in
-> port 6.",
->           "Counter": "0,1,2,3",
->           "CounterHTOff": "0,1,2,3,4,5,6,7",
->           "EventCode": "0xA1",
-> diff --git a/tools/perf/pmu-events/arch/x86/broadwellde/pipeline.json
-> b/tools/perf/pmu-events/arch/x86/broadwellde/pipeline.json
-> index 7580b8af0d13..b67eba679844 100644
-> --- a/tools/perf/pmu-events/arch/x86/broadwellde/pipeline.json
-> +++ b/tools/perf/pmu-events/arch/x86/broadwellde/pipeline.json
-> @@ -1133,7 +1133,7 @@
->       },
->       {
->           "AnyThread": "1",
-> -        "BriefDescription": "Cycles per core when uops are exectuted in
-> port 0.",
-> +        "BriefDescription": "Cycles per core when uops are executed in
-> port 0.",
->           "Counter": "0,1,2,3",
->           "CounterHTOff": "0,1,2,3,4,5,6,7",
->           "EventCode": "0xA1",
-> @@ -1153,7 +1153,7 @@
->       },
->       {
->           "AnyThread": "1",
-> -        "BriefDescription": "Cycles per core when uops are exectuted in
-> port 1.",
-> +        "BriefDescription": "Cycles per core when uops are executed in
-> port 1.",
->           "Counter": "0,1,2,3",
->           "CounterHTOff": "0,1,2,3,4,5,6,7",
->           "EventCode": "0xA1",
-> @@ -1213,7 +1213,7 @@
->       },
->       {
->           "AnyThread": "1",
-> -        "BriefDescription": "Cycles per core when uops are exectuted in
-> port 4.",
-> +        "BriefDescription": "Cycles per core when uops are executed in
-> port 4.",
->           "Counter": "0,1,2,3",
->           "CounterHTOff": "0,1,2,3,4,5,6,7",
->           "EventCode": "0xA1",
-> @@ -1233,7 +1233,7 @@
->       },
->       {
->           "AnyThread": "1",
-> -        "BriefDescription": "Cycles per core when uops are exectuted in
-> port 5.",
-> +        "BriefDescription": "Cycles per core when uops are executed in
-> port 5.",
->           "Counter": "0,1,2,3",
->           "CounterHTOff": "0,1,2,3,4,5,6,7",
->           "EventCode": "0xA1",
-> @@ -1253,7 +1253,7 @@
->       },
->       {
->           "AnyThread": "1",
-> -        "BriefDescription": "Cycles per core when uops are exectuted in
-> port 6.",
-> +        "BriefDescription": "Cycles per core when uops are executed in
-> port 6.",
->           "Counter": "0,1,2,3",
->           "CounterHTOff": "0,1,2,3,4,5,6,7",
->           "EventCode": "0xA1",
-> diff --git a/tools/perf/pmu-events/arch/x86/broadwellx/pipeline.json
-> b/tools/perf/pmu-events/arch/x86/broadwellx/pipeline.json
-> index 18d21b94a4b9..23e0c3fadc53 100644
-> --- a/tools/perf/pmu-events/arch/x86/broadwellx/pipeline.json
-> +++ b/tools/perf/pmu-events/arch/x86/broadwellx/pipeline.json
-> @@ -1133,7 +1133,7 @@
->       },
->       {
->           "AnyThread": "1",
-> -        "BriefDescription": "Cycles per core when uops are exectuted in
-> port 0.",
-> +        "BriefDescription": "Cycles per core when uops are executed in
-> port 0.",
->           "Counter": "0,1,2,3",
->           "CounterHTOff": "0,1,2,3,4,5,6,7",
->           "EventCode": "0xA1",
-> @@ -1153,7 +1153,7 @@
->       },
->       {
->           "AnyThread": "1",
-> -        "BriefDescription": "Cycles per core when uops are exectuted in
-> port 1.",
-> +        "BriefDescription": "Cycles per core when uops are executed in
-> port 1.",
->           "Counter": "0,1,2,3",
->           "CounterHTOff": "0,1,2,3,4,5,6,7",
->           "EventCode": "0xA1",
-> @@ -1213,7 +1213,7 @@
->       },
->       {
->           "AnyThread": "1",
-> -        "BriefDescription": "Cycles per core when uops are exectuted in
-> port 4.",
-> +        "BriefDescription": "Cycles per core when uops are executed in
-> port 4.",
->           "Counter": "0,1,2,3",
->           "CounterHTOff": "0,1,2,3,4,5,6,7",
->           "EventCode": "0xA1",
-> @@ -1233,7 +1233,7 @@
->       },
->       {
->           "AnyThread": "1",
-> -        "BriefDescription": "Cycles per core when uops are exectuted in
-> port 5.",
-> +        "BriefDescription": "Cycles per core when uops are executed in
-> port 5.",
->           "Counter": "0,1,2,3",
->           "CounterHTOff": "0,1,2,3,4,5,6,7",
->           "EventCode": "0xA1",
-> @@ -1253,7 +1253,7 @@
->       },
->       {
->           "AnyThread": "1",
-> -        "BriefDescription": "Cycles per core when uops are exectuted in
-> port 6.",
-> +        "BriefDescription": "Cycles per core when uops are executed in
-> port 6.",
->           "Counter": "0,1,2,3",
->           "CounterHTOff": "0,1,2,3,4,5,6,7",
->           "EventCode": "0xA1",
-> diff --git a/tools/perf/pmu-events/arch/x86/haswell/pipeline.json
-> b/tools/perf/pmu-events/arch/x86/haswell/pipeline.json
-> index a53f28ec9270..06fbe7d34a8c 100644
-> --- a/tools/perf/pmu-events/arch/x86/haswell/pipeline.json
-> +++ b/tools/perf/pmu-events/arch/x86/haswell/pipeline.json
-> @@ -1035,7 +1035,7 @@
->           "CounterHTOff": "0,1,2,3,4,5,6,7",
->           "EventCode": "0xA1",
->           "EventName": "UOPS_EXECUTED_PORT.PORT_0_CORE",
-> -        "PublicDescription": "Cycles per core when uops are exectuted
-> in port 0.",
-> +        "PublicDescription": "Cycles per core when uops are executed in
-> port 0.",
->           "SampleAfterValue": "2000003",
->           "UMask": "0x1"
->       },
-> @@ -1056,7 +1056,7 @@
->           "CounterHTOff": "0,1,2,3,4,5,6,7",
->           "EventCode": "0xA1",
->           "EventName": "UOPS_EXECUTED_PORT.PORT_1_CORE",
-> -        "PublicDescription": "Cycles per core when uops are exectuted
-> in port 1.",
-> +        "PublicDescription": "Cycles per core when uops are executed in
-> port 1.",
->           "SampleAfterValue": "2000003",
->           "UMask": "0x2"
->       },
-> @@ -1117,7 +1117,7 @@
->           "CounterHTOff": "0,1,2,3,4,5,6,7",
->           "EventCode": "0xA1",
->           "EventName": "UOPS_EXECUTED_PORT.PORT_4_CORE",
-> -        "PublicDescription": "Cycles per core when uops are exectuted
-> in port 4.",
-> +        "PublicDescription": "Cycles per core when uops are executed in
-> port 4.",
->           "SampleAfterValue": "2000003",
->           "UMask": "0x10"
->       },
-> @@ -1138,7 +1138,7 @@
->           "CounterHTOff": "0,1,2,3,4,5,6,7",
->           "EventCode": "0xA1",
->           "EventName": "UOPS_EXECUTED_PORT.PORT_5_CORE",
-> -        "PublicDescription": "Cycles per core when uops are exectuted
-> in port 5.",
-> +        "PublicDescription": "Cycles per core when uops are executed in
-> port 5.",
->           "SampleAfterValue": "2000003",
->           "UMask": "0x20"
->       },
-> @@ -1159,7 +1159,7 @@
->           "CounterHTOff": "0,1,2,3,4,5,6,7",
->           "EventCode": "0xA1",
->           "EventName": "UOPS_EXECUTED_PORT.PORT_6_CORE",
-> -        "PublicDescription": "Cycles per core when uops are exectuted
-> in port 6.",
-> +        "PublicDescription": "Cycles per core when uops are executed in
-> port 6.",
->           "SampleAfterValue": "2000003",
->           "UMask": "0x40"
->       },
-> diff --git a/tools/perf/pmu-events/arch/x86/haswellx/pipeline.json
-> b/tools/perf/pmu-events/arch/x86/haswellx/pipeline.json
-> index a53f28ec9270..06fbe7d34a8c 100644
-> --- a/tools/perf/pmu-events/arch/x86/haswellx/pipeline.json
-> +++ b/tools/perf/pmu-events/arch/x86/haswellx/pipeline.json
-> @@ -1035,7 +1035,7 @@
->           "CounterHTOff": "0,1,2,3,4,5,6,7",
->           "EventCode": "0xA1",
->           "EventName": "UOPS_EXECUTED_PORT.PORT_0_CORE",
-> -        "PublicDescription": "Cycles per core when uops are exectuted
-> in port 0.",
-> +        "PublicDescription": "Cycles per core when uops are executed in
-> port 0.",
->           "SampleAfterValue": "2000003",
->           "UMask": "0x1"
->       },
-> @@ -1056,7 +1056,7 @@
->           "CounterHTOff": "0,1,2,3,4,5,6,7",
->           "EventCode": "0xA1",
->           "EventName": "UOPS_EXECUTED_PORT.PORT_1_CORE",
-> -        "PublicDescription": "Cycles per core when uops are exectuted
-> in port 1.",
-> +        "PublicDescription": "Cycles per core when uops are executed in
-> port 1.",
->           "SampleAfterValue": "2000003",
->           "UMask": "0x2"
->       },
-> @@ -1117,7 +1117,7 @@
->           "CounterHTOff": "0,1,2,3,4,5,6,7",
->           "EventCode": "0xA1",
->           "EventName": "UOPS_EXECUTED_PORT.PORT_4_CORE",
-> -        "PublicDescription": "Cycles per core when uops are exectuted
-> in port 4.",
-> +        "PublicDescription": "Cycles per core when uops are executed in
-> port 4.",
->           "SampleAfterValue": "2000003",
->           "UMask": "0x10"
->       },
-> @@ -1138,7 +1138,7 @@
->           "CounterHTOff": "0,1,2,3,4,5,6,7",
->           "EventCode": "0xA1",
->           "EventName": "UOPS_EXECUTED_PORT.PORT_5_CORE",
-> -        "PublicDescription": "Cycles per core when uops are exectuted
-> in port 5.",
-> +        "PublicDescription": "Cycles per core when uops are executed in
-> port 5.",
->           "SampleAfterValue": "2000003",
->           "UMask": "0x20"
->       },
-> @@ -1159,7 +1159,7 @@
->           "CounterHTOff": "0,1,2,3,4,5,6,7",
->           "EventCode": "0xA1",
->           "EventName": "UOPS_EXECUTED_PORT.PORT_6_CORE",
-> -        "PublicDescription": "Cycles per core when uops are exectuted
-> in port 6.",
-> +        "PublicDescription": "Cycles per core when uops are executed in
-> port 6.",
->           "SampleAfterValue": "2000003",
->           "UMask": "0x40"
->       },
-> --
-> Hayashizaki Masayuki
-> hayashizaki.masayuki@gmail.com
-> AkariSpetification / Developer
-> https://akari.mn
+IMHO it would be much better to instead have flags; or if flags are
+disliked a separate function to only call _REG later on.
+
+>  		}
+>  	}
+>  
+> Index: linux-pm/drivers/acpi/acpica/evxfregn.c
+> ===================================================================
+> --- linux-pm.orig/drivers/acpi/acpica/evxfregn.c
+> +++ linux-pm/drivers/acpi/acpica/evxfregn.c
+> @@ -78,6 +78,18 @@ acpi_install_address_space_handler(acpi_
+>  		goto unlock_and_exit;
+>  	}
+>  
+> +	/*
+> +	 * Avoid evaluating _REG methods if an EC address space handler is
+> +	 * installed for acpi_gbl_root_node, because this is done in order to
+> +	 * make Embedded Controller operation regions, accessed via the Embedded
+> +	 * Controllers described in ECDT, available early (see ACPI 6.4, Section
+> +	 * 6.5.4, exception 2).
+> +	 */
+> +
+> +	if (node == acpi_gbl_root_node || space_id == ACPI_ADR_SPACE_EC) {
+> +		goto unlock_and_exit;
+> +	}
+> +
+
+Hmm, I like this in that it is KISS. But OTOH this does mean that
+acpi_install_address_space_handler() now behaves differently depending on its
+parameters in a possibly surprising way. So IMHO this feels a bit too clever
+for our own good, since it may surprise the callers of this function.
+
+My biggest problem is, that as indicated above I believe that instead
+of uninstalling + re-installing the handler we really need to have a way
+to just call _REG later; and that in turn requires the caller to know if
+_REG has run or not.
+
+I've posted a new RFC patch series which adds flags to
+acpi_install_address_space_handler() to not run / only run _REG :
+
+https://lore.kernel.org/linux-acpi/20220706201410.88244-1-hdegoede@redhat.com/
+
+this then gets used in the drivers/acpi/ec.c patch to defer calling _REG when
+registering the handler based on the ECDT until the DSDT EC entry is parsed.
+I personally like how this turns out and IMHO this is cleaner (less hackish)
+then the proposed solution with calling ec_remove_handlers(ec) :
+
+https://lore.kernel.org/linux-acpi/20220706201410.88244-3-hdegoede@redhat.com/
+
+Regards,
+
+Hans
+
+
+
+
+
+
+>  	/* Run all _REG methods for this address space */
+>  
+>  	acpi_ev_execute_reg_methods(node, space_id, ACPI_REG_CONNECT);
+> 
+> 
+> 
+

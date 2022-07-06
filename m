@@ -2,85 +2,160 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E596568870
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 14:35:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 682E4568872
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 14:36:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232467AbiGFMf0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Jul 2022 08:35:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39952 "EHLO
+        id S231251AbiGFMgC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Jul 2022 08:36:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40380 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232102AbiGFMfY (ORCPT
+        with ESMTP id S232256AbiGFMgA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Jul 2022 08:35:24 -0400
-Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9CFF1B7B4;
-        Wed,  6 Jul 2022 05:35:22 -0700 (PDT)
-Received: from zn.tnic (p200300ea970ff625329c23fffea6a903.dip0.t-ipconnect.de [IPv6:2003:ea:970f:f625:329c:23ff:fea6:a903])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Wed, 6 Jul 2022 08:36:00 -0400
+Received: from relay08.th.seeweb.it (relay08.th.seeweb.it [5.144.164.169])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C6CF1A81B
+        for <linux-kernel@vger.kernel.org>; Wed,  6 Jul 2022 05:35:58 -0700 (PDT)
+Received: from [192.168.1.101] (abxi46.neoplus.adsl.tpnet.pl [83.9.2.46])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 6447F1EC0554;
-        Wed,  6 Jul 2022 14:35:17 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1657110917;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=aOfghTrex1dSH5ya2NTo53o75SOki07wRbpatW6WuBk=;
-        b=KCUu0L2dkP2XI8FBDBFzdO0NWi8TMtHxuIX9sQgc8hqhPWfiDc3DIkWjRmLn/A5w4jes+W
-        Kdp/Bzg5kTu+nf6MBnNBJTADx5tph7Hm3ovWxLGauzcr2XCZznaaWbyvFkNYCST3UF4uBO
-        rmMjNumRUWoX4RY3dD2SpM+CD9QRTo4=
-Date:   Wed, 6 Jul 2022 14:35:17 +0200
-From:   Borislav Petkov <bp@alien8.de>
-To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
-Cc:     "H. Peter Anvin" <hpa@zytor.com>,
-        linux-arm-kernel@lists.infradead.org,
-        linuxppc-dev@lists.ozlabs.org, linux-s390@vger.kernel.org,
-        linux-kernel@vger.kernel.org, x86@kernel.org,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Arnd Bergmann <arnd@arndb.de>
-Subject: Re: [PATCH v3] random: remove CONFIG_ARCH_RANDOM
-Message-ID: <YsWBhaZT5dCQHfwp@zn.tnic>
-References: <20220706003225.335768-1-Jason@zx2c4.com>
- <20220706105411.406259-1-Jason@zx2c4.com>
+        by m-r2.th.seeweb.it (Postfix) with ESMTPSA id 584053F669;
+        Wed,  6 Jul 2022 14:35:56 +0200 (CEST)
+Message-ID: <ebcfa5b0-a416-64c0-3aa4-3ae9487c61ab@somainline.org>
+Date:   Wed, 6 Jul 2022 14:35:55 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20220706105411.406259-1-Jason@zx2c4.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH v3] dt-bindings: qcom: document preferred compatible
+ naming
+Content-Language: en-US
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Vinod Koul <vkoul@kernel.org>, Alex Elder <elder@linaro.org>,
+        Robert Foss <robert.foss@linaro.org>,
+        Bhupesh Sharma <bhupesh.sharma@linaro.org>
+References: <20220705092846.66731-1-krzysztof.kozlowski@linaro.org>
+From:   Konrad Dybcio <konrad.dybcio@somainline.org>
+In-Reply-To: <20220705092846.66731-1-krzysztof.kozlowski@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jul 06, 2022 at 12:54:11PM +0200, Jason A. Donenfeld wrote:
-> So this commit simplifies things by removing CONFIG_ARCH_RANDOM, keeping
 
-No need to say "this commit" or "this patch" - just write "as if you are
-giving orders to the codebase to change its behaviour."
 
-In this case, "So simplify things by ... "
+On 5.07.2022 11:28, Krzysztof Kozlowski wrote:
+> Compatibles can come in two formats.  Either "vendor,ip-soc" or
+> "vendor,soc-ip".  Qualcomm bindings were mixing both of usages, so add a
+> DT schema file documenting preferred policy and enforcing it for all new
+> compatibles, except few existing patterns.
+> 
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> 
+> ---
+> 
+> Changes since v2:
+> 1. Narrow the expected pattern to be followed by dash '-' after model
+>    number (msm8996-) or by two letters and a dash (sc8280xp-).
+> 2. Add qcom,apss-wdt-xxx to list of exceptions.
+> 3. Use comment instead of description in the oneOf list.
+> 
+> Changes since v1:
+> 1. Add schema instead of readme (Rob).
+> 
+> Cc: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+> Cc: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+> Cc: Vinod Koul <vkoul@kernel.org>
+> Cc: Alex Elder <elder@linaro.org>
+> Cc: Robert Foss <robert.foss@linaro.org>
+> Cc: Bhupesh Sharma <bhupesh.sharma@linaro.org>
+> ---
+>  .../devicetree/bindings/arm/qcom-soc.yaml     | 57 +++++++++++++++++++
+>  1 file changed, 57 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/arm/qcom-soc.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/arm/qcom-soc.yaml b/Documentation/devicetree/bindings/arm/qcom-soc.yaml
+> new file mode 100644
+> index 000000000000..6307c925335d
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/arm/qcom-soc.yaml
+> @@ -0,0 +1,57 @@
+> +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/arm/qcom-soc.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Qualcomm SoC compatibles naming convention
+> +
+> +maintainers:
+> +  - Bjorn Andersson <bjorn.andersson@linaro.org>
+> +
+> +description: |
+> +  Guidelines for new compatibles for SoC blocks/components.
+> +  When adding new compatibles in new bindings, use the format::
+> +    qcom,SoC-IP
+> +
+> +  For example::
+> +   qcom,sdm845-llcc-bwmon
+> +
+> +  When adding new compatibles to existing bindings, use the format in the
+> +  existing binding, even if it contradicts the above.
+> +
+> +select:
+> +  properties:
+> +    compatible:
+> +      pattern: "^qcom,.*(apq|ipq|mdm|msm|qcs|sa|sc|sdm|sdx|sm)[0-9]+.*$"
+> +  required:
+> +    - compatible
+> +
+> +properties:
+> +  compatible:
+> +    oneOf:
+> +      # Preferred naming style for compatibles of SoC components:
+> +      - pattern: "^qcom,(apq|ipq|mdm|msm|qcs|sa|sc|sdm|sdx|sm)[0-9]+-.*$"
+> +      - pattern: "^qcom,(sa|sc)8[0-9]+[a-z][a-z]?-.*$"
+> +
+> +      # Legacy namings - variations of existing patterns/compatibles are OK,
+> +      # but do not add completely new entries to these:
+> +      - pattern: "^qcom,apss-wdt-(apq|ipq|mdm|msm|qcs|sa|sc|sdm|sdx|sm)[0-9]+.*$"
+> +      - pattern: "^qcom,gcc-(apq|ipq|mdm|msm|qcs|sa|sc|sdm|sdx|sm)[0-9]+.*$"
+> +      - pattern: "^qcom,mmcc-(apq|ipq|mdm|msm|qcs|sa|sc|sdm|sdx|sm)[0-9]+.*$"
+> +      - pattern: "^qcom,pcie-(apq|ipq|mdm|msm|qcs|sa|sc|sdm|sdx|sm)[0-9]+.*$"
+> +      - pattern: "^qcom,rpm-(apq|ipq|mdm|msm|qcs|sa|sc|sdm|sdx|sm)[0-9]+.*$"
+> +      - pattern: "^qcom,scm-(apq|ipq|mdm|msm|qcs|sa|sc|sdm|sdx|sm)[0-9]+.*$"
+> +      - enum:
+> +          - qcom,gpucc-sdm630
+> +          - qcom,gpucc-sdm660
+> +          - qcom,lcc-apq8064
+> +          - qcom,lcc-ipq8064
+> +          - qcom,lcc-mdm9615
+> +          - qcom,lcc-msm8960
+> +          - qcom,lpass-cpu-apq8016
+> +          - qcom,usb-ss-ipq4019-phy
+> +          - qcom,usb-hs-ipq4019-phy
+> +          - qcom,vqmmc-ipq4019-regulator
+Maybe we could add new compatibles for these drivers and replace them
+in upstream DTs, but keep the old ones in the drivers with a clear
+indication that they are there only for legacy reasons?
 
->  arch/x86/Kconfig                                  |  9 ---------
->  arch/x86/include/asm/archrandom.h                 | 14 +++++---------
->  arch/x86/kernel/cpu/rdrand.c                      |  2 --
+In the specific case of gpucc-sdm630/660 I think we could even "break" backwards
+compatibility, as the only users of that driver (Adreno GPU & its SMMU) depend
+on an iommu series to function properly, which has been stuck in the freezer..
 
-For those:
-
-Acked-by: Borislav Petkov <bp@suse.de>
-
-Thx.
-
--- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
+Konrad
+> +
+> +additionalProperties: true

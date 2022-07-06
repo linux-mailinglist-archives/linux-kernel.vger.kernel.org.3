@@ -2,117 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 30F6156917D
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 20:13:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 42C3256917F
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 20:14:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234319AbiGFSN4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Jul 2022 14:13:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57068 "EHLO
+        id S234383AbiGFSOB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Jul 2022 14:14:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57378 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234373AbiGFSNt (ORCPT
+        with ESMTP id S234354AbiGFSN7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Jul 2022 14:13:49 -0400
-Received: from mail-oa1-x30.google.com (mail-oa1-x30.google.com [IPv6:2001:4860:4864:20::30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25B2E62D4
-        for <linux-kernel@vger.kernel.org>; Wed,  6 Jul 2022 11:13:48 -0700 (PDT)
-Received: by mail-oa1-x30.google.com with SMTP id 586e51a60fabf-10c0430e27dso10875401fac.4
-        for <linux-kernel@vger.kernel.org>; Wed, 06 Jul 2022 11:13:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=7fWRDNeX9MMfp7ZEnj1zISls/i3Z9E63XbcmRmnrtV4=;
-        b=LSY5fpPHj4ODjWxLFsQ9CCFHdMccQXXVWbagQg8W6sKSpRG79C61MjDBvwdytJYiP1
-         v/sOP4TlMEi9u8iCMRIvpNMnk5MDT30+cGLjsGLXmiI2SiSk+7ojKAmmRyYdGZWz/gKH
-         jyRYhjWDLxcCB4tk8HADZx8VemvH77M4nBLeqNxfXlkrDsVzmXIYbSVch2LVL5RzMDXF
-         vgDLZUpSMPj2TdbmuXkGJ+Q5hphs9i9pMD+RX2jt5UxnqjSeof3u1cu4LqnFJDTTEb9j
-         +RIB3tV1O8+E3L3JcHABdZKK4JPWtxLMy0cLIOjyQdvA5UCtCUCXZ860tRxOYl3nVMLM
-         Yt/w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=7fWRDNeX9MMfp7ZEnj1zISls/i3Z9E63XbcmRmnrtV4=;
-        b=goYh4dw8PxdJhQaRX7P4o3wTkTbaSRHIiX9AbCoL1FF8c6lEOWkANDuY9svs2meBpS
-         j0+xWhOcLvJTbWlRei4NveBGV7xh3c+lENf9I+943DTA0eBIy6PfVRP8gj9vIBwHKnH6
-         Do1zCL1Y0VoFUtGkXZ5C+8u7y5n//FRLb/MVblfI1Cd+oKb02IfTnPBnqmzmPnL7UdBQ
-         tKoMaRO2KEk6We+9rYFiCX2Y1ebVD/V18bqq0FN+3VWRpE44HmetWM9l2aESDkNUdbC6
-         kQZ4m9MQ3uLs272YEl1LWYSBf6q1k9LuL0S5H4PNHTKGOBr28rlX1krnXDqWbtQWRd3c
-         RPrw==
-X-Gm-Message-State: AJIora91BoWBL43NbMye+a5y8rp/Yz9E0q0RfXXXoQtph19Die2QN76v
-        llzrCWbIDdZL/Vv+TqBObwd/rrgL2oewOErPiU+MrQ==
-X-Google-Smtp-Source: AGRyM1sMShOFtGknX+KfS0VwLuvS48QVMtsbgqt5zd+qQNVYk34Z62nVt80xNGcx+pAMuQL76YDfGHMvR1Efkb0SOic=
-X-Received: by 2002:a05:6870:56aa:b0:10b:f4fb:8203 with SMTP id
- p42-20020a05687056aa00b0010bf4fb8203mr11908251oao.181.1657131227362; Wed, 06
- Jul 2022 11:13:47 -0700 (PDT)
+        Wed, 6 Jul 2022 14:13:59 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 961EF9FCF;
+        Wed,  6 Jul 2022 11:13:58 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 309C261FF9;
+        Wed,  6 Jul 2022 18:13:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 321B0C341CA;
+        Wed,  6 Jul 2022 18:13:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1657131237;
+        bh=sM4TNspEX9Bff5U2v6ScPqfbpzsVCvLpxc6cCswvR+Q=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=VHN6NwqrZXoSMRvausUD8YF0N65d3qV3Qi+voMdwY8Cx1Z+KnC4MDMaMW7pTAeRKp
+         OprBQXVZ/SFWYMl0FOsOFRb5dU9dY4BPuC+ly4MMTBTrXHTXlpUJVm9Evb9L/RJZV0
+         PJl3lHGuOyXGf2tkZ21vZfXmn/c/6EALarXXsvmU=
+Date:   Wed, 6 Jul 2022 20:13:54 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Maxim Devaev <mdevaev@gmail.com>
+Cc:     linux-usb@vger.kernel.org, stern@rowland.harvard.edu,
+        balbi@kernel.org, caihuoqing@baidu.com,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] usb: gadget: f_mass_storage: forced_eject attribute
+Message-ID: <YsXQ4hFDVjO+xm3s@kroah.com>
+References: <20220706174634.20639-1-mdevaev@gmail.com>
 MIME-Version: 1.0
-References: <20220621150902.46126-1-mlevitsk@redhat.com> <20220621150902.46126-12-mlevitsk@redhat.com>
- <CALMp9eSe5jtvmOPWLYCcrMmqyVBeBkg90RwtR4bwxay99NAF3g@mail.gmail.com>
- <42da1631c8cdd282e5d9cfd0698b6df7deed2daf.camel@redhat.com>
- <CALMp9eRNZ8D5aRyUEkc7CORz-=bqzfVCSf6nOGZhqQfWfte0dw@mail.gmail.com> <289c2dd941ecbc3c32514fc0603148972524b22d.camel@redhat.com>
-In-Reply-To: <289c2dd941ecbc3c32514fc0603148972524b22d.camel@redhat.com>
-From:   Jim Mattson <jmattson@google.com>
-Date:   Wed, 6 Jul 2022 11:13:36 -0700
-Message-ID: <CALMp9eS2gxzWU1+OpfBTqCZsmyq8qoCW_Qs84xv=rGo1ranG1Q@mail.gmail.com>
-Subject: Re: [PATCH v2 11/11] KVM: x86: emulator/smm: preserve interrupt
- shadow in SMRAM
-To:     Maxim Levitsky <mlevitsk@redhat.com>
-Cc:     kvm@vger.kernel.org, Sean Christopherson <seanjc@google.com>,
-        x86@kernel.org, Kees Cook <keescook@chromium.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        linux-kernel@vger.kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
-        Borislav Petkov <bp@alien8.de>, Joerg Roedel <joro@8bytes.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220706174634.20639-1-mdevaev@gmail.com>
+X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jul 5, 2022 at 6:38 AM Maxim Levitsky <mlevitsk@redhat.com> wrote:
+On Wed, Jul 06, 2022 at 08:46:34PM +0300, Maxim Devaev wrote:
+> It allows to reset prevent_medium_removal flag and "eject" the image.
+> 
+> The patch is a completely alternative implementation of the previously
+> proposed [1], the idea of which was born after the mentioned discussion.
+> 
+> Signed-off-by: Maxim Devaev <mdevaev@gmail.com>
+> Link: https://lore.kernel.org/lkml/20220406092445.215288-1-mdevaev@gmail.com [1]
+> ---
+>  drivers/usb/gadget/function/f_mass_storage.c | 25 ++++++++++++++++++++
+>  drivers/usb/gadget/function/storage_common.c | 11 +++++++++
+>  drivers/usb/gadget/function/storage_common.h |  2 ++
+>  3 files changed, 38 insertions(+)
+> 
+> diff --git a/drivers/usb/gadget/function/f_mass_storage.c b/drivers/usb/gadget/function/f_mass_storage.c
+> index 6ad669dde41c..00cac2a38178 100644
+> --- a/drivers/usb/gadget/function/f_mass_storage.c
+> +++ b/drivers/usb/gadget/function/f_mass_storage.c
+> @@ -2520,10 +2520,21 @@ static ssize_t file_store(struct device *dev, struct device_attribute *attr,
+>  	return fsg_store_file(curlun, filesem, buf, count);
+>  }
+>  
+> +static ssize_t forced_eject_store(struct device *dev,
+> +				  struct device_attribute *attr,
+> +				  const char *buf, size_t count)
+> +{
+> +	struct fsg_lun		*curlun = fsg_lun_from_dev(dev);
+> +	struct rw_semaphore	*filesem = dev_get_drvdata(dev);
+> +
+> +	return fsg_store_forced_eject(curlun, filesem, buf, count);
+> +}
+> +
+>  static DEVICE_ATTR_RW(nofua);
+>  /* mode wil be set in fsg_lun_attr_is_visible() */
+>  static DEVICE_ATTR(ro, 0, ro_show, ro_store);
+>  static DEVICE_ATTR(file, 0, file_show, file_store);
+> +static DEVICE_ATTR_WO(forced_eject);
 
-> Most of the SMI save state area is reserved, and the handler has no way of knowing
-> what CPU stored there, it can only access the fields that are reserved in the spec.
->
-> Yes, if the SMI handler really insists it can see that the saved RIP points to an
-> instruction that follows the STI, but does that really matter? It is allowed by the
-> spec explicitly anyway.
+You have to document sysfs files in Documentation/ABI/ in order for us
+to be able to accept them.
 
-I was just pointing out that the difference between blocking SMI and
-not blocking SMI is, in fact, observable.
+thanks,
 
-> Plus our SMI layout (at least for 32 bit) doesn't confirm to the X86 spec anyway,
-> we as I found out flat out write over the fields that have other meaning in the X86 spec.
-
-Shouldn't we fix that?
-
-> Also I proposed to preserve the int shadow in internal kvm state and migrate
-> it in upper 4 bits of the 'shadow' field of struct kvm_vcpu_events.
-> Both Paolo and Sean proposed to store the int shadow in the SMRAM instead,
-> and you didn't object to this, and now after I refactored and implemented
-> the whole thing you suddently do.
-
-I did not see the prior conversations. I rarely get an opportunity to
-read the list.
-
-> However AMD just recently posted a VNMI patch series to avoid
-> single stepping the CPU when NMI is blocked due to the same reason, because
-> it is fragile.
-
-The vNMI feature isn't available in any shipping processor yet, is it?
-
-> Do you really want KVM to single step the guest in this case, to deliver the #SMI?
-> I can do it, but it is bound to cause lot of trouble.
-
-Perhaps you could document this as a KVM erratum...one of many
-involving virtual SMI delivery.
+greg k-h

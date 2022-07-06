@@ -2,113 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A6AB568EE2
+	by mail.lfdr.de (Postfix) with ESMTP id BDFED568EE4
 	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 18:19:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234367AbiGFQSX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Jul 2022 12:18:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45708 "EHLO
+        id S232606AbiGFQSk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Jul 2022 12:18:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46272 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233659AbiGFQSQ (ORCPT
+        with ESMTP id S234053AbiGFQSb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Jul 2022 12:18:16 -0400
-Received: from mail-qt1-x82f.google.com (mail-qt1-x82f.google.com [IPv6:2607:f8b0:4864:20::82f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B09227FE2
-        for <linux-kernel@vger.kernel.org>; Wed,  6 Jul 2022 09:18:15 -0700 (PDT)
-Received: by mail-qt1-x82f.google.com with SMTP id h19so18925722qtp.6
-        for <linux-kernel@vger.kernel.org>; Wed, 06 Jul 2022 09:18:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ziepe.ca; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=Z5AtWZPe7XoqBJU6Mk4sFJpC18BYt1O5VeJ13XcQzX4=;
-        b=Ewz99xqh8v2JGDRnfSIbSELjNOHHdsxNwR3glx8EoOGGev5aohpcw6bWI/kSKPXG0P
-         eN6PsAah0mHTRNi3bHI/PD93M4mNRFT9xFR7Xp1ALIJ7MO5UqM1gbfU0vtFnJL4eAXBj
-         7HrxdcAznMe+kLEOERuVkQ9iw6gfkPre8defoP11IpiTfUbN7erJSe1v4uTtXgHQMNYK
-         qNiR89H3qjJgEivlIv3cciUWJwZPYmnvfH/tVJ18bh+iMtLrA+MY48Ku6YwKjZlJHlyQ
-         gsVePEmk9eXsyuDLBOad6mIO/zu+2ZipibQZ/do77BtbkNy7IWxAJErql/N1oRbG6ebq
-         Ozqw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=Z5AtWZPe7XoqBJU6Mk4sFJpC18BYt1O5VeJ13XcQzX4=;
-        b=EdU4yXLmFwqtzzOeNEwj+lP3yTcRcRRUptEwSOah4gCJS6QZaF5FhgrI0ysqR6fBCW
-         XR0PaQTXBXe5MjkQjKt/3RfDdtROIix5WFSAX5akOmO9WmJbHEuIXfi43KcYrHqJnEdO
-         TCJtrJAY7LYM21IQQQ+1pUC8NnDP/kucmMR+KD6xD1EzsHr0bFa5yd52Z8+GbwBKX6gM
-         KyLr+2swAWw4CdSm6svfTCbRGyFVKT/gMytc205gs0MZo4D3Vq7hJ6sqVEV4rjUFI1J/
-         p/asRHiTOHVi+m9eFbBX26+mbsVuIkmKjVPXAwcQGssz17SYcVQ2dmC/qCC3OdtFFtoq
-         fZDg==
-X-Gm-Message-State: AJIora9CLu8DKxVRuyMXppl9kM4Lay5I01HUOv9QE+ZPFPQBhX1KCrfC
-        9+2FG1TeXELl+mT3z64PdNyRhQ==
-X-Google-Smtp-Source: AGRyM1uj3Zv5IfAsAH88CBXvJ1B+xqPgTHtuEYaKAMVSg+irD6dNO967VZRHDnXBhdHxHFqYCJ6SLg==
-X-Received: by 2002:a05:622a:450:b0:31d:3a5d:fc50 with SMTP id o16-20020a05622a045000b0031d3a5dfc50mr22010953qtx.433.1657124294361;
-        Wed, 06 Jul 2022 09:18:14 -0700 (PDT)
-Received: from ziepe.ca (hlfxns017vw-142-162-113-129.dhcp-dynamic.fibreop.ns.bellaliant.net. [142.162.113.129])
-        by smtp.gmail.com with ESMTPSA id v18-20020a05620a441200b006a701d8a43bsm24578677qkp.79.2022.07.06.09.18.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 06 Jul 2022 09:18:13 -0700 (PDT)
-Received: from jgg by mlx with local (Exim 4.94)
-        (envelope-from <jgg@ziepe.ca>)
-        id 1o97jA-0076he-VG; Wed, 06 Jul 2022 13:18:12 -0300
-Date:   Wed, 6 Jul 2022 13:18:12 -0300
-From:   Jason Gunthorpe <jgg@ziepe.ca>
-To:     Dan Carpenter <dan.carpenter@oracle.com>
-Cc:     Longfang Liu <liulongfang@huawei.com>,
-        Yishai Hadas <yishaih@nvidia.com>,
-        Shameer Kolothum <shameerali.kolothum.thodi@huawei.com>,
-        Kevin Tian <kevin.tian@intel.com>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        Cornelia Huck <cohuck@redhat.com>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org
-Subject: Re: [PATCH] vfio: hisi_acc_vfio_pci: fix integer overflow check in
- hisi_acc_vf_resume_write()
-Message-ID: <20220706161812.GJ23621@ziepe.ca>
-References: <YsP+2CWqMudArkqF@kili>
- <20220705180649.GI23621@ziepe.ca>
- <20220706055124.GA2338@kadam>
+        Wed, 6 Jul 2022 12:18:31 -0400
+Received: from verein.lst.de (verein.lst.de [213.95.11.211])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADBD8DFE1
+        for <linux-kernel@vger.kernel.org>; Wed,  6 Jul 2022 09:18:29 -0700 (PDT)
+Received: by verein.lst.de (Postfix, from userid 2407)
+        id 7E1AB68B05; Wed,  6 Jul 2022 18:18:25 +0200 (CEST)
+Date:   Wed, 6 Jul 2022 18:18:25 +0200
+From:   Christoph Hellwig <hch@lst.de>
+To:     Keith Busch <kbusch@kernel.org>
+Cc:     John Garry <john.garry@huawei.com>, axboe@fb.com, hch@lst.de,
+        sagi@grimberg.me, linux-nvme@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] nvme: Fix nvme_setup_command metadata trace event for
+ cdw10
+Message-ID: <20220706161825.GA1962@lst.de>
+References: <1657095398-114310-1-git-send-email-john.garry@huawei.com> <YsW0orMaDFfrHbx+@kbusch-mbp.dhcp.thefacebook.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220706055124.GA2338@kadam>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+In-Reply-To: <YsW0orMaDFfrHbx+@kbusch-mbp.dhcp.thefacebook.com>
+User-Agent: Mutt/1.5.17 (2007-11-01)
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jul 06, 2022 at 08:51:24AM +0300, Dan Carpenter wrote:
-> On Tue, Jul 05, 2022 at 03:06:49PM -0300, Jason Gunthorpe wrote:
-> > On Tue, Jul 05, 2022 at 12:05:28PM +0300, Dan Carpenter wrote:
-> > > The casting on this makes the integer overflow check slightly wrong.
-> > > "len" is an unsigned long. "*pos" and "requested_length" are signed
-> > > long longs.  Imagine "len" is ULONG_MAX and "*pos" is 2.
-> > > "ULONG_MAX + 2 = 1". 
-> > 
-> > I wonder if this can happen, len is a kernel controlled value bounded
-> > by a memory allocation..
-> > 
-> 
-> Oh.  Smatch uses a model which says that all read/writes come from
-> vfs_write().  The problem with tracking kernel read/writes is that
-> recursion is tricky.  So Smatch just deletes those from the DB.
+On Wed, Jul 06, 2022 at 10:13:22AM -0600, Keith Busch wrote:
+> Did you test what the trace looks like afte this? We're losing valuable trace
+> data here. The field is supposed to get CDW's 10 - 15, so that's 24 bytes. I
+> don't know why it cares that the address of the field being read is only 4
+> bytes; we want everything that comes after it too.
 
-Oh, maybe I got it wrong, len is the user input, so yes that does look
-bad
+Because accesses should not spawn boundaries of members in structs unless
+copying the entire struct.  If we want to trace the various fields we
+need to individually assign them.
 
-> > This code was copy and pasted from drivers/vfio/pci/mlx5/main.c, so it
-> > should be fixed too
-> 
-> Sure.
-> 
-> I created a static checker warning for this type of thing but it didn't
-> catch the issue in drivers/vfio/pci/mlx5/main.c because Smatch says that
-> the bug is impossible.  Which is true.
-
-How come it is different?
-
-Jason
+Anyway, I'm dropping this patch from nvme-5.19 for now to let the
+discussion conclude.

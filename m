@@ -2,44 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B598C568002
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 09:38:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 663F756800F
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 09:38:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231675AbiGFHhL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Jul 2022 03:37:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53380 "EHLO
+        id S231688AbiGFHhe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Jul 2022 03:37:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53640 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231638AbiGFHhI (ORCPT
+        with ESMTP id S231721AbiGFHh0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Jul 2022 03:37:08 -0400
-Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2052.outbound.protection.outlook.com [40.107.244.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03D4622B2D;
-        Wed,  6 Jul 2022 00:37:07 -0700 (PDT)
+        Wed, 6 Jul 2022 03:37:26 -0400
+Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2062e.outbound.protection.outlook.com [IPv6:2a01:111:f400:7e89::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4832522BC4;
+        Wed,  6 Jul 2022 00:37:24 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=JV8dDokWB1lvplJiiBJzDlRT+6JDzRgYSqgD1qmGJgbOrDqq3CTZucTdNvSO9GbMDRPINGKQi6azekTLx+BiDnPKDkIWE7UaXPayEGo9LZaptWpPPX4llD/QF5/oMoQckcl0durqWI3Vl1jDqyKNuluoUXXxuGNBfE+XUDSUmSqmv/RLukZXFzO+ob+VTM7RDZHkz1hK9YdB3XV5fBY1bzU7/hcSSKAOQLNqIfEPwZ5BGEFIOvfIuva+KpPSg4+D7sJEycj0MIaGrAR/tM+b68qLgJ9TgP2ilp6Jz0dhwOEgO0b8EK6+c7TrZxQ3Ye9V7cESUwhuCEoHPgubDIHX2Q==
+ b=G14bq91rAmEKzbTyYrEH3etwEqGvi9trpBFIgrDRTAQdxzqpuVXrw7hhS9Un0KsxXXmlQe417oRwjGJ0S603g7O2gh2U3VRe3VHZTh8g/NEr7B3jCkTU3a03HXncR90pKVlmZevdvZmg3PuHqbH1uNzV9AoMFrBzVZaGliWzMWNzEjzZ3nDIlvzQaQarJU8oPGvxssHruu7kHf8AJQLHDd3I7o+2b8DfJ4YKmjDDZ5FevqG2vy8gea1tD8x7D1VvS+TfhJqkZj4QgcWjisgFs/cfguPjueegfj+Sc8nI5W7eS9TXETwv8DSwAGX+7iIBLnlr8icdqgqx6vwjkA/V0g==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=PRfgOiS1B4ukdh5lyCJvijBwLT3IcTDzlgRc/+oyiv0=;
- b=E4JrIIS+fglCCObF1AT+KweD0Z0suciQ5uKYrzI/EgiuxggQC4eOgILVhOw1nAqV5uTeddMNqHU2CVnJ4eRL/otNWR6nx34XhtSKwd9pMzmWJCXIlw4oXmSZtVTP+OYqo+TylWNMuzrKmaIQ0O2cRpzBLAM4qO1TiBed1U4ZI2HWVrDH9B5AaLdwMFcu3bIE8SGm8JFs14J6oR4URCz0OlLX7VRvkIwvuewesYqpnUf37USjJk1dGq1XjE4NVurDia6NT1Yc+8H/+bNwy45sk4U+QN4MGDjDXHkmhtVn0/c4QGI1Nl1X8VfLhwOFdkxEkgY4iqIcF1Rlu0ZM5KOqlA==
+ bh=UrC1TjL9RzVlD/Xt8AGIlrt+M1iz9DAQ7dSjduadBeU=;
+ b=Xs3+aeED4tVVQq4So6bzfjMVph3ISrLejb4BNx5C8s5o3nIjgJW/9jiEhEZuOefDD08pbiRJI8LHo/jfe71oO6vBYDwEfS4E/U92+IMEXHBnlkyOT2WR26gv50fa8b8G1WE4bHnWTTtjGVu3BJEUftiBa2V0GyR0IP2QbyZ/Gx2vbsGZnMZjiAdec61JVC7Xrimp0CHTCbJvHgKLAdF6RPF98OLu81WGLw2MHFw+kwjvCAP9N0QoZczaqpaGHP8elmo5HsubazEQerPtu5WvjMqgSm2qaHIDd67AtwjJy46NoBQMfw/iz89Mr/mNd2GmI3jpRVLkSP8Ly1F8ChuRHQ==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
  165.204.84.17) smtp.rcpttodomain=linuxfoundation.org smtp.mailfrom=amd.com;
  dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
  header.from=amd.com; dkim=none (message not signed); arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=PRfgOiS1B4ukdh5lyCJvijBwLT3IcTDzlgRc/+oyiv0=;
- b=rMzXlDGEAt0uEdaG0iIN5fpsYXUZRoiWwMLmsCXaw6NNgkwTzbmvWr283e1KBztjxn3BVeCGrwU7fHruRBRyL8KaoArnUlC2yvTkTWgtqXxsp+ZuKosqsIKKd0I+6KkHRYOb1eCkGuroeFhJF9x6F0/tTboIk/pcqjqTw54Lvd8=
-Received: from MWHPR03CA0014.namprd03.prod.outlook.com (2603:10b6:300:117::24)
- by BL0PR12MB4964.namprd12.prod.outlook.com (2603:10b6:208:1c7::18) with
+ bh=UrC1TjL9RzVlD/Xt8AGIlrt+M1iz9DAQ7dSjduadBeU=;
+ b=nNKsbxUIkMSJ2e2iAIRVTxoZ/njl5aHm5DZuLxY/NJEjUI8nJICCPShGIE2dreHtKqMiArHca8+iV6U2FJM8nFuuVH42RHWZBfbwkiYga2Ni2dxPat6Tqwb4xFFcDocSqC2bsWQnQiSfxmLD9xSpZ8TmbneHIhlneNPzOCJAqgQ=
+Received: from MW4PR04CA0364.namprd04.prod.outlook.com (2603:10b6:303:81::9)
+ by LV2PR12MB5750.namprd12.prod.outlook.com (2603:10b6:408:17e::6) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5395.14; Wed, 6 Jul
- 2022 07:37:05 +0000
-Received: from CO1NAM11FT015.eop-nam11.prod.protection.outlook.com
- (2603:10b6:300:117:cafe::e6) by MWHPR03CA0014.outlook.office365.com
- (2603:10b6:300:117::24) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5395.21; Wed, 6 Jul
+ 2022 07:37:08 +0000
+Received: from CO1NAM11FT049.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:303:81:cafe::f2) by MW4PR04CA0364.outlook.office365.com
+ (2603:10b6:303:81::9) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5395.14 via Frontend
- Transport; Wed, 6 Jul 2022 07:37:04 +0000
+ Transport; Wed, 6 Jul 2022 07:37:08 +0000
 X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
  smtp.mailfrom=amd.com; dkim=none (message not signed)
  header.d=none;dmarc=pass action=none header.from=amd.com;
@@ -47,13 +47,13 @@ Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
  165.204.84.17 as permitted sender) receiver=protection.outlook.com;
  client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
 Received: from SATLEXMB04.amd.com (165.204.84.17) by
- CO1NAM11FT015.mail.protection.outlook.com (10.13.175.130) with Microsoft SMTP
+ CO1NAM11FT049.mail.protection.outlook.com (10.13.175.50) with Microsoft SMTP
  Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.5417.15 via Frontend Transport; Wed, 6 Jul 2022 07:37:04 +0000
+ 15.20.5417.15 via Frontend Transport; Wed, 6 Jul 2022 07:37:08 +0000
 Received: from jasmine-meng.amd.com (10.180.168.240) by SATLEXMB04.amd.com
  (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.28; Wed, 6 Jul
- 2022 02:36:58 -0500
+ 2022 02:37:02 -0500
 From:   Meng Li <li.meng@amd.com>
 To:     Shuah Khan <skhan@linuxfoundation.org>,
         Huang Rui <ray.huang@amd.com>, <linux-pm@vger.kernel.org>
@@ -68,9 +68,9 @@ CC:     "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
         Viresh Kumar <viresh.kumar@linaro.org>,
         Borislav Petkov <bp@alien8.de>, <linux-kernel@vger.kernel.org>,
         Meng Li <li.meng@amd.com>
-Subject: [PATCH V1 2/4] selftests: amd-pstate: Trigger tbench benchmark and test cpus
-Date:   Wed, 6 Jul 2022 15:36:20 +0800
-Message-ID: <20220706073622.672135-3-li.meng@amd.com>
+Subject: [PATCH V1 3/4] selftests: amd-pstate: Trigger gitsource benchmark and test cpus
+Date:   Wed, 6 Jul 2022 15:36:21 +0800
+Message-ID: <20220706073622.672135-4-li.meng@amd.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220706073622.672135-1-li.meng@amd.com>
 References: <20220706073622.672135-1-li.meng@amd.com>
@@ -82,398 +82,122 @@ X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
  (10.181.40.145)
 X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 43a3349e-e20c-41be-6ad3-08da5f2252b3
-X-MS-TrafficTypeDiagnostic: BL0PR12MB4964:EE_
+X-MS-Office365-Filtering-Correlation-Id: 46a2de39-d10c-4d60-c006-08da5f2254d1
+X-MS-TrafficTypeDiagnostic: LV2PR12MB5750:EE_
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: QCCa68Y5fq0lxfuQDdXlNHsJ6U4TBNVXNMYMLHI84VQ4nrLbn4Nv6ZvXh+NsGNsGbKG5zaCl8SghtytV2XpSdO61YKZXY8p0ZcDpJ4BmEzWM0FJSVVbw1dTSEK00d0V8sjLOSJFY9JS+LUsA6aUlsFjSSfkq4yRp0yz5v18QWfa6S+/uoNuUoL4Sap83oKnulEjzAbbnx09wwtRXKt61p7xOi9+427w9Zl66Mj+V+yj79kn6rSgTAIsPCmTlhzVeNL12GPkVjLR69mwxnZ3bF1sOa+Q9pxo0CFmPlK6OGDkZetBLPhJkMk/JCAfo9xf5h5yt2GtSNeJg2v6GiM2090ktdpwOrKvf7Cerbu4I0ZNr2F6OEbtzKmCxBs6KrSyuaQbPR3bRVgu+WWu4iygrmEhvbkbQgIqRC1MrBE9HciVqjcL9GwaKhylxRjG/ntQaNusPekO12nkTp0CXDxwJKldTWfsYUx18VtVIglCCdg5ziZbVTRihDQeaoAlOEIZWyHmzuDbg92EfdqSliCs4w2Hk/W7XmmrMmGOmbUs/DLE9aePNsiIRT1YC92eetc2FMvSIvLl2oXtHIEfcweKW8JMDqgdo1pxwSQ3h8uq1fZ3v60QPlqHZR3kjeUb5mFWEWdXG751Wm8BmgUdQXkY4whKy4ZYJ0/9n8vvvFgpm1Jp4xZ0rqNPlHmZRx2hmxoOZEOiU/Ue/Aj1gOOWSChClnY7Am91D7slrhXYM4OxjffoK7CunRI8I3t6D/YOc02+IOj5X6524rkz9iZQITzbjbYIVLWQNdmIAHhL6589WAuQpLV/7J1jhIVGNmwkCcih7Yn76FyioknWNKpwEkTAOwxmE3ZVLILsYo/bsP5SFFrp5fBdhyyiepwDfwZ1tYWA/EhzJ7aD1uLmPnDbYplXhxg==
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230016)(4636009)(346002)(39860400002)(376002)(396003)(136003)(46966006)(40470700004)(36840700001)(7696005)(36756003)(356005)(81166007)(34020700004)(40480700001)(54906003)(36860700001)(110136005)(316002)(86362001)(82740400003)(6666004)(82310400005)(2906002)(8676002)(83380400001)(41300700001)(4326008)(5660300002)(336012)(47076005)(26005)(30864003)(70206006)(70586007)(426003)(40460700003)(16526019)(186003)(8936002)(1076003)(2616005)(478600001)(36900700001);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: Q+BTluKCYANNHVdFdXS4qNzdZMGUnaLvGGRrX3bsV9SgfDK6WKGof8uuwqG0Wcio0kyzdCjOs2WhZSkQ2c3SfNjDVeTULC8gbHL2anJjoLeYJJQkLnI+ziUTmc+YmuWWWK+qvAkHsJyL7+m0AQmfZP5emEP6pFw/wkHu5lIUIiN1jrktkBjtylA4vmi5i68xlRyFMKYfMmbMsIf13EagzNkeBmb65CI5ZmiziZ6xHcQg20BAeimrOJOm4TMH33nDb4BMTDYd08kqHd1nnnOjA0mwMNpSBGi5QtV9tbQ9n5oVKB+HXsM2T+aJWrWb9y7ozOPXNR6SJ07gRlKohn1HSUwYv22a6hDykfQ3zKiOIR9M/n3SOOBIz6ND1bDWzI2NmnRuF07yb00cftv4EmUB4slrw6JqRetx4jVJyxtwnBEvFZVtKE+xBYC4aRe0LGolAgBEez5ShE6MunTuTRpPlzEj/S71pnI0YxQMyo06E9+7g0nV7MOU02aGtxVo+gaN0xRZrDfBxusCLEnRIyqAHvgLJKeY494aitWrkhh1ZgClXo73Cm0kFYRiz+suuWkN5EZuOMSQYYEzPjsnmRBMCVxEPYFWcHLZROsMOUh941w96+rSwRmyBgh5T4lckVKY1D17vp7GmSNSD3haigbHJBLa4myUaftpZ0uSGGzo1U8IV3MfrHQlaeAS/ZEizwiIlERSyKdFcI3kcUMuAwgzMFS6kd2ZNhBL+SW3xQBh09yW9wyN9/A3mX+yXCbKnUdj5DUpeh7NNvyWufG7WEGnAufSNt05i/HsMWg4nSa7bMHpHj70WruT+BQPEE3xCQ+pUMH0T1hFH3V98Mb9DyFVyojDNu9O6ROSZjZvIw90N1/ZgQ5m1zACVqgGgvxOwesdT2qR4Rs8BKqngn2L+INF3WjoBHC0Mnw9b4tGeC5tIak=
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230016)(4636009)(39860400002)(396003)(346002)(136003)(376002)(46966006)(36840700001)(40470700004)(40460700003)(8936002)(36756003)(47076005)(426003)(336012)(2616005)(5660300002)(186003)(16526019)(86362001)(1076003)(83380400001)(26005)(110136005)(54906003)(316002)(2906002)(40480700001)(478600001)(41300700001)(8676002)(6666004)(34020700004)(70586007)(70206006)(81166007)(82740400003)(36860700001)(4326008)(356005)(82310400005)(7696005)(36900700001);DIR:OUT;SFP:1101;
 X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Jul 2022 07:37:04.5488
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Jul 2022 07:37:08.1030
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 43a3349e-e20c-41be-6ad3-08da5f2252b3
+X-MS-Exchange-CrossTenant-Network-Message-Id: 46a2de39-d10c-4d60-c006-08da5f2254d1
 X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
 X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT015.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT049.eop-nam11.prod.protection.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Anonymous
 X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL0PR12MB4964
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: LV2PR12MB5750
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add tbench.sh trigger the tbench testing and monitor the cpu desire
+Add gitsource.sh trigger the gitsource testing and monitor the cpu desire
 performance, frequency, load, power consumption and throughput etc.
 
 Signed-off-by: Meng Li <li.meng@amd.com>
 ---
- tools/testing/selftests/amd-pstate/Makefile  |  10 +-
- tools/testing/selftests/amd-pstate/main.sh   | 168 ++++++++++++++++-
- tools/testing/selftests/amd-pstate/tbench.sh | 187 +++++++++++++++++++
- 3 files changed, 361 insertions(+), 4 deletions(-)
- create mode 100755 tools/testing/selftests/amd-pstate/tbench.sh
+ tools/testing/selftests/amd-pstate/Makefile   |   2 +-
+ .../testing/selftests/amd-pstate/gitsource.sh | 176 ++++++++++++++++++
+ tools/testing/selftests/amd-pstate/main.sh    |  21 ++-
+ 3 files changed, 195 insertions(+), 4 deletions(-)
+ create mode 100755 tools/testing/selftests/amd-pstate/gitsource.sh
 
 diff --git a/tools/testing/selftests/amd-pstate/Makefile b/tools/testing/selftests/amd-pstate/Makefile
-index 167ab51ec290..e2fb03381a32 100644
+index e2fb03381a32..c536b9303858 100644
 --- a/tools/testing/selftests/amd-pstate/Makefile
 +++ b/tools/testing/selftests/amd-pstate/Makefile
-@@ -4,7 +4,15 @@
- # No binaries, but make sure arg-less "make" doesn't trigger "run_tests"
- all:
+@@ -13,6 +13,6 @@ TEST_GEN_FILES += ../../../power/x86/intel_pstate_tracer/intel_pstate_tracer.py
+ endif
  
-+uname_M := $(shell uname -m 2>/dev/null || echo not)
-+ARCH ?= $(shell echo $(uname_M) | sed -e s/i.86/x86/ -e s/x86_64/x86/)
-+
-+ifeq (x86,$(ARCH))
-+TEST_GEN_FILES += ../../../power/x86/amd_pstate_tracer/amd_pstate_trace.py
-+TEST_GEN_FILES += ../../../power/x86/intel_pstate_tracer/intel_pstate_tracer.py
-+endif
-+
  TEST_PROGS := run.sh
--TEST_FILES := main.sh basic.sh
-+TEST_FILES := main.sh basic.sh tbench.sh
+-TEST_FILES := main.sh basic.sh tbench.sh
++TEST_FILES := main.sh basic.sh tbench.sh gitsource.sh
  
  include ../lib.mk
-diff --git a/tools/testing/selftests/amd-pstate/main.sh b/tools/testing/selftests/amd-pstate/main.sh
-index 1c28b5d7b4c5..ae71fe62e3b0 100755
---- a/tools/testing/selftests/amd-pstate/main.sh
-+++ b/tools/testing/selftests/amd-pstate/main.sh
-@@ -9,6 +9,7 @@ else
- fi
- 
- source basic.sh
-+source tbench.sh
- 
- # amd-pstate-ut only run on x86/x86_64 AMD systems.
- ARCH=$(uname -m 2>/dev/null | sed -e 's/i.86/x86/' -e 's/x86_64/x86/')
-@@ -16,10 +17,95 @@ VENDOR=$(cat /proc/cpuinfo | grep -m 1 'vendor_id' | awk '{print $NF}')
- 
- FUNC=all
- OUTFILE=selftest
-+OUTFILE_TBENCH="$OUTFILE.tbench"
-+
-+SYSFS=
-+CPUROOT=
-+CPUFREQROOT=
-+MAKE_CPUS=
-+
-+TIME_LIMIT=100
-+PROCESS_NUM=128
-+LOOP_TIMES=3
-+TRACER_INTERVAL=10
- 
- # Kselftest framework requirement - SKIP code is 4.
- ksft_skip=4
- 
-+# Counts CPUs with cpufreq directories
-+count_cpus()
-+{
-+	count=0;
-+
-+	for cpu in `ls $CPUROOT | grep "cpu[0-9].*"`; do
-+		if [ -d $CPUROOT/$cpu/cpufreq ]; then
-+			let count=count+1;
-+		fi
-+	done
-+
-+	echo $count;
-+}
-+
-+# $1: policy
-+find_current_governor()
-+{
-+	cat $CPUFREQROOT/$1/scaling_governor
-+}
-+
-+# $1: policy
-+backup_governor()
-+{
-+	local cur_gov=$(find_current_governor $1)
-+
-+	printf "Governor backup done for $1: $cur_gov\n"
-+	echo "$1 $cur_gov" >> $OUTFILE.backup_governor.log
-+}
-+
-+restore_governor()
-+{
-+	i=0;
-+
-+	policies=$(awk '{print $1}' $OUTFILE.backup_governor.log)
-+	for policy in $policies; do
-+		let i++;
-+		governor=$(sed -n ''$i'p' $OUTFILE.backup_governor.log | awk '{print $2}')
-+
-+		# switch governor
-+		_switch_governor $policy $governor
-+		printf "Governor restored for $policy to $governor\n"
-+	done
-+}
-+
-+# $1: policy, $2: governor
-+_switch_governor()
-+{
-+	echo $2 > $CPUFREQROOT/$1/scaling_governor
-+}
-+
-+for_each_policy()
-+{
-+	policies=$(ls $CPUFREQROOT| grep "policy[0-9].*")
-+	for policy in $policies; do
-+		$@ $policy
-+	done
-+}
-+
-+# $1: governor, $2: policy
-+switch_governor()
-+{
-+	local filepath=$CPUFREQROOT/$2/scaling_available_governors
-+
-+	# Exit if cpu isn't managed by cpufreq core
-+	if [ ! -f $filepath ]; then
-+		return;
-+	fi
-+
-+	# switch governor
-+	_switch_governor $2 $1
-+
-+	printf "Switched governor for $2 to $1\n"
-+}
-+
- # All amd-pstate tests
- amd_pstate_all()
- {
-@@ -27,8 +113,19 @@ amd_pstate_all()
- 	printf "***** Running AMD P-state Sanity Tests  *****\n"
- 	printf "=============================================\n\n"
- 
-+	count=$(count_cpus)
-+	if [ $count = 0 ]; then
-+		printf "No cpu is managed by cpufreq core, exiting\n"
-+		exit;
-+	else
-+		printf "AMD P-state manages: $count CPUs\n"
-+	fi
-+
- 	# unit test for amd-pstate kernel driver
- 	amd_pstate_basic
-+
-+	# tbench
-+	amd_pstate_tbench
- }
- 
- helpme()
-@@ -37,21 +134,26 @@ helpme()
- 	[-h <help>]
- 	[-o <output-file-for-dump>]
- 	[-c <all: All testing,
--	     basic: Basic testing.>]
-+	     basic: Basic testing,
-+	     tbench: Tbench testing.>]
-+	[-t <tbench time limit>]
-+	[-p <tbench process number>]
-+	[-l <loop times for tbench]
-+	[-i <amd tracer interval]
- 	\n"
- 	exit 2
- }
- 
- parse_arguments()
- {
--	while getopts ho:c: arg
-+	while getopts ho:c:t:p:l:i: arg
- 	do
- 		case $arg in
- 			h) # --help
- 				helpme
- 				;;
- 
--			c) # --func_type (Function to perform: basic (default: all))
-+			c) # --func_type (Function to perform: basic, tbench (default: all))
- 				FUNC=$OPTARG
- 				;;
- 
-@@ -59,6 +161,21 @@ parse_arguments()
- 				OUTFILE=$OPTARG
- 				;;
- 
-+			t) # --tbench-time-limit
-+				TIME_LIMIT=$OPTARG
-+				;;
-+
-+			p) # --tbench-process-number
-+				PROCESS_NUM=$OPTARG
-+				;;
-+
-+			l) # --tbench-loop-times
-+				LOOP_TIMES=$OPTARG
-+				;;
-+
-+			i) # --amd-tracer-interval
-+				TRACER_INTERVAL=$OPTARG
-+				;;
- 			\?)
- 				helpme
- 				;;
-@@ -91,10 +208,44 @@ prerequisite()
- 		echo $msg please run this as root >&2
- 		exit $ksft_skip
- 	fi
-+
-+	if [ ! -f perf ] ; then
-+		echo $msg please build perf under directory tools/perf and copy it to directory amd-pstate. >&2
-+		exit $ksft_skip
-+	fi
-+
-+	SYSFS=`mount -t sysfs | head -1 | awk '{ print $3 }'`
-+
-+	if [ ! -d "$SYSFS" ]; then
-+		echo $msg sysfs is not mounted >&2
-+		exit 2
-+	fi
-+
-+	CPUROOT=$SYSFS/devices/system/cpu
-+	CPUFREQROOT="$CPUROOT/cpufreq"
-+
-+	if ! ls $CPUROOT/cpu* > /dev/null 2>&1; then
-+		echo $msg cpus not available in sysfs >&2
-+		exit 2
-+	fi
-+
-+	if ! ls $CPUROOT/cpufreq > /dev/null 2>&1; then
-+		echo $msg cpufreq directory not available in sysfs >&2
-+		exit 2
-+	fi
- }
- 
- do_test()
- {
-+	# Check if CPUs are managed by cpufreq or not
-+	count=$(count_cpus)
-+	MAKE_CPUS=$((count*2))
-+
-+	if [ $count = 0 ]; then
-+		echo "No cpu is managed by cpufreq core, exiting"
-+		exit 2;
-+	fi
-+
- 	case "$FUNC" in
- 		"all")
- 		amd_pstate_all
-@@ -104,6 +255,10 @@ do_test()
- 		amd_pstate_basic
- 		;;
- 
-+		"tbench")
-+		amd_pstate_tbench
-+		;;
-+
- 		*)
- 		echo "Invalid [-f] function type"
- 		helpme
-@@ -122,10 +277,17 @@ pre_clear_dumps()
- 		"basic")
- 		;;
- 
-+		"tbench")
-+		rm -rf $OUTFILE.log
-+		rm -rf $OUTFILE.backup_governor.log
-+		rm -rf $OUTFILE_TBENCH*
-+		;;
-+
- 	esac
- }
- 
- post_clear_dumps()
- {
- 	rm -rf $OUTFILE.log
-+	rm -rf $OUTFILE.backup_governor.log
- }
-diff --git a/tools/testing/selftests/amd-pstate/tbench.sh b/tools/testing/selftests/amd-pstate/tbench.sh
+diff --git a/tools/testing/selftests/amd-pstate/gitsource.sh b/tools/testing/selftests/amd-pstate/gitsource.sh
 new file mode 100755
-index 000000000000..0320300971ce
+index 000000000000..0631a4839f5d
 --- /dev/null
-+++ b/tools/testing/selftests/amd-pstate/tbench.sh
-@@ -0,0 +1,187 @@
++++ b/tools/testing/selftests/amd-pstate/gitsource.sh
+@@ -0,0 +1,176 @@
 +#!/bin/sh
 +# SPDX-License-Identifier: GPL-2.0
 +
 +# Testing and monitor the cpu frequency and performance when
-+# this script trigger tbench test.
++# this script trigger gitsource test.
 +
 +# protect against multiple inclusion
-+if [ $FILE_TBENCH ]; then
++if [ $FILE_GITSOURCE ]; then
 +	return 0
 +else
-+	FILE_TBENCH=DONE
++	FILE_GITSOURCE=DONE
 +fi
 +
-+tbench_name="dbench-4.0"
-+tbench_tar="$tbench_name.tar.gz"
-+tbench_url="https://ftp.samba.org/pub/pub/tridge/dbench/dbench-4.0.tar.gz"
-+tbench_governors=("ondemand" "schedutil")
++git_name="git-2.15.1"
++git_tar="$git_name.tar.gz"
++gitsource_url="https://github.com/git/git/archive/refs/tags/v2.15.1.tar.gz"
++gitsource_governors=("ondemand" "schedutil")
 +
-+# $1: governor, $2: round, $3: des-perf, $4: freq, $5: load, $6: performance, $7: energy, $8: PPW
-+store_csv_tbench()
++# $1: governor, $2: round, $3: des-perf, $4: freq, $5: load, $6: time $7: energy, $8: PPW
++store_csv_gitsource()
 +{
-+	echo "$1, $2, $3, $4, $5, $6, $7, $8" | tee -a $OUTFILE_TBENCH.csv > /dev/null 2>&1
++	echo "$1, $2, $3, $4, $5, $6, $7, $8" | tee -a $OUTFILE_GIT.csv > /dev/null 2>&1
 +}
 +
-+empty_line_csv_tbench()
++empty_line_csv_gitsource()
 +{
-+	echo "" | tee -a $OUTFILE_TBENCH.csv > /dev/null 2>&1
++	echo "" | tee -a $OUTFILE_GIT.csv > /dev/null 2>&1
 +}
 +
-+pre_clear_tbench()
++pre_clear_gitsource()
 +{
-+	rm -rf results/tracer-tbench*
++	rm -rf results/tracer-gitsource*
 +}
 +
-+post_clear_tbench()
++post_clear_gitsource()
 +{
-+	rm -rf results/tracer-tbench*
-+	rm -rf $OUTFILE_TBENCH*.log
++	rm -rf results/tracer-gitsource*
++	rm -rf $OUTFILE_GIT*.log
 +}
 +
-+install_tbench()
++install_gitsource()
 +{
-+	if [ ! -d $tbench_name ]; then
-+		printf "Download tbench, please wait a moment ...\n\n"
-+		wget -O $tbench_tar $tbench_url > /dev/null 2>&1
++	if [ ! -d $git_name ]; then
++		printf "Download gitsource, please wait a moment ...\n\n"
++		wget -O $git_tar $gitsource_url > /dev/null 2>&1
 +
-+		printf "Tar tbench ...\n\n"
-+		tar -xzf $tbench_tar
-+
-+		printf "Compile and install tbench ...\n\n"
-+		cd $tbench_name
-+		./autogen.sh
-+		./configure > /dev/null 2>&1
-+		make > /dev/null 2>&1
-+		make install > /dev/null 2>&1
-+		cd ..
++		printf "Tar gitsource ...\n\n"
++		tar -xzf $git_tar
 +	fi
 +}
 +
 +# $1: governor, $2: loop
-+run_tbench()
++run_gitsource()
 +{
 +	echo "Launching amd pstate tracer for $1 #$2 tracer_interval: $TRACER_INTERVAL"
-+	./amd_pstate_trace.py -n tracer-tbench-$1-$2 -i $TRACER_INTERVAL > /dev/null 2>&1 &
++	./amd_pstate_trace.py -n tracer-gitsource-$1-$2 -i $TRACER_INTERVAL > /dev/null 2>&1
 +
-+	printf "Test tbench for $1 #$2 time_limit: $TIME_LIMIT procs_num: $PROCESS_NUM\n"
-+	cd $tbench_name
-+	./tbench_srv > /dev/null 2>&1 &
-+	./../perf stat -a --per-socket -I 1000 -e power/energy-pkg/ ./tbench -t $TIME_LIMIT $PROCESS_NUM > ../$OUTFILE_TBENCH-perf-$1-$2.log 2>&1
++	printf "Make and test gitsource for $1 #$2 make_cpus: $MAKE_CPUS\n"
++	cd $git_name
++	./../perf stat -a --per-socket -I 1000 -e power/energy-pkg/ /usr/bin/time -o ../$OUTFILE_GIT.time-gitsource-$1-$2.log make test -j$MAKE_CPUS > ../$OUTFILE_GIT-perf-$1-$2.log 2>&1
 +	cd ..
-+
-+	pid=`pidof tbench_srv`
-+	kill $pid
 +
 +	for job in `jobs -p`
 +	do
@@ -483,111 +207,193 @@ index 000000000000..0320300971ce
 +}
 +
 +# $1: governor, $2: loop
-+parse_tbench()
++parse_gitsource()
 +{
-+	awk '{print $5}' results/tracer-tbench-$1-$2/cpu.csv | sed -e '1d' | sed s/,// > $OUTFILE_TBENCH-des-perf-$1-$2.log
-+	avg_des_perf=$(awk 'BEGIN {i=0; sum=0};{i++; sum += $1};END {print sum/i}' $OUTFILE_TBENCH-des-perf-$1-$2.log)
-+	printf "Tbench-$1-#$2 avg des perf: $avg_des_perf\n" | tee -a $OUTFILE_TBENCH.result
++	awk '{print $5}' results/tracer-gitsource-$1-$2/cpu.csv | sed -e '1d' | sed s/,// > $OUTFILE_GIT-des-perf-$1-$2.log
++	avg_des_perf=$(awk 'BEGIN {i=0; sum=0};{i++; sum += $1};END {print sum/i}' $OUTFILE_GIT-des-perf-$1-$2.log)
++	printf "Gitsource-$1-#$2 avg des perf: $avg_des_perf\n" | tee -a $OUTFILE_GIT.result
 +
-+	awk '{print $7}' results/tracer-tbench-$1-$2/cpu.csv | sed -e '1d' | sed s/,// > $OUTFILE_TBENCH-freq-$1-$2.log
-+	avg_freq=$(awk 'BEGIN {i=0; sum=0};{i++; sum += $1};END {print sum/i}' $OUTFILE_TBENCH-freq-$1-$2.log)
-+	printf "Tbench-$1-#$2 avg freq: $avg_freq\n" | tee -a $OUTFILE_TBENCH.result
++	awk '{print $7}' results/tracer-gitsource-$1-$2/cpu.csv | sed -e '1d' | sed s/,// > $OUTFILE_GIT-freq-$1-$2.log
++	avg_freq=$(awk 'BEGIN {i=0; sum=0};{i++; sum += $1};END {print sum/i}' $OUTFILE_GIT-freq-$1-$2.log)
++	printf "Gitsource-$1-#$2 avg freq: $avg_freq\n" | tee -a $OUTFILE_GIT.result
 +
-+	awk '{print $11}' results/tracer-tbench-$1-$2/cpu.csv | sed -e '1d' | sed s/,// > $OUTFILE_TBENCH-load-$1-$2.log
-+	avg_load=$(awk 'BEGIN {i=0; sum=0};{i++; sum += $1};END {print sum/i}' $OUTFILE_TBENCH-load-$1-$2.log)
-+	printf "Tbench-$1-#$2 avg load: $avg_load\n" | tee -a $OUTFILE_TBENCH.result
++	awk '{print $11}' results/tracer-gitsource-$1-$2/cpu.csv | sed -e '1d' | sed s/,// > $OUTFILE_GIT-load-$1-$2.log
++	avg_load=$(awk 'BEGIN {i=0; sum=0};{i++; sum += $1};END {print sum/i}' $OUTFILE_GIT-load-$1-$2.log)
++	printf "Gitsource-$1-#$2 avg load: $avg_load\n" | tee -a $OUTFILE_GIT.result
 +
-+	grep Throughput $OUTFILE_TBENCH-perf-$1-$2.log | awk '{print $2}' > $OUTFILE_TBENCH-throughput-$1-$2.log
-+	tp_sum=$(awk 'BEGIN {sum=0};{sum += $1};END {print sum}' $OUTFILE_TBENCH-throughput-$1-$2.log)
-+	printf "Tbench-$1-#$2 throughput(MB/s): $tp_sum\n" | tee -a $OUTFILE_TBENCH.result
++	grep user $OUTFILE_GIT.time-gitsource-$1-$2.log | awk '{print $1}' | sed -e 's/user//' > $OUTFILE_GIT-time-$1-$2.log
++	time_sum=$(awk 'BEGIN {sum=0};{sum += $1};END {print sum}' $OUTFILE_GIT-time-$1-$2.log)
++	printf "Gitsource-$1-#$2 user time(s): $time_sum\n" | tee -a $OUTFILE_GIT.result
 +
-+	grep Joules $OUTFILE_TBENCH-perf-$1-$2.log | awk '{print $4}' > $OUTFILE_TBENCH-energy-$1-$2.log
-+	en_sum=$(awk 'BEGIN {sum=0};{sum += $1};END {print sum}' $OUTFILE_TBENCH-energy-$1-$2.log)
-+	printf "Tbench-$1-#$2 power consumption(J): $en_sum\n" | tee -a $OUTFILE_TBENCH.result
++	grep Joules $OUTFILE_GIT-perf-$1-$2.log | awk '{print $4}' > $OUTFILE_GIT-energy-$1-$2.log
++	en_sum=$(awk 'BEGIN {sum=0};{sum += $1};END {print sum}' $OUTFILE_GIT-energy-$1-$2.log)
++	printf "Gitsource-$1-#$2 power consumption(J): $en_sum\n" | tee -a $OUTFILE_GIT.result
 +
-+	ppw=`echo "scale=4;($TIME_LIMIT-1)*$tp_sum/$en_sum" | bc | awk '{printf "%.4f", $0}'`
-+	printf "Tbench-$1-#$2 PPW(MB/J): $ppw\n" | tee -a $OUTFILE_TBENCH.result
-+	printf "\n" | tee -a $OUTFILE_TBENCH.result
++	ppw=`echo "scale=4;$time_sum/$en_sum" | bc | awk '{printf "%.4f", $0}'`
++	printf "Gitsource-$1-#$2 PPW(s/J): $ppw\n" | tee -a $OUTFILE_GIT.result
++	printf "\n" | tee -a $OUTFILE_GIT.result
 +
-+	store_csv_tbench $1 $2 $avg_des_perf $avg_freq $avg_load $tp_sum $en_sum $ppw
++	store_csv_gitsource $1 $2 $avg_des_perf $avg_freq $avg_load $time_sum $en_sum $ppw
 +}
 +
-+# $1: governor
-+loop_tbench()
++# $1: governor:w
++
++loop_gitsource()
 +{
-+	printf "\nTbench total test times is $LOOP_TIMES for $1\n\n"
++	printf "\nGitsource total test times is $LOOP_TIMES for $1\n\n"
 +	for i in `seq 1 $LOOP_TIMES`
 +	do
-+		run_tbench $1 $i
-+		parse_tbench $1 $i
++		run_gitsource $1 $i
++		parse_gitsource $1 $i
 +	done
 +}
 +
 +# $1: governor
-+gather_tbench()
++gather_gitsource()
 +{
-+	printf "Tbench test result for $1 (loops:$LOOP_TIMES)" | tee -a $OUTFILE_TBENCH.result
-+	printf "\n--------------------------------------------------\n" | tee -a $OUTFILE_TBENCH.result
++	printf "Gitsource test result for $1 (loops:$LOOP_TIMES)" | tee -a $OUTFILE_GIT.result
++	printf "\n--------------------------------------------------\n" | tee -a $OUTFILE_GIT.result
 +
-+	grep "Tbench-$1-#" $OUTFILE_TBENCH.result | grep "avg des perf:" | awk '{print $NF}' > $OUTFILE_TBENCH-des-perf-$1.log
-+	avg_des_perf=$(awk 'BEGIN {sum=0};{sum += $1};END {print sum/'$LOOP_TIMES'}' $OUTFILE_TBENCH-des-perf-$1.log)
-+	printf "Tbench-$1 avg des perf: $avg_des_perf\n" | tee -a $OUTFILE_TBENCH.result
++	grep "Gitsource-$1-#" $OUTFILE_GIT.result | grep "avg des perf:" | awk '{print $NF}' > $OUTFILE_GIT-des-perf-$1.log
++	avg_des_perf=$(awk 'BEGIN {sum=0};{sum += $1};END {print sum/'$LOOP_TIMES'}' $OUTFILE_GIT-des-perf-$1.log)
++	printf "Gitsource-$1 avg des perf: $avg_des_perf\n" | tee -a $OUTFILE_GIT.result
 +
-+	grep "Tbench-$1-#" $OUTFILE_TBENCH.result | grep "avg freq:" | awk '{print $NF}' > $OUTFILE_TBENCH-freq-$1.log
-+	avg_freq=$(awk 'BEGIN {sum=0};{sum += $1};END {print sum/'$LOOP_TIMES'}' $OUTFILE_TBENCH-freq-$1.log)
-+	printf "Tbench-$1 avg freq: $avg_freq\n" | tee -a $OUTFILE_TBENCH.result
++	grep "Gitsource-$1-#" $OUTFILE_GIT.result | grep "avg freq:" | awk '{print $NF}' > $OUTFILE_GIT-freq-$1.log
++	avg_freq=$(awk 'BEGIN {sum=0};{sum += $1};END {print sum/'$LOOP_TIMES'}' $OUTFILE_GIT-freq-$1.log)
++	printf "Gitsource-$1 avg freq: $avg_freq\n" | tee -a $OUTFILE_GIT.result
 +
-+	grep "Tbench-$1-#" $OUTFILE_TBENCH.result | grep "avg load:" | awk '{print $NF}' > $OUTFILE_TBENCH-load-$1.log
-+	avg_load=$(awk 'BEGIN {sum=0};{sum += $1};END {print sum/'$LOOP_TIMES'}' $OUTFILE_TBENCH-load-$1.log)
-+	printf "Tbench-$1 avg load: $avg_load\n" | tee -a $OUTFILE_TBENCH.result
++	grep "Gitsource-$1-#" $OUTFILE_GIT.result | grep "avg load:" | awk '{print $NF}' > $OUTFILE_GIT-load-$1.log
++	avg_load=$(awk 'BEGIN {sum=0};{sum += $1};END {print sum/'$LOOP_TIMES'}' $OUTFILE_GIT-load-$1.log)
++	printf "Gitsource-$1 avg load: $avg_load\n" | tee -a $OUTFILE_GIT.result
 +
-+	grep "Tbench-$1-#" $OUTFILE_TBENCH.result | grep "throughput(MB/s):" | awk '{print $NF}' > $OUTFILE_TBENCH-throughput-$1.log
-+	tp_sum=$(awk 'BEGIN {sum=0};{sum += $1};END {print sum}' $OUTFILE_TBENCH-throughput-$1.log)
-+	printf "Tbench-$1 total throughput(MB/s): $tp_sum\n" | tee -a $OUTFILE_TBENCH.result
++	grep "Gitsource-$1-#" $OUTFILE_GIT.result | grep "user time(s):" | awk '{print $NF}' > $OUTFILE_GIT-time-$1.log
++	time_sum=$(awk 'BEGIN {sum=0};{sum += $1};END {print sum}' $OUTFILE_GIT-time-$1.log)
++	printf "Gitsource-$1 total user time(s): $time_sum\n" | tee -a $OUTFILE_GIT.result
 +
-+	avg_tp=$(awk 'BEGIN {sum=0};{sum += $1};END {print sum/'$LOOP_TIMES'}' $OUTFILE_TBENCH-throughput-$1.log)
-+	printf "Tbench-$1 avg throughput(MB/s): $avg_tp\n" | tee -a $OUTFILE_TBENCH.result
++	avg_time=$(awk 'BEGIN {sum=0};{sum += $1};END {print sum/'$LOOP_TIMES'}' $OUTFILE_GIT-time-$1.log)
++	printf "Gitsource-$1 avg user times(s): $avg_time\n" | tee -a $OUTFILE_GIT.result
 +
-+	grep "Tbench-$1-#" $OUTFILE_TBENCH.result | grep "power consumption(J):" | awk '{print $NF}' > $OUTFILE_TBENCH-energy-$1.log
-+	en_sum=$(awk 'BEGIN {sum=0};{sum += $1};END {print sum}' $OUTFILE_TBENCH-energy-$1.log)
-+	printf "Tbench-$1 total power consumption(J): $en_sum\n" | tee -a $OUTFILE_TBENCH.result
++	grep "Gitsource-$1-#" $OUTFILE_GIT.result | grep "power consumption(J):" | awk '{print $NF}' > $OUTFILE_GIT-energy-$1.log
++	en_sum=$(awk 'BEGIN {sum=0};{sum += $1};END {print sum}' $OUTFILE_GIT-energy-$1.log)
++	printf "Gitsource-$1 total power consumption(J): $en_sum\n" | tee -a $OUTFILE_GIT.result
 +
-+	avg_en=$(awk 'BEGIN {sum=0};{sum += $1};END {print sum/'$LOOP_TIMES'}' $OUTFILE_TBENCH-energy-$1.log)
-+	printf "Tbench-$1 avg power consumption(J): $avg_en\n" | tee -a $OUTFILE_TBENCH.result
++	avg_en=$(awk 'BEGIN {sum=0};{sum += $1};END {print sum/'$LOOP_TIMES'}' $OUTFILE_GIT-energy-$1.log)
++	printf "Gitsource-$1 avg power consumption(J): $avg_en\n" | tee -a $OUTFILE_GIT.result
 +
-+	ppw=`echo "scale=4;($TIME_LIMIT-1)*$avg_tp/$avg_en" | bc | awk '{printf "%.4f", $0}'`
-+	printf "Tbench-$1 PPW(MB/J): $ppw\n" | tee -a $OUTFILE_TBENCH.result
-+	printf "\n" | tee -a $OUTFILE_TBENCH.result
++	ppw=`echo "scale=4;$avg_time/$avg_en" | bc | awk '{printf "%.4f", $0}'`
++	printf "Gitsource-$1 PPW(s/J): $ppw\n" | tee -a $OUTFILE_GIT.result
++	printf "\n" | tee -a $OUTFILE_GIT.result
 +
-+	store_csv_tbench $1 "Average" $avg_des_perf $avg_freq $avg_load $avg_tp $avg_en $ppw
-+	empty_line_csv_tbench
++	store_csv_gitsource $1 "Average" $avg_des_perf $avg_freq $avg_load $avg_time $avg_en $ppw
++	empty_line_csv_gitsource
 +}
 +
-+amd_pstate_tbench()
++amd_pstate_gitsource()
 +{
 +	printf "\n---------------------------------------------\n"
-+	printf "*** Running AMD P-state tbench            ***"
++	printf "*** Running AMD P-state gitsource         ***"
 +	printf "\n---------------------------------------------\n"
 +
-+	pre_clear_tbench
++	pre_clear_gitsource
 +
-+	install_tbench
++	install_gitsource
 +
-+	store_csv_tbench "Governor" "Round" "Des-perf" "Freq" "Load" "Performance(MB/s)" "Energy(Joules)" "PPW(MB/J)"
++	store_csv_gitsource "Governor" "Round" "Des-perf" "Freq" "Load" "Time(s)" "Energy(Joules)" "PPW(s/J)"
 +
 +	for_each_policy backup_governor
 +
-+	for governor in ${tbench_governors[*]} ; do
++	for governor in ${gitsource_governors[*]} ; do
 +		printf "\nSpecified governor is $governor\n\n"
 +		for_each_policy switch_governor $governor
-+		loop_tbench $governor
-+		gather_tbench $governor
++		loop_gitsource $governor
++		gather_gitsource $governor
 +	done
 +
 +	restore_governor
 +
-+	post_clear_tbench
++	post_clear_gitsource
 +}
+diff --git a/tools/testing/selftests/amd-pstate/main.sh b/tools/testing/selftests/amd-pstate/main.sh
+index ae71fe62e3b0..69bf8ea371a5 100755
+--- a/tools/testing/selftests/amd-pstate/main.sh
++++ b/tools/testing/selftests/amd-pstate/main.sh
+@@ -10,6 +10,7 @@ fi
+ 
+ source basic.sh
+ source tbench.sh
++source gitsource.sh
+ 
+ # amd-pstate-ut only run on x86/x86_64 AMD systems.
+ ARCH=$(uname -m 2>/dev/null | sed -e 's/i.86/x86/' -e 's/x86_64/x86/')
+@@ -18,6 +19,7 @@ VENDOR=$(cat /proc/cpuinfo | grep -m 1 'vendor_id' | awk '{print $NF}')
+ FUNC=all
+ OUTFILE=selftest
+ OUTFILE_TBENCH="$OUTFILE.tbench"
++OUTFILE_GIT="$OUTFILE.gitsource"
+ 
+ SYSFS=
+ CPUROOT=
+@@ -126,6 +128,9 @@ amd_pstate_all()
+ 
+ 	# tbench
+ 	amd_pstate_tbench
++
++	# gitsource
++	amd_pstate_gitsource
+ }
+ 
+ helpme()
+@@ -135,7 +140,8 @@ helpme()
+ 	[-o <output-file-for-dump>]
+ 	[-c <all: All testing,
+ 	     basic: Basic testing,
+-	     tbench: Tbench testing.>]
++	     tbench: Tbench testing,
++	     gitsource: Gitsource testing.>]
+ 	[-t <tbench time limit>]
+ 	[-p <tbench process number>]
+ 	[-l <loop times for tbench]
+@@ -153,7 +159,7 @@ parse_arguments()
+ 				helpme
+ 				;;
+ 
+-			c) # --func_type (Function to perform: basic, tbench (default: all))
++			c) # --func_type (Function to perform: basic, tbench, gitsource (default: all))
+ 				FUNC=$OPTARG
+ 				;;
+ 
+@@ -169,7 +175,7 @@ parse_arguments()
+ 				PROCESS_NUM=$OPTARG
+ 				;;
+ 
+-			l) # --tbench-loop-times
++			l) # --tbench/gitsource-loop-times
+ 				LOOP_TIMES=$OPTARG
+ 				;;
+ 
+@@ -259,6 +265,10 @@ do_test()
+ 		amd_pstate_tbench
+ 		;;
+ 
++		"gitsource")
++		amd_pstate_gitsource
++		;;
++
+ 		*)
+ 		echo "Invalid [-f] function type"
+ 		helpme
+@@ -283,6 +293,11 @@ pre_clear_dumps()
+ 		rm -rf $OUTFILE_TBENCH*
+ 		;;
+ 
++		"gitsource")
++		rm -rf $OUTFILE.log
++		rm -rf $OUTFILE.backup_governor.log
++		rm -rf $OUTFILE_GIT*
++		;;
+ 	esac
+ }
+ 
 -- 
 2.25.1
 

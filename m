@@ -2,196 +2,253 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EF2CB568580
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 12:27:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E99E56858D
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 12:29:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232245AbiGFK0f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Jul 2022 06:26:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41246 "EHLO
+        id S232050AbiGFK30 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Jul 2022 06:29:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44194 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232324AbiGFK0c (ORCPT
+        with ESMTP id S232564AbiGFK3W (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Jul 2022 06:26:32 -0400
-Received: from www262.sakura.ne.jp (www262.sakura.ne.jp [202.181.97.72])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12F0B26AD5
-        for <linux-kernel@vger.kernel.org>; Wed,  6 Jul 2022 03:26:30 -0700 (PDT)
-Received: from fsav311.sakura.ne.jp (fsav311.sakura.ne.jp [153.120.85.142])
-        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTP id 266AQT3u067488;
-        Wed, 6 Jul 2022 19:26:29 +0900 (JST)
-        (envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
-Received: from www262.sakura.ne.jp (202.181.97.72)
- by fsav311.sakura.ne.jp (F-Secure/fsigk_smtp/550/fsav311.sakura.ne.jp);
- Wed, 06 Jul 2022 19:26:29 +0900 (JST)
-X-Virus-Status: clean(F-Secure/fsigk_smtp/550/fsav311.sakura.ne.jp)
-Received: from [192.168.1.9] (M106072142033.v4.enabler.ne.jp [106.72.142.33])
-        (authenticated bits=0)
-        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTPSA id 266AQSCK067485
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NO);
-        Wed, 6 Jul 2022 19:26:28 +0900 (JST)
-        (envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
-Message-ID: <a6d98824-56c8-6d92-bb1b-eb065b57cb81@I-love.SAKURA.ne.jp>
-Date:   Wed, 6 Jul 2022 19:26:28 +0900
+        Wed, 6 Jul 2022 06:29:22 -0400
+Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2070.outbound.protection.outlook.com [40.107.94.70])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A5F825EBD
+        for <linux-kernel@vger.kernel.org>; Wed,  6 Jul 2022 03:29:16 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=J29yd2lpY8RZYIf842orvCZiYre/B05eQmuuOZz0gdwxihTSlyrMe0NhNrHh1DuqHBjz5D7RO6mrbg9I9q1yA+4utLUfyO/kiillZEQC8k4+/8iQQ68n0KJavWzzwiiXim2pXpT1lh/QVCZNdC+wOw2+GwO1712fTZc552BErHA20V47pX8ACfoyrDy9oOAc2kIFiY/fq59JSLHggDSkq+Cw2dOWTjH+WHNWfnuUDvuu+TnjbQVz70HT1mwG5jzl92x1kDNszX5ULQBvHFynYBzbg50DrRopcwi6ilh4i+TkkbWfoFsX4xB95eslr9C2Lngw+lmMpj2CGCojfv19TQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=8rN1Gw+F2UlK7cFjCkeitzaWjpiLHEjAZJOk42jV9Fs=;
+ b=lR776golhZQzk7OLQWhk7YY4Zx5+C6ki2C0muoVOH5Msl4zPM9gJbyk7slr8SNFP0encZ65LkZGFlunELfj4N3PvPiUIAGTN8H3P4JG5Bw4YhzOwqeAA4TmJXJGWcj4u0c2xS9OgHriwlF4/0546NhNT5LznxzCkQZRmVsrs6tdDIRQ7Z7hQBX1/spO1vajrNAuCgXhykvi26IEmwXgC/j6oM0KitZ78DuQgGjStsY19wl+A/otOpIEWDgrum5WRdw/nOzPevpAgjroelYDNxc5jN5pic+a+91/z4vImBD2oLmsJ9V8wGM5KyJCtlsmRRGtNuxaWnae8ebngq8d2FQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=lists.freedesktop.org smtp.mailfrom=amd.com;
+ dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
+ header.from=amd.com; dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=8rN1Gw+F2UlK7cFjCkeitzaWjpiLHEjAZJOk42jV9Fs=;
+ b=b63GcKy42xKiCdY4R9nBWA0KTxQfeRKipa5YfQqwqBXSk9YndnaiAj38m3lARhM5V1fnUQar4CoIlk/PzEhJl6qnJWVLnbbDiHHEysm3ebVqcq/aE0AMVM0Afgf5woSPFgv7sRtwSoRP5n7lTqADA2QV+uriIKzAoAQxdZdIKgo=
+Received: from DM5PR07CA0064.namprd07.prod.outlook.com (2603:10b6:4:ad::29) by
+ IA1PR12MB6388.namprd12.prod.outlook.com (2603:10b6:208:388::7) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.5395.20; Wed, 6 Jul 2022 10:29:14 +0000
+Received: from DM6NAM11FT005.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:4:ad:cafe::27) by DM5PR07CA0064.outlook.office365.com
+ (2603:10b6:4:ad::29) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5395.15 via Frontend
+ Transport; Wed, 6 Jul 2022 10:29:14 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ DM6NAM11FT005.mail.protection.outlook.com (10.13.172.238) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.5417.15 via Frontend Transport; Wed, 6 Jul 2022 10:29:13 +0000
+Received: from SATLEXMB05.amd.com (10.181.40.146) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.28; Wed, 6 Jul
+ 2022 05:29:13 -0500
+Received: from SATLEXMB03.amd.com (10.181.40.144) by SATLEXMB05.amd.com
+ (10.181.40.146) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.28; Wed, 6 Jul
+ 2022 05:29:13 -0500
+Received: from vijendar-X570-GAMING-X.amd.com (10.180.168.240) by
+ SATLEXMB03.amd.com (10.181.40.144) with Microsoft SMTP Server id 15.1.2375.28
+ via Frontend Transport; Wed, 6 Jul 2022 05:29:03 -0500
+From:   Vijendar Mukunda <Vijendar.Mukunda@amd.com>
+To:     <dri-devel@lists.freedesktop.org>, <amd-gfx@lists.freedesktop.org>
+CC:     <Alexander.Deucher@amd.com>, <Basavaraj.Hiregoudar@amd.com>,
+        <Sunil-kumar.Dommati@amd.com>, <zhuning@everest-semi.com>,
+        Vijendar Mukunda <Vijendar.Mukunda@amd.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
+        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Kai-Heng Feng <kai.heng.feng@canonical.com>,
+        open list <linux-kernel@vger.kernel.org>
+Subject: [PATCH v3 1/3] drm/amdgpu: fix for coding style issues
+Date:   Wed, 6 Jul 2022 15:58:48 +0530
+Message-ID: <20220706102851.2451164-1-Vijendar.Mukunda@amd.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 6.3; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH] char: misc: make misc_open() and misc_register() killable
-Content-Language: en-US
-To:     Greg KH <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
-        Arnd Bergmann <arnd@arndb.de>, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org,
-        Wedson Almeida Filho <wedsonaf@google.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Arjan van de Ven <arjan@linux.intel.com>
-References: <YsKW6VvWqvcMRBSl@kroah.com>
- <100f445e-9fa8-4f37-76aa-8359f0008c59@I-love.SAKURA.ne.jp>
- <YsLIepAXeBKT0AF/@kroah.com>
- <01a93294-e323-b9ca-7e95-a33d4b89dc47@I-love.SAKURA.ne.jp>
- <YsL5pUuydMWJ9dSQ@kroah.com>
- <617f64e3-74c8-f98b-3430-bd476867e483@I-love.SAKURA.ne.jp>
- <5665ccb2-b92b-9e1f-8bb5-a950986450ec@I-love.SAKURA.ne.jp>
- <YsRHwy6+5gask+KT@kroah.com>
- <064bbe2a-c18e-203e-9e01-b32fe9baa390@I-love.SAKURA.ne.jp>
- <7ddb25ff-60e5-75be-8080-2a7465cca68c@I-love.SAKURA.ne.jp>
- <YsUtBERm94k/iZTy@kroah.com>
-From:   Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
-In-Reply-To: <YsUtBERm94k/iZTy@kroah.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: b67fffc3-3fd0-4213-3e79-08da5f3a5f70
+X-MS-TrafficTypeDiagnostic: IA1PR12MB6388:EE_
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: bzKfEcAZzDREUu5QDixeGWBHAQo6yoHV0O1F86JAnfoSKBjOZjrhwil//Ah4qkZqxWCbXu90GAZE0qnGC2xhS8QdQ7FnTluiRQKP5zMaN3/p2LlnK/DYfxfekodH78cAi/x7WrOzggdNTPqSemfSKArhfFRwRZ6J++bLVoaULDYlLz5cH6xW3LtCX2tr0ctKUyVGnHgAHllZgQ40le4h5MDWrKovhMPyk3v+n7/jJJ/LleQeqwMH+V/GN15ujGlqDW6+jFZmkxL3qbEEIsT5yxad8vtTVrM6BRpqZq3QheuxaC1SxWbXGd0Bxop3+93JCSLOTVyoeLaMxoPRpI84C38LqwxTS7Z75TwqutKRK0xhTo/xtXbsFmaI2RbpaHlv22caMH1RQyDmwIsyJtQkr+h332e+1E41bv69l+i1H9KEllrtcfdl1OO6TtsejlPFahJg17RiM+YdmhtXsuZFtDoLhtGEXei1hAFiO5ou4oRKPJHoUrL4Ezejqu5KB7HEoj9VabUB9odZWgF9Hvx/um11F2pA3X0rNm5MUdpNrQ/RAmgzKvclno72cyWwEW+ufeE7gacVUQzYAcRZa4GTFWSR1mN+225YfnDybIxjEKfkukH/HcxOGoJ8fD42lSy0XNgCl2HnTGFbzBDXOQ/d9QT7KDH7Ec4v2JvIj+LJGAVujOpRK17Hc/QfaSjI4P0FWx0Z43mH1s2LSdBRE+nFUneQTJw1X5JJOESxWBB1JbaA4mJtphfRIe8vmsLS/Zn0Zyf15jUkSnJhsBWiGeSn7jukqytNzL/PoNsW0s1pyjfBh0dmnHbA2xK61woUlF4zvPccV2BxhVfRwg+SI0UfENO/vCSWgmU0sPQ6rTuz3uDgsl6YXVNVfnpBTKL2O/ci
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230016)(4636009)(346002)(39860400002)(376002)(396003)(136003)(40470700004)(36840700001)(46966006)(478600001)(82740400003)(316002)(356005)(110136005)(70206006)(336012)(54906003)(41300700001)(83380400001)(70586007)(81166007)(426003)(34020700004)(8676002)(186003)(36860700001)(1076003)(2616005)(4326008)(7696005)(2906002)(47076005)(6666004)(26005)(36756003)(82310400005)(86362001)(5660300002)(8936002)(40480700001)(40460700003)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Jul 2022 10:29:13.9342
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: b67fffc3-3fd0-4213-3e79-08da5f3a5f70
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT005.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA1PR12MB6388
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/07/06 15:34, Greg KH wrote:
-> On Wed, Jul 06, 2022 at 03:21:15PM +0900, Tetsuo Handa wrote:
->> How should we fix this problem?
-> 
-> We can decrease the timeout in usb_stor_msg_common().  I imagine that if
-> that timeout is ever hit in this sequence, then all will recover, right?
-> Try decreasing it to a sane number and see what happens.
+Fixed below checkpatch warnings and errors
 
-Yes, all recovers with below diff.
+drivers/gpu/drm/amd/amdgpu/amdgpu_acp.c:131: CHECK: Comparison to NULL could be written "apd"
+drivers/gpu/drm/amd/amdgpu/amdgpu_acp.c:150: CHECK: Comparison to NULL could be written "apd"
+drivers/gpu/drm/amd/amdgpu/amdgpu_acp.c:196: CHECK: Prefer kernel type 'u64' over 'uint64_t'
+drivers/gpu/drm/amd/amdgpu/amdgpu_acp.c:224: CHECK: Please don't use multiple blank lines
+drivers/gpu/drm/amd/amdgpu/amdgpu_acp.c:226: CHECK: Comparison to NULL could be written "!adev->acp.acp_genpd"
+drivers/gpu/drm/amd/amdgpu/amdgpu_acp.c:233: CHECK: Please don't use multiple blank lines
+drivers/gpu/drm/amd/amdgpu/amdgpu_acp.c:239: CHECK: Alignment should match open parenthesis
+drivers/gpu/drm/amd/amdgpu/amdgpu_acp.c:241: CHECK: Comparison to NULL could be written "!adev->acp.acp_cell"
+drivers/gpu/drm/amd/amdgpu/amdgpu_acp.c:247: CHECK: Comparison to NULL could be written "!adev->acp.acp_res"
+drivers/gpu/drm/amd/amdgpu/amdgpu_acp.c:253: CHECK: Comparison to NULL could be written "!i2s_pdata"
+drivers/gpu/drm/amd/amdgpu/amdgpu_acp.c:350: CHECK: Alignment should match open parenthesis
+drivers/gpu/drm/amd/amdgpu/amdgpu_acp.c:550: ERROR: that open brace { should be on the previous line
 
-------------------------------------------------------------
-diff --git a/drivers/usb/storage/transport.c b/drivers/usb/storage/transport.c
-index 1928b3918242..d2a192306e0c 100644
---- a/drivers/usb/storage/transport.c
-+++ b/drivers/usb/storage/transport.c
-@@ -164,7 +164,7 @@ static int usb_stor_msg_common(struct us_data *us, int timeout)
-  
- 	/* wait for the completion of the URB */
- 	timeleft = wait_for_completion_interruptible_timeout(
--			&urb_done, timeout ? : MAX_SCHEDULE_TIMEOUT);
-+			&urb_done, timeout ? : 5 * HZ);
-  
- 	clear_bit(US_FLIDX_URB_ACTIVE, &us->dflags);
+Signed-off-by: Vijendar Mukunda <Vijendar.Mukunda@amd.com>
+
+---
+changes since v2:
+          - Removed Null check for apd structure
+          - Modified commit message
+changes since v1:
+           - Modified commit label as drm/amdgpu
+
+ drivers/gpu/drm/amd/amdgpu/amdgpu_acp.c | 35 +++++++++----------------
+ 1 file changed, 12 insertions(+), 23 deletions(-)
+
+diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_acp.c b/drivers/gpu/drm/amd/amdgpu/amdgpu_acp.c
+index cc9c9f8b23b2..ceda19152c77 100644
+--- a/drivers/gpu/drm/amd/amdgpu/amdgpu_acp.c
++++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_acp.c
+@@ -128,16 +128,14 @@ static int acp_poweroff(struct generic_pm_domain *genpd)
+ 	struct amdgpu_device *adev;
  
-------------------------------------------------------------
-
-But
-
->> Anyway,
->>
->>         /*
->>          * Resuming.  We may need to wait for the image device to
->>          * appear.
->>          */
->>         wait_for_device_probe();
->>
->> in snapshot_open() will sleep forever if some device became unresponsive.
->>
-
-wait_for_device_probe() in snapshot_open() was added by commit c751085943362143
-("PM/Hibernate: Wait for SCSI devices scan to complete during resume"), and
-that commit did not take into account possibility of unresponsive hardware.
-
-   "In addition, if the resume from hibernation is userland-driven, it's
-    better to wait for all device probes in the kernel to complete before
-    attempting to open the resume device."
-
-It is trivial to make e.g. atomic_read(&probe_count) == 10, which means that
-acceptable timeout for usb_stor_msg_common() may be no longer acceptable timeout
-for wait_for_device_probe(). Unlike flush_workqueue(), wait_for_device_probe()
-can wait forever if new probe requests keep coming in while waiting for existing
-probe requests to complete. Therefore, I think we should introduce timeout on
-wait_for_device_probe() side as well.
-
-I would like to propose below changes in 3 patches as fixes for this problem.
-Since there are 13 wait_for_device_probe() callers, maybe we want both killable
-and uninterruptible versions and pass timeout as an argument...
-
-------------------------------------------------------------
- drivers/base/dd.c               |    3 ++-
- drivers/char/misc.c             |    9 ++++++---
- drivers/usb/storage/transport.c |    2 +-
- 3 files changed, 9 insertions(+), 5 deletions(-)
-
-diff --git a/drivers/base/dd.c b/drivers/base/dd.c
-index 3fc3b5940bb3..67e08b381ee2 100644
---- a/drivers/base/dd.c
-+++ b/drivers/base/dd.c
-@@ -723,7 +723,8 @@ void wait_for_device_probe(void)
- 	flush_work(&deferred_probe_work);
- 
- 	/* wait for the known devices to complete their probing */
--	wait_event(probe_waitqueue, atomic_read(&probe_count) == 0);
-+	wait_event_killable_timeout(probe_waitqueue,
-+				    atomic_read(&probe_count) == 0, 60 * HZ);
- 	async_synchronize_full();
+ 	apd = container_of(genpd, struct acp_pm_domain, gpd);
+-	if (apd != NULL) {
+-		adev = apd->adev;
++	adev = apd->adev;
+ 	/* call smu to POWER GATE ACP block
+ 	 * smu will
+ 	 * 1. turn off the acp clock
+ 	 * 2. power off the acp tiles
+ 	 * 3. check and enter ulv state
+ 	 */
+-		amdgpu_dpm_set_powergating_by_smu(adev, AMD_IP_BLOCK_TYPE_ACP, true);
+-	}
++	amdgpu_dpm_set_powergating_by_smu(adev, AMD_IP_BLOCK_TYPE_ACP, true);
+ 	return 0;
  }
- EXPORT_SYMBOL_GPL(wait_for_device_probe);
-diff --git a/drivers/char/misc.c b/drivers/char/misc.c
-index ca5141ed5ef3..6430c534a1cb 100644
---- a/drivers/char/misc.c
-+++ b/drivers/char/misc.c
-@@ -104,7 +104,8 @@ static int misc_open(struct inode *inode, struct file *file)
- 	int err = -ENODEV;
- 	const struct file_operations *new_fops = NULL;
  
--	mutex_lock(&misc_mtx);
-+	if (mutex_lock_killable(&misc_mtx))
-+		return -EINTR;
+@@ -147,16 +145,14 @@ static int acp_poweron(struct generic_pm_domain *genpd)
+ 	struct amdgpu_device *adev;
  
- 	list_for_each_entry(c, &misc_list, list) {
- 		if (c->minor == minor) {
-@@ -116,7 +117,8 @@ static int misc_open(struct inode *inode, struct file *file)
- 	if (!new_fops) {
- 		mutex_unlock(&misc_mtx);
- 		request_module("char-major-%d-%d", MISC_MAJOR, minor);
--		mutex_lock(&misc_mtx);
-+		if (mutex_lock_killable(&misc_mtx))
-+			return -EINTR;
+ 	apd = container_of(genpd, struct acp_pm_domain, gpd);
+-	if (apd != NULL) {
+-		adev = apd->adev;
++	adev = apd->adev;
+ 	/* call smu to UNGATE ACP block
+ 	 * smu will
+ 	 * 1. exit ulv
+ 	 * 2. turn on acp clock
+ 	 * 3. power on acp tiles
+ 	 */
+-		amdgpu_dpm_set_powergating_by_smu(adev, AMD_IP_BLOCK_TYPE_ACP, false);
+-	}
++	amdgpu_dpm_set_powergating_by_smu(adev, AMD_IP_BLOCK_TYPE_ACP, false);
+ 	return 0;
+ }
  
- 		list_for_each_entry(c, &misc_list, list) {
- 			if (c->minor == minor) {
-@@ -178,7 +180,8 @@ int misc_register(struct miscdevice *misc)
+@@ -193,7 +189,7 @@ static int acp_genpd_remove_device(struct device *dev, void *data)
+ static int acp_hw_init(void *handle)
+ {
+ 	int r;
+-	uint64_t acp_base;
++	u64 acp_base;
+ 	u32 val = 0;
+ 	u32 count = 0;
+ 	struct i2s_platform_data *i2s_pdata = NULL;
+@@ -220,37 +216,32 @@ static int acp_hw_init(void *handle)
+ 		return -EINVAL;
  
- 	INIT_LIST_HEAD(&misc->list);
+ 	acp_base = adev->rmmio_base;
+-
+-
+ 	adev->acp.acp_genpd = kzalloc(sizeof(struct acp_pm_domain), GFP_KERNEL);
+-	if (adev->acp.acp_genpd == NULL)
++	if (!adev->acp.acp_genpd)
+ 		return -ENOMEM;
  
--	mutex_lock(&misc_mtx);
-+	if (mutex_lock_killable(&misc_mtx))
-+		return -EINTR;
+ 	adev->acp.acp_genpd->gpd.name = "ACP_AUDIO";
+ 	adev->acp.acp_genpd->gpd.power_off = acp_poweroff;
+ 	adev->acp.acp_genpd->gpd.power_on = acp_poweron;
+-
+-
+ 	adev->acp.acp_genpd->adev = adev;
  
- 	if (is_dynamic) {
- 		int i = find_first_zero_bit(misc_minors, DYNAMIC_MINORS);
-diff --git a/drivers/usb/storage/transport.c b/drivers/usb/storage/transport.c
-index 1928b3918242..d2a192306e0c 100644
---- a/drivers/usb/storage/transport.c
-+++ b/drivers/usb/storage/transport.c
-@@ -164,7 +164,7 @@ static int usb_stor_msg_common(struct us_data *us, int timeout)
-  
- 	/* wait for the completion of the URB */
- 	timeleft = wait_for_completion_interruptible_timeout(
--			&urb_done, timeout ? : MAX_SCHEDULE_TIMEOUT);
-+			&urb_done, timeout ? : 60 * HZ);
-  
- 	clear_bit(US_FLIDX_URB_ACTIVE, &us->dflags);
+ 	pm_genpd_init(&adev->acp.acp_genpd->gpd, NULL, false);
  
-------------------------------------------------------------
+-	adev->acp.acp_cell = kcalloc(ACP_DEVS, sizeof(struct mfd_cell),
+-							GFP_KERNEL);
++	adev->acp.acp_cell = kcalloc(ACP_DEVS, sizeof(struct mfd_cell), GFP_KERNEL);
+ 
+-	if (adev->acp.acp_cell == NULL) {
++	if (!adev->acp.acp_cell) {
+ 		r = -ENOMEM;
+ 		goto failure;
+ 	}
+ 
+ 	adev->acp.acp_res = kcalloc(5, sizeof(struct resource), GFP_KERNEL);
+-	if (adev->acp.acp_res == NULL) {
++	if (!adev->acp.acp_res) {
+ 		r = -ENOMEM;
+ 		goto failure;
+ 	}
+ 
+ 	i2s_pdata = kcalloc(3, sizeof(struct i2s_platform_data), GFP_KERNEL);
+-	if (i2s_pdata == NULL) {
++	if (!i2s_pdata) {
+ 		r = -ENOMEM;
+ 		goto failure;
+ 	}
+@@ -346,8 +337,7 @@ static int acp_hw_init(void *handle)
+ 	adev->acp.acp_cell[3].platform_data = &i2s_pdata[2];
+ 	adev->acp.acp_cell[3].pdata_size = sizeof(struct i2s_platform_data);
+ 
+-	r = mfd_add_hotplug_devices(adev->acp.parent, adev->acp.acp_cell,
+-								ACP_DEVS);
++	r = mfd_add_hotplug_devices(adev->acp.parent, adev->acp.acp_cell, ACP_DEVS);
+ 	if (r)
+ 		goto failure;
+ 
+@@ -546,8 +536,7 @@ static const struct amd_ip_funcs acp_ip_funcs = {
+ 	.set_powergating_state = acp_set_powergating_state,
+ };
+ 
+-const struct amdgpu_ip_block_version acp_ip_block =
+-{
++const struct amdgpu_ip_block_version acp_ip_block = {
+ 	.type = AMD_IP_BLOCK_TYPE_ACP,
+ 	.major = 2,
+ 	.minor = 2,
+-- 
+2.25.1
 

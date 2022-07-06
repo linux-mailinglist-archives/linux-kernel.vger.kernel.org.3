@@ -2,250 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 31B45569187
+	by mail.lfdr.de (Postfix) with ESMTP id 7A024569188
 	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 20:16:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233957AbiGFSP5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Jul 2022 14:15:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58794 "EHLO
+        id S230472AbiGFSPm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Jul 2022 14:15:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58582 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229895AbiGFSPz (ORCPT
+        with ESMTP id S229895AbiGFSPj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Jul 2022 14:15:55 -0400
-Received: from relay.virtuozzo.com (relay.virtuozzo.com [130.117.225.111])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB9DC9FCF;
-        Wed,  6 Jul 2022 11:15:54 -0700 (PDT)
-Received: from [192.168.16.236] (helo=vzdev.sw.ru)
-        by relay.virtuozzo.com with esmtp (Exim 4.95)
-        (envelope-from <alexander.atanasov@virtuozzo.com>)
-        id 1o99Yd-00927l-6j;
-        Wed, 06 Jul 2022 20:15:27 +0200
-From:   Alexander Atanasov <alexander.atanasov@virtuozzo.com>
-To:     "K. Y. Srinivasan" <kys@microsoft.com>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        Stephen Hemminger <sthemmin@microsoft.com>,
-        Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>
-Cc:     kernel@openvz.org,
-        Alexander Atanasov <alexander.atanasov@virtuozzo.com>,
-        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v2 1/1] Create debugfs file with hyper-v balloon usage information
-Date:   Wed,  6 Jul 2022 18:15:09 +0000
-Message-Id: <20220706181510.32236-1-alexander.atanasov@virtuozzo.com>
-X-Mailer: git-send-email 2.31.1
-In-Reply-To: <20220706180202.bzbm6boi232bruct@liuwe-devbox-debian-v2>
-References: <20220706180202.bzbm6boi232bruct@liuwe-devbox-debian-v2>
+        Wed, 6 Jul 2022 14:15:39 -0400
+Received: from NAM02-SN1-obe.outbound.protection.outlook.com (mail-sn1anam02on2078.outbound.protection.outlook.com [40.107.96.78])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFDFF5FF0;
+        Wed,  6 Jul 2022 11:15:38 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=V6tdbrQZwy1EALh+WeIRcr2ZRX+gTVnamo3wd+s+Hlq2IZrReX555uNbf+DhjL5K6UrzqOLy1/BGeu4/ZdXgK+7pBC3DvLWgQ+ozdo6SxE/eHH4Uu3YM4RjZ0bAPqG5VzVfS4OK8jWnS+QhgnTFxe4G8uQyCojLtBGkWNhZbbDw+Ue3K6RQhp8rWI4OA+EMAPrfbjMrDbkgZKbq7sZiH6nSkUICJXEexuHDzud/azuDWq6Bxht6lD4qDnATSHlrUiTlgi1dJx/4psbzNfrKyE3w3bS5+9VBzvBxbn0H+VEv/fUmAluGtgHc35GmaRLOmQVeuUKR30Imal+ST4hZYKg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=SHTWi9wBbPiA86pL11ydanPCadwNaja7MH7iXDeYKm4=;
+ b=Uk9rodDVggrxKRQo33sAFmJjQcLKePJvQY8RAo507Yo5YHAEGK2m/6pPFQpl6XZANKH7gJK2P6MaGtk1x7NhVQ+OJHBo3xM4xzouaExt/4YWgTPtOIO1EVBmntVCG/1Hz8Cph2RLukoyLmbY2W8VHvgt5ZGdiM9qrUQRxPJPL/c/Gnb60d87rF1NP0+kBlnG5Dn1rD8mVRKL0Si3b55HdoeNoUJDulx9rZLpqIE+i9/XmCp5tRcsdPpINxqv20l6Z2RFi/6ozDB9f2M9wgI1GUiNoSY9j/Hg421bO30cLpzPjT9JAtOn8wvWeF3RqBHprS9xoNxneAseZd6yC0+5xQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=SHTWi9wBbPiA86pL11ydanPCadwNaja7MH7iXDeYKm4=;
+ b=VSqzNlpAnX8iTXTNJ6ggCqu250+rC/9Nx0As3TMD1TNXO0NlLQk6c80zuFJbPpBEagtY+D+FKYlQAfRDSQauW7BoZVhA4FxF1P7i7H6NIlp2YTX7cZ2XDuLOfkmmgthsBMiICq8JvvtuaYs0sKwaJzlCguJsrlm2NNY1RKgVi/25mDsIgpInJFLaGLgr/yVtfJLoFkhs9bWaUHmm88PFdFjm1aGmr4d9Hgc/T4B2YndI0Xo6uVw7ffIw48ljf4XCj1VfukPznh8/ifizE+AAN2O2+LHAs3I+mWv6hx2tz+a5GV5GJXPvf14iOq9+IjtMnTOlbz4U7C7I3Z5UxXEI1Q==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from MN2PR12MB4192.namprd12.prod.outlook.com (2603:10b6:208:1d5::15)
+ by MN0PR12MB6149.namprd12.prod.outlook.com (2603:10b6:208:3c7::22) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5395.21; Wed, 6 Jul
+ 2022 18:15:36 +0000
+Received: from MN2PR12MB4192.namprd12.prod.outlook.com
+ ([fe80::ac35:7c4b:3282:abfb]) by MN2PR12MB4192.namprd12.prod.outlook.com
+ ([fe80::ac35:7c4b:3282:abfb%3]) with mapi id 15.20.5395.021; Wed, 6 Jul 2022
+ 18:15:36 +0000
+Date:   Wed, 6 Jul 2022 15:15:34 -0300
+From:   Jason Gunthorpe <jgg@nvidia.com>
+To:     Nicolin Chen <nicolinc@nvidia.com>
+Cc:     kwankhede@nvidia.com, corbet@lwn.net, hca@linux.ibm.com,
+        gor@linux.ibm.com, agordeev@linux.ibm.com,
+        borntraeger@linux.ibm.com, svens@linux.ibm.com,
+        zhenyuw@linux.intel.com, zhi.a.wang@intel.com,
+        jani.nikula@linux.intel.com, joonas.lahtinen@linux.intel.com,
+        rodrigo.vivi@intel.com, tvrtko.ursulin@linux.intel.com,
+        airlied@linux.ie, daniel@ffwll.ch, farman@linux.ibm.com,
+        mjrosato@linux.ibm.com, pasic@linux.ibm.com, vneethv@linux.ibm.com,
+        oberpar@linux.ibm.com, freude@linux.ibm.com,
+        akrowiak@linux.ibm.com, jjherne@linux.ibm.com,
+        alex.williamson@redhat.com, cohuck@redhat.com,
+        kevin.tian@intel.com, hch@infradead.org, jchrist@linux.ibm.com,
+        kvm@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-s390@vger.kernel.org,
+        intel-gvt-dev@lists.freedesktop.org,
+        intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org
+Subject: Re: [RFT][PATCH v2 7/9] vfio: Rename user_iova of vfio_dma_rw()
+Message-ID: <20220706181534.GO693670@nvidia.com>
+References: <20220706062759.24946-1-nicolinc@nvidia.com>
+ <20220706062759.24946-8-nicolinc@nvidia.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220706062759.24946-8-nicolinc@nvidia.com>
+X-ClientProxiedBy: BL0PR0102CA0015.prod.exchangelabs.com
+ (2603:10b6:207:18::28) To MN2PR12MB4192.namprd12.prod.outlook.com
+ (2603:10b6:208:1d5::15)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: d80e043f-c1bc-4bf6-a6b2-08da5f7b85fe
+X-MS-TrafficTypeDiagnostic: MN0PR12MB6149:EE_
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: YEhnC7iPzTel/SYXLWvTFdV6991RlSMlUquMcgWKiqGvU3v92aF3V1y1IvfidtJ3kXPDpxs0pauNC+PCTTrJPtP73kKs27ZVS7zGgySN1w1LjosMXKFgk8LGIpaYJJl8Dzud1Ja325Aw/YCEYRw9qtgn8nUjGN9mEqab6rqCpAnteUhOC9MHeKTYm7Exk/z17XGDM17EzUZOwtLAEP3qZdU60Uvr+Yc1GSTLfaJO24NM83Dw4oYVq9Hb6rPGQ1OOQJrbhKZNg7fLSxqVLdjnrNUiohBZEdH9Boa5AFmIOMcMuBrEc2wzFvXcaa5JPy7H8oFWqj4q+IkjB8cOSnhblt32S58D3a1l48s8OlYrvwdj30GVUDfEYeCFTag80EpzTIZ4bVTCMBULN/vl0BJMx4IfmKoB0zhJUz+jaKawxDMscgOpVmwxFU/KWfDZCHr+0UZNpaRcZk8qN5//1YLlOlpBBetJjSySgeetv7eNkCH1tO8LcxVHEa3I15w1XXRZMMoR+P2hCCLvCL8M/WmbjnG1erwOVyaDgEVymuIyRdP6z4xXyO0b8a1nib/DeeKiaIriOTINREY1jWQKXHyz4xrR6E+AxzJ6sRXGRDnUmAQY+Rj2ZuBQUGqGQlhpXoH8STxH14tidl0ysc1TaQk/F8eai5tJBtI8DIfkGoZf6FfKKeSUTqZsOoZm+pN6lhKwKS2HSLtJRRM0GA5J7I0NbYcsDIyxrwH3nyYLkQatLNsmZTgMjxejkmsrrE1d5e+Vh9GJ682FH7QNJdVQSiOkvc4rTokxtqJaxJdGS31rdX7aCiqj5aIghnbzMw073qTA
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN2PR12MB4192.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(396003)(366004)(39860400002)(346002)(136003)(376002)(6862004)(8936002)(7416002)(5660300002)(86362001)(66476007)(66556008)(7406005)(8676002)(41300700001)(6636002)(4326008)(37006003)(66946007)(316002)(4744005)(2616005)(186003)(478600001)(26005)(36756003)(6486002)(6512007)(6506007)(2906002)(33656002)(38100700002)(83380400001)(1076003)(27376004);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?PRrBM3gxJnOqmOxhQKM62yXSALPgy5G04+kajMt2N+tOoqaiAZkdkDO/y05w?=
+ =?us-ascii?Q?Le5uATqGTAOekbmwKnIi30ydCfreEzqNMAR7JZ2nna+ZFj0v2FW1NUk6U0gF?=
+ =?us-ascii?Q?d3SNWG9kpDTC4SSTdFdU3dhtwx893lAxVDxPImohzHrjoGq3MY3yIuhpKO6Q?=
+ =?us-ascii?Q?FGGF6nvz/e+EqMx6VDb/Vlk9ugdnVn6z24FQ50c2gy51v+9FDQXfpz8Sni9U?=
+ =?us-ascii?Q?+b64IUgfJ9/EEq/VZmBjZ5EvPpSifpa5kt2kuz//Pf83r7ZDHzB9Mx2NuEBb?=
+ =?us-ascii?Q?ElJSkoAS3ufi130KqC3yWjAYot8DQlflEN77Qi59/FxPEzwrz+1332F7FfP3?=
+ =?us-ascii?Q?8wli8Ww4Z4GSKx78rDVjYjSyb0M9q/36b+GWTyRfu8x4IxCAv1B+LhkPbXtI?=
+ =?us-ascii?Q?TkfNuWk/vsVgoqw0XvF71KsbgzY7OpTWVUOM5CfHKI5wdOrL9tHONz+1/m37?=
+ =?us-ascii?Q?XBkq/Zo+TYSCGjwMuO7eo+T0sV16qggMC/AScx0tj4f/k/s1onsdhwyw+UB5?=
+ =?us-ascii?Q?GEbKlXf7ZuvOORBlBMaLxi3JQxLv6Enb6BI6UyjzImnnpWfJG0WiCv6834VS?=
+ =?us-ascii?Q?miqh3w5r8hd+nXMVa3kTE20opBAGmCE18iDnRcf7nWN6IthN7h/R2Wa/DJim?=
+ =?us-ascii?Q?fe2KRffiGxjjZYriiojNoI8EpG5/6AuZ/fsfamPccS5fQVj/MwlC9yS87EJt?=
+ =?us-ascii?Q?6sQS+j1IdiTBhIOpa7ZLf6nmSBPgdpx+ymbuaiYCit4TthISaV1M5tlxtO5R?=
+ =?us-ascii?Q?AT7qIofFCJmhJEmBVlfPayJkQof0eL5ooA+kciNO1fGehGoyKc1GCxXJ6mEi?=
+ =?us-ascii?Q?ANdjf60sqaXrUFIZTG+g6aaZwZzgr7o1+JWQq5JgUdaaLBFAQGE7CYhHOv+7?=
+ =?us-ascii?Q?dUCXWVRMPUln/DTOS7y8RDPJNfLuLyb8rwrmaI7zB+iooIfPe0zV2oBmN+GQ?=
+ =?us-ascii?Q?NjnDUDM5cvVQ8KPFrqJ4dKw7vafYR8qh2DMIYUa0/Yx5Ckeu8pM4AfOH6EMZ?=
+ =?us-ascii?Q?D0VME86zmfKWrAHmspZbHIAvUx//na8womP9j76PYgnTIs4ZQ6pU0leIc3fc?=
+ =?us-ascii?Q?qe42DxD+ppxxn9b7w26BXnQTbc74D53gsWfQDrvsvcemRTZw1dmiZKXCT4yp?=
+ =?us-ascii?Q?jhL6+BEOIyiWA9iAWORG1IC6iP7QFFC71f4DZaXKY4qVZjTBrMPUGDC+0GNW?=
+ =?us-ascii?Q?7+GoDpIpPjRO9jEGdKJRrovRZR51bMU6ZluNkMMz8gB2znInH0CwF3fLDVxe?=
+ =?us-ascii?Q?0EXjt3FiF3FnHyxkfowaYmrlXPj8PudoSJ7beQm24HEJ/6MBhYP8Ix2y6o6k?=
+ =?us-ascii?Q?JgTTIWSR99+Py3lsojjtXUnsALl/wzhVhCVUwERz0Bt7619btUsPOK32NXY9?=
+ =?us-ascii?Q?FKyTdo7B/KfODMn1MvEpDDV1yeAuq33TjRbCKHGQ7L+nJgiId+rgrN/DYNq6?=
+ =?us-ascii?Q?aDZhfFljNnjPEJOECx3hyTC/cWuLw9dXEZUQxGpun/drqnFN5HoeL8OJFxc6?=
+ =?us-ascii?Q?BJ6SEdeCFnFKxUC99UEdQM9jCBUyPsZIaR4TnVMF78McfbmXCnNqUrthOq5N?=
+ =?us-ascii?Q?zcyu8D3mveCy7fZGXzXjt3Cow2wM96f9fnE6AEew?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: d80e043f-c1bc-4bf6-a6b2-08da5f7b85fe
+X-MS-Exchange-CrossTenant-AuthSource: MN2PR12MB4192.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Jul 2022 18:15:36.1427
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: WSELiQIX9taY+KDbw7BZMDQmZbSmbmZiCn6CuLbG733ytacBe66TEcDkU1RP4kpa
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN0PR12MB6149
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Allow the guest to know how much it is ballooned by the host.
-It is useful when debugging out of memory conditions.
+On Tue, Jul 05, 2022 at 11:27:57PM -0700, Nicolin Chen wrote:
+> Following the updated vfio_pin/unpin_pages(), use the simpler "iova".
+> 
+> Signed-off-by: Nicolin Chen <nicolinc@nvidia.com>
+> ---
+>  drivers/vfio/vfio.c  | 6 +++---
+>  include/linux/vfio.h | 2 +-
+>  2 files changed, 4 insertions(+), 4 deletions(-)
 
-When host gets back memory from the guest it is accounted
-as used memory in the guest but the guest have no way to know
-how much it is actually ballooned.
+Reviewed-by: Jason Gunthorpe <jgg@nvidia.com>
 
-Expose current state, flags and max possible memory to the guest.
-While at it - fix a 10+ years old typo.
-
-Signed-off-by: Alexander Atanasov <alexander.atanasov@virtuozzo.com>
----
- drivers/hv/hv_balloon.c | 126 +++++++++++++++++++++++++++++++++++++++-
- 1 file changed, 125 insertions(+), 1 deletion(-)
-
-V1->V2:
- - Fix C&P errors - you got me :)
-
-Note - no attempt to handle guest vs host page size difference
-is made - see ballooning_enabled.
-Basicly if balloon page size != guest page size balloon is off.
-
-diff --git a/drivers/hv/hv_balloon.c b/drivers/hv/hv_balloon.c
-index 91e8a72eee14..91dfde06c6fb 100644
---- a/drivers/hv/hv_balloon.c
-+++ b/drivers/hv/hv_balloon.c
-@@ -11,6 +11,7 @@
- #include <linux/kernel.h>
- #include <linux/jiffies.h>
- #include <linux/mman.h>
-+#include <linux/debugfs.h>
- #include <linux/delay.h>
- #include <linux/init.h>
- #include <linux/module.h>
-@@ -248,7 +249,7 @@ struct dm_capabilities_resp_msg {
-  * num_committed: Committed memory in pages.
-  * page_file_size: The accumulated size of all page files
-  *		   in the system in pages.
-- * zero_free: The nunber of zero and free pages.
-+ * zero_free: The number of zero and free pages.
-  * page_file_writes: The writes to the page file in pages.
-  * io_diff: An indicator of file cache efficiency or page file activity,
-  *	    calculated as File Cache Page Fault Count - Page Read Count.
-@@ -567,6 +568,13 @@ struct hv_dynmem_device {
- 	__u32 version;
- 
- 	struct page_reporting_dev_info pr_dev_info;
-+
-+#ifdef CONFIG_DEBUG_FS
-+	/*
-+	 * Maximum number of pages that can be hot_add-ed
-+	 */
-+	__u64 max_dynamic_page_count;
-+#endif
- };
- 
- static struct hv_dynmem_device dm_device;
-@@ -1078,6 +1086,9 @@ static void process_info(struct hv_dynmem_device *dm, struct dm_info_msg *msg)
- 
- 			pr_info("Max. dynamic memory size: %llu MB\n",
- 				(*max_page_count) >> (20 - HV_HYP_PAGE_SHIFT));
-+#ifdef CONFIG_DEBUG_FS
-+			dm->max_dynamic_page_count = *max_page_count;
-+#endif
- 		}
- 
- 		break;
-@@ -1807,6 +1818,115 @@ static int balloon_connect_vsp(struct hv_device *dev)
- 	return ret;
- }
- 
-+/*
-+ * DEBUGFS Interface
-+ */
-+#ifdef CONFIG_DEBUG_FS
-+
-+/**
-+ * hv_balloon_debug_show - shows statistics of balloon operations.
-+ * @f: pointer to the &struct seq_file.
-+ * @offset: ignored.
-+ *
-+ * Provides the statistics that can be accessed in hv-balloon in the debugfs.
-+ *
-+ * Return: zero on success or an error code.
-+ */
-+static int hv_balloon_debug_show(struct seq_file *f, void *offset)
-+{
-+	struct hv_dynmem_device *dm = f->private;
-+	unsigned long num_pages_committed;
-+	char *sname;
-+
-+	seq_printf(f, "%-22s: %u.%u\n", "host_version",
-+				DYNMEM_MAJOR_VERSION(dm->version),
-+				DYNMEM_MINOR_VERSION(dm->version));
-+
-+	seq_printf(f, "%-22s:", "capabilities");
-+	if (ballooning_enabled())
-+		seq_puts(f, " enabled");
-+
-+	if (hot_add_enabled())
-+		seq_puts(f, " hot_add");
-+
-+	seq_puts(f, "\n");
-+
-+	seq_printf(f, "%-22s: %u", "state", dm->state);
-+	switch (dm->state) {
-+	case DM_INITIALIZING:
-+			sname = "Initializing";
-+			break;
-+	case DM_INITIALIZED:
-+			sname = "Initialized";
-+			break;
-+	case DM_BALLOON_UP:
-+			sname = "Balloon Up";
-+			break;
-+	case DM_BALLOON_DOWN:
-+			sname = "Balloon Down";
-+			break;
-+	case DM_HOT_ADD:
-+			sname = "Hot Add";
-+			break;
-+	case DM_INIT_ERROR:
-+			sname = "Error";
-+			break;
-+	default:
-+			sname = "Unknown";
-+	}
-+	seq_printf(f, " (%s)\n", sname);
-+
-+	/* HV Page Size */
-+	seq_printf(f, "%-22s: %ld\n", "page_size", HV_HYP_PAGE_SIZE);
-+
-+	/* Pages added with hot_add */
-+	seq_printf(f, "%-22s: %u\n", "pages_added", dm->num_pages_added);
-+
-+	/* pages that are "onlined"/used from pages_added */
-+	seq_printf(f, "%-22s: %u\n", "pages_onlined", dm->num_pages_onlined);
-+
-+	/* pages we have given back to host */
-+	seq_printf(f, "%-22s: %u\n", "pages_ballooned", dm->num_pages_ballooned);
-+
-+	num_pages_committed = vm_memory_committed();
-+	num_pages_committed += dm->num_pages_ballooned +
-+				(dm->num_pages_added > dm->num_pages_onlined ?
-+				dm->num_pages_added - dm->num_pages_onlined : 0) +
-+				compute_balloon_floor();
-+	seq_printf(f, "%-22s: %lu\n", "total_pages_commited",
-+				num_pages_committed);
-+
-+	seq_printf(f, "%-22s: %llu\n", "max_dynamic_page_count",
-+				dm->max_dynamic_page_count);
-+
-+	return 0;
-+}
-+
-+DEFINE_SHOW_ATTRIBUTE(hv_balloon_debug);
-+
-+static void  hv_balloon_debugfs_init(struct hv_dynmem_device *b)
-+{
-+	debugfs_create_file("hv-balloon", 0444, NULL, b,
-+			&hv_balloon_debug_fops);
-+}
-+
-+static void  hv_balloon_debugfs_exit(struct hv_dynmem_device *b)
-+{
-+	debugfs_remove(debugfs_lookup("hv-balloon", NULL));
-+}
-+
-+#else
-+
-+static inline void hv_balloon_debugfs_init(struct hv_dynmem_device  *b)
-+{
-+}
-+
-+static inline void hv_balloon_debugfs_exit(struct hv_dynmem_device *b)
-+{
-+}
-+
-+#endif	/* CONFIG_DEBUG_FS */
-+
- static int balloon_probe(struct hv_device *dev,
- 			 const struct hv_vmbus_device_id *dev_id)
- {
-@@ -1854,6 +1974,8 @@ static int balloon_probe(struct hv_device *dev,
- 		goto probe_error;
- 	}
- 
-+	hv_balloon_debugfs_init(&dm_device);
-+
- 	return 0;
- 
- probe_error:
-@@ -1879,6 +2001,8 @@ static int balloon_remove(struct hv_device *dev)
- 	if (dm->num_pages_ballooned != 0)
- 		pr_warn("Ballooned pages: %d\n", dm->num_pages_ballooned);
- 
-+	hv_balloon_debugfs_exit(dm);
-+
- 	cancel_work_sync(&dm->balloon_wrk.wrk);
- 	cancel_work_sync(&dm->ha_wrk.wrk);
- 
--- 
-2.25.1
-
+Jason

@@ -2,95 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 826585689E0
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 15:44:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 48F5E5689E9
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 15:45:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233355AbiGFNoO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Jul 2022 09:44:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44152 "EHLO
+        id S233305AbiGFNox (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Jul 2022 09:44:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44766 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232632AbiGFNoM (ORCPT
+        with ESMTP id S229757AbiGFNow (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Jul 2022 09:44:12 -0400
-Received: from mail-pg1-x52c.google.com (mail-pg1-x52c.google.com [IPv6:2607:f8b0:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8811DEF2;
-        Wed,  6 Jul 2022 06:44:11 -0700 (PDT)
-Received: by mail-pg1-x52c.google.com with SMTP id 145so14034885pga.12;
-        Wed, 06 Jul 2022 06:44:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=LHHGKToiM1OUemXzX1dDbHxH26W+LzkLaTBpHG8rWNM=;
-        b=TT/oSCYu+RUKuk7ccRpLt1nm/t7zLtTvvSxoKpYj4CbZEgxKomziH0eGBeqMkmMzNa
-         dfhemGBsKyD0qBXgg/jL8pLeyma1d15C5rTu+1AoZuQl7PqVGdHYxRVr76BFgr/6+qFz
-         ezeRM1dfChTcTiZSQHbzgYBIeqsGNvaa8uBpcu6tzMrMvMDg4ivBwkpmkT8ejeY/2NgP
-         CJUAYwDtr8UIvHmlYpzKYlQzw6HTZHG564GH8Ts4iYnlnSJpkntUDI1bjBIDpsxLrzah
-         mbuDOi/iYHHkUIm97Kwg8RG4ILtVTq/oBu5je3ooDJ7lL9Xo52XnVZosp4IpPJ8wlhQz
-         ZRrg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=LHHGKToiM1OUemXzX1dDbHxH26W+LzkLaTBpHG8rWNM=;
-        b=HvHKbov22hJzk+lwT8BgDshPMTemo+TW5NT2q7EshLfDIYcY0FENrjHtth2u5WPiSH
-         18QCHclb+p8NXsEwqcyDyiO1j4fowk1FOuZfpxmt3VTMKiGWEVVDUzmjwBjSa0nds0SM
-         CM2+v5YCm4cetp8ymPu8yMt9Sn5t9BJeuXbenajrLswrqA2Ef+5Ko9HUga8IO8LffueF
-         plEVIdwB3lBaLyskn2dRx1nWUQnWWisgex4QRUJLfoo0gjlbK0IIA5SEZLHRPbDB95AH
-         neNtJXwnS3Nv4oibVNorVecSMtzvcPYpDAXfCR0ZWu3GBZUYNgr3jlMwrX3p+/UY4ZUK
-         d+Zw==
-X-Gm-Message-State: AJIora/QTfYmnmXq3TfqZHwKo0MGvcYIFCrhbXhgnOscr6GR7WMGIPH/
-        NXCC7PsgsL4Rxj9vfgosrJo=
-X-Google-Smtp-Source: AGRyM1vGZc3ZXZl/gU/2ubN5ixjl8fD7LwgQW+Z7SUfcqW82dzc2Id8BN5mCvouL35W0B20sGBTIIA==
-X-Received: by 2002:a05:6a00:1992:b0:527:c201:ef52 with SMTP id d18-20020a056a00199200b00527c201ef52mr47273913pfl.59.1657115051388;
-        Wed, 06 Jul 2022 06:44:11 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id d18-20020a170903231200b0016bf7981d0bsm3164280plh.86.2022.07.06.06.44.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 06 Jul 2022 06:44:10 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Wed, 6 Jul 2022 06:44:10 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        slade@sladewatkins.com
-Subject: Re: [PATCH 5.10 00/84] 5.10.129-rc1 review
-Message-ID: <20220706134410.GE769692@roeck-us.net>
-References: <20220705115615.323395630@linuxfoundation.org>
+        Wed, 6 Jul 2022 09:44:52 -0400
+Received: from verein.lst.de (verein.lst.de [213.95.11.211])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0DA8DEF2;
+        Wed,  6 Jul 2022 06:44:51 -0700 (PDT)
+Received: by verein.lst.de (Postfix, from userid 2407)
+        id 81CAF68AA6; Wed,  6 Jul 2022 15:44:47 +0200 (CEST)
+Date:   Wed, 6 Jul 2022 15:44:47 +0200
+From:   Christoph Hellwig <hch@lst.de>
+To:     John Garry <john.garry@huawei.com>
+Cc:     damien.lemoal@opensource.wdc.com, joro@8bytes.org, will@kernel.org,
+        jejb@linux.ibm.com, martin.petersen@oracle.com, hch@lst.de,
+        m.szyprowski@samsung.com, robin.murphy@arm.com,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-ide@vger.kernel.org, iommu@lists.linux-foundation.org,
+        iommu@lists.linux.dev, linux-scsi@vger.kernel.org,
+        linuxarm@huawei.com
+Subject: Re: [PATCH v5 0/5] DMA mapping changes for SCSI core
+Message-ID: <20220706134447.GA23753@lst.de>
+References: <1656590892-42307-1-git-send-email-john.garry@huawei.com> <b5f80062-e8ef-9597-1b0c-393140950dfb@huawei.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220705115615.323395630@linuxfoundation.org>
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <b5f80062-e8ef-9597-1b0c-393140950dfb@huawei.com>
+User-Agent: Mutt/1.5.17 (2007-11-01)
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jul 05, 2022 at 01:57:23PM +0200, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.10.129 release.
-> There are 84 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
-> 
-> Responses should be made by Thu, 07 Jul 2022 11:55:56 +0000.
-> Anything received after that time might be too late.
-> 
+On Wed, Jul 06, 2022 at 02:40:44PM +0100, John Garry wrote:
+> On 30/06/2022 13:08, John Garry wrote:
+>
+> Hi Christoph,
+>
+> Can you please consider picking up this series? A few things to note 
+> beforehand:
+>
+> - I changed to only apply the mapping limit to SAS hosts in this version. I 
+> would need a fresh ack from Martin for those SCSI parts, but wanted to make 
+> sure you were ok with it.
 
-Build results:
-	total: 163 pass: 163 fail: 0
-Qemu test results:
-	total: 477 pass: 477 fail: 0
+Yes, I've mostly been waiting for an ACK from Martin.
 
-Tested-by: Guenter Roeck <linux@roeck-us.net>
+> - Damien had some doubt on updating the shost max_sectors as opposed to the 
+> per-request queue default, but I think he's ok with it - see patch 4/5
 
-Guenter
+I'm fine either way.

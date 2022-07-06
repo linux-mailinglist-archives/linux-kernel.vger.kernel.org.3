@@ -2,178 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F72456958D
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 00:57:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CEAEB56958E
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 00:59:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232278AbiGFW4e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Jul 2022 18:56:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49372 "EHLO
+        id S233383AbiGFW7f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Jul 2022 18:59:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50906 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229768AbiGFW4b (ORCPT
+        with ESMTP id S229768AbiGFW7e (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Jul 2022 18:56:31 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32AAD2A26C
-        for <linux-kernel@vger.kernel.org>; Wed,  6 Jul 2022 15:56:31 -0700 (PDT)
+        Wed, 6 Jul 2022 18:59:34 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B23E18E36
+        for <linux-kernel@vger.kernel.org>; Wed,  6 Jul 2022 15:59:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1657148191; x=1688684191;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=8DbT4bhyfITTbHgUKYW3/W8iRxM6tM3UJzh/P4G68Xw=;
-  b=MV1Is78xz1SRFR6FH4iYPU419LyZJ4h0cgTcIa/+YEchWpolsPZj8RYx
-   Nkz9CayNXDH7ECsygf7FGsM7r0qZ+CS8DCLY91/RM9feeggsd8G1sXX89
-   WloSrOpziUyuas3e2DtY0gcHJFxMzSS3/fy054Zip1KoxKdaLhvzwckIz
-   KNjXswtvxAeJYUK36ykWo//pKue/j+qA4mp7udE7bES/h1UB+ZfaHkbSp
-   zVk9U4ebYgP0ngYHj3XjNDxovH58i1OiBZZx8PIw5gWT9sPKfScrhdGBn
-   3DG/FLBBly01MJJZ1BknVcPA0YJicZQ+P0l9ILOQz02tjGy5Sii2dKZH0
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10400"; a="309440414"
+  t=1657148374; x=1688684374;
+  h=message-id:subject:from:to:cc:date:in-reply-to:
+   references:content-transfer-encoding:mime-version;
+  bh=bh75gl/ZpQtcHPqssKBS7MqGiz/R4n3x9LdQifuC0KQ=;
+  b=bGor7x4V39/t1piJ1UdA7UGsvesmDPCYPBFzJQAFufxMdQ5DpIPmxc63
+   XhU37abNXwhbhGFUzZKV+s0TYPv4D2E0Dde+iVxu3xYUY1p3ap9ZaVOFo
+   FMyguvoM9fGOtNJ26GAoxG6Pa2d1Y5tgcmLwDLs72FtpCkx+5Z3wHGb0T
+   lMy2mMK4AZ3IuZWfRZ8LN4jWbGHQTs97kQckpidkueM3WrbJ/j8/5EaBt
+   5bUMnzJq2RRJgMxYubVUPy5G0qapChHV2g/GmKr/0aLZ0Yi0VvmzfYVSW
+   fvQ0+BV+YqB+j422bg0gZMI2PrKM1HMWxkhoLFDvCg2IB3lgHwAa5hGoE
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10400"; a="345575238"
 X-IronPort-AV: E=Sophos;i="5.92,251,1650956400"; 
-   d="scan'208";a="309440414"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jul 2022 15:56:30 -0700
-X-ExtLoop1: 1
+   d="scan'208";a="345575238"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jul 2022 15:59:33 -0700
 X-IronPort-AV: E=Sophos;i="5.92,251,1650956400"; 
-   d="scan'208";a="568267283"
-Received: from lkp-server01.sh.intel.com (HELO 68b931ab7ac1) ([10.239.97.150])
-  by orsmga006.jf.intel.com with ESMTP; 06 Jul 2022 15:56:29 -0700
-Received: from kbuild by 68b931ab7ac1 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1o9Dwb-000LBM-0E;
-        Wed, 06 Jul 2022 22:56:29 +0000
-Date:   Thu, 07 Jul 2022 06:55:35 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "x86-ml" <x86@kernel.org>
-Cc:     linux-kernel@vger.kernel.org
-Subject: [tip:x86/urgent] BUILD SUCCESS
- b57feed2cc2622ae14b2fa62f19e973e5e0a60cf
-Message-ID: <62c612e7.ktr2SH5IpU+2Q81N%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+   d="scan'208";a="597829362"
+Received: from ctrainor-mobl1.amr.corp.intel.com (HELO khuang2-desk.gar.corp.intel.com) ([10.209.178.157])
+  by fmsmga007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jul 2022 15:59:30 -0700
+Message-ID: <82d4c654ce78416ba3635bad15f8bb21c3a42a4f.camel@intel.com>
+Subject: Re: [PATCH v8 1/5] x86/tdx: Add TDX Guest attestation interface
+ driver
+From:   Kai Huang <kai.huang@intel.com>
+To:     Sathyanarayanan Kuppuswamy 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        Dave Hansen <dave.hansen@intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org
+Cc:     "H . Peter Anvin" <hpa@zytor.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        Tony Luck <tony.luck@intel.com>,
+        Andi Kleen <ak@linux.intel.com>,
+        Wander Lairson Costa <wander@redhat.com>,
+        Isaku Yamahata <isaku.yamahata@gmail.com>,
+        marcelo.cerri@canonical.com, tim.gardner@canonical.com,
+        khalid.elmously@canonical.com, philip.cox@canonical.com,
+        linux-kernel@vger.kernel.org
+Date:   Thu, 07 Jul 2022 10:59:28 +1200
+In-Reply-To: <e92c570e-29c0-e6d1-88e8-cb6344c01859@linux.intel.com>
+References: <20220609025220.2615197-1-sathyanarayanan.kuppuswamy@linux.intel.com>
+         <20220609025220.2615197-2-sathyanarayanan.kuppuswamy@linux.intel.com>
+         <0f6bedbb-14cc-bf93-5d9f-bfd2c49dc7b2@intel.com>
+         <48b9d807-2d9e-016f-bada-906911d6ecb0@linux.intel.com>
+         <f26f88ee-1226-3e32-77cc-fc86bc65e0b7@intel.com>
+         <ca73d2bd-5d40-d385-aeb0-8c04811690ff@linux.intel.com>
+         <331abea18e728061979301772a9d0d61543f59fb.camel@intel.com>
+         <0b5884b8-9240-63b2-ca4c-20c86fd2e8c1@linux.intel.com>
+         <8b6f3f9f-71c8-2b6f-20a3-5e9c259a1b9a@intel.com>
+         <74383158-460e-0cd1-94bc-faca5b8175ea@linux.intel.com>
+         <932869b757b384426ada376cd9791697353c2247.camel@intel.com>
+         <e92c570e-29c0-e6d1-88e8-cb6344c01859@linux.intel.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.44.2 (3.44.2-1.fc36) 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git x86/urgent
-branch HEAD: b57feed2cc2622ae14b2fa62f19e973e5e0a60cf  x86/compressed/64: Add identity mappings for setup_data entries
+On Wed, 2022-07-06 at 15:27 -0700, Sathyanarayanan Kuppuswamy wrote:
+>=20
+> On 7/5/22 3:31 PM, Kai Huang wrote:
+> > On Tue, 2022-07-05 at 14:21 -0700, Sathyanarayanan Kuppuswamy wrote:
+> > > SGX is a related feature. It also uses IOCTL approach for enclave pro=
+visioning.
+> > >=20
+> > > arch/x86/kernel/cpu/sgx/ioctl.c
+> >=20
+> > SGX isn't a good example here.  The IOCTLs are used to create enclaves,=
+ but not
+> > for attestation.  SGX attestation relies on enclave itself to get/verif=
+y the
+> > report, etc, so has no interaction with the kernel.
+>=20
+> If you are looking for an attestation specific example, you can only chec=
+k the AMD
+> code.
+>=20
+> https://patchwork.kernel.org/project/linux-mm/patch/20220307213356.279720=
+5-44-brijesh.singh@amd.com/
+>=20
+> Also, sev_get_attestation_report() in arch/x86/kvm/svm/sev.c also impleme=
+nts attestation
+> IOCTL specific to KVM.
+>=20
 
-elapsed time: 721m
+I think we only need to look at how attestation is implemented in kernel fo=
+r
+other vendors, so yes it would be helpful to look at AMD's implementation. =
+=20
+I'll probably also look at it when I have some time.
 
-configs tested: 96
-configs skipped: 73
+--=20
+Thanks,
+-Kai
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
 
-gcc tested configs:
-arm64                            allyesconfig
-arm                                 defconfig
-arm                              allyesconfig
-i386                          randconfig-c001
-sh                          rsk7269_defconfig
-arm                          iop32x_defconfig
-sh                         ecovec24_defconfig
-powerpc                    amigaone_defconfig
-openrisc                  or1klitex_defconfig
-xtensa                         virt_defconfig
-mips                         mpc30x_defconfig
-arc                        nsimosci_defconfig
-arm                          exynos_defconfig
-powerpc                      cm5200_defconfig
-arm                          simpad_defconfig
-xtensa                           allyesconfig
-sh                           se7721_defconfig
-mips                           ip32_defconfig
-sh                          lboxre2_defconfig
-sh                           se7722_defconfig
-s390                          debug_defconfig
-um                             i386_defconfig
-riscv                            allyesconfig
-powerpc                    adder875_defconfig
-arm                          lpd270_defconfig
-xtensa                generic_kc705_defconfig
-nios2                         3c120_defconfig
-powerpc                      pasemi_defconfig
-arm                           viper_defconfig
-arm                      jornada720_defconfig
-arm                        mini2440_defconfig
-arm                             rpc_defconfig
-sh                           se7705_defconfig
-sparc64                             defconfig
-um                               alldefconfig
-mips                       capcella_defconfig
-riscv                    nommu_virt_defconfig
-riscv                          rv32_defconfig
-riscv                    nommu_k210_defconfig
-riscv                             allnoconfig
-i386                   debian-10.3-kselftests
-i386                              debian-10.3
-m68k                             allyesconfig
-m68k                             allmodconfig
-arc                              allyesconfig
-alpha                            allyesconfig
-powerpc                           allnoconfig
-mips                             allyesconfig
-powerpc                          allmodconfig
-sh                               allmodconfig
-i386                             allyesconfig
-i386                                defconfig
-x86_64                        randconfig-a006
-x86_64                        randconfig-a004
-x86_64                        randconfig-a002
-i386                          randconfig-a001
-i386                          randconfig-a003
-i386                          randconfig-a005
-x86_64                        randconfig-a011
-x86_64                        randconfig-a013
-x86_64                        randconfig-a015
-i386                          randconfig-a012
-i386                          randconfig-a014
-i386                          randconfig-a016
-x86_64                    rhel-8.3-kselftests
-um                           x86_64_defconfig
-x86_64                              defconfig
-x86_64                           allyesconfig
-x86_64                               rhel-8.3
-x86_64                          rhel-8.3-func
-x86_64                           rhel-8.3-syz
-x86_64                         rhel-8.3-kunit
-
-clang tested configs:
-mips                      maltaaprp_defconfig
-powerpc                      walnut_defconfig
-arm                            dove_defconfig
-mips                malta_qemu_32r6_defconfig
-arm                       spear13xx_defconfig
-mips                           ip27_defconfig
-powerpc                     mpc5200_defconfig
-x86_64                        randconfig-k001
-x86_64                        randconfig-a005
-i386                          randconfig-a002
-i386                          randconfig-a006
-i386                          randconfig-a004
-x86_64                        randconfig-a012
-x86_64                        randconfig-a014
-x86_64                        randconfig-a016
-i386                          randconfig-a011
-i386                          randconfig-a013
-i386                          randconfig-a015
-x86_64                        randconfig-a003
-x86_64                        randconfig-a001
-riscv                randconfig-r042-20220706
-hexagon              randconfig-r045-20220706
-hexagon              randconfig-r041-20220706
-s390                 randconfig-r044-20220706
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp

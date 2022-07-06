@@ -2,72 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0FD3E5691D1
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 20:29:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3496F5691D7
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 20:30:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234479AbiGFS3d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Jul 2022 14:29:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43106 "EHLO
+        id S234503AbiGFS3v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Jul 2022 14:29:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43558 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234414AbiGFS3Z (ORCPT
+        with ESMTP id S234526AbiGFS3o (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Jul 2022 14:29:25 -0400
-Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BEC3DDAE;
-        Wed,  6 Jul 2022 11:29:20 -0700 (PDT)
-Received: by mail-wr1-x42a.google.com with SMTP id d16so16901937wrv.10;
-        Wed, 06 Jul 2022 11:29:20 -0700 (PDT)
+        Wed, 6 Jul 2022 14:29:44 -0400
+Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B841A12AD7
+        for <linux-kernel@vger.kernel.org>; Wed,  6 Jul 2022 11:29:43 -0700 (PDT)
+Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-31cbcba2f28so45138007b3.19
+        for <linux-kernel@vger.kernel.org>; Wed, 06 Jul 2022 11:29:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=/ipO2NkMUMMvxvzZn2ltri7y+IHfLy0+fza0bQjlk34=;
-        b=lkGkOKrNCzdbqRpsx09FoK7d/OanN8Jr9CgkeEcU8CM5aoHdA6Pvhu74nWGVd50Und
-         hIfGjNZqe3qCQ25Qgt27NJgQXnGTSa47OFddWoEBSdwb7s5pbP9so+VzOBfHwLBUvSOj
-         K/WRLDMeQgAacHo3Xfy0WPdCPHUQRS04LN/j912/BOdpLVJCrfcvu+8YP5coRQzOLy/b
-         VWZz78ujP3oOQFeHy0E9BJ3czWex1efyuk4h7eh/+O6QBaR5iuB2s1uvdml7ikROky0s
-         ue8NB3jiiaMQCMMi043vRnOB0zZAHPQIw1cAAnhzvMecpLGjaoVrG+LsKk7TWSH3LQ8B
-         SKnQ==
+        d=google.com; s=20210112;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=WFIqq+Ih1CphrUsWAZ/TbaFgC8wSAo6D8gk6Qgq5hnE=;
+        b=KKDpFirza47Orl3k+eu59zksxZJfyAAZGEmAozAnCJw/8ycZWnOjOjZ66rNx63/vff
+         CZsDzYCXha5g6Bz4HHm0aZpHX2Q+dIfjkWlrcIgYR1xbw+R8rB36+ZJjZFQgvFOhao7b
+         EyHykMj40N8gXOSwjRJ1zKW5UQbMYtNCBLwjmi45IOZbkBjBaeQeF2rLMpuKKOOXtkaf
+         OH76PqHJAHOoZ/cm5sexyU6e5adhrjxjASPMEaG9zGkd7SZKHw0Fzt6PZhws365Afemg
+         80iD5wE/Nh2Z6cosBcnbXu7i+/RD+2HazCOm0sc7hW/GObtZmHOeK0i4vX8PaJmUq5XJ
+         4YUQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=/ipO2NkMUMMvxvzZn2ltri7y+IHfLy0+fza0bQjlk34=;
-        b=M1eWF6N5wYcAkLWk82a+li7M9N17laiaEHR7zdB0fraeRdCtLGob5s6tWdYjxWdw6P
-         MyX0ZylVe2yxEb/ipLyot57pfH3t136I4spqeaZNr/icmavoEFtsFEyChwivCcg8lSce
-         2siaFoDVgDOFWPTah1s2DF8jxFLiNr9MPmW68bqddQL3/A7HLDxGqVNl80vfFCZrkW7Q
-         TNP8vNUtNl8lrvsnY/Vtcop3r5h4zGE20j3OyQ2A/mb4K7fNwk039wNKdfLz12LJCEA8
-         qvLYk0fw1taCA3zbjth2YBqegNaU2/uQrQd0ZJcFeKskfCzxyY5CjzPsmgbtRYuETwKS
-         2NAA==
-X-Gm-Message-State: AJIora9lAh/ZxFvaFzFzzPVXJqzABoT8GpUr9HjGI2v/p3Q3cfTFfQTJ
-        XnQbga9KuX/oHRXX3Ii6iLEUXoeJgjirZA==
-X-Google-Smtp-Source: AGRyM1ux1QIOhjvHQjtoROyzGjFt6VIyFfhw6EWam9o2tDucO6Mufz2phavnv2wM30ROS89HUqHXWg==
-X-Received: by 2002:a5d:64ad:0:b0:21b:b412:a34b with SMTP id m13-20020a5d64ad000000b0021bb412a34bmr39603551wrp.161.1657132160349;
-        Wed, 06 Jul 2022 11:29:20 -0700 (PDT)
-Received: from kista.localdomain (213-161-3-76.dynamic.telemach.net. [213.161.3.76])
-        by smtp.gmail.com with ESMTPSA id r15-20020a0560001b8f00b0021d74906683sm5142406wru.28.2022.07.06.11.29.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 06 Jul 2022 11:29:20 -0700 (PDT)
-From:   Jernej Skrabec <jernej.skrabec@gmail.com>
-To:     ezequiel@vanguardiasur.com.ar, p.zabel@pengutronix.de
-Cc:     mchehab@kernel.org, hverkuil-cisco@xs4all.nl,
-        benjamin.gaignard@collabora.com, nicolas.dufresne@collabora.com,
-        gregkh@linuxfoundation.org, linux-media@vger.kernel.org,
-        linux-staging@lists.linux.dev,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-rockchip@lists.infradead.org,
-        Jernej Skrabec <jernej.skrabec@gmail.com>
-Subject: [PATCH v3 7/7] media: hantro: sunxi: Enable 10-bit decoding
-Date:   Wed,  6 Jul 2022 20:29:01 +0200
-Message-Id: <20220706182901.78949-8-jernej.skrabec@gmail.com>
-X-Mailer: git-send-email 2.37.0
-In-Reply-To: <20220706182901.78949-1-jernej.skrabec@gmail.com>
-References: <20220706182901.78949-1-jernej.skrabec@gmail.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=WFIqq+Ih1CphrUsWAZ/TbaFgC8wSAo6D8gk6Qgq5hnE=;
+        b=7D0H8q95wctWPnAaUOw4voqhkM4qBGcTHZKWMXLvRDCGhRZnvIkCf52Q4SlddYAYQE
+         Womn8Bgwx8C15Nboz+1G+tPqwcIyT07YM/Yu/oK37OVFqopc2rU++s6QPnfmr1bE79V7
+         ZEGnsB0CX5SbbhSMzC6IQz6n7QElAlaNfy0ZLZ+Wv+48TdBtpFGPmy64k+ox9Q/2fL+9
+         T+qwtmvNvRlxJ/Hrmqye2q7iNWvd61zt/h74Kk3bhul4VxkTRXKotgzC5h5kl7i/9KIY
+         R6g+ve+sAG8SL4E55BkUeaQfgZgQqi7bPs40uw7UykfilnrkQBrC++OZi6F/Z9bt4OZv
+         7kwg==
+X-Gm-Message-State: AJIora9EFSH74C/XSfHj72Rlb5oVEANxs9KIgzKC+KbBFUJxoHUFERay
+        ecK6h0qwaNntrU3O1vWL6hQaHS57vuDxw6A=
+X-Google-Smtp-Source: AGRyM1s7dT6nr0ViJcQtDJEIuz8ngMKQXBvRBWAFFgqLK42PyV8aI8hdF86axENugYHnaXsYT6RhQn4SdgVZ/bk=
+X-Received: from tj.c.googlers.com ([fda3:e722:ac3:cc00:20:ed76:c0a8:53a])
+ (user=tjmercier job=sendgmr) by 2002:a81:110:0:b0:317:a640:ad04 with SMTP id
+ 16-20020a810110000000b00317a640ad04mr49013482ywb.427.1657132182771; Wed, 06
+ Jul 2022 11:29:42 -0700 (PDT)
+Date:   Wed,  6 Jul 2022 18:29:24 +0000
+Message-Id: <20220706182924.2563058-1-tjmercier@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.37.0.rc0.161.g10f37bed90-goog
+Subject: [PATCH] drm/etnaviv: Remove duplicate call to drm_gem_free_mmap_offset
+From:   "T.J. Mercier" <tjmercier@google.com>
+To:     tjmercier@google.com, Lucas Stach <l.stach@pengutronix.de>,
+        Russell King <linux+etnaviv@armlinux.org.uk>,
+        Christian Gmeiner <christian.gmeiner@gmail.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>
+Cc:     etnaviv@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,59 +68,27 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Now that infrastructure for 10-bit decoding exists, enable it for
-Allwinner H6.
+The docs explicitly say the drm_gem_object_release function already calls this,
+and this does not appear to be a prerequisite for the call to
+etnaviv_gem_ops.release.
 
-Tested-by: Benjamin Gaignard <benjamin.gaignard@collabora.com>
-Signed-off-by: Jernej Skrabec <jernej.skrabec@gmail.com>
+Signed-off-by: T.J. Mercier <tjmercier@google.com>
 ---
- drivers/staging/media/hantro/sunxi_vpu_hw.c | 27 +++++++++++++++++++++
- 1 file changed, 27 insertions(+)
+ drivers/gpu/drm/etnaviv/etnaviv_gem.c | 1 -
+ 1 file changed, 1 deletion(-)
 
-diff --git a/drivers/staging/media/hantro/sunxi_vpu_hw.c b/drivers/staging/media/hantro/sunxi_vpu_hw.c
-index fbeac81e59e1..02ce8b064a8f 100644
---- a/drivers/staging/media/hantro/sunxi_vpu_hw.c
-+++ b/drivers/staging/media/hantro/sunxi_vpu_hw.c
-@@ -23,12 +23,39 @@ static const struct hantro_fmt sunxi_vpu_postproc_fmts[] = {
- 			.step_height = 32,
- 		},
- 	},
-+	{
-+		.fourcc = V4L2_PIX_FMT_P010,
-+		.codec_mode = HANTRO_MODE_NONE,
-+		.postprocessed = true,
-+		.frmsize = {
-+			.min_width = FMT_MIN_WIDTH,
-+			.max_width = FMT_UHD_WIDTH,
-+			.step_width = 32,
-+			.min_height = FMT_MIN_HEIGHT,
-+			.max_height = FMT_UHD_HEIGHT,
-+			.step_height = 32,
-+		},
-+	},
- };
+diff --git a/drivers/gpu/drm/etnaviv/etnaviv_gem.c b/drivers/gpu/drm/etnaviv/etnaviv_gem.c
+index cc386f8a7116..ecb828e4e156 100644
+--- a/drivers/gpu/drm/etnaviv/etnaviv_gem.c
++++ b/drivers/gpu/drm/etnaviv/etnaviv_gem.c
+@@ -504,7 +504,6 @@ void etnaviv_gem_free_object(struct drm_gem_object *obj)
+ 		kfree(mapping);
+ 	}
  
- static const struct hantro_fmt sunxi_vpu_dec_fmts[] = {
- 	{
- 		.fourcc = V4L2_PIX_FMT_NV12_4L4,
- 		.codec_mode = HANTRO_MODE_NONE,
-+		.match_depth = true,
-+		.frmsize = {
-+			.min_width = FMT_MIN_WIDTH,
-+			.max_width = FMT_UHD_WIDTH,
-+			.step_width = 32,
-+			.min_height = FMT_MIN_HEIGHT,
-+			.max_height = FMT_UHD_HEIGHT,
-+			.step_height = 32,
-+		},
-+	},
-+	{
-+		.fourcc = V4L2_PIX_FMT_P010_4L4,
-+		.codec_mode = HANTRO_MODE_NONE,
-+		.match_depth = true,
- 		.frmsize = {
- 			.min_width = FMT_MIN_WIDTH,
- 			.max_width = FMT_UHD_WIDTH,
+-	drm_gem_free_mmap_offset(obj);
+ 	etnaviv_obj->ops->release(etnaviv_obj);
+ 	drm_gem_object_release(obj);
+ 
 -- 
-2.37.0
+2.37.0.rc0.161.g10f37bed90-goog
 

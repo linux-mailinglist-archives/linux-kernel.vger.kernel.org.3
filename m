@@ -2,110 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7299D568865
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 14:33:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A5D0568845
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 14:27:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233670AbiGFMdW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Jul 2022 08:33:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37732 "EHLO
+        id S233029AbiGFM04 convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 6 Jul 2022 08:26:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59944 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231842AbiGFMdT (ORCPT
+        with ESMTP id S231799AbiGFM0z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Jul 2022 08:33:19 -0400
-X-Greylist: delayed 465 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 06 Jul 2022 05:33:17 PDT
-Received: from mailout-taastrup.gigahost.dk (mailout-taastrup.gigahost.dk [46.183.139.199])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7EBCA26ACC;
-        Wed,  6 Jul 2022 05:33:17 -0700 (PDT)
-Received: from mailout.gigahost.dk (mailout.gigahost.dk [89.186.169.112])
-        by mailout-taastrup.gigahost.dk (Postfix) with ESMTP id 3165A18864BD;
-        Wed,  6 Jul 2022 12:25:31 +0000 (UTC)
-Received: from smtp.gigahost.dk (smtp.gigahost.dk [89.186.169.109])
-        by mailout.gigahost.dk (Postfix) with ESMTP id 27ACE25032B8;
-        Wed,  6 Jul 2022 12:25:31 +0000 (UTC)
-Received: by smtp.gigahost.dk (Postfix, from userid 1000)
-        id 1F97F9120FED; Wed,  6 Jul 2022 12:25:31 +0000 (UTC)
-X-Screener-Id: 413d8c6ce5bf6eab4824d0abaab02863e8e3f662
-Received: from wse-c0127.vestervang (unknown [208.127.141.28])
-        by smtp.gigahost.dk (Postfix) with ESMTPSA id A337C9120FED;
-        Wed,  6 Jul 2022 12:25:29 +0000 (UTC)
-From:   Hans Schultz <netdev@kapio-technology.com>
-To:     davem@davemloft.net, kuba@kernel.org
-Cc:     netdev@vger.kernel.org, Hans Schultz <netdev@kapio-technology.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>, Jiri Pirko <jiri@resnulli.us>,
-        Ivan Vecera <ivecera@redhat.com>,
-        Roopa Prabhu <roopa@nvidia.com>,
-        Nikolay Aleksandrov <razor@blackwall.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Ido Schimmel <idosch@nvidia.com>, linux-kernel@vger.kernel.org,
-        bridge@lists.linux-foundation.org, linux-kselftest@vger.kernel.org
-Subject: [PATCH net-next 1/1] net: dsa: mv88e6xxx: allow reading FID when handling ATU violations
-Date:   Wed,  6 Jul 2022 14:25:02 +0200
-Message-Id: <20220706122502.1521819-1-netdev@kapio-technology.com>
-X-Mailer: git-send-email 2.30.2
+        Wed, 6 Jul 2022 08:26:55 -0400
+Received: from mail-yb1-f177.google.com (mail-yb1-f177.google.com [209.85.219.177])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3766223141;
+        Wed,  6 Jul 2022 05:26:54 -0700 (PDT)
+Received: by mail-yb1-f177.google.com with SMTP id e69so20452891ybh.2;
+        Wed, 06 Jul 2022 05:26:54 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=gpk0Gh0a+AtnRVgdtA4MUVRtIe6naoBICzq73QDej2Y=;
+        b=qfOtqNnIRC9LBsBjWVd+mVuSYQ+7+66az3Nk/6mzHxqA1tMch9LUtiT4gOhpg2MT5/
+         fMl2edI7qz3wc+XzS2Crf3VOBDT0wTGDwsWF1vZ8HtBnyO4BCG6WRsyumThe82PaMHxZ
+         WA5JI4VIlb69pDNozD2x7COZxyyf7GW9XLwmJwTITfGw4dyC2ih9ArJMv5GbXl8ftiOC
+         egNdsaw/c57BtUbdHA6GA2VvqKH5Mc8fjCtVT6xDWYc0wFtArrYQwGP+okIkOSes9oBd
+         UwM0FpxSuoSYdx46ryVNY1JbL44m8R2o7DdUaHvsHsRRr2Ljjl/AMFNvdGfI+HP8u1AU
+         bdyA==
+X-Gm-Message-State: AJIora+AE7HGTq2JsZBbyR9O/hvSAk3rCcZowXmc+N1G1PSN3hlg2Les
+        oi5BWkaLe12sSDMDP+KsARTaPRktOmVuGb5BWS82axQf
+X-Google-Smtp-Source: AGRyM1tKDYbnkqKUPoh71iZOMDwFVwrB8898cCK95PJhcy623Xcogk41U3bLgfT9DGSd625UZs38bVOravIr+SKYhag=
+X-Received: by 2002:a25:ab81:0:b0:66e:3dc5:898c with SMTP id
+ v1-20020a25ab81000000b0066e3dc5898cmr19162785ybi.81.1657110413378; Wed, 06
+ Jul 2022 05:26:53 -0700 (PDT)
 MIME-Version: 1.0
-Organization: Westermo Network Technologies AB
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,FROM_FMBLA_NEWDOM,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+References: <20220629151012.3115773-1-daniel.lezcano@linaro.org> <92c86903-354f-0114-a796-64571667a923@linaro.org>
+In-Reply-To: <92c86903-354f-0114-a796-64571667a923@linaro.org>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Wed, 6 Jul 2022 14:26:42 +0200
+Message-ID: <CAJZ5v0jPdo5=YWS_ZjLDojtXkpxqejzircN+fGG9y1pnCyH_qg@mail.gmail.com>
+Subject: Re: [PATCH 1/2] thermal/core: Use clamp() helper in the stepwise governor
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-For convenience the function mv88e6xxx_g1_atu_op() has been used to read
-ATU violations, but the function has other purposes and does not enable
-the possibility to read the FID when reading ATU violations.
+On Wed, Jul 6, 2022 at 2:07 PM Daniel Lezcano <daniel.lezcano@linaro.org> wrote:
+>
+> On 29/06/2022 17:10, Daniel Lezcano wrote:
+> > The code is actually clampling the next cooling device state using the
+> > lowest and highest states of the thermal instance.
+> >
+> > That code can be replaced by the clamp() macro which does exactly the
+> > same. It results in a simpler routine to read.
+> >
+> > Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
+> > ---
+>
+> I'll apply this series if nobody has comments
 
-The FID is needed to get hold of which VID was involved in the violation,
-thus the need for future purposes to be able to read the FID.
+Sounds good to me.
 
-Signed-off-by: Hans Schultz <netdev@kapio-technology.com>
----
- drivers/net/dsa/mv88e6xxx/global1_atu.c | 16 ++++++++++++++--
- 1 file changed, 14 insertions(+), 2 deletions(-)
+Please feel free to add ACKs from me to the patches.
 
-diff --git a/drivers/net/dsa/mv88e6xxx/global1_atu.c b/drivers/net/dsa/mv88e6xxx/global1_atu.c
-index 40bd67a5c8e9..5d120d53823c 100644
---- a/drivers/net/dsa/mv88e6xxx/global1_atu.c
-+++ b/drivers/net/dsa/mv88e6xxx/global1_atu.c
-@@ -114,6 +114,19 @@ static int mv88e6xxx_g1_atu_op_wait(struct mv88e6xxx_chip *chip)
- 	return mv88e6xxx_g1_wait_bit(chip, MV88E6XXX_G1_ATU_OP, bit, 0);
- }
- 
-+static int mv88e6xxx_g1_read_atu_violation(struct mv88e6xxx_chip *chip)
-+{
-+	int err;
-+
-+	err = mv88e6xxx_g1_write(chip, MV88E6XXX_G1_ATU_OP,
-+				 MV88E6XXX_G1_ATU_OP_BUSY |
-+				 MV88E6XXX_G1_ATU_OP_GET_CLR_VIOLATION);
-+	if (err)
-+		return err;
-+
-+	return mv88e6xxx_g1_atu_op_wait(chip);
-+}
-+
- static int mv88e6xxx_g1_atu_op(struct mv88e6xxx_chip *chip, u16 fid, u16 op)
- {
- 	u16 val;
-@@ -359,8 +372,7 @@ static irqreturn_t mv88e6xxx_g1_atu_prob_irq_thread_fn(int irq, void *dev_id)
- 
- 	mv88e6xxx_reg_lock(chip);
- 
--	err = mv88e6xxx_g1_atu_op(chip, 0,
--				  MV88E6XXX_G1_ATU_OP_GET_CLR_VIOLATION);
-+	err = mv88e6xxx_g1_read_atu_violation(chip);
- 	if (err)
- 		goto out;
- 
--- 
-2.30.2
-
+>
+> >   drivers/thermal/gov_step_wise.c | 15 ++++-----------
+> >   1 file changed, 4 insertions(+), 11 deletions(-)
+> >
+> > diff --git a/drivers/thermal/gov_step_wise.c b/drivers/thermal/gov_step_wise.c
+> > index 12acb12aac50..6efbfaf014da 100644
+> > --- a/drivers/thermal/gov_step_wise.c
+> > +++ b/drivers/thermal/gov_step_wise.c
+> > @@ -11,6 +11,7 @@
+> >    */
+> >
+> >   #include <linux/thermal.h>
+> > +#include <linux/minmax.h>
+> >   #include <trace/events/thermal.h>
+> >
+> >   #include "thermal_core.h"
+> > @@ -52,10 +53,7 @@ static unsigned long get_target_state(struct thermal_instance *instance,
+> >
+> >       if (!instance->initialized) {
+> >               if (throttle) {
+> > -                     next_target = (cur_state + 1) >= instance->upper ?
+> > -                                     instance->upper :
+> > -                                     ((cur_state + 1) < instance->lower ?
+> > -                                     instance->lower : (cur_state + 1));
+> > +                     next_target = clamp((cur_state + 1), instance->lower, instance->upper);
+> >               } else {
+> >                       next_target = THERMAL_NO_TARGET;
+> >               }
+> > @@ -66,10 +64,7 @@ static unsigned long get_target_state(struct thermal_instance *instance,
+> >       switch (trend) {
+> >       case THERMAL_TREND_RAISING:
+> >               if (throttle) {
+> > -                     next_target = cur_state < instance->upper ?
+> > -                                 (cur_state + 1) : instance->upper;
+> > -                     if (next_target < instance->lower)
+> > -                             next_target = instance->lower;
+> > +                     next_target = clamp((cur_state + 1), instance->lower, instance->upper);
+> >               }
+> >               break;
+> >       case THERMAL_TREND_RAISE_FULL:
+> > @@ -82,9 +77,7 @@ static unsigned long get_target_state(struct thermal_instance *instance,
+> >                               next_target = THERMAL_NO_TARGET;
+> >               } else {
+> >                       if (!throttle) {
+> > -                             next_target = cur_state - 1;
+> > -                             if (next_target > instance->upper)
+> > -                                     next_target = instance->upper;
+> > +                             next_target = clamp((cur_state - 1), instance->lower, instance->upper);
+> >                       }
+> >               }
+> >               break;
+>
+>
+> --
+> <http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+>
+> Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+> <http://twitter.com/#!/linaroorg> Twitter |
+> <http://www.linaro.org/linaro-blog/> Blog

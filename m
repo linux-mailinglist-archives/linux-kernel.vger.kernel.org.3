@@ -2,166 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B17BD568C7E
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 17:19:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 89E2E568C82
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 17:20:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233056AbiGFPSu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Jul 2022 11:18:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33490 "EHLO
+        id S232964AbiGFPUE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Jul 2022 11:20:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34222 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232907AbiGFPSr (ORCPT
+        with ESMTP id S232562AbiGFPUC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Jul 2022 11:18:47 -0400
-Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4947C15A22
-        for <linux-kernel@vger.kernel.org>; Wed,  6 Jul 2022 08:18:44 -0700 (PDT)
-Received: by mail-lf1-x12a.google.com with SMTP id f39so26506090lfv.3
-        for <linux-kernel@vger.kernel.org>; Wed, 06 Jul 2022 08:18:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=o34sXf13gS9dNYvfC/d9+rktJGbU/41tC7AjUNaoSfE=;
-        b=tlOoP70fhClmeDGn6OyYtjbxbmb1OaS8KTC422YM24182veuP3d/kvBY7X+d7EJ367
-         LaLee21l5oFOZHt/LERQLQuMZzVzBH4W1Uh3S+LeoStH84qKP704G6G6+hDP8o5A8rdN
-         RIO7uSW8KL2kgCuCd+wAUF+QisuRSOwhJAxD/MU8ilFjcj1leWnB5Y4fXz7MuuNd0yek
-         7aW5PBGTVYZxViG2+A/e8POYcjpJoTfFaN2KaJxBMp/VxNjgGE6tr/PdyGWBzorB8GGv
-         Dz6um5/CIwWVK5q1quxiJt0dasAVA/TqoJB0lGiZBlLbTulmwkVUCyz4LAVmm6L2SDAa
-         wYOQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=o34sXf13gS9dNYvfC/d9+rktJGbU/41tC7AjUNaoSfE=;
-        b=3VAyAHSxLNynVBJmgTDR5Q85DZi/JJIB499CpB9J1phQysvZjd3TkMdxXf5dnbaaNI
-         BFgxrqoH6rVoyArL5nGcrWiJptT0ACGgmt72EZk9Fr1GwAdtFTin1+k5u5Ek3mP2VFSM
-         axUHcgNIYslw0NYatDBXqwEmocJZ3pf4aP7t08teWQID9GYGYm53fHO/NajSaHKlnUZM
-         ce58hm7ntB4ldAcRvJKvjglBS2+PsP6zsMcuaH0slFsiKn5zQCqAr/xvOWoNH1iwtW/M
-         vERaIHPq0jygim/ErY42AFUFnSJgjH+ii9cER7wZ/tl6U+EsUjXAgx2z3NoEfbBTh0js
-         SpYA==
-X-Gm-Message-State: AJIora9lemToLGiR2H8iN9L0Eg7KnfDZ8mpc4Kq318tguFwU9+isuTvO
-        /8F8xEMxY+sSQ14Q9oAeRXcm6A==
-X-Google-Smtp-Source: AGRyM1vdzcWdQzM1UmXWIIm9OeMBRjPNPblppO/1Nm2JRbLD3Lswd6x84BFNiMqKX8XEm3f7WV8inw==
-X-Received: by 2002:a05:6512:3fa7:b0:47f:7387:926c with SMTP id x39-20020a0565123fa700b0047f7387926cmr25769600lfa.98.1657120722496;
-        Wed, 06 Jul 2022 08:18:42 -0700 (PDT)
-Received: from [192.168.1.52] ([84.20.121.239])
-        by smtp.gmail.com with ESMTPSA id t10-20020a056512208a00b00486944fe8d5sm313121lfr.238.2022.07.06.08.18.41
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 06 Jul 2022 08:18:41 -0700 (PDT)
-Message-ID: <0301ebc6-1222-e813-f237-f14ad8444940@linaro.org>
-Date:   Wed, 6 Jul 2022 17:18:40 +0200
+        Wed, 6 Jul 2022 11:20:02 -0400
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.22])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 256A4DFE9;
+        Wed,  6 Jul 2022 08:20:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1657120795;
+        bh=b+vt/0cGEYcZZG9BWVam5Ip3R961sQPxGZVgSe7MWj0=;
+        h=X-UI-Sender-Class:Date:Subject:To:Cc:References:From:In-Reply-To;
+        b=KxYkqTGKZCI/tspnJULL/opvxGa9gQzUjW4iKogMkmQFTuAYk9aeasjjGtKajq0RP
+         uD7j9uGS8Z6obGwGNg368LxEk10VmtiKJao307VjUv1O4/7dQTTwsv5bhet3IUHmrX
+         6qmQIkCdogO8TerPkFu8uj5dBZj0GNyPbdKr3Bdg=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from [192.168.20.60] ([92.116.134.81]) by mail.gmx.net (mrgmx105
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1MRmjq-1o35Um3wAk-00THSi; Wed, 06
+ Jul 2022 17:19:55 +0200
+Message-ID: <1c8235c2-62ca-c464-76f6-b06db573adea@gmx.de>
+Date:   Wed, 6 Jul 2022 17:19:54 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.11.0
-Subject: Re: [PATCH v1 08/16] arm64: dts: mt8195: Add power domains controller
+Subject: Re: [PATCH] video: of_display_timing.h: include errno.h
 Content-Language: en-US
-To:     Tinghan Shen <tinghan.shen@mediatek.com>,
-        Yong Wu <yong.wu@mediatek.com>, Joerg Roedel <joro@8bytes.org>,
-        Will Deacon <will@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Chun-Jie Chen <chun-jie.chen@mediatek.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Enric Balletbo i Serra <enric.balletbo@collabora.com>,
-        Weiyi Lu <weiyi.lu@mediatek.com>
-Cc:     iommu@lists.linux-foundation.org,
-        linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        Project_Global_Chrome_Upstream_Group@mediatek.com
-References: <20220704100028.19932-1-tinghan.shen@mediatek.com>
- <20220704100028.19932-9-tinghan.shen@mediatek.com>
- <3b65405d-167f-a0c7-d15e-5da6f08d99b3@linaro.org>
- <eec6aee5cd023fff6d986882db0330e1ab85a59d.camel@mediatek.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <eec6aee5cd023fff6d986882db0330e1ab85a59d.camel@mediatek.com>
+To:     Stephen Boyd <swboyd@chromium.org>,
+        Hsin-Yi Wang <hsinyi@chromium.org>,
+        Tomi Valkeinen <tomi.valkeinen@ti.com>
+Cc:     linux-fbdev@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>
+References: <20220630173328.1369576-1-hsinyi@chromium.org>
+ <CAE-0n50Pe2=tYeuuhBVHsTV9BqU1huU-w-xMMn-1scj2OxBWbg@mail.gmail.com>
+From:   Helge Deller <deller@gmx.de>
+In-Reply-To: <CAE-0n50Pe2=tYeuuhBVHsTV9BqU1huU-w-xMMn-1scj2OxBWbg@mail.gmail.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:n2uCNbVzwhkQ9zgDVeIADvB/xMYqvgs2r8gEs29DdUD0FcmdWPV
+ fCn/APP0oFD8Ae1+JgXMBf0yEq5uP8cVusEGjVO5FImhwvHrvZVPsuDZwZ6Uoy2rgANeTIH
+ Fgk1DNLv2kpj/QqZJ54hM2mCw6wtNIWzPItpeJhMe96C6wn04G9j8/+YGXvmY/qvZO+MsaW
+ AKkfgA12Abd2P9HJmrh3g==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:wEaaUDar/Eo=:IzN8sQ8xQY6lLOBf6dPtaL
+ VJYnYKld5t6sQ97t4ftKIW3Y/eHAS9QgVnBa0uRN3710YXkemrbytArkZBug0OHrk368kLreY
+ 4bwoFCBuPglE0NCL91cIdGEvVDa8JIMv9AeEr3GVicRelAdYzxd06Kc7Hwa4qTZ4uJEzP9TCQ
+ yk9ti2/BtU7RWZ1hxbp+nvSY34dLmfSHH5uyOGlgM+G54JMzU1qrfWUQkToHUREkuo52PYbsV
+ jV8wHewZP1LMcg5ClP5iKdqT2wW/s9D2uH9xAtATh7CB7eo0WhRNtvXlD/hxiTY+cFa9e7T9v
+ eet4dKpASuEkLO6UdCFgtY7JRPVGUio5NJj8PHIkfUvH7RdCYBHo6rs1m0UvoLLUUQ6EcyuGF
+ TsiToVzVQunZKLLY9O8yJFPqjBpbYwq3vRrfuIfbXRl0qtMc3QLfiC7K1KMLBYpDdgqhoryvT
+ +lBuU2CrgTvsgQeac6B2ay4qOm4ueU1g2sGYzIPSIzdbaCJ1YL8N4xEATCFF21Eg6M+VS1Oui
+ Q7Poqk5tRS3SplFAcWa4PQluPt8F7rESAi0+SYl2Xm9Z6i2jTYmCbPuVfvd7nLkEEmz2aM9L9
+ G5F+EPDb+IzVPy84/DwsnvJxsjPJ+7ktc7BaoSiT/4qvLY43uPmTfJwbRjOL+J61fhkDbw9KA
+ xyg5dYcfdU3ugvqc5hw+wuqnM5G+hBiMV8c05NY7J1BvPIlziiK8VRbBaMqA4yuJghUbJJ9zf
+ VoMWfuA0pNqW17CwFKLqrbWGVfgJF17Za4DjhuuyltT4pyQxLuuEczKpkUcpwho491DT542bA
+ Bm1CBBj6/ZVkBAkqCbOSwr3zSRvrlkN0lUeRGDYCAm0TVK0G1NiwHJ0tkAVMJKR4faTyXVt4P
+ lmw9PTwL9RcYLc7nCp1y8XAZE7JXrn/3v+2yo1L6oFF9Nr7QenF22xWdK7wm+b9Z/FF5RgIGH
+ 9Pu07Xm+0Yri9fHkiL2RmvKjZCIUe0BLUQwQBKvxJBbbJcO5cSXqHacDBe5zLmL2579L/+3A3
+ 4nvn2Ktq+yA1f4Eqi86RTql41FWMYTteu44ANcnwuIc+h/2wBWIvnitdsApkTYRD1lSS+ZkDi
+ oF8lV53sGUMBBUxoDA1p31ajj2svwdbEThUHCwSsORB23/OJ0OlqTs8DQ==
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 06/07/2022 14:00, Tinghan Shen wrote:
-> Hi Krzysztof,
-> 
-> After discussing your message with our power team, 
-> we realized that we need your help to ensure we fully understand you.
-> 
-> On Mon, 2022-07-04 at 14:38 +0200, Krzysztof Kozlowski wrote:
->> On 04/07/2022 12:00, Tinghan Shen wrote:
->>> Add power domains controller node for mt8195.
->>>
->>> Signed-off-by: Weiyi Lu <weiyi.lu@mediatek.com>
->>> Signed-off-by: Tinghan Shen <tinghan.shen@mediatek.com>
->>> ---
->>>  arch/arm64/boot/dts/mediatek/mt8195.dtsi | 327 +++++++++++++++++++++++
->>>  1 file changed, 327 insertions(+)
->>>
->>> diff --git a/arch/arm64/boot/dts/mediatek/mt8195.dtsi b/arch/arm64/boot/dts/mediatek/mt8195.dtsi
->>> index 8d59a7da3271..d52e140d9271 100644
->>> --- a/arch/arm64/boot/dts/mediatek/mt8195.dtsi
->>> +++ b/arch/arm64/boot/dts/mediatek/mt8195.dtsi
->>> @@ -10,6 +10,7 @@
->>>  #include <dt-bindings/interrupt-controller/irq.h>
->>>  #include <dt-bindings/phy/phy.h>
->>>  #include <dt-bindings/pinctrl/mt8195-pinfunc.h>
->>> +#include <dt-bindings/power/mt8195-power.h>
->>>  
->>>  / {
->>>  	compatible = "mediatek,mt8195";
->>> @@ -338,6 +339,332 @@
->>>  			#interrupt-cells = <2>;
->>>  		};
->>>  
->>> +		scpsys: syscon@10006000 {
->>> +			compatible = "syscon", "simple-mfd";
+On 7/1/22 01:27, Stephen Boyd wrote:
+> Quoting Hsin-Yi Wang (2022-06-30 10:33:29)
+>> If CONFIG_OF is not enabled, default of_get_display_timing() returns an
+>> errno, so include the header.
 >>
->> These compatibles cannot be alone.
-> 
-> the scpsys sub node has the compatible of the power domain driver.
-> do you suggest that the compatible in the sub node should move to here?
+>> Fixes: 422b67e0b31a ("videomode: provide dummy inline functions for !CO=
+NFIG_OF")
+>> Suggested-by: Stephen Boyd <swboyd@chromium.org>
+>> Signed-off-by: Hsin-Yi Wang <hsinyi@chromium.org>
+>> ---
+>
+> Reviewed-by: Stephen Boyd <swboyd@chromium.org>
 
-Not necessarily, depends. You have here device node representing system
-registers. They need they own compatibles, just like everywhere in the
-kernel (except the broken cases...).
+Applied to fbdev git tree.
 
-Whether this should be compatible of power-domain driver, it depends
-what this device node is. I don't know, I don't have your datasheets or
-your architecture diagrams...
+Thanks!
+Helge
 
-> 
->>> +			reg = <0 0x10006000 0 0x1000>;
->>> +			#power-domain-cells = <1>;
->>
->> If it is simple MFD, then probably it is not a power domain provider.
->> Decide.
-> 
-> this MFD device is the power controller on mt8195. 
-
-Then it is not a simple MFD but a power controller. Do not use
-"simple-mfd" compatible.
-
-> Some features need 
-> to do some operations on registers in this node. We think that implement 
-> the operation of these registers as the MFD device can provide flexibility 
-> for future use. We want to clarify if you're saying that an MFD device 
-> cannot be a power domain provider.
-
-MFD device is Linuxism, so it has nothing to do here. I am talking only
-about simple-mfd. simple-mfd is a simple device only instantiating
-children and not providing anything to anyone. Neither to children. This
- the most important part. The children do not depend on anything from
-simple-mfd device. For example simple-mfd device can be shut down
-(gated) and children should still operate. Being a power domain
-controller, contradicts this usually.
-
-Best regards,
-Krzysztof

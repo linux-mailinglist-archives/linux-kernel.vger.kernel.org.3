@@ -2,98 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ADFBD568C47
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 17:08:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9054D568C4A
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 17:08:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233691AbiGFPHl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Jul 2022 11:07:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51924 "EHLO
+        id S233602AbiGFPHh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Jul 2022 11:07:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51780 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232445AbiGFPHi (ORCPT
+        with ESMTP id S233748AbiGFPHa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Jul 2022 11:07:38 -0400
-Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4EC0925592
-        for <linux-kernel@vger.kernel.org>; Wed,  6 Jul 2022 08:07:33 -0700 (PDT)
-Received: by mail-ed1-x530.google.com with SMTP id x10so12315686edd.13
-        for <linux-kernel@vger.kernel.org>; Wed, 06 Jul 2022 08:07:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=BpcbsEw/20xy+czFl3NKN5RfG+F04MUU4xLklx2RkdY=;
-        b=CAvY5156Pd1hW8HjRa+SbS77+QIlmJ/aqV11spi0db19nP+RAi7RtWtooJIj/uX/Se
-         DWYeNgfzHB4FOLkYeGjRph2dszxVR0ABUofJffAAn8/GAiWJHyK92fFUO43t7x94K91p
-         nWQWMLPSfdtUIChpFdPAwHA2zKPMZNZTUJSrb4gMRml3VrzDKrXvDMX+PLyf1iDFHyoS
-         tg4CFvrLcfN8uUBhOVz/b155e6dw/Djpke/zpHOnNTsxsMtIE8gq0qteoZq/vUvQTBfB
-         McKpzl8tmPOCe+bqTfeW8I54EYkS5SwtdTz2CCm3GBzn29v/WUYWOTlCmp5wirnhJz20
-         cvmw==
+        Wed, 6 Jul 2022 11:07:30 -0400
+Received: from mail-io1-f45.google.com (mail-io1-f45.google.com [209.85.166.45])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6748418390;
+        Wed,  6 Jul 2022 08:07:29 -0700 (PDT)
+Received: by mail-io1-f45.google.com with SMTP id z191so14254075iof.6;
+        Wed, 06 Jul 2022 08:07:29 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=BpcbsEw/20xy+czFl3NKN5RfG+F04MUU4xLklx2RkdY=;
-        b=ybs9TMZBIo59Wq98XtR52r6MdEwqd6n0QhmgdeKDEIwnzrmVFoUVhZlCh7AFx8b1KQ
-         IFAAA4dgmMyZSboKQCqbB2sLDqkSO2fSNPq8Jdzi5ThLe3ptaKi4CoiFrLvDIe06zUFx
-         fSdR6DxHhNibNE2PJPWp98/RnhVZUjiwYM2CZtJCbc4V6flsaCJKVD/nNY2kTm73lfRy
-         Dg9Yab4qclRYUGe6SlaUNEpaa+67+nTKHqpElK8dcTST82gG2qR9ztICx6bKkt9Tz8F8
-         A2wCvMrGVodLmpls6VkDe4fYRzc8V4ci8YlnPkhDF3ehbWjoIdz4xLv+JpJFx80VCUw4
-         xBQA==
-X-Gm-Message-State: AJIora8EvCAcycctsMyiZ6tUVFzFDb5p6bZws5EpJsPzRk3EXBtJcssB
-        OHoQovZtgZqM0Sy4gsLKDE4OvG/P3FLeTgNwWXvPQg==
-X-Google-Smtp-Source: AGRyM1toIUwU2hQGy73CKB+mVxb4qKDrzlrhNmnsT46t+aRA8c854vbii67QfBYKQMCf50W7y/jQJ8Jrdqy0Wyvjcuc=
-X-Received: by 2002:a05:6402:150:b0:437:b93c:3a9 with SMTP id
- s16-20020a056402015000b00437b93c03a9mr52926716edu.82.1657120051888; Wed, 06
- Jul 2022 08:07:31 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=I+N5AebuQqH0jlQLRd239QoK9Ox33sEr2sOU9qmAdeI=;
+        b=XCnztQaDgc/sNAitwWmgRKjOmHoJ17a8DU7mosO8cYyuO5/yKDdIOzY80Tc45zxiZB
+         3eCFiP1CW8oeTSgYuJDxM3CqINWb9wA4kQUNPOu8jupxUpQjrW6O1AydeUfTmLcCvmUJ
+         BsTGIsqLt0raL05IUFiXNWLrVqBk3QlRd960EX4Ba2NCwSqQwYobILeaB5gJO2gflbqf
+         BkhsyymuRPI6ff8ol3wQpx8y8tM4BcG0seEtbQZd6AGJJppao0xxS5EYW8DGSyS+iJ8x
+         nW3QeSEF37MtTjWGU10jzUn8vWM7ckI7twku820jtbHEGvHFxNFmOjl2vPZKqAyp7mXV
+         vwXQ==
+X-Gm-Message-State: AJIora/Lbs5ZQ7qZ2YOHXdu+5B+l/NDhRpsj8YzdgmsKuXkmRQWcnGP/
+        VLIfqyznZrLDLNzpxJgffFL5mzPrWg==
+X-Google-Smtp-Source: AGRyM1u/v+SlHrKVZCbVrdRrUDL35cvfBUpgBdQqM1X6lZXvh4bPTZSzxIS4OlVZ6WnVzumcugqeVw==
+X-Received: by 2002:a02:aa1a:0:b0:331:9183:9136 with SMTP id r26-20020a02aa1a000000b0033191839136mr24435755jam.242.1657120048487;
+        Wed, 06 Jul 2022 08:07:28 -0700 (PDT)
+Received: from robh.at.kernel.org ([64.188.179.248])
+        by smtp.gmail.com with ESMTPSA id k1-20020a926f01000000b002dbee570531sm5683827ilc.18.2022.07.06.08.07.27
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 06 Jul 2022 08:07:28 -0700 (PDT)
+Received: (nullmailer pid 48246 invoked by uid 1000);
+        Wed, 06 Jul 2022 15:07:26 -0000
+Date:   Wed, 6 Jul 2022 09:07:26 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Pali =?iso-8859-1?Q?Roh=E1r?= <pali@kernel.org>
+Cc:     Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        linux-watchdog@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 1/2] dt-bindings: watchdog: max63xx: Add GPIO binding
+Message-ID: <20220706150726.GA40600-robh@kernel.org>
+References: <20220705001023.14660-1-pali@kernel.org>
 MIME-Version: 1.0
-References: <20220705171835.4923-1-brgl@bgdev.pl> <CAHp75Ve3sPhFOZhL=_2p+1avuo96CP995KD+bi+Pn3gyj1F9TA@mail.gmail.com>
- <CAMRc=MekRvEVjRKJn6CWpbk9GJWS0Y+kB9MYpGFSN9WSSzWC7A@mail.gmail.com> <CAHp75VdepbidJWgLZFk3ns13boZXRYvMqvLvXF_xYw=2ahZMgw@mail.gmail.com>
-In-Reply-To: <CAHp75VdepbidJWgLZFk3ns13boZXRYvMqvLvXF_xYw=2ahZMgw@mail.gmail.com>
-From:   Bartosz Golaszewski <brgl@bgdev.pl>
-Date:   Wed, 6 Jul 2022 17:07:21 +0200
-Message-ID: <CAMRc=MfQgVD3VkY+Pq7UxV8WB-2GSpsSgU9N8djdkK99ycg4Uw@mail.gmail.com>
-Subject: Re: [PATCH] gpio: pxa: schedule a devm action for the clock struct
-To:     Andy Shevchenko <andy.shevchenko@gmail.com>
-Cc:     Stephen Boyd <swboyd@chromium.org>,
-        Robert Jarzmik <robert.jarzmik@free.fr>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Hulk Robot <hulkci@huawei.com>, Yuan Can <yuancan@huawei.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220705001023.14660-1-pali@kernel.org>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jul 6, 2022 at 2:32 PM Andy Shevchenko
-<andy.shevchenko@gmail.com> wrote:
->
-> On Wed, Jul 6, 2022 at 2:11 PM Bartosz Golaszewski <brgl@bgdev.pl> wrote:
-> > On Wed, Jul 6, 2022 at 1:49 PM Andy Shevchenko
-> > <andy.shevchenko@gmail.com> wrote:
-> > > On Tue, Jul 5, 2022 at 7:29 PM Bartosz Golaszewski <brgl@bgdev.pl> wrote:
->
-> ...
->
-> > > > Reported-by: Signed-off-by: Yuan Can <yuancan@huawei.com>
-> > >
-> > > Me puzzled.
-> >
-> > Yuan Can sent the following patch:
-> > https://patchwork.ozlabs.org/project/linux-gpio/patch/20220704130323.104294-1-yuancan@huawei.com/
-> >
-> > I responded that it was not complete and sent this instead.
->
-> I understand that, I am puzzled with Reported-by: followed by SoB.
-> What is this format? Is it something new and documented?
->
+On Tue, Jul 05, 2022 at 02:10:22AM +0200, Pali Rohár wrote:
+> GPIO is optional and used for WDI logic.
+> 
+> Signed-off-by: Pali Rohár <pali@kernel.org>
+> ---
+> Changes in v3:
+> * Extend description
+> ---
+>  Documentation/devicetree/bindings/watchdog/maxim,max63xx.yaml | 4 ++++
+>  1 file changed, 4 insertions(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/watchdog/maxim,max63xx.yaml b/Documentation/devicetree/bindings/watchdog/maxim,max63xx.yaml
+> index ab9641e845db..a0cf9e6c371d 100644
+> --- a/Documentation/devicetree/bindings/watchdog/maxim,max63xx.yaml
+> +++ b/Documentation/devicetree/bindings/watchdog/maxim,max63xx.yaml
+> @@ -27,6 +27,10 @@ properties:
+>      description: This is a 1-byte memory-mapped address
+>      maxItems: 1
+>  
+> +  gpios:
 
-Ah! No, it's just my brain on not enough coffee I suppose. Thanks, I'll fix it.
+As I said before, add a name prefix: wdi-gpios
 
-Bart
+> +    description: Optional GPIO used for controlling WDI (watchdog input) when WDI bit is not mapped to memory
+
+Wrap lines at 80 unless wrapping at 100 provides some benefit.
+
+yamllint is set to 110 because I don't want to fix everyone's line wrap, 
+not because that's the standard.
+
+
+> +    maxItems: 1
+> +
+>  required:
+>    - compatible
+>    - reg
+> -- 
+> 2.20.1
+> 
+> 

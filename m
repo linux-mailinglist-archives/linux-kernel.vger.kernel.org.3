@@ -2,93 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E03E9569164
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 20:10:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 81729569167
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 20:11:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231573AbiGFSJ6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Jul 2022 14:09:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53096 "EHLO
+        id S233254AbiGFSLE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Jul 2022 14:11:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53864 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230073AbiGFSJz (ORCPT
+        with ESMTP id S230291AbiGFSLB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Jul 2022 14:09:55 -0400
-Received: from mail-lj1-x236.google.com (mail-lj1-x236.google.com [IPv6:2a00:1450:4864:20::236])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39B2428E16;
-        Wed,  6 Jul 2022 11:09:54 -0700 (PDT)
-Received: by mail-lj1-x236.google.com with SMTP id w2so3095608ljj.7;
-        Wed, 06 Jul 2022 11:09:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:date:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=0A598iVSKLysRfv2sRXRDO6tMHET5VOceIuNiuD58/Y=;
-        b=RCq4RtcmZ8gfFAM/viGpnHBX7b6YJzB9+TxM8v7brC+iSNmhLCX/k75uH2OP1T7/a8
-         bS8oBg/Viter1LXQ7eHV8v2nY5lEBb4Rv3iw0GJ1bZSN0TQm1ffZiqD4NXwPV4veIWVe
-         XB1ZUQDinD2dOVWeGYnETXE+m19508Y6Ozq/PcicZqcTgtPcNoKDObAq4iyCDwVYYrq8
-         RIkiNu3SHadjcqE0XTgclmFT9xK2C1KbizaIxzPjJEENCITLg1FV+XIOB6MZfdvVcnWl
-         4SmvktWXdPoqTf+km4bX9tnC7oUfSZzFD/c6028NywVvCMaAdd7bZ50ArulnCB4I/0vw
-         Oqrg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:date:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=0A598iVSKLysRfv2sRXRDO6tMHET5VOceIuNiuD58/Y=;
-        b=KMWHR6n94SUKnvXfF1Uhq5dfKTnVRc25846iBaq+Kk3XHUmezBXgKmXu/R8ns4pbd/
-         xG/omqZBLOX7jmRJHHLu5JXRijT+Q0x7oaj+4TyX2MFDyimisRAdqkiJxPwib6zXxtGe
-         LJMHp1kFFxq9uy+AUOfTqd8fBbTe+LrGwkArNgH4KrPskylfOkulzCA8L40bdEpLvQpm
-         IjrAAos5HixRp3Z1UeQF5XrGC89cPmKAyvYSZIjKXUf9zeGqT0EbUmBiYSCsMXXD/rV3
-         87+DhWLWbZqnxR0sAimfYZpU3xWRY43X5RczgsfeLn5poinnniKcF2b60b42bO5mZo0y
-         3OhA==
-X-Gm-Message-State: AJIora+46Wsmq+LxfmTQbpWVmPwr09PkV2YdLBXiM6dwwoSurzXv7ve/
-        MlQGdRwR6/gH4qTm09LRye9luzcpKAi9LwmPh3A=
-X-Google-Smtp-Source: AGRyM1tVGz9tZcQBzGZVPndJH1FRtpjeuQp7KHQvu/ovYzoH3JzfCWBp9GXAxjZSPbrMCtpzNemUuA==
-X-Received: by 2002:a2e:b209:0:b0:25a:705d:c4ba with SMTP id l9-20020a2eb209000000b0025a705dc4bamr22643914ljm.468.1657130992430;
-        Wed, 06 Jul 2022 11:09:52 -0700 (PDT)
-Received: from pc638.lan ([155.137.26.201])
-        by smtp.gmail.com with ESMTPSA id n24-20020a05651203f800b0047863e5649esm6413063lfq.86.2022.07.06.11.09.51
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 06 Jul 2022 11:09:51 -0700 (PDT)
-From:   Uladzislau Rezki <urezki@gmail.com>
-X-Google-Original-From: Uladzislau Rezki <urezki@pc638.lan>
-Date:   Wed, 6 Jul 2022 20:09:49 +0200
-To:     "Paul E. McKenney" <paulmck@kernel.org>
-Cc:     Uladzislau Rezki <urezki@gmail.com>,
-        Christian =?utf-8?B?S8O2bmln?= <christian.koenig@amd.com>,
-        "Alex Xu (Hello71)" <alex_y_xu@yahoo.ca>,
-        wireguard@lists.zx2c4.com, "Jason A. Donenfeld" <Jason@zx2c4.com>,
-        Joel Fernandes <joel@joelfernandes.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Xinhui.Pan@amd.com, linux-kernel@vger.kernel.org,
-        amd-gfx@lists.freedesktop.org,
-        Suren Baghdasaryan <surenb@google.com>, rcu@vger.kernel.org,
-        Hridya Valsaraju <hridya@google.com>,
-        Arve =?utf-8?B?SGrDuG5uZXbDpWc=?= <arve@android.com>,
-        Theodore Ts'o <tytso@mit.edu>, alexander.deucher@amd.com,
-        Todd Kjos <tkjos@android.com>, uladzislau.rezki@sony.com,
-        Martijn Coenen <maco@android.com>,
-        Christian Brauner <christian@brauner.io>
-Subject: Re: CONFIG_ANDROID (was: rcu_sched detected expedited stalls in
- amdgpu after suspend)
-Message-ID: <YsXP7ZwHh/GvWM82@pc638.lan>
-References: <20220627204139.GL1790663@paulmck-ThinkPad-P17-Gen-1>
- <1656379893.q9yb069erk.none@localhost>
- <20220628041252.GV1790663@paulmck-ThinkPad-P17-Gen-1>
- <1656421946.ic03168yc3.none@localhost>
- <20220628185437.GA1790663@paulmck-ThinkPad-P17-Gen-1>
- <1656443915.mdjoauhqe0.none@localhost>
- <YrtgeSmwLmpzN/zw@pc638>
- <79c6ad70-47d9-47fe-4bb4-33fcf356dd37@amd.com>
- <YsXK5A0MiVgHd8Je@pc638.lan>
- <20220706175836.GI1790663@paulmck-ThinkPad-P17-Gen-1>
+        Wed, 6 Jul 2022 14:11:01 -0400
+Received: from fllv0016.ext.ti.com (fllv0016.ext.ti.com [198.47.19.142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FEBC28E28;
+        Wed,  6 Jul 2022 11:11:01 -0700 (PDT)
+Received: from fllv0035.itg.ti.com ([10.64.41.0])
+        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 266IAvWS009357;
+        Wed, 6 Jul 2022 13:10:57 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1657131057;
+        bh=mYqyAiq5ehGUf6IoQZIVZVf2MHlbWHt5NT9zBcqkp2I=;
+        h=Date:Subject:To:CC:References:From:In-Reply-To;
+        b=Gw+BcOdE2y1dmryHTvOCOc+tmfeUQ0WCXVhc/B3rbmX8MYkgRjw7tBSwQ0XTmEHTn
+         0UtiOubc4g7FyXSqnHA0J9FDa5g73XMLt3zXdL3AOdD7KsXHIoDUQAoeP+FwW1CQ6j
+         VHHluaoQdwsyNRSzaJGUZlCPlajzuor0rhwgKipE=
+Received: from DLEE114.ent.ti.com (dlee114.ent.ti.com [157.170.170.25])
+        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 266IAvhF017632
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Wed, 6 Jul 2022 13:10:57 -0500
+Received: from DLEE115.ent.ti.com (157.170.170.26) by DLEE114.ent.ti.com
+ (157.170.170.25) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Wed, 6
+ Jul 2022 13:10:56 -0500
+Received: from fllv0040.itg.ti.com (10.64.41.20) by DLEE115.ent.ti.com
+ (157.170.170.26) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
+ Frontend Transport; Wed, 6 Jul 2022 13:10:56 -0500
+Received: from [10.250.33.129] (ileax41-snat.itg.ti.com [10.172.224.153])
+        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 266IAugH090962;
+        Wed, 6 Jul 2022 13:10:56 -0500
+Message-ID: <16319b56-4b14-6f51-23c6-6b78b87119d7@ti.com>
+Date:   Wed, 6 Jul 2022 13:10:56 -0500
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220706175836.GI1790663@paulmck-ThinkPad-P17-Gen-1>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH 6/6] arm64: dts: ti: k3-j7200-mcu-wakeup: Add SA2UL node
+Content-Language: en-US
+To:     Nishanth Menon <nm@ti.com>
+CC:     Vignesh Raghavendra <vigneshr@ti.com>,
+        Tero Kristo <kristo@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+References: <20220705170340.26719-1-afd@ti.com>
+ <20220705170340.26719-6-afd@ti.com> <20220706180446.cyzujuasovjvsofk@lively>
+From:   Andrew Davis <afd@ti.com>
+In-Reply-To: <20220706180446.cyzujuasovjvsofk@lively>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -96,43 +70,64 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jul 06, 2022 at 10:58:36AM -0700, Paul E. McKenney wrote:
-> On Wed, Jul 06, 2022 at 07:48:20PM +0200, Uladzislau Rezki wrote:
-> > Hello.
-> > 
-> > On Mon, Jul 04, 2022 at 01:30:50PM +0200, Christian König wrote:
-> > > Hi guys,
-> > > 
-> > > Am 28.06.22 um 22:11 schrieb Uladzislau Rezki:
-> > > > > Excerpts from Paul E. McKenney's message of June 28, 2022 2:54 pm:
-> > > > > > All you need to do to get the previous behavior is to add something like
-> > > > > > this to your defconfig file:
-> > > > > > 
-> > > > > > CONFIG_RCU_EXP_CPU_STALL_TIMEOUT=21000
-> > > > > > 
-> > > > > > Any reason why this will not work for you?
-> > > 
-> > > sorry for jumping in so later, I was on vacation for a week.
-> > > 
-> > > Well when any RCU period is longer than 20ms and amdgpu in the backtrace my
-> > > educated guess is that we messed up some timeout waiting for the hw.
-> > > 
-> > > We usually do wait a few us, but it can be that somebody is waiting for ms
-> > > instead.
-> > > 
-> > > So there are some todos here as far as I can see and It would be helpful to
-> > > get a cleaner backtrace if possible.
-> > > 
-> > Actually CONFIG_ANDROID looks like is going to be removed, so the CONFIG_RCU_EXP_CPU_STALL_TIMEOUT
-> > will not have any dependencies on the CONFIG_ANDROID anymore:
-> > 
-> > https://lkml.org/lkml/2022/6/29/756
+On 7/6/22 1:04 PM, Nishanth Menon wrote:
+> On 12:03-20220705, Andrew Davis wrote:
+>> J7200 has an instance of SA2UL in the MCU domain.
+>> Add DT node for the same.
+>>
+>> Signed-off-by: Andrew Davis <afd@ti.com>
+>> ---
+>>   .../boot/dts/ti/k3-j7200-mcu-wakeup.dtsi      | 20 +++++++++++++++++++
+>>   1 file changed, 20 insertions(+)
 > 
-> But you can set the RCU_EXP_CPU_STALL_TIMEOUT Kconfig option, if you
-> wish.  Setting this option to 20 will get you the behavior previously
-> obtained by setting the now-defunct ANDROID Kconfig option.
+> Please split this series into what crypto maintainers need to pick up vs
+> what I need to pick up for dts. patches for my tree need to have lakml
+> in cc as a rule (see MAINTAINERS file).
 > 
-Right. Or over boot parameter. So for us it is not a big issue :)
 
---
-Uladzislau Rezki
+Okay, I'll break the first two into their own series. Adding LAKML folks
+for v2.
+
+>>
+>> diff --git a/arch/arm64/boot/dts/ti/k3-j7200-mcu-wakeup.dtsi b/arch/arm64/boot/dts/ti/k3-j7200-mcu-wakeup.dtsi
+>> index 1044ec6c4b0d4..ebad3642c8e30 100644
+>> --- a/arch/arm64/boot/dts/ti/k3-j7200-mcu-wakeup.dtsi
+>> +++ b/arch/arm64/boot/dts/ti/k3-j7200-mcu-wakeup.dtsi
+>> @@ -375,4 +375,24 @@ mcu_r5fss0_core1: r5f@41400000 {
+>>   			ti,loczrama = <1>;
+>>   		};
+>>   	};
+>> +
+>> +	mcu_crypto: crypto@40900000 {
+>> +		compatible = "ti,j721e-sa2ul";
+>> +		reg = <0x00 0x40900000 0x00 0x1200>;
+>> +		power-domains = <&k3_pds 265 TI_SCI_PD_SHARED>;
+>> +		#address-cells = <2>;
+>> +		#size-cells = <2>;
+>> +		ranges = <0x00 0x40900000 0x00 0x40900000 0x00 0x30000>;
+>> +		dmas = <&mcu_udmap 0xf501>, <&mcu_udmap 0x7502>,
+>> +		       <&mcu_udmap 0x7503>;
+>> +		dma-names = "tx", "rx1", "rx2";
+>> +		dma-coherent;
+>> +
+>> +		rng: rng@40910000 {
+>> +			compatible = "inside-secure,safexcel-eip76";
+>> +			reg = <0x00 0x40910000 0x00 0x7d>;
+>> +			interrupts = <GIC_SPI 945 IRQ_TYPE_LEVEL_HIGH>;
+> 
+> Please document why disabled.
+> 
+
+Sure thing, will add background info to the commit message.
+
+Thanks,
+Andrew
+
+>> +			status = "disabled";
+>> +		};
+>> +	};
+>>   };
+>> -- 
+>> 2.36.1
+>>
+> 

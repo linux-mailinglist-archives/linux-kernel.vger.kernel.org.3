@@ -2,36 +2,36 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 936245683FA
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 11:47:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2AE7D5683C8
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 11:46:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231467AbiGFJjP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Jul 2022 05:39:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47550 "EHLO
+        id S233306AbiGFJjR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Jul 2022 05:39:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47988 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232632AbiGFJi2 (ORCPT
+        with ESMTP id S232678AbiGFJi2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 6 Jul 2022 05:38:28 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75F4E237E2;
-        Wed,  6 Jul 2022 02:38:20 -0700 (PDT)
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24EB2237CE;
+        Wed,  6 Jul 2022 02:38:21 -0700 (PDT)
 Received: from benjamin-XPS-13-9310.. (unknown [IPv6:2a01:e0a:120:3210:3a70:988d:42ce:f5cc])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
         (Authenticated sender: benjamin.gaignard)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id CDFA466019AD;
-        Wed,  6 Jul 2022 10:38:18 +0100 (BST)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 7896F66019D2;
+        Wed,  6 Jul 2022 10:38:19 +0100 (BST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1657100299;
-        bh=Pc01xd3UxsBg7Fqnq6gTTbtdqkYbng68gmR8BJ3yino=;
+        s=mail; t=1657100300;
+        bh=63DK0QU2jOvymNfj3HqpMerTR1+oNui+5easuOdNoyM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=mZXF72kh1e/lgHSbZffgxW4ZlsJxkUlzI0YLU9cisyA/2AWTL/aDATEdkUZTJ3a0p
-         KwezvL+MJJgFFRuhlV6qBJGGiXk5KhD73E3f+6wRm1kATn0nuEV/Bz46ITe9/u6jow
-         WzQStR7XAh6vRdw8t7W0uBY5/oF+IuCI3qsDAS34wbZ/Tyg/24DPB3E+QtaAaB0Spo
-         NNx0+35hIpC46QWOhgEZ93/8WYfC6i3w+e5vKI6TB3DzPu30gUEMXWMhE1sHd5M52T
-         a0ppolZkDydDBDNAbqn4iL9IiEZcJHFSkDSY+bUYwTPybyWmEbtyzvR0YZ9KT6x3EE
-         8/4xg/TmpMdIQ==
+        b=GKU1gKM2NUa1vMlUP67CfgQVQ71YeTLpCq2cg/hSpnLfz5DN4zFIQUcaXMmYdCwy2
+         v2IP4QTrc97Z0xvsYpflk0hA0AJ9EI0+xZPdKeJa6JmDUrnf8Bc6hxwpubPlQM8r0l
+         IgaEi/vX4eMKYBm9NIrXH5ZFgwSAEvwZMDHD5nU+YNqvqQ+B0j5yerb8AeZeSXCVkQ
+         2f2uzRjn2SXj/GUNONBdNbXsVbfOTD8ZCnHZp0YxOvYrSDzPc4K3UAQPG9aIfl7HMX
+         MT9n/Fv9usAAuQIQdN9Tb56e54qbglOnrn15YL70ZvJZOMw7TAFGAWd6VGIRwbzi/a
+         BRvUfwZp0Vn7A==
 From:   Benjamin Gaignard <benjamin.gaignard@collabora.com>
 To:     mchehab@kernel.org, hverkuil@xs4all.nl,
         ezequiel@vanguardiasur.com.ar, p.zabel@pengutronix.de,
@@ -44,9 +44,9 @@ Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
         kernel@collabora.com,
         Benjamin Gaignard <benjamin.gaignard@collabora.com>
-Subject: [PATCH v11 12/17] media: uapi: Move the HEVC stateless control type out of staging
-Date:   Wed,  6 Jul 2022 11:37:58 +0200
-Message-Id: <20220706093803.158810-13-benjamin.gaignard@collabora.com>
+Subject: [PATCH v11 13/17] media: controls: Log HEVC stateless control in .std_log
+Date:   Wed,  6 Jul 2022 11:37:59 +0200
+Message-Id: <20220706093803.158810-14-benjamin.gaignard@collabora.com>
 X-Mailer: git-send-email 2.32.0
 In-Reply-To: <20220706093803.158810-1-benjamin.gaignard@collabora.com>
 References: <20220706093803.158810-1-benjamin.gaignard@collabora.com>
@@ -61,70 +61,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Move the HEVC stateless controls types out of staging,
-and re-number them.
+Simply print the type of the control.
 
 Signed-off-by: Benjamin Gaignard <benjamin.gaignard@collabora.com>
-Reviewed-by: Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
 Acked-by: Nicolas Dufresne <nicolas.dufresne@collabora.com>
 Tested-by: Jernej Skrabec <jernej.skrabec@gmail.com>
 ---
- .../userspace-api/media/videodev2.h.rst.exceptions         | 5 +++++
- include/media/hevc-ctrls.h                                 | 7 -------
- include/uapi/linux/videodev2.h                             | 6 ++++++
- 3 files changed, 11 insertions(+), 7 deletions(-)
+ drivers/media/v4l2-core/v4l2-ctrls-core.c | 15 +++++++++++++++
+ 1 file changed, 15 insertions(+)
 
-diff --git a/Documentation/userspace-api/media/videodev2.h.rst.exceptions b/Documentation/userspace-api/media/videodev2.h.rst.exceptions
-index 0b91200776f8..2feea4a5a008 100644
---- a/Documentation/userspace-api/media/videodev2.h.rst.exceptions
-+++ b/Documentation/userspace-api/media/videodev2.h.rst.exceptions
-@@ -153,6 +153,11 @@ replace symbol V4L2_CTRL_TYPE_VP9_COMPRESSED_HDR :c:type:`v4l2_ctrl_type`
- replace symbol V4L2_CTRL_TYPE_VP9_FRAME :c:type:`v4l2_ctrl_type`
- replace symbol V4L2_CTRL_TYPE_HDR10_CLL_INFO :c:type:`v4l2_ctrl_type`
- replace symbol V4L2_CTRL_TYPE_HDR10_MASTERING_DISPLAY :c:type:`v4l2_ctrl_type`
-+replace symbol V4L2_CTRL_TYPE_HEVC_SPS :c:type:`v4l2_ctrl_type`
-+replace symbol V4L2_CTRL_TYPE_HEVC_PPS :c:type:`v4l2_ctrl_type`
-+replace symbol V4L2_CTRL_TYPE_HEVC_SLICE_PARAMS :c:type:`v4l2_ctrl_type`
-+replace symbol V4L2_CTRL_TYPE_HEVC_SCALING_MATRIX :c:type:`v4l2_ctrl_type`
-+replace symbol V4L2_CTRL_TYPE_HEVC_DECODE_PARAMS :c:type:`v4l2_ctrl_type`
- 
- # V4L2 capability defines
- replace define V4L2_CAP_VIDEO_CAPTURE device-capabilities
-diff --git a/include/media/hevc-ctrls.h b/include/media/hevc-ctrls.h
-index 3a6601a46ced..42d16e8a1050 100644
---- a/include/media/hevc-ctrls.h
-+++ b/include/media/hevc-ctrls.h
-@@ -22,13 +22,6 @@
- #define V4L2_CID_STATELESS_HEVC_START_CODE	(V4L2_CID_CODEC_BASE + 1016)
- #define V4L2_CID_STATELESS_HEVC_ENTRY_POINT_OFFSETS (V4L2_CID_CODEC_BASE + 1017)
- 
--/* enum v4l2_ctrl_type type values */
--#define V4L2_CTRL_TYPE_HEVC_SPS 0x0120
--#define V4L2_CTRL_TYPE_HEVC_PPS 0x0121
--#define V4L2_CTRL_TYPE_HEVC_SLICE_PARAMS 0x0122
--#define V4L2_CTRL_TYPE_HEVC_SCALING_MATRIX 0x0123
--#define V4L2_CTRL_TYPE_HEVC_DECODE_PARAMS 0x0124
--
- enum v4l2_stateless_hevc_decode_mode {
- 	V4L2_STATELESS_HEVC_DECODE_MODE_SLICE_BASED,
- 	V4L2_STATELESS_HEVC_DECODE_MODE_FRAME_BASED,
-diff --git a/include/uapi/linux/videodev2.h b/include/uapi/linux/videodev2.h
-index 37f9f23a67fe..e0d19a6b5bc7 100644
---- a/include/uapi/linux/videodev2.h
-+++ b/include/uapi/linux/videodev2.h
-@@ -1836,6 +1836,12 @@ enum v4l2_ctrl_type {
- 
- 	V4L2_CTRL_TYPE_VP9_COMPRESSED_HDR	= 0x0260,
- 	V4L2_CTRL_TYPE_VP9_FRAME		= 0x0261,
-+
-+	V4L2_CTRL_TYPE_HEVC_SPS			= 0x0270,
-+	V4L2_CTRL_TYPE_HEVC_PPS			= 0x0271,
-+	V4L2_CTRL_TYPE_HEVC_SLICE_PARAMS	= 0x0272,
-+	V4L2_CTRL_TYPE_HEVC_SCALING_MATRIX	= 0x0273,
-+	V4L2_CTRL_TYPE_HEVC_DECODE_PARAMS	= 0x0274,
- };
- 
- /*  Used in the VIDIOC_QUERYCTRL ioctl for querying controls */
+diff --git a/drivers/media/v4l2-core/v4l2-ctrls-core.c b/drivers/media/v4l2-core/v4l2-ctrls-core.c
+index ff8a61f24d0a..c5c5407584ff 100644
+--- a/drivers/media/v4l2-core/v4l2-ctrls-core.c
++++ b/drivers/media/v4l2-core/v4l2-ctrls-core.c
+@@ -307,6 +307,21 @@ static void std_log(const struct v4l2_ctrl *ctrl)
+ 	case V4L2_CTRL_TYPE_VP9_FRAME:
+ 		pr_cont("VP9_FRAME");
+ 		break;
++	case V4L2_CTRL_TYPE_HEVC_SPS:
++		pr_cont("HEVC_SPS");
++		break;
++	case V4L2_CTRL_TYPE_HEVC_PPS:
++		pr_cont("HEVC_PPS");
++		break;
++	case V4L2_CTRL_TYPE_HEVC_SLICE_PARAMS:
++		pr_cont("HEVC_SLICE_PARAMS");
++		break;
++	case V4L2_CTRL_TYPE_HEVC_SCALING_MATRIX:
++		pr_cont("HEVC_SCALING_MATRIX");
++		break;
++	case V4L2_CTRL_TYPE_HEVC_DECODE_PARAMS:
++		pr_cont("HEVC_DECODE_PARAMS");
++		break;
+ 	default:
+ 		pr_cont("unknown type %d", ctrl->type);
+ 		break;
 -- 
 2.32.0
 

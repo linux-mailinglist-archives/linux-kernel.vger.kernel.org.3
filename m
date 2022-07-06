@@ -2,71 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B6082568F07
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 18:25:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8562E568F0F
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 18:25:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233514AbiGFQYv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Jul 2022 12:24:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51446 "EHLO
+        id S232923AbiGFQZo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Jul 2022 12:25:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52048 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229723AbiGFQYs (ORCPT
+        with ESMTP id S232413AbiGFQZl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Jul 2022 12:24:48 -0400
-Received: from mail-oa1-x36.google.com (mail-oa1-x36.google.com [IPv6:2001:4860:4864:20::36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2897B220FF
-        for <linux-kernel@vger.kernel.org>; Wed,  6 Jul 2022 09:24:46 -0700 (PDT)
-Received: by mail-oa1-x36.google.com with SMTP id 586e51a60fabf-f2a4c51c45so22021899fac.9
-        for <linux-kernel@vger.kernel.org>; Wed, 06 Jul 2022 09:24:46 -0700 (PDT)
+        Wed, 6 Jul 2022 12:25:41 -0400
+Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F130A24BEC
+        for <linux-kernel@vger.kernel.org>; Wed,  6 Jul 2022 09:25:39 -0700 (PDT)
+Received: by mail-lf1-x133.google.com with SMTP id bf9so3570281lfb.13
+        for <linux-kernel@vger.kernel.org>; Wed, 06 Jul 2022 09:25:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to
+        d=linaro.org; s=google;
+        h=from:to:subject:date:message-id:in-reply-to:references:mime-version
          :content-transfer-encoding;
-        bh=Uk0kx353H+gGEfDDNFmV1k9XciWZTV5g6S3ovbgNaYc=;
-        b=q72jtloM2SDi91Cm9eEXs5cyQKoz6sZDEvLuLXFIb7EshTx2BjZIq/SU+zmAx9A6u2
-         OkhFTooEMKuWDaJGNqVtXflRgwCVAswedV3ISK1CU2bborL4CI9ob3M5dqU3Ca5+pVUZ
-         ZetgEmy2eRUVTFWRG9k9SY446cb+eISHQtwcXClClz5vysey5tDoCTkam6/AukY+SJtT
-         JwRibs+fYhBkhcmbSOgz6ww4Ris6YBwDeU8dAKimk1ajn8CQio3I8s7EMNYK3uy0j1hU
-         MHxSU4Y8OMsHSEXHXCsEmXcSivNPxtRsFmPwmlP/WovH8Hic5zGc7EwYtUZPSBgiS9lK
-         xr4A==
+        bh=JIashhGYeFkYbR7kffcxLHDD+hAhV8QuuTTEgk9FK6w=;
+        b=SSDkiH9n4YUDAEgzeFf1wijKsdU1ygC2Uyrcwx3gg8zkLNpuo/dxGqL9ivnDrIvWyk
+         K7yIk7BMjOc6IC/9b4aQTUqXeBnTDeHPL2xwu4cOGWLdCvJ9GySyewAp8xjALGKyBPn4
+         wrsgaRflmgDS7gopEhVKYyjKWrASbY+yuOsZRblk4Dz4T/xpYr5ti5UqzEO+kUH0j0ev
+         EsvgVCkjESXJvQtWvCzUzKH6nhBTNYjyCqwaLce8Z/sswjrLjQA/pyjdGHbUo2hfwQJp
+         WmHOcsagFJ1ypodUlhsfFtJOhHYm0I4etlRQwLGimh/qRSggOHY1Q3wVmFvSc2m+5FKR
+         8Eow==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to:content-transfer-encoding;
-        bh=Uk0kx353H+gGEfDDNFmV1k9XciWZTV5g6S3ovbgNaYc=;
-        b=HAhMCRDd9x3zQINgkJhc8NBJrL/DCkOJlAS/RA9vgxlhpZZ84LgqsJuUHJbldqLYnX
-         BPzkYHfyu48JyjgRG7apX3inYzEHwiCuJ5HW9K5Gbx9CSgL+5URpzZXGeZhuMq1gSneS
-         YxoFw8FXtflhBlt9rntSCHopgborv+7xw5bABshG/jdNytZZ1oVsdXudozvRCfh7iC3I
-         VWq0OuF736rOws3xR23Jrbs/re0zE07koMzGgLn1CjSyeoK274zfscsHbOt58leeOknj
-         FTOahBvFTrwv9gwEW31J5yscn8wUlXxu2oNnzJjxNXh+u7eYbixXX/Tdmq14wXs9AGSA
-         Pm5w==
-X-Gm-Message-State: AJIora/WuyfvvxQqFVdF3A5FF5A6HEnvzkjYHY3DQPwdtau8fJjFx7Qy
-        2s4+Oj2QdIji62kifnX92kVumgL/uRvlLji62qM=
-X-Google-Smtp-Source: AGRyM1t0VJwpTR7+JM9mLwtps1D/owIhLHrUztAjn6gHiYvVhDcAThr8A70Egycpa14+Dl//+YEHsIqVHvKFdXK4Va4=
-X-Received: by 2002:a05:6870:c144:b0:eb:5ef1:7d8c with SMTP id
- g4-20020a056870c14400b000eb5ef17d8cmr26641897oad.232.1657124685590; Wed, 06
- Jul 2022 09:24:45 -0700 (PDT)
+        h=x-gm-message-state:from:to:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=JIashhGYeFkYbR7kffcxLHDD+hAhV8QuuTTEgk9FK6w=;
+        b=2rbPZ+gJBwKjwrWI/BvzHY7kyJ2Jt+F0BSnRK+tbWE52Wn+On6Ljejr+A4WhFvd4O/
+         6hXbh2c5hoBh05wRVjb5Tvg807vYEUZb3QKNeJVOgsred3GA902dQNFguHJQ+/ysWvxQ
+         bY6SAPFl+TMCsQcMgACuTv/n+oZcqILWx/ZaB16/ojt18scE3n7pXNB1TLFMzxfdi9sJ
+         F0zeJ1NWJRbHDihpkr56bIRscdfcnJI9itNFlxWAJCEfPGukBbRpAIt4KgAB3nbK7q+D
+         vPCSw/yolR3x+SemasFaF2Tl8cfwNoh3/UkHInY2OBVUrLFpmt1OEQq1uOTp1dJzu4oQ
+         R2WA==
+X-Gm-Message-State: AJIora8lgrNYuYlD4gfZzd4DELTRlQ9fqz9ORCBLdkYqC/ajjcwfA5uE
+        muq26tAsI5UTL8S0IWQ1Yr8EUg==
+X-Google-Smtp-Source: AGRyM1v3dY3SIkHzldafEjg4djIqTpd+Td8TJMqE++IEKyQClDARm8w1I4/mKmWXRyPnpi9Alj+NTQ==
+X-Received: by 2002:a05:6512:b8d:b0:47f:74f0:729b with SMTP id b13-20020a0565120b8d00b0047f74f0729bmr25713700lfv.403.1657124738237;
+        Wed, 06 Jul 2022 09:25:38 -0700 (PDT)
+Received: from krzk-bin.home ([84.20.121.239])
+        by smtp.gmail.com with ESMTPSA id 14-20020a2e154e000000b0025bf58c5338sm4025232ljv.15.2022.07.06.09.25.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 06 Jul 2022 09:25:37 -0700 (PDT)
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To:     krzysztof.kozlowski@linaro.org, linux-samsung-soc@vger.kernel.org,
+        devicetree@vger.kernel.org, alim.akhtar@samsung.com,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 1/3] dt-bindings: soc: samsung: exynos-pmu: cleanup assigned clocks
+Date:   Wed,  6 Jul 2022 18:25:35 +0200
+Message-Id: <165712469638.30806.13604483011536770069.b4-ty@linaro.org>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20220706160257.27579-1-krzysztof.kozlowski@linaro.org>
+References: <20220706160257.27579-1-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
-Received: by 2002:a4a:4545:0:0:0:0:0 with HTTP; Wed, 6 Jul 2022 09:24:45 -0700 (PDT)
-Reply-To: sgtkaylla202@gmail.com
-From:   Kayla Manthey <avrielharry73@gmail.com>
-Date:   Wed, 6 Jul 2022 16:24:45 +0000
-Message-ID: <CAFSKFDauFRxLGbKGhNfJ-rCZ2ecpTN=eGmmMEwOJObKESRv7Lg@mail.gmail.com>
-Subject: 
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: base64
-X-Spam-Status: No, score=4.2 required=5.0 tests=BAYES_40,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        UNDISC_FREEM autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: ****
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-LS0gDQrQl9C00YDQsNCy0L4g0LTRgNCw0LPQsA0K0JLQtSDQvNC+0LvQsNC8LCDQtNCw0LvQuCDR
-mNCwINC00L7QsdC40LLRgtC1INC80L7RmNCw0YLQsCDQv9GA0LXRgtGF0L7QtNC90LAg0L/QvtGA
-0LDQutCwLCDQstC4INCx0LvQsNCz0L7QtNCw0YDQsNC8Lg0K
+On Wed, 6 Jul 2022 18:02:55 +0200, Krzysztof Kozlowski wrote:
+> "assigned-clocks" are not needed in the device schema as they come from
+> core schema.
+> 
+> 
+
+Applied with Rob's tags carried over from v1.
+
+Applied, thanks!
+
+[1/3] dt-bindings: soc: samsung: exynos-pmu: cleanup assigned clocks
+      https://git.kernel.org/krzk/linux/c/38aed2e0aa406de6dda64515cc3937976a27038e
+[2/3] dt-bindings: soc: samsung: exynos-pmu: use abolute ref paths
+      https://git.kernel.org/krzk/linux/c/61bebc2902901cc2f1cac496dc81be38ca74d7d4
+[3/3] dt-bindings: soc: samsung: exynos-pmu: add reboot-mode
+      https://git.kernel.org/krzk/linux/c/3e27bf719303b1b19edd37bd04e9e586c73f6511
+
+Best regards,
+-- 
+Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>

@@ -2,106 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 47ED2567FDD
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 09:31:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A805567EF9
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 08:54:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231280AbiGFHat (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Jul 2022 03:30:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49056 "EHLO
+        id S230101AbiGFGyq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Jul 2022 02:54:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48184 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231164AbiGFHar (ORCPT
+        with ESMTP id S229477AbiGFGyp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Jul 2022 03:30:47 -0400
-Received: from mail-qt1-f180.google.com (mail-qt1-f180.google.com [209.85.160.180])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48F4F22B08;
-        Wed,  6 Jul 2022 00:30:46 -0700 (PDT)
-Received: by mail-qt1-f180.google.com with SMTP id ck6so17090448qtb.7;
-        Wed, 06 Jul 2022 00:30:46 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=l7jdNwqUxVmvsNaO4xkKTr+IxISvnOUVGzWu8CWMy8I=;
-        b=NpA85b0lUlGtmA2c7o6s1IDA1zJ/BdNO4PNqEUf03xhjacbEewcTaadStrmxhvgb0g
-         fhR+eT5Vs+CQA5KAqL0OFyGNlB7N2E3J63c4SsHfdrw9VO2SAXW1o1e6+75rUvcU7d8V
-         K89LfkKH5qEThT/qoY6wQIn6db60yUUGPQuoywc4ATIe0GObc+Xks8bJ8BhlAa2w/rMi
-         tauQmyHUnmcHt4tSl8qYP48lAOr8AZsLOktpdSOmsAW6mZsak/me8VGKIpgLUYOKP391
-         EpEhYuA9fl3oCtQwzMD1F+iXAJ/cww94jjg5+AblJv9XDcKYYt0mfYzbW4Bf7xIXRZET
-         jFZQ==
-X-Gm-Message-State: AJIora/mhKqmdk9YTdkdY4ayHPn9lriFD0MLmXh84QGxAdNPY18WuRSQ
-        6BzjsIe0AuQX0mhStyYqsfonwJTA0j2cWQ==
-X-Google-Smtp-Source: AGRyM1sualVkhVTr9IE8GyKTkUsyvaESHEGFY+rjVtUptztEZR3aldwXsxCh5rxPWbi88m9V5F5bTQ==
-X-Received: by 2002:a05:6214:27ce:b0:470:596b:4e82 with SMTP id ge14-20020a05621427ce00b00470596b4e82mr35691966qvb.118.1657092645093;
-        Wed, 06 Jul 2022 00:30:45 -0700 (PDT)
-Received: from mail-yw1-f173.google.com (mail-yw1-f173.google.com. [209.85.128.173])
-        by smtp.gmail.com with ESMTPSA id c19-20020a05622a059300b00304edcfa109sm25649620qtb.33.2022.07.06.00.30.43
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 06 Jul 2022 00:30:44 -0700 (PDT)
-Received: by mail-yw1-f173.google.com with SMTP id 00721157ae682-31c89653790so80232737b3.13;
-        Wed, 06 Jul 2022 00:30:43 -0700 (PDT)
-X-Received: by 2002:a81:9209:0:b0:31c:b1b7:b063 with SMTP id
- j9-20020a819209000000b0031cb1b7b063mr12871303ywg.383.1657092643442; Wed, 06
- Jul 2022 00:30:43 -0700 (PDT)
+        Wed, 6 Jul 2022 02:54:45 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BA751B791;
+        Tue,  5 Jul 2022 23:54:44 -0700 (PDT)
+Received: from dggpemm500024.china.huawei.com (unknown [172.30.72.54])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4Ld9Fr6YdJzhZ0N;
+        Wed,  6 Jul 2022 14:52:16 +0800 (CST)
+Received: from dggpemm100009.china.huawei.com (7.185.36.113) by
+ dggpemm500024.china.huawei.com (7.185.36.203) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Wed, 6 Jul 2022 14:54:27 +0800
+Received: from huawei.com (10.175.113.32) by dggpemm100009.china.huawei.com
+ (7.185.36.113) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Wed, 6 Jul
+ 2022 14:54:27 +0800
+From:   Liu Shixin <liushixin2@huawei.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Matthew Wilcox <willy@infradead.org>, Jan Kara <jack@suse.cz>,
+        William Kucharski <william.kucharski@oracle.com>,
+        "Christoph Hellwig" <hch@lst.de>
+CC:     <linux-kernel@vger.kernel.org>, <stable@vger.kernel.org>,
+        Liu Shixin <liushixin2@huawei.com>
+Subject: [PATCH 5.15 v2] mm/filemap: fix UAF in find_lock_entries
+Date:   Wed, 6 Jul 2022 15:30:45 +0800
+Message-ID: <20220706073045.1398379-1-liushixin2@huawei.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <20220705210143.315151-1-emil.renner.berthing@canonical.com> <20220705210143.315151-2-emil.renner.berthing@canonical.com>
-In-Reply-To: <20220705210143.315151-2-emil.renner.berthing@canonical.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Wed, 6 Jul 2022 09:30:32 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdU3q4W+azwo5sAUHfsL7Se9vGftHxRdmu1c5-j5fPrwow@mail.gmail.com>
-Message-ID: <CAMuHMdU3q4W+azwo5sAUHfsL7Se9vGftHxRdmu1c5-j5fPrwow@mail.gmail.com>
-Subject: Re: [PATCH v1 1/4] leds: pwm-multicolor: Don't show -EPROBE_DEFER as errors
-To:     Emil Renner Berthing <emil.renner.berthing@canonical.com>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Pavel Machek <pavel@ucw.cz>, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Vincent Pelletier <plr.vincent@gmail.com>,
-        Bin Meng <bin.meng@windriver.com>,
-        Aurelien Jarno <aurelien@aurel32.net>,
-        Ron Economos <w6rz@comcast.net>,
-        Qiu Wenbo <qiuwenbo@kylinos.com.cn>,
-        Stephen L Arnold <nerdboy@gentoo.org>,
-        Jianlong Huang <jianlong.huang@starfivetech.com>,
-        Mark Kettenis <kettenis@openbsd.org>,
-        Sven Schwermer <sven.schwermer@disruptive-technologies.com>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>,
-        David Abdurachmanov <davidlt@rivosinc.com>,
-        linux-leds <linux-leds@vger.kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        linux-riscv <linux-riscv@lists.infradead.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.113.32]
+X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
+ dggpemm100009.china.huawei.com (7.185.36.113)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jul 5, 2022 at 11:01 PM Emil Renner Berthing
-<emil.renner.berthing@canonical.com> wrote:
-> When requesting a PWM it might return -EPROBE_DEFER if it hasn't probed
-> yet. This is not an error, so just propagate the -EPROBE_DEFER without
-> logging anything. There is already dev_err_probe for exactly this
-> situation.
->
-> Fixes: 9fa2762110dd ("leds: Add PWM multicolor driver")
-> Signed-off-by: Emil Renner Berthing <emil.renner.berthing@canonical.com>
+Release refcount after xas_set to fix UAF which may cause panic like this:
 
-Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
+ page:ffffea000491fa40 refcount:1 mapcount:0 mapping:0000000000000000 index:0x1 pfn:0x1247e9
+ head:ffffea000491fa00 order:3 compound_mapcount:0 compound_pincount:0
+ memcg:ffff888104f91091
+ flags: 0x2fffff80010200(slab|head|node=0|zone=2|lastcpupid=0x1fffff)
+...
+page dumped because: VM_BUG_ON_PAGE(PageTail(page))
+ ------------[ cut here ]------------
+ kernel BUG at include/linux/page-flags.h:632!
+ invalid opcode: 0000 [#1] SMP DEBUG_PAGEALLOC KASAN
+ CPU: 1 PID: 7642 Comm: sh Not tainted 5.15.51-dirty #26
+...
+ Call Trace:
+  <TASK>
+  __invalidate_mapping_pages+0xe7/0x540
+  drop_pagecache_sb+0x159/0x320
+  iterate_supers+0x120/0x240
+  drop_caches_sysctl_handler+0xaa/0xe0
+  proc_sys_call_handler+0x2b4/0x480
+  new_sync_write+0x3d6/0x5c0
+  vfs_write+0x446/0x7a0
+  ksys_write+0x105/0x210
+  do_syscall_64+0x35/0x80
+  entry_SYSCALL_64_after_hwframe+0x44/0xae
+ RIP: 0033:0x7f52b5733130
+...
 
-Gr{oetje,eeting}s,
+This problem has been fixed on mainline by patch 6b24ca4a1a8d ("mm: Use
+multi-index entries in the page cache") since it deletes the related code.
 
-                        Geert
+Fixes: 5c211ba29deb ("mm: add and use find_lock_entries")
+Signed-off-by: Liu Shixin <liushixin2@huawei.com>
+---
+ mm/filemap.c | 10 ++++++----
+ 1 file changed, 6 insertions(+), 4 deletions(-)
 
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+diff --git a/mm/filemap.c b/mm/filemap.c
+index 00e391e75880..2c65dd314c49 100644
+--- a/mm/filemap.c
++++ b/mm/filemap.c
+@@ -2090,7 +2090,11 @@ unsigned find_lock_entries(struct address_space *mapping, pgoff_t start,
+ 
+ 	rcu_read_lock();
+ 	while ((page = find_get_entry(&xas, end, XA_PRESENT))) {
++		unsigned long next_idx = xas.xa_index;
++
+ 		if (!xa_is_value(page)) {
++			if (PageTransHuge(page))
++				next_idx = page->index + thp_nr_pages(page);
+ 			if (page->index < start)
+ 				goto put;
+ 			if (page->index + thp_nr_pages(page) - 1 > end)
+@@ -2111,11 +2115,9 @@ unsigned find_lock_entries(struct address_space *mapping, pgoff_t start,
+ put:
+ 		put_page(page);
+ next:
+-		if (!xa_is_value(page) && PageTransHuge(page)) {
+-			unsigned int nr_pages = thp_nr_pages(page);
+-
++		if (next_idx != xas.xa_index) {
+ 			/* Final THP may cross MAX_LFS_FILESIZE on 32-bit */
+-			xas_set(&xas, page->index + nr_pages);
++			xas_set(&xas, next_idx);
+ 			if (xas.xa_index < nr_pages)
+ 				break;
+ 		}
+-- 
+2.25.1
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds

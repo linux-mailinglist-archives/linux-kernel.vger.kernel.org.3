@@ -2,102 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AF4F256923E
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 20:56:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ACF65569240
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 20:56:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233541AbiGFSzz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Jul 2022 14:55:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36366 "EHLO
+        id S234060AbiGFS4V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Jul 2022 14:56:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36820 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230502AbiGFSzs (ORCPT
+        with ESMTP id S230502AbiGFS4T (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Jul 2022 14:55:48 -0400
-Received: from mx0a-002e3701.pphosted.com (mx0a-002e3701.pphosted.com [148.163.147.86])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16B4F2AC47
-        for <linux-kernel@vger.kernel.org>; Wed,  6 Jul 2022 11:55:46 -0700 (PDT)
-Received: from pps.filterd (m0150242.ppops.net [127.0.0.1])
-        by mx0a-002e3701.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 266IYSeV028868;
-        Wed, 6 Jul 2022 18:55:15 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=hpe.com; h=date : from : to : cc :
- subject : message-id : references : content-type : in-reply-to :
- mime-version; s=pps0720; bh=V/RKn4cwO8Jde9mbP6eJbdj72qAcC8xBRDOOWhNiMSQ=;
- b=pUw4L9rTo/LcMp9rbfH5fVTlVoZPIp2IpjUUFCXGswZVBnMVRknIQWCdfywOivE7pwU/
- amOiqGfhXKw53yx3Xc+dIp6/NP7oHWKsbNUeiaog+z2orlR0oBcl7EaKxtFNHe+/C1CM
- cL33+GW86PUOpuIX8JmVtR9AnblimvI0TEaXupudK67nNhwqG/7RocOXX123ITXehd3A
- vIXzfs+DP/asTrOpSRMXWY9l4Te9pqbEk1Ph1vQJyuat0Ynxm8mrpE7csbXme3VhP7Wg
- ZM2GjUQ2CrK5zvQrRP6JctuvGNjjLI8nO6GdmAN4CfmbUKxhhMwnVZT8xml8dbyXJYMR Ug== 
-Received: from p1lg14880.it.hpe.com (p1lg14880.it.hpe.com [16.230.97.201])
-        by mx0a-002e3701.pphosted.com (PPS) with ESMTPS id 3h5fst04wu-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 06 Jul 2022 18:55:15 +0000
-Received: from p1lg14886.dc01.its.hpecorp.net (unknown [10.119.18.237])
+        Wed, 6 Jul 2022 14:56:19 -0400
+Received: from mout-p-102.mailbox.org (mout-p-102.mailbox.org [IPv6:2001:67c:2050:0:465::102])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 361512A941;
+        Wed,  6 Jul 2022 11:56:17 -0700 (PDT)
+Received: from smtp202.mailbox.org (smtp202.mailbox.org [IPv6:2001:67c:2050:b231:465::202])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by p1lg14880.it.hpe.com (Postfix) with ESMTPS id B307B80022C;
-        Wed,  6 Jul 2022 18:55:13 +0000 (UTC)
-Received: from swahl-home.5wahls.com (unknown [16.231.227.36])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by p1lg14886.dc01.its.hpecorp.net (Postfix) with ESMTPS id CF5F2809A09;
-        Wed,  6 Jul 2022 18:55:11 +0000 (UTC)
-Date:   Wed, 6 Jul 2022 13:55:10 -0500
-From:   Steve Wahl <steve.wahl@hpe.com>
-To:     Lu Baolu <baolu.lu@linux.intel.com>
-Cc:     Joerg Roedel <joro@8bytes.org>, Steve Wahl <steve.wahl@hpe.com>,
-        Kevin Tian <kevin.tian@intel.com>,
-        David Woodhouse <dwmw2@infradead.org>,
-        Jerry Snitselaar <jsnitsel@redhat.com>,
-        Mike Travis <mike.travis@hpe.com>,
-        Dimitri Sivanich <sivanich@hpe.com>,
-        Russ Anderson <russ.anderson@hpe.com>, iommu@lists.linux.dev,
-        iommu@lists.linux-foundation.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v1 0/6] iommu/vt-d: Reset DMAR_UNITS_SUPPORTED
-Message-ID: <YsXajixg7mN8PLtX@swahl-home.5wahls.com>
-References: <20220625125204.2199437-1-baolu.lu@linux.intel.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220625125204.2199437-1-baolu.lu@linux.intel.com>
-X-Proofpoint-GUID: 7ym3B4n5N3oaqW6wr62eHBRkqpjXsZps
-X-Proofpoint-ORIG-GUID: 7ym3B4n5N3oaqW6wr62eHBRkqpjXsZps
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+        by mout-p-102.mailbox.org (Postfix) with ESMTPS id 4LdTK74dyDz9sS6;
+        Wed,  6 Jul 2022 20:56:11 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mailbox.org; s=mail20150812;
+        t=1657133771;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=gWRQ34WBwUcgZFnDVii0kRTol59eMnvDdmOFJDSqIlM=;
+        b=Qlzj0j8gY1Bn+osmzzywPIUHBhOyWzU3O6IDByYpwfi0j1C7dp1Esw1nlxeoBslbtzilJm
+        rmyorlJsC6zC/s0VE0u23V5bzAnLtuwjUJM7SKhoSlZ9wXgc29ba5c6BK1nZu/2w+KvSl9
+        /j+ZhE91NY/ixoBvRAPDrMe7p5BKV5w/F0vY6pvzb17/avB670q+nXgGzXqQ0HVr/ddRai
+        QTrwUJGsWIYr5sAIXS1zdKdzwaijIgXzdAopBK6c//WlyzUa2oDlHRzJM5m6bvqNQ5IxNf
+        vsbXWicVS6avS07xWPc30dYmaCk0SwyfFN/bHHjpZgG4akmwNDAUQ+HpXvt/Cg==
+Message-ID: <b73295d8-d3e6-c6b8-de76-d82a5ae7ee42@mailbox.org>
+Date:   Wed, 6 Jul 2022 18:56:04 +0000
 MIME-Version: 1.0
-X-HPE-SCL: -1
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
- definitions=2022-07-06_11,2022-06-28_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 phishscore=0
- spamscore=0 lowpriorityscore=0 adultscore=0 bulkscore=0 malwarescore=0
- clxscore=1011 mlxscore=0 mlxlogscore=773 priorityscore=1501 suspectscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2206140000
- definitions=main-2207060073
-X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Subject: Re: [Regression?] Linux 5.19-rc5 gets stuck on boot, not rc4
+Content-Language: en-US
+To:     Thorsten Leemhuis <regressions@leemhuis.info>,
+        "Limonciello, Mario" <Mario.Limonciello@amd.com>
+Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "platform-driver-x86@vger.kernel.org" 
+        <platform-driver-x86@vger.kernel.org>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Jani Nikula <jani.nikula@intel.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>
+References: <272584304.305738.1657029005216@office.mailbox.org>
+ <CAHk-=wivGGgs9K_TfQYTW4RzH_C-JVfLZKNA5+hKQU0eNFBeiw@mail.gmail.com>
+ <MN0PR12MB61015A04C6E4202B2E8E08A9E2819@MN0PR12MB6101.namprd12.prod.outlook.com>
+ <72419963.329229.1657096948079@office.mailbox.org>
+ <8ee1bc75-3ecd-9d87-b7cc-37ba15133026@leemhuis.info>
+From:   Tor Vic <torvic9@mailbox.org>
+In-Reply-To: <8ee1bc75-3ecd-9d87-b7cc-37ba15133026@leemhuis.info>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-MBO-RS-ID: 66bb31361032e829da4
+X-MBO-RS-META: u68cyx87wwpwomnx367d5ut8eqok4ekg
+X-Rspamd-Queue-Id: 4LdTK74dyDz9sS6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Jun 25, 2022 at 08:51:58PM +0800, Lu Baolu wrote:
-> Hi folks,
-> 
-> This is a follow-up series of changes proposed by this patch:
-> 
-> https://lore.kernel.org/linux-iommu/20220615183650.32075-1-steve.wahl@hpe.com/
-> 
-> It removes several static arrays of size DMAR_UNITS_SUPPORTED and sets
-> the DMAR_UNITS_SUPPORTED to 1024.
-> 
 
-After Kevin Tian's comments, for the whole series:
 
-Reviewed-by: Steve Wahl <steve.wahl@hpe.com>
+On 06.07.22 18:21, Thorsten Leemhuis wrote:
+> On 06.07.22 10:42, torvic9@mailbox.org wrote:
+>>
+>>> Limonciello, Mario <mario.limonciello@amd.com> hat am 05.07.2022 17:10 GMT geschrieben:
+>>>> -----Original Message-----
+>>>> From: Linus Torvalds <torvalds@linux-foundation.org>
+>>>> Sent: Tuesday, July 5, 2022 11:40
+>>>> To: Tor Vic <torvic9@mailbox.org>
+>>>> Cc: linux-kernel@vger.kernel.org; platform-driver-x86@vger.kernel.org;
+>>>> Hans de Goede <hdegoede@redhat.com>; Jani Nikula
+>>>> <jani.nikula@intel.com>
+>>>> Subject: Re: [Regression?] Linux 5.19-rc5 gets stuck on boot, not rc4
+>>>>
+>>>> On Tue, Jul 5, 2022 at 6:50 AM <torvic9@mailbox.org> wrote:
+>>>>>
+>>>>> Linux 5.19-rc5 does not boot on my Kaby Lake Thinkpad.
+>>>>> rc3 and rc4 were still fine, so I guess something between rc4 and rc5
+>>>>> introduced a regression.
+>>>>
+>>>> Sounds that way.
+>>>>
+>>>>> Unfortunately, there are no errors or warning messages.
+>>>>> It gets stuck quite early on boot, about the time USB is initialized,
+>>>>> so less than 1 second into post-bootloader boot.
+>>>>> It then just sits there doing nothing - SysRq still works though.
+>>>>
+>>>> There aren't all that many changes in rc5, and your hardware looks
+>>>> *very* standard (all intel chipset, and a Samsung SM961 SSD).
+>>>>
+>>>> And with the lack of details, we'll either need a bisect:
+>>>>
+>>>>> I don't have time for a bisect, but I thought I'll let you know about
+>>>>> this issue, and maybe someone already has an idea.
+>>>>
+>>>> or we'll need more reports..
+>>>>
+>>>>> Some system information below. Root filesystem is f2fs.
+>>>>
+>>>> Ok, f2fs is certainly unusual, but there are no f2fs changes in rc5.
+>>>>
+>>>> There's some PM changes for i915 ("drm/i915/dgfx: Disable d3cold at
+>>>> gfx root port") and a couple of thinkpad-acpi platform driver updates,
+>>>> so I'm adding a few random people to the cc in case somebody goes
+>>>> "ahh..."
+>>>>
+>>>
+>>> If a bisect isn't possible for you the kernel command line should be pretty
+>>> helpful to isolate which area the problem is introduced.
+>>> I'd say start out with "nomodeset" on the kernel command line to prevent
+>>> i915 from loading.  If that fixes it, hopefully it's a small number of commits
+>>> to peel back like the one Linus mentioned.
+>>
+>> Good advice!
+>> Using "nomodeset" makes the computer boot again.
+> 
+> Wild guess, I'm not involved at all in any of the following, I just
+> noticed it and thought it might be worth mentioning:
+> 
+> I heard Fedora rawhide added this patch to solve a boot problem that
+> sounded similar to yours:
+> https://patchwork.freedesktop.org/patch/489982/
+> 
+> See also this thread:
+> https://lore.kernel.org/all/fddf5ca6-77dc-88f9-c191-7de09717063c@redhat.com/
 
---> Steve
+Hi Thorsten,
 
--- 
-Steve Wahl, Hewlett Packard Enterprise
+Yep, that sounds just like it!
+I do have 'CONFIG_SYSFB_SIMPLEFB=y' in my laptop's config.
+
+Will try this tomorrow and report back again.
+
+> 
+> A few config option are mentioned there that seem to have an impact.
+> Maybe it's worth changing those or trying that patch.
+> 
+> But as I said, I'm not involved, so maybe this is a bad advice.
+> 
+> Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
+> 
+> P.S.: As the Linux kernel's regression tracker I deal with a lot of
+> reports and sometimes miss something important when writing mails like
+> this. If that's the case here, don't hesitate to tell me in a public
+> reply, it's in everyone's interest to set the public record straight.

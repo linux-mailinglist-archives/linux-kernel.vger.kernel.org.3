@@ -2,152 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 131465693CC
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 23:02:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C31465693D7
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 23:06:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234272AbiGFVCQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Jul 2022 17:02:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33468 "EHLO
+        id S233259AbiGFVGC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Jul 2022 17:06:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35600 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233456AbiGFVCP (ORCPT
+        with ESMTP id S231397AbiGFVGA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Jul 2022 17:02:15 -0400
-Received: from ssl.serverraum.org (ssl.serverraum.org [IPv6:2a01:4f8:151:8464::1:2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C926923146;
-        Wed,  6 Jul 2022 14:02:14 -0700 (PDT)
-Received: from ssl.serverraum.org (web.serverraum.org [172.16.0.2])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ssl.serverraum.org (Postfix) with ESMTPSA id BABEB2223A;
-        Wed,  6 Jul 2022 23:02:12 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2016061301;
-        t=1657141332;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=l9BSZkguRrgG6EPhutYIDpmenXtzq7TNMD8r/kLbskc=;
-        b=WV6CXeZou7RvdPtdmr829rwyfN9tS5+35cTyMXOAxcqfznoaZT/8RuIdbp+P9ggkpqNWH+
-        La5o6Jh73TqZrLjKcdw7QVMk4YsHTqNT9+gN1Owvkuh6DIZuy8V4jy7xN4bymULQ73VoM6
-        FyvYVXrg8rAbo8PD3ftsNbU1LztRfbk=
+        Wed, 6 Jul 2022 17:06:00 -0400
+Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C0C9167C1
+        for <linux-kernel@vger.kernel.org>; Wed,  6 Jul 2022 14:05:59 -0700 (PDT)
+Received: by mail-ej1-x633.google.com with SMTP id q6so29088155eji.13
+        for <linux-kernel@vger.kernel.org>; Wed, 06 Jul 2022 14:05:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=3covsTOEQGoLyVnwY5XV95mNRZOh4Tyvakfc5xsujkQ=;
+        b=sZqocmz/4Y6K3wsDgmovwFwithWhO/dCbYzuKxivdgc0XQYQdnRdM+AleiWifaYGgT
+         hJLwE8XQPN5iuUIPEwm6EfX9vdptcvXJqMqu3iXvNGGQ4jwu+aDh/QV/JNT42IU+BPlQ
+         q/IGOXSQOqrfYmN0cOxx06bi8zpmRiUslSCEX6xpoyoXq4jDy49hk3Di8m28bq+56IDc
+         dIDtPF2RymL4nU++R7LvJ7LQEj7KWzPzmZgw9bPK8GPKu531YDYJryJO712s/mORW1FT
+         Qzg6cTUTJOBSXiu5R27vO112u/mnJpxE9UiYlxl+eMqz9jZMkgbblmttxIEWtB3poDPM
+         BtEQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=3covsTOEQGoLyVnwY5XV95mNRZOh4Tyvakfc5xsujkQ=;
+        b=0cnwq+V40f+RCxY9HdNifD425DwD4G6AcenD3SAi0bYJDDnTnjJZoe5LfmZ5+6/kVt
+         O5Et/A5AhGJ7EpI1HyiKw4xKxG9xlU7uNgAQX2oxXgDq4kfpY8SwrSIBZaex1bGdaLJ0
+         CamZUJ+zu10I0G3T4x//nwC+tz8jzGJVoDY/6puak0jxF/U1ai5hA/n/XfhdefAjk/xP
+         j97sD6E/kqITBVD6pJrj0GN/e7v+LHW9xWrenGni5Vu1LzYghKQo/15bMjAG9IDhFZBS
+         3Ts7Xgs5EFjt9uIIwfgi2wxIpbBaHIaIKWw1XMfMmOvrRFjEOIxuFwiWTNbR7pMmh87L
+         8Rzw==
+X-Gm-Message-State: AJIora/421mpbe6DsClEeXHIU5langbCItkm7WUTnEn/UmTEVrk0fL6H
+        mmqoyoWNS+saJipJvzPkWKmjNGoApUJy+yB+EI3kTQ==
+X-Google-Smtp-Source: AGRyM1uWI/PvLqWhv5jXHuhpc/hX5L1uVg66QNyDvRE3wDI2b9gqE97i1K3GG/FkfgwtLBSS6hsAfp1U0XizVDZkO+g=
+X-Received: by 2002:a17:907:e8e:b0:72a:ad07:8357 with SMTP id
+ ho14-20020a1709070e8e00b0072aad078357mr23742385ejc.338.1657141557573; Wed, 06
+ Jul 2022 14:05:57 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-Date:   Wed, 06 Jul 2022 23:02:12 +0200
-From:   Michael Walle <michael@walle.cc>
-To:     haibo.chen@nxp.com
-Cc:     ashish.kumar@nxp.com, yogeshgaur.83@gmail.com, broonie@kernel.org,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        han.xu@nxp.com, singh.kuldeep87k@gmail.com,
-        tudor.ambarus@microchip.com, p.yadav@ti.com,
-        miquel.raynal@bootlin.com, richard@nod.at, vigneshr@ti.com,
-        shawnguo@kernel.org, s.hauer@pengutronix.de, kernel@pengutronix.de,
-        linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-mtd@lists.infradead.org,
-        festevam@gmail.com, linux-imx@nxp.com,
-        linux-arm-kernel@lists.infradead.org, zhengxunli@mxic.com.tw
-Subject: Re: [PATCH 04/11] spi: spi-nxp-fspi: add function to select sample
- clock source for flash reading
-In-Reply-To: <1657012303-6464-4-git-send-email-haibo.chen@nxp.com>
-References: <1657012303-6464-1-git-send-email-haibo.chen@nxp.com>
- <1657012303-6464-4-git-send-email-haibo.chen@nxp.com>
-User-Agent: Roundcube Webmail/1.4.13
-Message-ID: <7a66e4fe8f7224ea272d68276c7b138b@walle.cc>
-X-Sender: michael@walle.cc
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20220625050838.1618469-1-davidgow@google.com> <20220625050838.1618469-2-davidgow@google.com>
+In-Reply-To: <20220625050838.1618469-2-davidgow@google.com>
+From:   Brendan Higgins <brendanhiggins@google.com>
+Date:   Wed, 6 Jul 2022 17:05:46 -0400
+Message-ID: <CAFd5g44w0h-EFfw-1wY=bBu_BbO1xi3Ys6gPoDogthCxrF14Qg@mail.gmail.com>
+Subject: Re: [PATCH v3 1/5] kunit: unify module and builtin suite definitions
+To:     David Gow <davidgow@google.com>
+Cc:     Luis Chamberlain <mcgrof@kernel.org>,
+        Jeremy Kerr <jk@codeconstruct.com.au>,
+        Daniel Latypov <dlatypov@google.com>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Andrew Jeffery <andrew@aj.id.au>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Andra Paraschiv <andraprs@amazon.com>,
+        Longpeng <longpeng2@huawei.com>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        =?UTF-8?B?TWHDrXJhIENhbmFs?= <maira.canal@usp.br>,
+        linux-mmc@vger.kernel.org, linux-aspeed@lists.ozlabs.org,
+        openbmc@lists.ozlabs.org, linux-usb@vger.kernel.org,
+        linux-modules@vger.kernel.org,
+        Matt Johnston <matt@codeconstruct.com.au>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am 2022-07-05 11:11, schrieb haibo.chen@nxp.com:
-> From: Haibo Chen <haibo.chen@nxp.com>
-> 
-> fspi define four mode for sample clock source selection.
-> 
-> Here is the list of modes:
-> mode 0: Dummy Read strobe generated by FlexSPI Controller and loopback
-> internally
-> mode 1: Dummy Read strobe generated by FlexSPI Controller and loopback
-> from DQS pad
-> mode 2: Reserved
-> mode 3: Flash provided Read strobe and input from DQS pad
-> 
-> In default, fspi use mode 0 after reset.
-> For 8-8-8-DTR mode, need to use mode 3, otherwise 8-8-8-DTR read always
-> get incorrect data.
-> 
-> Signed-off-by: Haibo Chen <haibo.chen@nxp.com>
-> ---
->  drivers/spi/spi-nxp-fspi.c | 47 ++++++++++++++++++++++++++++++++++++++
->  1 file changed, 47 insertions(+)
-> 
-> diff --git a/drivers/spi/spi-nxp-fspi.c b/drivers/spi/spi-nxp-fspi.c
-> index c32a4f53fa2a..34679dc0e1ad 100644
-> --- a/drivers/spi/spi-nxp-fspi.c
-> +++ b/drivers/spi/spi-nxp-fspi.c
-> @@ -380,6 +380,7 @@ struct nxp_fspi {
->  	struct pm_qos_request pm_qos_req;
->  	int selected;
->  #define FSPI_INITILIZED		(1 << 0)
-> +#define FSPI_RXCLKSRC_3		(1 << 1)
->  	int flags;
->  };
-> 
-> @@ -877,6 +878,50 @@ static int nxp_fspi_do_op(struct nxp_fspi *f,
-> const struct spi_mem_op *op)
->  	return err;
->  }
-> 
-> +/*
-> + * Sample Clock source selection for Flash Reading
-> + * Four modes defined by fspi:
-> + * mode 0: Dummy Read strobe generated by FlexSPI Controller
-> + *         and loopback internally
-> + * mode 1: Dummy Read strobe generated by FlexSPI Controller
-> + *         and loopback from DQS pad
-> + * mode 2: Reserved
-> + * mode 3: Flash provided Read strobe and input from DQS pad
-> + *
-> + * fspi default use mode 0 after reset
-> + */
-> +static void nxp_fspi_select_rx_sample_clk_source(struct nxp_fspi *f,
-> +						 const struct spi_mem_op *op)
-> +{
-> +	u32 reg;
-> +
-> +	/*
-> +	 * For 8-8-8-DTR mode, need to use mode 3 (Flash provided Read
-> +	 * strobe and input from DQS pad), otherwise read operaton may
-> +	 * meet issue.
-> +	 * This mode require flash device connect the DQS pad on board.
-> +	 * For other modes, still use mode 0, keep align with before.
-> +	 * spi_nor_suspend will disable 8-8-8-DTR mode, also need to
-> +	 * change the mode back to mode 0.
-> +	 */
-> +	if (!(f->flags & FSPI_RXCLKSRC_3) &&
-> +			op->cmd.dtr && op->addr.dtr &&
-> +			op->dummy.dtr && op->data.dtr) {
-> +		reg = fspi_readl(f, f->iobase + FSPI_MCR0);
-> +		reg |= FSPI_MCR0_RXCLKSRC(3);
-> +		fspi_writel(f, reg, f->iobase + FSPI_MCR0);
-> +		f->flags |= FSPI_RXCLKSRC_3;
-> +	} else if ((f->flags & FSPI_RXCLKSRC_3) &&
-> +			!op->cmd.dtr && !op->addr.dtr &&
-> +			!op->dummy.dtr && !op->data.dtr) {
-> +		reg = fspi_readl(f, f->iobase + FSPI_MCR0);
-> +		reg &= ~FSPI_MCR0_RXCLKSRC(3);	/* select mode 0 */
-> +		fspi_writel(f, reg, f->iobase + FSPI_MCR0);
-> +		f->flags &= ~FSPI_RXCLKSRC_3;
-> +	}
+On Sat, Jun 25, 2022 at 1:10 AM David Gow <davidgow@google.com> wrote:
+>
+> From: Jeremy Kerr <jk@codeconstruct.com.au>
+>
+> Currently, KUnit runs built-in tests and tests loaded from modules
+> differently. For built-in tests, the kunit_test_suite{,s}() macro adds a
+> list of suites in the .kunit_test_suites linker section. However, for
+> kernel modules, a module_init() function is used to run the test suites.
+>
+> This causes problems if tests are included in a module which already
+> defines module_init/exit_module functions, as they'll conflict with the
+> kunit-provided ones.
+>
+> This change removes the kunit-defined module inits, and instead parses
+> the kunit tests from their own section in the module. After module init,
+> we call __kunit_test_suites_init() on the contents of that section,
+> which prepares and runs the suite.
+>
+> This essentially unifies the module- and non-module kunit init formats.
+>
+> Tested-by: Ma=C3=ADra Canal <maira.canal@usp.br>
+> Signed-off-by: Jeremy Kerr <jk@codeconstruct.com.au>
+> Signed-off-by: Daniel Latypov <dlatypov@google.com>
+> Signed-off-by: David Gow <davidgow@google.com>
 
-How is this supposed to work? Are you unconditionally enable
-flash provided read strobes if DTR is used? What if the
-flash doesn't provide one or the board haven't DQS connected?
-
--michael
+Reviewed-by: Brendan Higgins <brendanhiggins@google.com>

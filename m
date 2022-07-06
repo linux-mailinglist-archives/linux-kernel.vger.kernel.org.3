@@ -2,210 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 61FA656896F
+	by mail.lfdr.de (Postfix) with ESMTP id F2024568971
 	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 15:30:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233634AbiGFN3S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Jul 2022 09:29:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57242 "EHLO
+        id S233369AbiGFN3y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Jul 2022 09:29:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57530 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232435AbiGFN3L (ORCPT
+        with ESMTP id S232435AbiGFN3u (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Jul 2022 09:29:11 -0400
-Received: from mail-io1-f41.google.com (mail-io1-f41.google.com [209.85.166.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7153D22536;
-        Wed,  6 Jul 2022 06:29:09 -0700 (PDT)
-Received: by mail-io1-f41.google.com with SMTP id v185so13950660ioe.11;
-        Wed, 06 Jul 2022 06:29:09 -0700 (PDT)
+        Wed, 6 Jul 2022 09:29:50 -0400
+Received: from mail-lj1-x22a.google.com (mail-lj1-x22a.google.com [IPv6:2a00:1450:4864:20::22a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06B14220F3;
+        Wed,  6 Jul 2022 06:29:49 -0700 (PDT)
+Received: by mail-lj1-x22a.google.com with SMTP id q8so6015897ljj.10;
+        Wed, 06 Jul 2022 06:29:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=iG3AipQilfKuzKYwYhwqMs5yIfTtS592Uv9tC2e+5zg=;
+        b=OEUv/cFSDJM+foTCDim/T3cc3IZE2e/1ltzUcZlawkCnaiBFbRzC+OqKhW6rprzStm
+         AgzNYb86PiwD+g9H7CweK556mPP+7LDddRqSZLIdLGF0qEatc31Ruh6RCW1o9pdn95GQ
+         zdd5dfKxEv6nTUdHVbL2KuGX8G/zxP1uVeixydyr7+Dc8V0+9yQjcqPj0CPKbIPscr3o
+         1K5GKaJlKrfF3LQyO1Sy/xC+CyqAuCXFj22kDzSNb/cmWxqzWCPPbYjJdkQ4PhXpOBip
+         T8m+2GRUjcK9TWOhzJU0HawY3V47k6Hpj/sEyP1TuZ10BC+S/zFLzcyLlzMUM1/p52xu
+         JOWA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:in-reply-to:references:subject:date
-         :message-id;
-        bh=aH9lY+PqiINzwORzIiO0qDw6/f8iZmksmBw46FQhWpk=;
-        b=ZU4k9EwsJe71bEPuMPK0lbyWmxGQAMOcEW+n3oeNXf+dG44xu97oBkS7Qcg6vlxvOc
-         aXozB4uMFAkOWHj2TzaGsjgpnN+swxtskIn8I+ysyolbCTOgK9jDeqb91SYyTxX8YG3T
-         2+q3siFL/rNhs9SQ3H54jemXv3/oK0P37qq+Y39mFhMd2plJ/yElZNBspE94HPMvPhw/
-         g/opXiWUgdG+lrH0NVUqpemNI8gmTttsanaKSHA6uiXxEb1oQK0uY/vZRvDTI12bnzYU
-         yvOcebMTJIn41/iIG9X8vwtanjzMSb6s7ptHtPGZ989APzrEwUGUoSa55AUxM6rxX6MR
-         gACA==
-X-Gm-Message-State: AJIora89V2XVJ6gqO1jGsw3L+/KfyoDjZWRSCTmsrI5atb4Q4jGBB1ZU
-        61TNpKgGObrf6PsVzzsO/A==
-X-Google-Smtp-Source: AGRyM1siwmsKZBGMzZqo+DCW0UuVyEgykE4URqCkd6D2y8wK9hzr/wCXAIdebsXRMO5/8F/INeU8rg==
-X-Received: by 2002:a05:6602:29d1:b0:669:428e:8c59 with SMTP id z17-20020a05660229d100b00669428e8c59mr21345697ioq.85.1657114148656;
-        Wed, 06 Jul 2022 06:29:08 -0700 (PDT)
-Received: from robh.at.kernel.org ([64.188.179.248])
-        by smtp.gmail.com with ESMTPSA id 19-20020a056e0211b300b002dc0d743570sm3817592ilj.43.2022.07.06.06.29.07
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 06 Jul 2022 06:29:08 -0700 (PDT)
-Received: (nullmailer pid 4099937 invoked by uid 1000);
-        Wed, 06 Jul 2022 13:29:04 -0000
-From:   Rob Herring <robh@kernel.org>
-To:     Kavyasree Kotagiri <kavyasree.kotagiri@microchip.com>
-Cc:     nicolas.ferre@microchip.com, robh+dt@kernel.org,
-        alexandre.belloni@bootlin.com, linux-kernel@vger.kernel.org,
-        Kavyasree.Kotagiri@microchip.com, UNGLinuxDriver@microchip.com,
-        krzysztof.kozlowski+dt@linaro.org,
-        linux-arm-kernel@lists.infradead.org, claudiu.beznea@microchip.com,
-        devicetree@vger.kernel.org
-In-Reply-To: <20220706110619.71729-2-kavyasree.kotagiri@microchip.com>
-References: <20220706110619.71729-1-kavyasree.kotagiri@microchip.com> <20220706110619.71729-2-kavyasree.kotagiri@microchip.com>
-Subject: Re: [PATCH v7 1/3] dt-bindings: mfd: Convert atmel-flexcom to json-schema
-Date:   Wed, 06 Jul 2022 07:29:04 -0600
-Message-Id: <1657114144.966195.4099936.nullmailer@robh.at.kernel.org>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=iG3AipQilfKuzKYwYhwqMs5yIfTtS592Uv9tC2e+5zg=;
+        b=1yNVOd3VkEVELacsasxP54CySCd4Yam+xXJIjKvXYtTv62fLlsLKtF4NNspUXe1Fbn
+         x0z+SUd973jEa0dv9u4+twOIayQo8GtafTqT44g6ABtv6OANFzeZNBRDgq1EUcKvTypU
+         a+pKnbX27mPhNlh6yivyyF5i96+cLqywrUSnFke0YwN4o1JKsON9FxTWO9jnYsCyPOIW
+         xNw6nDGwt1FhwlybCYtrO45zJeUnPTG6mQgZF3zLuaQBmjWvnss8L+X6fwp2uQe7SDf7
+         +psMtiojVtr7yk+NqMgHubOwoBfBLM9pBi2CJT5Chd4SU2NOlvMyxj6+BTd4JVjs8QhQ
+         3aPA==
+X-Gm-Message-State: AJIora/kVBytI7CSvM3vKQa1Zm3ed0vEO220a87PqBbppWXRAJ4dryEP
+        SObIchtsF+950CQa5kqLoLg=
+X-Google-Smtp-Source: AGRyM1s9JuaMX0+6/OvWmt4rbkwOyWZwEWNEGno5g4V0BLC1qKGGoMHtZJe1u80z+BZaZOYr40oEkA==
+X-Received: by 2002:a2e:a901:0:b0:25d:244e:842c with SMTP id j1-20020a2ea901000000b0025d244e842cmr8562397ljq.406.1657114187213;
+        Wed, 06 Jul 2022 06:29:47 -0700 (PDT)
+Received: from [192.168.1.11] ([46.235.67.63])
+        by smtp.gmail.com with ESMTPSA id a1-20020a056512390100b00477c164293csm3281194lfu.79.2022.07.06.06.29.46
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 06 Jul 2022 06:29:46 -0700 (PDT)
+Message-ID: <12431b93-a614-0525-b581-01aa540748e6@gmail.com>
+Date:   Wed, 6 Jul 2022 16:29:45 +0300
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH v3] net: ocelot: fix wrong time_after usage
+Content-Language: en-US
+To:     Vladimir Oltean <vladimir.oltean@nxp.com>
+Cc:     Claudiu Manoil <claudiu.manoil@nxp.com>,
+        "alexandre.belloni@bootlin.com" <alexandre.belloni@bootlin.com>,
+        "davem@davemloft.net" <davem@davemloft.net>,
+        "edumazet@google.com" <edumazet@google.com>,
+        "kuba@kernel.org" <kuba@kernel.org>,
+        "pabeni@redhat.com" <pabeni@redhat.com>,
+        "clement.leger@bootlin.com" <clement.leger@bootlin.com>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Andrew Lunn <andrew@lunn.ch>
+References: <20220706105044.8071-1-paskripkin@gmail.com>
+ <20220706131300.uontjopbdf72pwxy@skbuf>
+From:   Pavel Skripkin <paskripkin@gmail.com>
+In-Reply-To: <20220706131300.uontjopbdf72pwxy@skbuf>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 06 Jul 2022 09:06:17 -0200, Kavyasree Kotagiri wrote:
-> Convert the Atmel flexcom device tree bindings to json schema.
-> 
-> Signed-off-by: Kavyasree Kotagiri <kavyasree.kotagiri@microchip.com>
-> ---
-> v6 -> v7:
->  - Change filename to atmel,sama5d2-flexcom.yaml
->  - Add #address-cells, #size-cells to flexcom node - Fixed warnings.
-> 
-> v5 -> v6:
->  - Removed spi node from example as suggested by Rob and
->    also pattern properties(spi dt-bindings conversion to yaml patch is under review).
->    Once that is accepted, I will add back spi example through new patch.
-> 
-> v4 -> v5:
->  - Fixed indentations.
-> 
-> v3 -> v4:
->  - Corrected format of enum used for compatible string.
-> 
-> v2 -> v3:
->  - used enum for compatible string.
->  - changed irq flag to IRQ_TYPE_LEVEL_HIGH in example.
->  - fixed dtschema errors.
-> 
-> v1 -> v2:
->  - Fix title.
-> 
->  .../bindings/mfd/atmel,sama5d2-flexcom.yaml   | 74 +++++++++++++++++++
->  .../devicetree/bindings/mfd/atmel-flexcom.txt | 63 ----------------
->  2 files changed, 74 insertions(+), 63 deletions(-)
->  create mode 100644 Documentation/devicetree/bindings/mfd/atmel,sama5d2-flexcom.yaml
->  delete mode 100644 Documentation/devicetree/bindings/mfd/atmel-flexcom.txt
+Hi Vladimir,
+
+Vladimir Oltean <vladimir.oltean@nxp.com> says:
+> Can you please indent the arguments to the open bracket?
 > 
 
-Running 'make dtbs_check' with the schema in this patch gives the
-following warnings. Consider if they are expected or the schema is
-incorrect. These may not be new warnings.
+Sure thing! I've just sent a v4.
 
-Note that it is not yet a requirement to have 0 warnings for dtbs_check.
-This will change in the future.
-
-Full log is available here: https://patchwork.ozlabs.org/patch/
+Thank you for review
 
 
-flexcom@e0040000: 'i2c@600', 'serial@200', 'spi@400' do not match any of the regexes: 'pinctrl-[0-9]+'
-	arch/arm/boot/dts/lan966x-kontron-kswitch-d10-mmt-6g-2gs.dtb
-	arch/arm/boot/dts/lan966x-kontron-kswitch-d10-mmt-8g.dtb
-	arch/arm/boot/dts/lan966x-pcb8291.dtb
 
-flexcom@e0044000: 'i2c@600', 'serial@200', 'spi@400' do not match any of the regexes: 'pinctrl-[0-9]+'
-	arch/arm/boot/dts/lan966x-kontron-kswitch-d10-mmt-6g-2gs.dtb
-	arch/arm/boot/dts/lan966x-kontron-kswitch-d10-mmt-8g.dtb
-	arch/arm/boot/dts/lan966x-pcb8291.dtb
-
-flexcom@e0060000: 'i2c@600', 'serial@200', 'spi@400' do not match any of the regexes: 'pinctrl-[0-9]+'
-	arch/arm/boot/dts/lan966x-kontron-kswitch-d10-mmt-6g-2gs.dtb
-	arch/arm/boot/dts/lan966x-kontron-kswitch-d10-mmt-8g.dtb
-	arch/arm/boot/dts/lan966x-pcb8291.dtb
-
-flexcom@e0064000: 'i2c@600', 'serial@200', 'spi@400' do not match any of the regexes: 'pinctrl-[0-9]+'
-	arch/arm/boot/dts/lan966x-kontron-kswitch-d10-mmt-6g-2gs.dtb
-	arch/arm/boot/dts/lan966x-kontron-kswitch-d10-mmt-8g.dtb
-	arch/arm/boot/dts/lan966x-pcb8291.dtb
-
-flexcom@e0070000: 'i2c@600', 'serial@200', 'spi@400' do not match any of the regexes: 'pinctrl-[0-9]+'
-	arch/arm/boot/dts/lan966x-kontron-kswitch-d10-mmt-6g-2gs.dtb
-	arch/arm/boot/dts/lan966x-kontron-kswitch-d10-mmt-8g.dtb
-	arch/arm/boot/dts/lan966x-pcb8291.dtb
-
-flexcom@e1818000: 'serial@200' does not match any of the regexes: 'pinctrl-[0-9]+'
-	arch/arm/boot/dts/at91-sama7g5ek.dtb
-
-flexcom@e181c000: 'i2c@600' does not match any of the regexes: 'pinctrl-[0-9]+'
-	arch/arm/boot/dts/at91-sama7g5ek.dtb
-
-flexcom@e1824000: 'serial@200' does not match any of the regexes: 'pinctrl-[0-9]+'
-	arch/arm/boot/dts/at91-sama7g5ek.dtb
-
-flexcom@e2018000: 'serial@200' does not match any of the regexes: 'pinctrl-[0-9]+'
-	arch/arm/boot/dts/at91-sama7g5ek.dtb
-
-flexcom@e2024000: 'serial@200' does not match any of the regexes: 'pinctrl-[0-9]+'
-	arch/arm/boot/dts/at91-sama7g5ek.dtb
-
-flexcom@e2818000: 'i2c@600' does not match any of the regexes: 'pinctrl-[0-9]+'
-	arch/arm/boot/dts/at91-sama7g5ek.dtb
-
-flexcom@e281c000: 'i2c@600' does not match any of the regexes: 'pinctrl-[0-9]+'
-	arch/arm/boot/dts/at91-sama7g5ek.dtb
-
-flexcom@e2824000: 'spi@400' does not match any of the regexes: 'pinctrl-[0-9]+'
-	arch/arm/boot/dts/at91-sama7g5ek.dtb
-
-flexcom@f0000000: 'spi@400' does not match any of the regexes: 'pinctrl-[0-9]+'
-	arch/arm/boot/dts/at91-sam9x60ek.dtb
-
-flexcom@f0004000: 'serial@200' does not match any of the regexes: 'pinctrl-[0-9]+'
-	arch/arm/boot/dts/at91-sam9x60ek.dtb
-
-flexcom@f8010000: 'i2c@600' does not match any of the regexes: 'pinctrl-[0-9]+'
-	arch/arm/boot/dts/at91-sam9x60ek.dtb
-
-flexcom@f801c000: 'i2c@600' does not match any of the regexes: 'pinctrl-[0-9]+'
-	arch/arm/boot/dts/at91-sam9x60ek.dtb
-
-flexcom@f8034000: 'i2c@600', 'serial@200', 'spi@400' do not match any of the regexes: 'pinctrl-[0-9]+'
-	arch/arm/boot/dts/at91-kizbox3-hs.dtb
-	arch/arm/boot/dts/at91-sama5d27_som1_ek.dtb
-	arch/arm/boot/dts/at91-sama5d27_wlsom1_ek.dtb
-	arch/arm/boot/dts/at91-sama5d2_icp.dtb
-	arch/arm/boot/dts/at91-sama5d2_ptc_ek.dtb
-	arch/arm/boot/dts/at91-sama5d2_xplained.dtb
-
-flexcom@f8038000: 'i2c@600', 'serial@200', 'spi@400' do not match any of the regexes: 'pinctrl-[0-9]+'
-	arch/arm/boot/dts/at91-kizbox3-hs.dtb
-	arch/arm/boot/dts/at91-sama5d27_som1_ek.dtb
-	arch/arm/boot/dts/at91-sama5d27_wlsom1_ek.dtb
-	arch/arm/boot/dts/at91-sama5d2_icp.dtb
-	arch/arm/boot/dts/at91-sama5d2_ptc_ek.dtb
-	arch/arm/boot/dts/at91-sama5d2_xplained.dtb
-
-flexcom@fc010000: 'i2c@600', 'serial@200', 'spi@400' do not match any of the regexes: 'pinctrl-[0-9]+'
-	arch/arm/boot/dts/at91-kizbox3-hs.dtb
-	arch/arm/boot/dts/at91-sama5d27_som1_ek.dtb
-	arch/arm/boot/dts/at91-sama5d27_wlsom1_ek.dtb
-	arch/arm/boot/dts/at91-sama5d2_icp.dtb
-	arch/arm/boot/dts/at91-sama5d2_ptc_ek.dtb
-	arch/arm/boot/dts/at91-sama5d2_xplained.dtb
-
-flexcom@fc014000: 'i2c@600', 'serial@200', 'spi@400' do not match any of the regexes: 'pinctrl-[0-9]+'
-	arch/arm/boot/dts/at91-kizbox3-hs.dtb
-	arch/arm/boot/dts/at91-sama5d27_som1_ek.dtb
-	arch/arm/boot/dts/at91-sama5d27_wlsom1_ek.dtb
-	arch/arm/boot/dts/at91-sama5d2_icp.dtb
-	arch/arm/boot/dts/at91-sama5d2_ptc_ek.dtb
-	arch/arm/boot/dts/at91-sama5d2_xplained.dtb
-
-flexcom@fc018000: 'i2c@600', 'serial@200', 'spi@400' do not match any of the regexes: 'pinctrl-[0-9]+'
-	arch/arm/boot/dts/at91-kizbox3-hs.dtb
-	arch/arm/boot/dts/at91-sama5d27_som1_ek.dtb
-	arch/arm/boot/dts/at91-sama5d27_wlsom1_ek.dtb
-	arch/arm/boot/dts/at91-sama5d2_icp.dtb
-	arch/arm/boot/dts/at91-sama5d2_ptc_ek.dtb
-	arch/arm/boot/dts/at91-sama5d2_xplained.dtb
-
+Thanks,
+--Pavel Skripkin

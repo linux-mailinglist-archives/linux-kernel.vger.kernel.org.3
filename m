@@ -2,55 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 00CA856806C
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 09:45:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D93CC56806E
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 09:45:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231658AbiGFHpJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Jul 2022 03:45:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33962 "EHLO
+        id S231922AbiGFHpW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Jul 2022 03:45:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34246 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231865AbiGFHpF (ORCPT
+        with ESMTP id S231827AbiGFHpT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Jul 2022 03:45:05 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7AC422B17;
-        Wed,  6 Jul 2022 00:45:03 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 546B6225A3;
-        Wed,  6 Jul 2022 07:45:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1657093502; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
-        bh=u5DoLqKVxyy1WDXsQxYHtUUIzMR4OyQzQ4xHbmmcCFQ=;
-        b=rNaEq4xWWdueYwENPpdLRIh66mIPKo8u7X3mlrGsXScRB1SjL6BVWfj7kplm9dTyXYFvQv
-        iGKoWLnAULAOT8+u32aXERyjR/75eIKUOa+dc/MYW36Y7OuIt1CT9hd9lQdvzX7vJEGsji
-        jtZk1vVnjQrxo20yjUnw+7xsM6uh4IA=
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 1EDEF134CF;
-        Wed,  6 Jul 2022 07:45:02 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id 5efYBX49xWLJDwAAMHmgww
-        (envelope-from <oneukum@suse.com>); Wed, 06 Jul 2022 07:45:02 +0000
-From:   Oliver Neukum <oneukum@suse.com>
-To:     ean@mess.org, mchehab@kernel.org, linux-media@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Oliver Neukum <oneukum@suse.com>
-Subject: [PATCH] ati-remote: remove private err() macro
-Date:   Wed,  6 Jul 2022 09:44:59 +0200
-Message-Id: <20220706074459.19940-1-oneukum@suse.com>
-X-Mailer: git-send-email 2.35.3
+        Wed, 6 Jul 2022 03:45:19 -0400
+Received: from out30-56.freemail.mail.aliyun.com (out30-56.freemail.mail.aliyun.com [115.124.30.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E169813E0A
+        for <linux-kernel@vger.kernel.org>; Wed,  6 Jul 2022 00:45:17 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R131e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046051;MF=cruzzhao@linux.alibaba.com;NM=1;PH=DS;RN=10;SR=0;TI=SMTPD_---0VIXa9DY_1657093513;
+Received: from 30.97.49.75(mailfrom:cruzzhao@linux.alibaba.com fp:SMTPD_---0VIXa9DY_1657093513)
+          by smtp.aliyun-inc.com;
+          Wed, 06 Jul 2022 15:45:14 +0800
+Message-ID: <2f2b3592-9cf8-95ad-7150-6fb430906231@linux.alibaba.com>
+Date:   Wed, 6 Jul 2022 15:45:13 +0800
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.9.0
+Subject: Re: [PATCH 2/3] sched/core: Introduce nr_running percpu for each
+ cookie
+Content-Language: en-US
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     mingo@redhat.com, juri.lelli@redhat.com,
+        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
+        rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
+        bristot@redhat.com, linux-kernel@vger.kernel.org
+References: <1656403045-100840-1-git-send-email-CruzZhao@linux.alibaba.com>
+ <1656403045-100840-3-git-send-email-CruzZhao@linux.alibaba.com>
+ <YsK2riNersXeRgKM@hirez.programming.kicks-ass.net>
+From:   cruzzhao <cruzzhao@linux.alibaba.com>
+In-Reply-To: <YsK2riNersXeRgKM@hirez.programming.kicks-ass.net>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -58,59 +50,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Drivers should use dev_err()
 
-Signed-off-by: Oliver Neukum <oneukum@suse.com>
----
- drivers/media/rc/ati_remote.c | 11 +++++------
- 1 file changed, 5 insertions(+), 6 deletions(-)
 
-diff --git a/drivers/media/rc/ati_remote.c b/drivers/media/rc/ati_remote.c
-index 3155e876616d..b43ae0580374 100644
---- a/drivers/media/rc/ati_remote.c
-+++ b/drivers/media/rc/ati_remote.c
-@@ -135,8 +135,6 @@ MODULE_PARM_DESC(mouse, "Enable mouse device, default = yes");
- 
- #define dbginfo(dev, format, arg...) \
- 	do { if (debug) dev_info(dev , format , ## arg); } while (0)
--#undef err
--#define err(format, arg...) printk(KERN_ERR format , ## arg)
- 
- struct ati_receiver_type {
- 	/* either default_keymap or get_default_keymap should be set */
-@@ -816,11 +814,12 @@ static int ati_remote_probe(struct usb_interface *interface,
- 	struct ati_receiver_type *type = (struct ati_receiver_type *)id->driver_info;
- 	struct ati_remote *ati_remote;
- 	struct input_dev *input_dev;
-+	struct device *device = &interface->dev;
- 	struct rc_dev *rc_dev;
- 	int err = -ENOMEM;
- 
- 	if (iface_host->desc.bNumEndpoints != 2) {
--		err("%s: Unexpected desc.bNumEndpoints\n", __func__);
-+		dev_err(device, "%s: Unexpected desc.bNumEndpoints\n", __func__);
- 		return -ENODEV;
- 	}
- 
-@@ -828,15 +827,15 @@ static int ati_remote_probe(struct usb_interface *interface,
- 	endpoint_out = &iface_host->endpoint[1].desc;
- 
- 	if (!usb_endpoint_is_int_in(endpoint_in)) {
--		err("%s: Unexpected endpoint_in\n", __func__);
-+		dev_err(device, "%s: Unexpected endpoint_in\n", __func__);
- 		return -ENODEV;
- 	}
- 	if (le16_to_cpu(endpoint_in->wMaxPacketSize) == 0) {
--		err("%s: endpoint_in message size==0? \n", __func__);
-+		dev_err(device, "%s: endpoint_in message size==0? \n", __func__);
- 		return -ENODEV;
- 	}
- 	if (!usb_endpoint_is_int_out(endpoint_out)) {
--		err("%s: Unexpected endpoint_out\n", __func__);
-+		dev_err(device, "%s: Unexpected endpoint_out\n", __func__);
- 		return -ENODEV;
- 	}
- 
--- 
-2.35.3
+在 2022/7/4 下午5:45, Peter Zijlstra 写道:
+> On Tue, Jun 28, 2022 at 03:57:24PM +0800, Cruz Zhao wrote:
+> 
+>>  static unsigned long sched_core_alloc_cookie(void)
+>>  {
+>>  	struct sched_core_cookie *ck = kmalloc(sizeof(*ck), GFP_KERNEL);
+>> +	int cpu;
+>> +
+>>  	if (!ck)
+>>  		return 0;
+>>  
+>>  	refcount_set(&ck->refcnt, 1);
+>> +
+>> +	ck->nr_running = alloc_percpu(unsigned int);
+> 
+> 	if (!ck->nr_running)
+> 		// do something
+> 
+>> +	for_each_possible_cpu(cpu)
+>> +		*per_cpu_ptr(ck->nr_running, cpu) = 0;
+> 
+> So I really, as in *really* dislike how this blows up the size of
+> cookies. Esp. with 100s of CPUs not actually being rare these days.
 
+My idea is to get the distribution of cookie'd tasks on each runqueue
+through ck->nr_running, so as to facilitate optimization of load
+balance. Sorry for not stating this in the change log.
+
+This does blow up the size of cookies in scenarios with a large number
+of CPUs, and I'll try to get around this problem.
+
+Many thanks for reviewing.
+Best wishes,
+Cruz Zhao

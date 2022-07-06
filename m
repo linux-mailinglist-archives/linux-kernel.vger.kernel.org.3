@@ -2,121 +2,162 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 893A05689FA
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 15:49:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 45C8E568A03
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 15:50:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233591AbiGFNte (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Jul 2022 09:49:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49034 "EHLO
+        id S232759AbiGFNtn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Jul 2022 09:49:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49246 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233552AbiGFNtY (ORCPT
+        with ESMTP id S233814AbiGFNtf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Jul 2022 09:49:24 -0400
-Received: from mail-yw1-f177.google.com (mail-yw1-f177.google.com [209.85.128.177])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 861541E3DC;
-        Wed,  6 Jul 2022 06:49:21 -0700 (PDT)
-Received: by mail-yw1-f177.google.com with SMTP id 00721157ae682-31c9b70c382so78127607b3.6;
-        Wed, 06 Jul 2022 06:49:21 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=dtlZocyToFGVGM2MQv4D5WyH03DgmYnmulWgb2UYDDM=;
-        b=5sTNTd959nviLdhYXPo32JN94yMddzVGvOEmZR2Gbt6cIsyfUPytCQC9x1WCuSGKXy
-         xLGuAEkDEmsR45ND6N65PRlQRjdb3iNrjCHNFNJaZewKUkJxpde2JFeBH9Ds6HilX+GF
-         EWggPWcj6SBJHSmoqT8GRItcG6X+gciLi5JoGLf3GM4tDqbsKmxstvK3VPynj4fi7hxL
-         disixYF6FyjiiO17AFwwFbu6AvkcRFX1iPj2Fa9VbGiytkzSixYzGdZ/4bA32IPazoh5
-         ITRVEkns6rbKjzvh7zCWs3bbmmp4bPHd7bNPLla153an+WqG+LKK/1AaVmM4J4EZc5I4
-         uVDw==
-X-Gm-Message-State: AJIora8/mjxVLZu67D2qghMyEjcjv7rP1GQOnE7WWOdIuIBQTpYWiBTE
-        ypDTtzWSX3hYElUJ6Y0DBk9tiKb8jr7OGP1SXlA=
-X-Google-Smtp-Source: AGRyM1vr1wi9w9NCemLoidvbCweBYnR1fD94J+vYgMW//deWJxOLNs20DDiRmD9h3ILhGY+rqoURrgi4/Rat+LO9y+c=
-X-Received: by 2002:a81:17d0:0:b0:31c:c5e2:fc1e with SMTP id
- 199-20020a8117d0000000b0031cc5e2fc1emr10086071ywx.196.1657115360660; Wed, 06
- Jul 2022 06:49:20 -0700 (PDT)
+        Wed, 6 Jul 2022 09:49:35 -0400
+Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2088.outbound.protection.outlook.com [40.107.94.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6F6A21802
+        for <linux-kernel@vger.kernel.org>; Wed,  6 Jul 2022 06:49:33 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=AQi/jf1xNgFgHeWZ2E4wKKVRAm53ZEaiu9ztZSy7jj+qfAXMKBz2nYn0ZgOJW1n1FmTepc+hRosn0LOnY2KCoE6l/J22hqeSWGd/4DFajdzYLFYHs0GHSX2ZffIINMBHpNZ1ZMwBRJnrc86zdqfZwNLclNI7PlGWNHEV8/MsPq1AFGOAtGNP5X3b/GRKLdqNRSXj5bjDF3Y/eC/zAI/GvbQQm0qzr4LizUb2LqhuZB0KQB40hoepaXOZ1oG5RV2+LCSCG147lVGELnGwwKCrE0oReXtIkxn+rn5Dif7MPtvAKDjl+//h9sC9ZwaKJ1VG7UayfsQNKdiFIjbcX+9FKg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=Frug2jq4X16sUhS4yt7tW8OOE0Ia8xeNDv3JuVJDN5c=;
+ b=RyZyNurklGVmCuzWUHxUBnQKYmbkyHSSSzKDthbKLELNhGKbRwakdvnfd6tcvouR1UuRmy2O+N9AYfVZhezZbLpvzDWdofYIkAbfJD8iHGFRvG03wD3bZHi/TqP21nWjSN4N5Xok5IOGQi0TMnMZbwjAZ1uZCRWb2YNUiuNhn0M2RCq5mV/jHX55o1r9WHUIYMbD88ZSxooT4gvKh2SQwHVHWDvAAl6QIG41OiPCRA6wlFxXDNehWHwySjxFm2XM3JFXZNwoE/Fk0INnlwEZ0KEv0eghGbay1OiMe9y3Y+fBgNafbTiNRvACY+O5nuECRVnzliYGTscLxKnAo4vSXA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=Frug2jq4X16sUhS4yt7tW8OOE0Ia8xeNDv3JuVJDN5c=;
+ b=Js3iFYR27m+B5hzyOY9c5Y4yWlURisBV747NKQYf/9AzL9zLdBH3q77OWBb7IYwqaLcrgaTnsKi/shTKsHpCxwNbP8OhJ/vJcfd43H6dPlg6Tk+DS6mkdOB9iY0jZ3jNeI5v43TK5S8ln5FjYbolhxXFFCpcWY5HrzKk9MgZ2/k=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from CO6PR12MB5427.namprd12.prod.outlook.com (2603:10b6:5:358::13)
+ by MN2PR12MB4128.namprd12.prod.outlook.com (2603:10b6:208:1dd::15) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5417.16; Wed, 6 Jul
+ 2022 13:49:31 +0000
+Received: from CO6PR12MB5427.namprd12.prod.outlook.com
+ ([fe80::f55b:be13:11c6:d9dc]) by CO6PR12MB5427.namprd12.prod.outlook.com
+ ([fe80::f55b:be13:11c6:d9dc%3]) with mapi id 15.20.5395.021; Wed, 6 Jul 2022
+ 13:49:31 +0000
+Message-ID: <5dc99a6e-569c-a736-9f64-ac632433da81@amd.com>
+Date:   Wed, 6 Jul 2022 09:49:26 -0400
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH] drm/amd/display: remove repeated includes
+Content-Language: en-US
+To:     Guo Zhengkui <guozhengkui@vivo.com>, Leo Li <sunpeng.li@amd.com>,
+        Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
+        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Jimmy Kizito <Jimmy.Kizito@amd.com>,
+        "open list:AMD DISPLAY CORE" <amd-gfx@lists.freedesktop.org>,
+        "open list:DRM DRIVERS" <dri-devel@lists.freedesktop.org>,
+        open list <linux-kernel@vger.kernel.org>
+Cc:     zhengkui_guo@outlook.com
+References: <20220706091329.62192-1-guozhengkui@vivo.com>
+From:   Harry Wentland <harry.wentland@amd.com>
+In-Reply-To: <20220706091329.62192-1-guozhengkui@vivo.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: YT3PR01CA0111.CANPRD01.PROD.OUTLOOK.COM
+ (2603:10b6:b01:85::12) To CO6PR12MB5427.namprd12.prod.outlook.com
+ (2603:10b6:5:358::13)
 MIME-Version: 1.0
-References: <8c3d50faf8811e86136fb3f9c459e43fc3c50bc0.1653565641.git.viresh.kumar@linaro.org>
- <426bf6edc80b2e944d459fa7b8dffbe8b73bb3d9.1653623526.git.viresh.kumar@linaro.org>
- <CAJZ5v0gswDEdK9-gC1dPr9BFPv3G9rs+JYe-7=1JZ11OMoBb-g@mail.gmail.com> <20220615045957.55ocdyddcac3vwct@vireshk-i7>
-In-Reply-To: <20220615045957.55ocdyddcac3vwct@vireshk-i7>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Wed, 6 Jul 2022 15:49:09 +0200
-Message-ID: <CAJZ5v0gDCS8mkoFjnqOAi9gGuhTheE79FwvRWgeoxagMj3Ok0Q@mail.gmail.com>
-Subject: Re: [PATCH V2 2/3] cpufreq: Panic if policy is active in cpufreq_policy_free()
-To:     Viresh Kumar <viresh.kumar@linaro.org>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        kernel test robot <oliver.sang@intel.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 38a7ddff-ebe0-49b8-4f99-08da5f565a31
+X-MS-TrafficTypeDiagnostic: MN2PR12MB4128:EE_
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: UgioCGX2RR993IA/DBn6jSl2blxp2h8sjsiOIpWt6549viDVfMzCiw/TXBDuzKMHxkmILhSZCqFrgqsyuj2VNoOk+Q34v92wA96ZthqmpNq0OXR+3sI0NhX1DpM8ZIEocSbJF9g6vb44njVlKLHhX/XpHBUfMjA04xQozowdQMzooW153EUrOYZXmwK+zXFBFgXMxEaiYbi6GmYrk/IoRa81qfc/JNy/SNMQyd+fhfM/GqwRZZk+8wJinOBvBE90ejIZFiD5me6G/zTe4zEVEy1nQ3u6mGkqS3fbPSfC5po8BI7MRjgokgyhCpAYJyes7XAtoSkXYxcReMAIq9Wqaw1LCPHeT/TFbqik83JyC4jark3LH7sfG0bY27SdIt8aFRp/JfJY/BdTN1m82fMUii4Ku1JdYZ4Vb1AbWdXAGMrYvduWzsoAnODCJupZ3VbvzuTGITAm0YcGeTw1cAjovnFuZn7YSVWl+4ByqpeGz00wX7jikL7EHnRWFbh7pUi5fvuUsm9mcPT0cfw+x187HIUOreOPIWW8H5TOQMvFirSO4FgZesqDa2+Bb03CIlp5vfPw4yjMsASnlVlONraUv2lGO008ZbYDfOQihKlkPOY7rXU9DEIJKmzFZNEYfGbPtjj3x3EVr/3xjJNEixzzjU4CnnjHMK2Scwaur/zazaJHJ8mLmkOoRyBTVtw1UZHtAdrGC/U1wL43oz1vsv7HNWegVTDBqFsvCuI3NXxUj/MplYA2f97PnWoReiY9NnPd/dPGHpurWw8ibU7pE/bNkM55ZbB0hePEpQD6HXPaBX0mwQxwsKq5t+glLbX+XPmcoEJUrHJho3UfctRMdGuANelqYb2Hswt52/vBStoQxZE=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CO6PR12MB5427.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(376002)(366004)(396003)(136003)(39860400002)(346002)(5660300002)(6666004)(921005)(41300700001)(4326008)(53546011)(8676002)(66556008)(66946007)(66476007)(186003)(6506007)(478600001)(4744005)(316002)(6486002)(2906002)(8936002)(44832011)(2616005)(38100700002)(86362001)(6512007)(26005)(83380400001)(31696002)(31686004)(36756003)(110136005)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?KzIrbHh6K2dHWmhtQ1pOTW5uRm9JRWVZOUJZL3grbHBKZDdRSkx5WE0wdkU1?=
+ =?utf-8?B?Wm9HeGJuR1g1T013NVFDcmdDL0svSGM0WjBhUis1Q0M2dVBYOFBkTndhN1V5?=
+ =?utf-8?B?aGRuSUNzYkFiS21BdzNXaWxPejBJT1kwUU5ZRE5uTlI3dlZBU1MweXNteUdi?=
+ =?utf-8?B?TTl3b2NvSlMwTjlkcXVNZ1crNlRMWUlVMGVoMUE4ajczZkplTUxFZVk2VGRD?=
+ =?utf-8?B?bmxRTTVqSlJYbitodE8zZGtuUzBFdzBqdnYvVStnWXh2djhocFVwejQzeTVC?=
+ =?utf-8?B?L2VQV2YxTW5naTNmZHlZZnluNC9uWUpxTzg2UXJ4Ykh6TDNXYlVYVFdvaEVM?=
+ =?utf-8?B?bzBXWTczb3dlZTNkVTZWb0pVTG1vV0ZBbm1EUnk5K0VKMStPVkdETERvTVoy?=
+ =?utf-8?B?QUcwVU16Yk1hdWZwaGFLWE1uZjR0STdpSlF3OUFEU3Y2NnBSalErMFUvMnQv?=
+ =?utf-8?B?YXYxdXpyQXJQWHJ6dVN6VE1QcEMwYVVZUnhrNGhNdDRPdGFOZVZjTXVLQVM3?=
+ =?utf-8?B?eDRQcEIyOEpOam4vQlQxRzFqN255cGZBcE1oR2VrVHBLa0k0MmJ5RlZqT05v?=
+ =?utf-8?B?WldtSjk1QXV3TGVlYUc3dVpiRDl5a3VkOWJsMnV1QXdTZFIvMUtvMnZtaTg4?=
+ =?utf-8?B?QkFJSUVwdE9QNmNuWUloaWpySm5vL09DK0xyb053VnNaM0lwcG5HdFlBWTJD?=
+ =?utf-8?B?K29EMitFZFdhNlZuUlNtOCtXRkV5b0Jyb0lEQjJjTjBmRWd6by9NMnN3UDFy?=
+ =?utf-8?B?UXNQZmhVZlVPRUdHRTJXYlBUZ3NpUnhDNHZ1NEhrelFITlBraFp5Mi8wcDJB?=
+ =?utf-8?B?Ym9aVEdjbWo2cGlaaEFQTWw2Y2ZCYmg5aHlnVnpHdE9wY3dzU2JrNTdzYjlk?=
+ =?utf-8?B?ZDhxOGRlZStNRHdlSVRZWE1aNFpTM3ZaTFltVjNiRStDem1teFZTL0h3a2ph?=
+ =?utf-8?B?Z3RaWEhpSkZlcHJLcW9jZm96WVBYS2VERXJGZWYxb05rdUlUWmNlU1M2OVJZ?=
+ =?utf-8?B?MmJkdi9RL2lXaGhvTTJmK1Z2azZId2hYQkpIWjEzZHc3NEFQdU9OMGxyaURR?=
+ =?utf-8?B?cFhRRzNwMTZLZkFYeXB4ZkxQbnhyS1QyR1NBQjRQQ3U5TjA0dEYyQXZxS3ZB?=
+ =?utf-8?B?OGFZZElQYjRkRDlVMUhXeDZJU2IyQ2Q4VW9kcWZkNU0wNmlva3BkMmJVeTNj?=
+ =?utf-8?B?M0pTbzFVZHpCdEhXM3M5WHBZMWh0cDI1ZHF2UzNtQUdpemdpRWZDWkFwSGVE?=
+ =?utf-8?B?cFBIQ253QlRqYXAydVNNOHNnZXp3enp0TDhJS25qSFB1M2F5bzBUbU1CelBU?=
+ =?utf-8?B?TW90YmpiOFl1cDV5QzZpMXUwMW5ha2dETEw1aFRYZmdOY2lSbmZIVlQrZW1l?=
+ =?utf-8?B?cTB3L0lxclhCMXJocCsxL0t3MEd4cHJOc21LUmQwNHUybzliWTFPQ0R3SkYy?=
+ =?utf-8?B?ajZhbTd0RlVWZk95eDQwZnRVaCtUU3pGWWdRMUxSZGlBSWw4MDNBKzREUWRC?=
+ =?utf-8?B?UHpuNm4raDhuYkZON3l0Y1BaVjRpRGVmemE2MTJmd29BcHU5S0c1UXF2ZU14?=
+ =?utf-8?B?SEIyY1doQjZJSW80SjFybVNjeU9yY2JEano5K3h4bEh2ZmRDdDQyTVNHZlBJ?=
+ =?utf-8?B?QzQrbzV5M0M4di95Y1o3SWs1SkM1L3lmTHVuRVVBUkJuOFpuUHUvR3JWZjRt?=
+ =?utf-8?B?ejFOV0MrOWNTMVFlMXNLV0NNK1V0UEVZMk9raHVpRHF3TGFBSUlsSXlaS2Vy?=
+ =?utf-8?B?YU9udnZUK3FjbldQRE1uVkxsdlFIUGRHK0paK2FiOTlhVTBuNkVyOVJHdWg1?=
+ =?utf-8?B?bk9uRW53bm1ZYjBJUmNTOGJRdnFEVW11dmFuSlhuWjJQVWI2Z01PTStGVU5G?=
+ =?utf-8?B?NXdwWlpWVXBPQTdCZ3A5VlZUQmhLN0o0YitESUtnakVtQk8xT3JYUDVSc0pH?=
+ =?utf-8?B?eHZHRFQ1WHpoNXFXQ21iZmQwbHBLTFY1UE5ad2VXUjFadkg3dUM3ZFJqMTl1?=
+ =?utf-8?B?dmVETHlabnJWY0Y1Zkd2b1g0bXJEM0xLRGJBTEw5SEFNcDR6Q2Z5OUN1NDIx?=
+ =?utf-8?B?K2g5NkVpL3NkTWFXZ0FBaU9BbC9MQ3BxU2xVSGdyY2NRcFFZL2QxNDlXRTZr?=
+ =?utf-8?Q?wolWsRVMoNSl+dxH17ue7LAL2?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 38a7ddff-ebe0-49b8-4f99-08da5f565a31
+X-MS-Exchange-CrossTenant-AuthSource: CO6PR12MB5427.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Jul 2022 13:49:31.3384
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: oslyBzeD9qKE1JPv69xMh8bUjmkahfNuj9OVHOwAE6R3KDH97KUHf5CeSJfVLXOHJxUkrhif7bzU2ULrNwbUBg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR12MB4128
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 15, 2022 at 7:00 AM Viresh Kumar <viresh.kumar@linaro.org> wrote:
->
-> On 14-06-22, 15:59, Rafael J. Wysocki wrote:
-> > On Fri, May 27, 2022 at 5:53 AM Viresh Kumar <viresh.kumar@linaro.org> wrote:
-> > >
-> > > With the new design in place, to avoid potential races show() and
-> > > store() callbacks check if the policy is active or not before proceeding
-> > > any further. And in order to guarantee that cpufreq_policy_free() must
-> > > be called after clearing the policy->cpus mask, i.e. by marking it
-> > > inactive.
-> > >
-> > > Lets make sure we don't get a bug around this later and catch this early
-> > > by putting a BUG_ON() within cpufreq_policy_free().
-> > >
-> > > Also update cpufreq_online() a bit to make sure we clear the cpus mask
-> > > for each error case before calling cpufreq_policy_free().
-> > >
-> > > Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
-> > > ---
-> > > V2: Update cpufreq_online() and changelog.
-> > >
-> > >  drivers/cpufreq/cpufreq.c | 9 +++++++--
-> > >  1 file changed, 7 insertions(+), 2 deletions(-)
-> > >
-> > > diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
-> > > index e24aa5d4bca5..0f8245731783 100644
-> > > --- a/drivers/cpufreq/cpufreq.c
-> > > +++ b/drivers/cpufreq/cpufreq.c
-> > > @@ -1284,6 +1284,12 @@ static void cpufreq_policy_free(struct cpufreq_policy *policy)
-> > >         unsigned long flags;
-> > >         int cpu;
-> > >
-> > > +       /*
-> > > +        * The callers must ensure the policy is inactive by now, to avoid any
-> > > +        * races with show()/store() callbacks.
-> > > +        */
-> > > +       BUG_ON(!policy_is_inactive(policy));
-> >
-> > I'm not a super-big fan of this change.
-> >
-> > First off, crashing the kernel outright here because of possible races
-> > appears a bit excessive to me.
-> >
-> > Second, it looks like we are worrying about the code running before
-> > the wait_for_completion() call in cpufreq_policy_put_kobj(), because
-> > after that call no one can be running show() or store().  So why don't
-> > we reorder the wait_for_completion() call with respect to the code in
-> > question instead?
->
-> No, I am not worrying about that race. I am just trying to make sure some change
-> in future doesn't break this assumption (that policy should be inactive by this
-> point). That's all. It all looks good for now.
->
-> May be a WARN instead of BUG if we don't want to crash.
+On 2022-07-06 05:13, Guo Zhengkui wrote:
+> Remove a repeated "#include <drm/drm_print.h>"
+> 
+> Signed-off-by: Guo Zhengkui <guozhengkui@vivo.com>
 
-WARN_ON() would be somewhat better, but then I'm not sure if having a
-full call trace in this case is really useful, because we know when
-cpufreq_policy_free() can be called anyway.
+Reviewed-by: Harry Wentland <harry.wentland@amd.com>
 
-Maybe just print a warning message.
+Harry
+
+> ---
+>  drivers/gpu/drm/amd/display/dc/os_types.h | 2 --
+>  1 file changed, 2 deletions(-)
+> 
+> diff --git a/drivers/gpu/drm/amd/display/dc/os_types.h b/drivers/gpu/drm/amd/display/dc/os_types.h
+> index 795dd486b6d6..6b88ae14f1f9 100644
+> --- a/drivers/gpu/drm/amd/display/dc/os_types.h
+> +++ b/drivers/gpu/drm/amd/display/dc/os_types.h
+> @@ -39,8 +39,6 @@
+>  #include <drm/display/drm_dp_helper.h>
+>  #include <drm/drm_print.h>
+>  
+> -#include <drm/drm_print.h>
+> -
+>  #include "cgs_common.h"
+>  
+>  #if defined(__BIG_ENDIAN) && !defined(BIGENDIAN_CPU)
+

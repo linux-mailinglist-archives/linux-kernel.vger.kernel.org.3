@@ -2,75 +2,158 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 00AA8568828
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 14:18:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A8A7568832
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 14:20:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233640AbiGFMSe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Jul 2022 08:18:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54338 "EHLO
+        id S233479AbiGFMUw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Jul 2022 08:20:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55908 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233511AbiGFMSa (ORCPT
+        with ESMTP id S231875AbiGFMUu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Jul 2022 08:18:30 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A6A2B7F6;
-        Wed,  6 Jul 2022 05:18:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=K1Y7ptrT7Er2IK1W4YVha+bOOd1wacvtD6sKDOTjhDI=; b=T9Iub2y3szS+osiCqWJlAKFFN6
-        fEBaxB+/vywIQlou7UGu+d3PWSi1mre+UKTJZgLTyHjCCQZTdb6cs7csA4JViC4yYJnQjO/n/YGPV
-        UrpVXuwqh9kc9QWxI9uo0e9z2iMY8M3evGnDtgaB8TfZWlf3Gb3sH0TW4wPTnx430fIkyCPLxxRev
-        6H6OZ/g9RzR2FT8jG+KKQ/MVy0jes/numMC9qL8IJETTu6DfK+oIHxyyc8UxKxCq5RNl1E1j7E79s
-        gHfXY07tVW362XGQtGinYSLyI5PDNvaqc2ZEsx/qZnmwHlj1K+hhPFAnODTpvZXM9Z93uWvcPtnZ0
-        pIXibGPg==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1o93yx-001dRt-AY; Wed, 06 Jul 2022 12:18:15 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id A1B1C300478;
-        Wed,  6 Jul 2022 14:18:12 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 6728F2020A599; Wed,  6 Jul 2022 14:18:12 +0200 (CEST)
-Date:   Wed, 6 Jul 2022 14:18:12 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Florian Westphal <fw@strlen.de>
-Cc:     Kajetan Puchalski <kajetan.puchalski@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Pablo Neira Ayuso <pablo@netfilter.org>,
-        Jozsef Kadlecsik <kadlec@netfilter.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, Mel Gorman <mgorman@suse.de>,
-        lukasz.luba@arm.com, dietmar.eggemann@arm.com,
-        mark.rutland@arm.com, broonie@kernel.org,
-        netfilter-devel@vger.kernel.org, coreteam@netfilter.org,
-        netdev@vger.kernel.org, stable@vger.kernel.org,
-        regressions@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: Re: [Regression] stress-ng udp-flood causes kernel panic on Ampere
- Altra
-Message-ID: <YsV9hDD4iMAGV9yU@hirez.programming.kicks-ass.net>
-References: <YsAnPhPfWRjpkdmn@e126311.manchester.arm.com>
- <20220702205651.GB15144@breakpoint.cc>
- <YsKxTAaIgvKMfOoU@e126311.manchester.arm.com>
- <YsLGoU7q5hP67TJJ@e126311.manchester.arm.com>
- <YsQYIoJK3iqJ68Tq@e126311.manchester.arm.com>
- <20220705105749.GA711@willie-the-truck>
- <20220705110724.GB711@willie-the-truck>
- <20220705112449.GA931@willie-the-truck>
- <YsVmbOqzACeo1rO4@e126311.manchester.arm.com>
- <20220706120201.GA7996@breakpoint.cc>
+        Wed, 6 Jul 2022 08:20:50 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 490FE1EC6C;
+        Wed,  6 Jul 2022 05:20:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1657110049; x=1688646049;
+  h=message-id:date:subject:to:cc:references:from:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=a40tYHtNaMgPl05KlceNH7JBPsY6eHgPJh9pxVymfmo=;
+  b=HCfvGRRKD24Qg1LGkFZje7p8Jfv8bhcOg76KGfEcH8Xc4rDHPkgIW82K
+   SaeTNXcJtY+LEice0VM0pjbew9CvK25vCcauot1CzqXTvZNbygTzBeEwM
+   IMFR3mJaYvSlV/cwiu/J9CRi/aSGVDM1UQF8huiPOlgD9bHBoAW1/CeXn
+   YFR9GKEobHvVNr5+m8F+iJLComzvpuZa8KF3ez1oiwxUI+2PyGCRvoWQC
+   vDSIb7agRhc9o5kEMMJ7Rp6tpQVuioCPsaKEBQtdIWKdbdmOOgin9r2fx
+   pXicyD2LmYzVEjfkayI7SrVlrfPz/ySLbCnd5leaiAcUI8SaeBpVh8MOQ
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10399"; a="272518357"
+X-IronPort-AV: E=Sophos;i="5.92,250,1650956400"; 
+   d="scan'208";a="272518357"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jul 2022 05:20:34 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.92,250,1650956400"; 
+   d="scan'208";a="770028062"
+Received: from orsmsx605.amr.corp.intel.com ([10.22.229.18])
+  by orsmga005.jf.intel.com with ESMTP; 06 Jul 2022 05:20:34 -0700
+Received: from orsmsx611.amr.corp.intel.com (10.22.229.24) by
+ ORSMSX605.amr.corp.intel.com (10.22.229.18) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.27; Wed, 6 Jul 2022 05:20:34 -0700
+Received: from ORSEDG601.ED.cps.intel.com (10.7.248.6) by
+ orsmsx611.amr.corp.intel.com (10.22.229.24) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.27 via Frontend Transport; Wed, 6 Jul 2022 05:20:34 -0700
+Received: from NAM11-BN8-obe.outbound.protection.outlook.com (104.47.58.169)
+ by edgegateway.intel.com (134.134.137.102) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2308.27; Wed, 6 Jul 2022 05:20:34 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=csmBgpxkjlGgJjA8grnXaBSyQF01nNRAczZZak3HJ2L3CsrNOV43wcCVZU3xWeO5Jtg+uTXaXzAWzR8+drADVlWE+oc+LAaAQ54ScPdeLgCZphxI7OjYR5sDuZCHdjxMJlWMLSQWd77H1UAgLI3GHREq+wddhWRcCFcodxCYsbgqrhRwcyhmqgxBW22seJd6vQg43wHkA+AE6SujfopeuvjZCoOj0X0MXw/DqAuxNdMZdHJgm58BUDaNcBlhMvb8P5td6u8o4AXsUCk/lm3v8ziHvS8CqRDm3x2FifaqtTI/yQdM8Ia7vPAoSH/tZbeN2EMt6iGfBPUiD3UeZklRVQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=ZibYtr3NBX6AA70dPoms8XNnrWDTkOjN6m8iKL426bY=;
+ b=MHPqfcN+L6J9VwOHgzOZa0Bpuj8Ht3i9TyA09XYlBAIcygfs2yFtrznzizWYStv3EIrg5x/PG4oGsGIpjRoqkNn6gOi6lZuIgMF2+n02mLXd95+izMhKZe4WsYCkxgq8sXG6O0axtf0GhMsKRhhVE8wNwWhRVP2wwIp1S+ocj74lipJos63lu3xhpagHrsgTugyJh64OZmDakiwCfetGxeRo1ZTZ00G2MkwwjH0Tq8c/RVRQWOmirykXp5mJULBdk2dYA1JOu6z0uqVnpgdriCCD5ALavYeug2ZZa2Xq4UpV/4KibtDa55Xh/Kr7w69MENbcHiErWuWqmCbFO2MQNw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from DS0PR11MB6375.namprd11.prod.outlook.com (2603:10b6:8:c9::21) by
+ BN6PR1101MB2098.namprd11.prod.outlook.com (2603:10b6:405:52::19) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5417.16; Wed, 6 Jul
+ 2022 12:20:32 +0000
+Received: from DS0PR11MB6375.namprd11.prod.outlook.com
+ ([fe80::8b5:ae20:1c12:421b]) by DS0PR11MB6375.namprd11.prod.outlook.com
+ ([fe80::8b5:ae20:1c12:421b%6]) with mapi id 15.20.5395.021; Wed, 6 Jul 2022
+ 12:20:32 +0000
+Message-ID: <3c32390d-6ef6-82b2-7765-1ddad1ab39d0@intel.com>
+Date:   Wed, 6 Jul 2022 14:20:25 +0200
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Firefox/91.0 Thunderbird/91.10.0
+Subject: Re: linux-next: build failure after merge of the sound-asoc tree
+Content-Language: en-US
+To:     Mark Brown <broonie@kernel.org>,
+        Stephen Rothwell <sfr@canb.auug.org.au>
+CC:     Liam Girdwood <lgirdwood@gmail.com>,
+        =?UTF-8?Q?Amadeusz_S=c5=82awi=c5=84ski?= 
+        <amadeuszx.slawinski@linux.intel.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+References: <20220706115529.7deea289@canb.auug.org.au>
+ <YsV7jC2eoEx6G3qH@sirena.org.uk>
+From:   Cezary Rojewski <cezary.rojewski@intel.com>
+In-Reply-To: <YsV7jC2eoEx6G3qH@sirena.org.uk>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: FR3P281CA0034.DEUP281.PROD.OUTLOOK.COM
+ (2603:10a6:d10:1c::20) To DS0PR11MB6375.namprd11.prod.outlook.com
+ (2603:10b6:8:c9::21)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220706120201.GA7996@breakpoint.cc>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: d3f074f6-2ddc-42cc-c677-08da5f49ebd9
+X-MS-TrafficTypeDiagnostic: BN6PR1101MB2098:EE_
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: aMkmEiRL3bMsG5rtAv6hRxBSl735H0CCr2Jm84pj+rpV4TJTPriEySS/weGL/ws7DJj/dD0oXqTFZO5TcKcqDR3w5KZeJ0TaGUwdTLW3S2DsZl1ZSmHm/hsLPH8TnbrlTvsVbZaf/PHKj5LoE7LY3AI8YYiverm5pShas0yN+eH4sR7O5AJh9ayTakY0uhe9d1dk5v5L0Oshg/rcK3jRzmBCKLby5d7VjNAZeB8kjW/t4f3yu813YSfRX9iJVzSW2IHslW3EvUtwtgM0qXOHhwAU0BGCQ0dHC3lpkl6b49STvr0wohRLrmPlrrpJ2JSpojSWAfFSg74amTifSbwHBFwVtec/7nHoGyHz65WnZU7VGjhDOePM5+fVAhPuiMonJvzn4dgn6dVCfMaW6Sx9bWkTAmk1VawROO8pSSuNDF3DRpzk673I4uCw8saeM5R7aOfdxCU75LAbj5kdQ+9Wzj1g3rjrHCMYb5phlg6ViDFfpb1mJPQxkbALNH2HnlDVpeNhwE2VyvJl3TkmL84FlUMDDA6PNgKStLK/4L8mn2auMf+2R3cmLcczDxd47k1NoeDKj1Zzyg0kZa05dIfcBOQrinV7lyv9U7jJEWtdyO3tapSLmqutgC7hoGPS/EBQJtE1k3CxpfdvHEgdx6Ptzrc7abFXq5prTJkjLgFIsqR3xOtE45nGGaqOACe5YqXZ4OsAMqbFy//pv6METjn8wOeL56+BcmNg5kSn5XF9aTvaZ0Q6nr+rFgIZ6M1fAzSnBgw1YGjMEudLn/DU+R4rOG8b0xchL4Trh0UH4IPdyPgxnCdua5kcUebFGBYDEQvzpOCEjx62eIB4ElC7CtopcnNUl9z7nnYHGe0y4LSU1a6DSqQvvATkpb9QlQMsPmzPGvjcOJVzYhq71X92d/tGavsx3nWXUMdQHyXRgOUfRt8=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DS0PR11MB6375.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(396003)(366004)(376002)(39860400002)(136003)(346002)(41300700001)(6666004)(316002)(6512007)(26005)(186003)(2616005)(54906003)(110136005)(53546011)(6506007)(83380400001)(86362001)(38100700002)(5660300002)(31686004)(2906002)(966005)(6486002)(8936002)(44832011)(478600001)(4744005)(8676002)(4326008)(66556008)(66476007)(66946007)(31696002)(82960400001)(36756003)(43740500002)(45980500001);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?ME5sVTQ4SlQxT2FJMElLUHBmTEd4aTc3TVduM0hTYmMzNUJOM21tcGZvYXRx?=
+ =?utf-8?B?QXJFNndibW5MaGMvcDZaTDZmc1RtNko4Mlp6NkJvQzZLRStRRXIwaGpPdGxz?=
+ =?utf-8?B?MWdoS0hVb3c0SndGRjA4RnJqZUlLYzN1d3JNSmlJcnhmdWZXVDF0RVR5S2ph?=
+ =?utf-8?B?azlvM0YzS2dYdXVTR2dLdmlvVS9iQXdrSFhXZVdrdmlzNDZ1ZjVhOXcvOVV4?=
+ =?utf-8?B?Unl5SUYvbVFGYTNGTWozUUhtVFNUb01VV2ZoSFo0VktFVStCa3RrYm50MFVx?=
+ =?utf-8?B?TVl5YXBPZ0tRMG5zVzVhQlhWeVVKU20xNlJiOU9TS3pheVNLTzRRODNmZGZn?=
+ =?utf-8?B?cTFBTFR6UW5vLzhIOGIyVld5eU9qemxkUGcrT1dWR25mUm5sUjBmZEJMbWVN?=
+ =?utf-8?B?UHV1a2hmNnJSdjZkbkp1L3plTHk0dXMxdDVSV2s0N0NZQXFneTN4cW42Tnd5?=
+ =?utf-8?B?VkZBU0h0KzdOMkNNcWtpZTlTRVFMalpmRUd2ektPdWFyd2tuY2tqRzBNazlS?=
+ =?utf-8?B?WE0vcEcvWmdjaUdsTXY4WVNaVmhhdGRERGJrQVdiWXFMdXAraHJQN1BwSDdL?=
+ =?utf-8?B?TFhBZlFSaU9TZUlHUEZ3T21VSkRlcjFVdkZoRjFCUTJ0UGNEczV2T1hqc3Q1?=
+ =?utf-8?B?dTdoMGYxbm9aMDZDZGJKakRmcFNzVU1HTk95cENJUUVZREVRcS9tWnRWV3dB?=
+ =?utf-8?B?a3duakMzOXYyLzRuYndKRkV2c013L0RXaUd6aUFEUzE0bmQxUjRPckUwbngz?=
+ =?utf-8?B?RVVWN0JjZ2FuZEtLczk2Rk5jU28wNFNwZEsxT2RJbnNTOC9yWi8yNTR3eWJR?=
+ =?utf-8?B?azJvMzhLcENjWlJxZTBkNWF2bEFNV1dyM0IvSlprZkZCUHFBNFIvTHhYOWhr?=
+ =?utf-8?B?cFFNaE01Ky84WGFvYzBoc0FHUEZyT0RmMCtQVGxCL2ZvbHA0T0pNWkRDd2FT?=
+ =?utf-8?B?alRDcWdBcEQyU292akpHL2FwckxtVUJ4Q1BMQS91ZENMYmNLeWp0Z2xMV0x3?=
+ =?utf-8?B?OUhMRnE1S2dDWitUNHBwRHZvMEYwWk80L2t2cm04VHVNZmpMT1VYSHpnSHk1?=
+ =?utf-8?B?WjJlbzcxQlgvenJyTFdZdDE2Nm9WYVNXMzJ1N0tQMEdnU21BOGRidlkzRG05?=
+ =?utf-8?B?VXVESXk5bUpPOVN4T0xGU0JiYXFIaTllU2VRbkxpd3pqY0Y1UEpScU9udnNv?=
+ =?utf-8?B?Wjk5QzJld3BFSDhIb3NwQ2MzZGMvQ2lyQ2Z4WUM1dHgzKzZ2cE9FeU1pbVA2?=
+ =?utf-8?B?S0YzY3UxbzMvb2xQWUpIaElKZU93SWp6b1FQZlpBNlNENGhodVRmRktXN2FJ?=
+ =?utf-8?B?elZlMDNrdkZRSEVwbGJRUHRtd3lnSVhHRWM4Q3RqVjIvNDVKbTJCUVhzNlBE?=
+ =?utf-8?B?RUR5cXhqdFRPT3MxSVFLRHRxSWdmS2xEckVNUTdqMVhsQ3Erd1BwTWZMWFZP?=
+ =?utf-8?B?T3gyZHF4KzJ0QVhJMml6Y1J4Q1kyRTRsenQ1SVYvQ0VBclUvYWRNR2ZsNnAx?=
+ =?utf-8?B?TXpJb2ZwSFVGNVcwZTFpOTdTa2p1WWg0a2RnSEc1aHEycEJsWmNERjgxYjlO?=
+ =?utf-8?B?KzFTRVJleWh6cjBVY3RLYzJkelpJcnJSZksxdVlTMUtDQWg5OFpXbm5uTmtz?=
+ =?utf-8?B?MjhLVisxUmdEd0NxMGlqRVMyeTM5VUN2MVhDdlZybW0zbzMwbmE0d0RVU0du?=
+ =?utf-8?B?V0hmeFB4Q3JXRlZZYk1ZRGFVY0JXMlVnZXNGdVk1ZGtVVFlOSHlpTjdiVnhw?=
+ =?utf-8?B?V29YT2JqRUZ4ZXhVaU9PNmtpeHNWZFdDd0lodGNNUTk5eFJSQjloVFVOenlj?=
+ =?utf-8?B?VU4vNnphd1BwQTF2THNzU3NDVFljMWpMQkJxUTN4Rk9lVzhFaC9lU1ZQamE4?=
+ =?utf-8?B?bWZ5SzY0cFY2RlAwNzZ4MnVXWlR5cTFISFk2OEsraG1sU0NYNk9DNU5ac1Vz?=
+ =?utf-8?B?ek5iNk5nMkhhYWhWazFEbDN3UzFweWo3SkNUNmV5SnV5UU5ORUZhZVZ2V0xH?=
+ =?utf-8?B?SEVEQ05jZnRjMlN4L2d6WnduWHA2YmtZU3JUWS9VRVd0d2IvTEF1Q0Q2MDRM?=
+ =?utf-8?B?aWxYdjdHaFBjRURGWW5MMjdQeFV5VnJqcHlYR3ozM0VuNStvdi9QZUE5Qkpa?=
+ =?utf-8?B?L2M0WDlCYjhUR0pRcW1Hd0FsbnFVQWJXZXdwZVNQMGFoZzNHeXNyVCtkaHJ6?=
+ =?utf-8?B?b1E9PQ==?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: d3f074f6-2ddc-42cc-c677-08da5f49ebd9
+X-MS-Exchange-CrossTenant-AuthSource: DS0PR11MB6375.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Jul 2022 12:20:32.1456
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: zVxE8KfWVHDxumzhhFQmvDUCwxgcNgr7F5K4hX9qQtRlwUUdqBTAw3F6K1wrYX4LiBvq5lifRvSyYZ7x9Vw/lt+xufIo8YqWBNsPSPxKTwI=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN6PR1101MB2098
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
         SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -79,158 +162,32 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jul 06, 2022 at 02:02:01PM +0200, Florian Westphal wrote:
+On 2022-07-06 2:09 PM, Mark Brown wrote:
+> On Wed, Jul 06, 2022 at 11:55:29AM +1000, Stephen Rothwell wrote:
+> 
+>> After merging the sound-asoc tree, today's linux-next build (x86_64
+>> allmodconfig) failed like this:
+> 
+> Which toolchain do you use?  I've been using GCC 10 since it seems to be
+> what Linus is using, anything else I try has tended to get spurious
+> failures in from his tree.
 
-> Subject: [nf] netfilter: conntrack: fix crash due to confirmed bit load reordering
-> 
-> Kajetan Puchalski reports crash on ARM, with backtrace of:
-> 
-> __nf_ct_delete_from_lists
-> nf_ct_delete
-> early_drop
-> __nf_conntrack_alloc
-> 
-> Unlike atomic_inc_not_zero, refcount_inc_not_zero is not a full barrier.
-> conntrack uses SLAB_TYPESAFE_BY_RCU, i.e. it is possible that a 'newly'
-> allocated object is still in use on another CPU:
-> 
-> CPU1						CPU2
-> 						enounters 'ct' during hlist walk
->  delete_from_lists
->  refcount drops to 0
->  kmem_cache_free(ct);
->  __nf_conntrack_alloc() // returns same object
-> 						refcount_inc_not_zero(ct); /* might fail */
-> 
-> 						/* If set, ct is public/in the hash table */
-> 						test_bit(IPS_CONFIRMED_BIT, &ct->status);
-> 
-> In case CPU1 already set refcount back to 1, refcount_inc_not_zero()
-> will succeed.
-> 
-> The expected possibilities for a CPU that obtained the object 'ct'
-> (but no reference so far) are:
-> 
-> 1. refcount_inc_not_zero() fails.  CPU2 ignores the object and moves to
->    the next entry in the list.  This happens for objects that are about
->    to be free'd, that have been free'd, or that have been reallocated
->    by __nf_conntrack_alloc(), but where the refcount has not been
->    increased back to 1 yet.
-> 
-> 2. refcount_inc_not_zero() succeeds. CPU2 checks the CONFIRMED bit
->    in ct->status.  If set, the object is public/in the table.
-> 
->    If not, the object must be skipped; CPU2 calls nf_ct_put() to
->    un-do the refcount increment and moves to the next object.
-> 
-> Parallel deletion from the hlists is prevented by a
-> 'test_and_set_bit(IPS_DYING_BIT, &ct->status);' check, i.e. only one
-> cpu will do the unlink, the other one will only drop its reference count.
-> 
-> Because refcount_inc_not_zero is not a full barrier, CPU2 may try to
-> delete an object that is not on any list:
-> 
-> 1. refcount_inc_not_zero() successful (refcount inited to 1 on other CPU)
-> 2. CONFIRMED test also successful (load was reordered or zeroing
->    of ct->status not yet visible)
-> 3. delete_from_lists unlinks entry not on the hlist, because
->    IPS_DYING_BIT is 0 (already cleared).
-> 
-> 2) is already wrong: CPU2 will handle a partially initited object
-> that is supposed to be private to CPU1.
-> 
-> This change adds smp_rmb() whenever refcount_inc_not_zero() was successful.
-> 
-> It also inserts a smp_wmb() before the refcount is set to 1 during
-> allocation.
-> 
-> Because other CPU might still 'see' the object, refcount_set(1)
-> "resurrects" the object, so we need to make sure that other CPUs will
-> also observe the right contents.  In particular, the CONFIRMED bit test
-> must only pass once the object is fully initialised and either in the
-> hash or about to be inserted (with locks held to delay possible unlink from
-> early_drop or gc worker).
-> 
-> I did not change flow_offload_alloc(), as far as I can see it should call
-> refcount_inc(), not refcount_inc_not_zero(): the ct object is attached to
-> the skb so its refcount should be >= 1 in all cases.
-> 
-> Reported-by: Kajetan Puchalski <kajetan.puchalski@arm.com>
-> Diagnosed-by: Will Deacon <will@kernel.org>
-> Fixes: 719774377622 ("netfilter: conntrack: convert to refcount_t api")
-> Signed-off-by: Florian Westphal <fw@strlen.de>
-> ---
->  include/net/netfilter/nf_conntrack.h |  3 +++
->  net/netfilter/nf_conntrack_core.c    | 19 +++++++++++++++++++
->  2 files changed, 22 insertions(+)
-> 
-> diff --git a/include/net/netfilter/nf_conntrack.h b/include/net/netfilter/nf_conntrack.h
-> index a32be8aa7ed2..3dc3646ffba2 100644
-> --- a/include/net/netfilter/nf_conntrack.h
-> +++ b/include/net/netfilter/nf_conntrack.h
-> @@ -300,6 +300,9 @@ static inline bool nf_ct_is_expired(const struct nf_conn *ct)
->  /* use after obtaining a reference count */
->  static inline bool nf_ct_should_gc(const struct nf_conn *ct)
->  {
-> +	/* ->status and ->timeout loads must happen after refcount increase */
-> +	smp_rmb();
-> +
->  	return nf_ct_is_expired(ct) && nf_ct_is_confirmed(ct) &&
->  	       !nf_ct_is_dying(ct);
->  }
-> diff --git a/net/netfilter/nf_conntrack_core.c b/net/netfilter/nf_conntrack_core.c
-> index 082a2fd8d85b..072cabf1b296 100644
-> --- a/net/netfilter/nf_conntrack_core.c
-> +++ b/net/netfilter/nf_conntrack_core.c
-> @@ -795,6 +795,9 @@ __nf_conntrack_find_get(struct net *net, const struct nf_conntrack_zone *zone,
->  		 */
->  		ct = nf_ct_tuplehash_to_ctrack(h);
->  		if (likely(refcount_inc_not_zero(&ct->ct_general.use))) {
-> +			/* re-check key after refcount */
-> +			smp_rmb();
-> +
->  			if (likely(nf_ct_key_equal(h, tuple, zone, net)))
->  				goto found;
->  
-> @@ -1393,7 +1396,11 @@ static unsigned int early_drop_list(struct net *net,
->  		 * We steal the timer reference.  If that fails timer has
->  		 * already fired or someone else deleted it. Just drop ref
->  		 * and move to next entry.
-> +		 *
-> +		 * smp_rmb to ensure ->ct_net and ->status are loaded after
-> +		 * refcount increase.
->  		 */
-> +		smp_rmb();
->  		if (net_eq(nf_ct_net(tmp), net) &&
->  		    nf_ct_is_confirmed(tmp) &&
->  		    nf_ct_delete(tmp, 0, 0))
-> @@ -1536,6 +1543,8 @@ static void gc_worker(struct work_struct *work)
->  			if (!refcount_inc_not_zero(&tmp->ct_general.use))
->  				continue;
->  
-> +			/* load ct->status after refcount */
-> +			smp_rmb();
->  			if (gc_worker_skip_ct(tmp)) {
->  				nf_ct_put(tmp);
->  				continue;
-> @@ -1775,6 +1784,16 @@ init_conntrack(struct net *net, struct nf_conn *tmpl,
->  	if (!exp)
->  		__nf_ct_try_assign_helper(ct, tmpl, GFP_ATOMIC);
->  
-> +	/* Other CPU might have obtained a pointer to this object before it was
-> +	 * released.  Because refcount is 0, refcount_inc_not_zero() will fail.
-> +	 *
-> +	 * After refcount_set(1) it will succeed; ensure that zeroing of
-> +	 * ct->status and the correct ct->net pointer are visible; else other
-> +	 * core might observe CONFIRMED bit which means the entry is valid and
-> +	 * in the hash table, but its not (anymore).
-> +	 */
-> +	smp_wmb();
-> +
->  	/* Now it is going to be associated with an sk_buff, set refcount to 1. */
->  	refcount_set(&ct->ct_general.use, 1);
 
-FWIW, the old code, that used atomic_inc() instead of refcount_set()
-would have had the exact sample problem. There was no implied order vs
-the earlier stores.
+Issue has been revealed by the yesterday's fix [1] - there was a 
+spelling error on my side in the most recent (and integrated) version of 
+i2s_test machine driver. As my CI was 1-rebase behind the schedule, we 
+did not notice.
+
+As mentioned by Amadeo, fix has already been provided [2]. Sorry for any 
+trouble caused by that issue.
+
+
+[1]: 
+https://lore.kernel.org/alsa-devel/20220705103238.7484-1-lukas.bulwahn@gmail.com/
+[2]: 
+https://lore.kernel.org/alsa-devel/20220706062952.251704-1-cezary.rojewski@intel.com/T/#u
+
+
+Regards,
+Czarek
 

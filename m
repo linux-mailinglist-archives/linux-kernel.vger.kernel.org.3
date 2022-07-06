@@ -2,91 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ED77F567CE8
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 06:00:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DEAE8567CED
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 06:02:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231688AbiGFEAo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Jul 2022 00:00:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33076 "EHLO
+        id S231757AbiGFECJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Jul 2022 00:02:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33892 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231637AbiGFEAl (ORCPT
+        with ESMTP id S230112AbiGFECH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Jul 2022 00:00:41 -0400
-Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0BD901EC7F
-        for <linux-kernel@vger.kernel.org>; Tue,  5 Jul 2022 21:00:39 -0700 (PDT)
-Received: from [198.18.0.1] (unknown [192.168.200.1])
-        by mail.loongson.cn (Coremail) with SMTP id AQAAf9Axn+LhCMViZP0LAA--.36560S3;
-        Wed, 06 Jul 2022 12:00:33 +0800 (CST)
-Message-ID: <c824b9ca-c9c4-1912-7845-99a0989277a4@loongson.cn>
-Date:   Wed, 6 Jul 2022 12:00:33 +0800
+        Wed, 6 Jul 2022 00:02:07 -0400
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 343E114014;
+        Tue,  5 Jul 2022 21:02:06 -0700 (PDT)
+X-UUID: ce02886f8f534f04a89634c157529cdf-20220706
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.8,REQID:afe0df47-7923-4ea8-a583-c275ae9651a5,OB:0,LO
+        B:0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACTI
+        ON:release,TS:0
+X-CID-META: VersionHash:0f94e32,CLOUDID:a12c8663-0b3f-4b2c-b3a6-ed5c044366a0,C
+        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,IP:nil,URL:0,File:nil
+        ,QS:nil,BEC:nil,COL:0
+X-UUID: ce02886f8f534f04a89634c157529cdf-20220706
+Received: from mtkmbs11n1.mediatek.inc [(172.21.101.185)] by mailgw01.mediatek.com
+        (envelope-from <tinghan.shen@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 709273467; Wed, 06 Jul 2022 12:01:59 +0800
+Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
+ mtkmbs11n2.mediatek.inc (172.21.101.187) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.792.3;
+ Wed, 6 Jul 2022 12:01:57 +0800
+Received: from mtksdccf07 (172.21.84.99) by mtkmbs11n2.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.2.792.3 via Frontend
+ Transport; Wed, 6 Jul 2022 12:01:57 +0800
+Message-ID: <6886a99699aa8240b2a59eb068dbf48061001d06.camel@mediatek.com>
+Subject: Re: [PATCH v1 02/16] dt-bindings: memory: mediatek: Update
+ condition for mt8195 smi node
+From:   Tinghan Shen <tinghan.shen@mediatek.com>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Yong Wu <yong.wu@mediatek.com>, Joerg Roedel <joro@8bytes.org>,
+        Will Deacon <will@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Chun-Jie Chen <chun-jie.chen@mediatek.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        "Enric Balletbo i Serra" <enric.balletbo@collabora.com>,
+        Weiyi Lu <weiyi.lu@mediatek.com>
+CC:     <iommu@lists.linux-foundation.org>,
+        <linux-mediatek@lists.infradead.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>
+Date:   Wed, 6 Jul 2022 12:01:57 +0800
+In-Reply-To: <119f2a98-ef56-7b99-631f-221b737939ae@linaro.org>
+References: <20220704100028.19932-1-tinghan.shen@mediatek.com>
+         <20220704100028.19932-3-tinghan.shen@mediatek.com>
+         <119f2a98-ef56-7b99-631f-221b737939ae@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH v2] LoongArch: Clean useless vcsr in loongarch_fpu.
-Content-Language: en-US
-To:     Xi Ruoyao <xry111@xry111.site>, Huacai Chen <chenhuacai@kernel.org>
-Cc:     WANG Xuerui <kernel@xen0n.name>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        loongarch@lists.linux.dev, LKML <linux-kernel@vger.kernel.org>
-References: <20220704153612.314112-1-huqi@loongson.cn>
- <4273e104-8392-6a06-5d18-a1933978d8c3@xen0n.name>
- <22a1ba993e298ce12a374decefebeca484240883.camel@xry111.site>
- <16c9ccaa5e5a2ffd39272cff6f66e487c659b571.camel@xry111.site>
- <CAAhV-H5+qd1ZrOqE8fgRmWshXy57AfEFpyKSK8ZstZZEQ53owQ@mail.gmail.com>
- <ac46f5cb4c8d1154cfc3e862fb5211e869839c9a.camel@xry111.site>
-From:   Qi Hu <huqi@loongson.cn>
-In-Reply-To: <ac46f5cb4c8d1154cfc3e862fb5211e869839c9a.camel@xry111.site>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-CM-TRANSID: AQAAf9Axn+LhCMViZP0LAA--.36560S3
-X-Coremail-Antispam: 1UD129KBjvJXoW7ArWUurWDJw45KrWUurWkXrb_yoW8Gw17pF
-        4xWw4fAF4kArnIva1kAw4rKa13W348WayUKwsIvr1jkrn2q343KrWrXFs5GFyfGr1SyF45
-        Xr4qqryxZ3yDZaDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnUUvcSsGvfC2KfnxnUUI43ZEXa7xR_UUUUUUUUU==
-X-CM-SenderInfo: pkxtxqxorr0wxvrqhubq/1tbiAQATCV3QvPxRrAABsq
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-MTK:  N
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Mon, 2022-07-04 at 14:36 +0200, Krzysztof Kozlowski wrote:
+> On 04/07/2022 12:00, Tinghan Shen wrote:
+> > The max clock items for the dts node with compatible
+> > 'mediatek,mt8195-smi-sub-common' should be 3.
+> > 
+> > However, the dtbs_check of such node will get following message,
+> > arch/arm64/boot/dts/mediatek/mt8195-evb.dtb: smi@14010000: clock-names: ['apb', 'smi', 'gals0']
+> > is too long
+> >          From schema: Documentation/devicetree/bindings/memory-controllers/mediatek,smi-
+> > common.yaml
+> > 
+> > Remove the last 'else' checking to fix this error.
+> 
+> Missing fixes tag.
+> 
+> > 
+> > Signed-off-by: Tinghan Shen <tinghan.shen@mediatek.com>
+> > ---
+> >  .../memory-controllers/mediatek,smi-common.yaml        | 10 +++++++++-
+> >  1 file changed, 9 insertions(+), 1 deletion(-)
+> > 
+> > diff --git a/Documentation/devicetree/bindings/memory-controllers/mediatek,smi-common.yaml
+> > b/Documentation/devicetree/bindings/memory-controllers/mediatek,smi-common.yaml
+> > index a98b359bf909..e5f553e2e12a 100644
+> > --- a/Documentation/devicetree/bindings/memory-controllers/mediatek,smi-common.yaml
+> > +++ b/Documentation/devicetree/bindings/memory-controllers/mediatek,smi-common.yaml
+> > @@ -143,7 +143,15 @@ allOf:
+> >              - const: gals0
+> >              - const: gals1
+> >  
+> > -    else:  # for gen2 HW that don't have gals
+> > +  - if:  # for gen2 HW that don't have gals
+> > +      properties:
+> > +        compatible:
+> > +          enum:
+> > +            - mediatek,mt2712-smi-common
+> > +            - mediatek,mt8167-smi-common
+> > +            - mediatek,mt8173-smi-common
+> > +
+> 
+> Without looking at the code, it's impossible to understand what you are
+> doing here. The commit msg says one, but you are doing something else.
+> 
+> Write commit msg explaining what you want to achieve and what you are doing.
+> 
+> 
+> Best regards,
+> Krzysztof
 
-On 2022/7/6 10:51, Xi Ruoyao wrote:
-> On Wed, 2022-07-06 at 10:35 +0800, Huacai Chen wrote:
->
->> Maybe Xuerui and Ruoyao have some misunderstanding. LSX/LASX will
->> surely be upstream, this has nothing to do with cleanup VCSR16.
->> Because FP/LSX/LASX share the same control bits in FCSR now.
-> My guess:
->
-> Almost all behavior of vector unit is controlled by FCSR (for example,
-> the rounding of both FPU and vector unit should be controlled by FCSR
-> altogether), except one bit similar to the bit 24 of MSACSR ("flush to
-> zero") is in VCSR [^1].  And "flush to zero" is not really useful so it
-> will be removed in 3A6000, and we'll not use it for 3A5000.
-Actually, flush to zero has been removed in 3A5000.
->
-> [^1]: A more bold guess: the hardware engineers could have just said
-> "let's wire this register called MSACSR in GS464V as FCSR16/VCSR in
-> LA464, maybe it will be useful and who knows?"  But now in practice it's
-> not useful.
->
-> Am I correct?
-The hardware(LA464) has removed the vcsr("has but not use" is 
-incorrect), and here are some details:
+Ok, I'll update in next version.
 
-- For all FP operations, including LSX/LASX, they are controlled by 
-fcsr0/1/2/3.
-
-- For LSX/LASX other operations, they are *not* controlled by any other 
-CSR now. And fcsr16 to fcsr31 are reserved to control these operations 
-(now they are *undefined*).
-
-- Flush to zero(MSACSR.FS) is removed and not supported.
-
-- If you use "movfcsr2gr" to read the fcsr16, the value is *UNDEFINED*.
+Thanks,
+TingHan
 

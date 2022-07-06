@@ -2,72 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3522C56859D
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 12:31:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A25405684FF
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 12:16:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232642AbiGFKb0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Jul 2022 06:31:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46266 "EHLO
+        id S231718AbiGFKPs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Jul 2022 06:15:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56598 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230471AbiGFKbW (ORCPT
+        with ESMTP id S229949AbiGFKPn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Jul 2022 06:31:22 -0400
-Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7BF926541;
-        Wed,  6 Jul 2022 03:31:21 -0700 (PDT)
-Received: by mail-ej1-x62d.google.com with SMTP id u12so26281641eja.8;
-        Wed, 06 Jul 2022 03:31:21 -0700 (PDT)
+        Wed, 6 Jul 2022 06:15:43 -0400
+Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2CE3B1FE;
+        Wed,  6 Jul 2022 03:15:42 -0700 (PDT)
+Received: by mail-wm1-x32c.google.com with SMTP id be14-20020a05600c1e8e00b003a04a458c54so8697516wmb.3;
+        Wed, 06 Jul 2022 03:15:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=message-id:date:from:to:cc:subject:references:mime-version
+        h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to;
-        bh=kZqIs70OTt6jii795NJ0qzTYWchhAv15K9Xbii8uxEY=;
-        b=ojxfvPkFrNi++Sxaxk8fgSMW1Gsz6qhemLuJhcq20+PotSdo3KyBODTIqB6z/LGD+m
-         LX00zjjNlyHPUZ+UL3CjpxyEh6YT5Bsp5hr+fjSYWnHowpi66bN9Z07TPqNfcXBkqqCi
-         O6NaEM3NTTHiR/fuAG4+BDC64QipwU7k9C724rH5ZohdWJprSfYC94IxpfSBtl5DrY4G
-         pBdCTsrBcbZ+sJMQzOEbvAW2r+CaESlQ/5aut/oU8Urn7DE9SKp6drBIpDeNofK9k4uA
-         WAnAIINR8rK0mmzxVkaWVXpWxyf1UG0PswMSjveTc6zGq5r3t8TsZj8SUr70FTv1a1Ok
-         d9kA==
+        bh=8iSPnCQlsn+unzEqQcxOovCWHEse64Sct+b/T3iSIHY=;
+        b=aj0FxjuXf5+sYxguaPR56ZprS55VHe5p8rrpzjIRCgOqycEJExWkGLaeRK3bPBodEJ
+         Gfg9DK1JRt2nsD/jT3t+r5R4BzX9VYkUj+62J3DYIKHyNHnGGqMsRvmvfV3YwHP/NiGj
+         q8kqKp0caReF+UEGk7/Qe/2J3lBVLMTwAONjOsuz1HvtgF+Bsg1twpdOUr/kVYxu8TPS
+         ZLhsaEK3atv4PCC+o8S0tUw7fma2qXrFc4jq3R58hS3/fPCZva/3808NI7u/atFvHxU3
+         O/v8IOQDlpGCzudIpAW6jMZ3QnELL7udgODcy4IRqEKr+afWPOBEZjjSY2GAQkCeHdWs
+         C7sg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:from:to:cc:subject:references
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=kZqIs70OTt6jii795NJ0qzTYWchhAv15K9Xbii8uxEY=;
-        b=jx4W/mUBB5urdtm+SK40pqkwbiA62f8rj6YiGPKg9bcRuos9o292JkhVZ3qlu+r+GD
-         10kxmGZt/N0czM96ftuXvRcVLjaauu9l6D9lGOxobjKhzEHGoQ8xm5aSQwU6MaSBeHLj
-         gwvjYtX6QQQKQHKYziPWPvQ/YDRv4elWMLrHRrPMxl3utNbgIRWZwDz3lCwqZMcRjifI
-         UX2BVY5/e8rGMZOGf3+VWBvc4MN530CrGjfXiLE7V5QzUnlrNKhivyBkv1Uf8cAjLpPK
-         B0XZI7dIF1UB5LX9D1S2GCqk8eSv4bPf7xIk64YymjPlnhxKZK2Vue412SBqauXHdvrI
-         jdsA==
-X-Gm-Message-State: AJIora9ndDZ+YsF3T75/pk9ptcpnHRzlSZ/83g6iKYzrmbLzFBv+0vMj
-        AG1w+LtQFbLQcwbXI5ZXFnk=
-X-Google-Smtp-Source: AGRyM1v6fxEC2x1zCBi16bwizxaClsgUJu80BMz4g/bFoXggudO0Qbz1kaXsSRWtgQ6ovciwd0/sRg==
-X-Received: by 2002:a17:907:6e01:b0:726:9a7b:59b7 with SMTP id sd1-20020a1709076e0100b007269a7b59b7mr39760566ejc.752.1657103480336;
-        Wed, 06 Jul 2022 03:31:20 -0700 (PDT)
-Received: from Ansuel-xps. (93-42-70-190.ip85.fastwebnet.it. [93.42.70.190])
-        by smtp.gmail.com with ESMTPSA id g1-20020a170906538100b0072a55ebbc77sm9122331ejo.66.2022.07.06.03.31.19
+        bh=8iSPnCQlsn+unzEqQcxOovCWHEse64Sct+b/T3iSIHY=;
+        b=WbWk62TTg5Lo7KjzoL67vnXGFWaCnExSSr0ypF6v/2C/t830YIAYFiVIBETVf7LOVl
+         kN+eOTPa004UiXUX9M3IUu56+a1tghBARcSgQ3CtKHEw/gl2kRByvvgjTYe2g8zpS1RX
+         yB6ba0Feqth/yDudjQvCuc8T7jwrJa8xWcMXDzWphDp52BCRdh1QrWiJUYh7dRmrlB11
+         ayHYvkxHFUBdcSP9/BNUeUP9YKkPpPzqTB89CJFeH4DvRD50dmKid27iVM102as0WFw5
+         dArTHOZ4Kgw3n8uWkQI95YtEHabS28Gr2YcRpwwFGjFj+1WWvSwjOoMuPPCnEAUchDYx
+         DoFQ==
+X-Gm-Message-State: AJIora+LOh3Ou7ObhtKyTcbsvFRPYDwGdVbNWkywKc7LUGkTlW7R0B/w
+        KkdefzzqU0Nzzgc3Wtql5mo=
+X-Google-Smtp-Source: AGRyM1trurU8mdAXWWae97aHNRdGMRp2KksttXISCTNRtIBYP+sMAcFFNPp2a9M21Jsx8Lfhhyqd/w==
+X-Received: by 2002:a7b:c8d2:0:b0:3a0:2fd0:177 with SMTP id f18-20020a7bc8d2000000b003a02fd00177mr42782003wml.23.1657102541471;
+        Wed, 06 Jul 2022 03:15:41 -0700 (PDT)
+Received: from debian ([167.98.27.226])
+        by smtp.gmail.com with ESMTPSA id q11-20020adfea0b000000b0020fff0ea0a3sm34783485wrm.116.2022.07.06.03.15.40
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 06 Jul 2022 03:31:19 -0700 (PDT)
-Message-ID: <62c56477.1c69fb81.8ec4c.f1ac@mx.google.com>
-X-Google-Original-Message-ID: <YsVgkpprrGAgg5oz@Ansuel-xps.>
-Date:   Wed, 6 Jul 2022 12:14:42 +0200
-From:   Christian Marangi <ansuelsmth@gmail.com>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Jonathan McDowell <noodles@earth.li>
-Subject: Re: [PATCH 09/13] ARM: dts: qcom: add smem node for ipq8064
-References: <20220705133917.8405-1-ansuelsmth@gmail.com>
- <20220705133917.8405-10-ansuelsmth@gmail.com>
- <c5bf6246-a350-8a87-71bc-bc13d502a8af@linaro.org>
+        Wed, 06 Jul 2022 03:15:41 -0700 (PDT)
+Date:   Wed, 6 Jul 2022 11:15:39 +0100
+From:   "Sudip Mukherjee (Codethink)" <sudipm.mukherjee@gmail.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, slade@sladewatkins.com
+Subject: Re: [PATCH 5.15 00/98] 5.15.53-rc1 review
+Message-ID: <YsVgy1TGlldNqADK@debian>
+References: <20220705115617.568350164@linuxfoundation.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <c5bf6246-a350-8a87-71bc-bc13d502a8af@linaro.org>
+In-Reply-To: <20220705115617.568350164@linuxfoundation.org>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -78,65 +73,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jul 06, 2022 at 10:39:16AM +0200, Krzysztof Kozlowski wrote:
-> On 05/07/2022 15:39, Christian Marangi wrote:
-> > Add missing smem node for ipq8064.
-> > 
-> > Signed-off-by: Christian Marangi <ansuelsmth@gmail.com>
-> > Tested-by: Jonathan McDowell <noodles@earth.li>
-> > ---
-> >  arch/arm/boot/dts/qcom-ipq8064.dtsi | 18 ++++++++++++++++++
-> >  1 file changed, 18 insertions(+)
-> > 
-> > diff --git a/arch/arm/boot/dts/qcom-ipq8064.dtsi b/arch/arm/boot/dts/qcom-ipq8064.dtsi
-> > index b5aede3d7ccf..98527a7d885e 100644
-> > --- a/arch/arm/boot/dts/qcom-ipq8064.dtsi
-> > +++ b/arch/arm/boot/dts/qcom-ipq8064.dtsi
-> > @@ -908,6 +908,11 @@ lcc: clock-controller@28000000 {
-> >  			#reset-cells = <1>;
-> >  		};
-> >  
-> > +		sfpb_mutex_block: syscon@1200600 {
-> > +			compatible = "syscon";
-> 
-> syscon alone is not allowed.
->
+Hi Greg,
 
-Mh... This is problematic. How this should be handled?
-This should be put in sfpb_mutex and change the driver to use regs if
-present instead of syscon?
+On Tue, Jul 05, 2022 at 01:57:18PM +0200, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.15.53 release.
+> There are 98 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+> 
+> Responses should be made by Thu, 07 Jul 2022 11:55:56 +0000.
+> Anything received after that time might be too late.
 
-> > +			reg = <0x01200600 0x100>;
-> > +		};
-> > +
-> >  		pcie0: pci@1b500000 {
-> >  			compatible = "qcom,pcie-ipq8064";
-> >  			reg = <0x1b500000 0x1000
-> > @@ -1332,4 +1337,17 @@ sdcc3: mmc@12180000 {
-> >  			};
-> >  		};
-> >  	};
-> > +
-> > +	sfpb_mutex: sfpb-mutex {
-> 
-> Generic node names, so hwlock
-> 
-> > +		compatible = "qcom,sfpb-mutex";
-> > +		syscon = <&sfpb_mutex_block 4 4>;
-> > +
-> > +		#hwlock-cells = <1>;
-> > +	};
-> > +
-> > +	smem {
-> > +		compatible = "qcom,smem";
-> > +		memory-region = <&smem>;
-> > +		hwlocks = <&sfpb_mutex 3>;
-> > +	};
-> >  };
-> 
-> 
-> Best regards,
-> Krzysztof
+Build test (gcc version 11.3.1 20220627):
+mips: 62 configs -> no failure
+arm: 99 configs -> no failure
+arm64: 3 configs -> no failure
+x86_64: 4 configs -> no failure
+alpha allmodconfig -> no failure
+csky allmodconfig -> no failure
+powerpc allmodconfig -> no failure
+riscv allmodconfig -> no failure
+s390 allmodconfig -> no failure
+xtensa allmodconfig -> no failure
 
--- 
-	Ansuel
+Boot test:
+x86_64: Booted on my test laptop. No regression.
+x86_64: Booted on qemu. No regression. [1]
+arm64: Booted on rpi4b (4GB model). No regression. [2]
+mips: Booted on ci20 board. No regression. [3]
+
+[1]. https://openqa.qa.codethink.co.uk/tests/1458
+[2]. https://openqa.qa.codethink.co.uk/tests/1461
+[3]. https://openqa.qa.codethink.co.uk/tests/1464
+
+Tested-by: Sudip Mukherjee <sudip.mukherjee@codethink.co.uk>
+
+--
+Regards
+Sudip

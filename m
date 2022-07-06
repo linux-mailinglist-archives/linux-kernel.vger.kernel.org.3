@@ -2,83 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B6F7568230
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 10:56:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A3E5568238
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 10:58:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232403AbiGFI4G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Jul 2022 04:56:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36078 "EHLO
+        id S232606AbiGFI5w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Jul 2022 04:57:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37306 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230320AbiGFI4F (ORCPT
+        with ESMTP id S231959AbiGFI5q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Jul 2022 04:56:05 -0400
-Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1562F2497D;
-        Wed,  6 Jul 2022 01:56:04 -0700 (PDT)
-Received: by mail-ed1-x52c.google.com with SMTP id e40so18387575eda.2;
-        Wed, 06 Jul 2022 01:56:04 -0700 (PDT)
+        Wed, 6 Jul 2022 04:57:46 -0400
+Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 687D124BEE;
+        Wed,  6 Jul 2022 01:57:45 -0700 (PDT)
+Received: by mail-pf1-x42e.google.com with SMTP id 3so3669483pfx.3;
+        Wed, 06 Jul 2022 01:57:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=TiSbYoSDE0lMlfqj+l2CCSMOXHr+cfG4LYMnjViLfKg=;
-        b=iZgloJtbC+6whSU9AepPlzjoWEwtuEoHIfHnGtNlQ4C7UtGfnEEmVwBmNUQ+hp8QPE
-         srctWeLgf/fotpb89l8rI9lg4mQnr87w7+3vinjVE3RJNZRD0kzVD+wvsw7UaK+t8/s1
-         st8AI91D07QbVN2WkuVWV8CPl3yJX9BZwJFdkx0W5TdbJV2D1CKOCqCSvlq6wN6RqaPf
-         UUjR7td8tkJqcXdBiPbDT5qzW5f7hWK/dJbmdUy1js1wwVwqnvzOz88LxLXf05GrHzur
-         AKLeY/3k9Tub41UOdBMxbshm3a3Agu7xGvCJZt+FuehosHVD+1D5nfFrAlxRw5PKNxdD
-         XPoQ==
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=9bOXUBsbXZmaBYzdut2n91pd8GDpqQDkHHTCpALSOcI=;
+        b=WbD1If6fFhm+DWvJ31AEQrrcggmBAVShmCuXjXNLR/EVZnRJUDmLjPBezh+u8N3upE
+         GXKjZxORcv3nTuTsXheqqTeRS4skn7EUMwPYGKEcKo3ObhN6T6QIWqvqxX6Jr8F8QElY
+         /FFM0dQQSlpothQOx+YeobkCdnpTL1e0JIO9lvz1yIw30dwxN0fdT4a7Kza3H9j4qj6X
+         xkNgj8iH/9xz6YGbQQGnLUiRk7GZcv/bnxehkOG5U5RMwAvat4EhTh1NTM/tC6yV7UUl
+         l/1BXoGHW0yM0j0TcLjhlJm98q9lR4zh/p+boW25L80TLyb3fhDy9DvPsO/ZJQjltXZE
+         u58g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=TiSbYoSDE0lMlfqj+l2CCSMOXHr+cfG4LYMnjViLfKg=;
-        b=7zOHLWKAPXgGCodGXBfeno64XrpFtSqM2ngQxGuB/S9tfbuqZcSiLMM1LSlZfWtonN
-         JoVXvXJKR/jpswYL2sgkC6TcT+iLhQaPagGVSXojKRFCCq/d8JGdbF3sAzZFjoOw1aAX
-         bXzt/kuLUIAf/q1/NzdMPSow4cBjCyyvHndK572UbA2fTJFJ6r039zkOtN8JaoLj9Fc/
-         RX9LiyEpWgqdCQTgw3nxtvzJx2h+5nnJqwWjF/IWntcw8Xt/B4UtuGI5v6bm5xqmBtjM
-         rmCirfQgw61LN3413VnP4z9omVywWYVWd/1dtrTOWKG34WwyHvnFYTGr1TuEQ6AukDdd
-         9lMQ==
-X-Gm-Message-State: AJIora9kbQ609EjCdC8LD2XfDFhQJmKzfHK5CB6g5DoeiupSWQd72gkW
-        qgX7Nlyamr98WiWQHv9MbrM=
-X-Google-Smtp-Source: AGRyM1sX+A6RqHnQ5QmWzoiAncEiL9RQsnExvWaj8wwcC2AJnUx5vD9KmRmIFnuBHDzZTV1CprW1Hw==
-X-Received: by 2002:aa7:ce8a:0:b0:43a:7b0e:9950 with SMTP id y10-20020aa7ce8a000000b0043a7b0e9950mr9208313edv.58.1657097762610;
-        Wed, 06 Jul 2022 01:56:02 -0700 (PDT)
-Received: from skbuf ([188.26.185.61])
-        by smtp.gmail.com with ESMTPSA id i10-20020a170906698a00b00705fa7087bbsm17260818ejr.142.2022.07.06.01.56.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 06 Jul 2022 01:56:01 -0700 (PDT)
-Date:   Wed, 6 Jul 2022 11:55:59 +0300
-From:   Vladimir Oltean <olteanv@gmail.com>
-To:     Hans S <schultz.hans@gmail.com>
-Cc:     "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>, netdev@vger.kernel.org,
-        Hans Schultz <schultz.hans+netdev@gmail.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>, Jiri Pirko <jiri@resnulli.us>,
-        Ivan Vecera <ivecera@redhat.com>,
-        Roopa Prabhu <roopa@nvidia.com>,
-        Nikolay Aleksandrov <razor@blackwall.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Ido Schimmel <idosch@nvidia.com>, linux-kernel@vger.kernel.org,
-        bridge@lists.linux-foundation.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH V3 net-next 3/4] net: dsa: mv88e6xxx: mac-auth/MAB
- implementation
-Message-ID: <20220706085559.oyvzijcikivemfkg@skbuf>
-References: <20220524152144.40527-1-schultz.hans+netdev@gmail.com>
- <20220524152144.40527-4-schultz.hans+netdev@gmail.com>
- <20220627180557.xnxud7d6ol22lexb@skbuf>
- <CAKUejP7ugMB9d3MVX3m9Brw12_ocFoT+nuJJucYdQH70kzC7=w@mail.gmail.com>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=9bOXUBsbXZmaBYzdut2n91pd8GDpqQDkHHTCpALSOcI=;
+        b=3tyE3cz2re6g7D14fKZd/H+Q76R52jkAQIuJdgU6zCnU0WrfvZGFErC18cN0lfLelO
+         0eTLU08/2gyLmZI53VaFLR+yFX9AXKv9UYOmk32jHmWo/5I242aeWjRjC+PTd+nnk5CS
+         7UkrNTsxNcwIZjAFmNy7Ltk5iCloOGDnKoNKW+IfLtyH5RWBS8B+Uf5lslWCcSObES8N
+         k3lqFuUMiBmTrQX9O3reEAAVgAaG2VkwFcMtaHNzRgS41+AN8IG3fUHxdapVswIsriyz
+         vJEndRKqkL5eRaXP2dVzA1DQLiHaukfjpdFYl/8kVzKpjmNx10j81p55PGYbQZc186EI
+         cFLg==
+X-Gm-Message-State: AJIora+g3bwc+phzOW9iejv6A+30SfjHOW2tz5NaqGyZt0kfRUw/gKtq
+        1fImLsu+S7JX5zvFSCO5VvI=
+X-Google-Smtp-Source: AGRyM1sYGXX9loS3JRKD0954hjKimsXBBNwAgBw0D8WiC3yUj6I/JN7LKTG9QaIQg312XdOckDYv7w==
+X-Received: by 2002:a05:6a00:1303:b0:528:2ed8:7e86 with SMTP id j3-20020a056a00130300b005282ed87e86mr29108564pfu.4.1657097864729;
+        Wed, 06 Jul 2022 01:57:44 -0700 (PDT)
+Received: from ?IPV6:2404:f801:0:5:8000::75b? ([2404:f801:9000:18:efec::75b])
+        by smtp.gmail.com with ESMTPSA id d18-20020a170903231200b0016bf7981d0bsm2501495plh.86.2022.07.06.01.57.35
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 06 Jul 2022 01:57:43 -0700 (PDT)
+Message-ID: <10062b7d-f0a6-6724-4ccb-506da09a8533@gmail.com>
+Date:   Wed, 6 Jul 2022 16:57:33 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAKUejP7ugMB9d3MVX3m9Brw12_ocFoT+nuJJucYdQH70kzC7=w@mail.gmail.com>
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH 2/2] x86/ACPI: Set swiotlb area according to the number of
+ lapic entry in MADT
+Content-Language: en-US
+To:     Christoph Hellwig <hch@infradead.org>
+Cc:     corbet@lwn.net, rafael@kernel.org, len.brown@intel.com,
+        pavel@ucw.cz, tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
+        m.szyprowski@samsung.com, robin.murphy@arm.com, paulmck@kernel.org,
+        akpm@linux-foundation.org, keescook@chromium.org,
+        songmuchun@bytedance.com, rdunlap@infradead.org,
+        damien.lemoal@opensource.wdc.com, michael.h.kelley@microsoft.com,
+        kys@microsoft.com, Tianyu Lan <Tianyu.Lan@microsoft.com>,
+        iommu@lists.linux-foundation.org, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        vkuznets@redhat.com, wei.liu@kernel.org, parri.andrea@gmail.com,
+        thomas.lendacky@amd.com, linux-hyperv@vger.kernel.org,
+        kirill.shutemov@intel.com, andi.kleen@intel.com,
+        Andi Kleen <ak@linux.intel.com>
+References: <20220627153150.106995-1-ltykernel@gmail.com>
+ <20220627153150.106995-3-ltykernel@gmail.com>
+ <YrxcCZKvFYjxLf9n@infradead.org>
+ <a876f862-c005-108d-e6f9-68336a8d89f0@gmail.com>
+ <YsVBKgxiQKfnCjvn@infradead.org>
+From:   Tianyu Lan <ltykernel@gmail.com>
+In-Reply-To: <YsVBKgxiQKfnCjvn@infradead.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -87,105 +91,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 28, 2022 at 02:26:43PM +0200, Hans S wrote:
-> > Dumb question: if you only flush the locked entries at fast age if the
-> > port is locked, then what happens with the existing locked entries if
-> > the port becomes unlocked before an FDB flush takes place?
-> > Shouldn't mv88e6xxx_port_set_lock() call mv88e6xxx_atu_locked_entry_flush()
-> > too?
+On 7/6/2022 4:00 PM, Christoph Hellwig wrote:
+> On Fri, Jul 01, 2022 at 01:02:21AM +0800, Tianyu Lan wrote:
+>>> Can we reorder that initialization?  Because I really hate having
+>>> to have an arch hook in every architecture.
+>>
+>> How about using "flags" parameter of swiotlb_init() to pass area number
+>> or add new parameter for area number?
+>>
+>> I just reposted patch 1 since there is just some coding style issue and area
+>> number may also set via swiotlb kernel parameter. We still need figure out a
+>> good solution to pass area number from architecture code.
 > 
-> That was my first thought too, but the way the flags are handled with the mask etc, does so that
-> mv88e6xxx_port_set_lock() is called when other flags change. It could be done by the transition
-> from locked->unlocked by checking if the port is locked already.
+> What is the problem with calling swiotlb_init after nr_possible_cpus()
+> works?
 
-Why does mv88e6xxx_port_set_lock() get called when other flags change?
+Swiotlb_init() is called in the mem_init() of different architects and
+memblock free pages are released to the buddy allocator just after
+calling swiotlb_init() via memblock_free_all().
 
-> On the other hand, the timers will timeout and the entries will be removed anyhow.
+The mem_init() is called before smp_init(). If calling swiotlb_init()
+after smp_init(), that means we can't allocate large chunk low end
+memory via memblock_alloc() in the swiotlb(). Swiotlb_init() needs
+to rework to allocate memory from the buddy allocator and just like
+swiotlb_init_late() does. This will limit the bounce buffer size.
+Otherwise We need to do the reorder for all achitectures and there maybe
+some other unknown issues.
 
-> > > +static void mv88e6xxx_atu_locked_entry_timer_work(struct atu_locked_entry *ale)
-> >
-> > Please find a more adequate name for this function.
-> 
-> Any suggestions?
+swiotlb flags parameter of swiotlb_init() seems to be a good place to
+pass the area number in current code. If not set the swiotlb_area
+number/flag, the area number will be one and keep the original behavior
+of one single global spinlock protecting io tlb data structure.
 
-Not sure. It depends on whether you leave just the logic to delete a
-locked ATU entry, or also the switchdev FDB_DEL_TO_BRIDGE notifier.
-In any case, pick a name that reflects what it does. Something with
-locked_entry_delete() can't be too wrong.
 
-> > From the discussion with Ido and Nikolay I get the impression that
-> > you're not doing the right thing here either, notifying a
-> > SWITCHDEV_FDB_DEL_TO_BRIDGE from what is effectively the
-> > SWITCHDEV_FDB_DEL_TO_DEVICE handler (port_fdb_del).
-> 
-> Hmm, my experience tells me that much is opposite the normal
-> conventions when dealing with
-> locked ports, as there was never switchdev notifications from the
-> driver to the bridge before, but
-> that is needed to keep ATU and FDB entries in sync.
 
-On delete you mean? So the bridge signals switchdev a deletion of a
-locked FDB entry (as I pointed out, this function gets indirectly called
-from port_fdb_del), but it won't get deleted until switchdev signals it
-back, is what you're saying?
 
-> > Why is the rtnl_unlock() outside the switch statement but the rtnl_lock() inside?
-> > Not to mention, the dsa_port_to_bridge_port() call needs to be under rtnl_lock().
-> 
-> Just a small optimization as I also have another case of the switch
-> (only one switch case if
-> you didn't notice) belonging to the next patch set regarding dynamic
-> ATU entries.
 
-What kind of optimization are you even talking about? Please get rid of
-coding patterns like this, sorry.
 
-> > Please, no "if (chiplock) mutex_lock()" hacks. Just lockdep_assert_held(&chip->reg_lock),
-> > which serves both for documentation and for validation purposes, ensure
-> > the lock is always taken at the caller (which in this case is super easy)
-> > and move on.
-> 
-> As I am calling the function in if statement checks, it would make
-> that code more messy, while with
-> this approach the function can be called from anywhere. I also looked
-> at having two functions, with
-> one being a wrapper function taking the lock and calling the other...
 
-There are many functions in mv88e6xxx that require the reg_lock to be
-held, there's nothing new or special here.
 
-> >
-> > > +
-> > > +     if (mv88e6xxx_port_read(chip, port, MV88E6XXX_PORT_CTL0, &reg))
-> > > +             goto out;
-> >
-> > It would be good to actually propagate the error to the caller and
-> > "locked" via a pass-by-reference bool pointer argument, not just say
-> > that I/O errors mean that the port is unlocked.
-> 
-> Again the wish to be able to call it from if statement checks,.
-> 
-> > > +     reg &= MV88E6XXX_PORT_ASSOC_VECTOR_PAV_MASK;
-> > > +     if (locked) {
-> > > +             reg |= MV88E6XXX_PORT_ASSOC_VECTOR_IGNORE_WRONG |
-> > > +                     MV88E6XXX_PORT_ASSOC_VECTOR_LOCKED_PORT |
-> > > +                     MV88E6XXX_PORT_ASSOC_VECTOR_INT_AGE_OUT |
-> > > +                     MV88E6XXX_PORT_ASSOC_VECTOR_HOLD_AT_1;
-> >
-> > I'd suggest aligning these macros vertically.
-> 
-> They are according to the Linux kernel coding standard wrt indentation afaik.
 
-Compare:
 
-		reg |= MV88E6XXX_PORT_ASSOC_VECTOR_IGNORE_WRONG |
-			MV88E6XXX_PORT_ASSOC_VECTOR_LOCKED_PORT |
-			MV88E6XXX_PORT_ASSOC_VECTOR_INT_AGE_OUT |
-			MV88E6XXX_PORT_ASSOC_VECTOR_HOLD_AT_1;
 
-with:
 
-		reg |= MV88E6XXX_PORT_ASSOC_VECTOR_IGNORE_WRONG |
-		       MV88E6XXX_PORT_ASSOC_VECTOR_LOCKED_PORT |
-		       MV88E6XXX_PORT_ASSOC_VECTOR_INT_AGE_OUT |
-		       MV88E6XXX_PORT_ASSOC_VECTOR_HOLD_AT_1;
+
+

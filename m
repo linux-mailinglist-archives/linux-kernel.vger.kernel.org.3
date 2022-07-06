@@ -2,163 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 85E36568251
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 11:01:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D3DD556824C
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 11:01:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232618AbiGFI7u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Jul 2022 04:59:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39184 "EHLO
+        id S232642AbiGFJAh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Jul 2022 05:00:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39348 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232619AbiGFI7n (ORCPT
+        with ESMTP id S231289AbiGFJAd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Jul 2022 04:59:43 -0400
-Received: from out30-57.freemail.mail.aliyun.com (out30-57.freemail.mail.aliyun.com [115.124.30.57])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E044619C2C;
-        Wed,  6 Jul 2022 01:59:39 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R151e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046059;MF=baolin.wang@linux.alibaba.com;NM=1;PH=DS;RN=33;SR=0;TI=SMTPD_---0VIXd7l-_1657097967;
-Received: from localhost(mailfrom:baolin.wang@linux.alibaba.com fp:SMTPD_---0VIXd7l-_1657097967)
-          by smtp.aliyun-inc.com;
-          Wed, 06 Jul 2022 16:59:29 +0800
-From:   Baolin Wang <baolin.wang@linux.alibaba.com>
-To:     akpm@linux-foundation.org
-Cc:     rppt@linux.ibm.com, willy@infradead.org, will@kernel.org,
-        aneesh.kumar@linux.ibm.com, npiggin@gmail.com,
-        peterz@infradead.org, catalin.marinas@arm.com,
-        chenhuacai@kernel.org, kernel@xen0n.name,
-        tsbogend@alpha.franken.de, dave.hansen@linux.intel.com,
-        luto@kernel.org, tglx@linutronix.de, mingo@redhat.com,
-        bp@alien8.de, hpa@zytor.com, arnd@arndb.de, guoren@kernel.org,
-        monstr@monstr.eu, jonas@southpole.se,
-        stefan.kristiansson@saunalahti.fi, shorne@gmail.com,
-        baolin.wang@linux.alibaba.com, x86@kernel.org,
-        linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        loongarch@lists.linux.dev, linux-mips@vger.kernel.org,
-        linux-csky@vger.kernel.org, openrisc@lists.librecores.org,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 3/3] mm: Add kernel PTE level pagetable pages account
-Date:   Wed,  6 Jul 2022 16:59:17 +0800
-Message-Id: <398ead25695e530f766849be5edafaf62c1c864d.1657096412.git.baolin.wang@linux.alibaba.com>
-X-Mailer: git-send-email 1.8.3.1
-In-Reply-To: <cover.1657096412.git.baolin.wang@linux.alibaba.com>
-References: <cover.1657096412.git.baolin.wang@linux.alibaba.com>
-In-Reply-To: <cover.1657096412.git.baolin.wang@linux.alibaba.com>
-References: <cover.1657096412.git.baolin.wang@linux.alibaba.com>
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        Wed, 6 Jul 2022 05:00:33 -0400
+Received: from mail-qk1-f179.google.com (mail-qk1-f179.google.com [209.85.222.179])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0671B1658B
+        for <linux-kernel@vger.kernel.org>; Wed,  6 Jul 2022 02:00:30 -0700 (PDT)
+Received: by mail-qk1-f179.google.com with SMTP id b125so10540726qkg.11
+        for <linux-kernel@vger.kernel.org>; Wed, 06 Jul 2022 02:00:29 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=z+A5o8tUrRNDtNylm0pOuZuXmTXA18iZkAubQygVne4=;
+        b=ktQSztUoRKB+qdv5EeIGoLTSMMQdx2NlwFvQIuYLQXuwaz3+x/zVaj+Hz81s7AC1AY
+         8l116GzNcsQQfSQmdhJH7f0xo3pMA8bexqJwBbl6BikJ1riQoSciomS7D7dN7JHvB/X9
+         YzyCoGSkWZx1htimOab1wiYYbqvM0ieCKTndq74wYSJYmw2KGtnmslZtF8+so7KEiyfP
+         SnJW7wxhHhl0hES1rcjekenESIYQjJcSOersRUcxTLveXu80YAb5dUykj79hF6LrvPAn
+         Y7vJTmlL89bPgkWx9N1TJITyN+ImuWooqQ+K/rD1jM6nXCFoLDOUIiYC5O6hFSExdu+c
+         RyYQ==
+X-Gm-Message-State: AJIora/TzsfjU2nH38cZ7Vqj7n6jOQATMDcxBSrfy/IcQ81t9s4dulLZ
+        wwcRtxweg+pdGKEtfLmn7WXZPpmT3dJ1XQ==
+X-Google-Smtp-Source: AGRyM1t9a1yjKoKjgRjEquB8cMasLZH0JofQcx1LWYxmoDPQzF0oRKxFwXp0rsZ8t5tCoSex8Gixiw==
+X-Received: by 2002:a05:620a:2408:b0:6b2:3000:3c39 with SMTP id d8-20020a05620a240800b006b230003c39mr23136524qkn.730.1657098028851;
+        Wed, 06 Jul 2022 02:00:28 -0700 (PDT)
+Received: from mail-yw1-f170.google.com (mail-yw1-f170.google.com. [209.85.128.170])
+        by smtp.gmail.com with ESMTPSA id ay4-20020a05622a228400b002f39b99f69csm23094383qtb.54.2022.07.06.02.00.28
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 06 Jul 2022 02:00:28 -0700 (PDT)
+Received: by mail-yw1-f170.google.com with SMTP id 00721157ae682-2ef5380669cso133086257b3.9
+        for <linux-kernel@vger.kernel.org>; Wed, 06 Jul 2022 02:00:28 -0700 (PDT)
+X-Received: by 2002:a81:5404:0:b0:31c:c24d:94b0 with SMTP id
+ i4-20020a815404000000b0031cc24d94b0mr9877031ywb.502.1657098028124; Wed, 06
+ Jul 2022 02:00:28 -0700 (PDT)
+MIME-Version: 1.0
+References: <Yrg6BzpKIJBTAVmO@zx2c4.com> <20220626111509.330159-1-Jason@zx2c4.com>
+In-Reply-To: <20220626111509.330159-1-Jason@zx2c4.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Wed, 6 Jul 2022 11:00:16 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdX3WH6ixwGjit6-z8iWe2-9ukeExDc5YWu1degJzcGKzw@mail.gmail.com>
+Message-ID: <CAMuHMdX3WH6ixwGjit6-z8iWe2-9ukeExDc5YWu1degJzcGKzw@mail.gmail.com>
+Subject: Re: [PATCH v2] m68k: virt: use RNG seed from bootinfo block
+To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
+Cc:     Laurent Vivier <laurent@vivier.eu>,
+        linux-m68k <linux-m68k@lists.linux-m68k.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Now the kernel PTE level ptes are always protected by mm->page_table_lock
-instead of split pagetable lock, so the kernel PTE level pagetable pages
-are not accounted. Especially the vmalloc()/vmap() can consume lots of
-kernel pagetable, so to get an accurate pagetable accounting, calling new
-helpers page_{set,clear}_pgtable() when allocating or freeing a kernel
-PTE level pagetable page.
+On Sun, Jun 26, 2022 at 1:15 PM Jason A. Donenfeld <Jason@zx2c4.com> wrote:
+> Other virt VMs can pass RNG seeds via the "rng-seed" device tree
+> property or via UEFI, but m68k doesn't have either. Instead it has its
+> own bootinfo protocol. So this commit adds support for receiving a RNG
+> seed from it, which will be used at the earliest possible time in boot,
+> just like device tree.
+>
+> Reviewed-by: Laurent Vivier <laurent@vivier.eu>
+> Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
 
-Meanwhile converting architectures to use corresponding generic PTE pagetable
-allocation and freeing functions.
+> --- a/arch/m68k/include/uapi/asm/bootinfo-virt.h
+> +++ b/arch/m68k/include/uapi/asm/bootinfo-virt.h
+> @@ -13,6 +13,13 @@
+>  #define BI_VIRT_VIRTIO_BASE    0x8004
+>  #define BI_VIRT_CTRL_BASE      0x8005
+>
+> +/* A random seed used to initialize the RNG. Record format:
+> + *
+> + *   - length       [ 2 bytes, 16-bit big endian ]
+> + *   - seed data    [ `length` bytes ]
 
-Note this patch only adds accounting to the page tables allocated after boot.
+", padded to preserve 2-byte alignment"
 
-Signed-off-by: Baolin Wang <baolin.wang@linux.alibaba.com>
-Reported-by: kernel test robot <oliver.sang@intel.com>
----
- arch/csky/include/asm/pgalloc.h |  2 +-
- arch/microblaze/mm/pgtable.c    |  2 +-
- arch/openrisc/mm/ioremap.c      |  2 +-
- arch/x86/mm/pgtable.c           |  2 +-
- include/asm-generic/pgalloc.h   | 14 ++++++++++++--
- 5 files changed, 16 insertions(+), 6 deletions(-)
+Reviewed-by: Geert Uytterhoeven <geert@linux-m68k.org>
+i.e. will queue in the m68k for-v5.20 branch with the above fixed.
+No need to resend.
 
-diff --git a/arch/csky/include/asm/pgalloc.h b/arch/csky/include/asm/pgalloc.h
-index 7d57e5d..56f8d25 100644
---- a/arch/csky/include/asm/pgalloc.h
-+++ b/arch/csky/include/asm/pgalloc.h
-@@ -29,7 +29,7 @@ static inline pte_t *pte_alloc_one_kernel(struct mm_struct *mm)
- 	pte_t *pte;
- 	unsigned long i;
- 
--	pte = (pte_t *) __get_free_page(GFP_KERNEL);
-+	pte = __pte_alloc_one_kernel(mm);
- 	if (!pte)
- 		return NULL;
- 
-diff --git a/arch/microblaze/mm/pgtable.c b/arch/microblaze/mm/pgtable.c
-index 9f73265..e96dd1b 100644
---- a/arch/microblaze/mm/pgtable.c
-+++ b/arch/microblaze/mm/pgtable.c
-@@ -245,7 +245,7 @@ unsigned long iopa(unsigned long addr)
- __ref pte_t *pte_alloc_one_kernel(struct mm_struct *mm)
- {
- 	if (mem_init_done)
--		return (pte_t *)__get_free_page(GFP_KERNEL | __GFP_ZERO);
-+		return __pte_alloc_one_kernel(mm);
- 	else
- 		return memblock_alloc_try_nid(PAGE_SIZE, PAGE_SIZE,
- 					      MEMBLOCK_LOW_LIMIT,
-diff --git a/arch/openrisc/mm/ioremap.c b/arch/openrisc/mm/ioremap.c
-index daae13a..3453acc 100644
---- a/arch/openrisc/mm/ioremap.c
-+++ b/arch/openrisc/mm/ioremap.c
-@@ -118,7 +118,7 @@ pte_t __ref *pte_alloc_one_kernel(struct mm_struct *mm)
- 	pte_t *pte;
- 
- 	if (likely(mem_init_done)) {
--		pte = (pte_t *)get_zeroed_page(GFP_KERNEL);
-+		pte = __pte_alloc_one_kernel(mm);
- 	} else {
- 		pte = memblock_alloc(PAGE_SIZE, PAGE_SIZE);
- 		if (!pte)
-diff --git a/arch/x86/mm/pgtable.c b/arch/x86/mm/pgtable.c
-index ea39670..20f3076 100644
---- a/arch/x86/mm/pgtable.c
-+++ b/arch/x86/mm/pgtable.c
-@@ -858,7 +858,7 @@ int pmd_free_pte_page(pmd_t *pmd, unsigned long addr)
- 	/* INVLPG to clear all paging-structure caches */
- 	flush_tlb_kernel_range(addr, addr + PAGE_SIZE-1);
- 
--	free_page((unsigned long)pte);
-+	pte_free_kernel(NULL, pte);
- 
- 	return 1;
- }
-diff --git a/include/asm-generic/pgalloc.h b/include/asm-generic/pgalloc.h
-index 8ce8d7c..cd8420f 100644
---- a/include/asm-generic/pgalloc.h
-+++ b/include/asm-generic/pgalloc.h
-@@ -18,7 +18,14 @@
-  */
- static inline pte_t *__pte_alloc_one_kernel(struct mm_struct *mm)
- {
--	return (pte_t *)__get_free_page(GFP_PGTABLE_KERNEL);
-+	struct page *page;
-+	gfp_t gfp = GFP_PGTABLE_KERNEL;
-+
-+	page = alloc_pages(gfp, 0);
-+	if (!page)
-+		return NULL;
-+	page_set_pgtable(page);
-+	return (pte_t *)page_address(page);
- }
- 
- #ifndef __HAVE_ARCH_PTE_ALLOC_ONE_KERNEL
-@@ -41,7 +48,10 @@ static inline pte_t *pte_alloc_one_kernel(struct mm_struct *mm)
-  */
- static inline void pte_free_kernel(struct mm_struct *mm, pte_t *pte)
- {
--	free_page((unsigned long)pte);
-+	struct page *page = virt_to_page(pte);
-+
-+	page_clear_pgtable(page);
-+	__free_page(page);
- }
- 
- /**
--- 
-1.8.3.1
+Gr{oetje,eeting}s,
 
+                        Geert
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds

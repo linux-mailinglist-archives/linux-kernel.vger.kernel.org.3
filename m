@@ -2,144 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D33285684A5
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 12:06:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 221655684B7
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 12:08:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231241AbiGFKGS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Jul 2022 06:06:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44728 "EHLO
+        id S232803AbiGFKIB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Jul 2022 06:08:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46330 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230008AbiGFKGR (ORCPT
+        with ESMTP id S232775AbiGFKHl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Jul 2022 06:06:17 -0400
-Received: from mail-pg1-x549.google.com (mail-pg1-x549.google.com [IPv6:2607:f8b0:4864:20::549])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4D1A24F17
-        for <linux-kernel@vger.kernel.org>; Wed,  6 Jul 2022 03:06:15 -0700 (PDT)
-Received: by mail-pg1-x549.google.com with SMTP id p10-20020a631e4a000000b0040d2af22a74so5741588pgm.5
-        for <linux-kernel@vger.kernel.org>; Wed, 06 Jul 2022 03:06:15 -0700 (PDT)
+        Wed, 6 Jul 2022 06:07:41 -0400
+Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0E2E25597
+        for <linux-kernel@vger.kernel.org>; Wed,  6 Jul 2022 03:07:28 -0700 (PDT)
+Received: by mail-wr1-x435.google.com with SMTP id s1so21308660wra.9
+        for <linux-kernel@vger.kernel.org>; Wed, 06 Jul 2022 03:07:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:message-id:mime-version:subject:from:to:cc;
-        bh=ps635/kpA1eo1e2a/d/LkjenrD3s0FFYKtlQH5og2M0=;
-        b=NnynWWsFfTO+dssm6EIyPhjE+6ApmP6rlGBgJIa4hjcU/iJJY5BwKVCYSsog4WiWVX
-         VDsaEFZrRp+XsyKcCEmw4KZWipHQRyDu/cD9ip08AN20WScWrdo+817dBdzSnXfpxgCg
-         VTEuIjEiJBrB9mFSCrZWEG19FX6yzHPv6lhcjBomqEFUcUy/Oy9nmcqAwT4xnbIDTHVk
-         b6zqi0B1PK3O/xgcbr3fO7C7Wmj+l9j5BHZx7Hu2NhioXvuc3dlbOVw8fotQHF2X6w0z
-         2P/Jy5KOYU7EZjo97NVQnQ3mZEH10ekINoXovU53Su/npgQOQyJVdGhQIlbipJbPHJli
-         qz6w==
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=QObgdcNgPMmmkDUAL9Gi7pEY5BpJMOpSGHFLHn03yYA=;
+        b=zOd9ffccl9iKPwv8bkny3QSt1yff375lo1GN7IGSjUfvbUmcyeTzsHRpUc/NyUkGGc
+         j7JCVoFIc+YsJwE+f6oUfsOy+mfvfMiEGdKppg2/x8GwobRAF12Hnab4zqYiAqWxiQbn
+         c2G88/YUPhZ932/+NCrv33WzT5/NBLuTK9RNtnEgSyvqVnWYGFFEhO+G5NFDDA6qtqww
+         Y7UYl38YzOTDB04Hj6iMVDwEwuU6zlGhReg5DoHiwOqtlUW91WMnzKdqxc9tuMN5hjDD
+         aohUAYA1lzTSJ8H+Fh4wLc3+zpNjvqnJDqXRiM4bPcVWpE9eqMApo6tZywHA7cqeb1JM
+         YMIw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
-        bh=ps635/kpA1eo1e2a/d/LkjenrD3s0FFYKtlQH5og2M0=;
-        b=jWANPXl+/Yo2wpx4VZNkWb4E4hYy/qfC/OVFxc9tm34mAnoPC50umw0e8GwlmilEjg
-         Z2zgQCGQ/GABlM2KHcIKJdJ9zhEUf80rqd208TJCr08eXVl5LFr3y5MdDfjSRxpzl9vI
-         xjl6CkTl+a3a47Q2QBILiLtDHs+BJR7aprIjRgMb4k8+s/GZdbx358iZJ6jxgZHIFhHS
-         8Wnks6DLs3qqfl9w5jooXnErtF07FL9U56hIMMDNM2W4Pd4DqqgQ5thZyP7QnSenk8kp
-         zCPnpppw56ur8UZdsFAXUINUMa32K9x0O/Gz9WvlHvq8zPi4ikaOG3qc3VBLYgZ9Czr3
-         Bl8Q==
-X-Gm-Message-State: AJIora9muFU6Fwt1Ihuk+3Kcj5P2TP0ff5SUMv0o6X0LTUxWl+oxAOda
-        6cqNL0mvqB4k1F2VC1Li+31sygTNTd/jFw==
-X-Google-Smtp-Source: AGRyM1uOxF/MrPzQp6BtGripzjqJC6JwABG5OHiDEZ1tbj3+JeUCDkBfbNlhP7R6C3rOrgYGj62qT2p8TRZx3A==
-X-Received: from slicestar.c.googlers.com ([fda3:e722:ac3:cc00:4f:4b78:c0a8:20a1])
- (user=davidgow job=sendgmr) by 2002:a17:90a:d243:b0:1ef:9e70:3d4e with SMTP
- id o3-20020a17090ad24300b001ef9e703d4emr9065309pjw.232.1657101975263; Wed, 06
- Jul 2022 03:06:15 -0700 (PDT)
-Date:   Wed,  6 Jul 2022 18:06:07 +0800
-Message-Id: <20220706100607.75761-1-davidgow@google.com>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.37.0.rc0.161.g10f37bed90-goog
-Subject: [PATCH v3] apparmor: test: Remove some casts which are no-longer required
-From:   David Gow <davidgow@google.com>
-To:     Brendan Higgins <brendanhiggins@google.com>,
-        Daniel Latypov <dlatypov@google.com>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        John Johansen <john.johansen@canonical.com>,
-        James Morris <jmorris@namei.org>,
-        "Serge E . Hallyn" <serge@hallyn.com>
-Cc:     David Gow <davidgow@google.com>, kunit-dev@googlegroups.com,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        Stephen Rothwell <sfr@canb.auug.org.au>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=QObgdcNgPMmmkDUAL9Gi7pEY5BpJMOpSGHFLHn03yYA=;
+        b=NjUi2dolfmxt0bJva9cc7xMB5rj89OXzOUzdlYF7Mo1mOiPCPhM4wkYMaOFjpX8mad
+         diRYAWXeLnu4ln+Fj9Nlty9Do64Nhj7zVbMUa5XkMkE+Sdyqq4HdZYRe07Jfi/CvMzcg
+         lPMYCZ8Z1BkgSQcj/HAAEBixHs5MI7MFsMpgl3tp3mtCntxwpvWjG4zZphsjZzLIcuBi
+         3Zc9oKvD82hV76XCFy408Cte7hwDgO3mBKsskea4F7lBKM8MJpZ2h+rOPn+zU7rafRQH
+         +VrJRAtoiKJZ3jncipxVeNj7MITh2s97CUJU5D62sv8fsA0y7k4mK3CikkvLqou+mr0F
+         xvvg==
+X-Gm-Message-State: AJIora8ufSqE4ZSgoEz0y50GkzMxjvYdeOrpQI4YsSVwNvUqC3hOzDat
+        8bzntk8HAVSQIRUauMrXD+855w==
+X-Google-Smtp-Source: AGRyM1sjNYc1LtO3TTtCWhgBsef9MokUhndxvevofnCl3/UmI5h7ZLG1LXPoJC1T5ZRpWDJkpL31qA==
+X-Received: by 2002:a05:6000:1683:b0:21b:93b0:898f with SMTP id y3-20020a056000168300b0021b93b0898fmr35871674wrd.662.1657102047194;
+        Wed, 06 Jul 2022 03:07:27 -0700 (PDT)
+Received: from srini-hackbase.lan (cpc90716-aztw32-2-0-cust825.18-1.cable.virginm.net. [86.26.103.58])
+        by smtp.gmail.com with ESMTPSA id n35-20020a05600c3ba300b003a039054567sm24678143wms.18.2022.07.06.03.07.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 06 Jul 2022 03:07:26 -0700 (PDT)
+From:   Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+To:     gregkh@linuxfoundation.org
+Cc:     linux-kernel@vger.kernel.org,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+Subject: [PATCH 0/7] nvmem: patches (set 1) for 5.20
+Date:   Wed,  6 Jul 2022 11:06:20 +0100
+Message-Id: <20220706100627.6534-1-srinivas.kandagatla@linaro.org>
+X-Mailer: git-send-email 2.25.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-With some of the stricter type checking in KUnit's EXPECT macros
-removed, several casts in policy_unpack_test are no longer required.
+Hi Greg,
+Here are nvmem patches for 5.20, which includes
 
-Remove the unnecessary casts, making the conditions clearer.
+- New MicroChip NVMEM provider
+- updated bindings for MediaTech to include new SoC's
+- An enhancement in mtk-efuse to use devm_platform_get_and_ioremap_resource
 
-Reviewed-by: Brendan Higgins <brendanhiggins@google.com>
-Acked-by: John Johansen <john.johansen@canonical.com>
-Signed-off-by: David Gow <davidgow@google.com>
----
+Can you please queue them up for 5.20.
 
-This is a rebase and resend of [1], which had been accepted into the
-AppArmor tree, but eventually conflicted with [2]. Let's push it via the
-KUnit tree to avoid any further conflicts, as discussed in [3].
+Thanks,
+Srini
 
-Cheers,
--- David
+Allen-KH Cheng (1):
+  dt-bindings: nvmem: mediatek: efuse: add support for mt8186
 
-[1]: https://lore.kernel.org/linux-kselftest/20210513193204.816681-9-davidgow@google.com/
-[2]: https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=5f91bd9f1e7ad5a2025a2f95a2bc002cb7c9e0f9
-[3]: https://lore.kernel.org/all/20220405125540.2135d81d@canb.auug.org.au/
----
- security/apparmor/policy_unpack_test.c | 12 ++++++------
- 1 file changed, 6 insertions(+), 6 deletions(-)
+AngeloGioacchino Del Regno (1):
+  nvmem: mtk-efuse: Simplify with
+    devm_platform_get_and_ioremap_resource()
 
-diff --git a/security/apparmor/policy_unpack_test.c b/security/apparmor/policy_unpack_test.c
-index 5c18d2f19862..7954cb23d5f2 100644
---- a/security/apparmor/policy_unpack_test.c
-+++ b/security/apparmor/policy_unpack_test.c
-@@ -177,7 +177,7 @@ static void policy_unpack_test_unpack_array_out_of_bounds(struct kunit *test)
- 
- 	array_size = unpack_array(puf->e, name);
- 
--	KUNIT_EXPECT_EQ(test, array_size, (u16)0);
-+	KUNIT_EXPECT_EQ(test, array_size, 0);
- 	KUNIT_EXPECT_PTR_EQ(test, puf->e->pos,
- 		puf->e->start + TEST_NAMED_ARRAY_BUF_OFFSET);
- }
-@@ -391,10 +391,10 @@ static void policy_unpack_test_unpack_u16_chunk_basic(struct kunit *test)
- 
- 	size = unpack_u16_chunk(puf->e, &chunk);
- 
--	KUNIT_EXPECT_PTR_EQ(test, (void *)chunk,
-+	KUNIT_EXPECT_PTR_EQ(test, chunk,
- 			    puf->e->start + TEST_U16_OFFSET + 2);
--	KUNIT_EXPECT_EQ(test, size, (size_t)TEST_U16_DATA);
--	KUNIT_EXPECT_PTR_EQ(test, puf->e->pos, (void *)(chunk + TEST_U16_DATA));
-+	KUNIT_EXPECT_EQ(test, size, TEST_U16_DATA);
-+	KUNIT_EXPECT_PTR_EQ(test, puf->e->pos, (chunk + TEST_U16_DATA));
- }
- 
- static void policy_unpack_test_unpack_u16_chunk_out_of_bounds_1(
-@@ -408,7 +408,7 @@ static void policy_unpack_test_unpack_u16_chunk_out_of_bounds_1(
- 
- 	size = unpack_u16_chunk(puf->e, &chunk);
- 
--	KUNIT_EXPECT_EQ(test, size, (size_t)0);
-+	KUNIT_EXPECT_EQ(test, size, 0);
- 	KUNIT_EXPECT_NULL(test, chunk);
- 	KUNIT_EXPECT_PTR_EQ(test, puf->e->pos, puf->e->end - 1);
- }
-@@ -430,7 +430,7 @@ static void policy_unpack_test_unpack_u16_chunk_out_of_bounds_2(
- 
- 	size = unpack_u16_chunk(puf->e, &chunk);
- 
--	KUNIT_EXPECT_EQ(test, size, (size_t)0);
-+	KUNIT_EXPECT_EQ(test, size, 0);
- 	KUNIT_EXPECT_NULL(test, chunk);
- 	KUNIT_EXPECT_PTR_EQ(test, puf->e->pos, puf->e->start + TEST_U16_OFFSET);
- }
+Chunfeng Yun (2):
+  dt-bindings: nvmem: convert mtk-efuse.txt to YAML schema
+  dt-bindings: nvmem: mediatek: efuse: add support mt8183
+
+Claudiu Beznea (2):
+  dt-bindings: microchip-otpc: document Microchip OTPC
+  nvmem: microchip-otpc: add support
+
+Lukas Bulwahn (1):
+  MAINTAINERS: rectify file pattern in MICROCHIP OTPC DRIVER
+
+ .../bindings/nvmem/mediatek,efuse.yaml        |  89 ++++++
+ .../nvmem/microchip,sama7g5-otpc.yaml         |  50 +++
+ .../devicetree/bindings/nvmem/mtk-efuse.txt   |  43 ---
+ MAINTAINERS                                   |   8 +
+ drivers/nvmem/Kconfig                         |   7 +
+ drivers/nvmem/Makefile                        |   2 +
+ drivers/nvmem/microchip-otpc.c                | 288 ++++++++++++++++++
+ drivers/nvmem/mtk-efuse.c                     |   3 +-
+ .../nvmem/microchip,sama7g5-otpc.h            |  12 +
+ 9 files changed, 457 insertions(+), 45 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/nvmem/mediatek,efuse.yaml
+ create mode 100644 Documentation/devicetree/bindings/nvmem/microchip,sama7g5-otpc.yaml
+ delete mode 100644 Documentation/devicetree/bindings/nvmem/mtk-efuse.txt
+ create mode 100644 drivers/nvmem/microchip-otpc.c
+ create mode 100644 include/dt-bindings/nvmem/microchip,sama7g5-otpc.h
+
 -- 
-2.37.0.rc0.161.g10f37bed90-goog
+2.25.1
 

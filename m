@@ -2,146 +2,171 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6ACA4567FA6
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 09:17:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F1A4A567FAB
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 09:19:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231281AbiGFHRF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Jul 2022 03:17:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39366 "EHLO
+        id S231158AbiGFHTP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Jul 2022 03:19:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40770 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229788AbiGFHRE (ORCPT
+        with ESMTP id S229782AbiGFHTK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Jul 2022 03:17:04 -0400
-Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD35B222A9
-        for <linux-kernel@vger.kernel.org>; Wed,  6 Jul 2022 00:17:02 -0700 (PDT)
-Received: by mail-pj1-x102e.google.com with SMTP id v4-20020a17090abb8400b001ef966652a3so4976819pjr.4
-        for <linux-kernel@vger.kernel.org>; Wed, 06 Jul 2022 00:17:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=tfH8664UHgjV+2jYP2o3Me9myzK7TwJx+jhwNn0JvyI=;
-        b=HlELrmOdwl3EiZsHOgJRt0JH0Da5y6wa7WoiSFjNcoqVeMJOU3U8m2CodJqT1HOHEQ
-         SM+Q0V5IE7bBaCXqSg1PKuXTpR3kPD8NtxqT2S94qCQlkpmixRP7x1/d5Jyb80LQ3X24
-         ZPxchV8ILLaLTn38koxgUr1mDH1WeFoAp4xIILm/iqP/Gbgiwi6NEcdhp7BIW8HrDIJX
-         Wrs9ZVavFbtbFLW1sO3fOPyzmGXrfGbMCFSb2ecao2ZY4anXo1cLCV6j9jj5oo3oOMao
-         oWgbbHmuDAFlwVGNnsoJQdUN/0hoBLUJNNl3Wxy4LchljUWUb1F2cb06h6KGZYXBND6L
-         fV/w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=tfH8664UHgjV+2jYP2o3Me9myzK7TwJx+jhwNn0JvyI=;
-        b=QUdu3aFolcYCMqmdgcPdYLHU/y6SsEH6E4GLTBy/5XQc9EQL/pKISYmznuXfszGCQT
-         O5c4kdrAFHDcxQ6vZ+MXQLRr5GQdWwgmHFKaHDPNKYZJBSOn8zHzO+RAG4igytPeBkPd
-         TbCia5Rd0+GbClLzCDObiJkl4XhcqaJdO7GQtprT+G+vBDSUrshEDciEC5n66+C4Oce2
-         erNYR+c2BK9T5O5Nx1og4zv9TkTJLCOnwKnA0ByymCYePUCipPpQtIzy1p9jjDMcliph
-         bt0Tpq1A2C8Z47IfWCyn6Etl02r0X6UCn7ZWjwdZ/utX/6j3XC+dAeyWKlZN50ngy5Ya
-         NDHQ==
-X-Gm-Message-State: AJIora/9NJBdWe52tuF0N0mUENJy1IG6ElmW0r2vJk6GDtk/wBWJf0hZ
-        trpmlT1EiWftNqbd9X3835Jh6Q3ZecvtFXL0sR5eEQ==
-X-Google-Smtp-Source: AGRyM1svTMN91R9urVgT2hpWinIt0CNDCABC4iWVvoIhyCPfVdSDwzkHpleTtKRi1fMl7A9POp+r1f1RP4HCaU65KUU=
-X-Received: by 2002:a17:90a:f8c4:b0:1ef:b67d:f67b with SMTP id
- l4-20020a17090af8c400b001efb67df67bmr1587038pjd.145.1657091822187; Wed, 06
- Jul 2022 00:17:02 -0700 (PDT)
+        Wed, 6 Jul 2022 03:19:10 -0400
+Received: from verein.lst.de (verein.lst.de [213.95.11.211])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF25012ADD
+        for <linux-kernel@vger.kernel.org>; Wed,  6 Jul 2022 00:19:09 -0700 (PDT)
+Received: by verein.lst.de (Postfix, from userid 2407)
+        id 01AA46732D; Wed,  6 Jul 2022 09:19:05 +0200 (CEST)
+Date:   Wed, 6 Jul 2022 09:19:05 +0200
+From:   Christoph Hellwig <hch@lst.de>
+To:     Mike Leach <mike.leach@linaro.org>
+Cc:     linux-arm-kernel@lists.infradead.org, coresight@lists.linaro.org,
+        linux-kernel@vger.kernel.org, mathieu.poirier@linaro.org,
+        suzuki.poulose@arm.com, leo.yan@linaro.org, acme@kernel.org,
+        james.clark@arm.com, Joel Becker <jlbec@evilplan.org>,
+        Christoph Hellwig <hch@lst.de>
+Subject: Re: [PATCH v4 7/7] configfs: Fix LOCKDEP nesting issues with
+ fragment semaphores
+Message-ID: <20220706071905.GA28897@lst.de>
+References: <20220704154249.11501-1-mike.leach@linaro.org> <20220704154249.11501-8-mike.leach@linaro.org>
 MIME-Version: 1.0
-References: <20220705150002.2016207-1-varadgautam@google.com>
- <YsRkPUcrMj+JU0Om@kroah.com> <CAOLDJOJ_v75WqGt2mZa0h-GgF+NThFBY5DvasH+9LLVgLrrvog@mail.gmail.com>
- <YsUvgWmrk+ZfUy3t@kroah.com>
-In-Reply-To: <YsUvgWmrk+ZfUy3t@kroah.com>
-From:   Varad Gautam <varadgautam@google.com>
-Date:   Wed, 6 Jul 2022 09:16:51 +0200
-Message-ID: <CAOLDJOJug5jYpaSjY1tAYWNo0QRM4NB+wM2Vd2=Lf_O7TRjVCg@mail.gmail.com>
-Subject: Re: [PATCH] thermal: sysfs: Perform bounds check when storing thermal states
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>, linux-pm@vger.kernel.org,
-        stable@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220704154249.11501-8-mike.leach@linaro.org>
+User-Agent: Mutt/1.5.17 (2007-11-01)
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jul 6, 2022 at 8:45 AM Greg KH <gregkh@linuxfoundation.org> wrote:
->
-> On Tue, Jul 05, 2022 at 11:02:50PM +0200, Varad Gautam wrote:
-> > On Tue, Jul 5, 2022 at 6:18 PM Greg KH <gregkh@linuxfoundation.org> wrote:
-> > >
-> > > On Tue, Jul 05, 2022 at 03:00:02PM +0000, Varad Gautam wrote:
-> > > > Check that a user-provided thermal state is within the maximum
-> > > > thermal states supported by a given driver before attempting to
-> > > > apply it. This prevents a subsequent OOB access in
-> > > > thermal_cooling_device_stats_update() while performing
-> > > > state-transition accounting on drivers that do not have this check
-> > > > in their set_cur_state() handle.
-> > > >
-> > > > Signed-off-by: Varad Gautam <varadgautam@google.com>
-> > > > Cc: stable@vger.kernel.org
-> > > > ---
-> > > >  drivers/thermal/thermal_sysfs.c | 12 +++++++++++-
-> > > >  1 file changed, 11 insertions(+), 1 deletion(-)
-> > > >
-> > > > diff --git a/drivers/thermal/thermal_sysfs.c b/drivers/thermal/thermal_sysfs.c
-> > > > index 1c4aac8464a7..0c6b0223b133 100644
-> > > > --- a/drivers/thermal/thermal_sysfs.c
-> > > > +++ b/drivers/thermal/thermal_sysfs.c
-> > > > @@ -607,7 +607,7 @@ cur_state_store(struct device *dev, struct device_attribute *attr,
-> > > >               const char *buf, size_t count)
-> > > >  {
-> > > >       struct thermal_cooling_device *cdev = to_cooling_device(dev);
-> > > > -     unsigned long state;
-> > > > +     unsigned long state, max_state;
-> > > >       int result;
-> > > >
-> > > >       if (sscanf(buf, "%ld\n", &state) != 1)
-> > > > @@ -618,10 +618,20 @@ cur_state_store(struct device *dev, struct device_attribute *attr,
-> > > >
-> > > >       mutex_lock(&cdev->lock);
-> > > >
-> > > > +     result = cdev->ops->get_max_state(cdev, &max_state);
-> > > > +     if (result)
-> > > > +             goto unlock;
-> > > > +
-> > > > +     if (state > max_state) {
-> > > > +             result = -EINVAL;
-> > > > +             goto unlock;
-> > > > +     }
-> > > > +
-> > > >       result = cdev->ops->set_cur_state(cdev, state);
-> > >
-> > > Why doesn't set_cur_state() check the max state before setting it?  Why
-> > > are the callers forced to always check it before?  That feels wrong...
-> > >
-> >
-> > The problem lies in thermal_cooling_device_stats_update(), not set_cur_state().
-> >
-> > If ->set_cur_state() doesn't error out on invalid state,
-> > thermal_cooling_device_stats_update() does a:
-> >
-> > stats->trans_table[stats->state * stats->max_states + new_state]++;
-> >
-> > stats->trans_table reserves space depending on max_states, but we'd end up
-> > reading/writing outside it. cur_state_store() can prevent this regardless of
-> > the driver's ->set_cur_state() implementation.
->
-> Why wouldn't cur_state_store() check for an out-of-bounds condition by
-> calling get_max_state() and then return an error if it is invalid,
-> preventing thermal_cooling_device_stats_update() from ever being called?
->
+Can you send me the whole series?  Reviewing a patch 7 out of 7 without
+context is basically impossible.
 
-That's what this patch does, it adds the out-of-bounds check.
-
-> thanks,
->
-> greg k-h
+On Mon, Jul 04, 2022 at 04:42:49PM +0100, Mike Leach wrote:
+> CoreSight uses configfs to represent the user interface to programmed
+> configurations, which can be loaded and unloaded dynamically via configfs.
+> 
+> These add and remove configurations using register/unregister group
+> calls.
+> 
+> It has been found that if CONFIG_LOCKDEP is enabled, then it appears to
+> be confused by the nesting inherent in the fragment semaphores used
+> by groups and the underlying subsystem.
+> 
+> This patch sets up a mechanism to use separate classes for the fragment
+> semaphores, in a similar way to that already in place to fix nesting
+> issues with the i_mutexes.
+> 
+> Cc: Joel Becker <jlbec@evilplan.org>
+> Cc: Christoph Hellwig <hch@lst.de>
+> Signed-off-by: Mike Leach <mike.leach@linaro.org>
+> ---
+>  fs/configfs/configfs_internal.h |  3 +++
+>  fs/configfs/dir.c               | 45 +++++++++++++++++++++++++++++++++
+>  2 files changed, 48 insertions(+)
+> 
+> diff --git a/fs/configfs/configfs_internal.h b/fs/configfs/configfs_internal.h
+> index c0395363eab9..736c74ec4b7a 100644
+> --- a/fs/configfs/configfs_internal.h
+> +++ b/fs/configfs/configfs_internal.h
+> @@ -22,6 +22,9 @@ struct configfs_fragment {
+>  	atomic_t frag_count;
+>  	struct rw_semaphore frag_sem;
+>  	bool frag_dead;
+> +#ifdef CONFIG_LOCKDEP
+> +	int frag_depth;
+> +#endif
+>  };
+>  
+>  void put_fragment(struct configfs_fragment *);
+> diff --git a/fs/configfs/dir.c b/fs/configfs/dir.c
+> index d1f9d2632202..6ecd8961afc3 100644
+> --- a/fs/configfs/dir.c
+> +++ b/fs/configfs/dir.c
+> @@ -133,6 +133,41 @@ configfs_adjust_dir_dirent_depth_after_populate(struct configfs_dirent *sd)
+>  	sd->s_depth = -1;
+>  }
+>  
+> +/* fragment semaphore needs some lockdep handling */
+> +static struct lock_class_key default_frag_class[MAX_LOCK_DEPTH];
+> +
+> +/*
+> + * Set the lockdep depth for a new fragment based on the parent frag depth.
+> + * Called from register_subsystem() with NULL parent group to set root subsystem
+> + * depth which defaults to 0 in a new fragment, and from register_group() with the
+> + * parent group to set a new group fragment based on the parent fragment depth.
+> + *
+> + * Prevents lockdep getting upset on the unregister_group() call if it cannot
+> + * understand the hierarchy of fragments.
+> + */
+> +static void configfs_adjust_frag_depth(struct configfs_fragment *frag,
+> +				       struct config_group *parent_group)
+> +{
+> +	struct configfs_dirent *parent_dirent;
+> +
+> +	if (parent_group) {
+> +		// find parent frag
+> +		parent_dirent = parent_group->cg_item.ci_dentry->d_fsdata;
+> +		frag->frag_depth = parent_dirent->s_frag->frag_depth + 1;
+> +	}
+> +
+> +	if (frag->frag_depth < ARRAY_SIZE(default_frag_class)) {
+> +		lockdep_set_class(&frag->frag_sem,
+> +				  &default_frag_class[frag->frag_depth]);
+> +	} else {
+> +		/*
+> +		 * In practice the maximum level of locking depth is
+> +		 * already reached. Just inform about possible reasons.
+> +		 */
+> +		pr_info("Too many levels of fragments for the locking correctness validator.\n");
+> +	}
+> +}
+> +
+>  #else /* CONFIG_LOCKDEP */
+>  
+>  static void configfs_init_dirent_depth(struct configfs_dirent *sd)
+> @@ -154,6 +189,11 @@ configfs_adjust_dir_dirent_depth_after_populate(struct configfs_dirent *sd)
+>  {
+>  }
+>  
+> +static void configfs_adjust_frag_depth(struct configfs_fragment *frag,
+> +				       struct config_group *parent_group)
+> +{
+> +}
+> +
+>  #endif /* CONFIG_LOCKDEP */
+>  
+>  static struct configfs_fragment *new_fragment(void)
+> @@ -165,6 +205,9 @@ static struct configfs_fragment *new_fragment(void)
+>  		atomic_set(&p->frag_count, 1);
+>  		init_rwsem(&p->frag_sem);
+>  		p->frag_dead = false;
+> +#ifdef CONFIG_LOCKDEP
+> +		p->frag_depth = 0;
+> +#endif
+>  	}
+>  	return p;
+>  }
+> @@ -1742,6 +1785,7 @@ int configfs_register_group(struct config_group *parent_group,
+>  	parent = parent_group->cg_item.ci_dentry;
+>  
+>  	inode_lock_nested(d_inode(parent), I_MUTEX_PARENT);
+> +	configfs_adjust_frag_depth(frag, parent_group);
+>  	ret = create_default_group(parent_group, group, frag);
+>  	if (ret)
+>  		goto err_out;
+> @@ -1872,6 +1916,7 @@ int configfs_register_subsystem(struct configfs_subsystem *subsys)
+>  	mutex_unlock(&configfs_subsystem_mutex);
+>  
+>  	inode_lock_nested(d_inode(root), I_MUTEX_PARENT);
+> +	configfs_adjust_frag_depth(frag, NULL);
+>  
+>  	err = -ENOMEM;
+>  	dentry = d_alloc_name(root, group->cg_item.ci_name);
+> -- 
+> 2.17.1
+---end quoted text---

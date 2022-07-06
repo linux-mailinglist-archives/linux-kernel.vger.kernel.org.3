@@ -2,117 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 56D87568494
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 12:06:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C77F256849B
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 12:06:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231892AbiGFKEm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Jul 2022 06:04:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43296 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232428AbiGFKEi (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
+        id S232442AbiGFKEi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
         Wed, 6 Jul 2022 06:04:38 -0400
-Received: from mail-qk1-f177.google.com (mail-qk1-f177.google.com [209.85.222.177])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 831AA24F12;
-        Wed,  6 Jul 2022 03:04:37 -0700 (PDT)
-Received: by mail-qk1-f177.google.com with SMTP id k20so10664082qkj.1;
-        Wed, 06 Jul 2022 03:04:37 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Bj57DZQxAwyQ5rJJj/iE7VR9xSo/KE2P6unWd/aXevs=;
-        b=me00YsG/CTPgmtw6XBBNNqyHRnIhI5p4+QrnMlqczQBUU5g8ALhHRfeaXQ54m2JhjL
-         B2aVuqw0AoVgm5K2r7k7YEZJ7RPHkSF15PPENHNE5k5gRiMNebhTw6iva0+YnkYKkP85
-         lbu0+IgKGZNinFjkbLpWkgY+EVV9PzhsIy0YzQItEc7qrec62fTNY7ub7ExmzYpB+8cw
-         qjEivTws2DYbF1/hFICTAA0v2ho/RETLQAdcXwV7smV2Fw79/juMqBA58Iwx5OkUPYf1
-         dCUeeJNX5BGkwl9qbwrNhEIAVcDkHvH31jCLOyoGqD9c0h+63Fpp22RWPrUUzPCKDpGk
-         dd0Q==
-X-Gm-Message-State: AJIora+9UYeQkxIC4YJClRYpI8pV3MRWfBJtn+GP9cWAD6RrHx46XJj6
-        k3TZCu+tlY0hQzyPKejbTqKtknGL9KRLECh/
-X-Google-Smtp-Source: AGRyM1uew14ejTFGCfT4Wj367a0dGX6ivHmE5ftDDeHvVWEGdY5QNX6jtVG2mdBkJ7kxdm7k90YzEw==
-X-Received: by 2002:ae9:f808:0:b0:6af:dfa:a290 with SMTP id x8-20020ae9f808000000b006af0dfaa290mr26249582qkh.741.1657101876397;
-        Wed, 06 Jul 2022 03:04:36 -0700 (PDT)
-Received: from mail-yb1-f176.google.com (mail-yb1-f176.google.com. [209.85.219.176])
-        by smtp.gmail.com with ESMTPSA id y11-20020a05620a44cb00b006a37eb728cfsm25037529qkp.1.2022.07.06.03.04.35
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 06 Jul 2022 03:04:35 -0700 (PDT)
-Received: by mail-yb1-f176.google.com with SMTP id 64so17199350ybt.12;
-        Wed, 06 Jul 2022 03:04:35 -0700 (PDT)
-X-Received: by 2002:a25:2b48:0:b0:668:3b7d:326c with SMTP id
- r69-20020a252b48000000b006683b7d326cmr41431788ybr.380.1657101874906; Wed, 06
- Jul 2022 03:04:34 -0700 (PDT)
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43270 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231824AbiGFKEf (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 6 Jul 2022 06:04:35 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D210224F00
+        for <linux-kernel@vger.kernel.org>; Wed,  6 Jul 2022 03:04:34 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 61A68B81BA7
+        for <linux-kernel@vger.kernel.org>; Wed,  6 Jul 2022 10:04:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7825BC3411C;
+        Wed,  6 Jul 2022 10:04:28 +0000 (UTC)
+Date:   Wed, 6 Jul 2022 11:04:24 +0100
+From:   Catalin Marinas <catalin.marinas@arm.com>
+To:     Mike Rapoport <rppt@kernel.org>
+Cc:     Will Deacon <will@kernel.org>,
+        "guanghui.fgh" <guanghuifeng@linux.alibaba.com>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        baolin.wang@linux.alibaba.com, akpm@linux-foundation.org,
+        david@redhat.com, jianyong.wu@arm.com, james.morse@arm.com,
+        quic_qiancai@quicinc.com, christophe.leroy@csgroup.eu,
+        jonathan@marek.ca, mark.rutland@arm.com,
+        thunder.leizhen@huawei.com, anshuman.khandual@arm.com,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        geert+renesas@glider.be, linux-mm@kvack.org,
+        yaohongbo@linux.alibaba.com, alikernel-developer@linux.alibaba.com
+Subject: Re: [PATCH v4] arm64: mm: fix linear mem mapping access performance
+ degradation
+Message-ID: <YsVeKPzaO0SJdwFW@arm.com>
+References: <20220704163815.GA32177@willie-the-truck>
+ <CAMj1kXEvY5QXOUrXZ7rBp9As=65uTTFRSSq+FPt-n4M2P-_VtQ@mail.gmail.com>
+ <20220705095231.GB552@willie-the-truck>
+ <5d044fdd-a61a-d60f-d294-89e17de37712@linux.alibaba.com>
+ <20220705121115.GB1012@willie-the-truck>
+ <YsRSajyMxahXe7ZS@kernel.org>
+ <YsRZ8V8mQ+HM31D6@arm.com>
+ <YsRfgX7FFZLxQU50@kernel.org>
+ <YsRvPTORdvIwzShL@arm.com>
+ <YsSi9HAOOzbPYN+w@kernel.org>
 MIME-Version: 1.0
-References: <20220630051630.1718927-1-anshuman.khandual@arm.com> <20220630051630.1718927-27-anshuman.khandual@arm.com>
-In-Reply-To: <20220630051630.1718927-27-anshuman.khandual@arm.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Wed, 6 Jul 2022 12:04:23 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdVJiS6vm2td-PBH3zpsNZJeeoudS4+yu4JG08sOi+XFdA@mail.gmail.com>
-Message-ID: <CAMuHMdVJiS6vm2td-PBH3zpsNZJeeoudS4+yu4JG08sOi+XFdA@mail.gmail.com>
-Subject: Re: [PATCH V6 26/26] mm/mmap: Drop ARCH_HAS_VM_GET_PAGE_PROT
-To:     Anshuman Khandual <anshuman.khandual@arm.com>
-Cc:     Linux MM <linux-mm@kvack.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        "linux-ia64@vger.kernel.org" <linux-ia64@vger.kernel.org>,
-        Linux-sh list <linux-sh@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-csky@vger.kernel.org,
-        sparclinux <sparclinux@vger.kernel.org>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        Christoph Hellwig <hch@lst.de>,
-        linux-s390 <linux-s390@vger.kernel.org>,
-        "open list:QUALCOMM HEXAGON..." <linux-hexagon@vger.kernel.org>,
-        "the arch/x86 maintainers" <x86@kernel.org>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Christoph Hellwig <hch@infradead.org>,
-        arcml <linux-snps-arc@lists.infradead.org>,
-        "open list:TENSILICA XTENSA PORT (xtensa)" 
-        <linux-xtensa@linux-xtensa.org>,
-        linux-um <linux-um@lists.infradead.org>,
-        linux-m68k <linux-m68k@lists.linux-m68k.org>,
-        Openrisc <openrisc@lists.librecores.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Parisc List <linux-parisc@vger.kernel.org>,
-        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
-        alpha <linux-alpha@vger.kernel.org>,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YsSi9HAOOzbPYN+w@kernel.org>
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 30, 2022 at 7:20 AM Anshuman Khandual
-<anshuman.khandual@arm.com> wrote:
-> Now all the platforms enable ARCH_HAS_GET_PAGE_PROT. They define and export
-> own vm_get_page_prot() whether custom or standard DECLARE_VM_GET_PAGE_PROT.
-> Hence there is no need for default generic fallback for vm_get_page_prot().
-> Just drop this fallback and also ARCH_HAS_GET_PAGE_PROT mechanism.
->
-> Cc: Andrew Morton <akpm@linux-foundation.org>
-> Cc: linux-mm@kvack.org
-> Cc: linux-kernel@vger.kernel.org
-> Reviewed-by: Christoph Hellwig <hch@lst.de>
-> Reviewed-by: Christophe Leroy <christophe.leroy@csgroup.eu>
-> Signed-off-by: Anshuman Khandual <anshuman.khandual@arm.com>
+On Tue, Jul 05, 2022 at 11:45:40PM +0300, Mike Rapoport wrote:
+> On Tue, Jul 05, 2022 at 06:05:01PM +0100, Catalin Marinas wrote:
+> > On Tue, Jul 05, 2022 at 06:57:53PM +0300, Mike Rapoport wrote:
+> > > On Tue, Jul 05, 2022 at 04:34:09PM +0100, Catalin Marinas wrote:
+> > > > On Tue, Jul 05, 2022 at 06:02:02PM +0300, Mike Rapoport wrote:
+> > > > > +void __init remap_crashkernel(void)
+> > > > > +{
+> > > > > +#ifdef CONFIG_KEXEC_CORE
+> > > > > +	phys_addr_t start, end, size;
+> > > > > +	phys_addr_t aligned_start, aligned_end;
+> > > > > +
+> > > > > +	if (can_set_direct_map() || IS_ENABLED(CONFIG_KFENCE))
+> > > > > +	    return;
+> > > > > +
+> > > > > +	if (!crashk_res.end)
+> > > > > +	    return;
+> > > > > +
+> > > > > +	start = crashk_res.start & PAGE_MASK;
+> > > > > +	end = PAGE_ALIGN(crashk_res.end);
+> > > > > +
+> > > > > +	aligned_start = ALIGN_DOWN(crashk_res.start, PUD_SIZE);
+> > > > > +	aligned_end = ALIGN(end, PUD_SIZE);
+> > > > > +
+> > > > > +	/* Clear PUDs containing crash kernel memory */
+> > > > > +	unmap_hotplug_range(__phys_to_virt(aligned_start),
+> > > > > +			    __phys_to_virt(aligned_end), false, NULL);
+> > > > 
+> > > > What I don't understand is what happens if there's valid kernel data
+> > > > between aligned_start and crashk_res.start (or the other end of the
+> > > > range).
+> > > 
+> > > Data shouldn't go anywhere :)
+> > > 
+> > > There is 
+> > > 
+> > > +	/* map area from PUD start to start of crash kernel with large pages */
+> > > +	size = start - aligned_start;
+> > > +	__create_pgd_mapping(swapper_pg_dir, aligned_start,
+> > > +			     __phys_to_virt(aligned_start),
+> > > +			     size, PAGE_KERNEL, early_pgtable_alloc, 0);
+> > > 
+> > > and 
+> > > 
+> > > +	/* map area from end of crash kernel to PUD end with large pages */
+> > > +	size = aligned_end - end;
+> > > +	__create_pgd_mapping(swapper_pg_dir, end, __phys_to_virt(end),
+> > > +			     size, PAGE_KERNEL, early_pgtable_alloc, 0);
+> > > 
+> > > after the unmap, so after we tear down a part of a linear map we
+> > > immediately recreate it, just with a different page size.
+> > > 
+> > > This all happens before SMP, so there is no concurrency at that point.
+> > 
+> > That brief period of unmap worries me. The kernel text, data and stack
+> > are all in the vmalloc space but any other (memblock) allocation to this
+> > point may be in the unmapped range before and after the crashkernel
+> > reservation. The interrupts are off, so I think the only allocation and
+> > potential access that may go in this range is the page table itself. But
+> > it looks fragile to me.
+> 
+> I agree there are chances there will be an allocation from the unmapped
+> range. 
+> 
+> We can make sure this won't happen, though. We can cap the memblock
+> allocations with memblock_set_current_limit(aligned_end) or
+> memblock_reserve(algined_start, aligned_end) until the mappings are
+> restored. 
 
->  arch/m68k/Kconfig       |  1 -
+We can reserve the region just before unmapping to avoid new allocations
+for the page tables but we can't do much about pages already allocated
+prior to calling remap_crashkernel().
 
-Reviewed-by: Geert Uytterhoeven <geert@linux-m68k.org>
-Acked-by: Geert Uytterhoeven <geert@linux-m68k.org>
-
-Gr{oetje,eeting}s,
-
-                        Geert
-
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+-- 
+Catalin

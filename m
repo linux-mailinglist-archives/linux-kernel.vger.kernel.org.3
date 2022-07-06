@@ -2,117 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BDEDB569597
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 01:02:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 034A0569599
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 01:03:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234177AbiGFXB5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Jul 2022 19:01:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52140 "EHLO
+        id S233383AbiGFXDC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Jul 2022 19:03:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52874 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229768AbiGFXBz (ORCPT
+        with ESMTP id S229768AbiGFXDA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Jul 2022 19:01:55 -0400
-Received: from mail-qt1-x82c.google.com (mail-qt1-x82c.google.com [IPv6:2607:f8b0:4864:20::82c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 996821DA6A
-        for <linux-kernel@vger.kernel.org>; Wed,  6 Jul 2022 16:01:54 -0700 (PDT)
-Received: by mail-qt1-x82c.google.com with SMTP id ck6so20421417qtb.7
-        for <linux-kernel@vger.kernel.org>; Wed, 06 Jul 2022 16:01:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=PtNM1GEZDSdRmQMZQoeggIYPPP+5wqHALbDWGxuW5Cc=;
-        b=Q5GA+WIFBxr1AvdVtYRnT+47GWrXVpL4qFWtF4+6IsSV+2SRJGr5EHycebrSGzT9D6
-         KbePikb19U8h4mXTBPkve1L2iyLedbWhDVMS1885oEQ26Bw+6StZX0Ft9YPOj65HOxD4
-         u9Wtx7lBUNZp1GhGKZIBsTXDLkQYtY4AKEjHKeLqGAXy+0SG/EOKe4cdX+ilj1UQBIF2
-         Ipik/JGfEdWnzFIoF5AjZTHno5E7xHFy4ScshLG79WJt2KL0jlwgGg48bahcMqtmYS5q
-         ICxwkuW8PDyla0Yu973s5vH2LyeeRblMxs5S7IKHHaTxfGM27EZq0EZCu4HABohvNQDG
-         lqOQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=PtNM1GEZDSdRmQMZQoeggIYPPP+5wqHALbDWGxuW5Cc=;
-        b=5gWw4crNOV+66DOJ6fTp6CL9pWoRRuZopxs2Lz3TxRrBd/YRUwUkM2vfDuMjELYP1H
-         tnEMnfR8da1GdGgxkRNWk3t30Qw000QNOGNd3xQaOYXizoZjUSNcJ8hjVMv6aYSuHBx0
-         AbrOfcyJAnd7eplyYSV3ivMa9JZ9OXgWmN5GZ5xX6JbNZH+rQMc5GW87jT5syxLsZy8C
-         teI/zJfRd/AEbNiFr/K70l1leF71ooKhkHeCjK4JUpdReu7impjE9YoCk63vzkX8/UDa
-         66XT1D5LnXmbZGfaTkeXuaakRW76ut5XA/qkhR8ZE8+VT6UL7i5cMUTIjA8AjtgCOCdO
-         Qo5w==
-X-Gm-Message-State: AJIora8V65IjBzQJKjwymCJ8I/nWdehjk4Q9gcpLwiVlHkK7ZrBKzn7v
-        o6AM5vrmskWLlQH39FCbh/HFrv3/PaEwKjU/eW+pvA==
-X-Google-Smtp-Source: AGRyM1udpm2O+FOWxGd36c7AV3UpmX/cXi9qnAvOXyNitk2mFoRcQAvdHwuLHr1CAZfSltNwqJQ6erI2QtRUjI6DJpQ=
-X-Received: by 2002:a05:6214:202f:b0:432:4810:1b34 with SMTP id
- 15-20020a056214202f00b0043248101b34mr19087377qvf.35.1657148513364; Wed, 06
- Jul 2022 16:01:53 -0700 (PDT)
+        Wed, 6 Jul 2022 19:03:00 -0400
+Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC7A41DA6A;
+        Wed,  6 Jul 2022 16:02:57 -0700 (PDT)
+Received: from ip5b412258.dynamic.kabel-deutschland.de ([91.65.34.88] helo=diego.localnet)
+        by gloria.sntech.de with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <heiko@sntech.de>)
+        id 1o9E2X-0002uT-8c; Thu, 07 Jul 2022 01:02:37 +0200
+From:   Heiko =?ISO-8859-1?Q?St=FCbner?= <heiko@sntech.de>
+To:     Guo Ren <guoren@kernel.org>
+Cc:     Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Wei Fu <wefu@redhat.com>,
+        Christoph Muellner <cmuellner@linux.com>,
+        Philipp Tomsich <philipp.tomsich@vrull.eu>,
+        Christoph Hellwig <hch@lst.de>,
+        Samuel Holland <samuel@sholland.org>,
+        Atish Patra <atishp@atishpatra.org>,
+        Anup Patel <anup@brainfault.org>,
+        Nick Kossifidis <mick@ics.forth.gr>,
+        Rob Herring <robh+dt@kernel.org>, krzk+dt@kernel.org,
+        devicetree <devicetree@vger.kernel.org>,
+        Drew Fustini <drew@beagleboard.org>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Atish Patra <atish.patra@wdc.com>
+Subject: Re: [PATCH v6 3/4] riscv: Add support for non-coherent devices using zicbom extension
+Date:   Thu, 07 Jul 2022 01:02:36 +0200
+Message-ID: <3111003.5fSG56mABF@diego>
+In-Reply-To: <CAJF2gTT6DzPihaP+BHLM6Wvn=Hba-jb-bhs96U3+ApdSmT593g@mail.gmail.com>
+References: <20220705224703.1571895-1-heiko@sntech.de> <20220705224703.1571895-4-heiko@sntech.de> <CAJF2gTT6DzPihaP+BHLM6Wvn=Hba-jb-bhs96U3+ApdSmT593g@mail.gmail.com>
 MIME-Version: 1.0
-References: <1656667620-18718-1-git-send-email-alan.maguire@oracle.com> <1656667620-18718-2-git-send-email-alan.maguire@oracle.com>
-In-Reply-To: <1656667620-18718-2-git-send-email-alan.maguire@oracle.com>
-From:   Hao Luo <haoluo@google.com>
-Date:   Wed, 6 Jul 2022 16:01:42 -0700
-Message-ID: <CA+khW7gY5qAqP+EsHzEqrAk5OFKdR4Fhy76v_5WN+0ko+vkgsA@mail.gmail.com>
-Subject: Re: [PATCH v2 bpf-next 1/2] bpf: add a ksym BPF iterator
-To:     Alan Maguire <alan.maguire@oracle.com>
-Cc:     ast@kernel.org, andrii@kernel.org, daniel@iogearbox.net,
-        kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
-        john.fastabend@gmail.com, kpsingh@kernel.org, jolsa@kernel.org,
-        mhiramat@kernel.org, akpm@linux-foundation.org, void@manifault.com,
-        swboyd@chromium.org, ndesaulniers@google.com,
-        9erthalion6@gmail.com, kennyyu@fb.com, geliang.tang@suse.com,
-        kuniyu@amazon.co.jp, bpf@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,T_SPF_HELO_TEMPERROR autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jul 1, 2022 at 2:28 AM Alan Maguire <alan.maguire@oracle.com> wrote:
->
-> add a "ksym" iterator which provides access to a "struct kallsym_iter"
-> for each symbol.  Intent is to support more flexible symbol parsing
-> as discussed in [1].
->
-> [1] https://lore.kernel.org/all/YjRPZj6Z8vuLeEZo@krava/
->
-> Suggested-by: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-> Signed-off-by: Alan Maguire <alan.maguire@oracle.com>
-> ---
->  kernel/kallsyms.c | 89 +++++++++++++++++++++++++++++++++++++++++++++++++++++++
->  1 file changed, 89 insertions(+)
->
-> diff --git a/kernel/kallsyms.c b/kernel/kallsyms.c
-> index fbdf8d3..8b662da 100644
-> --- a/kernel/kallsyms.c
-> +++ b/kernel/kallsyms.c
-> @@ -30,6 +30,7 @@
-[...]
-> +
-> +static struct bpf_iter_reg ksym_iter_reg_info = {
-> +       .target                 = "ksym",
-> +       .ctx_arg_info_size      = 1,
-> +       .ctx_arg_info           = {
-> +               { offsetof(struct bpf_iter__ksym, ksym),
-> +                 PTR_TO_BTF_ID_OR_NULL },
-> +       },
-> +       .seq_info               = &ksym_iter_seq_info,
-> +};
+Hi Guo,
 
-It would be great to allow cond_resched() while iterating. Disabling
-resched is unnecessary for iterating ksyms IMO.
-
-.feature = BPF_ITER_RESCHED,
-
-Hao
-
-> +
-[...]
-> --
-> 1.8.3.1
+Am Mittwoch, 6. Juli 2022, 01:32:12 CEST schrieb Guo Ren:
+> On Wed, Jul 6, 2022 at 6:47 AM Heiko Stuebner <heiko@sntech.de> wrote:
+> >
+> > The Zicbom ISA-extension was ratified in november 2021
+> > and introduces instructions for dcache invalidate, clean
+> > and flush operations.
+> >
+> > Implement cache management operations for non-coherent devices
+> > based on them.
+> >
+> > Of course not all cores will support this, so implement an
+> > alternative-based mechanism that replaces empty instructions
+> > with ones done around Zicbom instructions.
+> >
+> > As discussed in previous versions, assume the platform
+> > being coherent by default so that non-coherent devices need
+> > to get marked accordingly by firmware.
+> >
+> > Reviewed-by: Christoph Hellwig <hch@lst.de>
+> > Signed-off-by: Heiko Stuebner <heiko@sntech.de>
+> > Cc: Christoph Hellwig <hch@lst.de>
+> > Cc: Atish Patra <atish.patra@wdc.com>
+> > Cc: Guo Ren <guoren@kernel.org>
+> > Cc: Anup Patel <anup@brainfault.org>
+> > ---
+> >  arch/riscv/Kconfig                   |  31 ++++++++
+> >  arch/riscv/Makefile                  |   4 +
+> >  arch/riscv/include/asm/cache.h       |   4 +
+> >  arch/riscv/include/asm/cacheflush.h  |  10 +++
+> >  arch/riscv/include/asm/errata_list.h |  19 ++++-
+> >  arch/riscv/include/asm/hwcap.h       |   1 +
+> >  arch/riscv/kernel/cpu.c              |   1 +
+> >  arch/riscv/kernel/cpufeature.c       |  24 ++++++
+> >  arch/riscv/kernel/setup.c            |   2 +
+> >  arch/riscv/mm/Makefile               |   1 +
+> >  arch/riscv/mm/dma-noncoherent.c      | 112 +++++++++++++++++++++++++++
+> >  11 files changed, 208 insertions(+), 1 deletion(-)
+> >  create mode 100644 arch/riscv/mm/dma-noncoherent.c
+> >
+> > diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
+> > index 32ffef9f6e5b..f7b2b3a4b7f1 100644
+> > --- a/arch/riscv/Kconfig
+> > +++ b/arch/riscv/Kconfig
+> > @@ -113,6 +113,7 @@ config RISCV
+> >         select MODULES_USE_ELF_RELA if MODULES
+> >         select MODULE_SECTIONS if MODULES
+> >         select OF
+> > +       select OF_DMA_DEFAULT_COHERENT
+> >         select OF_EARLY_FLATTREE
+> >         select OF_IRQ
+> >         select PCI_DOMAINS_GENERIC if PCI
+> > @@ -218,6 +219,14 @@ config PGTABLE_LEVELS
+> >  config LOCKDEP_SUPPORT
+> >         def_bool y
+> >
+> > +config RISCV_DMA_NONCOHERENT
+> > +       bool
+> > +       select ARCH_HAS_DMA_PREP_COHERENT
+> > +       select ARCH_HAS_SYNC_DMA_FOR_DEVICE
+> > +       select ARCH_HAS_SYNC_DMA_FOR_CPU
+> > +       select ARCH_HAS_SETUP_DMA_OPS
+> > +       select DMA_DIRECT_REMAP
+> > +
+> >  source "arch/riscv/Kconfig.socs"
+> >  source "arch/riscv/Kconfig.erratas"
+> >
+> > @@ -376,6 +385,28 @@ config RISCV_ISA_SVPBMT
+> >
+> >            If you don't know what to do here, say Y.
+> >
+> > +config CC_HAS_ZICBOM
+> > +       bool
+> > +       default y if 64BIT && $(cc-option,-mabi=lp64 -march=rv64ima_zicbom)
+> > +       default y if 32BIT && $(cc-option,-mabi=lp64 -march=rv32ima_zicbom)
 >
+> -mabi=lp64 for rv32?
+
+Thanks for catching that! :-) 
+
+When I converted over to using the real instructions for Zicbom instead of
+pre-coded ones, I used a different format first for detecting the Zicbom
+existence and I guess when moving over to the above I made a mistake
+in the conversion.
+
+In any case, that should of course be ilp32, same as in the Makefile.
+With updated opensbi and Qemu I have now re-tested all possible
+combinations and am pretty hopefully that this should fit now.
+
+v7 following shortly.
+
+Thanks
+Heiko
+
+

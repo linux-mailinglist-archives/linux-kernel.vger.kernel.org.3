@@ -2,107 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DBE4D567F6F
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 09:05:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D7615567F7F
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 09:06:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231689AbiGFHFL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Jul 2022 03:05:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59190 "EHLO
+        id S231678AbiGFHFp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Jul 2022 03:05:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58906 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231610AbiGFHEv (ORCPT
+        with ESMTP id S231549AbiGFHFX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Jul 2022 03:04:51 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2AE11222A9;
-        Wed,  6 Jul 2022 00:04:46 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id CF811B81AEF;
-        Wed,  6 Jul 2022 07:04:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1095EC3411C;
-        Wed,  6 Jul 2022 07:04:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1657091083;
-        bh=yFTTCN8eLFI/FFSUip2r6VUaWUpwukK1oykDBvVFoaw=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=jvQpbiTHwHtxiL7mhpAUqPcIfklC3uMq+eSlq7Dn3j9ZoCfEt8bXAghrDvZr0IVL+
-         IVo2VVD6El337SyTT90L4wo/hIPFCt8NLQgPrX4IoEu6OyCSHbBsNvDzbu6ja4urNO
-         b9ykds4BGL4/msxrju07lSQ9srOtvpaXTx1taFYM=
-Date:   Wed, 6 Jul 2022 09:04:41 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Christoph Hellwig <hch@lst.de>
-Cc:     Logan Gunthorpe <logang@deltatee.com>,
-        Jason Gunthorpe <jgg@ziepe.ca>, linux-kernel@vger.kernel.org,
-        linux-nvme@lists.infradead.org, linux-block@vger.kernel.org,
-        linux-pci@vger.kernel.org, linux-mm@kvack.org,
-        iommu@lists.linux-foundation.org,
-        Stephen Bates <sbates@raithlin.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
-        John Hubbard <jhubbard@nvidia.com>,
-        Don Dutile <ddutile@redhat.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Daniel Vetter <daniel.vetter@ffwll.ch>,
-        Minturn Dave B <dave.b.minturn@intel.com>,
-        Jason Ekstrand <jason@jlekstrand.net>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Xiong Jianxin <jianxin.xiong@intel.com>,
-        Bjorn Helgaas <helgaas@kernel.org>,
-        Ira Weiny <ira.weiny@intel.com>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Martin Oliveira <martin.oliveira@eideticom.com>,
-        Chaitanya Kulkarni <ckulkarnilinux@gmail.com>,
-        Ralph Campbell <rcampbell@nvidia.com>,
-        Bjorn Helgaas <bhelgaas@google.com>
-Subject: Re: [PATCH v7 20/21] PCI/P2PDMA: Introduce pci_mmap_p2pmem()
-Message-ID: <YsU0Cb0rRbW8FGPX@kroah.com>
-References: <20220705161240.GB13721@lst.de>
- <a509b13c-244b-23fc-f989-339750a733a5@deltatee.com>
- <20220705164315.GB14484@lst.de>
- <acb91f37-0470-8ce4-19e4-426903cbc3a1@deltatee.com>
- <20220705165039.GB14566@lst.de>
- <YsRzNqmZYlgkL7fI@kroah.com>
- <1bd43ef7-0403-bd25-087c-d54d5af677e4@deltatee.com>
- <YsR4CNDgtt4JWonv@kroah.com>
- <b3deacdd-cb76-6ebb-0e29-ef6a5a426a0d@deltatee.com>
- <20220706065127.GA27132@lst.de>
+        Wed, 6 Jul 2022 03:05:23 -0400
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B019922536;
+        Wed,  6 Jul 2022 00:05:20 -0700 (PDT)
+Received: from mail-yw1-f174.google.com ([209.85.128.174]) by
+ mrelayeu.kundenserver.de (mreue009 [213.165.67.97]) with ESMTPSA (Nemesis) id
+ 1MQMm9-1nvYz6481J-00MIfJ; Wed, 06 Jul 2022 09:05:18 +0200
+Received: by mail-yw1-f174.google.com with SMTP id 00721157ae682-31c86fe1dddso83275417b3.1;
+        Wed, 06 Jul 2022 00:05:15 -0700 (PDT)
+X-Gm-Message-State: AJIora/yyXFuxC0iH8udXG4GKzeQDfZVFj5/5/aXY+3OG8rcG8jffJLV
+        2V+NVKVyV6CbxZT52ddqge0oe5EQDCQFt7Y66jU=
+X-Google-Smtp-Source: AGRyM1sFkLoTiaaVIBkcDzO6lGV11chQSm3x6oRhEtv1xOtqIu5uDObFEe7OPQNG4jMZlSfDIkbGiGD4cv9otOB20XA=
+X-Received: by 2002:a81:f8f:0:b0:31c:bd9f:31ce with SMTP id
+ 137-20020a810f8f000000b0031cbd9f31cemr10731679ywp.347.1657091114041; Wed, 06
+ Jul 2022 00:05:14 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220706065127.GA27132@lst.de>
-X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220630051630.1718927-1-anshuman.khandual@arm.com>
+ <8a6ccbae-7d7c-6e08-cc28-eeb649f86112@arm.com> <85fff3f6-373f-3e6a-325e-0fa8ad46273a@csgroup.eu>
+In-Reply-To: <85fff3f6-373f-3e6a-325e-0fa8ad46273a@csgroup.eu>
+From:   Arnd Bergmann <arnd@arndb.de>
+Date:   Wed, 6 Jul 2022 09:04:56 +0200
+X-Gmail-Original-Message-ID: <CAK8P3a1gb1Xrg4AGnncFpN=aDxVKfjkt1TmSvZXXADZTv7eE-g@mail.gmail.com>
+Message-ID: <CAK8P3a1gb1Xrg4AGnncFpN=aDxVKfjkt1TmSvZXXADZTv7eE-g@mail.gmail.com>
+Subject: Re: [PATCH V6 00/26] mm/mmap: Drop __SXXX/__PXXX macros from across platforms
+To:     Christophe Leroy <christophe.leroy@csgroup.eu>
+Cc:     Anshuman Khandual <anshuman.khandual@arm.com>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
+        "linux-xtensa@linux-xtensa.org" <linux-xtensa@linux-xtensa.org>,
+        "linux-ia64@vger.kernel.org" <linux-ia64@vger.kernel.org>,
+        "linux-parisc@vger.kernel.org" <linux-parisc@vger.kernel.org>,
+        "linux-s390@vger.kernel.org" <linux-s390@vger.kernel.org>,
+        "linux-sh@vger.kernel.org" <linux-sh@vger.kernel.org>,
+        "linux-hexagon@vger.kernel.org" <linux-hexagon@vger.kernel.org>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "linux-um@lists.infradead.org" <linux-um@lists.infradead.org>,
+        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
+        "linux-csky@vger.kernel.org" <linux-csky@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "hch@infradead.org" <hch@infradead.org>,
+        "linux-m68k@lists.linux-m68k.org" <linux-m68k@lists.linux-m68k.org>,
+        "openrisc@lists.librecores.org" <openrisc@lists.librecores.org>,
+        "linux-alpha@vger.kernel.org" <linux-alpha@vger.kernel.org>,
+        "sparclinux@vger.kernel.org" <sparclinux@vger.kernel.org>,
+        "linux-riscv@lists.infradead.org" <linux-riscv@lists.infradead.org>,
+        "linux-snps-arc@lists.infradead.org" 
+        <linux-snps-arc@lists.infradead.org>,
+        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Provags-ID: V03:K1:eoj/BCXKdmN3+Jtii2tnT9++PxDX3Qg7gtjTIvPC9UxI/6aBcxJ
+ tTae1o1xAarRHKJSP3rYt1b1/eDeegzTy0D2zVasyMJuuUa+41stGutBBXc1JX0IWj+OuEm
+ 4ASghrYondSGEJVdD4r91TCAANQlj5byQGbFpEa9jhmxGwVvHYU/Vtoar9ZPDQqoHW43WeM
+ R3ozEe+h4nV01gc2XgZ2Q==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:prrS9+g5wIQ=:AH9lcMoXqt1xOcLbdnz0v3
+ FlSve9D0sISO715668G4rmmOOym/lRAuFwSwKOrEgM87WsNd50hr6zzm6CkRQaWsQNRfb3JMD
+ pcZW7ztueF93/tWxu/udv1r5lnePhIz3byRArXnmXPWihtuIM7AQ9Ky3KkRQOmYKT78as29UQ
+ r0cGiEnz6bcQpvcqYSjK3TJdLhS7PpmL3x90cG6xm+NZ6gIxuJEClno37wYHSZUPbBMVs/C9A
+ IOAAi+/oi7gWMWmtjHJarqw8Y+I2uYCh9CrF0dt8bUjvuK2QFTKEwKPEsaHgVWA42u9wlem+y
+ 4sIgHUzW0/TuymIwELBXL/ElFVOdfLORt8KL4MTwAICBILbSZS3XVWwMDkjgBf8D4QCI5c+R9
+ 00HOPOriisiG7YnK8L6mjd+xGcjfeCvzVC9XOhM+28BR7CteM5su05ac/6hzrpkJLyILrKNRs
+ HvaTSN1FwRqUy9Kj+WI1P6jXqu8d2IBxZMLKsnAXha4VVlcdtrH2kDJLkchXUmu8Y/f31xGor
+ TVUj0G1hyIitAC5nxF36puqdvyGzqw1EjycEk73/bwY8lkE1YYSQMhVTNIdROMV1pqvwgLPdl
+ IaRqUJkq0ZbXME5jinzrOPR2K+0f/rNmGTOO72ZJ2xElw39Q0uqHGgmN6++BKG4JNqK9MlBbi
+ DSfhIbUxaRzTzPoPxj2i8ePp+cVwJBWGqB9PqvGAd6DX6y27uTIL9evkQviyXz4YCMv3vnrFq
+ lsDcsJpMxdcr5+T5dz0YqL8w/tJakl/IqUgEw6m0VYya+EPCL+0rI2VwcHBY2Xj2z72Kibici
+ 54Y/uROUkJKI0rqrBWN7XoacPQ1MfP1Mq5mgKzoRwHNbT+W58ZL9IU8OR3lzsTjY6dj34FUgG
+ OKtnA6/3GxUCV6shdv1Q==
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jul 06, 2022 at 08:51:27AM +0200, Christoph Hellwig wrote:
-> On Tue, Jul 05, 2022 at 12:16:45PM -0600, Logan Gunthorpe wrote:
-> > The current version does it through a char device, but that requires
-> > creating a simple_fs and anon_inode for teardown on driver removal, plus
-> > a bunch of hooks through the driver that exposes it (NVMe, in this case)
-> > to set this all up.
-> > 
-> > Christoph is suggesting a sysfs interface which could potentially avoid
-> > the anon_inode and all of the extra hooks. It has some significant
-> > benefits and maybe some small downsides, but I wouldn't describe it as
-> > horrid.
-> 
-> Yeah, I don't think is is horrible, it fits in with the resource files
-> for the BARs, and solves a lot of problems.  Greg, can you explain
-> what would be so bad about it?
+On Wed, Jul 6, 2022 at 8:33 AM Christophe Leroy
+<christophe.leroy@csgroup.eu> wrote:
 
-As you mention, you will have to pass different things down into sysfs
-in order for that to be possible.  If it matches the resource files like
-we currently have today, that might not be that bad, but it still feels
-odd to me.  Let's see an implementation and a Documentation/ABI/ entry
-first though.
+> As far as I can see in Kconfig, CONFIG_MMU is user selectable on the
+> following architectures:
+> - ARM
+> - M68K
+> - RISCV
+> - SH
+>
+> And is disabled by default on XTENSA.
 
-thanks,
+Right, the list is complete, though it's also default-enabled for
+every CPU core on xtensa, and you can only disable it for
+"custom" CPU cores.
 
-greg k-h
+        Arnd

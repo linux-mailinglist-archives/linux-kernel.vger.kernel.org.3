@@ -2,168 +2,190 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 83161568222
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 10:53:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B6F7568230
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 10:56:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232237AbiGFIwN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Jul 2022 04:52:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33960 "EHLO
+        id S232403AbiGFI4G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Jul 2022 04:56:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36078 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232138AbiGFIwJ (ORCPT
+        with ESMTP id S230320AbiGFI4F (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Jul 2022 04:52:09 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3883B248EC;
-        Wed,  6 Jul 2022 01:52:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1657097529; x=1688633529;
-  h=message-id:subject:from:to:cc:date:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=rrbZGLkCmOqSgzRms+ImBGiKNcOdYZiidZ/LIuBdEGU=;
-  b=O5Sn4Dt4Yqz1OBzA+686FnOo7t/Sli2YMhkKs8Dbwpr5spmH+gr81WCi
-   q3mqaqPEGKZTMxuj/SfhkA/zpzs0nKodapi56noV/2Q9wa+6uzir9E/PH
-   C4xVgtR4isnjRO1LMvRTNQBnhOuBTWjf5k74fHeXnrq1eEJHVQb0uZ+GY
-   c+1CtzhErbM5vkxA6JTmFgNp/DxCDkxdhspKyg9moiiIImPzy1DGKSALC
-   dFptH9cZXOdsUnvVsUX6UgwZzrwDE7zQbrl3LN7DKr410xtoOiG6F2cKt
-   LGW4fwGDFUxPrQomRrm2Iykslf4yq3aa1OuymVM++hnRhWGSLQaJBcnWz
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10399"; a="283710640"
-X-IronPort-AV: E=Sophos;i="5.92,249,1650956400"; 
-   d="scan'208";a="283710640"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jul 2022 01:52:08 -0700
-X-IronPort-AV: E=Sophos;i="5.92,249,1650956400"; 
-   d="scan'208";a="620220665"
-Received: from lilicui-mobl.ccr.corp.intel.com ([10.255.29.244])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jul 2022 01:52:03 -0700
-Message-ID: <6eed01c90fafe681cccba2f227d65f2e9bfb8348.camel@intel.com>
-Subject: Re: [PATCH] thermal: sysfs: Perform bounds check when storing
- thermal states
-From:   Zhang Rui <rui.zhang@intel.com>
-To:     Varad Gautam <varadgautam@google.com>,
-        Greg KH <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>, linux-pm@vger.kernel.org,
-        stable@vger.kernel.org
-Date:   Wed, 06 Jul 2022 16:51:59 +0800
-In-Reply-To: <CAOLDJOJug5jYpaSjY1tAYWNo0QRM4NB+wM2Vd2=Lf_O7TRjVCg@mail.gmail.com>
-References: <20220705150002.2016207-1-varadgautam@google.com>
-         <YsRkPUcrMj+JU0Om@kroah.com>
-         <CAOLDJOJ_v75WqGt2mZa0h-GgF+NThFBY5DvasH+9LLVgLrrvog@mail.gmail.com>
-         <YsUvgWmrk+ZfUy3t@kroah.com>
-         <CAOLDJOJug5jYpaSjY1tAYWNo0QRM4NB+wM2Vd2=Lf_O7TRjVCg@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.1 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Wed, 6 Jul 2022 04:56:05 -0400
+Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1562F2497D;
+        Wed,  6 Jul 2022 01:56:04 -0700 (PDT)
+Received: by mail-ed1-x52c.google.com with SMTP id e40so18387575eda.2;
+        Wed, 06 Jul 2022 01:56:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=TiSbYoSDE0lMlfqj+l2CCSMOXHr+cfG4LYMnjViLfKg=;
+        b=iZgloJtbC+6whSU9AepPlzjoWEwtuEoHIfHnGtNlQ4C7UtGfnEEmVwBmNUQ+hp8QPE
+         srctWeLgf/fotpb89l8rI9lg4mQnr87w7+3vinjVE3RJNZRD0kzVD+wvsw7UaK+t8/s1
+         st8AI91D07QbVN2WkuVWV8CPl3yJX9BZwJFdkx0W5TdbJV2D1CKOCqCSvlq6wN6RqaPf
+         UUjR7td8tkJqcXdBiPbDT5qzW5f7hWK/dJbmdUy1js1wwVwqnvzOz88LxLXf05GrHzur
+         AKLeY/3k9Tub41UOdBMxbshm3a3Agu7xGvCJZt+FuehosHVD+1D5nfFrAlxRw5PKNxdD
+         XPoQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=TiSbYoSDE0lMlfqj+l2CCSMOXHr+cfG4LYMnjViLfKg=;
+        b=7zOHLWKAPXgGCodGXBfeno64XrpFtSqM2ngQxGuB/S9tfbuqZcSiLMM1LSlZfWtonN
+         JoVXvXJKR/jpswYL2sgkC6TcT+iLhQaPagGVSXojKRFCCq/d8JGdbF3sAzZFjoOw1aAX
+         bXzt/kuLUIAf/q1/NzdMPSow4cBjCyyvHndK572UbA2fTJFJ6r039zkOtN8JaoLj9Fc/
+         RX9LiyEpWgqdCQTgw3nxtvzJx2h+5nnJqwWjF/IWntcw8Xt/B4UtuGI5v6bm5xqmBtjM
+         rmCirfQgw61LN3413VnP4z9omVywWYVWd/1dtrTOWKG34WwyHvnFYTGr1TuEQ6AukDdd
+         9lMQ==
+X-Gm-Message-State: AJIora9kbQ609EjCdC8LD2XfDFhQJmKzfHK5CB6g5DoeiupSWQd72gkW
+        qgX7Nlyamr98WiWQHv9MbrM=
+X-Google-Smtp-Source: AGRyM1sX+A6RqHnQ5QmWzoiAncEiL9RQsnExvWaj8wwcC2AJnUx5vD9KmRmIFnuBHDzZTV1CprW1Hw==
+X-Received: by 2002:aa7:ce8a:0:b0:43a:7b0e:9950 with SMTP id y10-20020aa7ce8a000000b0043a7b0e9950mr9208313edv.58.1657097762610;
+        Wed, 06 Jul 2022 01:56:02 -0700 (PDT)
+Received: from skbuf ([188.26.185.61])
+        by smtp.gmail.com with ESMTPSA id i10-20020a170906698a00b00705fa7087bbsm17260818ejr.142.2022.07.06.01.56.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 06 Jul 2022 01:56:01 -0700 (PDT)
+Date:   Wed, 6 Jul 2022 11:55:59 +0300
+From:   Vladimir Oltean <olteanv@gmail.com>
+To:     Hans S <schultz.hans@gmail.com>
+Cc:     "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>, netdev@vger.kernel.org,
+        Hans Schultz <schultz.hans+netdev@gmail.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>, Jiri Pirko <jiri@resnulli.us>,
+        Ivan Vecera <ivecera@redhat.com>,
+        Roopa Prabhu <roopa@nvidia.com>,
+        Nikolay Aleksandrov <razor@blackwall.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Ido Schimmel <idosch@nvidia.com>, linux-kernel@vger.kernel.org,
+        bridge@lists.linux-foundation.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH V3 net-next 3/4] net: dsa: mv88e6xxx: mac-auth/MAB
+ implementation
+Message-ID: <20220706085559.oyvzijcikivemfkg@skbuf>
+References: <20220524152144.40527-1-schultz.hans+netdev@gmail.com>
+ <20220524152144.40527-4-schultz.hans+netdev@gmail.com>
+ <20220627180557.xnxud7d6ol22lexb@skbuf>
+ <CAKUejP7ugMB9d3MVX3m9Brw12_ocFoT+nuJJucYdQH70kzC7=w@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAKUejP7ugMB9d3MVX3m9Brw12_ocFoT+nuJJucYdQH70kzC7=w@mail.gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 2022-07-06 at 09:16 +0200, Varad Gautam wrote:
-> On Wed, Jul 6, 2022 at 8:45 AM Greg KH <gregkh@linuxfoundation.org>
-> wrote:
-> > 
-> > On Tue, Jul 05, 2022 at 11:02:50PM +0200, Varad Gautam wrote:
-> > > On Tue, Jul 5, 2022 at 6:18 PM Greg KH <
-> > > gregkh@linuxfoundation.org> wrote:
-> > > > 
-> > > > On Tue, Jul 05, 2022 at 03:00:02PM +0000, Varad Gautam wrote:
-> > > > > Check that a user-provided thermal state is within the
-> > > > > maximum
-> > > > > thermal states supported by a given driver before attempting
-> > > > > to
-> > > > > apply it. This prevents a subsequent OOB access in
-> > > > > thermal_cooling_device_stats_update() while performing
-> > > > > state-transition accounting on drivers that do not have this
-> > > > > check
-> > > > > in their set_cur_state() handle.
-> > > > > 
-> > > > > Signed-off-by: Varad Gautam <varadgautam@google.com>
-> > > > > Cc: stable@vger.kernel.org
-> > > > > ---
-> > > > >  drivers/thermal/thermal_sysfs.c | 12 +++++++++++-
-> > > > >  1 file changed, 11 insertions(+), 1 deletion(-)
-> > > > > 
-> > > > > diff --git a/drivers/thermal/thermal_sysfs.c
-> > > > > b/drivers/thermal/thermal_sysfs.c
-> > > > > index 1c4aac8464a7..0c6b0223b133 100644
-> > > > > --- a/drivers/thermal/thermal_sysfs.c
-> > > > > +++ b/drivers/thermal/thermal_sysfs.c
-> > > > > @@ -607,7 +607,7 @@ cur_state_store(struct device *dev,
-> > > > > struct device_attribute *attr,
-> > > > >               const char *buf, size_t count)
-> > > > >  {
-> > > > >       struct thermal_cooling_device *cdev =
-> > > > > to_cooling_device(dev);
-> > > > > -     unsigned long state;
-> > > > > +     unsigned long state, max_state;
-> > > > >       int result;
-> > > > > 
-> > > > >       if (sscanf(buf, "%ld\n", &state) != 1)
-> > > > > @@ -618,10 +618,20 @@ cur_state_store(struct device *dev,
-> > > > > struct device_attribute *attr,
-> > > > > 
-> > > > >       mutex_lock(&cdev->lock);
-> > > > > 
-> > > > > +     result = cdev->ops->get_max_state(cdev, &max_state);
-> > > > > +     if (result)
-> > > > > +             goto unlock;
-> > > > > +
-> > > > > +     if (state > max_state) {
-> > > > > +             result = -EINVAL;
-> > > > > +             goto unlock;
-> > > > > +     }
-> > > > > +
-> > > > >       result = cdev->ops->set_cur_state(cdev, state);
-> > > > 
-> > > > Why doesn't set_cur_state() check the max state before setting
-> > > > it?  Why
-> > > > are the callers forced to always check it before?  That feels
-> > > > wrong...
-> > > > 
-> > > 
-> > > The problem lies in thermal_cooling_device_stats_update(), not
-> > > set_cur_state().
-> > > 
-> > > If ->set_cur_state() doesn't error out on invalid state,
-> > > thermal_cooling_device_stats_update() does a:
-> > > 
-> > > stats->trans_table[stats->state * stats->max_states +
-> > > new_state]++;
-> > > 
-> > > stats->trans_table reserves space depending on max_states, but
-> > > we'd end up
-> > > reading/writing outside it. cur_state_store() can prevent this
-> > > regardless of
-> > > the driver's ->set_cur_state() implementation.
-> > 
-> > Why wouldn't cur_state_store() check for an out-of-bounds condition
-> > by
-> > calling get_max_state() and then return an error if it is invalid,
-> > preventing thermal_cooling_device_stats_update() from ever being
-> > called?
-> > 
+On Tue, Jun 28, 2022 at 02:26:43PM +0200, Hans S wrote:
+> > Dumb question: if you only flush the locked entries at fast age if the
+> > port is locked, then what happens with the existing locked entries if
+> > the port becomes unlocked before an FDB flush takes place?
+> > Shouldn't mv88e6xxx_port_set_lock() call mv88e6xxx_atu_locked_entry_flush()
+> > too?
 > 
-> That's what this patch does, it adds the out-of-bounds check.
+> That was my first thought too, but the way the flags are handled with the mask etc, does so that
+> mv88e6xxx_port_set_lock() is called when other flags change. It could be done by the transition
+> from locked->unlocked by checking if the port is locked already.
 
-No, I think Greg' question is
-why cdev->ops->set_cur_state() return 0 when setting a cooling state
-that exceeds the maximum cooling state?
+Why does mv88e6xxx_port_set_lock() get called when other flags change?
 
-thanks,
-rui
+> On the other hand, the timers will timeout and the entries will be removed anyhow.
+
+> > > +static void mv88e6xxx_atu_locked_entry_timer_work(struct atu_locked_entry *ale)
+> >
+> > Please find a more adequate name for this function.
 > 
-> > thanks,
-> > 
-> > greg k-h
+> Any suggestions?
 
+Not sure. It depends on whether you leave just the logic to delete a
+locked ATU entry, or also the switchdev FDB_DEL_TO_BRIDGE notifier.
+In any case, pick a name that reflects what it does. Something with
+locked_entry_delete() can't be too wrong.
+
+> > From the discussion with Ido and Nikolay I get the impression that
+> > you're not doing the right thing here either, notifying a
+> > SWITCHDEV_FDB_DEL_TO_BRIDGE from what is effectively the
+> > SWITCHDEV_FDB_DEL_TO_DEVICE handler (port_fdb_del).
+> 
+> Hmm, my experience tells me that much is opposite the normal
+> conventions when dealing with
+> locked ports, as there was never switchdev notifications from the
+> driver to the bridge before, but
+> that is needed to keep ATU and FDB entries in sync.
+
+On delete you mean? So the bridge signals switchdev a deletion of a
+locked FDB entry (as I pointed out, this function gets indirectly called
+from port_fdb_del), but it won't get deleted until switchdev signals it
+back, is what you're saying?
+
+> > Why is the rtnl_unlock() outside the switch statement but the rtnl_lock() inside?
+> > Not to mention, the dsa_port_to_bridge_port() call needs to be under rtnl_lock().
+> 
+> Just a small optimization as I also have another case of the switch
+> (only one switch case if
+> you didn't notice) belonging to the next patch set regarding dynamic
+> ATU entries.
+
+What kind of optimization are you even talking about? Please get rid of
+coding patterns like this, sorry.
+
+> > Please, no "if (chiplock) mutex_lock()" hacks. Just lockdep_assert_held(&chip->reg_lock),
+> > which serves both for documentation and for validation purposes, ensure
+> > the lock is always taken at the caller (which in this case is super easy)
+> > and move on.
+> 
+> As I am calling the function in if statement checks, it would make
+> that code more messy, while with
+> this approach the function can be called from anywhere. I also looked
+> at having two functions, with
+> one being a wrapper function taking the lock and calling the other...
+
+There are many functions in mv88e6xxx that require the reg_lock to be
+held, there's nothing new or special here.
+
+> >
+> > > +
+> > > +     if (mv88e6xxx_port_read(chip, port, MV88E6XXX_PORT_CTL0, &reg))
+> > > +             goto out;
+> >
+> > It would be good to actually propagate the error to the caller and
+> > "locked" via a pass-by-reference bool pointer argument, not just say
+> > that I/O errors mean that the port is unlocked.
+> 
+> Again the wish to be able to call it from if statement checks,.
+> 
+> > > +     reg &= MV88E6XXX_PORT_ASSOC_VECTOR_PAV_MASK;
+> > > +     if (locked) {
+> > > +             reg |= MV88E6XXX_PORT_ASSOC_VECTOR_IGNORE_WRONG |
+> > > +                     MV88E6XXX_PORT_ASSOC_VECTOR_LOCKED_PORT |
+> > > +                     MV88E6XXX_PORT_ASSOC_VECTOR_INT_AGE_OUT |
+> > > +                     MV88E6XXX_PORT_ASSOC_VECTOR_HOLD_AT_1;
+> >
+> > I'd suggest aligning these macros vertically.
+> 
+> They are according to the Linux kernel coding standard wrt indentation afaik.
+
+Compare:
+
+		reg |= MV88E6XXX_PORT_ASSOC_VECTOR_IGNORE_WRONG |
+			MV88E6XXX_PORT_ASSOC_VECTOR_LOCKED_PORT |
+			MV88E6XXX_PORT_ASSOC_VECTOR_INT_AGE_OUT |
+			MV88E6XXX_PORT_ASSOC_VECTOR_HOLD_AT_1;
+
+with:
+
+		reg |= MV88E6XXX_PORT_ASSOC_VECTOR_IGNORE_WRONG |
+		       MV88E6XXX_PORT_ASSOC_VECTOR_LOCKED_PORT |
+		       MV88E6XXX_PORT_ASSOC_VECTOR_INT_AGE_OUT |
+		       MV88E6XXX_PORT_ASSOC_VECTOR_HOLD_AT_1;

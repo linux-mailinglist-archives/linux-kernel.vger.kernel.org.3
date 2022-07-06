@@ -2,73 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 486A3568E8A
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 18:01:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C5C2568E93
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 18:03:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233522AbiGFQBV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Jul 2022 12:01:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58140 "EHLO
+        id S232948AbiGFQDI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Jul 2022 12:03:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59226 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233496AbiGFQBT (ORCPT
+        with ESMTP id S232618AbiGFQDD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Jul 2022 12:01:19 -0400
-Received: from mail-qt1-x82a.google.com (mail-qt1-x82a.google.com [IPv6:2607:f8b0:4864:20::82a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A56D220CC
-        for <linux-kernel@vger.kernel.org>; Wed,  6 Jul 2022 09:01:17 -0700 (PDT)
-Received: by mail-qt1-x82a.google.com with SMTP id ay10so18825262qtb.1
-        for <linux-kernel@vger.kernel.org>; Wed, 06 Jul 2022 09:01:17 -0700 (PDT)
+        Wed, 6 Jul 2022 12:03:03 -0400
+Received: from mail-lj1-x22e.google.com (mail-lj1-x22e.google.com [IPv6:2a00:1450:4864:20::22e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D41422B38
+        for <linux-kernel@vger.kernel.org>; Wed,  6 Jul 2022 09:03:02 -0700 (PDT)
+Received: by mail-lj1-x22e.google.com with SMTP id u14so19053286ljh.2
+        for <linux-kernel@vger.kernel.org>; Wed, 06 Jul 2022 09:03:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=maine.edu; s=google;
-        h=from:date:to:cc:subject:in-reply-to:message-id:references
-         :mime-version;
-        bh=hXDY2u6jMg7vkEvggtI5AB4RBXe4Hbw6rSIH74WebXE=;
-        b=fFIEN8uCmrBxStKbvR2C6opnu9SDffnpYZ+kJERJiNZersQBDv+uoadi13EglEGxWg
-         HoFTNiT4e6IHnxvBchc3s4ewz2IbR9r7iiFfrVUD52TAoDdPaXCKU+vxV6I/v3ItbvSj
-         spKsCGG/3NLbXVr3k6P9DPEvh5mzv1l0in1zE=
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=ZaoaKwsL8ku1Uz6lXHCkOu4mh1FNdfVzKE+uBlMrabs=;
+        b=EQDIuAW2mPjWc3UukucAmnpe503YdQiYmVy7KYJl2PRpYcGW7hjafd3FnyGdCPQq2x
+         L9lEqV57/RrBgD0TjF9LOilwljWgA1RRIltXLGk21nilEA0gn62nImKNbHqp/rBtRZQa
+         EoFYhn8/7gUd2e5FGV1VpwMFFjtQsAalpD6E6aOwur/bOt8kSD10XwaH6CYX18CD9ZIy
+         FH56lk+Rk5BM1uF1h4wCSxpaG/R+dexGYhDg5DOlIqVL7A5pT/wy6b3fTzkskksShdTg
+         Jib7bAvsJh/KB+HsV9pBJuyy6MFRjwg4d1JB2KzUoyt5wsDbmBED/N49xM+XOG15RRHO
+         CqrQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:date:to:cc:subject:in-reply-to:message-id
-         :references:mime-version;
-        bh=hXDY2u6jMg7vkEvggtI5AB4RBXe4Hbw6rSIH74WebXE=;
-        b=h+1VesN+ZHewyKBKce5+hcMrKQZRsuUtI9pi95pWq05oWtbcrjcgJxOyatGcCRbaRm
-         N4Ms5Wf55HAWQ642t+av1TogkiRSyl+RLNRnb0mMEKL60DFkFelpV8Qe3J3jzHGmic+A
-         Bk9eMyXMh3yJNcTF3RgcHvzFN4tCectH+S2n8CBiFGcSvKZz+p2m5YwapYeWmrR1Qmrk
-         Ac28p+TqOMgG3fMZ929/9Tzm0t+bSJ1PkiKlRc6zQtsiRWNWaVjraTdxTbLCEkSaeX1J
-         YzQvacPkTbPc+slbLctAN25EtQe92I6PJnhaomiec4ScPUi3xDXGNfwBpoiudEfQ6eRl
-         qZ1Q==
-X-Gm-Message-State: AJIora8t91vjyxyjn9ebfymGnxQt6zp07mhM0Xt1svLJXpbkOukXK6b5
-        4X2oLFGRsbiBHz+Hep5jTyKGDjn6FLY5gkRB
-X-Google-Smtp-Source: AGRyM1tbV9pEZEk3QSLJdDZqYDNgt+v0pheI01GB3Bv4jXB/ILGSjVhSfmfEpc4K/E6wOBk9JjZ31Q==
-X-Received: by 2002:a05:6214:1ccd:b0:46e:7427:2626 with SMTP id g13-20020a0562141ccd00b0046e74272626mr38233187qvd.101.1657123275539;
-        Wed, 06 Jul 2022 09:01:15 -0700 (PDT)
-Received: from macbook-air.local (weaver.eece.maine.edu. [130.111.218.23])
-        by smtp.gmail.com with ESMTPSA id bp32-20020a05620a45a000b006a67d257499sm26186666qkb.56.2022.07.06.09.01.14
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=ZaoaKwsL8ku1Uz6lXHCkOu4mh1FNdfVzKE+uBlMrabs=;
+        b=5COXR4AL6BeAcp9DeEmj+pvsWoi7FLCBbYdoCGV+x63mwPmJpSdUIlTtP4mJlK4FuF
+         Ve3MUBBI5+y/dBVB4+JF0lvG4BLT4YtPqzktQinWBYh90jj4rAPbdvsmfVdH3EXt59OS
+         dkAkN+sriYE/Y7CEhBN8zYAJaGBTQKxaF39gzYgbrcMkOCatitQNt5ZoHelVQKc389ou
+         ydDWE+COeBP2+wF3gbC/dYE9ZQkB64/wtjrlZyPbT5C7Qjr9O3rqKVUVlLuR25czGgKp
+         zyws0KQihsbUSkJKcKMWtvwm0B/M82WLsidlQYtXnwrwRSZ+GTL7TeHdrnRNIx1HDztx
+         E62g==
+X-Gm-Message-State: AJIora8XTLdZh9APoWvCLtZCDWruco0hhxHz8dz/3het0LpoZjH3dY7H
+        N+b/10P/y/rx4G42O67ZwHhbiQ==
+X-Google-Smtp-Source: AGRyM1usYe0DgQM+cWbFc0I1Rn5wU2VfkJUj/XUxR6drj0t4QMNREew/jx3fpm7jmqgvm8metzBd7g==
+X-Received: by 2002:a05:651c:4cf:b0:25a:9cbe:bf4b with SMTP id e15-20020a05651c04cf00b0025a9cbebf4bmr24713793lji.379.1657123380501;
+        Wed, 06 Jul 2022 09:03:00 -0700 (PDT)
+Received: from krzk-bin.home ([84.20.121.239])
+        by smtp.gmail.com with ESMTPSA id w10-20020a2e9bca000000b0025a65ed7aa4sm6291292ljj.51.2022.07.06.09.02.59
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 06 Jul 2022 09:01:15 -0700 (PDT)
-From:   Vince Weaver <vincent.weaver@maine.edu>
-X-Google-Original-From: Vince Weaver <vince@maine.edu>
-Date:   Wed, 6 Jul 2022 12:01:11 -0400 (EDT)
-To:     Andrew Kilroy <andrew.kilroy@arm.com>
-cc:     linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
-        acme@kernel.org, Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>, Tom Rix <trix@redhat.com>,
-        linux-arm-kernel@lists.infradead.org, netdev@vger.kernel.org,
-        bpf@vger.kernel.org, llvm@lists.linux.dev
-Subject: Re: [PATCH 2/8] perf evsel: Do not request ptrauth sample field if
- not supported
-In-Reply-To: <20220704145333.22557-3-andrew.kilroy@arm.com>
-Message-ID: <d67dff7-73c3-e5a-eb7b-f132e8f565cc@maine.edu>
-References: <20220704145333.22557-1-andrew.kilroy@arm.com> <20220704145333.22557-3-andrew.kilroy@arm.com>
+        Wed, 06 Jul 2022 09:02:59 -0700 (PDT)
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: [PATCH v2 1/3] dt-bindings: soc: samsung: exynos-pmu: cleanup assigned clocks
+Date:   Wed,  6 Jul 2022 18:02:55 +0200
+Message-Id: <20220706160257.27579-1-krzysztof.kozlowski@linaro.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
@@ -79,36 +71,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 4 Jul 2022, Andrew Kilroy wrote:
+"assigned-clocks" are not needed in the device schema as they come from
+core schema.
 
-> A subsequent patch alters perf to perf_event_open with the
-> PERF_SAMPLE_ARCH_1 bit on.
-> 
-> This patch deals with the case where the kernel does not know about the
-> PERF_SAMPLE_ARCH_1 bit, and does not know to send the pointer
-> authentication masks.  In this case the perf_event_open system call
-> returns -EINVAL (-22) and perf exits with an error.
-> 
-> This patch causes userspace process to re-attempt the perf_event_open
-> system call but without asking for the PERF_SAMPLE_ARCH_1 sample
-> field, allowing the perf_event_open system call to succeed.
+Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-So in this case you are leaking ARM64-specific info into the generic 
-perf_event_open() call?  Is there any way the kernel could implement this 
-without userspace having to deal with the issue?
+---
 
-There are a few recent ARM64 perf_event related patches that are pushing 
-ARM specific interfaces into the generic code, with the apparent 
-assumption that it will just be implemented in the userspace perf tool.  
-However there are a number of outside-the-kernel codebases that also use 
-perf_event_open() and it seems a bit onerous if all of them have to start 
-adding a lot of extra ARM64-specific code, especially because as far as I 
-can tell there haven't been any documentation patches included for the 
-Makefile.
+Changes since v1:
+1. Re-phrase commit msg.
+---
+ Documentation/devicetree/bindings/soc/samsung/exynos-pmu.yaml | 3 ---
+ 1 file changed, 3 deletions(-)
 
-The other recent change that's annoying for userspace is the addition of 
-the ARM-specific /proc/sys/kernel/perf_user_access that duplicates 
-functionality found in /sys/devices/cpu/rdpmc
+diff --git a/Documentation/devicetree/bindings/soc/samsung/exynos-pmu.yaml b/Documentation/devicetree/bindings/soc/samsung/exynos-pmu.yaml
+index c30a6437030d..a5d489acfdca 100644
+--- a/Documentation/devicetree/bindings/soc/samsung/exynos-pmu.yaml
++++ b/Documentation/devicetree/bindings/soc/samsung/exynos-pmu.yaml
+@@ -49,9 +49,6 @@ properties:
+   reg:
+     maxItems: 1
+ 
+-  assigned-clock-parents: true
+-  assigned-clocks: true
+-
+   '#clock-cells':
+     const: 1
+ 
+-- 
+2.34.1
 
-Vince Weaver
-vincent.weaver@maine.edu

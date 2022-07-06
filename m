@@ -2,99 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F29C568075
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 09:51:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 36C4856807A
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 09:53:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231126AbiGFHu7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Jul 2022 03:50:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37738 "EHLO
+        id S231929AbiGFHwx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Jul 2022 03:52:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38556 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230359AbiGFHu6 (ORCPT
+        with ESMTP id S231932AbiGFHwj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Jul 2022 03:50:58 -0400
-Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A918822B3C
-        for <linux-kernel@vger.kernel.org>; Wed,  6 Jul 2022 00:50:57 -0700 (PDT)
-Received: by mail-lf1-x12f.google.com with SMTP id bf9so1265410lfb.13
-        for <linux-kernel@vger.kernel.org>; Wed, 06 Jul 2022 00:50:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=FlbkSQMuL6DPopX9Jhy9aRGujf7+Ghnha+4ZI42JhKU=;
-        b=WNxpvWiCli1fRyqRMAOZzjflPEJ0tGPc1ystkDWhs+qsREsRWmzGCaGIMD1L88/aEN
-         /eD1C5nA7Ble7aPcAcMVFmIWle/MsPdcsRjidqogMy5AIkWKJzX5w/6ZlGA+HZbWhUqH
-         C+aPSiE4xygcBjDkr4fy8Bli7LA5wB+INObBcGWj2cGx0EVUqNtS4LP2VNZi8owm0t9a
-         tC6muyIS4IxXFW3Jh6BY3lV8W0UNIoc0CksEl3+4vU7qJOjG48EUMiEGAy5pE+MMQ5Jw
-         ompZcU711sHwBdcvaXLNODh7Qa3zxEpNiCQBzpI5RfnVAiF9ny62Gt66UZTBnceVgx15
-         cL/g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=FlbkSQMuL6DPopX9Jhy9aRGujf7+Ghnha+4ZI42JhKU=;
-        b=FlZYuScw16N7+4jGFzkWuZCAj+WOlmP55r3UCF5u7Q+ZC8DHl9kT7SSafme1D/gWY+
-         AVDP/Fijz+E5GEdTmP2ng31E+FZx9tk2yhh0mAdaQtonrEGE3YbKPFtcbpK/9llYGYCl
-         ggyYfn8yr/tcBEG6eJPzTGGckUp/jmao5/OE8Hao1XSLEOSgGyNZZ+UCpK/zSmURkq/P
-         5kAJUe+luNRReZs/8vs8GUk88Irr1BF25h/NUWkQeO4L8wLoJrBMxlNAUulY5GwU+rU5
-         rkib4DlQgxExZ8g0VnIA1ZFfq9JLFnvyIOJms/IJRgBoyzg6rWg/be5HFvPxTgwlucIQ
-         al5Q==
-X-Gm-Message-State: AJIora8OzlR83V+z6whzP4HlKQRNrJ2W1cHbT3/7zZQYUJhBrm6zqyXK
-        Q/rmupnMgSuoRatyt6mMbiz9ag==
-X-Google-Smtp-Source: AGRyM1u0kgzOnSifC1dR3yyTO02hojSssvCg6Op3JAouGsR15Dka0UvjOzpdL38x/YLB691Lm56A4A==
-X-Received: by 2002:a05:6512:68a:b0:480:45d6:c0bb with SMTP id t10-20020a056512068a00b0048045d6c0bbmr22929850lfe.260.1657093854563;
-        Wed, 06 Jul 2022 00:50:54 -0700 (PDT)
-Received: from [192.168.1.52] ([84.20.121.239])
-        by smtp.gmail.com with ESMTPSA id d27-20020ac2545b000000b00482feedb568sm990126lfn.182.2022.07.06.00.50.52
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 06 Jul 2022 00:50:53 -0700 (PDT)
-Message-ID: <7f4101ff-7b91-7f22-9de9-06a650143df4@linaro.org>
-Date:   Wed, 6 Jul 2022 09:50:52 +0200
+        Wed, 6 Jul 2022 03:52:39 -0400
+Received: from gproxy2-pub.mail.unifiedlayer.com (gproxy2-pub.mail.unifiedlayer.com [69.89.18.3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E270E22BD8
+        for <linux-kernel@vger.kernel.org>; Wed,  6 Jul 2022 00:52:37 -0700 (PDT)
+Received: from cmgw10.mail.unifiedlayer.com (unknown [10.0.90.125])
+        by progateway4.mail.pro1.eigbox.com (Postfix) with ESMTP id 7533910048359
+        for <linux-kernel@vger.kernel.org>; Wed,  6 Jul 2022 07:52:37 +0000 (UTC)
+Received: from box5620.bluehost.com ([162.241.219.59])
+        by cmsmtp with ESMTP
+        id 8zptoeBVpNVEz8zptoEPLl; Wed, 06 Jul 2022 07:52:37 +0000
+X-Authority-Reason: nr=8
+X-Authority-Analysis: v=2.4 cv=I5+g+Psg c=1 sm=1 tr=0 ts=62c53f45
+ a=30941lsx5skRcbJ0JMGu9A==:117 a=30941lsx5skRcbJ0JMGu9A==:17
+ a=dLZJa+xiwSxG16/P+YVxDGlgEgI=:19 a=IkcTkHD0fZMA:10:nop_charset_1
+ a=RgO8CyIxsXoA:10:nop_rcvd_month_year
+ a=-Ou01B_BuAIA:10:endurance_base64_authed_username_1 a=VwQbUJbxAAAA:8
+ a=HaFmDPmJAAAA:8 a=vhpX749HnvCW0mh33ykA:9 a=QEXdDO2ut3YA:10:nop_charset_2
+ a=AjGcO6oz07-iQ99wixmX:22 a=nmWuMzfKamIsx3l42hEX:22
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=w6rz.net;
+        s=default; h=Content-Transfer-Encoding:Content-Type:MIME-Version:Date:
+        Message-ID:From:In-Reply-To:References:Cc:To:Subject:Sender:Reply-To:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=Ehri7w21xe3oLfaq8pC4B/TeiDcdDHBX5uGf5h/F0es=; b=lgHRcEOF4IRRoL6hKh0MrL2vXL
+        f/YGrHHvjaFCPaljL2NWNWDhMokm/R+Fe5x7H8LrVo7o5aobfhtbm1n0D7xgy1Pg8NrPZGC7/DSes
+        rsV9KYY9Do+Tz6f48WwpcJxhUMDsg1u5586h2b+pKz8X/tfpmS4/a0Fjjr+qqay7gaUThqlSA4lm1
+        coRRtHSEi84lIzxYKw8twAtFTu4AYTgYVRtZDRV/YYncbXXGcpsWX02Q2cEc8ezx0KLRBuVnG3pF3
+        BQgd1NFLz+vxCUOhsSmKO8g8N5qa223zqc1niwFB92MMWTbpWwY8X44IhfK4ihIkxDWEuAc+0DRt9
+        o2eodurg==;
+Received: from c-73-162-232-9.hsd1.ca.comcast.net ([73.162.232.9]:34780 helo=[10.0.1.48])
+        by box5620.bluehost.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <re@w6rz.net>)
+        id 1o8zpr-0001AX-UJ;
+        Wed, 06 Jul 2022 01:52:36 -0600
+Subject: Re: [PATCH 5.15 00/98] 5.15.53-rc1 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org
+Cc:     stable@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com,
+        sudipm.mukherjee@gmail.com, slade@sladewatkins.com
+References: <20220705115617.568350164@linuxfoundation.org>
+In-Reply-To: <20220705115617.568350164@linuxfoundation.org>
+From:   Ron Economos <re@w6rz.net>
+Message-ID: <17e1e2d9-acb4-41a1-ff88-faa1801214d9@w6rz.net>
+Date:   Wed, 6 Jul 2022 00:52:32 -0700
+User-Agent: Mozilla/5.0 (X11; Linux armv7l; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH v10 1/3] dt-bindings: marvell: Document the AC5/AC5X
- compatibles
-Content-Language: en-US
-To:     Vadym Kochan <vadym.kochan@plvision.eu>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Chris Packham <chris.packham@alliedtelesis.co.nz>,
-        Gregory CLEMENT <gregory.clement@bootlin.com>,
-        Konstantin Porotchkin <kostap@marvell.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Robert Marko <robert.marko@sartura.hr>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-Cc:     Elad Nachman <enachman@marvell.com>
-References: <20220705190934.6168-1-vadym.kochan@plvision.eu>
- <20220705190934.6168-2-vadym.kochan@plvision.eu>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220705190934.6168-2-vadym.kochan@plvision.eu>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Transfer-Encoding: 7bit
+Content-Language: en-US
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - box5620.bluehost.com
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - w6rz.net
+X-BWhitelist: no
+X-Source-IP: 73.162.232.9
+X-Source-L: No
+X-Exim-ID: 1o8zpr-0001AX-UJ
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+X-Source-Sender: c-73-162-232-9.hsd1.ca.comcast.net ([10.0.1.48]) [73.162.232.9]:34780
+X-Source-Auth: re@w6rz.net
+X-Email-Count: 2
+X-Source-Cap: d3NpeHJ6bmU7d3NpeHJ6bmU7Ym94NTYyMC5ibHVlaG9zdC5jb20=
+X-Local-Domain: yes
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 05/07/2022 21:09, Vadym Kochan wrote:
-> From: Chris Packham <chris.packham@alliedtelesis.co.nz>
-> 
-> Describe the compatible properties for the Marvell Alleycat5/5X switches
-> with integrated CPUs.
+On 7/5/22 4:57 AM, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.15.53 release.
+> There are 98 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>
+> Responses should be made by Thu, 07 Jul 2022 11:55:56 +0000.
+> Anything received after that time might be too late.
+>
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.15.53-rc1.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.15.y
+> and the diffstat can be found below.
+>
+> thanks,
+>
+> greg k-h
 
+Built and booted successfully on RISC-V RV64 (HiFive Unmatched).
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Tested-by: Ron Economos <re@w6rz.net>
 
-
-Best regards,
-Krzysztof

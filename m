@@ -2,96 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AB158569204
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 20:41:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A69A5569207
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 20:41:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233850AbiGFSky (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Jul 2022 14:40:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53948 "EHLO
+        id S233952AbiGFSll (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Jul 2022 14:41:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54478 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230400AbiGFSkv (ORCPT
+        with ESMTP id S233163AbiGFSlk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Jul 2022 14:40:51 -0400
-Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07F8621812
-        for <linux-kernel@vger.kernel.org>; Wed,  6 Jul 2022 11:40:51 -0700 (PDT)
-Received: by mail-ej1-x629.google.com with SMTP id ay16so28605688ejb.6
-        for <linux-kernel@vger.kernel.org>; Wed, 06 Jul 2022 11:40:50 -0700 (PDT)
+        Wed, 6 Jul 2022 14:41:40 -0400
+Received: from mail-vs1-xe32.google.com (mail-vs1-xe32.google.com [IPv6:2607:f8b0:4864:20::e32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C6D814006
+        for <linux-kernel@vger.kernel.org>; Wed,  6 Jul 2022 11:41:39 -0700 (PDT)
+Received: by mail-vs1-xe32.google.com with SMTP id 189so16004377vsh.2
+        for <linux-kernel@vger.kernel.org>; Wed, 06 Jul 2022 11:41:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=bzZxytl6Wz1ULT/c3I88/Se1K67ZgUfdG5WNP/NRkJ8=;
-        b=dQwN+tvPKIRMd1vYHaBJh6VuS0FJt91XOeuM/qjAhRLitRoEcZx2s1ezkBqZ/ws0Pg
-         3fiFn3BV2KEol8zrCiUrVmhY3GaspEBJYeJJtDFNmL/rqQWZTf8d+hj2qKX+/70qXGfe
-         irqBzNKxgl33ozpVHsT36ij1G44wFTxKWPMhBtLHLh8apjOtVYWDtRX8seWCmAySMsr8
-         wuwTTOie4Yj7HXN+8JVP9mNeWL3gK2Gp+P304WDehcZqKNquzHDl8Trkvdb3bQn7+CTd
-         LQvXjGrNOJXt55jX0zVxcj5ddRCMscsy3SaZNpt+o7opQAZBQ/d9Khe2YTFjaiQTFY1V
-         bqSQ==
+        d=vanguardiasur-com-ar.20210112.gappssmtp.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=Mx+gg3QeKmgimEFCxkgENq8mFFJCcPLK3Tpa8KBdXZQ=;
+        b=5ImEhxj9zI5QeixgMRy2oCb09ZTGtoB6sy1iCWHZJEwpEb/2tcEQxNADRv6npBljpf
+         RBFko9PzIovMhvzHZ+vyuSY9vlzgMgLtBESaw2zseX/uky3RQSPesFJA7iiB5rqdAelc
+         QqO/eolI+l+BGzAnaeiSqx+J2cXRfnGkBXNCoX8Cocg4mvfcLmEDIYihPzYg3lL4e6fH
+         c31WF1yoKJqHG4OJKSXfh3bZjjACv8KSKvVqBdHOm2zFuV0N1e9b1eTWMLU8SyRimOVg
+         qN9LUzsND3dfxynncyS+fU3Q3Yv20MOwuTJjyZFc71LvOjkWOc9oJIOSzCqOcTAZh26S
+         Pc1Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=bzZxytl6Wz1ULT/c3I88/Se1K67ZgUfdG5WNP/NRkJ8=;
-        b=pDrM4kf7foFnChHqaRzLut8U+ROCtKok1WLgx0iOPYcF7qC2nmRQTjHczOFj8LJqIS
-         7Datc2niDoyfUZWdqToUqODfsn4B8BJvkNh3F3o2RobviosocvH4h3bGURVE8jjm2Xiz
-         FaYYTF6h/8d2qCKSfP08yCyJQVmIowbtkueUAV1dxVkHub6iN80OXg0FQTloH4ovEzmn
-         /6EHdQpJKGgHNwbDnap9ozG96sDWTqvy0lUngVXpOQC88Sr/k/fuP3hymfTcKspH/35e
-         XeKZu/p6gCMfpcJCv26grW2tNVbApyKdoO1i/HKC3QniF+289Uf3iUFhNfBJCxP5zdZq
-         X1Lg==
-X-Gm-Message-State: AJIora/34gqREJjZvcnYjSwanFBM1D7KKDFVYRvssRk7TGKoRJqL8jOu
-        cVYjC8SKJiBKJjvEifBMTSV7d1gdgxabVTEVfe5LfGWHgXRL11Y5
-X-Google-Smtp-Source: AGRyM1t/wfpA6fOyKP5JwHbP+bdVJjg4/MG8xC6r/8iY7QXRXmsDubgkBJpnvhrkzd1QnRJThbyM11ZX1GZakD841c8=
-X-Received: by 2002:a17:907:3f81:b0:6ff:1a3d:9092 with SMTP id
- hr1-20020a1709073f8100b006ff1a3d9092mr40708168ejc.319.1657132849397; Wed, 06
- Jul 2022 11:40:49 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=Mx+gg3QeKmgimEFCxkgENq8mFFJCcPLK3Tpa8KBdXZQ=;
+        b=DUAz/oyEyA9f+0QPdgbqytauqiLQn3ZKwNtiXIJFX+da/6tRCX3/rvIOlYJr1l53Y3
+         FsrHmWnDuJIc7VxkI3pnom/C6wRP2SSIjc4iwiyl8T4ZdZLXaHjqoHWpJUl1x51YpjhH
+         73DckD4xNpANRwbpKpwwfuOIlYmeI+tRJg3YJukNhZs5176da0AIb+oOUBbEM0KW5/Pz
+         0umhebOFz4AHB4wh7VRGDtHz82bRMycjc/11eu8ednizlr2x/vH/XFPNutxBkbCSWGte
+         ywdR9n9/DE+wca58HMnEPoKSN5fX6oOagSclK89cGg5jn2/b+V8jRY+IJe4QjnZz5MB0
+         RxBA==
+X-Gm-Message-State: AJIora8Et+t7K1ZlrU18NOJ2/bEQriRPcVTZSNZE0PPoSFYzGgJRNuWe
+        O+MH3j2rEGBudjOrprmvYe0uiw==
+X-Google-Smtp-Source: AGRyM1s5ukynxxAouwTdeCJdufFu6R51/gQaW1DL+UIgufieP8aySiDkibXdqieMtaA8i4QJFxT64Q==
+X-Received: by 2002:a05:6102:244a:b0:354:4eaa:f176 with SMTP id g10-20020a056102244a00b003544eaaf176mr22415969vss.45.1657132898361;
+        Wed, 06 Jul 2022 11:41:38 -0700 (PDT)
+Received: from zeta-build.. ([190.190.187.68])
+        by smtp.gmail.com with ESMTPSA id j12-20020ab06cac000000b003828662fb30sm6052225uaa.39.2022.07.06.11.41.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 06 Jul 2022 11:41:37 -0700 (PDT)
+From:   Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
+To:     dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
+Cc:     Javier Martinez Canillas <javierm@redhat.com>,
+        David Airlie <airlied@linux.ie>,
+        Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
+Subject: [PATCH] drm/ssd130x: Fix pre-charge period setting
+Date:   Wed,  6 Jul 2022 15:41:33 -0300
+Message-Id: <20220706184133.210888-1-ezequiel@vanguardiasur.com.ar>
+X-Mailer: git-send-email 2.34.3
 MIME-Version: 1.0
-References: <20220626101553.1885428-1-davidgow@google.com> <20220629040605.2395481-1-davidgow@google.com>
-In-Reply-To: <20220629040605.2395481-1-davidgow@google.com>
-From:   Brendan Higgins <brendanhiggins@google.com>
-Date:   Wed, 6 Jul 2022 14:40:38 -0400
-Message-ID: <CAFd5g4507mJryQy=fYeVSPpk=zf3LAm2wojM05rLkdTdyV-0Cw@mail.gmail.com>
-Subject: Re: [PATCH v2] Documentation: kunit: Cleanup run_wrapper, fix x-ref
-To:     David Gow <davidgow@google.com>
-Cc:     Daniel Latypov <dlatypov@google.com>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Linux Doc Mailing List <linux-doc@vger.kernel.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Bagas Sanjaya <bagasdotme@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 29, 2022 at 12:06 AM David Gow <davidgow@google.com> wrote:
->
-> The "Run Tests on qemu" section of run_wrapper.rst had a few issues left
-> over from the last big documentation refactor[1]:
-> - It referenced a non_uml.rst page, which was integrated into the other
->   pages (including run_wrapper.rst).
-> - It skimmed over the use of --arch= and --cross_compile= in favour of
->   using a custom --qemu_config. Since most users will want to use the
->   former, let's give examples.
->
-> Remove the reference to the non-existant page, and add a couple of
-> examples to encourage the use of --arch= and --cross_compile=.
->
-> With this change, there should be no more broken references in the KUnit
-> documentation (i.e., the one mentioned in [2] is gone).
->
-> [1]: https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=46201d47d6c4be594c1d57b7f3251c371626a9c4
-> [2]: https://lore.kernel.org/linux-doc/cover.1656234456.git.mchehab@kernel.org/
->
-> Signed-off-by: David Gow <davidgow@google.com>
+Fix small typo which causes the mask for the 'precharge1' setting
+to be used with the 'precharge2' value.
 
-Reviewed-by: Brendan Higgins <brendanhiggins@google.com>
+Signed-off-by: Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
+---
+ drivers/gpu/drm/solomon/ssd130x.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/gpu/drm/solomon/ssd130x.c b/drivers/gpu/drm/solomon/ssd130x.c
+index 08394444dd6e..f4886e66ff34 100644
+--- a/drivers/gpu/drm/solomon/ssd130x.c
++++ b/drivers/gpu/drm/solomon/ssd130x.c
+@@ -350,7 +350,7 @@ static int ssd130x_init(struct ssd130x_device *ssd130x)
+ 
+ 	/* Set precharge period in number of ticks from the internal clock */
+ 	precharge = (SSD130X_SET_PRECHARGE_PERIOD1_SET(ssd130x->prechargep1) |
+-		     SSD130X_SET_PRECHARGE_PERIOD1_SET(ssd130x->prechargep2));
++		     SSD130X_SET_PRECHARGE_PERIOD2_SET(ssd130x->prechargep2));
+ 	ret = ssd130x_write_cmd(ssd130x, 2, SSD130X_SET_PRECHARGE_PERIOD, precharge);
+ 	if (ret < 0)
+ 		return ret;
+-- 
+2.34.3
+

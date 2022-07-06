@@ -2,127 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 48D0E567E43
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 08:18:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D094567E47
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 08:19:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229941AbiGFGRt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Jul 2022 02:17:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51388 "EHLO
+        id S230004AbiGFGTY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Jul 2022 02:19:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52614 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229628AbiGFGRr (ORCPT
+        with ESMTP id S229796AbiGFGTX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Jul 2022 02:17:47 -0400
-Received: from EUR03-DBA-obe.outbound.protection.outlook.com (mail-dbaeur03on2051.outbound.protection.outlook.com [40.107.104.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E98C13DEB
-        for <linux-kernel@vger.kernel.org>; Tue,  5 Jul 2022 23:17:45 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Fck9NlABHzM6lT7nv/wTqRHrOmJKV1J19XQ6ugs1EEA62cf6pIt2Rxw0UkeO17IXDbLGM6grZjh9snAxoWnELxXQasLBUad2umj0JFG7EMRknz1fEyAKg+fkuL6q4qdgz8bWvvbUDeKS8uhGVAAtOjS+JzwwgTEv9uboGn1+usrMyNDMGH6HPpxURRvu+AMXM1VY4IR7xqypFl2yLl/eitdrL4w9XrSo8i5P+3q5NlsX5yqvxul39iWmsOYUpwC58NQZcDj7GL0PsF1nH6N3/sv5qKHLpqCVICpLNvb+rDNmv4u8APZNTMyq2aG0OpQIzjtnaaYnZXvEk8EuO6nI7A==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=4/FaPivtjBKo/5QIQwt/UgWd4q1clpHngbxHENytT/I=;
- b=nv0LtVCwTEVUg2+YlWUsKy4pC88jdBd+9LsbVe2XRF4hwJ8/3y4jqvCX3A5wyqLZvJQ1HmDY4uiAatVPwD/Hw5El/+n4g5ldvABZ2mS5OKkNSsz7wiNGNdKyDChwvZvt94prfb7ycFPKdWBEde4RU753eDDeV1L0VwzsFn6laSeB4gTLUwqx4Fy/xQeedEVPHjTVjhrOnsYR5d7UVhpSP9zh4wGX3/aRIe3mx9KC1B20+hBT0TvbtQVcDXSxGA5MqOnP/Osgrvn2lnnqfSqHwk08/K3fnZcqIQTVQg29qElJxqRJ2iLz1dJgrZTUQp3uQCshSG4J6UXmL97hjtqeig==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=suse.com; dmarc=pass action=none header.from=suse.com;
- dkim=pass header.d=suse.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=4/FaPivtjBKo/5QIQwt/UgWd4q1clpHngbxHENytT/I=;
- b=2U5pKMOKRNxVP5EVh0vWGjoQO81jT09OHEh9zutfn5Z1I0H0psSo8LWwSfiUhDvm5CrS1WLHY3qGwHy91REbGj2GLeEfA04QKSlGLPqq7mnEyjidXUxAcu1/1StSSwxrmMYf3kShdCa4WLqFbcKBW8aCQFHx7uBcr7mU0aEHpmhubWti6WAkXg9SfuCdPIxt+muP1hAbsHUfCIwI15iRQXfvrzgMJAkw2c7Jf7MlFWaPx76ngdVk48nc7HMQJ+YcwuWVXzlX0UWcAjQGTkVwEh7rD5XZRFPce6xa+L9YIdtrbFG8YZaHWHuR42mAuM9hZxta2aPuktB8Ygzs3ppbjw==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=suse.com;
-Received: from AM6PR04MB6551.eurprd04.prod.outlook.com (2603:10a6:20b:fa::20)
- by DB3PR0402MB3787.eurprd04.prod.outlook.com (2603:10a6:8:12::25) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5395.20; Wed, 6 Jul
- 2022 06:17:43 +0000
-Received: from AM6PR04MB6551.eurprd04.prod.outlook.com
- ([fe80::dd30:2cbc:361d:2d1e]) by AM6PR04MB6551.eurprd04.prod.outlook.com
- ([fe80::dd30:2cbc:361d:2d1e%6]) with mapi id 15.20.5395.020; Wed, 6 Jul 2022
- 06:17:43 +0000
-Message-ID: <b7fa785b-cea3-3e05-c101-d6c7bd101ef3@suse.com>
-Date:   Wed, 6 Jul 2022 08:17:41 +0200
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH] x86/PAT: have pat_enabled() properly reflect state when
- running on e.g. Xen
-Content-Language: en-US
-To:     Borislav Petkov <bp@alien8.de>
-Cc:     Andrew Lutomirski <luto@kernel.org>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        lkml <linux-kernel@vger.kernel.org>,
-        "xen-devel@lists.xenproject.org" <xen-devel@lists.xenproject.org>
-References: <9385fa60-fa5d-f559-a137-6608408f88b0@suse.com>
- <YsRTAGI2PhfZ5V7M@zn.tnic> <016d281b-7e40-f1bd-66ee-c19c3cc56efe@suse.com>
- <YsRjX/U1XN8rq+8u@zn.tnic>
-From:   Jan Beulich <jbeulich@suse.com>
-In-Reply-To: <YsRjX/U1XN8rq+8u@zn.tnic>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: FR0P281CA0079.DEUP281.PROD.OUTLOOK.COM
- (2603:10a6:d10:1e::19) To AM6PR04MB6551.eurprd04.prod.outlook.com
- (2603:10a6:20b:fa::20)
+        Wed, 6 Jul 2022 02:19:23 -0400
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3B2514D00;
+        Tue,  5 Jul 2022 23:19:14 -0700 (PDT)
+X-UUID: 428c1ce0bf624f339c07c6100c280249-20220706
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.8,REQID:8cd32d2b-4b91-407e-a898-52462391aa23,OB:0,LO
+        B:0,IP:0,URL:5,TC:0,Content:0,EDM:0,RT:0,SF:45,FILE:0,RULE:Release_Ham,ACT
+        ION:release,TS:50
+X-CID-INFO: VERSION:1.1.8,REQID:8cd32d2b-4b91-407e-a898-52462391aa23,OB:0,LOB:
+        0,IP:0,URL:5,TC:0,Content:0,EDM:0,RT:0,SF:45,FILE:0,RULE:Release_Ham,ACTIO
+        N:release,TS:50
+X-CID-META: VersionHash:0f94e32,CLOUDID:7b7abcd6-5d6d-4eaf-a635-828a3ee48b7c,C
+        OID:15dc4aa8751e,Recheck:0,SF:28|17|19|48,TC:nil,Content:0,EDM:-3,IP:nil,U
+        RL:1,File:nil,QS:nil,BEC:nil,COL:0
+X-UUID: 428c1ce0bf624f339c07c6100c280249-20220706
+Received: from mtkmbs10n1.mediatek.inc [(172.21.101.34)] by mailgw01.mediatek.com
+        (envelope-from <tinghan.shen@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 1551361263; Wed, 06 Jul 2022 14:19:10 +0800
+Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
+ mtkmbs11n1.mediatek.inc (172.21.101.185) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.792.3;
+ Wed, 6 Jul 2022 14:19:08 +0800
+Received: from mtksdccf07 (172.21.84.99) by mtkmbs11n2.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.2.792.3 via Frontend
+ Transport; Wed, 6 Jul 2022 14:19:08 +0800
+Message-ID: <b5667c052447d1b3c3498131af98d80a07ed4767.camel@mediatek.com>
+Subject: Re: [PATCH v1 03/16] dt-bindings: power: mediatek: Refine multiple
+ level power domain nodes
+From:   Tinghan Shen <tinghan.shen@mediatek.com>
+To:     Rob Herring <robh@kernel.org>
+CC:     Yong Wu <yong.wu@mediatek.com>, Joerg Roedel <joro@8bytes.org>,
+        "Will Deacon" <will@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Chun-Jie Chen <chun-jie.chen@mediatek.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        "Enric Balletbo i Serra" <enric.balletbo@collabora.com>,
+        Weiyi Lu <weiyi.lu@mediatek.com>,
+        <iommu@lists.linux-foundation.org>,
+        <linux-mediatek@lists.infradead.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>
+Date:   Wed, 6 Jul 2022 14:19:08 +0800
+In-Reply-To: <20220705205739.GA2599256-robh@kernel.org>
+References: <20220704100028.19932-1-tinghan.shen@mediatek.com>
+         <20220704100028.19932-4-tinghan.shen@mediatek.com>
+         <20220705205739.GA2599256-robh@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 1a15c52d-1ced-4263-0bc7-08da5f173c96
-X-MS-TrafficTypeDiagnostic: DB3PR0402MB3787:EE_
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: +dki65Glg8n1gvzCGzEehTgm4YIyP8Noz4wPdpGwPtOXtkk1rKEJ22b9EdPr7bKv/QZQ4K2E0aO5hk+FP84Exnpt1QNjpGsPZ5WxxNb9yLSZgo0wlnvgHdBZiARdlQgTS320oYndJfCwRuby2Z7ZwuMvsxIxOXBQy4ZtwrLdnrYwWxvYZLDZb96ST6yOrlczGWhCtx/lppU6jnCfR7JZQLShKkr/tOJvY7k8ZeKIsHkFtGSdpKNn346wqc16ZIUGV5aN7eaE4ACvxRqpJ1GjRBDnraASQsBx0Tvt7yvGyuENmNcNyVJhXNmDbnEPrxZRlhVFqaBOlLp1EHvqtvo/94cVzDs8aFteELbCp6FUxfc3cyUzopEpnMqCXVMLatRRQzqCT7msrcSl1LXOMWyqZi8UDRXG9e4wCnqXkciO1LP3jRwz7IV+kEee7zaxfXNsThDzv7q9dLpyeOLCxSpEI/V1i3fNKnB+cUK+ltuZIrtYVaAY/m0elV393/K5HaXJ+ZYaW2uC2gKgQE9WdOPFVffzphhpXXPtBSas0YDaw3ganD3SMlBmSOhG5Rlp7Hu33hywxyi76NKbb5wgylQXUPrbdJp9/VWlQPOqjqSkLZ3wAlCb7hJ+1Pn7d8DOE0V8xhRPo84POo0gwe4KmwpG6s1NiG8/axbMGkLjXon9mpNSV7xLFIkH7jStKCM9HGBeB08hgnYycgFu1DFZezg/9z5sXeTHGCgeuxSuudfWrlDZhd3kjQW0GrlPMoglr8w+Rrg99QdaXTgJ6R+18L1pvIVC96u+dX65arzs2lIDYB39mcjsIFb8NP6+80UhLe2YrT9Qi9ao1MFVM/o5gKl9SfXaTxLYsXQCQyoTCi8koF0=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM6PR04MB6551.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(346002)(39860400002)(366004)(396003)(376002)(136003)(6512007)(54906003)(6506007)(5660300002)(26005)(53546011)(6486002)(8936002)(66556008)(86362001)(66476007)(4326008)(66946007)(8676002)(6916009)(316002)(478600001)(41300700001)(186003)(31696002)(31686004)(36756003)(2906002)(2616005)(38100700002)(83380400001)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?UHFrVkVkUkd0SFZJR3AvMHZyb0t4NU5pQ2EwQ0hoU28vckIwakpvNVpXMzBj?=
- =?utf-8?B?Q0J5cVZLTWZWelhXS25XZnBEZ1JWZTk4Z2VOR0RwdmVNSzNITGdUS0xLQW9q?=
- =?utf-8?B?eForSTdic0xpbi93TGdVTG1rWDhpWkJ1TncvY0dsRDhHbVo3VHlQaXN2dG5k?=
- =?utf-8?B?MWtVeG1VcFhwanFJaDE4aGE3TlpKUlJrcUprRCsrR1IxbEQ2cDVGQVZ6c3dv?=
- =?utf-8?B?TWtFb2R3aVArQ2k0MnF1MCtUc1NXOUZKekc3WWNJQXplcGtjMEZieTBlQ0FU?=
- =?utf-8?B?QVdzY0REUlBkMFhkL1I1eXFZemg0bzlOSlFXZFMrVzY3NVdubzUvNmk4VlJ1?=
- =?utf-8?B?TTVRM05qT1IzUGNYRkE3ZlZwWm55MXoxTTJaR3VWL0hZVzdtVDdZaThrMllz?=
- =?utf-8?B?Vmk3cjFyRlhUeXkwd1M4TVBCR3JVNSsrUHZRY1RwOVhqTUxYM0hkcHdDZGJp?=
- =?utf-8?B?UHZxYzV1aXAyZTdzVkNIdjVnSHE3MFJ6blQwYXhTRkxYZENaWEt0d3RvSXYx?=
- =?utf-8?B?Nk9vU0NaTzJnVkpkcjdQdnVuL2dCdmNVL2t4M0VjR3pNR2lGRXo2S3ZGVThP?=
- =?utf-8?B?OWMyNVpEK05xUUZTWktTUWd5WDdxUm94TXljYmlsR1hxUG9vVXM1SDRlVHJz?=
- =?utf-8?B?Witqbi9aanUrM3Q1aU5QMWQ4cXlnTHFxM2NOSmFNSm5WNG56aEpuN2hjMWFH?=
- =?utf-8?B?RjljU2ZuQlZQTWFIOGtJbnJ2UkhpOHlZVVlCMStZUWlFOXFCR2tqNGgvOTcr?=
- =?utf-8?B?ZXdGMFZDRXBxWHVjaXpkcENXeHl5ZU9KcSt5WU10RElNZ25ZOTBraU9KaHcw?=
- =?utf-8?B?ekR3SWhZekJMUkt2Um5JSFV3UStVdkgvdmttOE5hMTF3aXR4aWE3clZGTlBo?=
- =?utf-8?B?d3pCS092M2IxQUtmS243QzJSeHE5NTNkTFd3Zm9EUTdkaXlCRnpHUFFKbDV2?=
- =?utf-8?B?bVpmQ2w0Zzcza1JTNUplcUFVVlZ3dXUrMmg4dkhPRVJud2VydmFGT0xNZnJq?=
- =?utf-8?B?NDlueldmSmFkSTBVazJ2RjZVRlVKTVFPMGJjek5XM1crcWJMZDdOS0hnVUNQ?=
- =?utf-8?B?OVlpa2ltV1lZbjR0WUE3NGtJd1ZENWJqWWcrOVhnSGl5YldiYWFwVzNNSDE1?=
- =?utf-8?B?SmhXS1ZTTXdmclFrcFFJd1dDVWo0V0MzK29vSnZaaVBEWmFnVjFJcXlMeEFB?=
- =?utf-8?B?T21hbHFNQjhiRHdJWjJHSjhhajBXb1A3UUh0NFBVRU1iUmlFR1hkZGtoSjJs?=
- =?utf-8?B?NGtmSlFiRW84cnVyWnA0a0FWQUQzRVgreU5pNndDeXlRcEtFME55eXErVnVH?=
- =?utf-8?B?Q0toV01QWDJJNE5OMVJHcG4zR1JQRzBtL1k1SDlTL3JXc1ZmUHFmcVZPU01w?=
- =?utf-8?B?cU8yalBRYldERm5kTkx6bTAvMmRoVnFVSW91Y1dNWVpqR1BFSzJsUDdJc0pG?=
- =?utf-8?B?TnA0b1BaN0JGSjVQZUhQWXBrYWFIdjgzeTlNbXpPOHNJTTd0eGpTMUhsUGZY?=
- =?utf-8?B?QkEwekZCMWR1SkF0SmIyc3k2ZGd3a0pubmMwSFZsNnpIZFE3RWdUL1lUUllu?=
- =?utf-8?B?Ulg0ZE9UeHIxQURDTXU5a0dzYU45akRtOFNFUnFRdnhOYVFZRWJYYjZ4ZEdw?=
- =?utf-8?B?RjRpTFMwNXcyMDVxcXhoaS9MSWx3UmFqWDBoempzbForRk9hSnNMcUEzdlJz?=
- =?utf-8?B?eG56cFFRaGxYTVRJQlJSWFd5RDFLSnVvd3habzcwR29IcHVCcnVNS0dlQXcv?=
- =?utf-8?B?Lyt2SXl1cmtXdWVtWHl1U2hCVE9nTXBmcFNNQWdLTXBHR0Y5czF4UCt1TWlX?=
- =?utf-8?B?R0UyMEJOc2xzVVdLYkFjbFJ6eDByaUxsV1d3NUtzT2s3N0Yrbk9MRUdhcXRU?=
- =?utf-8?B?QXYra2NGeGRPM1RQbEJUNU9valV4Mm95VVhhcTBxS1A4UGdNV3MvU1N6RFJY?=
- =?utf-8?B?RDJ3SlVnZHlFdUJvRUc4eVFIZGcyL2tmQVJ1QS9jV2VWWkljVk1JUkVkbjhZ?=
- =?utf-8?B?VGpjS05ONmJKQ214ejdFbWFDM21MM0NRMnByM21XYXpGTVBzSVM1czNIQVdM?=
- =?utf-8?B?RjVXY29BOTJScGZqazN5S2RCNFFEWDFOcU8vRSs1OWFGZEZ1UE5xY2FHNm9m?=
- =?utf-8?Q?lmrr6Xqsc9douVJkvE4aMfkfB?=
-X-OriginatorOrg: suse.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 1a15c52d-1ced-4263-0bc7-08da5f173c96
-X-MS-Exchange-CrossTenant-AuthSource: AM6PR04MB6551.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Jul 2022 06:17:43.3105
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: f7a17af6-1c5c-4a36-aa8b-f5be247aa4ba
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: I0afLh/yH6v1DmY6Z8RlKepQkH80TrWasyUwR57tFxxhD+TyRk9ChdNnnWC9ZI12bWbgJ1TRMhFwfDpWo96nKg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB3PR0402MB3787
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+Content-Transfer-Encoding: 7bit
+X-MTK:  N
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,T_SPF_HELO_TEMPERROR,UNPARSEABLE_RELAY
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -130,70 +76,289 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 05.07.2022 18:14, Borislav Petkov wrote:
-> On Tue, Jul 05, 2022 at 05:56:36PM +0200, Jan Beulich wrote:
->> Re-using pat_disabled like you do in your suggestion below won't
->> work, because mtrr_bp_init() calls pat_disable() when MTRRs
->> appear to be disabled (from the kernel's view). The goal is to
->> honor "nopat" without honoring any other calls to pat_disable().
+On Tue, 2022-07-05 at 14:57 -0600, Rob Herring wrote:
+> On Mon, Jul 04, 2022 at 06:00:15PM +0800, Tinghan Shen wrote:
+> > Extract duplicated properties and support more levels of power
+> > domain nodes.
+> > 
+> > This change fix following error when do dtbs_check,
+> >     arch/arm64/boot/dts/mediatek/mt8195-evb.dtb: power-controller: power-domain@15:
+> > power-domain@16:power-domain@18: 'power-domain@19', 'power-domain@20', 'power-domain@21' do not
+> > match any of the regexes: 'pinctrl-[0-9]+'
+> > 	 From schema: Documentation/devicetree/bindings/power/mediatek,power-controller.yaml
+> > 
+> > Signed-off-by: Tinghan Shen <tinghan.shen@mediatek.com>
+> > ---
+> >  .../power/mediatek,power-controller.yaml      | 132 ++----------------
+> >  1 file changed, 12 insertions(+), 120 deletions(-)
+> > 
+> > diff --git a/Documentation/devicetree/bindings/power/mediatek,power-controller.yaml
+> > b/Documentation/devicetree/bindings/power/mediatek,power-controller.yaml
+> > index 135c6f722091..09a537a802b8 100644
+> > --- a/Documentation/devicetree/bindings/power/mediatek,power-controller.yaml
+> > +++ b/Documentation/devicetree/bindings/power/mediatek,power-controller.yaml
+> > @@ -39,8 +39,17 @@ properties:
+> >    '#size-cells':
+> >      const: 0
+> >  
+> > +required:
+> > +  - compatible
+> > +
+> > +additionalProperties: false
+> > +
+> >  patternProperties:
+> >    "^power-domain@[0-9a-f]+$":
+> > +    $ref: "#/$defs/power-domain-node"
+> > +
+> > +$defs:
+> > +  power-domain-node:
+> >      type: object
+> >      description: |
+> >        Represents the power domains within the power controller node as documented
+> > @@ -98,127 +107,10 @@ patternProperties:
+> >          $ref: /schemas/types.yaml#/definitions/phandle
+> >          description: phandle to the device containing the SMI register range.
+> >  
+> > -    patternProperties:
+> > -      "^power-domain@[0-9a-f]+$":
+> > -        type: object
+> > -        description: |
+> > -          Represents a power domain child within a power domain parent node.
+> > -
+> > -        properties:
+> > -
+> > -          '#power-domain-cells':
+> > -            description:
+> > -              Must be 0 for nodes representing a single PM domain and 1 for nodes
+> > -              providing multiple PM domains.
+> > -
+> > -          '#address-cells':
+> > -            const: 1
+> > -
+> > -          '#size-cells':
+> > -            const: 0
+> > -
+> > -          reg:
+> > -            maxItems: 1
+> > -
+> > -          clocks:
+> > -            description: |
+> > -              A number of phandles to clocks that need to be enabled during domain
+> > -              power-up sequencing.
+> > -
+> > -          clock-names:
+> > -            description: |
+> > -              List of names of clocks, in order to match the power-up sequencing
+> > -              for each power domain we need to group the clocks by name. BASIC
+> > -              clocks need to be enabled before enabling the corresponding power
+> > -              domain, and should not have a '-' in their name (i.e mm, mfg, venc).
+> > -              SUSBYS clocks need to be enabled before releasing the bus protection,
+> > -              and should contain a '-' in their name (i.e mm-0, isp-0, cam-0).
+> > -
+> > -              In order to follow properly the power-up sequencing, the clocks must
+> > -              be specified by order, adding first the BASIC clocks followed by the
+> > -              SUSBSYS clocks.
+> > -
+> > -          domain-supply:
+> > -            description: domain regulator supply.
+> > -
+> > -          mediatek,infracfg:
+> > -            $ref: /schemas/types.yaml#/definitions/phandle
+> > -            description: phandle to the device containing the INFRACFG register range.
+> > -
+> > -          mediatek,smi:
+> > -            $ref: /schemas/types.yaml#/definitions/phandle
+> > -            description: phandle to the device containing the SMI register range.
+> > -
+> > -        patternProperties:
+> > -          "^power-domain@[0-9a-f]+$":
+> > -            type: object
+> > -            description: |
+> > -              Represents a power domain child within a power domain parent node.
+> > -
+> > -            properties:
+> > +      required:
+> > +        - reg
+> >  
+> > -              '#power-domain-cells':
+> > -                description:
+> > -                  Must be 0 for nodes representing a single PM domain and 1 for nodes
+> > -                  providing multiple PM domains.
+> > -
+> > -              '#address-cells':
+> > -                const: 1
+> > -
+> > -              '#size-cells':
+> > -                const: 0
+> > -
+> > -              reg:
+> > -                maxItems: 1
+> > -
+> > -              clocks:
+> > -                description: |
+> > -                  A number of phandles to clocks that need to be enabled during domain
+> > -                  power-up sequencing.
+> > -
+> > -              clock-names:
+> > -                description: |
+> > -                  List of names of clocks, in order to match the power-up sequencing
+> > -                  for each power domain we need to group the clocks by name. BASIC
+> > -                  clocks need to be enabled before enabling the corresponding power
+> > -                  domain, and should not have a '-' in their name (i.e mm, mfg, venc).
+> > -                  SUSBYS clocks need to be enabled before releasing the bus protection,
+> > -                  and should contain a '-' in their name (i.e mm-0, isp-0, cam-0).
+> > -
+> > -                  In order to follow properly the power-up sequencing, the clocks must
+> > -                  be specified by order, adding first the BASIC clocks followed by the
+> > -                  SUSBSYS clocks.
+> > -
+> > -              domain-supply:
+> > -                description: domain regulator supply.
+> > -
+> > -              mediatek,infracfg:
+> > -                $ref: /schemas/types.yaml#/definitions/phandle
+> > -                description: phandle to the device containing the INFRACFG register range.
+> > -
+> > -              mediatek,smi:
+> > -                $ref: /schemas/types.yaml#/definitions/phandle
+> > -                description: phandle to the device containing the SMI register range.
+> > -
+> > -            required:
+> > -              - reg
+> > -
+> > -            additionalProperties: false
+> > -
+> > -        required:
+> > -          - reg
+> > -
+> > -        additionalProperties: false
+> > -
+> > -    required:
+> > -      - reg
+> > -
+> > -    additionalProperties: false
+> > -
+> > -required:
+> > -  - compatible
+> > -
+> > -additionalProperties: false
+> > +      additionalProperties: false
+> $ make dt_binding_check DT_SCHEMA_FILES=Documentation/devicetree/bindings/power/mediatek,power-
+> controller.yaml O=out
+> make[1]: Entering directory '/proj/mtk15399/upstream-cros/src/third_party/kernel/v5.10/out'
+>   LINT    Documentation/devicetree/bindings
+>   CHKDT   Documentation/devicetree/bindings/processed-schema.json
+>   SCHEMA  Documentation/devicetree/bindings/processed-schema.json
+> /proj/mtk15399/upstream-
+> cros/src/third_party/kernel/v5.10/Documentation/devicetree/bindings/iio/temperature/adi,ltc2983.ya
+> ml: ignoring, error in schema: patternProperties: ^thermistor@: properties: adi,excitation-
+> current-nanoamp
+> /proj/mtk15399/upstream-
+> cros/src/third_party/kernel/v5.10/Documentation/devicetree/bindings/display/tegra/nvidia,tegra124-
+> sor.yaml: ignoring, error in schema: allOf: 1: if: not: properties
+> /proj/mtk15399/upstream-
+> cros/src/third_party/kernel/v5.10/Documentation/devicetree/bindings/mfd/mps,mp2629.yaml: ignoring,
+> error parsing file
+>   DTEX    Documentation/devicetree/bindings/power/mediatek,power-controller.example.dts
+>   DTC     Documentation/devicetree/bindings/power/mediatek,power-controller.example.dtb
+>   CHECK   Documentation/devicetree/bindings/power/mediatek,power-controller.example.dtb
+> Traceback (most recent call last):
+>   File "/proj/mtk15399/.venv/py3.9/bin/dt-validate", line 173, in <module>
+>     testtree = dtschema.load(filename, line_number=args.line_number)
+>   File "/proj/mtk15399/.venv/py3.9/lib/python3.9/site-packages/dtschema/lib.py", line 913, in load
+>     return [ dtschema.dtb.fdt_unflatten(f.read()) ]
+>   File "/proj/mtk15399/.venv/py3.9/lib/python3.9/site-packages/dtschema/dtb.py", line 463, in
+> fdt_unflatten
+>     p = dtschema.get_prop_types()
+>   File "/proj/mtk15399/.venv/py3.9/lib/python3.9/site-packages/dtschema/lib.py", line 892, in
+> get_prop_types
+>     props = dtschema.extract_types(schema_cache)
+>   File "/proj/mtk15399/.venv/py3.9/lib/python3.9/site-packages/dtschema/lib.py", line 883, in
+> extract_types
+>     _extract_subschema_types(props, sch, sch)
+>   File "/proj/mtk15399/.venv/py3.9/lib/python3.9/site-packages/dtschema/lib.py", line 874, in
+> _extract_subschema_types
 > 
-> Actually, the current goal is to adjust Xen dom0 because:
+> [...snip...]
 > 
-> 1. it uses the PAT code
+>   File "/proj/mtk15399/.venv/py3.9/lib/python3.9/site-packages/dtschema/lib.py", line 803, in
+> _extract_prop_type
+>     _extract_prop_type(props, schema, propname, subschema)
+>   File "/proj/mtk15399/.venv/py3.9/lib/python3.9/site-packages/dtschema/lib.py", line 794, in
+> _extract_prop_type
+>     _extract_subschema_types(props, schema, subschema)
+>   File "/proj/mtk15399/.venv/py3.9/lib/python3.9/site-packages/dtschema/lib.py", line 874, in
+> _extract_subschema_types
+>     _extract_prop_type(props, schema, p, v)
+>   File "/proj/mtk15399/.venv/py3.9/lib/python3.9/site-packages/dtschema/lib.py", line 790, in
+> _extract_prop_type
+>     if not isinstance(subschema, dict):
+> RecursionError: maximum recursion depth exceeded while calling a Python object
+> make[1]: Leaving directory '/proj/mtk15399/upstream-cros/src/third_party/kernel/v5.10/out'
+> You now aren't checking more than 1 level because you have defined 
+> 'additionalProperties' to be a DT property. Check the indentation.
 > 
-> 2. but then it does something special and hides the MTRRs
+> You need this in $defs/power-domain-node to recurse:
 > 
-> which is not something real hardware does.
-> 
-> So this one-off thing should be prominent, visible and not get in the
-> way.
-> 
-> As to mtrr_bp_init(), can you use X86_FEATURE_XENPV there to detect this
-> special case when the kernel is running as dom0 and set stuff there
-> accordingly so that it doesn't disable PAT?
+>     additionalProperties:
+>       $ref: #/$defs/power-domain-node
+Hi Rob,
 
-Sure, but that alone won't help. There's a beneficial side effect
-of running through pat_disable(): That way pat_init() will bail
-right away. Without that I'd need to further special case things
-there (as under Xen/PV PAT must not be written, only read) and I'd
-also need to set pat_bp_enabled and pat_bp_initialized somewhere.
-I could of course check X86_FEATURE_XENPV in all the necessary
-places, but I was quite certain _that_ wouldn't be liked (nor
-would I be convinced this is the right thing to do - see bottom).
+I get the following error after adding the 'additionalProperties' to $defs/power-domain-node.
+The same error occurs when I run dt_binding_check on power/renesas,sysc-rmobile.yaml, which has the
+similar property.
 
-> Then you don't have to touch pat_disabled() either but intergrate the
-> Xen variant properly...
-> 
->> I can probably fiddle with pat_enabled() instead of with
->> init_cache_modes(), but when making the change I had the feeling
->> this might be less liked (as looking more hacky, at least to me).
-> 
-> Why would that be more hacky?
+$ make dt_binding_check DT_SCHEMA_FILES=Documentation/devicetree/bindings/power/mediatek,power-
+controller.yaml O=out
+make[1]: Entering directory '/test/upstream-cros/src/third_party/kernel/v5.10/out'
+  LINT    Documentation/devicetree/bindings
+  CHKDT   Documentation/devicetree/bindings/processed-schema.json
+  SCHEMA  Documentation/devicetree/bindings/processed-schema.json
+/test/upstream-
+cros/src/third_party/kernel/v5.10/Documentation/devicetree/bindings/iio/temperature/adi,ltc2983.yaml
+: ignoring, error in schema: patternProperties: ^thermistor@: properties: adi,excitation-current-
+nanoamp
+/test/upstream-
+cros/src/third_party/kernel/v5.10/Documentation/devicetree/bindings/display/tegra/nvidia,tegra124-
+sor.yaml: ignoring, error in schema: allOf: 1: if: not: properties
+/test/upstream-
+cros/src/third_party/kernel/v5.10/Documentation/devicetree/bindings/mfd/mps,mp2629.yaml: ignoring,
+error parsing file
+  DTEX    Documentation/devicetree/bindings/power/mediatek,power-controller.example.dts
+  DTC     Documentation/devicetree/bindings/power/mediatek,power-controller.example.dtb
+  CHECK   Documentation/devicetree/bindings/power/mediatek,power-controller.example.dtb
+Traceback (most recent call last):
+  File "/test/.venv/py3.9/bin/dt-validate", line 173, in <module>
+    testtree = dtschema.load(filename, line_number=args.line_number)
+  File "/test/.venv/py3.9/lib/python3.9/site-packages/dtschema/lib.py", line 913, in load
+    return [ dtschema.dtb.fdt_unflatten(f.read()) ]
+  File "/test/.venv/py3.9/lib/python3.9/site-packages/dtschema/dtb.py", line 463, in fdt_unflatten
+    p = dtschema.get_prop_types()
+  File "/test/.venv/py3.9/lib/python3.9/site-packages/dtschema/lib.py", line 892, in get_prop_types
+    props = dtschema.extract_types(schema_cache)
+  File "/test/.venv/py3.9/lib/python3.9/site-packages/dtschema/lib.py", line 883, in extract_types
+    _extract_subschema_types(props, sch, sch)
+  File "/test/.venv/py3.9/lib/python3.9/site-packages/dtschema/lib.py", line 874, in
+_extract_subschema_types
 
-My view on it, as said. I did actually make several attempts, until
-reaching what I then submitted. All earlier ones were quite a bit
-more intrusive (see above for an outline).
+[...snip...]
 
-> I'd much rather check upfront what the kernel is running on and act
-> accordingly instead of hooking into random functions and then years
-> later wonder why was it done in the first place.
+  File "/test/.venv/py3.9/lib/python3.9/site-packages/dtschema/lib.py", line 803, in
+_extract_prop_type
+    _extract_prop_type(props, schema, propname, subschema)
+  File "/test/.venv/py3.9/lib/python3.9/site-packages/dtschema/lib.py", line 794, in
+_extract_prop_type
+    _extract_subschema_types(props, schema, subschema)
+  File "/test/.venv/py3.9/lib/python3.9/site-packages/dtschema/lib.py", line 874, in
+_extract_subschema_types
+    _extract_prop_type(props, schema, p, v)
+  File "/test/.venv/py3.9/lib/python3.9/site-packages/dtschema/lib.py", line 790, in
+_extract_prop_type
+    if not isinstance(subschema, dict):
+RecursionError: maximum recursion depth exceeded while calling a Python object
+make[1]: Leaving directory '/test/upstream-cros/src/third_party/kernel/v5.10/out'
 
-Thank you for putting it that kindly. It was a pretty conscious
-decision where to make the changes, after - as said - quite a bit
-of trying other variants. History with Xen-specific changes has
-taught me to try to keep them as uninvasive and generic as possible.
-The more things smelled like Xen-only, the less they were liked.
 
->> But besides the "where" the other question is: Do you really want
->> me to limit this to Xen/PV, rather than - as I have it now -
->> extending it to any hypervisor, which may behave in similar ways?
-> 
-> Well, do you know of some other HV which hides MTRRs from the guest?
-> 
-> I haven't heard of any...
+Best Regards,
+TingHan
 
-Any decent hypervisor will allow overriding CPUID, so in principle
-I'd expect any to permit disabling MTRR to leave a guest to use
-the (more modern and less cumbersome) PAT alone.
-
-Jan

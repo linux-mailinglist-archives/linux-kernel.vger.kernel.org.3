@@ -2,43 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CAC665695BA
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 01:17:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 23E045695C0
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 01:19:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234467AbiGFXQJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Jul 2022 19:16:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33516 "EHLO
+        id S234084AbiGFXTR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Jul 2022 19:19:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36124 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234414AbiGFXQG (ORCPT
+        with ESMTP id S231197AbiGFXTP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Jul 2022 19:16:06 -0400
-Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68FF12B632;
-        Wed,  6 Jul 2022 16:16:05 -0700 (PDT)
-Received: from ip5b412258.dynamic.kabel-deutschland.de ([91.65.34.88] helo=phil.lan)
-        by gloria.sntech.de with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <heiko@sntech.de>)
-        id 1o9EFF-0002yn-3v; Thu, 07 Jul 2022 01:15:45 +0200
-From:   Heiko Stuebner <heiko@sntech.de>
-To:     palmer@dabbelt.com, paul.walmsley@sifive.com
-Cc:     linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-        wefu@redhat.com, guoren@kernel.org, cmuellner@linux.com,
-        philipp.tomsich@vrull.eu, hch@lst.de, samuel@sholland.org,
-        atishp@atishpatra.org, anup@brainfault.org, mick@ics.forth.gr,
-        robh+dt@kernel.org, krzk+dt@kernel.org, devicetree@vger.kernel.org,
-        drew@beagleboard.org, rdunlap@infradead.org,
-        Heiko Stuebner <heiko@sntech.de>
-Subject: [PATCH v7 4/4] riscv: implement cache-management errata for T-Head SoCs
-Date:   Thu,  7 Jul 2022 01:15:36 +0200
-Message-Id: <20220706231536.2041855-5-heiko@sntech.de>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220706231536.2041855-1-heiko@sntech.de>
-References: <20220706231536.2041855-1-heiko@sntech.de>
+        Wed, 6 Jul 2022 19:19:15 -0400
+Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A0D523160
+        for <linux-kernel@vger.kernel.org>; Wed,  6 Jul 2022 16:19:14 -0700 (PDT)
+Received: by mail-ej1-x62c.google.com with SMTP id r21so771922eju.0
+        for <linux-kernel@vger.kernel.org>; Wed, 06 Jul 2022 16:19:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=q/Ysdr5RliGVgXwVXSg+b/L5hF2oyr6zGQqCB2KMY/0=;
+        b=gUDNXgh8oYKcJZw0fUdo4BytcCdgQxI55O9Z8eNCVrgBjjaoaN+pidJLGzKrW3fAqI
+         hsvgccN+NLv3W4Qd5dsHD4E/vPub65TAG6ylvI/+TfIpXY4YS8UOm1l61MtOvueWxmzh
+         TU02Ugf9JLdShW2ETtxvEPvMRHEZhot0uKREE=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=q/Ysdr5RliGVgXwVXSg+b/L5hF2oyr6zGQqCB2KMY/0=;
+        b=AkxYRpMb2bG6wtJbOl7se9kM7loAFlPo9nKXwzANn98ZPZEpYJoCzrldNxbJrMTZwB
+         6aXrPPnpGmY9DKHMqRBbu44hfd9NYYGX4P7QKUkLrfH4n3cCZRdykcpUBoPYcUG25H8x
+         fN4uhWuczat8oRjvGQErFPXtseWUnvGs+/YHLgBZMgvVCUJ4bPh8Eu2jOhDv3JkOZpOg
+         NXWOGECQ0Myr2XyfJl5S2AWlDLdywdN0V7VrLH/sfwG1+fy6G9vbPGPvSXtuGAybieyL
+         rEgHBkhWR7BHK2L2zvNzmr9BxiE7cc13J3C762TycVnfI2kZxTLe1rergL5qgOiBJrkJ
+         uJWg==
+X-Gm-Message-State: AJIora8T6zJXXrEdFHn9KRcbBRr8Fl+j8h8Ms7GfaQK60lleiiQXw9nD
+        93iBS+jLHDQcxcjxGjlM9iowRkHz7qKWVlqR
+X-Google-Smtp-Source: AGRyM1u05DCuy6hb+9IHu6cKxh1K8K1/HBMfJdJL6jrelhVl7rWTNZ6JKxlWbjhV8dhhwgGgyCTfHg==
+X-Received: by 2002:a17:906:9c82:b0:6e1:2c94:1616 with SMTP id fj2-20020a1709069c8200b006e12c941616mr41388062ejc.64.1657149552863;
+        Wed, 06 Jul 2022 16:19:12 -0700 (PDT)
+Received: from mail-wr1-f41.google.com (mail-wr1-f41.google.com. [209.85.221.41])
+        by smtp.gmail.com with ESMTPSA id g4-20020a170906868400b006fee98045cdsm18434844ejx.10.2022.07.06.16.19.11
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 06 Jul 2022 16:19:11 -0700 (PDT)
+Received: by mail-wr1-f41.google.com with SMTP id o4so24014388wrh.3
+        for <linux-kernel@vger.kernel.org>; Wed, 06 Jul 2022 16:19:11 -0700 (PDT)
+X-Received: by 2002:adf:f90d:0:b0:20c:de32:4d35 with SMTP id
+ b13-20020adff90d000000b0020cde324d35mr38633425wrr.583.1657149550898; Wed, 06
+ Jul 2022 16:19:10 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,T_SPF_HELO_TEMPERROR autolearn=ham
+References: <1657135928-31195-1-git-send-email-quic_khsieh@quicinc.com>
+In-Reply-To: <1657135928-31195-1-git-send-email-quic_khsieh@quicinc.com>
+From:   Doug Anderson <dianders@chromium.org>
+Date:   Wed, 6 Jul 2022 16:18:58 -0700
+X-Gmail-Original-Message-ID: <CAD=FV=Vx7LAXuUZjvgZZejPh7DvBinVbjNpOddFrL1xtHJMnjw@mail.gmail.com>
+Message-ID: <CAD=FV=Vx7LAXuUZjvgZZejPh7DvBinVbjNpOddFrL1xtHJMnjw@mail.gmail.com>
+Subject: Re: [PATCH v4] drm/msm/dp: make eDP panel as the first connected connector
+To:     Kuogee Hsieh <quic_khsieh@quicinc.com>
+Cc:     Rob Clark <robdclark@gmail.com>, Sean Paul <sean@poorly.run>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Vinod Koul <vkoul@kernel.org>, Daniel Vetter <daniel@ffwll.ch>,
+        David Airlie <airlied@linux.ie>,
+        Andy Gross <agross@kernel.org>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        "Abhinav Kumar (QUIC)" <quic_abhinavk@quicinc.com>,
+        "Aravind Venkateswaran (QUIC)" <quic_aravindh@quicinc.com>,
+        Sankeerth Billakanti <quic_sbillaka@quicinc.com>,
+        freedreno <freedreno@lists.freedesktop.org>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -46,152 +85,49 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The T-Head C906 and C910 implement a scheme for handling
-cache operations different from the generic Zicbom extension.
+Hi,
 
-Add an errata for it next to the generic dma coherency ops.
+On Wed, Jul 6, 2022 at 12:32 PM Kuogee Hsieh <quic_khsieh@quicinc.com> wrote:
+>
+> Some userspace presumes that the first connected connector is the main
+> display, where it's supposed to display e.g. the login screen. For
+> laptops, this should be the main panel.
+>
+> This patch call drm_helper_move_panel_connectors_to_head() after
+> drm_bridge_connector_init() to make sure eDP stay at head of
+> connected connector list. This fixes unexpected corruption happen
+> at eDP panel if eDP is not placed at head of connected connector
+> list.
+>
+> Changes in v2:
+> -- move drm_helper_move_panel_connectors_to_head() to
+>                 dpu_kms_drm_obj_init()
+>
+> Changes in v4:
+> -- move drm_helper_move_panel_connectors_to_head() to msm_drm_init()
+>
+> Signed-off-by: Kuogee Hsieh <quic_khsieh@quicinc.com>
+> ---
+>  drivers/gpu/drm/msm/msm_drv.c | 2 ++
+>  1 file changed, 2 insertions(+)
 
-Reviewed-by: Samuel Holland <samuel@sholland.org>
-Tested-by: Samuel Holland <samuel@sholland.org>
-Reviewed-by: Guo Ren <guoren@kernel.org>
-Signed-off-by: Heiko Stuebner <heiko@sntech.de>
----
- arch/riscv/Kconfig.erratas           | 11 +++++++
- arch/riscv/errata/thead/errata.c     | 20 ++++++++++++
- arch/riscv/include/asm/errata_list.h | 48 +++++++++++++++++++++++++---
- 3 files changed, 74 insertions(+), 5 deletions(-)
+Reviewed-by: Douglas Anderson <dianders@chromium.org>
+Tested-by: Douglas Anderson <dianders@chromium.org>
 
-diff --git a/arch/riscv/Kconfig.erratas b/arch/riscv/Kconfig.erratas
-index 457ac72c9b36..3223e533fd87 100644
---- a/arch/riscv/Kconfig.erratas
-+++ b/arch/riscv/Kconfig.erratas
-@@ -55,4 +55,15 @@ config ERRATA_THEAD_PBMT
- 
- 	  If you don't know what to do here, say "Y".
- 
-+config ERRATA_THEAD_CMO
-+	bool "Apply T-Head cache management errata"
-+	depends on ERRATA_THEAD
-+	select RISCV_DMA_NONCOHERENT
-+	default y
-+	help
-+	  This will apply the cache management errata to handle the
-+	  non-standard handling on non-coherent operations on T-Head SoCs.
-+
-+	  If you don't know what to do here, say "Y".
-+
- endmenu
-diff --git a/arch/riscv/errata/thead/errata.c b/arch/riscv/errata/thead/errata.c
-index b37b6fedd53b..202c83f677b2 100644
---- a/arch/riscv/errata/thead/errata.c
-+++ b/arch/riscv/errata/thead/errata.c
-@@ -27,6 +27,23 @@ static bool errata_probe_pbmt(unsigned int stage,
- 	return false;
- }
- 
-+static bool errata_probe_cmo(unsigned int stage,
-+			     unsigned long arch_id, unsigned long impid)
-+{
-+#ifdef CONFIG_ERRATA_THEAD_CMO
-+	if (arch_id != 0 || impid != 0)
-+		return false;
-+
-+	if (stage == RISCV_ALTERNATIVES_EARLY_BOOT)
-+		return false;
-+
-+	riscv_noncoherent_supported();
-+	return true;
-+#else
-+	return false;
-+#endif
-+}
-+
- static u32 thead_errata_probe(unsigned int stage,
- 			      unsigned long archid, unsigned long impid)
- {
-@@ -35,6 +52,9 @@ static u32 thead_errata_probe(unsigned int stage,
- 	if (errata_probe_pbmt(stage, archid, impid))
- 		cpu_req_errata |= (1U << ERRATA_THEAD_PBMT);
- 
-+	if (errata_probe_cmo(stage, archid, impid))
-+		cpu_req_errata |= (1U << ERRATA_THEAD_CMO);
-+
- 	return cpu_req_errata;
- }
- 
-diff --git a/arch/riscv/include/asm/errata_list.h b/arch/riscv/include/asm/errata_list.h
-index 79d89aeeaa6c..19a771085781 100644
---- a/arch/riscv/include/asm/errata_list.h
-+++ b/arch/riscv/include/asm/errata_list.h
-@@ -16,7 +16,8 @@
- 
- #ifdef CONFIG_ERRATA_THEAD
- #define	ERRATA_THEAD_PBMT 0
--#define	ERRATA_THEAD_NUMBER 1
-+#define	ERRATA_THEAD_CMO 1
-+#define	ERRATA_THEAD_NUMBER 2
- #endif
- 
- #define	CPUFEATURE_SVPBMT 0
-@@ -88,17 +89,54 @@ asm volatile(ALTERNATIVE(						\
- #define ALT_THEAD_PMA(_val)
- #endif
- 
-+/*
-+ * dcache.ipa rs1 (invalidate, physical address)
-+ * | 31 - 25 | 24 - 20 | 19 - 15 | 14 - 12 | 11 - 7 | 6 - 0 |
-+ *   0000001    01010      rs1       000      00000  0001011
-+ * dache.iva rs1 (invalida, virtual address)
-+ *   0000001    00110      rs1       000      00000  0001011
-+ *
-+ * dcache.cpa rs1 (clean, physical address)
-+ * | 31 - 25 | 24 - 20 | 19 - 15 | 14 - 12 | 11 - 7 | 6 - 0 |
-+ *   0000001    01001      rs1       000      00000  0001011
-+ * dcache.cva rs1 (clean, virtual address)
-+ *   0000001    00100      rs1       000      00000  0001011
-+ *
-+ * dcache.cipa rs1 (clean then invalidate, physical address)
-+ * | 31 - 25 | 24 - 20 | 19 - 15 | 14 - 12 | 11 - 7 | 6 - 0 |
-+ *   0000001    01011      rs1       000      00000  0001011
-+ * dcache.civa rs1 (... virtual address)
-+ *   0000001    00111      rs1       000      00000  0001011
-+ *
-+ * sync.s (make sure all cache operations finished)
-+ * | 31 - 25 | 24 - 20 | 19 - 15 | 14 - 12 | 11 - 7 | 6 - 0 |
-+ *   0000000    11001     00000      000      00000  0001011
-+ */
-+#define THEAD_inval_A0	".long 0x0265000b"
-+#define THEAD_clean_A0	".long 0x0245000b"
-+#define THEAD_flush_A0	".long 0x0275000b"
-+#define THEAD_SYNC_S	".long 0x0190000b"
-+
- #define ALT_CMO_OP(_op, _start, _size, _cachesize)			\
--asm volatile(ALTERNATIVE(						\
--	__nops(5),							\
-+asm volatile(ALTERNATIVE_2(						\
-+	__nops(6),							\
- 	"mv a0, %1\n\t"							\
- 	"j 2f\n\t"							\
- 	"3:\n\t"							\
- 	"cbo." __stringify(_op) " (a0)\n\t"				\
- 	"add a0, a0, %0\n\t"						\
- 	"2:\n\t"							\
--	"bltu a0, %2, 3b\n\t", 0,					\
--		CPUFEATURE_ZICBOM, CONFIG_RISCV_ISA_ZICBOM)		\
-+	"bltu a0, %2, 3b\n\t"						\
-+	"nop", 0, CPUFEATURE_ZICBOM, CONFIG_RISCV_ISA_ZICBOM,		\
-+	"mv a0, %1\n\t"							\
-+	"j 2f\n\t"							\
-+	"3:\n\t"							\
-+	THEAD_##_op##_A0 "\n\t"						\
-+	"add a0, a0, %0\n\t"						\
-+	"2:\n\t"							\
-+	"bltu a0, %2, 3b\n\t"						\
-+	THEAD_SYNC_S, THEAD_VENDOR_ID,					\
-+			ERRATA_THEAD_CMO, CONFIG_ERRATA_THEAD_CMO)	\
- 	: : "r"(_cachesize),						\
- 	    "r"((unsigned long)(_start) & ~((_cachesize) - 1UL)),	\
- 	    "r"((unsigned long)(_start) + (_size))			\
--- 
-2.35.1
+NOTE: I tested this upstream with these two trees merged together:
 
+msm-next: 1ff1da40d6fc Merge branches 'msm-next-lumag-core'...
+qcom/for-next: d014f9463260 Merge branches 'arm64-for-5.20'...
+
+...plus a revert to make things boot again [1]. I booted this on a
+sc7280-herobrine running Chrome OS. When I do this, the original
+reported glitching is fixed (yay) and I think we should land it.
+
+...but I'm not convinced that all glitching is fixed by this. In
+particular I've occasionally seen an underrun at bootup (blue color)
+followed by a temporary glitch. With the above plus ${SUBJECT} patch I
+also reliably see a glitch on my external (DP) display every time I
+plug in. I don't see either on the downstream Chrome OS kernel,
+though...
+
+[1] https://lore.kernel.org/r/20220706144706.1.I48f35820bf3670d54940110462555c2d0a6d5eb2@changeid

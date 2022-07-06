@@ -2,53 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E33356922C
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 20:50:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B5DF56922E
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 20:50:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234237AbiGFSuh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Jul 2022 14:50:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32790 "EHLO
+        id S234053AbiGFSu5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Jul 2022 14:50:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33106 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233934AbiGFSuf (ORCPT
+        with ESMTP id S232953AbiGFSux (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Jul 2022 14:50:35 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDC8223161;
-        Wed,  6 Jul 2022 11:50:34 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Wed, 6 Jul 2022 14:50:53 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E88FC23161
+        for <linux-kernel@vger.kernel.org>; Wed,  6 Jul 2022 11:50:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1657133450;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=6VXm7agXtiv+U3vrTaDHt2nr+7qTTcMzlC2o0102s4c=;
+        b=eTKA0ionBGRk7dPZAaPddlur09ih6LrXE7/lzMWi7e31AqUQuLw4k2JKhTJnT9AEez0BsH
+        oEgIYPYK0vNDUguZfGWdhHn2GH/YIe24Ma4DioH96oWmip9YtjFCty8MIsxRmEuaJOaXUx
+        +ZrETb5gqlg/+JEt+sfsJ6uKYVQ0JG4=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-213-Te3BkxTNPBKv-FuUOUFLOg-1; Wed, 06 Jul 2022 14:50:47 -0400
+X-MC-Unique: Te3BkxTNPBKv-FuUOUFLOg-1
+Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 90DD0B81BF1;
-        Wed,  6 Jul 2022 18:50:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0C2EFC341C8;
-        Wed,  6 Jul 2022 18:50:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
-        s=korg; t=1657133432;
-        bh=F0/XVKDg3YIqGzbpwY8z/7I/yJ1VvZPV4zJoaMEXJZk=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=dL7SYbgE8qHk3Il2TkQbLtQ2BF9Tkfy7gnziK5j4rWO1QLPZdvwaVcHl6qVpsOGRo
-         m1LXPIUwMRYr3WFU/Pm9W8idoEAa+EZn0nonlho2ljY5HyF1R2RgnpPe5izc/+zA/x
-         3+rPQSyAKABfLW2UFY2RJ016Wc0/+XrzU7B9pTCE=
-Date:   Wed, 6 Jul 2022 11:50:31 -0700
-From:   Andrew Morton <akpm@linux-foundation.org>
-To:     Nico Pache <npache@redhat.com>
-Cc:     Joel Savitz <jsavitz@redhat.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Shuah Khan <shuah@kernel.org>, Linux MM <linux-mm@kvack.org>,
-        linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH] selftests/vm: enable running select groups of tests
-Message-Id: <20220706115031.3c312d9268bf87287be0b8f9@linux-foundation.org>
-In-Reply-To: <CAA1CXcAFyMLBEi87A0+pBbUKtzfEeE-5uyqPugmHLmzgH8=w8w@mail.gmail.com>
-References: <20220705185605.3889110-1-jsavitz@redhat.com>
-        <20220705133456.d5572b2e36ebb36188369988@linux-foundation.org>
-        <CAA1CXcAFyMLBEi87A0+pBbUKtzfEeE-5uyqPugmHLmzgH8=w8w@mail.gmail.com>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id EB193811E81;
+        Wed,  6 Jul 2022 18:50:46 +0000 (UTC)
+Received: from starship (unknown [10.40.194.38])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 994A8492C3B;
+        Wed,  6 Jul 2022 18:50:40 +0000 (UTC)
+Message-ID: <7160446153df8710f78db8e0d0e135a583b13e0b.camel@redhat.com>
+Subject: Re: [PATCH v2 02/21] KVM: VMX: Drop bits 31:16 when shoving
+ exception error code into VMCS
+From:   Maxim Levitsky <mlevitsk@redhat.com>
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Oliver Upton <oupton@google.com>,
+        Peter Shier <pshier@google.com>
+Date:   Wed, 06 Jul 2022 21:50:39 +0300
+In-Reply-To: <YsW0ZDkfVywkQEJO@google.com>
+References: <20220614204730.3359543-1-seanjc@google.com>
+         <20220614204730.3359543-3-seanjc@google.com>
+         <df72cfcdda55b594d6bbbd9b5b0e2b229dc6c718.camel@redhat.com>
+         <YsW0ZDkfVywkQEJO@google.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.36.5 (3.36.5-2.fc32) 
+MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-Scanned-By: MIMEDefang 2.85 on 10.11.54.9
+X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -56,40 +71,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 6 Jul 2022 14:38:03 -0400 Nico Pache <npache@redhat.com> wrote:
-
-> On Tue, Jul 5, 2022 at 4:35 PM Andrew Morton <akpm@linux-foundation.org> wrote:
-> >
-> > On Tue,  5 Jul 2022 14:56:05 -0400 Joel Savitz <jsavitz@redhat.com> wrote:
-> >
-> > > Add the ability to run one or more groups of vm tests (specified
-> > > by the environment variable TEST_ITEMS). Preserve existing default
-> > > behavior of running all tests when TEST_ITEMS is empty or "default".
-> >
-> Hi Andrew,
+On Wed, 2022-07-06 at 16:12 +0000, Sean Christopherson wrote:
+> On Wed, Jul 06, 2022, Maxim Levitsky wrote:
+> > On Tue, 2022-06-14 at 20:47 +0000, Sean Christopherson wrote:
+> > > Deliberately truncate the exception error code when shoving it into the
+> > > VMCS (VM-Entry field for vmcs01 and vmcs02, VM-Exit field for vmcs12).
+> > > Intel CPUs are incapable of handling 32-bit error codes and will never
+> > > generate an error code with bits 31:16, but userspace can provide an
+> > > arbitrary error code via KVM_SET_VCPU_EVENTS.  Failure to drop the bits
+> > > on exception injection results in failed VM-Entry, as VMX disallows
+> > > setting bits 31:16.  Setting the bits on VM-Exit would at best confuse
+> > > L1, and at worse induce a nested VM-Entry failure, e.g. if L1 decided to
+> > > reinject the exception back into L2.
+> > 
+> > Wouldn't it be better to fail KVM_SET_VCPU_EVENTS instead if it tries
+> > to set error code with uppper 16 bits set?
 > 
-> > What is the reason for this?  What's the use case?
+> No, because AMD CPUs generate error codes with bits 31:16 set.  KVM "supports"
+> cross-vendor live migration, so outright rejecting is not an option.
 > 
-> The current design of vm selftests is all-or-none. We'd like to be
-> able to selectively run these tests (We settled for selective groups
-> of tests rather than individual tests).
+> > Or if that is considered ABI breakage, then KVM_SET_VCPU_EVENTS code
+> > can truncate the user given value to 16 bit.
 > 
-> The main reason for doing this is our efforts to expand RedHats MM CI
-> testing. There are two use cases for these changes that relate to our
-> reasoning:
-> 1) Our current CI has overlapping tests between LTP and vm selftests,
-> so we'd like a way to prevent running the same test in two places.
-> 2) We'd like the ability to skip a test if it is determined to be
-> unstable or requires certain hardware requirements.
+> Again, AMD, and more specifically SVM, allows bits 31:16 to be non-zero, so
+> truncation is only correct for VMX.  I say "VMX" instead of "Intel" because
+> architecturally the Intel CPUs do have 32-bit error codes, it's just the VMX
+> architecture that doesn't allow injection of 32-bit values.
 > 
-> By adding this functionality we are really expanding what we are able
-> to do with the stock vm-selftests.
 
-OK, please let's get this info into the changelog - it's the most
-important part.
+Oh, I see AMD uses bit 31 for RMP (from SEV-SNP) page fault,
+Thanks for the explanation!
 
-> > And why via the environment rather than via commandline args?
-> Just a design choice I suppose. I'm sure Joel would be willing to
-> implement it as a cmdline arg if you'd prefer that approach.
+You might want to add this piece of info somewhere as a comment if you wish.
 
-I think that would be best.
+Thanks,
+Best regards,
+	Maxim Levitsky
+

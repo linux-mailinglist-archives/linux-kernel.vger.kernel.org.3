@@ -2,106 +2,201 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CABD5568807
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 14:12:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DD41C5687BD
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 14:04:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233682AbiGFMMC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Jul 2022 08:12:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45824 "EHLO
+        id S232400AbiGFMEY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Jul 2022 08:04:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39434 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233610AbiGFMLj (ORCPT
+        with ESMTP id S231952AbiGFMET (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Jul 2022 08:11:39 -0400
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C8152A424;
-        Wed,  6 Jul 2022 05:11:30 -0700 (PDT)
-Received: from fraeml735-chm.china.huawei.com (unknown [172.18.147.200])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4LdJFH458gz686xt;
-        Wed,  6 Jul 2022 20:07:15 +0800 (CST)
-Received: from lhreml724-chm.china.huawei.com (10.201.108.75) by
- fraeml735-chm.china.huawei.com (10.206.15.216) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Wed, 6 Jul 2022 14:11:28 +0200
-Received: from localhost.localdomain (10.69.192.58) by
- lhreml724-chm.china.huawei.com (10.201.108.75) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Wed, 6 Jul 2022 13:11:22 +0100
-From:   John Garry <john.garry@huawei.com>
-To:     <axboe@kernel.dk>, <damien.lemoal@opensource.wdc.com>,
-        <bvanassche@acm.org>, <hch@lst.de>, <jejb@linux.ibm.com>,
-        <martin.petersen@oracle.com>, <hare@suse.de>, <satishkh@cisco.com>,
-        <sebaddel@cisco.com>, <kartilak@cisco.com>
-CC:     <linux-doc@vger.kernel.org>, <linux-rdma@vger.kernel.org>,
-        <linux-mmc@vger.kernel.org>, <linux-nvme@lists.infradead.org>,
-        <linux-s390@vger.kernel.org>, <linux-scsi@vger.kernel.org>,
-        <mpi3mr-linuxdrv.pdl@broadcom.com>, <linux-block@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <nbd@other.debian.org>,
-        John Garry <john.garry@huawei.com>
-Subject: [PATCH v3 6/6] blk-mq: Drop local variable for reserved tag
-Date:   Wed, 6 Jul 2022 20:03:54 +0800
-Message-ID: <1657109034-206040-7-git-send-email-john.garry@huawei.com>
-X-Mailer: git-send-email 2.8.1
-In-Reply-To: <1657109034-206040-1-git-send-email-john.garry@huawei.com>
-References: <1657109034-206040-1-git-send-email-john.garry@huawei.com>
+        Wed, 6 Jul 2022 08:04:19 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C136B28E1D
+        for <linux-kernel@vger.kernel.org>; Wed,  6 Jul 2022 05:04:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1657109057;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=y00sYDlWcZIUbSKIfjxNwX4MIuc56S64dgMIq8NLDRM=;
+        b=f1EPkwMtqEKBKwmxoiKQotnYWbwU0zj8aAsF47bRivxAOK5kfui+wg8PdDx/cypncKwexd
+        ZITbX+4MTNhnmZ/8502BMx8E5gCp6FAKFFlPk6t3kACL+8HmWAjPCU6snZWSLfsXKLk4b4
+        YMtizzuQG0vCguLjJscLhL0psDmQ+ko=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-505-NT-onGftPuCNYuGZd3Bfsg-1; Wed, 06 Jul 2022 08:04:14 -0400
+X-MC-Unique: NT-onGftPuCNYuGZd3Bfsg-1
+Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 5B6C41C06EC0;
+        Wed,  6 Jul 2022 12:04:14 +0000 (UTC)
+Received: from starship (unknown [10.40.194.38])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 09B3140CFD0A;
+        Wed,  6 Jul 2022 12:04:11 +0000 (UTC)
+Message-ID: <cd9be62e3c2018a4f779f65fed46954e9431e0b0.camel@redhat.com>
+Subject: Re: [PATCH v2 13/21] KVM: x86: Formalize blocking of nested pending
+ exceptions
+From:   Maxim Levitsky <mlevitsk@redhat.com>
+To:     Sean Christopherson <seanjc@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>
+Cc:     Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Oliver Upton <oupton@google.com>,
+        Peter Shier <pshier@google.com>
+Date:   Wed, 06 Jul 2022 15:04:10 +0300
+In-Reply-To: <20220614204730.3359543-14-seanjc@google.com>
+References: <20220614204730.3359543-1-seanjc@google.com>
+         <20220614204730.3359543-14-seanjc@google.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.36.5 (3.36.5-2.fc32) 
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.69.192.58]
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- lhreml724-chm.china.huawei.com (10.201.108.75)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 2.84 on 10.11.54.1
+X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The local variable is now only referenced once so drop it.
+On Tue, 2022-06-14 at 20:47 +0000, Sean Christopherson wrote:
+> Capture nested_run_pending as block_pending_exceptions so that the logic
+> of why exceptions are blocked only needs to be documented once instead of
+> at every place that employs the logic.
+> 
+> No functional change intended.
+> 
+> Signed-off-by: Sean Christopherson <seanjc@google.com>
+> ---
+>  arch/x86/kvm/svm/nested.c | 20 ++++++++++----------
+>  arch/x86/kvm/vmx/nested.c | 23 ++++++++++++-----------
+>  2 files changed, 22 insertions(+), 21 deletions(-)
+> 
+> diff --git a/arch/x86/kvm/svm/nested.c b/arch/x86/kvm/svm/nested.c
+> index 471d40e97890..460161e67ce5 100644
+> --- a/arch/x86/kvm/svm/nested.c
+> +++ b/arch/x86/kvm/svm/nested.c
+> @@ -1347,10 +1347,16 @@ static inline bool nested_exit_on_init(struct vcpu_svm *svm)
+>  
+>  static int svm_check_nested_events(struct kvm_vcpu *vcpu)
+>  {
+> -	struct vcpu_svm *svm = to_svm(vcpu);
+> -	bool block_nested_events =
+> -		kvm_event_needs_reinjection(vcpu) || svm->nested.nested_run_pending;
+>  	struct kvm_lapic *apic = vcpu->arch.apic;
+> +	struct vcpu_svm *svm = to_svm(vcpu);
+> +	/*
+> +	 * Only a pending nested run blocks a pending exception.  If there is a
+> +	 * previously injected event, the pending exception occurred while said
+> +	 * event was being delivered and thus needs to be handled.
+> +	 */
 
-Signed-off-by: John Garry <john.garry@huawei.com>
-Reviewed-by: Bart Van Assche <bvanassche@acm.org>
-Reviewed-by: Martin K. Petersen <martin.petersen@oracle.com>
----
- block/blk-mq-tag.c | 6 ++----
- 1 file changed, 2 insertions(+), 4 deletions(-)
+Tiny nitpick about the comment:
 
-diff --git a/block/blk-mq-tag.c b/block/blk-mq-tag.c
-index 4e9b8ec55bda..8e3b36d1cb57 100644
---- a/block/blk-mq-tag.c
-+++ b/block/blk-mq-tag.c
-@@ -262,7 +262,6 @@ static bool bt_iter(struct sbitmap *bitmap, unsigned int bitnr, void *data)
- 	struct blk_mq_hw_ctx *hctx = iter_data->hctx;
- 	struct request_queue *q = iter_data->q;
- 	struct blk_mq_tag_set *set = q->tag_set;
--	bool reserved = iter_data->reserved;
- 	struct blk_mq_tags *tags;
- 	struct request *rq;
- 	bool ret = true;
-@@ -272,7 +271,7 @@ static bool bt_iter(struct sbitmap *bitmap, unsigned int bitnr, void *data)
- 	else
- 		tags = hctx->tags;
- 
--	if (!reserved)
-+	if (!iter_data->reserved)
- 		bitnr += tags->nr_reserved_tags;
- 	/*
- 	 * We can hit rq == NULL here, because the tagging functions
-@@ -333,12 +332,11 @@ static bool bt_tags_iter(struct sbitmap *bitmap, unsigned int bitnr, void *data)
- {
- 	struct bt_tags_iter_data *iter_data = data;
- 	struct blk_mq_tags *tags = iter_data->tags;
--	bool reserved = iter_data->flags & BT_TAG_ITER_RESERVED;
- 	struct request *rq;
- 	bool ret = true;
- 	bool iter_static_rqs = !!(iter_data->flags & BT_TAG_ITER_STATIC_RQS);
- 
--	if (!reserved)
-+	if (!(iter_data->flags & BT_TAG_ITER_RESERVED))
- 		bitnr += tags->nr_reserved_tags;
- 
- 	/*
--- 
-2.35.3
+One can say that if there is an injected event, this means that we
+are in the middle of handling it, thus we are not on instruction boundary,
+and thus we don't process events (e.g interrupts).
+
+So maybe write something like that?
+
+
+> +	bool block_nested_exceptions = svm->nested.nested_run_pending;
+> +	bool block_nested_events = block_nested_exceptions ||
+> +				   kvm_event_needs_reinjection(vcpu);
+
+Tiny nitpick: I don't like that much the name 'nested' as
+it can also mean a nested exception (e.g exception that
+happened while jumping to an exception  handler).
+
+Here we mean just exception/events for the guest, so I would suggest
+to just drop the word 'nested'.
+
+>  
+>  	if (lapic_in_kernel(vcpu) &&
+>  	    test_bit(KVM_APIC_INIT, &apic->pending_events)) {
+> @@ -1363,13 +1369,7 @@ static int svm_check_nested_events(struct kvm_vcpu *vcpu)
+>  	}
+>  
+>  	if (vcpu->arch.exception.pending) {
+> -		/*
+> -		 * Only a pending nested run can block a pending exception.
+> -		 * Otherwise an injected NMI/interrupt should either be
+> -		 * lost or delivered to the nested hypervisor in the EXITINTINFO
+> -		 * vmcb field, while delivering the pending exception.
+> -		 */
+> -		if (svm->nested.nested_run_pending)
+> +		if (block_nested_exceptions)
+>                          return -EBUSY;
+>  		if (!nested_exit_on_exception(svm))
+>  			return 0;
+> diff --git a/arch/x86/kvm/vmx/nested.c b/arch/x86/kvm/vmx/nested.c
+> index fafdcbfeca1f..50fe66f0cc1b 100644
+> --- a/arch/x86/kvm/vmx/nested.c
+> +++ b/arch/x86/kvm/vmx/nested.c
+> @@ -3903,11 +3903,17 @@ static bool nested_vmx_preemption_timer_pending(struct kvm_vcpu *vcpu)
+>  
+>  static int vmx_check_nested_events(struct kvm_vcpu *vcpu)
+>  {
+> -	struct vcpu_vmx *vmx = to_vmx(vcpu);
+> -	unsigned long exit_qual;
+> -	bool block_nested_events =
+> -	    vmx->nested.nested_run_pending || kvm_event_needs_reinjection(vcpu);
+>  	struct kvm_lapic *apic = vcpu->arch.apic;
+> +	struct vcpu_vmx *vmx = to_vmx(vcpu);
+> +	unsigned long exit_qual;
+> +	/*
+> +	 * Only a pending nested run blocks a pending exception.  If there is a
+> +	 * previously injected event, the pending exception occurred while said
+> +	 * event was being delivered and thus needs to be handled.
+> +	 */
+> +	bool block_nested_exceptions = vmx->nested.nested_run_pending;
+> +	bool block_nested_events = block_nested_exceptions ||
+> +				   kvm_event_needs_reinjection(vcpu);
+>  
+>  	if (lapic_in_kernel(vcpu) &&
+>  		test_bit(KVM_APIC_INIT, &apic->pending_events)) {
+> @@ -3941,15 +3947,10 @@ static int vmx_check_nested_events(struct kvm_vcpu *vcpu)
+>  	 * Process exceptions that are higher priority than Monitor Trap Flag:
+>  	 * fault-like exceptions, TSS T flag #DB (not emulated by KVM, but
+>  	 * could theoretically come in from userspace), and ICEBP (INT1).
+> -	 *
+> -	 * Note that only a pending nested run can block a pending exception.
+> -	 * Otherwise an injected NMI/interrupt should either be
+> -	 * lost or delivered to the nested hypervisor in the IDT_VECTORING_INFO,
+> -	 * while delivering the pending exception.
+>  	 */
+>  	if (vcpu->arch.exception.pending &&
+>  	    !(vmx_get_pending_dbg_trap(vcpu) & ~DR6_BT)) {
+> -		if (vmx->nested.nested_run_pending)
+> +		if (block_nested_exceptions)
+>  			return -EBUSY;
+>  		if (!nested_vmx_check_exception(vcpu, &exit_qual))
+>  			goto no_vmexit;
+> @@ -3966,7 +3967,7 @@ static int vmx_check_nested_events(struct kvm_vcpu *vcpu)
+>  	}
+>  
+>  	if (vcpu->arch.exception.pending) {
+> -		if (vmx->nested.nested_run_pending)
+> +		if (block_nested_exceptions)
+>  			return -EBUSY;
+>  		if (!nested_vmx_check_exception(vcpu, &exit_qual))
+>  			goto no_vmexit;
+
+Besides the nitpicks:
+
+Reviewed-by: Maxim Levitsky <mlevitsk@redhat.com>
+
+Best regards,
+	Maxim Levitsky
+
 

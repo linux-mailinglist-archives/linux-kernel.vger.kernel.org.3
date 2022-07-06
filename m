@@ -2,127 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BC6D7568B76
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 16:39:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A2DDB568B78
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 16:39:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232913AbiGFOjF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Jul 2022 10:39:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58652 "EHLO
+        id S232988AbiGFOjU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Jul 2022 10:39:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58926 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232424AbiGFOjC (ORCPT
+        with ESMTP id S230232AbiGFOjS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Jul 2022 10:39:02 -0400
-Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE75F1BEB1
-        for <linux-kernel@vger.kernel.org>; Wed,  6 Jul 2022 07:39:00 -0700 (PDT)
-Received: by mail-lf1-x135.google.com with SMTP id d12so2948641lfq.12
-        for <linux-kernel@vger.kernel.org>; Wed, 06 Jul 2022 07:39:00 -0700 (PDT)
+        Wed, 6 Jul 2022 10:39:18 -0400
+Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2A5F21E2A;
+        Wed,  6 Jul 2022 07:39:17 -0700 (PDT)
+Received: by mail-wr1-x42e.google.com with SMTP id h17so9226401wrx.0;
+        Wed, 06 Jul 2022 07:39:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=zZOCnL2sk3pByrLKpJXQRiEZ7lTe3lvaSXFyozjR1Sk=;
-        b=lmT7TvAXdlwO8MoznJL41ScqnCxhsPkyj3eO8uJVObJgBwMjkbz/dZ39ZBM2Q6uKVU
-         OYmvbwv02NdsHcN62nEMsrORHyzmxAYZmIPxYaTFaaaS18SQGiG0Vbpy5rd8u60KuOm7
-         BZZCXPyYtByZ51BH/XuE3XmjOHA+E+ksnsjvnO4Vv5MRk6ia//DlfQXbATqtc/M32+0W
-         Vkyn6341a4yx3S6P9qKA/V1h+VyuGk/bMIBNVaiOI9euzs7WrBD5hJ//1OG1vpriTMQP
-         FvgjjPgQIC4C0Bs6jZFH0oQ3q2vOxEvDkO7uPZLvwfSJqE2C/qslvt4ZbHZUZi/wFXmx
-         eOMg==
+        d=gmail.com; s=20210112;
+        h=message-id:subject:from:to:cc:date:in-reply-to:references
+         :user-agent:mime-version:content-transfer-encoding;
+        bh=nbQzGLyZt6vzMT4BrPBKi6wsfX0WBie55S1iaaXmviw=;
+        b=KCmuH45Vy/rpX/YO/8zkdGIjPwhBYbYTx4AAuan5fdQsofigAJqvELTwsriH+fNszk
+         8ibZuqSZb0KkiBhVZaHKQu2ofbuuSc2j2Er6SS0P/OcGNiw3Qk4x2WSdUJqWQwnp0tOH
+         AoCdkpjvY2D46ih6+FHsGjqI4+oUTBq5PMgRafwnLQNdjGF51y5dpzLJEcGv5U0D5y0m
+         zmmHDfIouMDdPYEIRtWJwVoZrIwKiqQwFx7ysqEIv9qu8YOPnzhBEiZtMQt7o9xSUj9B
+         vGW7pMrIyHBP8WIAocwjP2crsF9F9NVABukfZtlL4JleU+HPb/zdaCCWC3sbjH495cOX
+         DSHQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=zZOCnL2sk3pByrLKpJXQRiEZ7lTe3lvaSXFyozjR1Sk=;
-        b=yTqiGoZbAKcnMM1KdzyZOGfyZitAAS3Bwygku8b7DTHDZCHK2r5Zeby9qTBDvzMZmD
-         QtV6kMv2gD2UhV0/uNisLSs1HQplG3RUX/l6UGwLSs03+31CqvXSdqi6nOwtkVTvAva7
-         yOit3zfS6OesC+S4YM8vjQjD/OlYjkUn1F6uL5pJcHxOVEVcll5dzNw84yYaCJ0Oe3+s
-         LI0rqtNqmIJqygfpDZdCYlUzhZ9BqiKS+5DTZ+abKLkp/g19IkRO2IHE3gVl+jjk0TJe
-         gmA02dyxQRLpoobqWfz4hNKufd9y6qQIcibdKMRYbeznDVaw6SRVNafwG6gNXcgVKMXo
-         XOyg==
-X-Gm-Message-State: AJIora9449nFZ2oScvLkFVLCfFWEqI5Fj7+gwdBjLesPv8p2ObuVDx87
-        LXqfKD/BuWMYbZtuF/2BoNQG3A==
-X-Google-Smtp-Source: AGRyM1tvr1UuDnYcmSJc30YkpAaFP4aCC6wjkMinKdciZeRPBO4Q4W7IOip5cYIkpaF2vYVKHyb7wA==
-X-Received: by 2002:a05:6512:2204:b0:484:e8eb:4169 with SMTP id h4-20020a056512220400b00484e8eb4169mr4366900lfu.472.1657118339097;
-        Wed, 06 Jul 2022 07:38:59 -0700 (PDT)
-Received: from [192.168.1.52] ([84.20.121.239])
-        by smtp.gmail.com with ESMTPSA id b29-20020ac25e9d000000b00486bf193d23sm267876lfq.299.2022.07.06.07.38.57
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 06 Jul 2022 07:38:58 -0700 (PDT)
-Message-ID: <4c3443f4-a65d-331b-851a-01f5275bbf4b@linaro.org>
-Date:   Wed, 6 Jul 2022 16:38:57 +0200
+        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
+         :references:user-agent:mime-version:content-transfer-encoding;
+        bh=nbQzGLyZt6vzMT4BrPBKi6wsfX0WBie55S1iaaXmviw=;
+        b=LtWHKRgTG7ZvZv7NlWx9LOVCoFnS9K8bUa4Q9cWvVgyX/URMfldoF0USDlngypX7/d
+         veva2vUJtX2Z4jeeJdV7jyoTz/wVj9I/vqaPXE6NLxgwYwRcOj7WSz2WBXYM97uOSSGx
+         BgnWPcQUwYEo9v0u6GBWQ65IF5AfTH7XNdOk/7YdauotSE7ZGxNzKozDXyzyEoiRUb8/
+         objJ204lJTw9c9MtZqF0zKJ/Nm7jl45cBzEre2l/uA5omEf4mF/O7MIjviGnXPSlCsuV
+         Iol6NNngPtb/VXwfkHUdlC+BEdu7xwG8wRxEjSvabr2UY+WwYojCIzP6g6/sJCWWfq3x
+         Z+CA==
+X-Gm-Message-State: AJIora9gNrWcnay1zrkvi7WNkFpsd7vfvNEDsR4tbEZ/pNP9tVuDek3F
+        ChU2ZnPsF7xqFW1l2FpX98k=
+X-Google-Smtp-Source: AGRyM1sCnYfNWrP9a6CSVlU5BzXSjjrZmNGdu/l9Zkwg02x4RMZljumMZCkx5SDH7ztA2RR8lp07bw==
+X-Received: by 2002:a5d:4982:0:b0:21d:6e04:1fb3 with SMTP id r2-20020a5d4982000000b0021d6e041fb3mr12404193wrq.69.1657118356381;
+        Wed, 06 Jul 2022 07:39:16 -0700 (PDT)
+Received: from [192.168.1.126] (68.201.26.77.dynamic.reverse-mundo-r.com. [77.26.201.68])
+        by smtp.gmail.com with ESMTPSA id z5-20020adfe545000000b0021b81855c1csm43580911wrm.27.2022.07.06.07.39.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 06 Jul 2022 07:39:15 -0700 (PDT)
+Message-ID: <dd655cf6e49cac219a5ae29bff1a19fd026c6ea5.camel@gmail.com>
+Subject: Re: [PATCH v2 5/5] iio: pressure: bmp280: Adds more tunable config
+ parameters for BMP380
+From:   Angel Iglesias <ang.iglesiasg@gmail.com>
+To:     Andy Shevchenko <andy.shevchenko@gmail.com>
+Cc:     Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        Paul Cercueil <paul@crapouillou.net>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        linux-iio <linux-iio@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Date:   Wed, 06 Jul 2022 16:39:13 +0200
+In-Reply-To: <CAHp75VcEAtpVsfp2CCtJR_e_eSSFaMkODFwd-ZuHKGsNPcVWfA@mail.gmail.com>
+References: <20220704003337.208696-1-ang.iglesiasg@gmail.com>
+         <CAHp75VdBv8BJVzBCMzWKpm0RrqX=K_QPQ4cgdshqXP3Uy+hVHQ@mail.gmail.com>
+         <b9280ecbf78424882878ef2ff6c3da6671064ed5.camel@gmail.com>
+         <CAHp75VcEAtpVsfp2CCtJR_e_eSSFaMkODFwd-ZuHKGsNPcVWfA@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.42.4 (3.42.4-2.module_f35+14217+587aad52) 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH v1 02/16] dt-bindings: memory: mediatek: Update condition
- for mt8195 smi node
-Content-Language: en-US
-To:     Matthias Brugger <matthias.bgg@gmail.com>,
-        Tinghan Shen <tinghan.shen@mediatek.com>,
-        Yong Wu <yong.wu@mediatek.com>, Joerg Roedel <joro@8bytes.org>,
-        Will Deacon <will@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Chun-Jie Chen <chun-jie.chen@mediatek.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Enric Balletbo i Serra <enric.balletbo@collabora.com>,
-        Weiyi Lu <weiyi.lu@mediatek.com>
-Cc:     iommu@lists.linux-foundation.org,
-        linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        Project_Global_Chrome_Upstream_Group@mediatek.com
-References: <20220704100028.19932-1-tinghan.shen@mediatek.com>
- <20220704100028.19932-3-tinghan.shen@mediatek.com>
- <119f2a98-ef56-7b99-631f-221b737939ae@linaro.org>
- <9757b32c-c196-f7e0-3c61-1d4edae854dc@gmail.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <9757b32c-c196-f7e0-3c61-1d4edae854dc@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 06/07/2022 15:48, Matthias Brugger wrote:
+On mié, 2022-07-06 at 14:42 +0200, Andy Shevchenko wrote:
+> On Wed, Jul 6, 2022 at 12:51 AM Angel Iglesias <ang.iglesiasg@gmail.com>
+> wrote:
+> > On Mon, 2022-07-04 at 22:08 +0200, Andy Shevchenko wrote:
+> > > On Mon, Jul 4, 2022 at 2:41 AM Angel Iglesias <ang.iglesiasg@gmail.com>
+> > > wrote:
 > 
+> ...
 > 
-> On 04/07/2022 14:36, Krzysztof Kozlowski wrote:
->> On 04/07/2022 12:00, Tinghan Shen wrote:
->>> The max clock items for the dts node with compatible
->>> 'mediatek,mt8195-smi-sub-common' should be 3.
->>>
->>> However, the dtbs_check of such node will get following message,
->>> arch/arm64/boot/dts/mediatek/mt8195-evb.dtb: smi@14010000: clock-names: ['apb', 'smi', 'gals0'] is too long
->>>           From schema: Documentation/devicetree/bindings/memory-controllers/mediatek,smi-common.yaml
->>>
->>> Remove the last 'else' checking to fix this error.
->>
->> Missing fixes tag.
->>
+> > > > +               if (unlikely(!data->chip_info->sampling_freq_avail)) {
+> > > 
+> > > Why unlikely() ? How does this improve code generation / performance?
+> > 
+> > As Jonathan Cameron sugested on a previous version of the patch, even
+> > thought
+> > this code should be safe (as if we are checking sampling frequency is
+> > because
+> > the sensor is a BMP380 and has that property), it would be better to have a
+> > sanity check just to be sure the property is really available. I used
+> > unlikely
+> > macro to take into account that the property would be almost always
+> > initialized.
+> > 
+> > Now that you mention, probably this code won't be called too often to make
+> > the
+> > "unlikely" branching hint make a meaningful performance difference
+> > 
+> > > > +               if (unlikely(!data->chip_info->iir_filter_coeffs_avail))
+> > > > {
+> > > 
+> > > Ditto.
 > 
->  From my understanding, fixes tags are for patches that fix bugs (hw is not 
-> working etc) and not a warning message from dtbs_check. So my point of view 
-> would be to not add a fixes tag here.
+> Is this really a performance-critical path? How did you check that
+> unlikely() makes sense?
+> More evidence, please!
 
-Not conforming to bindings is also a bug. Missing properties or wrong
-properties, even if hardware is working, is still a bug. If such bug is
-not visible now in Linux, might be visible later in the future or
-visible in different OS (DTS are used by other systems and pieces of
-software like bootloaders). Limiting this only to Linux and to current
-version (hardware still works) is OK for Linux drivers, but not for DTS.
+You're right. This code will be invoked by userspace using the sysfs ABI,
+probably just once, to check sensor settings. The unlikely() is out place, I'll
+drop it in next patch iteration.
 
-Therefore Fixes tag in general is applicable. Of course maybe to this
-one not really, maybe this is too trivial, or whatever, so I do not
-insist. But I insist on the principle - reasonable dtbs_check warnings
-are like compiler warnings - bugs which have to be fixed.
+> ...
+> 
+> > > Why do you need to copy'n'paste dozens of the very same comment?
+> > > Wouldn't it be enough to explain it somewhere at the top of the file
+> > > or in the respective documentation (if it exists)?
+> 
+> No answer?
+
+Apologies, I'll fix the duplicated comments. Would be a good place for the
+comment before the function "bmp280_write_raw" or at the start of the switch
+block?
 
 
-Best regards,
-Krzysztof

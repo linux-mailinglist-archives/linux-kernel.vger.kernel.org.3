@@ -2,83 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B2D11567F02
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 08:55:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A1586567F06
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 08:56:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230178AbiGFGz1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Jul 2022 02:55:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48634 "EHLO
+        id S230151AbiGFG4I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Jul 2022 02:56:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49258 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229803AbiGFGzX (ORCPT
+        with ESMTP id S229477AbiGFG4G (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Jul 2022 02:55:23 -0400
-Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 819891CFDB
-        for <linux-kernel@vger.kernel.org>; Tue,  5 Jul 2022 23:55:21 -0700 (PDT)
-Received: by mail-lf1-x12f.google.com with SMTP id t19so23659778lfl.5
-        for <linux-kernel@vger.kernel.org>; Tue, 05 Jul 2022 23:55:21 -0700 (PDT)
+        Wed, 6 Jul 2022 02:56:06 -0400
+Received: from mail-il1-x12e.google.com (mail-il1-x12e.google.com [IPv6:2607:f8b0:4864:20::12e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF9691B79C
+        for <linux-kernel@vger.kernel.org>; Tue,  5 Jul 2022 23:56:05 -0700 (PDT)
+Received: by mail-il1-x12e.google.com with SMTP id m14so5896462iln.10
+        for <linux-kernel@vger.kernel.org>; Tue, 05 Jul 2022 23:56:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=Qi/HzfCRWKKbzy7uAxJ2wy7Sd2F4DwDWD93n1e7b+Tc=;
-        b=N4r+vDEttCJfEoxvR/u99LGStE2n////g6PJKpqQIKTaIwvLn8AXYs8hqZBlvYpkDl
-         eyOLQBzIW7O0B6T3kT5fKYR+Y8//FFHM/SMIShQqLOzZOPlrXupLlVYUn1VlnLYvmxFZ
-         iNerWocy49Jul7Dkzmj3EZYcRNXcZUWR9RoSmVLomGo+KBEQ/+IXUGbWacbzp4bjQcQA
-         2r+LvnWAUUYmkNj/mpLtvweY84+02vOCr+XbTU9YddzlYy8lpdHH3S6AtI8/vys34Jmi
-         txWa9n2NwOo0wxhrhr9XAERVDe8r6PpcqfiSSXe+H3by/LngaIh54sKx8hGS0l/ZzZ28
-         +tBw==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=YFNQb7b1KCsmQRzxr93CIXPIla3KWLn6zmSX1Y0R8fU=;
+        b=chEdrQ2KkUcPSmiE2c06PqmFRcX/+J/ozDM3YotO8fOVVIZqIyVSxNFhq29PwUY0Em
+         ThOXuJ8axs5pxRxZWcRECV+zwOLllRql7f3spnr/BMvT88PuL8bVexOkVkLTMUs5rTv9
+         ekT05iDkTxWG8l0eFUAlDcdvvYrahBBMDNyINXiZMUzdGu83qbZ2gTeL5Y0fnNa7wRpi
+         l2FYNTJrGz58RjSYLzKfQOAPX0bvALteMfrWpqOfe+1mNs1ROS94Fh7n8DpYY07UBICG
+         5UQvKebkK8goHufdaC+qFxsF2tgPcPIcubD/UuqyeL2+Epz7oLoxR2Uc6BtaGMUTYBMN
+         0twQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=Qi/HzfCRWKKbzy7uAxJ2wy7Sd2F4DwDWD93n1e7b+Tc=;
-        b=3g8m1XLHKU1YsBwmK31qGjvR/wIwUQC1kx52sntciiE44mgvSYnPMqyXZXUuP3x4YL
-         GG9vn0R+XXlvg2PCrJ5kAOWIvrdYk2P4sou22V5tLBcUN4ssqPFzzdonDUbibPMY3mF/
-         Jjy4FIjVhKQ9QygWtSjOW1nykexAlCyU7zc8Qr4J0yMMor/CRycpCHg/js6MgRgcyJ3u
-         zS9sr0zBhgFLSuVI5yGEndVKHSmwQcNXnKP8KpaO12xJykVtTje8Bjz04D3nc6eA9BTW
-         tzPWMbZJ12iNcQN2iq2NH4rZ2DrI5Z6lbAnAz7Tdq+l97cAHuIF2XZjL0sggUPD2iEW6
-         64IQ==
-X-Gm-Message-State: AJIora/MSGqVheNKslzNZt4XLED4nj+r1yNNIlVNns+Vv0ObqP/gTro+
-        zaVq926TtyT0s5NY2laFJ14jhj7JsxL3SQ==
-X-Google-Smtp-Source: AGRyM1tVdXaVsQm7jLPm4SWsUXJ32TvoCX8tMg8AnAhTDvikIGvlqTGiIIAzYYTV6UyDSGye5umtjw==
-X-Received: by 2002:ac2:5a03:0:b0:47f:90ee:4c9 with SMTP id q3-20020ac25a03000000b0047f90ee04c9mr26352628lfn.319.1657090519863;
-        Tue, 05 Jul 2022 23:55:19 -0700 (PDT)
-Received: from [192.168.1.52] ([84.20.121.239])
-        by smtp.gmail.com with ESMTPSA id m4-20020a056512114400b00478772eb18esm6127941lfg.92.2022.07.05.23.55.18
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 05 Jul 2022 23:55:19 -0700 (PDT)
-Message-ID: <3f4f62da-302f-c6cb-0c32-73f4e36e5022@linaro.org>
-Date:   Wed, 6 Jul 2022 08:55:18 +0200
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=YFNQb7b1KCsmQRzxr93CIXPIla3KWLn6zmSX1Y0R8fU=;
+        b=dm3Q1yN3m2W+Nc1yzBFd93wOVxT6UHdWAYmGdCRbZ8XvGPkiF62iZs6FiREd6W/DG9
+         dsMI2NS0jm3E/4n9qECkv0Am/0dIs5NL+1mtzODZX51pxedH7k4+1snk9/9IUwmrGRAg
+         hR7V/pAJQFN7DWO7pq6SuwMk/leuqaiDNp4B+up/TvlQN9xeUvEgNQjOqZ3r16BnRoMP
+         LGMdmXAcV0dCra6lAQIBR6RznvD7rBhLtCVvu/2LUKZAwSd027DvfjM3IBDNHoaqA8Ja
+         m8Vw831nG8ueWici9vo/qhaSkvW8zH7IJM6Z+peWS6DtKGjOguzX5SsFE/umuqtAyyPN
+         Zmzg==
+X-Gm-Message-State: AJIora8rbPIHjye8a6miTINJq5nmTGaLrf3qt8+bhldpjdLmSIEfd8RY
+        IH02zdrgkX2SiHbvDVjLk5kW3luJpU/n/HE0PEcA3A==
+X-Google-Smtp-Source: AGRyM1soHgVS48kFwmmwTHhWAsyaq8JZdKD0yeOo508CIlLAH/onAdt/4q+JwrPyk3J4PH3vhtrqOaDDZ8QlBJTxAs4=
+X-Received: by 2002:a92:cb0e:0:b0:2dc:240a:3149 with SMTP id
+ s14-20020a92cb0e000000b002dc240a3149mr4326727ilo.55.1657090565135; Tue, 05
+ Jul 2022 23:56:05 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH v4] dt-bindings: qcom: document preferred compatible
- naming
-Content-Language: en-US
-To:     Rob Herring <robh@kernel.org>
-Cc:     Vinod Koul <vkoul@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Andy Gross <agross@kernel.org>, devicetree@vger.kernel.org,
-        Robert Foss <robert.foss@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        linux-arm-msm@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Alex Elder <elder@linaro.org>,
-        Bhupesh Sharma <bhupesh.sharma@linaro.org>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        linux-kernel@vger.kernel.org,
-        Konrad Dybcio <konrad.dybcio@somainline.org>
-References: <20220705161301.493364-1-krzysztof.kozlowski@linaro.org>
- <1657048737.406960.2471232.nullmailer@robh.at.kernel.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <1657048737.406960.2471232.nullmailer@robh.at.kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+References: <20220705115610.236040773@linuxfoundation.org>
+In-Reply-To: <20220705115610.236040773@linuxfoundation.org>
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Wed, 6 Jul 2022 12:25:54 +0530
+Message-ID: <CA+G9fYtXD=L3JaBVDMoVg8ChmqcewOr+rJDy=G-wdegUs0JYcQ@mail.gmail.com>
+Subject: Re: [PATCH 5.4 00/58] 5.4.204-rc1 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        slade@sladewatkins.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -87,67 +71,120 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 05/07/2022 21:18, Rob Herring wrote:
-> On Tue, 05 Jul 2022 18:13:01 +0200, Krzysztof Kozlowski wrote:
->> Compatibles can come in two formats.  Either "vendor,ip-soc" or
->> "vendor,soc-ip".  Qualcomm bindings were mixing both of usages, so add a
->> DT schema file documenting preferred policy and enforcing it for all new
->> compatibles, except few existing patterns.
->>
->> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
->>
->> ---
->>
->> Changes since v3:
->> 1. Add qcom,kpss-wdt-xxx to pattern for exceptions.
->> 2. Add ipq806x entries to list of exceptions.
->>
->> Changes since v2:
->> 1. Narrow the expected pattern to be followed by dash '-' after model
->>    number (msm8996-) or by two letters and a dash (sc8280xp-).
->> 2. Add qcom,apss-wdt-xxx to list of exceptions.
->> 3. Use comment instead of description in the oneOf list.
->>
->> Changes since v1:
->> 1. Add schema instead of readme (Rob).
->>
->> Cc: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
->> Cc: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
->> Cc: Vinod Koul <vkoul@kernel.org>
->> Cc: Alex Elder <elder@linaro.org>
->> Cc: Robert Foss <robert.foss@linaro.org>
->> Cc: Bhupesh Sharma <bhupesh.sharma@linaro.org>
->> ---
->>  .../devicetree/bindings/arm/qcom-soc.yaml     | 63 +++++++++++++++++++
->>  1 file changed, 63 insertions(+)
->>  create mode 100644 Documentation/devicetree/bindings/arm/qcom-soc.yaml
->>
-> 
-> My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
-> on your patch (DT_CHECKER_FLAGS is new in v5.13):
-> 
-> yamllint warnings/errors:
-> 
-> dtschema/dtc warnings/errors:
-> /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/cpufreq/qcom-cpufreq-nvmem.example.dtb: /: compatible: 'oneOf' conditional failed, one must be fixed:
-> 	'qcom,qcs404' does not match '^qcom,(apq|ipq|mdm|msm|qcs|sa|sc|sdm|sdx|sm)[0-9]+-.*$'
-> 	'qcom,qcs404' does not match '^qcom,(sa|sc)8[0-9]+[a-z][a-z]?-.*$'
-> 	'qcom,qcs404' does not match '^qcom,[ak]pss-wdt-(apq|ipq|mdm|msm|qcs|sa|sc|sdm|sdx|sm)[0-9]+.*$'
-> 	'qcom,qcs404' does not match '^qcom,gcc-(apq|ipq|mdm|msm|qcs|sa|sc|sdm|sdx|sm)[0-9]+.*$'
-> 	'qcom,qcs404' does not match '^qcom,mmcc-(apq|ipq|mdm|msm|qcs|sa|sc|sdm|sdx|sm)[0-9]+.*$'
-> 	'qcom,qcs404' does not match '^qcom,pcie-(apq|ipq|mdm|msm|qcs|sa|sc|sdm|sdx|sm)[0-9]+.*$'
-> 	'qcom,qcs404' does not match '^qcom,rpm-(apq|ipq|mdm|msm|qcs|sa|sc|sdm|sdx|sm)[0-9]+.*$'
-> 	'qcom,qcs404' does not match '^qcom,scm-(apq|ipq|mdm|msm|qcs|sa|sc|sdm|sdx|sm)[0-9]+.*$'
-> 	'qcom,qcs404' is not one of ['qcom,gpucc-sdm630', 'qcom,gpucc-sdm660', 'qcom,lcc-apq8064', 'qcom,lcc-ipq8064', 'qcom,lcc-mdm9615', 'qcom,lcc-msm8960', 'qcom,lpass-cpu-apq8016', 'qcom,usb-ss-ipq4019-phy', 'qcom,usb-hs-ipq4019-phy', 'qcom,vqmmc-ipq4019-regulator']
-> 	'qcom,qcs404' is not one of ['qcom,ipq806x-nand', 'qcom,ipq806x-usb-phy-ss', 'qcom,ipq806x-usb-phy-hs']
-> 	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/arm/qcom-soc.yaml
-> 
-
-This is fixed by:
-https://lore.kernel.org/all/20220627143340.477120-1-krzysztof.kozlowski@linaro.org/
-https://lore.kernel.org/all/20220628092253.21905-1-krzysztof.kozlowski@linaro.org/
+On Tue, 5 Jul 2022 at 17:34, Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
+>
+> This is the start of the stable review cycle for the 5.4.204 release.
+> There are 58 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>
+> Responses should be made by Thu, 07 Jul 2022 11:55:56 +0000.
+> Anything received after that time might be too late.
+>
+> The whole patch series can be found in one patch at:
+>         https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-=
+5.4.204-rc1.gz
+> or in the git tree and branch at:
+>         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
+-rc.git linux-5.4.y
+> and the diffstat can be found below.
+>
+> thanks,
+>
+> greg k-h
 
 
+Results from Linaro=E2=80=99s test farm.
+No regressions on arm64, arm, x86_64, and i386.
 
-Best regards,
-Krzysztof
+Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
+
+## Build
+* kernel: 5.4.204-rc1
+* git: https://gitlab.com/Linaro/lkft/mirrors/stable/linux-stable-rc
+* git branch: linux-5.4.y
+* git commit: 0f4cd7014f4101204454b404e03101579ef33481
+* git describe: v5.4.203-59-g0f4cd7014f41
+* test details:
+https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-5.4.y/build/v5.4.2=
+03-59-g0f4cd7014f41
+
+## Test Regressions (compared to v5.4.203)
+No test regressions found.
+
+## Metric Regressions (compared to v5.4.203)
+No metric regressions found.
+
+## Test Fixes (compared to v5.4.203)
+No test fixes found.
+
+## Metric Fixes (compared to v5.4.203)
+No metric fixes found.
+
+## Test result summary
+total: 122576, pass: 108899, fail: 260, skip: 12381, xfail: 1036
+
+## Build Summary
+* arc: 10 total, 10 passed, 0 failed
+* arm: 307 total, 307 passed, 0 failed
+* arm64: 61 total, 59 passed, 2 failed
+* i386: 28 total, 25 passed, 3 failed
+* mips: 48 total, 48 passed, 0 failed
+* parisc: 12 total, 12 passed, 0 failed
+* powerpc: 54 total, 54 passed, 0 failed
+* riscv: 27 total, 27 passed, 0 failed
+* s390: 12 total, 12 passed, 0 failed
+* sh: 24 total, 24 passed, 0 failed
+* sparc: 12 total, 12 passed, 0 failed
+* x86_64: 55 total, 54 passed, 1 failed
+
+## Test suites summary
+* fwts
+* igt-gpu-tools
+* kunit
+* kvm-unit-tests
+* libgpiod
+* libhugetlbfs
+* log-parser-boot
+* log-parser-test
+* ltp-cap_bounds
+* ltp-commands
+* ltp-containers
+* ltp-controllers
+* ltp-cpuhotplug
+* ltp-crypto
+* ltp-cve
+* ltp-dio
+* ltp-fcntl-locktests
+* ltp-filecap[
+* ltp-filecaps
+* ltp-fs
+* ltp-fs_bind
+* ltp-fs_perms_simple
+* ltp-fsx
+* ltp-hugetlb
+* ltp-io
+* ltp-ipc
+* ltp-math
+* ltp-mm
+* ltp-nptl
+* ltp-open-posix-tests
+* ltp-pty
+* ltp-sched
+* ltp-securebits
+* ltp-smoke
+* ltp-syscalls
+* ltp-tracing
+* network-basic-tests
+* packetdrill
+* perf
+* perf/Zstd-perf.data-compression
+* rcutorture
+* ssuite
+* v4l2-compliance
+* vdso
+
+--
+Linaro LKFT
+https://lkft.linaro.org

@@ -2,175 +2,342 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 854DA569222
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 20:49:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E14E7569225
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 20:49:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234057AbiGFSs4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Jul 2022 14:48:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59780 "EHLO
+        id S234376AbiGFStk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Jul 2022 14:49:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60224 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230472AbiGFSsx (ORCPT
+        with ESMTP id S230472AbiGFSti (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Jul 2022 14:48:53 -0400
-Received: from proxima.lasnet.de (proxima.lasnet.de [IPv6:2a01:4f8:121:31eb:3::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA6C41F2DE;
-        Wed,  6 Jul 2022 11:48:51 -0700 (PDT)
-Received: from [IPv6:2a01:c23:9553:2700:569c:b316:2406:eb4c] (dynamic-2a01-0c23-9553-2700-569c-b316-2406-eb4c.c23.pool.telefonica.de [IPv6:2a01:c23:9553:2700:569c:b316:2406:eb4c])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: jluebbe@lasnet.de)
-        by proxima.lasnet.de (Postfix) with ESMTPSA id F3EA5C0373;
-        Wed,  6 Jul 2022 20:48:48 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lasnet.de; s=2021;
-        t=1657133329;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Q1N88M69xDw45XQpZsRsQu5rF1MU+rMW1YQ0tIbUWkM=;
-        b=pTxEw9xvEo8NmFgytApBz58B51c7rSRlcJd/LGcOr5Xa0NpxIcqsBL1Mn9oILQipdn0ZF+
-        xLTeG04YGQSVrDohQrniIkm0DbTT6+W3IuuxqV3kSWPLB5Gfrz9TzdBhpx5+O/n2YkASvl
-        9Ouwb01iWqRXXGxCs3mtZZYVYzdbkQ6vm81QH9hmLD0LdYrCIbqqC0uhQ55gxFqKEhnnw4
-        sYAk+uT0TOxdLyaafrxtdJU7z+SZCHja/r5podGM6R8ZHiCiKxN170xL1pk1UKjk8hJK10
-        RZsGDgDTzRzPor8Yq9H9x6NNaYJzXtvCEZXR/yWSJCeocgXqFF3vBE+mZerwtg==
-Message-ID: <a32428fa0f3811c25912cd313a6fe1fb4f0a4fac.camel@lasnet.de>
-Subject: Re: [REGRESSION] connection timeout with routes to VRF
-From:   Jan Luebbe <jluebbe@lasnet.de>
-To:     Mike Manning <mvrmanning@gmail.com>,
-        David Ahern <dsahern@kernel.org>,
-        Robert Shearman <robertshearman@gmail.com>,
-        Andy Roulin <aroulin@nvidia.com>
-Cc:     "David S. Miller" <davem@davemloft.net>, netdev@vger.kernel.org,
-        regressions@lists.linux.dev,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Date:   Wed, 06 Jul 2022 20:49:27 +0200
-In-Reply-To: <940fa370-08ce-1d39-d5cc-51de8e853b47@gmail.com>
-References: <a54c149aed38fded2d3b5fdb1a6c89e36a083b74.camel@lasnet.de>
-         <6410890e-333d-5f0e-52f2-1041667c80f8@kernel.org>
-         <940fa370-08ce-1d39-d5cc-51de8e853b47@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.38.3-1 
+        Wed, 6 Jul 2022 14:49:38 -0400
+Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 396961F2DE;
+        Wed,  6 Jul 2022 11:49:37 -0700 (PDT)
+Received: by mail-wr1-x432.google.com with SMTP id b26so23313400wrc.2;
+        Wed, 06 Jul 2022 11:49:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=Ko/7vC9uowvuhOuaHcW9SY3o/jbXX33rNYIe8reYijA=;
+        b=QLJylXo2eaBfDec1E1bIZZKyHJ2Ip5yd5MiTpPTCsWMP3gnUBm/WIUhKFc+DLKY2xY
+         jX5sbJ4vqW1/WKy5myg14xYhnjLfKXFL9tRizC137hXm1sIoZhtM6csu/b8LdJ9CsaFM
+         ZA72EpVHaWiqK49RF88f1AtPl/kn1888m0/wzD3RhQlp4GbqDy7Ql9umdC05ShqnrgV+
+         WxBf3SH1ZJkh4KSPiMbuY1Ll+j8HI1ZKUBRaxbcmXUmZd7w4KTMbRbv0GbJT41UsSQvI
+         Uw8KfcqGzNemOI842jvMib1Ul1BlQBcjS9lNGAthAxvcA3PNG2qKQOGwAHD/FVEa/LtW
+         JbTQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=Ko/7vC9uowvuhOuaHcW9SY3o/jbXX33rNYIe8reYijA=;
+        b=n4+2xmxrAkC82HHhCZgUMMWzcMoJQ838486eENyKUcEYTmHiwwJvW0411ha461sao2
+         G9MUnFJXqvVroz/1lVNGkpyyYc4H4SwetLDriShq3z1cn/9dSS8y9WYUjIo+MNF1tdUr
+         fMKomTJXnc8QqK9o15VTvBp3RQsXmD9TP/RddBvLREh3P1ZQ18vwRjgx2F49ps71t+XU
+         4H5rFfF23BfzHTai7cNgDphUfTThE4/xfOBdG5mWWtfdo39d+gScqgzWWcL3lgjYC8Fw
+         MjjrqBYXokK+6y4yj5TIJswoCx+OFZeCxHKoJssDf+MzJrUGh1k7yfMSkkKTinYd+pk7
+         58FQ==
+X-Gm-Message-State: AJIora/WtI35UjuUI6+x+5+z9oiY1mb46xLk+U0HbntkXAgDKKEU8Ezq
+        eB6YeDIkTKPLrrU83T8bdcPdePkb8+XD6Q==
+X-Google-Smtp-Source: AGRyM1sYaoB/gPUJLbwXa1xJPEIH03jj58v64kXD0M1vI4pS1KVWTePPmY1i0+YU9sbkMOpmkfe1Bg==
+X-Received: by 2002:a5d:4aca:0:b0:21d:6793:1c11 with SMTP id y10-20020a5d4aca000000b0021d67931c11mr18375854wrs.202.1657133375703;
+        Wed, 06 Jul 2022 11:49:35 -0700 (PDT)
+Received: from kista.localnet (213-161-3-76.dynamic.telemach.net. [213.161.3.76])
+        by smtp.gmail.com with ESMTPSA id e10-20020a05600c4e4a00b00397402ae674sm18080800wmq.11.2022.07.06.11.49.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 06 Jul 2022 11:49:34 -0700 (PDT)
+From:   Jernej =?utf-8?B?xaBrcmFiZWM=?= <jernej.skrabec@gmail.com>
+To:     Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
+Cc:     Benjamin Gaignard <benjamin.gaignard@collabora.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Hans Verkuil <hverkuil@xs4all.nl>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        Maxime Ripard <mripard@kernel.org>,
+        Paul Kocialkowski <paul.kocialkowski@bootlin.com>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Samuel Holland <samuel@sholland.org>,
+        Nicolas Dufresne <nicolas.dufresne@collabora.com>,
+        Andrzej Pietrasiewicz <andrzej.p@collabora.com>,
+        linux-media <linux-media@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "open list:ARM/Rockchip SoC..." <linux-rockchip@lists.infradead.org>,
+        "open list:STAGING SUBSYSTEM" <linux-staging@lists.linux.dev>,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        linux-sunxi@lists.linux.dev,
+        Collabora Kernel ML <kernel@collabora.com>
+Subject: Re: Re: Re: [PATCH v10 11/17] media: uapi: Add V4L2_CID_STATELESS_HEVC_ENTRY_POINT_OFFSETS control
+Date:   Wed, 06 Jul 2022 20:49:33 +0200
+Message-ID: <1769918.8hzESeGDPO@kista>
+In-Reply-To: <CAAEAJfDNHSBtJD_chSV0_UMTJWztyPFxjORRn0+dSrtcZCoYwg@mail.gmail.com>
+References: <20220705085420.272912-1-benjamin.gaignard@collabora.com> <4408380.LvFx2qVVIh@kista> <CAAEAJfDNHSBtJD_chSV0_UMTJWztyPFxjORRn0+dSrtcZCoYwg@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, 2022-06-26 at 21:06 +0100, Mike Manning wrote:
-...
-> Andy Roulin suggested the same fix to the same problem a few weeks back.
-> Let's do it along with a test case in fcnl-test.sh which covers all of
-> these vrf permutations.
-> 
-Reverting 3c82a21f4320 would remove isolation between the default and other VRFs
-needed when no VRF route leaking has been configured between these: there may be
-unintended leaking of packets arriving on a device enslaved to an l3mdev due to
-the potential match on an unbound socket.
+Dne sreda, 06. julij 2022 ob 20:39:41 CEST je Ezequiel Garcia napisal(a):
+> Hi Jernej,
+>=20
+> On Tue, Jul 5, 2022 at 1:11 PM Jernej =C5=A0krabec <jernej.skrabec@gmail.=
+com>=20
+wrote:
+> > Dne torek, 05. julij 2022 ob 18:03:28 CEST je Benjamin Gaignard=20
+napisal(a):
+> > > Le 05/07/2022 =C3=A0 17:45, Ezequiel Garcia a =C3=A9crit :
+> > > > Hi guys,
+> > > >=20
+> > > > On Tue, Jul 05, 2022 at 10:54:14AM +0200, Benjamin Gaignard wrote:
+> > > >> The number of 'entry point offset' can be very variable.
+> > > >> Instead of using a large static array define a v4l2 dynamic array
+> > > >> of U32 (V4L2_CTRL_TYPE_U32).
+> > > >> The number of entry point offsets is reported by the elems field
+> > > >> and in struct v4l2_ctrl_hevc_slice_params.num_entry_point_offsets
+> > > >> field.
+> > > >>=20
+> > > >> Signed-off-by: Benjamin Gaignard <benjamin.gaignard@collabora.com>
+> > > >> Acked-by: Nicolas Dufresne <nicolas.dufresne@collabora.com>
+> > > >> Tested-by: Jernej Skrabec <jernej.skrabec@gmail.com>
+> > > >> ---
+> > > >>=20
+> > > >>   .../userspace-api/media/v4l/ext-ctrls-codec.rst       | 11
+> > > >>   +++++++++++
+> > > >>   drivers/media/v4l2-core/v4l2-ctrls-defs.c             |  5 +++++
+> > > >>   include/media/hevc-ctrls.h                            |  5 ++++-
+> > > >>   3 files changed, 20 insertions(+), 1 deletion(-)
+> > > >>=20
+> > > >> diff --git
+> > > >> a/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst
+> > > >> b/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst index
+> > > >> db0df7d9f27c..8df8d7fdfe70 100644
+> > > >> --- a/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst
+> > > >> +++ b/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst
+> > > >> @@ -3010,6 +3010,9 @@ enum v4l2_mpeg_video_hevc_size_of_length_fie=
+ld
+> > > >> -
+> > > >>=20
+> > > >>       * - __u32
+> > > >>      =20
+> > > >>         - ``data_bit_offset``
+> > > >>         - Offset (in bits) to the video data in the current slice
+> > > >>         data.
+> > > >>=20
+> > > >> +    * - __u32
+> > > >> +      - ``num_entry_point_offsets``
+> > > >> +      - Specifies the number of entry point offset syntax elements
+> > > >> in
+> > > >> the slice header.>
+> > > >=20
+> > > > This looks underdocumented. Somewhere in the docs it should be
+> > > > mentioned
+> > > > that the field 'num_entry_point_offsets' is linked to the control
+> > > > V4L2_CID_STATELESS_HEVC_ENTRY_POINT_OFFSETS.
+> > >=20
+> > > This field is here because some drivers would like know the number of
+> > > entry point offsets without getting the entry point offsets data itse=
+lf.
+> >=20
+> > Yeah, this field must be set even when entry points offset control isn't
+> > used. Additionally, if entry point offsets control is needed and if
+> > submitting multiple slices at once, length of entry point offsets array
+> > must be sum of num_entry_point_offsets of all slices in that job. Not
+> > sure where to put this explanation.
+>=20
+> This confused me a bit: so you mean that this field (called
+> num_entry_point_offsets)
+> must be the sum of "num_entry_point_offsets" syntax elements for
+> slices in the request?
 
-Thanks for the explanation.
+No, it's the other way around. num_entry_point_offsets field has same meani=
+ng as=20
+in syntax. It's per slice property. I said that if there is control with al=
+l=20
+entry point offsets, it has to have number of elements, which is sum of all=
+=20
+num_entry_point_offsets fields in slice array.
 
-VRF route leaking requires routes to be present for both ingress and egress
-VRFs,
-the testcase shown only has a route from default to red VRF. The implicit return
-path from red to default VRF due to match on unbound socket is no longer
-present.
+Example (totaly made up):
 
+=46rame has 4 slices, each with 16 entry points.
+App sends only 2 slices per job. Both num_entry_point_offsets fields in sli=
+ce=20
+control will have value 16, but entry point offsets array control will have=
+ 32=20
+elements (16 entry points offsets from first and 16 entry point offsets fro=
+m=20
+second slice).
 
-If there is a better configuration that makes this work in the general case
-without a change to the kernel, we'd be happy as well.
+Best regards,
+Jernej
 
-In our full setup, the outbound TCP connection (from the default VRF) gets a
-local IP from the interface enslaved to the VRF. Before 3c82a21f4320, this would
-simply work.
+>=20
+> If this is the case, then perhaps it will be a mistake to name our V4L2
+> field exactly like the syntax element, since it this sum meaning.
+> Otherwise, developers would tend to get confused by it.
+>=20
+> What do you think?
+>=20
+> Thanks,
+> Ezequiel
+>=20
+> > Best regards,
+> > Jernej
+> >=20
+> > > Benjamin
+> > >=20
+> > > > Thanks,
+> > > > Ezequiel
+> > > >=20
+> > > >>       * - __u8
+> > > >>      =20
+> > > >>         - ``nal_unit_type``
+> > > >>         - Specifies the coding type of the slice (B, P or I).
+> > > >>=20
+> > > >> @@ -3150,6 +3153,14 @@ enum v4l2_mpeg_video_hevc_size_of_length_fi=
+eld
+> > > >> -
+> > > >>=20
+> > > >>       \normalsize
+> > > >>=20
+> > > >> +``V4L2_CID_STATELESS_HEVC_ENTRY_POINT_OFFSETS (integer)``
+> > > >> +    Specifies entry point offsets in bytes.
+> > > >> +    This control is a dynamically sized array. The number of entry
+> > > >> point
+> > > >> +    offsets is reported by the ``elems`` field.
+> > > >> +    This bitstream parameter is defined according to :ref:`hevc`.
+> > > >> +    They are described in section 7.4.7.1 "General slice segment
+> > > >> header
+> > > >> +    semantics" of the specification.
+> > > >> +
+> > > >>=20
+> > > >>   ``V4L2_CID_STATELESS_HEVC_SCALING_MATRIX (struct)``
+> > > >>  =20
+> > > >>       Specifies the HEVC scaling matrix parameters used for the
+> > > >>       scaling
+> > > >>       process
+> > > >>       for transform coefficients.
+> > > >>=20
+> > > >> diff --git a/drivers/media/v4l2-core/v4l2-ctrls-defs.c
+> > > >> b/drivers/media/v4l2-core/v4l2-ctrls-defs.c index
+> > > >> d594efbcbb93..e22921e7ea61 100644
+> > > >> --- a/drivers/media/v4l2-core/v4l2-ctrls-defs.c
+> > > >> +++ b/drivers/media/v4l2-core/v4l2-ctrls-defs.c
+> > > >> @@ -1188,6 +1188,7 @@ const char *v4l2_ctrl_get_name(u32 id)
+> > > >>=20
+> > > >>    case V4L2_CID_STATELESS_HEVC_DECODE_PARAMS:             return
+> >=20
+> > "HEVC Decode
+> >=20
+> > > >>    Parameters"; case V4L2_CID_STATELESS_HEVC_DECODE_MODE:
+> > return "HEVC
+> >=20
+> > > >>    Decode Mode"; case V4L2_CID_STATELESS_HEVC_START_CODE:
+> > return "HEVC
+> >=20
+> > > >>    Start Code";>>
+> > > >>=20
+> > > >> +  case V4L2_CID_STATELESS_HEVC_ENTRY_POINT_OFFSETS:       return
+> >=20
+> > "HEVC Entry
+> >=20
+> > > >> Point Offsets";>>
+> > > >>=20
+> > > >>    /* Colorimetry controls */
+> > > >>    /* Keep the order of the 'case's the same as in v4l2-controls.h!
+> >=20
+> > */
+> >=20
+> > > >> @@ -1518,6 +1519,10 @@ void v4l2_ctrl_fill(u32 id, const char **na=
+me,
+> > > >> enum v4l2_ctrl_type *type,>>
+> > > >>=20
+> > > >>    case V4L2_CID_STATELESS_HEVC_DECODE_PARAMS:
+> > > >>            *type =3D V4L2_CTRL_TYPE_HEVC_DECODE_PARAMS;
+> > > >>            break;
+> > > >>=20
+> > > >> +  case V4L2_CID_STATELESS_HEVC_ENTRY_POINT_OFFSETS:
+> > > >> +          *type =3D V4L2_CTRL_TYPE_U32;
+> > > >> +          *flags |=3D V4L2_CTRL_FLAG_DYNAMIC_ARRAY;
+> > > >> +          break;
+> > > >>=20
+> > > >>    case V4L2_CID_STATELESS_VP9_COMPRESSED_HDR:
+> > > >>            *type =3D V4L2_CTRL_TYPE_VP9_COMPRESSED_HDR;
+> > > >>            break;
+> > > >>=20
+> > > >> diff --git a/include/media/hevc-ctrls.h b/include/media/hevc-ctrls=
+=2Eh
+> > > >> index a372c184689e..3a6601a46ced 100644
+> > > >> --- a/include/media/hevc-ctrls.h
+> > > >> +++ b/include/media/hevc-ctrls.h
+> > > >> @@ -20,6 +20,7 @@
+> > > >>=20
+> > > >>   #define V4L2_CID_STATELESS_HEVC_DECODE_PARAMS
+> >=20
+> > (V4L2_CID_CODEC_BASE +
+> >=20
+> > > >>   1012)
+> > > >>   #define V4L2_CID_STATELESS_HEVC_DECODE_MODE    =20
+> > > >>   (V4L2_CID_CODEC_BASE
+> >=20
+> > +
+> >=20
+> > > >>   1015)
+> > > >>   #define V4L2_CID_STATELESS_HEVC_START_CODE     =20
+> > > >>   (V4L2_CID_CODEC_BASE + 1016)> > >>=20
+> > > >> +#define V4L2_CID_STATELESS_HEVC_ENTRY_POINT_OFFSETS
+> > > >> (V4L2_CID_CODEC_BASE
+> > > >> + 1017)>>
+> > > >>=20
+> > > >>   /* enum v4l2_ctrl_type type values */
+> > > >>   #define V4L2_CTRL_TYPE_HEVC_SPS 0x0120
+> > > >>=20
+> > > >> @@ -316,6 +317,8 @@ struct v4l2_hevc_pred_weight_table {
+> > > >>=20
+> > > >>    *
+> > > >>    * @bit_size: size (in bits) of the current slice data
+> > > >>    * @data_bit_offset: offset (in bits) to the video data in the
+> > > >>    current
+> > > >>    slice data>>
+> > > >>=20
+> > > >> + * @num_entry_point_offsets: specifies the number of entry point
+> > > >> offset
+> > > >> syntax + *                      elements in the slice
+> >=20
+> > header.
+> >=20
+> > > >>    * @nal_unit_type: specifies the coding type of the slice (B, P =
+or
+> > > >>    I)
+> > > >>    * @nuh_temporal_id_plus1: minus 1 specifies a temporal identifi=
+er
+> > > >>    for
+> > > >>    the NAL unit * @slice_type: see V4L2_HEVC_SLICE_TYPE_{}
+> > > >>=20
+> > > >> @@ -358,7 +361,7 @@ struct v4l2_hevc_pred_weight_table {
+> > > >>=20
+> > > >>   struct v4l2_ctrl_hevc_slice_params {
+> > > >>  =20
+> > > >>    __u32   bit_size;
+> > > >>    __u32   data_bit_offset;
+> > > >>=20
+> > > >> -
+> > > >> +  __u32   num_entry_point_offsets;
+> > > >>=20
+> > > >>    /* ISO/IEC 23008-2, ITU-T Rec. H.265: NAL unit header */
+> > > >>    __u8    nal_unit_type;
+> > > >>    __u8    nuh_temporal_id_plus1;
+> > > >>=20
+> > > >> --
+> > > >> 2.32.0
 
-How would the return path route from the red VRF to the default VRF look in that
-case?
-
-Match on unbound socket in all VRFs and not only in the default VRF should be
-possible by setting this option (see
-https://www.kernel.org/doc/Documentation/networking/vrf.txt):
-
-
-Do you mean unbound as in listening socket not bound to an IP with bind()? Or as
-in a socket in the default VRF?
-
-sysctl net.ipv4.tcp_l3mdev_accept=1
-
-
-The sysctl docs sound like this should only apply to listening sockets. In this
-case, we have an unconnected outbound socket.
-
-However, for this to work a change similar to the following is needed (I have
-shown the change to the macro for consistency with above, it is now an inline
-fn):
-
-
-I can also test on master and only used the macro form only because I wasn't
-completely sure how to translate it to the inline function form.
-
----
- include/net/inet_hashtables.h |   10 ++++------
- 1 file changed, 4 insertions(+), 6 deletions(-)
-
---- a/include/net/inet_hashtables.h
-+++ b/include/net/inet_hashtables.h
-@@ -300,9 +300,8 @@
- #define INET_MATCH(__sk, __net, __cookie, __saddr, __daddr, __ports, __dif,
-__sdif) \
-        (((__sk)->sk_portpair == (__ports))                     &&      \
-         ((__sk)->sk_addrpair == (__cookie))                    &&      \
--        (((__sk)->sk_bound_dev_if == (__dif))                  ||      \
--         ((__sk)->sk_bound_dev_if == (__sdif)))                &&      \
--        net_eq(sock_net(__sk), (__net)))
-+        net_eq(sock_net(__sk), (__net))                        &&      \
-+        inet_sk_bound_dev_eq((__net), (__sk)->sk_bound_dev_if, (__dif),
-(__sdif)))
- #else /* 32-bit arch */
- #define INET_ADDR_COOKIE(__name, __saddr, __daddr) \
-        const int __name __deprecated __attribute__((unused))
-@@ -311,9 +310,8 @@
-        (((__sk)->sk_portpair == (__ports))             &&              \
-         ((__sk)->sk_daddr      == (__saddr))           &&              \
-         ((__sk)->sk_rcv_saddr  == (__daddr))           &&              \
--        (((__sk)->sk_bound_dev_if == (__dif))          ||              \
--         ((__sk)->sk_bound_dev_if == (__sdif)))        &&              \
--        net_eq(sock_net(__sk), (__net)))
-+        net_eq(sock_net(__sk), (__net))                &&              \
-+        inet_sk_bound_dev_eq((__net), (__sk)->sk_bound_dev_if, (__dif),
-(__sdif)))
- #endif /* 64-bit arch */
-
- /* Sockets in TCP_CLOSE state are _always_ taken out of the hash, so we need
-
-I can confirm that this gets my testcase working with 
-net.ipv4.tcp_l3mdev_accept=1.
-
-This is to get the testcase to pass, I will leave it to others to comment on
-the testcase validity in terms of testing forwarding using commands on 1 device.
-
-So a network-namespace-based testcase would be preferred? We used the simple
-setup because it seemed easier to understand.
-
-The series that 3c82a21f4320 is part of were introduced into the kernel in 2018
-by the Vyatta team, who regularly run an extensive test suite for routing
-protocols
-for VRF functionality incl. all combinations of route leaking between default
-and
-other VRFs, so there is no known issue in this regard. I will attempt to reach
-out
-to them so as to advise them of this thread.
-
-Are these testcases public? Perhaps I could use them find a better configuration
-that handles our use-case.
-
-Thanks,
-
-Jan
 

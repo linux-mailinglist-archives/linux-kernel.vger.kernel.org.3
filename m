@@ -2,179 +2,194 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 56D99568B88
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 16:41:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A4595568B83
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 16:41:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233461AbiGFOlh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Jul 2022 10:41:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60634 "EHLO
+        id S233376AbiGFOlQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Jul 2022 10:41:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60238 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233413AbiGFOlg (ORCPT
+        with ESMTP id S232031AbiGFOlN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Jul 2022 10:41:36 -0400
-Received: from alexa-out.qualcomm.com (alexa-out.qualcomm.com [129.46.98.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D705237D3;
-        Wed,  6 Jul 2022 07:41:35 -0700 (PDT)
+        Wed, 6 Jul 2022 10:41:13 -0400
+Received: from mail-lj1-x234.google.com (mail-lj1-x234.google.com [IPv6:2a00:1450:4864:20::234])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C78441BEB1
+        for <linux-kernel@vger.kernel.org>; Wed,  6 Jul 2022 07:41:11 -0700 (PDT)
+Received: by mail-lj1-x234.google.com with SMTP id i17so13967950ljj.12
+        for <linux-kernel@vger.kernel.org>; Wed, 06 Jul 2022 07:41:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1657118495; x=1688654495;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references;
-  bh=Hr9yV/i11+naZBUagnWE5HaqO+SDNFfP01uIpud54bQ=;
-  b=QeontSuISPdiGgRlQ57Pj+KlhZvaz4o+qoWNYD+a6cT8rixGBIAUtvGS
-   DCJqteOCeKTGQGPb1+jRHCI+m6yZ4M9zK1chjQ71J93SAi3gHoMdDK3tP
-   tcRQsuE+PCm//HzVgGvYw9S1mrfI2taetk/hT4iY/q4QxQxpWR3q+pfwB
-   8=;
-Received: from ironmsg09-lv.qualcomm.com ([10.47.202.153])
-  by alexa-out.qualcomm.com with ESMTP; 06 Jul 2022 07:41:35 -0700
-X-QCInternal: smtphost
-Received: from ironmsg02-blr.qualcomm.com ([10.86.208.131])
-  by ironmsg09-lv.qualcomm.com with ESMTP/TLS/AES256-SHA; 06 Jul 2022 07:40:49 -0700
-X-QCInternal: smtphost
-Received: from hu-krichai-hyd.qualcomm.com (HELO hu-sgudaval-hyd.qualcomm.com) ([10.213.110.37])
-  by ironmsg02-blr.qualcomm.com with ESMTP; 06 Jul 2022 20:10:27 +0530
-Received: by hu-sgudaval-hyd.qualcomm.com (Postfix, from userid 4058933)
-        id D6C9642A4; Wed,  6 Jul 2022 20:10:26 +0530 (+0530)
-From:   Krishna chaitanya chundru <quic_krichai@quicinc.com>
-To:     helgaas@kernel.org
-Cc:     linux-pci@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, mka@chromium.org,
-        quic_vbadigan@quicinc.com, quic_hemantk@quicinc.com,
-        quic_nitegupt@quicinc.com, quic_skananth@quicinc.com,
-        quic_ramkri@quicinc.com, manivannan.sadhasivam@linaro.org,
-        swboyd@chromium.org, dmitry.baryshkov@linaro.org,
-        Krishna chaitanya chundru <quic_krichai@quicinc.com>,
-        Jingoo Han <jingoohan1@gmail.com>,
-        Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Rob Herring <robh@kernel.org>,
-        =?UTF-8?q?Krzysztof=20Wilczy=C5=84ski?= <kw@linux.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Stanimir Varbanov <svarbanov@mm-sol.com>,
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=4ZAzCdhKYQqo7ESaR4JmvDnaWURtuqjk4b36eg17tyU=;
+        b=QtpY64gBiKv87zn3WH2V1jHnVALzZR4GkLl4QHXzPB598mym+g/h+MDZP43GXpQU4T
+         CpJ5jhoWrUkeBz61LdkRfl5hqVdEcL/tMmIiS1jU/5qF6qJLm8TUz7eprhsEaTffAyvS
+         IVMmNMlc68RsNh27R/W2EAR6qRh8qON/B77jFGV949tv0wyeiuerQhisDI4e6v6xwsB9
+         oqJtQUYDleBIdCZHs151WysbiavrxY29iZF6O62v5WODUGhEvOgIdKr9nLBXk8dG4V1E
+         saCII/MZNMTL0jj/AXexSQPYgDMuFeTQcGK44uggOyD3qKU6Hg+DgJ/gTwusmBTOl/ci
+         i05g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=4ZAzCdhKYQqo7ESaR4JmvDnaWURtuqjk4b36eg17tyU=;
+        b=kL4w8EjsLhrWZTFXlJnpmC3PZ5pllMMofdICHDlRtQJ156c3dhdV/pKDGNvTJsxwaM
+         iCzAa0F/i2mspffDKRbCYBIyJQFiGrv6eNRCKnNm4Ad6Bf1DbES3m/rOSSG7HTfGYmcO
+         fwmx3OjVZVM1ZlucofFyRbolRchgV7HQOMvlKZMppFYAqTPUUw5siERjs7uTInX9XL1z
+         qeLnBcT4n4FZIst4MpqpOvYjkyVvGPue+a976WSs5sSkbZMe14vUadSL19PFOfqevWHZ
+         5kICEOo9GPys1MENUgDn+4hIfN+E6uiaOrJuox/ZD8SdA6iYNp5VplTC1b+gikz8MDyB
+         CyPw==
+X-Gm-Message-State: AJIora8VhuQMBAGhbs8bw4zmJmSONKj/ooW0m74/AXov86Bh2TsQ4Hau
+        EdUFwHNddEHnrf+uD146w6gZkA==
+X-Google-Smtp-Source: AGRyM1vaIRti7iIX0vInI1Gwqn/+FjD2lj6KOCRUq8xBiaDzLL3qGwDU+An6dSqATeWRY7w0ckPAzg==
+X-Received: by 2002:a05:651c:b0f:b0:25d:38e0:a5a5 with SMTP id b15-20020a05651c0b0f00b0025d38e0a5a5mr4706056ljr.278.1657118470135;
+        Wed, 06 Jul 2022 07:41:10 -0700 (PDT)
+Received: from [192.168.1.52] ([84.20.121.239])
+        by smtp.gmail.com with ESMTPSA id l15-20020a19c20f000000b0047f68e0ca8fsm6320712lfc.49.2022.07.06.07.41.08
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 06 Jul 2022 07:41:09 -0700 (PDT)
+Message-ID: <4adc6b89-bab9-ae20-662f-dd66b2049d7f@linaro.org>
+Date:   Wed, 6 Jul 2022 16:41:08 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH v3] dt-bindings: qcom: document preferred compatible
+ naming
+Content-Language: en-US
+To:     Konrad Dybcio <konrad.dybcio@somainline.org>,
         Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>
-Subject: [PATCH v4 2/2] PCI: qcom: Restrict pci transactions after pci suspend
-Date:   Wed,  6 Jul 2022 20:10:25 +0530
-Message-Id: <1657118425-10304-3-git-send-email-quic_krichai@quicinc.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1657118425-10304-1-git-send-email-quic_krichai@quicinc.com>
-References: <1656684800-31278-1-git-send-email-quic_krichai@quicinc.com>
- <1657118425-10304-1-git-send-email-quic_krichai@quicinc.com>
-X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Vinod Koul <vkoul@kernel.org>, Alex Elder <elder@linaro.org>,
+        Robert Foss <robert.foss@linaro.org>,
+        Bhupesh Sharma <bhupesh.sharma@linaro.org>
+References: <20220705092846.66731-1-krzysztof.kozlowski@linaro.org>
+ <ebcfa5b0-a416-64c0-3aa4-3ae9487c61ab@somainline.org>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <ebcfa5b0-a416-64c0-3aa4-3ae9487c61ab@somainline.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-If the endpoint device state is D0 and irq's are not freed, then
-kernel try to mask interrupts in system suspend path by writing
-in to the vector table (for MSIX interrupts) and config space (for MSI's).
+On 06/07/2022 14:35, Konrad Dybcio wrote:
+> 
+> 
+> On 5.07.2022 11:28, Krzysztof Kozlowski wrote:
+>> Compatibles can come in two formats.  Either "vendor,ip-soc" or
+>> "vendor,soc-ip".  Qualcomm bindings were mixing both of usages, so add a
+>> DT schema file documenting preferred policy and enforcing it for all new
+>> compatibles, except few existing patterns.
+>>
+>> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+>>
+>> ---
+>>
+>> Changes since v2:
+>> 1. Narrow the expected pattern to be followed by dash '-' after model
+>>    number (msm8996-) or by two letters and a dash (sc8280xp-).
+>> 2. Add qcom,apss-wdt-xxx to list of exceptions.
+>> 3. Use comment instead of description in the oneOf list.
+>>
+>> Changes since v1:
+>> 1. Add schema instead of readme (Rob).
+>>
+>> Cc: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+>> Cc: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+>> Cc: Vinod Koul <vkoul@kernel.org>
+>> Cc: Alex Elder <elder@linaro.org>
+>> Cc: Robert Foss <robert.foss@linaro.org>
+>> Cc: Bhupesh Sharma <bhupesh.sharma@linaro.org>
+>> ---
+>>  .../devicetree/bindings/arm/qcom-soc.yaml     | 57 +++++++++++++++++++
+>>  1 file changed, 57 insertions(+)
+>>  create mode 100644 Documentation/devicetree/bindings/arm/qcom-soc.yaml
+>>
+>> diff --git a/Documentation/devicetree/bindings/arm/qcom-soc.yaml b/Documentation/devicetree/bindings/arm/qcom-soc.yaml
+>> new file mode 100644
+>> index 000000000000..6307c925335d
+>> --- /dev/null
+>> +++ b/Documentation/devicetree/bindings/arm/qcom-soc.yaml
+>> @@ -0,0 +1,57 @@
+>> +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
+>> +%YAML 1.2
+>> +---
+>> +$id: http://devicetree.org/schemas/arm/qcom-soc.yaml#
+>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+>> +
+>> +title: Qualcomm SoC compatibles naming convention
+>> +
+>> +maintainers:
+>> +  - Bjorn Andersson <bjorn.andersson@linaro.org>
+>> +
+>> +description: |
+>> +  Guidelines for new compatibles for SoC blocks/components.
+>> +  When adding new compatibles in new bindings, use the format::
+>> +    qcom,SoC-IP
+>> +
+>> +  For example::
+>> +   qcom,sdm845-llcc-bwmon
+>> +
+>> +  When adding new compatibles to existing bindings, use the format in the
+>> +  existing binding, even if it contradicts the above.
+>> +
+>> +select:
+>> +  properties:
+>> +    compatible:
+>> +      pattern: "^qcom,.*(apq|ipq|mdm|msm|qcs|sa|sc|sdm|sdx|sm)[0-9]+.*$"
+>> +  required:
+>> +    - compatible
+>> +
+>> +properties:
+>> +  compatible:
+>> +    oneOf:
+>> +      # Preferred naming style for compatibles of SoC components:
+>> +      - pattern: "^qcom,(apq|ipq|mdm|msm|qcs|sa|sc|sdm|sdx|sm)[0-9]+-.*$"
+>> +      - pattern: "^qcom,(sa|sc)8[0-9]+[a-z][a-z]?-.*$"
+>> +
+>> +      # Legacy namings - variations of existing patterns/compatibles are OK,
+>> +      # but do not add completely new entries to these:
+>> +      - pattern: "^qcom,apss-wdt-(apq|ipq|mdm|msm|qcs|sa|sc|sdm|sdx|sm)[0-9]+.*$"
+>> +      - pattern: "^qcom,gcc-(apq|ipq|mdm|msm|qcs|sa|sc|sdm|sdx|sm)[0-9]+.*$"
+>> +      - pattern: "^qcom,mmcc-(apq|ipq|mdm|msm|qcs|sa|sc|sdm|sdx|sm)[0-9]+.*$"
+>> +      - pattern: "^qcom,pcie-(apq|ipq|mdm|msm|qcs|sa|sc|sdm|sdx|sm)[0-9]+.*$"
+>> +      - pattern: "^qcom,rpm-(apq|ipq|mdm|msm|qcs|sa|sc|sdm|sdx|sm)[0-9]+.*$"
+>> +      - pattern: "^qcom,scm-(apq|ipq|mdm|msm|qcs|sa|sc|sdm|sdx|sm)[0-9]+.*$"
+>> +      - enum:
+>> +          - qcom,gpucc-sdm630
+>> +          - qcom,gpucc-sdm660
+>> +          - qcom,lcc-apq8064
+>> +          - qcom,lcc-ipq8064
+>> +          - qcom,lcc-mdm9615
+>> +          - qcom,lcc-msm8960
+>> +          - qcom,lpass-cpu-apq8016
+>> +          - qcom,usb-ss-ipq4019-phy
+>> +          - qcom,usb-hs-ipq4019-phy
+>> +          - qcom,vqmmc-ipq4019-regulator
+> Maybe we could add new compatibles for these drivers and replace them
+> in upstream DTs, but keep the old ones in the drivers with a clear
+> indication that they are there only for legacy reasons?
 
-These transactions are initiated in the pm suspend after pcie clocks got
-disabled as part of platform driver pm  suspend call. Due to it, these
-transactions are resulting in un-clocked access and eventually to crashes.
+You cannot replace them in DTS, it would be an ABI break of DTS against
+other systems or older kernels. You can deprecate them in bindings, add
+new, and after few years (e.g. 1-3) change them in DTS... and still
+someone will complain that you broke the ABI.
 
-So added a logic in qcom driver to restrict these unclocked access.
-And updated the logic to check the link state before masking
-or unmasking the interrupts.
-
-Signed-off-by: Krishna chaitanya chundru <quic_krichai@quicinc.com>
----
- drivers/pci/controller/dwc/pcie-designware-host.c | 14 +++++++--
- drivers/pci/controller/dwc/pcie-qcom.c            | 36 +++++++++++++++++++++--
- 2 files changed, 46 insertions(+), 4 deletions(-)
-
-diff --git a/drivers/pci/controller/dwc/pcie-designware-host.c b/drivers/pci/controller/dwc/pcie-designware-host.c
-index 2fa86f3..2a46b40 100644
---- a/drivers/pci/controller/dwc/pcie-designware-host.c
-+++ b/drivers/pci/controller/dwc/pcie-designware-host.c
-@@ -29,13 +29,23 @@ static void dw_msi_ack_irq(struct irq_data *d)
- 
- static void dw_msi_mask_irq(struct irq_data *d)
- {
--	pci_msi_mask_irq(d);
-+	struct pcie_port *pp = irq_data_get_irq_chip_data(d->parent_data);
-+	struct dw_pcie *pci = to_dw_pcie_from_pp(pp);
-+
-+	if (dw_pcie_link_up(pci))
-+		pci_msi_mask_irq(d);
-+
- 	irq_chip_mask_parent(d);
- }
- 
- static void dw_msi_unmask_irq(struct irq_data *d)
- {
--	pci_msi_unmask_irq(d);
-+	struct pcie_port *pp = irq_data_get_irq_chip_data(d->parent_data);
-+	struct dw_pcie *pci = to_dw_pcie_from_pp(pp);
-+
-+	if (dw_pcie_link_up(pci))
-+		pci_msi_unmask_irq(d);
-+
- 	irq_chip_unmask_parent(d);
- }
- 
-diff --git a/drivers/pci/controller/dwc/pcie-qcom.c b/drivers/pci/controller/dwc/pcie-qcom.c
-index 0a9d1ee..78bc463 100644
---- a/drivers/pci/controller/dwc/pcie-qcom.c
-+++ b/drivers/pci/controller/dwc/pcie-qcom.c
-@@ -1342,11 +1342,41 @@ static int qcom_pcie_suspend_2_7_0(struct qcom_pcie *pcie)
- 	return 0;
- }
- 
-+static u32 qcom_pcie_read_dbi(struct dw_pcie *pci, void __iomem *base,
-+				u32 reg, size_t size)
-+{
-+	struct qcom_pcie *pcie = to_qcom_pcie(pci);
-+	u32 val;
-+
-+	if (pcie->is_suspended)
-+		return PCIBIOS_BAD_REGISTER_NUMBER;
-+
-+	dw_pcie_read(base + reg, size, &val);
-+	return val;
-+}
-+
-+static void qcom_pcie_write_dbi(struct dw_pcie *pci, void __iomem *base,
-+				u32 reg, size_t size, u32 val)
-+{
-+	struct qcom_pcie *pcie = to_qcom_pcie(pci);
-+
-+	if (pcie->is_suspended)
-+		return;
-+
-+	dw_pcie_write(base + reg, size, val);
-+}
-+
- static int qcom_pcie_link_up(struct dw_pcie *pci)
- {
--	u16 offset = dw_pcie_find_capability(pci, PCI_CAP_ID_EXP);
--	u16 val = readw(pci->dbi_base + offset + PCI_EXP_LNKSTA);
-+	struct qcom_pcie *pcie = to_qcom_pcie(pci);
-+	u16 offset;
-+	u16 val;
-+
-+	if (pcie->is_suspended)
-+		return false;
- 
-+	offset = dw_pcie_find_capability(pci, PCI_CAP_ID_EXP);
-+	val = readw(pci->dbi_base + offset + PCI_EXP_LNKSTA);
- 	return !!(val & PCI_EXP_LNKSTA_DLLLA);
- }
- 
-@@ -1590,6 +1620,8 @@ static const struct qcom_pcie_cfg sc7280_cfg = {
- static const struct dw_pcie_ops dw_pcie_ops = {
- 	.link_up = qcom_pcie_link_up,
- 	.start_link = qcom_pcie_start_link,
-+	.read_dbi = qcom_pcie_read_dbi,
-+	.write_dbi = qcom_pcie_write_dbi,
- };
- 
- static int qcom_pcie_probe(struct platform_device *pdev)
--- 
-2.7.4
-
+> In the specific case of gpucc-sdm630/660 I think we could even "break" backwards
+> compatibility, as the only users of that driver (Adreno GPU & its SMMU) depend
+> on an iommu series to function properly, which has been stuck in the freezer...
+Best regards,
+Krzysztof

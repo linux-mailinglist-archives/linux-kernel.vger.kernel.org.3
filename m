@@ -2,317 +2,233 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EA72C5680ED
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 10:18:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 98FDB5680EF
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 10:18:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230460AbiGFIRs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Jul 2022 04:17:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56122 "EHLO
+        id S231305AbiGFISi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Jul 2022 04:18:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56904 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230050AbiGFIRq (ORCPT
+        with ESMTP id S229650AbiGFISe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Jul 2022 04:17:46 -0400
-Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96738237D7
-        for <linux-kernel@vger.kernel.org>; Wed,  6 Jul 2022 01:17:45 -0700 (PDT)
-Received: by mail-lf1-x134.google.com with SMTP id t19so23957505lfl.5
-        for <linux-kernel@vger.kernel.org>; Wed, 06 Jul 2022 01:17:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=zxEgUQKShb0lRQRTiY8pzzMuqPlmMV7N3JPs4Nr+3+4=;
-        b=CVGN96LaQ0iwJhHVVj9woXp+Ne8W8/vdvDhLGI2yNvMW6TRNcRRVCd+ku4LHWajtty
-         1s50NI3FLn/T4kHsHyk4gaLStGA+FBg0gKoFmiUqiFp8WQ80Y2JeuC1honizgMVVAZ5c
-         ww/rw/Lm09dffF4HBlw2q9EdJ2CPMma7QFBPC/sgFt/7rwR2+Lka5RICHyfv4rDTXN1f
-         ckgsadObgw05UV6ixaT418mLTDXyM9U2LZauU6NdCb9tgfbpM2u4MEeWgghGA8bzMhPG
-         EAGOGq7LOPkxYlX9kCtllE1rHiAye/Ad2aiNogRoV0jvnV/RMZ1OTVxXd0KqX5TF0oa+
-         GE9Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=zxEgUQKShb0lRQRTiY8pzzMuqPlmMV7N3JPs4Nr+3+4=;
-        b=sj0T/08Oahx72oErBFtt8zPqRGKZzhn/12uhBAq6oaGJiCR24D73pNShGPNrdBbrFH
-         w+1PkAEe6XmjOh7VdXZqFI0T+jk0oCMYl/s/Xt1rB09OWf5c2h9gr87fXLbxtmzdAo9o
-         SisbVCCbKylK68ODmdUZXF3iOCiH33vYhcyneAjmRakJCi48yMHABbOKaTZbJiw/fJwx
-         FRZ9/bv/qi9F+tLO5KhrccHdL9sPCwXWu+7fqxZP9O9a8POGc4/TNO0OmhE4nftPXH62
-         g79dLs/smiYWdd8WlZfj77lyWe1w90IPWBVaWhJVgpEf8IVfUm+6I0BguxfGDTCDkHpC
-         1/Rw==
-X-Gm-Message-State: AJIora8dTDZ8oVXLI8gXiwV5EI22B30Qhih0En/VjD0F7HyVheU1W7mM
-        NKbHCbDsEgYvd2po0OV52IvwTg==
-X-Google-Smtp-Source: AGRyM1urd3EIKHZti9p5ALjQH1gHIijjenH6NzPZZaDzIclsoYWzXLldRVcoKJmrr5Ng/rstORLdyw==
-X-Received: by 2002:ac2:4bcb:0:b0:47f:87a0:b638 with SMTP id o11-20020ac24bcb000000b0047f87a0b638mr26011486lfq.313.1657095463934;
-        Wed, 06 Jul 2022 01:17:43 -0700 (PDT)
-Received: from [192.168.1.52] ([84.20.121.239])
-        by smtp.gmail.com with ESMTPSA id k10-20020a2ea26a000000b0025bbf597b8asm5199567ljm.71.2022.07.06.01.17.41
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 06 Jul 2022 01:17:42 -0700 (PDT)
-Message-ID: <2f809ae4-a7cc-4210-b56f-bd09e3f2a599@linaro.org>
-Date:   Wed, 6 Jul 2022 10:17:41 +0200
+        Wed, 6 Jul 2022 04:18:34 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A59DDF5F;
+        Wed,  6 Jul 2022 01:18:31 -0700 (PDT)
+Received: from pps.filterd (m0187473.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 26685gK6036271;
+        Wed, 6 Jul 2022 08:18:22 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : cc :
+ subject : in-reply-to : in-reply-to : references : date : message-id :
+ mime-version : content-type; s=pp1;
+ bh=V2CZ4gY54/pQbJxuXJAl8m7gTB+wm6t3bS+kX/vImVo=;
+ b=jwlCdiPOIy7I7CjM6N5ZSfxsRTquU3h0+eoTDG+mCAf7KxwfroPezZyg4/Hkqwf5IDK5
+ blWH1UIkvVN+zT137bwLeh3E9lMm4JfCPwOgkGaXyiYUU0j6D0yj3lJ07KTyD7tyAVM2
+ Ibjl7XBZ5JQ6c9muMe4XoaPQOtXp3sO2qOGUsAPiZEZ3SImYOkA1mAV7z/tIFGDwPowY
+ 7FtiCtyEg+U+WNNP/V2xcAusXyGNI2ADPj3yvLp4o1P8HIwOiFE9acC0XrLDHvVfy/zl
+ +9fr4weqAUfgQ1jzu0oqDkfCOJVGuDuxRxHqowzOX9/bx7lD2QqNtDvnZbqFNt6WVcIH EQ== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3h55xfh3j7-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 06 Jul 2022 08:18:22 +0000
+Received: from m0187473.ppops.net (m0187473.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 2667a5cn012417;
+        Wed, 6 Jul 2022 08:18:22 GMT
+Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3h55xfh3hj-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 06 Jul 2022 08:18:21 +0000
+Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
+        by ppma03ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 26686beW013087;
+        Wed, 6 Jul 2022 08:18:19 GMT
+Received: from b06cxnps4074.portsmouth.uk.ibm.com (d06relay11.portsmouth.uk.ibm.com [9.149.109.196])
+        by ppma03ams.nl.ibm.com with ESMTP id 3h4ujsgp5e-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 06 Jul 2022 08:18:19 +0000
+Received: from d06av26.portsmouth.uk.ibm.com (d06av26.portsmouth.uk.ibm.com [9.149.105.62])
+        by b06cxnps4074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 2668IG0615008116
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 6 Jul 2022 08:18:16 GMT
+Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 2F830AE055;
+        Wed,  6 Jul 2022 08:18:16 +0000 (GMT)
+Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 12FF6AE045;
+        Wed,  6 Jul 2022 08:18:16 +0000 (GMT)
+Received: from localhost (unknown [9.171.42.49])
+        by d06av26.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Wed,  6 Jul 2022 08:18:16 +0000 (GMT)
+From:   Alexander Egorenkov <egorenar@linux.ibm.com>
+To:     Alexander Gordeev <agordeev@linux.ibm.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>
+Cc:     Matthew Wilcox <willy@infradead.org>, Baoquan He <bhe@redhat.com>,
+        Christoph Hellwig <hch@lst.de>, linux-kernel@vger.kernel.org,
+        linux-s390@vger.kernel.org
+Subject: Re: [PATCH 1/1] s390/crash: allow multi-segment iterators
+In-Reply-To: <3e713ce3865246766feca8397af2860cbe46854d.1657049033.git.agordeev@linux.ibm.com>
+In-Reply-To: 
+References: <cover.1657049033.git.agordeev@linux.ibm.com>
+ <3e713ce3865246766feca8397af2860cbe46854d.1657049033.git.agordeev@linux.ibm.com>
+Date:   Wed, 06 Jul 2022 10:18:15 +0200
+Message-ID: <877d4q3b94.fsf@oc8242746057.ibm.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH v4 1/5] dt-bindings: display: bridge: Convert cdns,dsi.txt
- to yaml
-Content-Language: en-US
-To:     Rahul T R <r-ravikumar@ti.com>, dri-devel@lists.freedesktop.org,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org
-Cc:     andrzej.hajda@intel.com, narmstrong@baylibre.com,
-        robert.foss@linaro.org, jonas@kwiboo.se, jernej.skrabec@gmail.com,
-        airlied@linux.ie, daniel@ffwll.ch, p.zabel@pengutronix.de,
-        tomi.valkeinen@ideasonboard.com, laurent.pinchart@ideasonboard.com,
-        linux-kernel@vger.kernel.org, jpawar@cadence.com,
-        sjakhade@cadence.com, mparab@cadence.com, a-bhatia1@ti.com,
-        devicetree@vger.kernel.org, vigneshr@ti.com, lee.jones@linaro.org
-References: <20220705121116.24121-1-r-ravikumar@ti.com>
- <20220705121116.24121-2-r-ravikumar@ti.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220705121116.24121-2-r-ravikumar@ti.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: CrDlVV1nYjvMRfWgYvpb2dGx4YW7EOSL
+X-Proofpoint-ORIG-GUID: w0SkKzNZ_rFmb5tc2JT46Gy2kpuUtxxF
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
+ definitions=2022-07-06_04,2022-06-28_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 clxscore=1011
+ impostorscore=0 mlxlogscore=999 mlxscore=0 suspectscore=0 bulkscore=0
+ lowpriorityscore=0 priorityscore=1501 malwarescore=0 spamscore=0
+ phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2206140000 definitions=main-2207060030
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 05/07/2022 14:11, Rahul T R wrote:
-> Convert cdns,dsi.txt binding to yaml format
-> 
-> Signed-off-by: Rahul T R <r-ravikumar@ti.com>
+Hi Alexander,
+
+Alexander Gordeev <agordeev@linux.ibm.com> writes:
+
+> Rework copy_oldmem_page() to allow multi-segment iterators.
+> Reuse existing iterate_iovec macro as is and only relevant
+> bits from __iterate_and_advance macro.
+>
+> Fixes: 49b11524d648 ("s390/crash: add missing iterator advance in copy_oldmem_page())
+> Signed-off-by: Alexander Gordeev <agordeev@linux.ibm.com>
 > ---
->  .../bindings/display/bridge/cdns,dsi.txt      | 112 ----------
->  .../bindings/display/bridge/cdns,dsi.yaml     | 198 ++++++++++++++++++
->  2 files changed, 198 insertions(+), 112 deletions(-)
->  delete mode 100644 Documentation/devicetree/bindings/display/bridge/cdns,dsi.txt
->  create mode 100644 Documentation/devicetree/bindings/display/bridge/cdns,dsi.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/display/bridge/cdns,dsi.txt b/Documentation/devicetree/bindings/display/bridge/cdns,dsi.txt
-> deleted file mode 100644
-> index 525a4bfd8634..000000000000
-> --- a/Documentation/devicetree/bindings/display/bridge/cdns,dsi.txt
-> +++ /dev/null
-> @@ -1,112 +0,0 @@
-> -Cadence DSI bridge
-> -==================
-> -
-> -The Cadence DSI bridge is a DPI to DSI bridge supporting up to 4 DSI lanes.
-> -
-> -Required properties:
-> -- compatible: should be set to "cdns,dsi".
-> -- reg: physical base address and length of the controller's registers.
-> -- interrupts: interrupt line connected to the DSI bridge.
-> -- clocks: DSI bridge clocks.
-> -- clock-names: must contain "dsi_p_clk" and "dsi_sys_clk".
-> -- phys: phandle link to the MIPI D-PHY controller.
-> -- phy-names: must contain "dphy".
-> -- #address-cells: must be set to 1.
-> -- #size-cells: must be set to 0.
-> -
-> -Optional properties:
-> -- resets: DSI reset lines.
-> -- reset-names: can contain "dsi_p_rst".
-> -
-> -Required subnodes:
-> -- ports: Ports as described in Documentation/devicetree/bindings/graph.txt.
-> -  2 ports are available:
-> -  * port 0: this port is only needed if some of your DSI devices are
-> -	    controlled through  an external bus like I2C or SPI. Can have at
-> -	    most 4 endpoints. The endpoint number is directly encoding the
-> -	    DSI virtual channel used by this device.
-> -  * port 1: represents the DPI input.
-> -  Other ports will be added later to support the new kind of inputs.
-> -
-> -- one subnode per DSI device connected on the DSI bus. Each DSI device should
-> -  contain a reg property encoding its virtual channel.
-> -
-> -Example:
-> -	dsi0: dsi@fd0c0000 {
-> -		compatible = "cdns,dsi";
-> -		reg = <0x0 0xfd0c0000 0x0 0x1000>;
-> -		clocks = <&pclk>, <&sysclk>;
-> -		clock-names = "dsi_p_clk", "dsi_sys_clk";
-> -		interrupts = <1>;
-> -		phys = <&dphy0>;
-> -		phy-names = "dphy";
-> -		#address-cells = <1>;
-> -		#size-cells = <0>;
-> -
-> -		ports {
-> -			#address-cells = <1>;
-> -			#size-cells = <0>;
-> -
-> -			port@1 {
-> -				reg = <1>;
-> -				dsi0_dpi_input: endpoint {
-> -					remote-endpoint = <&xxx_dpi_output>;
-> -				};
-> -			};
-> -		};
-> -
-> -		panel: dsi-dev@0 {
-> -			compatible = "<vendor,panel>";
-> -			reg = <0>;
-> -		};
-> -	};
-> -
-> -or
-> -
-> -	dsi0: dsi@fd0c0000 {
-> -		compatible = "cdns,dsi";
-> -		reg = <0x0 0xfd0c0000 0x0 0x1000>;
-> -		clocks = <&pclk>, <&sysclk>;
-> -		clock-names = "dsi_p_clk", "dsi_sys_clk";
-> -		interrupts = <1>;
-> -		phys = <&dphy1>;
-> -		phy-names = "dphy";
-> -		#address-cells = <1>;
-> -		#size-cells = <0>;
-> -
-> -		ports {
-> -			#address-cells = <1>;
-> -			#size-cells = <0>;
-> -
-> -			port@0 {
-> -				reg = <0>;
-> -				#address-cells = <1>;
-> -				#size-cells = <0>;
-> -
-> -				dsi0_output: endpoint@0 {
-> -					reg = <0>;
-> -					remote-endpoint = <&dsi_panel_input>;
-> -				};
-> -			};
-> -
-> -			port@1 {
-> -				reg = <1>;
-> -				dsi0_dpi_input: endpoint {
-> -					remote-endpoint = <&xxx_dpi_output>;
-> -				};
-> -			};
-> -		};
-> -	};
-> -
-> -	i2c@xxx {
-> -		panel: panel@59 {
-> -			compatible = "<vendor,panel>";
-> -			reg = <0x59>;
-> -
-> -			port {
-> -				dsi_panel_input: endpoint {
-> -					remote-endpoint = <&dsi0_output>;
-> -				};
-> -			};
-> -		};
-> -	};
-> diff --git a/Documentation/devicetree/bindings/display/bridge/cdns,dsi.yaml b/Documentation/devicetree/bindings/display/bridge/cdns,dsi.yaml
-> new file mode 100644
-> index 000000000000..ccedc73d8c18
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/display/bridge/cdns,dsi.yaml
-> @@ -0,0 +1,198 @@
-> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/display/bridge/cdns,dsi.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+>  arch/s390/kernel/crash_dump.c | 65 +++++++++++++++++++++++++++--------
+>  1 file changed, 50 insertions(+), 15 deletions(-)
+>
+> diff --git a/arch/s390/kernel/crash_dump.c b/arch/s390/kernel/crash_dump.c
+> index 28124d0fa1d5..ac873245d6f0 100644
+> --- a/arch/s390/kernel/crash_dump.c
+> +++ b/arch/s390/kernel/crash_dump.c
+> @@ -210,6 +210,52 @@ static int copy_oldmem_user(void __user *dst, unsigned long src, size_t count)
+>  	return 0;
+>  }
+>  
+> +#define iterate_iovec(i, n, base, len, off, __p, STEP) {	\
+> +	size_t off = 0;						\
+> +	size_t skip = i->iov_offset;				\
+> +	do {							\
+> +		len = min(n, __p->iov_len - skip);		\
+> +		if (likely(len)) {				\
+> +			base = __p->iov_base + skip;		\
+> +			len -= (STEP);				\
+> +			off += len;				\
+> +			skip += len;				\
+> +			n -= len;				\
+> +			if (skip < __p->iov_len)		\
+> +				break;				\
+> +		}						\
+> +		__p++;						\
+> +		skip = 0;					\
+> +	} while (n);						\
+> +	i->iov_offset = skip;					\
+> +	n = off;						\
+> +}
 > +
-> +title: Cadence DSI bridge
+> +#define __iterate_and_advance(i, n, base, len, off, I, K) {	\
+> +	if (unlikely(i->count < n))				\
+> +		n = i->count;					\
+> +	if (likely(n)) {					\
+> +		if (likely(iter_is_iovec(i))) {			\
+> +			const struct iovec *iov = i->iov;	\
+> +			void __user *base;			\
+> +			size_t len;				\
+> +			iterate_iovec(i, n, base, len, off,	\
+> +						iov, (I))	\
+> +			i->nr_segs -= iov - i->iov;		\
+> +			i->iov = iov;				\
+> +		} else if (iov_iter_is_kvec(i)) {		\
+> +			const struct kvec *kvec = i->kvec;	\
+> +			void *base;				\
+> +			size_t len;				\
+> +			iterate_iovec(i, n, base, len, off,	\
+> +						kvec, (K))	\
+> +			i->nr_segs -= kvec - i->kvec;		\
+> +			i->kvec = kvec;				\
+> +		}						\
+> +		i->count -= n;					\
+> +	}							\
+> +}
 > +
-> +maintainers:
-> +  - Boris Brezillon <boris.brezillon@bootlin.com>
-> +
-> +description: |
-> +   CDNS DSI is a bridge device which converts DPI to DSI
-> +
-> +properties:
-> +  compatible:
-> +    items:
+>  /*
+>   * Copy one page from "oldmem"
+>   */
+> @@ -217,25 +263,14 @@ ssize_t copy_oldmem_page(struct iov_iter *iter, unsigned long pfn, size_t csize,
+>  			 unsigned long offset)
+>  {
+>  	unsigned long src;
+> -	int rc;
+>  
+>  	if (!(iter_is_iovec(iter) || iov_iter_is_kvec(iter)))
+>  		return -EINVAL;
+> -	/* Multi-segment iterators are not supported */
+> -	if (iter->nr_segs > 1)
+> -		return -EINVAL;
+> -	if (!csize)
+> -		return 0;
+>  	src = pfn_to_phys(pfn) + offset;
+> -
+> -	/* XXX: pass the iov_iter down to a common function */
+> -	if (iter_is_iovec(iter))
+> -		rc = copy_oldmem_user(iter->iov->iov_base, src, csize);
+> -	else
+> -		rc = copy_oldmem_kernel(iter->kvec->iov_base, src, csize);
+> -	if (rc < 0)
+> -		return rc;
+> -	iov_iter_advance(iter, csize);
+> +	__iterate_and_advance(iter, csize, base, len, off,
+> +		({ copy_oldmem_user(base, src + off, len) < 0 ? csize : 0; }),
+> +		({ copy_oldmem_kernel(base, src + off, len) < 0 ? csize : 0; })
 
-These are not items and it does not make any sense, because you remove
-it in second patch. Just make it an enum.
+Question
+--------
+About return value of STEP in iterate_iovec().
+We return "csize" in case copy_oldmem_*() fails.
+If i'm not mistaken this could lead to an overflow in iterate_iovec():
 
-> +      - const: cdns,dsi
-> +
-> +  reg:
-> +    items:
-> +      - description:
-> +          Register block for controller's registers.
-> +
-> +  clocks:
-> +    items:
-> +      - description: PSM clock, used by the IP
-> +      - description: sys clock, used by the IP
-> +
-> +  clock-names:
-> +    items:
-> +      - const: dsi_p_clk
-> +      - const: dsi_sys_clk
-> +
-> +  phys:
-> +    maxItems: 1
-> +    description: phandle link to the MIPI D-PHY controller.
-> +
-> +  phy-names:
-> +    const: dphy
-> +
-> +  power-domains:
-> +    maxItems: 1
+  len -= (STEP);
 
-This was not present in old bindings and your commit msg says it is only
-a conversion.
+Because len could be less than csize in case iovec consists of multiple
+segments, one of which is less than csize.
 
-> +
-> +  interrupts:
-> +    maxItems: 1
-> +
-> +  resets:
-> +    maxItems: 1
-> +    description: PHY reset.
-> +
-> +  reset-names:
-> +    const: dsi_p_rst
-> +
-> +  ports:
-> +    $ref: /schemas/graph.yaml#/properties/ports
-> +
-> +    properties:
-> +      port@0:
-> +        $ref: /schemas/graph.yaml#/properties/port
-> +        description:
-> +          Output port representing the DSI output. It can have
-> +          most 4 endpoints. The endpoint number is directly encoding
-> +          the DSI virtual channel used by this device.
-> +
-> +      port@1:
-> +        $ref: /schemas/graph.yaml#/properties/port
-> +        description:
-> +          Input port representing the DP bridge input.
-> +
-> +    required:
-> +      - port@1
-> +
-> +allOf:
-> +  - $ref: ../dsi-controller.yaml#
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +  - interrupts
-> +  - clocks
-> +  - clock-names
-> +  - phys
-> +  - phy-names
-> +  - ports
-> +
-> +unevaluatedProperties: false
-> +
+Better to return len ?
 
-Best regards,
-Krzysztof
+({ copy_oldmem_user(base, src + off, len) < 0 ? len : 0; })
+
+> +	)
+>  	return csize;
+>  }
+
+Another thing is that now we never report any errors in contrast to
+the version before. This is OK ?
+Maybe set an error flag while iterating and then when the iteration is
+done, check the flag and return an error ?
+
+
+
+>  
+> -- 
+> 2.34.1
+
+
+Otherwise, looks good to me.
+Tested on LPAR and zVM , all our tela-kernel kdump tests in
+tests/dump/kdump work now.
+
+Reviewed-by: Alexander Egorenkov <egorenar@linux.ibm.com>
+Tested-by: Alexander Egorenkov <egorenar@linux.ibm.com>
+
+Regards
+Alex

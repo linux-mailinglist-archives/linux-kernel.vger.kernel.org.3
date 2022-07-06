@@ -2,94 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E954568360
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 11:26:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CC12556833C
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 11:17:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232019AbiGFJRl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Jul 2022 05:17:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60948 "EHLO
+        id S233057AbiGFJPT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Jul 2022 05:15:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58750 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231305AbiGFJRj (ORCPT
+        with ESMTP id S232924AbiGFJPI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Jul 2022 05:17:39 -0400
-Received: from mail-qt1-f173.google.com (mail-qt1-f173.google.com [209.85.160.173])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E943F1D
-        for <linux-kernel@vger.kernel.org>; Wed,  6 Jul 2022 02:17:35 -0700 (PDT)
-Received: by mail-qt1-f173.google.com with SMTP id bs20so17373300qtb.11
-        for <linux-kernel@vger.kernel.org>; Wed, 06 Jul 2022 02:17:35 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=N5bac8l9SxzDPCg8iINwZ/ihRJfBHL5uFQtEx4wJI88=;
-        b=y6z3DMha2liFgpENA6KifpWCPnxnR3MF52rrpZO0trFRvPd069l3q4mjccd0jF5n83
-         x73D5N7GokdTyDhNMF1Nf/zYn31ZaztXk5NQGRuUoDSx3090HvrP/GviziKMDJQRj7d6
-         tNyMrbioqXiy3RQvacNwj7gKxK2yRAwULG4VPFGB+1fGbgWEOSoQhaeGBY311oes0fWF
-         EtwXh4+eebJMVOLbRPCjuJE9Sd8XPQHwXA5GvK+JssbtT83sUKKDiDsWpEG2Cyp6+RZG
-         KmHqDHLc5w1hYlQylyew4x2O5cbMzvOfDtxzXdCBEcyK0wqjRSGSHll83NZi1JyPrV4/
-         SQ3A==
-X-Gm-Message-State: AJIora98/c1W5slSeD2YB5HJWsXN2aFy8s/fxMG/WS+1gWkBL9eKdyvN
-        p6XydEmP1Fea+V3Ke0IW4WhFSf+NmmYrNg==
-X-Google-Smtp-Source: AGRyM1v6Ax7NuZ6jjlFLaMHF0fIErMH9lXZZPm1eLDChTOZ+cNTuqTmTSb3kB75N1USmE+gJ9PfQ6A==
-X-Received: by 2002:ad4:5dc1:0:b0:462:194:bc7a with SMTP id m1-20020ad45dc1000000b004620194bc7amr36751615qvh.87.1657099054355;
-        Wed, 06 Jul 2022 02:17:34 -0700 (PDT)
-Received: from mail-yb1-f179.google.com (mail-yb1-f179.google.com. [209.85.219.179])
-        by smtp.gmail.com with ESMTPSA id f15-20020ac87f0f000000b00304e8938800sm25213055qtk.96.2022.07.06.02.17.33
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 06 Jul 2022 02:17:34 -0700 (PDT)
-Received: by mail-yb1-f179.google.com with SMTP id c143so17765388ybf.3
-        for <linux-kernel@vger.kernel.org>; Wed, 06 Jul 2022 02:17:33 -0700 (PDT)
-X-Received: by 2002:a5b:6c1:0:b0:669:a7c3:4c33 with SMTP id
- r1-20020a5b06c1000000b00669a7c34c33mr42274477ybq.543.1657099053737; Wed, 06
- Jul 2022 02:17:33 -0700 (PDT)
+        Wed, 6 Jul 2022 05:15:08 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 659A1C23;
+        Wed,  6 Jul 2022 02:15:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1657098905; x=1688634905;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=+VI0QHCyPONLMhvZQIjJCP6FWIqDVbefx+zx+Z98RBc=;
+  b=FqBCdX+dKwjfCTP4qWzmWXOyXVGACg4qF/Ljw8Bsah3nJYe1X/NVDB/c
+   UpRnDBSXNg+OJmn0UY1z7fyK+zhcHh6EggVYruSKhPXVLZ9YU/pMNpHPg
+   YeUaeHoLdJc1LcyG652+uaAyeiQ2eT1Lt7oj8bGSWNG05UpOtSCGLTymM
+   NTZdLbMdUeApSDbPzn93fwig6pVTBnKAfJ4bbHbqJbGdgT8Xt4DE76FDh
+   4iSRA9KZw4/ZM0BvD0XssGz1DSPK4+0x5KYPlHN7HBAD4/y+iHmYsTuhH
+   udojrgBt4/Hnr2IS73rudankdwaWIumkcq46tBHHtyX3vni0KGHxZWMzI
+   A==;
+X-IronPort-AV: E=Sophos;i="5.92,249,1650956400"; 
+   d="scan'208";a="170971252"
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa5.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 06 Jul 2022 02:15:04 -0700
+Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
+ chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.17; Wed, 6 Jul 2022 02:15:04 -0700
+Received: from localhost.localdomain (10.10.115.15) by
+ chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server id
+ 15.1.2375.17 via Frontend Transport; Wed, 6 Jul 2022 02:15:01 -0700
+From:   Claudiu Beznea <claudiu.beznea@microchip.com>
+To:     <herbert@gondor.apana.org.au>, <davem@davemloft.net>,
+        <nicolas.ferre@microchip.com>, <alexandre.belloni@bootlin.com>
+CC:     <linux-crypto@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>
+Subject: [PATCH] crypto: atmel-tdes: initialize tdes_dd while declaring
+Date:   Wed, 6 Jul 2022 12:17:27 +0300
+Message-ID: <20220706091727.831036-1-claudiu.beznea@microchip.com>
+X-Mailer: git-send-email 2.33.0
 MIME-Version: 1.0
-References: <20220628084903.3147123-1-yangyingliang@huawei.com>
-In-Reply-To: <20220628084903.3147123-1-yangyingliang@huawei.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Wed, 6 Jul 2022 11:17:22 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdV=YG_EMFO0jq7s4nH=VN3aWox3=+fWuF46HVHdWCDdMg@mail.gmail.com>
-Message-ID: <CAMuHMdV=YG_EMFO0jq7s4nH=VN3aWox3=+fWuF46HVHdWCDdMg@mail.gmail.com>
-Subject: Re: [PATCH -next v2] m68k: virt: platform: fix missing
- platform_device_unregister() on error in virt_platform_init()
-To:     Yang Yingliang <yangyingliang@huawei.com>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-m68k <linux-m68k@lists.linux-m68k.org>,
-        Laurent Vivier <laurent@vivier.eu>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 28, 2022 at 10:39 AM Yang Yingliang
-<yangyingliang@huawei.com> wrote:
-> Add the missing platform_device_unregister() before return
-> from virt_platform_init() in the error handling case.
->
-> Fixes: 05d51e42df06 ("m68k: Introduce a virtual m68k machine")
-> Reported-by: Hulk Robot <hulkci@huawei.com>
-> Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
-> ---
-> v2:
->   change for loop to while at lable err_unregister_rtc_virtio.
+Initialize sha_dd with platform_get_drvdata() when declaring it.
 
-Reviewed-by: Geert Uytterhoeven <geert@linux-m68k.org>
-i.e. will queue in the m68k for-v5.20 branch.
+Signed-off-by: Claudiu Beznea <claudiu.beznea@microchip.com>
+---
 
-Gr{oetje,eeting}s,
+Hi,
 
-                        Geert
+This patch is based on patch at [1].
 
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+[1] https://patchwork.kernel.org/project/linux-crypto/patch/20220705205144.131702-3-u.kleine-koenig@pengutronix.de
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+Thank you,
+Claudiu Beznea
+
+ drivers/crypto/atmel-tdes.c | 4 +---
+ 1 file changed, 1 insertion(+), 3 deletions(-)
+
+diff --git a/drivers/crypto/atmel-tdes.c b/drivers/crypto/atmel-tdes.c
+index a5e78aa08bf0..8b7bc1076e0d 100644
+--- a/drivers/crypto/atmel-tdes.c
++++ b/drivers/crypto/atmel-tdes.c
+@@ -1263,9 +1263,7 @@ static int atmel_tdes_probe(struct platform_device *pdev)
+ 
+ static int atmel_tdes_remove(struct platform_device *pdev)
+ {
+-	struct atmel_tdes_dev *tdes_dd;
+-
+-	tdes_dd = platform_get_drvdata(pdev);
++	struct atmel_tdes_dev *tdes_dd = platform_get_drvdata(pdev);
+ 
+ 	spin_lock(&atmel_tdes.lock);
+ 	list_del(&tdes_dd->list);
+-- 
+2.33.0
+

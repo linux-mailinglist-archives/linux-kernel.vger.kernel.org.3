@@ -2,155 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D1A55681D4
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 10:40:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ED7CD5681CD
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 10:40:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231718AbiGFIgX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Jul 2022 04:36:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48746 "EHLO
+        id S231181AbiGFIif (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Jul 2022 04:38:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51118 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232377AbiGFIgU (ORCPT
+        with ESMTP id S231720AbiGFIi3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Jul 2022 04:36:20 -0400
-Received: from mail-pg1-x531.google.com (mail-pg1-x531.google.com [IPv6:2607:f8b0:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6CE5248DF
-        for <linux-kernel@vger.kernel.org>; Wed,  6 Jul 2022 01:36:15 -0700 (PDT)
-Received: by mail-pg1-x531.google.com with SMTP id bf13so421154pgb.11
-        for <linux-kernel@vger.kernel.org>; Wed, 06 Jul 2022 01:36:15 -0700 (PDT)
+        Wed, 6 Jul 2022 04:38:29 -0400
+Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92A091FE
+        for <linux-kernel@vger.kernel.org>; Wed,  6 Jul 2022 01:38:28 -0700 (PDT)
+Received: by mail-wr1-x433.google.com with SMTP id d16so14624585wrv.10
+        for <linux-kernel@vger.kernel.org>; Wed, 06 Jul 2022 01:38:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ozlabs-ru.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=3rzfxOGSqbmsMXygj1P/cqh2Us2vss/rVotjH7eOiew=;
-        b=dk2nJfeFYSbNNmJ7tfrqvCIB0euid3h5zOgKmeIekOTSjhv32mCcyofMLQzJOxVoHK
-         aRq8F2c7iJUjCTd7Y/R57xcY2bQaG6ioi6kv+TLcL+BJXAejshlsS8xum/OPiXvWATUT
-         vdpXbQt44L+uRaYXT/JYB1kPPRa5y4RCwgzLVcx6cO8cxsxhXpGhmN3kN09lXKVIZ1EV
-         2RM/eb4YmuKY00crYGVaIq/BcRRUuz6NJ06G7GmqQXyCv3np8UGtERkM6G7D8uEfqBjH
-         kNj56D5Yll5Oi4SUi1xuGmI0nMVIO/WeFD/kdtiHRvSGSaLJFJ39dLB9U3M7/SenAMsI
-         7e5g==
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=jvy9fZnYZOoUrKY4T2EHzyax/+pT0S6ZamgoWmCY7lI=;
+        b=Nrhlvi6Z3KY701t0TfH8JnJ1eqEH2mzMamvFfXkAzFp4yCik2wthX5b3eiGElyvktY
+         twrPjYnxH4Az3+UmhZZyi4kamjX7dmvkLuZ3fe6Y1Zwwi7fdAUSUWpMsVoLnc6Q6rzvW
+         qQU61MwwrRJzMAfPB1T4+5euhuz6TkkhTHBkZjlLyqQmV3/u0RSXtgyy89UsQGTSptFa
+         rbxm5yZOIAAt2gicjScl7bUX2ZcLzlqji8MJM9Bzs/Mo7PsrQ05mNlXrxDJiUjYMLehx
+         AwXhr7GPmcZZgqAmb6q2D5c6t6TBjdN1QLyjaESLYjidadwhnFPeBL/fEiaKbpTIE6rX
+         PlYQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=3rzfxOGSqbmsMXygj1P/cqh2Us2vss/rVotjH7eOiew=;
-        b=qA8P1WImQrgkr3EP2YbE3SEeSEmr41W9XjpUhQy8U8Z9LrFrLNBl6USxNOQhpRKoXh
-         Y0/cI+y+4ehNfm3TXcZGnXeaMfKacQ13M5siu60ACzFljv1n2UqA7q51H9EEt4NJLMUS
-         EMNIFWwowgl0/V/gmEuVujM29pUbMaIxIX1vUmQcYy4c7bm4fDIpxNukNgL5k969NLtP
-         GPiytVOK2YM7dGSIVJkxcwymJDe/HrmNlsI61uV5XxD+KEch0QUlj2ushJMGxiUkMP9K
-         BtJqo7g6J5gWASYMtKoqqg/gHTf3QWIChEakdd+FpJCDZ4ixabp1NMp8Re0ufhSIVDw/
-         5Mkg==
-X-Gm-Message-State: AJIora/RvupaIO5llVzwiTPBgVaGzjRDqhAowzK+Qed/0uOEg+v+9hXy
-        E1w8KrRWN+vOqyubXJGRW4mB8g==
-X-Google-Smtp-Source: AGRyM1tFhqz+nKiml8dYdUjMlqXU6Xc6JmbRL/P4emD0Q/E95wuRF7UkZpzP0rKmsb8rD5oZaq+n2Q==
-X-Received: by 2002:a05:6a00:17a7:b0:525:4306:72ad with SMTP id s39-20020a056a0017a700b00525430672admr45748510pfg.42.1657096575284;
-        Wed, 06 Jul 2022 01:36:15 -0700 (PDT)
-Received: from [192.168.10.153] (203-7-124-83.dyn.iinet.net.au. [203.7.124.83])
-        by smtp.gmail.com with ESMTPSA id m14-20020a056a00080e00b00525b61f4792sm19405754pfk.109.2022.07.06.01.36.10
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 06 Jul 2022 01:36:14 -0700 (PDT)
-Message-ID: <aef1d470-e8a0-4ba8-2a55-adf05b836684@ozlabs.ru>
-Date:   Wed, 6 Jul 2022 18:38:09 +1000
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=jvy9fZnYZOoUrKY4T2EHzyax/+pT0S6ZamgoWmCY7lI=;
+        b=CZdaHpcDokaD+C+fskwhVLQG6EuiSqmE0O0PLkHO0LWtAZ8F6jx1sdtCEG9sTKD829
+         5xhdPLKK4cy1OyJtF/2wPEG/YjmGx+N4Mrk/iYZspY+V4TvW+8AD5KE+PMygZk3eogsW
+         mQyuMbIK7MuZKTdYkf3+ocNDDg77xVeESLRSfPcCpjUKJCp/9+iqQ3/RKwoTbMIlaYbf
+         /qaxQctjt5M5Xot/18E2r6DKb/Xa2aYNRtE+BjTv4j9VCiKkv9F4X3vN/RDtJ5gDBDaR
+         ldSHOotD2OeL04sYC8WELoAZnixvGJXl3SO9Mr5r90ZpawgfTGiY0HzRwFn4m83Uf81A
+         yv1Q==
+X-Gm-Message-State: AJIora8RH6gOq3nyhw0hvi8jzA48Blsp24WzGYJqJe0/9m1tOL+17pla
+        WrI74oEaiENn0ObO9iZH1FPgTA==
+X-Google-Smtp-Source: AGRyM1u3aF0xlinqVbRSOVIwu8dj8kY7lVCFFrYuXzoizRjf/6/698o7/GM5e2My59isg+g9TMgrJg==
+X-Received: by 2002:a05:6000:1e10:b0:21b:98c7:d35e with SMTP id bj16-20020a0560001e1000b0021b98c7d35emr38383139wrb.30.1657096706860;
+        Wed, 06 Jul 2022 01:38:26 -0700 (PDT)
+Received: from maple.lan (cpc141216-aztw34-2-0-cust174.18-1.cable.virginm.net. [80.7.220.175])
+        by smtp.gmail.com with ESMTPSA id j22-20020a05600c1c1600b003a046549a85sm21339238wms.37.2022.07.06.01.38.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 06 Jul 2022 01:38:26 -0700 (PDT)
+Date:   Wed, 6 Jul 2022 09:38:24 +0100
+From:   Daniel Thompson <daniel.thompson@linaro.org>
+To:     Rob Herring <robh@kernel.org>
+Cc:     Lee Jones <lee.jones@linaro.org>,
+        Jingoo Han <jingoohan1@gmail.com>,
+        Helge Deller <deller@gmx.de>, Jingoo Han <jg1.han@samsung.com>,
+        dri-devel@lists.freedesktop.org, linux-fbdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] Revert "drivers/video/backlight/platform_lcd.c: add
+ support for device tree based probe"
+Message-ID: <20220706083824.yow4e2hqthoqffol@maple.lan>
+References: <20220629210024.815761-1-robh@kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.0
-Subject: Re: [PATCH v2 09/14] iommu/ipmmu-vmsa: Clean up bus_set_iommu()
-Content-Language: en-US
-To:     Robin Murphy <robin.murphy@arm.com>, joro@8bytes.org,
-        will@kernel.org
-Cc:     jean-philippe@linaro.org, zhang.lyra@gmail.com,
-        linux-kernel@vger.kernel.org, iommu@lists.linux-foundation.org,
-        thierry.reding@gmail.com, linux-arm-kernel@lists.infradead.org,
-        gerald.schaefer@linux.ibm.com
-References: <cover.1650890638.git.robin.murphy@arm.com>
- <01a58dcc9c70836b7556d54dbdac6a340f206781.1650890638.git.robin.murphy@arm.com>
-From:   Alexey Kardashevskiy <aik@ozlabs.ru>
-In-Reply-To: <01a58dcc9c70836b7556d54dbdac6a340f206781.1650890638.git.robin.murphy@arm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220629210024.815761-1-robh@kernel.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 28/04/2022 23:18, Robin Murphy wrote:
-> Stop calling bus_set_iommu() since it's now unnecessary. This also
-> leaves the custom initcall effectively doing nothing but register
-> the driver, which no longer needs to happen early either, so convert
-> it to builtin_platform_driver().
+On Wed, Jun 29, 2022 at 03:00:23PM -0600, Rob Herring wrote:
+> This reverts commit 52e842432f36d5b15227d0ee0d2aa3d2bc3cc0b2.
 > 
-> Signed-off-by: Robin Murphy <robin.murphy@arm.com>
+> The DT support never would have worked because there's no platform_data
+> providing ops. There's not any documented binding for it either.
+> 
+> Cc: Jingoo Han <jg1.han@samsung.com>
+> Signed-off-by: Rob Herring <robh@kernel.org>
+
+Reviewed-by: Daniel Thompson <daniel.thompson@linaro.org>
+
+
+Daniel.
+
+
 > ---
->   drivers/iommu/ipmmu-vmsa.c | 35 +----------------------------------
->   1 file changed, 1 insertion(+), 34 deletions(-)
+>  drivers/video/backlight/platform_lcd.c | 10 ----------
+>  1 file changed, 10 deletions(-)
 > 
-> diff --git a/drivers/iommu/ipmmu-vmsa.c b/drivers/iommu/ipmmu-vmsa.c
-> index 8fdb84b3642b..2549d32f0ddd 100644
-> --- a/drivers/iommu/ipmmu-vmsa.c
-> +++ b/drivers/iommu/ipmmu-vmsa.c
-> @@ -1090,11 +1090,6 @@ static int ipmmu_probe(struct platform_device *pdev)
->   		ret = iommu_device_register(&mmu->iommu, &ipmmu_ops, &pdev->dev);
->   		if (ret)
->   			return ret;
-> -
-> -#if defined(CONFIG_IOMMU_DMA)
-> -		if (!iommu_present(&platform_bus_type))
-> -			bus_set_iommu(&platform_bus_type, &ipmmu_ops);
-> -#endif
->   	}
->   
->   	/*
-
-The comment which starts here did not make it to the patch but it should 
-have as it mentions bus_set_iommu() which is gone by the end of the series.
-
-
-More general question/request - could you please include the exact sha1 
-the patchset is based on? It did not apply to any current trees and 
-while it was trivial, it was slightly annoying to resolve the conflicts 
-:)  Thanks,
-
-
-> @@ -1168,32 +1163,4 @@ static struct platform_driver ipmmu_driver = {
->   	.probe = ipmmu_probe,
->   	.remove	= ipmmu_remove,
->   };
-> -
-> -static int __init ipmmu_init(void)
-> -{
-> -	struct device_node *np;
-> -	static bool setup_done;
-> -	int ret;
-> -
-> -	if (setup_done)
-> -		return 0;
-> -
-> -	np = of_find_matching_node(NULL, ipmmu_of_ids);
-> -	if (!np)
-> -		return 0;
-> -
-> -	of_node_put(np);
-> -
-> -	ret = platform_driver_register(&ipmmu_driver);
-> -	if (ret < 0)
-> -		return ret;
-> -
-> -#if defined(CONFIG_ARM) && !defined(CONFIG_IOMMU_DMA)
-> -	if (!iommu_present(&platform_bus_type))
-> -		bus_set_iommu(&platform_bus_type, &ipmmu_ops);
+> diff --git a/drivers/video/backlight/platform_lcd.c b/drivers/video/backlight/platform_lcd.c
+> index b2bfbf070200..dc37494baf42 100644
+> --- a/drivers/video/backlight/platform_lcd.c
+> +++ b/drivers/video/backlight/platform_lcd.c
+> @@ -12,7 +12,6 @@
+>  #include <linux/fb.h>
+>  #include <linux/backlight.h>
+>  #include <linux/lcd.h>
+> -#include <linux/of.h>
+>  #include <linux/slab.h>
+>  
+>  #include <video/platform_lcd.h>
+> @@ -133,19 +132,10 @@ static int platform_lcd_resume(struct device *dev)
+>  static SIMPLE_DEV_PM_OPS(platform_lcd_pm_ops, platform_lcd_suspend,
+>  			platform_lcd_resume);
+>  
+> -#ifdef CONFIG_OF
+> -static const struct of_device_id platform_lcd_of_match[] = {
+> -	{ .compatible = "platform-lcd" },
+> -	{},
+> -};
+> -MODULE_DEVICE_TABLE(of, platform_lcd_of_match);
 > -#endif
 > -
-> -	setup_done = true;
-> -	return 0;
-> -}
-> -subsys_initcall(ipmmu_init);
-> +builtin_platform_driver(ipmmu_driver);
-
--- 
-Alexey
+>  static struct platform_driver platform_lcd_driver = {
+>  	.driver		= {
+>  		.name	= "platform-lcd",
+>  		.pm	= &platform_lcd_pm_ops,
+> -		.of_match_table = of_match_ptr(platform_lcd_of_match),
+>  	},
+>  	.probe		= platform_lcd_probe,
+>  };
+> -- 
+> 2.34.1
+> 

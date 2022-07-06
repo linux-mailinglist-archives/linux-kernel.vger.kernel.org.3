@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F6665691A4
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 20:23:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E589C5691A3
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 20:23:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233097AbiGFSXG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Jul 2022 14:23:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35812 "EHLO
+        id S233721AbiGFSXJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Jul 2022 14:23:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35824 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229901AbiGFSXE (ORCPT
+        with ESMTP id S230496AbiGFSXF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Jul 2022 14:23:04 -0400
-Received: from mail-qt1-x829.google.com (mail-qt1-x829.google.com [IPv6:2607:f8b0:4864:20::829])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B7B720193
-        for <linux-kernel@vger.kernel.org>; Wed,  6 Jul 2022 11:23:03 -0700 (PDT)
-Received: by mail-qt1-x829.google.com with SMTP id ay10so19426652qtb.1
-        for <linux-kernel@vger.kernel.org>; Wed, 06 Jul 2022 11:23:03 -0700 (PDT)
+        Wed, 6 Jul 2022 14:23:05 -0400
+Received: from mail-qt1-x833.google.com (mail-qt1-x833.google.com [IPv6:2607:f8b0:4864:20::833])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51927275DF
+        for <linux-kernel@vger.kernel.org>; Wed,  6 Jul 2022 11:23:04 -0700 (PDT)
+Received: by mail-qt1-x833.google.com with SMTP id ck6so19426498qtb.7
+        for <linux-kernel@vger.kernel.org>; Wed, 06 Jul 2022 11:23:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=Tec8Pa6+4aUBm7TR1OiqeNa6UoFtj7s3ohyHFfAvUcY=;
-        b=liJUqlVUP/V3F/KatPRarEzCwnL/FqEy36rqiMMklCWcJMIs6ILOVuE4H3OYdpKROq
-         ld87lD7HInYelDTb7kjePfisvfAJqZBJpFAYQZO5YvZsZ9HwlC5bXHBXh/KHJhYlvywR
-         W2MugFRwpQk5t/kVIbbDy6k/6ssnQaGW7HU29GBprffPMmXMG0F0G2Xxhl7JdPxG4tTe
-         65oVfOyEsSz0303P6+gyGlqvyOVyHlJ50QSSD12TSDQDmE7Xz9t4Jq/kC/odJhzxKVQo
-         i836Hp24FEoH10Ad+pD08rz6WWtH3szlKDYirshUq9S5Qmy99IxIVHqaik4N8QW8B8lw
-         /jBw==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=YcIiYRUAkK4hThsiTUmcop0uj0NkU+EnxuUcvjeiwcw=;
+        b=PfDnBaOf9rzqGm8iXPrycR1x+cGtlYAYfxRqPqbkAACdi8hIvPUpaak9PRr3rtVpjt
+         xiVVI5XpP1c+k7HKpSE1Ly079Dw5r4Z6MXuQ3FtGCOjtGzrKSZwYqJMDAoct76RQVyRR
+         QsTyNK2RSXrnhSL4qPhI4P7M8ltqtOVar4UKYcxFkq69E1iMOe7wN5TIbOVdm3fuh+Si
+         t1TAj++2+VfHxN3xoQXIK4o8Dah8jxheRulwm4bRXhUUfWA3wPLFnB+o7VU3AgP060gY
+         LvjFxCpVzAwII+FV/G2obR3QZpeWQhv5PnyPtchaD63oCvH5u3yfFIKklHN1bHjftHlu
+         fivw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=Tec8Pa6+4aUBm7TR1OiqeNa6UoFtj7s3ohyHFfAvUcY=;
-        b=EAaU3POByYhIDXf03ZOt9J2zoFJIAQC2ApndvJLun3taqu9xyOczobW1GyaTbyy3Er
-         N6L0eWDhnzz8vDM7LuoX9erOe4FYShyQf/ZaJSTygj4LjzBn8tdEk/2SHizuh1njBGt4
-         F9kGDqTN/bWtSANt39GXVmUHZxSxinfZCZsmIsDHzKFrXwfkIiChBJUBhhmrrthMrPbu
-         DLAUi0FBi8lekkCLik+x0eBOtNsigT0JInpOVOndPppMptjW6UDRc0MFWsBtlwI65dmk
-         ebjUix5uhhqRZO7k1hgVjQee7/KsS2xiJYDuftOP6N8F8/YgrEfLikg1hXzHAAtKn+uI
-         bjVw==
-X-Gm-Message-State: AJIora/trjYX1eETS7TUx1ZukbELPCYD5jTPQGGKZusa9RWPxgnOBOyR
-        QZJvFQAKUBLOKH8+3Qzcmrnm1dcJ16QGSw==
-X-Google-Smtp-Source: AGRyM1tSNpvVO+OEV1NpkndhEzaNeGVlNgBrfIM5uF3RaupKWCA2eMT1W3zFihDWENJdIhMPxBzNXw==
-X-Received: by 2002:a05:622a:1014:b0:319:7601:c22 with SMTP id d20-20020a05622a101400b0031976010c22mr33923749qte.509.1657131782457;
-        Wed, 06 Jul 2022 11:23:02 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=YcIiYRUAkK4hThsiTUmcop0uj0NkU+EnxuUcvjeiwcw=;
+        b=buZO0cIEAVB+0SDXvIeqlB6H/BL4/pBvg+ApEoba+kYaV4Re0hAr9ZO2hLydCVJfPe
+         hr7iORO59BKbO0S+C7yOb3W4L6I04LsPeofyr/D1cxwcQquoBSxj1GpVFNK2BbwZ7gt9
+         tT92SZ1tDKf7ZYOS1vlymZSsfDp53NjEC30mFnuYfkNM/DQCtVO57FKzcSHnG8lWTIrQ
+         CMmy+dwv5eZQfVuL3h93HUtCmID6nhcoPnkSjij0qxs+450l9BoKBb/zv68IxNn6yPJN
+         9SFeIA/QgsI03ydvU3O9m6QRBDpachD1MifDEl0wcAtJlDFe+cdns9PJUSI4ONLlvNvp
+         wcyg==
+X-Gm-Message-State: AJIora/KJ14kWyHz+NMh1pz1ld8BAeLoL54hCCk3Qq3FGDrf3HF0iFaD
+        neJ8tr3Qs2T6PvvvVvMABhBibTOWfk2trQ==
+X-Google-Smtp-Source: AGRyM1s4/Oompt0Y1loOAPg2Pry4nWKDsKMkqnqHtOmUpMzV0ZX2xJrG/qavihtlYy7V4KYIDq7D2w==
+X-Received: by 2002:a05:622a:386:b0:31d:4c75:6f63 with SMTP id j6-20020a05622a038600b0031d4c756f63mr14466710qtx.404.1657131783280;
+        Wed, 06 Jul 2022 11:23:03 -0700 (PDT)
 Received: from localhost (c-69-254-185-160.hsd1.fl.comcast.net. [69.254.185.160])
-        by smtp.gmail.com with ESMTPSA id g11-20020ac8480b000000b003051ba1f8bcsm24083569qtq.15.2022.07.06.11.23.01
+        by smtp.gmail.com with ESMTPSA id b14-20020ac84f0e000000b00317c3ce1f4esm24299121qte.45.2022.07.06.11.23.03
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 06 Jul 2022 11:23:01 -0700 (PDT)
+        Wed, 06 Jul 2022 11:23:03 -0700 (PDT)
 From:   Yury Norov <yury.norov@gmail.com>
 To:     linux-kernel@vger.kernel.org,
         Alexander Lobakin <alexandr.lobakin@intel.com>,
@@ -64,10 +64,12 @@ To:     linux-kernel@vger.kernel.org,
         Steven Rostedt <rostedt@goodmis.org>,
         =?UTF-8?q?Toke=20H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
 Cc:     Yury Norov <yury.norov@gmail.com>
-Subject: [PATCH 0/5] lib/find: add find_nth_bit()
-Date:   Wed,  6 Jul 2022 11:22:55 -0700
-Message-Id: <20220706182300.70862-1-yury.norov@gmail.com>
+Subject: [PATCH 1/5] lib: add find_nth(,and,andnot)_bit()
+Date:   Wed,  6 Jul 2022 11:22:56 -0700
+Message-Id: <20220706182300.70862-2-yury.norov@gmail.com>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20220706182300.70862-1-yury.norov@gmail.com>
+References: <20220706182300.70862-1-yury.norov@gmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -86,41 +88,187 @@ Usually people do it like this:
 		if (--n == 0)
 			return bit;
 
-Which is not so elegant, and very slow.
+We can do it more efficiently, if we:
+1. find a word containing Nth bit, using hweight(); and
+2. find the bit, using a helper fns(), that works similarly to
+   __ffs() and ffz().
 
-This series adds fast routines for this task, and applies them where
-appropriate.
+fns() is implemented as a simple loop. For x86_64, there's PDEP instruction
+to do that: ret = clz(pdep(1 << idx, num)). However, for large bitmaps the
+most of improvement comes from using hweight(), so I kept fns() simple.
 
-While here, move thin wrappers around find_bit() in nodemask.c to a
-corresponding header, and because nodemask.c is empty after that,
-remove it.
+New find_nth_bit() is ~70 times faster on x86_64/kvm:
+for_each_bit:                  7154190 ns,  16411 iterations
+find_nth_bit:                505493126 ns,  16315 iterations
 
-On top of "lib: cleanup bitmap-related headers":
-https://lkml.org/lkml/2022/7/6/1202
+With all that, a family of 3 new functions is added, and used where
+appropriate in the following patches.
 
-Yury Norov (5):
-  lib: add find_nth(,and,andnot)_bit()
-  lib/bitmap: add tests for find_nth_bit()
-  remove bitmap_ord_to_pos
-  cpumask: add cpumask_nth_{,and,andnot}
-  lib/nodemask: inline next_node_in() and node_random()
+Signed-off-by: Yury Norov <yury.norov@gmail.com>
+---
+ include/linux/bitops.h | 19 ++++++++++
+ include/linux/find.h   | 79 ++++++++++++++++++++++++++++++++++++++++++
+ lib/find_bit.c         | 20 +++++++++++
+ 3 files changed, 118 insertions(+)
 
- MAINTAINERS              |  1 -
- include/linux/bitmap.h   |  1 -
- include/linux/bitops.h   | 19 ++++++++++
- include/linux/cpumask.h  | 44 ++++++++++++++++++++++
- include/linux/find.h     | 79 ++++++++++++++++++++++++++++++++++++++++
- include/linux/nodemask.h | 27 +++++++++++---
- lib/Makefile             |  2 +-
- lib/bitmap.c             | 36 ++----------------
- lib/cpumask.c            | 26 ++++++-------
- lib/find_bit.c           | 20 ++++++++++
- lib/find_bit_benchmark.c | 17 +++++++++
- lib/nodemask.c           | 31 ----------------
- lib/test_bitmap.c        | 36 +++++++++++++++++-
- 13 files changed, 250 insertions(+), 89 deletions(-)
- delete mode 100644 lib/nodemask.c
-
+diff --git a/include/linux/bitops.h b/include/linux/bitops.h
+index 7aaed501f768..86072cfcbe17 100644
+--- a/include/linux/bitops.h
++++ b/include/linux/bitops.h
+@@ -196,6 +196,25 @@ static inline unsigned long __ffs64(u64 word)
+ 	return __ffs((unsigned long)word);
+ }
+ 
++/**
++ * fns - find N'th set bit in a 64 bit word
++ * @word: The 64 bit word
++ * @n: Bit to find
++ */
++static inline unsigned long fns(unsigned long word, unsigned int n)
++{
++	unsigned int bit;
++
++	while (word) {
++		bit = __ffs(word);
++		if (--n == 0)
++			return bit;
++		__clear_bit(bit, &word);
++	}
++
++	return BITS_PER_LONG;
++}
++
+ /**
+  * assign_bit - Assign value to a bit in memory
+  * @nr: the bit to set
+diff --git a/include/linux/find.h b/include/linux/find.h
+index 424ef67d4a42..00a24bc596d0 100644
+--- a/include/linux/find.h
++++ b/include/linux/find.h
+@@ -12,6 +12,8 @@ extern unsigned long _find_next_bit(const unsigned long *addr1,
+ 		const unsigned long *addr2, unsigned long nbits,
+ 		unsigned long start, unsigned long invert, unsigned long le);
+ extern unsigned long _find_first_bit(const unsigned long *addr, unsigned long size);
++unsigned long _find_nth_bit(const unsigned long *addr1, const unsigned long *addr2,
++				unsigned long size, unsigned long n, bool not);
+ extern unsigned long _find_first_and_bit(const unsigned long *addr1,
+ 					 const unsigned long *addr2, unsigned long size);
+ extern unsigned long _find_first_zero_bit(const unsigned long *addr, unsigned long size);
+@@ -125,6 +127,83 @@ unsigned long find_first_bit(const unsigned long *addr, unsigned long size)
+ }
+ #endif
+ 
++/**
++ * find_nth_bit - find N'th set bit in a memory region
++ * @addr: The address to start the search at
++ * @size: The maximum number of bits to search
++ * @n: The number of set bit, which position is needed
++ *
++ * Returns the bit number of the N'th set bit.
++ * If no such, returns @size.
++ */
++static inline
++unsigned long find_nth_bit(const unsigned long *addr, unsigned long size, unsigned long n)
++{
++	if (n == 0 || n > size)
++		return size;
++
++	if (small_const_nbits(size)) {
++		unsigned long val =  *addr & GENMASK(size - 1, 0);
++
++		return val ? fns(val, n) : size;
++	}
++
++	return _find_nth_bit(addr, NULL, size, n, false);
++}
++
++/**
++ * find_nth_and_bit - find N'th set bit in 2 memory regions
++ * @addr1: The 1st address to start the search at
++ * @addr2: The 2nd address to start the search at
++ * @size: The maximum number of bits to search
++ * @n: The number of set bit, which position is needed
++ *
++ * Returns the bit number of the N'th set bit.
++ * If no such, returns @size.
++ */
++static inline
++unsigned long find_nth_and_bit(const unsigned long *addr1, const unsigned long *addr2,
++				unsigned long size, unsigned long n)
++{
++	if (n == 0 || n > size)
++		return size;
++
++	if (small_const_nbits(size)) {
++		unsigned long val =  *addr1 & *addr2 & GENMASK(size - 1, 0);
++
++		return val ? fns(val, n) : size;
++	}
++
++	return _find_nth_bit(addr1, addr2, size, n, false);
++}
++
++/**
++ * find_nth_andnot_bit - find N'th set bit in 2 memory regions,
++ *			 flipping bits in 2nd region
++ * @addr1: The 1st address to start the search at
++ * @addr2: The 2nd address to start the search at
++ * @size: The maximum number of bits to search
++ * @n: The number of set bit, which position is needed
++ *
++ * Returns the bit number of the N'th set bit.
++ * If no such, returns @size.
++ */
++static inline
++unsigned long find_nth_andnot_bit(const unsigned long *addr1, const unsigned long *addr2,
++				unsigned long size, unsigned long n)
++{
++	if (n == 0 || n > size)
++		return size;
++
++	if (small_const_nbits(size)) {
++		unsigned long val =  *addr1 & (~*addr2) & GENMASK(size - 1, 0);
++
++		return val ? fns(val, n) : size;
++	}
++
++	return _find_nth_bit(addr1, addr2, size, n, true);
++}
++
+ #ifndef find_first_and_bit
+ /**
+  * find_first_and_bit - find the first set bit in both memory regions
+diff --git a/lib/find_bit.c b/lib/find_bit.c
+index 1b8e4b2a9cba..7b8ad12c8cc7 100644
+--- a/lib/find_bit.c
++++ b/lib/find_bit.c
+@@ -89,6 +89,26 @@ unsigned long _find_first_bit(const unsigned long *addr, unsigned long size)
+ EXPORT_SYMBOL(_find_first_bit);
+ #endif
+ 
++unsigned long _find_nth_bit(const unsigned long *addr1, const unsigned long *addr2,
++				unsigned long size, unsigned long n, bool not)
++{
++	unsigned long val, idx, w;
++
++	for (idx = 0; idx * BITS_PER_LONG < size; idx++, n -= w) {
++		val = addr1[idx];
++		if (addr2)
++			val &= not ? ~addr2[idx] : addr2[idx];
++
++		w = hweight_long(val);
++		if (w >= n)
++			return min(idx * BITS_PER_LONG + fns(val, n), size);
++	}
++
++	return size;
++
++}
++EXPORT_SYMBOL(_find_nth_bit);
++
+ #ifndef find_first_and_bit
+ /*
+  * Find the first set bit in two memory regions.
 -- 
 2.34.1
 

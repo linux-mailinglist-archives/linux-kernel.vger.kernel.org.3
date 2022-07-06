@@ -2,209 +2,197 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8678B567E4C
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 08:21:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 20EDD567E5A
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 08:28:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230014AbiGFGVZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Jul 2022 02:21:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53668 "EHLO
+        id S230028AbiGFG2R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Jul 2022 02:28:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56104 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229455AbiGFGVY (ORCPT
+        with ESMTP id S229455AbiGFG2P (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Jul 2022 02:21:24 -0400
-Received: from www262.sakura.ne.jp (www262.sakura.ne.jp [202.181.97.72])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4646B15710
-        for <linux-kernel@vger.kernel.org>; Tue,  5 Jul 2022 23:21:23 -0700 (PDT)
-Received: from fsav115.sakura.ne.jp (fsav115.sakura.ne.jp [27.133.134.242])
-        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTP id 2666LLBA006352;
-        Wed, 6 Jul 2022 15:21:21 +0900 (JST)
-        (envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
-Received: from www262.sakura.ne.jp (202.181.97.72)
- by fsav115.sakura.ne.jp (F-Secure/fsigk_smtp/550/fsav115.sakura.ne.jp);
- Wed, 06 Jul 2022 15:21:21 +0900 (JST)
-X-Virus-Status: clean(F-Secure/fsigk_smtp/550/fsav115.sakura.ne.jp)
-Received: from [192.168.1.9] (M106072142033.v4.enabler.ne.jp [106.72.142.33])
-        (authenticated bits=0)
-        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTPSA id 2666LKZO006347
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NO);
-        Wed, 6 Jul 2022 15:21:21 +0900 (JST)
-        (envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
-Message-ID: <7ddb25ff-60e5-75be-8080-2a7465cca68c@I-love.SAKURA.ne.jp>
-Date:   Wed, 6 Jul 2022 15:21:15 +0900
+        Wed, 6 Jul 2022 02:28:15 -0400
+Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2079.outbound.protection.outlook.com [40.107.93.79])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FD0B21D;
+        Tue,  5 Jul 2022 23:28:13 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=cIEMVpS8xIs/HMa1MWPuemaHfzeBUJZKv61Q7XZwFqoOh/E7vu2rxlPmYvGSmOhGnJutui5MpzAanxfW8o54w8T3FRbvGJBcHj+Me1lYtSgQsciBw+apxadvhFwRbU7q6Jejw5uF+Pq/CQxIaV8xP/Fp4IcqqYgmUVOe3F0OM4+qDyny+WBQ4SWXn8wbyVqw2k+7hRhIdlYtUN48t7FlkzT9nlz3hHgGRaNxo5B3pG1KX25w1QuOvuVlOp4jKcRcVrAzZMpMDsvHUug2etnm/+NrI8Ttn3MET0rZlSdC62c8yHdlgS5VqBaYfYWxhd2ZYRtyLom2EO/Y4j33jaRpng==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=ZOhxWwfEe2gdOEbpD2pjMTaRdE59L5rfSB/zx9TzAy0=;
+ b=Qqxi/6cJ34FVoFu+ebq3WnvxNM2zAjP8YzYO7iYs4QlCkWdHAylqZmebt/ZlLaxKaF+7HKWzWDoyFTDGo/56DRrjhiU/bBg24kk/JlilshDoUZiTGBxP/YVlQDqWHjvA9IZksd7vM29JAtXMBk1TbklR3OXouf9tWXL+DuOxXkTVL9h86vhavPJehENB9t+IRgDrWLLNdUtLzZ1XqEqynfumqq3L4HsScSS+UjcZi1rcOYCh64h33QkHK6d1GUx7hwvCcSNlb7cd0q7S5/cve6YB4wtapE7gzGnQSVYg9FlZNJorPSiV/muIb8Rzr525ZVI/cHND4tOcDix2zPVrCw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 12.22.5.235) smtp.rcpttodomain=linux.ibm.com smtp.mailfrom=nvidia.com;
+ dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=ZOhxWwfEe2gdOEbpD2pjMTaRdE59L5rfSB/zx9TzAy0=;
+ b=Q546eqOWyVy8yIZiBdXAHdsXg8S1Er8IKfnhED/oH4GtbWwJxcrV1kR+Sr4oH1iBjrOte7bPjanQez5RGR2JrGpA2d8yeEXGQao8y7hbVw8BDbpD5qpO5W2ufGBTTgtD2SgpAgkHi4xuB7g0SZ1bi14S8Y0Gp3uqtVuWtvOeocRLhwX8Tu0dq0/N0lkWr46LU1lX+aOY7F2Cn7WekITEQF+YES4zh/OJDG998igm7uEEC+XFR1qZoP2ppGxNa/Iqs453WQmDXvHghraFW2jpSSGSI5/YohMFwldSev0ZkGaMvncuK/wXTZxIkpZlhmeLr3Z93BeOom/CpiHfZUOGHQ==
+Received: from DM6PR02CA0075.namprd02.prod.outlook.com (2603:10b6:5:1f4::16)
+ by BN8PR12MB3316.namprd12.prod.outlook.com (2603:10b6:408:42::24) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5395.15; Wed, 6 Jul
+ 2022 06:28:11 +0000
+Received: from DM6NAM11FT062.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:5:1f4:cafe::f6) by DM6PR02CA0075.outlook.office365.com
+ (2603:10b6:5:1f4::16) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5395.14 via Frontend
+ Transport; Wed, 6 Jul 2022 06:28:11 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 12.22.5.235)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 12.22.5.235 as permitted sender) receiver=protection.outlook.com;
+ client-ip=12.22.5.235; helo=mail.nvidia.com; pr=C
+Received: from mail.nvidia.com (12.22.5.235) by
+ DM6NAM11FT062.mail.protection.outlook.com (10.13.173.40) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.20.5417.15 via Frontend Transport; Wed, 6 Jul 2022 06:28:10 +0000
+Received: from rnnvmail202.nvidia.com (10.129.68.7) by DRHQMAIL107.nvidia.com
+ (10.27.9.16) with Microsoft SMTP Server (TLS) id 15.0.1497.32; Wed, 6 Jul
+ 2022 06:28:10 +0000
+Received: from rnnvmail201.nvidia.com (10.129.68.8) by rnnvmail202.nvidia.com
+ (10.129.68.7) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.26; Tue, 5 Jul 2022
+ 23:28:09 -0700
+Received: from Asurada-Nvidia.nvidia.com (10.127.8.9) by mail.nvidia.com
+ (10.129.68.8) with Microsoft SMTP Server id 15.2.986.26 via Frontend
+ Transport; Tue, 5 Jul 2022 23:28:07 -0700
+From:   Nicolin Chen <nicolinc@nvidia.com>
+To:     <kwankhede@nvidia.com>, <corbet@lwn.net>, <hca@linux.ibm.com>,
+        <gor@linux.ibm.com>, <agordeev@linux.ibm.com>,
+        <borntraeger@linux.ibm.com>, <svens@linux.ibm.com>,
+        <zhenyuw@linux.intel.com>, <zhi.a.wang@intel.com>,
+        <jani.nikula@linux.intel.com>, <joonas.lahtinen@linux.intel.com>,
+        <rodrigo.vivi@intel.com>, <tvrtko.ursulin@linux.intel.com>,
+        <airlied@linux.ie>, <daniel@ffwll.ch>, <farman@linux.ibm.com>,
+        <mjrosato@linux.ibm.com>, <pasic@linux.ibm.com>,
+        <vneethv@linux.ibm.com>, <oberpar@linux.ibm.com>,
+        <freude@linux.ibm.com>, <akrowiak@linux.ibm.com>,
+        <jjherne@linux.ibm.com>, <alex.williamson@redhat.com>,
+        <cohuck@redhat.com>, <jgg@nvidia.com>, <kevin.tian@intel.com>,
+        <hch@infradead.org>
+CC:     <jchrist@linux.ibm.com>, <kvm@vger.kernel.org>,
+        <linux-doc@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-s390@vger.kernel.org>,
+        <intel-gvt-dev@lists.freedesktop.org>,
+        <intel-gfx@lists.freedesktop.org>,
+        <dri-devel@lists.freedesktop.org>
+Subject: [RFT][PATCH v2 0/9] Update vfio_pin/unpin_pages API
+Date:   Tue, 5 Jul 2022 23:27:50 -0700
+Message-ID: <20220706062759.24946-1-nicolinc@nvidia.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 6.3; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH] char: misc: make misc_open() and misc_register() killable
-Content-Language: en-US
-From:   Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
-        arnd@arndb.de, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org,
-        Wedson Almeida Filho <wedsonaf@google.com>,
-        Dmitry Vyukov <dvyukov@google.com>
-References: <000000000000d9ff3a05bb37069e@google.com>
- <72e74af9-f1b6-e383-a2c3-6ee8a0aea5e0@I-love.SAKURA.ne.jp>
- <YsKW6VvWqvcMRBSl@kroah.com>
- <100f445e-9fa8-4f37-76aa-8359f0008c59@I-love.SAKURA.ne.jp>
- <YsLIepAXeBKT0AF/@kroah.com>
- <01a93294-e323-b9ca-7e95-a33d4b89dc47@I-love.SAKURA.ne.jp>
- <YsL5pUuydMWJ9dSQ@kroah.com>
- <617f64e3-74c8-f98b-3430-bd476867e483@I-love.SAKURA.ne.jp>
- <5665ccb2-b92b-9e1f-8bb5-a950986450ec@I-love.SAKURA.ne.jp>
- <YsRHwy6+5gask+KT@kroah.com>
- <064bbe2a-c18e-203e-9e01-b32fe9baa390@I-love.SAKURA.ne.jp>
-In-Reply-To: <064bbe2a-c18e-203e-9e01-b32fe9baa390@I-love.SAKURA.ne.jp>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 74ce2c6b-09e8-4a7d-9ace-08da5f18b2df
+X-MS-TrafficTypeDiagnostic: BN8PR12MB3316:EE_
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: =?us-ascii?Q?mZO7gOG3nLhi6C3Lkq2mRtsIT6vPO4kNZjUjtXE3dXYJCazLgguN0hB6uJZN?=
+ =?us-ascii?Q?sKGPh0+BtAH20pJVmfkQBtX4fJxrbfFmqtF5sCJw5CEYgLsjYJoCM5EBixSq?=
+ =?us-ascii?Q?PFG+sJ6dk532QQvRIlJkVha/eKkhe+h3sRJXRM8jlSrRq9eON6IybihpljQd?=
+ =?us-ascii?Q?2mKNZv+ai9YSYiQrrwahGvZhLroXGnbYGwIaL62fEKtTe1o/lzUuteL5mD2h?=
+ =?us-ascii?Q?y0UQ34PUSDvofyhLADT3+295vfFKxojHYYE8yOlCK0tWq9ccdoABj7wwxQlD?=
+ =?us-ascii?Q?PXH2Lr/eNdgUfCo/vZhKWXARf5CzESmscqSEKjT6ohNFGAjtem12FtdTU7ce?=
+ =?us-ascii?Q?2jPDt+VAfEHYCB8Y+TLIGGtb3bsmwmgp+aaFOF3TCgQpO0FxXwN09JKGn6T1?=
+ =?us-ascii?Q?CpZY18HiUzyfcwdR1Y6+k88ENWvy+QhWLKRaDrd+wkLuLwcWJNJ+CFMjYaBa?=
+ =?us-ascii?Q?IiJCpAHw84cf4mK9o1sDZV7jgwqWA3FyuFZlsi5FO0MfuxlYcCeiPHdYwA28?=
+ =?us-ascii?Q?d13JfZEjk5ilHZQHOtJOOqStC8mUsvSej2FMtEaI4MRYYXhOXZ7Bo+qD7Miy?=
+ =?us-ascii?Q?R1jZosoLgJ2lEWjT4bbN6HUjy9I6T6KpHNEcJsKbaeXN0T9rrfhjONy3tTg2?=
+ =?us-ascii?Q?K9MS1+IRpp3oqnJt2cy9g3sP+6ScmzkjP0AEsSrm1NvGmlx0Kqv2AKh6vbDn?=
+ =?us-ascii?Q?nzp9C64Qj/4x7ITN1ycR3gScymA/XxUOmVhXoyxGSODrMWIAF76Viajcf3Hj?=
+ =?us-ascii?Q?oszLMKRQgF7p8NC6LZITO30mFctNleNyr4//WmDAMQJ13YzI27TGMxJWwzO0?=
+ =?us-ascii?Q?8SE1k2oldplyOAGKYbxK/KdTPyils5D7MxgsvNGYYpDEagDAP0V8tE+vLBU8?=
+ =?us-ascii?Q?PYW9sN19a3btQonIG7jZw5PGcWIwLQmuFGPTNG9tvBbnjUDHHceM94XhUvAu?=
+ =?us-ascii?Q?AO8EpXF79gZIPK2L8sIY9HhOQnUHHh+JdeFHpgfgKkuE0xmdc9ckxH4qgF1r?=
+ =?us-ascii?Q?3NE9svdPGmY+1mYrZwNjXnd6k78KfbdnGEaX/Vni+E0ohAE=3D?=
+X-Forefront-Antispam-Report: CIP:12.22.5.235;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:InfoNoRecords;CAT:NONE;SFS:(13230016)(4636009)(376002)(396003)(136003)(39860400002)(346002)(46966006)(36840700001)(40470700004)(5660300002)(6666004)(82740400003)(356005)(921005)(41300700001)(81166007)(4326008)(8676002)(70206006)(70586007)(36860700001)(15650500001)(82310400005)(186003)(7696005)(478600001)(316002)(2906002)(966005)(8936002)(1076003)(2616005)(86362001)(40480700001)(7416002)(40460700003)(7406005)(26005)(83380400001)(47076005)(36756003)(110136005)(426003)(336012)(54906003)(36900700001)(83996005)(2101003);DIR:OUT;SFP:1101;
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Jul 2022 06:28:10.9949
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 74ce2c6b-09e8-4a7d-9ace-08da5f18b2df
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[12.22.5.235];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT062.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN8PR12MB3316
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/07/05 23:35, Tetsuo Handa wrote:
-> On 2022/07/05 23:16, Greg KH wrote:
->> Some device is being probed at the moment, maybe we have a deadlock
->> somewhere here...
-> 
-> Lockdep says __device_attach() from hub_event() was in progress.
-> 
-> ----------------------------------------
-> [  237.376478][   T28] 5 locks held by kworker/1:1/26:
-> [  237.381526][   T28]  #0: ffff888016b92538 ((wq_completion)usb_hub_wq){+.+.}-{0:0}, at: process_one_work+0x87a/0x1610
-> [  237.392798][   T28]  #1: ffffc90000c2fda8 ((work_completion)(&hub->events)){+.+.}-{0:0}, at: process_one_work+0x8ae/0x1610
-> [  237.406354][   T28]  #2: ffff88801f7ee220 (&dev->mutex){....}-{3:3}, at: hub_event+0x1c1/0x4680
-> [  237.415920][   T28]  #3: ffff88801b6c6220 (&dev->mutex){....}-{3:3}, at: __device_attach+0x7a/0x4a0
-> [  237.426682][   T28]  #4: ffff8880216bc1a8 (&dev->mutex){....}-{3:3}, at: __device_attach+0x7a/0x4a0
-> ----------------------------------------
-> 
+This is a preparatory series for IOMMUFD v2 patches. It prepares for
+replacing vfio_iommu_type1 implementations of vfio_pin/unpin_pages()
+with IOMMUFD version.
 
-The number returned by atomic_read(&probe_count) matched the number of works for hub_event()
-in usb_hub_wq workqueue. The probe function is called from hub_event(), and
-usb_stor_msg_common() calls wait_for_completion_interruptible_timeout(MAX_SCHEDULE_TIMEOUT)
-via driver's init function.
+There's a gap between these two versions: the vfio_iommu_type1 version
+inputs a non-contiguous PFN list and outputs another PFN list for the
+pinned physical page list, while the IOMMUFD version only supports a
+contiguous address input by accepting the starting IO virtual address
+of a set of pages to pin and by outputting to a physical page list.
 
-But if the usb device is unresponsive, wait_for_completion_interruptible_timeout() sleeps
-forever. And in this testcase (which emulates usb devices using /dev/raw-gadget interface),
-the usb device became unresponsive because the process who is responsible with reading/writing
-/dev/raw-gadget interface is blocked at mutex_lock(&misc_mtx) at misc_open(), and results in
-an AB-BA deadlock condition. Making misc_open() killable solved this problem, by allowing
-the opener of /dev/raw-gadget interface to call fput() upon "send SIGKILL after 5 seconds from
-fork()" behavior.
+The nature of existing callers mostly aligns with the IOMMUFD version,
+except s390's vfio_ccw_cp code where some additional change is needed
+along with this series. Overall, updating to "iova" and "phys_page"
+does improve the caller side to some extent.
 
-Anyway,
+Also fix a misuse of physical address and virtual address in the s390's
+crypto code. And update the input naming at the adjacent vfio_dma_rw().
 
-        /*
-         * Resuming.  We may need to wait for the image device to
-         * appear.
-         */
-        wait_for_device_probe();
+This is on github:
+https://github.com/nicolinc/iommufd/commits/vfio_pin_pages
 
-in snapshot_open() will sleep forever if some device became unresponsive.
+Request for testing: I only did build for s390 and i915 code, so it'd
+be nice to have people who have environment to run sanity accordingly.
 
-How should we fix this problem?
+Thanks!
 
+Changelog
+v2:
+ * Added a patch to make vfio_unpin_pages return void
+ * Added two patches to remove PFN list from two s390 callers
+ * Renamed "phys_page" parameter to "pages" for vfio_pin_pages
+ * Updated commit log of kmap_local_page() patch
+ * Added Harald's "Reviewed-by" to pa_ind patch
+ * Rebased on top of Alex's extern removal path
+v1: https://lore.kernel.org/kvm/20220616235212.15185-1-nicolinc@nvidia.com/
 
+Nicolin Chen (9):
+  vfio: Make vfio_unpin_pages() return void
+  vfio/ap: Pass in physical address of ind to ap_aqic()
+  vfio/ccw: Only pass in contiguous pages
+  vfio: Pass in starting IOVA to vfio_pin/unpin_pages API
+  vfio/ap: Remove redundant pfn
+  vfio/ccw: Change pa_pfn list to pa_iova list
+  vfio: Rename user_iova of vfio_dma_rw()
+  vfio/ccw: Add kmap_local_page() for memcpy
+  vfio: Replace phys_pfn with pages for vfio_pin_pages()
 
-SysRq-t output (location is based on Linux 5.18.0):
-----------------------------------------
-[  113.988455][ T4455] Calling probe_count=2
-[  115.002350][    C2] sysrq: Show State
+ .../driver-api/vfio-mediated-device.rst       |   6 +-
+ arch/s390/include/asm/ap.h                    |   6 +-
+ drivers/gpu/drm/i915/gvt/kvmgt.c              |  46 ++---
+ drivers/s390/cio/vfio_ccw_cp.c                | 195 +++++++++++-------
+ drivers/s390/crypto/ap_queue.c                |   2 +-
+ drivers/s390/crypto/vfio_ap_ops.c             |  54 +++--
+ drivers/s390/crypto/vfio_ap_private.h         |   4 +-
+ drivers/vfio/vfio.c                           |  55 +++--
+ drivers/vfio/vfio.h                           |   8 +-
+ drivers/vfio/vfio_iommu_type1.c               |  46 +++--
+ include/linux/vfio.h                          |   9 +-
+ 11 files changed, 218 insertions(+), 213 deletions(-)
 
-[  124.602603][    C2] task:kworker/2:2     state:S stack:11608 pid:  980 ppid:     2 flags:0x00004000
-[  124.613409][    C2] Workqueue: usb_hub_wq hub_event
-[  124.618941][    C2] Call Trace:
-[  124.624046][    C2]  <TASK>
-[  124.629122][    C2]  __schedule+0x3b6/0x1690
-[  124.634575][    C2]  ? _raw_spin_unlock_irq+0x1f/0x40
-[  124.640085][    C2]  schedule+0x49/0xb0
-[  124.645280][    C2]  schedule_timeout+0x134/0x180
-[  124.650574][    C2]  ? _raw_spin_unlock_irq+0x1f/0x40
-[  124.655880][    C2]  ? lockdep_hardirqs_on+0x79/0x100
-[  124.662294][    C2]  __wait_for_common+0xac/0x1f0
-[  124.667740][    C2]  ? usleep_range_state+0xe0/0xe0
-[  124.673449][    C2]  usb_stor_msg_common+0x157/0x1f0           usb_stor_msg_common at drivers/usb/storage/transport.c:166 (discriminator 4)
-[  124.679074][    C2]  ? verify_cpu+0xf0/0x100
-[  124.684774][    C2]  usb_stor_ctrl_transfer+0xc3/0xf0          usb_stor_ctrl_transfer at drivers/usb/storage/transport.c:344
-[  124.690387][    C2]  usb_stor_sddr09_dpcm_init+0x63/0x1a0      sddr09_send_command at drivers/usb/storage/sddr09.c:307
-                                                                  (inlined by) usb_stor_sddr09_dpcm_init at drivers/usb/storage/sddr09.c:1455
-[  124.696087][    C2]  ? sddr09_get_cardinfo+0x530/0x530
-[  124.701654][    C2]  usb_stor_probe2+0x24f/0x470               usb_stor_acquire_resources at drivers/usb/storage/usb.c:788
-                                                                  (inlined by) usb_stor_probe2 at drivers/usb/storage/usb.c:1050
-[  124.707024][    C2]  ? sddr09_transport+0x1940/0x1940
-[  124.712690][    C2]  sddr09_probe+0xd6/0x110
-[  124.717980][    C2]  usb_probe_interface+0x19b/0x3e0
-[  124.723533][    C2]  ? usb_match_dynamic_id+0xe0/0xe0
-[  124.728900][    C2]  really_probe+0x138/0x4c0
-[  124.734058][    C2]  __driver_probe_device+0x191/0x220
-[  124.739406][    C2]  driver_probe_device+0x2a/0x120
-[  124.744649][    C2]  __device_attach_driver+0x105/0x1a0
-[  124.749981][    C2]  ? driver_allows_async_probing+0x90/0x90
-[  124.755600][    C2]  bus_for_each_drv+0xba/0x100
-[  124.761136][    C2]  __device_attach+0x130/0x290
-[  124.766408][    C2]  bus_probe_device+0xdb/0xf0
-[  124.771735][    C2]  device_add+0x635/0xdf0
-[  124.776770][    C2]  ? __mutex_unlock_slowpath+0x37/0x280
-[  124.782189][    C2]  usb_set_configuration+0x9ca/0xd10
-[  124.787516][    C2]  usb_generic_driver_probe+0x8c/0xc0
-[  124.792906][    C2]  usb_probe_device+0x6c/0x180
-[  124.798041][    C2]  ? usb_driver_release_interface+0xc0/0xc0
-[  124.803416][    C2]  really_probe+0x138/0x4c0
-[  124.808329][    C2]  __driver_probe_device+0x191/0x220
-[  124.813373][    C2]  driver_probe_device+0x2a/0x120
-[  124.818345][    C2]  __device_attach_driver+0x105/0x1a0
-[  124.823436][    C2]  ? driver_allows_async_probing+0x90/0x90
-[  124.828730][    C2]  bus_for_each_drv+0xba/0x100
-[  124.834151][    C2]  __device_attach+0x130/0x290
-[  124.840066][    C2]  bus_probe_device+0xdb/0xf0
-[  124.845475][    C2]  device_add+0x635/0xdf0
-[  124.850835][    C2]  usb_new_device.cold+0x110/0x5e9
-[  124.856251][    C2]  hub_event+0x177c/0x26b0
-[  124.861609][    C2]  process_one_work+0x3d4/0x9c0
-[  124.866730][    C2]  worker_thread+0x5b/0x5d0
-[  124.874165][    C2]  ? process_one_work+0x9c0/0x9c0
-[  124.879966][    C2]  kthread+0x135/0x170
-[  124.884870][    C2]  ? kthread_complete_and_exit+0x30/0x30
-[  124.890628][    C2]  ret_from_fork+0x1f/0x30
-[  124.896103][    C2]  </TASK>
-
-[  143.975320][    C2] Showing all locks held in the system:
-[  143.985599][    C2] 5 locks held by kworker/2:2/980:
-[  143.991149][    C2]  #0: ffff88800d615938 ((wq_completion)usb_hub_wq){+.+.}-{0:0}, at: process_one_work+0x304/0x9c0
-[  144.002742][    C2]  #1: ffffc90003ed3e70 ((work_completion)(&hub->events)){+.+.}-{0:0}, at: process_one_work+0x304/0x9c0
-[  144.015128][    C2]  #2: ffff88800fe66a20 (&dev->mutex){....}-{3:3}, at: hub_event+0xc4/0x26b0
-[  144.022646][    C2]  #3: ffff88810e445a20 (&dev->mutex){....}-{3:3}, at: __device_attach+0x41/0x290
-[  144.032770][    C2]  #4: ffff88810e4449a8 (&dev->mutex){....}-{3:3}, at: __device_attach+0x41/0x290
-[  144.045877][    C2] 1 lock held by in:imklog/3844:
-[  144.052399][    C2]  #0: ffff888106694ee8 (&f->f_pos_lock){+.+.}-{3:3}, at: __fdget_pos+0x8d/0xa0
-[  144.060131][    C2] 1 lock held by a.out/4425:
-[  144.066811][    C2]  #0: ffffffff86863848 (misc_mtx){+.+.}-{3:3}, at: misc_open+0x25/0x1e0
-[  144.074587][    C2] 3 locks held by systemd-udevd/4439:
-[  144.081494][    C2]  #0: ffff8880140bc688 (&of->mutex){+.+.}-{3:3}, at: kernfs_fop_read_iter+0x9d/0x2e0
-[  144.095133][    C2]  #1: ffff88810ba50938 (kn->active#60){++++}-{0:0}, at: kernfs_fop_read_iter+0xa5/0x2e0
-[  144.109502][    C2]  #2: ffff88810e445a20 (&dev->mutex){....}-{3:3}, at: read_descriptors+0x3c/0x1e0
-[  144.123733][    C2] 2 locks held by a.out/4455:
-[  144.131152][    C2]  #0: ffffffff86863848 (misc_mtx){+.+.}-{3:3}, at: misc_open+0x25/0x1e0
-[  144.139727][    C2]  #1: ffffffff8652d068 (system_transition_mutex){+.+.}-{3:3}, at: snapshot_open+0x40/0x160
-[  144.154965][    C2] 1 lock held by a.out/4456:
-[  144.162582][    C2]  #0: ffffffff86863848 (misc_mtx){+.+.}-{3:3}, at: misc_open+0x25/0x1e0
-[  144.171374][    C2] 1 lock held by a.out/4457:
-[  144.179220][    C2]  #0: ffffffff86863848 (misc_mtx){+.+.}-{3:3}, at: misc_open+0x25/0x1e0
-[  144.188231][    C2] 1 lock held by a.out/4458:
-[  144.196069][    C2]  #0: ffffffff86863848 (misc_mtx){+.+.}-{3:3}, at: misc_open+0x25/0x1e0
-[  144.204946][    C2] 1 lock held by a.out/4459:
-[  144.214175][    C2]  #0: ffffffff86863848 (misc_mtx){+.+.}-{3:3}, at: misc_open+0x25/0x1e0
-
-[  144.246256][    C2] Showing busy workqueues and worker pools:
-[  144.254448][    C2] workqueue usb_hub_wq: flags=0x4
-[  144.262458][    C2]   pwq 4: cpus=2 node=0 flags=0x0 nice=0 active=2/256 refcnt=3
-[  144.262554][    C2]     in-flight: 980:hub_event hub_event
-[  144.262743][    C2] pool 4: cpus=2 node=0 flags=0x0 nice=0 hung=29s workers=4 idle: 28 3084 53
-[  144.290063][ T4455] Calling probe_count=2
-----------------------------------------
+-- 
+2.17.1
 

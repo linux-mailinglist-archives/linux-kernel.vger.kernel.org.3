@@ -2,60 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 03B4D5693FB
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 23:13:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A304F569407
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 23:13:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233940AbiGFVM6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Jul 2022 17:12:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39462 "EHLO
+        id S234614AbiGFVNB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Jul 2022 17:13:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39516 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234558AbiGFVMt (ORCPT
+        with ESMTP id S234580AbiGFVMv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Jul 2022 17:12:49 -0400
-Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFF08D129;
-        Wed,  6 Jul 2022 14:12:48 -0700 (PDT)
-Received: by mail-ej1-x632.google.com with SMTP id n4so9886515ejz.10;
-        Wed, 06 Jul 2022 14:12:48 -0700 (PDT)
+        Wed, 6 Jul 2022 17:12:51 -0400
+Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52E3E2717A;
+        Wed,  6 Jul 2022 14:12:50 -0700 (PDT)
+Received: by mail-ej1-x62c.google.com with SMTP id ay16so29188262ejb.6;
+        Wed, 06 Jul 2022 14:12:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=lvGXj3ls7TV90GptpGG1jLpCJVEsDU4cCv/CoE+6bpM=;
-        b=krbHqmBRYekWzAlAtpO7sBN1ST+0G/8miKAo7OHmnIWBpNlinUrotSvvT1yBHIz7YZ
-         OyA0CScteMVUjoIYc46Nonj3i80xglBJ6e+iyHV6uvOdKNYDlOhNUl+WnjJiwGbFFCxh
-         z4t6U2R1AecTXan3+SfE7tpGRpqIJm6FfEWSnhdOnKS3f03WV5e5Jz3aEjJ2r0ovXzO2
-         HAT5CoieAPJbEzTrdWLBOAAre8VodDEtdXeYkqWMdq1SK01rx400RfpXfIGc1mZ4Vqua
-         LRW3/AqfZgF0KSC7VpEQxfBIjTEQc3zjvjgWv7vkfjQt+UeSYixIPe26dxRUW2BKr60E
-         VoAA==
+        bh=we08VGkVJJS9erZ+xZEURv2knz+tCGYmdx4Fvbq08aw=;
+        b=Bie/rkw0fZJCM4o17/trs/tRZNbAbnduk8j+HDM6c0Qw+dP+OKpnuZ5Tyd7+6aEyq8
+         0/XE+WCynGervG526QuZBQk4yWg614mWBN24qSedFh8uj8OgHc+MZv8qBXXeStErrUXf
+         5E2zG8d/sF/Su+y3ryO6B5wVLu8P/Q7WUKnDZ/wb9k+X3UhbjtN8q/G+kPTIiDyTJSjc
+         CFcf7efQotPQ00EMa8lczD4xwtkIxD3iaQVWLWfM+GYc+M/bGJy6QAguxUnlB983R91M
+         0FdVcsCk2mIFrfSJ6wOVJsKaauQDnSr2thEUXaWbCC+mH7ZcO7g+yFHMxoCypRPfoZL5
+         qsYA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=lvGXj3ls7TV90GptpGG1jLpCJVEsDU4cCv/CoE+6bpM=;
-        b=LNNuhQQ0BNRd1H+uEp3VetzH1Z9ecM4//8ae3V0nT4oCf3YEqveWJPsL1IA6zcti4/
-         NOq/rnfMVkZfAWXPlEdbxtOOgKJMEZ6MwgP/qpNSjQasaqkkhOXPcKSgW4ic3sAE3PVJ
-         2quxZH3X7bRXtJ1HlnGHS3lFOMW/KeHs8RU8x3+6/mIf2Nty6WIDa8/2a2iU010SuvOI
-         sbWEta8EQ3ZmTTHlKAuA7CjP7jfVMH8whsRhstQ/cfZYbJmcHoGnA4lVktKO5zpn+6X7
-         4xriuXqbZhdJWKnRXPdkhH2ujQD8YCWnoZgtVoxwGyAddp2XeO5U94dIBVUuGHkGKxEy
-         zq/g==
-X-Gm-Message-State: AJIora98E1swG5ttfDz1LG3uFlUh2QdM/6jFZj2f2FoXyFVY1vAYWu4y
-        KmbiQ4uIEXreV+DjSbqFj8A=
-X-Google-Smtp-Source: AGRyM1tENucyCQc6o1kqm7tKl+HfBOTrbZHO+IO7+Og4B6UEcwWEmeiPcizBD5QYh/RTI6pu23BzEQ==
-X-Received: by 2002:a17:906:149b:b0:726:2968:e32a with SMTP id x27-20020a170906149b00b007262968e32amr42064953ejc.71.1657141967428;
-        Wed, 06 Jul 2022 14:12:47 -0700 (PDT)
+        bh=we08VGkVJJS9erZ+xZEURv2knz+tCGYmdx4Fvbq08aw=;
+        b=Ui485FJxRSbp0rE4rGU+1LuodVN4t6rmNXYzsUslBJWUcUDDkCtQnQjOweISgQ+Z55
+         teH9KU5d6oD961smUK7KhzT39ZeplC2W7EzkpbUe0IL9QzE80OFSNH5i270Op0Nmycq0
+         NJ+hm0LAe6wwdwh3GkfaTRxT8+UQWhkUqAUJxrHpBaN/BhOiVsGS97wx8H/slqsczCGj
+         ZZ01JhZW2xVRwvtu8v8D/S2xFrQ77jvh4mJ6vxY+hy2kB5K+rpDUO/A1DEw1WD3lf20F
+         Uh1SF+4+QIvLLsH5+YHGcz3M9vV8Njqi6h3JND89ekG/Kn0aZlON+aElufrFpO5KcqqH
+         rzAg==
+X-Gm-Message-State: AJIora8ZnfYc3XN7lvb0dGQoXDXCVwFjSPXQDD9aA8SM86CLSYbcq5P6
+        ADtS+fmvISJgCy1tWykklas=
+X-Google-Smtp-Source: AGRyM1uHBO2y9EEWc2OBKCoKBWs/OWH1CuCPvILePBbd1nLqVoWD4UCdzMYiiv872nfgNeZ9S3U0og==
+X-Received: by 2002:a17:906:9756:b0:722:ec43:9252 with SMTP id o22-20020a170906975600b00722ec439252mr42473586ejy.299.1657141968933;
+        Wed, 06 Jul 2022 14:12:48 -0700 (PDT)
 Received: from localhost (92.40.202.8.threembb.co.uk. [92.40.202.8])
-        by smtp.gmail.com with ESMTPSA id q17-20020a17090676d100b007121b22b376sm2164813ejn.105.2022.07.06.14.12.46
+        by smtp.gmail.com with ESMTPSA id v17-20020aa7dbd1000000b0043586bee560sm26103857edt.68.2022.07.06.14.12.48
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 06 Jul 2022 14:12:46 -0700 (PDT)
+        Wed, 06 Jul 2022 14:12:48 -0700 (PDT)
 From:   Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
 To:     paul@crapouillou.net, lgirdwood@gmail.com, broonie@kernel.org,
         perex@perex.cz, tiwai@suse.com
 Cc:     linux-mips@vger.kernel.org, alsa-devel@alsa-project.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH 06/11] ASoC: jz4740-i2s: Use FIELD_PREP() macros in hw_params callback
-Date:   Wed,  6 Jul 2022 22:13:25 +0100
-Message-Id: <20220706211330.120198-7-aidanmacdonald.0x0@gmail.com>
+Subject: [PATCH 07/11] ASoC: jz4740-i2s: Remove some unused macros
+Date:   Wed,  6 Jul 2022 22:13:26 +0100
+Message-Id: <20220706211330.120198-8-aidanmacdonald.0x0@gmail.com>
 In-Reply-To: <20220706211330.120198-1-aidanmacdonald.0x0@gmail.com>
 References: <20220706211330.120198-1-aidanmacdonald.0x0@gmail.com>
 MIME-Version: 1.0
@@ -70,70 +70,52 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Get rid of a couple of macros and improve readability by using
-FIELD_PREP() and GENMASK() for the sample size setting.
+These macros are unused and can be dropped; the information is now
+encoded in regmap fields.
 
 Signed-off-by: Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
 ---
- sound/soc/jz4740/jz4740-i2s.c | 17 ++++++++---------
- 1 file changed, 8 insertions(+), 9 deletions(-)
+ sound/soc/jz4740/jz4740-i2s.c | 13 -------------
+ 1 file changed, 13 deletions(-)
 
 diff --git a/sound/soc/jz4740/jz4740-i2s.c b/sound/soc/jz4740/jz4740-i2s.c
-index 8bb9449d13d3..3c3cf78bf848 100644
+index 3c3cf78bf848..b8d2723c5f90 100644
 --- a/sound/soc/jz4740/jz4740-i2s.c
 +++ b/sound/soc/jz4740/jz4740-i2s.c
-@@ -3,6 +3,7 @@
-  *  Copyright (C) 2010, Lars-Peter Clausen <lars@metafoo.de>
-  */
+@@ -35,8 +35,6 @@
+ #define JZ_REG_AIC_CLK_DIV	0x30
+ #define JZ_REG_AIC_FIFO		0x34
  
-+#include <linux/bitfield.h>
- #include <linux/init.h>
- #include <linux/io.h>
- #include <linux/kernel.h>
-@@ -49,8 +50,8 @@
- #define JZ4760_AIC_CONF_FIFO_RX_THRESHOLD_OFFSET 24
- #define JZ4760_AIC_CONF_FIFO_TX_THRESHOLD_OFFSET 16
+-#define JZ_AIC_CONF_FIFO_RX_THRESHOLD_MASK (0xf << 12)
+-#define JZ_AIC_CONF_FIFO_TX_THRESHOLD_MASK (0xf <<  8)
+ #define JZ_AIC_CONF_OVERFLOW_PLAY_LAST BIT(6)
+ #define JZ_AIC_CONF_INTERNAL_CODEC BIT(5)
+ #define JZ_AIC_CONF_I2S BIT(4)
+@@ -45,11 +43,6 @@
+ #define JZ_AIC_CONF_SYNC_CLK_MASTER BIT(1)
+ #define JZ_AIC_CONF_ENABLE BIT(0)
  
--#define JZ_AIC_CTRL_OUTPUT_SAMPLE_SIZE_MASK (0x7 << 19)
--#define JZ_AIC_CTRL_INPUT_SAMPLE_SIZE_MASK (0x7 << 16)
-+#define JZ_AIC_CTRL_OUTPUT_SAMPLE_SIZE GENMASK(21, 19)
-+#define JZ_AIC_CTRL_INPUT_SAMPLE_SIZE GENMASK(18, 16)
- #define JZ_AIC_CTRL_ENABLE_RX_DMA BIT(15)
- #define JZ_AIC_CTRL_ENABLE_TX_DMA BIT(14)
- #define JZ_AIC_CTRL_MONO_TO_STEREO BIT(11)
-@@ -65,9 +66,6 @@
- #define JZ_AIC_CTRL_ENABLE_PLAYBACK BIT(1)
- #define JZ_AIC_CTRL_ENABLE_CAPTURE BIT(0)
- 
--#define JZ_AIC_CTRL_OUTPUT_SAMPLE_SIZE_OFFSET 19
--#define JZ_AIC_CTRL_INPUT_SAMPLE_SIZE_OFFSET  16
+-#define JZ_AIC_CONF_FIFO_RX_THRESHOLD_OFFSET 12
+-#define JZ_AIC_CONF_FIFO_TX_THRESHOLD_OFFSET 8
+-#define JZ4760_AIC_CONF_FIFO_RX_THRESHOLD_OFFSET 24
+-#define JZ4760_AIC_CONF_FIFO_TX_THRESHOLD_OFFSET 16
 -
- #define JZ_AIC_I2S_FMT_DISABLE_BIT_CLK BIT(12)
- #define JZ_AIC_I2S_FMT_DISABLE_BIT_ICLK BIT(13)
- #define JZ_AIC_I2S_FMT_ENABLE_SYS_CLK BIT(4)
-@@ -245,8 +243,9 @@ static int jz4740_i2s_hw_params(struct snd_pcm_substream *substream,
- 	}
+ #define JZ_AIC_CTRL_OUTPUT_SAMPLE_SIZE GENMASK(21, 19)
+ #define JZ_AIC_CTRL_INPUT_SAMPLE_SIZE GENMASK(18, 16)
+ #define JZ_AIC_CTRL_ENABLE_RX_DMA BIT(15)
+@@ -73,12 +66,6 @@
  
- 	if (substream->stream == SNDRV_PCM_STREAM_PLAYBACK) {
--		ctrl &= ~JZ_AIC_CTRL_OUTPUT_SAMPLE_SIZE_MASK;
--		ctrl |= sample_size << JZ_AIC_CTRL_OUTPUT_SAMPLE_SIZE_OFFSET;
-+		ctrl &= ~JZ_AIC_CTRL_OUTPUT_SAMPLE_SIZE;
-+		ctrl |= FIELD_PREP(JZ_AIC_CTRL_OUTPUT_SAMPLE_SIZE, sample_size);
-+
- 		if (params_channels(params) == 1)
- 			ctrl |= JZ_AIC_CTRL_MONO_TO_STEREO;
- 		else
-@@ -254,8 +253,8 @@ static int jz4740_i2s_hw_params(struct snd_pcm_substream *substream,
+ #define JZ_AIC_I2S_STATUS_BUSY BIT(2)
  
- 		div_field = i2s->field_i2sdiv_playback;
- 	} else {
--		ctrl &= ~JZ_AIC_CTRL_INPUT_SAMPLE_SIZE_MASK;
--		ctrl |= sample_size << JZ_AIC_CTRL_INPUT_SAMPLE_SIZE_OFFSET;
-+		ctrl &= ~JZ_AIC_CTRL_INPUT_SAMPLE_SIZE;
-+		ctrl |= FIELD_PREP(JZ_AIC_CTRL_INPUT_SAMPLE_SIZE, sample_size);
+-#define JZ_AIC_CLK_DIV_MASK 0xf
+-#define I2SDIV_DV_SHIFT 0
+-#define I2SDIV_DV_MASK (0xf << I2SDIV_DV_SHIFT)
+-#define I2SDIV_IDV_SHIFT 8
+-#define I2SDIV_IDV_MASK (0xf << I2SDIV_IDV_SHIFT)
+-
+ struct i2s_soc_info {
+ 	struct snd_soc_dai_driver *dai;
  
- 		div_field = i2s->field_i2sdiv_capture;
- 	}
 -- 
 2.35.1
 

@@ -2,403 +2,179 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 910A3569102
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 19:45:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 55E60569104
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 19:47:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234251AbiGFRpA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Jul 2022 13:45:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33194 "EHLO
+        id S233437AbiGFRrR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Jul 2022 13:47:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36080 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234220AbiGFRoj (ORCPT
+        with ESMTP id S231892AbiGFRrQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Jul 2022 13:44:39 -0400
-Received: from alexa-out.qualcomm.com (alexa-out.qualcomm.com [129.46.98.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 717B32C133;
-        Wed,  6 Jul 2022 10:44:09 -0700 (PDT)
+        Wed, 6 Jul 2022 13:47:16 -0400
+Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C00B33B;
+        Wed,  6 Jul 2022 10:47:15 -0700 (PDT)
+Received: by mail-ed1-x52f.google.com with SMTP id k30so12088232edk.8;
+        Wed, 06 Jul 2022 10:47:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1657129450; x=1688665450;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=C21R6YwpZ6S+qazhFSa7FqJfh0q5us7JeiD6mUwqoN8=;
-  b=cH7mHP/OS5MMT+W++9i7U7v9qv3T7cGfYyPE0LtD2qRYQiAVXLtJZCPI
-   2MDBJf1WnP91DsoemcndDIiP+2ba2TsTz2wRMlOdqKMqS0EUARH7brs6H
-   HzjFG+QC1mPb0WA9urmuj6k6w0nyXXhnGA/eRQ5F/jDAULJZl2GysERZI
-   k=;
-Received: from ironmsg-lv-alpha.qualcomm.com ([10.47.202.13])
-  by alexa-out.qualcomm.com with ESMTP; 06 Jul 2022 10:44:08 -0700
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg-lv-alpha.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jul 2022 10:44:07 -0700
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Wed, 6 Jul 2022 10:44:07 -0700
-Received: from [10.216.39.82] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Wed, 6 Jul 2022
- 10:44:02 -0700
-Message-ID: <69e3fec3-bd49-8877-f1f8-453b09b8c940@quicinc.com>
-Date:   Wed, 6 Jul 2022 23:13:59 +0530
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=WMGCefUtPu8UwO6ERml6n2ZI6wHVNjwGQiWTcNMaDt8=;
+        b=XRzM2s5gsW+2XIeJx9zST87Dkr0yBh1JLoOgB7sEy/hLnoHYgASmLndmmwGBPbdWYx
+         hSDdPh5gZmIUvzo/uHphQi1sSexVaCqkaQVgV0+3jHDKSaTVkAV4+EhLxtQ0OvGJR3d8
+         SCe76l/dR66w58TmCgvZtENLXnYDIkPTC94JYmyIfMft0yECZRnRUFBc4MCiqsL9zWtk
+         V5c8RFTjqBel8ffrGOouKqY+T8VJWuZ897hPSLoHDWYirLl1pxfst6fXZtWK+84+iYNl
+         wQbfLCw5JthRZgc5HIrbBScEvbOCafgTcf7HGbHgc7s2CUQUHAlCQieT/s9BQXplxUGe
+         iSiw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=WMGCefUtPu8UwO6ERml6n2ZI6wHVNjwGQiWTcNMaDt8=;
+        b=K+QXXouVyV4G7CyfRLw7THV1pQuLJv0sqqBc6ph7dWxU7T86PZ8Yj3fs8Dq8N1t8Or
+         K2pZsgddJIZjQ5ggTbowv+u2pGUdfff/wl/IKl2l3q3NcvjhidvmMrQGzvWL5H18vJ/J
+         eTD4CJEa8A5hbt16fmDFgmeO/BymceRA/dk7rmC/wMWmz5wGbAt327GjrGNhH/2RjaAV
+         JAzYQh9Kc1fnolGcYsPv+98qSUJfA29A2YM1lNjAnRMb87RUh5y3KdO1dTtkFjCrYygs
+         6HlIdzvgWE6Ef8MUwqG36TYjD3sUAM4+Szi1/1tW+t05PU05LbzyGdMCwu5huUJGdcw7
+         78TQ==
+X-Gm-Message-State: AJIora+j6vv8VU/IJVG0/n6/z7okGEXHRjIp8ctUQ+H7s8l4qHJmUQg+
+        +pHie2KC/09cclb4k7624xqcIPl6rTWQcmMs
+X-Google-Smtp-Source: AGRyM1siy18+UGvFM82oNCh1h17PbVkWfOI8tJwH3vSrS46mbZeFShaTA30dUZR6noxdbd8NecxUYQ==
+X-Received: by 2002:a05:6402:4243:b0:437:618c:695a with SMTP id g3-20020a056402424300b00437618c695amr57133692edb.222.1657129633400;
+        Wed, 06 Jul 2022 10:47:13 -0700 (PDT)
+Received: from localhost.localdomain (87-168-253.netrunf.cytanet.com.cy. [87.228.168.253])
+        by smtp.gmail.com with ESMTPSA id ev20-20020a056402541400b0043a20be7a33sm8627180edb.90.2022.07.06.10.47.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 06 Jul 2022 10:47:12 -0700 (PDT)
+From:   Maxim Devaev <mdevaev@gmail.com>
+To:     linux-usb@vger.kernel.org
+Cc:     stern@rowland.harvard.edu, balbi@kernel.org,
+        gregkh@linuxfoundation.org, caihuoqing@baidu.com,
+        mdevaev@gmail.com, linux-kernel@vger.kernel.org
+Subject: [PATCH] usb: gadget: f_mass_storage: forced_eject attribute
+Date:   Wed,  6 Jul 2022 20:46:34 +0300
+Message-Id: <20220706174634.20639-1-mdevaev@gmail.com>
+X-Mailer: git-send-email 2.37.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [V2] tty: serial: qcom-geni-serial: Fix get_clk_div_rate() which
- otherwise could return a sub-optimal clock rate.
-Content-Language: en-CA
-To:     Doug Anderson <dianders@chromium.org>,
-        "Vijaya Krishna Nivarthi (Temp)" <vnivarth@qti.qualcomm.com>
-CC:     Andy Gross <agross@kernel.org>,
-        "bjorn.andersson@linaro.org" <bjorn.andersson@linaro.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
-        "linux-serial@vger.kernel.org" <linux-serial@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        "Mukesh Savaliya (QUIC)" <quic_msavaliy@quicinc.com>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        "Stephen Boyd" <swboyd@chromium.org>
-References: <1656496841-5853-1-git-send-email-quic_vnivarth@quicinc.com>
- <CAD=FV=UXP+dfYEHpsS_djnWYxNVUS__2Uu5Mmxt2G4T=vfSSQQ@mail.gmail.com>
- <BL0PR02MB4564A1EC37911A464BBEC260FABD9@BL0PR02MB4564.namprd02.prod.outlook.com>
- <CAD=FV=XCgsyTRT-T5jKN6c7tJ=du8gbpkMccm2VZpz+TFWyLsw@mail.gmail.com>
- <BL0PR02MB45643EEB3C1571E0F2364B8FFABE9@BL0PR02MB4564.namprd02.prod.outlook.com>
- <CAD=FV=Up_NNd5RNJ+xLrPOHfPb_YG1ut=BjU=O2yP8w2hG9Ugw@mail.gmail.com>
-From:   Vijaya Krishna Nivarthi <quic_vnivarth@quicinc.com>
-In-Reply-To: <CAD=FV=Up_NNd5RNJ+xLrPOHfPb_YG1ut=BjU=O2yP8w2hG9Ugw@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+It allows to reset prevent_medium_removal flag and "eject" the image.
 
+The patch is a completely alternative implementation of the previously
+proposed [1], the idea of which was born after the mentioned discussion.
 
-On 7/6/2022 8:56 PM, Doug Anderson wrote:
-> Hi,
->
-> On Mon, Jul 4, 2022 at 11:57 AM Vijaya Krishna Nivarthi (Temp)
-> <vnivarth@qti.qualcomm.com> wrote:
->> Hi,
->>
->>
->>> -----Original Message-----
->>> From: Doug Anderson <dianders@chromium.org>
->>> Sent: Friday, July 1, 2022 8:38 PM
->>> To: Vijaya Krishna Nivarthi (Temp) (QUIC) <quic_vnivarth@quicinc.com>
->>> Cc: Andy Gross <agross@kernel.org>; bjorn.andersson@linaro.org; Konrad
->>> Dybcio <konrad.dybcio@somainline.org>; Greg Kroah-Hartman
->>> <gregkh@linuxfoundation.org>; Jiri Slaby <jirislaby@kernel.org>; linux-arm-
->>> msm <linux-arm-msm@vger.kernel.org>; linux-serial@vger.kernel.org; LKML
->>> <linux-kernel@vger.kernel.org>; Mukesh Savaliya (QUIC)
->>> <quic_msavaliy@quicinc.com>; Matthias Kaehlcke <mka@chromium.org>;
->>> Stephen Boyd <swboyd@chromium.org>
->>> Subject: Re: [V2] tty: serial: qcom-geni-serial: Fix get_clk_div_rate() which
->>> otherwise could return a sub-optimal clock rate.
->>>
->>> WARNING: This email originated from outside of Qualcomm. Please be wary
->>> of any links or attachments, and do not enable macros.
->>>
->>> Hi,
->>>
->>> On Fri, Jul 1, 2022 at 4:04 AM Vijaya Krishna Nivarthi (Temp) (QUIC)
->>> <quic_vnivarth@quicinc.com> wrote:
->>>> Hi,
->>>>
->>>>
->>>>> -----Original Message-----
->>>>> From: Doug Anderson <dianders@chromium.org>
->>>>> Sent: Thursday, June 30, 2022 4:45 AM
->>>>> To: Vijaya Krishna Nivarthi (Temp) (QUIC)
->>>>> <quic_vnivarth@quicinc.com>
->>>>> Cc: Andy Gross <agross@kernel.org>; bjorn.andersson@linaro.org;
->>>>> Konrad Dybcio <konrad.dybcio@somainline.org>; Greg Kroah-Hartman
->>>>> <gregkh@linuxfoundation.org>; Jiri Slaby <jirislaby@kernel.org>;
->>>>> linux-arm- msm <linux-arm-msm@vger.kernel.org>;
->>>>> linux-serial@vger.kernel.org; LKML <linux-kernel@vger.kernel.org>;
->>>>> Mukesh Savaliya (QUIC) <quic_msavaliy@quicinc.com>; Matthias
->>>>> Kaehlcke <mka@chromium.org>; Stephen Boyd
->>> <swboyd@chromium.org>
->>>>> Subject: Re: [V2] tty: serial: qcom-geni-serial: Fix
->>>>> get_clk_div_rate() which otherwise could return a sub-optimal clock rate.
->>>>>
->>>>>
->>>>>
->>>>>> +                               /* Save the first (lowest freq) within tolerance */
->>>>>> +                               ser_clk = freq;
->>>>>> +                               *clk_div = new_div;
->>>>>> +                               /* no more search for exact match required in 2nd run
->>> */
->>>>>> +                               if (!exact_match)
->>>>>> +                                       break;
->>>>>> +                       }
->>>>>> +               }
->>>>>>
->>>>>> -               prev = freq;
->>>>>> +               div = freq / desired_clk + 1;
->>>>> Can't you infinite loop now?
->>>>>
->>>>> Start with:
->>>>>
->>>>> desired_clk = 10000
->>>>> div = 1
->>>>> percent_tol = 2
->>>>>
->>>>>
->>>>> Now:
->>>>>
->>>>> mult = 10000
->>>>> offset = 200
->>>>> test_freq = 9800
->>>>> freq = 9800
->>>>> div = 9800 / 10000 + 1 = 0 + 1 = 1
->>>>>
->>>>> ...and then you'll loop again with "div = 1", won't you? ...or did I
->>>>> get something wrong in my analysis? This is the reason my proposed
->>>>> algorithm had two loops.
->>>>>
->>>>>
->>>> I went back to your proposed algorithm and made couple of simple
->>> changes, and it seemed like what we need.
->>>> a) look only for exact match once a clock rate within tolerance is
->>>> found
->>>> b) swap test_freq and freq at end of while loops to make it run as
->>>> desired
->>>>
->>>>
->>>>          maxdiv = CLK_DIV_MSK >> CLK_DIV_SHFT;
->>>>          div = 1;
->>>>
->>>>          while (div < maxdiv) {
->>>>                  mult = (unsigned long long)div * desired_clk;
->>>>                  if (mult != (unsigned long)mult)
->>>>                          break;
->>>>
->>>>                  if (ser_clk)
->>>>                          offset = 0;
->>>>                  ===================a=====================
->>>>                  else
->>>>                          offset = div_u64(mult * percent_tol, 100);
->>>>
->>>>                  /*
->>>>                   * Loop requesting (freq - 2%) and possibly (freq).
->>>>                   *
->>>>                   * We'll keep track of the lowest freq inexact match we found
->>>>                   * but always try to find a perfect match. NOTE: this algorithm
->>>>                   * could miss a slightly better freq if there's more than one
->>>>                   * freq between (freq - 2%) and (freq) but (freq) can't be made
->>>>                   * exactly, but that's OK.
->>>>                   *
->>>>                   * This absolutely relies on the fact that the Qualcomm clock
->>>>                   * driver always rounds up.
->>>>                   */
->>>>                  test_freq = mult - offset;
->>>>                  while (test_freq <= mult) {
->>>>                          freq = clk_round_rate(clk, test_freq);
->>>>
->>>>                          /*
->>>>                           * A dead-on freq is an insta-win. This implicitly
->>>>                           * handles when "freq == mult"
->>>>                           */
->>>>                          if (!(freq % desired_clk)) {
->>>>                                  *clk_div = freq / desired_clk;
->>>>                                  return freq;
->>>>                          }
->>>>
->>>>                          /*
->>>>                           * Only time clock framework doesn't round up is if
->>>>                           * we're past the max clock rate. We're done searching
->>>>                           * if that's the case.
->>>>                           */
->>>>                          if (freq < test_freq)
->>>>                                  return ser_clk;
->>>>
->>>>                          /* Save the first (lowest freq) within tolerance */
->>>>                          if (!ser_clk && freq <= mult + offset) {
->>>>                                  ser_clk = freq;
->>>>                                  *clk_div = div;
->>>>                          }
->>>>
->>>>                          /*
->>>>                           * If we already rounded up past mult then this will
->>>>                           * cause the loop to exit. If not then this will run
->>>>                           * the loop a second time with exactly mult.
->>>>                           */
->>>>                          test_freq = max(test_freq + 1, mult);
->>>>                                                       ====b====
->>>>                  }
->>>>
->>>>                  /*
->>>>                   * freq will always be bigger than mult by at least 1.
->>>>                   * That means we can get the next divider with a DIV_ROUND_UP.
->>>>                   * This has the advantage of skipping by a whole bunch of divs
->>>>                   * If the clock framework already bypassed them.
->>>>                   */
->>>>                  div = DIV_ROUND_UP(freq, desired_clk);
->>>>                                                         ===b==
->>>>          }
->>>>
->>>>
->>>> Will also drop exact_match now.
->>>>
->>>> Will upload v3 after testing.
->>> The more I've been thinking about it, the more I wonder if we even need the
->>> special case of looking for an exact match at all. It feels like we should choose
->>> one: we either look for the best match or we look for the one with the
->>> lowest clock source rate. The weird half-half approach that we have right
->>> now feels like over-engineering and complicates things.
->>>
->>> How about this (again, only lightly tested). Worst case if we _truly_ need a
->>> close-to-exact match we could pass a tolerance of 0 in and we'd get
->>> something that's nearly exact, though I'm not suggesting we actually do that.
->>> If we think 2% is good enough then we should just accept the first (and
->>> lowest clock rate) 2% match we find.
->>>
->>>      abs_tol = div_u64((u64)desired_clk * percent_tol, 100);
->>>      maxdiv = CLK_DIV_MSK >> CLK_DIV_SHFT;
->>>      div = 1;
->>>      while (div <= maxdiv) {
->>>          mult = (u64)div * desired_clk;
->>>          if (mult != (unsigned long)mult)
->>>              break;
->>>
->>>          offset = div * abs_tol;
->>>          freq = clk_round_rate(clk, mult - offset);
->>>
->>>          /* Can only get lower if we're done */
->>>          if (freq < mult - offset)
->>>              break;
->>>
->>>          /*
->>>           * Re-calculate div in case rounding skipped rates but we
->>>           * ended up at a good one, then check for a match.
->>>           */
->>>          div = DIV_ROUND_CLOSEST(freq, desired_clk);
->>>          achieved = DIV_ROUND_CLOSEST(freq, div);
->>>          if (achieved <= desired_clk + abs_tol &&
->>>              achieved >= desired_clk - abs_tol) {
->>>              *clk_div = div;
->>>              return freq;
->>>          }
->>>
->>>          /*
->>>           * Always increase div by at least one, but we'll go more than
->>>           * one if clk_round_rate() gave us something higher.
->>>           */
->>>          div = DIV_ROUND_UP(max(freq, (unsigned long)mult) + 1, desired_clk);
->> Wouldn’t DIV_ROUND_UP(freq, desired_clk) suffice here?
->> freq >= mult-offset, else we would have hit break.
-> No. As you say, freq >= "mult-offset". That means that freq could be
-> == "mult-offset", right? If offset > 0 then freq could be < mult. Then
-> your DIV_ROUND_UP() would just take you right back to where you
-> started the loop with and you'd end up with an infinite loop, wouldn't
-> you?
->
-Probably No.
+Signed-off-by: Maxim Devaev <mdevaev@gmail.com>
+Link: https://lore.kernel.org/lkml/20220406092445.215288-1-mdevaev@gmail.com [1]
+---
+ drivers/usb/gadget/function/f_mass_storage.c | 25 ++++++++++++++++++++
+ drivers/usb/gadget/function/storage_common.c | 11 +++++++++
+ drivers/usb/gadget/function/storage_common.h |  2 ++
+ 3 files changed, 38 insertions(+)
 
-( (freq >= mult-offset) && (freq <= mult) ) =>
+diff --git a/drivers/usb/gadget/function/f_mass_storage.c b/drivers/usb/gadget/function/f_mass_storage.c
+index 6ad669dde41c..00cac2a38178 100644
+--- a/drivers/usb/gadget/function/f_mass_storage.c
++++ b/drivers/usb/gadget/function/f_mass_storage.c
+@@ -2520,10 +2520,21 @@ static ssize_t file_store(struct device *dev, struct device_attribute *attr,
+ 	return fsg_store_file(curlun, filesem, buf, count);
+ }
+ 
++static ssize_t forced_eject_store(struct device *dev,
++				  struct device_attribute *attr,
++				  const char *buf, size_t count)
++{
++	struct fsg_lun		*curlun = fsg_lun_from_dev(dev);
++	struct rw_semaphore	*filesem = dev_get_drvdata(dev);
++
++	return fsg_store_forced_eject(curlun, filesem, buf, count);
++}
++
+ static DEVICE_ATTR_RW(nofua);
+ /* mode wil be set in fsg_lun_attr_is_visible() */
+ static DEVICE_ATTR(ro, 0, ro_show, ro_store);
+ static DEVICE_ATTR(file, 0, file_show, file_store);
++static DEVICE_ATTR_WO(forced_eject);
+ 
+ /****************************** FSG COMMON ******************************/
+ 
+@@ -2677,6 +2688,7 @@ static struct attribute *fsg_lun_dev_attrs[] = {
+ 	&dev_attr_ro.attr,
+ 	&dev_attr_file.attr,
+ 	&dev_attr_nofua.attr,
++	&dev_attr_forced_eject.attr,
+ 	NULL
+ };
+ 
+@@ -3090,6 +3102,18 @@ static ssize_t fsg_lun_opts_inquiry_string_store(struct config_item *item,
+ 
+ CONFIGFS_ATTR(fsg_lun_opts_, inquiry_string);
+ 
++static ssize_t fsg_lun_opts_forced_eject_store(struct config_item *item,
++					       const char *page, size_t len)
++{
++	struct fsg_lun_opts *opts = to_fsg_lun_opts(item);
++	struct fsg_opts *fsg_opts = to_fsg_opts(opts->group.cg_item.ci_parent);
++
++	return fsg_store_forced_eject(opts->lun, &fsg_opts->common->filesem,
++				      page, len);
++}
++
++CONFIGFS_ATTR_WO(fsg_lun_opts_, forced_eject);
++
+ static struct configfs_attribute *fsg_lun_attrs[] = {
+ 	&fsg_lun_opts_attr_file,
+ 	&fsg_lun_opts_attr_ro,
+@@ -3097,6 +3121,7 @@ static struct configfs_attribute *fsg_lun_attrs[] = {
+ 	&fsg_lun_opts_attr_cdrom,
+ 	&fsg_lun_opts_attr_nofua,
+ 	&fsg_lun_opts_attr_inquiry_string,
++	&fsg_lun_opts_attr_forced_eject,
+ 	NULL,
+ };
+ 
+diff --git a/drivers/usb/gadget/function/storage_common.c b/drivers/usb/gadget/function/storage_common.c
+index b859a158a414..8cd95bf7831f 100644
+--- a/drivers/usb/gadget/function/storage_common.c
++++ b/drivers/usb/gadget/function/storage_common.c
+@@ -519,4 +519,15 @@ ssize_t fsg_store_inquiry_string(struct fsg_lun *curlun, const char *buf,
+ }
+ EXPORT_SYMBOL_GPL(fsg_store_inquiry_string);
+ 
++ssize_t fsg_store_forced_eject(struct fsg_lun *curlun, struct rw_semaphore *filesem,
++			       const char *buf, size_t count)
++{
++	int ret;
++
++	curlun->prevent_medium_removal = 0;
++	ret = fsg_store_file(curlun, filesem, "", 0);
++	return ret < 0 ? ret : count;
++}
++EXPORT_SYMBOL_GPL(fsg_store_forced_eject);
++
+ MODULE_LICENSE("GPL");
+diff --git a/drivers/usb/gadget/function/storage_common.h b/drivers/usb/gadget/function/storage_common.h
+index bdeb1e233fc9..0a544a82cbf8 100644
+--- a/drivers/usb/gadget/function/storage_common.h
++++ b/drivers/usb/gadget/function/storage_common.h
+@@ -219,5 +219,7 @@ ssize_t fsg_store_removable(struct fsg_lun *curlun, const char *buf,
+ 			    size_t count);
+ ssize_t fsg_store_inquiry_string(struct fsg_lun *curlun, const char *buf,
+ 				 size_t count);
++ssize_t fsg_store_forced_eject(struct fsg_lun *curlun, struct rw_semaphore *filesem,
++			       const char *buf, size_t count);
+ 
+ #endif /* USB_STORAGE_COMMON_H */
+-- 
+2.37.0
 
-( (freq >= mult-offset) && (freq <= mult+offset) )
-
-would mean that
-
-div = DIV_ROUND_CLOSEST(freq, desired_clk);
-evaluates to original div and we are within tolerance and hence we can return and hence don't even reach DIV_ROUND_UP?
-
-Please note that freq can skip any multiples and land up anywhere.
-
-As long as it has not gone beyond clock rate table, either it lands 
-within tolerance of nearest multiple of desired_clk (in which case we 
-return)
-
-OR
-
-We move on to next div = (freq/desired_clk + 1)
-
-
-I retract div++, I was mistaken to believe that DIV_ROUND_UP(freq, 
-desired_clk) would be same as div++.
-
-Thank you.
-
->> Additionally if freq <= mult we would have hit return.
->> So always freq > mult?
->>
->> And hence div++ would do the same?
-> I thought about it and I decided that it might not if the clock
-> framework skipped a whole bunch. Let's see if I can give an example.
->
-> Let's say
-> * "desired_clk" is 10000
-> * "percent_tol" is 2 (abs_tol = 200)
-> * We can make clocks 17000, 20000, 25000.
->
-> First time through the loop:
->
-> mult = 10000
-> offset = 200
-> freq = 17000
-> div = 2
-> achieved = 8500 (not within tolerance)
->
-> ...at the end of the loop if we do "div++" then we'll end up with
-> div=3 for the next loop and we'll miss finding 20000.
-> ...but if we do my math, we end up with:
->
-> DIV_ROUND_UP(max(17000, 10000) + 1, 10000)
-> DIV_ROUND_UP(17000 + 1, 10000)
-> DIV_ROUND_UP(17000, 10000)
-> 2
->
-> ...and that's exactly what we want.
->
->
-> Here's an example showing why the line "div = DIV_ROUND_CLOSEST(freq,
-> desired_clk)" is important:
->
-> * "desired_clk" is 10000
-> * "percent_tol" is 2 (abs_tol = 200)
-> * We can make clocks 19600, 25000.
->
-> mult = 10000
-> offset = 200
-> freq = 19600
-> div = 2
-> achieved = 9800
->
-> Returns 19600 and div=2
->
->
-> Here's an example showing how the clock framework rounding lets us
-> skip some "div"s without missing anything important:
->
-> * "desired_clk" is 10000
-> * "percent_tol" is 2 (abs_tol = 200)
-> * We can make clocks 24000, 30000.
->
-> mult = 25000
-> offset = 200
-> freq = 24000
-> div = 2
-> achieved = 12000 (not within tolerance)
->
-> div = DIV_ROUND_UP(max(24000, 10000) + 1, 10000)
-> div = 3
->
-> mult = 30000
-> offset = 600
-> freq = 30000
-> div = 3
->
-> -Doug

@@ -2,77 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CBBF25685B8
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 12:37:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 432D256855B
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 12:22:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232577AbiGFKhW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Jul 2022 06:37:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50748 "EHLO
+        id S232483AbiGFKWF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Jul 2022 06:22:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60886 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229898AbiGFKhT (ORCPT
+        with ESMTP id S231935AbiGFKVj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Jul 2022 06:37:19 -0400
-Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFEF82717B;
-        Wed,  6 Jul 2022 03:37:18 -0700 (PDT)
-Received: by mail-ej1-x631.google.com with SMTP id sb34so26289953ejc.11;
-        Wed, 06 Jul 2022 03:37:18 -0700 (PDT)
+        Wed, 6 Jul 2022 06:21:39 -0400
+Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A55D2714D;
+        Wed,  6 Jul 2022 03:21:15 -0700 (PDT)
+Received: by mail-pl1-x631.google.com with SMTP id m14so13286771plg.5;
+        Wed, 06 Jul 2022 03:21:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=message-id:date:from:to:cc:subject:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=MdRqT9TlKdwtrSOPprK+WxAXXd6G2UIUMtOdNMZWkdg=;
-        b=kUYGi0zyaBVHlWyW2J/RjJbjDeIvRLSOl1zOC96AGnE90aip4WIhWrH3IF+8Ngfa6s
-         m+hVdOWs3loi+YVcBnxcJsSddoM8Ad8FfSiJEjTT1j/LgZ62Syhtxx9GsGdSaSizpUmO
-         YQY1O1D386wLK3mgr7bqOGVABn6kvLYRsjbLk7am351BOTHd7k9wouiHeDZbIdx2aqYd
-         Q+1uPAnYne6cG9i0a6rdbjhK+pwadpBzYVWEkRKpG66NU3D72tCYbQCrLBI8+ju/m6ja
-         +mXn0Hid725+tgu6EG14lS1ThkbyxNckigH3OsStHi9Tyu8p1oYkIlixA5teJY6L1ksW
-         2z8g==
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=UzsK5A/Pd2DS/q+pu2TPIXsF74uXoZ2jR8FiWqOBTf0=;
+        b=jPknnkWS+HyznwuLvLZ32EFNaMi2kYHUveXX06LBsxWi8WWk54fdGGslOYuaNSzAC1
+         +C/+81V/BTWAnyuW8zpzEOQ+3m5kTKePsPyILyW85ZxloaLy8smIa1RrjtcLHK+50AnN
+         yH5/1g7GUFT38DXkivHkyB65dBQ5OBuhhzy8EUzkCEJTf3ZiONObArhVTtB/OcViMTCO
+         X8KJZBJU4Y7DZ7cizzptUG1IJyL3aKSnpY0xM5e5mg68r1rnl3nGzJWE9g1ZeO/yvMHJ
+         7jvS9E7520rHkopiOmyafXJGnjCstN3kCYMy2ZH1/+Y8EfKqhyAZCsV/fFXXHCJrvG+e
+         ygDw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:from:to:cc:subject:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=MdRqT9TlKdwtrSOPprK+WxAXXd6G2UIUMtOdNMZWkdg=;
-        b=m7tmm9p+hzgX0RGsgkmSWeLIM//B3mZuDSLmh2mevhXzjMvakFMAYZk5pmL8UybOnb
-         Y5wxEtP75Qy5gwnp3gioBWE7TqZZzcOUwKq8ej7H4h477joi/NFkxYod9ZbpPNk8SZYy
-         uKktt9PsZODz6wxBvIPRjcPxF6XWxpB0ys4WFBf8bJZukm8BeA4gdIZ1LEAoUWJXcWRV
-         k3uvhX375Tb4eKWhqXebJVBg5AmYj4ut6xYrQqYW9sUSAVhe/QZYGJxrrKji24DDrOYF
-         3stilLuB7+MwRH8gCG7bXPShAjROCYY/cPBn3XIl6Vmpb1wauadQpY/66aEwr4tAO/HX
-         zDTQ==
-X-Gm-Message-State: AJIora/wg2W5kspFVKBxpa/P8ppB/kQoPsHGgrjCQVCuT3bm/r2ZZqtQ
-        RCu4EnZKQOQ/2nfcVXW/6r8=
-X-Google-Smtp-Source: AGRyM1tAarnBTiCdC/ZPJSTY7R7C2gOasl5h7rc83XMHrb1C7HWHD3j5JXHa5OWdynIt1UhhJ6BSqA==
-X-Received: by 2002:a17:907:2d9e:b0:726:a03a:16c4 with SMTP id gt30-20020a1709072d9e00b00726a03a16c4mr36829048ejc.742.1657103837343;
-        Wed, 06 Jul 2022 03:37:17 -0700 (PDT)
-Received: from Ansuel-xps. (93-42-70-190.ip85.fastwebnet.it. [93.42.70.190])
-        by smtp.gmail.com with ESMTPSA id o19-20020a17090637d300b006ff0b457cdasm17319454ejc.53.2022.07.06.03.37.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 06 Jul 2022 03:37:16 -0700 (PDT)
-Message-ID: <62c565dc.1c69fb81.a4566.e9b2@mx.google.com>
-X-Google-Original-Message-ID: <YsVh+AKZ/ZAshXzt@Ansuel-xps.>
-Date:   Wed, 6 Jul 2022 12:20:40 +0200
-From:   Christian Marangi <ansuelsmth@gmail.com>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/5] ARM: DTS: qcom: fix dtbs_check warning with new
- rpmcc clocks
-References: <20220705202837.667-1-ansuelsmth@gmail.com>
- <20220705202837.667-3-ansuelsmth@gmail.com>
- <18e40247-7151-b50a-97fe-00ee88f47d9b@linaro.org>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=UzsK5A/Pd2DS/q+pu2TPIXsF74uXoZ2jR8FiWqOBTf0=;
+        b=w2Y6SpmJBMIP8pXWlIVkOuLu0pbSMIpNPyIM57uEV3EpEgf4KrkJWXTBPF1fkEzlzk
+         3fjU0rN2xN/hQyIl3nVIbu/4f35SanMyY5MH5PLpgvUCGC4IknXEB1H71B7jei9iEN1C
+         Nh07tWJCVfBAaI0AJh8yJ1TOAfLiVvfItTSP35E/c+yX9ijfmK1nOkqw6FEhft2onbP5
+         GtujuryDzNnKM3yhd8BWxEg4gUPoavz2sVhbsdgpLp7Y2eJSPUx58xjPKQEuqg63244C
+         g8JYmAt/zwanWcDzlhPT9lj/X8GSQ98Q/3N8u2u+YxNGjVipJvdTCvISXwz1VlbcWV33
+         dFOg==
+X-Gm-Message-State: AJIora9HhR2u8Q3E16508TwNPd967xYkTau5ZDOBObafM29Dcav9ET0f
+        J7u/ZP2RySDr7b4/ze+q/PM=
+X-Google-Smtp-Source: AGRyM1u62ff8Zjp/L+wMPt2MQjdQjkuAxTYu9AnfGkSn1v7kxGjrvXqT5UyLr/SkNP7QrlRhVQcR8g==
+X-Received: by 2002:a17:90a:c7cc:b0:1ef:775e:8df1 with SMTP id gf12-20020a17090ac7cc00b001ef775e8df1mr26574178pjb.28.1657102874543;
+        Wed, 06 Jul 2022 03:21:14 -0700 (PDT)
+Received: from ?IPV6:2404:f801:0:5:8000::75b? ([2404:f801:9000:1a:efea::75b])
+        by smtp.gmail.com with ESMTPSA id w21-20020a656955000000b0041282c423e6sm2085990pgq.71.2022.07.06.03.21.04
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 06 Jul 2022 03:21:13 -0700 (PDT)
+Message-ID: <71242da1-8a7a-53ca-06d6-7a1363141bd8@gmail.com>
+Date:   Wed, 6 Jul 2022 18:21:02 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <18e40247-7151-b50a-97fe-00ee88f47d9b@linaro.org>
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH 2/2] x86/ACPI: Set swiotlb area according to the number of
+ lapic entry in MADT
+Content-Language: en-US
+To:     Christoph Hellwig <hch@infradead.org>
+Cc:     corbet@lwn.net, rafael@kernel.org, len.brown@intel.com,
+        pavel@ucw.cz, tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
+        m.szyprowski@samsung.com, robin.murphy@arm.com, paulmck@kernel.org,
+        akpm@linux-foundation.org, keescook@chromium.org,
+        songmuchun@bytedance.com, rdunlap@infradead.org,
+        damien.lemoal@opensource.wdc.com, michael.h.kelley@microsoft.com,
+        kys@microsoft.com, Tianyu Lan <Tianyu.Lan@microsoft.com>,
+        iommu@lists.linux-foundation.org, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        vkuznets@redhat.com, wei.liu@kernel.org, parri.andrea@gmail.com,
+        thomas.lendacky@amd.com, linux-hyperv@vger.kernel.org,
+        kirill.shutemov@intel.com, andi.kleen@intel.com,
+        Andi Kleen <ak@linux.intel.com>
+References: <20220627153150.106995-1-ltykernel@gmail.com>
+ <20220627153150.106995-3-ltykernel@gmail.com>
+ <YrxcCZKvFYjxLf9n@infradead.org>
+ <a876f862-c005-108d-e6f9-68336a8d89f0@gmail.com>
+ <YsVBKgxiQKfnCjvn@infradead.org>
+ <10062b7d-f0a6-6724-4ccb-506da09a8533@gmail.com>
+ <YsVPwYGHUoctAKjs@infradead.org>
+From:   Tianyu Lan <ltykernel@gmail.com>
+In-Reply-To: <YsVPwYGHUoctAKjs@infradead.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -81,25 +93,19 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jul 06, 2022 at 09:44:04AM +0200, Krzysztof Kozlowski wrote:
-> On 05/07/2022 22:28, Christian Marangi wrote:
-> > Fix dtbs_check warning for new rpmcc Documentation changes and add the
-> > required clocks.
+On 7/6/2022 5:02 PM, Christoph Hellwig wrote:
+> On Wed, Jul 06, 2022 at 04:57:33PM +0800, Tianyu Lan wrote:
+>> Swiotlb_init() is called in the mem_init() of different architects and
+>> memblock free pages are released to the buddy allocator just after
+>> calling swiotlb_init() via memblock_free_all().
 > 
-> There is no warning in the kernel, right? So the commit is not correct.
->
-
-Oh ok, the warning is generated by the new Documentation.
-
-> Only the second part of your sentence applies, but you should extend it.
+> Yes.
 > 
-
-Ok will reword this.
-
+>> The mem_init() is called before smp_init().
 > 
-> 
-> Best regards,
-> Krzysztof
+> But why would that matter?  cpu_possible_map is set up from
+> setup_arch(), which is called before that.
 
--- 
-	Ansuel
+Sorry. I just still focus online cpu number and the number is got after
+smp_init(). Possible cpu number includes some offline cpus. I will have 
+a try. Thanks for suggestion.

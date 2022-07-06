@@ -2,74 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5473B568EC5
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 18:13:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A28A4568EC8
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 18:15:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234382AbiGFQNa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Jul 2022 12:13:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41308 "EHLO
+        id S234444AbiGFQPX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Jul 2022 12:15:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43062 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233665AbiGFQN1 (ORCPT
+        with ESMTP id S234005AbiGFQPU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Jul 2022 12:13:27 -0400
-Received: from mail-io1-f51.google.com (mail-io1-f51.google.com [209.85.166.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A4153AF;
-        Wed,  6 Jul 2022 09:13:26 -0700 (PDT)
-Received: by mail-io1-f51.google.com with SMTP id p128so14460184iof.1;
-        Wed, 06 Jul 2022 09:13:26 -0700 (PDT)
+        Wed, 6 Jul 2022 12:15:20 -0400
+Received: from mail-io1-f43.google.com (mail-io1-f43.google.com [209.85.166.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7BA917AA2;
+        Wed,  6 Jul 2022 09:15:19 -0700 (PDT)
+Received: by mail-io1-f43.google.com with SMTP id v185so14427946ioe.11;
+        Wed, 06 Jul 2022 09:15:19 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=TvrtBUF3QCSk1zMA7Dk12dzB8jZO0FszbYgfQoyxdZg=;
-        b=zrPw+4sJvBBRMWD3HdCEUepvFdghbwxN8NZwamTQ5ylShVLNIAxrFLpo34eTXH8kwE
-         JnxAticURA5Mwq73usg92imGVd6mvNL4V11Q2yaR1WvlraxOBZ8d16Gls4QmbYgjpYXm
-         jikU9NxGY9QMDChfZL0tPStk1+wcX2msEn345UL3+dkIHWZz+zUz4kUUJJ9dj2Z8JI04
-         9rrL6pMOLFlr9drCChRvdyQaMI5hqN4JmuF5Vs6VNwZ5JlhwUR7mMiWf1JTbMsN6PRHr
-         TF9reTlp3RV8nWzDzn5z9S5GILuu/2o1RI7xW6yHp+pmVkUVZV/gU2mkslTvFsaatyb0
-         Ogdw==
-X-Gm-Message-State: AJIora+rj0YP+RFH4ihIE/3Z3BMraczFhfu5K5vW8A1UKmuub2UFsiEB
-        5lu9yJsK6Hr1/N+FK7SoQQ==
-X-Google-Smtp-Source: AGRyM1vBtpYxC3SUwaxTGvXOV5v1/bmL0O3/t3lMZhg+53gxeih+OnIt/Wdk0ksZ1XWBJ/178iMCow==
-X-Received: by 2002:a6b:7845:0:b0:64c:9acc:9f1a with SMTP id h5-20020a6b7845000000b0064c9acc9f1amr22309984iop.103.1657124005646;
-        Wed, 06 Jul 2022 09:13:25 -0700 (PDT)
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=yIuMK+Epa4CeSgafcIsVixZuNX7hOleHdf6ygTqGQic=;
+        b=KyPDdrCKAep8qU83RXPBG6KW1vNzc2QUV/dTQPp9hpiIjwPdbBDDC4kgskodiNBK9x
+         LDMTx/LSFPCmrF/uT9UfOEDSP2Fr5jQ7iH1vxOvcfYAlHhFyk6CFIKuKazVRZzpek0s4
+         +uQLnCnZFyvGeeqdxhZVS+qyGx06oIcYgX8INgDP5rnA0QRyoRMw22J5limjChguXVQY
+         fCBSFLrKktrhu+0JrzwHm0AhF8KIOrqhHaCLcXM3ZXUezVwCz4KzqQWsJtPDeeMbFjl6
+         ilkpYpODy/DvGHuzU+6kr22/hmFIUXbuz0QTtWvGkdilRI5vE9X/3L1zmUXy2Q+3/GIs
+         xsfg==
+X-Gm-Message-State: AJIora9I0QXSQ7R2Bv+53LvMSeTL1jtp1rx5/3UJqnpltopFh583ypo6
+        QiFQCJ1T223G+/MR59/W+g==
+X-Google-Smtp-Source: AGRyM1tgaH87vbPXIyTm51/rl0HRCmr9Zvj2FpHEwqOBNW/fakBKe/7zvs2hlfs05Iy5v7d+JKaY6Q==
+X-Received: by 2002:a02:9709:0:b0:339:ef87:c30b with SMTP id x9-20020a029709000000b00339ef87c30bmr25332247jai.214.1657124118887;
+        Wed, 06 Jul 2022 09:15:18 -0700 (PDT)
 Received: from robh.at.kernel.org ([64.188.179.248])
-        by smtp.gmail.com with ESMTPSA id j25-20020a02a699000000b00339c33df66bsm16050036jam.118.2022.07.06.09.13.23
+        by smtp.gmail.com with ESMTPSA id r16-20020a02b110000000b0032e271a558csm15962003jah.168.2022.07.06.09.15.18
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 06 Jul 2022 09:13:25 -0700 (PDT)
-Received: (nullmailer pid 140225 invoked by uid 1000);
-        Wed, 06 Jul 2022 16:13:23 -0000
-Date:   Wed, 6 Jul 2022 10:13:23 -0600
+        Wed, 06 Jul 2022 09:15:18 -0700 (PDT)
+Received: (nullmailer pid 143080 invoked by uid 1000);
+        Wed, 06 Jul 2022 16:15:17 -0000
+Date:   Wed, 6 Jul 2022 10:15:17 -0600
 From:   Rob Herring <robh@kernel.org>
-To:     Emil Renner Berthing <emil.renner.berthing@canonical.com>
-Cc:     Pavel Machek <pavel@ucw.cz>, Aurelien Jarno <aurelien@aurel32.net>,
-        linux-kernel@vger.kernel.org,
-        David Abdurachmanov <davidlt@rivosinc.com>,
-        Vincent Pelletier <plr.vincent@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Stephen L Arnold <nerdboy@gentoo.org>,
-        Bin Meng <bin.meng@windriver.com>,
-        linux-riscv@lists.infradead.org, linux-leds@vger.kernel.org,
-        Qiu Wenbo <qiuwenbo@kylinos.com.cn>,
-        Sven Schwermer <sven.schwermer@disruptive-technologies.com>,
-        devicetree@vger.kernel.org,
-        Jianlong Huang <jianlong.huang@starfivetech.com>,
-        Mark Kettenis <kettenis@openbsd.org>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Ron Economos <w6rz@comcast.net>,
-        Paul Walmsley <paul.walmsley@sifive.com>
-Subject: Re: [PATCH v1 2/4] dt-bindings: leds: pwm-multicolor: Add active-low
- property
-Message-ID: <20220706161323.GA140190-robh@kernel.org>
-References: <20220705210143.315151-1-emil.renner.berthing@canonical.com>
- <20220705210143.315151-3-emil.renner.berthing@canonical.com>
+To:     Jimmy Chen =?utf-8?B?KOmZs+awuOmBlCk=?= <jimmy.chen@moxa.com>
+Cc:     "krzysztof.kozlowski+dt@linaro.org" 
+        <krzysztof.kozlowski+dt@linaro.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH 2/2] Add an entry for MOXA platform board
+Message-ID: <20220706161517.GA140402-robh@kernel.org>
+References: <SEYPR01MB4272F28F81FB51152496D9CBFA809@SEYPR01MB4272.apcprd01.prod.exchangelabs.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20220705210143.315151-3-emil.renner.berthing@canonical.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <SEYPR01MB4272F28F81FB51152496D9CBFA809@SEYPR01MB4272.apcprd01.prod.exchangelabs.com>
 X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
         FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
         HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
@@ -81,14 +66,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 05 Jul 2022 23:01:41 +0200, Emil Renner Berthing wrote:
-> Add the active-low property to LEDs that are part of a multicolor LED
-> just like the regular PWM LEDs have.
+On Wed, Jul 06, 2022 at 07:22:23AM +0000, Jimmy Chen (陳永達) wrote:
+> UC-8220 & UC-8210 hardware compatibility model
 > 
-> Signed-off-by: Emil Renner Berthing <emil.renner.berthing@canonical.com>
+> Signed-off-by: Jimmy Chen <jimmy.chen@moxa.com>
 > ---
->  .../devicetree/bindings/leds/leds-pwm-multicolor.yaml         | 4 ++++
->  1 file changed, 4 insertions(+)
-> 
+>  .../devicetree/bindings/arm/moxa.yaml         | 21 +++++++++++++++++++
+>  1 file changed, 21 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/arm/moxa.yaml
 
-Reviewed-by: Rob Herring <robh@kernel.org>
+What's the relationship to moxart.yaml?
+
+> 
+> diff --git a/Documentation/devicetree/bindings/arm/moxa.yaml b/Documentation/devicetree/bindings/arm/moxa.yaml
+> new file mode 100644
+> index 000000000000..73f4bf883b06
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/arm/moxa.yaml
+> @@ -0,0 +1,21 @@
+> +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/arm/moxa.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: MOXA platform device tree bindings
+> +
+> +maintainers:
+> +  - Jimmy Chen <jimmy.chen@moxa.com>
+> +
+> +properties:
+> +  compatible:
+> +    description: UC-82XX-LX embedded computer
+> +    items:
+> +      - const: moxa,uc-8210
+> +      - const: moxa,uc-8220
+> +
+> +additionalProperties: true
+> +...
+> +
+> -- 
+> 2.20.1
+> 

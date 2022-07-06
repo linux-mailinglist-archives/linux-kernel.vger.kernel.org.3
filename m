@@ -2,146 +2,252 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2DE03567C19
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 04:50:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EF0FE567C1C
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 04:51:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231180AbiGFCty (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Jul 2022 22:49:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44660 "EHLO
+        id S231237AbiGFCu6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Jul 2022 22:50:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45186 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229648AbiGFCtx (ORCPT
+        with ESMTP id S230089AbiGFCuz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Jul 2022 22:49:53 -0400
-Received: from out199-6.us.a.mail.aliyun.com (out199-6.us.a.mail.aliyun.com [47.90.199.6])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9918915A3E
-        for <linux-kernel@vger.kernel.org>; Tue,  5 Jul 2022 19:49:51 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R101e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046049;MF=guanghuifeng@linux.alibaba.com;NM=1;PH=DS;RN=21;SR=0;TI=SMTPD_---0VIW9-BM_1657075784;
-Received: from 30.225.28.170(mailfrom:guanghuifeng@linux.alibaba.com fp:SMTPD_---0VIW9-BM_1657075784)
-          by smtp.aliyun-inc.com;
-          Wed, 06 Jul 2022 10:49:45 +0800
-Message-ID: <7bf7c5ea-16eb-b02f-8ef5-bb94c157236d@linux.alibaba.com>
-Date:   Wed, 6 Jul 2022 10:49:43 +0800
+        Tue, 5 Jul 2022 22:50:55 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E078915A3E;
+        Tue,  5 Jul 2022 19:50:53 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 69791619A6;
+        Wed,  6 Jul 2022 02:50:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 04A73C341C7;
+        Wed,  6 Jul 2022 02:50:50 +0000 (UTC)
+Date:   Tue, 5 Jul 2022 22:50:49 -0400
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     kernel test robot <lkp@intel.com>
+Cc:     linux-kernel@vger.kernel.org, kbuild-all@lists.01.org,
+        Ingo Molnar <mingo@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        Arend van Spriel <aspriel@gmail.com>,
+        Franky Lin <franky.lin@broadcom.com>,
+        Hante Meuleman <hante.meuleman@broadcom.com>,
+        Kalle Valo <kvalo@kernel.org>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        linux-wireless@vger.kernel.org,
+        brcm80211-dev-list.pdl@broadcom.com,
+        SHA-cyfmac-dev-list@infineon.com, netdev@vger.kernel.org
+Subject: Re: [PATCH 04/13] tracing/brcm: Use the new __vstring() helper
+Message-ID: <20220705225049.665db869@gandalf.local.home>
+In-Reply-To: <202207061019.0zRrehFH-lkp@intel.com>
+References: <20220705224749.622796175@goodmis.org>
+        <202207061019.0zRrehFH-lkp@intel.com>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH v4] arm64: mm: fix linear mem mapping access performance
- degradation
-To:     Mike Rapoport <rppt@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>
-Cc:     Will Deacon <will@kernel.org>, Ard Biesheuvel <ardb@kernel.org>,
-        baolin.wang@linux.alibaba.com, akpm@linux-foundation.org,
-        david@redhat.com, jianyong.wu@arm.com, james.morse@arm.com,
-        quic_qiancai@quicinc.com, christophe.leroy@csgroup.eu,
-        jonathan@marek.ca, mark.rutland@arm.com,
-        thunder.leizhen@huawei.com, anshuman.khandual@arm.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        geert+renesas@glider.be, linux-mm@kvack.org,
-        yaohongbo@linux.alibaba.com, alikernel-developer@linux.alibaba.com
-References: <6977c692-78ca-5a67-773e-0389c85f2650@linux.alibaba.com>
- <20220704163815.GA32177@willie-the-truck>
- <CAMj1kXEvY5QXOUrXZ7rBp9As=65uTTFRSSq+FPt-n4M2P-_VtQ@mail.gmail.com>
- <20220705095231.GB552@willie-the-truck>
- <5d044fdd-a61a-d60f-d294-89e17de37712@linux.alibaba.com>
- <20220705121115.GB1012@willie-the-truck> <YsRSajyMxahXe7ZS@kernel.org>
- <YsRZ8V8mQ+HM31D6@arm.com> <YsRfgX7FFZLxQU50@kernel.org>
- <YsRvPTORdvIwzShL@arm.com> <YsSi9HAOOzbPYN+w@kernel.org>
-From:   "guanghui.fgh" <guanghuifeng@linux.alibaba.com>
-In-Reply-To: <YsSi9HAOOzbPYN+w@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Thanks.
+On Wed, 6 Jul 2022 10:35:50 +0800
+kernel test robot <lkp@intel.com> wrote:
 
-在 2022/7/6 4:45, Mike Rapoport 写道:
-> On Tue, Jul 05, 2022 at 06:05:01PM +0100, Catalin Marinas wrote:
->> On Tue, Jul 05, 2022 at 06:57:53PM +0300, Mike Rapoport wrote:
->>> On Tue, Jul 05, 2022 at 04:34:09PM +0100, Catalin Marinas wrote:
->>>> On Tue, Jul 05, 2022 at 06:02:02PM +0300, Mike Rapoport wrote:
->>>>> +void __init remap_crashkernel(void)
->>>>> +{
->>>>> +#ifdef CONFIG_KEXEC_CORE
->>>>> +	phys_addr_t start, end, size;
->>>>> +	phys_addr_t aligned_start, aligned_end;
->>>>> +
->>>>> +	if (can_set_direct_map() || IS_ENABLED(CONFIG_KFENCE))
->>>>> +	    return;
->>>>> +
->>>>> +	if (!crashk_res.end)
->>>>> +	    return;
->>>>> +
->>>>> +	start = crashk_res.start & PAGE_MASK;
->>>>> +	end = PAGE_ALIGN(crashk_res.end);
->>>>> +
->>>>> +	aligned_start = ALIGN_DOWN(crashk_res.start, PUD_SIZE);
->>>>> +	aligned_end = ALIGN(end, PUD_SIZE);
->>>>> +
->>>>> +	/* Clear PUDs containing crash kernel memory */
->>>>> +	unmap_hotplug_range(__phys_to_virt(aligned_start),
->>>>> +			    __phys_to_virt(aligned_end), false, NULL);
->>>>
->>>> What I don't understand is what happens if there's valid kernel data
->>>> between aligned_start and crashk_res.start (or the other end of the
->>>> range).
->>>
->>> Data shouldn't go anywhere :)
->>>
->>> There is
->>>
->>> +	/* map area from PUD start to start of crash kernel with large pages */
->>> +	size = start - aligned_start;
->>> +	__create_pgd_mapping(swapper_pg_dir, aligned_start,
->>> +			     __phys_to_virt(aligned_start),
->>> +			     size, PAGE_KERNEL, early_pgtable_alloc, 0);
->>>
->>> and
->>>
->>> +	/* map area from end of crash kernel to PUD end with large pages */
->>> +	size = aligned_end - end;
->>> +	__create_pgd_mapping(swapper_pg_dir, end, __phys_to_virt(end),
->>> +			     size, PAGE_KERNEL, early_pgtable_alloc, 0);
->>>
->>> after the unmap, so after we tear down a part of a linear map we
->>> immediately recreate it, just with a different page size.
->>>
->>> This all happens before SMP, so there is no concurrency at that point.
->>
->> That brief period of unmap worries me. The kernel text, data and stack
->> are all in the vmalloc space but any other (memblock) allocation to this
->> point may be in the unmapped range before and after the crashkernel
->> reservation. The interrupts are off, so I think the only allocation and
->> potential access that may go in this range is the page table itself. But
->> it looks fragile to me.
+> Hi Steven,
 > 
-> I agree there are chances there will be an allocation from the unmapped
-> range.
+> Thank you for the patch! Perhaps something to improve:
 > 
-> We can make sure this won't happen, though. We can cap the memblock
-> allocations with memblock_set_current_limit(aligned_end) or
-> memblock_reserve(algined_start, aligned_end) until the mappings are
-> restored.
->   
->> -- 
->> Catalin
+> [auto build test WARNING on rostedt-trace/for-next]
+> [also build test WARNING on wireless-next/main wireless/main linus/master v5.19-rc5 next-20220705]
+> [If your patch is applied to the wrong git tree, kindly drop us a note.
+> And when submitting patch, we suggest to use '--base' as documented in
+> https://git-scm.com/docs/git-format-patch]
 > 
-I think there is no need to worry about vmalloc mem.
 
-1.As mentioned above,
-When reserving crashkernel and remapping linear mem mapping, there is 
-only one boot cpu running. There is no other cpu/thread running at the 
-same time.
 
-2.Although vmalloc may alloc mem from the ummaped area, but we will 
-rebuid remapping using pte level mapping which keeps virtual address to 
-the same physical address
-(At the same time, no other cpu/thread is access vmalloc mem).
+> If you fix the issue, kindly add following tag where applicable
+> Reported-by: kernel test robot <lkp@intel.com>
+> 
+> All warnings (new ones prefixed by >>):
 
-As a result, it has no effect to vmalloc mem.
+OK, let's look at all the warnings.
+
+> 
+>    In file included from include/trace/define_trace.h:102,
+>                     from drivers/net/wireless/broadcom/brcm80211/brcmfmac/tracepoint.h:133,
+>                     from drivers/net/wireless/broadcom/brcm80211/brcmfmac/tracepoint.c:12:
+>    drivers/net/wireless/broadcom/brcm80211/brcmfmac/./tracepoint.h: In function 'trace_event_get_offsets_brcmf_err':
+> >> include/trace/trace_events.h:261:16: warning: function 'trace_event_get_offsets_brcmf_err' might be a candidate for 'gnu_printf' format attribute [-Wsuggest-attribute=format]  
+
+ 1. "might be a candidate for 'gnu_printf' format attribute"
+
+>      261 |         struct trace_event_raw_##call __maybe_unused *entry;            \
+>          |                ^~~~~~~~~~~~~~~~
+>    include/trace/trace_events.h:40:9: note: in expansion of macro 'DECLARE_EVENT_CLASS'
+>       40 |         DECLARE_EVENT_CLASS(name,                              \
+>          |         ^~~~~~~~~~~~~~~~~~~
+>    drivers/net/wireless/broadcom/brcm80211/brcmfmac/./tracepoint.h:31:1: note: in expansion of macro 'TRACE_EVENT'
+>       31 | TRACE_EVENT(brcmf_err,
+>          | ^~~~~~~~~~~
+>    drivers/net/wireless/broadcom/brcm80211/brcmfmac/./tracepoint.h: In function 'trace_event_get_offsets_brcmf_dbg':
+> >> include/trace/trace_events.h:261:16: warning: function 'trace_event_get_offsets_brcmf_dbg' might be a candidate for 'gnu_printf' format attribute [-Wsuggest-attribute=format]  
+
+ 2. "might be a candidate for 'gnu_printf' format attribute"
+
+>      261 |         struct trace_event_raw_##call __maybe_unused *entry;            \
+>          |                ^~~~~~~~~~~~~~~~
+>    include/trace/trace_events.h:40:9: note: in expansion of macro 'DECLARE_EVENT_CLASS'
+>       40 |         DECLARE_EVENT_CLASS(name,                              \
+>          |         ^~~~~~~~~~~~~~~~~~~
+>    drivers/net/wireless/broadcom/brcm80211/brcmfmac/./tracepoint.h:45:1: note: in expansion of macro 'TRACE_EVENT'
+>       45 | TRACE_EVENT(brcmf_dbg,
+>          | ^~~~~~~~~~~
+>    In file included from include/trace/define_trace.h:102,
+>                     from drivers/net/wireless/broadcom/brcm80211/brcmfmac/tracepoint.h:133,
+>                     from drivers/net/wireless/broadcom/brcm80211/brcmfmac/tracepoint.c:12:
+>    drivers/net/wireless/broadcom/brcm80211/brcmfmac/./tracepoint.h: In function 'trace_event_raw_event_brcmf_err':
+>    include/trace/trace_events.h:386:16: warning: function 'trace_event_raw_event_brcmf_err' might be a candidate for 'gnu_printf' format attribute [-Wsuggest-attribute=format]
+
+ 3. "might be a candidate for 'gnu_printf' format attribute"
+
+>      386 |         struct trace_event_raw_##call *entry;                           \
+>          |                ^~~~~~~~~~~~~~~~
+>    include/trace/trace_events.h:40:9: note: in expansion of macro 'DECLARE_EVENT_CLASS'
+>       40 |         DECLARE_EVENT_CLASS(name,                              \
+>          |         ^~~~~~~~~~~~~~~~~~~
+>    drivers/net/wireless/broadcom/brcm80211/brcmfmac/./tracepoint.h:31:1: note: in expansion of macro 'TRACE_EVENT'
+>       31 | TRACE_EVENT(brcmf_err,
+>          | ^~~~~~~~~~~
+>    drivers/net/wireless/broadcom/brcm80211/brcmfmac/./tracepoint.h: In function 'trace_event_raw_event_brcmf_dbg':
+>    include/trace/trace_events.h:386:16: warning: function 'trace_event_raw_event_brcmf_dbg' might be a candidate for 'gnu_printf' format attribute [-Wsuggest-attribute=format]
+
+ 4. "might be a candidate for 'gnu_printf' format attribute"
+
+>      386 |         struct trace_event_raw_##call *entry;                           \
+>          |                ^~~~~~~~~~~~~~~~
+>    include/trace/trace_events.h:40:9: note: in expansion of macro 'DECLARE_EVENT_CLASS'
+>       40 |         DECLARE_EVENT_CLASS(name,                              \
+>          |         ^~~~~~~~~~~~~~~~~~~
+>    drivers/net/wireless/broadcom/brcm80211/brcmfmac/./tracepoint.h:45:1: note: in expansion of macro 'TRACE_EVENT'
+>       45 | TRACE_EVENT(brcmf_dbg,
+>          | ^~~~~~~~~~~
+>    In file included from include/trace/define_trace.h:103,
+>                     from drivers/net/wireless/broadcom/brcm80211/brcmfmac/tracepoint.h:133,
+>                     from drivers/net/wireless/broadcom/brcm80211/brcmfmac/tracepoint.c:12:
+>    drivers/net/wireless/broadcom/brcm80211/brcmfmac/./tracepoint.h: In function 'perf_trace_brcmf_err':
+>    include/trace/perf.h:64:16: warning: function 'perf_trace_brcmf_err' might be a candidate for 'gnu_printf' format attribute [-Wsuggest-attribute=format]
+
+ 5. "might be a candidate for 'gnu_printf' format attribute"
+
+>       64 |         struct hlist_head *head;                                        \
+>          |                ^~~~~~~~~~
+>    include/trace/trace_events.h:40:9: note: in expansion of macro 'DECLARE_EVENT_CLASS'
+>       40 |         DECLARE_EVENT_CLASS(name,                              \
+>          |         ^~~~~~~~~~~~~~~~~~~
+>    drivers/net/wireless/broadcom/brcm80211/brcmfmac/./tracepoint.h:31:1: note: in expansion of macro 'TRACE_EVENT'
+>       31 | TRACE_EVENT(brcmf_err,
+>          | ^~~~~~~~~~~
+>    drivers/net/wireless/broadcom/brcm80211/brcmfmac/./tracepoint.h: In function 'perf_trace_brcmf_dbg':
+>    include/trace/perf.h:64:16: warning: function 'perf_trace_brcmf_dbg' might be a candidate for 'gnu_printf' format attribute [-Wsuggest-attribute=format]
+
+ 6. "might be a candidate for 'gnu_printf' format attribute"
+
+>       64 |         struct hlist_head *head;                                        \
+>          |                ^~~~~~~~~~
+>    include/trace/trace_events.h:40:9: note: in expansion of macro 'DECLARE_EVENT_CLASS'
+>       40 |         DECLARE_EVENT_CLASS(name,                              \
+>          |         ^~~~~~~~~~~~~~~~~~~
+>    drivers/net/wireless/broadcom/brcm80211/brcmfmac/./tracepoint.h:45:1: note: in expansion of macro 'TRACE_EVENT'
+>       45 | TRACE_EVENT(brcmf_dbg,
+>          | ^~~~~~~~~~~
+> --
+>    In file included from include/trace/define_trace.h:102,
+>                     from drivers/net/wireless/broadcom/brcm80211/brcmsmac/brcms_trace_brcmsmac_msg.h:82,
+>                     from drivers/net/wireless/broadcom/brcm80211/brcmsmac/brcms_trace_events.h:38,
+>                     from drivers/net/wireless/broadcom/brcm80211/brcmsmac/brcms_trace_events.c:22:
+>    drivers/net/wireless/broadcom/brcm80211/brcmsmac/./brcms_trace_brcmsmac_msg.h: In function 'trace_event_get_offsets_brcms_dbg':
+> >> include/trace/trace_events.h:261:16: warning: function 'trace_event_get_offsets_brcms_dbg' might be a candidate for 'gnu_printf' format attribute [-Wsuggest-attribute=format]  
+
+ 7. "might be a candidate for 'gnu_printf' format attribute"
+
+>      261 |         struct trace_event_raw_##call __maybe_unused *entry;            \
+>          |                ^~~~~~~~~~~~~~~~
+>    include/trace/trace_events.h:40:9: note: in expansion of macro 'DECLARE_EVENT_CLASS'
+>       40 |         DECLARE_EVENT_CLASS(name,                              \
+>          |         ^~~~~~~~~~~~~~~~~~~
+>    drivers/net/wireless/broadcom/brcm80211/brcmsmac/./brcms_trace_brcmsmac_msg.h:59:1: note: in expansion of macro 'TRACE_EVENT'
+>       59 | TRACE_EVENT(brcms_dbg,
+>          | ^~~~~~~~~~~
+>    In file included from include/trace/define_trace.h:102,
+>                     from drivers/net/wireless/broadcom/brcm80211/brcmsmac/brcms_trace_brcmsmac_msg.h:82,
+>                     from drivers/net/wireless/broadcom/brcm80211/brcmsmac/brcms_trace_events.h:38,
+>                     from drivers/net/wireless/broadcom/brcm80211/brcmsmac/brcms_trace_events.c:22:
+>    drivers/net/wireless/broadcom/brcm80211/brcmsmac/./brcms_trace_brcmsmac_msg.h: In function 'trace_event_raw_event_brcms_dbg':
+>    include/trace/trace_events.h:386:16: warning: function 'trace_event_raw_event_brcms_dbg' might be a candidate for 'gnu_printf' format attribute [-Wsuggest-attribute=format]
+
+ 8. "might be a candidate for 'gnu_printf' format attribute"
+
+
+>      386 |         struct trace_event_raw_##call *entry;                           \
+>          |                ^~~~~~~~~~~~~~~~
+>    include/trace/trace_events.h:40:9: note: in expansion of macro 'DECLARE_EVENT_CLASS'
+>       40 |         DECLARE_EVENT_CLASS(name,                              \
+>          |         ^~~~~~~~~~~~~~~~~~~
+>    drivers/net/wireless/broadcom/brcm80211/brcmsmac/./brcms_trace_brcmsmac_msg.h:59:1: note: in expansion of macro 'TRACE_EVENT'
+>       59 | TRACE_EVENT(brcms_dbg,
+>          | ^~~~~~~~~~~
+>    In file included from include/trace/define_trace.h:103,
+>                     from drivers/net/wireless/broadcom/brcm80211/brcmsmac/brcms_trace_brcmsmac_msg.h:82,
+>                     from drivers/net/wireless/broadcom/brcm80211/brcmsmac/brcms_trace_events.h:38,
+>                     from drivers/net/wireless/broadcom/brcm80211/brcmsmac/brcms_trace_events.c:22:
+>    drivers/net/wireless/broadcom/brcm80211/brcmsmac/./brcms_trace_brcmsmac_msg.h: In function 'perf_trace_brcms_dbg':
+>    include/trace/perf.h:64:16: warning: function 'perf_trace_brcms_dbg' might be a candidate for 'gnu_printf' format attribute [-Wsuggest-attribute=format]
+
+ 9. "might be a candidate for 'gnu_printf' format attribute"
+
+>       64 |         struct hlist_head *head;                                        \
+>          |                ^~~~~~~~~~
+>    include/trace/trace_events.h:40:9: note: in expansion of macro 'DECLARE_EVENT_CLASS'
+>       40 |         DECLARE_EVENT_CLASS(name,                              \
+>          |         ^~~~~~~~~~~~~~~~~~~
+>    drivers/net/wireless/broadcom/brcm80211/brcmsmac/./brcms_trace_brcmsmac_msg.h:59:1: note: in expansion of macro 'TRACE_EVENT'
+>       59 | TRACE_EVENT(brcms_dbg,
+>          | ^~~~~~~~~~~
+> 
+> 
+> vim +261 include/trace/trace_events.h
+> 
+> 55de2c0b5610cb include/trace/trace_events.h Masami Hiramatsu         2021-11-22  253  
+> 091ad3658e3c76 include/trace/ftrace.h       Ingo Molnar              2009-11-26  254  #undef DECLARE_EVENT_CLASS
+> 091ad3658e3c76 include/trace/ftrace.h       Ingo Molnar              2009-11-26  255  #define DECLARE_EVENT_CLASS(call, proto, args, tstruct, assign, print)	\
+> d0ee8f4a1f5f3d include/trace/trace_events.h Steven Rostedt (Red Hat  2015-05-13  256) static inline notrace int trace_event_get_offsets_##call(		\
+> 62323a148fbeb0 include/trace/trace_events.h Steven Rostedt (Red Hat  2015-05-13  257) 	struct trace_event_data_offsets_##call *__data_offsets, proto)	\
+> 7fcb7c472f455d include/trace/ftrace.h       Li Zefan                 2009-06-01  258  {									\
+> 7fcb7c472f455d include/trace/ftrace.h       Li Zefan                 2009-06-01  259  	int __data_size = 0;						\
+> 114e7b52dee69c include/trace/ftrace.h       Filipe Brandenburger     2014-02-28  260  	int __maybe_unused __item_length;				\
+> a7237765730a10 include/trace/trace_events.h Steven Rostedt (Red Hat  2015-05-13 @261) 	struct trace_event_raw_##call __maybe_unused *entry;		\
+> 7fcb7c472f455d include/trace/ftrace.h       Li Zefan                 2009-06-01  262  									\
+> 7fcb7c472f455d include/trace/ftrace.h       Li Zefan                 2009-06-01  263  	tstruct;							\
+> 7fcb7c472f455d include/trace/ftrace.h       Li Zefan                 2009-06-01  264  									\
+> 7fcb7c472f455d include/trace/ftrace.h       Li Zefan                 2009-06-01  265  	return __data_size;						\
+> 7fcb7c472f455d include/trace/ftrace.h       Li Zefan                 2009-06-01  266  }
+> 7fcb7c472f455d include/trace/ftrace.h       Li Zefan                 2009-06-01  267  
+> 
+
+Really? 9 warnings about something that *MIGHT* be a candidate for
+gnu_printf format attribute?  This is a macro that expanded into something
+that could possibly use the printf format, but is nested deep in macro
+magic.
+
+Can we please shut this up?
+
+Thanks,
+
+-- Steve

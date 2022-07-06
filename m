@@ -2,59 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9FD35567FBA
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 09:22:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2BA33567FBB
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 09:22:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231521AbiGFHVI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Jul 2022 03:21:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42662 "EHLO
+        id S230293AbiGFHWZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Jul 2022 03:22:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43466 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229788AbiGFHVH (ORCPT
+        with ESMTP id S229995AbiGFHWX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Jul 2022 03:21:07 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0C8B13E0A;
-        Wed,  6 Jul 2022 00:21:06 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4B81861DD2;
-        Wed,  6 Jul 2022 07:21:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5A213C3411C;
-        Wed,  6 Jul 2022 07:21:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1657092065;
-        bh=qzMpWlHvnneyzml1ICOgakHTc1rJSym0t9u8nI7Z5ZU=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=f7IROoZSTm6WIg49hLLQAQkYt/TUXHvya+Z0lY9XwbPwqkCPAEcNCfqqXjn5LQPjE
-         ltXdslACUiGtUviKOH/vS7S1LfTPiy2skw/3qejnrFS1u669aZLs1OAoODYqe/1L2s
-         jp4kSbUgY4YYVEiuXOgTGQFBVv2fCGnaEbDGuNfxqtmJ9NQJe8SKcGmIa2ofVwOBPc
-         D7FU45+7jGZsBKildd4SPCKsGKl/JWxDTFaEFlOCUmvcXQx4onu37eiyokOUuGkiND
-         ZaRBbOLGYXz3AD6VLMWfkQ6fsg9Jvxv2oZChARsI1iguOD92J3BSgC5naNCKketeCJ
-         TddgY140Rdx0w==
-Date:   Wed, 6 Jul 2022 09:21:02 +0200
-From:   Wolfram Sang <wsa@kernel.org>
-To:     Conor Dooley <conor.dooley@microchip.com>
-Cc:     linux-i2c@vger.kernel.org, ben.dooks@codethink.co.uk,
-        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
-        daire.mcnamara@microchip.com
-Subject: Re: [PATCH v6 2/2] MAINTAINERS: add the polarfire soc's i2c driver
-Message-ID: <YsU33mo+8MwmgPr4@shikoro>
-Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        Conor Dooley <conor.dooley@microchip.com>,
-        linux-i2c@vger.kernel.org, ben.dooks@codethink.co.uk,
-        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
-        daire.mcnamara@microchip.com
-References: <20220621074238.957177-1-conor.dooley@microchip.com>
- <20220621074238.957177-2-conor.dooley@microchip.com>
+        Wed, 6 Jul 2022 03:22:23 -0400
+Received: from mail-io1-xd2a.google.com (mail-io1-xd2a.google.com [IPv6:2607:f8b0:4864:20::d2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3649E1EC50
+        for <linux-kernel@vger.kernel.org>; Wed,  6 Jul 2022 00:22:22 -0700 (PDT)
+Received: by mail-io1-xd2a.google.com with SMTP id u20so13232306iob.8
+        for <linux-kernel@vger.kernel.org>; Wed, 06 Jul 2022 00:22:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=LWP0EkYAFx4PugNtgV/U+l7margof7tLaaJFsktZvHc=;
+        b=JIud/HruAF050J0/GoKoXx2odR25dkkMlotf7RE3iqKX+v+pIo1HFItO5WbLLXvv/i
+         qtIWlIWKpwtS4vEocGK5/q4JLhtr1DA54Y1Smq6dvt6sorWi19UboU7kIVx3rpip2obx
+         zmBTf4MRKIUb7tAdAepx12yUF5w/3AlVy7WV9vi4T916UBSw+HOyUjKtE5aThWeQ+IWD
+         oZ7s1Nz7WGjZwvWrTxMuaGzIZiQm0klAlV8gwaJtYdqOoEEFtx5gtVN1xuNvo1ZQLcJX
+         hCEMhsmVskNbrN1sXzN4Bkfuhz7AloZ1mLh1gmrEzVzdnJlgbqqFcNNCZq90fOQAMm9K
+         3pNg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=LWP0EkYAFx4PugNtgV/U+l7margof7tLaaJFsktZvHc=;
+        b=DdaR8gmfxT+Yi0tddStUq9WIc9n/HkgfyceJSUCeTRuuXzHXDAnXEyRoUfZ3QaqcP4
+         M6M3EVKKi1uuCf44QpjwlYpcOE5umtGX7NLcxme7ZG7/oGOpjoSNFhMl/voa8S6ijark
+         uKMQXyRKLGpkaw3VyTmwqfSLgcfacZlZZQFMfbBYTFjqOq25Rh+i3qIr382DLiwBd5cO
+         uBcguEoa+eQJQCT0lolWJIcd3QTUOQa1PqZWrw9e3agFi0c912t3r8iQU4WwbZKoCUk4
+         LCyKXr9VRHci62fcDSBzanUmByymWWHhNNt1KIO2BTjQvfUw6RPLEgFMM2ZB485ktjvD
+         0wQw==
+X-Gm-Message-State: AJIora+1kk+D9xHR/ZF6Mr/i4Z/pptq7DHG3clUKaqM3e0VeuEfBZaJC
+        hdWEpLcmhyII6oHjUW1zHcF87uTnb1+wCoo7t1THdQ==
+X-Google-Smtp-Source: AGRyM1sEh47KM3KJC7RAjJ+mTtr0GQ3oNgmwTFHyuENbfpMfO5Nos4e7w/P7r1qzDI6XZzF+yTi1nfdbdaDPrmNDmY4=
+X-Received: by 2002:a5d:8f96:0:b0:675:573e:6eb5 with SMTP id
+ l22-20020a5d8f96000000b00675573e6eb5mr21303689iol.144.1657092141532; Wed, 06
+ Jul 2022 00:22:21 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="RlT7hi3kxpfgCUPI"
-Content-Disposition: inline
-In-Reply-To: <20220621074238.957177-2-conor.dooley@microchip.com>
-X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+References: <20220705115606.333669144@linuxfoundation.org>
+In-Reply-To: <20220705115606.333669144@linuxfoundation.org>
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Wed, 6 Jul 2022 12:52:10 +0530
+Message-ID: <CA+G9fYt4H-976bCxr+BnhKi45M6zWXppJidXeSHJUvsxYG_3zA@mail.gmail.com>
+Subject: Re: [PATCH 4.14 00/29] 4.14.287-rc1 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        slade@sladewatkins.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -62,49 +71,113 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Tue, 5 Jul 2022 at 17:32, Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
+>
+> This is the start of the stable review cycle for the 4.14.287 release.
+> There are 29 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>
+> Responses should be made by Thu, 07 Jul 2022 11:55:56 +0000.
+> Anything received after that time might be too late.
+>
+> The whole patch series can be found in one patch at:
+>         https://www.kernel.org/pub/linux/kernel/v4.x/stable-review/patch-=
+4.14.287-rc1.gz
+> or in the git tree and branch at:
+>         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
+-rc.git linux-4.14.y
+> and the diffstat can be found below.
+>
+> thanks,
+>
+> greg k-h
 
---RlT7hi3kxpfgCUPI
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Results from Linaro=E2=80=99s test farm.
+No regressions on arm64, arm, x86_64, and i386.
 
-On Tue, Jun 21, 2022 at 08:42:39AM +0100, Conor Dooley wrote:
-> Add the newly added i2c controller driver to the existing entry for
-> PolarFire SoC.
->=20
-> Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
-> ---
-> New in v6.
-> FYI: I have several maintainers updates in flight - usb, pwm, spi
-> of which some will be in 5.20 & clk/hwrng/pci that are likely to
-> go into 5.19-rcN.
+Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
 
-Then, I'd suggest you collect all of them and send them as one patch at
-the end of the next merge window?
+## Build
+* kernel: 4.14.287-rc1
+* git: https://gitlab.com/Linaro/lkft/mirrors/stable/linux-stable-rc
+* git branch: linux-4.14.y
+* git commit: 2e9431cf011af1ed9fe42d59f296ce27ef8647a4
+* git describe: v4.14.286-30-g2e9431cf011a
+* test details:
+https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-4.14.y/build/v4.14=
+.286-30-g2e9431cf011a
 
-For that case:
+## Test Regressions (compared to v4.14.286)
+No test regressions found.
 
-Acked-by: Wolfram Sang <wsa@kernel.org>
+## Metric Regressions (compared to v4.14.286)
+No metric regressions found.
 
+## Test Fixes (compared to v4.14.286)
+No test fixes found.
 
---RlT7hi3kxpfgCUPI
-Content-Type: application/pgp-signature; name="signature.asc"
+## Metric Fixes (compared to v4.14.286)
+No metric fixes found.
 
------BEGIN PGP SIGNATURE-----
+## Test result summary
+total: 109881, pass: 96367, fail: 208, skip: 11789, xfail: 1517
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmLFN94ACgkQFA3kzBSg
-Kbbz2RAAoC8RtqHoaDsrcvvgA8X46nr34vTXQoDfO+mnNvMQqcK0ynxX75NrLXL1
-y28340cjgp9nKa3wriOF7xRWsv42z3WrwaegvyBTVg5W9CGEvvXa1QXAyESNS7IR
-azYrpm7qnYmbv/OExLGZr+nlvyHv9RfysxPeS3e5cmaUOkwVTzavug4dy9IbLltO
-JtVNaZMRVgd9lc+ILvPF6q1hMxmnJ3fIViVptf/HQbXxCZfpkw0Zyn88Z3k2kI2a
-UJ2z2U2Xtzs5WbYdHep0rvay/8zx/mYBYPGhnnIAXg4Pyh7iOJeyt30Va3FPuJZH
-LnxI8Ir2ETnb6BLn/vK9thTa/ml+sIxPSJMJQ7ZtQzI7mjFNBA/O0vxhGW7d2R8j
-/w5RDelYs1kSzjMdpnYlJx8MoJu+5ifCnsWXR46SlT5jxVC1rPe9Dgijf1Khkgie
-vQP/39idrz1P7PRzeDhyjtoODpAgKPR1YL0FhxszwHwppiSfn18t4bn9aYl2VwKu
-8EYcD4h/95VFOX++Cps4Nk76oXrQP0OTbdLa7LiKER8IHQ/yLCNEBSsPYsVbbWs9
-C8CnMV0ri0Pp0yyyJ+i0LDDTrHUsZLERQREjvb5J6XR5pkXx5OREpwWDMO1gOj7o
-A4bNOaxyFJXFmwVqEIrkGaHGjrWJ6l8Nypa24BL7vMjsxv/MaK8=
-=sxFt
------END PGP SIGNATURE-----
+## Build Summary
+* arc: 10 total, 10 passed, 0 failed
+* arm: 286 total, 281 passed, 5 failed
+* arm64: 50 total, 47 passed, 3 failed
+* i386: 26 total, 23 passed, 3 failed
+* mips: 33 total, 33 passed, 0 failed
+* parisc: 12 total, 12 passed, 0 failed
+* powerpc: 16 total, 16 passed, 0 failed
+* s390: 12 total, 9 passed, 3 failed
+* sh: 24 total, 24 passed, 0 failed
+* sparc: 12 total, 12 passed, 0 failed
+* x86_64: 48 total, 47 passed, 1 failed
 
---RlT7hi3kxpfgCUPI--
+## Test suites summary
+* fwts
+* igt-gpu-tools
+* kunit
+* kvm-unit-tests
+* libhugetlbfs
+* log-parser-boot
+* log-parser-test
+* ltp-cap_bounds
+* ltp-commands
+* ltp-containers
+* ltp-controllers
+* ltp-cpuhotplug
+* ltp-crypto
+* ltp-cve
+* ltp-dio
+* ltp-fcntl-locktests
+* ltp-filecaps
+* ltp-fs
+* ltp-fs_bind
+* ltp-fs_perms_simple
+* ltp-fsx
+* ltp-hugetlb
+* ltp-io
+* ltp-ipc
+* ltp-math
+* ltp-mm
+* ltp-nptl
+* ltp-open-posix-tests
+* ltp-pty
+* ltp-sched
+* ltp-securebits
+* ltp-smoke
+* ltp-syscalls
+* ltp-tracing
+* network-basic-tests
+* packetdrill
+* rcutorture
+* v4l2-compliance
+* vdso
+
+--
+Linaro LKFT
+https://lkft.linaro.org

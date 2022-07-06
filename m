@@ -2,134 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C86FD56889F
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 14:48:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F4EC5688A8
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 14:49:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233362AbiGFMq4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Jul 2022 08:46:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49398 "EHLO
+        id S233546AbiGFMs1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Jul 2022 08:48:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50644 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231280AbiGFMqz (ORCPT
+        with ESMTP id S233465AbiGFMsY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Jul 2022 08:46:55 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0BB81201AA
-        for <linux-kernel@vger.kernel.org>; Wed,  6 Jul 2022 05:46:53 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 9F2BF106F;
-        Wed,  6 Jul 2022 05:46:53 -0700 (PDT)
-Received: from usa.arm.com (e103737-lin.cambridge.arm.com [10.1.197.49])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 201873F792;
-        Wed,  6 Jul 2022 05:46:51 -0700 (PDT)
-From:   Sudeep Holla <sudeep.holla@arm.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Sudeep Holla <sudeep.holla@arm.com>,
-        ALKML <linux-arm-kernel@lists.infradead.org>,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [GIT PULL] cacheinfo/arch_topology: Updates for v5.20
-Date:   Wed,  6 Jul 2022 13:46:44 +0100
-Message-Id: <20220706124644.2276077-1-sudeep.holla@arm.com>
-X-Mailer: git-send-email 2.37.0
+        Wed, 6 Jul 2022 08:48:24 -0400
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72590BF9
+        for <linux-kernel@vger.kernel.org>; Wed,  6 Jul 2022 05:48:23 -0700 (PDT)
+Received: from pps.filterd (m0127361.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 266CFN2K028179;
+        Wed, 6 Jul 2022 12:48:13 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
+ subject : message-id : references : mime-version : content-type :
+ in-reply-to; s=pp1; bh=fSPNY+OiJp0wUyPSKAfyfQcaV1gFB/fGEKhyfQNOqhk=;
+ b=e2MEal4IgbEGRbwyvEUn0B2rvPPXkxrIVO56ugFgbrCsS7gb5yQS1whte+4Vx4QAAa0x
+ yYIUyIg7kDK2ZCoD8C4HDJQXpuiQnfHxRgIkn6it6E9YZUZ3+fnJiur7Gm1rS9OsvFbg
+ etQojyyt1+hMiz1RU6eQolAt0oOOCD79G+SN4NizevssGUd9HzOFEt5AInPtS8eMVTTR
+ 7v3yO1fIpqhXxqdEmTKNLYfc0RXwotw2KOpgXBpU5jl+iEJrsfDECCFfuAEPsvrnXfAT
+ w7p3R08zoce8tWcWMnnvQoArE8nBk+lTlw+GvOmzi+rPWzxrAXdRNFUokKYmuppD+o4j aA== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3h5a7ygt6y-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 06 Jul 2022 12:48:13 +0000
+Received: from m0127361.ppops.net (m0127361.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 266Cf0aq007070;
+        Wed, 6 Jul 2022 12:48:12 GMT
+Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3h5a7ygt6a-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 06 Jul 2022 12:48:12 +0000
+Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
+        by ppma03ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 266CZaGk011470;
+        Wed, 6 Jul 2022 12:48:11 GMT
+Received: from b06cxnps4074.portsmouth.uk.ibm.com (d06relay11.portsmouth.uk.ibm.com [9.149.109.196])
+        by ppma03ams.nl.ibm.com with ESMTP id 3h4ujsh4au-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 06 Jul 2022 12:48:10 +0000
+Received: from d06av24.portsmouth.uk.ibm.com (mk.ibm.com [9.149.105.60])
+        by b06cxnps4074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 266Cm8ul19661080
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 6 Jul 2022 12:48:08 GMT
+Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 5E3574203F;
+        Wed,  6 Jul 2022 12:48:08 +0000 (GMT)
+Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id E85F842042;
+        Wed,  6 Jul 2022 12:48:07 +0000 (GMT)
+Received: from li-4a3a4a4c-28e5-11b2-a85c-a8d192c6f089.ibm.com (unknown [9.145.48.113])
+        by d06av24.portsmouth.uk.ibm.com (Postfix) with ESMTPS;
+        Wed,  6 Jul 2022 12:48:07 +0000 (GMT)
+Date:   Wed, 6 Jul 2022 14:48:06 +0200
+From:   Alexander Gordeev <agordeev@linux.ibm.com>
+To:     Sven Schnelle <svens@linux.ibm.com>
+Cc:     Oleg Nesterov <oleg@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        "Eric W. Biederman" <ebiederm@xmission.com>,
+        Kees Cook <keescook@chromium.org>, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] ptrace: fix clearing of JOBCTL_TRACED in
+ ptrace_unfreeze_traced()
+Message-ID: <YsWEhoEHSbnD2e+u@li-4a3a4a4c-28e5-11b2-a85c-a8d192c6f089.ibm.com>
+References: <20220706101625.2100298-1-svens@linux.ibm.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220706101625.2100298-1-svens@linux.ibm.com>
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: sDac5WY-KMihLIzMQDX1NZ6FNHv5t9Io
+X-Proofpoint-ORIG-GUID: P8jN4riq4evkLt9Y6qNcdj9l4R526RyV
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
+ definitions=2022-07-06_08,2022-06-28_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 clxscore=1015
+ mlxlogscore=854 mlxscore=0 suspectscore=0 adultscore=0 lowpriorityscore=0
+ impostorscore=0 malwarescore=0 spamscore=0 priorityscore=1501 bulkscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2206140000
+ definitions=main-2207060049
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Greg,
+On Wed, Jul 06, 2022 at 12:16:25PM +0200, Sven Schnelle wrote:
+> CI reported the following splat while running the strace testsuite:
+> 
+> [ 3976.640309] WARNING: CPU: 1 PID: 3570031 at kernel/ptrace.c:272 ptrace_check_attach+0x12e/0x178
+> [ 3976.640391] CPU: 1 PID: 3570031 Comm: strace Tainted: G           OE     5.19.0-20220624.rc3.git0.ee819a77d4e7.300.fc36.s390x #1
+> [ 3976.640410] Hardware name: IBM 3906 M04 704 (z/VM 7.1.0)
+> [ 3976.640452] Call Trace:
+> [ 3976.640454]  [<00000000ab4b645a>] ptrace_check_attach+0x132/0x178
+> [ 3976.640457] ([<00000000ab4b6450>] ptrace_check_attach+0x128/0x178)
+> [ 3976.640460]  [<00000000ab4b6cde>] __s390x_sys_ptrace+0x86/0x160
+> [ 3976.640463]  [<00000000ac03fcec>] __do_syscall+0x1d4/0x200
+> [ 3976.640468]  [<00000000ac04e312>] system_call+0x82/0xb0
+> [ 3976.640470] Last Breaking-Event-Address:
+> [ 3976.640471]  [<00000000ab4ea3c8>] wait_task_inactive+0x98/0x190
+> 
+> This is because JOBCTL_TRACED is set, but the task is not in TASK_TRACED
+> state. Caused by ptrace_unfreeze_traced() which does:
+> 
+> task->jobctl &= ~TASK_TRACED
+> 
+> but it should be:
+> 
+> task->jobctl &= ~JOBCTL_TRACED
+> 
+> Fixes: 31cae1eaae4f ("sched,signal,ptrace: Rework TASK_TRACED, TASK_STOPPED state")
+> Signed-off-by: Sven Schnelle <svens@linux.ibm.com>
 
-This is my first pull request to you, not sure if you are open to
-pull request or prefer pulling the patch series directly. I am fine
-either way. You can ignore this and pull the patches from[1] if you
-prefer.
+Tested-by: Alexander Gordeev <agordeev@linux.ibm.com>
 
-Most of these changes are in -next for almost 2 weeks with small update
-to fix issue reported on RISC-V last week. The small changes in ACPI
-and arm64 are acked-by Rafael and Catalin.
-
-Regards,
-Sudeep
-
-[1] https://lore.kernel.org/all/20220704101605.1318280-1-sudeep.holla@arm.com/
-
-
--->8
-
-The following changes since commit f2906aa863381afb0015a9eb7fefad885d4e5a56:
-
-  Linux 5.19-rc1 (2022-06-05 17:18:54 -0700)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/sudeep.holla/linux.git tags/arch-cache-topo-5.20
-
-for you to fetch changes up to 7128af87c7f1c30cd6cebe0b012cc25872c689e2:
-
-  ACPI: Remove the unused find_acpi_cpu_cache_topology() (2022-07-04 16:23:23 +0100)
-
-----------------------------------------------------------------
-cacheinfo and arch_topology updates for v5.20
-
-These are updates to fix some discrepancies we have in the CPU topology
-parsing from the device tree /cpu-map node and the divergence from the
-behaviour on a ACPI enabled platform. The expectation is that both DT
-and ACPI enabled systems must present consistent view of the CPU topology.
-
-The current assignment of generated cluster count as the physical package
-identifier for each CPU is wrong. The device tree bindings for CPU
-topology supports sockets to infer the socket or physical package
-identifier for a given CPU. It is now being made use of you address the
-issue. These updates also assigns the cluster identifier as parsed from
-the device tree cluster nodes within /cpu-map without support for
-nesting of the clusters as there are no such reported/known platforms.
-
-In order to be on par with ACPI PPTT physical package/socket support,
-these updates also include support for socket nodes in /cpu-map.
-
-The only exception is that the last level cache id information can be
-inferred from the same ACPI PPTT while we need to parse CPU cache nodes
-in the device tree. The cacheinfo changes here is to enable the re-use
-of the cacheinfo to detect the cache attributes for all the CPU quite
-early even before the scondardaries are booted so that the information
-can be used to build the schedular domains especially the last level
-cache(LLC).
-
-----------------------------------------------------------------
-Ionela Voinescu (1):
-      arch_topology: Limit span of cpu_clustergroup_mask()
-
-Sudeep Holla (20):
-      ACPI: PPTT: Use table offset as fw_token instead of virtual address
-      cacheinfo: Use of_cpu_device_node_get instead cpu_dev->of_node
-      cacheinfo: Add helper to access any cache index for a given CPU
-      cacheinfo: Move cache_leaves_are_shared out of CONFIG_OF
-      cacheinfo: Add support to check if last level cache(LLC) is valid or shared
-      cacheinfo: Allow early detection and population of cache attributes
-      cacheinfo: Use cache identifiers to check if the caches are shared if available
-      cacheinfo: Align checks in cache_shared_cpu_map_{setup,remove} for readability
-      arch_topology: Add support to parse and detect cache attributes
-      arch_topology: Use the last level cache information from the cacheinfo
-      arm64: topology: Remove redundant setting of llc_id in CPU topology
-      arch_topology: Drop LLC identifier stash from the CPU topology
-      arch_topology: Set thread sibling cpumask only within the cluster
-      arch_topology: Check for non-negative value rather than -1 for IDs validity
-      arch_topology: Avoid parsing through all the CPUs once a outlier CPU is found
-      arch_topology: Don't set cluster identifier as physical package identifier
-      arch_topology: Set cluster identifier in each core/thread from /cpu-map
-      arch_topology: Add support for parsing sockets in /cpu-map
-      arch_topology: Warn that topology for nested clusters is not supported
-      ACPI: Remove the unused find_acpi_cpu_cache_topology()
-
- arch/arm64/kernel/topology.c  |  14 -----
- drivers/acpi/pptt.c           |  40 +-----------
- drivers/base/arch_topology.c  | 102 +++++++++++++++++++++++-------
- drivers/base/cacheinfo.c      | 143 +++++++++++++++++++++++++++---------------
- include/linux/acpi.h          |   5 --
- include/linux/arch_topology.h |   1 -
- include/linux/cacheinfo.h     |   3 +
- 7 files changed, 175 insertions(+), 133 deletions(-)
+> ---
+>  kernel/ptrace.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/kernel/ptrace.c b/kernel/ptrace.c
+> index 156a99283b11..1893d909e45c 100644
+> --- a/kernel/ptrace.c
+> +++ b/kernel/ptrace.c
+> @@ -222,7 +222,7 @@ static void ptrace_unfreeze_traced(struct task_struct *task)
+>  	if (lock_task_sighand(task, &flags)) {
+>  		task->jobctl &= ~JOBCTL_PTRACE_FROZEN;
+>  		if (__fatal_signal_pending(task)) {
+> -			task->jobctl &= ~TASK_TRACED;
+> +			task->jobctl &= ~JOBCTL_TRACED;
+>  			wake_up_state(task, __TASK_TRACED);
+>  		}
+>  		unlock_task_sighand(task, &flags);
+> -- 
+> 2.34.1
+> 

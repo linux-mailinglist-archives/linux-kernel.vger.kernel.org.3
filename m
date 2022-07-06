@@ -2,137 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C77F256849B
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 12:06:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E201568495
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 12:06:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232442AbiGFKEi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Jul 2022 06:04:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43270 "EHLO
+        id S229558AbiGFKF1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Jul 2022 06:05:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43572 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231824AbiGFKEf (ORCPT
+        with ESMTP id S232579AbiGFKE6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Jul 2022 06:04:35 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D210224F00
-        for <linux-kernel@vger.kernel.org>; Wed,  6 Jul 2022 03:04:34 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 61A68B81BA7
-        for <linux-kernel@vger.kernel.org>; Wed,  6 Jul 2022 10:04:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7825BC3411C;
-        Wed,  6 Jul 2022 10:04:28 +0000 (UTC)
-Date:   Wed, 6 Jul 2022 11:04:24 +0100
-From:   Catalin Marinas <catalin.marinas@arm.com>
-To:     Mike Rapoport <rppt@kernel.org>
-Cc:     Will Deacon <will@kernel.org>,
-        "guanghui.fgh" <guanghuifeng@linux.alibaba.com>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        baolin.wang@linux.alibaba.com, akpm@linux-foundation.org,
-        david@redhat.com, jianyong.wu@arm.com, james.morse@arm.com,
-        quic_qiancai@quicinc.com, christophe.leroy@csgroup.eu,
-        jonathan@marek.ca, mark.rutland@arm.com,
-        thunder.leizhen@huawei.com, anshuman.khandual@arm.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        geert+renesas@glider.be, linux-mm@kvack.org,
-        yaohongbo@linux.alibaba.com, alikernel-developer@linux.alibaba.com
-Subject: Re: [PATCH v4] arm64: mm: fix linear mem mapping access performance
- degradation
-Message-ID: <YsVeKPzaO0SJdwFW@arm.com>
-References: <20220704163815.GA32177@willie-the-truck>
- <CAMj1kXEvY5QXOUrXZ7rBp9As=65uTTFRSSq+FPt-n4M2P-_VtQ@mail.gmail.com>
- <20220705095231.GB552@willie-the-truck>
- <5d044fdd-a61a-d60f-d294-89e17de37712@linux.alibaba.com>
- <20220705121115.GB1012@willie-the-truck>
- <YsRSajyMxahXe7ZS@kernel.org>
- <YsRZ8V8mQ+HM31D6@arm.com>
- <YsRfgX7FFZLxQU50@kernel.org>
- <YsRvPTORdvIwzShL@arm.com>
- <YsSi9HAOOzbPYN+w@kernel.org>
+        Wed, 6 Jul 2022 06:04:58 -0400
+Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58DD824F13
+        for <linux-kernel@vger.kernel.org>; Wed,  6 Jul 2022 03:04:52 -0700 (PDT)
+Received: by mail-lf1-x136.google.com with SMTP id d12so1720155lfq.12
+        for <linux-kernel@vger.kernel.org>; Wed, 06 Jul 2022 03:04:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=jOWI5FGVtw/ixLzBC8ndyrPyf2V1YZb2DgbRUAqX8k8=;
+        b=c5v/TLBpZif5jKoI+hkZ+17AFj26Gnn9DHyCs2jUB7uEFwBY32pqpr2yHfDBI7PGvN
+         3rlM+QhqvFMy+erwYAeEAYIi/keeK83s/fW4mZVW/AOCPBih7h9a8SgErfxQbakynLyV
+         qlQpGMiZQxBHKFe4GJZ0w2FR105vGMoa9Oy+XFqKN7ZQiNRQ1Vdhn6DUsBe8XUkDZV9h
+         vOgGb1n8TtDi8MQHh1Z95RdCUzbTNIv1mNoBPpbRTHKV/gTDVMokqznfZ77VJdj+zAF0
+         sQjDiibGF8E331zBoDc+kQVXZc+iZ3Lt6wSiDfjWe6WyMSlomBQnh7/7V1tOUkVEgZam
+         90sw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=jOWI5FGVtw/ixLzBC8ndyrPyf2V1YZb2DgbRUAqX8k8=;
+        b=2CN6WP53ekDm43pcIyp4ylh5/K6XXOsDoMsJrf9pUkrQeA+jbjrQ9nz8jra7UVdKot
+         VrXgAiKWnqYjNk2uVGHkix3XzDnLpcEtXFyc3z7ouuPUaq5ajajz3RKkqp0NDJdHSXgs
+         RqcbB67jnTgNAGaQpAgyf+qrcV1/8eXGo1OcAxhMPkgrL9X8bAQvGOkl8340bkIi0FVC
+         f/h2X/fI1AEzoklOtakUvHsd3O1Lp6RXheaejw1ru9lG6ciIjCoP3LsQ5TBH97LwOegd
+         0+Rger0rcI5326nIFPsH13jysv9hFVNudiCE8YtApvI6SwqHc3btX/aWUcNOAEKqSFgL
+         GUAg==
+X-Gm-Message-State: AJIora/WYtaa0e4tbWfPtGlcGJikXtnFh++X1GEg3GjhiekDLS5BsmiY
+        Qd9/jvqTywgX2jfzOd1CJDX3jQ==
+X-Google-Smtp-Source: AGRyM1uNagtuURx0cGgzKp82vsGEFu/cEuG3G54Di0lBF8Z5m3UsWaeZWfJnTLwPuInoek5ZCpX7BQ==
+X-Received: by 2002:ac2:4bd5:0:b0:481:25b8:51af with SMTP id o21-20020ac24bd5000000b0048125b851afmr24554967lfq.686.1657101890693;
+        Wed, 06 Jul 2022 03:04:50 -0700 (PDT)
+Received: from [192.168.1.52] ([84.20.121.239])
+        by smtp.gmail.com with ESMTPSA id y9-20020ac24e69000000b0047f647414efsm6194258lfs.190.2022.07.06.03.04.49
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 06 Jul 2022 03:04:50 -0700 (PDT)
+Message-ID: <8f9651b2-ca9a-413c-d94f-9ecf3717343c@linaro.org>
+Date:   Wed, 6 Jul 2022 12:04:49 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YsSi9HAOOzbPYN+w@kernel.org>
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH 1/2] [V1,1/2] arm64: dts: qcom: Add LTE SKUs for
+ sc7280-villager family
+Content-Language: en-US
+To:     Jimmy Chen <jinghung.chen3@hotmail.com>
+Cc:     agross@kernel.org, alan-huang@quanta.corp-partner.google.com,
+        bjorn.andersson@linaro.org, devicetree@vger.kernel.org,
+        dianders@chromium.org, konrad.dybcio@somainline.org,
+        krzysztof.kozlowski+dt@linaro.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, robh+dt@kernel.org
+References: <cfc2c27a-444d-8bd8-84a7-b6b1f99258f9@linaro.org>
+ <SG2PR03MB5006AB4C7E356CE321F628D9CC809@SG2PR03MB5006.apcprd03.prod.outlook.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <SG2PR03MB5006AB4C7E356CE321F628D9CC809@SG2PR03MB5006.apcprd03.prod.outlook.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jul 05, 2022 at 11:45:40PM +0300, Mike Rapoport wrote:
-> On Tue, Jul 05, 2022 at 06:05:01PM +0100, Catalin Marinas wrote:
-> > On Tue, Jul 05, 2022 at 06:57:53PM +0300, Mike Rapoport wrote:
-> > > On Tue, Jul 05, 2022 at 04:34:09PM +0100, Catalin Marinas wrote:
-> > > > On Tue, Jul 05, 2022 at 06:02:02PM +0300, Mike Rapoport wrote:
-> > > > > +void __init remap_crashkernel(void)
-> > > > > +{
-> > > > > +#ifdef CONFIG_KEXEC_CORE
-> > > > > +	phys_addr_t start, end, size;
-> > > > > +	phys_addr_t aligned_start, aligned_end;
-> > > > > +
-> > > > > +	if (can_set_direct_map() || IS_ENABLED(CONFIG_KFENCE))
-> > > > > +	    return;
-> > > > > +
-> > > > > +	if (!crashk_res.end)
-> > > > > +	    return;
-> > > > > +
-> > > > > +	start = crashk_res.start & PAGE_MASK;
-> > > > > +	end = PAGE_ALIGN(crashk_res.end);
-> > > > > +
-> > > > > +	aligned_start = ALIGN_DOWN(crashk_res.start, PUD_SIZE);
-> > > > > +	aligned_end = ALIGN(end, PUD_SIZE);
-> > > > > +
-> > > > > +	/* Clear PUDs containing crash kernel memory */
-> > > > > +	unmap_hotplug_range(__phys_to_virt(aligned_start),
-> > > > > +			    __phys_to_virt(aligned_end), false, NULL);
-> > > > 
-> > > > What I don't understand is what happens if there's valid kernel data
-> > > > between aligned_start and crashk_res.start (or the other end of the
-> > > > range).
-> > > 
-> > > Data shouldn't go anywhere :)
-> > > 
-> > > There is 
-> > > 
-> > > +	/* map area from PUD start to start of crash kernel with large pages */
-> > > +	size = start - aligned_start;
-> > > +	__create_pgd_mapping(swapper_pg_dir, aligned_start,
-> > > +			     __phys_to_virt(aligned_start),
-> > > +			     size, PAGE_KERNEL, early_pgtable_alloc, 0);
-> > > 
-> > > and 
-> > > 
-> > > +	/* map area from end of crash kernel to PUD end with large pages */
-> > > +	size = aligned_end - end;
-> > > +	__create_pgd_mapping(swapper_pg_dir, end, __phys_to_virt(end),
-> > > +			     size, PAGE_KERNEL, early_pgtable_alloc, 0);
-> > > 
-> > > after the unmap, so after we tear down a part of a linear map we
-> > > immediately recreate it, just with a different page size.
-> > > 
-> > > This all happens before SMP, so there is no concurrency at that point.
-> > 
-> > That brief period of unmap worries me. The kernel text, data and stack
-> > are all in the vmalloc space but any other (memblock) allocation to this
-> > point may be in the unmapped range before and after the crashkernel
-> > reservation. The interrupts are off, so I think the only allocation and
-> > potential access that may go in this range is the page table itself. But
-> > it looks fragile to me.
+On 06/07/2022 11:36, Jimmy Chen wrote:
+> To keep the consistency of the format for Chromebook items,
+> we basically add these items based on the rules discussed in the previous patch series here
+> https://lore.kernel.org/all/20220520143502.v4.1.I71e42c6174f1cec17da3024c9f73ba373263b9b6@changeid/.
 > 
-> I agree there are chances there will be an allocation from the unmapped
-> range. 
+> We are little configured with “one entry - one enum “. Do you mean something like below example?
+> We suggest keep items separated as it is more readable.
 > 
-> We can make sure this won't happen, though. We can cap the memblock
-> allocations with memblock_set_current_limit(aligned_end) or
-> memblock_reserve(algined_start, aligned_end) until the mappings are
-> restored. 
+>       - description: Google Villager
+>         items:
+>           - const: google,villager-rev0
+>           - const: google,villager
+>           - const: google,villager-rev0-sku0
+>           - const: google,villager-sku0
+>           - const: qcom,sc7280
+> 
 
-We can reserve the region just before unmapping to avoid new allocations
-for the page tables but we can't do much about pages already allocated
-prior to calling remap_crashkernel().
+Is this a reply to something we discussed? There is no quote here, but I
+remember pointing out some issues with one of Google patches recently.
+Unfortunately my mailbox receives like 300 mails per day, so this does
+not help...
 
--- 
-Catalin
+Best regards,
+Krzysztof

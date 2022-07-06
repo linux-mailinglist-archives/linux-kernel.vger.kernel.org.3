@@ -2,46 +2,40 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 94A755683D5
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 11:46:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 42BBD568472
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 12:00:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233342AbiGFJlw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Jul 2022 05:41:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50642 "EHLO
+        id S232438AbiGFJ56 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Jul 2022 05:57:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38770 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232433AbiGFJl2 (ORCPT
+        with ESMTP id S232256AbiGFJ54 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Jul 2022 05:41:28 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id EABDF2528C
-        for <linux-kernel@vger.kernel.org>; Wed,  6 Jul 2022 02:40:07 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 46B9415DB;
-        Wed,  6 Jul 2022 02:40:03 -0700 (PDT)
-Received: from usa.arm.com (e103737-lin.cambridge.arm.com [10.1.197.49])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 42A673F66F;
-        Wed,  6 Jul 2022 02:40:00 -0700 (PDT)
-From:   Sudeep Holla <sudeep.holla@arm.com>
-To:     linux-arm-kernel@lists.infradead.org,
-        Cristian Marussi <cristian.marussi@arm.com>,
-        linux-kernel@vger.kernel.org
-Cc:     Sudeep Holla <sudeep.holla@arm.com>, wbartczak@marvell.com,
-        Jonathan.Cameron@Huawei.com, f.fainelli@gmail.com,
-        souvik.chakravarty@arm.com, adrian.slatineanu@arm.com,
-        wleavitt@marvell.com, james.quinlan@broadcom.com,
-        etienne.carriere@linaro.org, daniel.lezcano@linaro.org,
-        tarek.el-sherbiny@arm.com, vincent.guittot@linaro.org
-Subject: Re: [PATCH v4 0/7] SCMIv3.1 Powercap protocol and driver
-Date:   Wed,  6 Jul 2022 10:39:57 +0100
-Message-Id: <165710015322.2263892.5289020414237680742.b4-ty@arm.com>
-X-Mailer: git-send-email 2.37.0
-In-Reply-To: <20220704102241.2988447-1-cristian.marussi@arm.com>
-References: <20220704102241.2988447-1-cristian.marussi@arm.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        Wed, 6 Jul 2022 05:57:56 -0400
+Received: from inva021.nxp.com (inva021.nxp.com [92.121.34.21])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7EFA1ED
+        for <linux-kernel@vger.kernel.org>; Wed,  6 Jul 2022 02:57:54 -0700 (PDT)
+Received: from inva021.nxp.com (localhost [127.0.0.1])
+        by inva021.eu-rdc02.nxp.com (Postfix) with ESMTP id 3C48A20079B;
+        Wed,  6 Jul 2022 11:57:53 +0200 (CEST)
+Received: from aprdc01srsp001v.ap-rdc01.nxp.com (aprdc01srsp001v.ap-rdc01.nxp.com [165.114.16.16])
+        by inva021.eu-rdc02.nxp.com (Postfix) with ESMTP id 04D402007DE;
+        Wed,  6 Jul 2022 11:57:53 +0200 (CEST)
+Received: from localhost.localdomain (shlinux2.ap.freescale.net [10.192.224.44])
+        by aprdc01srsp001v.ap-rdc01.nxp.com (Postfix) with ESMTP id 50153180327D;
+        Wed,  6 Jul 2022 17:57:51 +0800 (+08)
+From:   Shengjiu Wang <shengjiu.wang@nxp.com>
+To:     nicoleotsuka@gmail.com, Xiubo.Lee@gmail.com, festevam@gmail.com,
+        shengjiu.wang@gmail.com, lgirdwood@gmail.com, broonie@kernel.org,
+        perex@perex.cz, tiwai@suse.com, alsa-devel@alsa-project.org
+Cc:     linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] ASoC: imx-card: Fix DSD/PDM mclk frequency
+Date:   Wed,  6 Jul 2022 17:42:55 +0800
+Message-Id: <1657100575-8261-1-git-send-email-shengjiu.wang@nxp.com>
+X-Mailer: git-send-email 2.7.4
+X-Virus-Scanned: ClamAV using ClamSMTP
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -49,32 +43,50 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 4 Jul 2022 11:22:34 +0100, Cristian Marussi wrote:
-> this short series introduces the last missing bit of SCMIv3.1, Powercap
-> protocol. Along the series, there is a small refactoring around the SCMI
-> FastChannels handling routines so as to reuse as much as possible the
-> pre-existent (and tested) FastChannel code from the Perf protocol.
-> 
-> New SCMI FC tracing support is added too along the way.
-> 
-> [...]
+The DSD/PDM rate not only DSD64/128/256/512, which are the
+multiple rate of 44.1kHz,  but also support the multiple
+rate of 8kHz, so can't force all mclk frequency to be
+22579200Hz, need to assign the frequency according to
+rate.
 
-Applied to sudeep.holla/linux (for-next/scmi), thanks!
+Fixes: aa736700f42f ("ASoC: imx-card: Add imx-card machine driver")
+Signed-off-by: Shengjiu Wang <shengjiu.wang@nxp.com>
+---
+ sound/soc/fsl/imx-card.c | 14 +++++++++++---
+ 1 file changed, 11 insertions(+), 3 deletions(-)
 
-[1/7] dt-bindings: firmware: arm,scmi: Add powercap protocol
-      https://git.kernel.org/sudeep.holla/c/451d8457bc
-[2/7] firmware: arm_scmi: Add SCMIv3.1 Powercap protocol basic support
-      https://git.kernel.org/sudeep.holla/c/0316f99c47
-[3/7] firmware: arm_scmi: Generalize FastChannel support
-      https://git.kernel.org/sudeep.holla/c/6f9ea4dabd
-[4/7] firmware: arm_scmi: Add SCMIv3.1 Powercap FastChannels support
-      https://git.kernel.org/sudeep.holla/c/855aa26e5f
-[5/7] include: trace: Add SCMI FastChannel tracing
-      https://git.kernel.org/sudeep.holla/c/e699eb9b4f
-[6/7] firmware: arm_scmi: Use FastChannel tracing
-      https://git.kernel.org/sudeep.holla/c/b27d04d5a5
-
---
-Regards,
-Sudeep
+diff --git a/sound/soc/fsl/imx-card.c b/sound/soc/fsl/imx-card.c
+index 1797d777b1b8..ccc4194dc5e7 100644
+--- a/sound/soc/fsl/imx-card.c
++++ b/sound/soc/fsl/imx-card.c
+@@ -17,6 +17,9 @@
+ 
+ #include "fsl_sai.h"
+ 
++#define IMX_CARD_MCLK_22P5792MHZ  22579200
++#define IMX_CARD_MCLK_24P576MHZ   24576000
++
+ enum codec_type {
+ 	CODEC_DUMMY = 0,
+ 	CODEC_AK5558 = 1,
+@@ -353,9 +356,14 @@ static int imx_aif_hw_params(struct snd_pcm_substream *substream,
+ 		mclk_freq = akcodec_get_mclk_rate(substream, params, slots, slot_width);
+ 	else
+ 		mclk_freq = params_rate(params) * slots * slot_width;
+-	/* Use the maximum freq from DSD512 (512*44100 = 22579200) */
+-	if (format_is_dsd(params))
+-		mclk_freq = 22579200;
++
++	if (format_is_dsd(params)) {
++		/* Use the maximum freq from DSD512 (512*44100 = 22579200) */
++		if (!(params_rate(params) % 11025))
++			mclk_freq = IMX_CARD_MCLK_22P5792MHZ;
++		else
++			mclk_freq = IMX_CARD_MCLK_24P576MHZ;
++	}
+ 
+ 	ret = snd_soc_dai_set_sysclk(cpu_dai, link_data->cpu_sysclk_id, mclk_freq,
+ 				     SND_SOC_CLOCK_OUT);
+-- 
+2.17.1
 

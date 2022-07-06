@@ -2,95 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C3AA568BAA
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 16:50:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4593D568BD4
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 16:53:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232918AbiGFOur (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Jul 2022 10:50:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39694 "EHLO
+        id S230146AbiGFOwy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Jul 2022 10:52:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40926 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232070AbiGFOuo (ORCPT
+        with ESMTP id S233187AbiGFOws (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Jul 2022 10:50:44 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A04ED240B0;
-        Wed,  6 Jul 2022 07:50:43 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2B83661E8E;
-        Wed,  6 Jul 2022 14:50:43 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DEA7EC3411C;
-        Wed,  6 Jul 2022 14:50:41 +0000 (UTC)
-Date:   Wed, 6 Jul 2022 10:50:40 -0400
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     LKML <linux-kernel@vger.kernel.org>
-Cc:     Neil Horman <nhorman@tuxdriver.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        netdev <netdev@vger.kernel.org>,
-        Eric Dumazet <edumazet@google.com>,
-        Kuniyuki Iwashima <kuniyu@amazon.com>
-Subject: [PATCH] net: sock: tracing: Fix sock_exceed_buf_limit not to
- dereference stale pointer
-Message-ID: <20220706105040.54fc03b0@gandalf.local.home>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        Wed, 6 Jul 2022 10:52:48 -0400
+Received: from outbound-smtp27.blacknight.com (outbound-smtp27.blacknight.com [81.17.249.195])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0A6B25E89
+        for <linux-kernel@vger.kernel.org>; Wed,  6 Jul 2022 07:52:45 -0700 (PDT)
+Received: from mail.blacknight.com (pemlinmail04.blacknight.ie [81.17.254.17])
+        by outbound-smtp27.blacknight.com (Postfix) with ESMTPS id 4C6FFCAC44
+        for <linux-kernel@vger.kernel.org>; Wed,  6 Jul 2022 15:52:44 +0100 (IST)
+Received: (qmail 16294 invoked from network); 6 Jul 2022 14:52:44 -0000
+Received: from unknown (HELO techsingularity.net) (mgorman@techsingularity.net@[84.203.198.246])
+  by 81.17.254.9 with ESMTPSA (AES256-SHA encrypted, authenticated); 6 Jul 2022 14:52:44 -0000
+Date:   Wed, 6 Jul 2022 15:52:41 +0100
+From:   Mel Gorman <mgorman@techsingularity.net>
+To:     Oliver Sang <oliver.sang@intel.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        0day robot <lkp@intel.com>,
+        LKML <linux-kernel@vger.kernel.org>, linux-mm@kvack.org,
+        lkp@lists.01.org, Nicolas Saenz Julienne <nsaenzju@redhat.com>,
+        Marcelo Tosatti <mtosatti@redhat.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Michal Hocko <mhocko@kernel.org>,
+        Hugh Dickins <hughd@google.com>
+Subject: Re: [mm/page_alloc]  2bd8eec68f:
+ BUG:sleeping_function_called_from_invalid_context_at_mm/gup.c
+Message-ID: <20220706145241.GG27531@techsingularity.net>
+References: <20220613125622.18628-8-mgorman@techsingularity.net>
+ <YsFk/qU+QtWun04h@xsang-OptiPlex-9020>
+ <20220703132209.875b823d1cb7169a8d51d56d@linux-foundation.org>
+ <YsRB3fZHAfik0M/q@xsang-OptiPlex-9020>
+ <20220706095535.GD27531@techsingularity.net>
+ <20220706115328.GE27531@techsingularity.net>
+ <YsWacP1k8wMgGfXx@xsang-OptiPlex-9020>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-15
+Content-Disposition: inline
+In-Reply-To: <YsWacP1k8wMgGfXx@xsang-OptiPlex-9020>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-0.2 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLACK autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: "Steven Rostedt (Google)" <rostedt@goodmis.org>
+On Wed, Jul 06, 2022 at 10:21:36PM +0800, Oliver Sang wrote:
+> > I tried reproducing this on a 2-socket machine with Xeon
+> > Gold Gold 5218R CPUs. It was necessary to set timeouts in both
+> > vm/settings and kselftest/runner.sh to avoid timeouts. Testing with
+> > a standard config on my original 5.19-rc3 baseline and the baseline
+> > b13baccc3850ca8b8cccbf8ed9912dbaa0fdf7f3 both passed. I tried your kernel
+> > config with i915 disabled (would not build) and necessary storage drivers
+> > and network drivers enabled (for boot and access). The kernel log shows
+> > a bunch of warnings related to USBAN during boot and during some of the
+> > tests but otherwise compaction_test completed successfully as well as
+> > the other VM tests.
+> > 
+> > Is this always reproducible?
+> 
+> not always but high rate.
+> we actually also observed other dmesgs stats for both 2bd8eec68f74 and its
+> parent
 
-The trace event sock_exceed_buf_limit saves the prot->sysctl_mem pointer
-and then dereferences it in the TP_printk() portion. This is unsafe as the
-TP_printk() portion is executed at the time the buffer is read. That is,
-it can be seconds, minutes, days, months, even years later. If the proto
-is freed, then this dereference will can also lead to a kernel crash.
+Ok, it's unclear what the "other dmesg stats" are but given that it happens
+for the parent. Does 5.19-rc2 (your baseline) have the same messages as
+2bd8eec68f74^? Does the kselftests vm suite always pass but sometimes
+fails with 2bd8eec68f74?
 
-Instead, save the sysctl_mem array into the ring buffer and have the
-TP_printk() reference that instead. This is the proper and safe way to
-read pointers in trace events.
+> but those dmesg.BUG:sleeping_function_called_from_invalid_context_at*
+> seem only happen on 2bd8eec68f74 as well as the '-fix' commit.
+> 
 
-Link: https://lore.kernel.org/all/20220706052130.16368-12-kuniyu@amazon.com/
+And roughly how often does it happen? I'm running it in a loop now to
+see if I can trigger it locally.
 
-Cc: stable@vger.kernel.org
-Fixes: 3847ce32aea9f ("core: add tracepoints for queueing skb to rcvbuf")
-Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
----
- include/trace/events/sock.h | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
-
-diff --git a/include/trace/events/sock.h b/include/trace/events/sock.h
-index 12c315782766..777ee6cbe933 100644
---- a/include/trace/events/sock.h
-+++ b/include/trace/events/sock.h
-@@ -98,7 +98,7 @@ TRACE_EVENT(sock_exceed_buf_limit,
- 
- 	TP_STRUCT__entry(
- 		__array(char, name, 32)
--		__field(long *, sysctl_mem)
-+		__array(long, sysctl_mem, 3)
- 		__field(long, allocated)
- 		__field(int, sysctl_rmem)
- 		__field(int, rmem_alloc)
-@@ -110,7 +110,9 @@ TRACE_EVENT(sock_exceed_buf_limit,
- 
- 	TP_fast_assign(
- 		strncpy(__entry->name, prot->name, 32);
--		__entry->sysctl_mem = prot->sysctl_mem;
-+		__entry->sysctl_mem[0] = READ_ONCE(prot->sysctl_mem[0]);
-+		__entry->sysctl_mem[1] = READ_ONCE(prot->sysctl_mem[1]);
-+		__entry->sysctl_mem[2] = READ_ONCE(prot->sysctl_mem[2]);
- 		__entry->allocated = allocated;
- 		__entry->sysctl_rmem = sk_get_rmem0(sk, prot);
- 		__entry->rmem_alloc = atomic_read(&sk->sk_rmem_alloc);
 -- 
-2.35.1
-
+Mel Gorman
+SUSE Labs

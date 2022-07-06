@@ -2,64 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1CC58567B21
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 02:32:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 44D5A567B23
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 02:35:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230189AbiGFAcv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Jul 2022 20:32:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39282 "EHLO
+        id S229521AbiGFAfv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Jul 2022 20:35:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40666 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229479AbiGFAcp (ORCPT
+        with ESMTP id S229453AbiGFAft (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Jul 2022 20:32:45 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86610165B2;
-        Tue,  5 Jul 2022 17:32:43 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 0EDF0B81A49;
-        Wed,  6 Jul 2022 00:32:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 03447C341C7;
-        Wed,  6 Jul 2022 00:32:38 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="HB0NeYjL"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1657067556;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=E8hY50EUIwXyXEL9Dt6kCiCr6Rdb7d35iCkloytNyu8=;
-        b=HB0NeYjL0fi6oMfAXC2OUAK5iqiyu2gygmneDxyQWnSA98FO7S2ySfZZ60wuRpbXHGGyYE
-        TQivwkgZkDcK7VMzXpSxuB/Hhdqj2CZ14CwkKjgCc/ohq4uqSFbdDGSttS9Vepz7dYS3ci
-        cqxV+CxoOAzsNPKC0aRgFy1lLqpqYns=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 4558f604 (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
-        Wed, 6 Jul 2022 00:32:36 +0000 (UTC)
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-To:     Borislav Petkov <bp@alien8.de>, "H. Peter Anvin" <hpa@zytor.com>,
-        "Jason A. Donenfeld" <Jason@zx2c4.com>,
-        linux-arm-kernel@lists.infradead.org,
-        linuxppc-dev@lists.ozlabs.org, linux-s390@vger.kernel.org,
-        linux-kernel@vger.kernel.org, x86@kernel.org,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Arnd Bergmann <arnd@arndb.de>
-Subject: [PATCH v2] random: remove CONFIG_ARCH_RANDOM
-Date:   Wed,  6 Jul 2022 02:32:25 +0200
-Message-Id: <20220706003225.335768-1-Jason@zx2c4.com>
-In-Reply-To: <YsTXI3J+ptkN/vb4@zx2c4.com>
-References: <YsTXI3J+ptkN/vb4@zx2c4.com>
+        Tue, 5 Jul 2022 20:35:49 -0400
+Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 633E9A447
+        for <linux-kernel@vger.kernel.org>; Tue,  5 Jul 2022 17:35:48 -0700 (PDT)
+Received: from pps.filterd (m0246632.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 265KwsYC001747;
+        Wed, 6 Jul 2022 00:35:36 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
+ subject : date : message-id : content-type : content-transfer-encoding :
+ mime-version; s=corp-2021-07-09;
+ bh=fENrfAXjmwrJrGB1l/vpS+dfDOSXV95lX1im9CR734o=;
+ b=Ea7VwumlklvzqieeA5ISxjiu8R1cVADGc1HGIKmoHbaV4wMxEAjdv9btAqjm4usTW3Zm
+ Q1u0mHzF2eRdrSxN/I+EQYGfBXA33Ohl0I8bcmzS5LFQgTl6MkvEU4h/YvOqE5NdwV1W
+ Efs0tHilp5pAewTj9BvWBZHQS4KPhFzLTvjb9x/X8f3YrvGEnZBvuCo6AtcqlZn9W/LC
+ pM9wP38QE4d5mqEiq5/+kS9RIXi2RnWfLTHx81kpl7SKUUmJ4x2RxbocRYYddY7zwN7t
+ C9GoN0uikNRitmeg4ILhZtFnkhWjX9K78zf/KGMSmVzeKoDWv7UTJXNvKQ5MkskhTuxi Aw== 
+Received: from iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta03.appoci.oracle.com [130.35.103.27])
+        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3h4uby0haf-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 06 Jul 2022 00:35:36 +0000
+Received: from pps.filterd (iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
+        by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (8.16.1.2/8.16.1.2) with SMTP id 2660BbXB032416;
+        Wed, 6 Jul 2022 00:35:36 GMT
+Received: from nam10-mw2-obe.outbound.protection.outlook.com (mail-mw2nam10lp2101.outbound.protection.outlook.com [104.47.55.101])
+        by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com with ESMTP id 3h4ud7my94-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 06 Jul 2022 00:35:35 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=B3dtntN2+/9o3YRLBMRN81CtHzGMZMFfI1NE+oxBueW6JZEHvt9gmopjY2tSgmWzsMMt2m+LM+Oaa5Ad9+/MPc5R8bpN5is8lHWm7dn9H7fsgq4HHfYM1FBdjalo/n7I1vmwbQEPp1Y10eGInyk6+xqdPQf85hGHCjY4G5WimvttfeNpW1UF5MPXQ2XmMWR1psPRPo2y0a+gSLZ5EnfwUskQZGoBQz8tXdRscWg9BlH7yKMa7dkZrMsbvDo3FccgTaq1qjZXarfGlENG0cGjhWokDXC72E4afS+cAD5x9PxjwAimtv+ebFScvnFxlrHHoqX23INXhkvrRyOU1vLUjA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=fENrfAXjmwrJrGB1l/vpS+dfDOSXV95lX1im9CR734o=;
+ b=bK17VtPSbov/RBHFabXzINJoquxQGlRNtBMK7FXGdbAhOisdUOGu+8blEvP4MExpLqjcxENxylyK0gkulAa9S/JMlYDKe5rjz910VfhTFb4+fui7pfyh5IUQMeY6P02iSE4zGHV4yzrPU/E4CNqp4EWvSDAuqffeXmFsXnLbj6QE99Ni64P2XgStvvdRK8gddSStYqW8aEgySyaKlgfL7IVgluDueO4jfa6FEARphk7sqrgTZO/DXeWMXvNBGSpHoHoALwVaVdmDfYmp8plAzGJlMWn47+dU1s682pbpXFPyB65064Ls2KZopIooxsukdcGK5OM8ZSo0oD5pivdMdg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=fENrfAXjmwrJrGB1l/vpS+dfDOSXV95lX1im9CR734o=;
+ b=iT2u513c5Yw9r/bgWcVy61nBfhjL31JYmw4vgPpgiqAIGJd0D0K3f570aUtq9GfphfgyeAcqR5OXmY2aqSj+iFCEUmnQNjzclr5eLXtm5bC7pSvpT+qUGMvlKkf1QCoFhKbL3LffT4fUOIgQkKciMpfkUkKBHTNfGw05EGNqZrc=
+Received: from SN6PR10MB3022.namprd10.prod.outlook.com (2603:10b6:805:d8::25)
+ by PH0PR10MB4421.namprd10.prod.outlook.com (2603:10b6:510:33::6) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5395.14; Wed, 6 Jul
+ 2022 00:35:33 +0000
+Received: from SN6PR10MB3022.namprd10.prod.outlook.com
+ ([fe80::6cb8:8ff0:385f:1c54]) by SN6PR10MB3022.namprd10.prod.outlook.com
+ ([fe80::6cb8:8ff0:385f:1c54%3]) with mapi id 15.20.5395.022; Wed, 6 Jul 2022
+ 00:35:33 +0000
+From:   Liam Howlett <liam.howlett@oracle.com>
+To:     "maple-tree@lists.infradead.org" <maple-tree@lists.infradead.org>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>
+CC:     Yu Zhao <yuzhao@google.com>
+Subject: [PATCH] mm/mmap: Fix copy_vma() new_vma check
+Thread-Topic: [PATCH] mm/mmap: Fix copy_vma() new_vma check
+Thread-Index: AQHYkNBN5b9h95VVwE+7V6rX9Clfdg==
+Date:   Wed, 6 Jul 2022 00:35:33 +0000
+Message-ID: <20220706003522.1827240-1-Liam.Howlett@oracle.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-mailer: git-send-email 2.35.1
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: fc8412aa-0486-469c-26f8-08da5ee77032
+x-ms-traffictypediagnostic: PH0PR10MB4421:EE_
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: oR2FKQk8E0zQ7tI9lETsUqydv2AKNzIaVd5OECJNgvMIDWlF5fcKAt4clMVLzAoG5zgbdl3G/8kJyN2ZpT3KVn78C5fKxjkAopj6C3khbd6uvy0Bq7D1Exscq8mbF9NjsaFX79U3T2jDgxMxoCG7Cofd/BNJRwBEg77JPz6gSZB42TRCRIQV1UdriG5wF0nl8u1p5iqRfPaTOg5DgmqcfyXi0PUfsqqLhih6LwH9lHtobCFuGbaWYlH12kwp/wJ90hB1OmigZCxTMihTxMEOu/Osu3Ek4fQUo0ljzeQ2KK+9H9N1KVs9dMg2rk2EWDEhZQd6NVWekwG3abW7QJcmw6W8BVdlEccjOMHNen+ej1E2w0ylr9kx/bT/oPqad9ui28Vmp8/lKbyvnYQoheU3AGNtnLLrZLt3lNw4Xus1VmeryG673gvONLa3xghPvX+0bo+eSqFNdPE+V6lJzvwSkKTp3SWOx/l4pVBMun7v297RGgW9BuX+LEzTwkIHsMbzxmJk6CcRcvpwP+Naz8zUQjDkzaOlIv8E2YG8s3WKs1qpiIisLu+qAHMvMq+F0/+GfygcfPm9dOJJLDJ2fws5XNT1Yg08yfN/tnaJot5a32a9x60T5yLM39VzAtBu2Gd3DfpeRUdbt4ik3MQWbRc8nJ3uN2feNJnpiZyQrEqFgIbE+y3VYey/JjK1nRfH0g1pdGrn0/NmCnMj8XORbfCKaGsyf5wnjosvM37Q/IBvoq+INGlUOPmPkpJ1bsoImd9oeInvjJGKeBhZzNWIEHeGRnul6oZnmcC1gjNVYQYliOtL6p+9WmCjeY29EWrR1HkG
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SN6PR10MB3022.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(376002)(346002)(136003)(396003)(39860400002)(366004)(122000001)(2616005)(186003)(1076003)(38070700005)(38100700002)(4744005)(83380400001)(8936002)(5660300002)(44832011)(6512007)(36756003)(2906002)(26005)(6486002)(8676002)(41300700001)(66446008)(4326008)(71200400001)(6506007)(66476007)(76116006)(66556008)(86362001)(316002)(64756008)(110136005)(478600001)(66946007)(91956017);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?iso-8859-1?Q?jokZuDg2zRxlUz2hE7WXOAnzDHPass4ESkXAw9hepzMnHlpDCZBOaCDvDt?=
+ =?iso-8859-1?Q?9jQHdqOqTVhF/AM/23eag19IgHlfVuJs+rfU+yjo0pSsnCz7UG4rzKi5QV?=
+ =?iso-8859-1?Q?+GFQnbH83MDKbzlz5l+F7xvP8XF2dPmWEJaGvFIqfIZz4ACtdRR/YKpvPi?=
+ =?iso-8859-1?Q?5ofamYg58yNGirC1rCDUQlOAa1pcYztH+asrK8IVpnRFuigTgp1InqeVms?=
+ =?iso-8859-1?Q?uw5CDAeJ24GqVgjD7b2EhiFjfY1lnxAHxeyjckkKmX85xCt9lMHV/vhftU?=
+ =?iso-8859-1?Q?LV+bXJAakHB3hcNyZpXtSxsd9kivVxEMw+Nw1RynptApPJUOmuooBfb3//?=
+ =?iso-8859-1?Q?jdYaGZWSl3kbiyH+lI6NwofuHwXYnnyih35EaNznNBsmCO+thnqMTd+x2l?=
+ =?iso-8859-1?Q?UvlaDk1COGJVNSPeMCGeH0RrGBpDz4F/PPmO5IS8r9t+aXDALXN/Eg4fz0?=
+ =?iso-8859-1?Q?szH6uBE6UTMArzh3VNktXGVGFrKMY6ouAdFGlFkpEpcYh6VS2yQQF0a4fP?=
+ =?iso-8859-1?Q?6hZ1JU0UDC2TpmuJ7fOnKficw4oyx2X7FgiZMQmwnzraEdhwwd9FmgFnN6?=
+ =?iso-8859-1?Q?B0h8oiiiN6QowtKd7z2AglQ4NVrjzOj53QQYK7eV8OUK3Jb+4P872dtjOB?=
+ =?iso-8859-1?Q?guIeXkkckpvy4RsYVKzJkGyquo7MShfSKeEptuBZiii/kpLdQqVrt37x5K?=
+ =?iso-8859-1?Q?MwS4ziecsGPTUTFmu9JLPVypHxZ7Nza4magGIUkN/qEIOdToJq+maV+ZTd?=
+ =?iso-8859-1?Q?9x3IoRu6WouhA8KoHbk9FMAP2UN8ZcXZFtd420yBAiRH6r2CetC489WlQS?=
+ =?iso-8859-1?Q?LdvSKJg/63jL9Gl1N8v0AEZwxyW8eyeKsvYxCOsU/Yk72QjykIjVw9LMAS?=
+ =?iso-8859-1?Q?rjZFuLHxeALmknT4Tt1Im0xCJTArMGq1nnzxONbIJ+hQPcExD7ypUb7AG+?=
+ =?iso-8859-1?Q?v005d46uE5syzA43Nh5RbN81RyKrRhaE4jZPpTpT7iXExfTwCbvUw6myRU?=
+ =?iso-8859-1?Q?VRF+ApJ+o/mTWJVYpcxnePByWY7IMYj80oHanh6/m8ky1RX8EBzhgSANvQ?=
+ =?iso-8859-1?Q?W9f9M5mwjmEQhg3QmRqwFbx1ODjW0LxtT7xmGVYKBFqB9b0YdyGFG2lS8p?=
+ =?iso-8859-1?Q?hziXY/b+d/oj9+dElf7VsWb/h4Inl/k856kgpnh6iK0pe8JL4XLGZvnIkt?=
+ =?iso-8859-1?Q?/3M/6BEX5QF0jdu9IlQ/gm3P61TY0yzskZoyetcg/IxkuadNGPDQSqH45z?=
+ =?iso-8859-1?Q?BtpLDQLQKY4j1sTK1N7x3zeW55KQ3EWpunbAJ481jw/nfQ1AmSbXjDNxEO?=
+ =?iso-8859-1?Q?eZadVBAPPsotPL1uow1xQTwyHlJ/qChmtbTr46WISdyRrDOgLx+Y3B0MP0?=
+ =?iso-8859-1?Q?LFxH9H96W/gJmdaM1fzeNgn3tJkJ8zGJpt3/oV7d9MrfckaKRIhZul6PQw?=
+ =?iso-8859-1?Q?vxyyX7graAw3P6gWSgimzx+obvHK2n5OT2Dd4ayIqw694c8lTJzWLbevSU?=
+ =?iso-8859-1?Q?YFWTPDpgyXh1huNJU1PoD1qWPYpTUjIsMd5eKxxqFoxsLdhsou3E2P8w/P?=
+ =?iso-8859-1?Q?lAl7Yp1BzwkBtTCdHdY4QgPzhjMfT1a9LoYhgRjIQ/kE+GXYfbpfhDtwYY?=
+ =?iso-8859-1?Q?ukmhYP/i6KDKSKVOIQiLExLijc3fGe2rAk+KvqZYd/d0z+IMc7/BewlQ?=
+ =?iso-8859-1?Q?=3D=3D?=
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: SN6PR10MB3022.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: fc8412aa-0486-469c-26f8-08da5ee77032
+X-MS-Exchange-CrossTenant-originalarrivaltime: 06 Jul 2022 00:35:33.8981
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: ILVhqPyEeFYu+vwU6vbJi+M3oUFRXIkC/q/+u1TT1SThdA69IhWMwzVsun/88HV2W12XSYG2mF5UqrYt3t/LsA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR10MB4421
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.517,18.0.883
+ definitions=2022-07-05_20:2022-06-28,2022-07-05 signatures=0
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 phishscore=0 bulkscore=0 malwarescore=0
+ mlxscore=0 spamscore=0 suspectscore=0 adultscore=0 mlxlogscore=979
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2206140000
+ definitions=main-2207050102
+X-Proofpoint-ORIG-GUID: 0Fs9YtK6oCClNoSIrOe5nAJvC6pk_kk1
+X-Proofpoint-GUID: 0Fs9YtK6oCClNoSIrOe5nAJvC6pk_kk1
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,420 +148,29 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When RDRAND was introduced, there was much discussion on whether it
-should be trusted and how the kernel should handle that. Initially, two
-mechanisms cropped up, CONFIG_ARCH_RANDOM, a compile time switch, and
-"nordrand", a boot-time switch.
+When checking new_vma limits to ensure they are not within where the
+copy of the vma will be placed, ensure new_vma is not NULL.
 
-Later the thinking evolved. With a properly designed RNG, using RDRAND
-values alone won't harm anything, even if the outputs are malicious.
-Rather, the issue is whether those values are being *trusted* to be good
-or not. And so a new set of options were introduced as the real
-ones that people use -- CONFIG_RANDOM_TRUST_CPU and "random.trust_cpu".
-With these options, RDRAND is used, but it's not always credited. So in
-the worst case, it does nothing, and in the best case, maybe it helps.
-
-Along the way, CONFIG_ARCH_RANDOM's meaning got sort of pulled into the
-center and became something certain platforms force-select.
-
-The old options don't really help with much, and it's a bit odd to have
-special handling for these instructions when the kernel can deal fine
-with the existence or untrusted existence or broken existence or
-non-existence of that CPU capability.
-
-So this commit simplifies things down to the two options that are
-actually used, and removes the confusing old ones that aren't used or
-useful. It leaves "nordrand" for now, as the removal of that will take a
-different route.
-
-Cc: Catalin Marinas <catalin.marinas@arm.com>
-Cc: Will Deacon <will@kernel.org>
-Cc: Michael Ellerman <mpe@ellerman.id.au>
-Cc: Heiko Carstens <hca@linux.ibm.com>
-Cc: Alexander Gordeev <agordeev@linux.ibm.com>
-Cc: Thomas Gleixner <tglx@linutronix.de>
-Cc: H. Peter Anvin <hpa@zytor.com>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: Arnd Bergmann <arnd@arndb.de>
-Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
+Fixes: ded0cf440d9b (mm: remove the vma linked list)
+Reported-by: Yu Zhao <yuzhao@google.com>
+Signed-off-by: Liam R. Howlett <Liam.Howlett@oracle.com>
 ---
- arch/arm64/Kconfig                                |  8 --------
- arch/arm64/include/asm/archrandom.h               | 10 ----------
- arch/arm64/kernel/cpufeature.c                    |  2 --
- arch/powerpc/Kconfig                              |  3 ---
- arch/powerpc/include/asm/archrandom.h             |  3 ---
- arch/powerpc/include/asm/machdep.h                |  2 --
- arch/powerpc/platforms/microwatt/Kconfig          |  1 -
- arch/powerpc/platforms/powernv/Kconfig            |  1 -
- arch/powerpc/platforms/pseries/Kconfig            |  1 -
- arch/s390/Kconfig                                 | 15 ---------------
- arch/s390/configs/zfcpdump_defconfig              |  1 -
- arch/s390/crypto/Makefile                         |  2 +-
- arch/s390/include/asm/archrandom.h                |  3 ---
- arch/x86/Kconfig                                  |  9 ---------
- arch/x86/include/asm/archrandom.h                 | 10 +---------
- arch/x86/kernel/cpu/rdrand.c                      |  2 --
- drivers/char/Kconfig                              |  1 -
- drivers/char/hw_random/s390-trng.c                |  9 ---------
- include/linux/random.h                            |  9 +--------
- .../selftests/wireguard/qemu/kernel.config        |  1 -
- 20 files changed, 3 insertions(+), 90 deletions(-)
+ mm/mmap.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig
-index 1652a9800ebe..1880f71c2547 100644
---- a/arch/arm64/Kconfig
-+++ b/arch/arm64/Kconfig
-@@ -1858,14 +1858,6 @@ config ARM64_E0PD
- 
- 	  This option enables E0PD for TTBR1 where available.
- 
--config ARCH_RANDOM
--	bool "Enable support for random number generation"
--	default y
--	help
--	  Random number generation (part of the ARMv8.5 Extensions)
--	  provides a high bandwidth, cryptographically secure
--	  hardware random number generator.
--
- config ARM64_AS_HAS_MTE
- 	# Initial support for MTE went in binutils 2.32.0, checked with
- 	# ".arch armv8.5-a+memtag" below. However, this was incomplete
-diff --git a/arch/arm64/include/asm/archrandom.h b/arch/arm64/include/asm/archrandom.h
-index 3a6b6d38c5b8..c3b9fa56af67 100644
---- a/arch/arm64/include/asm/archrandom.h
-+++ b/arch/arm64/include/asm/archrandom.h
-@@ -2,8 +2,6 @@
- #ifndef _ASM_ARCHRANDOM_H
- #define _ASM_ARCHRANDOM_H
- 
--#ifdef CONFIG_ARCH_RANDOM
--
- #include <linux/arm-smccc.h>
- #include <linux/bug.h>
- #include <linux/kernel.h>
-@@ -167,12 +165,4 @@ arch_get_random_seed_long_early(unsigned long *v)
- }
- #define arch_get_random_seed_long_early arch_get_random_seed_long_early
- 
--#else /* !CONFIG_ARCH_RANDOM */
--
--static inline bool __init smccc_probe_trng(void)
--{
--	return false;
--}
--
--#endif /* CONFIG_ARCH_RANDOM */
- #endif /* _ASM_ARCHRANDOM_H */
-diff --git a/arch/arm64/kernel/cpufeature.c b/arch/arm64/kernel/cpufeature.c
-index 8d88433de81d..0e9462abeb77 100644
---- a/arch/arm64/kernel/cpufeature.c
-+++ b/arch/arm64/kernel/cpufeature.c
-@@ -2416,7 +2416,6 @@ static const struct arm64_cpu_capabilities arm64_features[] = {
- 		.cpu_enable = cpu_enable_e0pd,
- 	},
- #endif
--#ifdef CONFIG_ARCH_RANDOM
- 	{
- 		.desc = "Random Number Generator",
- 		.capability = ARM64_HAS_RNG,
-@@ -2428,7 +2427,6 @@ static const struct arm64_cpu_capabilities arm64_features[] = {
- 		.sign = FTR_UNSIGNED,
- 		.min_field_value = 1,
- 	},
--#endif
- #ifdef CONFIG_ARM64_BTI
- 	{
- 		.desc = "Branch Target Identification",
-diff --git a/arch/powerpc/Kconfig b/arch/powerpc/Kconfig
-index c2ce2e60c8f0..0d5757c125c4 100644
---- a/arch/powerpc/Kconfig
-+++ b/arch/powerpc/Kconfig
-@@ -1248,9 +1248,6 @@ config PHYSICAL_START
- 	default "0x00000000"
- endif
- 
--config	ARCH_RANDOM
--	def_bool n
--
- config PPC_LIB_RHEAP
- 	bool
- 
-diff --git a/arch/powerpc/include/asm/archrandom.h b/arch/powerpc/include/asm/archrandom.h
-index 9a53e29680f4..25ba65df6b1a 100644
---- a/arch/powerpc/include/asm/archrandom.h
-+++ b/arch/powerpc/include/asm/archrandom.h
-@@ -2,8 +2,6 @@
- #ifndef _ASM_POWERPC_ARCHRANDOM_H
- #define _ASM_POWERPC_ARCHRANDOM_H
- 
--#ifdef CONFIG_ARCH_RANDOM
--
- #include <asm/machdep.h>
- 
- static inline bool __must_check arch_get_random_long(unsigned long *v)
-@@ -35,7 +33,6 @@ static inline bool __must_check arch_get_random_seed_int(unsigned int *v)
- 
- 	return rc;
- }
--#endif /* CONFIG_ARCH_RANDOM */
- 
- #ifdef CONFIG_PPC_POWERNV
- int powernv_hwrng_present(void);
-diff --git a/arch/powerpc/include/asm/machdep.h b/arch/powerpc/include/asm/machdep.h
-index 358d171ae8e0..6c1002043367 100644
---- a/arch/powerpc/include/asm/machdep.h
-+++ b/arch/powerpc/include/asm/machdep.h
-@@ -200,9 +200,7 @@ struct machdep_calls {
- 	ssize_t (*cpu_release)(const char *, size_t);
- #endif
- 
--#ifdef CONFIG_ARCH_RANDOM
- 	int (*get_random_seed)(unsigned long *v);
--#endif
- };
- 
- extern void e500_idle(void);
-diff --git a/arch/powerpc/platforms/microwatt/Kconfig b/arch/powerpc/platforms/microwatt/Kconfig
-index 5e320f49583a..6af443a1db99 100644
---- a/arch/powerpc/platforms/microwatt/Kconfig
-+++ b/arch/powerpc/platforms/microwatt/Kconfig
-@@ -6,7 +6,6 @@ config PPC_MICROWATT
- 	select PPC_ICS_NATIVE
- 	select PPC_ICP_NATIVE
- 	select PPC_UDBG_16550
--	select ARCH_RANDOM
- 	help
-           This option enables support for FPGA-based Microwatt implementations.
- 
-diff --git a/arch/powerpc/platforms/powernv/Kconfig b/arch/powerpc/platforms/powernv/Kconfig
-index 161dfe024085..e1a05c5a9004 100644
---- a/arch/powerpc/platforms/powernv/Kconfig
-+++ b/arch/powerpc/platforms/powernv/Kconfig
-@@ -12,7 +12,6 @@ config PPC_POWERNV
- 	select EPAPR_BOOT
- 	select PPC_INDIRECT_PIO
- 	select PPC_UDBG_16550
--	select ARCH_RANDOM
- 	select CPU_FREQ
- 	select PPC_DOORBELL
- 	select MMU_NOTIFIER
-diff --git a/arch/powerpc/platforms/pseries/Kconfig b/arch/powerpc/platforms/pseries/Kconfig
-index f7fd91d153a4..f4a647c1f0b2 100644
---- a/arch/powerpc/platforms/pseries/Kconfig
-+++ b/arch/powerpc/platforms/pseries/Kconfig
-@@ -19,7 +19,6 @@ config PPC_PSERIES
- 	select PPC_UDBG_16550
- 	select PPC_DOORBELL
- 	select HOTPLUG_CPU
--	select ARCH_RANDOM
- 	select FORCE_SMP
- 	select SWIOTLB
- 	default y
-diff --git a/arch/s390/Kconfig b/arch/s390/Kconfig
-index 91c0b80a8bf0..28a958b900f1 100644
---- a/arch/s390/Kconfig
-+++ b/arch/s390/Kconfig
-@@ -508,21 +508,6 @@ config KEXEC_SIG
- 	  verification for the corresponding kernel image type being
- 	  loaded in order for this to work.
- 
--config ARCH_RANDOM
--	def_bool y
--	prompt "s390 architectural random number generation API"
--	help
--	  Enable the s390 architectural random number generation API
--	  to provide random data for all consumers within the Linux
--	  kernel.
--
--	  When enabled the arch_random_* functions declared in linux/random.h
--	  are implemented. The implementation is based on the s390 CPACF
--	  instruction subfunction TRNG which provides a real true random
--	  number generator.
--
--	  If unsure, say Y.
--
- config KERNEL_NOBP
- 	def_bool n
- 	prompt "Enable modified branch prediction for the kernel by default"
-diff --git a/arch/s390/configs/zfcpdump_defconfig b/arch/s390/configs/zfcpdump_defconfig
-index a87fcc45e307..f4976f611b94 100644
---- a/arch/s390/configs/zfcpdump_defconfig
-+++ b/arch/s390/configs/zfcpdump_defconfig
-@@ -15,7 +15,6 @@ CONFIG_TUNE_ZEC12=y
- # CONFIG_COMPAT is not set
- CONFIG_NR_CPUS=2
- CONFIG_HZ_100=y
--# CONFIG_ARCH_RANDOM is not set
- # CONFIG_RELOCATABLE is not set
- # CONFIG_CHSC_SCH is not set
- # CONFIG_SCM_BUS is not set
-diff --git a/arch/s390/crypto/Makefile b/arch/s390/crypto/Makefile
-index c63abfeb6d17..1b1cc478fa94 100644
---- a/arch/s390/crypto/Makefile
-+++ b/arch/s390/crypto/Makefile
-@@ -15,7 +15,7 @@ obj-$(CONFIG_CRYPTO_CHACHA_S390) += chacha_s390.o
- obj-$(CONFIG_S390_PRNG) += prng.o
- obj-$(CONFIG_CRYPTO_GHASH_S390) += ghash_s390.o
- obj-$(CONFIG_CRYPTO_CRC32_S390) += crc32-vx_s390.o
--obj-$(CONFIG_ARCH_RANDOM) += arch_random.o
-+obj-y += arch_random.o
- 
- crc32-vx_s390-y := crc32-vx.o crc32le-vx.o crc32be-vx.o
- chacha_s390-y := chacha-glue.o chacha-s390.o
-diff --git a/arch/s390/include/asm/archrandom.h b/arch/s390/include/asm/archrandom.h
-index 5dc712fde3c7..27a3ff021b96 100644
---- a/arch/s390/include/asm/archrandom.h
-+++ b/arch/s390/include/asm/archrandom.h
-@@ -11,8 +11,6 @@
- #ifndef _ASM_S390_ARCHRANDOM_H
- #define _ASM_S390_ARCHRANDOM_H
- 
--#ifdef CONFIG_ARCH_RANDOM
--
- #include <linux/static_key.h>
- #include <linux/atomic.h>
- 
-@@ -50,5 +48,4 @@ static inline bool __must_check arch_get_random_seed_int(unsigned int *v)
- 	return false;
- }
- 
--#endif /* CONFIG_ARCH_RANDOM */
- #endif /* _ASM_S390_ARCHRANDOM_H */
-diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
-index be0b95e51df6..59b82135c814 100644
---- a/arch/x86/Kconfig
-+++ b/arch/x86/Kconfig
-@@ -1833,15 +1833,6 @@ config ARCH_USES_PG_UNCACHED
- 	def_bool y
- 	depends on X86_PAT
- 
--config ARCH_RANDOM
--	def_bool y
--	prompt "x86 architectural random number generator" if EXPERT
--	help
--	  Enable the x86 architectural RDRAND instruction
--	  (Intel Bull Mountain technology) to generate random numbers.
--	  If supported, this is a high bandwidth, cryptographically
--	  secure hardware random number generator.
--
- config X86_UMIP
- 	def_bool y
- 	prompt "User Mode Instruction Prevention" if EXPERT
-diff --git a/arch/x86/include/asm/archrandom.h b/arch/x86/include/asm/archrandom.h
-index ebc248e49549..1d7bd74d2b44 100644
---- a/arch/x86/include/asm/archrandom.h
-+++ b/arch/x86/include/asm/archrandom.h
-@@ -65,10 +65,8 @@ static inline bool __must_check rdseed_int(unsigned int *v)
- 
- /*
-  * These are the generic interfaces; they must not be declared if the
-- * stubs in <linux/random.h> are to be invoked,
-- * i.e. CONFIG_ARCH_RANDOM is not defined.
-+ * stubs in <linux/random.h> are to be invoked.
-  */
--#ifdef CONFIG_ARCH_RANDOM
- 
- static inline bool __must_check arch_get_random_long(unsigned long *v)
- {
-@@ -92,10 +90,4 @@ static inline bool __must_check arch_get_random_seed_int(unsigned int *v)
- 
- extern void x86_init_rdrand(struct cpuinfo_x86 *c);
- 
--#else  /* !CONFIG_ARCH_RANDOM */
--
--static inline void x86_init_rdrand(struct cpuinfo_x86 *c) { }
--
--#endif  /* !CONFIG_ARCH_RANDOM */
--
- #endif /* ASM_X86_ARCHRANDOM_H */
-diff --git a/arch/x86/kernel/cpu/rdrand.c b/arch/x86/kernel/cpu/rdrand.c
-index c4be62058dd9..8f216669ecb8 100644
---- a/arch/x86/kernel/cpu/rdrand.c
-+++ b/arch/x86/kernel/cpu/rdrand.c
-@@ -26,7 +26,6 @@ __setup("nordrand", x86_rdrand_setup);
-  */
- #define SANITY_CHECK_LOOPS 8
- 
--#ifdef CONFIG_ARCH_RANDOM
- void x86_init_rdrand(struct cpuinfo_x86 *c)
- {
- 	unsigned int changed = 0;
-@@ -63,4 +62,3 @@ void x86_init_rdrand(struct cpuinfo_x86 *c)
- "RDRAND gives funky smelling output, might consider not using it by booting with \"nordrand\"");
- 
- }
--#endif
-diff --git a/drivers/char/Kconfig b/drivers/char/Kconfig
-index 0b6c03643ddc..30192e123e5f 100644
---- a/drivers/char/Kconfig
-+++ b/drivers/char/Kconfig
-@@ -431,7 +431,6 @@ config ADI
- config RANDOM_TRUST_CPU
- 	bool "Initialize RNG using CPU RNG instructions"
- 	default y
--	depends on ARCH_RANDOM
- 	help
- 	  Initialize the RNG using random numbers supplied by the CPU's
- 	  RNG instructions (e.g. RDRAND), if supported and available. These
-diff --git a/drivers/char/hw_random/s390-trng.c b/drivers/char/hw_random/s390-trng.c
-index 2beaa35c0d74..488808dc17a2 100644
---- a/drivers/char/hw_random/s390-trng.c
-+++ b/drivers/char/hw_random/s390-trng.c
-@@ -108,7 +108,6 @@ static ssize_t trng_counter_show(struct device *dev,
- {
- 	u64 dev_counter = atomic64_read(&trng_dev_counter);
- 	u64 hwrng_counter = atomic64_read(&trng_hwrng_counter);
--#if IS_ENABLED(CONFIG_ARCH_RANDOM)
- 	u64 arch_counter = atomic64_read(&s390_arch_random_counter);
- 
- 	return sysfs_emit(buf,
-@@ -118,14 +117,6 @@ static ssize_t trng_counter_show(struct device *dev,
- 			"total: %llu\n",
- 			dev_counter, hwrng_counter, arch_counter,
- 			dev_counter + hwrng_counter + arch_counter);
--#else
--	return sysfs_emit(buf,
--			"trng:  %llu\n"
--			"hwrng: %llu\n"
--			"total: %llu\n",
--			dev_counter, hwrng_counter,
--			dev_counter + hwrng_counter);
--#endif
- }
- static DEVICE_ATTR(byte_counter, 0444, trng_counter_show, NULL);
- 
-diff --git a/include/linux/random.h b/include/linux/random.h
-index 20e389a14e5c..865770e29f3e 100644
---- a/include/linux/random.h
-+++ b/include/linux/random.h
-@@ -106,14 +106,7 @@ declare_get_random_var_wait(long, unsigned long)
-  */
- #include <linux/prandom.h>
- 
--#ifdef CONFIG_ARCH_RANDOM
--# include <asm/archrandom.h>
--#else
--static inline bool __must_check arch_get_random_long(unsigned long *v) { return false; }
--static inline bool __must_check arch_get_random_int(unsigned int *v) { return false; }
--static inline bool __must_check arch_get_random_seed_long(unsigned long *v) { return false; }
--static inline bool __must_check arch_get_random_seed_int(unsigned int *v) { return false; }
--#endif
-+#include <asm/archrandom.h>
- 
- /*
-  * Called from the boot CPU during startup; not valid to call once
-diff --git a/tools/testing/selftests/wireguard/qemu/kernel.config b/tools/testing/selftests/wireguard/qemu/kernel.config
-index bad88f4b0a03..e1858ce7003f 100644
---- a/tools/testing/selftests/wireguard/qemu/kernel.config
-+++ b/tools/testing/selftests/wireguard/qemu/kernel.config
-@@ -58,7 +58,6 @@ CONFIG_NO_HZ_IDLE=y
- CONFIG_NO_HZ_FULL=n
- CONFIG_HZ_PERIODIC=n
- CONFIG_HIGH_RES_TIMERS=y
--CONFIG_ARCH_RANDOM=y
- CONFIG_FILE_LOCKING=y
- CONFIG_POSIX_TIMERS=y
- CONFIG_DEVTMPFS=y
--- 
+diff --git a/mm/mmap.c b/mm/mmap.c
+index dacc01b0126a..9eb663cde5c7 100644
+--- a/mm/mmap.c
++++ b/mm/mmap.c
+@@ -3293,7 +3293,7 @@ struct vm_area_struct *copy_vma(struct vm_area_struct=
+ **vmap,
+ 	}
+=20
+ 	new_vma =3D find_vma_prev(mm, addr, &prev);
+-	if (new_vma->vm_start < addr + len)
++	if (new_vma && new_vma->vm_start < addr + len)
+ 		return NULL;	/* should never get here */
+=20
+ 	new_vma =3D vma_merge(mm, prev, addr, addr + len, vma->vm_flags,
+--=20
 2.35.1
-

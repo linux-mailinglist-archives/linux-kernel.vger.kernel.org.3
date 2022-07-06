@@ -2,65 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D41F456879D
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 14:01:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E2A4556879B
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 14:01:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233480AbiGFMBK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Jul 2022 08:01:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34400 "EHLO
+        id S233470AbiGFMBO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Jul 2022 08:01:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34486 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233446AbiGFMBG (ORCPT
+        with ESMTP id S233444AbiGFMBI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Jul 2022 08:01:06 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4B08329C89
-        for <linux-kernel@vger.kernel.org>; Wed,  6 Jul 2022 05:00:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1657108858;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=QxoUQEd9T+5d75jxMjI+RMAFpSP159lEO1UAIvXOQUI=;
-        b=hYNAcI1KZTuW32kZ6SpOxcSt4sOvUnTIpELUo0agE1PKBesnC5rXpRJ8vUoJuer+5g7ZoC
-        GcbcYNHM+2lyq4o2EuqSnn8neLF0H5b4zCy9/gUYv+rKfSiUNg11rEPBtAqPikNp2t1kVI
-        DH/hULc4kVIFydhcUD7u+8s3N9DbLJ8=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-564-kzt-C4n3OzG5Krm-U2CwNQ-1; Wed, 06 Jul 2022 08:00:53 -0400
-X-MC-Unique: kzt-C4n3OzG5Krm-U2CwNQ-1
-Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        Wed, 6 Jul 2022 08:01:08 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8E2428E36
+        for <linux-kernel@vger.kernel.org>; Wed,  6 Jul 2022 05:01:06 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id A7EBB294EDE0;
-        Wed,  6 Jul 2022 12:00:52 +0000 (UTC)
-Received: from starship (unknown [10.40.194.38])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 57E0A1415117;
-        Wed,  6 Jul 2022 12:00:50 +0000 (UTC)
-Message-ID: <1b59bf16b21f2fd5cedc3e88e1c437185b48d48c.camel@redhat.com>
-Subject: Re: [PATCH v2 10/21] KVM: VMX: Inject #PF on ENCLS as "emulated" #PF
-From:   Maxim Levitsky <mlevitsk@redhat.com>
-To:     Sean Christopherson <seanjc@google.com>,
-        Paolo Bonzini <pbonzini@redhat.com>
-Cc:     Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Oliver Upton <oupton@google.com>,
-        Peter Shier <pshier@google.com>
-Date:   Wed, 06 Jul 2022 15:00:49 +0300
-In-Reply-To: <20220614204730.3359543-11-seanjc@google.com>
-References: <20220614204730.3359543-1-seanjc@google.com>
-         <20220614204730.3359543-11-seanjc@google.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.36.5 (3.36.5-2.fc32) 
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2DBE161F44
+        for <linux-kernel@vger.kernel.org>; Wed,  6 Jul 2022 12:01:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4789DC3411C;
+        Wed,  6 Jul 2022 12:01:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1657108865;
+        bh=SxZ5gPnL1lJYbbdKlvmsQFgB0lgS1A3kcbUqEn7xBRQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=dOArfIuHLw6DUXMjueXyFAFj2MCvfGU248UeblIvaB8Mdpjk6cKv5QRgDqMx2lFNo
+         YPquuSW2tGbSY4szUZ8AsXJ4UhyUu1n+0QYBcu2OKEtSIXoGnTmJMDgFU10bCKD1UL
+         kTnHNnB+u3RvZbLvXiZ4nnoDTn7mOJkFjkNN0pgpo/ij/+tCmur3TTu/VtbTwNvhtJ
+         tLdFw/1/d+h2fNSstaH8dYTmHFiRXZKq0PA7IBfzs3FJSGEA7r1h/dWZxCuN2gcEEg
+         H0JWBi9zioTiZ6u/011hT2D6fRfJ5QMJUeEFfe4rD6K5t9G4KLgqCqr/9rntIR/yjN
+         e9jWJXYnSBCpg==
+Date:   Wed, 6 Jul 2022 13:00:59 +0100
+From:   Will Deacon <will@kernel.org>
+To:     John Garry <john.garry@huawei.com>
+Cc:     joro@8bytes.org, robin.murphy@arm.com, mst@redhat.com,
+        jasowang@redhat.com, iommu@lists.linux-foundation.org,
+        linux-kernel@vger.kernel.org,
+        virtualization@lists.linux-foundation.org,
+        chenxiang66@hisilicon.com, thunder.leizhen@huawei.com,
+        jean-philippe@linaro.org, linuxarm@huawei.com
+Subject: Re: [PATCH RESEND v5 1/5] iommu: Refactor iommu_group_store_type()
+Message-ID: <20220706120059.GE2403@willie-the-truck>
+References: <1649071634-188535-1-git-send-email-john.garry@huawei.com>
+ <1649071634-188535-2-git-send-email-john.garry@huawei.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 2.85 on 10.11.54.7
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1649071634-188535-2-git-send-email-john.garry@huawei.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,35 +60,26 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 2022-06-14 at 20:47 +0000, Sean Christopherson wrote:
-> Treat #PFs that occur during emulation of ENCLS as, wait for it, emulated
-> page faults.  Practically speaking, this is a glorified nop as the
-> exception is never of the nested flavor, and it's extremely unlikely the
-> guest is relying on the side effect of an implicit INVLPG on the faulting
-> address.
+On Mon, Apr 04, 2022 at 07:27:10PM +0800, John Garry wrote:
+> Function iommu_group_store_type() supports changing the default domain
+> of an IOMMU group.
 > 
-> Fixes: 70210c044b4e ("KVM: VMX: Add SGX ENCLS[ECREATE] handler to enforce CPUID restrictions")
-> Signed-off-by: Sean Christopherson <seanjc@google.com>
+> Many conditions need to be satisfied and steps taken for this action to be
+> successful.
+> 
+> Satisfying these conditions and steps will be required for setting other
+> IOMMU group attributes, so factor into a common part and a part specific
+> to update the IOMMU group attribute.
+> 
+> No functional change intended.
+> 
+> Some code comments are tidied up also.
+> 
+> Signed-off-by: John Garry <john.garry@huawei.com>
 > ---
->  arch/x86/kvm/vmx/sgx.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/arch/x86/kvm/vmx/sgx.c b/arch/x86/kvm/vmx/sgx.c
-> index 35e7ec91ae86..966cfa228f2a 100644
-> --- a/arch/x86/kvm/vmx/sgx.c
-> +++ b/arch/x86/kvm/vmx/sgx.c
-> @@ -129,7 +129,7 @@ static int sgx_inject_fault(struct kvm_vcpu *vcpu, gva_t gva, int trapnr)
->  		ex.address = gva;
->  		ex.error_code_valid = true;
->  		ex.nested_page_fault = false;
-> -		kvm_inject_page_fault(vcpu, &ex);
-> +		kvm_inject_emulated_page_fault(vcpu, &ex);
->  	} else {
->  		kvm_inject_gp(vcpu, 0);
->  	}
+>  drivers/iommu/iommu.c | 96 ++++++++++++++++++++++++++++---------------
+>  1 file changed, 62 insertions(+), 34 deletions(-)
 
-Reviewed-by: Maxim Levitsky <mlevitsk@redhat.com>
+Acked-by: Will Deacon <will@kernel.org>
 
-Best regards,
-	Maxim Levitsky
-
+Will

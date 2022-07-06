@@ -2,85 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3486C568DC3
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 17:44:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C134568D7A
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 17:44:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234683AbiGFPjm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Jul 2022 11:39:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59210 "EHLO
+        id S233997AbiGFPnj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Jul 2022 11:43:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40218 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234738AbiGFPht (ORCPT
+        with ESMTP id S235094AbiGFPnL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Jul 2022 11:37:49 -0400
-Received: from mail-yw1-f176.google.com (mail-yw1-f176.google.com [209.85.128.176])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CDDC25EB3;
-        Wed,  6 Jul 2022 08:34:21 -0700 (PDT)
-Received: by mail-yw1-f176.google.com with SMTP id 00721157ae682-31c8a1e9e33so91637247b3.5;
-        Wed, 06 Jul 2022 08:34:21 -0700 (PDT)
+        Wed, 6 Jul 2022 11:43:11 -0400
+Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C9CD2F03F
+        for <linux-kernel@vger.kernel.org>; Wed,  6 Jul 2022 08:36:50 -0700 (PDT)
+Received: by mail-lf1-x12a.google.com with SMTP id t19so25940399lfl.5
+        for <linux-kernel@vger.kernel.org>; Wed, 06 Jul 2022 08:36:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=/3bPZqTRdflIiXLL8U8luN1bqZnH5disuECgPvDTbyA=;
+        b=t6VexcMz2hiUMyqtZuYA6IFPdq58Ama0cu9nzuLM1kCROsn3lKYCy4HLSvTkNkrbPv
+         Ml58v86Sw6WzVq6H4DVXaUNJhYDIh49X4+29ovyHHT1VvawTprk96QRRG+jyPd81h+o8
+         HqRyoiarsRM5fSv8c4wSXK8HUMl4EMVa4wxeBT/m+9TzxpO+Q5Niy75fXQv4XOqYPmKM
+         6ZHrfWK5Qii+6zDHZBdBQU7xomGbh3zOuVZ78QBivosuTRxT28O1iSCbdz6Zb58CS+iO
+         LZS5U/StKayEh7MfIF9leyUE7VugAU+N49GwzXVCwhC3KdTFw4RE6gw50pQtWlMr2nhR
+         g2Rg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=e+Fsv8R6El10zE4fRO1Zb3LQa9YV3Qjec5+0V8sZOL8=;
-        b=abA2kxiYOK5w7K6qOsyYQIZT4hWfSiQncZj/EO7rhLYaVAk6FGpU6Kr98ibYzDhH5Y
-         oUgbjATbtc8CW95p7wGQgCqYGSEgL8QD6Mcg7T7Lj0HS3ghwrtlI/kxflVkm861jzK3N
-         03x/T0/empdgiEvnlxIZWNloj8euVPnMObTXrIvMbVztLSA1hUb0EcseNozh8WpSfPzi
-         Ocn3mTICmZ2lIZto4x4gXGIGNJxQZv6Hop0U3ETSKWv22x5b81WalOmLNTWM9CX+rF7s
-         aa3+sOZ845mI96bXxCxxJdJmr53azPXBHoImOmdq54vrnj6ICLDZS0mqxP62rGvX2zuA
-         5kVw==
-X-Gm-Message-State: AJIora+ZUm1wIAlfeVCNpW41toSLZCq+b8F0KDutM6G8Njt+/V+MzgfT
-        FJv4rQAhJehPy8VEOOM5xcAkEkWIEYVdpxe2e6T4CdXSeBg=
-X-Google-Smtp-Source: AGRyM1u7ABPiXSFcDKj/c4I09BwgdOZnzeJIsTesqlFtEdqGMBzTO/wiiq9rxvUww5aXa3RBPwaMfL4Aazj2igIKYaE=
-X-Received: by 2002:a81:6943:0:b0:31c:ee3e:47c6 with SMTP id
- e64-20020a816943000000b0031cee3e47c6mr3379106ywc.515.1657121660817; Wed, 06
- Jul 2022 08:34:20 -0700 (PDT)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=/3bPZqTRdflIiXLL8U8luN1bqZnH5disuECgPvDTbyA=;
+        b=cQMhtuWMGzu0ptLsw+9+JvCWhK4j5OU3YPAvLwS1d1M1o1e+SOO2hIvCOmhW7F3McN
+         +Lhhcp1XhjC0OaBbVOhriz7ht0PBLZXHfKgxX9+21ikL4SSGa6V2IAS9/2oJMIuDqwcA
+         MVyjExI7PGoNbN6/BjX+16BiURSw4ooOd7YeEjdd7VGSBAOMviRBz1xi5dgJy+kwB12w
+         /AquKRT1m6IX4Us6wMvehOZ3MBUWidwnS47UtZLenOgPPphxhhuoTkuKTWg98xBdRhe6
+         RECC76/3k2j0gNtZyaUP9X8UbIrDE/JrEhQZRyrlZIp4E4HdygBc8tfF0P0PTIs9bzyj
+         LY8A==
+X-Gm-Message-State: AJIora+mwqXXTfFyYhuHm6vo1EJEQSSz6sFEoGasR3djlM6j8DjEg2wA
+        0aHg0rxO4KQzqkF+dGbWM2bHHc5+zcbnYcrZ
+X-Google-Smtp-Source: AGRyM1stEUKNw32v0KSUxSuBpHNUbaQ6rT8pQqskgO/HGl45Idq4x3SKxz3EcjiXU2ySPZR+XqCFaw==
+X-Received: by 2002:a05:6512:3ca0:b0:47f:a9f3:f26 with SMTP id h32-20020a0565123ca000b0047fa9f30f26mr28314150lfv.297.1657121805528;
+        Wed, 06 Jul 2022 08:36:45 -0700 (PDT)
+Received: from [192.168.1.52] ([84.20.121.239])
+        by smtp.gmail.com with ESMTPSA id h15-20020a2eb0ef000000b00255500154fasm6270992ljl.52.2022.07.06.08.36.44
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 06 Jul 2022 08:36:44 -0700 (PDT)
+Message-ID: <25b43586-eeb3-4b7b-7362-2d599aa89cf0@linaro.org>
+Date:   Wed, 6 Jul 2022 17:36:43 +0200
 MIME-Version: 1.0
-References: <8c3d50faf8811e86136fb3f9c459e43fc3c50bc0.1653565641.git.viresh.kumar@linaro.org>
- <426bf6edc80b2e944d459fa7b8dffbe8b73bb3d9.1653623526.git.viresh.kumar@linaro.org>
- <CAJZ5v0gswDEdK9-gC1dPr9BFPv3G9rs+JYe-7=1JZ11OMoBb-g@mail.gmail.com>
- <20220615045957.55ocdyddcac3vwct@vireshk-i7> <CAJZ5v0gDCS8mkoFjnqOAi9gGuhTheE79FwvRWgeoxagMj3Ok0Q@mail.gmail.com>
- <20220706152333.fvgybznz3j6ffmre@vireshk-i7>
-In-Reply-To: <20220706152333.fvgybznz3j6ffmre@vireshk-i7>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Wed, 6 Jul 2022 17:34:09 +0200
-Message-ID: <CAJZ5v0hnjeTYDfGvwrAEY8hNa6bfD6MDGEiuTOgVV+g6LEaGLQ@mail.gmail.com>
-Subject: Re: [PATCH V2 2/3] cpufreq: Panic if policy is active in cpufreq_policy_free()
-To:     Viresh Kumar <viresh.kumar@linaro.org>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        kernel test robot <oliver.sang@intel.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH v2 1/2] [RFT] dt-bindings: leds: Add
+ cznic,turris1x-leds.yaml binding
+Content-Language: en-US
+To:     =?UTF-8?Q?Marek_Beh=c3=ban?= <kabel@kernel.org>,
+        =?UTF-8?Q?Pali_Roh=c3=a1r?= <pali@kernel.org>
+Cc:     Pavel Machek <pavel@ucw.cz>, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-leds@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220705000448.14337-1-pali@kernel.org>
+ <20220705155929.25565-1-pali@kernel.org> <20220706131507.353f0bed@thinkpad>
+ <20220706111912.hz2mx4dc35lgq6l5@pali> <20220706172732.6228d180@thinkpad>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220706172732.6228d180@thinkpad>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jul 6, 2022 at 5:23 PM Viresh Kumar <viresh.kumar@linaro.org> wrote:
->
-> On 06-07-22, 15:49, Rafael J. Wysocki wrote:
-> > WARN_ON() would be somewhat better, but then I'm not sure if having a
-> > full call trace in this case is really useful, because we know when
-> > cpufreq_policy_free() can be called anyway.
-> >
-> > Maybe just print a warning message.
->
-> The warning will get printed, yes, but I am sure everyone will end up
-> ignoring it, once it happens.
->
-> One of the benefits of printing the call-stack is people will take it
-> seriously and report it, and we won't miss a bug, if one gets in
-> somehow.
+On 06/07/2022 17:27, Marek Behún wrote:
+> On Wed, 6 Jul 2022 13:19:12 +0200
+> Pali Rohár <pali@kernel.org> wrote:
+> 
+>> On Wednesday 06 July 2022 13:15:07 Marek Behún wrote:
+>>> On Tue,  5 Jul 2022 17:59:28 +0200
+>>> Pali Rohár <pali@kernel.org> wrote:
+>>>   
+>>>> +examples:
+>>>> +  - |
+>>>> +    #include <dt-bindings/leds/common.h>
+>>>> +
+>>>> +    cpld@3,0 {  
+>>>
+>>> The generic node name should be just "bus". That it is a CPLD
+>>> implementation should come from compatible string.  
+>>
+>> Sorry, I do not understand why "bus". Why other memory chips are named
+>> e.g. "nand" or "nor" and not "bus" too?
+> 
+> As far as I understand this is because that is the preferred name for
+> busses and this is a bus, since there is also the simple-bus compatible.
+> 
+>> By this logic should not be _every_ node called just "bus"? Hm... and 
+>> are names needed at all then?
+> 
+> :-)
+> 
+> The schema
+>   https://github.com/devicetree-org/dt-schema/blob/main/dtschema/schemas/simple-bus.yaml
+> allows for different names (soc|axi|ahb|*-bus) to avoid warnings on
+> existing old dts files.
+> 
+> The preferred way is to not have the implementation in nodename,
+> similar to how we use 'switch' instead of 'mv88e6xxx', or
+> 'ethernet-phy' instead of 'mv88e151x', or 'led-controller', ...
 
-I'd rather not go into discussing things that people may or may not do and why.
+Thanks Marek for detailed explanation.
+The cases above rather trigger my comments and this one here, after
+Pali's explanation, do not fit them. pld is a generic class of a device,
+so it is okay here. cpld probably as well (although one could argue that
+it is a subset of pld, so the generic name is pld, but then one would
+say fpga also should be called pld). For me it does not have to be bus,
+just don't want mv88e6xxx or any other vendor/model names. Therefore
+cpld is fine.
 
-My point is that if WARN_ON() gets converted to panic(), they will not
-see the message at all and if the message gets printed, they will have
-a chance to see it even in that case.  Whether or not they use that
-chance as desirable is beyond the scope of engineering IMV.
+> 
+> I wasn't there when people started requesting for this to be that way,
+> but I guess it makes some sense to make it more readable and less
+> redundant (the generic name in nodename and the implementation in
+> compatible string...).
+
+
+
+
+Best regards,
+Krzysztof

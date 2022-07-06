@@ -2,124 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A5C3569234
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 20:53:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E1796569239
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 20:55:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233061AbiGFSxi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Jul 2022 14:53:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34924 "EHLO
+        id S233685AbiGFSzL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Jul 2022 14:55:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35724 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230502AbiGFSxf (ORCPT
+        with ESMTP id S230502AbiGFSzJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Jul 2022 14:53:35 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9C4C02612D
-        for <linux-kernel@vger.kernel.org>; Wed,  6 Jul 2022 11:53:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1657133611;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=vpKqPCC+dq82KAEepp5QL1jPT12BGJMMiKq0ETkXQgI=;
-        b=ivb4/9gfTcW/ufl+w3CCLqpb1aweipn6RPAvhcy82X0get7z+OL+/ieNE+Bp8TB+SIyYoY
-        tVQ/uEC4vCMCOXnhuXrzAZkuJgDre5fkpRC1rMjtE1ixUvTigU1Iz8csGpg3wB0P54bsyI
-        xIN/sdQHomnzA87SEbOrzOjRhC71Boo=
-Received: from mail-yw1-f197.google.com (mail-yw1-f197.google.com
- [209.85.128.197]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-539-GG54jug4OwqAR1iyPjRdRQ-1; Wed, 06 Jul 2022 14:53:30 -0400
-X-MC-Unique: GG54jug4OwqAR1iyPjRdRQ-1
-Received: by mail-yw1-f197.google.com with SMTP id 00721157ae682-31c8c7138ebso67979957b3.17
-        for <linux-kernel@vger.kernel.org>; Wed, 06 Jul 2022 11:53:30 -0700 (PDT)
+        Wed, 6 Jul 2022 14:55:09 -0400
+Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F8F2205FC
+        for <linux-kernel@vger.kernel.org>; Wed,  6 Jul 2022 11:55:08 -0700 (PDT)
+Received: by mail-ej1-x635.google.com with SMTP id d2so28699559ejy.1
+        for <linux-kernel@vger.kernel.org>; Wed, 06 Jul 2022 11:55:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=Q+PQw8bgTsUWzLK2GyjEyXbBw4GPBQs2jHRw73nMgOg=;
+        b=g18FQLbTBsNJjQwfyzkFrrOYV6TBFs7GbkjeeMRyNJjXBoYZvwu3B4Re8aLNhkahpW
+         hcR+X5y/BYoQAL2WXhtq46FOiY3YG9EVE6CGxGWwYEP528MEY+IgAgrK7Yb5mqbYTLgJ
+         BXbgNkGke93r0Uqpvmx8f6bBqk7gOEVp4fke2+8LQ0KiebBIkNrkf7kgTGJa635Nm5A9
+         jGKxl0kTgh7vdm0Kq6Xlbt7pCZnn1NO1/bPCqS61niSmnKHxitacAKycaE09axAHEddu
+         PPtg4s1FFaHvHkuqB4jDEKVupA22T1z8FPzNfOWsJ38uo7sE2hTYUSLdoi1PlRJQHkAV
+         W7Xg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=vpKqPCC+dq82KAEepp5QL1jPT12BGJMMiKq0ETkXQgI=;
-        b=qOCjoAPsDe5j2uH0aUCrocdPTGFGfmd4AUkWWhPmBcllsSeU9X1ucy5lazycBveA9H
-         Pxdqf9S3iCJQy+aYI5kfZAdnN0RLXBY9yWWIWL/JlC7wF5ySKUePcKw6Tl7Kw38w8kUt
-         1Op0EQMIwTnvtrMIh0LFqw4WYJp/dd1h1mrjdlHKeN8ByIq2+LKu+HX0tfOWt8eKKkGu
-         dtXLw2b6XI/ilKaCYr2iTn8tfJ83iPsXgzNSEkHd+FQt+Mci7MtPny80T3XLFt5WAioU
-         3qoZ1xdfI4ol/rITtvphGCQkYrBNv4tZHX0aGFROTENUi0k/hb6sCgxCBE0IhNyiEFYS
-         F39Q==
-X-Gm-Message-State: AJIora9BVPSwNyXfnikE+HiOgeLOmPVjRWcDU3xEMuo5MhQjJXqgsifd
-        jKBXkSe7NDQy16V9txj6UgswperGVhYZROnD/4AVN71mqafjS3JJzVoC2/AxBKu76L4G+9EQj6u
-        NPES4RBLY45j+8tPlvs7YuIAMVUkfF4H2VbTj1FwR
-X-Received: by 2002:a81:315:0:b0:317:6789:a0c1 with SMTP id 21-20020a810315000000b003176789a0c1mr50398783ywd.378.1657133610008;
-        Wed, 06 Jul 2022 11:53:30 -0700 (PDT)
-X-Google-Smtp-Source: AGRyM1ukESutasOwQQv+z1C+dhV56B10wsDX/hCRqFQDRXmQvGdZRZ/ZCWAmPTwBAQNixjzF7EcmG5m3Mb5/SjaYnJQ=
-X-Received: by 2002:a81:315:0:b0:317:6789:a0c1 with SMTP id
- 21-20020a810315000000b003176789a0c1mr50398765ywd.378.1657133609825; Wed, 06
- Jul 2022 11:53:29 -0700 (PDT)
+        bh=Q+PQw8bgTsUWzLK2GyjEyXbBw4GPBQs2jHRw73nMgOg=;
+        b=KNJuzWI7DUpqKFbJuv5lmtIPGZ5EQkjOfMss1Ms4hkNzplQQF30eczpj7oBbDGjU9A
+         njLD6j5fAyMH4Wz6xuW4S64MefBBZzu894oZvyeZQ7ukTX0CDvBBzd+b5zP11Z/PBwPv
+         XoS/q+sGwNw9Cn2zvYq+/9vu3s1rSmo5zpKzo2OwtJeuVsJab8pfcJh1fwBIG+QM8xAO
+         i6Y/yAVPil/1H2xmCh/GPTJju+D2JMDWuGMReJH2aNWeuVsOqPLe9oTlbrXyXjxBrT/M
+         jSs2ujfCH8JKq7aonyeTBVN0lyPvGORfMVXW81AcWiCVbP1tN6f+3iuDqw0DIad9QNwj
+         DVNw==
+X-Gm-Message-State: AJIora9qcXMEdDQ2hmfABegeIimymjTs0OBKnbuVJuh6cQFyp0yFO7dH
+        FYmp9vNlpR/gKOYITkT1A9FsptD35z5bqWzdxaZeXA==
+X-Google-Smtp-Source: AGRyM1u90NXMAv1ydDCibLoqD+x9HtXFKYTRwcMsYvL2w9tVOBh1Fcw27ysjsuqLJ8Som+OskOKQKiPo8p5u1+0tWEg=
+X-Received: by 2002:a17:906:ce2a:b0:723:1587:9021 with SMTP id
+ sd10-20020a170906ce2a00b0072315879021mr41894495ejb.725.1657133707087; Wed, 06
+ Jul 2022 11:55:07 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220705185605.3889110-1-jsavitz@redhat.com> <20220705133456.d5572b2e36ebb36188369988@linux-foundation.org>
- <CAA1CXcAFyMLBEi87A0+pBbUKtzfEeE-5uyqPugmHLmzgH8=w8w@mail.gmail.com> <20220706115031.3c312d9268bf87287be0b8f9@linux-foundation.org>
-In-Reply-To: <20220706115031.3c312d9268bf87287be0b8f9@linux-foundation.org>
-From:   Joel Savitz <jsavitz@redhat.com>
-Date:   Wed, 6 Jul 2022 14:53:14 -0400
-Message-ID: <CAL1p7m5hSJ87PvQTED0BdP1i43HbnqE1Q1XTqWb9aTrXS2jXmA@mail.gmail.com>
-Subject: Re: [PATCH] selftests/vm: enable running select groups of tests
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     Nico Pache <npache@redhat.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Shuah Khan <shuah@kernel.org>, Linux MM <linux-mm@kvack.org>,
-        linux-kselftest@vger.kernel.org
+References: <20220516165446.1246262-1-dlatypov@google.com>
+In-Reply-To: <20220516165446.1246262-1-dlatypov@google.com>
+From:   Brendan Higgins <brendanhiggins@google.com>
+Date:   Wed, 6 Jul 2022 14:54:55 -0400
+Message-ID: <CAFd5g46Dmo_9aPF1h-vuAi8tbFuzm6nCOkX2bFBVd6V0foyiSA@mail.gmail.com>
+Subject: Re: [PATCH] kunit: use kmemdup in kunit_filter_tests(), take suite as const
+To:     Daniel Latypov <dlatypov@google.com>
+Cc:     davidgow@google.com, linux-kernel@vger.kernel.org,
+        kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
+        skhan@linuxfoundation.org, kernel test robot <lkp@intel.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Thanks for the feedback.
+On Mon, May 16, 2022 at 12:54 PM Daniel Latypov <dlatypov@google.com> wrote:
+>
+> kmemdup() is easier than kmalloc() + memcpy(), per lkp bot.
+>
+> Also make the input `suite` as const since we're now always making
+> copies after commit a127b154a8f2 ("kunit: tool: allow filtering test
+> cases via glob").
+>
+> Reported-by: kernel test robot <lkp@intel.com>
+> Signed-off-by: Daniel Latypov <dlatypov@google.com>
 
-Will rework and send v2.
-
-Best,
-Joel Savitz
-
-On Wed, Jul 6, 2022 at 2:50 PM Andrew Morton <akpm@linux-foundation.org> wrote:
->
-> On Wed, 6 Jul 2022 14:38:03 -0400 Nico Pache <npache@redhat.com> wrote:
->
-> > On Tue, Jul 5, 2022 at 4:35 PM Andrew Morton <akpm@linux-foundation.org> wrote:
-> > >
-> > > On Tue,  5 Jul 2022 14:56:05 -0400 Joel Savitz <jsavitz@redhat.com> wrote:
-> > >
-> > > > Add the ability to run one or more groups of vm tests (specified
-> > > > by the environment variable TEST_ITEMS). Preserve existing default
-> > > > behavior of running all tests when TEST_ITEMS is empty or "default".
-> > >
-> > Hi Andrew,
-> >
-> > > What is the reason for this?  What's the use case?
-> >
-> > The current design of vm selftests is all-or-none. We'd like to be
-> > able to selectively run these tests (We settled for selective groups
-> > of tests rather than individual tests).
-> >
-> > The main reason for doing this is our efforts to expand RedHats MM CI
-> > testing. There are two use cases for these changes that relate to our
-> > reasoning:
-> > 1) Our current CI has overlapping tests between LTP and vm selftests,
-> > so we'd like a way to prevent running the same test in two places.
-> > 2) We'd like the ability to skip a test if it is determined to be
-> > unstable or requires certain hardware requirements.
-> >
-> > By adding this functionality we are really expanding what we are able
-> > to do with the stock vm-selftests.
->
-> OK, please let's get this info into the changelog - it's the most
-> important part.
->
-> > > And why via the environment rather than via commandline args?
-> > Just a design choice I suppose. I'm sure Joel would be willing to
-> > implement it as a cmdline arg if you'd prefer that approach.
->
-> I think that would be best.
->
-
+Reviewed-by: Brendan Higgins <brendanhiggins@google.com>

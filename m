@@ -2,117 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AA45C56880C
+	by mail.lfdr.de (Postfix) with ESMTP id F172C56880D
 	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 14:12:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233505AbiGFMMs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Jul 2022 08:12:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46150 "EHLO
+        id S233573AbiGFMMv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Jul 2022 08:12:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46078 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233581AbiGFMMV (ORCPT
+        with ESMTP id S233629AbiGFMME (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Jul 2022 08:12:21 -0400
-Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E14D52A72B
-        for <linux-kernel@vger.kernel.org>; Wed,  6 Jul 2022 05:11:54 -0700 (PDT)
-Received: by mail-ed1-x529.google.com with SMTP id eq6so18997660edb.6
-        for <linux-kernel@vger.kernel.org>; Wed, 06 Jul 2022 05:11:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=N8SiADVZ0KBDLxFo+fo8QUS4MOh1gf7B6JuJMFLC4bk=;
-        b=HgxVzYvDle/d1CEh6AG1GZUcPYT+1KA3sTSEjmLiflVXdHAaXsIUJQdpd/Cft0ENun
-         8QtJSxn0ieSoNkiZId7FUOQ056DX62vamfJMe52Qw4gJf8jRLqYQ3w7bdramuFqlSF2U
-         SehjyB8iiTiR5st1Ohxe1wKDAJFmMVYuu4Xqe070npzAQ4BUwENQuyHhuXd3Ira0yEhm
-         ao5HiRtOJcVYKfQo2MYmOTxpSpPFGMkEOzRtHuTq/wnF6pL6dTwJtpMr+nzdZL2WX+2P
-         ufPUiA8LaRWPF1W1S7LgnawXvspOtjS2XezEDVrZFmFOVX9qRKgC1W0nLgoSBWK0YF2P
-         267g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=N8SiADVZ0KBDLxFo+fo8QUS4MOh1gf7B6JuJMFLC4bk=;
-        b=3N+wl49B//MzwrXkjhPFsfZW/gVSsTW48qIJRIXb+mntx8lXBojIScuywKhL/71EFX
-         3+yUICdEkC3aPUjal5yU/yQW81NyQIPegO+O8Pj7XITdtrN1F66qOD+uAKONt9WwJHMY
-         NWgkHTiyC3bogvygUCE1wRQe7j7D3T7DAmuPMjpen9zE2fwstCJmY3TLfbwlV+now7nU
-         NfKIEl6A9mytHW5SnYSJ3sqz58XoBghl4IgGZROyXRT29U4V4qgplQ1RFw+vscUusNGS
-         dVbVG5FkQcYxPzJqamNiYp1olqHOB9oqrCjAKlROj0cqeA2XmzZhGmsmfDqL7lr6kKz2
-         XyDg==
-X-Gm-Message-State: AJIora/GfYVimZaL5RqPBjE7zfoIkMZbPZF/6YxKF/e/5xgQQcBpxYKO
-        mFfdRUX/ktigfTiVs+bd3BDLZY5n8XUjw3pqHhzxLg==
-X-Google-Smtp-Source: AGRyM1vpuAqdUfAJusRdAhecce32zUigq0oPHC1Ch9CEbzZkxlWq1NVJqHyNIpP2zeYxH8v4AApd5lRVPX29zGcOApI=
-X-Received: by 2002:a05:6402:42c3:b0:43a:46f6:ebd2 with SMTP id
- i3-20020a05640242c300b0043a46f6ebd2mr23832628edc.213.1657109513100; Wed, 06
- Jul 2022 05:11:53 -0700 (PDT)
+        Wed, 6 Jul 2022 08:12:04 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A0032A721
+        for <linux-kernel@vger.kernel.org>; Wed,  6 Jul 2022 05:11:53 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 05B9C61F8C
+        for <linux-kernel@vger.kernel.org>; Wed,  6 Jul 2022 12:11:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 376C8C341C0;
+        Wed,  6 Jul 2022 12:11:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1657109512;
+        bh=SeP+pP9PIpzAPPpJhtZkpan835Qsg2jX4rok4kM3sRg=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=lwCf+b5YlgzovcNzoC+4ZeUraeGLv/Sw51y8rFKv9x+kKwiJzJeQm3AGRaDNAfIQv
+         OZkf3j+7FfcaTNwmuL58WhUHcLKLnhHBMsSHzmBC3+YsWeK9tZefF3y26C151bH7Qd
+         U9svzLMEdPsnlalg7nkHuu2oQnIZRgC1UixyybKFENWTDazFKxTMX5+Q8OqQn1RzdP
+         FO2fT6zuwhcTs16IMELy73gL8TPupxG45MRzCuJtz6XWXI4kESHjGGg5dTH709IqA9
+         F/QNjICHhh25JoTHiOa8f1KbF4TMtTetdpOhxYgARTqjEAvdUYoTDOT5qVQVipf8fS
+         sjAEvTC+KzK7A==
+Date:   Wed, 6 Jul 2022 13:11:44 +0100
+From:   Will Deacon <will@kernel.org>
+To:     "Leizhen (ThunderTown)" <thunder.leizhen@huawei.com>
+Cc:     John Garry <john.garry@huawei.com>, joro@8bytes.org,
+        robin.murphy@arm.com, mst@redhat.com, jasowang@redhat.com,
+        iommu@lists.linux-foundation.org, linux-kernel@vger.kernel.org,
+        virtualization@lists.linux-foundation.org,
+        chenxiang66@hisilicon.com, jean-philippe@linaro.org,
+        linuxarm@huawei.com
+Subject: Re: [PATCH RESEND v5 2/5] iova: Allow rcache range upper limit to be
+ flexible
+Message-ID: <20220706121144.GG2403@willie-the-truck>
+References: <1649071634-188535-1-git-send-email-john.garry@huawei.com>
+ <1649071634-188535-3-git-send-email-john.garry@huawei.com>
+ <834447a0-675a-5978-8ffe-285ce09f4213@huawei.com>
 MIME-Version: 1.0
-References: <20220705171835.4923-1-brgl@bgdev.pl> <CAHp75Ve3sPhFOZhL=_2p+1avuo96CP995KD+bi+Pn3gyj1F9TA@mail.gmail.com>
-In-Reply-To: <CAHp75Ve3sPhFOZhL=_2p+1avuo96CP995KD+bi+Pn3gyj1F9TA@mail.gmail.com>
-From:   Bartosz Golaszewski <brgl@bgdev.pl>
-Date:   Wed, 6 Jul 2022 14:11:42 +0200
-Message-ID: <CAMRc=MekRvEVjRKJn6CWpbk9GJWS0Y+kB9MYpGFSN9WSSzWC7A@mail.gmail.com>
-Subject: Re: [PATCH] gpio: pxa: schedule a devm action for the clock struct
-To:     Andy Shevchenko <andy.shevchenko@gmail.com>,
-        Stephen Boyd <swboyd@chromium.org>
-Cc:     Robert Jarzmik <robert.jarzmik@free.fr>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Hulk Robot <hulkci@huawei.com>, Yuan Can <yuancan@huawei.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <834447a0-675a-5978-8ffe-285ce09f4213@huawei.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jul 6, 2022 at 1:49 PM Andy Shevchenko
-<andy.shevchenko@gmail.com> wrote:
-s>
-> On Tue, Jul 5, 2022 at 7:29 PM Bartosz Golaszewski <brgl@bgdev.pl> wrote:
-> >
-> > The clock is never released after probe(). Schedule devm actions for
-> > putting and disabling the clock.
->
-> ...
->
-> > Reported-by: Signed-off-by: Yuan Can <yuancan@huawei.com>
->
-> Me puzzled.
->
+On Thu, Apr 07, 2022 at 03:52:53PM +0800, Leizhen (ThunderTown) wrote:
+> On 2022/4/4 19:27, John Garry wrote:
+> > Some low-level drivers may request DMA mappings whose IOVA length exceeds
+> > that of the current rcache upper limit.
+> > 
+> > This means that allocations for those IOVAs will never be cached, and
+> > always must be allocated and freed from the RB tree per DMA mapping cycle.
+> > This has a significant effect on performance, more so since commit
+> > 4e89dce72521 ("iommu/iova: Retry from last rb tree node if iova search
+> > fails"), as discussed at [0].
+> > 
+> > As a first step towards allowing the rcache range upper limit be
+> > configured, hold this value in the IOVA rcache structure, and allocate
+> > the rcaches separately.
+> > 
+> > Delete macro IOVA_RANGE_CACHE_MAX_SIZE in case it's reused by mistake.
+> > 
+> > [0] https://lore.kernel.org/linux-iommu/20210129092120.1482-1-thunder.leizhen@huawei.com/
+> > 
+> > Signed-off-by: John Garry <john.garry@huawei.com>
+> > ---
+> >  drivers/iommu/iova.c | 20 ++++++++++----------
+> >  include/linux/iova.h |  3 +++
+> >  2 files changed, 13 insertions(+), 10 deletions(-)
+> > 
+> > diff --git a/drivers/iommu/iova.c b/drivers/iommu/iova.c
+> > index db77aa675145..5c22b9187b79 100644
+> > --- a/drivers/iommu/iova.c
+> > +++ b/drivers/iommu/iova.c
+> > @@ -15,8 +15,6 @@
+> >  /* The anchor node sits above the top of the usable address space */
+> >  #define IOVA_ANCHOR	~0UL
+> >  
+> > -#define IOVA_RANGE_CACHE_MAX_SIZE 6	/* log of max cached IOVA range size (in pages) */
+> > -
+> >  static bool iova_rcache_insert(struct iova_domain *iovad,
+> >  			       unsigned long pfn,
+> >  			       unsigned long size);
+> > @@ -443,7 +441,7 @@ alloc_iova_fast(struct iova_domain *iovad, unsigned long size,
+> >  	 * rounding up anything cacheable to make sure that can't happen. The
+> >  	 * order of the unadjusted size will still match upon freeing.
+> >  	 */
+> > -	if (size < (1 << (IOVA_RANGE_CACHE_MAX_SIZE - 1)))
+> > +	if (size < (1 << (iovad->rcache_max_size - 1)))
+> >  		size = roundup_pow_of_two(size);
+> >  
+> >  	iova_pfn = iova_rcache_get(iovad, size, limit_pfn + 1);
+> > @@ -713,13 +711,15 @@ int iova_domain_init_rcaches(struct iova_domain *iovad)
+> >  	unsigned int cpu;
+> >  	int i, ret;
+> >  
+> > -	iovad->rcaches = kcalloc(IOVA_RANGE_CACHE_MAX_SIZE,
+> > +	iovad->rcache_max_size = 6; /* Arbitrarily high default */
+> 
+> It would be better to assign this constant value to iovad->rcache_max_size
+> in init_iova_domain().
 
-Yuan Can sent the following patch:
-https://patchwork.ozlabs.org/project/linux-gpio/patch/20220704130323.104294-1-yuancan@huawei.com/
+I think it's fine where it is as it's a meaningless number outside of the
+rcache code.
 
-I responded that it was not complete and sent this instead.
-
->
-> ...
->
-> > +       ret = devm_add_action_or_reset(&pdev->dev, pxa_gpio_clk_put, clk);
-> > +       if (ret)
-> > +               return ret;
-> > +
-> >         ret = clk_prepare_enable(clk);
-> > +       if (ret)
-> > +               return ret;
-> > +
-> > +       ret = devm_add_action_or_reset(&pdev->dev,
-> > +                                      pxa_gpio_clk_disable_unprepare, clk);
-> > +       if (ret)
-> >                 return ret;
->
-> Can we use recently introduced clk APIs for that? Maybe Stephen has an
-> immutable branch you may reuse?
-
-Sure, sounds good! Stephen, would you mind providing me with a branch for that?
-
-Bart
-
->
-> --
-> With Best Regards,
-> Andy Shevchenko
+Will

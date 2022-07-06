@@ -2,90 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C9C8568AEC
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 16:10:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 69191568AFF
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 16:12:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232839AbiGFOJk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Jul 2022 10:09:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38656 "EHLO
+        id S233075AbiGFOLv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Jul 2022 10:11:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39862 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232935AbiGFOJi (ORCPT
+        with ESMTP id S232132AbiGFOLt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Jul 2022 10:09:38 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E48F13DE9
-        for <linux-kernel@vger.kernel.org>; Wed,  6 Jul 2022 07:09:38 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id CFB4E61E5D
-        for <linux-kernel@vger.kernel.org>; Wed,  6 Jul 2022 14:09:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 243CFC341C6;
-        Wed,  6 Jul 2022 14:09:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1657116577;
-        bh=+JtukXBA766gOI7S3LFDUUjkO+RnBFyznT0x7iJLGpA=;
-        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=ImFBD4gU9gBuLfbijkPj7gCgLLRFFXMCCBb0xhqby5u4CwArtAnozBT0FWEUO/8Bn
-         5cQ42fRrPuXZDf7msTYW7K6VtX/c3F+NErpP/l0NDYRVf5Ym9zWxn4+vz1ihuO34BB
-         u0SDBSHshhs+eV4iF52qHv9zgc9qrtc5b3aV2jaowZ48ZyeWqp6xCGq8ctx8yA3l6U
-         IIue77kxvs3TMml1o6y72CU//lTz6Yz8DxLfP2jNds4ZHs5UI1qF1QDWGMZByVSRmg
-         LOsbpbTvTVOGCtZqMQAGAgiZWZjQPUoI3YA3e4iPE8pSCA0fXGWTn95wypP1xAKV9u
-         r8ht0ZBwfNqKw==
-From:   Mark Brown <broonie@kernel.org>
-To:     alsa-devel@alsa-project.org, cezary.rojewski@intel.com
-Cc:     lkp@intel.com, linux-kernel@vger.kernel.org,
-        lukas.bulwahn@gmail.com, amadeuszx.slawinski@linux.intel.com,
-        perex@perex.cz, pierre-louis.bossart@linux.intel.com,
-        sfr@canb.auug.org.au, hdegoede@redhat.com, tiwai@suse.com
-In-Reply-To: <20220706062952.251704-1-cezary.rojewski@intel.com>
-References: <20220706062952.251704-1-cezary.rojewski@intel.com>
-Subject: Re: [PATCH] ASoC: Intel: avs: Fix i2s_test card name initialization
-Message-Id: <165711657487.3718491.15631357198534177792.b4-ty@kernel.org>
-Date:   Wed, 06 Jul 2022 15:09:34 +0100
-MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Wed, 6 Jul 2022 10:11:49 -0400
+Received: from mail-pg1-x535.google.com (mail-pg1-x535.google.com [IPv6:2607:f8b0:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1EEF618E0C;
+        Wed,  6 Jul 2022 07:11:49 -0700 (PDT)
+Received: by mail-pg1-x535.google.com with SMTP id bf13so1067929pgb.11;
+        Wed, 06 Jul 2022 07:11:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id;
+        bh=KG16OAHavVBqkRuHTbh0NGqQDaSt65u8OkbDtr+MKsc=;
+        b=RzX9k+b8GRhpE+9hiBRtVPva3BJQ5aTXpiV13GLB2bpDMg+y708Xc7a0tMnQeuukat
+         47PBVS0j+LufZ/RyaPLbN34pp2qEc9yJOYqSbbzobWc2dvg5xzQ0iFImfkFZce3lNRhu
+         /6/c5OXR9ebGVqjrJRgOBgho6MoC58e31gFedE9Hgv9wi5dk/Y4QdSdiVrArzbL1+ebJ
+         j+3fSLOcK5fU3Lw80axnxvDZQtoDDPUfXNGqL541FCFuynl/nKrTXQkZaLj5aDkND68x
+         jdCTXafqXjsnqo1AX7Af6PNmIdekV0LP7A51hdaFdMyFGTCROKryqbFaHOIaoPY7LAcZ
+         6VGQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=KG16OAHavVBqkRuHTbh0NGqQDaSt65u8OkbDtr+MKsc=;
+        b=PmZwDH+LEUCsvVIPv6YjP6C6Nz6AsJZxhhTuME6/graKwZCXloJDvv0UN6+1zQos5I
+         xwVH6iNrB424C4M55ioDQbj3DD49n++fS7wFvjPIAD0y4UIndPcIMoRCnpVw844+5D/V
+         ajEcGyHmmKk7w+VMUv4aLVGON1XtEYl1+ZhwJ4HubHnShbZD4ayO1g6U96MYh0kgUWAB
+         UCqOmYx/kVdvniaLigdjdlas7UjB8W1zEgVGcHSSrU1QQ+vuzgfGRkbfOklifjEZJQSs
+         INap+7LHmjk76R7nJoyYr94QknPSPq6aBdpGePUG4GF35ZUwf1VGGFCnGtsjYl9Arv7H
+         qLHg==
+X-Gm-Message-State: AJIora/S6alXUbaQV6odFfwqExSczoMV4ff17AfrcxbJceOSmymX2RIZ
+        g8PaJe2lZi1C/IidH71Gb5Q=
+X-Google-Smtp-Source: AGRyM1tpK+6ZJPnE7uxluB75lS9txGRh7VyahB/IXqAsB6Pou+Erqkn+fGw7xpYr3j2NE6BUSe/hrw==
+X-Received: by 2002:a63:ff66:0:b0:412:6f4c:1e11 with SMTP id s38-20020a63ff66000000b004126f4c1e11mr8289504pgk.396.1657116708393;
+        Wed, 06 Jul 2022 07:11:48 -0700 (PDT)
+Received: from localhost.localdomain (1-171-7-167.dynamic-ip.hinet.net. [1.171.7.167])
+        by smtp.gmail.com with ESMTPSA id k2-20020aa79722000000b005283fa73dcesm8738427pfg.77.2022.07.06.07.11.45
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Wed, 06 Jul 2022 07:11:47 -0700 (PDT)
+From:   cy_huang <u0084500@gmail.com>
+To:     jic23@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org
+Cc:     lars@metafoo.de, cy_huang@richtek.com, linux-iio@vger.kernel.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
+Subject: [PATCH v5 0/2] Add Richtek RTQ6056 support
+Date:   Wed,  6 Jul 2022 22:11:40 +0800
+Message-Id: <1657116702-24161-1-git-send-email-u0084500@gmail.com>
+X-Mailer: git-send-email 2.7.4
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 6 Jul 2022 08:29:52 +0200, Cezary Rojewski wrote:
-> Update printf formatting as 'ssp_port' argument is of type 'int', not
-> 'long int'.
-> 
-> 
+From: ChiYuan Huang <cy_huang@richtek.com>
 
-Applied to
+This patch series is to enable Richtek RTQ6056 support.
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/sound.git for-next
+The RTQ6056 is a high accuracy current-sense monitor with I2C interface, and
+the device provides full information for system by reading out the load current
+and power.
 
-Thanks!
+Since v5
+- Fix kernel version text for ABI.
 
-[1/1] ASoC: Intel: avs: Fix i2s_test card name initialization
-      commit: f1fd46e068f52893608469df98d4608672e3e45f
+Since v4
+- Add '__aligned(8)' for timestamp member.
+- Declare timestamp from 'int64_t' to more unified 's64'.
 
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
+Since v3
+- change the node name to be generic 'adc' in binding example.
+- Refine pm_runtime API calling order in 'read_channel' API.
+- Fix vshunt wrong scale for divider.
+- Refine the comment text.
+- Use 'devm_add_action_or_reset' to decrease the code usage in probe
+  function.
+- Use RUNTIME_PM_OPS to replace SET_RUNTIME_PM_OPS.
+- minor fix for the comma.
+- Use pm_ptr to replace the direct assigned pm_ops.
 
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
+Since v2
+- Change the resistor property name to be generic 'shunt-resistor-micro-ohms'.
+- Rename file from 'rtq6056-adc' to 'rtq6056'.
+- Refine the ABI, if generic already defined it, remove it and check the channel
+  report unit.
+- Add copyright text.
+- include the correct header.
+- change the property parsing name.
+- To use iio_chan_spec address field.
+- Refine each channel separate and shared_by_all.
+- Use pm_runtime and pm_runtime_autosuspend.
+- Remove the shutdown callback. From the HW suggestion, it's not recommended to
+  use battery as the power supply.
+- Check all scale unit (voltage->mV, current->mA, power->milliWatt).
+- Use the read_avail to provide the interface for attribute value list.
+- Add comma for the last element in the const integer array.
+- Refine each ADC label text.
+- In read_label callback, replace snprintf to sysfs_emit.
 
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
+ChiYuan Huang (2):
+  dt-bindings: iio: adc: Add rtq6056 adc support
+  iio: adc: Add rtq6056 support
 
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
+ .../ABI/testing/sysfs-bus-iio-adc-rtq6056          |   6 +
+ .../bindings/iio/adc/richtek,rtq6056.yaml          |  56 ++
+ drivers/iio/adc/Kconfig                            |  15 +
+ drivers/iio/adc/Makefile                           |   1 +
+ drivers/iio/adc/rtq6056.c                          | 651 +++++++++++++++++++++
+ 5 files changed, 729 insertions(+)
+ create mode 100644 Documentation/ABI/testing/sysfs-bus-iio-adc-rtq6056
+ create mode 100644 Documentation/devicetree/bindings/iio/adc/richtek,rtq6056.yaml
+ create mode 100644 drivers/iio/adc/rtq6056.c
 
-Thanks,
-Mark
+-- 
+2.7.4
+

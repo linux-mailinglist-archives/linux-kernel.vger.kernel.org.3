@@ -2,171 +2,176 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F1A4A567FAB
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 09:19:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B48D0567FAD
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 09:19:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231158AbiGFHTP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Jul 2022 03:19:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40770 "EHLO
+        id S231414AbiGFHTd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Jul 2022 03:19:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41096 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229782AbiGFHTK (ORCPT
+        with ESMTP id S230411AbiGFHTb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Jul 2022 03:19:10 -0400
-Received: from verein.lst.de (verein.lst.de [213.95.11.211])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF25012ADD
-        for <linux-kernel@vger.kernel.org>; Wed,  6 Jul 2022 00:19:09 -0700 (PDT)
-Received: by verein.lst.de (Postfix, from userid 2407)
-        id 01AA46732D; Wed,  6 Jul 2022 09:19:05 +0200 (CEST)
-Date:   Wed, 6 Jul 2022 09:19:05 +0200
-From:   Christoph Hellwig <hch@lst.de>
-To:     Mike Leach <mike.leach@linaro.org>
-Cc:     linux-arm-kernel@lists.infradead.org, coresight@lists.linaro.org,
-        linux-kernel@vger.kernel.org, mathieu.poirier@linaro.org,
-        suzuki.poulose@arm.com, leo.yan@linaro.org, acme@kernel.org,
-        james.clark@arm.com, Joel Becker <jlbec@evilplan.org>,
-        Christoph Hellwig <hch@lst.de>
-Subject: Re: [PATCH v4 7/7] configfs: Fix LOCKDEP nesting issues with
- fragment semaphores
-Message-ID: <20220706071905.GA28897@lst.de>
-References: <20220704154249.11501-1-mike.leach@linaro.org> <20220704154249.11501-8-mike.leach@linaro.org>
+        Wed, 6 Jul 2022 03:19:31 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BF8817597;
+        Wed,  6 Jul 2022 00:19:30 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id C1216B81B34;
+        Wed,  6 Jul 2022 07:19:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 941B5C3411C;
+        Wed,  6 Jul 2022 07:19:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1657091967;
+        bh=FB2gZ5iWwU/2a567MT026YYSUHCSk5tzPNywBL8SsB0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=gulmZnpLXpwkVNG1h2iqjiRdlj+KzXD4IWAE8z8c7ef356hRD3AbS6b0Pjo/174UC
+         jq16jN9qYaqz/biFvuhK0hrBachfGHCD4LvJ875cZhn92tSkZPn+QvTiB9WYx4pBTJ
+         0bwX6VEtilDMmhFNue5bPo/P81T21At1swZYmj7SQzUFkSfdIK1Sq2kEQez7LVE6Ec
+         wWIBrOWcxwWqIlGQ+MyfgWecnUZNXscInBq2bp25NKY12ISM9GTobPvoTa0zTdCidL
+         4uaiSyq48mSOcUpjrWP67nTZ/z5nSF2LHuaoP1Nwa2nteuJYh6U52yVvnHxZwZRvTL
+         mpgsnx2xYv1uQ==
+Date:   Wed, 6 Jul 2022 09:19:20 +0200
+From:   Wolfram Sang <wsa@kernel.org>
+To:     Conor Dooley <conor.dooley@microchip.com>
+Cc:     linux-i2c@vger.kernel.org, ben.dooks@codethink.co.uk,
+        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
+        daire.mcnamara@microchip.com
+Subject: Re: [PATCH v6 1/2] i2c: add support for microchip fpga i2c
+ controllers
+Message-ID: <YsU3eLA3PrceFS65@shikoro>
+Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
+        Conor Dooley <conor.dooley@microchip.com>,
+        linux-i2c@vger.kernel.org, ben.dooks@codethink.co.uk,
+        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
+        daire.mcnamara@microchip.com
+References: <20220621074238.957177-1-conor.dooley@microchip.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="OmL4pllIGSAYh4OI"
 Content-Disposition: inline
-In-Reply-To: <20220704154249.11501-8-mike.leach@linaro.org>
-User-Agent: Mutt/1.5.17 (2007-11-01)
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20220621074238.957177-1-conor.dooley@microchip.com>
+X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Can you send me the whole series?  Reviewing a patch 7 out of 7 without
-context is basically impossible.
 
-On Mon, Jul 04, 2022 at 04:42:49PM +0100, Mike Leach wrote:
-> CoreSight uses configfs to represent the user interface to programmed
-> configurations, which can be loaded and unloaded dynamically via configfs.
-> 
-> These add and remove configurations using register/unregister group
-> calls.
-> 
-> It has been found that if CONFIG_LOCKDEP is enabled, then it appears to
-> be confused by the nesting inherent in the fragment semaphores used
-> by groups and the underlying subsystem.
-> 
-> This patch sets up a mechanism to use separate classes for the fragment
-> semaphores, in a similar way to that already in place to fix nesting
-> issues with the i_mutexes.
-> 
-> Cc: Joel Becker <jlbec@evilplan.org>
-> Cc: Christoph Hellwig <hch@lst.de>
-> Signed-off-by: Mike Leach <mike.leach@linaro.org>
-> ---
->  fs/configfs/configfs_internal.h |  3 +++
->  fs/configfs/dir.c               | 45 +++++++++++++++++++++++++++++++++
->  2 files changed, 48 insertions(+)
-> 
-> diff --git a/fs/configfs/configfs_internal.h b/fs/configfs/configfs_internal.h
-> index c0395363eab9..736c74ec4b7a 100644
-> --- a/fs/configfs/configfs_internal.h
-> +++ b/fs/configfs/configfs_internal.h
-> @@ -22,6 +22,9 @@ struct configfs_fragment {
->  	atomic_t frag_count;
->  	struct rw_semaphore frag_sem;
->  	bool frag_dead;
-> +#ifdef CONFIG_LOCKDEP
-> +	int frag_depth;
-> +#endif
->  };
->  
->  void put_fragment(struct configfs_fragment *);
-> diff --git a/fs/configfs/dir.c b/fs/configfs/dir.c
-> index d1f9d2632202..6ecd8961afc3 100644
-> --- a/fs/configfs/dir.c
-> +++ b/fs/configfs/dir.c
-> @@ -133,6 +133,41 @@ configfs_adjust_dir_dirent_depth_after_populate(struct configfs_dirent *sd)
->  	sd->s_depth = -1;
->  }
->  
-> +/* fragment semaphore needs some lockdep handling */
-> +static struct lock_class_key default_frag_class[MAX_LOCK_DEPTH];
-> +
-> +/*
-> + * Set the lockdep depth for a new fragment based on the parent frag depth.
-> + * Called from register_subsystem() with NULL parent group to set root subsystem
-> + * depth which defaults to 0 in a new fragment, and from register_group() with the
-> + * parent group to set a new group fragment based on the parent fragment depth.
-> + *
-> + * Prevents lockdep getting upset on the unregister_group() call if it cannot
-> + * understand the hierarchy of fragments.
-> + */
-> +static void configfs_adjust_frag_depth(struct configfs_fragment *frag,
-> +				       struct config_group *parent_group)
+--OmL4pllIGSAYh4OI
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+Hi Conor,
+
+thank you for sending this driver.
+
+On Tue, Jun 21, 2022 at 08:42:38AM +0100, Conor Dooley wrote:
+> Add Microchip CoreI2C i2c controller support. This driver supports the
+> "hard" i2c controller on the Microchip PolarFire SoC & the basic feature
+> set for "soft" i2c controller implemtations in the FPGA fabric.
+>=20
+> Co-developed-by: Daire McNamara <daire.mcnamara@microchip.com>
+> Signed-off-by: Daire McNamara <daire.mcnamara@microchip.com>
+> Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
+
+Where are the bindings? Are they already on the way upstream?
+
+>  drivers/i2c/busses/i2c-microchip-core.c | 486 ++++++++++++++++++++++++
+
+The biggest remark I have is to rename the driver a little. Usually a
+"-core" suffix means that there are other drivers like "-platform" or
+"-pci" use this core. Would "i2c-microchip-fpga" or
+"i2c-microchip-corei2c" work for you?
+
+> +#include <linux/clk.h>
+> +#include <linux/clkdev.h>
+> +#include <linux/err.h>
+> +#include <linux/i2c.h>
+> +#include <linux/iopoll.h>
+
+Do you really need that?
+
+=2E..
+
+> +static irqreturn_t mchp_corei2c_handle_isr(struct mchp_corei2c_dev *idev)
 > +{
-> +	struct configfs_dirent *parent_dirent;
+> +	u32 status =3D idev->isr_status;
+> +	u8 ctrl;
+> +	bool last_byte =3D false, finished =3D false;
 > +
-> +	if (parent_group) {
-> +		// find parent frag
-> +		parent_dirent = parent_group->cg_item.ci_dentry->d_fsdata;
-> +		frag->frag_depth = parent_dirent->s_frag->frag_depth + 1;
-> +	}
+> +	if (!idev->buf)
+> +		return IRQ_NONE;
 > +
-> +	if (frag->frag_depth < ARRAY_SIZE(default_frag_class)) {
-> +		lockdep_set_class(&frag->frag_sem,
-> +				  &default_frag_class[frag->frag_depth]);
-> +	} else {
-> +		/*
-> +		 * In practice the maximum level of locking depth is
-> +		 * already reached. Just inform about possible reasons.
-> +		 */
-> +		pr_info("Too many levels of fragments for the locking correctness validator.\n");
-> +	}
-> +}
-> +
->  #else /* CONFIG_LOCKDEP */
->  
->  static void configfs_init_dirent_depth(struct configfs_dirent *sd)
-> @@ -154,6 +189,11 @@ configfs_adjust_dir_dirent_depth_after_populate(struct configfs_dirent *sd)
->  {
->  }
->  
-> +static void configfs_adjust_frag_depth(struct configfs_fragment *frag,
-> +				       struct config_group *parent_group)
+> +	switch (status) {
+> +	case STATUS_M_START_SENT:
+> +	case STATUS_M_REPEATED_START_SENT:
+> +		ctrl =3D readb(idev->base + CORE_I2C_CTRL);
+> +		ctrl &=3D ~CTRL_STA;
+> +		writeb(idev->addr, idev->base + CORE_I2C_DATA);
+> +		writeb(ctrl, idev->base + CORE_I2C_CTRL);
+> +		if (idev->msg_len <=3D 0)
+> +			finished =3D true;
+
+How can it happen that len is < 0? Wouldn't that be an error case?
+
+=2E..
+
+> +static u32 mchp_corei2c_func(struct i2c_adapter *adap)
 > +{
-> +}
-> +
->  #endif /* CONFIG_LOCKDEP */
->  
->  static struct configfs_fragment *new_fragment(void)
-> @@ -165,6 +205,9 @@ static struct configfs_fragment *new_fragment(void)
->  		atomic_set(&p->frag_count, 1);
->  		init_rwsem(&p->frag_sem);
->  		p->frag_dead = false;
-> +#ifdef CONFIG_LOCKDEP
-> +		p->frag_depth = 0;
-> +#endif
->  	}
->  	return p;
->  }
-> @@ -1742,6 +1785,7 @@ int configfs_register_group(struct config_group *parent_group,
->  	parent = parent_group->cg_item.ci_dentry;
->  
->  	inode_lock_nested(d_inode(parent), I_MUTEX_PARENT);
-> +	configfs_adjust_frag_depth(frag, parent_group);
->  	ret = create_default_group(parent_group, group, frag);
->  	if (ret)
->  		goto err_out;
-> @@ -1872,6 +1916,7 @@ int configfs_register_subsystem(struct configfs_subsystem *subsys)
->  	mutex_unlock(&configfs_subsystem_mutex);
->  
->  	inode_lock_nested(d_inode(root), I_MUTEX_PARENT);
-> +	configfs_adjust_frag_depth(frag, NULL);
->  
->  	err = -ENOMEM;
->  	dentry = d_alloc_name(root, group->cg_item.ci_name);
-> -- 
-> 2.17.1
----end quoted text---
+> +	return I2C_FUNC_I2C | I2C_FUNC_SMBUS_EMUL;
+
+Have you testes SMBUS_QUICK as well?
+
+=2E..
+
+> +	idev->dev =3D &pdev->dev;
+> +	init_completion(&idev->msg_complete);
+> +	spin_lock_init(&idev->lock);
+
+You never use this lock.
+
+=2E..
+
+> +	idev->adapter.owner =3D THIS_MODULE;
+> +	idev->adapter.algo =3D &mchp_corei2c_algo;
+> +	idev->adapter.dev.parent =3D &pdev->dev;
+> +	idev->adapter.dev.of_node =3D pdev->dev.of_node;
+> +	idev->adapter.timeout =3D MICROCHIP_I2C_TIMEOUT;
+
+Simply use HZ here?
+
+All in all, only minor stuff. Driver looks really good in general.
+
+Thanks and happy hacking,
+
+   Wolfram
+
+
+--OmL4pllIGSAYh4OI
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmLFN3MACgkQFA3kzBSg
+Kba8NRAAqyqEH6g74uljPcXWAkLi3roPje6JaNcEUiOq3uuDxx9YV5NA5iGAB5Tr
+kxGim4tON8th0+soWiJDwimGPBE5Qjpe6sbn5gWT5AVp/3yPeo4eJTId/ck8siSu
+ocINGQuQrSNY3obDX+t6gkWPbl8i4/DKwuGZf1/O3zTBS+HdlFuiWQHUAEmyQe5d
+aBEg2+zXHiU4F317yDZaZSHWpbljfqlFYzF4KiLL9tuQjY2Hfk1Zp0eQYbj00Eke
+4h0khf3y0smBvb2LDPL/BqDBxBK+1iZ1pmuFbmIdEvj77dUcfWvobZDcl1H/CefE
+UhMET1HczdIw4K/RpUugCzyKQmTs7Z9TOB59U8pI+xZqr1XUq8qGawtrbZbVw1fV
+BGIDShROfHS3sYd6yEDAg4fQJo2VHxSvqqeBk01Js2JMnB2iTB/LgUw45DqgViAU
+8q5f77M+DGHOlxbjCCwr04Xf8iE8rZUl3pBAjC4rBN0LUoBT/BdkGf/xwGvaU3eg
+DId0nedud9Zb+dMwHa9OcJBdrpI6xy7Wsg0PWa3xseB0TokNws+1HzPEHNU6jVJR
+ej+IrfqaKPbyuaAH0QO/82qdwgW80uBuL9qp+/XcsK6yKdXH5r/a3FOwRCar6cil
+W8eS6gjbP79w47yTAFJFEwae/wDZM0/EyEWF4YxWSe89sFjYJw4=
+=R64A
+-----END PGP SIGNATURE-----
+
+--OmL4pllIGSAYh4OI--

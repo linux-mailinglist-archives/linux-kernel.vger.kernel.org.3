@@ -2,81 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8123E5680AF
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 10:01:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F030F5680B3
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 10:03:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231359AbiGFIBU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Jul 2022 04:01:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46512 "EHLO
+        id S231932AbiGFIDi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Jul 2022 04:03:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47782 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229861AbiGFIBS (ORCPT
+        with ESMTP id S231192AbiGFIDg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Jul 2022 04:01:18 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21C8F17E26;
-        Wed,  6 Jul 2022 01:01:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
-        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=HiFeALskotGpN1iZvBw/0D0ZUKVzZ82kmtWfVdYRxfo=; b=TBk29vbiT7YIhM59E+b8lJL1BC
-        s9vDVB+cyngWjY1b9etW2yvGet4ZQgwoKvRt/ddj4PMRpNbW2LPTnRfGMNShRZjgyI5b9D5NTssWW
-        Yu1wqoef9iBvueGmVwFeekNliQ2w0m5K8tkKJWr67ZpzzE7hx9kaZwy88tLY4tywyOoy3XQgBEI04
-        TlVDVkPR5vGctLPt5wbI5wowzkBAdMCMrXaamBoHdesrny/Uz+BoTzZVMRtjZIFe8DXbPGUJRNERs
-        wqDEy8+Iqv4G8BTU73KHJAd+ryiZ5SkzgGvmpUNnL9qjAb1Qi2rwfVvt/l9s5A+uHzkdMNY+rQwGy
-        J16yPRvA==;
-Received: from hch by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1o8zxi-007FVc-S9; Wed, 06 Jul 2022 08:00:42 +0000
-Date:   Wed, 6 Jul 2022 01:00:42 -0700
-From:   Christoph Hellwig <hch@infradead.org>
-To:     Tianyu Lan <ltykernel@gmail.com>
-Cc:     Christoph Hellwig <hch@infradead.org>, corbet@lwn.net,
-        rafael@kernel.org, len.brown@intel.com, pavel@ucw.cz,
-        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
-        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
-        m.szyprowski@samsung.com, robin.murphy@arm.com, paulmck@kernel.org,
-        akpm@linux-foundation.org, keescook@chromium.org,
-        songmuchun@bytedance.com, rdunlap@infradead.org,
-        damien.lemoal@opensource.wdc.com, michael.h.kelley@microsoft.com,
-        kys@microsoft.com, Tianyu Lan <Tianyu.Lan@microsoft.com>,
-        iommu@lists.linux-foundation.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        vkuznets@redhat.com, wei.liu@kernel.org, parri.andrea@gmail.com,
-        thomas.lendacky@amd.com, linux-hyperv@vger.kernel.org,
-        kirill.shutemov@intel.com, andi.kleen@intel.com,
-        Andi Kleen <ak@linux.intel.com>
-Subject: Re: [PATCH 2/2] x86/ACPI: Set swiotlb area according to the number
- of lapic entry in MADT
-Message-ID: <YsVBKgxiQKfnCjvn@infradead.org>
-References: <20220627153150.106995-1-ltykernel@gmail.com>
- <20220627153150.106995-3-ltykernel@gmail.com>
- <YrxcCZKvFYjxLf9n@infradead.org>
- <a876f862-c005-108d-e6f9-68336a8d89f0@gmail.com>
+        Wed, 6 Jul 2022 04:03:36 -0400
+Received: from mail-qk1-f182.google.com (mail-qk1-f182.google.com [209.85.222.182])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40607112D;
+        Wed,  6 Jul 2022 01:03:35 -0700 (PDT)
+Received: by mail-qk1-f182.google.com with SMTP id z12so10495320qki.3;
+        Wed, 06 Jul 2022 01:03:35 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=dm7RnST85MIDJNN+2iaSBOhoswr2qSrezycwHqjqOec=;
+        b=fcrhL3OiHlR9dOFNNY+eaTjH8iKVfWBno9MkBZa32r/KMZsXIDfKlP9boKY2jdi7Gv
+         Gil6sFKTWG1i8/lwgkkC2kHcEYeUoiuRwoS13+uEd0qskHPXPL0IjSSABGW8kdxUztkV
+         /WLqRGSS5IW57IKFgPQJhnh9SnWGS1Q21zLLP+9sa4zkxc3w4eX4YwKsMtheqVGHzHLe
+         eY+mK0bz6Gj3LnCWV4vpUk2cxiLF4kg7dz3/u+cigqRQZD7uRZQyq3KXRDnFRNSVnmpE
+         Jyb4OKsfHX0QaX0mBP8OGVE5aXeOAfwrFcqg1oofn2yUYziJS1xQ8xI3FWf8EhfQROW3
+         pA8g==
+X-Gm-Message-State: AJIora8t7vTkN4slON78vOIDYUjt591WypbA75zmMQjapQStxaiqvU3K
+        uSS1xqo3k7DFkFToZ2lYMlzL8yUvXDbYsQ==
+X-Google-Smtp-Source: AGRyM1sZUa78MrahEXAR7bJTtWbKG5S3y9s8JnJHXQzOQ5pzAu2NlZr/77IrtSVFVjytfLtRBQlgaQ==
+X-Received: by 2002:a05:620a:4055:b0:6b0:151f:7281 with SMTP id i21-20020a05620a405500b006b0151f7281mr25804652qko.601.1657094614268;
+        Wed, 06 Jul 2022 01:03:34 -0700 (PDT)
+Received: from mail-yw1-f178.google.com (mail-yw1-f178.google.com. [209.85.128.178])
+        by smtp.gmail.com with ESMTPSA id t17-20020a05620a005100b006af20edff0csm22694447qkt.58.2022.07.06.01.03.33
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 06 Jul 2022 01:03:33 -0700 (PDT)
+Received: by mail-yw1-f178.google.com with SMTP id 00721157ae682-31c86fe1dddso84448447b3.1;
+        Wed, 06 Jul 2022 01:03:33 -0700 (PDT)
+X-Received: by 2002:a81:5404:0:b0:31c:c24d:94b0 with SMTP id
+ i4-20020a815404000000b0031cc24d94b0mr9659273ywb.502.1657094613015; Wed, 06
+ Jul 2022 01:03:33 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <a876f862-c005-108d-e6f9-68336a8d89f0@gmail.com>
-X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20220705215213.1802496-1-mail@conchuod.ie>
+In-Reply-To: <20220705215213.1802496-1-mail@conchuod.ie>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Wed, 6 Jul 2022 10:03:21 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdVOK+iHeTfRLDeMF1mwZoeH1KH_GHuCY72YnhQibGqhwA@mail.gmail.com>
+Message-ID: <CAMuHMdVOK+iHeTfRLDeMF1mwZoeH1KH_GHuCY72YnhQibGqhwA@mail.gmail.com>
+Subject: Re: [PATCH v5 00/13] Canaan devicetree fixes
+To:     Conor Dooley <mail@conchuod.ie>
+Cc:     David Airlie <airlied@linux.ie>, Daniel Vetter <daniel@ffwll.ch>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        Eugeniy Paltsev <Eugeniy.Paltsev@synopsys.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Serge Semin <fancer.lancer@gmail.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Palmer Dabbelt <palmer@rivosinc.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Conor Dooley <conor.dooley@microchip.com>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
+        Niklas Cassel <niklas.cassel@wdc.com>,
+        Dillon Min <dillon.minfei@gmail.com>,
+        DRI Development <dri-devel@lists.freedesktop.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        dmaengine <dmaengine@vger.kernel.org>,
+        linux-riscv <linux-riscv@lists.infradead.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jul 01, 2022 at 01:02:21AM +0800, Tianyu Lan wrote:
-> > Can we reorder that initialization?  Because I really hate having
-> > to have an arch hook in every architecture.
-> 
-> How about using "flags" parameter of swiotlb_init() to pass area number
-> or add new parameter for area number?
-> 
-> I just reposted patch 1 since there is just some coding style issue and area
-> number may also set via swiotlb kernel parameter. We still need figure out a
-> good solution to pass area number from architecture code.
+Hi Conor,
 
-What is the problem with calling swiotlb_init after nr_possible_cpus()
-works?
+On Tue, Jul 5, 2022 at 11:52 PM Conor Dooley <mail@conchuod.ie> wrote:
+> I *DO NOT* have any Canaan hardware so I have not tested any of this in
+> action. Since I sent v1, I tried to buy some since it's cheap - but could
+> out of the limited stockists none seemed to want to deliver to Ireland :(
+> I based the series on next-20220617.
+
+Digi-Key does not want to ship to IRL?
+The plain MAiX BiT is out-of-stock, but the kit incl. a display is
+available (97 in stock).
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds

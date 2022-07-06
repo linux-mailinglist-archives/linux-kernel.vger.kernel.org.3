@@ -2,242 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 098D7568330
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 11:17:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BA745568320
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 11:17:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233212AbiGFJKz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Jul 2022 05:10:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54234 "EHLO
+        id S231326AbiGFJLS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Jul 2022 05:11:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53884 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233147AbiGFJKl (ORCPT
+        with ESMTP id S233182AbiGFJLE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Jul 2022 05:10:41 -0400
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7137727CFD
-        for <linux-kernel@vger.kernel.org>; Wed,  6 Jul 2022 02:07:11 -0700 (PDT)
-Received: from pendragon.ideasonboard.com (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 18C3830A;
-        Wed,  6 Jul 2022 11:07:09 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1657098429;
-        bh=7a7sP/qfgjxBwlIY6oHlcCZlyF3jnNgn1GFBh6GTvz4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=LQU4kBpLaR61Qojw4Rbx/fxB1BSWUUpqPVgc/NBbKyBBVp9rDnxq0tMg7PWsvBan4
-         6Ovr39q+qE5gV/ojoBmGniKZJl6Ma7CnUbh4+xTkA/IG1SSvjGzUEGAVf3+4lem1Kl
-         6EFL0BxNNzCiFinA8lNV+AVZCCRqcB4RWjjHOszw=
-Date:   Wed, 6 Jul 2022 12:06:43 +0300
-From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     Thomas Zimmermann <tzimmermann@suse.de>
-Cc:     Danilo Krummrich <dakr@redhat.com>, daniel@ffwll.ch,
-        airlied@linux.ie, linux-kernel@vger.kernel.org,
-        dri-devel@lists.freedesktop.org
-Subject: Re: [PATCH 0/3] drm: rename CMA helpers to DMA helpers
-Message-ID: <YsVQo40s5PlPwynD@pendragon.ideasonboard.com>
-References: <20220705212613.732039-1-dakr@redhat.com>
- <066c5652-79e8-85df-fcf6-f5ea46f4cd48@suse.de>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <066c5652-79e8-85df-fcf6-f5ea46f4cd48@suse.de>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        Wed, 6 Jul 2022 05:11:04 -0400
+Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E405E252A3;
+        Wed,  6 Jul 2022 02:07:49 -0700 (PDT)
+Received: from localhost.localdomain.localdomain (unknown [10.2.5.46])
+        by mail.loongson.cn (Coremail) with SMTP id AQAAf9Axn+LbUMVi83YMAA--.37951S2;
+        Wed, 06 Jul 2022 17:07:44 +0800 (CST)
+From:   Hongchen Zhang <zhanghongchen@loongson.cn>
+To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Hongchen Zhang <zhanghongchen@loongson.cn>
+Subject: [PATCH] MIPS: fix pmd_mkinvalid
+Date:   Wed,  6 Jul 2022 17:07:36 +0800
+Message-Id: <1657098456-29244-1-git-send-email-zhanghongchen@loongson.cn>
+X-Mailer: git-send-email 1.8.3.1
+X-CM-TRANSID: AQAAf9Axn+LbUMVi83YMAA--.37951S2
+X-Coremail-Antispam: 1UD129KBjvJXoWxuryDZw1ftw4DtrW3Ww4DJwb_yoW5Cw1fp3
+        WkAa9YkrW5K34IyFW3tr1ftr15ZrZrKF9Ygryqgr1jya43X397Jrn3G34ktFy8Ja1qvFy8
+        Gr13XFs8GrWxZaDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUkI14x267AKxVWUJVW8JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+        1l84ACjcxK6xIIjxv20xvE14v26ryj6F1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4j
+        6F4UM28EF7xvwVC2z280aVAFwI0_Cr1j6rxdM28EF7xvwVC2z280aVCY1x0267AKxVW0oV
+        Cq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0
+        I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r
+        4UM4x0Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwCY02Avz4vE-syl42xK
+        82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGw
+        C20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r126r1DMIIYrxkI7VAKI48J
+        MIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r1j6r4UMI
+        IF0xvE42xK8VAvwI8IcIk0rVWrZr1j6s0DMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvE
+        x4A2jsIEc7CjxVAFwI0_Jr0_GrUvcSsGvfC2KfnxnUUI43ZEXa7VUbrMaUUUUUU==
+X-CM-SenderInfo: x2kd0w5krqwupkhqwqxorr0wxvrqhubq/
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Thomas,
+When a pmd entry is invalidated by pmd_mkinvalid,pmd_present should
+return true.
+So introduce a _PAGE_PRESENT_INVALID_SHIFT bit to check if a pmd is
+present but invalidated by pmd_mkinvalid.
 
-On Wed, Jul 06, 2022 at 10:34:13AM +0200, Thomas Zimmermann wrote:
-> Am 05.07.22 um 23:26 schrieb Danilo Krummrich:
-> > This patch series renames all CMA helpers to DMA helpers - considering the
-> > hierarchy of APIs (mm/cma -> dma -> gem/fb dma helpers) calling them DMA
-> > helpers seems to be more applicable.
-> 
-> Ok, why not.
-> 
-> Acked-by: Thomas Zimmermann <tzimmermann@suse.de>
-> 
-> for the series.
-> 
-> Sometimes allocation fails because there's no CMA memory left. 
-> Increasing that value on boot usually fixes the problem. Should we note 
-> somewhere in the docs that the allocator is backed by pages in CMA memory?
+Signed-off-by: Hongchen Zhang <zhanghongchen@loongson.cn>
+---
+ arch/mips/include/asm/pgtable-64.h   | 2 +-
+ arch/mips/include/asm/pgtable-bits.h | 5 +++++
+ arch/mips/include/asm/pgtable.h      | 3 ++-
+ 3 files changed, 8 insertions(+), 2 deletions(-)
 
-CMA is only one of the backends that can be used here. For instance, if
-the device performs DMA through an IOMMU, then CMA won't be used.
-
-This being said, helping users who may face a problem with too little
-CMA memory is useful, but I'm not sure where the best place to put that
-information would be.
-
-> > Additionally, commit e57924d4ae80 ("drm/doc: Task to rename CMA helpers")
-> > requests to rename the CMA helpers and implies that people seem to be confused
-> > about the naming.
-> > 
-> > The patches are compile-time tested building a x86_64 kernel with
-> > `make allyesconfig && make drivers/gpu/drm`.
-> > 
-> > Danilo Krummrich (3):
-> >    drm/fb: rename FB CMA helpers to FB DMA helpers
-> >    drm/gem: rename GEM CMA helpers to GEM DMA helpers
-> >    drm/todo: remove task to rename CMA helpers
-> > 
-> >   Documentation/gpu/drm-kms-helpers.rst         |   8 +-
-> >   Documentation/gpu/drm-mm.rst                  |  16 +-
-> >   Documentation/gpu/todo.rst                    |  13 -
-> >   drivers/gpu/drm/Kconfig                       |   4 +-
-> >   drivers/gpu/drm/Makefile                      |   6 +-
-> >   drivers/gpu/drm/arm/Kconfig                   |   4 +-
-> >   drivers/gpu/drm/arm/display/Kconfig           |   2 +-
-> >   .../arm/display/komeda/komeda_framebuffer.c   |  10 +-
-> >   .../gpu/drm/arm/display/komeda/komeda_kms.c   |  10 +-
-> >   drivers/gpu/drm/arm/hdlcd_crtc.c              |   6 +-
-> >   drivers/gpu/drm/arm/hdlcd_drv.c               |   8 +-
-> >   drivers/gpu/drm/arm/malidp_drv.c              |  10 +-
-> >   drivers/gpu/drm/arm/malidp_mw.c               |   6 +-
-> >   drivers/gpu/drm/arm/malidp_planes.c           |  24 +-
-> >   drivers/gpu/drm/armada/armada_gem.c           |   6 +-
-> >   drivers/gpu/drm/aspeed/Kconfig                |   2 +-
-> >   drivers/gpu/drm/aspeed/aspeed_gfx_crtc.c      |   8 +-
-> >   drivers/gpu/drm/aspeed/aspeed_gfx_drv.c       |   8 +-
-> >   drivers/gpu/drm/atmel-hlcdc/Kconfig           |   2 +-
-> >   drivers/gpu/drm/atmel-hlcdc/atmel_hlcdc_dc.c  |   6 +-
-> >   .../gpu/drm/atmel-hlcdc/atmel_hlcdc_plane.c   |   6 +-
-> >   ...rm_fb_cma_helper.c => drm_fb_dma_helper.c} |  52 +--
-> >   drivers/gpu/drm/drm_file.c                    |   2 +-
-> >   drivers/gpu/drm/drm_format_helper.c           |   4 +-
-> >   ..._gem_cma_helper.c => drm_gem_dma_helper.c} | 296 +++++++++---------
-> >   drivers/gpu/drm/drm_mipi_dbi.c                |   2 +-
-> >   drivers/gpu/drm/fsl-dcu/Kconfig               |   2 +-
-> >   drivers/gpu/drm/fsl-dcu/fsl_dcu_drm_drv.c     |   8 +-
-> >   drivers/gpu/drm/fsl-dcu/fsl_dcu_drm_kms.c     |   2 +-
-> >   drivers/gpu/drm/fsl-dcu/fsl_dcu_drm_plane.c   |   8 +-
-> >   drivers/gpu/drm/hisilicon/kirin/Kconfig       |   2 +-
-> >   .../gpu/drm/hisilicon/kirin/kirin_drm_ade.c   |  10 +-
-> >   .../gpu/drm/hisilicon/kirin/kirin_drm_drv.c   |   4 +-
-> >   drivers/gpu/drm/imx/Kconfig                   |   2 +-
-> >   drivers/gpu/drm/imx/dcss/Kconfig              |   2 +-
-> >   drivers/gpu/drm/imx/dcss/dcss-kms.c           |   6 +-
-> >   drivers/gpu/drm/imx/dcss/dcss-plane.c         |  18 +-
-> >   drivers/gpu/drm/imx/imx-drm-core.c            |  10 +-
-> >   drivers/gpu/drm/imx/imx-drm.h                 |   2 +-
-> >   drivers/gpu/drm/imx/ipuv3-crtc.c              |   4 +-
-> >   drivers/gpu/drm/imx/ipuv3-plane.c             |  28 +-
-> >   drivers/gpu/drm/ingenic/Kconfig               |   2 +-
-> >   drivers/gpu/drm/ingenic/ingenic-drm-drv.c     |  14 +-
-> >   drivers/gpu/drm/ingenic/ingenic-ipu.c         |  12 +-
-> >   drivers/gpu/drm/kmb/Kconfig                   |   2 +-
-> >   drivers/gpu/drm/kmb/kmb_drv.c                 |   6 +-
-> >   drivers/gpu/drm/kmb/kmb_plane.c               |  10 +-
-> >   drivers/gpu/drm/mcde/Kconfig                  |   2 +-
-> >   drivers/gpu/drm/mcde/mcde_display.c           |   8 +-
-> >   drivers/gpu/drm/mcde/mcde_drv.c               |  10 +-
-> >   drivers/gpu/drm/mediatek/Kconfig              |   2 +-
-> >   drivers/gpu/drm/mediatek/mtk_drm_drv.c        |   2 +-
-> >   drivers/gpu/drm/mediatek/mtk_drm_gem.c        |   4 +-
-> >   drivers/gpu/drm/meson/Kconfig                 |   2 +-
-> >   drivers/gpu/drm/meson/meson_drv.c             |  10 +-
-> >   drivers/gpu/drm/meson/meson_overlay.c         |  12 +-
-> >   drivers/gpu/drm/meson/meson_plane.c           |   8 +-
-> >   drivers/gpu/drm/msm/msm_drv.c                 |   2 +-
-> >   drivers/gpu/drm/mxsfb/Kconfig                 |   2 +-
-> >   drivers/gpu/drm/mxsfb/mxsfb_drv.c             |   6 +-
-> >   drivers/gpu/drm/mxsfb/mxsfb_kms.c             |  10 +-
-> >   drivers/gpu/drm/panel/Kconfig                 |   2 +-
-> >   drivers/gpu/drm/panel/panel-ilitek-ili9341.c  |   6 +-
-> >   drivers/gpu/drm/pl111/Kconfig                 |   2 +-
-> >   drivers/gpu/drm/pl111/pl111_display.c         |   8 +-
-> >   drivers/gpu/drm/pl111/pl111_drv.c             |  10 +-
-> >   drivers/gpu/drm/rcar-du/Kconfig               |   2 +-
-> >   drivers/gpu/drm/rcar-du/rcar_du_crtc.c        |   4 +-
-> >   drivers/gpu/drm/rcar-du/rcar_du_drv.c         |   6 +-
-> >   drivers/gpu/drm/rcar-du/rcar_du_kms.c         |  38 +--
-> >   drivers/gpu/drm/rcar-du/rcar_du_plane.c       |   8 +-
-> >   drivers/gpu/drm/rcar-du/rcar_du_vsp.c         |   6 +-
-> >   drivers/gpu/drm/rockchip/Kconfig              |   2 +-
-> >   drivers/gpu/drm/rockchip/rockchip_drm_drv.c   |   2 +-
-> >   drivers/gpu/drm/rockchip/rockchip_drm_gem.c   |   4 +-
-> >   drivers/gpu/drm/shmobile/Kconfig              |   2 +-
-> >   drivers/gpu/drm/shmobile/shmob_drm_crtc.c     |  10 +-
-> >   drivers/gpu/drm/shmobile/shmob_drm_drv.c      |   6 +-
-> >   drivers/gpu/drm/shmobile/shmob_drm_kms.c      |   4 +-
-> >   drivers/gpu/drm/shmobile/shmob_drm_kms.h      |   2 +-
-> >   drivers/gpu/drm/shmobile/shmob_drm_plane.c    |  10 +-
-> >   drivers/gpu/drm/solomon/ssd130x.c             |   2 +-
-> >   drivers/gpu/drm/sprd/Kconfig                  |   2 +-
-> >   drivers/gpu/drm/sprd/sprd_dpu.c               |  10 +-
-> >   drivers/gpu/drm/sprd/sprd_drm.c               |   6 +-
-> >   drivers/gpu/drm/sti/Kconfig                   |   2 +-
-> >   drivers/gpu/drm/sti/sti_cursor.c              |  14 +-
-> >   drivers/gpu/drm/sti/sti_drv.c                 |   8 +-
-> >   drivers/gpu/drm/sti/sti_gdp.c                 |  18 +-
-> >   drivers/gpu/drm/sti/sti_hqvdp.c               |  18 +-
-> >   drivers/gpu/drm/sti/sti_plane.c               |   4 +-
-> >   drivers/gpu/drm/stm/Kconfig                   |   2 +-
-> >   drivers/gpu/drm/stm/drv.c                     |  12 +-
-> >   drivers/gpu/drm/stm/ltdc.c                    |  16 +-
-> >   drivers/gpu/drm/sun4i/Kconfig                 |   2 +-
-> >   drivers/gpu/drm/sun4i/sun4i_backend.c         |   6 +-
-> >   drivers/gpu/drm/sun4i/sun4i_drv.c             |  10 +-
-> >   drivers/gpu/drm/sun4i/sun4i_frontend.c        |  10 +-
-> >   drivers/gpu/drm/sun4i/sun8i_mixer.c           |   4 +-
-> >   drivers/gpu/drm/sun4i/sun8i_ui_layer.c        |   8 +-
-> >   drivers/gpu/drm/sun4i/sun8i_vi_layer.c        |   8 +-
-> >   drivers/gpu/drm/tegra/fb.c                    |   2 +-
-> >   drivers/gpu/drm/tidss/Kconfig                 |   2 +-
-> >   drivers/gpu/drm/tidss/tidss_crtc.c            |   4 +-
-> >   drivers/gpu/drm/tidss/tidss_dispc.c           |  12 +-
-> >   drivers/gpu/drm/tidss/tidss_drv.c             |   6 +-
-> >   drivers/gpu/drm/tidss/tidss_kms.c             |   2 +-
-> >   drivers/gpu/drm/tidss/tidss_plane.c           |   2 +-
-> >   drivers/gpu/drm/tilcdc/Kconfig                |   2 +-
-> >   drivers/gpu/drm/tilcdc/tilcdc_crtc.c          |   8 +-
-> >   drivers/gpu/drm/tilcdc/tilcdc_drv.c           |   6 +-
-> >   drivers/gpu/drm/tiny/Kconfig                  |  22 +-
-> >   drivers/gpu/drm/tiny/arcpgu.c                 |  12 +-
-> >   drivers/gpu/drm/tiny/hx8357d.c                |   6 +-
-> >   drivers/gpu/drm/tiny/ili9163.c                |   6 +-
-> >   drivers/gpu/drm/tiny/ili9225.c                |  12 +-
-> >   drivers/gpu/drm/tiny/ili9341.c                |   6 +-
-> >   drivers/gpu/drm/tiny/ili9486.c                |   6 +-
-> >   drivers/gpu/drm/tiny/mi0283qt.c               |   6 +-
-> >   drivers/gpu/drm/tiny/panel-mipi-dbi.c         |   6 +-
-> >   drivers/gpu/drm/tiny/repaper.c                |  12 +-
-> >   drivers/gpu/drm/tiny/st7586.c                 |  12 +-
-> >   drivers/gpu/drm/tiny/st7735r.c                |   6 +-
-> >   drivers/gpu/drm/tve200/Kconfig                |   2 +-
-> >   drivers/gpu/drm/tve200/tve200_display.c       |  12 +-
-> >   drivers/gpu/drm/tve200/tve200_drv.c           |   8 +-
-> >   drivers/gpu/drm/v3d/v3d_drv.c                 |   2 +-
-> >   drivers/gpu/drm/v3d/v3d_gem.c                 |   4 +-
-> >   drivers/gpu/drm/vc4/Kconfig                   |   2 +-
-> >   drivers/gpu/drm/vc4/vc4_bo.c                  |  44 +--
-> >   drivers/gpu/drm/vc4/vc4_crtc.c                |  10 +-
-> >   drivers/gpu/drm/vc4/vc4_drv.c                 |   8 +-
-> >   drivers/gpu/drm/vc4/vc4_drv.h                 |  18 +-
-> >   drivers/gpu/drm/vc4/vc4_gem.c                 |   4 +-
-> >   drivers/gpu/drm/vc4/vc4_plane.c               |  10 +-
-> >   drivers/gpu/drm/vc4/vc4_render_cl.c           |  26 +-
-> >   drivers/gpu/drm/vc4/vc4_txp.c                 |   6 +-
-> >   drivers/gpu/drm/vc4/vc4_v3d.c                 |   4 +-
-> >   drivers/gpu/drm/vc4/vc4_validate.c            |  16 +-
-> >   drivers/gpu/drm/vc4/vc4_validate_shaders.c    |   2 +-
-> >   drivers/gpu/drm/xlnx/Kconfig                  |   2 +-
-> >   drivers/gpu/drm/xlnx/zynqmp_disp.c            |   4 +-
-> >   drivers/gpu/drm/xlnx/zynqmp_dpsub.c           |   8 +-
-> >   ...rm_fb_cma_helper.h => drm_fb_dma_helper.h} |  10 +-
-> >   include/drm/drm_gem.h                         |   2 +-
-> >   ..._gem_cma_helper.h => drm_gem_dma_helper.h} | 154 ++++-----
-> >   146 files changed, 777 insertions(+), 790 deletions(-)
-> >   rename drivers/gpu/drm/{drm_fb_cma_helper.c => drm_fb_dma_helper.c} (68%)
-> >   rename drivers/gpu/drm/{drm_gem_cma_helper.c => drm_gem_dma_helper.c} (60%)
-> >   rename include/drm/{drm_fb_cma_helper.h => drm_fb_dma_helper.h} (56%)
-> >   rename include/drm/{drm_gem_cma_helper.h => drm_gem_dma_helper.h} (53%)
-
+diff --git a/arch/mips/include/asm/pgtable-64.h b/arch/mips/include/asm/pgtable-64.h
+index 41921ac..1c5ef41 100644
+--- a/arch/mips/include/asm/pgtable-64.h
++++ b/arch/mips/include/asm/pgtable-64.h
+@@ -265,7 +265,7 @@ static inline int pmd_present(pmd_t pmd)
+ {
+ #ifdef CONFIG_MIPS_HUGE_TLB_SUPPORT
+ 	if (unlikely(pmd_val(pmd) & _PAGE_HUGE))
+-		return pmd_val(pmd) & _PAGE_PRESENT;
++		return pmd_val(pmd) & (_PAGE_PRESENT | _PAGE_PRESENT_INVALID);
+ #endif
+ 
+ 	return pmd_val(pmd) != (unsigned long) invalid_pte_table;
+diff --git a/arch/mips/include/asm/pgtable-bits.h b/arch/mips/include/asm/pgtable-bits.h
+index 2362842..3c176a1e 100644
+--- a/arch/mips/include/asm/pgtable-bits.h
++++ b/arch/mips/include/asm/pgtable-bits.h
+@@ -49,6 +49,7 @@ enum pgtable_bits {
+ 
+ 	/* Used only by software (masked out before writing EntryLo*) */
+ 	_PAGE_PRESENT_SHIFT = 24,
++	_PAGE_PRESENT_INVALID_SHIFT,
+ 	_PAGE_WRITE_SHIFT,
+ 	_PAGE_ACCESSED_SHIFT,
+ 	_PAGE_MODIFIED_SHIFT,
+@@ -80,6 +81,7 @@ enum pgtable_bits {
+ 
+ 	/* Used only by software (masked out before writing EntryLo*) */
+ 	_PAGE_PRESENT_SHIFT = _CACHE_SHIFT + 3,
++	_PAGE_PRESENT_INVALID_SHIFT,
+ 	_PAGE_NO_READ_SHIFT,
+ 	_PAGE_WRITE_SHIFT,
+ 	_PAGE_ACCESSED_SHIFT,
+@@ -98,6 +100,7 @@ enum pgtable_bits {
+ enum pgtable_bits {
+ 	/* Used only by software (writes to EntryLo ignored) */
+ 	_PAGE_PRESENT_SHIFT,
++	_PAGE_PRESENT_INVALID_SHIFT,
+ 	_PAGE_NO_READ_SHIFT,
+ 	_PAGE_WRITE_SHIFT,
+ 	_PAGE_ACCESSED_SHIFT,
+@@ -122,6 +125,7 @@ enum pgtable_bits {
+ enum pgtable_bits {
+ 	/* Used only by software (masked out before writing EntryLo*) */
+ 	_PAGE_PRESENT_SHIFT,
++	_PAGE_PRESENT_INVALID_SHIFT,
+ #if !defined(CONFIG_CPU_HAS_RIXI)
+ 	_PAGE_NO_READ_SHIFT,
+ #endif
+@@ -152,6 +156,7 @@ enum pgtable_bits {
+ 
+ /* Used only by software */
+ #define _PAGE_PRESENT		(1 << _PAGE_PRESENT_SHIFT)
++#define _PAGE_PRESENT_INVALID	(1 << _PAGE_PRESENT_INVALID_SHIFT)
+ #define _PAGE_WRITE		(1 << _PAGE_WRITE_SHIFT)
+ #define _PAGE_ACCESSED		(1 << _PAGE_ACCESSED_SHIFT)
+ #define _PAGE_MODIFIED		(1 << _PAGE_MODIFIED_SHIFT)
+diff --git a/arch/mips/include/asm/pgtable.h b/arch/mips/include/asm/pgtable.h
+index 374c632..cc80211 100644
+--- a/arch/mips/include/asm/pgtable.h
++++ b/arch/mips/include/asm/pgtable.h
+@@ -698,7 +698,8 @@ static inline pmd_t pmd_modify(pmd_t pmd, pgprot_t newprot)
+ 
+ static inline pmd_t pmd_mkinvalid(pmd_t pmd)
+ {
+-	pmd_val(pmd) &= ~(_PAGE_PRESENT | _PAGE_VALID | _PAGE_DIRTY);
++	pmd_val(pmd) |= _PAGE_PRESENT_INVALID;
++	pmd_val(pmd) &= ~(_PAGE_PRESENT | _PAGE_VALID);
+ 
+ 	return pmd;
+ }
 -- 
-Regards,
+1.8.3.1
 
-Laurent Pinchart

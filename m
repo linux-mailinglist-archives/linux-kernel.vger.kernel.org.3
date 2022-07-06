@@ -2,151 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ABF74568436
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 11:56:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E6F65568439
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 11:56:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232711AbiGFJy4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Jul 2022 05:54:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33480 "EHLO
+        id S232499AbiGFJzK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Jul 2022 05:55:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34576 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232422AbiGFJyB (ORCPT
+        with ESMTP id S232444AbiGFJyC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Jul 2022 05:54:01 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76B22248ED;
-        Wed,  6 Jul 2022 02:53:55 -0700 (PDT)
-Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id AF779660199B;
-        Wed,  6 Jul 2022 10:53:53 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1657101234;
-        bh=rrPM2RkTW31xk31VsC6bdTdnculyR3ZfQ48lOmZ9V5w=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=Fb+2l5vidgyAGY8OhCcNd87EdHAo2OhyjbVAH1q3Nkj+8qOMGHrmL88J2W9e7/UWx
-         3v7k9SU2nBDHgrTjbmGh3A/AtStOFFSdvQf+2oIbuJSxzlcjmKypBcm6ZkVSUM0aG7
-         8rq5S4IduoCoUhuLeGMgx8ruXj5ChlVcYM0wWn6RuJZKZwroLp8a46WaftVQzwJAb0
-         giPupNRNKIJssSgcW9BOVRp1EbDTtCGV9TdsMFiyT+edCjtpDhK+NgmwvYOY3G/HCg
-         2duK7Bia6wBC0by0Z/5nqhmM29AGsjeusHhwaNRwdQSuFNXze/sojl914FsAfFCt8H
-         5Ws55Yiq2MEMQ==
-Message-ID: <458c06ee-a617-0ebf-c7f6-c731e743c7fb@collabora.com>
-Date:   Wed, 6 Jul 2022 11:53:51 +0200
+        Wed, 6 Jul 2022 05:54:02 -0400
+Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id BA58824F02;
+        Wed,  6 Jul 2022 02:53:58 -0700 (PDT)
+Received: by linux.microsoft.com (Postfix, from userid 1127)
+        id 7098020DDCC6; Wed,  6 Jul 2022 02:53:58 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 7098020DDCC6
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1657101238;
+        bh=nqWFIU1UiRFLTOpHJIOQKgm3cC14TJ1i84bjg1AGMUQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=KBDbzW9JfJw0HvDn0Ey1qx6FMF/Bd0qdu1ll02ZueIe9HzHVzzCII+Vgxpy577IXI
+         3HK6hg00b3wcconubFbLgJ2kEB2l+qnzPSOoob9N/1ryz2TfjejHyf3IW3Ze5D/t1J
+         AjezB/Yg9xIYo+WBr+8xxXs+gbOB2wwx4EahYJhU=
+Date:   Wed, 6 Jul 2022 02:53:58 -0700
+From:   Saurabh Singh Sengar <ssengar@linux.microsoft.com>
+To:     Praveen Kumar <kumarpraveen@linux.microsoft.com>
+Cc:     kys@microsoft.com, haiyangz@microsoft.com, sthemmin@microsoft.com,
+        wei.liu@kernel.org, decui@microsoft.com, jejb@linux.ibm.com,
+        martin.petersen@oracle.com, linux-hyperv@vger.kernel.org,
+        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        ssengar@microsoft.com, mikelley@microsoft.com
+Subject: Re: [PATCH] scsi: storvsc: Prevent running tasklet for long
+Message-ID: <20220706095358.GA3320@linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net>
+References: <1657035141-2132-1-git-send-email-ssengar@linux.microsoft.com>
+ <b4fea161-41c5-a03e-747b-316c74eb986c@linux.microsoft.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH v2 0/6] media: mediatek: vcodec: Fix 4K decoding support
-Content-Language: en-US
-To:     Chen-Yu Tsai <wenst@chromium.org>,
-        Tiffany Lin <tiffany.lin@mediatek.com>,
-        Andrew-CT Chen <andrew-ct.chen@mediatek.com>,
-        Yunfei Dong <yunfei.dong@mediatek.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Cc:     linux-media@vger.kernel.org, linux-mediatek@lists.infradead.org,
-        linux-kernel@vger.kernel.org,
-        Nicolas Dufresne <nicolas@ndufresne.ca>,
-        Nicolas Dufresne <nicolas.dufresne@collabora.com>
-References: <20220706082138.2668163-1-wenst@chromium.org>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20220706082138.2668163-1-wenst@chromium.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <b4fea161-41c5-a03e-747b-316c74eb986c@linux.microsoft.com>
+User-Agent: Mutt/1.5.21 (2010-09-15)
+X-Spam-Status: No, score=-19.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,
+        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 06/07/22 10:21, Chen-Yu Tsai ha scritto:
-> This is v2 of the mtk-vcodec 4K decoder fixes.
+On Wed, Jul 06, 2022 at 02:44:42PM +0530, Praveen Kumar wrote:
+> On 05-07-2022 21:02, Saurabh Sengar wrote:
+> > There can be scenarios where packets in ring buffer are continuously
+> > getting queued from upper layer and dequeued from storvsc interrupt
+> > handler, such scenarios can hold the foreach_vmbus_pkt loop (which is
+> > executing as a tasklet) for a long duration. Theoretically its possible
+> > that this loop executes forever. Add a condition to limit execution of
+> > this tasklet for finite amount of time to avoid such hazardous scenarios.
+> > 
+> > Signed-off-by: Saurabh Sengar <ssengar@linux.microsoft.com>
+> > ---
+> >  drivers/scsi/storvsc_drv.c | 7 +++++++
+> >  1 file changed, 7 insertions(+)
+> > 
+> > diff --git a/drivers/scsi/storvsc_drv.c b/drivers/scsi/storvsc_drv.c
+> > index fe000da..0c428cb 100644
+> > --- a/drivers/scsi/storvsc_drv.c
+> > +++ b/drivers/scsi/storvsc_drv.c
+> > @@ -60,6 +60,9 @@
+> >  #define VMSTOR_PROTO_VERSION_WIN8_1	VMSTOR_PROTO_VERSION(6, 0)
+> >  #define VMSTOR_PROTO_VERSION_WIN10	VMSTOR_PROTO_VERSION(6, 2)
+> >  
+> > +/* channel callback timeout in ms */
+> > +#define CALLBACK_TIMEOUT		5
 > 
-> While testing a backport of recent mtk-vcodec developments on ChromeOS
-> v5.10 kernel [1], it was found that 4K decoding support had regressed.
-> The decoder was not correctly reporting 4K frame sizes when queried,
-> and ChromeOS then determined that the hardware did not support it.
-> 
-> This turned out to be a mix of different bugs:
-> 
-> 1. Frame size enumeration on the output side should not depend on the
->     currently set format, or any other derived state. This is fixed in
->     patch 2.
-> 
-> 2. TRY_FMT on the output side was incorrectly clamping the resolution
->     based on the current maximum values. It should not. Fixed in patch
->     4.
-> 
-> 3. The default resolution limit was not set according to the default
->     output format determined at runtime, but hard-coded to 1080p. An
->     S_FMT call is needed to override this. The instance resolution limit
->     is rendered useless after patches 3 and 4, and dropped in patch 5.
-> 
-> Other patches:
-> - Patch 1 makes stepwise_fhd constant.
-> - Patch 3 drops redundant aligning of default resolution
-> - Patch 6 moves framesize inside mtk_video_fmt, making it easier to
->    access and removes a list search that was added in patch 4.
-> 
-> Changes since v1:
->    - Added patch to const-ify stepwise_fhd, as Nicolas requested.
->    - Dropped old patch 2 (media: mediatek: vcodec: dec: Set default
->      max resolution based on format)
->    - Dropped old patch 4 (media: mediatek: vcodec: dec: Set maximum
->      resolution when S_FMT on output only)
->    - Made max resolution lookup for TRY_FMT return stepwise structure in
->      patch 4, which helps with the last patch that moves framesize
->      stepwise into mtk_video_fmt.
->    - Did some style cleanups in patch 4
-> 
-> This series is based on next-20220705.
-> 
-> This was only tested on the backport kernel [1] on MT8195, which is the
-> only currently supported SoC that does 4K decoding. Hopefully the folks
-> at Collabora can give this a test on their mainline MT8195 integration
-> branch.
+> If I may, it would be good if we have the CALLBACK_TIMEOUT configurable based upon user's requirement with default value to '5'.
+> I assume, this value '5' fits best to the use-case which we are trying to resolve here. Thanks.
 
-Cannot spot any regression after fluster tests.
-
-For the whole series:
-
-Tested-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+Agree, how about adding a sysfs entry for this parameter
 
 > 
+> > +
+> >  /*  Packet structure describing virtual storage requests. */
+> >  enum vstor_packet_operation {
+> >  	VSTOR_OPERATION_COMPLETE_IO		= 1,
+> > @@ -1204,6 +1207,7 @@ static void storvsc_on_channel_callback(void *context)
+> >  	struct hv_device *device;
+> >  	struct storvsc_device *stor_device;
+> >  	struct Scsi_Host *shost;
+> > +	unsigned long expire = jiffies + msecs_to_jiffies(CALLBACK_TIMEOUT);
+> >  
+> >  	if (channel->primary_channel != NULL)
+> >  		device = channel->primary_channel->device_obj;
+> > @@ -1224,6 +1228,9 @@ static void storvsc_on_channel_callback(void *context)
+> >  		u32 minlen = rqst_id ? sizeof(struct vstor_packet) :
+> >  			sizeof(enum vstor_packet_operation);
+> >  
+> > +		if (time_after(jiffies, expire))
+> > +			break;
+> > +
+> >  		if (pktlen < minlen) {
+> >  			dev_err(&device->device,
+> >  				"Invalid pkt: id=%llu, len=%u, minlen=%u\n",
 > 
-> Regards
-> ChenYu
+> Regards,
 > 
-> [1] https://crrev.com/c/3713491
-> 
-> Chen-Yu Tsai (6):
->    media: mediatek: vcodec: decoder: Const-ify stepwise_fhd
->    media: mediatek: vcodec: decoder: Fix 4K frame size enumeration
->    media: mediatek: vcodec: decoder: Skip alignment for default
->      resolution
->    media: mediatek: vcodec: decoder: Fix resolution clamping in TRY_FMT
->    media: mediatek: vcodec: decoder: Drop max_{width,height} from
->      mtk_vcodec_ctx
->    media: mediatek: vcodec: decoder: Embed framesize inside mtk_video_fmt
-> 
->   .../platform/mediatek/vcodec/mtk_vcodec_dec.c | 54 ++++++++-----------
->   .../mediatek/vcodec/mtk_vcodec_dec_stateful.c | 29 +++-------
->   .../vcodec/mtk_vcodec_dec_stateless.c         | 30 +++++------
->   .../platform/mediatek/vcodec/mtk_vcodec_drv.h | 20 +------
->   4 files changed, 41 insertions(+), 92 deletions(-)
-> 
-
-
--- 
-AngeloGioacchino Del Regno
-Software Engineer
-
-Collabora Ltd.
-Platinum Building, St John's Innovation Park, Cambridge CB4 0DS, UK
-Registered in England & Wales, no. 5513718
+> ~Praveen.

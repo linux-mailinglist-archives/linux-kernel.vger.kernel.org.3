@@ -2,59 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 509F9567F48
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 09:03:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 943B4567F43
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 09:03:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231270AbiGFHCs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Jul 2022 03:02:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55508 "EHLO
+        id S231316AbiGFHCx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Jul 2022 03:02:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55622 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231287AbiGFHCZ (ORCPT
+        with ESMTP id S231389AbiGFHCb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Jul 2022 03:02:25 -0400
-Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9AE3520F75;
-        Wed,  6 Jul 2022 00:02:22 -0700 (PDT)
-Received: from fllv0034.itg.ti.com ([10.64.40.246])
-        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 26672D1o130006;
-        Wed, 6 Jul 2022 02:02:13 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1657090933;
-        bh=jCdj0h7QAmp7j0F9vvlvaFSLwy3D0Xt0WBUaK75CTSw=;
-        h=From:To:CC:Subject:Date;
-        b=Hp6X7OemNztT4azjbZnCzYTwq7/DxGjLKZTmzP0jzp5p4xK8iJCANhhV/+SLS6g68
-         f9T1waR5j8VvxiJ/el6CeAQA8ZKVhWUqTgGF4+/QQU++EF8zlBdpP1WwcVNonz4ocP
-         2fkzWfRI0lwLpLGzfS5aYUPYLPdZlH9aVAm4Req0=
-Received: from DFLE110.ent.ti.com (dfle110.ent.ti.com [10.64.6.31])
-        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 26672DnT116700
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Wed, 6 Jul 2022 02:02:13 -0500
-Received: from DFLE112.ent.ti.com (10.64.6.33) by DFLE110.ent.ti.com
- (10.64.6.31) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Wed, 6
- Jul 2022 02:02:12 -0500
-Received: from lelv0327.itg.ti.com (10.180.67.183) by DFLE112.ent.ti.com
- (10.64.6.33) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
- Frontend Transport; Wed, 6 Jul 2022 02:02:13 -0500
-Received: from ula0492258.dal.design.ti.com (ileax41-snat.itg.ti.com [10.172.224.153])
-        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 266728j5113804;
-        Wed, 6 Jul 2022 02:02:09 -0500
-From:   Siddharth Vadapalli <s-vadapalli@ti.com>
-To:     <davem@davemloft.net>, <kuba@kernel.org>, <linux@armlinux.org.uk>
-CC:     <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <kishon@ti.com>, <vigneshr@ti.com>, <grygorii.strashko@ti.com>,
-        <s-vadapalli@ti.com>
-Subject: [PATCH net v3] net: ethernet: ti: am65-cpsw: Fix devlink port register sequence
-Date:   Wed, 6 Jul 2022 12:32:08 +0530
-Message-ID: <20220706070208.12207-1-s-vadapalli@ti.com>
-X-Mailer: git-send-email 2.36.1
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        Wed, 6 Jul 2022 03:02:31 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1BBB20191;
+        Wed,  6 Jul 2022 00:02:30 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3EDF861DA8;
+        Wed,  6 Jul 2022 07:02:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9A80EC3411C;
+        Wed,  6 Jul 2022 07:02:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1657090949;
+        bh=dHnpslg4D2Iqrhe64MOAwfZyhz2n2bJgiGLBsNy4Y7o=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=NOsD6YvfXM++X57BkQDilD3MF0Hr3witgXGzJLsBZ7l6udoCZolC6LAQL2EBfymqd
+         RIssw+c+OIYU2FN7oTs0bT65o7FsmuO1qaG6S/5uVLKXD4KioVLDwHbCVBiOu+Nv3d
+         Zxgv1aiaFlvw62DixlBfW7+O5C0/RsTIO6Q5cUcxBgLe8CyZQcmB5N2YiRHnNpg7HJ
+         gzBUkonkjNzmgNLKdyzC2h456YFa7WXSqwjBJg9JY2bGkn3A22JApf3cDFulNQqzoh
+         gL4/Y1MY69hyiYyFjc7lXHynRqqXL90DE2F3r7PPtonJoWMNQqf8QlYWN56BQeH/Uh
+         A7oaekjR0dEGA==
+Received: from ip-185-104-136-29.ptr.icomera.net ([185.104.136.29] helo=wait-a-minute.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <maz@kernel.org>)
+        id 1o8z3L-005YCw-4A;
+        Wed, 06 Jul 2022 08:02:27 +0100
+Date:   Wed, 06 Jul 2022 08:02:20 +0100
+Message-ID: <87h73un2pv.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Lad Prabhakar <prabhakar.csengg@gmail.com>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        devicetree@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
+        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Biju Das <biju.das.jz@bp.renesas.com>,
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Subject: Re: [PATCH v7 0/5] Renesas RZ/G2L IRQC support
+In-Reply-To: <20220703194020.78701-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+References: <20220703194020.78701-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.104.136.29
+X-SA-Exim-Rcpt-To: prabhakar.csengg@gmail.com, tglx@linutronix.de, robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org, geert+renesas@glider.be, linus.walleij@linaro.org, brgl@bgdev.pl, p.zabel@pengutronix.de, devicetree@vger.kernel.org, linux-renesas-soc@vger.kernel.org, linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org, biju.das.jz@bp.renesas.com, prabhakar.mahadev-lad.rj@bp.renesas.com
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -63,100 +75,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Renaming interfaces using udevd depends on the interface being registered
-before its netdev is registered. Otherwise, udevd reads an empty
-phys_port_name value, resulting in the interface not being renamed.
+On Sun, 03 Jul 2022 20:40:15 +0100,
+Lad Prabhakar <prabhakar.csengg@gmail.com> wrote:
+> 
+> Hi All,
+> 
+> The RZ/G2L Interrupt Controller is a front-end for the GIC found on
+> Renesas RZ/G2L SoC's with below pins:
+> - IRQ sense select for 8 external interrupts, mapped to 8 GIC SPI
+>   interrupts
+> - GPIO pins used as external interrupt input pins out of GPIOINT0-122 a
+>   maximum of only 32 can be mapped to 32 GIC SPI interrupts,
+> - NMI edge select.
+> 
+>                                                              _____________
+>                                                              |    GIC     |
+>                                                              |  ________  |
+>                                       ____________           | |        | |
+> NMI --------------------------------->|          |  SPI0-479 | | GIC-600| |
+>              _______                  |          |------------>|        | |
+>              |      |                 |          |  PPI16-31 | |        | |
+>              |      | IRQ0-IRQ7       |   IRQC   |------------>|        | |
+> P0_P48_4 --->| GPIO |---------------->|          |           | |________| |
+>              |      |GPIOINT0-122     |          |           |            |
+>              |      |---------------->| TINT0-31 |           |            |
+>              |______|                 |__________|           |____________|
+> 
+> The proposed patches add hierarchical IRQ domain, one in IRQC driver and
+> another in pinctrl driver. Upon interrupt requests map the interrupt to
+> GIC. Out of GPIOINT0-122 only 32 can be mapped to GIC SPI, this mapping is
+> handled by the pinctrl and IRQC driver.
+> 
+> Cheers,
+> Prabhakar
+> 
+> v6->v7:
+> * Used devm_reset_control_get_exclusive() instead of
+>   devm_reset_control_get_exclusive_by_index()
+> * Included RB tag from Linus for patch 5/5
+> * Switched to newer version of populate_parent_alloc_arg() (patch depends
+>   on https://git.kernel.org/pub/scm/linux/kernel/git/maz/arm-platforms.git/
+>   patch/?id=178b7e21459e9a7e2a2c369711ef0cc9b1cfbcd7)
 
-Fix this by registering the interface before registering its netdev
-by invoking am65_cpsw_nuss_register_devlink() before invoking
-register_netdev() for the interface.
+Please add this patch as part of the series.
 
-Move the function call to devlink_port_type_eth_set(), invoking it after
-register_netdev() is invoked, to ensure that netlink notification for the
-port state change is generated after the netdev is completely initialized.
+	M.
 
-Fixes: 58356eb31d60 ("net: ti: am65-cpsw-nuss: Add devlink support")
-Signed-off-by: Siddharth Vadapalli <s-vadapalli@ti.com>
----
-Changelog:
-v2 -> v3:
-1. Add error handling to unregister devlink.
-
-v1-> v2:
-1. Add Fixes tag in commit message.
-2. Update patch subject to include "net".
-3. Invoke devlink_port_type_eth_set() after register_netdev() is called.
-4. Update commit message describing the cause for moving the call to
-   devlink_port_type_eth_set().
-
-v2: https://lore.kernel.org/r/20220704073040.7542-1-s-vadapalli@ti.com/
-v1: https://lore.kernel.org/r/20220623044337.6179-1-s-vadapalli@ti.com/
-
- drivers/net/ethernet/ti/am65-cpsw-nuss.c | 17 ++++++++++-------
- 1 file changed, 10 insertions(+), 7 deletions(-)
-
-diff --git a/drivers/net/ethernet/ti/am65-cpsw-nuss.c b/drivers/net/ethernet/ti/am65-cpsw-nuss.c
-index fb92d4c1547d..f4a6b590a1e3 100644
---- a/drivers/net/ethernet/ti/am65-cpsw-nuss.c
-+++ b/drivers/net/ethernet/ti/am65-cpsw-nuss.c
-@@ -2467,7 +2467,6 @@ static int am65_cpsw_nuss_register_devlink(struct am65_cpsw_common *common)
- 				port->port_id, ret);
- 			goto dl_port_unreg;
- 		}
--		devlink_port_type_eth_set(dl_port, port->ndev);
- 	}
- 	devlink_register(common->devlink);
- 	return ret;
-@@ -2511,6 +2510,7 @@ static void am65_cpsw_unregister_devlink(struct am65_cpsw_common *common)
- static int am65_cpsw_nuss_register_ndevs(struct am65_cpsw_common *common)
- {
- 	struct device *dev = common->dev;
-+	struct devlink_port *dl_port;
- 	struct am65_cpsw_port *port;
- 	int ret = 0, i;
- 
-@@ -2527,6 +2527,10 @@ static int am65_cpsw_nuss_register_ndevs(struct am65_cpsw_common *common)
- 		return ret;
- 	}
- 
-+	ret = am65_cpsw_nuss_register_devlink(common);
-+	if (ret)
-+		return ret;
-+
- 	for (i = 0; i < common->port_num; i++) {
- 		port = &common->ports[i];
- 
-@@ -2539,25 +2543,24 @@ static int am65_cpsw_nuss_register_ndevs(struct am65_cpsw_common *common)
- 				i, ret);
- 			goto err_cleanup_ndev;
- 		}
-+
-+		dl_port = &port->devlink_port;
-+		devlink_port_type_eth_set(dl_port, port->ndev);
- 	}
- 
- 	ret = am65_cpsw_register_notifiers(common);
- 	if (ret)
- 		goto err_cleanup_ndev;
- 
--	ret = am65_cpsw_nuss_register_devlink(common);
--	if (ret)
--		goto clean_unregister_notifiers;
--
- 	/* can't auto unregister ndev using devm_add_action() due to
- 	 * devres release sequence in DD core for DMA
- 	 */
- 
- 	return 0;
--clean_unregister_notifiers:
--	am65_cpsw_unregister_notifiers(common);
-+
- err_cleanup_ndev:
- 	am65_cpsw_nuss_cleanup_ndev(common);
-+	am65_cpsw_unregister_devlink(common);
- 
- 	return ret;
- }
 -- 
-2.36.1
-
+Without deviation from the norm, progress is not possible.

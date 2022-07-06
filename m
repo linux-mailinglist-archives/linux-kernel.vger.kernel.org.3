@@ -2,95 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B0696568861
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 14:32:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E8E8568867
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 14:33:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232258AbiGFMcX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Jul 2022 08:32:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36336 "EHLO
+        id S232923AbiGFMds (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Jul 2022 08:33:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38704 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233676AbiGFMcS (ORCPT
+        with ESMTP id S231690AbiGFMdp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Jul 2022 08:32:18 -0400
-Received: from mail-yb1-xb31.google.com (mail-yb1-xb31.google.com [IPv6:2607:f8b0:4864:20::b31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3A1F26ACD;
-        Wed,  6 Jul 2022 05:32:17 -0700 (PDT)
-Received: by mail-yb1-xb31.google.com with SMTP id 64so17773243ybt.12;
-        Wed, 06 Jul 2022 05:32:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=8fGAXjGlGnpjPR/MiR6gsPc9M+X2hCgjnxVgcSV7E3k=;
-        b=P/KZVgStvwd6tySv/eqvZW97OYZrxBW12v9/apZmCsEtA/Q+sdmq9OqksdzHZulEya
-         wFBpmwKk3nrt8R3dH8u2dMJgbSFpPpciBDSkjav7dd41r92zJAke3Gl4dNXktkEoa0QG
-         T1nrgddl70vFVYEUx+/IizMxucxyR1Hds4UhCqPzmkDJZcTZapqwyoc1uWSH8iUJ3rdQ
-         ilr6sNRvOYZktNBrDEtEg0+UKHO81nCyzOd4+bRrZAZUtVBMOKIklc3W20D3t9SoZWTf
-         Hh/ladfy9L58v8UJCRMWnnNKAFOCryTiguhDsJw8bNOxZapPWrmn6TUhPofHAZ5f39b5
-         SJxg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=8fGAXjGlGnpjPR/MiR6gsPc9M+X2hCgjnxVgcSV7E3k=;
-        b=oRWsjX82+2AAyrv4GpJvbyex4WGUT+TZxJnH5jJI85Vz5CPYHZk3UQwlmCssxumOMx
-         TxGm16NTcdj7tTcXgHLhmYkHVPuCSOanUSCCYv6kqqCx/wglZPohPKvNxqrMfkQ9VLDL
-         jDgw2YDtSOwO3KDx3wPs44PPw+9kVBjasyIOuOmTSnZ4uv3F86ZArlK6IJNAvBobCOQ9
-         +O6HBwvKNSgvadFKzDFuR2mXWe4SdS5jynuiI1ILXDhq/xkLfUawxqdGUm2x+LXW38Ur
-         HV490GXMGVpTfPXfg/bZLK5lCCddW5mnTQHjaiJVq1/F2tPH5gBcn0CIAPnCdjbKeR1r
-         zhvg==
-X-Gm-Message-State: AJIora93lbO76FL2+ZPZvVzRpUw3rvo1CMwfxrRkQOicBy4kqLJ6TjdB
-        pzxRs1CEMoW/qzxGEvkB2Ha5oofGHMQiAf8vm/E=
-X-Google-Smtp-Source: AGRyM1s4GlbjUriYI4OcdkNVJtgtJWpB1v8bCoaFXYo/uFZb8MEoGn1i49NyJ8LwAl23y4jn60aNhZquQqyShVxPDjM=
-X-Received: by 2002:a05:6902:686:b0:66e:627f:4d29 with SMTP id
- i6-20020a056902068600b0066e627f4d29mr12612894ybt.385.1657110736868; Wed, 06
- Jul 2022 05:32:16 -0700 (PDT)
+        Wed, 6 Jul 2022 08:33:45 -0400
+Received: from smtp-relay-canonical-0.canonical.com (smtp-relay-canonical-0.canonical.com [185.125.188.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D399EE04;
+        Wed,  6 Jul 2022 05:33:44 -0700 (PDT)
+Received: from localhost.localdomain (unknown [10.101.196.174])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-canonical-0.canonical.com (Postfix) with ESMTPSA id B0CE441692;
+        Wed,  6 Jul 2022 12:33:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1657110822;
+        bh=Ij7XJmC/+XwLc9RCA+8oEtzYP6f2opNzC/i7DALyxf4=;
+        h=From:To:Cc:Subject:Date:Message-Id:MIME-Version;
+        b=N4a6WjFi3HaggQEMc5n/WBnTOkNwycKmXj7W+LLP5Rz4J6dVDd4GLV4FnHAMculYC
+         cux0bvryXmlasULy+7Ni9LuvBbB09oxeyf4PtCJ11nrfllWO6VjAzTY0E7hVhS6fTj
+         mF9YuPnDu5IbgC4fMrGQ66QYwUe1lD1ON/SsBfDVOU0gsUYPpC+D6/pwCQf3sidhgN
+         gMcz/yzneo98haN2J7DDew4Fp1jcFHQa9QGKotyzD53fKVctPFqeNr26BAyGRfEcgc
+         G+LLBsrfRdZpnGuSazTS3bx06e/rGcnnuK6CU7zjmzTSZc8PXr9KwieRTL/P62FYaD
+         mDLAdryM+I2Qg==
+From:   Kai-Heng Feng <kai.heng.feng@canonical.com>
+To:     bhelgaas@google.com
+Cc:     mika.westerberg@linux.intel.com, koba.ko@canonical.com,
+        Kai-Heng Feng <kai.heng.feng@canonical.com>,
+        "David E . Box" <david.e.box@linux.intel.com>,
+        Sathyanarayanan Kuppuswamy 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] PCI: Disable upstream port PTM during suspend
+Date:   Wed,  6 Jul 2022 20:32:44 +0800
+Message-Id: <20220706123244.18056-1-kai.heng.feng@canonical.com>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
-References: <20220705171835.4923-1-brgl@bgdev.pl> <CAHp75Ve3sPhFOZhL=_2p+1avuo96CP995KD+bi+Pn3gyj1F9TA@mail.gmail.com>
- <CAMRc=MekRvEVjRKJn6CWpbk9GJWS0Y+kB9MYpGFSN9WSSzWC7A@mail.gmail.com>
-In-Reply-To: <CAMRc=MekRvEVjRKJn6CWpbk9GJWS0Y+kB9MYpGFSN9WSSzWC7A@mail.gmail.com>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Wed, 6 Jul 2022 14:31:40 +0200
-Message-ID: <CAHp75VdepbidJWgLZFk3ns13boZXRYvMqvLvXF_xYw=2ahZMgw@mail.gmail.com>
-Subject: Re: [PATCH] gpio: pxa: schedule a devm action for the clock struct
-To:     Bartosz Golaszewski <brgl@bgdev.pl>
-Cc:     Stephen Boyd <swboyd@chromium.org>,
-        Robert Jarzmik <robert.jarzmik@free.fr>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Hulk Robot <hulkci@huawei.com>, Yuan Can <yuancan@huawei.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jul 6, 2022 at 2:11 PM Bartosz Golaszewski <brgl@bgdev.pl> wrote:
-> On Wed, Jul 6, 2022 at 1:49 PM Andy Shevchenko
-> <andy.shevchenko@gmail.com> wrote:
-> > On Tue, Jul 5, 2022 at 7:29 PM Bartosz Golaszewski <brgl@bgdev.pl> wrote:
+On Intel Alder Lake platforms, Thunderbolt entering D3cold can cause
+some errors reported by AER:
+pcieport 0000:00:1d.0: AER: Uncorrected (Non-Fatal) error received: 0000:00:1d.0
+pcieport 0000:00:1d.0: PCIe Bus Error: severity=Uncorrected (Non-Fatal), type=Transaction Layer, (Requester ID)
+pcieport 0000:00:1d.0:   device [8086:7ab0] error status/mask=00100000/00004000
+pcieport 0000:00:1d.0:    [20] UnsupReq               (First)
+pcieport 0000:00:1d.0: AER:   TLP Header: 34000000 08000052 00000000 00000000
+thunderbolt 0000:0a:00.0: AER: can't recover (no error_detected callback)
+xhci_hcd 0000:3e:00.0: AER: can't recover (no error_detected callback)
+pcieport 0000:00:1d.0: AER: device recovery failed
 
-...
+In addition to that, it can also block system from suspending when
+a Thunderbolt dock is attached to the same system.
 
-> > > Reported-by: Signed-off-by: Yuan Can <yuancan@huawei.com>
-> >
-> > Me puzzled.
->
-> Yuan Can sent the following patch:
-> https://patchwork.ozlabs.org/project/linux-gpio/patch/20220704130323.104294-1-yuancan@huawei.com/
->
-> I responded that it was not complete and sent this instead.
+The original approach [1] is to disable AER and DPC when link is in
+L2/L3 Ready, L2 and L3, but Bjorn identified the root cause is the Unsupported
+Request:
+  - 08:00.0 sent a PTM Request Message (a Posted Request)
+  - 00:1d.0 received the PTM Request Message
+  - The link transitioned to DL_Down
+  - Per sec 2.9.1, 00:1d.0 discarded the Request and reported an
+    Unsupported Request
+  - Or, per sec 6.21.3, if 00:1d.0 received a PTM Request when its
+    own PTM Enable was clear, it would also be treated as an
+    Unsupported Request
 
-I understand that, I am puzzled with Reported-by: followed by SoB.
-What is this format? Is it something new and documented?
+And further: 'David did something like this [1], but just for Root Ports. That
+looks wrong to me because sec 6.21.3 says we should not have PTM enabled in an
+Upstream Port (i.e., in a downstream device like 08:00.0) unless it is already
+enabled in the Downstream Port (i.e., in the Root Port 00:1d.0).'
 
+So also disable upstream port PTM to make the PCI driver conform to the spec
+and solve the issue.
 
+[1] https://lore.kernel.org/all/20220408153159.106741-1-kai.heng.feng@canonical.com/
+[2] https://lore.kernel.org/all/20220422222433.GA1464120@bhelgaas/
+Bugzilla: https://bugzilla.kernel.org/show_bug.cgi?id=215453
+Bugzilla: https://bugzilla.kernel.org/show_bug.cgi?id=216210
+Suggested-by: Bjorn Helgaas <bhelgaas@google.com>
+Cc: David E. Box <david.e.box@linux.intel.com>
+Cc: Sathyanarayanan Kuppuswamy <sathyanarayanan.kuppuswamy@linux.intel.com>
+
+Signed-off-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
+---
+ drivers/pci/pci.c | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/pci/pci.c b/drivers/pci/pci.c
+index cfaf40a540a82..8ba8a0e12946e 100644
+--- a/drivers/pci/pci.c
++++ b/drivers/pci/pci.c
+@@ -2717,7 +2717,8 @@ int pci_prepare_to_sleep(struct pci_dev *dev)
+ 	 * port to enter a lower-power PM state and the SoC to reach a
+ 	 * lower-power idle state as a whole.
+ 	 */
+-	if (pci_pcie_type(dev) == PCI_EXP_TYPE_ROOT_PORT)
++	if (pci_pcie_type(dev) == PCI_EXP_TYPE_ROOT_PORT ||
++	    pci_pcie_type(dev) == PCI_EXP_TYPE_UPSTREAM)
+ 		pci_disable_ptm(dev);
+ 
+ 	pci_enable_wake(dev, target_state, wakeup);
+@@ -2775,7 +2776,8 @@ int pci_finish_runtime_suspend(struct pci_dev *dev)
+ 	 * port to enter a lower-power PM state and the SoC to reach a
+ 	 * lower-power idle state as a whole.
+ 	 */
+-	if (pci_pcie_type(dev) == PCI_EXP_TYPE_ROOT_PORT)
++	if (pci_pcie_type(dev) == PCI_EXP_TYPE_ROOT_PORT ||
++	    pci_pcie_type(dev) == PCI_EXP_TYPE_UPSTREAM)
+ 		pci_disable_ptm(dev);
+ 
+ 	__pci_enable_wake(dev, target_state, pci_dev_run_wake(dev));
 -- 
-With Best Regards,
-Andy Shevchenko
+2.36.1
+

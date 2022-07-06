@@ -2,45 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 70B105683EC
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 11:47:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BB6765680F9
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 10:19:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232238AbiGFJnU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Jul 2022 05:43:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50612 "EHLO
+        id S231415AbiGFITg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Jul 2022 04:19:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57970 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233304AbiGFJnD (ORCPT
+        with ESMTP id S230310AbiGFITf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Jul 2022 05:43:03 -0400
-Received: from elvis.franken.de (elvis.franken.de [193.175.24.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A5F2C24085;
-        Wed,  6 Jul 2022 02:42:36 -0700 (PDT)
-Received: from uucp (helo=alpha)
-        by elvis.franken.de with local-bsmtp (Exim 3.36 #1)
-        id 1o91YH-0003Nf-00; Wed, 06 Jul 2022 11:42:33 +0200
-Received: by alpha.franken.de (Postfix, from userid 1000)
-        id 869D2C0230; Wed,  6 Jul 2022 10:19:01 +0200 (CEST)
-Date:   Wed, 6 Jul 2022 10:19:01 +0200
-From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-To:     Marc Zyngier <maz@kernel.org>
-Cc:     Sander Vanheule <sander@svanheule.net>,
-        Aleksander Jan Bajkowski <olek2@wp.pl>,
-        martin.blumenstingl@googlemail.com, hauke@hauke-m.de,
-        git@birger-koblitz.de, linux-mips@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] MIPS: smp-mt: enable all hardware interrupts on second
- VPE
-Message-ID: <20220706081901.GA10797@alpha.franken.de>
-References: <20220702190705.5319-1-olek2@wp.pl>
- <3c9a032edd0fb9b9608ad3ca08d6e3cc38f21464.camel@svanheule.net>
- <87fsjen2kl.wl-maz@kernel.org>
+        Wed, 6 Jul 2022 04:19:35 -0400
+Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0DEFA1F600
+        for <linux-kernel@vger.kernel.org>; Wed,  6 Jul 2022 01:19:34 -0700 (PDT)
+Received: by mail-lf1-x130.google.com with SMTP id t25so24597035lfg.7
+        for <linux-kernel@vger.kernel.org>; Wed, 06 Jul 2022 01:19:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=gDjr8ks/zcETV46JsfKPfwR3f8/Qj094umNODYQnwfE=;
+        b=vwpgEGu7gSpWjT7U08K4pkeu5xPCo1IsIY62sZGORbH1QlOSm5lkuAZeVggYLzb5xT
+         sxFvZS/0Ujs5GjnRRq3RuihiwzDjFRlaTtZhKwAKBH1eLm1Obtmj4iapO++RvjY9lmMa
+         ytGvxzXbGaZVV9qI2kIk3LPtTztVOqiCc+FnPxTwMnH1VXQm+JF4GsL98N4+hlJLLVmA
+         WznOu0PVvLJuX8/ivOuhRVsqrH3OhzlAQ+/sjP46CLUjwbPc0pSIHaqSOtMK+m28C7IK
+         ljLY93XtF7PWrfnqdvOjq/TLj5HZ2W/bRTj6Py8955zK96vadQD9q3aUT73ykjdeVs8h
+         1TXw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=gDjr8ks/zcETV46JsfKPfwR3f8/Qj094umNODYQnwfE=;
+        b=V1g/MU6TnitmhDTOYslYWX9lSZY5P4ctA9rsrQWpqsskRm06x0zj5NTx/iRIgD3G7C
+         riItp/B78wAgfXWLiXlD9Pp9taTU4yAysRrOF1Pe9kiNYOfrtdB1Tsd9lMCU0s9DQr0b
+         jncNUg6ABM456bZdawfabspyEfeRjVTyOk4KNYqQcY/DeMA+Hi0WXabmuSiADXl69bnT
+         hLMEtTb312UJJWoOoT7EQYlEaAUnfzgbdIzEVauzvjtd9OpeGT8+3BggygIo/UucvPDU
+         8T98wlF+kt/RBtjohqlO6LnHQ/eHiQo7x9dPiQDEsu2rj6lckHlTJQvtDxW5tIAF2FlN
+         OCaw==
+X-Gm-Message-State: AJIora/lnz2WgSAIqruFrckeHvDrETFSEyqlvwqbQklIRtf1GOsMYUbI
+        KP4pytNdsAVS6YdL2GcNALV3CQ==
+X-Google-Smtp-Source: AGRyM1sfqlcGekXlCPdHZ5+96hLd7k3jpzjFHgymZWad0IcOB6L5vuOsGawv+8fZnVsOqoIRkpWdRg==
+X-Received: by 2002:a05:6512:3c3:b0:47d:ab07:50e7 with SMTP id w3-20020a05651203c300b0047dab0750e7mr23215123lfp.261.1657095572340;
+        Wed, 06 Jul 2022 01:19:32 -0700 (PDT)
+Received: from [192.168.1.52] ([84.20.121.239])
+        by smtp.gmail.com with ESMTPSA id a1-20020a056512200100b004846548df9bsm610460lfb.267.2022.07.06.01.19.30
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 06 Jul 2022 01:19:31 -0700 (PDT)
+Message-ID: <189a226c-1664-9a07-cd0d-6ab8242d5443@linaro.org>
+Date:   Wed, 6 Jul 2022 10:19:30 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <87fsjen2kl.wl-maz@kernel.org>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH v4 2/5] dt-bindings: display: bridge: cdns,dsi: Add
+ compatible for dsi on j721e
+Content-Language: en-US
+To:     Rahul T R <r-ravikumar@ti.com>, dri-devel@lists.freedesktop.org,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org
+Cc:     andrzej.hajda@intel.com, narmstrong@baylibre.com,
+        robert.foss@linaro.org, jonas@kwiboo.se, jernej.skrabec@gmail.com,
+        airlied@linux.ie, daniel@ffwll.ch, p.zabel@pengutronix.de,
+        tomi.valkeinen@ideasonboard.com, laurent.pinchart@ideasonboard.com,
+        linux-kernel@vger.kernel.org, jpawar@cadence.com,
+        sjakhade@cadence.com, mparab@cadence.com, a-bhatia1@ti.com,
+        devicetree@vger.kernel.org, vigneshr@ti.com, lee.jones@linaro.org
+References: <20220705121116.24121-1-r-ravikumar@ti.com>
+ <20220705121116.24121-3-r-ravikumar@ti.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220705121116.24121-3-r-ravikumar@ti.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -48,60 +82,65 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jul 06, 2022 at 08:05:30AM +0100, Marc Zyngier wrote:
-> On Sun, 03 Jul 2022 19:15:11 +0100,
-> Sander Vanheule <sander@svanheule.net> wrote:
-> > 
-> > Hi Aleksander,
-> > 
-> > Since this is IRQ related: +CC Marc Zyngier
-> > 
-> > On Sat, 2022-07-02 at 21:07 +0200, Aleksander Jan Bajkowski wrote:
-> > > This patch is needed to handle interrupts by the second VPE on
-> > > the Lantiq xRX200, xRX300 and xRX330 SoCs. In these chips, 32 ICU
-> > > interrupts are connected to each hardware line. The SoC supports
-> > > a total of 160 interrupts. Currently changing smp_affinity to the
-> > > second VPE hangs interrupts.
-> > > 
-> > > This problem affects multithreaded SoCs with a custom interrupt
-> > > controller. Chips with 1004Kc core and newer use the MIPS GIC.
-> > > 
-> > > Also CC'ed Birger Koblitz and Sander Vanheule. Both are working
-> > > on support for Realtek RTL930x chips with 34Kc core and Birger
-> > > has added a patch in OpenWRT that also enables all interrupt
-> > > lines. So it looks like this patch is useful for more SoCs.
-> > > 
-> > > Tested on lantiq xRX200 and xRX330.
-> > > 
-> > > Signed-off-by: Aleksander Jan Bajkowski <olek2@wp.pl>
-> > 
-> > Thanks for bringing up this issue. Like you say OpenWrt carries a
-> > similar patch, and I also carry a patch on my tree to enable all CPU
-> > IRQ lines.
-> > 
-> > Indiscriminately enabling all IRQ lines doesn't sit quite right with
-> > me though, since I would expect these to be enabled
-> > on-demand. I.e. when a peripheral requests an IRQ, or when an IRQ
-> > controller is cascaded into one of the CPU's interrupt lines. If I
-> > understand correctly, the IRQ mask/unmask functions in
-> > drivers/irqchip/irq-mips-cpu.c should do this.
+On 05/07/2022 14:11, Rahul T R wrote:
+> Add compatible to support dsi bridge on j721e
 > 
-> But this is only enabling interrupts at the CPU level, right? And the
-> irqchip is still in control of the masking of the individual
-> interrupts?
-
-in the Lantiq case yes
-
-> If both assertions are true, then this patch seems OK. If it just let
-> any interrupt through without any control, then this is wrong.
+> Signed-off-by: Rahul T R <r-ravikumar@ti.com>
+> ---
+>  .../bindings/display/bridge/cdns,dsi.yaml     | 24 +++++++++++++++++--
+>  1 file changed, 22 insertions(+), 2 deletions(-)
 > 
-> So which one is it?
+> diff --git a/Documentation/devicetree/bindings/display/bridge/cdns,dsi.yaml b/Documentation/devicetree/bindings/display/bridge/cdns,dsi.yaml
+> index ccedc73d8c18..33a88b39cf09 100644
+> --- a/Documentation/devicetree/bindings/display/bridge/cdns,dsi.yaml
+> +++ b/Documentation/devicetree/bindings/display/bridge/cdns,dsi.yaml
+> @@ -14,13 +14,17 @@ description: |
+>  
+>  properties:
+>    compatible:
+> -    items:
+> -      - const: cdns,dsi
+> +    enum:
+> +      - cdns,dsi
+> +      - ti,j721e-dsi
+>  
+>    reg:
+> +    minItems: 1
+>      items:
+>        - description:
+>            Register block for controller's registers.
+> +      - description:
+> +          Register block for wrapper settings registers in case of TI J7 SoCs.
+>  
+>    clocks:
+>      items:
+> @@ -74,6 +78,22 @@ properties:
+>  allOf:
+>    - $ref: ../dsi-controller.yaml#
+>  
+> +  - if:
+> +      properties:
+> +        compatible:
+> +          contains:
+> +            const: ti,j721e-dsi
+> +    then:
+> +      properties:
+> +        reg:
+> +          minItems: 2
+> +          maxItems: 2
+> +    else:
+> +      properties:
+> +        reg:
+> +          minItems: 1
 
-if there isn't an additional irqchip connected to the cpu interrupt lines,
-this patch will cause problems.
+minItems are not needed here.
 
-Thomas.
+> +          maxItems: 1
+> +
+>  required:
+>    - compatible
+>    - reg
 
--- 
-Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
-good idea.                                                [ RFC1925, 2.3 ]
+
+Best regards,
+Krzysztof

@@ -2,42 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B2D9567F40
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 09:03:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 52D18567F34
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 09:01:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229929AbiGFHCQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Jul 2022 03:02:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55312 "EHLO
+        id S231171AbiGFHB3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Jul 2022 03:01:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54522 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230165AbiGFHCO (ORCPT
+        with ESMTP id S229592AbiGFHBV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Jul 2022 03:02:14 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36B71205DA;
-        Wed,  6 Jul 2022 00:02:13 -0700 (PDT)
-Received: from canpemm500007.china.huawei.com (unknown [172.30.72.53])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4Ld9QR5zyGzhYrc;
-        Wed,  6 Jul 2022 14:59:43 +0800 (CST)
-Received: from localhost (10.174.179.215) by canpemm500007.china.huawei.com
- (7.192.104.62) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Wed, 6 Jul
- 2022 15:02:09 +0800
-From:   YueHaibing <yuehaibing@huawei.com>
-To:     <thierry.reding@gmail.com>, <jonathanh@nvidia.com>,
-        <digetx@gmail.com>, <dmitry.osipenko@collabora.com>
-CC:     <linux-tegra@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        YueHaibing <yuehaibing@huawei.com>
-Subject: [PATCH v2 -next] soc/tegra: fuse: Add missing DMADEVICES dependency
-Date:   Wed, 6 Jul 2022 15:00:48 +0800
-Message-ID: <20220706070048.35784-1-yuehaibing@huawei.com>
-X-Mailer: git-send-email 2.10.2.windows.1
-MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.174.179.215]
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
- canpemm500007.china.huawei.com (7.192.104.62)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        Wed, 6 Jul 2022 03:01:21 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFB3D1EAFC;
+        Wed,  6 Jul 2022 00:01:20 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 9F093B81AE8;
+        Wed,  6 Jul 2022 07:01:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3C463C3411C;
+        Wed,  6 Jul 2022 07:01:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1657090878;
+        bh=+cM9fbXgghc45VgTmM6OgjrtFCbCpn//QrK67G8SxMw=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=t+PGTy4NrxmmE4XEqgl/Ogpy+Cnfpimwnc0xiX8KVK0JUyww/ppKs89RePW/5uzsp
+         giOTLrbd8L++9gPSsDPtEC3M6tluCPSlyCCcLvjX8xqZfqVBXFA5RfkzQbMjiKRqUh
+         7vekQaK6qNdaFFVjg6KMbWlxXrAKjnEDv21PuY5E6IJ1B2aWdVIBcSBVuYpqcUosHp
+         n8brPLCgqQRjgE6Yrnb96dpnuWvmjYmtYrHMZYtaFlvgBdI2Wz8XlLb29Ccpgg13X/
+         w13ynAMiJofDLsjBj9ODtCoE+s5FPkKffWpzGYQ/fzzQlFmfN1cJIej0kyZIfPlf2L
+         g25PaWGEGZJqg==
+Received: from ip-185-104-136-29.ptr.icomera.net ([185.104.136.29] helo=wait-a-minute.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <maz@kernel.org>)
+        id 1o8z2A-005YBP-E3;
+        Wed, 06 Jul 2022 08:01:16 +0100
+Date:   Wed, 06 Jul 2022 08:01:08 +0100
+Message-ID: <87iloan2rv.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
+Cc:     Andy Shevchenko <andy.shevchenko@gmail.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        devicetree <devicetree@vger.kernel.org>,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Biju Das <biju.das.jz@bp.renesas.com>,
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Subject: Re: [PATCH v7 3/5] gpio: gpiolib: Allow free() callback to be overridden
+In-Reply-To: <CA+V-a8vua6t5wDNc2CT_XWhoy6OjmzCXyaJ1FtGaqeG5g-qS-w@mail.gmail.com>
+References: <20220703194020.78701-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+        <20220703194020.78701-4-prabhakar.mahadev-lad.rj@bp.renesas.com>
+        <CAHp75VfFZ146p1sZ2=Ec-F-9zYJZHPWyvgYQeVsG=2TzssaPmA@mail.gmail.com>
+        <CA+V-a8vua6t5wDNc2CT_XWhoy6OjmzCXyaJ1FtGaqeG5g-qS-w@mail.gmail.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.104.136.29
+X-SA-Exim-Rcpt-To: prabhakar.csengg@gmail.com, andy.shevchenko@gmail.com, tglx@linutronix.de, robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org, geert+renesas@glider.be, linus.walleij@linaro.org, brgl@bgdev.pl, p.zabel@pengutronix.de, devicetree@vger.kernel.org, linux-renesas-soc@vger.kernel.org, linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org, biju.das.jz@bp.renesas.com, prabhakar.mahadev-lad.rj@bp.renesas.com
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -46,35 +81,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-WARNING: unmet direct dependencies detected for TEGRA20_APB_DMA
-  Depends on [n]: DMADEVICES [=n] && (ARCH_TEGRA [=y] || COMPILE_TEST [=n])
-  Selected by [y]:
-  - SOC_TEGRA_FUSE [=y] && ARCH_TEGRA [=y] && ARCH_TEGRA_2x_SOC [=y]
+On Tue, 05 Jul 2022 05:53:03 +0100,
+"Lad, Prabhakar" <prabhakar.csengg@gmail.com> wrote:
+> 
+> On Mon, Jul 4, 2022 at 5:16 PM Andy Shevchenko
+> <andy.shevchenko@gmail.com> wrote:
+> >
+> > On Sun, Jul 3, 2022 at 9:43 PM Lad Prabhakar <prabhakar.csengg@gmail.com> wrote:
+> > >
+> > > Allow free() callback to be overridden from irq_domain_ops for
+> > > hierarchical chips.
+> > >
+> > > This allows drivers to free up resources which are allocated during
+> > > child_to_parent_hwirq()/populate_parent_alloc_arg() callbacks.
+> > >
+> > > On Renesas RZ/G2L platform a bitmap is maintained for TINT slots, a slot
+> > > is allocated in child_to_parent_hwirq() callback which is freed up in free
+> > > callback hence this override.
+> >
+> > Hmm... To me this sounds asymmetrical. We alloc something in another
+> > callback, which is not what this free is for. Perhaps it should be an
+> > optional
+> >
+> > free_populated_parent_arg() or alike?
+> >
+> @Marc your thoughts?
 
-TEGRA20_APB_DMA depends on DMADEVICES, so add this condition check while select it.
+I think there are enough optional callbacks, and we don't currently
+have a clear picture of how this may be used in the future, specially
+based on a sample of *one*.
 
-Fixes: 19d41e5e9c68 ("soc/tegra: fuse: Add APB DMA dependency for Tegra20")
-Suggested-by: Dmitry Osipenko <dmitry.osipenko@collabora.com>
-Signed-off-by: YueHaibing <yuehaibing@huawei.com>
----
-v2: Add DMADEVICES check instead of depending it. 
----
- drivers/soc/tegra/Kconfig | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Let's get it in as is, and tweak things as we go, should another user
+require a slightly different behaviour. This also saves us the debate
+around the naming, which is always pretty useless.
 
-diff --git a/drivers/soc/tegra/Kconfig b/drivers/soc/tegra/Kconfig
-index 5725c8ef0406..d29010e11a3c 100644
---- a/drivers/soc/tegra/Kconfig
-+++ b/drivers/soc/tegra/Kconfig
-@@ -136,7 +136,7 @@ config SOC_TEGRA_FUSE
- 	def_bool y
- 	depends on ARCH_TEGRA
- 	select SOC_BUS
--	select TEGRA20_APB_DMA if ARCH_TEGRA_2x_SOC
-+	select TEGRA20_APB_DMA if (ARCH_TEGRA_2x_SOC && DMADEVICES)
- 
- config SOC_TEGRA_FLOWCTRL
- 	bool
+Thanks,
+
+	M.
+
 -- 
-2.17.1
-
+Without deviation from the norm, progress is not possible.

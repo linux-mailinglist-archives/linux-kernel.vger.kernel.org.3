@@ -2,149 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CF98E568406
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 11:51:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6619C568412
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 11:51:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231305AbiGFJue (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Jul 2022 05:50:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58838 "EHLO
+        id S232180AbiGFJux (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Jul 2022 05:50:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59092 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229558AbiGFJub (ORCPT
+        with ESMTP id S231658AbiGFJus (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Jul 2022 05:50:31 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 249561580C;
-        Wed,  6 Jul 2022 02:50:30 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 3259A1042;
-        Wed,  6 Jul 2022 02:50:30 -0700 (PDT)
-Received: from [10.57.42.44] (unknown [10.57.42.44])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 9DB933F66F;
-        Wed,  6 Jul 2022 02:50:25 -0700 (PDT)
-Message-ID: <f545c1f4-0cb5-ec4e-66e8-dbed6b992085@arm.com>
-Date:   Wed, 6 Jul 2022 10:50:23 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH V3.1 02/20] OPP: Make dev_pm_opp_set_regulators() accept
- NULL terminated list
-Content-Language: en-GB
-To:     Viresh Kumar <viresh.kumar@linaro.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Kyungmin Park <kyungmin.park@samsung.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Wed, 6 Jul 2022 05:50:48 -0400
+Received: from mail-lj1-x22c.google.com (mail-lj1-x22c.google.com [IPv6:2a00:1450:4864:20::22c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E895237FE
+        for <linux-kernel@vger.kernel.org>; Wed,  6 Jul 2022 02:50:42 -0700 (PDT)
+Received: by mail-lj1-x22c.google.com with SMTP id n15so17749680ljg.8
+        for <linux-kernel@vger.kernel.org>; Wed, 06 Jul 2022 02:50:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=71Kna/9czd4EohADHArXF2GliG2yv9ElmmPlGMx3dPc=;
+        b=rqA4uSFtaeSRfqVbXx1KgUGC97AurnQ9NQj27U9JVpTftmqd4IP393pfdEuh+YIg59
+         3cNfvCI0I1w7YTWwCva6tdOf7ecccDPM8j/kQI45Db5EkC0FhcG0uVZ7rf+WTxKQcbp3
+         UcLRjueW2Bo2VEXYTv4SXIzIod3oiSPH44Zfc35t0PNa1P7R+xrTNk75P9BOU1A3QixA
+         JJwjNcUZBnFckGOr1mogDVBP96uEvGTqo/V2Su9K83RTookcf/hIIPBo31CdWvpwUB15
+         SiYkcfSOVrVMoyTCDlGLwYET7U1J1HQjRSGvqfbEial42CihZ/FubawppcQgXJmkPB8E
+         BRzA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=71Kna/9czd4EohADHArXF2GliG2yv9ElmmPlGMx3dPc=;
+        b=ZEDIcZR0zfSeXC3Un0uBjk0WNQpIYVkFALW3HC8FCcCefEfYvrTXZf0viqfjGXy70o
+         zVq5iT9O3+vQHLcom7WqnIm4pJ0lsZK+Aul7dFyGMcCUf71QiRIkyJkJn0gxFQdt+Yir
+         o6fbJp6Zm9PTymJIOiXpkWg1FHtHvfPbtahjU6PddZOoXHKcEwv1xTnthJVfjx3tTD1t
+         VA4w1EyhgZUQCk2T2K07uj25REQ4AX72Kh6uSI/XKVMriWMVISTwhTJbop3XMVdKKuW2
+         gNm6zOoonkbzPlYi3B+IFgWRYVI+zLX7pF3S2AwtjwJcrg6GbISdn85Ml4wvcKDtAh/U
+         BAdQ==
+X-Gm-Message-State: AJIora8+AwsoqNPFnWBPLMt3lGfO91M8bKXA969THRfzKeIBD5J10NC6
+        /GPkKT4zWM9dX/rmYfbOzq0htg==
+X-Google-Smtp-Source: AGRyM1vzGHD4GprYtW+scuWgo8KTLw+GYTqKz2ZFm84RG1G9aOrnqWXawhGN4REDH4zBQsz0END9dA==
+X-Received: by 2002:a2e:8449:0:b0:25d:1a37:ead2 with SMTP id u9-20020a2e8449000000b0025d1a37ead2mr10645814ljh.509.1657101040746;
+        Wed, 06 Jul 2022 02:50:40 -0700 (PDT)
+Received: from krzk-bin.home ([84.20.121.239])
+        by smtp.gmail.com with ESMTPSA id bp23-20020a056512159700b00478f1e04655sm6202957lfb.14.2022.07.06.02.50.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 06 Jul 2022 02:50:40 -0700 (PDT)
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         Alim Akhtar <alim.akhtar@samsung.com>,
-        Qiang Yu <yuq825@gmail.com>, Rob Herring <robh@kernel.org>,
-        Tomeu Vizoso <tomeu.vizoso@collabora.com>,
-        Alyssa Rosenzweig <alyssa.rosenzweig@collabora.com>,
-        Nishanth Menon <nm@ti.com>, Stephen Boyd <sboyd@kernel.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>
-Cc:     linux-pm@vger.kernel.org,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        dri-devel@lists.freedesktop.org, lima@lists.freedesktop.org,
-        linux-tegra@vger.kernel.org, linux-mediatek@lists.infradead.org
-References: <9730e011004b7526e79c6f409f5147fb235b414a.1656935522.git.viresh.kumar@linaro.org>
- <bcabb1a90a5158628ee1633c10f8886544723fb9.1657095331.git.viresh.kumar@linaro.org>
-From:   Steven Price <steven.price@arm.com>
-In-Reply-To: <bcabb1a90a5158628ee1633c10f8886544723fb9.1657095331.git.viresh.kumar@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Chanho Park <chanho61.park@samsung.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: [PATCH 1/3] dt-bindings: soc: samsung: exynos-pmu: cleanup assigned clocks
+Date:   Wed,  6 Jul 2022 11:50:35 +0200
+Message-Id: <20220706095037.78542-1-krzysztof.kozlowski@linaro.org>
+X-Mailer: git-send-email 2.34.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 06/07/2022 09:18, Viresh Kumar wrote:
-> Make dev_pm_opp_set_regulators() accept a NULL terminated list of names
-> instead of making the callers keep the two parameters in sync, which
-> creates an opportunity for bugs to get in.
-> 
-> Suggested-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
-> ---
-> V3->V3.1:
-> - Update panfrost_drv.c to include the NULL element.
-> 
->  drivers/cpufreq/cpufreq-dt.c                |  9 ++++-----
->  drivers/cpufreq/ti-cpufreq.c                |  7 +++----
->  drivers/devfreq/exynos-bus.c                |  4 ++--
->  drivers/gpu/drm/lima/lima_devfreq.c         |  3 ++-
->  drivers/gpu/drm/panfrost/panfrost_devfreq.c |  3 +--
->  drivers/gpu/drm/panfrost/panfrost_drv.c     | 15 ++++++++++-----
->  drivers/opp/core.c                          | 18 ++++++++++++------
->  drivers/soc/tegra/pmc.c                     |  4 ++--
->  include/linux/pm_opp.h                      |  9 ++++-----
->  9 files changed, 40 insertions(+), 32 deletions(-)
-> 
-[...]
-> diff --git a/drivers/gpu/drm/panfrost/panfrost_devfreq.c b/drivers/gpu/drm/panfrost/panfrost_devfreq.c
-> index 194af7f607a6..5110cd9b2425 100644
-> --- a/drivers/gpu/drm/panfrost/panfrost_devfreq.c
-> +++ b/drivers/gpu/drm/panfrost/panfrost_devfreq.c
-> @@ -101,8 +101,7 @@ int panfrost_devfreq_init(struct panfrost_device *pfdev)
->  		return 0;
->  	}
->  
-> -	ret = devm_pm_opp_set_regulators(dev, pfdev->comp->supply_names,
-> -					 pfdev->comp->num_supplies);
-> +	ret = devm_pm_opp_set_regulators(dev, pfdev->comp->supply_names);
->  	if (ret) {
->  		/* Continue if the optional regulator is missing */
->  		if (ret != -ENODEV) {
-> diff --git a/drivers/gpu/drm/panfrost/panfrost_drv.c b/drivers/gpu/drm/panfrost/panfrost_drv.c
-> index 7fcbc2a5b6cd..8a4bef65d38c 100644
-> --- a/drivers/gpu/drm/panfrost/panfrost_drv.c
-> +++ b/drivers/gpu/drm/panfrost/panfrost_drv.c
-> @@ -625,24 +625,29 @@ static int panfrost_remove(struct platform_device *pdev)
->  	return 0;
->  }
->  
-> -static const char * const default_supplies[] = { "mali" };
-> +/*
-> + * The OPP core wants the supply names to be NULL terminated, but we need the
-> + * correct num_supplies value for regulator core. Hence, we NULL terminate here
-> + * and then initialize num_supplies with ARRAY_SIZE - 1.
-> + */
-> +static const char * const default_supplies[] = { "mali", NULL };
->  static const struct panfrost_compatible default_data = {
-> -	.num_supplies = ARRAY_SIZE(default_supplies),
-> +	.num_supplies = ARRAY_SIZE(default_supplies) - 1,
->  	.supply_names = default_supplies,
->  	.num_pm_domains = 1, /* optional */
->  	.pm_domain_names = NULL,
->  };
->  
->  static const struct panfrost_compatible amlogic_data = {
-> -	.num_supplies = ARRAY_SIZE(default_supplies),
-> +	.num_supplies = ARRAY_SIZE(default_supplies) - 1,
->  	.supply_names = default_supplies,
->  	.vendor_quirk = panfrost_gpu_amlogic_quirk,
->  };
->  
-> -static const char * const mediatek_mt8183_supplies[] = { "mali", "sram" };
-> +static const char * const mediatek_mt8183_supplies[] = { "mali", "sram", NULL };
->  static const char * const mediatek_mt8183_pm_domains[] = { "core0", "core1", "core2" };
->  static const struct panfrost_compatible mediatek_mt8183_data = {
-> -	.num_supplies = ARRAY_SIZE(mediatek_mt8183_supplies),
-> +	.num_supplies = ARRAY_SIZE(mediatek_mt8183_supplies) - 1,
->  	.supply_names = mediatek_mt8183_supplies,
->  	.num_pm_domains = ARRAY_SIZE(mediatek_mt8183_pm_domains),
->  	.pm_domain_names = mediatek_mt8183_pm_domains,
+"assigned-clocks" are not needed in the schema as they come from DT
+schema.
 
-Reviewed-by: Steven Price <steven.price@arm.com>
+Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+---
+ Documentation/devicetree/bindings/soc/samsung/exynos-pmu.yaml | 3 ---
+ 1 file changed, 3 deletions(-)
 
-Thanks for the rework, much cleaner.
-
-Steve
+diff --git a/Documentation/devicetree/bindings/soc/samsung/exynos-pmu.yaml b/Documentation/devicetree/bindings/soc/samsung/exynos-pmu.yaml
+index c30a6437030d..a5d489acfdca 100644
+--- a/Documentation/devicetree/bindings/soc/samsung/exynos-pmu.yaml
++++ b/Documentation/devicetree/bindings/soc/samsung/exynos-pmu.yaml
+@@ -49,9 +49,6 @@ properties:
+   reg:
+     maxItems: 1
+ 
+-  assigned-clock-parents: true
+-  assigned-clocks: true
+-
+   '#clock-cells':
+     const: 1
+ 
+-- 
+2.34.1
 

@@ -2,86 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B6283568EB8
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 18:11:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A145568EC0
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 18:12:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234219AbiGFQLk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Jul 2022 12:11:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38680 "EHLO
+        id S234360AbiGFQMr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Jul 2022 12:12:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40196 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234172AbiGFQLh (ORCPT
+        with ESMTP id S233665AbiGFQMp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Jul 2022 12:11:37 -0400
-Received: from mail-io1-f49.google.com (mail-io1-f49.google.com [209.85.166.49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4197826AE8;
-        Wed,  6 Jul 2022 09:11:36 -0700 (PDT)
-Received: by mail-io1-f49.google.com with SMTP id p128so14455408iof.1;
-        Wed, 06 Jul 2022 09:11:36 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=yn8tR4/75agkFJENZOIVD2SZjKFyA+a7PHsFMtDwO+Y=;
-        b=t9EcJXTL8xgt+krH71KFPcfQeQBs6vQjesu+nYe4QmxlWVhSHFQEip2ZGiWbD6uW6o
-         Cr3IG4BcKrDE+/YwaCB7/588c+af25G84SF3uUmtHP3Y8YQp5FK3GpCZFyu7TMDNRyJR
-         grEf4HCyCo6K/hIqdMNPrr2qaMRHRRfHLE3ric3iJPReGAQLChL/JMDesmPg/CqQlMmV
-         yH7ZlnViWB/safbl7V2/71dXDM56XeBAi31AftvwbgP8YVKn7rPy6K6xASln6MVVtaMo
-         rjQh8kbuaWnJk/oTZpKpt0YsYBdOteCk7XZReg8+7lr/VOws0WxmhjNdIqhsHBsf4fSs
-         +b6Q==
-X-Gm-Message-State: AJIora8PqllGTf+fIuxG6e+isMjVhv86QOVehEmwYqqSXdW9bxRnAVDD
-        j/hOmOeZqh7ob8mA8wh8s5nhpa0jRQ==
-X-Google-Smtp-Source: AGRyM1uwBDjxglmKGpZwt97wz+OegWG99R+2nYnYk0T8Ikwk585QkGnuzVr7ZeezMJ7kaTmArLk7DQ==
-X-Received: by 2002:a05:6638:40a4:b0:33e:2862:4ecf with SMTP id m36-20020a05663840a400b0033e28624ecfmr21115909jam.107.1657123895503;
-        Wed, 06 Jul 2022 09:11:35 -0700 (PDT)
-Received: from robh.at.kernel.org ([64.188.179.248])
-        by smtp.gmail.com with ESMTPSA id n3-20020a056638120300b003317fc4aa87sm16010355jas.150.2022.07.06.09.11.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 06 Jul 2022 09:11:35 -0700 (PDT)
-Received: (nullmailer pid 137394 invoked by uid 1000);
-        Wed, 06 Jul 2022 16:11:33 -0000
-Date:   Wed, 6 Jul 2022 10:11:33 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-renesas-soc@vger.kernel.org, devicetree@vger.kernel.org,
-        Magnus Damm <magnus.damm@gmail.com>,
-        linux-kernel@vger.kernel.org,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Rob Herring <robh+dt@kernel.org>
-Subject: Re: [PATCH] dt-bindings: hwinfo: renesas,prr: move from soc directory
-Message-ID: <20220706161133.GA137360-robh@kernel.org>
-References: <20220705155038.454251-1-krzysztof.kozlowski@linaro.org>
+        Wed, 6 Jul 2022 12:12:45 -0400
+Received: from alexa-out.qualcomm.com (alexa-out.qualcomm.com [129.46.98.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C221526AF5;
+        Wed,  6 Jul 2022 09:12:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1657123962; x=1688659962;
+  h=from:to:cc:subject:date:message-id:mime-version;
+  bh=GnfUMVq1W6rBm3XVQUeNZvGnk+n43Q4tBwbR/zDUP5k=;
+  b=QmAiIBZPuFsg9AtV4tMSGNCjzKwTIjHUw1ZTb96aW8yFxI3Wxwu09CcS
+   sqVrl4XXAmViVpDUgYZUwDyh72BJxP/gNrdQA7UDBt46ddDf8PPHR/n+y
+   SwvWo80EikhhPW85Z2UemqzO/tRg0rR5V859hOu/nqV9BpX3d2mGo8eoR
+   E=;
+Received: from ironmsg09-lv.qualcomm.com ([10.47.202.153])
+  by alexa-out.qualcomm.com with ESMTP; 06 Jul 2022 09:12:42 -0700
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg09-lv.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jul 2022 09:12:27 -0700
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Wed, 6 Jul 2022 09:12:26 -0700
+Received: from khsieh-linux1.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Wed, 6 Jul 2022 09:12:25 -0700
+From:   Kuogee Hsieh <quic_khsieh@quicinc.com>
+To:     <robdclark@gmail.com>, <sean@poorly.run>, <swboyd@chromium.org>,
+        <dianders@chromium.org>, <vkoul@kernel.org>, <daniel@ffwll.ch>,
+        <airlied@linux.ie>, <agross@kernel.org>,
+        <dmitry.baryshkov@linaro.org>, <bjorn.andersson@linaro.org>
+CC:     <quic_abhinavk@quicinc.com>, <quic_aravindh@quicinc.com>,
+        <quic_khsieh@quicinc.com>, <quic_sbillaka@quicinc.com>,
+        <freedreno@lists.freedesktop.org>,
+        <dri-devel@lists.freedesktop.org>, <linux-arm-msm@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: [PATCH v2] drm/msm/dp: make eDP panel as the first connected connector
+Date:   Wed, 6 Jul 2022 09:12:16 -0700
+Message-ID: <1657123936-2459-1-git-send-email-quic_khsieh@quicinc.com>
+X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220705155038.454251-1-krzysztof.kozlowski@linaro.org>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 05 Jul 2022 17:50:38 +0200, Krzysztof Kozlowski wrote:
-> Group devices like Chip ID or SoC information under "hwinfo" directory.
-> 
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> 
-> ---
-> 
-> This should go via Renesas tree because of changes around soc/renesas/renesas,prr.yaml.
-> 
-> Changes since v1:
-> 1. Split from https://lore.kernel.org/all/20220705154613.453096-1-krzysztof.kozlowski@linaro.org/
-> ---
->  .../bindings/{soc/renesas => hwinfo}/renesas,prr.yaml           | 2 +-
->  MAINTAINERS                                                     | 1 +
->  2 files changed, 2 insertions(+), 1 deletion(-)
->  rename Documentation/devicetree/bindings/{soc/renesas => hwinfo}/renesas,prr.yaml (92%)
-> 
+Some userspace presumes that the first connected connector is the main
+display, where it's supposed to display e.g. the login screen. For
+laptops, this should be the main panel.
 
-Acked-by: Rob Herring <robh@kernel.org>
+This patch call drm_helper_move_panel_connectors_to_head() after
+drm_bridge_connector_init() to make sure eDP stay at head of
+connected connector list. This fixes unexpected corruption happen
+at eDP panel if eDP is not placed at head of connected connector
+list.
+
+Changes in v2:
+-- move drm_helper_move_panel_connectors_to_head() to
+		dpu_kms_drm_obj_init()
+
+Signed-off-by: Kuogee Hsieh <quic_khsieh@quicinc.com>
+Tested-by: Douglas Anderson <dianders@chromium.org>
+Reviewed-by: Douglas Anderson <dianders@chromium.org>
+Reviewed-by: Abhinav Kumar <quic_abhinavk@quicinc.com>
+---
+ drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c
+index 2b9d931..50ff666 100644
+--- a/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c
++++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c
+@@ -763,6 +763,8 @@ static int _dpu_kms_drm_obj_init(struct dpu_kms *dpu_kms)
+ 	if (ret)
+ 		return ret;
+ 
++	drm_helper_move_panel_connectors_to_head(dev);
++
+ 	num_encoders = 0;
+ 	drm_for_each_encoder(encoder, dev)
+ 		num_encoders++;
+-- 
+The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
+a Linux Foundation Collaborative Project
+

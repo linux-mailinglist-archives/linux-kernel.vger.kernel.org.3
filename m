@@ -2,129 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 12183567F8E
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 09:09:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 77C95567F97
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 09:12:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231521AbiGFHIQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Jul 2022 03:08:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34352 "EHLO
+        id S229984AbiGFHMs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Jul 2022 03:12:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36822 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231150AbiGFHIN (ORCPT
+        with ESMTP id S229459AbiGFHMr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Jul 2022 03:08:13 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6AAFCD5A;
-        Wed,  6 Jul 2022 00:08:12 -0700 (PDT)
-Received: from dggpemm500024.china.huawei.com (unknown [172.30.72.55])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4Ld9Yw0X2JzkX5l;
-        Wed,  6 Jul 2022 15:06:12 +0800 (CST)
-Received: from dggpemm100009.china.huawei.com (7.185.36.113) by
- dggpemm500024.china.huawei.com (7.185.36.203) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Wed, 6 Jul 2022 15:07:32 +0800
-Received: from [10.174.179.24] (10.174.179.24) by
- dggpemm100009.china.huawei.com (7.185.36.113) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Wed, 6 Jul 2022 15:07:32 +0800
-Subject: Re: [PATCH 5.15 v2] mm/filemap: fix UAF in find_lock_entries
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Matthew Wilcox <willy@infradead.org>, Jan Kara <jack@suse.cz>,
-        William Kucharski <william.kucharski@oracle.com>,
-        "Christoph Hellwig" <hch@lst.de>
-References: <20220706073045.1398379-1-liushixin2@huawei.com>
-CC:     <linux-kernel@vger.kernel.org>, <stable@vger.kernel.org>
-From:   Liu Shixin <liushixin2@huawei.com>
-Message-ID: <904d2d5a-c39a-928e-55f2-58d1c1fa737e@huawei.com>
-Date:   Wed, 6 Jul 2022 15:07:32 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:45.0) Gecko/20100101
- Thunderbird/45.7.1
-MIME-Version: 1.0
-In-Reply-To: <20220706073045.1398379-1-liushixin2@huawei.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.174.179.24]
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
- dggpemm100009.china.huawei.com (7.185.36.113)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Wed, 6 Jul 2022 03:12:47 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE8A321AC
+        for <linux-kernel@vger.kernel.org>; Wed,  6 Jul 2022 00:12:46 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 75607B81AE7
+        for <linux-kernel@vger.kernel.org>; Wed,  6 Jul 2022 07:12:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0252FC3411C;
+        Wed,  6 Jul 2022 07:12:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1657091564;
+        bh=MKCelLRGo19jxP5YyzzSs6MDJt/u2Z/VZUjRwVgwoe4=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=axxVzqO41y4qRoNIUf/mTmfLsicFzHjqLDXncKogvoPMRQOzBYkmYW6mvLSrOsYVQ
+         QpHD9X6+hn5uJgzWaaLyDlkpZvF2gB6Z8QZoDTluWRvlDgv3VeKf/Bgc6fj2DgS9Vp
+         MaoQHhsRQD242OMsoADmgvJdgLDahqMLL0vwjXNbLCCT7DednMdlaXJFSBa4oooAjq
+         YhLEGBZkY6NRdctft1uUNxWvaRkbPMhp/tLzUFpaYqbYo4AeVlM+ESdtYcSIJWsHS3
+         cJCs2ABe9cqlS9ARTJgs+ZOY9Pe7HREj3vElhi5+i/q8KdyYcG6Fmqk4zexqU+yRkg
+         IgmvUPuQ/B2EQ==
+Received: from ip-185-104-136-29.ptr.icomera.net ([185.104.136.29] helo=wait-a-minute.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <maz@kernel.org>)
+        id 1o8zDF-005YP1-Pa;
+        Wed, 06 Jul 2022 08:12:41 +0100
+Date:   Wed, 06 Jul 2022 08:11:46 +0100
+Message-ID: <87edyyn2a5.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Schspa Shi <schspa@gmail.com>
+Cc:     james.morse@arm.com, alexandru.elisei@arm.com,
+        suzuki.poulose@arm.com, catalin.marinas@arm.com, will@kernel.org,
+        linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] KVM: arm64: Fix 64 bit mmio handle
+In-Reply-To: <m2h740zz1i.fsf@gmail.com>
+References: <20220630161220.53449-1-schspa@gmail.com>
+        <87mtdu15ok.wl-maz@kernel.org>
+        <m2bkua148a.fsf@gmail.com>
+        <a5ca4db3db9ef101258cab94d6b7e045@kernel.org>
+        <m2sfnlvwup.fsf@gmail.com>
+        <87letd0wqm.wl-maz@kernel.org>
+        <m2h740zz1i.fsf@gmail.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.104.136.29
+X-SA-Exim-Rcpt-To: schspa@gmail.com, james.morse@arm.com, alexandru.elisei@arm.com, suzuki.poulose@arm.com, catalin.marinas@arm.com, will@kernel.org, linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu, linux-kernel@vger.kernel.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This patch has a compilation problem, please ignore it.
+On Fri, 01 Jul 2022 15:22:51 +0100,
+Schspa Shi <schspa@gmail.com> wrote:
+> 
+> 
+> Marc Zyngier <maz@kernel.org> writes:
+> 
+> >> 
+> >> I have running some static code analysis software upon Kernel code.
+> >> Seeing there is possible overflow.
+> >> 
+> >> maks << 1U << ((len * 8) -1);
+> >> 
+> >> The AI don't know, len is only the value of 1, 2, 4, and make this
+> >> a warnings
+> >> 
+> >> I tring to analysis this, but didn't realize the real scenario of
+> >> sign extension, and finally sent this problematic patch.
+> >> 
+> >> I do see some uninitialized memory reads (the values are not used
+> >> in the end, just as temporary space for API execution),
+> >> do we need to fix these?
+> > 
+> > You need to be more descriptive here. What uninitialised reads? In
+> > general, pointing at the code and providing a full description of
+> > what
+> > you think is incorrect would really help...
+> > 
+> > 	M.
+> One example is
+> int vgic_v3_has_attr_regs(struct kvm_device *dev, struct
+> kvm_device_attr *attr)
+> {
+> 	...
+>    case KVM_DEV_ARM_VGIC_GRP_CPU_SYSREGS: {
+> 		u64 reg, id;
+> 
+> 		id = (attr->attr & KVM_DEV_ARM_VGIC_SYSREG_INSTR_MASK);
+> 		return vgic_v3_has_cpu_sysregs_attr(vcpu, 0, id, &reg);
+> 	}
+> 
+> }
+> 
+> The funcion vgic_v3_has_cpu_sysregs_attr will read reg's value to
+> params without initialization. There should have no problems,
+> because the register value never used.
 
+Thanks for pointing this out.
 
-On 2022/7/6 15:30, Liu Shixin wrote:
-> Release refcount after xas_set to fix UAF which may cause panic like this:
->
->  page:ffffea000491fa40 refcount:1 mapcount:0 mapping:0000000000000000 index:0x1 pfn:0x1247e9
->  head:ffffea000491fa00 order:3 compound_mapcount:0 compound_pincount:0
->  memcg:ffff888104f91091
->  flags: 0x2fffff80010200(slab|head|node=0|zone=2|lastcpupid=0x1fffff)
-> ...
-> page dumped because: VM_BUG_ON_PAGE(PageTail(page))
->  ------------[ cut here ]------------
->  kernel BUG at include/linux/page-flags.h:632!
->  invalid opcode: 0000 [#1] SMP DEBUG_PAGEALLOC KASAN
->  CPU: 1 PID: 7642 Comm: sh Not tainted 5.15.51-dirty #26
-> ...
->  Call Trace:
->   <TASK>
->   __invalidate_mapping_pages+0xe7/0x540
->   drop_pagecache_sb+0x159/0x320
->   iterate_supers+0x120/0x240
->   drop_caches_sysctl_handler+0xaa/0xe0
->   proc_sys_call_handler+0x2b4/0x480
->   new_sync_write+0x3d6/0x5c0
->   vfs_write+0x446/0x7a0
->   ksys_write+0x105/0x210
->   do_syscall_64+0x35/0x80
->   entry_SYSCALL_64_after_hwframe+0x44/0xae
->  RIP: 0033:0x7f52b5733130
-> ...
->
-> This problem has been fixed on mainline by patch 6b24ca4a1a8d ("mm: Use
-> multi-index entries in the page cache") since it deletes the related code.
->
-> Fixes: 5c211ba29deb ("mm: add and use find_lock_entries")
-> Signed-off-by: Liu Shixin <liushixin2@huawei.com>
-> ---
->  mm/filemap.c | 10 ++++++----
->  1 file changed, 6 insertions(+), 4 deletions(-)
->
-> diff --git a/mm/filemap.c b/mm/filemap.c
-> index 00e391e75880..2c65dd314c49 100644
-> --- a/mm/filemap.c
-> +++ b/mm/filemap.c
-> @@ -2090,7 +2090,11 @@ unsigned find_lock_entries(struct address_space *mapping, pgoff_t start,
->  
->  	rcu_read_lock();
->  	while ((page = find_get_entry(&xas, end, XA_PRESENT))) {
-> +		unsigned long next_idx = xas.xa_index;
-> +
->  		if (!xa_is_value(page)) {
-> +			if (PageTransHuge(page))
-> +				next_idx = page->index + thp_nr_pages(page);
->  			if (page->index < start)
->  				goto put;
->  			if (page->index + thp_nr_pages(page) - 1 > end)
-> @@ -2111,11 +2115,9 @@ unsigned find_lock_entries(struct address_space *mapping, pgoff_t start,
->  put:
->  		put_page(page);
->  next:
-> -		if (!xa_is_value(page) && PageTransHuge(page)) {
-> -			unsigned int nr_pages = thp_nr_pages(page);
-> -
-> +		if (next_idx != xas.xa_index) {
->  			/* Final THP may cross MAX_LFS_FILESIZE on 32-bit */
-> -			xas_set(&xas, page->index + nr_pages);
-> +			xas_set(&xas, next_idx);
->  			if (xas.xa_index < nr_pages)
->  				break;
->  		}
+I spent some time looking at this, and this is only the tip of the
+iceberg. The whole userspace interaction with the GIC sysregs is ugly
+(at best), and needs some love.
 
+I've written a small series[1] cleaning things up, which needs testing
+(I've just checked that it was compiling correctly). I'd appreciate
+you running your tool on it.
+
+	M.
+
+[1] https://git.kernel.org/pub/scm/linux/kernel/git/maz/arm-platforms.git/log/?h=kvm-arm64/sysreg-cleanup-5.20
+
+-- 
+Without deviation from the norm, progress is not possible.

@@ -2,97 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DE728567D9C
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 07:08:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 97EA3567DA3
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 07:17:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230313AbiGFFId (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Jul 2022 01:08:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38934 "EHLO
+        id S230286AbiGFFRW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Jul 2022 01:17:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42062 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229849AbiGFFIb (ORCPT
+        with ESMTP id S229579AbiGFFRT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Jul 2022 01:08:31 -0400
-Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A74C713F6E;
-        Tue,  5 Jul 2022 22:08:29 -0700 (PDT)
-Received: by mail-ej1-x62b.google.com with SMTP id d2so25106896ejy.1;
-        Tue, 05 Jul 2022 22:08:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=fqW8ITr6pkHCWZBrT39EMsBIfhdgMVbMM4TjNULI/38=;
-        b=YsAx5ivwuNl9tLSOYa7dEkxgApDxvzAPmFmc58v+1biY3BiOwjQBT3Czux7A02seZB
-         ZvHwwLyVBJ8/44c+cGpsFt2SjJZ/tPqA3lHoByEU/Lne4SS9UfebmIthgZMu3D+hNhpG
-         ydOwNUwPS1kX9bReAxKxtfDbjLAazrRZp6QJfdhC+YlA9XeCOMTuwDvGYXXKFd3JHEHM
-         rlM4HUi1g1qfRB3E4H5ppWuhzR7zOX4BFh2KZwGJ/ZS20vcAmn2kglgbdb/FrySgFMme
-         0QOfZ1zRQx4r1xdRlwkT1OQvpeFGz5CVK5+TZ1Q6m2l86UI2/HGmBnXWrhbUxOtigsrv
-         /GAw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=fqW8ITr6pkHCWZBrT39EMsBIfhdgMVbMM4TjNULI/38=;
-        b=p18/kAjBOxL3+T5D10aC7TaL6hhfEE68iCXBYbprOgMAxgTi1g6GgxYMbeFbj/8kv2
-         FC/tibwb5S2ooJhgeuO3v0wcP7RXVD6NPFEvRWMlA6J0nlO5nZ9WGGOuo2LtHuZgp+qP
-         OlFSxSrsuH4ZnXa++Zya67TR6AsoKzFtdlhkSFussRcDA1jG2C0BjGGyrywUA6doee/l
-         ljNREmG0yNHuhuc0DVqSLhjifEruIY7EhKAkcHxe0IzAwd2B58JwdEo0Ejye3RjCzrxo
-         /TgYYil88TP3YB985gxEMlVuLzv0oc0D+yU5LY/tOrg4p7JhecTgohXMbh4F5yuvMSEy
-         3rYw==
-X-Gm-Message-State: AJIora+iblham9uN7u8CI7+DYNG05/f8OezOjE3UfwBLVAxsoYGFfC8D
-        mXH5AxSrqnWrno1N5Y7XR1wULIg9VFGDvdgGolg=
-X-Google-Smtp-Source: AGRyM1tHiuUQIegmkhcnzw4aOn0s2ariq+tC53xxAs49MBY6ZpAMRVUYnbv3Gn+5IHRHiXq1jEOx4FGry9WJYCFZ3sI=
-X-Received: by 2002:a17:907:6e05:b0:72a:a141:962 with SMTP id
- sd5-20020a1709076e0500b0072aa1410962mr20770588ejc.545.1657084107247; Tue, 05
- Jul 2022 22:08:27 -0700 (PDT)
+        Wed, 6 Jul 2022 01:17:19 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4808A1F632;
+        Tue,  5 Jul 2022 22:17:18 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 0A615B818BD;
+        Wed,  6 Jul 2022 05:17:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DBA6EC3411C;
+        Wed,  6 Jul 2022 05:17:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1657084635;
+        bh=OFpHh/l0JfYEWjjOkBu7G0I8TgRj2RIKDJ6hwTnDB4c=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Mb9WgisFnRbb27wZ++aPJVbXMd1ftcbhxbI0V/J4diGfrf/TguPxSYm4QeUDOHpRr
+         jQsxMmbbr5cf54KvfOk1Fks992+OaK1F9C0VmpLkDUZ6b5B+ZxXXz+gk/xb9D+UAIr
+         RuDDWt7+NFdl1RWcPdH5LfITDJyZGFi0BkVdDamvViZ4+j0r5iXIMXrVSmCOv89cJJ
+         lx5S7rdmEwanFxjqQZNwXKExqUmwPrBFeB45oEegaoSgnhvs6ZVMUjm3BSY4E7Fh5z
+         C3IhCKJzyVSaWwRLtswTsvdAPb7gMfvTBaDnkDxba1TQHCorvXsH44zlReFZ7jnNtm
+         J6YOI0lh0kRVw==
+Date:   Wed, 6 Jul 2022 10:47:10 +0530
+From:   Vinod Koul <vkoul@kernel.org>
+To:     Shengjiu Wang <shengjiu.wang@nxp.com>
+Cc:     shawnguo@kernel.org, s.hauer@pengutronix.de, kernel@pengutronix.de,
+        festevam@gmail.com, linux-imx@nxp.com, dmaengine@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] dmaengine: imx-sdma: Fix compile warning 'Function
+ parameter not described'
+Message-ID: <YsUa1qwIb2LzrUjW@matsya>
+References: <1652858507-12628-1-git-send-email-shengjiu.wang@nxp.com>
 MIME-Version: 1.0
-References: <20220704152721.352046-1-jolsa@kernel.org>
-In-Reply-To: <20220704152721.352046-1-jolsa@kernel.org>
-From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Tue, 5 Jul 2022 22:08:16 -0700
-Message-ID: <CAEf4Bzb+dK9kBsYZ_j=st9LMgFid6GzivQnbNOJ+nyg7zbD8UQ@mail.gmail.com>
-Subject: Re: [PATCHv2] perf tools: Convert legacy map definition to BTF-defined
-To:     Jiri Olsa <jolsa@kernel.org>
-Cc:     Arnaldo Carvalho de Melo <acme@kernel.org>,
-        lkml <linux-kernel@vger.kernel.org>,
-        Peter Zijlstra <a.p.zijlstra@chello.nl>,
-        Ingo Molnar <mingo@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Ian Rogers <irogers@google.com>,
-        "linux-perf-use." <linux-perf-users@vger.kernel.org>,
-        bpf <bpf@vger.kernel.org>, Andrii Nakryiko <andrii@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1652858507-12628-1-git-send-email-shengjiu.wang@nxp.com>
+X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jul 4, 2022 at 8:27 AM Jiri Olsa <jolsa@kernel.org> wrote:
->
-> The libbpf is switching off support for legacy map definitions [1],
-> which will break the perf llvm tests.
->
-> Moving the base source map definition to BTF-defined, so we need
-> to use -g compile option for to add debug/BTF info.
->
-> [1] https://lore.kernel.org/bpf/20220627211527.2245459-1-andrii@kernel.org/
-> Signed-off-by: Jiri Olsa <jolsa@kernel.org>
+On 18-05-22, 15:21, Shengjiu Wang wrote:
+> Fix compile warning that 'Function parameter or member not described'
+> with 'W=1' option:
+> 
+> There is no description for struct sdma_script_start_addrs, so use /*
+> instead of /**
+> 
+> Add missed description for struct sdma_desc
+
+Patch title should describe the change, so add struct documentation etc
+would be apt. Pls revise
+
+> 
+> Signed-off-by: Shengjiu Wang <shengjiu.wang@nxp.com>
 > ---
+>  drivers/dma/imx-sdma.c | 7 ++++++-
+>  1 file changed, 6 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/dma/imx-sdma.c b/drivers/dma/imx-sdma.c
+> index 95367a8a81a5..111beb7138e0 100644
+> --- a/drivers/dma/imx-sdma.c
+> +++ b/drivers/dma/imx-sdma.c
+> @@ -188,7 +188,7 @@
+>  #define SDMA_DONE0_CONFIG_DONE_SEL	BIT(7)
+>  #define SDMA_DONE0_CONFIG_DONE_DIS	BIT(6)
+>  
+> -/**
+> +/*
+>   * struct sdma_script_start_addrs - SDMA script start pointers
+>   *
+>   * start addresses of the different functions in the physical
+> @@ -424,6 +424,11 @@ struct sdma_desc {
+>   * @data:		specific sdma interface structure
+>   * @bd_pool:		dma_pool for bd
+>   * @terminate_worker:	used to call back into terminate work function
+> + * @terminated:		terminated list
+> + * @is_ram_script:	flag for script in ram
+> + * @n_fifos_src:	number of source device fifos
+> + * @n_fifos_dst:	number of destination device fifos
+> + * @sw_done:		software done flag
+>   */
+>  struct sdma_channel {
+>  	struct virt_dma_chan		vc;
+> -- 
+> 2.17.1
 
-LGTM. Thanks for taking care of this!
-
-Acked-by: Andrii Nakryiko <andrii@kernel.org>
-
->  tools/perf/tests/bpf-script-example.c | 35 ++++++++++++++++++---------
->  tools/perf/util/llvm-utils.c          |  2 +-
->  2 files changed, 24 insertions(+), 13 deletions(-)
->
-
-[...]
+-- 
+~Vinod

@@ -2,66 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 54E9C5686FB
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 13:44:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AB366568705
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 13:44:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232713AbiGFLnQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Jul 2022 07:43:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41898 "EHLO
+        id S232776AbiGFLoC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Jul 2022 07:44:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43356 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232524AbiGFLnO (ORCPT
+        with ESMTP id S231689AbiGFLoA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Jul 2022 07:43:14 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id AD89C27CE0
-        for <linux-kernel@vger.kernel.org>; Wed,  6 Jul 2022 04:43:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1657107792;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=RG6ddZS0ZUevI491C3hXszWOwMlAIAahGi08ot1UyoQ=;
-        b=I9jCf6M4BFfgwFO0hXdyB1sgqEsg9gMunj1nDJrLG8ItARRaIFqyIoY0J/PpUKCHixHdov
-        bMCCEUuaNwSSg03dX1Lr5BR+z/DPVPlTtMRroh/CsMHdij47WLyVC+mtnyIiy/e5r//hFD
-        Si2FCC1AtBZsaClcSP1V7TItraBVt0M=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-329-GNmOByy2MDSnXrZ5vZD9yA-1; Wed, 06 Jul 2022 07:43:09 -0400
-X-MC-Unique: GNmOByy2MDSnXrZ5vZD9yA-1
-Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 4C71B299E74E;
-        Wed,  6 Jul 2022 11:43:09 +0000 (UTC)
-Received: from starship (unknown [10.40.194.38])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id EF2B540315A;
-        Wed,  6 Jul 2022 11:43:06 +0000 (UTC)
-Message-ID: <df72cfcdda55b594d6bbbd9b5b0e2b229dc6c718.camel@redhat.com>
-Subject: Re: [PATCH v2 02/21] KVM: VMX: Drop bits 31:16 when shoving
- exception error code into VMCS
-From:   Maxim Levitsky <mlevitsk@redhat.com>
-To:     Sean Christopherson <seanjc@google.com>,
-        Paolo Bonzini <pbonzini@redhat.com>
-Cc:     Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Oliver Upton <oupton@google.com>,
-        Peter Shier <pshier@google.com>
-Date:   Wed, 06 Jul 2022 14:43:05 +0300
-In-Reply-To: <20220614204730.3359543-3-seanjc@google.com>
-References: <20220614204730.3359543-1-seanjc@google.com>
-         <20220614204730.3359543-3-seanjc@google.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.36.5 (3.36.5-2.fc32) 
+        Wed, 6 Jul 2022 07:44:00 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD99621A
+        for <linux-kernel@vger.kernel.org>; Wed,  6 Jul 2022 04:43:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1657107839; x=1688643839;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=2BQGwJvaGkI3ta8Axwf5AjPJuv0kEeRPs9Fx1GKNBxk=;
+  b=gE2DOnkesE6GikjeCQ4IxatERdruytdBZf1KmvYcZ8F9DKk8rr/uqEpk
+   23vLzRbc4sVSqOoDq926GFpL9w+F9iCsWMQUaZ3Xqo7bLKOlshrlHzEf6
+   V29mEErJN9XmVTfG/XSYrTNAHgHo65vnokbY12f3zGIRu1xRCBEWyBCkY
+   CHIGRbS0KejBrwXixXJe5MQjl2yD/3PQauibO7DQx7x7C0cL2wUQIkFkG
+   FrSCrmyw/f/hX7dTCHBrbqvnniOLi82q5UjJfCPqpyljlCEoM3PhJ3MgZ
+   HiTvpb360VXjMRJD6t6rWNjPPEqm0Ng1E5L5Ny5Q1AI4JAHZDgLvjVFRa
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10399"; a="347707427"
+X-IronPort-AV: E=Sophos;i="5.92,249,1650956400"; 
+   d="scan'208";a="347707427"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jul 2022 04:43:59 -0700
+X-IronPort-AV: E=Sophos;i="5.92,249,1650956400"; 
+   d="scan'208";a="650630076"
+Received: from sannilnx.jer.intel.com ([10.12.26.175])
+  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jul 2022 04:43:56 -0700
+From:   Alexander Usyskin <alexander.usyskin@intel.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>
+Cc:     Tomas Winkler <tomas.winkler@intel.com>,
+        Alexander Usyskin <alexander.usyskin@intel.com>,
+        Vitaly Lubart <vitaly.lubart@intel.com>,
+        intel-gfx@lists.freedesktop.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v5 00/14] GSC support for XeHP SDV and DG2 platforms
+Date:   Wed,  6 Jul 2022 14:43:31 +0300
+Message-Id: <20220706114345.1128018-1-alexander.usyskin@intel.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 2.85 on 10.11.54.10
-X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,76 +65,76 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 2022-06-14 at 20:47 +0000, Sean Christopherson wrote:
-> Deliberately truncate the exception error code when shoving it into the
-> VMCS (VM-Entry field for vmcs01 and vmcs02, VM-Exit field for vmcs12).
-> Intel CPUs are incapable of handling 32-bit error codes and will never
-> generate an error code with bits 31:16, but userspace can provide an
-> arbitrary error code via KVM_SET_VCPU_EVENTS.  Failure to drop the bits
-> on exception injection results in failed VM-Entry, as VMX disallows
-> setting bits 31:16.  Setting the bits on VM-Exit would at best confuse
-> L1, and at worse induce a nested VM-Entry failure, e.g. if L1 decided to
-> reinject the exception back into L2.
+Add GSC support for XeHP SDV and DG2 platforms.
 
-Wouldn't it be better to fail KVM_SET_VCPU_EVENTS instead if it tries
-to set error code with uppper 16 bits set?
+The series includes changes for the mei driver:
+- add ability to use polling instead of interrupts
+- add ability to use extended timeouts
+- setup extended operational memory for GSC
 
-Or if that is considered ABI breakage, then KVM_SET_VCPU_EVENTS code
-can truncate the user given value to 16 bit.
+The series includes changes for the i915 driver:
+- allocate extended operational memory for GSC
+- GSC on XeHP SDV offsets and definitions
 
-Best regards,
-	Maxim Levitsky
+Greg KH, please review and ACK the MEI patches.
+We are pushing these patches through gfx tree as
+the auxiliary device belongs there.
 
+V2: rebase over merged DG1 series and DG2 enablement patch,
+    fix commit messages
 
-> 
-> Cc: stable@vger.kernel.org
-> Signed-off-by: Sean Christopherson <seanjc@google.com>
-> ---
->  arch/x86/kvm/vmx/nested.c |  9 ++++++++-
->  arch/x86/kvm/vmx/vmx.c    | 11 ++++++++++-
->  2 files changed, 18 insertions(+), 2 deletions(-)
-> 
-> diff --git a/arch/x86/kvm/vmx/nested.c b/arch/x86/kvm/vmx/nested.c
-> index ee6f27dffdba..33ffc8bcf9cd 100644
-> --- a/arch/x86/kvm/vmx/nested.c
-> +++ b/arch/x86/kvm/vmx/nested.c
-> @@ -3833,7 +3833,14 @@ static void nested_vmx_inject_exception_vmexit(struct kvm_vcpu *vcpu,
->  	u32 intr_info = nr | INTR_INFO_VALID_MASK;
->  
->  	if (vcpu->arch.exception.has_error_code) {
-> -		vmcs12->vm_exit_intr_error_code = vcpu->arch.exception.error_code;
-> +		/*
-> +		 * Intel CPUs will never generate an error code with bits 31:16
-> +		 * set, and more importantly VMX disallows setting bits 31:16
-> +		 * in the injected error code for VM-Entry.  Drop the bits to
-> +		 * mimic hardware and avoid inducing failure on nested VM-Entry
-> +		 * if L1 chooses to inject the exception back to L2.
-> +		 */
-> +		vmcs12->vm_exit_intr_error_code = (u16)vcpu->arch.exception.error_code;
->  		intr_info |= INTR_INFO_DELIVER_CODE_MASK;
->  	}
->  
-> diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
-> index 5e14e4c40007..ec98992024e2 100644
-> --- a/arch/x86/kvm/vmx/vmx.c
-> +++ b/arch/x86/kvm/vmx/vmx.c
-> @@ -1621,7 +1621,16 @@ static void vmx_queue_exception(struct kvm_vcpu *vcpu)
->  	kvm_deliver_exception_payload(vcpu);
->  
->  	if (has_error_code) {
-> -		vmcs_write32(VM_ENTRY_EXCEPTION_ERROR_CODE, error_code);
-> +		/*
-> +		 * Despite the error code being architecturally defined as 32
-> +		 * bits, and the VMCS field being 32 bits, Intel CPUs and thus
-> +		 * VMX don't actually supporting setting bits 31:16.  Hardware
-> +		 * will (should) never provide a bogus error code, but KVM's
-> +		 * ABI lets userspace shove in arbitrary 32-bit values.  Drop
-> +		 * the upper bits to avoid VM-Fail, losing information that
-> +		 * does't really exist is preferable to killing the VM.
-> +		 */
-> +		vmcs_write32(VM_ENTRY_EXCEPTION_ERROR_CODE, (u16)error_code);
->  		intr_info |= INTR_INFO_DELIVER_CODE_MASK;
->  	}
->  
+V3: rebase over latest tip
 
+V4: add missed changelog in pxp dbugfs patch
+
+V5: rebase over latest tip
+    fix changelog in pxp dbugfs patch
+    put HAX patch last to the ease of merging
+
+Alexander Usyskin (5):
+  drm/i915/gsc: add slow_fw flag to the mei auxiliary device
+  drm/i915/gsc: add slow_fw flag to the gsc device definition
+  drm/i915/gsc: add GSC XeHP SDV platform definition
+  mei: gsc: wait for reset thread on stop
+  mei: extend timeouts on slow devices.
+
+Daniele Ceraolo Spurio (1):
+  HAX: drm/i915: force INTEL_MEI_GSC on for CI
+
+Tomas Winkler (5):
+  mei: gsc: use polling instead of interrupts
+  mei: mkhi: add memory ready command
+  mei: gsc: setup gsc extended operational memory
+  mei: debugfs: add pxp mode to devstate in debugfs
+  drm/i915/gsc: allocate extended operational memory in LMEM
+
+Vitaly Lubart (3):
+  drm/i915/gsc: skip irq initialization if using polling
+  mei: bus: export common mkhi definitions into a separate header
+  mei: gsc: add transition to PXP mode in resume flow
+
+ drivers/gpu/drm/i915/Kconfig.debug  |   1 +
+ drivers/gpu/drm/i915/gt/intel_gsc.c | 119 +++++++++++++++++++++++++---
+ drivers/gpu/drm/i915/gt/intel_gsc.h |   3 +
+ drivers/misc/mei/bus-fixup.c        | 105 ++++++++++++++++--------
+ drivers/misc/mei/client.c           |  14 ++--
+ drivers/misc/mei/debugfs.c          |  17 ++++
+ drivers/misc/mei/gsc-me.c           |  77 +++++++++++++++---
+ drivers/misc/mei/hbm.c              |  12 +--
+ drivers/misc/mei/hw-me-regs.h       |   7 ++
+ drivers/misc/mei/hw-me.c            | 116 ++++++++++++++++++++++-----
+ drivers/misc/mei/hw-me.h            |  14 +++-
+ drivers/misc/mei/hw-txe.c           |   2 +-
+ drivers/misc/mei/hw.h               |   5 ++
+ drivers/misc/mei/init.c             |  21 ++++-
+ drivers/misc/mei/main.c             |   2 +-
+ drivers/misc/mei/mei_dev.h          |  26 ++++++
+ drivers/misc/mei/mkhi.h             |  57 +++++++++++++
+ drivers/misc/mei/pci-me.c           |   2 +-
+ include/linux/mei_aux.h             |   2 +
+ 19 files changed, 511 insertions(+), 91 deletions(-)
+ create mode 100644 drivers/misc/mei/mkhi.h
+
+-- 
+2.34.1
 

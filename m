@@ -2,168 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C021E5693CB
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 23:02:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 131465693CC
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 23:02:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234216AbiGFVBm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Jul 2022 17:01:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33168 "EHLO
+        id S234272AbiGFVCQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Jul 2022 17:02:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33468 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233313AbiGFVBj (ORCPT
+        with ESMTP id S233456AbiGFVCP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Jul 2022 17:01:39 -0400
-Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE5EB1FCE4
-        for <linux-kernel@vger.kernel.org>; Wed,  6 Jul 2022 14:01:37 -0700 (PDT)
-Received: by mail-wm1-x332.google.com with SMTP id t17-20020a1c7711000000b003a0434b0af7so9648798wmi.0
-        for <linux-kernel@vger.kernel.org>; Wed, 06 Jul 2022 14:01:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=blackwall-org.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=8giTgAsje0PgfypLa6/wbiRAhOKG5Tbh9uzJ383M/Bs=;
-        b=tKJjlthPnaEUALGlSwOgU2+cmYJtLc+oN99DlO8lq1Y7rInuuxKIEplRA+CkIQc4Zu
-         /mSKlqcduxV+zRdt744Pc41wwC1FnsejAi7m+GVhafW7mWsC3youUYZO0ntc5V1XamCb
-         U56HsOfaCcVYg4yp8enUA1c9MLNo3+yUCuJmKleWR5uRggQ6MYepwTz/ZLZLFR5hMRgW
-         nic4oSRwTR8/ZjeeAQk5NcqHILD6IdjFBUzuG8mcJLKpdezZapamwLnr9V5Tk9RQFERp
-         QpJz9yXqh7jlZYaG0gwhLA9GX/Y8WQdcQbZSxqkFftJ+p2pYV9vmNcJIUbEv6zisJIlO
-         j+Xg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=8giTgAsje0PgfypLa6/wbiRAhOKG5Tbh9uzJ383M/Bs=;
-        b=sNrBejyoD964402fFFISxzySCa3Vxq2i6EeLqg7DSm9SJdgGyT+pZTO1nvXHcfMKaq
-         DVIis18n6g/9fwM8OeJ7wGfrCcOZl4WY0Wl7sl7z0cfRq2GM4NWy7xp2lQp+Ru9xOp88
-         YV872IQ9xExt4stPVpnnFZe1Appsr9hRhtYhLvum8AAL10dthw4Rez+wECzmUTWuMehh
-         Gs1/fkrb8S0vGJBdudy4Mdekf+6mQ/5fRl1dCIKxjRXv2A+FTS9NeXW7xLJdPtRqQQeE
-         C8+NOWybVfj5wLFYWuULr7LVHFp6vRNTV6QRQXS3Uw5TZPeodmDeCdLFjnSuVdY8QaRi
-         1UwQ==
-X-Gm-Message-State: AJIora/VAb5lY43YqQyVd58ghdRQvQ8a8W57xgfFrPhhJsZS0lNS++xJ
-        szMHrzguENWD3Ui/0snw1NabhA==
-X-Google-Smtp-Source: AGRyM1t2MDSTpNkXC9YMLSLkaChvYJUF4lJkJTFVxiVdM6Jtdc6ObrobRcfGsudXpamHQtbQXOv11w==
-X-Received: by 2002:a05:600c:35d5:b0:3a0:4b1a:2a28 with SMTP id r21-20020a05600c35d500b003a04b1a2a28mr544580wmq.22.1657141296053;
-        Wed, 06 Jul 2022 14:01:36 -0700 (PDT)
-Received: from [192.168.0.111] (87-243-81-1.ip.btc-net.bg. [87.243.81.1])
-        by smtp.gmail.com with ESMTPSA id 13-20020a05600c020d00b0039c362311d2sm27187329wmi.9.2022.07.06.14.01.34
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 06 Jul 2022 14:01:35 -0700 (PDT)
-Message-ID: <fe456fb0-4f68-f93e-d4a9-66e3bc56d547@blackwall.org>
-Date:   Thu, 7 Jul 2022 00:01:33 +0300
+        Wed, 6 Jul 2022 17:02:15 -0400
+Received: from ssl.serverraum.org (ssl.serverraum.org [IPv6:2a01:4f8:151:8464::1:2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C926923146;
+        Wed,  6 Jul 2022 14:02:14 -0700 (PDT)
+Received: from ssl.serverraum.org (web.serverraum.org [172.16.0.2])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ssl.serverraum.org (Postfix) with ESMTPSA id BABEB2223A;
+        Wed,  6 Jul 2022 23:02:12 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2016061301;
+        t=1657141332;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=l9BSZkguRrgG6EPhutYIDpmenXtzq7TNMD8r/kLbskc=;
+        b=WV6CXeZou7RvdPtdmr829rwyfN9tS5+35cTyMXOAxcqfznoaZT/8RuIdbp+P9ggkpqNWH+
+        La5o6Jh73TqZrLjKcdw7QVMk4YsHTqNT9+gN1Owvkuh6DIZuy8V4jy7xN4bymULQ73VoM6
+        FyvYVXrg8rAbo8PD3ftsNbU1LztRfbk=
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH V3 net-next 1/4] net: bridge: add fdb flag to extent
- locked port feature
-Content-Language: en-US
-To:     Vladimir Oltean <olteanv@gmail.com>
-Cc:     Hans Schultz <schultz.hans@gmail.com>, davem@davemloft.net,
-        kuba@kernel.org, netdev@vger.kernel.org,
-        Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>, Jiri Pirko <jiri@resnulli.us>,
-        Ivan Vecera <ivecera@redhat.com>,
-        Roopa Prabhu <roopa@nvidia.com>, Shuah Khan <shuah@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Ido Schimmel <idosch@nvidia.com>, linux-kernel@vger.kernel.org,
-        bridge@lists.linux-foundation.org, linux-kselftest@vger.kernel.org
-References: <20220524152144.40527-2-schultz.hans+netdev@gmail.com>
- <01e6e35c-f5c9-9776-1263-058f84014ed9@blackwall.org>
- <86zgj6oqa9.fsf@gmail.com>
- <b78fb006-04c4-5a25-7ba5-94428cc9591a@blackwall.org>
- <86fskyggdo.fsf@gmail.com>
- <040a1551-2a9f-18d0-9987-f196bb429c1b@blackwall.org>
- <86v8tu7za3.fsf@gmail.com>
- <4bf1c80d-0f18-f444-3005-59a45797bcfd@blackwall.org>
- <20220706181316.r5l5rzjysxow2j7l@skbuf>
- <7cf30a3e-a562-d582-4391-072a2c98ab05@blackwall.org>
- <20220706202130.ehzxnnqnduaq3rmt@skbuf>
-From:   Nikolay Aleksandrov <razor@blackwall.org>
-In-Reply-To: <20220706202130.ehzxnnqnduaq3rmt@skbuf>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Date:   Wed, 06 Jul 2022 23:02:12 +0200
+From:   Michael Walle <michael@walle.cc>
+To:     haibo.chen@nxp.com
+Cc:     ashish.kumar@nxp.com, yogeshgaur.83@gmail.com, broonie@kernel.org,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        han.xu@nxp.com, singh.kuldeep87k@gmail.com,
+        tudor.ambarus@microchip.com, p.yadav@ti.com,
+        miquel.raynal@bootlin.com, richard@nod.at, vigneshr@ti.com,
+        shawnguo@kernel.org, s.hauer@pengutronix.de, kernel@pengutronix.de,
+        linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-mtd@lists.infradead.org,
+        festevam@gmail.com, linux-imx@nxp.com,
+        linux-arm-kernel@lists.infradead.org, zhengxunli@mxic.com.tw
+Subject: Re: [PATCH 04/11] spi: spi-nxp-fspi: add function to select sample
+ clock source for flash reading
+In-Reply-To: <1657012303-6464-4-git-send-email-haibo.chen@nxp.com>
+References: <1657012303-6464-1-git-send-email-haibo.chen@nxp.com>
+ <1657012303-6464-4-git-send-email-haibo.chen@nxp.com>
+User-Agent: Roundcube Webmail/1.4.13
+Message-ID: <7a66e4fe8f7224ea272d68276c7b138b@walle.cc>
+X-Sender: michael@walle.cc
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 06/07/2022 23:21, Vladimir Oltean wrote:
-> On Wed, Jul 06, 2022 at 10:38:04PM +0300, Nikolay Aleksandrov wrote:
->> I don't think that is new or surprising, if there isn't anything to control the
->> device resources you'll get there. You don't really need to write any new programs
->> you can easily do it with mausezahn. I have tests that add over 10 million fdbs on
->> devices for a few seconds.
+Am 2022-07-05 11:11, schrieb haibo.chen@nxp.com:
+> From: Haibo Chen <haibo.chen@nxp.com>
 > 
-> Of course it isn't new, but that doesn't make the situation in any way better,
-> quite the opposite...
+> fspi define four mode for sample clock source selection.
 > 
->> The point is it's not the bridge's task to limit memory consumption or to watch for resource
->> management. You can limit new entries from the device driver (in case of swdev learning) or
->> you can use a daemon to watch the number of entries and disable learning. There are many
->> different ways to avoid this. We've discussed it before and I don't mind adding a hard fdb
->> per-port limit in the bridge as long as it's done properly. We've also discussed LRU and similar
->> algorithms for fdb learning and eviction. But any hardcoded limits or limits that can break
->> current default use cases are unacceptable, they must be opt-in.
+> Here is the list of modes:
+> mode 0: Dummy Read strobe generated by FlexSPI Controller and loopback
+> internally
+> mode 1: Dummy Read strobe generated by FlexSPI Controller and loopback
+> from DQS pad
+> mode 2: Reserved
+> mode 3: Flash provided Read strobe and input from DQS pad
 > 
-> I don't think you can really say that it's not the bridge's task to
-> limit memory consumption when what it does is essentially allocate
-> memory from untrusted and unbounded user input, in kernel softirq
-> context.
+> In default, fspi use mode 0 after reset.
+> For 8-8-8-DTR mode, need to use mode 3, otherwise 8-8-8-DTR read always
+> get incorrect data.
 > 
-> That's in fact the problem, the kernel OOM killer will kick in, but
-> there will be no process to kill. This is why the kernel deadlocks on
-> memory and dies.
+> Signed-off-by: Haibo Chen <haibo.chen@nxp.com>
+> ---
+>  drivers/spi/spi-nxp-fspi.c | 47 ++++++++++++++++++++++++++++++++++++++
+>  1 file changed, 47 insertions(+)
 > 
-> Maybe where our expectations differ is that I believe that a Linux
-> bridge shouldn't need gazillions of tweaks to not kill the kernel?
-> There are many devices in production using a bridge without such
-> configuration, you can't just make it opt-in.
+> diff --git a/drivers/spi/spi-nxp-fspi.c b/drivers/spi/spi-nxp-fspi.c
+> index c32a4f53fa2a..34679dc0e1ad 100644
+> --- a/drivers/spi/spi-nxp-fspi.c
+> +++ b/drivers/spi/spi-nxp-fspi.c
+> @@ -380,6 +380,7 @@ struct nxp_fspi {
+>  	struct pm_qos_request pm_qos_req;
+>  	int selected;
+>  #define FSPI_INITILIZED		(1 << 0)
+> +#define FSPI_RXCLKSRC_3		(1 << 1)
+>  	int flags;
+>  };
 > 
-
-No, you cannot suddenly enforce such limit because such limit cannot work for everyone.
-There is no silver bullet that works for everyone. Opt-in is the only way to go
-about this with specific config for different devices and deployments, anyone
-interested can set their limits. They can be auto-adjusted by swdev drivers
-after that if necessary, but first they must be implemented in software.
-
-If you're interested in adding default limits based on memory heuristics and consumption
-I'd be interested to see it.
-
-> Of course, performance under heavy stress is a separate concern, and
-> maybe user space monitoring would be a better idea for that.
+> @@ -877,6 +878,50 @@ static int nxp_fspi_do_op(struct nxp_fspi *f,
+> const struct spi_mem_op *op)
+>  	return err;
+>  }
 > 
+> +/*
+> + * Sample Clock source selection for Flash Reading
+> + * Four modes defined by fspi:
+> + * mode 0: Dummy Read strobe generated by FlexSPI Controller
+> + *         and loopback internally
+> + * mode 1: Dummy Read strobe generated by FlexSPI Controller
+> + *         and loopback from DQS pad
+> + * mode 2: Reserved
+> + * mode 3: Flash provided Read strobe and input from DQS pad
+> + *
+> + * fspi default use mode 0 after reset
+> + */
+> +static void nxp_fspi_select_rx_sample_clk_source(struct nxp_fspi *f,
+> +						 const struct spi_mem_op *op)
+> +{
+> +	u32 reg;
+> +
+> +	/*
+> +	 * For 8-8-8-DTR mode, need to use mode 3 (Flash provided Read
+> +	 * strobe and input from DQS pad), otherwise read operaton may
+> +	 * meet issue.
+> +	 * This mode require flash device connect the DQS pad on board.
+> +	 * For other modes, still use mode 0, keep align with before.
+> +	 * spi_nor_suspend will disable 8-8-8-DTR mode, also need to
+> +	 * change the mode back to mode 0.
+> +	 */
+> +	if (!(f->flags & FSPI_RXCLKSRC_3) &&
+> +			op->cmd.dtr && op->addr.dtr &&
+> +			op->dummy.dtr && op->data.dtr) {
+> +		reg = fspi_readl(f, f->iobase + FSPI_MCR0);
+> +		reg |= FSPI_MCR0_RXCLKSRC(3);
+> +		fspi_writel(f, reg, f->iobase + FSPI_MCR0);
+> +		f->flags |= FSPI_RXCLKSRC_3;
+> +	} else if ((f->flags & FSPI_RXCLKSRC_3) &&
+> +			!op->cmd.dtr && !op->addr.dtr &&
+> +			!op->dummy.dtr && !op->data.dtr) {
+> +		reg = fspi_readl(f, f->iobase + FSPI_MCR0);
+> +		reg &= ~FSPI_MCR0_RXCLKSRC(3);	/* select mode 0 */
+> +		fspi_writel(f, reg, f->iobase + FSPI_MCR0);
+> +		f->flags &= ~FSPI_RXCLKSRC_3;
+> +	}
 
-You can do the whole software learning from user-space if needed, not only under heavy stress.
+How is this supposed to work? Are you unconditionally enable
+flash provided read strobes if DTR is used? What if the
+flash doesn't provide one or the board haven't DQS connected?
 
-> I know you changed jobs, but did Cumulus Linux have an application to
-> monitor and limit the FDB entry count? Is there some standard
-> application which does this somewhere, or does everybody roll their own?
-> 
-
-I don't see how that is relevant.
-
-> Anyway, limiting FDB entry count from user space is still theoretically
-> different from not dying. If you need to schedule a task to dispose of
-
-you can disable learning altogether and add entries from a user-space daemon, ie
-implement complete user-space learning agent, theoretically you can solve it in
-many ways if that's the problem
-
-> the weight while the ship is sinking from softirq context, you may never
-> get to actually schedule that task in time. AFAIK the bridge UAPI doesn't
-> expose a pre-programmed limit, so what needs to be done is for user
-> space to manually delete entries until the count falls below the limit.
-
-That is a single case speculation, it depends on how it was implemented in the first place. You
-can disable learning and have more than enough time to deal with it.
-
-I already said it's ok to add hard configurable limits if they're done properly performance-wise.
-Any distribution can choose to set some default limits after the option exists.
-
+-michael

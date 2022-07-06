@@ -2,221 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D31EC56884A
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 14:27:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 284F056884F
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Jul 2022 14:29:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231799AbiGFM1f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Jul 2022 08:27:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60338 "EHLO
+        id S233325AbiGFM3h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Jul 2022 08:29:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34034 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232818AbiGFM1b (ORCPT
+        with ESMTP id S231656AbiGFM3g (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Jul 2022 08:27:31 -0400
-Received: from relay08.th.seeweb.it (relay08.th.seeweb.it [IPv6:2001:4b7a:2000:18::169])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09E5E248CF;
-        Wed,  6 Jul 2022 05:27:27 -0700 (PDT)
-Received: from [192.168.1.101] (abxi46.neoplus.adsl.tpnet.pl [83.9.2.46])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by m-r2.th.seeweb.it (Postfix) with ESMTPSA id A886C3F756;
-        Wed,  6 Jul 2022 14:27:24 +0200 (CEST)
-Message-ID: <a443cd40-a1d5-6e17-1c49-d592a590f1f8@somainline.org>
-Date:   Wed, 6 Jul 2022 14:27:23 +0200
+        Wed, 6 Jul 2022 08:29:36 -0400
+Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70F8E767E;
+        Wed,  6 Jul 2022 05:29:35 -0700 (PDT)
+Received: from dggemv711-chm.china.huawei.com (unknown [172.30.72.53])
+        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4LdJk51Qk1z1DDHr;
+        Wed,  6 Jul 2022 20:28:45 +0800 (CST)
+Received: from kwepemm600003.china.huawei.com (7.193.23.202) by
+ dggemv711-chm.china.huawei.com (10.1.198.66) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Wed, 6 Jul 2022 20:29:33 +0800
+Received: from [10.67.111.205] (10.67.111.205) by
+ kwepemm600003.china.huawei.com (7.193.23.202) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Wed, 6 Jul 2022 20:29:32 +0800
+Subject: Re: [PATCH v2] perf/core: Fix data race between perf_event_set_output
+ and perf_mmap_close
+To:     Peter Zijlstra <peterz@infradead.org>
+CC:     <mingo@redhat.com>, <acme@kernel.org>, <mark.rutland@arm.com>,
+        <alexander.shishkin@linux.intel.com>, <jolsa@kernel.org>,
+        <namhyung@kernel.org>, <linux-perf-users@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+References: <20220704120006.98141-1-yangjihong1@huawei.com>
+ <YsMGixSL4CDPTTZs@worktop.programming.kicks-ass.net>
+ <YsQ3jm2GR38SW7uD@worktop.programming.kicks-ass.net>
+From:   Yang Jihong <yangjihong1@huawei.com>
+Message-ID: <1e28533a-33ed-cae3-0389-c68e7c52cead@huawei.com>
+Date:   Wed, 6 Jul 2022 20:29:32 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.6.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH v6 11/12] arm64: dts: qcom: add PMP8074 DTSI
+In-Reply-To: <YsQ3jm2GR38SW7uD@worktop.programming.kicks-ass.net>
+Content-Type: text/plain; charset="utf-8"; format=flowed
 Content-Language: en-US
-To:     Robert Marko <robimarko@gmail.com>, agross@kernel.org,
-        bjorn.andersson@linaro.org, lee.jones@linaro.org,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        linus.walleij@linaro.org, lgirdwood@gmail.com, broonie@kernel.org,
-        jic23@kernel.org, lars@metafoo.de, linux-arm-msm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-gpio@vger.kernel.org, linux-iio@vger.kernel.org
-References: <20220704212402.1715182-1-robimarko@gmail.com>
- <20220704212402.1715182-11-robimarko@gmail.com>
-From:   Konrad Dybcio <konrad.dybcio@somainline.org>
-In-Reply-To: <20220704212402.1715182-11-robimarko@gmail.com>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Originating-IP: [10.67.111.205]
+X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
+ kwepemm600003.china.huawei.com (7.193.23.202)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hello,
 
-
-On 4.07.2022 23:24, Robert Marko wrote:
-> PMP8074 is a companion PMIC to the Qualcomm IPQ8074 series that is
-> controlled via SPMI.
+On 2022/7/5 21:07, Peter Zijlstra wrote:
+> On Mon, Jul 04, 2022 at 05:26:04PM +0200, Peter Zijlstra wrote:
+>> On Mon, Jul 04, 2022 at 08:00:06PM +0800, Yang Jihong wrote:
+>>> Data race exists between perf_event_set_output and perf_mmap_close.
+>>> The scenario is as follows:
+>>>
+>>>                    CPU1                                                       CPU2
+>>>                                                                      perf_mmap_close(event2)
+>>>                                                                        if (atomic_dec_and_test(&event2->rb->mmap_count)  // mmap_count 1 -> 0
+>>>                                                                          detach_rest = true;
+>>> ioctl(event1, PERF_EVENT_IOC_SET_OUTPUT, event2)
+>>>    perf_event_set_output(event1, event2)
+>>>                                                                        if (!detach_rest)
+>>>                                                                          goto out_put;
+>>>                                                                        list_for_each_entry_rcu(event, &event2->rb->event_list, rb_entry)
+>>>                                                                          ring_buffer_attach(event, NULL)
+>>>                                                                        // because event1 has not been added to event2->rb->event_list,
+>>>                                                                        // event1->rb is not set to NULL in these loops
+>>>
+>>>      ring_buffer_attach(event1, event2->rb)
+>>>        list_add_rcu(&event1->rb_entry, &event2->rb->event_list)
+>>>
+>>> The above data race causes a problem, that is, event1->rb is not NULL, but event1->rb->mmap_count is 0.
+>>> If the perf_mmap interface is invoked for the fd of event1, the kernel keeps in the perf_mmap infinite loop:
+>>>
+>>> again:
+>>>          mutex_lock(&event->mmap_mutex);
+>>>          if (event->rb) {
+>>> <SNIP>
+>>>                  if (!atomic_inc_not_zero(&event->rb->mmap_count)) {
+>>>                          /*
+>>>                           * Raced against perf_mmap_close() through
+>>>                           * perf_event_set_output(). Try again, hope for better
+>>>                           * luck.
+>>>                           */
+>>>                          mutex_unlock(&event->mmap_mutex);
+>>>                          goto again;
+>>>                  }
+>>> <SNIP>
+>>
+>> Too tired, must look again tomorrow, little feeback below.
 > 
-> Add DTSI for it providing GPIO, regulator and RTC support.
-> 
-> RTC is disabled by default as there is no built-in battery so it will
-> loose time unless board vendor added a battery, so make it optional.
-> 
-> Signed-off-by: Robert Marko <robimarko@gmail.com>
-> ---
-> Changes in v6:
-> * Add RTC and GPIO nodes
-> 
-> Changes in v5:
-> * Remove #address-cells and #size-cells as they are not required for
-> regulator subnodes
-> ---
->  arch/arm64/boot/dts/qcom/pmp8074.dtsi | 125 ++++++++++++++++++++++++++
->  1 file changed, 125 insertions(+)
->  create mode 100644 arch/arm64/boot/dts/qcom/pmp8074.dtsi
-> 
-> diff --git a/arch/arm64/boot/dts/qcom/pmp8074.dtsi b/arch/arm64/boot/dts/qcom/pmp8074.dtsi
-> new file mode 100644
-> index 000000000000..a3b395e4d78f
-> --- /dev/null
-> +++ b/arch/arm64/boot/dts/qcom/pmp8074.dtsi
-> @@ -0,0 +1,125 @@
-> +// SPDX-License-Identifier: GPL-2.0-only
-Hi,
+> With brain more awake I ended up with the below. Does that work?
 
-Please consider BSD3, or at least dual-licensing with some permissive
-license (so that for example BSDs can re-use these DTs).
-> +
-> +#include <dt-bindings/spmi/spmi.h>
-> +#include <dt-bindings/iio/qcom,spmi-vadc.h>
-> +
-> +&spmi_bus {
-> +	pmic@0 {
-> +		compatible = "qcom,pmp8074", "qcom,spmi-pmic";
-> +		reg = <0x0 SPMI_USID>;
-> +		#address-cells = <1>;
-> +		#size-cells = <0>;
-> +
-> +		pmp8074_adc: adc@3100 {
-> +			compatible = "qcom,spmi-adc-rev2";
-> +			reg = <0x3100>;
-> +			interrupts = <0x0 0x31 0x0 IRQ_TYPE_EDGE_RISING>;
-> +			#address-cells = <1>;
-> +			#size-cells = <0>;
-> +			#io-channel-cells = <1>;
-> +
-> +			ref_gnd@0 {
-No underscores in node names, please change this to ref-gnd (and consequently
-for all other nodes). Note that this only concerns node names and not labels.
+Yes, I apply the patch on kernel versions 5.10 and mainline,
+and it could fixed the problem.
 
-> +				reg = <ADC5_REF_GND>;
-> +				qcom,pre-scaling = <1 1>;
-> +			};
-> +
-> +			vref_1p25@1 {
-> +				reg = <ADC5_1P25VREF>;
-> +				qcom,pre-scaling = <1 1>;
-> +			};
-> +
-> +			vref_vadc@2 {
-> +				reg = <ADC5_VREF_VADC>;
-> +				qcom,pre-scaling = <1 1>;
-> +			};
-> +
-> +			pmic_die: die_temp@6 {
-> +				reg = <ADC5_DIE_TEMP>;
-> +				qcom,pre-scaling = <1 1>;
-> +			};
-> +
-> +			xo_therm: xo_temp@76 {
-> +				reg = <ADC5_XO_THERM_100K_PU>;
-> +				qcom,ratiometric;
-> +				qcom,hw-settle-time = <200>;
-> +				qcom,pre-scaling = <1 1>;
-> +			};
-> +
-> +			pa_therm1: thermistor1@77 {
-> +				reg = <ADC5_AMUX_THM1_100K_PU>;
-> +				qcom,ratiometric;
-> +				qcom,hw-settle-time = <200>;
-> +				qcom,pre-scaling = <1 1>;
-> +			};
-> +
-> +			pa_therm2: thermistor2@78 {
-> +				reg = <ADC5_AMUX_THM2_100K_PU>;
-> +				qcom,ratiometric;
-> +				qcom,hw-settle-time = <200>;
-> +				qcom,pre-scaling = <1 1>;
-> +			};
-> +
-> +			pa_therm3: thermistor3@79 {
-> +				reg = <ADC5_AMUX_THM3_100K_PU>;
-> +				qcom,ratiometric;
-> +				qcom,hw-settle-time = <200>;
-> +				qcom,pre-scaling = <1 1>;
-> +			};
-> +
-> +			vph_pwr@131 {
-> +				reg = <ADC5_VPH_PWR>;
-> +				qcom,pre-scaling = <1 3>;
-> +			};
-> +		};
-> +
-> +		pmp8074_rtc: rtc@6000 {
-> +			compatible = "qcom,pm8941-rtc";
-> +			reg = <0x6000>;
-> +			reg-names = "rtc", "alarm";
-> +			interrupts = <0x0 0x61 0x1 IRQ_TYPE_NONE>;
-> +			allow-set-time;
-> +			status = "disabled";
-Isn't this PMIC-internal, aka accessible on all devices using PMP8074?
+Tested-by: Yang Jihong <yangjihong1@huawei.com>
 
-> +		};
-> +
-> +		pmp8074_gpios: gpio@c000 {
-> +			compatible = "qcom,pmp8074-gpio", "qcom,spmi-gpio";
-> +			reg = <0xc000>;
-> +			gpio-controller;
-> +			#gpio-cells = <2>;
-> +			gpio-ranges = <&pmp8074_gpios 0 0 12>;
-> +			interrupt-controller;
-> +			#interrupt-cells = <2>;
-> +		};
-> +	};
-> +
-> +	pmic@1 {
-> +		compatible = "qcom,pmp8074", "qcom,spmi-pmic";
-> +		reg = <0x1 SPMI_USID>;
-> +
-> +		regulators {
-> +			compatible = "qcom,pmp8074-regulators";
-> +
-> +			s3: s3 {
-> +				regulator-name = "vdd_s3";
-> +				regulator-min-microvolt = <592000>;
-> +				regulator-max-microvolt = <1064000>;
-
-Are you sure no other configurations are supported with this PMIC?
-Otherwise you may accidentally burn somebody's board by setting up
-regulators in a place that's not usually expected to have them..
-
-Konrad
-> +				regulator-always-on;
-> +				regulator-boot-on;
-> +			};
-> +
-> +			s4: s4 {
-> +				regulator-name = "vdd_s4";
-> +				regulator-min-microvolt = <712000>;
-> +				regulator-max-microvolt = <992000>;
-> +				regulator-always-on;
-> +				regulator-boot-on;
-> +			};
-> +
-> +			l11: l11 {
-> +				regulator-name = "l11";
-> +				regulator-min-microvolt = <1800000>;
-> +				regulator-max-microvolt = <3300000>;
-> +			};
-> +		};
-> +	};
-> +};
+Thanks,
+Yang

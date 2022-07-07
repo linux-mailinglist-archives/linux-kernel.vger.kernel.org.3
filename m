@@ -2,61 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5324B56AB07
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 20:50:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EEF4156AB16
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 20:54:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236489AbiGGSuD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Jul 2022 14:50:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46976 "EHLO
+        id S236520AbiGGSy1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Jul 2022 14:54:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50320 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236089AbiGGSt6 (ORCPT
+        with ESMTP id S235662AbiGGSy0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Jul 2022 14:49:58 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E57D201A6;
-        Thu,  7 Jul 2022 11:49:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1657219796; x=1688755796;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=lLRTGNYtwXnxq+fPi8sGlOmQc4+DsD09icLC+QCdOPI=;
-  b=dbD1ar8xBIuMsYp+8uG0Kl4rIw+lOBs4tU4q6T79Fd3/8kaE/1ZWociQ
-   pG02Wvzs9jgxA8UBl6zA8XTdX+CmLJTasUi2fcQwJeZGPyvCi4XC2yTSz
-   G5EMeBl/v8EbYSn86dnUN74c0yDOGaLxlIBo3MZ5hLzw/MefqHBy0QWYr
-   3DIcuDBfl+98nyyDHNJrIYalqI9Xz7Gv2q7JssX2yOmi3vxt4D5mkC6TX
-   vkpe+Fu3mLa2m6ZXq8D3BqRsz5XtvcTAmk88fSWJaAMQD/3SY3B6zUO8x
-   OpsbKzic4m9knWoYyZqGYjb8y7QJoA56qnKxcZUbxpoz4q/FVsy9iJgZJ
-   w==;
-X-IronPort-AV: E=Sophos;i="5.92,253,1650956400"; 
-   d="scan'208";a="171212514"
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa5.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 07 Jul 2022 11:49:55 -0700
-Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
- chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.17; Thu, 7 Jul 2022 11:49:55 -0700
-Received: from soft-dev3-1.microsemi.net (10.10.115.15) by
- chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server id
- 15.1.2375.17 via Frontend Transport; Thu, 7 Jul 2022 11:49:53 -0700
-From:   Horatiu Vultur <horatiu.vultur@microchip.com>
-To:     <linux-gpio@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-CC:     <linus.walleij@linaro.org>, <kavyasree.kotagiri@microchip.com>,
-        <alexandre.belloni@bootlin.com>, <colin.foster@in-advantage.com>,
-        <UNGLinuxDriver@microchip.com>, <maxime.chevallier@bootlin.com>,
-        "Horatiu Vultur" <horatiu.vultur@microchip.com>
-Subject: [PATCH 2/2] pinctrl: ocelot: Fix pincfg
-Date:   Thu, 7 Jul 2022 20:53:42 +0200
-Message-ID: <20220707185342.2697569-3-horatiu.vultur@microchip.com>
-X-Mailer: git-send-email 2.33.0
-In-Reply-To: <20220707185342.2697569-1-horatiu.vultur@microchip.com>
-References: <20220707185342.2697569-1-horatiu.vultur@microchip.com>
+        Thu, 7 Jul 2022 14:54:26 -0400
+Received: from ms.lwn.net (ms.lwn.net [45.79.88.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E94F2AC45;
+        Thu,  7 Jul 2022 11:54:26 -0700 (PDT)
+Received: from localhost (unknown [IPv6:2601:281:8300:73::5f6])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ms.lwn.net (Postfix) with ESMTPSA id 98E98784;
+        Thu,  7 Jul 2022 18:54:25 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 ms.lwn.net 98E98784
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lwn.net; s=20201203;
+        t=1657220065; bh=/fMlRf3BBiH/y93ZsQHiL7t7Abbfscbt0cKNfAWYzk4=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=l6amQO03x3OqUce5kRG/390r2EX/q8YrX1e6aGN/L1PbQbt593fTX3QUrnRl2F0ED
+         I+H0WL9n1gvoIUxlFOSd6o491UzVtidx4R0mIKHiSxpMXB46BcWEAYjYlYbQAkAOKx
+         Yvp8EWr0DBOIonr95HiTvzNpkRK75NeG13L2M3J5Jd6vWZfN+TNUbBOW6QJcy2CcPs
+         /X+Zks2+z7cAuyV+uZeFosNGNHa1JU0Hagtib82Dkf0VMuCaJxwpQ28ZCLtgRONgdZ
+         cSAoaQdKHlDu8N9FNmYeCILWTr2ruYi8941LNmxZcShChPVd9zdjj313LDuVTCtIMm
+         mcthwisLlmP5w==
+From:   Jonathan Corbet <corbet@lwn.net>
+To:     Thierry Reding <thierry.reding@gmail.com>
+Cc:     Dipen Patel <dipenp@nvidia.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Linux Doc Mailing List <linux-doc@vger.kernel.org>,
+        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        linux-kernel@vger.kernel.org, linux-tegra@vger.kernel.org
+Subject: Re: [PATCH 02/12] docs: tegra194-hte.rst: don't include gpiolib.c
+ twice
+In-Reply-To: <YsYBMtHLygtss+9u@orome>
+References: <cover.1656759988.git.mchehab@kernel.org>
+ <de81b472f552bd651f140f0aa779a29652fffa62.1656759989.git.mchehab@kernel.org>
+ <7e536472-60cd-c81f-254e-bab9fda7ed37@nvidia.com> <YsYBMtHLygtss+9u@orome>
+Date:   Thu, 07 Jul 2022 12:54:24 -0600
+Message-ID: <87edywbvof.fsf@meer.lwn.net>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
-X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -64,87 +58,13 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The blamed commit changed to use regmaps instead of __iomem. But it
-didn't update the register offsets to be at word offset, so it uses byte
-offset.
+Thierry Reding <thierry.reding@gmail.com> writes:
 
-Fixes: 076d9e71bcf8 ("pinctrl: ocelot: convert pinctrl to regmap")
-Signed-off-by: Horatiu Vultur <horatiu.vultur@microchip.com>
----
- drivers/pinctrl/pinctrl-ocelot.c | 28 +++++++++++++++-------------
- 1 file changed, 15 insertions(+), 13 deletions(-)
+> here's another one that applies on top of that earlier patch. Can you
+> apply this to your tree?
 
-diff --git a/drivers/pinctrl/pinctrl-ocelot.c b/drivers/pinctrl/pinctrl-ocelot.c
-index 6212abe2b66f..e84f2f82901f 100644
---- a/drivers/pinctrl/pinctrl-ocelot.c
-+++ b/drivers/pinctrl/pinctrl-ocelot.c
-@@ -303,6 +303,13 @@ static const char *const ocelot_function_names[] = {
- 	[FUNC_RCVRD_CLK]	= "rcvrd_clk",
- };
- 
-+const struct regmap_config regmap_pincfg = {
-+		.reg_bits = 32,
-+		.val_bits = 32,
-+		.reg_stride = 4,
-+		.name = "pincfg",
-+};
-+
- struct ocelot_pmx_func {
- 	const char **groups;
- 	unsigned int ngroups;
-@@ -1334,7 +1341,8 @@ static int ocelot_hw_get_value(struct ocelot_pinctrl *info,
- 	if (info->pincfg) {
- 		u32 regcfg;
- 
--		ret = regmap_read(info->pincfg, pin, &regcfg);
-+		ret = regmap_read(info->pincfg, pin * regmap_pincfg.reg_stride,
-+				  &regcfg);
- 		if (ret)
- 			return ret;
- 
-@@ -1368,14 +1376,16 @@ static int ocelot_pincfg_clrsetbits(struct ocelot_pinctrl *info, u32 regaddr,
- 	u32 val;
- 	int ret;
- 
--	ret = regmap_read(info->pincfg, regaddr, &val);
-+	ret = regmap_read(info->pincfg, regaddr * regmap_pincfg.reg_stride,
-+			  &val);
- 	if (ret)
- 		return ret;
- 
- 	val &= ~clrbits;
- 	val |= setbits;
- 
--	ret = regmap_write(info->pincfg, regaddr, val);
-+	ret = regmap_write(info->pincfg, regaddr * regmap_pincfg.reg_stride,
-+			   val);
- 
- 	return ret;
- }
-@@ -1940,21 +1950,13 @@ static struct regmap *ocelot_pinctrl_create_pincfg(struct platform_device *pdev)
- {
- 	void __iomem *base;
- 
--	const struct regmap_config regmap_config = {
--		.reg_bits = 32,
--		.val_bits = 32,
--		.reg_stride = 4,
--		.max_register = 32,
--		.name = "pincfg",
--	};
--
--	base = devm_platform_ioremap_resource(pdev, 1);
-+		base = devm_platform_ioremap_resource(pdev, 1);
- 	if (IS_ERR(base)) {
- 		dev_dbg(&pdev->dev, "Failed to ioremap config registers (no extended pinconf)\n");
- 		return NULL;
- 	}
- 
--	return devm_regmap_init_mmio(&pdev->dev, base, &regmap_config);
-+	return devm_regmap_init_mmio(&pdev->dev, base, &regmap_pincfg);
- }
- 
- static int ocelot_pinctrl_probe(struct platform_device *pdev)
--- 
-2.33.0
+Done.
 
+Thanks,
+
+jon

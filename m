@@ -2,119 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C49356A9FA
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 19:48:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1CD9E56AA02
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 19:51:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235799AbiGGRrp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Jul 2022 13:47:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53702 "EHLO
+        id S235234AbiGGRvB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Jul 2022 13:51:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55942 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235570AbiGGRrm (ORCPT
+        with ESMTP id S231572AbiGGRu7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Jul 2022 13:47:42 -0400
-Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EAB485C97B
-        for <linux-kernel@vger.kernel.org>; Thu,  7 Jul 2022 10:47:40 -0700 (PDT)
-Received: by mail-ej1-x62d.google.com with SMTP id dn9so28418223ejc.7
-        for <linux-kernel@vger.kernel.org>; Thu, 07 Jul 2022 10:47:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=w5UVqVYkA2liWKvF5AEz1NuihXTRBWSdPpoacsPExUk=;
-        b=VnSWNkarZG9BtYbcTV2x/Y11CEBH4XIuymrgY4Vv27MqSHtZcbzE3N+SvKyyi1PXLp
-         qsyNpEE83rNxQJu+mSR0YcoECw57pUzVzNZ3VPUwnf8BZLAHNsZo6E0Ke3kShCQNltoz
-         citbH7pTYgo6Zc35r9M7xalt0nKGVVB6bwH1A6P4NchhbYKCz0GpsXV/rXfKDITpGBy+
-         ZYxIbJ7OxTk6fqRprTzXpXrn6JAnK2FWWnl7SHklRSsk4Cv3vtKnKovUTVlfDXDUfPkC
-         Shl8o9RHjCUA2jLq684EHRtlnOjpNFYHFGwQt/ulnZ1HdHkfFIBeMl/G/lFil1AicKXN
-         zT2A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=w5UVqVYkA2liWKvF5AEz1NuihXTRBWSdPpoacsPExUk=;
-        b=XNxaBO5iIyVS2a4nUHpQaRLmpU+JzcrnAl2wZMjV+eAj58JSXLbHqjyO4FErtzCTyO
-         byeIlUAyTl2mcG1omeYtey3xJDGe5FEN+VV6WbMF63lWdlIrlwtjCXSfvNYFbo7R9Uhv
-         2h9yo3MZua/3F+S83UGXIov66ICNUf7UtbUs6jFDgkecy/nur1jjRI/mWyKPdpAZBUbe
-         IFU2zmWzgwNqjGypJDiVqNK5AxUfiCl6aZAAxAuZIEIAy6wMZGVlv/3XlNtsQDHWt0OG
-         s52w+gQou4GE+4yDyiyyQ9Fx5yX193krl0+1bzWfMK4CH08E9wwWDMqYFlte8kY/oYxB
-         wwWw==
-X-Gm-Message-State: AJIora9jdr4a1/CxkTDf9VBrnvJOKUuZjkL++ntJaaKvMFR6yYaHDC/I
-        OOz9Wh0UsMhnnaw5p5w5yp3hXEv0pFzAIJ1IObVmLw==
-X-Google-Smtp-Source: AGRyM1vmJwqTFg1c1tCtPBghzrjs73hfYOtbJo0WpwlLvw0T29Eo5UgcY0rUroqmtCdxAXIWHXBAiIPtLMlbfDGk4c8=
-X-Received: by 2002:a17:906:478e:b0:722:f84d:159f with SMTP id
- cw14-20020a170906478e00b00722f84d159fmr46497744ejc.182.1657216059214; Thu, 07
- Jul 2022 10:47:39 -0700 (PDT)
+        Thu, 7 Jul 2022 13:50:59 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B2B7FE7
+        for <linux-kernel@vger.kernel.org>; Thu,  7 Jul 2022 10:50:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1657216258; x=1688752258;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=HeNs/JD0xOimySiaifY9QxTIfFe/OVms8T1fLccvbBU=;
+  b=CwZoYGPnmKupOEROtjVBgUQWjRx9mxiNVXz4mnu+25nbSGWhRnYRJy1P
+   sUNIkeYI8pGIarVwV4obF0UlbRKLd+hjo0ehF763QHkEkjU1QqeVSNXgm
+   k8lkKUyritpXRYRaypFL1XIwhLYcRMJ1CKgzv76Z3O3JhBKdECtlnX6Om
+   wrVuI3In3AuXXoEYF7UOWpIVZvrUidKvvLdl57wn/Pi0Ujdobem0dhbMF
+   75B9zO2B8X0hJ9L8oYB8xMiHRt26z13bCll8K+GtujIhzABjZMcvWqEYT
+   mnjwLJw2shGhGTJNwc+BgMBqNodllyTzJZULaTjLKAARs6dYusneiUXL2
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10401"; a="272881473"
+X-IronPort-AV: E=Sophos;i="5.92,253,1650956400"; 
+   d="scan'208";a="272881473"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jul 2022 10:50:57 -0700
+X-IronPort-AV: E=Sophos;i="5.92,253,1650956400"; 
+   d="scan'208";a="620890790"
+Received: from nmajidi-mobl.amr.corp.intel.com (HELO [10.251.17.238]) ([10.251.17.238])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jul 2022 10:50:57 -0700
+Message-ID: <ad552a6d-457c-8694-3d7d-ac670e805605@intel.com>
+Date:   Thu, 7 Jul 2022 10:50:56 -0700
 MIME-Version: 1.0
-References: <20220707173040.704116-1-justinstitt@google.com> <6f5a1c04746feb04add15107c70332ac603e4561.camel@perches.com>
-In-Reply-To: <6f5a1c04746feb04add15107c70332ac603e4561.camel@perches.com>
-From:   Justin Stitt <justinstitt@google.com>
-Date:   Thu, 7 Jul 2022 10:47:28 -0700
-Message-ID: <CAFhGd8oTybm0aQ_q60e+exf5eFO1kLiNKnmDZfVTyg=BbtgZsw@mail.gmail.com>
-Subject: Re: [PATCH] net: ipv4: fix clang -Wformat warning
-To:     Joe Perches <joe@perches.com>
-Cc:     Steffen Klassert <steffen.klassert@secunet.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S . Miller" <davem@davemloft.net>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        David Ahern <dsahern@kernel.org>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Tom Rix <trix@redhat.com>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-16.2 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SCC_BODY_URI_ONLY,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,
-        USER_IN_DEF_SPF_WL autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [tip: x86/boot] x86/kexec: Carry forward IMA measurement log on
+ kexec
+Content-Language: en-US
+To:     Jonathan McDowell <noodles@fb.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>
+Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Mimi Zohar <zohar@linux.ibm.com>, Baoquan He <bhe@redhat.com>,
+        "x86@kernel.org" <x86@kernel.org>
+References: <YmKyvlF3my1yWTvK@noodles-fedora-PC23Y6EG>
+ <165721275237.15455.6157055713679490274.tip-bot2@tip-bot2>
+ <YscZM+N77zUb1uam@noodles-fedora.dhcp.thefacebook.com>
+From:   Dave Hansen <dave.hansen@intel.com>
+In-Reply-To: <YscZM+N77zUb1uam@noodles-fedora.dhcp.thefacebook.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jul 7, 2022 at 10:40 AM Joe Perches <joe@perches.com> wrote:
->
-> On Thu, 2022-07-07 at 10:30 -0700, Justin Stitt wrote:
-> > When building with Clang we encounter this warning:
-> > > net/ipv4/ah4.c:513:4: error: format specifies type 'unsigned short' but
-> > > the argument has type 'int' [-Werror,-Wformat]
-> > > aalg_desc->uinfo.auth.icv_fullbits / 8);
-> >
-> > `aalg_desc->uinfo.auth.icv_fullbits` is a u16 but due to default
-> > argument promotion becomes an int.
-> >
-> > Variadic functions (printf-like) undergo default argument promotion.
-> > Documentation/core-api/printk-formats.rst specifically recommends using
-> > the promoted-to-type's format flag.
-> >
-> > As per C11 6.3.1.1:
-> > (https://www.open-std.org/jtc1/sc22/wg14/www/docs/n1548.pdf) `If an int
-> > can represent all values of the original type ..., the value is
-> > converted to an int; otherwise, it is converted to an unsigned int.
-> > These are called the integer promotions.` Thus it makes sense to change
-> > %hu to %d not only to follow this standard but to suppress the warning
-> > as well.
->
-> I think it also makes sense to use %u and not %d
-> as the original type is unsigned.
-Yeah, that would also work. An integer (even a signed one) fully
-encompasses a u16 so it's really a choice of style. Do you think the
-change to %u warrants a v2 of this patch?
->
-> > diff --git a/net/ipv4/ah4.c b/net/ipv4/ah4.c
-> []
-> > @@ -507,7 +507,7 @@ static int ah_init_state(struct xfrm_state *x)
-> >
-> >       if (aalg_desc->uinfo.auth.icv_fullbits/8 !=
-> >           crypto_ahash_digestsize(ahash)) {
-> > -             pr_info("%s: %s digestsize %u != %hu\n",
-> > +             pr_info("%s: %s digestsize %u != %d\n",
-> >                       __func__, x->aalg->alg_name,
-> >                       crypto_ahash_digestsize(ahash),
-> >                       aalg_desc->uinfo.auth.icv_fullbits / 8);
->
+On 7/7/22 10:37, Jonathan McDowell wrote:
+> On Thu, Jul 07, 2022 at 04:52:32PM -0000, tip-bot2 for Jonathan McDowell wrote:
+>> The following commit has been merged into the x86/boot branch of tip:
+> Just to clarify there's not some confusion going on; this is already in
+> -next via tip/master via tip/x86/kdump.
+> 
+> https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git/commit/?h=x86/kdump&id=b69a2afd5afce9bf6d56e349d6ab592c916e20f2
+
+Ahh, thanks for the heads up.  I'll zap it from x86/boot.
+

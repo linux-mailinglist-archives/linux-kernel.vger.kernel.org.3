@@ -2,162 +2,246 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 89A02569C9E
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 10:08:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5AB05569C9B
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 10:08:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235215AbiGGIGu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Jul 2022 04:06:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52274 "EHLO
+        id S235230AbiGGIHj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Jul 2022 04:07:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53078 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234779AbiGGIGs (ORCPT
+        with ESMTP id S235240AbiGGIHb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Jul 2022 04:06:48 -0400
-Received: from pegase2.c-s.fr (pegase2.c-s.fr [93.17.235.10])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0DAFB33E12
-        for <linux-kernel@vger.kernel.org>; Thu,  7 Jul 2022 01:06:45 -0700 (PDT)
-Received: from localhost (mailhub3.si.c-s.fr [172.26.127.67])
-        by localhost (Postfix) with ESMTP id 4LdpsH64xtz9tCS;
-        Thu,  7 Jul 2022 10:06:43 +0200 (CEST)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from pegase2.c-s.fr ([172.26.127.65])
-        by localhost (pegase2.c-s.fr [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id 5Li-Xwk3QDtB; Thu,  7 Jul 2022 10:06:43 +0200 (CEST)
-Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
-        by pegase2.c-s.fr (Postfix) with ESMTP id 4LdpsH5Gkpz9tCP;
-        Thu,  7 Jul 2022 10:06:43 +0200 (CEST)
-Received: from localhost (localhost [127.0.0.1])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id A3CFE8B79F;
-        Thu,  7 Jul 2022 10:06:43 +0200 (CEST)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from messagerie.si.c-s.fr ([127.0.0.1])
-        by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
-        with ESMTP id m_jbEc0-QBnx; Thu,  7 Jul 2022 10:06:43 +0200 (CEST)
-Received: from PO20335.IDSI0.si.c-s.fr (po20309.idsi0.si.c-s.fr [192.168.233.123])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id 5E8528B768;
-        Thu,  7 Jul 2022 10:06:43 +0200 (CEST)
-Received: from PO20335.IDSI0.si.c-s.fr (localhost [127.0.0.1])
-        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.16.1) with ESMTPS id 26786Th0478042
-        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
-        Thu, 7 Jul 2022 10:06:29 +0200
-Received: (from chleroy@localhost)
-        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.17.1/Submit) id 26786RM0478030;
-        Thu, 7 Jul 2022 10:06:27 +0200
-X-Authentication-Warning: PO20335.IDSI0.si.c-s.fr: chleroy set sender to christophe.leroy@csgroup.eu using -f
-From:   Christophe Leroy <christophe.leroy@csgroup.eu>
-To:     Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Michael Ellerman <mpe@ellerman.id.au>
-Cc:     Christophe Leroy <christophe.leroy@csgroup.eu>,
-        linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org
-Subject: [PATCH v2] powerpc/code-patching: Speed up page mapping/unmapping on PPC32
-Date:   Thu,  7 Jul 2022 10:06:18 +0200
-Message-Id: <1feabfad5952631acc033d671fad722706c4dd59.1657181170.git.christophe.leroy@csgroup.eu>
-X-Mailer: git-send-email 2.36.1
+        Thu, 7 Jul 2022 04:07:31 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B63333E29;
+        Thu,  7 Jul 2022 01:07:24 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2837A61F51;
+        Thu,  7 Jul 2022 08:07:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 32C64C3411E;
+        Thu,  7 Jul 2022 08:07:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1657181243;
+        bh=1PJR3vSNi2CqctUA37KJUC5ljQpR0hSFxiwQaafsdrw=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=h11WPHjnsVXBQRdtSVAD2tfv3aR7GPvQP6WHCL9YKf0qLe3WXI8kMmOJ3dNfzqM5+
+         R6VB4LBjhMDEnhlXCyCQ0QEPOhJN3rygXaYpXZrxAHBuiuAbx/AJpCJHX8ShBvfWmj
+         29tIRU+kvthFXiyavmGT+b/abfJ3zN/6i0UcQ7VA=
+Date:   Thu, 7 Jul 2022 10:07:21 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Maxim Devaev <mdevaev@gmail.com>
+Cc:     linux-usb@vger.kernel.org, stern@rowland.harvard.edu,
+        balbi@kernel.org, caihuoqing@baidu.com,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] usb: gadget: f_mass_storage: forced_eject attribute
+Message-ID: <YsaUOWZogtkE0ZLF@kroah.com>
+References: <20220706185936.24692-1-mdevaev@gmail.com>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1657181176; l=3182; s=20211009; h=from:subject:message-id; bh=qwhrSHeqOdSBuhjAZ7n0ZaDDCNODjbH+IoPBYXh8TLE=; b=Eu+muKObPx2nnetst4eRQIP8D4t+eSz6fBgEcqfF5o0mUE1vt7zXPiTNXqKOa1Z/wr6+ErHJsz1H X4OFI5j7BJVzJ1P6BhJ4/vSElRORJQwxcEh1webfYjxJFl93mA/K
-X-Developer-Key: i=christophe.leroy@csgroup.eu; a=ed25519; pk=HIzTzUj91asvincQGOFx6+ZF5AoUuP9GdOtQChs7Mm0=
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220706185936.24692-1-mdevaev@gmail.com>
+X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Since commit 591b4b268435 ("powerpc/code-patching: Pre-map patch area")
-the patch area is premapped so intermediate page tables are already
-allocated.
+On Wed, Jul 06, 2022 at 09:59:37PM +0300, Maxim Devaev wrote:
+> It allows to reset prevent_medium_removal flag and "eject" the image.
+> 
+> The patch is a completely alternative implementation of the previously
+> proposed [1], the idea of which was born after the mentioned discussion.
+> 
+> Signed-off-by: Maxim Devaev <mdevaev@gmail.com>
+> Link: https://lore.kernel.org/lkml/20220406092445.215288-1-mdevaev@gmail.com [1]
+> ---
+>  .../testing/configfs-usb-gadget-mass-storage  |  6 +++++
+>  Documentation/usb/gadget-testing.rst          |  6 +++++
+>  Documentation/usb/mass-storage.rst            |  9 +++++++
+>  drivers/usb/gadget/function/f_mass_storage.c  | 25 +++++++++++++++++++
+>  drivers/usb/gadget/function/storage_common.c  | 11 ++++++++
+>  drivers/usb/gadget/function/storage_common.h  |  2 ++
+>  6 files changed, 59 insertions(+)
+> 
+> diff --git a/Documentation/ABI/testing/configfs-usb-gadget-mass-storage b/Documentation/ABI/testing/configfs-usb-gadget-mass-storage
+> index c86b63a7bb43..87859ef40579 100644
+> --- a/Documentation/ABI/testing/configfs-usb-gadget-mass-storage
+> +++ b/Documentation/ABI/testing/configfs-usb-gadget-mass-storage
+> @@ -32,4 +32,10 @@ Description:
+>  				being a CD-ROM.
+>  		nofua		Flag specifying that FUA flag
+>  				in SCSI WRITE(10,12)
+> +		forced_eject	This write-only flag only makes sence when
+> +				the function is active. It causes a forced
+> +				detaching of the backing file from the LUN,
+> +				regardless of whether the host has allowed it.
+> +				Any non-zero number of bytes written will
+> +				result in ejection.
+>  		===========	==============================================
+> diff --git a/Documentation/usb/gadget-testing.rst b/Documentation/usb/gadget-testing.rst
+> index c18113077889..1481173d8719 100644
+> --- a/Documentation/usb/gadget-testing.rst
+> +++ b/Documentation/usb/gadget-testing.rst
+> @@ -333,6 +333,12 @@ In each lun directory there are the following attribute files:
+>  			being a CD-ROM.
+>  	nofua		Flag specifying that FUA flag
+>  			in SCSI WRITE(10,12)
+> +	forced_eject	This write-only flag only makes sence when
+> +			the function is active. It causes a forced
+> +			detaching of the backing file from the LUN,
+> +			regardless of whether the host has allowed it.
+> +			Any non-zero number of bytes written will
+> +			result in ejection.
+>  	=============== ==============================================
+>  
+>  Testing the MASS STORAGE function
+> diff --git a/Documentation/usb/mass-storage.rst b/Documentation/usb/mass-storage.rst
+> index d181b47c3cb6..f72e59237bce 100644
+> --- a/Documentation/usb/mass-storage.rst
+> +++ b/Documentation/usb/mass-storage.rst
+> @@ -181,6 +181,15 @@ sysfs entries
+>      Reflects the state of nofua flag for given logical unit.  It can
+>      be read and written.
+>  
+> +  - forced_eject
+> +
+> +    When written into, it allows to detach the backing file for given
+> +    logical unit, regardless of whether the host has allowed it.
+> +    The content doesn't matter, any non-zero number of bytes will
+> +    lead the forced eject.
+> +
+> +    Can not be read.
+> +
+>    Other then those, as usual, the values of module parameters can be
+>    read from /sys/module/g_mass_storage/parameters/* files.
+>  
+> diff --git a/drivers/usb/gadget/function/f_mass_storage.c b/drivers/usb/gadget/function/f_mass_storage.c
+> index 6ad669dde41c..00cac2a38178 100644
+> --- a/drivers/usb/gadget/function/f_mass_storage.c
+> +++ b/drivers/usb/gadget/function/f_mass_storage.c
+> @@ -2520,10 +2520,21 @@ static ssize_t file_store(struct device *dev, struct device_attribute *attr,
+>  	return fsg_store_file(curlun, filesem, buf, count);
+>  }
+>  
+> +static ssize_t forced_eject_store(struct device *dev,
+> +				  struct device_attribute *attr,
+> +				  const char *buf, size_t count)
+> +{
+> +	struct fsg_lun		*curlun = fsg_lun_from_dev(dev);
+> +	struct rw_semaphore	*filesem = dev_get_drvdata(dev);
+> +
+> +	return fsg_store_forced_eject(curlun, filesem, buf, count);
+> +}
+> +
+>  static DEVICE_ATTR_RW(nofua);
+>  /* mode wil be set in fsg_lun_attr_is_visible() */
+>  static DEVICE_ATTR(ro, 0, ro_show, ro_store);
+>  static DEVICE_ATTR(file, 0, file_show, file_store);
+> +static DEVICE_ATTR_WO(forced_eject);
+>  
+>  /****************************** FSG COMMON ******************************/
+>  
+> @@ -2677,6 +2688,7 @@ static struct attribute *fsg_lun_dev_attrs[] = {
+>  	&dev_attr_ro.attr,
+>  	&dev_attr_file.attr,
+>  	&dev_attr_nofua.attr,
+> +	&dev_attr_forced_eject.attr,
+>  	NULL
+>  };
+>  
+> @@ -3090,6 +3102,18 @@ static ssize_t fsg_lun_opts_inquiry_string_store(struct config_item *item,
+>  
+>  CONFIGFS_ATTR(fsg_lun_opts_, inquiry_string);
+>  
+> +static ssize_t fsg_lun_opts_forced_eject_store(struct config_item *item,
+> +					       const char *page, size_t len)
+> +{
+> +	struct fsg_lun_opts *opts = to_fsg_lun_opts(item);
+> +	struct fsg_opts *fsg_opts = to_fsg_opts(opts->group.cg_item.ci_parent);
+> +
+> +	return fsg_store_forced_eject(opts->lun, &fsg_opts->common->filesem,
+> +				      page, len);
+> +}
+> +
+> +CONFIGFS_ATTR_WO(fsg_lun_opts_, forced_eject);
+> +
+>  static struct configfs_attribute *fsg_lun_attrs[] = {
+>  	&fsg_lun_opts_attr_file,
+>  	&fsg_lun_opts_attr_ro,
+> @@ -3097,6 +3121,7 @@ static struct configfs_attribute *fsg_lun_attrs[] = {
+>  	&fsg_lun_opts_attr_cdrom,
+>  	&fsg_lun_opts_attr_nofua,
+>  	&fsg_lun_opts_attr_inquiry_string,
+> +	&fsg_lun_opts_attr_forced_eject,
+>  	NULL,
+>  };
+>  
+> diff --git a/drivers/usb/gadget/function/storage_common.c b/drivers/usb/gadget/function/storage_common.c
+> index b859a158a414..8cd95bf7831f 100644
+> --- a/drivers/usb/gadget/function/storage_common.c
+> +++ b/drivers/usb/gadget/function/storage_common.c
+> @@ -519,4 +519,15 @@ ssize_t fsg_store_inquiry_string(struct fsg_lun *curlun, const char *buf,
+>  }
+>  EXPORT_SYMBOL_GPL(fsg_store_inquiry_string);
+>  
+> +ssize_t fsg_store_forced_eject(struct fsg_lun *curlun, struct rw_semaphore *filesem,
+> +			       const char *buf, size_t count)
+> +{
+> +	int ret;
+> +
+> +	curlun->prevent_medium_removal = 0;
+> +	ret = fsg_store_file(curlun, filesem, "", 0);
+> +	return ret < 0 ? ret : count;
+> +}
+> +EXPORT_SYMBOL_GPL(fsg_store_forced_eject);
+> +
+>  MODULE_LICENSE("GPL");
+> diff --git a/drivers/usb/gadget/function/storage_common.h b/drivers/usb/gadget/function/storage_common.h
+> index bdeb1e233fc9..0a544a82cbf8 100644
+> --- a/drivers/usb/gadget/function/storage_common.h
+> +++ b/drivers/usb/gadget/function/storage_common.h
+> @@ -219,5 +219,7 @@ ssize_t fsg_store_removable(struct fsg_lun *curlun, const char *buf,
+>  			    size_t count);
+>  ssize_t fsg_store_inquiry_string(struct fsg_lun *curlun, const char *buf,
+>  				 size_t count);
+> +ssize_t fsg_store_forced_eject(struct fsg_lun *curlun, struct rw_semaphore *filesem,
+> +			       const char *buf, size_t count);
+>  
+>  #endif /* USB_STORAGE_COMMON_H */
+> -- 
+> 2.37.0
+> 
 
-Use __set_pte_at() directly instead of the heavy map_kernel_page(),
-at for unmapping just do a pte_clear() followed by a flush.
+Hi,
 
-__set_pte_at() can be used directly without the filters in
-set_pte_at() because we are mapping a normal page non executable.
+This is the friendly patch-bot of Greg Kroah-Hartman.  You have sent him
+a patch that has triggered this response.  He used to manually respond
+to these common problems, but in order to save his sanity (he kept
+writing the same thing over and over, yet to different people), I was
+created.  Hopefully you will not take offence and will fix the problem
+in your patch and resubmit it so that it can be accepted into the Linux
+kernel tree.
 
-Make sure gcc knows text_poke_area is page aligned in order to
-optimise the flush.
+You are receiving this message because of the following common error(s)
+as indicated below:
 
-This change reduces by 66% the time needed to activate ftrace on
-an 8xx (588000 tb ticks instead of 1744000).
+- This looks like a new version of a previously submitted patch, but you
+  did not list below the --- line any changes from the previous version.
+  Please read the section entitled "The canonical patch format" in the
+  kernel file, Documentation/SubmittingPatches for what needs to be done
+  here to properly describe this.
 
-Don't perform the change on PPC64 for now, as it is problematic for
-the time being.
+If you wish to discuss this problem further, or you have questions about
+how to resolve this issue, please feel free to respond to this email and
+Greg will reply once he has dug out from the pending patches received
+from other developers.
 
-Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
----
-v2: Only do it on PPC32 for now, mpe reported a problem on PPC64, see https://lore.kernel.org/lkml/165261053687.1047019.4165741740473209888.b4-ty@ellerman.id.au/T/#m9d91e820c43ebe56a72ad89403dac9eb270f5bb6
----
- arch/powerpc/lib/code-patching.c | 37 ++++++++++++++++++++++----------
- 1 file changed, 26 insertions(+), 11 deletions(-)
+thanks,
 
-diff --git a/arch/powerpc/lib/code-patching.c b/arch/powerpc/lib/code-patching.c
-index 6edf0697a526..01b9f5dc79d6 100644
---- a/arch/powerpc/lib/code-patching.c
-+++ b/arch/powerpc/lib/code-patching.c
-@@ -94,17 +94,20 @@ void __init poking_init(void)
- 	static_branch_enable(&poking_init_done);
- }
- 
-+static unsigned long get_patch_pfn(void *addr)
-+{
-+	if (IS_ENABLED(CONFIG_MODULES) && is_vmalloc_or_module_addr(addr))
-+		return vmalloc_to_pfn(addr);
-+	else
-+		return __pa_symbol(addr) >> PAGE_SHIFT;
-+}
-+
- /*
-  * This can be called for kernel text or a module.
-  */
- static int map_patch_area(void *addr, unsigned long text_poke_addr)
- {
--	unsigned long pfn;
--
--	if (IS_ENABLED(CONFIG_MODULES) && is_vmalloc_or_module_addr(addr))
--		pfn = vmalloc_to_pfn(addr);
--	else
--		pfn = __pa_symbol(addr) >> PAGE_SHIFT;
-+	unsigned long pfn = get_patch_pfn(addr);
- 
- 	return map_kernel_page(text_poke_addr, (pfn << PAGE_SHIFT), PAGE_KERNEL);
- }
-@@ -149,17 +152,29 @@ static int __do_patch_instruction(u32 *addr, ppc_inst_t instr)
- 	int err;
- 	u32 *patch_addr;
- 	unsigned long text_poke_addr;
-+	pte_t *pte;
-+	unsigned long pfn = get_patch_pfn(addr);
- 
--	text_poke_addr = (unsigned long)__this_cpu_read(text_poke_area)->addr;
-+	text_poke_addr = (unsigned long)__this_cpu_read(text_poke_area)->addr & PAGE_MASK;
- 	patch_addr = (u32 *)(text_poke_addr + offset_in_page(addr));
- 
--	err = map_patch_area(addr, text_poke_addr);
--	if (err)
--		return err;
-+	if (IS_ENABLED(CONFIG_PPC32)) {
-+		pte = virt_to_kpte(text_poke_addr);
-+		__set_pte_at(&init_mm, text_poke_addr, pte, pfn_pte(pfn, PAGE_KERNEL), 0);
-+	} else {
-+		err = map_patch_area(addr, text_poke_addr);
-+		if (err)
-+			return err;
-+	}
- 
- 	err = __patch_instruction(addr, instr, patch_addr);
- 
--	unmap_patch_area(text_poke_addr);
-+	if (IS_ENABLED(CONFIG_PPC32)) {
-+		pte_clear(&init_mm, text_poke_addr, pte);
-+		flush_tlb_kernel_range(text_poke_addr, text_poke_addr + PAGE_SIZE);
-+	} else {
-+		unmap_patch_area(text_poke_addr);
-+	}
- 
- 	return err;
- }
--- 
-2.36.1
-
+greg k-h's patch email bot

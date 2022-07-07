@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B9C9156A9EA
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 19:46:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 108BA56A9F8
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 19:48:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236397AbiGGRpT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Jul 2022 13:45:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51946 "EHLO
+        id S231875AbiGGRri (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Jul 2022 13:47:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53516 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235320AbiGGRpR (ORCPT
+        with ESMTP id S233757AbiGGRrY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Jul 2022 13:45:17 -0400
+        Thu, 7 Jul 2022 13:47:24 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E27275C95A;
-        Thu,  7 Jul 2022 10:45:16 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02EE55C97D;
+        Thu,  7 Jul 2022 10:47:22 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7D6AE62091;
-        Thu,  7 Jul 2022 17:45:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CC55FC3411E;
-        Thu,  7 Jul 2022 17:45:11 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 47E32620A6;
+        Thu,  7 Jul 2022 17:47:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 56393C3411E;
+        Thu,  7 Jul 2022 17:47:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1657215915;
-        bh=6utmIEBNmJdH+aR9y6LOhDYh2NSUvaIjv2jcybsXQCc=;
+        s=k20201202; t=1657216041;
+        bh=Om5lyrI/FUfOSiu1TyYTkifd9deSCv6M320djg1nrZM=;
         h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=cAyhptaXy+sXh7tJLLUO+9hfDyjRzLENSJ+HBy9X2F4/HeOhUBO8Meizj2dsj48tz
-         2+VupD/n2oX7oFzpv16iq8VNsclGafp+yIWNsiOIFOX2W8H4xvQ3Q6HCgALmEozHL6
-         XTOxP9EBdkL8eUZvR6Bk/6juwd4q+iXJXVPOHNNA8TPzcIhRm2vMZ461Nw/sRDZf88
-         m/b4+3DIOKRlWJ5jWfCQILcqGxpewHxdxLsAKdMD29xuKKWJReWU+qmJkVrMFyzE0q
-         azNUDuTJIrNHopCJpU0ZKAgvGCeREEI34ir7vMV89SbCvKbfA+lN86hFzyoQpRuPFm
-         UY+TA4fWyt11Q==
-Date:   Thu, 7 Jul 2022 18:54:56 +0100
+        b=UG3QjZNLJDSaydTOuou9yLJk6u83CwpZbBj5O+2xK1GfiiaPV42R0bXH1JtEnday0
+         VD8rGxK/iCJnQiv8eJhawEFOgxSSlbP+IMuWmfz05KTZ70HwZ1bZInOG0kRjWwB4oz
+         /rYHtW+c6EhbNGb8LoEYFGQ+qQQsFvoepBMdDdBZx2Y9wKK5ika0GmVDbUGqaysUns
+         Ymmd/E5JeU7n1pm72iF1aMQRgTHulPBLzXEIqitMDXSW6+Pkak3P9AvRCRbbF9xdlD
+         sTw1r+Th1KduLILQQctDHy+F9Mo8g5U4kU8vZGJLN5zDSh/26hWksF8pEhMWFRGMxb
+         AxpQbzIyw3J1Q==
+Date:   Thu, 7 Jul 2022 18:57:03 +0100
 From:   Jonathan Cameron <jic23@kernel.org>
-To:     Robert Marko <robimarko@gmail.com>
-Cc:     agross@kernel.org, bjorn.andersson@linaro.org,
-        konrad.dybcio@somainline.org, lee.jones@linaro.org,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        linus.walleij@linaro.org, lgirdwood@gmail.com, broonie@kernel.org,
-        lars@metafoo.de, linux-arm-msm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-gpio@vger.kernel.org, linux-iio@vger.kernel.org
-Subject: Re: [PATCH v6 10/12] iio: adc: qcom-spmi-adc5: add ADC5_VREF_VADC
- to rev2 ADC5
-Message-ID: <20220707185456.45ff3958@jic23-huawei>
-In-Reply-To: <20220704212402.1715182-10-robimarko@gmail.com>
-References: <20220704212402.1715182-1-robimarko@gmail.com>
-        <20220704212402.1715182-10-robimarko@gmail.com>
+To:     Marcus Folkesson <marcus.folkesson@gmail.com>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Kent Gustavsson <kent@minoris.se>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-iio@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 03/10] iio: adc: mcp3911: add support for buffers
+Message-ID: <20220707185703.4a5a3a30@jic23-huawei>
+In-Reply-To: <Yr1fqi/49l1nWYtt@gmail.com>
+References: <20220625103853.2470346-1-marcus.folkesson@gmail.com>
+        <20220625103853.2470346-3-marcus.folkesson@gmail.com>
+        <20220625124537.163bf426@jic23-huawei>
+        <Yr1fqi/49l1nWYtt@gmail.com>
 X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
@@ -62,37 +62,22 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon,  4 Jul 2022 23:24:00 +0200
-Robert Marko <robimarko@gmail.com> wrote:
 
-> Add support for ADC5_VREF_VADC channel to rev2 ADC5 channel list.
-> This channel measures the VADC reference LDO output.
+> > >  static const struct iio_info mcp3911_info = {
+> > >  	.read_raw = mcp3911_read_raw,
+> > >  	.write_raw = mcp3911_write_raw,
+> > > @@ -303,7 +353,7 @@ static int mcp3911_probe(struct spi_device *spi)
+> > >  		goto clk_disable;
+> > >  
+> > >  	indio_dev->name = spi_get_device_id(spi)->name;
+> > > -	indio_dev->modes = INDIO_DIRECT_MODE;
+> > > +	indio_dev->modes = INDIO_DIRECT_MODE | INDIO_BUFFER_TRIGGERED;  
+> > 
+> > The core sets INDIO_BUFFER_TRIGGERED as part of devm_iio_triggered_buffer_setup()
+> > so you need to set DIRECT_MODE here (that one isn't visible to the core)  
 > 
-> Signed-off-by: Robert Marko <robimarko@gmail.com>
-Acked-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+> Ok, thank you. I sent patches that fixes this in two other ADC-drivers
+> as well to avoid more people following the same thing.
 
-I'm assuming this will go in via MFD. Shout if I should pick it up
-directly.
-
-Thanks,
-
-Jonathan
-
-> ---
->  drivers/iio/adc/qcom-spmi-adc5.c | 2 ++
->  1 file changed, 2 insertions(+)
-> 
-> diff --git a/drivers/iio/adc/qcom-spmi-adc5.c b/drivers/iio/adc/qcom-spmi-adc5.c
-> index 87438d1e5c0b..7bd3745884f0 100644
-> --- a/drivers/iio/adc/qcom-spmi-adc5.c
-> +++ b/drivers/iio/adc/qcom-spmi-adc5.c
-> @@ -589,6 +589,8 @@ static const struct adc5_channels adc5_chans_rev2[ADC5_MAX_CHANNEL] = {
->  					SCALE_HW_CALIB_DEFAULT)
->  	[ADC5_1P25VREF]		= ADC5_CHAN_VOLT("vref_1p25", 0,
->  					SCALE_HW_CALIB_DEFAULT)
-> +	[ADC5_VREF_VADC]	= ADC5_CHAN_VOLT("vref_vadc", 0,
-> +					SCALE_HW_CALIB_DEFAULT)
->  	[ADC5_VPH_PWR]		= ADC5_CHAN_VOLT("vph_pwr", 1,
->  					SCALE_HW_CALIB_DEFAULT)
->  	[ADC5_VBAT_SNS]		= ADC5_CHAN_VOLT("vbat_sns", 1,
+Thanks. Much appreciated!
 

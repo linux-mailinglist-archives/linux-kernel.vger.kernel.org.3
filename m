@@ -2,128 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BF6FF56AD5D
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 23:21:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 268CC56AD61
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 23:22:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236741AbiGGVVZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Jul 2022 17:21:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35522 "EHLO
+        id S236758AbiGGVV7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Jul 2022 17:21:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35780 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236678AbiGGVVW (ORCPT
+        with ESMTP id S236555AbiGGVV6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Jul 2022 17:21:22 -0400
-Received: from mail-oi1-x231.google.com (mail-oi1-x231.google.com [IPv6:2607:f8b0:4864:20::231])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 921D832045
-        for <linux-kernel@vger.kernel.org>; Thu,  7 Jul 2022 14:21:21 -0700 (PDT)
-Received: by mail-oi1-x231.google.com with SMTP id s128so10130298oie.10
-        for <linux-kernel@vger.kernel.org>; Thu, 07 Jul 2022 14:21:21 -0700 (PDT)
+        Thu, 7 Jul 2022 17:21:58 -0400
+Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C037313A8
+        for <linux-kernel@vger.kernel.org>; Thu,  7 Jul 2022 14:21:57 -0700 (PDT)
+Received: by mail-pl1-x632.google.com with SMTP id r1so14736482plo.10
+        for <linux-kernel@vger.kernel.org>; Thu, 07 Jul 2022 14:21:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:in-reply-to:references:from:user-agent:date:message-id
-         :subject:to:cc;
-        bh=XuQp9w2Vs1aOFFH2QgkEWHPslvL9Ld8qwnD4BupNY0w=;
-        b=SXzFCD6PiakxSAJDlRX45oXMcaTKoAYue/mlyleZo0TLGj9D1x5FZiOFOc1bW5MMxm
-         zMeQR1uETxWfCgYwRwvbM/aZQlHNFz3jwfNhmuBK0Tl46qx6avBJt0Vj5QJf9fSg63nT
-         Laq+DqlvwhqfjZOD9GmtHldsC/NJuFdb8LnFw=
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=faIizSofs0zx69Ae3gA1YkV/PIqimk2KZUpeipzLxMY=;
+        b=s1cICUZz48iKQ6u/A6EwoCZanKEYcBE1yy/4rZseIqYyzTq7a/a+70ATZ+1ELNYid4
+         XsLNUJjlGpTdVVOxsHPDyw/DSmowfI76pbpMmmHh+IAzMjT+ihu15DNGM4ehioxAciHh
+         c8ud0aU5XulUNn4IfNE714fxyWnFFTlcjZ6CTag4/Z5FfAPp7pt9GaAix6f5I/1KsNBK
+         UqXYht+k553xW4KoeLJX3lkh2OSkM5fesn7QuN+340qAcRKwrSqvxHbMBqg/WIhjjRX4
+         d6IrvvTbLhWaDOd86CEoiSBkQbN+dYdHnBgMjfjvMDF3y1qpCn+ZeIcEULGfqEyzl+MJ
+         M7MQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:in-reply-to:references:from
-         :user-agent:date:message-id:subject:to:cc;
-        bh=XuQp9w2Vs1aOFFH2QgkEWHPslvL9Ld8qwnD4BupNY0w=;
-        b=ufuwprg35wLJfxY5bp0xfpGpKR1/0JKF5RcktcznPrcxWr8dC3M4tXyt/aXSn9eRz/
-         kwPxpDFv89rpYMt8f617rmHOyX5t/bYvgH6bbYO+BA2CCnow5hy6EBhGY9bvnNBujdM3
-         9Mv+6LcIr6I+2W/6bHqPOLlRdMaB3WnXSfX4+8SddqO+h2g3UnkrPcJiVhf2r/wnG/QT
-         IqyKQko1KyjTWdMRY/B0CnaUISV2HNLqsEUQk250KGW6QJqTgzcazTukHru9tMDs365X
-         vKuErXFk+t/VjATcNlIWxOO3vqOLXS2aaY44xwD8TrYzKckp02BiyWnqcpFkmYFN6E3m
-         RVeA==
-X-Gm-Message-State: AJIora/QNgalle5MmF2Typve1qV6cfVOoX46jLqMcymnablpQ9zWbZJG
-        Jml/SiCKcfkJI7y2K7aBPU6So+M0EFz+h+4wktj61Q==
-X-Google-Smtp-Source: AGRyM1u86hlfujAKJCwkQGNNNhGQ5OK4EZsg7vgXL8Rcuq1ObSFJPCM5Km3thPxlp2kWX7YX6S9fOpbX+fbPsKGN5IA=
-X-Received: by 2002:a05:6808:171c:b0:334:9342:63ef with SMTP id
- bc28-20020a056808171c00b00334934263efmr4885oib.63.1657228880881; Thu, 07 Jul
- 2022 14:21:20 -0700 (PDT)
-Received: from 753933720722 named unknown by gmailapi.google.com with
- HTTPREST; Thu, 7 Jul 2022 14:21:20 -0700
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=faIizSofs0zx69Ae3gA1YkV/PIqimk2KZUpeipzLxMY=;
+        b=edd8nV8afIEQFE8Oh5W0SdD1bmaORviMV+IQNxTZ3oHUZZ3XYQ2VpszhNvYdo84A1Y
+         EbNu8kxKzsvSeFbAQxh9mpTnvMqaeiY908NNOseBw0k6j6mS8abMamwrsu3BWJpEoFwV
+         Vd9UmXkLr8581RB/QNleEOcXQVIrzzxtZa5NJpKAfj0FVvvz9Ji5W5GksXwAbNrmStig
+         sWh1YlwfPIHSfyOcQzFKMTgOm+/4PBo0xKilnaLy6aR3GZIM3+kwR5RTB9lCdaOoXwsU
+         ZwzaqDifoggLVwDwYV6kg3mLWSa2fC+yzTjI1MRxYyyI7Wk8vo81rAmrmO2VHv37KMkx
+         8NyA==
+X-Gm-Message-State: AJIora/BXgQb5dHAUPvATl1qdBNvi94rHrAo6xgvp2mkRRqx80JxVROS
+        YIufzy8KMvYRoGFXDXW8KRBUpw==
+X-Google-Smtp-Source: AGRyM1vyiwNsHI0IbTNAJsLAB0nAB57lsmwO5bt52/vavViucROF0VncHlr1NXzSPgKD4L7XtPsnlg==
+X-Received: by 2002:a17:902:cf06:b0:16b:cc33:5bce with SMTP id i6-20020a170902cf0600b0016bcc335bcemr32777144plg.152.1657228916527;
+        Thu, 07 Jul 2022 14:21:56 -0700 (PDT)
+Received: from google.com (201.59.83.34.bc.googleusercontent.com. [34.83.59.201])
+        by smtp.gmail.com with ESMTPSA id m12-20020a170902768c00b0016a17da4ad4sm28183964pll.39.2022.07.07.14.21.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 07 Jul 2022 14:21:56 -0700 (PDT)
+Date:   Thu, 7 Jul 2022 21:21:52 +0000
+From:   Carlos Llamas <cmllamas@google.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Arve =?iso-8859-1?B?SGr4bm5lduVn?= <arve@android.com>,
+        Todd Kjos <tkjos@android.com>,
+        Martijn Coenen <maco@android.com>,
+        Christian Brauner <brauner@kernel.org>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        Hridya Valsaraju <hridya@google.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        kernel-team@android.com, linux-kernel@vger.kernel.org,
+        kernel test robot <lkp@intel.com>
+Subject: Re: [PATCH] binder: fix redefinition of seq_file attributes
+Message-ID: <YsdOcFxGTGkYvtd4@google.com>
+References: <20220701182041.2134313-1-cmllamas@google.com>
+ <YsMRtGg8xQ2Qicr2@kroah.com>
 MIME-Version: 1.0
-In-Reply-To: <40b6a28c-0237-55d7-2f5d-1c571f27e7d6@quicinc.com>
-References: <20220706191442.1150634-1-swboyd@chromium.org> <40b6a28c-0237-55d7-2f5d-1c571f27e7d6@quicinc.com>
-From:   Stephen Boyd <swboyd@chromium.org>
-User-Agent: alot/0.10
-Date:   Thu, 7 Jul 2022 14:21:20 -0700
-Message-ID: <CAE-0n51KOMLP4XJHw2CPNikzfhY0xdjeCScYwvCZ7gAYJM+8Fw@mail.gmail.com>
-Subject: Re: [PATCH] drm/msm/dsi: Set panel orientation when directly connected
-To:     Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Rob Clark <robdclark@gmail.com>
-Cc:     linux-kernel@vger.kernel.org, patches@lists.linux.dev,
-        Sean Paul <sean@poorly.run>, dri-devel@lists.freedesktop.org,
-        freedreno@lists.freedesktop.org,
-        Hsin-Yi Wang <hsinyi@chromium.org>,
-        Douglas Anderson <dianders@chromium.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YsMRtGg8xQ2Qicr2@kroah.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Quoting Abhinav Kumar (2022-07-07 14:11:08)
->
->
-> On 7/6/2022 12:14 PM, Stephen Boyd wrote:
-> > Set the panel orientation in drm when the panel is directly connected,
-> > i.e. we're not using an external bridge. The external bridge case is
-> > already handled by the panel bridge code, so we only update the path we
-> > take when the panel is directly connected/internal. This silences a
-> > warning splat coming from __drm_mode_object_add() on Wormdingler boards.
-> >
-> > Cc: Hsin-Yi Wang <hsinyi@chromium.org>
-> > Cc: Douglas Anderson <dianders@chromium.org>
-> > Signed-off-by: Stephen Boyd <swboyd@chromium.org>
-> > ---
-> >
-> > This relies on commit 5e41b01a7808 ("drm/panel: Add an API to allow drm
-> > to set orientation from panel") which is in drm-misc
-> >
-> >   drivers/gpu/drm/msm/dsi/dsi_manager.c | 2 ++
-> >   1 file changed, 2 insertions(+)
-> >
-> > diff --git a/drivers/gpu/drm/msm/dsi/dsi_manager.c b/drivers/gpu/drm/msm/dsi/dsi_manager.c
-> > index cb84d185d73a..9333f7095acd 100644
-> > --- a/drivers/gpu/drm/msm/dsi/dsi_manager.c
-> > +++ b/drivers/gpu/drm/msm/dsi/dsi_manager.c
-> > @@ -268,6 +268,8 @@ static int msm_dsi_manager_panel_init(struct drm_connector *conn, u8 id)
-> >               return PTR_ERR(panel);
-> >       }
-> >
-> > +     drm_connector_set_orientation_from_panel(conn, panel);
-> > +
->
-> This should be moved below the !panel check since you are passing panel
-> as one of the params.
+On Mon, Jul 04, 2022 at 06:13:40PM +0200, Greg Kroah-Hartman wrote:
+> On Fri, Jul 01, 2022 at 06:20:41PM +0000, Carlos Llamas wrote:
+> > +	binder_for_each_debugfs_entry(db_entry) {
+> > +		dentry = binderfs_create_file(binder_logs_root_dir,
+> > +					      db_entry->name,
+> > +					      db_entry->fops,
+> > +					      db_entry->data);
+> > +		if (IS_ERR(dentry)) {
+> > +			ret = PTR_ERR(dentry);
+> > +			goto out;
+> > +		}
+> 
+> I know this is a copy of what is there already, but there is never a
+> need to check the result of a debugfs_create_* call.  Just call it and
+> move on, never "abort" based on the result of a debugfs call, that's not
+> a good idea.
 
-drm_connector_set_orientation_from_panel() checks for a NULL panel
-pointer and sets to UNKNOWN. If I moved this below the !panel check then
-I'd have to split that condition for !IS_BONDED_DSI() which was more
-diff.
+This is true, none of these debugfs files seem critical for mounting a
+binderfs instance. I'm thinking init_binder_logs() should just return
+void. I'm only a bit hesitant to completely ignore the return code as
+users specifically ask for these files to be created via mount option
+"stats". So probably a pr_warn is what is actually needed here.
 
->
-> I looked up the doc and it says that for unknown(default cases) this is
-> a no-op so I think this change is fine otherwise.
->
-> "It is allowed to call this function with a panel_orientation of
-> DRM_MODE_PANEL_ORIENTATION_UNKNOWN, in which case it is a no-op."
+> 
+> So can you change this here, or want to send a follow-on patch that
+> removes these checks?
 
-Ok, so you're fine with this patch?
+Sure, I'll send a follow-on patch. I'm currently AFK so setting ETA for
+next week until I can actually test this change.
 
->
->
-> >       if (!panel || !IS_BONDED_DSI())
-> >               goto out;
-> >
-> >
-> > base-commit: 15b9ca1641f0c3cd74885280331e9172c62a125e
+> 
+> >  	}
+> >  
+> >  	proc_log_dir = binderfs_create_dir(binder_logs_root_dir, "proc");
+> 
+> Also there's never a need to save a directory, you can always look it up
+> when you want to remove it.
+
+It seems this is a convenient way to share this path with binder which
+otherwise doesn't know where binderfs was mounted. From having a quick
+look it doesn't seem that we need to share all the details in struct
+binderfs_info though. Maybe there is a better way to handle all this.
+
+Christian, since this is binderfs area WDYT?
+
+--
+Carlos Llamas

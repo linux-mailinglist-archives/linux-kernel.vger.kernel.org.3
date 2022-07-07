@@ -2,127 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4926156A1B2
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 14:00:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C82ED56A1B7
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 14:01:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235052AbiGGMAS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Jul 2022 08:00:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38592 "EHLO
+        id S234762AbiGGMAq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Jul 2022 08:00:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38532 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235642AbiGGMAC (ORCPT
+        with ESMTP id S235614AbiGGMAa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Jul 2022 08:00:02 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B0135925D
-        for <linux-kernel@vger.kernel.org>; Thu,  7 Jul 2022 04:58:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1657195084; x=1688731084;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=Y897ccQh9DniNRVq6CwkRyY6onhzd1oeECrmj1dS8v0=;
-  b=PBpUDtxpZPreo5XK0FPNp58UqL0ySFG0aRLQiV/SStWqxmrtXvQ+XjPC
-   cSw1UUT20t8elxZo2RJAnTJVznULekP158mRNv09FHI7pyNhEU/bSRFmZ
-   aQveGGD3cvPIfqb1RWaZVMQw8/gVGrWQYCGXoUsxC3ndsGx+fLf+PGDFh
-   WC2GLeDnyPv1NrsMhAE4+4OfGN7WvStxDWz5vVh9Wg0KYeMmw0e3JxEk4
-   NgkXHerSXZtCdyi/BuCihfyo48l1A3FlkAm2Cu8MzqRHAzfUAah9J5W7f
-   a/Pr/48alSEc8em/kGw1l5gVfRlSNfUa2hLvMn/m3T+tSrPruxAganyOZ
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10400"; a="284029853"
-X-IronPort-AV: E=Sophos;i="5.92,252,1650956400"; 
-   d="scan'208";a="284029853"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jul 2022 04:58:04 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,252,1650956400"; 
-   d="scan'208";a="620762106"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by orsmga008.jf.intel.com with ESMTP; 07 Jul 2022 04:58:00 -0700
-Received: by black.fi.intel.com (Postfix, from userid 1000)
-        id C5DCD400; Thu,  7 Jul 2022 14:58:07 +0300 (EEST)
-Date:   Thu, 7 Jul 2022 14:58:07 +0300
-From:   "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
-To:     Alexander Potapenko <glider@google.com>
-Cc:     Dave Hansen <dave.hansen@linux.intel.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        the arch/x86 maintainers <x86@kernel.org>,
-        Kostya Serebryany <kcc@google.com>,
-        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
-        Andrey Konovalov <andreyknvl@gmail.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        "H . J . Lu" <hjl.tools@gmail.com>,
-        Andi Kleen <ak@linux.intel.com>,
-        Rick Edgecombe <rick.p.edgecombe@intel.com>,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCHv4 3/8] mm: Pass down mm_struct to untagged_addr()
-Message-ID: <20220707115807.pzrj7bngm2ndcjwk@black.fi.intel.com>
-References: <20220622162230.83474-1-kirill.shutemov@linux.intel.com>
- <20220622162230.83474-4-kirill.shutemov@linux.intel.com>
- <CAG_fn=WgyitSd9h2ni2xpBBvgnoGTcwZOpWyNE5QRSRn+PcC=A@mail.gmail.com>
- <20220706231349.4ghhewbfpzjln56u@black.fi.intel.com>
- <CAG_fn=Ut8OaQ40VmNvG8HtJ7Cb4M03ce3ihFPrmj+PNQB0tF3A@mail.gmail.com>
+        Thu, 7 Jul 2022 08:00:30 -0400
+Received: from sender-of-o53.zoho.in (sender-of-o53.zoho.in [103.117.158.53])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50855564D2;
+        Thu,  7 Jul 2022 05:00:28 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1657195193; cv=none; 
+        d=zohomail.in; s=zohoarc; 
+        b=UXI3yFQQYQvAHbcwU47b2aV4XPVAOEmMMlZDYyLASHbsDrCE5eX9BYx9CQLwZCa1w5FA55qJKDendi/Q1QzoIsDk2PuqtHlEZmvuX15YaXhoRVo97G2MgOStTUrI7wn/c3EQ+EtMmbdQc6OnDDers1RSnKW3aSUskKZce1MMBpQ=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.in; s=zohoarc; 
+        t=1657195193; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
+        bh=9oIIAaHxLVDhvrlkTzyijBA4VZ4czewxEi1HFtBUOug=; 
+        b=Zo2xUH1iOtOefPSmYk0R9mLo7SNeXJoY3enHcHi/BfaabMulQlKyM4FPaTs8k9HA//uucsMzonvLgm2V0vfylypzJJqFWa8jr5R+elmh4eL6f6OZnV1PEG8Kp4PZ9jd4L1ItoFp82qGOCH1qsVM3QiI5FxTAOmpS+g+dUqEaryQ=
+ARC-Authentication-Results: i=1; mx.zohomail.in;
+        dkim=pass  header.i=siddh.me;
+        spf=pass  smtp.mailfrom=code@siddh.me;
+        dmarc=pass header.from=<code@siddh.me>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1657195193;
+        s=zmail; d=siddh.me; i=code@siddh.me;
+        h=Date:Date:From:From:To:To:Cc:Cc:Message-ID:In-Reply-To:References:Subject:Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:Message-Id:Reply-To;
+        bh=9oIIAaHxLVDhvrlkTzyijBA4VZ4czewxEi1HFtBUOug=;
+        b=hwnc2GD2S72yhNd+NMB/+XXsMH1iMdOo2ao2ky7s4lHQaSwHhwhBx8lfrARdu7Wa
+        RvrhAU86lvXXIJ8e7JjhdYC1E9m7Garllc9b8Nad20DVzzYPHSGHkEcTtfaKdTF0mHm
+        LeBDy5Jx95cQxV4OJKMpj5jFumgmc1e6XrMNtw4s=
+Received: from mail.zoho.in by mx.zoho.in
+        with SMTP id 1657195180973536.7531988269672; Thu, 7 Jul 2022 17:29:40 +0530 (IST)
+Date:   Thu, 07 Jul 2022 17:29:40 +0530
+From:   Siddh Raman Pant <code@siddh.me>
+To:     "Greg KH" <gregkh@linuxfoundation.org>
+Cc:     "Johannes Berg" <johannes@sipsolutions.net>,
+        "David S . Miller" <davem@davemloft.net>,
+        "Eric Dumazet" <edumazet@google.com>,
+        "Jakub Kicinski" <kuba@kernel.org>,
+        "Paolo Abeni" <pabeni@redhat.com>,
+        "netdev" <netdev@vger.kernel.org>,
+        "linux-wireless" <linux-wireless@vger.kernel.org>,
+        "linux-kernel" <linux-kernel@vger.kernel.org>,
+        "linux-kernel-mentees" 
+        <linux-kernel-mentees@lists.linuxfoundation.org>
+Message-ID: <181d887b398.167dab1d11045.9186448565104273580@siddh.me>
+In-Reply-To: <YsbIoB5KTqdRva6g@kroah.com>
+References: <20220701145423.53208-1-code@siddh.me>
+ <181d8729017.4900485b8578.8329491601163367716@siddh.me> <YsbIoB5KTqdRva6g@kroah.com>
+Subject: Re: Ping: [PATCH] net: Fix UAF in ieee80211_scan_rx()
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAG_fn=Ut8OaQ40VmNvG8HtJ7Cb4M03ce3ihFPrmj+PNQB0tF3A@mail.gmail.com>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+Importance: Medium
+User-Agent: Zoho Mail
+X-Mailer: Zoho Mail
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_RED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jul 07, 2022 at 10:56:53AM +0200, Alexander Potapenko wrote:
-> On Thu, Jul 7, 2022 at 1:14 AM Kirill A. Shutemov
-> <kirill.shutemov@linux.intel.com> wrote:
-> >
-> > On Tue, Jul 05, 2022 at 05:42:21PM +0200, Alexander Potapenko wrote:
-> > > Kirill,
-> > >
-> > >
-> > > > diff --git a/lib/strnlen_user.c b/lib/strnlen_user.c
-> > > > index feeb935a2299..abc096a68f05 100644
-> > > > --- a/lib/strnlen_user.c
-> > > > +++ b/lib/strnlen_user.c
-> > > > @@ -97,7 +97,7 @@ long strnlen_user(const char __user *str, long count)
-> > > >                 return 0;
-> > > >
-> > > >         max_addr = TASK_SIZE_MAX;
-> > > > -       src_addr = (unsigned long)untagged_addr(str);
-> > > > +       src_addr = (unsigned long)untagged_addr(current->mm, str);
-> > >
-> > > In a downstream kernel with LAM disabled I'm seeing current->mm being
-> > > NULL at this point, because strnlen_user() is being called by
-> > > kdevtmpfs.
-> > > IIUC current->mm is only guaranteed to be non-NULL in the userspace
-> > > process context, whereas untagged_addr() may get called in random
-> > > places.
-> > >
-> > > Am I missing something?
-> >
-> > Hm. Could you show a traceback?
-> >
-> > As strnlen_user() intended to be used on an user string I expected it to
-> > be called from a process context. I guess I'm wrong, but I don't yet
-> > understand why.
+On Thu, 07 Jul 2022 17:20:56 +0530  Greg KH <gregkh@linuxfoundation.org> wrote
+> On Thu, Jul 07, 2022 at 05:06:35PM +0530, Siddh Raman Pant via Linux-kernel-mentees wrote:
+> > Ping?
 > 
-> Oh, I see now. The old implementation of devtmpfsd()
-> (https://elixir.bootlin.com/linux/v5.4/source/drivers/base/devtmpfs.c#L397)
-> uses ksys_mount(), which assumes that the strings must be copied from
-> the userspace, whereas they are actually constants in kernel .rodata
+> context-less pings, on a patch that was sent less than 1 week ago, are
+> usually not a good idea.  Normally wait for 2 weeks and then resend if
+> you have not heard anything back.
 > 
-> Wonder if the validity of mm->current for userspace accesses is
-> actually enforced anyhow in newer kernels.
+> good luck!
+> 
+> greg k-h
 
-I think it is.
+Sorry, I never intended to disturb anyone.
 
-See 967747bbc084 and how it changes strnlen_user(). With max_addr equal to
-TASK_SIZE_MAX, strnlen_user() will always fail on a kernel string.
-
--- 
- Kirill A. Shutemov
+Thanks for informing,
+Siddh

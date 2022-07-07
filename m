@@ -2,267 +2,246 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 204C856AAE7
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 20:37:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A52EF56AAEC
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 20:38:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236691AbiGGSfL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Jul 2022 14:35:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36666 "EHLO
+        id S236703AbiGGSiU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Jul 2022 14:38:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39100 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236438AbiGGSex (ORCPT
+        with ESMTP id S236261AbiGGSiS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Jul 2022 14:34:53 -0400
-Received: from mail-vs1-xe2b.google.com (mail-vs1-xe2b.google.com [IPv6:2607:f8b0:4864:20::e2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5DBD2CDC5
-        for <linux-kernel@vger.kernel.org>; Thu,  7 Jul 2022 11:33:46 -0700 (PDT)
-Received: by mail-vs1-xe2b.google.com with SMTP id 185so8021434vse.6
-        for <linux-kernel@vger.kernel.org>; Thu, 07 Jul 2022 11:33:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=waymo.com; s=20210112;
-        h=mime-version:references:in-reply-to:reply-to:from:date:message-id
-         :subject:to:cc:content-transfer-encoding;
-        bh=nn6eOwe8KztwdNAWxsTG87VOiKGbCAJEGM+HEwr2iD4=;
-        b=Q8Xh+F/wfTZFJZOhAu9FZXg6j9b25n3noPIaoAROmFcqWadusg7tQGpSrsUHMLCSif
-         mHIFrgoB0A71ptocb+Zk29/jcsgu5lp5xwy6Ae+nguP6zkCdjoT5iqk0kTHBjr3anHyq
-         /vs1o9NqJmIRL4+IzufIpTzF1ZUEmG5ZKF6xSAAoURLCIDzdFEuWqQXIIyDLjI0HNIf6
-         7OHNj9iYbPXjGIWuY4nhHimksGw9/j9HDTLybKCdS443WWfLOWlFMCFNVD5ki+aEMx7J
-         RdaRqAkRZJiUnp9+lQb58hwdZQ6YZggNl9Zm78piGYbtC9sqEem9EPpXz23vD2b0noih
-         szRw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:reply-to
-         :from:date:message-id:subject:to:cc:content-transfer-encoding;
-        bh=nn6eOwe8KztwdNAWxsTG87VOiKGbCAJEGM+HEwr2iD4=;
-        b=rndV18QgmSnjW4+y5okwpwLdpFHP+qp1QPw+sLFl6ybexupf0iowxcxiwtSkVquDiJ
-         bwDXIaMeeryVBn+rl4EbftWTdJn5N/TP6U24/ReTKt0ttPEWwTEPSjWQF+PWO+vD6wlW
-         UYvfrcRXcwgN6adxJWNh4IGN0iJoHfMf4oTj2u8hskDtNDFWAYmB27pKGde58h8Gz6aP
-         DmXoSJzK77Hn5xWVmxi7zTASUmIlr571EUDEASoc5KhyG223QvPKAYvsFtQJc5FbneZQ
-         Re2chd7RvIyRqTaG1XnVTfJl6hl+awWo9B4FGkZ30QC1NMc8MVEGgqb2yjdeMIbjVJih
-         dqUQ==
-X-Gm-Message-State: AJIora/MA94v0BVMH8qPowWTNbkzKuF84aAJo3w8nu1gWs0y8vZXCi1x
-        wwuHlGeM7mBVrvwnqsye+okVZ5jAdEQTrdr5JOZ0jClDFnY=
-X-Google-Smtp-Source: AGRyM1sGmQCk/AS0etpboCWPaSLmERvN0DIYgGhIrNpxADBFyD57k8O5yqxNdEYy9ZFdRQMTHZuaiBEfqaqqvEE7TgM=
-X-Received: by 2002:a67:dc8c:0:b0:356:c204:fd6 with SMTP id
- g12-20020a67dc8c000000b00356c2040fd6mr12754936vsk.38.1657218825844; Thu, 07
- Jul 2022 11:33:45 -0700 (PDT)
+        Thu, 7 Jul 2022 14:38:18 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CE3E3B1;
+        Thu,  7 Jul 2022 11:38:17 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 19535622E2;
+        Thu,  7 Jul 2022 18:38:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EBA90C3411E;
+        Thu,  7 Jul 2022 18:38:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1657219096;
+        bh=XKZ9myQeTuUmO6Y2lKD7FxPu+lliZc7yaUuDsNTXtEE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=jWxlf7AzfQTnNLfVz9YnU3D4Rf6+B/B3R1vIfxdzWHXTZrkLNy988yzk16a/8ndm9
+         fBl26duvEPPn10zENYOMStSfE9siGL43Ya5GeU/5PtCg3+clnKu91PB+a/5fKKX0e6
+         zskPyIMgU2B/BrZ2eq8XGzNyAeTzz0Pvp+/A4/nE=
+Date:   Thu, 7 Jul 2022 20:38:13 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Maxim Devaev <mdevaev@gmail.com>
+Cc:     linux-usb@vger.kernel.org, stern@rowland.harvard.edu,
+        balbi@kernel.org, caihuoqing@baidu.com,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3] usb: gadget: f_mass_storage: forced_eject attribute
+Message-ID: <YscoFTmMC4v3k5/i@kroah.com>
+References: <20220707170912.70505-1-mdevaev@gmail.com>
 MIME-Version: 1.0
-References: <20220630001825.3905089-1-rsilvera@google.com> <CAM9d7cjAHdZ3-NbZQgR5i9NmiBW3U5pY6crtvb7RQWG5QvmHqg@mail.gmail.com>
-In-Reply-To: <CAM9d7cjAHdZ3-NbZQgR5i9NmiBW3U5pY6crtvb7RQWG5QvmHqg@mail.gmail.com>
-Reply-To: rsilvera@waymo.com
-From:   Raul Silvera <rsilvera@waymo.com>
-Date:   Thu, 7 Jul 2022 11:33:19 -0700
-Message-ID: <CA+PGoB80cDcbrJYqr5VKWC7F5DsaAedNiSdjCA0WiPcp7+wj_w@mail.gmail.com>
-Subject: Re: [PATCH] perf inject: Add a command line option to specify build ids.
-To:     Namhyung Kim <namhyung@kernel.org>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        linux-perf-users <linux-perf-users@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-9.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        USER_IN_DEF_SPF_WL autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220707170912.70505-1-mdevaev@gmail.com>
+X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Thank you. Will apply these suggestions and send an updated version shortly=
-.
+On Thu, Jul 07, 2022 at 08:09:13PM +0300, Maxim Devaev wrote:
+> It allows to reset prevent_medium_removal flag and "eject" the image.
+> 
+> The patch is a completely alternative implementation of the previously
+> proposed [1], the idea of which was born after the mentioned discussion.
+> 
+> Signed-off-by: Maxim Devaev <mdevaev@gmail.com>
+> Link: https://lore.kernel.org/lkml/20220406092445.215288-1-mdevaev@gmail.com [1]
+> ---
+>  .../testing/configfs-usb-gadget-mass-storage  |  6 +++++
+>  Documentation/usb/gadget-testing.rst          |  6 +++++
+>  Documentation/usb/mass-storage.rst            |  9 +++++++
+>  drivers/usb/gadget/function/f_mass_storage.c  | 25 +++++++++++++++++++
+>  drivers/usb/gadget/function/storage_common.c  | 11 ++++++++
+>  drivers/usb/gadget/function/storage_common.h  |  2 ++
+>  6 files changed, 59 insertions(+)
+> 
+> diff --git a/Documentation/ABI/testing/configfs-usb-gadget-mass-storage b/Documentation/ABI/testing/configfs-usb-gadget-mass-storage
+> index c86b63a7bb43..d899adb57e81 100644
+> --- a/Documentation/ABI/testing/configfs-usb-gadget-mass-storage
+> +++ b/Documentation/ABI/testing/configfs-usb-gadget-mass-storage
+> @@ -32,4 +32,10 @@ Description:
+>  				being a CD-ROM.
+>  		nofua		Flag specifying that FUA flag
+>  				in SCSI WRITE(10,12)
+> +		forced_eject	This write-only file is useful only when
+> +				the function is active. It causes the backing
+> +				file to be forcibly detached from the LUN,
+> +				regardless of whether the host has allowed it.
+> +				Any non-zero number of bytes written will
+> +				result in ejection.
+>  		===========	==============================================
+> diff --git a/Documentation/usb/gadget-testing.rst b/Documentation/usb/gadget-testing.rst
+> index c18113077889..15624c4fe633 100644
+> --- a/Documentation/usb/gadget-testing.rst
+> +++ b/Documentation/usb/gadget-testing.rst
+> @@ -333,6 +333,12 @@ In each lun directory there are the following attribute files:
+>  			being a CD-ROM.
+>  	nofua		Flag specifying that FUA flag
+>  			in SCSI WRITE(10,12)
+> +	forced_eject	This write-only file is useful only when
+> +			the function is active. It causes the backing
+> +			file to be forcibly detached from the LUN,
+> +			regardless of whether the host has allowed it.
+> +			Any non-zero number of bytes written will
+> +			result in ejection.
+>  	=============== ==============================================
+>  
+>  Testing the MASS STORAGE function
+> diff --git a/Documentation/usb/mass-storage.rst b/Documentation/usb/mass-storage.rst
+> index d181b47c3cb6..f399ec631599 100644
+> --- a/Documentation/usb/mass-storage.rst
+> +++ b/Documentation/usb/mass-storage.rst
+> @@ -181,6 +181,15 @@ sysfs entries
+>      Reflects the state of nofua flag for given logical unit.  It can
+>      be read and written.
+>  
+> +  - forced_eject
+> +
+> +    When written into, it causes the backing file to be forcibly
+> +    detached from the LUN, regardless of whether the host has allowed
+> +    it.  The content doesn't matter, any non-zero number of bytes
+> +    written will result in ejection.
+> +
+> +    Can not be read.
+> +
+>    Other then those, as usual, the values of module parameters can be
+>    read from /sys/module/g_mass_storage/parameters/* files.
+>  
+> diff --git a/drivers/usb/gadget/function/f_mass_storage.c b/drivers/usb/gadget/function/f_mass_storage.c
+> index 6ad669dde41c..00cac2a38178 100644
+> --- a/drivers/usb/gadget/function/f_mass_storage.c
+> +++ b/drivers/usb/gadget/function/f_mass_storage.c
+> @@ -2520,10 +2520,21 @@ static ssize_t file_store(struct device *dev, struct device_attribute *attr,
+>  	return fsg_store_file(curlun, filesem, buf, count);
+>  }
+>  
+> +static ssize_t forced_eject_store(struct device *dev,
+> +				  struct device_attribute *attr,
+> +				  const char *buf, size_t count)
+> +{
+> +	struct fsg_lun		*curlun = fsg_lun_from_dev(dev);
+> +	struct rw_semaphore	*filesem = dev_get_drvdata(dev);
+> +
+> +	return fsg_store_forced_eject(curlun, filesem, buf, count);
+> +}
+> +
+>  static DEVICE_ATTR_RW(nofua);
+>  /* mode wil be set in fsg_lun_attr_is_visible() */
+>  static DEVICE_ATTR(ro, 0, ro_show, ro_store);
+>  static DEVICE_ATTR(file, 0, file_show, file_store);
+> +static DEVICE_ATTR_WO(forced_eject);
+>  
+>  /****************************** FSG COMMON ******************************/
+>  
+> @@ -2677,6 +2688,7 @@ static struct attribute *fsg_lun_dev_attrs[] = {
+>  	&dev_attr_ro.attr,
+>  	&dev_attr_file.attr,
+>  	&dev_attr_nofua.attr,
+> +	&dev_attr_forced_eject.attr,
+>  	NULL
+>  };
+>  
+> @@ -3090,6 +3102,18 @@ static ssize_t fsg_lun_opts_inquiry_string_store(struct config_item *item,
+>  
+>  CONFIGFS_ATTR(fsg_lun_opts_, inquiry_string);
+>  
+> +static ssize_t fsg_lun_opts_forced_eject_store(struct config_item *item,
+> +					       const char *page, size_t len)
+> +{
+> +	struct fsg_lun_opts *opts = to_fsg_lun_opts(item);
+> +	struct fsg_opts *fsg_opts = to_fsg_opts(opts->group.cg_item.ci_parent);
+> +
+> +	return fsg_store_forced_eject(opts->lun, &fsg_opts->common->filesem,
+> +				      page, len);
+> +}
+> +
+> +CONFIGFS_ATTR_WO(fsg_lun_opts_, forced_eject);
+> +
+>  static struct configfs_attribute *fsg_lun_attrs[] = {
+>  	&fsg_lun_opts_attr_file,
+>  	&fsg_lun_opts_attr_ro,
+> @@ -3097,6 +3121,7 @@ static struct configfs_attribute *fsg_lun_attrs[] = {
+>  	&fsg_lun_opts_attr_cdrom,
+>  	&fsg_lun_opts_attr_nofua,
+>  	&fsg_lun_opts_attr_inquiry_string,
+> +	&fsg_lun_opts_attr_forced_eject,
+>  	NULL,
+>  };
+>  
+> diff --git a/drivers/usb/gadget/function/storage_common.c b/drivers/usb/gadget/function/storage_common.c
+> index b859a158a414..8cd95bf7831f 100644
+> --- a/drivers/usb/gadget/function/storage_common.c
+> +++ b/drivers/usb/gadget/function/storage_common.c
+> @@ -519,4 +519,15 @@ ssize_t fsg_store_inquiry_string(struct fsg_lun *curlun, const char *buf,
+>  }
+>  EXPORT_SYMBOL_GPL(fsg_store_inquiry_string);
+>  
+> +ssize_t fsg_store_forced_eject(struct fsg_lun *curlun, struct rw_semaphore *filesem,
+> +			       const char *buf, size_t count)
+> +{
+> +	int ret;
+> +
+> +	curlun->prevent_medium_removal = 0;
+> +	ret = fsg_store_file(curlun, filesem, "", 0);
+> +	return ret < 0 ? ret : count;
+> +}
+> +EXPORT_SYMBOL_GPL(fsg_store_forced_eject);
+> +
+>  MODULE_LICENSE("GPL");
+> diff --git a/drivers/usb/gadget/function/storage_common.h b/drivers/usb/gadget/function/storage_common.h
+> index bdeb1e233fc9..0a544a82cbf8 100644
+> --- a/drivers/usb/gadget/function/storage_common.h
+> +++ b/drivers/usb/gadget/function/storage_common.h
+> @@ -219,5 +219,7 @@ ssize_t fsg_store_removable(struct fsg_lun *curlun, const char *buf,
+>  			    size_t count);
+>  ssize_t fsg_store_inquiry_string(struct fsg_lun *curlun, const char *buf,
+>  				 size_t count);
+> +ssize_t fsg_store_forced_eject(struct fsg_lun *curlun, struct rw_semaphore *filesem,
+> +			       const char *buf, size_t count);
+>  
+>  #endif /* USB_STORAGE_COMMON_H */
+> -- 
+> 2.37.0
+> 
 
-Ra=C3=BAl E. Silvera
-Software Engineer
-waymo.com
+Hi,
 
-Ra=C3=BAl E. Silvera
-Software Engineer
-waymo.com
+This is the friendly patch-bot of Greg Kroah-Hartman.  You have sent him
+a patch that has triggered this response.  He used to manually respond
+to these common problems, but in order to save his sanity (he kept
+writing the same thing over and over, yet to different people), I was
+created.  Hopefully you will not take offence and will fix the problem
+in your patch and resubmit it so that it can be accepted into the Linux
+kernel tree.
 
+You are receiving this message because of the following common error(s)
+as indicated below:
 
-On Wed, Jul 6, 2022 at 2:27 PM Namhyung Kim <namhyung@kernel.org> wrote:
->
-> Hi Raul,
->
-> On Wed, Jun 29, 2022 at 5:18 PM Raul Silvera <rsilvera@google.com> wrote:
-> >
-> > This commit adds the option --known-build-ids to perf inject.
-> > It allows the user to explicitly specify the build id for a given
-> > path, instead of retrieving it from the current system. This is
-> > useful in cases where a perf.data file is processed on a different
-> > system from where it was collected, or if some of the binaries are
-> > no longer available.
-> >
-> > The build ids and paths are specified in pairs in the command line.
-> > Using the file:// specifier, build ids can be loaded from a file
-> > directly generated by perf buildid-list. This is convenient to copy
-> > build ids from one perf.data file to another.
-> >
-> > ** Example: In this example we use perf record to create two
-> > perf.data files, one with build ids and another without, and use
-> > perf buildid-list and perf inject to copy the build ids from the
-> > first file to the second.
-> >
-> > $ perf record ls /tmp                  # Create perf.data file
-> > $ perf record --no-buildid ls /tmp -o perf.data.no-buildid
-> > $ perf buildid-list > /tmp/build-ids.txt
-> > $ perf inject -b --known-build-ids=3D'file:///tmp/build-ids.txt' \
-> > $  -i perf.data.no-buildid -o perf.data.buildid
->
-> You'd better indent the block for the readability and to prevent
-> possible interference from the shell (for comments usually).
->
-> The last line is a continuation from the above line and it used
-> to print other prompts like ">".
->
-> >
-> > Signed-off-by: Raul Silvera <rsilvera@google.com>
-> > ---
-> >  tools/perf/builtin-inject.c | 57 +++++++++++++++++++++++++++++++++++++
-> >  1 file changed, 57 insertions(+)
-> >
-> > diff --git a/tools/perf/builtin-inject.c b/tools/perf/builtin-inject.c
-> > index a75bf11585b5..667b942f870e 100644
-> > --- a/tools/perf/builtin-inject.c
-> > +++ b/tools/perf/builtin-inject.c
-> > @@ -21,6 +21,7 @@
-> >  #include "util/data.h"
-> >  #include "util/auxtrace.h"
-> >  #include "util/jit.h"
-> > +#include "util/string2.h"
-> >  #include "util/symbol.h"
-> >  #include "util/synthetic-events.h"
-> >  #include "util/thread.h"
-> > @@ -35,6 +36,7 @@
-> >
-> >  #include <linux/list.h>
-> >  #include <linux/string.h>
-> > +#include <ctype.h>
-> >  #include <errno.h>
-> >  #include <signal.h>
-> >
-> > @@ -59,6 +61,8 @@ struct perf_inject {
-> >         struct itrace_synth_opts itrace_synth_opts;
-> >         char                    event_copy[PERF_SAMPLE_MAX_SIZE];
-> >         struct perf_file_section secs[HEADER_FEAT_BITS];
-> > +       const char              *known_build_ids_source;
-> > +       struct strlist          *known_build_ids;
-> >  };
-> >
-> >  struct event_entry {
-> > @@ -570,9 +574,43 @@ static int dso__read_build_id(struct dso *dso)
-> >         return dso->has_build_id ? 0 : -1;
-> >  }
-> >
-> > +static bool perf_inject__lookup_known_build_id(struct perf_inject *inj=
-ect,
-> > +                                              struct dso *dso)
-> > +{
-> > +       struct str_node *pos;
-> > +       int bid_len;
-> > +
-> > +       strlist__for_each_entry(pos, inject->known_build_ids) {
-> > +               const char *space;
-> > +
-> > +               pos->s =3D skip_spaces(pos->s);
-> > +               space =3D strstr(pos->s, " ");
-> > +               if (space =3D=3D NULL ||
-> > +                   !strcmp(dso->long_name, skip_spaces(space)))
-> > +                       continue;
-> > +               bid_len =3D space - pos->s;
-> > +               if (bid_len =3D=3D 0 || bid_len / 2 > BUILD_ID_SIZE)
->
-> I'm not sure how bid_len can be 0.  And you can compare to
-> SBUILD_ID_SIZE (without dividing by 2) - but it'd be ">=3D".
-> Also it could be worthwhile to check if bid_len is even.
->
->
-> > +                       return false;
-> > +               for (int ix =3D 0; 2 * ix + 1 < bid_len; ++ix) {
-> > +                       if (!isxdigit(pos->s[2 * ix]) ||
-> > +                           !isxdigit(pos->s[2 * ix + 1]))
-> > +                               return false;
-> > +
-> > +                       dso->bid.data[ix] =3D (hex(pos->s[2 * ix]) << 4=
- |
-> > +                                            hex(pos->s[2 * ix + 1]));
-> > +               }
-> > +               dso->bid.size =3D bid_len / 2;
-> > +               dso->has_build_id =3D 1;
-> > +               return true;
-> > +       }
-> > +       return false;
-> > +}
-> > +
-> >  static int dso__inject_build_id(struct dso *dso, struct perf_tool *too=
-l,
-> >                                 struct machine *machine, u8 cpumode, u3=
-2 flags)
-> >  {
-> > +       struct perf_inject *inject =3D container_of(tool, struct perf_i=
-nject,
-> > +                                                 tool);
-> >         int err;
-> >
-> >         if (is_anon_memory(dso->long_name) || flags & MAP_HUGETLB)
-> > @@ -580,6 +618,10 @@ static int dso__inject_build_id(struct dso *dso, s=
-truct perf_tool *tool,
-> >         if (is_no_dso_memory(dso->long_name))
-> >                 return 0;
-> >
-> > +       if (inject->known_build_ids !=3D NULL &&
-> > +           perf_inject__lookup_known_build_id(inject, dso))
-> > +               return 1;
-> > +
-> >         if (dso__read_build_id(dso) < 0) {
-> >                 pr_debug("no build_id found for %s\n", dso->long_name);
-> >                 return -1;
-> > @@ -1082,6 +1124,9 @@ int cmd_inject(int argc, const char **argv)
-> >                             "Inject build-ids into the output stream"),
-> >                 OPT_BOOLEAN(0, "buildid-all", &inject.build_id_all,
-> >                             "Inject build-ids of all DSOs into the outp=
-ut stream"),
-> > +               OPT_STRING(0, "known-build-ids", &inject.known_build_id=
-s_source,
-> > +                          "buildid path [buildid path...]",
-> > +                          "build-ids to use for specific files"),
-> >                 OPT_STRING('i', "input", &inject.input_name, "file",
-> >                            "input file name"),
-> >                 OPT_STRING('o', "output", &inject.output.path, "file",
-> > @@ -1215,6 +1260,18 @@ int cmd_inject(int argc, const char **argv)
-> >                  */
-> >                 inject.tool.ordered_events =3D true;
-> >                 inject.tool.ordering_requires_timestamps =3D true;
-> > +               if (inject.known_build_ids_source !=3D NULL) {
-> > +                       struct strlist *known_build_ids;
-> > +
-> > +                       known_build_ids =3D strlist__new(
-> > +                           inject.known_build_ids_source, NULL);
-> > +
-> > +                       if (known_build_ids =3D=3D NULL) {
-> > +                               pr_err("Couldn't parse known build ids.=
-\n");
-> > +                               goto out_delete;
-> > +                       }
-> > +                       inject.known_build_ids =3D known_build_ids;
->
-> You need to release it after use.  Note that strlist__delete()
-> accepts a NULL pointer.
->
-> Thanks,
-> Namhyung
->
->
-> > +               }
-> >         }
-> >
-> >         if (inject.sched_stat) {
-> > --
-> > 2.37.0.rc0.161.g10f37bed90-goog
-> >
+- This looks like a new version of a previously submitted patch, but you
+  did not list below the --- line any changes from the previous version.
+  Please read the section entitled "The canonical patch format" in the
+  kernel file, Documentation/SubmittingPatches for what needs to be done
+  here to properly describe this.
+
+If you wish to discuss this problem further, or you have questions about
+how to resolve this issue, please feel free to respond to this email and
+Greg will reply once he has dug out from the pending patches received
+from other developers.
+
+thanks,
+
+greg k-h's patch email bot

@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B4685569745
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 03:12:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 12DB756972E
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 03:12:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234255AbiGGBKM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Jul 2022 21:10:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48088 "EHLO
+        id S234554AbiGGBKO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Jul 2022 21:10:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48100 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229869AbiGGBKI (ORCPT
+        with ESMTP id S234150AbiGGBKJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Jul 2022 21:10:08 -0400
-Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D3422D1DA;
-        Wed,  6 Jul 2022 18:10:07 -0700 (PDT)
-Received: by mail-ej1-x630.google.com with SMTP id r21so1056243eju.0;
-        Wed, 06 Jul 2022 18:10:07 -0700 (PDT)
+        Wed, 6 Jul 2022 21:10:09 -0400
+Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6389E2D1DC;
+        Wed,  6 Jul 2022 18:10:08 -0700 (PDT)
+Received: by mail-ej1-x62a.google.com with SMTP id d2so29904447ejy.1;
+        Wed, 06 Jul 2022 18:10:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=cVUxHoUX8S49LOf9UWwf0cng+gray0TrmHyVxYmOxlI=;
-        b=H5Z5lKHYQ/ZOetroL0v1+dOEqnm7pS6bJu0pLT4lW0LJLKNcoUio/R4u3r3YuzgEw2
-         NVrHtGSZemNrfhR9rNr2zkghtu1c413krofOSO8JsMaxEcYTPgO5hzQe0xi5svYg7hJX
-         jpWwN7HEXXESZJGfarmQNtWKUQsFnrkfcMHETkymbZUSeTgf7ZWRWWEXGGRafoSFcyUR
-         9uDrlAvNqNd3V1PdtvfsXSD9tWtOzlpomEygEAkfIFGM/p+lIYzD+UFnbhzQcWVyJBek
-         ZKVYpgJHeQenXzTIknvDQ+WeHMCWl2xooXQb4GDcwyAWy/TGlo1dir6k38uynZHOj979
-         h5SA==
+        bh=LtHOAiNlZopaglJkN3YZQP1ZzTvW1XNe+F16bbBv+9w=;
+        b=DMdPnyk2HPEGpEfA7lK9rnaYMs8A5/OdCN+m1cpqJevumKvkbB8mcvooRjbN/QFrpj
+         D8+8A++9ZJDPrPIsKLGqzxfC/dMT0yRy2isdp0YH0htSWKKILW5wuTMiUxJj14+V/wsp
+         wL8OPLbWulNaamjwQsvKCaRcyCI5jK08I1HmswVVPzcQY8hMJ5S+ljR3HRmh2+e3/qwN
+         Z3KXjUqCqpZW1T3OZvUjiUHPuLAJY3p6NaXoVrBB2qeYnoaCt+F7Li7pPj4GLoTx9hDd
+         v0suJOy7RnK1AknSGXKndTsMc+oOIGZ0GEiOM+ulOYu1BRTUqpk/RT4zx3XQCOAxypav
+         Zczw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=cVUxHoUX8S49LOf9UWwf0cng+gray0TrmHyVxYmOxlI=;
-        b=jQf3NURmRBVzeZS2m5V4/hk3q0qfTDimYn1nr9sMXq+u3bxK9NcqkShQFzwq7TJ7hL
-         ggb+a4yoi7wUlkD3d/+4RdR5/Xdw8okRLfTunmVKls+bcxPcsrHd9e0iwPaAIpZw0w2L
-         stjVVabpzsDGzuMMkvO8oRkGRAdiesG9CjSrpx+XNV1anaGPG1mjfqQgVUc5tYJip+CR
-         33aeU26R/hir/xmJ7oc35C1rmCFiJmWaNRUBRcF973geFlt1bY8iKRSoTiL/5K7UeNPZ
-         2cuetVNVSxytKIcx9CkvRH6Dp59rN7ST2+ViBpRcuqVz2N1jIXep0G6uX22r8fIj0fAv
-         BPAg==
-X-Gm-Message-State: AJIora8HGGI5NoT/6UHi5p0YjsQJTGMimxQA6CDAwPyttPRbTFtVX7X1
-        k/LqdpcvrHayhYk5qo6mF2Y=
-X-Google-Smtp-Source: AGRyM1vIVA0PE6FEJfr9ycB88tNJCB0tDlMJbE/OdArU4vcfDSCCyb4Rx2OyCLKSHrG7sgVV8+C3QQ==
-X-Received: by 2002:a17:906:7ac2:b0:726:38e0:4e7d with SMTP id k2-20020a1709067ac200b0072638e04e7dmr43503363ejo.236.1657156205761;
-        Wed, 06 Jul 2022 18:10:05 -0700 (PDT)
+        bh=LtHOAiNlZopaglJkN3YZQP1ZzTvW1XNe+F16bbBv+9w=;
+        b=iZlbfFHW9EEbGQNmuSN7XQPtqPtzOucVws3ejD1rY05PYeIXGlYYVeikz2LNpLWdEm
+         STXjJ0B6ymIiP/X6COm4VJg/sOL27hdBKO1orrWBBb8UNbKQyTa+RxvvFkZdiWH8vlj1
+         lpoIuVdJ6XLeGqq4UpMtCx1WEt8GfeNUX5xHD2u0K65mGefxXwoi7e3xPKhzfmWqV6Et
+         l0TQa/MAc5rxm/2ucYno4scoBXhVpq8kMsYvv2nIL/ecOi3KigrRKOzXwwCORmwTk34m
+         Thx2IC85mNdCpb6IAe0Qema+ir4+4nI0btM379gIRQurpucqhJqFMY8cVvFwaGIGXj33
+         6tcQ==
+X-Gm-Message-State: AJIora8O15uW1k04t6PKQUw0JKgUTVxpEM1piG8I1x5YiaS2SrKzP9hm
+        xMDb7v2clnDC6cDditoYV8w=
+X-Google-Smtp-Source: AGRyM1sLckaDEU8GiRvO1p2D2lOQb5keIcvvsdtCOpHtsNA6DmdSwcn4lwruXYOkKUqpaCn02nSi6A==
+X-Received: by 2002:a17:907:1b03:b0:6ff:78d4:c140 with SMTP id mp3-20020a1709071b0300b006ff78d4c140mr43610220ejc.554.1657156206858;
+        Wed, 06 Jul 2022 18:10:06 -0700 (PDT)
 Received: from localhost.localdomain (93-42-70-190.ip85.fastwebnet.it. [93.42.70.190])
-        by smtp.googlemail.com with ESMTPSA id u17-20020a056402111100b0043a6e807febsm6915464edv.46.2022.07.06.18.10.04
+        by smtp.googlemail.com with ESMTPSA id u17-20020a056402111100b0043a6e807febsm6915464edv.46.2022.07.06.18.10.05
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 06 Jul 2022 18:10:05 -0700 (PDT)
+        Wed, 06 Jul 2022 18:10:06 -0700 (PDT)
 From:   Christian Marangi <ansuelsmth@gmail.com>
 To:     Andy Gross <agross@kernel.org>,
         Bjorn Andersson <bjorn.andersson@linaro.org>,
@@ -58,9 +58,9 @@ To:     Andy Gross <agross@kernel.org>,
         linux-kernel@vger.kernel.org
 Cc:     Christian Marangi <ansuelsmth@gmail.com>,
         Jonathan McDowell <noodles@earth.li>
-Subject: [PATCH v2 2/8] ARM: dts: qcom: add gsbi6 missing definition for ipq8064
-Date:   Thu,  7 Jul 2022 03:09:36 +0200
-Message-Id: <20220707010943.20857-3-ansuelsmth@gmail.com>
+Subject: [PATCH v2 3/8] ARM: dts: qcom: add specific ipq8064 dtsi with smb208 rpm regulators
+Date:   Thu,  7 Jul 2022 03:09:37 +0200
+Message-Id: <20220707010943.20857-4-ansuelsmth@gmail.com>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220707010943.20857-1-ansuelsmth@gmail.com>
 References: <20220707010943.20857-1-ansuelsmth@gmail.com>
@@ -76,68 +76,67 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add gsbi6 missing definition for ipq8064.
+Add specific ipq8064 dtsi with smb208 rpm regulators.
+
+Qcom advise to use this configuration but it's not mandatory and OEM
+can decide to implement their own regulators.
+smb208 regulators are used to scale CPU voltage, L2 cache voltage and
+Ubi32 cores.
+
+There regulators are controlled by rpm and to correctly works gsbi4-i2c
+require to be NEVER disabled or rpm will reject any regulator change
+request.
 
 Signed-off-by: Christian Marangi <ansuelsmth@gmail.com>
 Tested-by: Jonathan McDowell <noodles@earth.li>
 ---
- arch/arm/boot/dts/qcom-ipq8064.dtsi | 43 +++++++++++++++++++++++++++++
- 1 file changed, 43 insertions(+)
+ arch/arm/boot/dts/qcom-ipq8064-smb208.dtsi | 37 ++++++++++++++++++++++
+ 1 file changed, 37 insertions(+)
+ create mode 100644 arch/arm/boot/dts/qcom-ipq8064-smb208.dtsi
 
-diff --git a/arch/arm/boot/dts/qcom-ipq8064.dtsi b/arch/arm/boot/dts/qcom-ipq8064.dtsi
-index bc9987c841d0..7cccfe99bf00 100644
---- a/arch/arm/boot/dts/qcom-ipq8064.dtsi
-+++ b/arch/arm/boot/dts/qcom-ipq8064.dtsi
-@@ -663,6 +663,49 @@ spi@1a280000 {
- 			};
- 		};
- 
-+		gsbi6: gsbi@16500000 {
-+			compatible = "qcom,gsbi-v1.0.0";
-+			reg = <0x16500000 0x100>;
-+			cell-index = <6>;
-+			clocks = <&gcc GSBI6_H_CLK>;
-+			clock-names = "iface";
-+			#address-cells = <1>;
-+			#size-cells = <1>;
-+			ranges;
+diff --git a/arch/arm/boot/dts/qcom-ipq8064-smb208.dtsi b/arch/arm/boot/dts/qcom-ipq8064-smb208.dtsi
+new file mode 100644
+index 000000000000..ac9c44f0c164
+--- /dev/null
++++ b/arch/arm/boot/dts/qcom-ipq8064-smb208.dtsi
+@@ -0,0 +1,37 @@
++// SPDX-License-Identifier: GPL-2.0
 +
-+			syscon-tcsr = <&tcsr>;
++#include "qcom-ipq8064.dtsi"
 +
-+			status = "disabled";
++&rpm {
++	smb208_regulators: regulators {
++		compatible = "qcom,rpm-smb208-regulators";
 +
-+			gsbi6_i2c: i2c@16580000 {
-+				compatible = "qcom,i2c-qup-v1.1.1";
-+				reg = <0x16580000 0x1000>;
-+				interrupts = <GIC_SPI 157 IRQ_TYPE_LEVEL_HIGH>;
++		smb208_s1a: s1a {
++			regulator-min-microvolt = <1050000>;
++			regulator-max-microvolt = <1150000>;
 +
-+				clocks = <&gcc GSBI6_QUP_CLK>, <&gcc GSBI6_H_CLK>;
-+				clock-names = "core", "iface";
-+
-+				#address-cells = <1>;
-+				#size-cells = <0>;
-+
-+				status = "disabled";
-+			};
-+
-+			gsbi6_spi: spi@16580000 {
-+				compatible = "qcom,spi-qup-v1.1.1";
-+				reg = <0x16580000 0x1000>;
-+				interrupts = <GIC_SPI 157 IRQ_TYPE_LEVEL_HIGH>;
-+
-+				clocks = <&gcc GSBI6_QUP_CLK>, <&gcc GSBI6_H_CLK>;
-+				clock-names = "core", "iface";
-+
-+				#address-cells = <1>;
-+				#size-cells = <0>;
-+
-+				status = "disabled";
-+			};
++			qcom,switch-mode-frequency = <1200000>;
 +		};
 +
- 		gsbi7: gsbi@16600000 {
- 			status = "disabled";
- 			compatible = "qcom,gsbi-v1.0.0";
++		smb208_s1b: s1b {
++			regulator-min-microvolt = <1050000>;
++			regulator-max-microvolt = <1150000>;
++
++			qcom,switch-mode-frequency = <1200000>;
++		};
++
++		smb208_s2a: s2a {
++			regulator-min-microvolt = < 800000>;
++			regulator-max-microvolt = <1250000>;
++
++			qcom,switch-mode-frequency = <1200000>;
++		};
++
++		smb208_s2b: s2b {
++			regulator-min-microvolt = < 800000>;
++			regulator-max-microvolt = <1250000>;
++
++			qcom,switch-mode-frequency = <1200000>;
++		};
++	};
++};
 -- 
 2.36.1
 

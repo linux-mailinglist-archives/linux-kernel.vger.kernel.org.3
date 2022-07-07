@@ -2,111 +2,166 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0DBA956A3D6
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 15:38:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 57CC556A3D7
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 15:38:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235999AbiGGNiQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Jul 2022 09:38:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59684 "EHLO
+        id S236006AbiGGNig (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Jul 2022 09:38:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60222 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235303AbiGGNiM (ORCPT
+        with ESMTP id S236008AbiGGNic (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Jul 2022 09:38:12 -0400
-Received: from mail-yw1-x1132.google.com (mail-yw1-x1132.google.com [IPv6:2607:f8b0:4864:20::1132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9285B2C66B
-        for <linux-kernel@vger.kernel.org>; Thu,  7 Jul 2022 06:38:11 -0700 (PDT)
-Received: by mail-yw1-x1132.google.com with SMTP id 00721157ae682-31c8a1e9e33so117816247b3.5
-        for <linux-kernel@vger.kernel.org>; Thu, 07 Jul 2022 06:38:11 -0700 (PDT)
+        Thu, 7 Jul 2022 09:38:32 -0400
+Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A13BABE05
+        for <linux-kernel@vger.kernel.org>; Thu,  7 Jul 2022 06:38:30 -0700 (PDT)
+Received: by mail-pf1-x434.google.com with SMTP id y141so19422258pfb.7
+        for <linux-kernel@vger.kernel.org>; Thu, 07 Jul 2022 06:38:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=fMXMrcc1nEUI+wuPCiYfYqhHz2SxADiONzXQR+IXB/w=;
-        b=cqI0df0/bM14+Byc7m55xqH/dIAnqndav6WEZ0vXEwN8nE+9d/6E7bPTx7jurCCx+Z
-         8/AGzVUBhsuLMdgiSE0bAwmOpzkhXeTzNERKwBMZmx56CqYiVGEUFpDaFU/oeT9pX4Qr
-         AXnav1DzXc7BqLT4Rwp7nglSOltIpsRoPeRPyBx5zeh5SxsEFv+mHAvksmYG+5+lbCTx
-         xUlDVOqa17c4lqvu0OHC3OQrsUza+R1PN6Cw7iy1LVFKAlXnNCEXxUXW6kkxyxXnqYrU
-         35ZrvwI/DXXk6eooLBO4KbMf0Oz3iCRHNJvEOtz8P58RulMlLP2c1aW33cz8Hg6SWvqK
-         dIwg==
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=LlviVCXS0LxCL+bJnFAHhOkhgq8+v6fBshCzSesvNtw=;
+        b=oH9YyaoyUyKsvbZpmdcgvnpmbKNHrqgce3SbHbSYwKi3+h3pQeSsVnm6ysuQ8qOfde
+         rkQHGHOndOVAcKf8VltPjUbp/I5Eyx3oIrnxNPXpKTnue2+/RH3kWAssInK/hUxSEHcR
+         uokKs+ggA1xJOiRO8Kyt1vPsxar2OsHhcp0Okp8sRfGQRXHiX0epJsjL97a87R0vm6tz
+         zPb+2KRq3MXn0prNxDg0ROoBrjgLHRNCAkVZKScK4qDVUFU/DR4I3czqG5zV9I2VpKV1
+         HGUojTOtPPnQej3Pbbljm0UvQXgVyEX7QdEnaUmAHctfz31nFppFMXyaCcP38sPFTlwK
+         Ft6A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to:content-transfer-encoding;
-        bh=fMXMrcc1nEUI+wuPCiYfYqhHz2SxADiONzXQR+IXB/w=;
-        b=eYBQsfaU3N7aiOoyeZEt9xZlQZpeGbGt+AN7CkdjVCCnNHLLAu8XvYAtz38TnuipFL
-         RWx/c77q/5Is0+DnZc2Z6hAQAkoESRpEq+m8SIN32Aqt15e7B+JGPlLkNLla7CG2ii99
-         PHmtwJ/YIFr1J/VxMBuSLZnNpdxf4rPmN0755mluncIJuYA+3LaPTeWPpeUujVJXI9s1
-         DG99hnXfu7vZNptYUOfINaL93OXCWwCoA5Wo6fM2ARctVRS4hsAtCsYPVCTr/xjXece6
-         7Z1fYhuljsZNIbyLXwNJytDJjl71f6mSVkC5J2c+37VepvuVvykNbv7OQvwbvVcU5/h1
-         7w1g==
-X-Gm-Message-State: AJIora9spl90eT1WGsAZlKf6JA8XXUj5hQ5IlI0j+ISm6fspzCWDFSYX
-        DchMlUMqFwSrSf8ZMotQWzBghzJ+Ug3x38Unh9E=
-X-Google-Smtp-Source: AGRyM1vCQXAllNS9enJwQwPcq7JKZWRaRH29Sl14BzUwoGw1r7ZzDhKtZLSsOlJlfnMRrfHKHEtxNFnh8Fp+JpFpal8=
-X-Received: by 2002:a0d:d903:0:b0:31d:4fb:2a10 with SMTP id
- b3-20020a0dd903000000b0031d04fb2a10mr4870695ywe.339.1657201090557; Thu, 07
- Jul 2022 06:38:10 -0700 (PDT)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=LlviVCXS0LxCL+bJnFAHhOkhgq8+v6fBshCzSesvNtw=;
+        b=7i2SPqz/Pknaqf8nFDR9ZRaVczTpy2P4VCKqWC6hMiBe+F955lYcWay0ikvw4EUDLz
+         9Vo9o7LAm99yEtckXynEQSlNCKszHYi+FXuN6JQirp8ntI3kR5Ob44/HP62n8yWIZOUx
+         K/ZfqgK8VzldCt0NIdH0+OTvwZNb3U2LjbW4x8x76YZvcvJBEOMdvLqsj2aC+Y+mYLmT
+         gWi4oXt+DNlq2ggOORhtR4dduKhW0+zzjGYeXayQlqdkAeUHXWoZJ8xKlKpuEbOWPvIp
+         hE4uLFijH5sRxZV5pLlGzLXi08xIu12+rOwRHq75f/mz4PfYlV82bChUnv6NcBnlKnJB
+         cU6w==
+X-Gm-Message-State: AJIora9L0SClT9aSnlesoj7v+usyFvtFlVgSQ5rs6wSgE7xUut0pZBEN
+        Qnq/kY8/TetyY6Rj0xFvc6i0mA==
+X-Google-Smtp-Source: AGRyM1stU+QWyhSOHZT4PMsgUj7J2gqqMP3AKDLS5nWJRDvNbdTETCmhrTOs/U6K7gXJaF+U8nVRCw==
+X-Received: by 2002:a17:903:3247:b0:16b:e386:dcc9 with SMTP id ji7-20020a170903324700b0016be386dcc9mr22830868plb.54.1657201110434;
+        Thu, 07 Jul 2022 06:38:30 -0700 (PDT)
+Received: from [10.70.252.135] ([139.177.225.229])
+        by smtp.gmail.com with ESMTPSA id l14-20020a170903244e00b0016c18f479d5sm999371pls.19.2022.07.07.06.38.27
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 07 Jul 2022 06:38:29 -0700 (PDT)
+Message-ID: <42bfd82c-b3fb-c942-d6f2-ae5adec90a26@bytedance.com>
+Date:   Thu, 7 Jul 2022 21:38:20 +0800
 MIME-Version: 1.0
-Received: by 2002:a25:f30f:0:0:0:0:0 with HTTP; Thu, 7 Jul 2022 06:38:10 -0700 (PDT)
-Reply-To: michellegoodman45@gmail.com
-From:   Michelle Goodman <sarahtage24@gmail.com>
-Date:   Thu, 7 Jul 2022 13:38:10 +0000
-Message-ID: <CAK7Gz5z0FDTFZ1L3oqyHFzzRgFNQh1ZjHh82tA7OmdyktT3G5g@mail.gmail.com>
-Subject: Hello
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: Yes, score=7.2 required=5.0 tests=BAYES_95,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        UNDISC_FREEM autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2607:f8b0:4864:20:0:0:0:1132 listed in]
-        [list.dnswl.org]
-        *  3.0 BAYES_95 BODY: Bayes spam probability is 95 to 99%
-        *      [score: 0.9700]
-        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
-        *      digit
-        *      [michellegoodman45[at]gmail.com]
-        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
-        *       in digit
-        *      [sarahtage24[at]gmail.com]
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [sarahtage24[at]gmail.com]
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
-        *  2.9 UNDISC_FREEM Undisclosed recipients + freemail reply-to
-        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
-        *      different freemails
-X-Spam-Level: *******
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.0
+Subject: Re: [RFC PATCH 2/2] arm64: support HAVE_IRQ_EXIT_ON_IRQ_STACK
+Content-Language: en-US
+To:     Arnd Bergmann <arnd@arndb.de>
+Cc:     Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+References: <20220707110511.52129-1-zhengqi.arch@bytedance.com>
+ <20220707110511.52129-3-zhengqi.arch@bytedance.com>
+ <CAK8P3a1-rL391dp33D5r+SgQ+L0u7Neta_-DZoZL=+c1zPtNQg@mail.gmail.com>
+From:   Qi Zheng <zhengqi.arch@bytedance.com>
+In-Reply-To: <CAK8P3a1-rL391dp33D5r+SgQ+L0u7Neta_-DZoZL=+c1zPtNQg@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hallo,
-
-Ich entschuldige mich, falls diese E-Mail Sie =C3=BCberrascht. Ich habe ein
-Gesch=C3=A4ftsvorschlag, der f=C3=BCr uns beide von gro=C3=9Fem Nutzen sein=
- wird.
-Wenn Sie bereit sind, weiter zu diskutieren
-In dieser Angelegenheit erwarte ich das von Ihnen
-
-Antwort. umgehend, damit ich Ihnen weitere Einzelheiten mitteilen kann.
 
 
+On 2022/7/7 20:49, Arnd Bergmann wrote:
+> On Thu, Jul 7, 2022 at 1:05 PM Qi Zheng <zhengqi.arch@bytedance.com> wrote:
+>>
+>> Since softirqs are handled on the per-CPU IRQ stack,
+>> let's support HAVE_IRQ_EXIT_ON_IRQ_STACK which causes
+>> the core code to invoke __do_softirq() directly without
+>> going through do_softirq_own_stack().
+>>
+>> Signed-off-by: Qi Zheng <zhengqi.arch@bytedance.com>
+> 
+> I think the idea is right, but the extra function pointer adds more complexity
+> than necessary:
+> 
+>>   static __always_inline void __el1_irq(struct pt_regs *regs,
+>>                                        void (*handler)(struct pt_regs *))
+>>   {
+>>          enter_from_kernel_mode(regs);
+>>
+>> -       irq_enter_rcu();
+>> -       do_interrupt_handler(regs, handler);
+>> -       irq_exit_rcu();
+>> +       do_interrupt_handler(regs, handler, irq_handler);
+>>
+>>          arm64_preempt_schedule_irq();
+>>
+>> @@ -699,9 +711,7 @@ static void noinstr el0_interrupt(struct pt_regs *regs,
+>>          if (regs->pc & BIT(55))
+>>                  arm64_apply_bp_hardening();
+>>
+>> -       irq_enter_rcu();
+>> -       do_interrupt_handler(regs, handler);
+>> -       irq_exit_rcu();
+>> +       do_interrupt_handler(regs, handler, irq_handler);
+>>
+>>          exit_to_user_mode(regs);
+>>   }
+> 
+> Would it be possible to instead pull out the call_on_irq_stack() so these
+> two functions are instead called on the IRQ stack already?
 
-Mit freundlichen Gr=C3=BC=C3=9Fen,
+Hi,
 
-Michelle
+Do you mean to modify call_on_irq_stack()?
+
+I have tried doing a conditional jump inside call_on_irq_stack() like
+this:
+
+--- a/arch/arm64/kernel/entry.S
++++ b/arch/arm64/kernel/entry.S
+@@ -888,13 +888,22 @@ SYM_FUNC_START(call_on_irq_stack)
+
+         /* Move to the new stack and call the function there */
+         mov     sp, x16
+-       blr     x1
++
++       cmp     x2, #1
++       b.eq    99f
++
++       blr     x1
++       b       999f
++
++99:    bl      irq_enter_rcu
++       blr     x1
++       bl      irq_exit_rcu
+
+         /*
+          * Restore the SP from the FP, and restore the FP and LR from 
+the frame
+          * record.
+          */
+-       mov     sp, x29
++999:   mov     sp, x29
+         ldp     x29, x30, [sp], #16
+  #ifdef CONFIG_SHADOW_CALL_STACK
+         ldp     scs_sp, xzr, [sp], #16
+
+But this also requires a new parameter in do_interrupt_handler.
+
+I also considered implementing call_on_irq_stack() for nmi and irq
+separately, but later think it's unnecessary.
+
+> 
+>          Arnd
+
+Thanks,
+Qi

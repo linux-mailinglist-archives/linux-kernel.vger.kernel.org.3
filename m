@@ -2,58 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 583BF56A118
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 13:35:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B343F56A11D
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 13:35:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235451AbiGGLer (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Jul 2022 07:34:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43258 "EHLO
+        id S235355AbiGGLfK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Jul 2022 07:35:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43816 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232308AbiGGLem (ORCPT
+        with ESMTP id S235440AbiGGLfJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Jul 2022 07:34:42 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 299C62F65E
-        for <linux-kernel@vger.kernel.org>; Thu,  7 Jul 2022 04:34:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1657193682; x=1688729682;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=JKbCMUeQVy78kPkl4YfJ97Wr4SpG3UV/hAMkI54+8SI=;
-  b=M8DeFWWhzyRmNQnZTVOuiDRdbbaAKsIWpU6P2o7EPVHpY9DwOLU+KJ50
-   cMtzxz9J35zjlxP1XlSw2ryld2c4yCtrV3OqQf/+rzu3DQ/Emd9qm32vz
-   NtMHnJzEVBHhQv9JZcuYCvg/yBBqds8siHI+avn7BFuT9zDQ4INgNgSjt
-   GXctD8PVFcmIUmd2bymRWByh3KPC79FGYosZm4JtKWNw023sL+AXE1pt1
-   QQzQu5DYEbI6/G80i6q5bPZjxmiVtTcDLYxagO2TFCiL0Ph/hbeGg+hRD
-   NtAVcfAwePjRGIcNeyIKqZ7t1ClqIx1uqHURgmv2cuGjdxdhXeraMSFXl
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10400"; a="370318217"
-X-IronPort-AV: E=Sophos;i="5.92,252,1650956400"; 
-   d="scan'208";a="370318217"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jul 2022 04:34:41 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,252,1650956400"; 
-   d="scan'208";a="735938846"
-Received: from lkp-server01.sh.intel.com (HELO 68b931ab7ac1) ([10.239.97.150])
-  by fmsmga001.fm.intel.com with ESMTP; 07 Jul 2022 04:34:40 -0700
-Received: from kbuild by 68b931ab7ac1 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1o9PmK-000Lw7-0h;
-        Thu, 07 Jul 2022 11:34:40 +0000
-Date:   Thu, 7 Jul 2022 19:34:03 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Subject: [kbingham-rcar:kbingham/vsp1/debugfs 6/7]
- drivers/media/platform/renesas/vsp1/vsp1_debugfs.h:52:15: error: return type
- defaults to 'int'
-Message-ID: <202207071954.8vAac5gl-lkp@intel.com>
+        Thu, 7 Jul 2022 07:35:09 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id CA6D630562
+        for <linux-kernel@vger.kernel.org>; Thu,  7 Jul 2022 04:35:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1657193706;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=iR0TS1rdC3FNDtz2eTB0475ADyLRcoJ2o6s9EpnIbtI=;
+        b=KS8Ydq/TQdtd1Xpus6CdIxMqIKCPFrbqAR6hnPy4FbpWRBGFt2mKYiYVmMpWTQqBKKMdck
+        74+jmDh+Om+j99u+WVNpMUE9DqLm/RGgzXXo1OgUeeU3OaWXo86i/YRECK9vsgXnMPH47S
+        z5rw2Ef1kQkSUDFU4YCtEKpxlRqiBAo=
+Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
+ [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-649-w_wsnBUAMjeQTQ50Kv_mlA-1; Thu, 07 Jul 2022 07:35:05 -0400
+X-MC-Unique: w_wsnBUAMjeQTQ50Kv_mlA-1
+Received: by mail-wm1-f71.google.com with SMTP id 2-20020a1c0202000000b003a2cfab44eeso255938wmc.6
+        for <linux-kernel@vger.kernel.org>; Thu, 07 Jul 2022 04:35:05 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
+         :references:user-agent:mime-version:content-transfer-encoding;
+        bh=iR0TS1rdC3FNDtz2eTB0475ADyLRcoJ2o6s9EpnIbtI=;
+        b=0DjKCFn0PNoR5rKwyfh/zr7YfrT1XRA2VVrSC+zeQg9aYNsm7oRGPvxq2ZQuTHddpo
+         O/SJ3DpIAq3+OE0v0e38eCcOlsmB4XBG7B3Nb0HyISkECdYoX5TU5JjejHzoSmyQ0dZG
+         M3Scsr/DTRpOZ7fJZpHt9mO5XnfAo9f7dFd2Y+GNc+MKk9MEjEfoNABg36EuQwzll5tY
+         J6gketbAIGh479mHaT2Dt6Cd0ZplR3cfLCKbsJlasH4FZXWd0/lRussSS8Q6UgcOchBI
+         i1OCLLv+jcj0+gXCqMaqcn3O6jYfqc1ltnDKnlPT88lKG8EfWeBz3+Fr5xylY4bEzXD9
+         O61g==
+X-Gm-Message-State: AJIora9YDefS3/WXvkJweyzbSxFFB3GN186yXqt/VxCwzmLTvOtiXKJr
+        h/aDZrCF08MF4FAYeszsd8KxFFbYDyEr4A4bZeCXPBDQdMmyyYYajtCojWh7wQGqu4hBDVGu6ST
+        ZuaZIp/7JJgJ4r/toQFSPRgfc
+X-Received: by 2002:adf:fbc6:0:b0:21d:3fc3:99e with SMTP id d6-20020adffbc6000000b0021d3fc3099emr36304141wrs.550.1657193704583;
+        Thu, 07 Jul 2022 04:35:04 -0700 (PDT)
+X-Google-Smtp-Source: AGRyM1t15sMd6i1XfxQwEkr60GDGWRAtRhcRRPtx84aoNyLkcHeIr2MlpQD4oPg0UNU5SC7GGAzqaA==
+X-Received: by 2002:adf:fbc6:0:b0:21d:3fc3:99e with SMTP id d6-20020adffbc6000000b0021d3fc3099emr36304105wrs.550.1657193704250;
+        Thu, 07 Jul 2022 04:35:04 -0700 (PDT)
+Received: from gerbillo.redhat.com (146-241-106-148.dyn.eolo.it. [146.241.106.148])
+        by smtp.gmail.com with ESMTPSA id b10-20020a5d4d8a000000b0021d4aca9d1esm20916457wru.99.2022.07.07.04.35.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 07 Jul 2022 04:35:03 -0700 (PDT)
+Message-ID: <0c5fdfc7dbe3c48b884640c57857248e47794b6a.camel@redhat.com>
+Subject: Re: [PATCH net v3] net: ethernet: ti: am65-cpsw: Fix devlink port
+ register sequence
+From:   Paolo Abeni <pabeni@redhat.com>
+To:     Siddharth Vadapalli <s-vadapalli@ti.com>
+Cc:     davem@davemloft.net, kuba@kernel.org, linux@armlinux.org.uk,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kishon@ti.com, vigneshr@ti.com, grygorii.strashko@ti.com
+Date:   Thu, 07 Jul 2022 13:35:02 +0200
+In-Reply-To: <5d06687a-17f1-4d5c-7d3f-83d11e5ec2e7@ti.com>
+References: <20220706070208.12207-1-s-vadapalli@ti.com>
+         <e454f6de32de3be092260d19da24f58635eb6e49.camel@redhat.com>
+         <5d06687a-17f1-4d5c-7d3f-83d11e5ec2e7@ti.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.42.4 (3.42.4-2.fc35) 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
         SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -62,63 +82,126 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/kbingham/rcar.git kbingham/vsp1/debugfs
-head:   73e1dae0c0afd4ccbe318e1bc9881b3e800226ba
-commit: eda5de49ca65531ae1fa75f31300cdaacb112125 [6/7] v4l: vsp1: Provide video node debugfs entries
-config: m68k-randconfig-r021-20220707 (https://download.01.org/0day-ci/archive/20220707/202207071954.8vAac5gl-lkp@intel.com/config)
-compiler: m68k-linux-gcc (GCC) 11.3.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/kbingham/rcar.git/commit/?id=eda5de49ca65531ae1fa75f31300cdaacb112125
-        git remote add kbingham-rcar https://git.kernel.org/pub/scm/linux/kernel/git/kbingham/rcar.git
-        git fetch --no-tags kbingham-rcar kbingham/vsp1/debugfs
-        git checkout eda5de49ca65531ae1fa75f31300cdaacb112125
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=m68k SHELL=/bin/bash drivers/media/
+On Thu, 2022-07-07 at 14:41 +0530, Siddharth Vadapalli wrote:
+> Hello Paolo,
+> 
+> On 07/07/22 13:00, Paolo Abeni wrote:
+> > On Wed, 2022-07-06 at 12:32 +0530, Siddharth Vadapalli wrote:
+> > > Renaming interfaces using udevd depends on the interface being registered
+> > > before its netdev is registered. Otherwise, udevd reads an empty
+> > > phys_port_name value, resulting in the interface not being renamed.
+> > > 
+> > > Fix this by registering the interface before registering its netdev
+> > > by invoking am65_cpsw_nuss_register_devlink() before invoking
+> > > register_netdev() for the interface.
+> > > 
+> > > Move the function call to devlink_port_type_eth_set(), invoking it after
+> > > register_netdev() is invoked, to ensure that netlink notification for the
+> > > port state change is generated after the netdev is completely initialized.
+> > > 
+> > > Fixes: 58356eb31d60 ("net: ti: am65-cpsw-nuss: Add devlink support")
+> > > Signed-off-by: Siddharth Vadapalli <s-vadapalli@ti.com>
+> > > ---
+> > > Changelog:
+> > > v2 -> v3:
+> > > 1. Add error handling to unregister devlink.
+> > > 
+> > > v1-> v2:
+> > > 1. Add Fixes tag in commit message.
+> > > 2. Update patch subject to include "net".
+> > > 3. Invoke devlink_port_type_eth_set() after register_netdev() is called.
+> > > 4. Update commit message describing the cause for moving the call to
+> > >    devlink_port_type_eth_set().
+> > > 
+> > > v2: https://lore.kernel.org/r/20220704073040.7542-1-s-vadapalli@ti.com/
+> > > v1: https://lore.kernel.org/r/20220623044337.6179-1-s-vadapalli@ti.com/
+> > > 
+> > >  drivers/net/ethernet/ti/am65-cpsw-nuss.c | 17 ++++++++++-------
+> > >  1 file changed, 10 insertions(+), 7 deletions(-)
+> > > 
+> > > diff --git a/drivers/net/ethernet/ti/am65-cpsw-nuss.c b/drivers/net/ethernet/ti/am65-cpsw-nuss.c
+> > > index fb92d4c1547d..f4a6b590a1e3 100644
+> > > --- a/drivers/net/ethernet/ti/am65-cpsw-nuss.c
+> > > +++ b/drivers/net/ethernet/ti/am65-cpsw-nuss.c
+> > > @@ -2467,7 +2467,6 @@ static int am65_cpsw_nuss_register_devlink(struct am65_cpsw_common *common)
+> > >  				port->port_id, ret);
+> > >  			goto dl_port_unreg;
+> > >  		}
+> > > -		devlink_port_type_eth_set(dl_port, port->ndev);
+> > >  	}
+> > >  	devlink_register(common->devlink);
+> > >  	return ret;
+> > > @@ -2511,6 +2510,7 @@ static void am65_cpsw_unregister_devlink(struct am65_cpsw_common *common)
+> > >  static int am65_cpsw_nuss_register_ndevs(struct am65_cpsw_common *common)
+> > >  {
+> > >  	struct device *dev = common->dev;
+> > > +	struct devlink_port *dl_port;
+> > >  	struct am65_cpsw_port *port;
+> > >  	int ret = 0, i;
+> > >  
+> > > @@ -2527,6 +2527,10 @@ static int am65_cpsw_nuss_register_ndevs(struct am65_cpsw_common *common)
+> > >  		return ret;
+> > >  	}
+> > >  
+> > > +	ret = am65_cpsw_nuss_register_devlink(common);
+> > > +	if (ret)
+> > > +		return ret;
+> > > +
+> > >  	for (i = 0; i < common->port_num; i++) {
+> > >  		port = &common->ports[i];
+> > >  
+> > > @@ -2539,25 +2543,24 @@ static int am65_cpsw_nuss_register_ndevs(struct am65_cpsw_common *common)
+> > >  				i, ret);
+> > >  			goto err_cleanup_ndev;
+> > >  		}
+> > > +
+> > > +		dl_port = &port->devlink_port;
+> > > +		devlink_port_type_eth_set(dl_port, port->ndev);
+> > >  	}
+> > >  
+> > >  	ret = am65_cpsw_register_notifiers(common);
+> > >  	if (ret)
+> > >  		goto err_cleanup_ndev;
+> > >  
+> > > -	ret = am65_cpsw_nuss_register_devlink(common);
+> > > -	if (ret)
+> > > -		goto clean_unregister_notifiers;
+> > > -
+> > >  	/* can't auto unregister ndev using devm_add_action() due to
+> > >  	 * devres release sequence in DD core for DMA
+> > >  	 */
+> > >  
+> > >  	return 0;
+> > > -clean_unregister_notifiers:
+> > > -	am65_cpsw_unregister_notifiers(common);
+> > > +
+> > >  err_cleanup_ndev:
+> > >  	am65_cpsw_nuss_cleanup_ndev(common);
+> > > +	am65_cpsw_unregister_devlink(common);
+> > 
+> > It looks strange that there is no error path leading to
+> > am65_cpsw_unregister_devlink() only.
+> > 
+> > Why we don't need to call it when/if devm_request_irq() fails? 
+> 
+> am65_cpsw_nuss_register_devlink() is invoked after devm_request_irq() and
+> devm_request_irq()'s associated error handling.
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+Whoops, I misread the exact location were
+am65_cpsw_nuss_register_devlink() is located after this patch.  
 
-All errors (new ones prefixed by >>):
+That error path now LGTM.
 
-   In file included from drivers/media/platform/renesas/vsp1/vsp1_drv.c:27:
->> drivers/media/platform/renesas/vsp1/vsp1_debugfs.h:52:15: error: return type defaults to 'int' [-Werror=implicit-int]
-      52 | static inline vsp1_debugfs_create_video_stats(struct vsp1_video *video,
-         |               ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/media/platform/renesas/vsp1/vsp1_debugfs.h:54:15: error: return type defaults to 'int' [-Werror=implicit-int]
-      54 | static inline vsp1_debugfs_cleanup_video_stats(struct vsp1_video *video) { };
-         |               ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   cc1: some warnings being treated as errors
---
-   In file included from drivers/media/platform/renesas/vsp1/vsp1_video.c:28:
->> drivers/media/platform/renesas/vsp1/vsp1_debugfs.h:52:15: error: return type defaults to 'int' [-Werror=implicit-int]
-      52 | static inline vsp1_debugfs_create_video_stats(struct vsp1_video *video,
-         |               ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/media/platform/renesas/vsp1/vsp1_debugfs.h:54:15: error: return type defaults to 'int' [-Werror=implicit-int]
-      54 | static inline vsp1_debugfs_cleanup_video_stats(struct vsp1_video *video) { };
-         |               ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/media/platform/renesas/vsp1/vsp1_debugfs.h: In function 'vsp1_debugfs_create_video_stats':
-   drivers/media/platform/renesas/vsp1/vsp1_debugfs.h:53:37: error: control reaches end of non-void function [-Werror=return-type]
-      53 |                 const char *name) { };
-         |                                     ^
-   drivers/media/platform/renesas/vsp1/vsp1_debugfs.h: In function 'vsp1_debugfs_cleanup_video_stats':
-   drivers/media/platform/renesas/vsp1/vsp1_debugfs.h:54:76: error: control reaches end of non-void function [-Werror=return-type]
-      54 | static inline vsp1_debugfs_cleanup_video_stats(struct vsp1_video *video) { };
-         |                                                                            ^
-   cc1: some warnings being treated as errors
+> > 
+> > Not strictly related to this patch, but it looks like there is another
+> > suspect cleanup point: if a 'register_netdev()' call fails, the cleanup
+> > code will still call unregister_netdev() on the relevant device and the
+> > later ones, hitting a WARN_ON(1) in unregister_netdevice_many().
+> 
+> Thank you for pointing it out. I will look at it and address it in a separate
+> cleanup patch.
 
+Thanks!
 
-vim +/int +52 drivers/media/platform/renesas/vsp1/vsp1_debugfs.h
+Paolo
 
-    51	
-  > 52	static inline vsp1_debugfs_create_video_stats(struct vsp1_video *video,
-    53			const char *name) { };
-    54	static inline vsp1_debugfs_cleanup_video_stats(struct vsp1_video *video) { };
-    55	#endif /* CONFIG_DEBUG_FS */
-    56	
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp

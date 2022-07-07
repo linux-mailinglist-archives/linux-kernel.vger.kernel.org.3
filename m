@@ -2,66 +2,38 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 568BE56ADF7
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 23:49:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E997656ADFB
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 23:52:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236180AbiGGVtj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Jul 2022 17:49:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55386 "EHLO
+        id S236295AbiGGVv5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Jul 2022 17:51:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56564 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230076AbiGGVti (ORCPT
+        with ESMTP id S230076AbiGGVv4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Jul 2022 17:49:38 -0400
-Received: from mail-yw1-x112a.google.com (mail-yw1-x112a.google.com [IPv6:2607:f8b0:4864:20::112a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C051E57240
-        for <linux-kernel@vger.kernel.org>; Thu,  7 Jul 2022 14:49:35 -0700 (PDT)
-Received: by mail-yw1-x112a.google.com with SMTP id 00721157ae682-31cac89d8d6so113382577b3.2
-        for <linux-kernel@vger.kernel.org>; Thu, 07 Jul 2022 14:49:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=OjCiPujDwWAr96MY2U8dFxVH5SpHSOBsMxxBdetNe0o=;
-        b=WXfOeJCSSBM8CaZ5uxzGhKHdjS8d4W0L4/CXoC4wIgwzRGU72isSnIvlCHdbJ6AfLA
-         Rz6qLkiKGtnAZxWHhAodvc5n82OOPDaaUqXLFl2FfWqUONiq+f+Yvs42xtLQ1+xvXYBL
-         fvszAuYuRg3aqgoX9jYg2s5YeqLlSF28esgKZvWisEe5cRMnDVBABfSeadz1w4KxAP3g
-         ztDqvLR8fY4NwbjFOmxjPfER0p2r9C60+fhakQcX2TN+ONYU98BU6Lef3u/pW3XvkRO0
-         CWYFIQyEV1mxJkDHpuT1cRou94V+NSx8hVRi5m5x1CPSIMy7UtIB0/QQj0QjvaU1vJIx
-         XqnQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=OjCiPujDwWAr96MY2U8dFxVH5SpHSOBsMxxBdetNe0o=;
-        b=KHS99/joFLAok5hav1OoMBPbYcWOljseFrligVkWWSrUgvzugT/enQEfOqwVgfXJ+Q
-         qX4StSeBejS0TrsthD3zxJ6IwX0Jpelf74uouUqrfcwf+5x4gYJm3ruzZqN4KC6lF2eK
-         F7i/WXJTmKTKFEinVUF4g3LJlOPrvc5TqVakCHWmDhZB0gJxomZl6ZvXZBXQkW4fSeqQ
-         6aGetwGV58BvH/hUmTvAI1SAbTVC52KNC1ELQ58V1gplF43pWwN1TKe+s3nVuUa9DRWO
-         VS7ShmGC0MLhXoQpvKGYPH3Wn3SMS8u0VOiSgBiJHX6kbSvYzuZHywUit6bpkHtOo28q
-         mwzw==
-X-Gm-Message-State: AJIora9eTYpz5YP++JfIGdKwZD/xH+3yWSC8ITIL3c8V8U7OsenCQPaB
-        YWPdothVz29v1mhQcExB53inruR+aIc2RFF0z8R7Ug==
-X-Google-Smtp-Source: AGRyM1tfItuiWP2DcAnb+OiipszcN4h7gpGQANMfoYWOW1TY5G9MALOnWz+7agXA4SxBKJWbYJb9sYv4RZaL6LPztkE=
-X-Received: by 2002:a81:52d5:0:b0:31c:924e:f569 with SMTP id
- g204-20020a8152d5000000b0031c924ef569mr369534ywb.382.1657230574957; Thu, 07
- Jul 2022 14:49:34 -0700 (PDT)
+        Thu, 7 Jul 2022 17:51:56 -0400
+Received: from mx1.molgen.mpg.de (mx3.molgen.mpg.de [141.14.17.11])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC97B4D15C
+        for <linux-kernel@vger.kernel.org>; Thu,  7 Jul 2022 14:51:54 -0700 (PDT)
+Received: from localhost.localdomain (ip5f5aedb6.dynamic.kabel-deutschland.de [95.90.237.182])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: pmenzel)
+        by mx.molgen.mpg.de (Postfix) with ESMTPSA id 5E3FE61EA192C;
+        Thu,  7 Jul 2022 23:51:51 +0200 (CEST)
+From:   Paul Menzel <pmenzel@molgen.mpg.de>
+To:     Yury Norov <yury.norov@gmail.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>
+Cc:     Paul Menzel <pmenzel@molgen.mpg.de>, linux-kernel@vger.kernel.org
+Subject: [PATCH] lib/bitmap: Make length parameter `len` unsigned
+Date:   Thu,  7 Jul 2022 23:50:52 +0200
+Message-Id: <20220707215051.5664-1-pmenzel@molgen.mpg.de>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
-References: <20220705113515.54342-1-huangguangbin2@huawei.com> <670cb075-a2a5-2e18-c4e4-2e71e5c5e456@redhat.com>
-In-Reply-To: <670cb075-a2a5-2e18-c4e4-2e71e5c5e456@redhat.com>
-From:   Ilias Apalodimas <ilias.apalodimas@linaro.org>
-Date:   Fri, 8 Jul 2022 00:48:58 +0300
-Message-ID: <CAC_iWjLpYU=jsYOW3qfDOYPyKUJhzgRGowV+1FOmBkbCFZ-xkQ@mail.gmail.com>
-Subject: Re: [PATCH net-next v3] net: page_pool: optimize page pool page
- allocation in NUMA scenario
-To:     Jesper Dangaard Brouer <jbrouer@redhat.com>
-Cc:     Guangbin Huang <huangguangbin2@huawei.com>, hawk@kernel.org,
-        davem@davemloft.net, kuba@kernel.org, edumazet@google.com,
-        pabeni@redhat.com, brouer@redhat.com, lorenzo@kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        bpf@vger.kernel.org, lipeng321@huawei.com, chenhao288@hisilicon.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -70,89 +42,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 7 Jul 2022 at 22:14, Jesper Dangaard Brouer <jbrouer@redhat.com> wrote:
->
->
-> On 05/07/2022 13.35, Guangbin Huang wrote:
-> > From: Jie Wang <wangjie125@huawei.com>
-> >
-> > Currently NIC packet receiving performance based on page pool deteriorates
-> > occasionally. To analysis the causes of this problem page allocation stats
-> > are collected. Here are the stats when NIC rx performance deteriorates:
-> >
-> > bandwidth(Gbits/s)            16.8            6.91
-> > rx_pp_alloc_fast              13794308        21141869
-> > rx_pp_alloc_slow              108625          166481
-> > rx_pp_alloc_slow_h            0               0
-> > rx_pp_alloc_empty             8192            8192
-> > rx_pp_alloc_refill            0               0
-> > rx_pp_alloc_waive             100433          158289
-> > rx_pp_recycle_cached          0               0
-> > rx_pp_recycle_cache_full      0               0
-> > rx_pp_recycle_ring            362400          420281
-> > rx_pp_recycle_ring_full               6064893         9709724
-> > rx_pp_recycle_released_ref    0               0
-> >
-> > The rx_pp_alloc_waive count indicates that a large number of pages' numa
-> > node are inconsistent with the NIC device numa node. Therefore these pages
-> > can't be reused by the page pool. As a result, many new pages would be
-> > allocated by __page_pool_alloc_pages_slow which is time consuming. This
-> > causes the NIC rx performance fluctuations.
-> >
-> > The main reason of huge numa mismatch pages in page pool is that page pool
-> > uses alloc_pages_bulk_array to allocate original pages. This function is
-> > not suitable for page allocation in NUMA scenario. So this patch uses
-> > alloc_pages_bulk_array_node which has a NUMA id input parameter to ensure
-> > the NUMA consistent between NIC device and allocated pages.
-> >
-> > Repeated NIC rx performance tests are performed 40 times. NIC rx bandwidth
-> > is higher and more stable compared to the datas above. Here are three test
-> > stats, the rx_pp_alloc_waive count is zero and rx_pp_alloc_slow which
-> > indicates pages allocated from slow patch is relatively low.
-> >
-> > bandwidth(Gbits/s)            93              93.9            93.8
-> > rx_pp_alloc_fast              60066264        61266386        60938254
-> > rx_pp_alloc_slow              16512           16517           16539
-> > rx_pp_alloc_slow_ho           0               0               0
-> > rx_pp_alloc_empty             16512           16517           16539
-> > rx_pp_alloc_refill            473841          481910          481585
-> > rx_pp_alloc_waive             0               0               0
-> > rx_pp_recycle_cached          0               0               0
-> > rx_pp_recycle_cache_full      0               0               0
-> > rx_pp_recycle_ring            29754145        30358243        30194023
-> > rx_pp_recycle_ring_full               0               0               0
-> > rx_pp_recycle_released_ref    0               0               0
-> >
-> > Signed-off-by: Jie Wang <wangjie125@huawei.com>
->
-> Acked-by: Jesper Dangaard Brouer <brouer@redhat.com>
->
-> > ---
-> > v2->v3:
-> > 1, Delete the #ifdefs
-> > 2, Use 'pool->p.nid' in the call to alloc_pages_bulk_array_node()
-> >
-> > v1->v2:
-> > 1, Remove two inappropriate comments.
-> > 2, Use NUMA_NO_NODE instead of numa_mem_id() for code maintenance.
-> > ---
-> >   net/core/page_pool.c | 3 ++-
-> >   1 file changed, 2 insertions(+), 1 deletion(-)
-> >
-> > diff --git a/net/core/page_pool.c b/net/core/page_pool.c
-> > index f18e6e771993..b74905fcc3a1 100644
-> > --- a/net/core/page_pool.c
-> > +++ b/net/core/page_pool.c
-> > @@ -389,7 +389,8 @@ static struct page *__page_pool_alloc_pages_slow(struct page_pool *pool,
-> >       /* Mark empty alloc.cache slots "empty" for alloc_pages_bulk_array */
-> >       memset(&pool->alloc.cache, 0, sizeof(void *) * bulk);
-> >
-> > -     nr_pages = alloc_pages_bulk_array(gfp, bulk, pool->alloc.cache);
-> > +     nr_pages = alloc_pages_bulk_array_node(gfp, pool->p.nid, bulk,
-> > +                                            pool->alloc.cache);
-> >       if (unlikely(!nr_pages))
-> >               return NULL;
-> >
->
+The length is non-negative, so make it unsigned, and adapt while
+condition accordingly.
 
-Acked-by: Ilias Apalodimas <ilias.apalodimas@linaro.org>
+Signed-off-by: Paul Menzel <pmenzel@molgen.mpg.de>
+---
+ lib/bitmap.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/lib/bitmap.c b/lib/bitmap.c
+index b18e31ea6e66..0746beb336df 100644
+--- a/lib/bitmap.c
++++ b/lib/bitmap.c
+@@ -348,14 +348,14 @@ int __bitmap_weight(const unsigned long *bitmap, unsigned int bits)
+ }
+ EXPORT_SYMBOL(__bitmap_weight);
+ 
+-void __bitmap_set(unsigned long *map, unsigned int start, int len)
++void __bitmap_set(unsigned long *map, unsigned int start, unsigned int len)
+ {
+ 	unsigned long *p = map + BIT_WORD(start);
+ 	const unsigned int size = start + len;
+ 	int bits_to_set = BITS_PER_LONG - (start % BITS_PER_LONG);
+ 	unsigned long mask_to_set = BITMAP_FIRST_WORD_MASK(start);
+ 
+-	while (len - bits_to_set >= 0) {
++	while (len >= bits_to_set) {
+ 		*p |= mask_to_set;
+ 		len -= bits_to_set;
+ 		bits_to_set = BITS_PER_LONG;
+-- 
+2.36.1
+

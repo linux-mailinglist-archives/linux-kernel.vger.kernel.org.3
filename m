@@ -2,70 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 49696569852
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 04:46:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C291569843
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 04:36:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234696AbiGGCqQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Jul 2022 22:46:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50894 "EHLO
+        id S234357AbiGGCf4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Jul 2022 22:35:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46060 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234632AbiGGCqI (ORCPT
+        with ESMTP id S230308AbiGGCfz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Jul 2022 22:46:08 -0400
-Received: from mail-oa1-x32.google.com (mail-oa1-x32.google.com [IPv6:2001:4860:4864:20::32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9386C2F3A7
-        for <linux-kernel@vger.kernel.org>; Wed,  6 Jul 2022 19:46:07 -0700 (PDT)
-Received: by mail-oa1-x32.google.com with SMTP id 586e51a60fabf-10c0d96953fso10085553fac.0
-        for <linux-kernel@vger.kernel.org>; Wed, 06 Jul 2022 19:46:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=RSHQWkovr83QuNDZMnV0Uka1kuFVRZuDsMTfWh9lJ2Y=;
-        b=tuQoN6u9YrZctKw257A+8+huZEKUkRHbB/ZNuWPgKot44jR1nkVLR7jLgZs+7CUeU1
-         90R8Tmk+I3T3d9wMEY97BgwFXWSBnnzo4OzAuMXNuPxY2We3P8APGT5GzFVhEcV+4Zo0
-         shdWX2KUTUk8WS5sW8F9SzWlxjvKviZx+Uh11WqfJPkLB1mFt29a66XUC1pblwp9psGN
-         xoyHukYAD+JwgB7WvtKvaTh94kbYNEbcJCZQwDE8u6nIE7t/vD4MUn2SNq0Eo465iaMg
-         chnrXpqHz65N1nxdBFcZ+o/ge5cO/dJfIyauHYUQl/UGHPQbPGo+A/77VU6t2ORZNiRp
-         n+Ag==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=RSHQWkovr83QuNDZMnV0Uka1kuFVRZuDsMTfWh9lJ2Y=;
-        b=iRMYy2z8KS9qHt1eMcrgW+xsWrVynfcbHlEC4DFlhObR9pzwQOPA3zkNShLzKgXCUP
-         0tvgXLl/mkyA+4bRuoRQRnHgSPt4nAi171dJ6DjmaG0MbV+7tATx+fgLaxbdCFtHXnH9
-         /Xr850P65o4NgrW1wxsI9sIPw/2VplEGJajAg0QxoSFcazLllheUqInNV+QHlvaf1CbG
-         bDyXqLf+0xcPAj2ogYkKMb+FDRsK/pm+FAzIyo15Qp5zS7aFrV9P0JiLn2vUizqcKpht
-         wC0R9x3/0zdthXFdrWikrAHms0KU0eLQM9yii0ogmvZc2pAMrZeDL1BcT/JJS+LhGgqN
-         NiLQ==
-X-Gm-Message-State: AJIora/QjYhiREp1I39PDsccMWBeZ3YOksKLeDuoMucKU2Hkrg1l1emx
-        AHk3+vHbtgcupQRBrXGnzuEZjw==
-X-Google-Smtp-Source: AGRyM1uOHdRlfRwW7UE6JgQ2/iUk746TxWu0nBI+IMaIMBvcmiy6MQqTjTlpq1uIIXwhippN7/qWTw==
-X-Received: by 2002:a05:6870:ac14:b0:10c:1d60:d4d2 with SMTP id kw20-20020a056870ac1400b0010c1d60d4d2mr1257153oab.58.1657161966982;
-        Wed, 06 Jul 2022 19:46:06 -0700 (PDT)
-Received: from builder.lan (104-57-184-186.lightspeed.austtx.sbcglobal.net. [104.57.184.186])
-        by smtp.gmail.com with ESMTPSA id r6-20020a056870580600b001089aef1815sm16450814oap.20.2022.07.06.19.46.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 06 Jul 2022 19:46:06 -0700 (PDT)
-From:   Bjorn Andersson <bjorn.andersson@linaro.org>
-To:     Johan Hovold <johan+linaro@kernel.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-kernel@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org
-Subject: Re: [PATCH 00/14] arm64: dts: qcom: QMP PHY fixes
-Date:   Wed,  6 Jul 2022 21:46:04 -0500
-Message-Id: <165716195971.869883.8845615807571040314.b4-ty@linaro.org>
-X-Mailer: git-send-email 2.32.0
-In-Reply-To: <20220705114032.22787-1-johan+linaro@kernel.org>
-References: <20220705114032.22787-1-johan+linaro@kernel.org>
+        Wed, 6 Jul 2022 22:35:55 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BAD16F6E
+        for <linux-kernel@vger.kernel.org>; Wed,  6 Jul 2022 19:35:52 -0700 (PDT)
+Received: from dggemv703-chm.china.huawei.com (unknown [172.30.72.56])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4LdgSh1l1szhZ4j;
+        Thu,  7 Jul 2022 10:33:24 +0800 (CST)
+Received: from kwepemm600015.china.huawei.com (7.193.23.52) by
+ dggemv703-chm.china.huawei.com (10.3.19.46) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Thu, 7 Jul 2022 10:35:50 +0800
+Received: from huawei.com (10.175.127.227) by kwepemm600015.china.huawei.com
+ (7.193.23.52) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Thu, 7 Jul
+ 2022 10:35:50 +0800
+From:   ChenXiaoSong <chenxiaosong2@huawei.com>
+To:     <anton@tuxera.com>
+CC:     <linux-ntfs-dev@lists.sourceforge.net>,
+        <linux-kernel@vger.kernel.org>, <chenxiaosong2@huawei.com>,
+        <liuyongqiang13@huawei.com>, <yi.zhang@huawei.com>,
+        <zhangxiaoxu5@huawei.com>
+Subject: [PATCH] ntfs: fix use-after-free in ntfs_ucsncmp()
+Date:   Thu, 7 Jul 2022 10:48:01 +0800
+Message-ID: <20220707024801.2978141-1-chenxiaosong2@huawei.com>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.127.227]
+X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
+ kwepemm600015.china.huawei.com (7.193.23.52)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,48 +52,94 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 5 Jul 2022 13:40:18 +0200, Johan Hovold wrote:
-> Here's a bunch of fixes for PHY related DT issues found while amending
-> the current QMP PHY schema:
-> 
-> 	https://lore.kernel.org/r/20220705094239.17174-1-johan+linaro@kernel.org
-> 
-> Included are also some cleanups of the MS8996 PCIe PHY node which make
-> the node match the new binding example.
-> 
-> [...]
+Syzkaller reported use-after-free bug as follows:
 
-Applied, thanks!
+==================================================================
+BUG: KASAN: use-after-free in ntfs_ucsncmp+0x123/0x130
+Read of size 2 at addr ffff8880751acee8 by task a.out/879
 
-[01/14] arm64: dts: qcom: sc7280: drop PCIe PHY clock index
-        commit: 531c738fb36069d60aff267a0b25533a35d59fd0
-[02/14] arm64: dts: qcom: sm8250: add missing PCIe PHY clock-cells
-        commit: d9fd162ce764c227fcfd4242f6c1639895a9481f
-[03/14] arm64: dts: qcom: ipq6018: drop USB PHY clock index
-        commit: 9215a64a0776c4797ed08520655fba7e85530156
-[04/14] arm64: dts: qcom: ipq8074: drop USB PHY clock index
-        commit: de9e7f77d8694ed6f5064fe865711b5f8321c09d
-[05/14] arm64: dts: qcom: msm8996: drop USB PHY clock index
-        (no commit info)
-[06/14] arm64: dts: qcom: msm8998: drop USB PHY clock index
-        commit: ed9cbbcb8c6a1925db7995214602c6a8983ff870
-[07/14] arm64: dts: qcom: sm8350: drop USB PHY clock index
-        commit: af5515543b9b5999d547f4f2afcad95f0aff5b1d
-[08/14] arm64: dts: qcom: sm8450: drop USB PHY clock index
-        commit: 0aaa0a9a4745ff4b4ffeed80ce3463c9c8c0f693
-[09/14] arm64: dts: qcom: sc8280xp: drop UFS PHY clock-cells
-        commit: 119feff14672af57cc62d2e1350a34e4aa3c5f10
-[10/14] arm64: dts: qcom: sm8250: drop UFS PHY clock-cells
-        commit: be18bc7bd9e82e2d08095d9ed0d9978dcb707e7c
-[11/14] arm64: dts: qcom: sm8450: drop UFS PHY clock-cells
-        commit: e30d9f1e58c0f860b8a740c63527106146f0f3fd
-[12/14] arm64: dts: qcom: msm8996: add missing PCIe PHY clock-cells
-        (no commit info)
-[13/14] arm64: dts: qcom: msm8996: use non-empty ranges for PCIe PHYs
-        commit: 3a5da59af38d77088aa5226208cca0beb9125485
-[14/14] arm64: dts: qcom: msm8996: clean up PCIe PHY node
-        commit: 02d99d4cfe0984ea05edfbcbae2c9660a05f7b11
+CPU: 7 PID: 879 Comm: a.out Not tainted 5.19.0-rc4-next-20220630-00001-gcc5218c8bd2c-dirty #7
+Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS rel-1.16.0-0-gd239552ce722-prebuilt.qemu.org 04/01/2014
+Call Trace:
+ <TASK>
+ dump_stack_lvl+0x1c0/0x2b0
+ print_address_description.constprop.0.cold+0xd4/0x484
+ print_report.cold+0x55/0x232
+ kasan_report+0xbf/0xf0
+ ntfs_ucsncmp+0x123/0x130
+ ntfs_are_names_equal.cold+0x2b/0x41
+ ntfs_attr_find+0x43b/0xb90
+ ntfs_attr_lookup+0x16d/0x1e0
+ ntfs_read_locked_attr_inode+0x4aa/0x2360
+ ntfs_attr_iget+0x1af/0x220
+ ntfs_read_locked_inode+0x246c/0x5120
+ ntfs_iget+0x132/0x180
+ load_system_files+0x1cc6/0x3480
+ ntfs_fill_super+0xa66/0x1cf0
+ mount_bdev+0x38d/0x460
+ legacy_get_tree+0x10d/0x220
+ vfs_get_tree+0x93/0x300
+ do_new_mount+0x2da/0x6d0
+ path_mount+0x496/0x19d0
+ __x64_sys_mount+0x284/0x300
+ do_syscall_64+0x3b/0xc0
+ entry_SYSCALL_64_after_hwframe+0x46/0xb0
+RIP: 0033:0x7f3f2118d9ea
+Code: 48 8b 0d a9 f4 0b 00 f7 d8 64 89 01 48 83 c8 ff c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 44 00 00 49 89 ca b8 a5 00 00 00 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 8b 0d 76 f4 0b 00 f7 d8 64 89 01 48
+RSP: 002b:00007ffc269deac8 EFLAGS: 00000202 ORIG_RAX: 00000000000000a5
+RAX: ffffffffffffffda RBX: 0000000000000000 RCX: 00007f3f2118d9ea
+RDX: 0000000020000000 RSI: 0000000020000100 RDI: 00007ffc269dec00
+RBP: 00007ffc269dec80 R08: 00007ffc269deb00 R09: 00007ffc269dec44
+R10: 0000000000000000 R11: 0000000000000202 R12: 000055f81ab1d220
+R13: 0000000000000000 R14: 0000000000000000 R15: 0000000000000000
+ </TASK>
 
-Best regards,
+The buggy address belongs to the physical page:
+page:0000000085430378 refcount:1 mapcount:1 mapping:0000000000000000 index:0x555c6a81d pfn:0x751ac
+memcg:ffff888101f7e180
+anon flags: 0xfffffc00a0014(uptodate|lru|mappedtodisk|swapbacked|node=0|zone=1|lastcpupid=0x1fffff)
+raw: 000fffffc00a0014 ffffea0001bf2988 ffffea0001de2448 ffff88801712e201
+raw: 0000000555c6a81d 0000000000000000 0000000100000000 ffff888101f7e180
+page dumped because: kasan: bad access detected
+
+Memory state around the buggy address:
+ ffff8880751acd80: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+ ffff8880751ace00: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+>ffff8880751ace80: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+                                                          ^
+ ffff8880751acf00: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+ ffff8880751acf80: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+==================================================================
+
+The reason is that struct ATTR_RECORD->name_offset is 6485, end address of
+name string is out of bounds.
+
+Fix this by adding sanity check on end address of attibute name string.
+
+Signed-off-by: ChenXiaoSong <chenxiaosong2@huawei.com>
+---
+ fs/ntfs/attrib.c | 8 ++++++--
+ 1 file changed, 6 insertions(+), 2 deletions(-)
+
+diff --git a/fs/ntfs/attrib.c b/fs/ntfs/attrib.c
+index 4de597a83b88..4d1c3ca0c698 100644
+--- a/fs/ntfs/attrib.c
++++ b/fs/ntfs/attrib.c
+@@ -592,8 +592,12 @@ static int ntfs_attr_find(const ATTR_TYPE type, const ntfschar *name,
+ 		a = (ATTR_RECORD*)((u8*)ctx->attr +
+ 				le32_to_cpu(ctx->attr->length));
+ 	for (;;	a = (ATTR_RECORD*)((u8*)a + le32_to_cpu(a->length))) {
+-		if ((u8*)a < (u8*)ctx->mrec || (u8*)a > (u8*)ctx->mrec +
+-				le32_to_cpu(ctx->mrec->bytes_allocated))
++		u8 *mrec_end = (u8 *)(u8*)ctx->mrec +
++		               le32_to_cpu(ctx->mrec->bytes_allocated);
++		u8 *name_end = (u8 *)a + le16_to_cpu(a->name_offset) +
++		               a->name_length;
++		if ((u8*)a < (u8*)ctx->mrec || (u8*)a > mrec_end ||
++		    name_end > mrec_end)
+ 			break;
+ 		ctx->attr = a;
+ 		if (unlikely(le32_to_cpu(a->type) > le32_to_cpu(type) ||
 -- 
-Bjorn Andersson <bjorn.andersson@linaro.org>
+2.31.1
+

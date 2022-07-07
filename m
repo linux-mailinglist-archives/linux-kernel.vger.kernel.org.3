@@ -2,39 +2,39 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EB70956A480
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 15:50:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5CFB956A478
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 15:50:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236196AbiGGNtB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Jul 2022 09:49:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40346 "EHLO
+        id S236148AbiGGNsl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Jul 2022 09:48:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40234 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236085AbiGGNrp (ORCPT
+        with ESMTP id S236061AbiGGNrl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Jul 2022 09:47:45 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E88F27B20;
-        Thu,  7 Jul 2022 06:47:42 -0700 (PDT)
+        Thu, 7 Jul 2022 09:47:41 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D7D927B01;
+        Thu,  7 Jul 2022 06:47:41 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id ECEAFB8221A;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id ADE6F621AD;
         Thu,  7 Jul 2022 13:47:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 31927C341CE;
-        Thu,  7 Jul 2022 13:47:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5C7DDC36AE3;
+        Thu,  7 Jul 2022 13:47:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1657201659;
-        bh=t37NNwLh8MwSux7U3ureG58oP/xr5nX9uYzRDQ0W8Dw=;
+        bh=L091Lwo2vL0s0fAkT/tkbwRyMpVuvwvBsfviDWQ21ys=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Ipp8H3Cz2npmAH3g3htm83GAkhbejAdjQdZlM++d9T00FQGCgVj+U5t26ntJSwVJF
-         aYIDCMfv7RnKuVU9rwQGrpQ7XxcJad+0SwwnJ0YCJuFpmv53ePaFmiCiV5lS5PAATB
-         9ShS0QFk44sY+wSkFNxxVQ6v7kVXZkhbHYaftn+RtS/5REH4dfJAOMv/SOKM4NePrd
-         lz7p4zhAi2U+nW4mH9/REyavTxbxdND+G0Jtn06btjA3panEnRfw5DXHBmWq6Bftkr
-         zuF+kdtScya0QepF5Zf9Modudjaoe4llx+dKhPvdtulAB1va0S2d9PqcQQCM1tgzM0
-         q3KR0tkiBVrQA==
+        b=H0/KbZ9S4BDzwYcbJweszSEEOmiC8sFWJi9fN9SS7ScegTRl0f4M3oE6GuaAkmtUW
+         xkEhi7eYlTlLqkv+o3KkDEgjXEDTJ9eD/W2DIfinEH/7EmDY7tshrAw1X1SK1b1eFA
+         KKhs3z3jQvraUrjaoE/Tt5fS10KxKpItEdzqG9yVYx71t45b17/LaRyhgHk9WnTs1R
+         khmQt+TePtLuSBh5efF4yzfzisHmtoS3zlOD+Co4KrcdxXI4pYXzSWbqXcNXZERnAs
+         W24T+PRVmPPJHF2Scr3+j9D/QlGVvAmiAljt37T1w9fPEQ8QEZAVYhj342pturTxZ+
+         yUNBjBFGShOSQ==
 Received: from johan by xi.lan with local (Exim 4.94.2)
         (envelope-from <johan+linaro@kernel.org>)
-        id 1o9Rr3-0000vx-TR; Thu, 07 Jul 2022 15:47:41 +0200
+        id 1o9Rr3-0000vz-Vw; Thu, 07 Jul 2022 15:47:42 +0200
 From:   Johan Hovold <johan+linaro@kernel.org>
 To:     Vinod Koul <vkoul@kernel.org>, Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
@@ -45,9 +45,9 @@ Cc:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
         linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
         Johan Hovold <johan+linaro@kernel.org>
-Subject: [PATCH v2 04/30] dt-bindings: phy: qcom,qmp: fix child node description
-Date:   Thu,  7 Jul 2022 15:46:59 +0200
-Message-Id: <20220707134725.3512-5-johan+linaro@kernel.org>
+Subject: [PATCH v2 05/30] dt-bindings: phy: qcom,qmp: clean up descriptions
+Date:   Thu,  7 Jul 2022 15:47:00 +0200
+Message-Id: <20220707134725.3512-6-johan+linaro@kernel.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220707134725.3512-1-johan+linaro@kernel.org>
 References: <20220707134725.3512-1-johan+linaro@kernel.org>
@@ -63,29 +63,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Fix the incorrect description of the child nodes which claimed that one
-node is required per lane rather than per PHY.
+Clean up the remaining descriptions by using uppercase "PHY"
+consistently and dropping redundant information from the register
+descriptions.
 
 Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
 ---
- Documentation/devicetree/bindings/phy/qcom,qmp-phy.yaml | 4 +---
- 1 file changed, 1 insertion(+), 3 deletions(-)
+ Documentation/devicetree/bindings/phy/qcom,qmp-phy.yaml | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
 diff --git a/Documentation/devicetree/bindings/phy/qcom,qmp-phy.yaml b/Documentation/devicetree/bindings/phy/qcom,qmp-phy.yaml
-index ea028bad961d..f7b8898fd95d 100644
+index f7b8898fd95d..bcffabf04566 100644
 --- a/Documentation/devicetree/bindings/phy/qcom,qmp-phy.yaml
 +++ b/Documentation/devicetree/bindings/phy/qcom,qmp-phy.yaml
-@@ -100,9 +100,7 @@ properties:
- patternProperties:
-   "^phy@[0-9a-f]+$":
-     type: object
--    description:
--      Each device node of QMP phy is required to have as many child nodes as
--      the number of lanes the PHY has.
-+    description: one child node per PHY provided by this block
+@@ -11,7 +11,7 @@ maintainers:
+   - Vinod Koul <vkoul@kernel.org>
  
- required:
-   - compatible
+ description:
+-  QMP phy controller supports physical layer functionality for a number of
++  QMP PHY controller supports physical layer functionality for a number of
+   controllers on Qualcomm chipsets, such as, PCIe, UFS, and USB.
+ 
+ properties:
+@@ -63,8 +63,8 @@ properties:
+   reg:
+     minItems: 1
+     items:
+-      - description: Address and length of PHY's common serdes block.
+-      - description: Address and length of PHY's DP_COM control block.
++      - description: serdes
++      - description: DP_COM
+ 
+   "#address-cells":
+     enum: [ 1, 2 ]
 -- 
 2.35.1
 

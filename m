@@ -2,45 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 33598569F61
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 12:18:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 89CD1569F77
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 12:20:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235354AbiGGKRl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Jul 2022 06:17:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44688 "EHLO
+        id S235474AbiGGKSn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Jul 2022 06:18:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46350 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235222AbiGGKRX (ORCPT
+        with ESMTP id S235468AbiGGKSW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Jul 2022 06:17:23 -0400
-Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [IPv6:2a01:488:42:1000:50ed:8234::])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55D2450730;
-        Thu,  7 Jul 2022 03:17:22 -0700 (PDT)
-Received: from [2a02:8108:963f:de38:eca4:7d19:f9a2:22c5]; authenticated
-        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        id 1o9OZU-0008RW-7S; Thu, 07 Jul 2022 12:17:20 +0200
-Message-ID: <a93e5967-026a-186d-2bf0-5628631b9e28@leemhuis.info>
-Date:   Thu, 7 Jul 2022 12:17:16 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Content-Language: en-US
-To:     Florian Westphal <fw@strlen.de>, netfilter-devel@vger.kernel.org
-Cc:     regressions@lists.linux.dev, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Peter Zijlstra <peterz@infradead.org>,
-        Kajetan Puchalski <kajetan.puchalski@arm.com>,
-        Will Deacon <will@kernel.org>
-References: <20220706124007.GB7996@breakpoint.cc>
- <20220706145004.22355-1-fw@strlen.de>
-From:   Thorsten Leemhuis <regressions@leemhuis.info>
-Subject: Re: [PATCH nf v3] netfilter: conntrack: fix crash due to confirmed
- bit load reordering
-In-Reply-To: <20220706145004.22355-1-fw@strlen.de>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1657189042;f22e09e4;
-X-HE-SMSGID: 1o9OZU-0008RW-7S
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        Thu, 7 Jul 2022 06:18:22 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0121564FE
+        for <linux-kernel@vger.kernel.org>; Thu,  7 Jul 2022 03:18:13 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 27F8BB8210A
+        for <linux-kernel@vger.kernel.org>; Thu,  7 Jul 2022 10:18:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CD0A4C3411E;
+        Thu,  7 Jul 2022 10:18:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1657189090;
+        bh=BzVWbrw4pi09lZOHvX6qnHSfUGB1UR1jU0dwocCDVvE=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=YxjAoGEOVJmsW20F6x28K84UpRqIW4KE103BkwA3CwJRK87MOcHWUUE/ABC1Sra76
+         DAZLVD+wo10/u++6Ct7ARAVHiEdc/wYUZg19TXSJGoACXNojIhB63XXGOOXNZMyHDm
+         9q0tGRV09F0mNQqbUIQx3u2vuL2HphJVCMSkehwbFT39P4MnFoHuSnTKIdtKqq4tPF
+         Q1xeuXYHgV+wsZVGitS1fVw1DZtokxaOc/8FPwvVFNx4zaT+8MotMAodFK5h31ap4H
+         ueddKEpXKJAfV90Fl6766ddFnDX0TrSMu887c9U0pDkdT0VUnFM9ZtRWglAo/esWvb
+         QJP4QfhTT+35A==
+Received: from [185.201.63.253] (helo=wait-a-minute.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <maz@kernel.org>)
+        id 1o9OaG-005tAQ-DS;
+        Thu, 07 Jul 2022 11:18:08 +0100
+Date:   Thu, 07 Jul 2022 11:18:04 +0100
+Message-ID: <875yk9mdk3.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Jianmin Lv <lvjianmin@loongson.cn>
+Cc:     Thomas Gleixner <tglx@linutronix.de>, linux-kernel@vger.kernel.org,
+        Hanjun Guo <guohanjun@huawei.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Huacai Chen <chenhuacai@loongson.cn>
+Subject: Re: [PATCH V14 01/15] ACPICA: MADT: Add LoongArch APICs support
+In-Reply-To: <1656837932-18257-2-git-send-email-lvjianmin@loongson.cn>
+References: <1656837932-18257-1-git-send-email-lvjianmin@loongson.cn>
+        <1656837932-18257-2-git-send-email-lvjianmin@loongson.cn>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.201.63.253
+X-SA-Exim-Rcpt-To: lvjianmin@loongson.cn, tglx@linutronix.de, linux-kernel@vger.kernel.org, guohanjun@huawei.com, lorenzo.pieralisi@arm.com, jiaxun.yang@flygoat.com, chenhuacai@loongson.cn
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -49,41 +70,31 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 06.07.22 16:50, Florian Westphal wrote:
-> Kajetan Puchalski reports crash on ARM, with backtrace of:
+On Sun, 03 Jul 2022 09:45:18 +0100,
+Jianmin Lv <lvjianmin@loongson.cn> wrote:
 > 
-> [...]
-> Cc: Peter Zijlstra <peterz@infradead.org>
-> Reported-by: Kajetan Puchalski <kajetan.puchalski@arm.com>
-> Diagnosed-by: Will Deacon <will@kernel.org>
-> Fixes: 719774377622 ("netfilter: conntrack: convert to refcount_t api")
-> Signed-off-by: Florian Westphal <fw@strlen.de>
+> From: Huacai Chen <chenhuacai@loongson.cn>
+> 
+> LoongArch-specific interrupt controllers (similar to APIC) are added
+> in the next revision of ACPI Specification (current revision is 6.4),
+> which including CORE_PIC (CPUINTC), LIO_PIC (LIOINTC), EIO_PIC (EIOINTC),
+> HT_PIC (HTVECINTC), BIO_PIC (PCHINTC), LPC_PIC (PCHLPC) and MSI_PIC
+> (PCHMSI). This patch add their definition.
+> 
+> ACPI changes of LoongArch-specific interrupt controllers have already
+> been approved in the ECRs, and will be public in the next revision of
+> ACPI Specification.
+> 
+> Reference: https://mantis.uefi.org/mantis/view.php?id=2203
+> Reference: https://mantis.uefi.org/mantis/view.php?id=2313
 
-If you need to respin this patch for one reason or another, could you do
-me a favor and add proper 'Link:' tags pointing to all reports about
-this issue? e.g. like this:
+These links are pretty useless without an account on uefi.org (most
+people don't have one, and I certainly don't). Is there a link to
+something *public*?
 
- Link:
-https://lore.kernel.org/all/Yr7WTfd6AVTQkLjI@e126311.manchester.arm.com/
+Thanks,
 
-These tags are considered important by Linus[1] and others, as they
-allow anyone to look into the backstory weeks or years from now. That is
-why they should be placed in cases like this, as
-Documentation/process/submitting-patches.rst and
-Documentation/process/5.Posting.rst explain in more detail. I care
-personally, because these tags make my regression tracking efforts a
-whole lot easier, as they allow my tracking bot 'regzbot' to
-automatically connect reports with patches posted or committed to fix
-tracked regressions.
+	M.
 
-[1] see for example:
-https://lore.kernel.org/all/CAHk-=wjMmSZzMJ3Xnskdg4+GGz=5p5p+GSYyFBTh0f-DgvdBWg@mail.gmail.com/
-https://lore.kernel.org/all/CAHk-=wgs38ZrfPvy=nOwVkVzjpM3VFU1zobP37Fwd_h9iAD5JQ@mail.gmail.com/
-https://lore.kernel.org/all/CAHk-=wjxzafG-=J8oT30s7upn4RhBs6TX-uVFZ5rME+L5_DoJA@mail.gmail.com/
-
-Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
-
-P.S.: As the Linux kernel's regression tracker I deal with a lot of
-reports and sometimes miss something important when writing mails like
-this. If that's the case here, don't hesitate to tell me in a public
-reply, it's in everyone's interest to set the public record straight.
+-- 
+Without deviation from the norm, progress is not possible.

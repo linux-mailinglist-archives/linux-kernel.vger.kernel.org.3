@@ -2,90 +2,567 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1825C56A869
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 18:41:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1219656A866
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 18:41:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235636AbiGGQkQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Jul 2022 12:40:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50148 "EHLO
+        id S236350AbiGGQlZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Jul 2022 12:41:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51414 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235484AbiGGQkN (ORCPT
+        with ESMTP id S236365AbiGGQlN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Jul 2022 12:40:13 -0400
-Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A38012DC7
-        for <linux-kernel@vger.kernel.org>; Thu,  7 Jul 2022 09:40:12 -0700 (PDT)
-Received: by mail-pf1-x42e.google.com with SMTP id e16so7720730pfm.11
-        for <linux-kernel@vger.kernel.org>; Thu, 07 Jul 2022 09:40:12 -0700 (PDT)
+        Thu, 7 Jul 2022 12:41:13 -0400
+Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE5BF5927C
+        for <linux-kernel@vger.kernel.org>; Thu,  7 Jul 2022 09:41:11 -0700 (PDT)
+Received: by mail-wr1-x435.google.com with SMTP id s1so27119886wra.9
+        for <linux-kernel@vger.kernel.org>; Thu, 07 Jul 2022 09:41:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
+        d=linaro.org; s=google;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to;
-        bh=yD9JOmzp/dFDreTYsU04JyTwToOKdMohWmxTbaY6njU=;
-        b=DKgr4DUtPFkc2YDiqeIjerue3AdI7QvRfGK/IvbHd5WNTyaO9jlMo3t7VDNIsgycBd
-         t6lQ87zUS2Pl9GJwRhjoGWGceAce6eVnnyxitqo+Eu/Xz6OmKcSmrDovq2/kK3RmsXdV
-         4Zfim6Y0ZksMG/veV2zgbBBog0DqiGhbWO+r9Zf1/uquXY+OPCTFiD69FwWkhS4iQPWc
-         isKhI1Ls+LByweIbakofzyOp7saougvp7qWNGpDu/aFrNFfG2Q7M4lH04daUChzK80Hu
-         Nb4IOaA1dNWe/SQrp94mkgbyfb8qGJO4J5uEYBdK49Z06hXbDSRWKRiMd89ea36xMfa6
-         FH2A==
+        bh=ItGO6NK/3MSi92BUXFAqSiv2+WBgdHs6NhvmL5uKAxg=;
+        b=Grum5TjDc5XXzjyLI8WYn9T2YjWxesuA9fJLo56EUgmtGUhwyNGzcaVNXsj0rf8Zzz
+         QVW20O4duwR92ubS8ogjuyfKiyTQRLKCtMaeL0r45QUQiJD6M2kSPoj/uDqerA847SBH
+         8TEvfA2Rntr5SA7JCIpIWJzehG0A69GVqbDiXGir9RYt+6fl+ky4v+PUpMwqbQQH0XyB
+         Q3EFZ7Khilojz8e6K2ANbxpWlt7DC2yTjs+IckKF/J+fVyCSmRyeOgu7lCrCTZTTy1ul
+         wH11KyaE5sT+YYQnasuutwyD+0A/5Gy0F0qnRYxSbeE/zLenTSkbG66V9/zwyhrEu1tY
+         p4zw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=yD9JOmzp/dFDreTYsU04JyTwToOKdMohWmxTbaY6njU=;
-        b=URzpiNFZamLf9KDCF24mSU8p/ILVNc3injsRFvp5oRmgy7eco++0maefV5b59wwSX8
-         OVQ27eBBxSu6bNG/3JSpFzymL0GxGKPNryRMLaUUikzuSXxCARHJd6H9hKiLRohLv/Xw
-         Hk3GpLxNvfmxjYt6iJ//ZEKZwU99EXuB3SvH8QQTBahTJQFTyaXAU4iJzPDYByxfEzja
-         V1zKpkcBgN4x6BWD8oxh73vfgvmGF8cMnQHeRsM1tY4uAoCjpD4K7US7JNwGA2JAkQhr
-         Y0J18EdLS08ctdFWLRw4Y8s4DfJMavl7ETLlGx8n8ILtjxS5ILh5qi0wbccyuxB6chQF
-         iE7w==
-X-Gm-Message-State: AJIora+XaEZycOFds9PW6VubDvl4sNHhm7Uak+38AdIMhZicj1AzL363
-        9wFW2Hmv+In980ika+BxCZGokA==
-X-Google-Smtp-Source: AGRyM1uRun8/gyQJJismerB54U/dXNI8KUubj/l+07lYiNiUSieBPfgfo3nCJCkX+KWvZ5rnxkhc/Q==
-X-Received: by 2002:a17:90b:4f4e:b0:1ef:ab40:b345 with SMTP id pj14-20020a17090b4f4e00b001efab40b345mr6235651pjb.226.1657212012079;
-        Thu, 07 Jul 2022 09:40:12 -0700 (PDT)
-Received: from google.com (123.65.230.35.bc.googleusercontent.com. [35.230.65.123])
-        by smtp.gmail.com with ESMTPSA id oa1-20020a17090b1bc100b001ec84b0f199sm3505764pjb.1.2022.07.07.09.40.11
+        bh=ItGO6NK/3MSi92BUXFAqSiv2+WBgdHs6NhvmL5uKAxg=;
+        b=CMYp16CLnJtynpQ8/ii/EvW9Swco+6r4Xi/KiSAD8YysJpNNF7OzEgBKkW/wOJeXfH
+         ZNvO7VE69YSQBAgQugB1soH8FFpLLz5RjxrLzPKeIpAiWGgfpX8pONZW9FHMvxsv+GOY
+         LiuZUQiKr24LTuCtMc0dXJp/zNADGiL7mQ0ZrRqm/2DRtq+Pf7Alm/o35j8pfsROUysF
+         sg/4tx7G/Zr6pV8L7ahq+P6k67CpLJOGI4rmhJrG0FrAZq7lrL+61lvkSoXusqAiWlM+
+         bmer+3fRXbtH+dCvK03R9+l/lqu/2it0T+I9yQ2N5ekW2ClH596OZMNJc9C80taGHTLL
+         eSpg==
+X-Gm-Message-State: AJIora//5pomQqlWL9QwWlecSlosUgJKxrbhrEqvLgFCG837epsgCFhX
+        HogB5kyOmw8xa5Kf9vBGoL37Ww==
+X-Google-Smtp-Source: AGRyM1vwpgnCt8LTWG4ialf7PResaLtUvur0iNabS00uU6w0bA5OXHU33CjVR+m90xKkeThyvm9TWw==
+X-Received: by 2002:a5d:4201:0:b0:21d:7b63:1b43 with SMTP id n1-20020a5d4201000000b0021d7b631b43mr9705389wrq.225.1657212070375;
+        Thu, 07 Jul 2022 09:41:10 -0700 (PDT)
+Received: from larix (cpc92880-cmbg19-2-0-cust679.5-4.cable.virginm.net. [82.27.106.168])
+        by smtp.gmail.com with ESMTPSA id c8-20020a05600c0a4800b003a02f957245sm26967792wmq.26.2022.07.07.09.41.09
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 07 Jul 2022 09:40:11 -0700 (PDT)
-Date:   Thu, 7 Jul 2022 16:40:07 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Vitaly Kuznetsov <vkuznets@redhat.com>
-Cc:     kvm@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
-        Anirudh Rayabharam <anrayabh@linux.microsoft.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Maxim Levitsky <mlevitsk@redhat.com>,
-        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 06/28] KVM: nVMX: Introduce
- KVM_CAP_HYPERV_ENLIGHTENED_VMCS2
-Message-ID: <YscMZ2eU92fkDowB@google.com>
-References: <20220629150625.238286-1-vkuznets@redhat.com>
- <20220629150625.238286-7-vkuznets@redhat.com>
- <YsYAPL1UUKJB3/MJ@google.com>
- <87o7y1qm5t.fsf@redhat.com>
- <YscHNur0OsViyyDJ@google.com>
+        Thu, 07 Jul 2022 09:41:10 -0700 (PDT)
+Date:   Thu, 7 Jul 2022 17:41:07 +0100
+From:   Jean-Philippe Brucker <jean-philippe@linaro.org>
+To:     Xu Kuohai <xukuohai@huawei.com>
+Cc:     bpf@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        Mark Rutland <mark.rutland@arm.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Zi Shen Lim <zlim.lnx@gmail.com>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        "David S . Miller" <davem@davemloft.net>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        David Ahern <dsahern@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H . Peter Anvin" <hpa@zytor.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        Russell King <rmk+kernel@armlinux.org.uk>,
+        James Morse <james.morse@arm.com>,
+        Hou Tao <houtao1@huawei.com>,
+        Jason Wang <wangborong@cdjrlc.com>
+Subject: Re: [PATCH bpf-next v6 3/4] bpf, arm64: Impelment
+ bpf_arch_text_poke() for arm64
+Message-ID: <YscMo+jlif44bxBP@larix>
+References: <20220625161255.547944-1-xukuohai@huawei.com>
+ <20220625161255.547944-4-xukuohai@huawei.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <YscHNur0OsViyyDJ@google.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220625161255.547944-4-xukuohai@huawei.com>
+X-TUID: RY2JuS/AgKUo
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jul 07, 2022, Sean Christopherson wrote:
-> On Thu, Jul 07, 2022, Vitaly Kuznetsov wrote:
-> > luckily, Microsoft added a new PV CPUID feature bit inidicating the support
-> > for the new features in eVMCSv1 so KVM can just observe whether the bit was
-> > set by VMM or not and filter accordingly.
-> 
-> If there's a CPUID feature bit, why does KVM need to invent its own revision scheme?
+On Sat, Jun 25, 2022 at 12:12:54PM -0400, Xu Kuohai wrote:
+> Impelment bpf_arch_text_poke() for arm64, so bpf prog or bpf trampoline
 
-Doh, just saw your other mail.
+Implement
+
+> diff --git a/arch/arm64/net/bpf_jit_comp.c b/arch/arm64/net/bpf_jit_comp.c
+> index f08a4447d363..e0e9c705a2e4 100644
+> --- a/arch/arm64/net/bpf_jit_comp.c
+> +++ b/arch/arm64/net/bpf_jit_comp.c
+> @@ -9,6 +9,7 @@
+>  
+>  #include <linux/bitfield.h>
+>  #include <linux/bpf.h>
+> +#include <linux/memory.h>
+
+nit: keep sorted
+
+>  #include <linux/filter.h>
+>  #include <linux/printk.h>
+>  #include <linux/slab.h>
+> @@ -18,6 +19,7 @@
+>  #include <asm/cacheflush.h>
+>  #include <asm/debug-monitors.h>
+>  #include <asm/insn.h>
+> +#include <asm/patching.h>
+>  #include <asm/set_memory.h>
+>  
+>  #include "bpf_jit.h"
+> @@ -78,6 +80,15 @@ struct jit_ctx {
+>  	int fpb_offset;
+>  };
+>  
+> +struct bpf_plt {
+> +	u32 insn_ldr; /* load target */
+> +	u32 insn_br;  /* branch to target */
+> +	u64 target;   /* target value */
+> +} __packed;
+
+don't need __packed
+
+> +
+> +#define PLT_TARGET_SIZE   sizeof_field(struct bpf_plt, target)
+> +#define PLT_TARGET_OFFSET offsetof(struct bpf_plt, target)
+> +
+>  static inline void emit(const u32 insn, struct jit_ctx *ctx)
+>  {
+>  	if (ctx->image != NULL)
+> @@ -140,6 +151,12 @@ static inline void emit_a64_mov_i64(const int reg, const u64 val,
+>  	}
+>  }
+>  
+> +static inline void emit_bti(u32 insn, struct jit_ctx *ctx)
+> +{
+> +	if (IS_ENABLED(CONFIG_ARM64_BTI_KERNEL))
+> +		emit(insn, ctx);
+> +}
+> +
+>  /*
+>   * Kernel addresses in the vmalloc space use at most 48 bits, and the
+>   * remaining bits are guaranteed to be 0x1. So we can compose the address
+> @@ -235,13 +252,30 @@ static bool is_lsi_offset(int offset, int scale)
+>  	return true;
+>  }
+>  
+> +/* generated prologue:
+> + *      bti c // if CONFIG_ARM64_BTI_KERNEL
+> + *      mov x9, lr
+> + *      nop  // POKE_OFFSET
+> + *      paciasp // if CONFIG_ARM64_PTR_AUTH_KERNEL
+
+Any reason for the change regarding BTI and pointer auth?  We used to put
+'bti c' at the function entry if (BTI && !PA), or 'paciasp' if (BTI && PA),
+because 'paciasp' is an implicit BTI.
+
+> + *      stp x29, lr, [sp, #-16]!
+> + *      mov x29, sp
+> + *      stp x19, x20, [sp, #-16]!
+> + *      stp x21, x22, [sp, #-16]!
+> + *      stp x25, x26, [sp, #-16]!
+> + *      stp x27, x28, [sp, #-16]!
+> + *      mov x25, sp
+> + *      mov tcc, #0
+> + *      // PROLOGUE_OFFSET
+> + */
+> +
+> +#define BTI_INSNS (IS_ENABLED(CONFIG_ARM64_BTI_KERNEL) ? 1 : 0)
+> +#define PAC_INSNS (IS_ENABLED(CONFIG_ARM64_PTR_AUTH_KERNEL) ? 1 : 0)
+> +
+> +/* Offset of nop instruction in bpf prog entry to be poked */
+> +#define POKE_OFFSET (BTI_INSNS + 1)
+> +
+>  /* Tail call offset to jump into */
+> -#if IS_ENABLED(CONFIG_ARM64_BTI_KERNEL) || \
+> -	IS_ENABLED(CONFIG_ARM64_PTR_AUTH_KERNEL)
+> -#define PROLOGUE_OFFSET 9
+> -#else
+> -#define PROLOGUE_OFFSET 8
+> -#endif
+> +#define PROLOGUE_OFFSET (BTI_INSNS + 2 + PAC_INSNS + 8)
+>  
+>  static int build_prologue(struct jit_ctx *ctx, bool ebpf_from_cbpf)
+>  {
+> @@ -280,12 +314,14 @@ static int build_prologue(struct jit_ctx *ctx, bool ebpf_from_cbpf)
+>  	 *
+>  	 */
+>  
+> +	emit_bti(A64_BTI_C, ctx);
+> +
+> +	emit(A64_MOV(1, A64_R(9), A64_LR), ctx);
+> +	emit(A64_NOP, ctx);
+> +
+>  	/* Sign lr */
+>  	if (IS_ENABLED(CONFIG_ARM64_PTR_AUTH_KERNEL))
+>  		emit(A64_PACIASP, ctx);
+> -	/* BTI landing pad */
+> -	else if (IS_ENABLED(CONFIG_ARM64_BTI_KERNEL))
+> -		emit(A64_BTI_C, ctx);
+>  
+>  	/* Save FP and LR registers to stay align with ARM64 AAPCS */
+>  	emit(A64_PUSH(A64_FP, A64_LR, A64_SP), ctx);
+> @@ -312,8 +348,7 @@ static int build_prologue(struct jit_ctx *ctx, bool ebpf_from_cbpf)
+>  		}
+>  
+>  		/* BTI landing pad for the tail call, done with a BR */
+> -		if (IS_ENABLED(CONFIG_ARM64_BTI_KERNEL))
+> -			emit(A64_BTI_J, ctx);
+> +		emit_bti(A64_BTI_J, ctx);
+>  	}
+>  
+>  	emit(A64_SUB_I(1, fpb, fp, ctx->fpb_offset), ctx);
+> @@ -557,6 +592,53 @@ static int emit_ll_sc_atomic(const struct bpf_insn *insn, struct jit_ctx *ctx)
+>  	return 0;
+>  }
+>  
+> +void dummy_tramp(void);
+> +
+> +asm (
+> +"	.pushsection .text, \"ax\", @progbits\n"
+> +"	.type dummy_tramp, %function\n"
+> +"dummy_tramp:"
+> +#if IS_ENABLED(CONFIG_ARM64_BTI_KERNEL)
+> +"	bti j\n" /* dummy_tramp is called via "br x10" */
+> +#endif
+> +"	mov x10, lr\n"
+> +"	mov lr, x9\n"
+> +"	ret x10\n"
+> +"	.size dummy_tramp, .-dummy_tramp\n"
+> +"	.popsection\n"
+> +);
+> +
+> +/* build a plt initialized like this:
+> + *
+> + * plt:
+> + *      ldr tmp, target
+> + *      br tmp
+> + * target:
+> + *      .quad dummy_tramp
+> + *
+> + * when a long jump trampoline is attached, target is filled with the
+> + * trampoline address, and when the trampoine is removed, target is
+
+s/trampoine/trampoline/
+
+> + * restored to dummy_tramp address.
+> + */
+> +static void build_plt(struct jit_ctx *ctx, bool write_target)
+> +{
+> +	const u8 tmp = bpf2a64[TMP_REG_1];
+> +	struct bpf_plt *plt = NULL;
+> +
+> +	/* make sure target is 64-bit aligend */
+
+aligned
+
+> +	if ((ctx->idx + PLT_TARGET_OFFSET / AARCH64_INSN_SIZE) % 2)
+> +		emit(A64_NOP, ctx);
+> +
+> +	plt = (struct bpf_plt *)(ctx->image + ctx->idx);
+> +	/* plt is called via bl, no BTI needed here */
+> +	emit(A64_LDR64LIT(tmp, 2 * AARCH64_INSN_SIZE), ctx);
+> +	emit(A64_BR(tmp), ctx);
+> +
+> +	/* false write_target means target space is not allocated yet */
+> +	if (write_target)
+
+How about "if (ctx->image)", to be consistent
+
+> +		plt->target = (u64)&dummy_tramp;
+> +}
+> +
+>  static void build_epilogue(struct jit_ctx *ctx)
+>  {
+>  	const u8 r0 = bpf2a64[BPF_REG_0];
+> @@ -1356,7 +1438,7 @@ struct arm64_jit_data {
+>  
+>  struct bpf_prog *bpf_int_jit_compile(struct bpf_prog *prog)
+>  {
+> -	int image_size, prog_size, extable_size;
+> +	int image_size, prog_size, extable_size, extable_align, extable_offset;
+>  	struct bpf_prog *tmp, *orig_prog = prog;
+>  	struct bpf_binary_header *header;
+>  	struct arm64_jit_data *jit_data;
+> @@ -1426,13 +1508,17 @@ struct bpf_prog *bpf_int_jit_compile(struct bpf_prog *prog)
+>  
+>  	ctx.epilogue_offset = ctx.idx;
+>  	build_epilogue(&ctx);
+> +	build_plt(&ctx, false);
+>  
+> +	extable_align = __alignof__(struct exception_table_entry);
+>  	extable_size = prog->aux->num_exentries *
+>  		sizeof(struct exception_table_entry);
+>  
+>  	/* Now we know the actual image size. */
+>  	prog_size = sizeof(u32) * ctx.idx;
+> -	image_size = prog_size + extable_size;
+> +	/* also allocate space for plt target */
+> +	extable_offset = round_up(prog_size + PLT_TARGET_SIZE, extable_align);
+> +	image_size = extable_offset + extable_size;
+>  	header = bpf_jit_binary_alloc(image_size, &image_ptr,
+>  				      sizeof(u32), jit_fill_hole);
+>  	if (header == NULL) {
+> @@ -1444,7 +1530,7 @@ struct bpf_prog *bpf_int_jit_compile(struct bpf_prog *prog)
+>  
+>  	ctx.image = (__le32 *)image_ptr;
+>  	if (extable_size)
+> -		prog->aux->extable = (void *)image_ptr + prog_size;
+> +		prog->aux->extable = (void *)image_ptr + extable_offset;
+>  skip_init_ctx:
+>  	ctx.idx = 0;
+>  	ctx.exentry_idx = 0;
+> @@ -1458,6 +1544,7 @@ struct bpf_prog *bpf_int_jit_compile(struct bpf_prog *prog)
+>  	}
+>  
+>  	build_epilogue(&ctx);
+> +	build_plt(&ctx, true);
+>  
+>  	/* 3. Extra pass to validate JITed code. */
+>  	if (validate_code(&ctx)) {
+> @@ -1537,3 +1624,218 @@ bool bpf_jit_supports_subprog_tailcalls(void)
+>  {
+>  	return true;
+>  }
+> +
+> +static bool is_long_jump(void *ip, void *target)
+> +{
+> +	long offset;
+> +
+> +	/* NULL target means this is a NOP */
+> +	if (!target)
+> +		return false;
+> +
+> +	offset = (long)target - (long)ip;
+> +	return offset < -SZ_128M || offset >= SZ_128M;
+> +}
+> +
+> +static int gen_branch_or_nop(enum aarch64_insn_branch_type type, void *ip,
+> +			     void *addr, void *plt, u32 *insn)
+> +{
+> +	void *target;
+> +
+> +	if (!addr) {
+> +		*insn = aarch64_insn_gen_nop();
+> +		return 0;
+> +	}
+> +
+> +	if (is_long_jump(ip, addr))
+> +		target = plt;
+> +	else
+> +		target = addr;
+> +
+> +	*insn = aarch64_insn_gen_branch_imm((unsigned long)ip,
+> +					    (unsigned long)target,
+> +					    type);
+> +
+> +	return *insn != AARCH64_BREAK_FAULT ? 0 : -EFAULT;
+> +}
+> +
+> +/* Replace the branch instruction from @ip to @old_addr in a bpf prog or a bpf
+> + * trampoline with the branch instruction from @ip to @new_addr. If @old_addr
+> + * or @new_addr is NULL, the old or new instruction is NOP.
+> + *
+> + * When @ip is the bpf prog entry, a bpf trampoline is being attached or
+> + * detached. Since bpf trampoline and bpf prog are allocated separately with
+> + * vmalloc, the address distance may exceed 128MB, the maximum branch range.
+> + * So long jump should be handled.
+> + *
+> + * When a bpf prog is constructed, a plt pointing to empty trampoline
+> + * dummy_tramp is placed at the end:
+> + *
+> + *      bpf_prog:
+> + *              mov x9, lr
+> + *              nop // patchsite
+> + *              ...
+> + *              ret
+> + *
+> + *      plt:
+> + *              ldr x10, target
+> + *              br x10
+> + *      target:
+> + *              .quad dummy_tramp // plt target
+> + *
+> + * This is also the state when no trampoline is attached.
+> + *
+> + * When a short-jump bpf trampoline is attached, the patchsite is patched
+> + * to a bl instruction to the trampoline directly:
+> + *
+> + *      bpf_prog:
+> + *              mov x9, lr
+> + *              bl <short-jump bpf trampoline address> // patchsite
+> + *              ...
+> + *              ret
+> + *
+> + *      plt:
+> + *              ldr x10, target
+> + *              br x10
+> + *      target:
+> + *              .quad dummy_tramp // plt target
+> + *
+> + * When a long-jump bpf trampoline is attached, the plt target is filled with
+> + * the trampoline address and the patchsite is patched to a bl instruction to
+> + * the plt:
+> + *
+> + *      bpf_prog:
+> + *              mov x9, lr
+> + *              bl plt // patchsite
+> + *              ...
+> + *              ret
+> + *
+> + *      plt:
+> + *              ldr x10, target
+> + *              br x10
+> + *      target:
+> + *              .quad <long-jump bpf trampoline address> // plt target
+> + *
+> + * The dummy_tramp is used to prevent another CPU from jumping to unknown
+> + * locations during the patching process, making the patching process easier.
+> + */
+> +int bpf_arch_text_poke(void *ip, enum bpf_text_poke_type poke_type,
+> +		       void *old_addr, void *new_addr)
+> +{
+> +	int ret;
+> +	u32 old_insn;
+> +	u32 new_insn;
+> +	u32 replaced;
+> +	struct bpf_plt *plt = NULL;
+> +	unsigned long size = 0UL;
+> +	unsigned long offset = ~0UL;
+> +	enum aarch64_insn_branch_type branch_type;
+> +	char namebuf[KSYM_NAME_LEN];
+> +	void *image = NULL;
+> +	u64 plt_target = 0ULL;
+> +	bool poking_bpf_entry;
+> +
+> +	if (!__bpf_address_lookup((unsigned long)ip, &size, &offset, namebuf))
+> +		/* Only poking bpf text is supported. Since kernel function
+> +		 * entry is set up by ftrace, we reply on ftrace to poke kernel
+> +		 * functions.
+> +		 */
+> +		return -ENOTSUPP;
+> +
+> +	image = ip - offset;
+> +	/* zero offset means we're poking bpf prog entry */
+> +	poking_bpf_entry = (offset == 0UL);
+> +
+> +	/* bpf prog entry, find plt and the real patchsite */
+> +	if (poking_bpf_entry) {
+> +		/* plt locates at the end of bpf prog */
+> +		plt = image + size - PLT_TARGET_OFFSET;
+> +
+> +		/* skip to the nop instruction in bpf prog entry:
+> +		 * bti c // if BTI enabled
+> +		 * mov x9, x30
+> +		 * nop
+> +		 */
+> +		ip = image + POKE_OFFSET * AARCH64_INSN_SIZE;
+> +	}
+> +
+> +	/* long jump is only possible at bpf prog entry */
+> +	if (WARN_ON((is_long_jump(ip, new_addr) || is_long_jump(ip, old_addr)) &&
+> +		    !poking_bpf_entry))
+> +		return -EINVAL;
+> +
+> +	if (poke_type == BPF_MOD_CALL)
+> +		branch_type = AARCH64_INSN_BRANCH_LINK;
+> +	else
+> +		branch_type = AARCH64_INSN_BRANCH_NOLINK;
+> +
+> +	if (gen_branch_or_nop(branch_type, ip, old_addr, plt, &old_insn) < 0)
+> +		return -EFAULT;
+> +
+> +	if (gen_branch_or_nop(branch_type, ip, new_addr, plt, &new_insn) < 0)
+> +		return -EFAULT;
+> +
+> +	if (is_long_jump(ip, new_addr))
+> +		plt_target = (u64)new_addr;
+> +	else if (is_long_jump(ip, old_addr))
+> +		/* if the old target is a long jump and the new target is not,
+> +		 * restore the plt target to dummy_tramp, so there is always a
+> +		 * legal and harmless address stored in plt target, and we'll
+> +		 * never jump from plt to an unknown place.
+> +		 */
+> +		plt_target = (u64)&dummy_tramp;
+> +
+> +	if (plt_target) {
+> +		/* non-zero plt_target indicates we're patching a bpf prog,
+> +		 * which is read only.
+> +		 */
+> +		if (set_memory_rw(PAGE_MASK & ((uintptr_t)&plt->target), 1))
+> +			return -EFAULT;
+> +		WRITE_ONCE(plt->target, plt_target);
+> +		set_memory_ro(PAGE_MASK & ((uintptr_t)&plt->target), 1);
+> +		/* since plt target points to either the new trmapoline
+
+trampoline
+
+> +		 * or dummy_tramp, even if aother CPU reads the old plt
+
+another
+
+Thanks,
+Jean
+
+> +		 * target value before fetching the bl instruction to plt,
+> +		 * it will be brought back by dummy_tramp, so no barrier is
+> +		 * required here.
+> +		 */
+> +	}
+> +
+> +	/* if the old target and the new target are both long jumps, no
+> +	 * patching is required
+> +	 */
+> +	if (old_insn == new_insn)
+> +		return 0;
+> +
+> +	mutex_lock(&text_mutex);
+> +	if (aarch64_insn_read(ip, &replaced)) {
+> +		ret = -EFAULT;
+> +		goto out;
+> +	}
+> +
+> +	if (replaced != old_insn) {
+> +		ret = -EFAULT;
+> +		goto out;
+> +	}
+> +
+> +	/* We call aarch64_insn_patch_text_nosync() to replace instruction
+> +	 * atomically, so no other CPUs will fetch a half-new and half-old
+> +	 * instruction. But there is chance that another CPU executes the
+> +	 * old instruction after the patching operation finishes (e.g.,
+> +	 * pipeline not flushed, or icache not synchronized yet).
+> +	 *
+> +	 * 1. when a new trampoline is attached, it is not a problem for
+> +	 *    different CPUs to jump to different trampolines temporarily.
+> +	 *
+> +	 * 2. when an old trampoline is freed, we should wait for all other
+> +	 *    CPUs to exit the trampoline and make sure the trampoline is no
+> +	 *    longer reachable, since bpf_tramp_image_put() function already
+> +	 *    uses percpu_ref and task rcu to do the sync, no need to call
+> +	 *    the sync version here, see bpf_tramp_image_put() for details.
+> +	 */
+> +	ret = aarch64_insn_patch_text_nosync(ip, new_insn);
+> +out:
+> +	mutex_unlock(&text_mutex);
+> +
+> +	return ret;
+> +}
+> -- 
+> 2.30.2
+> 

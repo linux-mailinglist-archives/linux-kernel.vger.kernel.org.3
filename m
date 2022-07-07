@@ -2,58 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 829F156A1E7
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 14:27:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1901E56A1EC
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 14:28:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235374AbiGGM1h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Jul 2022 08:27:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57036 "EHLO
+        id S235461AbiGGM14 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Jul 2022 08:27:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57364 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232086AbiGGM1f (ORCPT
+        with ESMTP id S235072AbiGGM1y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Jul 2022 08:27:35 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7EF1220F0;
-        Thu,  7 Jul 2022 05:27:34 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 54D1962353;
-        Thu,  7 Jul 2022 12:27:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 85928C3411E;
-        Thu,  7 Jul 2022 12:27:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1657196853;
-        bh=UZItbwI5mnC5YfXqsXOrg8hDLSaCl6949bJX4LeLHM4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=gt6PBEsdnmii/ibuuz55rvlno8I2Rd6JySORPbjGrn4wO28KnR7X3aCP3t5Ho5Pvk
-         HlV+A4QH4RZd1geKQZzSWJlwtmoxscPeTeM/TCJTuUkQxztIdtGbuHYMMcftuY7UJg
-         XKnwcbzQNf0Fgf4BghGTWkMZ9PZOzUsn5SUvKQIFiH11s9v+3QbrKTjifnoCt/Jbcj
-         sG76CCxHc0ccPdDy4gWni4AyD8gWnRq/7zb3qWtJktNLNDFxEqxNKgMQbO6yxaBoFV
-         Qrqpilzvx3PZINS+1iLHi165Gid7MhbvP7DgWUCO98arYUpk27zndfj6Rec9qb4G84
-         +PyPx81Vyk7+g==
-Received: by pali.im (Postfix)
-        id 96E3A7B1; Thu,  7 Jul 2022 14:27:30 +0200 (CEST)
-Date:   Thu, 7 Jul 2022 14:27:30 +0200
-From:   Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>
-To:     Rob Herring <robh@kernel.org>
-Cc:     Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        linux-watchdog@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, kabel@kernel.org
-Subject: Re: [PATCH v3 1/2] dt-bindings: watchdog: max63xx: Add GPIO binding
-Message-ID: <20220707122730.45jtopop5cj7beni@pali>
-References: <20220705001023.14660-1-pali@kernel.org>
- <20220706150726.GA40600-robh@kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220706150726.GA40600-robh@kernel.org>
-User-Agent: NeoMutt/20180716
-X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        Thu, 7 Jul 2022 08:27:54 -0400
+Received: from mail-io1-f53.google.com (mail-io1-f53.google.com [209.85.166.53])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61B052251F;
+        Thu,  7 Jul 2022 05:27:53 -0700 (PDT)
+Received: by mail-io1-f53.google.com with SMTP id v185so16632929ioe.11;
+        Thu, 07 Jul 2022 05:27:53 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:in-reply-to:references:subject:date
+         :message-id;
+        bh=cMPT7f9qv5sQO6WNbfFTELIdIiXOvBw5cTsisXNHniQ=;
+        b=H1v4dAcR3R+lnwYPtIEQCKBk7xLj9VCoRBs0Y1HShtJqQDfLCIm17VSiC8FnDGT5b4
+         yW+uvtGzJlqQkD9mGjrkkcUMagPURP/6DMGcc74P5JDwxvUYEKOEBck2WE2Ii9Oyh5Tr
+         B/0KDpjRposrsw5ntBPJV44s36jTzTuRfdZJfcaMf9EkKYn82fHsI+/YsDoeXHtJB7ET
+         8IOYkYVZpx3+27XAEB4bNsv+wQ3vGBdbl2Ylm0x4naBVU1o80UIQgETYLEVhY7OOcS4r
+         Hx82jNbAJ5eWKLP1wRDPJKNfErDdP6HMK+npE35aYjUNf6CzwsHTGm9W8mxBck5v6GVX
+         sAkg==
+X-Gm-Message-State: AJIora+K1PVEpO/QX0l73UCIK67S+rDVFNfa3XNPEoIypmzKIpK3zP3A
+        r3oZieVND5qRKD863jmpLA==
+X-Google-Smtp-Source: AGRyM1tZlHGQo0cV0eRw2oO9lgiCjvxMu4CTwm0ERhDKTH/9dm5gg9bF2hOLr7xmiE2qJa9CFxMU5Q==
+X-Received: by 2002:a5e:a506:0:b0:66a:2cdc:e6f7 with SMTP id 6-20020a5ea506000000b0066a2cdce6f7mr25146629iog.113.1657196872555;
+        Thu, 07 Jul 2022 05:27:52 -0700 (PDT)
+Received: from robh.at.kernel.org ([98.38.210.73])
+        by smtp.gmail.com with ESMTPSA id z23-20020a05663803b700b00331c06bf620sm12890894jap.154.2022.07.07.05.27.51
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 07 Jul 2022 05:27:52 -0700 (PDT)
+Received: (nullmailer pid 1454232 invoked by uid 1000);
+        Thu, 07 Jul 2022 12:27:51 -0000
+From:   Rob Herring <robh@kernel.org>
+To:     Vidya Sagar <vidyas@nvidia.com>
+Cc:     kthota@nvidia.com, sagar.tv@gmail.com, lpieralisi@kernel.org,
+        bhelgaas@google.com, krzysztof.kozlowski+dt@linaro.org,
+        kishon@ti.com, robh+dt@kernel.org, linux-pci@vger.kernel.org,
+        devicetree@vger.kernel.org, jonathanh@nvidia.com,
+        gustavo.pimentel@synopsys.com, linux-tegra@vger.kernel.org,
+        thierry.reding@gmail.com, mmaddireddy@nvidia.com,
+        jingoohan1@gmail.com, kw@linux.com, linux-kernel@vger.kernel.org
+In-Reply-To: <20220707081301.29961-4-vidyas@nvidia.com>
+References: <20220707081301.29961-1-vidyas@nvidia.com> <20220707081301.29961-4-vidyas@nvidia.com>
+Subject: Re: [PATCH V4 3/9] dt-bindings: PCI: tegra234: Add schema for tegra234 endpoint mode
+Date:   Thu, 07 Jul 2022 06:27:51 -0600
+Message-Id: <1657196871.476299.1454231.nullmailer@robh.at.kernel.org>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -61,49 +64,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wednesday 06 July 2022 09:07:26 Rob Herring wrote:
-> On Tue, Jul 05, 2022 at 02:10:22AM +0200, Pali Rohár wrote:
-> > GPIO is optional and used for WDI logic.
-> > 
-> > Signed-off-by: Pali Rohár <pali@kernel.org>
-> > ---
-> > Changes in v3:
-> > * Extend description
-> > ---
-> >  Documentation/devicetree/bindings/watchdog/maxim,max63xx.yaml | 4 ++++
-> >  1 file changed, 4 insertions(+)
-> > 
-> > diff --git a/Documentation/devicetree/bindings/watchdog/maxim,max63xx.yaml b/Documentation/devicetree/bindings/watchdog/maxim,max63xx.yaml
-> > index ab9641e845db..a0cf9e6c371d 100644
-> > --- a/Documentation/devicetree/bindings/watchdog/maxim,max63xx.yaml
-> > +++ b/Documentation/devicetree/bindings/watchdog/maxim,max63xx.yaml
-> > @@ -27,6 +27,10 @@ properties:
-> >      description: This is a 1-byte memory-mapped address
-> >      maxItems: 1
-> >  
-> > +  gpios:
+On Thu, 07 Jul 2022 13:42:55 +0530, Vidya Sagar wrote:
+> Add support for PCIe controllers that operate in the endpoint mode
+> in tegra234 chipset.
 > 
-> As I said before, add a name prefix: wdi-gpios
+> Signed-off-by: Vidya Sagar <vidyas@nvidia.com>
+> ---
+> V4:
+> * Rebased on top of previous patch
+> 
+> V3:
+> * New patch in this series
+> 
+>  .../bindings/pci/nvidia,tegra194-pcie-ep.yaml | 123 +++++++++++++++++-
+>  1 file changed, 117 insertions(+), 6 deletions(-)
+> 
 
-So gpio with output direction should be really named that is input?
+My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
+on your patch (DT_CHECKER_FLAGS is new in v5.13):
 
-I really do not understand this kind of thinking and making every device
-tree description totally illogical and inconsistent with all other.
+yamllint warnings/errors:
 
-> > +    description: Optional GPIO used for controlling WDI (watchdog input) when WDI bit is not mapped to memory
-> 
-> Wrap lines at 80 unless wrapping at 100 provides some benefit.
-> 
-> yamllint is set to 110 because I don't want to fix everyone's line wrap, 
-> not because that's the standard.
-> 
-> 
-> > +    maxItems: 1
-> > +
-> >  required:
-> >    - compatible
-> >    - reg
-> > -- 
-> > 2.20.1
-> > 
-> > 
+dtschema/dtc warnings/errors:
+/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/pci/nvidia,tegra194-pcie-ep.example.dtb: pcie-ep@141a0000: Unevaluated properties are not allowed ('nvidia,enable-ext-refclk' was unexpected)
+	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/pci/nvidia,tegra194-pcie-ep.yaml
+
+doc reference errors (make refcheckdocs):
+
+See https://patchwork.ozlabs.org/patch/
+
+This check can fail if there are any dependencies. The base for a patch
+series is generally the most recent rc1.
+
+If you already ran 'make dt_binding_check' and didn't see the above
+error(s), then make sure 'yamllint' is installed and dt-schema is up to
+date:
+
+pip3 install dtschema --upgrade
+
+Please check and re-submit.
+

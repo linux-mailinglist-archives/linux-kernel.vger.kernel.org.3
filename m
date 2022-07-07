@@ -2,60 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A685756A0D4
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 13:06:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 501E656A0DA
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 13:07:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235266AbiGGLGA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Jul 2022 07:06:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54056 "EHLO
+        id S235291AbiGGLGD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Jul 2022 07:06:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54094 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234799AbiGGLF6 (ORCPT
+        with ESMTP id S234799AbiGGLGC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Jul 2022 07:05:58 -0400
-Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com [IPv6:2607:f8b0:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51F072F00D
-        for <linux-kernel@vger.kernel.org>; Thu,  7 Jul 2022 04:05:57 -0700 (PDT)
-Received: by mail-pf1-x42d.google.com with SMTP id j3so6004141pfb.6
-        for <linux-kernel@vger.kernel.org>; Thu, 07 Jul 2022 04:05:57 -0700 (PDT)
+        Thu, 7 Jul 2022 07:06:02 -0400
+Received: from mail-pg1-x52b.google.com (mail-pg1-x52b.google.com [IPv6:2607:f8b0:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F410A2F00D
+        for <linux-kernel@vger.kernel.org>; Thu,  7 Jul 2022 04:06:00 -0700 (PDT)
+Received: by mail-pg1-x52b.google.com with SMTP id z14so17898006pgh.0
+        for <linux-kernel@vger.kernel.org>; Thu, 07 Jul 2022 04:06:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=2zTI0bt2hGXniMSOabFtFhfhTaMs/YC0V+EzqH6eZXw=;
-        b=LXn5sdpPpDgBpxYruZLrgEgmKOMkrd56ZWQge3eXK4T89PrUHE38kacARLZDn3lzTy
-         vgo/a5n4GihYikVq5NHgs5ycps/uX8spRNyTkTdLg4FlTeGrrdhFwo3YldAPmWhfAsVe
-         c8O8dUA4XSXFIVbUFuZIPxwLxhzI2ksf4CNW98jKzIw3QHJ4L/OpnOr0rgQZdIXOfEMn
-         AhBf8DaqGoLRZJ7eZ816sy68TV3di2ZkgQQsQQQtFgrUE7WZIdYsYoh7KWqm38Gh4bmH
-         c0jhNQJqwRMTD79FUtf3PTVuRZ5cXzbmFnrYz321esiWPMrNd4ii/DrrSMuyY4ZSaYSQ
-         C1Sg==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=R+H04G+1sbEsT1Vwo2PzH8D8ql+BkczGA26aIjD53FM=;
+        b=wKcGv2/iE3mQ3uPvTHSfbHT86kJLoiIOovbMVqqzibgJxuFd8xFcR+AfkN178EY2+6
+         gmPO2Mcfp6YwjWvXzXuawAZ5q8BjVIPtn3nBAzg6qpn+c9Jsl4IbYnyTpRU9pzvJpdAu
+         MWrxjt0LJa865lMD/Hw7x1DJLQdynnAJEuTHEYerCtJoIcHLFylDUNFUKHxQGdnNl5eW
+         bgPoha6k0VIxHBIel2cCWSDy5rrlNrIk7FEbAe/6egFQUwjiEn8F41WxokvJ2miTZQeR
+         5JkUAECOm/ReMHrRd9I0QsadMzvTwwyiZsFcj3t8d85+8B/tPO1Jj871YBKca12AbRYz
+         Yhkw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=2zTI0bt2hGXniMSOabFtFhfhTaMs/YC0V+EzqH6eZXw=;
-        b=2UFa62YnKbnEcuCsIRkR5Out/pvCFPYdNNIIYlsx4TMD5CA+JAz7Y+e8ArHjwGy0y9
-         2lxUYCCDkixYgFt7LGbjhZYRJGeZ1uyZigeSepoIuGMbR6Z7ELzW22J9sxO/K9oqaISe
-         MLKa+eQOqsGp2jDXnay0FwML67K6ukNevJGrr7tdL0gYGJo+CJ+G9C3TXYrYn15Gntvv
-         5QzMszThMjRGwb25mxUe1/yUGldRcO77k68VI7nJJY0HE3z41cNsQ9GED+0hrGsTj0GW
-         kKyKxp+tRTK6PEQEXslvthu9uxFOkFYE6eqIIMdeMrQzxBzfuUZej/Z65RCKy6Wwmhub
-         QSxA==
-X-Gm-Message-State: AJIora+56I8xzvQWajjgmi3FKEhT7W4JAwrOJz9bIqRsFqr0XcJ79V29
-        Vw5lioEWAbqQ6k2vRQYSRcgCQA==
-X-Google-Smtp-Source: AGRyM1sxN+aNHJVus9UHXFQyxz8R4+HjMydn9pNnpRw3Va5FthFKH7aoBv9YSdrqItmT7/4E9E8gbw==
-X-Received: by 2002:a17:902:a388:b0:16b:d52b:a038 with SMTP id x8-20020a170902a38800b0016bd52ba038mr28321674pla.56.1657191956605;
-        Thu, 07 Jul 2022 04:05:56 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=R+H04G+1sbEsT1Vwo2PzH8D8ql+BkczGA26aIjD53FM=;
+        b=D2tGUa4/R5eJF5Vkca4xYrkvyW+7LpgytnaQd7ABKyS8RSzgVKy5Fu4g8Sg+2AC3w8
+         AQDWCMIlvVF4I6Fqxu+7rPA6ATjf4YYpMYsqWKS3Yh9rsFIheOBCHbBSEl1RjkvGVQXd
+         CssaS+PA4cvoouAnnMHew2Pt7190vkmd2TLrgkkkZgeXLKzTrf7DiB5RXa1l4WRMtnok
+         84x/KbDl0eB0LJdjgZtIcT5ojYiGbNNV9t5MLxOjcojTC+GbwCc164Q7kaheYekEHVNM
+         yQGmdbCHHR2fPBFSznku31LXZ3ArmrSVq4LxWJXjmR5klHKz2FCzlCpkOJUJu0O0Y7A4
+         F3bg==
+X-Gm-Message-State: AJIora9f0jE3oJbDAPMOQfYE5UTuchuJdqMjttHa3cYM17FslfNaGth+
+        MBN794XD5bhdvF6oSBLdUZ8u3g==
+X-Google-Smtp-Source: AGRyM1sIs8s4JT9g0SLi5t7N5/jxpFkC9Z8kSZSVHpD9q8G3jgH3az1rsxc2BtZf69utGx2dmcj5MA==
+X-Received: by 2002:a17:90b:4b41:b0:1ec:cb06:2fa3 with SMTP id mi1-20020a17090b4b4100b001eccb062fa3mr4369801pjb.55.1657191960365;
+        Thu, 07 Jul 2022 04:06:00 -0700 (PDT)
 Received: from C02DW0BEMD6R.bytedance.net ([139.177.225.229])
-        by smtp.gmail.com with ESMTPSA id 72-20020a62174b000000b005289a50e4c2sm1046403pfx.23.2022.07.07.04.05.54
+        by smtp.gmail.com with ESMTPSA id 72-20020a62174b000000b005289a50e4c2sm1046403pfx.23.2022.07.07.04.05.57
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 07 Jul 2022 04:05:56 -0700 (PDT)
+        Thu, 07 Jul 2022 04:05:59 -0700 (PDT)
 From:   Qi Zheng <zhengqi.arch@bytedance.com>
 To:     catalin.marinas@arm.com, will@kernel.org
 Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
         Qi Zheng <zhengqi.arch@bytedance.com>
-Subject: [RFC PATCH 0/2] arm64: run softirqs on the per-CPU IRQ stack
-Date:   Thu,  7 Jul 2022 19:05:09 +0800
-Message-Id: <20220707110511.52129-1-zhengqi.arch@bytedance.com>
+Subject: [RFC PATCH 1/2] arm64: run softirqs on the per-CPU IRQ stack
+Date:   Thu,  7 Jul 2022 19:05:10 +0800
+Message-Id: <20220707110511.52129-2-zhengqi.arch@bytedance.com>
 X-Mailer: git-send-email 2.24.3 (Apple Git-128)
+In-Reply-To: <20220707110511.52129-1-zhengqi.arch@bytedance.com>
+References: <20220707110511.52129-1-zhengqi.arch@bytedance.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -67,59 +69,62 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi all,
-
-Currently arm64 supports per-CPU IRQ stack, but softirqs are
-still handled in the task context.
+Currently arm64 supports per-CPU IRQ stack, but softirqs
+are still handled in the task context.
 
 Since any call to local_bh_enable() at any level in the task's
 call stack may trigger a softirq processing run, which could
 potentially cause a task stack overflow if the combined stack
-footprints exceed the stack's size. And we did encounter this
-situation in the real environment:
+footprints exceed the stack's size, let's run these softirqs
+on the IRQ stack as well.
 
-Call trace:
- dump_backtrace+0x0/0x1cc,
- show_stack+0x14/0x1c,
- dump_stack+0xc4/0xfc,
- panic+0x150/0x2c8,
- panic+0x0/0x2c8,
- handle_bad_stack+0x11c/0x130,
- __bad_stack+0x88/0x8c,
- vsnprintf+0x2c/0x524,
- vscnprintf+0x38/0x7c,
- scnprintf+0x6c/0x90,
- /* ... */
- __do_softirq+0x1e0/0x370,
- do_softirq+0x40/0x50,
- __local_bh_enable_ip+0x8c/0x90,
- _raw_spin_unlock_bh+0x1c/0x24,
- /* ... */
- process_one_work+0x1dc/0x3e4,
- worker_thread+0x260/0x360,
- kthread+0x118/0x128,
- ret_from_fork+0x10/0x18,
+Signed-off-by: Qi Zheng <zhengqi.arch@bytedance.com>
+---
+ arch/arm64/Kconfig      |  1 +
+ arch/arm64/kernel/irq.c | 11 +++++++++++
+ 2 files changed, 12 insertions(+)
 
-So let's run these softirqs on the IRQ stack as well.
-
-This series is based on next-20220705.
-
-Comments and suggestions are welcome.
-
-Thanks,
-Qi.
-
-Qi Zheng (2):
-  arm64: run softirqs on the per-CPU IRQ stack
-  arm64: support HAVE_IRQ_EXIT_ON_IRQ_STACK
-
- arch/arm64/Kconfig                 |  2 ++
- arch/arm64/include/asm/exception.h |  4 +++-
- arch/arm64/kernel/entry-common.c   | 30 ++++++++++++++++++++----------
- arch/arm64/kernel/entry.S          |  6 ++++--
- arch/arm64/kernel/irq.c            | 12 ++++++++++++
- 5 files changed, 41 insertions(+), 13 deletions(-)
-
+diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig
+index 3491d0d99891..402e16fec02a 100644
+--- a/arch/arm64/Kconfig
++++ b/arch/arm64/Kconfig
+@@ -230,6 +230,7 @@ config ARM64
+ 	select HAVE_ARCH_USERFAULTFD_MINOR if USERFAULTFD
+ 	select TRACE_IRQFLAGS_SUPPORT
+ 	select TRACE_IRQFLAGS_NMI_SUPPORT
++	select HAVE_SOFTIRQ_ON_OWN_STACK
+ 	help
+ 	  ARM 64-bit (AArch64) Linux support.
+ 
+diff --git a/arch/arm64/kernel/irq.c b/arch/arm64/kernel/irq.c
+index bda49430c9ea..e6aa37672fd4 100644
+--- a/arch/arm64/kernel/irq.c
++++ b/arch/arm64/kernel/irq.c
+@@ -22,6 +22,7 @@
+ #include <linux/vmalloc.h>
+ #include <asm/daifflags.h>
+ #include <asm/vmap_stack.h>
++#include <asm/exception.h>
+ 
+ /* Only access this in an NMI enter/exit */
+ DEFINE_PER_CPU(struct nmi_ctx, nmi_contexts);
+@@ -71,6 +72,16 @@ static void init_irq_stacks(void)
+ }
+ #endif
+ 
++static void ____do_softirq(struct pt_regs *regs)
++{
++	__do_softirq();
++}
++
++void do_softirq_own_stack(void)
++{
++	call_on_irq_stack(NULL, ____do_softirq);
++}
++
+ static void default_handle_irq(struct pt_regs *regs)
+ {
+ 	panic("IRQ taken without a root IRQ handler\n");
 -- 
 2.20.1
 

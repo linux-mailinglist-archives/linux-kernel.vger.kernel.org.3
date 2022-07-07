@@ -2,228 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A5B9856AE06
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 23:58:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2558A56AE08
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 23:58:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236792AbiGGV42 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Jul 2022 17:56:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59156 "EHLO
+        id S236728AbiGGV6Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Jul 2022 17:58:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60196 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236218AbiGGV41 (ORCPT
+        with ESMTP id S236233AbiGGV6W (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Jul 2022 17:56:27 -0400
-Received: from mail-io1-xd49.google.com (mail-io1-xd49.google.com [IPv6:2607:f8b0:4864:20::d49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21DE15A472
-        for <linux-kernel@vger.kernel.org>; Thu,  7 Jul 2022 14:56:26 -0700 (PDT)
-Received: by mail-io1-xd49.google.com with SMTP id s7-20020a5d9287000000b00678b8aa9e1aso3956328iom.11
-        for <linux-kernel@vger.kernel.org>; Thu, 07 Jul 2022 14:56:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:message-id:mime-version:subject:from:to:cc;
-        bh=ri5AY5SwLbhVC5p/TahumKhee43SBZlNLqy+ZUco6ig=;
-        b=lmPgZdfN7Gh79v3TGk4Il8Vo1qV9GsbTBrp8014DAaz6sauD8K+WKJJ8F89b2CLGCF
-         bWLCIVYAVlfPnQDbHrcDbRACwLqDzZgXCJo0olHVjXs3bALhJiIonqcXzFFYRDH8yUmD
-         umS0DiWRAR7uKJNqsp6+QOTblfr7K8L5a7j+RM1HnAbIIaB6tWVO59iT9q8ygeZCpfsR
-         N2telE6tmklDdOy0WbAQrQB7dP9gIYUxlcKQBhHb/jGHu+doSiINBGv0cRij7P8a7uJ/
-         A3yy2oEjB+1Zi6om7pKr7vdSAqHx1f3iI79AN3akeW18kC0/50lec/0q7C6dXpkN8lqg
-         QQ4g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
-        bh=ri5AY5SwLbhVC5p/TahumKhee43SBZlNLqy+ZUco6ig=;
-        b=cAzpCO8R7Z7FhoeOPiZD91HQpH7N6YRsPMH/2RasXI2WCTOhNKjcfgGP1VXGYpLlrt
-         9P4tlaDPdUxwcVafLJw7zf0QeXd5cKOwaO0tx7i31LhZGJgaiYmMztXXBcnVzs5bzB37
-         gAf0k6HN3rUZ8AsEZHdbSoIWnKsvChNgcNUcdaulJoas/x++IaSA7T+4Sl7lezHpmfBq
-         vK5vkJiIEYdJrx5LNM+LVfcIaMC1fFGm+2MaoACQ0ZxMHcuTEl1SOGLzY3X2InPo3XjH
-         uvn2mrqARLlWGP4ZuezgJfYPDYdx9oCk1a4tVLkFjaYAHZ5H3U6FMlIYBdJN2r6vdlZK
-         nC7Q==
-X-Gm-Message-State: AJIora9Igmz4IZdv1IekqNQfbvKNgaw/+XOu40XGDP12k1AZXHIDXLou
-        VguO/vQKl+gGqdiRqT8Hf8wXE3CHoa19Tw==
-X-Google-Smtp-Source: AGRyM1uO7QVBsH1j2gKzpmtJAG5Lj7xPEqLW5pD1TNv8qWmSC/LpIVdTNrwsWja/8PSQQ9jsVjor1XBKUNCMVg==
-X-Received: from riochico.c.googlers.com ([fda3:e722:ac3:cc00:2b:ff92:c0a8:b3e])
- (user=rsilvera job=sendgmr) by 2002:a05:6638:12d6:b0:339:d556:efb4 with SMTP
- id v22-20020a05663812d600b00339d556efb4mr190869jas.215.1657230985632; Thu, 07
- Jul 2022 14:56:25 -0700 (PDT)
-Date:   Thu,  7 Jul 2022 21:56:06 +0000
-Message-Id: <20220707215606.2409166-1-rsilvera@google.com>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.37.0.rc0.161.g10f37bed90-goog
-Subject: [PATCH v2] perf inject: Add a command line option to specify build ids
-From:   Raul Silvera <rsilvera@google.com>
-To:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>
-Cc:     linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Raul Silvera <rsilvera@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        Thu, 7 Jul 2022 17:58:22 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BAB7F5A47D;
+        Thu,  7 Jul 2022 14:58:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1657231101; x=1688767101;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=5/T7qOJPEL0MkmUxuGXLljoqiSl5+J7fMt/QUylbKvY=;
+  b=fjckSr78XiFRo5QSjL6t3Ht8AK+LAwQ1kViul7l5bWfBHOhVtVwfSFAR
+   fpAxInOt3p8kHWkCRaBZ4wVLIhCxLrXsR0A4rqefScUUKaAxDFJajhaUQ
+   iXttc8vHOKOmR4KVwR/Xic+4Tjxi7B9gsVvxumraYE6p/CpiGmfnV55bY
+   o/biSeRrELs8cpw8qe+XrkIgQK+bX+A1Kblt6Vr8e/CMXkZTc8FfI7OCd
+   KV0qOQgOa7YE2kVCwE6eBW0HZv0Tq+7KmpLNy80jerh3fgQnwpcO4woVh
+   EpadxnhzJkYUV+9AiiRUtbXVPlZgjps2mbJl2tvrT/j/KSpb6fRHYsbnG
+   A==;
+X-IronPort-AV: E=Sophos;i="5.92,253,1650956400"; 
+   d="scan'208";a="103554639"
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa6.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 07 Jul 2022 14:58:20 -0700
+Received: from chn-vm-ex02.mchp-main.com (10.10.87.72) by
+ chn-vm-ex02.mchp-main.com (10.10.87.72) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.17; Thu, 7 Jul 2022 14:58:19 -0700
+Received: from ryan-Precision-5560.microchip.com (10.10.115.15) by
+ chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server id
+ 15.1.2375.17 via Frontend Transport; Thu, 7 Jul 2022 14:58:19 -0700
+From:   <Ryan.Wanner@microchip.com>
+To:     <nicolas.ferre@microchip.com>, <alexandre.belloni@bootlin.com>,
+        <claudiu.beznea@microchip.com>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>
+CC:     <linux-arm-kernel@lists.infradead.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        Ryan Wanner <Ryan.Wanner@microchip.com>
+Subject: [PATCH v3] ARM: dts: at91: sama5d2: Fix typo in i2s1 node
+Date:   Thu, 7 Jul 2022 14:58:12 -0700
+Message-ID: <20220707215812.193008-1-Ryan.Wanner@microchip.com>
+X-Mailer: git-send-email 2.34.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This commit adds the option --known-build-ids to perf inject.
-It allows the user to explicitly specify the build id for a given
-path, instead of retrieving it from the current system. This is
-useful in cases where a perf.data file is processed on a different
-system from where it was collected, or if some of the binaries are
-no longer available.
+From: Ryan Wanner <Ryan.Wanner@microchip.com>
 
-The build ids and paths are specified in pairs in the command line.
-Using the file:// specifier, build ids can be loaded from a file
-directly generated by perf buildid-list. This is convenient to copy
-build ids from one perf.data file to another.
+Typo in i2s1 causing errors in dt binding validation.
+Changed assigned-parens to assigned-clock-parents and
+to match i2s0 node formatting.
 
-** Example: In this example we use perf record to create two
-perf.data files, one with build ids and another without, and use
-perf buildid-list and perf inject to copy the build ids from the
-first file to the second.
+Fixes: 1ca81883c557 ("ARM: dts: at91: sama5d2: add nodes for I2S controllers")
 
- $ perf record ls /tmp
- $ perf record --no-buildid -o perf.data.no-buildid ls /tmp
- $ perf buildid-list > /tmp/build-ids.txt
- $ perf inject -b --known-build-ids='file:///tmp/build-ids.txt' \
-        -i perf.data.no-buildid -o perf.data.buildid
-
-Signed-off-by: Raul Silvera <rsilvera@google.com>
+Signed-off-by: Ryan Wanner <Ryan.Wanner@microchip.com>
 ---
- V1 -> V2: Cleaned up patch description, deleted the strlist during
-           cleanup, and updated validation of the build id strings
+changes in v2:
+-corrected subject and tags
+changes in v1:
+-corrected formatting issues
 
- tools/perf/builtin-inject.c | 60 +++++++++++++++++++++++++++++++++++++
- 1 file changed, 60 insertions(+)
+ arch/arm/boot/dts/sama5d2.dtsi | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/tools/perf/builtin-inject.c b/tools/perf/builtin-inject.c
-index a75bf11585b5..4efb992ed1a0 100644
---- a/tools/perf/builtin-inject.c
-+++ b/tools/perf/builtin-inject.c
-@@ -21,6 +21,7 @@
- #include "util/data.h"
- #include "util/auxtrace.h"
- #include "util/jit.h"
-+#include "util/string2.h"
- #include "util/symbol.h"
- #include "util/synthetic-events.h"
- #include "util/thread.h"
-@@ -35,6 +36,7 @@
+diff --git a/arch/arm/boot/dts/sama5d2.dtsi b/arch/arm/boot/dts/sama5d2.dtsi
+index 89c71d419f82..659a17fc755c 100644
+--- a/arch/arm/boot/dts/sama5d2.dtsi
++++ b/arch/arm/boot/dts/sama5d2.dtsi
+@@ -1124,7 +1124,7 @@ AT91_XDMAC_DT_PERID(33))>,
+ 				clocks = <&pmc PMC_TYPE_PERIPHERAL 55>, <&pmc PMC_TYPE_GCK 55>;
+ 				clock-names = "pclk", "gclk";
+ 				assigned-clocks = <&pmc PMC_TYPE_CORE PMC_I2S1_MUX>;
+-				assigned-parrents = <&pmc PMC_TYPE_GCK 55>;
++				assigned-clock-parents = <&pmc PMC_TYPE_GCK 55>;
+ 				status = "disabled";
+ 			};
  
- #include <linux/list.h>
- #include <linux/string.h>
-+#include <ctype.h>
- #include <errno.h>
- #include <signal.h>
- 
-@@ -59,6 +61,8 @@ struct perf_inject {
- 	struct itrace_synth_opts itrace_synth_opts;
- 	char			event_copy[PERF_SAMPLE_MAX_SIZE];
- 	struct perf_file_section secs[HEADER_FEAT_BITS];
-+	const char		*known_build_ids_source;
-+	struct strlist		*known_build_ids;
- };
- 
- struct event_entry {
-@@ -570,9 +574,45 @@ static int dso__read_build_id(struct dso *dso)
- 	return dso->has_build_id ? 0 : -1;
- }
- 
-+static bool perf_inject__lookup_known_build_id(struct perf_inject *inject,
-+					       struct dso *dso)
-+{
-+	struct str_node *pos;
-+	int bid_len;
-+
-+	strlist__for_each_entry(pos, inject->known_build_ids) {
-+		const char *build_id, *dso_name;
-+
-+		build_id = skip_spaces(pos->s);
-+		dso_name = strchr(build_id, ' ');
-+		if (dso_name == NULL)
-+			continue;
-+		bid_len = dso_name - pos->s;
-+		dso_name = skip_spaces(dso_name);
-+		if (strcmp(dso->long_name, dso_name))
-+			continue;
-+		if (bid_len % 2 != 0 || bid_len >= SBUILD_ID_SIZE)
-+			return false;
-+		for (int ix = 0; 2 * ix + 1 < bid_len; ++ix) {
-+			if (!isxdigit(build_id[2 * ix]) ||
-+			    !isxdigit(build_id[2 * ix + 1]))
-+				return false;
-+
-+			dso->bid.data[ix] = (hex(build_id[2 * ix]) << 4 |
-+					     hex(build_id[2 * ix + 1]));
-+		}
-+		dso->bid.size = bid_len / 2;
-+		dso->has_build_id = 1;
-+		return true;
-+	}
-+	return false;
-+}
-+
- static int dso__inject_build_id(struct dso *dso, struct perf_tool *tool,
- 				struct machine *machine, u8 cpumode, u32 flags)
- {
-+	struct perf_inject *inject = container_of(tool, struct perf_inject,
-+						  tool);
- 	int err;
- 
- 	if (is_anon_memory(dso->long_name) || flags & MAP_HUGETLB)
-@@ -580,6 +620,10 @@ static int dso__inject_build_id(struct dso *dso, struct perf_tool *tool,
- 	if (is_no_dso_memory(dso->long_name))
- 		return 0;
- 
-+	if (inject->known_build_ids != NULL &&
-+	    perf_inject__lookup_known_build_id(inject, dso))
-+		return 1;
-+
- 	if (dso__read_build_id(dso) < 0) {
- 		pr_debug("no build_id found for %s\n", dso->long_name);
- 		return -1;
-@@ -1082,6 +1126,9 @@ int cmd_inject(int argc, const char **argv)
- 			    "Inject build-ids into the output stream"),
- 		OPT_BOOLEAN(0, "buildid-all", &inject.build_id_all,
- 			    "Inject build-ids of all DSOs into the output stream"),
-+		OPT_STRING(0, "known-build-ids", &inject.known_build_ids_source,
-+			   "buildid path [buildid path...]",
-+			   "build-ids to use for specific files"),
- 		OPT_STRING('i', "input", &inject.input_name, "file",
- 			   "input file name"),
- 		OPT_STRING('o', "output", &inject.output.path, "file",
-@@ -1215,6 +1262,18 @@ int cmd_inject(int argc, const char **argv)
- 		 */
- 		inject.tool.ordered_events = true;
- 		inject.tool.ordering_requires_timestamps = true;
-+		if (inject.known_build_ids_source != NULL) {
-+			struct strlist *known_build_ids;
-+
-+			known_build_ids = strlist__new(
-+			    inject.known_build_ids_source, NULL);
-+
-+			if (known_build_ids == NULL) {
-+				pr_err("Couldn't parse known build ids.\n");
-+				goto out_delete;
-+			}
-+			inject.known_build_ids = known_build_ids;
-+		}
- 	}
- 
- 	if (inject.sched_stat) {
-@@ -1241,6 +1300,7 @@ int cmd_inject(int argc, const char **argv)
- 	ret = __cmd_inject(&inject);
- 
- out_delete:
-+	strlist__delete(inject.known_build_ids);
- 	zstd_fini(&(inject.session->zstd_data));
- 	perf_session__delete(inject.session);
- out_close_output:
 -- 
-2.37.0.rc0.161.g10f37bed90-goog
+2.34.1
 

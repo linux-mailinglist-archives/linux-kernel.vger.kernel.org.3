@@ -2,74 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E62CB5699A2
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 07:00:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A02F5699AD
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 07:07:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235064AbiGGFAD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Jul 2022 01:00:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37742 "EHLO
+        id S235092AbiGGFGo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Jul 2022 01:06:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40512 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234872AbiGGFAA (ORCPT
+        with ESMTP id S234713AbiGGFGn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Jul 2022 01:00:00 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D52FB2FFDB
-        for <linux-kernel@vger.kernel.org>; Wed,  6 Jul 2022 21:59:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1657169998;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=87kGiNSJscDrhkcqf9onMm+btgIEmECZQ3ujjWWzTDc=;
-        b=GHZOvwnr0kTPGRC29QJKFGIzPO/KWdw3Xh1Z3UpOcahukRq+8QjfXtneY3kJ7HxkQxbPwU
-        5zUvrzRLrahDO3/Dy6cG6up+5hhTm83SE27wSMXPmVmegnH3aiffGe4CwULyQ00T0JyYMY
-        fmDECMrMuNEu7qO/gj+E6h/vF7nSPC0=
-Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
- [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-481-T4HjFeG0NK2qRPn5VaOG_g-1; Thu, 07 Jul 2022 00:59:57 -0400
-X-MC-Unique: T4HjFeG0NK2qRPn5VaOG_g-1
-Received: by mail-wm1-f69.google.com with SMTP id o28-20020a05600c511c00b003a04f97f27aso9019890wms.9
-        for <linux-kernel@vger.kernel.org>; Wed, 06 Jul 2022 21:59:56 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=87kGiNSJscDrhkcqf9onMm+btgIEmECZQ3ujjWWzTDc=;
-        b=RkexBfMNKddOAAzmrHt5lVIkneWrsf7kiDVEUCWSsphgMwsuvY3giB5vApOR6i8U/a
-         JtjrcDKw33CXtAEpyHC3WCo94vxzX9QOPWc16oD0vjfFN+oL58b4SxkO4CnTbbKe0ixF
-         iboipF6Ghr9YBcntpddsh8LAYMqBZfSrDZCUVaUmV6H6z5GPJZRKEKY5mFawjU0ihvl6
-         ieacrZ0HEu5O+INsNC7XkcucbiJSwMHVKgYFks0A2epEqxqi7Lsf9CLurv3YZQFijtew
-         E9yBCZyKgfnhmweoeHqqCZEDIcZWj2UaNjujPoIvRi4TKkoDz9CTkUJ8B/f+zt4Km6ah
-         +Lnw==
-X-Gm-Message-State: AJIora8RHM0sviV1hfPfk1Ial+UseR5TqKkop4ayrPDvPZh426e+XwCe
-        wfGX/Yx0RJankRHQsm9txe5TichSgyHgvmn1j4wDasUGL/rk7fvZSN7crefkc5YrkTG1P4ChtGr
-        eDnwvEy+Ry553d2IHMx0M/EAc
-X-Received: by 2002:a05:600c:154c:b0:3a1:884e:72ac with SMTP id f12-20020a05600c154c00b003a1884e72acmr2306295wmg.23.1657169995388;
-        Wed, 06 Jul 2022 21:59:55 -0700 (PDT)
-X-Google-Smtp-Source: AGRyM1upX1q823M5idzqfyXLIdglC8V3bd4vHkK4OrK+AmRKZd7yXW3c6aZu7VmA8Y4bGp5ywmiDYQ==
-X-Received: by 2002:a05:600c:154c:b0:3a1:884e:72ac with SMTP id f12-20020a05600c154c00b003a1884e72acmr2306277wmg.23.1657169995141;
-        Wed, 06 Jul 2022 21:59:55 -0700 (PDT)
-Received: from redhat.com ([2.52.154.68])
-        by smtp.gmail.com with ESMTPSA id k11-20020a05600c1c8b00b003a2cf5eb900sm449581wms.40.2022.07.06.21.59.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 06 Jul 2022 21:59:54 -0700 (PDT)
-Date:   Thu, 7 Jul 2022 00:59:50 -0400
-From:   "Michael S. Tsirkin" <mst@redhat.com>
-To:     Guo Zhi <qtxuning1999@sjtu.edu.cn>
-Cc:     jasowang@redhat.com, eperezma@redhat.com,
-        virtualization@lists.linux-foundation.org,
-        linux-kernel@vger.kernel.org, sgarzare@redhat.com
-Subject: Re: [PATCH v2 4/4] virtio_test: enable indirection feature
-Message-ID: <20220707005311-mutt-send-email-mst@kernel.org>
-References: <20220707024409.1869-1-qtxuning1999@sjtu.edu.cn>
- <20220707024409.1869-5-qtxuning1999@sjtu.edu.cn>
+        Thu, 7 Jul 2022 01:06:43 -0400
+Received: from www262.sakura.ne.jp (www262.sakura.ne.jp [202.181.97.72])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5ABB93121B
+        for <linux-kernel@vger.kernel.org>; Wed,  6 Jul 2022 22:06:41 -0700 (PDT)
+Received: from fsav414.sakura.ne.jp (fsav414.sakura.ne.jp [133.242.250.113])
+        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTP id 26756dcn022539;
+        Thu, 7 Jul 2022 14:06:39 +0900 (JST)
+        (envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
+Received: from www262.sakura.ne.jp (202.181.97.72)
+ by fsav414.sakura.ne.jp (F-Secure/fsigk_smtp/550/fsav414.sakura.ne.jp);
+ Thu, 07 Jul 2022 14:06:39 +0900 (JST)
+X-Virus-Status: clean(F-Secure/fsigk_smtp/550/fsav414.sakura.ne.jp)
+Received: from [192.168.1.9] (M106072142033.v4.enabler.ne.jp [106.72.142.33])
+        (authenticated bits=0)
+        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTPSA id 26756cXP022531
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NO);
+        Thu, 7 Jul 2022 14:06:39 +0900 (JST)
+        (envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
+Message-ID: <22c61a75-8140-c62d-ffe0-efd6e9fa38ee@I-love.SAKURA.ne.jp>
+Date:   Thu, 7 Jul 2022 14:06:38 +0900
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220707024409.1869-5-qtxuning1999@sjtu.edu.cn>
-X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+User-Agent: Mozilla/5.0 (Windows NT 6.3; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH] char: misc: make misc_open() and misc_register() killable
+Content-Language: en-US
+To:     Oliver Neukum <oneukum@suse.com>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Wedson Almeida Filho <wedsonaf@google.com>
+Cc:     Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
+        Arnd Bergmann <arnd@arndb.de>, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org, Dmitry Vyukov <dvyukov@google.com>,
+        Arjan van de Ven <arjan@linux.intel.com>
+References: <YsKW6VvWqvcMRBSl@kroah.com>
+ <100f445e-9fa8-4f37-76aa-8359f0008c59@I-love.SAKURA.ne.jp>
+ <YsLIepAXeBKT0AF/@kroah.com>
+ <01a93294-e323-b9ca-7e95-a33d4b89dc47@I-love.SAKURA.ne.jp>
+ <YsL5pUuydMWJ9dSQ@kroah.com>
+ <617f64e3-74c8-f98b-3430-bd476867e483@I-love.SAKURA.ne.jp>
+ <5665ccb2-b92b-9e1f-8bb5-a950986450ec@I-love.SAKURA.ne.jp>
+ <YsRHwy6+5gask+KT@kroah.com>
+ <064bbe2a-c18e-203e-9e01-b32fe9baa390@I-love.SAKURA.ne.jp>
+ <7ddb25ff-60e5-75be-8080-2a7465cca68c@I-love.SAKURA.ne.jp>
+ <YsUtBERm94k/iZTy@kroah.com>
+ <a6d98824-56c8-6d92-bb1b-eb065b57cb81@I-love.SAKURA.ne.jp>
+ <815866b5-842e-4829-5ed8-26a5f1e856a4@suse.com>
+From:   Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
+In-Reply-To: <815866b5-842e-4829-5ed8-26a5f1e856a4@suse.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
         SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -78,160 +70,298 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jul 07, 2022 at 10:44:09AM +0800, Guo Zhi wrote:
-> Prior implementation don't use indirection feature because there is only
-> one descriptor for every io event, actually prior implementation don't
-> support indirection because vhost can't translate and find the indirect
-> descriptors. This commit enable virtio_test malloc indirect descriptors
-> in a indirect buffer and map this buffer to vhost, thus resolve this
-> problem.
+On 2022/07/06 20:04, Oliver Neukum wrote:
 > 
-> Signed-off-by: Guo Zhi <qtxuning1999@sjtu.edu.cn>
-> ---
->  tools/virtio/virtio_test.c | 50 ++++++++++++++++++++++++++++++++------
->  1 file changed, 42 insertions(+), 8 deletions(-)
 > 
-> diff --git a/tools/virtio/virtio_test.c b/tools/virtio/virtio_test.c
-> index 363695b33..dca408a5c 100644
-> --- a/tools/virtio/virtio_test.c
-> +++ b/tools/virtio/virtio_test.c
-> @@ -25,7 +25,7 @@
->  #define RINGSIZE   256
->  #define TEST_BUF_NUM 0x100000
->  #define BUF_SIZE   1024
-> -/* Unused */
-> +#define INDIRECTS_SIZE   (RINGSIZE * sizeof(struct vring_desc) * 8)
->  void *__kmalloc_fake, *__kfree_ignore_start, *__kfree_ignore_end;
->  
->  struct vq_info {
-> @@ -47,6 +47,8 @@ struct vdev_info {
->  	int nvqs;
->  	void *buf;
->  	size_t buf_size;
-> +	void *indirects;
-> +	size_t indirects_size;
+> On 06.07.22 12:26, Tetsuo Handa wrote:
+>> On 2022/07/06 15:34, Greg KH wrote:
+>>> On Wed, Jul 06, 2022 at 03:21:15PM +0900, Tetsuo Handa wrote:
+>>>> How should we fix this problem?
+>>>
+>>> We can decrease the timeout in usb_stor_msg_common().  I imagine that if
+>>> that timeout is ever hit in this sequence, then all will recover, right?
+> 
+> Not really. The timeout there is supposed to come from the SCSI layer
+> in the general case.
 
-What are these exactly?
+I couldn't catch. usb_stor_msg_common() belongs to USB subsystem, doesn't it?
 
->  	struct vhost_memory *mem;
->  };
->  
-> @@ -131,6 +133,8 @@ static void vq_info_add(struct vdev_info *dev, int num)
->  static void vdev_info_init(struct vdev_info* dev, unsigned long long features)
->  {
->  	int r;
-> +	int nregions = 2;
-> +
->  	memset(dev, 0, sizeof *dev);
->  	dev->vdev.features = features;
->  	INIT_LIST_HEAD(&dev->vdev.vqs);
-> @@ -138,19 +142,25 @@ static void vdev_info_init(struct vdev_info* dev, unsigned long long features)
->  	dev->buf_size = BUF_SIZE;
->  	dev->buf = malloc(dev->buf_size);
->  	assert(dev->buf);
-> -        dev->control = open("/dev/vhost-test", O_RDWR);
-> +	dev->indirects_size = INDIRECTS_SIZE;
-> +	dev->indirects = malloc(dev->indirects_size);
-> +	assert(dev->indirects);
-> +	dev->control = open("/dev/vhost-test", O_RDWR);
->  	assert(dev->control >= 0);
->  	r = ioctl(dev->control, VHOST_SET_OWNER, NULL);
->  	assert(r >= 0);
->  	dev->mem = malloc(offsetof(struct vhost_memory, regions) +
-> -			  sizeof dev->mem->regions[0]);
-> +			(sizeof(dev->mem->regions[0])) * nregions);
->  	assert(dev->mem);
->  	memset(dev->mem, 0, offsetof(struct vhost_memory, regions) +
-> -                          sizeof dev->mem->regions[0]);
-> -	dev->mem->nregions = 1;
-> +			(sizeof(dev->mem->regions[0])) * nregions);
-> +	dev->mem->nregions = nregions;
->  	dev->mem->regions[0].guest_phys_addr = (long)dev->buf;
->  	dev->mem->regions[0].userspace_addr = (long)dev->buf;
->  	dev->mem->regions[0].memory_size = dev->buf_size;
-> +	dev->mem->regions[1].guest_phys_addr = (long)dev->indirects;
-> +	dev->mem->regions[1].userspace_addr = (long)dev->indirects;
-> +	dev->mem->regions[1].memory_size = dev->indirects_size;
->  	r = ioctl(dev->control, VHOST_SET_MEM_TABLE, dev->mem);
->  	assert(r >= 0);
->  }
-> @@ -170,6 +180,19 @@ static void wait_for_interrupt(struct vdev_info *dev)
->  		}
->  }
->  
-> +static int test_virtqueue_add_outbuf(struct virtqueue *vq,
-> +				     struct scatterlist *sg, unsigned int num,
-> +				     void *data, void *indirects)
-> +{
-> +	int r;
-> +
-> +	__kmalloc_fake = indirects;
-> +	r = virtqueue_add_outbuf(vq, sg, num, data,
-> +				 GFP_ATOMIC);
-> +	__kmalloc_fake = NULL;
-> +	return r;
-> +}
-> +
+How does SCSI layer matter here?
+Does USB storage device shows up as if SCSI disk (e.g. /dev/sdb) relevant?
 
-Quite a hack. Please add comments with documentation. Also - no way to
-avoid hacks?
+>> diff --git a/drivers/base/dd.c b/drivers/base/dd.c
+>> index 3fc3b5940bb3..67e08b381ee2 100644
+>> --- a/drivers/base/dd.c
+>> +++ b/drivers/base/dd.c
+>> @@ -723,7 +723,8 @@ void wait_for_device_probe(void)
+>>  	flush_work(&deferred_probe_work);
+>>  
+>>  	/* wait for the known devices to complete their probing */
+>> -	wait_event(probe_waitqueue, atomic_read(&probe_count) == 0);
+>> +	wait_event_killable_timeout(probe_waitqueue,
+>> +				    atomic_read(&probe_count) == 0, 60 * HZ);
+> 
+> You cannot just let a timeout go unreported.
 
->  static void run_test(struct vdev_info *dev, struct vq_info *vq,
->  		     bool delayed, int batch, int reset_n, int bufs)
->  {
-> @@ -181,6 +204,7 @@ static void run_test(struct vdev_info *dev, struct vq_info *vq,
->  	unsigned len;
->  	long long spurious = 0;
->  	const bool random_batch = batch == RANDOM_BATCH;
-> +	void *indirects;
->  
->  	r = ioctl(dev->control, VHOST_TEST_RUN, &test);
->  	assert(r >= 0);
-> @@ -188,10 +212,15 @@ static void run_test(struct vdev_info *dev, struct vq_info *vq,
->  		next_reset = INT_MAX;
->  	}
->  
-> +	/* Don't kfree indirects. */
-> +	__kfree_ignore_start = dev->indirects;
-> +	__kfree_ignore_end = dev->indirects + dev->indirects_size;
-> +
->  	for (;;) {
->  		virtqueue_disable_cb(vq->vq);
->  		completed_before = completed;
->  		started_before = started;
-> +		indirects = dev->indirects;
->  		do {
->  			const bool reset = completed > next_reset;
->  			if (random_batch)
-> @@ -203,9 +232,13 @@ static void run_test(struct vdev_info *dev, struct vq_info *vq,
->  				sg_init_table(sg, sg_size);
->  				for (int i = 0; i < sg_size; ++i)
->  					sg_set_buf(&sg[i], dev->buf + i, 0x1);
-> -				r = virtqueue_add_outbuf(vq->vq, sg, sg_size,
-> -							 dev->buf + started,
-> -							 GFP_ATOMIC);
-> +
-> +				// use indirects buffer repeatedly
+I think regarding snapshot_open() case, being best-effort is acceptable, for
+the reason of timeout might be new probe requests kept coming in, even after
+the device which snapshot_open() needed to wait already became ready.
+
+> 
+>>  	async_synchronize_full();
+>>  }
+>>  EXPORT_SYMBOL_GPL(wait_for_device_probe);
+>> diff --git a/drivers/char/misc.c b/drivers/char/misc.c
+>> index ca5141ed5ef3..6430c534a1cb 100644
+>> --- a/drivers/char/misc.c
+>> +++ b/drivers/char/misc.c
+>> @@ -104,7 +104,8 @@ static int misc_open(struct inode *inode, struct file *file)
+>>  	int err = -ENODEV;
+>>  	const struct file_operations *new_fops = NULL;
+>>  
+>> -	mutex_lock(&misc_mtx);
+>> +	if (mutex_lock_killable(&misc_mtx))
+>> +		return -EINTR;
+>>  
+>>  	list_for_each_entry(c, &misc_list, list) {
+>>  		if (c->minor == minor) {
+>> @@ -116,7 +117,8 @@ static int misc_open(struct inode *inode, struct file *file)
+>>  	if (!new_fops) {
+>>  		mutex_unlock(&misc_mtx);
+>>  		request_module("char-major-%d-%d", MISC_MAJOR, minor);
+>> -		mutex_lock(&misc_mtx);
+>> +		if (mutex_lock_killable(&misc_mtx))
+>> +			return -EINTR;
+>>  
+>>  		list_for_each_entry(c, &misc_list, list) {
+>>  			if (c->minor == minor) {
+>> @@ -178,7 +180,8 @@ int misc_register(struct miscdevice *misc)
+>>  
+>>  	INIT_LIST_HEAD(&misc->list);
+>>  
+>> -	mutex_lock(&misc_mtx);
+>> +	if (mutex_lock_killable(&misc_mtx))
+>> +		return -EINTR;
+> 
+> This usually runs in the context of a kernel thread, does it not?
+> What could kill that?
+
+I think that misc_register() is usually called from module's __init function
+which runs in the user context. Though, it would be much better if we can avoid
+sleeping operations with misc_mtx held.
+
+> 
+>>  
+>>  	if (is_dynamic) {
+>>  		int i = find_first_zero_bit(misc_minors, DYNAMIC_MINORS);
+>> diff --git a/drivers/usb/storage/transport.c b/drivers/usb/storage/transport.c
+>> index 1928b3918242..d2a192306e0c 100644
+>> --- a/drivers/usb/storage/transport.c
+>> +++ b/drivers/usb/storage/transport.c
+>> @@ -164,7 +164,7 @@ static int usb_stor_msg_common(struct us_data *us, int timeout)
+>>   
+>>  	/* wait for the completion of the URB */
+>>  	timeleft = wait_for_completion_interruptible_timeout(
+>> -			&urb_done, timeout ? : MAX_SCHEDULE_TIMEOUT);
+>> +			&urb_done, timeout ? : 60 * HZ);
+> 
+> No, I am sorry, but there are SCSI commands that can run for more than
+> 60 seconds. Formats, rewinding tapes, ...It seems to me you need to look
+> at the SCSI scanning code.
+
+I wonder how SCSI layer matters here.
+
+usb_stor_ctrl_transfer() is not using timeout for unknown reason
+
+  /*
+   * Transfer one control message, without timeouts, but allowing early
+   * termination.  Return codes are USB_STOR_XFER_xxx.
+   */
+
+but I think we should supply timeout in order to handle unresponsive hardware.
+Although usb_stor_ctrl_transfer() is called from kernel threads (which usually
+do not receive signals), use of wait_for_completion_interruptible_timeout() in
+usb_stor_msg_common() suggests that aborting upon timeout is also tolerable.
 
 
-C style comments please.
 
-> +				if (indirects + sg_size * sizeof(struct vring_desc) >
-> +						dev->indirects + dev->indirects_size)
-> +					indirects = dev->indirects;
-> +				r = test_virtqueue_add_outbuf(vq->vq, sg, sg_size,
-> +							      dev->buf + started, indirects);
->  				if (unlikely(r != 0)) {
->  					if (r == -ENOSPC &&
->  					    started > started_before)
-> @@ -216,6 +249,7 @@ static void run_test(struct vdev_info *dev, struct vq_info *vq,
->  				}
->  
->  				++started;
-> +				indirects += sg_size * sizeof(struct vring_desc);
->  			}
->  			if (unlikely(!virtqueue_kick(vq->vq))) {
->  				r = -1;
-> -- 
-> 2.17.1
+
+
+Let's summarize current location:
+
+(1) Greg wants me to fix snapshot_open() not to sleep for too long, instead of
+    making misc_open() killable.
+
+(2) I found snapshot_open() calls wait_for_device_probe() which might sleep
+    long enough to consider as hung up due to:
+
+      (a) One of existing probe request got stuck due to unresponsive hardware.
+
+      (b) New probe requests come in before existing probe requests complete.
+
+(3) Because of (2), it is difficult to guarantee snapshot_open() not to sleep for
+    too long.
+
+(4) Because of (3), calling file->f_op->open(inode, file) with misc_mtx held can
+    block mutex_lock(&misc_mtx) too long. This is the phenomenon syzbot is reporting.
+
+Initial mitigation was to replace mutex_lock(&misc_mtx) with mutex_lock_killable(&misc_mtx)
+so that /dev/raw-gadget users can terminate upon SIGKILL and khungtaskd will not complain
+about misc_mtx.
+
+Next mitigation was not to call file->f_op->open() with misc_mtx held.
+Wedson worried that this approach breaks modules which call misc_deregister(), but
+I think we can use this approach for modules which do not need to call misc_deregister()
+given that this approach is opt-in basis.
+
+I also think that we can bring wait_for_device_probe() in snapshot_open() to before
+lock_system_sleep(), for system_transition_mutex will not be required for waiting for
+the image device to appear. If we can accept the "not to call file->f_op->open() with
+misc_mtx held" mitigation, wait_for_device_probe() in snapshot_open() can be called
+without locks.
+
+Finding universally safe timeout value is beyond what I can do for this report.
+Regarding this report, I think we can lower the risk of regression if we apply
+timeout for atomic_read(&probe_count) == 0 from only snapshot_open().
+Can we make below changes?
+
+------------------------------------------------------------
+
+ drivers/base/dd.c             |   14 ++++++++++++++
+ drivers/char/misc.c           |    4 ++++
+ include/linux/device/driver.h |    1 +
+ include/linux/miscdevice.h    |    1 +
+ kernel/power/user.c           |   31 ++++++++++++++++++-------------
+ 5 files changed, 38 insertions(+), 13 deletions(-)
+
+diff --git a/drivers/base/dd.c b/drivers/base/dd.c
+index 3fc3b5940bb3..60fb22a50a4e 100644
+--- a/drivers/base/dd.c
++++ b/drivers/base/dd.c
+@@ -728,6 +728,20 @@ void wait_for_device_probe(void)
+ }
+ EXPORT_SYMBOL_GPL(wait_for_device_probe);
+ 
++void wait_for_device_probe_killable_timeout(unsigned long timeout)
++{
++	/* wait for probe timeout */
++	wait_event(probe_timeout_waitqueue, !driver_deferred_probe_timeout);
++
++	/* wait for the deferred probe workqueue to finish */
++	flush_work(&deferred_probe_work);
++
++	/* wait for the known devices to complete their probing */
++	wait_event_killable_timeout(probe_waitqueue,
++				    atomic_read(&probe_count) == 0, timeout);
++	async_synchronize_full();
++}
++
+ static int __driver_probe_device(struct device_driver *drv, struct device *dev)
+ {
+ 	int ret = 0;
+diff --git a/drivers/char/misc.c b/drivers/char/misc.c
+index ca5141ed5ef3..16601c78fecb 100644
+--- a/drivers/char/misc.c
++++ b/drivers/char/misc.c
+@@ -137,6 +137,10 @@ static int misc_open(struct inode *inode, struct file *file)
+ 
+ 	err = 0;
+ 	replace_fops(file, new_fops);
++	if (c->unlocked_open && file->f_op->open) {
++		mutex_unlock(&misc_mtx);
++		return file->f_op->open(inode, file);
++	}
+ 	if (file->f_op->open)
+ 		err = file->f_op->open(inode, file);
+ fail:
+diff --git a/include/linux/device/driver.h b/include/linux/device/driver.h
+index 15e7c5e15d62..324b2866d0f2 100644
+--- a/include/linux/device/driver.h
++++ b/include/linux/device/driver.h
+@@ -129,6 +129,7 @@ extern struct device_driver *driver_find(const char *name,
+ 					 struct bus_type *bus);
+ extern int driver_probe_done(void);
+ extern void wait_for_device_probe(void);
++extern void wait_for_device_probe_killable_timeout(unsigned long timeout);
+ 
+ /* sysfs interface for exporting driver attributes */
+ 
+diff --git a/include/linux/miscdevice.h b/include/linux/miscdevice.h
+index 0676f18093f9..e112ef9e3b7b 100644
+--- a/include/linux/miscdevice.h
++++ b/include/linux/miscdevice.h
+@@ -86,6 +86,7 @@ struct miscdevice  {
+ 	const struct attribute_group **groups;
+ 	const char *nodename;
+ 	umode_t mode;
++	bool unlocked_open;
+ };
+ 
+ extern int misc_register(struct miscdevice *misc);
+diff --git a/kernel/power/user.c b/kernel/power/user.c
+index ad241b4ff64c..1960d05ee439 100644
+--- a/kernel/power/user.c
++++ b/kernel/power/user.c
+@@ -51,35 +51,39 @@ static int snapshot_open(struct inode *inode, struct file *filp)
+ 	if (!hibernation_available())
+ 		return -EPERM;
+ 
++	switch (filp->f_flags & O_ACCMODE) {
++	case O_RDWR: /* Can't do both at the same time. */
++		return -ENOSYS;
++	case O_RDONLY: /* Hibernating */
++		/* The image device should be already ready. */
++		break;
++	default: /* Resuming */
++		/*
++		 * Since the image device might not be ready, try to wait up to
++		 * 5 minutes. We should not wait forever, for we might get stuck
++		 * due to unresponsive devices and/or new probe events which
++		 * are irrelevant to the image device keep coming in.
++		 */
++		wait_for_device_probe_killable_timeout(300 * HZ);
++		break;
++	}
++
+ 	lock_system_sleep();
+ 
+ 	if (!hibernate_acquire()) {
+ 		error = -EBUSY;
+ 		goto Unlock;
+ 	}
+-
+-	if ((filp->f_flags & O_ACCMODE) == O_RDWR) {
+-		hibernate_release();
+-		error = -ENOSYS;
+-		goto Unlock;
+-	}
+ 	nonseekable_open(inode, filp);
+ 	data = &snapshot_state;
+ 	filp->private_data = data;
+ 	memset(&data->handle, 0, sizeof(struct snapshot_handle));
+ 	if ((filp->f_flags & O_ACCMODE) == O_RDONLY) {
+-		/* Hibernating.  The image device should be accessible. */
+ 		data->swap = swap_type_of(swsusp_resume_device, 0);
+ 		data->mode = O_RDONLY;
+ 		data->free_bitmaps = false;
+ 		error = pm_notifier_call_chain_robust(PM_HIBERNATION_PREPARE, PM_POST_HIBERNATION);
+ 	} else {
+-		/*
+-		 * Resuming.  We may need to wait for the image device to
+-		 * appear.
+-		 */
+-		wait_for_device_probe();
+-
+ 		data->swap = -1;
+ 		data->mode = O_WRONLY;
+ 		error = pm_notifier_call_chain_robust(PM_RESTORE_PREPARE, PM_POST_RESTORE);
+@@ -441,6 +445,7 @@ static struct miscdevice snapshot_device = {
+ 	.minor = SNAPSHOT_MINOR,
+ 	.name = "snapshot",
+ 	.fops = &snapshot_fops,
++	.unlocked_open = true, /* Call snapshot_open() with no locks held. */
+ };
+ 
+ static int __init snapshot_device_init(void)
+------------------------------------------------------------
 

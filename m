@@ -2,128 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EF389569A71
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 08:25:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CC2C6569A75
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 08:25:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234619AbiGGGY5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Jul 2022 02:24:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57094 "EHLO
+        id S234769AbiGGGZU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Jul 2022 02:25:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57282 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233366AbiGGGYz (ORCPT
+        with ESMTP id S230090AbiGGGZS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Jul 2022 02:24:55 -0400
-Received: from mailbox.box.xen0n.name (mail.xen0n.name [115.28.160.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50C63633F
-        for <linux-kernel@vger.kernel.org>; Wed,  6 Jul 2022 23:24:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=xen0n.name; s=mail;
-        t=1657175090; bh=8KkOQg6Np0sKzvI4n9mwASctGzwr8vj+dzI40q2/t8o=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=j/Dq+BQMmoqtXk9l5OFH8rgHvcHVw4JU8RYJ4yq9hJJF682Opyf0d13ag70wtpAT6
-         rkMTF9/06gOztj1ICLRD2Y774WEcuYEx5ozZmvUirAtnZMQf1vdhtNhOMLatQt4jbY
-         RzcQCAPzOlmQPZacrVZdO71+1w55qWbIdoUPQy4E=
-Received: from [100.100.57.190] (unknown [220.248.53.61])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mailbox.box.xen0n.name (Postfix) with ESMTPSA id C680D60114;
-        Thu,  7 Jul 2022 14:24:49 +0800 (CST)
-Message-ID: <c5ed4251-04e3-c8a3-c19a-ff4fee469371@xen0n.name>
-Date:   Thu, 7 Jul 2022 14:24:49 +0800
+        Thu, 7 Jul 2022 02:25:18 -0400
+Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1620910B0;
+        Wed,  6 Jul 2022 23:25:15 -0700 (PDT)
+Received: from lelv0266.itg.ti.com ([10.180.67.225])
+        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 2676P8dY043709;
+        Thu, 7 Jul 2022 01:25:08 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1657175108;
+        bh=ZJ8DyvmgmgZoto0z0hfg2LDK7ZTaw+3l27p2FMAjOiM=;
+        h=From:To:Subject:Date;
+        b=OTkmVyPsxeupcIjzbthvKAk17Qp6GOStppW8EfC+b9DbbNodUbPpzi/+FZL1F/djL
+         iNCDyLSoBh0tHGtQiLhgDR+WSq1AvJe/ESLthYDGv4HikA2nT6OvKeg3UqIuUd2HTV
+         K/UGWE3qnW5W4iXkXlo10VsZJnRR/uDtKwBBeb6I=
+Received: from DFLE109.ent.ti.com (dfle109.ent.ti.com [10.64.6.30])
+        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 2676P8xG058650
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Thu, 7 Jul 2022 01:25:08 -0500
+Received: from DFLE100.ent.ti.com (10.64.6.21) by DFLE109.ent.ti.com
+ (10.64.6.30) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Thu, 7
+ Jul 2022 01:25:08 -0500
+Received: from lelv0327.itg.ti.com (10.180.67.183) by DFLE100.ent.ti.com
+ (10.64.6.21) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
+ Frontend Transport; Thu, 7 Jul 2022 01:25:08 -0500
+Received: from ubuntu.ent.ti.com (ileax41-snat.itg.ti.com [10.172.224.153])
+        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 2676P51R106842;
+        Thu, 7 Jul 2022 01:25:06 -0500
+From:   Matt Ranostay <mranostay@ti.com>
+To:     <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>
+Subject: [PATCH RESEND 0/6] J721S2: Add support for additional IPs
+Date:   Wed, 6 Jul 2022 23:24:57 -0700
+Message-ID: <20220707062503.295663-1-mranostay@ti.com>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:104.0)
- Gecko/20100101 Thunderbird/104.0a1
-Subject: Re: [PATCH v2] LoongArch: Clean useless vcsr in loongarch_fpu.
-Content-Language: en-US
-To:     Qi Hu <huqi@loongson.cn>, WANG Xuerui <kernel@xen0n.name>,
-        Xi Ruoyao <xry111@xry111.site>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Huacai Chen <chenhuacai@kernel.org>
-Cc:     loongarch@lists.linux.dev, LKML <linux-kernel@vger.kernel.org>
-References: <20220704153612.314112-1-huqi@loongson.cn>
- <4273e104-8392-6a06-5d18-a1933978d8c3@xen0n.name>
- <22a1ba993e298ce12a374decefebeca484240883.camel@xry111.site>
- <16c9ccaa5e5a2ffd39272cff6f66e487c659b571.camel@xry111.site>
- <CAAhV-H5+qd1ZrOqE8fgRmWshXy57AfEFpyKSK8ZstZZEQ53owQ@mail.gmail.com>
- <ac46f5cb4c8d1154cfc3e862fb5211e869839c9a.camel@xry111.site>
- <c824b9ca-c9c4-1912-7845-99a0989277a4@loongson.cn>
- <9d064771-9402-4e84-96f8-4713cddf42f2@www.fastmail.com>
- <730cb4c4-a6a3-783e-3e4c-7c2bdc35c088@loongson.cn>
- <0583a335-72f7-55cf-3cd9-4dbd8109a440@xen0n.name>
- <bd889cd7b72138a12b1339a33156ff46530c20b0.camel@xry111.site>
- <e67e03ae-e2d4-79e6-7f6a-5558ea9de52b@xen0n.name>
- <41a2a420-adfa-6f8d-392d-0c15892b6945@loongson.cn>
-From:   WANG Xuerui <kernel@xen0n.name>
-In-Reply-To: <41a2a420-adfa-6f8d-392d-0c15892b6945@loongson.cn>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+The following series of patches add support for the following
+on J721S2 common processor board,
 
-On 2022/7/7 14:09, Qi Hu wrote:
->
-> On 2022/7/7 12:22, WANG Xuerui wrote:
->> On 2022/7/7 12:04, Xi Ruoyao wrote:
->>> On Thu, 2022-07-07 at 11:05 +0800, WANG Xuerui wrote:
->>>
->>>> To be frank, at this point I think you're trying to hide something.
->>>> (This is not your fault, blame someone else of course because they 
->>>> told
->>>> you the fact.) In the old-world kernel the VCSR a.k.a. FCSR16 is
->>>> certainly being saved/restored, and there's apparently no harm in 
->>>> doing
->>>> so. And if the contents are indeed "undefined", why are the code there
->>>> in the first place? Certainly the bits *are* meaningful, only that for
->>>> some reason you aren't revealing the semantics and pretending that 
->>>> they
->>>> are "undefined" and probably "do nothing externally observable" if
->>>> accessed in the first place.
->>> On a 3A5000LL, I did an experiment via a kernel module, which enables
->>> LSX/LASX and tries to write and read fcsr16.  I tried each bit (1, 
->>> 2, 4,
->>> 8, ..., 1 << 31) one by one.  The result: no matter which bit I wrote
->>> into fcsr16, I always read out 0.
->>>
->>> And I've objdump'ed a kernel shipped in an early Loongnix release.  It
->>> seems the only reference to fcsr16 is a "movgr2fcsr $r16, $r0"
->>> instruction.
->>
->> Hmm this is weird. I can't understand why the vcsr code was there in 
->> the first place then... I'd like to check a few Loongnix/Kylin/UOS 
->> kernels but currently I don't have the time.
->>
->> If this is the case, indeed all vcsr-related code should be removed. 
->> Although I'm still not sure how to best word the commit message.
->>
-> Thanks for the Ruoyao's experiment.
->
-> Removing the vcsr is the first step to trying to support LBT and 
-> LSX/LASX in Kernel. In my opinion, the vcsr relevant code may be used 
-> for debugging and forgot to remove.
->
-Thinking about it harder, it actually makes sense. Given that access to 
-the LSX/LASX manuals is currently restricted, outsiders can never know 
-whether the code in question is really needed, so one has to err on the 
-conservative side. Thanks for the clarification, and my apologies for 
-being harsh in the previous reply.
+- USB
+- SerDes
+- OSPI
 
-I think the commit message could be reworded like:
+Aswath Govindraju (6):
+  arm64: dts: ti: k3-j721s2-main: Add support for USB
+  arm64: dts: ti: k3-j721s2-main: Add SERDES and WIZ device tree node
+  arm64: dts: ti: k3-j721s2-mcu-wakeup: Add support of OSPI
+  arm64: dts: ti: k3-j721s2-common-proc-board: Enable SERDES0
+  arm64: dts: ti: k3-j721s2-common-proc-board: Add USB support
+  arm64: dts: k3-j721s2: Add support for OSPI Flashes
 
-"The VCSR (also known as FCSR16) is not present on retail steppings of 
-3A5000. FCSR16 through FCSR31 are reserved for non-floating-point 
-LSX/LASX operations, but on 3A5000 all writes to them are no-op and all 
-reads return zero. FP LSX/LASX operations reuse the FCSR0 as their CSR.
+ .../dts/ti/k3-j721s2-common-proc-board.dts    |  78 ++++++++++++
+ arch/arm64/boot/dts/ti/k3-j721s2-main.dtsi    | 112 ++++++++++++++++++
+ .../boot/dts/ti/k3-j721s2-mcu-wakeup.dtsi     |  40 +++++++
+ arch/arm64/boot/dts/ti/k3-j721s2-som-p0.dtsi  |  42 +++++++
+ 4 files changed, 272 insertions(+)
 
-Remove VCSR handling that is probably leftover debugging code for an 
-earlier not-for-retail stepping."
-
-(And remove the trailing period in your patch title, while at it; the 
-Linux kernel doesn't use a trailing period for majority of its commits.)
+-- 
+2.36.1
 

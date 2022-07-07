@@ -2,139 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CAB2656A034
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 12:43:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C804256A03F
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 12:45:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235347AbiGGKmD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Jul 2022 06:42:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36136 "EHLO
+        id S234756AbiGGKpC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Jul 2022 06:45:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38924 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235337AbiGGKmB (ORCPT
+        with ESMTP id S231710AbiGGKpB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Jul 2022 06:42:01 -0400
-Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10EF633E03
-        for <linux-kernel@vger.kernel.org>; Thu,  7 Jul 2022 03:42:00 -0700 (PDT)
-Received: by mail-wm1-x336.google.com with SMTP id h14-20020a1ccc0e000000b0039eff745c53so10451261wmb.5
-        for <linux-kernel@vger.kernel.org>; Thu, 07 Jul 2022 03:41:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=ZVSYvXmefqE+MfS8n0FJBkX+AkR5IfISwtQFKKh7kvc=;
-        b=L23etO+ocvne9PH19+wfoZuBbhwO+sVAFrxpV2Fb6QzCrdDT8aZYJbXKWwmHB9ZM3/
-         LtFVWOTs/B1/Vx3uWTG5GMS1ib/p/ptp/X8Y34BEehd6eOn1V8EfXiafoFfxF/NSaLLQ
-         +ZEc6MsDPmWbM1WXj4i3/AAHYMx6noyTbboqRXXjh2BVLOb7NcyLkq+rH9RFfTjDh4Wi
-         U136tjV/Gjw9fzkeodZdKXOWgrCQKuauoFM+7dqT+vxxtLMJHT1oAHD605+Vfh3XD7Nq
-         I5iQW55TgsDhthvo5IFdKZYzMTGfs9S+qTX35DMQvQquFY3NN63mw5W7nz/inFVXBG3q
-         MBkQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=ZVSYvXmefqE+MfS8n0FJBkX+AkR5IfISwtQFKKh7kvc=;
-        b=1Q4uWE68cTy99BbQxOcw4Gj3VcHIw1WNXQh5xYv8kJ/fzAcEvePcbu/G1qfYCSgPQ5
-         9PoQTFb4Ivx+/TtpGn3+x0nK+Xxub/rv2kzS2vgWA68d/C8cMgEECzI7q3iyTJquvoPP
-         ddlKgmQc/5IXj3iUFDhUTGX3aJwtjdiX6fWkqZZfQKT7VOJL+m7Z4Je38vyYP0Ts+xN2
-         z2d5OWRmRD4VbTss2oKZSZnmMdeZBLNoLhQ42fLMjVhbT0VgmvoJvuLX+jCKiuClEVf3
-         CH3/AFzhgxPADaGuOHjTQxdH1rlKGzW+ReDeyhzdBhKMj7j9PnneVKw43g8O0FpgOi42
-         KDng==
-X-Gm-Message-State: AJIora+rueNuJkvlFEhGmFkQgbl14I/ueHludkpliXHehs04fa68krZx
-        fFTaMvnovfxvPZfhPCKIQr81hFFah9NXDg==
-X-Google-Smtp-Source: AGRyM1sPT+iSrdXpKNV9l2ZR5aSEXqzu1zOGVjiyisaGkoovw7DGeA3cpuGhJkZJXem2fF9/nCRqlQ==
-X-Received: by 2002:a05:600c:600d:b0:3a1:9712:5d31 with SMTP id az13-20020a05600c600d00b003a197125d31mr3618219wmb.67.1657190518617;
-        Thu, 07 Jul 2022 03:41:58 -0700 (PDT)
-Received: from linaro.org ([94.52.112.99])
-        by smtp.gmail.com with ESMTPSA id v17-20020a5d5911000000b0021bbdc3375fsm14265075wrd.68.2022.07.07.03.41.57
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 07 Jul 2022 03:41:58 -0700 (PDT)
-Date:   Thu, 7 Jul 2022 13:41:57 +0300
-From:   Abel Vesa <abel.vesa@linaro.org>
-To:     Saravana Kannan <saravanak@google.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        linux-arm-msm@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: [RFC v2] driver core: Fix repeated device_is_dependent check for
- same link
-Message-ID: <Ysa4dUhSbgz+VDIf@linaro.org>
-References: <20220706155347.778762-1-abel.vesa@linaro.org>
- <CAGETcx_MV8QsAFC_ztY6CjysshxPSZZ2ZbgpyXhSpH1v2knhzA@mail.gmail.com>
+        Thu, 7 Jul 2022 06:45:01 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4AFB445055;
+        Thu,  7 Jul 2022 03:45:00 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 301BE1063;
+        Thu,  7 Jul 2022 03:45:00 -0700 (PDT)
+Received: from [10.57.11.194] (unknown [10.57.11.194])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id F1F4A3F792;
+        Thu,  7 Jul 2022 03:44:56 -0700 (PDT)
+Message-ID: <e6d5ad5c-7014-2a34-cabc-84a94d3c84ee@arm.com>
+Date:   Thu, 7 Jul 2022 11:44:55 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAGETcx_MV8QsAFC_ztY6CjysshxPSZZ2ZbgpyXhSpH1v2knhzA@mail.gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH v2 1/4] PM: EM: convert power field to micro-Watts
+ precision and align drivers
+Content-Language: en-US
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>
+Cc:     amitk@kernel.org, rui.zhang@intel.com, viresh.kumar@linaro.org,
+        linux-kernel@vger.kernel.org, rafael@kernel.org,
+        dietmar.eggemann@arm.com, nm@ti.com, sboyd@kernel.org,
+        sudeep.holla@arm.com, cristian.marussi@arm.com,
+        matthias.bgg@gmail.com, linux-mediatek@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-pm@vger.kernel.org
+References: <20220707071555.10085-1-lukasz.luba@arm.com>
+ <20220707071555.10085-2-lukasz.luba@arm.com>
+ <9b4bd8b5-d5d9-7f75-128a-87b727ad0bd7@linaro.org>
+From:   Lukasz Luba <lukasz.luba@arm.com>
+In-Reply-To: <9b4bd8b5-d5d9-7f75-128a-87b727ad0bd7@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 22-07-06 21:51:34, Saravana Kannan wrote:
-> On Wed, Jul 6, 2022 at 8:54 AM Abel Vesa <abel.vesa@linaro.org> wrote:
-> >
-> > In case of a cyclic dependency, if the supplier is not yet available,
-> > the parent of the supplier is checked for dependency. But if there are
-> > more than one suppliers with the same parent, the first check returns
-> > true while the next ones skip that specific link entirely because of
-> > having DL_FLAG_MANAGED and DL_FLAG_SYNC_STATE_ONLY set, which is what
-> > the relaxing of the link does. But if we check for the target being
-> > a consumer before the check for those flags, we can check as many
-> > times as needed the same link and it will always return true, This is
-> > safe to do, since the relaxing of the link will be done only once
-> > because those flags will be set and it will bail early.
-> >
-> > Signed-off-by: Abel Vesa <abel.vesa@linaro.org>
-> > ---
-> >  drivers/base/core.c | 6 +++---
-> >  1 file changed, 3 insertions(+), 3 deletions(-)
-> >
-> > diff --git a/drivers/base/core.c b/drivers/base/core.c
-> > index 753e7cca0f40..2c3b860dfe80 100644
-> > --- a/drivers/base/core.c
-> > +++ b/drivers/base/core.c
-> > @@ -297,13 +297,13 @@ int device_is_dependent(struct device *dev, void *target)
-> >                 return ret;
-> >
-> >         list_for_each_entry(link, &dev->links.consumers, s_node) {
-> > +               if (link->consumer == target)
-> > +                       return 1;
-> > +
-> >                 if ((link->flags & ~DL_FLAG_INFERRED) ==
-> >                     (DL_FLAG_SYNC_STATE_ONLY | DL_FLAG_MANAGED))
-> >                         continue;
->
-> Thanks for trying to fix this issue, but I'll have to Nack this patch.
->
-> The whole point of the SYNC_STATE_ONLY flag is to allow cycles. It's
-> needed to maintain correctness of sync_state(). I think I described
-> those in the commit text that added the SYNC_STATE_ONLY flag. Check it
-> out if you are interested. So this change of yours will break
-> sync_state() functionality.
->
 
-Fair enough.
 
-> There's a bunch of nuance to fixing the dual cycle issue and I don't
-> mind fixing this myself in a week or two if you can wait.
->
+On 7/7/22 09:31, Daniel Lezcano wrote:
+> On 07/07/2022 09:15, Lukasz Luba wrote:
+>> The milli-Watts precision causes rounding errors while calculating
+>> efficiency cost for each OPP. This is especially visible in the 'simple'
+>> Energy Model (EM), where the power for each OPP is provided from OPP
+>> framework. This can cause some OPPs to be marked inefficient, while
+>> using micro-Watts precision that might not happen.
+>>
+>> Update all EM users which access 'power' field and assume the value is
+>> in milli-Watts.
+>>
+>> Solve also an issue with potential overflow in calculation of energy
+>> estimation on 32bit machine. It's needed now since the power value
+>> (thus the 'cost' as well) are higher.
+>>
+>> Example calculation which shows the rounding error and impact:
+>>
+>> power = 'dyn-power-coeff' * volt_mV * volt_mV * freq_MHz
+>>
+>> power_a_uW = (100 * 600mW * 600mW * 500MHz) / 10^6 = 18000
+>> power_a_mW = (100 * 600mW * 600mW * 500MHz) / 10^9 = 18
+>>
+>> power_b_uW = (100 * 605mW * 605mW * 600MHz) / 10^6 = 21961
+>> power_b_mW = (100 * 605mW * 605mW * 600MHz) / 10^9 = 21
+>>
+>> max_freq = 2000MHz
+>>
+>> cost_a_mW = 18 * 2000MHz/500MHz = 72
+>> cost_a_uW = 18000 * 2000MHz/500MHz = 72000
+>>
+>> cost_b_mW = 21 * 2000MHz/600MHz = 70 // <- artificially better
+>> cost_b_uW = 21961 * 2000MHz/600MHz = 73203
+>>
+>> The 'cost_b_mW' (which is based on old milli-Watts) is misleadingly
+>> better that the 'cost_b_uW' (this patch uses micro-Watts) and such
+>> would have impact on the 'inefficient OPPs' information in the Cpufreq
+>> framework. This patch set removes the rounding issue.
+>>
+>> Signed-off-by: Lukasz Luba <lukasz.luba@arm.com>
+> 
+> Acked-by: Daniel Lezcano <daniel.lezcano@linaro.org>
+> 
+> 
+> 
 
-Please cc me on it.
+Thanks Daniel! I'll ping Rafael to take this via his PM tree
 
-> Thanks,
-> Saravana
->
-> >
-> > -               if (link->consumer == target)
-> > -                       return 1;
-> > -
-> >                 ret = device_is_dependent(link->consumer, target);
-> >                 if (ret)
-> >                         break;
-> > --
-> > 2.34.3
-> >

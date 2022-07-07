@@ -2,71 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D67A56A585
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 16:34:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F17CD56A58C
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 16:35:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235876AbiGGOen (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Jul 2022 10:34:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55966 "EHLO
+        id S235619AbiGGOfs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Jul 2022 10:35:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57200 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235823AbiGGOee (ORCPT
+        with ESMTP id S235440AbiGGOfq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Jul 2022 10:34:34 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F78831353;
-        Thu,  7 Jul 2022 07:34:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=PVv/YKfz7Bw0xjcgtMQhhzWPkVQsFxjQSOmphQOK37M=; b=paTmFhWa9n/PSns35Y7QeDgthf
-        7eO00PoDK9Un3HIWlQs3Z3wZ/z3yeQTLFQgMfLJKnvdVOmidJl89jsiEr43rPlpIREnrgp0dIk4gn
-        unu+9iwnTLKmly1ZVSaZbyO4qAcF0fvBbwvvVUgsu+uy2pp084sgum4CGgXpKZFnBdRoFLpJeTZ0g
-        6VikpqrMB7a/jOcXxQaB6BtEtGc+4fMg+4+EThyWX++diWkhBpdhJbYt+7MkrfBCF5tuaJG7mFyyM
-        8wHLFLQ0ER546GxktelpduWXQgFKxV3zNVyypawz2nl29pe63e7twUpR2kswi6AHEoqp1Rhjs7pS7
-        BKLdnZZg==;
-Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1o9SaK-002eFG-E0; Thu, 07 Jul 2022 14:34:28 +0000
-Date:   Thu, 7 Jul 2022 15:34:28 +0100
-From:   Matthew Wilcox <willy@infradead.org>
-To:     Andrey Strachuk <strochuk@ispras.ru>
-Cc:     linux-kernel@vger.kernel.org, ldv-project@linuxtesting.org,
-        linux-fsdevel@vger.kernel.org
-Subject: Re: [PATCH] efs: removed useless conditional checks in function
-Message-ID: <Ysbu9PllO6dqZLhB@casper.infradead.org>
-References: <20220707142652.14447-1-strochuk@ispras.ru>
+        Thu, 7 Jul 2022 10:35:46 -0400
+Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 634192F67D
+        for <linux-kernel@vger.kernel.org>; Thu,  7 Jul 2022 07:35:44 -0700 (PDT)
+Received: by mail-ed1-x533.google.com with SMTP id n8so23454512eda.0
+        for <linux-kernel@vger.kernel.org>; Thu, 07 Jul 2022 07:35:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=6R/ddtNSwfm7ty86Jg8Rk/94EllRS1alXZobv2bNWis=;
+        b=nop4+PYaSie6cLDfOoz79jPZj+LmcL3qmT5jqfFfbawptaU2DSYNGb9uCsJ6ie6CBA
+         044wbTmELbC6ll9dHCgX/qKoXRUW4Gt58A8QRV6+vaYK5VZxmSNh9JGnRQJEzvaXSXoZ
+         p894kw4QPJoW/iXmBPjcZx7ieiwtgw4Ew+ydA=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=6R/ddtNSwfm7ty86Jg8Rk/94EllRS1alXZobv2bNWis=;
+        b=TMZFG0EAwGDdec64Lu7gkRGJYY67OcHivW73cOq372L6z9Ti+K0yNL/VebqGAVZEeV
+         cwOj+PeZhvol/7TIaSeUWJrSdjwGK/shvQaAE8OCVNNSnvKCrUpPKAmg6tMR11BmiJWy
+         +tbbLFnhEAY0VHEgO/xewXKxpi3ukZ4pXKJwC/nezpvQ0P4ANDAHv9rb2+62i78/WQKK
+         sSqjV7Pcw2uVVNmjR57/J7LKF/zposUbZoo6j9DEayMuANzs5O4KYppMR8AeEakbU60r
+         1UR1t5+YO72f2738CO9ksjsWFTUX+EX+XVHBE74/t37YvqYO4We4szanrQu0lG1F0yFB
+         ZKxA==
+X-Gm-Message-State: AJIora920owBV7PSFxx+sAe8yjQvwd2hXRY/ObRoYHeUzXmJ+8k/Vtlu
+        WZ51erq3n7E/hyAM0vfasBCnHp4zGv5j9Ng07gA=
+X-Google-Smtp-Source: AGRyM1uWSae5yZ2vD2ebnA/MbiOf9usorJ1WcZYO4NaFjKA3QXmOI6ArMG7k4ReF+KWna2/7SdZEiA==
+X-Received: by 2002:a05:6402:22a1:b0:437:78c2:d02b with SMTP id cx1-20020a05640222a100b0043778c2d02bmr62070775edb.64.1657204542664;
+        Thu, 07 Jul 2022 07:35:42 -0700 (PDT)
+Received: from mail-wr1-f48.google.com (mail-wr1-f48.google.com. [209.85.221.48])
+        by smtp.gmail.com with ESMTPSA id z5-20020a1709063a0500b00722fadc4279sm18855873eje.124.2022.07.07.07.35.41
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 07 Jul 2022 07:35:42 -0700 (PDT)
+Received: by mail-wr1-f48.google.com with SMTP id s1so26615381wra.9
+        for <linux-kernel@vger.kernel.org>; Thu, 07 Jul 2022 07:35:41 -0700 (PDT)
+X-Received: by 2002:adf:d1c1:0:b0:21b:a5e9:b7b2 with SMTP id
+ b1-20020adfd1c1000000b0021ba5e9b7b2mr45296183wrd.405.1657204541324; Thu, 07
+ Jul 2022 07:35:41 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220707142652.14447-1-strochuk@ispras.ru>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20220707075151.67335-1-krzysztof.kozlowski@linaro.org> <20220707075151.67335-6-krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220707075151.67335-6-krzysztof.kozlowski@linaro.org>
+From:   Doug Anderson <dianders@chromium.org>
+Date:   Thu, 7 Jul 2022 07:35:29 -0700
+X-Gmail-Original-Message-ID: <CAD=FV=XOGLH9UH4Bwd3E6RC_PT5A4bf20muhnZoW5Rb8O3b2LA@mail.gmail.com>
+Message-ID: <CAD=FV=XOGLH9UH4Bwd3E6RC_PT5A4bf20muhnZoW5Rb8O3b2LA@mail.gmail.com>
+Subject: Re: [PATCH 5/5] ARM: dts: qcom: align SDHCI clocks with DT schema
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Ulf Hansson <ulf.hansson@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Bhupesh Sharma <bhupesh.sharma@linaro.org>,
+        Linux MMC List <linux-mmc@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jul 07, 2022 at 05:26:52PM +0300, Andrey Strachuk wrote:
-> However, it cannot be NULL because kernel crashes at
-> line 293 otherwise.
-> The patch removes useless comparisons.
+Hi,
 
-Reviewed-by: Matthew Wilcox (Oracle) <willy@infradead.org>
+On Thu, Jul 7, 2022 at 1:04 AM Krzysztof Kozlowski
+<krzysztof.kozlowski@linaro.org> wrote:
+>
+> The DT schema expects clocks iface-core order.  No functional change.
+>
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> ---
+>  arch/arm/boot/dts/qcom-apq8084.dtsi    | 12 ++++++------
+>  arch/arm/boot/dts/qcom-ipq4019.dtsi    |  4 ++--
+>  arch/arm/boot/dts/qcom-msm8226.dtsi    | 18 +++++++++---------
+>  arch/arm/boot/dts/qcom-msm8974.dtsi    | 18 +++++++++---------
+>  arch/arm/boot/dts/qcom-msm8974pro.dtsi |  6 +++---
+>  5 files changed, 29 insertions(+), 29 deletions(-)
 
-Not sure who's going to merge this patch.  I guess I can throw it into
-the pagecache tree if nobody else wants it.
-
-> Found by Linux Verification Center (linuxtesting.org) with SVACE.
-> 
-> Signed-off-by: Andrey Strachuk <strochuk@ispras.ru>
-> Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
-
-If you really want to be fancy, you can delve into linux-fullhistory and
-come up with:
-
-Fixes: 2b50c6738b500 ("Import 2.3.2")
-
-although I bet that breaks a few scripts.
+Reviewed-by: Douglas Anderson <dianders@chromium.org>

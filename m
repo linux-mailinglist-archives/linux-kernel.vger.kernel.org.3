@@ -2,124 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E26856AF16
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 01:37:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6849956AF19
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 01:40:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236949AbiGGXgi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Jul 2022 19:36:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42388 "EHLO
+        id S236914AbiGGXkd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Jul 2022 19:40:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44194 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236588AbiGGXgg (ORCPT
+        with ESMTP id S236588AbiGGXkb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Jul 2022 19:36:36 -0400
-Received: from mail-qt1-x829.google.com (mail-qt1-x829.google.com [IPv6:2607:f8b0:4864:20::829])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26A442F396
-        for <linux-kernel@vger.kernel.org>; Thu,  7 Jul 2022 16:36:35 -0700 (PDT)
-Received: by mail-qt1-x829.google.com with SMTP id g14so25102449qto.9
-        for <linux-kernel@vger.kernel.org>; Thu, 07 Jul 2022 16:36:35 -0700 (PDT)
+        Thu, 7 Jul 2022 19:40:31 -0400
+Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EB8660539
+        for <linux-kernel@vger.kernel.org>; Thu,  7 Jul 2022 16:40:30 -0700 (PDT)
+Received: by mail-wm1-x331.google.com with SMTP id h14-20020a1ccc0e000000b0039eff745c53so133683wmb.5
+        for <linux-kernel@vger.kernel.org>; Thu, 07 Jul 2022 16:40:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=XH4cPztGrQqsT+SfmP8eyqdVMM+gtgpNj/VjG8VG1nM=;
-        b=RFDw+QHkFGDIWwRdYchdMvdzsKCZaAPs4rT4ufLkxWlPRK1TI6fo0tjk8JODZtXKd4
-         O72HgDCHviGjhjlEXZIeWeRgMHge4ii8LtPQRk1ZM82WyleakaHT/bxJQNT7uYoRE8yd
-         SOGYpBPdjvDJJFdnTOaO+cMv6a2l85flA9T+BpAnhJq3g+mfulEU+5cpzBnFASy/TLUZ
-         N9Cwcsd0p4otAVw0a9HYeTSCK1Sxz4CS2n9g8UPBtXsPDroiRwmeHTmafUJH0EaJcSGS
-         O/nPs75YVwnKxl4fHAQR8KMDd+7m3K4UhR5DhjExN/y7NOq4kENl9IZ+KDKOPDR2/Q/9
-         7jBg==
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=lpm5T5rrAKH4mSookDRGpy+67Q9o6aKuYw1+9EoK1vQ=;
+        b=KbGt49C9L59Bpvx1m1Ad3LlnQbW/JZFrzQsv5EblzyBkQ9StrftKOHLk00Cgp17eWV
+         xmFdWqHX1JAT6vJMmadhxu8XPg3UxRpveHwFJc8Di+aPaT/JEV8x84Ab2yWru7dcLsZS
+         l4aBQwOIFMlfD9LWt3Odc6HlB478R4au3yWbekprQy4lYEWHxthrjZtKxWfxLeIGQWHJ
+         ExAF0qTUC4tKQ1pFyi9mFFutI1lERYIjiWyduti1cVLEmjnkenWhHvNO065llo6UFw3v
+         222bugfioJW1PIy0wHfZ1JujYxqI07UFid569YdDRc+d73HmMFxk/NtOvKN2Zt3Ot6EO
+         hksg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=XH4cPztGrQqsT+SfmP8eyqdVMM+gtgpNj/VjG8VG1nM=;
-        b=7XOeTn82T4BuZ5K2yvIGa6PStxu1lumXSRVuXDlP1X+tLkTJ+HhmrrmKMksRPjQYN1
-         GFypHIRRjBZN0SYL1aGlIBRo/gh9Wj3BXx9yFX4qCFFRtGBZHJ0ArP8JU28koyA4i34m
-         CBFp4d55c2xWaCPrnP8vjzc4pkt1kZ86ZIIfrCbBMFd+puoO0dG4hwjthqrYVLC+l8Ag
-         Jl98dEJp4MEvdxMCLHZj3I2sp18+4Mlrdx0JVokP71AUE66pO4gjXDNiBE8vy16oSYK4
-         amfmH1OPyH8B7DTNvEREuXtO5VFLj+XupY/d3pk17P+KP6SP7IK/nvuULeOP3PuDhh/a
-         Ugdg==
-X-Gm-Message-State: AJIora8Y3arMfWV9uRIIUtn/SfLvwl8p+hpFzd99hQOiXF4eIVnjQXy3
-        40cGeJ2GxxKlOdQDUbIuenm8rmSJ+b+cU1KLZEkauA==
-X-Google-Smtp-Source: AGRyM1sBme6J6p5RCO5xjhv3NKpjQ0wj5ST2F+p/Xh1EL/z7+dP5eFQHgL71McKnLl+LsLYXpBQv/G7H5+l03mEnHyY=
-X-Received: by 2002:a05:6214:c6c:b0:470:a322:6777 with SMTP id
- t12-20020a0562140c6c00b00470a3226777mr501392qvj.85.1657236994169; Thu, 07 Jul
- 2022 16:36:34 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=lpm5T5rrAKH4mSookDRGpy+67Q9o6aKuYw1+9EoK1vQ=;
+        b=SPrx9ou7w+chjEcWJ3CQ9N6AwiTPEy+dO/m/mL8KlnvVa8G1m+st5+A54lnHT3zZGC
+         Fo8fbmQQ1RoDc3SHIEOC8QvdbNJEptNNWjzRMNRJnj6aiNWB1jLLiw5dtPABSQXQWZ2T
+         r/RBYQXcYYzm0ltANEH0+/eIbExiI9XrOl84aty0NNtLv0IuSpcHRFBX6uZbodxl9xCb
+         ujIRc8QovzS9FrufUKwzqECdWhwpYHkCxfh/z49c0INbwUr1Io9XvpcLqyYP5Xg1h/lO
+         hCka900+mUUdwV/Kp3sTpbf0ybFHsrWReBLKgAzoiKDZjSaeZfGAETWWXe57v5viPEnU
+         MQzA==
+X-Gm-Message-State: AJIora/f6waox8Z4n/87/pgNDUGBlNHebuXmwlOy2yJm2+mT1rnCQTgm
+        6x+tQk5mXx78VFxeymNji/8=
+X-Google-Smtp-Source: AGRyM1uIddC9eip6lfVZ65ltrxoHMS/51LDdcQmBhhU1DC6ST66K64iAhEXXDGC2WzpO1Yh2n1+S+A==
+X-Received: by 2002:a7b:ce8a:0:b0:3a1:8ead:2ae5 with SMTP id q10-20020a7bce8a000000b003a18ead2ae5mr355455wmj.100.1657237228520;
+        Thu, 07 Jul 2022 16:40:28 -0700 (PDT)
+Received: from opensuse.localnet (host-79-53-109-127.retail.telecomitalia.it. [79.53.109.127])
+        by smtp.gmail.com with ESMTPSA id f17-20020a05600c155100b0039c41686421sm289124wmg.17.2022.07.07.16.40.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 07 Jul 2022 16:40:27 -0700 (PDT)
+From:   "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
+To:     Eric Biederman <ebiederm@xmission.com>, kexec@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Cc:     Ira Weiny <ira.weiny@intel.com>
+Subject: Re: [PATCH] kexec: Replace kmap() with kmap_local_page()
+Date:   Fri, 08 Jul 2022 01:40:14 +0200
+Message-ID: <4410443.LvFx2qVVIh@opensuse>
+In-Reply-To: <20220707184939.6086-1-fmdefrancesco@gmail.com>
+References: <20220707184939.6086-1-fmdefrancesco@gmail.com>
 MIME-Version: 1.0
-References: <20220610194435.2268290-1-yosryahmed@google.com>
- <20220610194435.2268290-5-yosryahmed@google.com> <40114462-d5e2-ab07-7af9-5e60180027f9@fb.com>
-In-Reply-To: <40114462-d5e2-ab07-7af9-5e60180027f9@fb.com>
-From:   Hao Luo <haoluo@google.com>
-Date:   Thu, 7 Jul 2022 16:36:23 -0700
-Message-ID: <CA+khW7hqVbNWFbZcJz2QWV=c5SD1ci5KOD+t4drYt2-yqpyNTg@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v2 4/8] bpf: Introduce cgroup iter
-To:     Yonghong Song <yhs@fb.com>
-Cc:     Yosry Ahmed <yosryahmed@google.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>, Tejun Heo <tj@kernel.org>,
-        Zefan Li <lizefan.x@bytedance.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Michal Hocko <mhocko@kernel.org>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        David Rientjes <rientjes@google.com>,
-        Stanislav Fomichev <sdf@google.com>,
-        Greg Thelen <gthelen@google.com>,
-        Shakeel Butt <shakeelb@google.com>,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        bpf@vger.kernel.org, cgroups@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 27, 2022 at 9:14 PM Yonghong Song <yhs@fb.com> wrote:
+On gioved=C3=AC 7 luglio 2022 20:49:39 CEST Fabio M. De Francesco wrote:
+> The use of kmap() and kmap_atomic() are being deprecated in favor of
+> kmap_local_page().
+>=20
+> With kmap_local_page(), the mappings are per thread, CPU local and not
+> globally visible. Furthermore, the mappings can be acquired from any
+> context (including interrupts).
+>=20
+> Therefore, use kmap_local_page() in aio.c because these mappings are per
+> thread, CPU local, and not globally visible.
+>=20
+> Tested on a QEMU + KVM 32-bits VM booting a kernel with HIGHMEM64GB
+> enabled.
+>=20
+> Suggested-by: Ira Weiny <ira.weiny@intel.com>
+> Signed-off-by: Fabio M. De Francesco <fmdefrancesco@gmail.com>
+> ---
+>  kernel/kexec_core.c | 8 ++++----
+>  1 file changed, 4 insertions(+), 4 deletions(-)
 >
-> > +static int __cgroup_iter_seq_show(struct seq_file *seq,
-> > +                               struct cgroup_subsys_state *css, int in_stop)
-> > +{
-> > +     struct cgroup_iter_priv *p = seq->private;
-> > +     struct bpf_iter__cgroup ctx;
-> > +     struct bpf_iter_meta meta;
-> > +     struct bpf_prog *prog;
-> > +     int ret = 0;
-> > +
-> > +     /* cgroup is dead, skip this element */
-> > +     if (css && cgroup_is_dead(css->cgroup))
-> > +             return 0;
-> > +
-> > +     ctx.meta = &meta;
-> > +     ctx.cgroup = css ? css->cgroup : NULL;
-> > +     meta.seq = seq;
-> > +     prog = bpf_iter_get_info(&meta, in_stop);
-> > +     if (prog)
-> > +             ret = bpf_iter_run_prog(prog, &ctx);
->
-> Do we need to do anything special to ensure bpf program gets
-> up-to-date stat from ctx.cgroup?
->
+Please discard this version because there is a small error in the commit=20
+message due to bad copy and paste. Version 2 is at=20
+https://lore.kernel.org/lkml/20220707231550.1484-1-fmdefrancesco@gmail.com/
 
-Let's leave that to be handled by bpf programs. The kfunc rstat_flush
-can be called to sync stats, if using rstat.
+Thanks,
 
-> > +
-> > +     /* if prog returns > 0, terminate after this element. */
-> > +     if (ret != 0)
-> > +             p->terminate = true;
-> > +
-> > +     return 0;
-> > +}
-> > +
-> [...]
+=46abio
+
+

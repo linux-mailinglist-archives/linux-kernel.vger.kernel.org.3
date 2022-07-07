@@ -2,192 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 859EA569A83
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 08:26:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 91663569A80
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 08:26:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234923AbiGGGZi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Jul 2022 02:25:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57404 "EHLO
+        id S234921AbiGGG0K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Jul 2022 02:26:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58142 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234846AbiGGGZ2 (ORCPT
+        with ESMTP id S234120AbiGGG0I (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Jul 2022 02:25:28 -0400
-Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94E212A964;
-        Wed,  6 Jul 2022 23:25:25 -0700 (PDT)
-Received: from lelv0265.itg.ti.com ([10.180.67.224])
-        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 2676PMc8027406;
-        Thu, 7 Jul 2022 01:25:22 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1657175122;
-        bh=VAflBJuCcU62/ArqheoABMhl2sg0hYzkfyl+//WYhNA=;
-        h=From:To:Subject:Date:In-Reply-To:References;
-        b=mXiOGmQcYrF6J8xdEoQFURLKsTy3b2gokcS74p0pN/Qg18OaBY2ArF6D61RO5tkmf
-         u3tTY0lx2QyvXDaQl+VYqCxFpdqXGQIvuhNiCIuehpk8r1olaSwauLV5mAQh08EA1e
-         o6vrGbIudh0U1leeQEBj0PBWTTFjxCYBqJ0sl9JE=
-Received: from DLEE102.ent.ti.com (dlee102.ent.ti.com [157.170.170.32])
-        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 2676PMv0012122
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Thu, 7 Jul 2022 01:25:22 -0500
-Received: from DLEE100.ent.ti.com (157.170.170.30) by DLEE102.ent.ti.com
- (157.170.170.32) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Thu, 7
- Jul 2022 01:25:22 -0500
-Received: from lelv0327.itg.ti.com (10.180.67.183) by DLEE100.ent.ti.com
- (157.170.170.30) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
- Frontend Transport; Thu, 7 Jul 2022 01:25:22 -0500
-Received: from ubuntu.ent.ti.com (ileax41-snat.itg.ti.com [10.172.224.153])
-        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 2676P51X106842;
-        Thu, 7 Jul 2022 01:25:20 -0500
-From:   Matt Ranostay <mranostay@ti.com>
-To:     <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>
-Subject: [PATCH RESEND 6/6] arm64: dts: k3-j721s2: Add support for OSPI Flashes
-Date:   Wed, 6 Jul 2022 23:25:03 -0700
-Message-ID: <20220707062503.295663-7-mranostay@ti.com>
-X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220707062503.295663-1-mranostay@ti.com>
-References: <20220707062503.295663-1-mranostay@ti.com>
+        Thu, 7 Jul 2022 02:26:08 -0400
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0608726ACC;
+        Wed,  6 Jul 2022 23:26:06 -0700 (PDT)
+X-UUID: 32387981d5ee4f7dbd5a8f18bdead6cd-20220707
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.8,REQID:9adf498b-6916-4522-b531-8c71f165c085,OB:0,LO
+        B:0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACTI
+        ON:release,TS:0
+X-CID-META: VersionHash:0f94e32,CLOUDID:dc3fc886-57f0-47ca-ba27-fe8c57fbf305,C
+        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,IP:nil,URL:0,File:nil
+        ,QS:nil,BEC:nil,COL:0
+X-UUID: 32387981d5ee4f7dbd5a8f18bdead6cd-20220707
+Received: from mtkmbs11n2.mediatek.inc [(172.21.101.187)] by mailgw02.mediatek.com
+        (envelope-from <ck.hu@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 99316468; Thu, 07 Jul 2022 14:26:03 +0800
+Received: from mtkcas11.mediatek.inc (172.21.101.40) by
+ mtkmbs11n2.mediatek.inc (172.21.101.187) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
+ Thu, 7 Jul 2022 14:26:02 +0800
+Received: from mtksdccf07 (172.21.84.99) by mtkcas11.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Thu, 7 Jul 2022 14:26:02 +0800
+Message-ID: <4a4f26bf8d0b0da7e442ea799250e31860b28ed1.camel@mediatek.com>
+Subject: Re: [PATCH v13 05/10] drm/mediatek: Add MT8195 Embedded DisplayPort
+ driver
+From:   CK Hu <ck.hu@mediatek.com>
+To:     Bo-Chen Chen <rex-bc.chen@mediatek.com>, <chunkuang.hu@kernel.org>,
+        <p.zabel@pengutronix.de>, <daniel@ffwll.ch>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <mripard@kernel.org>,
+        <tzimmermann@suse.de>, <matthias.bgg@gmail.com>, <deller@gmx.de>,
+        <airlied@linux.ie>
+CC:     <msp@baylibre.com>, <granquet@baylibre.com>,
+        <jitao.shi@mediatek.com>, <wenst@chromium.org>,
+        <angelogioacchino.delregno@collabora.com>,
+        <liangxu.xu@mediatek.com>, <dri-devel@lists.freedesktop.org>,
+        <linux-mediatek@lists.infradead.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-fbdev@vger.kernel.org>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>
+Date:   Thu, 7 Jul 2022 14:26:02 +0800
+In-Reply-To: <20220701062808.18596-6-rex-bc.chen@mediatek.com>
+References: <20220701062808.18596-1-rex-bc.chen@mediatek.com>
+         <20220701062808.18596-6-rex-bc.chen@mediatek.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-MTK:  N
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Aswath Govindraju <a-govindraju@ti.com>
+Hi, Bo-Chen:
 
-J721S2 has an OSPI NOR flash on its SOM connected the OSPI0 instance and a
-QSPI NOR flash on the common processor board connected to the OSPI1
-instance. Add support for the same
+On Fri, 2022-07-01 at 14:28 +0800, Bo-Chen Chen wrote:
+> From: Markus Schneider-Pargmann <msp@baylibre.com>
+> 
+> This patch adds a embedded displayport driver for the MediaTek mt8195
+> SoC.
+> 
+> It supports the MT8195, the embedded DisplayPort units. It offers
+> DisplayPort 1.4 with up to 4 lanes.
+> 
+> The driver creates a child device for the phy. The child device will
+> never exist without the parent being active. As they are sharing a
+> register range, the parent passes a regmap pointer to the child so
+> that
+> both can work with the same register range. The phy driver sets
+> device
+> data that is read by the parent to get the phy device that can be
+> used
+> to control the phy properties.
+> 
+> This driver is based on an initial version by
+> Jitao shi <jitao.shi@mediatek.com>
+> 
+> Signed-off-by: Markus Schneider-Pargmann <msp@baylibre.com>
+> Signed-off-by: Guillaume Ranquet <granquet@baylibre.com>
+> Signed-off-by: Bo-Chen Chen <rex-bc.chen@mediatek.com>
+> ---
 
-Acked-by: Matt Ranostay <mranostay@ti.com>
-Signed-off-by: Aswath Govindraju <a-govindraju@ti.com>
----
- .../dts/ti/k3-j721s2-common-proc-board.dts    | 34 +++++++++++++++
- arch/arm64/boot/dts/ti/k3-j721s2-som-p0.dtsi  | 42 +++++++++++++++++++
- 2 files changed, 76 insertions(+)
+[snip]
 
-diff --git a/arch/arm64/boot/dts/ti/k3-j721s2-common-proc-board.dts b/arch/arm64/boot/dts/ti/k3-j721s2-common-proc-board.dts
-index aa75dc541842..cb99a97af426 100644
---- a/arch/arm64/boot/dts/ti/k3-j721s2-common-proc-board.dts
-+++ b/arch/arm64/boot/dts/ti/k3-j721s2-common-proc-board.dts
-@@ -206,6 +206,20 @@ mcu_mcan1_gpio_pins_default: mcu-mcan1-gpio-pins-default {
- 			J721S2_WKUP_IOPAD(0x0c8, PIN_INPUT, 7) /* (C28) WKUP_GPIO0_2 */
- 		>;
- 	};
-+
-+	mcu_fss0_ospi1_pins_default: mcu-fss0-ospi1-pins-default {
-+		pinctrl-single,pins = <
-+			J721S2_WKUP_IOPAD(0x040, PIN_OUTPUT, 0) /* (A19) MCU_OSPI1_CLK */
-+			J721S2_WKUP_IOPAD(0x05c, PIN_OUTPUT, 0) /* (D20) MCU_OSPI1_CSn0 */
-+			J721S2_WKUP_IOPAD(0x060, PIN_OUTPUT, 0) /* (C21) MCU_OSPI1_CSn1 */
-+			J721S2_WKUP_IOPAD(0x04c, PIN_INPUT, 0) /* (D21) MCU_OSPI1_D0 */
-+			J721S2_WKUP_IOPAD(0x050, PIN_INPUT, 0) /* (G20) MCU_OSPI1_D1 */
-+			J721S2_WKUP_IOPAD(0x054, PIN_INPUT, 0) /* (C20) MCU_OSPI1_D2 */
-+			J721S2_WKUP_IOPAD(0x058, PIN_INPUT, 0) /* (A20) MCU_OSPI1_D3 */
-+			J721S2_WKUP_IOPAD(0x048, PIN_INPUT, 0) /* (B19) MCU_OSPI1_DQS */
-+			J721S2_WKUP_IOPAD(0x044, PIN_INPUT, 0) /* (B20) MCU_OSPI1_LBCLKO */
-+		>;
-+	};
- };
- 
- &main_gpio2 {
-@@ -394,6 +408,26 @@ &usb0 {
- 	maximum-speed = "high-speed";
- };
- 
-+&ospi1 {
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&mcu_fss0_ospi1_pins_default>;
-+
-+	flash@0{
-+		compatible = "jedec,spi-nor";
-+		reg = <0x0>;
-+		spi-tx-bus-width = <1>;
-+		spi-rx-bus-width = <4>;
-+		spi-max-frequency = <40000000>;
-+		cdns,tshsl-ns = <60>;
-+		cdns,tsd2d-ns = <60>;
-+		cdns,tchsh-ns = <60>;
-+		cdns,tslch-ns = <60>;
-+		cdns,read-delay = <2>;
-+		#address-cells = <1>;
-+		#size-cells = <1>;
-+	};
-+};
-+
- &mcu_mcan0 {
- 	pinctrl-names = "default";
- 	pinctrl-0 = <&mcu_mcan0_pins_default>;
-diff --git a/arch/arm64/boot/dts/ti/k3-j721s2-som-p0.dtsi b/arch/arm64/boot/dts/ti/k3-j721s2-som-p0.dtsi
-index 76f0ceacb6d4..a05c17dd69b6 100644
---- a/arch/arm64/boot/dts/ti/k3-j721s2-som-p0.dtsi
-+++ b/arch/arm64/boot/dts/ti/k3-j721s2-som-p0.dtsi
-@@ -39,6 +39,28 @@ transceiver0: can-phy0 {
- 	};
- };
- 
-+&wkup_pmx0 {
-+	mcu_fss0_ospi0_pins_default: mcu-fss0-ospi0-pins-default {
-+		pinctrl-single,pins = <
-+			J721S2_WKUP_IOPAD(0x000, PIN_OUTPUT, 0) /* (D19) MCU_OSPI0_CLK */
-+			J721S2_WKUP_IOPAD(0x02c, PIN_OUTPUT, 0) /* (F15) MCU_OSPI0_CSn0 */
-+			J721S2_WKUP_IOPAD(0x030, PIN_OUTPUT, 0) /* (G17) MCU_OSPI0_CSn1 */
-+			J721S2_WKUP_IOPAD(0x038, PIN_OUTPUT, 0) /* (F14) MCU_OSPI0_CSn2 */
-+			J721S2_WKUP_IOPAD(0x03c, PIN_OUTPUT, 0) /* (F17) MCU_OSPI0_CSn3 */
-+			J721S2_WKUP_IOPAD(0x00c, PIN_INPUT, 0) /* (C19) MCU_OSPI0_D0 */
-+			J721S2_WKUP_IOPAD(0x010, PIN_INPUT, 0) /* (F16) MCU_OSPI0_D1 */
-+			J721S2_WKUP_IOPAD(0x014, PIN_INPUT, 0) /* (G15) MCU_OSPI0_D2 */
-+			J721S2_WKUP_IOPAD(0x018, PIN_INPUT, 0) /* (F18) MCU_OSPI0_D3 */
-+			J721S2_WKUP_IOPAD(0x01c, PIN_INPUT, 0) /* (E19) MCU_OSPI0_D4 */
-+			J721S2_WKUP_IOPAD(0x020, PIN_INPUT, 0) /* (G19) MCU_OSPI0_D5 */
-+			J721S2_WKUP_IOPAD(0x024, PIN_INPUT, 0) /* (F19) MCU_OSPI0_D6 */
-+			J721S2_WKUP_IOPAD(0x028, PIN_INPUT, 0) /* (F20) MCU_OSPI0_D7 */
-+			J721S2_WKUP_IOPAD(0x008, PIN_INPUT, 0) /* (E18) MCU_OSPI0_DQS */
-+			J721S2_WKUP_IOPAD(0x004, PIN_INPUT, 0) /* (E20) MCU_OSPI0_LBCLKO */
-+		>;
-+	};
-+};
-+
- &main_pmx0 {
- 	main_i2c0_pins_default: main-i2c0-pins-default {
- 		pinctrl-single,pins = <
-@@ -78,6 +100,26 @@ &main_mcan16 {
- 	phys = <&transceiver0>;
- };
- 
-+&ospi0 {
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&mcu_fss0_ospi0_pins_default>;
-+
-+	flash@0 {
-+		compatible = "jedec,spi-nor";
-+		reg = <0x0>;
-+		spi-tx-bus-width = <8>;
-+		spi-rx-bus-width = <8>;
-+		spi-max-frequency = <25000000>;
-+		cdns,tshsl-ns = <60>;
-+		cdns,tsd2d-ns = <60>;
-+		cdns,tchsh-ns = <60>;
-+		cdns,tslch-ns = <60>;
-+		cdns,read-delay = <4>;
-+		#address-cells = <1>;
-+		#size-cells = <1>;
-+	};
-+};
-+
- &mailbox0_cluster0 {
- 	status = "disabled";
- };
--- 
-2.36.1
+> +
+> +static void mtk_dp_video_enable(struct mtk_dp *mtk_dp, bool enable)
+> +{
+> +	if (enable) {
+> +		mtk_dp_set_tx_out(mtk_dp);
+> +		mtk_dp_video_mute(mtk_dp, false);
+> +	} else {
+> +		mtk_dp_video_mute(mtk_dp, true);
+
+In mtk_dp_set_tx_out(), disable some function. Why not enable that
+function here?
+
+Regards,
+CK
+
+> +	}
+> +}
+> +
 

@@ -2,58 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C3EDA569A45
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 08:10:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 000F5569A44
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 08:09:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233508AbiGGGJ5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Jul 2022 02:09:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48612 "EHLO
+        id S232918AbiGGGJ0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Jul 2022 02:09:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48288 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232207AbiGGGJz (ORCPT
+        with ESMTP id S232207AbiGGGJX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Jul 2022 02:09:55 -0400
-Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 78411B1F2
-        for <linux-kernel@vger.kernel.org>; Wed,  6 Jul 2022 23:09:54 -0700 (PDT)
-Received: from [10.90.50.23] (unknown [192.168.200.1])
-        by mail.loongson.cn (Coremail) with SMTP id AQAAf9Dxn9OseMZi7XgOAA--.1729S3;
-        Thu, 07 Jul 2022 14:09:49 +0800 (CST)
-Message-ID: <41a2a420-adfa-6f8d-392d-0c15892b6945@loongson.cn>
-Date:   Thu, 7 Jul 2022 14:09:48 +0800
+        Thu, 7 Jul 2022 02:09:23 -0400
+Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC8911A07C
+        for <linux-kernel@vger.kernel.org>; Wed,  6 Jul 2022 23:09:20 -0700 (PDT)
+Received: by mail-pf1-x42b.google.com with SMTP id n12so17398696pfq.0
+        for <linux-kernel@vger.kernel.org>; Wed, 06 Jul 2022 23:09:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ozlabs-ru.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=lBLaoCEYu6B1QHs8h0+IT0tcTegt1xNb9sRwZ3Ssx+k=;
+        b=KKU3bkWXqYGSAxudAHCMpdwv8k/MbYeL3BlToXsanmScbtdxzj+roiw6qR2/zliDjY
+         mwaW+R4IBZ+Ka58Ws9WmrMA4AQaIKZ20XyDoZgTAsfLmauyUznxDtKm2ODX2DUMtIYJJ
+         /zwJEtItmn9yQwYFuMLRddzChDg/rK+MBtukcmklhXc9rkFVUd2QXH/llJvvPx7rQF1g
+         lxf1MLcbnD55DCmbq4F2eS6P/B4T9Set1dTWbGjO724HjR0uIJhGhllZmcyaUs3o3LBh
+         x3y+D9JrfVA+D8pJkm++UejvnJMIIkoTdbUJbSbin+oYXGeKprCkL+Mr3i0NP+9bPrnk
+         s7mA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=lBLaoCEYu6B1QHs8h0+IT0tcTegt1xNb9sRwZ3Ssx+k=;
+        b=zV37mCORvfmKQ/K1YZhhNTeo3P1a2c3047rE7VkQJ/sZKssPaaeJgopBIsBuacR73R
+         F7shVsl/Ke/8awqydSnWHhWV2SYa9OMBHBI50EAboRJWr5+QcIS5CIHzzG+SvQBwNng7
+         nEFvwAwfEB533HLM59dJykHKEzTGF/EY/KkGgRxx0bfEBC3WkTiY3o+dHj0dukFtRv56
+         cz7zw9Bs/lz/TrMtHnqyjcV7thr3pb1Xt1iA0PXVBpUquYDBNnLsSCqtvWFz3fQBVF+k
+         yXIPfV0iMysNHBa9J56jpu9O7WZ6zCV+11kux+P1tpZmBFM8A3U/0A7ZHPsqoIrLqBAj
+         7L5w==
+X-Gm-Message-State: AJIora8O/jy4vXwvN0oWbllu1ojQ8UZRGLqgF4YPzFjvRIosLhbqRIUq
+        eKJLNTOFPcDJB4SPqvPBIFSzwZM0BAnE8w==
+X-Google-Smtp-Source: AGRyM1u8OwT6q0lWS/sIDoJNqoInBK/difGXOMsxhJDf6fRYFUo30HP6JVzORaI0GqdHFToVv2l/NQ==
+X-Received: by 2002:a17:90b:3141:b0:1ed:4ffb:f911 with SMTP id ip1-20020a17090b314100b001ed4ffbf911mr3214506pjb.80.1657174160430;
+        Wed, 06 Jul 2022 23:09:20 -0700 (PDT)
+Received: from [192.168.10.153] (203-7-124-83.dyn.iinet.net.au. [203.7.124.83])
+        by smtp.gmail.com with ESMTPSA id ij23-20020a170902ab5700b0016bd5da20casm10364432plb.134.2022.07.06.23.09.17
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 06 Jul 2022 23:09:19 -0700 (PDT)
+Message-ID: <5e6e43e3-b231-4a93-7d3b-14ddc7991cfe@ozlabs.ru>
+Date:   Thu, 7 Jul 2022 16:11:19 +1000
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH v2] LoongArch: Clean useless vcsr in loongarch_fpu.
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.0
+Subject: Re: [PATCH] vfio/spapr_tce: Remove the unused parameters container
 Content-Language: en-US
-To:     WANG Xuerui <kernel@xen0n.name>, Xi Ruoyao <xry111@xry111.site>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Huacai Chen <chenhuacai@kernel.org>
-Cc:     loongarch@lists.linux.dev, LKML <linux-kernel@vger.kernel.org>
-References: <20220704153612.314112-1-huqi@loongson.cn>
- <4273e104-8392-6a06-5d18-a1933978d8c3@xen0n.name>
- <22a1ba993e298ce12a374decefebeca484240883.camel@xry111.site>
- <16c9ccaa5e5a2ffd39272cff6f66e487c659b571.camel@xry111.site>
- <CAAhV-H5+qd1ZrOqE8fgRmWshXy57AfEFpyKSK8ZstZZEQ53owQ@mail.gmail.com>
- <ac46f5cb4c8d1154cfc3e862fb5211e869839c9a.camel@xry111.site>
- <c824b9ca-c9c4-1912-7845-99a0989277a4@loongson.cn>
- <9d064771-9402-4e84-96f8-4713cddf42f2@www.fastmail.com>
- <730cb4c4-a6a3-783e-3e4c-7c2bdc35c088@loongson.cn>
- <0583a335-72f7-55cf-3cd9-4dbd8109a440@xen0n.name>
- <bd889cd7b72138a12b1339a33156ff46530c20b0.camel@xry111.site>
- <e67e03ae-e2d4-79e6-7f6a-5558ea9de52b@xen0n.name>
-From:   Qi Hu <huqi@loongson.cn>
-In-Reply-To: <e67e03ae-e2d4-79e6-7f6a-5558ea9de52b@xen0n.name>
+To:     Alex Williamson <alex.williamson@redhat.com>,
+        Deming Wang <wangdeming@inspur.com>
+Cc:     cohuck@redhat.com, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220702064613.5293-1-wangdeming@inspur.com>
+ <20220706131456.3c08c2b7.alex.williamson@redhat.com>
+From:   Alexey Kardashevskiy <aik@ozlabs.ru>
+In-Reply-To: <20220706131456.3c08c2b7.alex.williamson@redhat.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf9Dxn9OseMZi7XgOAA--.1729S3
-X-Coremail-Antispam: 1UD129KBjvJXoW7Aw13Kr4rGryxuFWfuF4Durg_yoW8Ar15pr
-        W5ta9Yyr4kJryxAw1Ivwn5XrySvwn5AF15J3WkXFsavwn0qF9agrW8JFW093yYgrZ7Ka4Y
-        vr47Kas5ZayUZaDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnUUvcSsGvfC2KfnxnUUI43ZEXa7xR_UUUUUUUUU==
-X-CM-SenderInfo: pkxtxqxorr0wxvrqhubq/1tbiAQAACV3QvPyK7wABsh
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -61,38 +77,75 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
-On 2022/7/7 12:22, WANG Xuerui wrote:
-> On 2022/7/7 12:04, Xi Ruoyao wrote:
->> On Thu, 2022-07-07 at 11:05 +0800, WANG Xuerui wrote:
->>
->>> To be frank, at this point I think you're trying to hide something.
->>> (This is not your fault, blame someone else of course because they told
->>> you the fact.) In the old-world kernel the VCSR a.k.a. FCSR16 is
->>> certainly being saved/restored, and there's apparently no harm in doing
->>> so. And if the contents are indeed "undefined", why are the code there
->>> in the first place? Certainly the bits *are* meaningful, only that for
->>> some reason you aren't revealing the semantics and pretending that they
->>> are "undefined" and probably "do nothing externally observable" if
->>> accessed in the first place.
->> On a 3A5000LL, I did an experiment via a kernel module, which enables
->> LSX/LASX and tries to write and read fcsr16.  I tried each bit (1, 2, 4,
->> 8, ..., 1 << 31) one by one.  The result: no matter which bit I wrote
->> into fcsr16, I always read out 0.
->>
->> And I've objdump'ed a kernel shipped in an early Loongnix release.  It
->> seems the only reference to fcsr16 is a "movgr2fcsr $r16, $r0"
->> instruction.
->
-> Hmm this is weird. I can't understand why the vcsr code was there in 
-> the first place then... I'd like to check a few Loongnix/Kylin/UOS 
-> kernels but currently I don't have the time.
->
-> If this is the case, indeed all vcsr-related code should be removed. 
-> Although I'm still not sure how to best word the commit message.
->
-Thanks for the Ruoyao's experiment.
 
-Removing the vcsr is the first step to trying to support LBT and 
-LSX/LASX in Kernel. In my opinion, the vcsr relevant code may be used 
-for debugging and forgot to remove.
+On 07/07/2022 05:14, Alex Williamson wrote:
+> On Sat, 2 Jul 2022 02:46:13 -0400
+> Deming Wang <wangdeming@inspur.com> wrote:
+> 
+>> The parameter of container has been unused for tce_iommu_unuse_page.
+>> So, we should delete it.
+>>
+>> Signed-off-by: Deming Wang <wangdeming@inspur.com>
+>> ---
+>>   drivers/vfio/vfio_iommu_spapr_tce.c | 9 ++++-----
+>>   1 file changed, 4 insertions(+), 5 deletions(-)
+> 
+> I'll give Alexey a chance to ack this, but agree that it seems this arg
+> has never had any purpose.  Perhaps a debugging remnant.  Thanks,
 
+
+yup, that was debugging...
+
+Reviewed-by: Alexey Kardashevskiy <aik@ozlabs.ru>
+
+
+
+> 
+> Alex
+> 
+>>
+>> diff --git a/drivers/vfio/vfio_iommu_spapr_tce.c b/drivers/vfio/vfio_iommu_spapr_tce.c
+>> index 708a95e61831..ea3d17a94e94 100644
+>> --- a/drivers/vfio/vfio_iommu_spapr_tce.c
+>> +++ b/drivers/vfio/vfio_iommu_spapr_tce.c
+>> @@ -378,8 +378,7 @@ static void tce_iommu_release(void *iommu_data)
+>>   	kfree(container);
+>>   }
+>>   
+>> -static void tce_iommu_unuse_page(struct tce_container *container,
+>> -		unsigned long hpa)
+>> +static void tce_iommu_unuse_page(unsigned long hpa)
+>>   {
+>>   	struct page *page;
+>>   
+>> @@ -474,7 +473,7 @@ static int tce_iommu_clear(struct tce_container *container,
+>>   			continue;
+>>   		}
+>>   
+>> -		tce_iommu_unuse_page(container, oldhpa);
+>> +		tce_iommu_unuse_page(oldhpa);
+>>   	}
+>>   
+>>   	iommu_tce_kill(tbl, firstentry, pages);
+>> @@ -524,7 +523,7 @@ static long tce_iommu_build(struct tce_container *container,
+>>   		ret = iommu_tce_xchg_no_kill(container->mm, tbl, entry + i,
+>>   				&hpa, &dirtmp);
+>>   		if (ret) {
+>> -			tce_iommu_unuse_page(container, hpa);
+>> +			tce_iommu_unuse_page(hpa);
+>>   			pr_err("iommu_tce: %s failed ioba=%lx, tce=%lx, ret=%ld\n",
+>>   					__func__, entry << tbl->it_page_shift,
+>>   					tce, ret);
+>> @@ -532,7 +531,7 @@ static long tce_iommu_build(struct tce_container *container,
+>>   		}
+>>   
+>>   		if (dirtmp != DMA_NONE)
+>> -			tce_iommu_unuse_page(container, hpa);
+>> +			tce_iommu_unuse_page(hpa);
+>>   
+>>   		tce += IOMMU_PAGE_SIZE(tbl);
+>>   	}
+> 
+
+-- 
+Alexey

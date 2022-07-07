@@ -2,60 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DBA3656AC1C
+	by mail.lfdr.de (Postfix) with ESMTP id 92F9756AC1B
 	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 21:49:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236530AbiGGTq4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Jul 2022 15:46:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57138 "EHLO
+        id S236586AbiGGTq5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Jul 2022 15:46:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57148 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236409AbiGGTqs (ORCPT
+        with ESMTP id S236470AbiGGTqs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 7 Jul 2022 15:46:48 -0400
-Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F5BB32EF3;
+Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C0AD4D149;
         Thu,  7 Jul 2022 12:46:47 -0700 (PDT)
-Received: by mail-ed1-x534.google.com with SMTP id g1so16804279edb.12;
+Received: by mail-ej1-x62f.google.com with SMTP id sb34so34153406ejc.11;
         Thu, 07 Jul 2022 12:46:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=VXKGG9javDrFOkKmb7ryKLnUNvKA3TX1Nnby1SaWrZk=;
-        b=n4Y5f97i3NIfTU7jXusYevNsremu+bzSJxGsQhqkaTWbVr5A43Ya9I82QJ0xnvbvyU
-         OjpU6n96YZdMKX98GAE/eqOyzk4hW8kYp6PqIKy+rSs+51Cw6JJG5RwwClxUfOsXme5g
-         ZdQEiUIXd+0HtOaSDo8jPwacMQ0M6G/rgnQgbd7KqP3TSrW0Xw6bm7RQC7AaEIXOtyFr
-         kOlYvWt3jNntG3bGbJRa/wBWdsjOu+RgETf8y1Q0Qp4eQQveaZDUuZwOs84vV1NTUQ/g
-         QtxNVwYpi+vpzxaM+49jZrDlS//l5PVrJWUqAL4TxKBgsl8WFU8CSooCNOdu4wXXKpI8
-         ZRqg==
+        bh=15R8fRtnipOyDZjBwDRNBD+rUnFt8ovWDJg/qvPn+8w=;
+        b=eHPt7vqwXh1wCGADEJNAowKT4uYpPhdJCl2JI/BVjbITn1J6xk0YTHFOLRz2bBVMf6
+         iHLttoama6OrqnbmwCIZLUndzjK9dqq9pS6rjXFfThBI4IDN38Zzqonh/DySOh5BZCp8
+         oGDRgN8dVSes1DfDPXQc+0d0grg5TqfRpl1oplyx7ju1QJgxJ9QOZM9uqk9w6jnaUZ4X
+         bgjrMsOeUrZ2d6W1cBJUaX6gsi69h9iTFQ6IE8Xw0TUOwi5ldLPGnwBXbdWCQ/vXCBm2
+         ZSEKnl6wTO2Q5GbdnYMRpmjssovgDxmyVnfpgOqCTrg1NM4FdVhcA+6rqDXYzrAwwhDq
+         jRuw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=VXKGG9javDrFOkKmb7ryKLnUNvKA3TX1Nnby1SaWrZk=;
-        b=aSBkb5E/Amw/e5WazIzGKF+pcqXMdNVKbgQ8pSFYlhnQYegXZIjjYHr393bttjTAa4
-         sGW2E+t59yXerTU8O3ileW5zu+fdO5uEgZcItZoSm8Ay1wGsCS7oZ6y7wBOLB0cBNv/G
-         eRxfGQF/vT4P7WFXc4emu6mBh2JnoI9lvzRaE+SVmi2xsebwisENK/x+t0gk7wcOy3Fs
-         Rtk300QZ6HjGXQiZS20zR9GW5BQdGDxhCntLhDLkjz1LrLsxyJJVBtPlHaD1jo1T8gOs
-         ZB31jOBjCQaqYybJo6HxUmYlPuTIvhdnxUbVUXzPThev/3nACF0x0OS2MVY6wxVpR3ah
-         g/HA==
-X-Gm-Message-State: AJIora+IlLY7sG0Xzttc3+Wu8faPzmYMGhO3mW81GfdTpadgMg0QyPqO
-        l0zBHixuAwDvqGt5keKuWb8=
-X-Google-Smtp-Source: AGRyM1t5YHGaAXCFYhFbkUmZfS61A+phs798Naq0MTaMYMF1qfI/f4QbXo/kslRdhgJz08bZi9NqbQ==
-X-Received: by 2002:aa7:d80a:0:b0:43a:6f95:62a0 with SMTP id v10-20020aa7d80a000000b0043a6f9562a0mr26783800edq.284.1657223205729;
-        Thu, 07 Jul 2022 12:46:45 -0700 (PDT)
+        bh=15R8fRtnipOyDZjBwDRNBD+rUnFt8ovWDJg/qvPn+8w=;
+        b=0SgxWhSQCF4nKPS6K5LIArNTLR0OfVnFL7wnjpYtW7xJs66imgNk13GbcwX9BRosfh
+         mOPS/itYSyzDWBJqGwOQyD4K1e+i1rJPRRz8Ng3TXTdg1IS7Rr60sLJjiDS2QkCDfZ3S
+         VH5FKnTB8mCHmgfP2fJPapXHJREKydQWtKiEojq39IFua4szmVlpVC7ZWlwwVByZoUYj
+         Hkgaazble3A/9uY2EzfE2XC11JJVopR6/7A3+BzNSdbHemMvoNjUsksgMcT72O5AjYwp
+         X1v1er0NJ1e+9tDl26G5K9fuwALJJrPAMMJ3FiYPmIhwOS5U8bwuda+jwnqLDOS3OEMA
+         mFrw==
+X-Gm-Message-State: AJIora8Fpkf7UpL0gjX4Y27LB0hfFCWkDbjDEbKg09pgGhKDKlcGTvgL
+        D/LBbQJTT+y31WdTLJFm7/U=
+X-Google-Smtp-Source: AGRyM1vVBv4eichqt1pd+vj1n08RTifhwRB37lBYx7JArzeALYd899GQ5F2fkeIxJc0Jrz/wJBHNRg==
+X-Received: by 2002:a17:907:1dc6:b0:72a:5e9a:91be with SMTP id og6-20020a1709071dc600b0072a5e9a91bemr41769203ejc.730.1657223207214;
+        Thu, 07 Jul 2022 12:46:47 -0700 (PDT)
 Received: from localhost (92.40.202.166.threembb.co.uk. [92.40.202.166])
-        by smtp.gmail.com with ESMTPSA id b7-20020a1709064d4700b0070f6855b90bsm19448053ejv.170.2022.07.07.12.46.44
+        by smtp.gmail.com with ESMTPSA id d8-20020a056402000800b0043a71c376a2sm8283494edu.33.2022.07.07.12.46.46
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 07 Jul 2022 12:46:45 -0700 (PDT)
+        Thu, 07 Jul 2022 12:46:46 -0700 (PDT)
 From:   Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
 To:     paul@crapouillou.net, lgirdwood@gmail.com, broonie@kernel.org,
         perex@perex.cz, tiwai@suse.com
 Cc:     linux-mips@vger.kernel.org, alsa-devel@alsa-project.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH v2 04/11] ASoC: jz4740-i2s: Handle independent FIFO flush bits
-Date:   Thu,  7 Jul 2022 20:46:48 +0100
-Message-Id: <20220707194655.312892-5-aidanmacdonald.0x0@gmail.com>
+Subject: [PATCH v2 05/11] ASoC: jz4740-i2s: Use FIELD_PREP() macros in hw_params callback
+Date:   Thu,  7 Jul 2022 20:46:49 +0100
+Message-Id: <20220707194655.312892-6-aidanmacdonald.0x0@gmail.com>
 In-Reply-To: <20220707194655.312892-1-aidanmacdonald.0x0@gmail.com>
 References: <20220707194655.312892-1-aidanmacdonald.0x0@gmail.com>
 MIME-Version: 1.0
@@ -70,80 +70,71 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On the JZ4740, there is a single bit that flushes (empties) both
-the transmit and receive FIFO. Later SoCs have independent flush
-bits for each FIFO, which allows us to flush the right FIFO when
-starting up a stream.
+Get rid of a couple of macros and improve readability by using
+FIELD_PREP() and GENMASK() for the sample size setting.
 
-This also fixes a bug: since we were only setting the JZ4740's
-flush bit, which corresponds to the TX FIFO flush bit on other
-SoCs, other SoCs were not having their RX FIFO flushed at all.
-
-Fixes: 967beb2e8777 ("ASoC: jz4740: Add jz4780 support")
+Acked-by: Paul Cercueil <paul@crapouillou.net>
 Signed-off-by: Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
 ---
- sound/soc/jz4740/jz4740-i2s.c | 24 +++++++++++++++++++++++-
- 1 file changed, 23 insertions(+), 1 deletion(-)
+ sound/soc/jz4740/jz4740-i2s.c | 17 ++++++++---------
+ 1 file changed, 8 insertions(+), 9 deletions(-)
 
 diff --git a/sound/soc/jz4740/jz4740-i2s.c b/sound/soc/jz4740/jz4740-i2s.c
-index bd73427b837e..043f100a9cfa 100644
+index 043f100a9cfa..d0791dfa9c7b 100644
 --- a/sound/soc/jz4740/jz4740-i2s.c
 +++ b/sound/soc/jz4740/jz4740-i2s.c
-@@ -58,6 +58,9 @@
- #define JZ_AIC_CTRL_ENABLE_PLAYBACK BIT(1)
- #define JZ_AIC_CTRL_ENABLE_CAPTURE BIT(0)
+@@ -3,6 +3,7 @@
+  *  Copyright (C) 2010, Lars-Peter Clausen <lars@metafoo.de>
+  */
  
-+#define JZ4760_AIC_CTRL_TFLUSH BIT(8)
-+#define JZ4760_AIC_CTRL_RFLUSH BIT(7)
++#include <linux/bitfield.h>
+ #include <linux/init.h>
+ #include <linux/io.h>
+ #include <linux/kernel.h>
+@@ -42,8 +43,8 @@
+ #define JZ_AIC_CONF_SYNC_CLK_MASTER BIT(1)
+ #define JZ_AIC_CONF_ENABLE BIT(0)
+ 
+-#define JZ_AIC_CTRL_OUTPUT_SAMPLE_SIZE_MASK (0x7 << 19)
+-#define JZ_AIC_CTRL_INPUT_SAMPLE_SIZE_MASK (0x7 << 16)
++#define JZ_AIC_CTRL_OUTPUT_SAMPLE_SIZE GENMASK(21, 19)
++#define JZ_AIC_CTRL_INPUT_SAMPLE_SIZE GENMASK(18, 16)
+ #define JZ_AIC_CTRL_ENABLE_RX_DMA BIT(15)
+ #define JZ_AIC_CTRL_ENABLE_TX_DMA BIT(14)
+ #define JZ_AIC_CTRL_MONO_TO_STEREO BIT(11)
+@@ -61,9 +62,6 @@
+ #define JZ4760_AIC_CTRL_TFLUSH BIT(8)
+ #define JZ4760_AIC_CTRL_RFLUSH BIT(7)
+ 
+-#define JZ_AIC_CTRL_OUTPUT_SAMPLE_SIZE_OFFSET 19
+-#define JZ_AIC_CTRL_INPUT_SAMPLE_SIZE_OFFSET  16
+-
+ #define JZ_AIC_I2S_FMT_DISABLE_BIT_CLK BIT(12)
+ #define JZ_AIC_I2S_FMT_DISABLE_BIT_ICLK BIT(13)
+ #define JZ_AIC_I2S_FMT_ENABLE_SYS_CLK BIT(4)
+@@ -248,8 +246,9 @@ static int jz4740_i2s_hw_params(struct snd_pcm_substream *substream,
+ 	}
+ 
+ 	if (substream->stream == SNDRV_PCM_STREAM_PLAYBACK) {
+-		ctrl &= ~JZ_AIC_CTRL_OUTPUT_SAMPLE_SIZE_MASK;
+-		ctrl |= sample_size << JZ_AIC_CTRL_OUTPUT_SAMPLE_SIZE_OFFSET;
++		ctrl &= ~JZ_AIC_CTRL_OUTPUT_SAMPLE_SIZE;
++		ctrl |= FIELD_PREP(JZ_AIC_CTRL_OUTPUT_SAMPLE_SIZE, sample_size);
 +
- #define JZ_AIC_CTRL_OUTPUT_SAMPLE_SIZE_OFFSET 19
- #define JZ_AIC_CTRL_INPUT_SAMPLE_SIZE_OFFSET  16
+ 		if (params_channels(params) == 1)
+ 			ctrl |= JZ_AIC_CTRL_MONO_TO_STEREO;
+ 		else
+@@ -257,8 +256,8 @@ static int jz4740_i2s_hw_params(struct snd_pcm_substream *substream,
  
-@@ -75,6 +78,8 @@ struct i2s_soc_info {
- 	struct reg_field field_tx_fifo_thresh;
- 	struct reg_field field_i2sdiv_capture;
- 	struct reg_field field_i2sdiv_playback;
-+
-+	bool shared_fifo_flush;
- };
+ 		div_field = i2s->field_i2sdiv_playback;
+ 	} else {
+-		ctrl &= ~JZ_AIC_CTRL_INPUT_SAMPLE_SIZE_MASK;
+-		ctrl |= sample_size << JZ_AIC_CTRL_INPUT_SAMPLE_SIZE_OFFSET;
++		ctrl &= ~JZ_AIC_CTRL_INPUT_SAMPLE_SIZE;
++		ctrl |= FIELD_PREP(JZ_AIC_CTRL_INPUT_SAMPLE_SIZE, sample_size);
  
- struct jz4740_i2s {
-@@ -100,10 +105,26 @@ static int jz4740_i2s_startup(struct snd_pcm_substream *substream,
- 	struct jz4740_i2s *i2s = snd_soc_dai_get_drvdata(dai);
- 	int ret;
- 
-+	/*
-+	 * When we can flush FIFOs independently, only flush the
-+	 * FIFO that is starting up.
-+	 */
-+	if (!i2s->soc_info->shared_fifo_flush) {
-+		if (substream->stream == SNDRV_PCM_STREAM_PLAYBACK)
-+			regmap_set_bits(i2s->regmap, JZ_REG_AIC_CTRL, JZ4760_AIC_CTRL_TFLUSH);
-+		else
-+			regmap_set_bits(i2s->regmap, JZ_REG_AIC_CTRL, JZ4760_AIC_CTRL_RFLUSH);
-+	}
-+
- 	if (snd_soc_dai_active(dai))
- 		return 0;
- 
--	regmap_set_bits(i2s->regmap, JZ_REG_AIC_CTRL, JZ_AIC_CTRL_FLUSH);
-+	/*
-+	 * When there is a shared flush bit for both FIFOs we can
-+	 * only flush the FIFOs if no other stream has started.
-+	 */
-+	if (i2s->soc_info->shared_fifo_flush)
-+		regmap_set_bits(i2s->regmap, JZ_REG_AIC_CTRL, JZ_AIC_CTRL_FLUSH);
- 
- 	ret = clk_prepare_enable(i2s->clk_i2s);
- 	if (ret)
-@@ -382,6 +403,7 @@ static const struct i2s_soc_info jz4740_i2s_soc_info = {
- 	.field_tx_fifo_thresh	= REG_FIELD(JZ_REG_AIC_CONF, 8, 11),
- 	.field_i2sdiv_capture	= REG_FIELD(JZ_REG_AIC_CLK_DIV, 0, 3),
- 	.field_i2sdiv_playback	= REG_FIELD(JZ_REG_AIC_CLK_DIV, 0, 3),
-+	.shared_fifo_flush	= true,
- };
- 
- static const struct i2s_soc_info jz4760_i2s_soc_info = {
+ 		div_field = i2s->field_i2sdiv_capture;
+ 	}
 -- 
 2.35.1
 

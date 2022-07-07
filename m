@@ -2,150 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 000F5569A44
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 08:09:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B251569A48
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 08:14:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232918AbiGGGJ0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Jul 2022 02:09:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48288 "EHLO
+        id S232278AbiGGGOy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Jul 2022 02:14:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50860 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232207AbiGGGJX (ORCPT
+        with ESMTP id S231305AbiGGGOw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Jul 2022 02:09:23 -0400
-Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC8911A07C
-        for <linux-kernel@vger.kernel.org>; Wed,  6 Jul 2022 23:09:20 -0700 (PDT)
-Received: by mail-pf1-x42b.google.com with SMTP id n12so17398696pfq.0
-        for <linux-kernel@vger.kernel.org>; Wed, 06 Jul 2022 23:09:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ozlabs-ru.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=lBLaoCEYu6B1QHs8h0+IT0tcTegt1xNb9sRwZ3Ssx+k=;
-        b=KKU3bkWXqYGSAxudAHCMpdwv8k/MbYeL3BlToXsanmScbtdxzj+roiw6qR2/zliDjY
-         mwaW+R4IBZ+Ka58Ws9WmrMA4AQaIKZ20XyDoZgTAsfLmauyUznxDtKm2ODX2DUMtIYJJ
-         /zwJEtItmn9yQwYFuMLRddzChDg/rK+MBtukcmklhXc9rkFVUd2QXH/llJvvPx7rQF1g
-         lxf1MLcbnD55DCmbq4F2eS6P/B4T9Set1dTWbGjO724HjR0uIJhGhllZmcyaUs3o3LBh
-         x3y+D9JrfVA+D8pJkm++UejvnJMIIkoTdbUJbSbin+oYXGeKprCkL+Mr3i0NP+9bPrnk
-         s7mA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=lBLaoCEYu6B1QHs8h0+IT0tcTegt1xNb9sRwZ3Ssx+k=;
-        b=zV37mCORvfmKQ/K1YZhhNTeo3P1a2c3047rE7VkQJ/sZKssPaaeJgopBIsBuacR73R
-         F7shVsl/Ke/8awqydSnWHhWV2SYa9OMBHBI50EAboRJWr5+QcIS5CIHzzG+SvQBwNng7
-         nEFvwAwfEB533HLM59dJykHKEzTGF/EY/KkGgRxx0bfEBC3WkTiY3o+dHj0dukFtRv56
-         cz7zw9Bs/lz/TrMtHnqyjcV7thr3pb1Xt1iA0PXVBpUquYDBNnLsSCqtvWFz3fQBVF+k
-         yXIPfV0iMysNHBa9J56jpu9O7WZ6zCV+11kux+P1tpZmBFM8A3U/0A7ZHPsqoIrLqBAj
-         7L5w==
-X-Gm-Message-State: AJIora8O/jy4vXwvN0oWbllu1ojQ8UZRGLqgF4YPzFjvRIosLhbqRIUq
-        eKJLNTOFPcDJB4SPqvPBIFSzwZM0BAnE8w==
-X-Google-Smtp-Source: AGRyM1u8OwT6q0lWS/sIDoJNqoInBK/difGXOMsxhJDf6fRYFUo30HP6JVzORaI0GqdHFToVv2l/NQ==
-X-Received: by 2002:a17:90b:3141:b0:1ed:4ffb:f911 with SMTP id ip1-20020a17090b314100b001ed4ffbf911mr3214506pjb.80.1657174160430;
-        Wed, 06 Jul 2022 23:09:20 -0700 (PDT)
-Received: from [192.168.10.153] (203-7-124-83.dyn.iinet.net.au. [203.7.124.83])
-        by smtp.gmail.com with ESMTPSA id ij23-20020a170902ab5700b0016bd5da20casm10364432plb.134.2022.07.06.23.09.17
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 06 Jul 2022 23:09:19 -0700 (PDT)
-Message-ID: <5e6e43e3-b231-4a93-7d3b-14ddc7991cfe@ozlabs.ru>
-Date:   Thu, 7 Jul 2022 16:11:19 +1000
+        Thu, 7 Jul 2022 02:14:52 -0400
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECCDD21809;
+        Wed,  6 Jul 2022 23:14:46 -0700 (PDT)
+X-UUID: 9d9dbcd51b28492cb7540ac37f5c7395-20220707
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.8,REQID:15c04ce5-02fe-4f07-9be3-b30b7420f285,OB:0,LO
+        B:0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACTI
+        ON:release,TS:0
+X-CID-META: VersionHash:0f94e32,CLOUDID:ee4fa563-0b3f-4b2c-b3a6-ed5c044366a0,C
+        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,IP:nil,URL:0,File:nil
+        ,QS:nil,BEC:nil,COL:0
+X-UUID: 9d9dbcd51b28492cb7540ac37f5c7395-20220707
+Received: from mtkmbs10n2.mediatek.inc [(172.21.101.183)] by mailgw01.mediatek.com
+        (envelope-from <ck.hu@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 1889397465; Thu, 07 Jul 2022 14:14:40 +0800
+Received: from mtkmbs11n1.mediatek.inc (172.21.101.186) by
+ mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.792.15; Thu, 7 Jul 2022 14:14:39 +0800
+Received: from mtksdccf07 (172.21.84.99) by mtkmbs11n1.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.2.792.3 via Frontend
+ Transport; Thu, 7 Jul 2022 14:14:39 +0800
+Message-ID: <d8c634d099e988c2cf8903613352f7334d94d148.camel@mediatek.com>
+Subject: Re: [PATCH v13 05/10] drm/mediatek: Add MT8195 Embedded DisplayPort
+ driver
+From:   CK Hu <ck.hu@mediatek.com>
+To:     Bo-Chen Chen <rex-bc.chen@mediatek.com>, <chunkuang.hu@kernel.org>,
+        <p.zabel@pengutronix.de>, <daniel@ffwll.ch>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <mripard@kernel.org>,
+        <tzimmermann@suse.de>, <matthias.bgg@gmail.com>, <deller@gmx.de>,
+        <airlied@linux.ie>
+CC:     <msp@baylibre.com>, <granquet@baylibre.com>,
+        <jitao.shi@mediatek.com>, <wenst@chromium.org>,
+        <angelogioacchino.delregno@collabora.com>,
+        <liangxu.xu@mediatek.com>, <dri-devel@lists.freedesktop.org>,
+        <linux-mediatek@lists.infradead.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-fbdev@vger.kernel.org>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>
+Date:   Thu, 7 Jul 2022 14:14:39 +0800
+In-Reply-To: <20220701062808.18596-6-rex-bc.chen@mediatek.com>
+References: <20220701062808.18596-1-rex-bc.chen@mediatek.com>
+         <20220701062808.18596-6-rex-bc.chen@mediatek.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.0
-Subject: Re: [PATCH] vfio/spapr_tce: Remove the unused parameters container
-Content-Language: en-US
-To:     Alex Williamson <alex.williamson@redhat.com>,
-        Deming Wang <wangdeming@inspur.com>
-Cc:     cohuck@redhat.com, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220702064613.5293-1-wangdeming@inspur.com>
- <20220706131456.3c08c2b7.alex.williamson@redhat.com>
-From:   Alexey Kardashevskiy <aik@ozlabs.ru>
-In-Reply-To: <20220706131456.3c08c2b7.alex.williamson@redhat.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-MTK:  N
+X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,MAY_BE_FORGED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,T_SCC_BODY_TEXT_LINE,T_SPF_TEMPERROR,
+        UNPARSEABLE_RELAY autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi, Bo-Chen:
 
-
-On 07/07/2022 05:14, Alex Williamson wrote:
-> On Sat, 2 Jul 2022 02:46:13 -0400
-> Deming Wang <wangdeming@inspur.com> wrote:
+On Fri, 2022-07-01 at 14:28 +0800, Bo-Chen Chen wrote:
+> From: Markus Schneider-Pargmann <msp@baylibre.com>
 > 
->> The parameter of container has been unused for tce_iommu_unuse_page.
->> So, we should delete it.
->>
->> Signed-off-by: Deming Wang <wangdeming@inspur.com>
->> ---
->>   drivers/vfio/vfio_iommu_spapr_tce.c | 9 ++++-----
->>   1 file changed, 4 insertions(+), 5 deletions(-)
+> This patch adds a embedded displayport driver for the MediaTek mt8195
+> SoC.
 > 
-> I'll give Alexey a chance to ack this, but agree that it seems this arg
-> has never had any purpose.  Perhaps a debugging remnant.  Thanks,
-
-
-yup, that was debugging...
-
-Reviewed-by: Alexey Kardashevskiy <aik@ozlabs.ru>
-
-
-
+> It supports the MT8195, the embedded DisplayPort units. It offers
+> DisplayPort 1.4 with up to 4 lanes.
 > 
-> Alex
+> The driver creates a child device for the phy. The child device will
+> never exist without the parent being active. As they are sharing a
+> register range, the parent passes a regmap pointer to the child so
+> that
+> both can work with the same register range. The phy driver sets
+> device
+> data that is read by the parent to get the phy device that can be
+> used
+> to control the phy properties.
 > 
->>
->> diff --git a/drivers/vfio/vfio_iommu_spapr_tce.c b/drivers/vfio/vfio_iommu_spapr_tce.c
->> index 708a95e61831..ea3d17a94e94 100644
->> --- a/drivers/vfio/vfio_iommu_spapr_tce.c
->> +++ b/drivers/vfio/vfio_iommu_spapr_tce.c
->> @@ -378,8 +378,7 @@ static void tce_iommu_release(void *iommu_data)
->>   	kfree(container);
->>   }
->>   
->> -static void tce_iommu_unuse_page(struct tce_container *container,
->> -		unsigned long hpa)
->> +static void tce_iommu_unuse_page(unsigned long hpa)
->>   {
->>   	struct page *page;
->>   
->> @@ -474,7 +473,7 @@ static int tce_iommu_clear(struct tce_container *container,
->>   			continue;
->>   		}
->>   
->> -		tce_iommu_unuse_page(container, oldhpa);
->> +		tce_iommu_unuse_page(oldhpa);
->>   	}
->>   
->>   	iommu_tce_kill(tbl, firstentry, pages);
->> @@ -524,7 +523,7 @@ static long tce_iommu_build(struct tce_container *container,
->>   		ret = iommu_tce_xchg_no_kill(container->mm, tbl, entry + i,
->>   				&hpa, &dirtmp);
->>   		if (ret) {
->> -			tce_iommu_unuse_page(container, hpa);
->> +			tce_iommu_unuse_page(hpa);
->>   			pr_err("iommu_tce: %s failed ioba=%lx, tce=%lx, ret=%ld\n",
->>   					__func__, entry << tbl->it_page_shift,
->>   					tce, ret);
->> @@ -532,7 +531,7 @@ static long tce_iommu_build(struct tce_container *container,
->>   		}
->>   
->>   		if (dirtmp != DMA_NONE)
->> -			tce_iommu_unuse_page(container, hpa);
->> +			tce_iommu_unuse_page(hpa);
->>   
->>   		tce += IOMMU_PAGE_SIZE(tbl);
->>   	}
+> This driver is based on an initial version by
+> Jitao shi <jitao.shi@mediatek.com>
 > 
+> Signed-off-by: Markus Schneider-Pargmann <msp@baylibre.com>
+> Signed-off-by: Guillaume Ranquet <granquet@baylibre.com>
+> Signed-off-by: Bo-Chen Chen <rex-bc.chen@mediatek.com>
+> ---
 
--- 
-Alexey
+[snip]
+
+> +
+> +static int mtk_dp_bulk_16bit_write(struct mtk_dp *mtk_dp, u32
+> offset, u8 *buf,
+> +				   size_t length)
+
+The caller does not process the return value, so let this function to
+be void.
+
+Regards,
+CK
+
+> +{
+> +	int i, ret;
+> +	int num_regs = (length + 1) / 2;
+> +
+> +	/* 2 bytes per register */
+> +	for (i = 0; i < num_regs; i++) {
+> +		u32 val = buf[i * 2] |
+> +			  (i * 2 + 1 < length ? buf[i * 2 + 1] << 8 :
+> 0);
+> +
+> +		ret = mtk_dp_write(mtk_dp, offset + i * 4, val);
+> +		if (ret)
+> +			return ret;
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+

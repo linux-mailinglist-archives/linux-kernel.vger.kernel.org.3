@@ -2,90 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E520569EF6
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 11:57:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A1E85569F33
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 12:13:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234581AbiGGJ5P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Jul 2022 05:57:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55636 "EHLO
+        id S235229AbiGGKLu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Jul 2022 06:11:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38320 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234912AbiGGJ5O (ORCPT
+        with ESMTP id S235251AbiGGKLl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Jul 2022 05:57:14 -0400
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2EE2C4F182;
-        Thu,  7 Jul 2022 02:57:12 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4LdsJk1GTJz4xZD;
-        Thu,  7 Jul 2022 19:57:09 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1657187830;
-        bh=m2N/CY1UNR5vI4HQ8svnMwb9Kz3keEatqO3ubARoiok=;
-        h=Date:From:To:Cc:Subject:From;
-        b=H3wnziJ0n6fTPYu9iC7VeLh+hk5HvWPMqeXqcacAcYWT1vZUpyqzYMwXtl4EbpBK3
-         B1fzjEc9cCUAT10/3UrNytMnCOGM+0O1w7Fo7iufTIUtpyQQCDwoZh0CgjGPjzs6uL
-         e32dgFYBr07KHjhawPxV0m/tLWjPw2wkhkaLCKcolJDAp7k9SDyhWv61Bq31lBc/Bx
-         gkkVPQAmnvnmskZGxkvMP5nqeHPKBBbu1iYCG5YDBEYpVTvu+vPHUFSJrGsWtEoZXY
-         yON7xI2f3p7j8Gu0/egZqfikjNY3hzB3zEFbdXAg+R1XSiCxQjr1yKm4UlfpSQ2G2H
-         JiBfy3jBL9R7g==
-Date:   Thu, 7 Jul 2022 19:57:07 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>
-Cc:     Guangbin Huang <huangguangbin2@huawei.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: build warning after merge of the arm64 tree
-Message-ID: <20220707195707.7aec2e13@canb.auug.org.au>
+        Thu, 7 Jul 2022 06:11:41 -0400
+Received: from elvis.franken.de (elvis.franken.de [193.175.24.41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D1F504F66E;
+        Thu,  7 Jul 2022 03:11:39 -0700 (PDT)
+Received: from uucp (helo=alpha)
+        by elvis.franken.de with local-bsmtp (Exim 3.36 #1)
+        id 1o9OTx-0007T4-01; Thu, 07 Jul 2022 12:11:37 +0200
+Received: by alpha.franken.de (Postfix, from userid 1000)
+        id D6B80C02B6; Thu,  7 Jul 2022 11:57:48 +0200 (CEST)
+Date:   Thu, 7 Jul 2022 11:57:48 +0200
+From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+To:     Marc Zyngier <maz@kernel.org>
+Cc:     Sander Vanheule <sander@svanheule.net>,
+        Aleksander Jan Bajkowski <olek2@wp.pl>,
+        martin.blumenstingl@googlemail.com, hauke@hauke-m.de,
+        git@birger-koblitz.de, linux-mips@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] MIPS: smp-mt: enable all hardware interrupts on second
+ VPE
+Message-ID: <20220707095748.GB9894@alpha.franken.de>
+References: <20220702190705.5319-1-olek2@wp.pl>
+ <3c9a032edd0fb9b9608ad3ca08d6e3cc38f21464.camel@svanheule.net>
+ <87fsjen2kl.wl-maz@kernel.org>
+ <20220706081901.GA10797@alpha.franken.de>
+ <87h73u1s9r.wl-maz@kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/QfVCx8ZB5ut6yNpNi4YWikG";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <87h73u1s9r.wl-maz@kernel.org>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/QfVCx8ZB5ut6yNpNi4YWikG
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Wed, Jul 06, 2022 at 10:53:36AM +0100, Marc Zyngier wrote:
+> On Wed, 06 Jul 2022 09:19:01 +0100,
+> Thomas Bogendoerfer <tsbogend@alpha.franken.de> wrote:
+> > 
+> > On Wed, Jul 06, 2022 at 08:05:30AM +0100, Marc Zyngier wrote:
+> > > On Sun, 03 Jul 2022 19:15:11 +0100,
+> > > Sander Vanheule <sander@svanheule.net> wrote:
+> > > > 
+> > > > Hi Aleksander,
+> > > > 
+> > > > Since this is IRQ related: +CC Marc Zyngier
+> > > > 
+> > > > On Sat, 2022-07-02 at 21:07 +0200, Aleksander Jan Bajkowski wrote:
+> > > > > This patch is needed to handle interrupts by the second VPE on
+> > > > > the Lantiq xRX200, xRX300 and xRX330 SoCs. In these chips, 32 ICU
+> > > > > interrupts are connected to each hardware line. The SoC supports
+> > > > > a total of 160 interrupts. Currently changing smp_affinity to the
+> > > > > second VPE hangs interrupts.
+> > > > > 
+> > > > > This problem affects multithreaded SoCs with a custom interrupt
+> > > > > controller. Chips with 1004Kc core and newer use the MIPS GIC.
+> > > > > 
+> > > > > Also CC'ed Birger Koblitz and Sander Vanheule. Both are working
+> > > > > on support for Realtek RTL930x chips with 34Kc core and Birger
+> > > > > has added a patch in OpenWRT that also enables all interrupt
+> > > > > lines. So it looks like this patch is useful for more SoCs.
+> > > > > 
+> > > > > Tested on lantiq xRX200 and xRX330.
+> > > > > 
+> > > > > Signed-off-by: Aleksander Jan Bajkowski <olek2@wp.pl>
+> > > > 
+> > > > Thanks for bringing up this issue. Like you say OpenWrt carries a
+> > > > similar patch, and I also carry a patch on my tree to enable all CPU
+> > > > IRQ lines.
+> > > > 
+> > > > Indiscriminately enabling all IRQ lines doesn't sit quite right with
+> > > > me though, since I would expect these to be enabled
+> > > > on-demand. I.e. when a peripheral requests an IRQ, or when an IRQ
+> > > > controller is cascaded into one of the CPU's interrupt lines. If I
+> > > > understand correctly, the IRQ mask/unmask functions in
+> > > > drivers/irqchip/irq-mips-cpu.c should do this.
+> > > 
+> > > But this is only enabling interrupts at the CPU level, right? And the
+> > > irqchip is still in control of the masking of the individual
+> > > interrupts?
+> > 
+> > in the Lantiq case yes
+> > 
+> > > If both assertions are true, then this patch seems OK. If it just let
+> > > any interrupt through without any control, then this is wrong.
+> > > 
+> > > So which one is it?
+> > 
+> > if there isn't an additional irqchip connected to the cpu interrupt lines,
+> > this patch will cause problems.
+> 
+> And that's what the irq-mips-cpu driver should solve, right? In this
 
-Hi all,
+yes
 
-After merging the arm64 tree, today's linux-next build (htmldocs)
-produced this warning:
+> case, what's the problem with adopting this driver for the Lantiq
+> platform (and all other ones using the same CPU)?
 
-Documentation/admin-guide/perf/hns3-pmu.rst: WARNING: document isn't includ=
-ed in any toctree
+I guess vendor code supplied more or less the current code base and
+nobody dared to change it.
 
-Introduced by commit
+Thomas.
 
-  39915b6b5fc2 ("drivers/perf: hisi: Add description for HNS3 PMU driver")
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/QfVCx8ZB5ut6yNpNi4YWikG
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmLGrfMACgkQAVBC80lX
-0Gy7fAf+KZOGfeyzTAmR/d1Z+0tmP12k4tkjH1TJjrmHB1+V9xwBu8Foxo/kYXEC
-vJBIepzEhIqRa3vWcLOAizodHJrdqFVJEUDlivUq9JXXbUsuvXRoqHYz2B3nLaZO
-Hfrt7HnTpIxg4RF32iov5Y2u1TdMueUeiGBOrtmSkk0wNEATN/5zIxeTVogmWLrp
-/wyV6rz9EnHJpA8oI1a9D/3W8KRByTGwLIh1EOOth41bsi0DPzMno9Mr/nhSr11Q
-KrBqP6/0w8BVTHFXknhUw9Z6S55Y6xvlSN9N9QLXoa5zPHRRte0HcWeshJxPVc+b
-5vRd8eYsT3f/Jv9PqlcZjxlUGYSKKA==
-=43aM
------END PGP SIGNATURE-----
-
---Sig_/QfVCx8ZB5ut6yNpNi4YWikG--
+-- 
+Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
+good idea.                                                [ RFC1925, 2.3 ]

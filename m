@@ -2,128 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D148569B70
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 09:22:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1FB5E569B74
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 09:22:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232207AbiGGHWP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Jul 2022 03:22:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42744 "EHLO
+        id S233516AbiGGHWi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Jul 2022 03:22:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43030 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230334AbiGGHWN (ORCPT
+        with ESMTP id S234888AbiGGHWg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Jul 2022 03:22:13 -0400
-Received: from mail-qt1-f173.google.com (mail-qt1-f173.google.com [209.85.160.173])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B960220F78;
-        Thu,  7 Jul 2022 00:22:12 -0700 (PDT)
-Received: by mail-qt1-f173.google.com with SMTP id g14so21551183qto.9;
-        Thu, 07 Jul 2022 00:22:12 -0700 (PDT)
+        Thu, 7 Jul 2022 03:22:36 -0400
+Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E60730F43;
+        Thu,  7 Jul 2022 00:22:35 -0700 (PDT)
+Received: by mail-ej1-x62a.google.com with SMTP id a9so1125221ejf.6;
+        Thu, 07 Jul 2022 00:22:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=cDHDGLtxSydqFYBhl3txfOkIWwp8IL1b5jBeLJZfgD8=;
+        b=iMa8MwC7X5c+xv+LkBDIRr2ifkNStpYQGwx8kN5YESP/5lZej2GkPyii4mlnl/p1oS
+         eOgpiJGNZB6iyk7XGu3upbLG2ywKGQyqvW7qXjx9CeLrTQn6qJor4lwHISDN0uDAumJP
+         Brg9IzfPr/KCXuD5RB3EtLf3DQoNPruLomjmhy/77EseuQcTlk0SSSNdM3rJKtN+c4v3
+         grPr5r3HZbLsJta7gRQSEvN2j6S6gov/8/y4x24+DsUdST8//q7I4UbsGctmctv6uhhC
+         f9RvJor3q1b/39dN9/mfe4+/JL0vo4G5xsQNTjIIJvwTuqqRfI7AeEwtddLVbtamMFQD
+         1gSw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=g1iXDcNbNDisdpPgJiiBxrCtccde/88C3HCt64upFyM=;
-        b=t/OXhX2QQScnmxe7rDqRQ3LMfnYjiLHqzYZ8Wk6s9yicXq6aBPcDArW2+07tPufqKq
-         e2lSXpHg1gE+Z6LVrHosagBDjD8h4VZqpStwOUMbFsf4axDEQzFj5PAB6gOGf49ZD5Kc
-         f2ktPCj2QFyIH9fVoGlt6/MAPFdF1diAyXjiU1yha4nDeQtkspN6zZXrnd/a3iTsaQiW
-         cxU6UiPEDzIq6Hve+K/02BtIu5TXeUIaZXuPM5PJG7j+iZmQcE3rBZ9BcJVf3V8HG+ht
-         mJNjypgH5RB0IDkYoc8GxpufKU3shiz+t4yS6C4a7oLO592JHhAy8KLwTOxBTOxAbKck
-         7ZGg==
-X-Gm-Message-State: AJIora9rozqiPlBh6+Pb5hnipYd6s9wnEwr8/wVGJaxYW27+8SBSqpp2
-        6UyHjJDHFjLpR9V29OVkg7VwY56CHzqWdw==
-X-Google-Smtp-Source: AGRyM1sndVlcLk0HOKAS9JmW3XCtkJlILpqb8Cf5JVJZ6gl69VLq1XeVBIvtRoLXix1KZuYQrN9f9Q==
-X-Received: by 2002:a05:6214:29c4:b0:472:fb62:3a03 with SMTP id gh4-20020a05621429c400b00472fb623a03mr13639555qvb.93.1657178531815;
-        Thu, 07 Jul 2022 00:22:11 -0700 (PDT)
-Received: from mail-yw1-f171.google.com (mail-yw1-f171.google.com. [209.85.128.171])
-        by smtp.gmail.com with ESMTPSA id t2-20020ac85302000000b00317cdc1b15bsm24239422qtn.27.2022.07.07.00.22.11
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 07 Jul 2022 00:22:11 -0700 (PDT)
-Received: by mail-yw1-f171.google.com with SMTP id 00721157ae682-31c89111f23so111474497b3.0;
-        Thu, 07 Jul 2022 00:22:11 -0700 (PDT)
-X-Received: by 2002:a81:5404:0:b0:31c:c24d:94b0 with SMTP id
- i4-20020a815404000000b0031cc24d94b0mr16256568ywb.502.1657178531209; Thu, 07
- Jul 2022 00:22:11 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=cDHDGLtxSydqFYBhl3txfOkIWwp8IL1b5jBeLJZfgD8=;
+        b=fSvLO9pKP+qtqB2OMzcxKBgBOaW9JHNyYXgeVyslBGq1bh/nt/wOy4upSTwkFLiZLS
+         15GDjjVlsSdcSDon0RAvVX+BOqZmlIwdZg2YZ6uC5FM15DzbzplYYdx2mUjSDw5fKNgC
+         0rz7BXHhTupRP+aM2jNIyN4rCCTC+F8A0HV75fP+weJ5aY4VPeCfXImd7VVQHkcS6/Il
+         iaysaK2YVP5U9Aya4+v/Z/LRs8Smip+kk5ZZe9oiJsLP7aky4j23gFBU7oWKzevB1+lo
+         ZRD1lRY/+zWpnXevMLEao4EO6IRDTVCi5Hp8EziYs10WMtYUM2zDGeBlsydrZaDZTtYB
+         8RhQ==
+X-Gm-Message-State: AJIora9tHKlfnle2pU5fSeJ6ts+OpgdHv7Tm3ku1HmC8C6O7galwkihC
+        fk9pugyWW0QKnuJ0pKgoR+8=
+X-Google-Smtp-Source: AGRyM1v55kd1wD2qY05YZpI7eIrBTQA6vTsDxTmOi3o5zGBQ0oygj0wFrHlVmWGUSqBlqQ0RtQrqhQ==
+X-Received: by 2002:a17:906:9b94:b0:722:f2a1:efb9 with SMTP id dd20-20020a1709069b9400b00722f2a1efb9mr43561275ejc.42.1657178553645;
+        Thu, 07 Jul 2022 00:22:33 -0700 (PDT)
+Received: from orome (p200300e41f12c800f22f74fffe1f3a53.dip0.t-ipconnect.de. [2003:e4:1f12:c800:f22f:74ff:fe1f:3a53])
+        by smtp.gmail.com with ESMTPSA id k9-20020a17090646c900b00711d546f8a8sm18233348ejs.139.2022.07.07.00.22.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 07 Jul 2022 00:22:32 -0700 (PDT)
+Date:   Thu, 7 Jul 2022 09:22:31 +0200
+From:   Thierry Reding <thierry.reding@gmail.com>
+To:     Rob Herring <robh@kernel.org>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        devicetree@vger.kernel.org, linux-tegra@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] dt-bindings: arm: nvidia,tegra20-pmc: Move fixed string
+ property names under 'properties'
+Message-ID: <YsaJtzvG7V1bfjGB@orome>
+References: <20220706212034.568861-1-robh@kernel.org>
 MIME-Version: 1.0
-References: <20220503211954.1428919-1-frowand.list@gmail.com>
-In-Reply-To: <20220503211954.1428919-1-frowand.list@gmail.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Thu, 7 Jul 2022 09:21:58 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdWhn8cY4usyqao-osEcSCcmkU+NYg21co+GxVfvg5+dhw@mail.gmail.com>
-Message-ID: <CAMuHMdWhn8cY4usyqao-osEcSCcmkU+NYg21co+GxVfvg5+dhw@mail.gmail.com>
-Subject: Re: [PATCH v2 1/1] of: overlay: rename overlay source files from .dts
- to .dtso
-To:     Frank Rowand <frowand.list@gmail.com>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Pantelis Antoniou <pantelis.antoniou@konsulko.com>,
-        Tim Harvey <tharvey@gateworks.com>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        Li Yang <leoyang.li@nxp.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Michal Simek <michal.simek@xilinx.com>,
-        Michal Simek <monstr@monstr.eu>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Michael Walle <michael@walle.cc>,
-        Alex Marginean <alexandru.marginean@nxp.com>,
-        Ioana Ciornei <ioana.ciornei@nxp.com>,
-        Dong Aisheng <aisheng.dong@nxp.com>,
-        Jason Liu <jason.hui.liu@nxp.com>,
-        Vladimir Oltean <vladimir.oltean@nxp.com>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        linux-pci <linux-pci@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="yI+MNUdNl4WtNBvo"
+Content-Disposition: inline
+In-Reply-To: <20220706212034.568861-1-robh@kernel.org>
+User-Agent: Mutt/2.2.6 (2022-06-05)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Frank,
 
-On Tue, May 3, 2022 at 11:20 PM <frowand.list@gmail.com> wrote:
-> From: Frank Rowand <frank.rowand@sony.com>
->
-> In drivers/of/unittest-data/:
->    - Rename .dts overlay source files to use .dtso suffix.
->    - Add Makefile rule to build .dtbo.o assembly file from overlay
->      .dtso source file.
->    - Update Makefile to build .dtbo.o objects instead of .dtb.o from
->      unittest overlay source files.
->
-> Modify driver/of/unitest.c to use .dtbo.o based symbols instead of
-> .dtb.o
->
-> Modify scripts/Makefile.lib %.dtbo rule to depend upon %.dtso instead
-> of %.dts
->
-> Rename .dts overlay source files to use .dtso suffix in:
->    arch/arm64/boot/dts/freescale/
->    arch/arm64/boot/dts/xilinx/
->
-> Signed-off-by: Frank Rowand <frank.rowand@sony.com>
+--yI+MNUdNl4WtNBvo
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-What is the status of this work?
-Thanks!
+On Wed, Jul 06, 2022 at 03:20:34PM -0600, Rob Herring wrote:
+> Fixed string property names should be under 'properties' rather than
+> 'patternProperties'. Additionally, without beginning and end of line
+> anchors, any prefix or suffix is allowed on the specified property names.
+>=20
+> As all the nvidia,tegra20-pmc powergates child node properties are fixed
+> strings, change 'patternProperties' to 'properties'.
+>=20
+> Signed-off-by: Rob Herring <robh@kernel.org>
+> ---
+>  .../devicetree/bindings/arm/tegra/nvidia,tegra20-pmc.yaml       | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 
-Gr{oetje,eeting}s,
+This is part of a local patch that I have that cleans up other aspects
+of this schema as well.
 
-                        Geert
+However, I don't know when I'll get around to send that out, so if you
+want to apply this in the meantime:
 
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+Acked-by: Thierry Reding <treding@nvidia.com>
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+--yI+MNUdNl4WtNBvo
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAmLGibQACgkQ3SOs138+
+s6Fbdw/9F4whzx83xa3hxtsudWImR4P7iwas/9BwVlgDa4f3X4l6EyKPQNE5u1O9
+f1TZNHDZhc1rnkPc4yL0Jl9AgTKMlvCUbYlvkVWMLZy2/PFg4Xw+PVwhJLzC+aNv
+ls29839FcVtpmrwFdoWY/XQwxZAKKGVVuh8Ora/Is+6fLSyAfoRhZ4T5CwmvdVm6
+JUE4ugTcq9W26NXF/mso2nJYJfWicuMt6xnspgvpoI6gBX2v2cMQ6iu+GPEOmfFN
+vgh5vDF0kXpCAIvCU89r1jVoSaInkM/gxQWISdNhOCMQAKiNKI1tkrG+NPu8tkxd
+rR4yKelMrJ/TvmXNFIEYJ3Q9CnYtmuYAkdX6zkob5Ulb1BAeosAq5oLDx3k9VpFg
+JQyQ4/vx4mq2JvW7ocVSeJo6gM48CKu14ug4nlePzmXR3gNLAJJOOmNbknRC6lpz
+x1iExu639LKJ2svMnGT//n1ppyk71DBM3dbqDwPa4iiwrb+2xevzgttE4XF8E1xs
+3+DKNDqAfh5NNa7vOlh9QfyHy8vtqecVSdTwPhnVV+B+JTbjVeJf7kz/0Ghq/FDU
+EhYZk2L3MFoZJ9Oal4q+z9MjcZBoeF9hsmPgGU7CmGw9YVApjmIPbOLRyCYt+SfC
+j9AM+PrsXi0eSggalGpE6C893Ry53/DN2NWKYY5kcuDPNG6gy8g=
+=2t8O
+-----END PGP SIGNATURE-----
+
+--yI+MNUdNl4WtNBvo--

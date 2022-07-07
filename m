@@ -2,109 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DCD8256A1F0
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 14:28:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2231256A1F2
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 14:29:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235468AbiGGM2c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Jul 2022 08:28:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58068 "EHLO
+        id S235312AbiGGM3R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Jul 2022 08:29:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58908 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235042AbiGGM23 (ORCPT
+        with ESMTP id S233004AbiGGM3O (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Jul 2022 08:28:29 -0400
-Received: from alexa-out.qualcomm.com (alexa-out.qualcomm.com [129.46.98.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F23610B3;
-        Thu,  7 Jul 2022 05:28:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1657196907; x=1688732907;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=q87SZE8+NdzcCfnZaIbxgUmnbzqOub15OviL30vFxQQ=;
-  b=Rk1lLfNircUIguFNbDea9c3RpQ/Dowmz+ngyqvQHdKmbThvi+te4Kn3v
-   NImsAFtDvROgnRDx1qB98TzPe+pDi3pM22qdTcfO6an5HG3fNJNUhzjtQ
-   Y6FVt37NV6RZals/YYz75WvAmLCD59mpSR9QId2p5I+AXkhHfC+uPpm8k
-   A=;
-Received: from ironmsg08-lv.qualcomm.com ([10.47.202.152])
-  by alexa-out.qualcomm.com with ESMTP; 07 Jul 2022 05:28:27 -0700
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg08-lv.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jul 2022 05:28:26 -0700
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Thu, 7 Jul 2022 05:28:26 -0700
-Received: from [10.216.56.195] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Thu, 7 Jul 2022
- 05:28:22 -0700
-Message-ID: <e8811c9b-f826-2810-ee9e-df86250fd4cc@quicinc.com>
-Date:   Thu, 7 Jul 2022 17:58:19 +0530
+        Thu, 7 Jul 2022 08:29:14 -0400
+Received: from baidu.com (mx21.baidu.com [220.181.3.85])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id F29A818E21;
+        Thu,  7 Jul 2022 05:29:11 -0700 (PDT)
+Received: from BC-Mail-Ex25.internal.baidu.com (unknown [172.31.51.19])
+        by Forcepoint Email with ESMTPS id 81DFD37407DA3D817B73;
+        Thu,  7 Jul 2022 20:29:06 +0800 (CST)
+Received: from FB9D8C53FFFC188.internal.baidu.com (172.31.62.12) by
+ BC-Mail-Ex25.internal.baidu.com (172.31.51.19) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
+ 15.1.2308.20; Thu, 7 Jul 2022 20:29:07 +0800
+From:   Wang Guangju <wangguangju@baidu.com>
+To:     <seanjc@google.com>, <pbonzini@redhat.com>, <vkuznets@redhat.com>,
+        <jmattson@google.com>, <wanpengli@tencent.com>, <bp@alien8.de>,
+        <joro@8bytes.org>, <suravee.suthikulpanit@amd.com>,
+        <hpa@zytor.com>, <tglx@linutronix.de>, <mingo@redhat.com>,
+        <kvm@vger.kernel.org>
+CC:     <linux-kernel@vger.kernel.org>, <wangguangju@baidu.com>,
+        chukaiping <chukaiping@baidu.com>
+Subject: [PATCH] KVM: x86: Add EOI_INDUCED exit handlers for Hyper-V SynIC vectors
+Date:   Thu, 7 Jul 2022 20:28:54 +0800
+Message-ID: <20220707122854.87-1-wangguangju@baidu.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH] arm64: dts: qcom: sc7280: Move wcd specific pin conf to
- common file
-Content-Language: en-US
-To:     Doug Anderson <dianders@chromium.org>
-CC:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>,
-        <quic_rohkumar@quicinc.com>,
-        "Srinivas Kandagatla" <srinivas.kandagatla@linaro.org>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Judy Hsiao <judyhsiao@chromium.org>,
-        Matthias Kaehlcke <mka@chromium.org>
-References: <1657102611-20067-1-git-send-email-quic_srivasam@quicinc.com>
- <CAD=FV=UaUnZfWsXGQx6PoVQ5qqtsq10Dnui1v0Xn0S5Y-YgwRw@mail.gmail.com>
-From:   Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
-Organization: Qualcomm
-In-Reply-To: <CAD=FV=UaUnZfWsXGQx6PoVQ5qqtsq10Dnui1v0Xn0S5Y-YgwRw@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [172.31.62.12]
+X-ClientProxiedBy: BJHW-Mail-Ex12.internal.baidu.com (10.127.64.35) To
+ BC-Mail-Ex25.internal.baidu.com (172.31.51.19)
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_VALIDITY_RPBL,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+From: chukaiping <chukaiping@baidu.com>
 
-On 7/7/2022 2:13 AM, Doug Anderson wrote:
-Thanks for your time Doug!!!
-> Hi,
->
-> On Wed, Jul 6, 2022 at 3:17 AM Srinivasa Rao Mandadapu
-> <quic_srivasam@quicinc.com> wrote:
->> +/* PINCTRL - BOARD-SPECIFIC */
-> It's not really "board specific" since this is actually a file that's
-> included by multiple boards.
-Okay. Will update accordingly.
->
-> Maybe just use the header "PINCTRL" for now. Everything here is just
-> adding pull/drive strength/slew-rate info to existing pinctrl
-> settings. If we ever have more than that and want to separate into
-> different sections we can always adjust later.
->
->
->> +/*
->> + * Methodology for gpio-line-names:
->> + * - If a pin goes to CRD board and is named it gets that name.
->> + * - If a pin goes to CRD board and is not named, it gets no name.
->> + * - If a pin is totally internal to Qcard then it gets Qcard name.
->> + * - If a pin is not hooked up on Qcard, it gets no name.
->> + */
-> This file doesn't include "gpio-line-names" so you don't need to
-> include documentation about it.
-Okay. Will remove it.
->
-> -Doug
+When EOI virtualization is performed on VMX,
+kvm_apic_set_eoi_accelerated() is called upon
+EXIT_REASON_EOI_INDUCED but unlike its non-accelerated
+apic_set_eoi() sibling, Hyper-V SINT vectors are
+left unhandled.
+
+This patch fix it, and add a new helper function to
+handle both IOAPIC and Hyper-V SINT vectors.
+
+Suggested-by: Vitaly Kuznetsov <vkuznets@redhat.com>
+Signed-off-by: wangguangju <wangguangju@baidu.com>
+---
+ arch/x86/kvm/lapic.c | 19 ++++++++++++-------
+ 1 file changed, 12 insertions(+), 7 deletions(-)
+
+diff --git a/arch/x86/kvm/lapic.c b/arch/x86/kvm/lapic.c
+index f03facc..e046afe 100644
+--- a/arch/x86/kvm/lapic.c
++++ b/arch/x86/kvm/lapic.c
+@@ -1269,6 +1269,16 @@ static void kvm_ioapic_send_eoi(struct kvm_lapic *apic, int vector)
+ 	kvm_ioapic_update_eoi(apic->vcpu, vector, trigger_mode);
+ }
+ 
++static inline void apic_set_eoi_vector(struct kvm_lapic *apic, int vector)
++{
++	if (to_hv_vcpu(apic->vcpu) &&
++	    test_bit(vector, to_hv_synic(apic->vcpu)->vec_bitmap))
++		kvm_hv_synic_send_eoi(apic->vcpu, vector);
++
++	kvm_ioapic_send_eoi(apic, vector);
++	kvm_make_request(KVM_REQ_EVENT, apic->vcpu);
++}
++
+ static int apic_set_eoi(struct kvm_lapic *apic)
+ {
+ 	int vector = apic_find_highest_isr(apic);
+@@ -1285,12 +1295,8 @@ static int apic_set_eoi(struct kvm_lapic *apic)
+ 	apic_clear_isr(vector, apic);
+ 	apic_update_ppr(apic);
+ 
+-	if (to_hv_vcpu(apic->vcpu) &&
+-	    test_bit(vector, to_hv_synic(apic->vcpu)->vec_bitmap))
+-		kvm_hv_synic_send_eoi(apic->vcpu, vector);
++	apic_set_eoi_vector(apic, vector);
+ 
+-	kvm_ioapic_send_eoi(apic, vector);
+-	kvm_make_request(KVM_REQ_EVENT, apic->vcpu);
+ 	return vector;
+ }
+ 
+@@ -1304,8 +1310,7 @@ void kvm_apic_set_eoi_accelerated(struct kvm_vcpu *vcpu, int vector)
+ 
+ 	trace_kvm_eoi(apic, vector);
+ 
+-	kvm_ioapic_send_eoi(apic, vector);
+-	kvm_make_request(KVM_REQ_EVENT, apic->vcpu);
++	apic_set_eoi_vector(apic, vector);
+ }
+ EXPORT_SYMBOL_GPL(kvm_apic_set_eoi_accelerated);
+ 
+-- 
+2.9.4
+

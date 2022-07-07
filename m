@@ -2,62 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6BB2656A1C7
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 14:14:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 362D956A1CA
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 14:15:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235189AbiGGMOl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Jul 2022 08:14:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49484 "EHLO
+        id S235248AbiGGMPI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Jul 2022 08:15:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49648 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235105AbiGGMOi (ORCPT
+        with ESMTP id S230187AbiGGMPH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Jul 2022 08:14:38 -0400
-Received: from mx0b-0016f401.pphosted.com (mx0b-0016f401.pphosted.com [67.231.156.173])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EEE6C25E6;
-        Thu,  7 Jul 2022 05:14:37 -0700 (PDT)
-Received: from pps.filterd (m0045851.ppops.net [127.0.0.1])
-        by mx0b-0016f401.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 2674EkJa017917;
-        Thu, 7 Jul 2022 05:14:33 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=marvell.com; h=from : to : cc :
- subject : date : message-id : mime-version : content-type; s=pfpt0220;
- bh=yPFjesdZy7X4+sh1Kq/hbhR4pEK2RDD1VNTtaQfmEUQ=;
- b=ZrVItwYHI7bw4fAX8DcqKGm2bEJxwUZMr/5MT6aOYd7s7Gl0AjYmyAf4fvGE7EilSbjS
- phVLcK8QOH5DWhWDfdwFoDHS2EcWXBJBQo3pbiwBKuiDuO9UFpzOU+68G7vm4BoWxJNi
- uqYFHL2Wk0ruV2T4dAklhBEiDPx4jOs1xqVuvSW1V5CLZerigIph9hWs30dYsTJ5Hdzg
- HGSPklcB9yRsBm7cVtFfhe7EVIzT55sCt7ivGhy4sbqpyF65Tqcgocsy1K6xR0GXnyVK
- J5eZS/rHxRIUbif1TRMyxPIkEncpanZAb79rUYoPrI8eVYEbdRPQpeg0NErncOpNe7qy 1g== 
-Received: from dc5-exch02.marvell.com ([199.233.59.182])
-        by mx0b-0016f401.pphosted.com (PPS) with ESMTPS id 3h56wt5n78-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT);
-        Thu, 07 Jul 2022 05:14:33 -0700
-Received: from DC5-EXCH02.marvell.com (10.69.176.39) by DC5-EXCH02.marvell.com
- (10.69.176.39) with Microsoft SMTP Server (TLS) id 15.0.1497.18; Thu, 7 Jul
- 2022 05:14:31 -0700
-Received: from maili.marvell.com (10.69.176.80) by DC5-EXCH02.marvell.com
- (10.69.176.39) with Microsoft SMTP Server id 15.0.1497.18 via Frontend
- Transport; Thu, 7 Jul 2022 05:14:30 -0700
-Received: from hyd1soter3.marvell.com (unknown [10.29.37.12])
-        by maili.marvell.com (Postfix) with ESMTP id 404ED3F707B;
-        Thu,  7 Jul 2022 05:14:28 -0700 (PDT)
-From:   Hariprasad Kelam <hkelam@marvell.com>
-To:     <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-CC:     <kuba@kernel.org>, <davem@davemloft.net>, <sgoutham@marvell.com>,
-        <lcherian@marvell.com>, <gakula@marvell.com>, <jerinj@marvell.com>,
-        <sbhatta@marvell.com>
-Subject: [net-next PATCH] octeontx2-af: Don't reset previous pfc config
-Date:   Thu, 7 Jul 2022 17:44:27 +0530
-Message-ID: <20220707121427.21123-1-hkelam@marvell.com>
-X-Mailer: git-send-email 2.17.1
+        Thu, 7 Jul 2022 08:15:07 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B01DE10FC3
+        for <linux-kernel@vger.kernel.org>; Thu,  7 Jul 2022 05:15:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1657196105;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=mbs481tHsGM89XED3giouE72pimnkluKaWbGcj8hSD4=;
+        b=NPxS2enosB84LfTUAeQLmBOIM17fLpG3+c7amoLMp3u6VLbtDMth/dHRsUqtuTczt7f35A
+        7lKlyrXVjTyb75abvaFra+xfr4v9py0ea4GC1gfyXZkokXhwHuCmVs5hk1PAx8gNXZHOkl
+        0vfvTOJuJSGTBF7At13S7uRw6a3AEoQ=
+Received: from mail-lf1-f71.google.com (mail-lf1-f71.google.com
+ [209.85.167.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-94-7AnKyOdWPxK8b9TxOuL1CA-1; Thu, 07 Jul 2022 08:15:04 -0400
+X-MC-Unique: 7AnKyOdWPxK8b9TxOuL1CA-1
+Received: by mail-lf1-f71.google.com with SMTP id 10-20020ac2484a000000b0047f9f9c81daso6338741lfy.16
+        for <linux-kernel@vger.kernel.org>; Thu, 07 Jul 2022 05:15:04 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=mbs481tHsGM89XED3giouE72pimnkluKaWbGcj8hSD4=;
+        b=Abo8OkjUinyF63S2c2zXtSxMbxPwX/rnZKTQUs2MSysgpKHishkxBzinF8YLUGD28C
+         q0wLL9oeEcFsd5qoiheg61dsnlHbpOEWgDnBg3AGaAybfjOC8wNs8Q4keg0C742mso5n
+         mvCbw0dTbJlBkAr3CVAimKXEb5ubFIKUE1H1O+WkqIG+8La75WzwIjt//q+qfntljuxp
+         wLrd2qe7vK8wmxLZ7+lfXTbngcllMNy2/ukSrax24xkunfMw4H85WhYRpeRWOjQ48mIN
+         QpEx6Pcgw6jJNYm5BBk6v6xqQPXHFWaVF5H50LA19ydIP/loFz+cZqbgqjZA6sVIAxb4
+         Bb5Q==
+X-Gm-Message-State: AJIora+xDrMr8oRNy8dTo3GuQdUF5D75UxwKLPhZt7JLFGIVXv7hOJQu
+        hMyI6ceHoWxE9uWtiH/5iL5d5RueG6R5Fq7IaQxZszrqZ/yVxSUmQfWCZmwg/0RyaSjMlOYQ/x7
+        V3GY4pbjPtBpz3Tov6pYP6BzT9UkonHa0Pek1Vufz
+X-Received: by 2002:a2e:bf21:0:b0:25d:4b4b:f2aa with SMTP id c33-20020a2ebf21000000b0025d4b4bf2aamr3103341ljr.503.1657196103242;
+        Thu, 07 Jul 2022 05:15:03 -0700 (PDT)
+X-Google-Smtp-Source: AGRyM1vMcH0UiUDOPP/H8I4asZFfJr+vM8ihLQnz0V+NqvLvZrKYzOgKLoxJDbByYdvsOJ1Z+jbM8lUG9WQnWttAA2M=
+X-Received: by 2002:a2e:bf21:0:b0:25d:4b4b:f2aa with SMTP id
+ c33-20020a2ebf21000000b0025d4b4bf2aamr3103326ljr.503.1657196103018; Thu, 07
+ Jul 2022 05:15:03 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Proofpoint-ORIG-GUID: ACyxyUYyQC7cJc8iNTZUxzeCP7glUMgH
-X-Proofpoint-GUID: ACyxyUYyQC7cJc8iNTZUxzeCP7glUMgH
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
- definitions=2022-07-07_09,2022-06-28_01,2022-06-22_01
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+References: <920acea9aa18e4f2956581a8e158bdaa376fdf63.1629203945.git.jstancek@redhat.com>
+ <95f35287-3d66-1788-e54c-7275fdba16ac@csgroup.eu>
+In-Reply-To: <95f35287-3d66-1788-e54c-7275fdba16ac@csgroup.eu>
+From:   Jan Stancek <jstancek@redhat.com>
+Date:   Thu, 7 Jul 2022 14:14:47 +0200
+Message-ID: <CAASaF6xZXjEYEUnkMQh0Ke24d=iJo-SZFdwuGQgrqZbbmMtGfg@mail.gmail.com>
+Subject: Re: [PATCH/RFC] powerpc/module_64: allow .init_array constructors to run
+To:     Christophe Leroy <christophe.leroy@csgroup.eu>
+Cc:     mpe@ellerman.id.au, benh@kernel.crashing.org, paulus@samba.org,
+        linuxppc-dev@lists.ozlabs.org,
+        Wedson Almeida Filho <wedsonaf@google.com>,
+        lkml <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -65,144 +77,78 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Current implementation is such that driver first resets the
-existing PFC config before applying new pfc configuration.
-This creates a problem like once PF or VFs requests PFC config
-previous pfc config by other PFVfs is getting reset.
+On Thu, Jul 7, 2022 at 1:20 PM Christophe Leroy
+<christophe.leroy@csgroup.eu> wrote:
+>
+>
+>
+> Le 17/08/2021 =C3=A0 15:02, Jan Stancek a =C3=A9crit :
+> > gcov and kasan rely on compiler generated constructor code.
+> > For modules, gcc-8 with gcov enabled generates .init_array section,
+> > but on ppc64le it doesn't get executed. find_module_sections() never
+> > finds .init_array section, because module_frob_arch_sections() renames
+> > it to _init_array.
+> >
+> > Avoid renaming .init_array section, so do_mod_ctors() can use it.
+> >
+> > Cc: Michael Ellerman <mpe@ellerman.id.au>
+> > Cc: Benjamin Herrenschmidt <benh@kernel.crashing.org>
+> > Cc: Paul Mackerras <paulus@samba.org>
+> > Cc: Christophe Leroy <christophe.leroy@csgroup.eu>
+> > Signed-off-by: Jan Stancek <jstancek@redhat.com>
+>
+> Does commit d4be60fe66b7 ("powerpc/module_64: use module_init_section
+> instead of patching names") fixes your issue ?
 
-This patch fixes the problem by removing unnecessary resetting
-of PFC config. Also configure Pause quanta value to smaller as
-current value is too high.
+Yes, it does gcov for me. Thanks
 
-Signed-off-by: Hariprasad Kelam <hkelam@marvell.com>
-Signed-off-by: Sunil Kovvuri Goutham <sgoutham@marvell.com>
----
- .../net/ethernet/marvell/octeontx2/af/cgx.c    | 15 +++++++++++----
- .../net/ethernet/marvell/octeontx2/af/rpm.c    | 18 +++++++++++-------
- .../net/ethernet/marvell/octeontx2/af/rpm.h    |  3 +--
- 3 files changed, 23 insertions(+), 13 deletions(-)
-
-diff --git a/drivers/net/ethernet/marvell/octeontx2/af/cgx.c b/drivers/net/ethernet/marvell/octeontx2/af/cgx.c
-index 25491edc35ce..931a1a7ebf76 100644
---- a/drivers/net/ethernet/marvell/octeontx2/af/cgx.c
-+++ b/drivers/net/ethernet/marvell/octeontx2/af/cgx.c
-@@ -847,6 +847,11 @@ static void cgx_lmac_pause_frm_config(void *cgxd, int lmac_id, bool enable)
- 	cfg |= CGX_CMR_RX_OVR_BP_EN(lmac_id);
- 	cfg &= ~CGX_CMR_RX_OVR_BP_BP(lmac_id);
- 	cgx_write(cgx, 0, CGXX_CMR_RX_OVR_BP, cfg);
-+
-+	/* Disable all PFC classes by default */
-+	cfg = cgx_read(cgx, lmac_id, CGXX_SMUX_CBFC_CTL);
-+	cfg = FIELD_SET(CGX_PFC_CLASS_MASK, 0, cfg);
-+	cgx_write(cgx, lmac_id, CGXX_SMUX_CBFC_CTL, cfg);
- }
- 
- int verify_lmac_fc_cfg(void *cgxd, int lmac_id, u8 tx_pause, u8 rx_pause,
-@@ -899,6 +904,7 @@ int cgx_lmac_pfc_config(void *cgxd, int lmac_id, u8 tx_pause,
- 		return 0;
- 
- 	cfg = cgx_read(cgx, lmac_id, CGXX_SMUX_CBFC_CTL);
-+	pfc_en |= FIELD_GET(CGX_PFC_CLASS_MASK, cfg);
- 
- 	if (rx_pause) {
- 		cfg |= (CGXX_SMUX_CBFC_CTL_RX_EN |
-@@ -910,12 +916,13 @@ int cgx_lmac_pfc_config(void *cgxd, int lmac_id, u8 tx_pause,
- 			CGXX_SMUX_CBFC_CTL_DRP_EN);
- 	}
- 
--	if (tx_pause)
-+	if (tx_pause) {
- 		cfg |= CGXX_SMUX_CBFC_CTL_TX_EN;
--	else
-+		cfg = FIELD_SET(CGX_PFC_CLASS_MASK, pfc_en, cfg);
-+	} else {
- 		cfg &= ~CGXX_SMUX_CBFC_CTL_TX_EN;
--
--	cfg = FIELD_SET(CGX_PFC_CLASS_MASK, pfc_en, cfg);
-+		cfg = FIELD_SET(CGX_PFC_CLASS_MASK, 0, cfg);
-+	}
- 
- 	cgx_write(cgx, lmac_id, CGXX_SMUX_CBFC_CTL, cfg);
- 
-diff --git a/drivers/net/ethernet/marvell/octeontx2/af/rpm.c b/drivers/net/ethernet/marvell/octeontx2/af/rpm.c
-index 47e83d7a5804..05666922a45b 100644
---- a/drivers/net/ethernet/marvell/octeontx2/af/rpm.c
-+++ b/drivers/net/ethernet/marvell/octeontx2/af/rpm.c
-@@ -276,6 +276,11 @@ void rpm_lmac_pause_frm_config(void *rpmd, int lmac_id, bool enable)
- 	cfg = rpm_read(rpm, lmac_id, RPMX_MTI_MAC100X_COMMAND_CONFIG);
- 	cfg |= RPMX_MTI_MAC100X_COMMAND_CONFIG_TX_P_DISABLE;
- 	rpm_write(rpm, lmac_id, RPMX_MTI_MAC100X_COMMAND_CONFIG, cfg);
-+
-+	/* Disable all PFC classes */
-+	cfg = rpm_read(rpm, lmac_id, RPMX_CMRX_PRT_CBFC_CTL);
-+	cfg = FIELD_SET(RPM_PFC_CLASS_MASK, 0, cfg);
-+	rpm_write(rpm, lmac_id, RPMX_CMRX_PRT_CBFC_CTL, cfg);
- }
- 
- int rpm_get_rx_stats(void *rpmd, int lmac_id, int idx, u64 *rx_stat)
-@@ -387,15 +392,14 @@ void rpm_lmac_ptp_config(void *rpmd, int lmac_id, bool enable)
- int rpm_lmac_pfc_config(void *rpmd, int lmac_id, u8 tx_pause, u8 rx_pause, u16 pfc_en)
- {
- 	rpm_t *rpm = rpmd;
--	u64 cfg;
-+	u64 cfg, class_en;
- 
- 	if (!is_lmac_valid(rpm, lmac_id))
- 		return -ENODEV;
- 
--	/* reset PFC class quanta and threshold */
--	rpm_cfg_pfc_quanta_thresh(rpm, lmac_id, 0xffff, false);
--
- 	cfg = rpm_read(rpm, lmac_id, RPMX_MTI_MAC100X_COMMAND_CONFIG);
-+	class_en = rpm_read(rpm, lmac_id, RPMX_CMRX_PRT_CBFC_CTL);
-+	pfc_en |= FIELD_GET(RPM_PFC_CLASS_MASK, class_en);
- 
- 	if (rx_pause) {
- 		cfg &= ~(RPMX_MTI_MAC100X_COMMAND_CONFIG_RX_P_DISABLE |
-@@ -410,9 +414,11 @@ int rpm_lmac_pfc_config(void *rpmd, int lmac_id, u8 tx_pause, u8 rx_pause, u16 p
- 	if (tx_pause) {
- 		rpm_cfg_pfc_quanta_thresh(rpm, lmac_id, pfc_en, true);
- 		cfg &= ~RPMX_MTI_MAC100X_COMMAND_CONFIG_TX_P_DISABLE;
-+		class_en = FIELD_SET(RPM_PFC_CLASS_MASK, pfc_en, class_en);
- 	} else {
- 		rpm_cfg_pfc_quanta_thresh(rpm, lmac_id, 0xfff, false);
- 		cfg |= RPMX_MTI_MAC100X_COMMAND_CONFIG_TX_P_DISABLE;
-+		class_en = FIELD_SET(RPM_PFC_CLASS_MASK, 0, class_en);
- 	}
- 
- 	if (!rx_pause && !tx_pause)
-@@ -422,9 +428,7 @@ int rpm_lmac_pfc_config(void *rpmd, int lmac_id, u8 tx_pause, u8 rx_pause, u16 p
- 
- 	rpm_write(rpm, lmac_id, RPMX_MTI_MAC100X_COMMAND_CONFIG, cfg);
- 
--	cfg = rpm_read(rpm, lmac_id, RPMX_CMRX_PRT_CBFC_CTL);
--	cfg = FIELD_SET(RPM_PFC_CLASS_MASK, pfc_en, cfg);
--	rpm_write(rpm, lmac_id, RPMX_CMRX_PRT_CBFC_CTL, cfg);
-+	rpm_write(rpm, lmac_id, RPMX_CMRX_PRT_CBFC_CTL, class_en);
- 
- 	return 0;
- }
-diff --git a/drivers/net/ethernet/marvell/octeontx2/af/rpm.h b/drivers/net/ethernet/marvell/octeontx2/af/rpm.h
-index 9ab8d49dd180..8205f2626f61 100644
---- a/drivers/net/ethernet/marvell/octeontx2/af/rpm.h
-+++ b/drivers/net/ethernet/marvell/octeontx2/af/rpm.h
-@@ -48,7 +48,6 @@
- #define RPMX_MTI_MAC100X_CL1011_QUANTA_THRESH		0x8130
- #define RPMX_MTI_MAC100X_CL1213_QUANTA_THRESH		0x8138
- #define RPMX_MTI_MAC100X_CL1415_QUANTA_THRESH		0x8140
--#define RPM_DEFAULT_PAUSE_TIME			0xFFFF
- #define RPMX_CMR_RX_OVR_BP		0x4120
- #define RPMX_CMR_RX_OVR_BP_EN(x)	BIT_ULL((x) + 8)
- #define RPMX_CMR_RX_OVR_BP_BP(x)	BIT_ULL((x) + 4)
-@@ -70,7 +69,7 @@
- #define RPMX_MTI_MAC100X_COMMAND_CONFIG_PAUSE_FWD              BIT_ULL(7)
- #define RPMX_MTI_MAC100X_CL01_PAUSE_QUANTA              0x80A8
- #define RPMX_MTI_MAC100X_CL89_PAUSE_QUANTA		0x8108
--#define RPM_DEFAULT_PAUSE_TIME                          0xFFFF
-+#define RPM_DEFAULT_PAUSE_TIME                          0x7FF
- 
- /* Function Declarations */
- int rpm_get_nr_lmacs(void *rpmd);
--- 
-2.17.1
+>
+> If not, please rebase and resubmit.
+>
+> Thanks
+> Christophe
+>
+>
+> > ---
+> > I wasn't able to trace the comment:
+> >    "We don't handle .init for the moment: rename to _init"
+> > to original patch (it pre-dates .git). I'm not sure if it
+> > still applies today, so I limited patch to .init_array. This
+> > fixes gcov for modules for me on ppc64le 5.14.0-rc6.
+> >
+> > Renaming issue is also mentioned in kasan patches here:
+> >    https://patchwork.ozlabs.org/project/linuxppc-dev/cover/202103191440=
+58.772525-1-dja@axtens
+> >
+> >   arch/powerpc/kernel/module_64.c | 10 +++++++++-
+> >   1 file changed, 9 insertions(+), 1 deletion(-)
+> >
+> > diff --git a/arch/powerpc/kernel/module_64.c b/arch/powerpc/kernel/modu=
+le_64.c
+> > index 6baa676e7cb6..c604b13ea6bf 100644
+> > --- a/arch/powerpc/kernel/module_64.c
+> > +++ b/arch/powerpc/kernel/module_64.c
+> > @@ -299,8 +299,16 @@ int module_frob_arch_sections(Elf64_Ehdr *hdr,
+> >                                         sechdrs[i].sh_size);
+> >
+> >               /* We don't handle .init for the moment: rename to _init =
+*/
+> > -             while ((p =3D strstr(secstrings + sechdrs[i].sh_name, ".i=
+nit")))
+> > +             while ((p =3D strstr(secstrings + sechdrs[i].sh_name, ".i=
+nit"))) {
+> > +#ifdef CONFIG_CONSTRUCTORS
+> > +                     /* find_module_sections() needs .init_array intac=
+t */
+> > +                     if (strstr(secstrings + sechdrs[i].sh_name,
+> > +                             ".init_array")) {
+> > +                             break;
+> > +                     }
+> > +#endif
+> >                       p[0] =3D '_';
+> > +             }
+> >
+> >               if (sechdrs[i].sh_type =3D=3D SHT_SYMTAB)
+> >                       dedotify((void *)hdr + sechdrs[i].sh_offset,
+>
 

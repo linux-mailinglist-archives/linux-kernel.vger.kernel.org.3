@@ -2,66 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0375A56A5BA
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 16:44:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 66FAB56A5C1
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 16:45:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235973AbiGGOoN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Jul 2022 10:44:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37936 "EHLO
+        id S235575AbiGGOpX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Jul 2022 10:45:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38806 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231753AbiGGOoK (ORCPT
+        with ESMTP id S235872AbiGGOpU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Jul 2022 10:44:10 -0400
-Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C45431A80E;
-        Thu,  7 Jul 2022 07:44:09 -0700 (PDT)
-Received: from fllv0034.itg.ti.com ([10.64.40.246])
-        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 267Ei1PI062809;
-        Thu, 7 Jul 2022 09:44:01 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1657205041;
-        bh=ABTgJp8tO2KpPdtj4JUN1lMd40vTDK073OIeD9rsd0w=;
-        h=Date:From:To:CC:Subject:References:In-Reply-To;
-        b=y8DjTDhUlMpIkN+GCnusjFwbQhN5dK9d5RFqEs0FzLvzGC1TpjtbWmvMJdPNODfXZ
-         TFLoRI6PokmLxb+6TA43CBMD6c7MnYDq3qWsIFWmcNbCweZRLQE/XGJcAAUJtoJ7ja
-         uPzg/v0Jag/vbmXsp67HwpKLKD8gCxImraJG+2BU=
-Received: from DFLE106.ent.ti.com (dfle106.ent.ti.com [10.64.6.27])
-        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 267Ei1eh042654
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Thu, 7 Jul 2022 09:44:01 -0500
-Received: from DFLE106.ent.ti.com (10.64.6.27) by DFLE106.ent.ti.com
- (10.64.6.27) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Thu, 7
- Jul 2022 09:44:01 -0500
-Received: from lelv0326.itg.ti.com (10.180.67.84) by DFLE106.ent.ti.com
- (10.64.6.27) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
- Frontend Transport; Thu, 7 Jul 2022 09:44:00 -0500
-Received: from localhost (ileax41-snat.itg.ti.com [10.172.224.153])
-        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 267Ei0xf028702;
-        Thu, 7 Jul 2022 09:44:00 -0500
-Date:   Thu, 7 Jul 2022 09:44:00 -0500
-From:   Bryan Brattlof <bb@ti.com>
-To:     Andrew Davis <afd@ti.com>
-CC:     Nishanth Menon <nm@ti.com>, Vignesh Raghavendra <vigneshr@ti.com>,
-        Tero Kristo <kristo@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Thu, 7 Jul 2022 10:45:20 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3EAC828E1F
+        for <linux-kernel@vger.kernel.org>; Thu,  7 Jul 2022 07:45:18 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 5BC03106F;
+        Thu,  7 Jul 2022 07:45:18 -0700 (PDT)
+Received: from bogus (unknown [10.57.39.193])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id A8A383F66F;
+        Thu,  7 Jul 2022 07:45:15 -0700 (PDT)
+Date:   Thu, 7 Jul 2022 15:44:04 +0100
+From:   Sudeep Holla <sudeep.holla@arm.com>
+To:     Jeremy Linton <jeremy.linton@arm.com>
+Cc:     "tarumizu.kohei@fujitsu.com" <tarumizu.kohei@fujitsu.com>,
+        "catalin.marinas@arm.com" <catalin.marinas@arm.com>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        "will@kernel.org" <will@kernel.org>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "bp@alien8.de" <bp@alien8.de>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        "x86@kernel.org" <x86@kernel.org>, "hpa@zytor.com" <hpa@zytor.com>,
+        "linux-arm-kernel@lists.infradead.org" 
         <linux-arm-kernel@lists.infradead.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v2 1/4] arm64: dts: ti: k3-am65-main: Disable RNG node
-Message-ID: <20220707144400.tk3wmpeijdhuxpzv@bryanbrattlof.com>
-References: <20220706190838.26074-1-afd@ti.com>
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH 5/8] arm64: Create cache sysfs directory without ACPI
+ PPTT for hardware prefetch control
+Message-ID: <20220707144404.pm3qtgfo6fsik77d@bogus>
+References: <20220125071414.811344-1-tarumizu.kohei@fujitsu.com>
+ <20220125071414.811344-6-tarumizu.kohei@fujitsu.com>
+ <20220126103614.pcrcuc2kzklkq3xa@bogus>
+ <OSBPR01MB2037E92722D372D48F54438E80269@OSBPR01MB2037.jpnprd01.prod.outlook.com>
+ <4b99cf3c-f40b-cba7-2fa2-b6b311859776@arm.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220706190838.26074-1-afd@ti.com>
-X-PGP-Fingerprint: D3D1 77E4 0A38 DF4D 1853 FEEF 41B9 0D5D 71D5 6CE0
-User-Agent: NeoMutt/20171215
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+In-Reply-To: <4b99cf3c-f40b-cba7-2fa2-b6b311859776@arm.com>
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,38 +57,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Andrew
-
-On July  6, 2022 thus sayeth Andrew Davis:
-> The hardware random number generator is used by OP-TEE and is access is
-> denied to other users with SoC level bus firewalls. Any access to this
-> device from Linux will result in firewall errors. Disable this node.
+On Thu, Jul 07, 2022 at 09:37:57AM -0500, Jeremy Linton wrote:
+> Hi,
 > 
-> Signed-off-by: Andrew Davis <afd@ti.com>
-> ---
+> On 2/1/22 05:56, tarumizu.kohei@fujitsu.com wrote:
+> > > I am assuming this is ACPI enabled system.
+> > 
+> > Yes, it is ACPI enabled system.
+> > 
+> > > This looks bit hacky in my opinion. Before I explore better way of adding it, I would
+> > > like to check if you have explored ways to add PPTT reading these registers from
+> > > UEFI/EDK2 as PPTT has other topology information which you will need anyways.
+> > > That would simplify handling of these cacheinfo sysfs in the kernel. Let me know
+> > > what are your thoughts ?
+> > 
+> > The latest firmware of ARM64 machine, FX700 with the A64FX processor
+> > does not support PPTT.
+> > I think adding PPTT is the best way to generate cacheinfo sysfs.
+> > However, it is difficult to modify the firmware to add PPTT, so
+> > it is not clear when it will be possible.
+> > Therefore, I would like to implement the function in the kernel on
+> > the condition that firmware does not support PPTT.
 > 
-> Changes from v1:
->  - Added comment in dtsi file
+> As a bit of a late comment here, I assume you tried injecting the PPTT via
+> the initrd (directions in admin-guide/acpi/initrd_table_override.txt) then?
+> That is one of the usual kernel workarounds for broken/missing ACPI tables.
 > 
->  arch/arm64/boot/dts/ti/k3-am65-main.dtsi | 1 +
->  1 file changed, 1 insertion(+)
+> As mentioned above, besides not providing appropriate topology information
+> to userspace, not having the PPTT is also possibly causing suboptimal
+> scheduling decisions in the kernel itself.
 > 
-> diff --git a/arch/arm64/boot/dts/ti/k3-am65-main.dtsi b/arch/arm64/boot/dts/ti/k3-am65-main.dtsi
-> index e749343accedd..9de5a8294acd6 100644
-> --- a/arch/arm64/boot/dts/ti/k3-am65-main.dtsi
-> +++ b/arch/arm64/boot/dts/ti/k3-am65-main.dtsi
-> @@ -127,6 +127,7 @@ rng: rng@4e10000 {
->  			reg = <0x0 0x4e10000 0x0 0x7d>;
->  			interrupts = <GIC_SPI 24 IRQ_TYPE_LEVEL_HIGH>;
->  			clocks = <&k3_clks 136 1>;
-> +			status = "disabled"; /* Used by OP-TEE */
 
-Just curious about how we should document disabling nodes. I was 
-assuming the reasoning should be described in the bindings?
+Thanks a lot for the suggestion Jeremy. For some reason, I missed to follow
+up on this after my initial response. Anyways I agree injecting PPTT via
+initrd is a good compromise on systems that are shipped without or broken
+PPTT. I have tested that to be fully functional on v5.19-rc* on one of
+the servers shipped with broken PPTT.
 
-I would like to start disabling nodes by default in our dtsi files and 
-enabling them in our top dts file, making it easier for others to use 
-our device tree for a more focused purpose than our dev boards. I just 
-didn't know where I should document why I disabled the nodes :)
-
-~Bryan
+-- 
+Regards,
+Sudeep

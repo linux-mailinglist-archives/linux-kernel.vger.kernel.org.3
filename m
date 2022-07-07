@@ -2,89 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4EC815698F3
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 06:05:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A3DDB569908
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 06:12:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234905AbiGGEFY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Jul 2022 00:05:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36748 "EHLO
+        id S235015AbiGGEMO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Jul 2022 00:12:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39500 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229472AbiGGEFX (ORCPT
+        with ESMTP id S229472AbiGGEML (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Jul 2022 00:05:23 -0400
-Received: from xry111.site (xry111.site [IPv6:2001:470:683e::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00DEB2CCAB
-        for <linux-kernel@vger.kernel.org>; Wed,  6 Jul 2022 21:05:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=xry111.site;
-        s=default; t=1657166715;
-        bh=xMn7MrQA8Rmpsy+c97xahDZzxB54Wg0Ugt9J9SQO4vc=;
-        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-        b=EOafTUqNac5KDAd9ls46gfsCl24HWzca6XRCAz1uXx8HGJnv5dTrHFG0ZEM/z7D2Y
-         N86zIwO+ObrVe2stwKGm96K5rgkbVmXOIc+fUGbRxYJL23O6er5akeRm2ynmVrfoba
-         DlJNO2AVhJiMDFgEkmoUMgJ2+MLVsUKVYsf+sU3M=
-Received: from [IPv6:240e:358:1139:6500:dc73:854d:832e:4] (unknown [IPv6:240e:358:1139:6500:dc73:854d:832e:4])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature ECDSA (P-384) server-digest SHA384)
-        (Client did not present a certificate)
-        (Authenticated sender: xry111@xry111.site)
-        by xry111.site (Postfix) with ESMTPSA id CB233669AA;
-        Thu,  7 Jul 2022 00:05:06 -0400 (EDT)
-Message-ID: <bd889cd7b72138a12b1339a33156ff46530c20b0.camel@xry111.site>
-Subject: Re: [PATCH v2] LoongArch: Clean useless vcsr in loongarch_fpu.
-From:   Xi Ruoyao <xry111@xry111.site>
-To:     WANG Xuerui <kernel@xen0n.name>, Qi Hu <huqi@loongson.cn>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Huacai Chen <chenhuacai@kernel.org>
-Cc:     loongarch@lists.linux.dev, LKML <linux-kernel@vger.kernel.org>
-Date:   Thu, 07 Jul 2022 12:04:28 +0800
-In-Reply-To: <0583a335-72f7-55cf-3cd9-4dbd8109a440@xen0n.name>
-References: <20220704153612.314112-1-huqi@loongson.cn>
-         <4273e104-8392-6a06-5d18-a1933978d8c3@xen0n.name>
-         <22a1ba993e298ce12a374decefebeca484240883.camel@xry111.site>
-         <16c9ccaa5e5a2ffd39272cff6f66e487c659b571.camel@xry111.site>
-         <CAAhV-H5+qd1ZrOqE8fgRmWshXy57AfEFpyKSK8ZstZZEQ53owQ@mail.gmail.com>
-         <ac46f5cb4c8d1154cfc3e862fb5211e869839c9a.camel@xry111.site>
-         <c824b9ca-c9c4-1912-7845-99a0989277a4@loongson.cn>
-         <9d064771-9402-4e84-96f8-4713cddf42f2@www.fastmail.com>
-         <730cb4c4-a6a3-783e-3e4c-7c2bdc35c088@loongson.cn>
-         <0583a335-72f7-55cf-3cd9-4dbd8109a440@xen0n.name>
+        Thu, 7 Jul 2022 00:12:11 -0400
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B04CC1D0CA;
+        Wed,  6 Jul 2022 21:12:05 -0700 (PDT)
+X-UUID: 9e664c8c274342e1a9d2ce4616027e2f-20220707
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.8,REQID:a5e76897-188b-4de8-a872-8f8b29e6c46f,OB:0,LO
+        B:0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACTI
+        ON:release,TS:0
+X-CID-META: VersionHash:0f94e32,CLOUDID:ea45a263-0b3f-4b2c-b3a6-ed5c044366a0,C
+        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,IP:nil,URL:0,File:nil
+        ,QS:nil,BEC:nil,COL:0
+X-UUID: 9e664c8c274342e1a9d2ce4616027e2f-20220707
+Received: from mtkmbs10n2.mediatek.inc [(172.21.101.183)] by mailgw02.mediatek.com
+        (envelope-from <ck.hu@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 732966436; Thu, 07 Jul 2022 12:11:56 +0800
+Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
+ mtkmbs11n2.mediatek.inc (172.21.101.187) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.792.3;
+ Thu, 7 Jul 2022 12:11:55 +0800
+Received: from mtksdccf07 (172.21.84.99) by mtkmbs11n2.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.2.792.3 via Frontend
+ Transport; Thu, 7 Jul 2022 12:11:55 +0800
+Message-ID: <a9bba0b30073465dd85ca61220a0c476e8a33048.camel@mediatek.com>
+Subject: Re: [PATCH v13 05/10] drm/mediatek: Add MT8195 Embedded DisplayPort
+ driver
+From:   CK Hu <ck.hu@mediatek.com>
+To:     Bo-Chen Chen <rex-bc.chen@mediatek.com>, <chunkuang.hu@kernel.org>,
+        <p.zabel@pengutronix.de>, <daniel@ffwll.ch>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <mripard@kernel.org>,
+        <tzimmermann@suse.de>, <matthias.bgg@gmail.com>, <deller@gmx.de>,
+        <airlied@linux.ie>
+CC:     <msp@baylibre.com>, <granquet@baylibre.com>,
+        <jitao.shi@mediatek.com>, <wenst@chromium.org>,
+        <angelogioacchino.delregno@collabora.com>,
+        <liangxu.xu@mediatek.com>, <dri-devel@lists.freedesktop.org>,
+        <linux-mediatek@lists.infradead.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-fbdev@vger.kernel.org>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>
+Date:   Thu, 7 Jul 2022 12:11:55 +0800
+In-Reply-To: <20220701062808.18596-6-rex-bc.chen@mediatek.com>
+References: <20220701062808.18596-1-rex-bc.chen@mediatek.com>
+         <20220701062808.18596-6-rex-bc.chen@mediatek.com>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.44.3 
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
 MIME-Version: 1.0
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FROM_SUSPICIOUS_NTLD,
-        SPF_HELO_PASS,SPF_PASS,T_PDS_OTHER_BAD_TLD,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-MTK:  N
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
+        RDNS_NONE,SPF_HELO_PASS,T_SCC_BODY_TEXT_LINE,T_SPF_TEMPERROR,
+        UNPARSEABLE_RELAY autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 2022-07-07 at 11:05 +0800, WANG Xuerui wrote:
+Hi, Bo-Chen:
 
-> To be frank, at this point I think you're trying to hide something.=20
-> (This is not your fault, blame someone else of course because they told=
-=20
-> you the fact.) In the old-world kernel the VCSR a.k.a. FCSR16 is=20
-> certainly being saved/restored, and there's apparently no harm in doing=
-=20
-> so. And if the contents are indeed "undefined", why are the code there
-> in the first place? Certainly the bits *are* meaningful, only that for
-> some reason you aren't revealing the semantics and pretending that they=
-=20
-> are "undefined" and probably "do nothing externally observable" if=20
-> accessed in the first place.
+On Fri, 2022-07-01 at 14:28 +0800, Bo-Chen Chen wrote:
+> From: Markus Schneider-Pargmann <msp@baylibre.com>
+> 
+> This patch adds a embedded displayport driver for the MediaTek mt8195
+> SoC.
+> 
+> It supports the MT8195, the embedded DisplayPort units. It offers
+> DisplayPort 1.4 with up to 4 lanes.
+> 
+> The driver creates a child device for the phy. The child device will
+> never exist without the parent being active. As they are sharing a
+> register range, the parent passes a regmap pointer to the child so
+> that
+> both can work with the same register range. The phy driver sets
+> device
+> data that is read by the parent to get the phy device that can be
+> used
+> to control the phy properties.
+> 
+> This driver is based on an initial version by
+> Jitao shi <jitao.shi@mediatek.com>
+> 
+> Signed-off-by: Markus Schneider-Pargmann <msp@baylibre.com>
+> Signed-off-by: Guillaume Ranquet <granquet@baylibre.com>
+> Signed-off-by: Bo-Chen Chen <rex-bc.chen@mediatek.com>
+> ---
 
-On a 3A5000LL, I did an experiment via a kernel module, which enables
-LSX/LASX and tries to write and read fcsr16.  I tried each bit (1, 2, 4,
-8, ..., 1 << 31) one by one.  The result: no matter which bit I wrote
-into fcsr16, I always read out 0.
+[snip]
 
-And I've objdump'ed a kernel shipped in an early Loongnix release.  It
-seems the only reference to fcsr16 is a "movgr2fcsr $r16, $r0"
-instruction.
---=20
-Xi Ruoyao <xry111@xry111.site>
-School of Aerospace Science and Technology, Xidian University
+> +
+> +static irqreturn_t mtk_dp_hpd_event_thread(int hpd, void *dev)
+> +{
+> +	struct mtk_dp *mtk_dp = dev;
+> +	u8 buf[DP_RECEIVER_CAP_SIZE] = {};
+> +
+> +	if (mtk_dp->train_info.cable_state_change) {
+> +		mtk_dp->train_info.cable_state_change = false;
+> +
+> +		mtk_dp_update_bits(mtk_dp, MTK_DP_TOP_PWR_STATE,
+> +				   DP_PWR_STATE_BANDGAP_TPLL_LANE,
+> +				   DP_PWR_STATE_MASK);
+> +		drm_dp_read_dpcd_caps(&mtk_dp->aux, buf);
+
+Why do you read dpcd caps into 'buf'. 'buf' is not used elsewhere.
+
+Regards,
+CK
+
+> +	}
+> +
+> +	if (mtk_dp->train_info.irq_sta.hpd_inerrupt) {
+> +		dev_dbg(mtk_dp->dev, "MTK_DP_HPD_INTERRUPT\n");
+> +		mtk_dp->train_info.irq_sta.hpd_inerrupt = false;
+> +		mtk_dp_hpd_sink_event(mtk_dp);
+> +	}
+> +
+> +	return IRQ_HANDLED;
+> +}
+> +
+

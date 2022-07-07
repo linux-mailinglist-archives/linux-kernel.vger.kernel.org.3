@@ -2,119 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B8FE56AD45
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 23:11:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CF9CF56AD43
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 23:11:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236730AbiGGVLQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Jul 2022 17:11:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58540 "EHLO
+        id S236758AbiGGVLf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Jul 2022 17:11:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58668 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229834AbiGGVLP (ORCPT
+        with ESMTP id S236741AbiGGVLc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Jul 2022 17:11:15 -0400
-Received: from alexa-out-sd-01.qualcomm.com (alexa-out-sd-01.qualcomm.com [199.106.114.38])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 579151FCEC
-        for <linux-kernel@vger.kernel.org>; Thu,  7 Jul 2022 14:11:14 -0700 (PDT)
+        Thu, 7 Jul 2022 17:11:32 -0400
+Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 750F42E9F8
+        for <linux-kernel@vger.kernel.org>; Thu,  7 Jul 2022 14:11:31 -0700 (PDT)
+Received: by mail-pf1-x433.google.com with SMTP id y9so7620725pff.12
+        for <linux-kernel@vger.kernel.org>; Thu, 07 Jul 2022 14:11:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1657228274; x=1688764274;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=8cWXuoA3a8r8Bn5R5HljIheMcXCj6sEHWX+Ss3Kqdjo=;
-  b=j1MDjPgs0YEAhn6pr6CWSI6aYy6TKOOI8kTUs6Gk6FC7vBrIGFZtfUX8
-   Z27CGKiXwusRZ0eRXQRl5udE0VMfXRyjFYWnmuZQPxxYm8YK6HgQXxbHx
-   YAZexXm0TQaWrM8AfKx1iEPzpQlvlshooYJOASElh1PwUQpJ8o+q6VmLX
-   c=;
-Received: from unknown (HELO ironmsg04-sd.qualcomm.com) ([10.53.140.144])
-  by alexa-out-sd-01.qualcomm.com with ESMTP; 07 Jul 2022 14:11:14 -0700
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg04-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jul 2022 14:11:13 -0700
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Thu, 7 Jul 2022 14:11:13 -0700
-Received: from [10.111.163.64] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Thu, 7 Jul 2022
- 14:11:10 -0700
-Message-ID: <40b6a28c-0237-55d7-2f5d-1c571f27e7d6@quicinc.com>
-Date:   Thu, 7 Jul 2022 14:11:08 -0700
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=ZTnfo6xRgRnDJAawujjn6RVFJwv9JbaWoUFvSQYT7gc=;
+        b=b6mVfEU3B1Kz+nxNI3jjT4RpusLpAVsVtGCThcqz2WxsNk8Y3tI17P9xznRGksBAb+
+         8GtcLKGD6SqLecoii/sJRZBzYe/oHHfCmBQ6KyjOUKEs9JbhsSO8LlGC7Gg3qZOKpu6t
+         R+U7jZ4wKm/B+FwKq2Z/bXAYtTf5NK7zJgDRNJHgaUVfPSOGNvaRqHsaiOSfkPwSd99I
+         8OUzNcHpzBwaMfSLWuFKpCaWhXyShGNvFjcSuQGRbO512wy3OM/j+/9PUvBMJJDZlQt4
+         pVg+ex6bvlhCnCQYp6vGAzpwe0MyOM/LaQwAKdRF13SuWllj3O+oHHym/YUmAyOh3Fqs
+         358g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=ZTnfo6xRgRnDJAawujjn6RVFJwv9JbaWoUFvSQYT7gc=;
+        b=xp65gWRph+mNJX/q7fv8WFp0o+DMwRdYa/xP5pwtVG5q69qJSmUb4riQ69saB3lcUy
+         j2VHNe7FBkeeALBlJ4qGcaUWifu7FJKlFZwjGlg5FsARrgLs4hQcwfFf7u0VpvlQvNEw
+         Pqfy16hx0Gw0TTfotyfw9F4VpiF9ZG8DW+0ZXxQ+zUoCr78uT/iEvEUS3lIPNHJ6oGo+
+         D8YR+VRMF4fp/DEHK592ZZB5YtfDzN2KnyigCTAt6c2hoWsBsijA+PFDxLeMaDL03qT3
+         BaOHFiqhWvL4wDkOgqYfIQ2PALDcfc2DzkIN5+ldJZwNnLkC+7MUj71IH726wB7SSZtP
+         62Mg==
+X-Gm-Message-State: AJIora9dMH6bWE33t35mRHDtLMQflUw/9upvqlueorIrgViIusUxKBeC
+        wsl5SmbYspQI4puMG2KEk8DoVg==
+X-Google-Smtp-Source: AGRyM1so1CUFpRb/W+9u8G0bNWrE/aR8hrt1uZojq1495gVto4hEMFt63EXSJhIZ1QbYWGtmOiiswQ==
+X-Received: by 2002:aa7:9215:0:b0:528:56ba:ccec with SMTP id 21-20020aa79215000000b0052856baccecmr179112pfo.24.1657228290881;
+        Thu, 07 Jul 2022 14:11:30 -0700 (PDT)
+Received: from google.com (123.65.230.35.bc.googleusercontent.com. [35.230.65.123])
+        by smtp.gmail.com with ESMTPSA id k23-20020a628417000000b005289fad1bbesm3853638pfd.94.2022.07.07.14.11.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 07 Jul 2022 14:11:30 -0700 (PDT)
+Date:   Thu, 7 Jul 2022 21:11:26 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Yosry Ahmed <yosryahmed@google.com>
+Cc:     Tejun Heo <tj@kernel.org>, Johannes Weiner <hannes@cmpxchg.org>,
+        Zefan Li <lizefan.x@bytedance.com>,
+        Marc Zyngier <maz@kernel.org>,
+        James Morse <james.morse@arm.com>,
+        Alexandru Elisei <alexandru.elisei@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Michal Hocko <mhocko@kernel.org>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Shakeel Butt <shakeelb@google.com>,
+        Oliver Upton <oupton@google.com>, Huang@google.com,
+        Shaoqin <shaoqin.huang@intel.com>, cgroups@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        kvmarm@lists.cs.columbia.edu, kvm@vger.kernel.org,
+        linux-mm@kvack.org
+Subject: Re: [PATCH v6 3/4] KVM: x86/mmu: count KVM mmu usage in secondary
+ pagetable stats.
+Message-ID: <YsdL/mgrbCCM/mtr@google.com>
+References: <20220628220938.3657876-1-yosryahmed@google.com>
+ <20220628220938.3657876-4-yosryahmed@google.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.2
-Subject: Re: [PATCH] drm/msm/dsi: Set panel orientation when directly
- connected
-Content-Language: en-US
-To:     Stephen Boyd <swboyd@chromium.org>,
-        Rob Clark <robdclark@gmail.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-CC:     <linux-kernel@vger.kernel.org>, <patches@lists.linux.dev>,
-        Sean Paul <sean@poorly.run>, <dri-devel@lists.freedesktop.org>,
-        <freedreno@lists.freedesktop.org>,
-        Hsin-Yi Wang <hsinyi@chromium.org>,
-        Douglas Anderson <dianders@chromium.org>
-References: <20220706191442.1150634-1-swboyd@chromium.org>
-From:   Abhinav Kumar <quic_abhinavk@quicinc.com>
-In-Reply-To: <20220706191442.1150634-1-swboyd@chromium.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220628220938.3657876-4-yosryahmed@google.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 7/6/2022 12:14 PM, Stephen Boyd wrote:
-> Set the panel orientation in drm when the panel is directly connected,
-> i.e. we're not using an external bridge. The external bridge case is
-> already handled by the panel bridge code, so we only update the path we
-> take when the panel is directly connected/internal. This silences a
-> warning splat coming from __drm_mode_object_add() on Wormdingler boards.
+On Tue, Jun 28, 2022, Yosry Ahmed wrote:
+> Count the pages used by KVM mmu on x86 in memory stats under secondary
+> pagetable stats (e.g. "SecPageTables" in /proc/meminfo) to give better
+> visibility into the memory consumption of KVM mmu in a similar way to
+> how normal user page tables are accounted.
 > 
-> Cc: Hsin-Yi Wang <hsinyi@chromium.org>
-> Cc: Douglas Anderson <dianders@chromium.org>
-> Signed-off-by: Stephen Boyd <swboyd@chromium.org>
+> Signed-off-by: Yosry Ahmed <yosryahmed@google.com>
 > ---
-> 
-> This relies on commit 5e41b01a7808 ("drm/panel: Add an API to allow drm
-> to set orientation from panel") which is in drm-misc
-> 
->   drivers/gpu/drm/msm/dsi/dsi_manager.c | 2 ++
->   1 file changed, 2 insertions(+)
-> 
-> diff --git a/drivers/gpu/drm/msm/dsi/dsi_manager.c b/drivers/gpu/drm/msm/dsi/dsi_manager.c
-> index cb84d185d73a..9333f7095acd 100644
-> --- a/drivers/gpu/drm/msm/dsi/dsi_manager.c
-> +++ b/drivers/gpu/drm/msm/dsi/dsi_manager.c
-> @@ -268,6 +268,8 @@ static int msm_dsi_manager_panel_init(struct drm_connector *conn, u8 id)
->   		return PTR_ERR(panel);
->   	}
->   
-> +	drm_connector_set_orientation_from_panel(conn, panel);
-> +
 
-This should be moved below the !panel check since you are passing panel 
-as one of the params.
-
-I looked up the doc and it says that for unknown(default cases) this is 
-a no-op so I think this change is fine otherwise.
-
-"It is allowed to call this function with a panel_orientation of 
-DRM_MODE_PANEL_ORIENTATION_UNKNOWN, in which case it is a no-op."
-
-
->   	if (!panel || !IS_BONDED_DSI())
->   		goto out;
->   
-> 
-> base-commit: 15b9ca1641f0c3cd74885280331e9172c62a125e
+Reviewed-by: Sean Christopherson <seanjc@google.com>

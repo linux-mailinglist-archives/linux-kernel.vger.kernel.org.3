@@ -2,74 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 824F856A10D
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 13:32:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 583BF56A118
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 13:35:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235292AbiGGLcx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Jul 2022 07:32:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41256 "EHLO
+        id S235451AbiGGLer (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Jul 2022 07:34:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43258 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235038AbiGGLct (ORCPT
+        with ESMTP id S232308AbiGGLem (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Jul 2022 07:32:49 -0400
-Received: from out30-43.freemail.mail.aliyun.com (out30-43.freemail.mail.aliyun.com [115.124.30.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C18CD2FFF2;
-        Thu,  7 Jul 2022 04:32:47 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R151e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046059;MF=baolin.wang@linux.alibaba.com;NM=1;PH=DS;RN=33;SR=0;TI=SMTPD_---0VIdIQWG_1657193558;
-Received: from 30.97.48.62(mailfrom:baolin.wang@linux.alibaba.com fp:SMTPD_---0VIdIQWG_1657193558)
-          by smtp.aliyun-inc.com;
-          Thu, 07 Jul 2022 19:32:40 +0800
-Message-ID: <ef376131-bf5f-7e5b-ea1b-1e8f64a6d060@linux.alibaba.com>
-Date:   Thu, 7 Jul 2022 19:32:44 +0800
+        Thu, 7 Jul 2022 07:34:42 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 299C62F65E
+        for <linux-kernel@vger.kernel.org>; Thu,  7 Jul 2022 04:34:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1657193682; x=1688729682;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=JKbCMUeQVy78kPkl4YfJ97Wr4SpG3UV/hAMkI54+8SI=;
+  b=M8DeFWWhzyRmNQnZTVOuiDRdbbaAKsIWpU6P2o7EPVHpY9DwOLU+KJ50
+   cMtzxz9J35zjlxP1XlSw2ryld2c4yCtrV3OqQf/+rzu3DQ/Emd9qm32vz
+   NtMHnJzEVBHhQv9JZcuYCvg/yBBqds8siHI+avn7BFuT9zDQ4INgNgSjt
+   GXctD8PVFcmIUmd2bymRWByh3KPC79FGYosZm4JtKWNw023sL+AXE1pt1
+   QQzQu5DYEbI6/G80i6q5bPZjxmiVtTcDLYxagO2TFCiL0Ph/hbeGg+hRD
+   NtAVcfAwePjRGIcNeyIKqZ7t1ClqIx1uqHURgmv2cuGjdxdhXeraMSFXl
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10400"; a="370318217"
+X-IronPort-AV: E=Sophos;i="5.92,252,1650956400"; 
+   d="scan'208";a="370318217"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jul 2022 04:34:41 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.92,252,1650956400"; 
+   d="scan'208";a="735938846"
+Received: from lkp-server01.sh.intel.com (HELO 68b931ab7ac1) ([10.239.97.150])
+  by fmsmga001.fm.intel.com with ESMTP; 07 Jul 2022 04:34:40 -0700
+Received: from kbuild by 68b931ab7ac1 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1o9PmK-000Lw7-0h;
+        Thu, 07 Jul 2022 11:34:40 +0000
+Date:   Thu, 7 Jul 2022 19:34:03 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: [kbingham-rcar:kbingham/vsp1/debugfs 6/7]
+ drivers/media/platform/renesas/vsp1/vsp1_debugfs.h:52:15: error: return type
+ defaults to 'int'
+Message-ID: <202207071954.8vAac5gl-lkp@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH 0/3] Add PUD and kernel PTE level pagetable account
-To:     Dave Hansen <dave.hansen@intel.com>, akpm@linux-foundation.org
-Cc:     rppt@linux.ibm.com, willy@infradead.org, will@kernel.org,
-        aneesh.kumar@linux.ibm.com, npiggin@gmail.com,
-        peterz@infradead.org, catalin.marinas@arm.com,
-        chenhuacai@kernel.org, kernel@xen0n.name,
-        tsbogend@alpha.franken.de, dave.hansen@linux.intel.com,
-        luto@kernel.org, tglx@linutronix.de, mingo@redhat.com,
-        bp@alien8.de, hpa@zytor.com, arnd@arndb.de, guoren@kernel.org,
-        monstr@monstr.eu, jonas@southpole.se,
-        stefan.kristiansson@saunalahti.fi, shorne@gmail.com,
-        x86@kernel.org, linux-arch@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, loongarch@lists.linux.dev,
-        linux-mips@vger.kernel.org, linux-csky@vger.kernel.org,
-        openrisc@lists.librecores.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-References: <cover.1657096412.git.baolin.wang@linux.alibaba.com>
- <d2d58cc2-7e6d-aa2d-3096-a500ce321494@intel.com>
-From:   Baolin Wang <baolin.wang@linux.alibaba.com>
-In-Reply-To: <d2d58cc2-7e6d-aa2d-3096-a500ce321494@intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/kbingham/rcar.git kbingham/vsp1/debugfs
+head:   73e1dae0c0afd4ccbe318e1bc9881b3e800226ba
+commit: eda5de49ca65531ae1fa75f31300cdaacb112125 [6/7] v4l: vsp1: Provide video node debugfs entries
+config: m68k-randconfig-r021-20220707 (https://download.01.org/0day-ci/archive/20220707/202207071954.8vAac5gl-lkp@intel.com/config)
+compiler: m68k-linux-gcc (GCC) 11.3.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/kbingham/rcar.git/commit/?id=eda5de49ca65531ae1fa75f31300cdaacb112125
+        git remote add kbingham-rcar https://git.kernel.org/pub/scm/linux/kernel/git/kbingham/rcar.git
+        git fetch --no-tags kbingham-rcar kbingham/vsp1/debugfs
+        git checkout eda5de49ca65531ae1fa75f31300cdaacb112125
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=m68k SHELL=/bin/bash drivers/media/
+
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>):
+
+   In file included from drivers/media/platform/renesas/vsp1/vsp1_drv.c:27:
+>> drivers/media/platform/renesas/vsp1/vsp1_debugfs.h:52:15: error: return type defaults to 'int' [-Werror=implicit-int]
+      52 | static inline vsp1_debugfs_create_video_stats(struct vsp1_video *video,
+         |               ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/media/platform/renesas/vsp1/vsp1_debugfs.h:54:15: error: return type defaults to 'int' [-Werror=implicit-int]
+      54 | static inline vsp1_debugfs_cleanup_video_stats(struct vsp1_video *video) { };
+         |               ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   cc1: some warnings being treated as errors
+--
+   In file included from drivers/media/platform/renesas/vsp1/vsp1_video.c:28:
+>> drivers/media/platform/renesas/vsp1/vsp1_debugfs.h:52:15: error: return type defaults to 'int' [-Werror=implicit-int]
+      52 | static inline vsp1_debugfs_create_video_stats(struct vsp1_video *video,
+         |               ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/media/platform/renesas/vsp1/vsp1_debugfs.h:54:15: error: return type defaults to 'int' [-Werror=implicit-int]
+      54 | static inline vsp1_debugfs_cleanup_video_stats(struct vsp1_video *video) { };
+         |               ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/media/platform/renesas/vsp1/vsp1_debugfs.h: In function 'vsp1_debugfs_create_video_stats':
+   drivers/media/platform/renesas/vsp1/vsp1_debugfs.h:53:37: error: control reaches end of non-void function [-Werror=return-type]
+      53 |                 const char *name) { };
+         |                                     ^
+   drivers/media/platform/renesas/vsp1/vsp1_debugfs.h: In function 'vsp1_debugfs_cleanup_video_stats':
+   drivers/media/platform/renesas/vsp1/vsp1_debugfs.h:54:76: error: control reaches end of non-void function [-Werror=return-type]
+      54 | static inline vsp1_debugfs_cleanup_video_stats(struct vsp1_video *video) { };
+         |                                                                            ^
+   cc1: some warnings being treated as errors
 
 
-On 7/6/2022 11:48 PM, Dave Hansen wrote:
-> On 7/6/22 01:59, Baolin Wang wrote:
->> Now we will miss to account the PUD level pagetable and kernel PTE level
->> pagetable, as well as missing to set the PG_table flags for these pagetable
->> pages, which will get an inaccurate pagetable accounting, and miss
->> PageTable() validation in some cases. So this patch set introduces new
->> helpers to help to account PUD and kernel PTE pagetable pages.
-> 
-> Could you explain the motivation for this series a bit more?  Is there a
-> real-world problem that this fixes?
+vim +/int +52 drivers/media/platform/renesas/vsp1/vsp1_debugfs.h
 
-Not fix real problem. The motivation is that making the pagetable 
-accounting more accurate, which helps us to analyse the consumption of 
-the pagetable pages in some cases, and maybe help to do some empty 
-pagetable reclaiming in future.
+    51	
+  > 52	static inline vsp1_debugfs_create_video_stats(struct vsp1_video *video,
+    53			const char *name) { };
+    54	static inline vsp1_debugfs_cleanup_video_stats(struct vsp1_video *video) { };
+    55	#endif /* CONFIG_DEBUG_FS */
+    56	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

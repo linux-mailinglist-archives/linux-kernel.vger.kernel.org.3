@@ -2,59 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 983EE569E43
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 11:06:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D20F569E49
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 11:08:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234768AbiGGJF6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Jul 2022 05:05:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49422 "EHLO
+        id S235063AbiGGJIp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Jul 2022 05:08:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51162 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231545AbiGGJF5 (ORCPT
+        with ESMTP id S232646AbiGGJIj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Jul 2022 05:05:57 -0400
-Received: from mail-yw1-x1133.google.com (mail-yw1-x1133.google.com [IPv6:2607:f8b0:4864:20::1133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D5D023BE9
-        for <linux-kernel@vger.kernel.org>; Thu,  7 Jul 2022 02:05:56 -0700 (PDT)
-Received: by mail-yw1-x1133.google.com with SMTP id 00721157ae682-317a66d62dfso163824747b3.7
-        for <linux-kernel@vger.kernel.org>; Thu, 07 Jul 2022 02:05:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:from:date:message-id:subject:to:cc;
-        bh=zlOeCkIki6PJyWBNRiw36kI6SNKSOmci2Nqouica840=;
-        b=OItsImZM/QYb5LQ9evTfoTMcN/zucchGaWz1ri9JInDOmSPsTXteMNhP/lM04GDdv3
-         qivocRq6lMtSP025yyeXQ+gKXZJGr8XLz7p0td+uONy6NYDhFjZvFOjKU7qtJPLwoCQk
-         hjMhIVmfNvCX8xYP6OPeDyRYzJDg9va8ejhIvghxTlcSP8ncAOg/re8m+GMGmfGUk24e
-         TjFDIaHl29agDQImf+/pwWAoV4Xp/d4n8i0Ap4iOBcx8mdpQu+FW4VmGur2qCUamvSD1
-         k8hOTMTXDsl8TQ1JKQNluQyaLsFyzjikXY/r+nzb6v48WuSBNOr9b46AD8j8KW9dMQ2H
-         /05Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
-        bh=zlOeCkIki6PJyWBNRiw36kI6SNKSOmci2Nqouica840=;
-        b=1lNlgQGQI8jaNUwCjxrRsloHCFLDgx9ZAxULyFVPJwkRzDhVkjF2H7jaHzQhEbSCaS
-         0xaD+uKkued9sXuh2Cumirq4VgLpPw1fWjabZjjPeE3adtxy2I4Y3D3NVVOyYYsBpjoJ
-         GZrhP9/5GhyqH7+HvJs132wXUQj1bfhDEv7erbs5znxvPSnnl5ktFduGrkcXaj+aF63v
-         uoRNgOylzQVe0rkoSoSRGnLaYKlUa9G8Ps5OlnMyuA54UIDu3whCXP+EEM36GHVA5Kvy
-         7PE4hUryrA0QVbTO/IsT86ppc1IjItiQfa6AmxnJfBlAlpYp35M3r4d2wKm5OpX/oJsB
-         ty0Q==
-X-Gm-Message-State: AJIora+fhPWo3jwiTFMQLFP61sgF27Mk5hEhQtb3JkjVAdUAwDzTHeLS
-        vJv/EO5eUU81SoqwyzLpxsRTmSnY+jjTuqi3gfkG1AcDDuMKHA==
-X-Google-Smtp-Source: AGRyM1vi0SZgs7vqZxK7BiMF62vcQgS0TcVvEQyxltMKWNuoqcYS8FlqBkjLZxE+SmJCx2ju1yLIHNdAeZ5uI18siGQ=
-X-Received: by 2002:a0d:f801:0:b0:31d:851:96b8 with SMTP id
- i1-20020a0df801000000b0031d085196b8mr2657332ywf.448.1657184755082; Thu, 07
- Jul 2022 02:05:55 -0700 (PDT)
+        Thu, 7 Jul 2022 05:08:39 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BB0F1C90D
+        for <linux-kernel@vger.kernel.org>; Thu,  7 Jul 2022 02:08:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1657184916; x=1688720916;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=K92sXVRr3OVAanF+nk1nqQI3Z2WShQWgeM5zAx+dTos=;
+  b=BU1yoVMAUH0tBBqMa3Rh6ZqvXQ2XjLX/OqACLwg+BLVVtWBbnWyuaUUL
+   GQcvC6TOdvKNzVHtKjuKC3q6gMj22JmBwIs4L3HW5aukky5fvEJchO+p+
+   RSUclDdY8fvTma9S2zXkfmqzd7geRieKkyQsW3L1xQzo/4UE5gy+hRL2L
+   gi5F+/ih/L+DmvN3hGDxKsetlVsIr/mUdmVKeqoHj+ssUaBemJinZW4ZW
+   TilsNB/dHhTXn31Vj/DeUr//28CBq8XJ8w1tPByxg/T4YHplCX6ByjfZR
+   OsmBUBfwFz55cebrVi7//MLdVlIdQvuCYWpvfP++gFEoWa3FWqzVynuvl
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10400"; a="347958604"
+X-IronPort-AV: E=Sophos;i="5.92,252,1650956400"; 
+   d="scan'208";a="347958604"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jul 2022 02:08:36 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.92,252,1650956400"; 
+   d="scan'208";a="626246852"
+Received: from lkp-server01.sh.intel.com (HELO 68b931ab7ac1) ([10.239.97.150])
+  by orsmga001.jf.intel.com with ESMTP; 07 Jul 2022 02:08:35 -0700
+Received: from kbuild by 68b931ab7ac1 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1o9NUw-000Lnu-IA;
+        Thu, 07 Jul 2022 09:08:34 +0000
+Date:   Thu, 7 Jul 2022 17:08:17 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Li Zhengyu <lizhengyu3@huawei.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Palmer Dabbelt <palmer@rivosinc.com>
+Subject: arch/riscv/kernel/elf_kexec.c:352:9: error: unknown type name
+ 'Elf_Rela'; did you mean 'Elf64_Rela'?
+Message-ID: <202207071735.mAMg0MAa-lkp@intel.com>
 MIME-Version: 1.0
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Thu, 7 Jul 2022 11:05:44 +0200
-Message-ID: <CACRpkdYD-mnt-vypLAXP9J2pgzXOOYhS7fNeEKLK7T2q-45USg@mail.gmail.com>
-Subject: [GIT PULL] pin control fixes for v5.19
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -62,65 +62,194 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Linus,
+Hi Li,
 
-here are some minor pin control fixes, all driver-related.
+FYI, the error/warning still remains.
 
-Details in the signed tag, please pull it in!
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   9f09069cde34dcd86f5ecf3a3139fd752020812f
+commit: 838b3e28488f702e2b5477b393f009b2639d2b1a RISC-V: Load purgatory in kexec_file
+date:   7 weeks ago
+config: riscv-buildonly-randconfig-r001-20220707 (https://download.01.org/0day-ci/archive/20220707/202207071735.mAMg0MAa-lkp@intel.com/config)
+compiler: riscv64-linux-gcc (GCC) 11.3.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=838b3e28488f702e2b5477b393f009b2639d2b1a
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout 838b3e28488f702e2b5477b393f009b2639d2b1a
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash arch/riscv/kernel/
 
-Yours,
-Linus Walleij
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-The following changes since commit f2906aa863381afb0015a9eb7fefad885d4e5a56:
+All errors (new ones prefixed by >>):
 
-  Linux 5.19-rc1 (2022-06-05 17:18:54 -0700)
+   arch/riscv/kernel/elf_kexec.c: In function 'arch_kexec_apply_relocations_add':
+>> arch/riscv/kernel/elf_kexec.c:352:9: error: unknown type name 'Elf_Rela'; did you mean 'Elf64_Rela'?
+     352 |         Elf_Rela *relas;
+         |         ^~~~~~~~
+         |         Elf64_Rela
+   In file included from include/linux/elf.h:7,
+                    from arch/riscv/kernel/elf_kexec.c:15:
+>> arch/riscv/kernel/elf_kexec.c:370:44: error: request for member 'r_info' in something not a structure or union
+     370 |                 sym += ELF64_R_SYM(relas[i].r_info);
+         |                                            ^
+   include/uapi/linux/elf.h:163:43: note: in definition of macro 'ELF64_R_SYM'
+     163 | #define ELF64_R_SYM(i)                  ((i) >> 32)
+         |                                           ^
+>> arch/riscv/kernel/elf_kexec.c:379:32: error: request for member 'r_offset' in something not a structure or union
+     379 |                 loc += relas[i].r_offset;
+         |                                ^
+>> arch/riscv/kernel/elf_kexec.c:392:32: error: request for member 'r_addend' in something not a structure or union
+     392 |                 val += relas[i].r_addend;
+         |                                ^
+   arch/riscv/kernel/elf_kexec.c:394:51: error: request for member 'r_offset' in something not a structure or union
+     394 |                 addr = section->sh_addr + relas[i].r_offset;
+         |                                                   ^
+   In file included from include/linux/elf.h:7,
+                    from arch/riscv/kernel/elf_kexec.c:15:
+   arch/riscv/kernel/elf_kexec.c:396:47: error: request for member 'r_info' in something not a structure or union
+     396 |                 r_type = ELF64_R_TYPE(relas[i].r_info);
+         |                                               ^
+   include/uapi/linux/elf.h:164:43: note: in definition of macro 'ELF64_R_TYPE'
+     164 | #define ELF64_R_TYPE(i)                 ((i) & 0xffffffff)
+         |                                           ^
 
-are available in the Git repository at:
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-pinctrl.git
-tags/pinctrl-v5.19-2
+vim +352 arch/riscv/kernel/elf_kexec.c
 
-for you to fetch changes up to a1d4ef1adf8bbd302067534ead671a94759687ed:
+   318	
+   319	#define ENCODE_ITYPE_IMM(x) \
+   320		(RV_X(x, 0, 12) << 20)
+   321	#define ENCODE_BTYPE_IMM(x) \
+   322		((RV_X(x, 1, 4) << 8) | (RV_X(x, 5, 6) << 25) | \
+   323		(RV_X(x, 11, 1) << 7) | (RV_X(x, 12, 1) << 31))
+   324	#define ENCODE_UTYPE_IMM(x) \
+   325		(RV_X(x, 12, 20) << 12)
+   326	#define ENCODE_JTYPE_IMM(x) \
+   327		((RV_X(x, 1, 10) << 21) | (RV_X(x, 11, 1) << 20) | \
+   328		(RV_X(x, 12, 8) << 12) | (RV_X(x, 20, 1) << 31))
+   329	#define ENCODE_CBTYPE_IMM(x) \
+   330		((RV_X(x, 1, 2) << 3) | (RV_X(x, 3, 2) << 10) | (RV_X(x, 5, 1) << 2) | \
+   331		(RV_X(x, 6, 2) << 5) | (RV_X(x, 8, 1) << 12))
+   332	#define ENCODE_CJTYPE_IMM(x) \
+   333		((RV_X(x, 1, 3) << 3) | (RV_X(x, 4, 1) << 11) | (RV_X(x, 5, 1) << 2) | \
+   334		(RV_X(x, 6, 1) << 7) | (RV_X(x, 7, 1) << 6) | (RV_X(x, 8, 2) << 9) | \
+   335		(RV_X(x, 10, 1) << 8) | (RV_X(x, 11, 1) << 12))
+   336	#define ENCODE_UJTYPE_IMM(x) \
+   337		(ENCODE_UTYPE_IMM(RISCV_CONST_HIGH_PART(x)) | \
+   338		(ENCODE_ITYPE_IMM(RISCV_CONST_LOW_PART(x)) << 32))
+   339	#define ENCODE_UITYPE_IMM(x) \
+   340		(ENCODE_UTYPE_IMM(x) | (ENCODE_ITYPE_IMM(x) << 32))
+   341	
+   342	#define CLEAN_IMM(type, x) \
+   343		((~ENCODE_##type##_IMM((uint64_t)(-1))) & (x))
+   344	
+   345	int arch_kexec_apply_relocations_add(struct purgatory_info *pi,
+   346					     Elf_Shdr *section,
+   347					     const Elf_Shdr *relsec,
+   348					     const Elf_Shdr *symtab)
+   349	{
+   350		const char *strtab, *name, *shstrtab;
+   351		const Elf_Shdr *sechdrs;
+ > 352		Elf_Rela *relas;
+   353		int i, r_type;
+   354	
+   355		/* String & section header string table */
+   356		sechdrs = (void *)pi->ehdr + pi->ehdr->e_shoff;
+   357		strtab = (char *)pi->ehdr + sechdrs[symtab->sh_link].sh_offset;
+   358		shstrtab = (char *)pi->ehdr + sechdrs[pi->ehdr->e_shstrndx].sh_offset;
+   359	
+   360		relas = (void *)pi->ehdr + relsec->sh_offset;
+   361	
+   362		for (i = 0; i < relsec->sh_size / sizeof(*relas); i++) {
+   363			const Elf_Sym *sym;	/* symbol to relocate */
+   364			unsigned long addr;	/* final location after relocation */
+   365			unsigned long val;	/* relocated symbol value */
+   366			unsigned long sec_base;	/* relocated symbol value */
+   367			void *loc;		/* tmp location to modify */
+   368	
+   369			sym = (void *)pi->ehdr + symtab->sh_offset;
+ > 370			sym += ELF64_R_SYM(relas[i].r_info);
+   371	
+   372			if (sym->st_name)
+   373				name = strtab + sym->st_name;
+   374			else
+   375				name = shstrtab + sechdrs[sym->st_shndx].sh_name;
+   376	
+   377			loc = pi->purgatory_buf;
+   378			loc += section->sh_offset;
+ > 379			loc += relas[i].r_offset;
+   380	
+   381			if (sym->st_shndx == SHN_ABS)
+   382				sec_base = 0;
+   383			else if (sym->st_shndx >= pi->ehdr->e_shnum) {
+   384				pr_err("Invalid section %d for symbol %s\n",
+   385				       sym->st_shndx, name);
+   386				return -ENOEXEC;
+   387			} else
+   388				sec_base = pi->sechdrs[sym->st_shndx].sh_addr;
+   389	
+   390			val = sym->st_value;
+   391			val += sec_base;
+ > 392			val += relas[i].r_addend;
+   393	
+   394			addr = section->sh_addr + relas[i].r_offset;
+   395	
+   396			r_type = ELF64_R_TYPE(relas[i].r_info);
+   397	
+   398			switch (r_type) {
+   399			case R_RISCV_BRANCH:
+   400				*(u32 *)loc = CLEAN_IMM(BTYPE, *(u32 *)loc) |
+   401					 ENCODE_BTYPE_IMM(val - addr);
+   402				break;
+   403			case R_RISCV_JAL:
+   404				*(u32 *)loc = CLEAN_IMM(JTYPE, *(u32 *)loc) |
+   405					 ENCODE_JTYPE_IMM(val - addr);
+   406				break;
+   407			/*
+   408			 * With no R_RISCV_PCREL_LO12_S, R_RISCV_PCREL_LO12_I
+   409			 * sym is expected to be next to R_RISCV_PCREL_HI20
+   410			 * in purgatory relsec. Handle it like R_RISCV_CALL
+   411			 * sym, instead of searching the whole relsec.
+   412			 */
+   413			case R_RISCV_PCREL_HI20:
+   414			case R_RISCV_CALL:
+   415				*(u64 *)loc = CLEAN_IMM(UITYPE, *(u64 *)loc) |
+   416					 ENCODE_UJTYPE_IMM(val - addr);
+   417				break;
+   418			case R_RISCV_RVC_BRANCH:
+   419				*(u32 *)loc = CLEAN_IMM(CBTYPE, *(u32 *)loc) |
+   420					 ENCODE_CBTYPE_IMM(val - addr);
+   421				break;
+   422			case R_RISCV_RVC_JUMP:
+   423				*(u32 *)loc = CLEAN_IMM(CJTYPE, *(u32 *)loc) |
+   424					 ENCODE_CJTYPE_IMM(val - addr);
+   425				break;
+   426			case R_RISCV_ADD32:
+   427				*(u32 *)loc += val;
+   428				break;
+   429			case R_RISCV_SUB32:
+   430				*(u32 *)loc -= val;
+   431				break;
+   432			/* It has been applied by R_RISCV_PCREL_HI20 sym */
+   433			case R_RISCV_PCREL_LO12_I:
+   434			case R_RISCV_ALIGN:
+   435			case R_RISCV_RELAX:
+   436				break;
+   437			default:
+   438				pr_err("Unknown rela relocation: %d\n", r_type);
+   439				return -ENOEXEC;
+   440			}
+   441		}
+   442		return 0;
+   443	}
+   444	
 
-  pinctrl: stm32: fix optional IRQ support to gpios (2022-06-28 16:12:40 +0200)
-
-----------------------------------------------------------------
-Pin control fixes for the v5.19 kernel series:
-
-- Tag Intel pin control as supported in MAINTAINERS
-- Fix a NULL pointer exception in the Aspeed driver
-- Correct some NAND functions in the Sunxi A83T driver
-- Use the right offset for some Sunxi pins
-- Fix a zero base offset in the Freescale (NXP) i.MX93
-- Fix the IRQ support in the STM32 driver
-
-----------------------------------------------------------------
-Andrei Lalaev (1):
-      pinctrl: sunxi: sunxi_pconf_set: use correct offset
-
-Andy Shevchenko (1):
-      MAINTAINERS: Update Intel pin control to Supported
-
-Fabien Dessenne (1):
-      pinctrl: stm32: fix optional IRQ support to gpios
-
-Haowen Bai (1):
-      pinctrl: aspeed: Fix potential NULL dereference in aspeed_pinmux_set_mux()
-
-Jacky Bai (1):
-      pinctrl: imx: Add the zero base flag for imx93
-
-Linus Walleij (1):
-      Merge tag 'intel-pinctrl-v5.19-3' of
-gitolite.kernel.org:pub/scm/linux/kernel/git/pinctrl/intel into fixes
-
-Samuel Holland (1):
-      pinctrl: sunxi: a83t: Fix NAND function name for some pins
-
- MAINTAINERS                                |  2 +-
- drivers/pinctrl/aspeed/pinctrl-aspeed.c    |  4 ++--
- drivers/pinctrl/freescale/pinctrl-imx93.c  |  1 +
- drivers/pinctrl/stm32/pinctrl-stm32.c      | 20 ++++++++++++--------
- drivers/pinctrl/sunxi/pinctrl-sun8i-a83t.c | 10 +++++-----
- drivers/pinctrl/sunxi/pinctrl-sunxi.c      |  2 ++
- 6 files changed, 23 insertions(+), 16 deletions(-)
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

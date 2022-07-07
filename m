@@ -2,145 +2,174 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A3D4856A861
+	by mail.lfdr.de (Postfix) with ESMTP id ED69A56A862
 	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 18:39:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235807AbiGGQhc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Jul 2022 12:37:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45160 "EHLO
+        id S236299AbiGGQhf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Jul 2022 12:37:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45668 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236276AbiGGQhG (ORCPT
+        with ESMTP id S236358AbiGGQhY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Jul 2022 12:37:06 -0400
-Received: from mail-pg1-x52b.google.com (mail-pg1-x52b.google.com [IPv6:2607:f8b0:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C164D564D7
-        for <linux-kernel@vger.kernel.org>; Thu,  7 Jul 2022 09:37:05 -0700 (PDT)
-Received: by mail-pg1-x52b.google.com with SMTP id r22so12588972pgr.2
-        for <linux-kernel@vger.kernel.org>; Thu, 07 Jul 2022 09:37:05 -0700 (PDT)
+        Thu, 7 Jul 2022 12:37:24 -0400
+Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFDB053D34
+        for <linux-kernel@vger.kernel.org>; Thu,  7 Jul 2022 09:37:23 -0700 (PDT)
+Received: by mail-pf1-x42a.google.com with SMTP id b9so4447512pfp.10
+        for <linux-kernel@vger.kernel.org>; Thu, 07 Jul 2022 09:37:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
+        d=google.com; s=20210112;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to;
-        bh=tV06X8ZwNG1YBW7qI4+9zEQPn4cces6TNXHqdWyfoC4=;
-        b=kbGamTCBrLg0oYMpjTNMko7htfU0e7BF3RC13JW65s78vOyzbUBDgfcuvDxlAskpL0
-         4di1UMNwDc9jSx1j6TVrXpaem4bEpE6L9IfQWCoEzjTTb0aE0oawrFPaInrrvOxziQ1y
-         FALtax7m1GT5J1rv7Z6NC1vROJ145ws/dnLm/Ih6unMwnkSpBzjrDTa3YKrPnlhPxJG9
-         7YGHuMgHV05txyHNaD0HrqgyGa3o1H/uQdl4V89MzBua7O0JgrkGZiKW/iBSwbLD40y4
-         sSO4mrAtAWbY4pOkXQFM+QNmnO9ykUIN0oLQUz9w/foNqqC2y0Omgu69TZBgL3+4RU09
-         O1sg==
+        bh=X4ZyDiG49m0gnXusM/3dJ8XamBzjgE2+uil3Jq1hmaM=;
+        b=E49ZDCU676w+NcIsmk9E+mGQXW5bd97e4i4BXXPm4oNU/aLtXV8kdNULp4X9AedxTQ
+         VucxtgaBbhw9x6MrrQvMpIYHUk6qdm9q05sGeZzSyIfGpHNFeDZCpKWqkMStzd2sJ467
+         NKAFg1EfJHYtSm3kYr8+ukxMnVAPC/sjQ58j6HLDSiuHgHgfUtv2/amHrI3MUAApgyXm
+         4ozd+IQPs5wcoAb/3Cid0jeoSL1vKU7rlHqsVs/cnIviQfkOpVKYuYCMWOn/V/CXvHDa
+         xACQqg/P0s2cXSuXxvfdjtZpbDy+TQVQ6ZnEHFOLoXMm6TA5vU6DOLDlrqFrn4u4UuNF
+         upqA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=tV06X8ZwNG1YBW7qI4+9zEQPn4cces6TNXHqdWyfoC4=;
-        b=nQ1k/592jC6g6KY4MS2k7gjBazZf2VWs/0amR6UilKNU9csZD6qhN8nU7AFx8WzzVh
-         yrYTT9D/O1ZtSAVb2RLTAtG1Fk1tD+HkvUKcBW6T0KQx4BcKqzEGStg9h89KI+4/UtYB
-         EKfXmv2k14Z54TeyOvKRz3TWJm5eIwAemO1RB7h4gW1swjSnOwSTNGoxSfzQ5hVnED4t
-         /KXbhacpltuvTZMvnNs5MG0IuorAOtu3ZOQcl9vvKBDwAic+kwFxajG4v9mzbazHCPKi
-         3udOPro8j9ySMUcv1NWkNloWM0DpbLUGTeUXWTys6zbLwJoNQPUsKF0R/7gBLqNBdQwv
-         To0w==
-X-Gm-Message-State: AJIora9BxZ7rQyv7Nx9tGe9ig70e5d0KVzAzRxwG6CTJUqCgmwu1Dpn0
-        1Cn+ibJzBEmBb0Rpc8hcCdvP1g==
-X-Google-Smtp-Source: AGRyM1vzAxHVb8A5BM3cUTrB9ok+3+VShZVSqqsL9IGVRhf5PjhVblMcH7rfAoI61MaxE2OBZG+aWg==
-X-Received: by 2002:aa7:96da:0:b0:525:1752:85b with SMTP id h26-20020aa796da000000b005251752085bmr53522453pfq.63.1657211825312;
-        Thu, 07 Jul 2022 09:37:05 -0700 (PDT)
-Received: from p14s (S0106889e681aac74.cg.shawcable.net. [68.147.0.187])
-        by smtp.gmail.com with ESMTPSA id f126-20020a623884000000b0052891272298sm6048037pfa.120.2022.07.07.09.37.03
+        bh=X4ZyDiG49m0gnXusM/3dJ8XamBzjgE2+uil3Jq1hmaM=;
+        b=FyLENomZZYU76yTeAJEYpvaH9eCxy8hzu87HnyBwj/+cVjnhpONhghiTgx9MSas+iS
+         KR4avh5DPkwp5mgQyHxDhccAxWrwxgFxyK3xEUDb4EzN2ldd//egUAGKN4roYQ/DuD8/
+         7CjJjqh076jSyjkPfnaUVd6pFAPxLNwSUAvYgKRm//Wr+/PPoBfvjickKMOxaLF4MSMI
+         Q/IkQKS+d4/Dk1So5jceLHy0ZPHQ7rCY+2yKInOG6Et5nP1R8BBTdSWDnwDKVYjpVZmN
+         A1qgl/YHs6qnMoRPhT43M/dqSPDJGokRCopgH0JsCXP8ZFyHokqI+0qjNyXbRXIrBSy+
+         OEUQ==
+X-Gm-Message-State: AJIora+vq8LZtTqZt75x1QrpchjyqRjH0r/DxcN72SuagQ649yEIRgFb
+        5EgnvuHOk/bNmWgAszB0GO7msA==
+X-Google-Smtp-Source: AGRyM1uFgEAF/n3ZL8SgaHP0it5sEiGezafpwXHFouNd511hUumx1la2tvv7rjI5pniBlsKFFDXt+Q==
+X-Received: by 2002:a63:4558:0:b0:411:442a:b740 with SMTP id u24-20020a634558000000b00411442ab740mr39047805pgk.540.1657211843101;
+        Thu, 07 Jul 2022 09:37:23 -0700 (PDT)
+Received: from google.com (123.65.230.35.bc.googleusercontent.com. [35.230.65.123])
+        by smtp.gmail.com with ESMTPSA id p22-20020a1709027ed600b001690d398401sm28412267plb.88.2022.07.07.09.37.22
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 07 Jul 2022 09:37:03 -0700 (PDT)
-Date:   Thu, 7 Jul 2022 10:37:01 -0600
-From:   Mathieu Poirier <mathieu.poirier@linaro.org>
-To:     Besar Wicaksono <bwicaksono@nvidia.com>
-Cc:     suzuki.poulose@arm.com, robin.murphy@arm.com,
-        catalin.marinas@arm.com, will@kernel.org, mark.rutland@arm.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-tegra@vger.kernel.org, sudeep.holla@arm.com,
-        thanu.rangarajan@arm.com, Michael.Williams@arm.com,
-        treding@nvidia.com, jonathanh@nvidia.com, vsethi@nvidia.com,
-        mike.leach@linaro.org, leo.yan@linaro.org
-Subject: Re: [RESEND PATCH v3 0/2] perf: ARM CoreSight PMU support
-Message-ID: <20220707163701.GA2616901@p14s>
-References: <20220621055035.31766-1-bwicaksono@nvidia.com>
+        Thu, 07 Jul 2022 09:37:22 -0700 (PDT)
+Date:   Thu, 7 Jul 2022 16:37:18 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Wang Guangju <wangguangju@baidu.com>
+Cc:     pbonzini@redhat.com, vkuznets@redhat.com, jmattson@google.com,
+        wanpengli@tencent.com, bp@alien8.de, joro@8bytes.org,
+        suravee.suthikulpanit@amd.com, hpa@zytor.com, tglx@linutronix.de,
+        mingo@redhat.com, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, chukaiping <chukaiping@baidu.com>
+Subject: Re: [PATCH] KVM: x86: Add EOI_INDUCED exit handlers for Hyper-V
+ SynIC vectors
+Message-ID: <YscLvipHbNx+Wy9y@google.com>
+References: <20220707122854.87-1-wangguangju@baidu.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220621055035.31766-1-bwicaksono@nvidia.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220707122854.87-1-wangguangju@baidu.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-I will look at this patchset next week.
+This isn't adding a handler so much as it's signaling EOI for SynIC vectors. Maybe?
 
-Thanks,
-Mathieu
+  KVM: x86: Send EOI to SynIC vectors on accelerated EOI-induced VM-Exits
 
-On Tue, Jun 21, 2022 at 12:50:33AM -0500, Besar Wicaksono wrote:
-> Add driver support for ARM CoreSight PMU device and event attributes for NVIDIA
-> implementation. The code is based on ARM Coresight PMU architecture and ACPI ARM
-> Performance Monitoring Unit table (APMT) specification below:
->  * ARM Coresight PMU:
->         https://developer.arm.com/documentation/ihi0091/latest
->  * APMT: https://developer.arm.com/documentation/den0117/latest
+On Thu, Jul 07, 2022, Wang Guangju wrote:
+> From: chukaiping <chukaiping@baidu.com>
 > 
-> Notes:
->  * There is a concern on the naming of the PMU device.
->    Currently the driver is probing "arm-coresight-pmu" device, however the APMT
->    spec supports different kinds of CoreSight PMU based implementation. So it is
->    open for discussion if the name can stay or a "generic" name is required.
->    Please see the following thread:
->    http://lists.infradead.org/pipermail/linux-arm-kernel/2022-May/740485.html
+> When EOI virtualization is performed on VMX,
+> kvm_apic_set_eoi_accelerated() is called upon
+> EXIT_REASON_EOI_INDUCED but unlike its non-accelerated
+> apic_set_eoi() sibling, Hyper-V SINT vectors are
+> left unhandled.
+
+Wrap changelogs closer to ~75 chars.
+
+> This patch fix it, and add a new helper function to
+> handle both IOAPIC and Hyper-V SINT vectors.
+
+Avoid "this patch" and simply state what change is being made.  E.g.
+
+
+  Send EOI to Hyper-V SINT vectors when handling acclerated EOI-induced
+  VM-Exits.  KVM Hyper-V needs to handle the SINT EOI irrespective of
+  whether the EOI is acclerated or not.
+
+Fixes: 5c919412fe61 ("kvm/x86: Hyper-V synthetic interrupt controller")
+
+and probably Cc: stable@vger.kernel.org?
+
+> Suggested-by: Vitaly Kuznetsov <vkuznets@redhat.com>
+> Signed-off-by: wangguangju <wangguangju@baidu.com>
+> ---
+>  arch/x86/kvm/lapic.c | 19 ++++++++++++-------
+>  1 file changed, 12 insertions(+), 7 deletions(-)
 > 
-> The patchset applies on top of
->   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
->   master next-20220524
-> 
-> Changes from v2:
->  * Driver is now probing "arm-system-pmu" device.
->  * Change default PMU naming to "arm_<APMT node type>_pmu".
->  * Add implementor ops to generate custom name.
-> Thanks to suzuki.poulose@arm.com for the review comments.
-> v2: https://lore.kernel.org/all/20220515163044.50055-1-bwicaksono@nvidia.com/
-> 
-> Changes from v1:
->  * Remove CPU arch dependency.
->  * Remove 32-bit read/write helper function and just use read/writel.
->  * Add .is_visible into event attribute to filter out cycle counter event.
->  * Update pmiidr matching.
->  * Remove read-modify-write on PMCR since the driver only writes to PMCR.E.
->  * Assign default cycle event outside the 32-bit PMEVTYPER range.
->  * Rework the active event and used counter tracking.
-> Thanks to robin.murphy@arm.com for the review comments.
-> v1: https://lore.kernel.org/all/20220509002810.12412-1-bwicaksono@nvidia.com/
-> 
-> Besar Wicaksono (2):
->   perf: coresight_pmu: Add support for ARM CoreSight PMU driver
->   perf: coresight_pmu: Add support for NVIDIA SCF and MCF attribute
-> 
->  arch/arm64/configs/defconfig                  |    1 +
->  drivers/perf/Kconfig                          |    2 +
->  drivers/perf/Makefile                         |    1 +
->  drivers/perf/coresight_pmu/Kconfig            |   11 +
->  drivers/perf/coresight_pmu/Makefile           |    7 +
->  .../perf/coresight_pmu/arm_coresight_pmu.c    | 1316 +++++++++++++++++
->  .../perf/coresight_pmu/arm_coresight_pmu.h    |  177 +++
->  .../coresight_pmu/arm_coresight_pmu_nvidia.c  |  312 ++++
->  .../coresight_pmu/arm_coresight_pmu_nvidia.h  |   17 +
->  9 files changed, 1844 insertions(+)
->  create mode 100644 drivers/perf/coresight_pmu/Kconfig
->  create mode 100644 drivers/perf/coresight_pmu/Makefile
->  create mode 100644 drivers/perf/coresight_pmu/arm_coresight_pmu.c
->  create mode 100644 drivers/perf/coresight_pmu/arm_coresight_pmu.h
->  create mode 100644 drivers/perf/coresight_pmu/arm_coresight_pmu_nvidia.c
->  create mode 100644 drivers/perf/coresight_pmu/arm_coresight_pmu_nvidia.h
-> 
-> 
-> base-commit: 09ce5091ff971cdbfd67ad84dc561ea27f10d67a
-> -- 
-> 2.17.1
-> 
+> diff --git a/arch/x86/kvm/lapic.c b/arch/x86/kvm/lapic.c
+> index f03facc..e046afe 100644
+> --- a/arch/x86/kvm/lapic.c
+> +++ b/arch/x86/kvm/lapic.c
+> @@ -1269,6 +1269,16 @@ static void kvm_ioapic_send_eoi(struct kvm_lapic *apic, int vector)
+>  	kvm_ioapic_update_eoi(apic->vcpu, vector, trigger_mode);
+>  }
+>  
+> +static inline void apic_set_eoi_vector(struct kvm_lapic *apic, int vector)
+> +{
+> +	if (to_hv_vcpu(apic->vcpu) &&
+> +	    test_bit(vector, to_hv_synic(apic->vcpu)->vec_bitmap))
+> +		kvm_hv_synic_send_eoi(apic->vcpu, vector);
+> +
+> +	kvm_ioapic_send_eoi(apic, vector);
+> +	kvm_make_request(KVM_REQ_EVENT, apic->vcpu);
+> +}
+
+Rather than add a third helper, what about renaming kvm_apic_set_eoi_accelerated()
+and having the non-accelerated helper call the "acclerated" version?  That will
+document the delta between the non-accelerated patch and the accelerated path.
+The only hiccup is tracing, but that's easy to resolve (or we could just not trace
+if there's no valid vector to EOI), e.g.
+
+
+/*
+ * Send EOI for a valid vector.  The caller, or hardware when this is invoked
+ * after an accelerated EOI VM-Exit, is responsible for updating the vISR and
+ * vPPR.
+ */
+void kvm_apic_set_eoi(struct kvm_lapic *apic, int vector)
+{
+	trace_kvm_eoi(apic, vector);
+
+	if (to_hv_vcpu(apic->vcpu) &&
+	    test_bit(vector, to_hv_synic(apic->vcpu)->vec_bitmap))
+		kvm_hv_synic_send_eoi(apic->vcpu, vector);
+
+	kvm_ioapic_send_eoi(apic, vector);
+	kvm_make_request(KVM_REQ_EVENT, apic->vcpu);
+}
+EXPORT_SYMBOL_GPL(kvm_apic_set_eoi);
+
+static int apic_set_eoi(struct kvm_lapic *apic)
+{
+	int vector = apic_find_highest_isr(apic);
+
+	/*
+	 * Not every write EOI will has corresponding ISR,
+	 * one example is when Kernel check timer on setup_IO_APIC
+	 */
+	if (vector == -1) {
+		trace_kvm_eoi(apic, vector);   <---- maybe just drop this?
+		return vector;
+	}
+
+	apic_clear_isr(vector, apic);
+	apic_update_ppr(apic);
+
+	kvm_apic_set_eoi(apic, vector);
+
+	return vector;
+}

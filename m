@@ -2,36 +2,36 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B609956A856
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 18:39:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CA5D656A84E
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 18:39:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236320AbiGGQhP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Jul 2022 12:37:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45160 "EHLO
+        id S236324AbiGGQhS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Jul 2022 12:37:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45174 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236238AbiGGQgu (ORCPT
+        with ESMTP id S236242AbiGGQgv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Jul 2022 12:36:50 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6CAB3206A
-        for <linux-kernel@vger.kernel.org>; Thu,  7 Jul 2022 09:36:49 -0700 (PDT)
+        Thu, 7 Jul 2022 12:36:51 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 849F245054
+        for <linux-kernel@vger.kernel.org>; Thu,  7 Jul 2022 09:36:50 -0700 (PDT)
 Received: from hermes-devbox.fritz.box (82-71-8-225.dsl.in-addr.zen.co.uk [82.71.8.225])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
         (Authenticated sender: bbeckett)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 5293566019DA;
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id F023566019DD;
         Thu,  7 Jul 2022 17:36:48 +0100 (BST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1657211808;
-        bh=BJ87eisXj9Ppx4nwiDdWpEsHsZ0BoBn8nQEON2j1/N8=;
+        s=mail; t=1657211809;
+        bh=yyqoiKo1vjbgBxUDvFfH6fIoAaG7ofkIEVjSYkMkda8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Itkdm6v3oqx9wwzZMoWznGOM0+MaYPM6u9FIfj5QoGuSoMGOV6ReetkFdJmUCYEkQ
-         BWxdWfxv5kjzjamMcbgOOlny1aR/lp3lir9xhewHDgBsBueS5hPh0J3RbYIke/u1w3
-         25mMXnQgi8pIygVcMASRHzIdZzDdHnnnVmhChy4L5Qz3NX5Ha/wWJhyIezaT4rlQgT
-         /9qi1xDEtefpMqxQB1fHWKOYMmZdgY9la6Tp4N9t1rYW/GNMSaKUpZjNT0mMcMc0ti
-         BmVdm4yfj9miuVS+fnde8XDmeJO6EkgBtPPFwnBpf7h2dwk4QuDVkbqW8OaOcDc9Kc
-         /55iQB8OamsYA==
+        b=S2kS6QnGpjD57PEwB480ynQtUoapIaA63cBW9pqtjzasS0yZoA5XCZqnYPaHlY76h
+         uaR0jaJN5EjdprHX59F6OWdAqbzfHd3QDwo9NG/ZJrwl2mQbXyORlBe0FrhZ4Be3pv
+         4pYgp9uYTKPcZxzviqPTk1v5fMcaK5uvMzaW7OLeRnaruwUgnfeu93UfXk/Ui1qE0e
+         Oj25lZnGeO9M6PUaetxA5Vzg0IPPAyBfc3Jbm6DOJAb859iBo7MM7a3dGpHLZ/2Ec3
+         f/8iO2d2EIaTmT0IJ+2wN461ZLVLJiO+wS2/ThqxfyjH4ot7YAbnKhUb392VvR1Cfi
+         5g8DCk9BWGSAg==
 From:   Robert Beckett <bob.beckett@collabora.com>
 To:     dri-devel@lists.freedesktop.org, intel-gfx@lists.freedesktop.org,
         Jani Nikula <jani.nikula@linux.intel.com>,
@@ -44,9 +44,9 @@ Cc:     kernel@collabora.com, Robert Beckett <bob.beckett@collabora.com>,
         Matthew Auld <matthew.auld@intel.com>,
         =?UTF-8?q?Thomas=20Hellstr=C3=B6m?= 
         <thomas.hellstrom@linux.intel.com>, linux-kernel@vger.kernel.org
-Subject: [PATCH v9 08/11] drm/i915/ttm: add buffer pin on alloc flag
-Date:   Thu,  7 Jul 2022 16:36:03 +0000
-Message-Id: <20220707163606.1474111-9-bob.beckett@collabora.com>
+Subject: [PATCH v9 09/11] drm/i915/selftest: don't attempt engine reset of guc submission engines
+Date:   Thu,  7 Jul 2022 16:36:04 +0000
+Message-Id: <20220707163606.1474111-10-bob.beckett@collabora.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220707163606.1474111-1-bob.beckett@collabora.com>
 References: <20220707163606.1474111-1-bob.beckett@collabora.com>
@@ -61,114 +61,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-For situations where allocations need to fail on alloc instead of
-delayed get_pages, add a new alloc flag to pin the ttm bo.
-This makes sure that the resource has been allocated during buffer
-creation, allowing it to fail with an error if the placement is
-exhausted.
-This allows existing fallback options for stolen backend allocation like
-create_ring_vma to work as expected.
+igt_reset_engines_stolen tries to reset engines without checking if it
+is possible.
+Engines using GuC submission are not able to be reset from the host.
+
+In this scenario, the reset exits early, then on the next iteration of
+the each engine loop, the async teardown of the spinner request
+context's ring occurs while the next engine is under test.
+
+This is seen as a stolen memory corruption as the ring buffer was busy
+initially, but free during the confirmation check and had been poisoned
+during cleanup.
+
+Fix this by not testing GuC submission using engines.
 
 Signed-off-by: Robert Beckett <bob.beckett@collabora.com>
 ---
- .../gpu/drm/i915/gem/i915_gem_object_types.h  | 13 ++++++----
- drivers/gpu/drm/i915/gem/i915_gem_ttm.c       | 25 ++++++++++++++++++-
- 2 files changed, 32 insertions(+), 6 deletions(-)
+ drivers/gpu/drm/i915/gt/selftest_reset.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/drivers/gpu/drm/i915/gem/i915_gem_object_types.h b/drivers/gpu/drm/i915/gem/i915_gem_object_types.h
-index 6632ed52e919..07bc11247a3e 100644
---- a/drivers/gpu/drm/i915/gem/i915_gem_object_types.h
-+++ b/drivers/gpu/drm/i915/gem/i915_gem_object_types.h
-@@ -325,17 +325,20 @@ struct drm_i915_gem_object {
-  * dealing with userspace objects the CPU fault handler is free to ignore this.
-  */
- #define I915_BO_ALLOC_GPU_ONLY	  BIT(6)
-+/* object should be pinned in destination region from allocation */
-+#define I915_BO_ALLOC_PINNED	  BIT(7)
- #define I915_BO_ALLOC_FLAGS (I915_BO_ALLOC_CONTIGUOUS | \
- 			     I915_BO_ALLOC_VOLATILE | \
- 			     I915_BO_ALLOC_CPU_CLEAR | \
- 			     I915_BO_ALLOC_USER | \
- 			     I915_BO_ALLOC_PM_VOLATILE | \
- 			     I915_BO_ALLOC_PM_EARLY | \
--			     I915_BO_ALLOC_GPU_ONLY)
--#define I915_BO_READONLY          BIT(7)
--#define I915_TILING_QUIRK_BIT     8 /* unknown swizzling; do not release! */
--#define I915_BO_PROTECTED         BIT(9)
--#define I915_BO_WAS_BOUND_BIT     10
-+			     I915_BO_ALLOC_GPU_ONLY | \
-+			     I915_BO_ALLOC_PINNED)
-+#define I915_BO_READONLY          BIT(8)
-+#define I915_TILING_QUIRK_BIT     9 /* unknown swizzling; do not release! */
-+#define I915_BO_PROTECTED         BIT(10)
-+#define I915_BO_WAS_BOUND_BIT     11
- 	/**
- 	 * @mem_flags - Mutable placement-related flags
- 	 *
-diff --git a/drivers/gpu/drm/i915/gem/i915_gem_ttm.c b/drivers/gpu/drm/i915/gem/i915_gem_ttm.c
-index 27d59639177f..bb988608296d 100644
---- a/drivers/gpu/drm/i915/gem/i915_gem_ttm.c
-+++ b/drivers/gpu/drm/i915/gem/i915_gem_ttm.c
-@@ -998,6 +998,13 @@ static void i915_ttm_delayed_free(struct drm_i915_gem_object *obj)
- {
- 	GEM_BUG_ON(!obj->ttm.created);
+diff --git a/drivers/gpu/drm/i915/gt/selftest_reset.c b/drivers/gpu/drm/i915/gt/selftest_reset.c
+index 37c38bdd5f47..55f3b34e5f6e 100644
+--- a/drivers/gpu/drm/i915/gt/selftest_reset.c
++++ b/drivers/gpu/drm/i915/gt/selftest_reset.c
+@@ -194,6 +194,8 @@ static int igt_reset_engines_stolen(void *arg)
+ 		return 0;
  
-+	/* stolen objects are pinned for lifetime. Unpin before putting */
-+	if (obj->flags & I915_BO_ALLOC_PINNED) {
-+		ttm_bo_reserve(i915_gem_to_ttm(obj), true, false, NULL);
-+		ttm_bo_unpin(i915_gem_to_ttm(obj));
-+		ttm_bo_unreserve(i915_gem_to_ttm(obj));
-+	}
-+
- 	ttm_bo_put(i915_gem_to_ttm(obj));
- }
- 
-@@ -1193,6 +1200,9 @@ int __i915_gem_ttm_object_init(struct intel_memory_region *mem,
- 		.no_wait_gpu = false,
- 	};
- 	enum ttm_bo_type bo_type;
-+	struct ttm_place _place;
-+	struct ttm_placement _placement;
-+	struct ttm_placement *placement;
- 	int ret;
- 
- 	drm_gem_private_object_init(&i915->drm, &obj->base, size);
-@@ -1222,6 +1232,17 @@ int __i915_gem_ttm_object_init(struct intel_memory_region *mem,
- 	 */
- 	i915_gem_object_make_unshrinkable(obj);
- 
-+	if (obj->flags & I915_BO_ALLOC_PINNED) {
-+		i915_ttm_place_from_region(mem, &_place, obj->bo_offset,
-+					   obj->base.size, obj->flags);
-+		_placement.num_placement = 1;
-+		_placement.placement = &_place;
-+		_placement.num_busy_placement = 0;
-+		_placement.busy_placement = NULL;
-+		placement = &_placement;
-+	} else {
-+		placement = &i915_sys_placement;
-+	}
- 	/*
- 	 * If this function fails, it will call the destructor, but
- 	 * our caller still owns the object. So no freeing in the
-@@ -1230,7 +1251,7 @@ int __i915_gem_ttm_object_init(struct intel_memory_region *mem,
- 	 * until successful initialization.
- 	 */
- 	ret = ttm_bo_init_reserved(&i915->bdev, i915_gem_to_ttm(obj), size,
--				   bo_type, &i915_sys_placement,
-+				   bo_type, placement,
- 				   page_size >> PAGE_SHIFT,
- 				   &ctx, NULL, NULL, i915_ttm_bo_destroy);
- 	if (ret)
-@@ -1242,6 +1263,8 @@ int __i915_gem_ttm_object_init(struct intel_memory_region *mem,
- 	i915_ttm_adjust_domains_after_move(obj);
- 	i915_ttm_adjust_gem_after_move(obj);
- 	obj->ttm.cache_level_override = false;
-+	if (obj->flags & I915_BO_ALLOC_PINNED)
-+		ttm_bo_pin(i915_gem_to_ttm(obj));
- 	i915_gem_object_unlock(obj);
- 
- 	return 0;
+ 	for_each_engine(engine, gt, id) {
++		if (intel_engine_uses_guc(engine))
++			continue;
+ 		err = __igt_reset_stolen(gt, engine->mask, engine->name);
+ 		if (err)
+ 			return err;
 -- 
 2.25.1
 

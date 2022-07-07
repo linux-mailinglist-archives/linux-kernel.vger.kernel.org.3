@@ -2,80 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B7BCB569C3D
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 09:54:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E1C6569C79
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 10:08:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235139AbiGGHvG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Jul 2022 03:51:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38764 "EHLO
+        id S235053AbiGGIEn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Jul 2022 04:04:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49686 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235117AbiGGHvB (ORCPT
+        with ESMTP id S232120AbiGGIEk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Jul 2022 03:51:01 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 031E733A18
-        for <linux-kernel@vger.kernel.org>; Thu,  7 Jul 2022 00:50:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1657180257;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=+6vKb5qtW2WQk3PF9/RN812iqCXsUylPTfCM4P31gZ0=;
-        b=Z9/dRsgWOW1aq8VVcce7SDWbhH4blf5vJqWJFFf8luO3qJI/54bMxFmLmUUajfrDcCiL0q
-        FlHWlxvDCExwmI+THavvOsRuEa119rLr82g/xq61SJceD+W6v3CpydQIynJSU4EaELWDOI
-        vHUuqOpUOiDnjntdw+XZOCagrlSKQGg=
-Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
- [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-325-wNPe_FNrO0C3mx6E--qHdQ-1; Thu, 07 Jul 2022 03:50:56 -0400
-X-MC-Unique: wNPe_FNrO0C3mx6E--qHdQ-1
-Received: by mail-wm1-f71.google.com with SMTP id m17-20020a05600c3b1100b003a04a2f4936so9200357wms.6
-        for <linux-kernel@vger.kernel.org>; Thu, 07 Jul 2022 00:50:55 -0700 (PDT)
+        Thu, 7 Jul 2022 04:04:40 -0400
+Received: from mail-lj1-x231.google.com (mail-lj1-x231.google.com [IPv6:2a00:1450:4864:20::231])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3A9DE00
+        for <linux-kernel@vger.kernel.org>; Thu,  7 Jul 2022 01:04:39 -0700 (PDT)
+Received: by mail-lj1-x231.google.com with SMTP id w2so4920265ljj.7
+        for <linux-kernel@vger.kernel.org>; Thu, 07 Jul 2022 01:04:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=j6cTL70t81aTnV9x0x+mDaCfTVWwcqwkSWQQpbKRysc=;
+        b=je6ZJ8G24GI5T7f3zVncXY2R3x/GyryMMiZeWydkL5djDwH1y3R7eh9Jq7GZ+VjSmb
+         a+eZLklX94jyOz1YD9eehlDaxgYhFP6qzL8qeUH37Tl8CnuJ36fytFm/LKbEq5ghCWY7
+         52C6lpBA/LauPnoSxudh+wPUKILLcfTJMzWPlgNch+LCoN5IgLz2Ehm9S+caQ5g3MFfv
+         lfFYLqzsKAOcxRUzYSGYFwsSx9YRZZcaNuffd5QCnza1wOsBnwCksWBuR8uwRT0ydprz
+         tl8NMIphq/6HsC8d9JJPNgkNAqR+qMtNZJQSjeh7/RRcJbvchImmlZUiQ7Wr3633/+3q
+         N/ag==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=+6vKb5qtW2WQk3PF9/RN812iqCXsUylPTfCM4P31gZ0=;
-        b=xHdJZ0dlkEcyiTxKMhLLr78O06seZKz0mF7/roaD2w6RWSxwLiWxDpo9ztM7q1Aksc
-         to2cQI3Z5gXlQCJgj7WqpeFAaqmJgIdeJCr5zVEhndvUUi6/xzkaltQ9MZKcMI6ZCpf1
-         eQ+mw65lYcW08N6PqIz03KVhklQ5SsZa8jwGsXJmRO1TQKBa3/zUo6be9XGSr8jhJtWi
-         uQlNlXSOwFb2zJpkjHRdklZ5RveOMT8K3SStfGuPP2JXyVbB4f9+C45O2nXQrJ0ctBpp
-         PGrX6X0tkaNttGhzpErG/uTx5xobIiuVi9BLcOHKMPk02GoPCT4Pkvv7PCibWbrn4Pz9
-         KKVA==
-X-Gm-Message-State: AJIora9vO0mGqOcj/CjPEj5jDqGpFEeLcc8iQx4hTPPHb5XbIds8PpFp
-        IzISMdpYEsT2EJ8/349uBct7VkY5eu+atTNoaL0y06bvCUwm13xpmffcS7BJe2YhH+1SM4wTmAF
-        ZX/t8wGv5BDRStnC8T8uqosQW
-X-Received: by 2002:adf:fa04:0:b0:21d:1864:3172 with SMTP id m4-20020adffa04000000b0021d18643172mr44359074wrr.292.1657180254792;
-        Thu, 07 Jul 2022 00:50:54 -0700 (PDT)
-X-Google-Smtp-Source: AGRyM1s+oP8nKMiKtM5JWiNW2EmP7v5KZWVhT1rv4ikXnOMyupFZ/UG6Ka+8OsYj9pCbnG7pzppYQQ==
-X-Received: by 2002:adf:fa04:0:b0:21d:1864:3172 with SMTP id m4-20020adffa04000000b0021d18643172mr44359057wrr.292.1657180254605;
-        Thu, 07 Jul 2022 00:50:54 -0700 (PDT)
-Received: from debian.home (2a01cb058d1194004161f17a6a9ad508.ipv6.abo.wanadoo.fr. [2a01:cb05:8d11:9400:4161:f17a:6a9a:d508])
-        by smtp.gmail.com with ESMTPSA id u6-20020a5d5146000000b0020fcc655e4asm38297650wrt.5.2022.07.07.00.50.53
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=j6cTL70t81aTnV9x0x+mDaCfTVWwcqwkSWQQpbKRysc=;
+        b=lkFnf5OH0NhCc4V6kadQ7/1grSwhyIHCmqCc+jOH+bw5HJqORAP1CCh+DT/hm1T/PI
+         ly/jstYhntcNTCcTfnu/UqaciCogd9y/TFVijmDzl/8fNktZcJCkKXQhUDdHN1SFenr3
+         YxPIDA3XLyB6r9SyHf1YEbOmGECAIycqhQg3Is/S7jwjGDY3+zfXCbbWXYHe5x6Y4q6W
+         CoR0dfW0dcZ41GacYW7b3LmIU5G305FODPRHRQk5Hff7smLlgMQUcaKx4y5sHiDpMkvY
+         EHSbKEya2VNZl4mIsa6Ou85XKRK2L/vRTGINu1m5eEvGWyZGKVG2Pl173KoHfTD6P/9f
+         eXuA==
+X-Gm-Message-State: AJIora/u2ccvDFs6fPLgT2baiuUWjQJPUisnIFSAwaUjwcMfw00KHzBL
+        3te+ZWU7hxSYxGDA9yrrxvyjMw==
+X-Google-Smtp-Source: AGRyM1s/K+WamhzckF/8xnMBEQZ4YAGMlkNm4IeBoow2nLBL8pH0v4jvCtU+LTl5jPsnxiMxi2PgOg==
+X-Received: by 2002:a05:651c:511:b0:25b:f78e:cb30 with SMTP id o17-20020a05651c051100b0025bf78ecb30mr22584914ljp.327.1657181078252;
+        Thu, 07 Jul 2022 01:04:38 -0700 (PDT)
+Received: from krzk-bin.home ([84.20.121.239])
+        by smtp.gmail.com with ESMTPSA id s6-20020a056512214600b0047b0f2d7650sm6697187lfr.271.2022.07.07.01.04.37
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 07 Jul 2022 00:50:54 -0700 (PDT)
-Date:   Thu, 7 Jul 2022 09:50:52 +0200
-From:   Guillaume Nault <gnault@redhat.com>
-To:     Justin Stitt <justinstitt@google.com>
-Cc:     James Chapman <jchapman@katalix.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Tom Rix <trix@redhat.com>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Subject: Re: [PATCH] net: l2tp: fix clang -Wformat warning
-Message-ID: <20220707075052.GA3912@debian.home>
-References: <20220706230833.535238-1-justinstitt@google.com>
+        Thu, 07 Jul 2022 01:04:37 -0700 (PDT)
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To:     Ulf Hansson <ulf.hansson@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Bhupesh Sharma <bhupesh.sharma@linaro.org>,
+        linux-mmc@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org
+Cc:     Douglas Anderson <dianders@chromium.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: [PATCH 0/5] dt-bindings: mmc: / ARM: qcom: correct reg-names and clock entries
+Date:   Thu,  7 Jul 2022 09:51:46 +0200
+Message-Id: <20220707075151.67335-1-krzysztof.kozlowski@linaro.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220706230833.535238-1-justinstitt@google.com>
-X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -83,51 +76,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jul 06, 2022 at 04:08:33PM -0700, Justin Stitt wrote:
-> When building with clang we encounter this warning:
-> | net/l2tp/l2tp_ppp.c:1557:6: error: format specifies type 'unsigned
-> | short' but the argument has type 'u32' (aka 'unsigned int')
-> | [-Werror,-Wformat] session->nr, session->ns,
-> 
-> Both session->nr and session->ns are of type u32. The format specifier
-> previously used is `%hu` which would truncate our unsigned integer from
-> 32 to 16 bits. This doesn't seem like intended behavior, if it is then
-> perhaps we need to consider suppressing the warning with pragma clauses.
+Hi,
 
-pppol2tp_seq_session_show() is only called for L2TPv2 sessions, where
-ns and nr are 2 bytes long (L2TPv3 uses 3 bytes, hence the u32 type in
-the generic l2tp_session structure). So %hu shouldn't truncate anything
-here.
+No dependencies.  DT bindings patches are independent from DTS, so they can go
+via separate tree.
 
-However %u doesn't harm and is cleaner than silencing the warning with
-pragma.
+Best regards,
+Krzysztof
 
-Acked-by: Guillaume Nault <gnault@redhat.com>
+Krzysztof Kozlowski (5):
+  dt-bindings: mmc: sdhci-msm: fix reg-names entries
+  dt-bindings: mmc: sdhci-msm: constrain reg-names at least for one
+    variant
+  ARM: dts: qcom: align SDHCI reg-names with DT schema
+  arm64: dts: qcom: align SDHCI reg-names with DT schema
+  ARM: dts: qcom: align SDHCI clocks with DT schema
 
+ .../devicetree/bindings/mmc/sdhci-msm.yaml    | 40 +++++++++++++------
+ arch/arm/boot/dts/qcom-apq8084.dtsi           | 16 ++++----
+ arch/arm/boot/dts/qcom-ipq4019.dtsi           |  5 ++-
+ arch/arm/boot/dts/qcom-msm8226.dtsi           | 24 +++++------
+ arch/arm/boot/dts/qcom-msm8974.dtsi           | 24 +++++------
+ arch/arm/boot/dts/qcom-msm8974pro.dtsi        |  6 +--
+ arch/arm/boot/dts/qcom-sdx65.dtsi             |  2 +-
+ arch/arm64/boot/dts/qcom/ipq8074.dtsi         |  2 +-
+ arch/arm64/boot/dts/qcom/msm8916.dtsi         |  4 +-
+ arch/arm64/boot/dts/qcom/msm8953.dtsi         |  4 +-
+ arch/arm64/boot/dts/qcom/msm8994.dtsi         |  4 +-
+ arch/arm64/boot/dts/qcom/msm8996.dtsi         |  4 +-
+ arch/arm64/boot/dts/qcom/msm8998.dtsi         |  2 +-
+ 13 files changed, 77 insertions(+), 60 deletions(-)
 
-> This patch should get us closer to the goal of enabling the -Wformat
-> flag for Clang builds.
-> 
-> Link: https://github.com/ClangBuiltLinux/linux/issues/378
-> Signed-off-by: Justin Stitt <justinstitt@google.com>
-> ---
->  net/l2tp/l2tp_ppp.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/net/l2tp/l2tp_ppp.c b/net/l2tp/l2tp_ppp.c
-> index 8be1fdc68a0b..db2e584c625e 100644
-> --- a/net/l2tp/l2tp_ppp.c
-> +++ b/net/l2tp/l2tp_ppp.c
-> @@ -1553,7 +1553,7 @@ static void pppol2tp_seq_session_show(struct seq_file *m, void *v)
->  		   session->lns_mode ? "LNS" : "LAC",
->  		   0,
->  		   jiffies_to_msecs(session->reorder_timeout));
-> -	seq_printf(m, "   %hu/%hu %ld/%ld/%ld %ld/%ld/%ld\n",
-> +	seq_printf(m, "   %u/%u %ld/%ld/%ld %ld/%ld/%ld\n",
->  		   session->nr, session->ns,
->  		   atomic_long_read(&session->stats.tx_packets),
->  		   atomic_long_read(&session->stats.tx_bytes),
-> -- 
-> 2.37.0.rc0.161.g10f37bed90-goog
-> 
+-- 
+2.34.1
 

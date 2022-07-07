@@ -2,99 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C65C56A0A2
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 13:00:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1322356A0A5
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 13:00:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235104AbiGGK7i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Jul 2022 06:59:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49170 "EHLO
+        id S235155AbiGGK7z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Jul 2022 06:59:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49370 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230187AbiGGK7e (ORCPT
+        with ESMTP id S230187AbiGGK7v (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Jul 2022 06:59:34 -0400
-Received: from alexa-out-sd-01.qualcomm.com (alexa-out-sd-01.qualcomm.com [199.106.114.38])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7987D5721C;
-        Thu,  7 Jul 2022 03:59:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1657191573; x=1688727573;
-  h=subject:to:cc:references:from:message-id:date:
-   mime-version:in-reply-to:content-transfer-encoding;
-  bh=OfSc07yQ3ge94ZYeQXBPSqIG1ZrgFidplmZMaEP/6us=;
-  b=gydAR5ApPju8f/+Q3tKFH4XjJbaNMNJwaGk/vdDR7fPLM3fN3Z5HkVi7
-   JAka9dX1RgyqhptL7HmwwVJ6imCPKvamiZjaJkLS69M8Jt6+He751s1RG
-   jjGFY7GyzGK740h4WWqhjwpYmNOuV3eTSK3qJp9Tc6BZqglK1yKCjF8NN
-   o=;
-Received: from unknown (HELO ironmsg01-sd.qualcomm.com) ([10.53.140.141])
-  by alexa-out-sd-01.qualcomm.com with ESMTP; 07 Jul 2022 03:59:33 -0700
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg01-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jul 2022 03:59:33 -0700
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Thu, 7 Jul 2022 03:59:32 -0700
-Received: from [10.79.43.230] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Thu, 7 Jul 2022
- 03:59:29 -0700
-Subject: Re: [V3 1/7] remoteproc: qcom: pas: Add decrypt shutdown support for
- modem
-To:     Konrad Dybcio <konrad.dybcio@somainline.org>,
-        <bjorn.andersson@linaro.org>
-CC:     <agross@kernel.org>, <mathieu.poirier@linaro.org>,
-        <dmitry.baryshkov@linaro.org>, <linux-arm-msm@vger.kernel.org>,
-        <linux-remoteproc@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-References: <1657022900-2049-1-git-send-email-quic_sibis@quicinc.com>
- <1657022900-2049-2-git-send-email-quic_sibis@quicinc.com>
- <b75e45fc-eede-d44d-9c0d-535923de2f9d@somainline.org>
-From:   Sibi Sankar <quic_sibis@quicinc.com>
-Message-ID: <e51d0dc3-344a-f82f-aaf2-d07d76bed98e@quicinc.com>
-Date:   Thu, 7 Jul 2022 16:29:26 +0530
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        Thu, 7 Jul 2022 06:59:51 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDDEC57224;
+        Thu,  7 Jul 2022 03:59:50 -0700 (PDT)
+Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 0319466019AF;
+        Thu,  7 Jul 2022 11:59:47 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1657191588;
+        bh=Ncasodb0mlhKue8G5um/dzJDJSNHJ442SPjDYU2q3GI=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=G3Wb0DHsH05SDtLOudN/tZyJYo7/p+kDkzNgTgA/qmXdIPemFSZ5Gp8mg7sHTnbo8
+         EPxxgeujFcYAVjQWRmi3qfj0zHSvYLfSCJC7H6tEaliGTh6w4anzitaB/H/gJ5bKg8
+         y6mxUghQ6cvnE7Zbp3n7ePsPsO2hydtEIAZvXjCZTbehGd3YfouYSxL2CMjMF8WUsR
+         sVeeDqcJCbu71+gQBISChVWgpY4jm8gwFQ158lXk2y0LfWpX3u9/isgH09jXZ5KUkd
+         LNYC/F0a9UMtAqWxw34Bh3k+NGCc4o611IAAe3qUf2hkIaZgOGItUzdibxR5gvgoB4
+         joD5hcJd9qoBg==
+Message-ID: <243b30ca-a552-3cb7-8a4e-6e54a56ff60a@collabora.com>
+Date:   Thu, 7 Jul 2022 12:59:45 +0200
 MIME-Version: 1.0
-In-Reply-To: <b75e45fc-eede-d44d-9c0d-535923de2f9d@somainline.org>
-Content-Type: text/plain; charset="utf-8"; format=flowed
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH 1/2] dt-bindings: soc: mediatek: add mdp3 mutex support
+ for mt8186
 Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+To:     Matthias Brugger <matthias.bgg@gmail.com>,
+        Allen-KH Cheng <allen-kh.cheng@mediatek.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>
+Cc:     Project_Global_Chrome_Upstream_Group@mediatek.com,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-mediatek@lists.infradead.org,
+        Xiandong Wang <xiandong.wang@mediatek.com>
+References: <20220705122627.2273-1-allen-kh.cheng@mediatek.com>
+ <20220705122627.2273-2-allen-kh.cheng@mediatek.com>
+ <5916c91b-41a1-c97a-84b4-7d48739a0639@collabora.com>
+ <640c1a9b-f8b5-aa89-19af-7d6f5c55eb12@gmail.com>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <640c1a9b-f8b5-aa89-19af-7d6f5c55eb12@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hey Konrad,
-Thanks for taking time to review the series.
-
-
-On 7/6/22 6:08 PM, Konrad Dybcio wrote:
+Il 07/07/22 12:41, Matthias Brugger ha scritto:
 > 
 > 
-> On 5.07.2022 14:08, Sibi Sankar wrote:
->> The initial shutdown request to modem on SM8450 SoCs would start the
->> decryption process and will keep returning errors until the modem shutdown
->> is complete. Fix this by retrying shutdowns in fixed intervals.
+> On 07/07/2022 10:52, AngeloGioacchino Del Regno wrote:
+>> Il 05/07/22 14:26, Allen-KH Cheng ha scritto:
+>>> Add mdp3 mutex compatible for mt8186 SoC.
+>>>
+>>> Signed-off-by: Allen-KH Cheng <allen-kh.cheng@mediatek.com>
+>>> Signed-off-by: Xiandong Wang <xiandong.wang@mediatek.com>
 >>
-> I'm sorry, but this message seems a bit cryptic to me.. What
-> is being decrypted? How is it related to the shutdown sequence?
-> Why does it need to finish first?
-
-I was told some portions of the modem logs in secured modem regions
-needs decryption and this needs to be completed before minidump/coredump
-are collected.
-
--Sibi
-
+>>
+>> Please drop this commit. Adding a mdp3-mutex compatible is not needed here.
+>>
 > 
-> Konrad
+> Thanks for checking. We probably would need a fallback compatible. We can only know 
+> from the HW engineers that can confirm if the IP block is the same as the disp 
+> mutex or a different one.
 > 
-> [snipped the rest]
+> I'll drop both patches for now until things got clear.
 > 
+
+They're located in a different iospace from each other, but either the platform
+data needs to *not be* joined together, or if they're together, I would not like
+having two different compatible strings for essentially the same thing.
+
+I would at this point prefer dropping '-disp' from 'mediatek,mt8186-disp-mutex'
+so that we would be able to declare two 'mediatek,mt8186-mutex' in devicetree...
+...or simply have two mediatek,mt8186-disp-mutex (although logically incorrect?).
+
+Cheers,
+Angelo
+
+> Regards,
+> Matthias
+> 
+>>> ---
+>>>   .../devicetree/bindings/soc/mediatek/mediatek,mutex.yaml         | 1 +
+>>>   1 file changed, 1 insertion(+)
+>>>
+>>> diff --git a/Documentation/devicetree/bindings/soc/mediatek/mediatek,mutex.yaml 
+>>> b/Documentation/devicetree/bindings/soc/mediatek/mediatek,mutex.yaml
+>>> index 627dcc3e8b32..234fa5dc07c2 100644
+>>> --- a/Documentation/devicetree/bindings/soc/mediatek/mediatek,mutex.yaml
+>>> +++ b/Documentation/devicetree/bindings/soc/mediatek/mediatek,mutex.yaml
+>>> @@ -30,6 +30,7 @@ properties:
+>>>         - mediatek,mt8173-disp-mutex
+>>>         - mediatek,mt8183-disp-mutex
+>>>         - mediatek,mt8186-disp-mutex
+>>> +      - mediatek,mt8186-mdp3-mutex
+>>>         - mediatek,mt8192-disp-mutex
+>>>         - mediatek,mt8195-disp-mutex
+>>
+>>
+>>
+

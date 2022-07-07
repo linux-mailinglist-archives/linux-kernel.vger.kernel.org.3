@@ -2,121 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A347F56985B
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 04:51:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 11A9356985D
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 04:52:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234608AbiGGCvq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Jul 2022 22:51:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54116 "EHLO
+        id S234776AbiGGCwU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Jul 2022 22:52:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54422 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229775AbiGGCvp (ORCPT
+        with ESMTP id S229775AbiGGCwS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Jul 2022 22:51:45 -0400
-Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E0452F3B9
-        for <linux-kernel@vger.kernel.org>; Wed,  6 Jul 2022 19:51:44 -0700 (PDT)
-Received: by mail-yb1-xb4a.google.com with SMTP id z8-20020a056902054800b0066e2f4d7ae8so8979214ybs.18
-        for <linux-kernel@vger.kernel.org>; Wed, 06 Jul 2022 19:51:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:message-id:mime-version:subject:from:to:cc;
-        bh=7LPSlq7Trkpni6Jiwio8XRfrUDHcOcS9L2wBFBR2Vzo=;
-        b=abzazCQT38DTazMiKkJ2tFav1z5MzZhausH2mwikpoIfOK5eCPul9C4byXwCWzLOXT
-         xhWQL709yuL0pVbkXWaW5K+AjBEWpvihA98fJhwMJn/OIqLAXF6Shi6B+NSxcOw+wHZf
-         pcnPXwc4JBaHkMYDqlIlE7KjNr/uDUgN5443g6weKVY1Z73u+0XxnMPkxh+Imd8V66x7
-         snjGnB4jYIyvwGmkLd6IxcgwES5AtwFd2OBUt6eZsu/RHseCE/L6WO04BAMXge5uscNA
-         UuwnwCqOHx5M8cjTWO77p1d3CrFvCp7ePhNo+QPLwaetw2HcmdKMBnorMsRG2/SIUD+4
-         Q7UA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
-        bh=7LPSlq7Trkpni6Jiwio8XRfrUDHcOcS9L2wBFBR2Vzo=;
-        b=a7Aa73mnw2UPRdxFLGiUZzR8XDRrf1k+qpJXMsqJZOtmNqTlfOzmV5h+I9FGtz0E7P
-         p9N8/N1LOEZHxsIJBuBB+0TGhiQvk1HRBtLT1EP/+QLPYg2dKgZaGHtVY8txNQPezixM
-         xwspkoo11yF1ekyKMT/PZ//xNHlc4/WLnBLgLpKVqY6dUMI0/fHiFB8UUj2P9Pe/WAym
-         JQ/OsIYtDcL/vofi43QkqbD/+gyVgAD1n/0+0IRRBjHyzXiM7/HSKritaY9zjD1zv5jA
-         sautt6oOXhGuz70+DybN/bijdKUG9cAs/II1eKBTsdR8MYQF75YwwpO39gDfx3z8iEUx
-         oPFA==
-X-Gm-Message-State: AJIora8ikkz5wuP4u5a2NhhMXCRA2SEXPEb9mSpEoIi8leb06UtsisTQ
-        dxHeCEtQnU4d733iWBuAqLPYCIv4wDr//ctDjLzcRi2GUyGfcLJIMdL//HXYX+WDZePhJphHEI7
-        LMYwYSm2UkA7R0LXRugkeJi863WQF1luS+worahsBoUArIJE/oysZe0DZGbIfHv4H/mQ=
-X-Google-Smtp-Source: AGRyM1sv2sZJGNvWqq79iz8jLwYOOA59LiIbMmIQLBcMUQ60SAqPfvBk+4L77cgS6cOmbTQVOiDruUFRyg==
-X-Received: from timvp.bld.corp.google.com ([2620:15c:183:200:7d77:c591:814b:4db6])
- (user=timvp job=sendgmr) by 2002:a25:3414:0:b0:66e:4752:b055 with SMTP id
- b20-20020a253414000000b0066e4752b055mr21451158yba.40.1657162303830; Wed, 06
- Jul 2022 19:51:43 -0700 (PDT)
-Date:   Wed,  6 Jul 2022 20:51:39 -0600
-Message-Id: <20220706205136.v2.1.Ic7a7c81f880ab31533652e0928aa6e687bb268b5@changeid>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.37.0.rc0.161.g10f37bed90-goog
-Subject: [PATCH v2] platform/chrome: cros_ec: Send host event for prepare/complete
-From:   Tim Van Patten <timvp@google.com>
-To:     LKML <linux-kernel@vger.kernel.org>
-Cc:     rrangel@chromium.org, robbarnes@google.com,
-        Tim Van Patten <timvp@google.com>,
-        Benson Leung <bleung@chromium.org>,
-        Guenter Roeck <groeck@chromium.org>,
-        chrome-platform@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        Wed, 6 Jul 2022 22:52:18 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 822D92F64A;
+        Wed,  6 Jul 2022 19:52:17 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 38918B81FB2;
+        Thu,  7 Jul 2022 02:52:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7C540C341C6;
+        Thu,  7 Jul 2022 02:52:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1657162334;
+        bh=qHdfcR92KphIlwMQSdb9bKDFM89WG7PyeIshziXWI0I=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=n1KVKNxFhjVGMUg7wrJwh6QDUailEsLG3FV7Pe5Y9NdQnCvPdYv4WNhtPC4+JYla8
+         dPJKyd0MM7ozFhQIWyMou7+Wz8aTFfams0f36WUlZ14H4TgT5i8W9L/hoKusTE4N6E
+         Jbd9fVKqV6G8w729lzlifSuHFk7GzAGG3+Cjc81oQ9FzK5vOoLzbTcY5Fwe3ps3nyj
+         xg7+NGZ7bAPZLxnsi4IAculXNu7Xs0ClaNE7bfcdUGrlro+S0bxM4Iu5PVnPnui9XQ
+         ajwsVRiIZklyJQYmDItssy4F9BprGirOubfB/DW+pO2N/rG52i/+mfDOzXlankcn6M
+         E4xaK5aO5TWuw==
+Date:   Wed, 6 Jul 2022 19:52:13 -0700
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     Sieng-Piaw Liew <liew.s.piaw@gmail.com>
+Cc:     chris.snook@gmail.com, davem@davemloft.net, edumazet@google.com,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] net: ag71xx: switch to napi_build_skb() to reuse
+ skbuff_heads
+Message-ID: <20220706195213.6b751af8@kernel.org>
+In-Reply-To: <20220705004434.1453-1-liew.s.piaw@gmail.com>
+References: <20220705004434.1453-1-liew.s.piaw@gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Update cros_ec_lpc_pm_ops to call cros_ec_lpc_suspend() during PM
-.prepare() and cros_ec_lpc_resume() during .complete. This allows the
-EC to log entry/exit of AP's suspend/resume more accurately.
+On Tue,  5 Jul 2022 08:44:34 +0800 Sieng-Piaw Liew wrote:
+> --- a/drivers/net/ethernet/atheros/ag71xx.c
+> +++ b/drivers/net/ethernet/atheros/ag71xx.c
+> @@ -825,7 +825,7 @@ static int ag71xx_tx_packets(struct ag71xx *ag, bool flush)
+>  		if (!skb)
+>  			continue;
+>  
+> -		dev_kfree_skb_any(skb);
+> +		napi_consume_skb(skb, !flush);
 
-Signed-off-by: Tim Van Patten <timvp@google.com>
----
-
-Changes in v2:
-- Include cros_ec_resume() return value in dev_info() output.
-- Guard setting .prepare/.complete with #ifdef CONFIG_PM_SLEEP.
-
- drivers/platform/chrome/cros_ec_lpc.c | 14 +++++++++++---
- 1 file changed, 11 insertions(+), 3 deletions(-)
-
-diff --git a/drivers/platform/chrome/cros_ec_lpc.c b/drivers/platform/chrome/cros_ec_lpc.c
-index 7677ab3c0ead9..ce49fbc4ed2e1 100644
---- a/drivers/platform/chrome/cros_ec_lpc.c
-+++ b/drivers/platform/chrome/cros_ec_lpc.c
-@@ -534,19 +534,27 @@ static int cros_ec_lpc_suspend(struct device *dev)
- {
- 	struct cros_ec_device *ec_dev = dev_get_drvdata(dev);
- 
-+	dev_info(dev, "Prepare EC suspend\n");
-+
- 	return cros_ec_suspend(ec_dev);
- }
- 
--static int cros_ec_lpc_resume(struct device *dev)
-+static void cros_ec_lpc_resume(struct device *dev)
- {
- 	struct cros_ec_device *ec_dev = dev_get_drvdata(dev);
-+	int ret;
-+
-+	ret = cros_ec_resume(ec_dev);
- 
--	return cros_ec_resume(ec_dev);
-+	dev_info(dev, "EC resume completed: ret = %d\n", ret);
- }
- #endif
- 
- static const struct dev_pm_ops cros_ec_lpc_pm_ops = {
--	SET_LATE_SYSTEM_SLEEP_PM_OPS(cros_ec_lpc_suspend, cros_ec_lpc_resume)
-+#ifdef CONFIG_PM_SLEEP
-+	.prepare = cros_ec_lpc_suspend,
-+	.complete = cros_ec_lpc_resume
-+#endif
- };
- 
- static struct platform_driver cros_ec_lpc_driver = {
--- 
-2.37.0.rc0.161.g10f37bed90-goog
-
+!flush is not sufficient here, napi can be called with a budget of 0.

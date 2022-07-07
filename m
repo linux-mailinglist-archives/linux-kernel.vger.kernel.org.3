@@ -2,64 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CD26856AD79
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 23:30:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1093556AD7C
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 23:31:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236147AbiGGVaM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Jul 2022 17:30:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41462 "EHLO
+        id S236463AbiGGVbP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Jul 2022 17:31:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42056 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229876AbiGGVaJ (ORCPT
+        with ESMTP id S236418AbiGGVbN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Jul 2022 17:30:09 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C60E41C938
-        for <linux-kernel@vger.kernel.org>; Thu,  7 Jul 2022 14:30:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1657229408; x=1688765408;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=RR8nKcKkeUV/WR33JNvmdjCBx/wyCPnlG8A7Ckb1Pgs=;
-  b=KYhhMC0ZA5ffzAUdFuZx2mhILYY4jWqIRIFkzh4m3FTQr/kek1EWGhjn
-   9k/HSaMPGxC7UXvZIjIPI8y4nNRol+xzWZPu3P1Sk2kHid2/kJseQ+5y7
-   XGsIA+IT1kWLyE4zWTjQY1lctkmoqZetHvBXszNeHfJwjWz4Y8KRLDC9/
-   7eSakNAztpUyf0wVQnV2CJj5S7kW9q055SjsQGH1NwCnkEkAiJjqioSeI
-   NZdcRgQW9hGLMIFDMCDXUpuQsQA2+weqJmEbvhJ6PO5wz+3U22z8ZkPRR
-   GFGbJmOrl+c9FSsJAxxWx4umH2xWZNgMi9a35cdT6xEd21Q4CSt3PbPVT
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10401"; a="272922229"
-X-IronPort-AV: E=Sophos;i="5.92,253,1650956400"; 
-   d="scan'208";a="272922229"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jul 2022 14:30:08 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,253,1650956400"; 
-   d="scan'208";a="736115138"
-Received: from lkp-server01.sh.intel.com (HELO 68b931ab7ac1) ([10.239.97.150])
-  by fmsmga001.fm.intel.com with ESMTP; 07 Jul 2022 14:30:05 -0700
-Received: from kbuild by 68b931ab7ac1 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1o9Z4X-000MVK-6m;
-        Thu, 07 Jul 2022 21:30:05 +0000
-Date:   Fri, 8 Jul 2022 05:29:35 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Karthik Alapati <mail@karthek.com>,
-        Johan Hovold <johan@kernel.org>, Alex Elder <elder@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     kbuild-all@lists.01.org, Shuah Khan <skhan@linuxfoundation.org>,
-        greybus-dev@lists.linaro.org, linux-staging@lists.linux.dev,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] staging: greybus: don't use index pointer after iter
-Message-ID: <202207080535.tr2i6TxR-lkp@intel.com>
-References: <Ysa1oopf0ELw+OfB@karthik-strix-linux.karthek.com>
+        Thu, 7 Jul 2022 17:31:13 -0400
+Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DEA612FFE9
+        for <linux-kernel@vger.kernel.org>; Thu,  7 Jul 2022 14:31:11 -0700 (PDT)
+Received: by mail-wm1-x334.google.com with SMTP id v67-20020a1cac46000000b003a1888b9d36so80088wme.0
+        for <linux-kernel@vger.kernel.org>; Thu, 07 Jul 2022 14:31:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=fortu-net.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=IucSNIUmv3bfoSWC2fpPpGIdntozHM3LrGlPGnTJnoo=;
+        b=Z3+FvPR9cP3BN9xckeRw/vR52t06mLNibswiXImMS5IzyLigK74GbhAanYRUKC7JvH
+         5LpEM946RK8Yn8D3lYqK2wKe3NVlOedv4WcnCIHbp8/8A+u8vn+DUEXuKnXDdoA4aHH4
+         6saI7pVWqbI5+m7DC2YK+H3NIe+DkhjhNLfyEOHTdAtlf2SaO/qCHE5HEgRRkR7HlX2M
+         KIOaZIlP1oRAga/+8hOfZI7mlP/lorTH9AdYycai88iGBD7UhUfPoMehq0G8sEEj1ZdY
+         GxHVy2D0Yn23SPioQ/Tq+WxMPwCAcFfclfvnNaEdd31TDp7hFpXumwNN2/cCYyDhLDoM
+         J2sw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=IucSNIUmv3bfoSWC2fpPpGIdntozHM3LrGlPGnTJnoo=;
+        b=TFAq/J80/R9j5xvnavulzDImeXSKG6rbyiGK1xW3rjlW3IsYPmKZjFxdQrq7tKRo/u
+         wNZPiVCHeiqbQ8bih6N8My1bj7qM1iO8N/m9A1DHfOX+SWDB4RxFLs9377aeSVMxI4Xo
+         M3IbQ5SKaIbAZ4fij61bVgqBTwzSrUjAu1puF6S4dSjS2scv2Yy9geryzXqVGqTmHXDL
+         LOzgK4Oi4oPjRV8umtUNmh1QvuGjeoz85eR7VyUzDlK7TxEu2SbR86VPIZSiExcpOQPu
+         T5gYD/XtVh1cfpucPqv6Dtkd++lXUGe5HfFm+oMy6o4IrC9uCTNOeNjfsT31oIUFs6JE
+         YqtA==
+X-Gm-Message-State: AJIora/pmckKu5RYR+aHqjBjOTW728crxfY3Jl4SexMw1FO7Jpe2Fzjx
+        RJxIfx952kW7OAmqirx8fvt4
+X-Google-Smtp-Source: AGRyM1uzwSj6DHA7nKZebCyj2PA4fxLtm93WKT/k4GBSSZ3WgMlcewtZo8J7N/2xpNmtUbdtgSW8vQ==
+X-Received: by 2002:a7b:c410:0:b0:3a0:2d7d:732a with SMTP id k16-20020a7bc410000000b003a02d7d732amr6819484wmi.113.1657229469856;
+        Thu, 07 Jul 2022 14:31:09 -0700 (PDT)
+Received: from [192.168.1.18] (10.pool85-50-98.dynamic.orange.es. [85.50.98.10])
+        by smtp.gmail.com with ESMTPSA id x2-20020adfdd82000000b0021d62e30a62sm15210806wrl.50.2022.07.07.14.31.08
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 07 Jul 2022 14:31:09 -0700 (PDT)
+Message-ID: <872f2a21-7bf7-0cc3-298f-f817429f6997@fortu.net>
+Date:   Thu, 7 Jul 2022 23:30:55 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Ysa1oopf0ELw+OfB@karthik-strix-linux.karthek.com>
-X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH AUTOSEL 5.17 42/43] Revert "ACPI: Pass the same
+ capabilities to the _OSC regardless of the query flag"
+Content-Language: en-US
+To:     Sasha Levin <sashal@kernel.org>, linux-kernel@vger.kernel.org,
+        stable@vger.kernel.org
+Cc:     "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        Mario Limonciello <Mario.Limonciello@amd.com>,
+        Huang Rui <ray.huang@amd.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        rafael@kernel.org, linux-acpi@vger.kernel.org
+References: <20220328111828.1554086-1-sashal@kernel.org>
+ <20220328111828.1554086-42-sashal@kernel.org>
+From:   Tom Crossland <tomc@fortu.net>
+In-Reply-To: <20220328111828.1554086-42-sashal@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,85 +79,103 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Karthik,
+Hi, I'm observing the issue described here which I think is due to a 
+recent regression:
 
-Thank you for the patch! Yet something to improve:
+https://github.com/intel/linux-intel-lts/issues/22
 
-[auto build test ERROR on v5.19-rc5]
-[also build test ERROR on linus/master]
-[cannot apply to staging/staging-testing next-20220707]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+sudo dmesg -t -l err
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Karthik-Alapati/staging-greybus-don-t-use-index-pointer-after-iter/20220707-183311
-base:    88084a3df1672e131ddc1b4e39eeacfd39864acf
-config: i386-allyesconfig (https://download.01.org/0day-ci/archive/20220708/202207080535.tr2i6TxR-lkp@intel.com/config)
-compiler: gcc-11 (Debian 11.3.0-3) 11.3.0
-reproduce (this is a W=1 build):
-        # https://github.com/intel-lab-lkp/linux/commit/bc295082ef055003c6018b57d3c56c5aefcb65c5
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Karthik-Alapati/staging-greybus-don-t-use-index-pointer-after-iter/20220707-183311
-        git checkout bc295082ef055003c6018b57d3c56c5aefcb65c5
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        make W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/staging/
+ACPI BIOS Error (bug): Could not resolve symbol [\_PR.PR00._CPC], 
+AE_NOT_FOUND (20211217/psargs-330)
+ACPI Error: Aborting method \_PR.PR01._CPC due to previous error 
+(AE_NOT_FOUND) (20211217/psparse-529)
+ACPI BIOS Error (bug): Could not resolve symbol [\_PR.PR00._CPC], 
+AE_NOT_FOUND (20211217/psargs-330)
+ACPI Error: Aborting method \_PR.PR02._CPC due to previous error 
+(AE_NOT_FOUND) (20211217/psparse-529)
+ACPI BIOS Error (bug): Could not resolve symbol [\_PR.PR00._CPC], 
+AE_NOT_FOUND (20211217/psargs-330)
+ACPI Error: Aborting method \_PR.PR03._CPC due to previous error 
+(AE_NOT_FOUND) (20211217/psparse-529)
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+System:
+   Kernel: 5.18.9-arch1-1 arch: x86_64 bits: 64 compiler: gcc v: 12.1.0
+     parameters: initrd=\intel-ucode.img initrd=\initramfs-linux.img
+     root=xxx intel_iommu=on iommu=pt
+  Machine:
+   Type: Desktop Mobo: Intel model: NUC7i5BNB v: J31144-304 serial: <filter>
+     UEFI: Intel v: BNKBL357.86A.0088.2022.0125.1102 date: 01/25/2022
 
-All errors (new ones prefixed by >>):
+I hope this is the correct forum to report the issue. Apologies if not.
 
-   drivers/staging/greybus/audio_helper.c: In function 'gbaudio_dapm_free_controls':
->> drivers/staging/greybus/audio_helper.c:128:32: error: expected ';' before 'for'
-     128 |                 w_found = false
-         |                                ^
-         |                                ;
-   drivers/staging/greybus/audio_helper.c:119:14: warning: variable 'w_found' set but not used [-Wunused-but-set-variable]
-     119 |         bool w_found = false;
-         |              ^~~~~~~
-   drivers/staging/greybus/audio_helper.c:118:41: warning: unused variable 'next_w' [-Wunused-variable]
-     118 |         struct snd_soc_dapm_widget *w, *next_w;
-         |                                         ^~~~~~
-
-
-vim +128 drivers/staging/greybus/audio_helper.c
-
-   124	
-   125		mutex_lock(&dapm->card->dapm_mutex);
-   126		for (i = 0; i < num; i++) {
-   127			/* below logic can be optimized to identify widget pointer */
- > 128			w_found = false
-   129			list_for_each_entry_safe(w, next_w, &dapm->card->widgets,
-   130						 list) {
-   131				if (w->dapm != dapm)
-   132					continue;
-   133				if (!strcmp(w->name, widget->name)) {
-   134					w_found = true;
-   135					break;
-   136				}
-   137				w = NULL;
-   138			}
-   139			if (!w_found) {
-   140				dev_err(dapm->dev, "%s: widget not found\n",
-   141					widget->name);
-   142				widget++;
-   143				continue;
-   144			}
-   145			widget++;
-   146	#ifdef CONFIG_DEBUG_FS
-   147			if (!parent)
-   148				debugfs_w = debugfs_lookup(w->name, parent);
-   149			debugfs_remove(debugfs_w);
-   150			debugfs_w = NULL;
-   151	#endif
-   152			gbaudio_dapm_free_widget(w);
-   153		}
-   154		mutex_unlock(&dapm->card->dapm_mutex);
-   155		return 0;
-   156	}
-   157	
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+On 28/03/2022 13.18, Sasha Levin wrote:
+> From: "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>
+>
+> [ Upstream commit 2ca8e6285250c07a2e5a22ecbfd59b5a4ef73484 ]
+>
+> Revert commit 159d8c274fd9 ("ACPI: Pass the same capabilities to the
+> _OSC regardless of the query flag") which caused legitimate usage
+> scenarios (when the platform firmware does not want the OS to control
+> certain platform features controlled by the system bus scope _OSC) to
+> break and was misguided by some misleading language in the _OSC
+> definition in the ACPI specification (in particular, Section 6.2.11.1.3
+> "Sequence of _OSC Calls" that contradicts other perts of the _OSC
+> definition).
+>
+> Link: https://lore.kernel.org/linux-acpi/CAJZ5v0iStA0JmO0H3z+VgQsVuQONVjKPpw0F5HKfiq=Gb6B5yw@mail.gmail.com
+> Reported-by: Mario Limonciello <Mario.Limonciello@amd.com>
+> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> Tested-by: Mario Limonciello <mario.limonciello@amd.com>
+> Acked-by: Huang Rui <ray.huang@amd.com>
+> Reviewed-by: Mika Westerberg <mika.westerberg@linux.intel.com>
+> Signed-off-by: Sasha Levin <sashal@kernel.org>
+> ---
+>   drivers/acpi/bus.c | 27 +++++++++++++++++++--------
+>   1 file changed, 19 insertions(+), 8 deletions(-)
+>
+> diff --git a/drivers/acpi/bus.c b/drivers/acpi/bus.c
+> index 07f604832fd6..079b952ab59f 100644
+> --- a/drivers/acpi/bus.c
+> +++ b/drivers/acpi/bus.c
+> @@ -332,21 +332,32 @@ static void acpi_bus_osc_negotiate_platform_control(void)
+>   	if (ACPI_FAILURE(acpi_run_osc(handle, &context)))
+>   		return;
+>   
+> -	kfree(context.ret.pointer);
+> +	capbuf_ret = context.ret.pointer;
+> +	if (context.ret.length <= OSC_SUPPORT_DWORD) {
+> +		kfree(context.ret.pointer);
+> +		return;
+> +	}
+>   
+> -	/* Now run _OSC again with query flag clear */
+> +	/*
+> +	 * Now run _OSC again with query flag clear and with the caps
+> +	 * supported by both the OS and the platform.
+> +	 */
+>   	capbuf[OSC_QUERY_DWORD] = 0;
+> +	capbuf[OSC_SUPPORT_DWORD] = capbuf_ret[OSC_SUPPORT_DWORD];
+> +	kfree(context.ret.pointer);
+>   
+>   	if (ACPI_FAILURE(acpi_run_osc(handle, &context)))
+>   		return;
+>   
+>   	capbuf_ret = context.ret.pointer;
+> -	osc_sb_apei_support_acked =
+> -		capbuf_ret[OSC_SUPPORT_DWORD] & OSC_SB_APEI_SUPPORT;
+> -	osc_pc_lpi_support_confirmed =
+> -		capbuf_ret[OSC_SUPPORT_DWORD] & OSC_SB_PCLPI_SUPPORT;
+> -	osc_sb_native_usb4_support_confirmed =
+> -		capbuf_ret[OSC_SUPPORT_DWORD] & OSC_SB_NATIVE_USB4_SUPPORT;
+> +	if (context.ret.length > OSC_SUPPORT_DWORD) {
+> +		osc_sb_apei_support_acked =
+> +			capbuf_ret[OSC_SUPPORT_DWORD] & OSC_SB_APEI_SUPPORT;
+> +		osc_pc_lpi_support_confirmed =
+> +			capbuf_ret[OSC_SUPPORT_DWORD] & OSC_SB_PCLPI_SUPPORT;
+> +		osc_sb_native_usb4_support_confirmed =
+> +			capbuf_ret[OSC_SUPPORT_DWORD] & OSC_SB_NATIVE_USB4_SUPPORT;
+> +	}
+>   
+>   	kfree(context.ret.pointer);
+>   }

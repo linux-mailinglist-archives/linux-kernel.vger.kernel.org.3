@@ -2,209 +2,313 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EB12A56A81F
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 18:31:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 87B8156A822
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 18:32:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236052AbiGGQbE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Jul 2022 12:31:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41702 "EHLO
+        id S236138AbiGGQbs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Jul 2022 12:31:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41984 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235444AbiGGQbB (ORCPT
+        with ESMTP id S235444AbiGGQbq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Jul 2022 12:31:01 -0400
-Received: from mx0b-0016f401.pphosted.com (mx0a-0016f401.pphosted.com [67.231.148.174])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 202742A260;
-        Thu,  7 Jul 2022 09:31:01 -0700 (PDT)
-Received: from pps.filterd (m0045849.ppops.net [127.0.0.1])
-        by mx0a-0016f401.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 267A5vUj008113;
-        Thu, 7 Jul 2022 09:30:54 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=marvell.com; h=from : to : cc :
- subject : date : message-id : mime-version : content-type; s=pfpt0220;
- bh=MUJjQH1xdx9P6LYZOnnQzblD2ccmaLeiXo/c2Rlin3E=;
- b=AX31hYoB+V+bqwcJwkCxpaN8gYyPqgkUiLCiO1fwPHvDoPUknOz4g4P1eDb3JQq6t0Ex
- k/QBusUaf6jmJ/PFbjApljqzcWwu+e+SXHHIu+7UmgCWcDwoKJ7LFmKp8dJ4o6+d4XzJ
- xdusbhUeHe+mHEsoihU4Hxr2T0rmcLlSvxblKL36fivUAHpvLxxHj6nWNsHLH844PeSU
- FdAj4W5j09LDvZNS4Thu9FCowu0UG/wJWguh/n4OpzeGwREVTIQ02AOTR1eFu87erzDU
- cslllHMnf/o0MU5ygJP2KHRkYMl27K9FHEWvAEvngO1gsIt2oqepTInd0EbsM3XBTZJa 2w== 
-Received: from dc5-exch01.marvell.com ([199.233.59.181])
-        by mx0a-0016f401.pphosted.com (PPS) with ESMTPS id 3h5kwj3he2-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT);
-        Thu, 07 Jul 2022 09:30:54 -0700
-Received: from DC5-EXCH02.marvell.com (10.69.176.39) by DC5-EXCH01.marvell.com
- (10.69.176.38) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Thu, 7 Jul
- 2022 09:30:53 -0700
-Received: from maili.marvell.com (10.69.176.80) by DC5-EXCH02.marvell.com
- (10.69.176.39) with Microsoft SMTP Server id 15.0.1497.18 via Frontend
- Transport; Thu, 7 Jul 2022 09:30:53 -0700
-Received: from hyd1soter3.marvell.com (unknown [10.29.37.12])
-        by maili.marvell.com (Postfix) with ESMTP id E35305B6928;
-        Thu,  7 Jul 2022 09:30:49 -0700 (PDT)
-From:   Hariprasad Kelam <hkelam@marvell.com>
-To:     <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-CC:     <kuba@kernel.org>, <davem@davemloft.net>, <pabeni@redhat.com>,
-        <edumazet@google.com>, <sgoutham@marvell.com>,
-        <lcherian@marvell.com>, <gakula@marvell.com>, <jerinj@marvell.com>,
-        <sbhatta@marvell.com>
-Subject: [net-next PATCH V2] octeontx2-af: Don't reset previous pfc config
-Date:   Thu, 7 Jul 2022 22:00:48 +0530
-Message-ID: <20220707163048.7709-1-hkelam@marvell.com>
-X-Mailer: git-send-email 2.17.1
+        Thu, 7 Jul 2022 12:31:46 -0400
+Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2057.outbound.protection.outlook.com [40.107.220.57])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9D4E2E9FC;
+        Thu,  7 Jul 2022 09:31:44 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=fS6hfCSYsiVdZdvvAmyuiwnhE6A7XGeO+z6SjM7428RJ7RWt9qRaOQhFARhkROybfe+UY7iCvviYe2pYeBPPU74RqkCmU40jacBcNgDbgRkxqo1tJIibih6EEDJiRK8He6aQHCZofkB06+s9XMeBIG9GX5Bk7j/sypNUZTuIzzrKFVymOfatm0gq2H+vAP3/vBL9L8VLc+fb2nCo6lr4+BvOntJGsZ2zZ1Zhx77UdrbNQ1dvpuaDNRI6YCrSUUJDAuEwIC9tMUpHNuxJf5q95iExu4W3Mtxc2F44EMXigkepbG19DgSFpILh38hPSQZMDPoAPVXWcyz4H6Rhs/wmDA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=OVMGcDv4TMN48Rtfk3HDyvW8NOmKX+jMZCQx5UQk3hw=;
+ b=WM2XFq4tZBzWvksi+7148zBU6c3ctm2Rz+aMH1SENZ1P57b83Gt1QDF+CM//OKCIK9gOV/qh65ENfAJQmmB/pBJBuCAfE3oNnhA46EbENAuT74mhRqb9iVkBWdPWOT5n5ZecPj11VTIyUALDMNkJd/0Nu4eCJMVGjVeu0m6EcD9CkDXwzVNSNSt6/+0zhoA/xZLBjEvMa2c3jTWI+DDB5/mh6tATGJr1IA67c4CcRSwzwcu6cKDmtnHTNQZ/WmoIK8ckJN8PC6QgndtLz5Rm2L9Oy32/5Y0QiYN/3ovNdRxxTu5FEcQOAap/v8ZWYg0Nn0myAWPSomFOQr8ing+7VA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=OVMGcDv4TMN48Rtfk3HDyvW8NOmKX+jMZCQx5UQk3hw=;
+ b=jQL2NV7sjUxAx9HctYu/bRA1ZcxvB0JwDLiMYKpsS/qGO6E55aKm48rav93DxTmwehiaZkQaFu9cetqgD4vIBNMySOmtRD5y3UhUbbuAx9KFlkOMZOprc1tiUzz5/X5eMgnck6RIf+j9DpAVZejtQGNRL666P8Dtf2YC/QpXdZKd4EAyRcmnc58Xikwr5O8WkpbcfNbgVhtTXE6YHfJb1wHrrZLEbLaJStmWL2Kf7BtgEZOhNbqy6rP83JWH6rgG6mP1Mw5VJc0yvQTodqdXdIzbbg6X7himzXptGqm6ohCy0P7H3AEOGhoG3jN06UZNYwTtL9RH93G+ZuOOKtpxYA==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from BN8PR12MB2900.namprd12.prod.outlook.com (2603:10b6:408:69::18)
+ by DM6PR12MB3066.namprd12.prod.outlook.com (2603:10b6:5:11a::20) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5417.16; Thu, 7 Jul
+ 2022 16:31:42 +0000
+Received: from BN8PR12MB2900.namprd12.prod.outlook.com
+ ([fe80::3904:2c16:b3b7:c5f3]) by BN8PR12MB2900.namprd12.prod.outlook.com
+ ([fe80::3904:2c16:b3b7:c5f3%5]) with mapi id 15.20.5395.022; Thu, 7 Jul 2022
+ 16:31:42 +0000
+Message-ID: <d38bc5f1-8c92-db32-5821-c775181ad4f6@nvidia.com>
+Date:   Thu, 7 Jul 2022 22:01:30 +0530
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.2
+Subject: Re: [PATCH V1] PCI: designware-ep: Fix DBI access before core init
+Content-Language: en-US
+To:     Bjorn Helgaas <helgaas@kernel.org>
+Cc:     jingoohan1@gmail.com, gustavo.pimentel@synopsys.com,
+        lpieralisi@kernel.org, robh@kernel.org, kw@linux.com,
+        bhelgaas@google.com, linux-pci@vger.kernel.org,
+        linux-kernel@vger.kernel.org, kthota@nvidia.com,
+        mmaddireddy@nvidia.com, sagar.tv@gmail.com,
+        Serge Semin <Sergey.Semin@baikalelectronics.ru>
+References: <20220707160031.GA306375@bhelgaas>
+From:   Vidya Sagar <vidyas@nvidia.com>
+In-Reply-To: <20220707160031.GA306375@bhelgaas>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: MA1PR0101CA0071.INDPRD01.PROD.OUTLOOK.COM
+ (2603:1096:a00:20::33) To BN8PR12MB2900.namprd12.prod.outlook.com
+ (2603:10b6:408:69::18)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Proofpoint-ORIG-GUID: W9WNG3sLdi92WFYSAXymVWKUvv2XwG9Q
-X-Proofpoint-GUID: W9WNG3sLdi92WFYSAXymVWKUvv2XwG9Q
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
- definitions=2022-07-07_13,2022-06-28_01,2022-06-22_01
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 9aa36b0d-24e3-4a94-ed80-08da60362cd5
+X-MS-TrafficTypeDiagnostic: DM6PR12MB3066:EE_
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 5f+8RBZ7mYqC3iyRy2xmJ5FMKPb0cC1YuapNr88Sni0OC4BV1N3zC/6O8nvfPx7yMfoVhL7U5d2p5URX7rYtOJxPYbNR6T+tR1NptMS5B+YCPrRNuPoP63nn4ULdRF0pZ19tMCuCKLBCnd/nvYMVf33MqE0NvxZ4W21dnODgsip9ZYV2usMbM+0fJZT2h3O6rwmx9OU1Ho5UhaFSX0x3VvgAI9cCm9LU1/H7O4Xcn8UF5qS0iw9gYQecOfJ6CHn0dDMfHGDhL8o6TsHhJv7y/MWoUbBtnsfB3eo8wfTYo1N5hF2ZnY2tJ7xlcDymifIcjX67jYJiwOTN11tfM/tpqRNmveB3X7yrdI8BkslbLAmYByib3kyXiHcvKc0zec0HORFex47Z4gHjIeD3JLZET/mZZVz+HK1ChmT4CaPZnHQroqOfJz4KaGF82A8Ia9sv4OtQKIFC6n3KEHasClN0xEokBcGaCsr7yNC87SQ0cBGU3eA0MXHt0hzNs3eWlPtRPuyd42bwvHxDOc8ONMjMtEZ6bGgmnz7NDZC42IaSJDX9h/12uwd0IcIetRRDFIGzHhNt4gY0RjmPIm/xJOeNY3/Ex416rgDqHyd0RmZ7GOQkTftZCW340NkbzcTRbl4clNQO0ImGhnVQL+U0hjCogzZ7MVn/fUnlkvksB9o3MENfN5OvuGrrXXxBT+HbXX1xPqpBWpaoMFQ4Kxh0R/CNJyvOlLC7Ebg0njRL8YjSh6Sz5/35fB5N3TWiT7t0W3zE+3iZo5A5BHLU0k76C/qRqBPG9i1n2lh+VIXgnhinHp8L0hRQzPNmjQmXKAN9/6o44tuubKSVnXE45RbbmYWtX96ua1RyzVxXrlNGZvqqRV0=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN8PR12MB2900.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(376002)(136003)(346002)(39860400002)(396003)(366004)(6486002)(66946007)(4326008)(36756003)(26005)(6916009)(86362001)(31696002)(478600001)(6512007)(6506007)(31686004)(41300700001)(6666004)(8676002)(316002)(66476007)(66556008)(53546011)(38100700002)(186003)(2616005)(5660300002)(8936002)(7416002)(2906002)(83380400001)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?bUYxWHNNTUpzQWwvYWxZZ2dZYUhHUVp4TEdnbS9SK2NlUmF1NklaV0dMdWNa?=
+ =?utf-8?B?UU0zSk9XUGRDWlVuMUV1RFd4MCtvUmpZQUtCMFJFTCtvMnF5S3hqdDNJTWNh?=
+ =?utf-8?B?a3NBMmR3RldlMFNMT3Zvc0ZrNjRmVy8vNmFBV1JXTXBFSTQwV1F5d25Oc2lt?=
+ =?utf-8?B?U3p1VXdYdmo2ajNjTlhuaCtTM3hsV090cU1PR3gxb1I2a1dpWmhQSWh2WFA4?=
+ =?utf-8?B?RWdUYk10RTZ5VlJCRmw2TEpxekY2bi9CVVJGT0VFVmgzNEFYbkJPd1JrZE51?=
+ =?utf-8?B?SUtaSG9GV2hsWUkvZG9EaHNMTjErTDdyQTJ6NXl6SnJSWUtadEo0RVdlOW1p?=
+ =?utf-8?B?aFphQUFZM3RwMnRXZmk3L1o4bSswUHZjN09SNUZOcWZwa2NLalVZL3h2L3M1?=
+ =?utf-8?B?ZStIL1J5cmFwT3Z3RFVic2IwTTF0ZkN6aCtTR3E2U29ad2dtWVFWcWdzYk5X?=
+ =?utf-8?B?Q3BIUVVEWVJtL1NWT3Z2ZlI4UTQ2QUEwSERRTlFTbVRseURaY1JoTTlHYmdu?=
+ =?utf-8?B?WEdpZ2JZMHJqYjZJWFhzN0VPSkJ2TzVBQUxZMUpoTWpQV0owNlMxaWhoYTF4?=
+ =?utf-8?B?dENMbk9GbE02VlNDYWROdlY5Nlh1Q0owUXdaZk5PN1RQS1c3SE1kZ1JYNjdj?=
+ =?utf-8?B?QUUxVVdNY0NzYjJNOWNqVktVZFdHRWh2T3RFMDFSV0VMWURSNEtIY0VYd0s0?=
+ =?utf-8?B?bGpnM2x6V2dQSFMyNk1uODBwbGRTeHlxTWc5L1IvVDBrc3hZWDM5RlJNT3lF?=
+ =?utf-8?B?dXA2dHN3Umh5UmJjaEVmNy8rQ1VnZ3QwWVNEVDJWR2JyU05xd3kwek1zVzY2?=
+ =?utf-8?B?bE1JU2lXNEsySHAyOU5MRUNSc1NkeVhRSVBHaHdYVVdQR2xxbk9vWDk3bG5M?=
+ =?utf-8?B?b1AwY3FWUGNybDZNWDU4aVY2L2NPSzNSMXUzTDhjTEd4TlBFWnErZnhtODIx?=
+ =?utf-8?B?UG1JQVJycTJWZlRsRnVlRVZhbXB1V2V3VzYrN0NKdXpUS3ZmUk9uamh1Z2lU?=
+ =?utf-8?B?dWRna3lFa2p5ZFlDR0JuN2FHOHRmUkxObHVUZi92QW5ZaTdVVFlWVFc0d253?=
+ =?utf-8?B?azNKNWlQekxiOUZLVG1qSll6Y2NXZzhqRWpHd2E2REJuSHhxMURtUHEwKy9D?=
+ =?utf-8?B?aWxyZFhvSk1ST3BES2orS2hTemRsYnBVY2lmS3NFb2ZCMFlvdzI2ZStDN3Rh?=
+ =?utf-8?B?aUF5SERCV0V4bUcrRHVGWUpXbjF4Z1pOUDNDZVMrTUVHNm1YYmk2a2tEYk4r?=
+ =?utf-8?B?Z2poUTVwZHJxdVQyMEZMT3QxSC9sK2swc3E5L1hiMGZhM0dINERZOGFIc2k5?=
+ =?utf-8?B?dk54cjZuTG9uYTArVEI0MFRZak1hOWN1UXAvanBkeDVPVnJ5R1JqQkJWbUcz?=
+ =?utf-8?B?b3U2SVBDem5yRC9iUzREWmNxVGViYmNsUTQwMW9zdXp4QkIyRkhJNkFrNjhn?=
+ =?utf-8?B?TFVZU05pbGI0SjhLbEY4UWtuTnoyeUhmZXgyRVYrdGM5VksyVXpFRzQwTkZK?=
+ =?utf-8?B?ckJpYjlKS2Z5Wm9FZEtPNUJXa3A2NXlBWkZPVThCMDB6RHNlaEswbElHbWJ0?=
+ =?utf-8?B?bTMvMWpzdm5TSitpMW5TN3pzUXBGOHcxL3FhSDhoYzh4aGhmR2JGcE1XdXBC?=
+ =?utf-8?B?UmV0YlB0aTZrT3lkUWx3UXNhYWNMaEh2U1cvWkwwcFhPS294RmltTnh6Z3Nh?=
+ =?utf-8?B?WjdyTXhndFEwbHk0b2RNS205L2FOS3RZTTgveXR6YkxNNFFtam9IbGxEYzJO?=
+ =?utf-8?B?Y3FlbzFXWFBMSEZuT3FzVmZ4Q2xBbGFDVXhXbnJDRnY4YU9FSUo5dzkwa2tF?=
+ =?utf-8?B?Zk96RHZjdG9MM2pmNEFFUE9wWnZPc3NrT0lRQmZnRy9KMGRaNlpoeVJRZVlD?=
+ =?utf-8?B?dXFaV2tsbnEvTWxWVVBxeEFHNWFGUUNxQzY5dENkWHM4a1c1d1JPY2V3REEw?=
+ =?utf-8?B?K0dDRlhhc3pHTGtIckQ5WVZtVW9XSE5rc2I4elg2YXJBS2EyK3RBVFRJak9T?=
+ =?utf-8?B?R01NK0gyY2k1OTNPWGlhN0xqN3NVYW1vQWgwNEMweWZVR3dBTDZxYWk0Wmw1?=
+ =?utf-8?B?RktldzVaR1NCQlN2YlEzaWIxdU9qTFcyYTVWTHVwZ3B1Nm5RTzA1WHpBWFZX?=
+ =?utf-8?Q?DW4sZkesxVv4CoTIex695weaW?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 9aa36b0d-24e3-4a94-ed80-08da60362cd5
+X-MS-Exchange-CrossTenant-AuthSource: BN8PR12MB2900.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Jul 2022 16:31:42.6657
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: N32HavkM91eGUjVwloTilcr5naglw9vTPY14BYAwg1tnSr/nTvrtZsl4ZN4p4e/Xi1j1rlis3jwnf6OQNjabmg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR12MB3066
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Current implementation is such that driver first resets the
-existing PFC config before applying new pfc configuration.
-This creates a problem like once PF or VFs requests PFC config
-previous pfc config by other PFVfs is getting reset.
 
-This patch fixes the problem by removing unnecessary resetting
-of PFC config. Also configure Pause quanta value to smaller as
-current value is too high.
 
-Signed-off-by: Hariprasad Kelam <hkelam@marvell.com>
-Signed-off-by: Sunil Kovvuri Goutham <sgoutham@marvell.com>
----
-V2 * resending patch as earlier patch has 'missing maintainers" warning
+On 7/7/2022 9:30 PM, Bjorn Helgaas wrote:
+> External email: Use caution opening links or attachments
+> 
+> 
+> [+cc Serge]
+> 
+> On Thu, Jul 07, 2022 at 02:39:08PM +0530, Vidya Sagar wrote:
+>> Hi,
+>> Anyone has review comments for this change?
+>> Without this change, Tegra194's endpoint mode is effectively broken.
+> 
+> Did Tegra194 endpoint mode ever work, or has this always been broken.
+> Wondering if there's a Fixes: or stable tag we should add.  Also cc'd
+> Serge since he's been doing similar work on dwc.
 
- .../net/ethernet/marvell/octeontx2/af/cgx.c    | 15 +++++++++++----
- .../net/ethernet/marvell/octeontx2/af/rpm.c    | 18 +++++++++++-------
- .../net/ethernet/marvell/octeontx2/af/rpm.h    |  3 +--
- 3 files changed, 23 insertions(+), 13 deletions(-)
+Yes. The endpoint mode of Tegra194 did work particularly after the 
+commit ac37dde72177 ("PCI: dwc: Add API to notify core initialization 
+completion")
+There are many changes that got merged after this and hence couldn't 
+really point to one change to quote in Fixes: tag.
 
-diff --git a/drivers/net/ethernet/marvell/octeontx2/af/cgx.c b/drivers/net/ethernet/marvell/octeontx2/af/cgx.c
-index 25491edc35ce..931a1a7ebf76 100644
---- a/drivers/net/ethernet/marvell/octeontx2/af/cgx.c
-+++ b/drivers/net/ethernet/marvell/octeontx2/af/cgx.c
-@@ -847,6 +847,11 @@ static void cgx_lmac_pause_frm_config(void *cgxd, int lmac_id, bool enable)
- 	cfg |= CGX_CMR_RX_OVR_BP_EN(lmac_id);
- 	cfg &= ~CGX_CMR_RX_OVR_BP_BP(lmac_id);
- 	cgx_write(cgx, 0, CGXX_CMR_RX_OVR_BP, cfg);
-+
-+	/* Disable all PFC classes by default */
-+	cfg = cgx_read(cgx, lmac_id, CGXX_SMUX_CBFC_CTL);
-+	cfg = FIELD_SET(CGX_PFC_CLASS_MASK, 0, cfg);
-+	cgx_write(cgx, lmac_id, CGXX_SMUX_CBFC_CTL, cfg);
- }
+Thanks & Regards,
+Vidya Sagar
 
- int verify_lmac_fc_cfg(void *cgxd, int lmac_id, u8 tx_pause, u8 rx_pause,
-@@ -899,6 +904,7 @@ int cgx_lmac_pfc_config(void *cgxd, int lmac_id, u8 tx_pause,
- 		return 0;
-
- 	cfg = cgx_read(cgx, lmac_id, CGXX_SMUX_CBFC_CTL);
-+	pfc_en |= FIELD_GET(CGX_PFC_CLASS_MASK, cfg);
-
- 	if (rx_pause) {
- 		cfg |= (CGXX_SMUX_CBFC_CTL_RX_EN |
-@@ -910,12 +916,13 @@ int cgx_lmac_pfc_config(void *cgxd, int lmac_id, u8 tx_pause,
- 			CGXX_SMUX_CBFC_CTL_DRP_EN);
- 	}
-
--	if (tx_pause)
-+	if (tx_pause) {
- 		cfg |= CGXX_SMUX_CBFC_CTL_TX_EN;
--	else
-+		cfg = FIELD_SET(CGX_PFC_CLASS_MASK, pfc_en, cfg);
-+	} else {
- 		cfg &= ~CGXX_SMUX_CBFC_CTL_TX_EN;
--
--	cfg = FIELD_SET(CGX_PFC_CLASS_MASK, pfc_en, cfg);
-+		cfg = FIELD_SET(CGX_PFC_CLASS_MASK, 0, cfg);
-+	}
-
- 	cgx_write(cgx, lmac_id, CGXX_SMUX_CBFC_CTL, cfg);
-
-diff --git a/drivers/net/ethernet/marvell/octeontx2/af/rpm.c b/drivers/net/ethernet/marvell/octeontx2/af/rpm.c
-index 47e83d7a5804..05666922a45b 100644
---- a/drivers/net/ethernet/marvell/octeontx2/af/rpm.c
-+++ b/drivers/net/ethernet/marvell/octeontx2/af/rpm.c
-@@ -276,6 +276,11 @@ void rpm_lmac_pause_frm_config(void *rpmd, int lmac_id, bool enable)
- 	cfg = rpm_read(rpm, lmac_id, RPMX_MTI_MAC100X_COMMAND_CONFIG);
- 	cfg |= RPMX_MTI_MAC100X_COMMAND_CONFIG_TX_P_DISABLE;
- 	rpm_write(rpm, lmac_id, RPMX_MTI_MAC100X_COMMAND_CONFIG, cfg);
-+
-+	/* Disable all PFC classes */
-+	cfg = rpm_read(rpm, lmac_id, RPMX_CMRX_PRT_CBFC_CTL);
-+	cfg = FIELD_SET(RPM_PFC_CLASS_MASK, 0, cfg);
-+	rpm_write(rpm, lmac_id, RPMX_CMRX_PRT_CBFC_CTL, cfg);
- }
-
- int rpm_get_rx_stats(void *rpmd, int lmac_id, int idx, u64 *rx_stat)
-@@ -387,15 +392,14 @@ void rpm_lmac_ptp_config(void *rpmd, int lmac_id, bool enable)
- int rpm_lmac_pfc_config(void *rpmd, int lmac_id, u8 tx_pause, u8 rx_pause, u16 pfc_en)
- {
- 	rpm_t *rpm = rpmd;
--	u64 cfg;
-+	u64 cfg, class_en;
-
- 	if (!is_lmac_valid(rpm, lmac_id))
- 		return -ENODEV;
-
--	/* reset PFC class quanta and threshold */
--	rpm_cfg_pfc_quanta_thresh(rpm, lmac_id, 0xffff, false);
--
- 	cfg = rpm_read(rpm, lmac_id, RPMX_MTI_MAC100X_COMMAND_CONFIG);
-+	class_en = rpm_read(rpm, lmac_id, RPMX_CMRX_PRT_CBFC_CTL);
-+	pfc_en |= FIELD_GET(RPM_PFC_CLASS_MASK, class_en);
-
- 	if (rx_pause) {
- 		cfg &= ~(RPMX_MTI_MAC100X_COMMAND_CONFIG_RX_P_DISABLE |
-@@ -410,9 +414,11 @@ int rpm_lmac_pfc_config(void *rpmd, int lmac_id, u8 tx_pause, u8 rx_pause, u16 p
- 	if (tx_pause) {
- 		rpm_cfg_pfc_quanta_thresh(rpm, lmac_id, pfc_en, true);
- 		cfg &= ~RPMX_MTI_MAC100X_COMMAND_CONFIG_TX_P_DISABLE;
-+		class_en = FIELD_SET(RPM_PFC_CLASS_MASK, pfc_en, class_en);
- 	} else {
- 		rpm_cfg_pfc_quanta_thresh(rpm, lmac_id, 0xfff, false);
- 		cfg |= RPMX_MTI_MAC100X_COMMAND_CONFIG_TX_P_DISABLE;
-+		class_en = FIELD_SET(RPM_PFC_CLASS_MASK, 0, class_en);
- 	}
-
- 	if (!rx_pause && !tx_pause)
-@@ -422,9 +428,7 @@ int rpm_lmac_pfc_config(void *rpmd, int lmac_id, u8 tx_pause, u8 rx_pause, u16 p
-
- 	rpm_write(rpm, lmac_id, RPMX_MTI_MAC100X_COMMAND_CONFIG, cfg);
-
--	cfg = rpm_read(rpm, lmac_id, RPMX_CMRX_PRT_CBFC_CTL);
--	cfg = FIELD_SET(RPM_PFC_CLASS_MASK, pfc_en, cfg);
--	rpm_write(rpm, lmac_id, RPMX_CMRX_PRT_CBFC_CTL, cfg);
-+	rpm_write(rpm, lmac_id, RPMX_CMRX_PRT_CBFC_CTL, class_en);
-
- 	return 0;
- }
-diff --git a/drivers/net/ethernet/marvell/octeontx2/af/rpm.h b/drivers/net/ethernet/marvell/octeontx2/af/rpm.h
-index 9ab8d49dd180..8205f2626f61 100644
---- a/drivers/net/ethernet/marvell/octeontx2/af/rpm.h
-+++ b/drivers/net/ethernet/marvell/octeontx2/af/rpm.h
-@@ -48,7 +48,6 @@
- #define RPMX_MTI_MAC100X_CL1011_QUANTA_THRESH		0x8130
- #define RPMX_MTI_MAC100X_CL1213_QUANTA_THRESH		0x8138
- #define RPMX_MTI_MAC100X_CL1415_QUANTA_THRESH		0x8140
--#define RPM_DEFAULT_PAUSE_TIME			0xFFFF
- #define RPMX_CMR_RX_OVR_BP		0x4120
- #define RPMX_CMR_RX_OVR_BP_EN(x)	BIT_ULL((x) + 8)
- #define RPMX_CMR_RX_OVR_BP_BP(x)	BIT_ULL((x) + 4)
-@@ -70,7 +69,7 @@
- #define RPMX_MTI_MAC100X_COMMAND_CONFIG_PAUSE_FWD              BIT_ULL(7)
- #define RPMX_MTI_MAC100X_CL01_PAUSE_QUANTA              0x80A8
- #define RPMX_MTI_MAC100X_CL89_PAUSE_QUANTA		0x8108
--#define RPM_DEFAULT_PAUSE_TIME                          0xFFFF
-+#define RPM_DEFAULT_PAUSE_TIME                          0x7FF
-
- /* Function Declarations */
- int rpm_get_nr_lmacs(void *rpmd);
---
-2.17.1
+> 
+>> On 6/22/2022 9:31 AM, Vidya Sagar wrote:
+>>> Platforms that cannot support their core initialization without the
+>>> reference clock from the host, implement the feature 'core_init_notifier'
+>>> to indicate the DesignWare sub-system about when their core is getting
+>>> initialized. Any accesses to the core (Ex:- DBI) would result in system
+>>> hang in such systems (Ex:- tegra194). This patch moves any access to the
+>>> core to dw_pcie_ep_init_complete() API which is effectively called only
+>>> after the core initialization.
+>>>
+>>> Signed-off-by: Vidya Sagar <vidyas@nvidia.com>
+>>> ---
+>>>    .../pci/controller/dwc/pcie-designware-ep.c   | 88 +++++++++++--------
+>>>    1 file changed, 49 insertions(+), 39 deletions(-)
+>>>
+>>> diff --git a/drivers/pci/controller/dwc/pcie-designware-ep.c b/drivers/pci/controller/dwc/pcie-designware-ep.c
+>>> index 0eda8236c125..9feec720175f 100644
+>>> --- a/drivers/pci/controller/dwc/pcie-designware-ep.c
+>>> +++ b/drivers/pci/controller/dwc/pcie-designware-ep.c
+>>> @@ -639,9 +639,14 @@ static unsigned int dw_pcie_ep_find_ext_capability(struct dw_pcie *pci, int cap)
+>>>    int dw_pcie_ep_init_complete(struct dw_pcie_ep *ep)
+>>>    {
+>>>      struct dw_pcie *pci = to_dw_pcie_from_ep(ep);
+>>> +   struct dw_pcie_ep_func *ep_func;
+>>> +   struct device *dev = pci->dev;
+>>> +   struct pci_epc *epc = ep->epc;
+>>>      unsigned int offset;
+>>>      unsigned int nbars;
+>>>      u8 hdr_type;
+>>> +   u8 func_no;
+>>> +   void *addr;
+>>>      u32 reg;
+>>>      int i;
+>>> @@ -654,6 +659,42 @@ int dw_pcie_ep_init_complete(struct dw_pcie_ep *ep)
+>>>              return -EIO;
+>>>      }
+>>> +   dw_pcie_iatu_detect(pci);
+>>> +
+>>> +   ep->ib_window_map = devm_kcalloc(dev,
+>>> +                                    BITS_TO_LONGS(pci->num_ib_windows),
+>>> +                                    sizeof(long),
+>>> +                                    GFP_KERNEL);
+>>> +   if (!ep->ib_window_map)
+>>> +           return -ENOMEM;
+>>> +
+>>> +   ep->ob_window_map = devm_kcalloc(dev,
+>>> +                                    BITS_TO_LONGS(pci->num_ob_windows),
+>>> +                                    sizeof(long),
+>>> +                                    GFP_KERNEL);
+>>> +   if (!ep->ob_window_map)
+>>> +           return -ENOMEM;
+>>> +
+>>> +   addr = devm_kcalloc(dev, pci->num_ob_windows, sizeof(phys_addr_t),
+>>> +                       GFP_KERNEL);
+>>> +   if (!addr)
+>>> +           return -ENOMEM;
+>>> +   ep->outbound_addr = addr;
+>>> +
+>>> +   for (func_no = 0; func_no < epc->max_functions; func_no++) {
+>>> +           ep_func = devm_kzalloc(dev, sizeof(*ep_func), GFP_KERNEL);
+>>> +           if (!ep_func)
+>>> +                   return -ENOMEM;
+>>> +
+>>> +           ep_func->func_no = func_no;
+>>> +           ep_func->msi_cap = dw_pcie_ep_find_capability(ep, func_no,
+>>> +                                                         PCI_CAP_ID_MSI);
+>>> +           ep_func->msix_cap = dw_pcie_ep_find_capability(ep, func_no,
+>>> +                                                          PCI_CAP_ID_MSIX);
+>>> +
+>>> +           list_add_tail(&ep_func->list, &ep->func_list);
+>>> +   }
+>>> +
+>>>      offset = dw_pcie_ep_find_ext_capability(pci, PCI_EXT_CAP_ID_REBAR);
+>>>      dw_pcie_dbi_ro_wr_en(pci);
+>>> @@ -677,8 +718,6 @@ EXPORT_SYMBOL_GPL(dw_pcie_ep_init_complete);
+>>>    int dw_pcie_ep_init(struct dw_pcie_ep *ep)
+>>>    {
+>>>      int ret;
+>>> -   void *addr;
+>>> -   u8 func_no;
+>>>      struct resource *res;
+>>>      struct pci_epc *epc;
+>>>      struct dw_pcie *pci = to_dw_pcie_from_ep(ep);
+>>> @@ -686,7 +725,6 @@ int dw_pcie_ep_init(struct dw_pcie_ep *ep)
+>>>      struct platform_device *pdev = to_platform_device(dev);
+>>>      struct device_node *np = dev->of_node;
+>>>      const struct pci_epc_features *epc_features;
+>>> -   struct dw_pcie_ep_func *ep_func;
+>>>      INIT_LIST_HEAD(&ep->func_list);
+>>> @@ -708,8 +746,6 @@ int dw_pcie_ep_init(struct dw_pcie_ep *ep)
+>>>              }
+>>>      }
+>>> -   dw_pcie_iatu_detect(pci);
+>>> -
+>>>      res = platform_get_resource_byname(pdev, IORESOURCE_MEM, "addr_space");
+>>>      if (!res)
+>>>              return -EINVAL;
+>>> @@ -717,26 +753,6 @@ int dw_pcie_ep_init(struct dw_pcie_ep *ep)
+>>>      ep->phys_base = res->start;
+>>>      ep->addr_size = resource_size(res);
+>>> -   ep->ib_window_map = devm_kcalloc(dev,
+>>> -                                    BITS_TO_LONGS(pci->num_ib_windows),
+>>> -                                    sizeof(long),
+>>> -                                    GFP_KERNEL);
+>>> -   if (!ep->ib_window_map)
+>>> -           return -ENOMEM;
+>>> -
+>>> -   ep->ob_window_map = devm_kcalloc(dev,
+>>> -                                    BITS_TO_LONGS(pci->num_ob_windows),
+>>> -                                    sizeof(long),
+>>> -                                    GFP_KERNEL);
+>>> -   if (!ep->ob_window_map)
+>>> -           return -ENOMEM;
+>>> -
+>>> -   addr = devm_kcalloc(dev, pci->num_ob_windows, sizeof(phys_addr_t),
+>>> -                       GFP_KERNEL);
+>>> -   if (!addr)
+>>> -           return -ENOMEM;
+>>> -   ep->outbound_addr = addr;
+>>> -
+>>>      if (pci->link_gen < 1)
+>>>              pci->link_gen = of_pci_get_max_link_speed(np);
+>>> @@ -753,20 +769,6 @@ int dw_pcie_ep_init(struct dw_pcie_ep *ep)
+>>>      if (ret < 0)
+>>>              epc->max_functions = 1;
+>>> -   for (func_no = 0; func_no < epc->max_functions; func_no++) {
+>>> -           ep_func = devm_kzalloc(dev, sizeof(*ep_func), GFP_KERNEL);
+>>> -           if (!ep_func)
+>>> -                   return -ENOMEM;
+>>> -
+>>> -           ep_func->func_no = func_no;
+>>> -           ep_func->msi_cap = dw_pcie_ep_find_capability(ep, func_no,
+>>> -                                                         PCI_CAP_ID_MSI);
+>>> -           ep_func->msix_cap = dw_pcie_ep_find_capability(ep, func_no,
+>>> -                                                          PCI_CAP_ID_MSIX);
+>>> -
+>>> -           list_add_tail(&ep_func->list, &ep->func_list);
+>>> -   }
+>>> -
+>>>      if (ep->ops->ep_init)
+>>>              ep->ops->ep_init(ep);
+>>> @@ -790,6 +792,14 @@ int dw_pcie_ep_init(struct dw_pcie_ep *ep)
+>>>                      return 0;
+>>>      }
+>>> +   /*
+>>> +    * NOTE:- Avoid accessing the hardware (Ex:- DBI space) before this
+>>> +    * step as platforms that implement 'core_init_notifier' feature may
+>>> +    * not have the hardware ready (i.e. core initialized) for access
+>>> +    * (Ex: tegra194). Any hardware access on such platforms result
+>>> +    * in system hard hang.
+>>> +    */
+>>> +
+>>>      return dw_pcie_ep_init_complete(ep);
+>>>    }
+>>>    EXPORT_SYMBOL_GPL(dw_pcie_ep_init);
+>>>

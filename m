@@ -2,75 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B87CC56A976
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 19:24:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ABB6356A97F
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 19:24:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235861AbiGGRX7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Jul 2022 13:23:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34456 "EHLO
+        id S235638AbiGGRYb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Jul 2022 13:24:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34984 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235339AbiGGRX5 (ORCPT
+        with ESMTP id S236053AbiGGRYY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Jul 2022 13:23:57 -0400
-Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
-        by lindbergh.monkeyblade.net (Postfix) with SMTP id 20FA04F1A2
-        for <linux-kernel@vger.kernel.org>; Thu,  7 Jul 2022 10:23:51 -0700 (PDT)
-Received: (qmail 433016 invoked by uid 1000); 7 Jul 2022 13:23:50 -0400
-Date:   Thu, 7 Jul 2022 13:23:50 -0400
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     Maxim Devaev <mdevaev@gmail.com>
-Cc:     linux-usb@vger.kernel.org, balbi@kernel.org,
-        gregkh@linuxfoundation.org, caihuoqing@baidu.com,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3] usb: gadget: f_mass_storage: forced_eject attribute
-Message-ID: <YscWpjFlV60NybEA@rowland.harvard.edu>
-References: <20220707170912.70505-1-mdevaev@gmail.com>
+        Thu, 7 Jul 2022 13:24:24 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DA735A2D2
+        for <linux-kernel@vger.kernel.org>; Thu,  7 Jul 2022 10:24:23 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 00111B822B0
+        for <linux-kernel@vger.kernel.org>; Thu,  7 Jul 2022 17:24:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 72576C3411E;
+        Thu,  7 Jul 2022 17:24:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1657214660;
+        bh=PJWosiBSr/Jo2n5fQ5/FKsus3qGeZ8zXjOaJiRvPKhY=;
+        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+        b=EICthTyfj4eOlgLgxPHvd8oUs+GkQRoBCa7JqXrRG+Y52cMsA8M1I0RlZY4n13f4K
+         TOlIirKsI34gIbYOHZw36vEcOyQbLCIj8QuV4iu+rX3qlQ8dQN+TnNGi6zfKM+n/WD
+         4rYPjXHVQGZfUAIZJlgqwGdqbtYcvPVM5t5ztF8JNVhIOTjAjBpOrWXUrMbdaiYnqo
+         fiQVEWxEzcmHOSXlVp9361dZRoKM2jM8C6RPg0xLpGrDKDfzP7udtFKORnpepx7BnF
+         ONawH5UnjQhARG/1l0UB6iwpQlYM7rvwEDmRRSFMkjzQZpVHdRgaHss6rYgLuTTrOk
+         r6tQcIve+hnRg==
+From:   Mark Brown <broonie@kernel.org>
+To:     Xiubo.Lee@gmail.com, alsa-devel@alsa-project.org, perex@perex.cz,
+        festevam@gmail.com, tiwai@suse.com, shengjiu.wang@nxp.com,
+        shengjiu.wang@gmail.com, nicoleotsuka@gmail.com,
+        lgirdwood@gmail.com
+Cc:     linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org
+In-Reply-To: <1657192806-10569-1-git-send-email-shengjiu.wang@nxp.com>
+References: <1657192806-10569-1-git-send-email-shengjiu.wang@nxp.com>
+Subject: Re: [PATCH] ASoC: fsl_utils: Don't use plain integer as NULL pointer
+Message-Id: <165721465817.2940958.17759682147989552170.b4-ty@kernel.org>
+Date:   Thu, 07 Jul 2022 18:24:18 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220707170912.70505-1-mdevaev@gmail.com>
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jul 07, 2022 at 08:09:13PM +0300, Maxim Devaev wrote:
-> It allows to reset prevent_medium_removal flag and "eject" the image.
+On Thu, 7 Jul 2022 19:20:06 +0800, Shengjiu Wang wrote:
+> Fix sparse warning:
+> sound/soc/fsl/fsl_utils.c:125:31: sparse: warning: Using plain integer as NULL pointer
+> sound/soc/fsl/fsl_utils.c:125:42: sparse: warning: Using plain integer as NULL pointer
 > 
-> The patch is a completely alternative implementation of the previously
-> proposed [1], the idea of which was born after the mentioned discussion.
 > 
-> Signed-off-by: Maxim Devaev <mdevaev@gmail.com>
-> Link: https://lore.kernel.org/lkml/20220406092445.215288-1-mdevaev@gmail.com [1]
-> ---
 
-Greg's patch bot is going to complain that you didn't describe the 
-differences between v2 and v3 at this point.
+Applied to
 
-And since you'll have to submit the patch again...
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/sound.git for-next
 
-> +ssize_t fsg_store_forced_eject(struct fsg_lun *curlun, struct rw_semaphore *filesem,
-> +			       const char *buf, size_t count)
-> +{
-> +	int ret;
-> +
+Thanks!
 
-...  How about putting a comment line here, explaining that this 
-override will cause the medium to be ejected no matter what the host 
-wants?
+[1/1] ASoC: fsl_utils: Don't use plain integer as NULL pointer
+      commit: 050237e6b0bea0fafbf7d3d57e717c6fa1e4e819
 
-> +	curlun->prevent_medium_removal = 0;
-> +	ret = fsg_store_file(curlun, filesem, "", 0);
-> +	return ret < 0 ? ret : count;
-> +}
-> +EXPORT_SYMBOL_GPL(fsg_store_forced_eject);
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
 
-In any case, in the next submission you can add:
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
 
-Reviewed-by: Alan Stern <stern@rowland.harvard.edu>
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
 
-Alan Stern
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+Thanks,
+Mark

@@ -2,59 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 417AA569C28
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 09:49:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F739569C3C
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 09:54:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235126AbiGGHtN convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 7 Jul 2022 03:49:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36756 "EHLO
+        id S235077AbiGGHuN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Jul 2022 03:50:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37666 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235122AbiGGHsw (ORCPT
+        with ESMTP id S230272AbiGGHuL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Jul 2022 03:48:52 -0400
-Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D50232EEC;
-        Thu,  7 Jul 2022 00:48:42 -0700 (PDT)
-Received: from dggpemm500020.china.huawei.com (unknown [172.30.72.53])
-        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4LdpRW5bldz1DDRG;
-        Thu,  7 Jul 2022 15:47:51 +0800 (CST)
-Received: from dggpemm500008.china.huawei.com (7.185.36.136) by
- dggpemm500020.china.huawei.com (7.185.36.49) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Thu, 7 Jul 2022 15:48:40 +0800
-Received: from dggpemm500006.china.huawei.com (7.185.36.236) by
- dggpemm500008.china.huawei.com (7.185.36.136) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Thu, 7 Jul 2022 15:48:40 +0800
-Received: from dggpemm500006.china.huawei.com ([7.185.36.236]) by
- dggpemm500006.china.huawei.com ([7.185.36.236]) with mapi id 15.01.2375.024;
- Thu, 7 Jul 2022 15:48:40 +0800
-From:   "chenjun (AM)" <chenjun102@huawei.com>
-To:     Jason Andryuk <jandryuk@gmail.com>,
-        Peter Huewe <peterhuewe@gmx.de>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        Jason Gunthorpe <jgg@ziepe.ca>
-CC:     James Bottomley <James.Bottomley@HansenPartnership.com>,
-        "stable@vger.kernel.org" <stable@vger.kernel.org>,
-        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] tpm_tis: Hold locality open during probe
-Thread-Topic: [PATCH] tpm_tis: Hold locality open during probe
-Thread-Index: AQHYkVc7QBSxEshmGkyZ5C0kkbOHTA==
-Date:   Thu, 7 Jul 2022 07:48:40 +0000
-Message-ID: <5687473ad4da4c26a85b6d230cfc011a@huawei.com>
-References: <20220706164043.417780-1-jandryuk@gmail.com>
-Accept-Language: zh-CN, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [10.174.178.43]
-Content-Type: text/plain; charset="iso-2022-jp"
-Content-Transfer-Encoding: 8BIT
+        Thu, 7 Jul 2022 03:50:11 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2165838A9
+        for <linux-kernel@vger.kernel.org>; Thu,  7 Jul 2022 00:50:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1657180208;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=G+GK0m59h5LAkU0zG9fs2Rj6b2ZwvcuWU/BmMtKvyjk=;
+        b=Q5je867q4dXihrFvJvvHYY53IbwcqDJKMK1tSFjhP5GjruoB56wylez1K7/2yjdjZ+oLoi
+        kAwJJ3iTM925pT2Gl19+Ecg+IQ7dG5G3VKqR/ETATB67XCvf9fUPQ2VMNiJHwqxiPRHg/X
+        n4Z1utLSQRjkVi5X6LY4G108NSvj0dk=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-21-zejxw8LnMIC7a967odLosQ-1; Thu, 07 Jul 2022 03:50:05 -0400
+X-MC-Unique: zejxw8LnMIC7a967odLosQ-1
+Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id DF731101A588;
+        Thu,  7 Jul 2022 07:50:04 +0000 (UTC)
+Received: from T590 (ovpn-8-19.pek2.redhat.com [10.72.8.19])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id D7E742EF99;
+        Thu,  7 Jul 2022 07:49:57 +0000 (UTC)
+Date:   Thu, 7 Jul 2022 15:49:52 +0800
+From:   Ming Lei <ming.lei@redhat.com>
+To:     Gabriel Krisman Bertazi <krisman@collabora.com>
+Cc:     Jens Axboe <axboe@kernel.dk>, linux-block@vger.kernel.org,
+        Harris James R <james.r.harris@intel.com>,
+        linux-kernel@vger.kernel.org, io-uring@vger.kernel.org,
+        ZiyangZhang <ZiyangZhang@linux.alibaba.com>,
+        Xiaoguang Wang <xiaoguang.wang@linux.alibaba.com>,
+        Stefan Hajnoczi <stefanha@redhat.com>, ming.lei@redhat.com
+Subject: Re: [PATCH V3 1/1] ublk: add io_uring based userspace block driver
+Message-ID: <YsaQIGbyRKLAOoqR@T590>
+References: <20220628160807.148853-1-ming.lei@redhat.com>
+ <20220628160807.148853-2-ming.lei@redhat.com>
+ <8735fg4jhb.fsf@collabora.com>
+ <YsPw+HS8ssmVw86u@T590>
 MIME-Version: 1.0
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YsPw+HS8ssmVw86u@T590>
+X-Scanned-By: MIMEDefang 2.79 on 10.11.54.5
+X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -62,110 +67,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-在 2022/7/7 0:41, Jason Andryuk 写道:
-> WEC TPMs (in 1.2 mode) and NTC (in 2.0 mode) have been observer to
-> frequently, but intermittently, fail probe with:
-> tpm_tis: probe of 00:09 failed with error -1
-> 
-> Added debugging output showed that the request_locality in
-> tpm_tis_core_init succeeds, but then the tpm_chip_start fails when its
-> call to tpm_request_locality -> request_locality fails.
-> 
-> The access register in check_locality would show:
-> 0x80 TPM_ACCESS_VALID
-> 0x82 TPM_ACCESS_VALID | TPM_ACCESS_REQUEST_USE
-> 0x80 TPM_ACCESS_VALID
-> continuing until it times out. TPM_ACCESS_ACTIVE_LOCALITY (0x20) doesn't
-> get set which would end the wait.
-> 
-> My best guess is something racy was going on between release_locality's
-> write and request_locality's write.  There is no wait in
-> release_locality to ensure that the locality is released, so the
-> subsequent request_locality could confuse the TPM?
-> 
-> tpm_chip_start grabs locality 0, and updates chip->locality.  Call that
-> before the TPM_INT_ENABLE write, and drop the explicit request/release
-> calls.  tpm_chip_stop performs the release.  With this, we switch to
-> using chip->locality instead of priv->locality.  The probe failure is
-> not seen after this.
-> 
-> commit 0ef333f5ba7f ("tpm: add request_locality before write
-> TPM_INT_ENABLE") added a request_locality/release_locality pair around
-> tpm_tis_write32 TPM_INT_ENABLE, but there is a read of
-> TPM_INT_ENABLE for the intmask which should also have the locality
-> grabbed.  tpm_chip_start is moved before that to have the locality open
-> during the read.
-> 
-> Fixes: 0ef333f5ba7f ("tpm: add request_locality before write TPM_INT_ENABLE")
+On Tue, Jul 05, 2022 at 04:06:16PM +0800, Ming Lei wrote:
+> On Mon, Jul 04, 2022 at 06:10:40PM -0400, Gabriel Krisman Bertazi wrote:
+> > Ming Lei <ming.lei@redhat.com> writes:
 
-0ef333f5ba7f is probably not the commit that introduced the problem? As 
-you said the problem was in 5.4 and the commit was merged in 5.16.
+...
+> 
+> > 
+> > 
+> > > +			__func__, cmd->cmd_op, ub_cmd->q_id, tag,
+> > > +			ub_cmd->result);
+> > > +
+> > > +	if (!(issue_flags & IO_URING_F_SQE128))
+> > > +		goto out;
+> > > +
+> > > +	ubq = ublk_get_queue(ub, ub_cmd->q_id);
+> > > +	if (!ubq || ub_cmd->q_id != ubq->q_id)
+> > 
+> > q_id is coming from userspace and is used to access an array inside
+> > ublk_get_queue().  I think you need to ensure qid < ub->dev_info.nr_hw_queues
+> > before calling ublk_get_queue() to protect from a kernel bad memory
+> > access triggered by userspace.
+> 
+> Good catch!
 
-> CC: stable@vger.kernel.org
-> Signed-off-by: Jason Andryuk <jandryuk@gmail.com>
-> ---
-> The probe failure was seen on 5.4, 5.15 and 5.17.
-> 
-> commit e42acf104d6e ("tpm_tis: Clean up locality release") removed the
-> release wait.  I haven't tried, but re-introducing that would probably
-> fix this issue.  It's hard to know apriori when a synchronous wait is
-> needed, and they don't seem to be needed typically.  Re-introducing the
-> wait would re-introduce a wait in all cases.
-> 
-> Surrounding the read of TPM_INT_ENABLE with grabbing the locality may
-> not be necessary?  It looks like the code only grabs a locality for
-> writing, but that asymmetry is surprising to me.
-> 
-> tpm_chip and tpm_tis_data track the locality separately.  Should the
-> tpm_tis_data one be removed so they don't get out of sync?
-> ---
->   drivers/char/tpm/tpm_tis_core.c | 20 ++++++++------------
->   1 file changed, 8 insertions(+), 12 deletions(-)
-> 
-> diff --git a/drivers/char/tpm/tpm_tis_core.c b/drivers/char/tpm/tpm_tis_core.c
-> index dc56b976d816..529c241800c0 100644
-> --- a/drivers/char/tpm/tpm_tis_core.c
-> +++ b/drivers/char/tpm/tpm_tis_core.c
-> @@ -986,8 +986,13 @@ int tpm_tis_core_init(struct device *dev, struct tpm_tis_data *priv, int irq,
->   		goto out_err;
->   	}
->   
-> +	/* Grabs locality 0. */
-> +	rc = tpm_chip_start(chip);
-> +	if (rc)
-> +		goto out_err;
-> +
->   	/* Take control of the TPM's interrupt hardware and shut it off */
-> -	rc = tpm_tis_read32(priv, TPM_INT_ENABLE(priv->locality), &intmask);
-> +	rc = tpm_tis_read32(priv, TPM_INT_ENABLE(chip->locality), &intmask);
->   	if (rc < 0)
->   		goto out_err;
->   
-> @@ -995,19 +1000,10 @@ int tpm_tis_core_init(struct device *dev, struct tpm_tis_data *priv, int irq,
->   		   TPM_INTF_DATA_AVAIL_INT | TPM_INTF_STS_VALID_INT;
->   	intmask &= ~TPM_GLOBAL_INT_ENABLE;
->   
-> -	rc = request_locality(chip, 0);
-> -	if (rc < 0) {
-> -		rc = -ENODEV;
-> -		goto out_err;
-> -	}
-> -
-> -	tpm_tis_write32(priv, TPM_INT_ENABLE(priv->locality), intmask);
-> -	release_locality(chip, 0);
-> +	tpm_tis_write32(priv, TPM_INT_ENABLE(chip->locality), intmask);
->   
-> -	rc = tpm_chip_start(chip);
-> -	if (rc)
-> -		goto out_err;
->   	rc = tpm2_probe(chip);
-> +	/* Releases locality 0. */
->   	tpm_chip_stop(chip);
->   	if (rc)
->   		goto out_err;
-> 
+Turns out the check on 'qid < ub->dev_info.nr_hw_queues' isn't needed,
+since the condition of 'ub_cmd->q_id != ubq->q_id' is more strict.
 
 
--- 
-Regards
-Chen Jun
+Thanks,
+Ming
+

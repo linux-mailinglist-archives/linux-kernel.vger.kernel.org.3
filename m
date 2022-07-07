@@ -2,106 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4477B56ADFE
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 23:55:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 95D1D56AE01
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 23:56:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236445AbiGGVzH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Jul 2022 17:55:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58344 "EHLO
+        id S236703AbiGGVzz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Jul 2022 17:55:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58610 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236180AbiGGVzF (ORCPT
+        with ESMTP id S236597AbiGGVzo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Jul 2022 17:55:05 -0400
-Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4382A237C8;
-        Thu,  7 Jul 2022 14:55:05 -0700 (PDT)
-Received: by mail-pf1-x436.google.com with SMTP id d10so8147419pfd.9;
-        Thu, 07 Jul 2022 14:55:05 -0700 (PDT)
+        Thu, 7 Jul 2022 17:55:44 -0400
+Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B1362F017
+        for <linux-kernel@vger.kernel.org>; Thu,  7 Jul 2022 14:55:43 -0700 (PDT)
+Received: by mail-lf1-x12b.google.com with SMTP id t19so32750269lfl.5
+        for <linux-kernel@vger.kernel.org>; Thu, 07 Jul 2022 14:55:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=93ZpPgLJyecFvQZe9Ciq+tRk6eMsICLuhmWHFr9gFUg=;
-        b=GAnWHQqJETVvqsV+eO/iRlXpA4gq+UO2T+uCUmjDTIjzIs8thcups8CeCbAkdQiSUd
-         jPWOtQZG9DPoPYt1qTfBA1eppI1sQ8w8SHVRSPgp2vdsY8xE2Tu3AnuMk0ClU7n+FcQa
-         a+LxkfwvIehuQRjHuGW0Mq8o3Smw/05570BmEN+V+7ejRIbQL9ZS1YiZrfBcaZ78TOl/
-         elfsp0NWm6MKZIxUrqEF4gZ4KJhsglGGqI58xUqN8Sw87DUKuf8ofD+cpLJcDoQTfwJc
-         lf24t1q4/V57Eb8yeh8QlCAZReoR9G+JXMdEz1BgZa8KIjRff6puyhUUvRHopR0M+yUr
-         4VWg==
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=VjkruDOfgtNG2P/JMcjrgptBtGqklTPONWmMneNgjdQ=;
+        b=e3OSeiKAf4U5yFmmwkZ2dAxTav20lD5wJSygHmb3mnxTpWLPRf52/0elcJ8FeLFhmi
+         gQFBr+IzK1Mh4zYLL2TsMa4jJAoMTtzJEp/Djbh46Q2DUOgg6acWK/9ARh3VRLaWdk0n
+         wdaqkoWOkrMuvyG9exWEh+M2dhFWvl9O3Vt9rB0RWAfVQADTWrJQkW1zfuuJimBh6oxO
+         2F/drv67/O28bGQDl7glDEo6GEq11cNnbCenXJASchGcJUhdioC17tAc6LL7eaLvCf9W
+         BmKuwNJb13KBzv3QZf0dC+R5kn9KL1DMRtUCbKdOTWQmE6fyLBBFuzPPapvHyUn8nAsO
+         wrDg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=93ZpPgLJyecFvQZe9Ciq+tRk6eMsICLuhmWHFr9gFUg=;
-        b=TDacTkzez/4YPSOHAJq8MqDiBS6bkNSfcOeZyRhHxktFkwWSzhPBn1W1UsX/go66JD
-         o1835nLWGTpVIXh6z3pyp+/3G9fgGB/+9GYiPDvnYw8LWlWB2sWZKaxVD1WaYwWvCDjx
-         1g0uFAZr6S7SK9zjcXgcEAl70gXCESDqwvAfHlWIJV73n/DI82zjyZqipa6Ksmr3sUbA
-         8muZxFV4Evs5XhtPH7yPoPb5sKpgGxO/qRMWSiIblNFRJv9D+b5q5bYnoGYx+3VjYjlx
-         HFgpritOd96JHteet2nlMWevhHHNxPLFxGD2Cup9Xo6zrdGRjm9VMoYm+7fboRW/d6ml
-         nzmg==
-X-Gm-Message-State: AJIora8CGllhHvvMykdtqd0UjpV6VUs3mOKyWzkD3QJaWZ0F83zNculp
-        qcsbMfd+JdRDpMPTJQ4t4Bh0NMKSYoA=
-X-Google-Smtp-Source: AGRyM1tOiuIKopk+gbACZ96iTnvfbEAGXkXjE0d4OQIXpfAx3NzMvLRe5cA42MCnWxNPN0Bb7D/ttA==
-X-Received: by 2002:a63:1f66:0:b0:412:2f72:ec19 with SMTP id q38-20020a631f66000000b004122f72ec19mr213370pgm.282.1657230904195;
-        Thu, 07 Jul 2022 14:55:04 -0700 (PDT)
-Received: from fainelli-desktop.igp.broadcom.net ([192.19.223.252])
-        by smtp.gmail.com with ESMTPSA id x65-20020a636344000000b00412b1043f33sm2542576pgb.39.2022.07.07.14.55.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 07 Jul 2022 14:55:03 -0700 (PDT)
-From:   Florian Fainelli <f.fainelli@gmail.com>
-To:     linux-mips@vger.kernel.org
-Cc:     gerg@kernel.org, fancer.lancer@gmail.com,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        linux-kernel@vger.kernel.org (open list)
-Subject: [PATCH] MIPS: Fixed __debug_virt_addr_valid()
-Date:   Thu,  7 Jul 2022 14:52:36 -0700
-Message-Id: <20220707215237.1730283-1-f.fainelli@gmail.com>
-X-Mailer: git-send-email 2.25.1
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=VjkruDOfgtNG2P/JMcjrgptBtGqklTPONWmMneNgjdQ=;
+        b=Qi7xvD2IR81VCpZGH6dLOwZ2icQXi2/AmkrXfOKr/MP4R5kkZo4BfDXqrQJ/LYdVRL
+         XOUvgkrJcRQKood1WK0Jj6kIGk9qjX/TaWF9J8Jq4IPChL6PMGYd1+sGYw3vwxWziqqO
+         dIE7nXlvN4Gxpqf68JORFTB4kHMTly8EQZddTRkuNQ2NU7s34fkSShhViubfzzCx1rJQ
+         BXmpTlP63Gs0CdnzC0q6j1On/h6I4+NrEc6xfIcxZpilJIDVHUB78XDqUXn9Y8EkWqKa
+         mhit/GCvQQ+WG3ZN5jA+tRx1A3sbU28tioE5V/TN3Ii2B2kiFv4PVln8T+2ulq8eR1c+
+         q/WQ==
+X-Gm-Message-State: AJIora+0mDFoKVxE8M4INzgYz1+mQbwxdb/l0cfd1EuIwlKAsloWLSUh
+        57gUI8hDcigPRSyhUnZc+cvfcSed9+b3GTVq41vSyQ==
+X-Google-Smtp-Source: AGRyM1ulUqkyJL4RyJoqEjTlne97SVueY82GDwdi25+K4J351aeav1qr4l9IpBkvU0Q3fMqjGn/UQn1tge7LHhB3t4o=
+X-Received: by 2002:a05:6512:3c97:b0:481:1a82:9d6b with SMTP id
+ h23-20020a0565123c9700b004811a829d6bmr191230lfv.626.1657230941216; Thu, 07
+ Jul 2022 14:55:41 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20220702151020.2524220-1-trix@redhat.com>
+In-Reply-To: <20220702151020.2524220-1-trix@redhat.com>
+From:   Nick Desaulniers <ndesaulniers@google.com>
+Date:   Thu, 7 Jul 2022 14:55:29 -0700
+Message-ID: <CAKwvOdkeo75+BNrbH+6VHjHB_Md4VFdxy+Pgd3icxsTPCMka4g@mail.gmail.com>
+Subject: Re: [PATCH] iwlwifi: mvm: return an error if setting tbl_rev fails
+To:     Tom Rix <trix@redhat.com>
+Cc:     gregory.greenman@intel.com, kvalo@kernel.org, davem@davemloft.net,
+        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
+        nathan@kernel.org, luciano.coelho@intel.com,
+        ayala.barazani@intel.com, miriam.rachel.korenblit@intel.com,
+        johannes.berg@intel.com, matt.chen@intel.com,
+        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-It is permissible for kernel code to call virt_to_phys() against virtual
-addresses that are in KSEG0 or KSEG1 and we need to be dealing with both
-types. Add a final condition that ensures that the virtual address is
-below KSEG2.
+On Sat, Jul 2, 2022 at 8:10 AM Tom Rix <trix@redhat.com> wrote:
+>
+> clang static analysis reports
+> drivers/net/wireless/intel/iwlwifi/fw/acpi.c:1048:17: warning: Assigned value is garbage or undefined [core.uninitialized.Assign]
+>         fwrt->ppag_ver = tbl_rev;
+>                        ^ ~~~~~~~
+> tbl_rev is optionaly set by a series of calls to iwl_acpi_get_wifi_pkg()
+> and then jumping to the read_table when a call is successful.  The
+> error case when all the call fails is not handled.  On all failed,
+> the code flow falls through to the read_table label.  Add an error
+> handler for the all fail case.
+>
+> Fixes: e8e10a37c51c ("iwlwifi: acpi: move ppag code from mvm to fw/acpi")
+> Signed-off-by: Tom Rix <trix@redhat.com>
+> ---
+>  drivers/net/wireless/intel/iwlwifi/fw/acpi.c | 3 +++
+>  1 file changed, 3 insertions(+)
+>
+> diff --git a/drivers/net/wireless/intel/iwlwifi/fw/acpi.c b/drivers/net/wireless/intel/iwlwifi/fw/acpi.c
+> index e6d64152c81a..1ef1e26c3206 100644
+> --- a/drivers/net/wireless/intel/iwlwifi/fw/acpi.c
+> +++ b/drivers/net/wireless/intel/iwlwifi/fw/acpi.c
+> @@ -1044,6 +1044,9 @@ int iwl_acpi_get_ppag_table(struct iwl_fw_runtime *fwrt)
+>                 goto read_table;
 
-Fixes: dfad83cb7193 ("MIPS: Add support for CONFIG_DEBUG_VIRTUAL")
-Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
----
- arch/mips/mm/physaddr.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+Thanks for the patch!
 
-diff --git a/arch/mips/mm/physaddr.c b/arch/mips/mm/physaddr.c
-index a1ced5e44951..a82f8f57a652 100644
---- a/arch/mips/mm/physaddr.c
-+++ b/arch/mips/mm/physaddr.c
-@@ -5,6 +5,7 @@
- #include <linux/mmdebug.h>
- #include <linux/mm.h>
- 
-+#include <asm/addrspace.h>
- #include <asm/sections.h>
- #include <asm/io.h>
- #include <asm/page.h>
-@@ -30,7 +31,7 @@ static inline bool __debug_virt_addr_valid(unsigned long x)
- 	if (x == MAX_DMA_ADDRESS)
- 		return true;
- 
--	return false;
-+	return KSEGX(x) < KSEG2;
- }
- 
- phys_addr_t __virt_to_phys(volatile const void *x)
+I wonder why the pre-existing code had a goto to a label that was the
+subsequent statement? That's strange; maybe something was in between
+them before, was removed, and that wasn't cleaned up?
+
+I think the whole `if (!IS_ERR(wifi_pkg))` block would be clearer if this was:
+
+...
+wifi_pkg = iwl_acpi_get_wifi_pkg(fwrt->dev, data,
+    ACPI_PPAG_WIFI_DATA_SIZE_V1, &tbl_rev);
+if (IS_ERR(wifi_pkg) || tbl_rev != 0) {
+    ret = -EINVAL;
+    goto out_free;
+}
+num_sub_bands = IWL_NUM_SUB_BANDS_V1;
+IWL_DEBUG_RADIO(fwrt, "Reading PPAG table v1 (tbl_rev=0)\n");
+read_table:
+...
+
+rather than the existing spaghetti. Apologies for my formatting.
+
+>         }
+>
+> +       ret = -EINVAL;
+> +       goto out_free;
+> +
+>  read_table:
+>         fwrt->ppag_ver = tbl_rev;
+>         flags = &wifi_pkg->package.elements[1];
+> --
+> 2.27.0
+>
+
+
 -- 
-2.25.1
-
+Thanks,
+~Nick Desaulniers

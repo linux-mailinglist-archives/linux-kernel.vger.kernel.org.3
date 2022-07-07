@@ -2,56 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 108BA56A9F8
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 19:48:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C159E56AA25
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 19:59:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231875AbiGGRri (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Jul 2022 13:47:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53516 "EHLO
+        id S235948AbiGGR67 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Jul 2022 13:58:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33472 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233757AbiGGRrY (ORCPT
+        with ESMTP id S235807AbiGGR6z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Jul 2022 13:47:24 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02EE55C97D;
-        Thu,  7 Jul 2022 10:47:22 -0700 (PDT)
+        Thu, 7 Jul 2022 13:58:55 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C127E240AD;
+        Thu,  7 Jul 2022 10:58:50 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 47E32620A6;
-        Thu,  7 Jul 2022 17:47:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 56393C3411E;
-        Thu,  7 Jul 2022 17:47:19 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id D1336B82299;
+        Thu,  7 Jul 2022 17:58:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D59E9C3411E;
+        Thu,  7 Jul 2022 17:58:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1657216041;
-        bh=Om5lyrI/FUfOSiu1TyYTkifd9deSCv6M320djg1nrZM=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=UG3QjZNLJDSaydTOuou9yLJk6u83CwpZbBj5O+2xK1GfiiaPV42R0bXH1JtEnday0
-         VD8rGxK/iCJnQiv8eJhawEFOgxSSlbP+IMuWmfz05KTZ70HwZ1bZInOG0kRjWwB4oz
-         /rYHtW+c6EhbNGb8LoEYFGQ+qQQsFvoepBMdDdBZx2Y9wKK5ika0GmVDbUGqaysUns
-         Ymmd/E5JeU7n1pm72iF1aMQRgTHulPBLzXEIqitMDXSW6+Pkak3P9AvRCRbbF9xdlD
-         sTw1r+Th1KduLILQQctDHy+F9Mo8g5U4kU8vZGJLN5zDSh/26hWksF8pEhMWFRGMxb
-         AxpQbzIyw3J1Q==
-Date:   Thu, 7 Jul 2022 18:57:03 +0100
-From:   Jonathan Cameron <jic23@kernel.org>
-To:     Marcus Folkesson <marcus.folkesson@gmail.com>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Kent Gustavsson <kent@minoris.se>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-iio@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 03/10] iio: adc: mcp3911: add support for buffers
-Message-ID: <20220707185703.4a5a3a30@jic23-huawei>
-In-Reply-To: <Yr1fqi/49l1nWYtt@gmail.com>
-References: <20220625103853.2470346-1-marcus.folkesson@gmail.com>
-        <20220625103853.2470346-3-marcus.folkesson@gmail.com>
-        <20220625124537.163bf426@jic23-huawei>
-        <Yr1fqi/49l1nWYtt@gmail.com>
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-pc-linux-gnu)
+        s=k20201202; t=1657216727;
+        bh=iL3xIVjNybuWSiJjZ22VYxa1SB6+T14cOhJZN7GXylI=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=LDQrMLNrzJ6N5uQHsqODYBfAgEIQ1w+ISzrC5bbPvDpbr2SISXO3U+dJkEYXLD9NI
+         XePnOs2Zx7ktshBV61vIp6UjBVtCr4FRvRJEwIDt+yLsC6nOQxgNGBLqp8MBLnCQHC
+         EmNXV/y2HBtC+S64KN8I97tX+RoapjOxA1jU5layGe7ejrTCiXIjsp6bDAZm5IFmrx
+         tkoJKWxC/gfjGH/gGL+uAg/hb5pE488qNrC3VuV8AE+SivhrvRXbYCmCgifSTO/TEX
+         XGONNh3hPdOJM+3i/UJhczZgbt8Xgeuo9EkFSfphoDEXVCNYbg95xUqVA1EIJ1e3JE
+         TfXjIBUtptDOg==
+Date:   Thu, 7 Jul 2022 10:58:45 -0700
+From:   Nathan Chancellor <nathan@kernel.org>
+To:     Justin Stitt <justinstitt@google.com>
+Cc:     "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        David Howells <dhowells@redhat.com>,
+        Marc Dionne <marc.dionne@auristor.com>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Tom Rix <trix@redhat.com>, linux-afs@lists.infradead.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        llvm@lists.linux.dev
+Subject: Re: [PATCH] net: rxrpc: fix clang -Wformat warning
+Message-ID: <Ysce1Xur72MYp0/d@dev-arch.thelio-3990X>
+References: <20220706235648.594609-1-justinstitt@google.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220706235648.594609-1-justinstitt@google.com>
 X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -62,22 +62,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Justin,
 
-> > >  static const struct iio_info mcp3911_info = {
-> > >  	.read_raw = mcp3911_read_raw,
-> > >  	.write_raw = mcp3911_write_raw,
-> > > @@ -303,7 +353,7 @@ static int mcp3911_probe(struct spi_device *spi)
-> > >  		goto clk_disable;
-> > >  
-> > >  	indio_dev->name = spi_get_device_id(spi)->name;
-> > > -	indio_dev->modes = INDIO_DIRECT_MODE;
-> > > +	indio_dev->modes = INDIO_DIRECT_MODE | INDIO_BUFFER_TRIGGERED;  
-> > 
-> > The core sets INDIO_BUFFER_TRIGGERED as part of devm_iio_triggered_buffer_setup()
-> > so you need to set DIRECT_MODE here (that one isn't visible to the core)  
+On Wed, Jul 06, 2022 at 04:56:48PM -0700, Justin Stitt wrote:
+> When building with Clang we encounter this warning:
+> | net/rxrpc/rxkad.c:434:33: error: format specifies type 'unsigned short'
+> | but the argument has type 'u32' (aka 'unsigned int') [-Werror,-Wformat]
+> | _leave(" = %d [set %hx]", ret, y);
 > 
-> Ok, thank you. I sent patches that fixes this in two other ADC-drivers
-> as well to avoid more people following the same thing.
+> y is a u32 but the format specifier is `%hx`. Going from unsigned int to
+> short int results in a loss of data. This is surely not intended
+> behavior. If it is intended, the warning should be suppressed through
+> other means.
+> 
+> This patch should get us closer to the goal of enabling the -Wformat
+> flag for Clang builds.
+> 
+> Link: https://github.com/ClangBuiltLinux/linux/issues/378
+> Signed-off-by: Justin Stitt <justinstitt@google.com>
+> ---
+>  net/rxrpc/rxkad.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/net/rxrpc/rxkad.c b/net/rxrpc/rxkad.c
+> index 08aab5c01437..aa180464ec37 100644
+> --- a/net/rxrpc/rxkad.c
+> +++ b/net/rxrpc/rxkad.c
+> @@ -431,7 +431,7 @@ static int rxkad_secure_packet(struct rxrpc_call *call,
+>  		break;
+>  	}
+>  
+> -	_leave(" = %d [set %hx]", ret, y);
+> +	_leave(" = %d [set %u]", ret, y);
 
-Thanks. Much appreciated!
+Should this just become %x to keep printing it as a hexidecimal number?
 
+Cheers,
+Nathan
+
+>  	return ret;
+>  }
+>  
+> -- 
+> 2.37.0.rc0.161.g10f37bed90-goog
+> 

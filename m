@@ -2,209 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CF70956AE6B
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 00:29:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E5CC756AE41
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 00:20:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236039AbiGGW2k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Jul 2022 18:28:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56638 "EHLO
+        id S236904AbiGGWUn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Jul 2022 18:20:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49066 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236876AbiGGW2h (ORCPT
+        with ESMTP id S236101AbiGGWUk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Jul 2022 18:28:37 -0400
-Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31FEA2982A
-        for <linux-kernel@vger.kernel.org>; Thu,  7 Jul 2022 15:28:36 -0700 (PDT)
-Received: by mail-pj1-x102f.google.com with SMTP id 89-20020a17090a09e200b001ef7638e536so161999pjo.3
-        for <linux-kernel@vger.kernel.org>; Thu, 07 Jul 2022 15:28:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=uxGLQrmVdJkUuWt9NFaUI7Z08fb3rgzdHRf9FAvVKgw=;
-        b=nicL//rVudE/er1S99AVCTW5nBDeJ7vX2B4hG7Yv4pliRITYLCOBG47GAOKJC9Fdrd
-         NKb6E0fCTenDvDM5xvYevZDb83lMFGMH3wY/2v2I5siIrOnB9UFwAWvNQHjXDMHbvcgu
-         tTeeaeHmmVY6oBVb60D7cDCb0ghoxnm4qxY6Y=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=uxGLQrmVdJkUuWt9NFaUI7Z08fb3rgzdHRf9FAvVKgw=;
-        b=QdgGXVsq0VIrHkwNnXF0Jpv1a5chV2JQbxwbWpMhYkcsF8FCRLQrQ9YUMeUSt1PTXF
-         ao07m22EqBSgK0OVHhvkGDASg7jwFrzLfEbDF5FglVaXaxnPx2/qeWq1FVwXcXwrhvt2
-         3Ojt0ssPrZy7vF+t8u5F3Y+ZYB7L1Th1VjRBaSU+Nh0WU7KYBhfpNB5JJWkOc8qXTYZi
-         A3ePjwc/qlliftk4l3jHOWVchgUVhJasI6qjQWVvgibL7PeWLOe18KCryy/HAXh7pgiX
-         9T5gErYIUP0vpz2yZpx4BJ/P8gqjh+Y0svgGqbD41abLOC46FgHsw3ZEuLd5T1PrinxP
-         OVyg==
-X-Gm-Message-State: AJIora+m37mfl2n6SOtngYAmi0JeAIQLnPBvdl+qI0/hJNP/V1phnMbe
-        8/Wd5k9mp2AVJN3a0XlLynbH4pVHGf+fiQ==
-X-Google-Smtp-Source: AGRyM1uws4QaEh1Qxx+3rORBhlNAIeZ5eYIJkvKt5NX0VItF58Rs/EFwcECalDZoXUEEuTG9aePQZQ==
-X-Received: by 2002:a17:90b:3d86:b0:1ef:9672:f647 with SMTP id pq6-20020a17090b3d8600b001ef9672f647mr135726pjb.198.1657232915530;
-        Thu, 07 Jul 2022 15:28:35 -0700 (PDT)
-Received: from pmalani.c.googlers.com.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id 66-20020a620445000000b005289bfcee91sm5545657pfe.59.2022.07.07.15.28.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 07 Jul 2022 15:28:35 -0700 (PDT)
-From:   Prashant Malani <pmalani@chromium.org>
-To:     linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        chrome-platform@lists.linux.dev
-Cc:     bleung@chromium.org, heikki.krogerus@linux.intel.com,
-        Prashant Malani <pmalani@chromium.org>,
-        Daisuke Nojiri <dnojiri@chromium.org>,
-        "Dustin L. Howett" <dustin@howett.net>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Guenter Roeck <groeck@chromium.org>,
-        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Sebastian Reichel <sebastian.reichel@collabora.com>,
-        Tzung-Bi Shih <tzungbi@kernel.org>
-Subject: [PATCH v3 9/9] platform/chrome: cros_ec_typec: Get retimer handle
-Date:   Thu,  7 Jul 2022 22:20:16 +0000
-Message-Id: <20220707222045.1415417-10-pmalani@chromium.org>
-X-Mailer: git-send-email 2.37.0.rc0.161.g10f37bed90-goog
-In-Reply-To: <20220707222045.1415417-1-pmalani@chromium.org>
-References: <20220707222045.1415417-1-pmalani@chromium.org>
+        Thu, 7 Jul 2022 18:20:40 -0400
+Received: from EUR04-VI1-obe.outbound.protection.outlook.com (mail-eopbgr80079.outbound.protection.outlook.com [40.107.8.79])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D60E606A8;
+        Thu,  7 Jul 2022 15:20:39 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=FnzZXhjkiCfi4zi5VDkJ88lU47vgAfdT/ltnAn/qvAw7beI5ZDDjZ9lIB6wVVAhiXAC1QKDMVQ1H094dVbAlDO60RYLttg/jEkov3j90ymduwzaseIxZMRHbiXcq80qPkl7ogDxl9oy8XHCMuvw6i0PIvUUHb/wPseRV/FEJvi3uTVQuh1cdCnvrnCzQ6Zuoz94l5Cfih1uRm96xUXnFpocOPedyQqwc4pMEdnP7kTYO3f20HsLFHAitgAfJ/dXe+drfV+QNHHni5HcnSuvFxASoPJUZzGOYhGf58mMXcUQde4n4z4nlrBOMjmvGqFEMFxf2DnmmtteMQM8526UL9A==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=S9hG/wZuBy10TgTWKVcVgFxS6rpSGYo9tHXjdVuwINM=;
+ b=Of2ToSyeva59Hov3A3BHvxxATSQkfq3HCKZoTpcOYiu0o7hPs3GtGWsXutfxNuPBw0TROoC96WWNEA4RfzegGLG9cAsZ0pymYGkgWMXOkhNvsZvOR5TI6B4lnQlEw9OrZReXLIYGFKMCQoJoA9hobhfjJRfBfV+IkxUGRD3w3ICNHgPsDjG4Nhuq0bqVTu8y7MMk7ykzpr5HvpdHr0PegyKIgRFQw2r3e7UQVa5xigGlDwISTdmlS1DvWES7TFTPtCkmSHZHtkn1wMnl3qR2oDPpMmhDzOpmv+UvS5j9z4/gxmQV608I6YGOQua8u9iWKYcCLWVPAx7RWWdrDJADUQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=S9hG/wZuBy10TgTWKVcVgFxS6rpSGYo9tHXjdVuwINM=;
+ b=qrv1/OILCsSGCzuq3E+X0u9RRUuiucEC+/cdJgA3OAx3yyeWJIOswJu8MjmOmatrMuZGpYPmH2/uEe67F0ejJNJxzQ2EJQZNg9QUMLbqSHOXtxuFrkYqXblBZilPFPXMrlc9M1zH3L76clmACn8tbDnz6nd+b1Skej23LM60O1Q=
+Received: from VI1PR04MB5136.eurprd04.prod.outlook.com (2603:10a6:803:55::19)
+ by DBBPR04MB7898.eurprd04.prod.outlook.com (2603:10a6:10:1ed::12) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5417.16; Thu, 7 Jul
+ 2022 22:20:36 +0000
+Received: from VI1PR04MB5136.eurprd04.prod.outlook.com
+ ([fe80::71b7:8ed1:e4e0:3857]) by VI1PR04MB5136.eurprd04.prod.outlook.com
+ ([fe80::71b7:8ed1:e4e0:3857%4]) with mapi id 15.20.5395.021; Thu, 7 Jul 2022
+ 22:20:36 +0000
+From:   Vladimir Oltean <vladimir.oltean@nxp.com>
+To:     Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+CC:     "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "pabeni@redhat.com" <pabeni@redhat.com>,
+        "kuba@kernel.org" <kuba@kernel.org>,
+        "edumazet@google.com" <edumazet@google.com>,
+        "davem@davemloft.net" <davem@davemloft.net>,
+        "shuah@kernel.org" <shuah@kernel.org>
+Subject: Re: [PATCH 2/2] selftests: forwarding: Install no_forwarding.sh
+Thread-Topic: [PATCH 2/2] selftests: forwarding: Install no_forwarding.sh
+Thread-Index: AQHYkglGkL/K9N5BxEqRZcDKIJ8gXK1ze30A
+Date:   Thu, 7 Jul 2022 22:20:36 +0000
+Message-ID: <20220707222036.ptyaqh7xv6vhokqi@skbuf>
+References: <20220707135532.1783925-1-martin.blumenstingl@googlemail.com>
+ <20220707135532.1783925-3-martin.blumenstingl@googlemail.com>
+In-Reply-To: <20220707135532.1783925-3-martin.blumenstingl@googlemail.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nxp.com;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 561b230d-31e0-4464-e1be-08da6066eabb
+x-ms-traffictypediagnostic: DBBPR04MB7898:EE_
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: xAGhf/QxyHKA+PxX1JgSKz0nuch/G7Tv90QOl0UG4aCFRP4eID1JzZqlwj7oJY6iOBGOG8XnkZpRpBC+qfJr8Dau+g1ajjmCmiKvEDnXucBmTM5EbEMw92UNsyD5TY6DtW/Wjd3Qj9cXfs2BMNBeqaFwJHopQbtMw7oOFlarTVVT8X4qqf2N8v1WYd3e76khtMYE0OHZlNPEzFxGBOT9voYSgzTDk2imMkPJOnh9jP9gCQlttRP3RNpyKwV6UE5iYZDetBuM58pSDtkNCKnCG9q+BhfrzLH6jGiUKPwdfwgJBFqsxH2uRFVp5ddrIUT4uTZDzVTz7HxZtUGOW+yvt4ZDA1fNXRbVSIF5qTXuNpP2It2MDpoLrv5FrKExEWgWU4BEXlW8R8Rq/3wIKaXGlNa/RBmCMggAsfcv3YFfvDD/Vt36145zqD/EjqJe+qUoIc4Pu+Vg7KolcDbf3DwnamrN+WaTbESHYZ3/XnLck1a4PPsV9Z42ttNp9TjJrF1HzjFPrbKQmVX9jD0GKvBysQZu1bSQjtgnz9bzzTVhXBvXVBMHAYo9JnPVUK8uCk431rI/hQtp2RAslJ8n/ijODTRID22hm4shYAzNacD3gHGDuyzLDTjz6oEZS6JW12lUSWbJzpZAMhbsQKg5HwzFEgp1927D36HZV/7mHpJALj3xGJM732yw7HtnXuy57PvhM5Cn+SB8KWwWhCRP53fmZ/kY13Thl2z4K0Y3vC9e6oZ+fxWH+0rSrQuiGb6oH1G6ILS23WAgPFLVMLF5BjkM/K8IVOvdbjjBteP8XFNwybDYQPVTH3GMTv3TDpNZqWId
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VI1PR04MB5136.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(7916004)(4636009)(346002)(39860400002)(396003)(136003)(376002)(366004)(86362001)(33716001)(38070700005)(8936002)(38100700002)(5660300002)(122000001)(41300700001)(44832011)(478600001)(2906002)(316002)(4744005)(71200400001)(66476007)(66946007)(64756008)(91956017)(66446008)(76116006)(66556008)(6486002)(8676002)(186003)(54906003)(26005)(6506007)(1076003)(4326008)(9686003)(6512007)(6916009);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?h/AKEDg8T2ZB+JsJxbdoQtieil/5G9PH0+mwEo87tibQQkCIY0x62nQiIoIK?=
+ =?us-ascii?Q?Je4F2eeQIJBzE9nD8hFPS1KwXBrWzOgAjjcE0LUJej+nbH5JGxb4mQcUgevc?=
+ =?us-ascii?Q?voLoEFHS4eN2VW87vK63xykNrQvQHc61UIV+wyXsZavmJoTjEu2QOS+XrcSP?=
+ =?us-ascii?Q?QLiFrBNPHDcj6I5K+X4TMzfJH2Qt5C3VpKqOypPvRAxMrtomWi2ZT6LJlgZd?=
+ =?us-ascii?Q?SSMDUfDM3/5D1mHiR8vxbjK+vZfpeEVOSxKbJdZyzqCOZTJDiMGM7FSNQFyy?=
+ =?us-ascii?Q?AlYwo/Xxvnhs46v+Ki9m8LMDKL7QaJ6AU0h+ktuoTMgSkJZxuvCjup4ARud7?=
+ =?us-ascii?Q?tryDmVcKZ0brKW3cBRPYyOPOZGthEvduf2WijdYBGidpSnO3B26KQJKe13vt?=
+ =?us-ascii?Q?BJLWFMl2AQ8bvC24upuI8ps52ArBff082hLoCmK0U34uRhTd8ILh0Ebf/pzc?=
+ =?us-ascii?Q?BYg5AW7aGtVrN6Pk9b1CHzHG3uXB8YJq1R91/u+rgiRnmFwY5eA2N9r6dx+Z?=
+ =?us-ascii?Q?eAmCSWrg89OLB0rGLyVmtG7V/Rkw93RUP/BRdzUeOZQGLHdUqLnc9f7F/Qrl?=
+ =?us-ascii?Q?YHvhY0WuV1IVOT6KdeDVRD5ejqznrdOXNd+1t26thhVbAL9FV9lE3MhulxuE?=
+ =?us-ascii?Q?gnZK0zquhsGVA4m+f4eneFcXP032Y9LWqCQBJWdfsbB9ClZXVsueBxDpDRXS?=
+ =?us-ascii?Q?DO0xMm0Me+rsNa4Wtt0wEm1ERFxJCpqTVCvkx7ZKKGWMSLeZCQobOiIz9ZwJ?=
+ =?us-ascii?Q?eKknMDO9Goko7JNv4GuG2CuImY9Wd44yxHob4k6rS4zO42SfETn/gI4NWbbg?=
+ =?us-ascii?Q?JdfnflmzszdKCEzfXQ9M1VHYvZqxJo/zxbm6CgsXqrPPBKFCPz1nIqpHHJh/?=
+ =?us-ascii?Q?lV3qc5RuIfYlcTYm7f+uOAw8Gs9Skp+CjNtj4qVy62XmZXQWxWFKblDsBAu2?=
+ =?us-ascii?Q?hNOB7cdKkYgBBwxyhzOM1FGG14U4yE96X8W94j0wzDp24hFMO07ohlQXj2BC?=
+ =?us-ascii?Q?k+X0CyB0IjUImYmPL+iJkEBbY13ykwq8SHoUp4PMe95E7fCJXakZ64NTBf0Q?=
+ =?us-ascii?Q?VwtseLnudh2RQdPXg8VEuo/EZb0kU7TuY6V+/zn2ighH6oDcNKhYmFh6JFDE?=
+ =?us-ascii?Q?dBAQ3K6uh8WO6xH4Us+CSKnNI1DUOhDSoyvN3OOa9lzxV1Pzw3P2gm78ruRy?=
+ =?us-ascii?Q?mMn7iGohP8kna48aZtCJgkbsJ8gPrD4TrPmu2RGKMPM90T7xUylaVkKXzla/?=
+ =?us-ascii?Q?R8Gim56aics1/21LL4tTljxWM0NSXpztTnI/RX6P9Pd/okK5r90XmYMbxvV9?=
+ =?us-ascii?Q?K43OOvDufwlzQXJV0ii4bAvd0wIm5ozLm5/q97veO0IlFwmBAasjx975zVFY?=
+ =?us-ascii?Q?GtNNpUkQb51Kqnvz/tCbLEdgmkVB/LXJYmgqIeV/1D50YmUUWlqBeZX9yemQ?=
+ =?us-ascii?Q?fN+F1N646rbTJz3sMyl94kr7t0okMFlzOEowzqVWoKlhi2rhF9pKDRAo7c2r?=
+ =?us-ascii?Q?4/Cm6PnyVJoT0dh2t+6xovvhvuQO8C2ip8wvbQBb43/ICsnlTPzY7stu6VIR?=
+ =?us-ascii?Q?JC6IOJj+tDk2EtOHBhJa0AEQtR3wLUgraKLWz2B/2jL32t5ZXkz5ByInXhN6?=
+ =?us-ascii?Q?gg=3D=3D?=
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <80399C52F392944CA4D56C85308B9219@eurprd04.prod.outlook.com>
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: VI1PR04MB5136.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 561b230d-31e0-4464-e1be-08da6066eabb
+X-MS-Exchange-CrossTenant-originalarrivaltime: 07 Jul 2022 22:20:36.7302
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: FWVccW2rVJqSDYilt6sKCBJsf7buFXFLIO8DbLCWEXXuDNfOVxIbAlMuXxu0GSLgf8M3XzmcVja0EHY7wgbSNQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DBBPR04MB7898
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Where available, obtain the handle to retimer switch specified via
-firmware, and update the mux configuration callsites to add retimer
-support for supported modes.
+On Thu, Jul 07, 2022 at 03:55:32PM +0200, Martin Blumenstingl wrote:
+> When using the Makefile from tools/testing/selftests/net/forwarding/
+> all tests should be installed. Add no_forwarding.sh to the list of
+> "to be installed tests" where it has been missing so far.
+>=20
+> Fixes: 476a4f05d9b83f ("selftests: forwarding: add a no_forwarding.sh tes=
+t")
+> Signed-off-by: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+> ---
 
-Signed-off-by: Prashant Malani <pmalani@chromium.org>
----
-
-Changes since v2:
-- No changes.
-
-Changes since v1:
-- No changes.
-
- drivers/platform/chrome/cros_ec_typec.c | 44 +++++++++++++++++++++++--
- 1 file changed, 41 insertions(+), 3 deletions(-)
-
-diff --git a/drivers/platform/chrome/cros_ec_typec.c b/drivers/platform/chrome/cros_ec_typec.c
-index 39e6fd4491a9..38c4ac754ea9 100644
---- a/drivers/platform/chrome/cros_ec_typec.c
-+++ b/drivers/platform/chrome/cros_ec_typec.c
-@@ -20,6 +20,7 @@
- #include <linux/usb/typec_altmode.h>
- #include <linux/usb/typec_dp.h>
- #include <linux/usb/typec_mux.h>
-+#include <linux/usb/typec_retimer.h>
- #include <linux/usb/typec_tbt.h>
- #include <linux/usb/role.h>
- 
-@@ -53,6 +54,7 @@ struct cros_typec_port {
- 	struct usb_pd_identity c_identity;
- 	struct typec_switch *ori_sw;
- 	struct typec_mux *mux;
-+	struct typec_retimer *retimer;
- 	struct usb_role_switch *role_sw;
- 
- 	/* Variables keeping track of switch state. */
-@@ -142,6 +144,12 @@ static int cros_typec_get_switch_handles(struct cros_typec_port *port,
- 		goto mux_err;
- 	}
- 
-+	port->retimer = fwnode_typec_retimer_get(fwnode);
-+	if (IS_ERR(port->retimer)) {
-+		dev_dbg(dev, "Retimer handle not found.\n");
-+		goto retimer_sw_err;
-+	}
-+
- 	port->ori_sw = fwnode_typec_switch_get(fwnode);
- 	if (IS_ERR(port->ori_sw)) {
- 		dev_dbg(dev, "Orientation switch handle not found.\n");
-@@ -159,6 +167,8 @@ static int cros_typec_get_switch_handles(struct cros_typec_port *port,
- role_sw_err:
- 	typec_switch_put(port->ori_sw);
- ori_sw_err:
-+	typec_retimer_put(port->retimer);
-+retimer_sw_err:
- 	typec_mux_put(port->mux);
- mux_err:
- 	return -ENODEV;
-@@ -203,6 +213,21 @@ static void cros_typec_unregister_altmodes(struct cros_typec_data *typec, int po
- 	}
- }
- 
-+/*
-+ * Map the Type-C Mux state to retimer state and call the retimer set function. We need this
-+ * because we re-use the Type-C mux state for retimers.
-+ */
-+static int cros_typec_retimer_set(struct typec_retimer  *retimer, struct typec_mux_state state)
-+{
-+	struct typec_retimer_state rstate = {
-+		.alt = state.alt,
-+		.mode = state.mode,
-+		.data = state.data,
-+	};
-+
-+	return typec_retimer_set(retimer, &rstate);
-+}
-+
- static int cros_typec_usb_disconnect_state(struct cros_typec_port *port)
- {
- 	port->state.alt = NULL;
-@@ -211,6 +236,7 @@ static int cros_typec_usb_disconnect_state(struct cros_typec_port *port)
- 
- 	usb_role_switch_set_role(port->role_sw, USB_ROLE_NONE);
- 	typec_switch_set(port->ori_sw, TYPEC_ORIENTATION_NONE);
-+	cros_typec_retimer_set(port->retimer, port->state);
- 
- 	return typec_mux_set(port->mux, &port->state);
- }
-@@ -381,9 +407,14 @@ static int cros_typec_init_ports(struct cros_typec_data *typec)
- 
- static int cros_typec_usb_safe_state(struct cros_typec_port *port)
- {
-+	int ret;
- 	port->state.mode = TYPEC_STATE_SAFE;
- 
--	return typec_mux_set(port->mux, &port->state);
-+	ret = cros_typec_retimer_set(port->retimer, port->state);
-+	if (!ret)
-+		ret = typec_mux_set(port->mux, &port->state);
-+
-+	return ret;
- }
- 
- /*
-@@ -480,7 +511,11 @@ static int cros_typec_enable_dp(struct cros_typec_data *typec,
- 	port->state.data = &dp_data;
- 	port->state.mode = TYPEC_MODAL_STATE(ffs(pd_ctrl->dp_mode));
- 
--	return typec_mux_set(port->mux, &port->state);
-+	ret = cros_typec_retimer_set(port->retimer, port->state);
-+	if (!ret)
-+		ret = typec_mux_set(port->mux, &port->state);
-+
-+	return ret;
- }
- 
- static int cros_typec_enable_usb4(struct cros_typec_data *typec,
-@@ -569,7 +604,10 @@ static int cros_typec_configure_mux(struct cros_typec_data *typec, int port_num,
- 	} else if (port->mux_flags & USB_PD_MUX_USB_ENABLED) {
- 		port->state.alt = NULL;
- 		port->state.mode = TYPEC_STATE_USB;
--		ret = typec_mux_set(port->mux, &port->state);
-+
-+		ret = cros_typec_retimer_set(port->retimer, port->state);
-+		if (!ret)
-+			ret = typec_mux_set(port->mux, &port->state);
- 	} else {
- 		dev_dbg(typec->dev,
- 			"Unrecognized mode requested, mux flags: %x\n",
--- 
-2.37.0.rc0.161.g10f37bed90-goog
-
+Reviewed-by: Vladimir Oltean <vladimir.oltean@nxp.com>=

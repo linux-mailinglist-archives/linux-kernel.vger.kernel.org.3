@@ -2,103 +2,264 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 52A4E5696BB
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 02:06:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D0D925696BD
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 02:09:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234711AbiGGAGV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Jul 2022 20:06:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44418 "EHLO
+        id S233884AbiGGAJQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Jul 2022 20:09:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46126 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234127AbiGGAGT (ORCPT
+        with ESMTP id S234127AbiGGAJO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Jul 2022 20:06:19 -0400
-Received: from mail-io1-xd29.google.com (mail-io1-xd29.google.com [IPv6:2607:f8b0:4864:20::d29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F4D72DA87
-        for <linux-kernel@vger.kernel.org>; Wed,  6 Jul 2022 17:06:19 -0700 (PDT)
-Received: by mail-io1-xd29.google.com with SMTP id v185so15431662ioe.11
-        for <linux-kernel@vger.kernel.org>; Wed, 06 Jul 2022 17:06:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=RGizXG/uxdoJz8U4c3W7MH/XgehlwnClhkyqDDUQKKs=;
-        b=GMRPjL02HfiZEay0Ow0wEZIRQM8YqK19JjQ6wHkRag7IZnuEcaG1e3d4UyX7n9Z8vP
-         8R18RNEMpqXoIay+/HrrBFm0tcxRneMmyF2PGEzDTrvbLqCwyRAJ1T+aTKwLeNmQqvB1
-         kuk5gwxBDFQMkVAjNjPIabx4ujXIS0nk5Eei0=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=RGizXG/uxdoJz8U4c3W7MH/XgehlwnClhkyqDDUQKKs=;
-        b=vgkiyPQcc1OX9eSsLMqfcSFVpEae/FrsPlQBnTz0v56EWitC50onS8uqzGf2UUVnZe
-         y1Zc56UQlkd2w49YKjCml7kBKev15w8Qa0iCwx+ncpEwAqHrBlz+t/NGSxsR8DVCNCxQ
-         Gqsm2l+yUE8NnqAIE9Uu9pr9sVKCu9Q26tPjU0Y6huCiFNzMFKEOjBo+0O6s3h9WZ6C6
-         MhxxTCHB5Iru9zdhOcqL6N3Lo7z8902Ry/GlSS8aML7BHyFnh/PRDKIFzNtrHlzbyqb0
-         T0iRXYSRt25sqyKs1JZf8VpcRQfB6GQV04lM85Xnm/IxmdlKKpccuSs4/pKeTW+rkv76
-         VypQ==
-X-Gm-Message-State: AJIora8Cu57JIs4z7jenx9oH5OvzrczYLG3CphKLZx7DjlU9OXhqwDge
-        NQbs4Wz1dfzyQL3uB4WcNfTL8Q==
-X-Google-Smtp-Source: AGRyM1syZJEzhDl+xsvXgcQ0K9lWqKkWF7yQ0c7GCkiDbsU9+XqgQ+H6+RPvtXjsDc97K3zzVOyH7g==
-X-Received: by 2002:a05:6638:2708:b0:33c:975e:707a with SMTP id m8-20020a056638270800b0033c975e707amr25820072jav.284.1657152378545;
-        Wed, 06 Jul 2022 17:06:18 -0700 (PDT)
-Received: from [192.168.1.128] ([38.15.45.1])
-        by smtp.gmail.com with ESMTPSA id g193-20020a025bca000000b0033f17259e8bsm326612jab.54.2022.07.06.17.06.17
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 06 Jul 2022 17:06:18 -0700 (PDT)
-Subject: Re: [PATCH 4.9 00/29] 4.9.322-rc1 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org
-Cc:     stable@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com,
-        sudipm.mukherjee@gmail.com, slade@sladewatkins.com,
-        Shuah Khan <skhan@linuxfoundation.org>
-References: <20220705115605.742248854@linuxfoundation.org>
-From:   Shuah Khan <skhan@linuxfoundation.org>
-Message-ID: <60201c30-c755-3cb1-a771-dbcf0e7ad8b9@linuxfoundation.org>
-Date:   Wed, 6 Jul 2022 18:06:17 -0600
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.1
+        Wed, 6 Jul 2022 20:09:14 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68EC41BEBD
+        for <linux-kernel@vger.kernel.org>; Wed,  6 Jul 2022 17:09:13 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 2C064B81EFB
+        for <linux-kernel@vger.kernel.org>; Thu,  7 Jul 2022 00:09:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1B23DC3411C;
+        Thu,  7 Jul 2022 00:09:10 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="JLm4OCoS"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+        t=1657152548;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=OAVoRv2MVcDg2zTYQIQOw3ylC2VeCsqBTVsInz/w+fA=;
+        b=JLm4OCoSkpb82yVYch6n8PTgbLYaR2DZ3nsIj7WSrGbphF26ydy6HBK4kUtClK2VAUXXMB
+        nZc9q3hoWRG0DNtpLwZH46zIM3Hxfnzg66t/+rMYPCAMglzK5c7HDeC+XAutE3hBtCXVuZ
+        83BLd3AYvt/j0pxQA6HBGVgxxgg4Dj8=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id da5e5849 (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
+        Thu, 7 Jul 2022 00:09:08 +0000 (UTC)
+From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
+To:     hpa@zytor.com, Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        X86 ML <x86@kernel.org>, LKML <linux-kernel@vger.kernel.org>,
+        "Andy Lutomirski" <luto@kernel.org>
+Cc:     "Jason A. Donenfeld" <Jason@zx2c4.com>
+Subject: [PATCH v7] x86/setup: Use rng seeds from setup_data
+Date:   Thu,  7 Jul 2022 02:08:52 +0200
+Message-Id: <20220707000852.523788-1-Jason@zx2c4.com>
+In-Reply-To: <20220703004431.268931-1-Jason@zx2c4.com>
+References: <20220703004431.268931-1-Jason@zx2c4.com>
 MIME-Version: 1.0
-In-Reply-To: <20220705115605.742248854@linuxfoundation.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 7/5/22 5:57 AM, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 4.9.322 release.
-> There are 29 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
-> 
-> Responses should be made by Thu, 07 Jul 2022 11:55:56 +0000.
-> Anything received after that time might be too late.
-> 
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v4.x/stable-review/patch-4.9.322-rc1.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-4.9.y
-> and the diffstat can be found below.
-> 
-> thanks,
-> 
-> greg k-h
-> 
+Currently the only way x86 can get an early boot RNG seed is via EFI,
+which is generally always used now for physical machines, but is very
+rarely used in VMs, especially VMs that are optimized for starting
+"instantaneously", such as Firecracker's MicroVM. For tiny fast booting
+VMs, EFI is not something you generally need or want.
 
-Compiled and booted on my test system. No dmesg regressions.
+Rather, here we want the ability for the image loader or firmware to
+pass a single random seed, exactly as device tree platforms do with the
+"rng-seed" property. Additionally, this is something that bootloaders
+can append, with their own seed file management, which is something
+every other major OS ecosystem has that we do not (yet).
 
-Tested-by: Shuah Khan <skhan@linuxfoundation.org>
+This patch adds SETUP_RNG_SEED, similar to the other seven setup_data
+entries that are parsed at boot. It also takes care to zero out the seed
+immediately after using, in order to retain forward secrecy. This all
+takes about 7 trivial lines of code.
 
-thanks,
--- Shuah
+Then, on kexec_file_load(), a new fresh seed is generated and passed to
+the next kernel, just as is done on device tree architectures when
+using kexec. And, importantly, I've tested that QEMU is able to properly
+pass SETUP_RNG_SEED as well, making this work for every step of the way.
+This code too is pretty straight forward.
+
+Together these measures ensure that VMs and nested kexec()'d kernels
+always receive a proper boot time RNG seed at the earliest possible
+stage from their parents:
+
+   - Host [already has strongly initialized RNG]
+     - QEMU [passes fresh seed in SETUP_RNG_SEED field]
+       - Linux [uses parent's seed and gathers entropy of its own]
+         - kexec [passes this in SETUP_RNG_SEED field]
+           - Linux [uses parent's seed and gathers entropy of its own]
+             - kexec [passes this in SETUP_RNG_SEED field]
+               - Linux [uses parent's seed and gathers entropy of its own]
+                 - kexec [passes this in SETUP_RNG_SEED field]
+		   - ...
+
+I've verified in several scenarios that this works quite well from a
+host kernel to QEMU and down inwards, mixing and matching loaders, with
+every layer providing a seed to the next.
+
+Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
+---
+Changes v6->v7:
+- [amluto] Add comment about zeroing fields - data for forward secrecy, len in
+  case of accidental reset-to-entry-jump bug.
+Changes v5->v6:
+- [hpa] Rework commit message to be less confusing and not improperly
+  mention e820.
+Changes v4->v5:
+- Populate field when loading bzimages for kexec, just like device tree
+  platforms do.
+Changes v3->v4:
+- Zero out data after using, for forward secrecy.
+Changes v2->v3:
+- Actually memmap the right area with the random bytes in it. This
+  worked before because of page sizes, but the code wasn't right. Now
+  it's right.
+Changes v1->v2:
+- Fix small typo of data_len -> data->len.
+
+ arch/x86/include/uapi/asm/bootparam.h |  1 +
+ arch/x86/kernel/kexec-bzimage64.c     | 36 ++++++++++++++++++++++++---
+ arch/x86/kernel/setup.c               | 10 ++++++++
+ 3 files changed, 44 insertions(+), 3 deletions(-)
+
+diff --git a/arch/x86/include/uapi/asm/bootparam.h b/arch/x86/include/uapi/asm/bootparam.h
+index bea5cdcdf532..a60676b8d1d4 100644
+--- a/arch/x86/include/uapi/asm/bootparam.h
++++ b/arch/x86/include/uapi/asm/bootparam.h
+@@ -11,6 +11,7 @@
+ #define SETUP_APPLE_PROPERTIES		5
+ #define SETUP_JAILHOUSE			6
+ #define SETUP_CC_BLOB			7
++#define SETUP_RNG_SEED			8
+ 
+ #define SETUP_INDIRECT			(1<<31)
+ 
+diff --git a/arch/x86/kernel/kexec-bzimage64.c b/arch/x86/kernel/kexec-bzimage64.c
+index 170d0fd68b1f..13b2c55ebbf0 100644
+--- a/arch/x86/kernel/kexec-bzimage64.c
++++ b/arch/x86/kernel/kexec-bzimage64.c
+@@ -18,6 +18,7 @@
+ #include <linux/mm.h>
+ #include <linux/efi.h>
+ #include <linux/verification.h>
++#include <linux/random.h>
+ 
+ #include <asm/bootparam.h>
+ #include <asm/setup.h>
+@@ -110,6 +111,27 @@ static int setup_e820_entries(struct boot_params *params)
+ 	return 0;
+ }
+ 
++enum { RNG_SEED_LENGTH = 32 };
++
++static void
++add_rng_seed_setup_data(struct boot_params *params,
++			unsigned long params_load_addr,
++			unsigned int rng_seed_setup_data_offset)
++{
++	struct setup_data *sd = (void *)params + rng_seed_setup_data_offset;
++	unsigned long setup_data_phys;
++
++	if (!rng_is_initialized())
++		return;
++
++	sd->type = SETUP_RNG_SEED;
++	sd->len = RNG_SEED_LENGTH;
++	get_random_bytes(sd->data, RNG_SEED_LENGTH);
++	setup_data_phys = params_load_addr + rng_seed_setup_data_offset;
++	sd->next = params->hdr.setup_data;
++	params->hdr.setup_data = setup_data_phys;
++}
++
+ #ifdef CONFIG_EFI
+ static int setup_efi_info_memmap(struct boot_params *params,
+ 				  unsigned long params_load_addr,
+@@ -190,7 +212,8 @@ static int
+ setup_boot_parameters(struct kimage *image, struct boot_params *params,
+ 		      unsigned long params_load_addr,
+ 		      unsigned int efi_map_offset, unsigned int efi_map_sz,
+-		      unsigned int efi_setup_data_offset)
++		      unsigned int efi_setup_data_offset,
++		      unsigned int rng_seed_setup_data_offset)
+ {
+ 	unsigned int nr_e820_entries;
+ 	unsigned long long mem_k, start, end;
+@@ -242,6 +265,8 @@ setup_boot_parameters(struct kimage *image, struct boot_params *params,
+ 		}
+ 	}
+ 
++	add_rng_seed_setup_data(params, params_load_addr,
++				rng_seed_setup_data_offset);
+ #ifdef CONFIG_EFI
+ 	/* Setup EFI state */
+ 	setup_efi_state(params, params_load_addr, efi_map_offset, efi_map_sz,
+@@ -337,6 +362,7 @@ static void *bzImage64_load(struct kimage *image, char *kernel,
+ 	void *stack;
+ 	unsigned int setup_hdr_offset = offsetof(struct boot_params, hdr);
+ 	unsigned int efi_map_offset, efi_map_sz, efi_setup_data_offset;
++	unsigned int rng_seed_setup_data_offset;
+ 	struct kexec_buf kbuf = { .image = image, .buf_max = ULONG_MAX,
+ 				  .top_down = true };
+ 	struct kexec_buf pbuf = { .image = image, .buf_min = MIN_PURGATORY_ADDR,
+@@ -401,13 +427,16 @@ static void *bzImage64_load(struct kimage *image, char *kernel,
+ 	params_cmdline_sz = ALIGN(params_cmdline_sz, 16);
+ 	kbuf.bufsz = params_cmdline_sz + ALIGN(efi_map_sz, 16) +
+ 				sizeof(struct setup_data) +
+-				sizeof(struct efi_setup_data);
++				sizeof(struct efi_setup_data) +
++				sizeof(struct setup_data) +
++				RNG_SEED_LENGTH;
+ 
+ 	params = kzalloc(kbuf.bufsz, GFP_KERNEL);
+ 	if (!params)
+ 		return ERR_PTR(-ENOMEM);
+ 	efi_map_offset = params_cmdline_sz;
+ 	efi_setup_data_offset = efi_map_offset + ALIGN(efi_map_sz, 16);
++	rng_seed_setup_data_offset = efi_setup_data_offset + sizeof(struct efi_setup_data);
+ 
+ 	/* Copy setup header onto bootparams. Documentation/x86/boot.rst */
+ 	setup_header_size = 0x0202 + kernel[0x0201] - setup_hdr_offset;
+@@ -490,7 +519,8 @@ static void *bzImage64_load(struct kimage *image, char *kernel,
+ 
+ 	ret = setup_boot_parameters(image, params, bootparam_load_addr,
+ 				    efi_map_offset, efi_map_sz,
+-				    efi_setup_data_offset);
++				    efi_setup_data_offset,
++				    rng_seed_setup_data_offset);
+ 	if (ret)
+ 		goto out_free_params;
+ 
+diff --git a/arch/x86/kernel/setup.c b/arch/x86/kernel/setup.c
+index bd6c6fd373ae..409de5308a8c 100644
+--- a/arch/x86/kernel/setup.c
++++ b/arch/x86/kernel/setup.c
+@@ -23,6 +23,7 @@
+ #include <linux/usb/xhci-dbgp.h>
+ #include <linux/static_call.h>
+ #include <linux/swiotlb.h>
++#include <linux/random.h>
+ 
+ #include <uapi/linux/mount.h>
+ 
+@@ -355,6 +356,15 @@ static void __init parse_setup_data(void)
+ 		case SETUP_EFI:
+ 			parse_efi_setup(pa_data, data_len);
+ 			break;
++		case SETUP_RNG_SEED:
++			data = early_memremap(pa_data, data_len);
++			add_bootloader_randomness(data->data, data->len);
++			/* Zero seed for forward secrecy. */
++			memzero_explicit(data->data, data->len);
++			/* Zero length in case we find ourselves back here by accident. */
++			memzero_explicit(&data->len, sizeof(data->len));
++			early_memunmap(data, data_len);
++			break;
+ 		default:
+ 			break;
+ 		}
+-- 
+2.35.1
+

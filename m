@@ -2,73 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C3AE756AE6C
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 00:29:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1015856AE76
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 00:32:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237028AbiGGW3O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Jul 2022 18:29:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57428 "EHLO
+        id S236573AbiGGWbL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Jul 2022 18:31:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59014 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236457AbiGGW3L (ORCPT
+        with ESMTP id S230076AbiGGWbK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Jul 2022 18:29:11 -0400
-Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70A7965D51
-        for <linux-kernel@vger.kernel.org>; Thu,  7 Jul 2022 15:29:10 -0700 (PDT)
-Received: by mail-wm1-x333.google.com with SMTP id u12-20020a05600c210c00b003a02b16d2b8so75283wml.2
-        for <linux-kernel@vger.kernel.org>; Thu, 07 Jul 2022 15:29:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=conchuod.ie; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=yBL3Qyiw2yU4MEqrOIkV21CEVLt8E6eaNuc5XFAqVgo=;
-        b=FIs7rf6SPWuGcAR0XCFWnjYw5T/OzNPnd9YSnTFkFAORauCxEU4Aczweq5XUCyU7kC
-         S6RAs/jQU9b9oym4qyKPg8K7NvN+W2Vqk+MfOsIkqhFSyTG7R1rpvU/VnfhMOfJKREgf
-         OYH40nwLHktSF2Fmgwdrt7PGSxYOuuMS6lwniQpOYOQjmOQCDMXunwkOoB/XcfAGxPcW
-         k9y2BBZmIKiNI1EcqHHmxgbwIveR1WuD4foEDFPBS0PYWKl80+8iwMicmElV0Yeuf3ah
-         6mq7A3UoXc8Kw2cdGowOwd4goKJ6pH1HhidVzp1le/gHe7ifDIu0YMC9wBqp2j4Shy5H
-         jCMw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=yBL3Qyiw2yU4MEqrOIkV21CEVLt8E6eaNuc5XFAqVgo=;
-        b=WFfrxvs73mKAgjbyZJKGyuzGlBpfFb3H9fqKBoOWjx9TDovFVAg2CrEBnZpzw0fIbb
-         WG7uM2QjSe/HvtsO57IQ73zdR3/CVFuglACAl4S8Z4ZsxA27rrTiUURaVzFtlDUXIZsv
-         2FRTz6Jz4FLczGrYt+8GjXfvo0/R9NXXrKmwt+oSgUzuhJKhxzVFVGVO1YIfv3o7e/kB
-         0k6jWNjU1HAeXyEAEfDbCL44MH0BFu8tuN7Vi9AcVPKRqO4fO5aAmR5835YadNAgMKJD
-         XSIBrHWuH4eq/XPWZSixIl+iUpE1L0YkIgyavzM62FCjBD4NVOu2YkMP1SIcf9nqiI+U
-         qeQg==
-X-Gm-Message-State: AJIora+V0Mo7apYxqtpvKaXLzNPncgpHY0q+SCcjYtbUku/PofIY6ahz
-        Of/SW/Xgm0WT+e98/MevDQ30jw==
-X-Google-Smtp-Source: AGRyM1vHQ4F1C7uBW7hPq+3do+lBz+obsL6jknlXj5UKr4APcprktMviJ51oUK55Q3Z3fUeppuJe/A==
-X-Received: by 2002:a05:600c:1d17:b0:3a0:481b:f1e1 with SMTP id l23-20020a05600c1d1700b003a0481bf1e1mr7023439wms.136.1657232949057;
-        Thu, 07 Jul 2022 15:29:09 -0700 (PDT)
-Received: from henark71.. ([51.37.234.167])
-        by smtp.gmail.com with ESMTPSA id r190-20020a1c2bc7000000b003a18de85a64sm148855wmr.24.2022.07.07.15.29.07
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 07 Jul 2022 15:29:08 -0700 (PDT)
-From:   Conor Dooley <mail@conchuod.ie>
-To:     zong.li@sifive.com, robh+dt@kernel.org, palmer@dabbelt.com,
-        daire.mcnamara@microchip.com, niklas.cassel@wdc.com,
-        hahnjo@hahnjo.de, kernel@esmil.dk, aou@eecs.berkeley.edu,
-        geert@linux-m68k.org, paul.walmsley@sifive.com, mail@conchuod.ie,
-        damien.lemoal@opensource.wdc.com, krzysztof.kozlowski+dt@linaro.org
-Cc:     Conor Dooley <conor.dooley@microchip.com>,
-        devicetree@vger.kernel.org, linux-riscv@lists.infradead.org,
-        linux-kernel@vger.kernel.org, Brice.Goglin@inria.fr
-Subject: Re: (subset) [PATCH 0/5] RISC-V: Add cpu-map topology information nodes
-Date:   Thu,  7 Jul 2022 23:29:04 +0100
-Message-Id: <165723282709.4170238.17783892176422654947.b4-ty@microchip.com>
-X-Mailer: git-send-email 2.37.0
-In-Reply-To: <20220705190435.1790466-1-mail@conchuod.ie>
-References: <20220705190435.1790466-1-mail@conchuod.ie>
+        Thu, 7 Jul 2022 18:31:10 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA5D865D70
+        for <linux-kernel@vger.kernel.org>; Thu,  7 Jul 2022 15:31:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1657233069; x=1688769069;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=38Mh6DFaVp8kd4XW3sT6BiNg0fRZtdi1BmkNe5o8GJo=;
+  b=idHOHtrTcnyKxYwc8ge+uKTNwE8o9/yrxcWgPWBIU9P9Kl9LIWJKyMNK
+   LWUdGsbHmq3Ds+r09+8SC1xNikv+fLfHHoZKk8Rk39PJCm3gxloLO/g7e
+   mWAX2VacZLZZaw5Tia5F3eXvSMXI8PV7bUYrTtAGckec+Pl5diT7j80Xy
+   jIpAHJiS+S+LlHP/rVooz8wUZwj32JFZLyZpcPq1E+Ha6CmD5UEXX/8Is
+   3zaxOmFqUN222NI+bCIx50vSLPAduTzlz9C6T4bG8VPIswQHu477wcmyE
+   F4sEFZZz4rErd1b+dFk3apKFi2wXGAyCkz3E2XXzYDLHnUkGcHeFT8wMR
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10401"; a="282887708"
+X-IronPort-AV: E=Sophos;i="5.92,253,1650956400"; 
+   d="scan'208";a="282887708"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jul 2022 15:31:09 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.92,253,1650956400"; 
+   d="scan'208";a="840080638"
+Received: from lkp-server01.sh.intel.com (HELO 68b931ab7ac1) ([10.239.97.150])
+  by fmsmga006.fm.intel.com with ESMTP; 07 Jul 2022 15:31:07 -0700
+Received: from kbuild by 68b931ab7ac1 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1o9a1a-000MXW-IF;
+        Thu, 07 Jul 2022 22:31:06 +0000
+Date:   Fri, 8 Jul 2022 06:30:42 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Michael Ellerman <mpe@ellerman.id.au>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 3/4] powerpc: Remove asm/prom.h from asm/mpc52xx.h and
+ asm/pci.h
+Message-ID: <202207080622.VqN3Z1BL-lkp@intel.com>
+References: <22ac0b64b6c6ef6cc6a74739eb213a81372835ed.1657204012.git.christophe.leroy@csgroup.eu>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <22ac0b64b6c6ef6cc6a74739eb213a81372835ed.1657204012.git.christophe.leroy@csgroup.eu>
+X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,26 +68,92 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Conor Dooley <conor.dooley@microchip.com>
+Hi Christophe,
 
-On Tue, 5 Jul 2022 20:04:31 +0100, Conor Dooley wrote:
-> From: Conor Dooley <conor.dooley@microchip.com>
-> 
-> It was reported to me that the Hive Unmatched incorrectly reports
-> its topology to hwloc, but the StarFive VisionFive did in [0] &
-> a subsequent off-list email from Brice (the hwloc maintainer).
-> This turned out not to be entirely true, the /downstream/ version
-> of the VisionFive does work correctly but not upstream, as the
-> downstream devicetree has a cpu-map node that was added recently.
-> 
-> [...]
+I love your patch! Perhaps something to improve:
 
-Applied to dt-for-next, thanks!
+[auto build test WARNING on powerpc/next]
+[also build test WARNING on mkp-scsi/for-next jejb-scsi/for-next linus/master v5.19-rc5 next-20220707]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-[4/5] riscv: dts: microchip: Add mpfs' topology information
-      https://git.kernel.org/conor/c/88d319c6abae
+url:    https://github.com/intel-lab-lkp/linux/commits/Christophe-Leroy/video-fbdev-offb-Include-missing-linux-platform_device-h/20220707-222906
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/powerpc/linux.git next
+config: powerpc-microwatt_defconfig (https://download.01.org/0day-ci/archive/20220708/202207080622.VqN3Z1BL-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 66ae1d60bb278793fd651cece264699d522bab84)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install powerpc cross compiling tool for clang build
+        # apt-get install binutils-powerpc-linux-gnu
+        # https://github.com/intel-lab-lkp/linux/commit/0e553b9abdcfd7c1f63b072e9d9280ce759c0c3c
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Christophe-Leroy/video-fbdev-offb-Include-missing-linux-platform_device-h/20220707-222906
+        git checkout 0e553b9abdcfd7c1f63b072e9d9280ce759c0c3c
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=powerpc SHELL=/bin/bash arch/powerpc/kernel/
 
-The rest is yours Palmer once reviewed :)
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-Thanks,
-Conor.
+All warnings (new ones prefixed by >>):
+
+>> arch/powerpc/kernel/prom.c:891:5: warning: no previous prototype for function 'of_get_ibm_chip_id' [-Wmissing-prototypes]
+   int of_get_ibm_chip_id(struct device_node *np)
+       ^
+   arch/powerpc/kernel/prom.c:891:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   int of_get_ibm_chip_id(struct device_node *np)
+   ^
+   static 
+   1 warning generated.
+
+
+vim +/of_get_ibm_chip_id +891 arch/powerpc/kernel/prom.c
+
+b27652dd2174df1 Kevin Hao              2013-12-24  871  
+9b6b563c0d2d25e Paul Mackerras         2005-10-06  872  /*******
+9b6b563c0d2d25e Paul Mackerras         2005-10-06  873   *
+9b6b563c0d2d25e Paul Mackerras         2005-10-06  874   * New implementation of the OF "find" APIs, return a refcounted
+9b6b563c0d2d25e Paul Mackerras         2005-10-06  875   * object, call of_node_put() when done.  The device tree and list
+9b6b563c0d2d25e Paul Mackerras         2005-10-06  876   * are protected by a rw_lock.
+9b6b563c0d2d25e Paul Mackerras         2005-10-06  877   *
+9b6b563c0d2d25e Paul Mackerras         2005-10-06  878   * Note that property management will need some locking as well,
+9b6b563c0d2d25e Paul Mackerras         2005-10-06  879   * this isn't dealt with yet.
+9b6b563c0d2d25e Paul Mackerras         2005-10-06  880   *
+9b6b563c0d2d25e Paul Mackerras         2005-10-06  881   *******/
+9b6b563c0d2d25e Paul Mackerras         2005-10-06  882  
+b37193b71846858 Benjamin Herrenschmidt 2013-07-15  883  /**
+b37193b71846858 Benjamin Herrenschmidt 2013-07-15  884   * of_get_ibm_chip_id - Returns the IBM "chip-id" of a device
+b37193b71846858 Benjamin Herrenschmidt 2013-07-15  885   * @np: device node of the device
+b37193b71846858 Benjamin Herrenschmidt 2013-07-15  886   *
+b37193b71846858 Benjamin Herrenschmidt 2013-07-15  887   * This looks for a property "ibm,chip-id" in the node or any
+b37193b71846858 Benjamin Herrenschmidt 2013-07-15  888   * of its parents and returns its content, or -1 if it cannot
+b37193b71846858 Benjamin Herrenschmidt 2013-07-15  889   * be found.
+b37193b71846858 Benjamin Herrenschmidt 2013-07-15  890   */
+b37193b71846858 Benjamin Herrenschmidt 2013-07-15 @891  int of_get_ibm_chip_id(struct device_node *np)
+b37193b71846858 Benjamin Herrenschmidt 2013-07-15  892  {
+b37193b71846858 Benjamin Herrenschmidt 2013-07-15  893  	of_node_get(np);
+b37193b71846858 Benjamin Herrenschmidt 2013-07-15  894  	while (np) {
+1856f50c66dff0a Christophe Jaillet     2015-10-16  895  		u32 chip_id;
+b37193b71846858 Benjamin Herrenschmidt 2013-07-15  896  
+1856f50c66dff0a Christophe Jaillet     2015-10-16  897  		/*
+1856f50c66dff0a Christophe Jaillet     2015-10-16  898  		 * Skiboot may produce memory nodes that contain more than one
+1856f50c66dff0a Christophe Jaillet     2015-10-16  899  		 * cell in chip-id, we only read the first one here.
+1856f50c66dff0a Christophe Jaillet     2015-10-16  900  		 */
+1856f50c66dff0a Christophe Jaillet     2015-10-16  901  		if (!of_property_read_u32(np, "ibm,chip-id", &chip_id)) {
+b37193b71846858 Benjamin Herrenschmidt 2013-07-15  902  			of_node_put(np);
+1856f50c66dff0a Christophe Jaillet     2015-10-16  903  			return chip_id;
+b37193b71846858 Benjamin Herrenschmidt 2013-07-15  904  		}
+16c1d606263ea37 Michael Ellerman       2015-10-26  905  
+16c1d606263ea37 Michael Ellerman       2015-10-26  906  		np = of_get_next_parent(np);
+b37193b71846858 Benjamin Herrenschmidt 2013-07-15  907  	}
+b37193b71846858 Benjamin Herrenschmidt 2013-07-15  908  	return -1;
+b37193b71846858 Benjamin Herrenschmidt 2013-07-15  909  }
+b130e7c04f1130f Dan Streetman          2015-05-07  910  EXPORT_SYMBOL(of_get_ibm_chip_id);
+b37193b71846858 Benjamin Herrenschmidt 2013-07-15  911  
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

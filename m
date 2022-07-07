@@ -2,169 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DE45F56ABAC
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 21:16:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C4E5556ABB2
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 21:18:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236736AbiGGTQK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Jul 2022 15:16:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36450 "EHLO
+        id S236741AbiGGTSI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Jul 2022 15:18:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38642 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236740AbiGGTQI (ORCPT
+        with ESMTP id S236675AbiGGTSC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Jul 2022 15:16:08 -0400
-Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D9515C9C7
-        for <linux-kernel@vger.kernel.org>; Thu,  7 Jul 2022 12:16:04 -0700 (PDT)
-Received: by mail-wm1-x331.google.com with SMTP id l40-20020a05600c1d2800b003a18adff308so11801251wms.5
-        for <linux-kernel@vger.kernel.org>; Thu, 07 Jul 2022 12:16:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore-com.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=of729cYQdZdatbdtOkxwYpHbBpVYD6mDwvI8OalqF/o=;
-        b=V9nrML7ATfHvbYWklR0Oe2gzTDbjRLUtkda6dyGevx7bagNTD65ZqDTlKZirih5aQ1
-         nkX0TTKbRtilcre9JSlFYoQn3qcIXVkpQdvAbeJAItCMbjV9BvZD23iO9tn/VrjBpGru
-         KZFli/CXWr3kFMVrmqXy+YPpEv3+dBG02Y6iuCQ9sqm8XAx/uLSHgUEXqjDzq3oXUdbQ
-         mId9ygf9HdZzddUVAEuV/UqJOTkNMagpstdk+z9MSsEAraL5XHdPvcnaYEogTvZsdLjm
-         haswyT1lsFEWpC18LYFOZ0t0WcKCbZDLQKiRF/HBqnJeGP4KN6guHx1djhwXS5SfZ2Hz
-         vXCQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=of729cYQdZdatbdtOkxwYpHbBpVYD6mDwvI8OalqF/o=;
-        b=KaDbQr2lq1udHICxZlWMbCFu+KMITs961GH8Xfrt3uv4PQWxbLm/Am8dF6Rger5MI/
-         uQHdEqdco0f45ptcVd++rJ9PbxSV3Bw0BrgwLhXngsKY05vLv6q6FwrdLSVIRhM0/42d
-         WTL3wEVJEtruo5R8fLEZxOG6z1HmcgmJVyTgY8zf6eZOAD7XcUpvcdzqpn5wB84igAiz
-         oXnPgJpZCbKF1JXo1ceQor+JK1tRIlccuESqcYzF55k+zVSSi1lb4a1VPG0eXkD7V5gD
-         3T+MOb+UrdrLRbSBpctDB+jvVziSsA1idqFMx83yaBNj73bogc7dgUMpLlD3qvp5EA7D
-         +vRg==
-X-Gm-Message-State: AJIora/diyFojnwAHucUXZuj+4zjPX0jD9AHPDGggy0+4k7vvUO1yLFy
-        1E7v0AL0LjaN6IN8H6CWdJ0hhBl7iwoE65VoX8Jj
-X-Google-Smtp-Source: AGRyM1ujmYeLrS7g423s1azgK9mH3+K6H5JmKsA3Sj8Nhk0vm63Rpr3/GjZGXw6pIRtiE3dUUVQupoL7Ac9kaUGVDh0=
-X-Received: by 2002:a05:600c:4f85:b0:3a1:a8e7:232a with SMTP id
- n5-20020a05600c4f8500b003a1a8e7232amr6425558wmq.158.1657221363107; Thu, 07
- Jul 2022 12:16:03 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220706234003.66760-1-kuniyu@amazon.com> <20220706234003.66760-11-kuniyu@amazon.com>
-In-Reply-To: <20220706234003.66760-11-kuniyu@amazon.com>
-From:   Paul Moore <paul@paul-moore.com>
-Date:   Thu, 7 Jul 2022 15:15:52 -0400
-Message-ID: <CAHC9VhQMigGi65-j0c9WBN+dWLjjaYqTti-eP99c1RRrQzWj5g@mail.gmail.com>
-Subject: Re: [PATCH v2 net 10/12] cipso: Fix data-races around sysctl.
-To:     Kuniyuki Iwashima <kuniyu@amazon.com>
-Cc:     "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Iurii Zaikin <yzaikin@google.com>,
-        Kuniyuki Iwashima <kuni1840@gmail.com>, netdev@vger.kernel.org,
+        Thu, 7 Jul 2022 15:18:02 -0400
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26A1659248
+        for <linux-kernel@vger.kernel.org>; Thu,  7 Jul 2022 12:18:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1657221481; x=1688757481;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=up8cq/+G3lZAX2uopGo9w8cQRtyaAUegDJnUV47QUBg=;
+  b=PLY2GjaEIx1Ka8+M0+zwXCOXaM4SIUiSWy8ntneU+J/qsFhd03vl4KSF
+   cpeZeCXKYsyxYeOixAu/8WByy81I4Q8G/hZdegtLLBUEGxj+eXiGpN+0y
+   5w3t9K+Egnpghk8ik2WHVllDKwlF3CjBLnl0y/vLx8hy5WSavoPyrJEus
+   r9XlLZJ/AY3QsRRNqw2QamnBa5K7rvql96VOSmtXimGmLVQ4EB5AdP3dO
+   wWQs6W5tvx8jj72wWqBdeiDczQ+4WESe/La8XkBw79gIh3WW264hnvt1k
+   w4JowirC7emTyY+oUloBXwTRVT8eyJRHuDnBKv3mXWmDyt8J4+ueUKKvq
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10401"; a="263885935"
+X-IronPort-AV: E=Sophos;i="5.92,253,1650956400"; 
+   d="scan'208";a="263885935"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jul 2022 12:18:00 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.92,253,1650956400"; 
+   d="scan'208";a="620919426"
+Received: from lkp-server01.sh.intel.com (HELO 68b931ab7ac1) ([10.239.97.150])
+  by orsmga008.jf.intel.com with ESMTP; 07 Jul 2022 12:17:59 -0700
+Received: from kbuild by 68b931ab7ac1 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1o9X0g-000MMM-Dh;
+        Thu, 07 Jul 2022 19:17:58 +0000
+Date:   Fri, 8 Jul 2022 03:17:11 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Arnd Bergmann <arnd@arndb.de>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
         linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Subject: ld.lld: error: undefined symbol: omap_set_dma_priority
+Message-ID: <202207080322.DnumSqh8-lkp@intel.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jul 6, 2022 at 7:43 PM Kuniyuki Iwashima <kuniyu@amazon.com> wrote:
->
-> While reading cipso sysctl variables, they can be changed concurrently.
-> So, we need to add READ_ONCE() to avoid data-races.
->
-> Fixes: 446fda4f2682 ("[NetLabel]: CIPSOv4 engine")
-> Signed-off-by: Kuniyuki Iwashima <kuniyu@amazon.com>
-> ---
-> CC: Paul Moore <paul@paul-moore.com>
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   e8a4e1c1bb697b1d9fc48f0e56dc0f50bc024bee
+commit: 7036440eab3e2d47a775d4616909f8235488d714 ARM: omap1: enable multiplatform
+date:   5 weeks ago
+config: arm-randconfig-r035-20220706 (https://download.01.org/0day-ci/archive/20220708/202207080322.DnumSqh8-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project f553287b588916de09c66e3e32bf75e5060f967f)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install arm cross compiling tool for clang build
+        # apt-get install binutils-arm-linux-gnueabi
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=7036440eab3e2d47a775d4616909f8235488d714
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout 7036440eab3e2d47a775d4616909f8235488d714
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash
 
-Thanks for the patch, this looks good to me.  However, in the future
-you should probably drop the extra "---" separator (just leave the one
-before the diffstat below) and move my "Cc:" up above "Fixes:".
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-Acked-by: Paul Moore <paul@paul-moore.com>
+All errors (new ones prefixed by >>):
 
-> ---
->  Documentation/networking/ip-sysctl.rst |  2 +-
->  net/ipv4/cipso_ipv4.c                  | 12 +++++++-----
->  2 files changed, 8 insertions(+), 6 deletions(-)
->
-> diff --git a/Documentation/networking/ip-sysctl.rst b/Documentation/networking/ip-sysctl.rst
-> index 9f41961d11d5..0e58001f8580 100644
-> --- a/Documentation/networking/ip-sysctl.rst
-> +++ b/Documentation/networking/ip-sysctl.rst
-> @@ -1085,7 +1085,7 @@ cipso_cache_enable - BOOLEAN
->  cipso_cache_bucket_size - INTEGER
->         The CIPSO label cache consists of a fixed size hash table with each
->         hash bucket containing a number of cache entries.  This variable limits
-> -       the number of entries in each hash bucket; the larger the value the
-> +       the number of entries in each hash bucket; the larger the value is, the
->         more CIPSO label mappings that can be cached.  When the number of
->         entries in a given hash bucket reaches this limit adding new entries
->         causes the oldest entry in the bucket to be removed to make room.
-> diff --git a/net/ipv4/cipso_ipv4.c b/net/ipv4/cipso_ipv4.c
-> index 62d5f99760aa..6cd3b6c559f0 100644
-> --- a/net/ipv4/cipso_ipv4.c
-> +++ b/net/ipv4/cipso_ipv4.c
-> @@ -239,7 +239,7 @@ static int cipso_v4_cache_check(const unsigned char *key,
->         struct cipso_v4_map_cache_entry *prev_entry = NULL;
->         u32 hash;
->
-> -       if (!cipso_v4_cache_enabled)
-> +       if (!READ_ONCE(cipso_v4_cache_enabled))
->                 return -ENOENT;
->
->         hash = cipso_v4_map_cache_hash(key, key_len);
-> @@ -296,13 +296,14 @@ static int cipso_v4_cache_check(const unsigned char *key,
->  int cipso_v4_cache_add(const unsigned char *cipso_ptr,
->                        const struct netlbl_lsm_secattr *secattr)
->  {
-> +       int bkt_size = READ_ONCE(cipso_v4_cache_bucketsize);
->         int ret_val = -EPERM;
->         u32 bkt;
->         struct cipso_v4_map_cache_entry *entry = NULL;
->         struct cipso_v4_map_cache_entry *old_entry = NULL;
->         u32 cipso_ptr_len;
->
-> -       if (!cipso_v4_cache_enabled || cipso_v4_cache_bucketsize <= 0)
-> +       if (!READ_ONCE(cipso_v4_cache_enabled) || bkt_size <= 0)
->                 return 0;
->
->         cipso_ptr_len = cipso_ptr[1];
-> @@ -322,7 +323,7 @@ int cipso_v4_cache_add(const unsigned char *cipso_ptr,
->
->         bkt = entry->hash & (CIPSO_V4_CACHE_BUCKETS - 1);
->         spin_lock_bh(&cipso_v4_cache[bkt].lock);
-> -       if (cipso_v4_cache[bkt].size < cipso_v4_cache_bucketsize) {
-> +       if (cipso_v4_cache[bkt].size < bkt_size) {
->                 list_add(&entry->list, &cipso_v4_cache[bkt].list);
->                 cipso_v4_cache[bkt].size += 1;
->         } else {
-> @@ -1199,7 +1200,8 @@ static int cipso_v4_gentag_rbm(const struct cipso_v4_doi *doi_def,
->                 /* This will send packets using the "optimized" format when
->                  * possible as specified in  section 3.4.2.6 of the
->                  * CIPSO draft. */
-> -               if (cipso_v4_rbm_optfmt && ret_val > 0 && ret_val <= 10)
-> +               if (READ_ONCE(cipso_v4_rbm_optfmt) && ret_val > 0 &&
-> +                   ret_val <= 10)
->                         tag_len = 14;
->                 else
->                         tag_len = 4 + ret_val;
-> @@ -1603,7 +1605,7 @@ int cipso_v4_validate(const struct sk_buff *skb, unsigned char **option)
->                          * all the CIPSO validations here but it doesn't
->                          * really specify _exactly_ what we need to validate
->                          * ... so, just make it a sysctl tunable. */
-> -                       if (cipso_v4_rbm_strictvalid) {
-> +                       if (READ_ONCE(cipso_v4_rbm_strictvalid)) {
->                                 if (cipso_v4_map_lvl_valid(doi_def,
->                                                            tag[3]) < 0) {
->                                         err_offset = opt_iter + 3;
-> --
-> 2.30.2
+>> ld.lld: error: undefined symbol: omap_set_dma_priority
+   >>> referenced by omapfb_main.c:1706 (drivers/video/fbdev/omap/omapfb_main.c:1706)
+   >>>               video/fbdev/omap/omapfb_main.o:(omapfb_do_probe) in archive drivers/built-in.a
 
 -- 
-paul-moore.com
+0-DAY CI Kernel Test Service
+https://01.org/lkp

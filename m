@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 88439569773
+	by mail.lfdr.de (Postfix) with ESMTP id 3CBA2569772
 	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 03:31:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234778AbiGGBaw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Jul 2022 21:30:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33428 "EHLO
+        id S234673AbiGGBay (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Jul 2022 21:30:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33440 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229869AbiGGBau (ORCPT
+        with ESMTP id S234771AbiGGBav (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Jul 2022 21:30:50 -0400
-Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 480DF2E6B3;
-        Wed,  6 Jul 2022 18:30:49 -0700 (PDT)
-Received: by mail-ed1-x52f.google.com with SMTP id y8so15573037eda.3;
-        Wed, 06 Jul 2022 18:30:49 -0700 (PDT)
+        Wed, 6 Jul 2022 21:30:51 -0400
+Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47CDB2E9C5;
+        Wed,  6 Jul 2022 18:30:50 -0700 (PDT)
+Received: by mail-ed1-x530.google.com with SMTP id y8so15573066eda.3;
+        Wed, 06 Jul 2022 18:30:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=k0ZIcIVLYKNRLzJKCJF3m5higzWTNF+p4R6Ms2jPkNo=;
-        b=LXRDR07TxWBojVumiHEs6U86rpSR1juVIdWZWUbot+vCOlGNM5ovQTBVIzyGSlZzmC
-         T5LLxDdE/7Ej2sI/YmchSKnGBGl8UxX+NlOdQTkAXCME5bjABhtFroL01XI1e2u2+Dz4
-         YED9fIC03i5zNQmDGAHDSYY3QrN01H0Gch1LM4hYNSnhUcv3AsmkayiPyZwz7GZSuGo5
-         g5u3JhhXzOgGYBo0FgGsSPOTl9PkfV8xOr5aLRtZJQf3IBPyjXpx97l2gq8UJKTdHQ2v
-         y6rMRj7HGOBeQARD3fO1cABWN79SwifT/KWT4ALAaG56t+Rju48Z3y1EpIOs91AS/2wZ
-         nkSQ==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=YKi4RXaC4DagIFoOVZIbvN2+wPxyAJ0ILA+POA4IWXU=;
+        b=gpl6tmcSXHa0s+CoR5QxMt1giHv0yqfvRDXnSzW04dfEuN+lcpdDVR9udfeSfASPqw
+         Y4c5ZlNfo2pXxqTi9ajr0XOhSHMstqJ6XG+2SYeutjUY1TYAz7znVFPB7+VcCT9ykbs/
+         kjJhj5WEW8+xpIGwTnHf0w4nVkYVX1jBBE+UktIaQMjKxVUvbTSOeOqtkbCsgeEmMqHB
+         YazzHgalIB0pvsa/+h+I9YYGZUQO7KW6WtiafuJPgXQriG6PugEPWB55j7U0ydOurGbq
+         ys+ftsT+K324F4jrd1ko0LQigwoHxXZ3tk/566qCu/3925va8+inJxv0DIdtMRHzuQRH
+         YJkw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=k0ZIcIVLYKNRLzJKCJF3m5higzWTNF+p4R6Ms2jPkNo=;
-        b=YLTnzvJza/aAZAkgVft81lZt3hrP2/P3oEFcjsaGJaheaqavz5LcNADlCeNSdgjqIh
-         3hLggXRZ1dHJy6qSwr7qC6RM5iQ6qY26q6xXb6+WlUs8Cu94PFdKXEv9VvpgXxO7A8bz
-         VHZZFwef/HczidH7KolNxFRaNb0jkq2Ug1JDz1Jh3TZjiptr/Kh3X8DEO8qGNsk4vKOL
-         MBXqyrZuhXeDbv4x4cuLqLHiDz27UerZIv4oi3WaAIaAg5PGkxuBSbErbNPKWwFu2K9U
-         r0NentrcocRRdUjma9pYEcLj0UTj4ZnxFq9PMvDIREM7jl5dvLrmFlO5xcdI3oQp/IM/
-         uZ4w==
-X-Gm-Message-State: AJIora8+9VIVBKp78U2eoWhXvaAqfupF+nqGtLSAl2GXl+v8tsYOLNu7
-        dRxGZJFsJlg+TZm6Bf7Fu355/edM5q8=
-X-Google-Smtp-Source: AGRyM1tDfNc+eTqTcoBdiGlYQwBE9O+kiaTyIziPz4MhLjXUSbt+Cjy7gsQu4BooTbLX0neVJMvZFg==
-X-Received: by 2002:a05:6402:1e88:b0:435:bf05:f0f with SMTP id f8-20020a0564021e8800b00435bf050f0fmr58567067edf.2.1657157447751;
-        Wed, 06 Jul 2022 18:30:47 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=YKi4RXaC4DagIFoOVZIbvN2+wPxyAJ0ILA+POA4IWXU=;
+        b=ji8VxhYxwkpCGw+onNv1XpsCPGdoLs1RtR85qd1bLy6nwmxFGMXmDXjvJjhlz5BT/S
+         Mio4DSbc6O+G/GKDhMspuvSZJv8UC/c7Yaln3R9zwqnqUeW2rI5BKNJkTFIsMiqF6UIA
+         NPaN3hv+xUTSrEeFzbkBJm0VQp3gMHYgD2+OmHC3zO1j9+8C8bg0ya1EAnxDGdpN6RmO
+         73IheXIhTcafR5oiW9fsxPnha4L4YFCzE1kxr5II1BuNpDTVjZjfSYkeQt5bdtKcqwlK
+         9cSDp78EHB/Rg5qeIkCYubtL3KhYHPo4PLm4+6W6e/X8Wk8jZmpZyrJdKtaLgp/kPvGf
+         u1gA==
+X-Gm-Message-State: AJIora/dYDmRtlMEpqXzg9j/QmvbOTvOOBot5inIs+P0aZS9PSlzdc6p
+        4d2wzlAmRt6mzo5nPrkugWs=
+X-Google-Smtp-Source: AGRyM1tvRW8jOn395Cf1nAQOc2eTCCBlruL1sZKOeKP90O5nIUvJLopWQUsOFY5hKyj6KpwmTlCXQA==
+X-Received: by 2002:a05:6402:18:b0:435:9a79:9a40 with SMTP id d24-20020a056402001800b004359a799a40mr56959292edu.328.1657157448818;
+        Wed, 06 Jul 2022 18:30:48 -0700 (PDT)
 Received: from localhost.localdomain (93-42-70-190.ip85.fastwebnet.it. [93.42.70.190])
-        by smtp.googlemail.com with ESMTPSA id t27-20020a17090616db00b0071cbc7487e1sm18025172ejd.69.2022.07.06.18.30.46
+        by smtp.googlemail.com with ESMTPSA id t27-20020a17090616db00b0071cbc7487e1sm18025172ejd.69.2022.07.06.18.30.47
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 06 Jul 2022 18:30:47 -0700 (PDT)
+        Wed, 06 Jul 2022 18:30:48 -0700 (PDT)
 From:   Christian Marangi <ansuelsmth@gmail.com>
 To:     Andy Gross <agross@kernel.org>,
         Bjorn Andersson <bjorn.andersson@linaro.org>,
@@ -59,10 +59,12 @@ To:     Andy Gross <agross@kernel.org>,
         linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org, linux-remoteproc@vger.kernel.org
 Cc:     Christian Marangi <ansuelsmth@gmail.com>
-Subject: [PATCH 1/3] hwspinlock: qcom: Add support for mmio usage to sfpb-mutex
-Date:   Thu,  7 Jul 2022 03:30:14 +0200
-Message-Id: <20220707013017.26654-1-ansuelsmth@gmail.com>
+Subject: [PATCH 2/3] ARM: dts: qcom: add missing hwlock for ipq8064 dtsi
+Date:   Thu,  7 Jul 2022 03:30:15 +0200
+Message-Id: <20220707013017.26654-2-ansuelsmth@gmail.com>
 X-Mailer: git-send-email 2.36.1
+In-Reply-To: <20220707013017.26654-1-ansuelsmth@gmail.com>
+References: <20220707013017.26654-1-ansuelsmth@gmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -75,86 +77,29 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Allow sfpb-mutex to use mmio in addition to syscon.
+Add missing hwlock for ipq8064 dtsi provided by qcom,sfpb-mutex.
 
 Signed-off-by: Christian Marangi <ansuelsmth@gmail.com>
 ---
- drivers/hwspinlock/qcom_hwspinlock.c | 32 ++++++++++++++++++++++------
- 1 file changed, 25 insertions(+), 7 deletions(-)
+ arch/arm/boot/dts/qcom-ipq8064.dtsi | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-diff --git a/drivers/hwspinlock/qcom_hwspinlock.c b/drivers/hwspinlock/qcom_hwspinlock.c
-index 364710966665..23c913095bd0 100644
---- a/drivers/hwspinlock/qcom_hwspinlock.c
-+++ b/drivers/hwspinlock/qcom_hwspinlock.c
-@@ -19,6 +19,11 @@
- #define QCOM_MUTEX_APPS_PROC_ID	1
- #define QCOM_MUTEX_NUM_LOCKS	32
- 
-+struct qcom_hwspinlock_of_data {
-+	u32 offset;
-+	u32 stride;
-+};
+diff --git a/arch/arm/boot/dts/qcom-ipq8064.dtsi b/arch/arm/boot/dts/qcom-ipq8064.dtsi
+index 4b475d98343c..cd1b43e2cab4 100644
+--- a/arch/arm/boot/dts/qcom-ipq8064.dtsi
++++ b/arch/arm/boot/dts/qcom-ipq8064.dtsi
+@@ -1224,4 +1224,11 @@ sdcc3: mmc@12180000 {
+ 			};
+ 		};
+ 	};
 +
- static int qcom_hwspinlock_trylock(struct hwspinlock *lock)
- {
- 	struct regmap_field *field = lock->priv;
-@@ -63,9 +68,20 @@ static const struct hwspinlock_ops qcom_hwspinlock_ops = {
- 	.unlock		= qcom_hwspinlock_unlock,
++	sfpb_mutex: hwlock@1200600 {
++		compatible = "qcom,sfpb-mutex";
++		reg = <0x01200600 0x100>;
++
++		#hwlock-cells = <1>;
++	};
  };
- 
-+static const struct qcom_hwspinlock_of_data of_sfpb_mutex = {
-+	.offset = 0x4,
-+	.stride = 0x4,
-+};
-+
-+/* All modern platform has offset 0 and stride of 4k */
-+static const struct qcom_hwspinlock_of_data of_tcsr_mutex = {
-+	.offset = 0,
-+	.stride = 0x1000,
-+};
-+
- static const struct of_device_id qcom_hwspinlock_of_match[] = {
--	{ .compatible = "qcom,sfpb-mutex" },
--	{ .compatible = "qcom,tcsr-mutex" },
-+	{ .compatible = "qcom,sfpb-mutex", .data = &of_sfpb_mutex },
-+	{ .compatible = "qcom,tcsr-mutex", .data = &of_tcsr_mutex },
- 	{ }
- };
- MODULE_DEVICE_TABLE(of, qcom_hwspinlock_of_match);
-@@ -101,7 +117,7 @@ static struct regmap *qcom_hwspinlock_probe_syscon(struct platform_device *pdev,
- 	return regmap;
- }
- 
--static const struct regmap_config tcsr_mutex_config = {
-+static const struct regmap_config qcom_hwspinlock_mmio_config = {
- 	.reg_bits		= 32,
- 	.reg_stride		= 4,
- 	.val_bits		= 32,
-@@ -112,18 +128,20 @@ static const struct regmap_config tcsr_mutex_config = {
- static struct regmap *qcom_hwspinlock_probe_mmio(struct platform_device *pdev,
- 						 u32 *offset, u32 *stride)
- {
-+	const struct qcom_hwspinlock_of_data *data;
- 	struct device *dev = &pdev->dev;
- 	void __iomem *base;
- 
--	/* All modern platform has offset 0 and stride of 4k */
--	*offset = 0;
--	*stride = 0x1000;
-+	data = of_device_get_match_data(dev);
-+
-+	*offset = data->offset;
-+	*stride = data->stride;
- 
- 	base = devm_platform_ioremap_resource(pdev, 0);
- 	if (IS_ERR(base))
- 		return ERR_CAST(base);
- 
--	return devm_regmap_init_mmio(dev, base, &tcsr_mutex_config);
-+	return devm_regmap_init_mmio(dev, base, &qcom_hwspinlock_mmio_config);
- }
- 
- static int qcom_hwspinlock_probe(struct platform_device *pdev)
 -- 
 2.36.1
 

@@ -2,116 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9AA2556AD57
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 23:20:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BF6FF56AD5D
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 23:21:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236679AbiGGVTu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Jul 2022 17:19:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34742 "EHLO
+        id S236741AbiGGVVZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Jul 2022 17:21:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35522 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236225AbiGGVTt (ORCPT
+        with ESMTP id S236678AbiGGVVW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Jul 2022 17:19:49 -0400
-Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC398313A8;
-        Thu,  7 Jul 2022 14:19:46 -0700 (PDT)
-Received: by mail-pf1-x429.google.com with SMTP id y141so21848637pfb.7;
-        Thu, 07 Jul 2022 14:19:46 -0700 (PDT)
+        Thu, 7 Jul 2022 17:21:22 -0400
+Received: from mail-oi1-x231.google.com (mail-oi1-x231.google.com [IPv6:2607:f8b0:4864:20::231])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 921D832045
+        for <linux-kernel@vger.kernel.org>; Thu,  7 Jul 2022 14:21:21 -0700 (PDT)
+Received: by mail-oi1-x231.google.com with SMTP id s128so10130298oie.10
+        for <linux-kernel@vger.kernel.org>; Thu, 07 Jul 2022 14:21:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=6Mqly/bmUD1+v4qx6JacIhpg9Ul0/6TMbAP2G8iAsIU=;
-        b=Jy4LjqYXsHRJLEuWMy15VqPLyEiaTsf1cyTgG4LnEAnQ7+ZyzBgRaBgfsI3OLsSR25
-         AuLZIiP5ku1xcxEhyGX5xE6iCy8uPyufdJk38lQyS+2dEFVCnjKfrxa9QjazqgFtkLNt
-         XalKugilrwzxZdCPatAWtUZ10lmpfA0Dtsql+0SPL9T2QedYTIpGZoBWxMfR+mvz1XxA
-         oIianSf1mDs/H+/vYnKJFDZ2HpWIwjTIINByzQRlhyKgKGjFW1OTLD/crJxSprvn7wwb
-         D0tbQYBroY3kOJ8Syaut1HUYM0gwZXrTTqT3pWsLinpnHkfx4W6B1d29eeE02zENM2E5
-         4wOw==
+        d=chromium.org; s=google;
+        h=mime-version:in-reply-to:references:from:user-agent:date:message-id
+         :subject:to:cc;
+        bh=XuQp9w2Vs1aOFFH2QgkEWHPslvL9Ld8qwnD4BupNY0w=;
+        b=SXzFCD6PiakxSAJDlRX45oXMcaTKoAYue/mlyleZo0TLGj9D1x5FZiOFOc1bW5MMxm
+         zMeQR1uETxWfCgYwRwvbM/aZQlHNFz3jwfNhmuBK0Tl46qx6avBJt0Vj5QJf9fSg63nT
+         Laq+DqlvwhqfjZOD9GmtHldsC/NJuFdb8LnFw=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=6Mqly/bmUD1+v4qx6JacIhpg9Ul0/6TMbAP2G8iAsIU=;
-        b=L/qETWjrX7A90bI8m0ja6buSlEPyCLCrGbLW/L9m9U1k0oPqeECVT20nSb5DCzHtb/
-         cLgDTz9yYVELo4zvl/gpp0DtJ0JX1359nal9O50Mv6mLKfyfnI7pjRUDxw28unPEOJh3
-         vbhf+71Zl34U7QEivlKHRC2SkY335HXqp8SwqR8c5H9xdipFEmPAV/HbEiBQ00ambkeG
-         bWIGZ4pTv7v+rRL9FP56r81qKJqvtFhe0MfvWNOMG7DaKypyRfzZPRc7+pMYCE5V/6xc
-         Qle4gjqj6EqEnTHR3o5G3YvRwnspNK5AdGFNSdQbNdBSjEJwjRdL6b3CqLHMgLDKeb89
-         iJAg==
-X-Gm-Message-State: AJIora8vHH7VqyhCu7dBjYmoa1pWOmvybzPG+ZN+eNfE39SLEatkWCYy
-        EXmjsyiYkDLT88FAIOcrf7Q=
-X-Google-Smtp-Source: AGRyM1t5W9ZMr1j90syEK2lDjCt9pxLeU/e2mHN5T0KEFQkQACvggQZHVEjihw+PqNIHYc4CePKp/g==
-X-Received: by 2002:a63:5cd:0:b0:412:b163:b7e1 with SMTP id 196-20020a6305cd000000b00412b163b7e1mr51911pgf.451.1657228786230;
-        Thu, 07 Jul 2022 14:19:46 -0700 (PDT)
-Received: from localhost ([2a00:79e1:abd:4a00:2703:3c72:eb1a:cffd])
-        by smtp.gmail.com with ESMTPSA id h12-20020a170902f70c00b0016bfa1a5170sm5207389plo.285.2022.07.07.14.19.44
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 07 Jul 2022 14:19:45 -0700 (PDT)
-From:   Rob Clark <robdclark@gmail.com>
-To:     dri-devel@lists.freedesktop.org
-Cc:     freedreno@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
-        Rob Clark <robdclark@chromium.org>,
-        Rob Clark <robdclark@gmail.com>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Sean Paul <sean@poorly.run>, David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Jessica Zhang <quic_jesszhan@quicinc.com>,
-        Fernando Ramos <greenfoo@u92.eu>,
-        Mark Yacoub <markyacoub@google.com>,
-        linux-kernel@vger.kernel.org (open list)
-Subject: [PATCH] drm/msm/dpu: Fix for non-visible planes
-Date:   Thu,  7 Jul 2022 14:20:00 -0700
-Message-Id: <20220707212003.1710163-1-robdclark@gmail.com>
-X-Mailer: git-send-email 2.36.1
+        h=x-gm-message-state:mime-version:in-reply-to:references:from
+         :user-agent:date:message-id:subject:to:cc;
+        bh=XuQp9w2Vs1aOFFH2QgkEWHPslvL9Ld8qwnD4BupNY0w=;
+        b=ufuwprg35wLJfxY5bp0xfpGpKR1/0JKF5RcktcznPrcxWr8dC3M4tXyt/aXSn9eRz/
+         kwPxpDFv89rpYMt8f617rmHOyX5t/bYvgH6bbYO+BA2CCnow5hy6EBhGY9bvnNBujdM3
+         9Mv+6LcIr6I+2W/6bHqPOLlRdMaB3WnXSfX4+8SddqO+h2g3UnkrPcJiVhf2r/wnG/QT
+         IqyKQko1KyjTWdMRY/B0CnaUISV2HNLqsEUQk250KGW6QJqTgzcazTukHru9tMDs365X
+         vKuErXFk+t/VjATcNlIWxOO3vqOLXS2aaY44xwD8TrYzKckp02BiyWnqcpFkmYFN6E3m
+         RVeA==
+X-Gm-Message-State: AJIora/QNgalle5MmF2Typve1qV6cfVOoX46jLqMcymnablpQ9zWbZJG
+        Jml/SiCKcfkJI7y2K7aBPU6So+M0EFz+h+4wktj61Q==
+X-Google-Smtp-Source: AGRyM1u86hlfujAKJCwkQGNNNhGQ5OK4EZsg7vgXL8Rcuq1ObSFJPCM5Km3thPxlp2kWX7YX6S9fOpbX+fbPsKGN5IA=
+X-Received: by 2002:a05:6808:171c:b0:334:9342:63ef with SMTP id
+ bc28-20020a056808171c00b00334934263efmr4885oib.63.1657228880881; Thu, 07 Jul
+ 2022 14:21:20 -0700 (PDT)
+Received: from 753933720722 named unknown by gmailapi.google.com with
+ HTTPREST; Thu, 7 Jul 2022 14:21:20 -0700
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <40b6a28c-0237-55d7-2f5d-1c571f27e7d6@quicinc.com>
+References: <20220706191442.1150634-1-swboyd@chromium.org> <40b6a28c-0237-55d7-2f5d-1c571f27e7d6@quicinc.com>
+From:   Stephen Boyd <swboyd@chromium.org>
+User-Agent: alot/0.10
+Date:   Thu, 7 Jul 2022 14:21:20 -0700
+Message-ID: <CAE-0n51KOMLP4XJHw2CPNikzfhY0xdjeCScYwvCZ7gAYJM+8Fw@mail.gmail.com>
+Subject: Re: [PATCH] drm/msm/dsi: Set panel orientation when directly connected
+To:     Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Rob Clark <robdclark@gmail.com>
+Cc:     linux-kernel@vger.kernel.org, patches@lists.linux.dev,
+        Sean Paul <sean@poorly.run>, dri-devel@lists.freedesktop.org,
+        freedreno@lists.freedesktop.org,
+        Hsin-Yi Wang <hsinyi@chromium.org>,
+        Douglas Anderson <dianders@chromium.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Rob Clark <robdclark@chromium.org>
+Quoting Abhinav Kumar (2022-07-07 14:11:08)
+>
+>
+> On 7/6/2022 12:14 PM, Stephen Boyd wrote:
+> > Set the panel orientation in drm when the panel is directly connected,
+> > i.e. we're not using an external bridge. The external bridge case is
+> > already handled by the panel bridge code, so we only update the path we
+> > take when the panel is directly connected/internal. This silences a
+> > warning splat coming from __drm_mode_object_add() on Wormdingler boards.
+> >
+> > Cc: Hsin-Yi Wang <hsinyi@chromium.org>
+> > Cc: Douglas Anderson <dianders@chromium.org>
+> > Signed-off-by: Stephen Boyd <swboyd@chromium.org>
+> > ---
+> >
+> > This relies on commit 5e41b01a7808 ("drm/panel: Add an API to allow drm
+> > to set orientation from panel") which is in drm-misc
+> >
+> >   drivers/gpu/drm/msm/dsi/dsi_manager.c | 2 ++
+> >   1 file changed, 2 insertions(+)
+> >
+> > diff --git a/drivers/gpu/drm/msm/dsi/dsi_manager.c b/drivers/gpu/drm/msm/dsi/dsi_manager.c
+> > index cb84d185d73a..9333f7095acd 100644
+> > --- a/drivers/gpu/drm/msm/dsi/dsi_manager.c
+> > +++ b/drivers/gpu/drm/msm/dsi/dsi_manager.c
+> > @@ -268,6 +268,8 @@ static int msm_dsi_manager_panel_init(struct drm_connector *conn, u8 id)
+> >               return PTR_ERR(panel);
+> >       }
+> >
+> > +     drm_connector_set_orientation_from_panel(conn, panel);
+> > +
+>
+> This should be moved below the !panel check since you are passing panel
+> as one of the params.
 
-Fixes `kms_cursor_crc --run-subtest cursor-offscreen`.. when the cursor
-moves offscreen the plane becomes non-visible, so we need to skip over
-it in crtc atomic test and mixer setup.
+drm_connector_set_orientation_from_panel() checks for a NULL panel
+pointer and sets to UNKNOWN. If I moved this below the !panel check then
+I'd have to split that condition for !IS_BONDED_DSI() which was more
+diff.
 
-Signed-off-by: Rob Clark <robdclark@chromium.org>
----
- drivers/gpu/drm/msm/disp/dpu1/dpu_crtc.c | 6 ++++++
- 1 file changed, 6 insertions(+)
+>
+> I looked up the doc and it says that for unknown(default cases) this is
+> a no-op so I think this change is fine otherwise.
+>
+> "It is allowed to call this function with a panel_orientation of
+> DRM_MODE_PANEL_ORIENTATION_UNKNOWN, in which case it is a no-op."
 
-diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_crtc.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_crtc.c
-index 4dd0ce09ca74..4ba000951a90 100644
---- a/drivers/gpu/drm/msm/disp/dpu1/dpu_crtc.c
-+++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_crtc.c
-@@ -422,6 +422,9 @@ static void _dpu_crtc_blend_setup_mixer(struct drm_crtc *crtc,
- 		if (!state)
- 			continue;
- 
-+		if (!state->visible)
-+			continue;
-+
- 		pstate = to_dpu_plane_state(state);
- 		fb = state->fb;
- 
-@@ -1195,6 +1198,9 @@ static int dpu_crtc_atomic_check(struct drm_crtc *crtc,
- 		if (cnt >= DPU_STAGE_MAX * 4)
- 			continue;
- 
-+		if (!pstate->visible)
-+			continue;
-+
- 		pstates[cnt].dpu_pstate = dpu_pstate;
- 		pstates[cnt].drm_pstate = pstate;
- 		pstates[cnt].stage = pstate->normalized_zpos;
--- 
-2.36.1
+Ok, so you're fine with this patch?
 
+>
+>
+> >       if (!panel || !IS_BONDED_DSI())
+> >               goto out;
+> >
+> >
+> > base-commit: 15b9ca1641f0c3cd74885280331e9172c62a125e

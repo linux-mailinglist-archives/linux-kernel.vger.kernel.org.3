@@ -2,158 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BD0115699C3
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 07:19:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 559CD5699ED
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 07:36:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234919AbiGGFTq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Jul 2022 01:19:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47380 "EHLO
+        id S234983AbiGGFfM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Jul 2022 01:35:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55730 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229612AbiGGFTo (ORCPT
+        with ESMTP id S229553AbiGGFfJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Jul 2022 01:19:44 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B4143122B
-        for <linux-kernel@vger.kernel.org>; Wed,  6 Jul 2022 22:19:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1657171183; x=1688707183;
-  h=subject:references:in-reply-to:to:cc:from:message-id:
-   date:mime-version:content-transfer-encoding;
-  bh=JnsdlBnemi3+nXZhtC2fFwNrIgLD1cmfnw2eTSz6klU=;
-  b=SHS30CCIP6Zezj6UX6VpLhrvPqgOEYrk0MDqavfUzY/HWOxtIGFD5imI
-   zeRxjy/tO6FZ4ZeoXlaJmWtPIbg05Hh0aRJB9j/B0e9rzmIkC7FV7r37g
-   Rpwb2VetaFcQLWMhAJVV4uPGKgzZbYWBWv5RIxqKXNyOPGpqspZnK5w1m
-   33/i0MJ+Y3/2Jvyge9tKZtMmkrD5NcJPTvS34O5oiOih5o/ZcQkoO4Gf+
-   BNGImA0h4XqxdOvAWRjiXtgJYEG+1AidnCdDwr528Mfu50nd/Bp/mReys
-   NOLT4Pi5aU+l4QLapVOMuMR0FFY//yLdoXT9uMgf4a2uajuyxs917Jqvz
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10400"; a="266962546"
-X-IronPort-AV: E=Sophos;i="5.92,251,1650956400"; 
-   d="scan'208";a="266962546"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jul 2022 22:19:26 -0700
-X-IronPort-AV: E=Sophos;i="5.92,251,1650956400"; 
-   d="scan'208";a="650975358"
-Received: from rongch2-mobl.ccr.corp.intel.com (HELO [10.255.31.6]) ([10.255.31.6])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jul 2022 22:19:23 -0700
-Subject: Re: [PATCH v2 3/4] drm/gem: rename struct drm_gem_dma_object.{paddr
- => dma_addr}
-References: <202207070426.Bj47lRp2-lkp@intel.com>
-In-Reply-To: <202207070426.Bj47lRp2-lkp@intel.com>
-To:     Danilo Krummrich <dakr@redhat.com>, daniel@ffwll.ch,
-        laurent.pinchart@ideasonboard.com, airlied@linux.ie,
-        tzimmermann@suse.de
-Cc:     kbuild-all@lists.01.org, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org, Danilo Krummrich <dakr@redhat.com>
-From:   kernel test robot <rong.a.chen@intel.com>
-X-Forwarded-Message-Id: <202207070426.Bj47lRp2-lkp@intel.com>
-Message-ID: <75985d03-11aa-1c0a-d1c0-6a6cbd56cbce@intel.com>
-Date:   Thu, 7 Jul 2022 13:19:21 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Firefox/78.0 Thunderbird/78.12.0
+        Thu, 7 Jul 2022 01:35:09 -0400
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E61A33138E;
+        Wed,  6 Jul 2022 22:35:06 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4LdlVD4v1Kz4xXD;
+        Thu,  7 Jul 2022 15:35:00 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1657172101;
+        bh=Er96BYX0qV8YNs6ECQ777qibN0NojAhA5cN7YVJsaWw=;
+        h=Date:From:To:Cc:Subject:From;
+        b=U22eI7OHVcB5/ykIOyZaYdFiYaWDdY+iktdHr4AbKE/0D8RCMOhSa2L4Cw60O+UFD
+         e6muaas5Z3hbqhwrS9XGlJtekQ08IztaQNtyQ6z7ohMz8rGFVJ+LCejZwK5NUwu5IH
+         Xqwmlo2t1gneqxqqm7DnANyJsauYWHgMRuK8AxcS+HN5OMdHw7i1APDbfCKHEWswGr
+         VxomGud5rV/CbE5HGuQISrQOwOFB1GOCWE4pcKXcLfs+uXsgusqlKn0KZ2lrNlnNcO
+         u2jHZzChaFjkcDhdG8Tq7SF5fS5u+gkiOPaRyUA0WQH8v6oo2vQrcWuW5q/A+cjH21
+         0aSMrQtNOqaSw==
+Date:   Thu, 7 Jul 2022 15:21:42 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Kishon Vijay Abraham I <kishon@ti.com>,
+        Vinod Koul <vkoul@kernel.org>, Rob Clark <robdclark@gmail.com>,
+        Sean Paul <seanpaul@chromium.org>
+Cc:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Kuogee Hsieh <quic_khsieh@quicinc.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: manual merge of the phy-next tree with the drm-msm tree
+Message-ID: <20220707152142.060c5b6f@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=windows-1252; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/TeUkG8KjfcZ_x6OL7Km577L";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Danilo,
+--Sig_/TeUkG8KjfcZ_x6OL7Km577L
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Thank you for the patch! Yet something to improve:
+Hi all,
 
-[auto build test ERROR on v5.19-rc5]
-[also build test ERROR on linus/master]
-[cannot apply to drm-misc/drm-misc-next anholt/for-next 
-pinchartl-media/drm/du/next next-20220706]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Today's linux-next merge of the phy-next tree got a conflict in:
 
-url: 
-https://github.com/intel-lab-lkp/linux/commits/Danilo-Krummrich/drm-rename-CMA-helpers-to-DMA-helpers/20220706-204716
-base:    88084a3df1672e131ddc1b4e39eeacfd39864acf
-config: arm-buildonly-randconfig-r003-20220706 
-(https://download.01.org/0day-ci/archive/20220707/202207070426.Bj47lRp2-lkp@intel.com/config)
-compiler: arm-linux-gnueabi-gcc (GCC) 11.3.0
-reproduce (this is a W=1 build):
-         wget 
-https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross 
--O ~/bin/make.cross
-         chmod +x ~/bin/make.cross
-         # 
-https://github.com/intel-lab-lkp/linux/commit/54853a66aeea45ecb99d39dec51a7018803174e6
-         git remote add linux-review https://github.com/intel-lab-lkp/linux
-         git fetch --no-tags linux-review 
-Danilo-Krummrich/drm-rename-CMA-helpers-to-DMA-helpers/20220706-204716
-         git checkout 54853a66aeea45ecb99d39dec51a7018803174e6
-         # save the config file
-         mkdir build_dir && cp config build_dir/.config
-         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross 
-W=1 O=build_dir ARCH=arm SHELL=/bin/bash drivers/gpu/drm/tilcdc/
+  drivers/gpu/drm/msm/dp/dp_parser.h
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+between commit:
 
-All errors (new ones prefixed by >>):
+  50b1131e0674 ("drm/msm/dp: rewrite dss_module_power to use bulk clock fun=
+ctions")
 
-    drivers/gpu/drm/tilcdc/tilcdc_crtc.c: In function 'set_scanout':
->> drivers/gpu/drm/tilcdc/tilcdc_crtc.c:72:22: error: 'struct drm_gem_dma_object' has no member named 'paddr'; did you mean 'vaddr'?
-       72 |         start = gem->paddr + fb->offsets[0] +
-          |                      ^~~~~
-          |                      vaddr
+from the drm-msm tree and commit:
 
+  fa384dd8b9b8 ("drm/msm/dp: delete vdda regulator related functions from e=
+DP/DP controller")
 
-vim +72 drivers/gpu/drm/tilcdc/tilcdc_crtc.c
+from the phy-next tree.
 
-16ea975eac671fa Rob Clark        2013-01-08  61  2b2080d7e9ae246 Tomi 
-Valkeinen   2015-10-20  62  static void set_scanout(struct drm_crtc 
-*crtc, struct drm_framebuffer *fb)
-16ea975eac671fa Rob Clark        2013-01-08  63  {
-16ea975eac671fa Rob Clark        2013-01-08  64  	struct drm_device *dev 
-= crtc->dev;
-4c268d635f8d4f5 Daniel Schultz   2016-10-28  65  	struct 
-tilcdc_drm_private *priv = dev->dev_private;
-efb5bf503f38a8d Danilo Krummrich 2022-07-06  66  	struct 
-drm_gem_dma_object *gem;
-2b2080d7e9ae246 Tomi Valkeinen   2015-10-20  67  	dma_addr_t start, end;
-7eb9f069ff5dd39 Jyri Sarha       2016-08-26  68  	u64 dma_base_and_ceiling;
-16ea975eac671fa Rob Clark        2013-01-08  69  d47caa3aaf3da1e Danilo 
-Krummrich 2022-07-06  70  	gem = drm_fb_dma_get_gem_obj(fb, 0);
-16ea975eac671fa Rob Clark        2013-01-08  71  2b2080d7e9ae246 Tomi 
-Valkeinen   2015-10-20 @72  	start = gem->paddr + fb->offsets[0] +
-2b2080d7e9ae246 Tomi Valkeinen   2015-10-20  73  		crtc->y * 
-fb->pitches[0] +
-353c859899635ea Ville Syrjälä    2016-12-14  74  		crtc->x * 
-fb->format->cpp[0];
-16ea975eac671fa Rob Clark        2013-01-08  75  2b2080d7e9ae246 Tomi 
-Valkeinen   2015-10-20  76  	end = start + (crtc->mode.vdisplay * 
-fb->pitches[0]);
-16ea975eac671fa Rob Clark        2013-01-08  77  7eb9f069ff5dd39 Jyri 
-Sarha       2016-08-26  78  	/* Write LCDC_DMA_FB_BASE_ADDR_0_REG and 
-LCDC_DMA_FB_CEILING_ADDR_0_REG
-7eb9f069ff5dd39 Jyri Sarha       2016-08-26  79  	 * with a single 
-insruction, if available. This should make it more
-7eb9f069ff5dd39 Jyri Sarha       2016-08-26  80  	 * unlikely that LCDC 
-would fetch the DMA addresses in the middle of
-7eb9f069ff5dd39 Jyri Sarha       2016-08-26  81  	 * an update.
-7eb9f069ff5dd39 Jyri Sarha       2016-08-26  82  	 */
-4c268d635f8d4f5 Daniel Schultz   2016-10-28  83  	if (priv->rev == 1)
-4c268d635f8d4f5 Daniel Schultz   2016-10-28  84  		end -= 1;
-4c268d635f8d4f5 Daniel Schultz   2016-10-28  85  4c268d635f8d4f5 Daniel 
-Schultz   2016-10-28  86  	dma_base_and_ceiling = (u64)end << 32 | start;
-7eb9f069ff5dd39 Jyri Sarha       2016-08-26  87  	tilcdc_write64(dev, 
-LCDC_DMA_FB_BASE_ADDR_0_REG, dma_base_and_ceiling);
-16ea975eac671fa Rob Clark        2013-01-08  88  }
-16ea975eac671fa Rob Clark        2013-01-08  89
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+diff --cc drivers/gpu/drm/msm/dp/dp_parser.h
+index 9abddc6d50c0,47430e3a97bf..000000000000
+--- a/drivers/gpu/drm/msm/dp/dp_parser.h
++++ b/drivers/gpu/drm/msm/dp/dp_parser.h
+@@@ -100,16 -99,6 +98,11 @@@ struct dp_reg_entry=20
+  	int disable_load;
+  };
+ =20
+- struct dp_regulator_cfg {
+- 	int num;
+- 	struct dp_reg_entry regs[DP_DEV_REGULATOR_MAX];
+- };
+-=20
+ +struct dss_module_power {
+ +	unsigned int num_clk;
+ +	struct clk_bulk_data *clocks;
+ +};
+ +
+  /**
+   * struct dp_parser - DP parser's data exposed to clients
+   *
+
+--Sig_/TeUkG8KjfcZ_x6OL7Km577L
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmLGbWYACgkQAVBC80lX
+0GyCvAgAicMjd/akoL0/+CQJJXCFHdV7CbTbiySm2H2lVdBwL0D8OmJDHx7J/lvG
+SUwSf0b50XCY2/0lKwt0LcAshGrZtrV/YXRX4jKrWoudBq3S0axeSFQx81YrgcTF
+sO2hx0K89bDDX/Tg2B0LCdJc300BWitSSnUbLkSQhfyR4BmaS+td8uGeNGx7adv8
+NjZZkAgBh5yPcy3V0fhO85tNBJXpBrovqMFQ6BeghukCZyiskF5bmBt58byBXTwp
+w3zRHb+F6i+Xa1YfKsU852QPL9+a0UUkNWhuTNLpb1AfEIiza9oc/gM/q3MyyBHx
+ZG3tmzAkm+zieJE52jNLx2PUv4TY+A==
+=3qvA
+-----END PGP SIGNATURE-----
+
+--Sig_/TeUkG8KjfcZ_x6OL7Km577L--

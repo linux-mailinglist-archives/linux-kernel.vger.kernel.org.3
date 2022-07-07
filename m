@@ -2,117 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CC91D56A3BD
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 15:34:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1BDFC56A3C7
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 15:35:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235754AbiGGNeN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Jul 2022 09:34:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57200 "EHLO
+        id S235933AbiGGNfE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Jul 2022 09:35:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57744 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235291AbiGGNeJ (ORCPT
+        with ESMTP id S235831AbiGGNe7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Jul 2022 09:34:09 -0400
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.17.10])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0FDE1CFC4;
-        Thu,  7 Jul 2022 06:34:08 -0700 (PDT)
-Received: from mail-yb1-f171.google.com ([209.85.219.171]) by
- mrelayeu.kundenserver.de (mreue108 [213.165.67.113]) with ESMTPSA (Nemesis)
- id 1McpS0-1nZYrM3AEE-00Zzku; Thu, 07 Jul 2022 15:34:06 +0200
-Received: by mail-yb1-f171.google.com with SMTP id i7so32518489ybe.11;
-        Thu, 07 Jul 2022 06:34:06 -0700 (PDT)
-X-Gm-Message-State: AJIora+EskzTZXtVd0fRmEneRTGVHGos1q2KEFvCT/HqBOu0hC4JaL1i
-        tzELlgr6qEEpZNgv5IdlkJR6srMP5aUP7OEk9ig=
-X-Google-Smtp-Source: AGRyM1uVpCRoROO6rAh+vA5ak8N4SGshcVRH0JW9GvyB4UqceUAu6tZ1eCC16Bwe+GMTjR8QSqM1egSeZk3ZR5FMhlQ=
-X-Received: by 2002:a25:7c41:0:b0:66d:766a:4815 with SMTP id
- x62-20020a257c41000000b0066d766a4815mr46624953ybc.480.1657200845543; Thu, 07
- Jul 2022 06:34:05 -0700 (PDT)
+        Thu, 7 Jul 2022 09:34:59 -0400
+Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C7172655A;
+        Thu,  7 Jul 2022 06:34:58 -0700 (PDT)
+Received: by mail-lf1-x12e.google.com with SMTP id o7so2019513lfq.9;
+        Thu, 07 Jul 2022 06:34:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=npiD/6MFuemklK5N4fd6uEHkHHXVXjti7J9gtHmU40s=;
+        b=cmR5ozNZsfKwq+weP+rKFbYmiNDOv4zHFvDr74i6ujcsQwO0YoGkRHvB/r+oFAKln/
+         W11UC3fqmlyqvR+6CbzCDzCLdMYwgHza8uFRgDkO7C1awgsO/JmWB+MbfUzog3DiVu47
+         SmU0GTAFMxexZskW24NxGnRQGPDyWdrsB9Yk8VTH5+UvadZMjmvM7errXPz0ONFxdpes
+         L3yHBqGL9K0X8kTgjtjNpE0R1FyzKgWc7EW/XSwu3g3yC5wtu+2tQAzMnM1CJFHGvBhQ
+         As1fim7+PS/2Rpf2C08sKYdWSNDqKr+uFkp6evVmL1r80feRCQ5kwD79EqQSG/ovLXUc
+         XHHA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=npiD/6MFuemklK5N4fd6uEHkHHXVXjti7J9gtHmU40s=;
+        b=suk+xXeg1DyacU9i/PwibfMxcH4GD6UdijeiDlHhjsmSz6DD5q8uHgVDqNjO6hjtpL
+         9BI2KPxUtteaig/wm4k9H5n12uM5es+O5g2dS/4F1pMfmG49sirw9Fl/9RME+wh6GUXa
+         LkglUOT6gebJSiUZvI62hNnple7SFx+b+JQCnFvKshTI5wQI2HyPuUZY0Y0Fq3upBSNi
+         YUZMThlDC2r+eayqThw3IgGVaVYx1UsYTGxRM2q2jJ7QuvqxjwAQLIJDoxto+yjObp9b
+         rs+uCKCphnq7yUqg7/xfjuJ28Znb9cLRJAP3yoaxHfOpkNKsa/vs+Jxwr7Ul1zNP5cd5
+         oAjA==
+X-Gm-Message-State: AJIora+uVC956oJXyhD4G0LFErJ1CX1lv36LJYsqbN6ZQcU6hUnITHoR
+        MGEnb+ok2+52WazpyVIGCELCbUeyqGakIg==
+X-Google-Smtp-Source: AGRyM1t5LzkNfwoBmsfHPCq31xvTANN944FKw4IxGkardC72NgDlX20ozt87xTwTiQciTV9VJcUGxQ==
+X-Received: by 2002:ac2:5d66:0:b0:481:55cb:9b8b with SMTP id h6-20020ac25d66000000b0048155cb9b8bmr24579768lft.546.1657200896548;
+        Thu, 07 Jul 2022 06:34:56 -0700 (PDT)
+Received: from mobilestation ([95.79.140.178])
+        by smtp.gmail.com with ESMTPSA id y5-20020a05651c106500b0025d520648d1sm223570ljm.43.2022.07.07.06.34.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 07 Jul 2022 06:34:55 -0700 (PDT)
+Date:   Thu, 7 Jul 2022 16:34:52 +0300
+From:   Serge Semin <fancer.lancer@gmail.com>
+To:     nandhini.srikandan@intel.com
+Cc:     broonie@kernel.org, robh+dt@kernel.org, linux-spi@vger.kernel.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        mgross@linux.intel.com, kris.pan@intel.com,
+        kenchappa.demakkanavar@intel.com, furong.zhou@intel.com,
+        mallikarjunappa.sangannavar@intel.com, mahesh.r.vaidya@intel.com,
+        rashmi.a@intel.com
+Subject: Re: [PATCH v5 4/4] spi: dw: Add support for Intel Thunder Bay SPI
+ controller
+Message-ID: <20220707133452.w4ljjvdglvh3nkyw@mobilestation>
+References: <20220706042039.5763-1-nandhini.srikandan@intel.com>
+ <20220706042039.5763-5-nandhini.srikandan@intel.com>
 MIME-Version: 1.0
-References: <20220707132054.GA10610@logan-ThinkPad-T14-Gen-1>
-In-Reply-To: <20220707132054.GA10610@logan-ThinkPad-T14-Gen-1>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Thu, 7 Jul 2022 15:33:48 +0200
-X-Gmail-Original-Message-ID: <CAK8P3a0P2u+LdXcU7As=dfNbg_J2eWfhgB9TT1-xVyH0v6OM5Q@mail.gmail.com>
-Message-ID: <CAK8P3a0P2u+LdXcU7As=dfNbg_J2eWfhgB9TT1-xVyH0v6OM5Q@mail.gmail.com>
-Subject: Re: [PATCH v3] The Yosemite V3.5 is a facebook multi-node server
- platform that host four OCP server. The BMC in the Yosemite V3.5 platform
- based on AST2600 SoC.
-To:     Logananth Sundararaj <logananth13.hcl@gmail.com>
-Cc:     Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
-        SoC Team <soc@kernel.org>, Rob Herring <robh+dt@kernel.org>,
-        Joel Stanley <joel@jms.id.au>,
-        Andrew Jeffery <andrew@aj.id.au>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        DTML <devicetree@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-aspeed <linux-aspeed@lists.ozlabs.org>,
-        OpenBMC Maillist <openbmc@lists.ozlabs.org>,
-        garnermic@gmail.com, thangavel.k@hcl.com, naveen.mosess@hcl.com,
-        patrick@stwcx.xyz, velumanit@hcl.com
-Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:Ff4asemPkgpc3YgLJGPo+gGxHZPG4OGQORdlP3XswYqIxQVv9m5
- 0JTGQNJ2vXX18oqbh1UGTJpZNS7riFtZ2v+dLDNrH1XkSXIkkrZfjaXSef5SWwU4FmY51zc
- 3GCxzBjcuJHUr9Shbf0pQzQX42Ifs9oflNzlQicmSPfeJl0s+0C+B7Cw45CwTP6Q/orK5WH
- lw0Jab6s3K9H4OLj3s/XA==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:/KuZVDTAKcg=:/JVMEnND1FLr9TIGB4Cros
- rvifjyuwXtp+vn/NIRnsBFxErQaE/gdqgeUqJSKBUlpjuRgY205s+U1Hb815t2Q0o4/nTqmiT
- NZV+yPoYTEMlNXe9o15lXVqvOjs5a2uv+qrnsweH4OFa2P0FUiNerE7HsWR6y+X4tUyu6w9eW
- IKsyrTwGAI/iW6KXNnqaxUSd9Aa5dHRAyAeAbbs+jhgwWAF6W4/gz528mXzPYgyjkB7VBvI1o
- yq0O10e7rhwfG+MxVUsNKggEHsAWE5nXLuncz25b23iWAm383L8XHVQJ4YzPtiksHBLolmu03
- ENr+paIkXos+N6FmJTrlxeiR3AGC1+cTTvEq2VklwwzcePw0hzneP+ulg0PmFUvkmzb70DvUb
- MPrbiH6xStbVRtaDmz+u3KFCfYXlhuqyMirFPwxmXDJIleBJkKhlrxVI5V6Id57XAyD3tW2AG
- aXMxBdY1lygzt+1y0guRKqntUyWvXEuD8YCxqVhplKoING+4UR+aNg+kzIR85/6TqRbNvYpre
- IcdSN3bTLUU9v3GqvolDwpuipiunR065ZKDjGrbBYb0nzpkmuL7xCwt3cvkohECbryGInELLm
- BFKk7ayfQjuEuhQEVlWTC1lRdtkkCZpadJlrB4Bx9z+i17xICwtntFN7no0mJ3KpzehhzbS02
- GLAFnRUwxDcSsblsXBn6g5ZKF7WcbKVVGPdw4VE2owZ0pwRLz2q/MCO3y8JDSkcjgtSVsf/wC
- qzPQ8/zIUpYqx4fBy69xYbbUuON4toLMywzKXs3PkjWjXEj3Qs60MFmvfKqUTPaPO1XJyI1gj
- NvM019vy+aEtKT4oC2kvE5C6fSV0g7673HlDqWW5W4G3EjwxFN/jtetVMknU9bHD0SRIt8Vzw
- 0IHdQdM8x0+V0nouyjQ5R+UgyavmiupxWwt78PqdQ=
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220706042039.5763-5-nandhini.srikandan@intel.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jul 7, 2022 at 3:20 PM Logananth Sundararaj
-<logananth13.hcl@gmail.com> wrote:
->
-> This patch adds linux device tree entry related to
-> Yosemite V3.5 specific devices connected to BMC SoC.
->
-> Signed-off-by: Logananth Sundararaj <logananth_s@hcl.com>
+On Wed, Jul 06, 2022 at 12:20:39PM +0800, nandhini.srikandan@intel.com wrote:
+> From: Nandhini Srikandan <nandhini.srikandan@intel.com>
+> 
+> Add support for Intel Thunder Bay SPI controller, which uses DesignWare
+> DWC_ssi core and also add common init function for both Keem Bay and
+> Thunder Bay.
+> 
+> Signed-off-by: Nandhini Srikandan <nandhini.srikandan@intel.com>
 
+Acked-by: Serge Semin <fancer.lancer@gmail.com>
 
-Something went wrong with the patch description, it looks like you dropped
-the subject and sent the first paragraph as the subject instead.
+-Sergey
 
-> +/ {
-> +       model = "Facebook fby35";
-> +       compatible = "facebook,fby35", "aspeed,ast2600";
-> +
-> +       aliases {
-> +               serial4 = &uart5;
-> +       };
-
-Why not start at serial0 here?
-
-> +       chosen {
-> +               stdout-path = &uart5;
-> +               bootargs = "console=ttyS4,57600n8 root=/dev/ram rw vmalloc=384M";
-> +       };
-
-The bootargs should really come from the boot loader.
-
-Why do you need the vmalloc=384M? That seems excessive.
-
-> +
-> +       memory@80000000 {
-> +               device_type = "memory";
-> +               reg = <0x80000000 0x80000000>;
-> +       };
-
-The memory location and size is usually also set by the boot loader
-
-        Arnd
+> ---
+>  drivers/spi/spi-dw-mmio.c | 8 ++++----
+>  drivers/spi/spi-dw.h      | 3 +--
+>  2 files changed, 5 insertions(+), 6 deletions(-)
+> 
+> diff --git a/drivers/spi/spi-dw-mmio.c b/drivers/spi/spi-dw-mmio.c
+> index 5101c4c6017b..26c40ea6dd12 100644
+> --- a/drivers/spi/spi-dw-mmio.c
+> +++ b/drivers/spi/spi-dw-mmio.c
+> @@ -214,11 +214,10 @@ static int dw_spi_hssi_init(struct platform_device *pdev,
+>  	return 0;
+>  }
+>  
+> -static int dw_spi_keembay_init(struct platform_device *pdev,
+> -			       struct dw_spi_mmio *dwsmmio)
+> +static int dw_spi_intel_init(struct platform_device *pdev,
+> +			     struct dw_spi_mmio *dwsmmio)
+>  {
+>  	dwsmmio->dws.ip = DW_HSSI_ID;
+> -	dwsmmio->dws.caps = DW_SPI_CAP_KEEMBAY_MST;
+>  
+>  	return 0;
+>  }
+> @@ -349,7 +348,8 @@ static const struct of_device_id dw_spi_mmio_of_match[] = {
+>  	{ .compatible = "amazon,alpine-dw-apb-ssi", .data = dw_spi_alpine_init},
+>  	{ .compatible = "renesas,rzn1-spi", .data = dw_spi_pssi_init},
+>  	{ .compatible = "snps,dwc-ssi-1.01a", .data = dw_spi_hssi_init},
+> -	{ .compatible = "intel,keembay-ssi", .data = dw_spi_keembay_init},
+> +	{ .compatible = "intel,keembay-ssi", .data = dw_spi_intel_init},
+> +	{ .compatible = "intel,thunderbay-ssi", .data = dw_spi_intel_init},
+>  	{ .compatible = "microchip,sparx5-spi", dw_spi_mscc_sparx5_init},
+>  	{ .compatible = "canaan,k210-spi", dw_spi_canaan_k210_init},
+>  	{ /* end of table */}
+> diff --git a/drivers/spi/spi-dw.h b/drivers/spi/spi-dw.h
+> index 8b8f924ac410..9e8eb2b52d5c 100644
+> --- a/drivers/spi/spi-dw.h
+> +++ b/drivers/spi/spi-dw.h
+> @@ -31,8 +31,7 @@
+>  
+>  /* DW SPI controller capabilities */
+>  #define DW_SPI_CAP_CS_OVERRIDE		BIT(0)
+> -#define DW_SPI_CAP_KEEMBAY_MST		BIT(1)
+> -#define DW_SPI_CAP_DFS32		BIT(2)
+> +#define DW_SPI_CAP_DFS32		BIT(1)
+>  
+>  /* Register offsets (Generic for both DWC APB SSI and DWC SSI IP-cores) */
+>  #define DW_SPI_CTRLR0			0x00
+> -- 
+> 2.17.1
+> 

@@ -2,116 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1FDE856A9DE
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 19:41:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3880B56A9DB
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 19:41:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236493AbiGGRkj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Jul 2022 13:40:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47070 "EHLO
+        id S236562AbiGGRkq convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 7 Jul 2022 13:40:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47170 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235723AbiGGRke (ORCPT
+        with ESMTP id S236473AbiGGRkg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Jul 2022 13:40:34 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D98C7237F1
-        for <linux-kernel@vger.kernel.org>; Thu,  7 Jul 2022 10:40:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1657215633;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=gGUU8csqKmijlurVp5QMVe7bWGLLWRqgzi0YQOg1uuw=;
-        b=A3Ea5xpocg3boAEFZVrsPr0caXGxP5ItQmxICQssz+ljixu+Few9uWeHIReMOuwKZmPiGv
-        dY1QCUfJdwn80fvAhsSzbsLss5CX4ll3p6scfnrqP4Y1XuoEcKqzAVvujow1uzZwxTc9ij
-        0/IPLwiKJ0RJG9tWryuOMmgQ6qLTYgc=
-Received: from mail-ej1-f70.google.com (mail-ej1-f70.google.com
- [209.85.218.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-410-9dwGBpFHP2yMHFVu4srRuw-1; Thu, 07 Jul 2022 13:40:31 -0400
-X-MC-Unique: 9dwGBpFHP2yMHFVu4srRuw-1
-Received: by mail-ej1-f70.google.com with SMTP id oz40-20020a1709077da800b00722ef1e93bdso4966250ejc.17
-        for <linux-kernel@vger.kernel.org>; Thu, 07 Jul 2022 10:40:31 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=gGUU8csqKmijlurVp5QMVe7bWGLLWRqgzi0YQOg1uuw=;
-        b=Lc/Ze9E6eIZLo7jwjstdhuZjZj/+nVvGqyuhjHOc5nYZWWGeX93njLNyqqOvt3VQ/c
-         u0P5o6A5QFSzV3wQAoItJ52aj8zH1sSVu5EyhdN4nWf/AsKdER8MiKPx0SIAyNB21um0
-         H+t/zcYj3jN2AZ7djhnsGO15nfggqm24xY8EtI5wF2/4mB/xKt7i9GhTCrNVRHh9E1z2
-         VuiKiS03jtkBusMcd98wEk5MoJziBKVuRSaHvnNAXdqIx9v12Ltp/HpRhNh5EoeorDTD
-         2IGCHRap+bEzLO9mh+631FaF9GjMPxMuQk2ap7FqGbo0SI7JfBMW7gE0qiGrd8JUpfel
-         b2/w==
-X-Gm-Message-State: AJIora+sce5rlUw7DPmvLrUQqTlIoO+thRO7jOFyihEEx8oni9ZzR1t7
-        jvZfbgi/crdQxeLM62+HDiCPG+wLtFh0lq/yth0EiCR3rcQ905398/JlewG45hZ1My4GULG9QMR
-        ZaMJOKt5B9Yeeh7PZc2as0z4j
-X-Received: by 2002:aa7:c783:0:b0:435:2a52:3388 with SMTP id n3-20020aa7c783000000b004352a523388mr25532394eds.164.1657215630462;
-        Thu, 07 Jul 2022 10:40:30 -0700 (PDT)
-X-Google-Smtp-Source: AGRyM1vMHYRWt2bsRE6xTV+/1kBR3wQxwqI03PQBs+pw6SyB0ePUr1dLxWsHl5D3xjpNv8ERFU2Igw==
-X-Received: by 2002:aa7:c783:0:b0:435:2a52:3388 with SMTP id n3-20020aa7c783000000b004352a523388mr25532380eds.164.1657215630322;
-        Thu, 07 Jul 2022 10:40:30 -0700 (PDT)
-Received: from pollux.redhat.com ([2a02:810d:4b40:2ee8:642:1aff:fe31:a15c])
-        by smtp.gmail.com with ESMTPSA id jp1-20020a170906f74100b006fe0abb00f0sm19092424ejb.209.2022.07.07.10.40.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 07 Jul 2022 10:40:30 -0700 (PDT)
-From:   Danilo Krummrich <dakr@redhat.com>
-To:     daniel@ffwll.ch, laurent.pinchart@ideasonboard.com,
-        airlied@linux.ie, tzimmermann@suse.de
-Cc:     dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        Danilo Krummrich <dakr@redhat.com>
-Subject: [PATCH v3 4/4] drm/todo: remove task to rename CMA helpers
-Date:   Thu,  7 Jul 2022 19:40:03 +0200
-Message-Id: <20220707174003.1390017-5-dakr@redhat.com>
-X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220707174003.1390017-1-dakr@redhat.com>
-References: <20220707174003.1390017-1-dakr@redhat.com>
+        Thu, 7 Jul 2022 13:40:36 -0400
+Received: from relay.hostedemail.com (smtprelay0011.hostedemail.com [216.40.44.11])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7EF12237F1
+        for <linux-kernel@vger.kernel.org>; Thu,  7 Jul 2022 10:40:35 -0700 (PDT)
+Received: from omf08.hostedemail.com (a10.router.float.18 [10.200.18.1])
+        by unirelay08.hostedemail.com (Postfix) with ESMTP id 1E8C4203B6;
+        Thu,  7 Jul 2022 17:40:33 +0000 (UTC)
+Received: from [HIDDEN] (Authenticated sender: joe@perches.com) by omf08.hostedemail.com (Postfix) with ESMTPA id 065072002C;
+        Thu,  7 Jul 2022 17:40:29 +0000 (UTC)
+Message-ID: <6f5a1c04746feb04add15107c70332ac603e4561.camel@perches.com>
+Subject: Re: [PATCH] net: ipv4: fix clang -Wformat warning
+From:   Joe Perches <joe@perches.com>
+To:     Justin Stitt <justinstitt@google.com>,
+        Steffen Klassert <steffen.klassert@secunet.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S . Miller" <davem@davemloft.net>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        David Ahern <dsahern@kernel.org>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>
+Cc:     Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Tom Rix <trix@redhat.com>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+Date:   Thu, 07 Jul 2022 10:40:29 -0700
+In-Reply-To: <20220707173040.704116-1-justinstitt@google.com>
+References: <20220707173040.704116-1-justinstitt@google.com>
+Content-Type: text/plain; charset="ISO-8859-1"
+Content-Transfer-Encoding: 8BIT
+User-Agent: Evolution 3.44.1-0ubuntu1 
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-Stat-Signature: x68hfi6hchp93cc8y3oo9c1sywe99651
+X-Rspamd-Server: rspamout07
+X-Rspamd-Queue-Id: 065072002C
+X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=no
         autolearn_force=no version=3.4.6
+X-Session-Marker: 6A6F6540706572636865732E636F6D
+X-Session-ID: U2FsdGVkX19a/HDLIuVNWG7/7X2HRQkb389SoTBTrZA=
+X-HE-Tag: 1657215629-849573
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Both, GEM and FB, CMA helpers were renamed to "GEM DMA" and "FB DMA",
-hence the task can be removed.
+On Thu, 2022-07-07 at 10:30 -0700, Justin Stitt wrote:
+> When building with Clang we encounter this warning:
+> > net/ipv4/ah4.c:513:4: error: format specifies type 'unsigned short' but
+> > the argument has type 'int' [-Werror,-Wformat]
+> > aalg_desc->uinfo.auth.icv_fullbits / 8);
+> 
+> `aalg_desc->uinfo.auth.icv_fullbits` is a u16 but due to default
+> argument promotion becomes an int.
+> 
+> Variadic functions (printf-like) undergo default argument promotion.
+> Documentation/core-api/printk-formats.rst specifically recommends using
+> the promoted-to-type's format flag.
+> 
+> As per C11 6.3.1.1:
+> (https://www.open-std.org/jtc1/sc22/wg14/www/docs/n1548.pdf) `If an int
+> can represent all values of the original type ..., the value is
+> converted to an int; otherwise, it is converted to an unsigned int.
+> These are called the integer promotions.` Thus it makes sense to change
+> %hu to %d not only to follow this standard but to suppress the warning
+> as well.
 
-Acked-by: Thomas Zimmermann <tzimmermann@suse.de>
-Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Signed-off-by: Danilo Krummrich <dakr@redhat.com>
----
- Documentation/gpu/todo.rst | 13 -------------
- 1 file changed, 13 deletions(-)
+I think it also makes sense to use %u and not %d
+as the original type is unsigned.
 
-diff --git a/Documentation/gpu/todo.rst b/Documentation/gpu/todo.rst
-index 10bfb50908d1..fd5b3f2fb19e 100644
---- a/Documentation/gpu/todo.rst
-+++ b/Documentation/gpu/todo.rst
-@@ -343,19 +343,6 @@ converted, except for struct drm_driver.gem_prime_mmap.
- 
- Level: Intermediate
- 
--Rename CMA helpers to DMA helpers
-----------------------------------
--
--CMA (standing for contiguous memory allocator) is really a bit an accident of
--what these were used for first, a much better name would be DMA helpers. In the
--text these should even be called coherent DMA memory helpers (so maybe CDM, but
--no one knows what that means) since underneath they just use dma_alloc_coherent.
--
--Contact: Laurent Pinchart, Daniel Vetter
--
--Level: Intermediate (mostly because it is a huge tasks without good partial
--milestones, not technically itself that challenging)
--
- connector register/unregister fixes
- -----------------------------------
- 
--- 
-2.36.1
+> diff --git a/net/ipv4/ah4.c b/net/ipv4/ah4.c
+[]
+> @@ -507,7 +507,7 @@ static int ah_init_state(struct xfrm_state *x)
+>  
+>  	if (aalg_desc->uinfo.auth.icv_fullbits/8 !=
+>  	    crypto_ahash_digestsize(ahash)) {
+> -		pr_info("%s: %s digestsize %u != %hu\n",
+> +		pr_info("%s: %s digestsize %u != %d\n",
+>  			__func__, x->aalg->alg_name,
+>  			crypto_ahash_digestsize(ahash),
+>  			aalg_desc->uinfo.auth.icv_fullbits / 8);
 

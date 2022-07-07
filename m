@@ -2,107 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7638256A8E8
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 19:03:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1FAB456A8AC
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 18:54:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236473AbiGGRCz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Jul 2022 13:02:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42252 "EHLO
+        id S235876AbiGGQxP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Jul 2022 12:53:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33062 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236450AbiGGRCu (ORCPT
+        with ESMTP id S235727AbiGGQxI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Jul 2022 13:02:50 -0400
-Received: from out30-57.freemail.mail.aliyun.com (out30-57.freemail.mail.aliyun.com [115.124.30.57])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBAC95A461
-        for <linux-kernel@vger.kernel.org>; Thu,  7 Jul 2022 10:02:48 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R201e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045168;MF=guanghuifeng@linux.alibaba.com;NM=1;PH=DS;RN=21;SR=0;TI=SMTPD_---0VIefA1B_1657213358;
-Received: from 30.39.247.202(mailfrom:guanghuifeng@linux.alibaba.com fp:SMTPD_---0VIefA1B_1657213358)
-          by smtp.aliyun-inc.com;
-          Fri, 08 Jul 2022 01:02:40 +0800
-Message-ID: <fba6017f-cadc-cf6f-8afb-832e42dd28e5@linux.alibaba.com>
-Date:   Fri, 8 Jul 2022 01:02:37 +0800
+        Thu, 7 Jul 2022 12:53:08 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6EAE559252;
+        Thu,  7 Jul 2022 09:53:07 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 06D3F6244C;
+        Thu,  7 Jul 2022 16:53:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1D7E8C3411E;
+        Thu,  7 Jul 2022 16:53:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1657212786;
+        bh=oeKhu9Proyv+SOwlbKwi9FoGyKNdIXPkHb7LOnZiNeE=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=lvEUcujjIvCPcMQbsplCbc1Rnnwk5iAOmHFwVZRzfggqKe6/44ptYgU/JBH8Irsnd
+         EpvBJXHZ7OxrQFvthDQWiYQDtQYcxY9rz11Qzg9xW5tIl0mrxnWAoEeTWz1thhX+40
+         V3CnEcAGHvtN4SJcQEpf3OP0I5I6fPR2BQWXz912Z3UYeRd/zVL7Uu+sO2irn/tWAq
+         mjFitbJXq7FwPoM6LqfPDo2GCZKds7oJStVlaMHUQFaSCOLx1+zi4vXa0k4heta/v6
+         so6TGqxu4Htgi8/EMyZKWv2Fggnaaeo8dVNvqKBNp9Gf217HY41QZ2Apypd71aCU/m
+         v95Ojz+5a7l4w==
+Date:   Thu, 7 Jul 2022 18:02:48 +0100
+From:   Jonathan Cameron <jic23@kernel.org>
+To:     ChiYuan Huang <u0084500@gmail.com>
+Cc:     Andy Shevchenko <andy.shevchenko@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        cy_huang <cy_huang@richtek.com>,
+        linux-iio <linux-iio@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        devicetree <devicetree@vger.kernel.org>
+Subject: Re: [PATCH v2 2/2] iio: adc: Add rtq6056 support
+Message-ID: <20220707180248.2f8d1b0f@jic23-huawei>
+In-Reply-To: <CADiBU38FbZ87EHn_UDy-rS6V2bGDdLZJOcqNZsS03MzbNaVaKA@mail.gmail.com>
+References: <1656469212-12717-1-git-send-email-u0084500@gmail.com>
+        <1656469212-12717-3-git-send-email-u0084500@gmail.com>
+        <CAHp75Vd2bxFA5PmjEtgAjJfCf9YZENq_fb9b2VHmMmmHdqGJSw@mail.gmail.com>
+        <CADiBU384ZwKL_+i1zRL9qfVt-NLo=pnf8zrGna4Sxt+toYZdWg@mail.gmail.com>
+        <CADiBU3_sU8bj29x2Qs9y9fM2YDYcKvNBkBuzfpzuCkAjSeTu+Q@mail.gmail.com>
+        <CAHp75VeiuJjiPFFh0pEGGH4+UEn0g5902UhAJL93Ho2WvH0_gg@mail.gmail.com>
+        <CADiBU38FbZ87EHn_UDy-rS6V2bGDdLZJOcqNZsS03MzbNaVaKA@mail.gmail.com>
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH v4] arm64: mm: fix linear mem mapping access performance
- degradation
-To:     Catalin Marinas <catalin.marinas@arm.com>
-Cc:     Mike Rapoport <rppt@kernel.org>, Will Deacon <will@kernel.org>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        baolin.wang@linux.alibaba.com, akpm@linux-foundation.org,
-        david@redhat.com, jianyong.wu@arm.com, james.morse@arm.com,
-        quic_qiancai@quicinc.com, christophe.leroy@csgroup.eu,
-        jonathan@marek.ca, mark.rutland@arm.com,
-        thunder.leizhen@huawei.com, anshuman.khandual@arm.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        geert+renesas@glider.be, linux-mm@kvack.org,
-        yaohongbo@linux.alibaba.com, alikernel-developer@linux.alibaba.com
-References: <5d044fdd-a61a-d60f-d294-89e17de37712@linux.alibaba.com>
- <20220705121115.GB1012@willie-the-truck> <YsRSajyMxahXe7ZS@kernel.org>
- <YsRZ8V8mQ+HM31D6@arm.com> <YsRfgX7FFZLxQU50@kernel.org>
- <YsRvPTORdvIwzShL@arm.com> <YsSi9HAOOzbPYN+w@kernel.org>
- <YsVeKPzaO0SJdwFW@arm.com> <YsWULnvZZxoHtyRo@kernel.org>
- <9974bea5-4db9-0104-c9c9-d9b49c390f1b@linux.alibaba.com>
- <YsWtCLIG2qKETqmq@arm.com>
-From:   "guanghui.fgh" <guanghuifeng@linux.alibaba.com>
-In-Reply-To: <YsWtCLIG2qKETqmq@arm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Thanks.
+On Tue, 5 Jul 2022 09:41:39 +0800
+ChiYuan Huang <u0084500@gmail.com> wrote:
 
-在 2022/7/6 23:40, Catalin Marinas 写道:
-> On Wed, Jul 06, 2022 at 11:18:22PM +0800, guanghui.fgh wrote:
->> 在 2022/7/6 21:54, Mike Rapoport 写道:
->>> One thing I can think of is to only remap the crash kernel memory if it is
->>> a part of an allocation that exactly fits into one ore more PUDs.
->>>
->>> Say, in reserve_crashkernel() we try the memblock_phys_alloc() with
->>> PUD_SIZE as alignment and size rounded up to PUD_SIZE. If this allocation
->>> succeeds, we remap the entire area that now contains only memory allocated
->>> in reserve_crashkernel() and free the extra memory after remapping is done.
->>> If the large allocation fails, we fall back to the original size and
->>> alignment and don't allow unmapping crash kernel memory in
->>> arch_kexec_protect_crashkres().
->>
->> There is a new method.
->> I think we should use the patch v3(similar but need add some changes)
->>
->> 1.We can walk crashkernle block/section pagetable,
->> [[[(keep the origin block/section mapping valid]]]
->> rebuild the pte level page mapping for the crashkernel mem
->> rebuild left & right margin mem(which is in same block/section mapping but
->> out of crashkernel mem) with block/section mapping
->>
->> 2.'replace' the origin block/section mapping by new builded mapping
->> iterately
->>
->> With this method, all the mem mapping keep valid all the time.
-> 
-> As I already commented on one of your previous patches, this is not
-> allowed by the architecture. If FEAT_BBM is implemented (ARMv8.4 I
-> think), the worst that can happen is a TLB conflict abort and the
-> handler should invalidate the TLBs and restart the faulting instruction,
-> assuming the handler won't try to access the same conflicting virtual
-> address. Prior to FEAT_BBM, that's not possible as the architecture does
-> not describe a precise behaviour of conflicting TLB entries (you might
-> as well get the TLB output of multiple entries being or'ed together).
-> 
-I think there is another way to handle it.
+> Andy Shevchenko <andy.shevchenko@gmail.com> =E6=96=BC 2022=E5=B9=B47=E6=
+=9C=885=E6=97=A5 =E9=80=B1=E4=BA=8C =E6=B8=85=E6=99=A85:52=E5=AF=AB=E9=81=
+=93=EF=BC=9A
+> >
+> > On Mon, Jul 4, 2022 at 9:27 AM ChiYuan Huang <u0084500@gmail.com> wrote=
+: =20
+> > > ChiYuan Huang <u0084500@gmail.com> =E6=96=BC 2022=E5=B9=B47=E6=9C=884=
+=E6=97=A5 =E9=80=B1=E4=B8=80 =E4=B8=8A=E5=8D=8811:16=E5=AF=AB=E9=81=93=EF=
+=BC=9A =20
+> > > > Andy Shevchenko <andy.shevchenko@gmail.com> =E6=96=BC 2022=E5=B9=B4=
+7=E6=9C=881=E6=97=A5 =E9=80=B1=E4=BA=94 =E4=B8=8B=E5=8D=886:05=E5=AF=AB=E9=
+=81=93=EF=BC=9A =20
+> > > > > On Wed, Jun 29, 2022 at 4:23 AM cy_huang <u0084500@gmail.com> wro=
+te: =20
+> >
+> > ...
+> > =20
+> > > > > > +       *val =3D DIV_ROUND_UP(1000000, sample_time); =20
+> > > > >
+> > > > > USEC_PER_SEC ?
+> > > > > =20
+> > > > No, sample time is (vshunt convesion time + vbus conversion time) *
+> > > > average sample.
+> > > > And the sample freq returns the unit by HZ (sample frequency per se=
+cond)
+> > > > =20
+> > > The 'sample time' is unit by micro-second like as you mentioned. =20
+> >
+> > Ah, then it should be MICRO, so we will get Hz.
+> > =20
+> > > > > > +       return IIO_VAL_INT;
+> > > > > > +} =20
+> >
+> > ...
+> > =20
+> > > > > > +       struct {
+> > > > > > +               u16 vals[RTQ6056_MAX_CHANNEL];
+> > > > > > +               int64_t timestamp;
+> > > > > > +       } data __aligned(8); =20
+> > > > >
+> > > > > Hmm... alignment of this struct will be at least 4 bytes, but
+> > > > > shouldn't we rather be sure that the timestamp member is aligned
+> > > > > properly? Otherwise this seems fragile and dependent on
+> > > > > RTQ6056_MAX_CHANNEL % 4 =3D=3D 0.
+> > > > > =20
+> > > > Yap, from the 'max channel', it already guarantee this struct will =
+be
+> > > > aligned at lease 4.
+> > > > Actually, It can be removed. =20
+> >
+> > I think for the safest side it should be given to the timestamp member.=
+ No?
+> > =20
+> Sorry, following your comment, Why to use 'align' for the timestamp membe=
+r?
+> the data member already guarantee 2 * 4 =3D 8 byte, then timestamp will
+> be 8 byte aligned, right?
+>=20
+> what you mentioned is to put __aligned(8) only for timestamp.
+>=20
+> I try to put aligned in two ways ( one is only for timestamp, another
+> is the whole struct). the result is the same.
+> From my thinking, in this case, the struct is already 8 byte aligned
+> for timestamp member. don't you think to put 'aligned' is redundant?
 
-1.We can rebuild the crashkernel mem mapping firstly,
-but [[[don't change the origin linear mapping]]].
+On the 8 byte alignment question...  Look up alignment of s64 on x86_32...
+It's 4 byte aligned. We had a lot of 'fun' fixing this a few years ago.
 
-2.Afterward, we can reuse the idmap_pg_dir and switch to it.
-We use idmap_pg_dir to change the linear mapping which complyes with the 
-TLB BBM.
+So the marking of __aligned(8) for the timestamp does 2 things (and it
+takes a fairly close reading of the c spec to check this).
+
+1) Forces alignment of the timestamp. Needed so we can cheaply write
+the timestamp
+2) Forces alignment of the containing structure.
+
+The combination of these 2 enforces the padding being
+consistent across architectures whether or not they align s64 to
+4 or 8 bytes.  This last part is the subtle element that
+explains why on some architectures you need the __aligned(8) on the
+timestamp not the outer structure.
+
+Jonathan
+
+
+
+
+> > --
+> > With Best Regards,
+> > Andy Shevchenko =20
 

@@ -2,62 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 556BD569BB5
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 09:35:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A8FD4569BDB
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 09:43:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231879AbiGGHeS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Jul 2022 03:34:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50586 "EHLO
+        id S234887AbiGGHgB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Jul 2022 03:36:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51330 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230211AbiGGHeO (ORCPT
+        with ESMTP id S234565AbiGGHfc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Jul 2022 03:34:14 -0400
-Received: from mail-ej1-f53.google.com (mail-ej1-f53.google.com [209.85.218.53])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECDBF27CEB;
-        Thu,  7 Jul 2022 00:34:13 -0700 (PDT)
-Received: by mail-ej1-f53.google.com with SMTP id d2so30958990ejy.1;
-        Thu, 07 Jul 2022 00:34:13 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=k8tCCPWhXFVw0Grisrt5wFNoaTf/P1qQq3zFo+9VxAU=;
-        b=rWXLdaf2OeP5L+OqvLqX7kccZvzNu/Sbm/Z5qqMCsQnFaDuAilP78E3VnRA3kTK2ce
-         KeJT7AVKnDcBBdFgZsCLpMsHc34MfuO/YIoXzkooM/whrNtlHPXxyoP1nn4zfl8b7E4L
-         RPTMbicDIB3nGPOc6MkjpzDi4YGasZhibkOWIh6iKGIQ36g7Nkx14ooqicAqgeS0vWHj
-         3/J7OscqtBM5OSAk4+zmPSYP/vs5tYa1tnfxZteDQmlANeV1hwFLyo+Uil2Dj+dYk6j8
-         CvviQerZP8lg6Yd4oVMPB3asgZhuRR1YaiBJU6b4234xfQM/42vcHHOmeJWA1hxmOHqa
-         ynCQ==
-X-Gm-Message-State: AJIora/5uptEBwd6GXpSYGJLFG+MWL02JX+QaqTjrIhoEWrJhRKpwY9q
-        YMyL+6W4Pi6aR1fAeI15HBmkZRVJyTk=
-X-Google-Smtp-Source: AGRyM1u/+uQThAQr5NmhyoCOv3AsBtJTeHBUK7T9xKARuWT3qKFBeJ52TvhvRE15BiwRm4rk1JYfkA==
-X-Received: by 2002:a17:907:16a2:b0:726:abbc:69bf with SMTP id hc34-20020a17090716a200b00726abbc69bfmr42564140ejc.363.1657179252575;
-        Thu, 07 Jul 2022 00:34:12 -0700 (PDT)
-Received: from ?IPV6:2a0b:e7c0:0:107::49? ([2a0b:e7c0:0:107::49])
-        by smtp.gmail.com with ESMTPSA id cn22-20020a0564020cb600b0043a896048basm3299207edb.85.2022.07.07.00.34.11
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 07 Jul 2022 00:34:12 -0700 (PDT)
-Message-ID: <17759c4b-5858-12bb-4beb-c4a1d58c89ae@kernel.org>
-Date:   Thu, 7 Jul 2022 09:34:11 +0200
+        Thu, 7 Jul 2022 03:35:32 -0400
+Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 00BA327FC8
+        for <linux-kernel@vger.kernel.org>; Thu,  7 Jul 2022 00:35:30 -0700 (PDT)
+Received: from [10.90.50.23] (unknown [192.168.200.1])
+        by mail.loongson.cn (Coremail) with SMTP id AQAAf9Dxv9C9jMZibp8OAA--.1787S3;
+        Thu, 07 Jul 2022 15:35:25 +0800 (CST)
+Message-ID: <8a9cd14a-54ed-cd2b-88ad-647a43b09d0e@loongson.cn>
+Date:   Thu, 7 Jul 2022 15:35:14 +0800
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH 4/4] tty: n_gsm: fix missing corner cases in gsmld_poll()
+ Thunderbird/91.11.0
+Subject: Re: [PATCH v3] LoongArch: Remove vcsr in loongarch_fpu
 Content-Language: en-US
-To:     "Starke, Daniel" <daniel.starke@siemens.com>,
-        "linux-serial@vger.kernel.org" <linux-serial@vger.kernel.org>,
-        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>
-Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-References: <DB9PR10MB5881A05367C31A390EC3A042E0839@DB9PR10MB5881.EURPRD10.PROD.OUTLOOK.COM>
-From:   Jiri Slaby <jirislaby@kernel.org>
-In-Reply-To: <DB9PR10MB5881A05367C31A390EC3A042E0839@DB9PR10MB5881.EURPRD10.PROD.OUTLOOK.COM>
+To:     Huacai Chen <chenhuacai@kernel.org>
+Cc:     WANG Xuerui <kernel@xen0n.name>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        loongarch@lists.linux.dev, LKML <linux-kernel@vger.kernel.org>
+References: <20220706112937.1218573-1-huqi@loongson.cn>
+ <CAAhV-H6MHjzdwyZqk6a3sKByRofG1Th6QEk0Be5NBhiAsVNcTg@mail.gmail.com>
+From:   Qi Hu <huqi@loongson.cn>
+In-Reply-To: <CAAhV-H6MHjzdwyZqk6a3sKByRofG1Th6QEk0Be5NBhiAsVNcTg@mail.gmail.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+X-CM-TRANSID: AQAAf9Dxv9C9jMZibp8OAA--.1787S3
+X-Coremail-Antispam: 1UD129KBjvJXoWxGF4fJF1rtryxXF4UtFWfAFb_yoWrJF15pF
+        ZrAF4kGF4rGrn3tryqy34DWFWktw4DGw12gasFkFyrCr4qqw1kWry8tF98uFyjqa1FkrW0
+        gFyrWwnaqF1UX3JanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnUUvcSsGvfC2KfnxnUUI43ZEXa7xR_UUUUUUUUU==
+X-CM-SenderInfo: pkxtxqxorr0wxvrqhubq/1tbiAQAACV3QvPyW3wABsN
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -65,23 +50,121 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 07. 07. 22, 9:00, Starke, Daniel wrote:
->>> @@ -3051,14 +3051,20 @@ static __poll_t gsmld_poll(struct tty_struct *tty, struct file *file,
->>>    	__poll_t mask = 0;
->>>    	struct gsm_mux *gsm = tty->disc_data;
->>>    
->>> +	if (!gsm)
->>> +		return EPOLLHUP;
+
+On 2022/7/7 14:45, Huacai Chen wrote:
+> Hi, all,
+>
+> I have rewritten the commit message. If no problem, this patch will be
+> queued for loongarch-fixes.
+> --
+> The `vcsr` only exists in the old hardware design, it isn't used in any
+> shipped hardware from Loongson-3A5000 on. FPU and LSX/LASX both use the
+> `fcsr` as their control and status registers now. For example, the RM
+> control bit in fcsr0 is shared by FPU, LSX and LASX.
+>
+> Particularly, fcsr16 to fcsr31 are reserved for LSX/LASX now, access to
+> these registers has no visible effect if LSX/LASX is enabled, and will
+> cause SXD/ASXD exceptions if LSX/LASX is not enabled.
+>
+> So, mentions of vcsr are obsolete in the first place, let's remove them.
+
+Or simply say this?
+
+Remove VCSR from "loongarch_fpu" which is used for debugging.
+> --
+> Huacai
+>
+> On Wed, Jul 6, 2022 at 7:29 PM huqi <huqi@loongson.cn> wrote:
+>> From: Qi Hu <huqi@loongson.cn>
 >>
->> Hmm, how can this happen? It's a tty bug if it calls ld ops after NULLing
->> disc_data.
-> 
-> I can remove this check if it is redundant. Should I?
+>> The `vcsr` is not used anymore. Remove this member from `loongarch_fpu`.
+>>
+>>  From 3A5000(LoongArch), `vcsr` is removed in hardware. FP and LSX/LASX
+>> both use `fcsr` as their csr.
+>>
+>> Particularly, fcsr from $r16 to $r31 are reserved for LSX/LASX, an
+>> using the registers in this area will cause SXD/ASXD if LSX/LASX is
+>> not enabled.
+>>
+>> Signed-off-by: Qi Hu <huqi@loongson.cn>
+>> ---
+>> V3:
+>> - Modify commit message to conform to the format.
+>> V2:
+>> - Add more details in the commit message.
+>> ---
+>>   arch/loongarch/include/asm/fpregdef.h  |  1 -
+>>   arch/loongarch/include/asm/processor.h |  2 --
+>>   arch/loongarch/kernel/asm-offsets.c    |  1 -
+>>   arch/loongarch/kernel/fpu.S            | 10 ----------
+>>   4 files changed, 14 deletions(-)
+>>
+>> diff --git a/arch/loongarch/include/asm/fpregdef.h b/arch/loongarch/include/asm/fpregdef.h
+>> index adb16e4b43b0..b6be527831dd 100644
+>> --- a/arch/loongarch/include/asm/fpregdef.h
+>> +++ b/arch/loongarch/include/asm/fpregdef.h
+>> @@ -48,6 +48,5 @@
+>>   #define fcsr1  $r1
+>>   #define fcsr2  $r2
+>>   #define fcsr3  $r3
+>> -#define vcsr16 $r16
+>>
+>>   #endif /* _ASM_FPREGDEF_H */
+>> diff --git a/arch/loongarch/include/asm/processor.h b/arch/loongarch/include/asm/processor.h
+>> index 1d63c934b289..57ec45aa078e 100644
+>> --- a/arch/loongarch/include/asm/processor.h
+>> +++ b/arch/loongarch/include/asm/processor.h
+>> @@ -80,7 +80,6 @@ BUILD_FPR_ACCESS(64)
+>>
+>>   struct loongarch_fpu {
+>>          unsigned int    fcsr;
+>> -       unsigned int    vcsr;
+>>          uint64_t        fcc;    /* 8x8 */
+>>          union fpureg    fpr[NUM_FPU_REGS];
+>>   };
+>> @@ -161,7 +160,6 @@ struct thread_struct {
+>>           */                                                     \
+>>          .fpu                    = {                             \
+>>                  .fcsr           = 0,                            \
+>> -               .vcsr           = 0,                            \
+>>                  .fcc            = 0,                            \
+>>                  .fpr            = {{{0,},},},                   \
+>>          },                                                      \
+>> diff --git a/arch/loongarch/kernel/asm-offsets.c b/arch/loongarch/kernel/asm-offsets.c
+>> index bfb65eb2844f..20cd9e16a95a 100644
+>> --- a/arch/loongarch/kernel/asm-offsets.c
+>> +++ b/arch/loongarch/kernel/asm-offsets.c
+>> @@ -166,7 +166,6 @@ void output_thread_fpu_defines(void)
+>>
+>>          OFFSET(THREAD_FCSR, loongarch_fpu, fcsr);
+>>          OFFSET(THREAD_FCC,  loongarch_fpu, fcc);
+>> -       OFFSET(THREAD_VCSR, loongarch_fpu, vcsr);
+>>          BLANK();
+>>   }
+>>
+>> diff --git a/arch/loongarch/kernel/fpu.S b/arch/loongarch/kernel/fpu.S
+>> index 75c6ce0682a2..a631a7137667 100644
+>> --- a/arch/loongarch/kernel/fpu.S
+>> +++ b/arch/loongarch/kernel/fpu.S
+>> @@ -146,16 +146,6 @@
+>>          movgr2fcsr      fcsr0, \tmp0
+>>          .endm
+>>
+>> -       .macro sc_save_vcsr base, tmp0
+>> -       movfcsr2gr      \tmp0, vcsr16
+>> -       EX      st.w \tmp0, \base, 0
+>> -       .endm
+>> -
+>> -       .macro sc_restore_vcsr base, tmp0
+>> -       EX      ld.w \tmp0, \base, 0
+>> -       movgr2fcsr      vcsr16, \tmp0
+>> -       .endm
+>> -
+>>   /*
+>>    * Save a thread's fp context.
+>>    */
+>> --
+>> 2.36.1
+>>
+>>
 
-Sure as it makes little sense anyway. Even if gsm was non-NULL here, the 
-backing disc_data would be freed on the accesses further.
-
-thanks,
--- 
-js
-suse labs

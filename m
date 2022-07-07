@@ -2,210 +2,164 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 92E2D56A54B
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 16:23:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B5F8356A54E
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 16:23:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235452AbiGGOX2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Jul 2022 10:23:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47248 "EHLO
+        id S235304AbiGGOXt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Jul 2022 10:23:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47844 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235267AbiGGOX0 (ORCPT
+        with ESMTP id S235267AbiGGOXr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Jul 2022 10:23:26 -0400
-Received: from pegase2.c-s.fr (pegase2.c-s.fr [93.17.235.10])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7FE821E1F
-        for <linux-kernel@vger.kernel.org>; Thu,  7 Jul 2022 07:23:21 -0700 (PDT)
-Received: from localhost (mailhub3.si.c-s.fr [172.26.127.67])
-        by localhost (Postfix) with ESMTP id 4LdzCq6PM7z9tGf;
-        Thu,  7 Jul 2022 16:23:19 +0200 (CEST)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from pegase2.c-s.fr ([172.26.127.65])
-        by localhost (pegase2.c-s.fr [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id g8uEF7phv1fN; Thu,  7 Jul 2022 16:23:19 +0200 (CEST)
-Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
-        by pegase2.c-s.fr (Postfix) with ESMTP id 4LdzCq5XRRz9tGb;
-        Thu,  7 Jul 2022 16:23:19 +0200 (CEST)
-Received: from localhost (localhost [127.0.0.1])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id AE4DF8B79F;
-        Thu,  7 Jul 2022 16:23:19 +0200 (CEST)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from messagerie.si.c-s.fr ([127.0.0.1])
-        by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
-        with ESMTP id 3zsjNxXH00Jn; Thu,  7 Jul 2022 16:23:19 +0200 (CEST)
-Received: from PO20335.IDSI0.si.c-s.fr (unknown [192.168.233.174])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id 724EC8B768;
-        Thu,  7 Jul 2022 16:23:19 +0200 (CEST)
-Received: from PO20335.IDSI0.si.c-s.fr (localhost [127.0.0.1])
-        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.16.1) with ESMTPS id 267ENB1a537062
-        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
-        Thu, 7 Jul 2022 16:23:11 +0200
-Received: (from chleroy@localhost)
-        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.17.1/Submit) id 267EN9WS537057;
-        Thu, 7 Jul 2022 16:23:09 +0200
-X-Authentication-Warning: PO20335.IDSI0.si.c-s.fr: chleroy set sender to christophe.leroy@csgroup.eu using -f
-From:   Christophe Leroy <christophe.leroy@csgroup.eu>
-To:     Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Michael Ellerman <mpe@ellerman.id.au>
-Cc:     Christophe Leroy <christophe.leroy@csgroup.eu>,
-        linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org
-Subject: [PATCH v2] powerpc: Merge hardirq stack and softirq stack
-Date:   Thu,  7 Jul 2022 16:23:03 +0200
-Message-Id: <6cd9d8bb2258d8b51999c2584eac74423d2b5e29.1657203774.git.christophe.leroy@csgroup.eu>
-X-Mailer: git-send-email 2.36.1
+        Thu, 7 Jul 2022 10:23:47 -0400
+Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59AA627B0C;
+        Thu,  7 Jul 2022 07:23:46 -0700 (PDT)
+Received: by mail-wr1-x430.google.com with SMTP id bk26so11487733wrb.11;
+        Thu, 07 Jul 2022 07:23:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=references:from:to:cc:subject:in-reply-to:date:message-id
+         :mime-version:content-transfer-encoding;
+        bh=NUHMqETelgKBMcAu+0SqzcDlAwUOK8yrepUxvvqttSY=;
+        b=ebmq4wsrTY7n81CmTuWPBXuy4+uRkMUymgPTu0tKIVyN3L5u8nQrKnWTVjCaLhDc0w
+         q7F6sxxzi2FkCeK1lP1JWVi5yr59dT5rzsbmiraV7gwO9+wnvKoRo3Ka9gynQfMjM2S3
+         41mn87tBr98ibvSQfvdtmdIpkx4a4avfL5VsWRTJc1cmdEIegImJ9ypk3Dl2lR/fIMzL
+         DRyWfUOyasTKkbhrEdHHsrjoNC6crbz/7XeKhlXevNx7unwyCBxegVMv/LdxBwGwKqjS
+         aHZ/6K3NoiNbaCVSA5Qt4EPsekOnrYvbmnVkr3p6fES4TxvdTVHrinPHSPaLte2C2LQB
+         x0pQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:references:from:to:cc:subject:in-reply-to:date
+         :message-id:mime-version:content-transfer-encoding;
+        bh=NUHMqETelgKBMcAu+0SqzcDlAwUOK8yrepUxvvqttSY=;
+        b=FBqd863WWIgr7F634qkoJnm+7V9aBe7AStoElYOzOtAIP5zIY3mn/iDGysWGSvD1ZD
+         +E/anRGalGNI+D3Nlw9FfXtJNpvGsT+Wm51zw4Z5ZjAYZEHrqSWJT6Tvx4ZUdqUMibI7
+         QNXxEdgRcV0PgIrfD0pQ89xr5W5tDZJ21PqoNoR9Oohqgu7LN0KPPoC+/zIuqQ0EixC7
+         Xy111ehsR4iuXap8EDJfVc81v1tM2MhWLlhNO0H8xnl44MBfpCpHNt+a0Q3myWg4ATc0
+         W4YNCmyGGlV1AfKylTO9J6E+fFG7Z7A4A3AxpFCn89LsOHK8KjsPzzHDblUuuQ6dcNFm
+         gC3g==
+X-Gm-Message-State: AJIora+rEM/DbTp8JefnNapXki3ShPSjxPDanIMzV42aI4MlE0kVIkf6
+        BRmw03ZZjGyXuuPFNrBlpHQ=
+X-Google-Smtp-Source: AGRyM1vc0Rv/d4m30UdfyxezbdL00+nDaA1k0pzbL7Tp7PXXN6jWmgpXSBJiOt5Y38DOzQCsYh8kug==
+X-Received: by 2002:a5d:6da3:0:b0:21b:aaf5:b814 with SMTP id u3-20020a5d6da3000000b0021baaf5b814mr42352435wrs.140.1657203824787;
+        Thu, 07 Jul 2022 07:23:44 -0700 (PDT)
+Received: from localhost (92.40.203.179.threembb.co.uk. [92.40.203.179])
+        by smtp.gmail.com with ESMTPSA id p15-20020a05600c204f00b0039c5cecf206sm28717513wmg.4.2022.07.07.07.23.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 07 Jul 2022 07:23:44 -0700 (PDT)
+References: <20220706211330.120198-1-aidanmacdonald.0x0@gmail.com>
+ <20220706211330.120198-10-aidanmacdonald.0x0@gmail.com>
+ <HU9NER.25VYXWS2PRRL2@crapouillou.net>
+From:   Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
+To:     Paul Cercueil <paul@crapouillou.net>
+Cc:     lgirdwood@gmail.com, broonie@kernel.org, perex@perex.cz,
+        tiwai@suse.com, linux-mips@vger.kernel.org,
+        alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 09/11] ASoC: jz4740-i2s: Make the PLL clock name
+ SoC-specific
+In-reply-to: <HU9NER.25VYXWS2PRRL2@crapouillou.net>
+Date:   Thu, 07 Jul 2022 15:24:52 +0100
+Message-ID: <rQqB9wAMTrydT1hKl1pUshBKW82RHbiR@localhost>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1657203782; l=4880; s=20211009; h=from:subject:message-id; bh=BlBLt+cQJWmMavBMTU04gXXdsfd8eXA2BvSu7Z4YQ1c=; b=suEKQCrDr+Ise3R6cNF3nFYCedGfHliqGLwzAscPZZPspWGG+pNOcDpSD1TSgusC5qBWEZjJ/Ebd rIUUMdAjAsD7w/fCuSMWKx1n1RnyHhBc/sOHJl/M48x7xznZEHTD
-X-Developer-Key: i=christophe.leroy@csgroup.eu; a=ed25519; pk=HIzTzUj91asvincQGOFx6+ZF5AoUuP9GdOtQChs7Mm0=
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-__do_IRQ() doesn't switch on hardirq stack if we are on softirq stack.
 
-do_softirq() bail out early without doing anything when already in
-an interrupt.
+Paul Cercueil <paul@crapouillou.net> writes:
 
-invoke_softirq() is on task_stack when it calls do_softirq_own_stack().
+> Le mer., juil. 6 2022 at 22:13:28 +0100, Aidan MacDonald
+> <aidanmacdonald.0x0@gmail.com> a =C3=A9crit :
+>> On some Ingenic SoCs, such as the X1000, there is a programmable
+>> divider used to generate the I2S system clock from a PLL, rather
+>> than a fixed PLL/2 clock. It doesn't make much sense to call the
+>> clock "pll half" on those SoCs, so the clock name should really be
+>> a SoC-dependent value.
+>
+> Do you really need the .set_sysclk() callback? I've never seen it used on=
+ any
+> of the Ingenic boards I have, so to me it's pretty much dead code. Unless=
+ you
+> do use this callback, I'd suggest to drop this patch until you do need it.
+>
+> Cheers,
+> -Paul
+>
 
-So there are neither situation where we switch from hardirq stack to
-softirq stack nor from softirq stack to hardirq stack.
+Yes, one of my boards has an external codec (AK4376) that needs the
+sysclock and I've patched simple-card to be able to set a non-zero
+sysclock ID.
 
-It is therefore not necessary to have two stacks because they are
-never used at the same time.
-
-Merge both stacks into a new one called normirq_ctx.
-
-Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
----
- arch/powerpc/include/asm/irq.h |  3 +--
- arch/powerpc/kernel/irq.c      | 18 +++++++-----------
- arch/powerpc/kernel/process.c  |  6 +-----
- arch/powerpc/kernel/setup_32.c |  6 ++----
- arch/powerpc/kernel/setup_64.c |  6 ++----
- 5 files changed, 13 insertions(+), 26 deletions(-)
-
-diff --git a/arch/powerpc/include/asm/irq.h b/arch/powerpc/include/asm/irq.h
-index 5c1516a5ba8f..137909a6e0c1 100644
---- a/arch/powerpc/include/asm/irq.h
-+++ b/arch/powerpc/include/asm/irq.h
-@@ -49,8 +49,7 @@ extern void *mcheckirq_ctx[NR_CPUS];
- /*
-  * Per-cpu stacks for handling hard and soft interrupts.
-  */
--extern void *hardirq_ctx[NR_CPUS];
--extern void *softirq_ctx[NR_CPUS];
-+extern void *normirq_ctx[NR_CPUS];
- 
- void __do_IRQ(struct pt_regs *regs);
- extern void __init init_IRQ(void);
-diff --git a/arch/powerpc/kernel/irq.c b/arch/powerpc/kernel/irq.c
-index d50a18888bd9..0ac0e7ddf8ac 100644
---- a/arch/powerpc/kernel/irq.c
-+++ b/arch/powerpc/kernel/irq.c
-@@ -274,15 +274,14 @@ static __always_inline void call_do_irq(struct pt_regs *regs, void *sp)
- void __do_IRQ(struct pt_regs *regs)
- {
- 	struct pt_regs *old_regs = set_irq_regs(regs);
--	void *cursp, *irqsp, *sirqsp;
-+	void *cursp, *irqsp;
- 
- 	/* Switch to the irq stack to handle this */
- 	cursp = (void *)(current_stack_pointer & ~(THREAD_SIZE - 1));
--	irqsp = hardirq_ctx[raw_smp_processor_id()];
--	sirqsp = softirq_ctx[raw_smp_processor_id()];
-+	irqsp = normirq_ctx[raw_smp_processor_id()];
- 
- 	/* Already there ? If not switch stack and call */
--	if (unlikely(cursp == irqsp || cursp == sirqsp))
-+	if (unlikely(cursp == irqsp))
- 		__do_irq(regs, current_stack_pointer);
- 	else
- 		call_do_irq(regs, irqsp);
-@@ -305,10 +304,8 @@ static void __init vmap_irqstack_init(void)
- {
- 	int i;
- 
--	for_each_possible_cpu(i) {
--		softirq_ctx[i] = alloc_vm_stack();
--		hardirq_ctx[i] = alloc_vm_stack();
--	}
-+	for_each_possible_cpu(i)
-+		normirq_ctx[i] = alloc_vm_stack();
- }
- 
- 
-@@ -330,12 +327,11 @@ void    *dbgirq_ctx[NR_CPUS] __read_mostly;
- void *mcheckirq_ctx[NR_CPUS] __read_mostly;
- #endif
- 
--void *softirq_ctx[NR_CPUS] __read_mostly;
--void *hardirq_ctx[NR_CPUS] __read_mostly;
-+void *normirq_ctx[NR_CPUS] __read_mostly;
- 
- void do_softirq_own_stack(void)
- {
--	call_do_softirq(softirq_ctx[smp_processor_id()]);
-+	call_do_softirq(normirq_ctx[smp_processor_id()]);
- }
- 
- irq_hw_number_t virq_to_hw(unsigned int virq)
-diff --git a/arch/powerpc/kernel/process.c b/arch/powerpc/kernel/process.c
-index 0fbda89cd1bb..c17c974e5723 100644
---- a/arch/powerpc/kernel/process.c
-+++ b/arch/powerpc/kernel/process.c
-@@ -2089,11 +2089,7 @@ static inline int valid_irq_stack(unsigned long sp, struct task_struct *p,
- 	unsigned long stack_page;
- 	unsigned long cpu = task_cpu(p);
- 
--	stack_page = (unsigned long)hardirq_ctx[cpu];
--	if (sp >= stack_page && sp <= stack_page + THREAD_SIZE - nbytes)
--		return 1;
--
--	stack_page = (unsigned long)softirq_ctx[cpu];
-+	stack_page = (unsigned long)normirq_ctx[cpu];
- 	if (sp >= stack_page && sp <= stack_page + THREAD_SIZE - nbytes)
- 		return 1;
- 
-diff --git a/arch/powerpc/kernel/setup_32.c b/arch/powerpc/kernel/setup_32.c
-index 813261789303..cad0e4fbdd4b 100644
---- a/arch/powerpc/kernel/setup_32.c
-+++ b/arch/powerpc/kernel/setup_32.c
-@@ -158,10 +158,8 @@ void __init irqstack_early_init(void)
- 
- 	/* interrupt stacks must be in lowmem, we get that for free on ppc32
- 	 * as the memblock is limited to lowmem by default */
--	for_each_possible_cpu(i) {
--		softirq_ctx[i] = alloc_stack();
--		hardirq_ctx[i] = alloc_stack();
--	}
-+	for_each_possible_cpu(i)
-+		normirq_ctx[i] = alloc_stack();
- }
- 
- #ifdef CONFIG_VMAP_STACK
-diff --git a/arch/powerpc/kernel/setup_64.c b/arch/powerpc/kernel/setup_64.c
-index 2b2d0b0fbb30..2fe727e01937 100644
---- a/arch/powerpc/kernel/setup_64.c
-+++ b/arch/powerpc/kernel/setup_64.c
-@@ -717,10 +717,8 @@ void __init irqstack_early_init(void)
- 	 * cannot afford to take SLB misses on them. They are not
- 	 * accessed in realmode.
- 	 */
--	for_each_possible_cpu(i) {
--		softirq_ctx[i] = alloc_stack(limit, i);
--		hardirq_ctx[i] = alloc_stack(limit, i);
--	}
-+	for_each_possible_cpu(i)
-+		normirq_ctx[i] = alloc_stack(limit, i);
- }
- 
- #ifdef CONFIG_PPC_BOOK3E
--- 
-2.36.1
+>> Signed-off-by: Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
+>> ---
+>>  sound/soc/jz4740/jz4740-i2s.c | 8 +++++++-
+>>  1 file changed, 7 insertions(+), 1 deletion(-)
+>> diff --git a/sound/soc/jz4740/jz4740-i2s.c b/sound/soc/jz4740/jz4740-i2s=
+.c
+>> index 3a21ee9d34d1..80b355d715ce 100644
+>> --- a/sound/soc/jz4740/jz4740-i2s.c
+>> +++ b/sound/soc/jz4740/jz4740-i2s.c
+>> @@ -71,6 +71,8 @@ struct i2s_soc_info {
+>>  	struct reg_field field_tx_fifo_thresh;
+>>  	struct reg_field field_i2sdiv_capture;
+>>  	struct reg_field field_i2sdiv_playback;
+>> +
+>> +	const char *pll_clk_name;
+>>  };
+>>  struct jz4740_i2s {
+>> @@ -265,7 +267,7 @@ static int jz4740_i2s_set_sysclk(struct snd_soc_dai =
+*dai,
+>> int clk_id,
+>>  		clk_set_parent(i2s->clk_i2s, parent);
+>>  		break;
+>>  	case JZ4740_I2S_CLKSRC_PLL:
+>> -		parent =3D clk_get(NULL, "pll half");
+>> +		parent =3D clk_get(NULL, i2s->soc_info->pll_clk_name);
+>>  		if (IS_ERR(parent))
+>>  			return PTR_ERR(parent);
+>>  		clk_set_parent(i2s->clk_i2s, parent);
+>> @@ -387,6 +389,7 @@ static const struct i2s_soc_info jz4740_i2s_soc_info=
+ =3D {
+>>  	.field_tx_fifo_thresh	=3D REG_FIELD(JZ_REG_AIC_CONF, 8, 11),
+>>  	.field_i2sdiv_capture	=3D REG_FIELD(JZ_REG_AIC_CLK_DIV, 0, 3),
+>>  	.field_i2sdiv_playback	=3D REG_FIELD(JZ_REG_AIC_CLK_DIV, 0, 3),
+>> +	.pll_clk_name		=3D "pll half",
+>>  };
+>>  static const struct i2s_soc_info jz4760_i2s_soc_info =3D {
+>> @@ -395,6 +398,7 @@ static const struct i2s_soc_info jz4760_i2s_soc_info=
+ =3D {
+>>  	.field_tx_fifo_thresh	=3D REG_FIELD(JZ_REG_AIC_CONF, 16, 20),
+>>  	.field_i2sdiv_capture	=3D REG_FIELD(JZ_REG_AIC_CLK_DIV, 0, 3),
+>>  	.field_i2sdiv_playback	=3D REG_FIELD(JZ_REG_AIC_CLK_DIV, 0, 3),
+>> +	.pll_clk_name		=3D "pll half",
+>>  };
+>>  static struct snd_soc_dai_driver jz4770_i2s_dai =3D {
+>> @@ -421,6 +425,7 @@ static const struct i2s_soc_info jz4770_i2s_soc_info=
+ =3D {
+>>  	.field_tx_fifo_thresh	=3D REG_FIELD(JZ_REG_AIC_CONF, 16, 20),
+>>  	.field_i2sdiv_capture	=3D REG_FIELD(JZ_REG_AIC_CLK_DIV, 8, 11),
+>>  	.field_i2sdiv_playback	=3D REG_FIELD(JZ_REG_AIC_CLK_DIV, 0, 3),
+>> +	.pll_clk_name		=3D "pll half",
+>>  };
+>>  static const struct i2s_soc_info jz4780_i2s_soc_info =3D {
+>> @@ -429,6 +434,7 @@ static const struct i2s_soc_info jz4780_i2s_soc_info=
+ =3D {
+>>  	.field_tx_fifo_thresh	=3D REG_FIELD(JZ_REG_AIC_CONF, 16, 20),
+>>  	.field_i2sdiv_capture	=3D REG_FIELD(JZ_REG_AIC_CLK_DIV, 8, 11),
+>>  	.field_i2sdiv_playback	=3D REG_FIELD(JZ_REG_AIC_CLK_DIV, 0, 3),
+>> +	.pll_clk_name		=3D "pll half",
+>>  };
+>>  static const struct snd_soc_component_driver jz4740_i2s_component =3D {
+>> --
+>> 2.35.1
+>>=20
 

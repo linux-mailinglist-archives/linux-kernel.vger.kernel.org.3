@@ -2,232 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 975BD56A0DB
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 13:07:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EED2056A0D9
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 13:07:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235308AbiGGLGP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Jul 2022 07:06:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54146 "EHLO
+        id S235362AbiGGLGi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Jul 2022 07:06:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54518 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234799AbiGGLGF (ORCPT
+        with ESMTP id S234799AbiGGLGh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Jul 2022 07:06:05 -0400
-Received: from mail-pg1-x52b.google.com (mail-pg1-x52b.google.com [IPv6:2607:f8b0:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60FFD2F00D
-        for <linux-kernel@vger.kernel.org>; Thu,  7 Jul 2022 04:06:04 -0700 (PDT)
-Received: by mail-pg1-x52b.google.com with SMTP id o18so16660167pgu.9
-        for <linux-kernel@vger.kernel.org>; Thu, 07 Jul 2022 04:06:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=0rE1v9ONr28BkWdPM3nxjfIYuOOL3YuVoqV9XeUl+AE=;
-        b=ljb3Ar3ozqk8TtOYXJ76znXwwMrVo/bdbZaHaMq1YTH3a28/N2+1eY9jSorWeI5+0C
-         +y/mBBI/u381rSRni2JbN6Y/q9s6DZihyqqGCnz1etwRRslNwDE+TepaTpc31cIOqZgQ
-         wV2BKX7V4dbYbbdqGVTnSqOmOA6jyjN0kZcWL8GbQc5kUUTQYcs8VdYZf4nrMRNU/SCQ
-         +eEl/byJmKFXBKCXVjMvSl3UzUs2Jr6NA5zVQ0gogDCbE0OChEsyj6zuUsMUlPfqjOe5
-         faQ0F61Ei0Ii2l1SyrzpX4huiFP1ErMG72AXetMCMzHMkYfgeuOvIqgF7QxP1PKNQpNH
-         yHfQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=0rE1v9ONr28BkWdPM3nxjfIYuOOL3YuVoqV9XeUl+AE=;
-        b=RuvtMUE2J7htRl5wXGmTM/g2rHc3/UMB4t1VmV5K35oXo8Nq/D0P7+EJCW/PL9YZFI
-         OlelCi9xDiynJzAlc3fffoncom/w9dKT2NXkVBreSyEQ86Wd+APKDm3vnvEF9/KyJ0Iv
-         uFC4wYWek7Gj/zo1GwqfJ1a9DdE9GPaowTz4ZECPfmWB9LMbRbgXbpgtXPpSfBjK04L5
-         MEU6himWocsoLta+tfCjRRKUmR327uQUwLSGR8EniS76Uo5YN8GZs5iAjcgOg6IAzB+0
-         onu3dRb3cVQfZ4rmNl42pSnoOi9MMQrdi9zzXUllxm9YVJMKjSWN3ndele22OhwAVI5x
-         QGdw==
-X-Gm-Message-State: AJIora8eMfbEFmVATGa9A/tc4+Y6t9NMSkXThY5YSuGtJoTBgn88iLRT
-        7+JLX1f/zCD/Is0QzGIhdsLl+yj5BgB6aQ==
-X-Google-Smtp-Source: AGRyM1t8BOMQQikPZMARvP7l4hhlXzBGqMI70Us8ad+5zsJvgcRagUnPKLaqTtGYWKTiJ7SWuHPIFQ==
-X-Received: by 2002:a05:6a00:14d3:b0:528:486d:d576 with SMTP id w19-20020a056a0014d300b00528486dd576mr29182793pfu.24.1657191963643;
-        Thu, 07 Jul 2022 04:06:03 -0700 (PDT)
-Received: from C02DW0BEMD6R.bytedance.net ([139.177.225.229])
-        by smtp.gmail.com with ESMTPSA id 72-20020a62174b000000b005289a50e4c2sm1046403pfx.23.2022.07.07.04.06.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 07 Jul 2022 04:06:03 -0700 (PDT)
-From:   Qi Zheng <zhengqi.arch@bytedance.com>
-To:     catalin.marinas@arm.com, will@kernel.org
-Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Qi Zheng <zhengqi.arch@bytedance.com>
-Subject: [RFC PATCH 2/2] arm64: support HAVE_IRQ_EXIT_ON_IRQ_STACK
-Date:   Thu,  7 Jul 2022 19:05:11 +0800
-Message-Id: <20220707110511.52129-3-zhengqi.arch@bytedance.com>
-X-Mailer: git-send-email 2.24.3 (Apple Git-128)
-In-Reply-To: <20220707110511.52129-1-zhengqi.arch@bytedance.com>
-References: <20220707110511.52129-1-zhengqi.arch@bytedance.com>
+        Thu, 7 Jul 2022 07:06:37 -0400
+Received: from ssl.serverraum.org (ssl.serverraum.org [176.9.125.105])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9959757263;
+        Thu,  7 Jul 2022 04:06:36 -0700 (PDT)
+Received: from ssl.serverraum.org (web.serverraum.org [172.16.0.2])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ssl.serverraum.org (Postfix) with ESMTPSA id 5FD652222E;
+        Thu,  7 Jul 2022 13:06:34 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2016061301;
+        t=1657191994;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=pOMTg61mj0XRuC1mad9Q2m9pvxC3ABs1KCob0GyzqX8=;
+        b=jrIS09cKUGk0QfBZuNnmkROuNY8YnPoeHlWjEWzcaUOXGHahRbxuqsliGO6BBSdA9flz0/
+        YS0EKKi9NxPfYsp/kb8RtVGBMiIsy6xfizYcLBp53gAQuX8jhibYL75MgF767HTx8WhZ5E
+        XtjRpEM7O9HZMbFUSp6YC5vm1rqiF6s=
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8;
+ format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Date:   Thu, 07 Jul 2022 13:06:34 +0200
+From:   Michael Walle <michael@walle.cc>
+To:     Claudiu.Beznea@microchip.com
+Cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        Nicolas.Ferre@microchip.com, alexandre.belloni@bootlin.com,
+        Cristian.Birsan@microchip.com,
+        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 2/2] ARM: dts: kswitch-d10: enable the USB device port
+In-Reply-To: <326e23f3-5312-0a0d-500c-a51c1e99c5f1@microchip.com>
+References: <20220705130637.1386120-1-michael@walle.cc>
+ <20220705130637.1386120-2-michael@walle.cc>
+ <32a2193f-aea1-6237-a993-d0ba89cce431@microchip.com>
+ <1747f5d89ca65a9e54d95e7dd77c4709@walle.cc>
+ <326e23f3-5312-0a0d-500c-a51c1e99c5f1@microchip.com>
+User-Agent: Roundcube Webmail/1.4.13
+Message-ID: <8dca499e8f1494e7c54308063dd8f790@walle.cc>
+X-Sender: michael@walle.cc
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Since softirqs are handled on the per-CPU IRQ stack,
-let's support HAVE_IRQ_EXIT_ON_IRQ_STACK which causes
-the core code to invoke __do_softirq() directly without
-going through do_softirq_own_stack().
+Am 2022-07-07 11:18, schrieb Claudiu.Beznea@microchip.com:
+> On 06.07.2022 11:57, Michael Walle wrote:
+>> EXTERNAL EMAIL: Do not click links or open attachments unless you know 
+>> the
+>> content is safe
+>> 
+>> Hi Claudiu,
+>> 
+>> Am 2022-07-06 10:41, schrieb Claudiu.Beznea@microchip.com:
+>>> On 05.07.2022 16:06, Michael Walle wrote:
+>>>> EXTERNAL EMAIL: Do not click links or open attachments unless you 
+>>>> know
+>>>> the content is safe
+>>>> 
+>>>> Now that there is driver support for the USB device, enable it.
+>>>> 
+>>>> Signed-off-by: Michael Walle <michael@walle.cc>
+>>>> ---
+>>>>  arch/arm/boot/dts/lan966x-kontron-kswitch-d10-mmt.dtsi | 5 +++++
+>>>>  1 file changed, 5 insertions(+)
+>>>> 
+>>>> diff --git a/arch/arm/boot/dts/lan966x-kontron-kswitch-d10-mmt.dtsi
+>>>> b/arch/arm/boot/dts/lan966x-kontron-kswitch-d10-mmt.dtsi
+>>>> index 5a6c5f7c371a..d0d26e136c38 100644
+>>>> --- a/arch/arm/boot/dts/lan966x-kontron-kswitch-d10-mmt.dtsi
+>>>> +++ b/arch/arm/boot/dts/lan966x-kontron-kswitch-d10-mmt.dtsi
+>>>> @@ -200,6 +200,11 @@ &switch {
+>>>>         status = "okay";
+>>>>  };
+>>>> 
+>>>> +&udc {
+>>>> +       atmel,vbus-gpio = <&gpio 66 GPIO_ACTIVE_HIGH>;
+>>> 
+>>> Can you also add pinctrl to avoid issues described in:
+>> 
+>> Do I need a pinctrl node even if I just use it as a gpio?
+>> Isn't that handled automatically by the
+>> .gpio_request_enable op?
+> 
+> I cannot say for sure.
+> 
+> Looking a bit though it I think the issue described in commit I pointed 
+> may
+> come from the fact that struct gpio_chip::request may be
+> gpiochip_generic_request() which may return 0 in case
+> list_empty(&gc->gpiodev->pin_ranges) is true. The commit that I pointed 
+> was
+> introduced after commit 2ab73c6d8323 ("gpio: Support GPIO controllers
+> without pin-ranges") but I don't have more knowledge on it.
+> 
 
-Signed-off-by: Qi Zheng <zhengqi.arch@bytedance.com>
----
- arch/arm64/Kconfig                 |  1 +
- arch/arm64/include/asm/exception.h |  4 +++-
- arch/arm64/kernel/entry-common.c   | 30 ++++++++++++++++++++----------
- arch/arm64/kernel/entry.S          |  6 ++++--
- arch/arm64/kernel/irq.c            |  5 +++--
- 5 files changed, 31 insertions(+), 15 deletions(-)
+I'll just add it :) Thanks!
 
-diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig
-index 402e16fec02a..89f6368b705e 100644
---- a/arch/arm64/Kconfig
-+++ b/arch/arm64/Kconfig
-@@ -231,6 +231,7 @@ config ARM64
- 	select TRACE_IRQFLAGS_SUPPORT
- 	select TRACE_IRQFLAGS_NMI_SUPPORT
- 	select HAVE_SOFTIRQ_ON_OWN_STACK
-+	select HAVE_IRQ_EXIT_ON_IRQ_STACK
- 	help
- 	  ARM 64-bit (AArch64) Linux support.
- 
-diff --git a/arch/arm64/include/asm/exception.h b/arch/arm64/include/asm/exception.h
-index d94aecff9690..8bff0aa7ab50 100644
---- a/arch/arm64/include/asm/exception.h
-+++ b/arch/arm64/include/asm/exception.h
-@@ -54,7 +54,9 @@ asmlinkage void el0t_32_fiq_handler(struct pt_regs *regs);
- asmlinkage void el0t_32_error_handler(struct pt_regs *regs);
- 
- asmlinkage void call_on_irq_stack(struct pt_regs *regs,
--				  void (*func)(struct pt_regs *));
-+				  void (*func)(struct pt_regs *),
-+				  void (*do_func)(struct pt_regs *,
-+						  void (*)(struct pt_regs *)));
- asmlinkage void asm_exit_to_user_mode(struct pt_regs *regs);
- 
- void do_mem_abort(unsigned long far, unsigned long esr, struct pt_regs *regs);
-diff --git a/arch/arm64/kernel/entry-common.c b/arch/arm64/kernel/entry-common.c
-index c75ca36b4a49..935d1ab150b5 100644
---- a/arch/arm64/kernel/entry-common.c
-+++ b/arch/arm64/kernel/entry-common.c
-@@ -266,14 +266,16 @@ static void __sched arm64_preempt_schedule_irq(void)
- }
- 
- static void do_interrupt_handler(struct pt_regs *regs,
--				 void (*handler)(struct pt_regs *))
-+				 void (*handler)(struct pt_regs *),
-+				 void (*do_handler)(struct pt_regs *,
-+						    void (*)(struct pt_regs *)))
- {
- 	struct pt_regs *old_regs = set_irq_regs(regs);
- 
- 	if (on_thread_stack())
--		call_on_irq_stack(regs, handler);
-+		call_on_irq_stack(regs, handler, do_handler);
- 	else
--		handler(regs);
-+		do_handler(regs, handler);
- 
- 	set_irq_regs(old_regs);
- }
-@@ -441,22 +443,32 @@ asmlinkage void noinstr el1h_64_sync_handler(struct pt_regs *regs)
- 	}
- }
- 
-+static void nmi_handler(struct pt_regs *regs, void (*handler)(struct pt_regs *))
-+{
-+	handler(regs);
-+}
-+
- static __always_inline void __el1_pnmi(struct pt_regs *regs,
- 				       void (*handler)(struct pt_regs *))
- {
- 	arm64_enter_nmi(regs);
--	do_interrupt_handler(regs, handler);
-+	do_interrupt_handler(regs, handler, nmi_handler);
- 	arm64_exit_nmi(regs);
- }
- 
-+static void irq_handler(struct pt_regs *regs, void (*handler)(struct pt_regs *))
-+{
-+	irq_enter_rcu();
-+	handler(regs);
-+	irq_exit_rcu();
-+}
-+
- static __always_inline void __el1_irq(struct pt_regs *regs,
- 				      void (*handler)(struct pt_regs *))
- {
- 	enter_from_kernel_mode(regs);
- 
--	irq_enter_rcu();
--	do_interrupt_handler(regs, handler);
--	irq_exit_rcu();
-+	do_interrupt_handler(regs, handler, irq_handler);
- 
- 	arm64_preempt_schedule_irq();
- 
-@@ -699,9 +711,7 @@ static void noinstr el0_interrupt(struct pt_regs *regs,
- 	if (regs->pc & BIT(55))
- 		arm64_apply_bp_hardening();
- 
--	irq_enter_rcu();
--	do_interrupt_handler(regs, handler);
--	irq_exit_rcu();
-+	do_interrupt_handler(regs, handler, irq_handler);
- 
- 	exit_to_user_mode(regs);
- }
-diff --git a/arch/arm64/kernel/entry.S b/arch/arm64/kernel/entry.S
-index 254fe31c03a0..1c351391f6bd 100644
---- a/arch/arm64/kernel/entry.S
-+++ b/arch/arm64/kernel/entry.S
-@@ -867,7 +867,9 @@ NOKPROBE(ret_from_fork)
- 
- /*
-  * void call_on_irq_stack(struct pt_regs *regs,
-- * 		          void (*func)(struct pt_regs *));
-+ * 		          void (*func)(struct pt_regs *)
-+ * 			  void (*do_func)(struct pt_regs *,
-+ *					  void (*)(struct pt_regs *)));
-  *
-  * Calls func(regs) using this CPU's irq stack and shadow irq stack.
-  */
-@@ -886,7 +888,7 @@ SYM_FUNC_START(call_on_irq_stack)
- 
- 	/* Move to the new stack and call the function there */
- 	mov	sp, x16
--	blr	x1
-+	blr	x2
- 
- 	/*
- 	 * Restore the SP from the FP, and restore the FP and LR from the frame
-diff --git a/arch/arm64/kernel/irq.c b/arch/arm64/kernel/irq.c
-index e6aa37672fd4..54cd418d47ef 100644
---- a/arch/arm64/kernel/irq.c
-+++ b/arch/arm64/kernel/irq.c
-@@ -72,14 +72,15 @@ static void init_irq_stacks(void)
- }
- #endif
- 
--static void ____do_softirq(struct pt_regs *regs)
-+static void ____do_softirq(struct pt_regs *regs,
-+			   void (*handler)(struct pt_regs *))
- {
- 	__do_softirq();
- }
- 
- void do_softirq_own_stack(void)
- {
--	call_on_irq_stack(NULL, ____do_softirq);
-+	call_on_irq_stack(NULL, NULL, ____do_softirq);
- }
- 
- static void default_handle_irq(struct pt_regs *regs)
--- 
-2.20.1
-
+-michael

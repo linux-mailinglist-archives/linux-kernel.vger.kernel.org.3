@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 58805569747
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 03:12:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B4685569745
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 03:12:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234132AbiGGBKJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Jul 2022 21:10:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48084 "EHLO
+        id S234255AbiGGBKM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Jul 2022 21:10:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48088 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231599AbiGGBKH (ORCPT
+        with ESMTP id S229869AbiGGBKI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Jul 2022 21:10:07 -0400
-Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C8AA2D1DC;
-        Wed,  6 Jul 2022 18:10:06 -0700 (PDT)
-Received: by mail-ej1-x62f.google.com with SMTP id r21so1056198eju.0;
-        Wed, 06 Jul 2022 18:10:06 -0700 (PDT)
+        Wed, 6 Jul 2022 21:10:08 -0400
+Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D3422D1DA;
+        Wed,  6 Jul 2022 18:10:07 -0700 (PDT)
+Received: by mail-ej1-x630.google.com with SMTP id r21so1056243eju.0;
+        Wed, 06 Jul 2022 18:10:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=zpXoMxo0aQKIkiKPZdmGA4JTiZjUpQr6v1L8PEccH18=;
-        b=HRTWX4j7HkFX4uMlrzY2dzJzvkfSpZ2hSe14YKdvP1miavqePcCENEVt+YCOD90oqV
-         d3T2A4C8gZzXvb/7OqaBitojU3D+uN3a55CPc39U2plt8SfFe+FM+BbMNc6DzyPcHRZv
-         e0SOJe7TdJMOLtCM+Ia4t8GbWlh4g2hE/KkpgpaWC5DXrUUz6mzJhsSTnL0ZlOGfv6NY
-         1+oa/CK1ynWthaIipP1wokCE6Imgx2Ia6cDKjXaA5Yk62UOYfetuNNbubeHOnNOp4xiB
-         3T9XdekweVTOW9JEZxW0R1Idqzujuj+VSQg3NMS8d4f/UmCIKNoUNvtc64yCvGKzMMok
-         RtQg==
+        bh=cVUxHoUX8S49LOf9UWwf0cng+gray0TrmHyVxYmOxlI=;
+        b=H5Z5lKHYQ/ZOetroL0v1+dOEqnm7pS6bJu0pLT4lW0LJLKNcoUio/R4u3r3YuzgEw2
+         NVrHtGSZemNrfhR9rNr2zkghtu1c413krofOSO8JsMaxEcYTPgO5hzQe0xi5svYg7hJX
+         jpWwN7HEXXESZJGfarmQNtWKUQsFnrkfcMHETkymbZUSeTgf7ZWRWWEXGGRafoSFcyUR
+         9uDrlAvNqNd3V1PdtvfsXSD9tWtOzlpomEygEAkfIFGM/p+lIYzD+UFnbhzQcWVyJBek
+         ZKVYpgJHeQenXzTIknvDQ+WeHMCWl2xooXQb4GDcwyAWy/TGlo1dir6k38uynZHOj979
+         h5SA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=zpXoMxo0aQKIkiKPZdmGA4JTiZjUpQr6v1L8PEccH18=;
-        b=T1An1exRT/0dx7PT0k4QhAwZIKr8Du5Y+ZGRLJzdEvKZi1uthrkbEJFNrjWQEutVct
-         M2y4jJkL1q7QOPc6Nt6tPPYKe6ShXiPwJh4OgH1YiJg8YiAw6OFtLyl7q41qfHsIyI64
-         R4drb8BW6Er8FN42HlrjmuQCIiGJGdbUWbWF9MxH6du5GlgtYME1A397myUJbTMIykOp
-         jmAlTJAJI4OJ+siQ3Vvg5DuE5Tp2O/cSqVuydh6Kwrb72Sr9WG+oe31DOT/YOF/Y6NzV
-         1bhAXF+ObPmNcnNYElp2xsLBBUo44wYetLnnXnRdnttXbm0SLDAS3f8x2N60scR4Uo4n
-         jpTA==
-X-Gm-Message-State: AJIora8MyEtVJyrZJDvRWU9C0xBaa5xIvHX3IEvaoCsOjgYkUxK8RyFK
-        NYMmQI8rWlACuY65kcJAF1iZj35lPLE=
-X-Google-Smtp-Source: AGRyM1t9R4P4RR1EyyBS1sA+dL+RrIu7VFwViovZPip1seLvD5AZhI/SB/nk8AJ2gBNjn1pLIlC0wQ==
-X-Received: by 2002:a17:907:3e84:b0:6fe:8c5f:d552 with SMTP id hs4-20020a1709073e8400b006fe8c5fd552mr42214687ejc.710.1657156204617;
-        Wed, 06 Jul 2022 18:10:04 -0700 (PDT)
+        bh=cVUxHoUX8S49LOf9UWwf0cng+gray0TrmHyVxYmOxlI=;
+        b=jQf3NURmRBVzeZS2m5V4/hk3q0qfTDimYn1nr9sMXq+u3bxK9NcqkShQFzwq7TJ7hL
+         ggb+a4yoi7wUlkD3d/+4RdR5/Xdw8okRLfTunmVKls+bcxPcsrHd9e0iwPaAIpZw0w2L
+         stjVVabpzsDGzuMMkvO8oRkGRAdiesG9CjSrpx+XNV1anaGPG1mjfqQgVUc5tYJip+CR
+         33aeU26R/hir/xmJ7oc35C1rmCFiJmWaNRUBRcF973geFlt1bY8iKRSoTiL/5K7UeNPZ
+         2cuetVNVSxytKIcx9CkvRH6Dp59rN7ST2+ViBpRcuqVz2N1jIXep0G6uX22r8fIj0fAv
+         BPAg==
+X-Gm-Message-State: AJIora8HGGI5NoT/6UHi5p0YjsQJTGMimxQA6CDAwPyttPRbTFtVX7X1
+        k/LqdpcvrHayhYk5qo6mF2Y=
+X-Google-Smtp-Source: AGRyM1vIVA0PE6FEJfr9ycB88tNJCB0tDlMJbE/OdArU4vcfDSCCyb4Rx2OyCLKSHrG7sgVV8+C3QQ==
+X-Received: by 2002:a17:906:7ac2:b0:726:38e0:4e7d with SMTP id k2-20020a1709067ac200b0072638e04e7dmr43503363ejo.236.1657156205761;
+        Wed, 06 Jul 2022 18:10:05 -0700 (PDT)
 Received: from localhost.localdomain (93-42-70-190.ip85.fastwebnet.it. [93.42.70.190])
-        by smtp.googlemail.com with ESMTPSA id u17-20020a056402111100b0043a6e807febsm6915464edv.46.2022.07.06.18.10.03
+        by smtp.googlemail.com with ESMTPSA id u17-20020a056402111100b0043a6e807febsm6915464edv.46.2022.07.06.18.10.04
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 06 Jul 2022 18:10:04 -0700 (PDT)
+        Wed, 06 Jul 2022 18:10:05 -0700 (PDT)
 From:   Christian Marangi <ansuelsmth@gmail.com>
 To:     Andy Gross <agross@kernel.org>,
         Bjorn Andersson <bjorn.andersson@linaro.org>,
@@ -58,9 +58,9 @@ To:     Andy Gross <agross@kernel.org>,
         linux-kernel@vger.kernel.org
 Cc:     Christian Marangi <ansuelsmth@gmail.com>,
         Jonathan McDowell <noodles@earth.li>
-Subject: [PATCH v2 1/8] ARM: dts: qcom: add multiple missing pin definition for ipq8064
-Date:   Thu,  7 Jul 2022 03:09:35 +0200
-Message-Id: <20220707010943.20857-2-ansuelsmth@gmail.com>
+Subject: [PATCH v2 2/8] ARM: dts: qcom: add gsbi6 missing definition for ipq8064
+Date:   Thu,  7 Jul 2022 03:09:36 +0200
+Message-Id: <20220707010943.20857-3-ansuelsmth@gmail.com>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220707010943.20857-1-ansuelsmth@gmail.com>
 References: <20220707010943.20857-1-ansuelsmth@gmail.com>
@@ -76,120 +76,68 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add missing definition for mdio0 pins used for gpio-bitbang driver,i2c4
-pins and rgmii2 pins for ipq8064.
-
-Drop i2c4_pins node from ipq8064-ap148 dts as it's now moved to ipq8064
-dtsi.
-
-Drop mdio0_pins node from ipq8064-rb3011 dts as it's now moved to
-ipq8064 dtsi.
+Add gsbi6 missing definition for ipq8064.
 
 Signed-off-by: Christian Marangi <ansuelsmth@gmail.com>
 Tested-by: Jonathan McDowell <noodles@earth.li>
 ---
- arch/arm/boot/dts/qcom-ipq8064-ap148.dts  |  6 -----
- arch/arm/boot/dts/qcom-ipq8064-rb3011.dts |  9 -------
- arch/arm/boot/dts/qcom-ipq8064.dtsi       | 32 +++++++++++++++++++++++
- 3 files changed, 32 insertions(+), 15 deletions(-)
+ arch/arm/boot/dts/qcom-ipq8064.dtsi | 43 +++++++++++++++++++++++++++++
+ 1 file changed, 43 insertions(+)
 
-diff --git a/arch/arm/boot/dts/qcom-ipq8064-ap148.dts b/arch/arm/boot/dts/qcom-ipq8064-ap148.dts
-index b63d01d10189..a654d3c22c4f 100644
---- a/arch/arm/boot/dts/qcom-ipq8064-ap148.dts
-+++ b/arch/arm/boot/dts/qcom-ipq8064-ap148.dts
-@@ -7,12 +7,6 @@ / {
- 
- 	soc {
- 		pinmux@800000 {
--			i2c4_pins: i2c4_pinmux {
--				pins = "gpio12", "gpio13";
--				function = "gsbi4";
--				bias-disable;
--			};
--
- 			buttons_pins: buttons_pins {
- 				mux {
- 					pins = "gpio54", "gpio65";
-diff --git a/arch/arm/boot/dts/qcom-ipq8064-rb3011.dts b/arch/arm/boot/dts/qcom-ipq8064-rb3011.dts
-index 9034f00f2bd8..5a65cce2500c 100644
---- a/arch/arm/boot/dts/qcom-ipq8064-rb3011.dts
-+++ b/arch/arm/boot/dts/qcom-ipq8064-rb3011.dts
-@@ -307,15 +307,6 @@ mux {
- 		};
- 	};
- 
--	mdio0_pins: mdio0_pins {
--		mux {
--			pins = "gpio0", "gpio1";
--			function = "gpio";
--			drive-strength = <8>;
--			bias-disable;
--		};
--	};
--
- 	mdio1_pins: mdio1_pins {
- 		mux {
- 			pins = "gpio10", "gpio11";
 diff --git a/arch/arm/boot/dts/qcom-ipq8064.dtsi b/arch/arm/boot/dts/qcom-ipq8064.dtsi
-index 4b475d98343c..bc9987c841d0 100644
+index bc9987c841d0..7cccfe99bf00 100644
 --- a/arch/arm/boot/dts/qcom-ipq8064.dtsi
 +++ b/arch/arm/boot/dts/qcom-ipq8064.dtsi
-@@ -382,6 +382,13 @@ mux {
- 				};
+@@ -663,6 +663,49 @@ spi@1a280000 {
  			};
- 
-+			i2c4_pins: i2c4-default {
-+				pins = "gpio12", "gpio13";
-+				function = "gsbi4";
-+				drive-strength = <12>;
-+				bias-disable;
-+			};
-+
- 			spi_pins: spi_pins {
- 				mux {
- 					pins = "gpio18", "gpio19", "gpio21";
-@@ -424,6 +431,8 @@ mux {
- 
- 				pullups {
- 					pins = "gpio39";
-+					function = "nand";
-+					drive-strength = <10>;
- 					bias-pull-up;
- 				};
- 
-@@ -431,9 +440,32 @@ hold {
- 					pins = "gpio40", "gpio41", "gpio42",
- 					       "gpio43", "gpio44", "gpio45",
- 					       "gpio46", "gpio47";
-+					function = "nand";
-+					drive-strength = <10>;
- 					bias-bus-hold;
- 				};
- 			};
-+
-+			mdio0_pins: mdio0-pins {
-+				mux {
-+					pins = "gpio0", "gpio1";
-+					function = "mdio";
-+					drive-strength = <8>;
-+					bias-disable;
-+				};
-+			};
-+
-+			rgmii2_pins: rgmii2-pins {
-+				mux {
-+					pins = "gpio27", "gpio28", "gpio29",
-+					       "gpio30", "gpio31", "gpio32",
-+					       "gpio51", "gpio52", "gpio59",
-+					       "gpio60", "gpio61", "gpio62";
-+					function = "rgmii2";
-+					drive-strength = <8>;
-+					bias-disable;
-+				};
-+			};
  		};
  
- 		intc: interrupt-controller@2000000 {
++		gsbi6: gsbi@16500000 {
++			compatible = "qcom,gsbi-v1.0.0";
++			reg = <0x16500000 0x100>;
++			cell-index = <6>;
++			clocks = <&gcc GSBI6_H_CLK>;
++			clock-names = "iface";
++			#address-cells = <1>;
++			#size-cells = <1>;
++			ranges;
++
++			syscon-tcsr = <&tcsr>;
++
++			status = "disabled";
++
++			gsbi6_i2c: i2c@16580000 {
++				compatible = "qcom,i2c-qup-v1.1.1";
++				reg = <0x16580000 0x1000>;
++				interrupts = <GIC_SPI 157 IRQ_TYPE_LEVEL_HIGH>;
++
++				clocks = <&gcc GSBI6_QUP_CLK>, <&gcc GSBI6_H_CLK>;
++				clock-names = "core", "iface";
++
++				#address-cells = <1>;
++				#size-cells = <0>;
++
++				status = "disabled";
++			};
++
++			gsbi6_spi: spi@16580000 {
++				compatible = "qcom,spi-qup-v1.1.1";
++				reg = <0x16580000 0x1000>;
++				interrupts = <GIC_SPI 157 IRQ_TYPE_LEVEL_HIGH>;
++
++				clocks = <&gcc GSBI6_QUP_CLK>, <&gcc GSBI6_H_CLK>;
++				clock-names = "core", "iface";
++
++				#address-cells = <1>;
++				#size-cells = <0>;
++
++				status = "disabled";
++			};
++		};
++
+ 		gsbi7: gsbi@16600000 {
+ 			status = "disabled";
+ 			compatible = "qcom,gsbi-v1.0.0";
 -- 
 2.36.1
 

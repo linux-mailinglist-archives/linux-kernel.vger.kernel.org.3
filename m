@@ -2,74 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 93C1056A1FF
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 14:32:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 32AB756A205
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 14:33:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235445AbiGGMcY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Jul 2022 08:32:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32886 "EHLO
+        id S235521AbiGGMcw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Jul 2022 08:32:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33244 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234818AbiGGMcW (ORCPT
+        with ESMTP id S235514AbiGGMcq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Jul 2022 08:32:22 -0400
-Received: from baidu.com (mx21.baidu.com [220.181.3.85])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B314C1BEBD;
-        Thu,  7 Jul 2022 05:32:21 -0700 (PDT)
-Received: from BC-Mail-Ex12.internal.baidu.com (unknown [172.31.51.52])
-        by Forcepoint Email with ESMTPS id EFABD9E8B5DBB35BA265;
-        Thu,  7 Jul 2022 20:32:18 +0800 (CST)
-Received: from bjkjy-mail-ex20.internal.baidu.com (172.31.50.14) by
- BC-Mail-Ex12.internal.baidu.com (172.31.51.52) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
- 15.1.2308.20; Thu, 7 Jul 2022 20:32:20 +0800
-Received: from BC-Mail-Ex25.internal.baidu.com (172.31.51.19) by
- bjkjy-mail-ex20.internal.baidu.com (172.31.50.14) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
- 15.1.2375.18; Thu, 7 Jul 2022 20:32:20 +0800
-Received: from BC-Mail-Ex25.internal.baidu.com ([172.31.51.19]) by
- BC-Mail-Ex25.internal.baidu.com ([172.31.51.19]) with mapi id 15.01.2308.020;
- Thu, 7 Jul 2022 20:32:20 +0800
-From:   "Wang,Guangju" <wangguangju@baidu.com>
-To:     "seanjc@google.com" <seanjc@google.com>,
-        "pbonzini@redhat.com" <pbonzini@redhat.com>,
-        "vkuznets@redhat.com" <vkuznets@redhat.com>,
-        "jmattson@google.com" <jmattson@google.com>,
-        "wanpengli@tencent.com" <wanpengli@tencent.com>,
-        "bp@alien8.de" <bp@alien8.de>, "joro@8bytes.org" <joro@8bytes.org>,
-        "suravee.suthikulpanit@amd.com" <suravee.suthikulpanit@amd.com>,
-        "hpa@zytor.com" <hpa@zytor.com>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>
-CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "Wang,Guangju" <wangguangju@baidu.com>,
-        "Chu,Kaiping" <chukaiping@baidu.com>
-Subject: =?gb2312?B?s7e72DogW1BBVENIXSBLVk06IHg4NjogQWRkIEVPSV9JTkRVQ0VEIGV4aXQg?=
- =?gb2312?Q?handlers_for_Hyper-V_SynIC_vectors?=
-Thread-Topic: [PATCH] KVM: x86: Add EOI_INDUCED exit handlers for Hyper-V
- SynIC vectors
-Thread-Index: AQHYkf2Zdxqgj4EsMEqsgQUTLQABEQ==
-X-CallingTelephoneNumber: IPM.Note
-X-VoiceMessageDuration: 35
-X-FaxNumberOfPages: 0
-Date:   Thu, 7 Jul 2022 12:32:20 +0000
-Message-ID: <72fc9fb240a24de4bf538f94860a655a@baidu.com>
-Accept-Language: zh-CN, en-US
-Content-Language: zh-CN
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [172.22.192.211]
-Content-Type: text/plain; charset="gb2312"
-Content-Transfer-Encoding: base64
+        Thu, 7 Jul 2022 08:32:46 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3FC322559E
+        for <linux-kernel@vger.kernel.org>; Thu,  7 Jul 2022 05:32:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1657197164;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=VIs+6LzrSr5HlwttqwpAgHOy2YvQeXQYndH2BfxS+Zw=;
+        b=L/FXzyCrMoxz02JHfmFlWJJPLGHhTGmmylQWPy0WrH1Fn/NkTwPMhqnVLmTF29DCjSlXIL
+        Dw6ffmmmcqje9LEfe82cczrtr53BkwyU91+dihxFLA8q+v9yLA6UZd/Z5vkYKZ4n3MMSc3
+        5q4RzGEFUyQC4y6YHO3hqSSWRQ3YrCw=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-354-JBebleIHM3ajt5Dpsn04WQ-1; Thu, 07 Jul 2022 08:32:40 -0400
+X-MC-Unique: JBebleIHM3ajt5Dpsn04WQ-1
+Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 17A933C0E214;
+        Thu,  7 Jul 2022 12:32:40 +0000 (UTC)
+Received: from warthog.procyon.org.uk (unknown [10.33.37.50])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 7D30040C141D;
+        Thu,  7 Jul 2022 12:32:38 +0000 (UTC)
+Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
+        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
+        Kingdom.
+        Registered in England and Wales under Company Registration No. 3798903
+From:   David Howells <dhowells@redhat.com>
+In-Reply-To: <20220707045112.10177-2-xiubli@redhat.com>
+References: <20220707045112.10177-2-xiubli@redhat.com> <20220707045112.10177-1-xiubli@redhat.com>
+To:     xiubli@redhat.com
+Cc:     dhowells@redhat.com, idryomov@gmail.com, jlayton@kernel.org,
+        marc.dionne@auristor.com, willy@infradead.org,
+        keescook@chromium.org, kirill.shutemov@linux.intel.com,
+        william.kucharski@oracle.com, linux-afs@lists.infradead.org,
+        linux-kernel@vger.kernel.org, ceph-devel@vger.kernel.org,
+        linux-cachefs@redhat.com, vshankar@redhat.com
+Subject: Re: [PATCH v3 1/2] netfs: do not unlock and put the folio twice
 MIME-Version: 1.0
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_VALIDITY_RPBL,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <2341365.1657197157.1@warthog.procyon.org.uk>
+Date:   Thu, 07 Jul 2022 13:32:37 +0100
+Message-ID: <2341366.1657197157@warthog.procyon.org.uk>
+X-Scanned-By: MIMEDefang 2.84 on 10.11.54.2
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-V2FuZyxHdWFuZ2p1IL2rs7e72NPKvP6hsFtQQVRDSF0gS1ZNOiB4ODY6IEFkZCBFT0lfSU5EVUNF
-RCBleGl0IGhhbmRsZXJzIGZvciBIeXBlci1WIFN5bklDIHZlY3RvcnOhsaGj
+xiubli@redhat.com wrote:
+
+> URL: https://tracker.ceph.com/issues/56423
+
+I think that should be "Link:".
+
+David
+

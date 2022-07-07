@@ -2,55 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8066D569D49
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 10:26:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E4CD8569D56
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 10:26:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235331AbiGGISS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Jul 2022 04:18:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60504 "EHLO
+        id S235353AbiGGISW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Jul 2022 04:18:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33188 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235473AbiGGIRi (ORCPT
+        with ESMTP id S235499AbiGGIRl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Jul 2022 04:17:38 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95F024D4E4
-        for <linux-kernel@vger.kernel.org>; Thu,  7 Jul 2022 01:15:54 -0700 (PDT)
-Date:   Thu, 07 Jul 2022 08:15:52 -0000
+        Thu, 7 Jul 2022 04:17:41 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 250374D166
+        for <linux-kernel@vger.kernel.org>; Thu,  7 Jul 2022 01:15:56 -0700 (PDT)
+Date:   Thu, 07 Jul 2022 08:15:53 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1657181753;
+        s=2020; t=1657181754;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=agB4s4WADpNkKagZMVxc6n5C9p1szKTvYPMmkV5M5Qw=;
-        b=xwIPqH5cDAVMXzR9PScT60mjMLZoywE9Fm19Eeb74vY8LrED0tB7DZo51Fm2+iUG0/M+Dc
-        mKfETsVyVMabrBx1aqgm9Z8UzISfIO01andoaZC/0ufgTpcFN0m3kRxRqELFPPSMrZjTt1
-        /ujIMXw8LJ1STav4bMyMQdcgqXBNu1m3pxNlK2oz/Enz4VnHN0R4HHEBGYq2bAIc9pdCt4
-        Ep2D5P6oEAG2W5OVke1HFitWF4qWYzyLGed872CqDD7qb8b5e23NWnCTy1Ha6D9/TWaLyv
-        dgP0ayIQ3AkExjX0Obw5r+pbBNdDe2UqZ6EgDh0oyByvttx6UZstzXfzcygeFg==
+        bh=5oGUO4fN/BKlwUyPfl+2zvy6oRh+E22TA0yGkEl73d8=;
+        b=ALwBBZDLfm+rBF9z0/SN/LocTLJkeFV4/p/yYb3QwOcsiPgiDpYNIVzGfBjfA6rexPfpPW
+        G+T90wGHDDl03KoVjmMQD5q7ba+si97JZcI8+vNYVEL9r+xq9q+Z9rhnOY0pv2b+YJTmHp
+        K5YfF4PpyP9MdzLAtW6Lfl21ra/JiY0+mbSSWHK5a2KqZ1cQNPuvK7cwOibkB+RQxklZ/R
+        /YS+3mMN71fq9tv+k4Le56bPTMqvn4H9WienIE5SVOakKrNWvEoDLsMjD7jYMXIlDklZzM
+        mdPjbwWpw3PcI/E7oLWV/05FybWdAtUNnAclvWYMR3WTma/927eA0AJ7ciOdhQ==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1657181753;
+        s=2020e; t=1657181754;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=agB4s4WADpNkKagZMVxc6n5C9p1szKTvYPMmkV5M5Qw=;
-        b=k24qG0nyWHpqQPcExStzS5MUYFQe3tzMbWyCzWi0Y6K1tbnvmN7r6E+J8ACbXWFUMT2cCB
-        g7yaCBKeazmSnLCA==
-From:   "irqchip-bot for Antonio Borneo" <tip-bot2@linutronix.de>
+        bh=5oGUO4fN/BKlwUyPfl+2zvy6oRh+E22TA0yGkEl73d8=;
+        b=7XYON2K2VmjH9+5DsE3CmcHqOzWf25rz69SIgxLQ9IxAhpfZRb3/EaRkzbpSCh52ujISK1
+        SkoUL2NZ5cA3MQBQ==
+From:   "irqchip-bot for Loic Pallardy" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-kernel@vger.kernel.org
-Subject: [irqchip: irq/irqchip-next] irqchip/stm32-exti: Prevent illegal read
- due to unbounded DT value
-Cc:     Antonio Borneo <antonio.borneo@foss.st.com>,
+Subject: [irqchip: irq/irqchip-next] irqchip/stm32-exti: Fix
+ irq_mask/irq_unmask for direct events
+Cc:     Loic Pallardy <loic.pallardy@foss.st.com>,
+        Antonio Borneo <antonio.borneo@foss.st.com>,
         Marc Zyngier <maz@kernel.org>, tglx@linutronix.de
-In-Reply-To: <20220606162757.415354-4-antonio.borneo@foss.st.com>
-References: <20220606162757.415354-4-antonio.borneo@foss.st.com>
+In-Reply-To: <20220606162757.415354-3-antonio.borneo@foss.st.com>
+References: <20220606162757.415354-3-antonio.borneo@foss.st.com>
 MIME-Version: 1.0
-Message-ID: <165718175212.15455.3837977774030321982.tip-bot2@tip-bot2>
+Message-ID: <165718175310.15455.3631192223036311523.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -67,39 +68,43 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 The following commit has been merged into the irq/irqchip-next branch of irqchip:
 
-Commit-ID:     c16ae609214e835692c33b1a090b5a15bf1b9e7e
-Gitweb:        https://git.kernel.org/pub/scm/linux/kernel/git/maz/arm-platforms/c16ae609214e835692c33b1a090b5a15bf1b9e7e
-Author:        Antonio Borneo <antonio.borneo@foss.st.com>
-AuthorDate:    Mon, 06 Jun 2022 18:27:54 +02:00
+Commit-ID:     f8b3eb4245113c8a9156d5db8e80c6134127bcc1
+Gitweb:        https://git.kernel.org/pub/scm/linux/kernel/git/maz/arm-platforms/f8b3eb4245113c8a9156d5db8e80c6134127bcc1
+Author:        Loic Pallardy <loic.pallardy@foss.st.com>
+AuthorDate:    Mon, 06 Jun 2022 18:27:53 +02:00
 Committer:     Marc Zyngier <maz@kernel.org>
 CommitterDate: Thu, 07 Jul 2022 09:07:44 +01:00
 
-irqchip/stm32-exti: Prevent illegal read due to unbounded DT value
+irqchip/stm32-exti: Fix irq_mask/irq_unmask for direct events
 
-The value hwirq is received from DT. If it exceeds the maximum
-valid value it causes the code to address unexisting irq chips
-reading outside the array boundary.
+The driver has to mask/unmask the corresponding flag in the
+Interrupt Mask Register (IMR).
+This is already done for configurable event, while direct events
+only forward the mask/unmask request to the parent.
 
-Check the value of hwirq before using it.
+Use the existing stm32_exti_h_mask()/stm32_exti_h_unmask() for
+direct events too.
 
+Signed-off-by: Loic Pallardy <loic.pallardy@foss.st.com>
 Signed-off-by: Antonio Borneo <antonio.borneo@foss.st.com>
 Signed-off-by: Marc Zyngier <maz@kernel.org>
-Link: https://lore.kernel.org/r/20220606162757.415354-4-antonio.borneo@foss.st.com
+Link: https://lore.kernel.org/r/20220606162757.415354-3-antonio.borneo@foss.st.com
 ---
- drivers/irqchip/irq-stm32-exti.c | 3 +++
- 1 file changed, 3 insertions(+)
+ drivers/irqchip/irq-stm32-exti.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
 diff --git a/drivers/irqchip/irq-stm32-exti.c b/drivers/irqchip/irq-stm32-exti.c
-index 1145f06..e2722e4 100644
+index 10c9c74..1145f06 100644
 --- a/drivers/irqchip/irq-stm32-exti.c
 +++ b/drivers/irqchip/irq-stm32-exti.c
-@@ -713,6 +713,9 @@ static int stm32_exti_h_domain_alloc(struct irq_domain *dm,
- 	int bank;
- 
- 	hwirq = fwspec->param[0];
-+	if (hwirq >= host_data->drv_data->bank_nr * IRQS_PER_BANK)
-+		return -EINVAL;
-+
- 	bank  = hwirq / IRQS_PER_BANK;
- 	chip_data = &host_data->chips_data[bank];
- 
+@@ -691,8 +691,8 @@ static struct irq_chip stm32_exti_h_chip_direct = {
+ 	.name			= "stm32-exti-h-direct",
+ 	.irq_eoi		= irq_chip_eoi_parent,
+ 	.irq_ack		= irq_chip_ack_parent,
+-	.irq_mask		= irq_chip_mask_parent,
+-	.irq_unmask		= irq_chip_unmask_parent,
++	.irq_mask		= stm32_exti_h_mask,
++	.irq_unmask		= stm32_exti_h_unmask,
+ 	.irq_retrigger		= irq_chip_retrigger_hierarchy,
+ 	.irq_set_type		= irq_chip_set_type_parent,
+ 	.irq_set_wake		= stm32_exti_h_set_wake,

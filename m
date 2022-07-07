@@ -2,41 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B968D569980
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 06:51:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 517C1569986
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 06:52:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234986AbiGGEvv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Jul 2022 00:51:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60128 "EHLO
+        id S235039AbiGGEv4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Jul 2022 00:51:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60168 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234910AbiGGEvs (ORCPT
+        with ESMTP id S234995AbiGGEvx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Jul 2022 00:51:48 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 237581F2
-        for <linux-kernel@vger.kernel.org>; Wed,  6 Jul 2022 21:51:47 -0700 (PDT)
+        Thu, 7 Jul 2022 00:51:53 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A5BF81F2
+        for <linux-kernel@vger.kernel.org>; Wed,  6 Jul 2022 21:51:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1657169506;
+        s=mimecast20190719; t=1657169511;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=87bVrTbuZnkI9JON9lK1BDOmGkuN19p3yyqcX4byQZM=;
-        b=TZ3YlRVhmvueJLTZjQx4jXiHw4Fj2NCSpMf/Fo7y6E3Euo4J+oxLqIhRrRwaP88RhiB7oZ
-        WTY8pLkwLAkKOr9oUcxTkII4lr0ituMO2Wghb8mzPqy87FPqf8HkUjOrBH7cn7J/2WmHcx
-        O5u17rzfmwvCGDa7HtQnvJpz0CVKu6c=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=UQF+7Yf5/3TSdzO16pYmfQfFVL4rnmU2GihY3Suv1gQ=;
+        b=XAsNhBCRcQQ4L9tSUtZdP9hvNXTGMCiCK0RIaXaVz0P4RKnH23quIeijR8wCeNRvrjTqYv
+        F1osWAxilKWRt4Kh5O4S6oj0cmWczKlRJDxyOIsKH50/72n7VIwmGP+ETVj0QldzQMPdaR
+        U5U+sHRzlKhuCXPdL6+qejnvNBGWXXg=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-577-oZ2oLL6SNuSPtwqvr2Bujw-1; Thu, 07 Jul 2022 00:51:42 -0400
-X-MC-Unique: oZ2oLL6SNuSPtwqvr2Bujw-1
+ us-mta-646-8xFHNGfJN_2L8z37FQ7S0Q-1; Thu, 07 Jul 2022 00:51:48 -0400
+X-MC-Unique: 8xFHNGfJN_2L8z37FQ7S0Q-1
 Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id D9BB1101A586;
-        Thu,  7 Jul 2022 04:51:41 +0000 (UTC)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 89AD83C0E20F;
+        Thu,  7 Jul 2022 04:51:47 +0000 (UTC)
 Received: from lxbceph1.gsslab.pek2.redhat.com (unknown [10.72.47.117])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id B3DB718EC9;
-        Thu,  7 Jul 2022 04:51:36 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 86CA418EC9;
+        Thu,  7 Jul 2022 04:51:42 +0000 (UTC)
 From:   xiubli@redhat.com
 To:     dhowells@redhat.com, idryomov@gmail.com, jlayton@kernel.org
 Cc:     marc.dionne@auristor.com, willy@infradead.org,
@@ -45,14 +46,16 @@ Cc:     marc.dionne@auristor.com, willy@infradead.org,
         linux-kernel@vger.kernel.org, ceph-devel@vger.kernel.org,
         linux-cachefs@redhat.com, vshankar@redhat.com,
         Xiubo Li <xiubli@redhat.com>
-Subject: [PATCH v3 0/2] netfs: fix the crash when unlocking the folio
-Date:   Thu,  7 Jul 2022 12:51:10 +0800
-Message-Id: <20220707045112.10177-1-xiubli@redhat.com>
+Subject: [PATCH v3 1/2] netfs: do not unlock and put the folio twice
+Date:   Thu,  7 Jul 2022 12:51:11 +0800
+Message-Id: <20220707045112.10177-2-xiubli@redhat.com>
+In-Reply-To: <20220707045112.10177-1-xiubli@redhat.com>
+References: <20220707045112.10177-1-xiubli@redhat.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Scanned-By: MIMEDefang 2.79 on 10.11.54.5
-X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -63,71 +66,153 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Xiubo Li <xiubli@redhat.com>
 
-V3:
-- s/struct folio *folio/struct folio **folio/
+check_write_begin() will unlock and put the folio when return
+non-zero. So we should avoid unlocking and putting it twice in
+netfs layer.
 
-V2:
-- Add error_unlocked lable and rename error lable to error_locked.
+At the same time pass a **folio to check_write_begin(), in which
+the folio should be cleared after being put.
 
-
-kernel: page:00000000c9746ff1 refcount:2 mapcount:0 mapping:00000000dc2785bb index:0x1 pfn:0x141afc
-kernel: memcg:ffff88810f766000
-kernel: aops:ceph_aops [ceph] ino:100000005e7 dentry name:"postgresql-Fri.log" 
-kernel: flags: 0x5ffc000000201c(uptodate|dirty|lru|private|node=0|zone=2|lastcpupid=0x7ff)
-kernel: raw: 005ffc000000201c ffffea000a9eeb48 ffffea00060ade48 ffff888193ed8228
-kernel: raw: 0000000000000001 ffff88810cc96500 00000002ffffffff ffff88810f766000
-kernel: page dumped because: VM_BUG_ON_FOLIO(!folio_test_locked(folio))
-kernel: ------------[ cut here ]------------
-kernel: kernel BUG at mm/filemap.c:1559!
-kernel: invalid opcode: 0000 [#1] PREEMPT SMP PTI
-kernel: CPU: 4 PID: 131697 Comm: postmaster Tainted: G S                5.19.0-rc2-ceph-g822a4c74e05d #1
-kernel: Hardware name: Supermicro SYS-5018R-WR/X10SRW-F, BIOS 2.0 12/17/2015
-kernel: RIP: 0010:folio_unlock+0x26/0x30
-kernel: Code: 00 0f 1f 00 0f 1f 44 00 00 48 8b 07 a8 01 74 0e f0 80 27 fe 78 01 c3 31 f6 e9 d6 fe ff ff 48 c7 c6 c0 81 37 82 e8 aa 64 04 00 <0f> 0b 0f 1f 84 00 00 00 00 00 0f 1f 44 00 00 48 8b 87 b8 01 00 00
-kernel: RSP: 0018:ffffc90004377bc8 EFLAGS: 00010246
-kernel: RAX: 000000000000003f RBX: ffff888193ed8228 RCX: 0000000000000001
-kernel: RDX: 0000000000000000 RSI: ffffffff823a3569 RDI: 00000000ffffffff
-kernel: RBP: ffffffff828a0058 R08: 0000000000000001 R09: 0000000000000001
-kernel: R10: 000000007c6b0fd2 R11: 0000000000000034 R12: 0000000000000001
-kernel: R13: 00000000fffffe00 R14: ffffea000506bf00 R15: ffff888193ed8000
-kernel: FS:  00007f4993626340(0000) GS:ffff88885fd00000(0000) knlGS:0000000000000000
-kernel: CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-kernel: CR2: 0000555789ee8000 CR3: 000000017a52a006 CR4: 00000000001706e0
-kernel: Call Trace:
-kernel: <TASK>
-kernel: netfs_write_begin+0x130/0x950 [netfs]
-kernel: ceph_write_begin+0x46/0xd0 [ceph]
-kernel: generic_perform_write+0xef/0x200
-kernel: ? file_update_time+0xd4/0x110
-kernel: ceph_write_iter+0xb01/0xcd0 [ceph]
-kernel: ? lock_is_held_type+0xe3/0x140
-kernel: ? new_sync_write+0x106/0x180
-kernel: new_sync_write+0x106/0x180
-kernel: vfs_write+0x29a/0x3a0
-kernel: ksys_write+0x5c/0xd0
-kernel: do_syscall_64+0x34/0x80
-kernel: entry_SYSCALL_64_after_hwframe+0x46/0xb0
-kernel: RIP: 0033:0x7f49903205c8
-kernel: Code: 89 02 48 c7 c0 ff ff ff ff eb b3 0f 1f 80 00 00 00 00 f3 0f 1e fa 48 8d 05 d5 3f 2a 00 8b 00 85 c0 75 17 b8 01 00 00 00 0f 05 <48> 3d 00 f0 ff ff 77 58 c3 0f 1f 80 00 00 00 00 41 54 49 89 d4 55
-kernel: RSP: 002b:00007fff104bd178 EFLAGS: 00000246 ORIG_RAX: 0000000000000001
-kernel: RAX: ffffffffffffffda RBX: 0000000000000048 RCX: 00007f49903205c8
-kernel: RDX: 0000000000000048 RSI: 000055944d3c1ea0 RDI: 000000000000000b
-kernel: RBP: 000055944d3c1ea0 R08: 000055944d3963d0 R09: 00007fff1055b080
-kernel: R10: 0000000000000000 R11: 0000000000000246 R12: 000055944d3962f0
-kernel: R13: 0000000000000048 R14: 00007f49905bb880 R15: 0000000000000048
-kernel: </TASK>
-
-
-Xiubo Li (2):
-  netfs: do not unlock and put the folio twice
-  afs: unlock the folio when vnode is marked deleted
-
- fs/afs/file.c            | 10 ++++++++--
+URL: https://tracker.ceph.com/issues/56423
+Signed-off-by: Xiubo Li <xiubli@redhat.com>
+---
+ fs/afs/file.c            |  2 +-
  fs/ceph/addr.c           | 11 ++++++-----
  fs/netfs/buffered_read.c | 18 ++++++++++--------
  include/linux/netfs.h    |  2 +-
- 4 files changed, 25 insertions(+), 16 deletions(-)
+ 4 files changed, 18 insertions(+), 15 deletions(-)
 
+diff --git a/fs/afs/file.c b/fs/afs/file.c
+index 42118a4f3383..afacce797fb9 100644
+--- a/fs/afs/file.c
++++ b/fs/afs/file.c
+@@ -375,7 +375,7 @@ static int afs_begin_cache_operation(struct netfs_io_request *rreq)
+ }
+ 
+ static int afs_check_write_begin(struct file *file, loff_t pos, unsigned len,
+-				 struct folio *folio, void **_fsdata)
++				 struct folio **folio, void **_fsdata)
+ {
+ 	struct afs_vnode *vnode = AFS_FS_I(file_inode(file));
+ 
+diff --git a/fs/ceph/addr.c b/fs/ceph/addr.c
+index 8095fc47230e..cf909b08907f 100644
+--- a/fs/ceph/addr.c
++++ b/fs/ceph/addr.c
+@@ -63,7 +63,7 @@
+ 	 (CONGESTION_ON_THRESH(congestion_kb) >> 2))
+ 
+ static int ceph_netfs_check_write_begin(struct file *file, loff_t pos, unsigned int len,
+-					struct folio *folio, void **_fsdata);
++					struct folio **folio, void **_fsdata);
+ 
+ static inline struct ceph_snap_context *page_snap_context(struct page *page)
+ {
+@@ -1280,18 +1280,19 @@ ceph_find_incompatible(struct page *page)
+ }
+ 
+ static int ceph_netfs_check_write_begin(struct file *file, loff_t pos, unsigned int len,
+-					struct folio *folio, void **_fsdata)
++					struct folio **folio, void **_fsdata)
+ {
+ 	struct inode *inode = file_inode(file);
+ 	struct ceph_inode_info *ci = ceph_inode(inode);
+ 	struct ceph_snap_context *snapc;
+ 
+-	snapc = ceph_find_incompatible(folio_page(folio, 0));
++	snapc = ceph_find_incompatible(folio_page(*folio, 0));
+ 	if (snapc) {
+ 		int r;
+ 
+-		folio_unlock(folio);
+-		folio_put(folio);
++		folio_unlock(*folio);
++		folio_put(*folio);
++		*folio = NULL;
+ 		if (IS_ERR(snapc))
+ 			return PTR_ERR(snapc);
+ 
+diff --git a/fs/netfs/buffered_read.c b/fs/netfs/buffered_read.c
+index 42f892c5712e..308c2ad4da8e 100644
+--- a/fs/netfs/buffered_read.c
++++ b/fs/netfs/buffered_read.c
+@@ -319,8 +319,8 @@ static bool netfs_skip_folio_read(struct folio *folio, loff_t pos, size_t len,
+  * conflicting writes once the folio is grabbed and locked.  It is passed a
+  * pointer to the fsdata cookie that gets returned to the VM to be passed to
+  * write_end.  It is permitted to sleep.  It should return 0 if the request
+- * should go ahead; unlock the folio and return -EAGAIN to cause the folio to
+- * be regot; or return an error.
++ * should go ahead; otherwise unlock, put and clear the folio and then return
++ * an error, -EAGAIN will cause the folio to be regot.
+  *
+  * The calling netfs must initialise a netfs context contiguous to the vfs
+  * inode before calling this.
+@@ -348,13 +348,14 @@ int netfs_write_begin(struct netfs_inode *ctx,
+ 
+ 	if (ctx->ops->check_write_begin) {
+ 		/* Allow the netfs (eg. ceph) to flush conflicts. */
+-		ret = ctx->ops->check_write_begin(file, pos, len, folio, _fsdata);
++		ret = ctx->ops->check_write_begin(file, pos, len, &folio, _fsdata);
+ 		if (ret < 0) {
+ 			trace_netfs_failure(NULL, NULL, ret, netfs_fail_check_write_begin);
+ 			if (ret == -EAGAIN)
+ 				goto retry;
+-			goto error;
++			goto error_unlocked;
+ 		}
++		BUG_ON(!folio);
+ 	}
+ 
+ 	if (folio_test_uptodate(folio))
+@@ -375,7 +376,7 @@ int netfs_write_begin(struct netfs_inode *ctx,
+ 				   NETFS_READ_FOR_WRITE);
+ 	if (IS_ERR(rreq)) {
+ 		ret = PTR_ERR(rreq);
+-		goto error;
++		goto error_locked;
+ 	}
+ 	rreq->no_unlock_folio	= folio_index(folio);
+ 	__set_bit(NETFS_RREQ_NO_UNLOCK_FOLIO, &rreq->flags);
+@@ -402,12 +403,12 @@ int netfs_write_begin(struct netfs_inode *ctx,
+ 
+ 	ret = netfs_begin_read(rreq, true);
+ 	if (ret < 0)
+-		goto error;
++		goto error_locked;
+ 
+ have_folio:
+ 	ret = folio_wait_fscache_killable(folio);
+ 	if (ret < 0)
+-		goto error;
++		goto error_locked;
+ have_folio_no_wait:
+ 	*_folio = folio;
+ 	_leave(" = 0");
+@@ -415,9 +416,10 @@ int netfs_write_begin(struct netfs_inode *ctx,
+ 
+ error_put:
+ 	netfs_put_request(rreq, false, netfs_rreq_trace_put_failed);
+-error:
++error_locked:
+ 	folio_unlock(folio);
+ 	folio_put(folio);
++error_unlocked:
+ 	_leave(" = %d", ret);
+ 	return ret;
+ }
+diff --git a/include/linux/netfs.h b/include/linux/netfs.h
+index 1773e5df8e65..88c4eb85c6f7 100644
+--- a/include/linux/netfs.h
++++ b/include/linux/netfs.h
+@@ -214,7 +214,7 @@ struct netfs_request_ops {
+ 	void (*issue_read)(struct netfs_io_subrequest *subreq);
+ 	bool (*is_still_valid)(struct netfs_io_request *rreq);
+ 	int (*check_write_begin)(struct file *file, loff_t pos, unsigned len,
+-				 struct folio *folio, void **_fsdata);
++				 struct folio **folio, void **_fsdata);
+ 	void (*done)(struct netfs_io_request *rreq);
+ };
+ 
 -- 
 2.36.0.rc1
 

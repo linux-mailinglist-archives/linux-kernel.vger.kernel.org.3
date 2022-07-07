@@ -2,256 +2,329 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 91CA956A706
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 17:33:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DE7C456A70B
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 17:35:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235806AbiGGPdS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Jul 2022 11:33:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55122 "EHLO
+        id S229926AbiGGPfo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Jul 2022 11:35:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56844 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235470AbiGGPdQ (ORCPT
+        with ESMTP id S234797AbiGGPfm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Jul 2022 11:33:16 -0400
-Received: from mail-qt1-x830.google.com (mail-qt1-x830.google.com [IPv6:2607:f8b0:4864:20::830])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A05F31389
-        for <linux-kernel@vger.kernel.org>; Thu,  7 Jul 2022 08:33:14 -0700 (PDT)
-Received: by mail-qt1-x830.google.com with SMTP id c20so960497qtw.8
-        for <linux-kernel@vger.kernel.org>; Thu, 07 Jul 2022 08:33:14 -0700 (PDT)
+        Thu, 7 Jul 2022 11:35:42 -0400
+Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5B1D26575;
+        Thu,  7 Jul 2022 08:35:40 -0700 (PDT)
+Received: from pps.filterd (m0246631.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 267EguoX032331;
+        Thu, 7 Jul 2022 15:34:09 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=message-id : date :
+ subject : to : cc : references : from : in-reply-to : content-type :
+ content-transfer-encoding : mime-version; s=corp-2021-07-09;
+ bh=c4FaWbc+sybBEmWkdrIzJQDpBgrmFveWhHTuLfwJ5UI=;
+ b=fWREjY1ufSdaYtB4XRVMKhFtGAAZnHc57MFT9889mMcEXjAid3nD43/7EiZ+dt52b2G1
+ iUI65Spgyy7knYtHUvoP0QW8LyVyN7NvP1nkSSq/vW9hY6KSKKuePyzUa3GCBly4d9Lb
+ hRClDlHF1VWfnsE20Mnbfyhc9sD6cTixSfgu0I1hkI9t0fX//DeccEG82t3ZXy7xnqfl
+ /rCLYuuZ+h4XjXZdNWT36zw36AbrQkS7b66aWcuQ7hHxXCkPSFqZNK8bQOjznU3iQ+V9
+ SeMuFlTz86UQAPxBE4jxzN++6o0XhRdCIcwHdpxe8HF75xWQ6xMFtVHIFcFqojXk2HP1 iw== 
+Received: from iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta03.appoci.oracle.com [130.35.103.27])
+        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3h4ubydkgt-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 07 Jul 2022 15:34:09 +0000
+Received: from pps.filterd (iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
+        by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (8.16.1.2/8.16.1.2) with SMTP id 267FFWP8001718;
+        Thu, 7 Jul 2022 15:34:03 GMT
+Received: from nam12-bn8-obe.outbound.protection.outlook.com (mail-bn8nam12lp2176.outbound.protection.outlook.com [104.47.55.176])
+        by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com with ESMTP id 3h4ud91rg9-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 07 Jul 2022 15:34:03 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=asnL3WysXqvd7f1JxNpPaHzx5gIRY0dL6kt6VzM8PXYWW4mRCuXrEitk5ivek+toeITNyMQjwzx+pXcu/yRDh/YdFoHtRsb998gMCIxLpXkF7lwnloPuJwr/GW9JRUpHjmSTV9nXvva4czq5N68WldK8cCBVwfb+nUu1KHr+uLAoAMa62MrK4rXOE6DCi13tC6gvjT7TjmM8mDZCqQ3ZrXOF+dJrJEpOHH0ABlybtkuW30ggcxrtspTMdP4BsSOHb018GlLOf/4ImPAmNDF3wXld2DIrZk23msJ80Isgza3ps1P9y/mZHj/tSEH6roByghU3mz1NjPA+NKDg92t9Mg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=c4FaWbc+sybBEmWkdrIzJQDpBgrmFveWhHTuLfwJ5UI=;
+ b=LohNplDfQe/sA9pvbw6BgoMkm7PwR4KgiFg7LcghnfPBNLJrWeRTKwfLoAljPK9t4syT98NN94oNCYp9q8PR+ufUQJcW9tTbBycGfdR1j40waIXucDPGkKL4YttUyp1JRu+rDneIvpNu2RLWaVpbZK6wY9CaI64qXGaMGp3YsMJ7a7kk7kmyAppZmevDWFxuk0Rc8Zjt/jN3fWjs0u9Xst3qE95N5Mo7ycYr3BpwzPbQU8yUkpPr42yQahT4JdjpkadSsAtGq3TfM1I9kTacItwfICF86Bju0YEzmI27pwdzhlMtzm6iA2zIGziN0SmKB6xoRg8mMviNi0i0baLTtA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=fLPqNOuxkhng0+VfusSfgGkkAqcB1Q6iFCv9UoVontQ=;
-        b=BDKkvsKU3sn42yDWiGzbpEF9p5SV1Dz/09dCOmImNJBbAP2CeP8HMOCqAggGGxMP8W
-         0UbRAdgvZA7Eg2wcj6YNM/h7ICwhoANe2veeMegkwrxmqfl+Ocge6dDwjTMN6H3K6BgI
-         YbFYGc/MP2anQkgQeeH8xvKXHG1ndJqEuuLN2Fo56DIW3SYjA8RcHXTKluBhn3vEm0qW
-         TNJvLy/Bvdlanl4tU4dSr2Q2fcn2rBTmuFlJZ7EI3JpzjYGVliasoq/rxodlhmDx0N5m
-         ZYaPVz/wW3jGhqush/vob0PDp70Uk9f/rXPPoriWMM0TEgl9VynMo2OQNmrqz+2JO+yN
-         OIWQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=fLPqNOuxkhng0+VfusSfgGkkAqcB1Q6iFCv9UoVontQ=;
-        b=H/JpqPifrgZ+kvCxBZ3JBt00oRfNy4VOCgXY5xC5QA0L1atE8tZ60xU7QSau+gh4vU
-         682/tGUcaEPz8xzSafWGHwnIubqZeWn7MNg8VLyYdkEqbAfkow3+JJimYJ0OlCR1iKbP
-         150i2cybik7AG9BI2ExIITG3BNZphIwQ3aL5ZLGz/ks8Kt+QKd9iJxADXwskON1co/Pm
-         nqDjfvhvxskAmnPdAxNXqGY5rZHSX3eR8jhSfU0ebRQNDZMPqoXRGuvOAE5NuFd3yJWg
-         Zta0ZoT/PduOE/jkOwRVFF3VTzp1UJnIMm4+weE4Jz1UHtePvzSfO0grWbAbiL6e0lhO
-         1j7w==
-X-Gm-Message-State: AJIora/VbfUHynvMacXPk21o8lqKqerLXSYzsIDtsag3Z36FiLU/RQ+0
-        cmI8DICW0gpqnX7hoBnhBDvO2l7JWGRxoCPPQuQaAw==
-X-Google-Smtp-Source: AGRyM1v2sny/0726HNQOlkXr40uwbBva0ycqSItDJC34DLwjRoq2GI9FOyav66XsWjyidLsuRaZEf1w+PSHx+h2/ceU=
-X-Received: by 2002:ac8:5c96:0:b0:31a:c19a:7da1 with SMTP id
- r22-20020ac85c96000000b0031ac19a7da1mr38432079qta.62.1657207993411; Thu, 07
- Jul 2022 08:33:13 -0700 (PDT)
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=c4FaWbc+sybBEmWkdrIzJQDpBgrmFveWhHTuLfwJ5UI=;
+ b=FJ3LBXMXWgNn1o6U7De5p/tuxSYUS1gLoNQjWF3yI2DjWa7kyUeXw1kXmAoJWHAWb809OnagHVsSw167WLzdCVLskp/+mK1ftLDsA/YqvPGG71rOJxbW5nKwbwKWL0cIFyUOdJ1g+8giqF2ES/1et9RnfMNuLNfjQoX4e+0VzxI=
+Received: from BN8PR10MB3220.namprd10.prod.outlook.com (2603:10b6:408:c8::18)
+ by PH0PR10MB4679.namprd10.prod.outlook.com (2603:10b6:510:3c::15) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5395.15; Thu, 7 Jul
+ 2022 15:34:01 +0000
+Received: from BN8PR10MB3220.namprd10.prod.outlook.com
+ ([fe80::71ec:3c08:c336:cc55]) by BN8PR10MB3220.namprd10.prod.outlook.com
+ ([fe80::71ec:3c08:c336:cc55%5]) with mapi id 15.20.5395.022; Thu, 7 Jul 2022
+ 15:34:01 +0000
+Message-ID: <f210bf7b-d353-91bf-d34f-51387fc7f00c@oracle.com>
+Date:   Thu, 7 Jul 2022 09:33:55 -0600
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH v2 8/9] mm/mshare: Add basic page table sharing support
+Content-Language: en-US
+To:     xhao@linux.alibaba.com, akpm@linux-foundation.org,
+        willy@infradead.org
+Cc:     aneesh.kumar@linux.ibm.com, arnd@arndb.de, 21cnbao@gmail.com,
+        corbet@lwn.net, dave.hansen@linux.intel.com, david@redhat.com,
+        ebiederm@xmission.com, hagen@jauu.net, jack@suse.cz,
+        keescook@chromium.org, kirill@shutemov.name, kucharsk@gmail.com,
+        linkinjeon@kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        longpeng2@huawei.com, luto@kernel.org, markhemm@googlemail.com,
+        pcc@google.com, rppt@kernel.org, sieberf@amazon.com,
+        sjpark@amazon.de, surenb@google.com, tst@schoebel-theuer.de,
+        yzaikin@google.com
+References: <cover.1656531090.git.khalid.aziz@oracle.com>
+ <7b768f38ad8a8be3aa35ac1e6316e556b121e866.1656531090.git.khalid.aziz@oracle.com>
+ <bc5ac335-a08f-a910-fc59-cdcbd86ea726@linux.alibaba.com>
+From:   Khalid Aziz <khalid.aziz@oracle.com>
+In-Reply-To: <bc5ac335-a08f-a910-fc59-cdcbd86ea726@linux.alibaba.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: DM6PR12CA0032.namprd12.prod.outlook.com
+ (2603:10b6:5:1c0::45) To BN8PR10MB3220.namprd10.prod.outlook.com
+ (2603:10b6:408:c8::18)
 MIME-Version: 1.0
-References: <1657040445-13067-1-git-send-email-quic_vpolimer@quicinc.com>
- <1657040445-13067-2-git-send-email-quic_vpolimer@quicinc.com>
- <5d469759-0619-eece-902d-df8ac6583f22@linaro.org> <BN0PR02MB8173DF17816659868604A82EE4839@BN0PR02MB8173.namprd02.prod.outlook.com>
-In-Reply-To: <BN0PR02MB8173DF17816659868604A82EE4839@BN0PR02MB8173.namprd02.prod.outlook.com>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Date:   Thu, 7 Jul 2022 18:33:02 +0300
-Message-ID: <CAA8EJpoYj_-bY8CSPdE=mBkZbnffgUXX+LzEXKWHQ3yhS4GmvA@mail.gmail.com>
-Subject: Re: [PATCH v4 1/7] drm/msm/disp/dpu1: clear dpu_assign_crtc and get
- crtc from drm_enc instead of dpu_enc
-To:     Vinod Polimera <vpolimer@qti.qualcomm.com>
-Cc:     "Vinod Polimera (QUIC)" <quic_vpolimer@quicinc.com>,
-        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
-        "linux-arm-msm@vger.kernel.org" <linux-arm-msm@vger.kernel.org>,
-        "freedreno@lists.freedesktop.org" <freedreno@lists.freedesktop.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "robdclark@gmail.com" <robdclark@gmail.com>,
-        "dianders@chromium.org" <dianders@chromium.org>,
-        "swboyd@chromium.org" <swboyd@chromium.org>,
-        "Kalyan Thota (QUIC)" <quic_kalyant@quicinc.com>,
-        "Kuogee Hsieh (QUIC)" <quic_khsieh@quicinc.com>,
-        "Vishnuvardhan Prodduturi (QUIC)" <quic_vproddut@quicinc.com>,
-        "bjorn.andersson@linaro.org" <bjorn.andersson@linaro.org>,
-        "Aravind Venkateswaran (QUIC)" <quic_aravindh@quicinc.com>,
-        "Abhinav Kumar (QUIC)" <quic_abhinavk@quicinc.com>,
-        "Sankeerth Billakanti (QUIC)" <quic_sbillaka@quicinc.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 7eea29f1-d7a2-44f9-ddfd-08da602e1dce
+X-MS-TrafficTypeDiagnostic: PH0PR10MB4679:EE_
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 3ZYfZofnBOYDWyNvpPCSt5DkTxVj0lf26fkjYPE3PqPqWvwg1on7PNw2S6gddb8mGomEkZhEOkYUuOi06mYTChezOHeZQhZuU7bTWuyI9eYTdnLIiP5emBtn0/ORT6NYfjojdth7ZqiIKXm6OlqFko8969AMLRaDxnvFc+2qrKWE7fHh76dj7BxM5YoaLHJqc/ohFulMUoaDo3aNhKRZ36gcc40mBy7rMlDmAYnhiVUX9fGi2I4jc9QKgcYRDEOqW8YvJdK8PX2XPG0pTZEIFRXftDJWFxkW1uDk3aKHfDFKj8QDf3BZXbyDxJHjKPVwZj8PcvWoPCIjCkDqiEtTV8flBZpXrmtF7a34w3K050K9aJT8YFZGPI3eRCqjaSqGLnoUEh7DL3ND2Z93563NahqF5KdeSYne83vGZNrAHJfivDJEr4nIT/MjimQdbkYs+IM/3ZEQxACcPhseP95wrCaSdzihFBVC57hg5YQf0C6OZXDkUMxTWow1ikhu/PJPZuWF37zRPSAXE0f09320WRFYGCS2UAYB+CrB1qDMAnehSlGAqKT9G7LmoKB4SAdNmG8bfoGNcMUOYLG6pg+vDX6W4J9HmPnQnb7CZ7W2WXamfZ+5nTyOnZoSLmQdV9Xb3FCVuhif8b/r5uPptfD0Bg3DmlLaCdAP1s5uqa52GhfM/CF4xlRb5gupoSgZmbXAxxln88tWecDMNjOuTJcIfhprImtYHlPgT5Mc/CNELOwW6M5XWET9d9cXccKk8ScHLi8xu0c5cNnBijkMg/s4lEaQfb/22uN2Dxz2bTRHucpt+Eh5mCHp6TfWws6nGH0jL4WQOVqqiQn7UgPiJsPsZw==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN8PR10MB3220.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(39860400002)(396003)(366004)(346002)(376002)(136003)(316002)(44832011)(31696002)(8936002)(5660300002)(86362001)(7416002)(83380400001)(66476007)(8676002)(26005)(66556008)(6512007)(4326008)(66946007)(2616005)(478600001)(6486002)(38100700002)(53546011)(6666004)(2906002)(186003)(6506007)(36756003)(31686004)(41300700001)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?UjVScnp2eDNSWFFPOGozT2QxdmNUWW83TXN6ZkFJd2hrMXNjdVhiV21WbWtQ?=
+ =?utf-8?B?QzVsdHNoQzBRSzcyMjdQYk5IdE8rMjJ3QzJJOHM5MGYySVJPUENEZzZOYTdW?=
+ =?utf-8?B?STh5b2YzMTVpQUVaT1psR2N6RUMzc0VNYjhLQWdBSEdSb2ptK2NaMDJBWS9t?=
+ =?utf-8?B?c2tZN2V3NzZhS002aW5jK2VsdG5JRUdEME1WVFNiaW1GSTVpREdyU0Iwb1FW?=
+ =?utf-8?B?eXg0UFRjRVFIem5Sb0h4b0NYaDhUb1p4Q2RTTmJFSVdKa0dMSDF2bzdYUVl6?=
+ =?utf-8?B?ZFVYMDN0ellvN1l5SEo5UGZ4VklxQ3BnTjdiM0ZBVlE5c1VNeWxBMXFoL0Vm?=
+ =?utf-8?B?QWMwZGxxODhLOFQxYjZQVW1kWU4ybVl4L2RBN1JJSEhXYnY4NXVzK3BnSVV4?=
+ =?utf-8?B?NWNIRjlOOEphSHZKQ2R0YjFTZFZmeUdPVnJEQnJOY0szVGdVQXZ4R1N2Ynpj?=
+ =?utf-8?B?cU43Nml5TXI3SlhaSWpQaHFtUmdSclhjWXpUQUFXNnB3VDQxNWVXd3lvVWps?=
+ =?utf-8?B?TWNac0ZDb1U2bnlQMWJXbURCcy9EcDQ2K0FPb3dLai9OUVFvTlRyTW1JUTR3?=
+ =?utf-8?B?NDNNR0pQZGIvQmZodEIyMmhOd0lwL3pjMnZwYTFYOTFGN1dEK1ZNTXVWd0ow?=
+ =?utf-8?B?SlI3S0hBUVVMYk9NNlM1N3pFK1lxWEgyc0dUNzY4dWF2bGQ1bk1MYUZyRnZO?=
+ =?utf-8?B?TWdGSWh5TTd2UjVPc293aUgwVHY3Z1BOV1B6Y2xZUVZxcWZ2bEJsNlIxc20v?=
+ =?utf-8?B?UDBVa0kyTGpuSElPeGFFVnZFemFmVU5JdjdBSjlwRHRvN3Q4YmEyTERMMjdy?=
+ =?utf-8?B?VHlOZ0JSOVJXbGZ3TUFIWFhQRERFSVdXZlpJZkh6aW5zd2dQSmtzdUFCbys5?=
+ =?utf-8?B?SW1NUk5lWDZYaUtCRmdYd21iNlVEOGJ1UGd2ek91cTNIaXQzSDQwdG1NOTBo?=
+ =?utf-8?B?MEp6c2tMWm9jeFZlMlY0OHRCVmRoUlI4b0hiQmdBdkxLTDcwdFl3ZVZJd0gy?=
+ =?utf-8?B?a3JSKy9FSzRNRDIxMGlXaXRXOEdnNlljZVdpUUpWWmkzTnRpQkt2QXNZbnVZ?=
+ =?utf-8?B?SGxvdmdERkRMTGtpRWhMbTdDZGlDQVNiZlNjc3ZQNHhoSUFjZG8vcUFHQUhT?=
+ =?utf-8?B?ZGpvemoxd2JaUGJqL1lrcVNLeldoSERCZ1FvMTAwdkt2L09rZ3VudXozUnhR?=
+ =?utf-8?B?YXNGR3BNZ2RqSUdHcjZ5NXpjS1VtNXdjdS9kOHBxaEZ2czJuQlVpMHNSSlJK?=
+ =?utf-8?B?SWdDUDdUcjEzcXJhRWNjVjN2UlFrVFFjV3VYV2o3Qndwai9wYnVPbkVYTGUx?=
+ =?utf-8?B?dEk2UUVxL0lwR0docVNITGkwZzFwbkNZTkwycHdwY3FJR2VJdTZxTS94bVlZ?=
+ =?utf-8?B?cVpOOWU5V3NSRUNKaVc3eHVSdUI1WTNtY0xrT1l2b214cyt4Nk00dXJoUjky?=
+ =?utf-8?B?VnpORFZQVFdGNmNJTXAxcERjV3ovVlFJa2VjbFN3UGJDYWFneTJlWEZ2TTVm?=
+ =?utf-8?B?VXlkVjFwTTNBSHFlL3RSVGFEUzhzTk1oTVFoa0RScXZuSTlycXN4NU03clNY?=
+ =?utf-8?B?b0lzVUdyOXAxTXNpd3RpREJmb2FYMWxEd3pXenNGb0l1NWQrbWkzLy9EK1VH?=
+ =?utf-8?B?eTlxaENXdndiSVYrSDVSUUZRRitMWUl1ZzVmenpnZEFZTnpvUThrSUZmYlBh?=
+ =?utf-8?B?Qk1PQUQrSWxTVzArb1Z1a0F6Ly9QWnpaek4yaUpPMjliaEN5b1dPbUhxWUkw?=
+ =?utf-8?B?YlhUNWpnOExZUWFLRytwcUJRdWM5ZDJaY282UHd0aVlXYVFad0huQkF4NTNr?=
+ =?utf-8?B?VzNsN0ZaeVNpbVo5cnlaOExqdEdGWFEyWitrTngwOW5JYjYwcEZsRzhpcWkr?=
+ =?utf-8?B?ZnNyck15dVFVUWMrWTVicW40TWxVOUFReUc3eUdBL01XSHRVbVlJUTNDL0Qw?=
+ =?utf-8?B?V090Y1czVjhOaG4xRHJDK0NuNVpCclBnRmZFYXJidXd2Vk1WREFCTHNyL3VX?=
+ =?utf-8?B?Q1ZtYlVteFNhempaT1pGMGF3aktYemNic3dsMkhreUIyVmRaYzZUeUFqMkJV?=
+ =?utf-8?B?VEdVZXkraEVrdWl2NDJDVEw4Um10MkZ4V0hlSlU1b0pHT3l3WDk0NThUOExT?=
+ =?utf-8?Q?VaFGX+K9DOkuNpv/ZYNk9gvnq?=
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 7eea29f1-d7a2-44f9-ddfd-08da602e1dce
+X-MS-Exchange-CrossTenant-AuthSource: BN8PR10MB3220.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Jul 2022 15:34:01.4486
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: Ha7yGVj7sDMb9l6bOwMQs2qXKM3DyUzSHr13j41G6dOjlXGbY2J6sjtdEwgJ6An84maYsXj/hQ5gGoX56EDs3A==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR10MB4679
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.517,18.0.883
+ definitions=2022-07-07_12:2022-06-28,2022-07-07 signatures=0
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 phishscore=0 bulkscore=0 malwarescore=0
+ mlxscore=0 spamscore=0 suspectscore=0 adultscore=0 mlxlogscore=999
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2206140000
+ definitions=main-2207070061
+X-Proofpoint-ORIG-GUID: 38MMWQ8Th-CMWE6lkDs70Wtlt18mKfai
+X-Proofpoint-GUID: 38MMWQ8Th-CMWE6lkDs70Wtlt18mKfai
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 7 Jul 2022 at 17:39, Vinod Polimera <vpolimer@qti.qualcomm.com> wrote:
->
-> > NAK. Quoting the documentation:
-> >
-> > only really meaningful for non-atomic drivers. Atomic drivers should
-> > instead check &drm_connector_state.crtc.
-> >
-> > Please adjust according to the documentation.
->    drm_enc gets the crtc info already from new connector state as part of drm_atomic_helper_update_legacy_modeset_state.
->    So drm_enc->crtc will be valid as we access it as part of modeset enable/disable.
->                          ```connector->encoder->crtc = new_conn_state->crtc;```.
+On 7/7/22 03:13, Xin Hao wrote:
+> 
+> On 6/30/22 6:53 AM, Khalid Aziz wrote:
+>> Add support for creating a new set of shared page tables in a new
+>> mm_struct upon mmap of an mshare region. Add page fault handling in
+>> this now mshare'd region. Modify exit_mmap path to make sure page
+>> tables in the mshare'd regions are kept intact when a process using
+>> mshare'd region exits. Clean up mshare mm_struct when the mshare
+>> region is deleted. This support is for the process creating mshare
+>> region only. Subsequent patches will add support for other processes
+>> to be able to map the mshare region.
+>>
+>> Signed-off-by: Khalid Aziz <khalid.aziz@oracle.com>
+>> Signed-off-by: Matthew Wilcox (Oracle) <willy@infradead.org>
+>> ---
+>>   include/linux/mm.h |   2 +
+>>   mm/internal.h      |   2 +
+>>   mm/memory.c        | 101 +++++++++++++++++++++++++++++-
+>>   mm/mshare.c        | 149 ++++++++++++++++++++++++++++++++++++---------
+>>   4 files changed, 222 insertions(+), 32 deletions(-)
+>>
+>> diff --git a/include/linux/mm.h b/include/linux/mm.h
+>> index 0ddc3057f73b..63887f06b37b 100644
+>> --- a/include/linux/mm.h
+>> +++ b/include/linux/mm.h
+>> @@ -1859,6 +1859,8 @@ void free_pgd_range(struct mmu_gather *tlb, unsigned long addr,
+>>           unsigned long end, unsigned long floor, unsigned long ceiling);
+>>   int
+>>   copy_page_range(struct vm_area_struct *dst_vma, struct vm_area_struct *src_vma);
+>> +int
+>> +mshare_copy_ptes(struct vm_area_struct *dst_vma, struct vm_area_struct *src_vma);
+>>   int follow_pte(struct mm_struct *mm, unsigned long address,
+>>              pte_t **ptepp, spinlock_t **ptlp);
+>>   int follow_pfn(struct vm_area_struct *vma, unsigned long address,
+>> diff --git a/mm/internal.h b/mm/internal.h
+>> index 3f2790aea918..6ae7063ac10d 100644
+>> --- a/mm/internal.h
+>> +++ b/mm/internal.h
+>> @@ -861,6 +861,8 @@ struct folio *try_grab_folio(struct page *page, int refs, unsigned int flags);
+>>   DECLARE_PER_CPU(struct per_cpu_nodestat, boot_nodestats);
+>> +extern vm_fault_t find_shared_vma(struct vm_area_struct **vma,
+>> +                    unsigned long *addrp);
+>>   static inline bool vma_is_shared(const struct vm_area_struct *vma)
+>>   {
+>>       return vma->vm_flags & VM_SHARED_PT;
+>> diff --git a/mm/memory.c b/mm/memory.c
+>> index 7a089145cad4..2a8d5b8928f5 100644
+>> --- a/mm/memory.c
+>> +++ b/mm/memory.c
+>> @@ -416,15 +416,20 @@ void free_pgtables(struct mmu_gather *tlb, struct vm_area_struct *vma,
+>>           unlink_anon_vmas(vma);
+>>           unlink_file_vma(vma);
+>> +        /*
+>> +         * There is no page table to be freed for vmas that
+>> +         * are mapped in mshare regions
+>> +         */
+>>           if (is_vm_hugetlb_page(vma)) {
+>>               hugetlb_free_pgd_range(tlb, addr, vma->vm_end,
+>>                   floor, next ? next->vm_start : ceiling);
+>> -        } else {
+>> +        } else if (!vma_is_shared(vma)) {
+>>               /*
+>>                * Optimization: gather nearby vmas into one call down
+>>                */
+>>               while (next && next->vm_start <= vma->vm_end + PMD_SIZE
+>> -                   && !is_vm_hugetlb_page(next)) {
+>> +                   && !is_vm_hugetlb_page(next)
+>> +                   && !vma_is_shared(next)) {
+>>                   vma = next;
+>>                   next = vma->vm_next;
+>>                   unlink_anon_vmas(vma);
+>> @@ -1260,6 +1265,54 @@ vma_needs_copy(struct vm_area_struct *dst_vma, struct vm_area_struct *src_vma)
+>>       return false;
+>>   }
+>> +/*
+>> + * Copy PTEs for mshare'd pages.
+>> + * This code is based upon copy_page_range()
+>> + */
+>> +int
+>> +mshare_copy_ptes(struct vm_area_struct *dst_vma, struct vm_area_struct *src_vma)
+>> +{
+>> +    pgd_t *src_pgd, *dst_pgd;
+>> +    unsigned long next;
+>> +    unsigned long addr = src_vma->vm_start;
+>> +    unsigned long end = src_vma->vm_end;
+>> +    struct mm_struct *dst_mm = dst_vma->vm_mm;
+>> +    struct mm_struct *src_mm = src_vma->vm_mm;
+>> +    struct mmu_notifier_range range;
+>> +    int ret = 0;
+>> +
+>> +    mmu_notifier_range_init(&range, MMU_NOTIFY_PROTECTION_PAGE,
+>> +                0, src_vma, src_mm, addr, end);
+>> +    mmu_notifier_invalidate_range_start(&range);
+>> +    /*
+>> +     * Disabling preemption is not needed for the write side, as
+>> +     * the read side doesn't spin, but goes to the mmap_lock.
+>> +     *
+>> +     * Use the raw variant of the seqcount_t write API to avoid
+>> +     * lockdep complaining about preemptibility.
+>> +     */
+>> +    mmap_assert_write_locked(src_mm);
+>> +    raw_write_seqcount_begin(&src_mm->write_protect_seq);
+>> +
+>> +    dst_pgd = pgd_offset(dst_mm, addr);
+>> +    src_pgd = pgd_offset(src_mm, addr);
+>> +    do {
+>> +        next = pgd_addr_end(addr, end);
+>> +        if (pgd_none_or_clear_bad(src_pgd))
+>> +            continue;
+>> +        if (unlikely(copy_p4d_range(dst_vma, src_vma, dst_pgd, src_pgd,
+>> +                        addr, next))) {
+>> +            ret = -ENOMEM;
+>> +            break;
+>> +        }
+>> +    } while (dst_pgd++, src_pgd++, addr = next, addr != end);
+>> +
+>> +    raw_write_seqcount_end(&src_mm->write_protect_seq);
+>> +    mmu_notifier_invalidate_range_end(&range);
+>> +
+>> +    return ret;
+>> +}
+>> +
+>>   int
+>>   copy_page_range(struct vm_area_struct *dst_vma, struct vm_area_struct *src_vma)
+>>   {
+>> @@ -1628,6 +1681,13 @@ void unmap_page_range(struct mmu_gather *tlb,
+>>       pgd_t *pgd;
+>>       unsigned long next;
+>> +    /*
+>> +     * No need to unmap vmas that share page table through
+>> +     * mshare region
+>> +     */
+>> +    if (vma_is_shared(vma))
+>> +        return;
+>> +
+>>       BUG_ON(addr >= end);
+>>       tlb_start_vma(tlb, vma);
+>>       pgd = pgd_offset(vma->vm_mm, addr);
+>> @@ -5113,6 +5173,8 @@ vm_fault_t handle_mm_fault(struct vm_area_struct *vma, unsigned long address,
+>>                  unsigned int flags, struct pt_regs *regs)
+>>   {
+>>       vm_fault_t ret;
+>> +    bool shared = false;
+>> +    struct mm_struct *orig_mm;
+>>       __set_current_state(TASK_RUNNING);
+>> @@ -5122,6 +5184,16 @@ vm_fault_t handle_mm_fault(struct vm_area_struct *vma, unsigned long address,
+>>       /* do counter updates before entering really critical section. */
+>>       check_sync_rss_stat(current);
+>> +    orig_mm = vma->vm_mm;
+>> +    if (unlikely(vma_is_shared(vma))) {
+>> +        ret = find_shared_vma(&vma, &address);
+>> +        if (ret)
+>> +            return ret;
+>> +        if (!vma)
+>> +            return VM_FAULT_SIGSEGV;
+>> +        shared = true;
+> if  shared is true,  so it mean the origin vma are replaced, but the code not free the origin vma ?
 
-drm_atomic_helper_update_legacy_modeset_state():
+The original vma is not replaced. Only the pointer for the vma to be used for processing mm fault is updated. Original 
+vma continues to be part of vma chain for the process and should not be freed.
 
- * Since these updates are not synchronized with lockings, only code paths
- * called from &drm_mode_config_helper_funcs.atomic_commit_tail can look at the
- * legacy state filled out by this helper. Defacto this means this helper and
- * the legacy state pointers are only really useful for transitioning an
- * existing driver to the atomic world.
-
-So please change the code to use drm_connector_state.crtc.
-
-Dixi.
-
->
-> Thanks,
-> Vinod P.
->
-> > -----Original Message-----
-> > From: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-> > Sent: Wednesday, July 6, 2022 12:34 AM
-> > To: Vinod Polimera (QUIC) <quic_vpolimer@quicinc.com>; dri-
-> > devel@lists.freedesktop.org; linux-arm-msm@vger.kernel.org;
-> > freedreno@lists.freedesktop.org; devicetree@vger.kernel.org
-> > Cc: linux-kernel@vger.kernel.org; robdclark@gmail.com;
-> > dianders@chromium.org; swboyd@chromium.org; Kalyan Thota (QUIC)
-> > <quic_kalyant@quicinc.com>; Kuogee Hsieh (QUIC)
-> > <quic_khsieh@quicinc.com>; Vishnuvardhan Prodduturi (QUIC)
-> > <quic_vproddut@quicinc.com>; bjorn.andersson@linaro.org; Aravind
-> > Venkateswaran (QUIC) <quic_aravindh@quicinc.com>; Abhinav Kumar
-> > (QUIC) <quic_abhinavk@quicinc.com>; Sankeerth Billakanti (QUIC)
-> > <quic_sbillaka@quicinc.com>
-> > Subject: Re: [PATCH v4 1/7] drm/msm/disp/dpu1: clear dpu_assign_crtc and
-> > get crtc from drm_enc instead of dpu_enc
-> >
-> > WARNING: This email originated from outside of Qualcomm. Please be wary
-> > of any links or attachments, and do not enable macros.
-> >
-> > On 05/07/2022 20:00, Vinod Polimera wrote:
-> > > Update crtc retrieval from dpu_enc to drm_enc, since new links get set
-> > > as part of the update legacy mode set. The dpu_enc->crtc cache is no
-> > > more needed, hence cleaning it as part of this change.
-> >
-> > NAK. Quoting the documentation:
-> >
-> > only really meaningful for non-atomic drivers. Atomic drivers should
-> > instead check &drm_connector_state.crtc.
-> >
-> > Please adjust according to the documentation.
-> > >
-> > > Signed-off-by: Vinod Polimera <quic_vpolimer@quicinc.com>
-> > > ---
-> > >   drivers/gpu/drm/msm/disp/dpu1/dpu_crtc.c    |  4 ----
-> > >   drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c | 18 +++---------------
-> > >   drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.h |  8 --------
-> > >   3 files changed, 3 insertions(+), 27 deletions(-)
-> > >
-> > > diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_crtc.c
-> > b/drivers/gpu/drm/msm/disp/dpu1/dpu_crtc.c
-> > > index b56f777..f91e3d1 100644
-> > > --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_crtc.c
-> > > +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_crtc.c
-> > > @@ -972,7 +972,6 @@ static void dpu_crtc_disable(struct drm_crtc *crtc,
-> > >                */
-> > >               if (dpu_encoder_get_intf_mode(encoder) == INTF_MODE_VIDEO)
-> > >                       release_bandwidth = true;
-> > > -             dpu_encoder_assign_crtc(encoder, NULL);
-> > >       }
-> > >
-> > >       /* wait for frame_event_done completion */
-> > > @@ -1042,9 +1041,6 @@ static void dpu_crtc_enable(struct drm_crtc *crtc,
-> > >       trace_dpu_crtc_enable(DRMID(crtc), true, dpu_crtc);
-> > >       dpu_crtc->enabled = true;
-> > >
-> > > -     drm_for_each_encoder_mask(encoder, crtc->dev, crtc->state-
-> > >encoder_mask)
-> > > -             dpu_encoder_assign_crtc(encoder, crtc);
-> > > -
-> > >       /* Enable/restore vblank irq handling */
-> > >       drm_crtc_vblank_on(crtc);
-> > >   }
-> > > diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c
-> > b/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c
-> > > index 52516eb..5629c0b 100644
-> > > --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c
-> > > +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c
-> > > @@ -1254,8 +1254,8 @@ static void dpu_encoder_vblank_callback(struct
-> > drm_encoder *drm_enc,
-> > >       dpu_enc = to_dpu_encoder_virt(drm_enc);
-> > >
-> > >       spin_lock_irqsave(&dpu_enc->enc_spinlock, lock_flags);
-> > > -     if (dpu_enc->crtc)
-> > > -             dpu_crtc_vblank_callback(dpu_enc->crtc);
-> > > +     if (drm_enc->crtc)
-> > > +             dpu_crtc_vblank_callback(drm_enc->crtc);
-> > >       spin_unlock_irqrestore(&dpu_enc->enc_spinlock, lock_flags);
-> > >
-> > >       atomic_inc(&phy_enc->vsync_cnt);
-> > > @@ -1280,18 +1280,6 @@ static void
-> > dpu_encoder_underrun_callback(struct drm_encoder *drm_enc,
-> > >       DPU_ATRACE_END("encoder_underrun_callback");
-> > >   }
-> > >
-> > > -void dpu_encoder_assign_crtc(struct drm_encoder *drm_enc, struct
-> > drm_crtc *crtc)
-> > > -{
-> > > -     struct dpu_encoder_virt *dpu_enc = to_dpu_encoder_virt(drm_enc);
-> > > -     unsigned long lock_flags;
-> > > -
-> > > -     spin_lock_irqsave(&dpu_enc->enc_spinlock, lock_flags);
-> > > -     /* crtc should always be cleared before re-assigning */
-> > > -     WARN_ON(crtc && dpu_enc->crtc);
-> > > -     dpu_enc->crtc = crtc;
-> > > -     spin_unlock_irqrestore(&dpu_enc->enc_spinlock, lock_flags);
-> > > -}
-> > > -
-> > >   void dpu_encoder_toggle_vblank_for_crtc(struct drm_encoder
-> > *drm_enc,
-> > >                                       struct drm_crtc *crtc, bool enable)
-> > >   {
-> > > @@ -1302,7 +1290,7 @@ void dpu_encoder_toggle_vblank_for_crtc(struct
-> > drm_encoder *drm_enc,
-> > >       trace_dpu_enc_vblank_cb(DRMID(drm_enc), enable);
-> > >
-> > >       spin_lock_irqsave(&dpu_enc->enc_spinlock, lock_flags);
-> > > -     if (dpu_enc->crtc != crtc) {
-> > > +     if (drm_enc->crtc != crtc) {
-> > >               spin_unlock_irqrestore(&dpu_enc->enc_spinlock, lock_flags);
-> > >               return;
-> > >       }
-> > > diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.h
-> > b/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.h
-> > > index 781d41c..edba815 100644
-> > > --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.h
-> > > +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.h
-> > > @@ -39,14 +39,6 @@ struct msm_display_info {
-> > >   };
-> > >
-> > >   /**
-> > > - * dpu_encoder_assign_crtc - Link the encoder to the crtc it's assigned to
-> > > - * @encoder: encoder pointer
-> > > - * @crtc:    crtc pointer
-> > > - */
-> > > -void dpu_encoder_assign_crtc(struct drm_encoder *encoder,
-> > > -                          struct drm_crtc *crtc);
-> > > -
-> > > -/**
-> > >    * dpu_encoder_toggle_vblank_for_crtc - Toggles vblank interrupts on or
-> > off if
-> > >    *  the encoder is assigned to the given crtc
-> > >    * @encoder:        encoder pointer
-> >
-> >
-> > --
-> > With best wishes
-> > Dmitry
-
-
-
--- 
-With best wishes
-Dmitry
+Thanks,
+Khalid

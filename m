@@ -2,68 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9707456A5B5
+	by mail.lfdr.de (Postfix) with ESMTP id 4E09356A5B4
 	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 16:42:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235510AbiGGOlo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Jul 2022 10:41:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35118 "EHLO
+        id S235895AbiGGOlj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Jul 2022 10:41:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35294 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235982AbiGGOla (ORCPT
+        with ESMTP id S235933AbiGGOla (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 7 Jul 2022 10:41:30 -0400
-Received: from mout.kundenserver.de (mout.kundenserver.de [217.72.192.74])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F0EF31DF4
-        for <linux-kernel@vger.kernel.org>; Thu,  7 Jul 2022 07:41:29 -0700 (PDT)
-Received: from mail-yw1-f174.google.com ([209.85.128.174]) by
- mrelayeu.kundenserver.de (mreue109 [213.165.67.113]) with ESMTPSA (Nemesis)
- id 1MA7Su-1oJt652ehm-00BbuM for <linux-kernel@vger.kernel.org>; Thu, 07 Jul
- 2022 16:41:27 +0200
-Received: by mail-yw1-f174.google.com with SMTP id 00721157ae682-31c86fe1dddso124494707b3.1
-        for <linux-kernel@vger.kernel.org>; Thu, 07 Jul 2022 07:41:27 -0700 (PDT)
-X-Gm-Message-State: AJIora/2p63JSg5OpuJ6f2F31WNWvTf5mESUM6zvGnmSgrhz64XwHZuW
-        ZLqS9fZ13SlJ27vYb39oqom4twlcWV7tyeWPlck=
-X-Google-Smtp-Source: AGRyM1ugCMrUPgxLUvxIRQZLC1zdIj2O+Vxq6ia7yT/fLej4bF43FUE/j7cYL5pmPy3Gz3VGYzGIau7ei5jBYmPiCD0=
-X-Received: by 2002:a0d:df0f:0:b0:31b:e000:7942 with SMTP id
- i15-20020a0ddf0f000000b0031be0007942mr50077266ywe.320.1657204886416; Thu, 07
- Jul 2022 07:41:26 -0700 (PDT)
+Received: from mail-yw1-x1131.google.com (mail-yw1-x1131.google.com [IPv6:2607:f8b0:4864:20::1131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 696773190D;
+        Thu,  7 Jul 2022 07:41:29 -0700 (PDT)
+Received: by mail-yw1-x1131.google.com with SMTP id 00721157ae682-31bf3656517so171608217b3.12;
+        Thu, 07 Jul 2022 07:41:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=e5bjrIIk4MXIN8C31qiFXOS3/fG2/z8CmTSANmVxdy8=;
+        b=kmWYMaUMp2mRClBKlIj7qLT5zJaCjwENeyNTjiQSNrIIRkJfTvFvh2WWMa6PAyijFV
+         aU0AIDpaSpv3DPCNoEKYmqOMND86p2POEJX2rqKTOeJRPeB9X8I0f74xiRgljzu7tapS
+         uIcVwArIYwk25FopRMaItDjuT0uN5EaAZQ/xJ2SCvSg12v3i/5n8a5mqTOOyQxOEo6jW
+         ZQvmi7WnA/CsW6y2pziC9JVgpBdvfR1oUGlWX4S7DsvrIpUM9dPt7dWw/h86fH2LUsCI
+         UPOBoZOQRx+ZLscbfduFYEZ4vqN3MmBkIFVtryHPHgANKOGb2IdC8YpppE1Ybnsopu63
+         oH+A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=e5bjrIIk4MXIN8C31qiFXOS3/fG2/z8CmTSANmVxdy8=;
+        b=n9gEx5MO2niFaoGo0t90jdWMPDc/lgcQ57sG6qouranT4BFcUk9SjH4COW9+OIX+a8
+         nPBQYE3zhDWZNb+lHq7kWtNBik5EHzV8Z9/wdsPykJpyTm9SbYubOWbUGO9ZdAJwEIFV
+         rJqS1O8/gNqa6tpwR++2BzkCajgJ7lPv5sy2W2aUmXechflGSDDsMXoAPwFWxs1PaWiP
+         Ei4Hy+sPyIOQig/w3BE2ICNvcO3cOnNZMFdpc0GhGhwuJqaG9wa0P8FYdFM0u+7IdavB
+         1RCAOvVajgxIG/2XS29pE+3yJXv6F/YzYXYalXjPZWRzkrHKyfd3kDaaKxFZzX/stM0x
+         UBGA==
+X-Gm-Message-State: AJIora84ac/4x2euN5wsA91/LddqPqRQzlN980Wj5Mf5/qOUzOSMqh0g
+        5sIK8oQS8ZtsS8vhZBrgSBSfunaYmMVpMvUYaSQ=
+X-Google-Smtp-Source: AGRyM1uJk4/jKvboenu61bK22XlgMlaJz0THOLxslPfUwFNnE4t0l44/11LtiP6JadK+sxElCUXALnelrhc0K8+Ii7Y=
+X-Received: by 2002:a81:cf02:0:b0:2d0:b68c:cf30 with SMTP id
+ u2-20020a81cf02000000b002d0b68ccf30mr52305330ywi.510.1657204888328; Thu, 07
+ Jul 2022 07:41:28 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220707110511.52129-1-zhengqi.arch@bytedance.com>
- <20220707110511.52129-3-zhengqi.arch@bytedance.com> <CAK8P3a1-rL391dp33D5r+SgQ+L0u7Neta_-DZoZL=+c1zPtNQg@mail.gmail.com>
- <42bfd82c-b3fb-c942-d6f2-ae5adec90a26@bytedance.com>
-In-Reply-To: <42bfd82c-b3fb-c942-d6f2-ae5adec90a26@bytedance.com>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Thu, 7 Jul 2022 16:41:08 +0200
-X-Gmail-Original-Message-ID: <CAK8P3a17A1t=qkyToQNVnuVfGPp-7VpFx5qJ-gmpyrkJ3yRXTw@mail.gmail.com>
-Message-ID: <CAK8P3a17A1t=qkyToQNVnuVfGPp-7VpFx5qJ-gmpyrkJ3yRXTw@mail.gmail.com>
-Subject: Re: [RFC PATCH 2/2] arm64: support HAVE_IRQ_EXIT_ON_IRQ_STACK
-To:     Qi Zheng <zhengqi.arch@bytedance.com>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+References: <CAK8P3a12-atmqjtjqi-RhFXH2Kwa-hxYcxy3Ftz2YjY5yyPHqg@mail.gmail.com>
+ <mhng-f5938c9b-7fc1-4b0c-9449-7dd1431f5446@palmerdabbelt-glaptop>
+ <CAKXUXMzpWsdKYbcu5MxvrAEMLHv4_2OGv2bRYEsQaze5trUSiQ@mail.gmail.com>
+ <CAK8P3a32m42gT9qz+Ldvr8okYGOc=kKeoJTGNWyYT71N8tJfEA@mail.gmail.com>
+ <4ff47e50-8702-1177-612b-73d9700e47c5@microchip.com> <CAK8P3a01x_ETchX2Vwm9oNaFJDhVZEu+G-2vRwegqKkMe54m6g@mail.gmail.com>
+In-Reply-To: <CAK8P3a01x_ETchX2Vwm9oNaFJDhVZEu+G-2vRwegqKkMe54m6g@mail.gmail.com>
+From:   Lukas Bulwahn <lukas.bulwahn@gmail.com>
+Date:   Thu, 7 Jul 2022 16:41:17 +0200
+Message-ID: <CAKXUXMxOUs31SkGb0JD=nmHxgFy4tQ5vn6yD6ivgRpbSAxm7mA@mail.gmail.com>
+Subject: Re: [PATCH] asm-generic: correct reference to GENERIC_LIB_DEVMEM_IS_ALLOWED
+To:     Arnd Bergmann <arnd@arndb.de>
+Cc:     Conor Dooley <Conor.Dooley@microchip.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Palmer Dabbelt <palmerdabbelt@google.com>,
+        "Luis R. Rodriguez" <mcgrof@kernel.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        kernel-janitors <kernel-janitors@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:lYjdV6iRvmKX6gHHIsoRJjfmbtBpvuRfe0a+FzlTlroi9hWEZZF
- vLvI/I95iGhdYnIR7wRtYdxLCu0vqfz5YeB5OCxi/BAkFgUcNqJmx/Hfp3NkMHXCufR9T6R
- 7nwFRS4VUDShHEtGGle9AVwYkW8S3Belopo46QXYBhAWzeDAnGAKCdBLlNqIv8OMVyESlnH
- Z+DTs0lH131ygUrQrZ4vw==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:h6omgu/DZns=:RLyckYvvWyeEmv1+hHo7ac
- iFwaeM+arwfyQDYBpnTQoZg0ZrwOKYu5iZWLOseTlb/dGzoEEAIsuuTwhonPzizhl4/SpPgz0
- bDqLjyrxaYXcBgDs3Iu1DYlj8O3y3/Y7Upy1kvcjYV+9bCh6MW/Q13ubp3kErX5bzGpgKRajG
- iT71heKw2HGGgALf5fumyXW8NHiAh+rkt6GQmxrDyPVFgHHBrj3pieuQEaRtSmb8XttTLmynk
- xk2drbfPWh8ALOYjQSnvIqlW3Fb+R621PvFeuZbdyF/coYgclCWp5/tXQKN7cTwD9c7X9U6+9
- PskKSFHRBC3hhxM1bMW8zS/50yV6+39Xk55pwh9D9EVaNUxZb2dVnTMpnBPJ+0uWvya5ajNF0
- /VrbzD0Iqm+8TAZy/5x12u7MgV3IlBiSnQ9BvbYQmVhf34zZGgWNjhKuiqWRypw1lHrqSTkNr
- E+GSVMIScZVReZltMHCLEyFEPA6+A+e9Z1XLsUiVLi1SwLvCPqjswQpmPOhiSJg8HbAh0/SKW
- qwp5LBmi98+zsAjAfCPlpTjGNerW3p0HGDa3uqikqB8EvOmWPAXVEiO9eZxIfAUZ/bak981ZC
- ZaOlkPP0+ZrL4Xzc0B+eOd4+irB6dyrRFE5OBPBp8Bi310XX8IZbg8XnwBeT2fdmsYoB46Rl3
- XxVK2ahlTudVypma7rtYLqNwUfQl9sfshvj3DQ9nx24SxCv9EO4rmS4jjHd9O5GN6+RIsXQmc
- 6t1xpWMsc8FbdI4GT13PsCaK2gV0dg/R2yaOV8VouMXFRbxH/IzWZ8qOaGiiOQiQ4uC8fmiGe
- N4sBSR+v4TLqvxNCA44yL36aIV6L4bDnG1XPprd4rkY/56FSWQKhRgXInOgiX99Md7Q9AA6Kw
- e0mqgZPE2uzNJP1DfGRQ==
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,114 +75,71 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jul 7, 2022 at 3:38 PM Qi Zheng <zhengqi.arch@bytedance.com> wrote:
-> On 2022/7/7 20:49, Arnd Bergmann wrote:
-> > On Thu, Jul 7, 2022 at 1:05 PM Qi Zheng <zhengqi.arch@bytedance.com> wrote:
->           * Restore the SP from the FP, and restore the FP and LR from
-> the frame
->           * record.
->           */
-> -       mov     sp, x29
-> +999:   mov     sp, x29
->          ldp     x29, x30, [sp], #16
->   #ifdef CONFIG_SHADOW_CALL_STACK
->          ldp     scs_sp, xzr, [sp], #16
+On Thu, Jul 7, 2022 at 3:07 PM Arnd Bergmann <arnd@arndb.de> wrote:
 >
-> But this also requires a new parameter in do_interrupt_handler.
+> On Thu, Jul 7, 2022 at 2:20 PM <Conor.Dooley@microchip.com> wrote:
+> > On 07/07/2022 13:13, Arnd Bergmann wrote:
+> > > On Thu, Jul 7, 2022 at 1:40 PM Lukas Bulwahn <lukas.bulwahn@gmail.com> wrote:
+> > >>
+> > >> On Wed, Oct 6, 2021 at 6:52 PM Palmer Dabbelt <palmerdabbelt@google.com> wrote:
+> > >>>
+> > >>> On Wed, 06 Oct 2021 08:17:38 PDT (-0700), Arnd Bergmann wrote:
+> > >>>> On Wed, Oct 6, 2021 at 5:00 PM Lukas Bulwahn <lukas.bulwahn@gmail.com> wrote:
+> > >>>>>
+> > >>>>> Commit 527701eda5f1 ("lib: Add a generic version of devmem_is_allowed()")
+> > >>>>> introduces the config symbol GENERIC_LIB_DEVMEM_IS_ALLOWED, but then
+> > >>>>> falsely refers to CONFIG_GENERIC_DEVMEM_IS_ALLOWED (note the missing LIB
+> > >>>>> in the reference) in ./include/asm-generic/io.h.
+> > >>>>>
+> > >>>>> Luckily, ./scripts/checkkconfigsymbols.py warns on non-existing configs:
+> > >>>>>
+> > >>>>> GENERIC_DEVMEM_IS_ALLOWED
+> > >>>>> Referencing files: include/asm-generic/io.h
+> > >>>>>
+> > >>>>> Correct the name of the config to the intended one.
+> > >>>>>
+> > >>>>> Fixes: 527701eda5f1 ("lib: Add a generic version of devmem_is_allowed()")
+> > >>>>> Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
+> > >>>>
+> > >>>> Acked-by: Arnd Bergmann <arnd@arndb.de>
+> > >>>
+> > >>> Reviewed-by: Palmer Dabbelt <palmerdabbelt@google.com>
+> > >>> Acked-by: Palmer Dabbelt <palmerdabbelt@google.com>
+> > >>>
+> > >>> Thanks.  I'm going to assume this is going in through some other tree,
+> > >>> but IIUC I sent the buggy patch up so LMK if you're expecting it to go
+> > >>> through mine.
+> > >>
+> > >> Palmer, Arnd,
+> > >>
+> > >> the patch in this mail thread got lost and was not picked up yet.
+> > >>
+> > >> MAINTAINERS suggests that Arnd takes patches to include/asm-generic/,
+> > >> since commit 1527aab617af ("asm-generic: list Arnd as asm-generic
+> > >> maintainer") in 2009, but maybe the responsibility for those files has
+> > >> actually moved on to somebody (or nobody) else and we just did not
+> > >> record that yet in MAINTAINERS.
+> > >>
+> > >> Arnd, will you pick this patch and provide it further to Linus Torvalds?
+> > >>
+> > >> Otherwise, Palmer already suggested picking it up himself.
+> > >>
+> > >
+> > > I've applied it to the asm-generic tree and can send it as a bugfix
+> > > pull request. I don't have any other fixer for that branch at the moment,
+> > > so if Palmer has other fixes for the riscv tree already, it would
+> > > save me making a pull request if he picks it up there.
 >
-> I also considered implementing call_on_irq_stack() for nmi and irq
-> separately, but later think it's unnecessary.
+> lkft just found a build failure:
+>
+> https://gitlab.com/Linaro/lkft/users/arnd.bergmann/asm-generic/-/jobs/2691154818
+>
+> I have not investigated what went wrong, but it does look like an actual
+> regression, so I'll wait for Lukas to follow up with a new version of the patch.
 
-What I had in mind was something along the lines of
+Thanks for your testing. I will look into it. Probably it is due to
+some more rigor during builds (-Werror and new warning types in the
+default build) since I proposed the patch in October 2021. That should
+be easy to fix, but let us see. I will send a PATCH v2 soon.
 
-diff --git a/arch/arm64/kernel/entry-common.c b/arch/arm64/kernel/entry-common.c
-index 56cefd33eb8e..432042b91588 100644
---- a/arch/arm64/kernel/entry-common.c
-+++ b/arch/arm64/kernel/entry-common.c
-@@ -270,10 +270,7 @@ static void do_interrupt_handler(struct pt_regs *regs,
- {
-        struct pt_regs *old_regs = set_irq_regs(regs);
-
--       if (on_thread_stack())
--               call_on_irq_stack(regs, handler);
--       else
--               handler(regs);
-+       handler(regs);
-
-        set_irq_regs(old_regs);
- }
-@@ -473,16 +470,31 @@ static void noinstr el1_interrupt(struct pt_regs *regs,
-                __el1_irq(regs, handler);
- }
-
--asmlinkage void noinstr el1h_64_irq_handler(struct pt_regs *regs)
-+static void noinstr el1_irq(struct pt_regs *regs)
- {
-        el1_interrupt(regs, handle_arch_irq);
- }
-
--asmlinkage void noinstr el1h_64_fiq_handler(struct pt_regs *regs)
-+asmlinkage void noinstr el1h_64_irq_handler(struct pt_regs *regs)
-+{
-+       if (on_thread_stack())
-+               call_on_irq_stack(regs, el1_irq);
-+       else
-+               el1_irq(regs);
-+}
-+
-+static void noinstr el1_fiq(struct pt_regs *regs)
- {
-        el1_interrupt(regs, handle_arch_fiq);
- }
-
-+asmlinkage void noinstr el1h_64_fiq_handler(struct pt_regs *regs)
-+{
-+        if (on_thread_stack())
-+               call_on_irq_stack(regs, el1_fiq);
-+       else
-+               el1_fiq(regs);
-+}
-+
- asmlinkage void noinstr el1h_64_error_handler(struct pt_regs *regs)
- {
-        unsigned long esr = read_sysreg(esr_el1);
-@@ -713,7 +731,7 @@ static void noinstr
-__el0_irq_handler_common(struct pt_regs *regs)
-
- asmlinkage void noinstr el0t_64_irq_handler(struct pt_regs *regs)
- {
--       __el0_irq_handler_common(regs);
-+       call_on_irq_stack(regs, __el0_irq_handler_common);
- }
-
- static void noinstr __el0_fiq_handler_common(struct pt_regs *regs)
-@@ -723,7 +741,7 @@ static void noinstr
-__el0_fiq_handler_common(struct pt_regs *regs)
-
- asmlinkage void noinstr el0t_64_fiq_handler(struct pt_regs *regs)
- {
--       __el0_fiq_handler_common(regs);
-+       call_on_irq_stack(regs, __el0_fiq_handler_common);
- }
-
- static void noinstr __el0_error_handler_common(struct pt_regs *regs)
-@@ -807,12 +825,12 @@ asmlinkage void noinstr
-el0t_32_sync_handler(struct pt_regs *regs)
-
- asmlinkage void noinstr el0t_32_irq_handler(struct pt_regs *regs)
- {
--       __el0_irq_handler_common(regs);
-+       call_on_irq_stack(regs, __el0_irq_handler_common);
- }
-
- asmlinkage void noinstr el0t_32_fiq_handler(struct pt_regs *regs)
- {
--       __el0_fiq_handler_common(regs);
-+       call_on_irq_stack(regs, __el0_fiq_handler_common);
- }
-
- asmlinkage void noinstr el0t_32_error_handler(struct pt_regs *regs)
-
-Not sure if that works.
-
-        Arnd
+Lukas

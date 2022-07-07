@@ -2,198 +2,191 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3164D56AB3D
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 21:04:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D1F256AB7D
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 21:05:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236452AbiGGTEL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Jul 2022 15:04:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56528 "EHLO
+        id S236656AbiGGTFO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Jul 2022 15:05:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57224 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230212AbiGGTEI (ORCPT
+        with ESMTP id S235643AbiGGTFM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Jul 2022 15:04:08 -0400
-Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com [IPv6:2607:f8b0:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63B9D1EADB;
-        Thu,  7 Jul 2022 12:04:07 -0700 (PDT)
-Received: by mail-pf1-x42d.google.com with SMTP id o12so7690979pfp.5;
-        Thu, 07 Jul 2022 12:04:07 -0700 (PDT)
+        Thu, 7 Jul 2022 15:05:12 -0400
+Received: from mail-qt1-x836.google.com (mail-qt1-x836.google.com [IPv6:2607:f8b0:4864:20::836])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D0ED20F4C
+        for <linux-kernel@vger.kernel.org>; Thu,  7 Jul 2022 12:05:11 -0700 (PDT)
+Received: by mail-qt1-x836.google.com with SMTP id c13so24137938qtq.10
+        for <linux-kernel@vger.kernel.org>; Thu, 07 Jul 2022 12:05:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=lfedw5Q6kj9MYHK76JYN4i5YQeu/OcQq9f2Hbxue1dE=;
-        b=Q92DfUFfGBSBq2rMRhTimcdKdE75oTaXk1j89PBY2orftuKs0EYufzZAPruBtKc/e1
-         cz7355enxMLNE3kMcxEudu5jCPpdMmlpEu3CQ7l+U1h50RFnZQtUhO8qdR3B7vF/+KLC
-         auGbW7DBqB0we/sImYcsljLCICyMgE1cz7HU3SNPykLHDvZLKgZqbTEHZaUrRqFRc+cY
-         DTnfDOKitxgDhMzCjiMi3d6cCOVF5ObhWNxyg8nQ0SMeGhv0ThvXEqILg61Sk609PGqU
-         /gHF30qaBJM8YRG1RlsMSgAMYmNt0l706Yl5egbme5AGzgwiRMGgWTzJltOYUIfFUPWO
-         yCEQ==
+        h=feedback-id:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=Lj/5GKFD5bSgxpfgMiLIINDbLK3iL7GVnVF/8eyegVw=;
+        b=O4PlJ4svdXAIysmorR7JS4m/B96kCMpmsXE6LPvC+47wcLRxPPo5DtZx2M8IJ05dF1
+         kxc6yI3WoB4LR6+/t0Qz3hdkwJbV66VeOVNdcOVTwMvSFNFADgM3+vgRsTnbtR/zTDoU
+         UFj2njpI0lZE/VkR5wgPReMyxtuCqYX6gWYghXFMfAOY0jDs9DpzQRDgAUxPaI/Eo7LX
+         xdRr/RyxdIrM16+HrUmKUliqfue1csAHy1W8/l2Z06onE9x/t1stCEo/1+9whQe3Uie5
+         5SklEoeNRt2Bh8rSn6YEv7b+lGBWYMnspBuEIUOLh5SNMgL+SMBB8SvGP/8+Qb6g4PoP
+         uoOw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=lfedw5Q6kj9MYHK76JYN4i5YQeu/OcQq9f2Hbxue1dE=;
-        b=Ck3SmV9D/0WYSu+mmqiH39smAtbMaeHWZ8kM+s38uH/FGi3Mh7WXN64XCwK42NkbAO
-         kzYxrkEPOUMpi6qNjnz3ZLts6vekzELv+dbxU5aS8ktZgA30zI0CdHPFtwefJZ9rQgPW
-         BBJqn+mkvhptpsLX5expFpK3Vdo/RgTb5NKBwYfhaAl/tRE9kir4jKsHVihasF7IJhK3
-         JZIaZhlEhdveXE8wyjTwOVAiljhhIvnWaUh1bgf0xN7kZznY/x31GXDDSx8e/ffZnsUm
-         ppU7HTo0t225NopGozmejS7adYdKnY2rJfYqkaJN+A+zg/1nAUL6eh1a0RqUlYgmK0CV
-         sGzA==
-X-Gm-Message-State: AJIora+Vpu+Ic8sz0G0eM+KgE8K3YZbv7dRZMFQQgXQbKOxZHlG5koJr
-        M1pNuV/1MemuNplcJY/X2ao=
-X-Google-Smtp-Source: AGRyM1vBMTVoI5fmKr4hV9WCTP7Jok/033MBAoEPhbyZTPfHRnGcZZW1OFagAJqNbMyMz7kb/cenUw==
-X-Received: by 2002:a05:6a00:14c5:b0:525:3797:fd3b with SMTP id w5-20020a056a0014c500b005253797fd3bmr52910828pfu.27.1657220646748;
-        Thu, 07 Jul 2022 12:04:06 -0700 (PDT)
-Received: from [172.30.1.47] ([14.32.163.5])
-        by smtp.gmail.com with ESMTPSA id rm12-20020a17090b3ecc00b001efc839ac97sm2073696pjb.3.2022.07.07.12.04.00
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 07 Jul 2022 12:04:06 -0700 (PDT)
-Message-ID: <bc08957c-4ebc-7c17-cbf4-ad6718862127@gmail.com>
-Date:   Fri, 8 Jul 2022 04:04:02 +0900
+        h=x-gm-message-state:feedback-id:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to;
+        bh=Lj/5GKFD5bSgxpfgMiLIINDbLK3iL7GVnVF/8eyegVw=;
+        b=5hfqvH/LfxzPo4bgNDj/Go9QpmMYgxjDLNrTEkv5pz2adkUaC7gd8YqhpComrblaDG
+         DcnoFZlIDhWIJOwMvLCtFs8+WEYq+HNBOLsbkqFAmwJ9lXRbN/Jj0NV2GNA51yrl0/RD
+         9aoXp+qWQOePyo8ut9RJaWs6nX1HxQtJr4SViuQ8UL69mgFWSfIDzgVdjl9ZvCWnvZeO
+         C/iEExb6LTCoujpc0wMKp4IvtS8CkHoMemvW5PEPZ6q9m/I3ijSjL0bc2nPco693Qce9
+         t7hxa5aPD+mxUu8FpoDM41skS4QNiuBnmL7VFNXF1kkD9xn95fqlIqsyl4QNx69sZ1vS
+         TpUA==
+X-Gm-Message-State: AJIora9bER1ngEgtS7QLLxNiQMFgaFhc/KvERlBLWoULGpT3uOo+r52K
+        RKai9vl+1HMuagTEhymsUcM=
+X-Google-Smtp-Source: AGRyM1sO8AvonfwY2omtTjp2x8IDHAvMXLJO2E4fkgdZv2PioOUj91/iavqaq166MECHSRkRtylLsA==
+X-Received: by 2002:ac8:5801:0:b0:31d:4c67:6f3 with SMTP id g1-20020ac85801000000b0031d4c6706f3mr19703387qtg.46.1657220709996;
+        Thu, 07 Jul 2022 12:05:09 -0700 (PDT)
+Received: from auth1-smtp.messagingengine.com (auth1-smtp.messagingengine.com. [66.111.4.227])
+        by smtp.gmail.com with ESMTPSA id g11-20020ac8124b000000b0031ea1dd67d9sm408611qtj.14.2022.07.07.12.05.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 07 Jul 2022 12:05:09 -0700 (PDT)
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+        by mailauth.nyi.internal (Postfix) with ESMTP id C031927C005A;
+        Thu,  7 Jul 2022 15:05:08 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute3.internal (MEProxy); Thu, 07 Jul 2022 15:05:08 -0400
+X-ME-Sender: <xms:ZC7HYrAosqjp1aq1yXOI7lTbd7lTnmznBHmbBr_voS4G-ndF4GD6Vw>
+    <xme:ZC7HYhiPn05gmxutH9ii--tw1I0k7gaI0WLCIIBz2cRbX2yXdEYH2yhiWlJecX1n5
+    NnjXlv_D4SiN35Www>
+X-ME-Received: <xmr:ZC7HYmnV_4XGdBnzIOYef_gUQdktfEokq8vdC8sHV1v8US3e93J0vVxa6Oxt8Q>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrudeihedgudeffecutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
+    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
+    enucfjughrpeffhffvvefukfhfgggtuggjsehttdertddttddvnecuhfhrohhmpeeuohhq
+    uhhnucfhvghnghcuoegsohhquhhnrdhfvghnghesghhmrghilhdrtghomheqnecuggftrf
+    grthhtvghrnhephedugfduffffteeutddvheeuveelvdfhleelieevtdeguefhgeeuveei
+    udffiedvnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomh
+    epsghoqhhunhdomhgvshhmthhprghuthhhphgvrhhsohhnrghlihhthidqieelvdeghedt
+    ieegqddujeejkeehheehvddqsghoqhhunhdrfhgvnhhgpeepghhmrghilhdrtghomhesfh
+    higihmvgdrnhgrmhgv
+X-ME-Proxy: <xmx:ZC7HYtyfWffvZQgCciFlzclSFDbd7CyA5zaBI2UBWTPtxHghKyitgg>
+    <xmx:ZC7HYgR93DkrOpgtJ6PIhsKT6qBgDH3wfaHTH9qZ6OtEkLOPl4dIiw>
+    <xmx:ZC7HYgZvyfNp1dViHWX2gSrWrqUuF_ghjNIzQDaPpWCGHw20sdea8Q>
+    <xmx:ZC7HYjHq4lDtekpeorg86l861XNv0KO0jyGOyI5SiVgr7dXSIUDGCA>
+Feedback-ID: iad51458e:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
+ 7 Jul 2022 15:05:08 -0400 (EDT)
+Date:   Thu, 7 Jul 2022 12:04:12 -0700
+From:   Boqun Feng <boqun.feng@gmail.com>
+To:     Waiman Long <longman@redhat.com>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
+        linux-kernel@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Mike Stowell <mstowell@redhat.com>
+Subject: Re: [PATCH v3] locking/rtmutex: Limit # of lock stealing for non-RT
+ waiters
+Message-ID: <YscuLP2PuMEnMh35@boqun-archlinux>
+References: <20220706135916.980580-1-longman@redhat.com>
+ <f3051cbb-313c-ba88-66c9-3f8f8d88d806@redhat.com>
+ <YsckV+iWLxPC+eH5@boqun-archlinux>
+ <3e43bc07-053f-80d0-7ea1-93a2897ef03e@redhat.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH V3 02/20] OPP: Make dev_pm_opp_set_regulators() accept
- NULL terminated list
-Content-Language: en-US
-To:     Viresh Kumar <viresh.kumar@linaro.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Kyungmin Park <kyungmin.park@samsung.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Qiang Yu <yuq825@gmail.com>, Rob Herring <robh@kernel.org>,
-        Tomeu Vizoso <tomeu.vizoso@collabora.com>,
-        Steven Price <steven.price@arm.com>,
-        Alyssa Rosenzweig <alyssa.rosenzweig@collabora.com>,
-        Nishanth Menon <nm@ti.com>, Stephen Boyd <sboyd@kernel.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>
-Cc:     linux-pm@vger.kernel.org,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        dri-devel@lists.freedesktop.org, lima@lists.freedesktop.org,
-        linux-tegra@vger.kernel.org
-References: <cover.1656935522.git.viresh.kumar@linaro.org>
- <9730e011004b7526e79c6f409f5147fb235b414a.1656935522.git.viresh.kumar@linaro.org>
-From:   Chanwoo Choi <cwchoi00@gmail.com>
-In-Reply-To: <9730e011004b7526e79c6f409f5147fb235b414a.1656935522.git.viresh.kumar@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <3e43bc07-053f-80d0-7ea1-93a2897ef03e@redhat.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 22. 7. 4. 21:07, Viresh Kumar wrote:
-> Make dev_pm_opp_set_regulators() accept a NULL terminated list of names
-> instead of making the callers keep the two parameters in sync, which
-> creates an opportunity for bugs to get in.
+On Thu, Jul 07, 2022 at 02:45:10PM -0400, Waiman Long wrote:
+> On 7/7/22 14:22, Boqun Feng wrote:
+> > On Wed, Jul 06, 2022 at 10:03:10AM -0400, Waiman Long wrote:
+> > > On 7/6/22 09:59, Waiman Long wrote:
+> > > > Commit 48eb3f4fcfd3 ("locking/rtmutex: Implement equal priority lock
+> > > > stealing") allows unlimited number of lock stealing's for non-RT
+> > > > tasks. That can lead to lock starvation of non-RT top waiter tasks if
+> > > > there is a constant incoming stream of non-RT lockers. This can cause
+> > > > rcu_preempt self-detected stall or even task lockup in PREEMPT_RT kernel.
+> > > > For example,
+> > > > 
+> > > > [77107.424943] rcu: INFO: rcu_preempt self-detected stall on CPU
+> > > > [ 1249.921363] INFO: task systemd:2178 blocked for more than 622 seconds.
+> > > > 
+> > > > Avoiding this problem and ensuring forward progress by limiting the
+> > > > number of times that a lock can be stolen from each waiter. This patch
+> > > > sets a threshold of 32. That number is arbitrary and can be changed
+> > > > if needed.
+> > > > 
+> > > > Fixes: 48eb3f4fcfd3 ("locking/rtmutex: Implement equal priority lock stealing")
+> > > > Signed-off-by: Waiman Long <longman@redhat.com>
+> > > > ---
+> > > >    kernel/locking/rtmutex.c        | 9 ++++++---
+> > > >    kernel/locking/rtmutex_common.h | 8 ++++++++
+> > > >    2 files changed, 14 insertions(+), 3 deletions(-)
+> > > > 
+> > > >    [v3: Increase threshold to 32 and add rcu_preempt self-detected stall]
+> > > Note that I decided to increase the threshold to 32 from 10 to reduce the
+> > > potential performance impact of this change, if any. We also found out that
+> > > this patch can fix some of the rcu_preempt self-detected stall problems that
+> > > we saw with the PREEMPT_RT kernel. So I added that information in the patch
+> > > description.
+> > > 
+> > Have you considered (and tested) whether we can set the threshold
+> > directly proportional to nr_cpu_ids? Because IIUC, the favorable case
+> > for lock stealing is that every CPU gets a chance to steal once. If one
+> > CPU can steal twice, 1) either there is a context switch between two
+> > tasks, which costs similarly as waking up the waiter, or 2) a task drops
+> > and re-graps a lock, which means the task wants to yield to other
+> > waiters of the lock.
 > 
-> Suggested-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
-> ---
->  drivers/cpufreq/cpufreq-dt.c                |  9 ++++-----
->  drivers/cpufreq/ti-cpufreq.c                |  7 +++----
->  drivers/devfreq/exynos-bus.c                |  4 ++--
->  drivers/gpu/drm/lima/lima_devfreq.c         |  3 ++-
->  drivers/gpu/drm/panfrost/panfrost_devfreq.c |  4 ++--
->  drivers/opp/core.c                          | 18 ++++++++++++------
->  drivers/soc/tegra/pmc.c                     |  4 ++--
->  include/linux/pm_opp.h                      |  9 ++++-----
->  8 files changed, 31 insertions(+), 27 deletions(-)
+> There is no inherent restriction on not allowing the same cpu stealing the
+> lock twice or more. With rtmutex, the top waiter may be sleeping and the
+
+Well, I'm not saying we need to restrict the same cpu to steal a lock
+twice or more. Think about this, when there is a task running on CPU 1
+already steals a lock once, for example:
+
+	<lock release>
+	{task C is the top waiter}
+
+	CPU 1
+	=====
+	<now task A running>
+	lock(); // steal the lock
+	...
+	unlock():
+	  // set owner to NULL
+	  <switch task B> // similar cost to wake up A
+	  lock(); // steal the lock
+
+, which means if a CPU steals a lock twice or more, it's almost certain
+that a context happened between two steals ("almost" because there could
+be a case where task A lock()+unlock() twice, but as I said, it
+means that task A is willing to yield.).
+
+Therefore if there are @nr_cpu_ids lock steals, it means either there is
+a context switch somewhere or a task has been willing to yield. And I
+think it's a reasonable signal to stop lock stealing.
+
+Thoughts?
+
+Regards,
+Boqun
+
+> wakeup latency can be considerable. By allowing another ready lock waiter to
+> steal the lock for productive use, it can improve system throughput. There
+> is no fairness in lock stealing and I don't believe it is a worthwhile goal
+> to allow each cpu to steal the lock once. It will just complicate the code.
 > 
-> diff --git a/drivers/cpufreq/cpufreq-dt.c b/drivers/cpufreq/cpufreq-dt.c
-> index 8fcaba541539..be0c19b3ffa5 100644
-> --- a/drivers/cpufreq/cpufreq-dt.c
-> +++ b/drivers/cpufreq/cpufreq-dt.c
-> @@ -193,7 +193,7 @@ static int dt_cpufreq_early_init(struct device *dev, int cpu)
->  	struct private_data *priv;
->  	struct device *cpu_dev;
->  	bool fallback = false;
-> -	const char *reg_name;
-> +	const char *reg_name[] = { NULL, NULL };
->  	int ret;
->  
->  	/* Check if this CPU is already covered by some other policy */
-> @@ -218,10 +218,9 @@ static int dt_cpufreq_early_init(struct device *dev, int cpu)
->  	 * OPP layer will be taking care of regulators now, but it needs to know
->  	 * the name of the regulator first.
->  	 */
-> -	reg_name = find_supply_name(cpu_dev);
-> -	if (reg_name) {
-> -		priv->opp_table = dev_pm_opp_set_regulators(cpu_dev, &reg_name,
-> -							    1);
-> +	reg_name[0] = find_supply_name(cpu_dev);
-> +	if (reg_name[0]) {
-> +		priv->opp_table = dev_pm_opp_set_regulators(cpu_dev, reg_name);
->  		if (IS_ERR(priv->opp_table)) {
->  			ret = PTR_ERR(priv->opp_table);
->  			if (ret != -EPROBE_DEFER)
-> diff --git a/drivers/cpufreq/ti-cpufreq.c b/drivers/cpufreq/ti-cpufreq.c
-> index 8f9fdd864391..560d67a6bef1 100644
-> --- a/drivers/cpufreq/ti-cpufreq.c
-> +++ b/drivers/cpufreq/ti-cpufreq.c
-> @@ -173,7 +173,7 @@ static struct ti_cpufreq_soc_data omap34xx_soc_data = {
->   *    seems to always read as 0).
->   */
->  
-> -static const char * const omap3_reg_names[] = {"cpu0", "vbb"};
-> +static const char * const omap3_reg_names[] = {"cpu0", "vbb", NULL};
->  
->  static struct ti_cpufreq_soc_data omap36xx_soc_data = {
->  	.reg_names = omap3_reg_names,
-> @@ -326,7 +326,7 @@ static int ti_cpufreq_probe(struct platform_device *pdev)
->  	const struct of_device_id *match;
->  	struct opp_table *ti_opp_table;
->  	struct ti_cpufreq_data *opp_data;
-> -	const char * const default_reg_names[] = {"vdd", "vbb"};
-> +	const char * const default_reg_names[] = {"vdd", "vbb", NULL};
->  	int ret;
->  
->  	match = dev_get_platdata(&pdev->dev);
-> @@ -387,8 +387,7 @@ static int ti_cpufreq_probe(struct platform_device *pdev)
->  		if (opp_data->soc_data->reg_names)
->  			reg_names = opp_data->soc_data->reg_names;
->  		ti_opp_table = dev_pm_opp_set_regulators(opp_data->cpu_dev,
-> -							 reg_names,
-> -							 ARRAY_SIZE(default_reg_names));
-> +							 reg_names);
->  		if (IS_ERR(ti_opp_table)) {
->  			dev_pm_opp_put_supported_hw(opp_data->opp_table);
->  			ret =  PTR_ERR(ti_opp_table);
-> diff --git a/drivers/devfreq/exynos-bus.c b/drivers/devfreq/exynos-bus.c
-> index e689101abc93..541baff93ee8 100644
-> --- a/drivers/devfreq/exynos-bus.c
-> +++ b/drivers/devfreq/exynos-bus.c
-> @@ -180,10 +180,10 @@ static int exynos_bus_parent_parse_of(struct device_node *np,
->  {
->  	struct device *dev = bus->dev;
->  	struct opp_table *opp_table;
-> -	const char *vdd = "vdd";
-> +	const char *supplies[] = { "vdd", NULL };
->  	int i, ret, count, size;
->  
-> -	opp_table = dev_pm_opp_set_regulators(dev, &vdd, 1);
-> +	opp_table = dev_pm_opp_set_regulators(dev, supplies);
->  	if (IS_ERR(opp_table)) {
->  		ret = PTR_ERR(opp_table);
->  		dev_err(dev, "failed to set regulators %d\n", ret);
-
-Reviewed-by: Chanwoo Choi <cw00.choi@samsung.com>
-
-(snip)
-
--- 
-Best Regards,
-Samsung Electronics
-Chanwoo Choi
+> On the other hand, unlimited lock stealing is bad and we have a put a limit
+> somehow to ensure forward progress.
+> 
+> Cheers,
+> Longman
+> 

@@ -2,107 +2,312 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DDFB2569F84
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 12:21:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 62376569F9A
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 12:23:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235297AbiGGKVO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Jul 2022 06:21:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49434 "EHLO
+        id S235252AbiGGKV4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Jul 2022 06:21:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49792 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235072AbiGGKVF (ORCPT
+        with ESMTP id S234762AbiGGKVt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Jul 2022 06:21:05 -0400
-Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A5D12BFE;
-        Thu,  7 Jul 2022 03:21:04 -0700 (PDT)
-Received: by mail-ej1-x62f.google.com with SMTP id os14so1351393ejb.4;
-        Thu, 07 Jul 2022 03:21:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=HrlXbWcFJrYmmGnhnXwnzHQ6nR1vAZ5/Ttv5TKyVVz4=;
-        b=UCj6ApGM3N18S4Dt6+Q/gWKy471ZadLbdHEBNZYY7fAFoj96ja0DQ8peadnrNHhcpj
-         SgKq0gPFfER74+4i9/CVV/ydJR0Nhe05d+1v8qBAW50OLh22cNNJqDwDzKODt9EIZrv8
-         MzJKifym6vd44Tr00zz8PKAYu7c0VgR0Dg22MVYDwGR9RwPpaRhB/IuJZVxnjnis/xxo
-         1Kg3gqw0aW8DaD1qhEd27dqCPUsx3qbNkVlIHReBo6OauksoixspoXUd9yZN338gs7H5
-         6RzNGRoagTdEqOxyr7dOq53ElZhRSC7W6DwYYDbklAUrNiRCJCXvd9gYfp8RrDX7rugi
-         5sFw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=HrlXbWcFJrYmmGnhnXwnzHQ6nR1vAZ5/Ttv5TKyVVz4=;
-        b=fKgvPKp/1TxG37eHxrMx4gT/Nwas9JetJiDk3ipTbW6GLMWMt6c1D6yS6cLDZwACxf
-         cBP7Jz2Xygl8MABS4ShG0HwF7HLJy9v0oZ67q8qOHzruWfUkXLJgYPTKXEbJsMjfS7qm
-         L+ZeA9RNsbkAb8hnF+gXxIxRDetcYXfUMJcg6tVK+VlsA3vVh6GtDF1zywotkaJ/99wC
-         x9qaDIIUHe2SLnWstcAMZ3/qbe0vCI7rTAFTR6NHGHtXC8NpFKEHeoOoueSQZCHBuqag
-         8TRuY4DUpZn6VPXSznfVy8sBMoM4uN2VqNT2bpQVS9wJzVfoKbG6r6B9+d45jyctlFaH
-         Deqw==
-X-Gm-Message-State: AJIora8YLUkSc3e/Iz7go+gAb1WyfBxoID3wcjpUuSOnDsRXl8ieMADb
-        OzqvCKXJLfxkfMyeA7wG0ng=
-X-Google-Smtp-Source: AGRyM1sq7ZRcrYah2UHhGSyBOrApze7sDmVHy7kME8pHSFycaghvbLni6IQQc4763QMY6dWCY2z0QQ==
-X-Received: by 2002:a17:907:9725:b0:726:c820:7653 with SMTP id jg37-20020a170907972500b00726c8207653mr45191077ejc.633.1657189262747;
-        Thu, 07 Jul 2022 03:21:02 -0700 (PDT)
-Received: from localhost.localdomain (93-42-70-190.ip85.fastwebnet.it. [93.42.70.190])
-        by smtp.googlemail.com with ESMTPSA id s22-20020a170906a19600b0071cef8bafc3sm18701117ejy.1.2022.07.07.03.21.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 07 Jul 2022 03:21:02 -0700 (PDT)
-From:   Christian Marangi <ansuelsmth@gmail.com>
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Ohad Ben-Cohen <ohad@wizery.com>,
-        Baolin Wang <baolin.wang7@gmail.com>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-remoteproc@vger.kernel.org
-Cc:     Christian Marangi <ansuelsmth@gmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH v2 3/3] ARM: dts: qcom: add missing smem compatible for ipq8064 dtsi
-Date:   Thu,  7 Jul 2022 12:20:40 +0200
-Message-Id: <20220707102040.1859-3-ansuelsmth@gmail.com>
-X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220707102040.1859-1-ansuelsmth@gmail.com>
-References: <20220707102040.1859-1-ansuelsmth@gmail.com>
+        Thu, 7 Jul 2022 06:21:49 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 613222BFE
+        for <linux-kernel@vger.kernel.org>; Thu,  7 Jul 2022 03:21:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1657189307;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=2Ycw1zECzq4gnTY7RXP2JL3HSW+2VoZY5kcSb6tFb0Q=;
+        b=DAS8+3BWIYhQp2P7ThA+nx5nygnYYYgcwRhBtsEXQc4iGFW/Q9keGXgfwUyTwJuo2Upo0L
+        vl79PYhRGTrIPD8SX7Lz+Am4TiWYi9LDNUyfui5dyXoSlBPNG82vk4/9QQSyIRLz4Dv5S9
+        G5ejPZQLf1twtv7kRhFbOruA39iW7DI=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-171-2IuL0U8gPamSaXLqmhfnag-1; Thu, 07 Jul 2022 06:21:42 -0400
+X-MC-Unique: 2IuL0U8gPamSaXLqmhfnag-1
+Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id CD478811E76;
+        Thu,  7 Jul 2022 10:21:41 +0000 (UTC)
+Received: from gerbillo.redhat.com (unknown [10.39.194.92])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 94CB7492C3B;
+        Thu,  7 Jul 2022 10:21:40 +0000 (UTC)
+From:   Paolo Abeni <pabeni@redhat.com>
+To:     torvalds@linux-foundation.org
+Cc:     kuba@kernel.org, davem@davemloft.net, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [GIT PULL] Networking for 5.19-rc6
+Date:   Thu,  7 Jul 2022 12:21:25 +0200
+Message-Id: <20220707102125.212793-1-pabeni@redhat.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Scanned-By: MIMEDefang 2.85 on 10.11.54.10
+X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add missing smem compatible and hwlocks phandle for ipq8064 dtsi
-smem node.
+Hi Linus!
 
-Signed-off-by: Christian Marangi <ansuelsmth@gmail.com>
-Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
----
- arch/arm/boot/dts/qcom-ipq8064.dtsi | 3 +++
- 1 file changed, 3 insertions(+)
+No known regressions on our radar at this point.
 
-diff --git a/arch/arm/boot/dts/qcom-ipq8064.dtsi b/arch/arm/boot/dts/qcom-ipq8064.dtsi
-index cd1b43e2cab4..ff1a2acb1d83 100644
---- a/arch/arm/boot/dts/qcom-ipq8064.dtsi
-+++ b/arch/arm/boot/dts/qcom-ipq8064.dtsi
-@@ -292,8 +292,11 @@ nss@40000000 {
- 		};
- 
- 		smem: smem@41000000 {
-+			compatible = "qcom,smem";
- 			reg = <0x41000000 0x200000>;
- 			no-map;
-+
-+			hwlocks = <&sfpb_mutex 3>;
- 		};
- 	};
- 
--- 
-2.36.1
+The following changes since commit 5e8379351dbde61ea383e514f0f9ecb2c047cf4e:
+
+  Merge tag 'net-5.19-rc5' of git://git.kernel.org/pub/scm/linux/kernel/git/netdev/net (2022-06-30 15:26:55 -0700)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/netdev/net.git tags/net-5.19-rc6
+
+for you to fetch changes up to 07266d066301b97ad56a693f81b29b7ced429b27:
+
+  Merge branch 'wireguard-patches-for-5-19-rc6' (2022-07-06 20:04:10 -0700)
+
+----------------------------------------------------------------
+Networking fixes for 5.19-rc6, including fixes from bpf, netfilter,
+can, bluetooth
+
+Current release - regressions:
+  - bluetooth: fix deadlock on hci_power_on_sync.
+
+Previous releases - regressions:
+  - sched: act_police: allow 'continue' action offload
+
+  - eth: usbnet: fix memory leak in error case
+
+  - eth: ibmvnic: properly dispose of all skbs during a failover.
+
+Previous releases - always broken:
+  - bpf:
+    - fix insufficient bounds propagation from adjust_scalar_min_max_vals
+    - clear page contiguity bit when unmapping pool
+
+  - netfilter: nft_set_pipapo: release elements in clone from abort path
+
+  - mptcp: netlink: issue MP_PRIO signals from userspace PMs
+
+  - can:
+    - rcar_canfd: fix data transmission failed on R-Car V3U
+    - gs_usb: gs_usb_open/close(): fix memory leak
+
+Misc:
+  - add Wenjia as SMC maintainer
+
+Signed-off-by: Paolo Abeni <pabeni@redhat.com>
+
+----------------------------------------------------------------
+Alexei Starovoitov (1):
+      bpf, docs: Better scale maintenance of BPF subsystem
+
+Daniel Borkmann (4):
+      bpf: Fix incorrect verifier simulation around jmp32's jeq/jne
+      bpf: Fix insufficient bounds propagation from adjust_scalar_min_max_vals
+      bpf, selftests: Add verifier test case for imm=0,umin=0,umax=1 scalar
+      bpf, selftests: Add verifier test case for jmp32's jeq/jne
+
+David S. Miller (5):
+      Merge branch '40GbE' of git://git.kernel.org/pub/scm/linux/kernel/git/tnguy/net-queue
+      Merge git://git.kernel.org/pub/scm/linux/kernel/git/netfilter/nf
+      Merge branch 'netdev-docs'
+      Merge branch 'act_police-continue-offload-fix'
+      Merge branch 'mptcp-path-manager-fixes'
+
+Duoming Zhou (1):
+      net: rose: fix UAF bug caused by rose_t0timer_expiry
+
+Duy Nguyen (1):
+      can: rcar_canfd: Fix data transmission failed on R-Car V3U
+
+Gal Pressman (1):
+      Revert "tls: rx: move counting TlsDecryptErrors for sync"
+
+Geliang Tang (1):
+      mptcp: update MIB_RMSUBFLOW in cmd_sf_destroy
+
+Hangbin Liu (1):
+      selftests/net: fix section name when using xdp_dummy.o
+
+Heiner Kallweit (1):
+      r8169: fix accessing unset transport header
+
+Ivan Malov (1):
+      xsk: Clear page contiguity bit when unmapping pool
+
+Jakub Kicinski (7):
+      Merge https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf
+      docs: netdev: document that patch series length limit
+      docs: netdev: document reverse xmas tree
+      docs: netdev: add a cheat sheet for the rules
+      Merge tag 'linux-can-fixes-for-5.19-20220704' of git://git.kernel.org/pub/scm/linux/kernel/git/mkl/linux-can
+      Merge tag 'for-net-2022-07-05' of git://git.kernel.org/pub/scm/linux/kernel/git/bluetooth/bluetooth
+      Merge branch 'wireguard-patches-for-5-19-rc6'
+
+Jason A. Donenfeld (5):
+      wireguard: selftests: set fake real time in init
+      wireguard: selftests: use virt machine on m68k
+      wireguard: selftests: always call kernel makefile
+      wireguard: selftests: use microvm on x86
+      crypto: s390 - do not depend on CRYPTO_HW for SIMD implementations
+
+Jimmy Assarsson (3):
+      can: kvaser_usb: replace run-time checks with struct kvaser_usb_driver_info
+      can: kvaser_usb: kvaser_usb_leaf: fix CAN clock frequency regression
+      can: kvaser_usb: kvaser_usb_leaf: fix bittiming limits
+
+Karsten Graul (1):
+      MAINTAINERS: add Wenjia as SMC maintainer
+
+Kishen Maloor (2):
+      mptcp: netlink: issue MP_PRIO signals from userspace PMs
+      selftests: mptcp: userspace PM support for MP_PRIO signals
+
+Li kunyu (1):
+      net: usb: Fix typo in code
+
+Liang He (1):
+      can: grcan: grcan_probe(): remove extra of_node_get()
+
+Lukasz Cieplicki (1):
+      i40e: Fix dropped jumbo frames statistics
+
+Marc Kleine-Budde (5):
+      can: m_can: m_can_chip_config(): actually enable internal timestamping
+      can: m_can: m_can_{read_fifo,echo_tx_event}(): shift timestamp to full 32 bits
+      can: mcp251xfd: mcp251xfd_stop(): add missing hrtimer_cancel()
+      can: mcp251xfd: mcp251xfd_register_get_dev_id(): use correct length to read dev_id
+      can: mcp251xfd: mcp251xfd_register_get_dev_id(): fix endianness conversion
+
+Masami Hiramatsu (Google) (1):
+      fprobe, samples: Add module parameter descriptions
+
+Mat Martineau (2):
+      mptcp: Avoid acquiring PM lock for subflow priority changes
+      mptcp: Acquire the subflow socket lock before modifying MP_PRIO flags
+
+Michael Walle (1):
+      net: lan966x: hardcode the number of external ports
+
+Norbert Zulinski (1):
+      i40e: Fix VF's MAC Address change on VM
+
+Oliver Hartkopp (1):
+      can: bcm: use call_rcu() instead of costly synchronize_rcu()
+
+Oliver Neukum (1):
+      usbnet: fix memory leak in error case
+
+Pablo Neira Ayuso (2):
+      netfilter: nf_tables: stricter validation of element data
+      netfilter: nft_set_pipapo: release elements in clone from abort path
+
+Paolo Abeni (3):
+      Merge branch 'fix-bridge_vlan_aware-sh-and-bridge_vlan_unaware-sh-with-iff_unicast_flt'
+      mptcp: fix locking in mptcp_nl_cmd_sf_destroy()
+      mptcp: fix local endpoint accounting
+
+Rhett Aultman (1):
+      can: gs_usb: gs_usb_open/close(): fix memory leak
+
+Rick Lindsley (1):
+      ibmvnic: Properly dispose of all skbs during a failover.
+
+Srinivas Neeli (1):
+      Revert "can: xilinx_can: Limit CANFD brp to 2"
+
+Thomas Kopp (2):
+      can: mcp251xfd: mcp251xfd_regmap_crc_read(): improve workaround handling for mcp2517fd
+      can: mcp251xfd: mcp251xfd_regmap_crc_read(): update workaround broken CRC on TBC register
+
+Vasyl Vavrychuk (1):
+      Bluetooth: core: Fix deadlock on hci_power_on_sync.
+
+Vlad Buslov (2):
+      net/sched: act_police: allow 'continue' action offload
+      net/mlx5e: Fix matchall police parameters validation
+
+Vladimir Oltean (3):
+      selftests: forwarding: fix flood_unicast_test when h2 supports IFF_UNICAST_FLT
+      selftests: forwarding: fix learning_test when h1 supports IFF_UNICAST_FLT
+      selftests: forwarding: fix error message in learning_test
+
+Vladis Dronov (1):
+      wireguard: Kconfig: select CRYPTO_CHACHA_S390
+
+ Documentation/process/maintainer-netdev.rst        |  36 +++
+ MAINTAINERS                                        | 116 +++++++--
+ crypto/Kconfig                                     | 114 +++++++++
+ drivers/crypto/Kconfig                             | 115 ---------
+ drivers/net/Kconfig                                |   1 +
+ drivers/net/can/grcan.c                            |   1 -
+ drivers/net/can/m_can/m_can.c                      |   8 +-
+ drivers/net/can/rcar/rcar_canfd.c                  |   5 +-
+ drivers/net/can/spi/mcp251xfd/mcp251xfd-core.c     |   6 +-
+ drivers/net/can/spi/mcp251xfd/mcp251xfd-regmap.c   |  22 +-
+ drivers/net/can/usb/gs_usb.c                       |  23 +-
+ drivers/net/can/usb/kvaser_usb/kvaser_usb.h        |  25 +-
+ drivers/net/can/usb/kvaser_usb/kvaser_usb_core.c   | 285 ++++++++++++---------
+ drivers/net/can/usb/kvaser_usb/kvaser_usb_hydra.c  |   4 +-
+ drivers/net/can/usb/kvaser_usb/kvaser_usb_leaf.c   | 119 +++++----
+ drivers/net/can/xilinx_can.c                       |   4 +-
+ drivers/net/ethernet/ibm/ibmvnic.c                 |   9 +
+ drivers/net/ethernet/intel/i40e/i40e.h             |  16 ++
+ drivers/net/ethernet/intel/i40e/i40e_main.c        |  73 ++++++
+ drivers/net/ethernet/intel/i40e/i40e_register.h    |  13 +
+ drivers/net/ethernet/intel/i40e/i40e_type.h        |   1 +
+ drivers/net/ethernet/intel/i40e/i40e_virtchnl_pf.c |   4 +
+ drivers/net/ethernet/mellanox/mlx5/core/en_tc.c    |  13 +-
+ .../net/ethernet/microchip/lan966x/lan966x_main.c  |   8 +-
+ .../net/ethernet/microchip/lan966x/lan966x_main.h  |   1 +
+ drivers/net/ethernet/realtek/r8169_main.c          |  10 +-
+ drivers/net/usb/catc.c                             |   2 +-
+ drivers/net/usb/usbnet.c                           |  17 +-
+ include/net/flow_offload.h                         |   1 +
+ kernel/bpf/verifier.c                              | 113 ++++----
+ net/bluetooth/hci_core.c                           |   3 +
+ net/bluetooth/hci_sync.c                           |   1 -
+ net/can/bcm.c                                      |  18 +-
+ net/mptcp/options.c                                |   3 +
+ net/mptcp/pm_netlink.c                             |  46 +++-
+ net/mptcp/pm_userspace.c                           |  51 +++-
+ net/mptcp/protocol.c                               |   9 +-
+ net/mptcp/protocol.h                               |   9 +-
+ net/netfilter/nf_tables_api.c                      |   9 +-
+ net/netfilter/nft_set_pipapo.c                     |  48 ++--
+ net/rose/rose_route.c                              |   4 +-
+ net/sched/act_police.c                             |   2 +-
+ net/tls/tls_sw.c                                   |   8 +-
+ net/xdp/xsk_buff_pool.c                            |   1 +
+ samples/fprobe/fprobe_example.c                    |   7 +
+ tools/testing/selftests/bpf/verifier/jmp32.c       |  21 ++
+ tools/testing/selftests/bpf/verifier/jump.c        |  22 ++
+ tools/testing/selftests/net/forwarding/lib.sh      |   6 +-
+ tools/testing/selftests/net/mptcp/pm_nl_ctl.c      |  73 +++++-
+ tools/testing/selftests/net/mptcp/userspace_pm.sh  |  32 +++
+ tools/testing/selftests/net/udpgro.sh              |   2 +-
+ tools/testing/selftests/net/udpgro_bench.sh        |   2 +-
+ tools/testing/selftests/net/udpgro_frglist.sh      |   2 +-
+ tools/testing/selftests/net/udpgro_fwd.sh          |   2 +-
+ tools/testing/selftests/net/veth.sh                |   6 +-
+ tools/testing/selftests/wireguard/qemu/Makefile    |  20 +-
+ .../selftests/wireguard/qemu/arch/arm.config       |   1 +
+ .../selftests/wireguard/qemu/arch/armeb.config     |   1 +
+ .../selftests/wireguard/qemu/arch/i686.config      |   8 +-
+ .../selftests/wireguard/qemu/arch/m68k.config      |  10 +-
+ .../selftests/wireguard/qemu/arch/mips.config      |   1 +
+ .../selftests/wireguard/qemu/arch/mipsel.config    |   1 +
+ .../selftests/wireguard/qemu/arch/powerpc.config   |   1 +
+ .../selftests/wireguard/qemu/arch/x86_64.config    |   7 +-
+ tools/testing/selftests/wireguard/qemu/init.c      |  11 +
+ 65 files changed, 1089 insertions(+), 524 deletions(-)
 

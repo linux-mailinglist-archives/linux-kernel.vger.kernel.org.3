@@ -2,115 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CA73D56AE13
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 00:04:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7EC9256AE16
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 00:05:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236447AbiGGWEq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Jul 2022 18:04:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37250 "EHLO
+        id S236655AbiGGWFA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Jul 2022 18:05:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37376 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236113AbiGGWEm (ORCPT
+        with ESMTP id S236113AbiGGWE6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Jul 2022 18:04:42 -0400
-Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A5582B1BA;
-        Thu,  7 Jul 2022 15:04:42 -0700 (PDT)
-Received: by mail-pl1-x636.google.com with SMTP id r1so14812684plo.10;
-        Thu, 07 Jul 2022 15:04:42 -0700 (PDT)
+        Thu, 7 Jul 2022 18:04:58 -0400
+Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 963C12C673
+        for <linux-kernel@vger.kernel.org>; Thu,  7 Jul 2022 15:04:57 -0700 (PDT)
+Received: by mail-wm1-x330.google.com with SMTP id l68so11422337wml.3
+        for <linux-kernel@vger.kernel.org>; Thu, 07 Jul 2022 15:04:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
+        d=conchuod.ie; s=google;
         h=from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=gztFolpOjRs4gmw4YebA1BI/HHxjQgQpOSAd6qju7xs=;
-        b=Z8eC2jZYCCpsvpiFBwV8ezW4pTFcWXnuy4sU831z78Xw+eF12FHvT0C2Kbz1gB1tet
-         8e+3l1eOph7TsvljIRIpRFvfWLcYyNds0Ibml5x4sqsBq+kkQDZOMoKqclWaKadDDsx7
-         zAqmVo3UFPHxJx9vavKR09fU255eaYmJ9atsnlO4G1nqf1wH8l47fCagot3rlMmdhrYt
-         m1ktZvRXXvI+Smkfq/d3Xq4/+mH9noax2vvnKD2zfWFOQuAkn9eqnt/uAQMFccY8GVnB
-         zcHRQjIbpWjVTuQCegTfdseg1FpOTSdvZcyAnFiZtPu/ZIZMgqtNQL9oKmsV3XncMFc6
-         DnCg==
+        bh=7wEvKldrbzSpzvzf7cF/tBIG4OcicbyZqv1HMnAM6uU=;
+        b=I1/2ncRqvqMJy+BGVzbQhxi6htaIzb4VhybmgmPLzthBnhtOWa1dhgLto1BEsgTICP
+         AhL5XT89aMYm1DAtXKmKWwE9NBPz1eY4PLcSWiH2q0mJJAmuFjZlwEEz9Y43xPBsUINp
+         sR7ZWsa5kDlUPQNe4RjdPPWrjh/FqAF0bf0ektOZ3IjdibERqs9szNiKFFiqJ3qUHKuO
+         9YOIl2Rih4qq0W54K/de/mjzekiUFVRWxhN7ISo2MUFJ3Dq9O3BVE9S7FZogDMX/4iUB
+         SnhQaaxBQuBfbaRfIgreoD3oo3bWKSwL0QYZC+iRtn9RlCZni3w7odpZ4TwEHyEKzB17
+         7mjQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=gztFolpOjRs4gmw4YebA1BI/HHxjQgQpOSAd6qju7xs=;
-        b=PhjErnBLeUmU22dcVL3qTW+hAknwyph+AU0BFJ4/oe/yOH//NfVn6+WmX1FLQtVD0I
-         0i5AfWiePC2vgZfCbF/9d3p2IMXEh44AvPmez/pPbWBYkaSperJwKsg6SdVKW0azaSTa
-         BNwN3VglyiohljZ6T8xpCp1sj8Eekxf6vGSY4hLQN4H8uayVSGiztKiyMkDz2RwzAtCI
-         7AZwFfolBVBLv971LD14yRu/yYRLzcGiVg+5jd1LgC/jNniteSu//479nV1stCvTz271
-         OgOfCD9rP1+RrDaG0WuuLKRWdrBMl1X2XJKrtLBCMD89Jexz5dU5DIqIbKSsE/z6fsUV
-         qyvg==
-X-Gm-Message-State: AJIora8Mr9Rtyii4aqHRHA7LCl5nYqxPSyRkwA5+AYNJUho5art+Xnk2
-        2T1Z/T4TZIsvS5ZyUgZ7wqH7d7kWxQQ=
-X-Google-Smtp-Source: AGRyM1t+qWzNHY3hylQUhEZteb+eFoihq4G6o91pFz6/yQ9b9r56kmL2IFHUDSiHcWt0pWGi9QmZYw==
-X-Received: by 2002:a17:90b:2384:b0:1ef:8506:374e with SMTP id mr4-20020a17090b238400b001ef8506374emr7688335pjb.99.1657231474622;
-        Thu, 07 Jul 2022 15:04:34 -0700 (PDT)
-Received: from fainelli-desktop.igp.broadcom.net ([192.19.223.252])
-        by smtp.gmail.com with ESMTPSA id cu7-20020a056a00448700b00525373aac7csm27239922pfb.26.2022.07.07.15.04.33
+        bh=7wEvKldrbzSpzvzf7cF/tBIG4OcicbyZqv1HMnAM6uU=;
+        b=H3iJutEuChvUWEs+0N28N0L3aJ4rOBkpSX/tSxRbaxA8O69EcOsGVFuZKtFTOFOYLV
+         FwDvRzl4orwYLdOW2ZEPN7dytn6k1MEPot0loRRfcbzU6dok5SDCQgBhCzjM87uzWM/X
+         cFyK3nSmxhANYIG5kE7+46pdhpyWNYF5YPtR8+HqDIvxQVauMv6dM6tgzdq6SX9fMXiF
+         M43pdXxnBxwsBT9z8FfdQu2eE7KVuIdK17gFVjqexK1n/oEhXyVxBYQyALHBmnF6FNps
+         mnIXl/H1lwX7nlLpHf2q3L8lg+4r6QcYoQ3DRo3IyGS+CG3+avQhCrSjtl1105X6XvZr
+         sEew==
+X-Gm-Message-State: AJIora9b5M1e/CGvb5nF018WxYRo3dRb19xCCz5EvLpcBEvGO4wqd5Uo
+        9cBZL2y/MtlMdN51/wS8By5KNw==
+X-Google-Smtp-Source: AGRyM1stTlaaZ8PDLMgVyLk3b3v8YtrUwDb/ZvBcVWXgdsJfv7RfAopcWzGfUfqfzcky8NyVUR+nfA==
+X-Received: by 2002:a05:600c:1d03:b0:3a1:7ab1:8dc6 with SMTP id l3-20020a05600c1d0300b003a17ab18dc6mr6641236wms.103.1657231496073;
+        Thu, 07 Jul 2022 15:04:56 -0700 (PDT)
+Received: from henark71.. ([51.37.234.167])
+        by smtp.gmail.com with ESMTPSA id bn24-20020a056000061800b0020fe35aec4bsm38625743wrb.70.2022.07.07.15.04.54
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 07 Jul 2022 15:04:34 -0700 (PDT)
-From:   Florian Fainelli <f.fainelli@gmail.com>
-To:     linux-mips@vger.kernel.org
-Cc:     fancer.lancer@gmail.com, gerg@kernel.org,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        linux-kernel@vger.kernel.org (open list)
-Subject: [RFC] MIPS: Enable ARCH_HAS_DEBUG_VIRTUAL for 64-bit
-Date:   Thu,  7 Jul 2022 15:04:27 -0700
-Message-Id: <20220707220428.1731083-1-f.fainelli@gmail.com>
-X-Mailer: git-send-email 2.25.1
+        Thu, 07 Jul 2022 15:04:55 -0700 (PDT)
+From:   Conor Dooley <mail@conchuod.ie>
+To:     Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Palmer Dabbelt <palmer@rivosinc.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J . Wysocki" <rafael@kernel.org>
+Cc:     Daire McNamara <daire.mcnamara@microchip.com>,
+        Conor Dooley <conor.dooley@microchip.com>,
+        Niklas Cassel <niklas.cassel@wdc.com>,
+        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Zong Li <zong.li@sifive.com>,
+        Emil Renner Berthing <kernel@esmil.dk>,
+        Jonas Hahnfeld <hahnjo@hahnjo.de>, Guo Ren <guoren@kernel.org>,
+        Anup Patel <anup@brainfault.org>,
+        Atish Patra <atishp@atishpatra.org>,
+        Changbin Du <changbin.du@intel.com>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Philipp Tomsich <philipp.tomsich@vrull.eu>,
+        Rob Herring <robh@kernel.org>, Marc Zyngier <maz@kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        Brice Goglin <Brice.Goglin@inria.fr>
+Subject: [PATCH/RFC 0/4] Fix RISC-V's arch-topology reporting
+Date:   Thu,  7 Jul 2022 23:04:33 +0100
+Message-Id: <20220707220436.4105443-1-mail@conchuod.ie>
+X-Mailer: git-send-email 2.37.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Update __debug_virt_addr_valid() to check for a virtual address'
-validity below CKSSEG and remove the !64BIT dependency on
-ARCH_HAS_DEBUG_VIRTUAL to make DEBUG_VIRTUAL selectable.
+From: Conor Dooley <conor.dooley@microchip.com>
 
-Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
----
-This requires the previous patch to be applied for this to work cleanly.
+Hey all,
+It's my first time messing around with arch/ code at all, let alone
+more than one arch, so forgive me if I have screwed up how to do a
+migration like this.
 
- arch/mips/Kconfig       | 2 +-
- arch/mips/mm/physaddr.c | 4 ++++
- 2 files changed, 5 insertions(+), 1 deletion(-)
+The goal here is the fix the incorrectly reported arch topology on
+RISC-V which seems to have been broken since it was added.
+cpu, package and thread IDs are all currently reported as -1, so tools
+like lstopo think systems have multiple threads on the same core when
+this is not true:
+https://github.com/open-mpi/hwloc/issues/536
 
-diff --git a/arch/mips/Kconfig b/arch/mips/Kconfig
-index db09d45d59ec..ddb6bde8fa1f 100644
---- a/arch/mips/Kconfig
-+++ b/arch/mips/Kconfig
-@@ -5,7 +5,7 @@ config MIPS
- 	select ARCH_32BIT_OFF_T if !64BIT
- 	select ARCH_BINFMT_ELF_STATE if MIPS_FP_SUPPORT
- 	select ARCH_HAS_CURRENT_STACK_POINTER if !CC_IS_CLANG || CLANG_VERSION >= 140000
--	select ARCH_HAS_DEBUG_VIRTUAL if !64BIT
-+	select ARCH_HAS_DEBUG_VIRTUAL
- 	select ARCH_HAS_FORTIFY_SOURCE
- 	select ARCH_HAS_KCOV
- 	select ARCH_HAS_NON_OVERLAPPING_ADDRESS_SPACE if !EVA
-diff --git a/arch/mips/mm/physaddr.c b/arch/mips/mm/physaddr.c
-index a82f8f57a652..3076238943d3 100644
---- a/arch/mips/mm/physaddr.c
-+++ b/arch/mips/mm/physaddr.c
-@@ -31,7 +31,11 @@ static inline bool __debug_virt_addr_valid(unsigned long x)
- 	if (x == MAX_DMA_ADDRESS)
- 		return true;
- 
-+#ifdef CONFIG_64BIT
-+	return KSEGX(x) < CKSSEG;
-+#else
- 	return KSEGX(x) < KSEG2;
-+#endif
- }
- 
- phys_addr_t __virt_to_phys(volatile const void *x)
+Because I want to backport that fix, I implemented store_cpu_topology
+for RISC-V before migrating to the generic version which seems to have
+just complicated things, but was Sudeep's preferred way of doing it.
+
+Palmer, I have not marked the first patch as RFC because I would like
+it to be taken as a fix for 5.19-rc(late) independently of the rest if
+possible.
+
+The rest of the series is RFC b/c I don't know what I am doing ;)
+
+I only built tested for arm64, so hopefully it is not broken when used.
+
+Thanks,
+Conor.
+
+Conor Dooley (4):
+  riscv: arch-topology: fix default topology reporting
+  arch-topology: add a default implementation of store_cpu_topology()
+  riscv: arch-topology: move riscv to the generic store_cpu_topology()
+  arm64: arch-topology move arm64 to the generic store_cpu_topology()
+
+ arch/arm64/kernel/smp.c       | 16 ++++++++++++--
+ arch/arm64/kernel/topology.c  | 40 -----------------------------------
+ arch/riscv/Kconfig            |  2 +-
+ arch/riscv/kernel/smpboot.c   |  4 +++-
+ drivers/base/arch_topology.c  | 19 +++++++++++++++++
+ include/linux/arch_topology.h |  1 +
+ 6 files changed, 38 insertions(+), 44 deletions(-)
+
+
+base-commit: b6f1f2fa2bddd69ff46a190b8120bd440fd50563
 -- 
-2.25.1
+2.37.0
 

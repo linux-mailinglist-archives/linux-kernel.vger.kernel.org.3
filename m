@@ -2,100 +2,336 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 912F6569AAE
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 08:47:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 57A90569AB6
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 08:48:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234106AbiGGGrL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Jul 2022 02:47:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44416 "EHLO
+        id S234370AbiGGGsk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Jul 2022 02:48:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45506 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234163AbiGGGrH (ORCPT
+        with ESMTP id S233783AbiGGGsi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Jul 2022 02:47:07 -0400
-Received: from mail-lj1-x235.google.com (mail-lj1-x235.google.com [IPv6:2a00:1450:4864:20::235])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 779B92C640
-        for <linux-kernel@vger.kernel.org>; Wed,  6 Jul 2022 23:47:06 -0700 (PDT)
-Received: by mail-lj1-x235.google.com with SMTP id j23so4336843lji.13
-        for <linux-kernel@vger.kernel.org>; Wed, 06 Jul 2022 23:47:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=ORqi6wxL3kK6m9SHgKlfeEe+zmKSxqFTgb7yiNIvOeU=;
-        b=PraNs8gbpIt1Zs2+HzsxBWREEY9MzvD2us1oVGkjux8QNNHhQxXEfXEjV0Wxe4o3jR
-         ZQlr47z3zj2GV5Ky41fn2utvGmCATv6SB0zDerZUdXAeAw0JPx2SXs5omCwZrfUZ9HBN
-         X5ovgRJXELEd8rb+mI/fXw8h0Y66oO8bsA+0L1dQtP5Zy1H+s/VwO+9ZkDXXwsDRKaN1
-         hrkZHfaEt73O6HmvPJc1b2iyvFwxsyFrqUDE7b987AtcxEgXt5G/xyE5ybZQmhONU22N
-         2OE0zAdpb40Un4DQs2u+joOQjbqaS5XsSVBRvJqe142EJExfS7YlInY8zuflROo9vSw+
-         m1GQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=ORqi6wxL3kK6m9SHgKlfeEe+zmKSxqFTgb7yiNIvOeU=;
-        b=fe0haYAtwEUkDLMpMpOF0stBqaaxSDZu+e/1W9fAX0w64jmbXvGxzyuu6hacOxQ43j
-         5nRcjfqpN0s3O0CM+CTCXX2oTbyJoeaXaCfUSgE+Wenm/KILrITum3dy7BoBZ+tD61+L
-         EH8Ef43v0HV6AfiAdVaOexdtAu9hH1tYKhcwo2dhRgYeRUG9dGupYyDYg6YLY0WaMJwD
-         ImByrV09+svZ8V6h5sTuult1G2wd6J7trZxe/wHi1TXXfmI6+B7lrex1l1lQkRonNn1/
-         ONoLDyMAa5mYRZ18T6LnqkON4GKMsaFPm0vKALX+f+7k7CyYpQc3QlPIRm85IC4D5qNQ
-         dRSg==
-X-Gm-Message-State: AJIora+UwLPYeb10GWIqF6Ce/fXXGnwSycTbbZphqAxt228llgUEuJfI
-        sces+wtvUmSGfmw6j05m//qALznaPZ1G6D+J
-X-Google-Smtp-Source: AGRyM1u71iUPG3at0BpkKCazPwBmgMYBMalIpGwgfvn4YnquFPcwW+Y5hM3ZZajjLRXJGbGxm8go3w==
-X-Received: by 2002:a05:651c:2127:b0:25a:897b:1413 with SMTP id a39-20020a05651c212700b0025a897b1413mr25381590ljq.121.1657176424814;
-        Wed, 06 Jul 2022 23:47:04 -0700 (PDT)
-Received: from [192.168.1.52] ([84.20.121.239])
-        by smtp.gmail.com with ESMTPSA id y8-20020a197508000000b0048745483f2asm515250lfe.23.2022.07.06.23.47.03
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 06 Jul 2022 23:47:04 -0700 (PDT)
-Message-ID: <d5845ed7-5d40-bac3-a522-a14c8876cfea@linaro.org>
-Date:   Thu, 7 Jul 2022 08:47:03 +0200
+        Thu, 7 Jul 2022 02:48:38 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC3931838E;
+        Wed,  6 Jul 2022 23:48:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1657176514; x=1688712514;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=+tXNzHwELuNgAxKMiAIkruQgSOcxxESD9EGqrQMewd4=;
+  b=mQRzVTUOWy5vuvimXmk8vB5qz9YexZEKVOCU4k2fPXx1c69NOTWjdkA1
+   KCy05ZoKhrQuS3o5q/BhR2djBS6EHblphYhCOQq9SDIaZnF2FbgVpGso8
+   Zk1ijtLm//ef01pktkWjbKoDIimg4FsOPwDTiVGyDDF30Hhh0qIDKXv8Z
+   bEnJA2P2qVeWRjhlD9dbsjPkZz4WrU189fASOiydA/WGUrmj2tAyxkitC
+   7JFD/+FC/UlzkvX+Bkw7TudLc5jgcdWaLasVgx1It0RYMH++sN6nwiShJ
+   EQi9Ya9wUisnstG6z/j1Lmfnp4cYBPKCWUBjEvNCZifV1jiGUMlSmXdfr
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10400"; a="285071812"
+X-IronPort-AV: E=Sophos;i="5.92,252,1650956400"; 
+   d="scan'208";a="285071812"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jul 2022 23:48:33 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.92,252,1650956400"; 
+   d="scan'208";a="683206148"
+Received: from yy-desk-7060.sh.intel.com (HELO localhost) ([10.239.159.76])
+  by FMSMGA003.fm.intel.com with ESMTP; 06 Jul 2022 23:48:31 -0700
+Date:   Thu, 7 Jul 2022 14:48:30 +0800
+From:   Yuan Yao <yuan.yao@linux.intel.com>
+To:     isaku.yamahata@intel.com
+Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        isaku.yamahata@gmail.com, Paolo Bonzini <pbonzini@redhat.com>,
+        Sean Christopherson <sean.j.christopherson@intel.com>
+Subject: Re: [PATCH v7 023/102] KVM: TDX: x86: Add ioctl to get TDX
+ systemwide parameters
+Message-ID: <20220707064830.eszinc5psxt4r5xc@yy-desk-7060>
+References: <cover.1656366337.git.isaku.yamahata@intel.com>
+ <16f33cfd1095fdba35543c562a417b681351d480.1656366338.git.isaku.yamahata@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH 2/2] dt-bindings: arm: fsl: Add Moxa UC8210/8220 series
-Content-Language: en-US
-To:     Jimmy Chen <u7702045@gmail.com>, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Shawn Guo <shawnguo@kernel.org>, Li Yang <leoyang.li@nxp.com>
-Cc:     Jimmy Chen <jimmy.chen@moxa.com>, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220707054044.22266-1-jimmy.chen@moxa.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220707054044.22266-1-jimmy.chen@moxa.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <16f33cfd1095fdba35543c562a417b681351d480.1656366338.git.isaku.yamahata@intel.com>
+User-Agent: NeoMutt/20171215
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 07/07/2022 07:40, Jimmy Chen wrote:
-> Moxa UC8210/8220 use Freescale i.MX7d CPU
-> 
-> Signed-off-by: Jimmy Chen <jimmy.chen@moxa.com>
+On Mon, Jun 27, 2022 at 02:53:15PM -0700, isaku.yamahata@intel.com wrote:
+> From: Sean Christopherson <sean.j.christopherson@intel.com>
+>
+> Implement a system-scoped ioctl to get system-wide parameters for TDX.
+>
+> Signed-off-by: Sean Christopherson <sean.j.christopherson@intel.com>
+> Signed-off-by: Isaku Yamahata <isaku.yamahata@intel.com>
 > ---
->  Documentation/devicetree/bindings/arm/fsl.yaml | 2 ++
->  1 file changed, 2 insertions(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/arm/fsl.yaml b/Documentation/devicetree/bindings/arm/fsl.yaml
-> index ef524378d449..00b2df05087e 100644
-> --- a/Documentation/devicetree/bindings/arm/fsl.yaml
-> +++ b/Documentation/devicetree/bindings/arm/fsl.yaml
-> @@ -767,6 +767,8 @@ properties:
->                - toradex,colibri-imx7d-emmc    # Colibri iMX7D 1GB (eMMC) Module
->                - zii,imx7d-rmu2            # ZII RMU2 Board
->                - zii,imx7d-rpu2            # ZII RPU2 Board
-> +              - moxa,uc-8210              # MOXA UC-8210 board
-> +              - moxa,uc-8220              # MOXA UC-8220 board
+>  arch/x86/include/asm/kvm-x86-ops.h    |  1 +
+>  arch/x86/include/asm/kvm_host.h       |  1 +
+>  arch/x86/include/uapi/asm/kvm.h       | 48 +++++++++++++++++++++++++++
+>  arch/x86/kvm/vmx/main.c               |  2 ++
+>  arch/x86/kvm/vmx/tdx.c                | 46 +++++++++++++++++++++++++
+>  arch/x86/kvm/vmx/x86_ops.h            |  2 ++
+>  arch/x86/kvm/x86.c                    |  6 ++++
+>  tools/arch/x86/include/uapi/asm/kvm.h | 48 +++++++++++++++++++++++++++
+>  8 files changed, 154 insertions(+)
+>
+> diff --git a/arch/x86/include/asm/kvm-x86-ops.h b/arch/x86/include/asm/kvm-x86-ops.h
+> index fbb2c6746066..3677a5015a4f 100644
+> --- a/arch/x86/include/asm/kvm-x86-ops.h
+> +++ b/arch/x86/include/asm/kvm-x86-ops.h
+> @@ -117,6 +117,7 @@ KVM_X86_OP(smi_allowed)
+>  KVM_X86_OP(enter_smm)
+>  KVM_X86_OP(leave_smm)
+>  KVM_X86_OP(enable_smi_window)
+> +KVM_X86_OP_OPTIONAL(dev_mem_enc_ioctl)
+>  KVM_X86_OP_OPTIONAL(mem_enc_ioctl)
+>  KVM_X86_OP_OPTIONAL(mem_enc_register_region)
+>  KVM_X86_OP_OPTIONAL(mem_enc_unregister_region)
+> diff --git a/arch/x86/include/asm/kvm_host.h b/arch/x86/include/asm/kvm_host.h
+> index 80df346af117..342decc69649 100644
+> --- a/arch/x86/include/asm/kvm_host.h
+> +++ b/arch/x86/include/asm/kvm_host.h
+> @@ -1591,6 +1591,7 @@ struct kvm_x86_ops {
+>  	int (*leave_smm)(struct kvm_vcpu *vcpu, const char *smstate);
+>  	void (*enable_smi_window)(struct kvm_vcpu *vcpu);
+>
+> +	int (*dev_mem_enc_ioctl)(void __user *argp);
+>  	int (*mem_enc_ioctl)(struct kvm *kvm, void __user *argp);
+>  	int (*mem_enc_register_region)(struct kvm *kvm, struct kvm_enc_region *argp);
+>  	int (*mem_enc_unregister_region)(struct kvm *kvm, struct kvm_enc_region *argp);
+> diff --git a/arch/x86/include/uapi/asm/kvm.h b/arch/x86/include/uapi/asm/kvm.h
+> index 9792ec1cc317..273c8d82b9c8 100644
+> --- a/arch/x86/include/uapi/asm/kvm.h
+> +++ b/arch/x86/include/uapi/asm/kvm.h
+> @@ -534,4 +534,52 @@ struct kvm_pmu_event_filter {
+>  #define KVM_X86_DEFAULT_VM	0
+>  #define KVM_X86_TDX_VM		1
+>
+> +/* Trust Domain eXtension sub-ioctl() commands. */
+> +enum kvm_tdx_cmd_id {
+> +	KVM_TDX_CAPABILITIES = 0,
+> +
+> +	KVM_TDX_CMD_NR_MAX,
+> +};
+> +
+> +struct kvm_tdx_cmd {
+> +	/* enum kvm_tdx_cmd_id */
+> +	__u32 id;
+> +	/* flags for sub-commend. If sub-command doesn't use this, set zero. */
+> +	__u32 flags;
+> +	/*
+> +	 * data for each sub-command. An immediate or a pointer to the actual
+> +	 * data in process virtual address.  If sub-command doesn't use it,
+> +	 * set zero.
+> +	 */
+> +	__u64 data;
+> +	/*
+> +	 * Auxiliary error code.  The sub-command may return TDX SEAMCALL
+> +	 * status code in addition to -Exxx.
+> +	 * Defined for consistency with struct kvm_sev_cmd.
+> +	 */
+> +	__u64 error;
+> +	/* Reserved: Defined for consistency with struct kvm_sev_cmd. */
+> +	__u64 unused;
+> +};
+> +
+> +struct kvm_tdx_cpuid_config {
+> +	__u32 leaf;
+> +	__u32 sub_leaf;
+> +	__u32 eax;
+> +	__u32 ebx;
+> +	__u32 ecx;
+> +	__u32 edx;
+> +};
+> +
+> +struct kvm_tdx_capabilities {
+> +	__u64 attrs_fixed0;
+> +	__u64 attrs_fixed1;
+> +	__u64 xfam_fixed0;
+> +	__u64 xfam_fixed1;
+> +
+> +	__u32 nr_cpuid_configs;
+> +	__u32 padding;
+> +	struct kvm_tdx_cpuid_config cpuid_configs[0];
+> +};
+> +
+>  #endif /* _ASM_X86_KVM_H */
+> diff --git a/arch/x86/kvm/vmx/main.c b/arch/x86/kvm/vmx/main.c
+> index 6a93b19a8b06..7b497ed1f21c 100644
+> --- a/arch/x86/kvm/vmx/main.c
+> +++ b/arch/x86/kvm/vmx/main.c
+> @@ -212,6 +212,8 @@ struct kvm_x86_ops vt_x86_ops __initdata = {
+>  	.complete_emulated_msr = kvm_complete_insn_gp,
+>
+>  	.vcpu_deliver_sipi_vector = kvm_vcpu_deliver_sipi_vector,
+> +
+> +	.dev_mem_enc_ioctl = tdx_dev_ioctl,
+>  };
+>
+>  struct kvm_x86_init_ops vt_init_ops __initdata = {
+> diff --git a/arch/x86/kvm/vmx/tdx.c b/arch/x86/kvm/vmx/tdx.c
+> index 63f3c7a02cc8..ec4ebba4152a 100644
+> --- a/arch/x86/kvm/vmx/tdx.c
+> +++ b/arch/x86/kvm/vmx/tdx.c
+> @@ -392,6 +392,52 @@ int tdx_vm_init(struct kvm *kvm)
+>  	return ret;
+>  }
+>
+> +int tdx_dev_ioctl(void __user *argp)
+> +{
+> +	struct kvm_tdx_capabilities __user *user_caps;
+> +	struct kvm_tdx_capabilities caps;
+> +	struct kvm_tdx_cmd cmd;
+> +
+> +	BUILD_BUG_ON(sizeof(struct kvm_tdx_cpuid_config) !=
+> +		     sizeof(struct tdx_cpuid_config));
+> +
+> +	if (copy_from_user(&cmd, argp, sizeof(cmd)))
+> +		return -EFAULT;
+> +	if (cmd.flags || cmd.error || cmd.unused)
+> +		return -EINVAL;
+> +	/*
+> +	 * Currently only KVM_TDX_CAPABILITIES is defined for system-scoped
+> +	 * mem_enc_ioctl().
+> +	 */
+> +	if (cmd.id != KVM_TDX_CAPABILITIES)
+> +		return -EINVAL;
+> +
+> +	user_caps = (void __user *)cmd.data;
+> +	if (copy_from_user(&caps, user_caps, sizeof(caps)))
+> +		return -EFAULT;
+> +
+> +	if (caps.nr_cpuid_configs < tdx_caps.nr_cpuid_configs)
+> +		return -E2BIG;
+> +
+> +	caps = (struct kvm_tdx_capabilities) {
+> +		.attrs_fixed0 = tdx_caps.attrs_fixed0,
+> +		.attrs_fixed1 = tdx_caps.attrs_fixed1,
+> +		.xfam_fixed0 = tdx_caps.xfam_fixed0,
+> +		.xfam_fixed1 = tdx_caps.xfam_fixed1,
+> +		.nr_cpuid_configs = tdx_caps.nr_cpuid_configs,
+> +		.padding = 0,
+> +	};
+> +
+> +	if (copy_to_user(user_caps, &caps, sizeof(caps)))
+> +		return -EFAULT;
+> +	if (copy_to_user(user_caps->cpuid_configs, &tdx_caps.cpuid_configs,
+> +			 tdx_caps.nr_cpuid_configs *
+> +			 sizeof(struct tdx_cpuid_config)))
+> +		return -EFAULT;
+> +
+> +	return 0;
+> +}
+> +
+>  int __init tdx_module_setup(void)
+>  {
+>  	const struct tdsysinfo_struct *tdsysinfo;
+> diff --git a/arch/x86/kvm/vmx/x86_ops.h b/arch/x86/kvm/vmx/x86_ops.h
+> index 663fd8d4063f..3027d9821fe1 100644
+> --- a/arch/x86/kvm/vmx/x86_ops.h
+> +++ b/arch/x86/kvm/vmx/x86_ops.h
+> @@ -132,6 +132,7 @@ void vmx_setup_mce(struct kvm_vcpu *vcpu);
+>  int __init tdx_hardware_setup(struct kvm_x86_ops *x86_ops);
+>  bool tdx_is_vm_type_supported(unsigned long type);
+>  void tdx_hardware_unsetup(void);
+> +int tdx_dev_ioctl(void __user *argp);
+>
+>  int tdx_vm_init(struct kvm *kvm);
+>  void tdx_mmu_release_hkid(struct kvm *kvm);
+> @@ -140,6 +141,7 @@ void tdx_vm_free(struct kvm *kvm);
+>  static inline int tdx_hardware_setup(struct kvm_x86_ops *x86_ops) { return 0; }
+>  static inline bool tdx_is_vm_type_supported(unsigned long type) { return false; }
+>  static inline void tdx_hardware_unsetup(void) {}
+> +static inline int tdx_dev_ioctl(void __user *argp) { return -EOPNOTSUPP; };
+>
+>  static inline int tdx_vm_init(struct kvm *kvm) { return -EOPNOTSUPP; }
+>  static inline void tdx_mmu_release_hkid(struct kvm *kvm) {}
+> diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
+> index 320f902eaf9e..6037ce93bcb7 100644
+> --- a/arch/x86/kvm/x86.c
+> +++ b/arch/x86/kvm/x86.c
+> @@ -4565,6 +4565,12 @@ long kvm_arch_dev_ioctl(struct file *filp,
+>  			break;
+>  		r = kvm_x86_dev_has_attr(&attr);
+>  		break;
+> +		case KVM_MEMORY_ENCRYPT_OP:
+> +			r = -EINVAL;
+> +			if (!kvm_x86_ops.dev_mem_enc_ioctl)
+> +				goto out;
+> +			r = static_call(kvm_x86_dev_mem_enc_ioctl)(argp);
+> +			break;
 
-Entries go here ordered alphabetically.
+Incorrect indention and please move it out of
+case KVM_HAS_DEVICE_ATTR: {
+}
 
-Best regards,
-Krzysztof
+>  	}
+>  	default:
+>  		r = -EINVAL;
+> diff --git a/tools/arch/x86/include/uapi/asm/kvm.h b/tools/arch/x86/include/uapi/asm/kvm.h
+> index 71a5851475e7..a9ea3573be1b 100644
+> --- a/tools/arch/x86/include/uapi/asm/kvm.h
+> +++ b/tools/arch/x86/include/uapi/asm/kvm.h
+> @@ -528,4 +528,52 @@ struct kvm_pmu_event_filter {
+>  #define KVM_X86_DEFAULT_VM	0
+>  #define KVM_X86_TDX_VM		1
+>
+> +/* Trust Domain eXtension sub-ioctl() commands. */
+> +enum kvm_tdx_cmd_id {
+> +	KVM_TDX_CAPABILITIES = 0,
+> +
+> +	KVM_TDX_CMD_NR_MAX,
+> +};
+> +
+> +struct kvm_tdx_cmd {
+> +	/* enum kvm_tdx_cmd_id */
+> +	__u32 id;
+> +	/* flags for sub-commend. If sub-command doesn't use this, set zero. */
+> +	__u32 flags;
+> +	/*
+> +	 * data for each sub-command. An immediate or a pointer to the actual
+> +	 * data in process virtual address.  If sub-command doesn't use it,
+> +	 * set zero.
+> +	 */
+> +	__u64 data;
+> +	/*
+> +	 * Auxiliary error code.  The sub-command may return TDX SEAMCALL
+> +	 * status code in addition to -Exxx.
+> +	 * Defined for consistency with struct kvm_sev_cmd.
+> +	 */
+> +	__u64 error;
+> +	/* Reserved: Defined for consistency with struct kvm_sev_cmd. */
+> +	__u64 unused;
+> +};
+> +
+> +struct kvm_tdx_cpuid_config {
+> +	__u32 leaf;
+> +	__u32 sub_leaf;
+> +	__u32 eax;
+> +	__u32 ebx;
+> +	__u32 ecx;
+> +	__u32 edx;
+> +};
+> +
+> +struct kvm_tdx_capabilities {
+> +	__u64 attrs_fixed0;
+> +	__u64 attrs_fixed1;
+> +	__u64 xfam_fixed0;
+> +	__u64 xfam_fixed1;
+> +
+> +	__u32 nr_cpuid_configs;
+> +	__u32 padding;
+> +	struct kvm_tdx_cpuid_config cpuid_configs[0];
+> +};
+> +
+>  #endif /* _ASM_X86_KVM_H */
+> --
+> 2.25.1
+>

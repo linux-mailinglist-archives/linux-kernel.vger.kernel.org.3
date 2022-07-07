@@ -2,73 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E6EC2569AAA
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 08:46:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A7F7569AB0
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 08:47:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232918AbiGGGqg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Jul 2022 02:46:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43882 "EHLO
+        id S234042AbiGGGqq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Jul 2022 02:46:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44014 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229697AbiGGGqe (ORCPT
+        with ESMTP id S229697AbiGGGqn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Jul 2022 02:46:34 -0400
-Received: from mail-lj1-x236.google.com (mail-lj1-x236.google.com [IPv6:2a00:1450:4864:20::236])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B39B12AE26
-        for <linux-kernel@vger.kernel.org>; Wed,  6 Jul 2022 23:46:33 -0700 (PDT)
-Received: by mail-lj1-x236.google.com with SMTP id a39so21051725ljq.11
-        for <linux-kernel@vger.kernel.org>; Wed, 06 Jul 2022 23:46:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=tZh+dn4czsVPREHl44O7IddFEHHwiTNYYgVX5E+3arg=;
-        b=AfFd7vdcM7BrjURHfGmIIl3YmliD3VHhxWZ7Vw16prCL9B9sYswdVolgCUZWTF6isG
-         +oH2PjLfB0Rr1/Yw9LAQR9Re4F060fLQatLnFByB6UX3i8CF+e7ZDTxVHkBbLfu5GAJJ
-         oG/Vw9mhKeAHn93/xC1N+oTrVNBjJzmZrYkxBk6+TnNMjmhWzNJNUkWnzLmd1RDsoMGd
-         pLFqonUey7BkmhkfSRXU/P6WinA9ngq8l0SXgdBazjDKmC38aeARDWcP1Qhg2NVOj6O5
-         NoKNOQ+GH1U7XAlhjT8OHYHhYce/U3iAwlwgsRlc7+6pNysE8KyvjoYmZZtBDowV83+2
-         YqUA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=tZh+dn4czsVPREHl44O7IddFEHHwiTNYYgVX5E+3arg=;
-        b=OsimCgZ3ZSW8DDt3ngzFrSpTnAOXStJTN4MrRV43gZpYfQyPovu0QFyTo7nrUyACn8
-         pqpxRZDl/X1mamOS0tGNi3HWci+2m2W1cbJyMt/A1bOvG4NQxFHa7GuXCdet90EtbF6t
-         ygvhdrDrwRokPsJ8jfEMW++2Q+5mL/vhdzb+2gkGT1LaCOLCnpEBR1VO/ITxZlouwUBc
-         FTTbUuqZ405R2hqO4TsvcdQCAEtglfKysCDJhNo4OswZ1M9/bdfEcuyIknNnSEO6zEbi
-         Rtv6yL4kc8/gIF7rm2aDwRRNM9MhlXVajzz+hwaGfXcjTjVuxuhsRjJ17pE0gTq0zcam
-         Y+NQ==
-X-Gm-Message-State: AJIora9qKGuSPfGVj0RKWECka3iD8TNrfHaQ1fRHZk9lX2v/9dtHN+qx
-        lStCKPP9bekLe/20qVj1dW3inw==
-X-Google-Smtp-Source: AGRyM1sxS3jj5vIVCBB7Th7q596D72VdSdvG01Z1E2modQbGL/e4QVMyP3GktInsrEdzy3hucwVkCQ==
-X-Received: by 2002:a2e:6e0b:0:b0:25b:bf22:47a with SMTP id j11-20020a2e6e0b000000b0025bbf22047amr25834609ljc.524.1657176392137;
-        Wed, 06 Jul 2022 23:46:32 -0700 (PDT)
-Received: from [192.168.1.52] ([84.20.121.239])
-        by smtp.gmail.com with ESMTPSA id o3-20020ac25e23000000b004889096bc6csm156151lfg.134.2022.07.06.23.46.31
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 06 Jul 2022 23:46:31 -0700 (PDT)
-Message-ID: <41e17a56-5cb0-8e90-c7ae-a7a56de986d0@linaro.org>
-Date:   Thu, 7 Jul 2022 08:46:30 +0200
+        Thu, 7 Jul 2022 02:46:43 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9ED1E2BB05;
+        Wed,  6 Jul 2022 23:46:42 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3E8FB6223F;
+        Thu,  7 Jul 2022 06:46:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 99C16C3411E;
+        Thu,  7 Jul 2022 06:46:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1657176401;
+        bh=gDTI6bzgacZUyQ+597yklj8txJRTgWrcbiEyQEYawhU=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Z73EBgtTyLs60Emr/xosib2dxdXvy3uMBdbaIJ0eVgs8Lj5Joq8ssaqU3nQtERQLR
+         I2ncGzqmkvJ2VfrrszcIdKo39Lua4giwgLnULAbHNharPwFZuImvVvUBjGAg3ZY3UD
+         /cvKzwDRFHONViYS/siA+90/tWvmBXT6AM9bz9/zK6YbkoGcAQBjaeDlAxKBjcXHCU
+         ggKkos86tg9mJJdCpk0u1Lop7gVkUrlQ0XzyVhL3J1ys2n3GWK6cNULI4Wb4e07fAr
+         I1OYLk7AGtCWOMGnzHE7dnr8jmhyqJ82XFgDckj0fsAoAClUKQMzsfpvKVqz7zXmG+
+         NBSurjWS06AyA==
+Received: from johan by xi.lan with local (Exim 4.94.2)
+        (envelope-from <johan@kernel.org>)
+        id 1o9LHf-00048G-Io; Thu, 07 Jul 2022 08:46:43 +0200
+Date:   Thu, 7 Jul 2022 08:46:43 +0200
+From:   Johan Hovold <johan@kernel.org>
+To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Cc:     Johan Hovold <johan+linaro@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 06/14] arm64: dts: qcom: msm8998: drop USB PHY clock index
+Message-ID: <YsaBU4YZEjxL/9uO@hovoldconsulting.com>
+References: <20220705114032.22787-1-johan+linaro@kernel.org>
+ <20220705114032.22787-7-johan+linaro@kernel.org>
+ <61281f98-f45c-4701-f21e-269c5e78881a@linaro.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH] dt-bindings: mmc: Add compatible for MediaTek MT8188
-Content-Language: en-US
-To:     Johnson Wang <johnson.wang@mediatek.com>, ulf.hansson@linaro.org,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org
-Cc:     linux-mmc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org,
-        Project_Global_Chrome_Upstream_Group@mediatek.com
-References: <20220707054710.1396-1-johnson.wang@mediatek.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220707054710.1396-1-johnson.wang@mediatek.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <61281f98-f45c-4701-f21e-269c5e78881a@linaro.org>
+X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -77,27 +64,22 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 07/07/2022 07:47, Johnson Wang wrote:
-> This commit adds dt-binding documentation of mmc for MediaTek MT8188 SoC
-> platform.
+On Tue, Jul 05, 2022 at 04:09:14PM +0300, Dmitry Baryshkov wrote:
+> On 05/07/2022 14:40, Johan Hovold wrote:
+> > The QMP USB PHY provides a single clock so drop the redundant clock
+> > index.
+> > 
+> > Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
 > 
-> Signed-off-by: Johnson Wang <johnson.wang@mediatek.com>
-> ---
->  Documentation/devicetree/bindings/mmc/mtk-sd.yaml | 3 +++
->  1 file changed, 3 insertions(+)
+> Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 > 
-> diff --git a/Documentation/devicetree/bindings/mmc/mtk-sd.yaml b/Documentation/devicetree/bindings/mmc/mtk-sd.yaml
-> index 2a2e9fa8c188..3fbf33ad4f7c 100644
-> --- a/Documentation/devicetree/bindings/mmc/mtk-sd.yaml
-> +++ b/Documentation/devicetree/bindings/mmc/mtk-sd.yaml
-> @@ -32,6 +32,9 @@ properties:
->        - items:
->            - const: mediatek,mt8186-mmc
->            - const: mediatek,mt8183-mmc
-> +      - items:
-> +          - const: mediatek,mt8188-mmc
+> However please note 
+> https://lore.kernel.org/linux-arm-msm/20220620071936.1558906-3-dmitry.baryshkov@linaro.org/ 
+> (for this and the last patch).
 
-You duplicate quite a lot. Use enum.
+Ah, I had not seen that one. Bjorn appears to have applied your series
+before this one so these two patches became empty and were dropped.
 
-Best regards,
-Krzysztof
+Thanks for reviewing!
+
+Johan

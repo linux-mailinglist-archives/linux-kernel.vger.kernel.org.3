@@ -2,51 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 559CD5699ED
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 07:36:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EB5D75699CA
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 07:22:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234983AbiGGFfM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Jul 2022 01:35:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55730 "EHLO
+        id S234951AbiGGFWP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Jul 2022 01:22:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48306 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229553AbiGGFfJ (ORCPT
+        with ESMTP id S229538AbiGGFWN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Jul 2022 01:35:09 -0400
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E61A33138E;
-        Wed,  6 Jul 2022 22:35:06 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4LdlVD4v1Kz4xXD;
-        Thu,  7 Jul 2022 15:35:00 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1657172101;
-        bh=Er96BYX0qV8YNs6ECQ777qibN0NojAhA5cN7YVJsaWw=;
-        h=Date:From:To:Cc:Subject:From;
-        b=U22eI7OHVcB5/ykIOyZaYdFiYaWDdY+iktdHr4AbKE/0D8RCMOhSa2L4Cw60O+UFD
-         e6muaas5Z3hbqhwrS9XGlJtekQ08IztaQNtyQ6z7ohMz8rGFVJ+LCejZwK5NUwu5IH
-         Xqwmlo2t1gneqxqqm7DnANyJsauYWHgMRuK8AxcS+HN5OMdHw7i1APDbfCKHEWswGr
-         VxomGud5rV/CbE5HGuQISrQOwOFB1GOCWE4pcKXcLfs+uXsgusqlKn0KZ2lrNlnNcO
-         u2jHZzChaFjkcDhdG8Tq7SF5fS5u+gkiOPaRyUA0WQH8v6oo2vQrcWuW5q/A+cjH21
-         0aSMrQtNOqaSw==
-Date:   Thu, 7 Jul 2022 15:21:42 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Kishon Vijay Abraham I <kishon@ti.com>,
-        Vinod Koul <vkoul@kernel.org>, Rob Clark <robdclark@gmail.com>,
-        Sean Paul <seanpaul@chromium.org>
-Cc:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Kuogee Hsieh <quic_khsieh@quicinc.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: manual merge of the phy-next tree with the drm-msm tree
-Message-ID: <20220707152142.060c5b6f@canb.auug.org.au>
+        Thu, 7 Jul 2022 01:22:13 -0400
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E81731235;
+        Wed,  6 Jul 2022 22:22:12 -0700 (PDT)
+Received: from pps.filterd (m0098417.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 2675GvFU012386;
+        Thu, 7 Jul 2022 05:22:03 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
+ subject : message-id : references : mime-version : content-type :
+ in-reply-to; s=pp1; bh=+1WB8LXMgfzVJPMaiZ9ErPb4Hm5qyRydXwOHGwyge80=;
+ b=c/dSRJBz/6HN0DoBULnK8QqcgKEEt+7r3gmAlAHGoQ1J6qkAUWvp9KHQD2F79ctUXknf
+ r4379Bt/Sn1Zq/j1mcilquud789K90lhBn0qy0VXna8h4MxrvEjRXOKwWfuTc46Qhbwc
+ 3pEJh5TzfytCiSsFTm94jtShdqVmHY221d7yPDSTBaljUsvCKfk4t+Ol1QeiomJZ4JhE
+ JmvtpIkhJUGxk8nN78e/aDgowt4gveFGUfinQP48nSN/qygHUCuNRm5hwe9bUPgU8140
+ hEsyO5/HILcgb5bEvsPEV2G+05GXBSPEXPCvtJgmmaP51p36BHeHcqcttGS++BJN+cYm lA== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3h5s6vg3g3-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 07 Jul 2022 05:22:03 +0000
+Received: from m0098417.ppops.net (m0098417.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 2675IJt6016252;
+        Thu, 7 Jul 2022 05:22:02 GMT
+Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3h5s6vg3fg-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 07 Jul 2022 05:22:02 +0000
+Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
+        by ppma06ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 2675M1Xo004196;
+        Thu, 7 Jul 2022 05:22:01 GMT
+Received: from b06cxnps4076.portsmouth.uk.ibm.com (d06relay13.portsmouth.uk.ibm.com [9.149.109.198])
+        by ppma06ams.nl.ibm.com with ESMTP id 3h4usd21yc-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 07 Jul 2022 05:22:01 +0000
+Received: from d06av26.portsmouth.uk.ibm.com (d06av26.portsmouth.uk.ibm.com [9.149.105.62])
+        by b06cxnps4076.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 2675LvbQ24641846
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 7 Jul 2022 05:21:57 GMT
+Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 85995AE045;
+        Thu,  7 Jul 2022 05:21:57 +0000 (GMT)
+Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 1A700AE04D;
+        Thu,  7 Jul 2022 05:21:57 +0000 (GMT)
+Received: from li-4a3a4a4c-28e5-11b2-a85c-a8d192c6f089.ibm.com (unknown [9.145.48.113])
+        by d06av26.portsmouth.uk.ibm.com (Postfix) with ESMTPS;
+        Thu,  7 Jul 2022 05:21:57 +0000 (GMT)
+Date:   Thu, 7 Jul 2022 07:21:55 +0200
+From:   Alexander Gordeev <agordeev@linux.ibm.com>
+To:     Alexander Egorenkov <egorenar@linux.ibm.com>
+Cc:     Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Baoquan He <bhe@redhat.com>, Christoph Hellwig <hch@lst.de>,
+        linux-kernel@vger.kernel.org, linux-s390@vger.kernel.org
+Subject: Re: [PATCH 1/1] s390/crash: allow multi-segment iterators
+Message-ID: <YsZtc9MV4buEfNKa@li-4a3a4a4c-28e5-11b2-a85c-a8d192c6f089.ibm.com>
+References: <cover.1657049033.git.agordeev@linux.ibm.com>
+ <3e713ce3865246766feca8397af2860cbe46854d.1657049033.git.agordeev@linux.ibm.com>
+ <877d4q3b94.fsf@oc8242746057.ibm.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/TeUkG8KjfcZ_x6OL7Km577L";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,SPF_PASS,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <877d4q3b94.fsf@oc8242746057.ibm.com>
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: GBc8YupEPXwtRkZsnOsNhzGnc4Iph18j
+X-Proofpoint-ORIG-GUID: o5kDKAlqg0Xp9dR6bve_wgoCzY4vUnFN
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
+ definitions=2022-07-07_03,2022-06-28_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0
+ priorityscore=1501 impostorscore=0 suspectscore=0 adultscore=0 spamscore=0
+ mlxlogscore=822 mlxscore=0 phishscore=0 malwarescore=0 clxscore=1015
+ lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2206140000 definitions=main-2207070019
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -54,75 +94,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/TeUkG8KjfcZ_x6OL7Km577L
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Wed, Jul 06, 2022 at 10:18:15AM +0200, Alexander Egorenkov wrote:
+> > +	__iterate_and_advance(iter, csize, base, len, off,
+> > +		({ copy_oldmem_user(base, src + off, len) < 0 ? csize : 0; }),
+> > +		({ copy_oldmem_kernel(base, src + off, len) < 0 ? csize : 0; })
+> 
+> Question
+> --------
+> About return value of STEP in iterate_iovec().
+> We return "csize" in case copy_oldmem_*() fails.
+> If i'm not mistaken this could lead to an overflow in iterate_iovec():
+> 
+>   len -= (STEP);
+> 
+> Because len could be less than csize in case iovec consists of multiple
+> segments, one of which is less than csize.
+> 
+> Better to return len ?
 
-Hi all,
+It certainly better. I'll post the fixed version.
 
-Today's linux-next merge of the phy-next tree got a conflict in:
+> ({ copy_oldmem_user(base, src + off, len) < 0 ? len : 0; })
+> 
+> > +	)
+> >  	return csize;
+> >  }
+> 
+> Another thing is that now we never report any errors in contrast to
+> the version before. This is OK ?
 
-  drivers/gpu/drm/msm/dp/dp_parser.h
+I think that is fine. It is consistent with other iterate_and_advance()
+uses and actually converted by read_from_oldmem() to -EFAULT in case of
+incomplete copy.
 
-between commit:
-
-  50b1131e0674 ("drm/msm/dp: rewrite dss_module_power to use bulk clock fun=
-ctions")
-
-from the drm-msm tree and commit:
-
-  fa384dd8b9b8 ("drm/msm/dp: delete vdda regulator related functions from e=
-DP/DP controller")
-
-from the phy-next tree.
-
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
-
---=20
-Cheers,
-Stephen Rothwell
-
-diff --cc drivers/gpu/drm/msm/dp/dp_parser.h
-index 9abddc6d50c0,47430e3a97bf..000000000000
---- a/drivers/gpu/drm/msm/dp/dp_parser.h
-+++ b/drivers/gpu/drm/msm/dp/dp_parser.h
-@@@ -100,16 -99,6 +98,11 @@@ struct dp_reg_entry=20
-  	int disable_load;
-  };
- =20
-- struct dp_regulator_cfg {
-- 	int num;
-- 	struct dp_reg_entry regs[DP_DEV_REGULATOR_MAX];
-- };
--=20
- +struct dss_module_power {
- +	unsigned int num_clk;
- +	struct clk_bulk_data *clocks;
- +};
- +
-  /**
-   * struct dp_parser - DP parser's data exposed to clients
-   *
-
---Sig_/TeUkG8KjfcZ_x6OL7Km577L
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmLGbWYACgkQAVBC80lX
-0GyCvAgAicMjd/akoL0/+CQJJXCFHdV7CbTbiySm2H2lVdBwL0D8OmJDHx7J/lvG
-SUwSf0b50XCY2/0lKwt0LcAshGrZtrV/YXRX4jKrWoudBq3S0axeSFQx81YrgcTF
-sO2hx0K89bDDX/Tg2B0LCdJc300BWitSSnUbLkSQhfyR4BmaS+td8uGeNGx7adv8
-NjZZkAgBh5yPcy3V0fhO85tNBJXpBrovqMFQ6BeghukCZyiskF5bmBt58byBXTwp
-w3zRHb+F6i+Xa1YfKsU852QPL9+a0UUkNWhuTNLpb1AfEIiza9oc/gM/q3MyyBHx
-ZG3tmzAkm+zieJE52jNLx2PUv4TY+A==
-=3qvA
------END PGP SIGNATURE-----
-
---Sig_/TeUkG8KjfcZ_x6OL7Km577L--
+Thank you!

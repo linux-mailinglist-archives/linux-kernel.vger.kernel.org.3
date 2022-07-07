@@ -2,153 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5CE7856A62C
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 16:52:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3FF8C56A635
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 16:54:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236216AbiGGOwR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Jul 2022 10:52:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41956 "EHLO
+        id S235556AbiGGOya (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Jul 2022 10:54:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48648 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236209AbiGGOvS (ORCPT
+        with ESMTP id S235355AbiGGOyQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Jul 2022 10:51:18 -0400
-Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1E0531DEE;
-        Thu,  7 Jul 2022 07:50:47 -0700 (PDT)
-Received: by mail-wm1-x336.google.com with SMTP id m6-20020a05600c3b0600b003a0489f412cso1043667wms.1;
-        Thu, 07 Jul 2022 07:50:47 -0700 (PDT)
+        Thu, 7 Jul 2022 10:54:16 -0400
+Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BEE45A45B
+        for <linux-kernel@vger.kernel.org>; Thu,  7 Jul 2022 07:53:18 -0700 (PDT)
+Received: by mail-pf1-x435.google.com with SMTP id e16so7105466pfm.11
+        for <linux-kernel@vger.kernel.org>; Thu, 07 Jul 2022 07:53:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=zKCQPtlV/zp+9AxyutmXUkykhKgpm+t7LU8VMAQOZXo=;
-        b=EBJoSIWSMNh7Q1ibq+I4sYH0CrcGDJBR7HCFsUv3WlC6lIeY+WB0iD1pZHLWb5hEYg
-         5oqhc10dDEvdDxWkISeBeVwaC00jPuQ2y4i2S4X/deZg2PRdyztDaHCmgc4XkoNnHPdU
-         0zrAezlOOkUNUpMt+vInfnHF+UPKzZR6VK11mkt1xOrjDbDyaJmSQcmnDbUnNAd2WCaZ
-         1xhm07yun2rNWjUM8ridi0XFR6SiPbEaV6U7ef/YsAnydnkrhBpLUwerTNKcNPaSaRGo
-         mn7N0pWFXGLMB8XhfqCS0MLZtgW8jpiIvbjGd7/WaMJlyhL4H75btFIyDomTkOJ7Rbtd
-         UqUQ==
+        d=ventanamicro.com; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=2/cSQRYg50JuMF0k4CiBLOOMScUk3mXsGoE8DMLTmGQ=;
+        b=er9nqWUP8eP6usOXt23apNRzaB+sp9s0z7ZvXZctGj3Om3+CrQ463jXIqaq0Olo7cA
+         eLVU8m4qvUPEKhD35qoudlMRRWzhftZF2RzvL1qICwipTKw6ml05b8wHU8hudZEuGfON
+         +xDaFvG1KOiNdB6l6W4oYPYwTd3zUsifB5zQzeTYpLjCnllDQv9fv4dSmKe5BQIPOInq
+         juBSjYjMYn3KOEJKZGUW/wKoq0bI1MT2nuOZ3Wa43ilVxvbgUDkKdKBBAYtJq5UewcQg
+         nCDZMgk0ulSCy9Ded1j4Vm1hK33lAQREgPfY7MB3Wh3rBZjOfUpWcmfX2KahyaibpiRz
+         fZ0Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=zKCQPtlV/zp+9AxyutmXUkykhKgpm+t7LU8VMAQOZXo=;
-        b=L4pXUdqlTy9UV7So//e8Oy6y775BdXwjaRGwUyylzKlPsgXCEQFNlHmHqjPuShFE6y
-         I+Bzb8Q4hIE08m9l5UqXsYxipNF3LBD0OcfcR/QrgBDriycr8sPjVQJmJS52eIU2igfq
-         3Qn5hV2FKMc/7FF79B/PrC8/KJ91afGsb6gNBDQHIHo/H8EktRmydm8rHryaPSKqIjdu
-         AMp80/MNdQuwK8xJTKoLvRPJ86RVCMmw/Uyyr0clus+fdSYFQt/mSvpiQ69rTKDeRePT
-         zy4BUGYtnHQ6bzOkastmSp6Vc8nkK4/cgZtyY3QxxU3lQpA5OKSEn6VQk9JORh0IFX0h
-         2qMg==
-X-Gm-Message-State: AJIora+5l9QceaJbeGMOqMx0r94S6pUTi+s4rPRi5Z/6h9FEkuAmg9us
-        zXTY8hUOG23uemmTvK+a6VxAHZ4BIPJz0Q==
-X-Google-Smtp-Source: AGRyM1tbSjA0Rr6Nv9IbQQWPXRgiLpd2Jgw9p/RhFNjcuTYsVoEOhwrw3W1uyeQOYlyX7Q3o45E0JA==
-X-Received: by 2002:a05:600c:3b87:b0:3a2:c7c1:a89 with SMTP id n7-20020a05600c3b8700b003a2c7c10a89mr5051361wms.159.1657205446330;
-        Thu, 07 Jul 2022 07:50:46 -0700 (PDT)
-Received: from [192.168.2.177] ([207.188.167.132])
-        by smtp.gmail.com with ESMTPSA id n35-20020a05600c3ba300b003a039054567sm29099955wms.18.2022.07.07.07.50.44
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 07 Jul 2022 07:50:45 -0700 (PDT)
-Message-ID: <de6412d4-732c-79cf-ac00-e0fccee44270@gmail.com>
-Date:   Thu, 7 Jul 2022 16:50:44 +0200
+        bh=2/cSQRYg50JuMF0k4CiBLOOMScUk3mXsGoE8DMLTmGQ=;
+        b=gFfOW2R5QvXkaHm6DaeG1KkW9ZxBrb3PVnDLGbviP/jqqb+YbetR6by0JtDH4FTncG
+         G7+uIpGpwHh/ceewP3ehiFI2tcilA90O/MkjKe1CyAajaqwnh1GrV5jfWUkLh3V/V7CS
+         CJMve0EBirJ6/kQf9SXZdwn/s8xlKnXv1LolFeCE4KrfaXTnCUEzkuLINxno04Bh445y
+         XNmm6PunbKZ51xEH+9huQScTEw22Zv3Lkb/sdhhRgwV+7UXOxZU1CZT62Srq9rE9uP47
+         wPXPMwYRebJrbdVnRDqcg42XhKC3+F6i/w3vJyONQ3/DnM/jK75QKM4OV6aWVcw+Ujri
+         nQxw==
+X-Gm-Message-State: AJIora+D4Kj3nMC3TK1UyzZ4k142ZvJj+s7yEIa4oPvDeQUWhuwjBYE9
+        ngHmBfbVZguGbigYQNRMc42Yjg==
+X-Google-Smtp-Source: AGRyM1vOJj+bmEomGF03XvBXPTdyrfwYNBaHdnZBlfX7sgIfcCWLhyRtqza8tkvG3CxVepetxWkL0Q==
+X-Received: by 2002:a17:903:110c:b0:168:fa61:1440 with SMTP id n12-20020a170903110c00b00168fa611440mr52729714plh.149.1657205596753;
+        Thu, 07 Jul 2022 07:53:16 -0700 (PDT)
+Received: from anup-ubuntu64-vm.. ([223.226.40.162])
+        by smtp.gmail.com with ESMTPSA id b26-20020aa7951a000000b0052535e7c489sm27144231pfp.114.2022.07.07.07.53.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 07 Jul 2022 07:53:16 -0700 (PDT)
+From:   Anup Patel <apatel@ventanamicro.com>
+To:     Paolo Bonzini <pbonzini@redhat.com>,
+        Atish Patra <atishp@atishpatra.org>
+Cc:     Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Alistair Francis <Alistair.Francis@wdc.com>,
+        Anup Patel <anup@brainfault.org>, kvm@vger.kernel.org,
+        kvm-riscv@lists.infradead.org, linux-riscv@lists.infradead.org,
+        linux-kernel@vger.kernel.org, Anup Patel <apatel@ventanamicro.com>
+Subject: [PATCH 0/5] KVM RISC-V Svpbmt support
+Date:   Thu,  7 Jul 2022 20:22:43 +0530
+Message-Id: <20220707145248.458771-1-apatel@ventanamicro.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH v3] arm64: dts: mt8173: Fix elm panel DT node
-Content-Language: en-US
-To:     Pin-Yen Lin <treapking@chromium.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>
-Cc:     Hsin-Yi Wang <hsinyi@chromium.org>,
-        Eizan Miyamoto <eizan@chromium.org>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-mediatek@lists.infradead.org
-References: <20220621091854.1904372-1-treapking@chromium.org>
-From:   Matthias Brugger <matthias.bgg@gmail.com>
-In-Reply-To: <20220621091854.1904372-1-treapking@chromium.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+This series extends KVM RISC-V to detect and use Svpbmt for both
+G-stage (hypervisor) and VS-stage (guest) page table.
 
+The corresponding KVMTOOL patches used for testing this series
+can be found in riscv_svpbmt_sstc_v1 branch at:
+https://github.com/avpatel/kvmtool.git
 
-On 21/06/2022 11:18, Pin-Yen Lin wrote:
-> Move the panel DT node under `aux-bus` node, so it won't use the buggy
-> `ps8640_bridge_get_edid` to get the display modes. Also, change the
-> compatible string from "lg,lp120up1" to "edp-panel", so the panel-edp
-> driver gets the displays modes from the EDID instead of using the
-> predefined display mode (`lg_lp129qe_mode`) in the driver, which is
-> actually not working.
-> 
+These patches can also be found in riscv_kvm_svpbmt_v1 branch at:
+https://github.com/avpatel/linux.git
 
-Do we need a fixes tag here? I'm not quite sure if we fix an upstream bug here, 
-to be honest.
+Alexandre Ghiti (1):
+  riscv: Fix missing PAGE_PFN_MASK
 
-Regards,
-Matthias
+Anup Patel (4):
+  KVM: Add gfp_custom flag in struct kvm_mmu_memory_cache
+  RISC-V: KVM: Add G-stage ioremap() and iounmap() functions
+  RISC-V: KVM: Use PAGE_KERNEL_IO in kvm_riscv_gstage_ioremap()
+  RISC-V: KVM: Add support for Svpbmt inside Guest/VM
 
-> Signed-off-by: Pin-Yen Lin <treapking@chromium.org>
-> ---
-> 
-> Changes in v3:
-> - Include more details in the commit message.
-> 
-> Changes in v2:
-> - Remove the Fixes tag because this change is not compatible with the
->    old kernel versions.
-> 
->   arch/arm64/boot/dts/mediatek/mt8173-elm.dtsi | 26 +++++++++++---------
->   1 file changed, 14 insertions(+), 12 deletions(-)
-> 
-> diff --git a/arch/arm64/boot/dts/mediatek/mt8173-elm.dtsi b/arch/arm64/boot/dts/mediatek/mt8173-elm.dtsi
-> index 9c75fbb31f98..1e0802a6f6d2 100644
-> --- a/arch/arm64/boot/dts/mediatek/mt8173-elm.dtsi
-> +++ b/arch/arm64/boot/dts/mediatek/mt8173-elm.dtsi
-> @@ -90,18 +90,6 @@ volume_up {
->   		};
->   	};
->   
-> -	panel: panel {
-> -		compatible = "lg,lp120up1";
-> -		power-supply = <&panel_fixed_3v3>;
-> -		backlight = <&backlight>;
-> -
-> -		port {
-> -			panel_in: endpoint {
-> -				remote-endpoint = <&ps8640_out>;
-> -			};
-> -		};
-> -	};
-> -
->   	panel_fixed_3v3: regulator1 {
->   		compatible = "regulator-fixed";
->   		regulator-name = "PANEL_3V3";
-> @@ -282,6 +270,20 @@ ps8640_out: endpoint {
->   				};
->   			};
->   		};
-> +
-> +		aux-bus {
-> +			panel {
-> +				compatible = "edp-panel";
-> +				power-supply = <&panel_fixed_3v3>;
-> +				backlight = <&backlight>;
-> +
-> +				port {
-> +					panel_in: endpoint {
-> +						remote-endpoint = <&ps8640_out>;
-> +					};
-> +				};
-> +			};
-> +		};
->   	};
->   };
->   
+ arch/riscv/include/asm/csr.h        | 16 ++++++++++++++++
+ arch/riscv/include/asm/kvm_host.h   |  5 +++++
+ arch/riscv/include/asm/pgtable-64.h | 12 ++++++------
+ arch/riscv/include/asm/pgtable.h    |  6 +++---
+ arch/riscv/include/uapi/asm/kvm.h   |  1 +
+ arch/riscv/kvm/mmu.c                | 22 ++++++++++++++++------
+ arch/riscv/kvm/vcpu.c               | 16 ++++++++++++++++
+ include/linux/kvm_types.h           |  1 +
+ virt/kvm/kvm_main.c                 |  4 +++-
+ 9 files changed, 67 insertions(+), 16 deletions(-)
+
+-- 
+2.34.1
+

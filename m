@@ -2,168 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DE864569EC5
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 11:43:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F0CD0569ECF
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 11:50:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235156AbiGGJnL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Jul 2022 05:43:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45854 "EHLO
+        id S233281AbiGGJsf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Jul 2022 05:48:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49350 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233783AbiGGJnH (ORCPT
+        with ESMTP id S229951AbiGGJsb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Jul 2022 05:43:07 -0400
-Received: from aposti.net (aposti.net [89.234.176.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9C2A45070;
-        Thu,  7 Jul 2022 02:43:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
-        s=mail; t=1657186985; h=from:from:sender:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=i8p03/aknxZm4ISCg5osm/QCfwD06OLWvg98PIGVA6k=;
-        b=4SIGlYDYz6ZeZwMrdFwcHjdodvrTphUWQoqLzkb/6LkauADFI0vWu+8mpxaajfTFhrYj87
-        UHht/fC++I9qD2m9Mw2oNxWMBu2R3rOFRIB8frxKvS5vDhiJiRJAgBjkfneTYy4BzHYz+t
-        BaW4ijYk24naRuCXPWWhsdjRcMj/ph4=
-Date:   Thu, 07 Jul 2022 10:42:55 +0100
-From:   Paul Cercueil <paul@crapouillou.net>
-Subject: Re: [PATCH 08/11] ASoC: jz4740-i2s: Align macro values and sort
- includes
-To:     Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
-Cc:     lgirdwood@gmail.com, broonie@kernel.org, perex@perex.cz,
-        tiwai@suse.com, linux-mips@vger.kernel.org,
-        alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org
-Message-Id: <JN9NER.N2JY086JY5VK2@crapouillou.net>
-In-Reply-To: <20220706211330.120198-9-aidanmacdonald.0x0@gmail.com>
-References: <20220706211330.120198-1-aidanmacdonald.0x0@gmail.com>
-        <20220706211330.120198-9-aidanmacdonald.0x0@gmail.com>
+        Thu, 7 Jul 2022 05:48:31 -0400
+Received: from sender4-of-o51.zoho.com (sender4-of-o51.zoho.com [136.143.188.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8C28DF69;
+        Thu,  7 Jul 2022 02:48:29 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1657187276; cv=none; 
+        d=zohomail.com; s=zohoarc; 
+        b=IeW7CmKisiJaE3pVWkI/F+5MdcngjRiLaAY1zVvmVucvGKqAP3KI50yY1wpVc5qSJtkOGqTpZkTEpmuDn9oKzJwQrL6XeKVEWmC8Cb3WY5IZdIOlaDLLnhdjpqSUHZMObhB4JsofAm+c27oYXEUM91okzF7La277sAlWgHDJ/HY=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
+        t=1657187276; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
+        bh=AxgMRIxlOM7se1RN4hoSSzKpsvEX8snGSo/jMnDX/Ek=; 
+        b=KBTUiCEn80z6AHIupkVuG2OQijhEML5J0n1ZUPb1eKfyKwV7YDU/Ruv0U5oPN6j8WkBOtxx7eaC27lbQdF5QV1C30jfSQMB30NBgHV9fWPfTUcJNHoTGQIRqpQJPgTb4Cj3StZY2mQnWCYUIBuVCgGftCqymIpMHe6oJWurUaJE=
+ARC-Authentication-Results: i=1; mx.zohomail.com;
+        dkim=pass  header.i=apertussolutions.com;
+        spf=pass  smtp.mailfrom=dpsmith@apertussolutions.com;
+        dmarc=pass header.from=<dpsmith@apertussolutions.com>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1657187276;
+        s=zoho; d=apertussolutions.com; i=dpsmith@apertussolutions.com;
+        h=Message-ID:Date:Date:MIME-Version:Subject:Subject:To:To:Cc:Cc:References:From:From:In-Reply-To:Content-Type:Content-Transfer-Encoding:Message-Id:Reply-To;
+        bh=AxgMRIxlOM7se1RN4hoSSzKpsvEX8snGSo/jMnDX/Ek=;
+        b=bNuNz5RLnm0oVDSPCegtHT9bLWpV9KooJQzx/hs9cDw7HfHcJYg/XFxb2wrvhPBs
+        IuN/dTS0HjbgUYS4kuPBAerNnc1UDtc8HSUUMAAzfgc3xaYh+Mb67J1c/fXDXR7Xxnm
+        NSenPKAzT0UAOe+5hVwNwALsCBMddgv5NNyIDGYM=
+Received: from [10.10.1.164] (static-72-81-132-2.bltmmd.fios.verizon.net [72.81.132.2]) by mx.zohomail.com
+        with SMTPS id 1657187267545698.9829943472045; Thu, 7 Jul 2022 02:47:47 -0700 (PDT)
+Message-ID: <b1e7b545-8e66-5dc0-ff5a-9f69d1751a5f@apertussolutions.com>
+Date:   Thu, 7 Jul 2022 05:46:40 -0400
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1; format=flowed
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Subject: Re: Linux DRTM on UEFI platforms
+Content-Language: en-US
+To:     The development of GNU GRUB <grub-devel@gnu.org>,
+        Brendan Trotter <btrotter@gmail.com>
+Cc:     Ard Biesheuvel <ardb@kernel.org>,
+        Matthew Garrett <mjg59@srcf.ucam.org>,
+        Daniel Kiper <daniel.kiper@oracle.com>,
+        Alec Brown <alec.r.brown@oracle.com>,
+        Kanth Ghatraju <kanth.ghatraju@oracle.com>,
+        Ross Philipson <ross.philipson@oracle.com>,
+        "piotr.krol@3mdeb.com" <piotr.krol@3mdeb.com>,
+        "krystian.hebel@3mdeb.com" <krystian.hebel@3mdeb.com>,
+        "persaur@gmail.com" <persaur@gmail.com>,
+        "Yoder, Stuart" <stuart.yoder@arm.com>,
+        Andrew Cooper <andrew.cooper3@citrix.com>,
+        "michal.zygowski@3mdeb.com" <michal.zygowski@3mdeb.com>,
+        James Bottomley <James.Bottomley@hansenpartnership.com>,
+        "lukasz@hawrylko.pl" <lukasz@hawrylko.pl>,
+        linux-efi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        James Morris <jmorris@namei.org>
+References: <20220329174057.GA17778@srcf.ucam.org>
+ <f9622b47-c45f-8c91-cb85-e5db7fd541cf@apertussolutions.com>
+ <CAMj1kXEUT8BK_akqjF1Wx0JkLniFyV_h9s1TfQnPqfxCHsKfWw@mail.gmail.com>
+ <7aab2990-9c57-2456-b08d-299ae96ac919@apertussolutions.com>
+ <CAELHeEfZ-feZnexp7Gx3VAJPerENcoO1Uccbe3xxUX95jvLUdA@mail.gmail.com>
+From:   "Daniel P. Smith" <dpsmith@apertussolutions.com>
+In-Reply-To: <CAELHeEfZ-feZnexp7Gx3VAJPerENcoO1Uccbe3xxUX95jvLUdA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ZohoMailClient: External
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,UPPERCASE_50_75 autolearn=no autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 7/5/22 20:03, Brendan Trotter wrote:
+> Hi,
 
+Greetings!
 
-Le mer., juil. 6 2022 at 22:13:27 +0100, Aidan MacDonald=20
-<aidanmacdonald.0x0@gmail.com> a =E9crit :
-> Some purely cosmetic changes: line up all the macro values to
-> make things easier to read and sort the includes alphabetically.
->=20
-> Signed-off-by: Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
+Not sure why I got dropped from distro, but no worries.
 
-Acked-by: Paul Cercueil <paul@crapouillou.net>
+> On Wed, Jul 6, 2022 at 4:52 AM Daniel P. Smith
+> <dpsmith@apertussolutions.com> wrote:
+>> On 6/10/22 12:40, Ard Biesheuvel wrote:> On Thu, 19 May 2022 at 22:59,
+>> To help provide clarity, consider the following flows for comparison,
+>>
+>> Normal/existing efi-stub:
+>>    EFI -> efi-stub -> head_64.S
+>>
+>> Proposed secure launch:
+>>    EFI -> efi-stub -> dl-handler -> [cpu] -> sl_stub ->head_64.S
+> 
+> For more clarity; the entire point is to ensure that the kernel only
+> has to trust itself and the CPU/TPM hardware (and does not have to
+> trust a potentially malicious boot loader)..Any attempt to avoid a
+> one-off solution for Linux is an attempt to weaken security.
 
-Cheers,
--Paul
+Please elaborate so I might understand how this entrypoint allows for 
+the kernel to only trust itself and the CPU/TPM.
 
-> ---
->  sound/soc/jz4740/jz4740-i2s.c | 66=20
-> +++++++++++++++++------------------
->  1 file changed, 32 insertions(+), 34 deletions(-)
->=20
-> diff --git a/sound/soc/jz4740/jz4740-i2s.c=20
-> b/sound/soc/jz4740/jz4740-i2s.c
-> index b8d2723c5f90..3a21ee9d34d1 100644
-> --- a/sound/soc/jz4740/jz4740-i2s.c
-> +++ b/sound/soc/jz4740/jz4740-i2s.c
-> @@ -4,6 +4,9 @@
->   */
->=20
->  #include <linux/bitfield.h>
-> +#include <linux/clk.h>
-> +#include <linux/delay.h>
-> +#include <linux/dma-mapping.h>
->  #include <linux/init.h>
->  #include <linux/io.h>
->  #include <linux/kernel.h>
-> @@ -13,11 +16,6 @@
->  #include <linux/regmap.h>
->  #include <linux/slab.h>
->=20
-> -#include <linux/clk.h>
-> -#include <linux/delay.h>
-> -
-> -#include <linux/dma-mapping.h>
-> -
->  #include <sound/core.h>
->  #include <sound/pcm.h>
->  #include <sound/pcm_params.h>
-> @@ -35,36 +33,36 @@
->  #define JZ_REG_AIC_CLK_DIV	0x30
->  #define JZ_REG_AIC_FIFO		0x34
->=20
-> -#define JZ_AIC_CONF_OVERFLOW_PLAY_LAST BIT(6)
-> -#define JZ_AIC_CONF_INTERNAL_CODEC BIT(5)
-> -#define JZ_AIC_CONF_I2S BIT(4)
-> -#define JZ_AIC_CONF_RESET BIT(3)
-> -#define JZ_AIC_CONF_BIT_CLK_MASTER BIT(2)
-> -#define JZ_AIC_CONF_SYNC_CLK_MASTER BIT(1)
-> -#define JZ_AIC_CONF_ENABLE BIT(0)
-> -
-> -#define JZ_AIC_CTRL_OUTPUT_SAMPLE_SIZE GENMASK(21, 19)
-> -#define JZ_AIC_CTRL_INPUT_SAMPLE_SIZE GENMASK(18, 16)
-> -#define JZ_AIC_CTRL_ENABLE_RX_DMA BIT(15)
-> -#define JZ_AIC_CTRL_ENABLE_TX_DMA BIT(14)
-> -#define JZ_AIC_CTRL_MONO_TO_STEREO BIT(11)
-> -#define JZ_AIC_CTRL_SWITCH_ENDIANNESS BIT(10)
-> -#define JZ_AIC_CTRL_SIGNED_TO_UNSIGNED BIT(9)
-> +#define JZ_AIC_CONF_OVERFLOW_PLAY_LAST	BIT(6)
-> +#define JZ_AIC_CONF_INTERNAL_CODEC	BIT(5)
-> +#define JZ_AIC_CONF_I2S			BIT(4)
-> +#define JZ_AIC_CONF_RESET		BIT(3)
-> +#define JZ_AIC_CONF_BIT_CLK_MASTER	BIT(2)
-> +#define JZ_AIC_CONF_SYNC_CLK_MASTER	BIT(1)
-> +#define JZ_AIC_CONF_ENABLE		BIT(0)
-> +
-> +#define JZ_AIC_CTRL_OUTPUT_SAMPLE_SIZE	GENMASK(21, 19)
-> +#define JZ_AIC_CTRL_INPUT_SAMPLE_SIZE	GENMASK(18, 16)
-> +#define JZ_AIC_CTRL_ENABLE_RX_DMA	BIT(15)
-> +#define JZ_AIC_CTRL_ENABLE_TX_DMA	BIT(14)
-> +#define JZ_AIC_CTRL_MONO_TO_STEREO	BIT(11)
-> +#define JZ_AIC_CTRL_SWITCH_ENDIANNESS	BIT(10)
-> +#define JZ_AIC_CTRL_SIGNED_TO_UNSIGNED	BIT(9)
->  #define JZ_AIC_CTRL_FLUSH		BIT(8)
-> -#define JZ_AIC_CTRL_ENABLE_ROR_INT BIT(6)
-> -#define JZ_AIC_CTRL_ENABLE_TUR_INT BIT(5)
-> -#define JZ_AIC_CTRL_ENABLE_RFS_INT BIT(4)
-> -#define JZ_AIC_CTRL_ENABLE_TFS_INT BIT(3)
-> -#define JZ_AIC_CTRL_ENABLE_LOOPBACK BIT(2)
-> -#define JZ_AIC_CTRL_ENABLE_PLAYBACK BIT(1)
-> -#define JZ_AIC_CTRL_ENABLE_CAPTURE BIT(0)
-> -
-> -#define JZ_AIC_I2S_FMT_DISABLE_BIT_CLK BIT(12)
-> -#define JZ_AIC_I2S_FMT_DISABLE_BIT_ICLK BIT(13)
-> -#define JZ_AIC_I2S_FMT_ENABLE_SYS_CLK BIT(4)
-> -#define JZ_AIC_I2S_FMT_MSB BIT(0)
-> -
-> -#define JZ_AIC_I2S_STATUS_BUSY BIT(2)
-> +#define JZ_AIC_CTRL_ENABLE_ROR_INT	BIT(6)
-> +#define JZ_AIC_CTRL_ENABLE_TUR_INT	BIT(5)
-> +#define JZ_AIC_CTRL_ENABLE_RFS_INT	BIT(4)
-> +#define JZ_AIC_CTRL_ENABLE_TFS_INT	BIT(3)
-> +#define JZ_AIC_CTRL_ENABLE_LOOPBACK	BIT(2)
-> +#define JZ_AIC_CTRL_ENABLE_PLAYBACK	BIT(1)
-> +#define JZ_AIC_CTRL_ENABLE_CAPTURE	BIT(0)
-> +
-> +#define JZ_AIC_I2S_FMT_DISABLE_BIT_CLK	BIT(12)
-> +#define JZ_AIC_I2S_FMT_DISABLE_BIT_ICLK	BIT(13)
-> +#define JZ_AIC_I2S_FMT_ENABLE_SYS_CLK	BIT(4)
-> +#define JZ_AIC_I2S_FMT_MSB		BIT(0)
-> +
-> +#define JZ_AIC_I2S_STATUS_BUSY		BIT(2)
->=20
->  struct i2s_soc_info {
->  	struct snd_soc_dai_driver *dai;
-> --
-> 2.35.1
->=20
+> The only correct approach is "efi-stub -> head_64.S -> kernel's own
+> secure init"; where (on UEFI systems) neither GRUB nor Trenchboot has
+> a valid reason to exist and should never be installed.
+> 
+> 
+> Cheers,
+> 
+> Brendan
 
-
+v/r,
+dps

@@ -2,111 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7A7DD56A332
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 15:13:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2914B56A341
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 15:16:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235234AbiGGNND (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Jul 2022 09:13:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36714 "EHLO
+        id S235509AbiGGNQN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Jul 2022 09:16:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39196 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234888AbiGGNNB (ORCPT
+        with ESMTP id S235218AbiGGNQK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Jul 2022 09:13:01 -0400
-Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2076.outbound.protection.outlook.com [40.107.94.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7692D220E1;
-        Thu,  7 Jul 2022 06:12:57 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=YMsmvK0um10+egVhzBs2SOQ5p/lGQGDQV43PhkV/+ZHprOAfRtGSjdEDkZf+0FoPb4Ream59fNEgcUs0dJf+MVmttoE6homtSSmQEF+v0rQwki/SRP0Wa8NUVM5JMDheQ//oAPZGiXSbwVkqVkojWWn4v0byrVaS91v8N6JJ+tdmISV2CotxTL9c4YkcL31zhcZGGxpr5/4oCBU/ARdSwdrkdg09cYgAAVPNkQ75EO8gG2eQsDyjM7HtYzFEySlHRtnORmZM0vp49IOVyYNQcDqWFsZ9Bshie+uhvkxuzYnQ6DPHJrgi3lTfCo4yYFrS1cxgSP3nTHX81k++fEfX4A==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=kKPylHrBOwaxCAkPgXc+ZVw0PpiWgi4WwzzmmMdl5MY=;
- b=a9mMbAZXDZQ60dsMv/QlycKhTaS+ON9dpRp8OcrrWcOwKjCMRtyGDWqWPzRGYRHM7iKEHX5soQ5KWcocurlRInqj4v/qflXa8bt+8CmKQDEKEbA8C8Fam5nDJxsrJHGEWcrdEA/SljLIpWTEhQpwMNAoah3NmEAdpfBX/nF94VNe9ab4jP745/qMXdQPmhkb3STwrTQBKHXdom/sgsM90UqiVE62M248L2enRBgesc3BBB1oj4SGy5DmPJZRw5oSY35+KS84zXDLYk6RVHmsdAvJ/HPRWsyuI3jPccXUZBKvaCuyXp444PI17lhMSr5iua2SidrS4yc4O4MDU2AoxA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 149.199.62.198) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=xilinx.com;
- dmarc=pass (p=none sp=none pct=100) action=none header.from=xilinx.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=xilinx.onmicrosoft.com; s=selector2-xilinx-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=kKPylHrBOwaxCAkPgXc+ZVw0PpiWgi4WwzzmmMdl5MY=;
- b=rY1GWJb94p0j874vo+o/3KV+Cfl/tumKo1k257CniTBpNB0CbzXhCZNo+jYpMmlnqOXqRS6WVqWrRZQUAFkHHB3KhpOOAEjPCUmDiZNYtJYvgyGW4D/2Sd0JHQmRIh0qWwW07JqbE8jyWG5YBruc9hCKxh9tQP6bqTYbgRqi9Uc=
-Received: from DM6PR13CA0036.namprd13.prod.outlook.com (2603:10b6:5:bc::49) by
- MN2PR02MB5981.namprd02.prod.outlook.com (2603:10b6:208:11e::25) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5417.16; Thu, 7 Jul
- 2022 13:12:55 +0000
-Received: from DM3NAM02FT054.eop-nam02.prod.protection.outlook.com
- (2603:10b6:5:bc:cafe::74) by DM6PR13CA0036.outlook.office365.com
- (2603:10b6:5:bc::49) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5438.5 via Frontend
- Transport; Thu, 7 Jul 2022 13:12:55 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 149.199.62.198)
- smtp.mailfrom=xilinx.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=xilinx.com;
-Received-SPF: Pass (protection.outlook.com: domain of xilinx.com designates
- 149.199.62.198 as permitted sender) receiver=protection.outlook.com;
- client-ip=149.199.62.198; helo=xsj-pvapexch02.xlnx.xilinx.com; pr=C
-Received: from xsj-pvapexch02.xlnx.xilinx.com (149.199.62.198) by
- DM3NAM02FT054.mail.protection.outlook.com (10.13.5.135) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.5417.15 via Frontend Transport; Thu, 7 Jul 2022 13:12:54 +0000
-Received: from xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) by
- xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2176.14; Thu, 7 Jul 2022 06:12:53 -0700
-Received: from smtp.xilinx.com (172.19.127.95) by
- xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) with Microsoft SMTP Server id
- 15.1.2176.14 via Frontend Transport; Thu, 7 Jul 2022 06:12:53 -0700
-Envelope-to: git@xilinx.com,
- linux-gpio@vger.kernel.org,
- bgolaszewski@baylibre.com,
- linux-kernel@vger.kernel.org
-Received: from [10.254.241.52] (port=58456)
-        by smtp.xilinx.com with esmtp (Exim 4.90)
-        (envelope-from <michal.simek@xilinx.com>)
-        id 1o9RJN-0000kv-3U; Thu, 07 Jul 2022 06:12:53 -0700
-Message-ID: <b78d9a15-5933-5965-edc6-7a050eb1bc0f@xilinx.com>
-Date:   Thu, 7 Jul 2022 15:12:50 +0200
+        Thu, 7 Jul 2022 09:16:10 -0400
+Received: from mail-io1-f72.google.com (mail-io1-f72.google.com [209.85.166.72])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2EBC2A961
+        for <linux-kernel@vger.kernel.org>; Thu,  7 Jul 2022 06:16:08 -0700 (PDT)
+Received: by mail-io1-f72.google.com with SMTP id h18-20020a5d9712000000b00674f83a60f0so9776685iol.4
+        for <linux-kernel@vger.kernel.org>; Thu, 07 Jul 2022 06:16:08 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
+         :from:to;
+        bh=oi6ePpdG99rdNTr7vl16aHsOKZPJL7r4QXfiCaOqR+g=;
+        b=Cmul8wG8sCalmF9dr7UOzhoczbs9m79VX+G1EYGkJaiFuJW3i3mfmP2b/lzS51Bias
+         Qh8PE6OY7JHxoWZwnTYHVYqcMlZzc82pJtWG2dKUvpSJNB58Xypdmd5puvOdI/Vbx50U
+         8DBXwfHn/X/GyCQvY96SKUO2D9pKoTVq2ahodI/Zvt+m/UzDaF9ygpYRimR02nE+VkIU
+         9Abggn4Q37wQcum4h7X1/Up9OUWFBGDwFHRpv6rPDatESEppx/ZtPEkxgnD6eQly6BbD
+         ZmqNuO2a6DJstVIQhOBX16yMujUoPIb3IzVgQv0wHmrEuJpYLhoQ0FwLSxpxkZL8SrgU
+         O1Sg==
+X-Gm-Message-State: AJIora9PTmW5UzlLp17XmUf0NWWzkwXheT07nzKStYeJENo6aKXtODqk
+        RZehpKk5F7WUWSYJ178uLnoy8E98k2Q3YskkKgBBND/KGghK
+X-Google-Smtp-Source: AGRyM1vDlcupM1djjRO57nR48Smu/lljdaSJjqPpE6AE84U19vxcmJ0ShZQhsnEsY7Nm7tG6mnuoQ+JUkFSQYCh6FLwyUYculHB7
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH v2] gpio: xilinx: add missing blank line after
- declarations
-Content-Language: en-US
-To:     Shubhrajyoti Datta <shubhrajyoti.datta@xilinx.com>,
-        <linux-gpio@vger.kernel.org>,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>
-CC:     <michal.simek@xilinx.com>, <srinivas.neeli@xilinx.com>,
-        <linux-kernel@vger.kernel.org>, <git@xilinx.com>
-References: <20220502110040.12225-1-shubhrajyoti.datta@xilinx.com>
-From:   Michal Simek <michal.simek@xilinx.com>
-In-Reply-To: <20220502110040.12225-1-shubhrajyoti.datta@xilinx.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 2edcbbc4-81d8-4d9e-54af-08da601a679d
-X-MS-TrafficTypeDiagnostic: MN2PR02MB5981:EE_
-X-Auto-Response-Suppress: DR, RN, NRN, OOF, AutoReply
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: qQpROhCKQMorcqiKuevupkAqHGuoLr+X22ed7VMltz+q2Um8B3pFkpumbQlBL5jsK9aRusdBq0nV0aFcWh/3URuMlvVDcwNsOb8cy9NgHPTBAWFQWXC6Enjvh+3QqgQm9UAtOnpeegJs2vDbgu1JrzrKoUtJKhlmXvLqCaDKEReG5c6hZ/3TiN5l89zsSmNvctaGeL6eeizivVJraONHIIQBLt63+UR9ZVv39w4wzyvteb2EUsoICrmPEc1xD7wzO9n62oBcNTPpldsKV5o9s9otFIXbO86ZoUfDvKFYTjQaXX4BtfCY02uVINJowD5amRHgD9XMoedzdwEMfPaOwptdMDPloUTA/af3d1wDQwNJtFj8qiHGo5YrWBehFROMYcMMpCSfyZRkOWYSFLW6nS5uENboExIZVlxJ/J7MvYzsIV5rMiWF7PSYRakCMkjXZtnefymGYLlmKZI9nWVk5w0/o5/PmNgvxrW/SyRbfFYTfG0KNTtk9wcxB99xfeR42SJnhjYcRvf5Dq8Sh4Zs9w1v3RI/IxjztEIKpnjdaRcFnjXdHXM17VYj50E8g5nBlL6tKprovGrhEPElW7KhdueR8yYYvep2TzWQHGnVSjXjfB9/SRkqUWXsk3njmDPjM9rQ5tTMIeNFJWWrEKg3MYsFXd32O0hzZqHqf5C791gaL3a6KzW4nQKGSQ04/c4KmyFjWo3HO56l8QRCiRzAxYNfl+GiXaKkf6fwOkdFUFoWm3vxEVGuYTmBYaXJo4hV6Dt41oNX4W8t10/sNkCTHMzBaiw0zq3e94Of40O04U3scVvFr0Th6MztmuPXg7ddfClAcxOECkYcQB1RejDrcIEiyzoqClO+HQwSd4Cj70Qw17QajuGvwK01sF9hCHJ8
-X-Forefront-Antispam-Report: CIP:149.199.62.198;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:xsj-pvapexch02.xlnx.xilinx.com;PTR:unknown-62-198.xilinx.com;CAT:NONE;SFS:(13230016)(4636009)(346002)(136003)(396003)(376002)(39860400002)(40470700004)(36840700001)(46966006)(2906002)(41300700001)(82310400005)(478600001)(31696002)(356005)(82740400003)(7636003)(70206006)(70586007)(83380400001)(2616005)(107886003)(4326008)(336012)(8676002)(426003)(47076005)(53546011)(26005)(36860700001)(40460700003)(44832011)(40480700001)(8936002)(9786002)(110136005)(36756003)(31686004)(316002)(54906003)(186003)(5660300002)(50156003)(43740500002);DIR:OUT;SFP:1101;
-X-OriginatorOrg: xilinx.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Jul 2022 13:12:54.9189
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 2edcbbc4-81d8-4d9e-54af-08da601a679d
-X-MS-Exchange-CrossTenant-Id: 657af505-d5df-48d0-8300-c31994686c5c
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=657af505-d5df-48d0-8300-c31994686c5c;Ip=[149.199.62.198];Helo=[xsj-pvapexch02.xlnx.xilinx.com]
-X-MS-Exchange-CrossTenant-AuthSource: DM3NAM02FT054.eop-nam02.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR02MB5981
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-Received: by 2002:a05:6e02:1565:b0:2dc:18dc:4064 with SMTP id
+ k5-20020a056e02156500b002dc18dc4064mr11199643ilu.46.1657199767984; Thu, 07
+ Jul 2022 06:16:07 -0700 (PDT)
+Date:   Thu, 07 Jul 2022 06:16:07 -0700
+In-Reply-To: <20220707105829.2104-1-hdanton@sina.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000007e224905e336e387@google.com>
+Subject: Re: [syzbot] WARNING in notifier_chain_register
+From:   syzbot <syzbot+5214f8dac5863061e37c@syzkaller.appspotmail.com>
+To:     hdanton@sina.com, linux-kernel@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -114,55 +55,68 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hello,
+
+syzbot has tested the proposed patch but the reproducer is still triggering an issue:
+WARNING in notifier_chain_register
+
+------------[ cut here ]------------
+notifier callback hci_suspend_notifier already registered
+WARNING: CPU: 1 PID: 4179 at kernel/notifier.c:28 notifier_chain_register kernel/notifier.c:28 [inline]
+WARNING: CPU: 1 PID: 4179 at kernel/notifier.c:28 notifier_chain_register+0x156/0x210 kernel/notifier.c:22
+Modules linked in:
+CPU: 1 PID: 4179 Comm: syz-executor.3 Not tainted 5.19.0-rc4-next-20220628-syzkaller-dirty #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 06/29/2022
+RIP: 0010:notifier_chain_register kernel/notifier.c:28 [inline]
+RIP: 0010:notifier_chain_register+0x156/0x210 kernel/notifier.c:22
+Code: 89 ea 48 b8 00 00 00 00 00 fc ff df 48 c1 ea 03 80 3c 02 00 0f 85 a5 00 00 00 49 8b 75 00 48 c7 c7 c0 d0 cb 89 e8 14 f5 e3 07 <0f> 0b 41 bc ef ff ff ff e8 5d 6f 2a 00 44 89 e0 48 83 c4 18 5b 5d
+RSP: 0018:ffffc9000373fd58 EFLAGS: 00010282
+RAX: 0000000000000000 RBX: ffff88801e825180 RCX: 0000000000000000
+RDX: ffff8880735ad7c0 RSI: ffffffff81610608 RDI: fffff520006e7f9d
+RBP: 0000000000000000 R08: 0000000000000005 R09: 0000000000000000
+R10: 0000000080000000 R11: 0000000000000001 R12: 0000000000000000
+R13: ffff88801e825180 R14: ffffffff8caa8ce8 R15: dffffc0000000000
+FS:  0000555556946400(0000) GS:ffff8880b9b00000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 0000555556109708 CR3: 0000000076371000 CR4: 00000000003506e0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <TASK>
+ __blocking_notifier_chain_register kernel/notifier.c:266 [inline]
+ blocking_notifier_chain_register+0x6f/0xc0 kernel/notifier.c:284
+ hci_register_suspend_notifier net/bluetooth/hci_core.c:2752 [inline]
+ hci_register_suspend_notifier+0x9d/0xc0 net/bluetooth/hci_core.c:2746
+ hci_sock_release+0x4a2/0x520 net/bluetooth/hci_sock.c:890
+ __sock_release+0xcd/0x280 net/socket.c:650
+ sock_close+0x18/0x20 net/socket.c:1365
+ __fput+0x277/0x9d0 fs/file_table.c:317
+ task_work_run+0xdd/0x1a0 kernel/task_work.c:177
+ resume_user_mode_work include/linux/resume_user_mode.h:49 [inline]
+ exit_to_user_mode_loop kernel/entry/common.c:169 [inline]
+ exit_to_user_mode_prepare+0x23c/0x250 kernel/entry/common.c:201
+ __syscall_exit_to_user_mode_work kernel/entry/common.c:283 [inline]
+ syscall_exit_to_user_mode+0x19/0x50 kernel/entry/common.c:294
+ do_syscall_64+0x42/0xb0 arch/x86/entry/common.c:86
+ entry_SYSCALL_64_after_hwframe+0x46/0xb0
+RIP: 0033:0x7f988dc3bd4b
+Code: 0f 05 48 3d 00 f0 ff ff 77 45 c3 0f 1f 40 00 48 83 ec 18 89 7c 24 0c e8 63 fc ff ff 8b 7c 24 0c 41 89 c0 b8 03 00 00 00 0f 05 <48> 3d 00 f0 ff ff 77 35 44 89 c7 89 44 24 0c e8 a1 fc ff ff 8b 44
+RSP: 002b:00007ffcc6777580 EFLAGS: 00000293 ORIG_RAX: 0000000000000003
+RAX: 0000000000000000 RBX: 0000000000000005 RCX: 00007f988dc3bd4b
+RDX: 00007f988dda02e8 RSI: ffffffffffffffff RDI: 0000000000000004
+RBP: 00007f988dd9d960 R08: 0000000000000000 R09: 00007f988dda02f0
+R10: 00007ffcc6777680 R11: 0000000000000293 R12: 00000000000147b9
+R13: 00007ffcc6777680 R14: 00007f988dd9bf60 R15: 0000000000000032
+ </TASK>
 
 
-On 5/2/22 13:00, Shubhrajyoti Datta wrote:
-> Add a missing blank line. No functional changes.
-> 
-> WARNING: Missing a blank line after declarations
-> 128: FILE: drivers/gpio/gpio-xilinx.c:120:
-> +       void __iomem *addr = chip->regs + reg + xgpio_regoffset(chip, bit / 32);
-> +       xgpio_set_value32(a, bit, xgpio_readreg(addr));
-> 
-> WARNING: Missing a blank line after declarations
-> 136: FILE: drivers/gpio/gpio-xilinx.c:126:
-> +       void __iomem *addr = chip->regs + reg + xgpio_regoffset(chip, bit / 32);
-> +       xgpio_writereg(addr, xgpio_get_value32(a, bit));
-> 
-> Reviewed-by: Radhey Shyam Pandey <radhey.shyam.pandey@xilinx.com>
-> Signed-off-by: Shubhrajyoti Datta <shubhrajyoti.datta@xilinx.com>
-> ---
-> v2: Update commit message
-> 
->   drivers/gpio/gpio-xilinx.c | 2 ++
->   1 file changed, 2 insertions(+)
-> 
-> diff --git a/drivers/gpio/gpio-xilinx.c b/drivers/gpio/gpio-xilinx.c
-> index b6d3a57e27ed..7f129e7eae78 100644
-> --- a/drivers/gpio/gpio-xilinx.c
-> +++ b/drivers/gpio/gpio-xilinx.c
-> @@ -117,12 +117,14 @@ static inline int xgpio_regoffset(struct xgpio_instance *chip, int ch)
->   static void xgpio_read_ch(struct xgpio_instance *chip, int reg, int bit, unsigned long *a)
->   {
->   	void __iomem *addr = chip->regs + reg + xgpio_regoffset(chip, bit / 32);
-> +
->   	xgpio_set_value32(a, bit, xgpio_readreg(addr));
->   }
->   
->   static void xgpio_write_ch(struct xgpio_instance *chip, int reg, int bit, unsigned long *a)
->   {
->   	void __iomem *addr = chip->regs + reg + xgpio_regoffset(chip, bit / 32);
-> +
->   	xgpio_writereg(addr, xgpio_get_value32(a, bit));
->   }
->   
+Tested on:
 
+commit:         cb71b93c Add linux-next specific files for 20220628
+git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+console output: https://syzkaller.appspot.com/x/log.txt?x=15640350080000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=badbc1adb2d582eb
+dashboard link: https://syzkaller.appspot.com/bug?extid=5214f8dac5863061e37c
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+patch:          https://syzkaller.appspot.com/x/patch.diff?x=1059e134080000
 
-Fixes: 02b3f84d9080 ("gpio: xilinx: Switch to use bitmap APIs")
-
-Reviewed-by: Michal Simek <michal.simek@amd.com>
-
-Bartosz: Can you please apply it?
-
-Thanks,
-Michal

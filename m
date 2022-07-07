@@ -2,53 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D5E2656A732
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 17:43:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2ADE756A733
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 17:43:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235891AbiGGPnJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Jul 2022 11:43:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60846 "EHLO
+        id S235933AbiGGPnN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Jul 2022 11:43:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60866 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231320AbiGGPnH (ORCPT
+        with ESMTP id S235895AbiGGPnJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Jul 2022 11:43:07 -0400
-Received: from mail-wm1-x34a.google.com (mail-wm1-x34a.google.com [IPv6:2a00:1450:4864:20::34a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0A822C673
-        for <linux-kernel@vger.kernel.org>; Thu,  7 Jul 2022 08:43:05 -0700 (PDT)
-Received: by mail-wm1-x34a.google.com with SMTP id v123-20020a1cac81000000b003a02a3f0beeso7612819wme.3
-        for <linux-kernel@vger.kernel.org>; Thu, 07 Jul 2022 08:43:05 -0700 (PDT)
+        Thu, 7 Jul 2022 11:43:09 -0400
+Received: from mail-wm1-x349.google.com (mail-wm1-x349.google.com [IPv6:2a00:1450:4864:20::349])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C8FC2CDC8
+        for <linux-kernel@vger.kernel.org>; Thu,  7 Jul 2022 08:43:08 -0700 (PDT)
+Received: by mail-wm1-x349.google.com with SMTP id z11-20020a05600c0a0b00b003a043991610so9712146wmp.8
+        for <linux-kernel@vger.kernel.org>; Thu, 07 Jul 2022 08:43:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=date:message-id:mime-version:subject:from:to:cc;
-        bh=6+izafj6otUlanY6LDi6lDonEWohqK4DU4v2BGJaV3o=;
-        b=r/irGtNirV7KX6v8sNaxCAye1YdkhEGYXBp6JZOCpOWe3GZGzRelVJ+nugud4Y8XcU
-         1UfAnBdslbdGQKQBdgH5b1/1H9AbdMMeYA3+A6YnCamh6qVCFoS08+9C7KE1eOkU2goe
-         xM6dFG2V2I67b2J11uhr75XwieyZcrYq3LDsppuXjlbs/od+P6oOWeQKgzpIm1ziZotH
-         pX6DtpI97g66REYjn1SRBS9TkwT/mudORdCBw/unfEQ5Elz9QdBe8XF7syBLb4jHXfWj
-         /5OiqEPOjZQksCM7GgpZCjKvexOM/r5UoOaeqRJgDbHttN/q7RMqZGVykH1xzuPdr8TG
-         A92Q==
+        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
+         :cc;
+        bh=syuU6hHKkMyzySl7opH6TLKAl/ic71oCS/pfUZCKirM=;
+        b=ZMhXcj3R8JjdbPGK1RMipFlJQJ86lMDFuZO9OnnWxoDWejMeiIKlQE1/l6rKmWBNjG
+         OMeODvWz+13whwJrciZJHlMCeujeT5FqqIflItvUc81Rb6SoYdvKWyTgKiCQ34lqGEwY
+         tWckpY38L6n6VQUCV+793/zDMGGIunjtCQrneZSfl77+vSXSBxcYumZs7v/NCfZARZwJ
+         eLWEZaQoH4hop3NISpz9zZtSl3HUxldZ+h6EXt8oEI9kDARhFgrD657Y88eYUFBAojxk
+         KDdv749g3Fix3+bOiahusF270WW9315W6Y2DQx8B26t6860pffFQ738fdnuj+iLnV73s
+         4BHg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
-        bh=6+izafj6otUlanY6LDi6lDonEWohqK4DU4v2BGJaV3o=;
-        b=i3KGntv80IYiuqr6E4x85LQj1pqdTs3zJhLxg0q+eYLjKuI7fIdB+myQRqslwgpJXR
-         sBEw7W+9fa6ePwn6nZnjRGfmorjsBZDLx3f0BB0SEzfqyweu9SBxpTQ6c9cxmanv9sdA
-         /CfBOd+UuSlcakfyV20DY+D3QmM0i0nZ/ubh9SptZEGVMFwY6AP8MOaUTf8bLnYR0gnm
-         FaP47gaXD/yG3IhXOY5W1X5D16mvto6NCnQpDYE73HIyl1Hq41jGaRqQIiGM6TMmnA1C
-         cj1yYwSzpczsEush+e+jCA3IQz31QQBAbkwCk3KHpiPhCFevjKQwYY+5jqh0ums6//ws
-         3CHg==
-X-Gm-Message-State: AJIora+qaKfpZi/VgVNuRDVV8JXuS0xruI7rQZCuT425Z/k42wRvEtba
-        diVHIoXTIZqiqAEvImzrAv8gCnor2z9xViWX73I=
-X-Google-Smtp-Source: AGRyM1shof327Elzhyt8rn85RRo4AKB8ZHaUvJxPl+hEjPJlJSHfA/poA5Jn3J+frt9WFK/zs1O1W/a7LzH8zYH/JJU=
+        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
+         :references:subject:from:to:cc;
+        bh=syuU6hHKkMyzySl7opH6TLKAl/ic71oCS/pfUZCKirM=;
+        b=HZVYeJTrqx9FkYw/VqZsU4M6noJTWv1SOH1YnPxKE+iWdKSVGIBND5jGnkDEB3hx+d
+         aPp/T3c1cG3zLDxm0XCSbc+5UK0dixB9DNlmqmz1sEUoovOK2oO4rccdHh+k6SlWaEGE
+         nasdm9cVhyVj+8lg/xdYXudeO7atxuc2GSz0CiWDIKkgZxhAaD+QMyUPkrw4FP4gJTJQ
+         VrzYyHZaD/wW/BD/ChhoQPDzwIlReJeo0k3Uf/QmjyPoBxTURcprWzeYDjzUmyyqZwSr
+         ZtzVytAft8RE8u3BSVjudy8Ojtb7Z+9xVtMfRcYf7imz5QzHrsXRIvBwy7FfvrUhd+FY
+         WbkA==
+X-Gm-Message-State: AJIora+4ukIGoaQxRiWTnG1xP8gjw0BiLeAXaciH1dlBqh7RGTe0GrP8
+        xSDhCjxCppVCCxy6Xh44mR4ZJU/kdoJd31a74yM=
+X-Google-Smtp-Source: AGRyM1s/z5vzucxzTqUnNnm7TDJ4CjC71IJlkl+nbMSVj+Hb1ZnIsskSvGSOP6z1E4Nv1uganQ5lrMPsgr02ysB+eNo=
 X-Received: from seb.c.googlers.com ([fda3:e722:ac3:cc00:28:9cb1:c0a8:31bd])
- (user=sebastianene job=sendgmr) by 2002:a7b:c8d2:0:b0:3a0:2fd0:177 with SMTP
- id f18-20020a7bc8d2000000b003a02fd00177mr5203021wml.23.1657208584555; Thu, 07
- Jul 2022 08:43:04 -0700 (PDT)
-Date:   Thu,  7 Jul 2022 15:42:25 +0000
-Message-Id: <20220707154226.1478674-1-sebastianene@google.com>
+ (user=sebastianene job=sendgmr) by 2002:a05:600c:35cf:b0:3a0:49c1:f991 with
+ SMTP id r15-20020a05600c35cf00b003a049c1f991mr5046739wmq.95.1657208586677;
+ Thu, 07 Jul 2022 08:43:06 -0700 (PDT)
+Date:   Thu,  7 Jul 2022 15:42:26 +0000
+In-Reply-To: <20220707154226.1478674-1-sebastianene@google.com>
+Message-Id: <20220707154226.1478674-2-sebastianene@google.com>
 Mime-Version: 1.0
+References: <20220707154226.1478674-1-sebastianene@google.com>
 X-Mailer: git-send-email 2.37.0.rc0.161.g10f37bed90-goog
-Subject: [PATCH v10 0/2] Detect stalls on guest vCPUS
+Subject: [PATCH v10 1/2] dt-bindings: vcpu_stall_detector: Add
+ qemu,vcpu-stall-detector compatible
 From:   Sebastian Ene <sebastianene@google.com>
 To:     Rob Herring <robh+dt@kernel.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -57,7 +62,8 @@ To:     Rob Herring <robh+dt@kernel.org>,
 Cc:     linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
         maz@kernel.org, will@kernel.org, vdonnefort@google.com,
         Guenter Roeck <linux@roeck-us.net>,
-        Sebastian Ene <sebastianene@google.com>
+        Sebastian Ene <sebastianene@google.com>,
+        Rob Herring <robh@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
@@ -69,57 +75,79 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is a re-work from v9 and addresses the comments received from Will.
+The VCPU stall detection mechanism allows to configure the expiration
+duration and the internal counter clock frequency measured in Hz.
+Add these properties in the schema.
 
-This adds a mechanism to detect stalls on the guest vCPUS by creating a
-per CPU hrtimer which periodically 'pets' the host backend driver.
-On a conventional watchdog-core driver, the userspace is responsible for
-delivering the 'pet' events by writing to the particular /dev/watchdogN node.
-In this case we require a strong thread affinity to be able to
-account for lost time on a per vCPU basis.
+While this is a memory mapped virtual device, it is expected to be loaded
+when the DT contains the compatible: "qemu,vcpu-stall-detector" node.
+In a protected VM we trust the generated DT nodes and we don't rely on
+the host to present the hardware peripherals.
 
-This device driver acts as a soft lockup detector by relying on the host
-backend driver to measure the elapesed time between subsequent 'pet' events.
-If the elapsed time doesn't match an expected value, the backend driver
-decides that the guest vCPU is locked and resets the guest. The host
-backend driver takes into account the time that the guest is not
-running. The communication with the backend driver is done through MMIO
-and the register layout of the virtual watchdog is described as part of
-the backend driver changes.
-
-The host backend driver is implemented as part of:
-https://chromium-review.googlesource.com/c/chromiumos/platform/crosvm/+/3548817
-
-Changelog v10:
- - keep only the hrtimer and a flag in the per_cpu structure and move
-   the other fields in a separate config structure
- - fix a potential race condition as pointed out by Will: the
-   driver remove(..) can race with the hotplug cpu notifiers
- - replace alloc_percpu with devm_alloc_percpu and remove the free_percpu
- - unregister the hotplug notifiers
- - improve the Kconfig description and fix the license in the header
-   file
- - add the review-by tag from Rob as the DT has not changed since v9
- 
-Changelog v9:
- - make the driver depend on CONFIG_OF
- - remove the platform_(set|get)_drvdata calls and keep a per-cpu static
-   variable `vm_stall_detect` as suggested by Guenter on the (v8) series
- - improve commit description and fix styling
-
-Sebastian Ene (2):
-  dt-bindings: vcpu_stall_detector: Add qemu,vcpu-stall-detector
-    compatible
-  misc: Add a mechanism to detect stalls on guest vCPUs
-
- .../misc/qemu,vcpu-stall-detector.yaml        |  51 +++++
- drivers/misc/Kconfig                          |  14 ++
- drivers/misc/Makefile                         |   1 +
- drivers/misc/vcpu_stall_detector.c            | 209 ++++++++++++++++++
- 4 files changed, 275 insertions(+)
+Reviewed-by: Rob Herring <robh@kernel.org>
+Signed-off-by: Sebastian Ene <sebastianene@google.com>
+---
+ .../misc/qemu,vcpu-stall-detector.yaml        | 51 +++++++++++++++++++
+ 1 file changed, 51 insertions(+)
  create mode 100644 Documentation/devicetree/bindings/misc/qemu,vcpu-stall-detector.yaml
- create mode 100644 drivers/misc/vcpu_stall_detector.c
 
+diff --git a/Documentation/devicetree/bindings/misc/qemu,vcpu-stall-detector.yaml b/Documentation/devicetree/bindings/misc/qemu,vcpu-stall-detector.yaml
+new file mode 100644
+index 000000000000..1aebeb696ee0
+--- /dev/null
++++ b/Documentation/devicetree/bindings/misc/qemu,vcpu-stall-detector.yaml
+@@ -0,0 +1,51 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/misc/qemu,vcpu-stall-detector.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: VCPU stall detector
++
++description:
++  This binding describes a CPU stall detector mechanism for virtual CPUs
++  which is accessed through MMIO.
++
++maintainers:
++  - Sebastian Ene <sebastianene@google.com>
++
++properties:
++  compatible:
++    enum:
++      - qemu,vcpu-stall-detector
++
++  reg:
++    maxItems: 1
++
++  clock-frequency:
++    $ref: /schemas/types.yaml#/definitions/uint32
++    description: |
++      The internal clock of the stall detector peripheral measure in Hz used
++      to decrement its internal counter register on each tick.
++      Defaults to 10 if unset.
++    default: 10
++
++  timeout-sec:
++    description: |
++      The stall detector expiration timeout measured in seconds.
++      Defaults to 8 if unset. Please note that it also takes into account the
++      time spent while the VCPU is not running.
++    default: 8
++
++required:
++  - compatible
++
++additionalProperties: false
++
++examples:
++  - |
++    vmwdt@9030000 {
++      compatible = "qemu,vcpu-stall-detector";
++      reg = <0x9030000 0x10000>;
++      clock-frequency = <10>;
++      timeout-sec = <8>;
++    };
 -- 
 2.37.0.rc0.161.g10f37bed90-goog
 

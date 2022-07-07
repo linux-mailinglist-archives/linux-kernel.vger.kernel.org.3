@@ -2,33 +2,30 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 21C7956979F
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 03:38:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2FD1A5697AB
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 03:47:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234686AbiGGBiX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Jul 2022 21:38:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40380 "EHLO
+        id S234084AbiGGBrJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Jul 2022 21:47:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44152 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234051AbiGGBiU (ORCPT
+        with ESMTP id S231627AbiGGBrI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Jul 2022 21:38:20 -0400
-Received: from out30-42.freemail.mail.aliyun.com (out30-42.freemail.mail.aliyun.com [115.124.30.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 101E32ED6D
-        for <linux-kernel@vger.kernel.org>; Wed,  6 Jul 2022 18:38:17 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R221e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046059;MF=yang.lee@linux.alibaba.com;NM=1;PH=DS;RN=12;SR=0;TI=SMTPD_---0VIadX3N_1657157894;
-Received: from localhost(mailfrom:yang.lee@linux.alibaba.com fp:SMTPD_---0VIadX3N_1657157894)
+        Wed, 6 Jul 2022 21:47:08 -0400
+Received: from out30-131.freemail.mail.aliyun.com (out30-131.freemail.mail.aliyun.com [115.124.30.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0DCAA2ED6F
+        for <linux-kernel@vger.kernel.org>; Wed,  6 Jul 2022 18:47:06 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R131e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045168;MF=yang.lee@linux.alibaba.com;NM=1;PH=DS;RN=6;SR=0;TI=SMTPD_---0VIaWWVA_1657158423;
+Received: from localhost(mailfrom:yang.lee@linux.alibaba.com fp:SMTPD_---0VIaWWVA_1657158423)
           by smtp.aliyun-inc.com;
-          Thu, 07 Jul 2022 09:38:14 +0800
+          Thu, 07 Jul 2022 09:47:04 +0800
 From:   Yang Li <yang.lee@linux.alibaba.com>
-To:     alexander.deucher@amd.com
-Cc:     Rodrigo.Siqueira@amd.com, harry.wentland@amd.com,
-        sunpeng.li@amd.com, christian.koenig@amd.com, Xinhui.Pan@amd.com,
-        airlied@linux.ie, daniel@ffwll.ch, amd-gfx@lists.freedesktop.org,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        Yang Li <yang.lee@linux.alibaba.com>
-Subject: [PATCH -next] drm/amd/display: clean up some inconsistent indenting
-Date:   Thu,  7 Jul 2022 09:38:12 +0800
-Message-Id: <20220707013812.64057-1-yang.lee@linux.alibaba.com>
+To:     tomba@kernel.org
+Cc:     daniel@ffwll.ch, airlied@linux.ie, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org, Yang Li <yang.lee@linux.alibaba.com>
+Subject: [PATCH -next] drm: Remove unnecessary print function dev_err()
+Date:   Thu,  7 Jul 2022 09:47:01 +0800
+Message-Id: <20220707014701.74829-1-yang.lee@linux.alibaba.com>
 X-Mailer: git-send-email 2.20.1.7.g153144c
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -42,65 +39,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Eliminate the follow smatch warnings:
-drivers/gpu/drm/amd/amdgpu/../display/dc/bios/bios_parser2.c:405 get_bios_object_from_path_v3() warn: inconsistent indenting
-drivers/gpu/drm/amd/amdgpu/../display/dc/bios/bios_parser2.c:611 bios_parser_get_hpd_info() warn: inconsistent indenting
-drivers/gpu/drm/amd/amdgpu/../display/dc/bios/bios_parser2.c:818 bios_parser_get_device_tag() warn: inconsistent indenting
-drivers/gpu/drm/amd/amdgpu/../display/dc/bios/bios_parser2.c:1599 bios_parser_is_device_id_supported() warn: inconsistent indenting
+The print function dev_err() is redundant because platform_get_irq()
+already prints an error.
+
+Eliminate the follow coccicheck warning:
+./drivers/gpu/drm/omapdrm/omap_dmm_tiler.c:817:2-9: line 817 is redundant because platform_get_irq() already prints an error
 
 Signed-off-by: Yang Li <yang.lee@linux.alibaba.com>
 ---
- .../gpu/drm/amd/display/dc/bios/bios_parser2.c   | 16 ++++++++--------
- 1 file changed, 8 insertions(+), 8 deletions(-)
+ drivers/gpu/drm/omapdrm/omap_dmm_tiler.c | 4 +---
+ 1 file changed, 1 insertion(+), 3 deletions(-)
 
-diff --git a/drivers/gpu/drm/amd/display/dc/bios/bios_parser2.c b/drivers/gpu/drm/amd/display/dc/bios/bios_parser2.c
-index c332650b7048..6f514d92b401 100644
---- a/drivers/gpu/drm/amd/display/dc/bios/bios_parser2.c
-+++ b/drivers/gpu/drm/amd/display/dc/bios/bios_parser2.c
-@@ -402,7 +402,7 @@ static struct atom_display_object_path_v3 *get_bios_object_from_path_v3(
- 		return NULL;
+diff --git a/drivers/gpu/drm/omapdrm/omap_dmm_tiler.c b/drivers/gpu/drm/omapdrm/omap_dmm_tiler.c
+index ac869acf80ea..61a27dd7392e 100644
+--- a/drivers/gpu/drm/omapdrm/omap_dmm_tiler.c
++++ b/drivers/gpu/drm/omapdrm/omap_dmm_tiler.c
+@@ -813,10 +813,8 @@ static int omap_dmm_probe(struct platform_device *dev)
  	}
  
--    return NULL;
-+	return NULL;
- }
+ 	omap_dmm->irq = platform_get_irq(dev, 0);
+-	if (omap_dmm->irq < 0) {
+-		dev_err(&dev->dev, "failed to get IRQ resource\n");
++	if (omap_dmm->irq < 0)
+ 		goto fail;
+-	}
  
- static enum bp_result bios_parser_get_i2c_info(struct dc_bios *dcb,
-@@ -605,8 +605,8 @@ static enum bp_result bios_parser_get_hpd_info(
- 	    default:
- 	        object = get_bios_object(bp, id);
+ 	omap_dmm->dev = &dev->dev;
  
--			if (!object)
--				return BP_RESULT_BADINPUT;
-+		if (!object)
-+			return BP_RESULT_BADINPUT;
- 
- 	        record = get_hpd_record(bp, object);
- 
-@@ -810,10 +810,10 @@ static enum bp_result bios_parser_get_device_tag(
- 	        /* getBiosObject will return MXM object */
- 	        object = get_bios_object(bp, connector_object_id);
- 
--			if (!object) {
--				BREAK_TO_DEBUGGER(); /* Invalid object id */
--				return BP_RESULT_BADINPUT;
--			}
-+		if (!object) {
-+			BREAK_TO_DEBUGGER(); /* Invalid object id */
-+			return BP_RESULT_BADINPUT;
-+		}
- 
- 	        info->acpi_device = 0; /* BIOS no longer provides this */
- 	        info->dev_id = device_type_from_device_id(object->device_tag);
-@@ -1596,7 +1596,7 @@ static bool bios_parser_is_device_id_supported(
- 			break;
- 	}
- 
--    return false;
-+	return false;
- }
- 
- static uint32_t bios_parser_get_ss_entry_number(
 -- 
 2.20.1.7.g153144c
 

@@ -2,331 +2,191 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A44056ABBC
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 21:20:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D9B5756ABC6
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 21:22:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236766AbiGGTUC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Jul 2022 15:20:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40732 "EHLO
+        id S236787AbiGGTWQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Jul 2022 15:22:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41800 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236221AbiGGTT7 (ORCPT
+        with ESMTP id S236436AbiGGTWO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Jul 2022 15:19:59 -0400
-Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A56E811159;
-        Thu,  7 Jul 2022 12:19:57 -0700 (PDT)
-Received: by mail-lf1-x12f.google.com with SMTP id f39so32788803lfv.3;
-        Thu, 07 Jul 2022 12:19:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=R/mTei+s1rrYZN+hisGGIikjU30EAyUwl8VC2G6/aAE=;
-        b=OsmaE5/5MhoxfJpQh2eDZK9CDDCuK8blIKUwX5YWpCckoNb3PXhKMCH2QoiO3rscy8
-         thWbUtoYRfVEqVVuG6qgMyV2mqXkEiKvHfcJwAeHmsht5SYTf+/8mC5/XhkL6mzr5atG
-         vjGQzEU3gJGk5xZy2lvh3nd/M5DpbSJubwee/BpWB4y1db+gMFPWQ4CCoIwmhcI0uz25
-         lnQ+6e3CH3A883TOYKoYii4KQpzgBjm+rXWYDDclPhjLYyFYCtsZon15q2bHx/OjWtjD
-         B8KPYvfkLsv3EyUjw4hgOweniEn25SJRFXnsEy2fDmBfoEb07yFxS719oIth01M7B+BD
-         M7FA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=R/mTei+s1rrYZN+hisGGIikjU30EAyUwl8VC2G6/aAE=;
-        b=EYC5T0X+5SnnO4fbjtRMGE0OCV6hXnT9SGq7+tagn1/zWxjfCzs7dacIqNeEu2xc8j
-         zpVFQySIm/qqZkM9sQo9D/wGp443WaWkN9tLZ2KW88Y0MlDDTTE504kZONfVt3RId72C
-         52rh//t4GbaBXiToGcAqtZqNVzDxBsiCDM9p7dVU0hvH1U9+u6W5urTHsTdAaDoNS0IL
-         06asPn/fRZ0jV47sJt9oaaStRSq3jFbukUMd5IpPoVsHcpuH5qYGl33n433TosZUUahf
-         tUItpDPQtWLyPE61DWZk+ZTrcgk7DbAqkn0mS83d0UtOKwFoS+haJyyzuca/H9KR0h5h
-         F2tA==
-X-Gm-Message-State: AJIora8j+IsasMKGhdNrf2DKPTp65XBW6Q9l3t3ntHCMzUpbo9Nqnd9d
-        tJuQHSjyB7nOploxvxlrWxc7l5JYVQsRCA==
-X-Google-Smtp-Source: AGRyM1sOW5LRZBvXAgSpR2nSg71/k8gzEgy5T/lk0W6o0v/zOTrUfbznk8kK7YjbIK9l2QQZN6ePeA==
-X-Received: by 2002:a05:6512:3491:b0:47f:6c96:c7d0 with SMTP id v17-20020a056512349100b0047f6c96c7d0mr29884768lfr.579.1657221595960;
-        Thu, 07 Jul 2022 12:19:55 -0700 (PDT)
-Received: from mobilestation ([95.79.140.178])
-        by smtp.gmail.com with ESMTPSA id s5-20020a05651c200500b0025d33ef2623sm518549ljo.61.2022.07.07.12.19.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 07 Jul 2022 12:19:54 -0700 (PDT)
-Date:   Thu, 7 Jul 2022 22:19:52 +0300
-From:   Serge Semin <fancer.lancer@gmail.com>
-To:     Rob Herring <robh@kernel.org>
-Cc:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Jingoo Han <jingoohan1@gmail.com>,
-        Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
-        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        Frank Li <Frank.Li@nxp.com>,
-        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-        linux-pci@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 12/17] dt-bindings: PCI: dwc: Add Baikal-T1 PCIe Root
- Port bindings
-Message-ID: <20220707191952.zqaws3ayttmpao4d@mobilestation>
-References: <20220610085706.15741-1-Sergey.Semin@baikalelectronics.ru>
- <20220610085706.15741-13-Sergey.Semin@baikalelectronics.ru>
- <20220615163712.GA1400328-robh@kernel.org>
- <20220619200355.zuixe3hqebpif4kv@mobilestation>
- <20220701145933.GB804716-robh@kernel.org>
-MIME-Version: 1.0
+        Thu, 7 Jul 2022 15:22:14 -0400
+Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2068.outbound.protection.outlook.com [40.107.243.68])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB4946474;
+        Thu,  7 Jul 2022 12:22:13 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=caDrgXqMBdNW6QIh+vfEExrluHZdObkgi7dNK/5sk5WLtKLbEl1YK5dCRPBR/gkPWA3fJR8aX+IomjYpdkNX3+0XY+sFpN5VUVUZlpxWX9hbO+2Uu9rcCM6s+AUujlr3/IHkwsPgM2IfV20Oqscg0/E/lIchqH1EjIIoT8BkXUDshoDNG4uYmOALyeQk/EiNM2ZW7yHlNPYHYz+ISFFcz9OICxG7PU/9/FiO8R89RYbWpUQeh/7s9Y9BcbL6aI72WfqmVb2aJfjU3X4Ul/TlPHhYmRYpX8CVbtW8DZasOGQX1z6dPg3+2J1gDPh8kd5IoqJ4Y5xLaDkgacbNEhSFCw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=BPdstP4tpNb313LZPFs3Mep91ji8nGfY7ETX/W//cK8=;
+ b=cYDbMafW1FKu8ur8DAMYI+/jvepbKAD0otalbMu/iSL7T66gQmPVXeOuCAmm40rtJg6yEhLCij4x96LD59tKok1w3mcdK3DWYbgx4AMb7dsN2sGbHmIsyzYiAzLpxUccAUtu6wEKkHQb+SIgQp9vjFknB6TrrCYTuVv6cfW8Z7Q9teMNEEaCNC1o64XvY01FZsuexXZPjnJjbZV1L8lOR5M4gWN+0ZJmQBm8WM/d1gM4tXYUWD8BhZEneN25B4X0UhMz476kKtjGuFDuwmdv4k0+6gSQeDzQxbvkWYkTsQzZ07HVdsK1d2Dsq6PLYdH3wBBcOiQxhv/fQ6RdMDugig==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=BPdstP4tpNb313LZPFs3Mep91ji8nGfY7ETX/W//cK8=;
+ b=VUAgF3zI/0f+ImcrBdTXC/TgOKUTcSRBRi2O2II5Tan04C+mmr/tJh6IWlRm7zRRNI6ODr8WTly4MEAmBINvum0U6upEG+gCXXvItvwycmMXrz25dW3CyzxhA8RJlvao90o0Z+vR+y0NCsgtirihlwRUiTx+jZbOBwyqt804QtiFuo6QloXzIGmoPeprW0gHj2gW/2v8HQDONZQ1ygn9lfFAgY2LLrqzsoXie0tJpS0ShX4Klad909Ukyi/lkAcnHYA7pSlwcAZ/ZWiMUqYHVKQt4TpSXd2jsKVdi5+x5uqKFw5GBM/Pve1UiDxMsiSQNVQYNrAhSpmnDyPExhsr+Q==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from MN2PR12MB4192.namprd12.prod.outlook.com (2603:10b6:208:1d5::15)
+ by BN9PR12MB5356.namprd12.prod.outlook.com (2603:10b6:408:105::23) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5417.16; Thu, 7 Jul
+ 2022 19:22:12 +0000
+Received: from MN2PR12MB4192.namprd12.prod.outlook.com
+ ([fe80::ac35:7c4b:3282:abfb]) by MN2PR12MB4192.namprd12.prod.outlook.com
+ ([fe80::ac35:7c4b:3282:abfb%3]) with mapi id 15.20.5417.016; Thu, 7 Jul 2022
+ 19:22:12 +0000
+Date:   Thu, 7 Jul 2022 16:22:10 -0300
+From:   Jason Gunthorpe <jgg@nvidia.com>
+To:     Nicolin Chen <nicolinc@nvidia.com>
+Cc:     "Tian, Kevin" <kevin.tian@intel.com>,
+        "kwankhede@nvidia.com" <kwankhede@nvidia.com>,
+        "corbet@lwn.net" <corbet@lwn.net>,
+        "hca@linux.ibm.com" <hca@linux.ibm.com>,
+        "gor@linux.ibm.com" <gor@linux.ibm.com>,
+        "agordeev@linux.ibm.com" <agordeev@linux.ibm.com>,
+        "borntraeger@linux.ibm.com" <borntraeger@linux.ibm.com>,
+        "svens@linux.ibm.com" <svens@linux.ibm.com>,
+        "zhenyuw@linux.intel.com" <zhenyuw@linux.intel.com>,
+        "Wang, Zhi A" <zhi.a.wang@intel.com>,
+        "jani.nikula@linux.intel.com" <jani.nikula@linux.intel.com>,
+        "joonas.lahtinen@linux.intel.com" <joonas.lahtinen@linux.intel.com>,
+        "Vivi, Rodrigo" <rodrigo.vivi@intel.com>,
+        "tvrtko.ursulin@linux.intel.com" <tvrtko.ursulin@linux.intel.com>,
+        "airlied@linux.ie" <airlied@linux.ie>,
+        "daniel@ffwll.ch" <daniel@ffwll.ch>,
+        "farman@linux.ibm.com" <farman@linux.ibm.com>,
+        "mjrosato@linux.ibm.com" <mjrosato@linux.ibm.com>,
+        "pasic@linux.ibm.com" <pasic@linux.ibm.com>,
+        "vneethv@linux.ibm.com" <vneethv@linux.ibm.com>,
+        "oberpar@linux.ibm.com" <oberpar@linux.ibm.com>,
+        "freude@linux.ibm.com" <freude@linux.ibm.com>,
+        "akrowiak@linux.ibm.com" <akrowiak@linux.ibm.com>,
+        "jjherne@linux.ibm.com" <jjherne@linux.ibm.com>,
+        "alex.williamson@redhat.com" <alex.williamson@redhat.com>,
+        "cohuck@redhat.com" <cohuck@redhat.com>,
+        "hch@infradead.org" <hch@infradead.org>,
+        "jchrist@linux.ibm.com" <jchrist@linux.ibm.com>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-s390@vger.kernel.org" <linux-s390@vger.kernel.org>,
+        "intel-gvt-dev@lists.freedesktop.org" 
+        <intel-gvt-dev@lists.freedesktop.org>,
+        "intel-gfx@lists.freedesktop.org" <intel-gfx@lists.freedesktop.org>,
+        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>
+Subject: Re: [RFT][PATCH v2 1/9] vfio: Make vfio_unpin_pages() return void
+Message-ID: <20220707192210.GC1705032@nvidia.com>
+References: <20220706062759.24946-1-nicolinc@nvidia.com>
+ <20220706062759.24946-2-nicolinc@nvidia.com>
+ <BN9PR11MB527643D01DFF0AFCED1614488C839@BN9PR11MB5276.namprd11.prod.outlook.com>
+ <YscUCe+2sXdDiQWq@Asurada-Nvidia>
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220701145933.GB804716-robh@kernel.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <YscUCe+2sXdDiQWq@Asurada-Nvidia>
+X-ClientProxiedBy: BL1P221CA0021.NAMP221.PROD.OUTLOOK.COM
+ (2603:10b6:208:2c5::17) To MN2PR12MB4192.namprd12.prod.outlook.com
+ (2603:10b6:208:1d5::15)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 0d77acf0-6ecb-462c-fbc2-08da604dfe1d
+X-MS-TrafficTypeDiagnostic: BN9PR12MB5356:EE_
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: mFJZLbax7PoeopxfrLncHFevgBW3HiW/pPJqJ3DfqzpMd61pUH9070BkofTH92OMJIi6zX0b9hQqqwlhhTlKDAYjRsXNcH7IutQZS1l2WrMMjwTz/Yi/B8m+nCuejzuPZuzbxFTkyQrzXbbjXLpVTWoL8z1BGOld83gRHZwFQV7UeutwSnOgFV0wyy7Ul067e8TDc4xcpSKqz7GcozpZoye/5kn8ITVS7khA6l4DmI00+Fv5rViVmRvhSxL0HRKfZVB8Toyk4qZsMNJrL71+kskwgQ7AWAoKNSoeHYLZEtA5u60pPWHjx2A9iQ3sQEztJFXRK1sQIGuxqM8fWPxJDlt4wW8MAhGHBbHZpwQOvbSrzcCfi4JIKZUQ+2guVyvXD8r4U2ePqxM6YJecfZs/J3ZpzqIloWk8Ywd46dJi+cUZH0rZ1rlqQpKNjiozdg1lLjWKQ8Ypi8i9mw102mTyAYbsU65QYKeHcX0q6egLOxJdxLzcn9hKnibSF5vUFH9REY8DMYc6h8k0t+hrvBFMicUHElcBFvjC+Ji86dVS/3WyQssHUTb+UF3jE2aBXQD/X3vAAhp8oUojU1+UBy/tTyKkc1POF851rBUSjkfybBFGrFhSiT/t3AvhnExyTG1lIYxYu1WivJTqlnR6kfAthMlJTrBrYaN8i7WwCyBmGKY6G8dfx+bEkpEFXgLhdkk9WMqHsiHyV2L2HO0MVCvlAPE7bV+l39l0Y7qUW+NZAQs5RqoWkF9SPBtdKsSzFzN3
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN2PR12MB4192.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(366004)(396003)(39860400002)(346002)(136003)(376002)(5660300002)(6862004)(8936002)(7416002)(7406005)(2906002)(478600001)(2616005)(316002)(36756003)(86362001)(66946007)(37006003)(54906003)(6486002)(4326008)(8676002)(66556008)(66476007)(38100700002)(186003)(1076003)(6512007)(6506007)(33656002)(26005)(41300700001)(6636002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?jF1/8A1FHJ7j2dWlgRykwoY1bo9vIwqw07ZoGM9pv7pjLVd0zEJpSZTdtR2a?=
+ =?us-ascii?Q?YyiAsnSH5FyCTO5wXHbuTNFmq7EyjaTxGSjZNx6MhS1qHndPZ9aICNQ0XyBT?=
+ =?us-ascii?Q?ZpCviYEQFYN4eh/4bOc65JJz/Z+/aKc8MsmKU0AG3b7Ggc+jxUBeu6wG9wgv?=
+ =?us-ascii?Q?hssBWqqEIjPvjUMNEANZVeef2rrLsLfj1IrpxR86g3HlwPyHmqc233EToZCW?=
+ =?us-ascii?Q?tfmyIdSVXIgRFDQReAidAYRo9OedJxRN6V9tJkj1p89Wxo7BfdI2mbVw8lOn?=
+ =?us-ascii?Q?AVe4/UBGi0nNJvk2lBEFHPkZE24UkrcZvFz50RfesW9m4TNBZBo+IpA0FVHL?=
+ =?us-ascii?Q?YY/zkcN4DB7e3r6doQ1lvf9AA6mJA0u+JSjHNhCe4P5Y9I6p9leilesjERJ9?=
+ =?us-ascii?Q?zbTtJ7zX4lb/S6ibH+hp79hZjzJIdGNrqS6+CgnzkewaQle8O6qF3iIlzyvk?=
+ =?us-ascii?Q?WQgD0vfrbZ4PxhmRltcXeqe34IPUY3h9GlLpukLKAW7LxotJbicwj7BoK38t?=
+ =?us-ascii?Q?xyiSeU6aDg2K7VM6rt2KapxYwmpkCOo95XjidRCAq4L7bS/F9XptwrR9Ujzg?=
+ =?us-ascii?Q?x3rBPcKJBOoxb4MJEbubVfxfRxJD4IWN498bRTt8ibrN6hL6QbmlT7QipLfm?=
+ =?us-ascii?Q?sV0dtQWe9VXxF6SZDGie2wLhZKDe2PgblyMKAJ73HpEf/IyarXP2K5YpIccA?=
+ =?us-ascii?Q?Zpaeo/ku0ExA7jJPKkDT/OcxZAY9ZiW1K/upf72Y0JM6IWDEA5DM9T4/FOHV?=
+ =?us-ascii?Q?n5zxFLNQOA4RdWKv2FjjoAkOuuje7395Obx9gJDt1fTGpyad+FJ/qvnDSQn8?=
+ =?us-ascii?Q?HKIDR6+yDCrnl2mNzs/IlXTrZ0y60UDrhARPFbfj3UOWwvRCoQEKl2VJZaFr?=
+ =?us-ascii?Q?CDpsFX5gLHEcR8KTDNn8D+PhUX7WNkG25cUnB+VWMKAEBt40TXBBAzmdleUI?=
+ =?us-ascii?Q?J078dXepbV3s6UXaARCGhVBFprYYgDVly3rXqYo1hHN7ZNYf0L1yYoH225ZG?=
+ =?us-ascii?Q?YYVBScHghr/zC9ltHYh7NuYrfSs1PUZ9JJ4sV7Fn8zgZ8LRMNa6iCWZVXDwC?=
+ =?us-ascii?Q?N6slXKtD7/yt6IPi+vUvG+Gv5FPOmaSkoYQjD187q6+NJG/2AsMrJTLGEi0h?=
+ =?us-ascii?Q?MxsUOba7YS4McjBDEzo0ncXT10Zw9UppRogmRvEL0MYiGusXyonKQbpB9Egi?=
+ =?us-ascii?Q?92Y3gAq6LZIHcVgKiCXmhflHzwZ8FRkZadGU7pfSIP8Ao6RWC0v8KXJ8oXYI?=
+ =?us-ascii?Q?TFfdvUuJA0S2QcmZm36MBCZB1P9ItEyq8nSN6WG9TAViJewNDkDlm/O6hU0k?=
+ =?us-ascii?Q?aonLjdN+lXTcd1FZC+J1AO4gaDTfbwpbW+RlJJsnrFrTbwzfk/Otrkq/bjJl?=
+ =?us-ascii?Q?vIe7tT2CtvtZn7iHc+SQbvqkjgiMewLDNgmxv72NcWSd696NnNdMN+92R6eG?=
+ =?us-ascii?Q?1P9Nv5gXhyDG/z3GQsXV/2x1pbVMiuOtEk+Z9eFjHmvvQ6dLgANtBikSCiuY?=
+ =?us-ascii?Q?bkQNcpB1nLMaezV9I0+bNog/6+QaNZPwDhXvE66yIMqOP/yNUrop6UBY5z/B?=
+ =?us-ascii?Q?fyiwKldxcM/gjSUh2ev/4fJnDIJcwg1b83k4XRfI?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 0d77acf0-6ecb-462c-fbc2-08da604dfe1d
+X-MS-Exchange-CrossTenant-AuthSource: MN2PR12MB4192.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Jul 2022 19:22:12.0659
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: jnYLcPKap2Yo+nbneH7AtiOGTd4OnrgZgfQb+neATLKXpG5zWO/VImmS1JAviMzS
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN9PR12MB5356
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jul 01, 2022 at 08:59:33AM -0600, Rob Herring wrote:
-> On Sun, Jun 19, 2022 at 11:03:55PM +0300, Serge Semin wrote:
-> > On Wed, Jun 15, 2022 at 10:37:12AM -0600, Rob Herring wrote:
-> > > On Fri, Jun 10, 2022 at 11:57:00AM +0300, Serge Semin wrote:
-> > > > Baikal-T1 SoC is equipped with DWC PCIe v4.60a Root Port controller, which
-> > > > link can be trained to work on up to Gen.3 speed over up to x4 lanes. The
-> > > > controller is supposed to be fed up with four clock sources: DBI
-> > > > peripheral clock, AXI application Tx/Rx clocks and external PHY/core
-> > > > reference clock generating the 100MHz signal. In addition to that the
-> > > > platform provide a way to reset each part of the controller:
-> > > > sticky/non-sticky bits, host controller core, PIPE interface, PCS/PHY and
-> > > > Hot/Power reset signal. The Root Port controller is equipped with multiple
-> > > > IRQ lines like MSI, system AER, PME, HP, Bandwidth change, Link
-> > > > equalization request and eDMA ones. The registers space is accessed over
-> > > > the DBI interface. There can be no more than four inbound or outbound iATU
-> > > > windows configured.
-> > > > 
-> > > > Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
-> > > > 
-> > > > ---
-> > > > 
-> > > > Changelog v2:
-> > > > - Rename 'syscon' property to 'baikal,bt1-syscon'.
-> > > > - Fix the 'compatible' property definition to being more specific about
-> > > >   what strings are supposed to be used. Due to that we had to add the
-> > > >   select property to evaluate the schema against the Baikal-T1 PCIe DT
-> > > >   nodes only.
-> > > > ---
-> > > >  .../bindings/pci/baikal,bt1-pcie.yaml         | 154 ++++++++++++++++++
-> > > >  1 file changed, 154 insertions(+)
-> > > >  create mode 100644 Documentation/devicetree/bindings/pci/baikal,bt1-pcie.yaml
-> > > > 
-> > > > diff --git a/Documentation/devicetree/bindings/pci/baikal,bt1-pcie.yaml b/Documentation/devicetree/bindings/pci/baikal,bt1-pcie.yaml
-> > > > new file mode 100644
-> > > > index 000000000000..23bd1d0aa5c5
-> > > > --- /dev/null
-> > > > +++ b/Documentation/devicetree/bindings/pci/baikal,bt1-pcie.yaml
-> > > > @@ -0,0 +1,154 @@
-> > > > +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> > > > +%YAML 1.2
-> > > > +---
-> > > > +$id: http://devicetree.org/schemas/pci/baikal,bt1-pcie.yaml#
-> > > > +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> > > > +
-> > > > +title: Baikal-T1 PCIe Root Port Controller
-> > > > +
-> > > > +maintainers:
-> > > > +  - Serge Semin <fancer.lancer@gmail.com>
-> > > > +
-> > > > +description:
-> > > > +  Embedded into Baikal-T1 SoC Root Complex controller. It's based on the
-> > > > +  DWC RC PCIe v4.60a IP-core, which is configured to have just a single Root
-> > > > +  Port function and is capable of establishing the link up to Gen.3 speed
-> > > > +  on x4 lanes. It doesn't have embedded clock and reset control module, so
-> > > > +  the proper interface initialization is supposed to be performed by software.
-> > > > +
-> > > > +select:
-> > > > +  properties:
-> > > > +    compatible:
-> > > > +      contains:
-> > > > +        const: baikal,bt1-pcie
-> > > > +
-> > > > +  required:
-> > > > +    - compatible
-> > > > +
-> > > > +allOf:
-> > > > +  - $ref: /schemas/pci/snps,dw-pcie.yaml#
-> > > > +
-> > > > +properties:
-> > > > +  compatible:
-> > > > +    items:
-> > > > +      - const: baikal,bt1-pcie
-> > > > +      - const: snps,dw-pcie-4.60a
-> > > 
+On Thu, Jul 07, 2022 at 10:12:41AM -0700, Nicolin Chen wrote:
+> On Thu, Jul 07, 2022 at 08:42:28AM +0000, Tian, Kevin wrote:
+> > External email: Use caution opening links or attachments
 > > 
-> > > Pointless, you can read the version.
 > > 
-> > The IP-core version CSR was first introduced in v4.70a. So by using
-> > the version-based compatible string I advertise the actual IP-core
-> > version.
-> 
-
-> Ah, right. However, we generally haven't done this elsewhere and you 
-> aren't special.
-
-I have a very bright example. It's DW MAC/GMAC/xGMAC device. The
-device driver relies on the IP-core version while Synopsys added the
-release ID CSRs in the much newer IP-cores.
-
-> 
+> > > From: Nicolin Chen <nicolinc@nvidia.com>
+> > > Sent: Wednesday, July 6, 2022 2:28 PM
+> > >
+> > > There's only one caller that checks its return value with a WARN_ON_ONCE,
+> > > while all other callers do not check return value at all. So simplify the
+> > > API to return void by embedding similar WARN_ON_ONCEs.
 > > 
-> > > 
-> > > > +      - const: snps,dw-pcie
-> > > 
+> > While this change keeps the similar effect as before it leads to different
+> > policy for same type of errors between pin and unpin paths:
+> 
+> I think it's because of the policy that an undo function should not
+> fail. Meanwhile, indulging faulty inputs isn't good either.
+> 
+> > e.g.
 > > 
-> > > Pointless, because what can you do with this by itself?
+> > vfio_unpin_pages():
+> >         if (WARN_ON_ONCE(!user_pfn || !npage || !vfio_assert_device_open(device)))
+> >                 return;
 > > 
-> > In general many things. For instance implement some IP-core specific
-> > quirks in the generic part of the PCIe subsystem, visually identify
-> > the device origin, etc.
-> 
-
-> Experience has shown these are not useful. Drop it. Anything in the PCI 
-> core would probably use the RP VID/PID.
-> 
-> Furthermore, there is no guarantee that you won't match and bind to the 
-> dw_plat_pcie_driver instead. The kernel has no mechanism to bind to the 
-> best match (which is further complicated with modules).
-
-I see your point. Then as I already said in my comment to the DW
-PCie DT-bindings patch of this series I'll have to split the
-snps,dw-pcie.yaml schema into two:
-snps,dw-pcie-common.yaml
-and
-snps,dw-pcie.yaml
-
-> 
-> 
-> > > > +  reg:
-> > > > +    description:
-> > > > +      DBI, DBI2 and at least 4KB outbound iATU-capable region.
-> > > > +    maxItems: 3
-> > > > +
-> > > > +  reg-names:
-> > > > +    minItems: 3
-> > > > +    maxItems: 3
-> > > > +    items:
-> > > > +      enum: [ dbi, dbi2, config ]
-> > > 
+> > vfio_pin_pages():
+> >         if (!user_pfn || !phys_pfn || !npage ||
+> >             !vfio_assert_device_open(device))
+> >                 return -EINVAL;
 > > 
-> > > This should define the order.
-> > 
-> > Please, tell me why do you persist in the items being ordered? The
-> > driver permits the relaxed order of the resources. Thus there is no
-> > much need in such constraint. At least I can't find any.
+> > It sounds a bit weird when reading related code...
 > 
+> Any better way to handle this?
 
-> Tell me why you need random order.
+They should all be WARN_ON's, that is the standard pattern to assert
+that function arguments must be correctly formed.
 
-Because I don't see a need in constraining the order. If we get to set
-the order requirement, then why do we need to have the "*-names"
-property at all?
-IMO having "reg" with max/minItems restriction plus generic
-description and "reg-names" with possible values enumerated seems very
-suitable pattern in this case. Don't you think?
+I would also drop the tests that obviously will oops on their on
+anyone, like NULL pointer checks. This is a semi-performance path.
 
-> 
-> 
-> > > > +  interrupts:
-> > > > +    description:
-> > > > +      MSI, AER, PME, Hot-plug, Link Bandwidth Management, Link Equalization
-> > > > +      request and eight Read/Write eDMA IRQ lines are available.
-> > > > +    maxItems: 14
-> > > > +
-> > > > +  interrupt-names:
-> > > > +    minItems: 14
-> > > > +    maxItems: 14
-> > > > +    items:
-> > > > +      oneOf:
-> > > > +        - pattern: '^dma[0-7]$'
-> > > > +        - enum: [ msi, aer, pme, hp, bw_mg, l_eq ]
-> > > 
-> > 
-> > > Define the order.
-> > 
-> > Fourteen IRQs? dma0, dma1, dma2, ..., msi, aer, ..., l_eq?
-> 
-
-> If that's what the h/w has...
-
-Please, see my comment above. Let's settle the ordering in general
-first.
-
-> 
-> > 
-> > > 
-> > > > +
-> > > > +  clocks:
-> > > > +    description:
-> > > > +      DBI (attached to the APB bus), AXI-bus master and slave interfaces
-> > > > +      are fed up by the dedicated application clocks. A common reference
-> > > > +      clock signal is supposed to be attached to the corresponding Ref-pad
-> > > > +      of the SoC. It will be redistributed amongst the controller core
-> > > > +      sub-modules (pipe, core, aux, etc).
-> > > > +    minItems: 4
-> > > > +    maxItems: 4
-> > > > +
-> > > > +  clock-names:
-> > > > +    minItems: 4
-> > > > +    maxItems: 4
-> > > > +    items:
-> > > > +      enum: [ dbi, mstr, slv, ref ]
-> > > > +
-> > > > +  resets:
-> > > > +    description:
-> > > > +      A comprehensive controller reset logic is supposed to be implemented
-> > > > +      by software, so almost all the possible application and core reset
-> > > > +      signals are exposed via the system CCU module.
-> > > > +    minItems: 9
-> > > > +    maxItems: 9
-> > > > +
-> > > > +  reset-names:
-> > > > +    minItems: 9
-> > > > +    maxItems: 9
-> > > > +    items:
-> > > > +      enum: [ mstr, slv, pwr, hot, phy, core, pipe, sticky, non-sticky ]
-> > > > +
-> > > > +  baikal,bt1-syscon:
-> > > > +    $ref: /schemas/types.yaml#/definitions/phandle
-> > > > +    description:
-> > > > +      Phandle to the Baikal-T1 System Controller DT node. It's required to
-> > > > +      access some additional PM, Reset-related and LTSSM signals.
-> > > > +
-> > > > +  num-lanes:
-> > > > +    maximum: 4
-> > > > +
-> > > > +  max-link-speed:
-> > > > +    maximum: 3
-> > > > +
-> > > 
-> > 
-> > > > +  num-ob-windows:
-> > > > +    const: 4
-> > > > +
-> > > > +  num-ib-windows:
-> > > > +    const: 4
-> > > 
-> > > Remove these. They are deprecated and shouldn't be in new bindings.
-> > 
-> > Aren't they deprecated in the framework of the DT nodes only?
-> 
-
-> Yes, and that means don't use in new users.
-> 
-> > Can't I still use them here to signify the number of iATU windows?
-> 
-> No.
-
-Ok.
-
--Sergey
-
-> 
-> Rob
+Jason

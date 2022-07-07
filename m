@@ -2,85 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 212D156A9B1
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 19:33:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CE48E56A9B5
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 19:35:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235987AbiGGRdc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Jul 2022 13:33:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41092 "EHLO
+        id S236268AbiGGRet (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Jul 2022 13:34:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42536 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235347AbiGGRd3 (ORCPT
+        with ESMTP id S235347AbiGGReq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Jul 2022 13:33:29 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A1301095;
-        Thu,  7 Jul 2022 10:33:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
-        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=TMaNklIdIcP+MFN2zwCG5jiftF6l+7/4HlhjYmCCffE=; b=Sn0j+sa3jhLQ0ziIexYmJgHUPF
-        ipH5TffoQhAW/RMhlhDR63Y1dQ/gQr6C/IjgyLZut5m8YWccvybkG2lt8sGbx4r8QgBYxATJMrQVq
-        9wqoMr8wbfVeht7o45vHjxRhg5cf/jER3KIA96iyL/yKONUDDwhsxgkgZy6lxw2ySmwo5djC8vTEi
-        v3W0b/A3Hj/VHwKxiRddE6dgdmyD7hMm94HFh1vu4gMPoDJgEfjlY1pGm0hiR0wwcS7gSxFTd0mDE
-        wRxUej3+v58daNyzNsBCv7ZXsNeKePVHHQIveb1MR+LiChvdfC6umxQM2DYVzhicvbsTp+ciiRXrv
-        TQNIE1GA==;
-Received: from hch by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1o9VNU-00HENG-U1; Thu, 07 Jul 2022 17:33:24 +0000
-Date:   Thu, 7 Jul 2022 10:33:24 -0700
-From:   Christoph Hellwig <hch@infradead.org>
-To:     Sergei Shtepa <sergei.shtepa@veeam.com>
-Cc:     axboe@kernel.dk, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 11/20] block, blksnap: functions and structures for
- performing block I/O operations
-Message-ID: <YscY5ImH+1EjgsIF@infradead.org>
-References: <1655135593-1900-1-git-send-email-sergei.shtepa@veeam.com>
- <1655135593-1900-12-git-send-email-sergei.shtepa@veeam.com>
+        Thu, 7 Jul 2022 13:34:46 -0400
+Received: from mail-pg1-x52b.google.com (mail-pg1-x52b.google.com [IPv6:2607:f8b0:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 953273337A
+        for <linux-kernel@vger.kernel.org>; Thu,  7 Jul 2022 10:34:45 -0700 (PDT)
+Received: by mail-pg1-x52b.google.com with SMTP id e132so19763510pgc.5
+        for <linux-kernel@vger.kernel.org>; Thu, 07 Jul 2022 10:34:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=OZkWdgnoDbGquEz4BY21XA5EPvYhUnSdDHMgpi45vYE=;
+        b=aGoS0rpC+B/tEvOv7NxuN+Y7Pz+rK2bekFpku9LPo2Efm45YbwFdW7HuhOwqzB7uD6
+         V4Emw9rT8b8duwWHgu03PVNsnP/gISTXS/rnEEYzDb7bKQeiIXPygnmawDlVnYGTZE5m
+         xsJYflAreHSAYanGagTOSnBOb/9tT9fljaAVPrZUO+9P8YtGV30pnrV8OIOpyNMbti7C
+         6l93nCMfKR+FM8G04fBWS+NE8Syz66hv7Xz6x5hqBbtlKeGaPryaRYSkPG0GTt3K5YUB
+         YLLLoSX62qgOzLYwASZl23mwveiqM7PiVGxBtTdOOEx/TtPeFJb9TwPhB3Hz14WPj1Z5
+         WRww==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=OZkWdgnoDbGquEz4BY21XA5EPvYhUnSdDHMgpi45vYE=;
+        b=YLIdYb9Wm5phrMXiiCP8a/td2nFYewjiFEetYpurnAaMbegR+ySEIWqYxADQKOXUYu
+         OQpz8ma8jPvWmAXSYMw9mduPmEItdYAZhFPPp+vWStSYHDeydlXc2M8HOE8Y5nHcmARZ
+         pNGuTUTMuizLdg3370HY0Ft7zYlc8GyPtuuvZjPfOn8H11eXuQ69iK+aI39X3RvZ4YKP
+         YkrqxAca0JvH1mv5OQzME/aft2IKO9M21DG6ldiw7MB91s6jMnThxbukopoX49D6ZHAN
+         TApwc9OjPmzTxQTPTL7c0GKFDJ4OHush1tZ4Fmpk1ZFNyZkbO7mwQxYgLZ/Ob7FVtD/m
+         zKFw==
+X-Gm-Message-State: AJIora/t4G0yaw+pOQols1AwpvA6Z56Ofll0825A89+EMfAIeR7bSeAb
+        t6aN7xTFk6H+WpI/TVLyxWuVbg==
+X-Google-Smtp-Source: AGRyM1sSBy47ob/FtIIC3SZjUaHxjOTEMYeykT695pMIsoflrGgSlcKyy5/HgZwBDzRBgYmuGjT39A==
+X-Received: by 2002:a63:a46:0:b0:412:b1d6:94cf with SMTP id z6-20020a630a46000000b00412b1d694cfmr5688478pgk.373.1657215284911;
+        Thu, 07 Jul 2022 10:34:44 -0700 (PDT)
+Received: from google.com (123.65.230.35.bc.googleusercontent.com. [35.230.65.123])
+        by smtp.gmail.com with ESMTPSA id o66-20020a625a45000000b0052a53f8ece3sm50268pfb.42.2022.07.07.10.34.44
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 07 Jul 2022 10:34:44 -0700 (PDT)
+Date:   Thu, 7 Jul 2022 17:34:40 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Vitaly Kuznetsov <vkuznets@redhat.com>
+Cc:     kvm@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] KVM: x86: Fully initialize 'struct kvm_lapic_irq' in
+ kvm_pv_kick_cpu_op()
+Message-ID: <YscZMCBpuoJUlQ+H@google.com>
+References: <20220628133057.107344-1-vkuznets@redhat.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1655135593-1900-12-git-send-email-sergei.shtepa@veeam.com>
-X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20220628133057.107344-1-vkuznets@redhat.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> +#define SECTORS_IN_PAGE (PAGE_SIZE / SECTOR_SIZE)
+On Tue, Jun 28, 2022, Vitaly Kuznetsov wrote:
+> 'vector' and 'trig_mode' fields of 'struct kvm_lapic_irq' are left
+> uninitialized in kvm_pv_kick_cpu_op(). While these fields are normally
+> not needed for APIC_DM_REMRD, they're still referenced by
+> __apic_accept_irq() for trace_kvm_apic_accept_irq(). Fully initialize
+> the structure to avoid consuming random stack memory.
+> 
+> Fixes: a183b638b61c ("KVM: x86: make apic_accept_irq tracepoint more generic")
+> Reported-by: syzbot+d6caa905917d353f0d07@syzkaller.appspotmail.com
+> Signed-off-by: Vitaly Kuznetsov <vkuznets@redhat.com>
+> ---
+>  arch/x86/kvm/x86.c | 18 ++++++++++--------
+>  1 file changed, 10 insertions(+), 8 deletions(-)
+> 
+> diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
+> index 567d13405445..8a98608dad4f 100644
+> --- a/arch/x86/kvm/x86.c
+> +++ b/arch/x86/kvm/x86.c
+> @@ -9340,15 +9340,17 @@ static int kvm_pv_clock_pairing(struct kvm_vcpu *vcpu, gpa_t paddr,
+>   */
+>  static void kvm_pv_kick_cpu_op(struct kvm *kvm, int apicid)
+>  {
+> -	struct kvm_lapic_irq lapic_irq;
+> -
+> -	lapic_irq.shorthand = APIC_DEST_NOSHORT;
+> -	lapic_irq.dest_mode = APIC_DEST_PHYSICAL;
+> -	lapic_irq.level = 0;
+> -	lapic_irq.dest_id = apicid;
+> -	lapic_irq.msi_redir_hint = false;
+> +	struct kvm_lapic_irq lapic_irq = {
+> +		.vector = 0,
+> +		.delivery_mode = APIC_DM_REMRD,
+> +		.dest_mode = APIC_DEST_PHYSICAL,
+> +		.level = false,
+> +		.trig_mode = 0,
+> +		.shorthand = APIC_DEST_NOSHORT,
+> +		.dest_id = apicid,
+> +		.msi_redir_hint = false
+> +	};
 
-This can use PAGE_SECTORS from blk_types.h
+What if we rely on the compiler to zero-initialize omitted fields?  E.g.
 
-> +
-> +struct bio_set diff_io_bioset = { 0 };
+	/*
+	 * All other fields are unused for APIC_DM_REMRD, but may be consumed by
+	 * common code, e.g. for tracing.  Defer initialization to the compiler.
+	 */
+	struct kvm_lapic_irq lapic_irq = {
+		.delivery_mode = APIC_DM_REMRD,
+		.dest_mode = APIC_DEST_PHYSICAL,
+		.shorthand = APIC_DEST_NOSHORT,
+		.dest_id = apicid,
+	};
 
-No need to initialize global variables to 0.
+KVM doesn't actually care about the vector, level, trig_mode, etc... for its magic
+magic DM_REMRD, i.e. using 0/false is completely arbitrary.  
 
-> +	// Allocate both bios
-> +	opf = diff_io->is_write ? REQ_OP_WRITE : REQ_OP_READ;
-> +	gfp = GFP_NOIO | (is_nowait ? GFP_NOWAIT : 0);
-> +
-> +	bio = bio_alloc_bioset(diff_region->bdev, nr_iovecs,
-> +			       opf | REQ_SYNC | REQ_IDLE | REQ_FUA,
-
-REQ_FUA on reads does not make sense.
-
-> +	submit_bio_noacct(bio);
-> +
-> +	// Submit flush bio
-> +	bio_set_flag(flush_bio, BIO_FILTERED);
-> +	flush_bio->bi_end_io = diff_io_endio;
-> +	flush_bio->bi_private = diff_io;
-> +	flush_bio->bi_iter.bi_sector = 0;
-> +	submit_bio_noacct(flush_bio);
-
-And a separate flush for reads seems odd and probably wrong here.
-And for writes REQ_FUA already ensuresyour write went to disk.
-Do you also need to flush all previous data?  In which case you
-probably want a single bio with REQ_PREFLUSH and REQ_FUA instead
-of submitting two separate bios here.
+>  
+> -	lapic_irq.delivery_mode = APIC_DM_REMRD;
+>  	kvm_irq_delivery_to_apic(kvm, NULL, &lapic_irq, NULL);
+>  }
+>  
+> -- 
+> 2.35.3
+> 

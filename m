@@ -2,196 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 03D48569E48
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 11:08:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 23069569E4C
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 11:09:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234797AbiGGJIn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Jul 2022 05:08:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51124 "EHLO
+        id S235207AbiGGJJh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Jul 2022 05:09:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52096 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231350AbiGGJIh (ORCPT
+        with ESMTP id S234120AbiGGJJg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Jul 2022 05:08:37 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EAA0EC13
-        for <linux-kernel@vger.kernel.org>; Thu,  7 Jul 2022 02:08:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1657184916; x=1688720916;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=XLKDwx63TgUoGLkIDj6RGrJv34h+ODJs1hILYPzgMhs=;
-  b=UJP5bZxnU4xxGql/txE7Fn6UQMOyoUx8I1bQwS8634soz3hZdEcw6OcN
-   6uImqJfNgzfKpz90UXBReD+yc4RKB0/v58qh+9MNZgz7wuiOVpnhxkqY/
-   dZtejfc1+kn94rwMX48QMiclhN8Vk+gl3gFR30QTYcsAuNYNA8Eux12JE
-   rIzTuvgbJLkC6y2lXOI7rnhDGSZF/oSGaHhmZTuzxpJryt4T5zRdp5FHG
-   YFHObT6Oqw21Ntjmy8xoTKuqvMAqckiiNLfIyzV95tLK3E/B1sMiai2Iw
-   a+TAhdHbyzGzYvdiym/IYe/2tS5S92cPp6wQ35YJMP7yOrJhJnNBex0ve
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10400"; a="281522661"
-X-IronPort-AV: E=Sophos;i="5.92,252,1650956400"; 
-   d="scan'208";a="281522661"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jul 2022 02:08:36 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,252,1650956400"; 
-   d="scan'208";a="683243838"
-Received: from lkp-server01.sh.intel.com (HELO 68b931ab7ac1) ([10.239.97.150])
-  by FMSMGA003.fm.intel.com with ESMTP; 07 Jul 2022 02:08:35 -0700
-Received: from kbuild by 68b931ab7ac1 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1o9NUw-000Lnw-J6;
-        Thu, 07 Jul 2022 09:08:34 +0000
-Date:   Thu, 7 Jul 2022 17:08:19 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Tom <support@vamrs.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Emil Renner Berthing <emil.renner.berthing@canonical.com>
-Subject: [esmil:visionfive 34/50]
- drivers/dma/dw-axi-dmac-starfive/starfive_dmaengine_memcpy.c:38:27: warning:
- cast from pointer to integer of different size
-Message-ID: <202207071751.cBaGYxUU-lkp@intel.com>
+        Thu, 7 Jul 2022 05:09:36 -0400
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A30425C57
+        for <linux-kernel@vger.kernel.org>; Thu,  7 Jul 2022 02:09:35 -0700 (PDT)
+Received: from pps.filterd (m0098421.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 2678DoTt017294;
+        Thu, 7 Jul 2022 09:09:31 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : date : message-id : mime-version : content-transfer-encoding; s=pp1;
+ bh=xrriXOd8MXHikzW4mDV3911Ou00ihCVJD4NXqNVvj2k=;
+ b=R9Qll9q6+ZLuK81k6J97Pnu0u1VqdwLD6Qf5YylAODQ764EOIZE5lGc9QH57ype07bIp
+ mP62IdmvOi5lGYn12fzOZ0VL1MbvJXyihSeTksqzb72RCU1fLOwsaAALosThhWTkO9Rk
+ 8QNi/l/8dKvhdK/VNug/Loc9clrAp5r+jFsUx6UbK312kT0X/+YP/Kuql56qxX6ZK5gm
+ eV+4qa+Xa3BlaU6m9Zoswp431nP9+ABcwKYO2NtI7Beu5PYvPwquVSb+GiGJBb9vuN8v
+ 4S/Gs+Y9BPAMSKBI/787CcIFdZgQuKoIRQkXpqSNa0qa+7wlDRHqVJPlcYJMSjUOBS/S Bg== 
+Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3h5smc4yj3-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 07 Jul 2022 09:09:31 +0000
+Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
+        by ppma04ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 26795n0t027290;
+        Thu, 7 Jul 2022 09:09:29 GMT
+Received: from b06cxnps4075.portsmouth.uk.ibm.com (d06relay12.portsmouth.uk.ibm.com [9.149.109.197])
+        by ppma04ams.nl.ibm.com with ESMTP id 3h4v4jtaqj-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 07 Jul 2022 09:09:29 +0000
+Received: from d06av23.portsmouth.uk.ibm.com (d06av23.portsmouth.uk.ibm.com [9.149.105.59])
+        by b06cxnps4075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 26799QJr24314346
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 7 Jul 2022 09:09:26 GMT
+Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 93776A4040;
+        Thu,  7 Jul 2022 09:09:26 +0000 (GMT)
+Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id F1981A4053;
+        Thu,  7 Jul 2022 09:09:24 +0000 (GMT)
+Received: from li-NotSettable.ibm.com.com (unknown [9.43.78.163])
+        by d06av23.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Thu,  7 Jul 2022 09:09:24 +0000 (GMT)
+From:   "Naveen N. Rao" <naveen.n.rao@linux.vnet.ibm.com>
+To:     Arnaldo Carvalho de Melo <acme@kernel.org>
+Cc:     cclaudio@linux.ibm.com, Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: [PATCH v2] perf trace: Fix SIGSEGV when processing syscall args
+Date:   Thu,  7 Jul 2022 14:39:00 +0530
+Message-Id: <20220707090900.572584-1-naveen.n.rao@linux.vnet.ibm.com>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: V_NH2Sk65YjV5iUmjpQYEKFq1Dw0p4C4
+X-Proofpoint-ORIG-GUID: V_NH2Sk65YjV5iUmjpQYEKFq1Dw0p4C4
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
+ definitions=2022-07-07_06,2022-06-28_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 clxscore=1015
+ suspectscore=0 lowpriorityscore=0 bulkscore=0 priorityscore=1501
+ adultscore=0 mlxscore=0 spamscore=0 mlxlogscore=999 phishscore=0
+ impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2206140000 definitions=main-2207070036
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/esmil/linux visionfive
-head:   943858df470556d0b7f3b31fcc10931603f0f3cc
-commit: 4c89873ac3af6a251049da47ab78862c05de9fad [34/50] dmaengine: Add dw-axi-dmac-starfive driver for JH7100
-config: riscv-buildonly-randconfig-r003-20220707 (https://download.01.org/0day-ci/archive/20220707/202207071751.cBaGYxUU-lkp@intel.com/config)
-compiler: riscv32-linux-gcc (GCC) 11.3.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/esmil/linux/commit/4c89873ac3af6a251049da47ab78862c05de9fad
-        git remote add esmil https://github.com/esmil/linux
-        git fetch --no-tags esmil visionfive
-        git checkout 4c89873ac3af6a251049da47ab78862c05de9fad
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash drivers/dma/dw-axi-dmac-starfive/
+On powerpc, 'perf trace' is crashing with a SIGSEGV when trying to
+process a perf.data file created with 'perf trace record -p':
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+  #0  0x00000001225b8988 in syscall_arg__scnprintf_augmented_string <snip> at builtin-trace.c:1492
+  #1  syscall_arg__scnprintf_filename <snip> at builtin-trace.c:1492
+  #2  syscall_arg__scnprintf_filename <snip> at builtin-trace.c:1486
+  #3  0x00000001225bdd9c in syscall_arg_fmt__scnprintf_val <snip> at builtin-trace.c:1973
+  #4  syscall__scnprintf_args <snip> at builtin-trace.c:2041
+  #5  0x00000001225bff04 in trace__sys_enter <snip> at builtin-trace.c:2319
 
-All warnings (new ones prefixed by >>):
+That points to the below code in tools/perf/builtin-trace.c:
+	/*
+	 * If this is raw_syscalls.sys_enter, then it always comes with the 6 possible
+	 * arguments, even if the syscall being handled, say "openat", uses only 4 arguments
+	 * this breaks syscall__augmented_args() check for augmented args, as we calculate
+	 * syscall->args_size using each syscalls:sys_enter_NAME tracefs format file,
+	 * so when handling, say the openat syscall, we end up getting 6 args for the
+	 * raw_syscalls:sys_enter event, when we expected just 4, we end up mistakenly
+	 * thinking that the extra 2 u64 args are the augmented filename, so just check
+	 * here and avoid using augmented syscalls when the evsel is the raw_syscalls one.
+	 */
+	if (evsel != trace->syscalls.events.sys_enter)
+		augmented_args = syscall__augmented_args(sc, sample, &augmented_args_size, trace->raw_augmented_syscalls_args_size);
 
-   drivers/dma/dw-axi-dmac-starfive/starfive_dmaengine_memcpy.c: In function 'dw_virt_to_phys':
->> drivers/dma/dw-axi-dmac-starfive/starfive_dmaengine_memcpy.c:38:27: warning: cast from pointer to integer of different size [-Wpointer-to-int-cast]
-      38 |         u64 pfn_offset = ((u64)vaddr) & 0xfff;
-         |                           ^
-   drivers/dma/dw-axi-dmac-starfive/starfive_dmaengine_memcpy.c: In function 'dw_dma_async_do_memcpy':
-   drivers/dma/dw-axi-dmac-starfive/starfive_dmaengine_memcpy.c:153:9: error: implicit declaration of function 'iort_dma_setup' [-Werror=implicit-function-declaration]
-     153 |         iort_dma_setup(dma_dev, &dma_addr, &dma_size);
-         |         ^~~~~~~~~~~~~~
-   drivers/dma/dw-axi-dmac-starfive/starfive_dmaengine_memcpy.c:154:15: warning: assignment to 'const struct iommu_ops *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
-     154 |         iommu = iort_iommu_configure_id(dma_dev, NULL);
-         |               ^
-   In file included from include/asm-generic/bug.h:22,
-                    from arch/riscv/include/asm/bug.h:83,
-                    from include/linux/bug.h:5,
-                    from arch/riscv/include/asm/current.h:13,
-                    from include/linux/mutex.h:14,
-                    from include/linux/kernfs.h:11,
-                    from include/linux/sysfs.h:16,
-                    from include/linux/kobject.h:20,
-                    from include/linux/of.h:17,
-                    from include/linux/irqdomain.h:35,
-                    from include/linux/acpi.h:13,
-                    from include/linux/acpi_iort.h:10,
-                    from drivers/dma/dw-axi-dmac-starfive/starfive_dmaengine_memcpy.c:16:
-   drivers/dma/dw-axi-dmac-starfive/starfive_dmaengine_memcpy.c:165:45: warning: cast from pointer to integer of different size [-Wpointer-to-int-cast]
-     165 |         DMA_DEBUG("src=%#llx, dst=%#llx\n", (u64)src, (u64)dst);
-         |                                             ^
-   include/linux/printk.h:436:33: note: in definition of macro 'printk_index_wrap'
-     436 |                 _p_func(_fmt, ##__VA_ARGS__);                           \
-         |                                 ^~~~~~~~~~~
-   include/soc/starfive/jh7100_dma.h:13:9: note: in expansion of macro 'printk'
-      13 |         printk("[DW_DMA_DEBUG] %s():%d \n" fmt, __func__, __LINE__, ##__VA_ARGS__)
-         |         ^~~~~~
-   drivers/dma/dw-axi-dmac-starfive/starfive_dmaengine_memcpy.c:165:9: note: in expansion of macro 'DMA_DEBUG'
-     165 |         DMA_DEBUG("src=%#llx, dst=%#llx\n", (u64)src, (u64)dst);
-         |         ^~~~~~~~~
-   drivers/dma/dw-axi-dmac-starfive/starfive_dmaengine_memcpy.c:165:55: warning: cast from pointer to integer of different size [-Wpointer-to-int-cast]
-     165 |         DMA_DEBUG("src=%#llx, dst=%#llx\n", (u64)src, (u64)dst);
-         |                                                       ^
-   include/linux/printk.h:436:33: note: in definition of macro 'printk_index_wrap'
-     436 |                 _p_func(_fmt, ##__VA_ARGS__);                           \
-         |                                 ^~~~~~~~~~~
-   include/soc/starfive/jh7100_dma.h:13:9: note: in expansion of macro 'printk'
-      13 |         printk("[DW_DMA_DEBUG] %s():%d \n" fmt, __func__, __LINE__, ##__VA_ARGS__)
-         |         ^~~~~~
-   drivers/dma/dw-axi-dmac-starfive/starfive_dmaengine_memcpy.c:165:9: note: in expansion of macro 'DMA_DEBUG'
-     165 |         DMA_DEBUG("src=%#llx, dst=%#llx\n", (u64)src, (u64)dst);
-         |         ^~~~~~~~~
-   drivers/dma/dw-axi-dmac-starfive/starfive_dmaengine_memcpy.c:187:9: error: implicit declaration of function 'sifive_l2_flush64_range'; did you mean 'sifive_l2_flush_range'? [-Werror=implicit-function-declaration]
-     187 |         sifive_l2_flush64_range(src_dma, size);
-         |         ^~~~~~~~~~~~~~~~~~~~~~~
-         |         sifive_l2_flush_range
-   drivers/dma/dw-axi-dmac-starfive/starfive_dmaengine_memcpy.c: In function 'dw_dma_memcpy_raw':
-   drivers/dma/dw-axi-dmac-starfive/starfive_dmaengine_memcpy.c:224:15: warning: assignment to 'const struct iommu_ops *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
-     224 |         iommu = iort_iommu_configure_id(dma_dev, NULL);
-         |               ^
-   In file included from include/asm-generic/bug.h:22,
-                    from arch/riscv/include/asm/bug.h:83,
-                    from include/linux/bug.h:5,
-                    from arch/riscv/include/asm/current.h:13,
-                    from include/linux/mutex.h:14,
-                    from include/linux/kernfs.h:11,
-                    from include/linux/sysfs.h:16,
-                    from include/linux/kobject.h:20,
-                    from include/linux/of.h:17,
-                    from include/linux/irqdomain.h:35,
-                    from include/linux/acpi.h:13,
-                    from include/linux/acpi_iort.h:10,
-                    from drivers/dma/dw-axi-dmac-starfive/starfive_dmaengine_memcpy.c:16:
->> include/soc/starfive/jh7100_dma.h:13:16: warning: format '%llx' expects argument of type 'long long unsigned int', but argument 4 has type 'dma_addr_t' {aka 'unsigned int'} [-Wformat=]
-      13 |         printk("[DW_DMA_DEBUG] %s():%d \n" fmt, __func__, __LINE__, ##__VA_ARGS__)
-         |                ^~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/printk.h:436:25: note: in definition of macro 'printk_index_wrap'
-     436 |                 _p_func(_fmt, ##__VA_ARGS__);                           \
-         |                         ^~~~
-   include/soc/starfive/jh7100_dma.h:13:9: note: in expansion of macro 'printk'
-      13 |         printk("[DW_DMA_DEBUG] %s():%d \n" fmt, __func__, __LINE__, ##__VA_ARGS__)
-         |         ^~~~~~
-   drivers/dma/dw-axi-dmac-starfive/starfive_dmaengine_memcpy.c:237:9: note: in expansion of macro 'DMA_DEBUG'
-     237 |         DMA_DEBUG("src_dma=%#llx, dst_dma=%#llx \n", src_dma, dst_dma);
-         |         ^~~~~~~~~
-   include/soc/starfive/jh7100_dma.h:13:16: warning: format '%llx' expects argument of type 'long long unsigned int', but argument 5 has type 'dma_addr_t' {aka 'unsigned int'} [-Wformat=]
-      13 |         printk("[DW_DMA_DEBUG] %s():%d \n" fmt, __func__, __LINE__, ##__VA_ARGS__)
-         |                ^~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/printk.h:436:25: note: in definition of macro 'printk_index_wrap'
-     436 |                 _p_func(_fmt, ##__VA_ARGS__);                           \
-         |                         ^~~~
-   include/soc/starfive/jh7100_dma.h:13:9: note: in expansion of macro 'printk'
-      13 |         printk("[DW_DMA_DEBUG] %s():%d \n" fmt, __func__, __LINE__, ##__VA_ARGS__)
-         |         ^~~~~~
-   drivers/dma/dw-axi-dmac-starfive/starfive_dmaengine_memcpy.c:237:9: note: in expansion of macro 'DMA_DEBUG'
-     237 |         DMA_DEBUG("src_dma=%#llx, dst_dma=%#llx \n", src_dma, dst_dma);
-         |         ^~~~~~~~~
-   cc1: some warnings being treated as errors
+As the comment points out, we should not be trying to augment the args
+for raw_syscalls. However, when processing a perf.data file, we are not
+initializing those properly. Fix the same.
 
+Reported-by: Claudio Carvalho <cclaudio@linux.ibm.com>
+Signed-off-by: Naveen N. Rao <naveen.n.rao@linux.vnet.ibm.com>
+---
+ tools/perf/builtin-trace.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-vim +38 drivers/dma/dw-axi-dmac-starfive/starfive_dmaengine_memcpy.c
+diff --git a/tools/perf/builtin-trace.c b/tools/perf/builtin-trace.c
+index 897fc504918b91..f075cf37a65ef8 100644
+--- a/tools/perf/builtin-trace.c
++++ b/tools/perf/builtin-trace.c
+@@ -4280,6 +4280,7 @@ static int trace__replay(struct trace *trace)
+ 		goto out;
+ 
+ 	evsel = evlist__find_tracepoint_by_name(session->evlist, "raw_syscalls:sys_enter");
++	trace->syscalls.events.sys_enter = evsel;
+ 	/* older kernels have syscalls tp versus raw_syscalls */
+ 	if (evsel == NULL)
+ 		evsel = evlist__find_tracepoint_by_name(session->evlist, "syscalls:sys_enter");
+@@ -4292,6 +4293,7 @@ static int trace__replay(struct trace *trace)
+ 	}
+ 
+ 	evsel = evlist__find_tracepoint_by_name(session->evlist, "raw_syscalls:sys_exit");
++	trace->syscalls.events.sys_exit = evsel;
+ 	if (evsel == NULL)
+ 		evsel = evlist__find_tracepoint_by_name(session->evlist, "syscalls:sys_exit");
+ 	if (evsel &&
 
-    35	
-    36	u64 dw_virt_to_phys(void *vaddr)
-    37	{
-  > 38		u64 pfn_offset = ((u64)vaddr) & 0xfff;
-    39	
-    40		return _dw_virt_to_phys((u64 *)vaddr) + pfn_offset;
-    41	}
-    42	EXPORT_SYMBOL(dw_virt_to_phys);
-    43	
-
+base-commit: 52f28b7bac75da9b8508f17438c9a8d83ab48e5d
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+2.36.1
+

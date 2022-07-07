@@ -2,110 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A56B856AA2B
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 20:01:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CDF6F56AA2D
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 20:02:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234713AbiGGSBg convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 7 Jul 2022 14:01:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34940 "EHLO
+        id S236027AbiGGSCM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Jul 2022 14:02:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35174 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235422AbiGGSBe (ORCPT
+        with ESMTP id S235422AbiGGSCL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Jul 2022 14:01:34 -0400
-Received: from relay5.hostedemail.com (smtprelay0012.hostedemail.com [216.40.44.12])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 113B126132
-        for <linux-kernel@vger.kernel.org>; Thu,  7 Jul 2022 11:01:33 -0700 (PDT)
-Received: from omf11.hostedemail.com (a10.router.float.18 [10.200.18.1])
-        by unirelay01.hostedemail.com (Postfix) with ESMTP id 1B3526101C;
-        Thu,  7 Jul 2022 18:01:31 +0000 (UTC)
-Received: from [HIDDEN] (Authenticated sender: joe@perches.com) by omf11.hostedemail.com (Postfix) with ESMTPA id E45E020037;
-        Thu,  7 Jul 2022 18:01:27 +0000 (UTC)
-Message-ID: <da17617717c5f6a79f58cdf4a56cd39e28c53377.camel@perches.com>
-Subject: Re: [PATCH] net: ipv4: fix clang -Wformat warning
-From:   Joe Perches <joe@perches.com>
-To:     Justin Stitt <justinstitt@google.com>
-Cc:     Steffen Klassert <steffen.klassert@secunet.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S . Miller" <davem@davemloft.net>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        David Ahern <dsahern@kernel.org>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Tom Rix <trix@redhat.com>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Date:   Thu, 07 Jul 2022 11:01:26 -0700
-In-Reply-To: <CAFhGd8oTybm0aQ_q60e+exf5eFO1kLiNKnmDZfVTyg=BbtgZsw@mail.gmail.com>
-References: <20220707173040.704116-1-justinstitt@google.com>
-         <6f5a1c04746feb04add15107c70332ac603e4561.camel@perches.com>
-         <CAFhGd8oTybm0aQ_q60e+exf5eFO1kLiNKnmDZfVTyg=BbtgZsw@mail.gmail.com>
-Content-Type: text/plain; charset="ISO-8859-1"
-Content-Transfer-Encoding: 8BIT
-User-Agent: Evolution 3.44.1-0ubuntu1 
+        Thu, 7 Jul 2022 14:02:11 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17B7B2656F
+        for <linux-kernel@vger.kernel.org>; Thu,  7 Jul 2022 11:02:11 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id AA93562099
+        for <linux-kernel@vger.kernel.org>; Thu,  7 Jul 2022 18:02:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A574EC3411E;
+        Thu,  7 Jul 2022 18:02:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1657216930;
+        bh=HDoiUoInW6aRDDHHBzIKcn6qHHceeqkyq+CtmISyeXU=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=QFNRNmus3psaglVsXhnp50XE0PLeedFGauo1lxlwehQS+G6/mNCfKqLJAjuzYaUhm
+         EI+zP/PyEYWmd8XZ0aJ8awxttRUg0EmcFh0qXk4VN+Q0gYRqCGSt/Y6pQlhv9reMi8
+         JmbFNT++r3TVVkL4uA2Sm5K4oltpHe7qs7wNNroA=
+Date:   Thu, 7 Jul 2022 20:02:07 +0200
+From:   "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>
+To:     Robert Hancock <robert.hancock@calian.com>
+Cc:     "lkp@intel.com" <lkp@intel.com>,
+        "kbuild-all@lists.01.org" <kbuild-all@lists.01.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "andrew@lunn.ch" <andrew@lunn.ch>
+Subject: Re: [linux-stable-rc:linux-4.19.y 1539/3265]
+ drivers/net/ethernet/xilinx/xilinx_axienet_main.c:283:15: error: implicit
+ declaration of function 'read_poll_timeout'
+Message-ID: <YscfnyyLd5Oxd/3p@kroah.com>
+References: <202207061830.78pJNuwN-lkp@intel.com>
+ <701e5ff60f921cb80bbc76e0fe0119b93c9bb431.camel@calian.com>
 MIME-Version: 1.0
-X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=no
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <701e5ff60f921cb80bbc76e0fe0119b93c9bb431.camel@calian.com>
+X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
-X-Stat-Signature: 9hji8x14hjnfib6t8mqzghy4hgmidssk
-X-Rspamd-Server: rspamout05
-X-Rspamd-Queue-Id: E45E020037
-X-Session-Marker: 6A6F6540706572636865732E636F6D
-X-Session-ID: U2FsdGVkX1+YCj/8yCY3yEUbxnuMVC5Ve/GvPfwKDhc=
-X-HE-Tag: 1657216887-660842
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 2022-07-07 at 10:47 -0700, Justin Stitt wrote:
-> On Thu, Jul 7, 2022 at 10:40 AM Joe Perches <joe@perches.com> wrote:
+On Wed, Jul 06, 2022 at 10:42:48PM +0000, Robert Hancock wrote:
+> On Wed, 2022-07-06 at 18:43 +0800, kernel test robot wrote:
+> > Hi Robert,
 > > 
-> > On Thu, 2022-07-07 at 10:30 -0700, Justin Stitt wrote:
-> > > When building with Clang we encounter this warning:
-> > > > net/ipv4/ah4.c:513:4: error: format specifies type 'unsigned short' but
-> > > > the argument has type 'int' [-Werror,-Wformat]
-> > > > aalg_desc->uinfo.auth.icv_fullbits / 8);
-> > > 
-> > > `aalg_desc->uinfo.auth.icv_fullbits` is a u16 but due to default
-> > > argument promotion becomes an int.
-> > > 
-> > > Variadic functions (printf-like) undergo default argument promotion.
-> > > Documentation/core-api/printk-formats.rst specifically recommends using
-> > > the promoted-to-type's format flag.
-> > > 
-> > > As per C11 6.3.1.1:
-> > > (https://www.open-std.org/jtc1/sc22/wg14/www/docs/n1548.pdf) `If an int
-> > > can represent all values of the original type ..., the value is
-> > > converted to an int; otherwise, it is converted to an unsigned int.
-> > > These are called the integer promotions.` Thus it makes sense to change
-> > > %hu to %d not only to follow this standard but to suppress the warning
-> > > as well.
+> > FYI, the error/warning still remains.
 > > 
-> > I think it also makes sense to use %u and not %d
-> > as the original type is unsigned.
-> Yeah, that would also work. An integer (even a signed one) fully
-> encompasses a u16 so it's really a choice of style. Do you think the
-> change to %u warrants a v2 of this patch?
-
-As it's rather odd output to use '%u != %d', probably.
-
-Your patch, up to you.
-
+> > tree:  
+> > https://urldefense.com/v3/__https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git__;!!IOGos0k!nK_4HG5DiIjhDaFvtB2c4HTsoQMg8UHEBJDv6stlGIMButbUtJc42wGH5qXaVC5JIkAwZas4Ne1iIw$
+> >   linux-4.19.y
+> > head:   b9f174a70c6f609b6132c3a65883b16d552984b8
+> > commit: 8b8ad8a7ac24905937c3975b54c4594b93b66ebb [1539/3265] net:
+> > axienet: Wait for PhyRstCmplt after core reset
+> > config: microblaze-randconfig-r003-20220704
+> > (https://urldefense.com/v3/__https://download.01.org/0day-ci/archive/
+> > 20220706/202207061830.78pJNuwN-lkp@intel.com/config__;!!IOGos0k!nK_4H
+> > G5DiIjhDaFvtB2c4HTsoQMg8UHEBJDv6stlGIMButbUtJc42wGH5qXaVC5JIkAwZatUAT
+> > tDaQ$ )
+> > compiler: microblaze-linux-gcc (GCC) 11.3.0
+> > reproduce (this is a W=1 build):
+> >         wget
+> > https://urldefense.com/v3/__https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross__;!!IOGos0k!nK_4HG5DiIjhDaFvtB2c4HTsoQMg8UHEBJDv6stlGIMButbUtJc42wGH5qXaVC5JIkAwZautG4jkgg$
+> >   -O ~/bin/make.cross
+> >         chmod +x ~/bin/make.cross
+> >         #
+> > https://urldefense.com/v3/__https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git/commit/?id=8b8ad8a7ac24905937c3975b54c4594b93b66ebb__;!!IOGos0k!nK_4HG5DiIjhDaFvtB2c4HTsoQMg8UHEBJDv6stlGIMButbUtJc42wGH5qXaVC5JIkAwZas8R9M_sA$
+> >  
+> >         git remote add linux-stable-rc
+> > https://urldefense.com/v3/__https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git__;!!IOGos0k!nK_4HG5DiIjhDaFvtB2c4HTsoQMg8UHEBJDv6stlGIMButbUtJc42wGH5qXaVC5JIkAwZas4Ne1iIw$
+> >  
+> >         git fetch --no-tags linux-stable-rc linux-4.19.y
+> >         git checkout 8b8ad8a7ac24905937c3975b54c4594b93b66ebb
+> >         # save the config file
+> >         mkdir build_dir && cp config build_dir/.config
+> >         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0
+> > make.cross W=1 O=build_dir ARCH=microblaze SHELL=/bin/bash
+> > drivers/net/ethernet/xilinx/
 > > 
-> > > diff --git a/net/ipv4/ah4.c b/net/ipv4/ah4.c
-> > []
-> > > @@ -507,7 +507,7 @@ static int ah_init_state(struct xfrm_state *x)
-> > > 
-> > >       if (aalg_desc->uinfo.auth.icv_fullbits/8 !=
-> > >           crypto_ahash_digestsize(ahash)) {
-> > > -             pr_info("%s: %s digestsize %u != %hu\n",
-> > > +             pr_info("%s: %s digestsize %u != %d\n",
-> > >                       __func__, x->aalg->alg_name,
-> > >                       crypto_ahash_digestsize(ahash),
-> > >                       aalg_desc->uinfo.auth.icv_fullbits / 8);
+> > If you fix the issue, kindly add following tag where applicable
+> > Reported-by: kernel test robot <lkp@intel.com>
 > > 
+> > All errors (new ones prefixed by >>):
+> > 
+> >    drivers/net/ethernet/xilinx/xilinx_axienet_main.c: In function
+> > 'axienet_dma_bd_init':
+> >    drivers/net/ethernet/xilinx/xilinx_axienet_main.c:283:9: error:
+> > 'ret' undeclared (first use in this function); did you mean 'net'?
+> >      283 |         ret = read_poll_timeout(axienet_ior, value,
+> >          |         ^~~
+> >          |         net
+> >    drivers/net/ethernet/xilinx/xilinx_axienet_main.c:283:9: note:
+> > each undeclared identifier is reported only once for each function it
+> > appears in
+> > > > drivers/net/ethernet/xilinx/xilinx_axienet_main.c:283:15: error:
+> > > > implicit declaration of function 'read_poll_timeout' [-
+> > > > Werror=implicit-function-declaration]
+> >      283 |         ret = read_poll_timeout(axienet_ior, value,
+> >          |               ^~~~~~~~~~~~~~~~~
+> >    drivers/net/ethernet/xilinx/xilinx_axienet_main.c:283:46: error:
+> > 'value' undeclared (first use in this function)
+> >      283 |         ret = read_poll_timeout(axienet_ior, value,
+> >          |                                              ^~~~~
+> >    cc1: some warnings being treated as errors
+> > 
+> 
+> This seems like maybe a bad backport of the listed patch to the 4.19
+> stable release?
 
+If so, can you provide a fix for this?
+
+thanks,
+
+greg k-h

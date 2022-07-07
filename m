@@ -2,136 +2,169 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B4D5D56ABA9
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 21:16:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DE45F56ABAC
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 21:16:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236721AbiGGTP5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Jul 2022 15:15:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36222 "EHLO
+        id S236736AbiGGTQK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Jul 2022 15:16:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36450 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236682AbiGGTPx (ORCPT
+        with ESMTP id S236740AbiGGTQI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Jul 2022 15:15:53 -0400
-Received: from ale.deltatee.com (ale.deltatee.com [204.191.154.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A121B5723F;
-        Thu,  7 Jul 2022 12:15:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=deltatee.com; s=20200525; h=Subject:MIME-Version:References:In-Reply-To:
-        Message-Id:Date:Cc:To:From:content-disposition;
-        bh=xel/L+sXXPOAh9iZSjFTyQINk5NqdFAPgrfWzmM//Q4=; b=BVpADDpCVjvq4lOhUUL/pghWDs
-        JqnodTxLfzAuOkPjYx5wXWvzFT0HNH2Mj3OraSySfZis+NMmJQtyJ0CX43XBpgtR4jxz4nKTPKfzT
-        K7mf1/DqpUSKQhSgMQGUBkIr0Gwu8CWYjaCWbnbbc03qjS+aOWm97aTVrTAtDQ7/n5UQXodkrJdoM
-        q1E772ezkvpGIfSBEJ+Or1nxisx1LJxwaiHo7/LOy/Z2K19CiwUU40m4jL8oYoiVhcCD6a10ASACD
-        YGQ45sJb1Fq7fXbK0FcosT43yxfFeH3z96vCNsbyCXyJPWxT+jBKyMrLS88V//zXgOAsKio2vD0L+
-        Lm7ANzvw==;
-Received: from cgy1-donard.priv.deltatee.com ([172.16.1.31])
-        by ale.deltatee.com with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <gunthorp@deltatee.com>)
-        id 1o9Wyb-0099KU-L6; Thu, 07 Jul 2022 13:15:50 -0600
-Received: from gunthorp by cgy1-donard.priv.deltatee.com with local (Exim 4.94.2)
-        (envelope-from <gunthorp@deltatee.com>)
-        id 1o9Wya-001ERY-DT; Thu, 07 Jul 2022 13:15:48 -0600
-From:   Logan Gunthorpe <logang@deltatee.com>
-To:     linux-kernel@vger.kernel.org, linux-raid@vger.kernel.org,
-        Song Liu <song@kernel.org>
-Cc:     Guoqing Jiang <guoqing.jiang@linux.dev>,
-        David Sloan <David.Sloan@eideticom.com>,
-        Logan Gunthorpe <logang@deltatee.com>
-Date:   Thu,  7 Jul 2022 13:15:33 -0600
-Message-Id: <20220707191533.293795-3-logang@deltatee.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20220707191533.293795-1-logang@deltatee.com>
-References: <20220707191533.293795-1-logang@deltatee.com>
+        Thu, 7 Jul 2022 15:16:08 -0400
+Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D9515C9C7
+        for <linux-kernel@vger.kernel.org>; Thu,  7 Jul 2022 12:16:04 -0700 (PDT)
+Received: by mail-wm1-x331.google.com with SMTP id l40-20020a05600c1d2800b003a18adff308so11801251wms.5
+        for <linux-kernel@vger.kernel.org>; Thu, 07 Jul 2022 12:16:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=paul-moore-com.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=of729cYQdZdatbdtOkxwYpHbBpVYD6mDwvI8OalqF/o=;
+        b=V9nrML7ATfHvbYWklR0Oe2gzTDbjRLUtkda6dyGevx7bagNTD65ZqDTlKZirih5aQ1
+         nkX0TTKbRtilcre9JSlFYoQn3qcIXVkpQdvAbeJAItCMbjV9BvZD23iO9tn/VrjBpGru
+         KZFli/CXWr3kFMVrmqXy+YPpEv3+dBG02Y6iuCQ9sqm8XAx/uLSHgUEXqjDzq3oXUdbQ
+         mId9ygf9HdZzddUVAEuV/UqJOTkNMagpstdk+z9MSsEAraL5XHdPvcnaYEogTvZsdLjm
+         haswyT1lsFEWpC18LYFOZ0t0WcKCbZDLQKiRF/HBqnJeGP4KN6guHx1djhwXS5SfZ2Hz
+         vXCQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=of729cYQdZdatbdtOkxwYpHbBpVYD6mDwvI8OalqF/o=;
+        b=KaDbQr2lq1udHICxZlWMbCFu+KMITs961GH8Xfrt3uv4PQWxbLm/Am8dF6Rger5MI/
+         uQHdEqdco0f45ptcVd++rJ9PbxSV3Bw0BrgwLhXngsKY05vLv6q6FwrdLSVIRhM0/42d
+         WTL3wEVJEtruo5R8fLEZxOG6z1HmcgmJVyTgY8zf6eZOAD7XcUpvcdzqpn5wB84igAiz
+         oXnPgJpZCbKF1JXo1ceQor+JK1tRIlccuESqcYzF55k+zVSSi1lb4a1VPG0eXkD7V5gD
+         3T+MOb+UrdrLRbSBpctDB+jvVziSsA1idqFMx83yaBNj73bogc7dgUMpLlD3qvp5EA7D
+         +vRg==
+X-Gm-Message-State: AJIora/diyFojnwAHucUXZuj+4zjPX0jD9AHPDGggy0+4k7vvUO1yLFy
+        1E7v0AL0LjaN6IN8H6CWdJ0hhBl7iwoE65VoX8Jj
+X-Google-Smtp-Source: AGRyM1ujmYeLrS7g423s1azgK9mH3+K6H5JmKsA3Sj8Nhk0vm63Rpr3/GjZGXw6pIRtiE3dUUVQupoL7Ac9kaUGVDh0=
+X-Received: by 2002:a05:600c:4f85:b0:3a1:a8e7:232a with SMTP id
+ n5-20020a05600c4f8500b003a1a8e7232amr6425558wmq.158.1657221363107; Thu, 07
+ Jul 2022 12:16:03 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 172.16.1.31
-X-SA-Exim-Rcpt-To: linux-kernel@vger.kernel.org, linux-raid@vger.kernel.org, song@kernel.org, guoqing.jiang@linux.dev, David.Sloan@eideticom.com, logang@deltatee.com
-X-SA-Exim-Mail-From: gunthorp@deltatee.com
+References: <20220706234003.66760-1-kuniyu@amazon.com> <20220706234003.66760-11-kuniyu@amazon.com>
+In-Reply-To: <20220706234003.66760-11-kuniyu@amazon.com>
+From:   Paul Moore <paul@paul-moore.com>
+Date:   Thu, 7 Jul 2022 15:15:52 -0400
+Message-ID: <CAHC9VhQMigGi65-j0c9WBN+dWLjjaYqTti-eP99c1RRrQzWj5g@mail.gmail.com>
+Subject: Re: [PATCH v2 net 10/12] cipso: Fix data-races around sysctl.
+To:     Kuniyuki Iwashima <kuniyu@amazon.com>
+Cc:     "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        Iurii Zaikin <yzaikin@google.com>,
+        Kuniyuki Iwashima <kuni1840@gmail.com>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-X-Spam-Level: 
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
-Subject: [PATCH 2/2] md/raid5: Convert prepare_to_wait() to wait_woken() api
-X-SA-Exim-Version: 4.2.1 (built Sat, 13 Feb 2021 17:57:42 +0000)
-X-SA-Exim-Scanned: Yes (on ale.deltatee.com)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-raid5_get_active_stripe() can sleep in various situations and it
-is called by make_stripe_request() while inside the
-prepare_to_wait()/finish_wait() section. Nested waits like this are
-not supported.
+On Wed, Jul 6, 2022 at 7:43 PM Kuniyuki Iwashima <kuniyu@amazon.com> wrote:
+>
+> While reading cipso sysctl variables, they can be changed concurrently.
+> So, we need to add READ_ONCE() to avoid data-races.
+>
+> Fixes: 446fda4f2682 ("[NetLabel]: CIPSOv4 engine")
+> Signed-off-by: Kuniyuki Iwashima <kuniyu@amazon.com>
+> ---
+> CC: Paul Moore <paul@paul-moore.com>
 
-This was noticed while making other changes that add different sleeps
-to raid5_get_active_stripe() that caused a WARNING with and
-CONFIG_DEBUG_ATOMIC_SLEEP.
+Thanks for the patch, this looks good to me.  However, in the future
+you should probably drop the extra "---" separator (just leave the one
+before the diffstat below) and move my "Cc:" up above "Fixes:".
 
-No ill effects have been noticed with the code as is, but theoretically
-a nested and here could cause a dead lock so it should be fixed.
+Acked-by: Paul Moore <paul@paul-moore.com>
 
-To fix this, convert the prepare_to_wait() call to use wake_woken()
-which supports nested sleeps.
+> ---
+>  Documentation/networking/ip-sysctl.rst |  2 +-
+>  net/ipv4/cipso_ipv4.c                  | 12 +++++++-----
+>  2 files changed, 8 insertions(+), 6 deletions(-)
+>
+> diff --git a/Documentation/networking/ip-sysctl.rst b/Documentation/networking/ip-sysctl.rst
+> index 9f41961d11d5..0e58001f8580 100644
+> --- a/Documentation/networking/ip-sysctl.rst
+> +++ b/Documentation/networking/ip-sysctl.rst
+> @@ -1085,7 +1085,7 @@ cipso_cache_enable - BOOLEAN
+>  cipso_cache_bucket_size - INTEGER
+>         The CIPSO label cache consists of a fixed size hash table with each
+>         hash bucket containing a number of cache entries.  This variable limits
+> -       the number of entries in each hash bucket; the larger the value the
+> +       the number of entries in each hash bucket; the larger the value is, the
+>         more CIPSO label mappings that can be cached.  When the number of
+>         entries in a given hash bucket reaches this limit adding new entries
+>         causes the oldest entry in the bucket to be removed to make room.
+> diff --git a/net/ipv4/cipso_ipv4.c b/net/ipv4/cipso_ipv4.c
+> index 62d5f99760aa..6cd3b6c559f0 100644
+> --- a/net/ipv4/cipso_ipv4.c
+> +++ b/net/ipv4/cipso_ipv4.c
+> @@ -239,7 +239,7 @@ static int cipso_v4_cache_check(const unsigned char *key,
+>         struct cipso_v4_map_cache_entry *prev_entry = NULL;
+>         u32 hash;
+>
+> -       if (!cipso_v4_cache_enabled)
+> +       if (!READ_ONCE(cipso_v4_cache_enabled))
+>                 return -ENOENT;
+>
+>         hash = cipso_v4_map_cache_hash(key, key_len);
+> @@ -296,13 +296,14 @@ static int cipso_v4_cache_check(const unsigned char *key,
+>  int cipso_v4_cache_add(const unsigned char *cipso_ptr,
+>                        const struct netlbl_lsm_secattr *secattr)
+>  {
+> +       int bkt_size = READ_ONCE(cipso_v4_cache_bucketsize);
+>         int ret_val = -EPERM;
+>         u32 bkt;
+>         struct cipso_v4_map_cache_entry *entry = NULL;
+>         struct cipso_v4_map_cache_entry *old_entry = NULL;
+>         u32 cipso_ptr_len;
+>
+> -       if (!cipso_v4_cache_enabled || cipso_v4_cache_bucketsize <= 0)
+> +       if (!READ_ONCE(cipso_v4_cache_enabled) || bkt_size <= 0)
+>                 return 0;
+>
+>         cipso_ptr_len = cipso_ptr[1];
+> @@ -322,7 +323,7 @@ int cipso_v4_cache_add(const unsigned char *cipso_ptr,
+>
+>         bkt = entry->hash & (CIPSO_V4_CACHE_BUCKETS - 1);
+>         spin_lock_bh(&cipso_v4_cache[bkt].lock);
+> -       if (cipso_v4_cache[bkt].size < cipso_v4_cache_bucketsize) {
+> +       if (cipso_v4_cache[bkt].size < bkt_size) {
+>                 list_add(&entry->list, &cipso_v4_cache[bkt].list);
+>                 cipso_v4_cache[bkt].size += 1;
+>         } else {
+> @@ -1199,7 +1200,8 @@ static int cipso_v4_gentag_rbm(const struct cipso_v4_doi *doi_def,
+>                 /* This will send packets using the "optimized" format when
+>                  * possible as specified in  section 3.4.2.6 of the
+>                  * CIPSO draft. */
+> -               if (cipso_v4_rbm_optfmt && ret_val > 0 && ret_val <= 10)
+> +               if (READ_ONCE(cipso_v4_rbm_optfmt) && ret_val > 0 &&
+> +                   ret_val <= 10)
+>                         tag_len = 14;
+>                 else
+>                         tag_len = 4 + ret_val;
+> @@ -1603,7 +1605,7 @@ int cipso_v4_validate(const struct sk_buff *skb, unsigned char **option)
+>                          * all the CIPSO validations here but it doesn't
+>                          * really specify _exactly_ what we need to validate
+>                          * ... so, just make it a sysctl tunable. */
+> -                       if (cipso_v4_rbm_strictvalid) {
+> +                       if (READ_ONCE(cipso_v4_rbm_strictvalid)) {
+>                                 if (cipso_v4_map_lvl_valid(doi_def,
+>                                                            tag[3]) < 0) {
+>                                         err_offset = opt_iter + 3;
+> --
+> 2.30.2
 
-Link: https://lwn.net/Articles/628628/
-Signed-off-by: Logan Gunthorpe <logang@deltatee.com>
----
- drivers/md/raid5.c | 13 ++++++-------
- 1 file changed, 6 insertions(+), 7 deletions(-)
-
-diff --git a/drivers/md/raid5.c b/drivers/md/raid5.c
-index e37ed93d130f..88c22a5cc09a 100644
---- a/drivers/md/raid5.c
-+++ b/drivers/md/raid5.c
-@@ -6043,12 +6043,12 @@ static enum stripe_result make_stripe_request(struct mddev *mddev,
- 
- static bool raid5_make_request(struct mddev *mddev, struct bio * bi)
- {
-+	DEFINE_WAIT_FUNC(wait, woken_wake_function);
- 	struct r5conf *conf = mddev->private;
- 	sector_t logical_sector;
- 	struct stripe_request_ctx ctx = {};
- 	const int rw = bio_data_dir(bi);
- 	enum stripe_result res;
--	DEFINE_WAIT(w);
- 	int s, stripe_cnt;
- 
- 	if (unlikely(bi->bi_opf & REQ_PREFLUSH)) {
-@@ -6111,7 +6111,8 @@ static bool raid5_make_request(struct mddev *mddev, struct bio * bi)
- 		return true;
- 	}
- 	md_account_bio(mddev, &bi);
--	prepare_to_wait(&conf->wait_for_overlap, &w, TASK_UNINTERRUPTIBLE);
-+
-+	add_wait_queue(&conf->wait_for_overlap, &wait);
- 	while (1) {
- 		res = make_stripe_request(mddev, conf, &ctx, logical_sector,
- 					  bi);
-@@ -6134,9 +6135,8 @@ static bool raid5_make_request(struct mddev *mddev, struct bio * bi)
- 				ctx.batch_last = NULL;
- 			}
- 
--			schedule();
--			prepare_to_wait(&conf->wait_for_overlap, &w,
--					TASK_UNINTERRUPTIBLE);
-+			wait_woken(&wait, TASK_UNINTERRUPTIBLE,
-+				   MAX_SCHEDULE_TIMEOUT);
- 			continue;
- 		}
- 
-@@ -6147,8 +6147,7 @@ static bool raid5_make_request(struct mddev *mddev, struct bio * bi)
- 		logical_sector = ctx.first_sector +
- 			(s << RAID5_STRIPE_SHIFT(conf));
- 	}
--
--	finish_wait(&conf->wait_for_overlap, &w);
-+	remove_wait_queue(&conf->wait_for_overlap, &wait);
- 
- 	if (ctx.batch_last)
- 		raid5_release_stripe(ctx.batch_last);
 -- 
-2.30.2
-
+paul-moore.com

@@ -2,117 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F3CC56A9AE
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 19:32:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 212D156A9B1
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 19:33:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236376AbiGGRcd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Jul 2022 13:32:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40444 "EHLO
+        id S235987AbiGGRdc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Jul 2022 13:33:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41092 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236349AbiGGRcc (ORCPT
+        with ESMTP id S235347AbiGGRd3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Jul 2022 13:32:32 -0400
-Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 189C431DDA
-        for <linux-kernel@vger.kernel.org>; Thu,  7 Jul 2022 10:32:31 -0700 (PDT)
-Received: by mail-yb1-xb4a.google.com with SMTP id j2-20020a2597c2000000b0064b3e54191aso14255948ybo.20
-        for <linux-kernel@vger.kernel.org>; Thu, 07 Jul 2022 10:32:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:message-id:mime-version:subject:from:to:cc;
-        bh=ZOW+O9e31Ha/guBWas9C4Qfgb7PDwF3Uvmoup8HsfZM=;
-        b=GlhRrt0eoyTgPJ3ZkpprLlEDiblR4c5+StbPFc15B+NgqrsyC9Bgtqd8oORODmdNxC
-         PBdDQZrVNljnjTBl7VHyA4sNkyeLqEzJ/d6ivs5fl+ZdeFbUMMHx49jhWnMYtvZpkzvM
-         fqpMYiO0hTXxPJjGoK/WtLk2t8edvuQZ7HMwY2GF0gaZYvKy3ctX9VY8JX5m1wBkQGbM
-         qHcOTwu5oLwsPaJU+OjdMPCnQoHU9qaTuihen0EmtNlQtbZqw6KQWT0gTV6j9cv9S3pi
-         jEanFKfAsUg/1MOqzPKKmsMsQvxLfASvRqt89JMmNLZUknVi0Gtz41bggeKnolcYIxKc
-         W5Og==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
-        bh=ZOW+O9e31Ha/guBWas9C4Qfgb7PDwF3Uvmoup8HsfZM=;
-        b=K96QdtiVu6yaK0U7KFx6hx45fLjUYpw3afTB8+8emHnnjqD5IJ48Q7DhjdoTVZSw5S
-         9b2fnWwZF5UpmBs+h8QroVG2oRbtrE81/9tOQHOzbwjv4AO3+i7B4NuHkWT2ahHhUhIE
-         xFwAPkNajmRgZ/Sa2kIg2U39+JfDlyxWyFNn1fm9flCB0XTwAZTAyTQNpAIQVgOoCRXA
-         ZmdVFEqBJOgUO4FGdFDNWsG1whIk18Wjb6oL9lC4fcl0ssFEkWekI9omBPBYFCtafh4K
-         UZjyenhV0I4hpl7DHswSZfRJzf0JktLK5I8VN6MNjmZyT6fV25sRvN5aqM81xGlhoRJ6
-         NY7A==
-X-Gm-Message-State: AJIora/Iw7OsS+izm/0lCT/EK73D/DVQSvO8ROBMmPB28PubtQcq27sU
-        1aYfRHqIRG1i2DvwgUq5nbYiK5xCIW69AQlDhA==
-X-Google-Smtp-Source: AGRyM1vGWOSYKAFjt67H1Pw8yisajdXsVeDlRauvs/71AQuzS3Qdnzm9JaYrsNVLi9oyAnzqltnu/fIwEIq+/G/RPQ==
-X-Received: from justinstitt.mtv.corp.google.com ([2620:15c:211:202:4640:519a:f833:9a5])
- (user=justinstitt job=sendgmr) by 2002:a81:17ca:0:b0:31c:9a75:1f2b with SMTP
- id 193-20020a8117ca000000b0031c9a751f2bmr26412666ywx.83.1657215150360; Thu,
- 07 Jul 2022 10:32:30 -0700 (PDT)
-Date:   Thu,  7 Jul 2022 10:30:40 -0700
-Message-Id: <20220707173040.704116-1-justinstitt@google.com>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.37.0.rc0.161.g10f37bed90-goog
-Subject: [PATCH] net: ipv4: fix clang -Wformat warning
-From:   Justin Stitt <justinstitt@google.com>
-To:     Steffen Klassert <steffen.klassert@secunet.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S . Miller" <davem@davemloft.net>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        David Ahern <dsahern@kernel.org>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>
-Cc:     Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Tom Rix <trix@redhat.com>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
-        Justin Stitt <justinstitt@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        Thu, 7 Jul 2022 13:33:29 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A1301095;
+        Thu,  7 Jul 2022 10:33:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
+        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=TMaNklIdIcP+MFN2zwCG5jiftF6l+7/4HlhjYmCCffE=; b=Sn0j+sa3jhLQ0ziIexYmJgHUPF
+        ipH5TffoQhAW/RMhlhDR63Y1dQ/gQr6C/IjgyLZut5m8YWccvybkG2lt8sGbx4r8QgBYxATJMrQVq
+        9wqoMr8wbfVeht7o45vHjxRhg5cf/jER3KIA96iyL/yKONUDDwhsxgkgZy6lxw2ySmwo5djC8vTEi
+        v3W0b/A3Hj/VHwKxiRddE6dgdmyD7hMm94HFh1vu4gMPoDJgEfjlY1pGm0hiR0wwcS7gSxFTd0mDE
+        wRxUej3+v58daNyzNsBCv7ZXsNeKePVHHQIveb1MR+LiChvdfC6umxQM2DYVzhicvbsTp+ciiRXrv
+        TQNIE1GA==;
+Received: from hch by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1o9VNU-00HENG-U1; Thu, 07 Jul 2022 17:33:24 +0000
+Date:   Thu, 7 Jul 2022 10:33:24 -0700
+From:   Christoph Hellwig <hch@infradead.org>
+To:     Sergei Shtepa <sergei.shtepa@veeam.com>
+Cc:     axboe@kernel.dk, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 11/20] block, blksnap: functions and structures for
+ performing block I/O operations
+Message-ID: <YscY5ImH+1EjgsIF@infradead.org>
+References: <1655135593-1900-1-git-send-email-sergei.shtepa@veeam.com>
+ <1655135593-1900-12-git-send-email-sergei.shtepa@veeam.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1655135593-1900-12-git-send-email-sergei.shtepa@veeam.com>
+X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When building with Clang we encounter this warning:
-| net/ipv4/ah4.c:513:4: error: format specifies type 'unsigned short' but
-| the argument has type 'int' [-Werror,-Wformat]
-| aalg_desc->uinfo.auth.icv_fullbits / 8);
+> +#define SECTORS_IN_PAGE (PAGE_SIZE / SECTOR_SIZE)
 
-`aalg_desc->uinfo.auth.icv_fullbits` is a u16 but due to default
-argument promotion becomes an int.
+This can use PAGE_SECTORS from blk_types.h
 
-Variadic functions (printf-like) undergo default argument promotion.
-Documentation/core-api/printk-formats.rst specifically recommends using
-the promoted-to-type's format flag.
+> +
+> +struct bio_set diff_io_bioset = { 0 };
 
-As per C11 6.3.1.1:
-(https://www.open-std.org/jtc1/sc22/wg14/www/docs/n1548.pdf) `If an int
-can represent all values of the original type ..., the value is
-converted to an int; otherwise, it is converted to an unsigned int.
-These are called the integer promotions.` Thus it makes sense to change
-%hu to %d not only to follow this standard but to suppress the warning
-as well.
+No need to initialize global variables to 0.
 
-Link: https://github.com/ClangBuiltLinux/linux/issues/378
-Signed-off-by: Justin Stitt <justinstitt@google.com>
----
- net/ipv4/ah4.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+> +	// Allocate both bios
+> +	opf = diff_io->is_write ? REQ_OP_WRITE : REQ_OP_READ;
+> +	gfp = GFP_NOIO | (is_nowait ? GFP_NOWAIT : 0);
+> +
+> +	bio = bio_alloc_bioset(diff_region->bdev, nr_iovecs,
+> +			       opf | REQ_SYNC | REQ_IDLE | REQ_FUA,
 
-diff --git a/net/ipv4/ah4.c b/net/ipv4/ah4.c
-index 6eea1e9e998d..3bf3d01fb7e3 100644
---- a/net/ipv4/ah4.c
-+++ b/net/ipv4/ah4.c
-@@ -507,7 +507,7 @@ static int ah_init_state(struct xfrm_state *x)
- 
- 	if (aalg_desc->uinfo.auth.icv_fullbits/8 !=
- 	    crypto_ahash_digestsize(ahash)) {
--		pr_info("%s: %s digestsize %u != %hu\n",
-+		pr_info("%s: %s digestsize %u != %d\n",
- 			__func__, x->aalg->alg_name,
- 			crypto_ahash_digestsize(ahash),
- 			aalg_desc->uinfo.auth.icv_fullbits / 8);
--- 
-2.37.0.rc0.161.g10f37bed90-goog
+REQ_FUA on reads does not make sense.
 
+> +	submit_bio_noacct(bio);
+> +
+> +	// Submit flush bio
+> +	bio_set_flag(flush_bio, BIO_FILTERED);
+> +	flush_bio->bi_end_io = diff_io_endio;
+> +	flush_bio->bi_private = diff_io;
+> +	flush_bio->bi_iter.bi_sector = 0;
+> +	submit_bio_noacct(flush_bio);
+
+And a separate flush for reads seems odd and probably wrong here.
+And for writes REQ_FUA already ensuresyour write went to disk.
+Do you also need to flush all previous data?  In which case you
+probably want a single bio with REQ_PREFLUSH and REQ_FUA instead
+of submitting two separate bios here.

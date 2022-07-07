@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 87CC056AA6F
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 20:24:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B4A4C56AA7B
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 20:26:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236194AbiGGSYC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Jul 2022 14:24:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49770 "EHLO
+        id S236063AbiGGSYq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Jul 2022 14:24:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50532 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235637AbiGGSYA (ORCPT
+        with ESMTP id S235207AbiGGSYn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Jul 2022 14:24:00 -0400
-Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5648D205F3;
-        Thu,  7 Jul 2022 11:23:59 -0700 (PDT)
-Received: by mail-pf1-x42b.google.com with SMTP id j3so8398331pfb.6;
-        Thu, 07 Jul 2022 11:23:59 -0700 (PDT)
+        Thu, 7 Jul 2022 14:24:43 -0400
+Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76FF52F02E;
+        Thu,  7 Jul 2022 11:24:42 -0700 (PDT)
+Received: by mail-pf1-x429.google.com with SMTP id a15so21014340pfv.13;
+        Thu, 07 Jul 2022 11:24:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=hQHooeYpBPLqhLw4iyaicqWZ8U8iT/gDaXg8Zs9aODs=;
-        b=Sx5FRvZ7QwI1k5mlx5HVc8zV8L6yX8BkzuLV6xWaMYwxoV9IEmxav452EFSv1yaRTg
-         6M1f/Zr4ijUYy3UQeqKtjrfc41NnV117hgRxVDKfruhh6G1V0nGzk2OQVqmrQikUniul
-         AkJD85s/nJQVbExGSDJK3Wy+q93j1ASFedP+Ck4MiZL6OOllxLimyBmeGFwyxngUvHJh
-         4NQiYwY1QTsPZhlKYVmVZOb4FacQZ/3GTthgegHvJIdrVQPHZShTniSSvPO+Y0Iq+gM/
-         8Xv6RNkMduZJ7MY5fQ1BisYQTMmlmYlcyil4ysUeNllSstSSfGJ9BA8R6W8F07krorZM
-         6rMg==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=FSl71Hk0BnT10NJnLI+ezCAWxmiJgLAkOV3Buo9ULGk=;
+        b=VzP8hyDh6QNCMC3TKLzAt458raLYFpDYGfyszwQftA212O0NHmyP4ioT00sB2b8S/C
+         6WV8doEI3U8UUrCW57uTUp7+JoTEhRdolIolfIzKUvZuqyyNXI5oY0vGkijfYqhXOzTK
+         9f8fccaGB15o2/fRoRWJxpj0SAkQV4vUvodnx9+9syhI2BIa1BgXvwdoTeRwyPIjGj/E
+         liwKTly6yl0DFNZa2rszHTQxwcWnf2RRThNjQUuH1BPoF4lEYkn4rBXQRypDLZw78HSV
+         3oHLuweaBhoC+UmH0t+YZjTZQdaL+dyvK48NhI6gPtN6lVXEd0LhDjIQ1yA9yNVG+FLy
+         0Ujw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=hQHooeYpBPLqhLw4iyaicqWZ8U8iT/gDaXg8Zs9aODs=;
-        b=4I7WjUhhVVxftbZHkqf819lHlZ6PmxG9VhDM2tjS/tGVmyuT9ECBQ+i7gnw8edmCxo
-         kdAqJZRmPwqscvuI4BlLHv5Z6g6623GxWdwkTNn4JuO4jif4rUbwxRqndVbd05U//DSX
-         EqqNKYRKGaR9HJIqGt+2EjfSy/nCDN1Xrseu3Rm4AHFvx8awlXokZ/i/tqN65ODpkt05
-         DMZuml6tF7vdm2pXoC22ZKxNecMnDTUUltW53LhQV5NuVJOlGXz7EymoqI31m7gcFgIr
-         SZzKcUSknChK/LOL+hQrXB4YDYkpKormnZD5zJHUJup2M05p6uYghJlNm2260u9NvQqB
-         XyPQ==
-X-Gm-Message-State: AJIora8ISDASUxODQ7NQQuBOyP/9mKqU7KuDtIRE75PU/sMO2DrRRMlL
-        G9KuTxVPX2DJ6oibSnt54JIo+PzrD+8=
-X-Google-Smtp-Source: AGRyM1uU7YSCIUD0jrjk1cuFuvNKKMo0gPiJm0l1nzNXzfY/UMVr9kZrx4Ww+2U3XI1Kk8Pv4SIWNQ==
-X-Received: by 2002:a17:90b:4f48:b0:1ed:45e5:dc8c with SMTP id pj8-20020a17090b4f4800b001ed45e5dc8cmr6732899pjb.131.1657218238815;
-        Thu, 07 Jul 2022 11:23:58 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=FSl71Hk0BnT10NJnLI+ezCAWxmiJgLAkOV3Buo9ULGk=;
+        b=wCXujsIKIlhUi/P3d8NUpU5aJY5ru24B4GOzaVrrA5gvCO0Dr7VxKmSFOwO6QEV05T
+         3thfidDYDGlKGV1hRC+rBFFTKfiFghUJXC9q1yp4Wl64gooRjqeWeCRz5hZPaGAbKtwc
+         neGI6B3HtK3B6RjacZK2C2tXKMIXTqiuz4i+BcBQiI1BiUwdF75yAlyD5PpYBnqIqdok
+         CKhDQnfIqhsnWGHE8SLoQ8YsU8TzPAZjYe2SihXwpdIDS82+LCbJaO2p4bD/qctWXRui
+         nR8DRW8FtTi5+it3D29BV/UXM578fihTfIWakIGVBNsBPondQ4rZl2XM7t5o13BsDVhS
+         59vg==
+X-Gm-Message-State: AJIora/MS0aX7lW1pw6mwDax15+Gqk3bpPT3Zyv31bh1/FhAjsx/h3yv
+        oDexDu6I7flw6MKH3lTuynk=
+X-Google-Smtp-Source: AGRyM1tPzGVr0Gv2TzaayGf6N5V5wiN70w72ancH39Az0FN3B4wMyUwrCwa2Au+ek10FwXP1szP/9g==
+X-Received: by 2002:a63:f405:0:b0:40d:48c1:e32d with SMTP id g5-20020a63f405000000b0040d48c1e32dmr38803677pgi.25.1657218281959;
+        Thu, 07 Jul 2022 11:24:41 -0700 (PDT)
 Received: from prasmi.domain.name ([103.219.60.85])
-        by smtp.gmail.com with ESMTPSA id o12-20020a170902d4cc00b0016a3f9e4865sm28589279plg.148.2022.07.07.11.23.53
+        by smtp.gmail.com with ESMTPSA id o12-20020a170902d4cc00b0016a3f9e4865sm28589279plg.148.2022.07.07.11.24.34
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 07 Jul 2022 11:23:58 -0700 (PDT)
+        Thu, 07 Jul 2022 11:24:41 -0700 (PDT)
 From:   prabhakar.csengg@gmail.com
 X-Google-Original-From: prabhakar.mahadev-lad.rj@bp.renesas.com
 To:     Marc Zyngier <maz@kernel.org>,
@@ -63,11 +63,20 @@ To:     Marc Zyngier <maz@kernel.org>,
 Cc:     linux-kernel@vger.kernel.org,
         Prabhakar <prabhakar.csengg@gmail.com>,
         Biju Das <biju.das.jz@bp.renesas.com>,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Subject: [PATCH v8 0/6] Renesas RZ/G2L IRQC support
-Date:   Thu,  7 Jul 2022 19:23:08 +0100
-Message-Id: <20220707182314.66610-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+        Daniel Palmer <daniel@thingy.jp>,
+        Romain Perier <romain.perier@gmail.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Robert Richter <rric@kernel.org>,
+        Nobuhiro Iwamatsu <nobuhiro1.iwamatsu@toshiba.co.jp>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>
+Subject: [PATCH v8 1/6] gpio: Remove dynamic allocation from populate_parent_alloc_arg()
+Date:   Thu,  7 Jul 2022 19:23:09 +0100
+Message-Id: <20220707182314.66610-2-prabhakar.mahadev-lad.rj@bp.renesas.com>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20220707182314.66610-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+References: <20220707182314.66610-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -80,147 +89,423 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+From: Marc Zyngier <maz@kernel.org>
 
-Hi All,
+The gpiolib is unique in the way it uses intermediate fwspecs
+when feeding an interrupt specifier to the parent domain, as it
+relies on the populate_parent_alloc_arg() callback to perform
+a dynamic allocation.
 
-The RZ/G2L Interrupt Controller is a front-end for the GIC found on
-Renesas RZ/G2L SoC's with below pins:
-- IRQ sense select for 8 external interrupts, mapped to 8 GIC SPI
-  interrupts
-- GPIO pins used as external interrupt input pins out of GPIOINT0-122 a
-  maximum of only 32 can be mapped to 32 GIC SPI interrupts,
-- NMI edge select.
+This is pretty inefficient (we free the structure almost immediately),
+and the only reason this isn't a stack allocation is that our
+ThunderX friend uses MSIs rather than a FW-constructed structure.
 
-                                                             _____________
-                                                             |    GIC     |
-                                                             |  ________  |
-                                      ____________           | |        | |
-NMI --------------------------------->|          |  SPI0-479 | | GIC-600| |
-             _______                  |          |------------>|        | |
-             |      |                 |          |  PPI16-31 | |        | |
-             |      | IRQ0-IRQ7       |   IRQC   |------------>|        | |
-P0_P48_4 --->| GPIO |---------------->|          |           | |________| |
-             |      |GPIOINT0-122     |          |           |            |
-             |      |---------------->| TINT0-31 |           |            |
-             |______|                 |__________|           |____________|
+Let's solve it by providing a new type composed of the union
+of a struct irq_fwspec and a msi_info_t, which satisfies both
+requirements. This allows us to use a stack allocation, and we
+can move the handful of users to this new scheme.
 
-The proposed patches add hierarchical IRQ domain, one in IRQC driver and
-another in pinctrl driver. Upon interrupt requests map the interrupt to
-GIC. Out of GPIOINT0-122 only 32 can be mapped to GIC SPI, this mapping is
-handled by the pinctrl and IRQC driver.
+Also perform some additional cleanup, such as getting rid of the
+stub versions of the irq_domain_translate_*cell helpers, which
+are never used when CONFIG_IRQ_DOMAIN_HIERARCHY isn't selected.
 
-Cheers,
-Prabhakar
+Tested on a Tegra186.
 
-v7->v8
-* Fixed return value in case of devm_reset_control_get_exclusive() failure.
-* Included patch [0] from Marc ([0] https://git.kernel.org/pub/scm/linux/kernel/
-  git/maz/arm-platforms.git/patch/?id=178b7e21459e9a7e2a2c369711ef0cc9b1cfbcd7)
+Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
+Signed-off-by: Marc Zyngier <maz@kernel.org>
+Cc: Daniel Palmer <daniel@thingy.jp>
+Cc: Romain Perier <romain.perier@gmail.com>
+Cc: Bartosz Golaszewski <brgl@bgdev.pl>
+Cc: Thierry Reding <thierry.reding@gmail.com>
+Cc: Jonathan Hunter <jonathanh@nvidia.com>
+Cc: Robert Richter <rric@kernel.org>
+Cc: Nobuhiro Iwamatsu <nobuhiro1.iwamatsu@toshiba.co.jp>
+Cc: Andy Gross <agross@kernel.org>
+Cc: Bjorn Andersson <bjorn.andersson@linaro.org>
+---
+ drivers/gpio/gpio-msc313.c               | 15 ++++-----
+ drivers/gpio/gpio-tegra.c                | 15 ++++-----
+ drivers/gpio/gpio-tegra186.c             | 15 ++++-----
+ drivers/gpio/gpio-thunderx.c             | 15 ++++-----
+ drivers/gpio/gpio-visconti.c             | 15 ++++-----
+ drivers/gpio/gpiolib.c                   | 42 ++++++++++--------------
+ drivers/pinctrl/qcom/pinctrl-spmi-gpio.c | 15 ++++-----
+ include/linux/gpio/driver.h              | 42 +++++++++++-------------
+ 8 files changed, 73 insertions(+), 101 deletions(-)
 
-v6->v7:
-* Used devm_reset_control_get_exclusive() instead of
-  devm_reset_control_get_exclusive_by_index()
-* Included RB tag from Linus for patch 5/5
-* Switched to newer version of populate_parent_alloc_arg() (patch depends
-  on https://git.kernel.org/pub/scm/linux/kernel/git/maz/arm-platforms.git/
-  patch/?id=178b7e21459e9a7e2a2c369711ef0cc9b1cfbcd7)
-
-v5->v6:
-* Fixed review comments pointed by Marc
-* Included Ack from Rob
-
-v4->v5:
-* Updated commit message for patch 3/5
-* Dropped interrupt-parent from and included RB tag from Geert
-  for patch 4/5
-* Implemented init_valid_mask() callback
-* Dropped ngirq patch from previous series
-* Dropped patches 4/7 and 5/7 from previous patch series will handle
-  it separately.
-
-v3->v4:
-* Updated description for interrupts-cells property in patch #1
-* Dropped the patch which overriding free callback in gpiolib
-* Used devm helpers in patch#2
-* Patch #4, #5 and #6 are newly added
-* In patch #7 dropped using gpio offset as hwirq
-* Implemented immutable GPIO in patch #7
-* Implemented child_offset_to_irq() callback in patch #7
-
-v2->v3:
-* Updated description for interrupts-cells property in patch #1
-* Included RB tag from Geert for binding patch
-* Fixed review comments pointed by Geert, Biju and Sergei.
-
-v1->v2:
-* Included RB tag from Rob
-* Fixed review comments pointed by Geert
-* included GPIO driver changes
-
-RFCV4 -> V1:
-* Used unevaluatedProperties.
-* Altered the sequence of reg property
-* Set the parent type
-* Used raw_spin_lock() instead of raw_spin_lock_irqsave()
-* Simplified parsing IRQ map.
-* Will send the GPIO and pinctrl changes as part of separate series
-
-RFC v4:
-* Used locking while RMW
-* Now using interrupts property instead of interrupt-map
-* Patch series depends on [0]
-* Updated binding doc
-* Fixed comments pointed by Andy
-
-[0] https://patchwork.kernel.org/project/linux-renesas-soc/patch/
-20220316200633.28974-1-prabhakar.mahadev-lad.rj@xxxxxxxxxxxxxx/
-
-RFC v3:
--> Re-structured the driver as a hierarchical irq domain instead of chained
--> made use of IRQCHIP_* macros
--> dropped locking
--> Added support for IRQ0-7 interrupts
--> Introduced 2 new patches for GPIOLIB
--> Switched to using GPIOLIB for irqdomains in pinctrl
-
-RFC v2: https://patchwork.kernel.org/project/linux-renesas-soc/cover/
-20210921193028.13099-1-prabhakar.mahadev-lad.rj@xxxxxxxxxxxxxx/
-
-RFC v1: https://patchwork.kernel.org/project/linux-renesas-soc/cover/
-20210803175109.1729-1-prabhakar.mahadev-lad.rj@xxxxxxxxxxxxxx/
-
-Lad Prabhakar (5):
-  dt-bindings: interrupt-controller: Add Renesas RZ/G2L Interrupt
-    Controller
-  irqchip: Add RZ/G2L IA55 Interrupt Controller driver
-  gpio: gpiolib: Allow free() callback to be overridden
-  dt-bindings: pinctrl: renesas,rzg2l-pinctrl: Document the properties
-    to handle GPIO IRQ
-  pinctrl: renesas: pinctrl-rzg2l: Add IRQ domain to handle GPIO
-    interrupt
-
-Marc Zyngier (1):
-  gpio: Remove dynamic allocation from populate_parent_alloc_arg()
-
- .../renesas,rzg2l-irqc.yaml                   | 133 ++++++
- .../pinctrl/renesas,rzg2l-pinctrl.yaml        |  15 +
- drivers/gpio/gpio-msc313.c                    |  15 +-
- drivers/gpio/gpio-tegra.c                     |  15 +-
- drivers/gpio/gpio-tegra186.c                  |  15 +-
- drivers/gpio/gpio-thunderx.c                  |  15 +-
- drivers/gpio/gpio-visconti.c                  |  15 +-
- drivers/gpio/gpiolib.c                        |  51 ++-
- drivers/irqchip/Kconfig                       |   8 +
- drivers/irqchip/Makefile                      |   1 +
- drivers/irqchip/irq-renesas-rzg2l.c           | 393 ++++++++++++++++++
- drivers/pinctrl/qcom/pinctrl-spmi-gpio.c      |  15 +-
- drivers/pinctrl/renesas/pinctrl-rzg2l.c       | 233 +++++++++++
- include/linux/gpio/driver.h                   |  42 +-
- 14 files changed, 862 insertions(+), 104 deletions(-)
- create mode 100644 Documentation/devicetree/bindings/interrupt-controller/renesas,rzg2l-irqc.yaml
- create mode 100644 drivers/irqchip/irq-renesas-rzg2l.c
-
+diff --git a/drivers/gpio/gpio-msc313.c b/drivers/gpio/gpio-msc313.c
+index b2c90bdd39d0..52d7b8d99170 100644
+--- a/drivers/gpio/gpio-msc313.c
++++ b/drivers/gpio/gpio-msc313.c
+@@ -550,15 +550,12 @@ static struct irq_chip msc313_gpio_irqchip = {
+  * so we need to provide the fwspec. Essentially gpiochip_populate_parent_fwspec_twocell
+  * that puts GIC_SPI into the first cell.
+  */
+-static void *msc313_gpio_populate_parent_fwspec(struct gpio_chip *gc,
+-					     unsigned int parent_hwirq,
+-					     unsigned int parent_type)
++static int msc313_gpio_populate_parent_fwspec(struct gpio_chip *gc,
++					      union gpio_irq_fwspec *gfwspec,
++					      unsigned int parent_hwirq,
++					      unsigned int parent_type)
+ {
+-	struct irq_fwspec *fwspec;
+-
+-	fwspec = kmalloc(sizeof(*fwspec), GFP_KERNEL);
+-	if (!fwspec)
+-		return NULL;
++	struct irq_fwspec *fwspec = &gfwspec->fwspec;
+ 
+ 	fwspec->fwnode = gc->irq.parent_domain->fwnode;
+ 	fwspec->param_count = 3;
+@@ -566,7 +563,7 @@ static void *msc313_gpio_populate_parent_fwspec(struct gpio_chip *gc,
+ 	fwspec->param[1] = parent_hwirq;
+ 	fwspec->param[2] = parent_type;
+ 
+-	return fwspec;
++	return 0;
+ }
+ 
+ static int msc313e_gpio_child_to_parent_hwirq(struct gpio_chip *chip,
+diff --git a/drivers/gpio/gpio-tegra.c b/drivers/gpio/gpio-tegra.c
+index ff2d2a1f9c73..e4fb4cb38a0f 100644
+--- a/drivers/gpio/gpio-tegra.c
++++ b/drivers/gpio/gpio-tegra.c
+@@ -443,15 +443,12 @@ static int tegra_gpio_child_to_parent_hwirq(struct gpio_chip *chip,
+ 	return 0;
+ }
+ 
+-static void *tegra_gpio_populate_parent_fwspec(struct gpio_chip *chip,
+-					       unsigned int parent_hwirq,
+-					       unsigned int parent_type)
++static int tegra_gpio_populate_parent_fwspec(struct gpio_chip *chip,
++					     union gpio_irq_fwspec *gfwspec,
++					     unsigned int parent_hwirq,
++					     unsigned int parent_type)
+ {
+-	struct irq_fwspec *fwspec;
+-
+-	fwspec = kmalloc(sizeof(*fwspec), GFP_KERNEL);
+-	if (!fwspec)
+-		return NULL;
++	struct irq_fwspec *fwspec = &gfwspec->fwspec;
+ 
+ 	fwspec->fwnode = chip->irq.parent_domain->fwnode;
+ 	fwspec->param_count = 3;
+@@ -459,7 +456,7 @@ static void *tegra_gpio_populate_parent_fwspec(struct gpio_chip *chip,
+ 	fwspec->param[1] = parent_hwirq;
+ 	fwspec->param[2] = parent_type;
+ 
+-	return fwspec;
++	return 0;
+ }
+ 
+ #ifdef CONFIG_PM_SLEEP
+diff --git a/drivers/gpio/gpio-tegra186.c b/drivers/gpio/gpio-tegra186.c
+index de28a68daea0..54d9fa7da9c1 100644
+--- a/drivers/gpio/gpio-tegra186.c
++++ b/drivers/gpio/gpio-tegra186.c
+@@ -621,16 +621,13 @@ static int tegra186_gpio_irq_domain_translate(struct irq_domain *domain,
+ 	return 0;
+ }
+ 
+-static void *tegra186_gpio_populate_parent_fwspec(struct gpio_chip *chip,
+-						 unsigned int parent_hwirq,
+-						 unsigned int parent_type)
++static int tegra186_gpio_populate_parent_fwspec(struct gpio_chip *chip,
++						union gpio_irq_fwspec *gfwspec,
++						unsigned int parent_hwirq,
++						unsigned int parent_type)
+ {
+ 	struct tegra_gpio *gpio = gpiochip_get_data(chip);
+-	struct irq_fwspec *fwspec;
+-
+-	fwspec = kmalloc(sizeof(*fwspec), GFP_KERNEL);
+-	if (!fwspec)
+-		return NULL;
++	struct irq_fwspec *fwspec = &gfwspec->fwspec;
+ 
+ 	fwspec->fwnode = chip->irq.parent_domain->fwnode;
+ 	fwspec->param_count = 3;
+@@ -638,7 +635,7 @@ static void *tegra186_gpio_populate_parent_fwspec(struct gpio_chip *chip,
+ 	fwspec->param[1] = parent_hwirq;
+ 	fwspec->param[2] = parent_type;
+ 
+-	return fwspec;
++	return 0;
+ }
+ 
+ static int tegra186_gpio_child_to_parent_hwirq(struct gpio_chip *chip,
+diff --git a/drivers/gpio/gpio-thunderx.c b/drivers/gpio/gpio-thunderx.c
+index 9f66deab46ea..e1dedbca0c85 100644
+--- a/drivers/gpio/gpio-thunderx.c
++++ b/drivers/gpio/gpio-thunderx.c
+@@ -408,18 +408,15 @@ static int thunderx_gpio_child_to_parent_hwirq(struct gpio_chip *gc,
+ 	return 0;
+ }
+ 
+-static void *thunderx_gpio_populate_parent_alloc_info(struct gpio_chip *chip,
+-						      unsigned int parent_hwirq,
+-						      unsigned int parent_type)
++static int thunderx_gpio_populate_parent_alloc_info(struct gpio_chip *chip,
++						    union gpio_irq_fwspec *gfwspec,
++						    unsigned int parent_hwirq,
++						    unsigned int parent_type)
+ {
+-	msi_alloc_info_t *info;
+-
+-	info = kmalloc(sizeof(*info), GFP_KERNEL);
+-	if (!info)
+-		return NULL;
++	msi_alloc_info_t *info = &gfwspec->msiinfo;
+ 
+ 	info->hwirq = parent_hwirq;
+-	return info;
++	return 0;
+ }
+ 
+ static int thunderx_gpio_probe(struct pci_dev *pdev,
+diff --git a/drivers/gpio/gpio-visconti.c b/drivers/gpio/gpio-visconti.c
+index e6534ea1eaa7..5e108ba9956a 100644
+--- a/drivers/gpio/gpio-visconti.c
++++ b/drivers/gpio/gpio-visconti.c
+@@ -103,15 +103,12 @@ static int visconti_gpio_child_to_parent_hwirq(struct gpio_chip *gc,
+ 	return -EINVAL;
+ }
+ 
+-static void *visconti_gpio_populate_parent_fwspec(struct gpio_chip *chip,
+-						  unsigned int parent_hwirq,
+-						  unsigned int parent_type)
++static int visconti_gpio_populate_parent_fwspec(struct gpio_chip *chip,
++						union gpio_irq_fwspec *gfwspec,
++						unsigned int parent_hwirq,
++						unsigned int parent_type)
+ {
+-	struct irq_fwspec *fwspec;
+-
+-	fwspec = kmalloc(sizeof(*fwspec), GFP_KERNEL);
+-	if (!fwspec)
+-		return NULL;
++	struct irq_fwspec *fwspec = &gfwspec->fwspec;
+ 
+ 	fwspec->fwnode = chip->irq.parent_domain->fwnode;
+ 	fwspec->param_count = 3;
+@@ -119,7 +116,7 @@ static void *visconti_gpio_populate_parent_fwspec(struct gpio_chip *chip,
+ 	fwspec->param[1] = parent_hwirq;
+ 	fwspec->param[2] = parent_type;
+ 
+-	return fwspec;
++	return 0;
+ }
+ 
+ static int visconti_gpio_probe(struct platform_device *pdev)
+diff --git a/drivers/gpio/gpiolib.c b/drivers/gpio/gpiolib.c
+index 9535f48e18d1..bfde94243752 100644
+--- a/drivers/gpio/gpiolib.c
++++ b/drivers/gpio/gpiolib.c
+@@ -1107,7 +1107,7 @@ static int gpiochip_hierarchy_irq_domain_alloc(struct irq_domain *d,
+ 	irq_hw_number_t hwirq;
+ 	unsigned int type = IRQ_TYPE_NONE;
+ 	struct irq_fwspec *fwspec = data;
+-	void *parent_arg;
++	union gpio_irq_fwspec gpio_parent_fwspec = {};
+ 	unsigned int parent_hwirq;
+ 	unsigned int parent_type;
+ 	struct gpio_irq_chip *girq = &gc->irq;
+@@ -1147,14 +1147,15 @@ static int gpiochip_hierarchy_irq_domain_alloc(struct irq_domain *d,
+ 	irq_set_probe(irq);
+ 
+ 	/* This parent only handles asserted level IRQs */
+-	parent_arg = girq->populate_parent_alloc_arg(gc, parent_hwirq, parent_type);
+-	if (!parent_arg)
+-		return -ENOMEM;
++	ret = girq->populate_parent_alloc_arg(gc, &gpio_parent_fwspec,
++					      parent_hwirq, parent_type);
++	if (ret)
++		return ret;
+ 
+ 	chip_dbg(gc, "alloc_irqs_parent for %d parent hwirq %d\n",
+ 		  irq, parent_hwirq);
+ 	irq_set_lockdep_class(irq, gc->irq.lock_key, gc->irq.request_key);
+-	ret = irq_domain_alloc_irqs_parent(d, irq, 1, parent_arg);
++	ret = irq_domain_alloc_irqs_parent(d, irq, 1, &gpio_parent_fwspec);
+ 	/*
+ 	 * If the parent irqdomain is msi, the interrupts have already
+ 	 * been allocated, so the EEXIST is good.
+@@ -1166,7 +1167,6 @@ static int gpiochip_hierarchy_irq_domain_alloc(struct irq_domain *d,
+ 			 "failed to allocate parent hwirq %d for hwirq %lu\n",
+ 			 parent_hwirq, hwirq);
+ 
+-	kfree(parent_arg);
+ 	return ret;
+ }
+ 
+@@ -1230,34 +1230,28 @@ static bool gpiochip_hierarchy_is_hierarchical(struct gpio_chip *gc)
+ 	return !!gc->irq.parent_domain;
+ }
+ 
+-void *gpiochip_populate_parent_fwspec_twocell(struct gpio_chip *gc,
+-					     unsigned int parent_hwirq,
+-					     unsigned int parent_type)
++int gpiochip_populate_parent_fwspec_twocell(struct gpio_chip *gc,
++					    union gpio_irq_fwspec *gfwspec,
++					    unsigned int parent_hwirq,
++					    unsigned int parent_type)
+ {
+-	struct irq_fwspec *fwspec;
+-
+-	fwspec = kmalloc(sizeof(*fwspec), GFP_KERNEL);
+-	if (!fwspec)
+-		return NULL;
++	struct irq_fwspec *fwspec = &gfwspec->fwspec;
+ 
+ 	fwspec->fwnode = gc->irq.parent_domain->fwnode;
+ 	fwspec->param_count = 2;
+ 	fwspec->param[0] = parent_hwirq;
+ 	fwspec->param[1] = parent_type;
+ 
+-	return fwspec;
++	return 0;
+ }
+ EXPORT_SYMBOL_GPL(gpiochip_populate_parent_fwspec_twocell);
+ 
+-void *gpiochip_populate_parent_fwspec_fourcell(struct gpio_chip *gc,
+-					      unsigned int parent_hwirq,
+-					      unsigned int parent_type)
++int gpiochip_populate_parent_fwspec_fourcell(struct gpio_chip *gc,
++					     union gpio_irq_fwspec *gfwspec,
++					     unsigned int parent_hwirq,
++					     unsigned int parent_type)
+ {
+-	struct irq_fwspec *fwspec;
+-
+-	fwspec = kmalloc(sizeof(*fwspec), GFP_KERNEL);
+-	if (!fwspec)
+-		return NULL;
++	struct irq_fwspec *fwspec = &gfwspec->fwspec;
+ 
+ 	fwspec->fwnode = gc->irq.parent_domain->fwnode;
+ 	fwspec->param_count = 4;
+@@ -1266,7 +1260,7 @@ void *gpiochip_populate_parent_fwspec_fourcell(struct gpio_chip *gc,
+ 	fwspec->param[2] = 0;
+ 	fwspec->param[3] = parent_type;
+ 
+-	return fwspec;
++	return 0;
+ }
+ EXPORT_SYMBOL_GPL(gpiochip_populate_parent_fwspec_fourcell);
+ 
+diff --git a/drivers/pinctrl/qcom/pinctrl-spmi-gpio.c b/drivers/pinctrl/qcom/pinctrl-spmi-gpio.c
+index fd5fff9adff0..3be2a08ae3a6 100644
+--- a/drivers/pinctrl/qcom/pinctrl-spmi-gpio.c
++++ b/drivers/pinctrl/qcom/pinctrl-spmi-gpio.c
+@@ -966,16 +966,13 @@ static int pmic_gpio_child_to_parent_hwirq(struct gpio_chip *chip,
+ 	return 0;
+ }
+ 
+-static void *pmic_gpio_populate_parent_fwspec(struct gpio_chip *chip,
+-					     unsigned int parent_hwirq,
+-					     unsigned int parent_type)
++static int pmic_gpio_populate_parent_fwspec(struct gpio_chip *chip,
++					    union gpio_irq_fwspec *gfwspec,
++					    unsigned int parent_hwirq,
++					    unsigned int parent_type)
+ {
+ 	struct pmic_gpio_state *state = gpiochip_get_data(chip);
+-	struct irq_fwspec *fwspec;
+-
+-	fwspec = kzalloc(sizeof(*fwspec), GFP_KERNEL);
+-	if (!fwspec)
+-		return NULL;
++	struct irq_fwspec *fwspec = &gfwspec->fwspec;
+ 
+ 	fwspec->fwnode = chip->irq.parent_domain->fwnode;
+ 
+@@ -985,7 +982,7 @@ static void *pmic_gpio_populate_parent_fwspec(struct gpio_chip *chip,
+ 	/* param[2] must be left as 0 */
+ 	fwspec->param[3] = parent_type;
+ 
+-	return fwspec;
++	return 0;
+ }
+ 
+ static int pmic_gpio_probe(struct platform_device *pdev)
+diff --git a/include/linux/gpio/driver.h b/include/linux/gpio/driver.h
+index 54c3c6506503..6aeea1071b1b 100644
+--- a/include/linux/gpio/driver.h
++++ b/include/linux/gpio/driver.h
+@@ -12,6 +12,8 @@
+ #include <linux/property.h>
+ #include <linux/types.h>
+ 
++#include <asm/msi.h>
++
+ struct gpio_desc;
+ struct of_phandle_args;
+ struct device_node;
+@@ -23,6 +25,13 @@ enum gpio_lookup_flags;
+ 
+ struct gpio_chip;
+ 
++union gpio_irq_fwspec {
++	struct irq_fwspec	fwspec;
++#ifdef CONFIG_GENERIC_MSI_IRQ_DOMAIN
++	msi_alloc_info_t	msiinfo;
++#endif
++};
++
+ #define GPIO_LINE_DIRECTION_IN	1
+ #define GPIO_LINE_DIRECTION_OUT	0
+ 
+@@ -103,9 +112,10 @@ struct gpio_irq_chip {
+ 	 * variant named &gpiochip_populate_parent_fwspec_fourcell is also
+ 	 * available.
+ 	 */
+-	void *(*populate_parent_alloc_arg)(struct gpio_chip *gc,
+-				       unsigned int parent_hwirq,
+-				       unsigned int parent_type);
++	int (*populate_parent_alloc_arg)(struct gpio_chip *gc,
++					 union gpio_irq_fwspec *fwspec,
++					 unsigned int parent_hwirq,
++					 unsigned int parent_type);
+ 
+ 	/**
+ 	 * @child_offset_to_irq:
+@@ -649,28 +659,14 @@ struct bgpio_pdata {
+ 
+ #ifdef CONFIG_IRQ_DOMAIN_HIERARCHY
+ 
+-void *gpiochip_populate_parent_fwspec_twocell(struct gpio_chip *gc,
++int gpiochip_populate_parent_fwspec_twocell(struct gpio_chip *gc,
++					    union gpio_irq_fwspec *gfwspec,
++					    unsigned int parent_hwirq,
++					    unsigned int parent_type);
++int gpiochip_populate_parent_fwspec_fourcell(struct gpio_chip *gc,
++					     union gpio_irq_fwspec *gfwspec,
+ 					     unsigned int parent_hwirq,
+ 					     unsigned int parent_type);
+-void *gpiochip_populate_parent_fwspec_fourcell(struct gpio_chip *gc,
+-					      unsigned int parent_hwirq,
+-					      unsigned int parent_type);
+-
+-#else
+-
+-static inline void *gpiochip_populate_parent_fwspec_twocell(struct gpio_chip *gc,
+-						    unsigned int parent_hwirq,
+-						    unsigned int parent_type)
+-{
+-	return NULL;
+-}
+-
+-static inline void *gpiochip_populate_parent_fwspec_fourcell(struct gpio_chip *gc,
+-						     unsigned int parent_hwirq,
+-						     unsigned int parent_type)
+-{
+-	return NULL;
+-}
+ 
+ #endif /* CONFIG_IRQ_DOMAIN_HIERARCHY */
+ 
 -- 
 2.25.1
 

@@ -2,106 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F251456AC7B
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 22:08:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D18DF56AC91
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 22:12:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236800AbiGGUIO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Jul 2022 16:08:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47028 "EHLO
+        id S236295AbiGGULp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Jul 2022 16:11:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50246 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236518AbiGGUIK (ORCPT
+        with ESMTP id S231320AbiGGULo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Jul 2022 16:08:10 -0400
-Received: from mail-pg1-x535.google.com (mail-pg1-x535.google.com [IPv6:2607:f8b0:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E4325C9FB
-        for <linux-kernel@vger.kernel.org>; Thu,  7 Jul 2022 13:08:09 -0700 (PDT)
-Received: by mail-pg1-x535.google.com with SMTP id e132so20449328pgc.5
-        for <linux-kernel@vger.kernel.org>; Thu, 07 Jul 2022 13:08:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=cFtvjAz52PfP2pPD+ElBW0/QBf2EF5ZKVG4poUQicBo=;
-        b=mP6SCv4ZYKPXIVkeWPvSzYVLVZhUki25eBM3YjhHa4kfvUF6M24odaSonkI7GHxDgl
-         q8l7jb+yebppC1HydPiKCkfhvmANyTWfCu52lX2gIwEpQBnE29Hb8QHYalq/BA13UOjv
-         +Zyr+YT7RtoA7XbaOypkXR3a1booylX88aVw60q9E8Hgv256LIL7u283VOkjfSc/SkGk
-         xBZgDfQP4w+8tYaciO9M9qkbnh1pzs5vOsjgxpOmnkZpqJo64Sb1mOLl2eYm3CP/azOl
-         MjvEVEDBMn2QuzM5ShiwcRwk74T7S++IlrVOEUYGSFYHaFxUDcAizX/UA4mV7JIntHW7
-         0e3w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=cFtvjAz52PfP2pPD+ElBW0/QBf2EF5ZKVG4poUQicBo=;
-        b=d9URePyzJP8fXnfpvUoV+bv89TKxCizUJlHND3DMh0Q31I0yu24+STPyqo1dtmhc8D
-         00nN5TbiGezo05Zg0fQVcq0U2Jkeog5TaHDw356/0N5GPw+DyJspwAKz/L28ZtWi4QXD
-         ZoEJO5+OhLAJJ8NlxP2hNihNIGL80EWy4xG7dg7eetK08k3WqtsZ/UGOXuQpPa3ZGaPR
-         8c16f12muY0017fvQ8gsyD4nl0tO1VZ9+PyO17QKuk7UHQpQYoeE2ki/fAxsJMjS1DMP
-         0CvqlNJ6yQzF1TKBh3DEKojneAmS9icaPqTpw060WLQYZ/EtvvbxsD6qPjtOiRQSWPY4
-         SVjA==
-X-Gm-Message-State: AJIora9vwYqr06f0cQZK/y93KJf14X9u/ZfbxQ3aFZxCQT3dxafgNwhd
-        JZoG1xVNHuMInc8rzHuJIqrgfqqF/zpfNA==
-X-Google-Smtp-Source: AGRyM1vO+9LD36zGVYjZHKVETQF42VSn4ohks+4f4YrWxIjNuhp8m2LWNGsH0so1jBJkR3/GbUBuuQ==
-X-Received: by 2002:a17:902:d28a:b0:16b:e4d6:6534 with SMTP id t10-20020a170902d28a00b0016be4d66534mr23220212plc.68.1657224488885;
-        Thu, 07 Jul 2022 13:08:08 -0700 (PDT)
-Received: from google.com (123.65.230.35.bc.googleusercontent.com. [35.230.65.123])
-        by smtp.gmail.com with ESMTPSA id w8-20020a627b08000000b00528c6c7bb65sm2244075pfc.83.2022.07.07.13.08.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 07 Jul 2022 13:08:08 -0700 (PDT)
-Date:   Thu, 7 Jul 2022 20:08:04 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Xiaoyao Li <xiaoyao.li@intel.com>
-Cc:     Michael Roth <michael.roth@amd.com>,
-        Vishal Annapurve <vannapurve@google.com>,
-        Chao Peng <chao.p.peng@linux.intel.com>,
-        "Nikunj A. Dadhania" <nikunj@amd.com>,
-        kvm list <kvm@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>, linux-mm@kvack.org,
-        linux-fsdevel@vger.kernel.org, linux-api@vger.kernel.org,
-        linux-doc@vger.kernel.org, qemu-devel@nongnu.org,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        x86 <x86@kernel.org>, "H . Peter Anvin" <hpa@zytor.com>,
-        Hugh Dickins <hughd@google.com>,
-        Jeff Layton <jlayton@kernel.org>,
-        "J . Bruce Fields" <bfields@fieldses.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Mike Rapoport <rppt@kernel.org>,
-        Steven Price <steven.price@arm.com>,
-        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Yu Zhang <yu.c.zhang@linux.intel.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Jun Nakajima <jun.nakajima@intel.com>,
-        Dave Hansen <dave.hansen@intel.com>,
-        Andi Kleen <ak@linux.intel.com>,
-        David Hildenbrand <david@redhat.com>, aarcange@redhat.com,
-        ddutile@redhat.com, dhildenb@redhat.com,
-        Quentin Perret <qperret@google.com>, mhocko@suse.com
-Subject: Re: [PATCH v6 6/8] KVM: Handle page fault for private memory
-Message-ID: <Ysc9JDcVAnlVrGC8@google.com>
-References: <20220519153713.819591-1-chao.p.peng@linux.intel.com>
- <20220519153713.819591-7-chao.p.peng@linux.intel.com>
- <b3ce0855-0e4b-782a-599c-26590df948dd@amd.com>
- <20220624090246.GA2181919@chaop.bj.intel.com>
- <CAGtprH82H_fjtRbL0KUxOkgOk4pgbaEbAydDYfZ0qxz41JCnAQ@mail.gmail.com>
- <20220630222140.of4md7bufd5jv5bh@amd.com>
- <4fe3b47d-e94a-890a-5b87-6dfb7763bc7e@intel.com>
+        Thu, 7 Jul 2022 16:11:44 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65A6ECE9;
+        Thu,  7 Jul 2022 13:11:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=YvxVbi0s8pdES8Ig1gSBYhIVsLmPB4xtFIWqaVBPjdc=; b=BMPjaWOnqsQRsLxJ8XGws3zvDd
+        RhhCBijfg3pyR660vMVQgjveB3wrPXHfrtcK/WhychCeHPT7axZxzeepRb9v2Ahm/H8C4z4Co3xau
+        /aUM7EGC//W6yq3U14JH6zc/bSRcqTg0YCe5ACYS9NMiuvVKu0btDKW511kIu35ammzENIt/Td45T
+        Z/ZlTDUBYl7KFbXabCmX8r0feHweSpO3s9Vyx9DUFoUaYhsDCDM5FoNXJEvd6tGOd4kGSV5GVbDKS
+        0fJquinBuJhKW2g9rU40MS5/hcU9l7BdT8Ead/wJDuA3Rhnjj4VPPrOPDpf1Ry9RSyxoVMKB4C6Pa
+        lWzZsblw==;
+Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1o9Xqc-0005C6-Jz; Thu, 07 Jul 2022 20:11:38 +0000
+Date:   Thu, 7 Jul 2022 13:11:38 -0700
+From:   Luis Chamberlain <mcgrof@kernel.org>
+To:     Song Liu <songliubraving@fb.com>
+Cc:     Song Liu <song@kernel.org>, lkml <linux-kernel@vger.kernel.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "x86@vger.kernel.org" <x86@vger.kernel.org>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        "rick.p.edgecombe@intel.com" <rick.p.edgecombe@intel.com>,
+        Kernel Team <Kernel-team@fb.com>,
+        "daniel@iogearbox.net" <daniel@iogearbox.net>
+Subject: Re: [PATCH v5 bpf-next 1/5] module: introduce module_alloc_huge
+Message-ID: <Ysc9+r2R6WKMIa3i@bombadil.infradead.org>
+References: <20220624215712.3050672-1-song@kernel.org>
+ <20220624215712.3050672-2-song@kernel.org>
+ <Yr+BV+HLZikpCU42@bombadil.infradead.org>
+ <16959523-ABD1-4D2B-B249-118DDADD7976@fb.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <4fe3b47d-e94a-890a-5b87-6dfb7763bc7e@intel.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+In-Reply-To: <16959523-ABD1-4D2B-B249-118DDADD7976@fb.com>
+Sender: Luis Chamberlain <mcgrof@infradead.org>
+X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -109,63 +58,84 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jul 01, 2022, Xiaoyao Li wrote:
-> On 7/1/2022 6:21 AM, Michael Roth wrote:
-> > On Thu, Jun 30, 2022 at 12:14:13PM -0700, Vishal Annapurve wrote:
-> > > With transparent_hugepages=always setting I see issues with the
-> > > current implementation.
-
-...
-
-> > > Looks like with transparent huge pages enabled kvm tried to handle the
-> > > shared memory fault on 0x84d gfn by coalescing nearby 4K pages
-> > > to form a contiguous 2MB page mapping at gfn 0x800, since level 2 was
-> > > requested in kvm_mmu_spte_requested.
-> > > This caused the private memory contents from regions 0x800-0x84c and
-> > > 0x86e-0xa00 to get unmapped from the guest leading to guest vm
-> > > shutdown.
+On Wed, Jul 06, 2022 at 04:39:13AM +0000, Song Liu wrote:
+> > On Jul 1, 2022, at 4:20 PM, Luis Chamberlain <mcgrof@kernel.org> wrote:
+> > On Fri, Jun 24, 2022 at 02:57:08PM -0700, Song Liu wrote:
+> >> +void *module_alloc_huge(unsigned long size)
+> >> +{
+> >> +	gfp_t gfp_mask = GFP_KERNEL;
+> >> +	void *p;
+> >> +
+> >> +	if (PAGE_ALIGN(size) > MODULES_LEN)
+> >> +		return NULL;
+> >> +
+> >> +	p = __vmalloc_node_range(size, MODULE_ALIGN,
+> >> +				 MODULES_VADDR + get_module_load_offset(),
+> >> +				 MODULES_END, gfp_mask, PAGE_KERNEL,
+> >> +				 VM_DEFER_KMEMLEAK | VM_ALLOW_HUGE_VMAP,
+> >> +				 NUMA_NO_NODE, __builtin_return_address(0));
+> >> +	if (p && (kasan_alloc_module_shadow(p, size, gfp_mask) < 0)) {
+> >> +		vfree(p);
+> >> +		return NULL;
+> >> +	}
+> >> +
+> >> +	return p;
+> >> +}
 > > 
-> > Interesting... seems like that wouldn't be an issue for non-UPM SEV, since
-> > the private pages would still be mapped as part of that 2M mapping, and
-> > it's completely up to the guest as to whether it wants to access as
-> > private or shared. But for UPM it makes sense this would cause issues.
-> > 
-> > > 
-> > > Does getting the mapping level as per the fault access type help
-> > > address the above issue? Any such coalescing should not cross between
-> > > private to
-> > > shared or shared to private memory regions.
-> > 
-> > Doesn't seem like changing the check to fault->is_private would help in
-> > your particular case, since the subsequent host_pfn_mapping_level() call
-> > only seems to limit the mapping level to whatever the mapping level is
-> > for the HVA in the host page table.
-> > 
-> > Seems like with UPM we need some additional handling here that also
-> > checks that the entire 2M HVA range is backed by non-private memory.
-> > 
-> > Non-UPM SNP hypervisor patches already have a similar hook added to
-> > host_pfn_mapping_level() which implements such a check via RMP table, so
-> > UPM might need something similar:
-> > 
-> >    https://github.com/AMDESE/linux/commit/ae4475bc740eb0b9d031a76412b0117339794139
-> > 
-> > -Mike
-> > 
+> > 1) When things like kernel/bpf/core.c start using a module alloc it
+> > is time to consider genearlizing this.
 > 
-> For TDX, we try to track the page type (shared, private, mixed) of each gfn
-> at given level. Only when the type is shared/private, can it be mapped at
-> that level. When it's mixed, i.e., it contains both shared pages and private
-> pages at given level, it has to go to next smaller level.
+> I am not quite sure what the generalization would look like. IMHO, the
+> ideal case would have:
+>   a) A kernel_text_rw_allocator, similar to current module_alloc.
+>   b) A kernel_text_ro_allocator, similar to current bpf_prog_pack_alloc.
+>      This is built on top of kernel_text_rw_allocator. Different 
+>      allocations could share a page, thus it requires text_poke like 
+>      support from the arch. 
+>   c) If the arch supports text_poke, kprobes, ftrace trampolines, and
+>      bpf trampolines should use kernel_text_ro_allocator.
+>   d) Major archs should support CONFIG_ARCH_WANTS_MODULES_DATA_IN_VMALLOC,
+>      and they should use kernel_text_ro_allocator for module text. 
 > 
-> https://github.com/intel/tdx/commit/ed97f4042eb69a210d9e972ccca6a84234028cad
+> Does this sound reasonable to you?
 
-Hmm, so a new slot->arch.page_attr array shouldn't be necessary, KVM can instead
-update slot->arch.lpage_info on shared<->private conversions.  Detecting whether
-a given range is partially mapped could get nasty if KVM defers tracking to the
-backing store, but if KVM itself does the tracking as was previously suggested[*],
-then updating lpage_info should be relatively straightfoward, e.g. use
-xa_for_each_range() to see if a given 2mb/1gb range is completely covered (fully
-shared) or not covered at all (fully private).
+Yes, and a respective free call may have an arch specific stuff which
+removes exec stuff.
 
-[*] https://lore.kernel.org/all/YofeZps9YXgtP3f1@google.com
+In so far as the bikeshedding, I do think this is generic so
+vmalloc_text_*() suffices or vmalloc_exec_*() take your pick for
+a starter and let the world throw in their preference.
+
+> I tried to enable CONFIG_ARCH_WANTS_MODULES_DATA_IN_VMALLOC for x86_64, 
+> but that doesn't really work. Do we have plan to make this combination
+> work?
+
+Oh nice.
+
+Good stuff. Perhaps it just requires a little love from mm folks.
+Don't beat yourself up if it does not yet. We can work towards that
+later.
+
+> > 2) How we free is important, and each arch does something funky for
+> > this. This is not addressed here.
+> 
+> How should we address this? IIUC, x86_64 just calls vfree. 
+
+That's not the case for all archs is it? I'm talking about the generic
+module_alloc() too. I'd like to see that go the way we discussed above.
+
+> > And yes I welcome generalizing generic module_alloc() too as suggested
+> > before. The concern on my part is the sloppiness this enables.
+> 
+> One question I have is, does module_alloc (or kernel_text_*_allocator 
+> above) belong to module code, or mm code (maybe vmalloc)?
+
+The evolution of its uses indicates it is growing outside of modules and
+so mm should be the new home.
+
+> I am planning to let BPF trampoline use bpf_prog_pack on x86_64, which 
+> is another baby step of c) above. 
+
+OK!
+
+  Luis

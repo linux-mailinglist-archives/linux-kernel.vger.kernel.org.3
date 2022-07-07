@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EEC4E56A2DD
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 14:53:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B9FDE56A2DF
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 14:53:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235859AbiGGMx3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Jul 2022 08:53:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46488 "EHLO
+        id S235876AbiGGMxh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Jul 2022 08:53:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46286 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235856AbiGGMxE (ORCPT
+        with ESMTP id S235517AbiGGMxP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Jul 2022 08:53:04 -0400
-Received: from mail-pg1-x529.google.com (mail-pg1-x529.google.com [IPv6:2607:f8b0:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D5BB2C678;
-        Thu,  7 Jul 2022 05:53:04 -0700 (PDT)
-Received: by mail-pg1-x529.google.com with SMTP id q82so11168027pgq.6;
-        Thu, 07 Jul 2022 05:53:04 -0700 (PDT)
+        Thu, 7 Jul 2022 08:53:15 -0400
+Received: from mail-pg1-x52a.google.com (mail-pg1-x52a.google.com [IPv6:2607:f8b0:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5029A2CC97;
+        Thu,  7 Jul 2022 05:53:11 -0700 (PDT)
+Received: by mail-pg1-x52a.google.com with SMTP id 73so2926575pgb.10;
+        Thu, 07 Jul 2022 05:53:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=1HOT8eT9LJMvE08pzscJQsZxewmGGQ7hUQZcMynRv0U=;
-        b=E+tBAHKbYBb1jyLJZwkH0wefRhu9LBtW28jrUfYjKXn65diHTNvv068WhUeaNGioO5
-         4lJmab0dNgevmRk0aajh6aNmoH6aY88oTD+s+d6JBjJSCxRhy1bzM2WTgfLZJdeCBQTO
-         5DIRzjZrDeUoz9GX9SIZ45mQAvhzo8CzRZQEx7e9PbpAuqZ6mn7ZQ3aZrfiL/NMyjAZI
-         VOHIW0ZeCdxb1oNrRfSKmME3juksIpNzrQ4fpPzqw1zb5lODDJ+ZqxPeMqS2nCMP6Hmi
-         ALs+X8EQDoGXFs0vIM212wNczouRDzaMUIpM9ogIH0f/M+CPjNzwrZjx4nwuduqmOpRV
-         +7vQ==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=OkXjFR+NYH0OoqXK6diEul5vRaNtuMp4IaWe2/sFDXI=;
+        b=nuqQ+wJ5o95y7jGGqpjCELTfPjPUHgi7E7FTZs0gaGOCcqFLscKyTXuknhl2r0Tr8i
+         GOKY+oU6XKhO8aGgFKaqc5b+9pKcLFKJ7RiiUd+QY6xRysPA/boO7vrt9gotnDM1k9VM
+         zIFmA8SksMiiE9HHckgX6o3SgQiX8ApGKfCA6UHTrz2tEszAPlMUEjm835NOJBg9WeDe
+         CzWBlbfIOMzbr9uTof81U+ft8J7xcwV9GCdQefl3HC72cHN8J4/cN0Wni9gPCz5OCWIl
+         olZjBjGuiap0t573baIhDwmeLQibM5GcnlMYqdobD9no36jFTc8y4Ce7Val9hIgEyvo+
+         VDXA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=1HOT8eT9LJMvE08pzscJQsZxewmGGQ7hUQZcMynRv0U=;
-        b=gI/nst4YBI7u5OVl4eioPmA0wSC9jyaq0ivAsU/MDbOSMQEsTvFWr7an4CYgsVxOMH
-         7CbA0xMOe7uUZlxz1FkOcI73fR9gDgqNGhbLwMeMIrsPM2AjhUbeG86XotFIPPbtiiVK
-         h4xKwNWTqBb9Kk4PCFOfyg9UATdqA3w6YJbQwbOEBO/9X+PGgMTKkXPyye9HbW6EsF/x
-         0sZmidDF5bW6CHQ2eZpwg61rZ4kRTJLXhyi8gUwysPK5faxAzH5BrnuNh+56+WAYOgtp
-         CmavKbX5waHguDiKMXPKlhZVr+2489Id3Le0NZg7j6fVOG5U/STZULoIBQvZtrSXbQio
-         Ez4g==
-X-Gm-Message-State: AJIora/edxczt3QhDG63g4OOWbyBEi54blwSmuUG5MQ8jTEH9zm3K13B
-        0l1iWhpQaFW2WyzZkwE0VKA=
-X-Google-Smtp-Source: AGRyM1sl4VKGZh3qbbhRsLLlluOZCr006j4y/s4lIPsX2UllxFxD81/fcATU0Wpwicb9MsZ3+B8cMw==
-X-Received: by 2002:a17:90b:33ca:b0:1ec:c617:9660 with SMTP id lk10-20020a17090b33ca00b001ecc6179660mr5091908pjb.95.1657198383576;
-        Thu, 07 Jul 2022 05:53:03 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=OkXjFR+NYH0OoqXK6diEul5vRaNtuMp4IaWe2/sFDXI=;
+        b=xDfBu1WYtW4bi2uZAltdY/BMqrDR4eg/nOLObgDYTu33ryFzHLCRFtWf7scU5nDNca
+         p3as1bh4uj790tra1qkEXrEev/dAnyx1LL0SXzXVZHuAHdplrkylm59iYnsfsGf/WhzC
+         tL942duvc+D5Uy6DI/SaT8xrPhEZN4NP1YXWu3CW46doElDGoRGUvDUry7Khhkjpxsce
+         sLrkMg+R81tdIskW4QV5Q/mfzC7Hj44SKItXcCnmhyGqUb0dRJKwk7NZzsRrKnrCGuBN
+         M7uNfIJXHFIcK7mY+O2MP3MwaauU3POPhOLaOJFyQWgUUOSzvtANA1+m24Mgp4/qBg/g
+         jzJA==
+X-Gm-Message-State: AJIora9TLtiMH10hzo4Bes8wOrbgNEugaj1iv06v03Tw39UrqoRzHxtA
+        GmUOvroDoXbXnCZ3EVS+uB4=
+X-Google-Smtp-Source: AGRyM1v1964MD/IIcSfx/8Y5slyYPx4KMBqa/W04tHsO/yrwZoWnhZV8fVssXI0+aMYp8g1qivWNHw==
+X-Received: by 2002:a63:f415:0:b0:408:808b:238f with SMTP id g21-20020a63f415000000b00408808b238fmr38849185pgi.469.1657198390801;
+        Thu, 07 Jul 2022 05:53:10 -0700 (PDT)
 Received: from localhost.localdomain (47-72-206-164.dsl.dyn.ihug.co.nz. [47.72.206.164])
-        by smtp.gmail.com with ESMTPSA id a11-20020a1709027e4b00b0016a3b5a46f0sm27907831pln.241.2022.07.07.05.52.57
+        by smtp.gmail.com with ESMTPSA id a11-20020a1709027e4b00b0016a3b5a46f0sm27907831pln.241.2022.07.07.05.53.03
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 07 Jul 2022 05:53:02 -0700 (PDT)
+        Thu, 07 Jul 2022 05:53:10 -0700 (PDT)
 From:   Barry Song <21cnbao@gmail.com>
 To:     akpm@linux-foundation.org, linux-mm@kvack.org,
         linux-arm-kernel@lists.infradead.org, x86@kernel.org,
@@ -55,11 +55,15 @@ To:     akpm@linux-foundation.org, linux-mm@kvack.org,
 Cc:     corbet@lwn.net, arnd@arndb.de, linux-kernel@vger.kernel.org,
         darren@os.amperecomputing.com, yangyicong@hisilicon.com,
         huzhanyuan@oppo.com, lipeifeng@oppo.com, zhangshiming@oppo.com,
-        guojian@oppo.com, realmz6@gmail.com, Barry Song <21cnbao@gmail.com>
-Subject: [PATCH 0/4] mm: arm64: bring up BATCHED_UNMAP_TLB_FLUSH
-Date:   Fri,  8 Jul 2022 00:52:38 +1200
-Message-Id: <20220707125242.425242-1-21cnbao@gmail.com>
+        guojian@oppo.com, realmz6@gmail.com,
+        Barry Song <v-songbaohua@oppo.com>,
+        Nadav Amit <namit@vmware.com>, Mel Gorman <mgorman@suse.de>
+Subject: [PATCH 1/4] Revert "Documentation/features: mark BATCHED_UNMAP_TLB_FLUSH doesn't apply to ARM64"
+Date:   Fri,  8 Jul 2022 00:52:39 +1200
+Message-Id: <20220707125242.425242-2-21cnbao@gmail.com>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20220707125242.425242-1-21cnbao@gmail.com>
+References: <20220707125242.425242-1-21cnbao@gmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -72,52 +76,53 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Though ARM64 has the hardware to do tlb shootdown, it is not free.
-A simplest micro benchmark shows even on snapdragon 888 with only
-8 cores, the overhead for ptep_clear_flush is huge even for paging
-out one page mapped by only one process:
-5.36%  a.out    [kernel.kallsyms]  [k] ptep_clear_flush
+From: Barry Song <v-songbaohua@oppo.com>
 
-While pages are mapped by multiple processes or HW has more CPUs,
-the cost should become even higher due to the bad scalability of
-tlb shootdown.
+This reverts commit 6bfef171d0d74cb050112e0e49feb20bfddf7f42.
 
-This patchset leverages the existing BATCHED_UNMAP_TLB_FLUSH by
-1. only send tlbi instructions in the first stage -
-	arch_tlbbatch_add_mm()
-2. wait for the completion of tlbi by dsb while doing tlbbatch
-	sync in arch_tlbbatch_flush()
-My testing on snapdragon shows the overhead of ptep_clear_flush
-is removed by the patchset. The micro benchmark becomes 5% faster
-even for one page mapped by single process on snapdragon 888.
+I was wrong to say batched tlb flush didn't apply to ARM. The fact
+is though ARM64 has hardware TLB flush, it is not free and could
+be quite expensive.
 
-While believing the micro benchmark in 4/4 will perform better
-on arm64 servers, I don't have a hardware to test. Thus,
-Hi Yicong,
-Would you like to run the same test in 4/4 on Kunpeng920?
-Hi Darren,
-Would you like to run the same test in 4/4 on Ampere's ARM64 server?
-Remember to enable zRAM swap device so that pageout can actually
-work for the micro benchmark.
-thanks!
+We still have a good chance to enable batched and deferred TLB flush
+on ARM64 for memory reclamation. A possible way is that we only queue
+tlbi instructions in hardware's queue. When we have to broadcast TLB,
+we broadcast it by dsb. We just need to get adapted to the existing
+framework of BATCHED_UNMAP_TLB_FLUSH.
 
-Barry Song (4):
-  Revert "Documentation/features: mark BATCHED_UNMAP_TLB_FLUSH doesn't
-    apply to ARM64"
-  mm: rmap: Allow platforms without mm_cpumask to defer TLB flush
-  mm: rmap: Extend tlbbatch APIs to fit new platforms
-  arm64: support batched/deferred tlb shootdown during page reclamation
+Cc: Will Deacon <will@kernel.org>
+Cc: Jonathan Corbet <corbet@lwn.net>
+Cc: Nadav Amit <namit@vmware.com>
+Cc: Mel Gorman <mgorman@suse.de>
+Signed-off-by: Barry Song <v-songbaohua@oppo.com>
+---
+ Documentation/features/arch-support.txt        | 1 -
+ Documentation/features/vm/TLB/arch-support.txt | 2 +-
+ 2 files changed, 1 insertion(+), 2 deletions(-)
 
- Documentation/features/arch-support.txt       |  1 -
- .../features/vm/TLB/arch-support.txt          |  2 +-
- arch/arm64/Kconfig                            |  1 +
- arch/arm64/include/asm/tlbbatch.h             | 12 +++++++++++
- arch/arm64/include/asm/tlbflush.h             | 13 ++++++++++++
- arch/x86/include/asm/tlbflush.h               |  4 +++-
- mm/rmap.c                                     | 21 +++++++++++++------
- 7 files changed, 45 insertions(+), 9 deletions(-)
- create mode 100644 arch/arm64/include/asm/tlbbatch.h
-
+diff --git a/Documentation/features/arch-support.txt b/Documentation/features/arch-support.txt
+index 118ae031840b..d22a1095e661 100644
+--- a/Documentation/features/arch-support.txt
++++ b/Documentation/features/arch-support.txt
+@@ -8,5 +8,4 @@ The meaning of entries in the tables is:
+     | ok |  # feature supported by the architecture
+     |TODO|  # feature not yet supported by the architecture
+     | .. |  # feature cannot be supported by the hardware
+-    | N/A|  # feature doesn't apply to the architecture
+ 
+diff --git a/Documentation/features/vm/TLB/arch-support.txt b/Documentation/features/vm/TLB/arch-support.txt
+index 039e4e91ada3..1c009312b9c1 100644
+--- a/Documentation/features/vm/TLB/arch-support.txt
++++ b/Documentation/features/vm/TLB/arch-support.txt
+@@ -9,7 +9,7 @@
+     |       alpha: | TODO |
+     |         arc: | TODO |
+     |         arm: | TODO |
+-    |       arm64: | N/A  |
++    |       arm64: | TODO |
+     |        csky: | TODO |
+     |     hexagon: | TODO |
+     |        ia64: | TODO |
 -- 
 2.25.1
 

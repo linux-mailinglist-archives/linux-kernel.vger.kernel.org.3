@@ -2,63 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D7581569EA9
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 11:40:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 476A3569EB1
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 11:40:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235192AbiGGJjE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Jul 2022 05:39:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42844 "EHLO
+        id S235015AbiGGJkE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Jul 2022 05:40:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43702 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233857AbiGGJi7 (ORCPT
+        with ESMTP id S234897AbiGGJkB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Jul 2022 05:38:59 -0400
-Received: from mail-qt1-x82c.google.com (mail-qt1-x82c.google.com [IPv6:2607:f8b0:4864:20::82c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85D9F64EC;
-        Thu,  7 Jul 2022 02:38:58 -0700 (PDT)
-Received: by mail-qt1-x82c.google.com with SMTP id x1so21893739qtv.8;
-        Thu, 07 Jul 2022 02:38:58 -0700 (PDT)
+        Thu, 7 Jul 2022 05:40:01 -0400
+Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED9F313D43;
+        Thu,  7 Jul 2022 02:40:00 -0700 (PDT)
+Received: by mail-wm1-x334.google.com with SMTP id n185so10277683wmn.4;
+        Thu, 07 Jul 2022 02:40:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=6asbgKWz5KHYE7O0UZbtRVtmQMjaffUmkO0hZOBuxeQ=;
-        b=QZLwCBKyScydvvSOVtGD1qyZw3hrB10MO+G+M0RTJ0CdbEsv5bCrs/twvrHUVXpCLf
-         ORqVcBS34PqcOfTkm69xUoT/vD3Jrfrdg3hgONzXu+MmeyJuQl6oFRcmoL360lMQMN3Z
-         TUcheJAsOhEeOEXCo38BP1aCCoOqMtpZLS4AStuc03Nu6x8q7LLMfzxQq2S9Q8UYP5uD
-         woqYfOdoZWGifHEzFmi4UBdW235DipK8dN+c7/PgEF98ZJ58jXX9SrK4xUELE1UWcG9A
-         qCj31+W9q3mwNZDyVirI6n0q8fAbDp/lrSECKgOMb4PCPh2oRHJ+P2QOp/6GMo2+CnIX
-         eMeQ==
+        h=from:to:cc:subject:date:message-id;
+        bh=cfC1eHw7vjyJEGT4bP0Ijue63QAf+zrsCzWAQ0rV+Js=;
+        b=eBaCrhvMik2nM7yS82rCJEfeku6KyF5Gd9yVUjzBw9knDNqqQA3UHJLWB7PgMDbT+T
+         PDa6S0zhQQ6h4qf5AEA0ayAM7yxjiKcl3IkCCQO71pYoys76DlHv+cjOrQYOGj1bszh6
+         vZaHugoCRLiR+X2f9O7nnnQBgtxTGIWQm614m743tWWHXzwY7YTiw/0Y3Tbx5sFphmOz
+         9by034TRbwnNZCENdFEUow6A8kCv3srDOfcUUWDC1TiGjqJKrODDOgq8Y8DR13WYOr1/
+         iMmG31vrAxgbsLlB+QKtPI4+gphvXPMTzAQtrIBp/lI+kMGH2IC4//b0EfdMFBfH+RKh
+         DBMg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=6asbgKWz5KHYE7O0UZbtRVtmQMjaffUmkO0hZOBuxeQ=;
-        b=kWmXOBk4bN0cYM+zJaVHVo/fUALAbCviQkk7s34ZnzXaBcBICliXL8Thr3pQYRg50I
-         oZeDaMgUy8ruaF+HpUtmlrftUoAJndn/qkSb+q47ULbKEQGIcEjyNpC0tan7XYZIVeRy
-         ygwa4pSkYMg6M0I82IUyWuF5yc/d1xcA1hv3NIzaukkZ1gUsuooyl9Ih+eKggLYQo2ZX
-         ECyr+XyN2xEx7T283q+wvzsJGcTiEXQwMrd3V8n5jFOunE5BGdg4TiMEz0JT3lmWF0ah
-         2gVo+WnnDN0JjMuAw/VahbFKgm68dCu4lPqNSegV941CwPFvLc3OEtc51f2v4/F9v3lS
-         9cIg==
-X-Gm-Message-State: AJIora+4djS+uOBKiOKyGlfSg2o0KPp7ZMfk82beJLy0/NOeEw2i1VGw
-        liSzxj216K7b/8zbJwQTYY8+kmMmXi3nQDhKe8CdNoEroWXMUw==
-X-Google-Smtp-Source: AGRyM1u1DxVEueyr4AjU7AJ8HsYZD917QDTURHYtEpLChyDxMkomtkQpXPfMEGhLJHPknvmFFijnt7114s+rnyC5QSQ=
-X-Received: by 2002:a0c:9719:0:b0:473:2d8e:60b9 with SMTP id
- k25-20020a0c9719000000b004732d8e60b9mr1921725qvd.122.1657186737605; Thu, 07
- Jul 2022 02:38:57 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220706160021.10710-1-matthias.may@westermo.com>
- <CAHsH6GsN=kykC32efTWhHKSPqi8Qn3HYgRursSSY2JiFf2hijw@mail.gmail.com> <45a19551-6004-2453-2f16-a7af5d5c0a59@westermo.com>
-In-Reply-To: <45a19551-6004-2453-2f16-a7af5d5c0a59@westermo.com>
-From:   Eyal Birger <eyal.birger@gmail.com>
-Date:   Thu, 7 Jul 2022 12:38:46 +0300
-Message-ID: <CAHsH6GtyXozwURA17DANjmmEVNRXTKZ-HASD6RhzisJ-+LZ=8Q@mail.gmail.com>
-Subject: Re: [PATCH net-next v2] ip_tunnel: allow to inherit from VLAN
- encapsulated IP frames
-To:     Matthias May <matthias.may@westermo.com>
-Cc:     netdev@vger.kernel.org, davem@davemloft.net,
-        yoshfuji@linux-ipv6.org, dsahern@kernel.org, edumazet@google.com,
-        kuba@kernel.org, pabeni@redhat.com, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=cfC1eHw7vjyJEGT4bP0Ijue63QAf+zrsCzWAQ0rV+Js=;
+        b=qJQknZS2UBeTbnxJEDuKuAehr9PrlcwnFrns/nrNjNjWEh5K2oHNUbWY3HLCj4h9Cw
+         RXf0mVTZlxOOmsC6ueMvdKbXtk7kR+s6Jzqay3VWOeu/A54etqZHaE/p58jaaZsjUh79
+         2T0dK49O8OIdGTVOoNnIDOeH3LLImiWvjoueebWcPk9A9bUsYZhlqgSWBLva+N+ZtY5U
+         LEKNPm+X2PE8pttNoeaPm+ITRQ4/W7vEnLvJ4IiDCU+3U3Aa8Z7DshcGQAY9XqosbSXV
+         ixKXZ5AfHTI4VipZgATZ3AjtYGqIPE01YZXt93H+LS0pk72nW3szU1P2dfzD0UcAeuBT
+         Uryg==
+X-Gm-Message-State: AJIora/mB84vIwjCRlDh7yycmCQTStfAbMAFjiXSenRHjkyM9HRZvf9f
+        rztbc2XT3np1j2roT23+qfE=
+X-Google-Smtp-Source: AGRyM1tV3ux5VMnFhY59IYP2nYIcJ/IVUvUn/b66ZUw7h8bA6IKJ3xV0bIf+akq51E1t5JZKF5xDng==
+X-Received: by 2002:a05:600c:214c:b0:3a0:401a:6f4b with SMTP id v12-20020a05600c214c00b003a0401a6f4bmr3209000wml.15.1657186799374;
+        Thu, 07 Jul 2022 02:39:59 -0700 (PDT)
+Received: from localhost.localdomain ([87.200.95.144])
+        by smtp.gmail.com with ESMTPSA id j14-20020a5d564e000000b0021d68d3a27dsm13831314wrw.45.2022.07.07.02.39.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 07 Jul 2022 02:39:58 -0700 (PDT)
+From:   Christian Hewitt <christianshewitt@gmail.com>
+To:     Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org
+Cc:     Christian Hewitt <christianshewitt@gmail.com>,
+        Furkan Kardame <furkan@fkardame.com>
+Subject: [PATCH 1/2] dt-bindings: arm: amlogic: add Beelink GT1 Ultimate binding
+Date:   Thu,  7 Jul 2022 09:39:53 +0000
+Message-Id: <20220707093954.21716-1-christianshewitt@gmail.com>
+X-Mailer: git-send-email 2.17.1
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -69,59 +69,26 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jul 7, 2022 at 10:44 AM Matthias May <matthias.may@westermo.com> wrote:
->
-> On 7/6/22 19:24, Eyal Birger wrote:
-> >
-> > Hi,
-> >
-> > On Wed, Jul 6, 2022 at 7:54 PM Matthias May <matthias.may@westermo.com <mailto:matthias.may@westermo.com>> wrote:
-> >
-> >     The current code allows to inherit the TOS, TTL, DF from the payload
-> >     when skb->protocol is ETH_P_IP or ETH_P_IPV6.
-> >     However when the payload is VLAN encapsulated (e.g because the tunnel
-> >     is of type GRETAP), then this inheriting does not work, because the
-> >     visible skb->protocol is of type ETH_P_8021Q.
-> >
-> >     Add a check on ETH_P_8021Q and subsequently check the payload protocol.
-> >
-> >     Signed-off-by: Matthias May <matthias.may@westermo.com <mailto:matthias.may@westermo.com>>
-> >     ---
-> >     v1 -> v2:
-> >       - Add support for ETH_P_8021AD as suggested by Jakub Kicinski.
-> >     ---
-> >       net/ipv4/ip_tunnel.c | 22 ++++++++++++++--------
-> >       1 file changed, 14 insertions(+), 8 deletions(-)
-> >
-> >     diff --git a/net/ipv4/ip_tunnel.c b/net/ipv4/ip_tunnel.c
-> >     index 94017a8c3994..bdcc0f1e83c8 100644
-> >     --- a/net/ipv4/ip_tunnel.c
-> >     +++ b/net/ipv4/ip_tunnel.c
-> >     @@ -648,6 +648,13 @@ void ip_tunnel_xmit(struct sk_buff *skb, struct net_device *dev,
-> >              u8 tos, ttl;
-> >              __be32 dst;
-> >              __be16 df;
-> >     +       __be16 *payload_protocol;
-> >     +
-> >     +       if (skb->protocol == htons(ETH_P_8021Q) ||
-> >     +           skb->protocol == htons(ETH_P_8021AD))
-> >     +               payload_protocol = (__be16 *)(skb->head + skb->network_header - 2);
-> >     +       else
-> >     +               payload_protocol = &skb->protocol;
-> >
-> >
-> > Maybe it's better to use skb_protocol(skb, true) here instead of open
-> > coding the vlan parsing?
-> >
-> > Eyal
->
-> Hi Eyal
-> I've looked into using skb_protocol(skb, true).
-> If skip_vlan is set to true, wouldn't it make sense to use vlan_get_protocol(skb) directly?
+Add the board binding for the Shenzen AZW (Beelink) GT1 Ultimate
+Android Set-Top Box device.
 
-Since it's inlined i don't think it makes a practical difference.
-Personally I'd find it more readable to use skb_protocol() here because
-VLANs are the less expected path, and the change is basically to ignore
-them.
+Signed-off-by: Christian Hewitt <christianshewitt@gmail.com>
+---
+ Documentation/devicetree/bindings/arm/amlogic.yaml | 1 +
+ 1 file changed, 1 insertion(+)
 
-Eyal.
+diff --git a/Documentation/devicetree/bindings/arm/amlogic.yaml b/Documentation/devicetree/bindings/arm/amlogic.yaml
+index 61a6cabb375b..3217c069673e 100644
+--- a/Documentation/devicetree/bindings/arm/amlogic.yaml
++++ b/Documentation/devicetree/bindings/arm/amlogic.yaml
+@@ -120,6 +120,7 @@ properties:
+           - enum:
+               - amlogic,q200
+               - amlogic,q201
++              - azw,gt1-ultimate
+               - khadas,vim2
+               - kingnovel,r-box-pro
+               - libretech,aml-s912-pc
+-- 
+2.17.1
+

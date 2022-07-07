@@ -2,62 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A016D569F19
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 12:04:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 76952569F0F
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 12:04:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235010AbiGGKDr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Jul 2022 06:03:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33436 "EHLO
+        id S235191AbiGGKDs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Jul 2022 06:03:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33424 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234991AbiGGKDo (ORCPT
+        with ESMTP id S234947AbiGGKDo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 7 Jul 2022 06:03:44 -0400
-Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9998D26AF1
-        for <linux-kernel@vger.kernel.org>; Thu,  7 Jul 2022 03:03:41 -0700 (PDT)
-Received: by mail-wm1-x332.google.com with SMTP id l40-20020a05600c1d2800b003a18adff308so10888687wms.5
-        for <linux-kernel@vger.kernel.org>; Thu, 07 Jul 2022 03:03:41 -0700 (PDT)
+Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 280FB2FFC8
+        for <linux-kernel@vger.kernel.org>; Thu,  7 Jul 2022 03:03:43 -0700 (PDT)
+Received: by mail-wm1-x334.google.com with SMTP id l68so10309474wml.3
+        for <linux-kernel@vger.kernel.org>; Thu, 07 Jul 2022 03:03:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=+l1iL0NEuXMTD9v+9+cJIdeSZBJgkzTvXEeRZPmJDmc=;
-        b=ILohkxWDl/nTQzvdTCs8NkfmN8dgIhtrnAZn0crydzEMid/17eesAXMw1lryR8vUNg
-         dHI1vhLtMVAOnjEYS66sw8Gup4ggYg+CUi5ki4AFxTQ6PiYwpCAAsVzUbXDLHUYIUELv
-         MjNC3X6CyG8utflI11bDVMLJEKs7VPYAX3qji72TYPzL/dVnMe2nGVE+csd/enpKur7I
-         ANBa3Zt68bafqepLiOEsDK1FDotparNMJWyMg4jd3SwvnhdZhdMu1z49pR+JqBtso11p
-         JNndb2Cy1VMsZqu4m4q3+ojhf/3eu/CHbfeTw+Zw4c2NpERB0s5ihjz0LO0HlBmufvY0
-         jqtg==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=lyjBxTca7YaObwbb4+mBlqGjkBNtiN/iQI75P0dOoGs=;
+        b=ApylUshkdPMBxowBWdA11FXwyilkLHFoxw2TpZNdWVe7J5wK5WsuGuLdOmNX9zTzk2
+         B3wObarbyP8uqKLaucFKPH78aop8aE2blu7qAJxjpQV5nQzDxGkC1l+zG1hr57kOGvSH
+         KgIss4NahKugLPEinebU9ajU/LHaVcvDyCz6Z39lpqL29COOaADmWKuLQbdTKSJqi6kP
+         xAXlqSE1KkqV65uWgS3vpW/BlnJWVs4SEftY6DMHJooeFm6vanfThWukfrTHd/9tAGJ8
+         ZyrjZZbQK11/AxnT17r7KeJLminrUJ2pwTXpmV+7H0bqbmeBHrfZWOcF3ulMGARIhSvh
+         EO+A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=+l1iL0NEuXMTD9v+9+cJIdeSZBJgkzTvXEeRZPmJDmc=;
-        b=nSzdJPsQB3/ToFMOeQDBwEzssW3e1kfJFyt8W9xwhBHpWaET1PIKqAFAKPHlzmQoA6
-         ZRQSijuvZimy/lch+BiQJRN/dWmCtC+HktSiTcYS8iPsLZ6+VpLpTRjHhUGZgD/Z552P
-         THLfhClnJWIP22P48iwYuCWZT9EtHeHOHfp4VMt0N6GNdSiaUJbUjfiNafDZ4p8BLLhG
-         H+ec5bFIdNsSzZLBAUPrgJqA2esQP+VIcICV4+JDio9IpvdMCeBkj90j/CxVuLC4+5P8
-         Rh9Lmu4CX6+wmF7yeUoOGQlEPbGhgTwYmYTkdZWuc9SRsC0HAd+9zMWF8Z+PudlhzANO
-         g0cg==
-X-Gm-Message-State: AJIora+MmOz26pgEval4ySaqjQuwvXSTmHLUQyVUnxhu3mGbDphvqlST
-        kelP4AXclWDTVCnqvqz+1iLcERRJvtgQdw==
-X-Google-Smtp-Source: AGRyM1vwP+rjkJ16/oi7CdPdPHtzE/ugfCPc/WqLwUxB+Yb4OogyiysKjo2MWcBXiuhJp86oGRPH5Q==
-X-Received: by 2002:a05:600c:40d7:b0:3a2:d438:4e33 with SMTP id m23-20020a05600c40d700b003a2d4384e33mr113235wmh.33.1657188220194;
-        Thu, 07 Jul 2022 03:03:40 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=lyjBxTca7YaObwbb4+mBlqGjkBNtiN/iQI75P0dOoGs=;
+        b=tWDv71oPwO1lpKBrQQw+LoF7EsQ57KWcUHEZaRPgtgN7FXodasdmlthyDx19IsDMWG
+         fpK0mBCmuTDmLe96TYPt6MUuBmwRFcOvJ1jRDr7S7qCzDiplfh0ICD8C2R6Skw9IQlC+
+         k4+2UDmRJF1VHRiOXKLwRQaDHLiETnt4Phwx0QdwFmuDt8OLF/YCBk4EqZP0ydx3jaU+
+         859528QXBzBBpwYLsX6awgPnUY7KDJSM6Az9xYykc/Zk65KJlQSs3f8OyCM3UsOBDHrs
+         JU8+tQuSuPo0qsE1Qmw9P3RWU7A/EVZLokP9s1FSuajcVZUCFvOEmtmQED/QlVim6TyV
+         8vMg==
+X-Gm-Message-State: AJIora8ZH4iXifFmfVEsEplKT97llRhYB4aexr75SCefSV2R0tkwcr8Y
+        qh76PGruTu2B7h+r3fweL2mYuEzl1lpNrA==
+X-Google-Smtp-Source: AGRyM1u9J+vSFg1DqYI+JSf7PHyh8N0GS+NGvJr8GthhXh2mHVh2UqUCCYZ4YWoXz6FbhRB0mk59Xg==
+X-Received: by 2002:a1c:e902:0:b0:3a0:2d95:49d4 with SMTP id q2-20020a1ce902000000b003a02d9549d4mr3555661wmc.189.1657188221377;
+        Thu, 07 Jul 2022 03:03:41 -0700 (PDT)
 Received: from localhost.localdomain ([94.52.112.99])
-        by smtp.gmail.com with ESMTPSA id h14-20020a5d548e000000b0021d7ad6b9fdsm4612034wrv.57.2022.07.07.03.03.39
+        by smtp.gmail.com with ESMTPSA id h14-20020a5d548e000000b0021d7ad6b9fdsm4612034wrv.57.2022.07.07.03.03.40
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 07 Jul 2022 03:03:39 -0700 (PDT)
+        Thu, 07 Jul 2022 03:03:40 -0700 (PDT)
 From:   Abel Vesa <abel.vesa@linaro.org>
 To:     Mike Turquette <mturquette@baylibre.com>,
         Stephen Boyd <sboyd@kernel.org>
 Cc:     linux-clk@vger.kernel.org,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         linux-arm-msm@vger.kernel.org, Abel Vesa <abel.vesa@linaro.org>
-Subject: [RFC PATCH 1/4] clk: Use clk_core_unlink_consumer on __clk_put
-Date:   Thu,  7 Jul 2022 13:03:06 +0300
-Message-Id: <20220707100309.1357663-1-abel.vesa@linaro.org>
+Subject: [RFC PATCH 2/4] clk: Add consumers count to core
+Date:   Thu,  7 Jul 2022 13:03:07 +0300
+Message-Id: <20220707100309.1357663-2-abel.vesa@linaro.org>
 X-Mailer: git-send-email 2.34.3
+In-Reply-To: <20220707100309.1357663-1-abel.vesa@linaro.org>
+References: <20220707100309.1357663-1-abel.vesa@linaro.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -70,27 +72,53 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-For consistency, use clk_core_unlink_consumer rather then hlist_del
-directly, on __clk_put. Prepare lock is already acquired at that point.
+Keep a count of all consumers per clock. One usage of could be to make
+core decisions (like disabling unused clocks) based on the number of
+consumers a clock has.
 
 Signed-off-by: Abel Vesa <abel.vesa@linaro.org>
 ---
- drivers/clk/clk.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/clk/clk.c | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
 diff --git a/drivers/clk/clk.c b/drivers/clk/clk.c
-index 7fc191c15507..e1d8245866b1 100644
+index e1d8245866b1..9b54afd2fee8 100644
 --- a/drivers/clk/clk.c
 +++ b/drivers/clk/clk.c
-@@ -4347,7 +4347,7 @@ void __clk_put(struct clk *clk)
- 		clk->exclusive_count = 0;
+@@ -72,6 +72,7 @@ struct clk_core {
+ 	unsigned long		flags;
+ 	bool			orphan;
+ 	bool			rpm_enabled;
++	unsigned int		consumers_count;
+ 	unsigned int		enable_count;
+ 	unsigned int		prepare_count;
+ 	unsigned int		protect_count;
+@@ -3682,6 +3683,9 @@ static int __clk_core_init(struct clk_core *core)
+ 		core->hw->core = NULL;
  	}
  
--	hlist_del(&clk->clks_node);
-+	clk_core_unlink_consumer(clk);
- 	if (clk->min_rate > clk->core->req_rate ||
- 	    clk->max_rate < clk->core->req_rate)
- 		clk_core_set_rate_nolock(clk->core, clk->core->req_rate);
++	if (!ret)
++		core->consumers_count = 0;
++
+ 	clk_prepare_unlock();
+ 
+ 	if (!ret)
+@@ -3699,6 +3703,7 @@ static void clk_core_link_consumer(struct clk_core *core, struct clk *clk)
+ {
+ 	clk_prepare_lock();
+ 	hlist_add_head(&clk->clks_node, &core->clks);
++	clk->core->consumers_count++;
+ 	clk_prepare_unlock();
+ }
+ 
+@@ -3710,6 +3715,7 @@ static void clk_core_unlink_consumer(struct clk *clk)
+ {
+ 	lockdep_assert_held(&prepare_lock);
+ 	hlist_del(&clk->clks_node);
++	clk->core->consumers_count--;
+ }
+ 
+ /**
 -- 
 2.34.3
 

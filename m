@@ -2,93 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A0422569A1B
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 07:58:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 71496569A24
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 07:59:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232460AbiGGF6H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Jul 2022 01:58:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40230 "EHLO
+        id S234309AbiGGF6r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Jul 2022 01:58:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41436 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229657AbiGGF6E (ORCPT
+        with ESMTP id S229927AbiGGF6p (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Jul 2022 01:58:04 -0400
-Received: from alexa-out.qualcomm.com (alexa-out.qualcomm.com [129.46.98.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71E123192C;
-        Wed,  6 Jul 2022 22:58:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1657173483; x=1688709483;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=0yz1LCHt0aGhTOraapZKZ5D1T7trqgBin6ZQ+zVDZFE=;
-  b=NPbJB3bkL8T9yDPWo1lgbIdlU2DpC4XmFY4WRuC1o9bBKkpx3D9Z3cvO
-   JR7kwxt7j+iZNU7BpcutF8/7wD29KVUcfLTtJWwhqdkAIkw1rOTWDZ/T0
-   gXlHy6QMuFyRUCZyPRAwTXmuUSywDwrBNrZMpTBA3ZPmlVSBNDx0BDOKL
-   Q=;
-Received: from ironmsg09-lv.qualcomm.com ([10.47.202.153])
-  by alexa-out.qualcomm.com with ESMTP; 06 Jul 2022 22:58:03 -0700
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg09-lv.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jul 2022 22:58:02 -0700
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Wed, 6 Jul 2022 22:58:02 -0700
-Received: from [10.216.26.218] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Wed, 6 Jul 2022
- 22:57:57 -0700
-Message-ID: <f6da6595-d3ba-b9f7-e869-041400ae12a7@quicinc.com>
-Date:   Thu, 7 Jul 2022 11:27:54 +0530
+        Thu, 7 Jul 2022 01:58:45 -0400
+Received: from verein.lst.de (verein.lst.de [213.95.11.211])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E967B2F013;
+        Wed,  6 Jul 2022 22:58:44 -0700 (PDT)
+Received: by verein.lst.de (Postfix, from userid 2407)
+        id 96BA568AA6; Thu,  7 Jul 2022 07:58:40 +0200 (CEST)
+Date:   Thu, 7 Jul 2022 07:58:40 +0200
+From:   Christoph Hellwig <hch@lst.de>
+To:     "Andrea Parri (Microsoft)" <parri.andrea@gmail.com>
+Cc:     Christoph Hellwig <hch@lst.de>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Robin Murphy <robin.murphy@arm.com>,
+        KY Srinivasan <kys@microsoft.com>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        Stephen Hemminger <sthemmin@microsoft.com>,
+        Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
+        Michael Kelley <mikelley@microsoft.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Peter Anvin <hpa@zytor.com>, linux-kernel@vger.kernel.org,
+        iommu@lists.linux-foundation.org, iommu@lists.linux.dev,
+        linux-hyperv@vger.kernel.org, x86@kernel.org
+Subject: Re: [RFC PATCH 2/2] dma-direct: Fix dma_direct_{alloc,free}() for
+ Hyperv-V IVMs
+Message-ID: <20220707055840.GA13401@lst.de>
+References: <20220706195027.76026-1-parri.andrea@gmail.com> <20220706195027.76026-3-parri.andrea@gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH v5 3/3] clk: qcom: lpass: Add support for resets &
- external mclk for SC7280
-Content-Language: en-US
-To:     Stephen Boyd <sboyd@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Michael Turquette <mturquette@baylibre.com>
-CC:     <linux-arm-msm@vger.kernel.org>, <linux-soc@vger.kernel.org>,
-        <linux-clk@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <robh@kernel.org>,
-        <robh+dt@kernel.org>, <mka@chromium.org>
-References: <20220614153306.29339-1-quic_tdas@quicinc.com>
- <20220614153306.29339-4-quic_tdas@quicinc.com>
- <20220615195552.7994AC34115@smtp.kernel.org>
-From:   Taniya Das <quic_tdas@quicinc.com>
-In-Reply-To: <20220615195552.7994AC34115@smtp.kernel.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220706195027.76026-3-parri.andrea@gmail.com>
+User-Agent: Mutt/1.5.17 (2007-11-01)
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Stephen,
+On Wed, Jul 06, 2022 at 09:50:27PM +0200, Andrea Parri (Microsoft) wrote:
+> @@ -305,6 +306,21 @@ void *dma_direct_alloc(struct device *dev, size_t size,
+>  		ret = page_address(page);
+>  		if (dma_set_decrypted(dev, ret, size))
+>  			goto out_free_pages;
+> +#ifdef CONFIG_HAS_IOMEM
+> +		/*
+> +		 * Remap the pages in the unencrypted physical address space
+> +		 * when dma_unencrypted_base is set (e.g., for Hyper-V AMD
+> +		 * SEV-SNP isolated guests).
+> +		 */
+> +		if (dma_unencrypted_base) {
+> +			phys_addr_t ret_pa = virt_to_phys(ret);
+> +
+> +			ret_pa += dma_unencrypted_base;
+> +			ret = memremap(ret_pa, size, MEMREMAP_WB);
+> +			if (!ret)
+> +				goto out_encrypt_pages;
+> +		}
+> +#endif
 
-On 6/16/2022 1:25 AM, Stephen Boyd wrote:
-> Quoting Taniya Das (2022-06-14 08:33:06)
->> The clock gating control for TX/RX/WSA core bus clocks would be required
->> to be reset(moved from hardware control) from audio core driver. Thus
->> add the support for the reset clocks.
-> 
-> Why can't this driver remove the clks from hardware control when it
-> probes? Does something put the clks into hardware control mode at
-> runtime?
 
-Sorry for the delayed response. These bits needs to be updated at 
-runtime and this is as per the design requirement. Thus we had to come 
-up with reset support for the same.
+So:
 
--- 
-Thanks & Regards,
-Taniya Das.
+this needs to move into dma_set_decrypted, otherwise we don't handle
+the dma_alloc_pages case (never mind that this is pretty unreadable).
+
+Which then again largely duplicates the code in swiotlb.  So I think
+what we need here is a low-level helper that does the
+set_memory_decrypted and memremap.  I'm not quite sure where it
+should go, but maybe some of the people involved with memory
+encryption might have good ideas.  unencrypted_base should go with
+it and then both swiotlb and dma-direct can call it.
+
+> +	/*
+> +	 * If dma_unencrypted_base is set, the virtual address returned by
+> +	 * dma_direct_alloc() is in the vmalloc address range.
+> +	 */
+> +	if (!dma_unencrypted_base && is_vmalloc_addr(cpu_addr)) {
+>  		vunmap(cpu_addr);
+>  	} else {
+>  		if (IS_ENABLED(CONFIG_ARCH_HAS_DMA_CLEAR_UNCACHED))
+>  			arch_dma_clear_uncached(cpu_addr, size);
+> +#ifdef CONFIG_HAS_IOMEM
+> +		if (dma_unencrypted_base) {
+> +			memunmap(cpu_addr);
+> +			/* re-encrypt the pages using the original address */
+> +			cpu_addr = page_address(pfn_to_page(PHYS_PFN(
+> +					dma_to_phys(dev, dma_addr))));
+> +		}
+> +#endif
+>  		if (dma_set_encrypted(dev, cpu_addr, size))
+
+Same on the unmap side.  It might also be worth looking into reordering
+the checks in some form instead o that raw dma_unencrypted_base check
+before the unmap.

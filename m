@@ -2,93 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6DD0F569A87
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 08:31:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E4AE569A88
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 08:31:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234581AbiGGGal (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Jul 2022 02:30:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33242 "EHLO
+        id S234787AbiGGGbB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Jul 2022 02:31:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33504 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233584AbiGGGaj (ORCPT
+        with ESMTP id S234850AbiGGGbA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Jul 2022 02:30:39 -0400
-Received: from out3-smtp.messagingengine.com (out3-smtp.messagingengine.com [66.111.4.27])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6708C10559;
-        Wed,  6 Jul 2022 23:30:38 -0700 (PDT)
-Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
-        by mailout.nyi.internal (Postfix) with ESMTP id 590775C00EA;
-        Thu,  7 Jul 2022 02:30:34 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute4.internal (MEProxy); Thu, 07 Jul 2022 02:30:34 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sholland.org; h=
-        cc:cc:content-transfer-encoding:content-type:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to; s=fm1; t=1657175434; x=
-        1657261834; bh=TJIn1V9ic4c6ApTfvv5dVrRd3t/GgxV3Sqp0Eq+6r2g=; b=c
-        MS6GOy0bVkuopuTWs3E68kSB8PBsKg8ibPv3O84u5Sh0VeXirV2OjpPl55joEPVI
-        WE53kOXPflazVfEgd8BbKerHq4/KseZZOPO+VJfL+A3ob1MbA0I5w5MSqEXFeYrl
-        ydmcsZ2V7Scisq+aH2ZZ5f4mN2UiI0Ap5xnJxIud1qlN2gN4zan+fWkmLhPYctAE
-        32TJBqvLB6Ejx+L2DY27g9L85fPdoMa4v4MsNB2ojr+k6SBzvdZi3Qh0gU0WwasT
-        9FQcReC5HItTaEY9HczcXJI3AM1lfUM3n2EYaEwQFUyQAQC2z3LjsVzBjO8BQMQU
-        emOBVIIz5UiGcw1FIvspQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding
-        :content-type:date:date:feedback-id:feedback-id:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
-        :x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=1657175434; x=
-        1657261834; bh=TJIn1V9ic4c6ApTfvv5dVrRd3t/GgxV3Sqp0Eq+6r2g=; b=H
-        jz8B7KLzbG2MiX/JJiPW0Ecv8YH9Fx+7bBEcpdtIFAJeOtRMStgSwhNJrJjeO7qA
-        4ZNu2CGNf150HlgJ0fEAd0vVV+4azEPquXHaokXrbttlRvKwxVvW4hIptjREGrFe
-        9kC+BdJ2bR4nfVI8mo4rQMlQk+ga4LGYGOxx9q0lb3XHdOXcjCXZqDCDjD47HKhL
-        6ZZDoTpvoJ9+MrP1wRoHIQD8TuUOG4WefSVt0M+Z4GmEJngBAIjuGyDKTCSg1xVA
-        DHE2q4h4zcGJXVCCAkCOEUSsquragbcZMm7pXCgrEQjmuYwBMbciYZhRXrTXOKWS
-        Gw/iDGGEdnEMjJcJYWluQ==
-X-ME-Sender: <xms:iX3GYtUbQ8sSCWKMsyk1ZiyCOdH1oc2iU4gzaybbpkZzD3j24n9QfA>
-    <xme:iX3GYtlT5nx4ARJxb2hJwi0SI5vB0jPfmRbWiWCXf_MOUfOWrnjX_c-9G0GYBI5au
-    RjPsb4OCEMYjgDEIQ>
-X-ME-Received: <xmr:iX3GYpYB044yJcwFqElkFhRn_E92_-h3lZntpCMcUOD4Prci6mcf1Z6Bt_p2favjuf5svEuQLlyf1QEU6dVY3xeKYbIOTMak7MnvYg4gmwNApGyzXqZImPx-4g>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrudeigedguddutdcutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enucfjughrpefuvfevfhfhkffffgggjggtgfesthejredttdefjeenucfhrhhomhepufgr
-    mhhuvghlucfjohhllhgrnhguuceoshgrmhhuvghlsehshhholhhlrghnugdrohhrgheqne
-    cuggftrfgrthhtvghrnhepffdtveekvdegkeeuueetgfetffeileevudekuefhheelvdfh
-    iedtheduhfduhefhnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilh
-    hfrhhomhepshgrmhhuvghlsehshhholhhlrghnugdrohhrgh
-X-ME-Proxy: <xmx:iX3GYgXdbzLv5yFKKcNEbjuVMdxFf6HwoPgTbeokPRJV44xgHKq7ww>
-    <xmx:iX3GYnldE02U6d-KTR5G7LE5l8ADzjA0YNOgZKirRFT3A6FuOAbpMQ>
-    <xmx:iX3GYtcerNFQGAyI0Adpuo10lgp1O8s4iVjw-FnElFoLi_Ffn_NZFg>
-    <xmx:in3GYp57PRmOH0nBgDQTexj1gKo512VSuiQiX8DXDGGn4tqse8dA8A>
-Feedback-ID: i0ad843c9:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
- 7 Jul 2022 02:30:33 -0400 (EDT)
-Subject: Re: [PATCH v11 3/6] arm64: dts: allwinner: Add Allwinner H616 .dtsi
- file
-To:     Andre Przywara <andre.przywara@arm.com>,
-        =?UTF-8?Q?Jernej_=c5=a0krabec?= <jernej.skrabec@gmail.com>
-Cc:     Chen-Yu Tsai <wens@csie.org>, Rob Herring <robh@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Icenowy Zheng <icenowy@aosc.io>,
-        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220428230933.15262-1-andre.przywara@arm.com>
- <22699277.6Emhk5qWAg@kista> <20220704225534.3e1a901a@slackpad.lan>
- <5278570.Sb9uPGUboI@kista>
- <20220706141655.15d2dd0e@donnerap.cambridge.arm.com>
-From:   Samuel Holland <samuel@sholland.org>
-Message-ID: <39537f95-2ed4-f526-5912-364c1c1ed512@sholland.org>
-Date:   Thu, 7 Jul 2022 01:30:32 -0500
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.6.0
+        Thu, 7 Jul 2022 02:31:00 -0400
+Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1B831580C
+        for <linux-kernel@vger.kernel.org>; Wed,  6 Jul 2022 23:30:57 -0700 (PDT)
+Received: by mail-pf1-x42b.google.com with SMTP id y141so17420212pfb.7
+        for <linux-kernel@vger.kernel.org>; Wed, 06 Jul 2022 23:30:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=MO3ynSxTj8X1iCfAoxAy28PWw6GICyf08YG7/5qtXxo=;
+        b=lf23X0U7EUSaU+TM9HkurbaRi3vg/9BZwKnU+DUtKR7xnUl9Owo5QqLWDp2vmH6oYA
+         XD6y6VZfwvKBsojd4boZ5Hjj9VPJbGv2OojAJkY9Ev8BwvDDTD0NkhxIWac/sJNRc3fN
+         18vrosz+1HAfjpiETu0BdEO4sS/5UFABQc6TRQX+yGQKaKLD5bnHFWwj3gXtJEOYSTgl
+         zcAUODlHbga0lOVLfQ+FjcPYPyWZa9FHD2tkwcjP8symTsN4oOkJgW7hfjcincW9uMwd
+         M7ZhF9E2u/pLCNYzx41fEH5u9gfMCettPloj5PbQh97m/3oZnwVx91WaWkii69tv+YNx
+         wSvQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=MO3ynSxTj8X1iCfAoxAy28PWw6GICyf08YG7/5qtXxo=;
+        b=KzwYkOwjhlEY+PdeaHGBfNRy9MQMXTpjjipJioINkM8gWhmQStw9zUUzCm5XGvEEP6
+         b7R32lEOOCcEncuDHLeZtjAHUHbZStSe4doOmEZ/y+EAEFIXGmtOtsSYyBri2BVMKdmN
+         fs0kY7vE/cQcI0XQzmwSSkA2gKyKfgHQBrIL8I5yH2jS/UmnAgek+/3lIDlWxkmNk5Tz
+         eS1HRtmX7YgFS4QH7mD9WTsObkYswU8IMfaBSHvJixMB6rSQv1mtG9gtGHvT3bADRts2
+         aCw/YZzsvrUPafo/MH7VtHOA7ppvgqije2CRMwNF0SRetvFcY0B5eFylB+X3hBpUd1Jv
+         32ag==
+X-Gm-Message-State: AJIora823eJl6pw7xhqAdHjmOvx44vBkV/XWQYMae9kxO9clMexia/Mm
+        gUmDIAj+AU9H3hN2iWp/owE=
+X-Google-Smtp-Source: AGRyM1vasxVFHOLUeQxCZwevdQZD9p7H2SSgtk/WNZE+n7hPzwBJu8mmJ5/o3U+kl4qUSdYTUW22UQ==
+X-Received: by 2002:a17:903:2445:b0:16a:32da:cc9 with SMTP id l5-20020a170903244500b0016a32da0cc9mr51440461pls.148.1657175457406;
+        Wed, 06 Jul 2022 23:30:57 -0700 (PDT)
+Received: from octofox.hsd1.ca.comcast.net ([2601:641:401:1d20:a3e3:ea8c:2267:a237])
+        by smtp.gmail.com with ESMTPSA id a140-20020a621a92000000b005289fbef7c4sm3317798pfa.140.2022.07.06.23.30.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 06 Jul 2022 23:30:57 -0700 (PDT)
+From:   Max Filippov <jcmvbkbc@gmail.com>
+To:     linux-xtensa@linux-xtensa.org
+Cc:     Chris Zankel <chris@zankel.net>, linux-kernel@vger.kernel.org,
+        Max Filippov <jcmvbkbc@gmail.com>
+Subject: [PATCH] xtensa: iss/network: drop 'devices' list
+Date:   Wed,  6 Jul 2022 23:30:55 -0700
+Message-Id: <20220707063055.3463190-1-jcmvbkbc@gmail.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-In-Reply-To: <20220706141655.15d2dd0e@donnerap.cambridge.arm.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=0.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        FROM_LOCAL_NOVOWEL,HK_RANDOM_ENVFROM,HK_RANDOM_FROM,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -96,37 +69,89 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Andre, Jernej,
+There are two per-device lists in the ISS network driver: command line
+parameters list and iss_net_private object list. The latter is only used
+for duplicate checking in the function iss_net_setup where the former
+should have been used.
+Drop iss_net_private object list and associated code and use command
+line parameters list in the iss_net_setup instead.
 
-On 7/6/22 8:16 AM, Andre Przywara wrote:
-> so after seemingly having finished writing this email, I realised that
-> this won't really help, as I think this diverts the discussion. And the
-> problem has been around for a while, and won't probably be solved easily
-> or quickly. I think we agree to disagree here, or we should admit that
-> there are different approaches ("bundled firmware" vs. "UEFI"), so in the
-> interest of not blocking the H616 series:
-> 
-> Shall I just keep the firmware node? This would work both ways, whereas
-> dropping the node would impede the "bundled firmware" approach?
+Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
+---
+ arch/xtensa/platforms/iss/network.c | 21 +++------------------
+ 1 file changed, 3 insertions(+), 18 deletions(-)
 
-Let me try to sum up the relevant portion of my thoughts (and save the rest for
-elsewhere):
+diff --git a/arch/xtensa/platforms/iss/network.c b/arch/xtensa/platforms/iss/network.c
+index fd84d4891758..2d566231688f 100644
+--- a/arch/xtensa/platforms/iss/network.c
++++ b/arch/xtensa/platforms/iss/network.c
+@@ -37,10 +37,6 @@
+ #define ETH_HEADER_OTHER 14
+ #define ISS_NET_TIMER_VALUE (HZ / 10)
+ 
+-
+-static DEFINE_SPINLOCK(devices_lock);
+-static LIST_HEAD(devices);
+-
+ /* ------------------------------------------------------------------------- */
+ 
+ /* We currently only support the TUNTAP transport protocol. */
+@@ -70,8 +66,6 @@ struct iss_net_ops {
+ /* This structure contains out private information for the driver. */
+ 
+ struct iss_net_private {
+-	struct list_head device_list;
+-
+ 	spinlock_t lock;
+ 	struct net_device *dev;
+ 	struct platform_device pdev;
+@@ -488,7 +482,6 @@ static int iss_net_configure(int index, char *init)
+ 
+ 	lp = netdev_priv(dev);
+ 	*lp = (struct iss_net_private) {
+-		.device_list		= LIST_HEAD_INIT(lp->device_list),
+ 		.dev			= dev,
+ 		.index			= index,
+ 	};
+@@ -521,10 +514,6 @@ static int iss_net_configure(int index, char *init)
+ 		driver_registered = 1;
+ 	}
+ 
+-	spin_lock(&devices_lock);
+-	list_add(&lp->device_list, &devices);
+-	spin_unlock(&devices_lock);
+-
+ 	lp->pdev.id = index;
+ 	lp->pdev.name = DRIVER_NAME;
+ 	platform_device_register(&lp->pdev);
+@@ -574,7 +563,7 @@ struct iss_net_init {
+ 
+ static int __init iss_net_setup(char *str)
+ {
+-	struct iss_net_private *device = NULL;
++	struct iss_net_init *device = NULL;
+ 	struct iss_net_init *new;
+ 	struct list_head *ele;
+ 	char *end;
+@@ -595,16 +584,12 @@ static int __init iss_net_setup(char *str)
+ 	}
+ 	str = end;
+ 
+-	spin_lock(&devices_lock);
+-
+-	list_for_each(ele, &devices) {
+-		device = list_entry(ele, struct iss_net_private, device_list);
++	list_for_each(ele, &eth_cmd_line) {
++		device = list_entry(ele, struct iss_net_init, list);
+ 		if (device->index == n)
+ 			break;
+ 	}
+ 
+-	spin_unlock(&devices_lock);
+-
+ 	if (device && device->index == n) {
+ 		pr_err("Device %u already configured\n", n);
+ 		return 1;
+-- 
+2.30.2
 
-The only reason to add the reserved-memory node is to support externally-loaded
-DTBs. By adding the node, we are committing to support externally-loaded DTBs on
-this SoC.
-
-Upgrading the kernel is not allowed to break boot. If we support
-externally-loaded DTBs, that rule extends to DTBs shipped with the kernel.
-
-If we remove the reserved-memory node, the combination of old U-Boot + new
-externally-loaded DTB will stop booting (the kernel version is irrelevant).
-Therefore, if we add the node, we can never remove it, full stop.
-
-I will (begrudgingly) accept that, as long as the node matches what TF-A
-actually generates today. That means, please:
- - Drop the label and update the node name
- - Reduce the size to 256 KiB, matching (BL31_LIMIT - BL31_BASE)
-
-Regards,
-Samuel

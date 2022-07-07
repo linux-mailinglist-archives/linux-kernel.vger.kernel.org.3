@@ -2,79 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E5F38569EBF
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 11:43:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4DB19569E93
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 11:31:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233281AbiGGJnE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Jul 2022 05:43:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45808 "EHLO
+        id S234443AbiGGJbH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Jul 2022 05:31:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38008 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233783AbiGGJnC (ORCPT
+        with ESMTP id S229951AbiGGJbF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Jul 2022 05:43:02 -0400
-X-Greylist: delayed 950 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 07 Jul 2022 02:43:01 PDT
-Received: from baidu.com (mx20.baidu.com [111.202.115.85])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A1B244D144
-        for <linux-kernel@vger.kernel.org>; Thu,  7 Jul 2022 02:43:01 -0700 (PDT)
-Received: from BJHW-Mail-Ex06.internal.baidu.com (unknown [10.127.64.16])
-        by Forcepoint Email with ESMTPS id E9EBBC9604B2142022AB;
-        Thu,  7 Jul 2022 17:27:08 +0800 (CST)
-Received: from bjkjy-mail-ex25.internal.baidu.com (172.31.50.41) by
- BJHW-Mail-Ex06.internal.baidu.com (10.127.64.16) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
- 15.1.2308.20; Thu, 7 Jul 2022 17:27:10 +0800
-Received: from BC-Mail-Ex25.internal.baidu.com (172.31.51.19) by
- bjkjy-mail-ex25.internal.baidu.com (172.31.50.41) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
- 15.1.2375.18; Thu, 7 Jul 2022 17:27:10 +0800
-Received: from BC-Mail-Ex25.internal.baidu.com ([172.31.51.19]) by
- BC-Mail-Ex25.internal.baidu.com ([172.31.51.19]) with mapi id 15.01.2308.020;
- Thu, 7 Jul 2022 17:27:10 +0800
-From:   "Wang,Guangju" <wangguangju@baidu.com>
-To:     Vitaly Kuznetsov <vkuznets@redhat.com>
-CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "seanjc@google.com" <seanjc@google.com>,
-        "pbonzini@redhat.com" <pbonzini@redhat.com>,
-        "jmattson@google.com" <jmattson@google.com>,
-        "wanpengli@tencent.com" <wanpengli@tencent.com>,
-        "bp@alien8.de" <bp@alien8.de>, "joro@8bytes.org" <joro@8bytes.org>,
-        "suravee.suthikulpanit@amd.com" <suravee.suthikulpanit@amd.com>,
-        "hpa@zytor.com" <hpa@zytor.com>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>
-Subject: =?gb2312?B?tPC4tDogW1BBVENIXSBLVk06IHg4NjogQWRkIEVPSSBleGl0IGJpdG1hcCBo?=
- =?gb2312?Q?andlers_for_Hyper-V_SynIC_vectors?=
-Thread-Topic: [PATCH] KVM: x86: Add EOI exit bitmap handlers for Hyper-V SynIC
- vectors
-Thread-Index: AQHYkEqBPHzJhkwNOk28KoTifs6bBK1yD/EAgACVoCA=
-Date:   Thu, 7 Jul 2022 09:27:10 +0000
-Message-ID: <4ba5a5a28a284f379b0f7832e20d1458@baidu.com>
-References: <20220705083732.168-1-wangguangju@baidu.com>
- <87v8s9qqen.fsf@redhat.com>
-In-Reply-To: <87v8s9qqen.fsf@redhat.com>
-Accept-Language: zh-CN, en-US
-Content-Language: zh-CN
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [172.22.192.211]
-Content-Type: text/plain; charset="gb2312"
-Content-Transfer-Encoding: base64
+        Thu, 7 Jul 2022 05:31:05 -0400
+Received: from aposti.net (aposti.net [89.234.176.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED1AE33E04;
+        Thu,  7 Jul 2022 02:31:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
+        s=mail; t=1657186262; h=from:from:sender:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=3432oYUbB0NCbGzcaiDe7Zz5ohhG6Uoy9WG/btVsu7A=;
+        b=JtBdqbQGB661DJdFRqmt6kAQ1SROsa6wGDALoANOgBdiRAomxlU2IucnqCUihPqEtfIJmC
+        JMFLR0QwG9OjtAxsdBjEzmmZfgI1AdPXq3yS6K2bYCDsqeDtHGKebsQvudbQwBuYlL4GHT
+        kdoqEDR72JweoTDsQMMhimpdx1obwaU=
+Date:   Thu, 07 Jul 2022 10:30:51 +0100
+From:   Paul Cercueil <paul@crapouillou.net>
+Subject: Re: [PATCH 02/11] ASoC: jz4740-i2s: Refactor DMA channel setup
+To:     Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
+Cc:     lgirdwood@gmail.com, broonie@kernel.org, perex@perex.cz,
+        tiwai@suse.com, linux-mips@vger.kernel.org,
+        alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org
+Message-Id: <F39NER.PND5B77O5GFP@crapouillou.net>
+In-Reply-To: <20220706211330.120198-3-aidanmacdonald.0x0@gmail.com>
+References: <20220706211330.120198-1-aidanmacdonald.0x0@gmail.com>
+        <20220706211330.120198-3-aidanmacdonald.0x0@gmail.com>
 MIME-Version: 1.0
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1; format=flowed
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-PiBUaGlzIHdob2xlIHBhcnQ6DQo+DQo+IAlpZiAodG9faHZfdmNwdShhcGljLT52Y3B1KSAmJg0K
-PgkgICAgdGVzdF9iaXQodmVjdG9yLCB0b19odl9zeW5pYyhhcGljLT52Y3B1KS0+dmVjX2JpdG1h
-cCkpDQo+CQlrdm1faHZfc3luaWNfc2VuZF9lb2koYXBpYy0+dmNwdSwgdmVjdG9yKTsNCj4NCj4J
-a3ZtX2lvYXBpY19zZW5kX2VvaShhcGljLCB2ZWN0b3IpOw0KPglrdm1fbWFrZV9yZXF1ZXN0KEtW
-TV9SRVFfRVZFTlQsIGFwaWMtPnZjcHUpOw0KDQo+IGNvdWxkIGJlIHNwbGl0IGludG8gYW4gaW5s
-aW5lIGZ1bmN0aW9uLCBzb21ldGhpbmcgbGlrZSAoY29tcGxldGVseQ0KPiB1bnRlc3RlZCk6DQoN
-ClRoYW5rIHlvdSwgSSB3aWxsIG1vZGlmeSBhbmQgdGVzdCBpdCBhbmQgdGhlbiBzZW5kIGEgbmV3
-IHBhdGNoLg0KDQotLQ0KV2FuZw0K
+
+
+Le mer., juil. 6 2022 at 22:13:21 +0100, Aidan MacDonald=20
+<aidanmacdonald.0x0@gmail.com> a =E9crit :
+> It's simpler to set up the playback and capture DMA settings
+> at driver probe time instead of during DAI probing.
+>=20
+> Signed-off-by: Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
+> ---
+>  sound/soc/jz4740/jz4740-i2s.c | 23 +++++------------------
+>  1 file changed, 5 insertions(+), 18 deletions(-)
+>=20
+> diff --git a/sound/soc/jz4740/jz4740-i2s.c=20
+> b/sound/soc/jz4740/jz4740-i2s.c
+> index 298ff0a83931..ecd8df70d39c 100644
+> --- a/sound/soc/jz4740/jz4740-i2s.c
+> +++ b/sound/soc/jz4740/jz4740-i2s.c
+> @@ -95,7 +95,6 @@ struct i2s_soc_info {
+>  struct jz4740_i2s {
+>  	struct resource *mem;
+>  	void __iomem *base;
+> -	dma_addr_t phys_base;
+
+Acked-by: Paul Cercueil <paul@crapouillou.net>
+
+Note that you can remove "mem" too, it's not used anywhere.
+
+Cheers,
+-Paul
+
+>=20
+>  	struct clk *clk_aic;
+>  	struct clk *clk_i2s;
+> @@ -370,21 +369,6 @@ static int jz4740_i2s_resume(struct=20
+> snd_soc_component *component)
+>  	return 0;
+>  }
+>=20
+> -static void jz4740_i2s_init_pcm_config(struct jz4740_i2s *i2s)
+> -{
+> -	struct snd_dmaengine_dai_dma_data *dma_data;
+> -
+> -	/* Playback */
+> -	dma_data =3D &i2s->playback_dma_data;
+> -	dma_data->maxburst =3D 16;
+> -	dma_data->addr =3D i2s->phys_base + JZ_REG_AIC_FIFO;
+> -
+> -	/* Capture */
+> -	dma_data =3D &i2s->capture_dma_data;
+> -	dma_data->maxburst =3D 16;
+> -	dma_data->addr =3D i2s->phys_base + JZ_REG_AIC_FIFO;
+> -}
+> -
+>  static int jz4740_i2s_dai_probe(struct snd_soc_dai *dai)
+>  {
+>  	struct jz4740_i2s *i2s =3D snd_soc_dai_get_drvdata(dai);
+> @@ -395,7 +379,6 @@ static int jz4740_i2s_dai_probe(struct=20
+> snd_soc_dai *dai)
+>  	if (ret)
+>  		return ret;
+>=20
+> -	jz4740_i2s_init_pcm_config(i2s);
+>  	snd_soc_dai_init_dma_data(dai, &i2s->playback_dma_data,
+>  		&i2s->capture_dma_data);
+>=20
+> @@ -529,7 +512,11 @@ static int jz4740_i2s_dev_probe(struct=20
+> platform_device *pdev)
+>  	if (IS_ERR(i2s->base))
+>  		return PTR_ERR(i2s->base);
+>=20
+> -	i2s->phys_base =3D mem->start;
+> +	i2s->playback_dma_data.maxburst =3D 16;
+> +	i2s->playback_dma_data.addr =3D mem->start + JZ_REG_AIC_FIFO;
+> +
+> +	i2s->capture_dma_data.maxburst =3D 16;
+> +	i2s->capture_dma_data.addr =3D mem->start + JZ_REG_AIC_FIFO;
+>=20
+>  	i2s->clk_aic =3D devm_clk_get(dev, "aic");
+>  	if (IS_ERR(i2s->clk_aic))
+> --
+> 2.35.1
+>=20
+
+

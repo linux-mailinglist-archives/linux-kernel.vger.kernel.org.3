@@ -2,121 +2,207 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0032E56A1C4
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 14:13:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6BB2656A1C7
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 14:14:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235020AbiGGMN3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Jul 2022 08:13:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48194 "EHLO
+        id S235189AbiGGMOl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Jul 2022 08:14:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49484 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231343AbiGGMN1 (ORCPT
+        with ESMTP id S235105AbiGGMOi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Jul 2022 08:13:27 -0400
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E30D65721A;
-        Thu,  7 Jul 2022 05:13:22 -0700 (PDT)
-Received: from mail-yw1-f177.google.com ([209.85.128.177]) by
- mrelayeu.kundenserver.de (mreue010 [213.165.67.97]) with ESMTPSA (Nemesis) id
- 1MHXWL-1oMwu94Ak5-00DVYb; Thu, 07 Jul 2022 14:13:21 +0200
-Received: by mail-yw1-f177.google.com with SMTP id 00721157ae682-317a66d62dfso167940137b3.7;
-        Thu, 07 Jul 2022 05:13:20 -0700 (PDT)
-X-Gm-Message-State: AJIora8CQlfh5jzBkohQCquTnvDQtwpNZZ/PLumOtErfs0nKblNAkwTG
-        h5MvPjdU8EPWAaXI3o/N4/cmr2oTfcTdtcwEfFo=
-X-Google-Smtp-Source: AGRyM1tV/DrF7ycXM3ug40hQQx3lr8bWg0MpBEk4G23+AfClxifxNOoCzy63rJK/JM88aL8UcFxTAzCzt8zqWWCvBBY=
-X-Received: by 2002:a81:f82:0:b0:31c:f1ae:1ed6 with SMTP id
- 124-20020a810f82000000b0031cf1ae1ed6mr8719242ywp.249.1657195999598; Thu, 07
- Jul 2022 05:13:19 -0700 (PDT)
+        Thu, 7 Jul 2022 08:14:38 -0400
+Received: from mx0b-0016f401.pphosted.com (mx0b-0016f401.pphosted.com [67.231.156.173])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EEE6C25E6;
+        Thu,  7 Jul 2022 05:14:37 -0700 (PDT)
+Received: from pps.filterd (m0045851.ppops.net [127.0.0.1])
+        by mx0b-0016f401.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 2674EkJa017917;
+        Thu, 7 Jul 2022 05:14:33 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=marvell.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-type; s=pfpt0220;
+ bh=yPFjesdZy7X4+sh1Kq/hbhR4pEK2RDD1VNTtaQfmEUQ=;
+ b=ZrVItwYHI7bw4fAX8DcqKGm2bEJxwUZMr/5MT6aOYd7s7Gl0AjYmyAf4fvGE7EilSbjS
+ phVLcK8QOH5DWhWDfdwFoDHS2EcWXBJBQo3pbiwBKuiDuO9UFpzOU+68G7vm4BoWxJNi
+ uqYFHL2Wk0ruV2T4dAklhBEiDPx4jOs1xqVuvSW1V5CLZerigIph9hWs30dYsTJ5Hdzg
+ HGSPklcB9yRsBm7cVtFfhe7EVIzT55sCt7ivGhy4sbqpyF65Tqcgocsy1K6xR0GXnyVK
+ J5eZS/rHxRIUbif1TRMyxPIkEncpanZAb79rUYoPrI8eVYEbdRPQpeg0NErncOpNe7qy 1g== 
+Received: from dc5-exch02.marvell.com ([199.233.59.182])
+        by mx0b-0016f401.pphosted.com (PPS) with ESMTPS id 3h56wt5n78-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT);
+        Thu, 07 Jul 2022 05:14:33 -0700
+Received: from DC5-EXCH02.marvell.com (10.69.176.39) by DC5-EXCH02.marvell.com
+ (10.69.176.39) with Microsoft SMTP Server (TLS) id 15.0.1497.18; Thu, 7 Jul
+ 2022 05:14:31 -0700
+Received: from maili.marvell.com (10.69.176.80) by DC5-EXCH02.marvell.com
+ (10.69.176.39) with Microsoft SMTP Server id 15.0.1497.18 via Frontend
+ Transport; Thu, 7 Jul 2022 05:14:30 -0700
+Received: from hyd1soter3.marvell.com (unknown [10.29.37.12])
+        by maili.marvell.com (Postfix) with ESMTP id 404ED3F707B;
+        Thu,  7 Jul 2022 05:14:28 -0700 (PDT)
+From:   Hariprasad Kelam <hkelam@marvell.com>
+To:     <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+CC:     <kuba@kernel.org>, <davem@davemloft.net>, <sgoutham@marvell.com>,
+        <lcherian@marvell.com>, <gakula@marvell.com>, <jerinj@marvell.com>,
+        <sbhatta@marvell.com>
+Subject: [net-next PATCH] octeontx2-af: Don't reset previous pfc config
+Date:   Thu, 7 Jul 2022 17:44:27 +0530
+Message-ID: <20220707121427.21123-1-hkelam@marvell.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-References: <CAK8P3a12-atmqjtjqi-RhFXH2Kwa-hxYcxy3Ftz2YjY5yyPHqg@mail.gmail.com>
- <mhng-f5938c9b-7fc1-4b0c-9449-7dd1431f5446@palmerdabbelt-glaptop> <CAKXUXMzpWsdKYbcu5MxvrAEMLHv4_2OGv2bRYEsQaze5trUSiQ@mail.gmail.com>
-In-Reply-To: <CAKXUXMzpWsdKYbcu5MxvrAEMLHv4_2OGv2bRYEsQaze5trUSiQ@mail.gmail.com>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Thu, 7 Jul 2022 14:13:02 +0200
-X-Gmail-Original-Message-ID: <CAK8P3a32m42gT9qz+Ldvr8okYGOc=kKeoJTGNWyYT71N8tJfEA@mail.gmail.com>
-Message-ID: <CAK8P3a32m42gT9qz+Ldvr8okYGOc=kKeoJTGNWyYT71N8tJfEA@mail.gmail.com>
-Subject: Re: [PATCH] asm-generic: correct reference to GENERIC_LIB_DEVMEM_IS_ALLOWED
-To:     Lukas Bulwahn <lukas.bulwahn@gmail.com>
-Cc:     Palmer Dabbelt <palmerdabbelt@google.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        kernel-janitors <kernel-janitors@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:y52jjYOeb8evCJVCb5GPlS8PD3mNk7Rl/98+o9yukeYkRQmbpvw
- ix5q9v9/qPmrzHFoc4szA2n5Nwqrt2jtQzoFaD3RvO9nn/Jum2GdQHZFDBUohnq5JvnC9f8
- uLIlczj4Y9SsfAF+yG6m5wfDm/3fxm+SFhRx+6a5T0bWQS0J+Uf2ETppa8c0nJjQVGTaSvE
- iQrvZE1HxvxSoPXzKG88A==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:izA6gWP3DDQ=:4/Ax1o5QZ1i74hAOv3jMfN
- SI2GsWbL4XI9xYsiIk4/dcHrPRdXz3F//fh7kiijBjnt5pxpoYvFeukfs574SSjkNG2TuXadf
- pvulI1yKVzFS7E8jbzmbf5/OWuoRLvewRWhTSpyFMcRtZHA217dW9/ImnA5qkN44iMGsoPcPc
- 77i7n+V4di2PZ3wFP2gBADcExaAXUxRCLh+z9ix0/tpKZ/gV41Zz/gl1T6dV+0cD+Ca5zpcNr
- NfEToICEBmshRxpICf0keZaCHmhLXun5SD/7i8Nwrc53tyDdyhO5GVh2hp3gK74/g0dzqLdvC
- CLy50aYdZ194D/UAjxZE6sP3OdWWXEDqs1SxxqV8yK0XWpxuhWtgDEZp4yH57bd7y0yb+uCLL
- ZLLzEN6+nm/kA8OI3aLGPjDYoAdPsIcQfErZXZD1i2BcwMXPwaEdVYuQbpZ293WKBo2CTuG3m
- IQ+ryzTug5Moq3tDVi9M28ofqbCqWW+5ftQbtJnQOE8fdbWf6WTE451SytS5z5wgtvGwT8O0W
- 7u8rfnWX8rIl9tdZS9Yo2QgzrNi74isPCpYeGp70XnCs5/IZHkzGAGO3L17RJnKlbcyn9N7Yb
- IWpnxqECb6bIicuA6ulBKmioil9zIIxZ5zejIvLxqWfU0wly2FPVgilm7d+rfsnihVHHiB8Mi
- +4BTG4Xt3EsddpgC4lQFD9xaaz4uG2fRBRsvMmPhOzsh00mgP+1ZblvY7O+27AXXpQdSuPsKn
- WuK9fVm0neJA90vx6Xr/rAUZkp+Wu0eQ7s8TgQ==
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Proofpoint-ORIG-GUID: ACyxyUYyQC7cJc8iNTZUxzeCP7glUMgH
+X-Proofpoint-GUID: ACyxyUYyQC7cJc8iNTZUxzeCP7glUMgH
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
+ definitions=2022-07-07_09,2022-06-28_01,2022-06-22_01
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jul 7, 2022 at 1:40 PM Lukas Bulwahn <lukas.bulwahn@gmail.com> wrote:
->
-> On Wed, Oct 6, 2021 at 6:52 PM Palmer Dabbelt <palmerdabbelt@google.com> wrote:
-> >
-> > On Wed, 06 Oct 2021 08:17:38 PDT (-0700), Arnd Bergmann wrote:
-> > > On Wed, Oct 6, 2021 at 5:00 PM Lukas Bulwahn <lukas.bulwahn@gmail.com> wrote:
-> > >>
-> > >> Commit 527701eda5f1 ("lib: Add a generic version of devmem_is_allowed()")
-> > >> introduces the config symbol GENERIC_LIB_DEVMEM_IS_ALLOWED, but then
-> > >> falsely refers to CONFIG_GENERIC_DEVMEM_IS_ALLOWED (note the missing LIB
-> > >> in the reference) in ./include/asm-generic/io.h.
-> > >>
-> > >> Luckily, ./scripts/checkkconfigsymbols.py warns on non-existing configs:
-> > >>
-> > >> GENERIC_DEVMEM_IS_ALLOWED
-> > >> Referencing files: include/asm-generic/io.h
-> > >>
-> > >> Correct the name of the config to the intended one.
-> > >>
-> > >> Fixes: 527701eda5f1 ("lib: Add a generic version of devmem_is_allowed()")
-> > >> Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
-> > >
-> > > Acked-by: Arnd Bergmann <arnd@arndb.de>
-> >
-> > Reviewed-by: Palmer Dabbelt <palmerdabbelt@google.com>
-> > Acked-by: Palmer Dabbelt <palmerdabbelt@google.com>
-> >
-> > Thanks.  I'm going to assume this is going in through some other tree,
-> > but IIUC I sent the buggy patch up so LMK if you're expecting it to go
-> > through mine.
->
-> Palmer, Arnd,
->
-> the patch in this mail thread got lost and was not picked up yet.
->
-> MAINTAINERS suggests that Arnd takes patches to include/asm-generic/,
-> since commit 1527aab617af ("asm-generic: list Arnd as asm-generic
-> maintainer") in 2009, but maybe the responsibility for those files has
-> actually moved on to somebody (or nobody) else and we just did not
-> record that yet in MAINTAINERS.
->
-> Arnd, will you pick this patch and provide it further to Linus Torvalds?
->
-> Otherwise, Palmer already suggested picking it up himself.
->
+Current implementation is such that driver first resets the
+existing PFC config before applying new pfc configuration.
+This creates a problem like once PF or VFs requests PFC config
+previous pfc config by other PFVfs is getting reset.
 
-I've applied it to the asm-generic tree and can send it as a bugfix
-pull request. I don't have any other fixer for that branch at the moment,
-so if Palmer has other fixes for the riscv tree already, it would
-save me making a pull request if he picks it up there.
+This patch fixes the problem by removing unnecessary resetting
+of PFC config. Also configure Pause quanta value to smaller as
+current value is too high.
 
-       Arnd
+Signed-off-by: Hariprasad Kelam <hkelam@marvell.com>
+Signed-off-by: Sunil Kovvuri Goutham <sgoutham@marvell.com>
+---
+ .../net/ethernet/marvell/octeontx2/af/cgx.c    | 15 +++++++++++----
+ .../net/ethernet/marvell/octeontx2/af/rpm.c    | 18 +++++++++++-------
+ .../net/ethernet/marvell/octeontx2/af/rpm.h    |  3 +--
+ 3 files changed, 23 insertions(+), 13 deletions(-)
+
+diff --git a/drivers/net/ethernet/marvell/octeontx2/af/cgx.c b/drivers/net/ethernet/marvell/octeontx2/af/cgx.c
+index 25491edc35ce..931a1a7ebf76 100644
+--- a/drivers/net/ethernet/marvell/octeontx2/af/cgx.c
++++ b/drivers/net/ethernet/marvell/octeontx2/af/cgx.c
+@@ -847,6 +847,11 @@ static void cgx_lmac_pause_frm_config(void *cgxd, int lmac_id, bool enable)
+ 	cfg |= CGX_CMR_RX_OVR_BP_EN(lmac_id);
+ 	cfg &= ~CGX_CMR_RX_OVR_BP_BP(lmac_id);
+ 	cgx_write(cgx, 0, CGXX_CMR_RX_OVR_BP, cfg);
++
++	/* Disable all PFC classes by default */
++	cfg = cgx_read(cgx, lmac_id, CGXX_SMUX_CBFC_CTL);
++	cfg = FIELD_SET(CGX_PFC_CLASS_MASK, 0, cfg);
++	cgx_write(cgx, lmac_id, CGXX_SMUX_CBFC_CTL, cfg);
+ }
+ 
+ int verify_lmac_fc_cfg(void *cgxd, int lmac_id, u8 tx_pause, u8 rx_pause,
+@@ -899,6 +904,7 @@ int cgx_lmac_pfc_config(void *cgxd, int lmac_id, u8 tx_pause,
+ 		return 0;
+ 
+ 	cfg = cgx_read(cgx, lmac_id, CGXX_SMUX_CBFC_CTL);
++	pfc_en |= FIELD_GET(CGX_PFC_CLASS_MASK, cfg);
+ 
+ 	if (rx_pause) {
+ 		cfg |= (CGXX_SMUX_CBFC_CTL_RX_EN |
+@@ -910,12 +916,13 @@ int cgx_lmac_pfc_config(void *cgxd, int lmac_id, u8 tx_pause,
+ 			CGXX_SMUX_CBFC_CTL_DRP_EN);
+ 	}
+ 
+-	if (tx_pause)
++	if (tx_pause) {
+ 		cfg |= CGXX_SMUX_CBFC_CTL_TX_EN;
+-	else
++		cfg = FIELD_SET(CGX_PFC_CLASS_MASK, pfc_en, cfg);
++	} else {
+ 		cfg &= ~CGXX_SMUX_CBFC_CTL_TX_EN;
+-
+-	cfg = FIELD_SET(CGX_PFC_CLASS_MASK, pfc_en, cfg);
++		cfg = FIELD_SET(CGX_PFC_CLASS_MASK, 0, cfg);
++	}
+ 
+ 	cgx_write(cgx, lmac_id, CGXX_SMUX_CBFC_CTL, cfg);
+ 
+diff --git a/drivers/net/ethernet/marvell/octeontx2/af/rpm.c b/drivers/net/ethernet/marvell/octeontx2/af/rpm.c
+index 47e83d7a5804..05666922a45b 100644
+--- a/drivers/net/ethernet/marvell/octeontx2/af/rpm.c
++++ b/drivers/net/ethernet/marvell/octeontx2/af/rpm.c
+@@ -276,6 +276,11 @@ void rpm_lmac_pause_frm_config(void *rpmd, int lmac_id, bool enable)
+ 	cfg = rpm_read(rpm, lmac_id, RPMX_MTI_MAC100X_COMMAND_CONFIG);
+ 	cfg |= RPMX_MTI_MAC100X_COMMAND_CONFIG_TX_P_DISABLE;
+ 	rpm_write(rpm, lmac_id, RPMX_MTI_MAC100X_COMMAND_CONFIG, cfg);
++
++	/* Disable all PFC classes */
++	cfg = rpm_read(rpm, lmac_id, RPMX_CMRX_PRT_CBFC_CTL);
++	cfg = FIELD_SET(RPM_PFC_CLASS_MASK, 0, cfg);
++	rpm_write(rpm, lmac_id, RPMX_CMRX_PRT_CBFC_CTL, cfg);
+ }
+ 
+ int rpm_get_rx_stats(void *rpmd, int lmac_id, int idx, u64 *rx_stat)
+@@ -387,15 +392,14 @@ void rpm_lmac_ptp_config(void *rpmd, int lmac_id, bool enable)
+ int rpm_lmac_pfc_config(void *rpmd, int lmac_id, u8 tx_pause, u8 rx_pause, u16 pfc_en)
+ {
+ 	rpm_t *rpm = rpmd;
+-	u64 cfg;
++	u64 cfg, class_en;
+ 
+ 	if (!is_lmac_valid(rpm, lmac_id))
+ 		return -ENODEV;
+ 
+-	/* reset PFC class quanta and threshold */
+-	rpm_cfg_pfc_quanta_thresh(rpm, lmac_id, 0xffff, false);
+-
+ 	cfg = rpm_read(rpm, lmac_id, RPMX_MTI_MAC100X_COMMAND_CONFIG);
++	class_en = rpm_read(rpm, lmac_id, RPMX_CMRX_PRT_CBFC_CTL);
++	pfc_en |= FIELD_GET(RPM_PFC_CLASS_MASK, class_en);
+ 
+ 	if (rx_pause) {
+ 		cfg &= ~(RPMX_MTI_MAC100X_COMMAND_CONFIG_RX_P_DISABLE |
+@@ -410,9 +414,11 @@ int rpm_lmac_pfc_config(void *rpmd, int lmac_id, u8 tx_pause, u8 rx_pause, u16 p
+ 	if (tx_pause) {
+ 		rpm_cfg_pfc_quanta_thresh(rpm, lmac_id, pfc_en, true);
+ 		cfg &= ~RPMX_MTI_MAC100X_COMMAND_CONFIG_TX_P_DISABLE;
++		class_en = FIELD_SET(RPM_PFC_CLASS_MASK, pfc_en, class_en);
+ 	} else {
+ 		rpm_cfg_pfc_quanta_thresh(rpm, lmac_id, 0xfff, false);
+ 		cfg |= RPMX_MTI_MAC100X_COMMAND_CONFIG_TX_P_DISABLE;
++		class_en = FIELD_SET(RPM_PFC_CLASS_MASK, 0, class_en);
+ 	}
+ 
+ 	if (!rx_pause && !tx_pause)
+@@ -422,9 +428,7 @@ int rpm_lmac_pfc_config(void *rpmd, int lmac_id, u8 tx_pause, u8 rx_pause, u16 p
+ 
+ 	rpm_write(rpm, lmac_id, RPMX_MTI_MAC100X_COMMAND_CONFIG, cfg);
+ 
+-	cfg = rpm_read(rpm, lmac_id, RPMX_CMRX_PRT_CBFC_CTL);
+-	cfg = FIELD_SET(RPM_PFC_CLASS_MASK, pfc_en, cfg);
+-	rpm_write(rpm, lmac_id, RPMX_CMRX_PRT_CBFC_CTL, cfg);
++	rpm_write(rpm, lmac_id, RPMX_CMRX_PRT_CBFC_CTL, class_en);
+ 
+ 	return 0;
+ }
+diff --git a/drivers/net/ethernet/marvell/octeontx2/af/rpm.h b/drivers/net/ethernet/marvell/octeontx2/af/rpm.h
+index 9ab8d49dd180..8205f2626f61 100644
+--- a/drivers/net/ethernet/marvell/octeontx2/af/rpm.h
++++ b/drivers/net/ethernet/marvell/octeontx2/af/rpm.h
+@@ -48,7 +48,6 @@
+ #define RPMX_MTI_MAC100X_CL1011_QUANTA_THRESH		0x8130
+ #define RPMX_MTI_MAC100X_CL1213_QUANTA_THRESH		0x8138
+ #define RPMX_MTI_MAC100X_CL1415_QUANTA_THRESH		0x8140
+-#define RPM_DEFAULT_PAUSE_TIME			0xFFFF
+ #define RPMX_CMR_RX_OVR_BP		0x4120
+ #define RPMX_CMR_RX_OVR_BP_EN(x)	BIT_ULL((x) + 8)
+ #define RPMX_CMR_RX_OVR_BP_BP(x)	BIT_ULL((x) + 4)
+@@ -70,7 +69,7 @@
+ #define RPMX_MTI_MAC100X_COMMAND_CONFIG_PAUSE_FWD              BIT_ULL(7)
+ #define RPMX_MTI_MAC100X_CL01_PAUSE_QUANTA              0x80A8
+ #define RPMX_MTI_MAC100X_CL89_PAUSE_QUANTA		0x8108
+-#define RPM_DEFAULT_PAUSE_TIME                          0xFFFF
++#define RPM_DEFAULT_PAUSE_TIME                          0x7FF
+ 
+ /* Function Declarations */
+ int rpm_get_nr_lmacs(void *rpmd);
+-- 
+2.17.1
+

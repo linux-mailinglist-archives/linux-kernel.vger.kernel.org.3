@@ -2,331 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BC71A56AE28
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 00:15:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DAF2E56AE34
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 00:17:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236533AbiGGWPI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Jul 2022 18:15:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44252 "EHLO
+        id S236672AbiGGWPV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Jul 2022 18:15:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44374 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236400AbiGGWPG (ORCPT
+        with ESMTP id S236566AbiGGWPT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Jul 2022 18:15:06 -0400
-Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5D705925A
-        for <linux-kernel@vger.kernel.org>; Thu,  7 Jul 2022 15:15:04 -0700 (PDT)
-Received: by mail-wm1-x334.google.com with SMTP id bi22-20020a05600c3d9600b003a04de22ab6so63700wmb.1
-        for <linux-kernel@vger.kernel.org>; Thu, 07 Jul 2022 15:15:04 -0700 (PDT)
+        Thu, 7 Jul 2022 18:15:19 -0400
+Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FD5E5925A
+        for <linux-kernel@vger.kernel.org>; Thu,  7 Jul 2022 15:15:18 -0700 (PDT)
+Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-31c8c7138ebso90704827b3.17
+        for <linux-kernel@vger.kernel.org>; Thu, 07 Jul 2022 15:15:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=Lr/CZqOVLz6yIPiD43/Upz31v3PfsMwGMsgVbDd4yko=;
-        b=EPJqEJfxUClNdXE7x34+CmxN5XESf+BDwZZJvcpdMqD6veIEoWjqyuek3ttJc5/jr1
-         5UxJTi7WOhVUwJUK7+G0hDK+646glFodCTUEgSwuAGhvFgSGQbAKaKHwpCNTHldHiiPm
-         LDo0aOUzJ+kZacjcpzUxDPaH4/0UUlkIREln/qsz5QzUNCkI0Sep3lPSV75yTaYhvB8q
-         hoLysBc1DrUeRCe7EzkWCVXdN5yTqmch1nnPU8QyFuhbgsDwn+Sy+uM7mHvtPgyUYLfI
-         EbA+Ur9X6Dm9WXLyu4WIFHUx5dIAKWzz/0Uwp0Me8QB5c+o8Sw2pD5LmHOsQ+Y7j9RKl
-         RabQ==
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=FgNJR3N4HuEzik8BFbsoxsCKMlA6Q79TXfo2nVTvHXw=;
+        b=aA00TODOScLx5rfKCpO+pAVqEX73pui8cCx+3XpnCCyru+fT+ofb/Ab2TS9xNDNU99
+         YNKaOBTsA7ff9EZZ8xUcR6VLuO3JXPvfBsrunTIT2rDulAbfyKZPIfD0jv7m8Tno8JXY
+         +T82Ab/D0pYfuaUmvFtngjFXFFMc5T/BVO6ypDoulJZ75kMRvYHKQB86864y10eH2uEw
+         4d3PUryKB7/phRYE0n7zvCY/JzTFCQSei9cMSVgBAyjxLTch+vrSPufB05tcgg9vjG2i
+         vuM1YjWMW1zfvqSXyEnoZLyTtO/m+9YJbYPez+Izg4VE+po1sFIWI3ZbN2N7STiUOkcA
+         SUTg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=Lr/CZqOVLz6yIPiD43/Upz31v3PfsMwGMsgVbDd4yko=;
-        b=wIjUYz/SHEJv5vcn4S2tGPR8KRjHVicHxhLj7PhLbLWdmmgEi+cma5W/mgpcxHFukN
-         HACANC5jfi6f/lEfaoaCpOMxiVMxLb1042hen2dxdjpZWNbKLLiHYJYmyPpHxvaVG9CO
-         FmI5MCDz/LaN2XbM7qACC2tfr/NId1726T2kO1dEdhTa8fb25DGCOb+2GNFHg0F5QqTa
-         Wa3FFm7irsaxS0bw+6eTH9srTB0ZIftOaHMLtDllzkOgWdjkzQE2f75HBdyeV2dMFFth
-         4k/Eeg20rJFVokn3wTgn34BI9nV57RdGbpjowkEsUKAEfYy5RqsaZXzXUIbpE3i3kQq3
-         TNdw==
-X-Gm-Message-State: AJIora8ll+PKMYCtLzsU+37y4rLVQbZiDO6mVQkjZQV2fyErp76l/0GI
-        UE7NFZF4qONHKAph7ExKYXMDLHRHQMdhdL5immZqglMxuhvPcw==
-X-Google-Smtp-Source: AGRyM1ufbZ1WfVQZGo2LHT7pdxKfnM1n1rEjqtCIIqXEJXUz5zpqX4zplHwL+vpOrkWqb948j+RS+x1eZOoatVczLdc=
-X-Received: by 2002:a1c:ed0a:0:b0:3a2:d894:23f2 with SMTP id
- l10-20020a1ced0a000000b003a2d89423f2mr576769wmh.152.1657232103081; Thu, 07
- Jul 2022 15:15:03 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220621125658.64935-1-songmuchun@bytedance.com>
- <CAJD7tkbeTtkMcVri9vzKHATjxAVZfC_vPNfApJiyRxY53c8pZQ@mail.gmail.com> <YrlYG0ecJyzFTVVz@FVFYT0MHHV2J.usts.net>
-In-Reply-To: <YrlYG0ecJyzFTVVz@FVFYT0MHHV2J.usts.net>
-From:   Yosry Ahmed <yosryahmed@google.com>
-Date:   Thu, 7 Jul 2022 15:14:26 -0700
-Message-ID: <CAJD7tkbk-E+Skkj3xxELuGFHet940DovKi0z8NxPqePzXa-Wug@mail.gmail.com>
-Subject: Re: [PATCH v6 00/11] Use obj_cgroup APIs to charge the LRU pages
-To:     Muchun Song <songmuchun@bytedance.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Johannes Weiner <hannes@cmpxchg.org>, longman@redhat.com,
-        Michal Hocko <mhocko@kernel.org>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Shakeel Butt <shakeelb@google.com>,
-        Cgroups <cgroups@vger.kernel.org>, duanxiongchun@bytedance.com,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux-MM <linux-mm@kvack.org>
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=FgNJR3N4HuEzik8BFbsoxsCKMlA6Q79TXfo2nVTvHXw=;
+        b=IqTTuyImrnTH9yA+PjxhxDAxIib1yVOKofUrzaCuaw2aKZgoEJKhH3qZtAn3C/nYj4
+         Ul/r2F0nedlEdU0BTFk1O58Ih0CY9mXqARbn7zrjWet8M8Nu4AwAgb0c0egC5KVYNaZo
+         25S4cVrx+TsE39SB5BR1kfVk8NyVp0dvV+0uX4fzavsK87j8m+QGsX/R3zKeQYt8TMtb
+         fs7//ffgJHsZ3Se33BLzK1i/wvSCspIlMdRcluVovHfp9dF/1NDgmLb2L+SQoLn1uZGH
+         nEJdorJ1lyEpD2pVF43QWGNs9zsPNCdqtb9jKgKIRBv1U8VO9KkjInSWYQILZqJGCCnH
+         uXXg==
+X-Gm-Message-State: AJIora+7/YmRJ5hjdypdDmismR7L4TDtgFli1tL6AlWPTrpB/CQkn/nc
+        YunU6Or8G4qQUrrw+4MUfPoNW2baPunERpjd6Q==
+X-Google-Smtp-Source: AGRyM1vsybvdyGETyP8/pCMszh/hivglrkQc+shq/bl09u6ogz5eozWp/OTQeXLsPPeDx31CWy9PP42+u4bdaUY5Ow==
+X-Received: from justinstitt.mtv.corp.google.com ([2620:15c:211:202:4640:519a:f833:9a5])
+ (user=justinstitt job=sendgmr) by 2002:a81:1cc:0:b0:317:a0fa:7a61 with SMTP
+ id 195-20020a8101cc000000b00317a0fa7a61mr516504ywb.10.1657232117460; Thu, 07
+ Jul 2022 15:15:17 -0700 (PDT)
+Date:   Thu,  7 Jul 2022 15:14:56 -0700
+Message-Id: <20220707221456.1782048-1-justinstitt@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.37.0.rc0.161.g10f37bed90-goog
+Subject: [PATCH] l2tp: l2tp_debugfs: fix Clang -Wformat warnings
+From:   Justin Stitt <justinstitt@google.com>
+To:     "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>
+Cc:     Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Tom Rix <trix@redhat.com>, Tom Parkin <tparkin@katalix.com>,
+        Justin Stitt <justinstitt@google.com>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, llvm@lists.linux.dev
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 27, 2022 at 12:11 AM Muchun Song <songmuchun@bytedance.com> wro=
-te:
->
-> On Sun, Jun 26, 2022 at 03:32:02AM -0700, Yosry Ahmed wrote:
-> > On Tue, Jun 21, 2022 at 5:57 AM Muchun Song <songmuchun@bytedance.com> =
-wrote:
-> > >
-> > > This version is rebased on mm-unstable. Hopefully, Andrew can get thi=
-s series
-> > > into mm-unstable which will help to determine whether there is a prob=
-lem or
-> > > degradation. I am also doing some benchmark tests in parallel.
-> > >
-> > > Since the following patchsets applied. All the kernel memory are char=
-ged
-> > > with the new APIs of obj_cgroup.
-> > >
-> > >         commit f2fe7b09a52b ("mm: memcg/slab: charge individual slab =
-objects instead of pages")
-> > >         commit b4e0b68fbd9d ("mm: memcontrol: use obj_cgroup APIs to =
-charge kmem pages")
-> > >
-> > > But user memory allocations (LRU pages) pinning memcgs for a long tim=
-e -
-> > > it exists at a larger scale and is causing recurring problems in the =
-real
-> > > world: page cache doesn't get reclaimed for a long time, or is used b=
-y the
-> > > second, third, fourth, ... instance of the same job that was restarte=
-d into
-> > > a new cgroup every time. Unreclaimable dying cgroups pile up, waste m=
-emory,
-> > > and make page reclaim very inefficient.
-> > >
-> > > We can convert LRU pages and most other raw memcg pins to the objcg d=
-irection
-> > > to fix this problem, and then the LRU pages will not pin the memcgs.
-> > >
-> > > This patchset aims to make the LRU pages to drop the reference to mem=
-ory
-> > > cgroup by using the APIs of obj_cgroup. Finally, we can see that the =
-number
-> > > of the dying cgroups will not increase if we run the following test s=
-cript.
-> >
-> > This is amazing work!
-> >
-> > Sorry if I came late, I didn't follow the threads of previous versions
-> > so this might be redundant, I just have a couple of questions.
-> >
-> > a) If LRU pages keep getting parented until they reach root_mem_cgroup
-> > (assuming they can), aren't these pages effectively unaccounted at
-> > this point or leaked? Is there protection against this?
-> >
->
-> In this case, those pages are accounted in root memcg level. Unfortunatel=
-y,
-> there is no mechanism now to transfer a page's memcg from one to another.
->
+When building with Clang we encounter the following warnings:
+| net/l2tp/l2tp_debugfs.c:187:40: error: format specifies type 'unsigned
+| short' but the argument has type 'u32' (aka 'unsigned int')
+| [-Werror,-Wformat] seq_printf(m, "   nr %hu, ns %hu\n", session->nr,
+| session->ns);
+-
+| net/l2tp/l2tp_debugfs.c:196:32: error: format specifies type 'unsigned
+| short' but the argument has type 'int' [-Werror,-Wformat]
+| session->l2specific_type, l2tp_get_l2specific_len(session));
+-
+| net/l2tp/l2tp_debugfs.c:219:6: error: format specifies type 'unsigned
+| short' but the argument has type 'u32' (aka 'unsigned int')
+| [-Werror,-Wformat] session->nr, session->ns,
 
-Hey Muchun,
+Both session->nr and ->nc are of type `u32`. The currently used format
+specifier is `%hu` which describes a `u16`. My proposed fix is to listen
+to Clang and use the correct format specifier `%u`.
 
-Quick question regarding the behavior of this change on cgroup v1 (I
-know .. I know .. sorry):
+For the warning at line 196, l2tp_get_l2specific_len() returns an int
+and should therefore be using the `%d` format specifier.
 
-When a memcg dies, its LRU pages are reparented, but what happens to
-the charge? IIUC we don't do anything because the pages are already
-hierarchically charged to the parent. Is this correct?
+Link: https://github.com/ClangBuiltLinux/linux/issues/378
+Signed-off-by: Justin Stitt <justinstitt@google.com>
+---
+Related l2tp -Wformat patch:
+https://lore.kernel.org/all/20220706230833.535238-1-justinstitt@google.com/
 
-In cgroup v1, we have non-hierarchical stats as well, so I am trying
-to understand if the reparented memory will appear in the
-non-hierarchical stats of the parent (my understanding is that the
-will not). I am also particularly interested in the charging behavior
-of pages that get reparented to root_mem_cgroup.
+ net/l2tp/l2tp_debugfs.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-The main reason I am asking is that (hierarchical_usage -
-non-hierarchical_usage - children_hierarchical_usage) is *roughly*
-something that we use, especially at the root level, to estimate
-zombie memory usage. I am trying to see if this change will break such
-calculations. Thanks!
+diff --git a/net/l2tp/l2tp_debugfs.c b/net/l2tp/l2tp_debugfs.c
+index 9d1aafe75f92..4595b56d175d 100644
+--- a/net/l2tp/l2tp_debugfs.c
++++ b/net/l2tp/l2tp_debugfs.c
+@@ -184,7 +184,7 @@ static void l2tp_dfs_seq_session_show(struct seq_file *m, void *v)
+ 		   session->pwtype == L2TP_PWTYPE_PPP ? "PPP" :
+ 		   "");
+ 	if (session->send_seq || session->recv_seq)
+-		seq_printf(m, "   nr %hu, ns %hu\n", session->nr, session->ns);
++		seq_printf(m, "   nr %u, ns %u\n", session->nr, session->ns);
+ 	seq_printf(m, "   refcnt %d\n", refcount_read(&session->ref_count));
+ 	seq_printf(m, "   config 0/0/%c/%c/-/%s %08x %u\n",
+ 		   session->recv_seq ? 'R' : '-',
+@@ -192,7 +192,7 @@ static void l2tp_dfs_seq_session_show(struct seq_file *m, void *v)
+ 		   session->lns_mode ? "LNS" : "LAC",
+ 		   0,
+ 		   jiffies_to_msecs(session->reorder_timeout));
+-	seq_printf(m, "   offset 0 l2specific %hu/%hu\n",
++	seq_printf(m, "   offset 0 l2specific %hu/%d\n",
+ 		   session->l2specific_type, l2tp_get_l2specific_len(session));
+ 	if (session->cookie_len) {
+ 		seq_printf(m, "   cookie %02x%02x%02x%02x",
+@@ -215,7 +215,7 @@ static void l2tp_dfs_seq_session_show(struct seq_file *m, void *v)
+ 		seq_puts(m, "\n");
+ 	}
+ 
+-	seq_printf(m, "   %hu/%hu tx %ld/%ld/%ld rx %ld/%ld/%ld\n",
++	seq_printf(m, "   %u/%u tx %ld/%ld/%ld rx %ld/%ld/%ld\n",
+ 		   session->nr, session->ns,
+ 		   atomic_long_read(&session->stats.tx_packets),
+ 		   atomic_long_read(&session->stats.tx_bytes),
+-- 
+2.37.0.rc0.161.g10f37bed90-goog
 
-> > b) Since moving charged pages between memcgs is now becoming easier by
-> > using the APIs of obj_cgroup, I wonder if this opens the door for
-> > future work to transfer charges to memcgs that are actually using
-> > reparented resources. For example, let's say cgroup A reads a few
-> > pages into page cache, and then they are no longer used by cgroup A.
-> > cgroup B, however, is using the same pages that are currently charged
-> > to cgroup A, so it keeps taxing cgroup A for its use. When cgroup A
-> > dies, and these pages are reparented to A's parent, can we possibly
-> > mark these reparented pages (maybe in the page tables somewhere) so
-> > that next time they get accessed we recharge them to B instead
-> > (possibly asynchronously)?
-> > I don't have much experience about page tables but I am pretty sure
-> > they are loaded so maybe there is no room in PTEs for something like
-> > this, but I have always wondered about what we can do for this case
-> > where a cgroup is consistently using memory charged to another cgroup.
-> > Maybe when this memory is reparented is a good point in time to decide
-> > to recharge appropriately. It would also fix the reparenty leak to
-> > root problem (if it even exists).
-> >
->
-> From my point of view, this is going to be an improvement to the memcg
-> subsystem in the future.  IIUC, most reparented pages are page cache
-> pages without be mapped to users. So page tables are not a suitable
-> place to record this information. However, we already have this informati=
-on
-> in struct obj_cgroup and struct mem_cgroup. If a page's obj_cgroup is not
-> equal to the page's obj_cgroup->memcg->objcg, it means this page have
-> been reparented. I am thinking if a place where a page is mapped (probabl=
-y
-> page fault patch) or page (cache) is written (usually vfs write path)
-> is suitable to transfer page's memcg from one to another. But need more
-> thinking, e.g. How to decide if a reparented page needs to be transferred=
-?
-> If we need more information to make this decision, where to store those
-> information? This is my primary thoughts on this question.
->
-> Thanks.
->
-> > Thanks again for this work and please excuse my ignorance if any part
-> > of what I said doesn't make sense :)
-> >
-> > >
-> > > ```bash
-> > > #!/bin/bash
-> > >
-> > > dd if=3D/dev/zero of=3Dtemp bs=3D4096 count=3D1
-> > > cat /proc/cgroups | grep memory
-> > >
-> > > for i in {0..2000}
-> > > do
-> > >         mkdir /sys/fs/cgroup/memory/test$i
-> > >         echo $$ > /sys/fs/cgroup/memory/test$i/cgroup.procs
-> > >         cat temp >> log
-> > >         echo $$ > /sys/fs/cgroup/memory/cgroup.procs
-> > >         rmdir /sys/fs/cgroup/memory/test$i
-> > > done
-> > >
-> > > cat /proc/cgroups | grep memory
-> > >
-> > > rm -f temp log
-> > > ```
-> > >
-> > > v5: https://lore.kernel.org/all/20220530074919.46352-1-songmuchun@byt=
-edance.com/
-> > > v4: https://lore.kernel.org/all/20220524060551.80037-1-songmuchun@byt=
-edance.com/
-> > > v3: https://lore.kernel.org/all/20220216115132.52602-1-songmuchun@byt=
-edance.com/
-> > > v2: https://lore.kernel.org/all/20210916134748.67712-1-songmuchun@byt=
-edance.com/
-> > > v1: https://lore.kernel.org/all/20210814052519.86679-1-songmuchun@byt=
-edance.com/
-> > > RFC v4: https://lore.kernel.org/all/20210527093336.14895-1-songmuchun=
-@bytedance.com/
-> > > RFC v3: https://lore.kernel.org/all/20210421070059.69361-1-songmuchun=
-@bytedance.com/
-> > > RFC v2: https://lore.kernel.org/all/20210409122959.82264-1-songmuchun=
-@bytedance.com/
-> > > RFC v1: https://lore.kernel.org/all/20210330101531.82752-1-songmuchun=
-@bytedance.com/
-> > >
-> > > v6:
-> > >  - Collect Acked-by and Reviewed-by from Roman and Michal Koutn=C3=BD=
-. Thanks.
-> > >  - Rebase to mm-unstable.
-> > >
-> > > v5:
-> > >  - Lots of improvements from Johannes, Roman and Waiman.
-> > >  - Fix lockdep warning reported by kernel test robot.
-> > >  - Add two new patches to do code cleanup.
-> > >  - Collect Acked-by and Reviewed-by from Johannes and Roman.
-> > >  - I didn't replace local_irq_disable/enable() to local_lock/unlock_i=
-rq() since
-> > >    local_lock/unlock_irq() takes an parameter, it needs more thinking=
- to transform
-> > >    it to local_lock.  It could be an improvement in the future.
-> > >
-> > > v4:
-> > >  - Resend and rebased on v5.18.
-> > >
-> > > v3:
-> > >  - Removed the Acked-by tags from Roman since this version is based o=
-n
-> > >    the folio relevant.
-> > >
-> > > v2:
-> > >  - Rename obj_cgroup_release_kmem() to obj_cgroup_release_bytes() and=
- the
-> > >    dependencies of CONFIG_MEMCG_KMEM (suggested by Roman, Thanks).
-> > >  - Rebase to linux 5.15-rc1.
-> > >  - Add a new pacth to cleanup mem_cgroup_kmem_disabled().
-> > >
-> > > v1:
-> > >  - Drop RFC tag.
-> > >  - Rebase to linux next-20210811.
-> > >
-> > > RFC v4:
-> > >  - Collect Acked-by from Roman.
-> > >  - Rebase to linux next-20210525.
-> > >  - Rename obj_cgroup_release_uncharge() to obj_cgroup_release_kmem().
-> > >  - Change the patch 1 title to "prepare objcg API for non-kmem usage"=
-.
-> > >  - Convert reparent_ops_head to an array in patch 8.
-> > >
-> > > Thanks for Roman's review and suggestions.
-> > >
-> > > RFC v3:
-> > >  - Drop the code cleanup and simplification patches. Gather those pat=
-ches
-> > >    into a separate series[1].
-> > >  - Rework patch #1 suggested by Johannes.
-> > >
-> > > RFC v2:
-> > >  - Collect Acked-by tags by Johannes. Thanks.
-> > >  - Rework lruvec_holds_page_lru_lock() suggested by Johannes. Thanks.
-> > >  - Fix move_pages_to_lru().
-> > >
-> > > Muchun Song (11):
-> > >   mm: memcontrol: remove dead code and comments
-> > >   mm: rename unlock_page_lruvec{_irq, _irqrestore} to
-> > >     lruvec_unlock{_irq, _irqrestore}
-> > >   mm: memcontrol: prepare objcg API for non-kmem usage
-> > >   mm: memcontrol: make lruvec lock safe when LRU pages are reparented
-> > >   mm: vmscan: rework move_pages_to_lru()
-> > >   mm: thp: make split queue lock safe when LRU pages are reparented
-> > >   mm: memcontrol: make all the callers of {folio,page}_memcg() safe
-> > >   mm: memcontrol: introduce memcg_reparent_ops
-> > >   mm: memcontrol: use obj_cgroup APIs to charge the LRU pages
-> > >   mm: lru: add VM_WARN_ON_ONCE_FOLIO to lru maintenance function
-> > >   mm: lru: use lruvec lock to serialize memcg changes
-> > >
-> > >  fs/buffer.c                      |   4 +-
-> > >  fs/fs-writeback.c                |  23 +-
-> > >  include/linux/memcontrol.h       | 218 +++++++++------
-> > >  include/linux/mm_inline.h        |   6 +
-> > >  include/trace/events/writeback.h |   5 +
-> > >  mm/compaction.c                  |  39 ++-
-> > >  mm/huge_memory.c                 | 153 ++++++++--
-> > >  mm/memcontrol.c                  | 584 +++++++++++++++++++++++++++--=
-----------
-> > >  mm/migrate.c                     |   4 +
-> > >  mm/mlock.c                       |   2 +-
-> > >  mm/page_io.c                     |   5 +-
-> > >  mm/swap.c                        |  49 ++--
-> > >  mm/vmscan.c                      |  66 ++---
-> > >  13 files changed, 776 insertions(+), 382 deletions(-)
-> > >
-> > >
-> > > base-commit: 882be1ed6b1b5073fc88552181b99bd2b9c0031f
-> > > --
-> > > 2.11.0
-> > >
-> > >
-> >

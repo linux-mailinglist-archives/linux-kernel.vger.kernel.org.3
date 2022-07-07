@@ -2,130 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 279B3569EA4
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 11:38:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BDE8E569EAC
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 11:40:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235061AbiGGJiG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Jul 2022 05:38:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41526 "EHLO
+        id S235220AbiGGJiY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Jul 2022 05:38:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41782 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231752AbiGGJiD (ORCPT
+        with ESMTP id S235117AbiGGJiX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Jul 2022 05:38:03 -0400
-Received: from aposti.net (aposti.net [89.234.176.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03D6D4505C;
-        Thu,  7 Jul 2022 02:38:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
-        s=mail; t=1657186680; h=from:from:sender:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=kXIlb6hdJqwtDzPJXzLaKXuJUAGqwuysqFCgGoS6L9w=;
-        b=NKmYCqFt+Bn8O5D8zNt1stEVUcLMJ7FFoyccHrpplWfWGAESaQJEK3TE3fjxpPWPw8ONIu
-        nf1ZpMQezjE6AGoRvyNUsoBGTqXM+YDCpHOsJaYgPQdcEBsrW4/JIoiG1eHRwFFCA0acF0
-        BtHJn3OyliNtw4dXcHcKuDRuodF9K6U=
-Date:   Thu, 07 Jul 2022 10:37:49 +0100
-From:   Paul Cercueil <paul@crapouillou.net>
-Subject: Re: [PATCH 05/11] ASoC: jz4740-i2s: Remove unused SoC version IDs
-To:     Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
-Cc:     lgirdwood@gmail.com, broonie@kernel.org, perex@perex.cz,
-        tiwai@suse.com, linux-mips@vger.kernel.org,
-        alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org
-Message-Id: <1F9NER.E4VHP6MF1K5A2@crapouillou.net>
-In-Reply-To: <20220706211330.120198-6-aidanmacdonald.0x0@gmail.com>
-References: <20220706211330.120198-1-aidanmacdonald.0x0@gmail.com>
-        <20220706211330.120198-6-aidanmacdonald.0x0@gmail.com>
+        Thu, 7 Jul 2022 05:38:23 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D771D45054;
+        Thu,  7 Jul 2022 02:38:19 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id CBFCA1063;
+        Thu,  7 Jul 2022 02:38:19 -0700 (PDT)
+Received: from [10.57.85.108] (unknown [10.57.85.108])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 507723F792;
+        Thu,  7 Jul 2022 02:38:17 -0700 (PDT)
+Message-ID: <a59c92ff-fb82-6e7f-4d2a-846b3d9e1356@arm.com>
+Date:   Thu, 7 Jul 2022 10:38:12 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1; format=flowed
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH v3 03/15] iommu: Always register bus notifiers
+Content-Language: en-GB
+To:     "Tian, Kevin" <kevin.tian@intel.com>,
+        Baolu Lu <baolu.lu@linux.intel.com>,
+        "joro@8bytes.org" <joro@8bytes.org>
+Cc:     "will@kernel.org" <will@kernel.org>,
+        "iommu@lists.linux.dev" <iommu@lists.linux.dev>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "suravee.suthikulpanit@amd.com" <suravee.suthikulpanit@amd.com>,
+        "vasant.hegde@amd.com" <vasant.hegde@amd.com>,
+        "mjrosato@linux.ibm.com" <mjrosato@linux.ibm.com>,
+        "gerald.schaefer@linux.ibm.com" <gerald.schaefer@linux.ibm.com>,
+        "schnelle@linux.ibm.com" <schnelle@linux.ibm.com>,
+        "linux-s390@vger.kernel.org" <linux-s390@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+References: <cover.1657034827.git.robin.murphy@arm.com>
+ <8c380309f264cd0dfc73ba2ec060adc9515af2f2.1657034828.git.robin.murphy@arm.com>
+ <1fab4c8a-7bc5-9a50-d48a-0dc590cac7a6@linux.intel.com>
+ <3d613192-f673-852e-9c52-b8a913d25616@arm.com>
+ <28a58a21-a866-b49c-9977-c8d05b320fbd@linux.intel.com>
+ <BN9PR11MB527610973C947DBA6B2EA8348C839@BN9PR11MB5276.namprd11.prod.outlook.com>
+From:   Robin Murphy <robin.murphy@arm.com>
+In-Reply-To: <BN9PR11MB527610973C947DBA6B2EA8348C839@BN9PR11MB5276.namprd11.prod.outlook.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 2022-07-07 07:34, Tian, Kevin wrote:
+>> From: Baolu Lu <baolu.lu@linux.intel.com>
+>> Sent: Thursday, July 7, 2022 8:21 AM
+>>
+>> On 2022/7/6 21:43, Robin Murphy wrote:
+>>> On 2022-07-06 02:53, Baolu Lu wrote:
+>>>> On 2022/7/6 01:08, Robin Murphy wrote:
+>>>>>    /*
+>>>>>     * Use a function instead of an array here because the domain-type
+>>>>> is a
+>>>>>     * bit-field, so an array would waste memory.
+>>>>> @@ -152,6 +172,10 @@ static int __init iommu_subsys_init(void)
+>>>>>                (iommu_cmd_line & IOMMU_CMD_LINE_STRICT) ?
+>>>>>                    "(set via kernel command line)" : "");
+>>>>> +    /* If the system is so broken that this fails, it will WARN
+>>>>> anyway */
+>>>>
+>>>> Can you please elaborate a bit on this? iommu_bus_init() still return
+>>>> errors.
+>>>
+>>> Indeed, it's commenting on the fact that we don't try to clean up or
+>>> propagate an error value further even if it did ever manage to return
+>>> one. I feared that if I strip the error handling out of iommu_bus_init()
+>>> itself on the same reasoning, we'll just get constant patches from the
+>>> static checker brigade trying to add it back, so it seemed like the
+>>> neatest compromise to keep that decision where it's obviously in an
+>>> early initcall, rather than in the helper function which can be viewed
+>>> out of context. However, I'm happy to either expand this comment or go
+>>> the whole way and make iommu_bus_init() return void if you think it's
+>>> worthwhile.
+>>
+>> Thanks for the explanation. It would be helpful if the comment could be
+>> expanded. In this case, after a long time, people will not consider it
+>> an oversight. :-)
+>>
+> 
+> I'd prefer to making iommu_bus_init() return void plus expanding
+> the comment otherwise the question arises that if the only caller
+> is not interested in the return value then why bother returning it
+> in the first place. 😊
 
+OK, that's fair enough, will do.
 
-Le mer., juil. 6 2022 at 22:13:24 +0100, Aidan MacDonald=20
-<aidanmacdonald.0x0@gmail.com> a =E9crit :
-> Using version IDs makes the code hard to follow -- it's better to
-> describe the functional differences between SoCs instead. Remove
-> the IDs since they're no longer used.
->=20
-> Signed-off-by: Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
-
-Acked-by: Paul Cercueil <paul@crapouillou.net>
-
-Cheers,
--Paul
-
-> ---
->  sound/soc/jz4740/jz4740-i2s.c | 12 ------------
->  1 file changed, 12 deletions(-)
->=20
-> diff --git a/sound/soc/jz4740/jz4740-i2s.c=20
-> b/sound/soc/jz4740/jz4740-i2s.c
-> index cbb89f724f64..8bb9449d13d3 100644
-> --- a/sound/soc/jz4740/jz4740-i2s.c
-> +++ b/sound/soc/jz4740/jz4740-i2s.c
-> @@ -81,15 +81,7 @@
->  #define I2SDIV_IDV_SHIFT 8
->  #define I2SDIV_IDV_MASK (0xf << I2SDIV_IDV_SHIFT)
->=20
-> -enum jz47xx_i2s_version {
-> -	JZ_I2S_JZ4740,
-> -	JZ_I2S_JZ4760,
-> -	JZ_I2S_JZ4770,
-> -	JZ_I2S_JZ4780,
-> -};
-> -
->  struct i2s_soc_info {
-> -	enum jz47xx_i2s_version version;
->  	struct snd_soc_dai_driver *dai;
->=20
->  	struct reg_field field_rx_fifo_thresh;
-> @@ -406,7 +398,6 @@ static struct snd_soc_dai_driver jz4740_i2s_dai =3D=20
-> {
->  };
->=20
->  static const struct i2s_soc_info jz4740_i2s_soc_info =3D {
-> -	.version =3D JZ_I2S_JZ4740,
->  	.dai =3D &jz4740_i2s_dai,
->  	.field_rx_fifo_thresh	=3D REG_FIELD(JZ_REG_AIC_CONF, 12, 15),
->  	.field_tx_fifo_thresh	=3D REG_FIELD(JZ_REG_AIC_CONF, 8, 11),
-> @@ -415,7 +406,6 @@ static const struct i2s_soc_info=20
-> jz4740_i2s_soc_info =3D {
->  };
->=20
->  static const struct i2s_soc_info jz4760_i2s_soc_info =3D {
-> -	.version =3D JZ_I2S_JZ4760,
->  	.dai =3D &jz4740_i2s_dai,
->  	.field_rx_fifo_thresh	=3D REG_FIELD(JZ_REG_AIC_CONF, 24, 27),
->  	.field_tx_fifo_thresh	=3D REG_FIELD(JZ_REG_AIC_CONF, 16, 20),
-> @@ -442,7 +432,6 @@ static struct snd_soc_dai_driver jz4770_i2s_dai =3D=20
-> {
->  };
->=20
->  static const struct i2s_soc_info jz4770_i2s_soc_info =3D {
-> -	.version =3D JZ_I2S_JZ4770,
->  	.dai =3D &jz4770_i2s_dai,
->  	.field_rx_fifo_thresh	=3D REG_FIELD(JZ_REG_AIC_CONF, 24, 27),
->  	.field_tx_fifo_thresh	=3D REG_FIELD(JZ_REG_AIC_CONF, 16, 20),
-> @@ -451,7 +440,6 @@ static const struct i2s_soc_info=20
-> jz4770_i2s_soc_info =3D {
->  };
->=20
->  static const struct i2s_soc_info jz4780_i2s_soc_info =3D {
-> -	.version =3D JZ_I2S_JZ4780,
->  	.dai =3D &jz4770_i2s_dai,
->  	.field_rx_fifo_thresh	=3D REG_FIELD(JZ_REG_AIC_CONF, 24, 27),
->  	.field_tx_fifo_thresh	=3D REG_FIELD(JZ_REG_AIC_CONF, 16, 20),
-> --
-> 2.35.1
->=20
-
-
+Thanks,
+Robin.

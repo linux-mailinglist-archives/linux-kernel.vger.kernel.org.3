@@ -2,107 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 772B756AD64
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 23:23:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9AA2556AD57
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 23:20:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236786AbiGGVXW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Jul 2022 17:23:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36926 "EHLO
+        id S236679AbiGGVTu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Jul 2022 17:19:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34742 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235974AbiGGVXV (ORCPT
+        with ESMTP id S236225AbiGGVTt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Jul 2022 17:23:21 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C033C32070;
-        Thu,  7 Jul 2022 14:23:20 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 7EF721F934;
-        Thu,  7 Jul 2022 21:23:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1657228999;
-        h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
-         cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=5ykXqRPQ8452sVCrhTFfpsVi7HQroPU8AJ6vHjrScFs=;
-        b=wAp3LKs8EO/4vVUHGERRqAzhgezurQtnIuIjO0A7orE2EKIqCck1L8jxowgYHfPwnnWXh+
-        49NFKdzMIa73GyxfKmWAGvBUXbzL/UxtC4Ye96C7SVACYqJKYT1RFFprKqVp18t9oCJeSe
-        XhARzwDX1wGCrajvXa+CTiTYSzzWvO4=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1657228999;
-        h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
-         cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=5ykXqRPQ8452sVCrhTFfpsVi7HQroPU8AJ6vHjrScFs=;
-        b=yrxZpqIN5Zo6khyjeN+AMMSRbdJlI+HH5kcKi2gRZSnO7s0DylrDi4jMtwnEeKL3nJ+vfZ
-        WHF63v9zwWUOADAQ==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 276E613461;
-        Thu,  7 Jul 2022 21:23:19 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id TWCoCMdOx2JXTQAAMHmgww
-        (envelope-from <dsterba@suse.cz>); Thu, 07 Jul 2022 21:23:19 +0000
-Date:   Thu, 7 Jul 2022 23:18:32 +0200
-From:   David Sterba <dsterba@suse.cz>
-To:     "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
-Cc:     Chris Mason <clm@fb.com>, Josef Bacik <josef@toxicpanda.com>,
-        David Sterba <dsterba@suse.com>,
-        Nick Terrell <terrelln@fb.com>,
-        Chris Down <chris@chrisdown.name>,
-        Filipe Manana <fdmanana@suse.com>, Qu Wenruo <wqu@suse.com>,
-        Nikolay Borisov <nborisov@suse.com>,
-        Gabriel Niebler <gniebler@suse.com>,
-        linux-btrfs@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Ira Weiny <ira.weiny@intel.com>
-Subject: Re: [PATCH] btrfs: Convert zlib_decompress_bio() to use
- kmap_local_page()
-Message-ID: <20220707211832.GQ15169@twin.jikos.cz>
-Reply-To: dsterba@suse.cz
-Mail-Followup-To: dsterba@suse.cz,
-        "Fabio M. De Francesco" <fmdefrancesco@gmail.com>,
-        Chris Mason <clm@fb.com>, Josef Bacik <josef@toxicpanda.com>,
-        David Sterba <dsterba@suse.com>, Nick Terrell <terrelln@fb.com>,
-        Chris Down <chris@chrisdown.name>,
-        Filipe Manana <fdmanana@suse.com>, Qu Wenruo <wqu@suse.com>,
-        Nikolay Borisov <nborisov@suse.com>,
-        Gabriel Niebler <gniebler@suse.com>, linux-btrfs@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Ira Weiny <ira.weiny@intel.com>
-References: <20220618091901.25034-1-fmdefrancesco@gmail.com>
+        Thu, 7 Jul 2022 17:19:49 -0400
+Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC398313A8;
+        Thu,  7 Jul 2022 14:19:46 -0700 (PDT)
+Received: by mail-pf1-x429.google.com with SMTP id y141so21848637pfb.7;
+        Thu, 07 Jul 2022 14:19:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=6Mqly/bmUD1+v4qx6JacIhpg9Ul0/6TMbAP2G8iAsIU=;
+        b=Jy4LjqYXsHRJLEuWMy15VqPLyEiaTsf1cyTgG4LnEAnQ7+ZyzBgRaBgfsI3OLsSR25
+         AuLZIiP5ku1xcxEhyGX5xE6iCy8uPyufdJk38lQyS+2dEFVCnjKfrxa9QjazqgFtkLNt
+         XalKugilrwzxZdCPatAWtUZ10lmpfA0Dtsql+0SPL9T2QedYTIpGZoBWxMfR+mvz1XxA
+         oIianSf1mDs/H+/vYnKJFDZ2HpWIwjTIINByzQRlhyKgKGjFW1OTLD/crJxSprvn7wwb
+         D0tbQYBroY3kOJ8Syaut1HUYM0gwZXrTTqT3pWsLinpnHkfx4W6B1d29eeE02zENM2E5
+         4wOw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=6Mqly/bmUD1+v4qx6JacIhpg9Ul0/6TMbAP2G8iAsIU=;
+        b=L/qETWjrX7A90bI8m0ja6buSlEPyCLCrGbLW/L9m9U1k0oPqeECVT20nSb5DCzHtb/
+         cLgDTz9yYVELo4zvl/gpp0DtJ0JX1359nal9O50Mv6mLKfyfnI7pjRUDxw28unPEOJh3
+         vbhf+71Zl34U7QEivlKHRC2SkY335HXqp8SwqR8c5H9xdipFEmPAV/HbEiBQ00ambkeG
+         bWIGZ4pTv7v+rRL9FP56r81qKJqvtFhe0MfvWNOMG7DaKypyRfzZPRc7+pMYCE5V/6xc
+         Qle4gjqj6EqEnTHR3o5G3YvRwnspNK5AdGFNSdQbNdBSjEJwjRdL6b3CqLHMgLDKeb89
+         iJAg==
+X-Gm-Message-State: AJIora8vHH7VqyhCu7dBjYmoa1pWOmvybzPG+ZN+eNfE39SLEatkWCYy
+        EXmjsyiYkDLT88FAIOcrf7Q=
+X-Google-Smtp-Source: AGRyM1t5W9ZMr1j90syEK2lDjCt9pxLeU/e2mHN5T0KEFQkQACvggQZHVEjihw+PqNIHYc4CePKp/g==
+X-Received: by 2002:a63:5cd:0:b0:412:b163:b7e1 with SMTP id 196-20020a6305cd000000b00412b163b7e1mr51911pgf.451.1657228786230;
+        Thu, 07 Jul 2022 14:19:46 -0700 (PDT)
+Received: from localhost ([2a00:79e1:abd:4a00:2703:3c72:eb1a:cffd])
+        by smtp.gmail.com with ESMTPSA id h12-20020a170902f70c00b0016bfa1a5170sm5207389plo.285.2022.07.07.14.19.44
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 07 Jul 2022 14:19:45 -0700 (PDT)
+From:   Rob Clark <robdclark@gmail.com>
+To:     dri-devel@lists.freedesktop.org
+Cc:     freedreno@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
+        Rob Clark <robdclark@chromium.org>,
+        Rob Clark <robdclark@gmail.com>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Sean Paul <sean@poorly.run>, David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Jessica Zhang <quic_jesszhan@quicinc.com>,
+        Fernando Ramos <greenfoo@u92.eu>,
+        Mark Yacoub <markyacoub@google.com>,
+        linux-kernel@vger.kernel.org (open list)
+Subject: [PATCH] drm/msm/dpu: Fix for non-visible planes
+Date:   Thu,  7 Jul 2022 14:20:00 -0700
+Message-Id: <20220707212003.1710163-1-robdclark@gmail.com>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220618091901.25034-1-fmdefrancesco@gmail.com>
-User-Agent: Mutt/1.5.23.1-rc1 (2014-03-12)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Jun 18, 2022 at 11:19:01AM +0200, Fabio M. De Francesco wrote:
-> The use of kmap() is being deprecated in favor of kmap_local_page(). With
-> kmap_local_page(), the mapping is per thread, CPU local and not globally
-> visible.
-> 
-> Therefore, use kmap_local_page() / kunmap_local() in zlib_decompress_bio()
-> because in this function the mappings are per thread and are not visible
-> in other contexts.
-> 
-> Tested with xfstests on QEMU + KVM 32-bits VM with 4GB of RAM and
-> HIGHMEM64G enabled. This patch passes 26/26 tests of group "compress".
-> 
-> Suggested-by: Ira Weiny <ira.weiny@intel.com>
-> Reviewed-by: Qu Wenruo <wqu@suse.com>
-> Signed-off-by: Fabio M. De Francesco <fmdefrancesco@gmail.com>
+From: Rob Clark <robdclark@chromium.org>
 
-Added to the kmap patches, thanks.
+Fixes `kms_cursor_crc --run-subtest cursor-offscreen`.. when the cursor
+moves offscreen the plane becomes non-visible, so we need to skip over
+it in crtc atomic test and mixer setup.
+
+Signed-off-by: Rob Clark <robdclark@chromium.org>
+---
+ drivers/gpu/drm/msm/disp/dpu1/dpu_crtc.c | 6 ++++++
+ 1 file changed, 6 insertions(+)
+
+diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_crtc.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_crtc.c
+index 4dd0ce09ca74..4ba000951a90 100644
+--- a/drivers/gpu/drm/msm/disp/dpu1/dpu_crtc.c
++++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_crtc.c
+@@ -422,6 +422,9 @@ static void _dpu_crtc_blend_setup_mixer(struct drm_crtc *crtc,
+ 		if (!state)
+ 			continue;
+ 
++		if (!state->visible)
++			continue;
++
+ 		pstate = to_dpu_plane_state(state);
+ 		fb = state->fb;
+ 
+@@ -1195,6 +1198,9 @@ static int dpu_crtc_atomic_check(struct drm_crtc *crtc,
+ 		if (cnt >= DPU_STAGE_MAX * 4)
+ 			continue;
+ 
++		if (!pstate->visible)
++			continue;
++
+ 		pstates[cnt].dpu_pstate = dpu_pstate;
+ 		pstates[cnt].drm_pstate = pstate;
+ 		pstates[cnt].stage = pstate->normalized_zpos;
+-- 
+2.36.1
+

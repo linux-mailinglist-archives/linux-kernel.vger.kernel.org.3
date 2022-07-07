@@ -2,53 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 42DA9569876
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 05:00:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D70C569888
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 05:01:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234908AbiGGDAT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Jul 2022 23:00:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60442 "EHLO
+        id S235001AbiGGDAq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Jul 2022 23:00:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60486 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234870AbiGGDAQ (ORCPT
+        with ESMTP id S234900AbiGGDAS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Jul 2022 23:00:16 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 916622F669;
-        Wed,  6 Jul 2022 20:00:14 -0700 (PDT)
+        Wed, 6 Jul 2022 23:00:18 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A60052A965;
+        Wed,  6 Jul 2022 20:00:17 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2F27D62153;
+        by ams.source.kernel.org (Postfix) with ESMTPS id 529C5B81FF0;
+        Thu,  7 Jul 2022 03:00:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id EF119C341CB;
         Thu,  7 Jul 2022 03:00:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 8A37AC341C6;
-        Thu,  7 Jul 2022 03:00:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1657162813;
-        bh=N8b8Kgo3TvZmFgrWYY3ovqkpBeOo6ywQTI9gO+NvEcI=;
+        s=k20201202; t=1657162815;
+        bh=odRgIWvrDMydZj1zXqpnhJanbUfaj1HRM7ILJa/0z80=;
         h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=DYo65RSKuCA308SwdH4IS29/zn5qkE/oeVaqJUNnCyepBLgX4fyYSRZ08pJORE3iq
-         XN6bn5MlDIAhE2SAURtNVGix1erky5naN9BYVUee+BSF+dzcUm/D0l1Aa//8Vj3l80
-         W/tSUvXK0bfLxlh9tp+1luFwK6Iz6SFOeMItwneLSm+O+va/AwXxOUWwAWX38q54Rf
-         KhnR5ApY7PksUeJy8GLzeEIplzlW5MNmNV95UhWmPGUQTreHdUjyuSKl081QSwd5+i
-         K4Ai8GrmyR5bKBPMjuBBps0BGJhW+rAqvryQMYLHnFc3+ZUD7fnGIv/99Ogo8eGMHy
-         YoAlLlMveOlPA==
+        b=j5D+I6kHOlEmipnGACrX+hPdTH/xsyHhzA4/NZb/9lekxunutJ28Cfjg5tU9LpEHl
+         rr0W1ML4sGPsD+Ooot4DeKA5FS/wlQRV3k1mFOxEfQ0GJQ3F+VNv01uBxk3tuSoXEZ
+         tTGtMFFL0dNQoqvsA28U9Aw7Fnie2FnuZf1jxkUVDb4Dh1gkyIWL13xJZtUJsgoyGb
+         Pv8zVhRYmhvaicEqKtdXu9n8GC7Sci7gWUrICWrkopNgG+7p4vYXAyUkpc6PpLFZpW
+         O6bVM1eaKQnk3X0lw2PXSyifb16C9phq3Vpf40+NfzL5+OpUyW00zmlKK/YsBRYfIS
+         ebBym7nVROcCQ==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 6D51CE45BD9;
-        Thu,  7 Jul 2022 03:00:13 +0000 (UTC)
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id D6F15E45BE0;
+        Thu,  7 Jul 2022 03:00:14 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net v2] net: rose: fix UAF bug caused by rose_t0timer_expiry
+Subject: Re: [PATCH] cnic: Use the bitmap API to allocate bitmaps
 From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <165716281344.11165.3540358551022288195.git-patchwork-notify@kernel.org>
-Date:   Thu, 07 Jul 2022 03:00:13 +0000
-References: <20220705125610.77971-1-duoming@zju.edu.cn>
-In-Reply-To: <20220705125610.77971-1-duoming@zju.edu.cn>
-To:     Duoming Zhou <duoming@zju.edu.cn>
-Cc:     linux-hams@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, ralf@linux-mips.org,
-        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com
+Message-Id: <165716281487.11165.4392215303964464060.git-patchwork-notify@kernel.org>
+Date:   Thu, 07 Jul 2022 03:00:14 +0000
+References: <521bd2a49be5d88e493bcfb63505d3df91a1c2d2.1657052743.git.christophe.jaillet@wanadoo.fr>
+In-Reply-To: <521bd2a49be5d88e493bcfb63505d3df91a1c2d2.1657052743.git.christophe.jaillet@wanadoo.fr>
+To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Cc:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, linux-kernel@vger.kernel.org,
+        kernel-janitors@vger.kernel.org, netdev@vger.kernel.org
 X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -61,29 +60,22 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 Hello:
 
-This patch was applied to netdev/net.git (master)
+This patch was applied to netdev/net-next.git (master)
 by Jakub Kicinski <kuba@kernel.org>:
 
-On Tue,  5 Jul 2022 20:56:10 +0800 you wrote:
-> There are UAF bugs caused by rose_t0timer_expiry(). The
-> root cause is that del_timer() could not stop the timer
-> handler that is running and there is no synchronization.
-> One of the race conditions is shown below:
+On Tue,  5 Jul 2022 22:25:58 +0200 you wrote:
+> Use bitmap_zalloc()/bitmap_free() instead of hand-writing them.
 > 
->     (thread 1)             |        (thread 2)
->                            | rose_device_event
->                            |   rose_rt_device_down
->                            |     rose_remove_neigh
-> rose_t0timer_expiry        |       rose_stop_t0timer(rose_neigh)
->   ...                      |         del_timer(&neigh->t0timer)
->                            |         kfree(rose_neigh) //[1]FREE
->   neigh->dce_mode //[2]USE |
+> It is less verbose and it improves the semantic.
 > 
-> [...]
+> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+> ---
+>  drivers/net/ethernet/broadcom/cnic.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
 
 Here is the summary with links:
-  - [net,v2] net: rose: fix UAF bug caused by rose_t0timer_expiry
-    https://git.kernel.org/netdev/net/c/148ca0451807
+  - cnic: Use the bitmap API to allocate bitmaps
+    https://git.kernel.org/netdev/net-next/c/76d3c114706f
 
 You are awesome, thank you!
 -- 

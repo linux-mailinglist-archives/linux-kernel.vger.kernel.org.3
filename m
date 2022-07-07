@@ -2,77 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 30D5156ACF6
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 22:51:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EDD8A56ACF8
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 22:52:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236497AbiGGUvN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Jul 2022 16:51:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44678 "EHLO
+        id S236587AbiGGUvi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Jul 2022 16:51:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44952 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236437AbiGGUvI (ORCPT
+        with ESMTP id S236533AbiGGUvg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Jul 2022 16:51:08 -0400
-Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 066B42CDE2
-        for <linux-kernel@vger.kernel.org>; Thu,  7 Jul 2022 13:51:05 -0700 (PDT)
-Received: by mail-lf1-x133.google.com with SMTP id e12so33143639lfr.6
-        for <linux-kernel@vger.kernel.org>; Thu, 07 Jul 2022 13:51:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=1yCn9FzE3TgPn9G9aMPiVPfAOGS2N8GQpGxVZMGerPY=;
-        b=xOPoHYFsS3NPMHesqsz3d/V7flw6QibIRa52MJorz6ZxvJKN9QBEIYgo0qcMCT933D
-         XLChc0UZYhnk66+HrEPy+AjH0K3NCiJ2Nd2Wi+cDxK2OJOeqa5oI+6+xfeEuLTVE1Kwc
-         jdCw0eAubPWWwY6SLkdR7tFbawyksR/tx2pRe2fEuw1tMid/UMGjep+YwCLQFtq9n68k
-         Ng2sagiJPQG80XifY2wKkPd1g7eNcfK8arcTcOYKzbzc5Hhl4IrcsGOKjMjHe/qh/4A2
-         1Q+J8SqXGvSpHcSnN/zhZPv8gR4U6T8l2v60uv61WJAU0GmpLT4Qsn7aH5vTK4hFWWUR
-         Ck5w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=1yCn9FzE3TgPn9G9aMPiVPfAOGS2N8GQpGxVZMGerPY=;
-        b=XVmrpoxMCJ47ip6QxB1gdcnrxEzC5qgfkKVhdkx5xXlOXEuACYZ5y5QIl17Zsm+i3k
-         QrHSBT2zxKz2vdCTqZdkwQVKAQr5+iXEGHH2W2KKZWmPUL79dgvspTgJkET4AA2g1jRG
-         UHwBYqFzXRLNlNgj3KpAhHS9sQCG1IbCatTAbCyvqiDMbpmEu+/KCDv8qY7UXfn3enuq
-         q2Xugj846ez7cTRKkCgBLXSU3yOp7QBC34o29A+rTr73Z0nnvIYCo5szZk2NrndQJixW
-         BVJm3ztxuZ8omrds4ZcM2NI3zyEGrNwvuHnAhRePOTO5jAkizPTYHd7Ft+tJBusgLAEd
-         ealg==
-X-Gm-Message-State: AJIora/m49jfFClNXrs8Z5zD7As3YHIepdnsfv7tDoCkxRmc2pFvrP+V
-        vz/mXnFCu/vbGToiuAHrptgolQ==
-X-Google-Smtp-Source: AGRyM1tMDs6Igfr2CIm7SALgNlpy/riEx4RV4z/bsOQ3j14KxMMU9E3LGwhg9JehjwtKyPbRJFvJlQ==
-X-Received: by 2002:a05:6512:3084:b0:47f:6c9e:952e with SMTP id z4-20020a056512308400b0047f6c9e952emr43810lfd.332.1657227063392;
-        Thu, 07 Jul 2022 13:51:03 -0700 (PDT)
-Received: from [192.168.1.211] ([37.153.55.125])
-        by smtp.gmail.com with ESMTPSA id m6-20020a056512358600b0047f8de9734asm7040369lfr.123.2022.07.07.13.51.02
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 07 Jul 2022 13:51:02 -0700 (PDT)
-Message-ID: <ecbbe366-b7c7-885d-f574-0ac900d7599a@linaro.org>
-Date:   Thu, 7 Jul 2022 23:51:01 +0300
+        Thu, 7 Jul 2022 16:51:36 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACA652CE06;
+        Thu,  7 Jul 2022 13:51:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+        Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
+        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
+        bh=TTdDoMIncBueyDVjmYEyIZn/enGMqk78p+ra2MsjS+w=; b=sE7/kRbdlSv7EDNBiYq9turMip
+        Y8jFHim2VJqGyNd6kV+yyl+ghqx0wWjY1oAiKWWvg1OEtRazc2fwps6uBk2W/rAY6QjFvLj3AdcQK
+        NjzHVTWhmxPc8gfHjR0GL/zj+HVMZ1CmupVS4UZZqcjbz8BNmmW8+/IvXVqDA36+u3l3XcpEFhFSQ
+        TWPZ0amSSofhK9YDY4uV5jWZHbMQjPj+zWVwcLWCoEupQm21QzaYFo6WKR5PF7M4AdVOVKeBkAytS
+        btzrXPQ2hDd3Km43Qd42cgGLAXZBmv2WuEUPASG78hGx1ea8ym3uKyTgvrtiaQEfTl5URkscMo0KZ
+        Pud0lScw==;
+Received: from [2601:1c0:6280:3f0::a6b3]
+        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1o9YSz-000B7y-VT; Thu, 07 Jul 2022 20:51:18 +0000
+Message-ID: <a2984435-6c8f-aee2-1e42-efc0b7cc4078@infradead.org>
+Date:   Thu, 7 Jul 2022 13:51:15 -0700
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH v4] drm/msm/dp: make eDP panel as the first connected
- connector
-Content-Language: en-GB
-To:     Kuogee Hsieh <quic_khsieh@quicinc.com>, robdclark@gmail.com,
-        sean@poorly.run, swboyd@chromium.org, dianders@chromium.org,
-        vkoul@kernel.org, daniel@ffwll.ch, airlied@linux.ie,
-        agross@kernel.org, bjorn.andersson@linaro.org
-Cc:     quic_abhinavk@quicinc.com, quic_aravindh@quicinc.com,
-        quic_sbillaka@quicinc.com, freedreno@lists.freedesktop.org,
-        dri-devel@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <1657135928-31195-1-git-send-email-quic_khsieh@quicinc.com>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-In-Reply-To: <1657135928-31195-1-git-send-email-quic_khsieh@quicinc.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+ Thunderbird/91.11.0
+Subject: Re: [PATCH v5 5/6] HID: add spi-hid, transport driver for HID over
+ SPI bus
+Content-Language: en-US
+To:     Jarrett Schultz <jaschultzms@gmail.com>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Jiri Kosina <jikos@kernel.org>,
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Marcel Ziswiler <marcel.ziswiler@toradex.com>,
+        Biju Das <biju.das.jz@bp.renesas.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Vinod Koul <vkoul@kernel.org>
+Cc:     Dmitry Antipov <dmanti@microsoft.com>, linux-input@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        Jarrett Schultz <jaschultz@microsoft.com>
+References: <20220707165902.3184-1-jaschultzMS@gmail.com>
+ <20220707165902.3184-6-jaschultzMS@gmail.com>
+From:   Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <20220707165902.3184-6-jaschultzMS@gmail.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,47 +71,86 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 06/07/2022 22:32, Kuogee Hsieh wrote:
-> Some userspace presumes that the first connected connector is the main
-> display, where it's supposed to display e.g. the login screen. For
-> laptops, this should be the main panel.
-> 
-> This patch call drm_helper_move_panel_connectors_to_head() after
-> drm_bridge_connector_init() to make sure eDP stay at head of
-> connected connector list. This fixes unexpected corruption happen
-> at eDP panel if eDP is not placed at head of connected connector
-> list.
-> 
-> Changes in v2:
-> -- move drm_helper_move_panel_connectors_to_head() to
-> 		dpu_kms_drm_obj_init()
-> 
-> Changes in v4:
-> -- move drm_helper_move_panel_connectors_to_head() to msm_drm_init()
-> 
-> Signed-off-by: Kuogee Hsieh <quic_khsieh@quicinc.com>
+Hi--
 
-Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+On 7/7/22 09:59, Jarrett Schultz wrote:
+> From: Jarrett Schultz <jaschultz@microsoft.com>
+> 
+> This driver follows HID Over SPI Protocol Specification 1.0 available at
+> https://www.microsoft.com/en-us/download/details.aspx?id=103325. The
+> initial version of the driver does not support: 1) multi-fragment input
+> reports, 2) sending GET_INPUT and COMMAND output report types and
+> processing their respective acknowledge input reports, and 3) device
+> sleep power state.
+> 
+> Signed-off-by: Dmitry Antipov <dmanti@microsoft.com>
+
+Missing your (Jarrett's) Signed-off-by: here.
+
+More below...
 
 > ---
->   drivers/gpu/drm/msm/msm_drv.c | 2 ++
->   1 file changed, 2 insertions(+)
+>  drivers/hid/Kconfig                 |    2 +
+>  drivers/hid/Makefile                |    1 +
+>  drivers/hid/spi-hid/Kconfig         |   25 +
+>  drivers/hid/spi-hid/Makefile        |   12 +
+>  drivers/hid/spi-hid/spi-hid-core.c  | 1326 +++++++++++++++++++++++++++
+>  drivers/hid/spi-hid/spi-hid-core.h  |  188 ++++
+>  drivers/hid/spi-hid/spi-hid-of.c    |  141 +++
+>  drivers/hid/spi-hid/spi-hid-of.h    |   30 +
+>  drivers/hid/spi-hid/spi-hid_trace.h |  194 ++++
+>  drivers/hid/spi-hid/trace.c         |    9 +
+>  10 files changed, 1928 insertions(+)
+>  create mode 100644 drivers/hid/spi-hid/Kconfig
+>  create mode 100644 drivers/hid/spi-hid/Makefile
+>  create mode 100644 drivers/hid/spi-hid/spi-hid-core.c
+>  create mode 100644 drivers/hid/spi-hid/spi-hid-core.h
+>  create mode 100644 drivers/hid/spi-hid/spi-hid-of.c
+>  create mode 100644 drivers/hid/spi-hid/spi-hid-of.h
+>  create mode 100644 drivers/hid/spi-hid/spi-hid_trace.h
+>  create mode 100644 drivers/hid/spi-hid/trace.c
 > 
-> diff --git a/drivers/gpu/drm/msm/msm_drv.c b/drivers/gpu/drm/msm/msm_drv.c
-> index 4a3dda2..4d518c2 100644
-> --- a/drivers/gpu/drm/msm/msm_drv.c
-> +++ b/drivers/gpu/drm/msm/msm_drv.c
-> @@ -419,6 +419,8 @@ static int msm_drm_init(struct device *dev, const struct drm_driver *drv)
->   		}
->   	}
->   
-> +	drm_helper_move_panel_connectors_to_head(ddev);
-> +
->   	ddev->mode_config.funcs = &mode_config_funcs;
->   	ddev->mode_config.helper_private = &mode_config_helper_funcs;
->   
 
+> diff --git a/drivers/hid/spi-hid/Kconfig b/drivers/hid/spi-hid/Kconfig
+> new file mode 100644
+> index 000000000000..37302d658162
+> --- /dev/null
+> +++ b/drivers/hid/spi-hid/Kconfig
+> @@ -0,0 +1,25 @@
+> +#
+> +# Copyright (c) 2021 Microsoft Corporation
+> +#
+> +# This program is free software; you can redistribute it and/or modify it
+> +# under the terms of the GNU General Public License version 2 as published by
+> +# the Free Software Foundation.
+> +#
+
+Please just use SPDX tags instead of all of that.
+See other hid/Kconfig files for examples.
+
+> +menu "SPI HID support"
+> +	depends on SPI
+> +
+> +config SPI_HID
+> +	tristate "HID over SPI transport layer"
+> +	default n
+> +	depends on SPI && INPUT && OF
+> +	select HID
+> +	help
+> +	  Say Y here if you use a keyboard, a touchpad, a touchscreen, or any
+> +	  other HID based devices which is connected to your computer via SPI.
+
+	        HID-based devices which are connected
+(or)
+	        HID-based device which is connected
+
+> +
+> +	  If unsure, say N.
+> +
+> +	  This support is also available as a module.  If so, the module
+> +	  will be called spi-hid.
+> +
+> +endmenu
 
 -- 
-With best wishes
-Dmitry
+~Randy

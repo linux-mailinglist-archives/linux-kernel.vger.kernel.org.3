@@ -2,356 +2,254 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2AB0556AC93
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 22:13:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6632056AC97
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 22:16:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236681AbiGGUMh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Jul 2022 16:12:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50808 "EHLO
+        id S236310AbiGGUQI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Jul 2022 16:16:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53248 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236731AbiGGUMY (ORCPT
+        with ESMTP id S235637AbiGGUQH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Jul 2022 16:12:24 -0400
-Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B70060521
-        for <linux-kernel@vger.kernel.org>; Thu,  7 Jul 2022 13:12:23 -0700 (PDT)
-Received: by mail-yb1-xb49.google.com with SMTP id t10-20020a5b07ca000000b0066ec1bb6e2cso1425037ybq.14
-        for <linux-kernel@vger.kernel.org>; Thu, 07 Jul 2022 13:12:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
-         :cc;
-        bh=tFW8VFrPqiDt4A42R2rdLJY8CJp1Wy+H1xcOhCNPxog=;
-        b=Rn6JrCUtfkakxQ60+6FAQ4STRa7Key1gCigctNzJ02Njz7n6jwVl15rlIFGk+YQ7Bg
-         frVrlmPOAm4Jpts3omH1b93EKvfePIXPbIglc9usLMJZ4bmFD4dL4RTJYpL6rqeWRIrG
-         ylSuPxlOs3xFhf88wOkfHRJUjOflTaGKZtoOdLWd1HLrUASvDxI/jXi3bpATzqAbjDwH
-         mgKb/bcr+3xlnYT2THb2YecIRcVLhKp8CRO1RT0Fj48EIYeDMG7N4LYBr3xvOCyssk6O
-         ByckgYq4XKY+AzAzn0VJf1BO4pu9YtGXpjFZ00Eu/gp/j1i7C3zvXrCwHmZcxrzeRNXi
-         a81A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
-         :references:subject:from:to:cc;
-        bh=tFW8VFrPqiDt4A42R2rdLJY8CJp1Wy+H1xcOhCNPxog=;
-        b=h1WG3a7RLmZdXNZEi2bIOYDUdhD5RhHNnbthJ1JOh/30dTHaRJwrrduacfFMZekSZA
-         GSoaZMH7SV0RinQTU1eHBnyd/kcOCG2gP0/2HqGpu8n688uuJrlY0Pc76kVxSxzp6mjb
-         +95V8sHDbphQLUawziBjmIo5BXlfT9Pck3MZwFRC3WwQGchwrX+RQF7W77gOU/zI1H2e
-         X1wrYPgm6TLgsrAjZvrbbMmHAxQQMYmYK4pXfj2/6ExfwBhkOiJ0C2c5K8Kv82MUH5Ln
-         NprfSAQ5EsD2TJDzp/FQCC8j9mOeErScy1TmeJqkC3R7Lrq8MEFn1cT+jxmS5YGDzDeo
-         qiNA==
-X-Gm-Message-State: AJIora8grEKogIdkipZTBssqRIhqSDZcNWPSkgC3iK3LMoXn4TlW7jq7
-        P6QcUS6HrtV+RMNiy4+DtE1YIzv5mMaB
-X-Google-Smtp-Source: AGRyM1vYTeg8ZWnMrebSTLUXApWydRdUJGbbTc4ql7usQE9POHEV2jrTwgfVslyVSzDAY8hTCBBbmznwaojz
-X-Received: from irogers.svl.corp.google.com ([2620:15c:2d4:203:bf75:f79:d509:a8d1])
- (user=irogers job=sendgmr) by 2002:a81:1355:0:b0:31c:9441:ec1b with SMTP id
- 82-20020a811355000000b0031c9441ec1bmr26860818ywt.101.1657224742397; Thu, 07
- Jul 2022 13:12:22 -0700 (PDT)
-Date:   Thu,  7 Jul 2022 13:12:13 -0700
-In-Reply-To: <20220707201213.331663-1-irogers@google.com>
-Message-Id: <20220707201213.331663-3-irogers@google.com>
-Mime-Version: 1.0
-References: <20220707201213.331663-1-irogers@google.com>
-X-Mailer: git-send-email 2.37.0.rc0.161.g10f37bed90-goog
-Subject: [PATCH v6 2/2] perf test: Json format checking
-From:   Ian Rogers <irogers@google.com>
-To:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Kan Liang <kan.liang@linux.intel.com>,
-        Zhengjun Xing <zhengjun.xing@linux.intel.com>,
-        Sandipan Das <sandipan.das@amd.com>,
-        Claire Jensen <cjense@google.com>, Alyssa Ross <hi@alyssa.is>,
-        Like Xu <likexu@tencent.com>,
-        James Clark <james.clark@arm.com>,
-        Florian Fischer <florian.fischer@muhq.space>,
-        linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
-        Claire Jensen <clairej735@gmail.com>
-Cc:     Stephane Eranian <eranian@google.com>,
-        Ian Rogers <irogers@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        Thu, 7 Jul 2022 16:16:07 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE4F21D32D;
+        Thu,  7 Jul 2022 13:16:05 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6E02662418;
+        Thu,  7 Jul 2022 20:16:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D7BB2C3411E;
+        Thu,  7 Jul 2022 20:16:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1657224964;
+        bh=ZFMH5B/Kr49IH99WLl66v3d7NBi0EDRNt8+9wu8lIB4=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=XAG/5TMp8LDglt139jKEchKVWxEpGe2utgAvIcGsBK/smlcBlpQaBaMlVm21Q38wt
+         RZPA+aNRJipERy7WHiK7IK+4gXnQr+rkfXXx9hvVPzWBwx/xHoLoNhqEVVo+uAj2mh
+         voVFX0kdKiwjbchQRlOIMlToO1C+eDKFRw+/G6W1dpctheaq4WffcTDyPlWVjpvqae
+         kqxMKEPZc/gBLfli3oGHkdkHqvdIzzocMlPgTBDs1FH96krZHs8yElrHOz5FoPkdbq
+         cAqQtSpDYYB/wkvW0JHeruxF2QRd4v5SIOORZuw6MVwHvSph3g+/jMgC/aSsaY2fFv
+         ca0oGbuioWGbw==
+Date:   Thu, 7 Jul 2022 21:15:58 +0100
+From:   Mauro Carvalho Chehab <mchehab@kernel.org>
+To:     Akira Yokosawa <akiyks@gmail.com>
+Cc:     corbet@lwn.net, ksummit-discuss@lists.linuxfoundation.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        mchehab+huawei@kernel.org
+Subject: Re: [PATCH v2 0/5] Address some issues with sphinx detection
+Message-ID: <20220707211558.438a27d4@sal.lan>
+In-Reply-To: <d0e1a08a-b965-ada6-e026-4e1cc38fbd90@gmail.com>
+References: <cover.1656756450.git.mchehab@kernel.org>
+        <d0e1a08a-b965-ada6-e026-4e1cc38fbd90@gmail.com>
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Claire Jensen <cjense@google.com>
+Em Tue, 5 Jul 2022 13:15:57 +0900
+Akira Yokosawa <akiyks@gmail.com> escreveu:
 
-Add field checking tests for perf stat JSON output.
-Sanity checks the expected number of fields are present, that the
-expected keys are present and they have the correct values.
+> Hi Mauro,
+> 
+> On Sat,  2 Jul 2022 11:11:24 +0100, Mauro Carvalho Chehab  wrote:
+> > Checking if Sphinx is available and read to run is tricky, and may involve
+> > installing several packages for the document build to happen.
+> > 
+> > There are two options to install Sphinx:
+> > 
+> > 	- via distro-provided packages;
+> > 	- via pip, using virtualenv/venv.
+> > 
+> > Some recent discussions showed a couple of misleading instructions.
+> > 
+> > This series improves the Sphinx detection by:
+> > 
+> > - Fixing the logich with checks if a past venv is working and recommend
+> >   just enabling it instead of installing a new venv;
+> > - Detect if sphinx-build stopped working on a venv. This may happen during
+> >   distribution updates;
+> > - Move the PDF minimal version to be later, in order for it to be printed only
+> >   after finishing the Sphinx version check;
+> > 
+> > Additionally, as now the Sphinx provided on almost all modern distros are
+> > above the minimal required version, place instructions about how to install
+> > Sphinx from the distro-provided packages after placing the instructions for
+> > installing it via venv.
+> > 
+> > This will hopefully help to have more developers checking documentation
+> > builds with
+> > 
+> > 	make htmldocs  
+> So this is a meta-level feedback considering the most likely uses
+> of sphinx-pre-install.
+> 
+> I think first-time users of sphinx-pre-install are more likely
+> interested in getting ready for running "make html".  They won't
+> bother with "make pdfdocs". 
 
-Signed-off-by: Claire Jensen <cjense@google.com>
-Signed-off-by: Ian Rogers <irogers@google.com>
----
- .../tests/shell/lib/perf_json_output_lint.py  |  95 +++++++++++
- tools/perf/tests/shell/stat+json_output.sh    | 147 ++++++++++++++++++
- 2 files changed, 242 insertions(+)
- create mode 100644 tools/perf/tests/shell/lib/perf_json_output_lint.py
- create mode 100755 tools/perf/tests/shell/stat+json_output.sh
+True, but, as you're pointing below, math expressions require LaTeX.
 
-diff --git a/tools/perf/tests/shell/lib/perf_json_output_lint.py b/tools/perf/tests/shell/lib/perf_json_output_lint.py
-new file mode 100644
-index 000000000000..aaa4a8677b6c
---- /dev/null
-+++ b/tools/perf/tests/shell/lib/perf_json_output_lint.py
-@@ -0,0 +1,95 @@
-+#!/usr/bin/python
-+# SPDX-License-Identifier: (LGPL-2.1 OR BSD-2-Clause)
-+# Basic sanity check of perf JSON output as specified in the man page.
-+
-+import argparse
-+import sys
-+import json
-+
-+ap = argparse.ArgumentParser()
-+ap.add_argument('--no-args', action='store_true')
-+ap.add_argument('--interval', action='store_true')
-+ap.add_argument('--system-wide-no-aggr', action='store_true')
-+ap.add_argument('--system-wide', action='store_true')
-+ap.add_argument('--event', action='store_true')
-+ap.add_argument('--per-core', action='store_true')
-+ap.add_argument('--per-thread', action='store_true')
-+ap.add_argument('--per-die', action='store_true')
-+ap.add_argument('--per-node', action='store_true')
-+ap.add_argument('--per-socket', action='store_true')
-+args = ap.parse_args()
-+
-+Lines = sys.stdin.readlines()
-+
-+def isfloat(num):
-+  try:
-+    float(num)
-+    return True
-+  except ValueError:
-+    return False
-+
-+
-+def isint(num):
-+  try:
-+    int(num)
-+    return True
-+  except ValueError:
-+    return False
-+
-+def is_counter_value(num):
-+  return isfloat(num) or num == '<not counted>' or num == '<not supported>'
-+
-+def check_json_output(expected_items):
-+  if expected_items != -1:
-+    for line in Lines:
-+      if 'failed' not in line:
-+        count = 0
-+        count = line.count(',')
-+        if count != expected_items and (count == 1 or count == 2) and 'metric-value' in line:
-+          # Events that generate >1 metric may have isolated metric
-+          # values and possibly have an interval prefix.
-+          continue
-+        if count != expected_items:
-+          raise RuntimeError(f'wrong number of fields. counted {count} expected {expected_items}'
-+                             f' in \'{line}\'')
-+  checks = {
-+      'aggregate-number': lambda x: isfloat(x),
-+      'core': lambda x: True,
-+      'counter-value': lambda x: is_counter_value(x),
-+      'cgroup': lambda x: True,
-+      'cpu': lambda x: isint(x),
-+      'die': lambda x: True,
-+      'event': lambda x: True,
-+      'event-runtime': lambda x: isfloat(x),
-+      'interval': lambda x: isfloat(x),
-+      'metric-unit': lambda x: True,
-+      'metric-value': lambda x: isfloat(x),
-+      'node': lambda x: True,
-+      'pcnt-running': lambda x: isfloat(x),
-+      'socket': lambda x: True,
-+      'thread': lambda x: True,
-+      'unit': lambda x: True,
-+  }
-+  input = '[\n' + ','.join(Lines) + '\n]'
-+  for item in json.loads(input):
-+    for key, value in item.items():
-+      if key not in checks:
-+        raise RuntimeError(f'Unexpected key: key={key} value={value}')
-+      if not checks[key](value):
-+        raise RuntimeError(f'Check failed for: key={key} value={value}')
-+
-+
-+try:
-+  if args.no_args or args.system_wide or args.event:
-+    expected_items = 6
-+  elif args.interval or args.per_thread or args.system_wide_no_aggr:
-+    expected_items = 7
-+  elif args.per_core or args.per_socket or args.per_node or args.per_die:
-+    expected_items = 8
-+  else:
-+    # If no option is specified, don't check the number of items.
-+    expected_items = -1
-+  check_json_output(expected_items)
-+except:
-+  print('Test failed for input:\n' + '\n'.join(Lines))
-+  raise
-diff --git a/tools/perf/tests/shell/stat+json_output.sh b/tools/perf/tests/shell/stat+json_output.sh
-new file mode 100755
-index 000000000000..ea8714a36051
---- /dev/null
-+++ b/tools/perf/tests/shell/stat+json_output.sh
-@@ -0,0 +1,147 @@
-+#!/bin/bash
-+# perf stat JSON output linter
-+# SPDX-License-Identifier: (LGPL-2.1 OR BSD-2-Clause)
-+# Checks various perf stat JSON output commands for the
-+# correct number of fields.
-+
-+set -e
-+
-+pythonchecker=$(dirname $0)/lib/perf_json_output_lint.py
-+if [ "x$PYTHON" == "x" ]
-+then
-+	if which python3 > /dev/null
-+	then
-+		PYTHON=python3
-+	elif which python > /dev/null
-+	then
-+		PYTHON=python
-+	else
-+		echo Skipping test, python not detected please set environment variable PYTHON.
-+		exit 2
-+	fi
-+fi
-+
-+# Return true if perf_event_paranoid is > $1 and not running as root.
-+function ParanoidAndNotRoot()
-+{
-+	 [ $(id -u) != 0 ] && [ $(cat /proc/sys/kernel/perf_event_paranoid) -gt $1 ]
-+}
-+
-+check_no_args()
-+{
-+	echo -n "Checking json output: no args "
-+	perf stat -j true 2>&1 | $PYTHON $pythonchecker --no-args
-+	echo "[Success]"
-+}
-+
-+check_system_wide()
-+{
-+	echo -n "Checking json output: system wide "
-+	if ParanoidAndNotRoot 0
-+	then
-+		echo "[Skip] paranoia and not root"
-+		return
-+	fi
-+	perf stat -j -a true 2>&1 | $PYTHON $pythonchecker --system-wide
-+	echo "[Success]"
-+}
-+
-+check_system_wide_no_aggr()
-+{
-+	echo -n "Checking json output: system wide "
-+	if ParanoidAndNotRoot 0
-+	then
-+		echo "[Skip] paranoia and not root"
-+		return
-+	fi
-+	echo -n "Checking json output: system wide no aggregation "
-+	perf stat -j -A -a --no-merge true 2>&1 | $PYTHON $pythonchecker --system-wide-no-aggr
-+	echo "[Success]"
-+}
-+
-+check_interval()
-+{
-+	echo -n "Checking json output: interval "
-+	perf stat -j -I 1000 true 2>&1 | $PYTHON $pythonchecker --interval
-+	echo "[Success]"
-+}
-+
-+
-+check_event()
-+{
-+	echo -n "Checking json output: event "
-+	perf stat -j -e cpu-clock true 2>&1 | $PYTHON $pythonchecker --event
-+	echo "[Success]"
-+}
-+
-+check_per_core()
-+{
-+	echo -n "Checking json output: per core "
-+	if ParanoidAndNotRoot 0
-+	then
-+		echo "[Skip] paranoia and not root"
-+		return
-+	fi
-+	perf stat -j --per-core -a true 2>&1 | $PYTHON $pythonchecker --per-core
-+	echo "[Success]"
-+}
-+
-+check_per_thread()
-+{
-+	echo -n "Checking json output: per thread "
-+	if ParanoidAndNotRoot 0
-+	then
-+		echo "[Skip] paranoia and not root"
-+		return
-+	fi
-+	perf stat -j --per-thread -a true 2>&1 | $PYTHON $pythonchecker --per-thread
-+	echo "[Success]"
-+}
-+
-+check_per_die()
-+{
-+	echo -n "Checking json output: per die "
-+	if ParanoidAndNotRoot 0
-+	then
-+		echo "[Skip] paranoia and not root"
-+		return
-+	fi
-+	perf stat -j --per-die -a true 2>&1 | $PYTHON $pythonchecker --per-die
-+	echo "[Success]"
-+}
-+
-+check_per_node()
-+{
-+	echo -n "Checking json output: per node "
-+	if ParanoidAndNotRoot 0
-+	then
-+		echo "[Skip] paranoia and not root"
-+		return
-+	fi
-+	perf stat -j --per-node -a true 2>&1 | $PYTHON $pythonchecker --per-node
-+	echo "[Success]"
-+}
-+
-+check_per_socket()
-+{
-+	echo -n "Checking json output: per socket "
-+	if ParanoidAndNotRoot 0
-+	then
-+		echo "[Skip] paranoia and not root"
-+		return
-+	fi
-+	perf stat -j --per-socket -a true 2>&1 | $PYTHON $pythonchecker --per-socket
-+	echo "[Success]"
-+}
-+
-+check_no_args
-+check_system_wide
-+check_system_wide_no_aggr
-+check_interval
-+check_event
-+check_per_core
-+check_per_thread
-+check_per_die
-+check_per_node
-+check_per_socket
-+exit 0
--- 
-2.37.0.rc0.161.g10f37bed90-goog
+The idea of using --no-pdf is to setup an environment without LaTeX,
+meaning that math tags would only be partially parsed: basically, the
+output would be html with LaTeX-like math expressions (at least last
+time I tried).
 
+> They won't likely be interested in virtualenv, either.
+
+Yes and no. The big issue with using distro packages is that it will
+produce 11 false-positive warnings due to duplicated C symbols. This
+will only be (hopefully) fixed on a later Sphinx 5.x (or 6.0). So,
+it would take more than 6 months to get rid of those.
+
+Using 2.4.4, after the fixes I sent, plus the 3 fixes from IIO tree
+(yet to be merged on -next), there will be just 4 warnings.
+
+So, IMO, for me, is still preferred to use 2.4.4 via venv.
+
+> So I think it would be reasonable to change the default behavior
+> of sphinx-pre-install.
+
+With this series, both venv and non-venv settings will be shown by
+default, allowing the developer decide what he prefers.
+
+Still, I'm not 100% sure if this is the best thing to do. 
+
+One alternative would be to run the script on an even more silent mode
+when called via makefile, in a way that it would, instead it will keep:
+
+- not display anything if sphinx-build works;
+- display enable/disable commands if venv is detected;
+
+But, instead of showing install options, it would instead, print a message
+like:
+
+	Can't build the documentation. Please run:
+
+	./scripts/sphinx-pre-install <options)
+
+	Where options are:
+	  --no-virtualenv	- Recommend installing Sphinx instead of using a virtualenv
+	  --no-pdf		- don't check for dependencies required to build PDF docs
+	  ...
+
+Another alternative would be to use --no-pdf for make htmldocs/epubdocs
+target, and a "--pdf" for make pdfdocs.
+
+> I mean the reasonable behavior without any option would be that of
+> when both --no-pdf and --no-virtualenv are given to the current
+> version.
+> 
+> There are a few issues on --no-pdf.
+> 
+> It says imagemagick and gcc are necessary, but they are redundant
+> in "make html", as far as I see.
+
+Well, gcc is not really necessary, but anyone using the Kernel tree
+very likely needs it. So, it doesn't hurt checking for it.
+
+With regards to imagemagick, I'm not sure if, after your patches changing
+the way to build image, it is still needed. We need to review it.
+
+Changing the dependency chain is a lot of work, as we need to retest
+everything on all supported platforms, using minimal install. Here, I'm
+using lxc download, as it usually gets something close to the minimal
+distro install.
+
+> Furthermore, it doesn't check dvipng and latex, which are used
+> for generating math equation images in HTML.
+
+Not checking for LaTeX is per design. It makes the install a lot havier
+than what's actually needed. dvipng is a new dependency after the
+changes on svg and dot conversions. Yeah, we need to test it on all
+distros and properly add it where needed.
+
+> Fedora, RHEL/CentOS, and openSUSE Leap provide helpful packages
+> for installing math expression support.
+> 
+>     Fedora 36               python3-sphinx-latex (python3-sphinx depends on this)
+>     RHEL 9/CentOS stream 9  ditto
+>     openSUSE Leap 15.4      python3-Sphinx_4_2_0-latex
+>                                 (python3-Sphinx_4_2_0 depends on this) or
+>                             python3-Sphinx-latex
+>                                 (python3-Sphinx depends on this, version: 2.3.1)
+
+yes, but this will install LaTeX. We don't want this for the minimal htmldocs
+build type, as math is used only on a handful set of documents, and most
+developers can live without that.
+
+> Other distros, whose texlive packages are coarse grained, don't provide
+> such helper packages.
+> 
+> Also, as mentioned previously, RHEL 9/CentOS stream9's texlive-xecjk 
+> doesn't work at the moment due to the lack of its dependency (texlive-ctex).
+
+LTS distros like RHEL and SUSE are usually a lot more conservative and may
+not have everything. The building system needs to cope with that.
+
+> I opened a bug ticket at RedHat bugzilla:
+>    https://bugzilla.redhat.com/show_bug.cgi?id=2086254
+> 
+> Unfortunately, I've heard no response yet.
+> If you know some means to boost its priority, please provide a comment
+> or two to the ticket.
+>
+> Until the issue can be resolved, "make pdfdocs" is limited to non-CJK
+> build on CentOS stream 9, RHEL 9 and its clones if you must stick to
+> distro packages. 
+
+Even if they add now, RHEL 9.0 won't have it. So, the script would need
+to check if the distro supports it.
+
+> For non-CJK build to work, you must not have
+> google-noto-sans-cjk-ttc-fonts.
+
+That doesn't sound right. We should probably fix conf.py to do the right
+thing. I mean, if this package is installed but texlive-xecjk, it should
+disable CJK fonts.
+
+> openSUSE Leap does not support full CJK build of "make pdfdocs", either.
+> Its Noto font packaging is peculiar and a similar named package of
+> noto-sans-cjk-fonts installs a set of language-specific fonts, each
+> of which doesn't qualify as a CJK font.
+> 
+> Seeing these problems of LTS distros, I'd suggest sphinx-pre-install
+> --pdf would check packages for non-CJK builds.
+
+Makes sense.
+
+> Another option of --cjk would show you additional packages for full CJK build.
+
+Also makes sense. I don't think they're mutually exclusive.
+
+> TL;DR, my suggestion of options and defaults to sphinx-pre-install:
+> 
+>     --no-pdf (default): for htmldocs only
+>     --no-virtualenv (default): distro Sphinx package
+>          (mention --virtualenv if distro Sphinx package is too young)
+>     --virtualenv: Sphinx by venv/virtualenv
+>     --pdf: for pdfdocs
+>         --no-cjk (default): don't bother with CJK pdfdocs
+>         --cjk: for CJK pdfdocs
+>                (print warning if user's distro doesn't support CJK)
+
+The options make sense. Still I would discuss more about what would be
+the best default:
+
+	- Suggest both venv and no-venv;
+	- Ask the user to run the script;
+	- have different behaviors when called with make pdfdocs
+	  or make htmldocs / epubdocs.
+
+Regards,
+Mauro

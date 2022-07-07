@@ -2,101 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 839B5569C96
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 10:08:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E6B35569C8C
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 10:08:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235162AbiGGIGF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Jul 2022 04:06:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51396 "EHLO
+        id S234581AbiGGIF4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Jul 2022 04:05:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51228 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235149AbiGGIGD (ORCPT
+        with ESMTP id S234328AbiGGIFu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Jul 2022 04:06:03 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E21425C5;
-        Thu,  7 Jul 2022 01:06:02 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2D58F61F9D;
-        Thu,  7 Jul 2022 08:06:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8E9C4C341CA;
-        Thu,  7 Jul 2022 08:06:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1657181161;
-        bh=sfmXV4tMP+5FC7d+XgMFdRmfqhgCRC6kI6KR1vW5czg=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=GAgMo0gS3gmNmDLrfo5hXZRhjDRnB0z6u0nQIlAHcNkUohsekUOT0arnNzkJk0PeJ
-         kiqvBbCCzpBZL91oWmRGYLhpwDY11jb6Z0rq5NZLwG8Hxv5Kwiw15K/zqV4hWGP/Ta
-         zxi3FIh5nbchm9t1YsRRUpPMK76SGBxSxqqqPZUGzp6nBJk9OwL5Y8aXFWn8NohlQb
-         X4Ih/hMPHwvhp6nrcI8M1tIMm3zt2XpD/4IXyn7659xU16Fb6aIhppwPfVhWqnlFIK
-         di8tTm83tOh09lNCQWY33uWGXxYdoYSNS/knPLKbFV5MUb1ypI/CG6QUgImE7U+hWb
-         mgNcvFDiEyjNA==
-Received: by mail-yb1-f169.google.com with SMTP id 76so15612381ybd.0;
-        Thu, 07 Jul 2022 01:06:01 -0700 (PDT)
-X-Gm-Message-State: AJIora9VSQIqnrJe48vZNHeihtCRv1YXzXLElTn1KlYTFsnQBpsGLgGL
-        1nttSYtnpPDb4IswdFdN8szFaeOY8gSKsWYvhXE=
-X-Google-Smtp-Source: AGRyM1vWsB1m06E0i839p0o7wq8aG5nv0UEyiO+bhht+9D2f833cmH7AafXMl6w9gYbck24GPqPDrwirxb/5d2EjiFU=
-X-Received: by 2002:a25:9f87:0:b0:669:4345:a8c0 with SMTP id
- u7-20020a259f87000000b006694345a8c0mr48554733ybq.472.1657181160664; Thu, 07
- Jul 2022 01:06:00 -0700 (PDT)
+        Thu, 7 Jul 2022 04:05:50 -0400
+Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99EA225C5;
+        Thu,  7 Jul 2022 01:05:49 -0700 (PDT)
+Received: by mail-wr1-x42d.google.com with SMTP id o4so25157488wrh.3;
+        Thu, 07 Jul 2022 01:05:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=fT8yeQg+Dwj7jLKoZKRv3i/G9RY+Y7eY8PKDxd9w8hA=;
+        b=ZeTCv2aBHlwKcpvH4HrdTxO8SeNk80W9HL97yV67/wJ160DEhooyCRtBgbDrppemtk
+         rV6+QX8xoIJr8eVj6vh7+G/4YCHeEuY3zh4lrYdNlgr4OSyAZVDuFiGZtr1ZLUYqHAmN
+         rnxXx5QNT/gOY9hFMPKyOMsWHYNMC0pwWFA1Uuxmbqhy8o097do+q+Ez/vZt0iREtUCS
+         leGctn0ZYFrcveuNipCgDEQrUz+jq8//9faMlhnhfJaCW4lCXNbXkeeyHJYuT++RUSTa
+         m6/b0Z/cIwqSd4wqYRR05trgLGNbci6mjwwI755OuI93ucyT5gJcHKefGH1CA+UhTWlL
+         wi1Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=fT8yeQg+Dwj7jLKoZKRv3i/G9RY+Y7eY8PKDxd9w8hA=;
+        b=j49w3+z8kUNtaEOytMpafeaMQzsZEdPxGE9rUBkrmYao87sQFLYRUwT5Z8xQ18wMgt
+         oBiZreg2xuz6Z845KonX6TcK1IeZmNDFhGzekubS0VYRhPMMqvfEv2b7efMbQ4vv8mXw
+         wSeXeZI/lXFGOzsM90CfvsdjRdTddU9PQYLiTOXHUoX+PxLNze+OsUTYzlJvtvS5lnaW
+         rbgSZ96drpxY/ydSgotBVmfJvQYeK3mcqYaoZ3ps8A6URmV//eV550vR07inZW38xaQ2
+         fs+Nm1AVYFU6DJIRhw+/izw/Ulo2Dy4YmTCwIlAeR+44X7uvR6jErenxvJwp3/705xdR
+         r9FQ==
+X-Gm-Message-State: AJIora8CTzlsFMYrDTi8ghDXJ4BAT5ois6+pb5bwCnYCVtgft39S2chQ
+        zhdh6ctm1QATZkEwnvQynG0=
+X-Google-Smtp-Source: AGRyM1sVEaAi/ACaCFuYmX/AjTVaucTEZ2FSvQb4EKGdf+bATvP2UhtY7kxzVh1XxGYT2IHaHfKtEw==
+X-Received: by 2002:a05:6000:1a41:b0:20e:687f:1c3 with SMTP id t1-20020a0560001a4100b0020e687f01c3mr41709333wry.415.1657181148039;
+        Thu, 07 Jul 2022 01:05:48 -0700 (PDT)
+Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
+        by smtp.gmail.com with ESMTPSA id p41-20020a05600c1da900b003a0231af43csm14640482wms.48.2022.07.07.01.05.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 07 Jul 2022 01:05:47 -0700 (PDT)
+From:   Colin Ian King <colin.i.king@gmail.com>
+To:     Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S . Miller" <davem@davemloft.net>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H . Peter Anvin" <hpa@zytor.com>, linux-crypto@vger.kernel.org
+Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] crypto: x86/blowfish: remove redundant assignment to variable nytes
+Date:   Thu,  7 Jul 2022 09:05:46 +0100
+Message-Id: <20220707080546.151730-1-colin.i.king@gmail.com>
+X-Mailer: git-send-email 2.35.3
 MIME-Version: 1.0
-References: <20220614092047.572235-1-hch@lst.de> <20220629062837.GA17140@lst.de>
- <Yrv0HLSj3xAHa+av@kroah.com> <20220707045840.GA12672@lst.de>
-In-Reply-To: <20220707045840.GA12672@lst.de>
-From:   Arnd Bergmann <arnd@kernel.org>
-Date:   Thu, 7 Jul 2022 10:05:43 +0200
-X-Gmail-Original-Message-ID: <CAK8P3a1VFhruH=DVLtL7u5JhH9ayCxrKyNb23qsAR4JBLvrD4Q@mail.gmail.com>
-Message-ID: <CAK8P3a1VFhruH=DVLtL7u5JhH9ayCxrKyNb23qsAR4JBLvrD4Q@mail.gmail.com>
-Subject: Re: fully convert arm to use dma-direct v3
-To:     Christoph Hellwig <hch@lst.de>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Andre Przywara <andre.przywara@arm.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Gregory Clement <gregory.clement@bootlin.com>,
-        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Laurentiu Tudor <laurentiu.tudor@nxp.com>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Robin Murphy <robin.murphy@arm.com>,
-        "open list:IOMMU DRIVERS" <iommu@lists.linux-foundation.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        USB list <linux-usb@vger.kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jul 7, 2022 at 6:58 AM Christoph Hellwig <hch@lst.de> wrote:
-> On Wed, Jun 29, 2022 at 08:41:32AM +0200, Greg Kroah-Hartman wrote:
-> > On Wed, Jun 29, 2022 at 08:28:37AM +0200, Christoph Hellwig wrote:
-> > > Any comments or additional testing?  It would be really great to get
-> > > this off the table.
-> >
-> > For the USB bits:
-> >
-> > Acked-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
->
-> So given that we're not making any progress on getting anyone interested
-> on the series, I'm tempted to just pull it into the dma-mapping tree
-> this weekend so that we'll finally have all architectures using the
-> common code.
+Variable nbytes is being assigned a value that is never read, it is
+being re-assigned in the next statement in the while-loop. The
+assignment is redundant and can be removed.
 
-Yes, please do!
+Cleans up clang scan-build warnings, e.g.:
+arch/x86/crypto/blowfish_glue.c:147:10: warning: Although the value
+stored to 'nbytes' is used in the enclosing expression, the value
+is never actually read from 'nbytes'
 
-Getting it into linux-next now should give plenty of time to test it
-with the automated kernelci and lkft systems, as well as Russell's
-Assabet. I'm sure we can fix up any regressions before this actually
-hits the 5.20 release.
+Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
+---
+ arch/x86/crypto/blowfish_glue.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-         Arnd
+diff --git a/arch/x86/crypto/blowfish_glue.c b/arch/x86/crypto/blowfish_glue.c
+index ba06322c1e39..019c64c1340a 100644
+--- a/arch/x86/crypto/blowfish_glue.c
++++ b/arch/x86/crypto/blowfish_glue.c
+@@ -144,7 +144,7 @@ static int cbc_encrypt(struct skcipher_request *req)
+ 
+ 	err = skcipher_walk_virt(&walk, req, false);
+ 
+-	while ((nbytes = walk.nbytes)) {
++	while (walk.nbytes) {
+ 		nbytes = __cbc_encrypt(ctx, &walk);
+ 		err = skcipher_walk_done(&walk, nbytes);
+ 	}
+@@ -225,7 +225,7 @@ static int cbc_decrypt(struct skcipher_request *req)
+ 
+ 	err = skcipher_walk_virt(&walk, req, false);
+ 
+-	while ((nbytes = walk.nbytes)) {
++	while (walk.nbytes) {
+ 		nbytes = __cbc_decrypt(ctx, &walk);
+ 		err = skcipher_walk_done(&walk, nbytes);
+ 	}
+-- 
+2.35.3
+

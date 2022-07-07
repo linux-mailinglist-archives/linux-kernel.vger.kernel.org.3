@@ -2,53 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C55956A4A8
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 15:58:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 248C256A474
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 15:50:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234399AbiGGN5K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Jul 2022 09:57:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54158 "EHLO
+        id S236339AbiGGNt7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Jul 2022 09:49:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41130 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235719AbiGGN5H (ORCPT
+        with ESMTP id S236145AbiGGNs3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Jul 2022 09:57:07 -0400
-Received: from mail-il1-f198.google.com (mail-il1-f198.google.com [209.85.166.198])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D91915FEC
-        for <linux-kernel@vger.kernel.org>; Thu,  7 Jul 2022 06:57:07 -0700 (PDT)
-Received: by mail-il1-f198.google.com with SMTP id i2-20020a056e021d0200b002d8ff49e7c4so9346839ila.8
-        for <linux-kernel@vger.kernel.org>; Thu, 07 Jul 2022 06:57:07 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
-         :from:to;
-        bh=jrhvBpI6mqQX1aZ/JxTs5fURHwqXekze4iGJit6D5xc=;
-        b=M9IqIeS7IqjNH4O74SZIauUysFz9L4umGl3bM+vVomeYMY3vnmmRntM0qAb1ZEXiFj
-         Y1igfk59kvKTlVM8BWduZq6UV4TTfe+qpTmv4mH7GR1rBRqKgzPcjFFiqfpIAJCuNw1y
-         H2foWzH9tiL6Krwb9dAT2jpr8n54s44K23z6Rca5WbWMW2E0NUkQqAsmci6auSI4J/+9
-         Nvhk+t8H15WJjARM2D0BntP2vxYcQEfVU3WVK0szSP/UPmNAXFYnxxLhplzxfZNd9VsM
-         Qxoz6d+bgRmGldpvxc+0/E1o4wtG6IKdrWZIYrVqeA0ZmTPHRENxpzEF1Xf5bpT69ltm
-         YScA==
-X-Gm-Message-State: AJIora/jWOTpsnLsFMk+4R7g2vUnBTvuPqiTyry9c0mjAm05eZ9rszcm
-        lf1ixoPfILBb7W0WfL4M9eIkyCcMJLgVM8mgHFWg+kLx4Wev
-X-Google-Smtp-Source: AGRyM1veD1FGX/guWz3LmMbeJxeQj9YYx4l0t8os2QaZH+INKZ0nO6u8jksRJ5byu1i7VngnaiT9PCYRcCRa7HjFNH66pdwpkUSd
+        Thu, 7 Jul 2022 09:48:29 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 903A31022;
+        Thu,  7 Jul 2022 06:48:27 -0700 (PDT)
+Received: from dggpemm500021.china.huawei.com (unknown [172.30.72.54])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4LdyPs15xgzkX62;
+        Thu,  7 Jul 2022 21:46:57 +0800 (CST)
+Received: from dggpemm500007.china.huawei.com (7.185.36.183) by
+ dggpemm500021.china.huawei.com (7.185.36.109) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Thu, 7 Jul 2022 21:48:25 +0800
+Received: from huawei.com (10.175.103.91) by dggpemm500007.china.huawei.com
+ (7.185.36.183) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Thu, 7 Jul
+ 2022 21:48:25 +0800
+From:   Yang Yingliang <yangyingliang@huawei.com>
+To:     <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>, <netdev@vger.kernel.org>
+CC:     <davem@davemloft.net>, <kuba@kernel.org>
+Subject: [PATCH -next] bcm63xx_enet: change the driver variables to static
+Date:   Thu, 7 Jul 2022 21:58:01 +0800
+Message-ID: <20220707135801.1483941-1-yangyingliang@huawei.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-X-Received: by 2002:a92:a041:0:b0:2d7:7935:effa with SMTP id
- b1-20020a92a041000000b002d77935effamr26077785ilm.222.1657202226780; Thu, 07
- Jul 2022 06:57:06 -0700 (PDT)
-Date:   Thu, 07 Jul 2022 06:57:06 -0700
-In-Reply-To: <2041c8d8-e57d-01bf-1378-3ad2c72f69d6@gmail.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000000c61d405e3377621@google.com>
-Subject: Re: [syzbot] KASAN: use-after-free Read in pty_close
-From:   syzbot <syzbot+49950ba66096b1f0209b@syzkaller.appspotmail.com>
-To:     asml.silence@gmail.com, axboe@kernel.dk,
-        gregkh@linuxfoundation.org, jirislaby@kernel.org,
-        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.103.91]
+X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
+ dggpemm500007.china.huawei.com (7.185.36.183)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -56,20 +50,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+bcm63xx_enetsw_driver and bcm63xx_enet_driver are only used in
+bcm63xx_enet.c now, change them to static.
 
-syzbot has tested the proposed patch and the reproducer did not trigger any issue:
+Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
+---
+ drivers/net/ethernet/broadcom/bcm63xx_enet.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-Reported-and-tested-by: syzbot+49950ba66096b1f0209b@syzkaller.appspotmail.com
+diff --git a/drivers/net/ethernet/broadcom/bcm63xx_enet.c b/drivers/net/ethernet/broadcom/bcm63xx_enet.c
+index 514d61dd91c7..fcaa6a2d067f 100644
+--- a/drivers/net/ethernet/broadcom/bcm63xx_enet.c
++++ b/drivers/net/ethernet/broadcom/bcm63xx_enet.c
+@@ -1935,7 +1935,7 @@ static int bcm_enet_remove(struct platform_device *pdev)
+ 	return 0;
+ }
+ 
+-struct platform_driver bcm63xx_enet_driver = {
++static struct platform_driver bcm63xx_enet_driver = {
+ 	.probe	= bcm_enet_probe,
+ 	.remove	= bcm_enet_remove,
+ 	.driver	= {
+@@ -2756,7 +2756,7 @@ static int bcm_enetsw_remove(struct platform_device *pdev)
+ 	return 0;
+ }
+ 
+-struct platform_driver bcm63xx_enetsw_driver = {
++static struct platform_driver bcm63xx_enetsw_driver = {
+ 	.probe	= bcm_enetsw_probe,
+ 	.remove	= bcm_enetsw_remove,
+ 	.driver	= {
+-- 
+2.25.1
 
-Tested on:
-
-commit:         f2703d1a io_uring: don't race double poll setting REQ_..
-git tree:       https://github.com/isilence/linux.git poll-syz
-console output: https://syzkaller.appspot.com/x/log.txt?x=115e9020080000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=d66f898fdc339ef0
-dashboard link: https://syzkaller.appspot.com/bug?extid=49950ba66096b1f0209b
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-
-Note: no patches were applied.
-Note: testing is done by a robot and is best-effort only.

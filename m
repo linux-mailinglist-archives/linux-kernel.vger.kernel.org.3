@@ -2,54 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BB8C356A141
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 13:45:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4279556A165
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 13:59:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235469AbiGGLpg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Jul 2022 07:45:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51690 "EHLO
+        id S235204AbiGGLvz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Jul 2022 07:51:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55312 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235193AbiGGLpd (ORCPT
+        with ESMTP id S233808AbiGGLvu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Jul 2022 07:45:33 -0400
-Received: from out30-131.freemail.mail.aliyun.com (out30-131.freemail.mail.aliyun.com [115.124.30.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E07194F65D;
-        Thu,  7 Jul 2022 04:45:31 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R381e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04400;MF=baolin.wang@linux.alibaba.com;NM=1;PH=DS;RN=32;SR=0;TI=SMTPD_---0VIcuH0b_1657194323;
-Received: from 30.97.48.62(mailfrom:baolin.wang@linux.alibaba.com fp:SMTPD_---0VIcuH0b_1657194323)
-          by smtp.aliyun-inc.com;
-          Thu, 07 Jul 2022 19:45:25 +0800
-Message-ID: <12227412-1d79-4ff6-b4e6-0d438dac7359@linux.alibaba.com>
-Date:   Thu, 7 Jul 2022 19:45:29 +0800
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH 3/3] mm: Add kernel PTE level pagetable pages account
-To:     Matthew Wilcox <willy@infradead.org>
-Cc:     akpm@linux-foundation.org, rppt@linux.ibm.com, will@kernel.org,
-        aneesh.kumar@linux.ibm.com, npiggin@gmail.com,
-        peterz@infradead.org, catalin.marinas@arm.com,
-        chenhuacai@kernel.org, kernel@xen0n.name,
-        tsbogend@alpha.franken.de, dave.hansen@linux.intel.com,
-        luto@kernel.org, tglx@linutronix.de, mingo@redhat.com,
-        bp@alien8.de, hpa@zytor.com, arnd@arndb.de, guoren@kernel.org,
-        monstr@monstr.eu, jonas@southpole.se,
-        stefan.kristiansson@saunalahti.fi, shorne@gmail.com,
-        x86@kernel.org, linux-arch@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, loongarch@lists.linux.dev,
-        linux-mips@vger.kernel.org, linux-csky@vger.kernel.org,
-        openrisc@lists.librecores.org, linux-mm@kvack.org,
+        Thu, 7 Jul 2022 07:51:50 -0400
+Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BEC584F1AE;
+        Thu,  7 Jul 2022 04:51:48 -0700 (PDT)
+Received: by mail-wm1-x329.google.com with SMTP id u12-20020a05600c210c00b003a02b16d2b8so10565596wml.2;
+        Thu, 07 Jul 2022 04:51:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=ogkoMPpbqUpUeQsCWCgDb8e2gSa/FEdLqVBOJmxNJ7Y=;
+        b=WTXWzzSqMW2xUPWKSm2FY6juWE54kahXBN/lxg32iKLQMfyWor4CnlQTpFrSuExssu
+         azRfkuijKbfrqi0c9j9Wuow372d78XDjEnKwhRyJtzpxiQtp2sy9KitOgLwVRjwvOvO3
+         6ryhleJyeBbRFZgXLpCSyvVVQXIqtJ/tMvfSVDrruvF75Ba3kz593P6mXNWNHA4hKLsl
+         fjjqJdjYlr7n6VKhK61RkafmK/aRPPP/lhBS/uHu9ehZ7uuTi4atY5OZT6Cfo/2Kh7Zt
+         oIbvCZhT8xmzHnUU8QpUcpK3JTOlfV7RmjBIJqQpmBmzQroMKiwt/5ItGgcqw4wq+npT
+         e1FQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=ogkoMPpbqUpUeQsCWCgDb8e2gSa/FEdLqVBOJmxNJ7Y=;
+        b=f7bVcgysf3287wBTEWASR4X+2u5iVXRKnQ6uwVenQQVwgskZl/XCsHBirXwwGaeoof
+         nZkKn0IYrJ3dhb7U0yUZv2QxVhb8W4WMjYur62pxE+z2y/hPeoehxZHXfvUQL0vcLmc7
+         F/P2BqTnWauJGCJ314kmJT8cdRqHQN/slJFG7YAQK71IEE39FufdvDOhf0YTcbQj7ies
+         SsXUa7qqpbegW5mpeR0GhqWM84mEijr8Hsk/lSGWPmqQ0mCKCwBTTV9AECA5XIWhpknn
+         W1M+QkDAIj5Pzkv+H+j0DwFZOX0Kz/5jlNp22KjdXeCTeGreTUJkY5Y5/YKpSnjX4g7M
+         9mwQ==
+X-Gm-Message-State: AJIora8Z75NCqMcsrJblspQFVGHwkJKb5Hn9agtV7aPhUKemLQZBkTDG
+        /zVfqe8IeZrBpEOQ4pQ/AV/bYTGamBZd5R4fXco=
+X-Google-Smtp-Source: AGRyM1sAH+mtKXEWcPCw/5qvsn9M3uN7o3s/XIhWb8Y5mjr/W5j62chBWusjy49VfVTbCBGeZoiC6A==
+X-Received: by 2002:a05:600c:a02:b0:39c:97cc:82e3 with SMTP id z2-20020a05600c0a0200b0039c97cc82e3mr4061663wmp.97.1657194706784;
+        Thu, 07 Jul 2022 04:51:46 -0700 (PDT)
+Received: from 127.0.0.1localhost (188.28.125.106.threembb.co.uk. [188.28.125.106])
+        by smtp.gmail.com with ESMTPSA id u2-20020a5d5142000000b0021b966abc19sm37982131wrt.19.2022.07.07.04.51.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 07 Jul 2022 04:51:46 -0700 (PDT)
+From:   Pavel Begunkov <asml.silence@gmail.com>
+To:     io-uring@vger.kernel.org, netdev@vger.kernel.org,
         linux-kernel@vger.kernel.org
-References: <cover.1657096412.git.baolin.wang@linux.alibaba.com>
- <398ead25695e530f766849be5edafaf62c1c864d.1657096412.git.baolin.wang@linux.alibaba.com>
- <YsWuC9+b3JaEAr0Q@casper.infradead.org>
-From:   Baolin Wang <baolin.wang@linux.alibaba.com>
-In-Reply-To: <YsWuC9+b3JaEAr0Q@casper.infradead.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
+Cc:     "David S . Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Jonathan Lemon <jonathan.lemon@gmail.com>,
+        Willem de Bruijn <willemb@google.com>,
+        Jens Axboe <axboe@kernel.dk>, David Ahern <dsahern@kernel.org>,
+        kernel-team@fb.com, Pavel Begunkov <asml.silence@gmail.com>
+Subject: [PATCH net-next v4 00/27] io_uring zerocopy send
+Date:   Thu,  7 Jul 2022 12:49:31 +0100
+Message-Id: <cover.1657194434.git.asml.silence@gmail.com>
+X-Mailer: git-send-email 2.36.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -57,36 +73,179 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+NOTE: Not be picked directly. After getting necessary acks, I'll be working
+      out merging with Jakub and Jens.
 
+The patchset implements io_uring zerocopy send. It works with both registered
+and normal buffers, mixing is allowed but not recommended. Apart from usual
+request completions, just as with MSG_ZEROCOPY, io_uring separately notifies
+the userspace when buffers are freed and can be reused (see API design below),
+which is delivered into io_uring's Completion Queue. Those "buffer-free"
+notifications are not necessarily per request, but the userspace has control
+over it and should explicitly attaching a number of requests to a single
+notification. The series also adds some internal optimisations when used with
+registered buffers like removing page referencing.
 
-On 7/6/2022 11:45 PM, Matthew Wilcox wrote:
-> On Wed, Jul 06, 2022 at 04:59:17PM +0800, Baolin Wang wrote:
->> Now the kernel PTE level ptes are always protected by mm->page_table_lock
->> instead of split pagetable lock, so the kernel PTE level pagetable pages
->> are not accounted. Especially the vmalloc()/vmap() can consume lots of
->> kernel pagetable, so to get an accurate pagetable accounting, calling new
->> helpers page_{set,clear}_pgtable() when allocating or freeing a kernel
->> PTE level pagetable page.
->>
->> Meanwhile converting architectures to use corresponding generic PTE pagetable
->> allocation and freeing functions.
->>
->> Note this patch only adds accounting to the page tables allocated after boot.
->>
->> Signed-off-by: Baolin Wang <baolin.wang@linux.alibaba.com>
->> Reported-by: kernel test robot <oliver.sang@intel.com>
-> 
-> What does this Reported-by: even mean?  the kernel test robot told you
-> that the page tables weren't being accounted?
+From the kernel networking perspective there are two main changes. The first
+one is passing ubuf_info into the network layer from io_uring (inside of an
+in kernel struct msghdr). This allows extra optimisations, e.g. ubuf_info
+caching on the io_uring side, but also helps to avoid cross-referencing
+and synchronisation problems. The second part is an optional optimisation
+removing page referencing for requests with registered buffers.
 
-I fixed an issue reported by this robot. OK, I can remove the tag.
+Benchmarking with an optimised version of the selftest (see [1]), which sends
+a bunch of requests, waits for completions and repeats. "+ flush" column posts
+one additional "buffer-free" notification per request, and just "zc" doesn't
+post buffer notifications at all.
 
-> I don't understand why we want to start accounting kernel page tables.
-> an we have a *discussion* about that with a sensible thread name instead
-> of just trying to sneak it in as patch 3/3?
+NIC (requests / second):
+IO size | non-zc    | zc             | zc + flush
+4000    | 495134    | 606420 (+22%)  | 558971 (+12%)
+1500    | 551808    | 577116 (+4.5%) | 565803 (+2.5%)
+1000    | 584677    | 592088 (+1.2%) | 560885 (-4%)
+600     | 596292    | 598550 (+0.4%) | 555366 (-6.7%)
 
-I think I have replied to you in below link [1]. The reason is we should 
-keep consistent with PMD or PUD pagetable allocation.
+dummy (requests / second):
+IO size | non-zc    | zc             | zc + flush
+8000    | 1299916   | 2396600 (+84%) | 2224219 (+71%)
+4000    | 1869230   | 2344146 (+25%) | 2170069 (+16%)
+1200    | 2071617   | 2361960 (+14%) | 2203052 (+6%)
+600     | 2106794   | 2381527 (+13%) | 2195295 (+4%)
 
-[1] 
-https://lore.kernel.org/all/68a5286b-7ff3-2c4e-1ab2-305e7860a2f3@linux.alibaba.com/
+Previously it also brought a massive performance speedup compared to the
+msg_zerocopy tool (see [3]), which is probably not super interesting.
+
+There is an additional bunch of refcounting optimisations that was omitted from
+the series for simplicity and as they don't change the picture drastically,
+they will be sent as follow up, as well as flushing optimisations closing the
+performance gap b/w two last columns.
+
+Note: the series is based on net-next + for-5.20/io_uring, but as vanilla
+net-next fails for me the repo (see [2]) is on top of for-5.20/io_uring.
+
+Links:
+
+  liburing (benchmark + tests):
+  [1] https://github.com/isilence/liburing/tree/zc_v4
+
+  kernel repo:
+  [2] https://github.com/isilence/linux/tree/zc_v4
+
+  RFC v1:
+  [3] https://lore.kernel.org/io-uring/cover.1638282789.git.asml.silence@gmail.com/
+
+  RFC v2:
+  https://lore.kernel.org/io-uring/cover.1640029579.git.asml.silence@gmail.com/
+
+  Net patches based
+  git@github.com:isilence/linux.git zc_v4-net-base
+
+API design overview:
+
+  The series introduces an io_uring concept of notifactors. From the userspace
+  perspective it's an entity to which it can bind one or more requests and then
+  requesting to flush it. Flushing a notifier makes it impossible to attach new
+  requests to it, and instructs the notifier to post a completion once all
+  requests attached to it are completed and the kernel doesn't need the buffers
+  anymore.
+
+  Notifications are stored in notification slots, which should be registered as
+  an array in io_uring. Each slot stores only one notifier at any particular
+  moment. Flushing removes it from the slot and the slot automatically replaces
+  it with a new notifier. All operations with notifiers are done by specifying
+  an index of a slot it's currently in.
+
+  When registering a notification the userspace specifies a u64 tag for each
+  slot, which will be copied in notification completion entries as
+  cqe::user_data. cqe::res is 0 and cqe::flags is equal to wrap around u32
+  sequence number counting notifiers of a slot.
+
+Changelog:
+
+  v3 -> v4
+    custom iov_iter handling
+
+  RFC v2 -> v3:
+    mem accounting for non-registered buffers
+    allow mixing registered and normal requests per notifier
+    notification flushing via IORING_OP_RSRC_UPDATE
+    TCP support
+    fix buffer indexing
+    fix io-wq ->uring_lock locking
+    fix bugs when mixing with MSG_ZEROCOPY
+    fix managed refs bugs in skbuff.c
+
+  RFC -> RFC v2:
+    remove additional overhead for non-zc from skb_release_data()
+    avoid msg propagation, hide extra bits of non-zc overhead
+    task_work based "buffer free" notifications
+    improve io_uring's notification refcounting
+    added 5/19, (no pfmemalloc tracking)
+    added 8/19 and 9/19 preventing small copies with zc
+    misc small changes
+
+David Ahern (1):
+  net: Allow custom iter handler in msghdr
+
+Pavel Begunkov (26):
+  ipv4: avoid partial copy for zc
+  ipv6: avoid partial copy for zc
+  skbuff: don't mix ubuf_info from different sources
+  skbuff: add SKBFL_DONT_ORPHAN flag
+  skbuff: carry external ubuf_info in msghdr
+  net: introduce managed frags infrastructure
+  net: introduce __skb_fill_page_desc_noacc
+  ipv4/udp: support externally provided ubufs
+  ipv6/udp: support externally provided ubufs
+  tcp: support externally provided ubufs
+  io_uring: initialise msghdr::msg_ubuf
+  io_uring: export io_put_task()
+  io_uring: add zc notification infrastructure
+  io_uring: cache struct io_notif
+  io_uring: complete notifiers in tw
+  io_uring: add rsrc referencing for notifiers
+  io_uring: add notification slot registration
+  io_uring: wire send zc request type
+  io_uring: account locked pages for non-fixed zc
+  io_uring: allow to pass addr into sendzc
+  io_uring: sendzc with fixed buffers
+  io_uring: flush notifiers after sendzc
+  io_uring: rename IORING_OP_FILES_UPDATE
+  io_uring: add zc notification flush requests
+  io_uring: enable managed frags with register buffers
+  selftests/io_uring: test zerocopy send
+
+ include/linux/io_uring_types.h                |  37 ++
+ include/linux/skbuff.h                        |  66 +-
+ include/linux/socket.h                        |   5 +
+ include/uapi/linux/io_uring.h                 |  45 +-
+ io_uring/Makefile                             |   2 +-
+ io_uring/io_uring.c                           |  42 +-
+ io_uring/io_uring.h                           |  22 +
+ io_uring/net.c                                | 187 ++++++
+ io_uring/net.h                                |   4 +
+ io_uring/notif.c                              | 215 +++++++
+ io_uring/notif.h                              |  87 +++
+ io_uring/opdef.c                              |  24 +-
+ io_uring/rsrc.c                               |  55 +-
+ io_uring/rsrc.h                               |  16 +-
+ io_uring/tctx.h                               |  26 -
+ net/compat.c                                  |   1 +
+ net/core/datagram.c                           |  14 +-
+ net/core/skbuff.c                             |  37 +-
+ net/ipv4/ip_output.c                          |  50 +-
+ net/ipv4/tcp.c                                |  32 +-
+ net/ipv6/ip6_output.c                         |  49 +-
+ net/socket.c                                  |   3 +
+ tools/testing/selftests/net/Makefile          |   1 +
+ .../selftests/net/io_uring_zerocopy_tx.c      | 605 ++++++++++++++++++
+ .../selftests/net/io_uring_zerocopy_tx.sh     | 131 ++++
+ 25 files changed, 1628 insertions(+), 128 deletions(-)
+ create mode 100644 io_uring/notif.c
+ create mode 100644 io_uring/notif.h
+ create mode 100644 tools/testing/selftests/net/io_uring_zerocopy_tx.c
+ create mode 100755 tools/testing/selftests/net/io_uring_zerocopy_tx.sh
+
+-- 
+2.36.1
+

@@ -2,72 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CD52456A076
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 12:53:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 83F6356A02C
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 12:42:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235363AbiGGKxM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Jul 2022 06:53:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43898 "EHLO
+        id S235223AbiGGKlX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Jul 2022 06:41:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35272 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234666AbiGGKxK (ORCPT
+        with ESMTP id S235129AbiGGKlP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Jul 2022 06:53:10 -0400
-Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 496F657220
-        for <linux-kernel@vger.kernel.org>; Thu,  7 Jul 2022 03:53:10 -0700 (PDT)
-Received: by mail-pf1-x436.google.com with SMTP id 70so3483851pfx.1
-        for <linux-kernel@vger.kernel.org>; Thu, 07 Jul 2022 03:53:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=o2TkSbcKxozTBX+199C68EfPygrcFe2Tw030jZ4Z9vM=;
-        b=GgGDiY3sxbPO69gH48Dooa8AKF4BOxgykhbQ+1ouSF8dLGeghVSxbRuSNK0BPAx24f
-         APydzglFENyyildEjJPmyUFjC3ALeywiRgIWzCsL0tD6jlJw7wgdw5SPOpK13mOYQp1m
-         iRE8czv4iIOBp8tHhVqGmvMQtjgmCQQP57BnEdZHwyNe49xS3VcFh0QSulsNKyyMgCPW
-         m9xDOwuQqIdAk3VF7wOBs1NrObJARy3N3uedK5oGEldvOtNMJf+FjcuB3iPYSAB5BZg5
-         zMj+O7USQ4J2eFtVwGZENKFjQzn1jraVue4zr1H3BuKAKaC0F8j1hN7HCCb152wGGCzu
-         POoA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=o2TkSbcKxozTBX+199C68EfPygrcFe2Tw030jZ4Z9vM=;
-        b=t6W0e2yeyfkNuPQY9A0N2VqVQJqwHsitjNe2D9UwhT5/9zPHEoqR2a4I0eGQzcEEBB
-         b54ZXa0T3STJcexmXRox7iava68qyiY4G47N9HkFJrAAQ15WPB7U1DrWB83yEZaR6FAh
-         SWeXhFWzpPW7NsOe1i1zc8eLB6fet/W9y5Fkza/fGu8Y5V5QnfUs41cXnMJjdaie09U8
-         Kbh+K0nSsQmPhRHrk+2zNDlxfqWIjj2dh6yo7JX7INtxC1MLrwuCIMz3DUgAboBckaDt
-         YMxxFolC6D6kjor87bODoJSJaB1YaYA3afWKvfiEkPy/+yfI27jBl+YYF+iWE97Ngua+
-         k6Zw==
-X-Gm-Message-State: AJIora8BVO9/kcfJworIgs9dtoh6vY3r8smgirvONHmAVKgAjfDSxF7f
-        L1XDThdZNbcSHqPY5K9Y2zr3jA==
-X-Google-Smtp-Source: AGRyM1tpqLIhCdElS4dIR3n1+S+tHgSxDTJ1ClIjp5xZogOgUFu5j/N9tejt6VOIggYIE9m6DdN9ow==
-X-Received: by 2002:a17:902:e885:b0:16c:408:9317 with SMTP id w5-20020a170902e88500b0016c04089317mr7760209plg.62.1657191189998;
-        Thu, 07 Jul 2022 03:53:09 -0700 (PDT)
-Received: from localhost ([122.171.18.80])
-        by smtp.gmail.com with ESMTPSA id f8-20020a170902ab8800b0016a0bf0ce2esm27552884plr.92.2022.07.07.03.53.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 07 Jul 2022 03:53:09 -0700 (PDT)
-Date:   Thu, 7 Jul 2022 16:23:07 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Lukasz Luba <lukasz.luba@arm.com>
-Cc:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        daniel.lezcano@linaro.org, amitk@kernel.org, rui.zhang@intel.com,
-        rafael@kernel.org, dietmar.eggemann@arm.com, nm@ti.com,
-        sboyd@kernel.org, sudeep.holla@arm.com, cristian.marussi@arm.com,
-        matthias.bgg@gmail.com, linux-mediatek@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH v2 1/4] PM: EM: convert power field to micro-Watts
- precision and align drivers
-Message-ID: <20220707105307.wl2pnqbf3j4fo75z@vireshk-i7>
-References: <20220707071555.10085-1-lukasz.luba@arm.com>
- <20220707071555.10085-2-lukasz.luba@arm.com>
+        Thu, 7 Jul 2022 06:41:15 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1628F33A39
+        for <linux-kernel@vger.kernel.org>; Thu,  7 Jul 2022 03:41:11 -0700 (PDT)
+Received: from dggemv704-chm.china.huawei.com (unknown [172.30.72.57])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4LdtFn0QyMzkWvL;
+        Thu,  7 Jul 2022 18:39:41 +0800 (CST)
+Received: from kwepemm600015.china.huawei.com (7.193.23.52) by
+ dggemv704-chm.china.huawei.com (10.3.19.47) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Thu, 7 Jul 2022 18:41:09 +0800
+Received: from huawei.com (10.175.127.227) by kwepemm600015.china.huawei.com
+ (7.193.23.52) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Thu, 7 Jul
+ 2022 18:41:08 +0800
+From:   ChenXiaoSong <chenxiaosong2@huawei.com>
+To:     <anton@tuxera.com>, <akpm@linux-foundation.org>
+CC:     <linux-ntfs-dev@lists.sourceforge.net>,
+        <linux-kernel@vger.kernel.org>, <chenxiaosong2@huawei.com>,
+        <liuyongqiang13@huawei.com>, <yi.zhang@huawei.com>,
+        <zhangxiaoxu5@huawei.com>
+Subject: [PATCH v2] ntfs: fix use-after-free in ntfs_ucsncmp()
+Date:   Thu, 7 Jul 2022 18:53:29 +0800
+Message-ID: <20220707105329.4020708-1-chenxiaosong2@huawei.com>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220707071555.10085-2-lukasz.luba@arm.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.127.227]
+X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
+ kwepemm600015.china.huawei.com (7.193.23.52)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -76,56 +52,96 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 07-07-22, 08:15, Lukasz Luba wrote:
-> The milli-Watts precision causes rounding errors while calculating
-> efficiency cost for each OPP. This is especially visible in the 'simple'
-> Energy Model (EM), where the power for each OPP is provided from OPP
-> framework. This can cause some OPPs to be marked inefficient, while
-> using micro-Watts precision that might not happen.
-> 
-> Update all EM users which access 'power' field and assume the value is
-> in milli-Watts.
-> 
-> Solve also an issue with potential overflow in calculation of energy
-> estimation on 32bit machine. It's needed now since the power value
-> (thus the 'cost' as well) are higher.
-> 
-> Example calculation which shows the rounding error and impact:
-> 
-> power = 'dyn-power-coeff' * volt_mV * volt_mV * freq_MHz
-> 
-> power_a_uW = (100 * 600mW * 600mW * 500MHz) / 10^6 = 18000
-> power_a_mW = (100 * 600mW * 600mW * 500MHz) / 10^9 = 18
-> 
-> power_b_uW = (100 * 605mW * 605mW * 600MHz) / 10^6 = 21961
-> power_b_mW = (100 * 605mW * 605mW * 600MHz) / 10^9 = 21
-> 
-> max_freq = 2000MHz
-> 
-> cost_a_mW = 18 * 2000MHz/500MHz = 72
-> cost_a_uW = 18000 * 2000MHz/500MHz = 72000
-> 
-> cost_b_mW = 21 * 2000MHz/600MHz = 70 // <- artificially better
-> cost_b_uW = 21961 * 2000MHz/600MHz = 73203
-> 
-> The 'cost_b_mW' (which is based on old milli-Watts) is misleadingly
-> better that the 'cost_b_uW' (this patch uses micro-Watts) and such
-> would have impact on the 'inefficient OPPs' information in the Cpufreq
-> framework. This patch set removes the rounding issue.
-> 
-> Signed-off-by: Lukasz Luba <lukasz.luba@arm.com>
-> ---
->  drivers/cpufreq/mediatek-cpufreq-hw.c |  7 ++--
->  drivers/cpufreq/scmi-cpufreq.c        |  6 +++
->  drivers/opp/of.c                      | 15 ++++----
->  drivers/powercap/dtpm_cpu.c           |  5 +--
->  drivers/thermal/cpufreq_cooling.c     | 13 ++++++-
->  drivers/thermal/devfreq_cooling.c     | 19 ++++++++--
->  include/linux/energy_model.h          | 54 +++++++++++++++++++--------
->  kernel/power/energy_model.c           | 24 ++++++++----
->  8 files changed, 100 insertions(+), 43 deletions(-)
+Syzkaller reported use-after-free bug as follows:
 
-Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
+==================================================================
+BUG: KASAN: use-after-free in ntfs_ucsncmp+0x123/0x130
+Read of size 2 at addr ffff8880751acee8 by task a.out/879
 
+CPU: 7 PID: 879 Comm: a.out Not tainted 5.19.0-rc4-next-20220630-00001-gcc5218c8bd2c-dirty #7
+Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS rel-1.16.0-0-gd239552ce722-prebuilt.qemu.org 04/01/2014
+Call Trace:
+ <TASK>
+ dump_stack_lvl+0x1c0/0x2b0
+ print_address_description.constprop.0.cold+0xd4/0x484
+ print_report.cold+0x55/0x232
+ kasan_report+0xbf/0xf0
+ ntfs_ucsncmp+0x123/0x130
+ ntfs_are_names_equal.cold+0x2b/0x41
+ ntfs_attr_find+0x43b/0xb90
+ ntfs_attr_lookup+0x16d/0x1e0
+ ntfs_read_locked_attr_inode+0x4aa/0x2360
+ ntfs_attr_iget+0x1af/0x220
+ ntfs_read_locked_inode+0x246c/0x5120
+ ntfs_iget+0x132/0x180
+ load_system_files+0x1cc6/0x3480
+ ntfs_fill_super+0xa66/0x1cf0
+ mount_bdev+0x38d/0x460
+ legacy_get_tree+0x10d/0x220
+ vfs_get_tree+0x93/0x300
+ do_new_mount+0x2da/0x6d0
+ path_mount+0x496/0x19d0
+ __x64_sys_mount+0x284/0x300
+ do_syscall_64+0x3b/0xc0
+ entry_SYSCALL_64_after_hwframe+0x46/0xb0
+RIP: 0033:0x7f3f2118d9ea
+Code: 48 8b 0d a9 f4 0b 00 f7 d8 64 89 01 48 83 c8 ff c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 44 00 00 49 89 ca b8 a5 00 00 00 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 8b 0d 76 f4 0b 00 f7 d8 64 89 01 48
+RSP: 002b:00007ffc269deac8 EFLAGS: 00000202 ORIG_RAX: 00000000000000a5
+RAX: ffffffffffffffda RBX: 0000000000000000 RCX: 00007f3f2118d9ea
+RDX: 0000000020000000 RSI: 0000000020000100 RDI: 00007ffc269dec00
+RBP: 00007ffc269dec80 R08: 00007ffc269deb00 R09: 00007ffc269dec44
+R10: 0000000000000000 R11: 0000000000000202 R12: 000055f81ab1d220
+R13: 0000000000000000 R14: 0000000000000000 R15: 0000000000000000
+ </TASK>
+
+The buggy address belongs to the physical page:
+page:0000000085430378 refcount:1 mapcount:1 mapping:0000000000000000 index:0x555c6a81d pfn:0x751ac
+memcg:ffff888101f7e180
+anon flags: 0xfffffc00a0014(uptodate|lru|mappedtodisk|swapbacked|node=0|zone=1|lastcpupid=0x1fffff)
+raw: 000fffffc00a0014 ffffea0001bf2988 ffffea0001de2448 ffff88801712e201
+raw: 0000000555c6a81d 0000000000000000 0000000100000000 ffff888101f7e180
+page dumped because: kasan: bad access detected
+
+Memory state around the buggy address:
+ ffff8880751acd80: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+ ffff8880751ace00: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+>ffff8880751ace80: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+                                                          ^
+ ffff8880751acf00: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+ ffff8880751acf80: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+==================================================================
+
+The reason is that struct ATTR_RECORD->name_offset is 6485, end address of
+name string is out of bounds.
+
+Fix this by adding sanity check on end address of attibute name string.
+
+Signed-off-by: ChenXiaoSong <chenxiaosong2@huawei.com>
+---
+v1 -> v2: remove redundant statement
+
+ fs/ntfs/attrib.c | 8 ++++++--
+ 1 file changed, 6 insertions(+), 2 deletions(-)
+
+diff --git a/fs/ntfs/attrib.c b/fs/ntfs/attrib.c
+index 4de597a83b88..9ab8766872d2 100644
+--- a/fs/ntfs/attrib.c
++++ b/fs/ntfs/attrib.c
+@@ -592,8 +592,12 @@ static int ntfs_attr_find(const ATTR_TYPE type, const ntfschar *name,
+ 		a = (ATTR_RECORD*)((u8*)ctx->attr +
+ 				le32_to_cpu(ctx->attr->length));
+ 	for (;;	a = (ATTR_RECORD*)((u8*)a + le32_to_cpu(a->length))) {
+-		if ((u8*)a < (u8*)ctx->mrec || (u8*)a > (u8*)ctx->mrec +
+-				le32_to_cpu(ctx->mrec->bytes_allocated))
++		u8 *mrec_end = (u8 *)ctx->mrec +
++		               le32_to_cpu(ctx->mrec->bytes_allocated);
++		u8 *name_end = (u8 *)a + le16_to_cpu(a->name_offset) +
++		               a->name_length;
++		if ((u8*)a < (u8*)ctx->mrec || (u8*)a > mrec_end ||
++		    name_end > mrec_end)
+ 			break;
+ 		ctx->attr = a;
+ 		if (unlikely(le32_to_cpu(a->type) > le32_to_cpu(type) ||
 -- 
-viresh
+2.31.1
+

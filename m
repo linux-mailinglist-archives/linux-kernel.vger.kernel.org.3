@@ -2,161 +2,169 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1FAB456A8AC
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 18:54:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CAB2256A90D
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 19:05:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235876AbiGGQxP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Jul 2022 12:53:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33062 "EHLO
+        id S236489AbiGGRDm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Jul 2022 13:03:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43290 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235727AbiGGQxI (ORCPT
+        with ESMTP id S236482AbiGGRDf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Jul 2022 12:53:08 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6EAE559252;
-        Thu,  7 Jul 2022 09:53:07 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 06D3F6244C;
-        Thu,  7 Jul 2022 16:53:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1D7E8C3411E;
-        Thu,  7 Jul 2022 16:53:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1657212786;
-        bh=oeKhu9Proyv+SOwlbKwi9FoGyKNdIXPkHb7LOnZiNeE=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=lvEUcujjIvCPcMQbsplCbc1Rnnwk5iAOmHFwVZRzfggqKe6/44ptYgU/JBH8Irsnd
-         EpvBJXHZ7OxrQFvthDQWiYQDtQYcxY9rz11Qzg9xW5tIl0mrxnWAoEeTWz1thhX+40
-         V3CnEcAGHvtN4SJcQEpf3OP0I5I6fPR2BQWXz912Z3UYeRd/zVL7Uu+sO2irn/tWAq
-         mjFitbJXq7FwPoM6LqfPDo2GCZKds7oJStVlaMHUQFaSCOLx1+zi4vXa0k4heta/v6
-         so6TGqxu4Htgi8/EMyZKWv2Fggnaaeo8dVNvqKBNp9Gf217HY41QZ2Apypd71aCU/m
-         v95Ojz+5a7l4w==
-Date:   Thu, 7 Jul 2022 18:02:48 +0100
-From:   Jonathan Cameron <jic23@kernel.org>
-To:     ChiYuan Huang <u0084500@gmail.com>
-Cc:     Andy Shevchenko <andy.shevchenko@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        cy_huang <cy_huang@richtek.com>,
-        linux-iio <linux-iio@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        devicetree <devicetree@vger.kernel.org>
-Subject: Re: [PATCH v2 2/2] iio: adc: Add rtq6056 support
-Message-ID: <20220707180248.2f8d1b0f@jic23-huawei>
-In-Reply-To: <CADiBU38FbZ87EHn_UDy-rS6V2bGDdLZJOcqNZsS03MzbNaVaKA@mail.gmail.com>
-References: <1656469212-12717-1-git-send-email-u0084500@gmail.com>
-        <1656469212-12717-3-git-send-email-u0084500@gmail.com>
-        <CAHp75Vd2bxFA5PmjEtgAjJfCf9YZENq_fb9b2VHmMmmHdqGJSw@mail.gmail.com>
-        <CADiBU384ZwKL_+i1zRL9qfVt-NLo=pnf8zrGna4Sxt+toYZdWg@mail.gmail.com>
-        <CADiBU3_sU8bj29x2Qs9y9fM2YDYcKvNBkBuzfpzuCkAjSeTu+Q@mail.gmail.com>
-        <CAHp75VeiuJjiPFFh0pEGGH4+UEn0g5902UhAJL93Ho2WvH0_gg@mail.gmail.com>
-        <CADiBU38FbZ87EHn_UDy-rS6V2bGDdLZJOcqNZsS03MzbNaVaKA@mail.gmail.com>
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-pc-linux-gnu)
+        Thu, 7 Jul 2022 13:03:35 -0400
+Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2054.outbound.protection.outlook.com [40.107.237.54])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24C8827CEC;
+        Thu,  7 Jul 2022 10:03:33 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=lCW3Mar/r+1CQY9xdq53VVltwc9yXij9fMTUpUjkKEwz4RP5Zm207lOG6wVbd9hsZfu/EdiPUY7/DsLeeHn1fl5km/zC78UwGoWNhVKKEcvsX50ISrV+EQn6wYknNNfyQyfNCx1peneBDspoTOPw5wpLqEqKcuhr33BhrcirP5jPZSlcV13Ai4SKnxlqF1nPypIGyHeuC0Pq6QYGxV0VFkvbNta0BeB2fPK8W7jcipDbMh4Iri+3dtAbK4rDN/39QFjPHsoR4ciZ7trnXue0c9C/VQBi/NC5HLLUf86txhBn3LI5R3NcrtmWCAdGoKyKcOHy+iPnOh3o86z9KS5kJA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=BN44ME50kgo6d4CgabURsu3s49tmnmTpQ6RmK36Ur5I=;
+ b=fIF4Tf3UgXlyFK0VjExglXzu5h8kp4+jS+tzVQn1xL+GzKvKDKal/MKXVHaEUVwLiS8v/zGEuLYls+M7epBY7LgNRgJjOH6yTWWNTXxx3Igq5nJiR9PkJu9XUhyi1Mv9zvB4NOxLPvkIK1z/mBXHuQkSnorpZ/kF91lRATsHWRGHOyeJKHVEhH4yXfD6BQBtxnKOT/w1u2c0DzcuKHh8kn/z8CAI9kqCjPwCiQL3VEMndZL22R/voPo8xdJDyIVJHvNTicCFrhafn/bimm+SxN3kQydhxsimliBfScWCR5JMS3AyR/Em924MrGXl8hf7xbJsoBBOdpGIiBIjVk41zw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 12.22.5.235) smtp.rcpttodomain=linux.ibm.com smtp.mailfrom=nvidia.com;
+ dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=BN44ME50kgo6d4CgabURsu3s49tmnmTpQ6RmK36Ur5I=;
+ b=d7v2BDTx5aQhJ9V154p5AuFFGacNCgcKEPy+KhQBTCTyKwoclWC2sSWJBIqqoEbRVvjtcGMDka8S5orno0py7SMRA1lNjiEy47JjsZyihhNakByVQeDuzhoNDniNIoW+k9dHHyp4VwYGbdvMcVkhTOkXuD8NTzQmP93Ce9pb2O+1C/gNQIa8b+Fu0L+w46aXPgcPoxAnOtyJPHKNZHZcrumI88CDL3vCJ5pIB51IqBjpcOky2Qg9kBLY17zKfDyszRZ/IIiAxtoaeRP9bfhkrKHy7C7E9LykrEGGwaSMWUdjNK6vsgypCKkWtQLIsnD4ephGkVHxKrgjhXmkn4OJmg==
+Received: from MWHPR02CA0006.namprd02.prod.outlook.com (2603:10b6:300:4b::16)
+ by MN2PR12MB4286.namprd12.prod.outlook.com (2603:10b6:208:199::22) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5417.16; Thu, 7 Jul
+ 2022 17:03:31 +0000
+Received: from CO1NAM11FT035.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:300:4b:cafe::8e) by MWHPR02CA0006.outlook.office365.com
+ (2603:10b6:300:4b::16) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5417.17 via Frontend
+ Transport; Thu, 7 Jul 2022 17:03:30 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 12.22.5.235)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 12.22.5.235 as permitted sender) receiver=protection.outlook.com;
+ client-ip=12.22.5.235; helo=mail.nvidia.com; pr=C
+Received: from mail.nvidia.com (12.22.5.235) by
+ CO1NAM11FT035.mail.protection.outlook.com (10.13.175.36) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.20.5417.15 via Frontend Transport; Thu, 7 Jul 2022 17:03:30 +0000
+Received: from drhqmail201.nvidia.com (10.126.190.180) by
+ DRHQMAIL107.nvidia.com (10.27.9.16) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.32; Thu, 7 Jul 2022 17:03:27 +0000
+Received: from drhqmail203.nvidia.com (10.126.190.182) by
+ drhqmail201.nvidia.com (10.126.190.180) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.26; Thu, 7 Jul 2022 10:03:26 -0700
+Received: from Asurada-Nvidia (10.127.8.9) by mail.nvidia.com (10.126.190.182)
+ with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.26 via Frontend
+ Transport; Thu, 7 Jul 2022 10:03:25 -0700
+Date:   Thu, 7 Jul 2022 10:03:23 -0700
+From:   Nicolin Chen <nicolinc@nvidia.com>
+To:     "Tian, Kevin" <kevin.tian@intel.com>
+CC:     "kwankhede@nvidia.com" <kwankhede@nvidia.com>,
+        "corbet@lwn.net" <corbet@lwn.net>,
+        "hca@linux.ibm.com" <hca@linux.ibm.com>,
+        "gor@linux.ibm.com" <gor@linux.ibm.com>,
+        "agordeev@linux.ibm.com" <agordeev@linux.ibm.com>,
+        "borntraeger@linux.ibm.com" <borntraeger@linux.ibm.com>,
+        "svens@linux.ibm.com" <svens@linux.ibm.com>,
+        "zhenyuw@linux.intel.com" <zhenyuw@linux.intel.com>,
+        "Wang, Zhi A" <zhi.a.wang@intel.com>,
+        "jani.nikula@linux.intel.com" <jani.nikula@linux.intel.com>,
+        "joonas.lahtinen@linux.intel.com" <joonas.lahtinen@linux.intel.com>,
+        "Vivi, Rodrigo" <rodrigo.vivi@intel.com>,
+        "tvrtko.ursulin@linux.intel.com" <tvrtko.ursulin@linux.intel.com>,
+        "airlied@linux.ie" <airlied@linux.ie>,
+        "daniel@ffwll.ch" <daniel@ffwll.ch>,
+        "farman@linux.ibm.com" <farman@linux.ibm.com>,
+        "mjrosato@linux.ibm.com" <mjrosato@linux.ibm.com>,
+        "pasic@linux.ibm.com" <pasic@linux.ibm.com>,
+        "vneethv@linux.ibm.com" <vneethv@linux.ibm.com>,
+        "oberpar@linux.ibm.com" <oberpar@linux.ibm.com>,
+        "freude@linux.ibm.com" <freude@linux.ibm.com>,
+        "akrowiak@linux.ibm.com" <akrowiak@linux.ibm.com>,
+        "jjherne@linux.ibm.com" <jjherne@linux.ibm.com>,
+        "alex.williamson@redhat.com" <alex.williamson@redhat.com>,
+        "cohuck@redhat.com" <cohuck@redhat.com>,
+        "jgg@nvidia.com" <jgg@nvidia.com>,
+        "hch@infradead.org" <hch@infradead.org>,
+        "jchrist@linux.ibm.com" <jchrist@linux.ibm.com>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-s390@vger.kernel.org" <linux-s390@vger.kernel.org>,
+        "intel-gvt-dev@lists.freedesktop.org" 
+        <intel-gvt-dev@lists.freedesktop.org>,
+        "intel-gfx@lists.freedesktop.org" <intel-gfx@lists.freedesktop.org>,
+        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>
+Subject: Re: [RFT][PATCH v2 9/9] vfio: Replace phys_pfn with pages for
+ vfio_pin_pages()
+Message-ID: <YscRU48SszOEkJML@Asurada-Nvidia>
+References: <20220706062759.24946-1-nicolinc@nvidia.com>
+ <20220706062759.24946-10-nicolinc@nvidia.com>
+ <BN9PR11MB5276AD70E90F20A3439883A58C839@BN9PR11MB5276.namprd11.prod.outlook.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <BN9PR11MB5276AD70E90F20A3439883A58C839@BN9PR11MB5276.namprd11.prod.outlook.com>
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: cd61a924-e745-4df7-ad18-08da603a9e41
+X-MS-TrafficTypeDiagnostic: MN2PR12MB4286:EE_
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: +RAIC8TRt8AsxXx44d88OORahKCsojzwP/pUrYn8GIXhIWGZY/2IK/nhubCtLZByaXoYydAVG7vsKifwY0DI90bzgoBwRX3rgNgQ62qnVjENlnrbVlJOmZstLOVKWyLXiuB+wjPa/5wSVrCpezBfelnvM50x5jyu/rPAapHWsORVzyCrKZUekBPQpBYzzqYA121j3ELWxTBlf0R85Cj73GEjrFomjrliCD6l2AWhPNmN7srnMAkATSqhdAHGDQmpKjtr5A0txtkUwvxhdNZkcWLhcEEDZZ+Fim0sIptcQ3+7kcXbjV4eW10dLwsL6DeOfFSL3QN98xOnbecopwUDSK8eKXWJKzNCeBkFdDfisgCY5HWUA4Q4F6QvxKvRNErSABdMVWNqffFe26BMnOzPKH45Oh4QP9pNd2UqoUnRJ+UBUMdT7NNdHdncuJtmnCe1QOLShACMdZSik4SMjtCFuYc1XIxWo9DgyISblv1OlHYsjQof35yXZrAfz1jyDOFrHtQMIh8fF13uphm2GJZC2+iKygW+DlOA88FNsQrN5VXvPAieQE8RSxMRxDVOqQDaAETu+e9Oo9M1Qq/cQvDYvVcimG7hsBkGut/TV/7Ww3SGvn1Zu1Tj03XCf7TbjJO6WHtaI3RRGaLcM7uofcIIYGNhrD7sZHvnOVudwjf08WMLUvqVBbFJ+Erc/JVzsefzYttHD2A4oJlvzBbRUvDeJXYzlxlUHaM1nDwUxgEeuo3QGsjhhG65+fZMkCQrkdjk/JQ4amYM+y1Z3FlbvC9BkfshrJbt5yByil1gdJ3yZ6LV7IzsUJQsDvTv+qZX2GGK7mqItzXSedfoRbpu6L13xYKHRdIX8HCCt5ORD1QspXU=
+X-Forefront-Antispam-Report: CIP:12.22.5.235;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:InfoNoRecords;CAT:NONE;SFS:(13230016)(4636009)(346002)(39860400002)(376002)(396003)(136003)(46966006)(36840700001)(40470700004)(9686003)(26005)(2906002)(40460700003)(47076005)(336012)(478600001)(40480700001)(83380400001)(82740400003)(186003)(55016003)(8676002)(81166007)(86362001)(70206006)(36860700001)(82310400005)(6862004)(8936002)(7416002)(426003)(5660300002)(54906003)(33716001)(316002)(41300700001)(70586007)(4326008)(4744005)(356005)(7406005)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Jul 2022 17:03:30.3633
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: cd61a924-e745-4df7-ad18-08da603a9e41
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[12.22.5.235];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT035.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR12MB4286
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 5 Jul 2022 09:41:39 +0800
-ChiYuan Huang <u0084500@gmail.com> wrote:
-
-> Andy Shevchenko <andy.shevchenko@gmail.com> =E6=96=BC 2022=E5=B9=B47=E6=
-=9C=885=E6=97=A5 =E9=80=B1=E4=BA=8C =E6=B8=85=E6=99=A85:52=E5=AF=AB=E9=81=
-=93=EF=BC=9A
+On Thu, Jul 07, 2022 at 08:49:28AM +0000, Tian, Kevin wrote:
+> External email: Use caution opening links or attachments
+> 
+> 
+> > From: Nicolin Chen <nicolinc@nvidia.com>
+> > Sent: Wednesday, July 6, 2022 2:28 PM
 > >
-> > On Mon, Jul 4, 2022 at 9:27 AM ChiYuan Huang <u0084500@gmail.com> wrote=
-: =20
-> > > ChiYuan Huang <u0084500@gmail.com> =E6=96=BC 2022=E5=B9=B47=E6=9C=884=
-=E6=97=A5 =E9=80=B1=E4=B8=80 =E4=B8=8A=E5=8D=8811:16=E5=AF=AB=E9=81=93=EF=
-=BC=9A =20
-> > > > Andy Shevchenko <andy.shevchenko@gmail.com> =E6=96=BC 2022=E5=B9=B4=
-7=E6=9C=881=E6=97=A5 =E9=80=B1=E4=BA=94 =E4=B8=8B=E5=8D=886:05=E5=AF=AB=E9=
-=81=93=EF=BC=9A =20
-> > > > > On Wed, Jun 29, 2022 at 4:23 AM cy_huang <u0084500@gmail.com> wro=
-te: =20
+> > Most of the callers of vfio_pin_pages() want "struct page *" and the
+> > low-level mm code to pin pages returns a list of "struct page *" too.
+> > So there's no gain in converting "struct page *" to PFN in between.
 > >
-> > ...
-> > =20
-> > > > > > +       *val =3D DIV_ROUND_UP(1000000, sample_time); =20
-> > > > >
-> > > > > USEC_PER_SEC ?
-> > > > > =20
-> > > > No, sample time is (vshunt convesion time + vbus conversion time) *
-> > > > average sample.
-> > > > And the sample freq returns the unit by HZ (sample frequency per se=
-cond)
-> > > > =20
-> > > The 'sample time' is unit by micro-second like as you mentioned. =20
+> > Replace the output parameter "phys_pfn" list with a "pages" list, to
+> > simplify callers. This also allows us to replace the vfio_iommu_type1
+> > implementation with a more efficient one.
+> 
+> worth mentioning that vfio pin is only for struct page * hence the
+> pfn_valid() check in gvt can be removed.
+
+Will add that.
+
 > >
-> > Ah, then it should be MICRO, so we will get Hz.
-> > =20
-> > > > > > +       return IIO_VAL_INT;
-> > > > > > +} =20
+> > For now, also update vfio_iommu_type1 to fit this new parameter too.
 > >
-> > ...
-> > =20
-> > > > > > +       struct {
-> > > > > > +               u16 vals[RTQ6056_MAX_CHANNEL];
-> > > > > > +               int64_t timestamp;
-> > > > > > +       } data __aligned(8); =20
-> > > > >
-> > > > > Hmm... alignment of this struct will be at least 4 bytes, but
-> > > > > shouldn't we rather be sure that the timestamp member is aligned
-> > > > > properly? Otherwise this seems fragile and dependent on
-> > > > > RTQ6056_MAX_CHANNEL % 4 =3D=3D 0.
-> > > > > =20
-> > > > Yap, from the 'max channel', it already guarantee this struct will =
-be
-> > > > aligned at lease 4.
-> > > > Actually, It can be removed. =20
-> >
-> > I think for the safest side it should be given to the timestamp member.=
- No?
-> > =20
-> Sorry, following your comment, Why to use 'align' for the timestamp membe=
-r?
-> the data member already guarantee 2 * 4 =3D 8 byte, then timestamp will
-> be 8 byte aligned, right?
->=20
-> what you mentioned is to put __aligned(8) only for timestamp.
->=20
-> I try to put aligned in two ways ( one is only for timestamp, another
-> is the whole struct). the result is the same.
-> From my thinking, in this case, the struct is already 8 byte aligned
-> for timestamp member. don't you think to put 'aligned' is redundant?
+> > Signed-off-by: Nicolin Chen <nicolinc@nvidia.com>
+> 
+> Reviewed-by: Kevin Tian <kevin.tian@intel.com>
 
-On the 8 byte alignment question...  Look up alignment of s64 on x86_32...
-It's 4 byte aligned. We had a lot of 'fun' fixing this a few years ago.
-
-So the marking of __aligned(8) for the timestamp does 2 things (and it
-takes a fairly close reading of the c spec to check this).
-
-1) Forces alignment of the timestamp. Needed so we can cheaply write
-the timestamp
-2) Forces alignment of the containing structure.
-
-The combination of these 2 enforces the padding being
-consistent across architectures whether or not they align s64 to
-4 or 8 bytes.  This last part is the subtle element that
-explains why on some architectures you need the __aligned(8) on the
-timestamp not the outer structure.
-
-Jonathan
-
-
-
-
-> > --
-> > With Best Regards,
-> > Andy Shevchenko =20
-
+Thanks for the review!

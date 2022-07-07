@@ -2,146 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 03C7456A5AC
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 16:40:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 02E7D56A563
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 16:29:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235948AbiGGOkU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Jul 2022 10:40:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33504 "EHLO
+        id S235556AbiGGO2q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Jul 2022 10:28:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51006 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235770AbiGGOkO (ORCPT
+        with ESMTP id S229934AbiGGO2o (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Jul 2022 10:40:14 -0400
-Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AEB6E31DF6;
-        Thu,  7 Jul 2022 07:40:09 -0700 (PDT)
-Received: by mail-wr1-x436.google.com with SMTP id o4so26643494wrh.3;
-        Thu, 07 Jul 2022 07:40:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=references:from:to:cc:subject:date:in-reply-to:message-id
-         :mime-version:content-transfer-encoding;
-        bh=7hDgGA6xF58M+skK5QIlnWLQGV+3ttaXAD+vkX6SQTM=;
-        b=OdyYpCiOrG7tlyeD9SoTpDDuQKJBKKGA87S7R8V3Q+QJ6NDK+vvD0cs3jfGUf7UMH9
-         lDhOJ2LadM95+PlfXuW7J6oHRmERFWaQmQAVWaiCGpuhOSfA08EwL+dBUYiT57caITab
-         j9MXKxNQiATFITxDffnWSJXK5ecwjuSz1f5ZOkxuJnlrWHxJccAzdx1y+echUhgYECSV
-         pKNZ80ClGqR9sXoB2jW9ocoAInVKc7fFJToX+qLHe9BNeBUQgmeNV9MuoaT9rD6Kmskk
-         tVg4vH6ToLFRFNi4TQx348MPbnO5J/Qgb7t6dGQFpcnAZkGlsDIUiwikKjXH4f7sl+9h
-         /Fsw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:references:from:to:cc:subject:date:in-reply-to
-         :message-id:mime-version:content-transfer-encoding;
-        bh=7hDgGA6xF58M+skK5QIlnWLQGV+3ttaXAD+vkX6SQTM=;
-        b=rlJObrW2QODcFmYAwagxbzvIDBOdbiNG8dag6Nts0Mchr5SVwRn+av30nfIl/q+KBW
-         cz0bs5lYe/613VBcFSLVqui5MyY6pB36pcnLN4XuydSNHEIFgTdspd49UraHDURBQxTg
-         sFigWtwxtyYfiQMNswOP5PmvEIDC7pIbplZD6W0n2wc88s3CHrZ77rCzNdRWaNnLdgI3
-         qaG8+uuxh1hrspYWyvMugS+eNpGis6EbDZHwEvj15gn696M4u3H+oB4JVkd/HL3rkSqR
-         P3hso1Cv7xIGQq2B1S82vP854+ZmtU8V0GguFKKaBXq6wk1FwpYbCC3BUddzFoZ3ldU3
-         upXg==
-X-Gm-Message-State: AJIora92xfrSgXnpIO/4xA20xMc04u6LIMzV//TfFDz3v0oYU8BDM/6j
-        FJQST+zM/QJ99phhWRq+rt3NIgn0j2w=
-X-Google-Smtp-Source: AGRyM1sOSpUSUa6euRjRBfNV9zECcsAUzzpDfBRmqUBeQ0d4SlwF4Zobq3KK7HmgaZgVwAO86qi/ZA==
-X-Received: by 2002:a5d:58cc:0:b0:21d:6919:7daf with SMTP id o12-20020a5d58cc000000b0021d69197dafmr22860158wrf.434.1657204808231;
-        Thu, 07 Jul 2022 07:40:08 -0700 (PDT)
-Received: from localhost (92.40.203.175.threembb.co.uk. [92.40.203.175])
-        by smtp.gmail.com with ESMTPSA id az42-20020a05600c602a00b003a1a02c6d7bsm14485822wmb.35.2022.07.07.07.40.07
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 07 Jul 2022 07:40:07 -0700 (PDT)
-References: <20220706211330.120198-1-aidanmacdonald.0x0@gmail.com>
- <20220706211330.120198-11-aidanmacdonald.0x0@gmail.com>
- <H4ANER.XJSSJIHNXTEA1@crapouillou.net>
-From:   Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
-To:     Paul Cercueil <paul@crapouillou.net>
-Cc:     lgirdwood@gmail.com, broonie@kernel.org, perex@perex.cz,
-        tiwai@suse.com, linux-mips@vger.kernel.org,
-        alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 10/11] ASoC: jz4740-i2s: Support S20_LE and S24_LE
- sample formats
-Date:   Thu, 07 Jul 2022 15:25:06 +0100
-In-reply-to: <H4ANER.XJSSJIHNXTEA1@crapouillou.net>
-Message-ID: <jp7AjR5Hus1i7prrsjVT3n5vI5jaszTk@localhost>
+        Thu, 7 Jul 2022 10:28:44 -0400
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29622101F4;
+        Thu,  7 Jul 2022 07:28:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1657204123; x=1688740123;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=lew5L0hGNEdLY7OPIiUC+eu2JioJ0wYpzwTmjdjpnes=;
+  b=U5Ru64LGpnc0wjSm9dNqi0OizmYopDiAw+7j01KZuCzMm2qrjjyitjmP
+   9PA87CxbPNyMrK9QV7sJ18ZFgCG0gjUWem6xlQGepEYrFhNBwY0g95uzk
+   fZgWRCKCRecKZstoUGITtBNHiSqCOgu89IolBCfMJPrsRupjRXj8dET2b
+   GViYTzcr7W5334WGB95D0rcd/EXzrmvm1quFdDNH2NZAdvNqadZRc6ncn
+   qrwyWtO12uAEPUkZiti/DVGWsd6IImirO8lbDnuYeFDDta/di3WAJVsl7
+   KivyHPCXGgnuH4xfT2X3TAxpUe1KAYFy3HwYBxGyh2bvXV4iW5HIwq5TS
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10400"; a="263820686"
+X-IronPort-AV: E=Sophos;i="5.92,253,1650956400"; 
+   d="scan'208";a="263820686"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jul 2022 07:28:42 -0700
+X-IronPort-AV: E=Sophos;i="5.92,253,1650956400"; 
+   d="scan'208";a="568539686"
+Received: from nmajidi-mobl.amr.corp.intel.com (HELO [10.251.17.238]) ([10.251.17.238])
+  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jul 2022 07:28:41 -0700
+Message-ID: <880f3991-09e5-2f96-d5ba-213cff05c458@intel.com>
+Date:   Thu, 7 Jul 2022 07:26:30 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH v5 12/22] x86/virt/tdx: Convert all memory regions in
+ memblock to TDX memory
+Content-Language: en-US
+To:     Kai Huang <kai.huang@intel.com>, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org
+Cc:     seanjc@google.com, pbonzini@redhat.com, len.brown@intel.com,
+        tony.luck@intel.com, rafael.j.wysocki@intel.com,
+        reinette.chatre@intel.com, dan.j.williams@intel.com,
+        peterz@infradead.org, ak@linux.intel.com,
+        kirill.shutemov@linux.intel.com,
+        sathyanarayanan.kuppuswamy@linux.intel.com,
+        isaku.yamahata@intel.com
+References: <cover.1655894131.git.kai.huang@intel.com>
+ <8288396be7fedd10521a28531e138579594d757a.1655894131.git.kai.huang@intel.com>
+ <20d63398-928f-0c6f-47ec-8e225c049ad8@intel.com>
+ <76d7604ff21b26252733165478d5c54035d84d98.camel@intel.com>
+From:   Dave Hansen <dave.hansen@intel.com>
+In-Reply-To: <76d7604ff21b26252733165478d5c54035d84d98.camel@intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 6/26/22 23:16, Kai Huang wrote:
+> On Fri, 2022-06-24 at 12:40 -0700, Dave Hansen wrote:
+>>> +/*
+>>> + * Walks over all memblock memory regions that are intended to be
+>>> + * converted to TDX memory.  Essentially, it is all memblock memory
+>>> + * regions excluding the low memory below 1MB.
+>>> + *
+>>> + * This is because on some TDX platforms the low memory below 1MB is
+>>> + * not included in CMRs.  Excluding the low 1MB can still guarantee
+>>> + * that the pages managed by the page allocator are always TDX memory,
+>>> + * as the low 1MB is reserved during kernel boot and won't end up to
+>>> + * the ZONE_DMA (see reserve_real_mode()).
+>>> + */
+>>> +#define memblock_for_each_tdx_mem_pfn_range(i, p_start, p_end, p_nid)	\
+>>> +	for_each_mem_pfn_range(i, MAX_NUMNODES, p_start, p_end, p_nid)	\
+>>> +		if (!pfn_range_skip_lowmem(p_start, p_end))
+>>
+>> Let's summarize where we are at this point:
+>>
+>> 1. All RAM is described in memblocks
+>> 2. Some memblocks are reserved and some are free
+>> 3. The lower 1MB is marked reserved
+>> 4. for_each_mem_pfn_range() walks all reserved and free memblocks, so we
+>>    have to exclude the lower 1MB as a special case.
+>>
+>> That seems superficially rather ridiculous.  Shouldn't we just pick a
+>> memblock iterator that skips the 1MB?  Surely there is such a thing.
+> 
+> Perhaps you are suggesting we should always loop the _free_ ranges so we don't
+> need to care about the first 1MB which is reserved?
+> 
+> The problem is some reserved memory regions are actually later freed to the page
+> allocator, for example, initrd.  So to cover all those 'late-freed-reserved-
+> regions', I used for_each_mem_pfn_range(), instead of for_each_free_mem_range().
 
-Paul Cercueil <paul@crapouillou.net> writes:
+Why not just entirely remove the lower 1MB from the memblock structure
+on TDX systems?  Do something equivalent to adding this on the kernel
+command line:
 
-> Le mer., juil. 6 2022 at 22:13:29 +0100, Aidan MacDonald
-> <aidanmacdonald.0x0@gmail.com> a =C3=A9crit :
->> The audio controller on JZ47xx SoCs supports 20- and 24-bit
->> samples coming from memory. Allow those formats to be used
->> with the I2S driver.
->> Signed-off-by: Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
->> ---
->>  sound/soc/jz4740/jz4740-i2s.c | 12 ++++++++++--
->>  1 file changed, 10 insertions(+), 2 deletions(-)
->> diff --git a/sound/soc/jz4740/jz4740-i2s.c b/sound/soc/jz4740/jz4740-i2s=
-.c
->> index 80b355d715ce..ee99c5e781ec 100644
->> --- a/sound/soc/jz4740/jz4740-i2s.c
->> +++ b/sound/soc/jz4740/jz4740-i2s.c
->> @@ -222,9 +222,15 @@ static int jz4740_i2s_hw_params(struct snd_pcm_subs=
-tream
->> *substream,
->>  	case SNDRV_PCM_FORMAT_S8:
->>  		sample_size =3D 0;
->>  		break;
->> -	case SNDRV_PCM_FORMAT_S16:
->> +	case SNDRV_PCM_FORMAT_S16_LE:
->>  		sample_size =3D 1;
->>  		break;
->> +	case SNDRV_PCM_FORMAT_S20_LE:
->> +		sample_size =3D 3;
->> +		break;
->> +	case SNDRV_PCM_FORMAT_S24_LE:
->> +		sample_size =3D 4;
->> +		break;
->
-> Did you test these? It is unclear to me, looking at the JZ4740 PM, if the
-> 18-bit, 20-bit and 24-bit samples are in 4 bytes or 3 bytes.
->
-> Cheers,
-> -Paul
->
+	memmap=1M$0x0
 
-I was only able to test 24-bit -- in practice 20-bit seems pretty rare
-and I'm finding it difficult to convert anything into that format with
-standard tools like ffmpeg, sox, etc. so I can't really test it.
+> Btw, I do have a checkpatch warning around this code:
+> 
+> ERROR: Macros with complex values should be enclosed in parentheses
+> #109: FILE: arch/x86/virt/vmx/tdx/tdx.c:377:
+> +#define memblock_for_each_tdx_mem_pfn_range(i, p_start, p_end, p_nid)	\
+> +	for_each_mem_pfn_range(i, MAX_NUMNODES, p_start, p_end, p_nid)	\
+> +		if (!pfn_range_skip_lowmem(p_start, p_end))
+> 
+> But it looks like a false positive to me.
 
-From what I understand, this is configuring the number of significant
-bits in the FIFO and has nothing to do with the in-memory format. So
-my commit message is a bit inaccurate.
-
-DMA can only do 4-byte transfers so that's why only 4-byte formats are
-usable. I suppose I could handle the 3-byte variants here, but there's
-probably no point to doing that if DMA can't transfer them.
-
->>  	default:
->>  		return -EINVAL;
->>  	}
->> @@ -362,7 +368,9 @@ static const struct snd_soc_dai_ops jz4740_i2s_dai_o=
-ps =3D
->> {
->>  };
->>  #define JZ4740_I2S_FMTS (SNDRV_PCM_FMTBIT_S8 | \
->> -		SNDRV_PCM_FMTBIT_S16_LE)
->> +			 SNDRV_PCM_FMTBIT_S16_LE | \
->> +			 SNDRV_PCM_FMTBIT_S20_LE | \
->> +			 SNDRV_PCM_FMTBIT_S24_LE)
->>  static struct snd_soc_dai_driver jz4740_i2s_dai =3D {
->>  	.probe =3D jz4740_i2s_dai_probe,
->> --
->> 2.35.1
->>=20
-
+I think it doesn't like the if().

@@ -2,68 +2,228 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0205D56A222
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 14:36:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2879F56A227
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 14:36:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235406AbiGGMgb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Jul 2022 08:36:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36144 "EHLO
+        id S235498AbiGGMgv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Jul 2022 08:36:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36452 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234713AbiGGMg1 (ORCPT
+        with ESMTP id S235452AbiGGMgs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Jul 2022 08:36:27 -0400
-Received: from zeniv.linux.org.uk (zeniv.linux.org.uk [IPv6:2a03:a000:7:0:5054:ff:fe1c:15ff])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04D2524097;
-        Thu,  7 Jul 2022 05:36:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=linux.org.uk; s=zeniv-20220401; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=QfuCQfWw0R4Q88qq2d57w+fLKWKJ84NLA20PhY0262o=; b=kAlWH5ohaNATSdC1GQ+NF2V6wa
-        41jRRwvfAUbq1hdmSbrCRtXj4idHyrlgsPxys7tc+KTCasciNhdDEIKsBbCW14UzM/iYRju60W6e0
-        3OLUH4f4PnHF+cmu1zdW62QPubeaen4F8Kl7rqUKw5LRgrwWsMPHT1T7yQTVuiEVYlWeDpsIDoJj3
-        mkpS6nTh/BWVvMakjPk0qHKzhcmrpEfmunYvnRN+uhV/CL/ny6AFL92yCQ4rBL32t3aOf8iRQq3Tz
-        mseVv320eJqzcAFoCs6bM7UQFtHD7ImIZPNFyVD00AghM9/jdDazuTrHjbX3y/cJJHP4bTjXQnxR7
-        1UgM5z7A==;
-Received: from viro by zeniv.linux.org.uk with local (Exim 4.95 #2 (Red Hat Linux))
-        id 1o9Qjt-0098gu-Mm;
-        Thu, 07 Jul 2022 12:36:13 +0000
-Date:   Thu, 7 Jul 2022 13:36:13 +0100
-From:   Al Viro <viro@zeniv.linux.org.uk>
-To:     Alexander Gordeev <agordeev@linux.ibm.com>
-Cc:     Alexander Egorenkov <egorenar@linux.ibm.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Baoquan He <bhe@redhat.com>, Christoph Hellwig <hch@lst.de>,
-        linux-kernel@vger.kernel.org, linux-s390@vger.kernel.org
-Subject: Re: [PATCH v2 1/1] s390/crash: allow multi-segment iterators
-Message-ID: <YsbTPShbZDgHUJ7G@ZenIV>
-References: <cover.1657172539.git.agordeev@linux.ibm.com>
- <613f63d652bb4fa6fb3d2bb38762de6bb066b35a.1657172539.git.agordeev@linux.ibm.com>
+        Thu, 7 Jul 2022 08:36:48 -0400
+Received: from alexa-out-sd-01.qualcomm.com (alexa-out-sd-01.qualcomm.com [199.106.114.38])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D67B2559E;
+        Thu,  7 Jul 2022 05:36:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1657197407; x=1688733407;
+  h=from:to:cc:subject:date:message-id:mime-version;
+  bh=UHRFUN82n1Ah6AJN0WBsMi2z7cqhaqHdGtwdvg6bkTE=;
+  b=VzhtC9UOOS8fida3cADJkcfb99+Tnn1RrtHle4X3RUF3rmxnlDxKjdTA
+   AIinBNP7lV38ve/riJ3AFCiR3bS8vSc+YJP2e+2ijYcYvM2hFYnDUnH9v
+   Ox1cmNCh+fY/03eeu8KQUOkik+lU/lBZKrDQdsgp9I4xYTUb4EaXjcJq2
+   c=;
+Received: from unknown (HELO ironmsg02-sd.qualcomm.com) ([10.53.140.142])
+  by alexa-out-sd-01.qualcomm.com with ESMTP; 07 Jul 2022 05:36:47 -0700
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg02-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jul 2022 05:36:46 -0700
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Thu, 7 Jul 2022 05:36:46 -0700
+Received: from hu-srivasam-hyd.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Thu, 7 Jul 2022 05:36:42 -0700
+From:   Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
+To:     <agross@kernel.org>, <bjorn.andersson@linaro.org>,
+        <robh+dt@kernel.org>, <linux-arm-msm@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <quic_rohkumar@quicinc.com>, <srinivas.kandagatla@linaro.org>,
+        <dianders@chromium.org>, <swboyd@chromium.org>,
+        <judyhsiao@chromium.org>
+CC:     Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
+Subject: [PATCH v2] arm64: dts: qcom: sc7280: Move wcd specific pin conf to common file
+Date:   Thu, 7 Jul 2022 18:06:21 +0530
+Message-ID: <1657197381-1271-1-git-send-email-quic_srivasam@quicinc.com>
+X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <613f63d652bb4fa6fb3d2bb38762de6bb066b35a.1657172539.git.agordeev@linux.ibm.com>
-Sender: Al Viro <viro@ftp.linux.org.uk>
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jul 07, 2022 at 08:01:15AM +0200, Alexander Gordeev wrote:
-> Rework copy_oldmem_page() to allow multi-segment iterators.
-> Reuse existing iterate_iovec macro as is and only relevant
-> bits from __iterate_and_advance macro.
-> 
-> Fixes: 49b11524d648 ("s390/crash: add missing iterator advance in copy_oldmem_page())
-> Signed-off-by: Alexander Gordeev <agordeev@linux.ibm.com>
+Move wcd specific pin conf to common file to support various
+herbronie variant boards and to avoid duplicate nodes in dts files.
 
-To be followed by duplication of every change ever done to those macros?
-Hell, no.  Do it the same way it's done for that _copy_from_iter_flushcache()
-thing - i.e. an ifdef in lib/iov_iter.c and no duplication of that forest of
-macros.
+Signed-off-by: Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
+---
+Changes Since V1:
+    -- Remove redundant documentation.
+    -- Update the pincontrol header comment.
+
+ .../dts/qcom/sc7280-herobrine-audio-wcd9385.dtsi   | 64 ++++++++++++++++++++++
+ arch/arm64/boot/dts/qcom/sc7280-herobrine-crd.dts  | 61 ---------------------
+ 2 files changed, 64 insertions(+), 61 deletions(-)
+
+diff --git a/arch/arm64/boot/dts/qcom/sc7280-herobrine-audio-wcd9385.dtsi b/arch/arm64/boot/dts/qcom/sc7280-herobrine-audio-wcd9385.dtsi
+index 32a1e78..859faaa 100644
+--- a/arch/arm64/boot/dts/qcom/sc7280-herobrine-audio-wcd9385.dtsi
++++ b/arch/arm64/boot/dts/qcom/sc7280-herobrine-audio-wcd9385.dtsi
+@@ -5,6 +5,70 @@
+  * Copyright (c) 2022, The Linux Foundation. All rights reserved.
+  */
+ 
++/* PINCTRL */
++
++&lpass_dmic01_clk {
++	drive-strength = <8>;
++	bias-disable;
++};
++
++&lpass_dmic01_clk_sleep {
++	drive-strength = <2>;
++};
++
++&lpass_dmic01_data {
++	bias-pull-down;
++};
++
++&lpass_dmic23_clk {
++	drive-strength = <8>;
++	bias-disable;
++};
++
++&lpass_dmic23_clk_sleep {
++	drive-strength = <2>;
++};
++
++&lpass_dmic23_data {
++	bias-pull-down;
++};
++
++&lpass_rx_swr_clk {
++	drive-strength = <2>;
++	slew-rate = <1>;
++	bias-disable;
++};
++
++&lpass_rx_swr_clk_sleep {
++	bias-pull-down;
++};
++
++&lpass_rx_swr_data {
++	drive-strength = <2>;
++	slew-rate = <1>;
++	bias-bus-hold;
++};
++
++&lpass_rx_swr_data_sleep {
++	bias-pull-down;
++};
++
++&lpass_tx_swr_clk {
++	drive-strength = <2>;
++	slew-rate = <1>;
++	bias-disable;
++};
++
++&lpass_tx_swr_clk_sleep {
++	bias-pull-down;
++};
++
++&lpass_tx_swr_data {
++	drive-strength = <2>;
++	slew-rate = <1>;
++	bias-bus-hold;
++};
++
+ &mi2s1_data0 {
+ 	drive-strength = <6>;
+ 	bias-disable;
+diff --git a/arch/arm64/boot/dts/qcom/sc7280-herobrine-crd.dts b/arch/arm64/boot/dts/qcom/sc7280-herobrine-crd.dts
+index e9ca6c5..7881bbc 100644
+--- a/arch/arm64/boot/dts/qcom/sc7280-herobrine-crd.dts
++++ b/arch/arm64/boot/dts/qcom/sc7280-herobrine-crd.dts
+@@ -155,67 +155,6 @@ ap_ts_pen_1v8: &i2c13 {
+  * - If a pin is totally internal to Qcard then it gets Qcard name.
+  * - If a pin is not hooked up on Qcard, it gets no name.
+  */
+-&lpass_dmic01_clk {
+-	drive-strength = <8>;
+-	bias-disable;
+-};
+-
+-&lpass_dmic01_clk_sleep {
+-	drive-strength = <2>;
+-};
+-
+-&lpass_dmic01_data {
+-	bias-pull-down;
+-};
+-
+-&lpass_dmic23_clk {
+-	drive-strength = <8>;
+-	bias-disable;
+-};
+-
+-&lpass_dmic23_clk_sleep {
+-	drive-strength = <2>;
+-};
+-
+-&lpass_dmic23_data {
+-	bias-pull-down;
+-};
+-
+-&lpass_rx_swr_clk {
+-	drive-strength = <2>;
+-	slew-rate = <1>;
+-	bias-disable;
+-};
+-
+-&lpass_rx_swr_clk_sleep {
+-	bias-pull-down;
+-};
+-
+-&lpass_rx_swr_data {
+-	drive-strength = <2>;
+-	slew-rate = <1>;
+-	bias-bus-hold;
+-};
+-
+-&lpass_rx_swr_data_sleep {
+-	bias-pull-down;
+-};
+-
+-&lpass_tx_swr_clk {
+-	drive-strength = <2>;
+-	slew-rate = <1>;
+-	bias-disable;
+-};
+-
+-&lpass_tx_swr_clk_sleep {
+-	bias-pull-down;
+-};
+-
+-&lpass_tx_swr_data {
+-	drive-strength = <2>;
+-	slew-rate = <1>;
+-	bias-bus-hold;
+-};
+ 
+ &pm8350c_gpios {
+ 	gpio-line-names = "FLASH_STROBE_1",		/* 1 */
+-- 
+2.7.4
+

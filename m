@@ -2,294 +2,188 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 18F7056A939
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 19:16:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5CDA856A93E
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 19:17:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236044AbiGGRPm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Jul 2022 13:15:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54330 "EHLO
+        id S235402AbiGGRRF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Jul 2022 13:17:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55486 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236028AbiGGRPk (ORCPT
+        with ESMTP id S231540AbiGGRRD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Jul 2022 13:15:40 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 105D95A46F;
-        Thu,  7 Jul 2022 10:15:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=bQvzG7GSULWCHMUDgIUkqtSeMjgbgkuAudufNvUWbQU=; b=mLDor1rOK+bf4kw7dXtv26VEGF
-        bAWCnhZ/QjHAk4k/10SsnQhc1yvei36xhZW97OWJfglAWGzYgyPezRIdmyTElrj1XBbJirPvOBO2X
-        WH6ILJ3tBhtNkW5AdvvWuEhXfLQF/qW7IM3RAg9Cq7FBdrj2exitlHll4AsDi8xd32iwR5XE54PZE
-        7++7fk2PU3XwD6sWovgn95vp0ERjiOdmKhflkZgDuJzMbjgpS4CiG/u4VOD2kTqtoAxRKTnXkna2A
-        6fz6Rf4wxYN4hVTomsmyBexSYLlueUvUBEopBXI9aNB7CLlCP0vjlym0v7KrB5iiyAPxNYjRL1rZJ
-        wwhMLPTg==;
-Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1o9V6D-00HB6V-5O; Thu, 07 Jul 2022 17:15:33 +0000
-Date:   Thu, 7 Jul 2022 10:15:33 -0700
-From:   Luis Chamberlain <mcgrof@kernel.org>
-To:     Muchun Song <songmuchun@bytedance.com>
-Cc:     hejianet@gmail.com, Kees Cook <keescook@chromium.org>,
-        Pan Xinhui <xinhui@linux.vnet.ibm.com>,
-        Thomas Huth <thuth@redhat.com>,
-        Chuck Lever <chuck.lever@oracle.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
-        Matthew Wilcox <willy@infradead.org>,
-        Xiongchun duan <duanxiongchun@bytedance.com>,
-        Iurii Zaikin <yzaikin@google.com>
-Subject: Re: [PATCH v3] sysctl: handle table->maxlen robustly for proc_dobool
-Message-ID: <YscUtVytP/fWyrkP@bombadil.infradead.org>
-References: <20220525065050.38905-1-songmuchun@bytedance.com>
- <YqIU3U+l1EDy7OgZ@bombadil.infradead.org>
- <CAMZfGtXj29Q-VeYRmU5VnW51tSyqCKbXsHCa9bi2z5WifEK_9w@mail.gmail.com>
+        Thu, 7 Jul 2022 13:17:03 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F8A15A2F7;
+        Thu,  7 Jul 2022 10:16:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1657214219; x=1688750219;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-id:content-transfer-encoding:
+   mime-version;
+  bh=y0YMopJesl/TVoNehEvhxtJUHf0OShe6WRK+Ao9Ng+E=;
+  b=U7JLxNU7oPxm1Rrh95cwL6CEvHU0mD/pRt/wGsqKf0/PftL0art1nvHk
+   EZA1AstfAJMfNc6mPOk/ueEQY5RyKSQOxw2JgcWt2pA1M3NvoiwhMt9PA
+   8Y3P9Xbi/NxR8RKmasP8NxyZ/AWJlRVxamqPPK02WdjJE66KIq5jdJp5x
+   0gszpXmZxgJw+Zhp37oo5ReO9WOeYhN0dMSMe3MnHvdl8CXfbrbz5L4RM
+   5URSibE8aip+L9UPNLp+kzoF6pTp9HFCOE/s5dmGYxgIDz7jkigYFjvh3
+   WsvmLEKk3aN21sgmmBEEZ7AWv5hgg/m7syiB6aYPsxaFRp3sWoCio7Lab
+   g==;
+X-IronPort-AV: E=Sophos;i="5.92,253,1650956400"; 
+   d="scan'208";a="166868488"
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa2.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 07 Jul 2022 10:16:58 -0700
+Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
+ chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.17; Thu, 7 Jul 2022 10:16:57 -0700
+Received: from NAM10-MW2-obe.outbound.protection.outlook.com (10.10.215.89) by
+ email.microchip.com (10.10.87.71) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.17 via Frontend
+ Transport; Thu, 7 Jul 2022 10:16:57 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=R37i0JnKEOoT15IJqUb9W0HjHNk5CxItLSfuYfSVuqo3SmJCsbB5/3G75KRMVXFCg/W/cXjGKY7K7rTu53OJ7VaHR/U60qnpv0P/7Q92EJtZwK0hp8FJho8JdNLjOTg7y22CE2jjaDa2qDBf4chU5nP/vHxWpXxjwWGYsBlM/K0Teaf7vL5QXv3cbl3gFIfqjGoI9ZNkcsE1YJXAge8WfJsDUl8We7/7Z663gLOjhQ7IYHEKI719NrFLCfTEHuEkZCvL1l05Qn8l0K5Ge9f4uUfkEu3kKGqbprxD3dhWkrGPQBZHLIYVETm5gApozczB8fHUnaNdy36LuNRUuT3v4w==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=y0YMopJesl/TVoNehEvhxtJUHf0OShe6WRK+Ao9Ng+E=;
+ b=djFDRTbtV9Zfe7U0dm8VWL6CAlEP7Fyns7LzznxEuaanoy7keOHevNgHYMf/1kjS3bD3GQiUEaIEaMIhn7pZ9ZQbn6q8e9W7oS8D017jJR1bIxXGba6s876W01AaJ/5/k4zBJk55OP9VmbtAAMiFF11PoBV0rg2drNDxWK+WOrP6sDRcSH46Cgv7lkOtYpIGF3tmUoM6LMr9+IysVUi9GStZgrnsA7x7ztEEbjW5raDbaBxJJA58WaYxKlhp8mpw7iY3RYCYWNW1uOy62k+FKV2chclahyXeRcezMTilparFBowUD56yCAxlX98Rhq4QXcFBVMWCglpD1Rq7dlxKnA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=microchip.com; dmarc=pass action=none
+ header.from=microchip.com; dkim=pass header.d=microchip.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=microchiptechnology.onmicrosoft.com;
+ s=selector2-microchiptechnology-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=y0YMopJesl/TVoNehEvhxtJUHf0OShe6WRK+Ao9Ng+E=;
+ b=hlTjzj6+fkoUumVdU0ZRO+qpMLYN5eFUPMuHP3M0Pru8JMtgYBuDYmU3OM2fbLmWTVJKBwVMoymClI48RDyMAYziOoWJ8CLx2TEZV5z9yMEKUgJLOAOxsKj/n3EpQ5g9k3xnkVXSFtgFjVmzk5sVcMC/fNkUR2nMNEI6W0cp5UU=
+Received: from CO1PR11MB5154.namprd11.prod.outlook.com (2603:10b6:303:99::15)
+ by BN9PR11MB5339.namprd11.prod.outlook.com (2603:10b6:408:118::22) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5417.16; Thu, 7 Jul
+ 2022 17:16:52 +0000
+Received: from CO1PR11MB5154.namprd11.prod.outlook.com
+ ([fe80::8d4a:1681:398d:9714]) by CO1PR11MB5154.namprd11.prod.outlook.com
+ ([fe80::8d4a:1681:398d:9714%5]) with mapi id 15.20.5417.016; Thu, 7 Jul 2022
+ 17:16:52 +0000
+From:   <Conor.Dooley@microchip.com>
+To:     <william.zhang@broadcom.com>, <f.fainelli@gmail.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <bcm-kernel-feedback-list@broadcom.com>
+CC:     <anand.gore@broadcom.com>, <dan.beygelman@broadcom.com>,
+        <kursad.oney@broadcom.com>, <joel.peshkin@broadcom.com>,
+        <andre.przywara@arm.com>, <cai.huoqing@linux.dev>,
+        <Conor.Dooley@microchip.com>, <geert+renesas@glider.be>,
+        <herbert@gondor.apana.org.au>, <mpm@selenic.com>,
+        <sgoutham@marvell.com>, <tsbogend@alpha.franken.de>,
+        <linux-crypto@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: Re: [RESEND PATCH 3/8] hwrng: bcm2835: bcmbca: Replace ARCH_BCM_63XX
+ with ARCH_BCMBCA
+Thread-Topic: [RESEND PATCH 3/8] hwrng: bcm2835: bcmbca: Replace ARCH_BCM_63XX
+ with ARCH_BCMBCA
+Thread-Index: AQHYkc8D8DvWBds+8k6fbjFhIiGw761zGCsAgAALxgCAAAMigA==
+Date:   Thu, 7 Jul 2022 17:16:52 +0000
+Message-ID: <9ce5272f-f90d-6b26-a0f8-0159a90e4502@microchip.com>
+References: <20220707065800.261269-1-william.zhang@broadcom.com>
+ <20220707065800.261269-3-william.zhang@broadcom.com>
+ <f14b59fb-c02f-cd59-3c92-cb4def7ad601@gmail.com>
+ <30b06496-27a0-28a0-2775-ad81893330dd@broadcom.com>
+In-Reply-To: <30b06496-27a0-28a0-2775-ad81893330dd@broadcom.com>
+Accept-Language: en-IE, en-US
+Content-Language: en-IE
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=microchip.com;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 4e8f6aaa-e588-4125-f15e-08da603c7c00
+x-ms-traffictypediagnostic: BN9PR11MB5339:EE_
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: rEmTutCTUFSAHx8zLcGw9Pml2gzrYyfDRDufYSu1UFqoBFR5pRDCMpKc9Tpllbo9D6dX0fNgwfHsIPtgOyI52H7jle6DLsEh8qRQBKvITdLolQD9FRCOyavB5Q3xuHYNbb5T7f5N/Le82nYzAwZdkuVxdbeTVzGcmpvMEK+sRSi40pU71zfR+p6t5Pjmpuwn+HJ1PxD8f8FTx8yF+1GBcO7rTWOLo4ZV6k0R+5vqWq/AqCG8Vz/Cdi6rbDCU0BiFmfRz/wFTf1V64M5JAOEAZKbXHbmeooRcdbcIqFA3cX4e2wqH1ni+naLoy39Prtkqqsug3VVIh5IpfM5HF2CK3YGe9rYmcgKf2XQ2gUDevV9QTDx3TS6ri6YYMP4A6AIFnOTL2n91R8Qia1jpO2Alyl5vAbwdAc5LFYZT7IVwSReqFg8hBjee+VkzttOW/t/ndIKVaq+XGsVp5tV/fR1HiHMbQk2XE0hnuaZMreDtpKeVMmAOHQyhTXu/9Mx6J9FAAHJtu72p0ZOHT9U99kQvKzOPWrMMiZeJyOVAYIvvQyQIQSdHPY3hx8PYO4xu740jDDxpTzUPXlUGz3cSabJ+oi5ADWCwcH/a9WzsGKwskwCqbrJATDgbNnA3LuCmonXz2OTo7qncEWkrjURokofJbazj3AYc56NCE7Rw8ctROsaICDwrgunqpJaUinXt0VmhoNW37M3+70mBmz8Joj7esSpflpTdQHYPSZAml0yZG9rdLF+KUfOjiFW0mN9EjAC6GolEXBkgM7I1XamDkbZaNVSJM1DYbQYiGjGIV6MuwNAjFioVlLlahpvfGGLnaq5uoO5z/h1WUtvi2ymmstCTt/OsMpsYnuP6QUG7xui4XUOpVax6uAQ6CaALoIOX9FGg
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CO1PR11MB5154.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(136003)(346002)(39860400002)(366004)(396003)(376002)(66946007)(66556008)(66476007)(64756008)(66446008)(110136005)(316002)(36756003)(4326008)(122000001)(76116006)(91956017)(53546011)(38070700005)(71200400001)(31686004)(8676002)(6506007)(54906003)(38100700002)(2616005)(86362001)(478600001)(6486002)(8936002)(7416002)(31696002)(5660300002)(41300700001)(2906002)(26005)(186003)(6512007)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?a3o0bmF5aC8vcmRaU0RjZDFaWGs4L2prQjJ4Y2cvMkNsOG14YVpaRGp0VUl4?=
+ =?utf-8?B?OG5Tbk9jR0VMYWtTREVtZE4rbGN3bTF3czVvb05uTElURjlKOE01KzBWQXdZ?=
+ =?utf-8?B?OERVRXVrZWw2TGpWTnF1WXZ6N2ZzMGZ6WnpMMHg4dTZZeFppZGdEZFZLMUdL?=
+ =?utf-8?B?Tkl1K1NmdTRVWDA4WGNNZjMzTDlGUFNsaHFLOVZ4U2xEaHJOaUJVTURlcWIr?=
+ =?utf-8?B?am1iZlNjdm9tSC9wNVZxdDF2UEVmSCtPVUlqZmJ4THlrRDR3WHU0WmdCM2Rk?=
+ =?utf-8?B?U2VjMGFoVWlQc1ppWEN0RzZ4d1M4bkwrM01ZdkNYcER5NVBlRzBjVWtKK2hK?=
+ =?utf-8?B?VnJTeHNTQ0RadE5kVUhGVy9nbGl6OWdFQjVyRWJaK1dRSEE5S2FqT0R2SjA3?=
+ =?utf-8?B?WXdJZEZ3RjlZK2p5T3A3MitmUjFrY0MvbXh5clBRakIxZG1teTZxdUcyQmFj?=
+ =?utf-8?B?Ukk1eVVFTlJXR2hXeFU4S2NvYmtkYjJxUm1lMHN2Sno0RERqMW5iZFROR3Rk?=
+ =?utf-8?B?ZjJXbTRVbEFJaFBGMkJuNStCVHN4dDZscEJWRktrT29Pdk5wMXZLVGdRR0h2?=
+ =?utf-8?B?TVlXZmIyTkpnTnFuVE9scm5vcWF6VUE5SDF6bW9PRWxVWVJzRkxxaG9Qb2VD?=
+ =?utf-8?B?bUpxYk9LeEIxL2w0L3FESlpzVEtINnk5VGxsRUJZY3hKT0Y0MnNIeW8wOGJt?=
+ =?utf-8?B?bWRyQ2RFWVlBT1NFUWtPQnU5M29qUnB0eGZTbDIyN1VZRmVNSWVReXBDVVdX?=
+ =?utf-8?B?blA5U1dBZ1NwWXBMdlp4aHExY1U0S0FwV2UzdkxXeHFwZzFhUmxZTWdFaUhk?=
+ =?utf-8?B?UmNCQk04WnV4MEt1YUZyTTZodzc3RlZnRXd6WEtQZElZU2tMRnFPcGpHVWFx?=
+ =?utf-8?B?SUtWYm5xWDhZTUdrQjltVkFkamx5ejU3OWZUZjhtRjZmTTdFRXNDRTJDbVQ0?=
+ =?utf-8?B?UzMxa1M4TVdjRHRzTDBUb08rNnErd0VSYzczVUJvVnNObVZ6VGFYQnlMYWx2?=
+ =?utf-8?B?WUtlNExwVDNKV3hhc1NSQkpSenU3QnB4bzRiR2hTVk55QzQ2ZVFocHB0dWhy?=
+ =?utf-8?B?VmovSzRoRFB5U1B1UDExb2wyaUR0S3psSWJtcTNpR1cvcWNVUnlxYmhXVUMr?=
+ =?utf-8?B?dkQ2MHlkWnpqQjNHN2owUzBEQVFBSlVNM3BYYlBsY01Xem8zZnZSZk13YUll?=
+ =?utf-8?B?TnJwNEFlU0pqUE1wVWc0anNwSXFmazlBV0VZeVNkazJjVE5YMHNVZnVHc1c5?=
+ =?utf-8?B?WThYMVdxc2JpREZDeUJxK25LQTZIeWFyWGg5VGxpNjJXSlcrNFNGa1dqN3F0?=
+ =?utf-8?B?ZUhmSHhlMDB5R0FYTnl4V255UzdRUFJBRksyalRML1FyK3RrcFdFOGVYV09j?=
+ =?utf-8?B?MFRBMXNycmQvR1hTczBJbTY2R3JyMkNnUVFyaXJtb2xpcXJhejRyRVhPakpt?=
+ =?utf-8?B?Q1U5NUgzZmw3bUF6QUZIL25xcHhyWmkzeG1TY0hWTTdSSTUwREtjbE1jRWRF?=
+ =?utf-8?B?U09VUlZ2ZGRtdTJGMDZSNmhuZTFjcGw0WDRtMVg4RjBTYVFpYzRjTExWVHl0?=
+ =?utf-8?B?VTRDVHJZTmxjQlN4RmVraVNqMHdTV2ZVYlhNdVNEbXlWK2h5bUpPQ3d3dDFV?=
+ =?utf-8?B?ZEEwL2dsTWFsOE00cElhY0dYOGNVT3BvL2JuVVJHVStKZzJmN2dHVU9wc09y?=
+ =?utf-8?B?bkt6cU1pai9HMjVZZUhxT2dWRWswL1gyOTVQRGYvdGtqaWJYRkRFcmcwRnBJ?=
+ =?utf-8?B?bUoyL0FweXZlcHFKV05DZmVmVG5SZG1JK0ZHRjVza0JlNlhKR0NvaW9nbXNq?=
+ =?utf-8?B?Vm5rT2dYSzBQZGlCVjQwK2xrckRPb3g3Zm1tMHNhU2dBRGdhZ2FXczljM2ZI?=
+ =?utf-8?B?Z1lsTm9WOWJyU0tCdVRMQkUwaU1Ld1hsMHJZQTlZdUE2UEM2Umxka2dCNWlh?=
+ =?utf-8?B?RGNOUkFCQnFMM2lzZGNIcENxelNtOXBuTzdtREpyVjBGVUZ2bDkwQTNJMW01?=
+ =?utf-8?B?YVpPMmE2elAwaGJCeG4ySGNiM2VVRkhzU3hDRzdKd3I5SEJJTTQrY2tpMk9h?=
+ =?utf-8?B?RXhpcXZNd2M3ODhHNVhINlBTbkpsMm1SdXpvc3FkN3NrVm0rZmlCbGl2N01F?=
+ =?utf-8?Q?ONn3FOY1QSeOIXfxSVa5PtHAR?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <B061B18220CCCF4A88A50F013DC410DE@namprd11.prod.outlook.com>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAMZfGtXj29Q-VeYRmU5VnW51tSyqCKbXsHCa9bi2z5WifEK_9w@mail.gmail.com>
-Sender: Luis Chamberlain <mcgrof@infradead.org>
-X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: CO1PR11MB5154.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 4e8f6aaa-e588-4125-f15e-08da603c7c00
+X-MS-Exchange-CrossTenant-originalarrivaltime: 07 Jul 2022 17:16:52.0931
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 3f4057f3-b418-4d4e-ba84-d55b4e897d88
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: 5w622kZduguSViK5xUyAYjn5dRF1ROFTXABMPHKbFXRRvlLmXwY3BsQMc9CuNrsdQg15kY8/cxvTJTwfT8sjSkw52zcE+dByHrqkco7spUo=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN9PR11MB5339
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 10, 2022 at 11:38:28AM +0800, Muchun Song wrote:
-> On Thu, Jun 9, 2022 at 11:42 PM Luis Chamberlain <mcgrof@kernel.org> wrote:
-> >
-> > Please Cc the original authors of code if sending some follow up
-> > possible enhancements.
-> 
-> Will do. +Jia He
-> 
-> >
-> > On Wed, May 25, 2022 at 02:50:50PM +0800, Muchun Song wrote:
-> > > Setting ->proc_handler to proc_dobool at the same time setting ->maxlen
-> > > to sizeof(int) is counter-intuitive, it is easy to make mistakes in the
-> > > future (When I first use proc_dobool() in my driver, I assign
-> > > sizeof(variable) to table->maxlen.  Then I found it was wrong, it should
-> > > be sizeof(int) which was very counter-intuitive).
-> >
-> > How did you find this out? If I change fs/lockd/svc.c's use I get
-> > compile warnings on at least x86_64.
-> 
-> I am writing a code like:
-> 
-> static bool optimize_vmemmap_enabled;
-> 
-> static struct ctl_table hugetlb_vmemmap_sysctls[] = {
->         {
->                 .procname = "hugetlb_optimize_vmemmap",
->                 .data = &optimize_vmemmap_enabled,
->                 .maxlen = sizeof(optimize_vmemmap_enabled),
->                 .mode = 0644,
->                 .proc_handler = proc_dobool,
->         },
->         { }
-> };
-> 
-> At least I don't see any warnings from compiler. And I found
-> the assignment of ".data" should be "sizeof(int)", otherwise,
-> it does not work properly. It is a little weird to me.
-
-This is still odd to me but please clarify in your commit logs
-how you found an issue. You don't need to specify the exact code
-snippet, but just mentioning how you found it helps during
-patch review.
-
-> > > For robustness,
-> > > rework proc_dobool() robustly.
-> >
-> > You mention robustness twice. Just say something like:
-> >
-> > To help make things clear, make the logic used by proc_dobool() very
-> > clear with regards to its requirement with working with bools.
-> 
-> Clearer! Thanks.
-> 
-> >
-> > > So it is an improvement not a real bug
-> > > fix.
-> > >
-> > > Signed-off-by: Muchun Song <songmuchun@bytedance.com>
-> > > Cc: Luis Chamberlain <mcgrof@kernel.org>
-> > > Cc: Kees Cook <keescook@chromium.org>
-> > > Cc: Iurii Zaikin <yzaikin@google.com>
-> > > ---
-> > > v3:
-> > >  - Update commit log.
-> > >
-> > > v2:
-> > >  - Reimplementing proc_dobool().
-> > >
-> > >  fs/lockd/svc.c  |  2 +-
-> > >  kernel/sysctl.c | 38 +++++++++++++++++++-------------------
-> > >  2 files changed, 20 insertions(+), 20 deletions(-)
-> > >
-> > > diff --git a/fs/lockd/svc.c b/fs/lockd/svc.c
-> > > index 59ef8a1f843f..6e48ee787f49 100644
-> > > --- a/fs/lockd/svc.c
-> > > +++ b/fs/lockd/svc.c
-> > > @@ -496,7 +496,7 @@ static struct ctl_table nlm_sysctls[] = {
-> > >       {
-> > >               .procname       = "nsm_use_hostnames",
-> > >               .data           = &nsm_use_hostnames,
-> > > -             .maxlen         = sizeof(int),
-> > > +             .maxlen         = sizeof(nsm_use_hostnames),
-> > >               .mode           = 0644,
-> > >               .proc_handler   = proc_dobool,
-> > >       },
-> >
-> > Should this be a separate patch? What about the rest of the kernel?
-> 
-> I afraid not. Since this change of proc_dobool will break the
-> "nsm_use_hostnames". It should be changed to
-> sizeof(nsm_use_hostnames) at the same time.
-
-OK!
-
-> > I see it is only used once so the one commit should mention that also.
-> 
-> Well, will do.
-
-OK
-
-> > Or did chaning this as you have it now alter the way the kernel
-> > treats this sysctl? All these things would be useful to clarify
-> > in the commit log.
-> 
-> Make sense. I'll mention those things into commit log.
-> 
-> >
-> > > diff --git a/kernel/sysctl.c b/kernel/sysctl.c
-> > > index e52b6e372c60..50a2c29efc94 100644
-> > > --- a/kernel/sysctl.c
-> > > +++ b/kernel/sysctl.c
-> > > @@ -423,21 +423,6 @@ static void proc_put_char(void **buf, size_t *size, char c)
-> > >       }
-> > >  }
-> > >
-> > > -static int do_proc_dobool_conv(bool *negp, unsigned long *lvalp,
-> > > -                             int *valp,
-> > > -                             int write, void *data)
-> > > -{
-> > > -     if (write) {
-> > > -             *(bool *)valp = *lvalp;
-> > > -     } else {
-> > > -             int val = *(bool *)valp;
-> > > -
-> > > -             *lvalp = (unsigned long)val;
-> > > -             *negp = false;
-> > > -     }
-> > > -     return 0;
-> > > -}
-> > > -
-> > >  static int do_proc_dointvec_conv(bool *negp, unsigned long *lvalp,
-> > >                                int *valp,
-> > >                                int write, void *data)
-> > > @@ -708,16 +693,31 @@ int do_proc_douintvec(struct ctl_table *table, int write,
-> > >   * @lenp: the size of the user buffer
-> > >   * @ppos: file position
-> > >   *
-> > > - * Reads/writes up to table->maxlen/sizeof(unsigned int) integer
-> > > - * values from/to the user buffer, treated as an ASCII string.
-> > > + * Reads/writes up to table->maxlen/sizeof(bool) bool values from/to
-> > > + * the user buffer, treated as an ASCII string.
-> > >   *
-> > >   * Returns 0 on success.
-> > >   */
-> > >  int proc_dobool(struct ctl_table *table, int write, void *buffer,
-> > >               size_t *lenp, loff_t *ppos)
-> > >  {
-> > > -     return do_proc_dointvec(table, write, buffer, lenp, ppos,
-> > > -                             do_proc_dobool_conv, NULL);
-> > > +     struct ctl_table tmp = *table;
-> > > +     bool *data = table->data;
-> >
-> > Previously do_proc_douintvec() is called, and that checks if table->data
-> > is NULL previously before reading it and if so bails on
-> > __do_proc_dointvec() as follows:
-> >
-> >         if (!tbl_data || !table->maxlen || !*lenp || (*ppos && !write)) {
-> >                 *lenp = 0;
-> >                 return 0;
-> >         }
-> >
-> > Is it possible to have table->data be NULL? I think that's where the
-> > above check comes from.
-> 
-> At least now it cannot be NULL (no users do this now).
-
-It does not mean new users where it is NULL can't be introduced.
-
-> > And, so if it was false but not NULL, would it never do anything?
-> 
-> I think we can add the check of NULL in the future if it could be
-> happened, just like proc_dou8vec_minmax and proc_do_static_key
-> do (they do not check ->data as well).
-
-Preventing bad uses ahead of time is definitely prefered.
-
-> > You can use lib/test_sysctl.c for this to proove / disprove correct
-> > functionality.
-> 
-> I didn't see the test for proc_bool in lib/test_sysctl.c. I think we can
-> add a separate patch later to add a test for proc_bool.
-
-Yes please.
-
-> >
-> > > +     unsigned int val = READ_ONCE(*data);
-> > > +     int ret;
-> > > +
-> > > +     /* Do not support arrays yet. */
-
-BTW I'd go furether. We don't want to add any more array
-support for anything new. So "we don't support arrays" is better.
-
-> > > +     if (table->maxlen != sizeof(bool))
-> > > +             return -EINVAL;
-> >
-> > This is a separate change, and while I agree with it, as it simplifies
-> > our implementation and we don't want to add more array crap support,
-> > this should *alone* should be a separate commit.
-> 
-> If you agree reusing do_proc_douintvec to implement proc_dobool(),
-> I think a separate commit may be not suitable since do_proc_douintvec()
-> only support non-array. Mentioning this in commit log makes sense to me.
-> 
-> >
-> > > +
-> > > +     tmp.maxlen = sizeof(val);
-> >
-> > Why even set this as you do when we know it must be sizeof(bool)?
-> > Or would this break things given do_proc_douintvec() is used?
-> 
-> Since we reuse do_proc_douintvec(), which requires a uint type, to
-> get/set the value from/to the users. I think you can refer to the implementation
-> of proc_dou8vec_minmax().
-> 
-> >
-> > > +     tmp.data = &val;
-> > > +     ret = do_proc_douintvec(&tmp, write, buffer, lenp, ppos, NULL, NULL);
-> >
-> > Ugh, since we are avoiding arrays and we are only dealing with bools
-> > I'm inclined to just ask we simpify this a bool implementation which
-> > does something like do_proc_do_bool() but without array and is optimized
-> > just for bools.
-> 
-> The current implementation of __do_proc_douintvec() is already only deal
-> with non-array. Maybe it is better to reuse __do_proc_douintvec()? Otherwise,
-> we need to implement a similar functionality (do_proc_do_bool) like it but just
-> process bool type. I suspect the changes will be not small. I am wondering is it
-> value to do this? If yes, should we also rework proc_dou8vec_minmax() as well?
-
-I hate code which is obfuscates. Even if it s longer. My preference is
-to open code a few things here even if it is adding new code.
-
-  Luis
+T24gMDcvMDcvMjAyMiAxODowNSwgV2lsbGlhbSBaaGFuZyB3cm90ZToNCj4gT24gNy83LzIyIDA5
+OjIzLCBGbG9yaWFuIEZhaW5lbGxpIHdyb3RlOg0KPj4gT24gNy82LzIyIDIzOjU3LCBXaWxsaWFt
+IFpoYW5nIHdyb3RlOg0KPj4+IFByZXBhcmUgZm9yIHRoZSBCQ002MzEzOCBBUkNIX0JDTV82M1hY
+IG1pZ3JhdGlvbiB0byBBUkNIX0JDTUJDQS4gTWFrZQ0KPj4+IEhXX1JBTkRPTV9CQ00yODM1IGRl
+cGVuZGluZyBvbiBBUkNIX0JDTUJDQS4NCj4+Pg0KPj4+IFNpZ25lZC1vZmYtYnk6IFdpbGxpYW0g
+WmhhbmcgPHdpbGxpYW0uemhhbmdAYnJvYWRjb20uY29tPg0KPj4NCj4+IEFja2VkLWJ5OiBGbG9y
+aWFuIEZhaW5lbGxpIDxmLmZhaW5lbGxpQGdtYWlsLmNvbT4NCj4+DQo+PiBUaGVyZSBpcyBubyBj
+b3ZlciBsZXR0ZXIgZm9yIHRoaXMgOCBwYXRjaCBzZXJpZXMgOi8gaXQgaXMgbm90IGNsZWFyIHRv
+IG1lIHdoZXRoZXIgZWFjaCBzdWJzeXN0ZW0gbWFpbnRhaW5lciB3aWxsIGJlIGluIGEgcG9zb3Rp
+b24gdG8gbWVyZ2UgdGhlc2UgcGF0Y2hlcyBpbmRpdmlkdWFsbHksIHlldCBzdGlsbCBoYXZlIGFs
+bCA4ICg3IG9mIHRoZW0gYWN0dWFsbHksIHNlZSBjb21tZW50IHRvIHBhdGNoIDEpIGxhbmQgaW4g
+NS4yMC4NCj4+DQo+IFRoZSBjb3ZlciBsZXR0ZXIgd2lsbCBnYXRoZXIgYWxsIHRoZSByZWNpcGll
+bnRzIHdoaWNoIHdpbGwgYmUgbW9yZSB0aGFuIDUwDQoNCnRiZiwgeW91IHByb2JhYmx5IGNvdWxk
+IGN1dCBkb3duIHRoZSBDQyBsaXN0IGlmIHlvdSB3YW50LCBpdCBpc250IHJlcXVpcmVkDQp0byBD
+QyBhYnNvbHV0ZWx5IGV2ZXJ5b25lIHRoYXQgZ2V0cyBzcGF0IG91dCBieSBnZXRfbWFpbnRhaW5l
+ci4NCg0KRm9yIGV4YW1wbGUsIEkgYW0gQ0NlZCBiZWNhdXNlIEkgd2FzIGEgcmVjZW50IGF1dGhv
+ciBmb3IgdGhlIGh3cm5nIGtjb25maWcNCmZpbGUsIHNvIHBlb3BsZSBsaWtlIG1lIGNvdWxkIGJl
+IHNhZmVseSBleGNsdWRlZCBpZiB5b3UgbmVlZCB0byBjdXQgZG93biBvbg0KdGhlIG51bWJlciBv
+ZiBwZW9wbGUgdGhhdCB5b3UgYXJlIENDaW5nLg0KDQpOb3QgdGhhdCBJIGhhdmUgYSBwcm9ibGVt
+IHdpdGggYmVpbmcgQ0NlZCwganVzdCBpZiBpdCBoZWxwcyB5b3UgaGl0IGEgbWluLg0KdGhyZXNo
+b2xkIGZlZWwgZnJlZSB0byBkcm9wIG1lIDopDQo=

@@ -2,89 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F753569EFF
+	by mail.lfdr.de (Postfix) with ESMTP id 463B0569EFE
 	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 12:01:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235168AbiGGJ6V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Jul 2022 05:58:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56536 "EHLO
+        id S235038AbiGGJ6k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Jul 2022 05:58:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57136 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231775AbiGGJ6U (ORCPT
+        with ESMTP id S231775AbiGGJ6i (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Jul 2022 05:58:20 -0400
-Received: from wout4-smtp.messagingengine.com (wout4-smtp.messagingengine.com [64.147.123.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7A304F19A
-        for <linux-kernel@vger.kernel.org>; Thu,  7 Jul 2022 02:58:19 -0700 (PDT)
-Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
-        by mailout.west.internal (Postfix) with ESMTP id 33A553200901;
-        Thu,  7 Jul 2022 05:58:17 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute2.internal (MEProxy); Thu, 07 Jul 2022 05:58:17 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
-        cc:cc:content-transfer-encoding:content-type:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to; s=fm1; t=1657187896; x=
-        1657274296; bh=blIZCyCRaX2Kykl2XYQhF1kcXz91lm/t4KZgjyH+ZSU=; b=U
-        jWvfp3BGT724u6qaVZOepvcwjgDtug4sqsJGq7/sCMaBVbNaY8dKYhwUUCqGlgzW
-        yKbrVoLvr/yBH7tMxOaBxGnArfmgCM01YWSunZjDCk4QA4gmXelihCT8qzA4h7tO
-        fbwBogSGdHwWGQpc2vDO4FYtM9t1LhpTbYO47n4ul/3ebDUPjn8YoJhGGXMS1p1n
-        uPynTK2HtNt1UTcNvs1bVR7MZzOrnk0eBw5DyVKoxxGJl74Sds/ScU6uWwdQYL2S
-        i9pZ5nMh0HavCCe5YszT4Xb+plfg/O7ezCxn/UBVMMYfavl2g1UlhU43gPdP2feA
-        5RsGL+WmgCCzpEuoPeEpA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding
-        :content-type:date:date:feedback-id:feedback-id:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
-        :x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=1657187896; x=
-        1657274296; bh=blIZCyCRaX2Kykl2XYQhF1kcXz91lm/t4KZgjyH+ZSU=; b=f
-        f2K2vPEEaVg45MA5zpZZ6E6RtM0VZRK3uni3dVVA498kXQqr/M2LQ/plFWsw2s7q
-        cJ6gMDlrX+mMf/ixkOQdbncGcV72IS7KF2KZn4P1ClMbpOkYyj+xLHJ6kxCQtpXi
-        +sKeZwXVEd8SM/nvvNPc3Dlh8uv2J6dTq2k9pVtwrfI0jL9h7yZDtRFWzOLZPuYd
-        +8Po+bLlxdBuHYos+iYwxbiuofaZGN5h+cFXMNzaDUOLe4Ngcob2VPMKwHLRWM2h
-        EzjiOOti1MWmbNI7X6KtRzF6t0eomwnvVtGnNswRgRNdiQPoVxIEmL5dOxA5+lh7
-        wyXvcMMJ4GRQE+9NLGTQw==
-X-ME-Sender: <xms:OK7GYicSPJdA3n6VN9QQiZvc115LX9eCMcCRWo6v4-yaelBXmZlF3w>
-    <xme:OK7GYsPgzDLT_xunQDkncSVu2EdX76G7oeShBPUWqSgMwtKeAaSVw0vjmWFc-59Tg
-    JfEVGpTrUaP5UiLtdI>
-X-ME-Received: <xmr:OK7GYjg9T_jcYBz2iivNqw6Zc991v1rMtyeIJFawv1iFRsPDM_4I5NuJ4sBGRgavD7cuW2TJQrurDy10TDPxU7WOaat-eei73ssbddcIwNE>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrudeihedgvdduucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepkfffgggfuffvvehfhfgjtgfgsehtkeertddtfeejnecuhfhrohhmpeflihgr
-    gihunhcujggrnhhguceojhhirgiguhhnrdihrghnghesfhhlhihgohgrthdrtghomheqne
-    cuggftrfgrthhtvghrnhepudfhkeevvddtueekfeefgfetlefgueegueeltddtieejgeei
-    heevgfehgfdvfeegnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilh
-    hfrhhomhepjhhirgiguhhnrdihrghnghesfhhlhihgohgrthdrtghomh
-X-ME-Proxy: <xmx:OK7GYv_MQC8eTz6hABoOIOlQlYSrEVS7o2CrmNTl1wS2rnfvQcaJtw>
-    <xmx:OK7GYusmHLDClTO6gpmZaLqU0uyENVdxtiy-8TrkXFBEVZ0uAjZA7Q>
-    <xmx:OK7GYmFQfnL6allvSrvn-H_Xq-OrcdXFq67SYeNYTe_BT9FoLrJnUQ>
-    <xmx:OK7GYiIB4vjqPLaA5Y93IKg6Ij3_YN091oKDp-ZBYp8dM3JxhVMxKQ>
-Feedback-ID: ifd894703:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
- 7 Jul 2022 05:58:15 -0400 (EDT)
-Message-ID: <bf9d6c87-1264-6d14-bf67-154ee7795bdd@flygoat.com>
-Date:   Thu, 7 Jul 2022 10:58:14 +0100
+        Thu, 7 Jul 2022 05:58:38 -0400
+Received: from mail-pg1-x52b.google.com (mail-pg1-x52b.google.com [IPv6:2607:f8b0:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 726DE32052
+        for <linux-kernel@vger.kernel.org>; Thu,  7 Jul 2022 02:58:36 -0700 (PDT)
+Received: by mail-pg1-x52b.google.com with SMTP id s27so17523268pga.13
+        for <linux-kernel@vger.kernel.org>; Thu, 07 Jul 2022 02:58:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=m4HG/EzZ4yDDFX9ZLe3tGPR/mp2zuB3XLszlvbX2wT0=;
+        b=oBdEAfaiagKKd/OutXLnPclA2lEf0G7KFP80f2aTDyy1KnozMKyeI6Pbm4w5TMKXd1
+         nVtTwwblWIebPNpAa+ogNWgoQNu4DMh+8y+dJbkiBnt+B37PXJBJZE3dBRBlYBxbSnCN
+         XYz30hJd4U1Uc8GTwVoCEGX5Zx4ckZ5qvnUuMOZS4ZtzF+xL/qgXb1LoDHzQs8Ujl29T
+         ENrpuknJ8MuWpIckjPyzTjidW5D4q7vtodavABDg67aNky/5meMIFETP89eBMOCDdUJZ
+         S35+JDntIrkn8r9tUg02hklcAbRgdWg43GtZ7Htq1x+4s5myhYhiFgSWPxO0ImFjiih5
+         qwiQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=m4HG/EzZ4yDDFX9ZLe3tGPR/mp2zuB3XLszlvbX2wT0=;
+        b=lKJPt5vcoV0GwUNmq/8KBV8bz38nOiBRe0V8WSSRPS0iW2oUxUy0jlrv/fIIQj5VVt
+         I3P7CK8fBschtoUiGsy1wA9IXuluYNLzROWAmhqqHS6BldPWBvFQcnXQ2ukNgD5q6hhh
+         JZOJQ9TVKym/ebQrSriw9YFkdtMc0Mdr3cxbKCkMmi1TnsYKQMv/IveeWuzGu9NaPMXN
+         /l3I9Ci498IUT4MctBTJn6y18foB2YGHz12Szjb7bxmfOURs81HYMj16sdPdhpJBf/dA
+         L/dsrb5gRB2ZW/wO9X4X16bcoMwMAMKeSEhJGQHLNrnd8WpGQncCgNzZFzXTZh8sHaY3
+         tSAw==
+X-Gm-Message-State: AJIora8fSwMi+Rzaul1jJZdfcAjO2+s/Vbu1UJ2DFQzCMq2wlmkxTkFA
+        Bs89O5KouPAZa/cLs2Ec6ePA8A==
+X-Google-Smtp-Source: AGRyM1sv2d47ZVfrMkLu7LHO/t5v2OTCRnI1aRQaGL/3uZGV4t3oKHyq4b78ACM45jaLg2vSXdlZVw==
+X-Received: by 2002:a17:902:cecc:b0:16b:da4d:7e8d with SMTP id d12-20020a170902cecc00b0016bda4d7e8dmr25287850plg.82.1657187915972;
+        Thu, 07 Jul 2022 02:58:35 -0700 (PDT)
+Received: from localhost ([122.171.18.80])
+        by smtp.gmail.com with ESMTPSA id g29-20020aa79f1d000000b0051c4f6d2d95sm26594677pfr.106.2022.07.07.02.58.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 07 Jul 2022 02:58:35 -0700 (PDT)
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>
+Cc:     linux-pm@vger.kernel.org,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH V3] cpufreq: Warn users while freeing active policy
+Date:   Thu,  7 Jul 2022 15:28:31 +0530
+Message-Id: <0af6e95f8da395f75c5a58363d8b1b40483252c8.1657187391.git.viresh.kumar@linaro.org>
+X-Mailer: git-send-email 2.31.1.272.g89b43f80a514
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH v3] LoongArch: Remove vcsr in loongarch_fpu
-Content-Language: en-GB
-To:     WANG Xuerui <kernel@xen0n.name>, Qi Hu <huqi@loongson.cn>,
-        Huacai Chen <chenhuacai@kernel.org>
-Cc:     loongarch@lists.linux.dev, LKML <linux-kernel@vger.kernel.org>
-References: <20220706112937.1218573-1-huqi@loongson.cn>
- <CAAhV-H6MHjzdwyZqk6a3sKByRofG1Th6QEk0Be5NBhiAsVNcTg@mail.gmail.com>
- <8a9cd14a-54ed-cd2b-88ad-647a43b09d0e@loongson.cn>
- <2e0bb05b-cd85-4eb0-bf8f-f90156196a63@www.fastmail.com>
- <0125879d-7452-17bc-8b46-3d4ae21648d1@xen0n.name>
-From:   Jiaxun Yang <jiaxun.yang@flygoat.com>
-In-Reply-To: <0125879d-7452-17bc-8b46-3d4ae21648d1@xen0n.name>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -92,17 +70,60 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+With the new design in place, the show() and store() callbacks check if
+the policy is active or not before proceeding any further to avoid
+potential races. And in order to guarantee that cpufreq_policy_free()
+must be called after clearing the policy->cpus mask, i.e. by marking the
+policy inactive.
 
+In order to avoid introducing a bug around this later, print a warning
+message if we end up freeing an active policy.
 
-在 2022/7/7 9:56, WANG Xuerui 写道:
->
-> However, the experiment result is counter-intuitive to me after all; 
-> are you aware that perhaps *some* 3A5000's in the wild actually have 
-> functional VCSR? If so, the state obviously needs isolation 
-> (saving/restoring simply becoming no-ops on later steppings), but 
-> otherwise this cleanup should be correct.
-^ Yep, my concern was 3A5000 with VCSR enabled can be vulnerable.
+Also update cpufreq_online() a bit to make sure we clear the cpus mask
+for each error case before calling cpufreq_policy_free().
 
-Thanks
-- Jiaxun
+Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
+---
+V3: BUG_ON() -> pr_warn()
+
+ drivers/cpufreq/cpufreq.c | 10 ++++++++--
+ 1 file changed, 8 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
+index 73432360e6e9..954eef26685f 100644
+--- a/drivers/cpufreq/cpufreq.c
++++ b/drivers/cpufreq/cpufreq.c
+@@ -1273,6 +1273,13 @@ static void cpufreq_policy_free(struct cpufreq_policy *policy)
+ 	unsigned long flags;
+ 	int cpu;
+ 
++	/*
++	 * The callers must ensure the policy is inactive by now, to avoid any
++	 * races with show()/store() callbacks.
++	 */
++	if (unlikely(!policy_is_inactive(policy)))
++		pr_warn("%s: Freeing active policy\n", __func__);
++
+ 	/* Remove policy from list */
+ 	write_lock_irqsave(&cpufreq_driver_lock, flags);
+ 	list_del(&policy->policy_list);
+@@ -1527,8 +1534,6 @@ static int cpufreq_online(unsigned int cpu)
+ 	for_each_cpu(j, policy->real_cpus)
+ 		remove_cpu_dev_symlink(policy, j, get_cpu_device(j));
+ 
+-	cpumask_clear(policy->cpus);
+-
+ out_offline_policy:
+ 	if (cpufreq_driver->offline)
+ 		cpufreq_driver->offline(policy);
+@@ -1538,6 +1543,7 @@ static int cpufreq_online(unsigned int cpu)
+ 		cpufreq_driver->exit(policy);
+ 
+ out_free_policy:
++	cpumask_clear(policy->cpus);
+ 	up_write(&policy->rwsem);
+ 
+ 	cpufreq_policy_free(policy);
+-- 
+2.31.1.272.g89b43f80a514
 

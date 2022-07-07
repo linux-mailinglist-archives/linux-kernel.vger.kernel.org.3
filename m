@@ -2,118 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DB98156A093
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 12:58:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C65C56A0A2
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 13:00:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235052AbiGGK6o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Jul 2022 06:58:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48708 "EHLO
+        id S235104AbiGGK7i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Jul 2022 06:59:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49170 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230187AbiGGK6l (ORCPT
+        with ESMTP id S230187AbiGGK7e (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Jul 2022 06:58:41 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 793A94D4D7;
-        Thu,  7 Jul 2022 03:58:40 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 946BC1063;
-        Thu,  7 Jul 2022 03:58:40 -0700 (PDT)
-Received: from [10.57.85.108] (unknown [10.57.85.108])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 524513F66F;
-        Thu,  7 Jul 2022 03:58:38 -0700 (PDT)
-Message-ID: <569e97f6-f78c-1eae-1023-2d5e2df2d40f@arm.com>
-Date:   Thu, 7 Jul 2022 11:58:18 +0100
+        Thu, 7 Jul 2022 06:59:34 -0400
+Received: from alexa-out-sd-01.qualcomm.com (alexa-out-sd-01.qualcomm.com [199.106.114.38])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7987D5721C;
+        Thu,  7 Jul 2022 03:59:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1657191573; x=1688727573;
+  h=subject:to:cc:references:from:message-id:date:
+   mime-version:in-reply-to:content-transfer-encoding;
+  bh=OfSc07yQ3ge94ZYeQXBPSqIG1ZrgFidplmZMaEP/6us=;
+  b=gydAR5ApPju8f/+Q3tKFH4XjJbaNMNJwaGk/vdDR7fPLM3fN3Z5HkVi7
+   JAka9dX1RgyqhptL7HmwwVJ6imCPKvamiZjaJkLS69M8Jt6+He751s1RG
+   jjGFY7GyzGK740h4WWqhjwpYmNOuV3eTSK3qJp9Tc6BZqglK1yKCjF8NN
+   o=;
+Received: from unknown (HELO ironmsg01-sd.qualcomm.com) ([10.53.140.141])
+  by alexa-out-sd-01.qualcomm.com with ESMTP; 07 Jul 2022 03:59:33 -0700
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg01-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jul 2022 03:59:33 -0700
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Thu, 7 Jul 2022 03:59:32 -0700
+Received: from [10.79.43.230] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Thu, 7 Jul 2022
+ 03:59:29 -0700
+Subject: Re: [V3 1/7] remoteproc: qcom: pas: Add decrypt shutdown support for
+ modem
+To:     Konrad Dybcio <konrad.dybcio@somainline.org>,
+        <bjorn.andersson@linaro.org>
+CC:     <agross@kernel.org>, <mathieu.poirier@linaro.org>,
+        <dmitry.baryshkov@linaro.org>, <linux-arm-msm@vger.kernel.org>,
+        <linux-remoteproc@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+References: <1657022900-2049-1-git-send-email-quic_sibis@quicinc.com>
+ <1657022900-2049-2-git-send-email-quic_sibis@quicinc.com>
+ <b75e45fc-eede-d44d-9c0d-535923de2f9d@somainline.org>
+From:   Sibi Sankar <quic_sibis@quicinc.com>
+Message-ID: <e51d0dc3-344a-f82f-aaf2-d07d76bed98e@quicinc.com>
+Date:   Thu, 7 Jul 2022 16:29:26 +0530
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH v3 04/15] iommu: Move bus setup to IOMMU device
- registration
-Content-Language: en-GB
-To:     "Tian, Kevin" <kevin.tian@intel.com>,
-        "joro@8bytes.org" <joro@8bytes.org>
-Cc:     "will@kernel.org" <will@kernel.org>,
-        "iommu@lists.linux.dev" <iommu@lists.linux.dev>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "baolu.lu@linux.intel.com" <baolu.lu@linux.intel.com>,
-        "suravee.suthikulpanit@amd.com" <suravee.suthikulpanit@amd.com>,
-        "vasant.hegde@amd.com" <vasant.hegde@amd.com>,
-        "mjrosato@linux.ibm.com" <mjrosato@linux.ibm.com>,
-        "gerald.schaefer@linux.ibm.com" <gerald.schaefer@linux.ibm.com>,
-        "schnelle@linux.ibm.com" <schnelle@linux.ibm.com>,
-        "linux-s390@vger.kernel.org" <linux-s390@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-References: <cover.1657034827.git.robin.murphy@arm.com>
- <5b9b608af21b3c4353af042355973bac55397962.1657034828.git.robin.murphy@arm.com>
- <BN9PR11MB5276ECD0D25C09D6A3686A3B8C839@BN9PR11MB5276.namprd11.prod.outlook.com>
-From:   Robin Murphy <robin.murphy@arm.com>
-In-Reply-To: <BN9PR11MB5276ECD0D25C09D6A3686A3B8C839@BN9PR11MB5276.namprd11.prod.outlook.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+In-Reply-To: <b75e45fc-eede-d44d-9c0d-535923de2f9d@somainline.org>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Language: en-US
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-07-07 07:51, Tian, Kevin wrote:
->> From: Robin Murphy <robin.murphy@arm.com>
->> Sent: Wednesday, July 6, 2022 1:08 AM
+Hey Konrad,
+Thanks for taking time to review the series.
+
+
+On 7/6/22 6:08 PM, Konrad Dybcio wrote:
+> 
+> 
+> On 5.07.2022 14:08, Sibi Sankar wrote:
+>> The initial shutdown request to modem on SM8450 SoCs would start the
+>> decryption process and will keep returning errors until the modem shutdown
+>> is complete. Fix this by retrying shutdowns in fixed intervals.
 >>
->> @@ -202,12 +210,32 @@ int iommu_device_register(struct iommu_device
->> *iommu,
->>   	spin_lock(&iommu_device_lock);
->>   	list_add_tail(&iommu->list, &iommu_device_list);
->>   	spin_unlock(&iommu_device_lock);
->> +
->> +	for (int i = 0; i < ARRAY_SIZE(iommu_buses); i++) {
->> +		struct bus_type *bus = iommu_buses[i];
->> +		int err;
->> +
->> +		if (bus->iommu_ops && bus->iommu_ops != ops) {
->> +			err = -EBUSY;
->> +		} else {
->> +			bus->iommu_ops = ops;
->> +			err = bus_iommu_probe(bus);
->> +		}
->> +		if (err) {
->> +			iommu_device_unregister(iommu);
->> +			return err;
->> +		}
->> +	}
->> +
+> I'm sorry, but this message seems a bit cryptic to me.. What
+> is being decrypted? How is it related to the shutdown sequence?
+> Why does it need to finish first?
+
+I was told some portions of the modem logs in secured modem regions
+needs decryption and this needs to be completed before minidump/coredump
+are collected.
+
+-Sibi
+
 > 
-> Probably move above into a new function bus_iommu_probe_all():
+> Konrad
 > 
-> 	/* probe all buses for devices associated with this iommu */
-> 	err = bus_iommu_probe_all();
-> 	if (err) {
-> 		iommu_device_unregister(iommu);
-> 		return err;
-> 	}
+> [snipped the rest]
 > 
-> Just  my personal preference on leaving logic in iommu_device_register()
-> more relevant to the iommu instance itself.
-
-On reflection I think it makes sense to pull the 
-iommu_device_unregister() out of the loop anyway - I think that's really 
-a left-over from between v1 and v2 when that error case briefly jumped 
-to another cleanup loop, before I realised it was actually trivial for 
-iommu_device_unregister() to clean up for itself.
-
-However I now see I've also missed another opportunity, and the -EBUSY 
-case should be hoisted out of the loop as well, since checking 
-iommu_buses[0] is sufficient. Then it's hopefully much clearer that once 
-the bus ops go away we'll be left with just a single extra line for the 
-loop, as in iommu_device_unregister(). Does that sound reasonable?
-
-> Apart from that:
-> 
-> Reviewed-by: Kevin Tian <kevin.tian@intel.com>
-
-Thanks! (and for the others as well)
-
-Robin.

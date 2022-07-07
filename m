@@ -2,60 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0CDC5569B4F
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 09:13:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 31F2C569B51
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 09:13:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233982AbiGGHM5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Jul 2022 03:12:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36422 "EHLO
+        id S234206AbiGGHNo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Jul 2022 03:13:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37358 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230120AbiGGHMy (ORCPT
+        with ESMTP id S230120AbiGGHNk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Jul 2022 03:12:54 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 543E12611A;
-        Thu,  7 Jul 2022 00:12:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1657177973; x=1688713973;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=7ebLS8vusPVgs8ypR/gWFiq93VgeyOCRm8GJtPqEUxw=;
-  b=PG/yGZvC/ATbLhTRgnqjkAtaaHLzd8JLwxaSAHNDJNkylRgodYp44uMQ
-   ZNAgFFvU5l5wkauQAUFsGSns/ejAB3Mf40DQwMHrCqL+IHqnj+jk7q73E
-   ns+ExpqgiShFyCADxyeMsNz893S9KrUCGJms/HMG0PTtykZF9i94BKkXp
-   rdHEQJCj2ogFLrNDb/M4mekYCIA2jciTOtK6O/f89H8vRGw7z82KvcELk
-   IAnqgqI5rX7fXcuHe+69gDMcD6+WtCKN42AAs06y0FRxxfkKjAyVY1jRY
-   KE84G1kmsWMvG8RcRTbwhGsenou5ScwbAUrzjL9ca8+mgvU3EyTyQOBdo
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10400"; a="345640116"
-X-IronPort-AV: E=Sophos;i="5.92,252,1650956400"; 
-   d="scan'208";a="345640116"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jul 2022 00:12:52 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,252,1650956400"; 
-   d="scan'208";a="651013655"
-Received: from yy-desk-7060.sh.intel.com (HELO localhost) ([10.239.159.76])
-  by fmsmga008.fm.intel.com with ESMTP; 07 Jul 2022 00:12:51 -0700
-Date:   Thu, 7 Jul 2022 15:12:50 +0800
-From:   Yuan Yao <yuan.yao@linux.intel.com>
-To:     isaku.yamahata@intel.com
-Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        isaku.yamahata@gmail.com, Paolo Bonzini <pbonzini@redhat.com>
-Subject: Re: [PATCH v7 024/102] KVM: TDX: Add place holder for TDX VM
- specific mem_enc_op ioctl
-Message-ID: <20220707071250.dcp53mspnronpbxg@yy-desk-7060>
-References: <cover.1656366337.git.isaku.yamahata@intel.com>
- <d0438eb959af5984eb4a72c3054085bfecd3b57d.1656366338.git.isaku.yamahata@intel.com>
+        Thu, 7 Jul 2022 03:13:40 -0400
+Received: from mailbox.box.xen0n.name (mail.xen0n.name [115.28.160.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0089E2A719
+        for <linux-kernel@vger.kernel.org>; Thu,  7 Jul 2022 00:13:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=xen0n.name; s=mail;
+        t=1657178015; bh=ppbGeYOQcIvSTiYj6vLLsomHZRDhW2cFfKDbRX+db6U=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=WjRzEqDqktrI48vPzdcQq4D3jO8oqbt3yBlDzJncnbSU02vXOLBjPFX1ry6B9sWbY
+         YbjLkmNnZVOzxhohwQLsPS8EqcjB4qI+rY/a8dAsILcERzqqSaZ1TZH5G/lyd/KV5z
+         sTlyWl6AetR6ULV/Ya3muCHhwzhG3gx3r/1Evr2s=
+Received: from [100.100.57.190] (unknown [220.248.53.61])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by mailbox.box.xen0n.name (Postfix) with ESMTPSA id 3B6EB6010B;
+        Thu,  7 Jul 2022 15:13:35 +0800 (CST)
+Message-ID: <0145342f-920a-0ce6-e50e-2b3285b5fb4f@xen0n.name>
+Date:   Thu, 7 Jul 2022 15:13:34 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <d0438eb959af5984eb4a72c3054085bfecd3b57d.1656366338.git.isaku.yamahata@intel.com>
-User-Agent: NeoMutt/20171215
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:104.0)
+ Gecko/20100101 Thunderbird/104.0a1
+Subject: Re: [PATCH v3] LoongArch: Remove vcsr in loongarch_fpu
+Content-Language: en-US
+To:     Huacai Chen <chenhuacai@kernel.org>, huqi <huqi@loongson.cn>
+Cc:     WANG Xuerui <kernel@xen0n.name>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        loongarch@lists.linux.dev, LKML <linux-kernel@vger.kernel.org>
+References: <20220706112937.1218573-1-huqi@loongson.cn>
+ <CAAhV-H6MHjzdwyZqk6a3sKByRofG1Th6QEk0Be5NBhiAsVNcTg@mail.gmail.com>
+From:   WANG Xuerui <kernel@xen0n.name>
+In-Reply-To: <CAAhV-H6MHjzdwyZqk6a3sKByRofG1Th6QEk0Be5NBhiAsVNcTg@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -63,123 +54,128 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 27, 2022 at 02:53:16PM -0700, isaku.yamahata@intel.com wrote:
-> From: Isaku Yamahata <isaku.yamahata@intel.com>
+On 2022/7/7 14:45, Huacai Chen wrote:
+> Hi, all,
 >
-> Add a place holder function for TDX specific VM-scoped ioctl as mem_enc_op.
-> TDX specific sub-commands will be added to retrieve/pass TDX specific
-> parameters.
->
-> KVM_MEMORY_ENCRYPT_OP was introduced for VM-scoped operations specific for
-> guest state-protected VM.  It defined subcommands for technology-specific
-> operations under KVM_MEMORY_ENCRYPT_OP.  Despite its name, the subcommands
-> are not limited to memory encryption, but various technology-specific
-> operations are defined.  It's natural to repurpose KVM_MEMORY_ENCRYPT_OP
-> for TDX specific operations and define subcommands.
->
-> TDX requires VM-scoped, and VCPU-scoped TDX-specific operations for device
-> model, for example, qemu.  Getting system-wide parameters, TDX-specific VM
-> initialization, and TDX-specific vCPU initialization.  Which requires KVM
-> vCPU-scoped operations in addition to the existing VM-scoped operations.
-
-Suggest to no need talking about vcpu scope operations here, because
-they're not available in this patch, we can talk about them in the
-patch which introduces them.
-
->
-> Signed-off-by: Isaku Yamahata <isaku.yamahata@intel.com>
-> ---
->  arch/x86/kvm/vmx/main.c    |  9 +++++++++
->  arch/x86/kvm/vmx/tdx.c     | 26 ++++++++++++++++++++++++++
->  arch/x86/kvm/vmx/x86_ops.h |  4 ++++
->  3 files changed, 39 insertions(+)
->
-> diff --git a/arch/x86/kvm/vmx/main.c b/arch/x86/kvm/vmx/main.c
-> index 7b497ed1f21c..067f5de56c53 100644
-> --- a/arch/x86/kvm/vmx/main.c
-> +++ b/arch/x86/kvm/vmx/main.c
-> @@ -73,6 +73,14 @@ static void vt_vm_free(struct kvm *kvm)
->  		return tdx_vm_free(kvm);
->  }
->
-> +static int vt_mem_enc_ioctl(struct kvm *kvm, void __user *argp)
-> +{
-> +	if (!is_td(kvm))
-> +		return -ENOTTY;
-> +
-> +	return tdx_vm_ioctl(kvm, argp);
-> +}
-> +
->  struct kvm_x86_ops vt_x86_ops __initdata = {
->  	.name = "kvm_intel",
->
-> @@ -214,6 +222,7 @@ struct kvm_x86_ops vt_x86_ops __initdata = {
->  	.vcpu_deliver_sipi_vector = kvm_vcpu_deliver_sipi_vector,
->
->  	.dev_mem_enc_ioctl = tdx_dev_ioctl,
-> +	.mem_enc_ioctl = vt_mem_enc_ioctl,
->  };
->
->  struct kvm_x86_init_ops vt_init_ops __initdata = {
-> diff --git a/arch/x86/kvm/vmx/tdx.c b/arch/x86/kvm/vmx/tdx.c
-> index ec4ebba4152a..2a9dfd54189f 100644
-> --- a/arch/x86/kvm/vmx/tdx.c
-> +++ b/arch/x86/kvm/vmx/tdx.c
-> @@ -438,6 +438,32 @@ int tdx_dev_ioctl(void __user *argp)
->  	return 0;
->  }
->
-> +int tdx_vm_ioctl(struct kvm *kvm, void __user *argp)
-> +{
-> +	struct kvm_tdx_cmd tdx_cmd;
-> +	int r;
-> +
-> +	if (copy_from_user(&tdx_cmd, argp, sizeof(struct kvm_tdx_cmd)))
-> +		return -EFAULT;
-> +	if (tdx_cmd.error || tdx_cmd.unused)
-> +		return -EINVAL;
-> +
-> +	mutex_lock(&kvm->lock);
-> +
-> +	switch (tdx_cmd.id) {
-> +	default:
-> +		r = -EINVAL;
-> +		goto out;
-> +	}
-> +
-> +	if (copy_to_user(argp, &tdx_cmd, sizeof(struct kvm_tdx_cmd)))
-> +		r = -EFAULT;
-> +
-> +out:
-> +	mutex_unlock(&kvm->lock);
-> +	return r;
-> +}
-> +
->  int __init tdx_module_setup(void)
->  {
->  	const struct tdsysinfo_struct *tdsysinfo;
-> diff --git a/arch/x86/kvm/vmx/x86_ops.h b/arch/x86/kvm/vmx/x86_ops.h
-> index 3027d9821fe1..ef6115ae0e88 100644
-> --- a/arch/x86/kvm/vmx/x86_ops.h
-> +++ b/arch/x86/kvm/vmx/x86_ops.h
-> @@ -137,6 +137,8 @@ int tdx_dev_ioctl(void __user *argp);
->  int tdx_vm_init(struct kvm *kvm);
->  void tdx_mmu_release_hkid(struct kvm *kvm);
->  void tdx_vm_free(struct kvm *kvm);
-> +
-> +int tdx_vm_ioctl(struct kvm *kvm, void __user *argp);
->  #else
->  static inline int tdx_hardware_setup(struct kvm_x86_ops *x86_ops) { return 0; }
->  static inline bool tdx_is_vm_type_supported(unsigned long type) { return false; }
-> @@ -147,6 +149,8 @@ static inline int tdx_vm_init(struct kvm *kvm) { return -EOPNOTSUPP; }
->  static inline void tdx_mmu_release_hkid(struct kvm *kvm) {}
->  static inline void tdx_flush_shadow_all_private(struct kvm *kvm) {}
->  static inline void tdx_vm_free(struct kvm *kvm) {}
-> +
-> +static inline int tdx_vm_ioctl(struct kvm *kvm, void __user *argp) { return -EOPNOTSUPP; }
->  #endif
->
->  #endif /* __KVM_X86_VMX_X86_OPS_H */
+> I have rewritten the commit message. If no problem, this patch will be
+> queued for loongarch-fixes.
 > --
-> 2.25.1
+> The `vcsr` only exists in the old hardware design, it isn't used in any
+> shipped hardware from Loongson-3A5000 on. FPU and LSX/LASX both use the
+> `fcsr` as their control and status registers now. For example, the RM
+> control bit in fcsr0 is shared by FPU, LSX and LASX.
+
+FPU is a function unit while LSX/LASX are ISA extensions, they don't 
+belong to the same category.
+
+"Scalar FP and LSX/LASX instructions all use ...", and "... is shared by 
+FP, LSX and LASX instructions." sound better.
+
+> Particularly, fcsr16 to fcsr31 are reserved for LSX/LASX now, access to
+> these registers has no visible effect if LSX/LASX is enabled, and will
+> cause SXD/ASXD exceptions if LSX/LASX is not enabled.
 >
+> So, mentions of vcsr are obsolete in the first place, let's remove them.
+
+Works for me and the wording is objective enough.
+
+> --
+> Huacai
+>
+> On Wed, Jul 6, 2022 at 7:29 PM huqi <huqi@loongson.cn> wrote:
+>> From: Qi Hu <huqi@loongson.cn>
+>>
+>> The `vcsr` is not used anymore. Remove this member from `loongarch_fpu`.
+>>
+>>  From 3A5000(LoongArch), `vcsr` is removed in hardware. FP and LSX/LASX
+>> both use `fcsr` as their csr.
+>>
+>> Particularly, fcsr from $r16 to $r31 are reserved for LSX/LASX, an
+>> using the registers in this area will cause SXD/ASXD if LSX/LASX is
+>> not enabled.
+>>
+>> Signed-off-by: Qi Hu <huqi@loongson.cn>
+>> ---
+>> V3:
+>> - Modify commit message to conform to the format.
+>> V2:
+>> - Add more details in the commit message.
+>> ---
+>>   arch/loongarch/include/asm/fpregdef.h  |  1 -
+>>   arch/loongarch/include/asm/processor.h |  2 --
+>>   arch/loongarch/kernel/asm-offsets.c    |  1 -
+>>   arch/loongarch/kernel/fpu.S            | 10 ----------
+>>   4 files changed, 14 deletions(-)
+>>
+>> diff --git a/arch/loongarch/include/asm/fpregdef.h b/arch/loongarch/include/asm/fpregdef.h
+>> index adb16e4b43b0..b6be527831dd 100644
+>> --- a/arch/loongarch/include/asm/fpregdef.h
+>> +++ b/arch/loongarch/include/asm/fpregdef.h
+>> @@ -48,6 +48,5 @@
+>>   #define fcsr1  $r1
+>>   #define fcsr2  $r2
+>>   #define fcsr3  $r3
+>> -#define vcsr16 $r16
+>>
+>>   #endif /* _ASM_FPREGDEF_H */
+>> diff --git a/arch/loongarch/include/asm/processor.h b/arch/loongarch/include/asm/processor.h
+>> index 1d63c934b289..57ec45aa078e 100644
+>> --- a/arch/loongarch/include/asm/processor.h
+>> +++ b/arch/loongarch/include/asm/processor.h
+>> @@ -80,7 +80,6 @@ BUILD_FPR_ACCESS(64)
+>>
+>>   struct loongarch_fpu {
+>>          unsigned int    fcsr;
+>> -       unsigned int    vcsr;
+>>          uint64_t        fcc;    /* 8x8 */
+>>          union fpureg    fpr[NUM_FPU_REGS];
+>>   };
+>> @@ -161,7 +160,6 @@ struct thread_struct {
+>>           */                                                     \
+>>          .fpu                    = {                             \
+>>                  .fcsr           = 0,                            \
+>> -               .vcsr           = 0,                            \
+>>                  .fcc            = 0,                            \
+>>                  .fpr            = {{{0,},},},                   \
+>>          },                                                      \
+>> diff --git a/arch/loongarch/kernel/asm-offsets.c b/arch/loongarch/kernel/asm-offsets.c
+>> index bfb65eb2844f..20cd9e16a95a 100644
+>> --- a/arch/loongarch/kernel/asm-offsets.c
+>> +++ b/arch/loongarch/kernel/asm-offsets.c
+>> @@ -166,7 +166,6 @@ void output_thread_fpu_defines(void)
+>>
+>>          OFFSET(THREAD_FCSR, loongarch_fpu, fcsr);
+>>          OFFSET(THREAD_FCC,  loongarch_fpu, fcc);
+>> -       OFFSET(THREAD_VCSR, loongarch_fpu, vcsr);
+>>          BLANK();
+>>   }
+>>
+>> diff --git a/arch/loongarch/kernel/fpu.S b/arch/loongarch/kernel/fpu.S
+>> index 75c6ce0682a2..a631a7137667 100644
+>> --- a/arch/loongarch/kernel/fpu.S
+>> +++ b/arch/loongarch/kernel/fpu.S
+>> @@ -146,16 +146,6 @@
+>>          movgr2fcsr      fcsr0, \tmp0
+>>          .endm
+>>
+>> -       .macro sc_save_vcsr base, tmp0
+>> -       movfcsr2gr      \tmp0, vcsr16
+>> -       EX      st.w \tmp0, \base, 0
+>> -       .endm
+>> -
+>> -       .macro sc_restore_vcsr base, tmp0
+>> -       EX      ld.w \tmp0, \base, 0
+>> -       movgr2fcsr      vcsr16, \tmp0
+>> -       .endm
+>> -
+>>   /*
+>>    * Save a thread's fp context.
+>>    */
+>> --
+>> 2.36.1
+>>
+>>
+Apart from the syntactical nit:
+
+Reviewed-by: WANG Xuerui <git@xen0n.name>
+

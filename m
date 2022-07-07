@@ -2,63 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 621F756ACDA
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 22:39:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F1EA56ACE5
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 22:43:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236437AbiGGUio (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Jul 2022 16:38:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38286 "EHLO
+        id S236474AbiGGUns (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Jul 2022 16:43:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40910 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231875AbiGGUim (ORCPT
+        with ESMTP id S231875AbiGGUnq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Jul 2022 16:38:42 -0400
-Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9560D1CFCF
-        for <linux-kernel@vger.kernel.org>; Thu,  7 Jul 2022 13:38:41 -0700 (PDT)
-Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-31ce88f9ab8so39189837b3.16
-        for <linux-kernel@vger.kernel.org>; Thu, 07 Jul 2022 13:38:41 -0700 (PDT)
+        Thu, 7 Jul 2022 16:43:46 -0400
+Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com [IPv6:2607:f8b0:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64A642409E
+        for <linux-kernel@vger.kernel.org>; Thu,  7 Jul 2022 13:43:45 -0700 (PDT)
+Received: by mail-pf1-x42f.google.com with SMTP id e16so8960583pfm.11
+        for <linux-kernel@vger.kernel.org>; Thu, 07 Jul 2022 13:43:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=date:message-id:mime-version:subject:from:to:cc;
-        bh=MtmsWhHJfa7z6EGDAwuHnwZvzmYyvpgdzqZZqyHQmxU=;
-        b=SvBsyqgeUtFCOrwSGE21tf7OVIzDLVqlgjC31Qjwz3eXSGy3keVTu5byI7NFAGM13Z
-         DKHnL2hMKDyFYZseWOr8PLiB0Z0MexDr92vfEzihUDHIDr8H1Xgg+mWVtw7dPggcnx69
-         AagT5Dlkmpn1tzFrNeW84M801vDVhdHqKZMJKndqrF/re3dWM95/ex/dj8vFDlhQr+ge
-         pnWso1m+u2J6AVT+Rh1IqAdfTLTCWAcIAyypt3QQJ65nCETR8nmjDUyelkY856lyCp3z
-         yejGaPAC2scFt6i7Z0k19x9RgCGB1O883p6rUoMhvDnbzoqfrlyiqzrszPLV3O92Dd/j
-         pHVw==
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=ll20ZcAb0w9z6zV6paEiNQvrdmi0bjy9wQYysAR+tA8=;
+        b=URF1boc84AH8v3HsZBbgNOqHaD2PrXzBbYwtXSIfIVRywqeC1B6KsyAiYI58j7p8Ll
+         w+BpTtRDUQDJMzOvCRjLMRlP/I4XvBlIw0fmlot8jvJ4iTPyGKKHpugbxZbP42XsyQPt
+         0zpbeWv6tIlOzL0jPLkJCDZBGjh0PyOY0jp2S31IKnOXJ2gPxDiRBrVdra/sEZ7CqSxR
+         jyEsVkeYWIAW55BczsdSKQ4cHzs7S1sruDMhUa9dcTtj6rR8RxyN7Rd6tWIgt6TA24zc
+         6StG5dlQKRb9/JD+KpgqdRiSHCG6KbPQuHygtUPG1uZy1vtJqtdlxyRNnpCo9gnlodNf
+         DwPA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
-        bh=MtmsWhHJfa7z6EGDAwuHnwZvzmYyvpgdzqZZqyHQmxU=;
-        b=NDM3hVCjmtiChlzDyw2fNr3+snH6rBz4LYe/QeCaQ5cn3JOwn5jxL0b1zB8L2O9jm/
-         Yne9SlZowO7xqSCzF500wmssbt6iF5cbYB1kiI0z1j15xFslj173a6C3z4L6OwzNMwBl
-         v2TpflmEbAxHLUGWaU/vd9qM2qIo5j+4lbz3CYS4EjhmrAo+xLQ72wdU7S1RSFq1pU+k
-         RUCPanTbiTMfRY8FVkyHRRLAYHogayQhoE70I/3B+rJZLmj8gJ8exnJvHyLy+CSAvRgJ
-         Eo63sDkg+S65B/fufUXo9kdNjUM/J2UeYmB7Rhrm11ChLjaEfSNAbc3/IKaxOF3Gt7cF
-         C+4Q==
-X-Gm-Message-State: AJIora8jnkspebpBR8uGWxM1NIsZwmblbR6CEFdT7FsQyD9Q2RhMNdcJ
-        HTOHvSaRnxoyByyM5RVV+hHUY/GMMXQn
-X-Google-Smtp-Source: AGRyM1vslLtKenxRif28iTau2qVy76RKBRFTYtWiRIc+Cm3GzLY4Tsaqyt6Jd+NeqkRZ7LehqxcUHpVuKay+
-X-Received: from irogers.svl.corp.google.com ([2620:15c:2d4:203:bf75:f79:d509:a8d1])
- (user=irogers job=sendgmr) by 2002:a0d:cc8c:0:b0:31d:1154:b730 with SMTP id
- o134-20020a0dcc8c000000b0031d1154b730mr10257ywd.440.1657226320914; Thu, 07
- Jul 2022 13:38:40 -0700 (PDT)
-Date:   Thu,  7 Jul 2022 13:38:36 -0700
-Message-Id: <20220707203836.345918-1-irogers@google.com>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.37.0.rc0.161.g10f37bed90-goog
-Subject: [PATCH v2] perf gtk: Only support --gtk if compiled in
-From:   Ian Rogers <irogers@google.com>
-To:     Arnaldo Carvalho de Melo <acme@kernel.org>,
-        xaizek <xaizek@posteo.net>, linux-perf-users@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Stephane Eranian <eranian@google.com>,
-        Ian Rogers <irogers@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=ll20ZcAb0w9z6zV6paEiNQvrdmi0bjy9wQYysAR+tA8=;
+        b=7w6LisPmbT2tGHxZnKRAt6s9KAi2GtQ8WKvDEJXKFxzgu2QGmYq6ZcQubP1SOIkf6f
+         kXJVwg+cEFYqjsKzLubbJgedmY1rtjmLm7zGHUHQ1dGhj9rcR+OrKNbypfN3kp/VviCh
+         0is52yfL5ohM7E3Jo/cruZlm1yl1DPOpy6/hXnz7vPolRaHGVQmO2ByHKc2WVqyM2VeD
+         uh7yQVvCjukT7Q1FTG2+gM42P+Y7cri5ij3QJ+avT5/2PX23IqooB6RxnSf7YHBwho4t
+         XYP77dU3pt3bBQpR81ZZBU/k9S925DKaWNTIsv2aGjtJ2o3EJvXyqZtFC12OrsEaQQPp
+         vgOw==
+X-Gm-Message-State: AJIora+8qA38kl+ncT0emFag3CfQnenEhm+U23ytjFUB3ungcnwV5gAo
+        EHUkmzrZlnZCavu0oP4zfmpqHw==
+X-Google-Smtp-Source: AGRyM1snpqN5XIgDiCvMqPlmhkqtR4FIdb2NphBLO/yR046bU8RX+GmUkvAlMCeGkCa4G4i/R5k0NQ==
+X-Received: by 2002:a05:6a00:a8e:b0:527:9d23:c613 with SMTP id b14-20020a056a000a8e00b005279d23c613mr55562111pfl.53.1657226624708;
+        Thu, 07 Jul 2022 13:43:44 -0700 (PDT)
+Received: from google.com (123.65.230.35.bc.googleusercontent.com. [35.230.65.123])
+        by smtp.gmail.com with ESMTPSA id g16-20020a63e610000000b0041264dec901sm6517163pgh.21.2022.07.07.13.43.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 07 Jul 2022 13:43:43 -0700 (PDT)
+Date:   Thu, 7 Jul 2022 20:43:40 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Borislav Petkov <bp@alien8.de>
+Cc:     Tom Lendacky <thomas.lendacky@amd.com>,
+        Michael Roth <michael.roth@amd.com>, x86@kernel.org,
+        linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        linux-efi@vger.kernel.org, platform-driver-x86@vger.kernel.org,
+        linux-coco@lists.linux.dev, linux-mm@kvack.org,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Joerg Roedel <jroedel@suse.de>,
+        "H. Peter Anvin" <hpa@zytor.com>, Ard Biesheuvel <ardb@kernel.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Jim Mattson <jmattson@google.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Sergio Lopez <slp@redhat.com>, Peter Gonda <pgonda@google.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        David Rientjes <rientjes@google.com>,
+        Dov Murik <dovmurik@linux.ibm.com>,
+        Tobin Feldman-Fitzthum <tobin@ibm.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        Andi Kleen <ak@linux.intel.com>,
+        "Dr . David Alan Gilbert" <dgilbert@redhat.com>,
+        brijesh.ksingh@gmail.com, tony.luck@intel.com, marcorr@google.com,
+        sathyanarayanan.kuppuswamy@linux.intel.com
+Subject: Re: [PATCH v12 19/46] x86/kernel: Make the .bss..decrypted section
+ shared in RMP table
+Message-ID: <YsdFfL231NXvYOXu@google.com>
+References: <20220307213356.2797205-20-brijesh.singh@amd.com>
+ <YqfabnTRxFSM+LoX@google.com>
+ <YqistMvngNKEJu2o@google.com>
+ <daaf7a84-4204-48ca-e40c-7ba296b4789c@amd.com>
+ <YqizrTCk460kov/X@google.com>
+ <6db51d45-e17a-38dd-131d-e43132c55dfb@amd.com>
+ <Yqjm/b3deMlxxePh@google.com>
+ <9abe9a71-242d-91d5-444a-b56c8b9b6d90@amd.com>
+ <YqtdIf7OSivLxFL0@google.com>
+ <Yr8mARnQT+VZK0iy@zn.tnic>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Yr8mARnQT+VZK0iy@zn.tnic>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -66,101 +104,69 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-If HAVE_GTK2_SUPPORT isn't defined then --gtk can't succeed, don't
-support it as a command line option in this case.
+On Fri, Jul 01, 2022, Borislav Petkov wrote:
+> On Thu, Jun 16, 2022 at 04:41:05PM +0000, Sean Christopherson wrote:
+> > > I worry that another use of cc_platform_has() could creep in at some point
+> > > and cause the same issue. Not sure how bad it would be, performance-wise, to
+> > > remove the jump table optimization for arch/x86/coco/core.c.
+> 
+> Is there a gcc switch for that?
 
-v2. Is a rebase. Patch appears to have been missed in:
-https://lore.kernel.org/lkml/Ygu40djM1MqAfkcF@kernel.org/
+I believe -fno-jump-tables will do the trick.  That also reminds me exactly why
+CONFIG_RETPOLINE=y isn't broken, jump tables are disabled when retpolines are enabled[*].
 
-Signed-off-by: Ian Rogers <irogers@google.com>
----
- tools/perf/builtin-annotate.c | 8 ++++++++
- tools/perf/builtin-report.c   | 6 ++++++
- 2 files changed, 14 insertions(+)
+[*] https://gcc.gnu.org/bugzilla/show_bug.cgi?id=86952
 
-diff --git a/tools/perf/builtin-annotate.c b/tools/perf/builtin-annotate.c
-index 2ffe071dbcff..f839e69492e8 100644
---- a/tools/perf/builtin-annotate.c
-+++ b/tools/perf/builtin-annotate.c
-@@ -50,7 +50,9 @@ struct perf_annotate {
- 	bool	   use_tui;
- #endif
- 	bool	   use_stdio, use_stdio2;
-+#ifdef HAVE_GTK2_SUPPORT
- 	bool	   use_gtk;
-+#endif
- 	bool	   skip_missing;
- 	bool	   has_br_stack;
- 	bool	   group_set;
-@@ -526,7 +528,9 @@ int cmd_annotate(int argc, const char **argv)
- 	OPT_BOOLEAN('q', "quiet", &quiet, "do now show any message"),
- 	OPT_BOOLEAN('D', "dump-raw-trace", &dump_trace,
- 		    "dump raw trace in ASCII"),
-+#ifdef HAVE_GTK2_SUPPORT
- 	OPT_BOOLEAN(0, "gtk", &annotate.use_gtk, "Use the GTK interface"),
-+#endif
- #ifdef HAVE_SLANG_SUPPORT
- 	OPT_BOOLEAN(0, "tui", &annotate.use_tui, "Use the TUI interface"),
- #endif
-@@ -614,10 +618,12 @@ int cmd_annotate(int argc, const char **argv)
- 	if (annotate_check_args(&annotate.opts) < 0)
- 		return -EINVAL;
- 
-+#ifdef HAVE_GTK2_SUPPORT
- 	if (symbol_conf.show_nr_samples && annotate.use_gtk) {
- 		pr_err("--show-nr-samples is not available in --gtk mode at this time\n");
- 		return ret;
- 	}
-+#endif
- 
- 	ret = symbol__validate_sym_arguments();
- 	if (ret)
-@@ -656,8 +662,10 @@ int cmd_annotate(int argc, const char **argv)
- 	else if (annotate.use_tui)
- 		use_browser = 1;
- #endif
-+#ifdef HAVE_GTK2_SUPPORT
- 	else if (annotate.use_gtk)
- 		use_browser = 2;
-+#endif
- 
- 	setup_browser(true);
- 
-diff --git a/tools/perf/builtin-report.c b/tools/perf/builtin-report.c
-index afe4a5539ecc..91ed41cc7d88 100644
---- a/tools/perf/builtin-report.c
-+++ b/tools/perf/builtin-report.c
-@@ -74,7 +74,9 @@ struct report {
- #ifdef HAVE_SLANG_SUPPORT
- 	bool			use_tui;
- #endif
-+#ifdef HAVE_GTK2_SUPPORT
- 	bool			use_gtk;
-+#endif
- 	bool			use_stdio;
- 	bool			show_full_info;
- 	bool			show_threads;
-@@ -1227,7 +1229,9 @@ int cmd_report(int argc, const char **argv)
- #ifdef HAVE_SLANG_SUPPORT
- 	OPT_BOOLEAN(0, "tui", &report.use_tui, "Use the TUI interface"),
- #endif
-+#ifdef HAVE_GTK2_SUPPORT
- 	OPT_BOOLEAN(0, "gtk", &report.use_gtk, "Use the GTK2 interface"),
-+#endif
- 	OPT_BOOLEAN(0, "stdio", &report.use_stdio,
- 		    "Use the stdio interface"),
- 	OPT_BOOLEAN(0, "header", &report.header, "Show data header."),
-@@ -1516,8 +1520,10 @@ int cmd_report(int argc, const char **argv)
- 	else if (report.use_tui)
- 		use_browser = 1;
- #endif
-+#ifdef HAVE_GTK2_SUPPORT
- 	else if (report.use_gtk)
- 		use_browser = 2;
-+#endif
- 
- 	/* Force tty output for header output and per-thread stat. */
- 	if (report.header || report.header_only || report.show_threads)
--- 
-2.37.0.rc0.161.g10f37bed90-goog
+> > One thought would be to initialize "vendor" to a bogus value, disallow calls to
+> > cc_set_vendor() until after the kernel as gotten to a safe point, and then WARN
+> > (or panic?) if cc_platform_has() is called before "vendor" is explicitly set.
+> > New calls can still get in, but they'll be much easier to detect and less likely
+> > to escape initial testing.
+> 
+> The invalid vendor thing makes sense but I don't think it'll help in
+> this case.
+> 
+> We set vendor in sme_enable() which comes before the
+> 
+> __startup_64 -> sme_postprocess_startup
+> 
+> path you're hitting.
 
+Right, but that's easily solved, no?  E.g.
+
+diff --git a/arch/x86/mm/mem_encrypt_amd.c b/arch/x86/mm/mem_encrypt_amd.c
+index e8f7953fda83..ed3118f5bf62 100644
+--- a/arch/x86/mm/mem_encrypt_amd.c
++++ b/arch/x86/mm/mem_encrypt_amd.c
+@@ -487,6 +487,8 @@ void __init sme_early_init(void)
+        if (!sme_me_mask)
+                return;
+
++       cc_set_vendor(CC_VENDOR_AMD);
++
+        early_pmd_flags = __sme_set(early_pmd_flags);
+
+        __supported_pte_mask = __sme_set(__supported_pte_mask);
+diff --git a/arch/x86/mm/mem_encrypt_identity.c b/arch/x86/mm/mem_encrypt_identity.c
+index f415498d3175..6b1c60032400 100644
+--- a/arch/x86/mm/mem_encrypt_identity.c
++++ b/arch/x86/mm/mem_encrypt_identity.c
+@@ -611,7 +611,6 @@ void __init sme_enable(struct boot_params *bp)
+ out:
+        if (sme_me_mask) {
+                physical_mask &= ~sme_me_mask;
+-               cc_set_vendor(CC_VENDOR_AMD);
+                cc_set_mask(sme_me_mask);
+        }
+ }
+
+And disallow cc_set_vendor() before x86_64_start_kernel(), then fix any fallout.
+
+> We could do only the aspect of checking whether it hasn't been set yet
+> and warn then, in order to make the usage more robust...
+> 
+> -- 
+> Regards/Gruss,
+>     Boris.
+> 
+> https://people.kernel.org/tglx/notes-about-netiquette

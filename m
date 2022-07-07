@@ -2,65 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E2A256A349
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 15:17:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A830756A354
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 15:17:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235156AbiGGNQi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Jul 2022 09:16:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39486 "EHLO
+        id S235409AbiGGNRg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Jul 2022 09:17:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40392 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235218AbiGGNQe (ORCPT
+        with ESMTP id S235098AbiGGNRd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Jul 2022 09:16:34 -0400
-Received: from mail-qt1-x82c.google.com (mail-qt1-x82c.google.com [IPv6:2607:f8b0:4864:20::82c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0141E2CDEF
-        for <linux-kernel@vger.kernel.org>; Thu,  7 Jul 2022 06:16:33 -0700 (PDT)
-Received: by mail-qt1-x82c.google.com with SMTP id r2so22562702qta.0
-        for <linux-kernel@vger.kernel.org>; Thu, 07 Jul 2022 06:16:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=MqlMfZ8fQXOwxTDqrntRkHE3D7MxEI/E5lq6JAfP4jE=;
-        b=WfQtu9rHhospRacVsjlUlb0LkygWfaJnaJaKYCL/TG+u0P+63HS6EvDZhohiyhLVCJ
-         BTZLcvVKMf4pSGEueFQNRTjePXe0vRWOBR7lBUOdX+4Ib+h/m8zte/7AP7d/81+15MSq
-         07tny2LKbipaTDVNGyfxCRcciiO56WQ7aPdpCr31REiLrLVi9zYmmnGeE3yQXEDmiwyj
-         U85JSfCvACZ5RO2nQnGcA8Mn5kvQIv5MI8wtRLBxTtsLJHazAQQi1uvLwxbIVasSxZvD
-         GVy0JZ2lcjCRv4gb5F0hfN3+YAZx4Uq7ZXUSkje+guR/BzCGhAI1a+ty8myJ4xvnZJ95
-         4hQQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=MqlMfZ8fQXOwxTDqrntRkHE3D7MxEI/E5lq6JAfP4jE=;
-        b=68D3Qe0qJGw8/faqV6LQHYUrvm5fUma810XLag12SwBLVAsdE0rBfRcVYCQNL42JDi
-         eJIHpNnpI6WWrzyYr44Ax+3DntYDjcBtXxrWGjrqzHumGrJp36yec5D5LsWaqRDKtCt5
-         8P7NMw/YPru9buxSDhq27bTkg0ZzLWfy+PGTdtyglR4cSFnNNDRkbbrYZfKp4eCca00A
-         iK5G6Ms/6ZjvccTUj9hkntCJ+GIvbCfN5rZDDn18rHIWiZYXaU1tNaax1wFbQ9C3lMIE
-         q7Bwtjw+SGK6zaIUJkjZVZ2zPLqjMxCGfYMV+454IZVLOGDCc5VmOCu6LYhN7rV+yqlC
-         QuzA==
-X-Gm-Message-State: AJIora+OpoCZA6Zsy76XPtzL5k9OzoSX7+cSdPFqS6rp2jHHbh0rVnjI
-        jXhgXDZaap15VKWJtoCjKzoHBM5zfNTS+mNZO1uPyQ==
-X-Google-Smtp-Source: AGRyM1ul3iuz5ajc9yApAncXOGwSRLVhNG/Nr3i0uRHfHk55LX9XPHmvYzBTEwB1AM2+4S/r20SQNdu1vMCLrBeKBFo=
-X-Received: by 2002:a05:6214:2a84:b0:473:2958:2b02 with SMTP id
- jr4-20020a0562142a8400b0047329582b02mr3813815qvb.122.1657199791909; Thu, 07
- Jul 2022 06:16:31 -0700 (PDT)
+        Thu, 7 Jul 2022 09:17:33 -0400
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A2662F3BC;
+        Thu,  7 Jul 2022 06:17:32 -0700 (PDT)
+Received: from mail-yb1-f171.google.com ([209.85.219.171]) by
+ mrelayeu.kundenserver.de (mreue009 [213.165.67.97]) with ESMTPSA (Nemesis) id
+ 1MQvH5-1numNx1zxX-00NwU8; Thu, 07 Jul 2022 15:17:30 +0200
+Received: by mail-yb1-f171.google.com with SMTP id 136so649075ybl.5;
+        Thu, 07 Jul 2022 06:17:30 -0700 (PDT)
+X-Gm-Message-State: AJIora9wVMgSkeYa2Fw1xQvY0SFiYMk4V9+IKUHeyrSWpFDHcdk1GB5Z
+        Y6Th2gPSHMFmfUIqxL3FaTCQw+c7GJ6oEUvRH3I=
+X-Google-Smtp-Source: AGRyM1sIVP+sKzdVYFj+QYsC1OY+fEPgMo3nlsTTen8lbyAjHTJh0NZ0UhttkuKcfl2p0A0KvTfiIntFQ2qrS/pVGTs=
+X-Received: by 2002:a25:9f87:0:b0:669:4345:a8c0 with SMTP id
+ u7-20020a259f87000000b006694345a8c0mr49906358ybq.472.1657199849284; Thu, 07
+ Jul 2022 06:17:29 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220707125848.379610-1-sunliming@kylinos.cn>
-In-Reply-To: <20220707125848.379610-1-sunliming@kylinos.cn>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Date:   Thu, 7 Jul 2022 16:16:20 +0300
-Message-ID: <CAA8EJpoXaJgU_oGmkHiMjX366+eWLYDBAbaLRCJfOm9ySFb+ig@mail.gmail.com>
-Subject: Re: [PATCH] drm/msm/dsi: fix the inconsistent indenting
-To:     sunliming <sunliming@kylinos.cn>
-Cc:     christian.koenig@amd.com, robdclark@gmail.com,
-        quic_abhinavk@quicinc.com, freedreno@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        kelulanainsley@gmail.com, kernel test robot <lkp@intel.com>
+References: <20220707112645.5147-1-lukas.bulwahn@gmail.com>
+In-Reply-To: <20220707112645.5147-1-lukas.bulwahn@gmail.com>
+From:   Arnd Bergmann <arnd@arndb.de>
+Date:   Thu, 7 Jul 2022 15:17:12 +0200
+X-Gmail-Original-Message-ID: <CAK8P3a3f0H2gnZFCah_HiNTdwyp4pLKd4w=yN6-0FxrF2+3ihA@mail.gmail.com>
+Message-ID: <CAK8P3a3f0H2gnZFCah_HiNTdwyp4pLKd4w=yN6-0FxrF2+3ihA@mail.gmail.com>
+Subject: Re: [PATCH] MAINTAINERS: mark ARM/PALM TREO SUPPORT orphan
+To:     Lukas Bulwahn <lukas.bulwahn@gmail.com>
+Cc:     Russell King <linux@armlinux.org.uk>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Daniel Mack <daniel@zonque.org>,
+        Haojian Zhuang <haojian.zhuang@gmail.com>,
+        Robert Jarzmik <robert.jarzmik@free.fr>,
+        kernel-janitors <kernel-janitors@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-Provags-ID: V03:K1:6u4FdKJKUiHlASxckZ1Jifeq3AQjDM5G0/ugNCBj8mgO+YqCLel
+ v58mLglqbrK/wJiI4tX2JHbGrc8//2LvSwyzBtWRUUOYAeshZ5CSTw+pfdBrZbIwS02vIq5
+ Dv22moH2R/ROiZvhHRJ2ycAgytl4nCil+1hwxbGpyxMWOQPFkXfGaG/hI/UtxW+PyLO6jul
+ 6WuxKTQ4X67dWXC1N8K+g==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:5Qf4fi8A2iU=:A9WWyXSH+HP8nUgm7HFrO6
+ CLVT6IcAToedOH9/oA8sn8opuqqlRhNykUaTqShbM1LF9d0aZRo77Jlro/v6KjBe1gJ49oLkT
+ Sffkn4Oze0iBOgg5FPCyZwUaQRAGs5IntOK06LghbwwnkuaOLU2Lp3p7fIfgMahUyWzMMSAbE
+ fCXHurvFQlg7Ot1cZM2EFx4h3soI+AAt0430+cxKjhG/MZ/Su0vorPnYX9ZQeuh7/rs4dgHMp
+ TGEgX6wPbJOsC1eyjjT4a7rUPK7xlQqOQCzahnPTky2v1+/Ur08AoLDzbN6cFvSXN/10RVmAG
+ 1BWe1OswUZYGzJ9BpBYG115wvqxQRAxFTAch9rNJksNRxYU76R6yUtLlDdutLb/foGaK+Y6jd
+ HcAZBgbA9EizGw9nq29Jq932hydDhbGgfLXHE/WaA69TgJlQBj4IT4KAghWbSzwfXGcM2ouRI
+ 2no2JBt/n7dmpTSEvnkU/dcvu7Vg3TzVk4upLsYDth9HWfd8+e89GuhtKx8DeCXSCoTjwwxLm
+ tcaT2zp2IXcOxGHkhTFDe3+6P+bnLEYtkQwWl19HM8HOWa2ibdhoi71o7JdsuaDn751u8DH9e
+ a+2RcH+g65OXRJE3w+z8VMLMftz9LMsp5+uIspcuHCVHKZVxi1JdTyfa3T1sEkraOC4OJOfNR
+ dgePqkNRn8/lbKOKqNvtqAtpYbhK/ay89rDH5jHP+JcgZFhX1zjlC2E830dxQgtoQjrXlFO6l
+ h/OKF+Kq5OKQd1YUgqwtJ5rACaOBiyoZY0MWDRHH5UdB96UMzPjzqzC2sUBDMn5aS4/jyCnqU
+ bZsrZt0tLQQVhD9zqF/WemLgipgyoHyoSdx/B7zV0w66q1sNZtbPM/WJphoTI5Ill+08kOwF8
+ C4rK0MTWKz9ICOmZyyTri4T8NJGNmYnES0WbV9ris=
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,38 +70,23 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 7 Jul 2022 at 15:59, sunliming <sunliming@kylinos.cn> wrote:
+On Thu, Jul 7, 2022 at 1:26 PM Lukas Bulwahn <lukas.bulwahn@gmail.com> wrote:
 >
-> Fix the inconsistent indenting in function msm_dsi_dphy_timing_calc_v3().
+> The email address sleep_walker@suse.com and the url http://hackndev.com/,
+> provided in the ARM/PALM TREO SUPPORT section, are not reachable anymore.
 >
-> Fix the following smatch warnings:
+> Make this machine support orphan, and give somebody the chance to step up.
+> Move the maintainer into CREDITS to keep the attribution to his work.
 >
-> drivers/gpu/drm/msm/dsi/phy/dsi_phy.c:350 msm_dsi_dphy_timing_calc_v3() warn: inconsistent indenting
->
-> Reported-by: kernel test robot <lkp@intel.com>
-> Signed-off-by: sunliming <sunliming@kylinos.cn>
+> Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
 > ---
->  2                                     | 947 ++++++++++++++++++++++++++
->  drivers/gpu/drm/msm/dsi/phy/dsi_phy.c |   2 +-
->  2 files changed, 948 insertions(+), 1 deletion(-)
->  create mode 100644 2
+> RFC patch: https://lore.kernel.org/all/20211229191828.21317-1-lukas.bulwahn@gmail.com/
+>   - received no comments
 >
-> diff --git a/2 b/2
-> new file mode 100644
-> index 000000000000..56dfa2d24be1
-> --- /dev/null
-> +++ b/2
+> Russell, please pick this minor update to MAINTAINERS.
 
-Please drop this part & resubmit.
+I usually take the platform specific MAINTAINERS updates through the soc tree.
 
-> @@ -0,0 +1,947 @@
-> +// SPDX-License-Identifier: GPL-2.0-only
-> +/*
-> + * Copyright (c) 2015, The Linux Foundation. All rights reserved.
-> + */
+Applied to the arm/fixes branch there.
 
-[skipped the rest]
-
--- 
-With best wishes
-Dmitry
+       Arnd

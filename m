@@ -2,83 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 25F2D569A20
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 07:58:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A0422569A1B
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 07:58:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233969AbiGGF6b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Jul 2022 01:58:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40676 "EHLO
+        id S232460AbiGGF6H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Jul 2022 01:58:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40230 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233819AbiGGF62 (ORCPT
+        with ESMTP id S229657AbiGGF6E (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Jul 2022 01:58:28 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14C676247;
-        Wed,  6 Jul 2022 22:58:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1657173507; x=1688709507;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=GTgy+TZ5gk/9Ni3R/3rUDmoUhBqx28jO50GTF6JZTZ8=;
-  b=Ev0nhGED95VrWQTUAT2wf3h3sn4oZTO5b1c6GGEDmGWCImui6cj5LhZh
-   /mxYHUzClk0FOCtaxHxXwUQIZ4ngLnD1RohATPoPNEAKIAThzfFl2vDbA
-   hoTPa4FigYPdWD1CMyOVvb+UN/9YqbXJ8/LHbo7W6+P9ihwPKGNdUCRUO
-   YEesvrrh1SdGk6ziVaw+pcbrwu8ybLsJSrelWIUGIKqQmuHM9z9ecrGgo
-   WzrJ2CVDHdFo0SPEfaYMOimUpRNS72l5HHu8KDyjQ0iJitt+18qyp13xm
-   NWrEz0yLmtblI+lI8sIOLLC3zaPDe1I7H9+mdsDveVUl0iJeWfqdSnLtM
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10400"; a="284679285"
-X-IronPort-AV: E=Sophos;i="5.92,252,1650956400"; 
-   d="scan'208";a="284679285"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jul 2022 22:58:27 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,252,1650956400"; 
-   d="scan'208";a="543692990"
-Received: from lkp-server01.sh.intel.com (HELO 68b931ab7ac1) ([10.239.97.150])
-  by orsmga003.jf.intel.com with ESMTP; 06 Jul 2022 22:58:25 -0700
-Received: from kbuild by 68b931ab7ac1 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1o9KWu-000LcS-SC;
-        Thu, 07 Jul 2022 05:58:24 +0000
-Date:   Thu, 7 Jul 2022 13:57:50 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Guangbin Huang <huangguangbin2@huawei.com>
-Cc:     kbuild-all@lists.01.org,
-        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
-        linux-kernel@vger.kernel.org, Will Deacon <will@kernel.org>,
-        John Garry <john.garry@huawei.com>,
-        Shaokun Zhang <zhangshaokun@hisilicon.com>,
-        linux-doc@vger.kernel.org
-Subject: [ammarfaizi2-block:arm64/linux/for-next/perf 11/12] htmldocs:
- Documentation/admin-guide/perf/hns3-pmu.rst: WARNING: document isn't
- included in any toctree
-Message-ID: <202207071326.3lzL9bUM-lkp@intel.com>
+        Thu, 7 Jul 2022 01:58:04 -0400
+Received: from alexa-out.qualcomm.com (alexa-out.qualcomm.com [129.46.98.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71E123192C;
+        Wed,  6 Jul 2022 22:58:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1657173483; x=1688709483;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=0yz1LCHt0aGhTOraapZKZ5D1T7trqgBin6ZQ+zVDZFE=;
+  b=NPbJB3bkL8T9yDPWo1lgbIdlU2DpC4XmFY4WRuC1o9bBKkpx3D9Z3cvO
+   JR7kwxt7j+iZNU7BpcutF8/7wD29KVUcfLTtJWwhqdkAIkw1rOTWDZ/T0
+   gXlHy6QMuFyRUCZyPRAwTXmuUSywDwrBNrZMpTBA3ZPmlVSBNDx0BDOKL
+   Q=;
+Received: from ironmsg09-lv.qualcomm.com ([10.47.202.153])
+  by alexa-out.qualcomm.com with ESMTP; 06 Jul 2022 22:58:03 -0700
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg09-lv.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jul 2022 22:58:02 -0700
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Wed, 6 Jul 2022 22:58:02 -0700
+Received: from [10.216.26.218] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Wed, 6 Jul 2022
+ 22:57:57 -0700
+Message-ID: <f6da6595-d3ba-b9f7-e869-041400ae12a7@quicinc.com>
+Date:   Thu, 7 Jul 2022 11:27:54 +0530
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH v5 3/3] clk: qcom: lpass: Add support for resets &
+ external mclk for SC7280
+Content-Language: en-US
+To:     Stephen Boyd <sboyd@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Michael Turquette <mturquette@baylibre.com>
+CC:     <linux-arm-msm@vger.kernel.org>, <linux-soc@vger.kernel.org>,
+        <linux-clk@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <robh@kernel.org>,
+        <robh+dt@kernel.org>, <mka@chromium.org>
+References: <20220614153306.29339-1-quic_tdas@quicinc.com>
+ <20220614153306.29339-4-quic_tdas@quicinc.com>
+ <20220615195552.7994AC34115@smtp.kernel.org>
+From:   Taniya Das <quic_tdas@quicinc.com>
+In-Reply-To: <20220615195552.7994AC34115@smtp.kernel.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/ammarfaizi2/linux-block arm64/linux/for-next/perf
-head:   66637ab137b44914356a9dc7a9b3f8ebcf0b0695
-commit: 39915b6b5fc209c9262b32ec754b3838550f2a1f [11/12] drivers/perf: hisi: Add description for HNS3 PMU driver
-reproduce: make htmldocs
+Hi Stephen,
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+On 6/16/2022 1:25 AM, Stephen Boyd wrote:
+> Quoting Taniya Das (2022-06-14 08:33:06)
+>> The clock gating control for TX/RX/WSA core bus clocks would be required
+>> to be reset(moved from hardware control) from audio core driver. Thus
+>> add the support for the reset clocks.
+> 
+> Why can't this driver remove the clks from hardware control when it
+> probes? Does something put the clks into hardware control mode at
+> runtime?
 
-All warnings (new ones prefixed by >>):
-
->> Documentation/admin-guide/perf/hns3-pmu.rst: WARNING: document isn't included in any toctree
+Sorry for the delayed response. These bits needs to be updated at 
+runtime and this is as per the design requirement. Thus we had to come 
+up with reset support for the same.
 
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Thanks & Regards,
+Taniya Das.

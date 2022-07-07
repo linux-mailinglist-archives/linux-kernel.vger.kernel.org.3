@@ -2,79 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 772A056A3FE
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 15:45:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 28B4656A423
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 15:48:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235424AbiGGNpF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Jul 2022 09:45:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38394 "EHLO
+        id S236087AbiGGNrw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Jul 2022 09:47:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40382 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235717AbiGGNo7 (ORCPT
+        with ESMTP id S236099AbiGGNrq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Jul 2022 09:44:59 -0400
-Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1EE25167C9
-        for <linux-kernel@vger.kernel.org>; Thu,  7 Jul 2022 06:44:57 -0700 (PDT)
-Received: by mail-ej1-x635.google.com with SMTP id h23so32460920ejj.12
-        for <linux-kernel@vger.kernel.org>; Thu, 07 Jul 2022 06:44:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=UG3BBJeQ9RIjyjrD9MOB3B5ohCStf2aBTETpevs+XUA=;
-        b=X39mUG+jYTlLCiofyr0kiIG3mDhenlIh8E2uip6pT9ESNsQWC+IFZws1LCAOeKhmv2
-         uMZOU76uVeoFJf0TVrVQej/MyqWt41MdhSk3TUzUTlJ/+jsZFtPuXwe/GO9aR4WfUsgy
-         FwL4VdBDHlh1wInQKar1y4jfn6kh8wQDtQXrM=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=UG3BBJeQ9RIjyjrD9MOB3B5ohCStf2aBTETpevs+XUA=;
-        b=BZA0FSiCJpR6aq1U0kUxBMiZVcNI5aPrjqQzVmzv/u06s97OKZwarEOuT73S+VNn6z
-         E8bxM8QRGyN+Gk9SzotatSHlsMJ20OSPDGe3PQOp2OEt5GAmeIllI5koMWp8+R91nAbB
-         Msb9Um0kvIivdfy1mdP8y+Ip4wZz5cOIfpoGOCCOvg162WB/jVg/kovQpTCAN/s/yahj
-         Xzh/2LNJXWV0QOhTANAMufX3t6m8n2SePB58XHgINwyzXDjA88ghQRN4PhgDzdApko7H
-         581n5kLSi3IlntvSyW1ivyrHxjh5Lbh5Ntsrpi594hW6osWa29DWTrCXBS+EsHPjdNt+
-         UXig==
-X-Gm-Message-State: AJIora/I47vWFKVzXRRzjVh1NmwBHYNfv0ae944ZMKpPUDpE718sQApq
-        aU7qqbxshRPc2OszcYGW2DX8F6dtjyLeZvd1Q6o=
-X-Google-Smtp-Source: AGRyM1vgAgOU0wdkBz5g9MEJcFjG+ccwLJrjXJOUk+IE5LgVC9j1q9EUUB9fqPyNJNSOVeeBFCb1QA==
-X-Received: by 2002:a17:907:9715:b0:726:2a3b:9f84 with SMTP id jg21-20020a170907971500b007262a3b9f84mr44021933ejc.414.1657201496070;
-        Thu, 07 Jul 2022 06:44:56 -0700 (PDT)
-Received: from mail-wr1-f51.google.com (mail-wr1-f51.google.com. [209.85.221.51])
-        by smtp.gmail.com with ESMTPSA id p4-20020a056402154400b0043a46f5fb82sm10128466edx.73.2022.07.07.06.44.54
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 07 Jul 2022 06:44:54 -0700 (PDT)
-Received: by mail-wr1-f51.google.com with SMTP id h17so13242268wrx.0
-        for <linux-kernel@vger.kernel.org>; Thu, 07 Jul 2022 06:44:54 -0700 (PDT)
-X-Received: by 2002:adf:ead2:0:b0:21d:8b49:6138 with SMTP id
- o18-20020adfead2000000b0021d8b496138mr959496wrn.138.1657201493566; Thu, 07
- Jul 2022 06:44:53 -0700 (PDT)
-MIME-Version: 1.0
-References: <1657197381-1271-1-git-send-email-quic_srivasam@quicinc.com>
-In-Reply-To: <1657197381-1271-1-git-send-email-quic_srivasam@quicinc.com>
-From:   Doug Anderson <dianders@chromium.org>
-Date:   Thu, 7 Jul 2022 06:44:41 -0700
-X-Gmail-Original-Message-ID: <CAD=FV=XD8vDPqkax1z6cB7ujOv_82YqkzZA1YNaPAGO+by4xJw@mail.gmail.com>
-Message-ID: <CAD=FV=XD8vDPqkax1z6cB7ujOv_82YqkzZA1YNaPAGO+by4xJw@mail.gmail.com>
-Subject: Re: [PATCH v2] arm64: dts: qcom: sc7280: Move wcd specific pin conf
- to common file
-To:     Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
-Cc:     Andy Gross <agross@kernel.org>,
+        Thu, 7 Jul 2022 09:47:46 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D22B27B01;
+        Thu,  7 Jul 2022 06:47:42 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id BB5E6B82011;
+        Thu,  7 Jul 2022 13:47:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 21CF1C341DA;
+        Thu,  7 Jul 2022 13:47:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1657201659;
+        bh=esDzN8W5rhBneLzn6GNPAOjFrhxGFXz2UJSq0T/MQp0=;
+        h=From:To:Cc:Subject:Date:From;
+        b=rzJV3sy30QlKDCxGIJ1uCrdj9ZTGItbp6hInBLe8wbwaYGvn6cRlVhfAfN4xks9oJ
+         krimXqbTZPaCEsyGRrKlQ76I2GMvTFIKkO9bGmGXPqmNxSw3iKl7pIcxKk4LzkQyY1
+         mBOXd/EzrdwqBW9TCFtcpS1DOIY327xUA12NsEpKY3iRZjZAcLtmyYodFHOrN3twIz
+         vgNT3MFCxvoUyH6/YjzJ15r2N3qwg9V7eZGYw/K9nNHfN3Sbaq1OHwgvK9HiBrunXY
+         9A+xkzjSbI7ymaMXOhJOM1WFr7+/TkS0fuhjd3/bk5UWoNF337HcJPdwqwY1zIf1qx
+         PVM7DItZ+vpqg==
+Received: from johan by xi.lan with local (Exim 4.94.2)
+        (envelope-from <johan+linaro@kernel.org>)
+        id 1o9Rr3-0000vo-IG; Thu, 07 Jul 2022 15:47:41 +0200
+From:   Johan Hovold <johan+linaro@kernel.org>
+To:     Vinod Koul <vkoul@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Andy Gross <agross@kernel.org>,
         Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>,
-        quic_rohkumar@quicinc.com,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Judy Hsiao <judyhsiao@chromium.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Johan Hovold <johan+linaro@kernel.org>
+Subject: [PATCH v2 00/30] phy: qcom,qmp: fix dt-bindings and deprecate lane suffix
+Date:   Thu,  7 Jul 2022 15:46:55 +0200
+Message-Id: <20220707134725.3512-1-johan+linaro@kernel.org>
+X-Mailer: git-send-email 2.35.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -82,24 +61,98 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+When adding support for SC8280XP to the QMP PHY driver I noticed that
+the PHY provider child node was not described by the current DT schema.
 
-On Thu, Jul 7, 2022 at 5:36 AM Srinivasa Rao Mandadapu
-<quic_srivasam@quicinc.com> wrote:
->
-> Move wcd specific pin conf to common file to support various
-> herbronie variant boards and to avoid duplicate nodes in dts files.
->
-> Signed-off-by: Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
-> ---
-> Changes Since V1:
->     -- Remove redundant documentation.
->     -- Update the pincontrol header comment.
->
->  .../dts/qcom/sc7280-herobrine-audio-wcd9385.dtsi   | 64 ++++++++++++++++++++++
->  arch/arm64/boot/dts/qcom/sc7280-herobrine-crd.dts  | 61 ---------------------
->  2 files changed, 64 insertions(+), 61 deletions(-)
+The SC8280XP PHYs also need a second fixed-divider PIPE clock
+("pipediv2") and I didn't want to have to add a bogus "lane" suffix to
+the clock name just to match the current "pipe0" name so I decided to
+deprecate the unnecessary suffix in the current binding instead.
 
-Looks fine to me now, thanks!
+To be able to add the missing child-node schema and handle device
+specifics like additional PIPE clocks, it quickly became obvious that
+the binding needs to be split up.
 
-Reviewed-by: Douglas Anderson <dianders@chromium.org>
+This series clean up and fixes some issue with the current schema before
+splitting it up in separate schemas for PCIe, UFS and USB and adding
+missing parts like the child PHY provider nodes.
+
+The MSM8996 PCIe PHY gets its own schema as this is the only non-combo
+PHY that actually provides more than one PHY per IP block. Note that the
+"lane" suffix is still unnecessary and misleading.
+
+The final patches add support for the updated binding to the (recently
+split up) PHY drivers. Included is also a related combo PHY cleanup.
+
+Johan
+
+
+Changes in v2
+ - squash split + cleanup + example patches (Krzysztof)
+ - deprecate clock-names instead of dropping suffix (Krzysztof)
+ - deprecate reset-names instead of dropping suffix (Krzysztof)
+ - flatten child reg if/then schemas (Krzysztof)
+ - add back optional vddp-ref-clk to all bindings even though it likely
+   only applies to MSM8996/98 UFS (Krzysztof)
+ - add missing sc7180 schema to USB binding
+ - misc clean ups
+   - shorten or drop descriptions
+   - drop quotes around $id and $schema (Krzysztof)
+   - use maxItems with clock-output-names
+   - combine two USB clock+reset schemas
+ - add Reviewed-by/Acked-by tags
+
+
+Johan Hovold (30):
+  dt-bindings: phy: qcom,qmp: fix bogus clock-cells property
+  dt-bindings: phy: qcom,qmp: sort compatible strings
+  dt-bindings: phy: qcom,qmp: drop redundant descriptions
+  dt-bindings: phy: qcom,qmp: fix child node description
+  dt-bindings: phy: qcom,qmp: clean up descriptions
+  dt-bindings: phy: qcom,qmp: clean up example
+  dt-bindings: phy: qcom,qmp: drop child-node comment
+  dt-bindings: phy: add qcom,msm8996-qmp-pcie-phy schema
+  dt-bindings: phy: qcom,msm8996-qmp-pcie: add missing child node schema
+  dt-bindings: phy: qcom,msm8996-qmp-pcie: deprecate PIPE clock names
+  dt-bindings: phy: qcom,msm8996-qmp-pcie: deprecate reset names
+  dt-bindings: phy: add QMP PCIe PHY schema
+  dt-bindings: phy: qcom,qmp-pcie: add missing child node schema
+  dt-bindings: phy: qcom,qmp-pcie: deprecate PIPE clock name
+  dt-bindings: phy: add QMP UFS PHY schema
+  dt-bindings: phy: qcom,qmp-ufs: add missing SM8450 clock
+  dt-bindings: phy: qcom,qmp-ufs: add missing SM8150 power domain
+  dt-bindings: phy: qcom,qmp-ufs: add missing child node schema
+  dt-bindings: phy: add QMP USB PHY schema
+  dt-bindings: phy: qcom,qmp-usb: add missing child node schema
+  dt-bindings: phy: qcom,qmp-usb: deprecate PIPE clock name
+  dt-bindings: phy: qcom,qmp-usb: add missing qcom,sc7180-qmp-usb3-phy
+    schema
+  dt-bindings: phy: qcom,qmp-usb3-dp: fix bogus clock-cells property
+  dt-bindings: phy: qcom,qmp-usb3-dp: deprecate USB PIPE clock name
+  phy: qcom-qmp-pcie: drop pipe clock lane suffix
+  phy: qcom-qmp-combo: drop unused lane reset
+  phy: qcom-qmp-combo: drop pipe clock lane suffix
+  phy: qcom-qmp-pcie-msm8996: drop pipe clock lane suffix
+  phy: qcom-qmp-pcie-msm8996: drop reset lane suffix
+  phy: qcom-qmp-usb: drop pipe clock lane suffix
+
+ .../phy/qcom,msm8996-qmp-pcie-phy.yaml        | 189 +++++++
+ .../bindings/phy/qcom,qmp-pcie-phy.yaml       | 294 ++++++++++
+ .../devicetree/bindings/phy/qcom,qmp-phy.yaml | 500 ------------------
+ .../bindings/phy/qcom,qmp-ufs-phy.yaml        | 239 +++++++++
+ .../bindings/phy/qcom,qmp-usb-phy.yaml        | 387 ++++++++++++++
+ .../bindings/phy/qcom,qmp-usb3-dp-phy.yaml    |   8 +-
+ drivers/phy/qualcomm/phy-qcom-qmp-combo.c     |   6 +-
+ .../phy/qualcomm/phy-qcom-qmp-pcie-msm8996.c  |   8 +-
+ drivers/phy/qualcomm/phy-qcom-qmp-pcie.c      |   4 +-
+ drivers/phy/qualcomm/phy-qcom-qmp-usb.c       |   4 +-
+ 10 files changed, 1115 insertions(+), 524 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/phy/qcom,msm8996-qmp-pcie-phy.yaml
+ create mode 100644 Documentation/devicetree/bindings/phy/qcom,qmp-pcie-phy.yaml
+ delete mode 100644 Documentation/devicetree/bindings/phy/qcom,qmp-phy.yaml
+ create mode 100644 Documentation/devicetree/bindings/phy/qcom,qmp-ufs-phy.yaml
+ create mode 100644 Documentation/devicetree/bindings/phy/qcom,qmp-usb-phy.yaml
+
+-- 
+2.35.1
+

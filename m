@@ -2,86 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D0DE56AEF6
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 01:18:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DBC3B56AEFE
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 01:25:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236988AbiGGXSS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Jul 2022 19:18:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60140 "EHLO
+        id S236728AbiGGXZt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Jul 2022 19:25:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36356 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236944AbiGGXSL (ORCPT
+        with ESMTP id S236491AbiGGXZr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Jul 2022 19:18:11 -0400
-Received: from mail-yw1-x1136.google.com (mail-yw1-x1136.google.com [IPv6:2607:f8b0:4864:20::1136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A81836EE90
-        for <linux-kernel@vger.kernel.org>; Thu,  7 Jul 2022 16:18:09 -0700 (PDT)
-Received: by mail-yw1-x1136.google.com with SMTP id 00721157ae682-31cb2c649f7so109871897b3.11
-        for <linux-kernel@vger.kernel.org>; Thu, 07 Jul 2022 16:18:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=getcruise.com; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to;
-        bh=6CFELXvtxAlt8nPIErk7+fEF/LsHr983328QLow/hHI=;
-        b=da4FqqwHQyqpE4K+70oxHQ5bOAB5codDp1SyDmvelbFbovcb6r0xotZItHLdeIoBlX
-         Dd3+Gu2omT7kH6EmVFnh0Y168v4B1Q8crm4fuQkQStiXGJrAmOGwxGpH1e5dEvIGYiWf
-         KCT+JSva5sWZSQAJKHap63tUJfAt6Gw9VArO+tKknQoSgz2YzKekeecBvrCKnl94/sxK
-         22pbjBDtdQvwtsgLChl+Q4Vc7jMFj4EhJ9nWj7P1+bUXcJvwEn6cIRvuwWJl0fwsMd3+
-         SnM0OyMaFysFi2cz1FceD1V3wzKzR96HGildeiAteLiZsMqeoCvXaPiAqJCYzNiNOt4B
-         pwbg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to;
-        bh=6CFELXvtxAlt8nPIErk7+fEF/LsHr983328QLow/hHI=;
-        b=X8uS9OhswX3p1TIromYa1r/bgNTT7A/yrWlsHflme71VP0QdgNVUPG+J2gQ/uThxcz
-         wtu2FA7HbqNNy/ufMYalBBDPRr7M2o6/SN14Kbw+Lk4i+tBGp/PUL9vr/1bV7b31WoVm
-         KEWGUsOUcrmKItaFJFTRA2GxUS+O4ai50Q5BZMncUNlhtrBYzRtBdjhixV2SfYHIqJ//
-         2cjnYL/in8LB3w1T93n5WJEwZwoXo7KBkows2HETLrergo1kSXrXQ4SLJed+c5ZypDv7
-         wDa3/XTQ/l1fBV3R3uQuAKZG/qPBT1tK1WEK93ZbRs/PruTEaKi+fkaJPvBbpDYbmbgc
-         D79A==
-X-Gm-Message-State: AJIora92dg0ZNMcdPlXUK2B0l2x143O4+mJoUrTiAOQbPQrsHDMFqW8L
-        EhEOah4I1PpdPVwD3xpYfUnbFxPvHFrkl0L5CKJ0xA==
-X-Google-Smtp-Source: AGRyM1sjkqac9MrjU56c4edaLIVbmEEqdA1go/nutn1J+GW3wxv2gw+18UW9maAsXvb2ygaUkx50Lv+2kG4nsP58I0M=
-X-Received: by 2002:a81:54c5:0:b0:31c:7731:e1ac with SMTP id
- i188-20020a8154c5000000b0031c7731e1acmr795992ywb.190.1657235888590; Thu, 07
- Jul 2022 16:18:08 -0700 (PDT)
+        Thu, 7 Jul 2022 19:25:47 -0400
+Received: from out30-42.freemail.mail.aliyun.com (out30-42.freemail.mail.aliyun.com [115.124.30.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A9FD24BE7
+        for <linux-kernel@vger.kernel.org>; Thu,  7 Jul 2022 16:25:46 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R131e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045168;MF=yang.lee@linux.alibaba.com;NM=1;PH=DS;RN=7;SR=0;TI=SMTPD_---0VIfzb5u_1657236342;
+Received: from localhost(mailfrom:yang.lee@linux.alibaba.com fp:SMTPD_---0VIfzb5u_1657236342)
+          by smtp.aliyun-inc.com;
+          Fri, 08 Jul 2022 07:25:42 +0800
+From:   Yang Li <yang.lee@linux.alibaba.com>
+To:     tiwai@suse.com
+Cc:     perex@perex.cz, broonie@kernel.org, lgirdwood@gmail.com,
+        alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org,
+        Yang Li <yang.lee@linux.alibaba.com>
+Subject: [PATCH -next] ASoC: amd: Remove duplicated include in acp-es8336.c
+Date:   Fri,  8 Jul 2022 07:25:40 +0800
+Message-Id: <20220707232540.22589-1-yang.lee@linux.alibaba.com>
+X-Mailer: git-send-email 2.20.1.7.g153144c
 MIME-Version: 1.0
-References: <20220628191216.39459-1-satish.nagireddy@getcruise.com> <YsdLLKh8K0UDsJMu@shikoro>
-In-Reply-To: <YsdLLKh8K0UDsJMu@shikoro>
-From:   Satish Nagireddy <satish.nagireddy@getcruise.com>
-Date:   Thu, 7 Jul 2022 16:17:57 -0700
-Message-ID: <CAG0LG97sCyfAi-XLGF_=U9aGJEYjjfd4cof2Ftgy2SoM+hsN-g@mail.gmail.com>
-Subject: Re: [EXT] Re: [PATCH] i2c: cadence: Unregister the clk notifier in
- error path
-To:     Wolfram Sang <wsa@kernel.org>,
-        Satish Nagireddy <satish.nagireddy@getcruise.com>,
-        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
-        michal.simek@xilinx.com, lars@metafoo.de
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jul 7, 2022 at 2:08 PM Wolfram Sang <wsa@kernel.org> wrote:
->
-> On Tue, Jun 28, 2022 at 12:12:16PM -0700, Satish Nagireddy wrote:
-> > This patch ensures that the clock notifier is unregistered
-> > when driver probe is returning error.
-> >
-> > Signed-off-by: Satish Nagireddy <satish.nagireddy@getcruise.com>
->
-> Applied to for-current, thanks! I added a Fixes: tag. It would be great
-> if you had the time to provide it next time with the patch.
->
-> Happy hacking!
->
+Fix following includecheck warning:
+./sound/soc/amd/acp-es8336.c: linux/module.h is included more than once.
 
-Sure, thank you!
+Signed-off-by: Yang Li <yang.lee@linux.alibaba.com>
+---
+ sound/soc/amd/acp-es8336.c | 1 -
+ 1 file changed, 1 deletion(-)
 
-Regards,
-Satish
+diff --git a/sound/soc/amd/acp-es8336.c b/sound/soc/amd/acp-es8336.c
+index eec3d57092fa..ae9e23749cb3 100644
+--- a/sound/soc/amd/acp-es8336.c
++++ b/sound/soc/amd/acp-es8336.c
+@@ -20,7 +20,6 @@
+ #include <linux/input.h>
+ #include <linux/module.h>
+ #include <linux/platform_device.h>
+-#include <linux/module.h>
+ #include <linux/acpi.h>
+ 
+ #include "../codecs/es8316.h"
+-- 
+2.20.1.7.g153144c
+

@@ -2,135 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A355756A990
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 19:26:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 89BE256A993
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 19:26:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236225AbiGGR0o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Jul 2022 13:26:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36956 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235894AbiGGR0k (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
+        id S236070AbiGGR0k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
         Thu, 7 Jul 2022 13:26:40 -0400
-Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B6DC5926A
-        for <linux-kernel@vger.kernel.org>; Thu,  7 Jul 2022 10:26:38 -0700 (PDT)
-Received: by mail-ed1-x536.google.com with SMTP id n8so24066715eda.0
-        for <linux-kernel@vger.kernel.org>; Thu, 07 Jul 2022 10:26:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=blackwall-org.20210112.gappssmtp.com; s=20210112;
-        h=date:from:to:cc:subject:user-agent:in-reply-to:references
-         :message-id:mime-version:content-transfer-encoding;
-        bh=3LZxcQs9nOMkFoDos2+PgU3t6nZSk06DoiTQtWvijMk=;
-        b=wUfdehM4WiupWRrJlT/Hxm6rzZgFZZSVUTcXcsGx5Z6aCq0BRBsQnvHtQValrPkRdT
-         Ei0yruYzS+D2av84NoQ+xq3KPhNQLFH9vwI2nbpEj+6ndn1fpaL1Am6ctGiS89Ej1qis
-         e6DyqA2NXmDUWlw9lwuHo3iSFGYQVZwsMlTzqJu5ZPnhLN5zK6qpxeWpokt5FE3QgOjB
-         aBhMD3AwZ5OGOguAGSguB7t2z7JiQ/VYPt4Ff8IH3z6/olNS2rHzItkgR4PaUvXSkMl6
-         xUjEY3/FgLD7k38wfk2c0FQKYUpqjd5cJD0tXbBxdv/gDXJbUIc6GoHuFUZXLwomcu3f
-         MJGA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:user-agent:in-reply-to
-         :references:message-id:mime-version:content-transfer-encoding;
-        bh=3LZxcQs9nOMkFoDos2+PgU3t6nZSk06DoiTQtWvijMk=;
-        b=LAk9Kw1Ub9rFTWq+uep0B5xKJj7sFxeDehIq6RuU1KpGfMjkTQmiUpHvrH1xHyg+h2
-         TO+UESJUP9A3yf5FrjDIT0prBd8/Qs5BYkVDwQTOJj7OIlmZ85xkfifvB1Vl/2jIfDE8
-         dXejWpSbnSFaEIDwAqyKyVVSBOcTxTxGLzeoZHmb+PkJwFKYfAV2ymyZS2CJCnYZJdB4
-         CngRT+SBYdHMd9YsMueNcZUqpXhA+bvYGXBtsVL8604a4cQ0LGCK6gRQPG5pvn1q590e
-         cffAzcqqjDuTtZnWnew7BLW4wcee4w3Z7LV84ylpQrRS5867mgIbTKG47xXhlCI6YeKH
-         smJw==
-X-Gm-Message-State: AJIora8hM8V+pTnvgKK+h7safcJmv2tkGwyNNIbvlKEc6yKESUZNF9UL
-        FWUeILRrapNRBw+aFBKX5idYrQ==
-X-Google-Smtp-Source: AGRyM1u12ybciGXsCapwSAqPM5BzxbOHsPWUV81XgBJottPf//sBeZ4RHpZ67iJUA/HNVpYN0jzC+Q==
-X-Received: by 2002:aa7:cc03:0:b0:435:5574:bf30 with SMTP id q3-20020aa7cc03000000b004355574bf30mr62912119edt.15.1657214796964;
-        Thu, 07 Jul 2022 10:26:36 -0700 (PDT)
-Received: from [127.0.0.1] ([93.123.70.11])
-        by smtp.gmail.com with ESMTPSA id k12-20020a17090666cc00b007041e969a8asm19241282ejp.97.2022.07.07.10.26.36
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 07 Jul 2022 10:26:36 -0700 (PDT)
-Date:   Thu, 07 Jul 2022 20:26:33 +0300
-From:   Nikolay Aleksandrov <razor@blackwall.org>
-To:     Vladimir Oltean <olteanv@gmail.com>
-CC:     Hans Schultz <schultz.hans@gmail.com>, davem@davemloft.net,
-        kuba@kernel.org, netdev@vger.kernel.org,
-        Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>, Jiri Pirko <jiri@resnulli.us>,
-        Ivan Vecera <ivecera@redhat.com>,
-        Roopa Prabhu <roopa@nvidia.com>, Shuah Khan <shuah@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Ido Schimmel <idosch@nvidia.com>, linux-kernel@vger.kernel.org,
-        bridge@lists.linux-foundation.org, linux-kselftest@vger.kernel.org
-Subject: =?US-ASCII?Q?Re=3A_=5BPATCH_V3_net-next_1/4=5D_net=3A_bridge=3A_?= =?US-ASCII?Q?add_fdb_flag_to_extent_locked_port_feature?=
-User-Agent: K-9 Mail for Android
-In-Reply-To: <20220707171507.pojkwqhwqk5u6mmn@skbuf>
-References: <b78fb006-04c4-5a25-7ba5-94428cc9591a@blackwall.org> <86fskyggdo.fsf@gmail.com> <040a1551-2a9f-18d0-9987-f196bb429c1b@blackwall.org> <86v8tu7za3.fsf@gmail.com> <4bf1c80d-0f18-f444-3005-59a45797bcfd@blackwall.org> <20220706181316.r5l5rzjysxow2j7l@skbuf> <7cf30a3e-a562-d582-4391-072a2c98ab05@blackwall.org> <20220706202130.ehzxnnqnduaq3rmt@skbuf> <fe456fb0-4f68-f93e-d4a9-66e3bc56d547@blackwall.org> <37d59561-6ce8-6c5f-5d31-5c37a0a3d231@blackwall.org> <20220707171507.pojkwqhwqk5u6mmn@skbuf>
-Message-ID: <01FCBF77-AD39-4A0F-93AC-629E7269D950@blackwall.org>
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36938 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232016AbiGGR0i (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 7 Jul 2022 13:26:38 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 094651C90A;
+        Thu,  7 Jul 2022 10:26:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
+        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=UHkKBpm+RhgrMphAf+XCwO//K//fxp+6iHZ7q8wCcNM=; b=vbEVH511VYM2BZTVa39U3EA3ro
+        Lf5kDXfDT46fqK25htVyvxN9bKmcLrrVh5iV9eq9ProjLfQYHqYiSqMgNwlRFx7/yzwN2LjGuSVcG
+        w86ETGFmGN8s6F21uTlGAC711vNk6dO8Yb8Ssb4DS2lGEJd282WEE5jq9XlKjRzxlSDjSDGYc4XuS
+        syI9xC11i5Rbxsmez/f1csmXYnKrkO1hxS4bcpS784/idKGxcf8R1uYwY6b/F6Bx0JVaAYzTd0BE7
+        2p5t2JAJm8isLef7ishy16TU3QsFE77jT/RlWRqHu51a64CoalatMPmr0Jhw3Rkg60ia3Y/WZcUBZ
+        PX4N2pTA==;
+Received: from hch by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1o9VGu-00HDr9-IW; Thu, 07 Jul 2022 17:26:36 +0000
+Date:   Thu, 7 Jul 2022 10:26:36 -0700
+From:   Christoph Hellwig <hch@infradead.org>
+To:     Sergei Shtepa <sergei.shtepa@veeam.com>
+Cc:     Christoph Hellwig <hch@infradead.org>,
+        "axboe@kernel.dk" <axboe@kernel.dk>,
+        "linux-block@vger.kernel.org" <linux-block@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH 01/20] block, blk_filter: enable block device filters
+Message-ID: <YscXTGXumE5Ust15@infradead.org>
+References: <1655135593-1900-1-git-send-email-sergei.shtepa@veeam.com>
+ <1655135593-1900-2-git-send-email-sergei.shtepa@veeam.com>
+ <YsWHHcCfSVFklh4M@infradead.org>
+ <ff78a1ee-8bc5-6e8e-040f-978cd07eacfe@veeam.com>
 MIME-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ff78a1ee-8bc5-6e8e-040f-978cd07eacfe@veeam.com>
+X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 7 July 2022 20:15:07 EEST, Vladimir Oltean <olteanv@gmail=2Ecom> wrote:
->Hi Nikolay,
->
->On Thu, Jul 07, 2022 at 05:08:15PM +0300, Nikolay Aleksandrov wrote:
->> On 07/07/2022 00:01, Nikolay Aleksandrov wrote:
->> > On 06/07/2022 23:21, Vladimir Oltean wrote:
->> >> On Wed, Jul 06, 2022 at 10:38:04PM +0300, Nikolay Aleksandrov wrote:
->> [snip]
->> > I already said it's ok to add hard configurable limits if they're don=
-e properly performance-wise=2E
->> > Any distribution can choose to set some default limits after the opti=
-on exists=2E
->> >=20
->>=20
->> Just fyi, and to avoid duplicate efforts, I already have patches for gl=
-obal and per-port software
->> fdb limits that I'll polish and submit soon (depending on time availabi=
-lity, of course)=2E If I find
->> more time I might add per-vlan limits as well to the set=2E They use em=
-bedded netlink attributes
->> to config and dump, so we can easily extend them later (e=2Eg=2E differ=
-ent action on limit hit, limit
->> statistics etc)=2E
->
->So again, to repeat myself, it's nice to have limits on FDB size, but
->those won't fix the software bridges that are now out in the open and
->can't have their configuration scripts changed=2E
->
->I haven't had the time to expand on this in a proper change yet, but I
->was thinking more along the lines of adding an OOM handler with
->register_oom_notifier() in br_fdb_init(), and on OOM, do something, like
->flush the FDB from all bridges=2E There are going to be complications, it
->will schedule switchdev, switchdev is going to allocate memory which
->we're low on, the workqueues aren't created with WQ_MEM_RECLAIM, so this
->isn't necessarily going to be a silver bullet either=2E But this is what
->concerns me the most, the unconfigured bridge killing the kernel so
->easily=2E As you can see, with an OOM handler I'm not so much trying to
->impose a fixed limit on FDB size, but do something sensible such that
->the bridge doesn't contribute to the kernel dying=2E
+On Thu, Jul 07, 2022 at 10:26:55AM +0200, Sergei Shtepa wrote:
+> Thank you, Christoph, for your attention to the patch.
+> 
+> I am preparing the next version of the patch. In it, I planned to
+> simplify the bdev_filer code.
+> I will make changes in it, in accordance with your comments, and
+> will add your code and check it on my test labs.
+> 
+> But I'm not sure if using the blk_mq_freeze_queue() is appropriate.
+> If I understood the code correctly, it is based on the expectation
+> that the counter q->q_usage_counter will decrease to zero.
+> To increase it, a blk_queue_enter() is used. And at the time of
+> calling the filter_bio() in the submit_bio_noacct(), this counter
+> has not yet been increased. I will double check this and try to
+> get rid of the bdev->bd_filter_lock.
 
-Hi Vladimir,
-Sounds good to me, the fdb limits have come up multiple times in the past =
-so I decided=20
-to finally add them and build from there, with them configured oom shouldn=
-'t be hit=2E
-These limits have never been present and people are fine (everyone deals w=
-ith or leaves it), but I'll be happy to review and ack such changes=2E I ho=
-pe you can correlate the oom and the bridge fdbs, not
-just blindly flushing as that can be problematic if you plan to have it en=
-abled by default=2E
-
-Cheers,
-  Nik
+Indeed.  For this to work we'd need to call the filter driver
+later.  Which is brings up another question:  Is there a real
+need to attach the filter driver to the bdev and thus potentially
+partition?  The rest of the block layer operates on the whole disk
+after the intial partition remapping, and besides allowing the
+filter driver to be called under q_usage_counter, this would
+also clean up some concepts.  It would probably also allow to
+remove the repeat return value over just using submit_bio_noacct
+similar to how normal stacking drivers reinject bios.

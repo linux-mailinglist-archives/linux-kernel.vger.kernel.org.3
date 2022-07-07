@@ -2,181 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 11022569D69
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 10:26:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E2909569D71
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 10:30:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235106AbiGGI0T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Jul 2022 04:26:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43506 "EHLO
+        id S234396AbiGGI1A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Jul 2022 04:27:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46150 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234787AbiGGI0B (ORCPT
+        with ESMTP id S234945AbiGGI05 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Jul 2022 04:26:01 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C410FDBD;
-        Thu,  7 Jul 2022 01:26:00 -0700 (PDT)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out1.suse.de (Postfix) with ESMTP id 72C642213C;
-        Thu,  7 Jul 2022 08:25:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1657182359; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=+PCuKHeU5exD2FIlmfFaDt+TsqPR87bfc3vKJfUNaeA=;
-        b=UNZXuSF7ZM2fMhSnj85pgd1wEoKBd9UVXC9eUZ8utbyY7RyBQPb2hYV3YYcFpFGH4Lu6w/
-        eDPExIImtWhcQz4GMERH8Wf6LSv3FE9jUEsezlXNMvQEXzct15TNe1YYss27qtfGNGcvdE
-        FLfeFMkCyTVnlnud3TFzszS3cXU4JhU=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1657182359;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=+PCuKHeU5exD2FIlmfFaDt+TsqPR87bfc3vKJfUNaeA=;
-        b=Lo88QHUFGsgpxLqYMFPza8Msrk1jlPzxDlf6HFeBLM65DLhcLwvsy6Lmchs8w+DZvuoCq/
-        ZNuaazAKuiuFMYDw==
-Received: from localhost.localdomain (unknown [10.100.208.98])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id 377DD2C142;
-        Thu,  7 Jul 2022 08:25:59 +0000 (UTC)
-From:   Jiri Slaby <jslaby@suse.cz>
-To:     gregkh@linuxfoundation.org
-Cc:     linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jiri Slaby <jslaby@suse.cz>,
-        =?UTF-8?q?=E4=B8=80=E5=8F=AA=E7=8B=97?= <chennbnbnb@gmail.com>,
-        Dan Carpenter <dan.carpenter@oracle.com>,
-        Hillf Danton <hdanton@sina.com>
-Subject: [PATCH 2/2] tty: use new tty_insert_flip_string_and_push_buffer() in pty_write()
-Date:   Thu,  7 Jul 2022 10:25:58 +0200
-Message-Id: <20220707082558.9250-2-jslaby@suse.cz>
-X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220707082558.9250-1-jslaby@suse.cz>
-References: <20220707082558.9250-1-jslaby@suse.cz>
+        Thu, 7 Jul 2022 04:26:57 -0400
+Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE9041A3BB
+        for <linux-kernel@vger.kernel.org>; Thu,  7 Jul 2022 01:26:55 -0700 (PDT)
+Received: by mail-wr1-x433.google.com with SMTP id h17so12068734wrx.0
+        for <linux-kernel@vger.kernel.org>; Thu, 07 Jul 2022 01:26:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language
+         :from:to:cc:references:in-reply-to:content-transfer-encoding;
+        bh=QTKsDc0N/t7R2FE7e8qc9b6f62szw20LTPOT6cDttmI=;
+        b=HyIH7xk6yru9oy170K9g2hvgVus86Ui4axzJlhxfhcliJroS1jnyBoVRj4ODf7WNYA
+         Ly800IqWmeVLmbjCEBNNXPbMVnz22YErTPPKsFhcRQXrAXGtMSAbl+5p3TCRL/JpXMye
+         TEv7EhT8dG3VKbRQZgzc87k2mkmm9ZAdSNN1y4xoI3NGqDVTVQ1mHzS6Xmu1cZkiOwLr
+         84LowuZVRAX6B5RZ0jcB/8uo1Jo7lHfQNwxE97Y2W7f+hGYR10ZeTt/NjYOButhf4VD6
+         k0p7UpKWV5SyxHaBSgbkARVDkc1/CL3FNPglG0F3zIg9HEAO6LUJppCQT0kF3OPVMwmg
+         iCkA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:from:to:cc:references:in-reply-to
+         :content-transfer-encoding;
+        bh=QTKsDc0N/t7R2FE7e8qc9b6f62szw20LTPOT6cDttmI=;
+        b=K+MY5Tad8snq7nBpgIasL6TdDKUZQbGW1egT2yKe06wmyZfutmGRroOgUj+QAJ4/KK
+         Xleg0ADNiHkwF9Ld0w7k2MMuUrUh15+qeJZI27H6f/5cygLOYIdeWnD9SYgrmVCQN9qc
+         y+Krg0dYJqGq8xvuR8r4otNh63PMJi+Zd/RrTIboJ1MWz2ETJ/AE3n0NLdKAswHb66o2
+         g3fLZZ4Tf6luXqBzIQD2tfsFuWASZFlzA9lLojam531LnPIO/F7BeHd+yELwgnbhUuW5
+         KGku5bcISrsPK7SR+3NM9ta3zk9HJliowifpoWs1vHcvEMom9Qu0TSEYjFo+4N22IEi0
+         am8Q==
+X-Gm-Message-State: AJIora9DYS+ab+esIup4QdTxHU4C00UzGqPCyA+elRCenyPesN9rEBOT
+        0wLmrCqTgIPBfaZKrmqn/LA=
+X-Google-Smtp-Source: AGRyM1tS+6lW63F88bR6HiGjHZ5SprOSCNjOdDOL1OoF+m3XQ5fOHIjiZGDgv7z3ySy8RO9u5xquXg==
+X-Received: by 2002:adf:f20e:0:b0:21d:8aa6:69da with SMTP id p14-20020adff20e000000b0021d8aa669damr47390wro.66.1657182414269;
+        Thu, 07 Jul 2022 01:26:54 -0700 (PDT)
+Received: from [192.168.2.177] ([207.188.167.132])
+        by smtp.gmail.com with ESMTPSA id v16-20020a5d4a50000000b0021d7d251c76sm3852686wrs.46.2022.07.07.01.26.52
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 07 Jul 2022 01:26:53 -0700 (PDT)
+Message-ID: <95151159-19fc-891f-65dc-2b66e2b96357@gmail.com>
+Date:   Thu, 7 Jul 2022 10:26:52 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH v2 -next] soc: mediatek: SVS: Use the new PM macros
+Content-Language: en-US
+From:   Matthias Brugger <matthias.bgg@gmail.com>
+To:     Jin Xiaoyun <jinxiaoyun2@huawei.com>,
+        angelogioacchino.delregno@collabora.com, khilman@baylibre.com,
+        zhengbin13@huawei.com, gaochao49@huawei.com
+Cc:     linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <20220622013410.2786760-1-jinxiaoyun2@huawei.com>
+ <20220623030931.2816013-1-jinxiaoyun2@huawei.com>
+ <d17549d3-a111-53b4-4576-2f5b6581c830@gmail.com>
+ <952582d8-1e02-8407-0f90-d54d327056ad@gmail.com>
+In-Reply-To: <952582d8-1e02-8407-0f90-d54d327056ad@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There is a race in pty_write(). pty_write() can be called in parallel
-with e.g. ioctl(TIOCSTI) or ioctl(TCXONC) which also inserts chars to
-the buffer. Provided, tty_flip_buffer_push() in pty_write() is called
-outside the lock, it can commit inconsistent tail. This can lead to out
-of bounds writes and other issues. See the Link below.
 
-To fix this, we have to introduce a new helper called
-tty_insert_flip_string_and_push_buffer(). It does both
-tty_insert_flip_string() and tty_flip_buffer_commit() under the port
-lock. It also calls queue_work(), but outside the lock. See
-71a174b39f10 (pty: do tty_flip_buffer_push without port->lock in
-pty_write) for the reasons.
 
-Keep the helper internal-only (in drivers' tty.h). It is not intended to
-be used widely.
+On 23/06/2022 14:03, Matthias Brugger wrote:
+> 
+> 
+> On 23/06/2022 13:59, Matthias Brugger wrote:
+>>
+>>
+>> On 23/06/2022 05:09, Jin Xiaoyun wrote:
+>>> Use DEFINE_SIMPLE_DEV_PM_OPS() instead of the SIMPLE_DEV_PM_OPS()
+>>> macro, along with using pm_sleep_ptr() as this driver doesn't handle
+>>> runtime PM.
+>>>
+>>> Fix build error:
+>>> drivers/soc/mediatek/mtk-svs.c:1515:12: error: ‘svs_resume’ defined but not 
+>>> used [-Werror=unused-function]
+>>> drivers/soc/mediatek/mtk-svs.c:1481:12: error: ‘svs_suspend’ defined but not 
+>>> used [-Werror=unused-function]
+>>>
+>>> Signed-off-by: Jin Xiaoyun <jinxiaoyun2@huawei.com>
+>>> Reviewed-by: Matthias Brugger <matthias.bgg@gmail.com>
+> 
+> I never did give my Reviewed-by for that. Please only add these tags if you got 
+> it explicetely.
+> 
+> Regards,
+> Matthias
+> 
+>>> ---
+>>> v1->v2:
+>>> - Remove the #ifdef CONFIG_PM guard around the suspend/resume functions
+>>> - Use DEFINE_SIMPLE_DEV_PM_OPS along with using pm_sleep_ptr()
+>>> ---
+>>>   drivers/soc/mediatek/mtk-svs.c | 4 ++--
+>>>   1 file changed, 2 insertions(+), 2 deletions(-)
+>>>
+>>> diff --git a/drivers/soc/mediatek/mtk-svs.c b/drivers/soc/mediatek/mtk-svs.c
+>>> index 606a00a2e57d..fae7376bd083 100644
+>>> --- a/drivers/soc/mediatek/mtk-svs.c
+>>> +++ b/drivers/soc/mediatek/mtk-svs.c
+>>> @@ -2381,13 +2381,13 @@ static int svs_probe(struct platform_device *pdev)
+>>>       return ret;
+>>>   }
+>>>
+>>> -static SIMPLE_DEV_PM_OPS(svs_pm_ops, svs_suspend, svs_resume);
+>>> +static DEFINE_SIMPLE_DEV_PM_OPS(svs_pm_ops, svs_suspend, svs_resume);
+>>>
+>>>   static struct platform_driver svs_driver = {
+>>>       .probe    = svs_probe,
+>>>       .driver    = {
+>>>           .name        = "mtk-svs",
+>>> -        .pm        = &svs_pm_ops,
+>>> +        .pm        = pm_sleep_ptr(&svs_pm_ops),
+>>
+>> Why do we need that? From my understanding DEFINE_SIMPLE_DEV_PM_OPS() sets 
+>> runtime_suspend_fn, runtime_resume_fn and idle_fn to NULL.
+>>
 
-Link: https://seclists.org/oss-sec/2022/q2/155
-Fixes: 71a174b39f10 (pty: do tty_flip_buffer_push without port->lock in pty_write)
-Cc: 一只狗 <chennbnbnb@gmail.com>
-Cc: Dan Carpenter <dan.carpenter@oracle.com>
-Suggested-by: Hillf Danton <hdanton@sina.com>
-Signed-off-by: Jiri Slaby <jslaby@suse.cz>
----
- drivers/tty/pty.c        | 14 ++------------
- drivers/tty/tty.h        |  3 +++
- drivers/tty/tty_buffer.c | 31 +++++++++++++++++++++++++++++++
- 3 files changed, 36 insertions(+), 12 deletions(-)
+As I didn't see any response from you on that, I went ahead and applied
+20220622175649.1856337-1-nathan@kernel.org
 
-diff --git a/drivers/tty/pty.c b/drivers/tty/pty.c
-index 74bfabe5b453..752dab3356d7 100644
---- a/drivers/tty/pty.c
-+++ b/drivers/tty/pty.c
-@@ -111,21 +111,11 @@ static void pty_unthrottle(struct tty_struct *tty)
- static int pty_write(struct tty_struct *tty, const unsigned char *buf, int c)
- {
- 	struct tty_struct *to = tty->link;
--	unsigned long flags;
- 
--	if (tty->flow.stopped)
-+	if (tty->flow.stopped || !c)
- 		return 0;
- 
--	if (c > 0) {
--		spin_lock_irqsave(&to->port->lock, flags);
--		/* Stuff the data into the input queue of the other end */
--		c = tty_insert_flip_string(to->port, buf, c);
--		spin_unlock_irqrestore(&to->port->lock, flags);
--		/* And shovel */
--		if (c)
--			tty_flip_buffer_push(to->port);
--	}
--	return c;
-+	return tty_insert_flip_string_and_push_buffer(to->port, buf, c);
- }
- 
- /**
-diff --git a/drivers/tty/tty.h b/drivers/tty/tty.h
-index b710c5ef89ab..f310a8274df1 100644
---- a/drivers/tty/tty.h
-+++ b/drivers/tty/tty.h
-@@ -111,4 +111,7 @@ static inline void tty_audit_tiocsti(struct tty_struct *tty, char ch)
- 
- ssize_t redirected_tty_write(struct kiocb *, struct iov_iter *);
- 
-+int tty_insert_flip_string_and_push_buffer(struct tty_port *port,
-+		const unsigned char *chars, size_t cnt);
-+
- #endif
-diff --git a/drivers/tty/tty_buffer.c b/drivers/tty/tty_buffer.c
-index ea630ceda009..9fdecc795b6b 100644
---- a/drivers/tty/tty_buffer.c
-+++ b/drivers/tty/tty_buffer.c
-@@ -601,6 +601,37 @@ void tty_flip_buffer_push(struct tty_port *port)
- }
- EXPORT_SYMBOL(tty_flip_buffer_push);
- 
-+/**
-+ * tty_insert_flip_string_and_push_buffer - add characters to the tty buffer and
-+ *	push
-+ * @port: tty port
-+ * @chars: characters
-+ * @size: size
-+ *
-+ * The function combines tty_insert_flip_string() and tty_flip_buffer_push()
-+ * with the exception of properly holding the @port->lock.
-+ *
-+ * To be used only internally (by pty currently).
-+ *
-+ * Returns: the number added.
-+ */
-+int tty_insert_flip_string_and_push_buffer(struct tty_port *port,
-+		const unsigned char *chars, size_t size)
-+{
-+	struct tty_bufhead *buf = &port->buf;
-+	unsigned long flags;
-+
-+	spin_lock_irqsave(&port->lock, flags);
-+	size = tty_insert_flip_string(port, chars, size);
-+	if (size)
-+		tty_flip_buffer_commit(buf->tail);
-+	spin_unlock_irqrestore(&port->lock, flags);
-+
-+	queue_work(system_unbound_wq, &buf->work);
-+
-+	return size;
-+}
-+
- /**
-  * tty_buffer_init		-	prepare a tty buffer structure
-  * @port: tty port to initialise
--- 
-2.36.1
+Regards,
+Matthias
 
+>> Regards,
+>> Matthias
+>>
+>>>           .of_match_table    = of_match_ptr(svs_of_match),
+>>>       },
+>>>   };
+>>> -- 
+>>> 2.25.1
+>>>

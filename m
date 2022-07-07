@@ -2,67 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ADC1D56981A
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 04:33:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B24E156981C
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 04:33:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234905AbiGGCby (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Jul 2022 22:31:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40098 "EHLO
+        id S234910AbiGGCcD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Jul 2022 22:32:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39974 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234898AbiGGCbg (ORCPT
+        with ESMTP id S234862AbiGGCbm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Jul 2022 22:31:36 -0400
-Received: from mail-oo1-xc30.google.com (mail-oo1-xc30.google.com [IPv6:2607:f8b0:4864:20::c30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 706352F3B2
-        for <linux-kernel@vger.kernel.org>; Wed,  6 Jul 2022 19:31:35 -0700 (PDT)
-Received: by mail-oo1-xc30.google.com with SMTP id o73-20020a4a2c4c000000b004284fd4e052so3246184ooo.7
-        for <linux-kernel@vger.kernel.org>; Wed, 06 Jul 2022 19:31:35 -0700 (PDT)
+        Wed, 6 Jul 2022 22:31:42 -0400
+Received: from mail-oa1-x2e.google.com (mail-oa1-x2e.google.com [IPv6:2001:4860:4864:20::2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 768E02F3B5
+        for <linux-kernel@vger.kernel.org>; Wed,  6 Jul 2022 19:31:36 -0700 (PDT)
+Received: by mail-oa1-x2e.google.com with SMTP id 586e51a60fabf-10bd4812c29so17922359fac.11
+        for <linux-kernel@vger.kernel.org>; Wed, 06 Jul 2022 19:31:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=HmbEGlmgz9inbfRdXswr9utl0AqPzk/QhsgAgC2XwtI=;
-        b=YyOkcEg1nXPEDqSuGVhcQUNsQITymByi5yzjSWlSBOLOKxn3jtVcDA7Mf63TCJY4M9
-         GzIw1SPZvg/bVpWePYmPt2Q+m4Z1Cr/1119jMXw6Ox7x/Nc6CJjZY+moFhobFXpNwJwq
-         5/07tq+5L6LQMRa0wlUU43WSJUBnHwK0dPbkAgKY5go9qxbk2ENeLW4pVpAuji62cYN8
-         GYCIdi6CGEjxqWqxtEnQrlySvW57u5tTEtYBvz0VjoFea0f3Ik8+caczfrzS6NrT0rpG
-         Tfbt1VVLfBTqjuSO1V1kg2B4xQT17JnpVNOejc8E0YhhKK4VPGq58MgDDU63k/XBVjIg
-         xrbw==
+        bh=mA1lvyszFduS/99/MChGCFetUx4AgZKBxyvoUM2pqRo=;
+        b=aiIQO+9g2cLgUtjQKUAHSsgd/s59gwdgrVajR0gjDVjthJG32PXA/CTHqfty05t2eL
+         pH8dtWhBJMqlSBhxf6K2WHsoseiubwogGVmZa6G1w8LidLjEvvvk/FyAEfmt27mmsQ66
+         7N1EsvXaCeYXxvsE5GZGdRRtzLLWuO3l++dR7XrgOkFHrY4XeYCiITWz2JxMjKFGTtI7
+         IzGco/R+xnp1QdqZ9Bqng4zRPtJ7fSRGpT5EMDjyzsWyG9Y8Vw7JdbHxQAvUuGEWz8+d
+         XBBTK/RnHzY+HZurB9hq6OEesloDCDxbq+B1MUsWz25SF1UbBUWI6vxnlvxCeKjaoXR6
+         /Acg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=HmbEGlmgz9inbfRdXswr9utl0AqPzk/QhsgAgC2XwtI=;
-        b=HqQ69kERLtKbC2L9DBXkSDOGwWf3TellpH3P1kB1CFw+/kH5NdWMaX7DBJD+N5T2oS
-         wnFTkyXPmvrN6PBol21PGogts4FsfT8OQvuOD/X/7bqaVoC7QxyP3kiWD5wEW4UrrL5+
-         McPUGaKiwh7gt2cQ8wseGpNIix9muEzIRU3GH2vTRzyDrmZKOuGcVr0Hy3qfTasSlSpa
-         BabmKqDbJL5N4sza/HltUXkK2OSaNKPdewQei8wxS/p1a9dqQqcZ7yK1cb/ShzFeYsLa
-         Y1R7WdCtTRBwm8wSYm5Zi0YIi4YM3EMa8vYfA3f6GHv+gZ38s4PaELHQyAz+24pO7DuF
-         JAVA==
-X-Gm-Message-State: AJIora9FNSUj20Xh7b1Z1MmhNy2Ze+EWWYVhMZbBd4iISPcXnW+m0UDu
-        I2BwZeNbT9S5UvnvU5sBsu0LZA==
-X-Google-Smtp-Source: AGRyM1uOLxFCyR+T8i4wtTM/J6Zo80ApbrLtbf6uQPT2Q3Bx1WlzbF4CUac/xbzPFJxqb8NG09f/YQ==
-X-Received: by 2002:a4a:e9a7:0:b0:428:89cf:34d3 with SMTP id t7-20020a4ae9a7000000b0042889cf34d3mr6714117ood.41.1657161094760;
-        Wed, 06 Jul 2022 19:31:34 -0700 (PDT)
+        bh=mA1lvyszFduS/99/MChGCFetUx4AgZKBxyvoUM2pqRo=;
+        b=KkMPMJwRZyKNGsM0icI4id2I3pySuBQqXI7lEnf7O7VY1BGOVl5oC/IpI6mkoemadJ
+         mNJ76EyITtlNYIMPeEZHsTecBZP+Nz4a9r0Gs6OPe1MlRRflc73b+Gkrqjh9li5Ts53j
+         +jJ9zhVyeb/BxaIkaPxuVPWq2t0Q5ysomyuphVmsDVa8+brwtSpEp6P6nTmG1pSM1JeK
+         9fVZPVFtj5dyZEyjFAjSDzSHZ/uE6dPO5/KZMai2c0EqhncYbyBA9Himow1ukjcxradh
+         ZY+aTa84Bd2reWJRioJqOZotG7ZpWzGjEm9Uo4uvBQZlVQQmQ6hHenNm1ADWvnbYhxMt
+         fZGw==
+X-Gm-Message-State: AJIora+cV9hj+u8v/i50cdKPIe6shOl++uc16AIY4tYLp5QR25TaIqV/
+        jeJQyzVrNNBVRduXf45vJGyYQQ==
+X-Google-Smtp-Source: AGRyM1vkaXbgxNeCIQkTvllc+bZKt2ZAPV5Fhnj81Y0QZU0HGFQ3NlkGpBUW2P7GDcgijGtuCj0SnQ==
+X-Received: by 2002:a05:6870:7a5:b0:10c:1c39:3475 with SMTP id en37-20020a05687007a500b0010c1c393475mr1256187oab.164.1657161095773;
+        Wed, 06 Jul 2022 19:31:35 -0700 (PDT)
 Received: from builder.lan (104-57-184-186.lightspeed.austtx.sbcglobal.net. [104.57.184.186])
-        by smtp.gmail.com with ESMTPSA id x48-20020a056830247000b006168c71ca4asm17024469otr.56.2022.07.06.19.31.33
+        by smtp.gmail.com with ESMTPSA id x48-20020a056830247000b006168c71ca4asm17024469otr.56.2022.07.06.19.31.34
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 06 Jul 2022 19:31:34 -0700 (PDT)
+        Wed, 06 Jul 2022 19:31:35 -0700 (PDT)
 From:   Bjorn Andersson <bjorn.andersson@linaro.org>
-To:     linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
-        Will Deacon <will@kernel.org>, Andy Gross <agross@kernel.org>,
+To:     phone-devel@vger.kernel.org,
+        Marijn Suijten <marijn.suijten@somainline.org>
+Cc:     linux-arm-msm@vger.kernel.org,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@somainline.org>,
+        ~postmarketos/upstreaming@lists.sr.ht,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Andy Gross <agross@kernel.org>,
+        Martin Botka <martin.botka@somainline.org>,
         devicetree@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Georgi Djakov <djakov@kernel.org>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Rajendra Nayak <quic_rjendra@quicinc.com>
-Subject: Re: (subset) [PATCH v8 3/4] arm64: defconfig: enable Qualcomm Bandwidth Monitor
-Date:   Wed,  6 Jul 2022 21:31:12 -0500
-Message-Id: <165716107315.864223.9487866032857198134.b4-ty@linaro.org>
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/3] arm64: dts: qcom: sm6125: Move sdc2 pinctrl from seine-pdx201 to sm6125
+Date:   Wed,  6 Jul 2022 21:31:13 -0500
+Message-Id: <165716107314.864223.9871410484260306384.b4-ty@linaro.org>
 X-Mailer: git-send-email 2.32.0
-In-Reply-To: <20220704121730.127925-4-krzysztof.kozlowski@linaro.org>
-References: <20220704121730.127925-1-krzysztof.kozlowski@linaro.org> <20220704121730.127925-4-krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220508100336.127176-1-marijn.suijten@somainline.org>
+References: <20220508100336.127176-1-marijn.suijten@somainline.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -76,17 +80,27 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 4 Jul 2022 14:17:29 +0200, Krzysztof Kozlowski wrote:
-> Enable the Qualcomm Bandwidth Monitor to allow scaling interconnects
-> depending on bandwidth usage between CPU and memory.  This is used
-> already on Qualcomm SDM845 SoC.
+On Sun, 8 May 2022 12:03:33 +0200, Marijn Suijten wrote:
+> Both the sdc2-on and sdc2-off pinctrl nodes are used by the
+> sdhci@4784000 node in sm6125.dtsi.  Surprisingly sdc2-off is defined in
+> sm6125, yet its sdc2-on counterpart is only defined in board-specific DT
+> for the Sony Seine PDX201 board/device resulting in an "undefined label
+> &sdc2_state_on" error if sm6125.dtsi were included elsewhere.
+> This sm6125 base dtsi should not rely on externally defined labels; the
+> properties referencing it should then also be written externally.
+> Since the sdc2-on pin configuration is board-independent just like
+> sdc2-off, move it from seine-pdx201.dts into sm6125.dtsi.
 > 
-> 
+> [...]
 
 Applied, thanks!
 
-[3/4] arm64: defconfig: enable Qualcomm Bandwidth Monitor
-      commit: 76f11e77f919397f31198354cd0e0bd8e76f8748
+[1/3] arm64: dts: qcom: sm6125: Move sdc2 pinctrl from seine-pdx201 to sm6125
+      commit: 6990640a93ba4e76dd62ca3ea1082a7354db09d7
+[2/3] arm64: dts: qcom: sm6125: Append -state suffix to pinctrl nodes
+      commit: cbfb5668aece448877fa7826cde81c9d06f4a4ac
+[3/3] arm64: dts: qcom: sm6125: Add DLL/DDR configuration on SDHCI 1/2
+      commit: e5de51e264e147d4bf882a464fb89501e9c87e14
 
 Best regards,
 -- 

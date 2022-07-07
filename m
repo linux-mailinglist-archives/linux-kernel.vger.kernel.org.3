@@ -2,40 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 969D25697C0
+	by mail.lfdr.de (Postfix) with ESMTP id E225E5697C1
 	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 04:03:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234357AbiGGCAL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Jul 2022 22:00:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51836 "EHLO
+        id S234848AbiGGCCm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Jul 2022 22:02:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52798 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229769AbiGGCAK (ORCPT
+        with ESMTP id S234690AbiGGCCk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Jul 2022 22:00:10 -0400
-Received: from mail.nfschina.com (unknown [IPv6:2400:dd01:100f:2:72e2:84ff:fe10:5f45])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C79132ED4B
-        for <linux-kernel@vger.kernel.org>; Wed,  6 Jul 2022 19:00:09 -0700 (PDT)
-Received: from localhost (unknown [127.0.0.1])
-        by mail.nfschina.com (Postfix) with ESMTP id D52631E80D82;
-        Thu,  7 Jul 2022 09:57:49 +0800 (CST)
-X-Virus-Scanned: amavisd-new at test.com
-Received: from mail.nfschina.com ([127.0.0.1])
-        by localhost (mail.nfschina.com [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id ZZKH5BkaPIZF; Thu,  7 Jul 2022 09:57:47 +0800 (CST)
-Received: from localhost.localdomain (unknown [219.141.250.2])
-        (Authenticated sender: zeming@nfschina.com)
-        by mail.nfschina.com (Postfix) with ESMTPA id 094C11E80D74;
-        Thu,  7 Jul 2022 09:57:47 +0800 (CST)
-From:   Li zeming <zeming@nfschina.com>
-To:     benh@kernel.crashing.org
-Cc:     linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org,
-        kernel@nfschina.com, Li zeming <zeming@nfschina.com>
-Subject: [PATCH] macintosh/windfarm_pid: Add header file macro definition
-Date:   Thu,  7 Jul 2022 09:59:49 +0800
-Message-Id: <20220707015949.3733-1-zeming@nfschina.com>
-X-Mailer: git-send-email 2.18.2
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,RDNS_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=no
+        Wed, 6 Jul 2022 22:02:40 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C3F42F03D;
+        Wed,  6 Jul 2022 19:02:40 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id AC0376208C;
+        Thu,  7 Jul 2022 02:02:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A96DAC3411C;
+        Thu,  7 Jul 2022 02:02:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1657159359;
+        bh=abt2fnMs2RLeFsNRDbZp4ICtDX00jnIhZbJrTMIbwro=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=dfkB/ry2ouo+vFAA83fScF1vliSCTQLU9aRmNkJYJZmA01OKIGpBtccjixQeqtZZm
+         q8eHDkQStzqYwREHb4NwveofynUWl3jLZubWCENVsJ9B8OQ3uLe1T1wyIph/Z/L+vF
+         te/8KVbE6Jv4X6Mmoyg+RgRKYAFwdhM6AolkSRSm6WkR1quhpp2dcbqxJaDkKKwSiP
+         n92v24MccNdaPjC9n4XGpFigZlWGMzvr4ljOI7UwChVJm6X7a+NOL2jo1nNPuoP6i+
+         yITHWhzmH7xKFRnHrtzIKBt1VwVBkpXsq4rNJdBSgWL/H4/jH+wpYmYHtl7YOWfvd3
+         qId/SQrGUtUkg==
+Date:   Wed, 6 Jul 2022 19:02:37 -0700
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     Duoming Zhou <duoming@zju.edu.cn>
+Cc:     linux-hams@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, ralf@linux-mips.org,
+        davem@davemloft.net, edumazet@google.com, pabeni@redhat.com
+Subject: Re: [PATCH net v2] net: rose: fix UAF bug caused by
+ rose_t0timer_expiry
+Message-ID: <20220706190237.477f24ee@kernel.org>
+In-Reply-To: <20220705125610.77971-1-duoming@zju.edu.cn>
+References: <20220705125610.77971-1-duoming@zju.edu.cn>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -43,31 +56,14 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-I think the header file could avoid redefinition errors.
- at compile time by adding macro definitions.
+On Tue,  5 Jul 2022 20:56:10 +0800 Duoming Zhou wrote:
+> +	del_timer_sync(&rose_neigh->t0timer);
 
-Signed-off-by: Li zeming <zeming@nfschina.com>
----
- drivers/macintosh/windfarm_pid.h | 4 ++++
- 1 file changed, 4 insertions(+)
+/**
+ * del_timer_sync - deactivate a timer and wait for the handler to finish.
+[...]
+ * Synchronization rules: Callers must prevent restarting of the timer,
+ * otherwise this function is meaningless.
 
-diff --git a/drivers/macintosh/windfarm_pid.h b/drivers/macintosh/windfarm_pid.h
-index 83f747dbeafc..9882e90a5071 100644
---- a/drivers/macintosh/windfarm_pid.h
-+++ b/drivers/macintosh/windfarm_pid.h
-@@ -1,4 +1,7 @@
- /* SPDX-License-Identifier: GPL-2.0-only */
-+#ifndef _WINDFARM_PID_H
-+#define _WINDFARM_PID_H
-+
- /*
-  * Windfarm PowerMac thermal control. Generic PID helpers
-  *
-@@ -82,3 +85,4 @@ struct wf_cpu_pid_state {
- extern void wf_cpu_pid_init(struct wf_cpu_pid_state *st,
- 			    struct wf_cpu_pid_param *param);
- extern s32 wf_cpu_pid_run(struct wf_cpu_pid_state *st, s32 power, s32 temp);
-+#endif
--- 
-2.18.2
-
+how is the restarting prevented? If I'm looking right 
+rose_t0timer_expiry() rearms the timer.

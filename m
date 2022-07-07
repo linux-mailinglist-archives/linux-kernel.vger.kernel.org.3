@@ -2,128 +2,209 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 98CBD56AC73
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 22:07:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1288A56AC82
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 22:08:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235637AbiGGUG5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Jul 2022 16:06:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45894 "EHLO
+        id S236295AbiGGUHR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Jul 2022 16:07:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46178 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232340AbiGGUG4 (ORCPT
+        with ESMTP id S236019AbiGGUHP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Jul 2022 16:06:56 -0400
-Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50D8A5C9E9;
-        Thu,  7 Jul 2022 13:06:54 -0700 (PDT)
-Received: by mail-pf1-x432.google.com with SMTP id w185so17833002pfb.4;
-        Thu, 07 Jul 2022 13:06:54 -0700 (PDT)
+        Thu, 7 Jul 2022 16:07:15 -0400
+Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64F9B5C9E9
+        for <linux-kernel@vger.kernel.org>; Thu,  7 Jul 2022 13:07:13 -0700 (PDT)
+Received: by mail-lf1-x12b.google.com with SMTP id m18so14506527lfg.10
+        for <linux-kernel@vger.kernel.org>; Thu, 07 Jul 2022 13:07:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=98EN1f5/i2LzYWeXUWVEmbBzCCPBpI9i3gg9XzfXb9c=;
-        b=hCntgRRaF+staQV7p+Zao9Z5wzI8MfIg0AxDo9EyOVwju9ZjeKvvIJ9QiYz0IPme8V
-         gAKsyoQBK33SyU4QiX9DVDaEeXcRDxEAgwbdUCsusfsFKFb6E8jP3mVwXSDRzMhb4m2c
-         dtYmCYRHI0Nii/nhSSJice4ub5t68hy+3ye8bUFIA74MWPBQ+B01AdSnL4jNTbPH3Mnd
-         6YOiAxixNAc8S5DC7qUtkHPpvl03ZyyUW9D8tkfbMGJgsFiFZkzUz9GmJLrLuoPs1EDQ
-         NcMt22lZfS5ZORKSNCB8Rao601RQkNRIFvGIITVDxXTGMG0ebzAXEESWvUmskqYae2qI
-         0lSw==
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=QKhIcn0No1S7A61+zmGLwK91+iFzUTtNVPgIThcxj6s=;
+        b=gVC3x4vRSwq9+jTYJ4uo46yrPyBoDX3w1bx40R6Hq+qmp0LoElZElkFm2Hh0l+vxXC
+         nl9oOppNyrXY9npgFovnSDGCRT+bSUhslsEq8L4AZqAA1jcipcKhZ7anh/DFsf1fEysw
+         yA0IdQLnyj0S0Pgeh67cQ7U+/axRBD/NtYoevdUq4dibCqJY68Dc9jlP26545M4i5/U4
+         Ef24qa57ODqV0zgYuzDbrH8vNumdkYJwcA7qYMfh+3KjREN38xz8SU6ImdPRQUW5InGw
+         X9cu4YLgWbUU140YdmZwa15DMNtZxfCsLvvLo2QT6i+m5C+wfWxcAH1UAzgZsXuGp5zl
+         Licg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=98EN1f5/i2LzYWeXUWVEmbBzCCPBpI9i3gg9XzfXb9c=;
-        b=ljRh8ZZmPA17RDLQQuRZxSf9q9s5f9C3IcwoS8GzUmz1ZXQvwKpwJHBmV/wbgFdu/w
-         ZOSGvopx7FPyCsnSQmUV30NRkjgopCv9cXfnTuG17iZFROmRQbU10xdzQkPQ+L7Q2ruo
-         TUZUQw6ht45iAs0OCuCBO0Ke1OwzIBhAYXkypF9dJoNmv/XiU39sTgi8e5S0TdA4Xtw/
-         EzN6RQS6plJW4nbefkMy7aMc8w6X1g56hhw+lglU+Wj3HJYAPkpyL2KLIAVHG0PLTM6Y
-         uTOllIU2IcrQysOGx9T4JxmljDi+uATxY/P9J6HS6dhZhyukcGFF3qtRsgghRV7PCS86
-         qNQg==
-X-Gm-Message-State: AJIora8+0WB6aa84Czfva7P+KlhePT/TzWMkXKaKW+EePsY1ctXPF835
-        /6kLirw0x6AhC/hUn1Z5NgY=
-X-Google-Smtp-Source: AGRyM1vy66Z/+Xo6fItZ1jRS5GZdetQUfu6iuqR5iLkdqPeiRLW/dYGBPYWyq3gDenoFALAvW3pxNw==
-X-Received: by 2002:a17:90a:e4ce:b0:1ef:87dc:e377 with SMTP id e14-20020a17090ae4ce00b001ef87dce377mr6847562pju.25.1657224413822;
-        Thu, 07 Jul 2022 13:06:53 -0700 (PDT)
-Received: from [172.30.1.47] ([14.32.163.5])
-        by smtp.gmail.com with ESMTPSA id p14-20020a170902a40e00b0016bd72887fcsm11267147plq.59.2022.07.07.13.06.50
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 07 Jul 2022 13:06:53 -0700 (PDT)
-Message-ID: <59e565e3-8930-9010-7642-2b13607cba61@gmail.com>
-Date:   Fri, 8 Jul 2022 05:06:48 +0900
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=QKhIcn0No1S7A61+zmGLwK91+iFzUTtNVPgIThcxj6s=;
+        b=okvMecy5i1FL/1APsbMkzssMQsWYID/c3tzOkgrLQLSnAw51e727HU4FolWhjATBfj
+         4PX8PXXkfSpXuKjGrqFx0VQvwl8UA3jbcSiLGIiJ2b47ZhbhqB6s+PqVIOLdtGnvqHgx
+         aXIK5ch9VHRGoTs9IzwKMwDGfkYRHtoCR98WtoQZXj1dp/qsDvUoPn7+wFqcS5o+lq5b
+         rx7857hWIhHbwf8iRKVkM4W8hgqMSE6jzYNwvRKqf57YP7JKkeOyFxP51M1SxVjijshf
+         /7EekjcWtByFL8nKPlIpcJnP/xvzG94ILnobQCFTeslhmTrVY0WXjoeHPnZGvLcShODE
+         iMNg==
+X-Gm-Message-State: AJIora9F+0Q+bg86hZ7FVrEtHEDxUZEiz0XHWlpN/os5tiiB9Vi0jw+K
+        MAz0Z1xzwQL3PX4zwkJmLqyTAlG24s4GBkx8Vgs0Kg==
+X-Google-Smtp-Source: AGRyM1ukmtVWv+UDsK4ocu2WtNQ0skzcglLvz74pG51Y9fsQEHQ2iNFArCm/PlRMEJjkm+H4jn63SwqGqxQ9ctyw6Jk=
+X-Received: by 2002:a05:6512:6d3:b0:489:37a0:ac40 with SMTP id
+ u19-20020a05651206d300b0048937a0ac40mr1624560lff.79.1657224431418; Thu, 07
+ Jul 2022 13:07:11 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH 2/2] dt-bindings: arm: sunxi: Add several MBUS compatibles
-Content-Language: en-US
-To:     Samuel Holland <samuel@sholland.org>, Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>
-Cc:     Chanwoo Choi <cw00.choi@samsung.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Maxime Ripard <maxime@cerno.tech>,
-        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-sunxi@lists.linux.dev
-References: <20220702042447.26734-1-samuel@sholland.org>
- <20220702042447.26734-2-samuel@sholland.org>
-From:   Chanwoo Choi <cwchoi00@gmail.com>
-In-Reply-To: <20220702042447.26734-2-samuel@sholland.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <cover.1655761627.git.ashish.kalra@amd.com> <7845d453af6344d0b156493eb4555399aad78615.1655761627.git.ashish.kalra@amd.com>
+ <CAMkAt6oGzqoMxN5ws9QZ9P1q5Rah92bb4V2KSYBgi0guMGUKAQ@mail.gmail.com> <SN6PR12MB2767CC5405E25A083E76CFFB8EB49@SN6PR12MB2767.namprd12.prod.outlook.com>
+In-Reply-To: <SN6PR12MB2767CC5405E25A083E76CFFB8EB49@SN6PR12MB2767.namprd12.prod.outlook.com>
+From:   Peter Gonda <pgonda@google.com>
+Date:   Thu, 7 Jul 2022 14:06:59 -0600
+Message-ID: <CAMkAt6pdoMY1yV+kcUzOftD2WKS8sQy-R2b=Aty8wS-gGp-21Q@mail.gmail.com>
+Subject: Re: [PATCH Part2 v6 35/49] KVM: SVM: Remove the long-lived GHCB host map
+To:     "Kalra, Ashish" <Ashish.Kalra@amd.com>
+Cc:     "the arch/x86 maintainers" <x86@kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        kvm list <kvm@vger.kernel.org>,
+        "linux-coco@lists.linux.dev" <linux-coco@lists.linux.dev>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Joerg Roedel <jroedel@suse.de>,
+        "Lendacky, Thomas" <Thomas.Lendacky@amd.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, Ard Biesheuvel <ardb@kernel.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Jim Mattson <jmattson@google.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Sergio Lopez <slp@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        David Rientjes <rientjes@google.com>,
+        Dov Murik <dovmurik@linux.ibm.com>,
+        Tobin Feldman-Fitzthum <tobin@ibm.com>,
+        Borislav Petkov <bp@alien8.de>,
+        "Roth, Michael" <Michael.Roth@amd.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        "Kirill A . Shutemov" <kirill@shutemov.name>,
+        Andi Kleen <ak@linux.intel.com>,
+        Tony Luck <tony.luck@intel.com>, Marc Orr <marcorr@google.com>,
+        Sathyanarayanan Kuppuswamy 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        Alper Gun <alpergun@google.com>,
+        "Dr. David Alan Gilbert" <dgilbert@redhat.com>,
+        "jarkko@kernel.org" <jarkko@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Samuel,
+On Fri, Jun 24, 2022 at 2:14 PM Kalra, Ashish <Ashish.Kalra@amd.com> wrote:
+>
+> [AMD Official Use Only - General]
+>
+> Hello Peter,
+>
+> >> From: Brijesh Singh <brijesh.singh@amd.com>
+> >>
+> >> On VMGEXIT, sev_handle_vmgexit() creates a host mapping for the GHCB
+> >> GPA, and unmaps it just before VM-entry. This long-lived GHCB map is
+> >> used by the VMGEXIT handler through accessors such as ghcb_{set_get}_x=
+xx().
+> >>
+> >> A long-lived GHCB map can cause issue when SEV-SNP is enabled. When
+> >> SEV-SNP is enabled the mapped GPA needs to be protected against a page
+> >> state change.
+> >>
+> >> To eliminate the long-lived GHCB mapping, update the GHCB sync
+> >> operations to explicitly map the GHCB before access and unmap it after
+> >> access is complete. This requires that the setting of the GHCBs
+> >> sw_exit_info_{1,2} fields be done during sev_es_sync_to_ghcb(), so
+> >> create two new fields in the vcpu_svm struct to hold these values when
+> >> required to be set outside of the GHCB mapping.
+> >>
+> >> Signed-off-by: Brijesh Singh <brijesh.singh@amd.com>
+> >> ---
+> >>  arch/x86/kvm/svm/sev.c | 131
+> >> ++++++++++++++++++++++++++---------------
+> >>  arch/x86/kvm/svm/svm.c |  12 ++--
+> >>  arch/x86/kvm/svm/svm.h |  24 +++++++-
+> >>  3 files changed, 111 insertions(+), 56 deletions(-)
+> >>
+> >> diff --git a/arch/x86/kvm/svm/sev.c b/arch/x86/kvm/svm/sev.c index
+> >> 01ea257e17d6..c70f3f7e06a8 100644
+> >> --- a/arch/x86/kvm/svm/sev.c
+> >> +++ b/arch/x86/kvm/svm/sev.c
+> >> @@ -2823,15 +2823,40 @@ void sev_free_vcpu(struct kvm_vcpu *vcpu)
+> >>         kvfree(svm->sev_es.ghcb_sa);
+> >> }
+> >>
+> >> +static inline int svm_map_ghcb(struct vcpu_svm *svm, struct
+> >> +kvm_host_map *map) {
+> >> +       struct vmcb_control_area *control =3D &svm->vmcb->control;
+> >> +       u64 gfn =3D gpa_to_gfn(control->ghcb_gpa);
+> >> +
+> >> +       if (kvm_vcpu_map(&svm->vcpu, gfn, map)) {
+> >> +               /* Unable to map GHCB from guest */
+> >> +               pr_err("error mapping GHCB GFN [%#llx] from guest\n", =
+gfn);
+> >> +               return -EFAULT;
+> >> +       }
+> >> +
+> >> +       return 0;
+> >> +}
+>
+> >There is a perf cost to this suggestion but it might make accessing the =
+GHCB safer for KVM. Have you thought about just using
+> >kvm_read_guest() or copy_from_user() to fully copy out the GCHB into a K=
+VM owned buffer, then copying it back before the VMRUN. That way the KVM do=
+esn't need to guard against page_state_changes on the GHCBs, that could be =
+a perf ?>improvement in a follow up.
+>
+> Along with the performance costs you mentioned, the main concern here wil=
+l be the GHCB write-back path (copying it back) before VMRUN: this will aga=
+in hit the issue we have currently with
+> kvm_write_guest() / copy_to_user(), when we use it to sync the scratch bu=
+ffer back to GHCB. This can fail if guest RAM is mapped using huge-page(s) =
+and RMP is 4K. Please refer to the patch/fix
+> mentioned below, kvm_write_guest() potentially can fail before VMRUN in c=
+ase of SNP :
+>
+> commit 94ed878c2669532ebae8eb9b4503f19aa33cd7aa
+> Author: Ashish Kalra <ashish.kalra@amd.com>
+> Date:   Mon Jun 6 22:28:01 2022 +0000
+>
+>     KVM: SVM: Sync the GHCB scratch buffer using already mapped ghcb
+>
+>     Using kvm_write_guest() to sync the GHCB scratch buffer can fail
+>     due to host mapping being 2M, but RMP being 4K. The page fault handli=
+ng
+>     in do_user_addr_fault() fails to split the 2M page to handle RMP faul=
+t due
+>     to it being called here in a non-preemptible context. Instead use
+>     the already kernel mapped ghcb to sync the scratch buffer when the
+>     scratch buffer is contained within the GHCB.
 
-On 22. 7. 2. 13:24, Samuel Holland wrote:
-> All of the sunxi SoCs since at least the A33 have a similar structure
-> for the MBUS and DRAM controller, but they all have minor differences in
-> MBUS port assignments and DRAM controller behavior. Give each SoC its
-> own compatible.
-> 
-> Signed-off-by: Samuel Holland <samuel@sholland.org>
-> ---
-> 
->  .../bindings/arm/sunxi/allwinner,sun4i-a10-mbus.yaml   | 10 ++++++++++
->  1 file changed, 10 insertions(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/arm/sunxi/allwinner,sun4i-a10-mbus.yaml b/Documentation/devicetree/bindings/arm/sunxi/allwinner,sun4i-a10-mbus.yaml
-> index 2b018feb56df..99566688d033 100644
-> --- a/Documentation/devicetree/bindings/arm/sunxi/allwinner,sun4i-a10-mbus.yaml
-> +++ b/Documentation/devicetree/bindings/arm/sunxi/allwinner,sun4i-a10-mbus.yaml
-> @@ -29,10 +29,20 @@ properties:
->    compatible:
->      enum:
->        - allwinner,sun5i-a13-mbus
-> +      - allwinner,sun8i-a33-mbus
-> +      - allwinner,sun8i-a50-mbus
-> +      - allwinner,sun8i-a83t-mbus
->        - allwinner,sun8i-h3-mbus
->        - allwinner,sun8i-r40-mbus
-> +      - allwinner,sun8i-v3s-mbus
-> +      - allwinner,sun8i-v536-mbus
-> +      - allwinner,sun20i-d1-mbus
->        - allwinner,sun50i-a64-mbus
-> +      - allwinner,sun50i-a100-mbus
->        - allwinner,sun50i-h5-mbus
-> +      - allwinner,sun50i-h6-mbus
-> +      - allwinner,sun50i-h616-mbus
-> +      - allwinner,sun50i-r329-mbus
->  
->    reg:
->      minItems: 1
+Ah I didn't see that issue thanks for the pointer.
 
-I have a question. 
-Are there the device drivers for the newly added compatible?
+The patch description says "When SEV-SNP is enabled the mapped GPA
+needs to be protected against a page state change." since if the guest
+were to convert the GHCB page to private when the host is using the
+GHCB the host could get an RMP violation right? That RMP violation
+would cause the host to crash unless we use some copy_to_user() type
+protections. I don't see anything mechanism for this patch to add the
+page state change protection discussed. Can't another vCPU still
+convert the GHCB to private?
 
--- 
-Best Regards,
-Samsung Electronics
-Chanwoo Choi
+I was wrong about the importance of this though seanjc@ walked me
+through how UPM will solve this issue so no worries about this until
+the series is rebased on to UPM.
+
+>
+> Thanks,
+> Ashish
+>
+> >Since we cannot unmap GHCBs I don't think UPM will help here so we proba=
+bly want to make these patches safe against malicious guests making GHCBs p=
+rivate. But maybe UPM does help?

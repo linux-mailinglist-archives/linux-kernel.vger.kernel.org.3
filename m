@@ -2,136 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CD2C256ADC6
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 23:36:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0598156ADD5
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 23:39:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236848AbiGGVg1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Jul 2022 17:36:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46624 "EHLO
+        id S236925AbiGGVj2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Jul 2022 17:39:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48862 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236313AbiGGVgZ (ORCPT
+        with ESMTP id S236915AbiGGVjZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Jul 2022 17:36:25 -0400
-Received: from NAM02-DM3-obe.outbound.protection.outlook.com (mail-dm3nam02on2062.outbound.protection.outlook.com [40.107.95.62])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D070380;
-        Thu,  7 Jul 2022 14:36:24 -0700 (PDT)
+        Thu, 7 Jul 2022 17:39:25 -0400
+Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EED2C20BCA
+        for <linux-kernel@vger.kernel.org>; Thu,  7 Jul 2022 14:39:24 -0700 (PDT)
+Received: from pps.filterd (m0246632.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 267KCoPZ020654;
+        Thu, 7 Jul 2022 21:39:17 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
+ : subject : message-id : references : content-type : in-reply-to :
+ mime-version; s=corp-2021-07-09;
+ bh=g42YrPTvGElUTZ3D+5qrntbowTCsB3L+lalvousnV0A=;
+ b=UMQQYh+41dJj8I4+cyhId7E7Ai64qsljvutY5hPr8PE5buexpry7BUvhfjWZjpKU1K36
+ AqpV7jublstQsk4HoFMSlJdPlAOINCCb+vtEJ67WLBIyG2hhgr1fDxJ22wrYGbHMB5u0
+ ExflqWstwnIVXA8T+B4Gn1dJFnG7bDSKxxHqkNYMzmBW+CWVtVCuCIBvLhwjQU+Xaj3+
+ w3pniMvjWR6XtQKYE78irU0MDyv90vh4F6L72Y+RZNe9efK8ouJt9YKck/t92p1Qk1In
+ kd59PZoOJTJN9px+9YAauVqBLt9e2qgnHo49qXgzKDkkKiOmkvazeUIRi2aODUIrW2Ag hA== 
+Received: from phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta02.appoci.oracle.com [147.154.114.232])
+        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3h4uby6g6f-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 07 Jul 2022 21:39:17 +0000
+Received: from pps.filterd (phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
+        by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (8.16.1.2/8.16.1.2) with SMTP id 267LZMGP006422;
+        Thu, 7 Jul 2022 21:39:16 GMT
+Received: from nam11-dm6-obe.outbound.protection.outlook.com (mail-dm6nam11lp2169.outbound.protection.outlook.com [104.47.57.169])
+        by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com with ESMTP id 3h4ud7bxvr-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 07 Jul 2022 21:39:16 +0000
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Tf0P2CZb+FIZ49QYRqYve+y2YEWIfK1ClMoHbciRbq9nT8h0wHxcIcilVTffMAnvW5xl87V1LpugGuDDYIt9dFf/aclRBXrWmzvUt4V79NFoHge9xWZ1EWhes6M2xVOVyHEk8VJGgwEV4Y0JihqmefU5Kq3wi1nOWwQZwh9a8gp5CyjkYWC/qEsEWBbxoPGb5aCLCR+gopVJemrauFMMvqLAzlUFYyYbpyMxX8p2CI9jIlUy2qYPTokXqhl0dc48xU+v9hBgY0fHYN+xhQ1MOZfSrjZGC9x/vIFddHr88Pr8Z/G6/HJhv56AWxHkcS1k6Yviv24fE3d0KUjBwwamMA==
+ b=k149Ngb1+xXLmuCNNiqPtIe8fAoPGuhEe9Un1tJfM3UPLyosSyVfVIRuRWtPUNCwZ/hjF5XsKyrHP1Ow4Jaw7m5nqI5VtH83t+LTwSqb7Q3aAQXYdaCRkAPXHbTp6J8xuasSCQv0uuBOH7BUIZJn1JKkEAJiqnpHMoUtUSRZmtzovJmm6tu/ymQYfxA8/afuJk2lXSAAQ/9ueBCyGt9uc3l5x3j9JOVmp2RBbSClbwd8D7PJzY1bUnbb7sgykE9gHymrdHUyyTgPIj3bQWkKeleIYNoJqeLT+Y24yZ/QwYZg+lvGeouvInywOf481WTRB/l7KAyz1/wdHgJA/5kHTQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=cyDHCLQV+2xBiz1vom6KZzM5P12UNu16eGgXfOQsbD0=;
- b=YcAwHQ3lZ64bK74JtgI/wFVocCud/fmosOyRDe1rqTDkSG3FgXJNFr19Xbnh/1MeuBCHL6tVS13xcYyXNrv0xFUWLSqD3x1otyTNNFlzH4IksgUoui4Pwm81PZfBqprDj1M6uWych4yY/VDflJts0zv9UfylP8cJN1aURzNcpliaKpWvy5/fahLqshcQNLDtlteYBVP8mc5d0bhcfjfoODY41Rp48u/LdcRX1t40Yri7FpDQNEC6NagLELNJtIrbSsa+CN40S/NQlTtkxP5gR9di4IUTqBdzrEggXhtQln55tU5qJtxohMgrxbaguBlJiFjkUKo409BaSVc8ivvk5w==
+ bh=g42YrPTvGElUTZ3D+5qrntbowTCsB3L+lalvousnV0A=;
+ b=HbANs5dg89TJ/UK4bJjuOyb3lZr+2wv/4vdxTzjZmVsoJkInE5ety3vUZuasB6AKzMhUtPnqLmgrIMSLLNZaoEggUVgYx2WdQvem3Oo28IgNUKaNU3x8bpeKNpRNE2nTXbkCQI7DWV4LaQPaspVYqygfWzKyTbsY3tO/A+E/GFpz7ivN7LEyYlHo6q5/KEGVD3BkU566lSZnFZ91aEKTk2DbgYm5NSrJVc8/0sb3AAsm4Vw/es7YUHwEYgWihm3dEi8kDOPZ3UG4+ZS57vIsN4TqgNSv5nkLi4q42/JFTO6obr27Z/BvmaYNyvlsm173TU4Y40LtguD80vwNpshftA==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=cyDHCLQV+2xBiz1vom6KZzM5P12UNu16eGgXfOQsbD0=;
- b=bgr3EQkFjudHMH1gcy3XJjr9DRwF1sKGPmMv6MvtULz0nYfMO4aGZgkIA3isAQa347V+eNJACHijdBcDuccfIdhoFb8jlQkGn6u+mAPDxBCFCBTB0xIOkSlRUbQsoDKUqhslpuI0ZQ7nN4Tn9KaqNxawWQ9SgzFw3rSH5yEACZQ=
-Received: from MN0PR12MB6101.namprd12.prod.outlook.com (2603:10b6:208:3cb::10)
- by MN2PR12MB4342.namprd12.prod.outlook.com (2603:10b6:208:264::7) with
+ bh=g42YrPTvGElUTZ3D+5qrntbowTCsB3L+lalvousnV0A=;
+ b=n519syp5SfGT2w3zQj2aumQBCSo1FybQPrWgoZVze91r3m1SxX7WeEAQaG4sRdLeNsaC59YbcYsgkrr5eHjjwimAOSzbuxnXEvR4DdBofvv7CX9A5PF8jaidi1+jSHD+my7t2vA8VIVIgfgWuTPjw5D5bUJU5md6SYoH07mhjj8=
+Received: from BY5PR10MB4196.namprd10.prod.outlook.com (2603:10b6:a03:20d::23)
+ by MN2PR10MB4175.namprd10.prod.outlook.com (2603:10b6:208:1d9::8) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5395.15; Thu, 7 Jul
- 2022 21:36:22 +0000
-Received: from MN0PR12MB6101.namprd12.prod.outlook.com
- ([fe80::1143:10a5:987a:7598]) by MN0PR12MB6101.namprd12.prod.outlook.com
- ([fe80::1143:10a5:987a:7598%5]) with mapi id 15.20.5395.021; Thu, 7 Jul 2022
- 21:36:22 +0000
-From:   "Limonciello, Mario" <Mario.Limonciello@amd.com>
-To:     Tom Crossland <tomc@fortu.net>, Sasha Levin <sashal@kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "stable@vger.kernel.org" <stable@vger.kernel.org>
-CC:     "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        "Huang, Ray" <Ray.Huang@amd.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        "rafael@kernel.org" <rafael@kernel.org>,
-        "linux-acpi@vger.kernel.org" <linux-acpi@vger.kernel.org>
-Subject: RE: [PATCH AUTOSEL 5.17 42/43] Revert "ACPI: Pass the same
- capabilities to the _OSC regardless of the query flag"
-Thread-Topic: [PATCH AUTOSEL 5.17 42/43] Revert "ACPI: Pass the same
- capabilities to the _OSC regardless of the query flag"
-Thread-Index: AQHYQpXKqDZmoY/ha0SX34ykqN32Na10DIKAgAABciA=
-Date:   Thu, 7 Jul 2022 21:36:22 +0000
-Message-ID: <MN0PR12MB6101729CF68952653E8F55EFE2839@MN0PR12MB6101.namprd12.prod.outlook.com>
-References: <20220328111828.1554086-1-sashal@kernel.org>
- <20220328111828.1554086-42-sashal@kernel.org>
- <872f2a21-7bf7-0cc3-298f-f817429f6997@fortu.net>
-In-Reply-To: <872f2a21-7bf7-0cc3-298f-f817429f6997@fortu.net>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-msip_labels: MSIP_Label_d4243a53-6221-4f75-8154-e4b33a5707a1_Enabled=true;
- MSIP_Label_d4243a53-6221-4f75-8154-e4b33a5707a1_SetDate=2022-07-07T21:36:09Z;
- MSIP_Label_d4243a53-6221-4f75-8154-e4b33a5707a1_Method=Privileged;
- MSIP_Label_d4243a53-6221-4f75-8154-e4b33a5707a1_Name=Public-AIP 2.0;
- MSIP_Label_d4243a53-6221-4f75-8154-e4b33a5707a1_SiteId=3dd8961f-e488-4e60-8e11-a82d994e183d;
- MSIP_Label_d4243a53-6221-4f75-8154-e4b33a5707a1_ActionId=617df13c-c6e6-4a13-b8ca-16edd70e8ec5;
- MSIP_Label_d4243a53-6221-4f75-8154-e4b33a5707a1_ContentBits=1
-msip_label_d4243a53-6221-4f75-8154-e4b33a5707a1_enabled: true
-msip_label_d4243a53-6221-4f75-8154-e4b33a5707a1_setdate: 2022-07-07T21:36:20Z
-msip_label_d4243a53-6221-4f75-8154-e4b33a5707a1_method: Privileged
-msip_label_d4243a53-6221-4f75-8154-e4b33a5707a1_name: Public-AIP 2.0
-msip_label_d4243a53-6221-4f75-8154-e4b33a5707a1_siteid: 3dd8961f-e488-4e60-8e11-a82d994e183d
-msip_label_d4243a53-6221-4f75-8154-e4b33a5707a1_actionid: 6914765a-9782-4dbb-9fcc-8b90f1ee8740
-msip_label_d4243a53-6221-4f75-8154-e4b33a5707a1_contentbits: 0
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: dc212039-61dd-482f-5703-08da6060bc71
-x-ms-traffictypediagnostic: MN2PR12MB4342:EE_
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: a71K2qofVxjXK4h40lbM8+WDXzddYY/E9RKZ1R0T7hJoJHn4XREvP1EKkRYdteUuqD0JItKLeFmV8+7mVpaowHOdDaIxYdkwmybl/oz++1INerkG/xlmd0691WTQG8hVlAfPg0rQkkWjqv6yCJeCCbn6SYeVR9w+MMBk2ZbFbAzjm/U5f2kL3atcki+fZkI/nBWHZ11xb4ivomn1B6mWOAOACGXCzzOhdd/Gz4Ju/8UoVT2Qd7YnyCCyD5oyU9ohfL6qd74Eqxl90Goptyvl1ZjlE09ZUjQPasOc0c4aM57lQIxM+/gFHKyOU00V6wAM2Fw9AwPXJc8TdWgazlw5J2tqxf4sHKu/t0iid056JiOZT6BrVcK9hfhUnSFbaKQgJnbe6ZuYjVfjpK+Ux8h0hfXKnlva19NwXyxm+h5opshZ8Nvf4wWDLautJuLlS7YOMWlvU2Cu89OvadF5AUvXHCBdWlOIUZhA2eDGBDbQgI1t0l4p5HcBmJMyt10qNuxZWMDR4rjR4UQ0I6kW+TAfF+2ohglJAsSeOYhhInNy5LBMMmVTbAkOpim7v9pcFEzoV1k2IzHr3dLN000ZQ0DLPmghVf/tuWxyy72FXERPiUliMcmt6K5xnkbKlE+xKHr9T6nETHXfhOubbm8aoyOk3MHI8oOMiCIxvqM7eKcvPrKVaGxCiHXdt85TZbIP4/3tV2ySbzjqNGSlCBAUSMZk53EtVhj1D1AjucO4zhAPCsh/+XMLT7amwKq7G86fbOcuM0wXZ9lnvaS8niJa88f1HsdJytBMcUUNe7/itu/AUs2YzKzCCsgGw1pDZcrMzAEKDDbvmG1xtFpSmi13fhCaBi6PQ4XeTL7ATIg9VBDZHZ77W4eAlrk5jHVHQZleCVQaP3L1qaPNxEns/qbURtSlmA==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN0PR12MB6101.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(346002)(376002)(396003)(136003)(39860400002)(366004)(41300700001)(54906003)(53546011)(38100700002)(316002)(2906002)(55016003)(7696005)(6506007)(66556008)(66946007)(110136005)(52536014)(86362001)(66446008)(478600001)(45080400002)(5660300002)(83380400001)(66476007)(4326008)(64756008)(8676002)(186003)(38070700005)(8936002)(26005)(966005)(33656002)(122000001)(76116006)(9686003)(71200400001)(26953001)(21314003);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?iso-8859-1?Q?fgVwDR8VDRnSz/onc3ny1f4H8DXjfawhsV04BNXlwbpE6gMoo/hW53PqQx?=
- =?iso-8859-1?Q?U3pN0Xc5CCxiVoAiCeUBijji6GQ42WP7+5b3Gy0J9hiXTD5ijMAPZzNvLu?=
- =?iso-8859-1?Q?5ChptZ+VHU+uiEn8BnI+Bdt28mW1WKLnYE5eefOhXTsIbZxsSWJUp9S6rE?=
- =?iso-8859-1?Q?UnFDJ+/Ky9T9j8Q0HejA7fqUOMvMgwRUGCReJUfjSRwbRVwDreCyYjx44a?=
- =?iso-8859-1?Q?S03GAurDnuenuYDc3441BMjxXzPsw6BhW1SF2Oki9lFXtWUXNcSAhPNFmX?=
- =?iso-8859-1?Q?nk4RTP1ENqaQonpcceXaRLSkRCsIROUBGQMFN++WFcN4a9e3hrYrwH9vQr?=
- =?iso-8859-1?Q?trnUAH8ALtyOwb5xd/BSRentuAOMAd/X5GPZD0dqIKC5qfXFiTSd8bIKwX?=
- =?iso-8859-1?Q?JZeLeONVyvn3kmC0jwH86MMQk4AnrjFtHrnchRPsu4660QI0Bs9sPluvsP?=
- =?iso-8859-1?Q?wuP2tQmqHstEDyjp4qj/d1IBIxrUBn/LoodvSE73bXKAcKSjdYoYC5TLIC?=
- =?iso-8859-1?Q?1isqAGo6GNQ6hx3iOi7ZiA/I4WnZjT4Kj9vyMHHmw4wd9pMIwXAWDK5N0I?=
- =?iso-8859-1?Q?ulDUlLmOSbkHVwI1IxR/QJl54ziFuSySMaspLtWpJGu7AS+1S2NXvZ6SMO?=
- =?iso-8859-1?Q?eyEokbIgPvabUHgRjCtRivZzUrm4oJ/WASO2nEsocoOaXURM0zk7V7Gr4v?=
- =?iso-8859-1?Q?FYzYw54w/sEykAZAI9xrf2XAZEFMD6BD5+5Vmt2vKGeTQC8PhCkHiCtyOp?=
- =?iso-8859-1?Q?vcu5gVhZkoeKe3EGAbIkjlcpITin3FIY8K1gQjD5a4PxlO53KzHqFQAE47?=
- =?iso-8859-1?Q?4mcq4tJjHiKpRlUtkr0wcVVhXg0N+Hby4i3AKdqtqXRpru/3dRkLwFAZkX?=
- =?iso-8859-1?Q?oV2bk1hW+98DCLYm8vdzcbeaAlQhY/EkWGjwZKKGlsOI5bJlS532iu6sDl?=
- =?iso-8859-1?Q?9Kh6E1o/frMqCH8QYPNMB7YKorKwrhJXcjcF0HB/fNSllXb04rPJQCFyXl?=
- =?iso-8859-1?Q?QNuYD8BiOQund/Tl9jyGo8WAEA7DJv//sE+fWcYTeA5gDLA4OVqAQUnEKR?=
- =?iso-8859-1?Q?UDHQcciOyHmvXmfZ9qa7uj/MXHMY7dly9n9CwdH04gj3SP/07LyQyQEe+h?=
- =?iso-8859-1?Q?hMTm3ACeP+SHTmoRlD0Q6AAFttLPyP2sQ9CAj5S1Hr40x101Gah0Gjd+s5?=
- =?iso-8859-1?Q?8SzmF0ug5tpn/V8MMXoQaWZ04CviDxG0vxbFDnRpoNlmDzoJE9I6oWijYs?=
- =?iso-8859-1?Q?PhGGc0y8Vr5VpQs+s37p40QvV71RY5VVHDW8+3roM1pW4SrLVgtpGoMBDh?=
- =?iso-8859-1?Q?evU5LWJc0X1epB4iUQeTbLGs1zQbLy82QNXmhe/x6warvny/RAx8wRDszN?=
- =?iso-8859-1?Q?fwAFcKQGgOJRk+emgAG+jd4ULbSOPCwV/jHl67NUhSvgcnYduqUrmOQ1JF?=
- =?iso-8859-1?Q?eBvnOwvDgI5c1yNSnlK2BHKgQkRBadfhrz2bFO5Ry6ljme7Laig9wwlHXI?=
- =?iso-8859-1?Q?EfJE+nHdkGh6Em1cE3D/iQ4jflLIY+HFj+FLkpYBcZT5vezkOsIDjpueyc?=
- =?iso-8859-1?Q?bs4P1n0qrvYq450/KslxWU0Bl+cZjzK1TSAbZqKhmdKYkJDJ6SXfJaEZjc?=
- =?iso-8859-1?Q?RAIw6HoND49wE=3D?=
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5417.16; Thu, 7 Jul
+ 2022 21:39:14 +0000
+Received: from BY5PR10MB4196.namprd10.prod.outlook.com
+ ([fe80::c1ba:c197:f81f:ec0]) by BY5PR10MB4196.namprd10.prod.outlook.com
+ ([fe80::c1ba:c197:f81f:ec0%6]) with mapi id 15.20.5417.016; Thu, 7 Jul 2022
+ 21:39:14 +0000
+Date:   Thu, 7 Jul 2022 14:39:08 -0700
+From:   Mike Kravetz <mike.kravetz@oracle.com>
+To:     Mina Almasry <almasrymina@google.com>
+Cc:     James Houghton <jthoughton@google.com>,
+        Muchun Song <songmuchun@bytedance.com>,
+        Peter Xu <peterx@redhat.com>,
+        David Hildenbrand <david@redhat.com>,
+        David Rientjes <rientjes@google.com>,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        Jue Wang <juew@google.com>,
+        Manish Mishra <manish.mishra@nutanix.com>,
+        "Dr . David Alan Gilbert" <dgilbert@redhat.com>,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org
+Subject: Re: [RFC PATCH 10/26] hugetlb: add for_each_hgm_shift
+Message-ID: <YsdSfBUAINPlsR9s@monkey>
+References: <20220624173656.2033256-1-jthoughton@google.com>
+ <20220624173656.2033256-11-jthoughton@google.com>
+ <CAHS8izNO+4Nzg=rgr1R027i2Evo-UKiFEK1gQcMHtF8uxcHzeQ@mail.gmail.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAHS8izNO+4Nzg=rgr1R027i2Evo-UKiFEK1gQcMHtF8uxcHzeQ@mail.gmail.com>
+X-ClientProxiedBy: MW4PR03CA0338.namprd03.prod.outlook.com
+ (2603:10b6:303:dc::13) To BY5PR10MB4196.namprd10.prod.outlook.com
+ (2603:10b6:a03:20d::23)
 MIME-Version: 1.0
-X-OriginatorOrg: amd.com
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: aac02376-3aff-4566-1236-08da60612168
+X-MS-TrafficTypeDiagnostic: MN2PR10MB4175:EE_
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: siHDJJUoUW1iRe5WJrN6wllGkmjh+WDAA8rkReEBw+n4uVg7Jx1nBndLgMVH+ZdY/GJ8IBiY5IQpt3vnCrREPm7PuxSv2nD1Kq5zTOTakjnJSe0/Sl69vNzUcc5ufg048NIE27OEeYnmZSxj2VK5p+bwrmT266hzEZk4d8N/C3TyFWi7/MHq2cBr51ieCfuSHv96e5LmoCa6iXYViO0LudVBwwMYGRmRjkvVS1H14O0I26vgYn8mJZBWDaIHgcdH4OPtatOyAUT1eQezS4s5svLVBP9j3Kr7Pz+olEs9t0NpyNLJAFfjuXSL/oi2MOpj+X/HgK1PnCMiDeGp4dmAfXTh3w7Zz6dp/Zfbii6Lijf0RqAt5qyVa5tQf2weZ9weHWBkrU+b7jDSL6J6uW6T4a91/yrVfLFZ5LQxrbul1bNwM7uytT3iUwkByZSyzOJvaAFUpUi1TTTBk5LK1iO9Ro8SN5DKTk+okFtEcCgdz/qfHykxgvrd1mDJjv74m97db7Ymr66dPf1xR0fvT+M6FanxsZOmrL0Z1TVojQ1pxIsozdY9Gf3gw9Xxy5oMmk9VlOtkMC+8l+BNSHdydcOfsJjMibHlNS2iNl1INxfBxzPUX8p5D3MVHAKVNJ0n/OvOKXESU1vElo/v+3jBR2C+vCvj4XBy7PwV6x62kAWo5RLvpWQcOjb8URj0ZMRJ3WBxyfIcmwflutcvhGlpqKERTdw7jho2vgmOcrjcNyeGXQqMRB3wuJD0yLGSOpNXUcff
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BY5PR10MB4196.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(7916004)(396003)(39860400002)(136003)(376002)(366004)(346002)(38100700002)(83380400001)(7416002)(66556008)(5660300002)(8936002)(4326008)(186003)(8676002)(66476007)(44832011)(6666004)(9686003)(33716001)(2906002)(41300700001)(478600001)(6512007)(26005)(6506007)(54906003)(53546011)(6916009)(6486002)(86362001)(316002)(66946007);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?RQghSm7PQWE0n2I7rdxjJmnL6FIhnx6bkr0Nye+7xjHCpkDRzHYcHGuVyzD9?=
+ =?us-ascii?Q?k+ER+cxelAjHP4oEQpEQ+C34duBvVvv8x8d85MidGsxh9lDAljK2sz7vbTDD?=
+ =?us-ascii?Q?msTkZmFgBITeh63RULA2IHRAZg/Cwn2Xv8eM/8stSgrLPDDHgC7sct4POfO2?=
+ =?us-ascii?Q?mHFZVUetcGcW6lRWXUW2m/zV9WOIJRnzh0kVRTs6Ezj0LEiahEkKEL0Kz3n5?=
+ =?us-ascii?Q?O0VipV9xC+snQaORajL0TitRs8BwpV4R9dS6FSR/wdtY40yj3iGpG+JLnjDk?=
+ =?us-ascii?Q?BF6RV+FQbe2jmZIeDsJVgJjpnOfQDA2oFvonJEszEDXDxPYSFbWSxmBYo/W7?=
+ =?us-ascii?Q?+vZt128ecGZ9repL4ZOS3OU8YU8ZXZjP/4gSmGFO2JV76LZXcuDpH1UMODbz?=
+ =?us-ascii?Q?dK1+FY0zkRwMkatIE29jsESPfj58TQW9lan498OA6LW7LZ/nJvfe3uCGGee8?=
+ =?us-ascii?Q?KtvkNmA2frlgPOeMzhV4ebPCK8luAdNHuLHa8PdvefuALk2JwOLwEn5Kn3FI?=
+ =?us-ascii?Q?SoSbqWR3937GoKuJcJeofabESFqgaLakfTpuKug2vWc3N7wCYtTlOKYxi0fE?=
+ =?us-ascii?Q?6JHmV9kUbcJXyQjJXtx6oYKaSfFFpeZfkryYHPoaDcf/ajLnoFRO9+ialCA8?=
+ =?us-ascii?Q?bKBBYJ7ko5HAHvFPIuM+lnydDZu6IYh/jEOD5TwO8N2COv8nXxider+diRp0?=
+ =?us-ascii?Q?LnlekXW6Ai7um/n1M3MAODyZoxZp/uucYUPOecaXXWiaCkJaE7eQZTg91Onc?=
+ =?us-ascii?Q?qYFtD5bk1b0tbYpeNKrT/OLNTIdC1CeZz/TIuymB92z1kAtvRwfzeeLebuSW?=
+ =?us-ascii?Q?H5sNpFzHHdIXzUxnSTXgmSRrHU3TWz1zXfuKpnG/RL9sMvEq+Duo6ZP0eiY1?=
+ =?us-ascii?Q?UuatA45WzbBV611qhpkSDq5MnPJUH4raZgLQ50ZWmbJtmtD6pRAkJIBiQqO7?=
+ =?us-ascii?Q?z3L4BVgVxsfeSTW7xtePvjXdm8w/loCGvIHrv3xeieeHvds5SsmMFYDUYV4E?=
+ =?us-ascii?Q?azdTVxOeDJexVERbPzEZwIiQdMmkS9AIMEQF17ws73mvWcYHJq2kYFxNtGP9?=
+ =?us-ascii?Q?Udkcpn1aAMkCx7GUK1zQb8RQQpVrXnWZCZ748lK9T6L4qAWj84g10Am5JeaD?=
+ =?us-ascii?Q?Q6P67hYNTDcRsHl1R7lXXP//Dm0FYuhYjUlA20n0YVLNobkLldJ4c8FIAODs?=
+ =?us-ascii?Q?tMp9mchufo/zBg9De3Tf+3Y9ZpWKnKZojiiJT35RKzs1/M7awHUGJ8ecA2d7?=
+ =?us-ascii?Q?99GSqWv9GlehdxGvUlSdKdjcL9KuC3bdIi2Qq8Wv1R9knA1F3xZk20qXAI65?=
+ =?us-ascii?Q?6NtZItRARepu53mbtppu18m5rEI4r6mOumo3bIqnRXBu3BJUnpV6i2DLgh1s?=
+ =?us-ascii?Q?KyZisCBzCsyfkPrYe2jJ6ltGM8FhRopOTX+SsTRoxMvlV48SjSJ53XGqnb0a?=
+ =?us-ascii?Q?xHHHTOEnlzGnQQCPbrIH+cTXmxvtzQUTLK67njllv5TQqOxs/uHm/47hHjdW?=
+ =?us-ascii?Q?S9G2njB9j7L41CPvMhQ9PONKdkhuGm87fgO5w1D4JLkTz5Nx7NGwtozV2URV?=
+ =?us-ascii?Q?/ft60DaBHEE62pkO/5adelJO+msH67degicSIjfao3jZMuEYsMohCO8TixWd?=
+ =?us-ascii?Q?QQ=3D=3D?=
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: aac02376-3aff-4566-1236-08da60612168
+X-MS-Exchange-CrossTenant-AuthSource: BY5PR10MB4196.namprd10.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: MN0PR12MB6101.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: dc212039-61dd-482f-5703-08da6060bc71
-X-MS-Exchange-CrossTenant-originalarrivaltime: 07 Jul 2022 21:36:22.0704
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Jul 2022 21:39:14.2131
  (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: n74F8qqbOs2hXPfbQi6HdwhwWP35iwgtu5RWKMOvfOpunOWfeBxI/DJZ7ys3iYOuCxCZ1Ksrf+c5pQP99r0/8Q==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR12MB4342
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: jOe5nMddaoA0Eiwvg/LcoIDxh34t9jLjDSbropsDnXvKzPG4IVcZMm8pxhJ8nVvPxKvdt2dSrymGfFfgfk8vhA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR10MB4175
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.517,18.0.883
+ definitions=2022-07-07_17:2022-06-28,2022-07-07 signatures=0
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 bulkscore=0 suspectscore=0 phishscore=0
+ adultscore=0 malwarescore=0 mlxscore=0 spamscore=0 mlxlogscore=999
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2206140000
+ definitions=main-2207070085
+X-Proofpoint-ORIG-GUID: 2TwUEiWO8E8fkgTJ-eV1KwmrtB6YzH9e
+X-Proofpoint-GUID: 2TwUEiWO8E8fkgTJ-eV1KwmrtB6YzH9e
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -139,155 +153,60 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-[Public]
-
-
-
-> -----Original Message-----
-> From: Tom Crossland <tomc@fortu.net>
-> Sent: Thursday, July 7, 2022 16:31
-> To: Sasha Levin <sashal@kernel.org>; linux-kernel@vger.kernel.org;
-> stable@vger.kernel.org
-> Cc: Rafael J. Wysocki <rafael.j.wysocki@intel.com>; Limonciello, Mario
-> <Mario.Limonciello@amd.com>; Huang, Ray <Ray.Huang@amd.com>; Mika
-> Westerberg <mika.westerberg@linux.intel.com>; rafael@kernel.org; linux-
-> acpi@vger.kernel.org
-> Subject: Re: [PATCH AUTOSEL 5.17 42/43] Revert "ACPI: Pass the same
-> capabilities to the _OSC regardless of the query flag"
->=20
-> Hi, I'm observing the issue described here which I think is due to a
-> recent regression:
->=20
-> https://nam11.safelinks.protection.outlook.com/?url=3Dhttps%3A%2F%2Fgithu=
-b.c
-> om%2Fintel%2Flinux-intel-
-> lts%2Fissues%2F22&amp;data=3D05%7C01%7CMario.Limonciello%40amd.com%7
-> C77419b612f9540e333ff08da606002ee%7C3dd8961fe4884e608e11a82d994e18
-> 3d%7C0%7C0%7C637928263354159054%7CUnknown%7CTWFpbGZsb3d8eyJWI
-> joiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C300
-> 0%7C%7C%7C&amp;sdata=3DX%2FEAU9GbRD%2FfYxCMUmnWI1cJ8dk8sICk0iYu
-> %2BKGqtl4%3D&amp;reserved=3D0
->=20
-> sudo dmesg -t -l err
->=20
-> ACPI BIOS Error (bug): Could not resolve symbol [\_PR.PR00._CPC],
-> AE_NOT_FOUND (20211217/psargs-330)
-> ACPI Error: Aborting method \_PR.PR01._CPC due to previous error
-> (AE_NOT_FOUND) (20211217/psparse-529)
-> ACPI BIOS Error (bug): Could not resolve symbol [\_PR.PR00._CPC],
-> AE_NOT_FOUND (20211217/psargs-330)
-> ACPI Error: Aborting method \_PR.PR02._CPC due to previous error
-> (AE_NOT_FOUND) (20211217/psparse-529)
-> ACPI BIOS Error (bug): Could not resolve symbol [\_PR.PR00._CPC],
-> AE_NOT_FOUND (20211217/psargs-330)
-> ACPI Error: Aborting method \_PR.PR03._CPC due to previous error
-> (AE_NOT_FOUND) (20211217/psparse-529)
->=20
-> System:
->  =A0 Kernel: 5.18.9-arch1-1 arch: x86_64 bits: 64 compiler: gcc v: 12.1.0
->  =A0=A0=A0 parameters: initrd=3D\intel-ucode.img initrd=3D\initramfs-linu=
-x.img
->  =A0=A0=A0 root=3Dxxx intel_iommu=3Don iommu=3Dpt
->  =A0Machine:
->  =A0 Type: Desktop Mobo: Intel model: NUC7i5BNB v: J31144-304 serial: <fi=
-lter>
->  =A0=A0=A0 UEFI: Intel v: BNKBL357.86A.0088.2022.0125.1102 date: 01/25/20=
-22
->=20
-> I hope this is the correct forum to report the issue. Apologies if not.
->=20
-
-This is the fix for it:
-
-https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git/commit/=
-?h=3Dlinux-next&id=3D7feec7430edddb87c24b0a86b08a03d0b496a755
-
-
-> On 28/03/2022 13.18, Sasha Levin wrote:
-> > From: "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>
+On 06/28/22 14:58, Mina Almasry wrote:
+> On Fri, Jun 24, 2022 at 10:37 AM James Houghton <jthoughton@google.com> wrote:
 > >
-> > [ Upstream commit 2ca8e6285250c07a2e5a22ecbfd59b5a4ef73484 ]
+> > This is a helper macro to loop through all the usable page sizes for a
+> > high-granularity-enabled HugeTLB VMA. Given the VMA's hstate, it will
+> > loop, in descending order, through the page sizes that HugeTLB supports
+> > for this architecture; it always includes PAGE_SIZE.
 > >
-> > Revert commit 159d8c274fd9 ("ACPI: Pass the same capabilities to the
-> > _OSC regardless of the query flag") which caused legitimate usage
-> > scenarios (when the platform firmware does not want the OS to control
-> > certain platform features controlled by the system bus scope _OSC) to
-> > break and was misguided by some misleading language in the _OSC
-> > definition in the ACPI specification (in particular, Section 6.2.11.1.3
-> > "Sequence of _OSC Calls" that contradicts other perts of the _OSC
-> > definition).
-> >
-> > Link:
-> https://nam11.safelinks.protection.outlook.com/?url=3Dhttps%3A%2F%2Flore.=
-ker
-> nel.org%2Flinux-
-> acpi%2FCAJZ5v0iStA0JmO0H3z%2BVgQsVuQONVjKPpw0F5HKfiq%3DGb6B5yw%
-> 40mail.gmail.com&amp;data=3D05%7C01%7CMario.Limonciello%40amd.com%7C
-> 77419b612f9540e333ff08da606002ee%7C3dd8961fe4884e608e11a82d994e183
-> d%7C0%7C0%7C637928263354159054%7CUnknown%7CTWFpbGZsb3d8eyJWIj
-> oiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C300
-> 0%7C%7C%7C&amp;sdata=3DTe3BK%2B0q2QmrqqoG5mbV%2FNguoMgiwzILNHl
-> %2BhUMLFlY%3D&amp;reserved=3D0
-> > Reported-by: Mario Limonciello <Mario.Limonciello@amd.com>
-> > Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> > Tested-by: Mario Limonciello <mario.limonciello@amd.com>
-> > Acked-by: Huang Rui <ray.huang@amd.com>
-> > Reviewed-by: Mika Westerberg <mika.westerberg@linux.intel.com>
-> > Signed-off-by: Sasha Levin <sashal@kernel.org>
+> > Signed-off-by: James Houghton <jthoughton@google.com>
 > > ---
-> >   drivers/acpi/bus.c | 27 +++++++++++++++++++--------
-> >   1 file changed, 19 insertions(+), 8 deletions(-)
+> >  mm/hugetlb.c | 10 ++++++++++
+> >  1 file changed, 10 insertions(+)
 > >
-> > diff --git a/drivers/acpi/bus.c b/drivers/acpi/bus.c
-> > index 07f604832fd6..079b952ab59f 100644
-> > --- a/drivers/acpi/bus.c
-> > +++ b/drivers/acpi/bus.c
-> > @@ -332,21 +332,32 @@ static void
-> acpi_bus_osc_negotiate_platform_control(void)
-> >   	if (ACPI_FAILURE(acpi_run_osc(handle, &context)))
-> >   		return;
+> > diff --git a/mm/hugetlb.c b/mm/hugetlb.c
+> > index 8b10b941458d..557b0afdb503 100644
+> > --- a/mm/hugetlb.c
+> > +++ b/mm/hugetlb.c
+> > @@ -6989,6 +6989,16 @@ bool hugetlb_hgm_enabled(struct vm_area_struct *vma)
+> >         /* All shared VMAs have HGM enabled. */
+> >         return vma->vm_flags & VM_SHARED;
+> >  }
+> > +static unsigned int __shift_for_hstate(struct hstate *h)
+> > +{
+> > +       if (h >= &hstates[hugetlb_max_hstate])
+> > +               return PAGE_SHIFT;
+> 
+> h > &hstates[hugetlb_max_hstate] means that h is out of bounds, no? am
+> I missing something here?
+> 
+> So is this intending to do:
+> 
+> if (h == hstates[hugetlb_max_hstate]
+>     return PAGE_SHIFT;
+> 
+> ? If so, could we write it as so?
+> 
+> I'm also wondering why __shift_for_hstate(hstate[hugetlb_max_hstate])
+> == PAGE_SHIFT? Isn't the last hstate the smallest hstate which should
+> be 2MB on x86? Shouldn't this return PMD_SHIFT in that case?
+> 
+
+I too am missing how this is working for similar reasons.
+-- 
+Mike Kravetz
+
+> > +       return huge_page_shift(h);
+> > +}
+> > +#define for_each_hgm_shift(hstate, tmp_h, shift) \
+> > +       for ((tmp_h) = hstate; (shift) = __shift_for_hstate(tmp_h), \
+> > +                              (tmp_h) <= &hstates[hugetlb_max_hstate]; \
+> > +                              (tmp_h)++)
+> >  #endif /* CONFIG_HUGETLB_HIGH_GRANULARITY_MAPPING */
 > >
-> > -	kfree(context.ret.pointer);
-> > +	capbuf_ret =3D context.ret.pointer;
-> > +	if (context.ret.length <=3D OSC_SUPPORT_DWORD) {
-> > +		kfree(context.ret.pointer);
-> > +		return;
-> > +	}
+> >  /*
+> > --
+> > 2.37.0.rc0.161.g10f37bed90-goog
 > >
-> > -	/* Now run _OSC again with query flag clear */
-> > +	/*
-> > +	 * Now run _OSC again with query flag clear and with the caps
-> > +	 * supported by both the OS and the platform.
-> > +	 */
-> >   	capbuf[OSC_QUERY_DWORD] =3D 0;
-> > +	capbuf[OSC_SUPPORT_DWORD] =3D
-> capbuf_ret[OSC_SUPPORT_DWORD];
-> > +	kfree(context.ret.pointer);
-> >
-> >   	if (ACPI_FAILURE(acpi_run_osc(handle, &context)))
-> >   		return;
-> >
-> >   	capbuf_ret =3D context.ret.pointer;
-> > -	osc_sb_apei_support_acked =3D
-> > -		capbuf_ret[OSC_SUPPORT_DWORD] &
-> OSC_SB_APEI_SUPPORT;
-> > -	osc_pc_lpi_support_confirmed =3D
-> > -		capbuf_ret[OSC_SUPPORT_DWORD] &
-> OSC_SB_PCLPI_SUPPORT;
-> > -	osc_sb_native_usb4_support_confirmed =3D
-> > -		capbuf_ret[OSC_SUPPORT_DWORD] &
-> OSC_SB_NATIVE_USB4_SUPPORT;
-> > +	if (context.ret.length > OSC_SUPPORT_DWORD) {
-> > +		osc_sb_apei_support_acked =3D
-> > +			capbuf_ret[OSC_SUPPORT_DWORD] &
-> OSC_SB_APEI_SUPPORT;
-> > +		osc_pc_lpi_support_confirmed =3D
-> > +			capbuf_ret[OSC_SUPPORT_DWORD] &
-> OSC_SB_PCLPI_SUPPORT;
-> > +		osc_sb_native_usb4_support_confirmed =3D
-> > +			capbuf_ret[OSC_SUPPORT_DWORD] &
-> OSC_SB_NATIVE_USB4_SUPPORT;
-> > +	}
-> >
-> >   	kfree(context.ret.pointer);
-> >   }

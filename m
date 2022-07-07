@@ -2,177 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7083056A02F
+	by mail.lfdr.de (Postfix) with ESMTP id 2787356A02E
 	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 12:42:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235361AbiGGKlp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Jul 2022 06:41:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35726 "EHLO
+        id S235273AbiGGKld (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Jul 2022 06:41:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35516 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234758AbiGGKll (ORCPT
+        with ESMTP id S234163AbiGGKlc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Jul 2022 06:41:41 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1266E4F66E
-        for <linux-kernel@vger.kernel.org>; Thu,  7 Jul 2022 03:41:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1657190500; x=1688726500;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=7N47+Gez7v6SrVexbxYjJ+GnWRyAfhpKnbjM6S+IDb4=;
-  b=FKfSmVNhtQE//9qOBnBlfnEEbpi2ijGwIPK0aiRD7i+zfaeau2Yw8hT3
-   VTX+hqlt7gUDCGEaZ+3q1oY0r7PpipoRMo8ISjolOuMcaFbGvZAW4Ikyn
-   J3ESRuF2kvAEsg3SgF+GpJ49kjJljKTPyHmp0J5tDlmqQeqW6hkqpSwDk
-   PwUKWp+B+j/4+8I4qFBUUR1Q9Jgao9GXuXpH+JIGEMYLb5WE9K6XEB/cb
-   pTzdxlaxur+vU5q93yQlO+Tt6jRfUnGMExnZUkYBbB5KRg5hR4Lbs+YfI
-   vDxnSRmqULlGpVpNQ/YFxZc9ObDKL3p0r5dTxvZvJzp8btt9atddjWMH9
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10400"; a="284734628"
-X-IronPort-AV: E=Sophos;i="5.92,252,1650956400"; 
-   d="scan'208";a="284734628"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jul 2022 03:41:39 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,252,1650956400"; 
-   d="scan'208";a="620739713"
-Received: from lkp-server01.sh.intel.com (HELO 68b931ab7ac1) ([10.239.97.150])
-  by orsmga008.jf.intel.com with ESMTP; 07 Jul 2022 03:41:38 -0700
-Received: from kbuild by 68b931ab7ac1 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1o9Owz-000LsN-V0;
-        Thu, 07 Jul 2022 10:41:37 +0000
-Date:   Thu, 07 Jul 2022 18:40:51 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "x86-ml" <x86@kernel.org>
-Cc:     linux-kernel@vger.kernel.org
-Subject: [tip:x86/build] BUILD SUCCESS
- b230402b0dbd6930a616a07641f0bbc30325881e
-Message-ID: <62c6b833.tNzxnSjPYMZqo8zr%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        Thu, 7 Jul 2022 06:41:32 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A20214F66E
+        for <linux-kernel@vger.kernel.org>; Thu,  7 Jul 2022 03:41:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1657190490;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=Pwcg7T0JuistTDUMjOvWrknPf1gKH9MIp+DFOaxmRLk=;
+        b=fuEJw9ZUNg++bNFtkFC9byvxVKJ6yTXhgMsCSuFedlwBv1V6aeUQR/QnZ5PuvCdl5abyeH
+        7iQ0iSIojp6Rxc0amaXsctVpDqGpiUFHxTvrJf0yzWyht9hCI+o9kOfbc5d16KpCFDOYzh
+        gHQRL7w73huf8Fw7s36uOTJNTBFjMCM=
+Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
+ [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-651-832HTB9TN7-LqQ0KG56UMQ-1; Thu, 07 Jul 2022 06:41:29 -0400
+X-MC-Unique: 832HTB9TN7-LqQ0KG56UMQ-1
+Received: by mail-wm1-f70.google.com with SMTP id j19-20020a05600c191300b003a048196712so9390909wmq.4
+        for <linux-kernel@vger.kernel.org>; Thu, 07 Jul 2022 03:41:29 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
+         :message-id:mime-version;
+        bh=Pwcg7T0JuistTDUMjOvWrknPf1gKH9MIp+DFOaxmRLk=;
+        b=wc5sb7NxF/Y3r63XIOfz4micGTVOZF/jH7PiBUNoaeZN7F1O0Ho+b49P1ZHCSePtMJ
+         2xIQ1l08ii4QThTz+gZgExEanXCXyrHI8XaPiRafYPSv5qNqxDIuJ2kRemWXXf2NhLmj
+         VblHVyoJJ+xSYKXkmxgB0kDkSE8o2ls9LhPRCWpExAoRgUrLDBNp5pAdY5j0/MgJ6bEL
+         Alt2RvWauhJU9TQizO8NSodqC7rDgB2mUe6E1lq+jaMYaL2cGm2zSeoQwFutvU5JfTux
+         Yxmd/qtlbis5WpmNuoAUQ0RzEHimRlz96SEMiCDimgkgJYtHAuC/EY2U3h0lKeKDheTk
+         6meg==
+X-Gm-Message-State: AJIora/qpkd3b3gJEcsOXcupIcEYnuZYupjK/TzwRAp0TvoninhSzif1
+        BGUtdD9c1cXJipTwLFHk83Z2WJmgNVrAd6Am6EU4UYSYo1tOxnMxqMubKN63aR6LC35ggqqck2w
+        +ZA8Bs62WRTR+DXfR13IeilZDwDGpSXBP8myNBnJysR6O5g4fPUgpI5Flz3tzhYG7SaSNu+nwX+
+        RJ
+X-Received: by 2002:a05:6000:1449:b0:21b:b171:5eb8 with SMTP id v9-20020a056000144900b0021bb1715eb8mr42593899wrx.634.1657190488473;
+        Thu, 07 Jul 2022 03:41:28 -0700 (PDT)
+X-Google-Smtp-Source: AGRyM1umfdWDsVBEWSxSBLaDDZ9YXVnNYpWt9Xos/OmPvPmnoyKP3JJo7OU6aWB2hLTWYc0keDEnWg==
+X-Received: by 2002:a05:6000:1449:b0:21b:b171:5eb8 with SMTP id v9-20020a056000144900b0021bb1715eb8mr42593876wrx.634.1657190488245;
+        Thu, 07 Jul 2022 03:41:28 -0700 (PDT)
+Received: from fedora (nat-2.ign.cz. [91.219.240.2])
+        by smtp.gmail.com with ESMTPSA id n35-20020a05600c3ba300b003a039054567sm28432130wms.18.2022.07.07.03.41.27
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 07 Jul 2022 03:41:27 -0700 (PDT)
+From:   Vitaly Kuznetsov <vkuznets@redhat.com>
+To:     Jim Mattson <jmattson@google.com>
+Cc:     kvm@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Anirudh Rayabharam <anrayabh@linux.microsoft.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Maxim Levitsky <mlevitsk@redhat.com>,
+        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 20/28] KVM: VMX: Add missing VMENTRY controls to
+ vmcs_config
+In-Reply-To: <CALMp9eTVAOCvWQ-3A6VmwhJk6skES9phMPC3O-za7Rk05SfVTg@mail.gmail.com>
+References: <20220629150625.238286-1-vkuznets@redhat.com>
+ <20220629150625.238286-21-vkuznets@redhat.com>
+ <CALMp9eTVAOCvWQ-3A6VmwhJk6skES9phMPC3O-za7Rk05SfVTg@mail.gmail.com>
+Date:   Thu, 07 Jul 2022 12:41:26 +0200
+Message-ID: <87fsjdqk6h.fsf@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git x86/build
-branch HEAD: b230402b0dbd6930a616a07641f0bbc30325881e  x86/Kconfig: Fix CONFIG_CC_HAS_SANE_STACKPROTECTOR when cross compiling with clang
+Jim Mattson <jmattson@google.com> writes:
 
-elapsed time: 723m
+> On Wed, Jun 29, 2022 at 8:07 AM Vitaly Kuznetsov <vkuznets@redhat.com> wrote:
+>>
+>> As a preparation to reusing the result of setup_vmcs_config() in
+>> nested VMX MSR setup, add the VMENTRY controls which KVM doesn't
+>> use but supports for nVMX to KVM_OPT_VMX_VM_ENTRY_CONTROLS and
+>> filter them out in vmx_vmentry_ctrl().
+>>
+>> No functional change intended.
+>>
+>> Signed-off-by: Vitaly Kuznetsov <vkuznets@redhat.com>
+>> ---
+>>  arch/x86/kvm/vmx/vmx.c | 3 +++
+>>  arch/x86/kvm/vmx/vmx.h | 4 +++-
+>>  2 files changed, 6 insertions(+), 1 deletion(-)
+>>
+>> diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
+>> index e5ab77ed37e4..b774b6391e0e 100644
+>> --- a/arch/x86/kvm/vmx/vmx.c
+>> +++ b/arch/x86/kvm/vmx/vmx.c
+>> @@ -4179,6 +4179,9 @@ static u32 vmx_vmentry_ctrl(void)
+>>  {
+>>         u32 vmentry_ctrl = vmcs_config.vmentry_ctrl;
+>>
+>> +       /* Not used by KVM but supported for nesting. */
+>> +       vmentry_ctrl &= ~(VM_ENTRY_SMM | VM_ENTRY_DEACT_DUAL_MONITOR);
+>> +
+>
+> LOL! KVM does not emulate the dual-monitor treatment of SMIs and SMM.
+> Do we actually claim to support these VM-entry controls today?!?
+>
 
-configs tested: 95
-configs skipped: 91
+No, just a brainfart on my side, nested_vmx_setup_ctls_msrs() filters
+them out too. I'll drop the patch.
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
-
-gcc tested configs:
-arm64                            allyesconfig
-arm                                 defconfig
-arm                              allyesconfig
-i386                          randconfig-c001
-m68k                        mvme147_defconfig
-m68k                             alldefconfig
-xtensa                       common_defconfig
-powerpc                         wii_defconfig
-m68k                       m5249evb_defconfig
-sh                        apsh4ad0a_defconfig
-arm                          lpd270_defconfig
-arm                           viper_defconfig
-arc                     nsimosci_hs_defconfig
-sh                                  defconfig
-sh                          rsk7269_defconfig
-alpha                            alldefconfig
-openrisc                            defconfig
-arm                          badge4_defconfig
-m68k                         amcore_defconfig
-sh                           se7721_defconfig
-powerpc                  storcenter_defconfig
-xtensa                  audio_kc705_defconfig
-sh                            titan_defconfig
-mips                  decstation_64_defconfig
-powerpc                     mpc83xx_defconfig
-sh                          sdk7786_defconfig
-arm                       aspeed_g5_defconfig
-m68k                        m5307c3_defconfig
-mips                 decstation_r4k_defconfig
-sh                           se7712_defconfig
-sh                        edosk7705_defconfig
-arm                        mini2440_defconfig
-arm                             rpc_defconfig
-sh                           se7705_defconfig
-sh                           sh2007_defconfig
-sh                         ecovec24_defconfig
-riscv                    nommu_virt_defconfig
-riscv                          rv32_defconfig
-riscv                    nommu_k210_defconfig
-riscv                             allnoconfig
-i386                   debian-10.3-kselftests
-i386                              debian-10.3
-m68k                             allyesconfig
-m68k                             allmodconfig
-arc                              allyesconfig
-alpha                            allyesconfig
-powerpc                           allnoconfig
-mips                             allyesconfig
-powerpc                          allmodconfig
-sh                               allmodconfig
-i386                             allyesconfig
-i386                                defconfig
-x86_64                        randconfig-a004
-x86_64                        randconfig-a002
-x86_64                        randconfig-a006
-i386                          randconfig-a001
-i386                          randconfig-a003
-i386                          randconfig-a005
-x86_64                        randconfig-a011
-x86_64                        randconfig-a013
-x86_64                        randconfig-a015
-i386                          randconfig-a012
-i386                          randconfig-a014
-i386                          randconfig-a016
-riscv                randconfig-r042-20220707
-arc                  randconfig-r043-20220707
-s390                 randconfig-r044-20220707
-x86_64                    rhel-8.3-kselftests
-x86_64                              defconfig
-x86_64                           allyesconfig
-x86_64                               rhel-8.3
-x86_64                          rhel-8.3-func
-x86_64                         rhel-8.3-kunit
-x86_64                           rhel-8.3-syz
-
-clang tested configs:
-arm                      pxa255-idp_defconfig
-powerpc                     tqm8540_defconfig
-arm                      tct_hammer_defconfig
-mips                        qi_lb60_defconfig
-x86_64                        randconfig-k001
-x86_64                        randconfig-a001
-x86_64                        randconfig-a003
-x86_64                        randconfig-a005
-i386                          randconfig-a002
-i386                          randconfig-a006
-i386                          randconfig-a004
-x86_64                        randconfig-a012
-x86_64                        randconfig-a014
-x86_64                        randconfig-a016
-i386                          randconfig-a011
-i386                          randconfig-a013
-i386                          randconfig-a015
-riscv                randconfig-r042-20220706
-hexagon              randconfig-r045-20220706
-hexagon              randconfig-r041-20220706
-s390                 randconfig-r044-20220706
+>>         if (vmx_pt_mode_is_system())
+>>                 vmentry_ctrl &= ~(VM_ENTRY_PT_CONCEAL_PIP |
+>>                                   VM_ENTRY_LOAD_IA32_RTIT_CTL);
+>> diff --git a/arch/x86/kvm/vmx/vmx.h b/arch/x86/kvm/vmx/vmx.h
+>> index d4503a38735b..7ada8410a037 100644
+>> --- a/arch/x86/kvm/vmx/vmx.h
+>> +++ b/arch/x86/kvm/vmx/vmx.h
+>> @@ -479,7 +479,9 @@ static inline u8 vmx_get_rvi(void)
+>>                 __KVM_REQ_VMX_VM_ENTRY_CONTROLS
+>>  #endif
+>>  #define KVM_OPT_VMX_VM_ENTRY_CONTROLS                          \
+>> -       (VM_ENTRY_LOAD_IA32_PERF_GLOBAL_CTRL |                  \
+>> +       (VM_ENTRY_SMM |                                         \
+>> +       VM_ENTRY_DEACT_DUAL_MONITOR |                           \
+>> +       VM_ENTRY_LOAD_IA32_PERF_GLOBAL_CTRL |                   \
+>>         VM_ENTRY_LOAD_IA32_PAT |                                \
+>>         VM_ENTRY_LOAD_IA32_EFER |                               \
+>>         VM_ENTRY_LOAD_BNDCFGS |                                 \
+>> --
+>> 2.35.3
+>>
+>
 
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Vitaly
+

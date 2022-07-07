@@ -2,66 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D3FB569D84
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 10:36:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2FC77569D8F
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 10:38:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232927AbiGGIgj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Jul 2022 04:36:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52304 "EHLO
+        id S235235AbiGGIiQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Jul 2022 04:38:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53060 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230005AbiGGIgi (ORCPT
+        with ESMTP id S234888AbiGGIh6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Jul 2022 04:36:38 -0400
-Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 682D6326D5;
-        Thu,  7 Jul 2022 01:36:37 -0700 (PDT)
-Received: by mail-pf1-x42a.google.com with SMTP id n12so18048894pfq.0;
-        Thu, 07 Jul 2022 01:36:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=bbHqYuBn99/DfkRvYwDANfs5Ue+qL8CDS8Gq1N/QC3c=;
-        b=leOp8aP0C+gnUlK1n50j+dt/zeX94akVOP7HCvSF7uKiLRlBDKC8JD44AhMsxPkOag
-         7mhMjYytI56DhkOlGXsCGPzPuMHP47+mSNCCRT9iG092+bi2RXYSG+8H8XcseOI7764V
-         M8PfOG7qMjX8I9jlOwShgIpkeY/xKNzN7OEymVF02nCU81dduZW8p8fYAjcaeN2NEDUg
-         yBIc7Ah+XhQ2g4trwoiwk2aUdBYceTnW4WXLYRDk4hKfRKzhOYPCVVhnlE1oGkbdWpGO
-         GJT/zb+i3dMRr/0HjEnoJFTvT0skB9ckysIGehN4SZya5dZ2ANYB+lkaZj1nBHsAehP2
-         Jw5A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=bbHqYuBn99/DfkRvYwDANfs5Ue+qL8CDS8Gq1N/QC3c=;
-        b=TaKAqDWRlm6dBXAK0fw/uU3v8L1D8dOib2SX6lsd3mp5vMpf/htSSCF7vY/yyAYch/
-         TBYMtYa9BOxLYpdmLuIiw3J9U69mbesppdSl/gG3+MqPtrn2xBBvUYAfLEucqt5T0w40
-         UG77kH8f9MNWHPzK9IKHnRFjqu/dnW2QhACBV9kZjXq355j/mYDUTkaEZmryLAVoTpSV
-         tPXeKorcLzM3G70h43eq25QN/Y1sIP9pRKezy6T5/XAIm57QaZ/azlIZqsZ4+HfH9Mij
-         CkrpeZ5K6eiPH1PF6ndA/9lPrdwHDdf1jsieQhFdPKw0zLukxTklWGZzRgJzUkbxYCkO
-         aTRA==
-X-Gm-Message-State: AJIora+JrMLslzjaCW81VegBflv80GBaJW7ECz9bvqx2dsj2j5Xj9EvG
-        s3aEK0I0BUYjCjhzlSzCTTHOfUFqO9mDfqhMmZk=
-X-Google-Smtp-Source: AGRyM1tzr0TRNmLKst9jt5mDGNc1x7oAlPI16O1qUxNPaloXnP2iRsJ/o8KTnvlOzFFCcsmtajTjvbdhutypTbYn2N4=
-X-Received: by 2002:a17:902:7807:b0:16b:e3d5:b2ce with SMTP id
- p7-20020a170902780700b0016be3d5b2cemr20794908pll.18.1657182996863; Thu, 07
- Jul 2022 01:36:36 -0700 (PDT)
+        Thu, 7 Jul 2022 04:37:58 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB57B4F188
+        for <linux-kernel@vger.kernel.org>; Thu,  7 Jul 2022 01:37:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1657183076; x=1688719076;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=lE+7lVnYaOfF8hmxGHZOQGam9sWX96ea4lWMzMEYDmc=;
+  b=lsQAs/ErGgRU2I5NFzac9cAhp3Hs9M/KFcP2qITYF0yvjrRGQFwlJ1iS
+   Mm/1wbSXlLC+XoAeBjjzBKGpbNc0zx3ZgaM/zvXfKt7jetwBTLFTE0OFo
+   H1PMmYIxE2Qo2VxEb/zZhTwtQIc+twW8DUhnKiLlMMydN1Evc7eTdxgF7
+   2LMPKzbPU2yC8O5yJlVVX6vVUeI7RgbyTZnmQdmUd7DU6qRKSve+4sXod
+   BvJs90vdprIKyydoRox0MZSfw1tgczVHM5ZPESpFRdjjldPW+8D7zWlsU
+   CQ4mrI+ujjsnvlg/BKOegPShO0k8xX2rMbUCxamNawrHnqnIII7/fHLhS
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10400"; a="272761958"
+X-IronPort-AV: E=Sophos;i="5.92,252,1650956400"; 
+   d="scan'208";a="272761958"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jul 2022 01:37:34 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.92,252,1650956400"; 
+   d="scan'208";a="920509223"
+Received: from lkp-server01.sh.intel.com (HELO 68b931ab7ac1) ([10.239.97.150])
+  by fmsmga005.fm.intel.com with ESMTP; 07 Jul 2022 01:37:33 -0700
+Received: from kbuild by 68b931ab7ac1 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1o9N0u-000LlG-DC;
+        Thu, 07 Jul 2022 08:37:32 +0000
+Date:   Thu, 7 Jul 2022 16:37:15 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Jiri Olsa <jolsa@kernel.org>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org
+Subject: [jolsa-perf:bpf/tramp_22 7/21] kernel/trace/ftrace_test.c:7:6:
+ warning: no previous prototype for function 'ftrace_test_0'
+Message-ID: <202207071637.MKFUUllN-lkp@intel.com>
 MIME-Version: 1.0
-References: <20220623103543.4138-1-yongsuyoo0215@gmail.com>
- <CANXPkT49g7_YaL3rABY5Uhohz=EPgPqOL2tb6K4SHsWmshtysw@mail.gmail.com> <a3d44193-68f1-81a6-6baa-19e8403c5cd6@selasky.org>
-In-Reply-To: <a3d44193-68f1-81a6-6baa-19e8403c5cd6@selasky.org>
-From:   =?UTF-8?B?7Jyg7Jqp7IiY?= <yongsuyoo0215@gmail.com>
-Date:   Thu, 7 Jul 2022 17:36:27 +0900
-Message-ID: <CANXPkT6cffk3uQm6fRiPpe2rvHzzvDKgwhYnQh+TVcBo_Dw=uQ@mail.gmail.com>
-Subject: Re: [PATCH] media: dvb_ringbuffer : Fix a bug in dvb_ringbuffer.c
-To:     Hans Petter Selasky <hps@selasky.org>, linux-media@vger.kernel.org,
-        linux-kernel@vger.kernel.org, mchehab@kernel.org,
-        Kieran Bingham <kieran.bingham@ideasonboard.com>
-Cc:     =?UTF-8?B?7Jyg7Jqp7IiY?= <yongsuyoo0215@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,32 +62,144 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Dear Hans Petter Selasky
-Thank you for your response and good advice and informations
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/jolsa/perf.git bpf/tramp_22
+head:   1d891c46bb689a24985cea58f4eddb053d6b1331
+commit: d2304746483fe3d68537522df1f8e63993bdd732 [7/21] ftrace: Add test functions
+config: hexagon-randconfig-r016-20220707 (https://download.01.org/0day-ci/archive/20220707/202207071637.MKFUUllN-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 66ae1d60bb278793fd651cece264699d522bab84)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/jolsa/perf.git/commit/?id=d2304746483fe3d68537522df1f8e63993bdd732
+        git remote add jolsa-perf https://git.kernel.org/pub/scm/linux/kernel/git/jolsa/perf.git
+        git fetch --no-tags jolsa-perf bpf/tramp_22
+        git checkout d2304746483fe3d68537522df1f8e63993bdd732
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash kernel/trace/
 
-Dear All
-How is this patch going ?
-Is there anyone who can share the current status ?
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-2022=EB=85=84 6=EC=9B=94 30=EC=9D=BC (=EB=AA=A9) =EC=98=A4=ED=9B=84 10:42, =
-Hans Petter Selasky <hps@selasky.org>=EB=8B=98=EC=9D=B4 =EC=9E=91=EC=84=B1:
->
-> On 6/26/22 23:11, =EC=9C=A0=EC=9A=A9=EC=88=98 wrote:
-> > Hi ~
-> >
-> > How is this patch going ?
-> > Can you share current status ?
-> >
-> > Thank you
-> >
->
-> Hi Yongsu,
->
-> Linux guys can sometimes take a long time to include patches speaking
-> weeks and months. For now I've added your patch to multimedia/webcamd
-> (v5.17.1.1) which runs under FreeBSD 13.1 (not Linux).
->
-> https://github.com/hselasky/webcamd/commit/0e4d4959a2aea2e6a88d316eb94359=
-2fe0b23d09
->
-> --HPS
+All warnings (new ones prefixed by >>):
+
+>> kernel/trace/ftrace_test.c:7:6: warning: no previous prototype for function 'ftrace_test_0' [-Wmissing-prototypes]
+   FUNC(ftrace_test_0)
+        ^
+   kernel/trace/ftrace_test.c:7:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   FUNC(ftrace_test_0)
+   ^
+   static 
+   kernel/trace/ftrace_test.c:3:23: note: expanded from macro 'FUNC'
+   #define FUNC(__name)            \
+                                   ^
+>> kernel/trace/ftrace_test.c:8:6: warning: no previous prototype for function 'ftrace_test_1' [-Wmissing-prototypes]
+   FUNC(ftrace_test_1)
+        ^
+   kernel/trace/ftrace_test.c:8:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   FUNC(ftrace_test_1)
+   ^
+   static 
+   kernel/trace/ftrace_test.c:3:23: note: expanded from macro 'FUNC'
+   #define FUNC(__name)            \
+                                   ^
+>> kernel/trace/ftrace_test.c:9:6: warning: no previous prototype for function 'ftrace_test_2' [-Wmissing-prototypes]
+   FUNC(ftrace_test_2)
+        ^
+   kernel/trace/ftrace_test.c:9:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   FUNC(ftrace_test_2)
+   ^
+   static 
+   kernel/trace/ftrace_test.c:3:23: note: expanded from macro 'FUNC'
+   #define FUNC(__name)            \
+                                   ^
+>> kernel/trace/ftrace_test.c:10:6: warning: no previous prototype for function 'ftrace_test_3' [-Wmissing-prototypes]
+   FUNC(ftrace_test_3)
+        ^
+   kernel/trace/ftrace_test.c:10:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   FUNC(ftrace_test_3)
+   ^
+   static 
+   kernel/trace/ftrace_test.c:3:23: note: expanded from macro 'FUNC'
+   #define FUNC(__name)            \
+                                   ^
+>> kernel/trace/ftrace_test.c:11:6: warning: no previous prototype for function 'ftrace_test_4' [-Wmissing-prototypes]
+   FUNC(ftrace_test_4)
+        ^
+   kernel/trace/ftrace_test.c:11:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   FUNC(ftrace_test_4)
+   ^
+   static 
+   kernel/trace/ftrace_test.c:3:23: note: expanded from macro 'FUNC'
+   #define FUNC(__name)            \
+                                   ^
+>> kernel/trace/ftrace_test.c:12:6: warning: no previous prototype for function 'ftrace_test_5' [-Wmissing-prototypes]
+   FUNC(ftrace_test_5)
+        ^
+   kernel/trace/ftrace_test.c:12:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   FUNC(ftrace_test_5)
+   ^
+   static 
+   kernel/trace/ftrace_test.c:3:23: note: expanded from macro 'FUNC'
+   #define FUNC(__name)            \
+                                   ^
+>> kernel/trace/ftrace_test.c:13:6: warning: no previous prototype for function 'ftrace_test_6' [-Wmissing-prototypes]
+   FUNC(ftrace_test_6)
+        ^
+   kernel/trace/ftrace_test.c:13:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   FUNC(ftrace_test_6)
+   ^
+   static 
+   kernel/trace/ftrace_test.c:3:23: note: expanded from macro 'FUNC'
+   #define FUNC(__name)            \
+                                   ^
+>> kernel/trace/ftrace_test.c:14:6: warning: no previous prototype for function 'ftrace_test_7' [-Wmissing-prototypes]
+   FUNC(ftrace_test_7)
+        ^
+   kernel/trace/ftrace_test.c:14:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   FUNC(ftrace_test_7)
+   ^
+   static 
+   kernel/trace/ftrace_test.c:3:23: note: expanded from macro 'FUNC'
+   #define FUNC(__name)            \
+                                   ^
+>> kernel/trace/ftrace_test.c:15:6: warning: no previous prototype for function 'ftrace_test_8' [-Wmissing-prototypes]
+   FUNC(ftrace_test_8)
+        ^
+   kernel/trace/ftrace_test.c:15:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   FUNC(ftrace_test_8)
+   ^
+   static 
+   kernel/trace/ftrace_test.c:3:23: note: expanded from macro 'FUNC'
+   #define FUNC(__name)            \
+                                   ^
+>> kernel/trace/ftrace_test.c:16:6: warning: no previous prototype for function 'ftrace_test_9' [-Wmissing-prototypes]
+   FUNC(ftrace_test_9)
+        ^
+   kernel/trace/ftrace_test.c:16:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   FUNC(ftrace_test_9)
+   ^
+   static 
+   kernel/trace/ftrace_test.c:3:23: note: expanded from macro 'FUNC'
+   #define FUNC(__name)            \
+                                   ^
+   10 warnings generated.
+
+
+vim +/ftrace_test_0 +7 kernel/trace/ftrace_test.c
+
+     6	
+   > 7	FUNC(ftrace_test_0)
+   > 8	FUNC(ftrace_test_1)
+   > 9	FUNC(ftrace_test_2)
+  > 10	FUNC(ftrace_test_3)
+  > 11	FUNC(ftrace_test_4)
+  > 12	FUNC(ftrace_test_5)
+  > 13	FUNC(ftrace_test_6)
+  > 14	FUNC(ftrace_test_7)
+  > 15	FUNC(ftrace_test_8)
+  > 16	FUNC(ftrace_test_9)
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

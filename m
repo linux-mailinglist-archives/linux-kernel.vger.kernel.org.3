@@ -2,58 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 57A1756A583
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 16:34:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 75ACB56A588
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 16:35:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235797AbiGGOeI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Jul 2022 10:34:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55222 "EHLO
+        id S235568AbiGGOe5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Jul 2022 10:34:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56462 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235397AbiGGOeH (ORCPT
+        with ESMTP id S235851AbiGGOet (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Jul 2022 10:34:07 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECADC2A732;
-        Thu,  7 Jul 2022 07:34:05 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 7B8DFB82139;
-        Thu,  7 Jul 2022 14:34:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 43847C3411E;
-        Thu,  7 Jul 2022 14:34:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1657204443;
-        bh=WcCj/mS9RTdQYqbcOaXGcW3pRviUrRb0UE/IJVCNlrM=;
-        h=Date:Subject:To:References:From:In-Reply-To:From;
-        b=ZJiIMtYC6iHeh1na94SLj/3K4bAW+2UN9B/KupY2HkbzVEhgNzS/myZeuowFtDTYq
-         jsIXZCvmDoz/f4jlcQMX3AFIugTgtdtDjw86wtrHbF4XnRgRvPurourTK+nlX1OBFI
-         93iM828Us08nWTE3gjA8/VOMeB4n2J+lWGrj9ljrs5qOy2xJhkb8IL8YwQZWYR+gXr
-         ifeJF4Rp46H7/yqH2EJ2bUz4kRXHNWd0nZlyJCR4Ea+woPSNOOVRqfBqws/LjK0SmY
-         9K0+6pvDhOcRY5w637R/NR9oE1s6OYbTAJhLg8CGtqW02Vit3uBaX8d4K8oPAlZFyH
-         sjCSJycqYNEDw==
-Message-ID: <28bf991f-7b4c-0af1-2780-842500b01a0f@kernel.org>
-Date:   Thu, 7 Jul 2022 17:33:58 +0300
+        Thu, 7 Jul 2022 10:34:49 -0400
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 441C33192C;
+        Thu,  7 Jul 2022 07:34:44 -0700 (PDT)
+Received: from pps.filterd (m0127361.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 267EMp7g024940;
+        Thu, 7 Jul 2022 14:34:15 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=b6yhrdKbF0YKjPkBVtBY5kmJWk0TjiHRvpteUX/lDog=;
+ b=PMzU2fckBEfHHfCp0zJoALW5rLTJLtUoHvudatexeBUR0P9yE9QE42BMukF/dVDUtiRl
+ higkx8TGCSr03l43wNV3vDfJlWEDXOHoEMDhWF7+Rp94S6/Kr6dwNmkIXOi8lwpcGRz+
+ vAC985JBR8Gdw/m9MqanjY0vh3FjMnlK5vu0KbVGAXnO7br7zm7ADcYUovIwvzjwXdIM
+ ol30UoafrC/+fJcQA8+yGWiK/Y5JS3Zi2qUpIW0ge7jTT8x5HgyjXNMBJ+QIA9T/PVYB
+ 0gk0AvMn4SAcmCy3uKIPvGXa/mRkTgskFe1t8iBL26lxNVRuKO+Ityx7KuIyqK7hlfdq uQ== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3h60qp1m90-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 07 Jul 2022 14:34:14 +0000
+Received: from m0127361.ppops.net (m0127361.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 267EMwGr025696;
+        Thu, 7 Jul 2022 14:34:13 GMT
+Received: from ppma04dal.us.ibm.com (7a.29.35a9.ip4.static.sl-reverse.com [169.53.41.122])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3h60qp1m8b-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 07 Jul 2022 14:34:13 +0000
+Received: from pps.filterd (ppma04dal.us.ibm.com [127.0.0.1])
+        by ppma04dal.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 267EOeXb023503;
+        Thu, 7 Jul 2022 14:34:12 GMT
+Received: from b03cxnp07027.gho.boulder.ibm.com (b03cxnp07027.gho.boulder.ibm.com [9.17.130.14])
+        by ppma04dal.us.ibm.com with ESMTP id 3h4uqy6peg-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 07 Jul 2022 14:34:12 +0000
+Received: from b03ledav005.gho.boulder.ibm.com (b03ledav005.gho.boulder.ibm.com [9.17.130.236])
+        by b03cxnp07027.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 267EYBXb34668804
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 7 Jul 2022 14:34:11 GMT
+Received: from b03ledav005.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 55A66BE05D;
+        Thu,  7 Jul 2022 14:34:11 +0000 (GMT)
+Received: from b03ledav005.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id E392CBE051;
+        Thu,  7 Jul 2022 14:34:09 +0000 (GMT)
+Received: from [9.47.158.152] (unknown [9.47.158.152])
+        by b03ledav005.gho.boulder.ibm.com (Postfix) with ESMTP;
+        Thu,  7 Jul 2022 14:34:09 +0000 (GMT)
+Message-ID: <3e4cd438-4596-1c0c-ac7e-9599d2325683@linux.ibm.com>
+Date:   Thu, 7 Jul 2022 10:34:09 -0400
 MIME-Version: 1.0
-Subject: Re: [PATCH v4 5/5] interconnect: qcom: icc-rpm: Set bandwidth and
- clock for bucket values
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+Subject: Re: [PATCH v12 02/26] securityfs: Extend securityfs with namespacing
+ support
 Content-Language: en-US
-To:     Leo Yan <leo.yan@linaro.org>, Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220705072336.742703-1-leo.yan@linaro.org>
- <20220705072336.742703-6-leo.yan@linaro.org>
-From:   Georgi Djakov <djakov@kernel.org>
-In-Reply-To: <20220705072336.742703-6-leo.yan@linaro.org>
+To:     "Serge E. Hallyn" <serge@hallyn.com>
+Cc:     linux-integrity@vger.kernel.org, zohar@linux.ibm.com,
+        christian.brauner@ubuntu.com, containers@lists.linux.dev,
+        dmitry.kasatkin@gmail.com, ebiederm@xmission.com,
+        krzysztof.struczynski@huawei.com, roberto.sassu@huawei.com,
+        mpeters@redhat.com, lhinds@redhat.com, lsturman@redhat.com,
+        puiterwi@redhat.com, jejb@linux.ibm.com, jamjoom@us.ibm.com,
+        linux-kernel@vger.kernel.org, paul@paul-moore.com, rgb@redhat.com,
+        linux-security-module@vger.kernel.org, jmorris@namei.org,
+        jpenumak@redhat.com, Christian Brauner <brauner@kernel.org>,
+        James Bottomley <James.Bottomley@HansenPartnership.com>
+References: <20220420140633.753772-1-stefanb@linux.ibm.com>
+ <20220420140633.753772-3-stefanb@linux.ibm.com>
+ <20220521022302.GA8575@mail.hallyn.com>
+From:   Stefan Berger <stefanb@linux.ibm.com>
+In-Reply-To: <20220521022302.GA8575@mail.hallyn.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: aRgPd1njpyoQFbwztZCX7-KjHUBD09kX
+X-Proofpoint-GUID: F_TjmUJIHRxjc33CqbbpfNQrapvur6FU
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
+ definitions=2022-07-07_11,2022-06-28_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 adultscore=0
+ mlxlogscore=999 clxscore=1011 lowpriorityscore=0 suspectscore=0 mlxscore=0
+ impostorscore=0 priorityscore=1501 malwarescore=0 bulkscore=0 phishscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2206140000
+ definitions=main-2207070055
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -61,140 +106,78 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
-On 5.07.22 10:23, Leo Yan wrote:
-> This commit uses buckets for support bandwidth and clock rates.  It
-> introduces a new function qcom_icc_bus_aggregate() to calculate the
-> aggregate average and peak bandwidths for every bucket, and also it
-> calculates the maximum aggregate values across all buckets.
-> 
-> The maximum aggregate values are used to calculate the final bandwidth
-> requests.  And we can set the clock rate per bucket, we use SLEEP bucket
-> as default bucket if a platform doesn't enable the interconnect path
-> tags in DT binding; otherwise, we use WAKE bucket to set active clock
-> and use SLEEP bucket for other clocks.  So far we don't use AMC bucket.
-> 
-> Signed-off-by: Leo Yan <leo.yan@linaro.org>
-> ---
->   drivers/interconnect/qcom/icc-rpm.c | 80 ++++++++++++++++++++++++-----
->   1 file changed, 67 insertions(+), 13 deletions(-)
-> 
-> diff --git a/drivers/interconnect/qcom/icc-rpm.c b/drivers/interconnect/qcom/icc-rpm.c
-> index b025fc6b97c9..4b932eb807c7 100644
-> --- a/drivers/interconnect/qcom/icc-rpm.c
-> +++ b/drivers/interconnect/qcom/icc-rpm.c
-> @@ -302,18 +302,62 @@ static int qcom_icc_bw_aggregate(struct icc_node *node, u32 tag, u32 avg_bw,
->   	return 0;
->   }
->   
-> +/**
-> + * qcom_icc_bus_aggregate - aggregate bandwidth by traversing all nodes
-> + * @provider: generic interconnect provider
-> + * @agg_avg: an array for aggregated average bandwidth of buckets
-> + * @agg_peak: an array for aggregated peak bandwidth of buckets
-> + * @max_agg_avg: pointer to max value of aggregated average bandwidth
-> + * @max_agg_peak: pointer to max value of aggregated peak bandwidth
-> + */
-> +static void qcom_icc_bus_aggregate(struct icc_provider *provider,
-> +				   u64 *agg_avg, u64 *agg_peak,
-> +				   u64 *max_agg_avg, u64 *max_agg_peak)
-> +{
-> +	struct icc_node *node;
-> +	struct qcom_icc_node *qn;
-> +	int i;
-> +
-> +	/* Initialise aggregate values */
-> +	for (i = 0; i < QCOM_ICC_NUM_BUCKETS; i++) {
-> +		agg_avg[i] = 0;
-> +		agg_peak[i] = 0;
-> +	}
-> +
-> +	*max_agg_avg = 0;
-> +	*max_agg_peak = 0;
-> +
-> +	/*
-> +	 * Iterate nodes on the interconnect and aggregate bandwidth
-> +	 * requests for every bucket.
-> +	 */
-> +	list_for_each_entry(node, &provider->nodes, node_list) {
-> +		qn = node->data;
-> +		for (i = 0; i < QCOM_ICC_NUM_BUCKETS; i++) {
-> +			agg_avg[i] += qn->sum_avg[i];
-> +			agg_peak[i] = max_t(u64, agg_peak[i], qn->max_peak[i]);
-> +		}
-> +	}
-> +
-> +	/* Find maximum values across all buckets */
-> +	for (i = 0; i < QCOM_ICC_NUM_BUCKETS; i++) {
-> +		*max_agg_avg = max_t(u64, *max_agg_avg, agg_avg[i]);
-> +		*max_agg_peak = max_t(u64, *max_agg_peak, agg_peak[i]);
-> +	}
-> +}
-> +
->   static int qcom_icc_set(struct icc_node *src, struct icc_node *dst)
->   {
->   	struct qcom_icc_provider *qp;
->   	struct qcom_icc_node *src_qn = NULL, *dst_qn = NULL;
->   	struct icc_provider *provider;
-> -	struct icc_node *n;
->   	u64 sum_bw;
->   	u64 max_peak_bw;
->   	u64 rate;
-> -	u32 agg_avg = 0;
-> -	u32 agg_peak = 0;
-> +	u64 agg_avg[QCOM_ICC_NUM_BUCKETS], agg_peak[QCOM_ICC_NUM_BUCKETS];
-> +	u64 max_agg_avg, max_agg_peak;
->   	int ret, i;
-> +	int bucket;
->   
->   	src_qn = src->data;
->   	if (dst)
-> @@ -321,12 +365,11 @@ static int qcom_icc_set(struct icc_node *src, struct icc_node *dst)
->   	provider = src->provider;
->   	qp = to_qcom_provider(provider);
->   
-> -	list_for_each_entry(n, &provider->nodes, node_list)
-> -		provider->aggregate(n, 0, n->avg_bw, n->peak_bw,
-> -				    &agg_avg, &agg_peak);
-> +	qcom_icc_bus_aggregate(provider, agg_avg, agg_peak, &max_agg_avg,
-> +			       &max_agg_peak);
->   
-> -	sum_bw = icc_units_to_bps(agg_avg);
-> -	max_peak_bw = icc_units_to_bps(agg_peak);
-> +	sum_bw = icc_units_to_bps(max_agg_avg);
-> +	max_peak_bw = icc_units_to_bps(max_agg_peak);
->   
->   	ret = __qcom_icc_set(src, src_qn, sum_bw);
->   	if (ret)
-> @@ -337,12 +380,23 @@ static int qcom_icc_set(struct icc_node *src, struct icc_node *dst)
->   			return ret;
->   	}
->   
-> -	rate = max(sum_bw, max_peak_bw);
 
-Looks like max_peak_bw is unused now?
+On 5/20/22 22:23, Serge E. Hallyn wrote:
+> On Wed, Apr 20, 2022 at 10:06:09AM -0400, Stefan Berger wrote:
+>> Enable multiple instances of securityfs by keying each instance with a
+>> pointer to the user namespace it belongs to.
+>>
+>> Since we do not need the pinning of the filesystem for the virtualization
+>> case, limit the usage of simple_pin_fs() and simpe_release_fs() to the
+>> case when the init_user_ns is active. This simplifies the cleanup for the
+>> virtualization case where usage of securityfs_remove() to free dentries
+>> is therefore not needed anymore.
+>>
+>> For the initial securityfs, i.e. the one mounted in the host userns mount,
+>> nothing changes. The rules for securityfs_remove() are as before and it is
+>> still paired with securityfs_create(). Specifically, a file created via
+>> securityfs_create_dentry() in the initial securityfs mount still needs to
+>> be removed by a call to securityfs_remove(). Creating a new dentry in the
+>> initial securityfs mount still pins the filesystem like it always did.
+>> Consequently, the initial securityfs mount is not destroyed on
+>> umount/shutdown as long as at least one user of it still has dentries that
+>> it hasn't removed with a call to securityfs_remove().
+>>
+>> Prevent mounting of an instance of securityfs in another user namespace
+>> than it belongs to. Also, prevent accesses to files and directories by
+>> a user namespace that is neither the user namespace it belongs to
+>> nor an ancestor of the user namespace that the instance of securityfs
+>> belongs to. Do not prevent access if securityfs was bind-mounted and
+>> therefore the init_user_ns is the owning user namespace.
+>>
+>> Suggested-by: Christian Brauner <brauner@kernel.org>
+>> Signed-off-by: Stefan Berger <stefanb@linux.ibm.com>
+>> Signed-off-by: James Bottomley <James.Bottomley@HansenPartnership.com>
+>>
+>> ---
+>> v11:
+>>   - Formatted comment's first line to be '/*'
+>> ---
+>>   security/inode.c | 73 ++++++++++++++++++++++++++++++++++++++++--------
+>>   1 file changed, 62 insertions(+), 11 deletions(-)
+>>
+>> diff --git a/security/inode.c b/security/inode.c
+>> index 13e6780c4444..84c9396792a9 100644
+>> --- a/security/inode.c
+>> +++ b/security/inode.c
+>> @@ -21,9 +21,38 @@
+>>   #include <linux/security.h>
+>>   #include <linux/lsm_hooks.h>
+>>   #include <linux/magic.h>
+>> +#include <linux/user_namespace.h>
+>>   
+>> -static struct vfsmount *mount;
+>> -static int mount_count;
+>> +static struct vfsmount *init_securityfs_mount;
+>> +static int init_securityfs_mount_count;
+>> +
+>> +static int securityfs_permission(struct user_namespace *mnt_userns,
+>> +				 struct inode *inode, int mask)
+>> +{
+>> +	int err;
+>> +
+>> +	err = generic_permission(&init_user_ns, inode, mask);
+>> +	if (!err) {
+>> +		/*
+>> +		 * Unless bind-mounted, deny access if current_user_ns() is not
+>> +		 * ancestor.
+> 
+> This comment has confused me the last few times I looked at this.  I see
+> now you're using "bind-mounted" as a shortcut for saying "bind mounted from
+> the init_user_ns into a child_user_ns container".  I do think that needs
+> to be made clearer in this comment.
 
-> -	do_div(rate, src_qn->buswidth);
-> -	rate = min_t(u64, rate, LONG_MAX);
-> -
->   	for (i = 0; i < qp->num_clks; i++) {
-> +		/*
-> +		 * Use WAKE bucket for active clock, otherwise, use SLEEP bucket
-> +		 * for other clocks.  If a platform doesn't set interconnect
-> +		 * path tags, by default use sleep bucket for all clocks.
-> +		 *
-> +		 * Note, AMC bucket is not supported yet.
-> +		 */
-> +		if (!strcmp(qp->bus_clks[i].id, "bus_a"))
-> +			bucket = QCOM_ICC_BUCKET_WAKE;
-> +		else
-> +			bucket = QCOM_ICC_BUCKET_SLEEP;
-> +
-> +		rate = icc_units_to_bps(max(agg_avg[bucket], agg_peak[bucket]));
-> +		do_div(rate, src_qn->buswidth);
-> +		rate = min_t(u64, rate, LONG_MAX);
-> +
->   		if (qp->bus_clk_rate[i] == rate)
->   			continue;
 
-Thanks,
-Georgi
+I rephrased the comment now.
+
+    Stefan

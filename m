@@ -2,72 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C23AC56A0BD
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 13:03:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5EE6A56A0BF
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 13:03:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235233AbiGGLBh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Jul 2022 07:01:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51386 "EHLO
+        id S235235AbiGGLDR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Jul 2022 07:03:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52392 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235204AbiGGLBe (ORCPT
+        with ESMTP id S234997AbiGGLDQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Jul 2022 07:01:34 -0400
-Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E85B5724C
-        for <linux-kernel@vger.kernel.org>; Thu,  7 Jul 2022 04:01:33 -0700 (PDT)
-Received: by mail-ej1-x62a.google.com with SMTP id j22so5502797ejs.2
-        for <linux-kernel@vger.kernel.org>; Thu, 07 Jul 2022 04:01:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=sjSXqoI7a+HOTC+YTCSBLGDQWqnl9EwapnigLIHqSzk=;
-        b=iG6EIylhIwZjx9zBcet13PJNSBWdfghExcuUmzMef2p0NXrXG2SRh2MepnBv5fUdm7
-         Yat1znLxWxiKA7/STWGsDtdiQB1Hglo0LCuZN6Rp2rkDabtLEx0MUspaEPi513ySiBZb
-         jRCWSFg9Gu9dtC/FVfKUlFHn1MgqcBceSYIm64vU5r+SGecfH7OOgr3FE+eU7UiI7PsG
-         HTI3CcrTEwraENMSI9b4k8hmPoLjhM72MGMZFGLKa7vhu9ej5poBkNGmjIF5rP2lsxBN
-         lI72V89qOJwJUgdpuYW9EASdBx+nCIb+RS/+mcAOaC5kCFEwpnKq0AdoLXfFbolYiz1L
-         Gtgw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=sjSXqoI7a+HOTC+YTCSBLGDQWqnl9EwapnigLIHqSzk=;
-        b=DnfCpLC89NGJP891Ujbo/HfF6Gm8cQ85C49JW4CYe/G9k5wAm2T9rFQst21DONbHH4
-         1+Gd+0Y9BabMbsuiWi54KelF7hLaNWMr+7HaTrBlKfTtFsBdu0VsVOBmp5073GgcKBYR
-         XwsfutjNNB6Gcq7g7oQDEEiTmteJcvU/yFG56A2DCixU4k+lm/wm36CrGGNXhKJU8pii
-         /VslNiNrFY6ZAbqK+sfUJbTAoZ/vzY3CvhENleqp4Q58k0g1N2rbOq401DHMLXiBzo9o
-         5N42hHAZ/KukJbtQTe9S92HQfGUCRfru2WTUYerWdTHgcnrPyeFY8QvD12Wpg2xZ0YVU
-         gluw==
-X-Gm-Message-State: AJIora891PEP3p9W/QEH+MwroR66TDNtzbNEYYMn+RU9mz8FkC20gh27
-        H9k7+//6GLyPACNZbgA6AQzAPyZuzBF5pW1NdGsbvA==
-X-Google-Smtp-Source: AGRyM1tshOPj4suuDXTbEPdKeVduVbjptKtkSRYnKzY+oqKLXU+GQLqXwfPKavWxbr1VVW2HNoT8Hl1TSgM18vZZzGg=
-X-Received: by 2002:a17:906:8459:b0:72a:ee63:ca58 with SMTP id
- e25-20020a170906845900b0072aee63ca58mr11472249ejy.487.1657191691742; Thu, 07
- Jul 2022 04:01:31 -0700 (PDT)
+        Thu, 7 Jul 2022 07:03:16 -0400
+Received: from pegase2.c-s.fr (pegase2.c-s.fr [93.17.235.10])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73D6057224
+        for <linux-kernel@vger.kernel.org>; Thu,  7 Jul 2022 04:03:14 -0700 (PDT)
+Received: from localhost (mailhub3.si.c-s.fr [172.26.127.67])
+        by localhost (Postfix) with ESMTP id 4Ldtmx1Fpdz9tCd;
+        Thu,  7 Jul 2022 13:03:13 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from pegase2.c-s.fr ([172.26.127.65])
+        by localhost (pegase2.c-s.fr [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id efQ1yoNuCuig; Thu,  7 Jul 2022 13:03:13 +0200 (CEST)
+Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
+        by pegase2.c-s.fr (Postfix) with ESMTP id 4Ldtmx0P46z9tCW;
+        Thu,  7 Jul 2022 13:03:13 +0200 (CEST)
+Received: from localhost (localhost [127.0.0.1])
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id F288D8B79F;
+        Thu,  7 Jul 2022 13:03:12 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from messagerie.si.c-s.fr ([127.0.0.1])
+        by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
+        with ESMTP id 0jiyn1_nHucC; Thu,  7 Jul 2022 13:03:12 +0200 (CEST)
+Received: from [192.168.233.174] (unknown [192.168.233.174])
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id 89E5E8B768;
+        Thu,  7 Jul 2022 13:03:12 +0200 (CEST)
+Message-ID: <95f35287-3d66-1788-e54c-7275fdba16ac@csgroup.eu>
+Date:   Thu, 7 Jul 2022 13:03:11 +0200
 MIME-Version: 1.0
-References: <20220612144854.2223873-1-alvin@pqrs.dk>
-In-Reply-To: <20220612144854.2223873-1-alvin@pqrs.dk>
-From:   Robert Foss <robert.foss@linaro.org>
-Date:   Thu, 7 Jul 2022 13:01:19 +0200
-Message-ID: <CAG3jFyvOBAXxBgv2JtEg=0hOeM0UN5CaOQopzvA2twE6ew6zyA@mail.gmail.com>
-Subject: Re: [PATCH RESEND 0/2] drm: bridge: adv7511: two fixes for CEC
-To:     alvin@pqrs.dk
-Cc:     Andrzej Hajda <andrzej.hajda@intel.com>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
-        Jonas Karlman <jonas@kwiboo.se>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Hans Verkuil <hans.verkuil@cisco.com>,
-        Archit Taneja <architt@codeaurora.org>,
-        =?UTF-8?Q?Alvin_=C5=A0ipraga?= <alsi@bang-olufsen.dk>,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH/RFC] powerpc/module_64: allow .init_array constructors to
+ run
+Content-Language: fr-FR
+To:     Jan Stancek <jstancek@redhat.com>, mpe@ellerman.id.au,
+        benh@kernel.crashing.org, paulus@samba.org,
+        linuxppc-dev@lists.ozlabs.org,
+        Wedson Almeida Filho <wedsonaf@google.com>
+Cc:     linux-kernel@vger.kernel.org
+References: <920acea9aa18e4f2956581a8e158bdaa376fdf63.1629203945.git.jstancek@redhat.com>
+From:   Christophe Leroy <christophe.leroy@csgroup.eu>
+In-Reply-To: <920acea9aa18e4f2956581a8e158bdaa376fdf63.1629203945.git.jstancek@redhat.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -76,32 +62,64 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hey Alvin,
 
-On Sun, 12 Jun 2022 at 16:49, Alvin =C5=A0ipraga <alvin@pqrs.dk> wrote:
->
-> From: Alvin =C5=A0ipraga <alsi@bang-olufsen.dk>
->
-> Previously sent back in March, see here:
->
-> https://lore.kernel.org/dri-devel/20220319145939.978087-1-alvin@pqrs.dk/
->
-> No changes besides rebasing on today's drm-misc-fixes.
->
-> Alvin =C5=A0ipraga (2):
->   drm: bridge: adv7511: fix CEC power down control register offset
->   drm: bridge: adv7511: unregister cec i2c device after cec adapter
->
->  drivers/gpu/drm/bridge/adv7511/adv7511.h     | 5 +----
->  drivers/gpu/drm/bridge/adv7511/adv7511_cec.c | 4 ++--
->  drivers/gpu/drm/bridge/adv7511/adv7511_drv.c | 5 ++---
->  3 files changed, 5 insertions(+), 9 deletions(-)
->
-> --
-> 2.36.1
->
 
-Sorry about being incredibly slow reviewing & merging this relatively
-simple series.
+Le 17/08/2021 à 15:02, Jan Stancek a écrit :
+> gcov and kasan rely on compiler generated constructor code.
+> For modules, gcc-8 with gcov enabled generates .init_array section,
+> but on ppc64le it doesn't get executed. find_module_sections() never
+> finds .init_array section, because module_frob_arch_sections() renames
+> it to _init_array.
+> 
+> Avoid renaming .init_array section, so do_mod_ctors() can use it.
+> 
+> Cc: Michael Ellerman <mpe@ellerman.id.au>
+> Cc: Benjamin Herrenschmidt <benh@kernel.crashing.org>
+> Cc: Paul Mackerras <paulus@samba.org>
+> Cc: Christophe Leroy <christophe.leroy@csgroup.eu>
+> Signed-off-by: Jan Stancek <jstancek@redhat.com>
 
-Applied to drm-misc-next.
+Does commit d4be60fe66b7 ("powerpc/module_64: use module_init_section 
+instead of patching names") fixes your issue ?
+
+If not, please rebase and resubmit.
+
+Thanks
+Christophe
+
+
+> ---
+> I wasn't able to trace the comment:
+>    "We don't handle .init for the moment: rename to _init"
+> to original patch (it pre-dates .git). I'm not sure if it
+> still applies today, so I limited patch to .init_array. This
+> fixes gcov for modules for me on ppc64le 5.14.0-rc6.
+> 
+> Renaming issue is also mentioned in kasan patches here:
+>    https://patchwork.ozlabs.org/project/linuxppc-dev/cover/20210319144058.772525-1-dja@axtens
+> 
+>   arch/powerpc/kernel/module_64.c | 10 +++++++++-
+>   1 file changed, 9 insertions(+), 1 deletion(-)
+> 
+> diff --git a/arch/powerpc/kernel/module_64.c b/arch/powerpc/kernel/module_64.c
+> index 6baa676e7cb6..c604b13ea6bf 100644
+> --- a/arch/powerpc/kernel/module_64.c
+> +++ b/arch/powerpc/kernel/module_64.c
+> @@ -299,8 +299,16 @@ int module_frob_arch_sections(Elf64_Ehdr *hdr,
+>   					  sechdrs[i].sh_size);
+>   
+>   		/* We don't handle .init for the moment: rename to _init */
+> -		while ((p = strstr(secstrings + sechdrs[i].sh_name, ".init")))
+> +		while ((p = strstr(secstrings + sechdrs[i].sh_name, ".init"))) {
+> +#ifdef CONFIG_CONSTRUCTORS
+> +			/* find_module_sections() needs .init_array intact */
+> +			if (strstr(secstrings + sechdrs[i].sh_name,
+> +				".init_array")) {
+> +				break;
+> +			}
+> +#endif
+>   			p[0] = '_';
+> +		}
+>   
+>   		if (sechdrs[i].sh_type == SHT_SYMTAB)
+>   			dedotify((void *)hdr + sechdrs[i].sh_offset,

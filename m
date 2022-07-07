@@ -2,114 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C0F356AA0D
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 19:52:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ED65656AA06
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 19:52:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235743AbiGGRvz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Jul 2022 13:51:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56558 "EHLO
+        id S235855AbiGGRwH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Jul 2022 13:52:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56794 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235320AbiGGRvx (ORCPT
+        with ESMTP id S235801AbiGGRwF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Jul 2022 13:51:53 -0400
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.21])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E9FD59253
-        for <linux-kernel@vger.kernel.org>; Thu,  7 Jul 2022 10:51:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1657216287;
-        bh=eRYbd4WlZHGFlVSm3qXeJePVlVFwXtMQqRvFFzWW8sA=;
-        h=X-UI-Sender-Class:From:To:Cc:Subject:Date:In-Reply-To:References;
-        b=CPCF48bnbKzeUJhPMiovgoEnC+vEixzZVTJv7LclOVBt0KONOCHOI2ocJYtObJk18
-         Nun8P/23Ka2GOvFVBiarlQSvGMuYzHFpuSlTqXNW3tPpOtYDP9X4TGlPUsnM7WmWNJ
-         OKxU1+NInSyFY0Bv0KjGUKVC79s3LtS6KyspU/mA=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from [80.245.77.44] ([80.245.77.44]) by web-mail.gmx.net
- (3c-app-gmx-bap68.server.lan [172.19.172.68]) (via HTTP); Thu, 7 Jul 2022
- 19:51:27 +0200
+        Thu, 7 Jul 2022 13:52:05 -0400
+Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F23CF59253;
+        Thu,  7 Jul 2022 10:52:04 -0700 (PDT)
+Received: by mail-ej1-x635.google.com with SMTP id sb34so33673935ejc.11;
+        Thu, 07 Jul 2022 10:52:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=KR2UDwCoOFfk3aid7VAOv89TmttgxGQj+7CaHoga6Qg=;
+        b=MRaATrwPP9hjvm1NNuEqHIaDKRUA3QAdXALhua1f36jJBhfBmI/gHkcre0uKbhYPeq
+         0W1nLnew8xh5il2NpNw4CK56oP1NALRfP+hIP8zFb5t6RNBMRG36zmvq/sS5Pj8d9CTZ
+         m25BzjRTwsLGI3bu64jSSYuYJezxrjLZQJbw1sTcqvTa/FMa9b7V0r31ErRJLGur2aBh
+         cfz51uSxB513iHKKLBq17+dtbwXBLjlu2WEG/R4VHnZ46+FCsursWfc1SWTWCFi0AS9o
+         BJeib9RUdQrCjtFnK6Oj8hQ7zv79cBgbhvdYIdFg3kjES2nUAvbiWHal0AzJqOT07Kg6
+         HYrA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=KR2UDwCoOFfk3aid7VAOv89TmttgxGQj+7CaHoga6Qg=;
+        b=zr2dKfBgKDoXLlu1GB6jReRw+Q70DUl5sDJRpLQjdoN5MldcSlFjGhOmMUZ75qi94J
+         +BYmjrHfSlvbu1PLBZqDKtff/64ZfvwrNY2oCDYKKGo+UyhxF5EaogdC8OcOkR1TaE5H
+         elegxv0tCM3i0bWq9UdMHYEARd68Q0Z10xy/te23gD318raUXwbc7IbzRXPswsJyRp1u
+         oH2+x0ZUtWTjNo+OvMdLgaLSe6ST23aEWAfqs0bunZkDeKb/5k0NlGtfDHUHaoU/phvu
+         nQ8uP+KYwyeTfG4/GqDlfH76/hmdnP7h7UeMz3qpoUSS5nW/uaHY/pkEB+FWHrAf9u7C
+         iaSg==
+X-Gm-Message-State: AJIora9cpX0VGrLUx/GnlTi5CJK/6PeygABEwDdwIK7+SGTZHcMw/U9+
+        hR9tLNBE0uyE5UM76RdYUPD/wi13yXera5JompQ=
+X-Google-Smtp-Source: AGRyM1uMk9Z0CtOaCfORAc+j23Jcvk1cBQMlmf5u9QjL6vDaOGE8rwki82hA51td2jlapijoqWB/QzoOnLstUmyMLUY=
+X-Received: by 2002:a17:907:3f92:b0:72a:b80c:ef3 with SMTP id
+ hr18-20020a1709073f9200b0072ab80c0ef3mr25975249ejc.264.1657216323499; Thu, 07
+ Jul 2022 10:52:03 -0700 (PDT)
 MIME-Version: 1.0
-Message-ID: <trinity-ec3b4258-cb12-42c2-9058-362260a275d2-1657216287085@3c-app-gmx-bap68>
-From:   Frank Wunderlich <frank-w@public-files.de>
-To:     Samuel Holland <samuel@sholland.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Vinod Koul <vkoul@kernel.org>
-Cc:     linux-phy@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Peter Geis <pgwipeout@gmail.com>
-Subject: Aw: [BUG] USB broken on rk3568 based R2Pro
-Content-Type: text/plain; charset=UTF-8
-Date:   Thu, 7 Jul 2022 19:51:27 +0200
-Importance: normal
-Sensitivity: Normal
-In-Reply-To: <trinity-54ed588d-4b2c-4177-83b0-4eda8ff16a42-1657210235522@3c-app-gmx-bap68>
-References: <trinity-54ed588d-4b2c-4177-83b0-4eda8ff16a42-1657210235522@3c-app-gmx-bap68>
-X-UI-Message-Type: mail
-X-Priority: 3
-X-Provags-ID: V03:K1:24r+j66QKvqyftybingAK3M/KSPL4PIEXDBNqezfGswC5ckMvODK/GKotZjbvO3p6PPEo
- 2L9wrLhmlGGFa9gLz+V633gEyKdfsg3ymqAUqvA89f4swLY1IkBrIuU3uk88xQPbK79ZeyHVxSxZ
- qJjit5vCIO0tZaq4gTIi/q+n3NsB9hTdSet3EFaMr/DYyFYohDbkb2KbhqHc5kgnl17gkFHacvv9
- E5lxV6UVejslIEfZdgk8bqBUXlMV5DdvwJ5k3HYbaqrLzmCE5Fi26HW5j+L9300IV5aG73Q4Qc1G
- t4=
-X-UI-Out-Filterresults: notjunk:1;V03:K0:IjCByH4FtZs=:jDoGUfUZr5RlWZlr5iWBZw
- qDLSgJsqF63mqfpHrJABrqUB6JFU5XKRh2N1dcj//OZfA0BmckB2nEfY+/VqcKMnFlVZbE1ms
- h44ezUMG0yKnKRYQfX5yLKiMdum+en/T1vUj5FqOCq5kkPf1B8cAymRl84eSqH4uvj/j+kDKT
- 6r05tVJidN4aCg5vW/kLJlRH3YQ1Eaexz4miP5VWrHs78OPK31GZvr7i9hYU2d9bUt/XOTlWf
- Jzj393El1vigBdv8fZGL7y4QQaDmxmqsTYSYFpMJMlPEpLym+SezWzH8TX+2UyXg9EEvgGOeh
- 5JS39wIC8jBRYuio6S/LXS6yZKbSceAfg3ONHxIzVPMYE82m3fKznFQI52EuuTAgb4meq1jAB
- ILu/l9OftbRe+5La1zyBAwY2M72E7dadwmn+9L0Z5v4mKHcyMb6AMGezFIWwY2TIq0nzkU1FB
- HZZ/eahsoBrZ0W3nXiYQ+js5Uv8SWmsL82bhhMAEDfA82uYOgR8wdDPv5FKEm5XwHVlKDdiPu
- z+fVuOG/ZLkzKQK2/J55fVSV9sTlrV7BlnRno5CS3XFEcHXQ6fuLg1mOCZS+EWzw6YgCC8jPT
- r0kr6B9hVD0EIFWkeTMuy4bEAlTjJSWaszI3WHL0hBH95UTDMOZrhV2F0ekjqXDShmp8+bQHn
- t2/wqJhtu8oQ7ejFYqNGkWxfBfTs00u54QBopVAUaxrQCGqigostXvlzo+2ZK8d9AzlOLouqQ
- lqAEdJsFLIfp1/goTGES/+M+8ZNOzMXbBLHE7kAQ5HCsRlkL6BJEhBzgUCQbt80bAIeQml6Od
- Hx6Eu0k
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220703194020.78701-1-prabhakar.mahadev-lad.rj@bp.renesas.com> <87h73un2pv.wl-maz@kernel.org>
+In-Reply-To: <87h73un2pv.wl-maz@kernel.org>
+From:   "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
+Date:   Thu, 7 Jul 2022 18:51:37 +0100
+Message-ID: <CA+V-a8tKOEcBD=X4=8S=jtw53ypfnckv-4+h7Dd4R969QNNeww@mail.gmail.com>
+Subject: Re: [PATCH v7 0/5] Renesas RZ/G2L IRQC support
+To:     Marc Zyngier <maz@kernel.org>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Biju Das <biju.das.jz@bp.renesas.com>,
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+Hi Marc,
 
-traced it down with manual reverts to this one:
-
-commit 6a98df08ccd55e87947d253b19925691763e755c
-    phy: rockchip-inno-usb2: Fix muxed interrupt support
-
-luckily i can revert only this and now upper usb-port works again
-
-@samuel: have you an idea how to fix your problem without breaking my boar=
-d? :)
-
-@greg/Vinod: maybe we can add a revert of this in mainline till issue is r=
-esolved?
-
-regards Frank
-
-
-> Von: "Frank Wunderlich" <frank-w@public-files.de>
-> i noticed that upper usb-Port (otg) is broken on my Bananapi R2Pro with =
-5.19-rc1, works with 5.18.0
+On Wed, Jul 6, 2022 at 8:02 AM Marc Zyngier <maz@kernel.org> wrote:
 >
-> this port is a usb3 (xhci) port which includes an usb2-phy and should su=
-pport otg, but i still want
-> to use it in host-only mode (USB-A socket).
+> On Sun, 03 Jul 2022 20:40:15 +0100,
+> Lad Prabhakar <prabhakar.csengg@gmail.com> wrote:
+> >
+> > Hi All,
+> >
+> > The RZ/G2L Interrupt Controller is a front-end for the GIC found on
+> > Renesas RZ/G2L SoC's with below pins:
+> > - IRQ sense select for 8 external interrupts, mapped to 8 GIC SPI
+> >   interrupts
+> > - GPIO pins used as external interrupt input pins out of GPIOINT0-122 a
+> >   maximum of only 32 can be mapped to 32 GIC SPI interrupts,
+> > - NMI edge select.
+> >
+> >                                                              _____________
+> >                                                              |    GIC     |
+> >                                                              |  ________  |
+> >                                       ____________           | |        | |
+> > NMI --------------------------------->|          |  SPI0-479 | | GIC-600| |
+> >              _______                  |          |------------>|        | |
+> >              |      |                 |          |  PPI16-31 | |        | |
+> >              |      | IRQ0-IRQ7       |   IRQC   |------------>|        | |
+> > P0_P48_4 --->| GPIO |---------------->|          |           | |________| |
+> >              |      |GPIOINT0-122     |          |           |            |
+> >              |      |---------------->| TINT0-31 |           |            |
+> >              |______|                 |__________|           |____________|
+> >
+> > The proposed patches add hierarchical IRQ domain, one in IRQC driver and
+> > another in pinctrl driver. Upon interrupt requests map the interrupt to
+> > GIC. Out of GPIOINT0-122 only 32 can be mapped to GIC SPI, this mapping is
+> > handled by the pinctrl and IRQC driver.
+> >
+> > Cheers,
+> > Prabhakar
+> >
+> > v6->v7:
+> > * Used devm_reset_control_get_exclusive() instead of
+> >   devm_reset_control_get_exclusive_by_index()
+> > * Included RB tag from Linus for patch 5/5
+> > * Switched to newer version of populate_parent_alloc_arg() (patch depends
+> >   on https://git.kernel.org/pub/scm/linux/kernel/git/maz/arm-platforms.git/
+> >   patch/?id=178b7e21459e9a7e2a2c369711ef0cc9b1cfbcd7)
 >
-> already tried setting dr_mode in dts back to "host" as this was changed =
-in rk356x.dtsi by this commit:
+> Please add this patch as part of the series.
 >
-> bc405bb3eeee 2022-04-25 arm64: dts: rockchip: enable otg/drd operation o=
-f usb_host0_xhci in rk356x
->
-> i see no error in dmesg and usb-controllers seem to be initialized compl=
-etely (visible in lsusb).
->
-> r2pro has ID-Pin not connected, so i tried also peters Patch without suc=
-cess :(
+Sure will do.
 
+Cheers,
+Prabhakar

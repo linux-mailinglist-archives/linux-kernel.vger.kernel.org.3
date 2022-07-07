@@ -2,99 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D536B56A96E
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 19:23:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1023956AE70
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 00:32:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236291AbiGGRVE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Jul 2022 13:21:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58786 "EHLO
+        id S237051AbiGGWaY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Jul 2022 18:30:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58434 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236314AbiGGRUy (ORCPT
+        with ESMTP id S236457AbiGGWaV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Jul 2022 13:20:54 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE5763335D;
-        Thu,  7 Jul 2022 10:20:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=H/z41n38fMrVHxK1y42Tj7P6QUPD60u5+XY8Ng8yfX4=; b=4Sn1wsXPrs/yPqmi1PLgRr5BWp
-        FHSQgVgDsdRtzm9v9KaJo4XwQvosGgRCB7c7Aj9ffpCIFDLnjZke7fTotJFHHaB3oPbWA0shGuBnZ
-        Qu/XhyKGfvyau20y8SvAUG6NuttXxvPKwYkrbpWh2+fZH9g+37n5HSanJywA/TwDrh1UXDuz+WpMg
-        t9l5gG9ew20hIBgsxIUM1HmFi4Eplosy6rE0RonRn+oVCf3LWSQosjXtELHUJ882+qdzGFUSaPwvF
-        21DHzBDyfz13iiBdtvfoh8DHWaYMKFlAZK2Gq7gH7w4otB1Q/j1xwhfdPKeGGB8o18f4nvkhbUrsH
-        3Tc6zh2g==;
-Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1o9VBG-00HCSD-Gf; Thu, 07 Jul 2022 17:20:46 +0000
-Date:   Thu, 7 Jul 2022 10:20:46 -0700
-From:   Luis Chamberlain <mcgrof@kernel.org>
-To:     Aaron Tomlin <atomlin@redhat.com>
-Cc:     rostedt@goodmis.org, cl@linux.com, pmladek@suse.com,
-        mbenes@suse.cz, christophe.leroy@csgroup.eu,
-        akpm@linux-foundation.org, linux-kernel@vger.kernel.org,
-        linux-modules@vger.kernel.org, atomlin@atomlin.com,
-        ghalat@redhat.com, oleksandr@natalenko.name, neelx@redhat.com,
-        daniel.thompson@linaro.org, hch@infradead.org, tglx@linutronix.de,
-        linux-rt-users@vger.kernel.org
-Subject: Re: [PATCH v2] module: kallsyms: Ensure preemption in add_kallsyms()
- with PREEMPT_RT
-Message-ID: <YscV7ujYs6Q60N+E@bombadil.infradead.org>
-References: <20220704161753.4033684-1-atomlin@redhat.com>
- <YsXNVSAtO+VDggcI@bombadil.infradead.org>
- <20220707165750.tk4fadpv3d4zr2mb@ava.usersys.com>
+        Thu, 7 Jul 2022 18:30:21 -0400
+Received: from mail-qk1-x72b.google.com (mail-qk1-x72b.google.com [IPv6:2607:f8b0:4864:20::72b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 279E665D5C
+        for <linux-kernel@vger.kernel.org>; Thu,  7 Jul 2022 15:30:21 -0700 (PDT)
+Received: by mail-qk1-x72b.google.com with SMTP id b125so14488428qkg.11
+        for <linux-kernel@vger.kernel.org>; Thu, 07 Jul 2022 15:30:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=Jw3Qfmu3T45z99OSd3EsU15JM25LaoYd7yNmPKrKK88=;
+        b=FOhnmRXS9NL3bEpaOsXAMBkVjpcC47K+YkIorSegkPqV3955JYCXCak9zQs5A4WKBL
+         MKFvHRj8NOI81W0zQ8iBeej32OqEeHxhKrliYNuYXJErIEe8W4OpZVNwcZVepivnJ8oW
+         tHFJOH5VoDsjhrdxuwxrqTte+9BSf+j1eeyJN8smjaaAek8+9hfTTRHMgsYC/mYr+OYx
+         W64vCy3SWfDiTyJfPzYyDd6E566Ykd3h2Aca/pnbUXWmgArSyGQF+Vq7/dwwJUKcwzYa
+         9jPKN6sCihez2/4c0MToyT6GegTJker5VEg3mFx5l4z4i0rvUQzfgNmd2NiGxGim42Hx
+         F7+g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=Jw3Qfmu3T45z99OSd3EsU15JM25LaoYd7yNmPKrKK88=;
+        b=xEyI+g0rY+aBGUec/0TgcNsQuWct/HRxK+UAqgWQCEuY5eSPF4cD0dEXx+q4IpfseS
+         WMm15sYFeJtWBngbRS3bK/NgHHW6bc48UyQHQCmES53PIt1m8cPtAPNMfcm2OkeRHL5/
+         ZDrpny7bRG+hEteFMHJ5DuG88DLmQLm0kb/O+lwyOhUgX6F/9q6IQnidSsvIDOWpl3iK
+         GLJw1dGD6j7aUcrAR8zHuAVmP3rzmWzdzkxxiE4BRgllCkL8z/Zu1g/2Qr5LYFesB3qG
+         Qi86NKWDki0ZGTDPx1WCURvrB5Zi6t+DBef6qVzYk13Ftp6KiGmpni9F1VIJZjgTLVRx
+         0XdA==
+X-Gm-Message-State: AJIora8SvNaXdNkHZkVGnQr3YXTvvoCDYHSBArWsNejOkSHx61L5SOsz
+        EmDfHoDOUo5mk1GBHey5YHnGz8VWbx6OXw==
+X-Google-Smtp-Source: AGRyM1vC9fck9sm08lNxiiaZUV/ztwt7EeO4Xjib0s96dqs+u8o5jSybOIYnTBs3S4UVcRrGf5FF/w==
+X-Received: by 2002:a37:ac0f:0:b0:6b4:72de:2432 with SMTP id e15-20020a37ac0f000000b006b472de2432mr166511qkm.699.1657233020300;
+        Thu, 07 Jul 2022 15:30:20 -0700 (PDT)
+Received: from fedora.attlocal.net (69-109-179-158.lightspeed.dybhfl.sbcglobal.net. [69.109.179.158])
+        by smtp.gmail.com with ESMTPSA id e22-20020ac84b56000000b0031e9bd3586esm1527747qts.79.2022.07.07.15.30.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 07 Jul 2022 15:30:19 -0700 (PDT)
+From:   William Breathitt Gray <william.gray@linaro.org>
+To:     jic23@kernel.org
+Cc:     linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        William Breathitt Gray <william.gray@linaro.org>,
+        Fred Eckert <Frede@cmslaser.com>
+Subject: [PATCH v2 0/2] iio: Implement and utilize register structures for ISA drivers
+Date:   Thu,  7 Jul 2022 13:21:23 -0400
+Message-Id: <cover.1657213745.git.william.gray@linaro.org>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220707165750.tk4fadpv3d4zr2mb@ava.usersys.com>
-Sender: Luis Chamberlain <mcgrof@infradead.org>
-X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-0.5 required=5.0 tests=BAYES_00,DATE_IN_PAST_03_06,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jul 07, 2022 at 05:57:50PM +0100, Aaron Tomlin wrote:
-> On Wed 2022-07-06 10:58 -0700, Luis Chamberlain wrote:
-> > Hey Aaron, thanks again!
-> 
-> Hi Luis,
-> 
-> No problem :)
-> 
-> > On Mon, Jul 04, 2022 at 05:17:53PM +0100, Aaron Tomlin wrote:
-> > > To disable preemption in the context of add_kallsyms() is incorrect.
-> > 
-> > Why, what broke? Did this used to work? Was the commit in question a
-> > regression then? Clarifying all this will help a lot.
-> 
-> Sorry for the confusion! If I understand correctly, nothing broke
-> intrinsically.
-> 
-> Rather with commit 08126db5ff73 ("module: kallsyms: Fix suspicious rcu
-> usage") under PREEMPT_RT=y, by disabling preemption, I introduced an
-> unbounded latency since the loop is not fixed which is generally frowned
-> upon.
+Changes in v2:
+ - Rename 'ad' member to 'ssr_ad' to indicate access to Software Strobe
+   Register as well; relevant comments updated
+ - Dereference DAC channel address via array subscripts in the
+   stx104_write_raw() function in order to match rest of code
+ - Replace struct cio_dac_reg with direct u16 pointer to the DAC
+   address; this greatly simplifies the cio-dac patch
 
-This is incredibly important information which should be added to the
-commit log, specialy as PREEMPT_RT=y becomes a first class citizen.
+The STX104 and CIO-DAC drivers were updated to use I/O memory accessor
+calls such as ioread8()/iowrite8() in previous patch series [1]. This
+patch series is a continuation of the effort to improve the code
+readability and reduce magic numbers by implementing and utilizing named
+register data structures.
 
-> So, I would say this was a regression since earlier preemption was
-> not disabled and we would dereference RCU-protected pointers explicitly
-> i.e. without using the more appropriate rcu_dereference() family
-> of primitives. That being said, these pointers cannot change in this
-> context as explained previously.
-> 
-> Would the above be suitable - just to confirm before I send another
-> iteration?
+[1] https://lore.kernel.org/all/cover.1652201921.git.william.gray@linaro.org/
 
-Yes, I would send this to Linus for the rc series. Please adjust the
-commit log with all this information.
+William Breathitt Gray (2):
+  iio: adc: stx104: Implement and utilize register structures
+  iio: dac: cio-dac: Cleanup indexing for DAC writes
 
-BTW I think there is just one more fix pending from you right?
+ drivers/iio/adc/stx104.c  | 74 ++++++++++++++++++++++++++-------------
+ drivers/iio/dac/cio-dac.c | 10 +++---
+ 2 files changed, 55 insertions(+), 29 deletions(-)
 
-  Luis
+
+base-commit: 338222d8e1121bcb78a86fb39982eddcc367a5bc
+-- 
+2.36.1
+

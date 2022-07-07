@@ -2,122 +2,302 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 71B63569FF3
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 12:31:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6688756A009
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 12:34:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235223AbiGGKaG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Jul 2022 06:30:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56710 "EHLO
+        id S234884AbiGGKef (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Jul 2022 06:34:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60030 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235136AbiGGKaC (ORCPT
+        with ESMTP id S233305AbiGGKed (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Jul 2022 06:30:02 -0400
-Received: from mail-pf1-f177.google.com (mail-pf1-f177.google.com [209.85.210.177])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8EAB53D1C
-        for <linux-kernel@vger.kernel.org>; Thu,  7 Jul 2022 03:30:00 -0700 (PDT)
-Received: by mail-pf1-f177.google.com with SMTP id y9so4259098pff.12
-        for <linux-kernel@vger.kernel.org>; Thu, 07 Jul 2022 03:30:00 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
-         :content-disposition;
-        bh=/JzY69fgYbq8dtADJobUrT4pb7r35M4xnJaXr87cK3U=;
-        b=rgiYYPuFcJIxT6hilVKRcyC/Q3El0dVYuzJx4a5aYTWKaJo9v1ZUYz2wOeRkuMAWgr
-         wvG3S7B+tSIuH0otkB74xV1oF2m7oXx1fdh72/MroUP1H29jgOjNLfpFXlQTPe6cCaT2
-         +W3PxVJNBLiTTk+C1xmEXZa66ZzQACmEwDwjqqPnkptY36xPhDAoSuo+FKNXD4um5sAe
-         cUSyuGi/9flFykx8E9rbWdP6lbUVj/inSCPbxlo9IE4mgTwasNhCPdBgPRnnyMxS8QRZ
-         pckJtrANZkF5H69J6tl0zBe8dw2DuokZOES/m9WqtZOgLHstk1Cp8fJ0ciT3XJ3ek+Io
-         Oyvw==
-X-Gm-Message-State: AJIora8MDwszwFtuHYUNpq5k6BuYq+6WqxrG9wfdxIaMJnqOd3R2mf+i
-        u0FcxEzZFdQXQ/Qaz3tnjOd1eUFVXWI=
-X-Google-Smtp-Source: AGRyM1sP5WYD/HQ6rAdWuX3ltvmMcNxBEYTPCu9kKK5hzBuh5N6HbxYmHp/HV+1kgm1U4f9RpXQjfg==
-X-Received: by 2002:a05:6a00:1a15:b0:527:d02b:29c6 with SMTP id g21-20020a056a001a1500b00527d02b29c6mr49866585pfv.23.1657189800287;
-        Thu, 07 Jul 2022 03:30:00 -0700 (PDT)
-Received: from karthik-strix-linux.karthek.com ([61.3.52.131])
-        by smtp.gmail.com with ESMTPSA id f73-20020a62384c000000b005251ce498cfsm2725939pfa.191.2022.07.07.03.29.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 07 Jul 2022 03:29:59 -0700 (PDT)
-Date:   Thu, 7 Jul 2022 15:59:54 +0530
-From:   Karthik Alapati <mail@karthek.com>
-To:     Johan Hovold <johan@kernel.org>, Alex Elder <elder@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Shuah Khan <skhan@linuxfoundation.org>,
-        greybus-dev@lists.linaro.org, linux-staging@lists.linux.dev,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] staging: greybus: don't use index pointer after iter
-Message-ID: <Ysa1oopf0ELw+OfB@karthik-strix-linux.karthek.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+        Thu, 7 Jul 2022 06:34:33 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CFA732068
+        for <linux-kernel@vger.kernel.org>; Thu,  7 Jul 2022 03:34:32 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 080EDB82104
+        for <linux-kernel@vger.kernel.org>; Thu,  7 Jul 2022 10:34:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id ABC4DC3411E;
+        Thu,  7 Jul 2022 10:34:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1657190069;
+        bh=FpJWKY13PUMMJsUpFy0Yaj3jOBe8ueGiOuxegiTyxVc=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=piO5ThK0gBRk07wa7koK/7JGXPIOrZErY840kRzzFKBp2szAra/726/H4uGQsbDys
+         oh1OvZ4/yifZ60pX0SWiqRBMiPCxsBDXpZgiyJAAc2TBHMcGJKOlKooITExVTnnwJV
+         //IOS7yjWN/V9JwIQ57r6czMFX/ikoBfesHa9fFrk7SYYR5sDmAQqje2HIdvr1odbM
+         +1VVzyCQwyvTEhekNufTWBUtctj2OJVFu8XjUiK7uPxbzd7RjfkXPfNiVXRy6Hn/QS
+         WemAQrShL2oUtjloIeHsvkjNXx8HlwiG92g9cfw+c+1fxSAwY5NBSrvl3Jzoag0rri
+         K9k0TJkvhX3Zw==
+Received: from [185.201.63.253] (helo=wait-a-minute.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <maz@kernel.org>)
+        id 1o9Oq2-005tL3-Tc;
+        Thu, 07 Jul 2022 11:34:27 +0100
+Date:   Thu, 07 Jul 2022 11:34:06 +0100
+Message-ID: <874jztmctd.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Jianmin Lv <lvjianmin@loongson.cn>
+Cc:     Thomas Gleixner <tglx@linutronix.de>, linux-kernel@vger.kernel.org,
+        Hanjun Guo <guohanjun@huawei.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Huacai Chen <chenhuacai@loongson.cn>
+Subject: Re: [PATCH V14 10/15] irqchip/loongson-liointc: Add ACPI init support
+In-Reply-To: <1656837932-18257-11-git-send-email-lvjianmin@loongson.cn>
+References: <1656837932-18257-1-git-send-email-lvjianmin@loongson.cn>
+        <1656837932-18257-11-git-send-email-lvjianmin@loongson.cn>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.201.63.253
+X-SA-Exim-Rcpt-To: lvjianmin@loongson.cn, tglx@linutronix.de, linux-kernel@vger.kernel.org, guohanjun@huawei.com, lorenzo.pieralisi@arm.com, jiaxun.yang@flygoat.com, chenhuacai@loongson.cn
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There are some usages of index pointer of list(w) which may not point to
-the right entry when the required entry is not found and the list traversal
-completes with index pointer pointing to the last entry. So, use w_found
-flag to track the case where the entry is found.
+On Sun, 03 Jul 2022 09:45:27 +0100,
+Jianmin Lv <lvjianmin@loongson.cn> wrote:
+> 
+> From: Huacai Chen <chenhuacai@loongson.cn>
+> 
+> LIOINTC stands for "Legacy I/O Interrupts" that described in Section
+> 11.1 of "Loongson 3A5000 Processor Reference Manual". For more
+> information please refer Documentation/loongarch/irq-chip-model.rst.
+> 
+> Co-developed-by: Jianmin Lv <lvjianmin@loongson.cn>
+> Signed-off-by: Jianmin Lv <lvjianmin@loongson.cn>
+> Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
+> ---
+>  arch/loongarch/include/asm/irq.h       |   4 +-
+>  arch/loongarch/kernel/irq.c            |   1 -
+>  drivers/irqchip/irq-loongson-liointc.c | 227 ++++++++++++++++++++++-----------
+>  3 files changed, 154 insertions(+), 78 deletions(-)
+> 
+> diff --git a/arch/loongarch/include/asm/irq.h b/arch/loongarch/include/asm/irq.h
+> index 8775dc6..b4c7956 100644
+> --- a/arch/loongarch/include/asm/irq.h
+> +++ b/arch/loongarch/include/asm/irq.h
+> @@ -97,7 +97,7 @@ static inline void eiointc_enable(void)
+>  
+>  struct irq_domain *loongarch_cpu_irq_init(void);
+>  
+> -struct irq_domain *liointc_acpi_init(struct irq_domain *parent,
+> +int liointc_acpi_init(struct irq_domain *parent,
+>  					struct acpi_madt_lio_pic *acpi_liointc);
+>  struct irq_domain *eiointc_acpi_init(struct irq_domain *parent,
+>  					struct acpi_madt_eio_pic *acpi_eiointc);
+> @@ -122,7 +122,7 @@ int pch_pic_acpi_init(struct irq_domain *parent,
+>  extern struct acpi_madt_bio_pic *acpi_pchpic[MAX_IO_PICS];
+>  
+>  extern struct irq_domain *cpu_domain;
+> -extern struct irq_domain *liointc_domain;
+> +extern struct fwnode_handle *liointc_handle;
+>  extern struct fwnode_handle *pch_lpc_handle;
+>  extern struct fwnode_handle *pch_pic_handle[MAX_IO_PICS];
+>  
+> diff --git a/arch/loongarch/kernel/irq.c b/arch/loongarch/kernel/irq.c
+> index ce21281..b04201c 100644
+> --- a/arch/loongarch/kernel/irq.c
+> +++ b/arch/loongarch/kernel/irq.c
+> @@ -26,7 +26,6 @@
+>  EXPORT_PER_CPU_SYMBOL(irq_stat);
+>  
+>  struct irq_domain *cpu_domain;
+> -struct irq_domain *liointc_domain;
+>  
+>  /*
+>   * 'what should we do if we get a hw irq event on an illegal vector'.
+> diff --git a/drivers/irqchip/irq-loongson-liointc.c b/drivers/irqchip/irq-loongson-liointc.c
+> index 8d05d8b..526ade4 100644
+> --- a/drivers/irqchip/irq-loongson-liointc.c
+> +++ b/drivers/irqchip/irq-loongson-liointc.c
+> @@ -23,7 +23,7 @@
+>  #endif
+>  
+>  #define LIOINTC_CHIP_IRQ	32
+> -#define LIOINTC_NUM_PARENT 4
+> +#define LIOINTC_NUM_PARENT	4
+>  #define LIOINTC_NUM_CORES	4
+>  
+>  #define LIOINTC_INTC_CHIP_START	0x20
+> @@ -58,6 +58,8 @@ struct liointc_priv {
+>  	bool				has_lpc_irq_errata;
+>  };
+>  
+> +struct fwnode_handle *liointc_handle;
+> +
+>  static void liointc_chained_handle_irq(struct irq_desc *desc)
+>  {
+>  	struct liointc_handler_data *handler = irq_desc_get_handler_data(desc);
+> @@ -153,97 +155,82 @@ static void liointc_resume(struct irq_chip_generic *gc)
+>  	irq_gc_unlock_irqrestore(gc, flags);
+>  }
+>  
+> -static const char * const parent_names[] = {"int0", "int1", "int2", "int3"};
+> -static const char * const core_reg_names[] = {"isr0", "isr1", "isr2", "isr3"};
+> +static int parent_irq[LIOINTC_NUM_PARENT];
+> +static u32 parent_int_map[LIOINTC_NUM_PARENT];
+> +static const char *const parent_names[] = {"int0", "int1", "int2", "int3"};
+> +static const char *const core_reg_names[] = {"isr0", "isr1", "isr2", "isr3"};
+>  
+> -static void __iomem *liointc_get_reg_byname(struct device_node *node,
+> -						const char *name)
+> +#ifdef CONFIG_ACPI
+> +static int liointc_domain_xlate(struct irq_domain *d, struct device_node *ctrlr,
+> +			     const u32 *intspec, unsigned int intsize,
+> +			     unsigned long *out_hwirq, unsigned int *out_type)
+>  {
+> -	int index = of_property_match_string(node, "reg-names", name);
+> -
+> -	if (index < 0)
+> -		return NULL;
+> -
+> -	return of_iomap(node, index);
+> +	if (WARN_ON(intsize < 1))
+> +		return -EINVAL;
+> +	*out_hwirq = intspec[0] - GSI_MIN_CPU_IRQ;
+> +	*out_type = IRQ_TYPE_NONE;
+> +	return 0;
+>  }
+>  
+> -static int __init liointc_of_init(struct device_node *node,
+> -				  struct device_node *parent)
+> +const struct irq_domain_ops acpi_irq_gc_ops = {
 
-Currently, When the condition (w->dapm != dapm) is true the loop continues
-and when it is not then it compares the name strings and breaks out of the
-loop if they match with w pointing to the right entry and it also breaks
-out of loop if they didn't match by additionally setting w to NULL. But
-what if the condition (w->dapm != dapm) is never false and the list
-traversal completes with w pointing to last entry then usage of it after
-the iter may not be correct. And there is no way to know whether the entry
-is found. So, if we introduce w_found to track when the entry is found
-then we can account for the case where the entry is not actually found and
-the list traversal completes.
+This should be static.
 
-Fixes coccinelle error:
-drivers/staging/greybus/audio_helper.c:135:7-8: ERROR:
-invalid reference to the index variable of the iterator on line 127
+> +	.map	= irq_map_generic_chip,
+> +	.unmap  = irq_unmap_generic_chip,
+> +	.xlate	= liointc_domain_xlate,
+> +};
+> +#endif
+> +
+> +static int liointc_init(phys_addr_t addr, unsigned long size, int revision,
+> +		struct fwnode_handle *domain_handle, struct device_node *node)
+>  {
+> +	int i, err;
+> +	void __iomem *base;
+> +	struct irq_chip_type *ct;
+>  	struct irq_chip_generic *gc;
+>  	struct irq_domain *domain;
+> -	struct irq_chip_type *ct;
+>  	struct liointc_priv *priv;
+> -	void __iomem *base;
+> -	u32 of_parent_int_map[LIOINTC_NUM_PARENT];
+> -	int parent_irq[LIOINTC_NUM_PARENT];
+> -	bool have_parent = FALSE;
+> -	int sz, i, err = 0;
+>  
+>  	priv = kzalloc(sizeof(*priv), GFP_KERNEL);
+>  	if (!priv)
+>  		return -ENOMEM;
+>  
+> -	if (of_device_is_compatible(node, "loongson,liointc-2.0")) {
+> -		base = liointc_get_reg_byname(node, "main");
+> -		if (!base) {
+> -			err = -ENODEV;
+> -			goto out_free_priv;
+> -		}
+> +	base = ioremap(addr, size);
+> +	if (!base)
+> +		goto out_free_priv;
+>  
+> -		for (i = 0; i < LIOINTC_NUM_CORES; i++)
+> -			priv->core_isr[i] = liointc_get_reg_byname(node, core_reg_names[i]);
+> -		if (!priv->core_isr[0]) {
+> -			err = -ENODEV;
+> -			goto out_iounmap_base;
+> -		}
+> -	} else {
+> -		base = of_iomap(node, 0);
+> -		if (!base) {
+> -			err = -ENODEV;
+> -			goto out_free_priv;
+> -		}
+> +	for (i = 0; i < LIOINTC_NUM_CORES; i++)
+> +		priv->core_isr[i] = base + LIOINTC_REG_INTC_STATUS;
+>  
+> -		for (i = 0; i < LIOINTC_NUM_CORES; i++)
+> -			priv->core_isr[i] = base + LIOINTC_REG_INTC_STATUS;
+> -	}
+> +	for (i = 0; i < LIOINTC_NUM_PARENT; i++)
+> +		priv->handler[i].parent_int_map = parent_int_map[i];
+>  
+> -	for (i = 0; i < LIOINTC_NUM_PARENT; i++) {
+> -		parent_irq[i] = of_irq_get_byname(node, parent_names[i]);
+> -		if (parent_irq[i] > 0)
+> -			have_parent = TRUE;
+> -	}
+> -	if (!have_parent) {
+> -		err = -ENODEV;
+> -		goto out_iounmap_isr;
+> -	}
+> +	if (revision > 1) {
+> +		for (i = 0; i < LIOINTC_NUM_CORES; i++) {
+> +			int index = of_property_match_string(node,
+> +					"reg-names", core_reg_names[i]);
+>  
+> -	sz = of_property_read_variable_u32_array(node,
+> -						"loongson,parent_int_map",
+> -						&of_parent_int_map[0],
+> -						LIOINTC_NUM_PARENT,
+> -						LIOINTC_NUM_PARENT);
+> -	if (sz < 4) {
+> -		pr_err("loongson-liointc: No parent_int_map\n");
+> -		err = -ENODEV;
+> -		goto out_iounmap_isr;
+> -	}
+> +			if (index < 0)
+> +				return -EINVAL;
+>  
+> -	for (i = 0; i < LIOINTC_NUM_PARENT; i++)
+> -		priv->handler[i].parent_int_map = of_parent_int_map[i];
+> +			priv->core_isr[i] = of_iomap(node, index);
+> +		}
+> +	}
+>  
+>  	/* Setup IRQ domain */
+> -	domain = irq_domain_add_linear(node, 32,
+> +#ifdef CONFIG_ACPI
+> +	domain = irq_domain_create_linear(domain_handle, LIOINTC_CHIP_IRQ,
+> +					&acpi_irq_gc_ops, priv);
+> +#else
+> +	domain = irq_domain_create_linear(domain_handle, LIOINTC_CHIP_IRQ,
+>  					&irq_generic_chip_ops, priv);
+> +#endif
 
-Signed-off-by: Karthik Alapati <mail@karthek.com>
----
- drivers/staging/greybus/audio_helper.c | 8 ++++++--
- 1 file changed, 6 insertions(+), 2 deletions(-)
+This feels wrong. The ACPI vs OF decision should be a runtime
+one. Maybe you don't have that issue yet because MIPS is only OF and
+LoongArch only ACPI, but it remains that this should be done
+dynamically.
 
-diff --git a/drivers/staging/greybus/audio_helper.c b/drivers/staging/greybus/audio_helper.c
-index 843760675876..7c04897a22a2 100644
---- a/drivers/staging/greybus/audio_helper.c
-+++ b/drivers/staging/greybus/audio_helper.c
-@@ -116,6 +116,7 @@ int gbaudio_dapm_free_controls(struct snd_soc_dapm_context *dapm,
- {
- 	int i;
- 	struct snd_soc_dapm_widget *w, *next_w;
-+	bool w_found = false;
- #ifdef CONFIG_DEBUG_FS
- 	struct dentry *parent = dapm->debugfs_dapm;
- 	struct dentry *debugfs_w = NULL;
-@@ -124,15 +125,18 @@ int gbaudio_dapm_free_controls(struct snd_soc_dapm_context *dapm,
- 	mutex_lock(&dapm->card->dapm_mutex);
- 	for (i = 0; i < num; i++) {
- 		/* below logic can be optimized to identify widget pointer */
-+		w_found = false
- 		list_for_each_entry_safe(w, next_w, &dapm->card->widgets,
- 					 list) {
- 			if (w->dapm != dapm)
- 				continue;
--			if (!strcmp(w->name, widget->name))
-+			if (!strcmp(w->name, widget->name)) {
-+				w_found = true;
- 				break;
-+			}
- 			w = NULL;
- 		}
--		if (!w) {
-+		if (!w_found) {
- 			dev_err(dapm->dev, "%s: widget not found\n",
- 				widget->name);
- 			widget++;
+Please try to rewrite it as:
+
+	if (!acpi_disabled)
+		[... ACPI stuff ...]
+	else
+		[... OF stuff ...]
+
+This should apply to all other cases where you have similar distinctions.
+
+Thanks,
+
+	M.
+
 -- 
-2.36.1
-
+Without deviation from the norm, progress is not possible.

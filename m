@@ -2,50 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C201569C82
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 10:08:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BFFBD569C7B
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 10:08:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235238AbiGGIIH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Jul 2022 04:08:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53636 "EHLO
+        id S235246AbiGGIIM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Jul 2022 04:08:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53652 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234655AbiGGIID (ORCPT
+        with ESMTP id S235120AbiGGIIE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Jul 2022 04:08:03 -0400
-Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com [IPv6:2607:f8b0:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8A0B33E29
-        for <linux-kernel@vger.kernel.org>; Thu,  7 Jul 2022 01:08:02 -0700 (PDT)
-Received: by mail-pf1-x42d.google.com with SMTP id j3so5212685pfb.6
-        for <linux-kernel@vger.kernel.org>; Thu, 07 Jul 2022 01:08:02 -0700 (PDT)
+        Thu, 7 Jul 2022 04:08:04 -0400
+Received: from mail-pg1-x532.google.com (mail-pg1-x532.google.com [IPv6:2607:f8b0:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B30F133E24
+        for <linux-kernel@vger.kernel.org>; Thu,  7 Jul 2022 01:08:03 -0700 (PDT)
+Received: by mail-pg1-x532.google.com with SMTP id o18so15926353pgu.9
+        for <linux-kernel@vger.kernel.org>; Thu, 07 Jul 2022 01:08:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=MO3ynSxTj8X1iCfAoxAy28PWw6GICyf08YG7/5qtXxo=;
-        b=PJ+ZhdDXDLbL0KK1RiKOurk0CvAhFVF5mBp/VCAST7ahanMw8eIp5Bzpjk3oKcvJiO
-         J0qspqCUt1HpVmVXfRtifYWZyVpVqEwTtG0lqcvVxcEDZFA7/FzhNXIxZgGnNmHI8NdZ
-         pBUYRfrd0OZLpgNUYGy59RmWrlyUODCb6y26Dx/OylIZQawfKSnrCo8kQJwOtuIdkPgV
-         P5c38HarwZL1OYa1I0eprUzp4mmcX2HPL5G2n0Kk3XeOe5vskaqy8V7zYoyYo7XZWWho
-         Ez2bs1VLcPFGJi8h34ZKrysLJFnXBSX1UBwFSzGpKeHh/I3kDKNl09l/WW9STD/xJv20
-         1CVA==
+        bh=2JMkXDEWsNUyTV2UFLqYbO8oSrxA6PJmtCKjhOjVVJ4=;
+        b=nWYmo88lUUMdAAw/AyAA10vGHCXrzofBxrdXE1qJ963zAeRDuNtSuDr+VV8zmRubSq
+         9lUhLXxg/R4MjQ11mEQilzJuJU957zpgOqCfmn3PfrdcSeCw74kjSaKWfy4g8OM6/LL9
+         m+13SWwSSgiOVzEAvOch/Yr8Y5m6CyMbhf1ErWIE+EXTbEO0Z9Kw82BQQ1prM3ORrzUk
+         VXsM4Aajba2dQA0Qav2OT3AnMxsW4zLEAfkWgRmWZEvxxioMH6pdmy++vMMk0cblfj3I
+         Im5Gn3/9qc/1jZW+bedAApaLjpiXSJhCTcVf1JFt4aIg77Mb4E9SD8Ba098UnwN1i0VU
+         5v7g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=MO3ynSxTj8X1iCfAoxAy28PWw6GICyf08YG7/5qtXxo=;
-        b=l0YjID6RCwjJhpbjtWrvEKxv8P5Se7KTJtMl0zRSzDDqzUr1kKDTurE2sLVez8Lenk
-         ueittgImEW3TIj1Atl5lCoOngril9YLGHWGCXZtIObT31TiFb1I8BpbJhlyd/Bh+FN2M
-         QaOxJauOGSk9XH2M6mFUQskOFY/aZBCS1kRgahAasiha4m/vLttwuWkwJjd6bMHKtYXz
-         puLXvDmnrIg4vfo44ipOnETtOiGeETANdxRXmOeMY7eURw2/jbMOxZ92MjfgghqHKslC
-         BWYMNXF902E2l1Y9E5xKrTYo+zDoCEuSxyKIh9JRWZJZAnmH1tpB8ZqzJEshyNgMbX+b
-         Mz9g==
-X-Gm-Message-State: AJIora/iVU5IpEDyCGxerJkJ0BjqmmCM4D6Dqk4fMOW09z1rLOzeKtzO
-        fFh9KtDsK/nmkjl22K//YQ0=
-X-Google-Smtp-Source: AGRyM1vNn3jmyFY6iNR9bfGT2tzhmnOtKbimC0i10Ah6N47O9NBIDTvg6GpILMBbxDE7K7U1ewfGMg==
-X-Received: by 2002:a17:902:6b8b:b0:14d:66c4:f704 with SMTP id p11-20020a1709026b8b00b0014d66c4f704mr52158092plk.53.1657181282389;
-        Thu, 07 Jul 2022 01:08:02 -0700 (PDT)
+        bh=2JMkXDEWsNUyTV2UFLqYbO8oSrxA6PJmtCKjhOjVVJ4=;
+        b=zWAgv8pzcuhHzWOOJcEjRPthjr2HFxkmoorWdAoNzWdV+w+b6jwn6wDcfS1JwYTUmv
+         VglAXWreYLbe19AFH5jsU7eOep7a5pQjKQfzYahTeWk8InT/jPsgMs04HGahQqiI7tNi
+         uOEUOcFZbxdh4pe0b0D9Htyh0FZpEbWksp8AHXxiIUz3Saysf/10W4B7WsXSH1KGkKji
+         by74UEkoIPhFt+QjEpDppkbXvTs0kaCUH7iCEcGL2bgxUxSz/0MXY13+KxxbqdBsEATm
+         uVUsD79d1EonYjhB8OVdDh0w7xRI2aSXaZtW9dmaOjCsQASqut9s3I0Vh3O14MNNRsah
+         liPQ==
+X-Gm-Message-State: AJIora8tIdHgtwfj/4cuXXOCNfgZlbRZ5dL8nIGTQz/ZxQjPhsj0R4ym
+        R63QbFUaiJNON5PykidL6yR5D+dF/X/l8g==
+X-Google-Smtp-Source: AGRyM1vAj9M28V9eEUa1ApSChnk2UKy2aafHz1z3Exu9j5+0/rqmJGtoPCJzhLb48Tq8hU5ivANbJw==
+X-Received: by 2002:a63:c006:0:b0:411:c33f:b4bb with SMTP id h6-20020a63c006000000b00411c33fb4bbmr31162443pgg.433.1657181283214;
+        Thu, 07 Jul 2022 01:08:03 -0700 (PDT)
 Received: from octofox.hsd1.ca.comcast.net ([2601:641:401:1d20:a3e3:ea8c:2267:a237])
-        by smtp.gmail.com with ESMTPSA id p4-20020a170902e74400b0016c0c82e85csm1377374plf.75.2022.07.07.01.08.01
+        by smtp.gmail.com with ESMTPSA id p4-20020a170902e74400b0016c0c82e85csm1377374plf.75.2022.07.07.01.08.02
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
         Thu, 07 Jul 2022 01:08:02 -0700 (PDT)
 From:   Max Filippov <jcmvbkbc@gmail.com>
@@ -53,9 +53,9 @@ To:     linux-xtensa@linux-xtensa.org
 Cc:     Chris Zankel <chris@zankel.net>, linux-kernel@vger.kernel.org,
         Yang Yingliang <yangyingliang@huawei.com>,
         Max Filippov <jcmvbkbc@gmail.com>
-Subject: [PATCH 1/3] xtensa: iss/network: drop 'devices' list
-Date:   Thu,  7 Jul 2022 01:07:59 -0700
-Message-Id: <20220707080801.3496148-2-jcmvbkbc@gmail.com>
+Subject: [PATCH 2/3] xtensa: iss/network: provide release() callback
+Date:   Thu,  7 Jul 2022 01:08:00 -0700
+Message-Id: <20220707080801.3496148-3-jcmvbkbc@gmail.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20220707080801.3496148-1-jcmvbkbc@gmail.com>
 References: <20220707080801.3496148-1-jcmvbkbc@gmail.com>
@@ -72,89 +72,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There are two per-device lists in the ISS network driver: command line
-parameters list and iss_net_private object list. The latter is only used
-for duplicate checking in the function iss_net_setup where the former
-should have been used.
-Drop iss_net_private object list and associated code and use command
-line parameters list in the iss_net_setup instead.
+Provide release() callback for the platform device embedded into struct
+iss_net_private and registered in the iss_net_configure so that
+platform_device_unregister could be called for it.
 
 Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
 ---
- arch/xtensa/platforms/iss/network.c | 21 +++------------------
- 1 file changed, 3 insertions(+), 18 deletions(-)
+ arch/xtensa/platforms/iss/network.c | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
 
 diff --git a/arch/xtensa/platforms/iss/network.c b/arch/xtensa/platforms/iss/network.c
-index fd84d4891758..2d566231688f 100644
+index 2d566231688f..2a22e80a488d 100644
 --- a/arch/xtensa/platforms/iss/network.c
 +++ b/arch/xtensa/platforms/iss/network.c
-@@ -37,10 +37,6 @@
- #define ETH_HEADER_OTHER 14
- #define ISS_NET_TIMER_VALUE (HZ / 10)
+@@ -466,6 +466,15 @@ static const struct net_device_ops iss_netdev_ops = {
+ 	.ndo_set_rx_mode	= iss_net_set_multicast_list,
+ };
  
--
--static DEFINE_SPINLOCK(devices_lock);
--static LIST_HEAD(devices);
--
- /* ------------------------------------------------------------------------- */
- 
- /* We currently only support the TUNTAP transport protocol. */
-@@ -70,8 +66,6 @@ struct iss_net_ops {
- /* This structure contains out private information for the driver. */
- 
- struct iss_net_private {
--	struct list_head device_list;
--
- 	spinlock_t lock;
++static void iss_net_pdev_release(struct device *dev)
++{
++	struct platform_device *pdev = to_platform_device(dev);
++	struct iss_net_private *lp =
++		container_of(pdev, struct iss_net_private, pdev);
++
++	free_netdev(lp->dev);
++}
++
+ static int iss_net_configure(int index, char *init)
+ {
  	struct net_device *dev;
- 	struct platform_device pdev;
-@@ -488,7 +482,6 @@ static int iss_net_configure(int index, char *init)
+@@ -516,6 +525,7 @@ static int iss_net_configure(int index, char *init)
  
- 	lp = netdev_priv(dev);
- 	*lp = (struct iss_net_private) {
--		.device_list		= LIST_HEAD_INIT(lp->device_list),
- 		.dev			= dev,
- 		.index			= index,
- 	};
-@@ -521,10 +514,6 @@ static int iss_net_configure(int index, char *init)
- 		driver_registered = 1;
- 	}
- 
--	spin_lock(&devices_lock);
--	list_add(&lp->device_list, &devices);
--	spin_unlock(&devices_lock);
--
  	lp->pdev.id = index;
  	lp->pdev.name = DRIVER_NAME;
++	lp->pdev.dev.release = iss_net_pdev_release;
  	platform_device_register(&lp->pdev);
-@@ -574,7 +563,7 @@ struct iss_net_init {
+ 	SET_NETDEV_DEV(dev, &lp->pdev.dev);
  
- static int __init iss_net_setup(char *str)
- {
--	struct iss_net_private *device = NULL;
-+	struct iss_net_init *device = NULL;
- 	struct iss_net_init *new;
- 	struct list_head *ele;
- 	char *end;
-@@ -595,16 +584,12 @@ static int __init iss_net_setup(char *str)
- 	}
- 	str = end;
- 
--	spin_lock(&devices_lock);
--
--	list_for_each(ele, &devices) {
--		device = list_entry(ele, struct iss_net_private, device_list);
-+	list_for_each(ele, &eth_cmd_line) {
-+		device = list_entry(ele, struct iss_net_init, list);
- 		if (device->index == n)
- 			break;
- 	}
- 
--	spin_unlock(&devices_lock);
--
- 	if (device && device->index == n) {
- 		pr_err("Device %u already configured\n", n);
- 		return 1;
 -- 
 2.30.2
 

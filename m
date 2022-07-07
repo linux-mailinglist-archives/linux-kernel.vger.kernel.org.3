@@ -2,229 +2,180 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F07B856AC04
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 21:44:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D4D3B56AC0A
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 21:46:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236386AbiGGToK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Jul 2022 15:44:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55978 "EHLO
+        id S236396AbiGGTqX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Jul 2022 15:46:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56894 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232284AbiGGToH (ORCPT
+        with ESMTP id S235994AbiGGTqW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Jul 2022 15:44:07 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D2742B61F;
-        Thu,  7 Jul 2022 12:44:05 -0700 (PDT)
-Received: from [192.168.2.145] (109-252-119-232.nat.spd-mgts.ru [109.252.119.232])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: dmitry.osipenko)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id C8C8666019C3;
-        Thu,  7 Jul 2022 20:44:02 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1657223044;
-        bh=s9q09bnLdROpMqyLMBUQhz0ijZlXdUM75kjg46rBmj0=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=BAMNb3hntq6N1YVAjYdQILoHglcKsMGJ4YA0mWQQxERAplRBE0k4Vxl03rjeB8BJF
-         SG1siIM+tVhWqAkEMtG8/INZusv1xXwAHmcm1YueWr78NVCtv/GbKWC8BIUfVZ7w/g
-         rxhuHUTrNuOLIXzpd89kZyGwy9UbgCOERVk/rlD+Au7VOSIw+gFiXzA3wadr6/WI2t
-         enzYcVhkpnc7uRlUKvvB1xfGO/xyJeBmQWVGbFUrcUbJxj/KrCjoXnxaAmbXJ2EedE
-         P+P+apJpW9WIrNRSKJLkz8feDH/F9WuM5/wkVegaSeOhMYo1huyPHbjb2y6XTZJ68i
-         nz7CaB0OKpCuA==
-Message-ID: <d557bbd0-2afb-12dc-1287-1aeb44ef55f5@collabora.com>
-Date:   Thu, 7 Jul 2022 22:43:59 +0300
-MIME-Version: 1.0
+        Thu, 7 Jul 2022 15:46:22 -0400
+Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2070.outbound.protection.outlook.com [40.107.243.70])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C2F632EF3;
+        Thu,  7 Jul 2022 12:46:18 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=KPiyQlKwW7jmJ+XxgPmLDF1vaV6ixIyIwISchuJb+SBT7n7H7r2nPJmvFxwCq0QOCNCvuGrUmrws3H1rGP+K5ihSWZJLMmgy1EAm/r1OEfXoTzUbvK5RdoxK8Iupa6dbCdYZCsK/q+6/+8CuGwvCEB6ssG0YRs6kIC5RS+P3ZnFuaLk1eiI/w45rZoNpvsXrpdGtPwD+NEqswJS0v/Gj/wz9+iEbi81/5Q3s8shsnVTNjFpZyhX2m91OezYx0pkiTOxJcs5i0T1F0Xz8gaTeQfv5gRVU6Z6G9jTgvxonJBETf2M7+Q3NxvVR3mtU1QmVuzGkyV22OpCIj6PqnCAlpw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=df2rFbwdC9wwKLpm2P8SkhYr/176yFg2xA+M7AuJyyI=;
+ b=KBdV8MNafAp0jGI06PcAe6x+kc+sKfmWBhKo0SYrUQYBViXlGUPjKKs8nxGKtnVNUobkkUoNdFcw1IOrSpR3/ntkHL84pEvzpIXNqc1pHtvdLEM7mb5du4CP44qyGVkjgl7lr6DFfQcUfXRP5Xa4Td8XFusXwAdokMql/XNBAYAPzjAujWm/qOaCbl5P5YdkXh069cYscm6PdPahzV/IjyTcfLBeoJEEW6c1m6tFiGP2fTWtj/gDi/CVQQNr5SGpDh24j9dKBDhfR8Ne83xjeIE2lyJIeuBbnykubnI5J/rMZb2yUNSFZqBBCfUg5QRWQW9A2Z36PxVguNAIzTXaQw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=df2rFbwdC9wwKLpm2P8SkhYr/176yFg2xA+M7AuJyyI=;
+ b=VQ35mtNg59Cyf5cwSK2Rh1ItGlixQo/hoNn1IK5uKuwPz1LJ1+LrU62t+zCIXq/LyP668uqBsWomR0MnodsbwK03jsV8k9iml9v6WCYy5nn1rySNSf8dTyOb8qXl9PkfMzqUHBSZ+oNoaqY5bPCVt7LGz0EyDP10aK05CI9ORHU=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from MN0PR12MB6222.namprd12.prod.outlook.com (2603:10b6:208:3c2::19)
+ by DM6PR12MB3291.namprd12.prod.outlook.com (2603:10b6:5:186::32) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5395.15; Thu, 7 Jul
+ 2022 19:46:15 +0000
+Received: from MN0PR12MB6222.namprd12.prod.outlook.com
+ ([fe80::ec96:60a2:ca21:17d1]) by MN0PR12MB6222.namprd12.prod.outlook.com
+ ([fe80::ec96:60a2:ca21:17d1%3]) with mapi id 15.20.5395.021; Thu, 7 Jul 2022
+ 19:46:15 +0000
+Message-ID: <e07cfbfd-da96-1251-4d17-2e4bef64e355@amd.com>
+Date:   Thu, 7 Jul 2022 14:46:11 -0500
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH V2 00/13] OPP: Add support for multiple clocks*
+ Thunderbird/91.9.1
+Subject: Re: [PATCH 11/12] cpufreq: amd-pstate: add ACPI disabled check
 Content-Language: en-US
-To:     Viresh Kumar <viresh.kumar@linaro.org>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Dmitry Osipenko <digetx@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Kyungmin Park <kyungmin.park@samsung.com>,
-        MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Nishanth Menon <nm@ti.com>,
+To:     Perry Yuan <Perry.Yuan@amd.com>, rafael.j.wysocki@intel.com,
+        viresh.kumar@linaro.org, Ray.Huang@amd.com,
         "Rafael J. Wysocki" <rafael@kernel.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Viresh Kumar <vireshk@kernel.org>
-Cc:     linux-pm@vger.kernel.org,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-tegra@vger.kernel.org,
-        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-        Rob Herring <robh@kernel.org>
-References: <cover.1657003420.git.viresh.kumar@linaro.org>
-From:   Dmitry Osipenko <dmitry.osipenko@collabora.com>
-In-Reply-To: <cover.1657003420.git.viresh.kumar@linaro.org>
+        Len Brown <lenb@kernel.org>, linux-acpi@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
+Cc:     Deepak.Sharma@amd.com, Mario.Limonciello@amd.com,
+        Nathan.Fontenot@amd.com, Alexander.Deucher@amd.com,
+        Jinzhou.Su@amd.com, Xinmei.Huang@amd.com, Xiaojian.Du@amd.com,
+        Li.Meng@amd.com
+References: <20220707170116.216912-1-Perry.Yuan@amd.com>
+From:   Nathan Fontenot <nafonten@amd.com>
+In-Reply-To: <20220707170116.216912-1-Perry.Yuan@amd.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: CH2PR19CA0005.namprd19.prod.outlook.com
+ (2603:10b6:610:4d::15) To MN0PR12MB6222.namprd12.prod.outlook.com
+ (2603:10b6:208:3c2::19)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 69ed68dd-8d30-4bde-7241-08da60515a22
+X-MS-TrafficTypeDiagnostic: DM6PR12MB3291:EE_
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: rWd0FT2bkrE4WkIQlaBaO1cah+Lqq4j8k1HI8d57Epf7Iu077i1WU8UAH7DXW1H9LflpIsnbUNnObb4jDddgOoGD5CmbgKGkEylhKqKDDNerBgkMSaeZiDmgxDLqU1VzJ0sYTvT06kfW3HOLF8mmu7SG+R0Q15XI8XeP6eSW58PNUQWlZ7L7UlU8wjizD9NgVie3W4zCFJP9LTQ4YckiplA55jzYt2lKno+ACr2nQc/sRioy3LWTbGfS6t/Sl/Pkfbo74FTdQUXYIcTNJmA23cS1yaU62VNDgPV85fCmEp4rRnZE9tU59fvXJQ92cpQFNur1jzcigLAOLo7dLo/WSt8rUzAGvXTqYhsihU1EgM708Z+JTlalYtBBxFAfUzFGV70H6U7StclJ+KWcywz7MibtwqT49Spo9YdkaZIH7WCnRQRnpRU/WCUF3sXBec8EjaT3Dd7eZREfNccFLtvd3sRGe3+eaF0gEI+f/nxql57oW/0xtCvzgqFWGe6/jetB0qXXyL63mnBKOCBJxRLHmep58WH60zHDCUdcjtDRHjPxMF5neS698yHevHl09FHnfymoHWHdM0QTYqPaFFYcHs46y2iFIyNue0gCWoAcw+Bs8a/6+m5J5VvNWVcdD2AqIZiq4OdupgadLXbm19yNpYbmNaQcdB/FgblHNDcEsJP8C6WAMTa6DuT9U9ja7iBDNLUw0zcIxI7ppwfR1Guc+9y0TtoQwp8ZLFRlLemia8iJ9u+l40L4T9pIqzXYIRJplI+5J0vxqaTIbZIR52wbPmkqeTGNMP5injNColwattrDC2urKkLb92B5RS7LXoZSFKYKZ2qUfYogIZLPZ2JDkHiNynRQdeMx5Z+egMd+Nc8=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN0PR12MB6222.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(136003)(366004)(376002)(396003)(39860400002)(346002)(5660300002)(41300700001)(31696002)(8936002)(478600001)(26005)(6512007)(2906002)(6506007)(53546011)(6486002)(38100700002)(31686004)(6666004)(2616005)(186003)(83380400001)(66946007)(8676002)(66556008)(110136005)(36756003)(316002)(66476007)(4326008)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?N1UvQXJ6L3A1UkZEVGFuZStVYkZEQ0Y4RlpUOS9iVitIWmEvaTVMZ25jalhr?=
+ =?utf-8?B?aTJWVDA4Um83OXNUSWZWMDhDS2hZcmRoNkxBanZoRWE4Y3dEMTgvamJIbkRE?=
+ =?utf-8?B?MCtHZWF1TXR6NTREK0gyMHpCOVI3UjJuZTRiZlFnRTBmVGlFUEdHZFREWkdN?=
+ =?utf-8?B?YjZ6Y3M5a1BQZFdUOTVmSXBQNEtxMW9YNXB0QWxaMUp0TmFiNzg1dFpJaGZw?=
+ =?utf-8?B?OURVWkdIRzlGZjJ4T2hMbEFjNnFyMmNpaS9rVC9vUTJITm04MmF3M1RZZkQ4?=
+ =?utf-8?B?UFZxSFZ4L3cxRmRkMXM1VUFPZ3prcnVsbzEyNzFpVCtBd1pwdVVBWHJucWRt?=
+ =?utf-8?B?VldDVlJwaitaWnltSXRiTktSZ2h4eTZJc2NQU3MrWVRTWGhsSG9BVGNHMUlN?=
+ =?utf-8?B?WjNhNEEzYkxYRU1qZFdwS0prbjNuZHF2dDdYeU0rU3grRmlBY1NzWHVJaUh5?=
+ =?utf-8?B?TXdBalZYT0tLcjkyZituNkIxOXpoT0E0ZXAzM0M4Nm5ncHV3OGQzQnJrSWpn?=
+ =?utf-8?B?KzNQZFJxdkxxL3dyNkJRRE91VVMrRkpZS2p4dzNMR3kwMHVyWWFhaXZZc1BU?=
+ =?utf-8?B?K0lFdUFrelVMZVJvUlc4THR0NlFiM1ZRajVWMXo3UGtqcFEzWFpKWUhGM2JK?=
+ =?utf-8?B?YWFOTFBQcUM1ZlNOdDYyMXBLK3gwWS9ab1R2aDBFR1hIdTkxUHZ2dkFNZ2g3?=
+ =?utf-8?B?OVZuMVM3V1N2b003eHdSRVM3SUQwQ1o0N01XREZXWUxkTlFGYU4rdjdXMGlq?=
+ =?utf-8?B?U0grRTV6dC83Zlh5N2hFdWpPWHFWREJjenVLdGRRZ0JSeW4rWVBSYmVsUWxN?=
+ =?utf-8?B?dS92dVpUdnlEdy9tcEh3Q3VGU01KNlEwdkRSZ1BoOVNoUks5YWZXTlZvSlZS?=
+ =?utf-8?B?dFV6SWZsRUJuVWVlY2ZHMzdYWkNVYnV4R3hBUk9QdnhJSmZyY1JYSURaM0t6?=
+ =?utf-8?B?VWYyNWFLOUpMQVA2bkRhdWh6eCtkOUdmdUNrSnU1ekNWSmsrZXBEdUpMaXUr?=
+ =?utf-8?B?d2xtWjQ5WFFWYUtmSXNWSkVpYVN2Zk1NLzNHb2dzSXdHRUJQMWpYQ2JRcnox?=
+ =?utf-8?B?dk5tdnQxWFVvYUNxSlY1REwwN1JsWE5tVkN2Nkt5RHlEYzBoZXNNWGxSM3lD?=
+ =?utf-8?B?clI3Y0ZnNXAvUldUMitjZnFwVEdoU0NEQzVraWY3bldUSDlTMUZLYTM1NGdQ?=
+ =?utf-8?B?Njk5eUJHaEVVZERPazVLUnpLZUFaYmg2VCtDNkFWb0w3aFBvYTZHNXhpUFlW?=
+ =?utf-8?B?MkFmQmpqL3d3R3FCZGF6N0hrSEFCUnpwQXg4TjlpK0EzaVNXSkZiWDhDcWJE?=
+ =?utf-8?B?S1IrNGppUmxMYllUbU5SaDZHV1hxcnRnR1ZEc3VuV3VDdFcyWDRETzM0bFlY?=
+ =?utf-8?B?M1BkSDlyem1VQ1JMQjlZT242R0VRTE82YmpzTFRQenZBSWhlQVdLZXAya3Vk?=
+ =?utf-8?B?QS9xZ2RYVUVjZjdCb3gyYVFOclpIRTBEb0ZQUFFJMDZ0aVZEdHBLUWNPZGdN?=
+ =?utf-8?B?YmxRZWIyTmd6N1VyTWE3d3JkUVpVUXQyK3k5blE0NXlMeHNETURJbmRwMld0?=
+ =?utf-8?B?b2RwVms4bFFCMEpZNHM1M0t5WTZlQ1lyK2I4VDl5UG1Ic0NnTm00dElPNC9p?=
+ =?utf-8?B?NG12SXoxQTROTXI5M3dVdXBGckFOaTVzT1dCb2hJVHlKaHVpN3ExYWRPbDFS?=
+ =?utf-8?B?OTRxTENWZHFqdEJDdTBadnpFWlltOTA0cTZ1UERXZFVvR3R5SEZpNnIwZkNu?=
+ =?utf-8?B?UzgzbnRob3ErK0c4eFFseFMrQlA2cm1ZVEFxd0VxUHVtU0lQcSswRWpjZTMz?=
+ =?utf-8?B?WUZpd0ZJaDlBRk1TUzBWTG1FbU8vZDlSRGVxMml2UUk4cURqeFVBQ1lCYUlL?=
+ =?utf-8?B?dWM5NUl0WXF2ZytrM0k4SmVlK3pqTEZqRSs4alRrcXdUaCtuekhsSGMvUzdD?=
+ =?utf-8?B?QTJxT3BwWW9ORk9IVUsySkZCMUZOTTVDdTRoNmtPL0c4V29nckdlNmNxZ0Ns?=
+ =?utf-8?B?N2pjcFU4cXlNVnllNHFZck1NR2ZCUW5OQUZ1MHB4aEt2QmdnNzJMMFE4UmRE?=
+ =?utf-8?B?eG1zT21xQlJzK0JhWkVmWGxmMng1dHRUNEs1RktFU1RaNUNUUklkbW52bXIx?=
+ =?utf-8?Q?s6qW2OtpIi1Fi9R8EkfBTgt74?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 69ed68dd-8d30-4bde-7241-08da60515a22
+X-MS-Exchange-CrossTenant-AuthSource: MN0PR12MB6222.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Jul 2022 19:46:14.8732
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: hkmGYDILQVP4tl0AxpcYXQYGBauU9TpOEw+mcQnJRbL/pNSR6AJVBNpsFpZcsnfMZsuBW5ma2XHoN4Db3RvuqA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR12MB3291
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 7/5/22 10:00, Viresh Kumar wrote:
-> Hello,
+On 7/7/22 12:01, Perry Yuan wrote:
+> Add acpi function check in case ACPI is not enabled, that will cause
+> pstate driver failed to call cppc acpi to change perf or update epp
+> value for shared memory solution processors.
 > 
-> This patchset adds support for devices with multiple clocks. None of the clocks
-> is considered primary in this case and all are handled equally.
+> When CPPC is invalid, warning log will be needed to be printed to tell
+> user what is wrong.
 > 
-> The drivers, for multiple clock case, are expected to call dev_pm_opp_set_opp()
-> to set the specific OPP. Though how they find the target OPP is left for the
-> users to handle. For some, we may have another unique OPP property, like level,
-> which can be used to find the OPP. While in case of others, we may want to
-> implement freq-based OPP finder APIs for multiple clock rates. I have decided
-> not to implement them in advance, and add them only someone wants to use them.
+> Signed-off-by: Perry Yuan <Perry.Yuan@amd.com>
+> ---
+>  drivers/acpi/cppc_acpi.c     | 3 +++
+>  drivers/cpufreq/amd-pstate.c | 2 +-
+>  2 files changed, 4 insertions(+), 1 deletion(-)
 > 
-> This is rebased over a lot of other OPP changes and is pushed here:
-> 
-> git://git.kernel.org/pub/scm/linux/kernel/git/vireshk/pm.git opp/linux-next
-> 
-> V1->V2:
-> 
-> - Fix broken git bisect for:
->   OPP: Reuse _opp_compare_key() in _opp_add_static_v2()
-> 
-> - Include binding changes written by Krzysztof earlier.
-> 
-> - Check config_clks before calling it, it isn't always set.
-> 
-> - Add config_clks for Tegra30's devfreq to handle its corner case.
-> 
-> - _opp_compare_key() supports multi-clk case now, earlier it skipped freq
->   comparison for such a case.
-> 
-> - New patch to compare all bandwidth values as well in _opp_compare_key().
-> 
-> - New patch to remove *_noclk() interface.
-> 
-> - Various other minor fixes.
-> 
-> --
-> Viresh
-> 
-> Krzysztof Kozlowski (1):
->   dt-bindings: opp: accept array of frequencies
-> 
-> Viresh Kumar (12):
->   OPP: Use consistent names for OPP table instances
->   OPP: Remove rate_not_available parameter to _opp_add()
->   OPP: Reuse _opp_compare_key() in _opp_add_static_v2()
->   OPP: Make dev_pm_opp_set_opp() independent of frequency
->   OPP: Allow multiple clocks for a device
->   OPP: Compare bandwidths for all paths in _opp_compare_key()
->   OPP: Add key specific assert() method to key finding helpers
->   OPP: Assert clk_count == 1 for single clk helpers
->   OPP: Provide a simple implementation to configure multiple clocks
->   OPP: Allow config_clks helper for single clk case
->   PM / devfreq: tegra30: Register config_clks helper
+> diff --git a/drivers/acpi/cppc_acpi.c b/drivers/acpi/cppc_acpi.c
+> index 6ff1901d7d43..17d67e3ededf 100644
+> --- a/drivers/acpi/cppc_acpi.c
+> +++ b/drivers/acpi/cppc_acpi.c
+> @@ -424,6 +424,9 @@ bool acpi_cpc_valid(void)
+>  	struct cpc_desc *cpc_ptr;
+>  	int cpu;
+>  
+> +	if (acpi_disabled)
+> +		return false> +
 
-Hello Viresh,
+This seems ok, the only other places I find that call acpi_cpc_valid() also check
+for acpi_disabled.
 
-This patch breaks Tegra again, please take a look:
+If the acpi_disabled check is added to acpi_cpc_valid() the other calling sites should
+be updated to remove their check for acpi_disabled.
 
-   OPP: Remove dev{m}_pm_opp_of_add_table_noclk()
+-Nathan
 
- 8<--- cut here ---
- Unable to handle kernel paging request at virtual address ffffffff
- [ffffffff] *pgd=9effd861, *pte=00000000, *ppte=00000000
- Internal error: Oops: 37 [#1] PREEMPT SMP ARM
- Modules linked in:
- CPU: 3 PID: 8 Comm: kworker/u8:0 Not tainted
-5.19.0-rc1-00040-g30b62d123f4f #82
- Hardware name: NVIDIA Tegra SoC (Flattened Device Tree)
- Workqueue: events_unbound deferred_probe_work_func
- PC is at _opp_compare_key+0x40/0xc4
- LR is at 0xfffffffb
- pc : [<c0b91b54>]    lr : [<fffffffb>]    psr: 20000113
- sp : df831b08  ip : c33cd4d0  fp : df831b24
- r10: c2586078  r9 : c258606c  r8 : 00000000
- r7 : 00000000  r6 : 00000001  r5 : c33cd480  r4 : c2586000
- r3 : 00000000  r2 : c33cd480  r1 : c258606c  r0 : c2586000
- Flags: nzCv  IRQs on  FIQs on  Mode SVC_32  ISA ARM  Segment none
- Control: 10c5387d  Table: 8000404a  DAC: 00000051
-...
- Backtrace:
-  _opp_compare_key from _set_opp+0x80/0x408
-  r7:00000000 r6:c27c0010 r5:c33cd480 r4:c2586000
-  _set_opp from dev_pm_opp_set_opp+0x74/0xdc
-  r10:00000001 r9:000f4240 r8:c33b6840 r7:c33b6840 r6:c33cd480 r5:c27c0010
-  r4:c2586000
-  dev_pm_opp_set_opp from tegra_pmc_core_pd_set_performance_state+0x54/0xbc
-  r6:c33b6840 r5:c1a21760 r4:c33cd480
-  tegra_pmc_core_pd_set_performance_state from
-_genpd_set_performance_state+0x1f0/0x280
-  r6:c33b6b58 r5:c33b6b48 r4:000f4240
-  _genpd_set_performance_state from _genpd_set_performance_state+0xb4/0x280
-  r10:00000001 r9:000f4240 r8:c33b9800 r7:c33b6840 r6:c33b9b18 r5:c33d0040
-  r4:000f4240
-  _genpd_set_performance_state from genpd_set_performance_state+0xb8/0xd4
-  r10:c33b9a98 r9:c33d0400 r8:00000000 r7:00000000 r6:c33b9800 r5:00000000
-  r4:c33d0400
-  genpd_set_performance_state from genpd_runtime_resume+0x22c/0x240
-  r5:00000000 r4:c27c0810
-  genpd_runtime_resume from __rpm_callback+0x4c/0x1ac
-  r10:c27ba8bc r9:00000000 r8:c27c0960 r7:c27c08cc r6:c27ba800 r5:c09611b8
-  r4:c27c0810
-  __rpm_callback from rpm_callback+0x60/0x64
-  r9:df831ce4 r8:c27c0960 r7:00000004 r6:c27ba800 r5:c09611b8 r4:c27c0810
-  rpm_callback from rpm_resume+0x480/0x7e0
-  r7:00000004 r6:c27ba800 r5:c09611b8 r4:c27c0810
-  rpm_resume from __pm_runtime_resume+0x58/0xb0
-  r10:00000000 r9:c2587194 r8:c2587210 r7:c27c0810 r6:c27c08cc r5:60000113
-  r4:c27c0810
-  __pm_runtime_resume from host1x_probe+0x3d4/0x6d4
-  r7:c27c0810 r6:c27c0800 r5:00000000 r4:c2587040
-  host1x_probe from platform_probe+0x6c/0xc0
-  r10:c191438c r9:c1aa8e20 r8:0000000d r7:c27c0810 r6:c1a2d354 r5:c27c0810
-  r4:00000000
-  platform_probe from really_probe.part.0+0xac/0x2c0
-  r7:c27c0810 r6:c1a2d354 r5:c27c0810 r4:00000000
-  really_probe.part.0 from __driver_probe_device+0xb8/0x14c
-  r7:c27c0810 r6:c1a2d354 r5:00000000 r4:c27c0810
-  __driver_probe_device from driver_probe_device+0x44/0x11c
-  r7:c27c0810 r6:c27c0810 r5:c2137c58 r4:c2137c54
-  driver_probe_device from __device_attach_driver+0xc8/0x10c
-  r9:c1aa8e20 r8:c242c000 r7:00000000 r6:c27c0810 r5:df831e6c r4:c1a2d354
-  __device_attach_driver from bus_for_each_drv+0x90/0xdc
-  r7:00000000 r6:c09440f8 r5:df831e6c r4:00000000
-  bus_for_each_drv from __device_attach+0xbc/0x1d4
-  r6:c27c0854 r5:00000001 r4:c27c0810
-  __device_attach from device_initial_probe+0x1c/0x20
-  r6:c1a30df8 r5:c27c0810 r4:c27c0810
-  device_initial_probe from bus_probe_device+0x98/0xa0
-  bus_probe_device from deferred_probe_work_func+0x8c/0xbc
-  r7:00000000 r6:c1a309e8 r5:c1a3099c r4:c27c0810
-  deferred_probe_work_func from process_one_work+0x2b8/0x774
-  r7:c25c8000 r6:c2407000 r5:c2557480 r4:c1a309f8
-  process_one_work from worker_thread+0x17c/0x56c
-  r10:00000088 r9:c25c8000 r8:c1905d40 r7:c240703c r6:c2557498 r5:c2407000
-  r4:c2557480
-  worker_thread from kthread+0x108/0x13c
-  r10:00000000 r9:df815e2c r8:c2557500 r7:c2557480 r6:c0151924 r5:c25c8000
-  r4:c2554540
-  kthread from ret_from_fork+0x14/0x28
- Exception stack(0xdf831fb0 to 0xdf831ff8)
- 1fa0:                                     00000000 00000000 00000000
-00000000
- 1fc0: 00000000 00000000 00000000 00000000 00000000 00000000 00000000
-00000000
- 1fe0: 00000000 00000000 00000000 00000000 00000013 00000000
-  r9:00000000 r8:00000000 r7:00000000 r6:00000000 r5:c015ba68 r4:c2554540
- Code: e24cc004 ea000001 e1530006 0a000007 (e5be5004)
- ---[ end trace 0000000000000000 ]---
-
-
--- 
-Best regards,
-Dmitry
+>  	for_each_present_cpu(cpu) {
+>  		cpc_ptr = per_cpu(cpc_desc_ptr, cpu);
+>  		if (!cpc_ptr)
+> diff --git a/drivers/cpufreq/amd-pstate.c b/drivers/cpufreq/amd-pstate.c
+> index b54b3b559993..6d81a9a94dde 100644
+> --- a/drivers/cpufreq/amd-pstate.c
+> +++ b/drivers/cpufreq/amd-pstate.c
+> @@ -684,7 +684,7 @@ static int __init amd_pstate_init(void)
+>  		return -ENODEV;
+>  
+>  	if (!acpi_cpc_valid()) {
+> -		pr_debug("the _CPC object is not present in SBIOS\n");
+> +		pr_warn_once("the _CPC object is not present in SBIOS or ACPI disabled\n");
+>  		return -ENODEV;
+>  	}
+>  

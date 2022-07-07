@@ -2,64 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3634E56A120
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 13:37:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C7DE56A124
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 13:39:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235044AbiGGLhf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Jul 2022 07:37:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45520 "EHLO
+        id S234814AbiGGLjK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Jul 2022 07:39:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47204 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232086AbiGGLhe (ORCPT
+        with ESMTP id S232086AbiGGLjI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Jul 2022 07:37:34 -0400
-Received: from sender-of-o53.zoho.in (sender-of-o53.zoho.in [103.117.158.53])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADAEB3207B;
-        Thu,  7 Jul 2022 04:37:32 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1657193806; cv=none; 
-        d=zohomail.in; s=zohoarc; 
-        b=I5W1IdvoD2nGBr7cTy4zLxcjT4gnMlRtD3AqrqbTzvvbhez+vjGAwX4xj0GilRpUDRiuDkxBNX8mhjf9gK+/UEXhP0WYqQqxp1I4I7LEuYhxU0CpiOEqmWqbqYfH+H81ddpLBbzsXe/oe66t3z0j2L/vpswji0KWN70Hy5k9LPA=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.in; s=zohoarc; 
-        t=1657193806; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
-        bh=gTKkhe7yy9xe35WDqN7DEWERl5MpDgjwE9MI2CF5JxY=; 
-        b=dxWcutimoHYKOL8oATc3wlMqftMo5koKmJLvdc8pkJnZnGq53Nn3p1Qa1n769/iRxUjc6Tvk/erlLRRsfk7oFIzdtZdIPbAFXE6lgzorc3X3mZYrjN8MEGPWbYZDuEfS5tcyCXon9Zv+6mcG7TaCxIkY1lfPecMxxyYD30Rq4Qw=
-ARC-Authentication-Results: i=1; mx.zohomail.in;
-        dkim=pass  header.i=siddh.me;
-        spf=pass  smtp.mailfrom=code@siddh.me;
-        dmarc=pass header.from=<code@siddh.me>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1657193806;
-        s=zmail; d=siddh.me; i=code@siddh.me;
-        h=Date:Date:From:From:To:To:Cc:Cc:Message-ID:In-Reply-To:References:Subject:Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:Message-Id:Reply-To;
-        bh=gTKkhe7yy9xe35WDqN7DEWERl5MpDgjwE9MI2CF5JxY=;
-        b=GzEjLOsKKpnpUCP+N2Nc85k5+lB8zJSPsSjXmAJLhx7Yksihz/9adhMHH0QIcq0r
-        nwxi4Ag7lVlaItZyo+oajMmJQkjxS6eQk/NbnakNPCGvA7MpEsms0svYumhjXEHJGSj
-        2AqmeW5HcvwkpR5s1/2iJuVJfbQEdWfuk9b5dGJo=
-Received: from mail.zoho.in by mx.zoho.in
-        with SMTP id 1657193795628794.4286758139061; Thu, 7 Jul 2022 17:06:35 +0530 (IST)
-Date:   Thu, 07 Jul 2022 17:06:35 +0530
-From:   Siddh Raman Pant <code@siddh.me>
-To:     "Johannes Berg" <johannes@sipsolutions.net>,
-        "David S . Miller" <davem@davemloft.net>,
-        "Eric Dumazet" <edumazet@google.com>,
-        "Jakub Kicinski" <kuba@kernel.org>,
-        "Paolo Abeni" <pabeni@redhat.com>
-Cc:     "linux-wireless" <linux-wireless@vger.kernel.org>,
-        "netdev" <netdev@vger.kernel.org>,
-        "linux-kernel" <linux-kernel@vger.kernel.org>,
-        "linux-kernel-mentees" 
-        <linux-kernel-mentees@lists.linuxfoundation.org>
-Message-ID: <181d8729017.4900485b8578.8329491601163367716@siddh.me>
-In-Reply-To: <20220701145423.53208-1-code@siddh.me>
-References: <20220701145423.53208-1-code@siddh.me>
-Subject: Ping: [PATCH] net: Fix UAF in ieee80211_scan_rx()
+        Thu, 7 Jul 2022 07:39:08 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F61D4D4CF
+        for <linux-kernel@vger.kernel.org>; Thu,  7 Jul 2022 04:39:07 -0700 (PDT)
+Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mfe@pengutronix.de>)
+        id 1o9PqP-0007JK-BQ; Thu, 07 Jul 2022 13:38:53 +0200
+Received: from mfe by ptx.hi.pengutronix.de with local (Exim 4.92)
+        (envelope-from <mfe@pengutronix.de>)
+        id 1o9PqN-0003dw-Uq; Thu, 07 Jul 2022 13:38:51 +0200
+Date:   Thu, 7 Jul 2022 13:38:51 +0200
+From:   Marco Felsch <m.felsch@pengutronix.de>
+To:     "Peng Fan (OSS)" <peng.fan@oss.nxp.com>
+Cc:     djakov@kernel.org, shawnguo@kernel.org, s.hauer@pengutronix.de,
+        festevam@gmail.com, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, abelvesa@kernel.org,
+        abailon@baylibre.com, l.stach@pengutronix.de,
+        laurent.pinchart@ideasonboard.com, marex@denx.de,
+        paul.elder@ideasonboard.com, Markus.Niebel@ew.tq-group.com,
+        aford173@gmail.com, devicetree@vger.kernel.org,
+        Peng Fan <peng.fan@nxp.com>, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-imx@nxp.com,
+        kernel@pengutronix.de, linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH V3 6/7] arm64: dts: imx8mp: add interconnects for media
+ blk ctrl
+Message-ID: <20220707113851.khi42m7pgx23d26u@pengutronix.de>
+References: <20220703091451.1416264-1-peng.fan@oss.nxp.com>
+ <20220703091451.1416264-7-peng.fan@oss.nxp.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-Importance: Medium
-User-Agent: Zoho Mail
-X-Mailer: Zoho Mail
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_RED autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220703091451.1416264-7-peng.fan@oss.nxp.com>
+User-Agent: NeoMutt/20180716
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
+X-SA-Exim-Mail-From: mfe@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,66 +59,55 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Ping?
+Hi,
 
-On Fri, 01 Jul 2022 20:24:23 +0530  Siddh Raman Pant <code@siddh.me> wrote
-> ieee80211_scan_rx() tries to access scan_req->flags after a null check
-> (see line 303 of mac80211/scan.c), but ___cfg80211_scan_done() uses
-> kfree() on the scan_req (see line 991 of wireless/scan.c).
->
-> This results in a UAF.
->
-> ieee80211_scan_rx() is called inside a RCU read-critical section
-> initiated by ieee80211_rx_napi() (see line 5043 of mac80211/rx.c).
->
-> Thus, add an rcu_head to the scan_req struct so as to use kfree_rcu()
-> instead of kfree() so that we don't free during the critical section.
->
-> Bug report (3): https://syzkaller.appspot.com/bug?extid=f9acff9bf08a845f225d
-> Reported-by: syzbot+f9acff9bf08a845f225d@syzkaller.appspotmail.com
-> Reported-by: syzbot+6cb476b7c69916a0caca@syzkaller.appspotmail.com
-> Reported-by: syzbot+9250865a55539d384347@syzkaller.appspotmail.com
->
-> Signed-off-by: Siddh Raman Pant <code@siddh.me>
+thanks for your patch and the work on this.
+
+On 22-07-03, Peng Fan (OSS) wrote:
+> From: Peng Fan <peng.fan@nxp.com>
+> 
+> Add interconnect property for media blk ctrl
+> 
+> Signed-off-by: Peng Fan <peng.fan@nxp.com>
 > ---
->  include/net/cfg80211.h | 2 ++
->  net/wireless/scan.c    | 2 +-
->  2 files changed, 3 insertions(+), 1 deletion(-)
->
-> diff --git a/include/net/cfg80211.h b/include/net/cfg80211.h
-> index 6d02e12e4702..ba4a49884de8 100644
-> --- a/include/net/cfg80211.h
-> +++ b/include/net/cfg80211.h
-> @@ -2368,6 +2368,7 @@ struct cfg80211_scan_6ghz_params {
->   * @n_6ghz_params: number of 6 GHz params
->   * @scan_6ghz_params: 6 GHz params
->   * @bssid: BSSID to scan for (most commonly, the wildcard BSSID)
-> + * @rcu_head: (internal) RCU head to use for freeing
->   */
->  struct cfg80211_scan_request {
->      struct cfg80211_ssid *ssids;
-> @@ -2397,6 +2398,7 @@ struct cfg80211_scan_request {
->      bool scan_6ghz;
->      u32 n_6ghz_params;
->      struct cfg80211_scan_6ghz_params *scan_6ghz_params;
-> +    struct rcu_head rcu_head;
+>  arch/arm64/boot/dts/freescale/imx8mp.dtsi | 12 ++++++++++++
+>  1 file changed, 12 insertions(+)
 > 
->      /* keep last */
->      struct ieee80211_channel *channels[];
-> diff --git a/net/wireless/scan.c b/net/wireless/scan.c
-> index 6d82bd9eaf8c..638b2805222c 100644
-> --- a/net/wireless/scan.c
-> +++ b/net/wireless/scan.c
-> @@ -988,7 +988,7 @@ void ___cfg80211_scan_done(struct cfg80211_registered_device *rdev,
->      kfree(rdev->int_scan_req);
->      rdev->int_scan_req = NULL;
-> 
-> -    kfree(rdev->scan_req);
-> +    kfree_rcu(rdev->scan_req, rcu_head);
->      rdev->scan_req = NULL;
-> 
->      if (!send_message)
-> -- 
-> 2.35.1
->
+> diff --git a/arch/arm64/boot/dts/freescale/imx8mp.dtsi b/arch/arm64/boot/dts/freescale/imx8mp.dtsi
+> index 13a2ee77d3c6..08bd57742294 100644
+> --- a/arch/arm64/boot/dts/freescale/imx8mp.dtsi
+> +++ b/arch/arm64/boot/dts/freescale/imx8mp.dtsi
 
+Can you please add:
+
+#include <dt-bindings/interconnect/fsl,imx8mp.h>
+
+else this won't compile.
+
+Regards,
+  Marco
+
+> @@ -1066,6 +1066,18 @@ media_blk_ctrl: blk-ctrl@32ec0000 {
+>  						     "lcdif1", "isi", "mipi-csi2",
+>  						     "lcdif2", "isp", "dwe",
+>  						     "mipi-dsi2";
+> +				interconnects =
+> +					<&noc IMX8MP_ICM_LCDIF_RD &noc IMX8MP_ICN_MEDIA>,
+> +					<&noc IMX8MP_ICM_LCDIF_WR &noc IMX8MP_ICN_MEDIA>,
+> +					<&noc IMX8MP_ICM_ISI0 &noc IMX8MP_ICN_MEDIA>,
+> +					<&noc IMX8MP_ICM_ISI1 &noc IMX8MP_ICN_MEDIA>,
+> +					<&noc IMX8MP_ICM_ISI2 &noc IMX8MP_ICN_MEDIA>,
+> +					<&noc IMX8MP_ICM_ISP0 &noc IMX8MP_ICN_MEDIA>,
+> +					<&noc IMX8MP_ICM_ISP1 &noc IMX8MP_ICN_MEDIA>,
+> +					<&noc IMX8MP_ICM_DWE &noc IMX8MP_ICN_MEDIA>;
+> +				interconnect-names = "lcdif-rd", "lcdif-wr", "isi0",
+> +						     "isi1", "isi2", "isp0", "isp1",
+> +						     "dwe";
+>  				clocks = <&clk IMX8MP_CLK_MEDIA_APB_ROOT>,
+>  					 <&clk IMX8MP_CLK_MEDIA_AXI_ROOT>,
+>  					 <&clk IMX8MP_CLK_MEDIA_CAM1_PIX_ROOT>,
+> -- 
+> 2.25.1
+> 
+> 
+> 

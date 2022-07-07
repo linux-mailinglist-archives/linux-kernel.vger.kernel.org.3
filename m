@@ -2,112 +2,162 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A9CC569CA3
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 10:08:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 89A02569C9E
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 10:08:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235202AbiGGIGh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Jul 2022 04:06:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52082 "EHLO
+        id S235215AbiGGIGu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Jul 2022 04:06:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52274 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235175AbiGGIGa (ORCPT
+        with ESMTP id S234779AbiGGIGs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Jul 2022 04:06:30 -0400
-Received: from ironport.ite.com.tw (60-251-196-230.hinet-ip.hinet.net [60.251.196.230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1B3233E1D
-        for <linux-kernel@vger.kernel.org>; Thu,  7 Jul 2022 01:06:29 -0700 (PDT)
-Received: from unknown (HELO mse.ite.com.tw) ([192.168.35.30])
-  by ironport.ite.com.tw with ESMTP; 07 Jul 2022 16:06:29 +0800
-Received: from CSBMAIL1.internal.ite.com.tw (CSBMAIL1.internal.ite.com.tw [192.168.65.58])
-        by mse.ite.com.tw with ESMTP id 26786NhS042559;
-        Thu, 7 Jul 2022 16:06:23 +0800 (GMT-8)
-        (envelope-from allen.chen@ite.com.tw)
-Received: from VirtualBox.internal.ite.com.tw (192.168.70.46) by
- CSBMAIL1.internal.ite.com.tw (192.168.65.58) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
- 15.1.2176.14; Thu, 7 Jul 2022 16:06:23 +0800
-From:   allen <allen.chen@ite.com.tw>
-CC:     Allen Chen <allen.chen@ite.com.tw>,
-        Pin-yen Lin <treapking@google.com>,
-        Jau-Chih Tseng <Jau-Chih.Tseng@ite.com.tw>,
-        Kenneth Hung <Kenneth.Hung@ite.com.tw>,
-        Hermes Wu <Hermes.Wu@ite.com.tw>,
-        Pin-Yen Lin <treapking@chromium.org>,
-        Andrzej Hajda <andrzej.hajda@intel.com>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Robert Foss <robert.foss@linaro.org>,
-        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
-        Jonas Karlman <jonas@kwiboo.se>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        "open list:DRM DRIVERS" <dri-devel@lists.freedesktop.org>,
-        open list <linux-kernel@vger.kernel.org>
-Subject: [PATCH 3/3] drm/bridge: it6505: Modified video clock calculation and video debug message
-Date:   Thu, 7 Jul 2022 16:05:59 +0800
-Message-ID: <20220707080600.49041-4-allen.chen@ite.com.tw>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220707080600.49041-1-allen.chen@ite.com.tw>
-References: <20220707080600.49041-1-allen.chen@ite.com.tw>
+        Thu, 7 Jul 2022 04:06:48 -0400
+Received: from pegase2.c-s.fr (pegase2.c-s.fr [93.17.235.10])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0DAFB33E12
+        for <linux-kernel@vger.kernel.org>; Thu,  7 Jul 2022 01:06:45 -0700 (PDT)
+Received: from localhost (mailhub3.si.c-s.fr [172.26.127.67])
+        by localhost (Postfix) with ESMTP id 4LdpsH64xtz9tCS;
+        Thu,  7 Jul 2022 10:06:43 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from pegase2.c-s.fr ([172.26.127.65])
+        by localhost (pegase2.c-s.fr [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id 5Li-Xwk3QDtB; Thu,  7 Jul 2022 10:06:43 +0200 (CEST)
+Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
+        by pegase2.c-s.fr (Postfix) with ESMTP id 4LdpsH5Gkpz9tCP;
+        Thu,  7 Jul 2022 10:06:43 +0200 (CEST)
+Received: from localhost (localhost [127.0.0.1])
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id A3CFE8B79F;
+        Thu,  7 Jul 2022 10:06:43 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from messagerie.si.c-s.fr ([127.0.0.1])
+        by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
+        with ESMTP id m_jbEc0-QBnx; Thu,  7 Jul 2022 10:06:43 +0200 (CEST)
+Received: from PO20335.IDSI0.si.c-s.fr (po20309.idsi0.si.c-s.fr [192.168.233.123])
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id 5E8528B768;
+        Thu,  7 Jul 2022 10:06:43 +0200 (CEST)
+Received: from PO20335.IDSI0.si.c-s.fr (localhost [127.0.0.1])
+        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.16.1) with ESMTPS id 26786Th0478042
+        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
+        Thu, 7 Jul 2022 10:06:29 +0200
+Received: (from chleroy@localhost)
+        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.17.1/Submit) id 26786RM0478030;
+        Thu, 7 Jul 2022 10:06:27 +0200
+X-Authentication-Warning: PO20335.IDSI0.si.c-s.fr: chleroy set sender to christophe.leroy@csgroup.eu using -f
+From:   Christophe Leroy <christophe.leroy@csgroup.eu>
+To:     Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Michael Ellerman <mpe@ellerman.id.au>
+Cc:     Christophe Leroy <christophe.leroy@csgroup.eu>,
+        linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org
+Subject: [PATCH v2] powerpc/code-patching: Speed up page mapping/unmapping on PPC32
+Date:   Thu,  7 Jul 2022 10:06:18 +0200
+Message-Id: <1feabfad5952631acc033d671fad722706c4dd59.1657181170.git.christophe.leroy@csgroup.eu>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [192.168.70.46]
-X-ClientProxiedBy: CSBMAIL1.internal.ite.com.tw (192.168.65.58) To
- CSBMAIL1.internal.ite.com.tw (192.168.65.58)
-X-TM-SNTS-SMTP: E3FDFD5508ED8861E199F559B82EF4936875AD59EA9190E4A1C2472A584984512002:8
-X-MAIL: mse.ite.com.tw 26786NhS042559
-X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,RDNS_DYNAMIC,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1657181176; l=3182; s=20211009; h=from:subject:message-id; bh=qwhrSHeqOdSBuhjAZ7n0ZaDDCNODjbH+IoPBYXh8TLE=; b=Eu+muKObPx2nnetst4eRQIP8D4t+eSz6fBgEcqfF5o0mUE1vt7zXPiTNXqKOa1Z/wr6+ErHJsz1H X4OFI5j7BJVzJ1P6BhJ4/vSElRORJQwxcEh1webfYjxJFl93mA/K
+X-Developer-Key: i=christophe.leroy@csgroup.eu; a=ed25519; pk=HIzTzUj91asvincQGOFx6+ZF5AoUuP9GdOtQChs7Mm0=
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: allen chen <allen.chen@ite.com.tw>
+Since commit 591b4b268435 ("powerpc/code-patching: Pre-map patch area")
+the patch area is premapped so intermediate page tables are already
+allocated.
 
-Speed up video clock calculation and remove redundant video debug message.
+Use __set_pte_at() directly instead of the heavy map_kernel_page(),
+at for unmapping just do a pte_clear() followed by a flush.
 
-Signed-off-by: Pin-Yen Lin <treapking@chromium.org>
-Signed-off-by: Allen Chen <allen.chen@ite.com.tw>
+__set_pte_at() can be used directly without the filters in
+set_pte_at() because we are mapping a normal page non executable.
 
+Make sure gcc knows text_poke_area is page aligned in order to
+optimise the flush.
+
+This change reduces by 66% the time needed to activate ftrace on
+an 8xx (588000 tb ticks instead of 1744000).
+
+Don't perform the change on PPC64 for now, as it is problematic for
+the time being.
+
+Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
 ---
- drivers/gpu/drm/bridge/ite-it6505.c | 6 ++----
- 1 file changed, 2 insertions(+), 4 deletions(-)
+v2: Only do it on PPC32 for now, mpe reported a problem on PPC64, see https://lore.kernel.org/lkml/165261053687.1047019.4165741740473209888.b4-ty@ellerman.id.au/T/#m9d91e820c43ebe56a72ad89403dac9eb270f5bb6
+---
+ arch/powerpc/lib/code-patching.c | 37 ++++++++++++++++++++++----------
+ 1 file changed, 26 insertions(+), 11 deletions(-)
 
-diff --git a/drivers/gpu/drm/bridge/ite-it6505.c b/drivers/gpu/drm/bridge/ite-it6505.c
-index cfd2c3275dc5..11a34ddb60a1 100644
---- a/drivers/gpu/drm/bridge/ite-it6505.c
-+++ b/drivers/gpu/drm/bridge/ite-it6505.c
-@@ -703,7 +703,7 @@ static void it6505_calc_video_info(struct it6505 *it6505)
- 	DRM_DEV_DEBUG_DRIVER(dev, "hactive_start:%d, vactive_start:%d",
- 			     hdes, vdes);
+diff --git a/arch/powerpc/lib/code-patching.c b/arch/powerpc/lib/code-patching.c
+index 6edf0697a526..01b9f5dc79d6 100644
+--- a/arch/powerpc/lib/code-patching.c
++++ b/arch/powerpc/lib/code-patching.c
+@@ -94,17 +94,20 @@ void __init poking_init(void)
+ 	static_branch_enable(&poking_init_done);
+ }
  
--	for (i = 0; i < 10; i++) {
-+	for (i = 0; i < 3; i++) {
- 		it6505_set_bits(it6505, REG_DATA_CTRL0, ENABLE_PCLK_COUNTER,
- 				ENABLE_PCLK_COUNTER);
- 		usleep_range(10000, 15000);
-@@ -720,7 +720,7 @@ static void it6505_calc_video_info(struct it6505 *it6505)
- 		return;
- 	}
- 
--	sum /= 10;
-+	sum /= 3;
- 	pclk = 13500 * 2048 / sum;
- 	it6505->video_info.clock = pclk;
- 	it6505->video_info.hdisplay = hdew;
-@@ -2344,8 +2344,6 @@ static void it6505_irq_hpd(struct it6505 *it6505)
- 
- 		if (!it6505_get_video_status(it6505))
- 			it6505_video_reset(it6505);
++static unsigned long get_patch_pfn(void *addr)
++{
++	if (IS_ENABLED(CONFIG_MODULES) && is_vmalloc_or_module_addr(addr))
++		return vmalloc_to_pfn(addr);
++	else
++		return __pa_symbol(addr) >> PAGE_SHIFT;
++}
++
+ /*
+  * This can be called for kernel text or a module.
+  */
+ static int map_patch_area(void *addr, unsigned long text_poke_addr)
+ {
+-	unsigned long pfn;
 -
--		it6505_calc_video_info(it6505);
- 	} else {
- 		memset(it6505->dpcd, 0, sizeof(it6505->dpcd));
+-	if (IS_ENABLED(CONFIG_MODULES) && is_vmalloc_or_module_addr(addr))
+-		pfn = vmalloc_to_pfn(addr);
+-	else
+-		pfn = __pa_symbol(addr) >> PAGE_SHIFT;
++	unsigned long pfn = get_patch_pfn(addr);
  
+ 	return map_kernel_page(text_poke_addr, (pfn << PAGE_SHIFT), PAGE_KERNEL);
+ }
+@@ -149,17 +152,29 @@ static int __do_patch_instruction(u32 *addr, ppc_inst_t instr)
+ 	int err;
+ 	u32 *patch_addr;
+ 	unsigned long text_poke_addr;
++	pte_t *pte;
++	unsigned long pfn = get_patch_pfn(addr);
+ 
+-	text_poke_addr = (unsigned long)__this_cpu_read(text_poke_area)->addr;
++	text_poke_addr = (unsigned long)__this_cpu_read(text_poke_area)->addr & PAGE_MASK;
+ 	patch_addr = (u32 *)(text_poke_addr + offset_in_page(addr));
+ 
+-	err = map_patch_area(addr, text_poke_addr);
+-	if (err)
+-		return err;
++	if (IS_ENABLED(CONFIG_PPC32)) {
++		pte = virt_to_kpte(text_poke_addr);
++		__set_pte_at(&init_mm, text_poke_addr, pte, pfn_pte(pfn, PAGE_KERNEL), 0);
++	} else {
++		err = map_patch_area(addr, text_poke_addr);
++		if (err)
++			return err;
++	}
+ 
+ 	err = __patch_instruction(addr, instr, patch_addr);
+ 
+-	unmap_patch_area(text_poke_addr);
++	if (IS_ENABLED(CONFIG_PPC32)) {
++		pte_clear(&init_mm, text_poke_addr, pte);
++		flush_tlb_kernel_range(text_poke_addr, text_poke_addr + PAGE_SIZE);
++	} else {
++		unmap_patch_area(text_poke_addr);
++	}
+ 
+ 	return err;
+ }
 -- 
-2.25.1
+2.36.1
 

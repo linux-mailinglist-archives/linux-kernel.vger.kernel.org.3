@@ -2,176 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0AD3F569A31
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 08:02:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 76AA8569A29
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 08:02:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234490AbiGGGAb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Jul 2022 02:00:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42886 "EHLO
+        id S234526AbiGGGBe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Jul 2022 02:01:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43440 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232893AbiGGGA2 (ORCPT
+        with ESMTP id S230197AbiGGGBa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Jul 2022 02:00:28 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A796B31939
-        for <linux-kernel@vger.kernel.org>; Wed,  6 Jul 2022 23:00:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1657173627; x=1688709627;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=d9qJR9o0LgiMrGjy5hTFcuicPIx/ArIKsfxBRnCmGhY=;
-  b=Zc/iWSLr9F0kC2IcK+Se8O0hoqmHA6WhcGwAI/poXiT9/yOMkPlxFKyr
-   70vWfEsWBwk89KkwP07tlv7TV3YilXkpHOSkVLPBjjLnt8YIczTFGquLr
-   3/Lx+YCVTGbYzIJd94iaAgufwQBV+FrYijSptqIqRoDuPhc+dx3a5lPj8
-   5SO+vMkyw/TMnohDL+vGMNf/2esRbD51ySI878EyDx27hYkP+1+pLpnZG
-   ZWoU2pWzgzxQdnRlJbhl7EuiE4nj0CQZ9o6J15+UgwBsJjejLfx/7/hoH
-   8KJi2rEaxvwmG8xyv0ekgVNK8LduioQZkjIKN9A3d/RAgP6sGYtpw9nR5
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10400"; a="347923091"
-X-IronPort-AV: E=Sophos;i="5.92,252,1650956400"; 
-   d="scan'208";a="347923091"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jul 2022 23:00:26 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,252,1650956400"; 
-   d="scan'208";a="735844351"
-Received: from lkp-server01.sh.intel.com (HELO 68b931ab7ac1) ([10.239.97.150])
-  by fmsmga001.fm.intel.com with ESMTP; 06 Jul 2022 23:00:25 -0700
-Received: from kbuild by 68b931ab7ac1 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1o9KYr-000Lcj-0r;
-        Thu, 07 Jul 2022 06:00:25 +0000
-Date:   Thu, 07 Jul 2022 14:00:07 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "x86-ml" <x86@kernel.org>
-Cc:     linux-kernel@vger.kernel.org
-Subject: [tip:irq/urgent] BUILD SUCCESS
- 80f2a248a2f92c07873128808359756f72a0438b
-Message-ID: <62c67667.ty1lUnqjYykQCA1Y%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        Thu, 7 Jul 2022 02:01:30 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A90931939;
+        Wed,  6 Jul 2022 23:01:30 -0700 (PDT)
+Received: from pps.filterd (m0098410.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 2673E4b7030395;
+        Thu, 7 Jul 2022 06:01:22 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : date : message-id : mime-version : content-transfer-encoding; s=pp1;
+ bh=71+kH/CtjTUCNfcDn+NS9jAFVfSPvoTRId7bBbYcrro=;
+ b=PT+2ipuHsC+h0TS+YeFUXoyMKapHbsls0zfEVjbsz5OwhKH4R15nvuEVSnFmvUu6gMLQ
+ r4K6WbAt82lSsowPDBz87XvzhcjUbnnFy2JSH0Tjbyi/m1UFwzSbKtlmwyT/Ye/GIPZc
+ z4mgFu6TAu+VeiISBcA44s3XKfc1iDmJN8AIEBnrcru4GXNruXM7YezixMfmVwP/pVFV
+ 27/a2l+uny5KaWvK9O5WJzGByq4ZUw8EZmijb2aLOiGDlhuy148lPM6/cWKTFR+EIGtE
+ fm0+OR0BIfLj2JTyjnEzQ2PfHolFIvgRFIcMyW382igkXZ9eDf+A47OeeRxzNmeGb9LT sA== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3h5magfh68-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 07 Jul 2022 06:01:21 +0000
+Received: from m0098410.ppops.net (m0098410.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 2675oUZP006091;
+        Thu, 7 Jul 2022 06:01:21 GMT
+Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3h5magfh5a-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 07 Jul 2022 06:01:21 +0000
+Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
+        by ppma06ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 2675q0NF030038;
+        Thu, 7 Jul 2022 06:01:19 GMT
+Received: from b06cxnps4074.portsmouth.uk.ibm.com (d06relay11.portsmouth.uk.ibm.com [9.149.109.196])
+        by ppma06ams.nl.ibm.com with ESMTP id 3h4usd23dd-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 07 Jul 2022 06:01:19 +0000
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (b06wcsmtp001.portsmouth.uk.ibm.com [9.149.105.160])
+        by b06cxnps4074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 26761GBH22151638
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 7 Jul 2022 06:01:16 GMT
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id E7485A405B;
+        Thu,  7 Jul 2022 06:01:15 +0000 (GMT)
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id D5475A4064;
+        Thu,  7 Jul 2022 06:01:15 +0000 (GMT)
+Received: from tuxmaker.boeblingen.de.ibm.com (unknown [9.152.85.9])
+        by b06wcsmtp001.portsmouth.uk.ibm.com (Postfix) with ESMTPS;
+        Thu,  7 Jul 2022 06:01:15 +0000 (GMT)
+Received: by tuxmaker.boeblingen.de.ibm.com (Postfix, from userid 55669)
+        id 9746FE0231; Thu,  7 Jul 2022 08:01:15 +0200 (CEST)
+From:   Alexander Gordeev <agordeev@linux.ibm.com>
+To:     Alexander Egorenkov <egorenar@linux.ibm.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>
+Cc:     Matthew Wilcox <willy@infradead.org>, Baoquan He <bhe@redhat.com>,
+        Christoph Hellwig <hch@lst.de>, linux-kernel@vger.kernel.org,
+        linux-s390@vger.kernel.org
+Subject: [PATCH v2 0/1] s390/crash: allow multi-segment iterators
+Date:   Thu,  7 Jul 2022 08:01:14 +0200
+Message-Id: <cover.1657172539.git.agordeev@linux.ibm.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: z6aApccoeqk47JGsObnhzZlzLTlZlQpN
+X-Proofpoint-GUID: KZ2R2RWF57IQwEjIhsTM-hjGdc7aW8Sc
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
+ definitions=2022-07-07_04,2022-06-28_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 malwarescore=0
+ suspectscore=0 mlxlogscore=812 mlxscore=0 bulkscore=0 impostorscore=0
+ spamscore=0 phishscore=0 priorityscore=1501 adultscore=0
+ lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2206140000 definitions=main-2207070023
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git irq/urgent
-branch HEAD: 80f2a248a2f92c07873128808359756f72a0438b  Merge tag 'irqchip-fixes-5.19-2' of git://git.kernel.org/pub/scm/linux/kernel/git/maz/arm-platforms into irq/urgent
+Unlike other architectures s390 can not use copyout() and memcopy() for
+accessing memory and thus using copy_to_iter() now is not possible. But
+a fix is needed, since 'cp' routine as 'core_collector' for kdump service
+initiates multi-segment iterator.
 
-elapsed time: 784m
+The reason iterate_iovec() and __iterate_and_advance() macros copied from
+lib/iov_iter.c (thus introducing redundancy) is to avoid custom iterator-
+treating in s390 code. I doubt these macros could be turned public (i.e
+with a follow-up patch), so the intention is to do it like _copy_to_iter()
+does.
 
-configs tested: 94
-configs skipped: 2
+Changes since v1:
+  - number of bytes left to copy on fail fixed;
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+Alexander Gordeev (1):
+  s390/crash: allow multi-segment iterators
 
-gcc tested configs:
-arm64                            allyesconfig
-arm                                 defconfig
-arm                              allyesconfig
-i386                          randconfig-c001
-powerpc                         wii_defconfig
-m68k                       m5249evb_defconfig
-sh                        apsh4ad0a_defconfig
-arm                          lpd270_defconfig
-arm                           viper_defconfig
-arc                     nsimosci_hs_defconfig
-arc                        nsimosci_defconfig
-arm                          exynos_defconfig
-powerpc                      cm5200_defconfig
-s390                          debug_defconfig
-arm                          simpad_defconfig
-xtensa                           allyesconfig
-sh                           se7721_defconfig
-mips                           ip32_defconfig
-sh                          lboxre2_defconfig
-sh                           se7722_defconfig
-um                             i386_defconfig
-riscv                            allyesconfig
-xtensa                  audio_kc705_defconfig
-sh                            titan_defconfig
-mips                  decstation_64_defconfig
-powerpc                     mpc83xx_defconfig
-sh                          kfr2r09_defconfig
-powerpc                 mpc837x_mds_defconfig
-powerpc                 mpc834x_itx_defconfig
-sh                         microdev_defconfig
-arm                        mini2440_defconfig
-arm                             rpc_defconfig
-sh                           se7705_defconfig
-sparc64                             defconfig
-um                               alldefconfig
-mips                       capcella_defconfig
-alpha                               defconfig
-riscv                    nommu_virt_defconfig
-riscv                          rv32_defconfig
-riscv                    nommu_k210_defconfig
-riscv                             allnoconfig
-i386                   debian-10.3-kselftests
-i386                              debian-10.3
-x86_64                        randconfig-c001
-arm                  randconfig-c002-20220706
-ia64                             allmodconfig
-alpha                            allyesconfig
-arc                              allyesconfig
-m68k                             allyesconfig
-m68k                             allmodconfig
-powerpc                           allnoconfig
-mips                             allyesconfig
-powerpc                          allmodconfig
-sh                               allmodconfig
-i386                             allyesconfig
-i386                                defconfig
-x86_64                        randconfig-a006
-x86_64                        randconfig-a004
-x86_64                        randconfig-a002
-i386                          randconfig-a001
-i386                          randconfig-a003
-i386                          randconfig-a005
-x86_64                        randconfig-a011
-x86_64                        randconfig-a013
-x86_64                        randconfig-a015
-i386                          randconfig-a012
-i386                          randconfig-a014
-i386                          randconfig-a016
-arc                  randconfig-r043-20220706
-x86_64                    rhel-8.3-kselftests
-um                           x86_64_defconfig
-x86_64                              defconfig
-x86_64                               rhel-8.3
-x86_64                           allyesconfig
-x86_64                          rhel-8.3-func
-x86_64                           rhel-8.3-syz
-x86_64                         rhel-8.3-kunit
-
-clang tested configs:
-x86_64                        randconfig-k001
-x86_64                        randconfig-a005
-x86_64                        randconfig-a003
-x86_64                        randconfig-a001
-i386                          randconfig-a002
-i386                          randconfig-a006
-i386                          randconfig-a004
-x86_64                        randconfig-a014
-x86_64                        randconfig-a016
-x86_64                        randconfig-a012
-i386                          randconfig-a013
-i386                          randconfig-a015
-i386                          randconfig-a011
-riscv                randconfig-r042-20220706
-s390                 randconfig-r044-20220706
-hexagon              randconfig-r041-20220706
-hexagon              randconfig-r045-20220706
+ arch/s390/kernel/crash_dump.c | 65 +++++++++++++++++++++++++++--------
+ 1 file changed, 50 insertions(+), 15 deletions(-)
 
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+2.34.1
+

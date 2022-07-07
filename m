@@ -2,127 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C2095569842
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 04:35:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 277A056984A
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 04:45:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234703AbiGGCf1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Jul 2022 22:35:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45748 "EHLO
+        id S234149AbiGGCov (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Jul 2022 22:44:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50116 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230308AbiGGCfX (ORCPT
+        with ESMTP id S229681AbiGGCot (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Jul 2022 22:35:23 -0400
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97CE5D6A;
-        Wed,  6 Jul 2022 19:35:21 -0700 (PDT)
-X-UUID: aea485e3a2284a3e9e63ebfef824fbd7-20220707
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.8,REQID:f012d853-75bc-4ace-afd1-96143a306e21,OB:0,LO
-        B:0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACTI
-        ON:release,TS:0
-X-CID-META: VersionHash:0f94e32,CLOUDID:9504c286-57f0-47ca-ba27-fe8c57fbf305,C
-        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,IP:nil,URL:0,File:nil
-        ,QS:nil,BEC:nil,COL:0
-X-UUID: aea485e3a2284a3e9e63ebfef824fbd7-20220707
-Received: from mtkexhb02.mediatek.inc [(172.21.101.103)] by mailgw02.mediatek.com
-        (envelope-from <ck.hu@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 327723911; Thu, 07 Jul 2022 10:35:14 +0800
-Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
- mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.792.3;
- Thu, 7 Jul 2022 10:35:13 +0800
-Received: from mtksdccf07 (172.21.84.99) by mtkmbs11n2.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.2.792.3 via Frontend
- Transport; Thu, 7 Jul 2022 10:35:13 +0800
-Message-ID: <ee075f26d133342e0ef386d4afc6173e420e30c5.camel@mediatek.com>
-Subject: Re: [PATCH v13 05/10] drm/mediatek: Add MT8195 Embedded DisplayPort
- driver
-From:   CK Hu <ck.hu@mediatek.com>
-To:     Bo-Chen Chen <rex-bc.chen@mediatek.com>, <chunkuang.hu@kernel.org>,
-        <p.zabel@pengutronix.de>, <daniel@ffwll.ch>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <mripard@kernel.org>,
-        <tzimmermann@suse.de>, <matthias.bgg@gmail.com>, <deller@gmx.de>,
-        <airlied@linux.ie>
-CC:     <msp@baylibre.com>, <granquet@baylibre.com>,
-        <jitao.shi@mediatek.com>, <wenst@chromium.org>,
-        <angelogioacchino.delregno@collabora.com>,
-        <liangxu.xu@mediatek.com>, <dri-devel@lists.freedesktop.org>,
-        <linux-mediatek@lists.infradead.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-fbdev@vger.kernel.org>,
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>
-Date:   Thu, 7 Jul 2022 10:35:13 +0800
-In-Reply-To: <20220701062808.18596-6-rex-bc.chen@mediatek.com>
-References: <20220701062808.18596-1-rex-bc.chen@mediatek.com>
-         <20220701062808.18596-6-rex-bc.chen@mediatek.com>
+        Wed, 6 Jul 2022 22:44:49 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B67B62E6A6;
+        Wed,  6 Jul 2022 19:44:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1657161888; x=1688697888;
+  h=message-id:subject:from:to:cc:in-reply-to:references:
+   content-transfer-encoding:mime-version:date;
+  bh=Gb3nr30qWpCvqvwt/EmXMfqV47lb+zWrxN4Q99RWa5Q=;
+  b=fQ+o2HVkYa6hF2IvUL9W7rnKdueBOU+lUXW00eWsWr6fxbHxQb9a8EOf
+   7IMkSSJA0WOAIKGwYR8IagyYq4PcFBrP8JG7DFfXEoqgyWz8Tm6/X4JLf
+   A4IgfiBTrTafFh5Z71v7CDiAPjec+5igD8UVROFjD1b7WIqp+BCeXImg4
+   QL4N687BDQxdCUsR0yg2Kw0AM0y1+trcCmy4NHTQoiUJu6Vpf4Vf2XvBT
+   kJyH1TRoWy6t8Y1X6mk9/jPAzilRmxJ5wliyqTCCg+pcEaYvNjI1Wa7RB
+   Ask0AXxppIY6+RvWPN0KRzFI4JeY61PC15miO9LNQadfQ6wKfcX9tNuby
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10400"; a="283939646"
+X-IronPort-AV: E=Sophos;i="5.92,251,1650956400"; 
+   d="scan'208";a="283939646"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jul 2022 19:44:48 -0700
+X-IronPort-AV: E=Sophos;i="5.92,251,1650956400"; 
+   d="scan'208";a="683153469"
+Received: from toddpric-mobl1.amr.corp.intel.com (HELO khuang2-desk.gar.corp.intel.com) ([10.213.182.230])
+  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jul 2022 19:44:45 -0700
+Message-ID: <202a463dd5443ccf2dc502e496e7d45ba5f05440.camel@intel.com>
+Subject: Re: [PATCH v5 12/22] x86/virt/tdx: Convert all memory regions in
+ memblock to TDX memory
+From:   Kai Huang <kai.huang@intel.com>
+To:     Dave Hansen <dave.hansen@intel.com>, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org
+Cc:     seanjc@google.com, pbonzini@redhat.com, len.brown@intel.com,
+        tony.luck@intel.com, rafael.j.wysocki@intel.com,
+        reinette.chatre@intel.com, dan.j.williams@intel.com,
+        peterz@infradead.org, ak@linux.intel.com,
+        kirill.shutemov@linux.intel.com,
+        sathyanarayanan.kuppuswamy@linux.intel.com,
+        isaku.yamahata@intel.com
+In-Reply-To: <76d7604ff21b26252733165478d5c54035d84d98.camel@intel.com>
+References: <cover.1655894131.git.kai.huang@intel.com>
+         <8288396be7fedd10521a28531e138579594d757a.1655894131.git.kai.huang@intel.com>
+         <20d63398-928f-0c6f-47ec-8e225c049ad8@intel.com>
+         <76d7604ff21b26252733165478d5c54035d84d98.camel@intel.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-MTK:  N
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY
-        autolearn=ham autolearn_force=no version=3.4.6
+Date:   Thu, 07 Jul 2022 14:37:46 +1200
+User-Agent: Evolution 3.44.2 (3.44.2-1.fc36) 
+X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, Bo-Chen:
 
-On Fri, 2022-07-01 at 14:28 +0800, Bo-Chen Chen wrote:
-> From: Markus Schneider-Pargmann <msp@baylibre.com>
-> 
-> This patch adds a embedded displayport driver for the MediaTek mt8195
-> SoC.
-> 
-> It supports the MT8195, the embedded DisplayPort units. It offers
-> DisplayPort 1.4 with up to 4 lanes.
-> 
-> The driver creates a child device for the phy. The child device will
-> never exist without the parent being active. As they are sharing a
-> register range, the parent passes a regmap pointer to the child so
-> that
-> both can work with the same register range. The phy driver sets
-> device
-> data that is read by the parent to get the phy device that can be
-> used
-> to control the phy properties.
-> 
-> This driver is based on an initial version by
-> Jitao shi <jitao.shi@mediatek.com>
-> 
-> Signed-off-by: Markus Schneider-Pargmann <msp@baylibre.com>
-> Signed-off-by: Guillaume Ranquet <granquet@baylibre.com>
-> Signed-off-by: Bo-Chen Chen <rex-bc.chen@mediatek.com>
-> ---
-> +
-> +static void mtk_dp_power_enable(struct mtk_dp *mtk_dp)
-> +{
-> +	mtk_dp_update_bits(mtk_dp, MTK_DP_TOP_RESET_AND_PROBE,
-> +			   0, SW_RST_B_PHYD);
-> +
-> +	/* Wait for power enable */
-> +	usleep_range(10, 200);
-> +
-> +	mtk_dp_update_bits(mtk_dp, MTK_DP_TOP_RESET_AND_PROBE,
-> +			   SW_RST_B_PHYD, SW_RST_B_PHYD);
-> +	mtk_dp_update_bits(mtk_dp, MTK_DP_TOP_PWR_STATE,
-> +			   DP_PWR_STATE_BANDGAP_TPLL,
-> DP_PWR_STATE_MASK);
-> +	mtk_dp_write(mtk_dp, MTK_DP_1040, 0x7);
+> > > +/*
+> > > + * Walks over all memblock memory regions that are intended to be
+> > > + * converted to TDX memory.  Essentially, it is all memblock memory
+> > > + * regions excluding the low memory below 1MB.
+> > > + *
+> > > + * This is because on some TDX platforms the low memory below 1MB is
+> > > + * not included in CMRs.  Excluding the low 1MB can still guarantee
+> > > + * that the pages managed by the page allocator are always TDX memor=
+y,
+> > > + * as the low 1MB is reserved during kernel boot and won't end up to
+> > > + * the ZONE_DMA (see reserve_real_mode()).
+> > > + */
+> > > +#define memblock_for_each_tdx_mem_pfn_range(i, p_start, p_end, p_nid=
+)	\
+> > > +	for_each_mem_pfn_range(i, MAX_NUMNODES, p_start, p_end, p_nid)	\
+> > > +		if (!pfn_range_skip_lowmem(p_start, p_end))
+> >=20
+> > Let's summarize where we are at this point:
+> >=20
+> > 1. All RAM is described in memblocks
+> > 2. Some memblocks are reserved and some are free
+> > 3. The lower 1MB is marked reserved
+> > 4. for_each_mem_pfn_range() walks all reserved and free memblocks, so w=
+e
+> >    have to exclude the lower 1MB as a special case.
+> >=20
+> > That seems superficially rather ridiculous.  Shouldn't we just pick a
+> > memblock iterator that skips the 1MB?  Surely there is such a thing.
+>=20
+> Perhaps you are suggesting we should always loop the _free_ ranges so we =
+don't
+> need to care about the first 1MB which is reserved?
+>=20
+> The problem is some reserved memory regions are actually later freed to t=
+he page
+> allocator, for example, initrd.  So to cover all those 'late-freed-reserv=
+ed-
+> regions', I used for_each_mem_pfn_range(), instead of for_each_free_mem_r=
+ange().
+>=20
+> Btw, I do have a checkpatch warning around this code:
+>=20
+> ERROR: Macros with complex values should be enclosed in parentheses
+> #109: FILE: arch/x86/virt/vmx/tdx/tdx.c:377:
+> +#define memblock_for_each_tdx_mem_pfn_range(i, p_start, p_end, p_nid)	\
+> +	for_each_mem_pfn_range(i, MAX_NUMNODES, p_start, p_end, p_nid)	\
+> +		if (!pfn_range_skip_lowmem(p_start, p_end))
+>=20
+> But it looks like a false positive to me.
 
-You have define the bit definition. Use the bit definition instead of a
-magic number.
+Hi Dave,
 
-+#define MTK_DP_1040			0x1040
-+#define RG_DPAUX_RX_VALID_DEGLITCH_EN	BIT(2)
-+#define RG_XTP_GLB_CKDET_EN		BIT(1)
-+#define RG_DPAUX_RX_EN			BIT(0)
+Sorry to ping. Just double check, any comments around here, ..
 
-> +}
-> +
+>=20
+> > Or, should we be doing something different with the 1MB in the memblock
+> > structure?
+>=20
+> memblock APIs are used by other kernel components.  I don't think we shou=
+ld
+> modify memblock code behaviour for TDX.  Do you have any specific suggest=
+ion?
+>=20
+> One possible option I can think is explicitly "register" memory regions a=
+s TDX
+> memory when they are firstly freed to the page allocator. =20
+
+[...]
+
+>=20
+> This will require new data structures to represent TDX memblock and the c=
+ode to
+> create, insert and merge contiguous TDX memblocks, etc.  The advantage is=
+ we can
+> just iterate those TDX memblocks when constructing TDMRs.
+>=20
+>=20
+
+And here?
 

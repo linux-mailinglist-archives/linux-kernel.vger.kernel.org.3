@@ -2,258 +2,349 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8922556A1C0
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 14:07:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D359A56A1C1
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 14:08:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235680AbiGGMHi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Jul 2022 08:07:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44766 "EHLO
+        id S235376AbiGGMIP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Jul 2022 08:08:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45242 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235598AbiGGMHe (ORCPT
+        with ESMTP id S235020AbiGGMIN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Jul 2022 08:07:34 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9955959250
-        for <linux-kernel@vger.kernel.org>; Thu,  7 Jul 2022 05:07:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1657195649;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=jMnXIdRVj9xX5STOZn22YQuc1w+ikq3NveF4l3Jb/M4=;
-        b=h1AMwnTE48sujr2jWOehzD0RA1jAeC5PKT6RbjbNTD7hc5VmOjq41CK5K8981advDXuIsE
-        NrShOKrsJ3pwKYcL8onlSW2y4nJ8QzwGfT4fSx7J99cjhyXG0YhJTbkpbJ/Qqi0cYVfmLd
-        4+9wtxBdw2nbcz/dJo08KAJBd25z/tc=
-Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
- [209.85.221.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-467-lcoTOGbQPwKZrCWeQSPuBQ-1; Thu, 07 Jul 2022 08:07:28 -0400
-X-MC-Unique: lcoTOGbQPwKZrCWeQSPuBQ-1
-Received: by mail-wr1-f71.google.com with SMTP id f20-20020adfc994000000b0021d4aca9d0eso3136913wrh.0
-        for <linux-kernel@vger.kernel.org>; Thu, 07 Jul 2022 05:07:27 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
-         :message-id:mime-version;
-        bh=jMnXIdRVj9xX5STOZn22YQuc1w+ikq3NveF4l3Jb/M4=;
-        b=0hCjS1tSyWnbb4IUvL4IA+7QLAKrO/OuYhL/YC+kby9dwD/bS5LhG4EzQcBaWoUiEI
-         gcf6+Z9FFTWIbNmCGvturQ5R49KOpHBZu6P9ZjwwM40WJDioWfc5XPPbbu05D8glxwLV
-         bkdvTf+LEnEhmZVoYe8TPhcaPQaBEEcScl+Xi88gfEbkNdWFNXFrcuI25sce4N2uRZfN
-         AeYOBQ3+7kysf4iyvx+NNs7aY0WE2G6a/XCcRx7UbUIbT9fViZEbA/RIvK/aHtvQRa9I
-         SGVSmXNN35Q2NpV98WyC94kFQWxN5CWSn1Z8pOnyfK4Sa2WOUq/6N7617MBuYiAaJ5bf
-         qDmQ==
-X-Gm-Message-State: AJIora9EY+7dRRMLXTXnK18wM39jzmCGmcQ9wmSvGaXxlSKzOWHdld3o
-        17QnqJXHbb8V+K5+p+tUoJQNVmabGT7KsWg/ItReVCy8gZlTO0FDh3SoNN8/6gWS3io419iDb3C
-        1h5WyQHzeDGpE+4GgYGaALfn1TaaXRIWuZzSXRVRvVezvENRFBSX0uWK+8P16zRD7WXCVdkS8Jc
-        dx
-X-Received: by 2002:a5d:4a0c:0:b0:21d:78c9:c5d3 with SMTP id m12-20020a5d4a0c000000b0021d78c9c5d3mr10082812wrq.42.1657195646138;
-        Thu, 07 Jul 2022 05:07:26 -0700 (PDT)
-X-Google-Smtp-Source: AGRyM1sb6YR+AZvHPC1LZE6NOAnLCM5dwuK/Rh6oo+GJqoNIUt6jQDe9CiVQ3QNB9El7KfK4hqsubA==
-X-Received: by 2002:a5d:4a0c:0:b0:21d:78c9:c5d3 with SMTP id m12-20020a5d4a0c000000b0021d78c9c5d3mr10082785wrq.42.1657195645809;
-        Thu, 07 Jul 2022 05:07:25 -0700 (PDT)
-Received: from fedora (nat-2.ign.cz. [91.219.240.2])
-        by smtp.gmail.com with ESMTPSA id y10-20020adff6ca000000b0021d6e758752sm8847904wrp.24.2022.07.07.05.07.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 07 Jul 2022 05:07:25 -0700 (PDT)
-From:   Vitaly Kuznetsov <vkuznets@redhat.com>
-To:     Jim Mattson <jmattson@google.com>
-Cc:     kvm@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Anirudh Rayabharam <anrayabh@linux.microsoft.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Maxim Levitsky <mlevitsk@redhat.com>,
-        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 23/28] KVM: VMX: Move LOAD_IA32_PERF_GLOBAL_CTRL
- errata handling out of setup_vmcs_config()
-In-Reply-To: <CALMp9eTmRLHQej1a4bFtpmRxaLaEJfwpDdvcZGbR54PFRjx+6g@mail.gmail.com>
-References: <20220629150625.238286-1-vkuznets@redhat.com>
- <20220629150625.238286-24-vkuznets@redhat.com>
- <CALMp9eTmRLHQej1a4bFtpmRxaLaEJfwpDdvcZGbR54PFRjx+6g@mail.gmail.com>
-Date:   Thu, 07 Jul 2022 14:07:24 +0200
-Message-ID: <8735fdqg77.fsf@redhat.com>
+        Thu, 7 Jul 2022 08:08:13 -0400
+Received: from n169-111.mail.139.com (n169-111.mail.139.com [120.232.169.111])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E37759254
+        for <linux-kernel@vger.kernel.org>; Thu,  7 Jul 2022 05:08:09 -0700 (PDT)
+X-RM-TagInfo: emlType=0                                       
+X-RM-SPAM:                                                                                        
+X-RM-SPAM-FLAG: 00000000
+Received: from [192.168.31.99] (unknown[27.196.144.100])
+        by rmsmtp-lg-appmail-12-12001 (RichMail) with SMTP id 2ee162c6cca1a83-5543a;
+        Thu, 07 Jul 2022 20:08:03 +0800 (CST)
+X-RM-TRANSID: 2ee162c6cca1a83-5543a
+Message-ID: <4c420e03-e53d-c1d6-5989-72479e00f159@139.com>
+Date:   Thu, 7 Jul 2022 20:08:01 +0800
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH V14 00/15] irqchip: Add LoongArch-related irqchip drivers
+Content-Language: en-US
+To:     Jianmin Lv <lvjianmin@loongson.cn>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Marc Zyngier <maz@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, Hanjun Guo <guohanjun@huawei.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Huacai Chen <chenhuacai@loongson.cn>, loongarch@lists.linux.dev
+References: <1656837932-18257-1-git-send-email-lvjianmin@loongson.cn>
+From:   Hu Zeyuan <huzeyuan139@139.com>
+In-Reply-To: <1656837932-18257-1-git-send-email-lvjianmin@loongson.cn>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Jim Mattson <jmattson@google.com> writes:
+Hi,Jianmin,
+Could you CC the kernel mailing list of loongarch[1] when you submitting 
+patches for LoongArch?
 
-> On Wed, Jun 29, 2022 at 8:07 AM Vitaly Kuznetsov <vkuznets@redhat.com> wrote:
->>
->> As a preparation to reusing the result of setup_vmcs_config() for setting
->> up nested VMX control MSRs, move LOAD_IA32_PERF_GLOBAL_CTRL errata handling
->> to vmx_vmexit_ctrl()/vmx_vmentry_ctrl() and print the warning from
->> hardware_setup(). While it seems reasonable to not expose
->> LOAD_IA32_PERF_GLOBAL_CTRL controls to L1 hypervisor on buggy CPUs,
->> such change would inevitably break live migration from older KVMs
->> where the controls are exposed. Keep the status quo for know, L1 hypervisor
->> itself is supposed to take care of the errata.
->
-> It can only do that if L1 doesn't lie about the model. This is why
-> F/M/S checks are, in general, evil.
->
->> Signed-off-by: Vitaly Kuznetsov <vkuznets@redhat.com>
->> ---
->>  arch/x86/kvm/vmx/vmx.c | 62 ++++++++++++++++++++++++++----------------
->>  1 file changed, 38 insertions(+), 24 deletions(-)
->>
->> diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
->> index fb58b0be953d..5f7ef1f8d2c6 100644
->> --- a/arch/x86/kvm/vmx/vmx.c
->> +++ b/arch/x86/kvm/vmx/vmx.c
->> @@ -2416,6 +2416,31 @@ static bool cpu_has_sgx(void)
->>         return cpuid_eax(0) >= 0x12 && (cpuid_eax(0x12) & BIT(0));
->>  }
->>
->> +/*
->> + * Some cpus support VM_{ENTRY,EXIT}_IA32_PERF_GLOBAL_CTRL but they
->> + * can't be used due to an errata where VM Exit may incorrectly clear
->
-> Nit: erratum (singular), or drop the 'an' to refer to errata (plural).
->
->> + * IA32_PERF_GLOBAL_CTRL[34:32].  Workaround the errata by using the
->
-> Nit: workaround (one word) is a noun. The verb form is "work around."
->
+[1]loongarch@lists.linux.dev
 
-Sure, but I'm not exactly certain which commit to blame here as I have
-options:
+Thanks!
 
-Fixes: 8bf00a529967 ("KVM: VMX: add support for switching of PERF_GLOBAL_CTRL")
-where it was introduced or
-
-Fixes: bb3541f175a9 ("KVM: x86: Fix typos")
-Fixes: c73da3fcab43 ("KVM: VMX: Properly handle dynamic VM Entry/Exit controls")
-
-where it was preserved :-)
-
->> + * MSR load mechanism to switch IA32_PERF_GLOBAL_CTRL.
->> + */
->> +static bool cpu_has_perf_global_ctrl_bug(void)
->> +{
->> +       if (boot_cpu_data.x86 == 0x6) {
->> +               switch (boot_cpu_data.x86_model) {
->> +               case 26: /* AAK155 */
->> +               case 30: /* AAP115 */
->> +               case 37: /* AAT100 */
->> +               case 44: /* BC86,AAY89,BD102 */
->> +               case 46: /* BA97 */
->
-> Nit: Replace decimal model numbers with mnemonics. See
-> https://lore.kernel.org/kvm/20220629222221.986645-1-jmattson@google.com/.
->
-
-I'm going to steal your patch and put it to my series (as I don't see it
-in kvm/queue yet).
-
->> +                       return true;
->> +               default:
->> +                       break;
->> +               }
->> +       }
->> +
->> +       return false;
->> +}
->
-> Is it worth either (a) memoizing the result, or (b) toggling a static
-> branch? Or am I prematurely optimizing?
->
-
-(Unless I missed something) besides hardware_setup(),
-cpu_has_perf_global_ctrl_bug() is only called (twice) from:
-
-vmx_vcpu_reset()
-	__vmx_vcpu_reset()
-		init_vmcs()
-			vmx_vmentry_ctrl()
-			vmx_vmexit_ctrl()
-
-this shouldn't happen very often so I guess we can leave it
-un-optimized. Also, we're only reading boot_cpu_data.x86/
-boot_cpu_data.x86_model here, this should be cheap).
-
->> +
->> +
->>  static __init int adjust_vmx_controls(u32 ctl_min, u32 ctl_opt,
->>                                       u32 msr, u32 *result)
->>  {
->> @@ -2572,30 +2597,6 @@ static __init int setup_vmcs_config(struct vmcs_config *vmcs_conf,
->>                 _vmexit_control &= ~x_ctrl;
->>         }
->>
->> -       /*
->> -        * Some cpus support VM_{ENTRY,EXIT}_IA32_PERF_GLOBAL_CTRL but they
->> -        * can't be used due to an errata where VM Exit may incorrectly clear
->> -        * IA32_PERF_GLOBAL_CTRL[34:32].  Workaround the errata by using the
->> -        * MSR load mechanism to switch IA32_PERF_GLOBAL_CTRL.
->> -        */
->> -       if (boot_cpu_data.x86 == 0x6) {
->> -               switch (boot_cpu_data.x86_model) {
->> -               case 26: /* AAK155 */
->> -               case 30: /* AAP115 */
->> -               case 37: /* AAT100 */
->> -               case 44: /* BC86,AAY89,BD102 */
->> -               case 46: /* BA97 */
->> -                       _vmentry_control &= ~VM_ENTRY_LOAD_IA32_PERF_GLOBAL_CTRL;
->> -                       _vmexit_control &= ~VM_EXIT_LOAD_IA32_PERF_GLOBAL_CTRL;
->> -                       pr_warn_once("kvm: VM_EXIT_LOAD_IA32_PERF_GLOBAL_CTRL "
->> -                                       "does not work properly. Using workaround\n");
->> -                       break;
->> -               default:
->> -                       break;
->> -               }
->> -       }
->> -
->> -
->>         rdmsr(MSR_IA32_VMX_BASIC, vmx_msr_low, vmx_msr_high);
->>
->>         /* IA-32 SDM Vol 3B: VMCS size is never greater than 4kB. */
->> @@ -4188,6 +4189,10 @@ static u32 vmx_vmentry_ctrl(void)
->>                           VM_ENTRY_LOAD_IA32_EFER |
->>                           VM_ENTRY_IA32E_MODE);
->>
->> +
->> +       if (cpu_has_perf_global_ctrl_bug())
->> +               vmentry_ctrl &= ~VM_ENTRY_LOAD_IA32_PERF_GLOBAL_CTRL;
->> +
->>         return vmentry_ctrl;
->>  }
->>
->> @@ -4202,6 +4207,10 @@ static u32 vmx_vmexit_ctrl(void)
->>         if (vmx_pt_mode_is_system())
->>                 vmexit_ctrl &= ~(VM_EXIT_PT_CONCEAL_PIP |
->>                                  VM_EXIT_CLEAR_IA32_RTIT_CTL);
->> +
->> +       if (cpu_has_perf_global_ctrl_bug())
->> +               vmexit_ctrl &= ~VM_EXIT_LOAD_IA32_PERF_GLOBAL_CTRL;
->> +
->>         /* Loading of EFER and PERF_GLOBAL_CTRL are toggled dynamically */
->>         return vmexit_ctrl &
->>                 ~(VM_EXIT_LOAD_IA32_PERF_GLOBAL_CTRL | VM_EXIT_LOAD_IA32_EFER);
->> @@ -8117,6 +8126,11 @@ static __init int hardware_setup(void)
->>         if (setup_vmcs_config(&vmcs_config, &vmx_capability) < 0)
->>                 return -EIO;
->>
->> +       if (cpu_has_perf_global_ctrl_bug()) {
->> +               pr_warn_once("kvm: VM_EXIT_LOAD_IA32_PERF_GLOBAL_CTRL "
->> +                            "does not work properly. Using workaround\n");
->> +       }
->> +
->>         if (boot_cpu_has(X86_FEATURE_NX))
->>                 kvm_enable_efer_bits(EFER_NX);
->>
->> --
->> 2.35.3
->>
->
-
--- 
-Vitaly
+在 2022/7/3 16:45, Jianmin Lv 写道:
+> LoongArch is a new RISC ISA, which is a bit like MIPS or RISC-V.
+> LoongArch includes a reduced 32-bit version (LA32R), a standard 32-bit
+> version (LA32S) and a 64-bit version (LA64). LoongArch use ACPI as its
+> boot protocol LoongArch-specific interrupt controllers (similar to APIC)
+> are already added in the ACPI Specification 6.5(which may be published in
+> early June this year and the board is reviewing the draft).
+> 
+> Currently, LoongArch based processors (e.g. Loongson-3A5000) can only
+> work together with LS7A chipsets. The irq chips in LoongArch computers
+> include CPUINTC (CPU Core Interrupt Controller), LIOINTC (Legacy I/O
+> Interrupt Controller), EIOINTC (Extended I/O Interrupt Controller),
+> HTVECINTC (Hyper-Transport Vector Interrupt Controller), PCH-PIC (Main
+> Interrupt Controller in LS7A chipset), PCH-LPC (LPC Interrupt Controller
+> in LS7A chipset) and PCH-MSI (MSI Interrupt Controller).
+> 
+> CPUINTC is a per-core controller (in CPU), LIOINTC/EIOINTC/HTVECINTC are
+> per-package controllers (in CPU), while PCH-PIC/PCH-LPC/PCH-MSI are all
+> controllers out of CPU (i.e., in chipsets). These controllers (in other
+> words, irqchips) are linked in a hierarchy, and there are two models of
+> hierarchy (legacy model and extended model).
+> 
+> Legacy IRQ model:
+> 
+> In this model, the IPI (Inter-Processor Interrupt) and CPU Local Timer
+> interrupt go to CPUINTC directly, CPU UARTS interrupts go to LIOINTC,
+> while all other devices interrupts go to PCH-PIC/PCH-LPC/PCH-MSI and
+> gathered by HTVECINTC, and then go to LIOINTC, and then CPUINTC.
+> 
+>   +---------------------------------------------+
+>   |                                             |
+>   |    +-----+     +---------+     +-------+    |
+>   |    | IPI | --> | CPUINTC | <-- | Timer |    |
+>   |    +-----+     +---------+     +-------+    |
+>   |                     ^                       |
+>   |                     |                       |
+>   |                +---------+     +-------+    |
+>   |                | LIOINTC | <-- | UARTs |    |
+>   |                +---------+     +-------+    |
+>   |                     ^                       |
+>   |                     |                       |
+>   |               +-----------+                 |
+>   |               | HTVECINTC |                 |
+>   |               +-----------+                 |
+>   |                ^         ^                  |
+>   |                |         |                  |
+>   |          +---------+ +---------+            |
+>   |          | PCH-PIC | | PCH-MSI |            |
+>   |          +---------+ +---------+            |
+>   |            ^     ^           ^              |
+>   |            |     |           |              |
+>   |    +---------+ +---------+ +---------+      |
+>   |    | PCH-LPC | | Devices | | Devices |      |
+>   |    +---------+ +---------+ +---------+      |
+>   |         ^                                   |
+>   |         |                                   |
+>   |    +---------+                              |
+>   |    | Devices |                              |
+>   |    +---------+                              |
+>   |                                             |
+>   |                                             |
+>   +---------------------------------------------+
+> 
+> Extended IRQ model:
+> 
+> In this model, the IPI (Inter-Processor Interrupt) and CPU Local Timer
+> interrupt go to CPUINTC directly, CPU UARTS interrupts go to LIOINTC,
+> while all other devices interrupts go to PCH-PIC/PCH-LPC/PCH-MSI and
+> gathered by EIOINTC, and then go to to CPUINTC directly.
+> 
+>   +--------------------------------------------------------+
+>   |                                                        |
+>   |         +-----+     +---------+     +-------+          |
+>   |         | IPI | --> | CPUINTC | <-- | Timer |          |
+>   |         +-----+     +---------+     +-------+          |
+>   |                      ^       ^                         |
+>   |                      |       |                         |
+>   |               +---------+ +---------+     +-------+    |
+>   |               | EIOINTC | | LIOINTC | <-- | UARTs |    |
+>   |               +---------+ +---------+     +-------+    |
+>   |                ^       ^                               |
+>   |                |       |                               |
+>   |         +---------+ +---------+                        |
+>   |         | PCH-PIC | | PCH-MSI |                        |
+>   |         +---------+ +---------+                        |
+>   |           ^     ^           ^                          |
+>   |           |     |           |                          |
+>   |   +---------+ +---------+ +---------+                  |
+>   |   | PCH-LPC | | Devices | | Devices |                  |
+>   |   +---------+ +---------+ +---------+                  |
+>   |        ^                                               |
+>   |        |                                               |
+>   |   +---------+                                          |
+>   |   | Devices |                                          |
+>   |   +---------+                                          |
+>   |                                                        |
+>   |                                                        |
+>   +--------------------------------------------------------+
+> 
+> The hierarchy model is constructed by parsing irq contronler structures
+> in MADT. Some controllers((e.g. LIOINTC, HTVECINTC, EIOINTC and PCH-LPC)
+> are hardcodingly connected to their parents, so their irqdomins are
+> separately routed to their parents in a fixed way. Some controllers
+> (e.g. PCH-PIC and PCH-MSI) could be routed to different parents for different
+> CPU. The firmware will config EIOINTC for the newer CPU and config HTVECINTC
+> for old CPU in MADT. By this way, PCH-PIC and PCH-MSI irqdomain can only be
+> routed one parent irqdomin: HTVECINTC or EIOINTC.
+> 
+> 
+> Example of irqchip topology in a system with  two chipsets:
+> 
+>   +------------------------------------------------------------+
+>   |                                                            |
+>   |                     +------------------+                   |
+>   |                     |      CPUINTC     |                   |
+>   |                     +------------------+                   |
+>   |                     ^                  ^                   |
+>   |                     |                  |                   |
+>   |          +----------+                  +----------+        |
+>   |          | EIOINTC 0|                  | EIOINTC 1|        |
+>   |          +----------+                  +----------+        |
+>   |          ^          ^                  ^          ^        |
+>   |          |          |                  |          |        |
+>   | +----------+   +----------+   +----------+    +----------+ |
+>   | | PCH-PIC 0|   | PCH-MSI 0|   | PCH-PIC 1|    | PCH-MSI 1| |
+>   | +----------+   +----------+   +----------+    +----------+ |
+>   |                                                            |
+>   |                                                            |
+>   +------------------------------------------------------------+
+> 
+> For systems with two chipsets, there are tow group(consists of EIOINTC, PCH-PIC and PCH-MSI) irqdomains,
+> and each group has same node id. So we defined a structure to mantain the relation of node and it's parent irqdomain.
+> 
+> struct acpi_vector_group {
+>          int node;
+> 	int pci_segment;
+>          struct irq_domain *parent;
+> };
+> 
+> The initialization and use of acpi_vector_group array are following:
+> 
+> 1 Entry of struct acpi_vector_group array initialization:
+> 
+> By parsing MCFG, the node id（from bit44-47 of Base Address）and pci segment are extracted. And from MADT, we have the node id of each EIOINTC.
+> 
+> entry.node = node id of pci segment
+> entry.pci_segment = pci segment (only for msi irqdomain)
+> 
+> By matching node id of entry and EIOINTC to set parent.
+> 
+> entry.parent = EIOINTC irqdomain(node id of EIOINTC == node id of pci segment)
+> 
+> 2 Get parent irqdomain for PCH-PIC:
+> 
+>>From MADT, we have the node id of each PCH-PIC(from bit44-47 of Base Address).
+> if (node of entry i == node of PCH-PIC)
+> 	return entrys[i].parent;
+> 
+> 3 Get parent irqdomain for PCH-MSI of pci segment:
+> 
+> 	return entrys[i].parent; (i is the index of msi irqdomain)
+> 
+> 4 How to select a correct irqdomain to map irq for a device?
+> For devices using legacy irq behind PCH-PIC, GSI is used to select correct PCH-PIC irqdomain.
+> For devices using msi irq behind PCH-MSI, the pci segmen of the device is used to select correct PCH-MSI irqdomain.
+> 
+> V1 -> V2:
+> 1, Remove queued patches;
+> 2, Move common logic of DT/ACPI probing to common functions;
+> 3, Split .suspend()/.resume() functions to separate patches.
+> 
+> V2 -> V3:
+> 1, Fix a bug for loongson-pch-pic probe;
+> 2, Some minor improvements for LPC controller.
+> 
+> V3 -> V4:
+> 1, Rework the CPU interrupt controller driver;
+> 2, Some minor improvements for other controllers.
+> 
+> V4 -> V5:
+> 1, Add a description of LoonArch's IRQ model;
+> 2, Support multiple EIOINTCs in one system;
+> 3, Some minor improvements for other controllers.
+> 
+> V5 -> V6:
+> 1, Attach a fwnode to CPUINTC irq domain;
+> 2, Use raw spinlock instead of generic spinlock;
+> 3, Improve the method of restoring EIOINTC state;
+> 4, Update documentation, comments and commit messages.
+> 
+> V6 -> V7:
+> 1, Fix build warnings reported by kernel test robot.
+> 
+> V7 -> V8:
+> 1, Add arguments sanity checking for irqchip init functions;
+> 2, Support Loongson-3C5000 (One NUMA Node includes 4 EIOINTC Node).
+> 
+> V8 -> V9:
+> 1, Rebase on 5.17-rc5;
+> 2, Update cover letter;
+> 3, Some small improvements.
+> 
+> V9 -> V10:
+> 1, Rebase on 5.17-rc6;
+> 2, Fix build warnings reported by kernel test robot.
+> 
+> V10 -> V11:
+> 1, Rebase on 5.18-rc4;
+> 2, Fix irq affinity setting for EIOINTC;
+> 3, Fix hwirq allocation failure for EIOINTC.
+> 
+> V11 -> RFC:
+> 1, Refactored the way to build irqchip hierarchy topology.
+> 
+> RFC -> RFC V2:
+> 1, Move all IO-interrupt related code to driver/irqchip from arch directory.
+> 2. Add description for an example of two chipsets system.
+> 
+> RFC V2 -> RFC V3:
+> 1, Add support for multiple GSI domains
+> 2, Use ACPI_GENERIC_GSI for GSI handling
+> 3, Drop suspend-resume stuff
+> 4, Export fwnode handles instead of irq domain handles
+> 
+> RFC V3 -> V12:
+> 1, Address patch attributions of the patch series
+> 
+> V12 -> V13
+> 1 Based on 5.19-rc2
+> 2 Remove arch specified gsi code
+> 3 Split some 'common' code into the various drivers where they belong.
+> 4 Allow acpi_gsi_to_irq() to have an arch-specific fallback
+> 
+> V13 -> V14
+> 1 Add LoongArch-specified APICs definition
+> 2 Use the way in CPUINTC driver to call pch-pic and pch-msi entry
+> 3 Fix compiling and regression issue for OF path
+> 
+> Huacai Chen (8):
+>    ACPICA: MADT: Add LoongArch APICs support
+>    irqchip: Add Loongson PCH LPC controller support
+>    irqchip/loongson-pch-pic: Add ACPI init support
+>    irqchip/loongson-pch-msi: Add ACPI init support
+>    irqchip/loongson-htvec: Add ACPI init support
+>    irqchip/loongson-liointc: Add ACPI init support
+>    irqchip: Add Loongson Extended I/O interrupt controller support
+>    irqchip: Add LoongArch CPU interrupt controller support
+> 
+> Jianmin Lv (5):
+>    genirq/generic_chip: export irq_unmap_generic_chip
+>    LoongArch: Use ACPI_GENERIC_GSI for gsi handling
+>    LoongArch: prepare to support multiple pch-pic and pch-msi irqdomain
+>    irqchip / ACPI: Introduce ACPI_IRQ_MODEL_LPIC for LoongArch
+>    LoongArch: Fix irq number for timer and ipi
+> 
+> Marc Zyngier (2):
+>    APCI: irq: Add support for multiple GSI domains
+>    ACPI: irq: Allow acpi_gsi_to_irq() to have an arch-specific fallback
+> 
+>   arch/loongarch/Kconfig                      |   1 +
+>   arch/loongarch/include/asm/irq.h            |  42 ++-
+>   arch/loongarch/kernel/acpi.c                |  65 -----
+>   arch/loongarch/kernel/irq.c                 |  45 ++-
+>   arch/loongarch/kernel/time.c                |   2 +-
+>   arch/mips/include/asm/mach-loongson64/irq.h |   2 +-
+>   drivers/acpi/bus.c                          |   3 +
+>   drivers/acpi/irq.c                          |  58 ++--
+>   drivers/irqchip/Kconfig                     |  28 ++
+>   drivers/irqchip/Makefile                    |   3 +
+>   drivers/irqchip/irq-gic-v3.c                |  18 +-
+>   drivers/irqchip/irq-gic.c                   |  18 +-
+>   drivers/irqchip/irq-loongarch-cpu.c         | 169 ++++++++++++
+>   drivers/irqchip/irq-loongson-eiointc.c      | 413 ++++++++++++++++++++++++++++
+>   drivers/irqchip/irq-loongson-htvec.c        | 145 +++++++---
+>   drivers/irqchip/irq-loongson-liointc.c      | 227 ++++++++++-----
+>   drivers/irqchip/irq-loongson-pch-lpc.c      | 207 ++++++++++++++
+>   drivers/irqchip/irq-loongson-pch-msi.c      | 131 ++++++---
+>   drivers/irqchip/irq-loongson-pch-pic.c      | 177 +++++++++---
+>   include/acpi/actbl2.h                       | 127 ++++++++-
+>   include/linux/acpi.h                        |   4 +-
+>   include/linux/cpuhotplug.h                  |   1 +
+>   include/linux/irq.h                         |   1 +
+>   kernel/irq/generic-chip.c                   |   2 +-
+>   24 files changed, 1578 insertions(+), 311 deletions(-)
+>   create mode 100644 drivers/irqchip/irq-loongarch-cpu.c
+>   create mode 100644 drivers/irqchip/irq-loongson-eiointc.c
+>   create mode 100644 drivers/irqchip/irq-loongson-pch-lpc.c
+> 
 

@@ -2,101 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 40CED56AA6B
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 20:24:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D16E256AA8B
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 20:27:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236199AbiGGSYL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Jul 2022 14:24:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49976 "EHLO
+        id S236295AbiGGS1R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Jul 2022 14:27:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53400 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236128AbiGGSYJ (ORCPT
+        with ESMTP id S236216AbiGGS1Q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Jul 2022 14:24:09 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E86B22F03B;
-        Thu,  7 Jul 2022 11:24:08 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 9B1FDB82340;
-        Thu,  7 Jul 2022 18:24:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5E2AAC3411E;
-        Thu,  7 Jul 2022 18:24:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1657218246;
-        bh=linJlkK0HAHLMdjOBvguKF5iShjpB0jbq6MyXKvaFZc=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=D7htMa30gqLwN5lFj4UQ3gQzBYmSefuAKVWW0S+566czBzSzYGqykYQIN06GHeevb
-         9DusZE68RJje8w4Q9uDUjmr7C2+ZId96lP/Pwxu20yrP/JtwL5bAukJgqa3HjmjPwy
-         PrQYi6Y1AZhLD/AacgcQOZ+2P86XP68lu45bUL4gKBM8hHPlmCI7FsXTirjZcYZ5AP
-         DFCb+7F1Ic5HrITZVHD1xd3dEoE3j2vr3skb+KCY/lp4jiKlvw/REycoBJLd3TrQ4w
-         9HkQGVlqs94MD29jYTxs1Qmj9UmBM/HNdSfhLIE4xobjyQk2J5+uzB24tQtRVx+c25
-         EahEvIT50eJ8Q==
-Date:   Thu, 7 Jul 2022 11:24:03 -0700
-From:   Nathan Chancellor <nathan@kernel.org>
-To:     Justin Stitt <justinstitt@google.com>
-Cc:     davem@davemloft.net, dhowells@redhat.com, edumazet@google.com,
-        kuba@kernel.org, linux-afs@lists.infradead.org,
-        linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
-        marc.dionne@auristor.com, ndesaulniers@google.com,
-        netdev@vger.kernel.org, pabeni@redhat.com, trix@redhat.com
-Subject: Re: [PATCH v2] net: rxrpc: fix clang -Wformat warning
-Message-ID: <Ysckw9ok670tojo1@dev-arch.thelio-3990X>
-References: <20220706235648.594609-1-justinstitt@google.com>
- <20220707182052.769989-1-justinstitt@google.com>
+        Thu, 7 Jul 2022 14:27:16 -0400
+Received: from mail-ed1-f54.google.com (mail-ed1-f54.google.com [209.85.208.54])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41A245A445
+        for <linux-kernel@vger.kernel.org>; Thu,  7 Jul 2022 11:27:15 -0700 (PDT)
+Received: by mail-ed1-f54.google.com with SMTP id g1so16574588edb.12
+        for <linux-kernel@vger.kernel.org>; Thu, 07 Jul 2022 11:27:15 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent
+         :content-language:to:cc:from:subject:content-transfer-encoding;
+        bh=pfx1nhZRFJd2pn0JeiqJxpeFaccnacgeVbyuvYlXCkA=;
+        b=1OIZ2kcau+30gloMmWPAHATGW7uuk5FxTbGA6XiAJwat8uBVHCCju3ebrfpIgQQJxW
+         BZf52C+TjTAj3TT5IDoUvD3eS1cR9wxQ5EULAEy/yHYv6QCoYvl3H1vditiJb4zpR1yi
+         uHzFTLpUMiKd7F/J4kB20QTZSBesg2k79yCVyLqew1NRAaR0WtMwJHFSquznyF6F1dAH
+         vXyZiX9QptPIrYHxM9bAdShqCrnYcE/kgjXBuiZcqgeufHQN/v/whBl8n72ITA6AzlgI
+         asWv6FrXNXYeu/t+dgHga4yUM07ItMhWUxJ85DcWD1p/bOmr8uTwtqH3Of+oS9FSp2a5
+         mRDA==
+X-Gm-Message-State: AJIora/kHxvaWWhTIEjUW10bNTb+Qbyfcfd7+AbX2QIxS04VjDMTILqg
+        hD3bVvGK4+bk+WxdwZ4mSojEcLJ40ko6KWi1Kkg=
+X-Google-Smtp-Source: AGRyM1vPQlfazhY3o3EK5xIq8fwoSIy+aI1rtaTsMAdg9o4Toc2blkMRyQHaS6DVSsWxcvXXZv6DPg==
+X-Received: by 2002:a05:6402:1844:b0:43a:7c15:c626 with SMTP id v4-20020a056402184400b0043a7c15c626mr20068919edy.17.1657218433888;
+        Thu, 07 Jul 2022 11:27:13 -0700 (PDT)
+Received: from [192.168.1.15] (178-222-165-43.dynamic.isp.telekom.rs. [178.222.165.43])
+        by smtp.gmail.com with ESMTPSA id j22-20020a1709066dd600b006fe8b456672sm12861790ejt.3.2022.07.07.11.27.12
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 07 Jul 2022 11:27:13 -0700 (PDT)
+Message-ID: <fc2a1d53-afe6-d496-ddcd-8ee35102ccd8@pionir.org>
+Date:   Thu, 7 Jul 2022 20:27:12 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220707182052.769989-1-justinstitt@google.com>
-X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.0.1
+Content-Language: en-US
+To:     x86@kernel.org
+Cc:     tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        dave.hansen@linux.intel.com, linux-kernel@vger.kernel.org
+From:   =?UTF-8?Q?Ognjen_Jovandi=c4=87?= <ognjen.jovandic.5@pionir.org>
+Subject: [PATCH] arch/i386: Fix the AMD Elan SC520 PIT clock source to
+ 1.18920MHz
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jul 07, 2022 at 11:20:52AM -0700, Justin Stitt wrote:
-> When building with Clang we encounter this warning:
-> | net/rxrpc/rxkad.c:434:33: error: format specifies type 'unsigned short'
-> | but the argument has type 'u32' (aka 'unsigned int') [-Werror,-Wformat]
-> | _leave(" = %d [set %hx]", ret, y);
-> 
-> y is a u32 but the format specifier is `%hx`. Going from unsigned int to
-> short int results in a loss of data. This is surely not intended
-> behavior. If it is intended, the warning should be suppressed through
-> other means.
-> 
-> This patch should get us closer to the goal of enabling the -Wformat
-> flag for Clang builds.
-> 
-> Link: https://github.com/ClangBuiltLinux/linux/issues/378
-> Signed-off-by: Justin Stitt <justinstitt@google.com>
+From: Ognjen Jovandić <ognjen.jovandic.5@pionir.org>
 
-Reviewed-by: Nathan Chancellor <nathan@kernel.org>
+x86/i386: Fix the AMD Elan SC520 PIT clock source to 1.18920MHz, which deviates from
+standard PC/AT clones.
+Signed-off-by: Ognjen Jovandić <ognjen.jovandic.5@pionir.org>
+---
+Changed PIT_TICK_RATE to 1189200ul which i found in Élan™SC520
+Microcontroller User’s Manual Chapter 5 CLOCK GENERATION AND CONTROL.
+Found problem while trying to port OpeWrt 21.04 to Soekris net4501.
+--- a/arch/x86/include/asm/timex.h
++++ b/arch/x86/include/asm/timex.h
+@@ -5,9 +5,19 @@
+ #include <asm/processor.h>
+ #include <asm/tsc.h>
+ 
++
++#ifdef CONFIG_MELAN
++
++#define CLOCK_TICK_RATE     1189200ul
++
++#else
++
+ /* Assume we use the PIT time source for the clock tick */
+ #define CLOCK_TICK_RATE		PIT_TICK_RATE
+ 
++#endif
++
++
+ #define ARCH_HAS_READ_CURRENT_TIMER
+ 
+ #endif /* _ASM_X86_TIMEX_H */
 
-> ---
-> diff from v1 -> v2: 
-> * Change format specifier from %u to %x to properly represent hexadecimal.
-> 
->  net/rxrpc/rxkad.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/net/rxrpc/rxkad.c b/net/rxrpc/rxkad.c
-> index 08aab5c01437..258917a714c8 100644
-> --- a/net/rxrpc/rxkad.c
-> +++ b/net/rxrpc/rxkad.c
-> @@ -431,7 +431,7 @@ static int rxkad_secure_packet(struct rxrpc_call *call,
->  		break;
->  	}
->  
-> -	_leave(" = %d [set %hx]", ret, y);
-> +	_leave(" = %d [set %x]", ret, y);
->  	return ret;
->  }
->  
-> -- 
-> 2.37.0.rc0.161.g10f37bed90-goog
-> 

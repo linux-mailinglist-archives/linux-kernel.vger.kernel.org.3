@@ -2,245 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 353A856AC3A
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 21:50:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 548B956AC44
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 21:56:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236805AbiGGTuF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Jul 2022 15:50:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33452 "EHLO
+        id S236067AbiGGTz5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Jul 2022 15:55:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37466 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236367AbiGGTuE (ORCPT
+        with ESMTP id S235622AbiGGTz4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Jul 2022 15:50:04 -0400
-Received: from mx1.riseup.net (mx1.riseup.net [198.252.153.129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15EF15A2E7
-        for <linux-kernel@vger.kernel.org>; Thu,  7 Jul 2022 12:50:02 -0700 (PDT)
-Received: from fews1.riseup.net (fews1-pn.riseup.net [10.0.1.83])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256
-         client-signature RSA-PSS (2048 bits) client-digest SHA256)
-        (Client CN "mail.riseup.net", Issuer "R3" (not verified))
-        by mx1.riseup.net (Postfix) with ESMTPS id 4Lf6Sp2Dr6zDr4k;
-        Thu,  7 Jul 2022 19:50:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=riseup.net; s=squak;
-        t=1657223402; bh=ied7/wQBWyRAGNRM3YJQ9nmwASEEztOFVReHeNDPqs4=;
-        h=From:To:Cc:Subject:Date:From;
-        b=fOz0/Uf6U90A9zYKjLrYyhaK5DOKfrFIvBM0bBMLHLM9VoHoTj9ZNQ0iwIL5u+zEg
-         AXXyOp3vVyjQtpP6Niv30wOp8BgS0agFINCJYPfOw15jlGX0oCHKxGiK25p318rtNi
-         ZVCcN8sHivF7gRafsWqVjJfzsx2zMERBdPOxal4w=
-X-Riseup-User-ID: 8654BB5CEEAED37E29E93B549D0D383934D30FA2C2F8B642BBBDF6AF5CF020CD
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-         by fews1.riseup.net (Postfix) with ESMTPSA id 4Lf6Sk2jRDz5vXK;
-        Thu,  7 Jul 2022 19:49:58 +0000 (UTC)
-From:   =?UTF-8?q?Ma=C3=ADra=20Canal?= <mairacanal@riseup.net>
-To:     Harry Wentland <harry.wentland@amd.com>,
-        Leo Li <sunpeng.li@amd.com>,
-        Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        christian.koenig@amd.com, Xinhui.Pan@amd.com,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>
-Cc:     amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org,
-        =?UTF-8?q?Ma=C3=ADra=20Canal?= <mairacanal@riseup.net>
-Subject: [PATCH] drm/amd/display: Drop dm_sw_gfx7_2d_thin_l_vp and dm_sw_gfx7_2d_thin_gl
-Date:   Thu,  7 Jul 2022 16:49:49 -0300
-Message-Id: <20220707194949.103978-1-mairacanal@riseup.net>
+        Thu, 7 Jul 2022 15:55:56 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 940F55C9CA
+        for <linux-kernel@vger.kernel.org>; Thu,  7 Jul 2022 12:55:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1657223752;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=4Mo3Zl8VhFZlmNu+vKliCf9PrnP4k8cuE7bMp/19zYQ=;
+        b=OzN/Xhf1hf+AanqN1tXztTnyitNhJGBIcK6suPyLwcza+4LpQQYdXCccXWnJ5eJTAvl/tI
+        79BH0lu9o4lfduoudoiaZTU2nvhwpUb1BakwbL3fxvXOjFX3SM84bjIRBt+MEpehNfu72m
+        wjCD+9ahC8I6/zqKqhPG133a/SIoFuM=
+Received: from mail-qk1-f200.google.com (mail-qk1-f200.google.com
+ [209.85.222.200]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-316-evkr0Y9jPJqbklOO5xXjOQ-1; Thu, 07 Jul 2022 15:55:48 -0400
+X-MC-Unique: evkr0Y9jPJqbklOO5xXjOQ-1
+Received: by mail-qk1-f200.google.com with SMTP id z9-20020a376509000000b006af1048e0caso18904986qkb.17
+        for <linux-kernel@vger.kernel.org>; Thu, 07 Jul 2022 12:55:48 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
+         :references:organization:user-agent:mime-version
+         :content-transfer-encoding;
+        bh=4Mo3Zl8VhFZlmNu+vKliCf9PrnP4k8cuE7bMp/19zYQ=;
+        b=R/N+EytWN5FmEa8aiihV8y9UvwX2tHTM0Wx/l3RVb/jHw/rhdrBTqeX7sT0Z0ekgQG
+         3lSYD0k0M3xbvZ4CR0LcEZMcwwr0MLlLQwCwtVB7mONhORdL9VIZYU4wUl4ji2/5uEZ6
+         wOu2jj6YIPXNfmBhI2F/VuGoV65Alrm5rnGbsv5h27EPJZLMdOAPRpLgw4HOncaBqjQx
+         cvYCHUZgwfwSAmcZ8wDF4cACgU0AGiH0/r5C07EZP16zW+a9TvrdpeeSzBgswhEnRPh0
+         UBqIf3AcAD1Bkqw+TfIZtVbkJaayBW8NHrrB7wxDbGOgxkQjwvYUx61Ba9YzlIE8Opmt
+         cuPw==
+X-Gm-Message-State: AJIora+v5x5b4xXpwFJma0BGCm0d+Kn2y4fhuTV2hIvqM57xW7wHH5ki
+        rjDHGbtoS09rP0sMK5WC6XhHYDc8gA5nq05tHKWVkEh9sOzTzkj2g6CDZg7UOOSkCOtm0+Kv9Kl
+        2eV9jepiuDpxD0UQsacseBJyQ
+X-Received: by 2002:a05:620a:a97:b0:6af:1394:1966 with SMTP id v23-20020a05620a0a9700b006af13941966mr31924311qkg.348.1657223748324;
+        Thu, 07 Jul 2022 12:55:48 -0700 (PDT)
+X-Google-Smtp-Source: AGRyM1uL/JdDYPTjD7D3BFa0hLHVO+5vqO0/kmBCEI+jlAypJGlcReJaqO0oDq49OegV/weSeVsAqg==
+X-Received: by 2002:a05:620a:a97:b0:6af:1394:1966 with SMTP id v23-20020a05620a0a9700b006af13941966mr31924302qkg.348.1657223748010;
+        Thu, 07 Jul 2022 12:55:48 -0700 (PDT)
+Received: from [192.168.8.138] ([141.154.49.182])
+        by smtp.gmail.com with ESMTPSA id u12-20020a05620a454c00b006afd667535asm23648140qkp.83.2022.07.07.12.55.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 07 Jul 2022 12:55:47 -0700 (PDT)
+Message-ID: <62827a27253727d92d6bfcf833a9ec4d3f7c7cd3.camel@redhat.com>
+Subject: Re: [PATCH] drm/nouveau/nouveau_bo: fix potential memory leak in
+ nouveau_bo_alloc()
+From:   Lyude Paul <lyude@redhat.com>
+To:     Jianglei Nie <niejianglei2021@163.com>, bskeggs@redhat.com,
+        kherbst@redhat.com, airlied@linux.ie, daniel@ffwll.ch
+Cc:     ri-devel@lists.freedesktop.org, nouveau@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org
+Date:   Thu, 07 Jul 2022 15:55:46 -0400
+In-Reply-To: <20220705094306.2244103-1-niejianglei2021@163.com>
+References: <20220705094306.2244103-1-niejianglei2021@163.com>
+Organization: Red Hat Inc.
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.42.4 (3.42.4-2.fc35) 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-As the enum dm_sw_gfx7_2d_thin_gl and dm_sw_gfx7_2d_thin_l_vp are not
-used on the codebase, this commit drops those entries from enum
-dm_swizzle_mode.
+Reviewed-by: Lyude Paul <lyude@redhat.com>
 
-Signed-off-by: Maíra Canal <mairacanal@riseup.net>
----
- .../dc/dml/dcn20/display_mode_vba_20.c        | 26 +++++-------------
- .../dc/dml/dcn20/display_mode_vba_20v2.c      | 26 +++++-------------
- .../dc/dml/dcn21/display_mode_vba_21.c        | 27 +++++--------------
- .../amd/display/dc/dml/display_mode_enums.h   |  2 --
- .../display/dc/dml/dml_wrapper_translation.c  |  9 -------
- 5 files changed, 19 insertions(+), 71 deletions(-)
+Will push
 
-diff --git a/drivers/gpu/drm/amd/display/dc/dml/dcn20/display_mode_vba_20.c b/drivers/gpu/drm/amd/display/dc/dml/dcn20/display_mode_vba_20.c
-index d3b5b6fedf04..4e4cb0927057 100644
---- a/drivers/gpu/drm/amd/display/dc/dml/dcn20/display_mode_vba_20.c
-+++ b/drivers/gpu/drm/amd/display/dc/dml/dcn20/display_mode_vba_20.c
-@@ -938,7 +938,7 @@ static unsigned int CalculateVMAndRowBytes(
- 		*MetaRowByte = 0;
- 	}
- 
--	if (SurfaceTiling == dm_sw_linear || SurfaceTiling == dm_sw_gfx7_2d_thin_gl || SurfaceTiling == dm_sw_gfx7_2d_thin_l_vp) {
-+	if (SurfaceTiling == dm_sw_linear) {
- 		MacroTileSizeBytes = 256;
- 		MacroTileHeight = BlockHeight256Bytes;
- 	} else if (SurfaceTiling == dm_sw_4kb_s || SurfaceTiling == dm_sw_4kb_s_x
-@@ -3347,26 +3347,12 @@ void dml20_ModeSupportAndSystemConfigurationFull(struct display_mode_lib *mode_l
- 										== dm_420_8
- 								|| mode_lib->vba.SourcePixelFormat[k]
- 										== dm_420_10))
--				|| (((mode_lib->vba.SurfaceTiling[k] == dm_sw_gfx7_2d_thin_gl
--						|| mode_lib->vba.SurfaceTiling[k]
--								== dm_sw_gfx7_2d_thin_l_vp)
--						&& !((mode_lib->vba.SourcePixelFormat[k]
--								== dm_444_64
-+				|| (mode_lib->vba.DCCEnable[k] == true
-+						&& (mode_lib->vba.SurfaceTiling[k] == dm_sw_linear
- 								|| mode_lib->vba.SourcePixelFormat[k]
--										== dm_444_32)
--								&& mode_lib->vba.SourceScan[k]
--										== dm_horz
--								&& mode_lib->vba.SupportGFX7CompatibleTilingIn32bppAnd64bpp
--										== true
--								&& mode_lib->vba.DCCEnable[k]
--										== false))
--						|| (mode_lib->vba.DCCEnable[k] == true
--								&& (mode_lib->vba.SurfaceTiling[k]
--										== dm_sw_linear
--										|| mode_lib->vba.SourcePixelFormat[k]
--												== dm_420_8
--										|| mode_lib->vba.SourcePixelFormat[k]
--												== dm_420_10)))) {
-+										== dm_420_8
-+								|| mode_lib->vba.SourcePixelFormat[k]
-+										== dm_420_10))) {
- 			mode_lib->vba.SourceFormatPixelAndScanSupport = false;
- 		}
- 	}
-diff --git a/drivers/gpu/drm/amd/display/dc/dml/dcn20/display_mode_vba_20v2.c b/drivers/gpu/drm/amd/display/dc/dml/dcn20/display_mode_vba_20v2.c
-index 63bbdf8b8678..eaa0cdb599ba 100644
---- a/drivers/gpu/drm/amd/display/dc/dml/dcn20/display_mode_vba_20v2.c
-+++ b/drivers/gpu/drm/amd/display/dc/dml/dcn20/display_mode_vba_20v2.c
-@@ -998,7 +998,7 @@ static unsigned int CalculateVMAndRowBytes(
- 		*MetaRowByte = 0;
- 	}
- 
--	if (SurfaceTiling == dm_sw_linear || SurfaceTiling == dm_sw_gfx7_2d_thin_gl || SurfaceTiling == dm_sw_gfx7_2d_thin_l_vp) {
-+	if (SurfaceTiling == dm_sw_linear) {
- 		MacroTileSizeBytes = 256;
- 		MacroTileHeight = BlockHeight256Bytes;
- 	} else if (SurfaceTiling == dm_sw_4kb_s || SurfaceTiling == dm_sw_4kb_s_x
-@@ -3454,26 +3454,12 @@ void dml20v2_ModeSupportAndSystemConfigurationFull(struct display_mode_lib *mode
- 										== dm_420_8
- 								|| mode_lib->vba.SourcePixelFormat[k]
- 										== dm_420_10))
--				|| (((mode_lib->vba.SurfaceTiling[k] == dm_sw_gfx7_2d_thin_gl
--						|| mode_lib->vba.SurfaceTiling[k]
--								== dm_sw_gfx7_2d_thin_l_vp)
--						&& !((mode_lib->vba.SourcePixelFormat[k]
--								== dm_444_64
-+				|| (mode_lib->vba.DCCEnable[k] == true
-+						&& (mode_lib->vba.SurfaceTiling[k] == dm_sw_linear
- 								|| mode_lib->vba.SourcePixelFormat[k]
--										== dm_444_32)
--								&& mode_lib->vba.SourceScan[k]
--										== dm_horz
--								&& mode_lib->vba.SupportGFX7CompatibleTilingIn32bppAnd64bpp
--										== true
--								&& mode_lib->vba.DCCEnable[k]
--										== false))
--						|| (mode_lib->vba.DCCEnable[k] == true
--								&& (mode_lib->vba.SurfaceTiling[k]
--										== dm_sw_linear
--										|| mode_lib->vba.SourcePixelFormat[k]
--												== dm_420_8
--										|| mode_lib->vba.SourcePixelFormat[k]
--												== dm_420_10)))) {
-+										== dm_420_8
-+								|| mode_lib->vba.SourcePixelFormat[k]
-+										== dm_420_10))) {
- 			mode_lib->vba.SourceFormatPixelAndScanSupport = false;
- 		}
- 	}
-diff --git a/drivers/gpu/drm/amd/display/dc/dml/dcn21/display_mode_vba_21.c b/drivers/gpu/drm/amd/display/dc/dml/dcn21/display_mode_vba_21.c
-index 8a7485e21d53..198d81861ac5 100644
---- a/drivers/gpu/drm/amd/display/dc/dml/dcn21/display_mode_vba_21.c
-+++ b/drivers/gpu/drm/amd/display/dc/dml/dcn21/display_mode_vba_21.c
-@@ -1342,7 +1342,7 @@ static unsigned int CalculateVMAndRowBytes(
- 		*MetaRowByte = 0;
- 	}
- 
--	if (SurfaceTiling == dm_sw_linear || SurfaceTiling == dm_sw_gfx7_2d_thin_gl || SurfaceTiling == dm_sw_gfx7_2d_thin_l_vp) {
-+	if (SurfaceTiling == dm_sw_linear) {
- 		MacroTileSizeBytes = 256;
- 		MacroTileHeight = BlockHeight256Bytes;
- 	} else if (SurfaceTiling == dm_sw_4kb_s || SurfaceTiling == dm_sw_4kb_s_x
-@@ -3579,26 +3579,13 @@ void dml21_ModeSupportAndSystemConfigurationFull(struct display_mode_lib *mode_l
- 										== dm_420_8
- 								|| mode_lib->vba.SourcePixelFormat[k]
- 										== dm_420_10))
--				|| (((mode_lib->vba.SurfaceTiling[k] == dm_sw_gfx7_2d_thin_gl
--						|| mode_lib->vba.SurfaceTiling[k]
--								== dm_sw_gfx7_2d_thin_l_vp)
--						&& !((mode_lib->vba.SourcePixelFormat[k]
--								== dm_444_64
-+				|| (mode_lib->vba.DCCEnable[k] == true
-+						&& (mode_lib->vba.SurfaceTiling[k]
-+								== dm_sw_linear
- 								|| mode_lib->vba.SourcePixelFormat[k]
--										== dm_444_32)
--								&& mode_lib->vba.SourceScan[k]
--										== dm_horz
--								&& mode_lib->vba.SupportGFX7CompatibleTilingIn32bppAnd64bpp
--										== true
--								&& mode_lib->vba.DCCEnable[k]
--										== false))
--						|| (mode_lib->vba.DCCEnable[k] == true
--								&& (mode_lib->vba.SurfaceTiling[k]
--										== dm_sw_linear
--										|| mode_lib->vba.SourcePixelFormat[k]
--												== dm_420_8
--										|| mode_lib->vba.SourcePixelFormat[k]
--												== dm_420_10)))) {
-+										== dm_420_8
-+								|| mode_lib->vba.SourcePixelFormat[k]
-+										== dm_420_10))) {
- 			mode_lib->vba.SourceFormatPixelAndScanSupport = false;
- 		}
- 	}
-diff --git a/drivers/gpu/drm/amd/display/dc/dml/display_mode_enums.h b/drivers/gpu/drm/amd/display/dc/dml/display_mode_enums.h
-index f394b3f3922a..0e06727d40b3 100644
---- a/drivers/gpu/drm/amd/display/dc/dml/display_mode_enums.h
-+++ b/drivers/gpu/drm/amd/display/dc/dml/display_mode_enums.h
-@@ -89,8 +89,6 @@ enum dm_swizzle_mode {
- 	dm_sw_var_s_x = 29,
- 	dm_sw_var_d_x = 30,
- 	dm_sw_var_r_x = 31,
--	dm_sw_gfx7_2d_thin_l_vp,
--	dm_sw_gfx7_2d_thin_gl,
- };
- enum lb_depth {
- 	dm_lb_10 = 0, dm_lb_8 = 1, dm_lb_6 = 2, dm_lb_12 = 3, dm_lb_16 = 4,
-diff --git a/drivers/gpu/drm/amd/display/dc/dml/dml_wrapper_translation.c b/drivers/gpu/drm/amd/display/dc/dml/dml_wrapper_translation.c
-index 4ec5310a2962..9edcb6fc83c1 100644
---- a/drivers/gpu/drm/amd/display/dc/dml/dml_wrapper_translation.c
-+++ b/drivers/gpu/drm/amd/display/dc/dml/dml_wrapper_translation.c
-@@ -35,15 +35,6 @@ static void gfx10array_mode_to_dml_params(
- 	case DC_ARRAY_LINEAR_GENERAL:
- 		*sw_mode = dm_sw_linear;
- 		break;
--	case DC_ARRAY_2D_TILED_THIN1:
--// DC_LEGACY_TILING_ADDR_GEN_ZERO - undefined as per current code hence removed
--#if 0
--		if (compat_level == DC_LEGACY_TILING_ADDR_GEN_ZERO)
--			*sw_mode = dm_sw_gfx7_2d_thin_l_vp;
--		else
--			*sw_mode = dm_sw_gfx7_2d_thin_gl;
--#endif
--		break;
- 	default:
- 		ASSERT(0); /* Not supported */
- 		break;
+On Tue, 2022-07-05 at 17:43 +0800, Jianglei Nie wrote:
+> nouveau_bo_alloc() allocates a memory chunk for "nvbo" with kzalloc().
+> When some error occurs, "nvbo" should be released. But when
+> WARN_ON(pi < 0)) equals true, the function return ERR_PTR without
+> releasing the "nvbo", which will lead to a memory leak.
+> 
+> We should release the "nvbo" with kfree() if WARN_ON(pi < 0)) equals true.
+> 
+> Signed-off-by: Jianglei Nie <niejianglei2021@163.com>
+> ---
+>  drivers/gpu/drm/nouveau/nouveau_bo.c | 4 +++-
+>  1 file changed, 3 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/gpu/drm/nouveau/nouveau_bo.c
+> b/drivers/gpu/drm/nouveau/nouveau_bo.c
+> index 05076e530e7d..d0887438b07e 100644
+> --- a/drivers/gpu/drm/nouveau/nouveau_bo.c
+> +++ b/drivers/gpu/drm/nouveau/nouveau_bo.c
+> @@ -281,8 +281,10 @@ nouveau_bo_alloc(struct nouveau_cli *cli, u64 *size,
+> int *align, u32 domain,
+>                         break;
+>         }
+>  
+> -       if (WARN_ON(pi < 0))
+> +       if (WARN_ON(pi < 0)) {
+> +               kfree(nvbo);
+>                 return ERR_PTR(-EINVAL);
+> +       }
+>  
+>         /* Disable compression if suitable settings couldn't be found. */
+>         if (nvbo->comp && !vmm->page[pi].comp) {
+
 -- 
-2.36.1
+Cheers,
+ Lyude Paul (she/her)
+ Software Engineer at Red Hat
 

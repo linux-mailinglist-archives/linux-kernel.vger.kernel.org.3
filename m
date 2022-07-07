@@ -2,83 +2,189 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2235F569D6F
+	by mail.lfdr.de (Postfix) with ESMTP id 99427569D70
 	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 10:30:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235229AbiGGI1m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Jul 2022 04:27:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46626 "EHLO
+        id S235162AbiGGI1G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Jul 2022 04:27:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46238 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235399AbiGGI1X (ORCPT
+        with ESMTP id S234945AbiGGI1D (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Jul 2022 04:27:23 -0400
-Received: from mx4.veeam.com (mx4.veeam.com [104.41.138.86])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 144F414D21;
-        Thu,  7 Jul 2022 01:27:20 -0700 (PDT)
-Received: from usmail.veeam.com (colmbx01.amust.local [172.18.0.171])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mx4.veeam.com (Postfix) with ESMTPS id 410621BED3;
-        Thu,  7 Jul 2022 11:27:18 +0300 (MSK)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=veeam.com;
-        s=mx4-2022; t=1657182438;
-        bh=9JTT03ywMrfFf8Wc1PmkKBuL5TV4H/+eK+u9HUsy8r8=;
-        h=Date:Subject:To:CC:References:From:In-Reply-To:From;
-        b=FWo545DE5ALoyzMmYKIG4JrOpsupyPySRmzVtTD+ZHL/Eqqur+HEZoVW5js8jjfQa
-         QcBfkDawEv48Y3RrDaynRVzEjyygp807vwzp1YhVTq1JVlTb4COUgUGDu8XSi5wwAR
-         dNF15T3fhtuxSqS/66FTUgki5h+CdJdywgMTo8M5X3rsMSq7HtiVauVa/I40w++dZt
-         ZVMlnTLnUfHtgERxoXpkjaRlXTC2go3Qxlt+bA+8HRHvoe28lc6uOhXxEWMIIrdnUF
-         R5xKVpCnzsUcSMcxA5pJ5rTxfnV0sXk9ejtPuHd7nNCXVRSOP3fJIgJG9jcQVYQ0C8
-         /XwZJ3y0eIfNA==
-Received: from [172.24.11.83] (172.24.11.83) by colmbx01.amust.local
- (172.18.0.171) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.9; Thu, 7 Jul 2022
- 04:26:56 -0400
-Message-ID: <ff78a1ee-8bc5-6e8e-040f-978cd07eacfe@veeam.com>
-Date:   Thu, 7 Jul 2022 10:26:55 +0200
+        Thu, 7 Jul 2022 04:27:03 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 02BCB14D21
+        for <linux-kernel@vger.kernel.org>; Thu,  7 Jul 2022 01:27:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1657182421;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=hyQUq78HZYV0U5amrGZK5Au62aqwa+QCBY5NRkOA5vM=;
+        b=Za1c3dchr9VjWfrfMwzbmap30VjOuSjq8jpKqxO9feLQkidfcNtGkfSjYRLrw51CdMSVyZ
+        l44mgb8yrPR6nw82yuQHX1wVC+3EzdKglDHla7aTQdVHH5nWJLpiQjnkSR/zQ2waM5ZAk4
+        fvM/tVl90P8vzI3fQNWZwyxjYvzfwjo=
+Received: from mail-ej1-f72.google.com (mail-ej1-f72.google.com
+ [209.85.218.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-297-hp2mYy4NONukDtTQ4jzcxA-1; Thu, 07 Jul 2022 04:26:59 -0400
+X-MC-Unique: hp2mYy4NONukDtTQ4jzcxA-1
+Received: by mail-ej1-f72.google.com with SMTP id sg40-20020a170907a42800b00722faf0aacbso4466460ejc.3
+        for <linux-kernel@vger.kernel.org>; Thu, 07 Jul 2022 01:26:59 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
+         :message-id:mime-version;
+        bh=hyQUq78HZYV0U5amrGZK5Au62aqwa+QCBY5NRkOA5vM=;
+        b=lVmGSf5uJ6xKg19jmxNkSz2t7HGXtgOQ7GGw1W/A9NOgvn5FIIbOqoLE7ATddkSBAD
+         v7VMKw7fItHoHLrXijuqb27yTQiJ037pJmXeY+vWer0++CUgeNovFmDohIyguz34HaNG
+         aoYFbPArsKw7vv/XUv6B30X9/zGFHalxkNAm+EjfIq7YGxn+w2KcQ6x+yAGyBNAqwpJh
+         nQOD8InMoywZrrxruRd07pJAWB5K7DphTa4j0nFCHyT33or2SgjXVr6VOAWbj1ZM7NYA
+         q8OCvmjjyyAUWL35RN/ypVsTQnDbHXV0inbS0ahYhV8BMfFKB5USTKwNkrBXMeAZYhik
+         rksQ==
+X-Gm-Message-State: AJIora8DRN+DZObUkEFGbWLJ6TJsJnUmYq4NYTywCVftKgkCVb+DsG/E
+        HL34rB++Na2V2nIiI9Ua38Ac8uoTdcXmm1viz9CeZZP5XbQsbGuhxOGwlghI1hzW6QdRnI9ZH7K
+        IMuOuTH5ujZ+thpLgcl+C/EQm
+X-Received: by 2002:a05:6402:c0b:b0:43a:25ff:ff08 with SMTP id co11-20020a0564020c0b00b0043a25ffff08mr32234926edb.148.1657182418713;
+        Thu, 07 Jul 2022 01:26:58 -0700 (PDT)
+X-Google-Smtp-Source: AGRyM1uvaDV9BbuUE121Sm+1DSqPLexh4d8iG52AgkDo+XRYCQ8whzlmbqjuBkwqDmHZx8J/VKLzYA==
+X-Received: by 2002:a05:6402:c0b:b0:43a:25ff:ff08 with SMTP id co11-20020a0564020c0b00b0043a25ffff08mr32234901edb.148.1657182418538;
+        Thu, 07 Jul 2022 01:26:58 -0700 (PDT)
+Received: from fedora (nat-2.ign.cz. [91.219.240.2])
+        by smtp.gmail.com with ESMTPSA id eo7-20020a056402530700b0043a78236cd2sm5689000edb.89.2022.07.07.01.26.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 07 Jul 2022 01:26:58 -0700 (PDT)
+From:   Vitaly Kuznetsov <vkuznets@redhat.com>
+To:     Wang Guangju <wangguangju@baidu.com>
+Cc:     linux-kernel@vger.kernel.org, wangguangju@baidu.com,
+        seanjc@google.com, pbonzini@redhat.com, jmattson@google.com,
+        wanpengli@tencent.com, bp@alien8.de, joro@8bytes.org,
+        suravee.suthikulpanit@amd.com, hpa@zytor.com, tglx@linutronix.de,
+        mingo@redhat.com, kvm@vger.kernel.org
+Subject: Re: [PATCH] KVM: x86: Add EOI exit bitmap handlers for Hyper-V
+ SynIC vectors
+In-Reply-To: <20220705083732.168-1-wangguangju@baidu.com>
+References: <20220705083732.168-1-wangguangju@baidu.com>
+Date:   Thu, 07 Jul 2022 10:26:56 +0200
+Message-ID: <87v8s9qqen.fsf@redhat.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH 01/20] block, blk_filter: enable block device filters
-Content-Language: en-US
-To:     Christoph Hellwig <hch@infradead.org>
-CC:     "axboe@kernel.dk" <axboe@kernel.dk>,
-        "linux-block@vger.kernel.org" <linux-block@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-References: <1655135593-1900-1-git-send-email-sergei.shtepa@veeam.com>
- <1655135593-1900-2-git-send-email-sergei.shtepa@veeam.com>
- <YsWHHcCfSVFklh4M@infradead.org>
-From:   Sergei Shtepa <sergei.shtepa@veeam.com>
-In-Reply-To: <YsWHHcCfSVFklh4M@infradead.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [172.24.11.83]
-X-ClientProxiedBy: prgmbx02.amust.local (172.24.128.103) To
- colmbx01.amust.local (172.18.0.171)
-X-EsetResult: clean, is OK
-X-EsetId: 37303A29078F7554657267
-X-Veeam-MMEX: True
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Thank you, Christoph, for your attention to the patch.
+Wang Guangju <wangguangju@baidu.com> writes:
 
-I am preparing the next version of the patch. In it, I planned to
-simplify the bdev_filer code.
-I will make changes in it, in accordance with your comments, and
-will add your code and check it on my test labs.
+> From: wangguangju <wangguangju@baidu.com>
+>
+> Hyper-V SynIC vectors were added into EOI exit bitmap in func
+> synic_set_sint().But when the Windows VM VMEXIT due to
+> EXIT_REASON_EOI_INDUCED, there are no EOI exit bitmap handlers
+> for Hyper-V SynIC vectors.
 
-But I'm not sure if using the blk_mq_freeze_queue() is appropriate.
-If I understood the code correctly, it is based on the expectation
-that the counter q->q_usage_counter will decrease to zero.
-To increase it, a blk_queue_enter() is used. And at the time of
-calling the filter_bio() in the submit_bio_noacct(), this counter
-has not yet been increased. I will double check this and try to
-get rid of the bdev->bd_filter_lock.
+My take:
+
+"When EOI virtualization is performed on VMX,
+kvm_apic_set_eoi_accelerated() is called upon EXIT_REASON_EOI_INDUCED
+but unlike its non-accelerated apic_set_eoi() sibling, Hyper-V SINT
+vectors are left unhandled.
+"
+
+>
+> This patch fix it.
+>
+> Change-Id: I2404ebf7bda60326be3f6786e0e34e63aa81bbd4
+
+In case this is not something publicly available it doesn't belong to
+kernel changelog as it doesn't bring any value.
+
+> Signed-off-by: wangguangju <wangguangju@baidu.com>
+> ---
+>  arch/x86/kvm/lapic.c | 4 ++++
+>  1 file changed, 4 insertions(+)
+>
+> diff --git a/arch/x86/kvm/lapic.c b/arch/x86/kvm/lapic.c
+> index 0e68b4c..59096f8 100644
+> --- a/arch/x86/kvm/lapic.c
+> +++ b/arch/x86/kvm/lapic.c
+> @@ -1303,6 +1303,10 @@ void kvm_apic_set_eoi_accelerated(struct kvm_vcpu *vcpu, int vector)
+>  
+>  	trace_kvm_eoi(apic, vector);
+>  
+> +	if (to_hv_vcpu(apic->vcpu) &&
+> +	    test_bit(vector, to_hv_synic(apic->vcpu)->vec_bitmap))
+> +		kvm_hv_synic_send_eoi(apic->vcpu, vector);
+> +
+>  	kvm_ioapic_send_eoi(apic, vector);
+>  	kvm_make_request(KVM_REQ_EVENT, apic->vcpu);
+
+
+This whole part:
+
+	if (to_hv_vcpu(apic->vcpu) &&
+	    test_bit(vector, to_hv_synic(apic->vcpu)->vec_bitmap))
+		kvm_hv_synic_send_eoi(apic->vcpu, vector);
+
+	kvm_ioapic_send_eoi(apic, vector);
+	kvm_make_request(KVM_REQ_EVENT, apic->vcpu);
+
+could be split into an inline function, something like (completely
+untested):
+
+diff --git a/arch/x86/kvm/lapic.c b/arch/x86/kvm/lapic.c
+index 6ff17d5a2ae3..9d19c7c738c0 100644
+--- a/arch/x86/kvm/lapic.c
++++ b/arch/x86/kvm/lapic.c
+@@ -1269,6 +1269,16 @@ static void kvm_ioapic_send_eoi(struct kvm_lapic *apic, int vector)
+        kvm_ioapic_update_eoi(apic->vcpu, vector, trigger_mode);
+ }
+ 
++static inline void apic_set_eoi_vector(struct kvm_lapic *apic, int vector)
++{
++       if (to_hv_vcpu(apic->vcpu) &&
++           test_bit(vector, to_hv_synic(apic->vcpu)->vec_bitmap))
++               kvm_hv_synic_send_eoi(apic->vcpu, vector);
++
++       kvm_ioapic_send_eoi(apic, vector);
++       kvm_make_request(KVM_REQ_EVENT, apic->vcpu);
++}
++
+ static int apic_set_eoi(struct kvm_lapic *apic)
+ {
+        int vector = apic_find_highest_isr(apic);
+@@ -1285,12 +1295,8 @@ static int apic_set_eoi(struct kvm_lapic *apic)
+        apic_clear_isr(vector, apic);
+        apic_update_ppr(apic);
+ 
+-       if (to_hv_vcpu(apic->vcpu) &&
+-           test_bit(vector, to_hv_synic(apic->vcpu)->vec_bitmap))
+-               kvm_hv_synic_send_eoi(apic->vcpu, vector);
++       apic_set_eoi_vector(apic, vector);
+ 
+-       kvm_ioapic_send_eoi(apic, vector);
+-       kvm_make_request(KVM_REQ_EVENT, apic->vcpu);
+        return vector;
+ }
+ 
+@@ -1304,8 +1310,7 @@ void kvm_apic_set_eoi_accelerated(struct kvm_vcpu *vcpu, int vector)
+ 
+        trace_kvm_eoi(apic, vector);
+ 
+-       kvm_ioapic_send_eoi(apic, vector);
+-       kvm_make_request(KVM_REQ_EVENT, apic->vcpu);
++       apic_set_eoi_vector(apic, vector);
+ }
+ EXPORT_SYMBOL_GPL(kvm_apic_set_eoi_accelerated);
+
+
+>  }
+
+-- 
+Vitaly
+

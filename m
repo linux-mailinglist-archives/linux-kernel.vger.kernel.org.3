@@ -2,137 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C2C7556AEE1
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 01:14:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4EE9856AEE4
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 01:16:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236553AbiGGXOW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Jul 2022 19:14:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57130 "EHLO
+        id S236611AbiGGXPf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Jul 2022 19:15:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57724 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236128AbiGGXOU (ORCPT
+        with ESMTP id S236156AbiGGXPd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Jul 2022 19:14:20 -0400
-Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46F9B27FD5
-        for <linux-kernel@vger.kernel.org>; Thu,  7 Jul 2022 16:14:19 -0700 (PDT)
-Received: by mail-wr1-x433.google.com with SMTP id s1so28299809wra.9
-        for <linux-kernel@vger.kernel.org>; Thu, 07 Jul 2022 16:14:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=izEW/QlWsYwAv1ZochY3FjaPww57C5kdq40cLp75WW8=;
-        b=IHvyQzKUsj6cmYt0GoU0JO/vGfv/QZ0SGCghTNipvbOxddWPTpllfdqd6WPZzJ5yfS
-         nmpXVBhxWR3VLak28+xTua7DJ7ThAUcOcyyIJ0I/BJa+3tLiKD4P35J0LBuXePIy8fyg
-         acNnxmifaxhC9p/P6L5kRGRaNWrosuFX8g67kNSObnRuamv1OdAteTf1Qrves5CowcCq
-         xqEa/TaraYD8x9YnR1+vADPqqsDoNkjbqKUuQri+vRSylWapjeZmU3qnHHoSJZWjZGzS
-         o8/cRY+egbj9YuTOrmSWcqzvzems3cK2Oq6dGGFnS/LhnvQnuyG0rq/KU9shqeDo87E8
-         7pIg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=izEW/QlWsYwAv1ZochY3FjaPww57C5kdq40cLp75WW8=;
-        b=RAecPae/XuLvCNdS5+dTdHdku24XI0IpYM29NuQWK9gKcEJVualJFY3DYXphv0NW4y
-         gQVbtvEqnlSGuPWMlPutM38HkiEfqS22z/2aughdchiKYxA5Ilv31r5V8JppAysLzaE8
-         IrWzrWGO8vsL8USHAvNZBh6IUAR8GVWelP0F9Gu7GbHWSmjlTvA8cUbwsfVZ3GkGt7aW
-         hHt1vbux8jhUNpDq+U7AGXOSKxmd+RNJB6LQ8sKFTYEfc90yvcS6pR31hWAerl236IIm
-         pkmJ8QarLYYrlJyO0Zb6C1Pzs0CWQ4zDvkDYLs5rsJQMVAbYy7ECXmPISQ0PfywPt/y3
-         prqQ==
-X-Gm-Message-State: AJIora/4FpcfBRxayA0IZylpiXfkHWUE9HUF5l91L99ow1ZDPafC8dIA
-        wP9YsX2d1BquNb4OCbHwkEcPlPa3vc0=
-X-Google-Smtp-Source: AGRyM1uBioqFu9xhYE1r6Pp52kKGi0yIK42RApLLOjdIK5CTwaDJdYl19OuGfydqU02oB42al4MyKA==
-X-Received: by 2002:adf:facc:0:b0:21d:8c8f:4b51 with SMTP id a12-20020adffacc000000b0021d8c8f4b51mr267095wrs.307.1657235657684;
-        Thu, 07 Jul 2022 16:14:17 -0700 (PDT)
-Received: from localhost.localdomain (host-79-53-109-127.retail.telecomitalia.it. [79.53.109.127])
-        by smtp.gmail.com with ESMTPSA id q6-20020a1cf306000000b003a033177655sm201922wmq.29.2022.07.07.16.14.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 07 Jul 2022 16:14:16 -0700 (PDT)
-From:   "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
-To:     Eric Biederman <ebiederm@xmission.com>, kexec@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Cc:     "Fabio M. De Francesco" <fmdefrancesco@gmail.com>,
-        Ira Weiny <ira.weiny@intel.com>
-Subject: [PATCH] kexec: Replace kmap() with kmap_local_page()
-Date:   Fri,  8 Jul 2022 01:14:12 +0200
-Message-Id: <20220707231412.1404-1-fmdefrancesco@gmail.com>
-X-Mailer: git-send-email 2.36.1
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Thu, 7 Jul 2022 19:15:33 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6002127FD5;
+        Thu,  7 Jul 2022 16:15:30 -0700 (PDT)
+Received: from pps.filterd (m0098409.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 267NCGVc006368;
+        Thu, 7 Jul 2022 23:15:23 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ mime-version : content-transfer-encoding; s=pp1;
+ bh=KAXRanh8SZV9oVzDpI4U/Isuvm+o+aN26hXhRYySckc=;
+ b=byDRGw8iGLugWdm91oA1f2TUyZKxoTu8mBeawYCkx15OsWk3gBNibN8mZh8ipVnPAEja
+ 0Hqu4ipKpaLORwkDqW4aNpPZ/cw5XtMfQbMbWohH78ITUF73UVuIoqI109g3e99qZW6L
+ uqAkL0rZ0akGRCwG0DbiT/tvQ8NSs5w5ch2n9BoyvdQG20BGZGKmvI48k6VF4oB+dj+R
+ m2QIr5mT9RgPDCX9TLQUIeyI6sgqlUkEY6xEjPWXtb62MunbzvmKB+W/ZiBFnN5jI8lG
+ CS5l0fTzpR7OwBjIEoEblxoICx45rYMWjoLDDTwo2WodrFgGkuz4nsGhLzMqLnrBepSP nw== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3h68xr821y-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 07 Jul 2022 23:15:22 +0000
+Received: from m0098409.ppops.net (m0098409.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 267NEajQ020952;
+        Thu, 7 Jul 2022 23:15:22 GMT
+Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3h68xr8216-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 07 Jul 2022 23:15:22 +0000
+Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
+        by ppma06ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 267N5uVw010938;
+        Thu, 7 Jul 2022 23:15:19 GMT
+Received: from b06cxnps4075.portsmouth.uk.ibm.com (d06relay12.portsmouth.uk.ibm.com [9.149.109.197])
+        by ppma06ams.nl.ibm.com with ESMTP id 3h4usd35uf-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 07 Jul 2022 23:15:19 +0000
+Received: from d06av23.portsmouth.uk.ibm.com (d06av23.portsmouth.uk.ibm.com [9.149.105.59])
+        by b06cxnps4075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 267NFHqj21299500
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 7 Jul 2022 23:15:17 GMT
+Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 71CF1A4057;
+        Thu,  7 Jul 2022 23:15:17 +0000 (GMT)
+Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 97139A4051;
+        Thu,  7 Jul 2022 23:15:15 +0000 (GMT)
+Received: from li-f45666cc-3089-11b2-a85c-c57d1a57929f.ibm.com (unknown [9.211.77.198])
+        by d06av23.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Thu,  7 Jul 2022 23:15:15 +0000 (GMT)
+Message-ID: <47fc2c7857600dd017cdede786b094d7b961dab6.camel@linux.ibm.com>
+Subject: Re: [PATCH -next] evm: Use IS_ENABLED to initialize .enabled
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     Xiu Jianfeng <xiujianfeng@huawei.com>, dmitry.kasatkin@gmail.com,
+        jmorris@namei.org, serge@hallyn.com
+Cc:     linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org
+Date:   Thu, 07 Jul 2022 19:15:14 -0400
+In-Reply-To: <20220606101042.89638-1-xiujianfeng@huawei.com>
+References: <20220606101042.89638-1-xiujianfeng@huawei.com>
+Content-Type: text/plain; charset="ISO-8859-15"
+X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: datqKVPqvBnsxJBdrgI9yc6ZZkyXQxzA
+X-Proofpoint-ORIG-GUID: EbxYwlsqVjBRcvApq6B-xszh25UDEKjA
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
+ definitions=2022-07-07_17,2022-06-28_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ malwarescore=0 bulkscore=0 adultscore=0 impostorscore=0 suspectscore=0
+ clxscore=1015 priorityscore=1501 phishscore=0 spamscore=0 mlxlogscore=958
+ mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2206140000 definitions=main-2207070090
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The use of kmap() and kmap_atomic() are being deprecated in favor of
-kmap_local_page().
+On Mon, 2022-06-06 at 18:10 +0800, Xiu Jianfeng wrote:
+> Use IS_ENABLED(CONFIG_XXX) instead of #ifdef/#endif statements to
+> initialize .enabled, minor simplicity improvement.
+> 
+> Signed-off-by: Xiu Jianfeng <xiujianfeng@huawei.com>
 
-With kmap_local_page(), the mappings are per thread, CPU local and not
-globally visible. Furthermore, the mappings can be acquired from any
-context (including interrupts).
+Thanks, Xiu.   This patch is now queued in next-testing.
 
-Therefore, use kmap_local_page() in kexec_core.c because these mappings are
-per thread, CPU local, and not globally visible.
-
-Tested on a QEMU + KVM 32-bits VM booting a kernel with HIGHMEM64GB
-enabled.
-
-Suggested-by: Ira Weiny <ira.weiny@intel.com>
-Signed-off-by: Fabio M. De Francesco <fmdefrancesco@gmail.com>
----
-
-v1->v2: A sentence of the commit message contained an error due to a
-mistake in copy-pasting from a previous patch. Replace "aio.c" with
-"kexec_core.c".
-
- kernel/kexec_core.c | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
-
-diff --git a/kernel/kexec_core.c b/kernel/kexec_core.c
-index 4d34c78334ce..6f98274765d4 100644
---- a/kernel/kexec_core.c
-+++ b/kernel/kexec_core.c
-@@ -814,7 +814,7 @@ static int kimage_load_normal_segment(struct kimage *image,
- 		if (result < 0)
- 			goto out;
- 
--		ptr = kmap(page);
-+		ptr = kmap_local_page(page);
- 		/* Start with a clear page */
- 		clear_page(ptr);
- 		ptr += maddr & ~PAGE_MASK;
-@@ -827,7 +827,7 @@ static int kimage_load_normal_segment(struct kimage *image,
- 			memcpy(ptr, kbuf, uchunk);
- 		else
- 			result = copy_from_user(ptr, buf, uchunk);
--		kunmap(page);
-+		kunmap_local(ptr);
- 		if (result) {
- 			result = -EFAULT;
- 			goto out;
-@@ -878,7 +878,7 @@ static int kimage_load_crash_segment(struct kimage *image,
- 			goto out;
- 		}
- 		arch_kexec_post_alloc_pages(page_address(page), 1, 0);
--		ptr = kmap(page);
-+		ptr = kmap_local_page(page);
- 		ptr += maddr & ~PAGE_MASK;
- 		mchunk = min_t(size_t, mbytes,
- 				PAGE_SIZE - (maddr & ~PAGE_MASK));
-@@ -894,7 +894,7 @@ static int kimage_load_crash_segment(struct kimage *image,
- 		else
- 			result = copy_from_user(ptr, buf, uchunk);
- 		kexec_flush_icache_page(page);
--		kunmap(page);
-+		kunmap_local(ptr);
- 		arch_kexec_pre_free_pages(page_address(page), 1);
- 		if (result) {
- 			result = -EFAULT;
--- 
-2.36.1
+Mimi
 

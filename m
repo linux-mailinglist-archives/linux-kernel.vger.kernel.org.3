@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B03A256977A
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 03:31:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C3AF956977D
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 03:31:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234054AbiGGBa4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Jul 2022 21:30:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33446 "EHLO
+        id S234810AbiGGBa6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Jul 2022 21:30:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33472 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234783AbiGGBaw (ORCPT
+        with ESMTP id S234798AbiGGBay (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Jul 2022 21:30:52 -0400
-Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DC942E6B3;
-        Wed,  6 Jul 2022 18:30:51 -0700 (PDT)
-Received: by mail-ed1-x536.google.com with SMTP id v12so8699397edc.10;
-        Wed, 06 Jul 2022 18:30:51 -0700 (PDT)
+        Wed, 6 Jul 2022 21:30:54 -0400
+Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F6E02E6B3;
+        Wed,  6 Jul 2022 18:30:53 -0700 (PDT)
+Received: by mail-ej1-x62e.google.com with SMTP id sb34so29843427ejc.11;
+        Wed, 06 Jul 2022 18:30:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=IrfFhBH+L4zbS3ugX8pRey925Xtf+IgisH4J8PjPwAs=;
-        b=bJ4yKoNJmHYErL1xYrVwTGGvdvKJv9diit70u6+8+wJIIxB2PW70eO91iUQ9gucdw8
-         AXYUD6kVU+XW7+t6XkKHYQhRbie+lpwaiJJX/1yiLTaKICHgt7tGWdB4+eB3LeoxIOry
-         4WyZkSio4IzUi715vktG+Bn5KY0aKucSYw9Plt6TbLv8vx9+BZL1prS8fpBnley7+P7U
-         adGES/k6peItUdaelK8/OOoS6elpatbcJS5Ixgj8zigGikFpuqDkfXQl7NIGQt6Nd9VV
-         m7aS8EMkYxgnycpvy2mJQ8xUjJv0+ajKG7zZdse81BqhqPNFON+szJjpKXr2GMv5EfeD
-         85tg==
+        bh=8uqZn4HAdLB1AC8QpQQ0n5So/DO9QfHEVB2iIBEuJuc=;
+        b=PwTXzFfl+bPjR3kTDvoh6EfebNJQtPW4iahTRsvPbW9K66nXesvdknJotclrb4aJym
+         HviucPNN6udwKpUn6nBv6/cNr9KaPi4dXaxgAwkl+F2FYY/a5gVlgZ06m0Jfao5opRez
+         rDJIblimsZLApGBBVyRoBA664FMHCTAOHGuJXDdbyx5+w6mC7WEuBErXcDyl6G0+6d5c
+         DgKda/tBiesc1X+nZrzM7RWI1HP5BfAhLlJmFhwd/rFzY3w2pOQwbF9DGzhKSPM3orKg
+         hlmRbP8b1ZL9C3Q1U+3r2qYZTGJHZSxb18+vwE0CjVqAx6snh7vL3xry1gad+mQtHYr7
+         pmLA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=IrfFhBH+L4zbS3ugX8pRey925Xtf+IgisH4J8PjPwAs=;
-        b=hEczf9bwGEvgWnR6+n71VwXKGY1IwKPf1Y1XAiP3nVKDcyioR0PpQu05LRPMaLNbk4
-         JEkTNk09uSFu8Iw2xn5WsFp5ijC9fx519bcFYNRlpuc5bH0Twfl5wkevQoNKBdBbOWql
-         uc66fPRT9G8aW7gVf3E9gBrEBrYOrF7WmZzeLlxcafab3xLC9QYECYAmEM1kIv578RjR
-         FMvVZxX1qBCfVE/U932+/eBgTajSEQfdGmDye18c45qkBOl3iaAGor63oRKUW/xJs8Lf
-         +WPwZU5WAfjsvN8diAWeOKgtgAjmZ5ocd7hbpfoiSDkKE5SdLqprG2n6HrY/podynAbk
-         zKkA==
-X-Gm-Message-State: AJIora/BDoF5DwPJsY2EGX6rgwgppGPods4qRS7w34Enj1oOtT+OuZ+x
-        mie93K9gO2+E9Eo8Ss63Wuc=
-X-Google-Smtp-Source: AGRyM1u1Ai6fzTs6ITeLopa0sNMdG+vE1mWq6grvdYItgPG2wOAVRDxA0vDr9kCp+7TTfjrkWBbl1Q==
-X-Received: by 2002:a05:6402:2710:b0:435:bf54:8569 with SMTP id y16-20020a056402271000b00435bf548569mr58057919edd.165.1657157449957;
-        Wed, 06 Jul 2022 18:30:49 -0700 (PDT)
+        bh=8uqZn4HAdLB1AC8QpQQ0n5So/DO9QfHEVB2iIBEuJuc=;
+        b=yr8kDRyafDbnaIpG8dg7Pj05434iojhVdct6qp14CxGay2GUVys/zUo5keC8XUfzom
+         zsVURlV+WcnrdlFHkKAS4GeS7aAaJruNzkKzvCtgi3Xpa3xGkKQXKLcunOGDPf6KbM0T
+         1tAtyEg7t56dFGDSC3A5ne9oTQPZeWq8YvX5gDTgS2YB5o0LJSAceVcLX5WAj5pHyywC
+         taF0C+NkX8d1w3OxFxbRnVnAFvn8Ja1hPDO5p10UItR88QV0mowJlvik3T6Iq0LoYkpG
+         XtuEW5ot1Z+1uxgt+FeJuUkm6l/bc94RKU0L5NbRnqhbB9NPz0KmM4IsOG/Pu2hazkk3
+         iRJw==
+X-Gm-Message-State: AJIora/7Ao7stO1nATTQIREdRZUcmZ3htW+UCCfO5B89n//PVIazG6IH
+        fVP2pc3TRV/3N13BMMMxgsE=
+X-Google-Smtp-Source: AGRyM1uziJSTcG7jIDbIil/Ple3MITi3ef+ntMudi6c9/rnhEFPwvjygxxBi44dHXxA+yD1w6icnNA==
+X-Received: by 2002:a17:907:7288:b0:72a:f967:8f89 with SMTP id dt8-20020a170907728800b0072af9678f89mr5917797ejc.359.1657157451664;
+        Wed, 06 Jul 2022 18:30:51 -0700 (PDT)
 Received: from localhost.localdomain (93-42-70-190.ip85.fastwebnet.it. [93.42.70.190])
-        by smtp.googlemail.com with ESMTPSA id t27-20020a17090616db00b0071cbc7487e1sm18025172ejd.69.2022.07.06.18.30.48
+        by smtp.googlemail.com with ESMTPSA id t27-20020a17090616db00b0071cbc7487e1sm18025172ejd.69.2022.07.06.18.30.50
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 06 Jul 2022 18:30:49 -0700 (PDT)
+        Wed, 06 Jul 2022 18:30:50 -0700 (PDT)
 From:   Christian Marangi <ansuelsmth@gmail.com>
 To:     Andy Gross <agross@kernel.org>,
         Bjorn Andersson <bjorn.andersson@linaro.org>,
@@ -59,9 +59,9 @@ To:     Andy Gross <agross@kernel.org>,
         linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org, linux-remoteproc@vger.kernel.org
 Cc:     Christian Marangi <ansuelsmth@gmail.com>
-Subject: [PATCH 3/3] ARM: dts: qcom: add missing smem compatible for ipq8064 dtsi
-Date:   Thu,  7 Jul 2022 03:30:16 +0200
-Message-Id: <20220707013017.26654-3-ansuelsmth@gmail.com>
+Subject: [PATCH 3/3] ARM: dts: qcom: add missing smem node for ipq8064 dtsi
+Date:   Thu,  7 Jul 2022 03:30:17 +0200
+Message-Id: <20220707013017.26654-4-ansuelsmth@gmail.com>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220707013017.26654-1-ansuelsmth@gmail.com>
 References: <20220707013017.26654-1-ansuelsmth@gmail.com>
@@ -77,8 +77,7 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add missing smem compatible and hwlocks binding for ipq8064 dtsi
-smem node.
+Add missing smem node for ipq8064 dtsi.
 
 Signed-off-by: Christian Marangi <ansuelsmth@gmail.com>
 ---

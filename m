@@ -2,146 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EA32556AD74
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 23:28:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CD26856AD79
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 23:30:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236779AbiGGV20 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Jul 2022 17:28:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39926 "EHLO
+        id S236147AbiGGVaM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Jul 2022 17:30:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41462 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236282AbiGGV2Z (ORCPT
+        with ESMTP id S229876AbiGGVaJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Jul 2022 17:28:25 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89BFA2E6BE;
-        Thu,  7 Jul 2022 14:28:23 -0700 (PDT)
+        Thu, 7 Jul 2022 17:30:09 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C60E41C938
+        for <linux-kernel@vger.kernel.org>; Thu,  7 Jul 2022 14:30:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1657229303; x=1688765303;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=7/TlorJDQoNGY2gktJY2UhvNcAgpTuh1cVKPBgUm+/0=;
-  b=CfhCZ9LqCuvVIpi6GjX1PeYMalrX6YIcLI9Es7tObjgKl0/6971KvKuL
-   3+Dq8+W/OZLa1U+x+yyjKjhcI3MxpTpOnUbvLqBo4XxqOTLyZAn3QE3Jb
-   qr/TFIjpex8S8CKI66qJg22TeHEjCZfF7/S2IXBFWhrXA/c+/F8krGMhN
-   QuSCmqj6My8a3tH49vBPV0kJkX0kVEh2TgdRYxps0twfTz06gZtCRE/ep
-   IY8rlMLJqjU526v3AhZImFhVD4Q0/955BjrVm06ASM3YLScOk2zDyf5PV
-   NkMoTqjPk9g+PBgy3upjzEgjPXYkqtS+iasQhN1sWzje32W/AFQK3H56n
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10401"; a="281674719"
+  t=1657229408; x=1688765408;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=RR8nKcKkeUV/WR33JNvmdjCBx/wyCPnlG8A7Ckb1Pgs=;
+  b=KYhhMC0ZA5ffzAUdFuZx2mhILYY4jWqIRIFkzh4m3FTQr/kek1EWGhjn
+   9k/HSaMPGxC7UXvZIjIPI8y4nNRol+xzWZPu3P1Sk2kHid2/kJseQ+5y7
+   XGsIA+IT1kWLyE4zWTjQY1lctkmoqZetHvBXszNeHfJwjWz4Y8KRLDC9/
+   7eSakNAztpUyf0wVQnV2CJj5S7kW9q055SjsQGH1NwCnkEkAiJjqioSeI
+   NZdcRgQW9hGLMIFDMCDXUpuQsQA2+weqJmEbvhJ6PO5wz+3U22z8ZkPRR
+   GFGbJmOrl+c9FSsJAxxWx4umH2xWZNgMi9a35cdT6xEd21Q4CSt3PbPVT
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10401"; a="272922229"
 X-IronPort-AV: E=Sophos;i="5.92,253,1650956400"; 
-   d="scan'208";a="281674719"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jul 2022 14:28:23 -0700
+   d="scan'208";a="272922229"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jul 2022 14:30:08 -0700
+X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.92,253,1650956400"; 
-   d="scan'208";a="651297397"
-Received: from ahajda-mobl.ger.corp.intel.com (HELO [10.213.16.170]) ([10.213.16.170])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jul 2022 14:28:20 -0700
-Message-ID: <70a63b2e-23f5-9bf8-f782-5941f5cd01fc@intel.com>
-Date:   Thu, 7 Jul 2022 23:28:18 +0200
+   d="scan'208";a="736115138"
+Received: from lkp-server01.sh.intel.com (HELO 68b931ab7ac1) ([10.239.97.150])
+  by fmsmga001.fm.intel.com with ESMTP; 07 Jul 2022 14:30:05 -0700
+Received: from kbuild by 68b931ab7ac1 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1o9Z4X-000MVK-6m;
+        Thu, 07 Jul 2022 21:30:05 +0000
+Date:   Fri, 8 Jul 2022 05:29:35 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Karthik Alapati <mail@karthek.com>,
+        Johan Hovold <johan@kernel.org>, Alex Elder <elder@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     kbuild-all@lists.01.org, Shuah Khan <skhan@linuxfoundation.org>,
+        greybus-dev@lists.linaro.org, linux-staging@lists.linux.dev,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] staging: greybus: don't use index pointer after iter
+Message-ID: <202207080535.tr2i6TxR-lkp@intel.com>
+References: <Ysa1oopf0ELw+OfB@karthik-strix-linux.karthek.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Firefox/91.0 Thunderbird/91.11.0
-Subject: Re: [Intel-gfx] [PATCH v3 2/2] drm/i915/gt: Serialize TLB invalidates
- with GT resets
-Content-Language: en-US
-To:     Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc:     Andi Shyti <andi.shyti@intel.com>,
-        =?UTF-8?Q?Thomas_Hellstr=c3=b6m?= 
-        <thomas.hellstrom@linux.intel.com>,
-        David Airlie <airlied@linux.ie>,
-        dri-devel@lists.freedesktop.org,
-        Lucas De Marchi <lucas.demarchi@intel.com>,
-        linux-kernel@vger.kernel.org,
-        Chris Wilson <chris.p.wilson@intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Dave Airlie <airlied@redhat.com>, stable@vger.kernel.org,
-        intel-gfx@lists.freedesktop.org
-References: <cover.1656921701.git.mchehab@kernel.org>
- <3ecc1f94290a66b2e682f956b5232b4903c32a2c.1656921701.git.mchehab@kernel.org>
-From:   Andrzej Hajda <andrzej.hajda@intel.com>
-Organization: Intel Technology Poland sp. z o.o. - ul. Slowackiego 173, 80-298
- Gdansk - KRS 101882 - NIP 957-07-52-316
-In-Reply-To: <3ecc1f94290a66b2e682f956b5232b4903c32a2c.1656921701.git.mchehab@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Ysa1oopf0ELw+OfB@karthik-strix-linux.karthek.com>
+X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 04.07.2022 10:09, Mauro Carvalho Chehab wrote:
-> From: Chris Wilson <chris.p.wilson@intel.com>
-> 
-> Avoid trying to invalidate the TLB in the middle of performing an
-> engine reset, as this may result in the reset timing out. Currently,
-> the TLB invalidate is only serialised by its own mutex, forgoing the
-> uncore lock, but we can take the uncore->lock as well to serialise
-> the mmio access, thereby serialising with the GDRST.
-> 
-> Tested on a NUC5i7RYB, BIOS RYBDWi35.86A.0380.2019.0517.1530 with
-> i915 selftest/hangcheck.
-> 
-> Cc: stable@vger.kernel.org # Up to 4.4
-> Fixes: 7938d61591d3 ("drm/i915: Flush TLBs before releasing backing store")
-> Reported-by: Mauro Carvalho Chehab <mchehab@kernel.org>
-> Tested-by: Mauro Carvalho Chehab <mchehab@kernel.org>
-> Reviewed-by: Mauro Carvalho Chehab <mchehab@kernel.org>
-> Cc: Chris Wilson <chris.p.wilson@intel.com>
-> Cc: Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>
-> Cc: Thomas Hellström <thomas.hellstrom@linux.intel.com>
-> Cc: Andi Shyti <andi.shyti@intel.com>
-> Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
+Hi Karthik,
 
-Reviewed-by: Andrzej Hajda <andrzej.hajda@intel.com>
+Thank you for the patch! Yet something to improve:
 
-Regards
-Andrzej
+[auto build test ERROR on v5.19-rc5]
+[also build test ERROR on linus/master]
+[cannot apply to staging/staging-testing next-20220707]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-> ---
-> 
-> To avoid mailbombing on a large number of people, only mailing lists were C/C on the cover.
-> See [PATCH v3 0/2] at: https://lore.kernel.org/all/cover.1656921701.git.mchehab@kernel.org/
-> 
->   drivers/gpu/drm/i915/gt/intel_gt.c | 15 ++++++++++++++-
->   1 file changed, 14 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/gpu/drm/i915/gt/intel_gt.c b/drivers/gpu/drm/i915/gt/intel_gt.c
-> index 8da3314bb6bf..68c2b0d8f187 100644
-> --- a/drivers/gpu/drm/i915/gt/intel_gt.c
-> +++ b/drivers/gpu/drm/i915/gt/intel_gt.c
-> @@ -952,6 +952,20 @@ void intel_gt_invalidate_tlbs(struct intel_gt *gt)
->   	mutex_lock(&gt->tlb_invalidate_lock);
->   	intel_uncore_forcewake_get(uncore, FORCEWAKE_ALL);
->   
-> +	spin_lock_irq(&uncore->lock); /* serialise invalidate with GT reset */
-> +
-> +	for_each_engine(engine, gt, id) {
-> +		struct reg_and_bit rb;
-> +
-> +		rb = get_reg_and_bit(engine, regs == gen8_regs, regs, num);
-> +		if (!i915_mmio_reg_offset(rb.reg))
-> +			continue;
-> +
-> +		intel_uncore_write_fw(uncore, rb.reg, rb.bit);
-> +	}
-> +
-> +	spin_unlock_irq(&uncore->lock);
-> +
->   	for_each_engine(engine, gt, id) {
->   		/*
->   		 * HW architecture suggest typical invalidation time at 40us,
-> @@ -966,7 +980,6 @@ void intel_gt_invalidate_tlbs(struct intel_gt *gt)
->   		if (!i915_mmio_reg_offset(rb.reg))
->   			continue;
->   
-> -		intel_uncore_write_fw(uncore, rb.reg, rb.bit);
->   		if (__intel_wait_for_register_fw(uncore,
->   						 rb.reg, rb.bit, 0,
->   						 timeout_us, timeout_ms,
+url:    https://github.com/intel-lab-lkp/linux/commits/Karthik-Alapati/staging-greybus-don-t-use-index-pointer-after-iter/20220707-183311
+base:    88084a3df1672e131ddc1b4e39eeacfd39864acf
+config: i386-allyesconfig (https://download.01.org/0day-ci/archive/20220708/202207080535.tr2i6TxR-lkp@intel.com/config)
+compiler: gcc-11 (Debian 11.3.0-3) 11.3.0
+reproduce (this is a W=1 build):
+        # https://github.com/intel-lab-lkp/linux/commit/bc295082ef055003c6018b57d3c56c5aefcb65c5
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Karthik-Alapati/staging-greybus-don-t-use-index-pointer-after-iter/20220707-183311
+        git checkout bc295082ef055003c6018b57d3c56c5aefcb65c5
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        make W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/staging/
 
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>):
+
+   drivers/staging/greybus/audio_helper.c: In function 'gbaudio_dapm_free_controls':
+>> drivers/staging/greybus/audio_helper.c:128:32: error: expected ';' before 'for'
+     128 |                 w_found = false
+         |                                ^
+         |                                ;
+   drivers/staging/greybus/audio_helper.c:119:14: warning: variable 'w_found' set but not used [-Wunused-but-set-variable]
+     119 |         bool w_found = false;
+         |              ^~~~~~~
+   drivers/staging/greybus/audio_helper.c:118:41: warning: unused variable 'next_w' [-Wunused-variable]
+     118 |         struct snd_soc_dapm_widget *w, *next_w;
+         |                                         ^~~~~~
+
+
+vim +128 drivers/staging/greybus/audio_helper.c
+
+   124	
+   125		mutex_lock(&dapm->card->dapm_mutex);
+   126		for (i = 0; i < num; i++) {
+   127			/* below logic can be optimized to identify widget pointer */
+ > 128			w_found = false
+   129			list_for_each_entry_safe(w, next_w, &dapm->card->widgets,
+   130						 list) {
+   131				if (w->dapm != dapm)
+   132					continue;
+   133				if (!strcmp(w->name, widget->name)) {
+   134					w_found = true;
+   135					break;
+   136				}
+   137				w = NULL;
+   138			}
+   139			if (!w_found) {
+   140				dev_err(dapm->dev, "%s: widget not found\n",
+   141					widget->name);
+   142				widget++;
+   143				continue;
+   144			}
+   145			widget++;
+   146	#ifdef CONFIG_DEBUG_FS
+   147			if (!parent)
+   148				debugfs_w = debugfs_lookup(w->name, parent);
+   149			debugfs_remove(debugfs_w);
+   150			debugfs_w = NULL;
+   151	#endif
+   152			gbaudio_dapm_free_widget(w);
+   153		}
+   154		mutex_unlock(&dapm->card->dapm_mutex);
+   155		return 0;
+   156	}
+   157	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

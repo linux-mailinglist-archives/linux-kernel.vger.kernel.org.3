@@ -2,99 +2,186 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1DA70569E53
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 11:13:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B9D2569E4F
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 11:13:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234120AbiGGJLh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Jul 2022 05:11:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53368 "EHLO
+        id S234502AbiGGJL5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Jul 2022 05:11:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53606 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231710AbiGGJLf (ORCPT
+        with ESMTP id S232095AbiGGJLz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Jul 2022 05:11:35 -0400
-Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com [IPv6:2607:f8b0:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 506102656F
-        for <linux-kernel@vger.kernel.org>; Thu,  7 Jul 2022 02:11:35 -0700 (PDT)
-Received: by mail-pf1-x42d.google.com with SMTP id o12so4589419pfp.5
-        for <linux-kernel@vger.kernel.org>; Thu, 07 Jul 2022 02:11:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=rLwmhSdpdM0C2SVR68sGMkumfQBnYqE+SwvxgblZSQI=;
-        b=Ht68Liz/PdKg9Ry0GeqLbp2oQCcabi48+LILOgsPbOxMLrLNZ2oi07LBiAGB82ZTu8
-         pgWiMu6T+6H7vmy3j4gbQ9bxxbq26fco8Z2Vd/VVo3BfSUf+U7BkTBAcY63cQPvQqSIj
-         7nEh8qwkng2wdUG/xIbq3AWa0Co1kd24lKfq+AOUTMR8/mW9LyF6cyMXxdo57Hjys6Gq
-         JqyrBdPjyMUW1Vc0s7+sIiHGMM8z6e5zHpdTTRpsQFRPPftmdQTKKn1uNyTkZKJE8rfK
-         cHrYk7TEWI8Yun0/8p5X8oQob/Tjdxk8oJOj3fcbFZQzEtlGX4yZYh31NbK7DcMKxM7k
-         da4Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=rLwmhSdpdM0C2SVR68sGMkumfQBnYqE+SwvxgblZSQI=;
-        b=QEs9dVB/wfX7JBbpZ3gEQ4n2d5JO2/n+O67Gk/nyIJlhzN9GV8mkTahzUqY0NXecMN
-         PdQwVeiCj9BQCoWEVwYrSpfcR3UM78MPEnyLNpfh9u37uFcx1bx3wX0MCj0aptpWNMeM
-         uCcARzsINZBw0ZEicPS//vj/HHp9wWa44yFbmV4R9Q6Hal9wTnNvxcryjpNSA/Rlzj0g
-         vI9dFndYaY47eHCplOdw/GHuNzIzxNWG1m/2vjwncVF1KBsbHFpOWbiqmlvQu46bncNv
-         PhaORAeQwSUV1okXB03yvF0ChFLztgBwX9hpyrOXdnnpGtWGLMGNBMuK186rurOALm4/
-         3+Nw==
-X-Gm-Message-State: AJIora9Jv0wJA2knPoB6Bn1IvOFC9Q6RUZp1SJYqjfn6Zmli7Fedh/vh
-        2/tKU0MvgG1D/Is2w9GQTqBMkjOLj8aOEg==
-X-Google-Smtp-Source: AGRyM1vbSbhepsSwLUQImCVGxM/MHJn8HE8BrF2aXTsRMMIPVGnwRPzoKRTvrhNWq7cjprjGU4/Ufw==
-X-Received: by 2002:a17:902:e5c3:b0:16a:67e7:d999 with SMTP id u3-20020a170902e5c300b0016a67e7d999mr49837459plf.32.1657185094633;
-        Thu, 07 Jul 2022 02:11:34 -0700 (PDT)
-Received: from localhost.localdomain ([156.236.96.165])
-        by smtp.gmail.com with ESMTPSA id m7-20020a17090a34c700b001ef8dd1315esm7788617pjf.27.2022.07.07.02.11.31
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 07 Jul 2022 02:11:34 -0700 (PDT)
-From:   Chao Liu <chaoliu719@gmail.com>
-To:     Jaegeuk Kim <jaegeuk@kernel.org>, Chao Yu <chao@kernel.org>
-Cc:     linux-f2fs-devel@lists.sourceforge.net,
-        linux-kernel@vger.kernel.org, Yue Hu <huyue2@coolpad.com>,
-        Wayne Zhang <zhangwen@coolpad.com>,
-        Chao Liu <liuchao@coolpad.com>
-Subject: [PATCH v2] f2fs: allow compression of files without blocks
-Date:   Thu,  7 Jul 2022 17:09:24 +0800
-Message-Id: <20220707090924.4183376-1-chaoliu719@gmail.com>
-X-Mailer: git-send-email 2.36.1
+        Thu, 7 Jul 2022 05:11:55 -0400
+Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44BCF27178;
+        Thu,  7 Jul 2022 02:11:54 -0700 (PDT)
+Received: from fllv0034.itg.ti.com ([10.64.40.246])
+        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 2679BfO4067950;
+        Thu, 7 Jul 2022 04:11:41 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1657185101;
+        bh=9T7T+TcW3HB3h8rQseCPo2y1Th8ApZJxTQE8TAFp8Gs=;
+        h=Date:CC:Subject:To:References:From:In-Reply-To;
+        b=xVQvcz/s4JVxY3lyuL14IjrzuOByKg/31LSIMxjgkZlety+v0RDEwDW8MxKDUSguO
+         lFrJkScwL7IoW3GJSpBEBl5bWdU6P5c3fFwNoroOZXU4QgVvlS8d231em1omyCZoZp
+         vcDAfWv6ErAN5S7G/Y1mwyqwK1mAjltJctUB38kI=
+Received: from DLEE107.ent.ti.com (dlee107.ent.ti.com [157.170.170.37])
+        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 2679BeTM004246
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Thu, 7 Jul 2022 04:11:41 -0500
+Received: from DLEE113.ent.ti.com (157.170.170.24) by DLEE107.ent.ti.com
+ (157.170.170.37) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Thu, 7
+ Jul 2022 04:11:40 -0500
+Received: from lelv0326.itg.ti.com (10.180.67.84) by DLEE113.ent.ti.com
+ (157.170.170.24) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
+ Frontend Transport; Thu, 7 Jul 2022 04:11:40 -0500
+Received: from [172.24.222.108] (ileax41-snat.itg.ti.com [10.172.224.153])
+        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 2679Baj4023761;
+        Thu, 7 Jul 2022 04:11:37 -0500
+Message-ID: <5d06687a-17f1-4d5c-7d3f-83d11e5ec2e7@ti.com>
+Date:   Thu, 7 Jul 2022 14:41:35 +0530
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+CC:     <davem@davemloft.net>, <kuba@kernel.org>, <linux@armlinux.org.uk>,
+        <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <kishon@ti.com>, <vigneshr@ti.com>, <grygorii.strashko@ti.com>,
+        <s-vadapalli@ti.com>
+Subject: Re: [PATCH net v3] net: ethernet: ti: am65-cpsw: Fix devlink port
+ register sequence
+Content-Language: en-US
+To:     Paolo Abeni <pabeni@redhat.com>
+References: <20220706070208.12207-1-s-vadapalli@ti.com>
+ <e454f6de32de3be092260d19da24f58635eb6e49.camel@redhat.com>
+From:   Siddharth Vadapalli <s-vadapalli@ti.com>
+In-Reply-To: <e454f6de32de3be092260d19da24f58635eb6e49.camel@redhat.com>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Chao Liu <liuchao@coolpad.com>
+Hello Paolo,
 
-Files created by truncate(1) have a size but no blocks, so
-they can be allowed to enable compression.
+On 07/07/22 13:00, Paolo Abeni wrote:
+> On Wed, 2022-07-06 at 12:32 +0530, Siddharth Vadapalli wrote:
+>> Renaming interfaces using udevd depends on the interface being registered
+>> before its netdev is registered. Otherwise, udevd reads an empty
+>> phys_port_name value, resulting in the interface not being renamed.
+>>
+>> Fix this by registering the interface before registering its netdev
+>> by invoking am65_cpsw_nuss_register_devlink() before invoking
+>> register_netdev() for the interface.
+>>
+>> Move the function call to devlink_port_type_eth_set(), invoking it after
+>> register_netdev() is invoked, to ensure that netlink notification for the
+>> port state change is generated after the netdev is completely initialized.
+>>
+>> Fixes: 58356eb31d60 ("net: ti: am65-cpsw-nuss: Add devlink support")
+>> Signed-off-by: Siddharth Vadapalli <s-vadapalli@ti.com>
+>> ---
+>> Changelog:
+>> v2 -> v3:
+>> 1. Add error handling to unregister devlink.
+>>
+>> v1-> v2:
+>> 1. Add Fixes tag in commit message.
+>> 2. Update patch subject to include "net".
+>> 3. Invoke devlink_port_type_eth_set() after register_netdev() is called.
+>> 4. Update commit message describing the cause for moving the call to
+>>    devlink_port_type_eth_set().
+>>
+>> v2: https://lore.kernel.org/r/20220704073040.7542-1-s-vadapalli@ti.com/
+>> v1: https://lore.kernel.org/r/20220623044337.6179-1-s-vadapalli@ti.com/
+>>
+>>  drivers/net/ethernet/ti/am65-cpsw-nuss.c | 17 ++++++++++-------
+>>  1 file changed, 10 insertions(+), 7 deletions(-)
+>>
+>> diff --git a/drivers/net/ethernet/ti/am65-cpsw-nuss.c b/drivers/net/ethernet/ti/am65-cpsw-nuss.c
+>> index fb92d4c1547d..f4a6b590a1e3 100644
+>> --- a/drivers/net/ethernet/ti/am65-cpsw-nuss.c
+>> +++ b/drivers/net/ethernet/ti/am65-cpsw-nuss.c
+>> @@ -2467,7 +2467,6 @@ static int am65_cpsw_nuss_register_devlink(struct am65_cpsw_common *common)
+>>  				port->port_id, ret);
+>>  			goto dl_port_unreg;
+>>  		}
+>> -		devlink_port_type_eth_set(dl_port, port->ndev);
+>>  	}
+>>  	devlink_register(common->devlink);
+>>  	return ret;
+>> @@ -2511,6 +2510,7 @@ static void am65_cpsw_unregister_devlink(struct am65_cpsw_common *common)
+>>  static int am65_cpsw_nuss_register_ndevs(struct am65_cpsw_common *common)
+>>  {
+>>  	struct device *dev = common->dev;
+>> +	struct devlink_port *dl_port;
+>>  	struct am65_cpsw_port *port;
+>>  	int ret = 0, i;
+>>  
+>> @@ -2527,6 +2527,10 @@ static int am65_cpsw_nuss_register_ndevs(struct am65_cpsw_common *common)
+>>  		return ret;
+>>  	}
+>>  
+>> +	ret = am65_cpsw_nuss_register_devlink(common);
+>> +	if (ret)
+>> +		return ret;
+>> +
+>>  	for (i = 0; i < common->port_num; i++) {
+>>  		port = &common->ports[i];
+>>  
+>> @@ -2539,25 +2543,24 @@ static int am65_cpsw_nuss_register_ndevs(struct am65_cpsw_common *common)
+>>  				i, ret);
+>>  			goto err_cleanup_ndev;
+>>  		}
+>> +
+>> +		dl_port = &port->devlink_port;
+>> +		devlink_port_type_eth_set(dl_port, port->ndev);
+>>  	}
+>>  
+>>  	ret = am65_cpsw_register_notifiers(common);
+>>  	if (ret)
+>>  		goto err_cleanup_ndev;
+>>  
+>> -	ret = am65_cpsw_nuss_register_devlink(common);
+>> -	if (ret)
+>> -		goto clean_unregister_notifiers;
+>> -
+>>  	/* can't auto unregister ndev using devm_add_action() due to
+>>  	 * devres release sequence in DD core for DMA
+>>  	 */
+>>  
+>>  	return 0;
+>> -clean_unregister_notifiers:
+>> -	am65_cpsw_unregister_notifiers(common);
+>> +
+>>  err_cleanup_ndev:
+>>  	am65_cpsw_nuss_cleanup_ndev(common);
+>> +	am65_cpsw_unregister_devlink(common);
+> 
+> It looks strange that there is no error path leading to
+> am65_cpsw_unregister_devlink() only.
+> 
+> Why we don't need to call it when/if devm_request_irq() fails? 
 
-Signed-off-by: Chao Liu <liuchao@coolpad.com>
----
-v2:
- - update commit message: truncate -> truncate(1)
+am65_cpsw_nuss_register_devlink() is invoked after devm_request_irq() and
+devm_request_irq()'s associated error handling.
 
- fs/f2fs/file.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> Not strictly related to this patch, but it looks like there is another
+> suspect cleanup point: if a 'register_netdev()' call fails, the cleanup
+> code will still call unregister_netdev() on the relevant device and the
+> later ones, hitting a WARN_ON(1) in unregister_netdevice_many().
 
-diff --git a/fs/f2fs/file.c b/fs/f2fs/file.c
-index 0f29af7876a6..f7a82858486a 100644
---- a/fs/f2fs/file.c
-+++ b/fs/f2fs/file.c
-@@ -1879,7 +1879,7 @@ static int f2fs_setflags_common(struct inode *inode, u32 iflags, u32 mask)
- 		if (iflags & F2FS_COMPR_FL) {
- 			if (!f2fs_may_compress(inode))
- 				return -EINVAL;
--			if (S_ISREG(inode->i_mode) && inode->i_size)
-+			if (S_ISREG(inode->i_mode) && F2FS_HAS_BLOCKS(inode))
- 				return -EINVAL;
+Thank you for pointing it out. I will look at it and address it in a separate
+cleanup patch.
 
- 			set_compress_context(inode);
---
-2.36.1
+Regards,
+Siddharth.

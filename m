@@ -2,68 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 610EA569855
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 04:46:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 49696569852
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 04:46:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234687AbiGGCqL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Jul 2022 22:46:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50862 "EHLO
+        id S234696AbiGGCqQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Jul 2022 22:46:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50894 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234613AbiGGCqH (ORCPT
+        with ESMTP id S234632AbiGGCqI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Jul 2022 22:46:07 -0400
-Received: from mail-oi1-x22a.google.com (mail-oi1-x22a.google.com [IPv6:2607:f8b0:4864:20::22a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 677102E9C4
-        for <linux-kernel@vger.kernel.org>; Wed,  6 Jul 2022 19:46:06 -0700 (PDT)
-Received: by mail-oi1-x22a.google.com with SMTP id l81so21971089oif.9
-        for <linux-kernel@vger.kernel.org>; Wed, 06 Jul 2022 19:46:06 -0700 (PDT)
+        Wed, 6 Jul 2022 22:46:08 -0400
+Received: from mail-oa1-x32.google.com (mail-oa1-x32.google.com [IPv6:2001:4860:4864:20::32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9386C2F3A7
+        for <linux-kernel@vger.kernel.org>; Wed,  6 Jul 2022 19:46:07 -0700 (PDT)
+Received: by mail-oa1-x32.google.com with SMTP id 586e51a60fabf-10c0d96953fso10085553fac.0
+        for <linux-kernel@vger.kernel.org>; Wed, 06 Jul 2022 19:46:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=4qjFAcplDcRzaa7vJN9whYnjs2tJsJNKANPDFAyYaEs=;
-        b=mMMhwZDFTY+3DxkcS0R/YCHlkrht8zPICIofshm7hvjHRFbnb6r23mMel+DKaUR9pc
-         PPyFPL0L4HtmipThte3LCOzU35DUCYLnsdS8Nf0tOSu/jEdVmmbnMFtqnuW9wn6WH+i5
-         F0nFyxOygItkx36wpyIR55BFR71fLxuhJR7/DWMultyGBY/UM8l7koHKw4zo+PxtAS8x
-         eOEt+YSLAdCK8VTBYqF7to/pUxfnGAvDBT99YS4NVSKoCdEQoCmBCrJ7vNWMVEa1lI4M
-         QHt9p0unAnG4fB04U6u+zgkoj1dKwxhgKpFQzBgzTVsaX56l274PaBAF3v5C5RQZRZMV
-         ZCTA==
+        bh=RSHQWkovr83QuNDZMnV0Uka1kuFVRZuDsMTfWh9lJ2Y=;
+        b=tuQoN6u9YrZctKw257A+8+huZEKUkRHbB/ZNuWPgKot44jR1nkVLR7jLgZs+7CUeU1
+         90R8Tmk+I3T3d9wMEY97BgwFXWSBnnzo4OzAuMXNuPxY2We3P8APGT5GzFVhEcV+4Zo0
+         shdWX2KUTUk8WS5sW8F9SzWlxjvKviZx+Uh11WqfJPkLB1mFt29a66XUC1pblwp9psGN
+         xoyHukYAD+JwgB7WvtKvaTh94kbYNEbcJCZQwDE8u6nIE7t/vD4MUn2SNq0Eo465iaMg
+         chnrXpqHz65N1nxdBFcZ+o/ge5cO/dJfIyauHYUQl/UGHPQbPGo+A/77VU6t2ORZNiRp
+         n+Ag==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=4qjFAcplDcRzaa7vJN9whYnjs2tJsJNKANPDFAyYaEs=;
-        b=j9BMc4qQwrBz9iAbzL8nKUvR4L2hV+bKgWIKKFEgSek8NrUyFPGwgg6C/XWel1+uPi
-         fZSE7/MJjy/ZMSjHmO+6acqqlaP1DSLdgiBi1WABo3EiKT0H/zUdTL76kkgsCrwlbmpD
-         AKSr9H+pGrld23Q/VGiEs27jebQ2yyXmH8dR/PdXle5wElcosNGoX57t38GzrZjoDkW4
-         +yt9W0DxEUf0POSiHVREnDvXuLBhfqWEx+FQPNnpYGoDRADhqUSngDqvLONc8j4HIi77
-         U4J6+2lUuM7q20kccJUAvzsKpp1rAHOlatNNXJlQJ/8fxzHfqCbJR7ZwWUcSbGO+2oFS
-         YIwQ==
-X-Gm-Message-State: AJIora99KFVhOWZEN/+v4rCT7aZ6/mxtoczIK4QtTfqURwuX+Bqovl38
-        Cgk49PUsqrRelsekG6p7hkayvA==
-X-Google-Smtp-Source: AGRyM1s24yL2hO/WFK+l/XqF3QQOrWXELrYqGXqtlUnFQvUq5NfNLy2D/i3vE87t6icTfaR82jpIrQ==
-X-Received: by 2002:a05:6808:23c4:b0:337:d77d:de75 with SMTP id bq4-20020a05680823c400b00337d77dde75mr1081032oib.133.1657161965795;
-        Wed, 06 Jul 2022 19:46:05 -0700 (PDT)
+        bh=RSHQWkovr83QuNDZMnV0Uka1kuFVRZuDsMTfWh9lJ2Y=;
+        b=iRMYy2z8KS9qHt1eMcrgW+xsWrVynfcbHlEC4DFlhObR9pzwQOPA3zkNShLzKgXCUP
+         0tvgXLl/mkyA+4bRuoRQRnHgSPt4nAi171dJ6DjmaG0MbV+7tATx+fgLaxbdCFtHXnH9
+         /Xr850P65o4NgrW1wxsI9sIPw/2VplEGJajAg0QxoSFcazLllheUqInNV+QHlvaf1CbG
+         bDyXqLf+0xcPAj2ogYkKMb+FDRsK/pm+FAzIyo15Qp5zS7aFrV9P0JiLn2vUizqcKpht
+         wC0R9x3/0zdthXFdrWikrAHms0KU0eLQM9yii0ogmvZc2pAMrZeDL1BcT/JJS+LhGgqN
+         NiLQ==
+X-Gm-Message-State: AJIora/QjYhiREp1I39PDsccMWBeZ3YOksKLeDuoMucKU2Hkrg1l1emx
+        AHk3+vHbtgcupQRBrXGnzuEZjw==
+X-Google-Smtp-Source: AGRyM1uOHdRlfRwW7UE6JgQ2/iUk746TxWu0nBI+IMaIMBvcmiy6MQqTjTlpq1uIIXwhippN7/qWTw==
+X-Received: by 2002:a05:6870:ac14:b0:10c:1d60:d4d2 with SMTP id kw20-20020a056870ac1400b0010c1d60d4d2mr1257153oab.58.1657161966982;
+        Wed, 06 Jul 2022 19:46:06 -0700 (PDT)
 Received: from builder.lan (104-57-184-186.lightspeed.austtx.sbcglobal.net. [104.57.184.186])
-        by smtp.gmail.com with ESMTPSA id r6-20020a056870580600b001089aef1815sm16450814oap.20.2022.07.06.19.46.04
+        by smtp.gmail.com with ESMTPSA id r6-20020a056870580600b001089aef1815sm16450814oap.20.2022.07.06.19.46.05
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 06 Jul 2022 19:46:05 -0700 (PDT)
+        Wed, 06 Jul 2022 19:46:06 -0700 (PDT)
 From:   Bjorn Andersson <bjorn.andersson@linaro.org>
-To:     Douglas Anderson <dianders@chromium.org>
+To:     Johan Hovold <johan+linaro@kernel.org>
 Cc:     Andy Gross <agross@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>, swboyd@chromium.org,
-        Bhupesh Sharma <bhupesh.sharma@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>, linux-kernel@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        devicetree@vger.kernel.org
-Subject: Re: [PATCH] Revert "arm64: dts: qcom: Fix 'reg-names' for sdhci nodes"
-Date:   Wed,  6 Jul 2022 21:46:03 -0500
-Message-Id: <165716195971.869883.14805700295899187397.b4-ty@linaro.org>
+        linux-kernel@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org
+Subject: Re: [PATCH 00/14] arm64: dts: qcom: QMP PHY fixes
+Date:   Wed,  6 Jul 2022 21:46:04 -0500
+Message-Id: <165716195971.869883.8845615807571040314.b4-ty@linaro.org>
 X-Mailer: git-send-email 2.32.0
-In-Reply-To: <20220706144706.1.I48f35820bf3670d54940110462555c2d0a6d5eb2@changeid>
-References: <20220706144706.1.I48f35820bf3670d54940110462555c2d0a6d5eb2@changeid>
+In-Reply-To: <20220705114032.22787-1-johan+linaro@kernel.org>
+References: <20220705114032.22787-1-johan+linaro@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -77,23 +73,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 6 Jul 2022 14:47:33 -0700, Douglas Anderson wrote:
-> This reverts commit afcbe252e9c19161e4d4c95f33faaf592f1de086.
+On Tue, 5 Jul 2022 13:40:18 +0200, Johan Hovold wrote:
+> Here's a bunch of fixes for PHY related DT issues found while amending
+> the current QMP PHY schema:
 > 
-> The commit in question caused my sc7280-herobrine-herobrine-r1 board
-> not to boot anymore. This shouldn't be too surprising since the driver
-> is relying on the name "cqhci".
+> 	https://lore.kernel.org/r/20220705094239.17174-1-johan+linaro@kernel.org
 > 
-> The issue seems to be that someone decided to change the names of
-> things when the binding moved from .txt to .yaml. We should go back to
-> the names that the bindings have historically specified.
+> Included are also some cleanups of the MS8996 PCIe PHY node which make
+> the node match the new binding example.
 > 
 > [...]
 
 Applied, thanks!
 
-[1/1] Revert "arm64: dts: qcom: Fix 'reg-names' for sdhci nodes"
-      commit: 21857088fa274750608e25b44ededa6199fac4a5
+[01/14] arm64: dts: qcom: sc7280: drop PCIe PHY clock index
+        commit: 531c738fb36069d60aff267a0b25533a35d59fd0
+[02/14] arm64: dts: qcom: sm8250: add missing PCIe PHY clock-cells
+        commit: d9fd162ce764c227fcfd4242f6c1639895a9481f
+[03/14] arm64: dts: qcom: ipq6018: drop USB PHY clock index
+        commit: 9215a64a0776c4797ed08520655fba7e85530156
+[04/14] arm64: dts: qcom: ipq8074: drop USB PHY clock index
+        commit: de9e7f77d8694ed6f5064fe865711b5f8321c09d
+[05/14] arm64: dts: qcom: msm8996: drop USB PHY clock index
+        (no commit info)
+[06/14] arm64: dts: qcom: msm8998: drop USB PHY clock index
+        commit: ed9cbbcb8c6a1925db7995214602c6a8983ff870
+[07/14] arm64: dts: qcom: sm8350: drop USB PHY clock index
+        commit: af5515543b9b5999d547f4f2afcad95f0aff5b1d
+[08/14] arm64: dts: qcom: sm8450: drop USB PHY clock index
+        commit: 0aaa0a9a4745ff4b4ffeed80ce3463c9c8c0f693
+[09/14] arm64: dts: qcom: sc8280xp: drop UFS PHY clock-cells
+        commit: 119feff14672af57cc62d2e1350a34e4aa3c5f10
+[10/14] arm64: dts: qcom: sm8250: drop UFS PHY clock-cells
+        commit: be18bc7bd9e82e2d08095d9ed0d9978dcb707e7c
+[11/14] arm64: dts: qcom: sm8450: drop UFS PHY clock-cells
+        commit: e30d9f1e58c0f860b8a740c63527106146f0f3fd
+[12/14] arm64: dts: qcom: msm8996: add missing PCIe PHY clock-cells
+        (no commit info)
+[13/14] arm64: dts: qcom: msm8996: use non-empty ranges for PCIe PHYs
+        commit: 3a5da59af38d77088aa5226208cca0beb9125485
+[14/14] arm64: dts: qcom: msm8996: clean up PCIe PHY node
+        commit: 02d99d4cfe0984ea05edfbcbae2c9660a05f7b11
 
 Best regards,
 -- 

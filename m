@@ -2,187 +2,169 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E958656ABF2
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 21:38:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3CC3556ABF8
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 21:40:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236145AbiGGTi4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Jul 2022 15:38:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52334 "EHLO
+        id S235452AbiGGTki (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Jul 2022 15:40:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53120 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231875AbiGGTix (ORCPT
+        with ESMTP id S236201AbiGGTke (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Jul 2022 15:38:53 -0400
-Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2042.outbound.protection.outlook.com [40.107.244.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E4952D1D6;
-        Thu,  7 Jul 2022 12:38:51 -0700 (PDT)
+        Thu, 7 Jul 2022 15:40:34 -0400
+Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2040.outbound.protection.outlook.com [40.107.237.40])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F25C85726C;
+        Thu,  7 Jul 2022 12:40:33 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=HwoRsytEuwtSNxaVT7Zn9thspwO5RAzWKNov3fjFlo6XETQS5WB88tOBl25jX+VBHl+0lY0EmcXtfbuButeX3B9RCkdFdsnC6rT4RIJBm++g/x7leAY52SEwB9DX74e7QrsH4qmdNzkMeJSatxvGMy1xxeFStSdkAfYE9TpKVYH/VMbBXWjhJ3t1I6txbHQ9RJhcSp/GF8fp8yzJWeJjdKychNiHtN0qt7dqffOfuG8hPM3vHTZyKfFy2p5qPxu19ae6rb7b4XrkCDy+ix2C3XvB/LXFqRwXbmExlXmsZtdRMgrNtW3XXaoLIXX4SQ775YkHwXVtwJK4Rko7vejS1Q==
+ b=cFPe5FGIZg4dUKjoYb75W7c0cuFCzCJs7/EvvPqLmwfw/LKNwPNthmCvP0exMf7RoKYfMeeWHS/ZQtXOwQl/2PvQUZsSYu3V91ZJo9PQoaWTpdXXo5BBO5NDvOKIujPHuF3XO3gAR3gW7iR66VC56mxehu4qirw5ZHRJRWhzESDOFZyjXE5+ouXjCnoo1MxPi1lRx3jUSKpfCxcoWxiToI4K2T25bb6kJ/yfeYKW2l2ZGcy0CWSHQ1qgSoTymSysnXXwXgPo7pAuyz8mSQOPn/vcr3qOkENJ7NWJpuoZ4u4pzMg/vg1OugfLLMft2zuUjpzIVHgtyo9Jr2TQ5EX/rA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=a1r2MXbwEU03ktEYKpbwsl7haoYcDTi0f+THMD5LQyI=;
- b=GegeAxHsdtuyzTae440EIRWL8sKdDFn5ENTs3kGUnyPnbrWHYh0VHdreG5x0oCigiQzIQ1LQPg2HOPSquhsIov+msB8Ej5ZA3b6VS82e/xYCXXKN6wVALqgtEkjGPVcJFwRCfd9LVwShZVelR7vskG/XqEfKw/XdiQI9idbxPfh0EiskaxG/glZfri+xtskraFMGIXWzXGpJVY2ndD/1EY3wtGIdUddSbYsIwAs/VNRAJdXlpkbhA1MDaN/g/nWhCNTBYKNSn8zR5Kz3zPmFAzcNHOfFn9/fHW6PItsCA7AvKsOQY8Jns4KMU3eV+Vc0fcsFwwv2pKb93B0Ipm3oTA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 12.22.5.235) smtp.rcpttodomain=linux.ibm.com smtp.mailfrom=nvidia.com;
- dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
+ bh=oSh2ruags+M1bjPYl+L+Fk3hKJJI5KhrklYNO07dYoo=;
+ b=cJw1109woraFmjzwFIRD2uovMbsr5ddD07WO/IIYSfU5aPt732THIXvu/hCRDzatgVAN6FUdFSPNeAfg6fUlH7etcU3T+Le0Am4UCgv7Zu4ONTmiOPZQq9luAX3tLDaz7sY1pNKiwNkjLoVPtMMED3TOJ65ds/uyt9FRfb0y80wRcEsBDS9ppzgTJGJNt8c5h9shvmtSCOnQF2G9+asIwAiEVgX9lLSXHmF0+LcLJ9ji1vIq9KsaVcuf2UxdaGA18/zFqPFHtZXXWfDFK2ZOe+gCcw9IgxtlveYZI8XhMXncZXDV8CxCzbsMc4f/P9dvlay2uVvCnYYIYKWN6A/tZw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=a1r2MXbwEU03ktEYKpbwsl7haoYcDTi0f+THMD5LQyI=;
- b=EqjDfcbpK2o10ltQQntOQWUemMvWiHjdjrPD2gLaGq9GyxirN5VY6nClIrJWhU1GdY/hSqFQTUIu1g6yCvr7zeeL4PjrmbxRXTV6YviLc1znHHaQRaSgeRxdaDjpwkDCw1iyCY2SCUZtRwm2qFV547WDGtF4p38jw+89BjhfQTESnmviQCyly3LdCq6RxMKp/MAPJYg4bn0z+gn/HPNtkOfgDXPMrhzQgGaDC9zP9cyD3qHaGhdXN1R5j+lxyHoJSJ4iTUZdrp0yM0KirXvxpLwH7SkhyHRbeyHAyiniOO5QY22Q3laRz7AryyeQQ4ZBkpPFJlX2EFUHWLXdRRf1gA==
-Received: from MW4PR03CA0352.namprd03.prod.outlook.com (2603:10b6:303:dc::27)
- by DM4PR12MB6135.namprd12.prod.outlook.com (2603:10b6:8:ac::5) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.5395.22; Thu, 7 Jul 2022 19:38:50 +0000
-Received: from CO1NAM11FT057.eop-nam11.prod.protection.outlook.com
- (2603:10b6:303:dc:cafe::bd) by MW4PR03CA0352.outlook.office365.com
- (2603:10b6:303:dc::27) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5395.14 via Frontend
- Transport; Thu, 7 Jul 2022 19:38:50 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 12.22.5.235)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 12.22.5.235 as permitted sender) receiver=protection.outlook.com;
- client-ip=12.22.5.235; helo=mail.nvidia.com; pr=C
-Received: from mail.nvidia.com (12.22.5.235) by
- CO1NAM11FT057.mail.protection.outlook.com (10.13.174.205) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.20.5417.15 via Frontend Transport; Thu, 7 Jul 2022 19:38:49 +0000
-Received: from drhqmail203.nvidia.com (10.126.190.182) by
- DRHQMAIL107.nvidia.com (10.27.9.16) with Microsoft SMTP Server (TLS) id
- 15.0.1497.32; Thu, 7 Jul 2022 19:38:49 +0000
-Received: from drhqmail201.nvidia.com (10.126.190.180) by
- drhqmail203.nvidia.com (10.126.190.182) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.26; Thu, 7 Jul 2022 12:38:49 -0700
-Received: from Asurada-Nvidia (10.127.8.9) by mail.nvidia.com (10.126.190.180)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.26 via Frontend
- Transport; Thu, 7 Jul 2022 12:38:47 -0700
-Date:   Thu, 7 Jul 2022 12:38:46 -0700
-From:   Nicolin Chen <nicolinc@nvidia.com>
-To:     Jason Gunthorpe <jgg@nvidia.com>
-CC:     "Tian, Kevin" <kevin.tian@intel.com>,
-        "kwankhede@nvidia.com" <kwankhede@nvidia.com>,
-        "corbet@lwn.net" <corbet@lwn.net>,
-        "hca@linux.ibm.com" <hca@linux.ibm.com>,
-        "gor@linux.ibm.com" <gor@linux.ibm.com>,
-        "agordeev@linux.ibm.com" <agordeev@linux.ibm.com>,
-        "borntraeger@linux.ibm.com" <borntraeger@linux.ibm.com>,
-        "svens@linux.ibm.com" <svens@linux.ibm.com>,
-        "zhenyuw@linux.intel.com" <zhenyuw@linux.intel.com>,
-        "Wang, Zhi A" <zhi.a.wang@intel.com>,
-        "jani.nikula@linux.intel.com" <jani.nikula@linux.intel.com>,
-        "joonas.lahtinen@linux.intel.com" <joonas.lahtinen@linux.intel.com>,
-        "Vivi, Rodrigo" <rodrigo.vivi@intel.com>,
-        "tvrtko.ursulin@linux.intel.com" <tvrtko.ursulin@linux.intel.com>,
-        "airlied@linux.ie" <airlied@linux.ie>,
-        "daniel@ffwll.ch" <daniel@ffwll.ch>,
-        "farman@linux.ibm.com" <farman@linux.ibm.com>,
-        "mjrosato@linux.ibm.com" <mjrosato@linux.ibm.com>,
-        "pasic@linux.ibm.com" <pasic@linux.ibm.com>,
-        "vneethv@linux.ibm.com" <vneethv@linux.ibm.com>,
-        "oberpar@linux.ibm.com" <oberpar@linux.ibm.com>,
-        "freude@linux.ibm.com" <freude@linux.ibm.com>,
-        "akrowiak@linux.ibm.com" <akrowiak@linux.ibm.com>,
-        "jjherne@linux.ibm.com" <jjherne@linux.ibm.com>,
-        "alex.williamson@redhat.com" <alex.williamson@redhat.com>,
-        "cohuck@redhat.com" <cohuck@redhat.com>,
-        "hch@infradead.org" <hch@infradead.org>,
-        "jchrist@linux.ibm.com" <jchrist@linux.ibm.com>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-s390@vger.kernel.org" <linux-s390@vger.kernel.org>,
-        "intel-gvt-dev@lists.freedesktop.org" 
-        <intel-gvt-dev@lists.freedesktop.org>,
-        "intel-gfx@lists.freedesktop.org" <intel-gfx@lists.freedesktop.org>,
-        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>
-Subject: Re: [RFT][PATCH v2 1/9] vfio: Make vfio_unpin_pages() return void
-Message-ID: <Ysc2RnPC+CsyhPhf@Asurada-Nvidia>
-References: <20220706062759.24946-1-nicolinc@nvidia.com>
- <20220706062759.24946-2-nicolinc@nvidia.com>
- <BN9PR11MB527643D01DFF0AFCED1614488C839@BN9PR11MB5276.namprd11.prod.outlook.com>
- <YscUCe+2sXdDiQWq@Asurada-Nvidia>
- <20220707192210.GC1705032@nvidia.com>
+ bh=oSh2ruags+M1bjPYl+L+Fk3hKJJI5KhrklYNO07dYoo=;
+ b=f6T5PLu9AEC45vj0fvyGoDaxnVwiojJtjA617sfb76w6rYVnZp7wYxwlXPr2JQeu6bmgzXJY4iczWIge+eL5RkcLyhqTt9lQWsmLLNYX9JyOsXOL83VJM1yzhYz/VSMBiyzabw5C4qenFTx18Pl3iUw3iuGiLHsShl7CJiokZ+c=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from MN0PR12MB6222.namprd12.prod.outlook.com (2603:10b6:208:3c2::19)
+ by MN2PR12MB3870.namprd12.prod.outlook.com (2603:10b6:208:166::29) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5395.18; Thu, 7 Jul
+ 2022 19:40:31 +0000
+Received: from MN0PR12MB6222.namprd12.prod.outlook.com
+ ([fe80::ec96:60a2:ca21:17d1]) by MN0PR12MB6222.namprd12.prod.outlook.com
+ ([fe80::ec96:60a2:ca21:17d1%3]) with mapi id 15.20.5395.021; Thu, 7 Jul 2022
+ 19:40:31 +0000
+Message-ID: <2a08a95d-6524-4f54-e6d2-76b43696ec0b@amd.com>
+Date:   Thu, 7 Jul 2022 14:40:28 -0500
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH 10/12] cpufreq: cpufreq: export cpufreq cpu release and
+ acquire
+Content-Language: en-US
+To:     Perry Yuan <Perry.Yuan@amd.com>, rafael.j.wysocki@intel.com,
+        viresh.kumar@linaro.org, Ray.Huang@amd.com,
+        "Rafael J. Wysocki" <rafael@kernel.org>, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Deepak.Sharma@amd.com, Mario.Limonciello@amd.com,
+        Nathan.Fontenot@amd.com, Alexander.Deucher@amd.com,
+        Jinzhou.Su@amd.com, Xinmei.Huang@amd.com, Xiaojian.Du@amd.com,
+        Li.Meng@amd.com
+References: <20220707170103.216736-1-Perry.Yuan@amd.com>
+From:   Nathan Fontenot <nafonten@amd.com>
+In-Reply-To: <20220707170103.216736-1-Perry.Yuan@amd.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: BL1PR13CA0289.namprd13.prod.outlook.com
+ (2603:10b6:208:2bc::24) To MN0PR12MB6222.namprd12.prod.outlook.com
+ (2603:10b6:208:3c2::19)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20220707192210.GC1705032@nvidia.com>
-X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 53b255a2-ec61-46d6-b2c4-08da6050510a
-X-MS-TrafficTypeDiagnostic: DM4PR12MB6135:EE_
+X-MS-Office365-Filtering-Correlation-Id: 6e4cdceb-e576-40a8-58bf-08da60508d1c
+X-MS-TrafficTypeDiagnostic: MN2PR12MB3870:EE_
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: D0weu0ebx0jct5GHyy/fUkzDLKHwsyeH9+JTP4amYNPBOiZAkBPUjw/pMI2jksSZBAWsd9/Ve1SoB+vtw1xlUgxTqfYtUZWCCjWUU56YFfIzudZGEUuah6AZCu1K9UKa3Xt60/H9OfQjdla0axGV5Kk5Im3Uip2w2MK9mmoMZoVr2iX7X53XGfwPsYqN89Njjz2Tq4WjR364RcSRuZ9JsycGF33ZunuID3PWEe9QMsAUFm1grUntH6jx3BRT/sw4wOv6lG+8eFfOPz0P+oFtqYQHSNv3ZIsSxHiN1woQMI4y/csvEijHYFwMsvT7DvUirp11QKPbjFDYhnEPmt5jXZXcDJNVUYMhzSZizYBfHGk3pfLqY9zL8PPuh1JJxReLx4XXT+Ig8eyI3SN3AZ6hCbYpUEVD9Vxh/Ew9Xne4WdE2FLMKtx1tqjxaY3hDXczZ9AS12o7ArUKxgifR0vHqztYyUDppRFUrg1wlV005cqhh/+65J+Gv/IiNSBpAt1DsH0aa/4MI2Q5b7/4dxjgbOWKE1ItPoZxg9LPwsIjKA5Xtd5ogCHOU/KJlDTn5eWD0Ph13Not8QpBqGhLXbo1W4IOUfenp56oaQhBQgaSqo8bn+ylLFZhI62pEY0ccvUHdfr2rlnSuA/g5t24EhIHpj3exQvtiONAgZvmkgDB5TBwKVY9ZU3um7OMYFY2lNaXcl/U41H7BNvz9Hr3WpBu1Gz2cPqP/jN78BbuZnyejGMOaTpnYH3oGKqc+TqmsPpczf9Wv1nEd6/5OBwJsaQr/WlUSFID9ulFDzR6sI+rx3PzRm3pqnaOx57cLg4BNmqmDccYtLgCgTqt9GelvQzCrH1kStcrli+uSHty0+zygEbrWqpS+wYDRrCRdtu0arSCj
-X-Forefront-Antispam-Report: CIP:12.22.5.235;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:InfoNoRecords;CAT:NONE;SFS:(13230016)(4636009)(136003)(376002)(39860400002)(396003)(346002)(40470700004)(46966006)(36840700001)(40460700003)(33716001)(7416002)(54906003)(4326008)(40480700001)(6636002)(7406005)(9686003)(356005)(55016003)(5660300002)(6862004)(26005)(86362001)(70206006)(8936002)(82740400003)(70586007)(316002)(81166007)(478600001)(82310400005)(186003)(8676002)(47076005)(41300700001)(2906002)(36860700001)(336012)(426003)(36900700001)(67856001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Jul 2022 19:38:49.8402
+X-Microsoft-Antispam-Message-Info: a6vK3Tcpym61ThFiN21WqauQT2Rw5t7xUWB1tEfriPU/ZYa6WG2KNemta43Iks0DXdEeyaAP8zViJsUj78q4Ib6oE9RePjfjCEKzSVuIC9zG3VYDK3ENatjH4sL2h6/6I/WQM/XtbzxVNioUnaL7YV0hHKo6sfA1kg52qhZ4Og/oLlx5FfH/LoYE1k8h7/JD1xjg3I++yGpl9C9mHvpPW2PGBaoKoC5WITQTl6Suygnx5tTPaDzEQZ6CtbDUENmdnfxbPzf/VZRDTCd9yd4XjKQBuxGmZueLrQ8T6wutcTod2vaVz2fIrE+QGREgNuiJne5UOvFstxhRmKimMZD1zliqnnqmn5ah05LsHxmOLP4+0Y+WT/VIOv1s6UsDRE09lM4fxOt+vHs3M6gJ3pTAZmvO4QECOXwuPbXgORNmMKw+24SnTbAZgayn+hKXXxxph+KX4eu2+Vram6Z+yD+oldM1q1o/Xr9fpEYoFhhiJu5MZmlQQtZYgP3xcWwXFEz4LexoOlP+Q0AU5jtIedivD/s+lwbxMbIEcaIIv3809LfFrP1+SL52owyMSiDGyPLOc2wM/HvUS+Lh/kJ5yLdsqslOSQW2WbX/48IrOpuebpHOp7uThK/hnx+N36fVAtgrkv1bBTSAFBrwJ5IHZB2gqq6YgBJti4AUX+WNnaZYdOMl41l/vYkUlxiRphpF0eyW37i/9M4VsmhJA9BZJPcvKPI377myVevrcvdscrKI+0VPpxMkVBAJxIq+D9+NMxrh8l4loaFMoRryeQOJZ8ZxleLZ2ZHxzjyXSXNR5jv+UHvGJhZlc9qlhtDgfp/cR6X48BISXYFoYs3r12jJWaUJPg==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN0PR12MB6222.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(136003)(346002)(376002)(39860400002)(366004)(396003)(26005)(2616005)(186003)(31686004)(2906002)(36756003)(6512007)(6486002)(6506007)(31696002)(316002)(53546011)(478600001)(38100700002)(8676002)(41300700001)(83380400001)(8936002)(4326008)(5660300002)(66476007)(110136005)(6666004)(66946007)(66556008)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?L2FlVGVNYkVtNXJtaS9IRTgwbGxlWlh4QWdQa0g2N1lENS9FWHNUbmlEOEpJ?=
+ =?utf-8?B?OFBUazYvNHl5UEZGYkorSExXQjNRV3pTOUh6WUFEN0htUkp2UUVTelFEbkpp?=
+ =?utf-8?B?bCtNUU1nbzlOZzdYVEY4cklrUytDV01yaHRFSTJUN0FCV2ZoMzlEbjNucnRO?=
+ =?utf-8?B?M3VZeExQT2ljZnA5OHdDN0F1WjVuR2Eva1NwUWd0VkRjZkVYTGVNWGtZdXFt?=
+ =?utf-8?B?TmNKa2g4M0xRWmdLeFlyRkNodkFFZ3ltWHdMcEVpSlZBWTNMMlZMcjRrZnBn?=
+ =?utf-8?B?WXdibW54cGllY3JURTZZdHUrL1VZaXlxdXUzT1lZM05ZUzNyU2E1Z1JhU2I2?=
+ =?utf-8?B?NThzZXZ2dm0vbFZTUFR2UFU4b1U1RFI2QXczTVJFOHVVSjV2WitLN0RPYmps?=
+ =?utf-8?B?ejlJZkpzSkp3emlVNEdJQm94d2d5Q1pvVFJ3T3h6RmRnZWoybG9jb1FNY2Q1?=
+ =?utf-8?B?T0lMTWRFelJrNGFZeEE2SFpJMjJnVC9yQmRUT0cwaVZObnlKRVdRdWRKbWxs?=
+ =?utf-8?B?b3FpaTREand1akhIMlJjNmxuRGhlU1RUVzY1enUyNzRnNlVIaE1NeTdrUk5M?=
+ =?utf-8?B?MDNJQVhBT3dhTUdhak1xUTV0UDk2eGgvVU5CUmtvTS9IK3hoTWhUWm5lZHJN?=
+ =?utf-8?B?d3pjcTlRSmRjZ3RMMnovTTZNS0hJRkI1T1BPeExSb3QwWHh0RGx3bGFHT010?=
+ =?utf-8?B?ZWNScWpzZTZKN21KaGJReEo4dDdocXBCeTZwMzM3TjZqNUxHTEVnVWM0dlk3?=
+ =?utf-8?B?NGxhRmh1UnNpYzdaN0E1dzNlTDJNNmQxUnRLNVpjamQ1SzBmSjBlZ0RMRm1J?=
+ =?utf-8?B?MFBTTUM1aGNpbzcwWkJhbng1NVVnRGwxTlpvRVhsL1ZNa2lSQ1RDdUJ6MjZk?=
+ =?utf-8?B?QUpZNXFLbDdBRlZNTGJWT2N6N2JJWHhvT3RmQ016aS9hWGVEZ2RuSzdPT3A1?=
+ =?utf-8?B?MU9qays1RXU3WS9BNitxWkMrbjgxbTdxakg3VDYydWtEMlVtbjc0QVBuYjhC?=
+ =?utf-8?B?YXoydTZlbjFXL3I3UmlycFU1cVp5RDBkenEvdHo4Zjk2MHhWUUphbmNadmxq?=
+ =?utf-8?B?NzhPVTVzcTlMNWxIV005dGlXQnlGNEROMGJudGpDbjdnUjFyN005Z2VDS3RI?=
+ =?utf-8?B?Z1BxQlV0dFJLNnBkd245a3FiTjZKVFJXNmEvRDN1UER6VnBCNkxZR2VITzlw?=
+ =?utf-8?B?UFREZ1NyME1lajY3Ynl4bXp4VlhlZEdkWURqQVJwaklFb0dwWTFiNUNFcXRX?=
+ =?utf-8?B?TWVSZis4cmV2SUdOYTlxaWJybE15UlE4M1pDNjRGTGlPci9ITElhaUxwWUJo?=
+ =?utf-8?B?Wkw4Si9XK0xSdW1KOEY4U3VsanlZTVYvY3dFU2xBNHNJRXhEYVJpNXdFVXhr?=
+ =?utf-8?B?eHBMcnQ3WjhCRmgzV0xaNnZnUWVxayt6VEJTUS9yaXpaUFh4NnpQNTVadVpI?=
+ =?utf-8?B?NXlDVnRXOWM2ODhZc1dFck1CYzRwditycFVxZFpVdlVlUVVyVnp2TVU1Nk5k?=
+ =?utf-8?B?RmxCRC9YY1lJRlM4VGxLV0ttZ0kvUDB0MWhQN09wdlNYMXdjSy9YZHhkYndW?=
+ =?utf-8?B?SjZrb2VLRStWWW81OWJ5L3RZRDg0NGY2cDd5Sm5xaGQya2tYTzlIenFDT2sz?=
+ =?utf-8?B?UmNadWlKVGJBR2FSTEJpMDlaSUpmMko5SUtMSHpBc2M2elV5c3BZbkVGRGp5?=
+ =?utf-8?B?T2RZRjVDOUM4NVNYaUpmLzBOYmg0TlBmUmwreUZxZTF3c1VqYUtlSDhZNHQy?=
+ =?utf-8?B?YXlXTzFTTVhjSGRLdmlTUjZ4ZFZNbEpib3RmNlI5UklvaG45ZGVqYWk0SWJ0?=
+ =?utf-8?B?d3ZiUU91ejBTczVJNXZvZGV1eEdtS2l2dWxDUHlxb2dxTzZodmM3R1EyUkVq?=
+ =?utf-8?B?b0lrVXg4N1VLY3VDUUtPc1FjUUlMYkkrdzVMY1ZEWkZEVFRlUVF0aVF5Wktp?=
+ =?utf-8?B?UU5zWVpJL1pwRW9KZlR0d2h1TE9pR1dUUkQ4LzJqVUVRWGpXWDVHWllCdVFi?=
+ =?utf-8?B?VytQVkN3bHQ0Y3JKQXNXemQyNWpxa3RuRUtZenBreXU0anprekNXekpCVDZP?=
+ =?utf-8?B?NXBxMlczdE1DN0YrZmlvclFVcHIwd3NXdTl3RHBqZzhxaENJRU50eVZjaHRr?=
+ =?utf-8?Q?Pg3Zn/duKXEPhPTWzlb33sbvD?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 6e4cdceb-e576-40a8-58bf-08da60508d1c
+X-MS-Exchange-CrossTenant-AuthSource: MN0PR12MB6222.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Jul 2022 19:40:30.9785
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 53b255a2-ec61-46d6-b2c4-08da6050510a
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[12.22.5.235];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT057.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR12MB6135
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: FvqEnfiLbq5HkFTYNZHPOyJcWdSxqnrlegBhyQMom1Hsw6SCCUNUVcUJm6QxO9lGZIVRTx4nwHAbJlW3EyRlig==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR12MB3870
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jul 07, 2022 at 04:22:10PM -0300, Jason Gunthorpe wrote:
-> On Thu, Jul 07, 2022 at 10:12:41AM -0700, Nicolin Chen wrote:
-> > On Thu, Jul 07, 2022 at 08:42:28AM +0000, Tian, Kevin wrote:
-> > > External email: Use caution opening links or attachments
-> > > 
-> > > 
-> > > > From: Nicolin Chen <nicolinc@nvidia.com>
-> > > > Sent: Wednesday, July 6, 2022 2:28 PM
-> > > >
-> > > > There's only one caller that checks its return value with a WARN_ON_ONCE,
-> > > > while all other callers do not check return value at all. So simplify the
-> > > > API to return void by embedding similar WARN_ON_ONCEs.
-> > > 
-> > > While this change keeps the similar effect as before it leads to different
-> > > policy for same type of errors between pin and unpin paths:
-> > 
-> > I think it's because of the policy that an undo function should not
-> > fail. Meanwhile, indulging faulty inputs isn't good either.
-> > 
-> > > e.g.
-> > > 
-> > > vfio_unpin_pages():
-> > >         if (WARN_ON_ONCE(!user_pfn || !npage || !vfio_assert_device_open(device)))
-> > >                 return;
-> > > 
-> > > vfio_pin_pages():
-> > >         if (!user_pfn || !phys_pfn || !npage ||
-> > >             !vfio_assert_device_open(device))
-> > >                 return -EINVAL;
-> > > 
-> > > It sounds a bit weird when reading related code...
-> > 
-> > Any better way to handle this?
+On 7/7/22 12:01, Perry Yuan wrote:
+> cpufreq_cpu_release" and "cpufreq_cpu_acquire" are only used internally by
+> drivers/cpufreq/cpufreq.c currently.
+> Export them so that other drivers such as the AMD P-state driver can use them as well.
 > 
-> They should all be WARN_ON's, that is the standard pattern to assert
-> that function arguments must be correctly formed.
 
-OK. I can change that. I assume that, not confined to arguments,
-we might want to have a WARN_ON for the return value check also.
+Can you provide more information on why this is needed for the amd-pstate driver?
 
-> I would also drop the tests that obviously will oops on their on
-> anyone, like NULL pointer checks. This is a semi-performance path.
+This patch exports the acquire/release functions but I don't see that the amd-pstate
+driver is updated to use them.
 
-OK. I will simply remove those NULL pointer checks. Actually,
-that !user_pfn check is gone anyway in the following patch, as
-user_pfn is replaced with iova.
+-Nathan
+
+> Signed-off-by: Perry Yuan <Perry.Yuan@amd.com>
+> ---
+>  drivers/cpufreq/cpufreq.c | 2 ++
+>  1 file changed, 2 insertions(+)
+> 
+> diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
+> index 73432360e6e9..4d3c83da29b7 100644
+> --- a/drivers/cpufreq/cpufreq.c
+> +++ b/drivers/cpufreq/cpufreq.c
+> @@ -262,6 +262,7 @@ void cpufreq_cpu_release(struct cpufreq_policy *policy)
+>  
+>  	cpufreq_cpu_put(policy);
+>  }
+> +EXPORT_SYMBOL_GPL(cpufreq_cpu_release);
+>  
+>  /**
+>   * cpufreq_cpu_acquire - Find policy for a CPU, mark it as busy and lock it.
+> @@ -291,6 +292,7 @@ struct cpufreq_policy *cpufreq_cpu_acquire(unsigned int cpu)
+>  
+>  	return policy;
+>  }
+> +EXPORT_SYMBOL_GPL(cpufreq_cpu_acquire);
+>  
+>  /*********************************************************************
+>   *            EXTERNALLY AFFECTING FREQUENCY CHANGES                 *

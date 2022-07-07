@@ -2,51 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9396D569BAA
+	by mail.lfdr.de (Postfix) with ESMTP id DC8F4569BAB
 	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 09:32:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234234AbiGGHbQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Jul 2022 03:31:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47404 "EHLO
+        id S234266AbiGGHbT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Jul 2022 03:31:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47478 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233962AbiGGHbJ (ORCPT
+        with ESMTP id S234118AbiGGHbO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Jul 2022 03:31:09 -0400
-Received: from mail-pg1-x533.google.com (mail-pg1-x533.google.com [IPv6:2607:f8b0:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6823B31235;
-        Thu,  7 Jul 2022 00:31:08 -0700 (PDT)
-Received: by mail-pg1-x533.google.com with SMTP id 145so16952208pga.12;
-        Thu, 07 Jul 2022 00:31:08 -0700 (PDT)
+        Thu, 7 Jul 2022 03:31:14 -0400
+Received: from mail-pg1-x52d.google.com (mail-pg1-x52d.google.com [IPv6:2607:f8b0:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 674E32A719;
+        Thu,  7 Jul 2022 00:31:12 -0700 (PDT)
+Received: by mail-pg1-x52d.google.com with SMTP id s27so16944780pga.13;
+        Thu, 07 Jul 2022 00:31:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=05adq9e2iMCT+akFGqC1jijiEVT2oaWGy/uJ53ipCKA=;
-        b=KV53tV/98wkSolJXfUehSfTQuITfMrpPzM167JsrIh2+CGqgIlvjkJhfbO5doHx8Sg
-         zwH9AIH/KDkay0vEnoML/BK6AsQgGSi2TkYhNamO1zNmI1W3H6TFLUphIw0Ub3HyZ6S4
-         eU78MyHmDj/ZIFFdPJM6Omt389tajXE2+raSiQRBqAZcF0I2XXIjZ6AApEEP9LGlvpvu
-         5hqrFjTaGL82z2tKhQG8HrEhCYHNTMHYVYvdsyDzLWpYj8DFTCHC+348eXA6LWi4ZYR5
-         dpEXd5nToj1JsJWH3yeFGONhGWplfLu3LVMtoLRJsh1rgVJketY3zXI2bkDq6hfcCMpi
-         0/uA==
+        bh=ylIiivzKiERKVdXJqq1oIEa+hsqFQi/5sngY2B1n2Y4=;
+        b=P38pycMfWhTwWHraF56FZrLGlc1cTG9JDRfVY4qLQekPvSTdDj068J1U5bwkct4hFB
+         XML6xpk/gr+yMDNfY+q2OsnrRmh3V2ENHTrzUnyDh9mDe0yzBW+vFUHGFzVKzLSkUI/0
+         j4vfQ43RmPXbf+2wk0Aq/FIE8FyWuWuXtuUime4zXPsGGDW05pfaqbKjRu/vLmLPygze
+         G+MVT+SFlKtOokad0/6y0jJvMKSxXCfIrQAHR/1Mtl2rT33BBB3ePlXhrmsX/L09pUed
+         ZG5GlwFuHx2oaEJTZ3lkRO21Q6RsqwVWwFp2lo6FJKFqHPEZljDlv4bMTSnUgfHZVtjh
+         qiHA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references;
-        bh=05adq9e2iMCT+akFGqC1jijiEVT2oaWGy/uJ53ipCKA=;
-        b=NJTt8LxT0Yg7XIdEZ7Dj13ehLJPkx920VPtQi05BQ6KadjLIK/K7XbmI+YwiwAII20
-         kDnAkcOhaFDqc9Ibc5uZphT7pE+cIbc01+fcqcph6NDZZxZytyA/6cC5fEWsDkJdpxqw
-         VaXbdfkwMHSywIOFk2RUB/PhFOEiUeXischq0Ap25Z5+gi5+t9xSszEcE1IcLbD+oryx
-         tzh2Quze391INtu6r/dyGl3Hxwp8YeXlfcQy6z1P+NAep6waMmCUDXfUl3KWezeuYdFH
-         wnAf09y651xaIAARIfwdtR/CjLPWhlfnNh+st2NqwDSWUfaaPHdFCHpdjNskUovamj4G
-         1KvA==
-X-Gm-Message-State: AJIora/fncFvM5RRrHqQ/r7Frr3Do9FfNVDu/HzHU+/SlF57RSKPCbpW
-        bIstbFcXlRj/GDibLzoZU/Q=
-X-Google-Smtp-Source: AGRyM1sCeA4QOM2dMj/QF5wCKZJBH0qADixd73Ldb2BT2BoYNhGsbOitMHVKaDElj/evCtcFantZbg==
-X-Received: by 2002:a05:6a00:15c1:b0:525:2db4:2a2c with SMTP id o1-20020a056a0015c100b005252db42a2cmr49723557pfu.30.1657179067746;
-        Thu, 07 Jul 2022 00:31:07 -0700 (PDT)
+        bh=ylIiivzKiERKVdXJqq1oIEa+hsqFQi/5sngY2B1n2Y4=;
+        b=x1UlmMsD63yoUm25yeSJ6S6ZQxQWYQCHcq7fQPhYGCmiIWS7OHwQqSPXEeUCAf4dtQ
+         CH3KeEgqNnl4PawG8vbCxK4UC8pJ44EblHiPix15c6G5AOFLty6lK9lAq7IYDAHX/3XL
+         BCIl6LdOExfbRb+4p/5QsYIz7FTtWTaHebIjB/7BRuQeIKlEsbAFXHrogf23FgEzJhyF
+         cgdBjIKtqAGjF/tL1aB0YEA1pdwJZVIeF+Cg2cXzUwJXRVq4hZ/csyzsLAGKqXM+AM4g
+         cm7teX18/J0q5nxf4JFFJGmhmIHmvd/2MpTMvxbdLc2y8AEJccbcJswVn7+/CnC6/1E8
+         ysbQ==
+X-Gm-Message-State: AJIora8YDLKQAQE3msjLErjB979RgjA0j293zdSrC9kM98wQBSYvx2pq
+        FrUMn4wA47Gg0VbIFzCRRCQ=
+X-Google-Smtp-Source: AGRyM1tozyIGmExpcZ1BEn9Rmb8Rdz9VU5TUho3dmZ3NakJq0Gn35c0sgLfMv1aefytPzeJvTqgimw==
+X-Received: by 2002:a17:90b:3d81:b0:1ef:a950:a0cd with SMTP id pq1-20020a17090b3d8100b001efa950a0cdmr3533359pjb.43.1657179071769;
+        Thu, 07 Jul 2022 00:31:11 -0700 (PDT)
 Received: from localhost.localdomain (60-250-192-107.hinet-ip.hinet.net. [60.250.192.107])
-        by smtp.gmail.com with ESMTPSA id s1-20020aa78bc1000000b00528c70c34c2sm928481pfd.115.2022.07.07.00.31.04
+        by smtp.gmail.com with ESMTPSA id s1-20020aa78bc1000000b00528c70c34c2sm928481pfd.115.2022.07.07.00.31.08
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 07 Jul 2022 00:31:07 -0700 (PDT)
+        Thu, 07 Jul 2022 00:31:11 -0700 (PDT)
 From:   Mia Lin <mimi05633@gmail.com>
 To:     avifishman70@gmail.com, tmaimon77@gmail.com, tali.perry1@gmail.com,
         venture@google.com, yuenn@google.com, benjaminfair@google.com,
@@ -57,9 +57,9 @@ To:     avifishman70@gmail.com, tmaimon77@gmail.com, tali.perry1@gmail.com,
         mylin1@nuvoton.com
 Cc:     openbmc@lists.ozlabs.org, linux-rtc@vger.kernel.org,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v4 2/3] ARM: dts: nuvoton: Add nuvoton RTC3018Y node
-Date:   Thu,  7 Jul 2022 15:30:53 +0800
-Message-Id: <20220707073054.3954-3-mimi05633@gmail.com>
+Subject: [PATCH v4 3/3] RTC: nuvoton: Add NCT3018Y real time clock driver
+Date:   Thu,  7 Jul 2022 15:30:54 +0800
+Message-Id: <20220707073054.3954-4-mimi05633@gmail.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20220707073054.3954-1-mimi05633@gmail.com>
 References: <20220707073054.3954-1-mimi05633@gmail.com>
@@ -73,28 +73,621 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add nuvoton real time clock RTC3018Y in I2C node
+Add real time clock support for NCT3018Y.
 
 Signed-off-by: Mia Lin <mimi05633@gmail.com>
 ---
- arch/arm/boot/dts/nuvoton-npcm750-evb.dts | 4 ++++
- 1 file changed, 4 insertions(+)
+ MAINTAINERS                |   1 +
+ drivers/rtc/Kconfig        |  10 +
+ drivers/rtc/Makefile       |   1 +
+ drivers/rtc/rtc-nct3018y.c | 553 +++++++++++++++++++++++++++++++++++++
+ 4 files changed, 565 insertions(+)
+ create mode 100644 drivers/rtc/rtc-nct3018y.c
 
-diff --git a/arch/arm/boot/dts/nuvoton-npcm750-evb.dts b/arch/arm/boot/dts/nuvoton-npcm750-evb.dts
-index 3dad32834e5e..589aadb67688 100644
---- a/arch/arm/boot/dts/nuvoton-npcm750-evb.dts
-+++ b/arch/arm/boot/dts/nuvoton-npcm750-evb.dts
-@@ -202,6 +202,10 @@
- 		reg = <0x48>;
- 		status = "okay";
- 	};
-+	rtc0: rtc@6f {
-+		compatible = "nuvoton,nct3018y";
-+		reg = <0x6f>;
-+	};
- };
+diff --git a/MAINTAINERS b/MAINTAINERS
+index eca54b275559..08101c49cba6 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -2453,6 +2453,7 @@ F:	arch/arm/boot/dts/nuvoton-npcm*
+ F:	arch/arm/mach-npcm/
+ F:	drivers/*/*npcm*
+ F:	drivers/*/*/*npcm*
++F:	drivers/rtc/rtc-nct3018y.c
+ F:	include/dt-bindings/clock/nuvoton,npcm7xx-clock.h
  
- /* lm75 on EB */
+ ARM/NUVOTON WPCM450 ARCHITECTURE
+diff --git a/drivers/rtc/Kconfig b/drivers/rtc/Kconfig
+index a00f901b5c1d..3444c638fd28 100644
+--- a/drivers/rtc/Kconfig
++++ b/drivers/rtc/Kconfig
+@@ -383,6 +383,16 @@ config RTC_DRV_MAX77686
+ 	  This driver can also be built as a module. If so, the module
+ 	  will be called rtc-max77686.
+ 
++config RTC_DRV_NCT3018Y
++	tristate "Nuvoton NCT3018Y"
++	depends on OF
++	help
++	   If you say yes here you get support for the Nuvoton NCT3018Y I2C RTC
++	   chip.
++
++	   This driver can also be built as a module, if so, the module will be
++	   called "rtc-nct3018y".
++
+ config RTC_DRV_RK808
+ 	tristate "Rockchip RK805/RK808/RK809/RK817/RK818 RTC"
+ 	depends on MFD_RK808
+diff --git a/drivers/rtc/Makefile b/drivers/rtc/Makefile
+index fb04467b652d..12353df426ff 100644
+--- a/drivers/rtc/Makefile
++++ b/drivers/rtc/Makefile
+@@ -112,6 +112,7 @@ obj-$(CONFIG_RTC_DRV_MV)	+= rtc-mv.o
+ obj-$(CONFIG_RTC_DRV_MXC)	+= rtc-mxc.o
+ obj-$(CONFIG_RTC_DRV_MXC_V2)	+= rtc-mxc_v2.o
+ obj-$(CONFIG_RTC_DRV_GAMECUBE)	+= rtc-gamecube.o
++obj-$(CONFIG_RTC_DRV_NCT3018Y)	+= rtc-nct3018y.o
+ obj-$(CONFIG_RTC_DRV_NTXEC)	+= rtc-ntxec.o
+ obj-$(CONFIG_RTC_DRV_OMAP)	+= rtc-omap.o
+ obj-$(CONFIG_RTC_DRV_OPAL)	+= rtc-opal.o
+diff --git a/drivers/rtc/rtc-nct3018y.c b/drivers/rtc/rtc-nct3018y.c
+new file mode 100644
+index 000000000000..82b8e64cb715
+--- /dev/null
++++ b/drivers/rtc/rtc-nct3018y.c
+@@ -0,0 +1,553 @@
++// SPDX-License-Identifier: GPL-2.0
++// Copyright (c) 2022 Nuvoton Technology Corporation
++
++#include <linux/bcd.h>
++#include <linux/clk-provider.h>
++#include <linux/err.h>
++#include <linux/i2c.h>
++#include <linux/module.h>
++#include <linux/of.h>
++#include <linux/rtc.h>
++#include <linux/slab.h>
++
++#define NCT3018Y_REG_SC		0x00 /* seconds */
++#define NCT3018Y_REG_SCA	0x01 /* alarm */
++#define NCT3018Y_REG_MN		0x02
++#define NCT3018Y_REG_MNA	0x03 /* alarm */
++#define NCT3018Y_REG_HR		0x04
++#define NCT3018Y_REG_HRA	0x05 /* alarm */
++#define NCT3018Y_REG_DW		0x06
++#define NCT3018Y_REG_DM		0x07
++#define NCT3018Y_REG_MO		0x08
++#define NCT3018Y_REG_YR		0x09
++#define NCT3018Y_REG_CTRL	0x0A /* timer control */
++#define NCT3018Y_REG_ST		0x0B /* status */
++#define NCT3018Y_REG_CLKO	0x0C /* clock out */
++
++#define NCT3018Y_BIT_AF		BIT(7)
++#define NCT3018Y_BIT_ST		BIT(7)
++#define NCT3018Y_BIT_DM		BIT(6)
++#define NCT3018Y_BIT_HF		BIT(5)
++#define NCT3018Y_BIT_DSM	BIT(4)
++#define NCT3018Y_BIT_AIE	BIT(3)
++#define NCT3018Y_BIT_OFIE	BIT(2)
++#define NCT3018Y_BIT_CIE	BIT(1)
++#define NCT3018Y_BIT_TWO	BIT(0)
++
++#define NCT3018Y_REG_BAT_MASK		0x07
++#define NCT3018Y_REG_CLKO_F_MASK	0x03 /* frequenc mask */
++#define NCT3018Y_REG_CLKO_CKE		0x80 /* clock out enabled */
++
++struct nct3018y {
++	struct rtc_device *rtc;
++	struct i2c_client *client;
++#ifdef CONFIG_COMMON_CLK
++	struct clk_hw clkout_hw;
++#endif
++};
++
++static int nct3018y_set_alarm_mode(struct i2c_client *client, bool on)
++{
++	int err, flags;
++
++	dev_dbg(&client->dev, "%s:on:%d\n", __func__, on);
++
++	flags =  i2c_smbus_read_byte_data(client, NCT3018Y_REG_CTRL);
++	if (flags < 0) {
++		dev_dbg(&client->dev,
++			"Failed to read NCT3018Y_REG_CTRL\n");
++		return flags;
++	}
++
++	if (on)
++		flags |= NCT3018Y_BIT_AIE;
++	else
++		flags &= ~NCT3018Y_BIT_AIE;
++
++	flags |= NCT3018Y_BIT_CIE;
++	err = i2c_smbus_write_byte_data(client, NCT3018Y_REG_CTRL, flags);
++	if (err < 0) {
++		dev_dbg(&client->dev, "Unable to write NCT3018Y_REG_CTRL\n");
++		return err;
++	}
++
++	flags =  i2c_smbus_read_byte_data(client, NCT3018Y_REG_ST);
++	if (flags < 0) {
++		dev_dbg(&client->dev,
++			"Failed to read NCT3018Y_REG_ST\n");
++		return flags;
++	}
++
++	flags &= ~(NCT3018Y_BIT_AF);
++	err = i2c_smbus_write_byte_data(client, NCT3018Y_REG_ST, flags);
++	if (err < 0) {
++		dev_dbg(&client->dev, "Unable to write NCT3018Y_REG_ST\n");
++		return err;
++	}
++
++	return 0;
++}
++
++static int nct3018y_get_alarm_mode(struct i2c_client *client, unsigned char *alarm_enable,
++				   unsigned char *alarm_flag)
++{
++	int flags;
++
++	if (alarm_enable) {
++		dev_dbg(&client->dev, "%s:NCT3018Y_REG_CTRL\n", __func__);
++		flags =  i2c_smbus_read_byte_data(client, NCT3018Y_REG_CTRL);
++		if (flags < 0)
++			return flags;
++		*alarm_enable = flags & NCT3018Y_BIT_AIE;
++	}
++
++	if (alarm_flag) {
++		dev_dbg(&client->dev, "%s:NCT3018Y_REG_ST\n", __func__);
++		flags =  i2c_smbus_read_byte_data(client, NCT3018Y_REG_ST);
++		if (flags < 0)
++			return flags;
++		*alarm_flag = flags & NCT3018Y_BIT_AF;
++	}
++
++	dev_dbg(&client->dev, "%s:alarm_enable:%x alarm_flag:%x\n",
++		__func__, *alarm_enable, *alarm_flag);
++
++	return 0;
++}
++
++static irqreturn_t nct3018y_irq(int irq, void *dev_id)
++{
++	struct nct3018y *nct3018y = i2c_get_clientdata(dev_id);
++	struct i2c_client *client = nct3018y->client;
++	int err;
++	unsigned char alarm_flag;
++	unsigned char alarm_enable;
++
++	dev_dbg(&client->dev, "%s:irq:%d\n", __func__, irq);
++	err = nct3018y_get_alarm_mode(nct3018y->client, &alarm_enable, &alarm_flag);
++	if (err)
++		return IRQ_NONE;
++
++	if (alarm_flag) {
++		dev_dbg(&client->dev, "%s:alarm flag:%x\n",
++			__func__, alarm_flag);
++		rtc_update_irq(nct3018y->rtc, 1, RTC_IRQF | RTC_AF);
++		nct3018y_set_alarm_mode(nct3018y->client, 0);
++		dev_dbg(&client->dev, "%s:IRQ_HANDLED\n", __func__);
++		return IRQ_HANDLED;
++	}
++
++	return IRQ_NONE;
++}
++
++/*
++ * In the routines that deal directly with the nct3018y hardware, we use
++ * rtc_time -- month 0-11, hour 0-23, yr = calendar year-epoch.
++ */
++static int nct3018y_rtc_read_time(struct device *dev, struct rtc_time *tm)
++{
++	struct i2c_client *client = to_i2c_client(dev);
++	unsigned char buf[10];
++	int err;
++
++	err = i2c_smbus_read_i2c_block_data(client, NCT3018Y_REG_SC, sizeof(buf), buf);
++	if (err < 0)
++		return err;
++
++	tm->tm_sec = bcd2bin(buf[0] & 0x7F);
++	tm->tm_min = bcd2bin(buf[2] & 0x7F);
++	tm->tm_hour = bcd2bin(buf[4] & 0x3F);
++	tm->tm_wday = buf[6] & 0x07;
++	tm->tm_mday = bcd2bin(buf[7] & 0x3F);
++	tm->tm_mon = bcd2bin(buf[8] & 0x1F) - 1;
++	tm->tm_year = bcd2bin(buf[9]) + 100;
++
++	return rtc_valid_tm(tm);
++}
++
++static int nct3018y_rtc_set_time(struct device *dev, struct rtc_time *tm)
++{
++	struct i2c_client *client = to_i2c_client(dev);
++	unsigned char buf[4] = {0};
++	int err;
++
++	buf[0] = bin2bcd(tm->tm_sec);
++	err = i2c_smbus_write_byte_data(client, NCT3018Y_REG_SC, buf[0]);
++	if (err < 0) {
++		dev_dbg(&client->dev, "Unable to write NCT3018Y_REG_SC\n");
++		return err;
++	}
++
++	buf[0] = bin2bcd(tm->tm_min);
++	err = i2c_smbus_write_byte_data(client, NCT3018Y_REG_MN, buf[0]);
++	if (err < 0) {
++		dev_dbg(&client->dev, "Unable to write NCT3018Y_REG_MN\n");
++		return err;
++	}
++
++	buf[0] = bin2bcd(tm->tm_hour);
++	err = i2c_smbus_write_byte_data(client, NCT3018Y_REG_HR, buf[0]);
++	if (err < 0) {
++		dev_dbg(&client->dev, "Unable to write NCT3018Y_REG_HR\n");
++		return err;
++	}
++
++	buf[0] = tm->tm_wday & 0x07;
++	buf[1] = bin2bcd(tm->tm_mday);
++	buf[2] = bin2bcd(tm->tm_mon + 1);
++	buf[3] = bin2bcd(tm->tm_year - 100);
++	err = i2c_smbus_write_i2c_block_data(client, NCT3018Y_REG_DW,
++					     sizeof(buf), buf);
++	if (err < 0) {
++		dev_dbg(&client->dev, "Unable to write for day and mon and year\n");
++		return -EIO;
++	}
++
++	return err;
++}
++
++static int nct3018y_rtc_read_alarm(struct device *dev, struct rtc_wkalrm *tm)
++{
++	struct i2c_client *client = to_i2c_client(dev);
++	unsigned char buf[5];
++	int err;
++
++	err = i2c_smbus_read_i2c_block_data(client, NCT3018Y_REG_SCA,
++					    sizeof(buf), buf);
++	if (err < 0) {
++		dev_dbg(&client->dev, "Unable to read date\n");
++		return -EIO;
++	}
++
++	dev_dbg(&client->dev, "%s: raw data is sec=%02x, min=%02x hr=%02x\n",
++		__func__, buf[0], buf[2], buf[4]);
++
++	tm->time.tm_sec = bcd2bin(buf[0] & 0x7F);
++	tm->time.tm_min = bcd2bin(buf[2] & 0x7F);
++	tm->time.tm_hour = bcd2bin(buf[4] & 0x3F);
++
++	err = nct3018y_get_alarm_mode(client, &tm->enabled, &tm->pending);
++	if (err < 0)
++		return err;
++
++	dev_dbg(&client->dev, "%s:s=%d m=%d, hr=%d, enabled=%d, pending=%d\n",
++		__func__, tm->time.tm_sec, tm->time.tm_min,
++		tm->time.tm_hour, tm->enabled, tm->pending);
++
++	return 0;
++}
++
++static int nct3018y_rtc_set_alarm(struct device *dev, struct rtc_wkalrm *tm)
++{
++	struct i2c_client *client = to_i2c_client(dev);
++	int err;
++
++	dev_dbg(dev, "%s, sec=%d, min=%d hour=%d tm->enabled:%d\n",
++		__func__, tm->time.tm_sec, tm->time.tm_min, tm->time.tm_hour,
++		tm->enabled);
++
++	err = i2c_smbus_write_byte_data(client, NCT3018Y_REG_SCA, bin2bcd(tm->time.tm_sec));
++	if (err < 0) {
++		dev_dbg(&client->dev, "Unable to write NCT3018Y_REG_SCA\n");
++		return err;
++	}
++
++	err = i2c_smbus_write_byte_data(client, NCT3018Y_REG_MNA, bin2bcd(tm->time.tm_min));
++	if (err < 0) {
++		dev_dbg(&client->dev, "Unable to write NCT3018Y_REG_MNA\n");
++		return err;
++	}
++
++	err = i2c_smbus_write_byte_data(client, NCT3018Y_REG_HRA, bin2bcd(tm->time.tm_hour));
++	if (err < 0) {
++		dev_dbg(&client->dev, "Unable to write NCT3018Y_REG_HRA\n");
++		return err;
++	}
++
++	return nct3018y_set_alarm_mode(client, tm->enabled);
++}
++
++static int nct3018y_irq_enable(struct device *dev, unsigned int enabled)
++{
++	dev_dbg(dev, "%s: alarm enable=%d\n", __func__, enabled);
++
++	return nct3018y_set_alarm_mode(to_i2c_client(dev), enabled);
++}
++
++static int nct3018y_ioctl(struct device *dev, unsigned int cmd, unsigned long arg)
++{
++	struct i2c_client *client = to_i2c_client(dev);
++	int status, flags = 0;
++
++	switch (cmd) {
++	case RTC_VL_READ:
++		status = i2c_smbus_read_byte_data(client, NCT3018Y_REG_ST);
++		if (status < 0)
++			return status;
++
++		if (!(status & NCT3018Y_REG_BAT_MASK))
++			flags |= RTC_VL_DATA_INVALID;
++
++		return put_user(flags, (unsigned int __user *)arg);
++
++	default:
++		return -ENOIOCTLCMD;
++	}
++}
++
++#ifdef CONFIG_COMMON_CLK
++/*
++ * Handling of the clkout
++ */
++
++#define clkout_hw_to_nct3018y(_hw) container_of(_hw, struct nct3018y, clkout_hw)
++
++static const int clkout_rates[] = {
++	32768,
++	1024,
++	32,
++	1,
++};
++
++static unsigned long nct3018y_clkout_recalc_rate(struct clk_hw *hw,
++						 unsigned long parent_rate)
++{
++	struct nct3018y *nct3018y = clkout_hw_to_nct3018y(hw);
++	struct i2c_client *client = nct3018y->client;
++	int flags;
++
++	flags = i2c_smbus_read_byte_data(client, NCT3018Y_REG_CLKO);
++	if (flags < 0)
++		return 0;
++
++	flags &= NCT3018Y_REG_CLKO_F_MASK;
++	return clkout_rates[flags];
++}
++
++static long nct3018y_clkout_round_rate(struct clk_hw *hw, unsigned long rate,
++				       unsigned long *prate)
++{
++	int i;
++
++	for (i = 0; i < ARRAY_SIZE(clkout_rates); i++)
++		if (clkout_rates[i] <= rate)
++			return clkout_rates[i];
++
++	return 0;
++}
++
++static int nct3018y_clkout_set_rate(struct clk_hw *hw, unsigned long rate,
++				    unsigned long parent_rate)
++{
++	struct nct3018y *nct3018y = clkout_hw_to_nct3018y(hw);
++	struct i2c_client *client = nct3018y->client;
++	int i, flags;
++
++	flags = i2c_smbus_read_byte_data(client, NCT3018Y_REG_CLKO);
++	if (flags < 0)
++		return flags;
++
++	for (i = 0; i < ARRAY_SIZE(clkout_rates); i++)
++		if (clkout_rates[i] == rate) {
++			flags &= ~NCT3018Y_REG_CLKO_F_MASK;
++			flags |= i;
++			return i2c_smbus_write_byte_data(client, NCT3018Y_REG_CLKO, flags);
++		}
++
++	return -EINVAL;
++}
++
++static int nct3018y_clkout_control(struct clk_hw *hw, bool enable)
++{
++	struct nct3018y *nct3018y = clkout_hw_to_nct3018y(hw);
++	struct i2c_client *client = nct3018y->client;
++	int flags;
++
++	flags = i2c_smbus_read_byte_data(client, NCT3018Y_REG_CLKO);
++	if (flags < 0)
++		return flags;
++
++	if (enable)
++		flags |= NCT3018Y_REG_CLKO_CKE;
++	else
++		flags &= ~NCT3018Y_REG_CLKO_CKE;
++
++	return i2c_smbus_write_byte_data(client, NCT3018Y_REG_CLKO, flags);
++}
++
++static int nct3018y_clkout_prepare(struct clk_hw *hw)
++{
++	return nct3018y_clkout_control(hw, 1);
++}
++
++static void nct3018y_clkout_unprepare(struct clk_hw *hw)
++{
++	nct3018y_clkout_control(hw, 0);
++}
++
++static int nct3018y_clkout_is_prepared(struct clk_hw *hw)
++{
++	struct nct3018y *nct3018y = clkout_hw_to_nct3018y(hw);
++	struct i2c_client *client = nct3018y->client;
++	int flags;
++
++	flags = i2c_smbus_read_byte_data(client, NCT3018Y_REG_CLKO);
++	if (flags < 0)
++		return flags;
++
++	return flags & NCT3018Y_REG_CLKO_CKE;
++}
++
++static const struct clk_ops nct3018y_clkout_ops = {
++	.prepare = nct3018y_clkout_prepare,
++	.unprepare = nct3018y_clkout_unprepare,
++	.is_prepared = nct3018y_clkout_is_prepared,
++	.recalc_rate = nct3018y_clkout_recalc_rate,
++	.round_rate = nct3018y_clkout_round_rate,
++	.set_rate = nct3018y_clkout_set_rate,
++};
++
++static struct clk *nct3018y_clkout_register_clk(struct nct3018y *nct3018y)
++{
++	struct i2c_client *client = nct3018y->client;
++	struct device_node *node = client->dev.of_node;
++	struct clk *clk;
++	struct clk_init_data init;
++	int flags, err;
++
++	/* disable the clkout output */
++	flags = 0;
++	err = i2c_smbus_write_byte_data(client, NCT3018Y_REG_CLKO, flags);
++	if (err < 0) {
++		dev_dbg(&client->dev, "Unable to write oscillator status register\n");
++		return ERR_PTR(err);
++	}
++
++	init.name = "nct3018y-clkout";
++	init.ops = &nct3018y_clkout_ops;
++	init.flags = 0;
++	init.parent_names = NULL;
++	init.num_parents = 0;
++	nct3018y->clkout_hw.init = &init;
++
++	/* optional override of the clockname */
++	of_property_read_string(node, "clock-output-names", &init.name);
++
++	/* register the clock */
++	clk = devm_clk_register(&client->dev, &nct3018y->clkout_hw);
++
++	if (!IS_ERR(clk))
++		of_clk_add_provider(node, of_clk_src_simple_get, clk);
++
++	return clk;
++}
++#endif
++
++static const struct rtc_class_ops nct3018y_rtc_ops = {
++	.read_time	= nct3018y_rtc_read_time,
++	.set_time	= nct3018y_rtc_set_time,
++	.read_alarm	= nct3018y_rtc_read_alarm,
++	.set_alarm	= nct3018y_rtc_set_alarm,
++	.alarm_irq_enable = nct3018y_irq_enable,
++	.ioctl		= nct3018y_ioctl,
++};
++
++static int nct3018y_probe(struct i2c_client *client,
++			  const struct i2c_device_id *id)
++{
++	struct nct3018y *nct3018y;
++	int err, flags;
++
++	if (!i2c_check_functionality(client->adapter, I2C_FUNC_I2C |
++				     I2C_FUNC_SMBUS_BYTE |
++				     I2C_FUNC_SMBUS_BLOCK_DATA))
++		return -ENODEV;
++
++	nct3018y = devm_kzalloc(&client->dev, sizeof(struct nct3018y),
++				GFP_KERNEL);
++	if (!nct3018y)
++		return -ENOMEM;
++
++	i2c_set_clientdata(client, nct3018y);
++	nct3018y->client = client;
++	device_set_wakeup_capable(&client->dev, 1);
++
++	flags = i2c_smbus_read_byte_data(client, NCT3018Y_REG_CTRL);
++	if (flags < 0) {
++		dev_dbg(&client->dev, "%s: read error\n", __func__);
++		return flags;
++	} else if (flags & NCT3018Y_BIT_TWO) {
++		dev_dbg(&client->dev, "%s: NCT3018Y_BIT_TWO is set\n", __func__);
++	}
++
++	flags = NCT3018Y_BIT_TWO;
++	err = i2c_smbus_write_byte_data(client, NCT3018Y_REG_CTRL, flags);
++	if (err < 0) {
++		dev_dbg(&client->dev, "Unable to write NCT3018Y_REG_CTRL\n");
++		return err;
++	}
++
++	flags = 0;
++	err = i2c_smbus_write_byte_data(client, NCT3018Y_REG_ST, flags);
++	if (err < 0) {
++		dev_dbg(&client->dev, "%s: write error\n", __func__);
++		return err;
++	}
++
++	nct3018y->rtc = devm_rtc_allocate_device(&client->dev);
++	if (IS_ERR(nct3018y->rtc))
++		return PTR_ERR(nct3018y->rtc);
++
++	nct3018y->rtc->ops = &nct3018y_rtc_ops;
++	nct3018y->rtc->range_min = RTC_TIMESTAMP_BEGIN_2000;
++	nct3018y->rtc->range_max = RTC_TIMESTAMP_END_2099;
++
++	if (client->irq > 0) {
++		err = devm_request_threaded_irq(&client->dev, client->irq,
++						NULL, nct3018y_irq,
++						IRQF_ONESHOT | IRQF_TRIGGER_FALLING,
++						"nct3018y", client);
++		if (err) {
++			dev_dbg(&client->dev, "unable to request IRQ %d\n", client->irq);
++			return err;
++		}
++	} else {
++		clear_bit(RTC_FEATURE_UPDATE_INTERRUPT, nct3018y->rtc->features);
++		clear_bit(RTC_FEATURE_ALARM, nct3018y->rtc->features);
++	}
++
++#ifdef CONFIG_COMMON_CLK
++	/* register clk in common clk framework */
++	nct3018y_clkout_register_clk(nct3018y);
++#endif
++
++	return devm_rtc_register_device(nct3018y->rtc);
++}
++
++static const struct i2c_device_id nct3018y_id[] = {
++	{ "nct3018y", 0 },
++	{ }
++};
++MODULE_DEVICE_TABLE(i2c, nct3018y_id);
++
++static const struct of_device_id nct3018y_of_match[] = {
++	{ .compatible = "nuvoton,nct3018y" },
++	{}
++};
++MODULE_DEVICE_TABLE(of, nct3018y_of_match);
++
++static struct i2c_driver nct3018y_driver = {
++	.driver		= {
++		.name	= "rtc-nct3018y",
++		.of_match_table = of_match_ptr(nct3018y_of_match),
++	},
++	.probe		= nct3018y_probe,
++	.id_table	= nct3018y_id,
++};
++
++module_i2c_driver(nct3018y_driver);
++
++MODULE_AUTHOR("Medad CChien <ctcchien@nuvoton.com>");
++MODULE_AUTHOR(("Mia Lin <mimi05633@gmail.com>");
++MODULE_DESCRIPTION("Nuvoton NCT3018Y RTC driver");
++MODULE_LICENSE("GPL");
 -- 
 2.17.1
 

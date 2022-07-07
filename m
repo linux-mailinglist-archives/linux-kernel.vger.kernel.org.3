@@ -2,182 +2,206 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D95E56A67F
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 17:02:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AD15556A683
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 17:02:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236294AbiGGPBT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Jul 2022 11:01:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56802 "EHLO
+        id S235842AbiGGPB2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Jul 2022 11:01:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58106 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236301AbiGGPBB (ORCPT
+        with ESMTP id S235695AbiGGPBG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Jul 2022 11:01:01 -0400
-Received: from EUR03-DBA-obe.outbound.protection.outlook.com (mail-dbaeur03on2062.outbound.protection.outlook.com [40.107.104.62])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7882C5C959;
-        Thu,  7 Jul 2022 08:00:30 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=H0nd8juVVxdlIYphYSYKTb4p6hFAJMCJ4ISDk/oEUFvr04hexuWws5pqH2fHQJHxLEdNN+AWfS7wsmwA2meNg+FCyjDdKWZqqsU7o7sXiu6XoAv1uf7P2XD0LX8hc1+Pwl8bFbUbXy289WQehpievQjWQaX8eNC7nEM88uIYDB0gCTjQgCzNA4rUyfCWFrPkgdQnnmxTFwFYuWyduk/dzXWXQgQvbwBRzOTptM9HcSyZJ8HcfEdtGKbUe7pb44RitPUs5+xOL5EJoRXJB+NhiPxBEQLz20DmKC57BPPMZsNgJrKlaIRNlCZ4JTsTzXgG2lWTr3ZwUjClFszJLpvCyg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=ecedMdUa9UhAfpsTIqAEINcbcP/2xpTrW3vWneaE0L8=;
- b=me0tur5dCQUxaTzXUgFjOEbIdAwYN2cCi4zpEak2xBOj0fa4XKjucM/EZodKsmn7plxGyrm5iKuhIyYx4MIZ5tJLKnEn9d/sUQASkt6XlM66YpEq87w4GjiI9xnxIi+Jl+jB7nJIrjsu8IyTRRxWtsxzjX51ruj7xRIgd9oj0cmYN+nHBMS1q+PSY1NJt9KpfCOOqU7ArZmTBdYuKivQg8/1sLqfGsMUUQSvJZ6CvNlrnaHCkKXXIsxRyU74ktJ78Liyxsgo/cc9s5NhxgX0GRLbIEAiT6HaeHNLMr+1y/UPTn9S6uGE8kOCftIAIdKFNKXt5wIn/SnCzo5Juw48gA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=seco.com; dmarc=pass action=none header.from=seco.com;
- dkim=pass header.d=seco.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=seco.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=ecedMdUa9UhAfpsTIqAEINcbcP/2xpTrW3vWneaE0L8=;
- b=qt4OcKo2aokeAzEjsoGJ2eqCu2yMAZzAWQpZWjuhhF2mX/Op/PyJKGujXmc1RNtcFuIRFhnXkxkpCkbmBlOZifUaiJVwX/VVjJnKmGORHKWMldHnN3eFPE/X8Eq76k+WHuernCgRs8am3IT2FL9w454cL2aMhPKWhx5dSGCgxho50SmQd0ci6QODH423l1s6jCYVutKFMQGaS4yx9t8siq5p9sPmujXDMOmOXTg6tGSd/s5ktDlFqQQouixsGPxCYwudmxEVInd/0NrZk2NuJovreUpjM4LF9lCmtRbv6bAdVmb0H8TwdfgL91ijRyZZFNRLXjPUOb63eJmn+dZ56g==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=seco.com;
-Received: from DB7PR03MB4972.eurprd03.prod.outlook.com (2603:10a6:10:7d::22)
- by PAXPR03MB8114.eurprd03.prod.outlook.com (2603:10a6:102:227::15) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5395.21; Thu, 7 Jul
- 2022 15:00:27 +0000
-Received: from DB7PR03MB4972.eurprd03.prod.outlook.com
- ([fe80::757e:b75f:3449:45b1]) by DB7PR03MB4972.eurprd03.prod.outlook.com
- ([fe80::757e:b75f:3449:45b1%6]) with mapi id 15.20.5417.016; Thu, 7 Jul 2022
- 15:00:27 +0000
-Subject: Re: [PATCH net-next v2 04/35] [RFC] phy: fsl: Add Lynx 10G SerDes
- driver
-To:     Vinod Koul <vkoul@kernel.org>
-Cc:     "David S . Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Madalin Bucur <madalin.bucur@nxp.com>, netdev@vger.kernel.org,
-        Russell King <linux@armlinux.org.uk>,
-        Paolo Abeni <pabeni@redhat.com>,
-        linux-arm-kernel@lists.infradead.org,
-        Eric Dumazet <edumazet@google.com>,
-        linux-kernel@vger.kernel.org,
-        Ioana Ciornei <ioana.ciornei@nxp.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-phy@lists.infradead.org
-References: <20220628221404.1444200-1-sean.anderson@seco.com>
- <20220628221404.1444200-5-sean.anderson@seco.com> <YsPWMYjyu2nyk+w8@matsya>
- <431a014a-3a8f-fdc7-319e-29df52832128@seco.com> <YsW+4fm/613ByK09@matsya>
-From:   Sean Anderson <sean.anderson@seco.com>
-Message-ID: <e4664a59-773a-cb72-3abe-ab4bb69aa9ea@seco.com>
-Date:   Thu, 7 Jul 2022 11:00:20 -0400
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
-In-Reply-To: <YsW+4fm/613ByK09@matsya>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: BL0PR02CA0044.namprd02.prod.outlook.com
- (2603:10b6:207:3d::21) To DB7PR03MB4972.eurprd03.prod.outlook.com
- (2603:10a6:10:7d::22)
+        Thu, 7 Jul 2022 11:01:06 -0400
+Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE9EC31DC6
+        for <linux-kernel@vger.kernel.org>; Thu,  7 Jul 2022 08:00:46 -0700 (PDT)
+Received: by mail-pf1-x433.google.com with SMTP id j3so7280755pfb.6
+        for <linux-kernel@vger.kernel.org>; Thu, 07 Jul 2022 08:00:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=2hZBVUu6vtCkIAAa0XFWh1kR5HWXI7azprojIq7FcUc=;
+        b=ISRo2QpRA1s7r0DFMGm1vMBzRptkuXUFhDKyTg9XJXKn5b3BIcUQSXQzNlLISAyqDL
+         GkMsA6qoleUzq5R8y+9dJyZvk35TdEn8rkdVR7SBnAkNkAf8a5bWlVs99ZuzBOx8GGeA
+         TX7WUScz8cUmHw9jOXQ99Tqa1b7XAOB7uXdS4cOI5d3G6iQxMK+063EyqojL1BM+jagj
+         /VaxrGZg/1Q1B+OlOhpM/0vS2a5h8TyuSQbO2znrgo4yyCq6iN4luc7BWujCd+rmW8LO
+         CD2xW4Ssr/LRJk/pRsFYJAL/jQmKYvPKvf6RdcSoSIa/EVwWgimNQGXcfySH8Mv2KE4A
+         y7ZA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=2hZBVUu6vtCkIAAa0XFWh1kR5HWXI7azprojIq7FcUc=;
+        b=mKTyJyAsgHaM4JQGa54BYEr0/zKCMAKdRLuljTXvqaiCcbMSn2sBoK6c0RuX8L0FfS
+         MXJ0PCtlCp5Umk8E3SlAadBBbnO1py1HRkkgQzEXqGUN+wfs/otOxltNSPLn8bVdxSsX
+         fZnXdbdonraZ6KHwegkTlfV2UKRbIXlFBb93Xh72Yfx8OKkLmD86Z08owCrwrSvd0P37
+         yyn0MTLD9cyESRziLAUkOG2HDaafCQqzRBGjdWHWovC8aVvo4uYwFvYEhplnjbGhIzz9
+         X0mCqei46E/ODtw773scxMdlBOCEHB+0bIhXZKp7jGLvbC/eekBrEk0S8VHVRUaektBj
+         f1Bw==
+X-Gm-Message-State: AJIora9D8jhQFwc6euUcp1/asn+cPGfYbPCeItxhipPiM1Xvuah1K/no
+        NZiwEJ6HBj1nezOxXO3+G6bLSbYzOarOOg==
+X-Google-Smtp-Source: AGRyM1vCvOBb8PRO1bSS1k7cYd5WxX9hvQhGM19KUKgd4qc7ZqLCHBICNZWzJnX41+KKSzo2ZuduiA==
+X-Received: by 2002:a17:902:ec8f:b0:16a:5327:467a with SMTP id x15-20020a170902ec8f00b0016a5327467amr53059445plg.40.1657206046159;
+        Thu, 07 Jul 2022 08:00:46 -0700 (PDT)
+Received: from [10.4.255.21] ([139.177.225.235])
+        by smtp.gmail.com with ESMTPSA id h14-20020a170902f7ce00b0016be0d5483asm9622923plw.252.2022.07.07.08.00.43
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 07 Jul 2022 08:00:45 -0700 (PDT)
+Message-ID: <33a63e76-fb71-2b9e-3b3c-cc6f7a675cf3@bytedance.com>
+Date:   Thu, 7 Jul 2022 23:00:37 +0800
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: f5a07ca6-7ef0-419e-5cd5-08da60296d02
-X-MS-TrafficTypeDiagnostic: PAXPR03MB8114:EE_
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: Z/5/6arsFB73NafNvLeQO0ufNAX3X5WS6CSW71rH6X8+e0RI9QUuUT1fX0HMIm73wwKChr3haIR6yi3KdJVZTpBFj99MR8LYz3275CnIWBho9fNbWlFNXM2dnAtrlvLwdJ4LSZbL5wSZTO1lrUUaeCn25SF6dR/AaYIb3AOD3aXaa7Il4OrEtMEAoPQybnMsEwpqvFgdchqTwgREMJfXpp1sKDUmCz93QhungFVm+fLf8omXhcjGSKvmBozXv7xsByiruvVMbFHAMj/9ZtiN6G3j/v8w+k2chUv4TWb34/98GGXmNBoExm3XwD2UuTCmzSVPRYfjrrxsAZ1hAooPV4X2EoUEbd3Fljjpl1006uRWhIZPQ1gLlPSJn5hDuhZnqwssrKarOWqDq4Y0vu7dcQUE6OUs3GNQDpscEFpKO1W8Uaf5m3Di0B6wQU4cIH+RV9y8yT7MgmS0OYa/HhvOVgqGbqBp9T+qGFeQJqkcxyElnKPEAmN3GJeDDxOTm/z7Z2ISTI22MkItRcnRKAahJ6DYfApVC5LN8oHp9Dpoqz8kde5K3jveRJt6WVLYbGOJhzbT4CEO9eEZ+q0Ihri3iDrgjwnwCTbs4VsU3ysOKv+HW+f3mtNmNf14qe3cFrFUuveX9nOHLcDaXOw26k+qaZ/NhH6h3I0cxG6CL2syXooZjZ7k1B1lPckGrof1QLnp03MYGxc+AmKYbR3sgxV9mIFBC59aCh+4TMu/PQoPdsUdndiY66muWzaMKnRPunP+rzrrA92u216e8CNaS6C0+OuzHZ/uwJClzw4T//TxKRSN6PRlT8mxZTSCQOTyIToGzrQZoRlq5DMZ393ZL4qkG9hjdBlCAX3I+xCpXmH94+Qls3Wnln21LwYOQMRWOzq0
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DB7PR03MB4972.eurprd03.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(346002)(39850400004)(396003)(376002)(136003)(366004)(2616005)(186003)(26005)(38350700002)(4326008)(36756003)(54906003)(31686004)(8676002)(6916009)(38100700002)(66556008)(83380400001)(66476007)(66946007)(86362001)(6486002)(478600001)(5660300002)(53546011)(6506007)(6666004)(31696002)(316002)(7416002)(44832011)(6512007)(8936002)(2906002)(41300700001)(52116002)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?QmVqNWFmT0JOaTV6c000SzhHRDN4Y2djWnBMOUVZL2JzbmR6c0dJM0s0emRr?=
- =?utf-8?B?dVJabXR4UEs0VFY3aDJpdGhBaDhCSkNvSEtxVVUvMzR4NU9icEV5UnZBVGVD?=
- =?utf-8?B?SUZzM3pBMzN3d0FUMjFpUXBoaW43TDdMR0RDSVhSYjRzc2JZbUNuZmh1WnFL?=
- =?utf-8?B?SWVCUlRPMzRlQTY2a3ZlNWE4dHdmL1V4S1VHN1ZnNml5RHVNYWdjTFk0RWFu?=
- =?utf-8?B?NjJKVzZvcDUxZXFDT2NWT2xGV2x0UXB5ZWpiRGQ2cWgxK1FBQ0wwYlJPcEVP?=
- =?utf-8?B?ZW5PZVZHMWFWeW1tMHpodUovWjhKeFhrdnR5Z1RrOTZtWW0xYTlWQmJUeDQx?=
- =?utf-8?B?aVBHMUtMTE9uRTMvZ2Y3VDRQTDAwdXZ1NTFBWmRLcUtCY3ZvdU02bG1uakYv?=
- =?utf-8?B?UFZ1VVhJN1MwTUI4SGFGM3RQTGRTQUUrMTQwdG8wSWEzUUFrMWpLRG1iaW55?=
- =?utf-8?B?UHp3RW9SRHJNb3dEQVAyc1JmWWxyYlZaaGhQUVZIL1RmQ1kvakZBSkhzK3F1?=
- =?utf-8?B?RmxocXlqQmxjSjhicjlGeUNYQ015WkZ3UGxMSjU4ZjR0RzQ2alhRdC8vUTlB?=
- =?utf-8?B?TWNsb1lBOFhRckVFZWh2QlljN3BlbDdGSm5DMUxnUDg0VCtoS3lXZTI2dU14?=
- =?utf-8?B?cEdXY2QvUXY4N3NCcEJhKzluOEFKaWRsTjVCSVhvWHVRM2s1cHF6dVBIRVJz?=
- =?utf-8?B?QVV4eWFyNlFXMW5BbUd2ZlBPd25VTzZESS8vaFJSTm1teGFydUtRS3FISEUw?=
- =?utf-8?B?bjlyTnBVV043dGpDN0M4bldDNGNLTGlkVFhhc3RiNDJ1Q0dMWjdQSnl5V2JH?=
- =?utf-8?B?TlVWdzNLY3dTSG1seGJnWUQ4bjloZ3ZyMjBVVGZCQ0JXQzM3d3dDcjJSc01S?=
- =?utf-8?B?SmZCR1VpQ256aFZJRkszSHJtTEJOejhxNWpsaE9sWFFBbi90SFJzQzh1NlFL?=
- =?utf-8?B?aW1MNTFBMXhteXErYk1KTCtjaGFNeklndEpHL0w1SEVqR0Z3dXluS2ZlRjNK?=
- =?utf-8?B?MG5La0lOcDc0Y0NUN1RhL3ZINUl0ZDRQVXJwVVJlOEFnK2VzYnYzVTd0K2F3?=
- =?utf-8?B?Q2NhZ1BMN3NWRlRzR2kzTkx1WktCY0hmTTlzN0w5RTY0RjkrdzZhdnduMUhh?=
- =?utf-8?B?N0RrOWVYUnJvdWl1NUJxMUZOUm9nRHhxVXJpNlMrd3kyNm1jaFpFSXBVUEtu?=
- =?utf-8?B?RGNLRk1XekxIVEEycUtaK3k5Kzlta0JKMHFkRmU3YWViR0xOWk84WmpFbHFN?=
- =?utf-8?B?ZU9FajlqNDUxdEExa0ZVZFptMUNIcWs5VUFSRG1CVFFXVzUrS0ovV2RnOEJO?=
- =?utf-8?B?TDVSU1FZOXNPbXUrM1RraDI4R01YZUUxQ092bnUzcFpWdktFN1poUFVmUHgr?=
- =?utf-8?B?NHYxZDVLVitYeTZMV3g1ZXNQWFo5OUMvZXllQmprSXN5QTFWTTJIc3U1RFhL?=
- =?utf-8?B?a2toUFFOOFViVk9EYmtuTlVjRkdSOFZqWEtaNUpHZFkrOXZFU1JtaGNsczBE?=
- =?utf-8?B?c1RtM1A3eGRCajhoTDFOamNWNmYxalJwYnRhN0ZGaHp0elJKUlhrVE9LSVVK?=
- =?utf-8?B?WXUvNVZLS1c5YkpMd0NXSHVOVHZKRUJ4Mlk0dmRGcG9yN3JEeGNYdHgrdFgz?=
- =?utf-8?B?QnJFUVBKNi9JSFFwczZmL1E2T2VhYkJ1N3JUejJtVVByVVcwVFNzSlZDT3d4?=
- =?utf-8?B?OHhZTlgvbk9ITldlY2g2dm1CRTJSVEpwV0l2aDlYRXRaMVZ0c01aQzdtclBk?=
- =?utf-8?B?aEtEcVRSYktSTTA2Nm5tKzVpVUVCYnN3c3gxSFMzKzBBVFJRL0dkN3Z5bm5m?=
- =?utf-8?B?dGNDdklVQkVBcUluNzVqS1RqUkxCdUV2NzRyazJONFJqUFpFaVJKNS83ck9Y?=
- =?utf-8?B?cFJMcmIzL2NyNGsvbXozdHdrcUZOalZtVDU1Q09GcGYrZlE3cEZlT0YxZWtw?=
- =?utf-8?B?TTN6QU5iY0dBL05UT3N0OVU4eld4SWpVRjN6ZTIzMjJjN2k4NlRnUFdWZDhn?=
- =?utf-8?B?cFJQRDdQbzBPRURWQVhtL2RYMjNtMlBWbjZvWmJJR2ZlaG9HVC90VEdBSWF5?=
- =?utf-8?B?R0xvNk1kcWd6N211YXNOZnVnNjdqT1hFV2FhYVJybnBndXM2UVd6bk12VDJX?=
- =?utf-8?B?RC9OOEdkM1NLVXN1cFY2bE5DZDl6QzB3WTY1YUlLNk1RVTQ3WFVmVElNTy9l?=
- =?utf-8?B?UkE9PQ==?=
-X-OriginatorOrg: seco.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: f5a07ca6-7ef0-419e-5cd5-08da60296d02
-X-MS-Exchange-CrossTenant-AuthSource: DB7PR03MB4972.eurprd03.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Jul 2022 15:00:26.8424
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: bebe97c3-6438-442e-ade3-ff17aa50e733
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: /r6MRSZA4GDwcXoooFqBO4bzNSVX1olrpWprsDsE7tbNFuq93n3or5MMWTzN0S+UgX1KNIFu9syjE27VU2+Vzw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PAXPR03MB8114
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.0
+Subject: Re: [RFC PATCH 2/2] arm64: support HAVE_IRQ_EXIT_ON_IRQ_STACK
+Content-Language: en-US
+To:     Arnd Bergmann <arnd@arndb.de>
+Cc:     Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+References: <20220707110511.52129-1-zhengqi.arch@bytedance.com>
+ <20220707110511.52129-3-zhengqi.arch@bytedance.com>
+ <CAK8P3a1-rL391dp33D5r+SgQ+L0u7Neta_-DZoZL=+c1zPtNQg@mail.gmail.com>
+ <42bfd82c-b3fb-c942-d6f2-ae5adec90a26@bytedance.com>
+ <CAK8P3a17A1t=qkyToQNVnuVfGPp-7VpFx5qJ-gmpyrkJ3yRXTw@mail.gmail.com>
+From:   Qi Zheng <zhengqi.arch@bytedance.com>
+In-Reply-To: <CAK8P3a17A1t=qkyToQNVnuVfGPp-7VpFx5qJ-gmpyrkJ3yRXTw@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Vinod,
 
-On 7/6/22 12:57 PM, Vinod Koul wrote:
-> On 05-07-22, 11:29, Sean Anderson wrote:
+
+On 2022/7/7 22:41, Arnd Bergmann wrote:
+> On Thu, Jul 7, 2022 at 3:38 PM Qi Zheng <zhengqi.arch@bytedance.com> wrote:
+>> On 2022/7/7 20:49, Arnd Bergmann wrote:
+>>> On Thu, Jul 7, 2022 at 1:05 PM Qi Zheng <zhengqi.arch@bytedance.com> wrote:
+>>            * Restore the SP from the FP, and restore the FP and LR from
+>> the frame
+>>            * record.
+>>            */
+>> -       mov     sp, x29
+>> +999:   mov     sp, x29
+>>           ldp     x29, x30, [sp], #16
+>>    #ifdef CONFIG_SHADOW_CALL_STACK
+>>           ldp     scs_sp, xzr, [sp], #16
+>>
+>> But this also requires a new parameter in do_interrupt_handler.
+>>
+>> I also considered implementing call_on_irq_stack() for nmi and irq
+>> separately, but later think it's unnecessary.
 > 
->> >> +	/* TODO: wait for the PLL to lock */
->> > 
->> > when will this be added?
->> 
->> I'm not sure. I haven't had any issues with this, and waiting on the lock bit is
->> only mentioned in some datasheets for this SerDes. On the LS1046A for example,
->> there is no mention of waiting for lock.
+> What I had in mind was something along the lines of
 > 
-> okay maybe remove the comment then?
-
-Well, as it happens, on the write before this (where we request the reset), we must
-wait for the request to clear before making this write. Since that needed a
-read_poll_timeout anyway, I added one for this line as well.
-
->> >> +static const struct clk_ops lynx_pll_clk_ops = {
->> >> +	.enable = lynx_pll_enable,
->> >> +	.disable = lynx_pll_disable,
->> >> +	.is_enabled = lynx_pll_is_enabled,
->> >> +	.recalc_rate = lynx_pll_recalc_rate,
->> >> +	.round_rate = lynx_pll_round_rate,
->> >> +	.set_rate = lynx_pll_set_rate,
->> >> +};
->> > 
->> > right, this should be a clk driver
->> 
->> Well, it is a clock driver, effectively internal to the SerDes. There are a few
->> examples of this already (e.g. the qualcomm and cadence phys). It could of course
->> be split off, but I would prefer that they remained together.
+> diff --git a/arch/arm64/kernel/entry-common.c b/arch/arm64/kernel/entry-common.c
+> index 56cefd33eb8e..432042b91588 100644
+> --- a/arch/arm64/kernel/entry-common.c
+> +++ b/arch/arm64/kernel/entry-common.c
+> @@ -270,10 +270,7 @@ static void do_interrupt_handler(struct pt_regs *regs,
+>   {
+>          struct pt_regs *old_regs = set_irq_regs(regs);
 > 
-> I would prefer clk driver is split and we maintain clean split b/w phy
-> and clk
+> -       if (on_thread_stack())
+> -               call_on_irq_stack(regs, handler);
+> -       else
+> -               handler(regs);
+> +       handler(regs);
 > 
+>          set_irq_regs(old_regs);
+>   }
+> @@ -473,16 +470,31 @@ static void noinstr el1_interrupt(struct pt_regs *regs,
+>                  __el1_irq(regs, handler);
+>   }
+> 
+> -asmlinkage void noinstr el1h_64_irq_handler(struct pt_regs *regs)
+> +static void noinstr el1_irq(struct pt_regs *regs)
+>   {
+>          el1_interrupt(regs, handle_arch_irq);
+>   }
+> 
+> -asmlinkage void noinstr el1h_64_fiq_handler(struct pt_regs *regs)
+> +asmlinkage void noinstr el1h_64_irq_handler(struct pt_regs *regs)
+> +{
+> +       if (on_thread_stack())
+> +               call_on_irq_stack(regs, el1_irq);
 
-OK. I will split this into drivers/phy/freescale/phy-fsl-lynx-10g-clk.c
+IMO, this can't work. Because el1_interrupt() will invoke
+arm64_preempt_schedule_irq(), which will cause scheduling on the
+IRQ stack.
 
---Sean
+Thanks,
+Qi
+
+> +       else
+> +               el1_irq(regs);
+> +}
+> +
+> +static void noinstr el1_fiq(struct pt_regs *regs)
+>   {
+>          el1_interrupt(regs, handle_arch_fiq);
+>   }
+> 
+> +asmlinkage void noinstr el1h_64_fiq_handler(struct pt_regs *regs)
+> +{
+> +        if (on_thread_stack())
+> +               call_on_irq_stack(regs, el1_fiq);
+> +       else
+> +               el1_fiq(regs);
+> +}
+> +
+>   asmlinkage void noinstr el1h_64_error_handler(struct pt_regs *regs)
+>   {
+>          unsigned long esr = read_sysreg(esr_el1);
+> @@ -713,7 +731,7 @@ static void noinstr
+> __el0_irq_handler_common(struct pt_regs *regs)
+> 
+>   asmlinkage void noinstr el0t_64_irq_handler(struct pt_regs *regs)
+>   {
+> -       __el0_irq_handler_common(regs);
+> +       call_on_irq_stack(regs, __el0_irq_handler_common);
+>   }
+> 
+>   static void noinstr __el0_fiq_handler_common(struct pt_regs *regs)
+> @@ -723,7 +741,7 @@ static void noinstr
+> __el0_fiq_handler_common(struct pt_regs *regs)
+> 
+>   asmlinkage void noinstr el0t_64_fiq_handler(struct pt_regs *regs)
+>   {
+> -       __el0_fiq_handler_common(regs);
+> +       call_on_irq_stack(regs, __el0_fiq_handler_common);
+>   }
+> 
+>   static void noinstr __el0_error_handler_common(struct pt_regs *regs)
+> @@ -807,12 +825,12 @@ asmlinkage void noinstr
+> el0t_32_sync_handler(struct pt_regs *regs)
+> 
+>   asmlinkage void noinstr el0t_32_irq_handler(struct pt_regs *regs)
+>   {
+> -       __el0_irq_handler_common(regs);
+> +       call_on_irq_stack(regs, __el0_irq_handler_common);
+>   }
+> 
+>   asmlinkage void noinstr el0t_32_fiq_handler(struct pt_regs *regs)
+>   {
+> -       __el0_fiq_handler_common(regs);
+> +       call_on_irq_stack(regs, __el0_fiq_handler_common);
+>   }
+> 
+>   asmlinkage void noinstr el0t_32_error_handler(struct pt_regs *regs)
+> 
+> Not sure if that works.
+> 
+>          Arnd
+
+-- 
+Thanks,
+Qi

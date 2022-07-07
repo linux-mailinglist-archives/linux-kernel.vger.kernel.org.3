@@ -2,211 +2,220 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 34E84569DA5
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 10:42:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D4276569DA9
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 10:43:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235122AbiGGImf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Jul 2022 04:42:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56850 "EHLO
+        id S235019AbiGGImw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Jul 2022 04:42:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56968 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229827AbiGGImd (ORCPT
+        with ESMTP id S229827AbiGGImu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Jul 2022 04:42:33 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F69C112E;
-        Thu,  7 Jul 2022 01:42:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1657183353; x=1688719353;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=0/fqLmI7qJTokHP14KeCe0rfUeYYD68w6VO7Am9TbdM=;
-  b=kEfdgN3mUme1UuZCqdLCzp3yqFtGBNRvPr26AvhcD7Mw0zX+K6g9KKxs
-   hAa1oLZzbXi5IGC0+MWf1lHTsni43BR/vSh0gIOLMddvjSNeUJIhsvf5c
-   zD7F3Jy/S14L+emQz6SMAYelPBaNOUI+JwQnF4+08J0/Hx3snrxc0NC7m
-   +oSNN2NBN/O8u4lkcYEdw11NtB4qfvQJnbS9/IuIA2JiXGMXP+eyTt4Gp
-   ms2LCcfghZc/h5h+BVoqJHJg5oW772o8H6Gc6K+LRP1Or9C0jlyo+B3sC
-   HRWGSS91MsLRYxaJ8KzBnviidkM7T8N7DBw9ereGy5yi3nO13SfbJcfCV
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10400"; a="281517753"
-X-IronPort-AV: E=Sophos;i="5.92,252,1650956400"; 
-   d="scan'208";a="281517753"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jul 2022 01:42:32 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,252,1650956400"; 
-   d="scan'208";a="597954229"
-Received: from orsmsx604.amr.corp.intel.com ([10.22.229.17])
-  by fmsmga007.fm.intel.com with ESMTP; 07 Jul 2022 01:42:31 -0700
-Received: from orsmsx611.amr.corp.intel.com (10.22.229.24) by
- ORSMSX604.amr.corp.intel.com (10.22.229.17) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.27; Thu, 7 Jul 2022 01:42:30 -0700
-Received: from orsmsx608.amr.corp.intel.com (10.22.229.21) by
- ORSMSX611.amr.corp.intel.com (10.22.229.24) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.27; Thu, 7 Jul 2022 01:42:30 -0700
-Received: from orsedg603.ED.cps.intel.com (10.7.248.4) by
- orsmsx608.amr.corp.intel.com (10.22.229.21) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.27 via Frontend Transport; Thu, 7 Jul 2022 01:42:30 -0700
-Received: from NAM11-DM6-obe.outbound.protection.outlook.com (104.47.57.173)
- by edgegateway.intel.com (134.134.137.100) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2308.27; Thu, 7 Jul 2022 01:42:29 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=MgjMFCjPAdnkzHplep5OJjIwcJVtsYuRh16mdBRwbczm9JadBwkmnWt1MSkpNkfNV7OpUdX38k4h9sFUpw859zlIycVcEimhm0MyRv9c70poM474E6AQLD7ZUOZccWZOst7ykNkf5TN5v0dRLlcXvFEMjDpthQWsVq1z7CWZg3dENbzT5SAMZcdVfOKXH/twXqOrraryOuuFEgc0n35sHkoLbfPnj9AlOqyDzzBwYBaGxLYPer2a16TL9lr8OlD+6br5zdFChVTeU6lzx3XPCmAa29kg++qqeu/nz5gUJ4Y/9EQ6BTZ3owGzDwqEO+Pp1Ga3E/qt+rCqw/PomlvJxQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=6FjMsp5Pcakqnbew0Z0H3HdHj3S2H7AgFuo/fxGr9gc=;
- b=iCjfmXPlObCsMcV8Nq11BkTNQX1a+dJrO0RkPHfbwx74aKrU4chpwjoYeDlbMEvmCWzf2KEb0IkFFuutBkONGv1HEQ2AXZvyLHG5aN9ZdjE3lmEKAOp0+cCczxpMKN1VLfdCXtvxn37ECvaKOWdiyw+tNlC08LtREaFcV4ARwoAQ1uSy01bA2ruM2tflBRQ21vC4t8E8/v1ZcL4C3YDJJ4WZo3b7Twqqy9lGlBuC1Bpj2ltIatnEZAZyrpWaX9iiExHopAWDgWaVw9Hxxl9bMZiL6P0laLM9hxHejUUo7GydXYFPnt7rAfIPe9CuJCULkCRbN3H5mGSJqxbPB2sa4Q==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Received: from BN9PR11MB5276.namprd11.prod.outlook.com (2603:10b6:408:135::18)
- by SN6PR11MB2654.namprd11.prod.outlook.com (2603:10b6:805:54::31) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5395.17; Thu, 7 Jul
- 2022 08:42:28 +0000
-Received: from BN9PR11MB5276.namprd11.prod.outlook.com
- ([fe80::8435:5a99:1e28:b38c]) by BN9PR11MB5276.namprd11.prod.outlook.com
- ([fe80::8435:5a99:1e28:b38c%2]) with mapi id 15.20.5395.021; Thu, 7 Jul 2022
- 08:42:28 +0000
-From:   "Tian, Kevin" <kevin.tian@intel.com>
-To:     Nicolin Chen <nicolinc@nvidia.com>,
-        "kwankhede@nvidia.com" <kwankhede@nvidia.com>,
-        "corbet@lwn.net" <corbet@lwn.net>,
-        "hca@linux.ibm.com" <hca@linux.ibm.com>,
-        "gor@linux.ibm.com" <gor@linux.ibm.com>,
-        "agordeev@linux.ibm.com" <agordeev@linux.ibm.com>,
-        "borntraeger@linux.ibm.com" <borntraeger@linux.ibm.com>,
-        "svens@linux.ibm.com" <svens@linux.ibm.com>,
-        "zhenyuw@linux.intel.com" <zhenyuw@linux.intel.com>,
-        "Wang, Zhi A" <zhi.a.wang@intel.com>,
-        "jani.nikula@linux.intel.com" <jani.nikula@linux.intel.com>,
-        "joonas.lahtinen@linux.intel.com" <joonas.lahtinen@linux.intel.com>,
-        "Vivi, Rodrigo" <rodrigo.vivi@intel.com>,
-        "tvrtko.ursulin@linux.intel.com" <tvrtko.ursulin@linux.intel.com>,
-        "airlied@linux.ie" <airlied@linux.ie>,
-        "daniel@ffwll.ch" <daniel@ffwll.ch>,
-        "farman@linux.ibm.com" <farman@linux.ibm.com>,
-        "mjrosato@linux.ibm.com" <mjrosato@linux.ibm.com>,
-        "pasic@linux.ibm.com" <pasic@linux.ibm.com>,
-        "vneethv@linux.ibm.com" <vneethv@linux.ibm.com>,
-        "oberpar@linux.ibm.com" <oberpar@linux.ibm.com>,
-        "freude@linux.ibm.com" <freude@linux.ibm.com>,
-        "akrowiak@linux.ibm.com" <akrowiak@linux.ibm.com>,
-        "jjherne@linux.ibm.com" <jjherne@linux.ibm.com>,
-        "alex.williamson@redhat.com" <alex.williamson@redhat.com>,
-        "cohuck@redhat.com" <cohuck@redhat.com>,
-        "jgg@nvidia.com" <jgg@nvidia.com>,
-        "hch@infradead.org" <hch@infradead.org>
-CC:     "jchrist@linux.ibm.com" <jchrist@linux.ibm.com>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-s390@vger.kernel.org" <linux-s390@vger.kernel.org>,
-        "intel-gvt-dev@lists.freedesktop.org" 
-        <intel-gvt-dev@lists.freedesktop.org>,
-        "intel-gfx@lists.freedesktop.org" <intel-gfx@lists.freedesktop.org>,
-        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>
-Subject: RE: [RFT][PATCH v2 1/9] vfio: Make vfio_unpin_pages() return void
-Thread-Topic: [RFT][PATCH v2 1/9] vfio: Make vfio_unpin_pages() return void
-Thread-Index: AQHYkQGZdvHyN+uRrkKQFdPKxVWBWq1ylc3w
-Date:   Thu, 7 Jul 2022 08:42:28 +0000
-Message-ID: <BN9PR11MB527643D01DFF0AFCED1614488C839@BN9PR11MB5276.namprd11.prod.outlook.com>
-References: <20220706062759.24946-1-nicolinc@nvidia.com>
- <20220706062759.24946-2-nicolinc@nvidia.com>
-In-Reply-To: <20220706062759.24946-2-nicolinc@nvidia.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-dlp-version: 11.6.500.17
-dlp-product: dlpe-windows
-dlp-reaction: no-action
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: b9ffb10b-cfbb-46d7-e396-08da5ff49fd8
-x-ms-traffictypediagnostic: SN6PR11MB2654:EE_
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: 9msCuaf3DB+OEHMxJ4IGBDWpW3UUrMR1Q4VitYy8YHf6BK48bKBv8XHGCVJfDNMtgJvMEd6q0tgORX/JhrAq6FKP05ASymiIYZxzApraldXy7koJNbBXPQZlT1jz2DFv7/fbvUDXPZmJYu1N6l1XgQ7oo1J701SqF9J/3XKcjv1PQN884WBDxSgB+2HNU37FTjx2wLAMTUPkPShZvfuF2gTld3D5p1USvZHwKcbqycoAR79oIJo3+AjH/EcJptJ6Z6bcQ+ylSGJzyobvz75J9SXHDAmUh/UNpMobSlwx1TTLCItFcPwkn05wL0FA0p3FRQzRiFY9rq8vGN/qJB/cXnGtl8iXERxCTmyxkQyMZ8S/Id8n5YEjeuiYwwiwkqSU3e+VEFeC28CP0BshFF+NmSaiXLfVtWeurZRVs50Qqmjo91J9RjGU+KvcuN7rjZDpVRdeZU17oWkQqWoQiYQ2Pa0J8rY9FumAjdbC3sItcNScRJXHSG+1OQFHQE/QiEgBOpodrkCDOS4PkgZIKaVYvqOkstLcT5b3SfY9W00VWLGTaPhdtl95zOQzAOz7zsHCCfoh+wgE93AwFQH2lmtgzHc9+RoF6AMmh85lMkkzPF35vNz09kTaNfJ5FbozFyY6M1XObOGbwAKcjD9J/bzhYmbnA8lACBIaxSRDXnc7Pex2M97WhScEx4QpFns6cE/OZuSdj2qEj54MNbusZef6MP/5aXHS67Gc+9FK8GhePia/ltXLOfShEDJtrvHZs8yTenWlIudlNXcRYkE65DlspncwjqZ54ghONlScqqRLnlPjFzGhD2HFKAdvClFZ7tcNTpvkWQDJdxTpG9ed1h6e2A==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN9PR11MB5276.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(346002)(396003)(376002)(39860400002)(366004)(136003)(9686003)(6506007)(82960400001)(26005)(478600001)(7696005)(71200400001)(186003)(38070700005)(38100700002)(33656002)(122000001)(55016003)(2906002)(8676002)(76116006)(66446008)(54906003)(921005)(52536014)(86362001)(8936002)(7416002)(5660300002)(41300700001)(316002)(110136005)(4326008)(66946007)(4744005)(66556008)(66476007)(64756008)(7406005);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?ifi9pI2UPNeDVW2a5CRmSvnQFTtss3PdaL80N/CqSRW/9+WR8cMlL5mJPwWp?=
- =?us-ascii?Q?vtAuZ/6DHIGsppZSinZizQttf9k5yDrx6FcNw9cUxp2ouJjmnUKp65QcVBFg?=
- =?us-ascii?Q?OZOg8J5f9MTode8oQnEAnTyUNeGIo64fesz9cxh+EbVlfXdnsy/1CaPvipRs?=
- =?us-ascii?Q?sX1Yq3gpVKylCfGf7USTcibyXhrFQkkh8/moncCJieFW4K1NFkr68tav8DRW?=
- =?us-ascii?Q?Pat8z+E3GFEu3OQoQEfMGGG/rR619EuBBK8UV31MLuLM6ouETvmfJ6D388WS?=
- =?us-ascii?Q?1SqDuq99ov1fhayvXsqyehv62zcDGwjENP7YGj1bRVLiEn99pXI+gs3cIIW5?=
- =?us-ascii?Q?ruecI4/28TjKsK75seTXEZw+2/XLgbMuqqVe7LI6icED/F5HhJJMdb6Za1aO?=
- =?us-ascii?Q?77DKYtXHTaOxR5mdZ3Izv9cWyD3MW9nTWIiOm0fN7yEg8hvsq2blJ2xcvSmI?=
- =?us-ascii?Q?IkhEB4thZ0OukSQAaWD1JaN1SusR8fAOaMG4gZkhRm3kcyUpBpliMBwN6vmk?=
- =?us-ascii?Q?qArjFQBgtRvJwUdWvIHPLP+MImqS7PXkqNTsX5b+iCgeyZGHm8KbDQxQ/Nn2?=
- =?us-ascii?Q?CsVjTuBk1X4N8k9MMJhqwMWnVCCf+SeTl8up2RzDh/Tkx9/UNtqYVvGcNEg0?=
- =?us-ascii?Q?dak1U6oBIKTMRDFOY3BI2qt9WQme0e/zff64/b9TpHqid8jLccnRJzszXpvR?=
- =?us-ascii?Q?LotZz8VOP4I2MCBZ/m0ljbu9gbCgAVK4hm8TwJcUaLTCfa1zFbAiS/LxwJAf?=
- =?us-ascii?Q?JSNJk3LhI4ZdLJ/2oV/GjI1/h6IHas1mlB9NDBpI3EhqKsav2M0bflP1q58f?=
- =?us-ascii?Q?L8rioKt+rdy0xpagAQcl5BZLukotUjg81nKCiWafYg5ENUZhsvNROmWY1JkF?=
- =?us-ascii?Q?mOkmpGDqUZFQzEQwG/A/JMGyvJU75QnzytVqNimH3ga0YwRMBCP77VxshnMd?=
- =?us-ascii?Q?J6WSnpQr53VuX0jmnd3GR2VylfPVyxzZhisBiJavzVpLuYDXqUVoEY20rjkl?=
- =?us-ascii?Q?Gyh3hni0Ej2q/Ng4Y8WEZ5gPTlZKC9PSQX08gv3FqZv3Ece4f8z+DqAyPejE?=
- =?us-ascii?Q?1XJz/HJeMR//Q8AGRWFtLLMu04ceSt5uEL6+/Gcem1KzsGWZUvDIMkmCByws?=
- =?us-ascii?Q?kv/fzUwqm7H51ui4j4mXjzIpglqgry3FFX5VE3S69FeiDe+Kpya7PdE1pNnW?=
- =?us-ascii?Q?pdilU5MpHPv0yMijEAnsFQkC251HFEq5gDOVTf93nBeF9HLoETKTDwI6FcNs?=
- =?us-ascii?Q?gdu7+RAjhExlQUg5glAFYLOiPo1sLRaIKrzCxBdQtfwK1xrjXlukq3or4dK4?=
- =?us-ascii?Q?K0lZt8UzmnOhOpUVX8A022tcva7jW09fzjoOqM3AtZRN3G3jIf/itXSEN0/f?=
- =?us-ascii?Q?04D/f8oCpQcJET3fKBoBAjs3Do57nyepTFn5iXQj2rb9AzHu6dbAB8TEDCeZ?=
- =?us-ascii?Q?NIoA5drWi327m/bJf5Fwvj1HSsPo8VrKjH05BdtpeCGSxrTiGiQx8adFOg/4?=
- =?us-ascii?Q?OercA1I+xICib35M5YXoPfkOETpysLJZGHMhbLuadxz5uLT5YcYDCVMDAaI3?=
- =?us-ascii?Q?bOdHJUJbnQz66CqZakUnZ7xV7kWPwpYF+feI6+w5?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        Thu, 7 Jul 2022 04:42:50 -0400
+Received: from gw2.atmark-techno.com (gw2.atmark-techno.com [35.74.137.57])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id BDE03B9E
+        for <linux-kernel@vger.kernel.org>; Thu,  7 Jul 2022 01:42:48 -0700 (PDT)
+Received: from mail-pf1-f199.google.com (mail-pf1-f199.google.com [209.85.210.199])
+        by gw2.atmark-techno.com (Postfix) with ESMTPS id 26A8920CF3
+        for <linux-kernel@vger.kernel.org>; Thu,  7 Jul 2022 17:42:48 +0900 (JST)
+Received: by mail-pf1-f199.google.com with SMTP id y14-20020a056a00180e00b00528499fc57cso5253748pfa.22
+        for <linux-kernel@vger.kernel.org>; Thu, 07 Jul 2022 01:42:48 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=3KNJ0jvCuSTCRCLb61BgOL0HuOp/dDIh3Ds4jE5/Wd8=;
+        b=SDizdr5lGeJicfzgfQCoDJt7Fm7sQ0YkP5Ooeg3pUZGfLaWU2lIH5CzzbFpuxSXaE4
+         1vPGLi63PM8eCws3SQTJk5nGaa3WKKTPSqW6vaZ269WImf+J1iXjIVlXRFbhFQWLWsNR
+         aZaNMhYdoq2Qgecjm3Y3nYZIgAFi1g+QCsdTljY/Xfmobj9brdRYjzxSl4R6NXEav68H
+         iX5NVeE9nQ4PCIQqa1IAwioItCDVswk0kxrq3BhHUy0TVJXr42VJilTD5Vu+7Iv1iLX4
+         RvuGBwSg8xbgvm7svoTd8pLCki/aYgoYMoN418nGmZD+c1SH3P456gTsJbVs8DKmw9RS
+         ayrg==
+X-Gm-Message-State: AJIora9UsWTM9ED25gktflUZMvg30fxW6mE1AJWgWkgLV0/tlS9hiMsh
+        eoS4PAvsq0rOiM/SOkrKqkrbamuz2znygU+UCHL8h4DE7UkuVT+nPyCRkfiqFbfuCaBy1+ktfP3
+        p/9FBi37jMnJUROREX3iWPo0HSA==
+X-Received: by 2002:a17:902:ce8b:b0:16c:66d:c455 with SMTP id f11-20020a170902ce8b00b0016c066dc455mr6226715plg.41.1657183367150;
+        Thu, 07 Jul 2022 01:42:47 -0700 (PDT)
+X-Google-Smtp-Source: AGRyM1sl6xaortDRQF+TsW10UlLhtxNJzNhgEA9NhVfM/GsCZojFjHwA/fsAEiLsvbH+YtNDguJMYA==
+X-Received: by 2002:a17:902:ce8b:b0:16c:66d:c455 with SMTP id f11-20020a170902ce8b00b0016c066dc455mr6226682plg.41.1657183366698;
+        Thu, 07 Jul 2022 01:42:46 -0700 (PDT)
+Received: from pc-zest.atmarktech (103.131.189.35.bc.googleusercontent.com. [35.189.131.103])
+        by smtp.gmail.com with ESMTPSA id n7-20020a170903110700b0016bfa097927sm4308856plh.249.2022.07.07.01.42.46
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Thu, 07 Jul 2022 01:42:46 -0700 (PDT)
+Received: from martinet by pc-zest.atmarktech with local (Exim 4.95)
+        (envelope-from <martinet@pc-zest>)
+        id 1o9N5x-009Ogn-2d;
+        Thu, 07 Jul 2022 17:42:45 +0900
+Date:   Thu, 7 Jul 2022 17:42:35 +0900
+From:   Dominique MARTINET <dominique.martinet@atmark-techno.com>
+To:     Yu Kuai <yukuai3@huawei.com>
+Cc:     "Matthew Wilcox (Oracle)" <willy@infradead.org>,
+        linux-btrfs@vger.kernel.org, linux-mm@kvack.org,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Kent Overstreet <kent.overstreet@gmail.com>,
+        Chris Mason <clm@fb.com>, Josef Bacik <josef@toxicpanda.com>,
+        David Sterba <dsterba@suse.com>
+Subject: Re: Major btrfs fiemap slowdown on file with many extents once in
+ cache (RCU stalls?) (Was: [PATCH 1/3] filemap: Correct the conditions for
+ marking a folio as accessed)
+Message-ID: <Ysace25wh5BbLd5f@atmark-techno.com>
+References: <20220619151143.1054746-1-willy@infradead.org>
+ <20220619151143.1054746-2-willy@infradead.org>
+ <Yr1QwVW+sHWlAqKj@atmark-techno.com>
+ <8cffd985-ba62-c4be-f9af-bb8314df8a67@huawei.com>
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: BN9PR11MB5276.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: b9ffb10b-cfbb-46d7-e396-08da5ff49fd8
-X-MS-Exchange-CrossTenant-originalarrivaltime: 07 Jul 2022 08:42:28.4328
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: QNgmliOFzpcd2fL/IpMuPCEs3ph5n3ns3ECRYbGFeWgs/9gvpD026Da0K64Fiz+MF9RP8qXLfrynUSUSXrELWw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN6PR11MB2654
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <8cffd985-ba62-c4be-f9af-bb8314df8a67@huawei.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> From: Nicolin Chen <nicolinc@nvidia.com>
-> Sent: Wednesday, July 6, 2022 2:28 PM
->=20
-> There's only one caller that checks its return value with a WARN_ON_ONCE,
-> while all other callers do not check return value at all. So simplify the
-> API to return void by embedding similar WARN_ON_ONCEs.
+(added btrfs maintainers in direct cc)
 
-While this change keeps the similar effect as before it leads to different
-policy for same type of errors between pin and unpin paths:
+Yu Kuai wrote on Fri, Jul 01, 2022 at 09:55:31AM +0800:
+> With this patch ctive_page() will be called the second time that page is
+> mark accessed, which has some extra overhead, however, 2GB/s -> 100MB/s
+> is insane, I'm not sure how this is possible, but it seems like it has
+> something to do with this change.(Noted that it's problematic that page
+> will not mark accessed before this patch).
 
-e.g.
+I honestly don't understand why folio being marked as accessed affects
+how fiemap is processed...
+My guess would be that this indeed "just fixes" that pages didn't get
+marked as accessed -> were dropped from cache -> it kept the inode
+io_tree small -> fiemap was fast ; and it really just a problem that the
+fiemap algorithm doesn't scale, but I haven't really checked if I'm
+right here.
 
-vfio_unpin_pages():
-	if (WARN_ON_ONCE(!user_pfn || !npage || !vfio_assert_device_open(device)))
-		return;
 
-vfio_pin_pages():
-	if (!user_pfn || !phys_pfn || !npage ||
-	    !vfio_assert_device_open(device))
-		return -EINVAL;
+So I don't think we should focus so much on the regression part as to
+figure out what's actually different the second time around and make
+that faster.
 
-It sounds a bit weird when reading related code...
+
+checking with 'perf script' btrfs_get_extent_fiemap() spends most of its
+time on this:
+ delalloc_len = count_range_bits(&inode->io_tree, &delalloc_start,
+                                 end, len, EXTENT_DELALLOC, 1);
+
+I have no idea what delalloc is supposed to be, but I can guess there is
+just way too many nodes in the io_tree: why is that and why wasn't there
+so many the first time around? I would assumed that as the file gets
+read it is put into cache, so the end of the first read should slow down
+as well but it didn't, so I'm sure I misunderstood something and I'm
+wasting everyone's time. Feel free to ignore me and find the issue
+instead :)
+
+
+> BTW, during my test, the speed of buffer read in ext4 only fell down a
+> little.
+
+For "normal" files that don't have ~200k extents full of holes and
+compression changes and whatever else this has gone through, I can
+confirm the slowdown is not as bad -- almost unnoticeable when few
+extents.
+but I still have my laptop cashing when I'm copying this file twice
+(well, I -could- just turn off panic_on_stall...) so it can go from a
+little to infinity...
+
+
+Thanks,
+
+(Leaving rest of the message for anyone catching up now; if there's
+anything you'd like me to do feel free to ask.)
+
+> > I've taken a moment to bisect this and came down to this patch.
+> > (5ccc944dce3d ("filemap: Correct the conditions for marking a folio
+> > as accessed"))
+> > 
+> > [1] https://lore.kernel.org/all/YrrFGO4A1jS0GI0G@atmark-techno.com/T/#u
+> > 
+> > 
+> > 
+> > Dropping caches (echo 3 > /proc/sys/vm/drop_caches) restore the speed,
+> > so there appears to be some bad effect to having the file in cache for
+> > fiemap?
+> > To be fair that file is pretty horrible:
+> > ---
+> > # compsize bigfile
+> > Processed 1 file, 194955 regular extents (199583 refs), 0 inline.
+> > Type       Perc     Disk Usage   Uncompressed Referenced
+> > TOTAL       15%      3.7G          23G          23G
+> > none       100%      477M         477M         514M
+> > zstd        14%      3.2G          23G          23G
+> > ---
+> > 
+> > Here's what perf has to say about it on top of this patch when running
+> > `cp bigfile /dev/null` the first time:
+> > 
+> > 98.97%     0.00%  cp       [kernel.kallsyms]    [k]
+> > entry_SYSCALL_64_after_hwframe
+> >   entry_SYSCALL_64_after_hwframe
+> >   do_syscall_64
+> >    - 93.40% ksys_read
+> >       - 93.36% vfs_read
+> >          - 93.25% new_sync_read
+> >             - 93.20% filemap_read
+> >                - 83.38% filemap_get_pages
+> >                   - 82.76% page_cache_ra_unbounded
+> >                      + 59.72% folio_alloc
+> >                      + 13.43% read_pages
+> >                      + 8.75% filemap_add_folio
+> >                        0.64% xa_load
+> >                     0.52% filemap_get_read_batch
+> >                + 8.75% copy_page_to_iter
+> >    - 4.73% __x64_sys_ioctl
+> >       - 4.72% do_vfs_ioctl
+> >          - btrfs_fiemap
+> >             - 4.70% extent_fiemap
+> >                + 3.95% btrfs_check_shared
+> >                + 0.70% get_extent_skip_holes
+> > 
+> > and second time:
+> > 99.90%     0.00%  cp       [kernel.kallsyms]    [k]
+> > entry_SYSCALL_64_after_hwfram
+> >   entry_SYSCALL_64_after_hwframe
+> >   do_syscall_64
+> >    - 94.62% __x64_sys_ioctl
+> >         do_vfs_ioctl
+> >         btrfs_fiemap
+> >       - extent_fiemap
+> >          - 50.01% get_extent_skip_holes
+> >             - 50.00% btrfs_get_extent_fiemap
+> >                - 49.97% count_range_bits
+> >                     rb_next
+> >          + 28.72% lock_extent_bits
+> >          + 15.55% __clear_extent_bit
+> >    - 5.21% ksys_read
+> >       + 5.21% vfs_read
+> > 
+> > (if this isn't readable, 95% of the time is spent on fiemap the second
+> > time around)
+> > 
+> > 
+> > 
+> > 
+> > I've also been observing RCU stalls on my laptop with the same workload
+> > (cp to /dev/null), but unfortunately I could not reproduce in qemu so I
+> > could not take traces to confirm they are caused by the same commit but
+> > given the workload I'd say that is it?
+> > I can rebuild a kernel for my laptop and confirm if you think it should
+> > be something else.
+> > 
+> > 
+> > I didn't look at the patch itself (yet) so have no suggestion at this
+> > point - it's plausible the patch fixed something and just exposed slow
+> > code that had been there all along so it might be better to look at the
+> > btrfs side first, I don't know.
+> > If you don't manage to reproduce I'll be happy to test anything thrown
+> > at me at the very least.
+
+-- 
+Dominique

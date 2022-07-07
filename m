@@ -2,70 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D274256AB81
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 21:06:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0DE4256AB8B
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 21:11:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236602AbiGGTGd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Jul 2022 15:06:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58092 "EHLO
+        id S236413AbiGGTKc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Jul 2022 15:10:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60388 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233757AbiGGTGa (ORCPT
+        with ESMTP id S235829AbiGGTKa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Jul 2022 15:06:30 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2198157230;
-        Thu,  7 Jul 2022 12:06:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=05SlPgOjw8Ge7G3S7ysnQzpGsSQeCNpy+r8rpobhENo=; b=Vbk/7NvhWFnJ0xBPYy409PU2F8
-        kH3S9RPlLO4ChI+L3vk7Awx/gNAS8+F2row0fMBq+SKGAuDiu2wy62hQlZWqyNgGPUW+72uzuFdPU
-        GXlGo2d+FU8Ot9NIKmZLzmW6vc3MpiNUYehYjIzf0mkLtJoxyjcLI+Roj6gzQrQP71ELtAJpa7DJG
-        j6VOZpP+WyZxGY403J/cpIJ0nCXlcYxJJXqgp4RqxM0oBBl/mMJR3Walhj34C1/qOyxtoZQ2CVctp
-        5xgRVQmJiNiFCjEBn0kP/OUKZIYlNJIf+EXxWjYqpubrKnKAcqykBp9oF4TJbgJN+XQzlkVz5fUK9
-        X+nOKZLQ==;
-Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1o9WpQ-002qNW-3O; Thu, 07 Jul 2022 19:06:20 +0000
-Date:   Thu, 7 Jul 2022 20:06:20 +0100
-From:   Matthew Wilcox <willy@infradead.org>
-To:     Al Viro <viro@zeniv.linux.org.uk>
-Cc:     Alexander Gordeev <agordeev@linux.ibm.com>,
-        Alexander Egorenkov <egorenar@linux.ibm.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>, Baoquan He <bhe@redhat.com>,
-        Christoph Hellwig <hch@lst.de>, linux-kernel@vger.kernel.org,
-        linux-s390@vger.kernel.org
-Subject: Re: [PATCH v2 1/1] s390/crash: allow multi-segment iterators
-Message-ID: <YscurHynz2jO1qoe@casper.infradead.org>
-References: <cover.1657172539.git.agordeev@linux.ibm.com>
- <613f63d652bb4fa6fb3d2bb38762de6bb066b35a.1657172539.git.agordeev@linux.ibm.com>
- <YsbXfh3e2rDEKSNw@casper.infradead.org>
- <YsbgQLNXbHH30phb@ZenIV>
+        Thu, 7 Jul 2022 15:10:30 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5DBA21E3C;
+        Thu,  7 Jul 2022 12:10:29 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 2FC2DB8229A;
+        Thu,  7 Jul 2022 19:10:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id A55FAC341C6;
+        Thu,  7 Jul 2022 19:10:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1657221026;
+        bh=AXT0QwQ+C3Ok4Ijv8ZPM1RMtVPUftjLd3GsN/eSVPGM=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=EKtH+VFPEOY3Vwu/DF+FYCAQRQFQ/OCJp+wWqycN71qmRBNQSz4pEzdRyj7VOhOsZ
+         qXt7ZiEudFwYlBVvC0ZFWICRhWZ/RGcUNwh/kiwm3ry9w8DvUREwMubdvguoxuwFmp
+         Bpr+Ylgwuytc4vewATgfX3U71lmTGJTjszvvfU/dMrMGsA42NkPnE7vEsuBcrcENxB
+         cAPytpUFYPH9mj3etkTw7y5m5wYWaip6lR1ffKr314ZGmMxWDmyRl7HUd5nQsAK6de
+         OER8AIuUiXUPGjBqwQ49N1iG+ow0uXHjAg2xBdXzRrGyLJxG4eVnGifpovvjphsvHr
+         1nZtn4wZ+goDA==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 89C26E45BD9;
+        Thu,  7 Jul 2022 19:10:26 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YsbgQLNXbHH30phb@ZenIV>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+Subject: Re: [GIT PULL] Networking for 5.19-rc6
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <165722102655.25210.83575038336801209.git-patchwork-notify@kernel.org>
+Date:   Thu, 07 Jul 2022 19:10:26 +0000
+References: <20220707102125.212793-1-pabeni@redhat.com>
+In-Reply-To: <20220707102125.212793-1-pabeni@redhat.com>
+To:     Paolo Abeni <pabeni@redhat.com>
+Cc:     torvalds@linux-foundation.org, kuba@kernel.org,
+        davem@davemloft.net, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jul 07, 2022 at 02:31:44PM +0100, Al Viro wrote:
-> > @@ -73,10 +73,9 @@ int memcpy_hsa_user(void __user *dest, unsigned long src, size_t count)
-> >  		}
-> >  		offset = src % PAGE_SIZE;
-> >  		bytes = min(PAGE_SIZE - offset, count);
-> > -		if (copy_to_user(dest, hsa_buf + offset, bytes))
-> > +		if (copy_to_iter(hsa_buf + offset, bytes, iter) != bytes)
-> >  			return -EFAULT;
-> 
-> Umm...  Then you want iov_iter_revert() on short copy...
+Hello:
 
-... maybe better to change the calling convention to return the short
-write and have the caller do it if they care?
+This pull request was applied to netdev/net.git (master)
+by Linus Torvalds <torvalds@linux-foundation.org>:
+
+On Thu,  7 Jul 2022 12:21:25 +0200 you wrote:
+> Hi Linus!
+> 
+> No known regressions on our radar at this point.
+> 
+> The following changes since commit 5e8379351dbde61ea383e514f0f9ecb2c047cf4e:
+> 
+>   Merge tag 'net-5.19-rc5' of git://git.kernel.org/pub/scm/linux/kernel/git/netdev/net (2022-06-30 15:26:55 -0700)
+> 
+> [...]
+
+Here is the summary with links:
+  - [GIT,PULL] Networking for 5.19-rc6
+    https://git.kernel.org/netdev/net/c/ef4ab3ba4e4f
+
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+

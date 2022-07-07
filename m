@@ -2,194 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 49E4D56A0D3
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 13:06:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3FEB956A0EE
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 13:13:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235177AbiGGLFs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Jul 2022 07:05:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53950 "EHLO
+        id S235249AbiGGLMy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Jul 2022 07:12:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59026 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234799AbiGGLFq (ORCPT
+        with ESMTP id S234746AbiGGLMw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Jul 2022 07:05:46 -0400
-Received: from NAM02-DM3-obe.outbound.protection.outlook.com (mail-dm3nam02on2081.outbound.protection.outlook.com [40.107.95.81])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3C302F00D;
-        Thu,  7 Jul 2022 04:05:43 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=N1QljE4omX0XtOaxAfuysZL+Qex3KGF4we8nyo+CG0qCWWiQtttv9/qluQfVqSqLFRypT66mm63+/odS3og0PS4Uf1jEXjTyzp9hWmabmrFSQCUtfd3/KpQ1VlVfm8CnbQZLDH/2f4vVvwlSbVCbBzN9pD59Q8S3sa3DNyxJFJ/TScPYtVdDDIRXli3ndE2JsvbC2cgqLO4YY43vpEy3yqRRldnz+3+AYcmi+LX90UUmxCCzMV+ZuLmdkFAXBy2l5Ub8ofeDpwZrTc/7HpO8QxhqmRfcL26bg/3BM/ndby6k+r7K95cpqTwZDKctMS3hSaLzTYYCn0OusyGdlh3T7Q==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=PbzbYv+UQ4JimLklG4oSJhYcx9qfN4NHWLX602YejpA=;
- b=DuZxXhw8GnORgsXXHRNNxsFhYDu4EVFtk9ZCrYaeRrXt8973LMOuGMsyUCn4T9dISYT2HopB5nqL7tp28tBpXwcEZHwWE8eyG9E4rhlooeSjTilAx5BHbzyTJQkKGfJMixtvFArrI+12hgsxnK8e45VuwtbSaI/2mxFqzvY9TIHuhSNuOwk3xRkdLq7mOHOAxaB/7ImrFdNzfwVy7J4vUfbRtMrr5YYWr7SCTkUElG+WBxJEcxf78MeSMLTYlyEJREMbYcJStPXOap5yzL1/xfiCrn9ZYikY5FAc9gOirn3M2AoLdwb9YK2m/JvNFBFdOcBouYiXHW2m+Blleb9Saw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=PbzbYv+UQ4JimLklG4oSJhYcx9qfN4NHWLX602YejpA=;
- b=oNDxo/o+8w8jFOd3ABAR44ez3ZbFXcs7v+TZan0a7b1G01hbg3JDog+vtWD/PZgM5rcqO9ZlBNkAFv6LfRr93r33OOF1gFlzL1SLKUPL4O4bnNpDGSPudM1YbUXqdoN9KlPZUh1NC6qT5EMzcVEibW7IT7DmHfQ3THja55m0yEE=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from DM6PR12MB4123.namprd12.prod.outlook.com (2603:10b6:5:21f::23)
- by DM6PR12MB3753.namprd12.prod.outlook.com (2603:10b6:5:1c7::18) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5395.20; Thu, 7 Jul
- 2022 11:05:41 +0000
-Received: from DM6PR12MB4123.namprd12.prod.outlook.com
- ([fe80::6d50:f6c5:cea4:1d95]) by DM6PR12MB4123.namprd12.prod.outlook.com
- ([fe80::6d50:f6c5:cea4:1d95%6]) with mapi id 15.20.5395.021; Thu, 7 Jul 2022
- 11:05:41 +0000
-Message-ID: <872891aa-11ea-ed60-5090-940e8e7e4458@amd.com>
-Date:   Thu, 7 Jul 2022 16:38:04 +0530
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: linux-next: build failure after merge of the sound-asoc tree
-Content-Language: en-US
-To:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Mark Brown <broonie@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-References: <20220707200428.3eb1a20e@canb.auug.org.au>
-From:   "Mukunda,Vijendar" <vijendar.mukunda@amd.com>
-In-Reply-To: <20220707200428.3eb1a20e@canb.auug.org.au>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: PN2PR01CA0194.INDPRD01.PROD.OUTLOOK.COM
- (2603:1096:c01:e8::19) To DM6PR12MB4123.namprd12.prod.outlook.com
- (2603:10b6:5:21f::23)
+        Thu, 7 Jul 2022 07:12:52 -0400
+Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8C0AD32EDF;
+        Thu,  7 Jul 2022 04:12:50 -0700 (PDT)
+Received: from [10.180.13.185] (unknown [10.180.13.185])
+        by mail.loongson.cn (Coremail) with SMTP id AQAAf9AxaeCxv8ZiOf0OAA--.37662S3;
+        Thu, 07 Jul 2022 19:12:49 +0800 (CST)
+Subject: Re: [PATCH] MIPS: fix pmd_mkinvalid
+To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <1657181495-33004-1-git-send-email-zhanghongchen@loongson.cn>
+ <20220707092206.GA9894@alpha.franken.de>
+From:   Hongchen Zhang <zhanghongchen@loongson.cn>
+Message-ID: <bfb97f6b-7a39-8253-bc14-08f2f54ed312@loongson.cn>
+Date:   Thu, 7 Jul 2022 19:12:49 +0800
+User-Agent: Mozilla/5.0 (X11; Linux loongarch64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 96fa8455-6877-4ec0-180a-08da6008a19c
-X-MS-TrafficTypeDiagnostic: DM6PR12MB3753:EE_
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: dBRK2ugqaM9wp5rzBgnD61Qhlk1kwHr5DqHsZDGNkwqYSQMWj0XyQdqQjGHLYGU1aghEVkVwQ7UlEgG5Q2cuWHSK9J9Bsa1gN8nUI1cSbhTyLSIfJELf9Ek/FCv95Ylv748OEz4h7wOqv6wqUjQcwIqzLImdQxfVbxNiH/mrIq+JzOcWluWgYtp+G62Sa5VDG6v3rEh51/CyPO3lywAsTtcK1xM5gGO6liePJ5wlYLPHso11mSu3QiqZ2U7aFKDLpuIlLp+tQuyVocyKBjWKxvlncVs3ryn6Ts2pQscrPWeLApcL3B59TRxzByy7VsGDpHlPnRw40QEihkJOEb4KewB/Id4R4uujxRmcRHVXdrmzBipe6eqjNDVZtdO5OcmY5vRNNQwTPeqnm/XdUrLwDbYg6pqGplrFLEzeVKCJDcf17VeUTb97l2pZgCTlj+mszJ5AnNnA0OlFePlrgbjpQ/PomrP8ISrrW9Ic4y4sNvpESyYVqiUToL/Xqs5vgVXOe0lSn3R7k+zrA0G9i99Q4JLuPqIz131EXDH+VDX3vEihQTdMNjlixnJQxmROA/kSvCsxPNdurNm2Ilgm8CFt5A7ec146lsNjZ+I0eH220FCfdkiy5uL9pJG2hHvrYTMOZvATwT2KBqmF/dPNy0nQiWvSazCmWdrBQc2dDWcI6oMXm6+tSrPW0Q6P5YoRDjG1X4SifP97GP1Gnjka2p3DLK0PF0toC89u3k1/UvU054jS+c9xCIDM3HDOVyPdEYanK7Cr8B3mvAmsagvov2GaygWqtv0V40YGphQlKaXIfU7qVy62ZKKVHRxk6AEdXqKD5XFPcyZOBRtYxnCqLhFw+GbYGKUIfxZpDRJe53JmhgNJ4XUoIU3isz/U68Mbx1rU
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR12MB4123.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(39860400002)(396003)(376002)(346002)(366004)(136003)(5660300002)(26005)(53546011)(8676002)(41300700001)(31696002)(6666004)(6512007)(83380400001)(8936002)(54906003)(66946007)(86362001)(316002)(6506007)(110136005)(966005)(6486002)(4326008)(66556008)(66476007)(186003)(38100700002)(36756003)(478600001)(2906002)(2616005)(31686004)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?cTZaVmVyRmREdG9XRGlGd2RPNC9PUEZWTjFiaFVJQ0I5akphMlRDbm5ONG85?=
- =?utf-8?B?NzhYTkgwMTNtRFdiSEtlQ1dTMkUrallMQlFIenlWNGxsRWpXeXFGSGlmWGFV?=
- =?utf-8?B?VUQ1WC9nSkVsT1dDVDE3MktXSmc3cUtsM2tvZWcrN2c0S1Ayc1RBNnhwZVIx?=
- =?utf-8?B?am1yYjJERVdHRUtQNjN4eWVNZ2RjQzAwZkh5dDMwZWRjYXN5TzhxQ3RqQm9R?=
- =?utf-8?B?Uk51am9pSklIeG1LTG5oUzluZmVkdDhHdTIzRjV3aE9wZjhQR0ZDdlJEb2w5?=
- =?utf-8?B?b3FQU1I4OCtXZlRkM0N0TThNT1RVVjJGNEFZaC9BUnVMbVR1cDBHRUhVb3RR?=
- =?utf-8?B?NnRmMTJoVE9qd2RoSFY4NVFxcnh2TjNrbXFqRjZvOEpEWTVMR1ZFaHNUT09m?=
- =?utf-8?B?STNrM2JMNU5DUlUxS0JPVEdxZzdMWHExdHlleDgzWW8zR3BPN1k4SDFoTHZz?=
- =?utf-8?B?b3pZRTQraEw5RnNaNmRxd3ZQVlZJT1NUZWZQNDQ4S0h2MnJ2TmhMVTJBY29I?=
- =?utf-8?B?RUdVOG5lR2pPTTM1T1pPQ0o0K1hqaEpYQi9wRFRTYVdqYlJoenFlajhOWktG?=
- =?utf-8?B?T093dWJza2ZMakQ4WldLdzNkd3BxdHZpOXg5ak9BQVZDU1Vvc3BCSG9oSUtT?=
- =?utf-8?B?UVIrV1hLTVNjMmRvTm4raGZiV01RRFJSeFZzc1hmclM4NUxlTDhZS0tsN29s?=
- =?utf-8?B?VGNrQ2VBbFdRK2dmMllyVUVjeWo0dDdUdXc4U2NWdFY2amFLaldUWlJ6YVo1?=
- =?utf-8?B?V0t2NHhxM0N0anF6bC9MbzdUbU9ZVG10WUFQTjkxV3ZPSUVoYjZsS2NwQlJY?=
- =?utf-8?B?NGxBQk1BRksxZTN0Mmg1ejJQOEVvZiszS3huQXU3dm5EZ09Id3loS2w5NVB2?=
- =?utf-8?B?NE9kTlVqODlhZ2ticnlZNTArUWR6aUVmYWprSFBXekZmZGZUbThwaE5VVVNn?=
- =?utf-8?B?ZEw4MmpMbDNPY2Q4UzhCbUsyRWp3eDI0bFp6ZW9QK211ZFVpcHFyK0JwNUhT?=
- =?utf-8?B?WWdndUVUdlJuVWNQaGhXQnFpL1dqelNqYk9kUHlCQTNPR0RuRVZkU05wcjdD?=
- =?utf-8?B?U21tWGpHZUF3MjRteVUxeGpRbGRTLzVwcHV0eTRXWXFlY0dBdUZhYTFmTUhw?=
- =?utf-8?B?aG5TOERjVWdSVnN4UmkrdURhcXhJOU00N3dtZmIvcFFKT2h2M1dLUjhSWWNU?=
- =?utf-8?B?RU1vMVV0ZVhxby9EbEJocnRkVGdQRlRLYi9xRmdmUjV6OFBnNzdlVkpORmFQ?=
- =?utf-8?B?V3MrYXZ0U3gxaXpSNWEwbHZYZjdtL1A0QnRVeGFWS2ZuK2piZGxrMDFMVGtx?=
- =?utf-8?B?RG4wUU9TQkNGOUQxS3FGNHhKamlSRzIxbFZwendXMGpqZDFZK25iVTl6WG9h?=
- =?utf-8?B?c09DOUJMcUNPRnBEL0Jxb3BkY1FvRWFjNHhoV1Z3bE1peFN6MWUzR0g2dk9z?=
- =?utf-8?B?bW4vN2lUMWZDWE53UnlHanBOUEttemplS2R4MnRsTzd0Z0dxNllHWDJ1S3ho?=
- =?utf-8?B?VXhNWkNCalJTakNnTnZGNzBJSkMxN3lkbWhpRXR6aWFRMzVDeFQ2bVgyOFBM?=
- =?utf-8?B?NnRjaXFyY2lzSksyWG9ZdUUranVPaU1iYXZ1VVIxbEVWVTFNelhnMU1oTTJI?=
- =?utf-8?B?VXNJcTIwaTQxaXl1Q2lEdE83NDg2ekp1d3d1ZmVUZmY5a0pSdnRRZS9HMHVu?=
- =?utf-8?B?cXozWGpyRWpqYmdIZ255WGhFcUJXQ2RhZTFzQnBuUGlSenRlNzR5N3E1UE9y?=
- =?utf-8?B?WGJ4MFZOVVRmZ2N6ckh2RnhzK2lVdm9wM0c2Q3MwaUg3c0JoaFNRMS9uQm1Q?=
- =?utf-8?B?SFdsTC9iUkVHWDhEM21ncC9TcDZZNDJ2RUhqTHE4cElXZVdMV3VqaUg3dGZx?=
- =?utf-8?B?b3R5UU9kS2R5MEdmSjJVUnlkTit6dlVjd0creloyd3BZcVc0dTh2aHFhWUVp?=
- =?utf-8?B?MWhWWXJWZWVCeG4reC9vdHduRDVUbzE2Zk0vZDJqQ0ZwcVVSbkYzVzBvRkRF?=
- =?utf-8?B?UzdRL2NTTU50a3dGTzJuWlFnRTF3T3ZPVzcvNndpZnFjenJ1M0EyVkxCSUFK?=
- =?utf-8?B?K1dXQmprOWhlNjRmcHRhY3kyeEZtaEswM29lTkJ0RnFkcGRpTjd0UzNGdlVD?=
- =?utf-8?Q?rR+mBYDfKGrF8RSHpm8OnaHYQ?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 96fa8455-6877-4ec0-180a-08da6008a19c
-X-MS-Exchange-CrossTenant-AuthSource: DM6PR12MB4123.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Jul 2022 11:05:41.7305
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: AW6cEtPdaIOuTrENjWjHoAWxN2TyjZB3g5ug9b0s4DRB4eb84o0wLngT075r9fJDEMl9WEm14J8qsAkFSEi7Pw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR12MB3753
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220707092206.GA9894@alpha.franken.de>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: AQAAf9AxaeCxv8ZiOf0OAA--.37662S3
+X-Coremail-Antispam: 1UD129KBjvdXoWruw43Aw4kXF1kGF1UWry8Xwb_yoWDtwc_uF
+        s2kr4rGw1DZa1rKFWUKw47ZrySkrZrJrW8X34kWrsF9FWkWan5Ar4qg3sFg3WkCws5JFyU
+        CF98uFy2qryI9jkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUIcSsGvfJTRUUUbx8YjsxI4VWkKwAYFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I
+        6I8E6xAIw20EY4v20xvaj40_Wr0E3s1l1IIY67AEw4v_Jr0_Jr4l8cAvFVAK0II2c7xJM2
+        8CjxkF64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVW8JVW5JwA2z4x0Y4vE2Ix0
+        cI8IcVCY1x0267AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z2
+        80aVCY1x0267AKxVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAK
+        zVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx
+        8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcVAKI48JMxk0xIA0c2IEe2xFo4CEbIxvr21lc2xS
+        Y4AK6svPMxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrV
+        AFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUXVWUAwCI
+        c40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267
+        AKxVWUJVW8JwCI42IY6xAIw20EY4v20xvaj40_WFyUJVCq3wCI42IY6I8E87Iv67AKxVWU
+        JVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r1j6r4UYxBIdaVFxhVjvjDU0xZFpf9x07bOoG
+        dUUUUU=
+X-CM-SenderInfo: x2kd0w5krqwupkhqwqxorr0wxvrqhubq/
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 7/7/22 3:34 PM, Stephen Rothwell wrote:
-> Hi all,
+On 2022/7/7 下午5:22, Thomas Bogendoerfer wrote:
+> On Thu, Jul 07, 2022 at 04:11:35PM +0800, Hongchen Zhang wrote:
+>> When a pmd entry is invalidated by pmd_mkinvalid,pmd_present should
+>> return true.
+>> So introduce a _PMD_PRESENT_INVALID_SHIFT bit to check if a pmd is
+>> present but invalidated by pmd_mkinvalid.
 > 
-> After merging the sound-asoc tree, today's linux-next build (powerpc
-> allyesconfig) failed like this:
+> What problem are you trying to fix ? What are the symptoms ?
 > 
-> sound/soc/amd/acp-es8336.c: In function 'st_es8336_late_probe':
-> sound/soc/amd/acp-es8336.c:204:33: error: invalid use of undefined type 'struct acpi_device'
->   204 |                 put_device(&adev->dev);
->       |                                 ^~
-> sound/soc/soc-acpi.c:34:1: error: redefinition of 'snd_soc_acpi_find_machine'
->    34 | snd_soc_acpi_find_machine(struct snd_soc_acpi_mach *machines)
->       | ^~~~~~~~~~~~~~~~~~~~~~~~~
-> In file included from sound/soc/soc-acpi.c:9:
-> include/sound/soc-acpi.h:38:1: note: previous definition of 'snd_soc_acpi_find_machine' with type 'struct snd_soc_acpi_mach *(struct snd_soc_acpi_mach *)'
->    38 | snd_soc_acpi_find_machine(struct snd_soc_acpi_mach *machines)
->       | ^~~~~~~~~~~~~~~~~~~~~~~~~
-> sound/soc/soc-acpi.c: In function 'snd_soc_acpi_find_package':
-> sound/soc/soc-acpi.c:58:36: error: implicit declaration of function 'acpi_fetch_acpi_dev'; did you mean 'device_match_acpi_dev'? [-Werror=implicit-function-declaration]
->    58 |         struct acpi_device *adev = acpi_fetch_acpi_dev(handle);
->       |                                    ^~~~~~~~~~~~~~~~~~~
->       |                                    device_match_acpi_dev
-> sound/soc/soc-acpi.c:58:36: error: initialization of 'struct acpi_device *' from 'int' makes pointer from integer without a cast [-Werror=int-conversion]
-> sound/soc/soc-acpi.c:64:25: error: invalid use of undefined type 'struct acpi_device'
->    64 |         if (adev && adev->status.present && adev->status.functional) {
->       |                         ^~
-> sound/soc/soc-acpi.c:64:49: error: invalid use of undefined type 'struct acpi_device'
->    64 |         if (adev && adev->status.present && adev->status.functional) {
->       |                                                 ^~
-> sound/soc/soc-acpi.c:80:26: error: implicit declaration of function 'acpi_extract_package' [-Werror=implicit-function-declaration]
->    80 |                 status = acpi_extract_package(myobj,
->       |                          ^~~~~~~~~~~~~~~~~~~~
-> sound/soc/soc-acpi.c: At top level:
-> sound/soc/soc-acpi.c:95:6: error: redefinition of 'snd_soc_acpi_find_package_from_hid'
->    95 | bool snd_soc_acpi_find_package_from_hid(const u8 hid[ACPI_ID_LEN],
->       |      ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> In file included from sound/soc/soc-acpi.c:9:
-> include/sound/soc-acpi.h:44:1: note: previous definition of 'snd_soc_acpi_find_package_from_hid' with type 'bool(const u8 *, struct snd_soc_acpi_package_context *)' {aka '_Bool(const unsigned char *, struct snd_soc_acpi_package_context *)'}
->    44 | snd_soc_acpi_find_package_from_hid(const u8 hid[ACPI_ID_LEN],
->       | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> sound/soc/soc-acpi.c:109:27: error: redefinition of 'snd_soc_acpi_codec_list'
->   109 | struct snd_soc_acpi_mach *snd_soc_acpi_codec_list(void *arg)
->       |                           ^~~~~~~~~~~~~~~~~~~~~~~
-> In file included from sound/soc/soc-acpi.c:9:
-> include/sound/soc-acpi.h:51:41: note: previous definition of 'snd_soc_acpi_codec_list' with type 'struct snd_soc_acpi_mach *(void *)'
->    51 | static inline struct snd_soc_acpi_mach *snd_soc_acpi_codec_list(void *arg)
->       |                                         ^~~~~~~~~~~~~~~~~~~~~~~
+>> Reported-by: kernel test robot <lkp@intel.com>
 > 
-> Caused by commit
+> the test robot showed problems with your last version of the patch,
+> which hasn't been integrated into at least the MIPS tree, so no
+> need to that.
 > 
->   f94fa8405801 ("ASoC: amd: enable machine driver build for Jadeite platform")
-> 
-> I have reverted that commit for today.
+> Thomas.
 > 
 
-Hi Stephen,
+Hi Thomas,
+   The idea come from the commit:
+   b65399f6111b(arm64/mm: Change THP helpers to comply with generic MM 
+  semantics).
+   There is an problem now:
+	    CPU 0		CPU 1
+	pmdp_invalidate		do_page_fault		
+	...			  __handle_mm_fault
+				    is_swap_pmd == true
+				    trigger VM_BUG_ON() ?
+	set_pmd_at
+   the reason is that pmd_present return true,after this commit
+   pmd_present will return false,and the VM_BUG_ON will not be triggered.
+   Like arm64 does,we can introduce a new bit to fix this.
 
-We have provided fix for build error and pushed patch for upstream review.
+Thanks.
 
-Patch title: " ASoC: amd: fix ACPI dependency compile errors and warnings"
-patch link:
-https://lore.kernel.org/lkml/20220706205515.2485601-1-Vijendar.Mukunda@amd.com/
-
-We will resend the fix for upstream review.
-
-Thanks,
-Vijendar

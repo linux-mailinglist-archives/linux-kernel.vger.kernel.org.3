@@ -2,153 +2,166 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 362D956A1CA
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 14:15:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D7EF556A1CB
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 14:15:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235248AbiGGMPI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Jul 2022 08:15:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49648 "EHLO
+        id S235357AbiGGMPT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Jul 2022 08:15:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49728 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230187AbiGGMPH (ORCPT
+        with ESMTP id S230187AbiGGMPS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Jul 2022 08:15:07 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B01DE10FC3
-        for <linux-kernel@vger.kernel.org>; Thu,  7 Jul 2022 05:15:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1657196105;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=mbs481tHsGM89XED3giouE72pimnkluKaWbGcj8hSD4=;
-        b=NPxS2enosB84LfTUAeQLmBOIM17fLpG3+c7amoLMp3u6VLbtDMth/dHRsUqtuTczt7f35A
-        7lKlyrXVjTyb75abvaFra+xfr4v9py0ea4GC1gfyXZkokXhwHuCmVs5hk1PAx8gNXZHOkl
-        0vfvTOJuJSGTBF7At13S7uRw6a3AEoQ=
-Received: from mail-lf1-f71.google.com (mail-lf1-f71.google.com
- [209.85.167.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-94-7AnKyOdWPxK8b9TxOuL1CA-1; Thu, 07 Jul 2022 08:15:04 -0400
-X-MC-Unique: 7AnKyOdWPxK8b9TxOuL1CA-1
-Received: by mail-lf1-f71.google.com with SMTP id 10-20020ac2484a000000b0047f9f9c81daso6338741lfy.16
-        for <linux-kernel@vger.kernel.org>; Thu, 07 Jul 2022 05:15:04 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=mbs481tHsGM89XED3giouE72pimnkluKaWbGcj8hSD4=;
-        b=Abo8OkjUinyF63S2c2zXtSxMbxPwX/rnZKTQUs2MSysgpKHishkxBzinF8YLUGD28C
-         q0wLL9oeEcFsd5qoiheg61dsnlHbpOEWgDnBg3AGaAybfjOC8wNs8Q4keg0C742mso5n
-         mvCbw0dTbJlBkAr3CVAimKXEb5ubFIKUE1H1O+WkqIG+8La75WzwIjt//q+qfntljuxp
-         wLrd2qe7vK8wmxLZ7+lfXTbngcllMNy2/ukSrax24xkunfMw4H85WhYRpeRWOjQ48mIN
-         QpEx6Pcgw6jJNYm5BBk6v6xqQPXHFWaVF5H50LA19ydIP/loFz+cZqbgqjZA6sVIAxb4
-         Bb5Q==
-X-Gm-Message-State: AJIora+xDrMr8oRNy8dTo3GuQdUF5D75UxwKLPhZt7JLFGIVXv7hOJQu
-        hMyI6ceHoWxE9uWtiH/5iL5d5RueG6R5Fq7IaQxZszrqZ/yVxSUmQfWCZmwg/0RyaSjMlOYQ/x7
-        V3GY4pbjPtBpz3Tov6pYP6BzT9UkonHa0Pek1Vufz
-X-Received: by 2002:a2e:bf21:0:b0:25d:4b4b:f2aa with SMTP id c33-20020a2ebf21000000b0025d4b4bf2aamr3103341ljr.503.1657196103242;
-        Thu, 07 Jul 2022 05:15:03 -0700 (PDT)
-X-Google-Smtp-Source: AGRyM1vMcH0UiUDOPP/H8I4asZFfJr+vM8ihLQnz0V+NqvLvZrKYzOgKLoxJDbByYdvsOJ1Z+jbM8lUG9WQnWttAA2M=
-X-Received: by 2002:a2e:bf21:0:b0:25d:4b4b:f2aa with SMTP id
- c33-20020a2ebf21000000b0025d4b4bf2aamr3103326ljr.503.1657196103018; Thu, 07
- Jul 2022 05:15:03 -0700 (PDT)
+        Thu, 7 Jul 2022 08:15:18 -0400
+Received: from smtp236.sjtu.edu.cn (smtp236.sjtu.edu.cn [202.120.2.236])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88C2516593
+        for <linux-kernel@vger.kernel.org>; Thu,  7 Jul 2022 05:15:16 -0700 (PDT)
+Received: from proxy02.sjtu.edu.cn (smtp188.sjtu.edu.cn [202.120.2.188])
+        by smtp236.sjtu.edu.cn (Postfix) with ESMTPS id 31A9C1008B388;
+        Thu,  7 Jul 2022 20:15:13 +0800 (CST)
+Received: from localhost (localhost.localdomain [127.0.0.1])
+        by proxy02.sjtu.edu.cn (Postfix) with ESMTP id 1B7ED204904CA;
+        Thu,  7 Jul 2022 20:15:13 +0800 (CST)
+X-Virus-Scanned: amavisd-new at 
+Received: from proxy02.sjtu.edu.cn ([127.0.0.1])
+        by localhost (proxy02.sjtu.edu.cn [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id ZRNcqXYDscP8; Thu,  7 Jul 2022 20:15:13 +0800 (CST)
+Received: from [192.168.24.189] (unknown [202.120.40.82])
+        (Authenticated sender: qtxuning1999@sjtu.edu.cn)
+        by proxy02.sjtu.edu.cn (Postfix) with ESMTPSA id 6A192204904BF;
+        Thu,  7 Jul 2022 20:15:00 +0800 (CST)
+Message-ID: <c8b82458-51e8-e460-9caa-0db9f8615d85@sjtu.edu.cn>
+Date:   Thu, 7 Jul 2022 20:15:00 +0800
 MIME-Version: 1.0
-References: <920acea9aa18e4f2956581a8e158bdaa376fdf63.1629203945.git.jstancek@redhat.com>
- <95f35287-3d66-1788-e54c-7275fdba16ac@csgroup.eu>
-In-Reply-To: <95f35287-3d66-1788-e54c-7275fdba16ac@csgroup.eu>
-From:   Jan Stancek <jstancek@redhat.com>
-Date:   Thu, 7 Jul 2022 14:14:47 +0200
-Message-ID: <CAASaF6xZXjEYEUnkMQh0Ke24d=iJo-SZFdwuGQgrqZbbmMtGfg@mail.gmail.com>
-Subject: Re: [PATCH/RFC] powerpc/module_64: allow .init_array constructors to run
-To:     Christophe Leroy <christophe.leroy@csgroup.eu>
-Cc:     mpe@ellerman.id.au, benh@kernel.crashing.org, paulus@samba.org,
-        linuxppc-dev@lists.ozlabs.org,
-        Wedson Almeida Filho <wedsonaf@google.com>,
-        lkml <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH v2 2/4] virtio_test: move magic number in code as defined
+ constant
+Content-Language: en-US
+To:     "Michael S. Tsirkin" <mst@redhat.com>
+Cc:     jasowang@redhat.com, eperezma@redhat.com,
+        virtualization@lists.linux-foundation.org,
+        linux-kernel@vger.kernel.org, sgarzare@redhat.com
+References: <20220707024409.1869-1-qtxuning1999@sjtu.edu.cn>
+ <20220707024409.1869-3-qtxuning1999@sjtu.edu.cn>
+ <20220707010036-mutt-send-email-mst@kernel.org>
+ <8c15f97f-df6d-9ec5-b9d3-c42350cde887@sjtu.edu.cn>
+ <20220707033233-mutt-send-email-mst@kernel.org>
+From:   Guo Zhi <qtxuning1999@sjtu.edu.cn>
+In-Reply-To: <20220707033233-mutt-send-email-mst@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-0.4 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jul 7, 2022 at 1:20 PM Christophe Leroy
-<christophe.leroy@csgroup.eu> wrote:
+On 2022/7/7 15:36, Michael S. Tsirkin wrote:
+> On Thu, Jul 07, 2022 at 02:17:19PM +0800, Guo Zhi wrote:
+>> On 2022/7/7 13:09, Michael S. Tsirkin wrote:
+>>> On Thu, Jul 07, 2022 at 10:44:07AM +0800, Guo Zhi wrote:
+>>>> We should avoid using magic numbers directly.
+>>> Not necessarily. For repeated values - I guess.
+>>> But this kind of thing:
+>>>
+>>> 	#define BUF_SIZE 1024
+>>> 	int buf_size = BUF_SIZE;
+>>>
+>>> brings no benefit IMHO.
+>>>
+>>> And this has cost - values are now removed from code.
+>> Firstly, as a test, user will have to change the config to test virtio and
+>> vhost frequently. If these magic number are put together like these, change
+>> will be more easier.
+> If tweaking these is useful for users we should add a command line flags
+> as opposed to asking users to tweak code.
 >
->
->
-> Le 17/08/2021 =C3=A0 15:02, Jan Stancek a =C3=A9crit :
-> > gcov and kasan rely on compiler generated constructor code.
-> > For modules, gcc-8 with gcov enabled generates .init_array section,
-> > but on ppc64le it doesn't get executed. find_module_sections() never
-> > finds .init_array section, because module_frob_arch_sections() renames
-> > it to _init_array.
-> >
-> > Avoid renaming .init_array section, so do_mod_ctors() can use it.
-> >
-> > Cc: Michael Ellerman <mpe@ellerman.id.au>
-> > Cc: Benjamin Herrenschmidt <benh@kernel.crashing.org>
-> > Cc: Paul Mackerras <paulus@samba.org>
-> > Cc: Christophe Leroy <christophe.leroy@csgroup.eu>
-> > Signed-off-by: Jan Stancek <jstancek@redhat.com>
->
-> Does commit d4be60fe66b7 ("powerpc/module_64: use module_init_section
-> instead of patching names") fixes your issue ?
+>> Secondly, many configs will be repeated, such as MAX_SG_FRAGS, even if some
+>> varibale only appear once, subsequent upgrade of virtio_test will use these
+>> variable in other place. For example, in this series of patch, patch 4/4
+>> will use RINGSIZE to set INDIRECTS_BUF_SIZE.
+>>
+>>>> Signed-off-by: Guo Zhi <qtxuning1999@sjtu.edu.cn>
+> Isn't there some way to use the size we get as 1st parameter of kmalloc?
 
-Yes, it does gcov for me. Thanks
+__kmalloc_fake has also been used in other place(vringh_test.c). which 
+also use it to force allocate a specified user addr.
+
+And it is actually hard to use 1st parameter of kmalloc to calculate the 
+address of the target addr, which also impact vringh_test if the 
+semantic of __kmalloc_fake changes.
 
 >
-> If not, please rebase and resubmit.
->
-> Thanks
-> Christophe
->
->
-> > ---
-> > I wasn't able to trace the comment:
-> >    "We don't handle .init for the moment: rename to _init"
-> > to original patch (it pre-dates .git). I'm not sure if it
-> > still applies today, so I limited patch to .init_array. This
-> > fixes gcov for modules for me on ppc64le 5.14.0-rc6.
-> >
-> > Renaming issue is also mentioned in kasan patches here:
-> >    https://patchwork.ozlabs.org/project/linuxppc-dev/cover/202103191440=
-58.772525-1-dja@axtens
-> >
-> >   arch/powerpc/kernel/module_64.c | 10 +++++++++-
-> >   1 file changed, 9 insertions(+), 1 deletion(-)
-> >
-> > diff --git a/arch/powerpc/kernel/module_64.c b/arch/powerpc/kernel/modu=
-le_64.c
-> > index 6baa676e7cb6..c604b13ea6bf 100644
-> > --- a/arch/powerpc/kernel/module_64.c
-> > +++ b/arch/powerpc/kernel/module_64.c
-> > @@ -299,8 +299,16 @@ int module_frob_arch_sections(Elf64_Ehdr *hdr,
-> >                                         sechdrs[i].sh_size);
-> >
-> >               /* We don't handle .init for the moment: rename to _init =
-*/
-> > -             while ((p =3D strstr(secstrings + sechdrs[i].sh_name, ".i=
-nit")))
-> > +             while ((p =3D strstr(secstrings + sechdrs[i].sh_name, ".i=
-nit"))) {
-> > +#ifdef CONFIG_CONSTRUCTORS
-> > +                     /* find_module_sections() needs .init_array intac=
-t */
-> > +                     if (strstr(secstrings + sechdrs[i].sh_name,
-> > +                             ".init_array")) {
-> > +                             break;
-> > +                     }
-> > +#endif
-> >                       p[0] =3D '_';
-> > +             }
-> >
-> >               if (sechdrs[i].sh_type =3D=3D SHT_SYMTAB)
-> >                       dedotify((void *)hdr + sechdrs[i].sh_offset,
->
+>>>> ---
+>>>>    tools/virtio/virtio_test.c | 18 +++++++++++-------
+>>>>    1 file changed, 11 insertions(+), 7 deletions(-)
+>>>>
+>>>> diff --git a/tools/virtio/virtio_test.c b/tools/virtio/virtio_test.c
+>>>> index 95f78b311..1ecd64271 100644
+>>>> --- a/tools/virtio/virtio_test.c
+>>>> +++ b/tools/virtio/virtio_test.c
+>>>> @@ -20,7 +20,10 @@
+>>>>    #include "../../drivers/vhost/test.h"
+>>>>    #define RANDOM_BATCH -1
+>>>> -
+>>>> +#define ALIGN 4096
+>>>> +#define RINGSIZE   256
+>>>> +#define TEST_BUF_NUM 0x100000
+>>>> +#define BUF_SIZE   1024
+>>>>    /* Unused */
+>>>>    void *__kmalloc_fake, *__kfree_ignore_start, *__kfree_ignore_end;
+>>>> @@ -100,8 +103,8 @@ static void vq_reset(struct vq_info *info, int num, struct virtio_device *vdev)
+>>>>    	if (info->vq)
+>>>>    		vring_del_virtqueue(info->vq);
+>>>> -	memset(info->ring, 0, vring_size(num, 4096));
+>>>> -	vring_init(&info->vring, num, info->ring, 4096);
+>>>> +	memset(info->ring, 0, vring_size(num, ALIGN));
+>>>> +	vring_init(&info->vring, num, info->ring, ALIGN);
+>>>>    	info->vq = __vring_new_virtqueue(info->idx, info->vring, vdev, true,
+>>>>    					 false, vq_notify, vq_callback, "test");
+>>>>    	assert(info->vq);
+>>>> @@ -115,7 +118,7 @@ static void vq_info_add(struct vdev_info *dev, int num)
+>>>>    	info->idx = dev->nvqs;
+>>>>    	info->kick = eventfd(0, EFD_NONBLOCK);
+>>>>    	info->call = eventfd(0, EFD_NONBLOCK);
+>>>> -	r = posix_memalign(&info->ring, 4096, vring_size(num, 4096));
+>>>> +	r = posix_memalign(&info->ring, PAGE_SIZE, vring_size(num, ALIGN));
+>>>>    	assert(r >= 0);
+>>>>    	vq_reset(info, num, &dev->vdev);
+>>>>    	vhost_vq_setup(dev, info);
+>>> This is actually doing more than what commit log says.
+>>>
+>>>> @@ -131,7 +134,7 @@ static void vdev_info_init(struct vdev_info* dev, unsigned long long features)
+>>>>    	dev->vdev.features = features;
+>>>>    	INIT_LIST_HEAD(&dev->vdev.vqs);
+>>>>    	spin_lock_init(&dev->vdev.vqs_list_lock);
+>>>> -	dev->buf_size = 1024;
+>>>> +	dev->buf_size = BUF_SIZE;
+>>>>
+>>>>
+>>>> This seems to have zero added value.
+>>>>
+>> Since the reason above and other magic number have been set as a defined
+>> constant, change here for simplicity and consistency.
+>>>>    	dev->buf = malloc(dev->buf_size);
+>>>>    	assert(dev->buf);
+>>>>            dev->control = open("/dev/vhost-test", O_RDWR);
+>>>> @@ -396,7 +399,8 @@ int main(int argc, char **argv)
+>>>>    done:
+>>>>    	vdev_info_init(&dev, features);
+>>>> -	vq_info_add(&dev, 256);
+>>>> -	run_test(&dev, &dev.vqs[0], delayed, batch, reset, 0x100000);
+>>>> +	vq_info_add(&dev, RINGSIZE);
+>>>> +
+>>>> +	run_test(&dev, &dev.vqs[0], delayed, batch, reset, TEST_BUF_NUM);
+>>>>    	return 0;
+>>> This replacement does not buy us anything either.
+>> RINGSIZE will be used in other place in subsequent modification.
+>>>>    }
+>>>> -- 
+>>>> 2.17.1
+
 

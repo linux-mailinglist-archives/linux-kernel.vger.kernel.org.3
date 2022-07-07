@@ -2,68 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EDD8A56ACF8
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 22:52:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 047D056AD02
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 22:53:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236587AbiGGUvi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Jul 2022 16:51:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44952 "EHLO
+        id S236599AbiGGUxR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Jul 2022 16:53:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45848 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236533AbiGGUvg (ORCPT
+        with ESMTP id S236145AbiGGUxO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Jul 2022 16:51:36 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACA652CE06;
-        Thu,  7 Jul 2022 13:51:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-        Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
-        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
-        bh=TTdDoMIncBueyDVjmYEyIZn/enGMqk78p+ra2MsjS+w=; b=sE7/kRbdlSv7EDNBiYq9turMip
-        Y8jFHim2VJqGyNd6kV+yyl+ghqx0wWjY1oAiKWWvg1OEtRazc2fwps6uBk2W/rAY6QjFvLj3AdcQK
-        NjzHVTWhmxPc8gfHjR0GL/zj+HVMZ1CmupVS4UZZqcjbz8BNmmW8+/IvXVqDA36+u3l3XcpEFhFSQ
-        TWPZ0amSSofhK9YDY4uV5jWZHbMQjPj+zWVwcLWCoEupQm21QzaYFo6WKR5PF7M4AdVOVKeBkAytS
-        btzrXPQ2hDd3Km43Qd42cgGLAXZBmv2WuEUPASG78hGx1ea8ym3uKyTgvrtiaQEfTl5URkscMo0KZ
-        Pud0lScw==;
-Received: from [2601:1c0:6280:3f0::a6b3]
-        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1o9YSz-000B7y-VT; Thu, 07 Jul 2022 20:51:18 +0000
-Message-ID: <a2984435-6c8f-aee2-1e42-efc0b7cc4078@infradead.org>
-Date:   Thu, 7 Jul 2022 13:51:15 -0700
+        Thu, 7 Jul 2022 16:53:14 -0400
+X-Greylist: delayed 62 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 07 Jul 2022 13:53:12 PDT
+Received: from alln-iport-6.cisco.com (alln-iport-6.cisco.com [173.37.142.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AAE0E2CE3B;
+        Thu,  7 Jul 2022 13:53:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=cisco.com; i=@cisco.com; l=2562; q=dns/txt; s=iport;
+  t=1657227192; x=1658436792;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=IGkApyCOPj4WsvWkXi+ev19llmpNYiOROU+qzijV/Sw=;
+  b=S7nv4NzhWjbjEb0JbQAwE75XDfzAcW0Ojozrk8d/xv+a2dBO0bbieBu6
+   rxQe2q3ZPAG6B2JmnSpaXvu4zlbWoYb7TH0CHjY4G3SFeMjLWAprpQlKm
+   /Hku5D/w10tCZhpmcR1V1pnTWN6c3lZlBNT2TahZ+9SMZ517Kkm7y/F7U
+   A=;
+X-IronPort-AV: E=Sophos;i="5.92,253,1650931200"; 
+   d="scan'208";a="930279870"
+Received: from alln-core-6.cisco.com ([173.36.13.139])
+  by alln-iport-6.cisco.com with ESMTP/TLS/DHE-RSA-SEED-SHA; 07 Jul 2022 20:52:09 +0000
+Received: from localhost.cisco.com ([10.193.101.253])
+        (authenticated bits=0)
+        by alln-core-6.cisco.com (8.15.2/8.15.2) with ESMTPSA id 267Kq06B003512
+        (version=TLSv1.2 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=NO);
+        Thu, 7 Jul 2022 20:52:08 GMT
+From:   Karan Tilak Kumar <kartilak@cisco.com>
+To:     sebaddel@cisco.com
+Cc:     arulponn@cisco.com, djhawar@cisco.com, gcboffa@cisco.com,
+        satishkh@cisco.com, gvaradar@cisco.com, jejb@linux.ibm.com,
+        martin.petersen@oracle.com, linux-scsi@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Karan Tilak Kumar <kartilak@cisco.com>
+Subject: [PATCH] scsi: fnic: refactor code in fnic probe to initialize scsi layer
+Date:   Thu,  7 Jul 2022 13:51:55 -0700
+Message-Id: <20220707205155.692688-1-kartilak@cisco.com>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH v5 5/6] HID: add spi-hid, transport driver for HID over
- SPI bus
-Content-Language: en-US
-To:     Jarrett Schultz <jaschultzms@gmail.com>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Jiri Kosina <jikos@kernel.org>,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Marcel Ziswiler <marcel.ziswiler@toradex.com>,
-        Biju Das <biju.das.jz@bp.renesas.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Vinod Koul <vkoul@kernel.org>
-Cc:     Dmitry Antipov <dmanti@microsoft.com>, linux-input@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        Jarrett Schultz <jaschultz@microsoft.com>
-References: <20220707165902.3184-1-jaschultzMS@gmail.com>
- <20220707165902.3184-6-jaschultzMS@gmail.com>
-From:   Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <20220707165902.3184-6-jaschultzMS@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Transfer-Encoding: 8bit
+X-Authenticated-User: kartilak@cisco.com
+X-Outbound-SMTP-Client: 10.193.101.253, [10.193.101.253]
+X-Outbound-Node: alln-core-6.cisco.com
+X-Spam-Status: No, score=-12.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIMWL_WL_MED,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,86 +62,80 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi--
+Refactor code from fnic probe into a different function so that
+scsi layer initialization code is grouped together.
+Also, add log messages for better debugging.
 
-On 7/7/22 09:59, Jarrett Schultz wrote:
-> From: Jarrett Schultz <jaschultz@microsoft.com>
-> 
-> This driver follows HID Over SPI Protocol Specification 1.0 available at
-> https://www.microsoft.com/en-us/download/details.aspx?id=103325. The
-> initial version of the driver does not support: 1) multi-fragment input
-> reports, 2) sending GET_INPUT and COMMAND output report types and
-> processing their respective acknowledge input reports, and 3) device
-> sleep power state.
-> 
-> Signed-off-by: Dmitry Antipov <dmanti@microsoft.com>
+Signed-off-by: Gian Carlo Boffa <gcboffa@cisco.com>
+Signed-off-by: Arulprabhu Ponnusamy <arulponn@cisco.com>
+Signed-off-by: Karan Tilak Kumar <kartilak@cisco.com>
+---
+ drivers/scsi/fnic/fnic_main.c | 45 ++++++++++++++++++++++++++---------
+ 1 file changed, 34 insertions(+), 11 deletions(-)
 
-Missing your (Jarrett's) Signed-off-by: here.
-
-More below...
-
-> ---
->  drivers/hid/Kconfig                 |    2 +
->  drivers/hid/Makefile                |    1 +
->  drivers/hid/spi-hid/Kconfig         |   25 +
->  drivers/hid/spi-hid/Makefile        |   12 +
->  drivers/hid/spi-hid/spi-hid-core.c  | 1326 +++++++++++++++++++++++++++
->  drivers/hid/spi-hid/spi-hid-core.h  |  188 ++++
->  drivers/hid/spi-hid/spi-hid-of.c    |  141 +++
->  drivers/hid/spi-hid/spi-hid-of.h    |   30 +
->  drivers/hid/spi-hid/spi-hid_trace.h |  194 ++++
->  drivers/hid/spi-hid/trace.c         |    9 +
->  10 files changed, 1928 insertions(+)
->  create mode 100644 drivers/hid/spi-hid/Kconfig
->  create mode 100644 drivers/hid/spi-hid/Makefile
->  create mode 100644 drivers/hid/spi-hid/spi-hid-core.c
->  create mode 100644 drivers/hid/spi-hid/spi-hid-core.h
->  create mode 100644 drivers/hid/spi-hid/spi-hid-of.c
->  create mode 100644 drivers/hid/spi-hid/spi-hid-of.h
->  create mode 100644 drivers/hid/spi-hid/spi-hid_trace.h
->  create mode 100644 drivers/hid/spi-hid/trace.c
-> 
-
-> diff --git a/drivers/hid/spi-hid/Kconfig b/drivers/hid/spi-hid/Kconfig
-> new file mode 100644
-> index 000000000000..37302d658162
-> --- /dev/null
-> +++ b/drivers/hid/spi-hid/Kconfig
-> @@ -0,0 +1,25 @@
-> +#
-> +# Copyright (c) 2021 Microsoft Corporation
-> +#
-> +# This program is free software; you can redistribute it and/or modify it
-> +# under the terms of the GNU General Public License version 2 as published by
-> +# the Free Software Foundation.
-> +#
-
-Please just use SPDX tags instead of all of that.
-See other hid/Kconfig files for examples.
-
-> +menu "SPI HID support"
-> +	depends on SPI
-> +
-> +config SPI_HID
-> +	tristate "HID over SPI transport layer"
-> +	default n
-> +	depends on SPI && INPUT && OF
-> +	select HID
-> +	help
-> +	  Say Y here if you use a keyboard, a touchpad, a touchscreen, or any
-> +	  other HID based devices which is connected to your computer via SPI.
-
-	        HID-based devices which are connected
-(or)
-	        HID-based device which is connected
-
-> +
-> +	  If unsure, say N.
-> +
-> +	  This support is also available as a module.  If so, the module
-> +	  will be called spi-hid.
-> +
-> +endmenu
-
+diff --git a/drivers/scsi/fnic/fnic_main.c b/drivers/scsi/fnic/fnic_main.c
+index 51e7c344ddc3..a666bf90f384 100644
+--- a/drivers/scsi/fnic/fnic_main.c
++++ b/drivers/scsi/fnic/fnic_main.c
+@@ -556,6 +556,39 @@ static void fnic_set_vlan(struct fnic *fnic, u16 vlan_id)
+ 	vnic_dev_set_default_vlan(fnic->vdev, vlan_id);
+ }
+ 
++static int fnic_scsi_drv_init(struct fnic *fnic)
++{
++	struct Scsi_Host *host = fnic->lport->host;
++
++	/* Configure maximum outstanding IO reqs*/
++	if (fnic->config.io_throttle_count != FNIC_UCSM_DFLT_THROTTLE_CNT_BLD)
++		host->can_queue = min_t(u32, FNIC_MAX_IO_REQ,
++					max_t(u32, FNIC_MIN_IO_REQ,
++					fnic->config.io_throttle_count));
++
++	fnic->fnic_max_tag_id = host->can_queue;
++	host->max_lun = fnic->config.luns_per_tgt;
++	host->max_id = FNIC_MAX_FCP_TARGET;
++	host->max_cmd_len = FCOE_MAX_CMD_LEN;
++
++	host->nr_hw_queues = fnic->wq_copy_count;
++	if (host->nr_hw_queues > 1)
++		shost_printk(KERN_ERR, host,
++				"fnic: blk-mq is not supported");
++
++	host->nr_hw_queues = fnic->wq_copy_count = 1;
++
++	shost_printk(KERN_INFO, host,
++			"fnic: can_queue: %d max_lun: %llu",
++			host->can_queue, host->max_lun);
++
++	shost_printk(KERN_INFO, host,
++			"fnic: max_id: %d max_cmd_len: %d nr_hw_queues: %d",
++			host->max_id, host->max_cmd_len, host->nr_hw_queues);
++
++	return 0;
++}
++
+ static int fnic_probe(struct pci_dev *pdev, const struct pci_device_id *ent)
+ {
+ 	struct Scsi_Host *host;
+@@ -696,17 +729,7 @@ static int fnic_probe(struct pci_dev *pdev, const struct pci_device_id *ent)
+ 		goto err_out_dev_close;
+ 	}
+ 
+-	/* Configure Maximum Outstanding IO reqs*/
+-	if (fnic->config.io_throttle_count != FNIC_UCSM_DFLT_THROTTLE_CNT_BLD) {
+-		host->can_queue = min_t(u32, FNIC_MAX_IO_REQ,
+-					max_t(u32, FNIC_MIN_IO_REQ,
+-					fnic->config.io_throttle_count));
+-	}
+-	fnic->fnic_max_tag_id = host->can_queue;
+-
+-	host->max_lun = fnic->config.luns_per_tgt;
+-	host->max_id = FNIC_MAX_FCP_TARGET;
+-	host->max_cmd_len = FCOE_MAX_CMD_LEN;
++	fnic_scsi_drv_init(fnic);
+ 
+ 	fnic_get_res_counts(fnic);
+ 
 -- 
-~Randy
+2.31.1
+

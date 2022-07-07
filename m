@@ -2,165 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 24D6F5698D7
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 05:35:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 899D75698DE
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 05:42:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234950AbiGGDfa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Jul 2022 23:35:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53260 "EHLO
+        id S234995AbiGGDmG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Jul 2022 23:42:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55822 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229775AbiGGDf2 (ORCPT
+        with ESMTP id S229775AbiGGDmC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Jul 2022 23:35:28 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D5DD1C91F;
-        Wed,  6 Jul 2022 20:35:27 -0700 (PDT)
-Received: from kwepemi500013.china.huawei.com (unknown [172.30.72.56])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4Ldhnt2x4VzcmyX;
-        Thu,  7 Jul 2022 11:33:22 +0800 (CST)
-Received: from [10.67.111.192] (10.67.111.192) by
- kwepemi500013.china.huawei.com (7.221.188.120) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Thu, 7 Jul 2022 11:35:24 +0800
-Message-ID: <82d7c23c-3aa4-b637-1050-9407c1f74045@huawei.com>
-Date:   Thu, 7 Jul 2022 11:35:23 +0800
+        Wed, 6 Jul 2022 23:42:02 -0400
+Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26C1C2B625
+        for <linux-kernel@vger.kernel.org>; Wed,  6 Jul 2022 20:42:01 -0700 (PDT)
+Received: by mail-pf1-x432.google.com with SMTP id n12so16872741pfq.0
+        for <linux-kernel@vger.kernel.org>; Wed, 06 Jul 2022 20:42:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=XANUYl1Borcsk9t8vW9KSV5bpVG0+amH7/nGFUEPepk=;
+        b=2GetizZARbsyb0LeA/H0CFHJ5ZDSX05z7Fj0Rdv0FAoXA0zqK/ef/rLVRAprYh+w7M
+         onjjGilLM6c2NLNaHB8kat/u5YYc9QNxShdExZMmggnbdox681JojrmXkQ4cuZzVRDtc
+         k47Xc2f3GfHYx3OqjhT9H0wYEcOrxVdHspUVwNG4lZa9CF8FlOr4RK0yjSVS8gx+IgZt
+         XSITF9+Q/tiHaUa1vY0TeKj0tX4FyUnjkwqGqztQHTlVV9XDqPlV0ERr4kPWa79K24PU
+         cBhW72Qeuq6DN/UfMHiv0wUgjLWpHlxmdM4LSs03mAmu1x4YFPLBfEo+hHYS0kiLWBhD
+         XUKw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=XANUYl1Borcsk9t8vW9KSV5bpVG0+amH7/nGFUEPepk=;
+        b=h6wcD02v+Z+1rUYvdJFwfKH91vH6ztyd3tO550rFc+MgDkPi8XqZN2DdCuFZc0y4mc
+         VHPB+8Y79MJt0ife92i0FmttdGwnbS0lWRswF71c2EtMpppPzyD93lkRw4+5K8iWp3/A
+         z2smo4u7T7YokDk4h2n2Sd1qq8gixHZLZ+FiURagPpjd7V0CgmzsFrlWUlwcuiy+Ng4g
+         mx8r0dLoFI4v3Eo6FiTU8ypPx0df9s6+DaLQV61bc4PMRcGgZyB6K1ztJS8ed3lmBxf2
+         b+LJOVoB8JIX8rTzPk1J0qHohn4FNeJA6rf0Z0x2yfOetEWEF98rEKRAAYJjnLLavTfA
+         7nBA==
+X-Gm-Message-State: AJIora/XYOkUgdjvvEZGXN7DZgcgrMR5G1D9biztJUpHhCNVODGAfI8l
+        hOf+t1d3R8EFwDHZ8yNYBLlaQg==
+X-Google-Smtp-Source: AGRyM1sR3M9hLSIGaOgLa30wuyO7cUvljtD/zzLIjrU9aWT23lVeaSlGiB5k5S2NVFCCAJVUR0J8kg==
+X-Received: by 2002:a17:902:e541:b0:16b:8f8a:3363 with SMTP id n1-20020a170902e54100b0016b8f8a3363mr49923352plf.66.1657165320712;
+        Wed, 06 Jul 2022 20:42:00 -0700 (PDT)
+Received: from C02G87K0MD6R.bytedance.net ([139.177.225.228])
+        by smtp.gmail.com with ESMTPSA id x3-20020a170902a38300b0016be4d78792sm7357707pla.257.2022.07.06.20.41.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 06 Jul 2022 20:42:00 -0700 (PDT)
+From:   Hao Jia <jiahao.os@bytedance.com>
+To:     mingo@redhat.com, peterz@infradead.org, juri.lelli@redhat.com,
+        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
+        rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
+        bristot@redhat.com, vschneid@redhat.com
+Cc:     linux-kernel@vger.kernel.org, Hao Jia <jiahao.os@bytedance.com>
+Subject: [PATCH] sched/fair: Remove unused parameter idle of _nohz_idle_balance()
+Date:   Thu,  7 Jul 2022 11:41:43 +0800
+Message-Id: <20220707034143.37991-1-jiahao.os@bytedance.com>
+X-Mailer: git-send-email 2.32.0 (Apple Git-132)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Subject: Re: [PATCH bpf-next v6 0/4] bpf trampoline for arm64
-Content-Language: en-US
-To:     KP Singh <kpsingh@kernel.org>, Will Deacon <will@kernel.org>
-CC:     Daniel Borkmann <daniel@iogearbox.net>,
-        <jean-philippe.brucker@arm.com>, <bpf@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <netdev@vger.kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Zi Shen Lim <zlim.lnx@gmail.com>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        David Ahern <dsahern@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, <x86@kernel.org>,
-        "H . Peter Anvin" <hpa@zytor.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        Russell King <rmk+kernel@armlinux.org.uk>,
-        James Morse <james.morse@arm.com>,
-        Hou Tao <houtao1@huawei.com>,
-        Jason Wang <wangborong@cdjrlc.com>
-References: <20220625161255.547944-1-xukuohai@huawei.com>
- <d3c1f1ed-353a-6af2-140d-c7051125d023@iogearbox.net>
- <20220705160045.GA1240@willie-the-truck>
- <CACYkzJ4e6qrB+HV7Nj=S-zCsPZjcxwMFCBMSnrYbdkLaD04Hqg@mail.gmail.com>
-From:   Xu Kuohai <xukuohai@huawei.com>
-In-Reply-To: <CACYkzJ4e6qrB+HV7Nj=S-zCsPZjcxwMFCBMSnrYbdkLaD04Hqg@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.67.111.192]
-X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
- kwepemi500013.china.huawei.com (7.221.188.120)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 7/6/2022 2:34 AM, KP Singh wrote:
-> On Tue, Jul 5, 2022 at 6:00 PM Will Deacon <will@kernel.org> wrote:
->>
->> Hi Daniel,
->>
->> On Thu, Jun 30, 2022 at 11:12:54PM +0200, Daniel Borkmann wrote:
->>> On 6/25/22 6:12 PM, Xu Kuohai wrote:
->>>> This patchset introduces bpf trampoline on arm64. A bpf trampoline converts
->>>> native calling convention to bpf calling convention and is used to implement
->>>> various bpf features, such as fentry, fexit, fmod_ret and struct_ops.
->>>>
->>>> The trampoline introduced does essentially the same thing as the bpf
->>>> trampoline does on x86.
->>>>
->>>> Tested on raspberry pi 4b and qemu:
->>>>
->>>>   #18 /1     bpf_tcp_ca/dctcp:OK
->>>>   #18 /2     bpf_tcp_ca/cubic:OK
->>>>   #18 /3     bpf_tcp_ca/invalid_license:OK
->>>>   #18 /4     bpf_tcp_ca/dctcp_fallback:OK
->>>>   #18 /5     bpf_tcp_ca/rel_setsockopt:OK
->>>>   #18        bpf_tcp_ca:OK
->>>>   #51 /1     dummy_st_ops/dummy_st_ops_attach:OK
->>>>   #51 /2     dummy_st_ops/dummy_init_ret_value:OK
->>>>   #51 /3     dummy_st_ops/dummy_init_ptr_arg:OK
->>>>   #51 /4     dummy_st_ops/dummy_multiple_args:OK
->>>>   #51        dummy_st_ops:OK
->>>>   #57 /1     fexit_bpf2bpf/target_no_callees:OK
->>>>   #57 /2     fexit_bpf2bpf/target_yes_callees:OK
->>>>   #57 /3     fexit_bpf2bpf/func_replace:OK
->>>>   #57 /4     fexit_bpf2bpf/func_replace_verify:OK
->>>>   #57 /5     fexit_bpf2bpf/func_sockmap_update:OK
->>>>   #57 /6     fexit_bpf2bpf/func_replace_return_code:OK
->>>>   #57 /7     fexit_bpf2bpf/func_map_prog_compatibility:OK
->>>>   #57 /8     fexit_bpf2bpf/func_replace_multi:OK
->>>>   #57 /9     fexit_bpf2bpf/fmod_ret_freplace:OK
->>>>   #57        fexit_bpf2bpf:OK
->>>>   #237       xdp_bpf2bpf:OK
->>>>
->>>> v6:
->>>> - Since Mark is refactoring arm64 ftrace to support long jump and reduce the
->>>>    ftrace trampoline overhead, it's not clear how we'll attach bpf trampoline
->>>>    to regular kernel functions, so remove ftrace related patches for now.
->>>> - Add long jump support for attaching bpf trampoline to bpf prog, since bpf
->>>>    trampoline and bpf prog are allocated via vmalloc, there is chance the
->>>>    distance exceeds the max branch range.
->>>> - Collect ACK/Review-by, not sure if the ACK and Review-bys for bpf_arch_text_poke()
->>>>    should be kept, since the changes to it is not trivial
-> 
-> +1 I need to give it another pass.>
+Since commit 7a82e5f52a35 ("sched/fair: Merge for each idle cpu
+loop of ILB") was merged. The parameter idle of _nohz_idle_balance()
+is not used anymore so we can remove it.
 
-Thank you verfy much! But I have to admit a problem. This patchset does
-not suport attaching bpf trampoline to regular kernel functions with
-ftrace. So lsm still does not work since the LSM HOOKS themselves are
-regular kernel functions. Sorry about that and hopefully we'll find an
-acceptable solution soon.
+Signed-off-by: Hao Jia <jiahao.os@bytedance.com>
+---
+ kernel/sched/fair.c | 7 +++----
+ 1 file changed, 3 insertions(+), 4 deletions(-)
 
->>>> - Update some commit messages and comments
->>>
->>> Given you've been taking a look and had objections in v5, would be great if you
->>> can find some cycles for this v6.
->>
->> Mark's out at the moment, so I wouldn't hold this series up pending his ack.
->> However, I agree that it would be good if _somebody_ from the Arm side can
->> give it the once over, so I've added Jean-Philippe to cc in case he has time
-> 
-> Makes sense,  Jean-Philippe had worked on BPF trampolines for ARM.
-> 
->> for a quick review. KP said he would also have a look, as he is interested
-> 
-> Thank you so much Will, I will give this another pass before the end
-> of the week.
-> 
->> in this series landing.
->>
->> Failing that, I'll try to look this week, but I'm off next week and I don't
->> want this to miss the merge window on my account.
-> 
-> Thanks for being considerate. Much appreciated.
-> 
-> - KP
-> 
->>
->> Cheers,
->>
->> Will
-> .
+diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
+index 77b2048a9326..8d4be2a95e37 100644
+--- a/kernel/sched/fair.c
++++ b/kernel/sched/fair.c
+@@ -10682,8 +10682,7 @@ static bool update_nohz_stats(struct rq *rq)
+  * can be a simple update of blocked load or a complete load balance with
+  * tasks movement depending of flags.
+  */
+-static void _nohz_idle_balance(struct rq *this_rq, unsigned int flags,
+-			       enum cpu_idle_type idle)
++static void _nohz_idle_balance(struct rq *this_rq, unsigned int flags)
+ {
+ 	/* Earliest time when we have to do rebalance again */
+ 	unsigned long now = jiffies;
+@@ -10798,7 +10797,7 @@ static bool nohz_idle_balance(struct rq *this_rq, enum cpu_idle_type idle)
+ 	if (idle != CPU_IDLE)
+ 		return false;
+ 
+-	_nohz_idle_balance(this_rq, flags, idle);
++	_nohz_idle_balance(this_rq, flags);
+ 
+ 	return true;
+ }
+@@ -10818,7 +10817,7 @@ void nohz_run_idle_balance(int cpu)
+ 	 * (ie NOHZ_STATS_KICK set) and will do the same.
+ 	 */
+ 	if ((flags == NOHZ_NEWILB_KICK) && !need_resched())
+-		_nohz_idle_balance(cpu_rq(cpu), NOHZ_STATS_KICK, CPU_IDLE);
++		_nohz_idle_balance(cpu_rq(cpu), NOHZ_STATS_KICK);
+ }
+ 
+ static void nohz_newidle_balance(struct rq *this_rq)
+-- 
+2.32.0
 

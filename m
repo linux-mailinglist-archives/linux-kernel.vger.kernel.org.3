@@ -2,60 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4319056AC20
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 21:49:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F07F56AC22
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 21:49:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236739AbiGGTrM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Jul 2022 15:47:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57302 "EHLO
+        id S236529AbiGGTrP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Jul 2022 15:47:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57346 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236584AbiGGTq5 (ORCPT
+        with ESMTP id S235961AbiGGTrB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Jul 2022 15:46:57 -0400
-Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B08C5926C;
-        Thu,  7 Jul 2022 12:46:56 -0700 (PDT)
-Received: by mail-ej1-x62f.google.com with SMTP id d2so34268062ejy.1;
-        Thu, 07 Jul 2022 12:46:56 -0700 (PDT)
+        Thu, 7 Jul 2022 15:47:01 -0400
+Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24A5559277;
+        Thu,  7 Jul 2022 12:46:57 -0700 (PDT)
+Received: by mail-ej1-x62c.google.com with SMTP id r21so5417085eju.0;
+        Thu, 07 Jul 2022 12:46:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=HY2aQJ3seKosRomDmgMnHWVFcuzDBXXIFx3XPBOLqNA=;
-        b=WJyzAI+UhCADxJhSCpFfMc6JP0QO5yqzG/wGBZtRpn9kH5VJLTu4tPA4BEw9SIyFky
-         +kCT7l8pqt6jrOI3gb5H3XjwW4GMf5XlfqBA95zc6cDAGqsWYByNiV4AYHWNofl9XOJO
-         tGCvVyO5IdKHC9/PBlBeAE0ZPbXdRLrm3BYQpA8iyqS4E7EInufMtUzSCm15on1mziEf
-         JvwJzxuNZn2oKL5mT1yPYQAANMVw43YAwSSD+8i2LFEiGiInhZfp81est8FmvqXf79fD
-         stf9FHEzh6sruZa/41S5RU6J6uzUS6pZtLjJj352zcXMOucnR4ZsYkxQqGkIYZM2u+Cs
-         qm3w==
+        bh=I3O9KA8l0ZyZWk4PrHMwkxFP5JEBmMEH3qlexm1SaGo=;
+        b=HwLSwtkKtvR1JYRcZtIwcC4yQ+vua1ftIKD9bu7kpfEy4Cm3W8mblgbzmNPr73P/h/
+         /4rPSpd9ODBgzWlhRj8NI6n+CqEoXlLf5JuCM6cu9k4JNYBDelbQyeT5aoJ/d+GkZM/4
+         fvgXUgbJudUuxFavxVMK6/qk2tZDOkhN+WxmxgEPt4/sQ8GNYhxfTFQmnLuau0h73YKB
+         CTqf2mABEU25rfu8arQIyQ+JFpWEjFYVntJJA6e7vE0AZ0nlrFHn4si5uXvNgtd+RxCS
+         2pyvxrKFbyXqnzB/cg0rDl3FAPT4KU6JODXjBqljMnJ+8PeVHvfjCXht9gv4Pd9jUfgB
+         0VGA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=HY2aQJ3seKosRomDmgMnHWVFcuzDBXXIFx3XPBOLqNA=;
-        b=YjHPlSIQ4fQF0d/pnaaNmxuN7FgZRNT1C+hoLNYKgUo4MhrWmpSu29sPR0p5Vo4hSk
-         SYjcYSkJO6f8OMwQbbT4UooOwGxEHgSPp9kRsKPCAln3Qz8WcYMu7xIBgKZ7Zu3qZIwq
-         d45TG1qE41pFrqrw6HGK41e49ncxbwxtl4rEwgdiMTpMrrryob36IUjHptc8lxJNSS82
-         KZC9oXALtUGyiVoUoUqQEInJFQuOxwqC1qMCOqK+gFyUz4f1SX5vC1MpXeonBJA1Drcs
-         rJs5kvOwlROi7L8ED5Oyv/y3pFW8ZVdvAsvCE5VxZrTwXyg2E7wnA0RJKjxVLFAzSn50
-         Vm1Q==
-X-Gm-Message-State: AJIora9vj0UWmC2uIqxY+IeZOQlNnIydT/WjTTz2Ck/9r7mqT6G9rlI/
-        dyQHiZEGKJRkZknmaXH4H+Y=
-X-Google-Smtp-Source: AGRyM1tUzrKvbxi+tK5EGLPnSQdDaVYBSDyNJGRicwUovzw7kcQNq25KFOZRTkp/LJ+afkG0aZQikA==
-X-Received: by 2002:a17:906:3589:b0:723:fe13:e981 with SMTP id o9-20020a170906358900b00723fe13e981mr45344059ejb.446.1657223215230;
-        Thu, 07 Jul 2022 12:46:55 -0700 (PDT)
+        bh=I3O9KA8l0ZyZWk4PrHMwkxFP5JEBmMEH3qlexm1SaGo=;
+        b=02OLcVJ6kPlraXU5cvF2tk19RWA66Rk/OGpIHrk3y0NsyOedsJOAsCIgL7icWrxC6P
+         RBK+D58k+UvLsZWct8YwkcWwatEa18kAXlHxky99Qha4Hau/KaSoqAl58ef5sg38ycRa
+         /TJu7CbwK8M1KgFlH/I9RivH2fwZPk+h5jwdh9XupqfEWvtKvo5Aoyne1++aEDeQ7haP
+         TLhXra+FFuTRaUdZB+c/P2wa7nLMYVXkVBQT2bYhNNPDTMcebtoIHz8LqIu0z0mGih0p
+         2W7d68jL+VlTQnfUUr+M+p+O1BZZBGPkMUugeBJNRsMF5ZhGyW7MDsNXevMBwU0Vi4et
+         h3qQ==
+X-Gm-Message-State: AJIora/bT3GSQrDvRukk9G0AxN0a0pm47AlNPqz/leEP5A1XKSBwVBlD
+        gQr/x7P1TTyxX+WmBlYpU/Q=
+X-Google-Smtp-Source: AGRyM1vlnCepxfEnkz/UpZMQDzyxm0F292miVG6p+EZfseDNlA70THgCrx3IUvfsU++monQQt7zpnw==
+X-Received: by 2002:a17:907:1b03:b0:6ff:78d4:c140 with SMTP id mp3-20020a1709071b0300b006ff78d4c140mr48043015ejc.554.1657223216723;
+        Thu, 07 Jul 2022 12:46:56 -0700 (PDT)
 Received: from localhost (92.40.202.166.threembb.co.uk. [92.40.202.166])
-        by smtp.gmail.com with ESMTPSA id k12-20020a17090666cc00b007041e969a8asm19400140ejp.97.2022.07.07.12.46.54
+        by smtp.gmail.com with ESMTPSA id g17-20020aa7c591000000b0043a4a5813d8sm10624117edq.2.2022.07.07.12.46.55
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 07 Jul 2022 12:46:54 -0700 (PDT)
+        Thu, 07 Jul 2022 12:46:56 -0700 (PDT)
 From:   Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
 To:     paul@crapouillou.net, lgirdwood@gmail.com, broonie@kernel.org,
         perex@perex.cz, tiwai@suse.com
 Cc:     linux-mips@vger.kernel.org, alsa-devel@alsa-project.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH v2 10/11] ASoC: jz4740-i2s: Move component functions near the component driver
-Date:   Thu,  7 Jul 2022 20:46:54 +0100
-Message-Id: <20220707194655.312892-11-aidanmacdonald.0x0@gmail.com>
+Subject: [PATCH v2 11/11] ASoC: jz4740-i2s: Refactor DAI probe/remove ops as component ops
+Date:   Thu,  7 Jul 2022 20:46:55 +0100
+Message-Id: <20220707194655.312892-12-aidanmacdonald.0x0@gmail.com>
 In-Reply-To: <20220707194655.312892-1-aidanmacdonald.0x0@gmail.com>
 References: <20220707194655.312892-1-aidanmacdonald.0x0@gmail.com>
 MIME-Version: 1.0
@@ -70,105 +70,107 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Move the component suspend/resume functions near the definition
-of the component driver to emphasize that they're unrelated to
-the DAI functions.
+Move most of the DAI probe/remove logic into component ops.
+This makes things more consistent because the AIC clock is
+now managed solely from the component side. And it makes it
+easier to add codec switching support later on.
 
 Signed-off-by: Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
 ---
- sound/soc/jz4740/jz4740-i2s.c | 72 +++++++++++++++++------------------
- 1 file changed, 36 insertions(+), 36 deletions(-)
+ sound/soc/jz4740/jz4740-i2s.c | 53 +++++++++++++++++++----------------
+ 1 file changed, 29 insertions(+), 24 deletions(-)
 
 diff --git a/sound/soc/jz4740/jz4740-i2s.c b/sound/soc/jz4740/jz4740-i2s.c
-index 70b9d28a40ce..5db73f12efcf 100644
+index 5db73f12efcf..e39ba4911678 100644
 --- a/sound/soc/jz4740/jz4740-i2s.c
 +++ b/sound/soc/jz4740/jz4740-i2s.c
-@@ -303,42 +303,6 @@ static int jz4740_i2s_set_sysclk(struct snd_soc_dai *dai, int clk_id,
- 	return ret;
- }
- 
--static int jz4740_i2s_suspend(struct snd_soc_component *component)
--{
--	struct jz4740_i2s *i2s = snd_soc_component_get_drvdata(component);
--
--	if (snd_soc_component_active(component)) {
--		regmap_clear_bits(i2s->regmap, JZ_REG_AIC_CONF, JZ_AIC_CONF_ENABLE);
--		clk_disable_unprepare(i2s->clk_i2s);
--	}
--
--	clk_disable_unprepare(i2s->clk_aic);
--
--	return 0;
--}
--
--static int jz4740_i2s_resume(struct snd_soc_component *component)
--{
--	struct jz4740_i2s *i2s = snd_soc_component_get_drvdata(component);
+@@ -306,32 +306,10 @@ static int jz4740_i2s_set_sysclk(struct snd_soc_dai *dai, int clk_id,
+ static int jz4740_i2s_dai_probe(struct snd_soc_dai *dai)
+ {
+ 	struct jz4740_i2s *i2s = snd_soc_dai_get_drvdata(dai);
 -	int ret;
 -
 -	ret = clk_prepare_enable(i2s->clk_aic);
 -	if (ret)
 -		return ret;
+ 
+ 	snd_soc_dai_init_dma_data(dai, &i2s->playback_dma_data,
+ 		&i2s->capture_dma_data);
+ 
+-	regmap_write(i2s->regmap, JZ_REG_AIC_CONF, JZ_AIC_CONF_RESET);
 -
--	if (snd_soc_component_active(component)) {
--		ret = clk_prepare_enable(i2s->clk_i2s);
--		if (ret) {
--			clk_disable_unprepare(i2s->clk_aic);
--			return ret;
--		}
+-	regmap_write(i2s->regmap, JZ_REG_AIC_CONF,
+-		     JZ_AIC_CONF_OVERFLOW_PLAY_LAST |
+-		     JZ_AIC_CONF_I2S | JZ_AIC_CONF_INTERNAL_CODEC);
 -
--		regmap_set_bits(i2s->regmap, JZ_REG_AIC_CONF, JZ_AIC_CONF_ENABLE);
--	}
+-	regmap_field_write(i2s->field_rx_fifo_thresh, 7);
+-	regmap_field_write(i2s->field_tx_fifo_thresh, 8);
 -
 -	return 0;
 -}
 -
- static int jz4740_i2s_dai_probe(struct snd_soc_dai *dai)
- {
- 	struct jz4740_i2s *i2s = snd_soc_dai_get_drvdata(dai);
-@@ -459,6 +423,42 @@ static const struct i2s_soc_info jz4780_i2s_soc_info = {
- 	.pll_clk_name		= "pll half",
- };
+-static int jz4740_i2s_dai_remove(struct snd_soc_dai *dai)
+-{
+-	struct jz4740_i2s *i2s = snd_soc_dai_get_drvdata(dai);
+-
+-	clk_disable_unprepare(i2s->clk_aic);
+ 	return 0;
+ }
  
-+static int jz4740_i2s_suspend(struct snd_soc_component *component)
+@@ -351,7 +329,6 @@ static const struct snd_soc_dai_ops jz4740_i2s_dai_ops = {
+ 
+ static struct snd_soc_dai_driver jz4740_i2s_dai = {
+ 	.probe = jz4740_i2s_dai_probe,
+-	.remove = jz4740_i2s_dai_remove,
+ 	.playback = {
+ 		.channels_min = 1,
+ 		.channels_max = 2,
+@@ -389,7 +366,6 @@ static const struct i2s_soc_info jz4760_i2s_soc_info = {
+ 
+ static struct snd_soc_dai_driver jz4770_i2s_dai = {
+ 	.probe = jz4740_i2s_dai_probe,
+-	.remove = jz4740_i2s_dai_remove,
+ 	.playback = {
+ 		.channels_min = 1,
+ 		.channels_max = 2,
+@@ -459,8 +435,37 @@ static int jz4740_i2s_resume(struct snd_soc_component *component)
+ 	return 0;
+ }
+ 
++static int jz4740_i2s_probe(struct snd_soc_component *component)
 +{
 +	struct jz4740_i2s *i2s = snd_soc_component_get_drvdata(component);
-+
-+	if (snd_soc_component_active(component)) {
-+		regmap_clear_bits(i2s->regmap, JZ_REG_AIC_CONF, JZ_AIC_CONF_ENABLE);
-+		clk_disable_unprepare(i2s->clk_i2s);
-+	}
-+
-+	clk_disable_unprepare(i2s->clk_aic);
-+
-+	return 0;
-+}
-+
-+static int jz4740_i2s_resume(struct snd_soc_component *component)
-+{
-+	struct jz4740_i2s *i2s = snd_soc_component_get_drvdata(component);
-+	int ret;
 +
 +	ret = clk_prepare_enable(i2s->clk_aic);
 +	if (ret)
 +		return ret;
 +
-+	if (snd_soc_component_active(component)) {
-+		ret = clk_prepare_enable(i2s->clk_i2s);
-+		if (ret) {
-+			clk_disable_unprepare(i2s->clk_aic);
-+			return ret;
-+		}
++	regmap_write(i2s->regmap, JZ_REG_AIC_CONF, JZ_AIC_CONF_RESET);
 +
-+		regmap_set_bits(i2s->regmap, JZ_REG_AIC_CONF, JZ_AIC_CONF_ENABLE);
-+	}
++	regmap_write(i2s->regmap, JZ_REG_AIC_CONF,
++		     JZ_AIC_CONF_OVERFLOW_PLAY_LAST |
++		     JZ_AIC_CONF_I2S | JZ_AIC_CONF_INTERNAL_CODEC);
++
++	regmap_field_write(i2s->field_rx_fifo_thresh, 7);
++	regmap_field_write(i2s->field_tx_fifo_thresh, 8);
 +
 +	return 0;
 +}
 +
++static void jz4740_i2s_remove(struct snd_soc_component *component)
++{
++	struct jz4740_i2s *i2s = snd_soc_component_get_drvdata(component);
++
++	clk_disable_unprepare(i2s->clk_aic);
++}
++
  static const struct snd_soc_component_driver jz4740_i2s_component = {
  	.name			= "jz4740-i2s",
++	.probe			= jz4740_i2s_probe,
++	.remove			= jz4740_i2s_remove,
  	.suspend		= jz4740_i2s_suspend,
+ 	.resume			= jz4740_i2s_resume,
+ 	.legacy_dai_naming	= 1,
 -- 
 2.35.1
 

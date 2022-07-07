@@ -2,88 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7262C569787
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 03:33:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 731D2569793
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 03:35:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234831AbiGGBcn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Jul 2022 21:32:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34592 "EHLO
+        id S234848AbiGGBdf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Jul 2022 21:33:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35742 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231607AbiGGBck (ORCPT
+        with ESMTP id S234838AbiGGBdd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Jul 2022 21:32:40 -0400
-Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7692D2E9DA;
-        Wed,  6 Jul 2022 18:32:39 -0700 (PDT)
-Received: by mail-ej1-x62e.google.com with SMTP id j22so3646749ejs.2;
-        Wed, 06 Jul 2022 18:32:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:from:to:subject:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=73StDBafAFoimZWPDY5sfTCTqYtNMPriED7nm6PDGRo=;
-        b=Ygudwhr65932O7JApn/NRyICurvHUiDHCRkQ7Az46Vr+Y6DS/yHV5A4NEMwA9Bs30U
-         8w+dsl+PZZ/xW4U5/MviH5Z76ytSvVZ40AG88NPoYp7eMpqjcAgP8i5ckUV4gMd6bcjK
-         dr9C3pg9Ey4mx6Y/qoEu4wVHYvf4EQX6pD5k0++k9fd75YYEXn+Vna1VjhHijihq3QXS
-         aMmO2Pf8nK1UQYb3kzK8hUqQYSUDYP2prTEK+X1tdHIJeS6TxxWXMZR9B3QRjP1PEOkE
-         VU6AOodMilcCEMb6W3mGWIrNwi6j2qiXmWxv4DOqBMi2wOWJZRZrL9U8TpyWVZntsXhd
-         RqUw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:from:to:subject:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=73StDBafAFoimZWPDY5sfTCTqYtNMPriED7nm6PDGRo=;
-        b=W4CWghX9ms0oZH9VQIgOz6lAwih5M1rBcJOuJPbWHugofHeU/6Fm8O61l5Hh09+Ab1
-         tcdtnoM+9kPk7E6yd7su/qjRzjgW49pZOUtSpU+7tqcvjv0/khnXVC26NPWeD3j2NUy1
-         xrvNX+uzfdj4Gr09mneXcOEsMSMM17Hx+8Tfy19YstAZ+xDKFrjFxeDu3iicJbAA7CSK
-         o/2jSuOpJTkKGmNv0Be2NJZ/Wa6wWTBp1uDRV9UHCPITh+b8sa9yP2njBjPpDKrPu2rv
-         9WPFSFlvvIdsVwx/Oc1NBafp1ML43ob78aBPsbMIBuVyDNISeJ6ER/F02RsoohSeRiKS
-         uleg==
-X-Gm-Message-State: AJIora8KMl3nIKHQHSDZcW2DvhzDae+v8Ghmdkw1dhSmy+2ShbxT9Mqb
-        ecRGl6mXzZKdgdiaf85/aU4=
-X-Google-Smtp-Source: AGRyM1shRjseXx5SkyieU5cWhnsfQl8dE6QOU6IdufehChSX1/HytvKdx4brLrT0D89tbuyznhJEMw==
-X-Received: by 2002:a17:907:1b25:b0:6da:8206:fc56 with SMTP id mp37-20020a1709071b2500b006da8206fc56mr42799330ejc.81.1657157557966;
-        Wed, 06 Jul 2022 18:32:37 -0700 (PDT)
-Received: from Ansuel-xps. (93-42-70-190.ip85.fastwebnet.it. [93.42.70.190])
-        by smtp.gmail.com with ESMTPSA id f22-20020a056402069600b0043a7404314csm5870698edy.8.2022.07.06.18.32.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 06 Jul 2022 18:32:37 -0700 (PDT)
-Message-ID: <62c637b5.1c69fb81.6f196.90a2@mx.google.com>
-X-Google-Original-Message-ID: <YsY3tAZVHlWTcp7x@Ansuel-xps.>
-Date:   Thu, 7 Jul 2022 03:32:36 +0200
-From:   Christian Marangi <ansuelsmth@gmail.com>
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Ohad Ben-Cohen <ohad@wizery.com>,
-        Baolin Wang <baolin.wang7@gmail.com>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-remoteproc@vger.kernel.org
-Subject: Re: [PATCH 3/3] ARM: dts: qcom: add missing smem node for ipq8064
- dtsi
-References: <20220707013017.26654-1-ansuelsmth@gmail.com>
- <20220707013017.26654-4-ansuelsmth@gmail.com>
+        Wed, 6 Jul 2022 21:33:33 -0400
+Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80B6F2CDC8;
+        Wed,  6 Jul 2022 18:33:32 -0700 (PDT)
+Received: from lelv0266.itg.ti.com ([10.180.67.225])
+        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 2671XMtl113088;
+        Wed, 6 Jul 2022 20:33:22 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1657157602;
+        bh=3Nx6G+cOPkCmsqougOzbxAPbtnwI3F7UdtXvOeI5+7w=;
+        h=From:To:CC:Subject:Date:In-Reply-To:References;
+        b=o98SkFh0HY7ekDfpnGd+8EQ77tTD5d2sfujI+fgT50c/OjY18c7OKYO1lc2/JDlLV
+         h/Mc3suT3WHJtJvymNSFZnmOV7/jsiQevwv7U8lJOvGM2eeRJEaYFQh2j8BLKc+7ym
+         tK1A/z32QFTCB5HVw9Y/6pOKGT3vS8AD1T42sq5Y=
+Received: from DLEE105.ent.ti.com (dlee105.ent.ti.com [157.170.170.35])
+        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 2671XLWl043040
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Wed, 6 Jul 2022 20:33:22 -0500
+Received: from DLEE108.ent.ti.com (157.170.170.38) by DLEE105.ent.ti.com
+ (157.170.170.35) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Wed, 6
+ Jul 2022 20:33:21 -0500
+Received: from fllv0040.itg.ti.com (10.64.41.20) by DLEE108.ent.ti.com
+ (157.170.170.38) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
+ Frontend Transport; Wed, 6 Jul 2022 20:33:21 -0500
+Received: from localhost (ileax41-snat.itg.ti.com [10.172.224.153])
+        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 2671XL0J121987;
+        Wed, 6 Jul 2022 20:33:21 -0500
+From:   Nishanth Menon <nm@ti.com>
+To:     <vigneshr@ti.com>
+CC:     Nishanth Menon <nm@ti.com>, <devicetree@vger.kernel.org>,
+        <kristo@kernel.org>, <linux-kernel@vger.kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <robh+dt@kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>, <kishon@ti.com>
+Subject: Re: [PATCH] arm64: dts: ti: k3-am642-sk: Add pinmux corresponding to main_uart0
+Date:   Wed, 6 Jul 2022 20:33:19 -0500
+Message-ID: <165715756351.14068.13347195026320424503.b4-ty@ti.com>
+X-Mailer: git-send-email 2.31.1
+In-Reply-To: <20220516113417.3516-1-a-govindraju@ti.com>
+References: <20220516113417.3516-1-a-govindraju@ti.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220707013017.26654-4-ansuelsmth@gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jul 07, 2022 at 03:30:17AM +0200, Christian Marangi wrote:
-> Add missing smem node for ipq8064 dtsi.
+Hi Aswath Govindraju,
+
+On Mon, 16 May 2022 17:04:17 +0530, Aswath Govindraju wrote:
+> Add pinmux details required for the zeroth instance of main UART.
+> 
 > 
 
-Slipped while fixing commit description... pls ignore.
+I have applied the following to branch ti-k3-dts-next on [1].
+Thank you!
 
+[1/1] arm64: dts: ti: k3-am642-sk: Add pinmux corresponding to main_uart0
+      commit: c553bf25f0f4135e17cf064a6875d5cbc43b0956
+
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent up the chain during
+the next merge window (or sooner if it is a relevant bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
+
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
+
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
+
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+[1] git://git.kernel.org/pub/scm/linux/kernel/git/ti/linux.git
 -- 
-	Ansuel
+Regards,
+Nishanth Menon
+Key (0xDDB5849D1736249D) / Fingerprint: F8A2 8693 54EB 8232 17A3  1A34 DDB5 849D 1736 249D
+

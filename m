@@ -2,52 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 565D956A3BA
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 15:33:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CC91D56A3BD
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 15:34:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235974AbiGGNdP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Jul 2022 09:33:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55434 "EHLO
+        id S235754AbiGGNeN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Jul 2022 09:34:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57200 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235981AbiGGNdL (ORCPT
+        with ESMTP id S235291AbiGGNeJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Jul 2022 09:33:11 -0400
-Received: from mail-io1-f69.google.com (mail-io1-f69.google.com [209.85.166.69])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FAEC32066
-        for <linux-kernel@vger.kernel.org>; Thu,  7 Jul 2022 06:33:08 -0700 (PDT)
-Received: by mail-io1-f69.google.com with SMTP id h18-20020a5d9712000000b00674f83a60f0so9799169iol.4
-        for <linux-kernel@vger.kernel.org>; Thu, 07 Jul 2022 06:33:08 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
-         :from:to;
-        bh=0LECw51ls94LteVZlKugyiTPqr14mVoBcbTQiczvg14=;
-        b=hoAKMvgGS/Vn0z0PmtJng7y0ga5en7gXNOSSM8pppuy2UQHk/J7gymmZgTvHH7ETEu
-         A6TFzpJ6vcV1uMui71OkpiPoFWQysxEOu4DXPMDyzGX5SfkpBpEvg74/2LfM8gX+VNoj
-         G70L2QIbyHBhlGzHNCQUHRIk1tdM9XqKeBqItrfM86wBhLUwbbmClYxnTa97GJuW3Lqt
-         17fBpPCe4XYU7rhMTuRCGrv2xA//l47AirrI0X4vHNJStPwBoOISNdWddsBaKs2dTl0i
-         EmO7wlA1YgGuu/TVsTAx9+6RtQPfJ3Ru2zU73CCfC2M8kes61JZ5XvxCXo587C+KQgZG
-         BPxA==
-X-Gm-Message-State: AJIora/+M7ILWpLr3/jOn5mSDyOlmWDw6RBMtD4HzNIybHCSK9jrWZDJ
-        xGqoK6jmV2ip+6xoEl8hH1OBPYypLnkgoSoemaciObqDyLhp
-X-Google-Smtp-Source: AGRyM1ti6n0V8uUHlPsmTuZ97R5qbB8BzFt4POgr/uCKeesL6DokbgtGbTdnB5ZczlhnTF3XCl/wEmF3rQIEMSRzUKo7Ec52yaa3
+        Thu, 7 Jul 2022 09:34:09 -0400
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.17.10])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0FDE1CFC4;
+        Thu,  7 Jul 2022 06:34:08 -0700 (PDT)
+Received: from mail-yb1-f171.google.com ([209.85.219.171]) by
+ mrelayeu.kundenserver.de (mreue108 [213.165.67.113]) with ESMTPSA (Nemesis)
+ id 1McpS0-1nZYrM3AEE-00Zzku; Thu, 07 Jul 2022 15:34:06 +0200
+Received: by mail-yb1-f171.google.com with SMTP id i7so32518489ybe.11;
+        Thu, 07 Jul 2022 06:34:06 -0700 (PDT)
+X-Gm-Message-State: AJIora+EskzTZXtVd0fRmEneRTGVHGos1q2KEFvCT/HqBOu0hC4JaL1i
+        tzELlgr6qEEpZNgv5IdlkJR6srMP5aUP7OEk9ig=
+X-Google-Smtp-Source: AGRyM1uVpCRoROO6rAh+vA5ak8N4SGshcVRH0JW9GvyB4UqceUAu6tZ1eCC16Bwe+GMTjR8QSqM1egSeZk3ZR5FMhlQ=
+X-Received: by 2002:a25:7c41:0:b0:66d:766a:4815 with SMTP id
+ x62-20020a257c41000000b0066d766a4815mr46624953ybc.480.1657200845543; Thu, 07
+ Jul 2022 06:34:05 -0700 (PDT)
 MIME-Version: 1.0
-X-Received: by 2002:a6b:d7:0:b0:672:70c8:5b4b with SMTP id 206-20020a6b00d7000000b0067270c85b4bmr24983020ioa.1.1657200787697;
- Thu, 07 Jul 2022 06:33:07 -0700 (PDT)
-Date:   Thu, 07 Jul 2022 06:33:07 -0700
-In-Reply-To: <0ef5a253-f554-4abd-e376-e37a3fbf67fb@gmail.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <00000000000045b69505e33720b0@google.com>
-Subject: Re: [syzbot] KASAN: use-after-free Read in pty_close
-From:   syzbot <syzbot+49950ba66096b1f0209b@syzkaller.appspotmail.com>
-To:     asml.silence@gmail.com, axboe@kernel.dk,
-        gregkh@linuxfoundation.org, jirislaby@kernel.org,
-        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com
+References: <20220707132054.GA10610@logan-ThinkPad-T14-Gen-1>
+In-Reply-To: <20220707132054.GA10610@logan-ThinkPad-T14-Gen-1>
+From:   Arnd Bergmann <arnd@arndb.de>
+Date:   Thu, 7 Jul 2022 15:33:48 +0200
+X-Gmail-Original-Message-ID: <CAK8P3a0P2u+LdXcU7As=dfNbg_J2eWfhgB9TT1-xVyH0v6OM5Q@mail.gmail.com>
+Message-ID: <CAK8P3a0P2u+LdXcU7As=dfNbg_J2eWfhgB9TT1-xVyH0v6OM5Q@mail.gmail.com>
+Subject: Re: [PATCH v3] The Yosemite V3.5 is a facebook multi-node server
+ platform that host four OCP server. The BMC in the Yosemite V3.5 platform
+ based on AST2600 SoC.
+To:     Logananth Sundararaj <logananth13.hcl@gmail.com>
+Cc:     Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
+        SoC Team <soc@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+        Joel Stanley <joel@jms.id.au>,
+        Andrew Jeffery <andrew@aj.id.au>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        DTML <devicetree@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-aspeed <linux-aspeed@lists.ozlabs.org>,
+        OpenBMC Maillist <openbmc@lists.ozlabs.org>,
+        garnermic@gmail.com, thangavel.k@hcl.com, naveen.mosess@hcl.com,
+        patrick@stwcx.xyz, velumanit@hcl.com
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+X-Provags-ID: V03:K1:Ff4asemPkgpc3YgLJGPo+gGxHZPG4OGQORdlP3XswYqIxQVv9m5
+ 0JTGQNJ2vXX18oqbh1UGTJpZNS7riFtZ2v+dLDNrH1XkSXIkkrZfjaXSef5SWwU4FmY51zc
+ 3GCxzBjcuJHUr9Shbf0pQzQX42Ifs9oflNzlQicmSPfeJl0s+0C+B7Cw45CwTP6Q/orK5WH
+ lw0Jab6s3K9H4OLj3s/XA==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:/KuZVDTAKcg=:/JVMEnND1FLr9TIGB4Cros
+ rvifjyuwXtp+vn/NIRnsBFxErQaE/gdqgeUqJSKBUlpjuRgY205s+U1Hb815t2Q0o4/nTqmiT
+ NZV+yPoYTEMlNXe9o15lXVqvOjs5a2uv+qrnsweH4OFa2P0FUiNerE7HsWR6y+X4tUyu6w9eW
+ IKsyrTwGAI/iW6KXNnqaxUSd9Aa5dHRAyAeAbbs+jhgwWAF6W4/gz528mXzPYgyjkB7VBvI1o
+ yq0O10e7rhwfG+MxVUsNKggEHsAWE5nXLuncz25b23iWAm383L8XHVQJ4YzPtiksHBLolmu03
+ ENr+paIkXos+N6FmJTrlxeiR3AGC1+cTTvEq2VklwwzcePw0hzneP+ulg0PmFUvkmzb70DvUb
+ MPrbiH6xStbVRtaDmz+u3KFCfYXlhuqyMirFPwxmXDJIleBJkKhlrxVI5V6Id57XAyD3tW2AG
+ aXMxBdY1lygzt+1y0guRKqntUyWvXEuD8YCxqVhplKoING+4UR+aNg+kzIR85/6TqRbNvYpre
+ IcdSN3bTLUU9v3GqvolDwpuipiunR065ZKDjGrbBYb0nzpkmuL7xCwt3cvkohECbryGInELLm
+ BFKk7ayfQjuEuhQEVlWTC1lRdtkkCZpadJlrB4Bx9z+i17xICwtntFN7no0mJ3KpzehhzbS02
+ GLAFnRUwxDcSsblsXBn6g5ZKF7WcbKVVGPdw4VE2owZ0pwRLz2q/MCO3y8JDSkcjgtSVsf/wC
+ qzPQ8/zIUpYqx4fBy69xYbbUuON4toLMywzKXs3PkjWjXEj3Qs60MFmvfKqUTPaPO1XJyI1gj
+ NvM019vy+aEtKT4oC2kvE5C6fSV0g7673HlDqWW5W4G3EjwxFN/jtetVMknU9bHD0SRIt8Vzw
+ 0IHdQdM8x0+V0nouyjQ5R+UgyavmiupxWwt78PqdQ=
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -55,24 +76,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
-
-syzbot tried to test the proposed patch but the build/boot failed:
-
-failed to checkout kernel repo git@github.com:isilence/linux.git/poll-syz: failed to run ["git" "fetch" "--force" "eab646780d8603fd6348e6bccafebcb1c0ddc5bc" "poll-syz"]: exit status 128
-Host key verification failed.
-fatal: Could not read from remote repository.
-
-Please make sure you have the correct access rights
-and the repository exists.
+On Thu, Jul 7, 2022 at 3:20 PM Logananth Sundararaj
+<logananth13.hcl@gmail.com> wrote:
+>
+> This patch adds linux device tree entry related to
+> Yosemite V3.5 specific devices connected to BMC SoC.
+>
+> Signed-off-by: Logananth Sundararaj <logananth_s@hcl.com>
 
 
+Something went wrong with the patch description, it looks like you dropped
+the subject and sent the first paragraph as the subject instead.
 
-Tested on:
+> +/ {
+> +       model = "Facebook fby35";
+> +       compatible = "facebook,fby35", "aspeed,ast2600";
+> +
+> +       aliases {
+> +               serial4 = &uart5;
+> +       };
 
-commit:         [unknown 
-git tree:       git@github.com:isilence/linux.git poll-syz
-dashboard link: https://syzkaller.appspot.com/bug?extid=49950ba66096b1f0209b
-compiler:       
+Why not start at serial0 here?
 
-Note: no patches were applied.
+> +       chosen {
+> +               stdout-path = &uart5;
+> +               bootargs = "console=ttyS4,57600n8 root=/dev/ram rw vmalloc=384M";
+> +       };
+
+The bootargs should really come from the boot loader.
+
+Why do you need the vmalloc=384M? That seems excessive.
+
+> +
+> +       memory@80000000 {
+> +               device_type = "memory";
+> +               reg = <0x80000000 0x80000000>;
+> +       };
+
+The memory location and size is usually also set by the boot loader
+
+        Arnd

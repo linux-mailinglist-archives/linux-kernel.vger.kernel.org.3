@@ -2,163 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BF747569753
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 03:19:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 87689569759
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 03:20:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234404AbiGGBTI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Jul 2022 21:19:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54518 "EHLO
+        id S234584AbiGGBUH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Jul 2022 21:20:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55090 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231345AbiGGBTH (ORCPT
+        with ESMTP id S230452AbiGGBUG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Jul 2022 21:19:07 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D03EE2E69D;
-        Wed,  6 Jul 2022 18:19:04 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 85C6FB81CF4;
-        Thu,  7 Jul 2022 01:19:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BA16EC341C6;
-        Thu,  7 Jul 2022 01:19:00 +0000 (UTC)
-Date:   Wed, 6 Jul 2022 21:18:58 -0400
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Song Liu <songliubraving@fb.com>
-Cc:     Song Liu <song@kernel.org>, Networking <netdev@vger.kernel.org>,
-        bpf <bpf@vger.kernel.org>, lkml <linux-kernel@vger.kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Kernel Team <Kernel-team@fb.com>,
-        "jolsa@kernel.org" <jolsa@kernel.org>,
-        "mhiramat@kernel.org" <mhiramat@kernel.org>
-Subject: Re: [PATCH v2 bpf-next 5/5] bpf: trampoline: support
- FTRACE_OPS_FL_SHARE_IPMODIFY
-Message-ID: <20220706211858.67f9254d@rorschach.local.home>
-In-Reply-To: <9E7BD8AD-483A-4960-B4C6-223CC715D2AF@fb.com>
-References: <20220602193706.2607681-1-song@kernel.org>
-        <20220602193706.2607681-6-song@kernel.org>
-        <20220706153843.37584b5b@gandalf.local.home>
-        <DC04E081-8320-4A39-A058-D0E33F202625@fb.com>
-        <20220706174049.6c60250f@gandalf.local.home>
-        <ECD336F1-A130-47BA-8FBB-E3573445380F@fb.com>
-        <20220706182931.06cb0e20@gandalf.local.home>
-        <9E7BD8AD-483A-4960-B4C6-223CC715D2AF@fb.com>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        Wed, 6 Jul 2022 21:20:06 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43E6E2E69C;
+        Wed,  6 Jul 2022 18:20:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1657156805; x=1688692805;
+  h=message-id:date:mime-version:cc:subject:to:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=RlBsSE86mhkZ1VM1qqe1zDyK2s+b9dUNIdXAWa4b/3U=;
+  b=MqFen/CH1oWMnHwrQxZifLcU/0coMdEwlj7UwSF/4Ld+8gaIAz3NGKj5
+   Sv1VOQV3QLtWhYfPMnNe0jpKeXAsM4gmAqyuWN9jaDkbCTBYyDD0NvqAk
+   Judq6xeZqP81xniFm+m5FpJpFgFoqIzY5nxf+E/ddHizPxiwRYNk04UMq
+   DGYrWnf5camVm0p4KIK0KYj81gRmmjI51j5g1MQPoa4PJ7dxBC6oR0P7s
+   GozERMKzpmpNUdQYJk5araKAxap27nbE15V916eoMXR1/x6ADlDiuJbqq
+   smFSfZ8Ly47fz+JBT6VLGk1ObYPWEPTffL2eoNHlKpiY3LEs92AABsxeO
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10400"; a="266934029"
+X-IronPort-AV: E=Sophos;i="5.92,251,1650956400"; 
+   d="scan'208";a="266934029"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jul 2022 18:20:04 -0700
+X-IronPort-AV: E=Sophos;i="5.92,251,1650956400"; 
+   d="scan'208";a="650909261"
+Received: from hualiu-mobl1.ccr.corp.intel.com (HELO [10.249.171.209]) ([10.249.171.209])
+  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jul 2022 18:20:01 -0700
+Message-ID: <2aa8aa41-4d9f-5a0f-1ad4-e2e19cbcbe6f@linux.intel.com>
+Date:   Thu, 7 Jul 2022 09:19:59 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Cc:     baolu.lu@linux.intel.com, will@kernel.org, iommu@lists.linux.dev,
+        linux-arm-kernel@lists.infradead.org,
+        suravee.suthikulpanit@amd.com, vasant.hegde@amd.com,
+        mjrosato@linux.ibm.com, gerald.schaefer@linux.ibm.com,
+        schnelle@linux.ibm.com, linux-s390@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 04/15] iommu: Move bus setup to IOMMU device
+ registration
+Content-Language: en-US
+To:     Robin Murphy <robin.murphy@arm.com>, joro@8bytes.org
+References: <cover.1657034827.git.robin.murphy@arm.com>
+ <5b9b608af21b3c4353af042355973bac55397962.1657034828.git.robin.murphy@arm.com>
+ <d6a8e85b-ab7d-f5c9-a8cb-79dd8e68c967@linux.intel.com>
+ <71835610-7798-5fbe-556a-fc44dc9e168b@arm.com>
+From:   Baolu Lu <baolu.lu@linux.intel.com>
+In-Reply-To: <71835610-7798-5fbe-556a-fc44dc9e168b@arm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 7 Jul 2022 00:19:07 +0000
-Song Liu <songliubraving@fb.com> wrote:
-
-> >> In this specific race condition, register_bpf() will succeed, as it already
-> >> got tr->mutex. But the IPMODIFY (livepatch) side will fail and retry.   
-> > 
-> > What else takes the tr->mutex ?  
+On 2022/7/6 22:37, Robin Murphy wrote:
+> On 2022-07-06 03:35, Baolu Lu wrote:
+>> On 2022/7/6 01:08, Robin Murphy wrote:
+>>> @@ -202,12 +210,32 @@ int iommu_device_register(struct iommu_device 
+>>> *iommu,
+>>>       spin_lock(&iommu_device_lock);
+>>>       list_add_tail(&iommu->list, &iommu_device_list);
+>>>       spin_unlock(&iommu_device_lock);
+>>> +
+>>> +    for (int i = 0; i < ARRAY_SIZE(iommu_buses); i++) {
+>>> +        struct bus_type *bus = iommu_buses[i];
+>>> +        int err;
+>>> +
+>>> +        if (bus->iommu_ops && bus->iommu_ops != ops) {
+>>> +            err = -EBUSY;
+>>> +        } else {
+>>> +            bus->iommu_ops = ops;
+>>> +            err = bus_iommu_probe(bus);
+>>> +        }
+>>> +        if (err) {
+>>> +            iommu_device_unregister(iommu);
+>>> +            return err;
+>>> +        }
+>>> +    }
+>>> +
+>>>       return 0;
+>>>   }
+>>>   EXPORT_SYMBOL_GPL(iommu_device_register);
+>>
+>> With bus_set_iommu() retired, my understanding is that now we embrace
+>> the first-come-first-serve policy for bus->iommu_ops setting. This will
+>> lead to problem in different iommu_ops for different bus case. Did I
+>> overlook anything?
 > 
-> tr->mutex is the local mutex for a single BPF trampoline, we only need to take
-> it when we make changes to the trampoline (add/remove fentry/fexit programs). 
+> This is just formalising the de-facto situation that we don't actually 
+> have any combination of drivers that could load on the same system 
+> without already attempting to claim at least one bus in common. It's 
+> also only temporary until the bus ops are removed completely and we 
+> fully support multiple drivers coexisting, which only actually takes a 
+> handful more patches - I've realised I could even bring that change 
+> *ahead* of the big job of converting iommu_domain_alloc() (I'm not 
+> convinced that the tree-wide flag-day patch for that I currently have in 
+> the dev branch is really viable, nor that I've actually got the correct 
+> device at some of the callsites), although whether it's worth the 
+> potentially-surprising behaviour that might result I'm less sure.
 > 
-> > 
-> > If it preempts anything else taking that mutex, when this runs, then it
-> > needs to be careful.
-> > 
-> > You said this can happen when the live patch came first. This isn't racing
-> > against live patch, it's racing against anything that takes the tr->mutex
-> > and then adds a bpf trampoline to a location that has a live patch.  
-> 
-> There are a few scenarios here:
-> 1. Live patch is already applied, then a BPF trampoline is being registered 
-> to the same function. In bpf_trampoline_update(), register_fentry returns
-> -EAGAIN, and this will be resolved. 
+> If we already had systems where in-tree drivers successfully coexisted 
+> on different buses then I'd have split this up and done something a bit 
+> more involved to keep a vestigial bus_set_iommu() around until the final 
+> bus ops removal, but since we don't, it seemed neatest to do all the 
+> related work in one go.
 
-Where will it be resolved?
+Fair enough. I've never seen a mixed system as far. It's fine for us to
+retire bus_set_iommu() for now and then formally support mixed IOMMU
+drivers later.
 
-> 
-> 2. BPF trampoline is already registered, then a live patch is being applied 
-> to the same function. The live patch code need to ask the bpf trampoline to
-> prepare the trampoline before live patch. This is done by calling 
-> bpf_tramp_ftrace_ops_func. 
-> 
-> 2.1 If nothing else is modifying the trampoline at the same time, 
-> bpf_tramp_ftrace_ops_func will succeed. 
-> 
-> 2.2 In rare cases, if something else is holding tr->mutex to make changes to 
-> the trampoline (add/remove fentry functions, etc.), mutex_trylock in 
-> bpf_tramp_ftrace_ops_func will fail, and live patch will fail. However, the 
-> change to BPF trampoline will still succeed. It is common for live patch to
-> retry, so we just need to try live patch again when no one is making changes 
-> to the BPF trampoline in parallel. 
-
-If the live patch is going to try again, and the task doing the live
-patch is SCHED_FIFO, and the task holding the tr->mutex is SCHED_OTHER
-(or just a lower priority), then there is a chance that the live patch
-task preempted the tr->mutex owner, and let's say the tr->mutex owner
-is pinned to the CPU (by the user or whatever), then because the live
-patch task is in a loop trying to take that mutex, it will never let
-the owner continue.
-
-Yes, this is a real scenario with trylock on mutexes. We hit it all the
-time in RT.
-
-> 
-> >   
-> >> 
-> >> Since both livepatch and bpf trampoline changes are rare operations, I think 
-> >> the chance of the race condition is low enough. 
-
-
-A low race condition in a world that does this a billion times a day,
-ends up being not so rare.
-
-I like to say, "I live in a world where the unlikely is very much likely!"
-
-
-> >> 
-> >> Does this make sense?
-> >>   
-> > 
-> > It's low, and if it is also a privileged operation then there's less to be
-> > concern about.  
-> 
-> Both live patch and BPF trampoline are privileged operations. 
-
-This makes the issue less of an issue, but if there's an application
-that does this with setuid or something, there's a chance that it can
-be used by an attacker as well.
-
-> 
-> > As if it is not, then we could have a way to deadlock the
-> > system. I'm more concerned that this will lead to a CVE than it just
-> > happening randomly. In other words, it only takes something that can run at
-> > a real-time priority to connect to a live patch location, and something
-> > that runs at a low priority to take a tr->mutex. If an attacker has both,
-> > then it can pin both to a CPU and then cause the deadlock to the system.
-> > 
-> > One hack to fix this is to add a msleep(1) in the failed case of the
-> > trylock. This will at least give the owner of the lock a millisecond to
-> > release it. This was what the RT patch use to do with spin_trylock() that
-> > was converted to a mutex (and we worked hard to remove all of them).  
-> 
-> The fix is really simple. But I still think we don't need it. We only hit
-> the trylock case for something with IPMODIFY. The non-privileged user 
-> should not be able to do that, right?
-
-For now, perhaps. But what useful applications are there going to be in
-the future that performs these privileged operations on behalf of a
-non-privileged user?
-
-In other words, if we can fix it now, we should, and avoid debugging
-this issue 5 years from now where it may take months to figure out.
-
--- Steve
+Best regards,
+baolu

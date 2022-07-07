@@ -2,119 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 02707569B9F
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 09:32:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 736EA569BA3
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 09:32:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233281AbiGGHaw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Jul 2022 03:30:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47220 "EHLO
+        id S233899AbiGGHbG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Jul 2022 03:31:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47316 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230028AbiGGHat (ORCPT
+        with ESMTP id S233711AbiGGHbB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Jul 2022 03:30:49 -0400
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D05331235;
-        Thu,  7 Jul 2022 00:30:44 -0700 (PDT)
-X-UUID: d2c34ff1fee144f4b921b7d1d663d878-20220707
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.8,REQID:6841d9ae-7ef7-40e6-9bc8-40cef7c34611,OB:0,LO
-        B:0,IP:0,URL:5,TC:0,Content:0,EDM:0,RT:0,SF:45,FILE:0,RULE:Release_Ham,ACT
-        ION:release,TS:50
-X-CID-INFO: VERSION:1.1.8,REQID:6841d9ae-7ef7-40e6-9bc8-40cef7c34611,OB:0,LOB:
-        0,IP:0,URL:5,TC:0,Content:0,EDM:0,RT:0,SF:45,FILE:0,RULE:Release_Ham,ACTIO
-        N:release,TS:50
-X-CID-META: VersionHash:0f94e32,CLOUDID:5e91a763-0b3f-4b2c-b3a6-ed5c044366a0,C
-        OID:95ab2f9f30ad,Recheck:0,SF:28|17|19|48,TC:nil,Content:0,EDM:-3,IP:nil,U
-        RL:1,File:nil,QS:nil,BEC:nil,COL:0
-X-UUID: d2c34ff1fee144f4b921b7d1d663d878-20220707
-Received: from mtkmbs10n1.mediatek.inc [(172.21.101.34)] by mailgw01.mediatek.com
-        (envelope-from <johnson.wang@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 583295451; Thu, 07 Jul 2022 15:30:41 +0800
-Received: from mtkmbs11n1.mediatek.inc (172.21.101.186) by
- mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.792.3;
- Thu, 7 Jul 2022 15:30:40 +0800
-Received: from mtksdccf07 (172.21.84.99) by mtkmbs11n1.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.2.792.3 via Frontend
- Transport; Thu, 7 Jul 2022 15:30:40 +0800
-Message-ID: <3216ec92952c7d722feaeb76986e0a6a54340646.camel@mediatek.com>
-Subject: Re: [PATCH] dt-bindings: mmc: Add compatible for MediaTek MT8188
-From:   Johnson Wang <johnson.wang@mediatek.com>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        <ulf.hansson@linaro.org>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>
-CC:     <linux-mmc@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <devicetree@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>
-Date:   Thu, 7 Jul 2022 15:30:40 +0800
-In-Reply-To: <41e17a56-5cb0-8e90-c7ae-a7a56de986d0@linaro.org>
-References: <20220707054710.1396-1-johnson.wang@mediatek.com>
-         <41e17a56-5cb0-8e90-c7ae-a7a56de986d0@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-MTK:  N
-X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,MAY_BE_FORGED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,T_SCC_BODY_TEXT_LINE,T_SPF_TEMPERROR,
-        UNPARSEABLE_RELAY autolearn=no autolearn_force=no version=3.4.6
+        Thu, 7 Jul 2022 03:31:01 -0400
+Received: from mail-pg1-x52f.google.com (mail-pg1-x52f.google.com [IPv6:2607:f8b0:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7BEC31345;
+        Thu,  7 Jul 2022 00:31:00 -0700 (PDT)
+Received: by mail-pg1-x52f.google.com with SMTP id bh13so11031912pgb.4;
+        Thu, 07 Jul 2022 00:31:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id;
+        bh=WUZiVSxb70SjflMeea8bnCcurZwfvJpru9MyA60zyUM=;
+        b=eHZ5ZGtmYAbxeYOI8Dddtf1jnwZ2ma1m1Q1cpBIPuq4m5M3rUPHe3/Cwh+mDxlAL1w
+         7Vt3vRKT+ZM/v+uo4v6CZe4heAWUn1MLYWfCQemLg9p5Rj2F5yGBeZ5ZRsnrTlWa155m
+         fIlk0n4c+uGqNoXiZqY22PMyVE2bzAttgcTjGJFAnq7x/qbMQcxQukdptTGMFohrRqQn
+         HPf4PcZ+SZh/iX93ZfROH+HIYihirMmnyQ4++yGixmazbL7TWE278fo9BSwLzJLPVT4/
+         ENcxZzVhMXgeq/W/oHVenjJB24JPpHUmaX5ohdZ+QdyocStI7NLT8iMTi9sHcB6bGgRS
+         jHgQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=WUZiVSxb70SjflMeea8bnCcurZwfvJpru9MyA60zyUM=;
+        b=AxlEdVEKr/a9ok+IStaREsJzW85S317h311QZaQkcMJ3pa8OhTCOF0zyKIAKzIqfGs
+         5S6aKSJSQahb0jxQzNAZhWAozY//HOEO1WS8qMdbZMBr0fH7jdqeKWc15wb4xynTOyN/
+         HHBE5WcIfxPJohkpsskgW5/nhVSTEbcTYIwa3SBkVNPUNqrNnrAJpyB80b/eY9tDBVOk
+         JE/BGU9m/eWYcspOBWgUuNnKY/W3saEpIG2muCeTxXlvF1dsak3DTQL4OMYD3VB9cD+Q
+         gglMXAKmSwfJ8vMp95p5E6FlbYXM+hh8YWBil7yXAisPZNvAhuoO+b47EB0jpUj7Nxeo
+         HzNg==
+X-Gm-Message-State: AJIora/q5rFvthcL9eBRc56UooNcYaF6bjqko6pHdQKa2MU2vJYrlZ6H
+        BDBj3+E12LLcP6NMR2Civ3s=
+X-Google-Smtp-Source: AGRyM1ugdnP2DY9671/p97edEwqdmfn/PaoBgKhvlhavh+06/vPSORCL6EneK3zNIgCKOMx7O+iH7g==
+X-Received: by 2002:a65:498b:0:b0:412:8e4:2842 with SMTP id r11-20020a65498b000000b0041208e42842mr23752388pgs.71.1657179060291;
+        Thu, 07 Jul 2022 00:31:00 -0700 (PDT)
+Received: from localhost.localdomain (60-250-192-107.hinet-ip.hinet.net. [60.250.192.107])
+        by smtp.gmail.com with ESMTPSA id s1-20020aa78bc1000000b00528c70c34c2sm928481pfd.115.2022.07.07.00.30.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 07 Jul 2022 00:30:59 -0700 (PDT)
+From:   Mia Lin <mimi05633@gmail.com>
+To:     avifishman70@gmail.com, tmaimon77@gmail.com, tali.perry1@gmail.com,
+        venture@google.com, yuenn@google.com, benjaminfair@google.com,
+        a.zummo@towertech.it, alexandre.belloni@bootlin.com,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        ctcchien@nuvoton.com, mimi05633@gmail.com, KWLIU@nuvoton.com,
+        YSCHU@nuvoton.com, KFTING@nuvoton.com, JJLIU0@nuvoton.com,
+        mylin1@nuvoton.com
+Cc:     openbmc@lists.ozlabs.org, linux-rtc@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v4 0/3] RTC: nuvoton: Add nuvoton real time clock driver
+Date:   Thu,  7 Jul 2022 15:30:51 +0800
+Message-Id: <20220707073054.3954-1-mimi05633@gmail.com>
+X-Mailer: git-send-email 2.17.1
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 2022-07-07 at 08:46 +0200, Krzysztof Kozlowski wrote:
-> On 07/07/2022 07:47, Johnson Wang wrote:
-> > This commit adds dt-binding documentation of mmc for MediaTek
-> > MT8188 SoC
-> > platform.
-> > 
-> > Signed-off-by: Johnson Wang <johnson.wang@mediatek.com>
-> > ---
-> >  Documentation/devicetree/bindings/mmc/mtk-sd.yaml | 3 +++
-> >  1 file changed, 3 insertions(+)
-> > 
-> > diff --git a/Documentation/devicetree/bindings/mmc/mtk-sd.yaml
-> > b/Documentation/devicetree/bindings/mmc/mtk-sd.yaml
-> > index 2a2e9fa8c188..3fbf33ad4f7c 100644
-> > --- a/Documentation/devicetree/bindings/mmc/mtk-sd.yaml
-> > +++ b/Documentation/devicetree/bindings/mmc/mtk-sd.yaml
-> > @@ -32,6 +32,9 @@ properties:
-> >        - items:
-> >            - const: mediatek,mt8186-mmc
-> >            - const: mediatek,mt8183-mmc
-> > +      - items:
-> > +          - const: mediatek,mt8188-mmc
-> 
-> You duplicate quite a lot. Use enum.
-> 
-> Best regards,
-> Krzysztof
+Support Nuvoton NCT3018Y real time clock.
 
-Hi Krzysztof,
+Changes since version 4:
+ - Fix warnings in rtc-nct3018y.c.
+ - Reduce the number of error messages.
+ - Add time vaild check.
+ - Add functionality check.
+ - Add maintainer.
 
-Thanks for you suggestion.
+Changes since version 3:
+ - Add part number in Kconfig.
+ - Refactor rtc-nct3018y.c.
 
-I will use 'enum' to place this compatible strings.
+Changes since version 2:
+ - Fix errors in rtc-nct3018y.c.
+ - Fix warnings in rtc-nct3018y.c.
 
-Just like this:
-- items:
-    - enum:
-        - mediatek,mt8186-mmc
-        - mediatek,mt8188-mmc
-        - mediatek,mt8192-mmc
-        - mediatek,mt8195-mmc
-    - const: mediatek,mt8183-mmc
+Changes since version 1:
+ - Add nuvoton,nct3018y property in NPCM devicetree.
+ - Add new property in rtc binding document.
+ - Add new driver for nuvoton real time clock driver.
 
-Moreover, it seems that missing an "items:" between oneOf and enum in
-the compatible property.
-Is my understanding wrong?
+Mia Lin (3):
+  dt-bindings: rtc: nuvoton: add NCT3018Y Real Time Clock
+  ARM: dts: nuvoton: Add nuvoton RTC3018Y node
+  RTC: nuvoton: Add NCT3018Y real time clock driver
 
-BRs,
-Johnson Wang
+ .../bindings/rtc/nuvoton,nct3018y.yaml        |  45 ++
+ MAINTAINERS                                   |   2 +
+ arch/arm/boot/dts/nuvoton-npcm750-evb.dts     |   4 +
+ drivers/rtc/Kconfig                           |  10 +
+ drivers/rtc/Makefile                          |   1 +
+ drivers/rtc/rtc-nct3018y.c                    | 553 ++++++++++++++++++
+ 6 files changed, 615 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/rtc/nuvoton,nct3018y.yaml
+ create mode 100644 drivers/rtc/rtc-nct3018y.c
 
+-- 
+2.17.1
 

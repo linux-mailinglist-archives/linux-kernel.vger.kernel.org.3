@@ -2,246 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A52EF56AAEC
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 20:38:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 520F456AAED
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 20:40:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236703AbiGGSiU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Jul 2022 14:38:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39100 "EHLO
+        id S236213AbiGGSjN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Jul 2022 14:39:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40330 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236261AbiGGSiS (ORCPT
+        with ESMTP id S232221AbiGGSjL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Jul 2022 14:38:18 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CE3E3B1;
-        Thu,  7 Jul 2022 11:38:17 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 19535622E2;
-        Thu,  7 Jul 2022 18:38:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EBA90C3411E;
-        Thu,  7 Jul 2022 18:38:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1657219096;
-        bh=XKZ9myQeTuUmO6Y2lKD7FxPu+lliZc7yaUuDsNTXtEE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=jWxlf7AzfQTnNLfVz9YnU3D4Rf6+B/B3R1vIfxdzWHXTZrkLNy988yzk16a/8ndm9
-         fBl26duvEPPn10zENYOMStSfE9siGL43Ya5GeU/5PtCg3+clnKu91PB+a/5fKKX0e6
-         zskPyIMgU2B/BrZ2eq8XGzNyAeTzz0Pvp+/A4/nE=
-Date:   Thu, 7 Jul 2022 20:38:13 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Maxim Devaev <mdevaev@gmail.com>
-Cc:     linux-usb@vger.kernel.org, stern@rowland.harvard.edu,
-        balbi@kernel.org, caihuoqing@baidu.com,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3] usb: gadget: f_mass_storage: forced_eject attribute
-Message-ID: <YscoFTmMC4v3k5/i@kroah.com>
-References: <20220707170912.70505-1-mdevaev@gmail.com>
+        Thu, 7 Jul 2022 14:39:11 -0400
+Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF024271D;
+        Thu,  7 Jul 2022 11:39:10 -0700 (PDT)
+Received: by mail-pf1-x435.google.com with SMTP id x184so7734503pfx.2;
+        Thu, 07 Jul 2022 11:39:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=Xk4jif5w/j4QtqfSLIsfZH63Xsd+XRgDGsOnmU7ibig=;
+        b=RrW536JT8xzuxyMjuf/Guz76azv1oh8lBOOlhG34EUvP2M12CHvP/fGsuUWkdf/nFl
+         CHeRZf2jqrZWmE9IkG8pEEYDZ+AmzeocyG5RP9tx+k6kHd2co8EoUcwSDWVlmrcVCDb3
+         7UkgotkgXjdaRZe6l8WOIleiCaj6p3Tst4aaRV2o9ijt8PnmQ66MWHlZdcy1IoERhBTL
+         e74xmi2JfuniNvTEc9LOGuHvkHsc0Y5E6NQkG4+F76mPR+lD3sfMvvd6O2t+C1TDpsjU
+         WtrIlIgRAWHqpMu+dt5O9rCRv7duBonOn9z+/q0c6k+JHK0/rq00gVzMVSC72xfBcedO
+         vzxA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Xk4jif5w/j4QtqfSLIsfZH63Xsd+XRgDGsOnmU7ibig=;
+        b=HAOHtpmOVnPZZW2igb5FwLzmgfg9RqHD/x8Y8N2aOp51W8eq8Efo4ZVDmBouXG9MnK
+         nCPDYXdgstIRiNixWDdZNicWiVWmpo3fK7pNWgH0RH+Mmto4BrFG8gdqEUNWm2nMKQXW
+         ILjU8PNHb88mAfNhvEdz85gDWAsoh8/WGCW6Z2T+zInXtLciL82hCNxqzYhMBMBSuyzE
+         ZxO37CxV6IHT3fdd2lhEQhTyieLoYpClMblXwESAs+7qWHONcMOylnun22l1N7jlmq74
+         S/8G/HCGzwcPTAdmaRXXAeahjiEcvgR5yvYoAg9N0dfda+pFnGCxqxsFkOIDvrQXzzjo
+         qnDg==
+X-Gm-Message-State: AJIora834EWEr+4Nbw8kr3R6AsInKqzaPsKrNV/Fr5johsjdP4g276Et
+        LOwkD+y8vOFbvzG+E20/NtWapekHvNJDBV69OhE=
+X-Google-Smtp-Source: AGRyM1uPuQyr0jXfAty/PA/vMsGjFedz5NPQ5R2yTQDxTX0fWG+sBPIX8CbplOONr8/Hdm0jj/141gNpF3PZRzk2dno=
+X-Received: by 2002:a17:903:1c4:b0:16a:73fd:3c6c with SMTP id
+ e4-20020a17090301c400b0016a73fd3c6cmr53782275plh.115.1657219150361; Thu, 07
+ Jul 2022 11:39:10 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220707170912.70505-1-mdevaev@gmail.com>
-X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <000000000000b06e5505e299a9b6@google.com> <CANn89iLuGKyVcNAAjvwWk8HoJrNgZ5HM4itXEsnqzU=+xZLKOQ@mail.gmail.com>
+ <CANn89iLvG0QBVkdhbC-x59ac=B=j+ZxXitBGanBo+8ThMJGG1g@mail.gmail.com> <YsW7EP45TloIyEtv@pop-os.localdomain>
+In-Reply-To: <YsW7EP45TloIyEtv@pop-os.localdomain>
+From:   Cong Wang <xiyou.wangcong@gmail.com>
+Date:   Thu, 7 Jul 2022 11:38:59 -0700
+Message-ID: <CAM_iQpVBHvO=4quf6yCbst5JNxg7GNb1hOYjmhF9HkHeR_hEaQ@mail.gmail.com>
+Subject: Re: [syzbot] WARNING in sk_stream_kill_queues (8)
+To:     Eric Dumazet <edumazet@google.com>
+Cc:     syzbot <syzbot+a0e6f8738b58f7654417@syzkaller.appspotmail.com>,
+        Stanislav Fomichev <sdf@google.com>,
+        Cong Wang <cong.wang@bytedance.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        John Fastabend <john.fastabend@gmail.com>,
+        David Miller <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        netdev <netdev@vger.kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+        syzkaller-bugs <syzkaller-bugs@googlegroups.com>,
+        Wei Wang <weiwan@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jul 07, 2022 at 08:09:13PM +0300, Maxim Devaev wrote:
-> It allows to reset prevent_medium_removal flag and "eject" the image.
-> 
-> The patch is a completely alternative implementation of the previously
-> proposed [1], the idea of which was born after the mentioned discussion.
-> 
-> Signed-off-by: Maxim Devaev <mdevaev@gmail.com>
-> Link: https://lore.kernel.org/lkml/20220406092445.215288-1-mdevaev@gmail.com [1]
-> ---
->  .../testing/configfs-usb-gadget-mass-storage  |  6 +++++
->  Documentation/usb/gadget-testing.rst          |  6 +++++
->  Documentation/usb/mass-storage.rst            |  9 +++++++
->  drivers/usb/gadget/function/f_mass_storage.c  | 25 +++++++++++++++++++
->  drivers/usb/gadget/function/storage_common.c  | 11 ++++++++
->  drivers/usb/gadget/function/storage_common.h  |  2 ++
->  6 files changed, 59 insertions(+)
-> 
-> diff --git a/Documentation/ABI/testing/configfs-usb-gadget-mass-storage b/Documentation/ABI/testing/configfs-usb-gadget-mass-storage
-> index c86b63a7bb43..d899adb57e81 100644
-> --- a/Documentation/ABI/testing/configfs-usb-gadget-mass-storage
-> +++ b/Documentation/ABI/testing/configfs-usb-gadget-mass-storage
-> @@ -32,4 +32,10 @@ Description:
->  				being a CD-ROM.
->  		nofua		Flag specifying that FUA flag
->  				in SCSI WRITE(10,12)
-> +		forced_eject	This write-only file is useful only when
-> +				the function is active. It causes the backing
-> +				file to be forcibly detached from the LUN,
-> +				regardless of whether the host has allowed it.
-> +				Any non-zero number of bytes written will
-> +				result in ejection.
->  		===========	==============================================
-> diff --git a/Documentation/usb/gadget-testing.rst b/Documentation/usb/gadget-testing.rst
-> index c18113077889..15624c4fe633 100644
-> --- a/Documentation/usb/gadget-testing.rst
-> +++ b/Documentation/usb/gadget-testing.rst
-> @@ -333,6 +333,12 @@ In each lun directory there are the following attribute files:
->  			being a CD-ROM.
->  	nofua		Flag specifying that FUA flag
->  			in SCSI WRITE(10,12)
-> +	forced_eject	This write-only file is useful only when
-> +			the function is active. It causes the backing
-> +			file to be forcibly detached from the LUN,
-> +			regardless of whether the host has allowed it.
-> +			Any non-zero number of bytes written will
-> +			result in ejection.
->  	=============== ==============================================
->  
->  Testing the MASS STORAGE function
-> diff --git a/Documentation/usb/mass-storage.rst b/Documentation/usb/mass-storage.rst
-> index d181b47c3cb6..f399ec631599 100644
-> --- a/Documentation/usb/mass-storage.rst
-> +++ b/Documentation/usb/mass-storage.rst
-> @@ -181,6 +181,15 @@ sysfs entries
->      Reflects the state of nofua flag for given logical unit.  It can
->      be read and written.
->  
-> +  - forced_eject
-> +
-> +    When written into, it causes the backing file to be forcibly
-> +    detached from the LUN, regardless of whether the host has allowed
-> +    it.  The content doesn't matter, any non-zero number of bytes
-> +    written will result in ejection.
-> +
-> +    Can not be read.
-> +
->    Other then those, as usual, the values of module parameters can be
->    read from /sys/module/g_mass_storage/parameters/* files.
->  
-> diff --git a/drivers/usb/gadget/function/f_mass_storage.c b/drivers/usb/gadget/function/f_mass_storage.c
-> index 6ad669dde41c..00cac2a38178 100644
-> --- a/drivers/usb/gadget/function/f_mass_storage.c
-> +++ b/drivers/usb/gadget/function/f_mass_storage.c
-> @@ -2520,10 +2520,21 @@ static ssize_t file_store(struct device *dev, struct device_attribute *attr,
->  	return fsg_store_file(curlun, filesem, buf, count);
->  }
->  
-> +static ssize_t forced_eject_store(struct device *dev,
-> +				  struct device_attribute *attr,
-> +				  const char *buf, size_t count)
-> +{
-> +	struct fsg_lun		*curlun = fsg_lun_from_dev(dev);
-> +	struct rw_semaphore	*filesem = dev_get_drvdata(dev);
-> +
-> +	return fsg_store_forced_eject(curlun, filesem, buf, count);
-> +}
-> +
->  static DEVICE_ATTR_RW(nofua);
->  /* mode wil be set in fsg_lun_attr_is_visible() */
->  static DEVICE_ATTR(ro, 0, ro_show, ro_store);
->  static DEVICE_ATTR(file, 0, file_show, file_store);
-> +static DEVICE_ATTR_WO(forced_eject);
->  
->  /****************************** FSG COMMON ******************************/
->  
-> @@ -2677,6 +2688,7 @@ static struct attribute *fsg_lun_dev_attrs[] = {
->  	&dev_attr_ro.attr,
->  	&dev_attr_file.attr,
->  	&dev_attr_nofua.attr,
-> +	&dev_attr_forced_eject.attr,
->  	NULL
->  };
->  
-> @@ -3090,6 +3102,18 @@ static ssize_t fsg_lun_opts_inquiry_string_store(struct config_item *item,
->  
->  CONFIGFS_ATTR(fsg_lun_opts_, inquiry_string);
->  
-> +static ssize_t fsg_lun_opts_forced_eject_store(struct config_item *item,
-> +					       const char *page, size_t len)
-> +{
-> +	struct fsg_lun_opts *opts = to_fsg_lun_opts(item);
-> +	struct fsg_opts *fsg_opts = to_fsg_opts(opts->group.cg_item.ci_parent);
-> +
-> +	return fsg_store_forced_eject(opts->lun, &fsg_opts->common->filesem,
-> +				      page, len);
-> +}
-> +
-> +CONFIGFS_ATTR_WO(fsg_lun_opts_, forced_eject);
-> +
->  static struct configfs_attribute *fsg_lun_attrs[] = {
->  	&fsg_lun_opts_attr_file,
->  	&fsg_lun_opts_attr_ro,
-> @@ -3097,6 +3121,7 @@ static struct configfs_attribute *fsg_lun_attrs[] = {
->  	&fsg_lun_opts_attr_cdrom,
->  	&fsg_lun_opts_attr_nofua,
->  	&fsg_lun_opts_attr_inquiry_string,
-> +	&fsg_lun_opts_attr_forced_eject,
->  	NULL,
->  };
->  
-> diff --git a/drivers/usb/gadget/function/storage_common.c b/drivers/usb/gadget/function/storage_common.c
-> index b859a158a414..8cd95bf7831f 100644
-> --- a/drivers/usb/gadget/function/storage_common.c
-> +++ b/drivers/usb/gadget/function/storage_common.c
-> @@ -519,4 +519,15 @@ ssize_t fsg_store_inquiry_string(struct fsg_lun *curlun, const char *buf,
->  }
->  EXPORT_SYMBOL_GPL(fsg_store_inquiry_string);
->  
-> +ssize_t fsg_store_forced_eject(struct fsg_lun *curlun, struct rw_semaphore *filesem,
-> +			       const char *buf, size_t count)
-> +{
-> +	int ret;
-> +
-> +	curlun->prevent_medium_removal = 0;
-> +	ret = fsg_store_file(curlun, filesem, "", 0);
-> +	return ret < 0 ? ret : count;
-> +}
-> +EXPORT_SYMBOL_GPL(fsg_store_forced_eject);
-> +
->  MODULE_LICENSE("GPL");
-> diff --git a/drivers/usb/gadget/function/storage_common.h b/drivers/usb/gadget/function/storage_common.h
-> index bdeb1e233fc9..0a544a82cbf8 100644
-> --- a/drivers/usb/gadget/function/storage_common.h
-> +++ b/drivers/usb/gadget/function/storage_common.h
-> @@ -219,5 +219,7 @@ ssize_t fsg_store_removable(struct fsg_lun *curlun, const char *buf,
->  			    size_t count);
->  ssize_t fsg_store_inquiry_string(struct fsg_lun *curlun, const char *buf,
->  				 size_t count);
-> +ssize_t fsg_store_forced_eject(struct fsg_lun *curlun, struct rw_semaphore *filesem,
-> +			       const char *buf, size_t count);
->  
->  #endif /* USB_STORAGE_COMMON_H */
-> -- 
-> 2.37.0
-> 
+On Wed, Jul 6, 2022 at 9:40 AM Cong Wang <xiyou.wangcong@gmail.com> wrote:
+>
+> I will look into this tonight.
 
-Hi,
+The following patch could work. It uncharges the sk mem before passing skb
+to recv actor but still keeps skb->sk.
 
-This is the friendly patch-bot of Greg Kroah-Hartman.  You have sent him
-a patch that has triggered this response.  He used to manually respond
-to these common problems, but in order to save his sanity (he kept
-writing the same thing over and over, yet to different people), I was
-created.  Hopefully you will not take offence and will fix the problem
-in your patch and resubmit it so that it can be accepted into the Linux
-kernel tree.
+diff --git a/net/ipv4/tcp.c b/net/ipv4/tcp.c
+index 9d2fd3ced21b..c6b1effb2afd 100644
+--- a/net/ipv4/tcp.c
++++ b/net/ipv4/tcp.c
+@@ -1749,6 +1749,7 @@ int tcp_read_skb(struct sock *sk,
+skb_read_actor_t recv_actor)
+                int used;
 
-You are receiving this message because of the following common error(s)
-as indicated below:
-
-- This looks like a new version of a previously submitted patch, but you
-  did not list below the --- line any changes from the previous version.
-  Please read the section entitled "The canonical patch format" in the
-  kernel file, Documentation/SubmittingPatches for what needs to be done
-  here to properly describe this.
-
-If you wish to discuss this problem further, or you have questions about
-how to resolve this issue, please feel free to respond to this email and
-Greg will reply once he has dug out from the pending patches received
-from other developers.
-
-thanks,
-
-greg k-h's patch email bot
+                __skb_unlink(skb, &sk->sk_receive_queue);
++               WARN_ON(!skb_set_owner_sk_safe(skb, sk));
+                used = recv_actor(sk, skb);
+                if (used <= 0) {
+                        if (!copied)

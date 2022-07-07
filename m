@@ -2,99 +2,188 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F739569C3C
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 09:54:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 67ECB569C32
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 09:54:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235077AbiGGHuN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Jul 2022 03:50:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37666 "EHLO
+        id S235094AbiGGHuX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Jul 2022 03:50:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37830 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230272AbiGGHuL (ORCPT
+        with ESMTP id S235079AbiGGHuW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Jul 2022 03:50:11 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2165838A9
-        for <linux-kernel@vger.kernel.org>; Thu,  7 Jul 2022 00:50:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1657180208;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=G+GK0m59h5LAkU0zG9fs2Rj6b2ZwvcuWU/BmMtKvyjk=;
-        b=Q5je867q4dXihrFvJvvHYY53IbwcqDJKMK1tSFjhP5GjruoB56wylez1K7/2yjdjZ+oLoi
-        kAwJJ3iTM925pT2Gl19+Ecg+IQ7dG5G3VKqR/ETATB67XCvf9fUPQ2VMNiJHwqxiPRHg/X
-        n4Z1utLSQRjkVi5X6LY4G108NSvj0dk=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-21-zejxw8LnMIC7a967odLosQ-1; Thu, 07 Jul 2022 03:50:05 -0400
-X-MC-Unique: zejxw8LnMIC7a967odLosQ-1
-Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id DF731101A588;
-        Thu,  7 Jul 2022 07:50:04 +0000 (UTC)
-Received: from T590 (ovpn-8-19.pek2.redhat.com [10.72.8.19])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id D7E742EF99;
-        Thu,  7 Jul 2022 07:49:57 +0000 (UTC)
-Date:   Thu, 7 Jul 2022 15:49:52 +0800
-From:   Ming Lei <ming.lei@redhat.com>
-To:     Gabriel Krisman Bertazi <krisman@collabora.com>
-Cc:     Jens Axboe <axboe@kernel.dk>, linux-block@vger.kernel.org,
-        Harris James R <james.r.harris@intel.com>,
-        linux-kernel@vger.kernel.org, io-uring@vger.kernel.org,
-        ZiyangZhang <ZiyangZhang@linux.alibaba.com>,
-        Xiaoguang Wang <xiaoguang.wang@linux.alibaba.com>,
-        Stefan Hajnoczi <stefanha@redhat.com>, ming.lei@redhat.com
-Subject: Re: [PATCH V3 1/1] ublk: add io_uring based userspace block driver
-Message-ID: <YsaQIGbyRKLAOoqR@T590>
-References: <20220628160807.148853-1-ming.lei@redhat.com>
- <20220628160807.148853-2-ming.lei@redhat.com>
- <8735fg4jhb.fsf@collabora.com>
- <YsPw+HS8ssmVw86u@T590>
+        Thu, 7 Jul 2022 03:50:22 -0400
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FC2E28E13;
+        Thu,  7 Jul 2022 00:50:18 -0700 (PDT)
+X-UUID: cb064ff2a78f4462a7ba4d2367b75615-20220707
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.8,REQID:887d7773-0562-4434-9921-16d3b14add2e,OB:0,LO
+        B:0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACTI
+        ON:release,TS:0
+X-CID-META: VersionHash:0f94e32,CLOUDID:e67bdad6-5d6d-4eaf-a635-828a3ee48b7c,C
+        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,IP:nil,URL:0,File:nil
+        ,QS:nil,BEC:nil,COL:0
+X-UUID: cb064ff2a78f4462a7ba4d2367b75615-20220707
+Received: from mtkmbs10n2.mediatek.inc [(172.21.101.183)] by mailgw01.mediatek.com
+        (envelope-from <ck.hu@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 1268588751; Thu, 07 Jul 2022 15:50:14 +0800
+Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
+ mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.792.3;
+ Thu, 7 Jul 2022 15:50:12 +0800
+Received: from mtksdccf07 (172.21.84.99) by mtkmbs11n2.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.2.792.3 via Frontend
+ Transport; Thu, 7 Jul 2022 15:50:12 +0800
+Message-ID: <d7078ff355a797081fcbd374c33fa5f4c74f4c98.camel@mediatek.com>
+Subject: Re: [PATCH v13 05/10] drm/mediatek: Add MT8195 Embedded DisplayPort
+ driver
+From:   CK Hu <ck.hu@mediatek.com>
+To:     Bo-Chen Chen <rex-bc.chen@mediatek.com>, <chunkuang.hu@kernel.org>,
+        <p.zabel@pengutronix.de>, <daniel@ffwll.ch>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <mripard@kernel.org>,
+        <tzimmermann@suse.de>, <matthias.bgg@gmail.com>, <deller@gmx.de>,
+        <airlied@linux.ie>
+CC:     <msp@baylibre.com>, <granquet@baylibre.com>,
+        <jitao.shi@mediatek.com>, <wenst@chromium.org>,
+        <angelogioacchino.delregno@collabora.com>,
+        <liangxu.xu@mediatek.com>, <dri-devel@lists.freedesktop.org>,
+        <linux-mediatek@lists.infradead.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-fbdev@vger.kernel.org>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>
+Date:   Thu, 7 Jul 2022 15:50:12 +0800
+In-Reply-To: <20220701062808.18596-6-rex-bc.chen@mediatek.com>
+References: <20220701062808.18596-1-rex-bc.chen@mediatek.com>
+         <20220701062808.18596-6-rex-bc.chen@mediatek.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YsPw+HS8ssmVw86u@T590>
-X-Scanned-By: MIMEDefang 2.79 on 10.11.54.5
-X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-MTK:  N
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jul 05, 2022 at 04:06:16PM +0800, Ming Lei wrote:
-> On Mon, Jul 04, 2022 at 06:10:40PM -0400, Gabriel Krisman Bertazi wrote:
-> > Ming Lei <ming.lei@redhat.com> writes:
+Hi, Bo-Chen:
 
-...
+On Fri, 2022-07-01 at 14:28 +0800, Bo-Chen Chen wrote:
+> From: Markus Schneider-Pargmann <msp@baylibre.com>
 > 
-> > 
-> > 
-> > > +			__func__, cmd->cmd_op, ub_cmd->q_id, tag,
-> > > +			ub_cmd->result);
-> > > +
-> > > +	if (!(issue_flags & IO_URING_F_SQE128))
-> > > +		goto out;
-> > > +
-> > > +	ubq = ublk_get_queue(ub, ub_cmd->q_id);
-> > > +	if (!ubq || ub_cmd->q_id != ubq->q_id)
-> > 
-> > q_id is coming from userspace and is used to access an array inside
-> > ublk_get_queue().  I think you need to ensure qid < ub->dev_info.nr_hw_queues
-> > before calling ublk_get_queue() to protect from a kernel bad memory
-> > access triggered by userspace.
+> This patch adds a embedded displayport driver for the MediaTek mt8195
+> SoC.
 > 
-> Good catch!
+> It supports the MT8195, the embedded DisplayPort units. It offers
+> DisplayPort 1.4 with up to 4 lanes.
+> 
+> The driver creates a child device for the phy. The child device will
+> never exist without the parent being active. As they are sharing a
+> register range, the parent passes a regmap pointer to the child so
+> that
+> both can work with the same register range. The phy driver sets
+> device
+> data that is read by the parent to get the phy device that can be
+> used
+> to control the phy properties.
+> 
+> This driver is based on an initial version by
+> Jitao shi <jitao.shi@mediatek.com>
+> 
+> Signed-off-by: Markus Schneider-Pargmann <msp@baylibre.com>
+> Signed-off-by: Guillaume Ranquet <granquet@baylibre.com>
+> Signed-off-by: Bo-Chen Chen <rex-bc.chen@mediatek.com>
+> ---
 
-Turns out the check on 'qid < ub->dev_info.nr_hw_queues' isn't needed,
-since the condition of 'ub_cmd->q_id != ubq->q_id' is more strict.
+[snip]
 
+> +/*
+> + * We need to handle HPD signal in eDP even though eDP is a always
+> connected
+> + * device. Besides connected status, there is another feature for
+> HPD signal -
+> + * HPD pulse: it presents an IRQ from sink devices to source devices
+> (Refer to
+> + * 5.1.4 of DP1.4 spec).
+> + */
+> +static irqreturn_t mtk_dp_hpd_isr_handler(struct mtk_dp *mtk_dp)
+> +{
+> +	bool connected;
+> +	bool hpd_connect_sta;
+> +	u32 irq_status = mtk_dp_swirq_get_clear(mtk_dp) |
+> +			 mtk_dp_hwirq_get_clear(mtk_dp);
+> +	struct mtk_dp_train_info *train_info = &mtk_dp->train_info;
+> +
+> +	if (irq_status & MTK_DP_HPD_INTERRUPT)
+> +		train_info->irq_sta.hpd_inerrupt = true;
+> +	if (irq_status & MTK_DP_HPD_CONNECT)
+> +		hpd_connect_sta = true;
+> +	if (irq_status & MTK_DP_HPD_DISCONNECT)
+> +		train_info->irq_sta.hpd_disconnect = true;
 
-Thanks,
-Ming
+hpd_disconnect is used only in this function, so let it be local
+variable.
+
+> +
+> +	if (!irq_status)
+> +		return IRQ_HANDLED;
+
+Move this to top of this function.
+
+> +
+> +	connected = mtk_dp_plug_state(mtk_dp);
+> +	if (connected || !train_info->cable_plugged_in)
+> +		train_info->irq_sta.hpd_disconnect  = false;
+
+The truth table of (irq_status & MTK_DP_HPD_DISCONNECT, connected,
+cable_plugged_in, hpd_disconnect) is
+
+0 0 0 0
+0 0 1 0
+0 1 0 0
+0 1 1 0
+1 0 0 0
+1 0 1 1
+1 1 0 0
+1 1 1 0
+
+So the only case that hpd_disconnect is true is
+
+(irq_status & MTK_DP_HPD_DISCONNECT) && !connected && train_info-
+>cable_plugged_in)
+
+And train_info->cable_plugged_in is the previous status. The previous
+status is connected. And irq_status and connected is the new status.
+The new status is disconnected.
+
+I have a question. Why we need both irq_status and connected for new
+status? I think connected is enough for new status, so we could ignore
+irq_status.
+
+Regards,
+CK
+
+> +	else if (!connected || train_info->cable_plugged_in)
+> +		hpd_connect_sta = false;
+> +
+> +	if (!(hpd_connect_sta || train_info->irq_sta.hpd_disconnect))
+> +		return IRQ_WAKE_THREAD;
+> +
+> +	if (hpd_connect_sta) {
+> +		hpd_connect_sta = false;
+> +		train_info->cable_plugged_in = true;
+> +	} else {
+> +		train_info->irq_sta.hpd_disconnect = false;
+> +		train_info->cable_plugged_in = false;
+> +	}
+> +	train_info->cable_state_change = true;
+> +
+> +	return IRQ_WAKE_THREAD;
+> +}
+> +
 

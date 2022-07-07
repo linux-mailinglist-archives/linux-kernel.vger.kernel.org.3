@@ -2,79 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 05A6A569B7A
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 09:25:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EACC8569B97
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 09:30:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233053AbiGGHZP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Jul 2022 03:25:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44802 "EHLO
+        id S232684AbiGGHac (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Jul 2022 03:30:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46992 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230334AbiGGHZN (ORCPT
+        with ESMTP id S230028AbiGGHaa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Jul 2022 03:25:13 -0400
-Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E52214D1D
-        for <linux-kernel@vger.kernel.org>; Thu,  7 Jul 2022 00:25:11 -0700 (PDT)
-Received: by mail-lf1-x12c.google.com with SMTP id o7so511995lfq.9
-        for <linux-kernel@vger.kernel.org>; Thu, 07 Jul 2022 00:25:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rasmusvillemoes.dk; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :references:from:in-reply-to:content-transfer-encoding;
-        bh=OeQUC2I7iJCMWcjTw5dbLAg4/W1Mty4WbVZ/J03hEOc=;
-        b=LGNeE5ha4E4AzZNyOe9qYxZoAqDpmosEjj4z+pAZkVqOInemEKk12Bd9qN6T0enAfC
-         nwzbECORkzo+dLXDCOjKjjQ4r9x561e29cy8R+xMpkUQNhwCtetqVXTE92LgWYlqM9fl
-         GOB4hyP1leiLdCvOJYeB5wKjoDgm9iC+7AAfI=
+        Thu, 7 Jul 2022 03:30:30 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 512F91263B
+        for <linux-kernel@vger.kernel.org>; Thu,  7 Jul 2022 00:30:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1657179028;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=cbmLgCmTysRy8uiXuxZ5jhXX1Rk2OR8KTMlastRWZ0Y=;
+        b=gsMJjNqz4RxDTbauLB/3Jh4o5IDPL4F/dsLmBc9JmoR3e9zSb+kjs5hawEwlFuTAzswSjF
+        DbbYE2+HPZzw08j91NKZEkb9uhDgYPTTu9FEuGEuaaegBennn+O6tj64y2XUJKmelKymxn
+        xw+glUWsVVG1ED4/nWntzzg84ZuVhak=
+Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com
+ [209.85.221.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-478-jUnkMlYvPC2GZC0S-eZMzQ-1; Thu, 07 Jul 2022 03:30:27 -0400
+X-MC-Unique: jUnkMlYvPC2GZC0S-eZMzQ-1
+Received: by mail-wr1-f70.google.com with SMTP id m7-20020adfa3c7000000b0021d7ae39d1dso941079wrb.12
+        for <linux-kernel@vger.kernel.org>; Thu, 07 Jul 2022 00:30:27 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=OeQUC2I7iJCMWcjTw5dbLAg4/W1Mty4WbVZ/J03hEOc=;
-        b=I7pwctnwnVGRj6jNvIIhfoiHZfCHxxQ8XJBvAoc4GbTXAFcxIKZ6OywGgldzGynLH7
-         hm4Md0Vq2G7L9VZds2d2fuKpELcrgdLd9eHFX8+yWM+z1uZDHGYtjcw+34xTJj2JMGvu
-         b+FqLq+ZeTuFUBzy7fEZS4wG20vXzY1/rNzn2yATdP87ykUt8Jf0zjesgmyxdMqrz+ES
-         oMGsbKt8jZs8b2jkF78vHjdclgybFpUV1OY4r2am0f7ix4E/xVQuGmXpkmCFroCwgY09
-         yVnvDd+UZ9O+NJ0T3n95HQfyLX0LiTWnqm2RLIe8vRwDZO6OLPFqJesE6lC5C0XcMGXh
-         anDA==
-X-Gm-Message-State: AJIora8Jzo06cH++1W6y3KQLDrbDYXFLbcLFRSgsmDdiKxPV8ohFfCs5
-        zEXthcD/x1msDanYGETNv/+kTg==
-X-Google-Smtp-Source: AGRyM1tgJOURuGijHWR+4rnJoab36+sEZz5x1CoTLQEi95gfkGiixqZ74vFWWkMjAU65xtPa8FvMWQ==
-X-Received: by 2002:a05:6512:3ca1:b0:47f:6fe5:8bcc with SMTP id h33-20020a0565123ca100b0047f6fe58bccmr27582166lfv.505.1657178709922;
-        Thu, 07 Jul 2022 00:25:09 -0700 (PDT)
-Received: from [172.16.11.74] ([81.216.59.226])
-        by smtp.gmail.com with ESMTPSA id 23-20020a2e1557000000b0025d4d4b4edbsm300588ljv.34.2022.07.07.00.25.08
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 07 Jul 2022 00:25:09 -0700 (PDT)
-Message-ID: <423c4368-0a1c-792c-2637-768532fc7782@rasmusvillemoes.dk>
-Date:   Thu, 7 Jul 2022 09:25:07 +0200
+        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
+         :references:user-agent:mime-version:content-transfer-encoding;
+        bh=cbmLgCmTysRy8uiXuxZ5jhXX1Rk2OR8KTMlastRWZ0Y=;
+        b=LgOl84eVdrq6OKB8X+XK5nGmWsDQrlPzXEHpCZkNLsR85/ujbspWXZPMTMubpc4AJN
+         DHJgI78x3KLc4tsDDcOYDmuM6uCsfXlGiOQ9zM1ZpKCR2BCVV8rs72kD69r/fsKhIkbY
+         yYZNdH94qa89gl8aHlX2gxDqI4KGC6vAfVsZ09OqanLeI50clpvrI1pL7q3gODfOzwvd
+         NPoaoKM+muNaywTzhfbgD/Q0QvoYnGotBm0VOpbjkKueQM0qWowLbW9khbA2Z3m5aoJV
+         xgzl70G/eNfARIIEI2UseK5ko6SUwXxaVgilYMJuo8R/lAESsS/+Snwp3giSks49KteW
+         UZjQ==
+X-Gm-Message-State: AJIora81JajkcKaJr5mpBsHjvrCdmIWE3lSRwPbLQuq42yzfMUw7nGBD
+        16FYnJSaEQgAMO5lYQ5pvfTCC2vb/CAAekwuSU+LHAyeQSTJrZ2Dbw9WdVtqECGWxKECMMPFkk0
+        sd/7ZR0+59v+Shg9+YqDnuf0+
+X-Received: by 2002:a5d:6d0a:0:b0:21d:6f28:5ead with SMTP id e10-20020a5d6d0a000000b0021d6f285eadmr13900880wrq.95.1657179025874;
+        Thu, 07 Jul 2022 00:30:25 -0700 (PDT)
+X-Google-Smtp-Source: AGRyM1seYbB1t0jf8+m8X4AxKyZNme7pt0Y06tR2WH42ONzW+bn03fpq5uQ+FvQAPGqPA7KRlSoeBw==
+X-Received: by 2002:a5d:6d0a:0:b0:21d:6f28:5ead with SMTP id e10-20020a5d6d0a000000b0021d6f285eadmr13900855wrq.95.1657179025614;
+        Thu, 07 Jul 2022 00:30:25 -0700 (PDT)
+Received: from gerbillo.redhat.com (146-241-106-148.dyn.eolo.it. [146.241.106.148])
+        by smtp.gmail.com with ESMTPSA id p9-20020a5d4e09000000b0021d8190e9cfsm2014707wrt.40.2022.07.07.00.30.24
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 07 Jul 2022 00:30:25 -0700 (PDT)
+Message-ID: <e454f6de32de3be092260d19da24f58635eb6e49.camel@redhat.com>
+Subject: Re: [PATCH net v3] net: ethernet: ti: am65-cpsw: Fix devlink port
+ register sequence
+From:   Paolo Abeni <pabeni@redhat.com>
+To:     Siddharth Vadapalli <s-vadapalli@ti.com>, davem@davemloft.net,
+        kuba@kernel.org, linux@armlinux.org.uk
+Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kishon@ti.com, vigneshr@ti.com, grygorii.strashko@ti.com
+Date:   Thu, 07 Jul 2022 09:30:24 +0200
+In-Reply-To: <20220706070208.12207-1-s-vadapalli@ti.com>
+References: <20220706070208.12207-1-s-vadapalli@ti.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.42.4 (3.42.4-2.fc35) 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH 1/5] lib: add find_nth(,and,andnot)_bit()
-Content-Language: en-US
-To:     Yury Norov <yury.norov@gmail.com>, linux-kernel@vger.kernel.org,
-        Alexander Lobakin <alexandr.lobakin@intel.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Arnd Bergmann <arnd@arndb.de>, David Gow <davidgow@google.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Isabella Basso <isabbasso@riseup.net>,
-        Kees Cook <keescook@chromium.org>,
-        Keith Busch <kbusch@kernel.org>,
-        Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-        Marco Elver <elver@google.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        =?UTF-8?Q?Toke_H=c3=b8iland-J=c3=b8rgensen?= <toke@redhat.com>
-References: <20220706182300.70862-1-yury.norov@gmail.com>
- <20220706182300.70862-2-yury.norov@gmail.com>
-From:   Rasmus Villemoes <linux@rasmusvillemoes.dk>
-In-Reply-To: <20220706182300.70862-2-yury.norov@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -82,98 +80,110 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 06/07/2022 20.22, Yury Norov wrote:
-> Kernel lacks for a function that searches for Nth bit in a bitmap.
-> Usually people do it like this:
-> 	for_each_set_bit(bit, mask, size)
-> 		if (--n == 0)
-> 			return bit;
+On Wed, 2022-07-06 at 12:32 +0530, Siddharth Vadapalli wrote:
+> Renaming interfaces using udevd depends on the interface being registered
+> before its netdev is registered. Otherwise, udevd reads an empty
+> phys_port_name value, resulting in the interface not being renamed.
 > 
-> We can do it more efficiently, if we:
-> 1. find a word containing Nth bit, using hweight(); and
-> 2. find the bit, using a helper fns(), that works similarly to
->    __ffs() and ffz().
+> Fix this by registering the interface before registering its netdev
+> by invoking am65_cpsw_nuss_register_devlink() before invoking
+> register_netdev() for the interface.
 > 
-> fns() is implemented as a simple loop. For x86_64, there's PDEP instruction
-> to do that: ret = clz(pdep(1 << idx, num)). However, for large bitmaps the
-> most of improvement comes from using hweight(), so I kept fns() simple.
+> Move the function call to devlink_port_type_eth_set(), invoking it after
+> register_netdev() is invoked, to ensure that netlink notification for the
+> port state change is generated after the netdev is completely initialized.
 > 
-> New find_nth_bit() is ~70 times faster on x86_64/kvm:
-> for_each_bit:                  7154190 ns,  16411 iterations
-> find_nth_bit:                505493126 ns,  16315 iterations
-
-Eh, have you interchanged these somehow, otherwise this reads as
-find_nth_bit being ~70 times _slower_?
-
-> With all that, a family of 3 new functions is added, and used where
-> appropriate in the following patches.
-> 
-> Signed-off-by: Yury Norov <yury.norov@gmail.com>
+> Fixes: 58356eb31d60 ("net: ti: am65-cpsw-nuss: Add devlink support")
+> Signed-off-by: Siddharth Vadapalli <s-vadapalli@ti.com>
 > ---
->  include/linux/bitops.h | 19 ++++++++++
->  include/linux/find.h   | 79 ++++++++++++++++++++++++++++++++++++++++++
->  lib/find_bit.c         | 20 +++++++++++
->  3 files changed, 118 insertions(+)
+> Changelog:
+> v2 -> v3:
+> 1. Add error handling to unregister devlink.
 > 
-> diff --git a/include/linux/bitops.h b/include/linux/bitops.h
-> index 7aaed501f768..86072cfcbe17 100644
-> --- a/include/linux/bitops.h
-> +++ b/include/linux/bitops.h
-> @@ -196,6 +196,25 @@ static inline unsigned long __ffs64(u64 word)
->  	return __ffs((unsigned long)word);
->  }
+> v1-> v2:
+> 1. Add Fixes tag in commit message.
+> 2. Update patch subject to include "net".
+> 3. Invoke devlink_port_type_eth_set() after register_netdev() is called.
+> 4. Update commit message describing the cause for moving the call to
+>    devlink_port_type_eth_set().
+> 
+> v2: https://lore.kernel.org/r/20220704073040.7542-1-s-vadapalli@ti.com/
+> v1: https://lore.kernel.org/r/20220623044337.6179-1-s-vadapalli@ti.com/
+> 
+>  drivers/net/ethernet/ti/am65-cpsw-nuss.c | 17 ++++++++++-------
+>  1 file changed, 10 insertions(+), 7 deletions(-)
+> 
+> diff --git a/drivers/net/ethernet/ti/am65-cpsw-nuss.c b/drivers/net/ethernet/ti/am65-cpsw-nuss.c
+> index fb92d4c1547d..f4a6b590a1e3 100644
+> --- a/drivers/net/ethernet/ti/am65-cpsw-nuss.c
+> +++ b/drivers/net/ethernet/ti/am65-cpsw-nuss.c
+> @@ -2467,7 +2467,6 @@ static int am65_cpsw_nuss_register_devlink(struct am65_cpsw_common *common)
+>  				port->port_id, ret);
+>  			goto dl_port_unreg;
+>  		}
+> -		devlink_port_type_eth_set(dl_port, port->ndev);
+>  	}
+>  	devlink_register(common->devlink);
+>  	return ret;
+> @@ -2511,6 +2510,7 @@ static void am65_cpsw_unregister_devlink(struct am65_cpsw_common *common)
+>  static int am65_cpsw_nuss_register_ndevs(struct am65_cpsw_common *common)
+>  {
+>  	struct device *dev = common->dev;
+> +	struct devlink_port *dl_port;
+>  	struct am65_cpsw_port *port;
+>  	int ret = 0, i;
 >  
-> +/**
-> + * fns - find N'th set bit in a 64 bit word
-> + * @word: The 64 bit word
-> + * @n: Bit to find
-> + */
-> +static inline unsigned long fns(unsigned long word, unsigned int n)
-> +{
-> +	unsigned int bit;
-> +
-> +	while (word) {
-> +		bit = __ffs(word);
-> +		if (--n == 0)
-> +			return bit;
-> +		__clear_bit(bit, &word);
-> +	}
-> +
-> +	return BITS_PER_LONG;
-> +}
-
-Urgh.  "unsigned long" is not necessarily a 64 bit word. And I don't
-like that the index is apparently 1-based (and that surprising API isn't
-spelled out anywhere). This is also way too big to be inline IMO.
-
->  #ifndef find_first_and_bit
->  /**
->   * find_first_and_bit - find the first set bit in both memory regions
-> diff --git a/lib/find_bit.c b/lib/find_bit.c
-> index 1b8e4b2a9cba..7b8ad12c8cc7 100644
-> --- a/lib/find_bit.c
-> +++ b/lib/find_bit.c
-> @@ -89,6 +89,26 @@ unsigned long _find_first_bit(const unsigned long *addr, unsigned long size)
->  EXPORT_SYMBOL(_find_first_bit);
->  #endif
+> @@ -2527,6 +2527,10 @@ static int am65_cpsw_nuss_register_ndevs(struct am65_cpsw_common *common)
+>  		return ret;
+>  	}
 >  
-> +unsigned long _find_nth_bit(const unsigned long *addr1, const unsigned long *addr2,
-> +				unsigned long size, unsigned long n, bool not)
-> +{
-> +	unsigned long val, idx, w;
+> +	ret = am65_cpsw_nuss_register_devlink(common);
+> +	if (ret)
+> +		return ret;
 > +
-> +	for (idx = 0; idx * BITS_PER_LONG < size; idx++, n -= w) {
-> +		val = addr1[idx];
-> +		if (addr2)
-> +			val &= not ? ~addr2[idx] : addr2[idx];
+>  	for (i = 0; i < common->port_num; i++) {
+>  		port = &common->ports[i];
+>  
+> @@ -2539,25 +2543,24 @@ static int am65_cpsw_nuss_register_ndevs(struct am65_cpsw_common *common)
+>  				i, ret);
+>  			goto err_cleanup_ndev;
+>  		}
+> +
+> +		dl_port = &port->devlink_port;
+> +		devlink_port_type_eth_set(dl_port, port->ndev);
+>  	}
+>  
+>  	ret = am65_cpsw_register_notifiers(common);
+>  	if (ret)
+>  		goto err_cleanup_ndev;
+>  
+> -	ret = am65_cpsw_nuss_register_devlink(common);
+> -	if (ret)
+> -		goto clean_unregister_notifiers;
+> -
+>  	/* can't auto unregister ndev using devm_add_action() due to
+>  	 * devres release sequence in DD core for DMA
+>  	 */
+>  
+>  	return 0;
+> -clean_unregister_notifiers:
+> -	am65_cpsw_unregister_notifiers(common);
+> +
+>  err_cleanup_ndev:
+>  	am65_cpsw_nuss_cleanup_ndev(common);
+> +	am65_cpsw_unregister_devlink(common);
 
-Maybe this could be microoptimized by doing
+It looks strange that there is no error path leading to
+am65_cpsw_unregister_devlink() only.
 
-unsigned long addr2mask = not ? ~0UL : 0UL;
-...
+Why we don't need to call it when/if devm_request_irq() fails? 
 
-  val &= (addr2[idx] ^ addr2mask);
+Not strictly related to this patch, but it looks like there is another
+suspect cleanup point: if a 'register_netdev()' call fails, the cleanup
+code will still call unregister_netdev() on the relevant device and the
+later ones, hitting a WARN_ON(1) in unregister_netdevice_many().
 
-but I don't think it'll make a difference.
+Thanks!
 
-Rasmus
+Paolo
+

@@ -2,115 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 35EC3569A6D
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 08:24:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EF389569A71
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 08:25:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234236AbiGGGYP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Jul 2022 02:24:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56648 "EHLO
+        id S234619AbiGGGY5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Jul 2022 02:24:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57094 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233366AbiGGGYO (ORCPT
+        with ESMTP id S233366AbiGGGYz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Jul 2022 02:24:14 -0400
-Received: from smtp236.sjtu.edu.cn (smtp236.sjtu.edu.cn [202.120.2.236])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DC4F633F
-        for <linux-kernel@vger.kernel.org>; Wed,  6 Jul 2022 23:24:13 -0700 (PDT)
-Received: from proxy02.sjtu.edu.cn (smtp188.sjtu.edu.cn [202.120.2.188])
-        by smtp236.sjtu.edu.cn (Postfix) with ESMTPS id C22AF1008B38C;
-        Thu,  7 Jul 2022 14:24:09 +0800 (CST)
-Received: from localhost (localhost.localdomain [127.0.0.1])
-        by proxy02.sjtu.edu.cn (Postfix) with ESMTP id AA519200A5E62;
-        Thu,  7 Jul 2022 14:24:09 +0800 (CST)
-X-Virus-Scanned: amavisd-new at 
-Received: from proxy02.sjtu.edu.cn ([127.0.0.1])
-        by localhost (proxy02.sjtu.edu.cn [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id zqcuLmg7dGjf; Thu,  7 Jul 2022 14:24:08 +0800 (CST)
-Received: from [192.168.24.189] (unknown [202.120.40.82])
-        (Authenticated sender: qtxuning1999@sjtu.edu.cn)
-        by proxy02.sjtu.edu.cn (Postfix) with ESMTPSA id EB9A8200A5E63;
-        Thu,  7 Jul 2022 14:24:02 +0800 (CST)
-Message-ID: <8a0ca3af-d7dd-9a98-1b08-8d861d25d368@sjtu.edu.cn>
-Date:   Thu, 7 Jul 2022 14:24:02 +0800
+        Thu, 7 Jul 2022 02:24:55 -0400
+Received: from mailbox.box.xen0n.name (mail.xen0n.name [115.28.160.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50C63633F
+        for <linux-kernel@vger.kernel.org>; Wed,  6 Jul 2022 23:24:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=xen0n.name; s=mail;
+        t=1657175090; bh=8KkOQg6Np0sKzvI4n9mwASctGzwr8vj+dzI40q2/t8o=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=j/Dq+BQMmoqtXk9l5OFH8rgHvcHVw4JU8RYJ4yq9hJJF682Opyf0d13ag70wtpAT6
+         rkMTF9/06gOztj1ICLRD2Y774WEcuYEx5ozZmvUirAtnZMQf1vdhtNhOMLatQt4jbY
+         RzcQCAPzOlmQPZacrVZdO71+1w55qWbIdoUPQy4E=
+Received: from [100.100.57.190] (unknown [220.248.53.61])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mailbox.box.xen0n.name (Postfix) with ESMTPSA id C680D60114;
+        Thu,  7 Jul 2022 14:24:49 +0800 (CST)
+Message-ID: <c5ed4251-04e3-c8a3-c19a-ff4fee469371@xen0n.name>
+Date:   Thu, 7 Jul 2022 14:24:49 +0800
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH v2 3/4] virtio_test: use random length scatterlists to
- test descriptor chain
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:104.0)
+ Gecko/20100101 Thunderbird/104.0a1
+Subject: Re: [PATCH v2] LoongArch: Clean useless vcsr in loongarch_fpu.
 Content-Language: en-US
-To:     "Michael S. Tsirkin" <mst@redhat.com>
-Cc:     jasowang@redhat.com, eperezma@redhat.com,
-        virtualization@lists.linux-foundation.org,
-        linux-kernel@vger.kernel.org, sgarzare@redhat.com
-References: <20220707024409.1869-1-qtxuning1999@sjtu.edu.cn>
- <20220707024409.1869-4-qtxuning1999@sjtu.edu.cn>
- <20220707011015-mutt-send-email-mst@kernel.org>
-From:   Guo Zhi <qtxuning1999@sjtu.edu.cn>
-In-Reply-To: <20220707011015-mutt-send-email-mst@kernel.org>
+To:     Qi Hu <huqi@loongson.cn>, WANG Xuerui <kernel@xen0n.name>,
+        Xi Ruoyao <xry111@xry111.site>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Huacai Chen <chenhuacai@kernel.org>
+Cc:     loongarch@lists.linux.dev, LKML <linux-kernel@vger.kernel.org>
+References: <20220704153612.314112-1-huqi@loongson.cn>
+ <4273e104-8392-6a06-5d18-a1933978d8c3@xen0n.name>
+ <22a1ba993e298ce12a374decefebeca484240883.camel@xry111.site>
+ <16c9ccaa5e5a2ffd39272cff6f66e487c659b571.camel@xry111.site>
+ <CAAhV-H5+qd1ZrOqE8fgRmWshXy57AfEFpyKSK8ZstZZEQ53owQ@mail.gmail.com>
+ <ac46f5cb4c8d1154cfc3e862fb5211e869839c9a.camel@xry111.site>
+ <c824b9ca-c9c4-1912-7845-99a0989277a4@loongson.cn>
+ <9d064771-9402-4e84-96f8-4713cddf42f2@www.fastmail.com>
+ <730cb4c4-a6a3-783e-3e4c-7c2bdc35c088@loongson.cn>
+ <0583a335-72f7-55cf-3cd9-4dbd8109a440@xen0n.name>
+ <bd889cd7b72138a12b1339a33156ff46530c20b0.camel@xry111.site>
+ <e67e03ae-e2d4-79e6-7f6a-5558ea9de52b@xen0n.name>
+ <41a2a420-adfa-6f8d-392d-0c15892b6945@loongson.cn>
+From:   WANG Xuerui <kernel@xen0n.name>
+In-Reply-To: <41a2a420-adfa-6f8d-392d-0c15892b6945@loongson.cn>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-0.4 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/7/7 13:16, Michael S. Tsirkin wrote:
-> On Thu, Jul 07, 2022 at 10:44:08AM +0800, Guo Zhi wrote:
->> Prior implementation only use one descriptor for each io event, which
->> does't test code of descriptor chain. More importantly, one descriptor
->> will not use indirect feature even indirect feature is specified. Use
->> random length scatterlists here to test descriptor chain.
->>
->> Signed-off-by: Guo Zhi <qtxuning1999@sjtu.edu.cn>
->> ---
->>   tools/virtio/virtio_test.c | 11 ++++++++---
->>   1 file changed, 8 insertions(+), 3 deletions(-)
->>
->> diff --git a/tools/virtio/virtio_test.c b/tools/virtio/virtio_test.c
->> index 1ecd64271..363695b33 100644
->> --- a/tools/virtio/virtio_test.c
->> +++ b/tools/virtio/virtio_test.c
->> @@ -20,6 +20,7 @@
->>   #include "../../drivers/vhost/test.h"
->>   
->>   #define RANDOM_BATCH -1
->> +#define MAX_SG_FRAGS 8UL
->>   #define ALIGN 4096
->>   #define RINGSIZE   256
->>   #define TEST_BUF_NUM 0x100000
->> @@ -172,7 +173,8 @@ static void wait_for_interrupt(struct vdev_info *dev)
->>   static void run_test(struct vdev_info *dev, struct vq_info *vq,
->>   		     bool delayed, int batch, int reset_n, int bufs)
->>   {
->> -	struct scatterlist sl;
->> +	struct scatterlist sg[MAX_SG_FRAGS];
->> +	int sg_size = 0;
->>   	long started = 0, completed = 0, next_reset = reset_n;
->>   	long completed_before, started_before;
->>   	int r, test = 1;
->> @@ -197,8 +199,11 @@ static void run_test(struct vdev_info *dev, struct vq_info *vq,
->>   
->>   			while (started < bufs &&
->>   			       (started - completed) < batch) {
->> -				sg_init_one(&sl, dev->buf, dev->buf_size);
->> -				r = virtqueue_add_outbuf(vq->vq, &sl, 1,
->> +				sg_size = random() % (MAX_SG_FRAGS - 1) + 1;
->> +				sg_init_table(sg, sg_size);
->> +				for (int i = 0; i < sg_size; ++i)
->> +					sg_set_buf(&sg[i], dev->buf + i, 0x1);
->> +				r = virtqueue_add_outbuf(vq->vq, sg, sg_size,
->>   							 dev->buf + started,
->>   							 GFP_ATOMIC);
->>   				if (unlikely(r != 0)) {
-> random on data path is pretty expensive.
-> I would suggest get an array size from user (and maybe a seed?) and
-> pregenerate some numbers, then reuse.
-SGTM, I will prepare a random number array before add outbuf begin.
->
->> -- 
->> 2.17.1
 
+On 2022/7/7 14:09, Qi Hu wrote:
+>
+> On 2022/7/7 12:22, WANG Xuerui wrote:
+>> On 2022/7/7 12:04, Xi Ruoyao wrote:
+>>> On Thu, 2022-07-07 at 11:05 +0800, WANG Xuerui wrote:
+>>>
+>>>> To be frank, at this point I think you're trying to hide something.
+>>>> (This is not your fault, blame someone else of course because they 
+>>>> told
+>>>> you the fact.) In the old-world kernel the VCSR a.k.a. FCSR16 is
+>>>> certainly being saved/restored, and there's apparently no harm in 
+>>>> doing
+>>>> so. And if the contents are indeed "undefined", why are the code there
+>>>> in the first place? Certainly the bits *are* meaningful, only that for
+>>>> some reason you aren't revealing the semantics and pretending that 
+>>>> they
+>>>> are "undefined" and probably "do nothing externally observable" if
+>>>> accessed in the first place.
+>>> On a 3A5000LL, I did an experiment via a kernel module, which enables
+>>> LSX/LASX and tries to write and read fcsr16.  I tried each bit (1, 
+>>> 2, 4,
+>>> 8, ..., 1 << 31) one by one.  The result: no matter which bit I wrote
+>>> into fcsr16, I always read out 0.
+>>>
+>>> And I've objdump'ed a kernel shipped in an early Loongnix release.  It
+>>> seems the only reference to fcsr16 is a "movgr2fcsr $r16, $r0"
+>>> instruction.
+>>
+>> Hmm this is weird. I can't understand why the vcsr code was there in 
+>> the first place then... I'd like to check a few Loongnix/Kylin/UOS 
+>> kernels but currently I don't have the time.
+>>
+>> If this is the case, indeed all vcsr-related code should be removed. 
+>> Although I'm still not sure how to best word the commit message.
+>>
+> Thanks for the Ruoyao's experiment.
+>
+> Removing the vcsr is the first step to trying to support LBT and 
+> LSX/LASX in Kernel. In my opinion, the vcsr relevant code may be used 
+> for debugging and forgot to remove.
+>
+Thinking about it harder, it actually makes sense. Given that access to 
+the LSX/LASX manuals is currently restricted, outsiders can never know 
+whether the code in question is really needed, so one has to err on the 
+conservative side. Thanks for the clarification, and my apologies for 
+being harsh in the previous reply.
+
+I think the commit message could be reworded like:
+
+"The VCSR (also known as FCSR16) is not present on retail steppings of 
+3A5000. FCSR16 through FCSR31 are reserved for non-floating-point 
+LSX/LASX operations, but on 3A5000 all writes to them are no-op and all 
+reads return zero. FP LSX/LASX operations reuse the FCSR0 as their CSR.
+
+Remove VCSR handling that is probably leftover debugging code for an 
+earlier not-for-retail stepping."
+
+(And remove the trailing period in your patch title, while at it; the 
+Linux kernel doesn't use a trailing period for majority of its commits.)
 

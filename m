@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 12DB756972E
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 03:12:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 14660569737
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 03:12:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234554AbiGGBKO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Jul 2022 21:10:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48100 "EHLO
+        id S234678AbiGGBKR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Jul 2022 21:10:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48110 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234150AbiGGBKJ (ORCPT
+        with ESMTP id S234158AbiGGBKK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Jul 2022 21:10:09 -0400
-Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6389E2D1DC;
-        Wed,  6 Jul 2022 18:10:08 -0700 (PDT)
-Received: by mail-ej1-x62a.google.com with SMTP id d2so29904447ejy.1;
-        Wed, 06 Jul 2022 18:10:08 -0700 (PDT)
+        Wed, 6 Jul 2022 21:10:10 -0400
+Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99CDB2D1DA;
+        Wed,  6 Jul 2022 18:10:09 -0700 (PDT)
+Received: by mail-ej1-x633.google.com with SMTP id u12so29817208eja.8;
+        Wed, 06 Jul 2022 18:10:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=LtHOAiNlZopaglJkN3YZQP1ZzTvW1XNe+F16bbBv+9w=;
-        b=DMdPnyk2HPEGpEfA7lK9rnaYMs8A5/OdCN+m1cpqJevumKvkbB8mcvooRjbN/QFrpj
-         D8+8A++9ZJDPrPIsKLGqzxfC/dMT0yRy2isdp0YH0htSWKKILW5wuTMiUxJj14+V/wsp
-         wL8OPLbWulNaamjwQsvKCaRcyCI5jK08I1HmswVVPzcQY8hMJ5S+ljR3HRmh2+e3/qwN
-         Z3KXjUqCqpZW1T3OZvUjiUHPuLAJY3p6NaXoVrBB2qeYnoaCt+F7Li7pPj4GLoTx9hDd
-         v0suJOy7RnK1AknSGXKndTsMc+oOIGZ0GEiOM+ulOYu1BRTUqpk/RT4zx3XQCOAxypav
-         Zczw==
+        bh=w+jHWIY2YSdrFjsb7SITOmNywGPRwpwNzxjK0A4jYIk=;
+        b=iITrxxZ3LPuYbfjO//m0evPxzVgZj99uSWjySaxBJlc+dVIHFa3gM7T8ePin1bYsSK
+         oKvGTET1d7+XJs5noOSzZ5Yuaa5vU85ZdqkZ/Vyom+/wY5Ugh3Gq/0C64F1v5czSJ2O7
+         lRTzcwa6rr00TZwBPiQ18RBPeH8YpcLFaC1U37iazGpYZ4W/iUHuyaFmxF6px84J+2UJ
+         9Xq405MkuRHs0Smjg8ECOByAjn8H1u7f1T9zl5RPc5pFyTCiZCQ8JK57Hk+qjOpKtxZC
+         TgyAAOb6LdyPrCMufQaXC7yJmMqGOWogspiGMpYEYYIMGxG0+otDFkBRXaiV78P9Csid
+         M6Tw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=LtHOAiNlZopaglJkN3YZQP1ZzTvW1XNe+F16bbBv+9w=;
-        b=iZlbfFHW9EEbGQNmuSN7XQPtqPtzOucVws3ejD1rY05PYeIXGlYYVeikz2LNpLWdEm
-         STXjJ0B6ymIiP/X6COm4VJg/sOL27hdBKO1orrWBBb8UNbKQyTa+RxvvFkZdiWH8vlj1
-         lpoIuVdJ6XLeGqq4UpMtCx1WEt8GfeNUX5xHD2u0K65mGefxXwoi7e3xPKhzfmWqV6Et
-         l0TQa/MAc5rxm/2ucYno4scoBXhVpq8kMsYvv2nIL/ecOi3KigrRKOzXwwCORmwTk34m
-         Thx2IC85mNdCpb6IAe0Qema+ir4+4nI0btM379gIRQurpucqhJqFMY8cVvFwaGIGXj33
-         6tcQ==
-X-Gm-Message-State: AJIora8O15uW1k04t6PKQUw0JKgUTVxpEM1piG8I1x5YiaS2SrKzP9hm
-        xMDb7v2clnDC6cDditoYV8w=
-X-Google-Smtp-Source: AGRyM1sLckaDEU8GiRvO1p2D2lOQb5keIcvvsdtCOpHtsNA6DmdSwcn4lwruXYOkKUqpaCn02nSi6A==
-X-Received: by 2002:a17:907:1b03:b0:6ff:78d4:c140 with SMTP id mp3-20020a1709071b0300b006ff78d4c140mr43610220ejc.554.1657156206858;
-        Wed, 06 Jul 2022 18:10:06 -0700 (PDT)
+        bh=w+jHWIY2YSdrFjsb7SITOmNywGPRwpwNzxjK0A4jYIk=;
+        b=gO3//+T10U8lZY2r3WZh8+yjnLBy64IIOpMHukRu5d3QeVmgrkSnzygC0Y5g3yCRsc
+         tT5B5mI03olRsX931n2U+1SyONJ1qR4nLUYE9cjaoq4nGWElherK47lKxkKGM1kNlCxh
+         9+qejmAIu0uTz8NqXH8MmNmYKKcA+A8jXffzEm1CKfxizApvbNZ1dEINZ4qgY8QUGOMy
+         odHRghIlf/tNbeIckzqWG3gpj7IHYwDz+uCIAbEUWaQh6OAQ3mO6y9IrVRIVHdzxt8BC
+         nmgYNo3yygB18ci3qBVKTNAc7uQ75rqgaP3X21cbNF2b+OsixzF1WuETWa8R1yo6hay5
+         0xag==
+X-Gm-Message-State: AJIora8Q/INfb1/Rw1B0JWLq89dfqFELOG0JHS7NFtwa3P2njj7H6T1S
+        aKVnIGdVh5B/LpMA9RndW+k=
+X-Google-Smtp-Source: AGRyM1sVZQM62n8HhzmQLeVMmbIfJmqtLwQxYymCef8hUd44AoMreg85GCIjWXcQ55iET2M8jInHeQ==
+X-Received: by 2002:a17:907:d18:b0:726:3172:2266 with SMTP id gn24-20020a1709070d1800b0072631722266mr42268550ejc.476.1657156208111;
+        Wed, 06 Jul 2022 18:10:08 -0700 (PDT)
 Received: from localhost.localdomain (93-42-70-190.ip85.fastwebnet.it. [93.42.70.190])
-        by smtp.googlemail.com with ESMTPSA id u17-20020a056402111100b0043a6e807febsm6915464edv.46.2022.07.06.18.10.05
+        by smtp.googlemail.com with ESMTPSA id u17-20020a056402111100b0043a6e807febsm6915464edv.46.2022.07.06.18.10.06
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 06 Jul 2022 18:10:06 -0700 (PDT)
+        Wed, 06 Jul 2022 18:10:07 -0700 (PDT)
 From:   Christian Marangi <ansuelsmth@gmail.com>
 To:     Andy Gross <agross@kernel.org>,
         Bjorn Andersson <bjorn.andersson@linaro.org>,
@@ -57,10 +57,11 @@ To:     Andy Gross <agross@kernel.org>,
         linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org
 Cc:     Christian Marangi <ansuelsmth@gmail.com>,
-        Jonathan McDowell <noodles@earth.li>
-Subject: [PATCH v2 3/8] ARM: dts: qcom: add specific ipq8064 dtsi with smb208 rpm regulators
-Date:   Thu,  7 Jul 2022 03:09:37 +0200
-Message-Id: <20220707010943.20857-4-ansuelsmth@gmail.com>
+        Jonathan McDowell <noodles@earth.li>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: [PATCH v2 4/8] ARM: dts: qcom: add missing snps,dwmac compatible for gmac ipq8064
+Date:   Thu,  7 Jul 2022 03:09:38 +0200
+Message-Id: <20220707010943.20857-5-ansuelsmth@gmail.com>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220707010943.20857-1-ansuelsmth@gmail.com>
 References: <20220707010943.20857-1-ansuelsmth@gmail.com>
@@ -76,67 +77,56 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add specific ipq8064 dtsi with smb208 rpm regulators.
-
-Qcom advise to use this configuration but it's not mandatory and OEM
-can decide to implement their own regulators.
-smb208 regulators are used to scale CPU voltage, L2 cache voltage and
-Ubi32 cores.
-
-There regulators are controlled by rpm and to correctly works gsbi4-i2c
-require to be NEVER disabled or rpm will reject any regulator change
-request.
+Add missing snps,dwmac compatible for gmac ipq8064 dtsi.
 
 Signed-off-by: Christian Marangi <ansuelsmth@gmail.com>
 Tested-by: Jonathan McDowell <noodles@earth.li>
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Reviewed-by: Konrad Dybcio <konrad.dybcio@somainline.org>
 ---
- arch/arm/boot/dts/qcom-ipq8064-smb208.dtsi | 37 ++++++++++++++++++++++
- 1 file changed, 37 insertions(+)
- create mode 100644 arch/arm/boot/dts/qcom-ipq8064-smb208.dtsi
+ arch/arm/boot/dts/qcom-ipq8064.dtsi | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/arch/arm/boot/dts/qcom-ipq8064-smb208.dtsi b/arch/arm/boot/dts/qcom-ipq8064-smb208.dtsi
-new file mode 100644
-index 000000000000..ac9c44f0c164
---- /dev/null
-+++ b/arch/arm/boot/dts/qcom-ipq8064-smb208.dtsi
-@@ -0,0 +1,37 @@
-+// SPDX-License-Identifier: GPL-2.0
-+
-+#include "qcom-ipq8064.dtsi"
-+
-+&rpm {
-+	smb208_regulators: regulators {
-+		compatible = "qcom,rpm-smb208-regulators";
-+
-+		smb208_s1a: s1a {
-+			regulator-min-microvolt = <1050000>;
-+			regulator-max-microvolt = <1150000>;
-+
-+			qcom,switch-mode-frequency = <1200000>;
-+		};
-+
-+		smb208_s1b: s1b {
-+			regulator-min-microvolt = <1050000>;
-+			regulator-max-microvolt = <1150000>;
-+
-+			qcom,switch-mode-frequency = <1200000>;
-+		};
-+
-+		smb208_s2a: s2a {
-+			regulator-min-microvolt = < 800000>;
-+			regulator-max-microvolt = <1250000>;
-+
-+			qcom,switch-mode-frequency = <1200000>;
-+		};
-+
-+		smb208_s2b: s2b {
-+			regulator-min-microvolt = < 800000>;
-+			regulator-max-microvolt = <1250000>;
-+
-+			qcom,switch-mode-frequency = <1200000>;
-+		};
-+	};
-+};
+diff --git a/arch/arm/boot/dts/qcom-ipq8064.dtsi b/arch/arm/boot/dts/qcom-ipq8064.dtsi
+index 7cccfe99bf00..a80090f5509e 100644
+--- a/arch/arm/boot/dts/qcom-ipq8064.dtsi
++++ b/arch/arm/boot/dts/qcom-ipq8064.dtsi
+@@ -1042,7 +1042,7 @@ stmmac_axi_setup: stmmac-axi-config {
+ 
+ 		gmac0: ethernet@37000000 {
+ 			device_type = "network";
+-			compatible = "qcom,ipq806x-gmac";
++			compatible = "qcom,ipq806x-gmac", "snps,dwmac";
+ 			reg = <0x37000000 0x200000>;
+ 			interrupts = <GIC_SPI 220 IRQ_TYPE_LEVEL_HIGH>;
+ 			interrupt-names = "macirq";
+@@ -1066,7 +1066,7 @@ gmac0: ethernet@37000000 {
+ 
+ 		gmac1: ethernet@37200000 {
+ 			device_type = "network";
+-			compatible = "qcom,ipq806x-gmac";
++			compatible = "qcom,ipq806x-gmac", "snps,dwmac";
+ 			reg = <0x37200000 0x200000>;
+ 			interrupts = <GIC_SPI 223 IRQ_TYPE_LEVEL_HIGH>;
+ 			interrupt-names = "macirq";
+@@ -1090,7 +1090,7 @@ gmac1: ethernet@37200000 {
+ 
+ 		gmac2: ethernet@37400000 {
+ 			device_type = "network";
+-			compatible = "qcom,ipq806x-gmac";
++			compatible = "qcom,ipq806x-gmac", "snps,dwmac";
+ 			reg = <0x37400000 0x200000>;
+ 			interrupts = <GIC_SPI 226 IRQ_TYPE_LEVEL_HIGH>;
+ 			interrupt-names = "macirq";
+@@ -1114,7 +1114,7 @@ gmac2: ethernet@37400000 {
+ 
+ 		gmac3: ethernet@37600000 {
+ 			device_type = "network";
+-			compatible = "qcom,ipq806x-gmac";
++			compatible = "qcom,ipq806x-gmac", "snps,dwmac";
+ 			reg = <0x37600000 0x200000>;
+ 			interrupts = <GIC_SPI 229 IRQ_TYPE_LEVEL_HIGH>;
+ 			interrupt-names = "macirq";
 -- 
 2.36.1
 

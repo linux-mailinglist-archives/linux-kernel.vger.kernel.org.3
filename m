@@ -2,246 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F20E3569E13
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 10:52:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 11CAC569DFF
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 10:52:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235418AbiGGIu2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Jul 2022 04:50:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37036 "EHLO
+        id S235301AbiGGIvs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Jul 2022 04:51:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38914 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235301AbiGGIuK (ORCPT
+        with ESMTP id S233783AbiGGIvr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Jul 2022 04:50:10 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59A8F45065
-        for <linux-kernel@vger.kernel.org>; Thu,  7 Jul 2022 01:50:09 -0700 (PDT)
-Date:   Thu, 07 Jul 2022 08:50:06 -0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1657183808;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=kQMMeEWN31sPIE98ZCny+Mzr/8j2KWKLCIvMS4PoQsY=;
-        b=YpjDpOiv+rWUoh/MWoXCd8J7d5I/QxmqUHslHJx2AHlKu4AdU8+VQLrSkVQtYOLtnM7wWt
-        pijl96hfZIH487wFoHiDyiXHlAEg96d3TTP6llqt8YLPMoNSdU8GwLuwwoeVEBQUshUUss
-        QSa1xN6sxZnAIZlf2ec1qI9EPOG+Y1ckRgo9iGQYsPBOWhaAoyaoqWss045PYiIgv3wQwB
-        P30vX6rePHevF3HPGiX23GZl5u7CnDzQA5n5N3a5hc7C1lDZaEWRepP7Tw1ElDjD+8aqjm
-        A7yypcBb4jel3f9v+Cci8sbok6dB1T1s4ZPhYEKFOf6hMRr1t3TKEartbQRgsg==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1657183808;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=kQMMeEWN31sPIE98ZCny+Mzr/8j2KWKLCIvMS4PoQsY=;
-        b=MjA+FN9G7Fb7Q39+EaY8otj4AIiXBkEHJR6tD6VCkV/9sGwWFBsH/aAtxiBXcACStBgdgR
-        GjeYlWm1bEK/mYCw==
-From:   "irqchip-bot for Samuel Holland" <tip-bot2@linutronix.de>
-Sender: tip-bot2@linutronix.de
-Reply-to: linux-kernel@vger.kernel.org
-To:     linux-kernel@vger.kernel.org
-Subject: [irqchip: irq/irqchip-next] irqchip/mips-gic: Only register IPI
- domain when SMP is enabled
-Cc:     kernel test robot <lkp@intel.com>,
-        Samuel Holland <samuel@sholland.org>,
-        Marc Zyngier <maz@kernel.org>, tglx@linutronix.de
-In-Reply-To: <20220701200056.46555-2-samuel@sholland.org>
-References: <20220701200056.46555-2-samuel@sholland.org>
+        Thu, 7 Jul 2022 04:51:47 -0400
+Received: from mail-qk1-f176.google.com (mail-qk1-f176.google.com [209.85.222.176])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5FB554F186;
+        Thu,  7 Jul 2022 01:51:46 -0700 (PDT)
+Received: by mail-qk1-f176.google.com with SMTP id b24so12869671qkn.4;
+        Thu, 07 Jul 2022 01:51:46 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=8TTCMhm7I/OLPKvXGM7JXMEkeorr37t0n/MgDLHxknI=;
+        b=oSjiSE/XijE+I5lzEu0e/Pz/X22yrLJP+wcQwNcyl1205BZHuUo9eiL21O2fLubnjg
+         MwWgo1HBvckHST1XKQ5ea5Uq7pBlGJ/b4wcxLfJs00duoLCXwxc670diq8H0ZY0EQ1on
+         RS3OV2ZgemS6cweeR7uVT94lE5pqrPAvwyoO578AoMWb+oplzWj6sn1iBzBMUOTarHck
+         O/xq4Caw6S4M/2MDrBnYGahEFqUkNUEz0hjjFVqEL3GqYGAjx5zOjLyfQSy4Zx/vm6nn
+         8+6seX4WVcmygiew5pwcnmXRhqOBdC3RsqvG8AbOxbLjk83Iuefo14PrV0o+Lpr0b2OE
+         4mKw==
+X-Gm-Message-State: AJIora+SxjZc3XF1MuAEXWnJU0HMX6EdcImGYyW/I8KABOPErjUOguuI
+        tKkO+/xwVELJuKkS3anH5nrVv19Lj5a4NFhB
+X-Google-Smtp-Source: AGRyM1viU2Kndlp+zQmvPbLpSpVwCKDMVFkme2eTbE257Mjq1O8Kgz9dJqnfvSXPVH4ho1HFhN7vOw==
+X-Received: by 2002:a37:a488:0:b0:6af:4bb:fea9 with SMTP id n130-20020a37a488000000b006af04bbfea9mr30242026qke.380.1657183905222;
+        Thu, 07 Jul 2022 01:51:45 -0700 (PDT)
+Received: from mail-yw1-f172.google.com (mail-yw1-f172.google.com. [209.85.128.172])
+        by smtp.gmail.com with ESMTPSA id i13-20020a05622a08cd00b00317ccf991a3sm5958085qte.19.2022.07.07.01.51.44
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 07 Jul 2022 01:51:44 -0700 (PDT)
+Received: by mail-yw1-f172.google.com with SMTP id 00721157ae682-31cf1adbf92so36642197b3.4;
+        Thu, 07 Jul 2022 01:51:44 -0700 (PDT)
+X-Received: by 2002:a81:1090:0:b0:31c:9be5:6c95 with SMTP id
+ 138-20020a811090000000b0031c9be56c95mr22889103ywq.384.1657183904507; Thu, 07
+ Jul 2022 01:51:44 -0700 (PDT)
 MIME-Version: 1.0
-Message-ID: <165718380687.15455.5041789110776942550.tip-bot2@tip-bot2>
-Robot-ID: <tip-bot2@linutronix.de>
-Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20220705155038.454251-1-krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220705155038.454251-1-krzysztof.kozlowski@linaro.org>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Thu, 7 Jul 2022 10:51:33 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdVw4Vcq8VCQBVFkuuA5cKGkZodgkqirh6Mohu-FmQFUvA@mail.gmail.com>
+Message-ID: <CAMuHMdVw4Vcq8VCQBVFkuuA5cKGkZodgkqirh6Mohu-FmQFUvA@mail.gmail.com>
+Subject: Re: [PATCH] dt-bindings: hwinfo: renesas,prr: move from soc directory
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Magnus Damm <magnus.damm@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following commit has been merged into the irq/irqchip-next branch of irqchip:
+On Tue, Jul 5, 2022 at 5:50 PM Krzysztof Kozlowski
+<krzysztof.kozlowski@linaro.org> wrote:
+> Group devices like Chip ID or SoC information under "hwinfo" directory.
+>
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+>
+> ---
+>
+> This should go via Renesas tree because of changes around soc/renesas/renesas,prr.yaml.
+>
+> Changes since v1:
+> 1. Split from https://lore.kernel.org/all/20220705154613.453096-1-krzysztof.kozlowski@linaro.org/
 
-Commit-ID:     8190cc572981f2f13b6ffc26c7cfa7899e5d3ccc
-Gitweb:        https://git.kernel.org/pub/scm/linux/kernel/git/maz/arm-platforms/8190cc572981f2f13b6ffc26c7cfa7899e5d3ccc
-Author:        Samuel Holland <samuel@sholland.org>
-AuthorDate:    Fri, 01 Jul 2022 15:00:49 -05:00
-Committer:     Marc Zyngier <maz@kernel.org>
-CommitterDate: Thu, 07 Jul 2022 09:38:03 +01:00
+Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
+i.e. will queue in renesas-devel for v5.20.
 
-irqchip/mips-gic: Only register IPI domain when SMP is enabled
+Gr{oetje,eeting}s,
 
-The MIPS GIC irqchip driver may be selected in a uniprocessor
-configuration, but it unconditionally registers an IPI domain.
+                        Geert
 
-Limit the part of the driver dealing with IPIs to only be compiled when
-GENERIC_IRQ_IPI is enabled, which corresponds to an SMP configuration.
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
 
-Reported-by: kernel test robot <lkp@intel.com>
-Signed-off-by: Samuel Holland <samuel@sholland.org>
-Signed-off-by: Marc Zyngier <maz@kernel.org>
-Link: https://lore.kernel.org/r/20220701200056.46555-2-samuel@sholland.org
----
- drivers/irqchip/Kconfig        |  3 +-
- drivers/irqchip/irq-mips-gic.c | 80 ++++++++++++++++++++++-----------
- 2 files changed, 56 insertions(+), 27 deletions(-)
-
-diff --git a/drivers/irqchip/Kconfig b/drivers/irqchip/Kconfig
-index 1f23a6b..d26a4ff 100644
---- a/drivers/irqchip/Kconfig
-+++ b/drivers/irqchip/Kconfig
-@@ -322,7 +322,8 @@ config KEYSTONE_IRQ
- 
- config MIPS_GIC
- 	bool
--	select GENERIC_IRQ_IPI
-+	select GENERIC_IRQ_IPI if SMP
-+	select IRQ_DOMAIN_HIERARCHY
- 	select MIPS_CM
- 
- config INGENIC_IRQ
-diff --git a/drivers/irqchip/irq-mips-gic.c b/drivers/irqchip/irq-mips-gic.c
-index ff89b36..8a9efb6 100644
---- a/drivers/irqchip/irq-mips-gic.c
-+++ b/drivers/irqchip/irq-mips-gic.c
-@@ -52,13 +52,15 @@ static DEFINE_PER_CPU_READ_MOSTLY(unsigned long[GIC_MAX_LONGS], pcpu_masks);
- 
- static DEFINE_SPINLOCK(gic_lock);
- static struct irq_domain *gic_irq_domain;
--static struct irq_domain *gic_ipi_domain;
- static int gic_shared_intrs;
- static unsigned int gic_cpu_pin;
- static unsigned int timer_cpu_pin;
- static struct irq_chip gic_level_irq_controller, gic_edge_irq_controller;
-+
-+#ifdef CONFIG_GENERIC_IRQ_IPI
- static DECLARE_BITMAP(ipi_resrv, GIC_MAX_INTRS);
- static DECLARE_BITMAP(ipi_available, GIC_MAX_INTRS);
-+#endif /* CONFIG_GENERIC_IRQ_IPI */
- 
- static struct gic_all_vpes_chip_data {
- 	u32	map;
-@@ -472,9 +474,11 @@ static int gic_irq_domain_map(struct irq_domain *d, unsigned int virq,
- 	u32 map;
- 
- 	if (hwirq >= GIC_SHARED_HWIRQ_BASE) {
-+#ifdef CONFIG_GENERIC_IRQ_IPI
- 		/* verify that shared irqs don't conflict with an IPI irq */
- 		if (test_bit(GIC_HWIRQ_TO_SHARED(hwirq), ipi_resrv))
- 			return -EBUSY;
-+#endif /* CONFIG_GENERIC_IRQ_IPI */
- 
- 		err = irq_domain_set_hwirq_and_chip(d, virq, hwirq,
- 						    &gic_level_irq_controller,
-@@ -567,6 +571,8 @@ static const struct irq_domain_ops gic_irq_domain_ops = {
- 	.map = gic_irq_domain_map,
- };
- 
-+#ifdef CONFIG_GENERIC_IRQ_IPI
-+
- static int gic_ipi_domain_xlate(struct irq_domain *d, struct device_node *ctrlr,
- 				const u32 *intspec, unsigned int intsize,
- 				irq_hw_number_t *out_hwirq,
-@@ -670,6 +676,48 @@ static const struct irq_domain_ops gic_ipi_domain_ops = {
- 	.match = gic_ipi_domain_match,
- };
- 
-+static int gic_register_ipi_domain(struct device_node *node)
-+{
-+	struct irq_domain *gic_ipi_domain;
-+	unsigned int v[2], num_ipis;
-+
-+	gic_ipi_domain = irq_domain_add_hierarchy(gic_irq_domain,
-+						  IRQ_DOMAIN_FLAG_IPI_PER_CPU,
-+						  GIC_NUM_LOCAL_INTRS + gic_shared_intrs,
-+						  node, &gic_ipi_domain_ops, NULL);
-+	if (!gic_ipi_domain) {
-+		pr_err("Failed to add IPI domain");
-+		return -ENXIO;
-+	}
-+
-+	irq_domain_update_bus_token(gic_ipi_domain, DOMAIN_BUS_IPI);
-+
-+	if (node &&
-+	    !of_property_read_u32_array(node, "mti,reserved-ipi-vectors", v, 2)) {
-+		bitmap_set(ipi_resrv, v[0], v[1]);
-+	} else {
-+		/*
-+		 * Reserve 2 interrupts per possible CPU/VP for use as IPIs,
-+		 * meeting the requirements of arch/mips SMP.
-+		 */
-+		num_ipis = 2 * num_possible_cpus();
-+		bitmap_set(ipi_resrv, gic_shared_intrs - num_ipis, num_ipis);
-+	}
-+
-+	bitmap_copy(ipi_available, ipi_resrv, GIC_MAX_INTRS);
-+
-+	return 0;
-+}
-+
-+#else /* !CONFIG_GENERIC_IRQ_IPI */
-+
-+static inline int gic_register_ipi_domain(struct device_node *node)
-+{
-+	return 0;
-+}
-+
-+#endif /* !CONFIG_GENERIC_IRQ_IPI */
-+
- static int gic_cpu_startup(unsigned int cpu)
- {
- 	/* Enable or disable EIC */
-@@ -688,11 +736,12 @@ static int gic_cpu_startup(unsigned int cpu)
- static int __init gic_of_init(struct device_node *node,
- 			      struct device_node *parent)
- {
--	unsigned int cpu_vec, i, gicconfig, v[2], num_ipis;
-+	unsigned int cpu_vec, i, gicconfig;
- 	unsigned long reserved;
- 	phys_addr_t gic_base;
- 	struct resource res;
- 	size_t gic_len;
-+	int ret;
- 
- 	/* Find the first available CPU vector. */
- 	i = 0;
-@@ -780,30 +829,9 @@ static int __init gic_of_init(struct device_node *node,
- 		return -ENXIO;
- 	}
- 
--	gic_ipi_domain = irq_domain_add_hierarchy(gic_irq_domain,
--						  IRQ_DOMAIN_FLAG_IPI_PER_CPU,
--						  GIC_NUM_LOCAL_INTRS + gic_shared_intrs,
--						  node, &gic_ipi_domain_ops, NULL);
--	if (!gic_ipi_domain) {
--		pr_err("Failed to add IPI domain");
--		return -ENXIO;
--	}
--
--	irq_domain_update_bus_token(gic_ipi_domain, DOMAIN_BUS_IPI);
--
--	if (node &&
--	    !of_property_read_u32_array(node, "mti,reserved-ipi-vectors", v, 2)) {
--		bitmap_set(ipi_resrv, v[0], v[1]);
--	} else {
--		/*
--		 * Reserve 2 interrupts per possible CPU/VP for use as IPIs,
--		 * meeting the requirements of arch/mips SMP.
--		 */
--		num_ipis = 2 * num_possible_cpus();
--		bitmap_set(ipi_resrv, gic_shared_intrs - num_ipis, num_ipis);
--	}
--
--	bitmap_copy(ipi_available, ipi_resrv, GIC_MAX_INTRS);
-+	ret = gic_register_ipi_domain(node);
-+	if (ret)
-+		return ret;
- 
- 	board_bind_eic_interrupt = &gic_bind_eic_interrupt;
- 
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds

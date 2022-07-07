@@ -2,119 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A1DC56975F
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 03:25:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6FCE1569766
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 03:27:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234686AbiGGBY5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Jul 2022 21:24:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57654 "EHLO
+        id S234685AbiGGBZw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Jul 2022 21:25:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58314 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234644AbiGGBYy (ORCPT
+        with ESMTP id S234404AbiGGBZv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Jul 2022 21:24:54 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3025E2E9C9;
-        Wed,  6 Jul 2022 18:24:51 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 5BE78CE21A8;
-        Thu,  7 Jul 2022 01:24:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3F51EC3411C;
-        Thu,  7 Jul 2022 01:24:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1657157087;
-        bh=YYAxmusy0ct4ZG1Il9AiODxjUliPdi0KcxWfM7ZIj9A=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=rKkIfyY2nmywCAejQPjJWLtkESEdus9zb2+gkl0u5I5FfHYXf+PUyrHhFeb1XysbQ
-         /m88UnyyuUbHdiEonql8LrsoiIZPYNbWGsyJqzQ0l+EYkFf4z9zmMF1QC2jIfzWYxb
-         QaZJnmKscHKs5n023MiBPlJpu/exjc6VrmsNsf4Rk6Arzf22NQr0AGllAWwlAm4xKc
-         BUR6vC513L9k01PWZ3oZySiydOpNHUxsC/MhXhVascuKWvC3wWlMywsoFY7EPjJl5v
-         Ae0IC1y54yBniuyYF/eUd3HsMHRnxogreSlYF6YEiQurARxIY/tp2i5ImHcxsXAGmH
-         JXXH0p/7X6wsg==
-Date:   Wed, 6 Jul 2022 18:24:46 -0700
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     Ratheesh Kannoth <rkannoth@marvell.com>
-Cc:     <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <sgoutham@marvell.com>, <davem@davemloft.net>,
-        <edumazet@google.com>, <pabeni@redhat.com>,
-        <kbuild-all@lists.01.org>, kernel test robot <lkp@intel.com>
-Subject: Re: [PATCH] octeontx2-af: Fix compiler warnings.
-Message-ID: <20220706182446.2fb0e78d@kernel.org>
-In-Reply-To: <20220706130241.2452196-1-rkannoth@marvell.com>
-References: <20220706130241.2452196-1-rkannoth@marvell.com>
+        Wed, 6 Jul 2022 21:25:51 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CFA82E6BA;
+        Wed,  6 Jul 2022 18:25:49 -0700 (PDT)
+Received: from dggpemm500020.china.huawei.com (unknown [172.30.72.55])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4Lddvs22zVzhYst;
+        Thu,  7 Jul 2022 09:23:21 +0800 (CST)
+Received: from dggpemm100009.china.huawei.com (7.185.36.113) by
+ dggpemm500020.china.huawei.com (7.185.36.49) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Thu, 7 Jul 2022 09:25:37 +0800
+Received: from [10.174.179.24] (10.174.179.24) by
+ dggpemm100009.china.huawei.com (7.185.36.113) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Thu, 7 Jul 2022 09:25:36 +0800
+Subject: Re: [PATCH 5.15 v3] mm/filemap: fix UAF in find_lock_entries
+To:     Matthew Wilcox <willy@infradead.org>
+References: <20220706074527.1406924-1-liushixin2@huawei.com>
+ <YsWXeLo9gXTEv3pw@casper.infradead.org>
+CC:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Jan Kara <jack@suse.cz>,
+        William Kucharski <william.kucharski@oracle.com>,
+        Christoph Hellwig <hch@lst.de>, <linux-kernel@vger.kernel.org>,
+        <stable@vger.kernel.org>
+From:   Liu Shixin <liushixin2@huawei.com>
+Message-ID: <536cb9e4-983d-80db-6590-44ae7fc02415@huawei.com>
+Date:   Thu, 7 Jul 2022 09:25:36 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:45.0) Gecko/20100101
+ Thunderbird/45.7.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <YsWXeLo9gXTEv3pw@casper.infradead.org>
+Content-Type: text/plain; charset="windows-1252"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.174.179.24]
+X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
+ dggpemm100009.china.huawei.com (7.185.36.113)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 6 Jul 2022 18:32:41 +0530 Ratheesh Kannoth wrote:
-> drivers/net/ethernet/marvell/octeontx2/af/rvu_npc_hash.c:388:5: warning: =
-no previous prototype for 'rvu_exact_calculate_hash' [-Wmissing-prototypes]
-> 388 | u32 rvu_exact_calculate_hash(struct rvu *rvu, u16 chan, u16 ctype, =
-u8 *mac,
-> |     ^~~~~~~~~~~~~~~~~~~~~~~~
-> drivers/net/ethernet/marvell/octeontx2/af/rvu_npc_hash.c: In function 'rv=
-u_npc_exact_get_drop_rule_info':
-> >> drivers/net/ethernet/marvell/octeontx2/af/rvu_npc_hash.c:1080:14: warn=
-ing: variable 'rc' set but not used [-Wunused-but-set-variable] =20
-> 1080 |         bool rc;
-> |              ^~
-> drivers/net/ethernet/marvell/octeontx2/af/rvu_npc_hash.c: At top level:
-> drivers/net/ethernet/marvell/octeontx2/af/rvu_npc_hash.c:1248:5: warning:=
- no previous prototype for 'rvu_npc_exact_add_table_entry' [-Wmissing-proto=
-types]
-> 1248 | int rvu_npc_exact_add_table_entry(struct rvu *rvu, u8 cgx_id, u8 l=
-mac_id, u8 *mac,
-> |     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> drivers/net/ethernet/marvell/octeontx2/af/rvu_npc_hash.c: In function 'rv=
-u_npc_exact_add_table_entry':
-> drivers/net/ethernet/marvell/octeontx2/af/rvu_npc_hash.c:1254:33: warning=
-: variable 'table' set but not used [-Wunused-but-set-variable]
-> 1254 |         struct npc_exact_table *table;
-> |                                 ^~~~~
-> drivers/net/ethernet/marvell/octeontx2/af/rvu_npc_hash.c: At top level:
-> drivers/net/ethernet/marvell/octeontx2/af/rvu_npc_hash.c:1320:5: warning:=
- no previous prototype for 'rvu_npc_exact_update_table_entry' [-Wmissing-pr=
-ototypes]
-> 1320 | int rvu_npc_exact_update_table_entry(struct rvu *rvu, u8 cgx_id, u=
-8 lmac_id,
-> |     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-There are also these warnings not fixed by the follow up:
 
-In file included from ../drivers/net/ethernet/marvell/octeontx2/af/rvu_npc_=
-fs.c:14:
-../drivers/net/ethernet/marvell/octeontx2/af/npc_profile.h:15120:28: error:=
- =E2=80=98npc_mkex_default=E2=80=99 defined but not used [-Werror=3Dunused-=
-variable]
-15120 | static struct npc_mcam_kex npc_mkex_default =3D {
-      |                            ^~~~~~~~~~~~~~~~
-../drivers/net/ethernet/marvell/octeontx2/af/npc_profile.h:15000:30: error:=
- =E2=80=98npc_lt_defaults=E2=80=99 defined but not used [-Werror=3Dunused-v=
-ariable]
-15000 | static struct npc_lt_def_cfg npc_lt_defaults =3D {
-      |                              ^~~~~~~~~~~~~~~
-../drivers/net/ethernet/marvell/octeontx2/af/npc_profile.h:14901:31: error:=
- =E2=80=98npc_kpu_profiles=E2=80=99 defined but not used [-Werror=3Dunused-=
-variable]
-14901 | static struct npc_kpu_profile npc_kpu_profiles[] =3D {
-      |                               ^~~~~~~~~~~~~~~~
-../drivers/net/ethernet/marvell/octeontx2/af/npc_profile.h:483:38: error: =
-=E2=80=98ikpu_action_entries=E2=80=99 defined but not used [-Werror=3Dunuse=
-d-variable]
-  483 | static struct npc_kpu_profile_action ikpu_action_entries[] =3D {
-      |                                      ^~~~~~~~~~~~~~~~~~~
-cc1: all warnings being treated as errors
+On 2022/7/6 22:08, Matthew Wilcox wrote:
+> On Wed, Jul 06, 2022 at 03:45:27PM +0800, Liu Shixin wrote:
+>>  	rcu_read_lock();
+>>  	while ((page = find_get_entry(&xas, end, XA_PRESENT))) {
+>> +		unsigned long next_idx = xas.xa_index;
+> It's confusing to have next_idx not be the actual next index.
+> That was why I made it 'xas.xa_index + 1'.  I know it's somewhat
+> used as an indicator that we don't need to call xas_set(), and so
+> it doesn't really matter, but let's say what we mean.
+I'll modify it and resend again, thanks.
+>
+>
+> .
+>
 
-Annoyingly kernel defaults to -Werror now so they break the build for
-me, and I'm not immediately sure how to fix those for you. So I think
-I'll revert the v2 and you can repost v3 as if v2 wasn't applied. SG?

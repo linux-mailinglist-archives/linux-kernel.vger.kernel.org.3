@@ -2,38 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 90FE556AD2E
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 23:05:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 836C656AD34
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 23:08:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236446AbiGGVEn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Jul 2022 17:04:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54280 "EHLO
+        id S236595AbiGGVIF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Jul 2022 17:08:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55928 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236486AbiGGVEh (ORCPT
+        with ESMTP id S229834AbiGGVIE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Jul 2022 17:04:37 -0400
-Received: from relay04.th.seeweb.it (relay04.th.seeweb.it [5.144.164.165])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A4902B601
-        for <linux-kernel@vger.kernel.org>; Thu,  7 Jul 2022 14:04:36 -0700 (PDT)
-Received: from localhost.localdomain (abxi46.neoplus.adsl.tpnet.pl [83.9.2.46])
-        by m-r1.th.seeweb.it (Postfix) with ESMTPA id C10801F564;
-        Thu,  7 Jul 2022 23:04:33 +0200 (CEST)
-From:   Konrad Dybcio <konrad.dybcio@somainline.org>
-To:     ~postmarketos/upstreaming@lists.sr.ht
-Cc:     martin.botka@somainline.org,
-        angelogioacchino.delregno@somainline.org,
-        marijn.suijten@somainline.org, jamipkettunen@somainline.org,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v2] soc/qcom: Make QCOM_RPMPD select PM_GENERIC_DOMAINS/_OF
-Date:   Thu,  7 Jul 2022 23:04:28 +0200
-Message-Id: <20220707210428.30382-1-konrad.dybcio@somainline.org>
-X-Mailer: git-send-email 2.37.0
+        Thu, 7 Jul 2022 17:08:04 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95B8D2CE3E;
+        Thu,  7 Jul 2022 14:08:03 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 4113BB823D3;
+        Thu,  7 Jul 2022 21:08:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 19976C3411E;
+        Thu,  7 Jul 2022 21:07:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1657228080;
+        bh=IHYd3/+BAYO09zmG6R4QzH1Cte/DJJmuroXS4ZzEAY0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=BnFdqOEI+YmchZbHvoz5icO8LTH87zKJpyNi6Q2tKnpDVEYMGo44KH4sAgoIZsUUE
+         8R7lHYrZYyKKWCwr0RRG8khpcveIOmJkU2q7sUHpiP+4Qw6P16p2Uvqp+8sVBhaM7+
+         1YleIDNOmVo70j1Th4Du2jgvDGoT9f42Ud3dLNhL9u8KciQ1Yh+b8MivP3oBGbuFll
+         c1niHVeW/lb1pPylkDg1YBRIIsDF0zoa/SGt7Q/WOCvTpi/ZUjJ/9jytlM3CTEMA6K
+         4BReTKV+Yc3GjMluwKgVjK/DhQ8lWBpcCKc8C7oOJVxA4qiHkqdkIqKX8qRJM1YWOZ
+         /Gpz1XfTOrN0Q==
+Date:   Thu, 7 Jul 2022 23:07:56 +0200
+From:   Wolfram Sang <wsa@kernel.org>
+To:     Satish Nagireddy <satish.nagireddy@getcruise.com>
+Cc:     linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
+        michal.simek@xilinx.com, lars@metafoo.de
+Subject: Re: [PATCH] i2c: cadence: Unregister the clk notifier in error path
+Message-ID: <YsdLLKh8K0UDsJMu@shikoro>
+Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
+        Satish Nagireddy <satish.nagireddy@getcruise.com>,
+        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
+        michal.simek@xilinx.com, lars@metafoo.de
+References: <20220628191216.39459-1-satish.nagireddy@getcruise.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="p4xrYuFtbIAeIRIg"
+Content-Disposition: inline
+In-Reply-To: <20220628191216.39459-1-satish.nagireddy@getcruise.com>
+X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -42,37 +59,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The driver uses generic genpd OF APIs and with a very minimal config
-where nothing else selects them, this driver will not probe, as
-of_genpd_add_provider_onecell will return -EOPNOTSUPP.
 
-Make sure to select these in Kconfig to prevent that.
+--p4xrYuFtbIAeIRIg
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Signed-off-by: Konrad Dybcio <konrad.dybcio@somainline.org>
----
-As Intel's kernel test robot pointed out, the v1 was faulty, as
-I somehow didn't think about making it depend on PM (it's required
-for PM_GENERIC_DOMAINS/_OF)...
+On Tue, Jun 28, 2022 at 12:12:16PM -0700, Satish Nagireddy wrote:
+> This patch ensures that the clock notifier is unregistered
+> when driver probe is returning error.
+>=20
+> Signed-off-by: Satish Nagireddy <satish.nagireddy@getcruise.com>
+
+Applied to for-current, thanks! I added a Fixes: tag. It would be great
+if you had the time to provide it next time with the patch.
+
+Happy hacking!
 
 
- drivers/soc/qcom/Kconfig | 3 +++
- 1 file changed, 3 insertions(+)
+--p4xrYuFtbIAeIRIg
+Content-Type: application/pgp-signature; name="signature.asc"
 
-diff --git a/drivers/soc/qcom/Kconfig b/drivers/soc/qcom/Kconfig
-index e718b8735444..7e714327018f 100644
---- a/drivers/soc/qcom/Kconfig
-+++ b/drivers/soc/qcom/Kconfig
-@@ -129,7 +129,10 @@ config QCOM_RPMHPD
- 
- config QCOM_RPMPD
- 	tristate "Qualcomm RPM Power domain driver"
-+	depends on PM
- 	depends on QCOM_SMD_RPM
-+	select PM_GENERIC_DOMAINS
-+	select PM_GENERIC_DOMAINS_OF
- 	help
- 	  QCOM RPM Power domain driver to support power-domains with
- 	  performance states. The driver communicates a performance state
--- 
-2.37.0
+-----BEGIN PGP SIGNATURE-----
 
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmLHSywACgkQFA3kzBSg
+Kba94Q//WTgLnz0z7JaTqqoTwfTrHgEet3+D3TSf+9lrrkcp7//I0jpB/xiqd2aL
+eisKE6lKbK2pfxIGYxxzr2SVdfk8/vfM0RCDULD/ZjySGkEENEO+rpcluxwdzmFS
+qAL8H1hYVikKXA7vOgfoPTJDC5W/4dy94NyRXaCKTR51NKmbQQ48Whc9YoHg34rp
+TfaQUQlUfjNWzlaPZD5+l3QlmIjfPnuKSjrcRlsMtzi/O6UzKKNH8xMoyt287yf8
+xmWcSa7jQ4BQvefQpxvEX7wB6fvMMehoPvk1jpT9NTC7O/Ntab5KI7tTvD6zAJgi
+c3O18N4GqJSpluCVbikVySSirXjlCTsV6fDtLWz2hT7ipffN5brCo1TJNV/ssv1x
+iMjglQKvklruclBGoU5B9GVktwERLwnRsia00SdXhHAlInyv7CpN/GfEqcIXepA6
+FUQ1Sv0ICatLqyTGn19AOk9Kp8er2xGnRah0IFhTMkQ8JBCL1q7bkCe7sVfY1dO0
+Sra6GSTqkY3/sVp8EAPNKfd+kfilwt3Vl+k1Mkwi5ZEuIqtsPjz56vpUKB1Rb7ms
+ozSNz02NGpi6fJTGNwBU/nwJI8w85yhZWM1vXk1wkyJOElQdEoHSVJna9jBlZZ5Z
+7eDtV2FG7KE98sB42WCgwvFhnMtK5IGeWcIy9fXh1zU6C7T0zeI=
+=FF/v
+-----END PGP SIGNATURE-----
+
+--p4xrYuFtbIAeIRIg--

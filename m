@@ -2,87 +2,217 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B92656A65F
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 16:58:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E25456A663
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 16:58:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235902AbiGGO62 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Jul 2022 10:58:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48968 "EHLO
+        id S236179AbiGGO6i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Jul 2022 10:58:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48936 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236487AbiGGO5p (ORCPT
+        with ESMTP id S236569AbiGGO54 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Jul 2022 10:57:45 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E0B85A2D6
-        for <linux-kernel@vger.kernel.org>; Thu,  7 Jul 2022 07:56:24 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 20498B82245
-        for <linux-kernel@vger.kernel.org>; Thu,  7 Jul 2022 14:56:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8B0FEC3411E;
-        Thu,  7 Jul 2022 14:56:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1657205781;
-        bh=29cEPvHAlw8eCIh2gtRvtawUMKFPh11oa+ribnpSLZU=;
-        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=N9JRBOylg2/hSGgv8Yoeh4t6WVqXYVJDiKSxLgnwaWnP5T08gRrsp5kPBAa5D9Q0/
-         JMGVVVX0qIEOC8/B9Mnt0Ye28KMdoq3CNXA31yrcfq+eC7FMu0JvUfBueVoBO0pf0n
-         G9IyCJ0wOSlQkki8Y3s0PtTersfaJ/IHlilBt4KUR6Fq6gPqZY9V97JOgW72O2GYjb
-         GmCpG9Y6kuYI6o6vMZSZosTrXqcIH0JkkobTibr0/cDSugy/R/CiECtOwQbKJ+EASa
-         OAA8mkoGWxYLwipRd7nTHrv+RHLB8331Em8+Bq6uCZ94j1arbOxKQSuqpuh99G/NcS
-         uThVQdglmrU1g==
-From:   Mark Brown <broonie@kernel.org>
-To:     naresh.solanki@9elements.com, lgirdwood@gmail.com,
-        broonie@kernel.org, patrick.rudolph@9elements.com
-Cc:     sfr@canb.auug.org.au, linux-kernel@vger.kernel.org
-In-Reply-To: <20220707111753.16581-1-broonie@kernel.org>
-References: <20220707111753.16581-1-broonie@kernel.org>
-Subject: Re: [PATCH] regulator: Fix MFD_MAX597X dependency
-Message-Id: <165720578028.1259782.4101203033564494968.b4-ty@kernel.org>
-Date:   Thu, 07 Jul 2022 15:56:20 +0100
+        Thu, 7 Jul 2022 10:57:56 -0400
+Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 195CA5A2D0
+        for <linux-kernel@vger.kernel.org>; Thu,  7 Jul 2022 07:56:46 -0700 (PDT)
+Received: by mail-wr1-x42c.google.com with SMTP id v14so26719174wra.5
+        for <linux-kernel@vger.kernel.org>; Thu, 07 Jul 2022 07:56:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=brainfault-org.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=cLr9Mmcric0DyXLOpIzNCFgMkTA1VLMFK7jDaemXdLU=;
+        b=H98wdu5qDGy04oCMwt6ovs0q+XccQqlJ766KgBBKbE3CHuBxjJ1N3NSADsMt8NTJTP
+         PJiSMgA2LOpwUXSANpfNHiUYnOzowZJnMjpdIAoEajWX2iW656Z2qt9JRPSyHjBdNAE0
+         RGJXvdn6TqeQuHG7WPFxhoW6XELXihSiEO4wrFztAI+oR6MySQkM9dOj1TqZF975WQlf
+         IJHpoUxI13I73GJ1w2wLJ/Dp8wREErwQEhh4e138xlHq1u66i9uQ/7PYRjhzcdiQnNgE
+         pPeIwjfr79919Ko/EoHAbuN+A6Lg08K4zn29tZajlD7J9PIgQgWMqjH2GZq9DWMg6Fr/
+         yOJQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=cLr9Mmcric0DyXLOpIzNCFgMkTA1VLMFK7jDaemXdLU=;
+        b=31a/XWQ+KquK01AzPDgbf9Dmygryl9UNIOZJe6FGQCS9LqKxfrby3oJ5GqkMhpOBQl
+         Q002cUjmdrDt8fTxdl/NZAK+gok8yhrs/aso6xkNdv0OYrzNkS1SOT0He/Kb7INoI52k
+         vqy0mIFAmPSTSQdZix64dVvqqyGlthTEns8EHHaQvMbH0P5QBTdA9xYfvn7RoelgIe/n
+         o4XRl1usR+HwsEiBVQkuP/mSLspzzpNDzx67znUvMLo0suB1AY7yERECehVepXq0bIh/
+         DFXbfOYU/g2t89NqdwWzUxO0XOXsOcE/Fq/yi9IPUlM8jHqR3E1kcsg9/M5Ltp6U72vb
+         yhkA==
+X-Gm-Message-State: AJIora/Af2xhiA8O5AOfWLzbke9oYom+g54qOkowHL9sEy7rh2aDvmj+
+        Ab9MsJpWwg/Pg+CTTFfWa+hb52QGM8F0ErTzhG86OQ==
+X-Google-Smtp-Source: AGRyM1v2GKFg3mDosjnF8piazRMU2qMePGvWEuuAe8aZZ3/XVozApEBgtIF6+Dtf0usPsP6pOOONf283f3z8fh4OUbM=
+X-Received: by 2002:adf:e9cf:0:b0:21d:7b89:da5 with SMTP id
+ l15-20020adfe9cf000000b0021d7b890da5mr9332902wrn.346.1657205804325; Thu, 07
+ Jul 2022 07:56:44 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220613085307.260256-1-alexandre.ghiti@canonical.com> <CAAhSdy1gr_WvCJUMXMwtZUux9qBsW-b_LGFg4=tdnkv5b538sg@mail.gmail.com>
+In-Reply-To: <CAAhSdy1gr_WvCJUMXMwtZUux9qBsW-b_LGFg4=tdnkv5b538sg@mail.gmail.com>
+From:   Anup Patel <anup@brainfault.org>
+Date:   Thu, 7 Jul 2022 20:26:31 +0530
+Message-ID: <CAAhSdy3_EvAZJtHxFH=ihrfUaPUmp5EbXNY4eD+CRsiqNkYx9w@mail.gmail.com>
+Subject: Re: [PATCH -fixes v2] riscv: Fix missing PAGE_PFN_MASK
+To:     Alexandre Ghiti <alexandre.ghiti@canonical.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>
+Cc:     =?UTF-8?Q?Heiko_St=C3=BCbner?= <heiko@sntech.de>,
+        Guo Ren <guoren@kernel.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Atish Patra <atishp@atishpatra.org>,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org List" <linux-kernel@vger.kernel.org>,
+        KVM General <kvm@vger.kernel.org>,
+        "open list:KERNEL VIRTUAL MACHINE FOR RISC-V (KVM/riscv)" 
+        <kvm-riscv@lists.infradead.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 7 Jul 2022 12:17:53 +0100, Mark Brown wrote:
-> Drivers should depend on rather than select their MFDs.
-> 
-> 
+Hi Palmer,
 
-Applied to
+On Mon, Jun 13, 2022 at 3:01 PM Anup Patel <anup@brainfault.org> wrote:
+>
+> On Mon, Jun 13, 2022 at 2:23 PM Alexandre Ghiti
+> <alexandre.ghiti@canonical.com> wrote:
+> >
+> > There are a bunch of functions that use the PFN from a page table entry
+> > that end up with the svpbmt upper-bits because they are missing the newly
+> > introduced PAGE_PFN_MASK which leads to wrong addresses conversions and
+> > then crash: fix this by adding this mask.
+> >
+> > Fixes: 100631b48ded ("riscv: Fix accessing pfn bits in PTEs for non-32bit variants")
+> > Signed-off-by: Alexandre Ghiti <alexandre.ghiti@canonical.com>
+>
+> Looks good to me.
+>
+> Reviewed-by: Anup Patel <anup@brainfault.org>
+>
+> @Palmer let me know if you want me to take this through the KVM repo.
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/regulator.git for-next
+This patch is required for KVM Svpbmt support so I have included it
+in my KVM RISC-V Svpbmt series.
 
-Thanks!
+Let me know if you plan to send this as fix for Linux-5.19-rcX
 
-[1/1] regulator: Fix MFD_MAX597X dependency
-      commit: 79152fc74ff664e2912abe17f21c42d7c49c90c9
+Regards,
+Anup
 
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
-
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
-
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
-
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-Thanks,
-Mark
+>
+> Regards,
+> Anup
+>
+> > ---
+> >  arch/riscv/include/asm/pgtable-64.h | 12 ++++++------
+> >  arch/riscv/include/asm/pgtable.h    |  6 +++---
+> >  arch/riscv/kvm/mmu.c                |  2 +-
+> >  3 files changed, 10 insertions(+), 10 deletions(-)
+> >
+> > diff --git a/arch/riscv/include/asm/pgtable-64.h b/arch/riscv/include/asm/pgtable-64.h
+> > index 5c2aba5efbd0..dc42375c2357 100644
+> > --- a/arch/riscv/include/asm/pgtable-64.h
+> > +++ b/arch/riscv/include/asm/pgtable-64.h
+> > @@ -175,7 +175,7 @@ static inline pud_t pfn_pud(unsigned long pfn, pgprot_t prot)
+> >
+> >  static inline unsigned long _pud_pfn(pud_t pud)
+> >  {
+> > -       return pud_val(pud) >> _PAGE_PFN_SHIFT;
+> > +       return __page_val_to_pfn(pud_val(pud));
+> >  }
+> >
+> >  static inline pmd_t *pud_pgtable(pud_t pud)
+> > @@ -278,13 +278,13 @@ static inline p4d_t pfn_p4d(unsigned long pfn, pgprot_t prot)
+> >
+> >  static inline unsigned long _p4d_pfn(p4d_t p4d)
+> >  {
+> > -       return p4d_val(p4d) >> _PAGE_PFN_SHIFT;
+> > +       return __page_val_to_pfn(p4d_val(p4d));
+> >  }
+> >
+> >  static inline pud_t *p4d_pgtable(p4d_t p4d)
+> >  {
+> >         if (pgtable_l4_enabled)
+> > -               return (pud_t *)pfn_to_virt(p4d_val(p4d) >> _PAGE_PFN_SHIFT);
+> > +               return (pud_t *)pfn_to_virt(__page_val_to_pfn(p4d_val(p4d)));
+> >
+> >         return (pud_t *)pud_pgtable((pud_t) { p4d_val(p4d) });
+> >  }
+> > @@ -292,7 +292,7 @@ static inline pud_t *p4d_pgtable(p4d_t p4d)
+> >
+> >  static inline struct page *p4d_page(p4d_t p4d)
+> >  {
+> > -       return pfn_to_page(p4d_val(p4d) >> _PAGE_PFN_SHIFT);
+> > +       return pfn_to_page(__page_val_to_pfn(p4d_val(p4d)));
+> >  }
+> >
+> >  #define pud_index(addr) (((addr) >> PUD_SHIFT) & (PTRS_PER_PUD - 1))
+> > @@ -347,7 +347,7 @@ static inline void pgd_clear(pgd_t *pgd)
+> >  static inline p4d_t *pgd_pgtable(pgd_t pgd)
+> >  {
+> >         if (pgtable_l5_enabled)
+> > -               return (p4d_t *)pfn_to_virt(pgd_val(pgd) >> _PAGE_PFN_SHIFT);
+> > +               return (p4d_t *)pfn_to_virt(__page_val_to_pfn(pgd_val(pgd)));
+> >
+> >         return (p4d_t *)p4d_pgtable((p4d_t) { pgd_val(pgd) });
+> >  }
+> > @@ -355,7 +355,7 @@ static inline p4d_t *pgd_pgtable(pgd_t pgd)
+> >
+> >  static inline struct page *pgd_page(pgd_t pgd)
+> >  {
+> > -       return pfn_to_page(pgd_val(pgd) >> _PAGE_PFN_SHIFT);
+> > +       return pfn_to_page(__page_val_to_pfn(pgd_val(pgd)));
+> >  }
+> >  #define pgd_page(pgd)  pgd_page(pgd)
+> >
+> > diff --git a/arch/riscv/include/asm/pgtable.h b/arch/riscv/include/asm/pgtable.h
+> > index 1d1be9d9419c..5dbd6610729b 100644
+> > --- a/arch/riscv/include/asm/pgtable.h
+> > +++ b/arch/riscv/include/asm/pgtable.h
+> > @@ -261,7 +261,7 @@ static inline pgd_t pfn_pgd(unsigned long pfn, pgprot_t prot)
+> >
+> >  static inline unsigned long _pgd_pfn(pgd_t pgd)
+> >  {
+> > -       return pgd_val(pgd) >> _PAGE_PFN_SHIFT;
+> > +       return __page_val_to_pfn(pgd_val(pgd));
+> >  }
+> >
+> >  static inline struct page *pmd_page(pmd_t pmd)
+> > @@ -590,14 +590,14 @@ static inline pmd_t pmd_mkinvalid(pmd_t pmd)
+> >         return __pmd(pmd_val(pmd) & ~(_PAGE_PRESENT|_PAGE_PROT_NONE));
+> >  }
+> >
+> > -#define __pmd_to_phys(pmd)  (pmd_val(pmd) >> _PAGE_PFN_SHIFT << PAGE_SHIFT)
+> > +#define __pmd_to_phys(pmd)  (__page_val_to_pfn(pmd_val(pmd)) << PAGE_SHIFT)
+> >
+> >  static inline unsigned long pmd_pfn(pmd_t pmd)
+> >  {
+> >         return ((__pmd_to_phys(pmd) & PMD_MASK) >> PAGE_SHIFT);
+> >  }
+> >
+> > -#define __pud_to_phys(pud)  (pud_val(pud) >> _PAGE_PFN_SHIFT << PAGE_SHIFT)
+> > +#define __pud_to_phys(pud)  (__page_val_to_pfn(pud_val(pud)) << PAGE_SHIFT)
+> >
+> >  static inline unsigned long pud_pfn(pud_t pud)
+> >  {
+> > diff --git a/arch/riscv/kvm/mmu.c b/arch/riscv/kvm/mmu.c
+> > index 1c00695ebee7..9826073fbc67 100644
+> > --- a/arch/riscv/kvm/mmu.c
+> > +++ b/arch/riscv/kvm/mmu.c
+> > @@ -54,7 +54,7 @@ static inline unsigned long gstage_pte_index(gpa_t addr, u32 level)
+> >
+> >  static inline unsigned long gstage_pte_page_vaddr(pte_t pte)
+> >  {
+> > -       return (unsigned long)pfn_to_virt(pte_val(pte) >> _PAGE_PFN_SHIFT);
+> > +       return (unsigned long)pfn_to_virt(__page_val_to_pfn(pte_val(pte)));
+> >  }
+> >
+> >  static int gstage_page_size_to_level(unsigned long page_size, u32 *out_level)
+> > --
+> > 2.34.1
+> >

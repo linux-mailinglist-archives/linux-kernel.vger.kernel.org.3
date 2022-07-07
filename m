@@ -2,118 +2,195 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 72BE656AF02
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 01:28:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BD19556AF0E
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 01:33:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236658AbiGGX2r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Jul 2022 19:28:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38006 "EHLO
+        id S236931AbiGGXdk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Jul 2022 19:33:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40270 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236491AbiGGX2p (ORCPT
+        with ESMTP id S236695AbiGGXdi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Jul 2022 19:28:45 -0400
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E79919298;
-        Thu,  7 Jul 2022 16:28:42 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4LfCK22BwWz4xL4;
-        Fri,  8 Jul 2022 09:28:38 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1657236518;
-        bh=CrMKnJMPN9f3mCAwl6Rh6j8UtkWI5IywlvNYWCVU2Wo=;
-        h=Date:From:To:Cc:Subject:From;
-        b=WIfpuv7FV3sNqt7iCzPadtMvhHYbxcH/tyBeZqrkJn83SalQbgzsFe4UYFwtpPjSn
-         Ar+lWC5C2co1C89/J6A3ne8dZymGYiyngIpo/oEpAfXqOxQLvlLIm2uQJaWmyZFyrH
-         uhW8oT2AoenuCA7W2XmlyGIMO+D6xVHN8BD5/2rvh8nYF0zs03czY9+to5cfPgTOkD
-         nLtzXjPgkSzbF5scIdB5hcfRGt3M2c+7FzoLJMcfvdJtqUWVYgqp9Y1oWNwrYbnw8Y
-         kLF0XSpZztloy+9uFTqei+p3ZUwrWbU/6PJdUMRDAJxsSYi61mza6wgF9e3mNYN2og
-         d73Sqfwl8/3Rg==
-Date:   Fri, 8 Jul 2022 09:28:36 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>
-Cc:     Arnaldo Carvalho de Melo <acme@redhat.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Ravi Bangoria <ravi.bangoria@amd.com>
-Subject: linux-next: manual merge of the perf tree with Linus' tree
-Message-ID: <20220708092836.1a24d5c2@canb.auug.org.au>
+        Thu, 7 Jul 2022 19:33:38 -0400
+Received: from mail-qt1-x833.google.com (mail-qt1-x833.google.com [IPv6:2607:f8b0:4864:20::833])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D58C1EECE
+        for <linux-kernel@vger.kernel.org>; Thu,  7 Jul 2022 16:33:35 -0700 (PDT)
+Received: by mail-qt1-x833.google.com with SMTP id i11so25101810qtr.4
+        for <linux-kernel@vger.kernel.org>; Thu, 07 Jul 2022 16:33:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=C3mGVzkNGFQOGZ/y27ZbQkMVyVRvFTFo9AVDkxPU3Qs=;
+        b=jI3G3nw3SkAqpzPaUgQF22T9Ic6RqP7p4lMxcErcOD7LNwKHd9PhRD3jRjB5LpdRas
+         Y5NSMurtCWidZFToFy1cwL/XBxIfNw8pRD1q5Tkl+DjQU82h4wug5DMjjkpFX5N/DorO
+         SwsedXFgGBd+s1tGJbH90/3YrEFEevIGRkGo0KerFHlOynd+zFhmCXD6wOxegx+qKcI7
+         whx6NUJOU7zlSU/AwEkpEWHVAccpRcvhOXltX62YPY1hchP+LZnGgdRpe/U837IrWH3D
+         dz5dOl6K+w5srsimqMB2BRtRhqEml7mfZ8+BDapksn3GwHM8o2gHQoLWP2Z3Uu5lfvw3
+         v75A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=C3mGVzkNGFQOGZ/y27ZbQkMVyVRvFTFo9AVDkxPU3Qs=;
+        b=PPEXSg7W2zwRj5CMpNsMu026OXeLvSb1zJEpA8IEeFCTot/GJXrXDoWmvzGbYCyz2/
+         kjJRxoRhxwy5Y9nNcG1GVxfkAkiBfsBaJyJZ9H0ce2wTCam6w/qO5Z0++C1F+fjAEPuQ
+         aO6abMWo6ueJOsFAcNjIa8vCFQIdqijafQtrkJFxhXcqssEmo6iBjMpcUJBx7V5mWdhn
+         0CcBHmMS2GBffaQOD6owgvozIQ/ii2WrjP6PLQO8iOdRcTjsqQDfForhfLjHaPuJQYxX
+         4NiGPnAqlR9Da8lgfMKHqRsNOXkIF682hf+HZAOu+O0y4SQjzqSbyCtz1hEYsgjMP8CM
+         co8Q==
+X-Gm-Message-State: AJIora9ugeyGqdxAHVTU3CmWXA6M2qLmock0bpNIgDOMtq44MJCScAq5
+        i4lGeh20d5nHsR48jk5a4IDB+FCkYr0f7KoxVlC1zA==
+X-Google-Smtp-Source: AGRyM1vEAd1x2UNB33pdXaPWBs45WXrfdgTefCVvtafX/mSzrQX5KL9nA7apiMh9koyl9ZSeRjRPZ2w8IZQ0Rvdb+DA=
+X-Received: by 2002:a0c:b30e:0:b0:470:a567:edf6 with SMTP id
+ s14-20020a0cb30e000000b00470a567edf6mr326564qve.44.1657236814309; Thu, 07 Jul
+ 2022 16:33:34 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/contwonC74Yzn8dqmovPQcs";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20220610194435.2268290-1-yosryahmed@google.com>
+ <20220610194435.2268290-5-yosryahmed@google.com> <f6c0274d-73c4-e05b-6405-4062230c4a14@fb.com>
+In-Reply-To: <f6c0274d-73c4-e05b-6405-4062230c4a14@fb.com>
+From:   Hao Luo <haoluo@google.com>
+Date:   Thu, 7 Jul 2022 16:33:23 -0700
+Message-ID: <CA+khW7h05O1zg90tkK_7G9u0dhi8jN8WFZ_V_58obSLR4n1iBQ@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v2 4/8] bpf: Introduce cgroup iter
+To:     Yonghong Song <yhs@fb.com>
+Cc:     Yosry Ahmed <yosryahmed@google.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>, Tejun Heo <tj@kernel.org>,
+        Zefan Li <lizefan.x@bytedance.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Michal Hocko <mhocko@kernel.org>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        David Rientjes <rientjes@google.com>,
+        Stanislav Fomichev <sdf@google.com>,
+        Greg Thelen <gthelen@google.com>,
+        Shakeel Butt <shakeelb@google.com>,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        bpf@vger.kernel.org, cgroups@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/contwonC74Yzn8dqmovPQcs
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Mon, Jun 27, 2022 at 9:09 PM Yonghong Song <yhs@fb.com> wrote:
+>
+>
+>
+> On 6/10/22 12:44 PM, Yosry Ahmed wrote:
+> > From: Hao Luo <haoluo@google.com>
+> >
+> > Cgroup_iter is a type of bpf_iter. It walks over cgroups in two modes:
+> >
+> >   - walking a cgroup's descendants.
+> >   - walking a cgroup's ancestors.
+>
+> The implementation has another choice, BPF_ITER_CGROUP_PARENT_UP.
+> We should add it here as well.
+>
 
-Hi all,
+Sorry about the late reply. I meant to write two modes: walking up and
+walking down. And two sub-modes when walking down: pre-order and
+post-order.
 
-Today's linux-next merge of the perf tree got a conflict in:
+But it seems this is confusing. I'm going to use three modes in the
+next version: UP, PRE and POST.
 
-  tools/perf/util/evsel.c
+Besides, since this patch modifies the bpf_iter_link_info, and that
+breaks the btf_dump selftest, I need to include the fix of the
+selftest in this patch.
 
-between commit:
+> >
+> > When attaching cgroup_iter, one can set a cgroup to the iter_link
+> > created from attaching. This cgroup is passed as a file descriptor and
+> > serves as the starting point of the walk. If no cgroup is specified,
+> > the starting point will be the root cgroup.
+> >
+> > For walking descendants, one can specify the order: either pre-order or
+> > post-order. For walking ancestors, the walk starts at the specified
+> > cgroup and ends at the root.
+> >
+> > One can also terminate the walk early by returning 1 from the iter
+> > program.
+> >
+> > Note that because walking cgroup hierarchy holds cgroup_mutex, the iter
+> > program is called with cgroup_mutex held.
+>
+> Overall looks good to me with a few nits below.
+>
+> Acked-by: Yonghong Song <yhs@fb.com>
+>
+> >
+> > Signed-off-by: Hao Luo <haoluo@google.com>
+> > Signed-off-by: Yosry Ahmed <yosryahmed@google.com>
+> > ---
+[...]
+> > +
+> > +/* cgroup_iter provides two modes of traversal to the cgroup hierarchy.
+> > + *
+> > + *  1. Walk the descendants of a cgroup.
+> > + *  2. Walk the ancestors of a cgroup.
+>
+> three modes here?
+>
 
-  49c692b7dfc9 ("perf offcpu: Accept allowed sample types only")
+Same here. Will use 'three modes' in the next version.
 
-from Linus' tree and commit:
+> > + *
+[...]
+> > +
+> > +static int bpf_iter_attach_cgroup(struct bpf_prog *prog,
+> > +                               union bpf_iter_link_info *linfo,
+> > +                               struct bpf_iter_aux_info *aux)
+> > +{
+> > +     int fd = linfo->cgroup.cgroup_fd;
+> > +     struct cgroup *cgrp;
+> > +
+> > +     if (fd)
+> > +             cgrp = cgroup_get_from_fd(fd);
+> > +     else /* walk the entire hierarchy by default. */
+> > +             cgrp = cgroup_get_from_path("/");
+> > +
+> > +     if (IS_ERR(cgrp))
+> > +             return PTR_ERR(cgrp);
+> > +
+> > +     aux->cgroup.start = cgrp;
+> > +     aux->cgroup.order = linfo->cgroup.traversal_order;
+>
+> The legality of traversal_order should be checked.
+>
 
-  9ab95b0b15a0 ("perf record ibs: Warn about sampling period skew")
+Sounds good. Will do.
 
-from the perf tree.
+> > +     return 0;
+> > +}
+> > +
+[...]
+> > +static void bpf_iter_cgroup_show_fdinfo(const struct bpf_iter_aux_info *aux,
+> > +                                     struct seq_file *seq)
+> > +{
+> > +     char *buf;
+> > +
+> > +     buf = kzalloc(PATH_MAX, GFP_KERNEL);
+> > +     if (!buf) {
+> > +             seq_puts(seq, "cgroup_path:\n");
+>
+> This is a really unlikely case. maybe "cgroup_path:<unknown>"?
+>
 
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
+Sure, no problem. This is a path that is unlikely to hit.
 
---=20
-Cheers,
-Stephen Rothwell
-
-diff --cc tools/perf/util/evsel.c
-index 094b0a9c0bc0,8fea51a9cd90..000000000000
---- a/tools/perf/util/evsel.c
-+++ b/tools/perf/util/evsel.c
-@@@ -1373,8 -1372,7 +1378,10 @@@ void evsel__config(struct evsel *evsel
-  	if (evsel__is_dummy_event(evsel))
-  		evsel__reset_sample_bit(evsel, BRANCH_STACK);
- =20
- +	if (evsel__is_offcpu_event(evsel))
- +		evsel->core.attr.sample_type &=3D OFFCPU_SAMPLE_TYPES;
-++
-+ 	arch__post_evsel_config(evsel, attr);
-  }
- =20
-  int evsel__set_filter(struct evsel *evsel, const char *filter)
-
---Sig_/contwonC74Yzn8dqmovPQcs
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmLHbCQACgkQAVBC80lX
-0GyfmAf/Q6m9gbCivfMChtl3jlKMHDI/oBbK5hrL5Ewdv0+1gxQef5ciuY7Sb5OU
-PbCBu/4duEwmDuxUqVjWn2MKg+qKYabTclQLOa0S0bWL8YXwDtem/zyIT552lJV/
-X+dvn/IKPw3d0roCsB5KYlFBa3UAtAKMDBYRJ/ZUrVVIUM97mj0/EVPOXo5+l4i4
-sqMNFHUcJ9uKBbwu9Jb3K25B6me8s+CduLVmk9XRSeL+U7h8AK+4CzsLtSwq4s+/
-5TG7EyKzXJq/ziaJaO9oImDfWiBMnNeU3gtqzZns0pBd+NlA8KnEMXWPeCG0Ppt1
-jnDyt/4m2lymQEhkiKyeMjlEXT2ddQ==
-=/KCH
------END PGP SIGNATURE-----
-
---Sig_/contwonC74Yzn8dqmovPQcs--
+> > +             goto show_order;
+[...]

@@ -2,140 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D18DF56AC91
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 22:12:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 73A2356AC94
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 22:13:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236295AbiGGULp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Jul 2022 16:11:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50246 "EHLO
+        id S236490AbiGGUMV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Jul 2022 16:12:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50738 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231320AbiGGULo (ORCPT
+        with ESMTP id S236375AbiGGUMS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Jul 2022 16:11:44 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65A6ECE9;
-        Thu,  7 Jul 2022 13:11:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=YvxVbi0s8pdES8Ig1gSBYhIVsLmPB4xtFIWqaVBPjdc=; b=BMPjaWOnqsQRsLxJ8XGws3zvDd
-        RhhCBijfg3pyR660vMVQgjveB3wrPXHfrtcK/WhychCeHPT7axZxzeepRb9v2Ahm/H8C4z4Co3xau
-        /aUM7EGC//W6yq3U14JH6zc/bSRcqTg0YCe5ACYS9NMiuvVKu0btDKW511kIu35ammzENIt/Td45T
-        Z/ZlTDUBYl7KFbXabCmX8r0feHweSpO3s9Vyx9DUFoUaYhsDCDM5FoNXJEvd6tGOd4kGSV5GVbDKS
-        0fJquinBuJhKW2g9rU40MS5/hcU9l7BdT8Ead/wJDuA3Rhnjj4VPPrOPDpf1Ry9RSyxoVMKB4C6Pa
-        lWzZsblw==;
-Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1o9Xqc-0005C6-Jz; Thu, 07 Jul 2022 20:11:38 +0000
-Date:   Thu, 7 Jul 2022 13:11:38 -0700
-From:   Luis Chamberlain <mcgrof@kernel.org>
-To:     Song Liu <songliubraving@fb.com>
-Cc:     Song Liu <song@kernel.org>, lkml <linux-kernel@vger.kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "x86@vger.kernel.org" <x86@vger.kernel.org>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        "rick.p.edgecombe@intel.com" <rick.p.edgecombe@intel.com>,
-        Kernel Team <Kernel-team@fb.com>,
-        "daniel@iogearbox.net" <daniel@iogearbox.net>
-Subject: Re: [PATCH v5 bpf-next 1/5] module: introduce module_alloc_huge
-Message-ID: <Ysc9+r2R6WKMIa3i@bombadil.infradead.org>
-References: <20220624215712.3050672-1-song@kernel.org>
- <20220624215712.3050672-2-song@kernel.org>
- <Yr+BV+HLZikpCU42@bombadil.infradead.org>
- <16959523-ABD1-4D2B-B249-118DDADD7976@fb.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <16959523-ABD1-4D2B-B249-118DDADD7976@fb.com>
-Sender: Luis Chamberlain <mcgrof@infradead.org>
-X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Thu, 7 Jul 2022 16:12:18 -0400
+Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1395A60525
+        for <linux-kernel@vger.kernel.org>; Thu,  7 Jul 2022 13:12:18 -0700 (PDT)
+Received: by mail-yb1-xb49.google.com with SMTP id y4-20020a25b9c4000000b0066e573fb0fcso7763723ybj.21
+        for <linux-kernel@vger.kernel.org>; Thu, 07 Jul 2022 13:12:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=R39MoO0H4i1puFWmocsrFgtr9MK3/WkIb4geb14BnSE=;
+        b=Q/k598i7pvIY73IwAUUaDL6o5KD5RFPeQ1CNdhkbg3b8lniKssp1gzozKJMb/1XPwP
+         MWem40hzDD0i7G95dBMEqBqbZR7k5REWqMqEaxFsJF+NlJmhFD/Ovh9J1J/6PIyg0pSQ
+         /05bFOFsiIBT4dcEh3YoNuenMDXY48Dx63SkcbOaio+g+ixq5KQy7UL+2/vr9UbOczDC
+         rB8YAYoIKFGCFiKUaPxtKJ30J0dKcUoovKVhdGx2wSWS13nB2MXfMKw9SzXTJD8eMZCP
+         dy+CTDka0LK8VVineqsxL183/5bH/YFkHxxmtmzev1312mbIp3KmXfTVQacevvwD1e+Z
+         cCDw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=R39MoO0H4i1puFWmocsrFgtr9MK3/WkIb4geb14BnSE=;
+        b=w8k5+ZmKu65FoLaS/yZZ8C5BC7wpQew5qfU+yWTj2yqWCS9QmbsgwTaZKXrkSkOe03
+         C86RjWDcgQnIQk56yDdtZEtkDwjoFxcSp+6MeLWMF4BCSsNMuSEFlA9i7yrc64H6jShR
+         cG444xl9mphdEsVsrGfb4zUxwBr+tRY+y934pZ1AKgwNiHiAkZr6XREANVaW6y8UCOt7
+         es7kQdeHQthoEy6upYqrKzhCvfrcK1BJCIMO0BLE7bkr6xRWymEqH42dG6fIAiUFCXjL
+         8TvQWXh7Q8HasRrclfhsfR0Bo7lCgTG+ZFUCsMyjaaBwxb6DKS6IANOXjj7+IKXaOPgW
+         94Qg==
+X-Gm-Message-State: AJIora8UOXhbZkP1G3JL29Rk96f6YiSyx/fQlHKx5Ce8eS8Ldw+WaNm0
+        vQCPMVXdFZ+RGwodk88kcxcaCRI2HCab
+X-Google-Smtp-Source: AGRyM1vegzrGHxeJIXn4vdSZXtKkNGyhIThba54BjBCbstdGnx5+rLTxfP6LdRW03Y/Ia6KGGkCZGnFA4uW4
+X-Received: from irogers.svl.corp.google.com ([2620:15c:2d4:203:bf75:f79:d509:a8d1])
+ (user=irogers job=sendgmr) by 2002:a25:f50b:0:b0:668:27cd:ed38 with SMTP id
+ a11-20020a25f50b000000b0066827cded38mr50880125ybe.606.1657224737360; Thu, 07
+ Jul 2022 13:12:17 -0700 (PDT)
+Date:   Thu,  7 Jul 2022 13:12:11 -0700
+Message-Id: <20220707201213.331663-1-irogers@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.37.0.rc0.161.g10f37bed90-goog
+Subject: [PATCH v6 0/2] JSON output for perf stat
+From:   Ian Rogers <irogers@google.com>
+To:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Kan Liang <kan.liang@linux.intel.com>,
+        Zhengjun Xing <zhengjun.xing@linux.intel.com>,
+        Sandipan Das <sandipan.das@amd.com>,
+        Claire Jensen <cjense@google.com>, Alyssa Ross <hi@alyssa.is>,
+        Like Xu <likexu@tencent.com>,
+        James Clark <james.clark@arm.com>,
+        Florian Fischer <florian.fischer@muhq.space>,
+        linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
+        Claire Jensen <clairej735@gmail.com>
+Cc:     Stephane Eranian <eranian@google.com>,
+        Ian Rogers <irogers@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jul 06, 2022 at 04:39:13AM +0000, Song Liu wrote:
-> > On Jul 1, 2022, at 4:20 PM, Luis Chamberlain <mcgrof@kernel.org> wrote:
-> > On Fri, Jun 24, 2022 at 02:57:08PM -0700, Song Liu wrote:
-> >> +void *module_alloc_huge(unsigned long size)
-> >> +{
-> >> +	gfp_t gfp_mask = GFP_KERNEL;
-> >> +	void *p;
-> >> +
-> >> +	if (PAGE_ALIGN(size) > MODULES_LEN)
-> >> +		return NULL;
-> >> +
-> >> +	p = __vmalloc_node_range(size, MODULE_ALIGN,
-> >> +				 MODULES_VADDR + get_module_load_offset(),
-> >> +				 MODULES_END, gfp_mask, PAGE_KERNEL,
-> >> +				 VM_DEFER_KMEMLEAK | VM_ALLOW_HUGE_VMAP,
-> >> +				 NUMA_NO_NODE, __builtin_return_address(0));
-> >> +	if (p && (kasan_alloc_module_shadow(p, size, gfp_mask) < 0)) {
-> >> +		vfree(p);
-> >> +		return NULL;
-> >> +	}
-> >> +
-> >> +	return p;
-> >> +}
-> > 
-> > 1) When things like kernel/bpf/core.c start using a module alloc it
-> > is time to consider genearlizing this.
-> 
-> I am not quite sure what the generalization would look like. IMHO, the
-> ideal case would have:
->   a) A kernel_text_rw_allocator, similar to current module_alloc.
->   b) A kernel_text_ro_allocator, similar to current bpf_prog_pack_alloc.
->      This is built on top of kernel_text_rw_allocator. Different 
->      allocations could share a page, thus it requires text_poke like 
->      support from the arch. 
->   c) If the arch supports text_poke, kprobes, ftrace trampolines, and
->      bpf trampolines should use kernel_text_ro_allocator.
->   d) Major archs should support CONFIG_ARCH_WANTS_MODULES_DATA_IN_VMALLOC,
->      and they should use kernel_text_ro_allocator for module text. 
-> 
-> Does this sound reasonable to you?
+Parsing the CSV or text output of perf stat can be problematic when
+new output is added (columns in CSV format). JSON names values and
+simplifies the job of parsing. Add a JSON output option to perf-stat
+then add unit test that parses and validates the output.
 
-Yes, and a respective free call may have an arch specific stuff which
-removes exec stuff.
+This is a resend of two v2 patches:
+https://lore.kernel.org/lkml/20210813220754.2104922-1-cjense@google.com/
+https://lore.kernel.org/lkml/20210813220936.2105426-1-cjense@google.com/
+with a few formatting changes and improvements to the linter.
 
-In so far as the bikeshedding, I do think this is generic so
-vmalloc_text_*() suffices or vmalloc_exec_*() take your pick for
-a starter and let the world throw in their preference.
+v6. Is a rebase.
 
-> I tried to enable CONFIG_ARCH_WANTS_MODULES_DATA_IN_VMALLOC for x86_64, 
-> but that doesn't really work. Do we have plan to make this combination
-> work?
+v5. Drops the merged CSV check, fixes a json test issue found by
+    Arnaldo and a typo.
 
-Oh nice.
+v4. Does some minor fixes to the json linter.
 
-Good stuff. Perhaps it just requires a little love from mm folks.
-Don't beat yourself up if it does not yet. We can work towards that
-later.
+v3. There is some tidy up of CSV code including a potential memory
+    over run in the os.nfields set up caught by sanitizers. To
+    facilitate this an AGGR_MAX value is added. v3 also adds the CSV
+    testing.
 
-> > 2) How we free is important, and each arch does something funky for
-> > this. This is not addressed here.
-> 
-> How should we address this? IIUC, x86_64 just calls vfree. 
+v2. Fixes the system wide no aggregation test to not run if the
+    paranoia is wrong. It also makes the counter-value check handle
+    the "<not counted>" and "<not supported>" cases.
 
-That's not the case for all archs is it? I'm talking about the generic
-module_alloc() too. I'd like to see that go the way we discussed above.
+Claire Jensen (2):
+  perf stat: Add JSON output option
+  perf test: Json format checking
 
-> > And yes I welcome generalizing generic module_alloc() too as suggested
-> > before. The concern on my part is the sloppiness this enables.
-> 
-> One question I have is, does module_alloc (or kernel_text_*_allocator 
-> above) belong to module code, or mm code (maybe vmalloc)?
+ tools/perf/Documentation/perf-stat.txt        |  21 +
+ tools/perf/builtin-stat.c                     |   6 +
+ .../tests/shell/lib/perf_json_output_lint.py  |  95 +++++
+ tools/perf/tests/shell/stat+json_output.sh    | 147 +++++++
+ tools/perf/util/stat-display.c                | 384 +++++++++++++-----
+ tools/perf/util/stat.c                        |   1 +
+ tools/perf/util/stat.h                        |   2 +
+ 7 files changed, 550 insertions(+), 106 deletions(-)
+ create mode 100644 tools/perf/tests/shell/lib/perf_json_output_lint.py
+ create mode 100755 tools/perf/tests/shell/stat+json_output.sh
 
-The evolution of its uses indicates it is growing outside of modules and
-so mm should be the new home.
+-- 
+2.37.0.rc0.161.g10f37bed90-goog
 
-> I am planning to let BPF trampoline use bpf_prog_pack on x86_64, which 
-> is another baby step of c) above. 
-
-OK!
-
-  Luis

@@ -2,121 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8870E56A7EF
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 18:22:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CE39256A7F1
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 18:23:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236323AbiGGQWd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Jul 2022 12:22:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33622 "EHLO
+        id S236331AbiGGQWo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Jul 2022 12:22:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33730 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236182AbiGGQW1 (ORCPT
+        with ESMTP id S236182AbiGGQWm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Jul 2022 12:22:27 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BD232CC84;
-        Thu,  7 Jul 2022 09:22:26 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id EA08F623C7;
-        Thu,  7 Jul 2022 16:22:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 291E3C3411E;
-        Thu,  7 Jul 2022 16:22:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1657210945;
-        bh=HN6yvGVfevEjt75PnG4J8rUpc7xjiTvUZmOyG5gVKtA=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=IMvF4f6cwmSSL2YUBBg7x2oJf9s+3uFnEP9GoviCcwUOdrzANU1J2xHC7pguJLCv1
-         nRwjeXWdTUIyoPIgPzHd06b6+T7/cAPje5o+ei9+XZrlQeW1ktEeK4lMK4KHYJ0oHN
-         nD+Pz7HuoxwZmeAFW0zsLaEnqDBNdhMLDRXcX5rP4V4KtsMiauY+Uh2Q58Vdc1Bh3L
-         gIt2IdYa3P3XaNH94nIayGi/ISeINGl+rYHvKx8kJR6HToTGoVIUwpqQObB4ZgMXfR
-         /RuM8ZPgmINLAVgz7Asn7DY/BgBuubRQk2C7XEX3PhYVxqOz8BlT8G5ZUVyNq4Rdmj
-         QGFRYaVgVysrw==
-Date:   Thu, 7 Jul 2022 11:22:23 -0500
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     ira.weiny@intel.com
-Cc:     Dan Williams <dan.j.williams@intel.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        "Li, Ming" <ming4.li@intel.com>, Lukas Wunner <lukas@wunner.de>,
-        Alison Schofield <alison.schofield@intel.com>,
-        Vishal Verma <vishal.l.verma@intel.com>,
-        Dave Jiang <dave.jiang@intel.com>,
-        Ben Widawsky <bwidawsk@kernel.org>,
-        linux-kernel@vger.kernel.org, linux-cxl@vger.kernel.org,
-        linux-pci@vger.kernel.org
-Subject: Re: [PATCH V13 3/9] PCI: Create PCIe library functions in support of
- DOE mailboxes.
-Message-ID: <20220707162223.GA307520@bhelgaas>
+        Thu, 7 Jul 2022 12:22:42 -0400
+Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com [IPv6:2607:f8b0:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F85B2CC84
+        for <linux-kernel@vger.kernel.org>; Thu,  7 Jul 2022 09:22:42 -0700 (PDT)
+Received: by mail-pf1-x42f.google.com with SMTP id g126so5976100pfb.3
+        for <linux-kernel@vger.kernel.org>; Thu, 07 Jul 2022 09:22:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=mLbZSQ9bODcgasUNI61Zcm8EfxeBwGZWHzpdpat/CYo=;
+        b=NkyKxeH4uONU1ORaVub6eKl0NxphgfX4t2qzCBXKG+/e3KVjyMRrXC6d2Dstjcxlii
+         AiYYVZu3KRWX+ieFirEKh0fPt3un2dmkN/fx+lg4aFELHzwtZyj+1k/FR3glYfn1cBCc
+         BXtylnGuV8Mwq1PwcAKtKyajjO4SznRp1D2cJC2Gqh1rW4XMF+S4HEvPWd32g3l6Emyn
+         My+B76zsoO57XHpvj+i9KNNQYrO9eQp0ACcliuWuLNDMJ6AEK4R2iSNSQ2B9a4qtlmnc
+         yOG9g1aD+F++90r7eUXIpZgRNMthWJ6k4LLSLZmft998gZ2vsQCkcoLsNpHBYt9VmtUa
+         w/pA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=mLbZSQ9bODcgasUNI61Zcm8EfxeBwGZWHzpdpat/CYo=;
+        b=MXjbQGO2tsktwj5V68J+pUEvbsFrb3TkQqaFoGp6Vhyk9+0mgQ5SSfhJPwphmDXbUy
+         T6TLxSX9OAs0M9/dZfZQPS2MtvlobVJB7VP9Fa/g4buLcgZ5eqR5QeLWBAzTxDals/6X
+         qoYZwzooR8aGxswwiFrGaTNlg0yu8MPXeTNoKbNc6ShkLDbEFmuuEUdu/3socNIdv5zk
+         /syKaLxqYr9L3lmREWLErFDDKafGRi0PhCVBwbO91uzVPMHHFKgFZYXyVdPSNZ0Hk0Tr
+         iKQhMBhHXGLRy2cl+WjvmMNMzkpli8v9XIeC7q1QxpDPzXQxgrfklXhEE71z/cKr+f6G
+         3b6A==
+X-Gm-Message-State: AJIora/lAyY3Tpji+1pZLUbOvSoGsJorEkClhCxl0+1UZu43b0RMuhzE
+        flr5MX/9naghh1sA3RGUZ/A=
+X-Google-Smtp-Source: AGRyM1vZ6aKeNQ/gzwgVHfo+LB3Sbcw+VHqLkFo45VEazYX5U8BtAJi2CTyOM6smyysAha6fqhz4DA==
+X-Received: by 2002:a17:902:7b88:b0:16b:d9a5:7a94 with SMTP id w8-20020a1709027b8800b0016bd9a57a94mr28033840pll.173.1657210961797;
+        Thu, 07 Jul 2022 09:22:41 -0700 (PDT)
+Received: from [10.67.48.245] ([192.19.223.252])
+        by smtp.googlemail.com with ESMTPSA id d11-20020a170903230b00b0016a5384071bsm28308326plh.1.2022.07.07.09.22.38
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 07 Jul 2022 09:22:41 -0700 (PDT)
+Message-ID: <40dd83a8-1196-c5b7-cac1-3521bf532792@gmail.com>
+Date:   Thu, 7 Jul 2022 09:22:37 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220705154932.2141021-4-ira.weiny@intel.com>
-X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [RESEND PATCH 1/8] ARM: debug: bcmbca: Replace ARCH_BCM_63XX with
+ ARCH_BCMBCA
+Content-Language: en-US
+To:     William Zhang <william.zhang@broadcom.com>,
+        Linux ARM List <linux-arm-kernel@lists.infradead.org>,
+        Broadcom Kernel List <bcm-kernel-feedback-list@broadcom.com>
+Cc:     anand.gore@broadcom.com, dan.beygelman@broadcom.com,
+        kursad.oney@broadcom.com, joel.peshkin@broadcom.com,
+        f.fainelli@gmail.com, Ard Biesheuvel <ardb@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Eugen Hristev <eugen.hristev@microchip.com>,
+        Kavyasree Kotagiri <kavyasree.kotagiri@microchip.com>,
+        Lukas Bulwahn <lukas.bulwahn@gmail.com>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Shawn Guo <shawnguo@kernel.org>, linux-kernel@vger.kernel.org
+References: <20220707065800.261269-1-william.zhang@broadcom.com>
+From:   Florian Fainelli <f.fainelli@gmail.com>
+In-Reply-To: <20220707065800.261269-1-william.zhang@broadcom.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jul 05, 2022 at 08:49:26AM -0700, ira.weiny@intel.com wrote:
-> From: Jonathan Cameron <Jonathan.Cameron@huawei.com>
-
-Possible subject:
-
-  PCI/DOE: Add DOE mailbox support functions
-
-(no trailing period required)
-
-> Introduced in a PCIe r6.0, sec 6.30, DOE provides a config space based
-> mailbox with standard protocol discovery.  Each mailbox is accessed
-> through a DOE Extended Capability.
+On 7/6/22 23:57, William Zhang wrote:
+> Prepare for the BCM63138 ARCH_BCM_63XX migration to ARCH_BCMBCA. Make
+> DEBUG_BCM63XX_UART depending on ARCH_BCMBCA.
 > 
-> Each DOE mailbox must support the DOE discovery protocol in addition to
-> any number of additional protocols.
-> 
-> Define core PCIe functionality to manage a single PCIe DOE mailbox at a
-> defined config space offset.  Functionality includes iterating,
-> creating, query of supported protocol, and task submission.  Destruction
-> of the mailboxes is device managed.
-> 
-> Cc: "Li, Ming" <ming4.li@intel.com>
-> Cc: Bjorn Helgaas <helgaas@kernel.org>
-> Signed-off-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
-> Co-developed-by: Ira Weiny <ira.weiny@intel.com>
-> Signed-off-by: Ira Weiny <ira.weiny@intel.com>
+> Signed-off-by: William Zhang <william.zhang@broadcom.com>
 
-Whenever the CXL folks are happy with this:
+This patch belonged in your v2 series:
 
-Acked-by: Bjorn Helgaas <bhelgaas@google.com>
+https://lore.kernel.org/linux-arm-kernel/20220707070037.261532-1-william.zhang@broadcom.com/
 
-> +static int pci_doe_recv_resp(struct pci_doe_mb *doe_mb, struct pci_doe_task *task)
-> ...
-> +		pci_err(pdev,
-> +			"[%x] expected [VID, Protocol] = [%04x, %02x], got [%04x, %02x]\n",
-
-Since the string already wraps, I think there's no benefit to starting
-it on its own line.  Joining with "pci_err(pdev, "[%x] ..." improves
-greppability slightly.
-
-> +			pci_err(pdev,
-> +				"[%x] busy detected; another entity is sending conflicting requests\n",
-> +				offset);
-
-Ditto.
-
-> + * pci_doe_submit_task() - Submit a task to be processed by the state machine
-> ...
-> + * RETURNS: 0 when task has been successful queued, -ERRNO on error
-
-successfully
-
-> +int pci_doe_submit_task(struct pci_doe_mb *doe_mb, struct pci_doe_task *task)
-> ...
-> +	 * DOE requests must be a whole number of DW
-> +	 * and the response needs to be big enough for at least 1 DW
-
-Rewrap to fill 78 columns or so.
+but that is fine, I will pick it up from there.
+-- 
+Florian

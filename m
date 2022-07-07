@@ -2,41 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 90E8856A1FB
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 14:32:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 129EF56A037
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 12:43:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235268AbiGGMcF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Jul 2022 08:32:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60830 "EHLO
+        id S235163AbiGGKn1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Jul 2022 06:43:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37586 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234818AbiGGMcC (ORCPT
+        with ESMTP id S234442AbiGGKnX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Jul 2022 08:32:02 -0400
-X-Greylist: delayed 7519 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 07 Jul 2022 05:31:59 PDT
-Received: from mx0b-0039f301.pphosted.com (mx0b-0039f301.pphosted.com [148.163.137.242])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3B5E1AF05;
-        Thu,  7 Jul 2022 05:31:59 -0700 (PDT)
-Received: from pps.filterd (m0174682.ppops.net [127.0.0.1])
-        by mx0b-0039f301.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 2679qfGv015076;
-        Thu, 7 Jul 2022 10:26:17 GMT
-Received: from eur05-vi1-obe.outbound.protection.outlook.com (mail-vi1eur05lp2168.outbound.protection.outlook.com [104.47.17.168])
-        by mx0b-0039f301.pphosted.com (PPS) with ESMTPS id 3h59fxm0t6-1
+        Thu, 7 Jul 2022 06:43:23 -0400
+X-Greylist: delayed 1033 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 07 Jul 2022 03:43:22 PDT
+Received: from mx0a-0039f301.pphosted.com (mx0a-0039f301.pphosted.com [148.163.133.242])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F5DD33A38;
+        Thu,  7 Jul 2022 03:43:21 -0700 (PDT)
+Received: from pps.filterd (m0174678.ppops.net [127.0.0.1])
+        by mx0a-0039f301.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 2679r5N4028262;
+        Thu, 7 Jul 2022 10:25:54 GMT
+Received: from eur05-db8-obe.outbound.protection.outlook.com (mail-db8eur05lp2111.outbound.protection.outlook.com [104.47.17.111])
+        by mx0a-0039f301.pphosted.com (PPS) with ESMTPS id 3h5v4jrxp4-2
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 07 Jul 2022 10:26:13 +0000
+        Thu, 07 Jul 2022 10:25:54 +0000
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=M+ajOIRKZKbgvuC1e4jIC5aLy3r7mDKLH11Tvhfv7bGRgAZqnnpEXneuUJHTBoFuS9Z3IWOCECTrbAJwdJE7wN5dH1CiweI4qZ5LE/9OyqwRewDTHlOGKl0f0MF2AEV/RiykU4ZIGHJI/bXVdXJj1ew9DFbBjcFxJEMcSyrYcFOtahfPtQ1ZK/AqEMXaPQKdO0g3nCqYbm+2Z+AkNpncNmBtnC4iQiAXVmd/JyIPoamAQTzntdYvq/FGQfy1XiOaxKO+ewtmDtIEJonO7Lcs6MehzWYsPHFjXWO6vMcXKGCTsN4tTUZLTuioQGVZY8AdmpqtHaqYTvgtOWramHWfIw==
+ b=QafqqYUSY55ZT3hkzo2FGLmzPy1XfKsaYLbVdp9Lt/U9zWOTTnHbM/CkNoL6SuqWgs01Y1gMRqznfn01G1xQ07KEcjGqlToAQrRSwXR2JstbzS6E/58LkCjnN6T5vgbjkgvsdyWb03bDZRzCKQwBI3UX1O9Mqo4YPWJ0Z8fJzNUvdNa/3qI6tpT4l7RehTDtqVugcgLOdBJ5GWImTPqu69t8w3f26pmncpC0AR+ual0p4xrRFz8zkjCulgVDst9CRBlSIgi34Ay8KHZG42k0mLoC1fhe2489SQ/DE7JE9WpdcAMRPaebxnvfLIl5Hh3gKoOTGiBKsrSVq+qe0zBkKA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=hQ/TZBzH8wkRxX/wU0UZ4Lp9a7lTIYuDKsiR3KNyjjg=;
- b=CdpLkSSSzphSubm8etozBRA6kmsGXDxRI7lmNs6CQXPv5jMfrEGPnDlR1pJvggFH3N8iX+3vH6dkUCln8FWKPZDSfiHm3I7SNDk+I9HK9wzwbqP1IOfOYHyCMzt+l2cadhuoRCxbogLeTe1iwOH7QFWeAb9i7UudcsmwuSt1w/tqSJc1uJpt6j9RhEsjpBizENVi527RbFhL/jWPEdh//lPLq4h5Gnl0syOT0qC2R6HAuXeuYv71mtHy8yEqEE7mKEMhvKmPhVTDYYlOu3SMMFuaPFCVGqWUaQzPiacXKkt/V9pzAgh7Y0SVq8vexZ5uwjynBvQIqVe+++hmtRZ2AQ==
+ bh=Nbj9O2STiP0ZVjHaen0OOMKkny04OYQ971tIntTnNgI=;
+ b=j/99qsa7ImSxqo8br9mVsTwmdHPhRziwarUmIhS6kLxf7dbIJzZjHfZWXLUjvwXMr3xUVOmxBhZJ+/Zqz25twgikboOqWctZD/IOaW4CSc3NcO1VaEmfMSBEUIyYrVmKs/UswRsadUhFI3qfl+aTbfRCUzybhiqbMXgZsBRxj8cNRipaWRUsVXLQHB/eQV6ylkQWbA4M4xv6zLREMylnYCeNutR+UEzotM0Qx/93Ycl42BuJrGM/1jpH4EmSVBkqKEejfr5SYsN46HS6oPbRkdUiX0vj3JSQV7c24dkXlVmZKezLV+l3KqC6uvEntBoN5Rl5UjoD2VUxFVNKsnMAeQ==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=epam.com; dmarc=pass action=none header.from=epam.com;
  dkim=pass header.d=epam.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=epam.com; s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=hQ/TZBzH8wkRxX/wU0UZ4Lp9a7lTIYuDKsiR3KNyjjg=;
- b=POTHSoTp0vlPPMOazB0XQ66Yb4/pqRGwu3w4vwXzSkIJtOOCcWM1YC573/opzYlG5RBZgd7aGd/9+tiILC0xrqcmQd0RwSxpTfPKyJVL2D/c27EobZy17femvtCRqX7U41YG3SgCceujbTeuCeaqVM1+hW3Lpwqk+GUzQ6NTq7DiNIJVesQQ5ziStI/AXWIlye2X/rCail2TM13IW2mr4dEy2QlFRfOrY8HIAWjuo1cN++IBjiqS1srGfCxq7hDdZCbRsVCUWWKZUqbOIGpOLCTcblVnPyCtcMn3qiwE8sPPfiRwVlEMgNCnfaoWlyc9WBKnRb4relQIXkVJATKbug==
+ bh=Nbj9O2STiP0ZVjHaen0OOMKkny04OYQ971tIntTnNgI=;
+ b=cKH6Vtt2eb10EqBF8ehADbm97sK4q25ahqnnudQvlGwjVukH24ehVpyTlbykCQsMs2x7zb4ms0ogPcE6QYP5DReV2QSD58hdT8QAx2hiSaatmyfOQzDtTO26MrrrxvbtJl7u+hCYiowqcqTLmnJHVds7NCZwltp0PqzRvL5F1U1mTR8GlCK87nC7it4XXAkjDL0T54R3MQj0oeoJq5nhXMojjRhwoQVOF9NtqncsC2gU+1U7jiOdHDGPIFXPrZ0G/r2rcrwmmWJkDcj8R7o+ajfNzmPwXrunmbX3fYDRa9D2GPApORI4h0mRYtNKEY/JqqJZAz7n0VgAitdHb1G5ww==
 Received: from PA4PR03MB7136.eurprd03.prod.outlook.com (2603:10a6:102:ea::23)
  by DB8PR03MB6012.eurprd03.prod.outlook.com (2603:10a6:10:ed::12) with
  Microsoft SMTP Server (version=TLS1_2,
@@ -45,7 +45,7 @@ Received: from PA4PR03MB7136.eurprd03.prod.outlook.com (2603:10a6:102:ea::23)
 Received: from PA4PR03MB7136.eurprd03.prod.outlook.com
  ([fe80::2d63:5490:24b9:415b]) by PA4PR03MB7136.eurprd03.prod.outlook.com
  ([fe80::2d63:5490:24b9:415b%9]) with mapi id 15.20.5417.016; Thu, 7 Jul 2022
- 10:25:08 +0000
+ 10:25:09 +0000
 From:   Oleksii Moisieiev <Oleksii_Moisieiev@epam.com>
 To:     "robh+dt@kernel.org" <robh+dt@kernel.org>
 CC:     Oleksii Moisieiev <Oleksii_Moisieiev@epam.com>,
@@ -66,52 +66,54 @@ CC:     Oleksii Moisieiev <Oleksii_Moisieiev@epam.com>,
         Cristian Marussi <cristian.marussi@arm.com>,
         Stefano Stabellini <sstabellini@kernel.org>,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: [PATCH v4 0/2] dt-bindings: Intorduce domain-controller
-Thread-Topic: [PATCH v4 0/2] dt-bindings: Intorduce domain-controller
-Thread-Index: AQHYkevVQuji0mJdiUaO5T+/y7MyeA==
-Date:   Thu, 7 Jul 2022 10:25:08 +0000
-Message-ID: <cover.1657187536.git.oleksii_moisieiev@epam.com>
+Subject: [PATCH v4 2/2] dt-bindings: Update scmi node description
+Thread-Topic: [PATCH v4 2/2] dt-bindings: Update scmi node description
+Thread-Index: AQHYkevVP3S32fpdeUiTm/voQggjvw==
+Date:   Thu, 7 Jul 2022 10:25:09 +0000
+Message-ID: <f7386e5cca4e7f53bab3d6d4272f1d2f28a2f2b9.1657187536.git.oleksii_moisieiev@epam.com>
+References: <cover.1657187536.git.oleksii_moisieiev@epam.com>
+In-Reply-To: <cover.1657187536.git.oleksii_moisieiev@epam.com>
 Accept-Language: en-US
 Content-Language: en-US
 X-MS-Has-Attach: 
 X-MS-TNEF-Correlator: 
 x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 8cb3deec-6dd8-431c-46e6-08da6002f7c1
+x-ms-office365-filtering-correlation-id: 77cf61b7-000a-4817-8da6-08da6002f844
 x-ms-traffictypediagnostic: DB8PR03MB6012:EE_
 x-ms-exchange-senderadcheck: 1
 x-ms-exchange-antispam-relay: 0
 x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: UdyXLYqfVipFS/1vCakWl+dPDvKvYzAKjGD3ZdCZrEROEmTC7ffJBHeEb9ZS95KKFWWCNL/JnGbSn/nUg1C2Vy5Gz3N1qTetd1oCn9FThUu4THq8ORzjkbl3wJHKv0CazKaF6I2m3wqZR02xv36rfMZrZRCorvI0MLGcfSIMQZOf9sno48dWz+8d+fWwpfcDorxLS3AlTPD0gX1O1A6+n74QzYyDIU9SzIOfT7qVL1v1C8AokS8arqe4A7qjXA+mkbiaiDxqJ8daZa1K+CTKyVmUvL9b450ZJWVIdMlnTMkryiVTstL+8Z7Obvg3Fiv3P6mGegnlBDDGIjoXWBq4hpwj8O3FExASlrcv//jNJiE0N5A9vMYxfKVeT9AG3vhEgKYBZmL26u6OEjdtdEb01pnUGYlxcqWLZ8W6jSRZkxM1KOh7WVA0p/Ro//9NDI7hN1Vl1ircOzbcqierlX0Ipqdr85zlybi+nfN3GiepyQulHRxxz9yRIUVu+8l6lprFtExqHt9nRRu8obyDnu227JmFV/KYIHz682/PBRGuocB+lsfRDyCYNP0MmTdYDYP3AG4vkA/CiSaXvzo0h9ha/HVWbfK2Zzjw/6Q486B6lngQr86PzOm3AvH86Gn/U9pnEiKp1RUmf0vmclS0chsaKKVsep1vy3VTD9BGRqBOznbrUkQTZ1FWALTkJc1gaPCujx81UXRAxFb+M3K/iFSU8Zn3vyBPYchheLcDygB+eAXt1ktRhIhnimBSfGkE+KCvLCNbFXpbG+dgIQ64Q1G4TniFfD1ccj3DoqabkSkdaAdP9r4ancZUM5nY341B3MHUOcV++b+R1G4Ab4huXfOA3tX5zDs4mOcUmvXMsac/XvY=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PA4PR03MB7136.eurprd03.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(39860400002)(136003)(346002)(396003)(376002)(366004)(41300700001)(26005)(55236004)(6506007)(122000001)(966005)(38070700005)(38100700002)(6512007)(86362001)(186003)(2616005)(7416002)(54906003)(4326008)(2906002)(8936002)(66476007)(8676002)(66556008)(66946007)(316002)(76116006)(91956017)(478600001)(5660300002)(6486002)(36756003)(71200400001)(64756008)(66446008)(83380400001);DIR:OUT;SFP:1101;
+x-microsoft-antispam-message-info: W+L1Lh8m6v/xc9G6H0/M5kuV7Ez/IUlSnrw1iK0+KP3ecxvdOelsY3zqrFeYsP501gev29BKeRNclxUs05SFr/vE2p44S2PY6Oub7fyzUlQLv/Iqp7HMzFM39AUAHGPGYlK567xXKdT0GzOGC2QiglPNogShdYJ8eARGNKnTc74tlDi52X52e7gdYqnUuJniL6zsZ+bWNSb/8C8nQbmR1GR6EmIorefs1mJLHr9/M3Gdhq8TZck6IUVYQCvRyt8Vr73zeQJLfpqr+oCDECKOISiEqghrokdk9kEl9WCpW8CeLuIpKPyhXUgj/RW34PYF11aDDw6ngu4iZkDL/FYM3anD6JjieRmySfdVaGukudlg5LLe0Gg5biiMUEvHGEMn9o9GlpEtMZjOC02Ul00sIQBkUsCQ9JLj8n/jsWD4SXWMRG9W14WvgtRKr/SRrvrdcO1OHEJ3IMne9VxqkpAh3eG12UuCwVq6Bb++sYC0cEQZuLx9Q0QCo2FxNXQE37c/zG0ujj0DRnBTXtY7+OZxQ8Qqz8Lf5N0T3w935fOL8zFY1Saa2/xxKX2EyguSED+CGHB1NaIfYdysBFd+ZDyipanTLnPoS0QlGSNqRJFRfOt99Idqj6i2tZAxa6GSj8cZ6mH7m4X3pb5BiL8q2e430+E3yhDqZTalD09CrH5EKdUrEytizXVDrdfkKZkrQQokvRsrfb9Xw6Z89/36JE+47IEexkfUaJxhVQP5QXBgunJL39xgzmWGJTIEQj9d4gq8TWcGDl/XSiOLjRM6zQi6g4HlOB1+mZh7lXwlD6fRhvBZHkuBDg7CRWRyQHE3+MHX2GekSjstdWF+7PqAnOlhECDbVnFu68/SHiJR40vUGyQ=
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PA4PR03MB7136.eurprd03.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(39860400002)(136003)(346002)(396003)(376002)(366004)(41300700001)(26005)(55236004)(6506007)(122000001)(966005)(38070700005)(38100700002)(6512007)(86362001)(186003)(2616005)(7416002)(54906003)(4326008)(2906002)(8936002)(66476007)(8676002)(66556008)(66946007)(316002)(76116006)(91956017)(478600001)(5660300002)(15650500001)(6486002)(36756003)(71200400001)(64756008)(66446008)(83380400001);DIR:OUT;SFP:1101;
 x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?iso-8859-1?Q?2y0KT4Mgwc4tNbQ5X59hRoDubEGnP13/2E3jWiRJGOJpVLdslrRX4ohyZn?=
- =?iso-8859-1?Q?QmMYr+XmQ13ruGqRuJc/IF5hqb1XVL6C+If4xfMbN/7mhmJSWlH0kS034u?=
- =?iso-8859-1?Q?0iWbmcUsCPAGrNh57hPSREhtYpoaooEZtlf3Avi1qSe6X9jpOjdvyzErAV?=
- =?iso-8859-1?Q?3z9PthdvoGLd8q564yM75cB4wm1mXfXyK6xSTWkpOoUNeoVcbxJYvi6uSi?=
- =?iso-8859-1?Q?+TGmitYCRU5RbaFCQYBdtp4/qxpV3Y4oJiZU8w2nsoGcRmP8m70nmEv9wE?=
- =?iso-8859-1?Q?PHql0RIVALEbzLreqvFJrIg4bh5dIZX7X0ro5Peeyvwn6LHi6IVPD7Tuez?=
- =?iso-8859-1?Q?7e0C33msMKP/1Dmt1uwOG212upzt6wAAbymA2/Qe9QMksNC4oTUBhLBTj7?=
- =?iso-8859-1?Q?jS+JShIcuYEbm/B1yEnbJ1pirxtW1Yo7YeKIFiFrMF8NAPp4Zx/3B1QnK8?=
- =?iso-8859-1?Q?B2ZbR/0S9TdBPtRXcCv1CqWCkhdigBQyTRGcNVKlUxMn04okVPN16VkF2j?=
- =?iso-8859-1?Q?4fR1rBZgOeW3moHICCTjBb8l5zFAFjV2sajSW5il3DRcjdHQj+p1YGaGsq?=
- =?iso-8859-1?Q?XiJb4anfw/UbJWxlhi+wr/MapzybV340Ay+SFYO/4PZgnL6CKJL3eAeE5T?=
- =?iso-8859-1?Q?yl3m0rfgEjF6Pc6iSUVxsEaPr0/L9YXsdpPa2vpK38vf8B/861wO2hbOzd?=
- =?iso-8859-1?Q?lLpsksLabNC/T3Ue+2JNohhw3EfYveyxfEE92U2bb5akEgU9mm/P8hXA34?=
- =?iso-8859-1?Q?taJsohEHk3xSDDU6rnk6eaCeK37UHyiHndlJCW7/TEFSDiT9sEMOLGEnGF?=
- =?iso-8859-1?Q?P/xG5eqZ8MXZnnlQXiOtCmkg3LF9vLexag5rhdc6CMvxVgp4fCLohGqwgr?=
- =?iso-8859-1?Q?6++uwwk/3RgvCWrQT3DJQf6wxOCdNz+9IiVQSfczJ5bRR6eLuRD7qtjEZB?=
- =?iso-8859-1?Q?bvKT4BYCuXUO0ldOyLhKueNZfMMx9t86/B6zo41p6ngMbqoF+o+G/DkdEz?=
- =?iso-8859-1?Q?pFTLerf27K4lCU7aX5+SspmI1D5PaeYQqIzaZT4BHCba7qaSGujaEcZS4z?=
- =?iso-8859-1?Q?M0nl+jj+p4W5BRwuw3WhxLecMS6WY4I7UHzbw7qw2eoqRa/CmnM4FA8dPB?=
- =?iso-8859-1?Q?huEsOXvXYC8vl1gQtSDy6TlgZa4lT447qdhgSiEZNJGIoprI78i8hUDtDe?=
- =?iso-8859-1?Q?2Z6uyT/thaHlmJAfIlHVqswNRB/mYtYVr5Y6d4idumOR9zeUWzvaM3gyeQ?=
- =?iso-8859-1?Q?8+lCOabDGrOF9agoGkpphCp+xwn6Bbun3X8mHuU5bVDMArtpoSFzRzK+qc?=
- =?iso-8859-1?Q?kISrjEBwXTItnBlY34gQfsLASb0fKkYJYyrDTQmZ0lcST5U/iIYs+dg7al?=
- =?iso-8859-1?Q?3Vx5iufNbztX47AAj6wXC687tVp+lHuSB/8oqgTOmwua7H6J8A7AlIeAhI?=
- =?iso-8859-1?Q?44e1cBos7QvQOBGKejWUZqnWyneB+2UGPmsL7TFg8gKbagc2Ue+z7PEtpg?=
- =?iso-8859-1?Q?I1J+mpsnUQ9Dod+o6hJQIaxd7WfzHpL5ALF7MbIy2IWPfZitPzUbeq/Fx6?=
- =?iso-8859-1?Q?Gts2Vu7tDSaRW1dnWXslOmOwC89vh6myoa8vpgq7lytf0sbYWw/ife90hO?=
- =?iso-8859-1?Q?w1ncunrd3AYmv2T5sVbrVt9+BzR5racbQp6Xz51oSzGcI8FH5GIeKxGg?=
+x-ms-exchange-antispam-messagedata-0: =?iso-8859-1?Q?c89kT+BjzYaCsmkJSsDL3/+zEAnQEqAE0LKgN8kSgEhweIbXZcdvUPFv+W?=
+ =?iso-8859-1?Q?SAFGh3zR56gCNFSj3/lE8R93IvsWNOiS4RvMxT8PGDTg20ZHuJ0wf75Jiq?=
+ =?iso-8859-1?Q?yM6twt+BciBCxZjzfk7CmZAXJP1aRnOn76Aaka3r0QE/dihUCtNrbWLFsg?=
+ =?iso-8859-1?Q?ObtxL4BOTasN5K1RlASj0wqD4lwJUkcvQCDBCe6dHYs2TwEFL4pznUU8ol?=
+ =?iso-8859-1?Q?UfBYB5o3q3rdqv9QjwSK5Cg+D2vZi034TTBQw5oSyZns9QJxmYDwtYIPY8?=
+ =?iso-8859-1?Q?hjA/3/vnQ6JScgaAhLCppGUlYxyyyqjFXv0nyKdsQjk0GMfcKstDfCzWA+?=
+ =?iso-8859-1?Q?jxurlxcMTVZlZ4RFgYkvWoHkq0RpnpJ+YIy+zd0GRJbrGWS9KczkzJje0V?=
+ =?iso-8859-1?Q?9oQoM/iMqWxcsXLql6zpzmO60IHoJaIL/jXPA9XR0bTjbUYPZwG4sDBKy2?=
+ =?iso-8859-1?Q?dRZ4c+r13mrzmkNFB1McW4qawm3dsUlaG9mS/0AoGpRDhzRty/G+GCQTAJ?=
+ =?iso-8859-1?Q?6qlq83F5rUw4fS2+rRwclBf5Y5yEQybY/PUHst7Lx2aR6ZNMOa3HGxZhP1?=
+ =?iso-8859-1?Q?GBLzhTeMvxRkC4z5WVXDe2WJUI3MVf2XR5QcssNccQpTolPPfR9AyPJOKG?=
+ =?iso-8859-1?Q?6/SwHlx1A/GQmTxfrlJHcvV45ANxIYH3yANd24t9VsBckVqgrZIsT40UM4?=
+ =?iso-8859-1?Q?SZsU+7am94pkUzNEDAuBrrGcfI/xK/iqFwQaoro/86SLqZnCaowPiqtvJA?=
+ =?iso-8859-1?Q?O8Rtk+SOPBiGLpfHqY8H4RXqMA9SR5j24Osro8ZshgbF6s1VhLy9ujwvmc?=
+ =?iso-8859-1?Q?yIlyzgRW2/LsjdWU6UoGt+OuAl1CqOuCrgRMFnz5IwOpRngOUIJZMotRKI?=
+ =?iso-8859-1?Q?EpAWXA2VrRr/GkuN1Mj3dd4TifeN8I63HaAhf/ALjqYg01cCzfIKj/YG0R?=
+ =?iso-8859-1?Q?0mr6Ije5ELpIfm+Xq9czSV8GZ2xNn8IMqWpV6DaI0fjy0N3Lm4X3gvTKKw?=
+ =?iso-8859-1?Q?rI68kRiGYFIOCHSq/w9jGa0vRgh+R/RNL7F1B5mUocYFSNmBYPHs79DzNr?=
+ =?iso-8859-1?Q?IP1ggMbkcZb0wLqxRBBFxulSfz0jGAIrOO+towq5reDBr9cSFnWqdlcd29?=
+ =?iso-8859-1?Q?i2Ddl0eROA15mdYw22pjFy2yRhJRVjC+dFuTRyJWFEs+CP4Kz0+UFcMQ7G?=
+ =?iso-8859-1?Q?g3eMPVzpiGAFAmzO4w75zVExIaVfwavbR6rDTDkLH08VB2VV98BpBCxzWO?=
+ =?iso-8859-1?Q?jBJHlpt7idVMnYc2CjSUCpdMMo22BSftOjeBq2//jXAJby0wnNc5DABur/?=
+ =?iso-8859-1?Q?oSTZvKaymFxI/fRE4YkLZIKkQgEZJOIuB/6ewATgBsF6Wf/CS4TsqkEfhm?=
+ =?iso-8859-1?Q?YBMwGXIyTD6TQDWHMKE9gX/rPl5vC3W7zD8YqEXQrgQLfkqrxCVYkcO9lS?=
+ =?iso-8859-1?Q?OptBVIHzb3/LyK+OW6wdbbPnAg0AfcsE76GAvetk7IsekWC7HpU0keWJ0v?=
+ =?iso-8859-1?Q?HZV+FaXW7Ex20Q8cFGoBZrhGm51qW7M1STYBaRxksfwVu4t0tPyA6B0Bp/?=
+ =?iso-8859-1?Q?fjNso0xjlKP5Mu2Pk7K8gYGraZq7p9sExKmtleuOMgT7NLWpmKPcRYM0h8?=
+ =?iso-8859-1?Q?eRS9Ef9/Lvm2YPGfjHVJ+CQTrYM5TlL1kBqVkjCZQw1o9bvSO9JN67EQ?=
  =?iso-8859-1?Q?=3D=3D?=
 Content-Type: text/plain; charset="iso-8859-1"
 Content-Transfer-Encoding: quoted-printable
@@ -119,100 +121,50 @@ MIME-Version: 1.0
 X-OriginatorOrg: epam.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
 X-MS-Exchange-CrossTenant-AuthSource: PA4PR03MB7136.eurprd03.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 8cb3deec-6dd8-431c-46e6-08da6002f7c1
-X-MS-Exchange-CrossTenant-originalarrivaltime: 07 Jul 2022 10:25:08.9030
+X-MS-Exchange-CrossTenant-Network-Message-Id: 77cf61b7-000a-4817-8da6-08da6002f844
+X-MS-Exchange-CrossTenant-originalarrivaltime: 07 Jul 2022 10:25:09.6226
  (UTC)
 X-MS-Exchange-CrossTenant-fromentityheader: Hosted
 X-MS-Exchange-CrossTenant-id: b41b72d0-4e9f-4c26-8a69-f949f367c91d
 X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: nx4euIGvt5IJRANwp9unbuyI2g9ow60TCnxBNI1GjjJlwIK7PJXvfZyrKq17NFgKVvL2kCED7rhweR96crH+dgZI/qLquSY/s1SKgeHDTUk=
+X-MS-Exchange-CrossTenant-userprincipalname: Y7Uov1Og0p+6H5PFT7hyKM/JaI5xp3S1Z3AzhF0FqiYzFp7qrdveEtGfLdB4lA5gAqCd6LW3vGttg/tP4aZ8+8FqATfT8PIcwKUauquMw5I=
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB8PR03MB6012
-X-Proofpoint-GUID: XG1IcycDazdoGlWkmJOHiTmAmCXjnU0u
-X-Proofpoint-ORIG-GUID: XG1IcycDazdoGlWkmJOHiTmAmCXjnU0u
+X-Proofpoint-GUID: 4DbTVCgKy27472BTsQhGMLYzCWXV_-Ke
+X-Proofpoint-ORIG-GUID: 4DbTVCgKy27472BTsQhGMLYzCWXV_-Ke
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
  definitions=2022-07-07_08,2022-06-28_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 spamscore=0
- malwarescore=0 lowpriorityscore=0 impostorscore=0 priorityscore=1501
- adultscore=0 bulkscore=0 clxscore=1015 mlxscore=0 mlxlogscore=823
- phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2206140000 definitions=main-2207070041
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 lowpriorityscore=0
+ clxscore=1015 impostorscore=0 malwarescore=0 suspectscore=0 spamscore=0
+ adultscore=0 priorityscore=1501 phishscore=0 bulkscore=0 mlxlogscore=856
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2206140000
+ definitions=main-2207070041
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Introducing the domain controller provider/consumenr bindngs which allow to
-divided system on chip into multiple domains that can be used to select
-by who hardware blocks could be accessed.
-A domain could be a cluster of CPUs, a group of hardware blocks or the
-set of devices, passed-through to the Guest in the virtualized systems.
-
-Device controllers are typically used to set the permissions of the hardwar=
+Add '#domain-cells' property description to the scmi node.
+This property makes scmi node as domain controller provider, which allows
+consumers to provide scmi node with the device_ids of the devices, which ar=
 e
-block. The contents of the domain configuration properties are defined by t=
-he
-binding for the individual domain controller device.
-
-The device controller conception in the virtualized systems is to set
-the device configuration for SCMI (System Control and Management
-Interface) which controls clocks/power-domains/resets etc from the
-Firmware. This configuratio sets the device_id to set the device permission=
-s
-for the Fimware using BASE_SET_DEVICE_PERMISSIONS message (see 4.2.2.10 of =
-[0]).
-There is no BASE_GET_DEVICE_PERMISSIONS call in SCMI and the way to
-determine device_id is not covered by the specification.
+using scmi protocols to control clocks/resets/power-domains etc.
+The device_ids could be used to set the device permissions for the
+Fimware using BASE_SET_DEVICE_PERMISSIONS message (see 4.2.2.10 of [0]).
 Device permissions management described in DEN 0056, Section 4.2.2.10 [0].
-Given parameter should set the device_id, needed to set device
-permissions in the Firmware.
-This property is used by trusted Agent (which is hypervisor in our case)
-to set permissions for the devices, passed-through to the non-trusted
-Agents. Trusted Agent will use device-perms to set the Device
-permissions for the Firmware (See Section 4.2.2.10 [0] for details).
-Agents concept is described in Section 4.2.1 [0].
 
-Domains in Device-tree node example:
-usb@e6590000
-{
-    domain-0 =3D <&scmi 19>; //Set domain id 19 to usb node
-    clocks =3D <&scmi_clock 3>, <&scmi_clock 2>;
-    resets =3D <&scmi_reset 10>, <&scmi_reset 9>;
-    power-domains =3D <&scmi_power 0>;
-};
-
-&scmi {
-    #domain-cells =3D <1>;
-}
-
-All mentioned bindings are going to be processed by XEN SCMI mediator
-feature, which is responsible to redirect SCMI calls from guests to the
-firmware, and not going be passed to the guests.
-
-Domain-controller provider/consumenr concept was taken from the bus
-controller framework patch series, provided in the following thread:
-[1].
-
-I think we can cooperate with the bus controller framework developers
-and produce the common binding, which will fit the requirements of both
-features
-
-Also, I think that binding can also be used for STM32 ETZPC bus
-controller feature, proposed in the following thread: [2].
-
-Looking forward for your thoughts and ideas.
+For SCMI this property is used by Trusted Agent to set the device permissio=
+ns
+for the Non-Trusted Agents.
+Trusted and non-trusted Agent terms described in Section 4.1.1 [0].
 
 [0] https://developer.arm.com/documentation/den0056/latest
-[1] https://lore.kernel.org/all/20190318100605.29120-1-benjamin.gaignard@st=
-.com/
-[2] https://lore.kernel.org/all/20200701132523.32533-1-benjamin.gaignard@st=
-.com/
 
+Signed-off-by: Oleksii Moisieiev <oleksii_moisieiev@epam.com>
 ---
 Changes v1 -> V2:
    - update parameter name, made it xen-specific
@@ -228,16 +180,50 @@ Changes V3 -> V4:
    - making scmi node to act as domain controller provider when the
      device permissions should be configured
 ---
+ .../bindings/firmware/arm,scmi.yaml           | 25 +++++++++++++++++++
+ 1 file changed, 25 insertions(+)
 
-Oleksii Moisieiev (2):
-  dt-bindings: Document common device controller bindings
-  dt-bindings: Update scmi node description
-
- .../bindings/domains/domain-controller.yaml   | 80 +++++++++++++++++++
- .../bindings/firmware/arm,scmi.yaml           | 25 ++++++
- 2 files changed, 105 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/domains/domain-contro=
-ller.yaml
-
+diff --git a/Documentation/devicetree/bindings/firmware/arm,scmi.yaml b/Doc=
+umentation/devicetree/bindings/firmware/arm,scmi.yaml
+index 5c4c6782e052..89589ed81b4e 100644
+--- a/Documentation/devicetree/bindings/firmware/arm,scmi.yaml
++++ b/Documentation/devicetree/bindings/firmware/arm,scmi.yaml
+@@ -78,6 +78,14 @@ properties:
+   '#size-cells':
+     const: 0
+=20
++  '#domain-cells':
++    $ref: /schemas/types.yaml#/definitions/uint32
++    description:
++      Number of cells in a domain controller specifier.
++      Set const to 1 here for nodes providing the device id, needed for
++      the BASE_SET_DEVICE_PERMISSIONS message (see 4.2.2.10 of [0]).
++    const: 1
++
+   arm,smc-id:
+     $ref: /schemas/types.yaml#/definitions/uint32
+     description:
+@@ -344,4 +352,21 @@ examples:
+         };
+     };
+=20
++  - |
++    firmware {
++        scmi_link: scmi {
++            compatible =3D "arm,scmi-smc";
++            shmem =3D <&cpu_scp_lpri0 &cpu_scp_lpri1>;
++            arm,smc-id =3D <0xc3000001>;
++
++            #address-cells =3D <1>;
++            #size-cells =3D <0>;
++            #domain-cells =3D <1>;
++        };
++    };
++
++    foo@0 {
++      reg =3D <0x0 0x10>;
++      domain-0 =3D <&scmi_link 1>;
++    };
+ ...
 --=20
 2.27.0

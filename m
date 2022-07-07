@@ -2,65 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1015856AE76
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 00:32:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D46856AE91
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 00:34:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236573AbiGGWbL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Jul 2022 18:31:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59014 "EHLO
+        id S237010AbiGGWcl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Jul 2022 18:32:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59974 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230076AbiGGWbK (ORCPT
+        with ESMTP id S236535AbiGGWci (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Jul 2022 18:31:10 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA5D865D70
-        for <linux-kernel@vger.kernel.org>; Thu,  7 Jul 2022 15:31:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1657233069; x=1688769069;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=38Mh6DFaVp8kd4XW3sT6BiNg0fRZtdi1BmkNe5o8GJo=;
-  b=idHOHtrTcnyKxYwc8ge+uKTNwE8o9/yrxcWgPWBIU9P9Kl9LIWJKyMNK
-   LWUdGsbHmq3Ds+r09+8SC1xNikv+fLfHHoZKk8Rk39PJCm3gxloLO/g7e
-   mWAX2VacZLZZaw5Tia5F3eXvSMXI8PV7bUYrTtAGckec+Pl5diT7j80Xy
-   jIpAHJiS+S+LlHP/rVooz8wUZwj32JFZLyZpcPq1E+Ha6CmD5UEXX/8Is
-   3zaxOmFqUN222NI+bCIx50vSLPAduTzlz9C6T4bG8VPIswQHu477wcmyE
-   F4sEFZZz4rErd1b+dFk3apKFi2wXGAyCkz3E2XXzYDLHnUkGcHeFT8wMR
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10401"; a="282887708"
-X-IronPort-AV: E=Sophos;i="5.92,253,1650956400"; 
-   d="scan'208";a="282887708"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jul 2022 15:31:09 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,253,1650956400"; 
-   d="scan'208";a="840080638"
-Received: from lkp-server01.sh.intel.com (HELO 68b931ab7ac1) ([10.239.97.150])
-  by fmsmga006.fm.intel.com with ESMTP; 07 Jul 2022 15:31:07 -0700
-Received: from kbuild by 68b931ab7ac1 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1o9a1a-000MXW-IF;
-        Thu, 07 Jul 2022 22:31:06 +0000
-Date:   Fri, 8 Jul 2022 06:30:42 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Michael Ellerman <mpe@ellerman.id.au>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 3/4] powerpc: Remove asm/prom.h from asm/mpc52xx.h and
- asm/pci.h
-Message-ID: <202207080622.VqN3Z1BL-lkp@intel.com>
-References: <22ac0b64b6c6ef6cc6a74739eb213a81372835ed.1657204012.git.christophe.leroy@csgroup.eu>
+        Thu, 7 Jul 2022 18:32:38 -0400
+Received: from mail-oa1-x2c.google.com (mail-oa1-x2c.google.com [IPv6:2001:4860:4864:20::2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7C1965D7A
+        for <linux-kernel@vger.kernel.org>; Thu,  7 Jul 2022 15:32:36 -0700 (PDT)
+Received: by mail-oa1-x2c.google.com with SMTP id 586e51a60fabf-fe023ab520so27123798fac.10
+        for <linux-kernel@vger.kernel.org>; Thu, 07 Jul 2022 15:32:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=cloudflare.com; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=w5ngIuUcsL6V72N4sBi1nVKjzL39vm3/CQze7FH+2hA=;
+        b=YnZCQafPM5prD6/n+Fb5qat9jQy+eMYSObcvtGYlOA7HZtw4hrgj5iKVvG/KF/lwid
+         FW+SUFxTPlYJodi+C5GQdnzT/E2LyvPJ3qJ8JvDmW5gZ+cB+wDuXel/62IPfMynLw11d
+         92w1iWcm9u4S7M9C6Bl/r9VYJOJTIygJlHTes=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=w5ngIuUcsL6V72N4sBi1nVKjzL39vm3/CQze7FH+2hA=;
+        b=yOxgpdHkZfGpNA7C1peJcz9us5MYKrZSVM6k+1sy0/FoPUAq/+RAbMIzG0hgDGFD7m
+         dVMP/gT53VT5EULOAgC/KLzWcZkoQxoWfdFptkVMztgcD/fc8Lje2FpmEemiuek3h9Q7
+         /qth7WZIpb+CQTxUJ7hh+lpmsWFX1c4/IF7GFfr8QdWMyn8PAfP1ZxkRwA8GBSzGttZx
+         cjjyW3yNRiSVkLHVbtOo8jWt3fAKzwX/moPwYVezY4CVvTPri/a4hr1lxaZuneeFmNHJ
+         oZpePbDH/qSe8ho8bs0GId80kz4hdVvK2Q+SZ+sNuA+6fSyx3nUoYUu5Buoz7hgnjnVV
+         XeFw==
+X-Gm-Message-State: AJIora8EdX103gUJl3QRwHjWXt33oyv/2LLD2TfQWA8nTzI+uaYEsKpp
+        tXYxIIUG0bprW2f74Z2t+xuxCg==
+X-Google-Smtp-Source: AGRyM1vIqtnT6lw5R/fcEfoiZ5MwUbb7toc3P9udUrr7HIOVUFz0P7kJ2u/nLlL3mSC8VGz+3bVwpA==
+X-Received: by 2002:a05:6870:2049:b0:101:1df6:8fc with SMTP id l9-20020a056870204900b001011df608fcmr111637oad.125.1657233156130;
+        Thu, 07 Jul 2022 15:32:36 -0700 (PDT)
+Received: from localhost.localdomain ([184.4.90.121])
+        by smtp.gmail.com with ESMTPSA id i16-20020a05683033f000b00616b835f5e7sm16246222otu.43.2022.07.07.15.32.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 07 Jul 2022 15:32:35 -0700 (PDT)
+From:   Frederick Lawler <fred@cloudflare.com>
+To:     kpsingh@kernel.org, revest@chromium.org, jackmanb@chromium.org,
+        ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+        kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
+        john.fastabend@gmail.com, jmorris@namei.org, serge@hallyn.com,
+        paul@paul-moore.com, stephen.smalley.work@gmail.com,
+        eparis@parisplace.org, shuah@kernel.org, brauner@kernel.org,
+        casey@schaufler-ca.com, ebiederm@xmission.com, bpf@vger.kernel.org,
+        linux-security-module@vger.kernel.org, selinux@vger.kernel.org,
+        linux-kselftest@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        kernel-team@cloudflare.com, Frederick Lawler <fred@cloudflare.com>
+Subject: [PATCH v2 0/4] Introduce security_create_user_ns()
+Date:   Thu,  7 Jul 2022 17:32:24 -0500
+Message-Id: <20220707223228.1940249-1-fred@cloudflare.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <22ac0b64b6c6ef6cc6a74739eb213a81372835ed.1657204012.git.christophe.leroy@csgroup.eu>
-X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,92 +73,65 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Christophe,
+While creating a LSM BPF MAC policy to block user namespace creation, we
+used the LSM cred_prepare hook because that is the closest hook to prevent
+a call to create_user_ns().
 
-I love your patch! Perhaps something to improve:
+The calls look something like this:
 
-[auto build test WARNING on powerpc/next]
-[also build test WARNING on mkp-scsi/for-next jejb-scsi/for-next linus/master v5.19-rc5 next-20220707]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+    cred = prepare_creds()
+        security_prepare_creds()
+            call_int_hook(cred_prepare, ...
+    if (cred)
+        create_user_ns(cred)
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Christophe-Leroy/video-fbdev-offb-Include-missing-linux-platform_device-h/20220707-222906
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/powerpc/linux.git next
-config: powerpc-microwatt_defconfig (https://download.01.org/0day-ci/archive/20220708/202207080622.VqN3Z1BL-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 66ae1d60bb278793fd651cece264699d522bab84)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install powerpc cross compiling tool for clang build
-        # apt-get install binutils-powerpc-linux-gnu
-        # https://github.com/intel-lab-lkp/linux/commit/0e553b9abdcfd7c1f63b072e9d9280ce759c0c3c
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Christophe-Leroy/video-fbdev-offb-Include-missing-linux-platform_device-h/20220707-222906
-        git checkout 0e553b9abdcfd7c1f63b072e9d9280ce759c0c3c
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=powerpc SHELL=/bin/bash arch/powerpc/kernel/
+We noticed that error codes were not propagated from this hook and
+introduced a patch [1] to propagate those errors.
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+The discussion notes that security_prepare_creds()
+is not appropriate for MAC policies, and instead the hook is
+meant for LSM authors to prepare credentials for mutation. [2]
 
-All warnings (new ones prefixed by >>):
+Ultimately, we concluded that a better course of action is to introduce
+a new security hook for LSM authors. [3]
 
->> arch/powerpc/kernel/prom.c:891:5: warning: no previous prototype for function 'of_get_ibm_chip_id' [-Wmissing-prototypes]
-   int of_get_ibm_chip_id(struct device_node *np)
-       ^
-   arch/powerpc/kernel/prom.c:891:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   int of_get_ibm_chip_id(struct device_node *np)
-   ^
-   static 
-   1 warning generated.
+This patch set first introduces a new security_create_user_ns() function
+and create_user_ns LSM hook, then marks the hook as sleepable in BPF.
 
+Links:
+1. https://lore.kernel.org/all/20220608150942.776446-1-fred@cloudflare.com/
+2. https://lore.kernel.org/all/87y1xzyhub.fsf@email.froward.int.ebiederm.org/
+3. https://lore.kernel.org/all/9fe9cd9f-1ded-a179-8ded-5fde8960a586@cloudflare.com/
 
-vim +/of_get_ibm_chip_id +891 arch/powerpc/kernel/prom.c
+Changes since v1:
+- Add selftests/bpf: Add tests verifying bpf lsm create_user_ns hook patch
+- Add selinux: Implement create_user_ns hook patch
+- Change function signature of security_create_user_ns() to only take
+  struct cred
+- Move security_create_user_ns() call after id mapping check in
+  create_user_ns()
+- Update documentation to reflect changes
 
-b27652dd2174df1 Kevin Hao              2013-12-24  871  
-9b6b563c0d2d25e Paul Mackerras         2005-10-06  872  /*******
-9b6b563c0d2d25e Paul Mackerras         2005-10-06  873   *
-9b6b563c0d2d25e Paul Mackerras         2005-10-06  874   * New implementation of the OF "find" APIs, return a refcounted
-9b6b563c0d2d25e Paul Mackerras         2005-10-06  875   * object, call of_node_put() when done.  The device tree and list
-9b6b563c0d2d25e Paul Mackerras         2005-10-06  876   * are protected by a rw_lock.
-9b6b563c0d2d25e Paul Mackerras         2005-10-06  877   *
-9b6b563c0d2d25e Paul Mackerras         2005-10-06  878   * Note that property management will need some locking as well,
-9b6b563c0d2d25e Paul Mackerras         2005-10-06  879   * this isn't dealt with yet.
-9b6b563c0d2d25e Paul Mackerras         2005-10-06  880   *
-9b6b563c0d2d25e Paul Mackerras         2005-10-06  881   *******/
-9b6b563c0d2d25e Paul Mackerras         2005-10-06  882  
-b37193b71846858 Benjamin Herrenschmidt 2013-07-15  883  /**
-b37193b71846858 Benjamin Herrenschmidt 2013-07-15  884   * of_get_ibm_chip_id - Returns the IBM "chip-id" of a device
-b37193b71846858 Benjamin Herrenschmidt 2013-07-15  885   * @np: device node of the device
-b37193b71846858 Benjamin Herrenschmidt 2013-07-15  886   *
-b37193b71846858 Benjamin Herrenschmidt 2013-07-15  887   * This looks for a property "ibm,chip-id" in the node or any
-b37193b71846858 Benjamin Herrenschmidt 2013-07-15  888   * of its parents and returns its content, or -1 if it cannot
-b37193b71846858 Benjamin Herrenschmidt 2013-07-15  889   * be found.
-b37193b71846858 Benjamin Herrenschmidt 2013-07-15  890   */
-b37193b71846858 Benjamin Herrenschmidt 2013-07-15 @891  int of_get_ibm_chip_id(struct device_node *np)
-b37193b71846858 Benjamin Herrenschmidt 2013-07-15  892  {
-b37193b71846858 Benjamin Herrenschmidt 2013-07-15  893  	of_node_get(np);
-b37193b71846858 Benjamin Herrenschmidt 2013-07-15  894  	while (np) {
-1856f50c66dff0a Christophe Jaillet     2015-10-16  895  		u32 chip_id;
-b37193b71846858 Benjamin Herrenschmidt 2013-07-15  896  
-1856f50c66dff0a Christophe Jaillet     2015-10-16  897  		/*
-1856f50c66dff0a Christophe Jaillet     2015-10-16  898  		 * Skiboot may produce memory nodes that contain more than one
-1856f50c66dff0a Christophe Jaillet     2015-10-16  899  		 * cell in chip-id, we only read the first one here.
-1856f50c66dff0a Christophe Jaillet     2015-10-16  900  		 */
-1856f50c66dff0a Christophe Jaillet     2015-10-16  901  		if (!of_property_read_u32(np, "ibm,chip-id", &chip_id)) {
-b37193b71846858 Benjamin Herrenschmidt 2013-07-15  902  			of_node_put(np);
-1856f50c66dff0a Christophe Jaillet     2015-10-16  903  			return chip_id;
-b37193b71846858 Benjamin Herrenschmidt 2013-07-15  904  		}
-16c1d606263ea37 Michael Ellerman       2015-10-26  905  
-16c1d606263ea37 Michael Ellerman       2015-10-26  906  		np = of_get_next_parent(np);
-b37193b71846858 Benjamin Herrenschmidt 2013-07-15  907  	}
-b37193b71846858 Benjamin Herrenschmidt 2013-07-15  908  	return -1;
-b37193b71846858 Benjamin Herrenschmidt 2013-07-15  909  }
-b130e7c04f1130f Dan Streetman          2015-05-07  910  EXPORT_SYMBOL(of_get_ibm_chip_id);
-b37193b71846858 Benjamin Herrenschmidt 2013-07-15  911  
+Frederick Lawler (4):
+  security, lsm: Introduce security_create_user_ns()
+  bpf-lsm: Make bpf_lsm_create_user_ns() sleepable
+  selftests/bpf: Add tests verifying bpf lsm create_user_ns hook
+  selinux: Implement create_user_ns hook
+
+ include/linux/lsm_hook_defs.h                 |  1 +
+ include/linux/lsm_hooks.h                     |  4 +
+ include/linux/security.h                      |  6 ++
+ kernel/bpf/bpf_lsm.c                          |  1 +
+ kernel/user_namespace.c                       |  5 ++
+ security/security.c                           |  5 ++
+ security/selinux/hooks.c                      |  9 ++
+ security/selinux/include/classmap.h           |  2 +
+ .../selftests/bpf/prog_tests/deny_namespace.c | 88 +++++++++++++++++++
+ .../selftests/bpf/progs/test_deny_namespace.c | 39 ++++++++
+ 10 files changed, 160 insertions(+)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/deny_namespace.c
+ create mode 100644 tools/testing/selftests/bpf/progs/test_deny_namespace.c
 
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+2.30.2
+

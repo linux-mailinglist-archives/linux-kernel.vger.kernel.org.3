@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C6EC756AE17
+	by mail.lfdr.de (Postfix) with ESMTP id 366CB56AE15
 	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 00:05:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236716AbiGGWFC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Jul 2022 18:05:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37404 "EHLO
+        id S236216AbiGGWFI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Jul 2022 18:05:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37416 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236624AbiGGWFA (ORCPT
+        with ESMTP id S236684AbiGGWFC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Jul 2022 18:05:00 -0400
-Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A06F2CC8A
-        for <linux-kernel@vger.kernel.org>; Thu,  7 Jul 2022 15:04:59 -0700 (PDT)
-Received: by mail-wr1-x42b.google.com with SMTP id o4so28141686wrh.3
-        for <linux-kernel@vger.kernel.org>; Thu, 07 Jul 2022 15:04:59 -0700 (PDT)
+        Thu, 7 Jul 2022 18:05:02 -0400
+Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D7E72B1BA
+        for <linux-kernel@vger.kernel.org>; Thu,  7 Jul 2022 15:05:01 -0700 (PDT)
+Received: by mail-wm1-x336.google.com with SMTP id v67-20020a1cac46000000b003a1888b9d36so120789wme.0
+        for <linux-kernel@vger.kernel.org>; Thu, 07 Jul 2022 15:05:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=conchuod.ie; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=7E7EjtLMLS23T2bsvt4SNELdhBh6QzAyNMiy3mGJiIQ=;
-        b=IpDj5afJY9kCBQK/vOv90bAyHCUlUto7onzuO/nC3gDHXS58GwaZXLBMRi1NpV8ze2
-         7b17aX7eg5pNGdN+ljCBcQEc7Flzi0KrNPzi/DSS83gxm/xyJ6d8Y10aQ11y5TH8tSm7
-         qxtNVNxZoHIHsKaon5dlXSvMpW9bZI5FVCtqvHtnlP/HB2Wrg8hCLpJp20X1soauPaZK
-         P6wZGFi3ZwZviCg8NdSlenWNPuXDtvx6V91JHpVX/vU12PqONkh1XKjIVuPe/Qsc7Scw
-         3xn/BvmyMLVj2asQTVoDw2k2nLgR7SK989r2ZPBZIJK8ddDzmN3y0lb0xRMqXv3YSmq0
-         gvJw==
+        bh=B5wkC6bSg20bpLD4uQZm3lcPPl+j3uqj6NVt2WW5Mcg=;
+        b=JoYnHtdqAYiT+36KpL4vd68z4rhaJnSSsg1xfE6U/TWcp9nowym0LLc5feUvF6cUvt
+         FBUAoeUMgHU+d8gc/nAa9KYVpHAA6oc64AfaDNZLuPUl+oOt6hoTTzlVpA6g244CjRAC
+         0b7eCJwc2WiueTqO7ly4o/mFQwqCHi5xTKI0OY3HTbmapB9RyS7H0ypUMkLfcxwySOUe
+         H+bi7Sss1x8a7j145shtX+T2pXLMx4rZ8NewuiYN+dGyOs7RUfZXeqIbqn3mW9bBWIJK
+         HbNIlILXJ2QlL38ltMXCL5N/aO9naJdqKNA0TMzNgFvBYDziN+CR6FNoB0EVmWiS/LoY
+         hNjQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=7E7EjtLMLS23T2bsvt4SNELdhBh6QzAyNMiy3mGJiIQ=;
-        b=uhvBfQj37fo/4vWi1MiZCanRyofHijNNF/tIGoNVUcr8HxXg37QFYq5n5FnnXCKLLE
-         g1YynnqbSlhXb5iWaBtQXhzHO0Uer2TBxMjZ5R9EE1YgoAkGYDDP7v6NVH9cQX+6zIcN
-         9Kx3DQDJuF1tLHzZOF16u9U1EOav2ZYlGflL9iB5dUhoX+i+SdlghelmWmJvIKxnuR94
-         U9JqFSBc/pqB/zBFTMfnTr8G0i1NK+iPUGvQlI2qxXsjDZ4mCIwgZjCUjKZ9ZOSsZi2n
-         FVSaFVGG8Whgn8OerbiFKPQAwiUmAHbQ91LJ9dgzJVGSqSslCxg+8o2EA79RUcJGB0AZ
-         sOdQ==
-X-Gm-Message-State: AJIora+mMnogC0huarh5es2Nk4Vr2sON2feFGJwbEszy9KwkfyFKB3fE
-        DCgkKdSD1ikWcbOh7X+E8YchsA==
-X-Google-Smtp-Source: AGRyM1vvwbxzDYSubtFunJO4nqpmeLLb8LTkGF5ahzlCzgxU+DSPa3gNVAuFvhOqaznOY1rAHaAZfA==
-X-Received: by 2002:a5d:5c05:0:b0:21d:83b4:d339 with SMTP id cc5-20020a5d5c05000000b0021d83b4d339mr40615wrb.611.1657231497860;
-        Thu, 07 Jul 2022 15:04:57 -0700 (PDT)
+        bh=B5wkC6bSg20bpLD4uQZm3lcPPl+j3uqj6NVt2WW5Mcg=;
+        b=lBLXjx4UMjIccKH21/5vc0I7kzkIkmp4a1w/Qx0I+lVGxs7KPImXw7MWY7iLQ28luI
+         OwcT9dGFIkTupB8FgCoGIK2+/rrTgQI8nWIX7L50mor2GtaW7kZudsLTMOWV7y31O+S4
+         A8ksnWlst46aExS/BQCRIJZ4KJSbLzoGYNcYprQ2fWWP1HtzzmwtKus+QrKmRIoKRgGE
+         1mxzX5eLSRyIKqUYKnWK+HbjPxCc8szS0tyRT3BgEkg9j/75r8vpDtDpXGgRGldtH8cd
+         wfVKaOdHqLRmjgyVHB4RlqzdsOLrEl6xsjEM5rNLBocIbxRDdKZtLR3T0b6WMLvnb+Mp
+         gDPQ==
+X-Gm-Message-State: AJIora9hTbS4Hekvk2xEVxoA4ZqDBUrEwvpw2VJZ3YewAdf2IqBZPgum
+        /b6LVMIt69cRPVO3IL/B1dyQ5A==
+X-Google-Smtp-Source: AGRyM1tnnzsxvhPG5IKs+YBZgLkAEtXKFH5kbjSLNkMp91lah456WA9wRpXL5hKIPbb8QYLBQN/YLA==
+X-Received: by 2002:a05:600c:22d8:b0:3a0:4092:caff with SMTP id 24-20020a05600c22d800b003a04092caffmr7025020wmg.59.1657231499789;
+        Thu, 07 Jul 2022 15:04:59 -0700 (PDT)
 Received: from henark71.. ([51.37.234.167])
-        by smtp.gmail.com with ESMTPSA id bn24-20020a056000061800b0020fe35aec4bsm38625743wrb.70.2022.07.07.15.04.56
+        by smtp.gmail.com with ESMTPSA id bn24-20020a056000061800b0020fe35aec4bsm38625743wrb.70.2022.07.07.15.04.58
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 07 Jul 2022 15:04:57 -0700 (PDT)
+        Thu, 07 Jul 2022 15:04:59 -0700 (PDT)
 From:   Conor Dooley <mail@conchuod.ie>
 To:     Paul Walmsley <paul.walmsley@sifive.com>,
         Palmer Dabbelt <palmer@dabbelt.com>,
@@ -76,9 +76,9 @@ Cc:     Daire McNamara <daire.mcnamara@microchip.com>,
         linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org,
         Brice Goglin <Brice.Goglin@inria.fr>
-Subject: [RFC 1/4] riscv: arch-topology: fix default topology reporting
-Date:   Thu,  7 Jul 2022 23:04:34 +0100
-Message-Id: <20220707220436.4105443-2-mail@conchuod.ie>
+Subject: [RFC 2/4] arch-topology: add a default implementation of store_cpu_topology()
+Date:   Thu,  7 Jul 2022 23:04:35 +0100
+Message-Id: <20220707220436.4105443-3-mail@conchuod.ie>
 X-Mailer: git-send-email 2.37.0
 In-Reply-To: <20220707220436.4105443-1-mail@conchuod.ie>
 References: <20220707220436.4105443-1-mail@conchuod.ie>
@@ -96,135 +96,25 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Conor Dooley <conor.dooley@microchip.com>
 
-RISC-V has no sane defaults to fall back on where there is no cpu-map
-in the devicetree.
-Without sane defaults, the package, core and thread IDs are all set to
--1. This causes user-visible inaccuracies for tools like hwloc/lstopo
-which rely on the sysfs cpu topology files to detect a system's
-topology.
+RISC-V & arm64 both use an almost identical method of filling in
+default vales for arch topology. Create a weakly defined default
+implementation with the intent of migrating both archs to use it.
 
-Add sane defaults in ~the exact same way as ARM64.
-
-CC: stable@vger.kernel.org
-Fixes: 03f11f03dbfe ("RISC-V: Parse cpu topology during boot.")
-Reported-by: Brice Goglin <Brice.Goglin@inria.fr>
-Link: https://github.com/open-mpi/hwloc/issues/536
 Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
 ---
-Sudeep suggested that this be backported rather than the changes to
-the devicetrees adding cpu-map since that property is optional.
-That patchset is still valid in it's own right.
+ drivers/base/arch_topology.c  | 19 +++++++++++++++++++
+ include/linux/arch_topology.h |  1 +
+ 2 files changed, 20 insertions(+)
 
-Changes since v1:
-- removed the GENERIC_ARCH_TOPOLOGY dependancy on SMP
-- removed a duplicate call to update_siblings_masks()
----
- arch/riscv/Kconfig                |  2 +-
- arch/riscv/include/asm/topology.h | 13 +++++++++++++
- arch/riscv/kernel/Makefile        |  1 +
- arch/riscv/kernel/smpboot.c       |  5 ++++-
- arch/riscv/kernel/topology.c      | 32 +++++++++++++++++++++++++++++++
- 5 files changed, 51 insertions(+), 2 deletions(-)
- create mode 100644 arch/riscv/include/asm/topology.h
- create mode 100644 arch/riscv/kernel/topology.c
-
-diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
-index 2af0701b7518..4b6c2fdbb57c 100644
---- a/arch/riscv/Kconfig
-+++ b/arch/riscv/Kconfig
-@@ -52,7 +52,7 @@ config RISCV
- 	select COMMON_CLK
- 	select CPU_PM if CPU_IDLE
- 	select EDAC_SUPPORT
--	select GENERIC_ARCH_TOPOLOGY if SMP
-+	select GENERIC_ARCH_TOPOLOGY
- 	select GENERIC_ATOMIC64 if !64BIT
- 	select GENERIC_CLOCKEVENTS_BROADCAST if SMP
- 	select GENERIC_EARLY_IOREMAP
-diff --git a/arch/riscv/include/asm/topology.h b/arch/riscv/include/asm/topology.h
-new file mode 100644
-index 000000000000..36bc6ecda898
---- /dev/null
-+++ b/arch/riscv/include/asm/topology.h
-@@ -0,0 +1,13 @@
-+/* SPDX-License-Identifier: GPL-2.0-only */
-+/*
-+ * Copyright (c) 2022 Microchip Technology Inc. and its subsidiaries
-+ */
-+
-+#ifndef _ASM_RISCV_TOPOLOGY_H
-+#define _ASM_RISCV_TOPOLOGY_H
-+
-+#include <asm-generic/topology.h>
-+
-+void store_cpu_topology(unsigned int cpuid);
-+
-+#endif /* _ASM_RISCV_TOPOLOGY_H */
-diff --git a/arch/riscv/kernel/Makefile b/arch/riscv/kernel/Makefile
-index c71d6591d539..9518882ba6f9 100644
---- a/arch/riscv/kernel/Makefile
-+++ b/arch/riscv/kernel/Makefile
-@@ -50,6 +50,7 @@ obj-y	+= riscv_ksyms.o
- obj-y	+= stacktrace.o
- obj-y	+= cacheinfo.o
- obj-y	+= patch.o
-+obj-y	+= topology.o
- obj-y	+= probes/
- obj-$(CONFIG_MMU) += vdso.o vdso/
- 
-diff --git a/arch/riscv/kernel/smpboot.c b/arch/riscv/kernel/smpboot.c
-index f1e4948a4b52..a8239b4b61f3 100644
---- a/arch/riscv/kernel/smpboot.c
-+++ b/arch/riscv/kernel/smpboot.c
-@@ -32,6 +32,7 @@
- #include <asm/sections.h>
- #include <asm/sbi.h>
- #include <asm/smp.h>
-+#include <asm/topology.h>
- 
- #include "head.h"
- 
-@@ -40,6 +41,8 @@ static DECLARE_COMPLETION(cpu_running);
- void __init smp_prepare_boot_cpu(void)
- {
- 	init_cpu_topology();
-+
-+	store_cpu_topology(smp_processor_id());
+diff --git a/drivers/base/arch_topology.c b/drivers/base/arch_topology.c
+index 441e14ac33a4..07e84c6ac5c2 100644
+--- a/drivers/base/arch_topology.c
++++ b/drivers/base/arch_topology.c
+@@ -765,6 +765,25 @@ void update_siblings_masks(unsigned int cpuid)
+ 	}
  }
  
- void __init smp_prepare_cpus(unsigned int max_cpus)
-@@ -161,9 +164,9 @@ asmlinkage __visible void smp_callin(void)
- 	mmgrab(mm);
- 	current->active_mm = mm;
- 
-+	store_cpu_topology(curr_cpuid);
- 	notify_cpu_starting(curr_cpuid);
- 	numa_add_cpu(curr_cpuid);
--	update_siblings_masks(curr_cpuid);
- 	set_cpu_online(curr_cpuid, 1);
- 
- 	/*
-diff --git a/arch/riscv/kernel/topology.c b/arch/riscv/kernel/topology.c
-new file mode 100644
-index 000000000000..db72862bd5b5
---- /dev/null
-+++ b/arch/riscv/kernel/topology.c
-@@ -0,0 +1,32 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+/*
-+ * Copyright (c) 2022 Microchip Technology Inc. and its subsidiaries
-+ *
-+ * Based on the arm64 version, which was in turn based on arm32, which was
-+ * ultimately based on sh's.
-+ * The arm64 version was listed as:
-+ * Copyright (C) 2011,2013,2014 Linaro Limited.
-+ */
-+
-+#include <linux/arch_topology.h>
-+#include <linux/topology.h>
-+#include <asm/topology.h>
-+
-+void store_cpu_topology(unsigned int cpuid)
++void __weak store_cpu_topology(unsigned int cpuid)
 +{
 +	struct cpu_topology *cpuid_topo = &cpu_topology[cpuid];
 +
@@ -242,6 +132,22 @@ index 000000000000..db72862bd5b5
 +topology_populated:
 +	update_siblings_masks(cpuid);
 +}
++
+ static void clear_cpu_topology(int cpu)
+ {
+ 	struct cpu_topology *cpu_topo = &cpu_topology[cpu];
+diff --git a/include/linux/arch_topology.h b/include/linux/arch_topology.h
+index a07b510e7dc5..fee306b8a541 100644
+--- a/include/linux/arch_topology.h
++++ b/include/linux/arch_topology.h
+@@ -92,6 +92,7 @@ void update_siblings_masks(unsigned int cpu);
+ void remove_cpu_topology(unsigned int cpuid);
+ void reset_cpu_topology(void);
+ int parse_acpi_topology(void);
++
+ #endif
+ 
+ #endif /* _LINUX_ARCH_TOPOLOGY_H_ */
 -- 
 2.37.0
 

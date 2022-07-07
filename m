@@ -2,73 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EE3B956A8B7
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 18:56:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7781E56A8BD
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 18:58:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235809AbiGGQ4H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Jul 2022 12:56:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35220 "EHLO
+        id S236028AbiGGQ6G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Jul 2022 12:58:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36466 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235638AbiGGQ4F (ORCPT
+        with ESMTP id S235240AbiGGQ6D (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Jul 2022 12:56:05 -0400
-Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 021691D335
-        for <linux-kernel@vger.kernel.org>; Thu,  7 Jul 2022 09:56:04 -0700 (PDT)
-Received: by mail-pf1-x434.google.com with SMTP id l124so10191274pfl.8
-        for <linux-kernel@vger.kernel.org>; Thu, 07 Jul 2022 09:56:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=1BT1AT3k3iZmUZypE3uU5mjcufGCXhMCCf//Wo7EMV0=;
-        b=C6bwjOBD52gxx6jkELTtK27C7o3ITQe946fB8fjzS8ygN3RVGrh0hDzKQd/5woWYsE
-         qTvSUaTh9ZDRbZ8bNYVIoU4dSWpJ/04NsVHJL5wpZ0rxdLRmhPJPgNjwhxl9txmyAGYn
-         hlLvBlzMhojacIdcbt4Ta5XayLq48MWFeC2/5yJRj7iI2h0PVujwu3jSqJ6kSD4dC9dR
-         PrO/ST/nzyMl4a8jz5CLtFH2nhCk8yfdKFY/r3deEVhmp2ZoiSObgF9jQk4FYx/i5yoh
-         +KWj4h2jQ1BYsYJ1j8jVx7Lp5/r+BfI3pSPvbPp4OSntUuYFCHqoHoEIDsL8JJYOyaKM
-         Qyuw==
+        Thu, 7 Jul 2022 12:58:03 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 301D32CCA1
+        for <linux-kernel@vger.kernel.org>; Thu,  7 Jul 2022 09:58:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1657213082;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=b5Se+ncO6ecEP2j0IGRLm2ErCWYimTOfWI6Y6AOlL5w=;
+        b=BJjWMyxeHuNY3aC4ZsF3I+JDEPBD61eKOkxk+UOOSFNQBvprkYm7mSgJzo2atg3X25xjD4
+        GJGX5uXL3/lqkjYHoV7u9khB+aiVDSeg59DZQi3pN9dosrqs3UkxNDMadBUlqwxL3OWHUt
+        ZvVXqeY6MxTSxQgLJdscOSSalGazTHg=
+Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
+ [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-163-uCXKLXZ6PC66DQ59OqAq9w-1; Thu, 07 Jul 2022 12:57:53 -0400
+X-MC-Unique: uCXKLXZ6PC66DQ59OqAq9w-1
+Received: by mail-wm1-f69.google.com with SMTP id h186-20020a1c21c3000000b003a2cf5b5aabso1003844wmh.8
+        for <linux-kernel@vger.kernel.org>; Thu, 07 Jul 2022 09:57:53 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=1BT1AT3k3iZmUZypE3uU5mjcufGCXhMCCf//Wo7EMV0=;
-        b=T1bHupCQAWa1hT5CPxNwVvEz7F+3vmfN2k0R1E+p+xoqaUkLWG1h4ZBy/MPDbgtGY/
-         /Ui6qW/e/FrlnFyOy5I3NN1Sev0UHFh7kegj16BFin/IbkotE+kKx9VfTgWfG+gpNfyN
-         1dKBBxbyTgi4PGJqnVLi7+BcOK17sobT+WmAYjIjckOtdFAPu6oVXyE1EGHjl5QAKQrX
-         1wHHCAbZ3ehn8QesqCHiF7i3rw+7C/2+mRaO8Wx9QtMgbIqXNipw3RGEP6jkUpXERmbL
-         4Kefjph5TAPlRrdVl6iYqU2M0lAF090TiV7VTDl/B/ppLrWaFlRPqLlFKAczp3MQ6YlN
-         QSFQ==
-X-Gm-Message-State: AJIora9Br9ut2GzSVmqT7bAD8irPov762wjLV75Ep2IkqkAiPUo0gWbH
-        40cvtMVcaZCLnbJ3ngsVyW94
-X-Google-Smtp-Source: AGRyM1tWAmuv/zDzk386/V8vG5C1HmB4rlyeJWlBag0dj/uxPpxeuWGA2XXBKCFE4zTbAzH6I61Swg==
-X-Received: by 2002:a63:d54c:0:b0:412:562e:6964 with SMTP id v12-20020a63d54c000000b00412562e6964mr16815009pgi.528.1657212963414;
-        Thu, 07 Jul 2022 09:56:03 -0700 (PDT)
-Received: from thinkpad ([117.207.26.37])
-        by smtp.gmail.com with ESMTPSA id b123-20020a621b81000000b00528c22fbb45sm2927241pfb.141.2022.07.07.09.55.58
+         :mime-version:content-disposition:in-reply-to;
+        bh=b5Se+ncO6ecEP2j0IGRLm2ErCWYimTOfWI6Y6AOlL5w=;
+        b=yKG2u73SwnLBW9jVS2ru0IwTtXOl2M/oVTy/T7meq8zje+56X5E2WrzkTN6ZpLcn1p
+         Q+uZwFUF2PkN4J6wkyChDIikuLPtNTAe4O17YEY/vncOZC5q/lpFlpufVOjzIeEaDTE1
+         Hx8E1Nk/eBVmDL7ubNkgiyty7B6eqKnJcMSpIFi25q+tKlPKVoWQpezvAxm+jteuECvp
+         5Ftla48p+Av1eVSvVLMbvFdTy/s7hcdOFLiOYV9XUlzcH3/jEXFxCabKImAVor9PsYrq
+         HLQO0gUC/IbKULzKjMoI0I1Kso40dAkV7olg0Kq8JqNwV69bgcPcOG0+QEhLElMQxCVn
+         JE7A==
+X-Gm-Message-State: AJIora+OkDtNGQ7vEnPL1CjzpyDtDmhzNo6GB7fDL3Gf0c5TVIynnLnZ
+        wAfWw3X0T3W95iRoPbDVWnmZK1ACLuEnl9R+NhnaX+EKs4zR4kmrc1wK7VG4w9Ek6Bteb6/W1IG
+        UuldoDJ2+QpOrCK0jpJkJU4s=
+X-Received: by 2002:adf:f304:0:b0:21d:7656:83e5 with SMTP id i4-20020adff304000000b0021d765683e5mr14230060wro.407.1657213072537;
+        Thu, 07 Jul 2022 09:57:52 -0700 (PDT)
+X-Google-Smtp-Source: AGRyM1sigDFIJcjtmUc1O7k0RVKhIrrr7aDHeemIxnkS8BpfHtXpLin1X8wgxmCtbkdtLWp+U6eoIg==
+X-Received: by 2002:adf:f304:0:b0:21d:7656:83e5 with SMTP id i4-20020adff304000000b0021d765683e5mr14230040wro.407.1657213072309;
+        Thu, 07 Jul 2022 09:57:52 -0700 (PDT)
+Received: from localhost (cpc111743-lutn13-2-0-cust979.9-3.cable.virginm.net. [82.17.115.212])
+        by smtp.gmail.com with ESMTPSA id x2-20020adfdd82000000b0021d62e30a62sm14742505wrl.50.2022.07.07.09.57.51
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 07 Jul 2022 09:56:03 -0700 (PDT)
-Date:   Thu, 7 Jul 2022 22:25:56 +0530
-From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-To:     Vidya Sagar <vidyas@nvidia.com>
-Cc:     jingoohan1@gmail.com, gustavo.pimentel@synopsys.com,
-        lpieralisi@kernel.org, robh@kernel.org, kw@linux.com,
-        bhelgaas@google.com, linux-pci@vger.kernel.org,
-        linux-kernel@vger.kernel.org, kthota@nvidia.com,
-        mmaddireddy@nvidia.com, sagar.tv@gmail.com
-Subject: Re: [PATCH V1] PCI: designware-ep: Fix DBI access before core init
-Message-ID: <20220707165556.GA5458@thinkpad>
-References: <20220622040133.31058-1-vidyas@nvidia.com>
- <5c36260c-6bb6-7eb5-be82-c60cd927c02d@nvidia.com>
+        Thu, 07 Jul 2022 09:57:51 -0700 (PDT)
+Date:   Thu, 7 Jul 2022 17:57:50 +0100
+From:   Aaron Tomlin <atomlin@redhat.com>
+To:     Luis Chamberlain <mcgrof@kernel.org>
+Cc:     rostedt@goodmis.org, cl@linux.com, pmladek@suse.com,
+        mbenes@suse.cz, christophe.leroy@csgroup.eu,
+        akpm@linux-foundation.org, linux-kernel@vger.kernel.org,
+        linux-modules@vger.kernel.org, atomlin@atomlin.com,
+        ghalat@redhat.com, oleksandr@natalenko.name, neelx@redhat.com,
+        daniel.thompson@linaro.org, hch@infradead.org, tglx@linutronix.de,
+        linux-rt-users@vger.kernel.org
+Subject: Re: [PATCH v2] module: kallsyms: Ensure preemption in add_kallsyms()
+ with PREEMPT_RT
+Message-ID: <20220707165750.tk4fadpv3d4zr2mb@ava.usersys.com>
+X-PGP-Key: http://pgp.mit.edu/pks/lookup?search=atomlin%40redhat.com
+X-PGP-Fingerprint: 7906 84EB FA8A 9638 8D1E  6E9B E2DE 9658 19CC 77D6
+References: <20220704161753.4033684-1-atomlin@redhat.com>
+ <YsXNVSAtO+VDggcI@bombadil.infradead.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <5c36260c-6bb6-7eb5-be82-c60cd927c02d@nvidia.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+In-Reply-To: <YsXNVSAtO+VDggcI@bombadil.infradead.org>
+X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,181 +85,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On Wed 2022-07-06 10:58 -0700, Luis Chamberlain wrote:
+> Hey Aaron, thanks again!
 
-On Thu, Jul 07, 2022 at 02:39:08PM +0530, Vidya Sagar wrote:
-> Hi,
-> Anyone has review comments for this change?
-> Without this change, Tegra194's endpoint mode is effectively broken.
+Hi Luis,
+
+No problem :)
+
+> On Mon, Jul 04, 2022 at 05:17:53PM +0100, Aaron Tomlin wrote:
+> > To disable preemption in the context of add_kallsyms() is incorrect.
 > 
+> Why, what broke? Did this used to work? Was the commit in question a
+> regression then? Clarifying all this will help a lot.
 
-I submitted a patch that fixes this issue in March and I did CC you on that.
-https://lore.kernel.org/lkml/20220330060515.22328-1-manivannan.sadhasivam@linaro.org/
+Sorry for the confusion! If I understand correctly, nothing broke
+intrinsically.
 
-That patch incorporated comments from Kishon on the previous patch from
-Kunihiko Hayashi. But there was no response afterwards.
+Rather with commit 08126db5ff73 ("module: kallsyms: Fix suspicious rcu
+usage") under PREEMPT_RT=y, by disabling preemption, I introduced an
+unbounded latency since the loop is not fixed which is generally frowned
+upon. So, I would say this was a regression since earlier preemption was
+not disabled and we would dereference RCU-protected pointers explicitly
+i.e. without using the more appropriate rcu_dereference() family
+of primitives. That being said, these pointers cannot change in this
+context as explained previously.
 
-Thanks,
-Mani
+Would the above be suitable - just to confirm before I send another
+iteration?
 
-> Thanks & Regards,
-> Vidya Sagar
-> 
-> On 6/22/2022 9:31 AM, Vidya Sagar wrote:
-> > Platforms that cannot support their core initialization without the
-> > reference clock from the host, implement the feature 'core_init_notifier'
-> > to indicate the DesignWare sub-system about when their core is getting
-> > initialized. Any accesses to the core (Ex:- DBI) would result in system
-> > hang in such systems (Ex:- tegra194). This patch moves any access to the
-> > core to dw_pcie_ep_init_complete() API which is effectively called only
-> > after the core initialization.
-> > 
-> > Signed-off-by: Vidya Sagar <vidyas@nvidia.com>
-> > ---
-> >   .../pci/controller/dwc/pcie-designware-ep.c   | 88 +++++++++++--------
-> >   1 file changed, 49 insertions(+), 39 deletions(-)
-> > 
-> > diff --git a/drivers/pci/controller/dwc/pcie-designware-ep.c b/drivers/pci/controller/dwc/pcie-designware-ep.c
-> > index 0eda8236c125..9feec720175f 100644
-> > --- a/drivers/pci/controller/dwc/pcie-designware-ep.c
-> > +++ b/drivers/pci/controller/dwc/pcie-designware-ep.c
-> > @@ -639,9 +639,14 @@ static unsigned int dw_pcie_ep_find_ext_capability(struct dw_pcie *pci, int cap)
-> >   int dw_pcie_ep_init_complete(struct dw_pcie_ep *ep)
-> >   {
-> >   	struct dw_pcie *pci = to_dw_pcie_from_ep(ep);
-> > +	struct dw_pcie_ep_func *ep_func;
-> > +	struct device *dev = pci->dev;
-> > +	struct pci_epc *epc = ep->epc;
-> >   	unsigned int offset;
-> >   	unsigned int nbars;
-> >   	u8 hdr_type;
-> > +	u8 func_no;
-> > +	void *addr;
-> >   	u32 reg;
-> >   	int i;
-> > @@ -654,6 +659,42 @@ int dw_pcie_ep_init_complete(struct dw_pcie_ep *ep)
-> >   		return -EIO;
-> >   	}
-> > +	dw_pcie_iatu_detect(pci);
-> > +
-> > +	ep->ib_window_map = devm_kcalloc(dev,
-> > +					 BITS_TO_LONGS(pci->num_ib_windows),
-> > +					 sizeof(long),
-> > +					 GFP_KERNEL);
-> > +	if (!ep->ib_window_map)
-> > +		return -ENOMEM;
-> > +
-> > +	ep->ob_window_map = devm_kcalloc(dev,
-> > +					 BITS_TO_LONGS(pci->num_ob_windows),
-> > +					 sizeof(long),
-> > +					 GFP_KERNEL);
-> > +	if (!ep->ob_window_map)
-> > +		return -ENOMEM;
-> > +
-> > +	addr = devm_kcalloc(dev, pci->num_ob_windows, sizeof(phys_addr_t),
-> > +			    GFP_KERNEL);
-> > +	if (!addr)
-> > +		return -ENOMEM;
-> > +	ep->outbound_addr = addr;
-> > +
-> > +	for (func_no = 0; func_no < epc->max_functions; func_no++) {
-> > +		ep_func = devm_kzalloc(dev, sizeof(*ep_func), GFP_KERNEL);
-> > +		if (!ep_func)
-> > +			return -ENOMEM;
-> > +
-> > +		ep_func->func_no = func_no;
-> > +		ep_func->msi_cap = dw_pcie_ep_find_capability(ep, func_no,
-> > +							      PCI_CAP_ID_MSI);
-> > +		ep_func->msix_cap = dw_pcie_ep_find_capability(ep, func_no,
-> > +							       PCI_CAP_ID_MSIX);
-> > +
-> > +		list_add_tail(&ep_func->list, &ep->func_list);
-> > +	}
-> > +
-> >   	offset = dw_pcie_ep_find_ext_capability(pci, PCI_EXT_CAP_ID_REBAR);
-> >   	dw_pcie_dbi_ro_wr_en(pci);
-> > @@ -677,8 +718,6 @@ EXPORT_SYMBOL_GPL(dw_pcie_ep_init_complete);
-> >   int dw_pcie_ep_init(struct dw_pcie_ep *ep)
-> >   {
-> >   	int ret;
-> > -	void *addr;
-> > -	u8 func_no;
-> >   	struct resource *res;
-> >   	struct pci_epc *epc;
-> >   	struct dw_pcie *pci = to_dw_pcie_from_ep(ep);
-> > @@ -686,7 +725,6 @@ int dw_pcie_ep_init(struct dw_pcie_ep *ep)
-> >   	struct platform_device *pdev = to_platform_device(dev);
-> >   	struct device_node *np = dev->of_node;
-> >   	const struct pci_epc_features *epc_features;
-> > -	struct dw_pcie_ep_func *ep_func;
-> >   	INIT_LIST_HEAD(&ep->func_list);
-> > @@ -708,8 +746,6 @@ int dw_pcie_ep_init(struct dw_pcie_ep *ep)
-> >   		}
-> >   	}
-> > -	dw_pcie_iatu_detect(pci);
-> > -
-> >   	res = platform_get_resource_byname(pdev, IORESOURCE_MEM, "addr_space");
-> >   	if (!res)
-> >   		return -EINVAL;
-> > @@ -717,26 +753,6 @@ int dw_pcie_ep_init(struct dw_pcie_ep *ep)
-> >   	ep->phys_base = res->start;
-> >   	ep->addr_size = resource_size(res);
-> > -	ep->ib_window_map = devm_kcalloc(dev,
-> > -					 BITS_TO_LONGS(pci->num_ib_windows),
-> > -					 sizeof(long),
-> > -					 GFP_KERNEL);
-> > -	if (!ep->ib_window_map)
-> > -		return -ENOMEM;
-> > -
-> > -	ep->ob_window_map = devm_kcalloc(dev,
-> > -					 BITS_TO_LONGS(pci->num_ob_windows),
-> > -					 sizeof(long),
-> > -					 GFP_KERNEL);
-> > -	if (!ep->ob_window_map)
-> > -		return -ENOMEM;
-> > -
-> > -	addr = devm_kcalloc(dev, pci->num_ob_windows, sizeof(phys_addr_t),
-> > -			    GFP_KERNEL);
-> > -	if (!addr)
-> > -		return -ENOMEM;
-> > -	ep->outbound_addr = addr;
-> > -
-> >   	if (pci->link_gen < 1)
-> >   		pci->link_gen = of_pci_get_max_link_speed(np);
-> > @@ -753,20 +769,6 @@ int dw_pcie_ep_init(struct dw_pcie_ep *ep)
-> >   	if (ret < 0)
-> >   		epc->max_functions = 1;
-> > -	for (func_no = 0; func_no < epc->max_functions; func_no++) {
-> > -		ep_func = devm_kzalloc(dev, sizeof(*ep_func), GFP_KERNEL);
-> > -		if (!ep_func)
-> > -			return -ENOMEM;
-> > -
-> > -		ep_func->func_no = func_no;
-> > -		ep_func->msi_cap = dw_pcie_ep_find_capability(ep, func_no,
-> > -							      PCI_CAP_ID_MSI);
-> > -		ep_func->msix_cap = dw_pcie_ep_find_capability(ep, func_no,
-> > -							       PCI_CAP_ID_MSIX);
-> > -
-> > -		list_add_tail(&ep_func->list, &ep->func_list);
-> > -	}
-> > -
-> >   	if (ep->ops->ep_init)
-> >   		ep->ops->ep_init(ep);
-> > @@ -790,6 +792,14 @@ int dw_pcie_ep_init(struct dw_pcie_ep *ep)
-> >   			return 0;
-> >   	}
-> > +	/*
-> > +	 * NOTE:- Avoid accessing the hardware (Ex:- DBI space) before this
-> > +	 * step as platforms that implement 'core_init_notifier' feature may
-> > +	 * not have the hardware ready (i.e. core initialized) for access
-> > +	 * (Ex: tegra194). Any hardware access on such platforms result
-> > +	 * in system hard hang.
-> > +	 */
-> > +
-> >   	return dw_pcie_ep_init_complete(ep);
-> >   }
-> >   EXPORT_SYMBOL_GPL(dw_pcie_ep_init);
-> > 
+
+Kind regards,
 
 -- 
-மணிவண்ணன் சதாசிவம்
+Aaron Tomlin
+

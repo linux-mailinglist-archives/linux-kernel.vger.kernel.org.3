@@ -2,60 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E97556AC0B
+	by mail.lfdr.de (Postfix) with ESMTP id B7CCC56AC0C
 	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 21:46:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236422AbiGGTqm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Jul 2022 15:46:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57064 "EHLO
+        id S236459AbiGGTqq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Jul 2022 15:46:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57076 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235994AbiGGTql (ORCPT
+        with ESMTP id S236409AbiGGTqm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Jul 2022 15:46:41 -0400
-Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B3122BB18;
-        Thu,  7 Jul 2022 12:46:40 -0700 (PDT)
-Received: by mail-ej1-x62f.google.com with SMTP id sb34so34152898ejc.11;
-        Thu, 07 Jul 2022 12:46:40 -0700 (PDT)
+        Thu, 7 Jul 2022 15:46:42 -0400
+Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B6092BB18;
+        Thu,  7 Jul 2022 12:46:42 -0700 (PDT)
+Received: by mail-ej1-x62c.google.com with SMTP id u12so34175562eja.8;
+        Thu, 07 Jul 2022 12:46:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=f4kRqvDXJLS7GmZtsXFWRLLZtfHq29P8onQ8FdHB/nc=;
-        b=obemIAbufVUX0Je/5XsBCs2IbAeoJaqeC0Ye2dg4etoDg4Gx4IJ/GuGRTSEo0/+t1c
-         MaVLtDhbQo8kX6EnbsrEOZqQOG0JJJhb82CgRsw5P28sFAsJ6qQdGiKgWqFrlktmgaEY
-         6ILuKXzCrONa5M3aGa81w6a8nRBozHzdBFkh0DYQI0EpXYx2v4rCiksmNal2s+TSwp/5
-         itz3hUzy8TzLA0SvjzSJSJwqWijO9DjiOpsAxfAq5c0gzU654gzCgKmJgABigIPSejcN
-         dMUdPaTvEH5kifwV3HjSYduzHjtCYicNobHEaR1N+m3xkfFXO4Ptiztez8AUgbgZmmaT
-         h9Bw==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=UB7bWLpN76PQbdxMQ5VYzrQ3FPvdWLLOGLWs9LTQXic=;
+        b=IcqaBb2YZi0XPrxjT0Sw3FEEa7o2NltgcsxgfJOa6eovx2O0PvWc1ZX3/qRUViniQ2
+         6UUqPzsjHacGXQ7IqSY9/Q4UoOEPxTjSyvqlwFfMmIUAsUfuUpaZFnqIuy/2E7+nPBEC
+         7tD33Cpqx7bBSosH5S8/2tmKU2xJZed9UMhaQesXyi6xus+1VgjWwyj2Kky3o4eHOGWJ
+         XXkTmNxHoboITxJ5b0kmnPGMsvkrO9VynKU8i+UYPnZ9qXbx9ikGzkbu7BxWghaIezjT
+         6q137WQVjfxbO/GevLujXIPtjveFeYlhi9N1jU17jH9UY9+yrvLJZGRAbbS7heCLktv0
+         YkVQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=f4kRqvDXJLS7GmZtsXFWRLLZtfHq29P8onQ8FdHB/nc=;
-        b=QMYvC+FHtjd6yDho05NQ8O6OViXN010E0Q6iZad60Y/BYl4ADCXwo4dAl+PJHgrSCe
-         pdf5h88oHz+tkXZGbZBlfXo3HvVTMyHZnS8zCFzeUMAmEB8cQyI6X4VmXwOg6GLVW4N1
-         2WCndVShl5hHLdDfJ7HMur2xwIdWOJSeeJVN35VBfgbwdAdiGSec7hyrjqb0otVJo6fr
-         5woV4JNMGcxJOoK/+akrNab6pQT28mBFz/GsTX+tcrXIDoXgrmbtfi9CJCt/9SqHNLSE
-         LpaxKH76WOqnenK9kgGQvntb7HPjBWCaRaB4qagcZRtWtc0t0T3dQ2XeDj2NfGo8r1TV
-         /VBA==
-X-Gm-Message-State: AJIora/mmLrVara23BtzxMu9LCyWA/dOu+c1Ga0cDhGquMH3AhXszhlW
-        OnPtmMwf6sRpnD7wWLEloiA=
-X-Google-Smtp-Source: AGRyM1tYDIOipNBlPWqFzK1Y0g8kMPF5iQqDRhDwSVrvLwVWbXfp5Rd4m5iNHpkpQS9eh2EXVw6t/A==
-X-Received: by 2002:a17:907:2ce8:b0:72a:6315:9412 with SMTP id hz8-20020a1709072ce800b0072a63159412mr39942235ejc.47.1657223198907;
-        Thu, 07 Jul 2022 12:46:38 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=UB7bWLpN76PQbdxMQ5VYzrQ3FPvdWLLOGLWs9LTQXic=;
+        b=N6I1TGK1Sjy7aT3rYCIAYZXnotaQqLy8XL7mmK48HdZrGxFiPd3n2Phd0+esauklsR
+         iE9YDVwcRtezxNmR57ROPLQXiG4rvkVCEAtDhnyLsdglSKf7kMDCVcnkgo1mERrbR4q6
+         VgdD32vYoY9cRTqfLSnFMTGNXB+UDVat8RuRoFo+9wKLCTnLk+no4mDs9ZuEfV0SdZsm
+         Osg0iEMwNaXfDzGH1gYduiP1vjPPj+j0RkIDFQsP4pF2tZqc8r+tNhlVx8sl+e50nyKh
+         ST/DghjV8JiZn+O5FmKtocBqI55Sz/fr0zBYjUjT5hBR3vKtZj7HjRi8urisyp6wjk20
+         dDiQ==
+X-Gm-Message-State: AJIora84ZffQjMcZv5EK1TS+5Y7XwnCW/AE2Ph++9sOEVAjxQc65boOS
+        NAUk+Iycag5OC82y26qFagA=
+X-Google-Smtp-Source: AGRyM1utMV2zsP5LBNoFrrsq2l4p2TqWZmG7Ipnb3c+GXRect6ryZDKwCot5L1ih/dFNuD8HUw1NPg==
+X-Received: by 2002:a17:907:7ba8:b0:72b:1491:c73c with SMTP id ne40-20020a1709077ba800b0072b1491c73cmr3123832ejc.415.1657223200530;
+        Thu, 07 Jul 2022 12:46:40 -0700 (PDT)
 Received: from localhost (92.40.202.166.threembb.co.uk. [92.40.202.166])
-        by smtp.gmail.com with ESMTPSA id lb23-20020a170907785700b0072af0b036f3sm3656613ejc.41.2022.07.07.12.46.37
+        by smtp.gmail.com with ESMTPSA id a4-20020a170906274400b00726b03f83a0sm15029570ejd.33.2022.07.07.12.46.39
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 07 Jul 2022 12:46:38 -0700 (PDT)
+        Thu, 07 Jul 2022 12:46:40 -0700 (PDT)
 From:   Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
 To:     paul@crapouillou.net, lgirdwood@gmail.com, broonie@kernel.org,
         perex@perex.cz, tiwai@suse.com
 Cc:     linux-mips@vger.kernel.org, alsa-devel@alsa-project.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH v2 0/11] ASoC: cleanups and improvements for jz4740-i2s
-Date:   Thu,  7 Jul 2022 20:46:44 +0100
-Message-Id: <20220707194655.312892-1-aidanmacdonald.0x0@gmail.com>
+Subject: [PATCH v2 01/11] ASoC: jz4740-i2s: Remove unused 'mem' resource
+Date:   Thu,  7 Jul 2022 20:46:45 +0100
+Message-Id: <20220707194655.312892-2-aidanmacdonald.0x0@gmail.com>
+In-Reply-To: <20220707194655.312892-1-aidanmacdonald.0x0@gmail.com>
+References: <20220707194655.312892-1-aidanmacdonald.0x0@gmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -68,42 +70,25 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This series is a preparatory cleanup of the jz4740-i2s driver before
-adding support for a new SoC. The last two patches lift unnecessary
-restrictions on sample rates and formats -- the existing ones appear
-to be derived from the limitations of the JZ4740's internal codec and
-don't reflect the actual capabilities of the I2S controller.
+This isn't used and doesn't need to be in the private data struct.
 
-I'm unable to test the series on any JZ47xx SoCs, but I have tested
-on an X1000 (which is the SoC I'll be adding in a followup series).
+Signed-off-by: Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
+---
+ sound/soc/jz4740/jz4740-i2s.c | 1 -
+ 1 file changed, 1 deletion(-)
 
-Changes in v2:
-
-* Drop two patches already in sound for-next.
-* Squash two removal patches into the regmap fields patch.
-* Remove the unused 'mem' resource in the driver private struct.
-* Use regmap_set_bits() and regmap_clear_bits() to improve readability.
-* Add fix for SoCs with independent FIFO flush bits (ie. most of them).
-* Update sample formats patch with a more informative commit message.
-* Add two new patches to refactor DAI/component probing.
-
-Aidan MacDonald (11):
-  ASoC: jz4740-i2s: Remove unused 'mem' resource
-  ASoC: jz4740-i2s: Convert to regmap API
-  ASoC: jz4740-i2s: Simplify using regmap fields
-  ASoC: jz4740-i2s: Handle independent FIFO flush bits
-  ASoC: jz4740-i2s: Use FIELD_PREP() macros in hw_params callback
-  ASoC: jz4740-i2s: Align macro values and sort includes
-  ASoC: jz4740-i2s: Make the PLL clock name SoC-specific
-  ASoC: jz4740-i2s: Support S20_LE and S24_LE sample formats
-  ASoC: jz4740-i2s: Support continuous sample rate
-  ASoC: jz4740-i2s: Move component functions near the component driver
-  ASoC: jz4740-i2s: Refactor DAI probe/remove ops as component ops
-
- sound/soc/jz4740/Kconfig      |   1 +
- sound/soc/jz4740/jz4740-i2s.c | 460 ++++++++++++++++++----------------
- 2 files changed, 247 insertions(+), 214 deletions(-)
-
+diff --git a/sound/soc/jz4740/jz4740-i2s.c b/sound/soc/jz4740/jz4740-i2s.c
+index ecd8df70d39c..c4c1e89b47c1 100644
+--- a/sound/soc/jz4740/jz4740-i2s.c
++++ b/sound/soc/jz4740/jz4740-i2s.c
+@@ -93,7 +93,6 @@ struct i2s_soc_info {
+ };
+ 
+ struct jz4740_i2s {
+-	struct resource *mem;
+ 	void __iomem *base;
+ 
+ 	struct clk *clk_aic;
 -- 
 2.35.1
 

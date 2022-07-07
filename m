@@ -2,52 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2363056ACA4
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 22:21:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6AE1556ACA8
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 22:25:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236501AbiGGUVQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Jul 2022 16:21:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56444 "EHLO
+        id S236580AbiGGUZq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Jul 2022 16:25:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58734 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236518AbiGGUVM (ORCPT
+        with ESMTP id S236518AbiGGUZp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Jul 2022 16:21:12 -0400
-Received: from relay05.th.seeweb.it (relay05.th.seeweb.it [IPv6:2001:4b7a:2000:18::166])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E164C248CA
-        for <linux-kernel@vger.kernel.org>; Thu,  7 Jul 2022 13:21:10 -0700 (PDT)
-Received: from [192.168.1.101] (abxi46.neoplus.adsl.tpnet.pl [83.9.2.46])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        Thu, 7 Jul 2022 16:25:45 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B0D42409E;
+        Thu,  7 Jul 2022 13:25:44 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by m-r2.th.seeweb.it (Postfix) with ESMTPSA id 276D93F6A7;
-        Thu,  7 Jul 2022 22:21:07 +0200 (CEST)
-Message-ID: <d294becf-920b-34ee-8ac9-eebd1ea3f1f2@somainline.org>
-Date:   Thu, 7 Jul 2022 22:21:06 +0200
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1A12B62392;
+        Thu,  7 Jul 2022 20:25:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1C967C3411E;
+        Thu,  7 Jul 2022 20:25:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1657225543;
+        bh=Awv2Q/kTS4EIeMRM5w7rfLsEcGuf97xy2lh+bykwg30=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=KLNwmustVN5eGr5ZkI+/HO4bQ+3cufL/liGr5otutC/f9mnzhj25zYdshB8Z+txeo
+         woO+s5lCXSoqMHk20Z3mWugmutv/9OMlFJ7GeepZ+4uA8juaBwAtRHmxrlRMwKGt8P
+         2VAA+BgzaVeC57BG0lVpRYUSYMXNg3TWjBUN+P+M6Q6VDcVDFmeK1XFHKDVcoJNwYj
+         eU3cZg1/03G3zU37nNwus8nym9rbrLAH5J7Wjmq3zn9m6lpYuusG2sYTzDn8Iru2Ex
+         x2el7+KAEGrBXflV2Yd4BMTzt9N3/odyQwFZ7kVzcVd0El0+g1O0iJ27DI0Abfq22D
+         0STQ8ZmwQj6OA==
+Date:   Thu, 7 Jul 2022 21:25:36 +0100
+From:   Mauro Carvalho Chehab <mchehab@kernel.org>
+To:     Jonathan Corbet <corbet@lwn.net>
+Cc:     Akira Yokosawa <akiyks@gmail.com>,
+        ksummit-discuss@lists.linuxfoundation.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        mchehab+huawei@kernel.org
+Subject: Re: [PATCH v2 0/5] Address some issues with sphinx detection
+Message-ID: <20220707212536.58026d99@sal.lan>
+In-Reply-To: <87ilo8bw3p.fsf@meer.lwn.net>
+References: <cover.1656756450.git.mchehab@kernel.org>
+        <d0e1a08a-b965-ada6-e026-4e1cc38fbd90@gmail.com>
+        <87ilo8bw3p.fsf@meer.lwn.net>
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH 2/2] [PATCH v2 2/2] arm64: dts: qcom: Add LTE SKUs for
- sc7280-villager family
-Content-Language: en-US
-To:     Doug Anderson <dianders@chromium.org>
-Cc:     Jimmy Chen <jinghung.chen3@hotmail.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Alan Huang <alan-huang@quanta.corp-partner.google.com>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>
-References: <SG2PR03MB500697A11DA5D0B45DE41B0ECC819@SG2PR03MB5006.apcprd03.prod.outlook.com>
- <3bf68892-9a55-1d6e-fb43-346d9378a866@somainline.org>
- <CAD=FV=VaCbb1xksYTL=dgDtZOD59nD=dx5hgYY-RFWkRVVo-7Q@mail.gmail.com>
-From:   Konrad Dybcio <konrad.dybcio@somainline.org>
-In-Reply-To: <CAD=FV=VaCbb1xksYTL=dgDtZOD59nD=dx5hgYY-RFWkRVVo-7Q@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -56,125 +59,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Em Thu, 07 Jul 2022 12:45:14 -0600
+Jonathan Corbet <corbet@lwn.net> escreveu:
 
-
-On 7.07.2022 01:51, Doug Anderson wrote:
-> Hi,
+> Akira Yokosawa <akiyks@gmail.com> writes:
 > 
-> On Wed, Jul 6, 2022 at 5:31 AM Konrad Dybcio
-> <konrad.dybcio@somainline.org> wrote:
->>
->>
->>
->> On 5.07.2022 04:22, Jimmy Chen wrote:
->>> This adds LTE skus for villager device tree files.
->>>
->>> Signed-off-by: Jimmy Chen <jinghung.chen3@hotmail.com>
->>> ---
->>>
->>>  arch/arm64/boot/dts/qcom/Makefile                 |  2 ++
->>>  .../arm64/boot/dts/qcom/sc7280-chrome-common.dtsi | 11 -----------
->>>  arch/arm64/boot/dts/qcom/sc7280-herobrine-crd.dts |  1 +
->>>  .../dts/qcom/sc7280-herobrine-herobrine-r1.dts    |  1 +
->>>  .../boot/dts/qcom/sc7280-herobrine-lte-sku.dtsi   | 15 +++++++++++++++
->>>  .../dts/qcom/sc7280-herobrine-villager-r0-lte.dts | 14 ++++++++++++++
->>>  .../dts/qcom/sc7280-herobrine-villager-r1-lte.dts | 14 ++++++++++++++
->>>  arch/arm64/boot/dts/qcom/sc7280-idp.dts           |  1 +
->>>  8 files changed, 48 insertions(+), 11 deletions(-)
->>>  create mode 100644 arch/arm64/boot/dts/qcom/sc7280-herobrine-lte-sku.dtsi
->>>  create mode 100644 arch/arm64/boot/dts/qcom/sc7280-herobrine-villager-r0-lte.dts
->>>  create mode 100644 arch/arm64/boot/dts/qcom/sc7280-herobrine-villager-r1-lte.dts
->>>
->>> diff --git a/arch/arm64/boot/dts/qcom/Makefile b/arch/arm64/boot/dts/qcom/Makefile
->>> index bb9f4eb3e65a0..6d81ff12f5af2 100644
->>> --- a/arch/arm64/boot/dts/qcom/Makefile
->>> +++ b/arch/arm64/boot/dts/qcom/Makefile
->>> @@ -103,6 +103,8 @@ dtb-$(CONFIG_ARCH_QCOM)   += sc7180-trogdor-r1-lte.dtb
->>>  dtb-$(CONFIG_ARCH_QCOM)      += sc7280-herobrine-crd.dtb
->>>  dtb-$(CONFIG_ARCH_QCOM)      += sc7280-herobrine-herobrine-r1.dtb
->>>  dtb-$(CONFIG_ARCH_QCOM)      += sc7280-herobrine-villager-r0.dtb
->>> +dtb-$(CONFIG_ARCH_QCOM)      += sc7280-herobrine-villager-r0-lte.dtb
->>> +dtb-$(CONFIG_ARCH_QCOM)      += sc7280-herobrine-villager-r1-lte.dtb
->>>  dtb-$(CONFIG_ARCH_QCOM)      += sc7280-idp.dtb
->>>  dtb-$(CONFIG_ARCH_QCOM)      += sc7280-idp2.dtb
->>>  dtb-$(CONFIG_ARCH_QCOM)      += sc7280-crd-r3.dtb
->>> diff --git a/arch/arm64/boot/dts/qcom/sc7280-chrome-common.dtsi b/arch/arm64/boot/dts/qcom/sc7280-chrome-common.dtsi
->>> index cfe2741456a1a..25f31c81b2b74 100644
->>> --- a/arch/arm64/boot/dts/qcom/sc7280-chrome-common.dtsi
->>> +++ b/arch/arm64/boot/dts/qcom/sc7280-chrome-common.dtsi
->>> @@ -83,17 +83,6 @@ spi_flash: flash@0 {
->>>       };
->>>  };
->>>
->>> -/* Modem setup is different on Chrome setups than typical Qualcomm setup */
->>> -&remoteproc_mpss {
->>> -     status = "okay";
->>> -     compatible = "qcom,sc7280-mss-pil";
->>> -     iommus = <&apps_smmu 0x124 0x0>, <&apps_smmu 0x488 0x7>;
->>> -     interconnects = <&mc_virt MASTER_LLCC 0 &mc_virt SLAVE_EBI1 0>;
->>> -     memory-region = <&mba_mem>, <&mpss_mem>;
->>> -     firmware-name = "qcom/sc7280-herobrine/modem/mba.mbn",
->>> -                     "qcom/sc7280-herobrine/modem/qdsp6sw.mbn";
->>> -};
->>> -
->>>  &remoteproc_wpss {
->>>       status = "okay";
->>>       firmware-name = "ath11k/WCN6750/hw1.0/wpss.mdt";
->>> diff --git a/arch/arm64/boot/dts/qcom/sc7280-herobrine-crd.dts b/arch/arm64/boot/dts/qcom/sc7280-herobrine-crd.dts
->>> index e9ca6c5d24a16..921eccfec39ae 100644
->>> --- a/arch/arm64/boot/dts/qcom/sc7280-herobrine-crd.dts
->>> +++ b/arch/arm64/boot/dts/qcom/sc7280-herobrine-crd.dts
->>> @@ -9,6 +9,7 @@
->>>
->>>  #include "sc7280-herobrine.dtsi"
->>>  #include "sc7280-herobrine-audio-wcd9385.dtsi"
->>> +#include "sc7280-herobrine-lte-sku.dtsi"
->>>
->>>  / {
->>>       model = "Qualcomm Technologies, Inc. sc7280 CRD platform (rev5+)";
->>> diff --git a/arch/arm64/boot/dts/qcom/sc7280-herobrine-herobrine-r1.dts b/arch/arm64/boot/dts/qcom/sc7280-herobrine-herobrine-r1.dts
->>> index c1647a85a371a..c1a6719687252 100644
->>> --- a/arch/arm64/boot/dts/qcom/sc7280-herobrine-herobrine-r1.dts
->>> +++ b/arch/arm64/boot/dts/qcom/sc7280-herobrine-herobrine-r1.dts
->>> @@ -8,6 +8,7 @@
->>>  /dts-v1/;
->>>
->>>  #include "sc7280-herobrine.dtsi"
->>> +#include "sc7280-herobrine-lte-sku.dtsi"
->>>
->>>  / {
->>>       model = "Google Herobrine (rev1+)";
->>> diff --git a/arch/arm64/boot/dts/qcom/sc7280-herobrine-lte-sku.dtsi b/arch/arm64/boot/dts/qcom/sc7280-herobrine-lte-sku.dtsi
->>> new file mode 100644
->>> index 0000000000000..a4809dd2f4e8a
->>> --- /dev/null
->>> +++ b/arch/arm64/boot/dts/qcom/sc7280-herobrine-lte-sku.dtsi
->>> @@ -0,0 +1,15 @@
->>> +// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
->>> +/*
->>> + * Google Herobrine dts fragment for LTE SKUs
->>> + *
->>> + * Copyright 2022 Google LLC.
->>> + */
->>> +/* Modem setup is different on Chrome setups than typical Qualcomm setup */
->>> +&remoteproc_mpss {
->> Hi, just a minor nit.
->>
->> It was recently agreed upon that the status property should go last to
->> make things consistent with other DTs (qcom is - as usual - a special
->> snowflake :D). Could you please fix that up? The rest looks good.
->>
->> Konrad
+> > TL;DR, my suggestion of options and defaults to sphinx-pre-install:
+> >
+> >     --no-pdf (default): for htmldocs only
+> >     --no-virtualenv (default): distro Sphinx package
+> >          (mention --virtualenv if distro Sphinx package is too young)
+> >     --virtualenv: Sphinx by venv/virtualenv
+> >     --pdf: for pdfdocs
+> >         --no-cjk (default): don't bother with CJK pdfdocs
+> >         --cjk: for CJK pdfdocs
+> >                (print warning if user's distro doesn't support CJK)
+> > Thoughts?  
 > 
-> I'm not aware of this new convention. Can you please provide a link?
-We've discussed it here [1], plus seemingly all other DTs (though I
-did not in fact check *all* other DTs, just a few from different vendors'
-subdirectories) seem to put it last, so I think we concluded that not
-standing out makes sense.. The DT spec itself does not specify where
-it should go, but this could possibly be a good addition to it..
-
-Konrad
-
-[1] https://www.spinics.net/lists/linux-arm-msm/msg115444.html
+> I think this makes sense.  As far as I can tell, PDF builds are a
+> relative rarity these days, and most people would rather not have to
+> deal with virtualenv if they can avoid it.  We should definitely
+> emphasize native installs whenever that can work.
 > 
-> -Doug
+> I'm planning to go ahead and apply Mauro's sphinx-pre-install patches
+> since they make things better, but then we should look at these tweaks.
+
+IMO it makes sense to apply them, as they address some existing issues
+on it. 
+
+We can improve the script later on with Akira's comments and after having 
+some discussions about what would be the default behavior that would fit
+better.
+
+Regards,
+Mauro

@@ -2,143 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CE376569F06
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 12:01:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C5180569EFD
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 12:01:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233560AbiGGJ6u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Jul 2022 05:58:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57362 "EHLO
+        id S235084AbiGGJ7G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Jul 2022 05:59:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57696 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232927AbiGGJ6p (ORCPT
+        with ESMTP id S234507AbiGGJ7F (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Jul 2022 05:58:45 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 129D34D4FE
-        for <linux-kernel@vger.kernel.org>; Thu,  7 Jul 2022 02:58:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1657187922;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=cHwrl27E0EeeOGu38G3zOF3hR+C+aXkp6gH0jh13XhA=;
-        b=V5gK9hXBTBSNtSad98p9y92PFF2QuMdltWBFQsFv/EHOorhmEEbOGCoZadHSI07jadxVpp
-        TOzH9bT+FotQQgZZbuNVaFtWsoDi/uDwzckt7fPAoSy74ST4E0BmHOheBZzeWiU6/j6zHI
-        WxAOKBVvQ6clpb5Fxave9oG4S57y42o=
-Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com
- [209.85.208.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-663-XeiQ-sS7Or61lcnybey0-A-1; Thu, 07 Jul 2022 05:58:41 -0400
-X-MC-Unique: XeiQ-sS7Or61lcnybey0-A-1
-Received: by mail-ed1-f71.google.com with SMTP id f13-20020a0564021e8d00b00437a2acb543so13513833edf.7
-        for <linux-kernel@vger.kernel.org>; Thu, 07 Jul 2022 02:58:41 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
-         :message-id:mime-version;
-        bh=cHwrl27E0EeeOGu38G3zOF3hR+C+aXkp6gH0jh13XhA=;
-        b=NkfGfqpl7dvUuIxCU3G3OCRnuXylA3yFiljGEek0BiNz/1tMUkllDE6t7mMOraVwHY
-         FEF2Q3lBqbA+VeHgawVpuptVOpOMWE+nzF3sxlnHwzDIp/snPHpdUzkYkmBVpP3u2PVv
-         92ggg5eG/Yo4eCGYLDuGNqJuVmRI3Uky5ae3/45jNg4pAWewztXWGb5CbTiPr/QJMizd
-         THi+kgzU1nxV+I8usly8zO4uc7Z0s+iSMkEgfdoK1A1jtItQe9gdcJ3BNQlSnjvmQkxP
-         Nk92bkxKpmfaBxdUJMnvJgiTB2SpNCmz1LlGYv8XWKS7VTGGVMfgO9mm+eNuLBvAEXrv
-         dinw==
-X-Gm-Message-State: AJIora8ILn8c4AnGY/Gb2LKpImwFD95HVmf8w1Ho87rTiGWrYHJWlLHl
-        bkLoqWt1CTKbKTsXAN3IeHSmc5E0iPW+VErQAhNaVUfKsOSOrWSNHH+0PR45CgAE+IpjIEmk8Q+
-        ZwX5rNaGEDT3dY5PuRNlI1Su9Hh6HcBUAKBzRb/djP6X4+U/4I02q9P5gqsHN+UduesLLLfIyms
-        Sn
-X-Received: by 2002:a17:907:a07c:b0:72a:b390:ee8a with SMTP id ia28-20020a170907a07c00b0072ab390ee8amr24435282ejc.96.1657187920490;
-        Thu, 07 Jul 2022 02:58:40 -0700 (PDT)
-X-Google-Smtp-Source: AGRyM1uLN8nFMmLxs9+8R8k/ZJmvejQdi+P9YfmR4vwmTSGFH2CRKzZN/QUUdlB4y3gq/oL96BYUNg==
-X-Received: by 2002:a17:907:a07c:b0:72a:b390:ee8a with SMTP id ia28-20020a170907a07c00b0072ab390ee8amr24435259ejc.96.1657187920243;
-        Thu, 07 Jul 2022 02:58:40 -0700 (PDT)
-Received: from fedora (nat-2.ign.cz. [91.219.240.2])
-        by smtp.gmail.com with ESMTPSA id u5-20020a170906068500b00703671ebe65sm18516064ejb.198.2022.07.07.02.58.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 07 Jul 2022 02:58:39 -0700 (PDT)
-From:   Vitaly Kuznetsov <vkuznets@redhat.com>
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     kvm@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
-        Anirudh Rayabharam <anrayabh@linux.microsoft.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Maxim Levitsky <mlevitsk@redhat.com>,
-        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 06/28] KVM: nVMX: Introduce
- KVM_CAP_HYPERV_ENLIGHTENED_VMCS2
-In-Reply-To: <YsYAPL1UUKJB3/MJ@google.com>
-References: <20220629150625.238286-1-vkuznets@redhat.com>
- <20220629150625.238286-7-vkuznets@redhat.com>
- <YsYAPL1UUKJB3/MJ@google.com>
-Date:   Thu, 07 Jul 2022 11:58:38 +0200
-Message-ID: <87o7y1qm5t.fsf@redhat.com>
+        Thu, 7 Jul 2022 05:59:05 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0F7E94F197;
+        Thu,  7 Jul 2022 02:59:04 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 2CC4E1063;
+        Thu,  7 Jul 2022 02:59:04 -0700 (PDT)
+Received: from [10.57.85.108] (unknown [10.57.85.108])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 883673F792;
+        Thu,  7 Jul 2022 02:59:01 -0700 (PDT)
+Message-ID: <f3a7143c-5e89-817a-a33d-7353d51a987d@arm.com>
+Date:   Thu, 7 Jul 2022 10:58:56 +0100
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH v3 03/15] iommu: Always register bus notifiers
+Content-Language: en-GB
+To:     "Tian, Kevin" <kevin.tian@intel.com>,
+        "joro@8bytes.org" <joro@8bytes.org>
+Cc:     "will@kernel.org" <will@kernel.org>,
+        "iommu@lists.linux.dev" <iommu@lists.linux.dev>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "baolu.lu@linux.intel.com" <baolu.lu@linux.intel.com>,
+        "suravee.suthikulpanit@amd.com" <suravee.suthikulpanit@amd.com>,
+        "vasant.hegde@amd.com" <vasant.hegde@amd.com>,
+        "mjrosato@linux.ibm.com" <mjrosato@linux.ibm.com>,
+        "gerald.schaefer@linux.ibm.com" <gerald.schaefer@linux.ibm.com>,
+        "schnelle@linux.ibm.com" <schnelle@linux.ibm.com>,
+        "linux-s390@vger.kernel.org" <linux-s390@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+References: <cover.1657034827.git.robin.murphy@arm.com>
+ <8c380309f264cd0dfc73ba2ec060adc9515af2f2.1657034828.git.robin.murphy@arm.com>
+ <BN9PR11MB5276B6689D88D3D5D57915908C839@BN9PR11MB5276.namprd11.prod.outlook.com>
+From:   Robin Murphy <robin.murphy@arm.com>
+In-Reply-To: <BN9PR11MB5276B6689D88D3D5D57915908C839@BN9PR11MB5276.namprd11.prod.outlook.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Sean Christopherson <seanjc@google.com> writes:
+On 2022-07-07 07:31, Tian, Kevin wrote:
+>> From: Robin Murphy <robin.murphy@arm.com>
+>> Sent: Wednesday, July 6, 2022 1:08 AM
+>>
+>> The number of bus types that the IOMMU subsystem deals with is small and
+>> manageable, so pull that list into core code as a first step towards
+>> cleaning up all the boilerplate bus-awareness from drivers. Calling
+>> iommu_probe_device() before bus->iommu_ops is set will simply return
+>> -ENODEV and not break the notifier call chain, so there should be no
+>> harm in proactively registering all our bus notifiers at init time.
+>>
+> 
+> Suppose we miss a check on iommu ops in iommu_release_device():
+> 
+> 	if (!dev->iommu) <<<<<<<
+> 		return;
+> 
+> 	iommu_device_unlink(dev->iommu->iommu_dev, dev);
+> 
+> 	ops = dev_iommu_ops(dev);
+> 	ops->release_device(dev);
+> 
+> following the rationale in patch01 a device could be removed when
+> it's associated with a known but not registered instance.
 
-> On Wed, Jun 29, 2022, Vitaly Kuznetsov wrote:
->> Turns out Enlightened VMCS can gain new fields without version change
->> and KVM_CAP_HYPERV_ENLIGHTENED_VMCS which KVM currently has cant's
->> handle this reliably. In particular, just updating the current definition
->> of eVMCSv1 with the new fields and adjusting the VMX MSR filtering will
->> inevitably break live migration to older KVMs. Note: enabling eVMCS and
->> setting VMX feature MSR can happen in any order.
->> 
->> Introduce a notion of KVM internal "Enlightened VMCS revision" and add
->> a new capability allowing to add fields to Enlightened VMCS while keeping
->> its version.
->
-> Bumping a "minor" version number in KVM is going to be a nightmare.  KVM is going
-> to be stuck "supporting" old revisions in perpetuity, and userspace will be forced
-> to keep track of which features are available with which arbitrary revision (is
-> that information even communicated to userspace?).
+No, because at that point the instance is only known internally to the 
+driver. As long as it isn't erroneously returned from 
+->probe_device(dev), dev->iommu will remain NULL and the rest of the 
+core code works as expected.
 
-My brain is certainly tainted with how we enable this in QEMU but why
-would userspace be interested in which features are actually filtered
-out?
-
-Currently (again, by QEMU), eVMCS is treated as a purely software
-feature. When enabled, certain controls are filtered out "under the
-hood" as VMX MSRs reported to VMM remain unfiltered (see
-'!msr_info->host_initiated' in vmx_get_msr()). Same stays true with any
-new revision: VMM's job is just to check that a) all hardware features
-are supported on both source and destination and b) the requested 'eVMCS
-revision' is supported by both. No need to know what's filtered out and
-what isn't.
-
->
-> I think a more maintainable approach would be to expose the "filtered" VMX MSRs to
-> userspace, e.g. add KVM_GET_EVMCS_VMX_MSRS.  Then KVM just needs to document what
-> the "filters" are for KVM versions that don't support KVM_GET_EVMCS_VMX_MSRS.
-> KVM itself doesn't need to maintain version information because it's userspace's
-> responsibility to ensure that userspace doesn't try to migrate to a KVM that doesn't
-> support the desired feature set.
-
-That would be a reasonable (but complex for VMM) approach too but I
-don't think we need this (and this patch introducing 'eVMCS revisions'
-to this matter): luckily, Microsoft added a new PV CPUID feature bit
-inidicating the support for the new features in eVMCSv1 so KVM can just
-observe whether the bit was set by VMM or not and filter accordingly.
-
->
-> That also avoids messes like unnecessarily blocking migration from "incompatible"
-> revisions when running on hardware that doesn't even support the control.
-
-Well yea, in case the difference between 'eVMCS revisions' is void
-because the hardware doesn't support these, it would still be possible
-to migrate to an older KVM which doesn't support the new revision but
-I'd stay strict: if a newer revision was requested it must be supported,
-no matter the hardware.
-
--- 
-Vitaly
-
+Thanks,
+Robin.

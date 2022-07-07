@@ -2,47 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A1E85569F33
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 12:13:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F753569EFF
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 12:01:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235229AbiGGKLu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Jul 2022 06:11:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38320 "EHLO
+        id S235168AbiGGJ6V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Jul 2022 05:58:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56536 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235251AbiGGKLl (ORCPT
+        with ESMTP id S231775AbiGGJ6U (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Jul 2022 06:11:41 -0400
-Received: from elvis.franken.de (elvis.franken.de [193.175.24.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D1F504F66E;
-        Thu,  7 Jul 2022 03:11:39 -0700 (PDT)
-Received: from uucp (helo=alpha)
-        by elvis.franken.de with local-bsmtp (Exim 3.36 #1)
-        id 1o9OTx-0007T4-01; Thu, 07 Jul 2022 12:11:37 +0200
-Received: by alpha.franken.de (Postfix, from userid 1000)
-        id D6B80C02B6; Thu,  7 Jul 2022 11:57:48 +0200 (CEST)
-Date:   Thu, 7 Jul 2022 11:57:48 +0200
-From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-To:     Marc Zyngier <maz@kernel.org>
-Cc:     Sander Vanheule <sander@svanheule.net>,
-        Aleksander Jan Bajkowski <olek2@wp.pl>,
-        martin.blumenstingl@googlemail.com, hauke@hauke-m.de,
-        git@birger-koblitz.de, linux-mips@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] MIPS: smp-mt: enable all hardware interrupts on second
- VPE
-Message-ID: <20220707095748.GB9894@alpha.franken.de>
-References: <20220702190705.5319-1-olek2@wp.pl>
- <3c9a032edd0fb9b9608ad3ca08d6e3cc38f21464.camel@svanheule.net>
- <87fsjen2kl.wl-maz@kernel.org>
- <20220706081901.GA10797@alpha.franken.de>
- <87h73u1s9r.wl-maz@kernel.org>
+        Thu, 7 Jul 2022 05:58:20 -0400
+Received: from wout4-smtp.messagingengine.com (wout4-smtp.messagingengine.com [64.147.123.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7A304F19A
+        for <linux-kernel@vger.kernel.org>; Thu,  7 Jul 2022 02:58:19 -0700 (PDT)
+Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
+        by mailout.west.internal (Postfix) with ESMTP id 33A553200901;
+        Thu,  7 Jul 2022 05:58:17 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute2.internal (MEProxy); Thu, 07 Jul 2022 05:58:17 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
+        cc:cc:content-transfer-encoding:content-type:date:date:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to; s=fm1; t=1657187896; x=
+        1657274296; bh=blIZCyCRaX2Kykl2XYQhF1kcXz91lm/t4KZgjyH+ZSU=; b=U
+        jWvfp3BGT724u6qaVZOepvcwjgDtug4sqsJGq7/sCMaBVbNaY8dKYhwUUCqGlgzW
+        yKbrVoLvr/yBH7tMxOaBxGnArfmgCM01YWSunZjDCk4QA4gmXelihCT8qzA4h7tO
+        fbwBogSGdHwWGQpc2vDO4FYtM9t1LhpTbYO47n4ul/3ebDUPjn8YoJhGGXMS1p1n
+        uPynTK2HtNt1UTcNvs1bVR7MZzOrnk0eBw5DyVKoxxGJl74Sds/ScU6uWwdQYL2S
+        i9pZ5nMh0HavCCe5YszT4Xb+plfg/O7ezCxn/UBVMMYfavl2g1UlhU43gPdP2feA
+        5RsGL+WmgCCzpEuoPeEpA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding
+        :content-type:date:date:feedback-id:feedback-id:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
+        :x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=1657187896; x=
+        1657274296; bh=blIZCyCRaX2Kykl2XYQhF1kcXz91lm/t4KZgjyH+ZSU=; b=f
+        f2K2vPEEaVg45MA5zpZZ6E6RtM0VZRK3uni3dVVA498kXQqr/M2LQ/plFWsw2s7q
+        cJ6gMDlrX+mMf/ixkOQdbncGcV72IS7KF2KZn4P1ClMbpOkYyj+xLHJ6kxCQtpXi
+        +sKeZwXVEd8SM/nvvNPc3Dlh8uv2J6dTq2k9pVtwrfI0jL9h7yZDtRFWzOLZPuYd
+        +8Po+bLlxdBuHYos+iYwxbiuofaZGN5h+cFXMNzaDUOLe4Ngcob2VPMKwHLRWM2h
+        EzjiOOti1MWmbNI7X6KtRzF6t0eomwnvVtGnNswRgRNdiQPoVxIEmL5dOxA5+lh7
+        wyXvcMMJ4GRQE+9NLGTQw==
+X-ME-Sender: <xms:OK7GYicSPJdA3n6VN9QQiZvc115LX9eCMcCRWo6v4-yaelBXmZlF3w>
+    <xme:OK7GYsPgzDLT_xunQDkncSVu2EdX76G7oeShBPUWqSgMwtKeAaSVw0vjmWFc-59Tg
+    JfEVGpTrUaP5UiLtdI>
+X-ME-Received: <xmr:OK7GYjg9T_jcYBz2iivNqw6Zc991v1rMtyeIJFawv1iFRsPDM_4I5NuJ4sBGRgavD7cuW2TJQrurDy10TDPxU7WOaat-eei73ssbddcIwNE>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrudeihedgvdduucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepkfffgggfuffvvehfhfgjtgfgsehtkeertddtfeejnecuhfhrohhmpeflihgr
+    gihunhcujggrnhhguceojhhirgiguhhnrdihrghnghesfhhlhihgohgrthdrtghomheqne
+    cuggftrfgrthhtvghrnhepudfhkeevvddtueekfeefgfetlefgueegueeltddtieejgeei
+    heevgfehgfdvfeegnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilh
+    hfrhhomhepjhhirgiguhhnrdihrghnghesfhhlhihgohgrthdrtghomh
+X-ME-Proxy: <xmx:OK7GYv_MQC8eTz6hABoOIOlQlYSrEVS7o2CrmNTl1wS2rnfvQcaJtw>
+    <xmx:OK7GYusmHLDClTO6gpmZaLqU0uyENVdxtiy-8TrkXFBEVZ0uAjZA7Q>
+    <xmx:OK7GYmFQfnL6allvSrvn-H_Xq-OrcdXFq67SYeNYTe_BT9FoLrJnUQ>
+    <xmx:OK7GYiIB4vjqPLaA5Y93IKg6Ij3_YN091oKDp-ZBYp8dM3JxhVMxKQ>
+Feedback-ID: ifd894703:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
+ 7 Jul 2022 05:58:15 -0400 (EDT)
+Message-ID: <bf9d6c87-1264-6d14-bf67-154ee7795bdd@flygoat.com>
+Date:   Thu, 7 Jul 2022 10:58:14 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <87h73u1s9r.wl-maz@kernel.org>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH v3] LoongArch: Remove vcsr in loongarch_fpu
+Content-Language: en-GB
+To:     WANG Xuerui <kernel@xen0n.name>, Qi Hu <huqi@loongson.cn>,
+        Huacai Chen <chenhuacai@kernel.org>
+Cc:     loongarch@lists.linux.dev, LKML <linux-kernel@vger.kernel.org>
+References: <20220706112937.1218573-1-huqi@loongson.cn>
+ <CAAhV-H6MHjzdwyZqk6a3sKByRofG1Th6QEk0Be5NBhiAsVNcTg@mail.gmail.com>
+ <8a9cd14a-54ed-cd2b-88ad-647a43b09d0e@loongson.cn>
+ <2e0bb05b-cd85-4eb0-bf8f-f90156196a63@www.fastmail.com>
+ <0125879d-7452-17bc-8b46-3d4ae21648d1@xen0n.name>
+From:   Jiaxun Yang <jiaxun.yang@flygoat.com>
+In-Reply-To: <0125879d-7452-17bc-8b46-3d4ae21648d1@xen0n.name>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -50,74 +92,17 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jul 06, 2022 at 10:53:36AM +0100, Marc Zyngier wrote:
-> On Wed, 06 Jul 2022 09:19:01 +0100,
-> Thomas Bogendoerfer <tsbogend@alpha.franken.de> wrote:
-> > 
-> > On Wed, Jul 06, 2022 at 08:05:30AM +0100, Marc Zyngier wrote:
-> > > On Sun, 03 Jul 2022 19:15:11 +0100,
-> > > Sander Vanheule <sander@svanheule.net> wrote:
-> > > > 
-> > > > Hi Aleksander,
-> > > > 
-> > > > Since this is IRQ related: +CC Marc Zyngier
-> > > > 
-> > > > On Sat, 2022-07-02 at 21:07 +0200, Aleksander Jan Bajkowski wrote:
-> > > > > This patch is needed to handle interrupts by the second VPE on
-> > > > > the Lantiq xRX200, xRX300 and xRX330 SoCs. In these chips, 32 ICU
-> > > > > interrupts are connected to each hardware line. The SoC supports
-> > > > > a total of 160 interrupts. Currently changing smp_affinity to the
-> > > > > second VPE hangs interrupts.
-> > > > > 
-> > > > > This problem affects multithreaded SoCs with a custom interrupt
-> > > > > controller. Chips with 1004Kc core and newer use the MIPS GIC.
-> > > > > 
-> > > > > Also CC'ed Birger Koblitz and Sander Vanheule. Both are working
-> > > > > on support for Realtek RTL930x chips with 34Kc core and Birger
-> > > > > has added a patch in OpenWRT that also enables all interrupt
-> > > > > lines. So it looks like this patch is useful for more SoCs.
-> > > > > 
-> > > > > Tested on lantiq xRX200 and xRX330.
-> > > > > 
-> > > > > Signed-off-by: Aleksander Jan Bajkowski <olek2@wp.pl>
-> > > > 
-> > > > Thanks for bringing up this issue. Like you say OpenWrt carries a
-> > > > similar patch, and I also carry a patch on my tree to enable all CPU
-> > > > IRQ lines.
-> > > > 
-> > > > Indiscriminately enabling all IRQ lines doesn't sit quite right with
-> > > > me though, since I would expect these to be enabled
-> > > > on-demand. I.e. when a peripheral requests an IRQ, or when an IRQ
-> > > > controller is cascaded into one of the CPU's interrupt lines. If I
-> > > > understand correctly, the IRQ mask/unmask functions in
-> > > > drivers/irqchip/irq-mips-cpu.c should do this.
-> > > 
-> > > But this is only enabling interrupts at the CPU level, right? And the
-> > > irqchip is still in control of the masking of the individual
-> > > interrupts?
-> > 
-> > in the Lantiq case yes
-> > 
-> > > If both assertions are true, then this patch seems OK. If it just let
-> > > any interrupt through without any control, then this is wrong.
-> > > 
-> > > So which one is it?
-> > 
-> > if there isn't an additional irqchip connected to the cpu interrupt lines,
-> > this patch will cause problems.
-> 
-> And that's what the irq-mips-cpu driver should solve, right? In this
 
-yes
 
-> case, what's the problem with adopting this driver for the Lantiq
-> platform (and all other ones using the same CPU)?
+在 2022/7/7 9:56, WANG Xuerui 写道:
+>
+> However, the experiment result is counter-intuitive to me after all; 
+> are you aware that perhaps *some* 3A5000's in the wild actually have 
+> functional VCSR? If so, the state obviously needs isolation 
+> (saving/restoring simply becoming no-ops on later steppings), but 
+> otherwise this cleanup should be correct.
+^ Yep, my concern was 3A5000 with VCSR enabled can be vulnerable.
 
-I guess vendor code supplied more or less the current code base and
-nobody dared to change it.
+Thanks
+- Jiaxun
 
-Thomas.
-
--- 
-Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
-good idea.                                                [ RFC1925, 2.3 ]

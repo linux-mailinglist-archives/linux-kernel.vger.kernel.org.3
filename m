@@ -2,50 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EBE9456A2EA
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 14:56:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B588456A2EC
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 14:56:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235833AbiGGMzr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Jul 2022 08:55:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46978 "EHLO
+        id S235831AbiGGM4R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Jul 2022 08:56:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49002 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235832AbiGGMz2 (ORCPT
+        with ESMTP id S235517AbiGGMz6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Jul 2022 08:55:28 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F331F5925C;
-        Thu,  7 Jul 2022 05:54:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=kxFmzXiF0cRRkkrInOTA83pxXZOhJrqHF0hfDJRzXOk=; b=htEmvonBhjadckYgV7YlTH6slM
-        tn/a8N/xt59dWKn4C6kGohfXu54+V43ptuE5O3UL69q2BRd4cpNOBhLcK9PjP/2OHi0hmhTu3ZpNs
-        bIjxgg2zVz6/awfJH5nsavG1JBn0tN8xa6BBbfHSpaSPqWLrPbnSbbxmBUNHh+Sa5Y2Lp7GkZ/3zF
-        KpyQ2BJlfwS9l1IiSwbcOm/wQ6A02EiZzStRek2viL5q2cnT7OoCYLBP4Eb6N/dKbqXvIxXt997rZ
-        BKEMWIgrswCmG4AjVdCc/+ENQwp/B3uGU/ZGFnUpveyNHkMwqkEuXqwABo/OAL23zWvfzbTgMxxtY
-        0NQ8lU2w==;
-Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1o9R1S-002a64-1R; Thu, 07 Jul 2022 12:54:22 +0000
-Date:   Thu, 7 Jul 2022 13:54:22 +0100
-From:   Matthew Wilcox <willy@infradead.org>
-To:     Alexander Gordeev <agordeev@linux.ibm.com>
-Cc:     Alexander Egorenkov <egorenar@linux.ibm.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>, Baoquan He <bhe@redhat.com>,
-        Christoph Hellwig <hch@lst.de>, linux-kernel@vger.kernel.org,
-        linux-s390@vger.kernel.org
-Subject: Re: [PATCH v2 1/1] s390/crash: allow multi-segment iterators
-Message-ID: <YsbXfh3e2rDEKSNw@casper.infradead.org>
-References: <cover.1657172539.git.agordeev@linux.ibm.com>
- <613f63d652bb4fa6fb3d2bb38762de6bb066b35a.1657172539.git.agordeev@linux.ibm.com>
+        Thu, 7 Jul 2022 08:55:58 -0400
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BA5F2D1EA;
+        Thu,  7 Jul 2022 05:55:00 -0700 (PDT)
+Received: from pps.filterd (m0098417.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 267BE1Vw029078;
+        Thu, 7 Jul 2022 12:54:47 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : from : to : cc : references : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=e+6nm5Ds4GELLXBnzsr/JRGB0864mlxyrQfc85EoIRc=;
+ b=aIECZrQI+DB6F31FIq3nIXdf/THBdz85H2+oWZJezjIEunx1vhzQEDuOYB2wCs3UaUcO
+ yOgOpcDvCBGxtVZif3xVp/D8Oqhtoj7FJ8K901lkdr3s+XfFY+f99XIlco3OJgnbpnRI
+ C1D9Qqv0Q54eC/BtLZq8rX4BBwVCratIZIWidvu2z0+mZzoO4FcdF9FucnB6P6mYhgv8
+ uQrdkzBi1zrCsCjDaV60tVaPjfraLcwIspRwzW9xY9+2+CYPb4aNLm6RMAZJIfKWCr2W
+ uA1+PmKk2Gwd9VGA9OX3jQGO2r3SdHBTcaqprfYbSqZfwvHuznD4Pr1C0O9ggi78ISfs Sg== 
+Received: from ppma04dal.us.ibm.com (7a.29.35a9.ip4.static.sl-reverse.com [169.53.41.122])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3h5xe7jsfk-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 07 Jul 2022 12:54:46 +0000
+Received: from pps.filterd (ppma04dal.us.ibm.com [127.0.0.1])
+        by ppma04dal.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 267Codfn003924;
+        Thu, 7 Jul 2022 12:54:46 GMT
+Received: from b01cxnp22033.gho.pok.ibm.com (b01cxnp22033.gho.pok.ibm.com [9.57.198.23])
+        by ppma04dal.us.ibm.com with ESMTP id 3h4uqy5yn8-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 07 Jul 2022 12:54:46 +0000
+Received: from b01ledav001.gho.pok.ibm.com (b01ledav001.gho.pok.ibm.com [9.57.199.106])
+        by b01cxnp22033.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 267Csi8534341138
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 7 Jul 2022 12:54:45 GMT
+Received: from b01ledav001.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id D63E228064;
+        Thu,  7 Jul 2022 12:54:44 +0000 (GMT)
+Received: from b01ledav001.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 40ED128066;
+        Thu,  7 Jul 2022 12:54:42 +0000 (GMT)
+Received: from [9.211.36.1] (unknown [9.211.36.1])
+        by b01ledav001.gho.pok.ibm.com (Postfix) with ESMTP;
+        Thu,  7 Jul 2022 12:54:41 +0000 (GMT)
+Message-ID: <a6317b8e-87ea-122d-c1fe-c320f030a7f3@linux.ibm.com>
+Date:   Thu, 7 Jul 2022 08:54:41 -0400
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <613f63d652bb4fa6fb3d2bb38762de6bb066b35a.1657172539.git.agordeev@linux.ibm.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH v3 15/15] iommu: Clean up bus_set_iommu()
+Content-Language: en-US
+From:   Matthew Rosato <mjrosato@linux.ibm.com>
+To:     Robin Murphy <robin.murphy@arm.com>, joro@8bytes.org
+Cc:     will@kernel.org, iommu@lists.linux.dev,
+        linux-arm-kernel@lists.infradead.org, baolu.lu@linux.intel.com,
+        suravee.suthikulpanit@amd.com, vasant.hegde@amd.com,
+        gerald.schaefer@linux.ibm.com, schnelle@linux.ibm.com,
+        linux-s390@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <cover.1657034827.git.robin.murphy@arm.com>
+ <dc44a2269276e1d0fa6715d4530a51df4e7b781c.1657034828.git.robin.murphy@arm.com>
+ <4c25e3ad-0eb6-5c41-48b2-7c10e745bd5d@linux.ibm.com>
+In-Reply-To: <4c25e3ad-0eb6-5c41-48b2-7c10e745bd5d@linux.ibm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: 6n0HHPssgA4yMkE6V_M0qX_01p8NmEIU
+X-Proofpoint-ORIG-GUID: 6n0HHPssgA4yMkE6V_M0qX_01p8NmEIU
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
+ definitions=2022-07-07_09,2022-06-28_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ malwarescore=0 bulkscore=0 mlxlogscore=999 spamscore=0 phishscore=0
+ lowpriorityscore=0 impostorscore=0 suspectscore=0 adultscore=0
+ clxscore=1015 mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2206140000 definitions=main-2207070050
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -53,160 +92,98 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jul 07, 2022 at 08:01:15AM +0200, Alexander Gordeev wrote:
-> Rework copy_oldmem_page() to allow multi-segment iterators.
-> Reuse existing iterate_iovec macro as is and only relevant
-> bits from __iterate_and_advance macro.
+On 7/7/22 8:49 AM, Matthew Rosato wrote:
+> On 7/5/22 1:08 PM, Robin Murphy wrote:
+>> Clean up the remaining trivial bus_set_iommu() callsites along
+>> with the implementation. Now drivers only have to know and care
+>> about iommu_device instances, phew!
+>>
+>> Signed-off-by: Robin Murphy <robin.murphy@arm.com>
+>> ---
+>>
+>> v3: Also catch Intel's cheeky open-coded assignment
+>>
+> 
+> ...
+> 
+>> diff --git a/drivers/iommu/s390-iommu.c b/drivers/iommu/s390-iommu.c
+>> index c898bcbbce11..dd957145fb81 100644
+>> --- a/drivers/iommu/s390-iommu.c
+>> +++ b/drivers/iommu/s390-iommu.c
+>> @@ -385,9 +385,3 @@ static const struct iommu_ops s390_iommu_ops = {
+>>           .free        = s390_domain_free,
+>>       }
+>>   };
+>> -
+>> -static int __init s390_iommu_init(void)
+>> -{
+>> -    return bus_set_iommu(&pci_bus_type, &s390_iommu_ops);
+>> -}
+>> -subsys_initcall(s390_iommu_init);
+> 
+> Previously s390_iommu_ops was only being set for pci_bus_type, but with 
+> this series it will now also be set for platform_bus_type.
+> 
+> To tolerate that, this series needs a change along the lines of:
+> 
 
-Or do it properly?
+...  Sorry, let's try that again without a mangled diff:
 
-You should probably put a mutex around all of this because if you have two
-threads accessing the hsa at the same time, they'll use the same buffer.
-But that's a pre-existing problem.  I also fixed the pre-existing bug
-where you were using 'count' when you meant to use 'len'.
+From: Matthew Rosato <mjrosato@linux.ibm.com> 
 
-Uncompiled.  You might need to include <linux/uio.h> somewhere.
+Date: Thu, 7 Jul 2022 08:45:44 -0400 
 
-diff --git a/arch/s390/include/asm/sclp.h b/arch/s390/include/asm/sclp.h
-index 236b34b75ddb..d8b4c526e0f0 100644
---- a/arch/s390/include/asm/sclp.h
-+++ b/arch/s390/include/asm/sclp.h
-@@ -143,7 +143,7 @@ int sclp_ap_configure(u32 apid);
- int sclp_ap_deconfigure(u32 apid);
- int sclp_pci_report(struct zpci_report_error_header *report, u32 fh, u32 fid);
- int memcpy_hsa_kernel(void *dest, unsigned long src, size_t count);
--int memcpy_hsa_user(void __user *dest, unsigned long src, size_t count);
-+int memcpy_hsa_iter(struct iov_iter *iter, unsigned long src, size_t count);
- void sclp_ocf_cpc_name_copy(char *dst);
+Subject: [PATCH] iommu/s390: fail probe for non-pci device 
+
  
- static inline int sclp_get_core_info(struct sclp_core_info *info, int early)
-diff --git a/arch/s390/kernel/crash_dump.c b/arch/s390/kernel/crash_dump.c
-index 28124d0fa1d5..6e4dde377f8e 100644
---- a/arch/s390/kernel/crash_dump.c
-+++ b/arch/s390/kernel/crash_dump.c
-@@ -130,53 +130,11 @@ static inline void *load_real_addr(void *addr)
- 	return (void *)real_addr;
- }
+
+s390-iommu only supports pci_bus_type today 
+
  
--/*
-- * Copy memory of the old, dumped system to a kernel space virtual address
-- */
--int copy_oldmem_kernel(void *dst, unsigned long src, size_t count)
--{
--	unsigned long len;
--	void *ra;
--	int rc;
--
--	while (count) {
--		if (!oldmem_data.start && src < sclp.hsa_size) {
--			/* Copy from zfcp/nvme dump HSA area */
--			len = min(count, sclp.hsa_size - src);
--			rc = memcpy_hsa_kernel(dst, src, len);
--			if (rc)
--				return rc;
--		} else {
--			/* Check for swapped kdump oldmem areas */
--			if (oldmem_data.start && src - oldmem_data.start < oldmem_data.size) {
--				src -= oldmem_data.start;
--				len = min(count, oldmem_data.size - src);
--			} else if (oldmem_data.start && src < oldmem_data.size) {
--				len = min(count, oldmem_data.size - src);
--				src += oldmem_data.start;
--			} else {
--				len = count;
--			}
--			if (is_vmalloc_or_module_addr(dst)) {
--				ra = load_real_addr(dst);
--				len = min(PAGE_SIZE - offset_in_page(ra), len);
--			} else {
--				ra = dst;
--			}
--			if (memcpy_real(ra, src, len))
--				return -EFAULT;
--		}
--		dst += len;
--		src += len;
--		count -= len;
--	}
--	return 0;
--}
--
- /*
-  * Copy memory of the old, dumped system to a user space virtual address
-  */
--static int copy_oldmem_user(void __user *dst, unsigned long src, size_t count)
-+static int copy_oldmem_iter(struct iov_iter *iter, unsigned long src,
-+		size_t count)
- {
- 	unsigned long len;
- 	int rc;
-@@ -185,7 +143,7 @@ static int copy_oldmem_user(void __user *dst, unsigned long src, size_t count)
- 		if (!oldmem_data.start && src < sclp.hsa_size) {
- 			/* Copy from zfcp/nvme dump HSA area */
- 			len = min(count, sclp.hsa_size - src);
--			rc = memcpy_hsa_user(dst, src, len);
-+			rc = memcpy_hsa_iter(iter, src, len);
- 			if (rc)
- 				return rc;
- 		} else {
-@@ -199,8 +157,8 @@ static int copy_oldmem_user(void __user *dst, unsigned long src, size_t count)
- 			} else {
- 				len = count;
- 			}
--			rc = copy_to_user_real(dst, src, count);
--			if (rc)
-+			rc = copy_to_iter(iter, src, len);
-+			if (rc != len)
- 				return rc;
- 		}
- 		dst += len;
-@@ -219,23 +177,13 @@ ssize_t copy_oldmem_page(struct iov_iter *iter, unsigned long pfn, size_t csize,
- 	unsigned long src;
- 	int rc;
+
+Signed-off-by: Matthew Rosato <mjrosato@linux.ibm.com> 
+
+--- 
+
+  drivers/iommu/s390-iommu.c | 7 ++++++- 
+
+  1 file changed, 6 insertions(+), 1 deletion(-) 
+
  
--	if (!(iter_is_iovec(iter) || iov_iter_is_kvec(iter)))
--		return -EINVAL;
--	/* Multi-segment iterators are not supported */
--	if (iter->nr_segs > 1)
--		return -EINVAL;
- 	if (!csize)
- 		return 0;
- 	src = pfn_to_phys(pfn) + offset;
+
+diff --git a/drivers/iommu/s390-iommu.c b/drivers/iommu/s390-iommu.c 
+
+index dd957145fb81..762f892b4ec3 100644 
+
+--- a/drivers/iommu/s390-iommu.c 
+
++++ b/drivers/iommu/s390-iommu.c 
+
+@@ -185,7 +185,12 @@ static void s390_iommu_detach_device(struct 
+iommu_domain *domain,
  
--	/* XXX: pass the iov_iter down to a common function */
--	if (iter_is_iovec(iter))
--		rc = copy_oldmem_user(iter->iov->iov_base, src, csize);
--	else
--		rc = copy_oldmem_kernel(iter->kvec->iov_base, src, csize);
-+	rc = copy_oldmem_iter(iter, src, csize);
- 	if (rc < 0)
- 		return rc;
--	iov_iter_advance(iter, csize);
- 	return csize;
- }
+
+  static struct iommu_device *s390_iommu_probe_device(struct device 
+*dev)
+  { 
+
+-       struct zpci_dev *zdev = to_zpci_dev(dev); 
+
++       struct zpci_dev *zdev; 
+
++ 
+
++       if (!dev_is_pci(dev)) 
+
++               return ERR_PTR(-ENODEV); 
+
++ 
+
++       zdev = to_zpci_dev(dev); 
+
  
-diff --git a/drivers/s390/char/zcore.c b/drivers/s390/char/zcore.c
-index 516783ba950f..26125718f3e0 100644
---- a/drivers/s390/char/zcore.c
-+++ b/drivers/s390/char/zcore.c
-@@ -59,7 +59,7 @@ static char hsa_buf[PAGE_SIZE] __aligned(PAGE_SIZE);
-  * @src:   Start address within HSA where data should be copied
-  * @count: Size of buffer, which should be copied
-  */
--int memcpy_hsa_user(void __user *dest, unsigned long src, size_t count)
-+int memcpy_hsa_iter(struct iov_iter *iter, unsigned long src, size_t count)
- {
- 	unsigned long offset, bytes;
- 
-@@ -73,10 +73,9 @@ int memcpy_hsa_user(void __user *dest, unsigned long src, size_t count)
- 		}
- 		offset = src % PAGE_SIZE;
- 		bytes = min(PAGE_SIZE - offset, count);
--		if (copy_to_user(dest, hsa_buf + offset, bytes))
-+		if (copy_to_iter(hsa_buf + offset, bytes, iter) != bytes)
- 			return -EFAULT;
- 		src += bytes;
--		dest += bytes;
- 		count -= bytes;
- 	}
- 	return 0;
+
+         return &zdev->iommu_dev; 
+
+  }
+

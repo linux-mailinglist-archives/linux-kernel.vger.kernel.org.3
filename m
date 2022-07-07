@@ -2,61 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 76952569F0F
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 12:04:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 32F44569F18
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 12:04:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235191AbiGGKDs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Jul 2022 06:03:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33424 "EHLO
+        id S235204AbiGGKDu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Jul 2022 06:03:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33504 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234947AbiGGKDo (ORCPT
+        with ESMTP id S234994AbiGGKDp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Jul 2022 06:03:44 -0400
-Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 280FB2FFC8
-        for <linux-kernel@vger.kernel.org>; Thu,  7 Jul 2022 03:03:43 -0700 (PDT)
-Received: by mail-wm1-x334.google.com with SMTP id l68so10309474wml.3
-        for <linux-kernel@vger.kernel.org>; Thu, 07 Jul 2022 03:03:43 -0700 (PDT)
+        Thu, 7 Jul 2022 06:03:45 -0400
+Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A4E031373
+        for <linux-kernel@vger.kernel.org>; Thu,  7 Jul 2022 03:03:44 -0700 (PDT)
+Received: by mail-wm1-x335.google.com with SMTP id ay25so663586wmb.1
+        for <linux-kernel@vger.kernel.org>; Thu, 07 Jul 2022 03:03:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=lyjBxTca7YaObwbb4+mBlqGjkBNtiN/iQI75P0dOoGs=;
-        b=ApylUshkdPMBxowBWdA11FXwyilkLHFoxw2TpZNdWVe7J5wK5WsuGuLdOmNX9zTzk2
-         B3wObarbyP8uqKLaucFKPH78aop8aE2blu7qAJxjpQV5nQzDxGkC1l+zG1hr57kOGvSH
-         KgIss4NahKugLPEinebU9ajU/LHaVcvDyCz6Z39lpqL29COOaADmWKuLQbdTKSJqi6kP
-         xAXlqSE1KkqV65uWgS3vpW/BlnJWVs4SEftY6DMHJooeFm6vanfThWukfrTHd/9tAGJ8
-         ZyrjZZbQK11/AxnT17r7KeJLminrUJ2pwTXpmV+7H0bqbmeBHrfZWOcF3ulMGARIhSvh
-         EO+A==
+        bh=ObHspT7PR13k/kGtFBiKTXV8HqbeVaIVVpnAi8PJftA=;
+        b=GWZdkkrngxKv3835VFOOsLNeXYo8jmqMtWNAQnzvrZCrwFx5yifVdE+11NrZqzhcaD
+         sipKBjoB2en+6upT6pL826qJX1xhCBSOoGusgSjlNcEvhNnMCrouEqECTyXEsDLmi5/s
+         Z2nPfc6qNoUecPf2APngELGEFsIMd/gU1XdsjnFgmgZuFLQw1BaqogvfbhNaUBs79IlG
+         sixx1kepX4WCDuccLT15Gr2rzyliVLLy3o/aELBHVXpNYdMkGwboTxUBoh/LRHpRlDjP
+         7yuo4QfeBWahN3ptBWyMZONEbjxkbq/44bNxeTnZA7FDzDthzINWV258dKIbgoy6swgo
+         Vx5g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=lyjBxTca7YaObwbb4+mBlqGjkBNtiN/iQI75P0dOoGs=;
-        b=tWDv71oPwO1lpKBrQQw+LoF7EsQ57KWcUHEZaRPgtgN7FXodasdmlthyDx19IsDMWG
-         fpK0mBCmuTDmLe96TYPt6MUuBmwRFcOvJ1jRDr7S7qCzDiplfh0ICD8C2R6Skw9IQlC+
-         k4+2UDmRJF1VHRiOXKLwRQaDHLiETnt4Phwx0QdwFmuDt8OLF/YCBk4EqZP0ydx3jaU+
-         859528QXBzBBpwYLsX6awgPnUY7KDJSM6Az9xYykc/Zk65KJlQSs3f8OyCM3UsOBDHrs
-         JU8+tQuSuPo0qsE1Qmw9P3RWU7A/EVZLokP9s1FSuajcVZUCFvOEmtmQED/QlVim6TyV
-         8vMg==
-X-Gm-Message-State: AJIora8ZH4iXifFmfVEsEplKT97llRhYB4aexr75SCefSV2R0tkwcr8Y
-        qh76PGruTu2B7h+r3fweL2mYuEzl1lpNrA==
-X-Google-Smtp-Source: AGRyM1u9J+vSFg1DqYI+JSf7PHyh8N0GS+NGvJr8GthhXh2mHVh2UqUCCYZ4YWoXz6FbhRB0mk59Xg==
-X-Received: by 2002:a1c:e902:0:b0:3a0:2d95:49d4 with SMTP id q2-20020a1ce902000000b003a02d9549d4mr3555661wmc.189.1657188221377;
-        Thu, 07 Jul 2022 03:03:41 -0700 (PDT)
+        bh=ObHspT7PR13k/kGtFBiKTXV8HqbeVaIVVpnAi8PJftA=;
+        b=Npj0i5N1CNuSk9LwKyi792qcIdeTQflwIRQXHUuFLZWGcdYSNieOIqtMFU0WXzM/M6
+         0DCMP0tm+/aoTmr4Q3fDl2+PJ61eE+qIXFGJYloZu3YzgiqTpn360iWBPNVHBUGeHBhM
+         4Fhb+BEWA4GfyhsXJrtp5on1Rpesc4HOQ8cni3DzojaSl/yenHzusn+Ov4gBjI0Id4Px
+         NPYazQtCGc+qsQSC/WjUT21gGUTDIshAzRvnNruyFXtr/QfyF+rdQM1BwqyXCxPSNIcB
+         fmVAPBTh35FWj63+nLvYKY3A1q8fWhE+nWVa3bWS7aZ2k3HdoHgRzunlubphHGhD8/1K
+         bGow==
+X-Gm-Message-State: AJIora/vpi3C90apaRAxUALFXIc7Qq1YO8tL5bY7U+9Ojf2hi7PTZuro
+        l9isGN0quCNrgSrOxv+mRaKl2w==
+X-Google-Smtp-Source: AGRyM1uGAAsPYsQWd2DaNk7kz2NhOZm9UNH91D25W0wEU2lB8IRcrOL+RJDUgzo05SB2rwlxtgrmgw==
+X-Received: by 2002:a05:600c:4e51:b0:3a0:4e8d:1e44 with SMTP id e17-20020a05600c4e5100b003a04e8d1e44mr3581402wmq.105.1657188222631;
+        Thu, 07 Jul 2022 03:03:42 -0700 (PDT)
 Received: from localhost.localdomain ([94.52.112.99])
-        by smtp.gmail.com with ESMTPSA id h14-20020a5d548e000000b0021d7ad6b9fdsm4612034wrv.57.2022.07.07.03.03.40
+        by smtp.gmail.com with ESMTPSA id h14-20020a5d548e000000b0021d7ad6b9fdsm4612034wrv.57.2022.07.07.03.03.41
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 07 Jul 2022 03:03:40 -0700 (PDT)
+        Thu, 07 Jul 2022 03:03:42 -0700 (PDT)
 From:   Abel Vesa <abel.vesa@linaro.org>
 To:     Mike Turquette <mturquette@baylibre.com>,
         Stephen Boyd <sboyd@kernel.org>
 Cc:     linux-clk@vger.kernel.org,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         linux-arm-msm@vger.kernel.org, Abel Vesa <abel.vesa@linaro.org>
-Subject: [RFC PATCH 2/4] clk: Add consumers count to core
-Date:   Thu,  7 Jul 2022 13:03:07 +0300
-Message-Id: <20220707100309.1357663-2-abel.vesa@linaro.org>
+Subject: [RFC PATCH 3/4] clk: Add consumers count information to debugfs
+Date:   Thu,  7 Jul 2022 13:03:08 +0300
+Message-Id: <20220707100309.1357663-3-abel.vesa@linaro.org>
 X-Mailer: git-send-email 2.34.3
 In-Reply-To: <20220707100309.1357663-1-abel.vesa@linaro.org>
 References: <20220707100309.1357663-1-abel.vesa@linaro.org>
@@ -72,53 +72,62 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Keep a count of all consumers per clock. One usage of could be to make
-core decisions (like disabling unused clocks) based on the number of
-consumers a clock has.
+Lets add consumers count information to debugfs. It could be useful for
+identifying which clocks do not have a consumer but are enabled at boot
+and should be disabled since they are unused. Also you could tell which
+clocks are marked as critical since they do not have consumers, but
+their enable_count is non-zero.
 
 Signed-off-by: Abel Vesa <abel.vesa@linaro.org>
 ---
- drivers/clk/clk.c | 6 ++++++
- 1 file changed, 6 insertions(+)
+ drivers/clk/clk.c | 12 +++++++-----
+ 1 file changed, 7 insertions(+), 5 deletions(-)
 
 diff --git a/drivers/clk/clk.c b/drivers/clk/clk.c
-index e1d8245866b1..9b54afd2fee8 100644
+index 9b54afd2fee8..e412e83a6e28 100644
 --- a/drivers/clk/clk.c
 +++ b/drivers/clk/clk.c
-@@ -72,6 +72,7 @@ struct clk_core {
- 	unsigned long		flags;
- 	bool			orphan;
- 	bool			rpm_enabled;
-+	unsigned int		consumers_count;
- 	unsigned int		enable_count;
- 	unsigned int		prepare_count;
- 	unsigned int		protect_count;
-@@ -3682,6 +3683,9 @@ static int __clk_core_init(struct clk_core *core)
- 		core->hw->core = NULL;
- 	}
- 
-+	if (!ret)
-+		core->consumers_count = 0;
-+
- 	clk_prepare_unlock();
- 
- 	if (!ret)
-@@ -3699,6 +3703,7 @@ static void clk_core_link_consumer(struct clk_core *core, struct clk *clk)
+@@ -2955,9 +2955,9 @@ static void clk_summary_show_one(struct seq_file *s, struct clk_core *c,
  {
+ 	int phase;
+ 
+-	seq_printf(s, "%*s%-*s %7d %8d %8d %11lu %10lu ",
++	seq_printf(s, "%*s%-*s %7d %7d %8d %8d %11lu %10lu ",
+ 		   level * 3 + 1, "",
+-		   30 - level * 3, c->name,
++		   30 - level * 3, c->name, c->consumers_count,
+ 		   c->enable_count, c->prepare_count, c->protect_count,
+ 		   clk_core_get_rate_recalc(c),
+ 		   clk_core_get_accuracy_recalc(c));
+@@ -2996,9 +2996,9 @@ static int clk_summary_show(struct seq_file *s, void *data)
+ 	struct clk_core *c;
+ 	struct hlist_head **lists = (struct hlist_head **)s->private;
+ 
+-	seq_puts(s, "                                 enable  prepare  protect                                duty  hardware\n");
+-	seq_puts(s, "   clock                          count    count    count        rate   accuracy phase  cycle    enable\n");
+-	seq_puts(s, "-------------------------------------------------------------------------------------------------------\n");
++	seq_puts(s, "                                 counsumers  enable  prepare  protect                                duty  hardware\n");
++	seq_puts(s, "   clock                              count   count    count    count        rate   accuracy phase  cycle    enable\n");
++	seq_puts(s, "-------------------------------------------------------------------------------------------------------------------\n");
+ 
  	clk_prepare_lock();
- 	hlist_add_head(&clk->clks_node, &core->clks);
-+	clk->core->consumers_count++;
- 	clk_prepare_unlock();
- }
  
-@@ -3710,6 +3715,7 @@ static void clk_core_unlink_consumer(struct clk *clk)
- {
- 	lockdep_assert_held(&prepare_lock);
- 	hlist_del(&clk->clks_node);
-+	clk->core->consumers_count--;
- }
+@@ -3021,6 +3021,7 @@ static void clk_dump_one(struct seq_file *s, struct clk_core *c, int level)
  
- /**
+ 	/* This should be JSON format, i.e. elements separated with a comma */
+ 	seq_printf(s, "\"%s\": { ", c->name);
++	seq_printf(s, "\"consumers_count\": %d,", c->consumers_count);
+ 	seq_printf(s, "\"enable_count\": %d,", c->enable_count);
+ 	seq_printf(s, "\"prepare_count\": %d,", c->prepare_count);
+ 	seq_printf(s, "\"protect_count\": %d,", c->protect_count);
+@@ -3330,6 +3331,7 @@ static void clk_debug_create_one(struct clk_core *core, struct dentry *pdentry)
+ 	debugfs_create_u32("clk_phase", 0444, root, &core->phase);
+ 	debugfs_create_file("clk_flags", 0444, root, core, &clk_flags_fops);
+ 	debugfs_create_u32("clk_prepare_count", 0444, root, &core->prepare_count);
++	debugfs_create_u32("clk_consumers_count", 0444, root, &core->consumers_count);
+ 	debugfs_create_u32("clk_enable_count", 0444, root, &core->enable_count);
+ 	debugfs_create_u32("clk_protect_count", 0444, root, &core->protect_count);
+ 	debugfs_create_u32("clk_notifier_count", 0444, root, &core->notifier_count);
 -- 
 2.34.3
 

@@ -2,99 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 836C656AD34
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 23:08:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5958956AD38
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 23:08:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236595AbiGGVIF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Jul 2022 17:08:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55928 "EHLO
+        id S236672AbiGGVIr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Jul 2022 17:08:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56814 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229834AbiGGVIE (ORCPT
+        with ESMTP id S236562AbiGGVIm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Jul 2022 17:08:04 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95B8D2CE3E;
-        Thu,  7 Jul 2022 14:08:03 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 4113BB823D3;
-        Thu,  7 Jul 2022 21:08:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 19976C3411E;
-        Thu,  7 Jul 2022 21:07:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1657228080;
-        bh=IHYd3/+BAYO09zmG6R4QzH1Cte/DJJmuroXS4ZzEAY0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=BnFdqOEI+YmchZbHvoz5icO8LTH87zKJpyNi6Q2tKnpDVEYMGo44KH4sAgoIZsUUE
-         8R7lHYrZYyKKWCwr0RRG8khpcveIOmJkU2q7sUHpiP+4Qw6P16p2Uvqp+8sVBhaM7+
-         1YleIDNOmVo70j1Th4Du2jgvDGoT9f42Ud3dLNhL9u8KciQ1Yh+b8MivP3oBGbuFll
-         c1niHVeW/lb1pPylkDg1YBRIIsDF0zoa/SGt7Q/WOCvTpi/ZUjJ/9jytlM3CTEMA6K
-         4BReTKV+Yc3GjMluwKgVjK/DhQ8lWBpcCKc8C7oOJVxA4qiHkqdkIqKX8qRJM1YWOZ
-         /Gpz1XfTOrN0Q==
-Date:   Thu, 7 Jul 2022 23:07:56 +0200
-From:   Wolfram Sang <wsa@kernel.org>
-To:     Satish Nagireddy <satish.nagireddy@getcruise.com>
-Cc:     linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
-        michal.simek@xilinx.com, lars@metafoo.de
-Subject: Re: [PATCH] i2c: cadence: Unregister the clk notifier in error path
-Message-ID: <YsdLLKh8K0UDsJMu@shikoro>
-Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        Satish Nagireddy <satish.nagireddy@getcruise.com>,
-        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
-        michal.simek@xilinx.com, lars@metafoo.de
-References: <20220628191216.39459-1-satish.nagireddy@getcruise.com>
+        Thu, 7 Jul 2022 17:08:42 -0400
+Received: from mail-pg1-x532.google.com (mail-pg1-x532.google.com [IPv6:2607:f8b0:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0642193D6
+        for <linux-kernel@vger.kernel.org>; Thu,  7 Jul 2022 14:08:41 -0700 (PDT)
+Received: by mail-pg1-x532.google.com with SMTP id s206so20712676pgs.3
+        for <linux-kernel@vger.kernel.org>; Thu, 07 Jul 2022 14:08:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=Z0i/FsEtEYZWQoqmAH7Voc71S2cgw06FoAKusiT8OZ4=;
+        b=WoU0PSQ0Wj5Vhi5VAdOixoxhmqcmoNDkx6vHqBySeC9zqf2nqsQfssDemp0HQ+Ov1B
+         x/J5MxoGXzLdJH5GEyRAbOhWT68fOGc+6rHAXDByBx1OVQfP46gGjK+Mi+BzW6aTzy1J
+         zCmFPJ2SlEc+diWQW3EPCjFu0t4IWIGEdVT9pGCnFTtf0M7aL/JzkavojLQOy4s/UgNF
+         NGApv5Q7B2F5jgchJKAeNIaqUXEoBZLJR5OdL0c5HU9ZNIBlR45kMkufdSbiFomJXlCl
+         /ZAg/DkWLMF98iVndrnP9vxLYNAXMsIgTDVMZU2Ziwpk1aIQXpLAs3/2s4PDhY8kMxbt
+         LAVQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=Z0i/FsEtEYZWQoqmAH7Voc71S2cgw06FoAKusiT8OZ4=;
+        b=Epiic/ei0PspO3exGpPmcTrC+UfS1wFUY4IgVUsDT7huO9b5W+LhMyHzOMbyXMyYP/
+         cCUcgaJeVZPFPfJeVUOq1ZNEELVdtjNfO/kTvVT9xoFaYMHd2eyrsCSVCrXHJ7Jhba7C
+         lUi6qCADEOZTrNiYAeLBd0wQPxyfVtedX1QWmVsRfqM19WvCjt1Mc5vTEdvTgEfK5pEo
+         KNitGwmDTINL6dRMTCj8byw+XGGcgQC+Kqd8tl+DcQs9JTSUKhkMZzgNH4AJk+VQUpX9
+         FYxtiWg/Bgpn0s9ertBYmMIPc9qd3ajxA8zcEWgq7l0hE45VvXEPZcEIut5LtVrB6VOS
+         m9Yw==
+X-Gm-Message-State: AJIora8F0uR6EropeT+ZKuXIKcuFA7W9b46rxNxToxxX0YeAQoWOGkgZ
+        jbH92PGmv3dm5ClLcIE42nGRxQ==
+X-Google-Smtp-Source: AGRyM1vgBjc1RVmgOpFR/T4l7q4gAYOsF/Sy+FYulOKydzkkokjqIlGLn0bz30DcFIQoLNe6uAKcaA==
+X-Received: by 2002:a05:6a00:13a5:b0:525:1da8:4af4 with SMTP id t37-20020a056a0013a500b005251da84af4mr55191739pfg.43.1657228121170;
+        Thu, 07 Jul 2022 14:08:41 -0700 (PDT)
+Received: from google.com (123.65.230.35.bc.googleusercontent.com. [35.230.65.123])
+        by smtp.gmail.com with ESMTPSA id m17-20020a170902db1100b0016a275623c1sm20721984plx.219.2022.07.07.14.08.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 07 Jul 2022 14:08:40 -0700 (PDT)
+Date:   Thu, 7 Jul 2022 21:08:36 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Yosry Ahmed <yosryahmed@google.com>
+Cc:     Tejun Heo <tj@kernel.org>, Johannes Weiner <hannes@cmpxchg.org>,
+        Zefan Li <lizefan.x@bytedance.com>,
+        Marc Zyngier <maz@kernel.org>,
+        James Morse <james.morse@arm.com>,
+        Alexandru Elisei <alexandru.elisei@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Michal Hocko <mhocko@kernel.org>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Shakeel Butt <shakeelb@google.com>,
+        Oliver Upton <oupton@google.com>, Huang@google.com,
+        Shaoqin <shaoqin.huang@intel.com>, cgroups@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        kvmarm@lists.cs.columbia.edu, kvm@vger.kernel.org,
+        linux-mm@kvack.org
+Subject: Re: [PATCH v6 2/4] KVM: mmu: add a helper to account memory used by
+ KVM MMU.
+Message-ID: <YsdLVBtl16mx3+Ot@google.com>
+References: <20220628220938.3657876-1-yosryahmed@google.com>
+ <20220628220938.3657876-3-yosryahmed@google.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="p4xrYuFtbIAeIRIg"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220628191216.39459-1-satish.nagireddy@getcruise.com>
-X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220628220938.3657876-3-yosryahmed@google.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Tue, Jun 28, 2022, Yosry Ahmed wrote:
+> Add a helper to account pages used by KVM for page tables in memory
+> secondary pagetable stats. This function will be used by subsequent
+> patches in different archs.
+> 
+> Signed-off-by: Yosry Ahmed <yosryahmed@google.com>
+> ---
+>  include/linux/kvm_host.h | 10 ++++++++++
+>  1 file changed, 10 insertions(+)
+> 
+> diff --git a/include/linux/kvm_host.h b/include/linux/kvm_host.h
+> index 3b40f8d68fbb1..032821d77e920 100644
+> --- a/include/linux/kvm_host.h
+> +++ b/include/linux/kvm_host.h
+> @@ -2241,6 +2241,16 @@ static inline void kvm_handle_signal_exit(struct kvm_vcpu *vcpu)
+>  }
+>  #endif /* CONFIG_KVM_XFER_TO_GUEST_WORK */
+>  
+> +/*
+> + * If more than one page is being (un)accounted, @virt must be the address of
+> + * the first page of a block of pages what were allocated together (i.e
+> + * accounted together).
 
---p4xrYuFtbIAeIRIg
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Sorry for the belated thoughts...
 
-On Tue, Jun 28, 2022 at 12:12:16PM -0700, Satish Nagireddy wrote:
-> This patch ensures that the clock notifier is unregistered
-> when driver probe is returning error.
->=20
-> Signed-off-by: Satish Nagireddy <satish.nagireddy@getcruise.com>
+If you spin a v7, can you add a note to call out that mod_lruvec_page_state() is
+itself thread-safe?  Caught my eye because the TDP MMU usage happens while holding
+mmu_lock for read.
 
-Applied to for-current, thanks! I added a Fixes: tag. It would be great
-if you had the time to provide it next time with the patch.
-
-Happy hacking!
-
-
---p4xrYuFtbIAeIRIg
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmLHSywACgkQFA3kzBSg
-Kba94Q//WTgLnz0z7JaTqqoTwfTrHgEet3+D3TSf+9lrrkcp7//I0jpB/xiqd2aL
-eisKE6lKbK2pfxIGYxxzr2SVdfk8/vfM0RCDULD/ZjySGkEENEO+rpcluxwdzmFS
-qAL8H1hYVikKXA7vOgfoPTJDC5W/4dy94NyRXaCKTR51NKmbQQ48Whc9YoHg34rp
-TfaQUQlUfjNWzlaPZD5+l3QlmIjfPnuKSjrcRlsMtzi/O6UzKKNH8xMoyt287yf8
-xmWcSa7jQ4BQvefQpxvEX7wB6fvMMehoPvk1jpT9NTC7O/Ntab5KI7tTvD6zAJgi
-c3O18N4GqJSpluCVbikVySSirXjlCTsV6fDtLWz2hT7ipffN5brCo1TJNV/ssv1x
-iMjglQKvklruclBGoU5B9GVktwERLwnRsia00SdXhHAlInyv7CpN/GfEqcIXepA6
-FUQ1Sv0ICatLqyTGn19AOk9Kp8er2xGnRah0IFhTMkQ8JBCL1q7bkCe7sVfY1dO0
-Sra6GSTqkY3/sVp8EAPNKfd+kfilwt3Vl+k1Mkwi5ZEuIqtsPjz56vpUKB1Rb7ms
-ozSNz02NGpi6fJTGNwBU/nwJI8w85yhZWM1vXk1wkyJOElQdEoHSVJna9jBlZZ5Z
-7eDtV2FG7KE98sB42WCgwvFhnMtK5IGeWcIy9fXh1zU6C7T0zeI=
-=FF/v
------END PGP SIGNATURE-----
-
---p4xrYuFtbIAeIRIg--
+> + */
+> +static inline void kvm_account_pgtable_pages(void *virt, int nr)
+> +{
+> +	mod_lruvec_page_state(virt_to_page(virt), NR_SECONDARY_PAGETABLE, nr);
+> +}
+> +
+>  /*
+>   * This defines how many reserved entries we want to keep before we
+>   * kick the vcpu to the userspace to avoid dirty ring full.  This
+> -- 
+> 2.37.0.rc0.161.g10f37bed90-goog
+> 

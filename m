@@ -2,218 +2,255 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C14F56A8B5
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 18:56:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EE3B956A8B7
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 18:56:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235662AbiGGQzx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Jul 2022 12:55:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35106 "EHLO
+        id S235809AbiGGQ4H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Jul 2022 12:56:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35220 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230313AbiGGQzv (ORCPT
+        with ESMTP id S235638AbiGGQ4F (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Jul 2022 12:55:51 -0400
-Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2048.outbound.protection.outlook.com [40.107.93.48])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF5F11D335;
-        Thu,  7 Jul 2022 09:55:50 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=aRRgHLikBi/dXAgUX5JzoxuGvwHkH2eK3aHr/Fj2C01sVUF9wJlyWe46spABlI/pDean1g2L7xFTEcZd3e8l9N6CX1R5pi3PmLemJn4R25MkrBRExUsEGlqXOYF8H9s7Sn/x61q2y6QpW4TtkBcvNFApuT6NI4cU4+3HqTPCYTu7cqD2MDEY4HcfLCkSik4TQO8x1XV1YLNfVWZPnMb8eSQGjRIfvWtpwRFsQthJgDrMfVG5Snnk3/tCkfmAGFDZSi/do/52NRWNPzA9zcOihrGmJq5pScPvQSlHXrpsTB5imkNhRN0fpOKg8sN7Py9yO/Uk5W9O/idS4HEg3cMPgg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=DE1xs5A8thrUl5LPVV7c/9fZki/WFGQ1WGIKHjPsX8k=;
- b=WMxwQlHI/F8NdBCBoSl+52UOgiawNypMbdfXMhmmm98PC8PikqdpRCq3YPcFdINA2HpFAsN4XG4/L7PPfLAypcsB3AOrm5Ca2/P7GX0ogY1mZEGzDVmYNRs3G9qIM/G1ZOnTM3pHtkrCP6RW4+j6QYxmagZBgVFEwGFesjZAl2fmto7Eb+s/kRk2hc0aEQw07fWvOugDB73ui5V5rsGlAxJ2WVpke9bF7QVrvAtIepRVe/d04iRqc89cTrC6+sIUD22tDhQC57mYFHaq2BEdiDMrskF8QnojmK8rh1EtYYHAV9xzfkKm8WS6kcK/IWKFS2CiICY9baCH0qwiePQAvQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=intel.com smtp.mailfrom=amd.com; dmarc=pass
- (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=DE1xs5A8thrUl5LPVV7c/9fZki/WFGQ1WGIKHjPsX8k=;
- b=aGquq+dbGnnAzbUhdSfb7ZiS6MX883syOZpztsor+5XLIFXW/NwGMo2SnGjJoHWAUd3ca4gVbx+2j3MfzTg74r+kpYeshwOg6oODuT0mps+BoATuPnDVRt7WYzkpcgGouG0qIJJP7NP9+M1PuCcqMv6p4sJqrp1fWd9IJVBxXvY=
-Received: from BN9P223CA0012.NAMP223.PROD.OUTLOOK.COM (2603:10b6:408:10b::17)
- by CY4PR12MB1416.namprd12.prod.outlook.com (2603:10b6:903:44::7) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5395.18; Thu, 7 Jul
- 2022 16:55:48 +0000
-Received: from BN8NAM11FT026.eop-nam11.prod.protection.outlook.com
- (2603:10b6:408:10b:cafe::ba) by BN9P223CA0012.outlook.office365.com
- (2603:10b6:408:10b::17) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5417.15 via Frontend
- Transport; Thu, 7 Jul 2022 16:55:47 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- BN8NAM11FT026.mail.protection.outlook.com (10.13.177.51) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.5417.15 via Frontend Transport; Thu, 7 Jul 2022 16:55:47 +0000
-Received: from pyuan-desktop.amd.com (10.180.168.240) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.28; Thu, 7 Jul
- 2022 11:55:40 -0500
-From:   Perry Yuan <Perry.Yuan@amd.com>
-To:     <rafael.j.wysocki@intel.com>, <viresh.kumar@linaro.org>,
-        <Ray.Huang@amd.com>, Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, <x86@kernel.org>,
-        "H. Peter Anvin" <hpa@zytor.com>, Huang Rui <ray.huang@amd.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Pawan Gupta <pawan.kumar.gupta@linux.intel.com>,
-        Perry Yuan <Perry.Yuan@amd.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Tony Luck <tony.luck@intel.com>,
-        Stephane Eranian <eranian@google.com>,
-        Ricardo Neri <ricardo.neri-calderon@linux.intel.com>,
-        <linux-kernel@vger.kernel.org>, <linux-pm@vger.kernel.org>
-CC:     <Deepak.Sharma@amd.com>, <Mario.Limonciello@amd.com>,
-        <Nathan.Fontenot@amd.com>, <Alexander.Deucher@amd.com>,
-        <Jinzhou.Su@amd.com>, <Xinmei.Huang@amd.com>,
-        <Xiaojian.Du@amd.com>, <Li.Meng@amd.com>
-Subject: [PATCH 02/12] cpufreq: amd-pstate: enable AMD Precision Boost mode switch
-Date:   Thu, 7 Jul 2022 12:55:21 -0400
-Message-ID: <20220707165522.212990-1-Perry.Yuan@amd.com>
-X-Mailer: git-send-email 2.25.1
+        Thu, 7 Jul 2022 12:56:05 -0400
+Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 021691D335
+        for <linux-kernel@vger.kernel.org>; Thu,  7 Jul 2022 09:56:04 -0700 (PDT)
+Received: by mail-pf1-x434.google.com with SMTP id l124so10191274pfl.8
+        for <linux-kernel@vger.kernel.org>; Thu, 07 Jul 2022 09:56:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=1BT1AT3k3iZmUZypE3uU5mjcufGCXhMCCf//Wo7EMV0=;
+        b=C6bwjOBD52gxx6jkELTtK27C7o3ITQe946fB8fjzS8ygN3RVGrh0hDzKQd/5woWYsE
+         qTvSUaTh9ZDRbZ8bNYVIoU4dSWpJ/04NsVHJL5wpZ0rxdLRmhPJPgNjwhxl9txmyAGYn
+         hlLvBlzMhojacIdcbt4Ta5XayLq48MWFeC2/5yJRj7iI2h0PVujwu3jSqJ6kSD4dC9dR
+         PrO/ST/nzyMl4a8jz5CLtFH2nhCk8yfdKFY/r3deEVhmp2ZoiSObgF9jQk4FYx/i5yoh
+         +KWj4h2jQ1BYsYJ1j8jVx7Lp5/r+BfI3pSPvbPp4OSntUuYFCHqoHoEIDsL8JJYOyaKM
+         Qyuw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=1BT1AT3k3iZmUZypE3uU5mjcufGCXhMCCf//Wo7EMV0=;
+        b=T1bHupCQAWa1hT5CPxNwVvEz7F+3vmfN2k0R1E+p+xoqaUkLWG1h4ZBy/MPDbgtGY/
+         /Ui6qW/e/FrlnFyOy5I3NN1Sev0UHFh7kegj16BFin/IbkotE+kKx9VfTgWfG+gpNfyN
+         1dKBBxbyTgi4PGJqnVLi7+BcOK17sobT+WmAYjIjckOtdFAPu6oVXyE1EGHjl5QAKQrX
+         1wHHCAbZ3ehn8QesqCHiF7i3rw+7C/2+mRaO8Wx9QtMgbIqXNipw3RGEP6jkUpXERmbL
+         4Kefjph5TAPlRrdVl6iYqU2M0lAF090TiV7VTDl/B/ppLrWaFlRPqLlFKAczp3MQ6YlN
+         QSFQ==
+X-Gm-Message-State: AJIora9Br9ut2GzSVmqT7bAD8irPov762wjLV75Ep2IkqkAiPUo0gWbH
+        40cvtMVcaZCLnbJ3ngsVyW94
+X-Google-Smtp-Source: AGRyM1tWAmuv/zDzk386/V8vG5C1HmB4rlyeJWlBag0dj/uxPpxeuWGA2XXBKCFE4zTbAzH6I61Swg==
+X-Received: by 2002:a63:d54c:0:b0:412:562e:6964 with SMTP id v12-20020a63d54c000000b00412562e6964mr16815009pgi.528.1657212963414;
+        Thu, 07 Jul 2022 09:56:03 -0700 (PDT)
+Received: from thinkpad ([117.207.26.37])
+        by smtp.gmail.com with ESMTPSA id b123-20020a621b81000000b00528c22fbb45sm2927241pfb.141.2022.07.07.09.55.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 07 Jul 2022 09:56:03 -0700 (PDT)
+Date:   Thu, 7 Jul 2022 22:25:56 +0530
+From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+To:     Vidya Sagar <vidyas@nvidia.com>
+Cc:     jingoohan1@gmail.com, gustavo.pimentel@synopsys.com,
+        lpieralisi@kernel.org, robh@kernel.org, kw@linux.com,
+        bhelgaas@google.com, linux-pci@vger.kernel.org,
+        linux-kernel@vger.kernel.org, kthota@nvidia.com,
+        mmaddireddy@nvidia.com, sagar.tv@gmail.com
+Subject: Re: [PATCH V1] PCI: designware-ep: Fix DBI access before core init
+Message-ID: <20220707165556.GA5458@thinkpad>
+References: <20220622040133.31058-1-vidyas@nvidia.com>
+ <5c36260c-6bb6-7eb5-be82-c60cd927c02d@nvidia.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.180.168.240]
-X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
- (10.181.40.145)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: e440c9b4-e136-4bb6-e215-08da60398a5d
-X-MS-TrafficTypeDiagnostic: CY4PR12MB1416:EE_
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 9tCIUVGvmgusYDmk5/HMVr+tVNSehD6/srb/IR7pJAWatVSTzplAKy6ofMt2uoYjWScbzc5MSFEC/+yXSCVjYExUONOauTSg8vvnGlDebZFIfk43FA9eiz6l82tHk71NkUZCvmNnxNmwKP3YYTy5KRZ2pxAuD0UvDSCjA9iYPhdP39kYmn9KaC8QxYNPVJDikfhhunZCLx/I4z44haC1RbHz18bT5Fval7b/GjQkIdC4UYcNNMi4aE1GyLLYRockuEmExIL8BvLwhQ9K6P/peCRnl8ixytgWFRSd2JhGy+Ehr1lNoZf7ul0wsUpxG4tu1p4PrD4nNgb/JJdfelushEW1Vlnm+Xu73z44qWwvydT/X6DwuCYfmXFSf11mX4LNZZq3WXokQ6lhK+Lq+OUvIc8BG/theH0g9xzJIPrtqxJvkxxEGk/xFXykfzmh1SpnGHTWOB9coEV25izNi3MhS3bvaBM7tyfyxLnHSkTdPQB1/aCzsAo5AspN1nFVPan+tdNf1O8cbrxjCTLRG1VHwQ85BvMVM82r0X8uHt2OLxIo4nPf5RmNn0B++rwtVZXJ6VN26XSFKraPdaZJCGB5zMAHnyfKv4JuLc7x4B/84STiATPpD1jPisLrlKD7++gTo62Q1/33yE5xU3bNyrVzRX+pdCgvbbFfM3Udr9mM6sikjBNtZxnFXdU7QDLgHGacmLoBRoYuv2TsP+ILg6vcpV/+VnfrUUx3PfYjoJZuYxX4JcXi3qVFHCRGTT5KC2Jt3C0WlciaB5c1AE5ptjdsrTBo7/X+Zn9lsfQFF7/gLmmSaUtGaKl2f6dpl+bA4kN+AK2Ap+UKQmUMi45KGXCu2vY9mHfrRT6ilM61XGsxrUqKGu7yxMSxxizc0Bx/cK0TG5k7raqeEtX73ag3dqVqvQ==
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230016)(4636009)(346002)(39860400002)(396003)(136003)(376002)(46966006)(36840700001)(40470700004)(8676002)(70206006)(70586007)(82310400005)(4326008)(5660300002)(356005)(8936002)(921005)(86362001)(2906002)(336012)(7416002)(82740400003)(81166007)(426003)(47076005)(83380400001)(41300700001)(16526019)(7696005)(40480700001)(6666004)(1076003)(40460700003)(110136005)(36860700001)(54906003)(2616005)(478600001)(186003)(36756003)(316002)(26005)(34020700004)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Jul 2022 16:55:47.6376
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: e440c9b4-e136-4bb6-e215-08da60398a5d
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT026.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY4PR12MB1416
+In-Reply-To: <5c36260c-6bb6-7eb5-be82-c60cd927c02d@nvidia.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add support to switch AMD precision boost state to scale cpu max
-frequency that will help to improve the processor throughput.
+Hi,
 
-when set boost state to be enabled, user will need to execute below commands,
-the CPU will reach absolute maximum performance level or the highest perf which
-CPU physical support. This performance level may not be sustainable for
-long durations, it will help to improve the IO workload tasks.
+On Thu, Jul 07, 2022 at 02:39:08PM +0530, Vidya Sagar wrote:
+> Hi,
+> Anyone has review comments for this change?
+> Without this change, Tegra194's endpoint mode is effectively broken.
+> 
 
-* turn on CPU boost state under root
-  echo 1 > /sys/devices/system/cpu/cpufreq/boost
+I submitted a patch that fixes this issue in March and I did CC you on that.
+https://lore.kernel.org/lkml/20220330060515.22328-1-manivannan.sadhasivam@linaro.org/
 
-If user set boost off,the CPU can reach to the maximum sustained
-performance level of the process, that level is the process can maintain
-continously working and definitely it can save some power compared to
-boost on mode.
+That patch incorporated comments from Kishon on the previous patch from
+Kunihiko Hayashi. But there was no response afterwards.
 
-* turn off CPU boost state under root
-  echo 0 > /sys/devices/system/cpu/cpufreq/boost
+Thanks,
+Mani
 
-Signed-off-by: Perry Yuan <Perry.Yuan@amd.com>
----
- arch/x86/include/asm/msr-index.h |  2 ++
- drivers/cpufreq/amd-pstate.c     | 22 +++++++++++++++++++---
- 2 files changed, 21 insertions(+), 3 deletions(-)
+> Thanks & Regards,
+> Vidya Sagar
+> 
+> On 6/22/2022 9:31 AM, Vidya Sagar wrote:
+> > Platforms that cannot support their core initialization without the
+> > reference clock from the host, implement the feature 'core_init_notifier'
+> > to indicate the DesignWare sub-system about when their core is getting
+> > initialized. Any accesses to the core (Ex:- DBI) would result in system
+> > hang in such systems (Ex:- tegra194). This patch moves any access to the
+> > core to dw_pcie_ep_init_complete() API which is effectively called only
+> > after the core initialization.
+> > 
+> > Signed-off-by: Vidya Sagar <vidyas@nvidia.com>
+> > ---
+> >   .../pci/controller/dwc/pcie-designware-ep.c   | 88 +++++++++++--------
+> >   1 file changed, 49 insertions(+), 39 deletions(-)
+> > 
+> > diff --git a/drivers/pci/controller/dwc/pcie-designware-ep.c b/drivers/pci/controller/dwc/pcie-designware-ep.c
+> > index 0eda8236c125..9feec720175f 100644
+> > --- a/drivers/pci/controller/dwc/pcie-designware-ep.c
+> > +++ b/drivers/pci/controller/dwc/pcie-designware-ep.c
+> > @@ -639,9 +639,14 @@ static unsigned int dw_pcie_ep_find_ext_capability(struct dw_pcie *pci, int cap)
+> >   int dw_pcie_ep_init_complete(struct dw_pcie_ep *ep)
+> >   {
+> >   	struct dw_pcie *pci = to_dw_pcie_from_ep(ep);
+> > +	struct dw_pcie_ep_func *ep_func;
+> > +	struct device *dev = pci->dev;
+> > +	struct pci_epc *epc = ep->epc;
+> >   	unsigned int offset;
+> >   	unsigned int nbars;
+> >   	u8 hdr_type;
+> > +	u8 func_no;
+> > +	void *addr;
+> >   	u32 reg;
+> >   	int i;
+> > @@ -654,6 +659,42 @@ int dw_pcie_ep_init_complete(struct dw_pcie_ep *ep)
+> >   		return -EIO;
+> >   	}
+> > +	dw_pcie_iatu_detect(pci);
+> > +
+> > +	ep->ib_window_map = devm_kcalloc(dev,
+> > +					 BITS_TO_LONGS(pci->num_ib_windows),
+> > +					 sizeof(long),
+> > +					 GFP_KERNEL);
+> > +	if (!ep->ib_window_map)
+> > +		return -ENOMEM;
+> > +
+> > +	ep->ob_window_map = devm_kcalloc(dev,
+> > +					 BITS_TO_LONGS(pci->num_ob_windows),
+> > +					 sizeof(long),
+> > +					 GFP_KERNEL);
+> > +	if (!ep->ob_window_map)
+> > +		return -ENOMEM;
+> > +
+> > +	addr = devm_kcalloc(dev, pci->num_ob_windows, sizeof(phys_addr_t),
+> > +			    GFP_KERNEL);
+> > +	if (!addr)
+> > +		return -ENOMEM;
+> > +	ep->outbound_addr = addr;
+> > +
+> > +	for (func_no = 0; func_no < epc->max_functions; func_no++) {
+> > +		ep_func = devm_kzalloc(dev, sizeof(*ep_func), GFP_KERNEL);
+> > +		if (!ep_func)
+> > +			return -ENOMEM;
+> > +
+> > +		ep_func->func_no = func_no;
+> > +		ep_func->msi_cap = dw_pcie_ep_find_capability(ep, func_no,
+> > +							      PCI_CAP_ID_MSI);
+> > +		ep_func->msix_cap = dw_pcie_ep_find_capability(ep, func_no,
+> > +							       PCI_CAP_ID_MSIX);
+> > +
+> > +		list_add_tail(&ep_func->list, &ep->func_list);
+> > +	}
+> > +
+> >   	offset = dw_pcie_ep_find_ext_capability(pci, PCI_EXT_CAP_ID_REBAR);
+> >   	dw_pcie_dbi_ro_wr_en(pci);
+> > @@ -677,8 +718,6 @@ EXPORT_SYMBOL_GPL(dw_pcie_ep_init_complete);
+> >   int dw_pcie_ep_init(struct dw_pcie_ep *ep)
+> >   {
+> >   	int ret;
+> > -	void *addr;
+> > -	u8 func_no;
+> >   	struct resource *res;
+> >   	struct pci_epc *epc;
+> >   	struct dw_pcie *pci = to_dw_pcie_from_ep(ep);
+> > @@ -686,7 +725,6 @@ int dw_pcie_ep_init(struct dw_pcie_ep *ep)
+> >   	struct platform_device *pdev = to_platform_device(dev);
+> >   	struct device_node *np = dev->of_node;
+> >   	const struct pci_epc_features *epc_features;
+> > -	struct dw_pcie_ep_func *ep_func;
+> >   	INIT_LIST_HEAD(&ep->func_list);
+> > @@ -708,8 +746,6 @@ int dw_pcie_ep_init(struct dw_pcie_ep *ep)
+> >   		}
+> >   	}
+> > -	dw_pcie_iatu_detect(pci);
+> > -
+> >   	res = platform_get_resource_byname(pdev, IORESOURCE_MEM, "addr_space");
+> >   	if (!res)
+> >   		return -EINVAL;
+> > @@ -717,26 +753,6 @@ int dw_pcie_ep_init(struct dw_pcie_ep *ep)
+> >   	ep->phys_base = res->start;
+> >   	ep->addr_size = resource_size(res);
+> > -	ep->ib_window_map = devm_kcalloc(dev,
+> > -					 BITS_TO_LONGS(pci->num_ib_windows),
+> > -					 sizeof(long),
+> > -					 GFP_KERNEL);
+> > -	if (!ep->ib_window_map)
+> > -		return -ENOMEM;
+> > -
+> > -	ep->ob_window_map = devm_kcalloc(dev,
+> > -					 BITS_TO_LONGS(pci->num_ob_windows),
+> > -					 sizeof(long),
+> > -					 GFP_KERNEL);
+> > -	if (!ep->ob_window_map)
+> > -		return -ENOMEM;
+> > -
+> > -	addr = devm_kcalloc(dev, pci->num_ob_windows, sizeof(phys_addr_t),
+> > -			    GFP_KERNEL);
+> > -	if (!addr)
+> > -		return -ENOMEM;
+> > -	ep->outbound_addr = addr;
+> > -
+> >   	if (pci->link_gen < 1)
+> >   		pci->link_gen = of_pci_get_max_link_speed(np);
+> > @@ -753,20 +769,6 @@ int dw_pcie_ep_init(struct dw_pcie_ep *ep)
+> >   	if (ret < 0)
+> >   		epc->max_functions = 1;
+> > -	for (func_no = 0; func_no < epc->max_functions; func_no++) {
+> > -		ep_func = devm_kzalloc(dev, sizeof(*ep_func), GFP_KERNEL);
+> > -		if (!ep_func)
+> > -			return -ENOMEM;
+> > -
+> > -		ep_func->func_no = func_no;
+> > -		ep_func->msi_cap = dw_pcie_ep_find_capability(ep, func_no,
+> > -							      PCI_CAP_ID_MSI);
+> > -		ep_func->msix_cap = dw_pcie_ep_find_capability(ep, func_no,
+> > -							       PCI_CAP_ID_MSIX);
+> > -
+> > -		list_add_tail(&ep_func->list, &ep->func_list);
+> > -	}
+> > -
+> >   	if (ep->ops->ep_init)
+> >   		ep->ops->ep_init(ep);
+> > @@ -790,6 +792,14 @@ int dw_pcie_ep_init(struct dw_pcie_ep *ep)
+> >   			return 0;
+> >   	}
+> > +	/*
+> > +	 * NOTE:- Avoid accessing the hardware (Ex:- DBI space) before this
+> > +	 * step as platforms that implement 'core_init_notifier' feature may
+> > +	 * not have the hardware ready (i.e. core initialized) for access
+> > +	 * (Ex: tegra194). Any hardware access on such platforms result
+> > +	 * in system hard hang.
+> > +	 */
+> > +
+> >   	return dw_pcie_ep_init_complete(ep);
+> >   }
+> >   EXPORT_SYMBOL_GPL(dw_pcie_ep_init);
+> > 
 
-diff --git a/arch/x86/include/asm/msr-index.h b/arch/x86/include/asm/msr-index.h
-index 869508de8269..b952fd6d6916 100644
---- a/arch/x86/include/asm/msr-index.h
-+++ b/arch/x86/include/asm/msr-index.h
-@@ -559,6 +559,8 @@
- #define AMD_CPPC_MIN_PERF(x)		(((x) & 0xff) << 8)
- #define AMD_CPPC_DES_PERF(x)		(((x) & 0xff) << 16)
- #define AMD_CPPC_ENERGY_PERF_PREF(x)	(((x) & 0xff) << 24)
-+#define AMD_CPPC_PRECISION_BOOST_BIT	25
-+#define AMD_CPPC_PRECISION_BOOST_ENABLED	BIT_ULL(AMD_CPPC_PRECISION_BOOST_BIT)
- 
- /* AMD Performance Counter Global Status and Control MSRs */
- #define MSR_AMD64_PERF_CNTR_GLOBAL_STATUS	0xc0000300
-diff --git a/drivers/cpufreq/amd-pstate.c b/drivers/cpufreq/amd-pstate.c
-index 9ac75c1cde9c..188e055e24a2 100644
---- a/drivers/cpufreq/amd-pstate.c
-+++ b/drivers/cpufreq/amd-pstate.c
-@@ -122,6 +122,7 @@ struct amd_cpudata {
- 
- 	u64 freq;
- 	bool	boost_supported;
-+	u64 	cppc_hw_conf_cached;
- };
- 
- static inline int pstate_enable(bool enable)
-@@ -438,18 +439,27 @@ static int amd_pstate_set_boost(struct cpufreq_policy *policy, int state)
- {
- 	struct amd_cpudata *cpudata = policy->driver_data;
- 	int ret;
-+	u64 value;
- 
- 	if (!cpudata->boost_supported) {
- 		pr_err("Boost mode is not supported by this processor or SBIOS\n");
- 		return -EINVAL;
- 	}
- 
--	if (state)
-+	ret = rdmsrl_on_cpu(cpudata->cpu, MSR_AMD_CPPC_HW_CTL, &value);
-+	if (ret)
-+		return ret;
-+
-+	if (state) {
-+		value |= AMD_CPPC_PRECISION_BOOST_ENABLED;
- 		policy->cpuinfo.max_freq = cpudata->max_freq;
--	else
-+	} else {
-+		value &= ~AMD_CPPC_PRECISION_BOOST_ENABLED;
- 		policy->cpuinfo.max_freq = cpudata->nominal_freq;
--
-+	}
- 	policy->max = policy->cpuinfo.max_freq;
-+	WRITE_ONCE(cpudata->cppc_hw_conf_cached, value);
-+	wrmsrl_on_cpu(cpudata->cpu, MSR_AMD_CPPC_HW_CTL, value);
- 
- 	ret = freq_qos_update_request(&cpudata->req[1],
- 				      policy->cpuinfo.max_freq);
-@@ -478,6 +488,7 @@ static int amd_pstate_cpu_init(struct cpufreq_policy *policy)
- 	int min_freq, max_freq, nominal_freq, lowest_nonlinear_freq, ret;
- 	struct device *dev;
- 	struct amd_cpudata *cpudata;
-+	u64 value;
- 
- 	dev = get_cpu_device(policy->cpu);
- 	if (!dev)
-@@ -542,6 +553,11 @@ static int amd_pstate_cpu_init(struct cpufreq_policy *policy)
- 
- 	policy->driver_data = cpudata;
- 
-+	ret = rdmsrl_on_cpu(cpudata->cpu, MSR_AMD_CPPC_HW_CTL, &value);
-+	if (ret)
-+		return ret;
-+	WRITE_ONCE(cpudata->cppc_hw_conf_cached, value);
-+
- 	amd_pstate_boost_init(cpudata);
- 
- 	return 0;
 -- 
-2.25.1
-
+மணிவண்ணன் சதாசிவம்

@@ -2,189 +2,233 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 99427569D70
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 10:30:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 98FB3569D77
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 10:31:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235162AbiGGI1G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Jul 2022 04:27:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46238 "EHLO
+        id S234779AbiGGIbW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Jul 2022 04:31:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49530 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234945AbiGGI1D (ORCPT
+        with ESMTP id S232893AbiGGIbT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Jul 2022 04:27:03 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 02BCB14D21
-        for <linux-kernel@vger.kernel.org>; Thu,  7 Jul 2022 01:27:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1657182421;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=hyQUq78HZYV0U5amrGZK5Au62aqwa+QCBY5NRkOA5vM=;
-        b=Za1c3dchr9VjWfrfMwzbmap30VjOuSjq8jpKqxO9feLQkidfcNtGkfSjYRLrw51CdMSVyZ
-        l44mgb8yrPR6nw82yuQHX1wVC+3EzdKglDHla7aTQdVHH5nWJLpiQjnkSR/zQ2waM5ZAk4
-        fvM/tVl90P8vzI3fQNWZwyxjYvzfwjo=
-Received: from mail-ej1-f72.google.com (mail-ej1-f72.google.com
- [209.85.218.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-297-hp2mYy4NONukDtTQ4jzcxA-1; Thu, 07 Jul 2022 04:26:59 -0400
-X-MC-Unique: hp2mYy4NONukDtTQ4jzcxA-1
-Received: by mail-ej1-f72.google.com with SMTP id sg40-20020a170907a42800b00722faf0aacbso4466460ejc.3
-        for <linux-kernel@vger.kernel.org>; Thu, 07 Jul 2022 01:26:59 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
-         :message-id:mime-version;
-        bh=hyQUq78HZYV0U5amrGZK5Au62aqwa+QCBY5NRkOA5vM=;
-        b=lVmGSf5uJ6xKg19jmxNkSz2t7HGXtgOQ7GGw1W/A9NOgvn5FIIbOqoLE7ATddkSBAD
-         v7VMKw7fItHoHLrXijuqb27yTQiJ037pJmXeY+vWer0++CUgeNovFmDohIyguz34HaNG
-         aoYFbPArsKw7vv/XUv6B30X9/zGFHalxkNAm+EjfIq7YGxn+w2KcQ6x+yAGyBNAqwpJh
-         nQOD8InMoywZrrxruRd07pJAWB5K7DphTa4j0nFCHyT33or2SgjXVr6VOAWbj1ZM7NYA
-         q8OCvmjjyyAUWL35RN/ypVsTQnDbHXV0inbS0ahYhV8BMfFKB5USTKwNkrBXMeAZYhik
-         rksQ==
-X-Gm-Message-State: AJIora8DRN+DZObUkEFGbWLJ6TJsJnUmYq4NYTywCVftKgkCVb+DsG/E
-        HL34rB++Na2V2nIiI9Ua38Ac8uoTdcXmm1viz9CeZZP5XbQsbGuhxOGwlghI1hzW6QdRnI9ZH7K
-        IMuOuTH5ujZ+thpLgcl+C/EQm
-X-Received: by 2002:a05:6402:c0b:b0:43a:25ff:ff08 with SMTP id co11-20020a0564020c0b00b0043a25ffff08mr32234926edb.148.1657182418713;
-        Thu, 07 Jul 2022 01:26:58 -0700 (PDT)
-X-Google-Smtp-Source: AGRyM1uvaDV9BbuUE121Sm+1DSqPLexh4d8iG52AgkDo+XRYCQ8whzlmbqjuBkwqDmHZx8J/VKLzYA==
-X-Received: by 2002:a05:6402:c0b:b0:43a:25ff:ff08 with SMTP id co11-20020a0564020c0b00b0043a25ffff08mr32234901edb.148.1657182418538;
-        Thu, 07 Jul 2022 01:26:58 -0700 (PDT)
-Received: from fedora (nat-2.ign.cz. [91.219.240.2])
-        by smtp.gmail.com with ESMTPSA id eo7-20020a056402530700b0043a78236cd2sm5689000edb.89.2022.07.07.01.26.57
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 07 Jul 2022 01:26:58 -0700 (PDT)
-From:   Vitaly Kuznetsov <vkuznets@redhat.com>
-To:     Wang Guangju <wangguangju@baidu.com>
-Cc:     linux-kernel@vger.kernel.org, wangguangju@baidu.com,
-        seanjc@google.com, pbonzini@redhat.com, jmattson@google.com,
-        wanpengli@tencent.com, bp@alien8.de, joro@8bytes.org,
-        suravee.suthikulpanit@amd.com, hpa@zytor.com, tglx@linutronix.de,
-        mingo@redhat.com, kvm@vger.kernel.org
-Subject: Re: [PATCH] KVM: x86: Add EOI exit bitmap handlers for Hyper-V
- SynIC vectors
-In-Reply-To: <20220705083732.168-1-wangguangju@baidu.com>
-References: <20220705083732.168-1-wangguangju@baidu.com>
-Date:   Thu, 07 Jul 2022 10:26:56 +0200
-Message-ID: <87v8s9qqen.fsf@redhat.com>
-MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Thu, 7 Jul 2022 04:31:19 -0400
+Received: from wout4-smtp.messagingengine.com (wout4-smtp.messagingengine.com [64.147.123.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 222814D4D2
+        for <linux-kernel@vger.kernel.org>; Thu,  7 Jul 2022 01:31:18 -0700 (PDT)
+Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
+        by mailout.west.internal (Postfix) with ESMTP id 9773F3200645;
+        Thu,  7 Jul 2022 04:31:14 -0400 (EDT)
+Received: from imap44 ([10.202.2.94])
+  by compute4.internal (MEProxy); Thu, 07 Jul 2022 04:31:15 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
+        cc:cc:content-transfer-encoding:content-type:date:date:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to; s=fm1; t=1657182674; x=
+        1657269074; bh=lID+xeUqMXtL0IhAsmdbChSx6RqMj0NKkfTfFacEB6U=; b=b
+        n9kwemExt/Z4AexJfIHsATJZHH7UNHMtlBiVCDl97ZiEk8MAnSCvsMAmN6N12D1s
+        vWjWXoGOhjKJi38WY7uzptADQj3Ac20lOLImsPiTuYmCSjKDeK/tIXyfYWgZzGeU
+        75DavsPBDTyCf1t9zpe+wpdh30q0YpZWiqBhyVH4mlZnxhmgHGv3gFtHiUgZa7p9
+        yikmnUUsbATlcMl6lEWHUmUvcGP/P5E1GSwhmv12YPo1hW1kgFaJp5ZaRhIz1nBL
+        5oyNYVB3igA6x2wn86loEfT4E+zbSq2A7h1P3cbZOBQS1Z5OqZ6tuvJPc6KeHwzz
+        Y+h/5IfjTK8Stwwya1K0A==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding
+        :content-type:date:date:feedback-id:feedback-id:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
+        :x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=1657182674; x=
+        1657269074; bh=lID+xeUqMXtL0IhAsmdbChSx6RqMj0NKkfTfFacEB6U=; b=K
+        fF79fUJXNq0huGbM0lusG209u5WOvftqJCMXEg1eXHPLQWDQnF/iRxirSFPYzrdq
+        qlCaFPQuwwu0FmxKNctdCud52FgVPfejvPY+q/5npa4Lz7YsK9fCf6Ecu9VTMZ6K
+        np74NHi0GIimdFrcKkI3RmCoIUscbdScJF2Q9/rduBrwtf9V7V63mX6P7e6Iqqve
+        5/rVM0ocN5f8Ppw9vJUM1KPgFESCR3uGUvoYKyWi+YT+SzYJC9q011W+OSCHdJ/a
+        kLFBtrRAC+lESWzPJlcKSoM3k/Fo44VIqc7s9M+RUklVr0LyW+lcxRKzg9DIwHWe
+        a6Gd9QWoVpLqhP4miu3/w==
+X-ME-Sender: <xms:0ZnGYhGWkF1WgLcL3dYKvGMFX8c7DoLQNZHn3M1xeU9nWGMbplFttw>
+    <xme:0ZnGYmVHBRsuPHPg7vwtjKe2eM0EgN5s9MypgaAH-bKiQL7SZstARyNe0WJZZje4Z
+    msVXxmovdngpEVW44g>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrudeihedgtdefucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepofgfggfkjghffffhvfevufgtgfesthhqredtreerjeenucfhrhhomhepfdfl
+    ihgrgihunhcujggrnhhgfdcuoehjihgrgihunhdrhigrnhhgsehflhihghhorghtrdgtoh
+    hmqeenucggtffrrghtthgvrhhnpeefteeuieffudeuteejudffkeduleffhffhtdehvdeg
+    vdeggefgjeetleegjeevhfenucffohhmrghinhepmhdurhgrtghlvghsrdgtohhmpdhfph
+    hurdhssgenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhm
+    pehjihgrgihunhdrhigrnhhgsehflhihghhorghtrdgtohhm
+X-ME-Proxy: <xmx:0ZnGYjJ84J1XB-QVVVCaNSWSxEfZYM4n63qdcUqy9obOcr111q0sGQ>
+    <xmx:0ZnGYnE5JQdd3i__QwW52WyKuNpM-zzwBqDVwVrqJUKdMM3nQXoVnQ>
+    <xmx:0ZnGYnW_5Kpef6Us3Z4yU6b0gjsjuxI78StAJy_h_OycbU-3UVQsdQ>
+    <xmx:0pnGYkhmGi4GfZ1bFAaChcpMFxn3m6p07qPYjjcu7bMjwF5ENiadYQ>
+Feedback-ID: ifd894703:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id 72ADE36A0071; Thu,  7 Jul 2022 04:31:13 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.7.0-alpha0-719-gc39a70fa89-fm-20220629.002-gc39a70fa
+Mime-Version: 1.0
+Message-Id: <2e0bb05b-cd85-4eb0-bf8f-f90156196a63@www.fastmail.com>
+In-Reply-To: <8a9cd14a-54ed-cd2b-88ad-647a43b09d0e@loongson.cn>
+References: <20220706112937.1218573-1-huqi@loongson.cn>
+ <CAAhV-H6MHjzdwyZqk6a3sKByRofG1Th6QEk0Be5NBhiAsVNcTg@mail.gmail.com>
+ <8a9cd14a-54ed-cd2b-88ad-647a43b09d0e@loongson.cn>
+Date:   Thu, 07 Jul 2022 09:30:40 +0100
+From:   "Jiaxun Yang" <jiaxun.yang@flygoat.com>
+To:     "Qi Hu" <huqi@loongson.cn>, "Huacai Chen" <chenhuacai@kernel.org>
+Cc:     "Xuerui Wang" <kernel@xen0n.name>, loongarch@lists.linux.dev,
+        LKML <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v3] LoongArch: Remove vcsr in loongarch_fpu
+Content-Type: text/plain;charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Wang Guangju <wangguangju@baidu.com> writes:
 
-> From: wangguangju <wangguangju@baidu.com>
+
+=E5=9C=A82022=E5=B9=B47=E6=9C=887=E6=97=A5=E4=B8=83=E6=9C=88 =E4=B8=8A=E5=
+=8D=888:35=EF=BC=8CQi Hu=E5=86=99=E9=81=93=EF=BC=9A
+> On 2022/7/7 14:45, Huacai Chen wrote:
+>> Hi, all,
+>>
+>> I have rewritten the commit message. If no problem, this patch will be
+>> queued for loongarch-fixes.
+>> --
+>> The `vcsr` only exists in the old hardware design, it isn't used in a=
+ny
+>> shipped hardware from Loongson-3A5000 on. FPU and LSX/LASX both use t=
+he
+>> `fcsr` as their control and status registers now. For example, the RM
+>> control bit in fcsr0 is shared by FPU, LSX and LASX.
+>>
+>> Particularly, fcsr16 to fcsr31 are reserved for LSX/LASX now, access =
+to
+>> these registers has no visible effect if LSX/LASX is enabled, and will
+>> cause SXD/ASXD exceptions if LSX/LASX is not enabled.
+>>
+>> So, mentions of vcsr are obsolete in the first place, let's remove th=
+em.
 >
-> Hyper-V SynIC vectors were added into EOI exit bitmap in func
-> synic_set_sint().But when the Windows VM VMEXIT due to
-> EXIT_REASON_EOI_INDUCED, there are no EOI exit bitmap handlers
-> for Hyper-V SynIC vectors.
-
-My take:
-
-"When EOI virtualization is performed on VMX,
-kvm_apic_set_eoi_accelerated() is called upon EXIT_REASON_EOI_INDUCED
-but unlike its non-accelerated apic_set_eoi() sibling, Hyper-V SINT
-vectors are left unhandled.
-"
-
+> Or simply say this?
 >
-> This patch fix it.
->
-> Change-Id: I2404ebf7bda60326be3f6786e0e34e63aa81bbd4
+> Remove VCSR from "loongarch_fpu" which is used for debugging.
 
-In case this is not something publicly available it doesn't belong to
-kernel changelog as it doesn't bring any value.
+Then you it will be a cross talk vulnerability if you simply ignore it i=
+n kernel.
 
-> Signed-off-by: wangguangju <wangguangju@baidu.com>
-> ---
->  arch/x86/kvm/lapic.c | 4 ++++
->  1 file changed, 4 insertions(+)
->
-> diff --git a/arch/x86/kvm/lapic.c b/arch/x86/kvm/lapic.c
-> index 0e68b4c..59096f8 100644
-> --- a/arch/x86/kvm/lapic.c
-> +++ b/arch/x86/kvm/lapic.c
-> @@ -1303,6 +1303,10 @@ void kvm_apic_set_eoi_accelerated(struct kvm_vcpu *vcpu, int vector)
->  
->  	trace_kvm_eoi(apic, vector);
->  
-> +	if (to_hv_vcpu(apic->vcpu) &&
-> +	    test_bit(vector, to_hv_synic(apic->vcpu)->vec_bitmap))
-> +		kvm_hv_synic_send_eoi(apic->vcpu, vector);
-> +
->  	kvm_ioapic_send_eoi(apic, vector);
->  	kvm_make_request(KVM_REQ_EVENT, apic->vcpu);
+Processes can create a covert channel for surreptitious data exchange ba=
+sed on VCSR like m1racles[1] for apple m1.
 
+Thanks
+[1]: https://m1racles.com/
 
-This whole part:
+>> --
+>> Huacai
+>>
+>> On Wed, Jul 6, 2022 at 7:29 PM huqi <huqi@loongson.cn> wrote:
+>>> From: Qi Hu <huqi@loongson.cn>
+>>>
+>>> The `vcsr` is not used anymore. Remove this member from `loongarch_f=
+pu`.
+>>>
+>>>  From 3A5000(LoongArch), `vcsr` is removed in hardware. FP and LSX/L=
+ASX
+>>> both use `fcsr` as their csr.
+>>>
+>>> Particularly, fcsr from $r16 to $r31 are reserved for LSX/LASX, an
+>>> using the registers in this area will cause SXD/ASXD if LSX/LASX is
+>>> not enabled.
+>>>
+>>> Signed-off-by: Qi Hu <huqi@loongson.cn>
+>>> ---
+>>> V3:
+>>> - Modify commit message to conform to the format.
+>>> V2:
+>>> - Add more details in the commit message.
+>>> ---
+>>>   arch/loongarch/include/asm/fpregdef.h  |  1 -
+>>>   arch/loongarch/include/asm/processor.h |  2 --
+>>>   arch/loongarch/kernel/asm-offsets.c    |  1 -
+>>>   arch/loongarch/kernel/fpu.S            | 10 ----------
+>>>   4 files changed, 14 deletions(-)
+>>>
+>>> diff --git a/arch/loongarch/include/asm/fpregdef.h b/arch/loongarch/=
+include/asm/fpregdef.h
+>>> index adb16e4b43b0..b6be527831dd 100644
+>>> --- a/arch/loongarch/include/asm/fpregdef.h
+>>> +++ b/arch/loongarch/include/asm/fpregdef.h
+>>> @@ -48,6 +48,5 @@
+>>>   #define fcsr1  $r1
+>>>   #define fcsr2  $r2
+>>>   #define fcsr3  $r3
+>>> -#define vcsr16 $r16
+>>>
+>>>   #endif /* _ASM_FPREGDEF_H */
+>>> diff --git a/arch/loongarch/include/asm/processor.h b/arch/loongarch=
+/include/asm/processor.h
+>>> index 1d63c934b289..57ec45aa078e 100644
+>>> --- a/arch/loongarch/include/asm/processor.h
+>>> +++ b/arch/loongarch/include/asm/processor.h
+>>> @@ -80,7 +80,6 @@ BUILD_FPR_ACCESS(64)
+>>>
+>>>   struct loongarch_fpu {
+>>>          unsigned int    fcsr;
+>>> -       unsigned int    vcsr;
+>>>          uint64_t        fcc;    /* 8x8 */
+>>>          union fpureg    fpr[NUM_FPU_REGS];
+>>>   };
+>>> @@ -161,7 +160,6 @@ struct thread_struct {
+>>>           */                                                     \
+>>>          .fpu                    =3D {                             \
+>>>                  .fcsr           =3D 0,                            \
+>>> -               .vcsr           =3D 0,                            \
+>>>                  .fcc            =3D 0,                            \
+>>>                  .fpr            =3D {{{0,},},},                   \
+>>>          },                                                      \
+>>> diff --git a/arch/loongarch/kernel/asm-offsets.c b/arch/loongarch/ke=
+rnel/asm-offsets.c
+>>> index bfb65eb2844f..20cd9e16a95a 100644
+>>> --- a/arch/loongarch/kernel/asm-offsets.c
+>>> +++ b/arch/loongarch/kernel/asm-offsets.c
+>>> @@ -166,7 +166,6 @@ void output_thread_fpu_defines(void)
+>>>
+>>>          OFFSET(THREAD_FCSR, loongarch_fpu, fcsr);
+>>>          OFFSET(THREAD_FCC,  loongarch_fpu, fcc);
+>>> -       OFFSET(THREAD_VCSR, loongarch_fpu, vcsr);
+>>>          BLANK();
+>>>   }
+>>>
+>>> diff --git a/arch/loongarch/kernel/fpu.S b/arch/loongarch/kernel/fpu=
+.S
+>>> index 75c6ce0682a2..a631a7137667 100644
+>>> --- a/arch/loongarch/kernel/fpu.S
+>>> +++ b/arch/loongarch/kernel/fpu.S
+>>> @@ -146,16 +146,6 @@
+>>>          movgr2fcsr      fcsr0, \tmp0
+>>>          .endm
+>>>
+>>> -       .macro sc_save_vcsr base, tmp0
+>>> -       movfcsr2gr      \tmp0, vcsr16
+>>> -       EX      st.w \tmp0, \base, 0
+>>> -       .endm
+>>> -
+>>> -       .macro sc_restore_vcsr base, tmp0
+>>> -       EX      ld.w \tmp0, \base, 0
+>>> -       movgr2fcsr      vcsr16, \tmp0
+>>> -       .endm
+>>> -
+>>>   /*
+>>>    * Save a thread's fp context.
+>>>    */
+>>> --
+>>> 2.36.1
+>>>
+>>>
 
-	if (to_hv_vcpu(apic->vcpu) &&
-	    test_bit(vector, to_hv_synic(apic->vcpu)->vec_bitmap))
-		kvm_hv_synic_send_eoi(apic->vcpu, vector);
-
-	kvm_ioapic_send_eoi(apic, vector);
-	kvm_make_request(KVM_REQ_EVENT, apic->vcpu);
-
-could be split into an inline function, something like (completely
-untested):
-
-diff --git a/arch/x86/kvm/lapic.c b/arch/x86/kvm/lapic.c
-index 6ff17d5a2ae3..9d19c7c738c0 100644
---- a/arch/x86/kvm/lapic.c
-+++ b/arch/x86/kvm/lapic.c
-@@ -1269,6 +1269,16 @@ static void kvm_ioapic_send_eoi(struct kvm_lapic *apic, int vector)
-        kvm_ioapic_update_eoi(apic->vcpu, vector, trigger_mode);
- }
- 
-+static inline void apic_set_eoi_vector(struct kvm_lapic *apic, int vector)
-+{
-+       if (to_hv_vcpu(apic->vcpu) &&
-+           test_bit(vector, to_hv_synic(apic->vcpu)->vec_bitmap))
-+               kvm_hv_synic_send_eoi(apic->vcpu, vector);
-+
-+       kvm_ioapic_send_eoi(apic, vector);
-+       kvm_make_request(KVM_REQ_EVENT, apic->vcpu);
-+}
-+
- static int apic_set_eoi(struct kvm_lapic *apic)
- {
-        int vector = apic_find_highest_isr(apic);
-@@ -1285,12 +1295,8 @@ static int apic_set_eoi(struct kvm_lapic *apic)
-        apic_clear_isr(vector, apic);
-        apic_update_ppr(apic);
- 
--       if (to_hv_vcpu(apic->vcpu) &&
--           test_bit(vector, to_hv_synic(apic->vcpu)->vec_bitmap))
--               kvm_hv_synic_send_eoi(apic->vcpu, vector);
-+       apic_set_eoi_vector(apic, vector);
- 
--       kvm_ioapic_send_eoi(apic, vector);
--       kvm_make_request(KVM_REQ_EVENT, apic->vcpu);
-        return vector;
- }
- 
-@@ -1304,8 +1310,7 @@ void kvm_apic_set_eoi_accelerated(struct kvm_vcpu *vcpu, int vector)
- 
-        trace_kvm_eoi(apic, vector);
- 
--       kvm_ioapic_send_eoi(apic, vector);
--       kvm_make_request(KVM_REQ_EVENT, apic->vcpu);
-+       apic_set_eoi_vector(apic, vector);
- }
- EXPORT_SYMBOL_GPL(kvm_apic_set_eoi_accelerated);
-
-
->  }
-
--- 
-Vitaly
-
+--=20
+- Jiaxun

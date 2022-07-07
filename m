@@ -2,135 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C00756A135
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 13:44:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BB8C356A141
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 13:45:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235456AbiGGLn6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Jul 2022 07:43:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50788 "EHLO
+        id S235469AbiGGLpg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Jul 2022 07:45:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51690 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235427AbiGGLn5 (ORCPT
+        with ESMTP id S235193AbiGGLpd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Jul 2022 07:43:57 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41E834F65D;
-        Thu,  7 Jul 2022 04:43:56 -0700 (PDT)
-Date:   Thu, 07 Jul 2022 11:43:52 -0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1657194234;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=GzccpZTqKPrOwaQ4wOzwzjUA7yHS+ujzGxsstE08CyM=;
-        b=wilJws5SpHCX1PjfyGd3a9suEVFLqUfBoZ5P27wqXNirlLqTTo37KSGPnZMjB9jrC8zzDy
-        c2sD+7Z0GSC90exkAzilzm+H7oBnyPg3f7bC2by5Gx2ornFNhXXr6LXfmi4PmPFPqGBxc2
-        HsLLMiSoHPqGqlGp56Ca3nNuZqHfn2hyfAfKHe28aqCOEnOvbFwpD4JrTKSrkjxRgFGfzo
-        4KskEHuPE/ZYGnRzi877AP5Y5iOjgU9auajnYcRW0iq6PmXHAII5b9xt7P0yPSJpw3S2/J
-        eo1awLLTVDhkMQJKOpnXdN0nWpbRcNPwseUkCtwEsm2DjmI9NCor7MriJe3PaA==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1657194234;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=GzccpZTqKPrOwaQ4wOzwzjUA7yHS+ujzGxsstE08CyM=;
-        b=MKyrpWArM5Y5jLoiomBPHdrsR6maRMpTWIN8iHKrIAFtv6RLg5qmaxNRrx7H8GPOExPG/8
-        3HAw5+NpXK4u2cCw==
-From:   "tip-bot2 for Peter Zijlstra" <tip-bot2@linutronix.de>
-Sender: tip-bot2@linutronix.de
-Reply-to: linux-kernel@vger.kernel.org
-To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: x86/urgent] x86/ibt, objtool: Don't discard text references
- from tracepoint section
-Cc:     Pengfei Xu <pengfei.xu@intel.com>,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>, x86@kernel.org,
-        linux-kernel@vger.kernel.org
-In-Reply-To: <Yrrepdaow4F5kqG0@hirez.programming.kicks-ass.net>
-References: <Yrrepdaow4F5kqG0@hirez.programming.kicks-ass.net>
+        Thu, 7 Jul 2022 07:45:33 -0400
+Received: from out30-131.freemail.mail.aliyun.com (out30-131.freemail.mail.aliyun.com [115.124.30.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E07194F65D;
+        Thu,  7 Jul 2022 04:45:31 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R381e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04400;MF=baolin.wang@linux.alibaba.com;NM=1;PH=DS;RN=32;SR=0;TI=SMTPD_---0VIcuH0b_1657194323;
+Received: from 30.97.48.62(mailfrom:baolin.wang@linux.alibaba.com fp:SMTPD_---0VIcuH0b_1657194323)
+          by smtp.aliyun-inc.com;
+          Thu, 07 Jul 2022 19:45:25 +0800
+Message-ID: <12227412-1d79-4ff6-b4e6-0d438dac7359@linux.alibaba.com>
+Date:   Thu, 7 Jul 2022 19:45:29 +0800
 MIME-Version: 1.0
-Message-ID: <165719423266.15455.16444447983189826756.tip-bot2@tip-bot2>
-Robot-ID: <tip-bot2@linutronix.de>
-Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH 3/3] mm: Add kernel PTE level pagetable pages account
+To:     Matthew Wilcox <willy@infradead.org>
+Cc:     akpm@linux-foundation.org, rppt@linux.ibm.com, will@kernel.org,
+        aneesh.kumar@linux.ibm.com, npiggin@gmail.com,
+        peterz@infradead.org, catalin.marinas@arm.com,
+        chenhuacai@kernel.org, kernel@xen0n.name,
+        tsbogend@alpha.franken.de, dave.hansen@linux.intel.com,
+        luto@kernel.org, tglx@linutronix.de, mingo@redhat.com,
+        bp@alien8.de, hpa@zytor.com, arnd@arndb.de, guoren@kernel.org,
+        monstr@monstr.eu, jonas@southpole.se,
+        stefan.kristiansson@saunalahti.fi, shorne@gmail.com,
+        x86@kernel.org, linux-arch@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, loongarch@lists.linux.dev,
+        linux-mips@vger.kernel.org, linux-csky@vger.kernel.org,
+        openrisc@lists.librecores.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+References: <cover.1657096412.git.baolin.wang@linux.alibaba.com>
+ <398ead25695e530f766849be5edafaf62c1c864d.1657096412.git.baolin.wang@linux.alibaba.com>
+ <YsWuC9+b3JaEAr0Q@casper.infradead.org>
+From:   Baolin Wang <baolin.wang@linux.alibaba.com>
+In-Reply-To: <YsWuC9+b3JaEAr0Q@casper.infradead.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following commit has been merged into the x86/urgent branch of tip:
 
-Commit-ID:     38e0e4d04d4187c63d6b511396faae7db6a3cd9e
-Gitweb:        https://git.kernel.org/tip/38e0e4d04d4187c63d6b511396faae7db6a3cd9e
-Author:        Peter Zijlstra <peterz@infradead.org>
-AuthorDate:    Tue, 28 Jun 2022 12:57:42 +02:00
-Committer:     Peter Zijlstra <peterz@infradead.org>
-CommitterDate: Thu, 07 Jul 2022 13:26:54 +02:00
 
-x86/ibt, objtool: Don't discard text references from tracepoint section
+On 7/6/2022 11:45 PM, Matthew Wilcox wrote:
+> On Wed, Jul 06, 2022 at 04:59:17PM +0800, Baolin Wang wrote:
+>> Now the kernel PTE level ptes are always protected by mm->page_table_lock
+>> instead of split pagetable lock, so the kernel PTE level pagetable pages
+>> are not accounted. Especially the vmalloc()/vmap() can consume lots of
+>> kernel pagetable, so to get an accurate pagetable accounting, calling new
+>> helpers page_{set,clear}_pgtable() when allocating or freeing a kernel
+>> PTE level pagetable page.
+>>
+>> Meanwhile converting architectures to use corresponding generic PTE pagetable
+>> allocation and freeing functions.
+>>
+>> Note this patch only adds accounting to the page tables allocated after boot.
+>>
+>> Signed-off-by: Baolin Wang <baolin.wang@linux.alibaba.com>
+>> Reported-by: kernel test robot <oliver.sang@intel.com>
+> 
+> What does this Reported-by: even mean?  the kernel test robot told you
+> that the page tables weren't being accounted?
 
-On Tue, Jun 28, 2022 at 04:28:58PM +0800, Pengfei Xu wrote:
+I fixed an issue reported by this robot. OK, I can remove the tag.
 
-> # ./ftracetest
-> === Ftrace unit tests ===
-> [1] Basic trace file check      [PASS]
-> [2] Basic test for tracers      [PASS]
-> [3] Basic trace clock test      [PASS]
-> [4] Basic event tracing check   [PASS]
-> [5] Change the ringbuffer size  [PASS]
-> [6] Snapshot and tracing setting        [PASS]
-> [7] trace_pipe and trace_marker [PASS]
-> [8] Test ftrace direct functions against tracers        [UNRESOLVED]
-> [9] Test ftrace direct functions against kprobes        [UNRESOLVED]
-> [10] Generic dynamic event - add/remove eprobe events   [FAIL]
-> [11] Generic dynamic event - add/remove kprobe events
->
-> It 100% reproduced in step 11 and then missing ENDBR BUG generated:
-> "
-> [ 9332.752836] mmiotrace: enabled CPU7.
-> [ 9332.788612] mmiotrace: disabled.
-> [ 9337.103426] traps: Missing ENDBR: syscall_regfunc+0x0/0xb0
+> I don't understand why we want to start accounting kernel page tables.
+> an we have a *discussion* about that with a sensible thread name instead
+> of just trying to sneak it in as patch 3/3?
 
-It turns out that while syscall_regfunc() does have an ENDBR when
-generated, it gets sealed by objtool's .ibt_endbr_seal list.
+I think I have replied to you in below link [1]. The reason is we should 
+keep consistent with PMD or PUD pagetable allocation.
 
-Since the only text references to this function:
-
-  $ git grep syscall_regfunc
-  include/linux/tracepoint.h:extern int syscall_regfunc(void);
-  include/trace/events/syscalls.h:        syscall_regfunc, syscall_unregfunc
-  include/trace/events/syscalls.h:        syscall_regfunc, syscall_unregfunc
-  kernel/tracepoint.c:int syscall_regfunc(void)
-
-appear in the __tracepoint section which is excluded by objtool.
-
-Fixes: 3c6f9f77e618 ("objtool: Rework ibt and extricate from stack validation")
-Reported-by: Pengfei Xu <pengfei.xu@intel.com
-Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-Link: https://lkml.kernel.org/r/Yrrepdaow4F5kqG0@hirez.programming.kicks-ass.net
----
- tools/objtool/check.c | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
-
-diff --git a/tools/objtool/check.c b/tools/objtool/check.c
-index 864bb9d..57153e0 100644
---- a/tools/objtool/check.c
-+++ b/tools/objtool/check.c
-@@ -3826,8 +3826,7 @@ static int validate_ibt(struct objtool_file *file)
- 		    !strcmp(sec->name, "__bug_table")			||
- 		    !strcmp(sec->name, "__ex_table")			||
- 		    !strcmp(sec->name, "__jump_table")			||
--		    !strcmp(sec->name, "__mcount_loc")			||
--		    !strcmp(sec->name, "__tracepoints"))
-+		    !strcmp(sec->name, "__mcount_loc"))
- 			continue;
- 
- 		list_for_each_entry(reloc, &sec->reloc->reloc_list, list)
+[1] 
+https://lore.kernel.org/all/68a5286b-7ff3-2c4e-1ab2-305e7860a2f3@linux.alibaba.com/

@@ -2,45 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C806D56A257
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 14:51:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2437156A2BF
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 14:53:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235456AbiGGMuv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Jul 2022 08:50:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44770 "EHLO
+        id S235827AbiGGMwK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Jul 2022 08:52:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45270 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235395AbiGGMuu (ORCPT
+        with ESMTP id S235743AbiGGMvq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Jul 2022 08:50:50 -0400
-Received: from baidu.com (mx20.baidu.com [111.202.115.85])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B8D3A2A412;
-        Thu,  7 Jul 2022 05:50:48 -0700 (PDT)
-Received: from BC-Mail-Ex25.internal.baidu.com (unknown [172.31.51.19])
-        by Forcepoint Email with ESMTPS id 2C54BBFB4ECE8D2ED1DD;
-        Thu,  7 Jul 2022 20:50:46 +0800 (CST)
-Received: from FB9D8C53FFFC188.internal.baidu.com (172.31.62.14) by
- BC-Mail-Ex25.internal.baidu.com (172.31.51.19) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
- 15.1.2308.20; Thu, 7 Jul 2022 20:50:47 +0800
-From:   Wang Guangju <wangguangju@baidu.com>
-To:     <seanjc@google.com>, <pbonzini@redhat.com>, <vkuznets@redhat.com>,
-        <jmattson@google.com>, <wanpengli@tencent.com>, <bp@alien8.de>,
-        <joro@8bytes.org>, <suravee.suthikulpanit@amd.com>,
-        <hpa@zytor.com>, <tglx@linutronix.de>, <mingo@redhat.com>,
-        <kvm@vger.kernel.org>
-CC:     <linux-kernel@vger.kernel.org>, <wangguangju@baidu.com>
-Subject: [PATCH] KVM: x86: Add EOI_INDUCED_EXIT handlers for Hyper-V SynIC vectors
-Date:   Thu, 7 Jul 2022 20:50:34 +0800
-Message-ID: <20220707125034.197-1-wangguangju@baidu.com>
-X-Mailer: git-send-email 2.25.1
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [172.31.62.14]
-X-ClientProxiedBy: BC-Mail-Ex13.internal.baidu.com (172.31.51.53) To
- BC-Mail-Ex25.internal.baidu.com (172.31.51.19)
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        Thu, 7 Jul 2022 08:51:46 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B07542CC8E
+        for <linux-kernel@vger.kernel.org>; Thu,  7 Jul 2022 05:51:41 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1E4E562361
+        for <linux-kernel@vger.kernel.org>; Thu,  7 Jul 2022 12:51:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 72D53C3411E;
+        Thu,  7 Jul 2022 12:51:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1657198300;
+        bh=JgQY5IEGZow71k30GNAc3oCcEvWU8+J6vldouzYNQWU=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=eHmSKABGRqiq/2x0GncRpfCV+pDmHO0wop22xov8cXu1+lI3iuGB7cwvaFz2Z4w6f
+         shD0/TjtgU+Ak8OYxrtHSWvK6a9Uad4qHUzXQNgFwdFHxtthMDmrXIT3UV1kiItqBP
+         G+gShem4nLqB7HaLpj8qu2XpDuKENgB76dcGcpvCVgaY/rNwM62hOEOEXf4mHPK9BX
+         NXsizo6/NI4KeGsKFLlQvb7lu86iJ9a/vFqAuoMf3eTq4ELeAyWbOZi1vAp7yHcvQW
+         bRyMdx2yC+oGsiafyTMw9KJPOtb5wdQ8hsCc8Z2S4A8Ho+MLRA1str8yzxINGuq8Nt
+         5YTTJbEuAAPVg==
+Received: from [185.201.63.253] (helo=wait-a-minute.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <maz@kernel.org>)
+        id 1o9Qyn-005utJ-NF;
+        Thu, 07 Jul 2022 13:51:38 +0100
+Date:   Thu, 07 Jul 2022 13:51:35 +0100
+Message-ID: <87zghlkrvs.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Jianmin Lv <lvjianmin@loongson.cn>,
+        Rafael J Wysocki <rafael@kernel.org>,
+        Robert Moore <robert.moore@intel.com>
+Cc:     Thomas Gleixner <tglx@linutronix.de>, linux-kernel@vger.kernel.org,
+        Hanjun Guo <guohanjun@huawei.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Huacai Chen <chenhuacai@loongson.cn>
+Subject: Re: [PATCH V14 00/15] irqchip: Add LoongArch-related irqchip drivers
+In-Reply-To: <1656837932-18257-1-git-send-email-lvjianmin@loongson.cn>
+References: <1656837932-18257-1-git-send-email-lvjianmin@loongson.cn>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.201.63.253
+X-SA-Exim-Rcpt-To: lvjianmin@loongson.cn, rafael@kernel.org, robert.moore@intel.com, tglx@linutronix.de, linux-kernel@vger.kernel.org, guohanjun@huawei.com, lorenzo.pieralisi@arm.com, jiaxun.yang@flygoat.com, chenhuacai@loongson.cn
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -48,68 +71,29 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: wangguangju <wangguangju@baidu.com>
++ Rafael, Robert
 
-When EOI virtualization is performed on VMX,
-kvm_apic_set_eoi_accelerated() is called upon
-EXIT_REASON_EOI_INDUCED but unlike its non-accelerated
-apic_set_eoi() sibling, Hyper-V SINT vectors are
-left unhandled.
+On Sun, 03 Jul 2022 09:45:17 +0100,
+Jianmin Lv <lvjianmin@loongson.cn> wrote:
+> 
+> LoongArch is a new RISC ISA, which is a bit like MIPS or RISC-V.
+> LoongArch includes a reduced 32-bit version (LA32R), a standard 32-bit
+> version (LA32S) and a 64-bit version (LA64). LoongArch use ACPI as its
+> boot protocol LoongArch-specific interrupt controllers (similar to APIC)
+> are already added in the ACPI Specification 6.5(which may be published in
+> early June this year and the board is reviewing the draft).
 
-This patch fix it, and add a new helper function to
-handle both IOAPIC and Hyper-V SINT vectors.
+Can the ACPI/ACPICA maintainers eyeball patch #1 in this series[1]? It
+adds some new, yet unpublished ACPI MADT updates, and I need an Ack on
+that before considering taking this series.
 
-Suggested-by: Vitaly Kuznetsov <vkuznets@redhat.com>
-Signed-off-by: wangguangju <wangguangju@baidu.com>
----
- arch/x86/kvm/lapic.c | 19 ++++++++++++-------
- 1 file changed, 12 insertions(+), 7 deletions(-)
+Patches 2 and 3 could also do with an Ack from the ACPI maintainers
+(though Hanjun did review an earlier version).
 
-diff --git a/arch/x86/kvm/lapic.c b/arch/x86/kvm/lapic.c
-index f03facc..e046afe 100644
---- a/arch/x86/kvm/lapic.c
-+++ b/arch/x86/kvm/lapic.c
-@@ -1269,6 +1269,16 @@ static void kvm_ioapic_send_eoi(struct kvm_lapic *apic, int vector)
- 	kvm_ioapic_update_eoi(apic->vcpu, vector, trigger_mode);
- }
- 
-+static inline void apic_set_eoi_vector(struct kvm_lapic *apic, int vector)
-+{
-+	if (to_hv_vcpu(apic->vcpu) &&
-+	    test_bit(vector, to_hv_synic(apic->vcpu)->vec_bitmap))
-+		kvm_hv_synic_send_eoi(apic->vcpu, vector);
-+
-+	kvm_ioapic_send_eoi(apic, vector);
-+	kvm_make_request(KVM_REQ_EVENT, apic->vcpu);
-+}
-+
- static int apic_set_eoi(struct kvm_lapic *apic)
- {
- 	int vector = apic_find_highest_isr(apic);
-@@ -1285,12 +1295,8 @@ static int apic_set_eoi(struct kvm_lapic *apic)
- 	apic_clear_isr(vector, apic);
- 	apic_update_ppr(apic);
- 
--	if (to_hv_vcpu(apic->vcpu) &&
--	    test_bit(vector, to_hv_synic(apic->vcpu)->vec_bitmap))
--		kvm_hv_synic_send_eoi(apic->vcpu, vector);
-+	apic_set_eoi_vector(apic, vector);
- 
--	kvm_ioapic_send_eoi(apic, vector);
--	kvm_make_request(KVM_REQ_EVENT, apic->vcpu);
- 	return vector;
- }
- 
-@@ -1304,8 +1310,7 @@ void kvm_apic_set_eoi_accelerated(struct kvm_vcpu *vcpu, int vector)
- 
- 	trace_kvm_eoi(apic, vector);
- 
--	kvm_ioapic_send_eoi(apic, vector);
--	kvm_make_request(KVM_REQ_EVENT, apic->vcpu);
-+	apic_set_eoi_vector(apic, vector);
- }
- EXPORT_SYMBOL_GPL(kvm_apic_set_eoi_accelerated);
- 
+Thanks,
+	M.
+
+[1] https://lore.kernel.org/r/1656837932-18257-2-git-send-email-lvjianmin@loongson.cn
+
 -- 
-2.9.4
-
+Without deviation from the norm, progress is not possible.

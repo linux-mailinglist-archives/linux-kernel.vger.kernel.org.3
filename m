@@ -2,136 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8398C56AE43
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 00:20:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1AFA956AE4C
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 00:22:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236872AbiGGWUP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Jul 2022 18:20:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48664 "EHLO
+        id S236925AbiGGWU4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Jul 2022 18:20:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49212 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236101AbiGGWUM (ORCPT
+        with ESMTP id S236907AbiGGWUy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Jul 2022 18:20:12 -0400
-Received: from EUR04-VI1-obe.outbound.protection.outlook.com (mail-eopbgr80041.outbound.protection.outlook.com [40.107.8.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 175052C651;
-        Thu,  7 Jul 2022 15:20:09 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=B8BrnZb+z1yoe0cUzYQuPRJxfPeZeSXBlJrqOUnz88L7di2ZOZNRRpSEqqv1U3hEJsMvm/T0KUYTa1C5HQLI5I1RT0RDo2KknHKDdfcwAz10UR4pNXX00DWSe/5Et9HH6GKWI5TrEUkH7ehufCPStvoDCT2sNbxTvyppfgZ/Z/CBaqxJFXIWrjnnF9rxnQFYALC9/9RWcCJfECXkvjANMzYaLLxv+jcvetz31dxBRzUlZJLWlXiOQIQaOD+MlElbmcS8clCL3hGRIF3EJrlF+QYXYkm8BbjualNjVXhz9DHU4/qq3cClpUqu2FsExalLbM+xe71ersSliuchvnCA8w==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=P4kHLTecolmODfMY7UZp/5fV61FpNHAuvoqgHtlBKas=;
- b=l2KbSOEJhlB40Y3Z5iGykiPCWHwxfVrLZQjPewiLZQx/Xxa8ZDM1Bm5q6wL5SJgZwbApWx2Kb0m83f/KAZc/YewMndZrK8H5cTS4GS/bOKHDhiZ0oSIDQyQYLLB6Twg0GmFOySgviELScOg02RrUbiPJNt/Dz4KYYLZcwOIa+WuMvaRRyPsUBnTx6ePebpT2DLLJDtCUcCXW7arm5x4b61QuGdwK3TYSTvUiitrF95+iHXoxd7TVOIQY2vpheEp/+1Tt3pn+zxho9iAOUsydT8N+nvw6Z4rJQNelqUyx5pDaNo4ZTs+vPURg6uAuxC/v4eN51cqKxQZYa+gSGPXwig==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=P4kHLTecolmODfMY7UZp/5fV61FpNHAuvoqgHtlBKas=;
- b=lXmVnZyKJPI4NbkFzKrTxvnadhK5BGqXe4pK8tPKtcJqFnhtwMcOLJPph+CqbgTwQW95uLn1OB2VeNTxHDy3Ha1yqLkHYlCTSqAjbasubR9NugUXbCOqppUZMxKG4PUF4BrOFo6HMZF4qri6gj+sSWKHL3gcgCHf/JENtGrrcKg=
-Received: from VI1PR04MB5136.eurprd04.prod.outlook.com (2603:10a6:803:55::19)
- by DBBPR04MB7898.eurprd04.prod.outlook.com (2603:10a6:10:1ed::12) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5417.16; Thu, 7 Jul
- 2022 22:20:06 +0000
-Received: from VI1PR04MB5136.eurprd04.prod.outlook.com
- ([fe80::71b7:8ed1:e4e0:3857]) by VI1PR04MB5136.eurprd04.prod.outlook.com
- ([fe80::71b7:8ed1:e4e0:3857%4]) with mapi id 15.20.5395.021; Thu, 7 Jul 2022
- 22:20:06 +0000
-From:   Vladimir Oltean <vladimir.oltean@nxp.com>
-To:     Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-CC:     "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "pabeni@redhat.com" <pabeni@redhat.com>,
-        "kuba@kernel.org" <kuba@kernel.org>,
-        "edumazet@google.com" <edumazet@google.com>,
-        "davem@davemloft.net" <davem@davemloft.net>,
-        "shuah@kernel.org" <shuah@kernel.org>
-Subject: Re: [PATCH 1/2] selftests: forwarding: Install local_termination.sh
-Thread-Topic: [PATCH 1/2] selftests: forwarding: Install local_termination.sh
-Thread-Index: AQHYkglFOirDc8ejk0+bKe8cGnRUAq1ze1iA
-Date:   Thu, 7 Jul 2022 22:20:06 +0000
-Message-ID: <20220707222005.mhcwxsijt2boxex2@skbuf>
-References: <20220707135532.1783925-1-martin.blumenstingl@googlemail.com>
- <20220707135532.1783925-2-martin.blumenstingl@googlemail.com>
-In-Reply-To: <20220707135532.1783925-2-martin.blumenstingl@googlemail.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 1370bb69-cb56-4f59-7f54-08da6066d8c7
-x-ms-traffictypediagnostic: DBBPR04MB7898:EE_
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: HOU/7SbN408NSzbge6H1W5NnlfduU1+lZK+xqKUsfjM8DheAB0cR39FN5CoO1miXc/1QNXaeTP3D3wiOzkV+tDqZ9hDT95bPn2GuNV7MULZ7m8GhYtzSENovOaDxhiAi32srhhl7tNAiao8RRn/eINWI3afy/eC2p8lol1jZK6SEqHUhSqssxKwos3Z9xJ0LtwDjO5/7u+gOAzKJ/DOkPu6Ap15eafm23uZSVFp+V8lm0brskVXnB9gVZrY/tJlfuT5oudTwQDLPktSIxs0fjM0lMtdFhJkaumNsryojg47gtiDxCayN3LIX54TfwYeDHJ6dF09IjNrhPaOjy1aco1zDDz8gVpGNjw+mXvZMI52COySdeAXmY93uasX8hGPLrxd6OvLJMCLCaagi3XCucLHtp3za763+o6Y5H5PnDzh5wIsz8saxwLGisqIsW0s6Kq/KTlD0nQCLr4PdjWu3d3EeRiDjo7KKdoTcTs0M31c4+aon7hcxD5H5q1Y8ZfHtlTaJFZOcwriVxjKpl2bs9Q8vSOP3Z0UozvYxHEsIE6t1MHHJIljrBoVfnJKNXORvFiqlYjfpu4jkTk7bQFxbyT64yjmUZZvaxTpq6JwoomtEZckqkdgrpt2u1YJuxe394S3Q/qekJWZo6MQpJHmxYi4JkisGdELVrcrHffucMNUxt+4z7NBYdSStMisSaOlD6YbqV4Q9XUbo6/KaPvonzSyBsXKRP+iKpBzwjBPc/cUm9w2izpdDumQwe2DMeXD0MEkZ3j8WN5eaadbINSa3axfL/KAMT9uu68z9Zrd2pduLnAybq9vdzz5tP5Hm9y28
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VI1PR04MB5136.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(7916004)(4636009)(346002)(39860400002)(396003)(136003)(376002)(366004)(86362001)(33716001)(38070700005)(8936002)(38100700002)(5660300002)(122000001)(41300700001)(44832011)(478600001)(2906002)(316002)(4744005)(71200400001)(66476007)(66946007)(64756008)(91956017)(66446008)(76116006)(66556008)(6486002)(8676002)(186003)(54906003)(26005)(6506007)(1076003)(4326008)(9686003)(6512007)(6916009);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?5/gdFiwHyFtwo+TJirgvLU51fvXH0Uucw6IycwQjgjy6OlDHMNQt/oixKnxj?=
- =?us-ascii?Q?Kbs6dXHiK9fl4CJhwJaSDE2FCZpB3z9YfsN/EYeZCQ5WowpQhJHfcxLq12En?=
- =?us-ascii?Q?cSLl3L3K0obuk9/reh/uhozajO1KCONNbity2wcpn8BfR2a/bqaVVaV07IOf?=
- =?us-ascii?Q?QEdvy/SVNHpPi1gdBL/HgGkVCqOP92nw4Fq0hwgAoVSru/13Klfpp5bF0hD3?=
- =?us-ascii?Q?OxDP5xcbUuqRalF+omHb5iwgYetRq2xzc/64G2DjgxtOPoci1cjz1aaKbGJC?=
- =?us-ascii?Q?2ilpORVkuSRHKMh1onBoo4f75ofgGbWRVQegGptwGeYXHPbo/MTQgGRqI23a?=
- =?us-ascii?Q?MI7oIguXi4B4coCIMBU3XdR+igk3008u1RsuJMm8182p6FaZx53im1EpZ97O?=
- =?us-ascii?Q?wQoeB8UgaEL/JRLx/ZG4eP4hlqwr1VrOWZbDPQsLBUE3K4wusSFRw/lD0L2D?=
- =?us-ascii?Q?+uFgb3VSdxtd8nfR8q50+X8V/Jt0Nfbf914U21WzerA65txepLHjVGTW8hPH?=
- =?us-ascii?Q?1gNdulfDIfB8ReMwPwFXq1ro8ljVsZlzdWZNHuTb5oN183JrzaA8X3d6Gbl/?=
- =?us-ascii?Q?tf2dxLiNy1NXAiUvBXp+PgMDTee6Q/m1swBQGllfHiwzepBfAZKr7N+x9oTT?=
- =?us-ascii?Q?XJTJUq7aJzn3ZgkaWDscrDrfQwKAPD3n9umzicoeAZM/VAj4G0KhfFdqHocm?=
- =?us-ascii?Q?bk+pFdf89iZpIxqHXTrooLKC4jHaLaM2yDsDqSPNmCkT+4kvnfGLoDuY142V?=
- =?us-ascii?Q?vmpkl3Vtd4KAjaETJbvzC8W0liMLnEI/55i8AnFaLUxNVeyrL8hreOa/Vfea?=
- =?us-ascii?Q?jAaXhHskF0GGconit/jQrSiZW5rh3QX7l4FKnmKSiRkTi2kalHmQiIqp2AzY?=
- =?us-ascii?Q?Lk6yPaLtWWNs3cxEDnXRM4t5kC/AHTpAQGiQcrrFBq/93BE8v7BJlPi9TVg9?=
- =?us-ascii?Q?4COU3k7g9hs98teokXo1wZnHHboj89N6/9CAI7/Ur1i097wH8GTvvHGL43kI?=
- =?us-ascii?Q?QkdJg4bwbWODQpcBOrdYV6KFjQpx5JeJSb5JkkMpHpzCp++6EI817+MeSn4/?=
- =?us-ascii?Q?uZz8neQkUUwKSpy5ai7zx5accdH4rxAvSgv2GXzL2gFvdfgtvh5HB4h5ec8a?=
- =?us-ascii?Q?Fzq9QppHdvqlZan4q1DiRjNjtAgcCUTfNcg60CR1fYysjd6O0vnyTQddiESU?=
- =?us-ascii?Q?IPR2cUo82QFxjxT7tJG3xNX4Ei1Bh84NVipumklSlqFQe3Bp86PZToX8Ca6E?=
- =?us-ascii?Q?AIVvmLI5Y9Ytm4Em4+qD4+7PyO1LPuWIOd3qGbZlg2hw3AnLFX6LEzqf10vF?=
- =?us-ascii?Q?X6wXdTOHT9Jp+mq6lwrcVvCTI9yEU17mKcizBbMCs7Onil/uw1lCTmOmOvhk?=
- =?us-ascii?Q?av3zaI0foDsv2eE1p+TBgQfMNnuEaKZgwLcgIp3THAdYzpJQzsoFxZND0J9N?=
- =?us-ascii?Q?2vmBARueBBXlPmI3/d2pX3uV/+nzY8OQ8gRYqAJghU+F4XOFWlCcLh58gcu/?=
- =?us-ascii?Q?fx9herWZQ32Gw0L11kSaS5+rq81n30zttFJyrKfBk7eZoSWl7ANvwyb9OS0w?=
- =?us-ascii?Q?vqv0bJREQ7KXWDI1nyBrXX5czweSGt2rgYWG+inZH5kdBBmt9k0iAd6w/iZd?=
- =?us-ascii?Q?Cg=3D=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <10BF4A4806F04543B607E6802D973EFA@eurprd04.prod.outlook.com>
-Content-Transfer-Encoding: quoted-printable
+        Thu, 7 Jul 2022 18:20:54 -0400
+Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 867A5606B5
+        for <linux-kernel@vger.kernel.org>; Thu,  7 Jul 2022 15:20:53 -0700 (PDT)
+Received: by mail-pj1-x1035.google.com with SMTP id g16-20020a17090a7d1000b001ea9f820449so149849pjl.5
+        for <linux-kernel@vger.kernel.org>; Thu, 07 Jul 2022 15:20:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=lQsjAc0YQIb9NGXs3HwZPWuZRhoPR+NwcjVw3jJIBFQ=;
+        b=XbKmDZy/WMqhyN9B6r1DiEk/QAbsScJ+CPdadwH6TXX4GDj1u7aiAI7fl26RJaYYGQ
+         FV81cwccRYv5EVCLSxS0nmWI5PSdob23rpAO9QjAZG+FRRv7VHpQUaS4dPfx7Hb4IS1O
+         tUG6Ya1zI60mw6iAXPx15Eus8qh9MgnPMjvTA=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=lQsjAc0YQIb9NGXs3HwZPWuZRhoPR+NwcjVw3jJIBFQ=;
+        b=ZdAgZD2MGfGZprmMMp75/JWolqt4FCLpIr+bWRVcF/oPeM4Mv/QTLODY/opBenGx0R
+         gGj3bCI5FUKWGH7FzUaIXdEhuofLy/vJ70AgHZ+TOm8MDAv+t0mFiDDgV8wRYqOkGJyy
+         ZV03OSSpv5xzE30Edu/FbRUWw+Eo+/lDkRuWOQJ6lp/B1PRuHFP80sbvpWVLHPtLzqHU
+         yIh6iblxaqyhVE2BnucMH2CD1zn71MRk+CxOlChfO6DiswFWF4MYJQ29xT9Hcs+sNBQd
+         /vV4iltQX5V4ZyQNXcV11GVCx64rQGobQpwLE9J5VdTOygK9T/8zA0iHHKu3t3INauPS
+         CXjQ==
+X-Gm-Message-State: AJIora8natq4kq3iTl+LNG+7xUO82Fr2Xyhi+bHZgGwGiioMLMQHITe+
+        GWZzV5Ibq/Jl79W2tN945TLVfk+cajoWXg==
+X-Google-Smtp-Source: AGRyM1sjFfRCrP/YQPVZOHPRuRcIuvCoR1wzUjn4/i2bvcYMaksJCxhurBqN4qfLnF4xhiqZEw68pA==
+X-Received: by 2002:a17:90b:4f48:b0:1ef:8ed0:df4d with SMTP id pj8-20020a17090b4f4800b001ef8ed0df4dmr7617959pjb.224.1657232452829;
+        Thu, 07 Jul 2022 15:20:52 -0700 (PDT)
+Received: from pmalani.c.googlers.com.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id 66-20020a620445000000b005289bfcee91sm5545657pfe.59.2022.07.07.15.20.51
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 07 Jul 2022 15:20:52 -0700 (PDT)
+From:   Prashant Malani <pmalani@chromium.org>
+To:     linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        chrome-platform@lists.linux.dev
+Cc:     bleung@chromium.org, heikki.krogerus@linux.intel.com,
+        Prashant Malani <pmalani@chromium.org>,
+        Daisuke Nojiri <dnojiri@chromium.org>,
+        "Dustin L. Howett" <dustin@howett.net>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Guenter Roeck <groeck@chromium.org>,
+        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+        Sebastian Reichel <sebastian.reichel@collabora.com>,
+        Tzung-Bi Shih <tzungbi@kernel.org>
+Subject: [PATCH v3 0/9] Type-C switch driver and Type-C framework updates
+Date:   Thu,  7 Jul 2022 22:20:07 +0000
+Message-Id: <20220707222045.1415417-1-pmalani@chromium.org>
+X-Mailer: git-send-email 2.37.0.rc0.161.g10f37bed90-goog
 MIME-Version: 1.0
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: VI1PR04MB5136.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 1370bb69-cb56-4f59-7f54-08da6066d8c7
-X-MS-Exchange-CrossTenant-originalarrivaltime: 07 Jul 2022 22:20:06.5917
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: I73UM/PE7l4TpW+QQu3I5SMPaO5HpnUcfFK/DvnHkO7HJtDXe7Mgh77ucJRC84WruitPWsASCTR1mcmJHtel9A==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DBBPR04MB7898
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jul 07, 2022 at 03:55:31PM +0200, Martin Blumenstingl wrote:
-> When using the Makefile from tools/testing/selftests/net/forwarding/
-> all tests should be installed. Add local_termination.sh to the list of
-> "to be installed tests" where it has been missing so far.
->=20
-> Fixes: 90b9566aa5cd3f ("selftests: forwarding: add a test for local_termi=
-nation.sh")
-> Signed-off-by: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-> ---
+This series introduces a retimer class to the USB Type-C framework,
+It also introduces a Chrome EC (Embedded Controller) switch driver which
+registers the aforementioned retimer switches as well as mode-switches.
 
-Reviewed-by: Vladimir Oltean <vladimir.oltean@nxp.com>=
+Patch 1 and 2 introduce the retimer class and associated functions to
+the Type-C common code.
+
+Patches 3-7 add the cros-typec-switch driver.
+
+Patches 8-9 update cros-ec-typec to get and use retimer switch handles.
+
+Submission suggestion (as always, open to better suggestions):
+- Patch 1 and 2 can go through the USB repo.
+- Patch 3-9 can go through the chrome-platform repo. Since they depend
+  on patches 1 and 2, we can create an "topic branch" off of usb-next
+  once Patch 1 and 2 are submitted, and then apply Patches 3-9 on top
+  of that "topic branch" before merging it back into chrome-platform's
+  for-next branch
+
+v2: https://lore.kernel.org/linux-usb/20220706171601.807042-1-pmalani@chromium.org/
+
+Changes since v2:
+- Fixed missing "static" declarations, and removed newlines from
+  function signatures.
+
+Changes since v1:
+- Changed class name and retimer device type name, and fixed
+  retimer reference release issue.
+
+Prashant Malani (9):
+  usb: typec: Add support for retimers
+  usb: typec: Add retimer handle to port
+  platform/chrome: Add Type-C mux set command definitions
+  platform/chrome: cros_typec_switch: Add switch driver
+  platform/chrome: cros_typec_switch: Set EC retimer
+  platform/chrome: cros_typec_switch: Add event check
+  platform/chrome: cros_typec_switch: Register mode switches
+  platform/chrome: cros_ec_typec: Cleanup switch handle return paths
+  platform/chrome: cros_ec_typec: Get retimer handle
+
+ MAINTAINERS                                   |   1 +
+ drivers/platform/chrome/Kconfig               |  11 +
+ drivers/platform/chrome/Makefile              |   1 +
+ drivers/platform/chrome/cros_ec_typec.c       |  50 ++-
+ drivers/platform/chrome/cros_typec_switch.c   | 332 ++++++++++++++++++
+ drivers/usb/typec/Makefile                    |   2 +-
+ drivers/usb/typec/class.c                     |  18 +-
+ drivers/usb/typec/class.h                     |   2 +
+ drivers/usb/typec/retimer.c                   | 168 +++++++++
+ drivers/usb/typec/retimer.h                   |  15 +
+ .../linux/platform_data/cros_ec_commands.h    |  18 +
+ include/linux/usb/typec_retimer.h             |  45 +++
+ 12 files changed, 654 insertions(+), 9 deletions(-)
+ create mode 100644 drivers/platform/chrome/cros_typec_switch.c
+ create mode 100644 drivers/usb/typec/retimer.c
+ create mode 100644 drivers/usb/typec/retimer.h
+ create mode 100644 include/linux/usb/typec_retimer.h
+
+-- 
+2.37.0.rc0.161.g10f37bed90-goog
+

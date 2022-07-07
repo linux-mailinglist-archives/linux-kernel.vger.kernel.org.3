@@ -2,122 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D7144569CDD
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 10:14:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 68092569CEB
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 10:15:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234829AbiGGIMX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Jul 2022 04:12:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54842 "EHLO
+        id S235015AbiGGIMZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Jul 2022 04:12:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54848 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234921AbiGGILx (ORCPT
+        with ESMTP id S235039AbiGGILz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Jul 2022 04:11:53 -0400
-Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6FE1E4D176;
-        Thu,  7 Jul 2022 01:11:42 -0700 (PDT)
-Received: from localhost.localdomain.localdomain (unknown [10.2.5.46])
-        by mail.loongson.cn (Coremail) with SMTP id AQAAf9Axn+I5lcZiB60OAA--.42042S2;
+        Thu, 7 Jul 2022 04:11:55 -0400
+Received: from mail-m965.mail.126.com (mail-m965.mail.126.com [123.126.96.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 700DA4D178
+        for <linux-kernel@vger.kernel.org>; Thu,  7 Jul 2022 01:11:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=126.com;
+        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=0HzhM
+        FxpifCBbW6I6z0WZTmqc/mz0kk5U7sD4ONHr8Y=; b=nYlki+Qz653MUyXmP9S9N
+        dp2gcB9vQ5/El97/KrnDZ/IDUnfW7r1wO1WONyuUyL4e2ZSWIawgua7fz5D9pYn9
+        /uMnT8eAUoHfYejKPuInRUphjgGoWMmHovWYb4MEgNoL4hqhhtg9S4MM6y3Jhjsx
+        N4gtFzmdMsLLHpxOKQvqe0=
+Received: from localhost.localdomain (unknown [124.16.139.61])
+        by smtp10 (Coremail) with SMTP id NuRpCgCH1Xk8lcZidfLLGA--.27011S2;
         Thu, 07 Jul 2022 16:11:41 +0800 (CST)
-From:   Hongchen Zhang <zhanghongchen@loongson.cn>
-To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Hongchen Zhang <zhanghongchen@loongson.cn>
-Subject: [PATCH] MIPS: fix pmd_mkinvalid
-Date:   Thu,  7 Jul 2022 16:11:35 +0800
-Message-Id: <1657181495-33004-1-git-send-email-zhanghongchen@loongson.cn>
-X-Mailer: git-send-email 1.8.3.1
-X-CM-TRANSID: AQAAf9Axn+I5lcZiB60OAA--.42042S2
-X-Coremail-Antispam: 1UD129KBjvJXoWxurWUZF4fCFyktrW8ur4Uurg_yoW5Gr15pa
-        1kAF9Y9rWYg34IyayYyr1Igr45ArsxKFZ0grWDWr1jqa43Xa97Xrn3K3sIyFy8XayvyFy8
-        WrWSqan8GrWIv3DanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUka14x267AKxVWUJVW8JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
-        1l84ACjcxK6xIIjxv20xvE14v26ryj6F1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26F4j
-        6r4UJwA2z4x0Y4vEx4A2jsIE14v26F4UJVW0owA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gc
-        CE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E
-        2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJV
-        W8JwACjcxG0xvY0x0EwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lc2xSY4AK6svPMxAI
-        w28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr
-        4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUAVWUtwCIc40Y0x0EwIxG
-        rwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVWUJVW8Jw
-        CI42IY6xAIw20EY4v20xvaj40_WFyUJVCq3wCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY
-        6I8E87Iv6xkF7I0E14v26r1j6r4UYxBIdaVFxhVjvjDU0xZFpf9x0JUywZ7UUUUU=
-X-CM-SenderInfo: x2kd0w5krqwupkhqwqxorr0wxvrqhubq/
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+From:   Liang He <windhl@126.com>
+To:     linux-kernel@vger.kernel.org, windhl@126.com
+Subject: [PATCH] arm-cci: Fix refcount leak bugs
+Date:   Thu,  7 Jul 2022 16:11:39 +0800
+Message-Id: <20220707081139.308849-1-windhl@126.com>
+X-Mailer: git-send-email 2.25.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: NuRpCgCH1Xk8lcZidfLLGA--.27011S2
+X-Coremail-Antispam: 1Uf129KBjvJXoWxXF1DCF4UWrWrZF47CF4rZrb_yoW5Gr4Upa
+        yYkrWYyrW8Kr4xKFZ2ya45AFZYg34IkrW3Ca47GFnI9wn8JFyYqr409F90vr15AF97Ja4r
+        trs8tF15Ca1vv37anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0zEjg4dUUUUU=
+X-Originating-IP: [124.16.139.61]
+X-CM-SenderInfo: hzlqvxbo6rjloofrz/xtbBGgU3F1-HZdEL9gAAsu
+X-Spam-Status: No, score=-0.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,RCVD_IN_VALIDITY_RPBL,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When a pmd entry is invalidated by pmd_mkinvalid,pmd_present should
-return true.
-So introduce a _PMD_PRESENT_INVALID_SHIFT bit to check if a pmd is
-present but invalidated by pmd_mkinvalid.
+In fact, there are several bugs:
 
-Reported-by: kernel test robot <lkp@intel.com>
-Signed-off-by: Hongchen Zhang <zhanghongchen@loongson.cn>
+(1) In cci_probe(), we should call of_node_put() for the refernece
+returned by of_find_matching_node() which has increased the refcount.
+
+(2) In __cci_ace_get_port(), we should call of_node_put() in fail path
+or when the reference is not used anymore as the reference is returned
+by of_parse_phandle() which has increased the refcount.
+
+(3) In cci_ace_init_ports(), we should call of_node_put() when the
+referne is not used anymore as the of_get_cpu_node() will increase
+the refcount.
+
+(4) In cci_probe_ports(), we should call of_node_put() when breaking
+out of for_each_available_child_of_node() which will automatically
+increase and decrease refcount. Besides, we should also call
+of_node_get() for the new reference created in 'ports[i].dn'.
+
+Fixes: ed69bdd8fd9b ("drivers: bus: add ARM CCI support")
+Signed-off-by: Liang He <windhl@126.com>
 ---
- arch/mips/include/asm/pgtable-64.h   | 2 +-
- arch/mips/include/asm/pgtable-bits.h | 2 ++
- arch/mips/include/asm/pgtable.h      | 3 +++
- 3 files changed, 6 insertions(+), 1 deletion(-)
 
-diff --git a/arch/mips/include/asm/pgtable-64.h b/arch/mips/include/asm/pgtable-64.h
-index 41921ac..050cf66 100644
---- a/arch/mips/include/asm/pgtable-64.h
-+++ b/arch/mips/include/asm/pgtable-64.h
-@@ -265,7 +265,7 @@ static inline int pmd_present(pmd_t pmd)
- {
- #ifdef CONFIG_MIPS_HUGE_TLB_SUPPORT
- 	if (unlikely(pmd_val(pmd) & _PAGE_HUGE))
--		return pmd_val(pmd) & _PAGE_PRESENT;
-+		return pmd_val(pmd) & (_PAGE_PRESENT | _PMD_PRESENT_INVALID);
- #endif
- 
- 	return pmd_val(pmd) != (unsigned long) invalid_pte_table;
-diff --git a/arch/mips/include/asm/pgtable-bits.h b/arch/mips/include/asm/pgtable-bits.h
-index 2362842..72cd88a 100644
---- a/arch/mips/include/asm/pgtable-bits.h
-+++ b/arch/mips/include/asm/pgtable-bits.h
-@@ -130,6 +130,7 @@ enum pgtable_bits {
- 	_PAGE_MODIFIED_SHIFT,
- #if defined(CONFIG_MIPS_HUGE_TLB_SUPPORT)
- 	_PAGE_HUGE_SHIFT,
-+	_PMD_PRESENT_INVALID_SHIFT,
- #endif
- #if defined(CONFIG_ARCH_HAS_PTE_SPECIAL)
- 	_PAGE_SPECIAL_SHIFT,
-@@ -157,6 +158,7 @@ enum pgtable_bits {
- #define _PAGE_MODIFIED		(1 << _PAGE_MODIFIED_SHIFT)
- #if defined(CONFIG_MIPS_HUGE_TLB_SUPPORT)
- # define _PAGE_HUGE		(1 << _PAGE_HUGE_SHIFT)
-+#define _PMD_PRESENT_INVALID	(1 << _PMD_PRESENT_INVALID_SHIFT)
- #endif
- #if defined(CONFIG_ARCH_HAS_PTE_SPECIAL)
- # define _PAGE_SPECIAL		(1 << _PAGE_SPECIAL_SHIFT)
-diff --git a/arch/mips/include/asm/pgtable.h b/arch/mips/include/asm/pgtable.h
-index 374c632..a75f461 100644
---- a/arch/mips/include/asm/pgtable.h
-+++ b/arch/mips/include/asm/pgtable.h
-@@ -696,12 +696,15 @@ static inline pmd_t pmd_modify(pmd_t pmd, pgprot_t newprot)
- 	return pmd;
+ For bug(4), I have not found when the global 'ports' is destroyed,
+so I cannot use 'of_node_put()' for its 'dn'. Please check it carefully.
+
+ drivers/bus/arm-cci.c | 16 ++++++++++++----
+ 1 file changed, 12 insertions(+), 4 deletions(-)
+
+diff --git a/drivers/bus/arm-cci.c b/drivers/bus/arm-cci.c
+index b8184a903583..d8e66022de5c 100644
+--- a/drivers/bus/arm-cci.c
++++ b/drivers/bus/arm-cci.c
+@@ -167,9 +167,12 @@ static int __cci_ace_get_port(struct device_node *dn, int type)
+ 	cci_portn = of_parse_phandle(dn, "cci-control-port", 0);
+ 	for (i = 0; i < nb_cci_ports; i++) {
+ 		ace_match = ports[i].type == type;
+-		if (ace_match && cci_portn == ports[i].dn)
++		if (ace_match && cci_portn == ports[i].dn) {
++			of_node_put(cci_portn);
+ 			return i;
++		}
+ 	}
++	of_node_put(cci_portn);
+ 	return -ENODEV;
  }
  
-+#ifdef CONFIG_MIPS_HUGE_TLB_SUPPORT
- static inline pmd_t pmd_mkinvalid(pmd_t pmd)
- {
-+	pmd_val(pmd) |= _PMD_PRESENT_INVALID;
- 	pmd_val(pmd) &= ~(_PAGE_PRESENT | _PAGE_VALID | _PAGE_DIRTY);
+@@ -199,6 +202,7 @@ static void cci_ace_init_ports(void)
+ 			continue;
  
- 	return pmd;
+ 		port = __cci_ace_get_port(cpun, ACE_PORT);
++		of_node_put(cpun);
+ 		if (port < 0)
+ 			continue;
+ 
+@@ -461,8 +465,10 @@ static int cci_probe_ports(struct device_node *np)
+ 
+ 		i = nb_ace + nb_ace_lite;
+ 
+-		if (i >= nb_cci_ports)
++		if (i >= nb_cci_ports) {
++			of_node_put(cp);
+ 			break;
++		}
+ 
+ 		if (of_property_read_string(cp, "interface-type",
+ 					&match_str)) {
+@@ -498,7 +504,7 @@ static int cci_probe_ports(struct device_node *np)
+ 			ports[i].type = ACE_LITE_PORT;
+ 			++nb_ace_lite;
+ 		}
+-		ports[i].dn = cp;
++		ports[i].dn = of_node_get(cp);
+ 	}
+ 
+ 	/*
+@@ -551,7 +557,9 @@ static int cci_probe(void)
+ 		return -ENXIO;
+ 	}
+ 
+-	return cci_probe_ports(np);
++	ret = cci_probe_ports(np);
++	of_node_put(np);
++	return ret;
  }
-+#endif
  
- /*
-  * The generic version pmdp_huge_get_and_clear uses a version of pmd_clear() with a
+ static int cci_init_status = -EAGAIN;
 -- 
-1.8.3.1
+2.25.1
 

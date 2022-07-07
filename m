@@ -2,184 +2,272 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C1B7A5696F9
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 02:40:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A7278569704
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 02:49:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234158AbiGGAkb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Jul 2022 20:40:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33938 "EHLO
+        id S233928AbiGGAtH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Jul 2022 20:49:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37738 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229811AbiGGAk2 (ORCPT
+        with ESMTP id S229695AbiGGAtG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Jul 2022 20:40:28 -0400
-Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2083.outbound.protection.outlook.com [40.107.223.83])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26EAB2B27A;
-        Wed,  6 Jul 2022 17:40:28 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=bgqCRDUl6kuZM1ebZTssXYYUtQpk2fUij4021plkk2K0Ek+BMZ9ixhXMM5zlQDDnqVcsLwlBxh7HWAVsAHIoBZcOiJTyTKOwqm+3m5bpOWyVt9LJvOc53zpsCDpohbhPFPyAUJKN7B6aYDwzWIeeEGU7MKV33Fb+EnmPbwAVc+7gIYuddAbjc/JripbbJkI8+6/X0dS+I+bivXBWqTYXhnDk3qnJn8DuMbPn3WZmRILyLFjJsZSZpPRJzAoF/gJrXz9ZO9b8ISiwfySKl6+za2OvEI5snHZp9rDCOCZPBSh1ZV4NYU0MEaj7B8l0tgGiTgsSdWRKVnnbfX5WrRqX2w==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=A/sm1mdL3GoaBITTkA2Zd6dcvS/Kmk4vivcnXkT7MAg=;
- b=JNKRvq74LhCn3L6wDeSJtusFH7FTE5069kXcb2xe3tjl3nyPHwo+pi6+BAjdaBj3i+TrROsTbu2gGLs+DYuBkIuK8vObYE723Z5PM1rbK5MOA5qf64kYU+PgYRyagtLGO/29mH/0Lq0ZLBgsYB57va99ChSxC/3aUbn1QYNmxoj7yDs2v0ANwm6PNJhKeIb8acUxrq/quWcRm0bRmEVvxkJq6mdEkw+wsGG8Z46cjHtrj0ERhi97a9IpedU8XknYZVf0oN0Xd0KeaxEiwzKJbn66hutpqvOg/cBIIesIsYHoMXXTpi6YBYkr6fEWhH5GYUELoU1Y2ejGQoy3PHK4qg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=A/sm1mdL3GoaBITTkA2Zd6dcvS/Kmk4vivcnXkT7MAg=;
- b=coM2DCctwYOHM4FIrnJDhiokf6Ss69AvzFx8YKedfiYWAwkN9laTilgYDfjeecHdAKUTgfxmGxRgzYU3BqH0QBpK5yFewNwhPBG2F94HhpvkDQESErZ9p3QomE45KaCja06Gb7r88UP5Q1QlHtvjPmKY+FNV/+a7HwfwyyZl9fqyKGNz/17i6pvlPwlpdLKbyJSheFSY6TU71ROiMXl82f80gCTf2/kEVXpQhKC4cgpfbMi6p/cvDH2+IGjegQv6y2yav09peGQXwraPbECPWpZ6Iu7205QLPqyUWDSmenzbfVoHaDh3XQ9Jf9kfGDJCIMy5N/61LZAiAejVFmtCkw==
-Received: from SJ0PR12MB5676.namprd12.prod.outlook.com (2603:10b6:a03:42e::8)
- by DM4PR12MB5891.namprd12.prod.outlook.com (2603:10b6:8:67::19) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5395.21; Thu, 7 Jul
- 2022 00:40:26 +0000
-Received: from SJ0PR12MB5676.namprd12.prod.outlook.com
- ([fe80::bd95:705e:9479:d8a]) by SJ0PR12MB5676.namprd12.prod.outlook.com
- ([fe80::bd95:705e:9479:d8a%5]) with mapi id 15.20.5395.020; Thu, 7 Jul 2022
- 00:40:26 +0000
-From:   Besar Wicaksono <bwicaksono@nvidia.com>
-To:     Will Deacon <will@kernel.org>
-CC:     "suzuki.poulose@arm.com" <suzuki.poulose@arm.com>,
-        "robin.murphy@arm.com" <robin.murphy@arm.com>,
-        "catalin.marinas@arm.com" <catalin.marinas@arm.com>,
-        "mark.rutland@arm.com" <mark.rutland@arm.com>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-tegra@vger.kernel.org" <linux-tegra@vger.kernel.org>,
-        "sudeep.holla@arm.com" <sudeep.holla@arm.com>,
-        "thanu.rangarajan@arm.com" <thanu.rangarajan@arm.com>,
-        "Michael.Williams@arm.com" <Michael.Williams@arm.com>,
-        Thierry Reding <treding@nvidia.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Vikram Sethi <vsethi@nvidia.com>,
-        "mathieu.poirier@linaro.org" <mathieu.poirier@linaro.org>,
-        "mike.leach@linaro.org" <mike.leach@linaro.org>,
-        "leo.yan@linaro.org" <leo.yan@linaro.org>
-Subject: RE: [RESEND PATCH v3 2/2] perf: coresight_pmu: Add support for NVIDIA
- SCF and MCF attribute
-Thread-Topic: [RESEND PATCH v3 2/2] perf: coresight_pmu: Add support for
- NVIDIA SCF and MCF attribute
-Thread-Index: AQHYhTLxxcyEPgAfs02S9hth/BTYH61jGWoAgA8O27A=
-Date:   Thu, 7 Jul 2022 00:40:26 +0000
-Message-ID: <SJ0PR12MB5676D57F1E19A51435CAF875A0839@SJ0PR12MB5676.namprd12.prod.outlook.com>
-References: <20220621055035.31766-1-bwicaksono@nvidia.com>
- <20220621055035.31766-3-bwicaksono@nvidia.com>
- <20220627103731.GC22095@willie-the-truck>
-In-Reply-To: <20220627103731.GC22095@willie-the-truck>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 8cf9adb4-051f-4532-dc5a-08da5fb14907
-x-ms-traffictypediagnostic: DM4PR12MB5891:EE_
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: PYeACKV3LBoCaZ9Ztf04ztbh/1OHk2z5AGRjF59rvzXVpSkPXkl+eKFvjSyCU3urTktgCnNy0EQG1YOlhRHPV5udG1CiuAeyRsJvh53rGnKF2Y9CySDfpPvupk2+1ojigjJaZEDS9XRnCrwPuWqxLrqz009DTTFlvMfeRkyLk3fCP8ZOtNGWdN+De3Oi3zgXGqblsI69/8tyh61UzaZEhhZmYH3XcolMGGZYsXxgjIDIP8iLcgcoL9a/Gqaw0mcbts/l4w7Bp4LZ6eYeMxbWHmBiG3AjR7V7f8IjJgJpUsyYiN1BsMHSyEa0O2GtyPCZ6IOljLJ9glMWZqnvfjcGietumulcgtD9CY3fUtx6Zk0+MZQ7RemfY5UtkO2yhwSmAT5ylS7JsoQf5qfKpw+SYOaaBMTUjxCRdjau3oPBjeiI0c8mW1QCirt6ORtqvtiXeGBllVGuqUdPkBSF98HT+Vx2A9TWTOMk9Y5mSu85sbMKCrau2U7uyQsunukY6JataEUC7cHYIYi7vmxFqeJ/8VnwVH6Ul4InPtHfa32X21vzfHhRTByi0pum4o+kLgiJQMWe7QH9oCD/qmoxhljVFlK199njR1/fYpQoJ0uwTup19rEZL3kRwC04YanZJ1PtUI9HgDoMoCVBVejLfYfuwl70s6xI55ddOsFQ1AILu8P2Bd7HK60DTHR+47p4LSDOqlwj0wMVtrZcd84vVN7RMMZ7KoMeR57r5mTz+rv9A6gVeq1tnfWxxzPg/ES8+G+wuxeAlEHynt6ZLAQOPMr9opgNnbZLd08MSgFaAlvwBgM6TFH8k5//IyfpgQrybgkB
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SJ0PR12MB5676.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(346002)(376002)(136003)(396003)(366004)(39860400002)(7696005)(26005)(6506007)(9686003)(71200400001)(38070700005)(186003)(83380400001)(122000001)(55016003)(33656002)(53546011)(2906002)(38100700002)(64756008)(478600001)(66556008)(316002)(5660300002)(86362001)(41300700001)(8936002)(7416002)(52536014)(6916009)(66446008)(4326008)(54906003)(76116006)(66476007)(8676002)(66946007);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?5/Tiea2eSwtFiyxcJt2Oi2GdNVYwvVQ/qqKGnX85mnM/zCiy9g7Evdhit176?=
- =?us-ascii?Q?3iXAImVt6UqNZJ+KE5QM48B8BgS866O4XMkYW6FTcFf1vXQ59mC9oa8/DzKQ?=
- =?us-ascii?Q?z42Ecax+0DrbsKEdGDIdufwG0cc6xgRJCrz9LHY0mrn+xeA2cjiUO8iB84EQ?=
- =?us-ascii?Q?X6TDDY9GWTcRx6kNsDCFloUq4A42xmgRbWwHHwgOJqz4lmcu/iIb10FOm4D2?=
- =?us-ascii?Q?nfzHjvEmvOrI2FawWZ3npVPGCD49TD6POChH43vU4o9/qGi8It7cpk677ily?=
- =?us-ascii?Q?hcPSiECH1Ye6yftdr+J8gMBeNk9WVYqcvc/MUaqoUO620yVMbaIMfM3KY2hC?=
- =?us-ascii?Q?njyVZw/6BWjnMqYAMLtFAFB543BHTg1+qeWrU2qbtyHTwqe8RntVmzJU5tQP?=
- =?us-ascii?Q?YpDxEmxpPru3mzozEwkzDDU+c4r6NP/BUBvB4W4wBLGPOdZBNF+bVa8dGISm?=
- =?us-ascii?Q?5JMAOnl3vlFJ1EJxxm/XQNZmPcy+jlMb6MBpZihZbYPQZGMAgNZXuA1VPlOu?=
- =?us-ascii?Q?FgBDuoEEEMAci7i1mCSlFkxSJG5k3swEtj2eLExMB0Q/K2izp/VNLUUhcWwv?=
- =?us-ascii?Q?NCnIDuuIB66UWpEFzxDzpjKzmmkk+dar3P+GHcofkOyzi0FVDubdJv+BZQKZ?=
- =?us-ascii?Q?hsu+H3ikcYqFizb1UCz/ezRNVjeeGBSKAg5URKBjZUaq7R3p2JpwkDeu3a4S?=
- =?us-ascii?Q?+CQhpGNdXLLyfqhlfVwlF0+HhE/xsikkQIJdyb5Fg+UrTwzanaPtUknNtK7F?=
- =?us-ascii?Q?wOtSHAK00mtvZT84was3chHMrLHkaArx/2p/SyBPPY5UNOg97/+QmHWIao+4?=
- =?us-ascii?Q?4mNcVow1AfkDrboaXGcq8s5KItlSf9eEmXnGSxgYiNJcGnjZ2VDaZazC5xNo?=
- =?us-ascii?Q?biMkXFHPM0RfYKpi5YkX+HDl9sddAyWY8UJigG21rao/f+IjqAe7w1aNuLJn?=
- =?us-ascii?Q?4gc118GkRUG9jCnD8PVW3jFbDA1pb7CT8WySMMnj/YudSsk8wmIzsJD23fDN?=
- =?us-ascii?Q?4zn7ysicImqaD87RciUhsPJeXOtssC1msaZKNZdt0ax0dvo7gapz8XWdPESR?=
- =?us-ascii?Q?4rVFfnQ0dpC4LAcSLcA7fFvDTOMhfmeytwFu7/X4dL9g057jfc+b85uBGwUj?=
- =?us-ascii?Q?cXgM3Swyhe4i//zYOu2Up8pSZ75izqgKz/MappIrNOH1yQTS3S+xWWfEU5mu?=
- =?us-ascii?Q?2BdZlTTgRxPtqIJEIgDOEVolluchJneenAiNxiGL3jHAFbjCduX+C6r5IQiX?=
- =?us-ascii?Q?c7gONR6X8mNgbX7lj+gPzI69FvLr1Mc/CHXW/rSriZ6GQWfYKgnyUJGREP9Q?=
- =?us-ascii?Q?QPQ0QfzWWKulFdQjNZvhsO1hy4Dp4nB1lwP6xZ0E27yR1W8RKgeeKYw9FfqH?=
- =?us-ascii?Q?6Xqm58sxCGZnKU4bjxk6/Kwy2ZVBHYeLv4jC5e1bwg+STbNrLtDFnGqYtZIN?=
- =?us-ascii?Q?4pZ3kHLSCnZzGtrngHbKXRma30NA3Sok4Nn9l6rTP68o2QbaJ3t8n6swZjON?=
- =?us-ascii?Q?56w1bN3yYLQnFReS1BOof+1DDqrdhMDq6h1KG2hkysbsbBiA5PYXiW8TDw+o?=
- =?us-ascii?Q?4acxqiijrGLT/4byjqVNUWmKokJ+omWrARxlMa8n?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        Wed, 6 Jul 2022 20:49:06 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DAFD2CDDE;
+        Wed,  6 Jul 2022 17:49:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=eKVp5k3k/Mi0/qvMSWAz3I45APz4Z+f2neoyr3EBBk8=; b=y/l+gyEDKQLQwYx67C/tiLjSvj
+        a0Rj2klHPOOnWB4ifiC8iV44uRyT6gMRDIJu8Dv2ER2oy4a08J4hLSVXwdwacPVzApHheuzw5jsPU
+        ueZNNpL2ZmPny582FLFVGY50TKdBSBNSDRaSrzMtaoRVLEFaqTQAbNK/WSNJcEmYQ8h7wHmPjoU27
+        DW3Xq13JSCqOCHS1BopLuVmKIN9Zf5Ji55U4mcFqLPOEZvp5H6i7+PNNKtDoLx+343HZnseieDEQT
+        BOdpcJ4pvICvl35OyEvix4J3mkDlYJHSklNMqD9bLTfOsm1P8WTN1vBh8vTbVUZYeupio+esFxNHg
+        YnMsYrjg==;
+Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1o9FhM-00Ctk7-8V; Thu, 07 Jul 2022 00:48:52 +0000
+Date:   Wed, 6 Jul 2022 17:48:52 -0700
+From:   Luis Chamberlain <mcgrof@kernel.org>
+To:     Helge Deller <deller@gmx.de>, Borislav Petkov <bp@alien8.de>,
+        Davidlohr Bueso <dave@stgolabs.net>
+Cc:     Lucas De Marchi <lucas.demarchi@intel.com>, jeyu@kernel.org,
+        linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-parisc@vger.kernel.org
+Subject: Re: [PATCH v2] modules: Ensure natural alignment for
+ .altinstructions and __bug_table sections
+Message-ID: <YsYtdMmsW2tHVx54@bombadil.infradead.org>
+References: <Yr8/gr8e8I7tVX4d@p100>
+ <Yr9l24rvCAPJvuJQ@bombadil.infradead.org>
+ <040d5924-eb42-2ee4-d663-88ef393cd4ae@gmx.de>
 MIME-Version: 1.0
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: SJ0PR12MB5676.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 8cf9adb4-051f-4532-dc5a-08da5fb14907
-X-MS-Exchange-CrossTenant-originalarrivaltime: 07 Jul 2022 00:40:26.4823
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: 6aQNVrsaYdMxpJedjfI0g+8SKb5kHYdnwia9EE3dWpJdJmliL5NQI5ta9rVxdhDl2xHwNKlO04DJPv866t7STw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR12MB5891
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <040d5924-eb42-2ee4-d663-88ef393cd4ae@gmx.de>
+Sender: Luis Chamberlain <mcgrof@infradead.org>
+X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-> -----Original Message-----
-> From: Will Deacon <will@kernel.org>
-> Sent: Monday, June 27, 2022 5:38 PM
-> To: Besar Wicaksono <bwicaksono@nvidia.com>
-> Cc: suzuki.poulose@arm.com; robin.murphy@arm.com;
-> catalin.marinas@arm.com; mark.rutland@arm.com; linux-arm-
-> kernel@lists.infradead.org; linux-kernel@vger.kernel.org; linux-
-> tegra@vger.kernel.org; sudeep.holla@arm.com;
-> thanu.rangarajan@arm.com; Michael.Williams@arm.com; Thierry Reding
-> <treding@nvidia.com>; Jonathan Hunter <jonathanh@nvidia.com>; Vikram
-> Sethi <vsethi@nvidia.com>; mathieu.poirier@linaro.org;
-> mike.leach@linaro.org; leo.yan@linaro.org
-> Subject: Re: [RESEND PATCH v3 2/2] perf: coresight_pmu: Add support for
-> NVIDIA SCF and MCF attribute
->=20
-> External email: Use caution opening links or attachments
->=20
->=20
-> On Tue, Jun 21, 2022 at 12:50:35AM -0500, Besar Wicaksono wrote:
-> > Add support for NVIDIA System Cache Fabric (SCF) and Memory Control
-> > Fabric (MCF) PMU attributes for CoreSight PMU implementation in
-> > NVIDIA devices.
+On Sat, Jul 02, 2022 at 06:24:52PM +0200, Helge Deller wrote:
+> Hi Luis,
+> 
+> On 7/1/22 23:23, Luis Chamberlain wrote:
+> > On Fri, Jul 01, 2022 at 08:40:02PM +0200, Helge Deller wrote:
+> >> In the kernel image vmlinux.lds.S linker scripts the .altinstructions
+> >> and __bug_table sections are 32- or 64-bit aligned because they hold 32-
+> >> and/or 64-bit values.
+> >>
+> >> But for modules the module.lds.S linker script doesn't define a default
+> >> alignment yet, so the linker chooses the default byte alignment, which
+> >> then leads to unnecessary unaligned memory accesses at runtime.
+> >>
+> >> Usually such unaligned accesses are unnoticed, because either the
+> >> hardware (as on x86 CPUs) or in-kernel exception handlers (e.g. on hppa
+> >> or sparc) emulate and fix them up at runtime.
+> >>
+> >> On hppa the 32-bit unalignment exception handler was temporarily broken
+> >> due another bad commit, and as such wrong values were returned on
+> >> unaligned accesses to the altinstructions table.
 > >
-> > Signed-off-by: Besar Wicaksono <bwicaksono@nvidia.com>
-> > ---
-> >  drivers/perf/coresight_pmu/Makefile           |   3 +-
-> >  .../perf/coresight_pmu/arm_coresight_pmu.c    |   4 +
-> >  .../coresight_pmu/arm_coresight_pmu_nvidia.c  | 312
-> ++++++++++++++++++
-> >  .../coresight_pmu/arm_coresight_pmu_nvidia.h  |  17 +
-> >  4 files changed, 335 insertions(+), 1 deletion(-)
-> >  create mode 100644
-> drivers/perf/coresight_pmu/arm_coresight_pmu_nvidia.c
-> >  create mode 100644
-> drivers/perf/coresight_pmu/arm_coresight_pmu_nvidia.h
->=20
-> Please can you include some documentation along with this driver? See
-> Documentation/admin-guide/perf/ for examples of other PMUs.
->=20
-> Will
+> > OK so some bad commit broke something which caused bad alignment access
+> > on altinstructions... But why on modules?!
+> >
+> > I am not aware of modules using alternatives, given that alternatives
+> > are hacks to help with bootup. For modules we can use other things
+> > like jump labels, static keys.
+> 
+> IMHO altinstructions isn't a hack.
+> They are much simpler and easier to use for static replacements.
+> jump labels and static keys are much more komplex, but of course they
+> give the possibility to switch back and forth if you need it.
+> But let's keep this discussion aside...
 
-Thank you for the pointer.
-I will include the documentation in the next revision.
+Yeah sure whatever.
 
-Regards,
-Besar
+> I checked a few other architectures, and here is what I found.
+> I dropped unimportant sections/lines.
+> 
+> Linux amdahl 4.19.0-20-arm64 #1 SMP Debian 4.19.235-1 (2022-03-17) aarch64 GNU/Linux
+> deller@amdahl:/lib/modules/4.19.0-19-arm64/kernel/block$ objdump -h bfq.ko
+> bfq.ko:     file format elf64-littleaarch64
+> Sections:
+> Idx Name          Size      VMA               LMA               File off  Algn
+>   6 .altinstructions 000000b4  0000000000000000  0000000000000000  000090a4  2**0
+>                   CONTENTS, ALLOC, LOAD, RELOC, READONLY, DATA
+>  13 __jump_table  00000018  0000000000000000  0000000000000000  0000d358  2**3
+>                   CONTENTS, ALLOC, LOAD, RELOC, DATA
+>  15 __bug_table   00000018  0000000000000000  0000000000000000  0000dcf8  2**2
+>                   CONTENTS, ALLOC, LOAD, RELOC, DATA
+> 
+> -> aarch64 uses altinstructions in modules as well.
+> -> alignment of altinstructions is wrong (but offset suggests it gets address right).
+> -> jump_table/bug_table -> Ok.
+> 
+> ----
+> 
+> Linux abel 4.19.0-20-armmp-lpae #1 SMP Debian 4.19.235-1 (2022-03-17) armv7l GNU/Linux
+> deller@abel:/lib/modules/4.19.0-20-armmp-lpae/kernel/block$ objdump -h bfq.ko
+> bfq.ko:     file format elf32-littlearm
+> Sections:
+> Idx Name          Size      VMA       LMA       File off  Algn
+>   9 __mcount_loc  000002ac  00000000  00000000  00009bf4  2**2
+>                   CONTENTS, ALLOC, LOAD, RELOC, READONLY, DATA
+>  11 __jump_table  0000000c  00000000  00000000  0000b320  2**3
+>                   CONTENTS, ALLOC, LOAD, RELOC, DATA
+> 
+> -> arm looks good.
+> 
+> ----
+> 
+> Linux plummer 4.19.0-20-powerpc64le #1 SMP Debian 4.19.235-1 (2022-03-17) ppc64le GNU/Linux
+> deller@plummer:/lib/modules/4.19.0-20-powerpc64le/kernel/block$ objdump -h bfq.ko
+> bfq.ko:     file format elf64-powerpcle
+> Sections:
+> Idx Name          Size      VMA               LMA               File off  Algn
+>   9 __mcount_loc  00000530  0000000000000000  0000000000000000  0000bc68  2**0
+>                   CONTENTS, ALLOC, LOAD, RELOC, READONLY, DATA
+>  12 __jump_table  00000018  0000000000000000  0000000000000000  000109d8  2**3
+>                   CONTENTS, ALLOC, LOAD, RELOC, DATA
+>  16 __bug_table   00000030  0000000000000000  0000000000000000  000115a0  2**0
+>                   CONTENTS, ALLOC, LOAD, RELOC, DATA
+> 
+> -> ppc64le has wrong alignment for mcount_loc and bug_table (but file offs suggests it's correct).
+> 
+> ----
+> 
+> Linux zelenka 4.19.0-20-s390x #1 SMP Debian 4.19.235-1 (2022-03-17) s390x GNU/Linux
+> deller@zelenka:/lib/modules/4.19.0-20-s390x/kernel/block$ objdump -h bfq.ko
+> bfq.ko:     file format elf64-s390
+> Sections:
+> Idx Name          Size      VMA               LMA               File off  Algn
+>   3 .altinstr_replacement 00000038  0000000000000000  0000000000000000  0000a440  2**0
+>                   CONTENTS, ALLOC, LOAD, READONLY, CODE
+>   8 .altinstructions 000000a8  0000000000000000  0000000000000000  0000b04e  2**0
+>                   CONTENTS, ALLOC, LOAD, RELOC, READONLY, DATA
+>  10 __mcount_loc  00000538  0000000000000000  0000000000000000  0000b1b0  2**3
+>                   CONTENTS, ALLOC, LOAD, RELOC, READONLY, DATA
+>  13 __jump_table  00000018  0000000000000000  0000000000000000  0000c8e0  2**3
+>                   CONTENTS, ALLOC, LOAD, RELOC, DATA
+>  17 __bug_table   00000018  0000000000000000  0000000000000000  0000d280  2**0
+>                   CONTENTS, ALLOC, LOAD, RELOC, DATA
+> 
+> -> s390x uses altinstructions in modules.
+> -> alignment should be fixed for altinstructions and bug_table
+
+Thanks for checking. I was wondering what uses cases openly used
+alternatives in modules. It was surprising to see bfq using it for some
+architectures.
+
+The problem with this question is that there are quite a bit of uses
+of ALTERNATIVE() on many calls on for example arch/arm64/include/.
+So really it could land on any module.
+
+> > So I don't understand still how this happened yet.
+> 
+> Happened what?
+> Even on x86 there is a call to apply_alternatives() in module_finalize() in
+> arch/x86/kernel/module.c.
+
+> I didn't found alternatives in amd64 modules in kernel 4.19 though...
+
+I do see one on bfq on 5.17:
+
+objdump  /lib/modules/5.17.0-1-amd64/kernel/block/bfq.ko -h --section=.altinstructions --section=.altinstr_replacement 
+objdump: Warning: Separate debug info file
+/usr/lib/modules/5.17.0-1-amd64/kernel/block/bfq.ko found, but CRC does not match - ignoring
+
+/lib/modules/5.17.0-1-amd64/kernel/block/bfq.ko:     file format
+elf64-x86-64
+
+Sections:
+Idx Name          Size      VMA               LMA               File off
+Algn
+  3 .altinstr_replacement 0000001c  0000000000000000  0000000000000000  0000c500  2**0
+                    CONTENTS, ALLOC, LOAD, READONLY, CODE
+  9 .altinstructions 00000054  0000000000000000 0000000000000000  0
+                    CONTENTS, ALLOC, LOAD, RELOC, READONLY, DATA
+
+I also them on even filesystems like xfs and so yeah, anywhere where a
+primative the achitecture uses which a driver uses will peg an
+alternative to a module.
+
+> >> This then led to
+> >> undefined behaviour because wrong kernel addresses were patched and we
+> >> suddenly faced lots of unrelated bugs, as can be seen in this mail
+> >> thread:
+> >> https://lore.kernel.org/all/07d91863-dacc-a503-aa2b-05c3b92a1e39@bell.net/T/#mab602dfa32be5e229d5e192ab012af196d04d75d
+> >>
+> >> This patch adds the missing natural alignment for kernel modules to
+> >> avoid unnecessary (hard- or software-based) fixups.
+> >
+> > Is it correct to infer that issue you found through a bad commit was
+> > then through code inspection after the bad commit made the kernel do
+> > something stupid with unaligned access to some module altinstructions
+> > section ? Ie, that should not have happened.
+> 
+> Right. Without the bad commit I would not have noticed the problem.
+
+OK please clarify this in your next spin of this patch.
+
+> > I'd like to determine if this is a stable fix, a regression, etc. And
+> > this is not yet clear.
+> 
+> I fully understand that it's a hard to decide if it should go to stable!
+
+> It's not critical or required to go to stable series now.
+
+I agree.
+
+Given, as you noted, that "usually such unaligned accesses are unnoticed,
+because either the hardware (as on x86 CPUs) or in-kernel exception handlers
+emulate and fix them up at runtime", I'm inclined to say no. 
+
+I'll let others chime in, in case I've missed some corner case.
+
+> My suggestion:
+> Add it to current head, wait for 1-2 releases, and *if required* we can
+> push it backwards at any time later.
+
+Yeah that sounds good. Can you re-work the commit log a bit more to make
+the judgement call to move stable later a bit easier? If one doesn't
+work with alternatives regularly there is some information that can
+quickly be lost during patch review / commit log review. And these days
+bots pick up patches for stable... so they might override in the end.
+
+  Luis
+> 
+> Helge
+> 
+> 
+> >   Luis
+> >
+> >>
+> >> Signed-off-by: Helge Deller <deller@gmx.de>
+> >> ---
+> >>  scripts/module.lds.S | 2 ++
+> >>  1 file changed, 2 insertions(+)
+> >>
+> >> --
+> >> v2: updated commit message
+> >>
+> >> diff --git a/scripts/module.lds.S b/scripts/module.lds.S
+> >> index 1d0e1e4dc3d2..3a3aa2354ed8 100644
+> >> --- a/scripts/module.lds.S
+> >> +++ b/scripts/module.lds.S
+> >> @@ -27,6 +27,8 @@ SECTIONS {
+> >>  	.ctors			0 : ALIGN(8) { *(SORT(.ctors.*)) *(.ctors) }
+> >>  	.init_array		0 : ALIGN(8) { *(SORT(.init_array.*)) *(.init_array) }
+> >>
+> >> +	.altinstructions	0 : ALIGN(8) { KEEP(*(.altinstructions)) }
+> >> +	__bug_table		0 : ALIGN(8) { KEEP(*(__bug_table)) }
+> >>  	__jump_table		0 : ALIGN(8) { KEEP(*(__jump_table)) }
+> >>
+> >>  	__patchable_function_entries : { *(__patchable_function_entries) }
+> 

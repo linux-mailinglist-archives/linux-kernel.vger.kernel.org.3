@@ -2,68 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2437156A2BF
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 14:53:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 07A4256A2AA
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 14:53:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235827AbiGGMwK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Jul 2022 08:52:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45270 "EHLO
+        id S235909AbiGGMxC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Jul 2022 08:53:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46474 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235743AbiGGMvq (ORCPT
+        with ESMTP id S235853AbiGGMwp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Jul 2022 08:51:46 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B07542CC8E
-        for <linux-kernel@vger.kernel.org>; Thu,  7 Jul 2022 05:51:41 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Thu, 7 Jul 2022 08:52:45 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C8DC23136E
+        for <linux-kernel@vger.kernel.org>; Thu,  7 Jul 2022 05:52:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1657198353;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=dUmFi8DZaDYcJf12L/Xx0NmEj/l0aTrBYJ3yxA0AGTs=;
+        b=TYm9w2Wqa5vNOhdSik7C8xsbtahmiledO/OHKsSiqKuY9XT/iAAzwwY5H0RMy2VCdD0PK4
+        3CmXdonO4Bbrl4jN/ypEwZtANHNR7Uta8z6eBdix0NWZffPFbXKOURnQR3VsoJT6PJssEm
+        Dn69XgOHv2vP/RlVQQyQ2/LQkLG4+Go=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-460-o2jcox1COZ-558705x74gw-1; Thu, 07 Jul 2022 08:52:30 -0400
+X-MC-Unique: o2jcox1COZ-558705x74gw-1
+Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1E4E562361
-        for <linux-kernel@vger.kernel.org>; Thu,  7 Jul 2022 12:51:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 72D53C3411E;
-        Thu,  7 Jul 2022 12:51:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1657198300;
-        bh=JgQY5IEGZow71k30GNAc3oCcEvWU8+J6vldouzYNQWU=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=eHmSKABGRqiq/2x0GncRpfCV+pDmHO0wop22xov8cXu1+lI3iuGB7cwvaFz2Z4w6f
-         shD0/TjtgU+Ak8OYxrtHSWvK6a9Uad4qHUzXQNgFwdFHxtthMDmrXIT3UV1kiItqBP
-         G+gShem4nLqB7HaLpj8qu2XpDuKENgB76dcGcpvCVgaY/rNwM62hOEOEXf4mHPK9BX
-         NXsizo6/NI4KeGsKFLlQvb7lu86iJ9a/vFqAuoMf3eTq4ELeAyWbOZi1vAp7yHcvQW
-         bRyMdx2yC+oGsiafyTMw9KJPOtb5wdQ8hsCc8Z2S4A8Ho+MLRA1str8yzxINGuq8Nt
-         5YTTJbEuAAPVg==
-Received: from [185.201.63.253] (helo=wait-a-minute.misterjones.org)
-        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.95)
-        (envelope-from <maz@kernel.org>)
-        id 1o9Qyn-005utJ-NF;
-        Thu, 07 Jul 2022 13:51:38 +0100
-Date:   Thu, 07 Jul 2022 13:51:35 +0100
-Message-ID: <87zghlkrvs.wl-maz@kernel.org>
-From:   Marc Zyngier <maz@kernel.org>
-To:     Jianmin Lv <lvjianmin@loongson.cn>,
-        Rafael J Wysocki <rafael@kernel.org>,
-        Robert Moore <robert.moore@intel.com>
-Cc:     Thomas Gleixner <tglx@linutronix.de>, linux-kernel@vger.kernel.org,
-        Hanjun Guo <guohanjun@huawei.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Huacai Chen <chenhuacai@loongson.cn>
-Subject: Re: [PATCH V14 00/15] irqchip: Add LoongArch-related irqchip drivers
-In-Reply-To: <1656837932-18257-1-git-send-email-lvjianmin@loongson.cn>
-References: <1656837932-18257-1-git-send-email-lvjianmin@loongson.cn>
-User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
- FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
- (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
-MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
-Content-Type: text/plain; charset=US-ASCII
-X-SA-Exim-Connect-IP: 185.201.63.253
-X-SA-Exim-Rcpt-To: lvjianmin@loongson.cn, rafael@kernel.org, robert.moore@intel.com, tglx@linutronix.de, linux-kernel@vger.kernel.org, guohanjun@huawei.com, lorenzo.pieralisi@arm.com, jiaxun.yang@flygoat.com, chenhuacai@loongson.cn
-X-SA-Exim-Mail-From: maz@kernel.org
-X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
-X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id E59A5395AFE3;
+        Thu,  7 Jul 2022 12:52:29 +0000 (UTC)
+Received: from warthog.procyon.org.uk (unknown [10.33.37.50])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 3C8E62026D64;
+        Thu,  7 Jul 2022 12:52:28 +0000 (UTC)
+Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
+        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
+        Kingdom.
+        Registered in England and Wales under Company Registration No. 3798903
+From:   David Howells <dhowells@redhat.com>
+In-Reply-To: <f60dacead3da4ab78edd225749d698f8e621f577.camel@kernel.org>
+References: <f60dacead3da4ab78edd225749d698f8e621f577.camel@kernel.org> <20220707045112.10177-1-xiubli@redhat.com> <20220707045112.10177-3-xiubli@redhat.com>
+To:     Jeff Layton <jlayton@kernel.org>
+Cc:     dhowells@redhat.com, xiubli@redhat.com, idryomov@gmail.com,
+        marc.dionne@auristor.com, willy@infradead.org,
+        keescook@chromium.org, kirill.shutemov@linux.intel.com,
+        william.kucharski@oracle.com, linux-afs@lists.infradead.org,
+        linux-kernel@vger.kernel.org, ceph-devel@vger.kernel.org,
+        linux-cachefs@redhat.com, vshankar@redhat.com
+Subject: Re: [PATCH v3 2/2] afs: unlock the folio when vnode is marked deleted
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <2433376.1657198347.1@warthog.procyon.org.uk>
+Date:   Thu, 07 Jul 2022 13:52:27 +0100
+Message-ID: <2433377.1657198347@warthog.procyon.org.uk>
+X-Scanned-By: MIMEDefang 2.78 on 10.11.54.4
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,29 +68,16 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-+ Rafael, Robert
+Jeff Layton <jlayton@kernel.org> wrote:
 
-On Sun, 03 Jul 2022 09:45:17 +0100,
-Jianmin Lv <lvjianmin@loongson.cn> wrote:
+> > +		folio_unlock(*folio);
+> > +		folio_put(*folio);
 > 
-> LoongArch is a new RISC ISA, which is a bit like MIPS or RISC-V.
-> LoongArch includes a reduced 32-bit version (LA32R), a standard 32-bit
-> version (LA32S) and a 64-bit version (LA64). LoongArch use ACPI as its
-> boot protocol LoongArch-specific interrupt controllers (similar to APIC)
-> are already added in the ACPI Specification 6.5(which may be published in
-> early June this year and the board is reviewing the draft).
+> Don't you also need this?
+> 
+> 	*folio = NULL;
 
-Can the ACPI/ACPICA maintainers eyeball patch #1 in this series[1]? It
-adds some new, yet unpublished ACPI MADT updates, and I need an Ack on
-that before considering taking this series.
+It shouldn't need any of those three lines.
 
-Patches 2 and 3 could also do with an Ack from the ACPI maintainers
-(though Hanjun did review an earlier version).
+David
 
-Thanks,
-	M.
-
-[1] https://lore.kernel.org/r/1656837932-18257-2-git-send-email-lvjianmin@loongson.cn
-
--- 
-Without deviation from the norm, progress is not possible.

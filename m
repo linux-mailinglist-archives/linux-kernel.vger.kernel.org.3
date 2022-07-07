@@ -2,39 +2,39 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C83F56A432
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 15:48:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D7FEE56A47D
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 15:50:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236066AbiGGNsE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Jul 2022 09:48:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40268 "EHLO
+        id S236303AbiGGNtn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Jul 2022 09:49:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40372 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236072AbiGGNrn (ORCPT
+        with ESMTP id S236095AbiGGNrp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Jul 2022 09:47:43 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E42121F61F;
-        Thu,  7 Jul 2022 06:47:41 -0700 (PDT)
+        Thu, 7 Jul 2022 09:47:45 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A00D63190D;
+        Thu,  7 Jul 2022 06:47:43 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 75339621B0;
+        by ams.source.kernel.org (Postfix) with ESMTPS id D2126B82223;
         Thu,  7 Jul 2022 13:47:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6B86CC341E0;
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 614DCC36AE5;
         Thu,  7 Jul 2022 13:47:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1657201659;
-        bh=xrYlZ4EhExYzNVTwlk2mL1RpUUVk9Eoy00LvYTfjQYQ=;
+        bh=2V9aRAC2X1UCZ0ZViRkEIRSPpsay+FjbvSHDFWbB+HQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Ppi1e1/pexMFYli93Wu2P2uKPa9/bFtEmV8i+cLMV8EBSKYPky/xkdl5zGfRdOYn/
-         REjp5a9vjTWJzNRb/0GwDyz+XzGNy4rvcsrjpP6sUy1AaGqS0tm6YyCxVytOZ3yMnA
-         6/9cP+khbeh4Tu/VN2g0SU8ID+OEBAXkq863rkNYbtAFS1W6H52+TIvurMhvC5WVXV
-         Wi+Mfx6NSvSUnYeSuf1lfAFWOmTwssfW//DJs01UNZLs+BKHVDSQYbm+0vWmo51Cto
-         IUIi6QOU6F4own20vxmAtCVEM+c2keBunXqz/y3ECOuT6liTrTUMN3H/uULWiPfCM4
-         jsju4DRKjxfXw==
+        b=fLgUXgdah3nbMnvAbNWI6gZKJtBQq0YUmCQjw8V6krIbgIOKoYTE3zolh6I+M9hRH
+         RtB39r51U7dsLy0WqkzH+YbIgNp1X5wKPbXM/a3ZN6vqOeQGysjlJzUOVkjkd2/Xly
+         4Tiqctx1VY2gqhrNUzN4CVqhhtCA2z2Ryi6JYDqhbSjUazsPXuxGe8Ma0xPF0f9/Fz
+         4i1a3L4I1z48rkcutP4BbKeH15npLDwLFnnjoxWgvnSEFlFTPF55lpn/E453hxctam
+         43wDnGrEyU1vZElwepfUmLkzwPxTzKDslR2z7bSjF/0z+bFn9yjkulnyK27Qa1mlvM
+         QdkXPfs6ddRHA==
 Received: from johan by xi.lan with local (Exim 4.94.2)
         (envelope-from <johan+linaro@kernel.org>)
-        id 1o9Rr4-0000w2-2Y; Thu, 07 Jul 2022 15:47:42 +0200
+        id 1o9Rr4-0000w4-58; Thu, 07 Jul 2022 15:47:42 +0200
 From:   Johan Hovold <johan+linaro@kernel.org>
 To:     Vinod Koul <vkoul@kernel.org>, Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
@@ -46,9 +46,9 @@ Cc:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
         Johan Hovold <johan+linaro@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH v2 06/30] dt-bindings: phy: qcom,qmp: clean up example
-Date:   Thu,  7 Jul 2022 15:47:01 +0200
-Message-Id: <20220707134725.3512-7-johan+linaro@kernel.org>
+Subject: [PATCH v2 07/30] dt-bindings: phy: qcom,qmp: drop child-node comment
+Date:   Thu,  7 Jul 2022 15:47:02 +0200
+Message-Id: <20220707134725.3512-8-johan+linaro@kernel.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220707134725.3512-1-johan+linaro@kernel.org>
 References: <20220707134725.3512-1-johan+linaro@kernel.org>
@@ -64,35 +64,27 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Clean up the example node somewhat by grouping consumer and provider
-properties in the child node.
+Drop the redundant comment about child nodes being required that was
+copied from the old binding documentation.
 
 Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
 ---
- Documentation/devicetree/bindings/phy/qcom,qmp-phy.yaml | 7 +++++--
- 1 file changed, 5 insertions(+), 2 deletions(-)
+ Documentation/devicetree/bindings/phy/qcom,qmp-phy.yaml | 1 -
+ 1 file changed, 1 deletion(-)
 
 diff --git a/Documentation/devicetree/bindings/phy/qcom,qmp-phy.yaml b/Documentation/devicetree/bindings/phy/qcom,qmp-phy.yaml
-index bcffabf04566..7e0f798632f4 100644
+index 7e0f798632f4..08a84af711ce 100644
 --- a/Documentation/devicetree/bindings/phy/qcom,qmp-phy.yaml
 +++ b/Documentation/devicetree/bindings/phy/qcom,qmp-phy.yaml
-@@ -426,10 +426,13 @@ examples:
-                       <0x400 0x1fc>,
-                       <0x800 0x218>,
-                       <0x600 0x70>;
--                #clock-cells = <0>;
--                #phy-cells = <0>;
-+
-                 clocks = <&gcc GCC_USB3_SEC_PHY_PIPE_CLK>;
-                 clock-names = "pipe0";
-+
-+                #clock-cells = <0>;
-                 clock-output-names = "usb3_uni_phy_pipe_clk_src";
-+
-+                #phy-cells = <0>;
-             };
-         };
+@@ -96,7 +96,6 @@ properties:
+ 
+   vddp-ref-clk-supply: true
+ 
+-#Required nodes:
+ patternProperties:
+   "^phy@[0-9a-f]+$":
+     type: object
 -- 
 2.35.1
 

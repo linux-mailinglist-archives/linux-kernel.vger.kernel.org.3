@@ -2,100 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F039156A47A
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 15:50:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EE9DE56A484
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 15:52:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236282AbiGGNt3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Jul 2022 09:49:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40394 "EHLO
+        id S236311AbiGGNwG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Jul 2022 09:52:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41476 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236103AbiGGNrq (ORCPT
+        with ESMTP id S236252AbiGGNvn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Jul 2022 09:47:46 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 624FA1FCD6;
-        Thu,  7 Jul 2022 06:47:44 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 76C1462049;
-        Thu,  7 Jul 2022 13:47:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9083DC341F2;
-        Thu,  7 Jul 2022 13:47:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1657201661;
-        bh=if7x9pUFUD8PopCzs/NYjEUQxvbby1hAw9eciZM4+V4=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=QzkzIeMzJKw1Rq2wRdJPGUbA+d4SWDDVM0DhtgUatxOhFm48arTnEr0hPMj8R51a0
-         WMdNYPk8iCuhAAY6/L/8m5f3IY8MPHbwMvKcP95GDY7rPQzs3+iAmDNRliYXyx9m4Y
-         WikmOWMg9+yVEe9T6MTzJ9eyjtvnAr9snwtk64TYodjDB1uIuNVvwd0dQFB/wqI1OF
-         mTIXK1gH99GD74yat9mI4TUF/xGL8RrG5Qb5c3DTBnwk1hPhjcW10gdeF+a+9DqoF4
-         HtKUbZ1yqAJTfPOKbCS42dICyDe410JMyFpb/zYw+pyVVsYNj3OD0Q4GJnpy4h64k1
-         acXB3B7he7MXw==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan+linaro@kernel.org>)
-        id 1o9Rr6-0000zK-86; Thu, 07 Jul 2022 15:47:44 +0200
-From:   Johan Hovold <johan+linaro@kernel.org>
-To:     Vinod Koul <vkoul@kernel.org>, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Johan Hovold <johan+linaro@kernel.org>
-Subject: [PATCH v2 30/30] phy: qcom-qmp-usb: drop pipe clock lane suffix
-Date:   Thu,  7 Jul 2022 15:47:25 +0200
-Message-Id: <20220707134725.3512-31-johan+linaro@kernel.org>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220707134725.3512-1-johan+linaro@kernel.org>
-References: <20220707134725.3512-1-johan+linaro@kernel.org>
+        Thu, 7 Jul 2022 09:51:43 -0400
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 182754D4CE;
+        Thu,  7 Jul 2022 06:50:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=cHtPqf0EZi6Rmr2HnZOjOrCXsqzXZi//SFvwSsuDJxg=; b=HSq2FS0mqQIs+Q8D5ZU9Sfzo5y
+        Y0+meYy1GAId0uW0Qfe0IafRM4UVJsLS12rsfb8JHVlmiYw8PqYYQw/2exCuPuB1wZ+GQyfE9sFZ8
+        aUP1HqEnFahXi8DUojJjffY/uTGSyVPpFkwA47f+e+PP2Lxaux4gckd9gjazwICe/Jjbqh02KNJNN
+        pEOGZliIuhyqCq34U94wK2EhcDpRwmz1wYiJvBPMc71rAmin8S0ELfj90xgEhFViQ+AsuctRpOXpw
+        mxpY5/TAIG9fWOkn3ruzr2kEFVr57RPPkNJWkk9zj+fb8R/7G4i4POj5aDbwEHxq5VhMdWVutO/Ut
+        1k7+rSkw==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1o9Rsw-001IU7-Nf; Thu, 07 Jul 2022 13:49:43 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 908C3300872;
+        Thu,  7 Jul 2022 15:49:34 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 5083920CA4D3D; Thu,  7 Jul 2022 15:49:34 +0200 (CEST)
+Date:   Thu, 7 Jul 2022 15:49:34 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Barry Song <21cnbao@gmail.com>
+Cc:     akpm@linux-foundation.org, linux-mm@kvack.org,
+        linux-arm-kernel@lists.infradead.org, x86@kernel.org,
+        catalin.marinas@arm.com, will@kernel.org,
+        linux-doc@vger.kernel.org, corbet@lwn.net, arnd@arndb.de,
+        linux-kernel@vger.kernel.org, darren@os.amperecomputing.com,
+        yangyicong@hisilicon.com, huzhanyuan@oppo.com, lipeifeng@oppo.com,
+        zhangshiming@oppo.com, guojian@oppo.com, realmz6@gmail.com,
+        Barry Song <v-songbaohua@oppo.com>,
+        Nadav Amit <namit@vmware.com>, Mel Gorman <mgorman@suse.de>
+Subject: Re: [PATCH 4/4] arm64: support batched/deferred tlb shootdown during
+ page reclamation
+Message-ID: <Ysbkbt7cvUWSShtc@hirez.programming.kicks-ass.net>
+References: <20220707125242.425242-1-21cnbao@gmail.com>
+ <20220707125242.425242-5-21cnbao@gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220707125242.425242-5-21cnbao@gmail.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The pipe clock is defined in the "lane" node so there's no need to keep
-adding a redundant lane-number suffix to the clock name.
+On Fri, Jul 08, 2022 at 12:52:42AM +1200, Barry Song wrote:
 
-Update driver to support the new binding where the pipe clock name has
-been deprecated by instead requesting the clock by index.
+> diff --git a/arch/arm64/include/asm/tlbbatch.h b/arch/arm64/include/asm/tlbbatch.h
+> new file mode 100644
+> index 000000000000..fedb0b87b8db
+> --- /dev/null
+> +++ b/arch/arm64/include/asm/tlbbatch.h
+> @@ -0,0 +1,12 @@
+> +/* SPDX-License-Identifier: GPL-2.0 */
+> +#ifndef _ARCH_ARM64_TLBBATCH_H
+> +#define _ARCH_ARM64_TLBBATCH_H
+> +
+> +struct arch_tlbflush_unmap_batch {
+> +	/*
+> +	 * For arm64, HW can do tlb shootdown, so we don't
+> +	 * need to record cpumask for sending IPI
+> +	 */
+> +};
+> +
+> +#endif /* _ARCH_ARM64_TLBBATCH_H */
+> diff --git a/arch/arm64/include/asm/tlbflush.h b/arch/arm64/include/asm/tlbflush.h
+> index 412a3b9a3c25..b3ed163267ca 100644
+> --- a/arch/arm64/include/asm/tlbflush.h
+> +++ b/arch/arm64/include/asm/tlbflush.h
+> @@ -272,6 +272,19 @@ static inline void flush_tlb_page(struct vm_area_struct *vma,
+>  	dsb(ish);
+>  }
+>  
+> +static inline void arch_tlbbatch_add_mm(struct arch_tlbflush_unmap_batch *batch,
+> +					struct mm_struct *mm,
+> +					struct vm_area_struct *vma,
+> +					unsigned long uaddr)
+> +{
+> +	flush_tlb_page_nosync(vma, uaddr);
+> +}
 
-Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
----
- drivers/phy/qualcomm/phy-qcom-qmp-usb.c | 4 +---
- 1 file changed, 1 insertion(+), 3 deletions(-)
+You're passing that vma along just to get the mm, that's quite silly and
+trivially fixed.
 
-diff --git a/drivers/phy/qualcomm/phy-qcom-qmp-usb.c b/drivers/phy/qualcomm/phy-qcom-qmp-usb.c
-index 994a8232be7b..2ed9b031bde4 100644
---- a/drivers/phy/qualcomm/phy-qcom-qmp-usb.c
-+++ b/drivers/phy/qualcomm/phy-qcom-qmp-usb.c
-@@ -2609,7 +2609,6 @@ int qcom_qmp_phy_usb_create(struct device *dev, struct device_node *np, int id,
- 	struct qcom_qmp *qmp = dev_get_drvdata(dev);
- 	struct phy *generic_phy;
- 	struct qmp_phy *qphy;
--	char prop_name[MAX_PROP_NAME];
- 	int ret;
+
+diff --git a/arch/arm64/include/asm/tlbflush.h b/arch/arm64/include/asm/tlbflush.h
+index 412a3b9a3c25..87505ecce1f0 100644
+--- a/arch/arm64/include/asm/tlbflush.h
++++ b/arch/arm64/include/asm/tlbflush.h
+@@ -254,17 +254,23 @@ static inline void flush_tlb_mm(struct mm_struct *mm)
+ 	dsb(ish);
+ }
  
- 	qphy = devm_kzalloc(dev, sizeof(*qphy), GFP_KERNEL);
-@@ -2665,8 +2664,7 @@ int qcom_qmp_phy_usb_create(struct device *dev, struct device_node *np, int id,
- 	if (!qphy->pcs_misc)
- 		dev_vdbg(dev, "PHY pcs_misc-reg not used\n");
+-static inline void flush_tlb_page_nosync(struct vm_area_struct *vma,
+-					 unsigned long uaddr)
++static inline void __flush_tlb_page_nosync(struct mm_struct *mm,
++					   unsigned long uaddr)
+ {
+ 	unsigned long addr;
  
--	snprintf(prop_name, sizeof(prop_name), "pipe%d", id);
--	qphy->pipe_clk = devm_get_clk_from_child(dev, np, prop_name);
-+	qphy->pipe_clk = devm_get_clk_from_child(dev, np, NULL);
- 	if (IS_ERR(qphy->pipe_clk)) {
- 		return dev_err_probe(dev, PTR_ERR(qphy->pipe_clk),
- 				     "failed to get lane%d pipe clock\n", id);
--- 
-2.35.1
-
+ 	dsb(ishst);
+-	addr = __TLBI_VADDR(uaddr, ASID(vma->vm_mm));
++	addr = __TLBI_VADDR(uaddr, ASID(mm));
+ 	__tlbi(vale1is, addr);
+ 	__tlbi_user(vale1is, addr);
+ }
+ 
++static inline void flush_tlb_page_nosync(struct vm_area_struct *vma,
++					 unsigned long uaddr)
++{
++	return __flush_tlb_page_nosync(vma->vm_mm, uaddr);
++}
++
+ static inline void flush_tlb_page(struct vm_area_struct *vma,
+ 				  unsigned long uaddr)
+ {

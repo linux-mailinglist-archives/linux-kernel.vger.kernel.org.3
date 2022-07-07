@@ -2,68 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0CAEF56AC45
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 21:56:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 56B1B56AC48
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 21:58:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236273AbiGGT4V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Jul 2022 15:56:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37962 "EHLO
+        id S236548AbiGGT5T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Jul 2022 15:57:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38798 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236272AbiGGT4T (ORCPT
+        with ESMTP id S235829AbiGGT5R (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Jul 2022 15:56:19 -0400
-Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CEC35C9CD
-        for <linux-kernel@vger.kernel.org>; Thu,  7 Jul 2022 12:56:18 -0700 (PDT)
-Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-317f6128c86so134757037b3.22
-        for <linux-kernel@vger.kernel.org>; Thu, 07 Jul 2022 12:56:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:message-id:mime-version:subject:from:to:cc;
-        bh=VTPpLSonRFchZeOdmeBL2sr3TWDo42K4dE3d7UKdw3M=;
-        b=iZHOX2/vDNeRZKy3jhNTimAQoYKlKZbkEVCdFgHoeOXgGiyKdLv6IlSMbt5pXw1LK9
-         SN/JPo+mr1yAbQMhnOsr8C4QZ/GzVOrHL24qVB2kG6U4WbwpUsw7uV5ScBZKHNZBO6LB
-         CZI5snkNAurmla+akmvZnbZ3aiHcyvRFv8XF/lWcL/rg3uiOrRiQdNj+t0jIVY+9MUMs
-         xgAY/Wa6ZqAo53/R1KKKovVxHxJxBdAf9GpjWjwGbhzJnPT1yGOG+yDGnw9CmUc+hxwq
-         5zObhLY9rgC0XnGKwcNVVlj3VKNsUdwg9AabuuVOFf5xzL9/Gzb+0bUCe6+Gvc8belY9
-         +H6Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
-        bh=VTPpLSonRFchZeOdmeBL2sr3TWDo42K4dE3d7UKdw3M=;
-        b=Tca1IOLVFPrA1AcyACiNAB7XgIw3S9xIHJe8D3XgVkvwfOcIJYNbWoxEM8F3X3O1Na
-         7ISF/Qrg0OLKYtkqyyB2TE0yLlxRQFADG7O5cqTNS1E91VSGSIMlUM6DYhLW8cQ4BACz
-         mh8LWyoJVpqfLS9HXn0YjX2E5ozg2dxzUgdAKAR+RXTWQLynZXwed8b3qfK73wkrTggG
-         OVhbvSIAKVVocEkGwBZSdMNB+OR/vKveiOH+rWRk7fYe74QDWzavT/Nye7HHE9R7Jove
-         embv9MpWFE3fsjZopKuOchqNe7GfmtXdn5SpJQcW4cGqaHEI3N9vApw3kmus6FL88IyG
-         8CPg==
-X-Gm-Message-State: AJIora8wmjcQW1OwrD9lGg9zxrYMBG/DFrBNbJv3iAR4CCGH+KrJnMyP
-        8QD/3stgqwT/DZGEP50wdqi+a+3Hx/cD
-X-Google-Smtp-Source: AGRyM1sJh46RbpP41le7Fm7sV2oy0iqvhzP+SQGvIAeGeUn8NkZt29kJnOvblIQo00Pr8BQPfG6OSwtYhUyN
-X-Received: from irogers.svl.corp.google.com ([2620:15c:2d4:203:bf75:f79:d509:a8d1])
- (user=irogers job=sendgmr) by 2002:a0d:e8c8:0:b0:31d:555:b4ce with SMTP id
- r191-20020a0de8c8000000b0031d0555b4cemr6721011ywe.94.1657223777645; Thu, 07
- Jul 2022 12:56:17 -0700 (PDT)
-Date:   Thu,  7 Jul 2022 12:56:10 -0700
-Message-Id: <20220707195610.303254-1-irogers@google.com>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.37.0.rc0.161.g10f37bed90-goog
-Subject: [PATCH v4] perf evlist: Remove group option.
-From:   Ian Rogers <irogers@google.com>
-To:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org
-Cc:     Stephane Eranian <eranian@google.com>,
-        Ian Rogers <irogers@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        Thu, 7 Jul 2022 15:57:17 -0400
+Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2074.outbound.protection.outlook.com [40.107.94.74])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 503645C9FB;
+        Thu,  7 Jul 2022 12:57:16 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=H0uHmbU/2NwcWVBFdaDhlE+uJhE5kdr5kZ0XXOOWQoor/SlYWxovT52kcae33aYSrTK0KkUZ4+qjdecdB3qHyOHXVkDkYudKPpRMytcqRvYhRwJZZAOCB6EanZ2TGWPQiPo188QGgmcY3q+pCRTu1NGsr+/brlPpiFFBHqb/vS+vJdiOB5C4iDdATBRn9xO5sBwe1roUM1915LRcdFgcKVihTqCirExnBSwCy7nCHloJ+sP1e1zI1s7EvL67Egze3B3UfdsisYt100jXBW8/rkbHXPUli5yIpdcKvQcTa1sCHuNJ5RAQiGpHxg0KkBBkGmnw6lkRMEO+RkGuL6Yn4g==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=ACB9iBXddRZ0jNDzdTGFhYI6JAtoXztnfWpt3O8cAKg=;
+ b=eM0CArgXU1/jj5kfumUuXtzmhrpAlkyG2IGOhOdhFXTjsihfK7RGvVORxZ06EbRsjJ2v3Tb3oEVDq2BpasAyHgnFenNuAQqple+PYnvoc/Jq/SXzz/Q9KpgAxx5b5Xhhh62VFlfI1P5YyUySltow/eK7rt89qcD2TT7r+mLE8KfuK2GXxODAK+LiTK4uSl5GaK5r3727hzsVv0NbO3GAGLzyCP0MBpSWoZQE1ayS9FDmsbmpnf35kqKIfMV0Zdv7IvgkP3QN6w+cUJphXJTEJoavOImBaWERmI2OamVlwCP/znD95k/zwXYUiFpTHDLhIEFrn/RL4HkUb1VyCi4Kpw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=ACB9iBXddRZ0jNDzdTGFhYI6JAtoXztnfWpt3O8cAKg=;
+ b=2DAme6Qu7z4VxMzw2CIYUHUI2ELc7UDmSdEAhukC2svrQBNehbIbc3k8xXcn6scJOx4ko0fgUa0QESDn92bQcddtrhye1q+80v/NItBfW5vBTs+j9e8Wgy+rUwJufc+v0odma7olohW2N3PcLT0m9ioH4rqU+n8XeRgtUFiv3zY=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from MN0PR12MB6222.namprd12.prod.outlook.com (2603:10b6:208:3c2::19)
+ by BL3PR12MB6643.namprd12.prod.outlook.com (2603:10b6:208:38f::17) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5417.16; Thu, 7 Jul
+ 2022 19:57:01 +0000
+Received: from MN0PR12MB6222.namprd12.prod.outlook.com
+ ([fe80::ec96:60a2:ca21:17d1]) by MN0PR12MB6222.namprd12.prod.outlook.com
+ ([fe80::ec96:60a2:ca21:17d1%3]) with mapi id 15.20.5395.021; Thu, 7 Jul 2022
+ 19:57:01 +0000
+Message-ID: <c25cbc3f-11c6-aca6-af7d-a4d7aa91e1ae@amd.com>
+Date:   Thu, 7 Jul 2022 14:56:58 -0500
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH 07/12] cpufreq: amd_pstate: map desired perf into pstate
+ scope for powersave governor
+Content-Language: en-US
+To:     Perry Yuan <Perry.Yuan@amd.com>, rafael.j.wysocki@intel.com,
+        viresh.kumar@linaro.org, Ray.Huang@amd.com,
+        "Rafael J. Wysocki" <rafael@kernel.org>, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Deepak.Sharma@amd.com, Mario.Limonciello@amd.com,
+        Nathan.Fontenot@amd.com, Alexander.Deucher@amd.com,
+        Jinzhou.Su@amd.com, Xinmei.Huang@amd.com, Xiaojian.Du@amd.com,
+        Li.Meng@amd.com
+References: <20220707170022.216202-1-Perry.Yuan@amd.com>
+From:   Nathan Fontenot <nafonten@amd.com>
+In-Reply-To: <20220707170022.216202-1-Perry.Yuan@amd.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: BLAPR03CA0080.namprd03.prod.outlook.com
+ (2603:10b6:208:329::25) To MN0PR12MB6222.namprd12.prod.outlook.com
+ (2603:10b6:208:3c2::19)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 1583cd3a-1fdc-452f-537f-08da6052db65
+X-MS-TrafficTypeDiagnostic: BL3PR12MB6643:EE_
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: bnojGnY9egfYei91/6+U67L08FA4+t036vSiJrOXqw4zWNYCR0M2SNFaMBFApMFM1AZwMFQS6/CUb9i4QVmzPB8NDqPJUmyuBm2PlWlZuoyhyyEX3gMmA9h2nIubwHwPAeC/gnZiqwxT2GFoU2NWnDI52DdDC+tiEeOZKSMrPTcmDxqflSEnmuwOpnZ2a8HRRBnjBsv94mmYlJ6nO79t3Edg/AKGk2NIm+vJc9pSWZrEdrd8EMEGZqh/PJTcMoiH2fQAKe/X+UrxfMJXNs4Wdmp2qeFZ5seqG+sdUYcuS7eldk3Iph7ZVBbjsNm/bO1p2j7S2d8eYnsbypJ1i1EID1GZqee54FDn1saQGafMCmpiau21KY2OuujPOYhDC2NPNpYMhgLKAIjRlVkIdDffQQyDsZWaiqsylo7MchPBCaZSetmKf3KnvEwT0uKb3U/QmVRUJVl68J27f6aaFIsGuB0lMCK3BPQI53jhGr90YKjaQk4e/DbkXbCJ6zGUM5CVLxFuWmWDi/M11CVIGC7/6M3C0UiyqrhHPzzNwQ3e3kuPlR/HV1HhLNApBuHCxcWn/LTaZQ2nzxbA4eB95t703wPN7owwf/2UgLVG5SyJnNSYwQ6XC3jkJfwIbo9IOM8oDDZPa0Dyc8KmNG7SNRwWzX+Up3WVqris+SnLX7UtILyH+5LWA10q3kUZBN43RDDHlgGExGisq4/jCjGuH4I//esg+bFWOaYpJ8+XSFD80PzySPOHoVVIqtLikd4VQCr6QJtr+4a3MrC+eNXLQwVP21l5ELIW8B4Cco+TKXBmVYqEq5Z3OzTw+XITxJmEtB453Wl3KDcUYuh781ppfzdI3QCT2Kt/vw8DP1DkWnjYi2s=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN0PR12MB6222.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(39860400002)(366004)(396003)(136003)(376002)(346002)(26005)(2906002)(6506007)(6666004)(41300700001)(6512007)(478600001)(8936002)(6486002)(5660300002)(53546011)(2616005)(31696002)(83380400001)(110136005)(186003)(38100700002)(31686004)(66946007)(316002)(36756003)(4326008)(66556008)(66476007)(8676002)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?ZHUwd016eHlZcjExMWpXbVpzVzFkOXRPMkV4ajN0aHdwUFJ1L0gzbkkvZ1Ft?=
+ =?utf-8?B?aU94MVc2UkhOU2llSnVEZi8zbmxhMWZCNWVaOGNXeFE5ajVMMjhWNEkwN3B5?=
+ =?utf-8?B?ZkZWbXNPNGs4U2thaVpNdnc3eUpFa2hoYkEwVDRQdU43M0xQOUNiOUFLcG12?=
+ =?utf-8?B?UjQwZXRQeTNRYmRmcnhFcFRSZTZzcTE5Q2xFdUtkNFlCdFNHNXl2Z0hEZlJB?=
+ =?utf-8?B?WjhlczVMMGQvL05tRnU5ZHAvMENDRno5MTN4SnJEbDdPa0JURFRHWXdDaWNu?=
+ =?utf-8?B?NDZOWHhsWm1zWHhsdWxRZk50OEE2c2tRTFZaMEZ0aHA3TlJRQkpHdHRQS2l6?=
+ =?utf-8?B?UFljSC9JcGZ3YVZVQU0rZTZZOElsc1g3WGNUa3cza0lrMGVyNUg2NFYwUnUy?=
+ =?utf-8?B?OEM5K09WNmFkYmwyK1RLSGJCODBrVFlTR2gxTzhsQVVJN082aFh1akZQcStY?=
+ =?utf-8?B?cUM0cUlBZXVyVkkyaTVHc1hlclpTVnhqSTE4cUY1VGI2Z24rSFFDYlh3U2Fu?=
+ =?utf-8?B?L21kZHVucVk5K2tyWC83RTFzcDE1YkJueWk4UysvMk4rRlkwcW9JcHZVcnpn?=
+ =?utf-8?B?cXh4RnhlQ0h1dDRscElQWjRmeFJxYkhGendtRzdnSldveWJYdUZlM2ZEVjZO?=
+ =?utf-8?B?SiswMFhLcEpNZjNYbW9iRG43Vm1aWS9EZFY4MzkrUU1iRGZsQ0c1dTA1U2RN?=
+ =?utf-8?B?WldqTk9JemZBTzZVeG9SWUpBaTE5RjNiMWtnM2k4S2ZkWXBmVmFQWWZiZlVS?=
+ =?utf-8?B?VjdrM3kyR3p3LzcyVzljR0xTSU1obExISzZ0UFVqYU1HWnhMb0hmM244TkN4?=
+ =?utf-8?B?TTVEU0VpNjROdE9OUW1MaUtITXRrelhlV0FYcWNoa2syQ1pFMVFjeE9OUllT?=
+ =?utf-8?B?Ny9pQkh5S08vRXZYWWI3Q0wreFlNRU9BOFBkTTg4RlRxV2YvSXVvdFBBdlNG?=
+ =?utf-8?B?YUJHWURHc1owYXRmb2R5ZVpjVy9HZ3I2c0kwNFdlUGVCbm9WaEQxRkpRZzRZ?=
+ =?utf-8?B?SnR6SS9sNjdLNExPSkxBT2V1M0lXVXhLTCtMM2F5cHYxMzNndThNMnRkSG9B?=
+ =?utf-8?B?SkRmZC9ScURTTjZmaXhCQTY0SHhPVnUwRm10azAydkczNVhYVk13MHFUcVhY?=
+ =?utf-8?B?UWswelpCa1Q1Z0piQ0RFcllhMHpHa0VKWFZ4U1R6aUNiRzg5MVY3NlcrSThU?=
+ =?utf-8?B?SkFuVGhhZkZ5QTVhQ3BrSGJpSUFiWUplVEFxdTdoWDNrbmFDSWJkek5HQ0w3?=
+ =?utf-8?B?WFVncFJFc0cxdFgwd3I2bGZuZjVsYjJ1dGpENDhvR09SLzhOTEhEUWgwQlc5?=
+ =?utf-8?B?UUlDQmdrNmI5K0I0MllLZDBQMTJOM29zMW9OeGhZc25qYmZnNUtuOEMzVzIx?=
+ =?utf-8?B?ZGgyQS9oaVgzY2tKaXpTSVMwcUd3QjNaeUVIdVRSMVhlWWhJQ21Jekt2VlBO?=
+ =?utf-8?B?d1hod25ZQU9SanhDNytZQ0kvZVNrV24zWXRmQzRGK25XK1crL0xHczBkU3Nq?=
+ =?utf-8?B?YlVKZFZZem84OVZSN2MyZG9MMzI0ZUFORmtkY3NkZVplVUlwUysxNnEyWklv?=
+ =?utf-8?B?b0ZROFJ2WnZURVdCRTBZOWFVZE5TZzkwL0JZZUtNaWROMjF0d2s3VlNWeDZu?=
+ =?utf-8?B?eDRZbHRMT1gwaWtYSURsdjNoYmF2aHoxK1B4UElib05CeHZPS1RZT1pxLy96?=
+ =?utf-8?B?K2FBdzRSZUh4YlUwRGhHMU41MGk5WHBKVTExOWNtZDkxVjhmWUY4dkpCVGxX?=
+ =?utf-8?B?eDQ5dnoxL0tocE92K1oycHQySDBqbzE1L0RtODVNelpaV0FrckVIUWVZRllF?=
+ =?utf-8?B?dDdtREJUaTErdnJsbVIzNGQrY0t5WlhGTGJHTUsrZ0VrVVZMM20xb3pvc1h4?=
+ =?utf-8?B?N0ZXUkwzbGQ3b0duaGtOcElMenJsMFlBWEx3Vmd2a2Fhc1hGMGR0Kzl0aVdN?=
+ =?utf-8?B?OU1ZSFBVWTk3ai9tZmRSb3RuemdvQWttZVpKNnhlS3JTcjRwOFViRU9JTDlZ?=
+ =?utf-8?B?eUpweDZ1WGtDaWlySUdNTEpEbnVrZkd3d1JyRE5uYXZNRXZjT1pCaXZBRStl?=
+ =?utf-8?B?WFRnV3VVVlpWYlkvWm5uenZPWlFONmJpWE1qNjk2QW5lTWtNcGtFK2M1bXV5?=
+ =?utf-8?Q?qyuLJjAx0TujGIAddq1zCABRE?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 1583cd3a-1fdc-452f-537f-08da6052db65
+X-MS-Exchange-CrossTenant-AuthSource: MN0PR12MB6222.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Jul 2022 19:57:01.2344
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: P436tF9BSGtdqh0Y56m1pCqKqVECI7/joHd+5hUXTZXkhhEOszXHNiL9Aujnu4JggcRxDz4sZCw8CJ62tBc9MA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL3PR12MB6643
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,276 +130,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The group option predates grouping events using curly braces added in
-commit 89efb029502d ("perf tools: Add support to parse event group syntax")
-The --group option was retained for legacy support (in August 2012) but
-keeping it adds complexity.
+On 7/7/22 12:00, Perry Yuan wrote:
+> The patch will fix the invalid desired perf value for powersave
+> governor. This issue is found when testing on one AMD EPYC system, the
+> actual des_perf is smaller than the min_perf value, that is invalid
+> value. because the min_perf is the lowest_perf system can support in
+> idle state.
+> 
+> Signed-off-by: Perry Yuan <Perry.Yuan@amd.com>
+> ---
+>  drivers/cpufreq/amd-pstate.c | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/drivers/cpufreq/amd-pstate.c b/drivers/cpufreq/amd-pstate.c
+> index 7c51f4125263..154eed849f38 100644
+> --- a/drivers/cpufreq/amd-pstate.c
+> +++ b/drivers/cpufreq/amd-pstate.c
+> @@ -317,6 +317,7 @@ static int amd_pstate_target(struct cpufreq_policy *policy,
+>  	des_perf = DIV_ROUND_CLOSEST(target_freq * cap_perf,
+>  				     cpudata->max_freq);
+>  
+> +	des_perf = clamp_t(unsigned long, des_perf, min_perf, max_perf);
+>  	cpufreq_freq_transition_begin(policy, &freqs);
+>  	amd_pstate_update(cpudata, min_perf, des_perf,
+>  			  max_perf, false);
 
-v2, v3 and v4 were rebases.
+The clamping of the desired perf value should be moved to amd_pstate_update(). The
+only other caller of amd_pstate_update() is amd_pstate_adjust_perf() which already
+clamps the desired perf value before making the call.
 
-Signed-off-by: Ian Rogers <irogers@google.com>
----
- tools/perf/Documentation/perf-record.txt |  4 ----
- tools/perf/Documentation/perf-top.txt    |  7 ++-----
- tools/perf/builtin-record.c              |  2 --
- tools/perf/builtin-stat.c                |  6 ------
- tools/perf/builtin-top.c                 |  2 --
- tools/perf/tests/attr/README             |  2 --
- tools/perf/tests/attr/test-record-group  | 22 ----------------------
- tools/perf/tests/attr/test-stat-group    | 17 -----------------
- tools/perf/util/evlist.c                 |  2 +-
- tools/perf/util/evlist.h                 |  2 --
- tools/perf/util/python.c                 |  8 --------
- tools/perf/util/record.c                 |  7 -------
- tools/perf/util/record.h                 |  1 -
- 13 files changed, 3 insertions(+), 79 deletions(-)
- delete mode 100644 tools/perf/tests/attr/test-record-group
- delete mode 100644 tools/perf/tests/attr/test-stat-group
-
-diff --git a/tools/perf/Documentation/perf-record.txt b/tools/perf/Documentation/perf-record.txt
-index 6bd6d07021ba..cd6ce29854b0 100644
---- a/tools/perf/Documentation/perf-record.txt
-+++ b/tools/perf/Documentation/perf-record.txt
-@@ -238,10 +238,6 @@ OPTIONS
- 	Also, by adding a comma, the number of mmap pages for AUX
- 	area tracing can be specified.
- 
----group::
--	Put all events in a single event group.  This precedes the --event
--	option and remains only for backward compatibility.  See --event.
--
- -g::
- 	Enables call-graph (stack chain/backtrace) recording for both
- 	kernel space and user space.
-diff --git a/tools/perf/Documentation/perf-top.txt b/tools/perf/Documentation/perf-top.txt
-index c1fdba26bf53..e534d709cc5a 100644
---- a/tools/perf/Documentation/perf-top.txt
-+++ b/tools/perf/Documentation/perf-top.txt
-@@ -51,9 +51,6 @@ Default is to monitor all CPUS.
- --count-filter=<count>::
- 	Only display functions with more events than this.
- 
----group::
--        Put the counters into a counter group.
--
- --group-sort-idx::
- 	Sort the output by the event at the index n in group. If n is invalid,
- 	sort by the first event. It can support multiple groups with different
-@@ -313,10 +310,10 @@ use '-e e1 -e e2 -G foo,foo' or just use '-e e1 -e e2 -G foo'.
- 
- 		perf top -e cycles,probe:icmp_rcv --switch-on=probe:icmp_rcv
- 
--	   Alternatively one can ask for --group and then two overhead columns
-+	   Alternatively one can ask for a group and then two overhead columns
-            will appear, the first for cycles and the second for the switch-on event.
- 
--		perf top --group -e cycles,probe:icmp_rcv --switch-on=probe:icmp_rcv
-+		perf top -e '{cycles,probe:icmp_rcv}' --switch-on=probe:icmp_rcv
- 
- 	This may be interesting to measure a workload only after some initialization
- 	phase is over, i.e. insert a perf probe at that point and use the above
-diff --git a/tools/perf/builtin-record.c b/tools/perf/builtin-record.c
-index cf5c5379ceaa..04a016520b7e 100644
---- a/tools/perf/builtin-record.c
-+++ b/tools/perf/builtin-record.c
-@@ -3197,8 +3197,6 @@ static struct option __record_options[] = {
- 	OPT_CALLBACK(0, "mmap-flush", &record.opts, "number",
- 		     "Minimal number of bytes that is extracted from mmap data pages (default: 1)",
- 		     record__mmap_flush_parse),
--	OPT_BOOLEAN(0, "group", &record.opts.group,
--		    "put the counters into a counter group"),
- 	OPT_CALLBACK_NOOPT('g', NULL, &callchain_param,
- 			   NULL, "enables call-graph recording" ,
- 			   &record_callchain_opt),
-diff --git a/tools/perf/builtin-stat.c b/tools/perf/builtin-stat.c
-index 4ce87a8eb7d7..225b63234e6c 100644
---- a/tools/perf/builtin-stat.c
-+++ b/tools/perf/builtin-stat.c
-@@ -180,7 +180,6 @@ static bool			topdown_run			= false;
- static bool			smi_cost			= false;
- static bool			smi_reset			= false;
- static int			big_num_opt			=  -1;
--static bool			group				= false;
- static const char		*pre_cmd			= NULL;
- static const char		*post_cmd			= NULL;
- static bool			sync_run			= false;
-@@ -816,9 +815,6 @@ static int __run_perf_stat(int argc, const char **argv, int run_idx)
- 		child_pid = evsel_list->workload.pid;
- 	}
- 
--	if (group)
--		evlist__set_leader(evsel_list);
--
- 	if (!cpu_map__is_dummy(evsel_list->core.user_requested_cpus)) {
- 		if (affinity__setup(&saved_affinity) < 0)
- 			return -1;
-@@ -1228,8 +1224,6 @@ static struct option stat_options[] = {
- #endif
- 	OPT_BOOLEAN('a', "all-cpus", &target.system_wide,
- 		    "system-wide collection from all CPUs"),
--	OPT_BOOLEAN('g', "group", &group,
--		    "put the counters into a counter group"),
- 	OPT_BOOLEAN(0, "scale", &stat_config.scale,
- 		    "Use --no-scale to disable counter scaling for multiplexing"),
- 	OPT_INCR('v', "verbose", &verbose,
-diff --git a/tools/perf/builtin-top.c b/tools/perf/builtin-top.c
-index fd8fd913c533..44c8bf33ce81 100644
---- a/tools/perf/builtin-top.c
-+++ b/tools/perf/builtin-top.c
-@@ -1470,8 +1470,6 @@ int cmd_top(int argc, const char **argv)
- 			    "dump the symbol table used for profiling"),
- 	OPT_INTEGER('f', "count-filter", &top.count_filter,
- 		    "only display functions with more events than this"),
--	OPT_BOOLEAN(0, "group", &opts->group,
--			    "put the counters into a counter group"),
- 	OPT_BOOLEAN('i', "no-inherit", &opts->no_inherit,
- 		    "child tasks do not inherit counters"),
- 	OPT_STRING(0, "sym-annotate", &top.sym_filter, "symbol name",
-diff --git a/tools/perf/tests/attr/README b/tools/perf/tests/attr/README
-index eb3f7d4bb324..4066fec7180a 100644
---- a/tools/perf/tests/attr/README
-+++ b/tools/perf/tests/attr/README
-@@ -49,7 +49,6 @@ Following tests are defined (with perf commands):
-   perf record --call-graph dwarf kill		(test-record-graph-dwarf)
-   perf record --call-graph fp kill              (test-record-graph-fp)
-   perf record --call-graph fp kill              (test-record-graph-fp-aarch64)
--  perf record --group -e cycles,instructions kill (test-record-group)
-   perf record -e '{cycles,instructions}' kill   (test-record-group1)
-   perf record -e '{cycles/period=1/,instructions/period=2/}:S' kill (test-record-group2)
-   perf record -D kill                           (test-record-no-delay)
-@@ -66,6 +65,5 @@ Following tests are defined (with perf commands):
-   perf stat -d kill                             (test-stat-detailed-1)
-   perf stat -dd kill                            (test-stat-detailed-2)
-   perf stat -ddd kill                           (test-stat-detailed-3)
--  perf stat --group -e cycles,instructions kill (test-stat-group)
-   perf stat -e '{cycles,instructions}' kill     (test-stat-group1)
-   perf stat -i -e cycles kill                   (test-stat-no-inherit)
-diff --git a/tools/perf/tests/attr/test-record-group b/tools/perf/tests/attr/test-record-group
-deleted file mode 100644
-index 14ee60fd3f41..000000000000
---- a/tools/perf/tests/attr/test-record-group
-+++ /dev/null
-@@ -1,22 +0,0 @@
--[config]
--command = record
--args    = --no-bpf-event --group -e cycles,instructions kill >/dev/null 2>&1
--ret     = 1
--
--[event-1:base-record]
--fd=1
--group_fd=-1
--sample_type=327
--read_format=4
--
--[event-2:base-record]
--fd=2
--group_fd=1
--config=1
--sample_type=327
--read_format=4
--mmap=0
--comm=0
--task=0
--enable_on_exec=0
--disabled=0
-diff --git a/tools/perf/tests/attr/test-stat-group b/tools/perf/tests/attr/test-stat-group
-deleted file mode 100644
-index e15d6946e9b3..000000000000
---- a/tools/perf/tests/attr/test-stat-group
-+++ /dev/null
-@@ -1,17 +0,0 @@
--[config]
--command = stat
--args    = --group -e cycles,instructions kill >/dev/null 2>&1
--ret     = 1
--
--[event-1:base-stat]
--fd=1
--group_fd=-1
--read_format=3|15
--
--[event-2:base-stat]
--fd=2
--group_fd=1
--config=1
--disabled=0
--enable_on_exec=0
--read_format=3|15
-diff --git a/tools/perf/util/evlist.c b/tools/perf/util/evlist.c
-index 48af7d379d82..4cc5c417d4a2 100644
---- a/tools/perf/util/evlist.c
-+++ b/tools/perf/util/evlist.c
-@@ -224,7 +224,7 @@ int __evlist__set_tracepoints_handlers(struct evlist *evlist,
- 	return err;
- }
- 
--void evlist__set_leader(struct evlist *evlist)
-+static void evlist__set_leader(struct evlist *evlist)
- {
- 	perf_evlist__set_leader(&evlist->core);
- }
-diff --git a/tools/perf/util/evlist.h b/tools/perf/util/evlist.h
-index 1bde9ccf4e7d..4cc31570d3d6 100644
---- a/tools/perf/util/evlist.h
-+++ b/tools/perf/util/evlist.h
-@@ -206,8 +206,6 @@ void evlist__set_selected(struct evlist *evlist, struct evsel *evsel);
- int evlist__create_maps(struct evlist *evlist, struct target *target);
- int evlist__apply_filters(struct evlist *evlist, struct evsel **err_evsel);
- 
--void evlist__set_leader(struct evlist *evlist);
--
- u64 __evlist__combined_sample_type(struct evlist *evlist);
- u64 evlist__combined_sample_type(struct evlist *evlist);
- u64 evlist__combined_branch_type(struct evlist *evlist);
-diff --git a/tools/perf/util/python.c b/tools/perf/util/python.c
-index 5be5fa2391de..53d70cda6063 100644
---- a/tools/perf/util/python.c
-+++ b/tools/perf/util/python.c
-@@ -1134,14 +1134,6 @@ static PyObject *pyrf_evlist__open(struct pyrf_evlist *pevlist,
- 				   PyObject *args, PyObject *kwargs)
- {
- 	struct evlist *evlist = &pevlist->evlist;
--	int group = 0;
--	static char *kwlist[] = { "group", NULL };
--
--	if (!PyArg_ParseTupleAndKeywords(args, kwargs, "|OOii", kwlist, &group))
--		return NULL;
--
--	if (group)
--		evlist__set_leader(evlist);
- 
- 	if (evlist__open(evlist) < 0) {
- 		PyErr_SetFromErrno(PyExc_OSError);
-diff --git a/tools/perf/util/record.c b/tools/perf/util/record.c
-index b529636ab3ea..1744b8eaf63e 100644
---- a/tools/perf/util/record.c
-+++ b/tools/perf/util/record.c
-@@ -99,13 +99,6 @@ void evlist__config(struct evlist *evlist, struct record_opts *opts, struct call
- 	bool use_comm_exec;
- 	bool sample_id = opts->sample_id;
- 
--	/*
--	 * Set the evsel leader links before we configure attributes,
--	 * since some might depend on this info.
--	 */
--	if (opts->group)
--		evlist__set_leader(evlist);
--
- 	if (perf_cpu_map__cpu(evlist->core.user_requested_cpus, 0).cpu < 0)
- 		opts->no_inherit = true;
- 
-diff --git a/tools/perf/util/record.h b/tools/perf/util/record.h
-index 4269e916f450..46212bf020cf 100644
---- a/tools/perf/util/record.h
-+++ b/tools/perf/util/record.h
-@@ -13,7 +13,6 @@ struct option;
- 
- struct record_opts {
- 	struct target target;
--	bool	      group;
- 	bool	      inherit_stat;
- 	bool	      no_buffering;
- 	bool	      no_inherit;
--- 
-2.37.0.rc0.161.g10f37bed90-goog
-
+-Nathan

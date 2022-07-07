@@ -2,124 +2,178 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1FB5E569B74
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 09:22:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 05A6A569B7A
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 09:25:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233516AbiGGHWi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Jul 2022 03:22:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43030 "EHLO
+        id S233053AbiGGHZP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Jul 2022 03:25:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44802 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234888AbiGGHWg (ORCPT
+        with ESMTP id S230334AbiGGHZN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Jul 2022 03:22:36 -0400
-Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E60730F43;
-        Thu,  7 Jul 2022 00:22:35 -0700 (PDT)
-Received: by mail-ej1-x62a.google.com with SMTP id a9so1125221ejf.6;
-        Thu, 07 Jul 2022 00:22:35 -0700 (PDT)
+        Thu, 7 Jul 2022 03:25:13 -0400
+Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E52214D1D
+        for <linux-kernel@vger.kernel.org>; Thu,  7 Jul 2022 00:25:11 -0700 (PDT)
+Received: by mail-lf1-x12c.google.com with SMTP id o7so511995lfq.9
+        for <linux-kernel@vger.kernel.org>; Thu, 07 Jul 2022 00:25:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=cDHDGLtxSydqFYBhl3txfOkIWwp8IL1b5jBeLJZfgD8=;
-        b=iMa8MwC7X5c+xv+LkBDIRr2ifkNStpYQGwx8kN5YESP/5lZej2GkPyii4mlnl/p1oS
-         eOgpiJGNZB6iyk7XGu3upbLG2ywKGQyqvW7qXjx9CeLrTQn6qJor4lwHISDN0uDAumJP
-         Brg9IzfPr/KCXuD5RB3EtLf3DQoNPruLomjmhy/77EseuQcTlk0SSSNdM3rJKtN+c4v3
-         grPr5r3HZbLsJta7gRQSEvN2j6S6gov/8/y4x24+DsUdST8//q7I4UbsGctmctv6uhhC
-         f9RvJor3q1b/39dN9/mfe4+/JL0vo4G5xsQNTjIIJvwTuqqRfI7AeEwtddLVbtamMFQD
-         1gSw==
+        d=rasmusvillemoes.dk; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :references:from:in-reply-to:content-transfer-encoding;
+        bh=OeQUC2I7iJCMWcjTw5dbLAg4/W1Mty4WbVZ/J03hEOc=;
+        b=LGNeE5ha4E4AzZNyOe9qYxZoAqDpmosEjj4z+pAZkVqOInemEKk12Bd9qN6T0enAfC
+         nwzbECORkzo+dLXDCOjKjjQ4r9x561e29cy8R+xMpkUQNhwCtetqVXTE92LgWYlqM9fl
+         GOB4hyP1leiLdCvOJYeB5wKjoDgm9iC+7AAfI=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=cDHDGLtxSydqFYBhl3txfOkIWwp8IL1b5jBeLJZfgD8=;
-        b=fSvLO9pKP+qtqB2OMzcxKBgBOaW9JHNyYXgeVyslBGq1bh/nt/wOy4upSTwkFLiZLS
-         15GDjjVlsSdcSDon0RAvVX+BOqZmlIwdZg2YZ6uC5FM15DzbzplYYdx2mUjSDw5fKNgC
-         0rz7BXHhTupRP+aM2jNIyN4rCCTC+F8A0HV75fP+weJ5aY4VPeCfXImd7VVQHkcS6/Il
-         iaysaK2YVP5U9Aya4+v/Z/LRs8Smip+kk5ZZe9oiJsLP7aky4j23gFBU7oWKzevB1+lo
-         ZRD1lRY/+zWpnXevMLEao4EO6IRDTVCi5Hp8EziYs10WMtYUM2zDGeBlsydrZaDZTtYB
-         8RhQ==
-X-Gm-Message-State: AJIora9tHKlfnle2pU5fSeJ6ts+OpgdHv7Tm3ku1HmC8C6O7galwkihC
-        fk9pugyWW0QKnuJ0pKgoR+8=
-X-Google-Smtp-Source: AGRyM1v55kd1wD2qY05YZpI7eIrBTQA6vTsDxTmOi3o5zGBQ0oygj0wFrHlVmWGUSqBlqQ0RtQrqhQ==
-X-Received: by 2002:a17:906:9b94:b0:722:f2a1:efb9 with SMTP id dd20-20020a1709069b9400b00722f2a1efb9mr43561275ejc.42.1657178553645;
-        Thu, 07 Jul 2022 00:22:33 -0700 (PDT)
-Received: from orome (p200300e41f12c800f22f74fffe1f3a53.dip0.t-ipconnect.de. [2003:e4:1f12:c800:f22f:74ff:fe1f:3a53])
-        by smtp.gmail.com with ESMTPSA id k9-20020a17090646c900b00711d546f8a8sm18233348ejs.139.2022.07.07.00.22.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 07 Jul 2022 00:22:32 -0700 (PDT)
-Date:   Thu, 7 Jul 2022 09:22:31 +0200
-From:   Thierry Reding <thierry.reding@gmail.com>
-To:     Rob Herring <robh@kernel.org>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        devicetree@vger.kernel.org, linux-tegra@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] dt-bindings: arm: nvidia,tegra20-pmc: Move fixed string
- property names under 'properties'
-Message-ID: <YsaJtzvG7V1bfjGB@orome>
-References: <20220706212034.568861-1-robh@kernel.org>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=OeQUC2I7iJCMWcjTw5dbLAg4/W1Mty4WbVZ/J03hEOc=;
+        b=I7pwctnwnVGRj6jNvIIhfoiHZfCHxxQ8XJBvAoc4GbTXAFcxIKZ6OywGgldzGynLH7
+         hm4Md0Vq2G7L9VZds2d2fuKpELcrgdLd9eHFX8+yWM+z1uZDHGYtjcw+34xTJj2JMGvu
+         b+FqLq+ZeTuFUBzy7fEZS4wG20vXzY1/rNzn2yATdP87ykUt8Jf0zjesgmyxdMqrz+ES
+         oMGsbKt8jZs8b2jkF78vHjdclgybFpUV1OY4r2am0f7ix4E/xVQuGmXpkmCFroCwgY09
+         yVnvDd+UZ9O+NJ0T3n95HQfyLX0LiTWnqm2RLIe8vRwDZO6OLPFqJesE6lC5C0XcMGXh
+         anDA==
+X-Gm-Message-State: AJIora8Jzo06cH++1W6y3KQLDrbDYXFLbcLFRSgsmDdiKxPV8ohFfCs5
+        zEXthcD/x1msDanYGETNv/+kTg==
+X-Google-Smtp-Source: AGRyM1tgJOURuGijHWR+4rnJoab36+sEZz5x1CoTLQEi95gfkGiixqZ74vFWWkMjAU65xtPa8FvMWQ==
+X-Received: by 2002:a05:6512:3ca1:b0:47f:6fe5:8bcc with SMTP id h33-20020a0565123ca100b0047f6fe58bccmr27582166lfv.505.1657178709922;
+        Thu, 07 Jul 2022 00:25:09 -0700 (PDT)
+Received: from [172.16.11.74] ([81.216.59.226])
+        by smtp.gmail.com with ESMTPSA id 23-20020a2e1557000000b0025d4d4b4edbsm300588ljv.34.2022.07.07.00.25.08
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 07 Jul 2022 00:25:09 -0700 (PDT)
+Message-ID: <423c4368-0a1c-792c-2637-768532fc7782@rasmusvillemoes.dk>
+Date:   Thu, 7 Jul 2022 09:25:07 +0200
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="yI+MNUdNl4WtNBvo"
-Content-Disposition: inline
-In-Reply-To: <20220706212034.568861-1-robh@kernel.org>
-User-Agent: Mutt/2.2.6 (2022-06-05)
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH 1/5] lib: add find_nth(,and,andnot)_bit()
+Content-Language: en-US
+To:     Yury Norov <yury.norov@gmail.com>, linux-kernel@vger.kernel.org,
+        Alexander Lobakin <alexandr.lobakin@intel.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Arnd Bergmann <arnd@arndb.de>, David Gow <davidgow@google.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Isabella Basso <isabbasso@riseup.net>,
+        Kees Cook <keescook@chromium.org>,
+        Keith Busch <kbusch@kernel.org>,
+        Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+        Marco Elver <elver@google.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        =?UTF-8?Q?Toke_H=c3=b8iland-J=c3=b8rgensen?= <toke@redhat.com>
+References: <20220706182300.70862-1-yury.norov@gmail.com>
+ <20220706182300.70862-2-yury.norov@gmail.com>
+From:   Rasmus Villemoes <linux@rasmusvillemoes.dk>
+In-Reply-To: <20220706182300.70862-2-yury.norov@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 06/07/2022 20.22, Yury Norov wrote:
+> Kernel lacks for a function that searches for Nth bit in a bitmap.
+> Usually people do it like this:
+> 	for_each_set_bit(bit, mask, size)
+> 		if (--n == 0)
+> 			return bit;
+> 
+> We can do it more efficiently, if we:
+> 1. find a word containing Nth bit, using hweight(); and
+> 2. find the bit, using a helper fns(), that works similarly to
+>    __ffs() and ffz().
+> 
+> fns() is implemented as a simple loop. For x86_64, there's PDEP instruction
+> to do that: ret = clz(pdep(1 << idx, num)). However, for large bitmaps the
+> most of improvement comes from using hweight(), so I kept fns() simple.
+> 
+> New find_nth_bit() is ~70 times faster on x86_64/kvm:
+> for_each_bit:                  7154190 ns,  16411 iterations
+> find_nth_bit:                505493126 ns,  16315 iterations
 
---yI+MNUdNl4WtNBvo
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Eh, have you interchanged these somehow, otherwise this reads as
+find_nth_bit being ~70 times _slower_?
 
-On Wed, Jul 06, 2022 at 03:20:34PM -0600, Rob Herring wrote:
-> Fixed string property names should be under 'properties' rather than
-> 'patternProperties'. Additionally, without beginning and end of line
-> anchors, any prefix or suffix is allowed on the specified property names.
->=20
-> As all the nvidia,tegra20-pmc powergates child node properties are fixed
-> strings, change 'patternProperties' to 'properties'.
->=20
-> Signed-off-by: Rob Herring <robh@kernel.org>
+> With all that, a family of 3 new functions is added, and used where
+> appropriate in the following patches.
+> 
+> Signed-off-by: Yury Norov <yury.norov@gmail.com>
 > ---
->  .../devicetree/bindings/arm/tegra/nvidia,tegra20-pmc.yaml       | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+>  include/linux/bitops.h | 19 ++++++++++
+>  include/linux/find.h   | 79 ++++++++++++++++++++++++++++++++++++++++++
+>  lib/find_bit.c         | 20 +++++++++++
+>  3 files changed, 118 insertions(+)
+> 
+> diff --git a/include/linux/bitops.h b/include/linux/bitops.h
+> index 7aaed501f768..86072cfcbe17 100644
+> --- a/include/linux/bitops.h
+> +++ b/include/linux/bitops.h
+> @@ -196,6 +196,25 @@ static inline unsigned long __ffs64(u64 word)
+>  	return __ffs((unsigned long)word);
+>  }
+>  
+> +/**
+> + * fns - find N'th set bit in a 64 bit word
+> + * @word: The 64 bit word
+> + * @n: Bit to find
+> + */
+> +static inline unsigned long fns(unsigned long word, unsigned int n)
+> +{
+> +	unsigned int bit;
+> +
+> +	while (word) {
+> +		bit = __ffs(word);
+> +		if (--n == 0)
+> +			return bit;
+> +		__clear_bit(bit, &word);
+> +	}
+> +
+> +	return BITS_PER_LONG;
+> +}
 
-This is part of a local patch that I have that cleans up other aspects
-of this schema as well.
+Urgh.  "unsigned long" is not necessarily a 64 bit word. And I don't
+like that the index is apparently 1-based (and that surprising API isn't
+spelled out anywhere). This is also way too big to be inline IMO.
 
-However, I don't know when I'll get around to send that out, so if you
-want to apply this in the meantime:
+>  #ifndef find_first_and_bit
+>  /**
+>   * find_first_and_bit - find the first set bit in both memory regions
+> diff --git a/lib/find_bit.c b/lib/find_bit.c
+> index 1b8e4b2a9cba..7b8ad12c8cc7 100644
+> --- a/lib/find_bit.c
+> +++ b/lib/find_bit.c
+> @@ -89,6 +89,26 @@ unsigned long _find_first_bit(const unsigned long *addr, unsigned long size)
+>  EXPORT_SYMBOL(_find_first_bit);
+>  #endif
+>  
+> +unsigned long _find_nth_bit(const unsigned long *addr1, const unsigned long *addr2,
+> +				unsigned long size, unsigned long n, bool not)
+> +{
+> +	unsigned long val, idx, w;
+> +
+> +	for (idx = 0; idx * BITS_PER_LONG < size; idx++, n -= w) {
+> +		val = addr1[idx];
+> +		if (addr2)
+> +			val &= not ? ~addr2[idx] : addr2[idx];
 
-Acked-by: Thierry Reding <treding@nvidia.com>
+Maybe this could be microoptimized by doing
 
---yI+MNUdNl4WtNBvo
-Content-Type: application/pgp-signature; name="signature.asc"
+unsigned long addr2mask = not ? ~0UL : 0UL;
+...
 
------BEGIN PGP SIGNATURE-----
+  val &= (addr2[idx] ^ addr2mask);
 
-iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAmLGibQACgkQ3SOs138+
-s6Fbdw/9F4whzx83xa3hxtsudWImR4P7iwas/9BwVlgDa4f3X4l6EyKPQNE5u1O9
-f1TZNHDZhc1rnkPc4yL0Jl9AgTKMlvCUbYlvkVWMLZy2/PFg4Xw+PVwhJLzC+aNv
-ls29839FcVtpmrwFdoWY/XQwxZAKKGVVuh8Ora/Is+6fLSyAfoRhZ4T5CwmvdVm6
-JUE4ugTcq9W26NXF/mso2nJYJfWicuMt6xnspgvpoI6gBX2v2cMQ6iu+GPEOmfFN
-vgh5vDF0kXpCAIvCU89r1jVoSaInkM/gxQWISdNhOCMQAKiNKI1tkrG+NPu8tkxd
-rR4yKelMrJ/TvmXNFIEYJ3Q9CnYtmuYAkdX6zkob5Ulb1BAeosAq5oLDx3k9VpFg
-JQyQ4/vx4mq2JvW7ocVSeJo6gM48CKu14ug4nlePzmXR3gNLAJJOOmNbknRC6lpz
-x1iExu639LKJ2svMnGT//n1ppyk71DBM3dbqDwPa4iiwrb+2xevzgttE4XF8E1xs
-3+DKNDqAfh5NNa7vOlh9QfyHy8vtqecVSdTwPhnVV+B+JTbjVeJf7kz/0Ghq/FDU
-EhYZk2L3MFoZJ9Oal4q+z9MjcZBoeF9hsmPgGU7CmGw9YVApjmIPbOLRyCYt+SfC
-j9AM+PrsXi0eSggalGpE6C893Ry53/DN2NWKYY5kcuDPNG6gy8g=
-=2t8O
------END PGP SIGNATURE-----
+but I don't think it'll make a difference.
 
---yI+MNUdNl4WtNBvo--
+Rasmus

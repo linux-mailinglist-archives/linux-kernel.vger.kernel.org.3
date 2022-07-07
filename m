@@ -2,68 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AF96A569F5C
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 12:18:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D1E43569F78
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 12:20:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235337AbiGGKQt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Jul 2022 06:16:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44132 "EHLO
+        id S235437AbiGGKSL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Jul 2022 06:18:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45600 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235298AbiGGKQf (ORCPT
+        with ESMTP id S235392AbiGGKR7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Jul 2022 06:16:35 -0400
-Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68ED05070A;
-        Thu,  7 Jul 2022 03:16:33 -0700 (PDT)
-Received: from fllv0034.itg.ti.com ([10.64.40.246])
-        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 267AGEbO003130;
-        Thu, 7 Jul 2022 05:16:14 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1657188974;
-        bh=hxrxBZGh2wqfWDsF8Po7X9MIkpwxyvxS+nGR14THjKQ=;
-        h=From:To:CC:Subject:Date:In-Reply-To:References;
-        b=KjmW0F3NjuF+6AQKolE/mYvYsfDX9JkLX8rf/pnpkhGSyyaScyZKrlY4ca4CDt3v7
-         Yo+J8OYV9w0Q04vLkp3EFRpDrctH9Y3reRjXpe8eK5/J/5jcBEh1wJSM1vmWhG3c96
-         WJIMnbXCv4iUn91ARPJy7ljdz4Vo9Da6/yXSZ4UQ=
-Received: from DFLE110.ent.ti.com (dfle110.ent.ti.com [10.64.6.31])
-        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 267AGEmK037922
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Thu, 7 Jul 2022 05:16:14 -0500
-Received: from DFLE114.ent.ti.com (10.64.6.35) by DFLE110.ent.ti.com
- (10.64.6.31) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Thu, 7
- Jul 2022 05:16:14 -0500
-Received: from fllv0040.itg.ti.com (10.64.41.20) by DFLE114.ent.ti.com
- (10.64.6.35) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
- Frontend Transport; Thu, 7 Jul 2022 05:16:14 -0500
-Received: from localhost (ileax41-snat.itg.ti.com [10.172.224.153])
-        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 267AGCtn061184;
-        Thu, 7 Jul 2022 05:16:13 -0500
-From:   Rahul T R <r-ravikumar@ti.com>
-To:     <dri-devel@lists.freedesktop.org>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>
-CC:     <andrzej.hajda@intel.com>, <narmstrong@baylibre.com>,
-        <robert.foss@linaro.org>, <jonas@kwiboo.se>,
-        <jernej.skrabec@gmail.com>, <airlied@linux.ie>, <daniel@ffwll.ch>,
-        <p.zabel@pengutronix.de>, <tomi.valkeinen@ideasonboard.com>,
-        <laurent.pinchart@ideasonboard.com>,
-        <linux-kernel@vger.kernel.org>, <jpawar@cadence.com>,
-        <sjakhade@cadence.com>, <mparab@cadence.com>, <a-bhatia1@ti.com>,
-        <devicetree@vger.kernel.org>, <vigneshr@ti.com>,
-        <lee.jones@linaro.org>, Rahul T R <r-ravikumar@ti.com>
-Subject: [PATCH v6 5/5] drm/bridge: cdns-dsi: Add support for J721E wrapper
-Date:   Thu, 7 Jul 2022 15:46:01 +0530
-Message-ID: <20220707101601.7081-6-r-ravikumar@ti.com>
-X-Mailer: git-send-email 2.37.0
-In-Reply-To: <20220707101601.7081-1-r-ravikumar@ti.com>
-References: <20220707101601.7081-1-r-ravikumar@ti.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        Thu, 7 Jul 2022 06:17:59 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49C9B53D28
+        for <linux-kernel@vger.kernel.org>; Thu,  7 Jul 2022 03:17:58 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A9E6462258
+        for <linux-kernel@vger.kernel.org>; Thu,  7 Jul 2022 10:17:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 113B8C3411E;
+        Thu,  7 Jul 2022 10:17:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1657189077;
+        bh=IDmcqk0j15tbJxt53sKlzpGzGwRFZvUZD8HQNmkZ1xo=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=OkoZ0CEd4yt2qxou8aEmiOCkMKEOSq8+8Q8DZUuCMR1lKTKB47TeAQYdv3fMivjNX
+         KOhrzZiwu9u8H128BeIJ3ElzesFB9J0vVusrnCnqb5e1vpOVAP9ad7YDCjuWyzu8kG
+         DQdGZNNhIwuafu7D6uNRb3KaZBvbtF/cHpbjHztP/iiwD/GvYcJM8dE3SUR8UX/kIK
+         iNckIqcOvQWSMba1ldE5lkD52piIy5aGnpKuOimkyNZAeuCNkjjCrlWrVugyb96fE2
+         e/Y0+edcQaGRQYoPl//9526nWIPbZ+Duvs/7ZhCGm5ZJbNTVxvlvstvbaZ0jlNKF7+
+         iFAhP3FKDkDhQ==
+Received: from [185.201.63.253] (helo=wait-a-minute.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <maz@kernel.org>)
+        id 1o9OZu-005t8O-MH;
+        Thu, 07 Jul 2022 11:17:54 +0100
+Date:   Thu, 07 Jul 2022 11:16:55 +0100
+Message-ID: <877d4pmdm0.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Jianmin Lv <lvjianmin@loongson.cn>
+Cc:     Thomas Gleixner <tglx@linutronix.de>, linux-kernel@vger.kernel.org,
+        Hanjun Guo <guohanjun@huawei.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Huacai Chen <chenhuacai@loongson.cn>
+Subject: Re: [PATCH V14 02/15] APCI: irq: Add support for multiple GSI domains
+In-Reply-To: <1656837932-18257-3-git-send-email-lvjianmin@loongson.cn>
+References: <1656837932-18257-1-git-send-email-lvjianmin@loongson.cn>
+        <1656837932-18257-3-git-send-email-lvjianmin@loongson.cn>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.201.63.253
+X-SA-Exim-Rcpt-To: lvjianmin@loongson.cn, tglx@linutronix.de, linux-kernel@vger.kernel.org, guohanjun@huawei.com, lorenzo.pieralisi@arm.com, jiaxun.yang@flygoat.com, chenhuacai@loongson.cn
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -72,259 +70,32 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add support for wrapper settings for DSI bridge on
-j721e. Also set the DPI input to DPI0
+On Sun, 03 Jul 2022 09:45:19 +0100,
+Jianmin Lv <lvjianmin@loongson.cn> wrote:
+> 
+> From: Marc Zyngier <maz@kernel.org>
+> 
+> In an unfortunate departure from the ACPI spec, the LoongArch
+> architecture split its GSI space across multiple interrupt
+> controllers.
+> 
+> In order to be able to reuse the core code and prevent
+> architectures from reinventing an already square wheel, offer
+> the arch code the ability to register a dispatcher function
+> that will return the domain fwnode for a given GSI.
+> 
+> The ARM GIC drivers are updated to support this (with a single
+> domain, as intended).
+> 
+> Signed-off-by: Marc Zyngier <maz@kernel.org>
+> Cc: Hanjun Guo <guohanjun@huawei.com>
+> Cc: Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
+> Signed-off-by: Jianmin Lv <lvjianmin@loongson.cn>
 
-Signed-off-by: Rahul T R <r-ravikumar@ti.com>
----
- drivers/gpu/drm/bridge/cadence/Kconfig        | 10 ++++
- drivers/gpu/drm/bridge/cadence/Makefile       |  1 +
- .../gpu/drm/bridge/cadence/cdns-dsi-core.c    | 37 +++++++++++++-
- .../gpu/drm/bridge/cadence/cdns-dsi-core.h    | 13 +++++
- .../gpu/drm/bridge/cadence/cdns-dsi-j721e.c   | 51 +++++++++++++++++++
- .../gpu/drm/bridge/cadence/cdns-dsi-j721e.h   | 18 +++++++
- 6 files changed, 129 insertions(+), 1 deletion(-)
- create mode 100644 drivers/gpu/drm/bridge/cadence/cdns-dsi-j721e.c
- create mode 100644 drivers/gpu/drm/bridge/cadence/cdns-dsi-j721e.h
+This patch was reviewed and tested by Hanjun. Why aren't the tags
+included here?
 
-diff --git a/drivers/gpu/drm/bridge/cadence/Kconfig b/drivers/gpu/drm/bridge/cadence/Kconfig
-index 8fbb46c66094..663a02d96420 100644
---- a/drivers/gpu/drm/bridge/cadence/Kconfig
-+++ b/drivers/gpu/drm/bridge/cadence/Kconfig
-@@ -36,3 +36,13 @@ config DRM_CDNS_DSI
- 	help
- 	  Support Cadence DPI to DSI bridge. This is an internal
- 	  bridge and is meant to be directly embedded in a SoC.
-+
-+if DRM_CDNS_DSI
-+
-+config DRM_CDNS_DSI_J721E
-+	bool "J721E Cadence DPI/DSI wrapper support"
-+	default y
-+	help
-+	  Support J721E Cadence DPI/DSI wrapper. This wrapper adds
-+	  support to select which DPI input to use for the bridge.
-+endif
-diff --git a/drivers/gpu/drm/bridge/cadence/Makefile b/drivers/gpu/drm/bridge/cadence/Makefile
-index e3d8e9a40784..4cffc8ff71c4 100644
---- a/drivers/gpu/drm/bridge/cadence/Makefile
-+++ b/drivers/gpu/drm/bridge/cadence/Makefile
-@@ -4,3 +4,4 @@ cdns-mhdp8546-y := cdns-mhdp8546-core.o cdns-mhdp8546-hdcp.o
- cdns-mhdp8546-$(CONFIG_DRM_CDNS_MHDP8546_J721E) += cdns-mhdp8546-j721e.o
- obj-$(CONFIG_DRM_CDNS_DSI) += cdns-dsi.o
- cdns-dsi-y := cdns-dsi-core.o
-+cdns-dsi-$(CONFIG_DRM_CDNS_DSI_J721E) += cdns-dsi-j721e.o
-diff --git a/drivers/gpu/drm/bridge/cadence/cdns-dsi-core.c b/drivers/gpu/drm/bridge/cadence/cdns-dsi-core.c
-index cba91247ab26..4b7de38ef1b0 100644
---- a/drivers/gpu/drm/bridge/cadence/cdns-dsi-core.c
-+++ b/drivers/gpu/drm/bridge/cadence/cdns-dsi-core.c
-@@ -15,12 +15,16 @@
- #include <linux/iopoll.h>
- #include <linux/module.h>
- #include <linux/of_address.h>
-+#include <linux/of_device.h>
- #include <linux/of_graph.h>
- #include <linux/platform_device.h>
- #include <linux/pm_runtime.h>
- #include <linux/reset.h>
- 
- #include "cdns-dsi-core.h"
-+#ifdef CONFIG_DRM_CDNS_DSI_J721E
-+#include "cdns-dsi-j721e.h"
-+#endif
- 
- static inline struct cdns_dsi *input_to_dsi(struct cdns_dsi_input *input)
- {
-@@ -265,6 +269,10 @@ static void cdns_dsi_bridge_disable(struct drm_bridge *bridge)
- 
- 	val = readl(dsi->regs + MCTL_MAIN_EN) & ~IF_EN(input->id);
- 	writel(val, dsi->regs + MCTL_MAIN_EN);
-+
-+	if (dsi->platform_ops && dsi->platform_ops->disable)
-+		dsi->platform_ops->disable(dsi);
-+
- 	pm_runtime_put(dsi->base.dev);
- }
- 
-@@ -360,6 +368,9 @@ static void cdns_dsi_bridge_enable(struct drm_bridge *bridge)
- 	if (WARN_ON(pm_runtime_get_sync(dsi->base.dev) < 0))
- 		return;
- 
-+	if (dsi->platform_ops && dsi->platform_ops->enable)
-+		dsi->platform_ops->enable(dsi);
-+
- 	mode = &bridge->encoder->crtc->state->adjusted_mode;
- 	nlanes = output->dev->lanes;
- 
-@@ -800,6 +811,8 @@ static int cdns_dsi_drm_probe(struct platform_device *pdev)
- 		goto err_disable_pclk;
- 	}
- 
-+	dsi->platform_ops = of_device_get_match_data(&pdev->dev);
-+
- 	val = readl(dsi->regs + IP_CONF);
- 	dsi->direct_cmd_fifo_depth = 1 << (DIRCMD_FIFO_DEPTH(val) + 2);
- 	dsi->rx_fifo_depth = RX_FIFO_DEPTH(val);
-@@ -835,14 +848,27 @@ static int cdns_dsi_drm_probe(struct platform_device *pdev)
- 	dsi->base.dev = &pdev->dev;
- 	dsi->base.ops = &cdns_dsi_ops;
- 
-+	if (dsi->platform_ops && dsi->platform_ops->init) {
-+		ret = dsi->platform_ops->init(dsi);
-+		if (ret != 0) {
-+			dev_err(&pdev->dev, "platform initialization failed: %d\n",
-+				ret);
-+			goto err_disable_runtime_pm;
-+		}
-+	}
-+
- 	ret = mipi_dsi_host_register(&dsi->base);
- 	if (ret)
--		goto err_disable_runtime_pm;
-+		goto err_deinit_platform;
- 
- 	clk_disable_unprepare(dsi->dsi_p_clk);
- 
- 	return 0;
- 
-+err_deinit_platform:
-+	if (dsi->platform_ops && dsi->platform_ops->exit)
-+		dsi->platform_ops->exit(dsi);
-+
- err_disable_runtime_pm:
- 	pm_runtime_disable(&pdev->dev);
- 
-@@ -857,6 +883,10 @@ static int cdns_dsi_drm_remove(struct platform_device *pdev)
- 	struct cdns_dsi *dsi = platform_get_drvdata(pdev);
- 
- 	mipi_dsi_host_unregister(&dsi->base);
-+
-+	if (dsi->platform_ops && dsi->platform_ops->exit)
-+		dsi->platform_ops->exit(dsi);
-+
- 	pm_runtime_disable(&pdev->dev);
- 
- 	return 0;
-@@ -864,6 +894,11 @@ static int cdns_dsi_drm_remove(struct platform_device *pdev)
- 
- static const struct of_device_id cdns_dsi_of_match[] = {
- 	{ .compatible = "cdns,dsi" },
-+#ifdef CONFIG_DRM_CDNS_DSI_J721E
-+	{ .compatible = "ti,j721e-dsi",
-+	  .data = &dsi_ti_j721e_ops,
-+	},
-+#endif
- 	{ },
- };
- MODULE_DEVICE_TABLE(of, cdns_dsi_of_match);
-diff --git a/drivers/gpu/drm/bridge/cadence/cdns-dsi-core.h b/drivers/gpu/drm/bridge/cadence/cdns-dsi-core.h
-index 65cc77f19b39..37568b547fbe 100644
---- a/drivers/gpu/drm/bridge/cadence/cdns-dsi-core.h
-+++ b/drivers/gpu/drm/bridge/cadence/cdns-dsi-core.h
-@@ -439,9 +439,22 @@ struct cdns_dsi_input {
- 	struct drm_bridge bridge;
- };
- 
-+struct cdns_dsi;
-+
-+struct dsi_platform_ops {
-+	int (*init)(struct cdns_dsi *dsi);
-+	void (*exit)(struct cdns_dsi *dsi);
-+	void (*enable)(struct cdns_dsi *dsi);
-+	void (*disable)(struct cdns_dsi *dsi);
-+};
-+
- struct cdns_dsi {
- 	struct mipi_dsi_host base;
- 	void __iomem *regs;
-+#ifdef CONFIG_DRM_CDNS_DSI_J721E
-+	void __iomem *j721e_regs;
-+#endif
-+	const struct dsi_platform_ops *platform_ops;
- 	struct cdns_dsi_input input;
- 	struct cdns_dsi_output output;
- 	unsigned int direct_cmd_fifo_depth;
-diff --git a/drivers/gpu/drm/bridge/cadence/cdns-dsi-j721e.c b/drivers/gpu/drm/bridge/cadence/cdns-dsi-j721e.c
-new file mode 100644
-index 000000000000..b5216acb333e
---- /dev/null
-+++ b/drivers/gpu/drm/bridge/cadence/cdns-dsi-j721e.c
-@@ -0,0 +1,51 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * TI j721e Cadence DSI wrapper
-+ *
-+ * Copyright (C) 2022 Texas Instruments Incorporated - http://www.ti.com/
-+ * Author: Rahul T R <r-ravikumar@ti.com>
-+ */
-+
-+#include <linux/io.h>
-+#include <linux/platform_device.h>
-+
-+#include "cdns-dsi-j721e.h"
-+
-+#define DSI_WRAP_REVISION		0x0
-+#define DSI_WRAP_DPI_CONTROL		0x4
-+#define DSI_WRAP_DSC_CONTROL		0x8
-+#define DSI_WRAP_DPI_SECURE		0xc
-+#define DSI_WRAP_DSI_0_ASF_STATUS	0x10
-+
-+#define DSI_WRAP_DPI_0_EN		BIT(0)
-+#define DSI_WRAP_DSI2_MUX_SEL		BIT(4)
-+
-+static int cdns_dsi_j721e_init(struct cdns_dsi *dsi)
-+{
-+	struct platform_device *pdev = to_platform_device(dsi->base.dev);
-+
-+	dsi->j721e_regs = devm_platform_ioremap_resource(pdev, 1);
-+	return PTR_ERR_OR_ZERO(dsi->j721e_regs);
-+}
-+
-+static void cdns_dsi_j721e_enable(struct cdns_dsi *dsi)
-+{
-+	/*
-+	 * Enable DPI0 as its input. DSS0 DPI2 is connected
-+	 * to DSI DPI0. This is the only supported configuration on
-+	 * J721E.
-+	 */
-+	writel(DSI_WRAP_DPI_0_EN, dsi->j721e_regs + DSI_WRAP_DPI_CONTROL);
-+}
-+
-+static void cdns_dsi_j721e_disable(struct cdns_dsi *dsi)
-+{
-+	/* Put everything to defaults  */
-+	writel(0, dsi->j721e_regs + DSI_WRAP_DPI_CONTROL);
-+}
-+
-+const struct dsi_platform_ops dsi_ti_j721e_ops = {
-+	.init = cdns_dsi_j721e_init,
-+	.enable = cdns_dsi_j721e_enable,
-+	.disable = cdns_dsi_j721e_disable,
-+};
-diff --git a/drivers/gpu/drm/bridge/cadence/cdns-dsi-j721e.h b/drivers/gpu/drm/bridge/cadence/cdns-dsi-j721e.h
-new file mode 100644
-index 000000000000..01f3dbd92db2
---- /dev/null
-+++ b/drivers/gpu/drm/bridge/cadence/cdns-dsi-j721e.h
-@@ -0,0 +1,18 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+/*
-+ * TI j721e Cadence DSI wrapper
-+ *
-+ * Copyright (C) 2022 Texas Instruments Incorporated - http://www.ti.com/
-+ * Author: Rahul T R <r-ravikumar@ti.com>
-+ */
-+
-+#ifndef CDNS_DSI_J721E_H
-+#define CDNS_DSI_J721E_H
-+
-+#include "cdns-dsi-core.h"
-+
-+struct dsi_platform_ops;
-+
-+extern const struct dsi_platform_ops dsi_ti_j721e_ops;
-+
-+#endif /* !CDNS_DSI_J721E_H */
+	M.
+
 -- 
-2.37.0
-
+Without deviation from the norm, progress is not possible.

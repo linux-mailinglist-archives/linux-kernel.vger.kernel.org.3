@@ -2,118 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F0CD0569ECF
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 11:50:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 486B7569ECD
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 11:47:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233281AbiGGJsf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Jul 2022 05:48:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49350 "EHLO
+        id S235044AbiGGJr1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Jul 2022 05:47:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48782 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229951AbiGGJsb (ORCPT
+        with ESMTP id S234342AbiGGJrW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Jul 2022 05:48:31 -0400
-Received: from sender4-of-o51.zoho.com (sender4-of-o51.zoho.com [136.143.188.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8C28DF69;
-        Thu,  7 Jul 2022 02:48:29 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1657187276; cv=none; 
-        d=zohomail.com; s=zohoarc; 
-        b=IeW7CmKisiJaE3pVWkI/F+5MdcngjRiLaAY1zVvmVucvGKqAP3KI50yY1wpVc5qSJtkOGqTpZkTEpmuDn9oKzJwQrL6XeKVEWmC8Cb3WY5IZdIOlaDLLnhdjpqSUHZMObhB4JsofAm+c27oYXEUM91okzF7La277sAlWgHDJ/HY=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-        t=1657187276; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
-        bh=AxgMRIxlOM7se1RN4hoSSzKpsvEX8snGSo/jMnDX/Ek=; 
-        b=KBTUiCEn80z6AHIupkVuG2OQijhEML5J0n1ZUPb1eKfyKwV7YDU/Ruv0U5oPN6j8WkBOtxx7eaC27lbQdF5QV1C30jfSQMB30NBgHV9fWPfTUcJNHoTGQIRqpQJPgTb4Cj3StZY2mQnWCYUIBuVCgGftCqymIpMHe6oJWurUaJE=
-ARC-Authentication-Results: i=1; mx.zohomail.com;
-        dkim=pass  header.i=apertussolutions.com;
-        spf=pass  smtp.mailfrom=dpsmith@apertussolutions.com;
-        dmarc=pass header.from=<dpsmith@apertussolutions.com>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1657187276;
-        s=zoho; d=apertussolutions.com; i=dpsmith@apertussolutions.com;
-        h=Message-ID:Date:Date:MIME-Version:Subject:Subject:To:To:Cc:Cc:References:From:From:In-Reply-To:Content-Type:Content-Transfer-Encoding:Message-Id:Reply-To;
-        bh=AxgMRIxlOM7se1RN4hoSSzKpsvEX8snGSo/jMnDX/Ek=;
-        b=bNuNz5RLnm0oVDSPCegtHT9bLWpV9KooJQzx/hs9cDw7HfHcJYg/XFxb2wrvhPBs
-        IuN/dTS0HjbgUYS4kuPBAerNnc1UDtc8HSUUMAAzfgc3xaYh+Mb67J1c/fXDXR7Xxnm
-        NSenPKAzT0UAOe+5hVwNwALsCBMddgv5NNyIDGYM=
-Received: from [10.10.1.164] (static-72-81-132-2.bltmmd.fios.verizon.net [72.81.132.2]) by mx.zohomail.com
-        with SMTPS id 1657187267545698.9829943472045; Thu, 7 Jul 2022 02:47:47 -0700 (PDT)
-Message-ID: <b1e7b545-8e66-5dc0-ff5a-9f69d1751a5f@apertussolutions.com>
-Date:   Thu, 7 Jul 2022 05:46:40 -0400
+        Thu, 7 Jul 2022 05:47:22 -0400
+Received: from aposti.net (aposti.net [89.234.176.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9419645077;
+        Thu,  7 Jul 2022 02:47:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
+        s=mail; t=1657187235; h=from:from:sender:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=pA2f0yBa6U6ftJuYv1lYb8ecq1Rzy1PWTbc6pDrTiGY=;
+        b=Q+Qb29ekKl3YvJV7p2iui3OpCBEqgzBvNsy2BaKIolTqg3PRMyMIWRSCBA6iE0S+6oYZHj
+        JRZvSKp5uEarGHt/HYdqtlWJwJg9ROhjKU1VgBv6tGnYVdl6vgh2/g1SEBv36Sd04ZXok1
+        ZFx/Ih4TbzaYEAZqelshawgmkUKBoA8=
+Date:   Thu, 07 Jul 2022 10:47:05 +0100
+From:   Paul Cercueil <paul@crapouillou.net>
+Subject: Re: [PATCH 09/11] ASoC: jz4740-i2s: Make the PLL clock name
+ SoC-specific
+To:     Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
+Cc:     lgirdwood@gmail.com, broonie@kernel.org, perex@perex.cz,
+        tiwai@suse.com, linux-mips@vger.kernel.org,
+        alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org
+Message-Id: <HU9NER.25VYXWS2PRRL2@crapouillou.net>
+In-Reply-To: <20220706211330.120198-10-aidanmacdonald.0x0@gmail.com>
+References: <20220706211330.120198-1-aidanmacdonald.0x0@gmail.com>
+        <20220706211330.120198-10-aidanmacdonald.0x0@gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Subject: Re: Linux DRTM on UEFI platforms
-Content-Language: en-US
-To:     The development of GNU GRUB <grub-devel@gnu.org>,
-        Brendan Trotter <btrotter@gmail.com>
-Cc:     Ard Biesheuvel <ardb@kernel.org>,
-        Matthew Garrett <mjg59@srcf.ucam.org>,
-        Daniel Kiper <daniel.kiper@oracle.com>,
-        Alec Brown <alec.r.brown@oracle.com>,
-        Kanth Ghatraju <kanth.ghatraju@oracle.com>,
-        Ross Philipson <ross.philipson@oracle.com>,
-        "piotr.krol@3mdeb.com" <piotr.krol@3mdeb.com>,
-        "krystian.hebel@3mdeb.com" <krystian.hebel@3mdeb.com>,
-        "persaur@gmail.com" <persaur@gmail.com>,
-        "Yoder, Stuart" <stuart.yoder@arm.com>,
-        Andrew Cooper <andrew.cooper3@citrix.com>,
-        "michal.zygowski@3mdeb.com" <michal.zygowski@3mdeb.com>,
-        James Bottomley <James.Bottomley@hansenpartnership.com>,
-        "lukasz@hawrylko.pl" <lukasz@hawrylko.pl>,
-        linux-efi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        James Morris <jmorris@namei.org>
-References: <20220329174057.GA17778@srcf.ucam.org>
- <f9622b47-c45f-8c91-cb85-e5db7fd541cf@apertussolutions.com>
- <CAMj1kXEUT8BK_akqjF1Wx0JkLniFyV_h9s1TfQnPqfxCHsKfWw@mail.gmail.com>
- <7aab2990-9c57-2456-b08d-299ae96ac919@apertussolutions.com>
- <CAELHeEfZ-feZnexp7Gx3VAJPerENcoO1Uccbe3xxUX95jvLUdA@mail.gmail.com>
-From:   "Daniel P. Smith" <dpsmith@apertussolutions.com>
-In-Reply-To: <CAELHeEfZ-feZnexp7Gx3VAJPerENcoO1Uccbe3xxUX95jvLUdA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ZohoMailClient: External
+Content-Type: text/plain; charset=iso-8859-1; format=flowed
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 7/5/22 20:03, Brendan Trotter wrote:
-> Hi,
 
-Greetings!
 
-Not sure why I got dropped from distro, but no worries.
+Le mer., juil. 6 2022 at 22:13:28 +0100, Aidan MacDonald=20
+<aidanmacdonald.0x0@gmail.com> a =E9crit :
+> On some Ingenic SoCs, such as the X1000, there is a programmable
+> divider used to generate the I2S system clock from a PLL, rather
+> than a fixed PLL/2 clock. It doesn't make much sense to call the
+> clock "pll half" on those SoCs, so the clock name should really be
+> a SoC-dependent value.
 
-> On Wed, Jul 6, 2022 at 4:52 AM Daniel P. Smith
-> <dpsmith@apertussolutions.com> wrote:
->> On 6/10/22 12:40, Ard Biesheuvel wrote:> On Thu, 19 May 2022 at 22:59,
->> To help provide clarity, consider the following flows for comparison,
->>
->> Normal/existing efi-stub:
->>    EFI -> efi-stub -> head_64.S
->>
->> Proposed secure launch:
->>    EFI -> efi-stub -> dl-handler -> [cpu] -> sl_stub ->head_64.S
-> 
-> For more clarity; the entire point is to ensure that the kernel only
-> has to trust itself and the CPU/TPM hardware (and does not have to
-> trust a potentially malicious boot loader)..Any attempt to avoid a
-> one-off solution for Linux is an attempt to weaken security.
+Do you really need the .set_sysclk() callback? I've never seen it used=20
+on any of the Ingenic boards I have, so to me it's pretty much dead=20
+code. Unless you do use this callback, I'd suggest to drop this patch=20
+until you do need it.
 
-Please elaborate so I might understand how this entrypoint allows for 
-the kernel to only trust itself and the CPU/TPM.
+Cheers,
+-Paul
 
-> The only correct approach is "efi-stub -> head_64.S -> kernel's own
-> secure init"; where (on UEFI systems) neither GRUB nor Trenchboot has
-> a valid reason to exist and should never be installed.
-> 
-> 
-> Cheers,
-> 
-> Brendan
+> Signed-off-by: Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
+> ---
+>  sound/soc/jz4740/jz4740-i2s.c | 8 +++++++-
+>  1 file changed, 7 insertions(+), 1 deletion(-)
+>=20
+> diff --git a/sound/soc/jz4740/jz4740-i2s.c=20
+> b/sound/soc/jz4740/jz4740-i2s.c
+> index 3a21ee9d34d1..80b355d715ce 100644
+> --- a/sound/soc/jz4740/jz4740-i2s.c
+> +++ b/sound/soc/jz4740/jz4740-i2s.c
+> @@ -71,6 +71,8 @@ struct i2s_soc_info {
+>  	struct reg_field field_tx_fifo_thresh;
+>  	struct reg_field field_i2sdiv_capture;
+>  	struct reg_field field_i2sdiv_playback;
+> +
+> +	const char *pll_clk_name;
+>  };
+>=20
+>  struct jz4740_i2s {
+> @@ -265,7 +267,7 @@ static int jz4740_i2s_set_sysclk(struct=20
+> snd_soc_dai *dai, int clk_id,
+>  		clk_set_parent(i2s->clk_i2s, parent);
+>  		break;
+>  	case JZ4740_I2S_CLKSRC_PLL:
+> -		parent =3D clk_get(NULL, "pll half");
+> +		parent =3D clk_get(NULL, i2s->soc_info->pll_clk_name);
+>  		if (IS_ERR(parent))
+>  			return PTR_ERR(parent);
+>  		clk_set_parent(i2s->clk_i2s, parent);
+> @@ -387,6 +389,7 @@ static const struct i2s_soc_info=20
+> jz4740_i2s_soc_info =3D {
+>  	.field_tx_fifo_thresh	=3D REG_FIELD(JZ_REG_AIC_CONF, 8, 11),
+>  	.field_i2sdiv_capture	=3D REG_FIELD(JZ_REG_AIC_CLK_DIV, 0, 3),
+>  	.field_i2sdiv_playback	=3D REG_FIELD(JZ_REG_AIC_CLK_DIV, 0, 3),
+> +	.pll_clk_name		=3D "pll half",
+>  };
+>=20
+>  static const struct i2s_soc_info jz4760_i2s_soc_info =3D {
+> @@ -395,6 +398,7 @@ static const struct i2s_soc_info=20
+> jz4760_i2s_soc_info =3D {
+>  	.field_tx_fifo_thresh	=3D REG_FIELD(JZ_REG_AIC_CONF, 16, 20),
+>  	.field_i2sdiv_capture	=3D REG_FIELD(JZ_REG_AIC_CLK_DIV, 0, 3),
+>  	.field_i2sdiv_playback	=3D REG_FIELD(JZ_REG_AIC_CLK_DIV, 0, 3),
+> +	.pll_clk_name		=3D "pll half",
+>  };
+>=20
+>  static struct snd_soc_dai_driver jz4770_i2s_dai =3D {
+> @@ -421,6 +425,7 @@ static const struct i2s_soc_info=20
+> jz4770_i2s_soc_info =3D {
+>  	.field_tx_fifo_thresh	=3D REG_FIELD(JZ_REG_AIC_CONF, 16, 20),
+>  	.field_i2sdiv_capture	=3D REG_FIELD(JZ_REG_AIC_CLK_DIV, 8, 11),
+>  	.field_i2sdiv_playback	=3D REG_FIELD(JZ_REG_AIC_CLK_DIV, 0, 3),
+> +	.pll_clk_name		=3D "pll half",
+>  };
+>=20
+>  static const struct i2s_soc_info jz4780_i2s_soc_info =3D {
+> @@ -429,6 +434,7 @@ static const struct i2s_soc_info=20
+> jz4780_i2s_soc_info =3D {
+>  	.field_tx_fifo_thresh	=3D REG_FIELD(JZ_REG_AIC_CONF, 16, 20),
+>  	.field_i2sdiv_capture	=3D REG_FIELD(JZ_REG_AIC_CLK_DIV, 8, 11),
+>  	.field_i2sdiv_playback	=3D REG_FIELD(JZ_REG_AIC_CLK_DIV, 0, 3),
+> +	.pll_clk_name		=3D "pll half",
+>  };
+>=20
+>  static const struct snd_soc_component_driver jz4740_i2s_component =3D {
+> --
+> 2.35.1
+>=20
 
-v/r,
-dps
+

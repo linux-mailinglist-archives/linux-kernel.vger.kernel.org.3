@@ -2,149 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F324569FF7
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 12:31:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 71B63569FF3
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 12:31:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235293AbiGGKaI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Jul 2022 06:30:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56798 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235209AbiGGKaG (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
+        id S235223AbiGGKaG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
         Thu, 7 Jul 2022 06:30:06 -0400
-Received: from NAM04-MW2-obe.outbound.protection.outlook.com (mail-mw2nam04on2069.outbound.protection.outlook.com [40.107.101.69])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38563564DF
-        for <linux-kernel@vger.kernel.org>; Thu,  7 Jul 2022 03:30:03 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=eDHtEciK1xGnWG8RUf2q+SvXwtkayp9yJHUtM7CAgtwCYMsbACRn8gXLeMyINMTOhyfE9FM89YmbHP5bUJnGtoINaKT6Y0NseoQm4RI8yolVtLkmSHlUSiFG8ZMq7Fz21/PSunKQOv34USoRhw7Z6NhsvkNLafzW0cFTu2/UQGiJO9ZYxwGEHB6MIQR72/7taAjtt654UWeF35KjGn3mFPwTay1m+SVRzO/klS83wJluLjfx/zb7a/gkI9sjvQcnnwR1RMZgMnMXPkDoBTVDgrQtNRpETy9OMqOfHOy86lZYM403GXkvHpPoHBOWJ5htC7tdj232YZkjddnS4zbiGA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=dq4OYKO+THEewQERtpbKpagudxI1MtuzUZyfnsdhE7w=;
- b=Fu/Gv9jtsXNF43xKfWi7Qxj39HNpMqtW1S36Q+wPDp8hz5MMwPPoXLTsRkfuo4JsXque14H4nEemtcioEDM6Ws1qZN2PpmNxzbE6Bj0jVz8/RMmCW3isnfZFMKX6zxoyJFF1MueQ3IR5toXGrvZ8vWqm/H/aM79RqJ/cJ6rgSXc1Nc9AqfgEmKnplbBu+BrO+Shln26E6AVwc9hL2EGduZjQTPA02gu1Y0dx+dacJ7SjOWawzT3l/yCIRa1FbQW8yDsyGMomppaU3lM3KN6l2s+2yQs8GJvKNCUGX2ZRONzdbW7wb6ofojl9h/efLbfGPSmkofk+lBwsfFDIuAO+Ig==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=kernel.org smtp.mailfrom=amd.com; dmarc=pass
- (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=dq4OYKO+THEewQERtpbKpagudxI1MtuzUZyfnsdhE7w=;
- b=B8uEzE64GCYX8UYPFTdOXMBl+IH0ggIZ1Tz+K4YKcg1tV6iOEj0h/kxPs+0WpNMyzxvrHwQul4bJ29rCzmdprxGhySqNibh6LSO+jACmyybP3IkOon37jYCXzNFlF3ldlcqUZjlx9RF7+KITsrg94iiGxn/j9qHsKUL+jl9Zl+s=
-Received: from DM6PR07CA0125.namprd07.prod.outlook.com (2603:10b6:5:330::7) by
- MWHPR12MB1549.namprd12.prod.outlook.com (2603:10b6:301:10::9) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.5395.17; Thu, 7 Jul 2022 10:30:00 +0000
-Received: from DM6NAM11FT005.eop-nam11.prod.protection.outlook.com
- (2603:10b6:5:330:cafe::df) by DM6PR07CA0125.outlook.office365.com
- (2603:10b6:5:330::7) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5417.16 via Frontend
- Transport; Thu, 7 Jul 2022 10:29:59 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- DM6NAM11FT005.mail.protection.outlook.com (10.13.172.238) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.5417.15 via Frontend Transport; Thu, 7 Jul 2022 10:29:59 +0000
-Received: from SATLEXMB07.amd.com (10.181.41.45) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.28; Thu, 7 Jul
- 2022 05:29:59 -0500
-Received: from SATLEXMB03.amd.com (10.181.40.144) by SATLEXMB07.amd.com
- (10.181.41.45) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.28; Thu, 7 Jul
- 2022 03:29:58 -0700
-Received: from dev-desktop.guestwireless.amd.com (10.180.168.240) by
- SATLEXMB03.amd.com (10.181.40.144) with Microsoft SMTP Server id 15.1.2375.28
- via Frontend Transport; Thu, 7 Jul 2022 05:29:54 -0500
-From:   jie1zhan <jesse.zhang@amd.com>
-To:     <broonie@kernel.org>, <dri-devel-bounces@lists.freedesktop.org>,
-        <dri-devel@lists.freedesktop.org>
-CC:     <Christian.Koenig@amd.com>, <Vijendar.Mukunda@amd.com>,
-        <Basavaraj.Hiregoudar@amd.com>, <Sunil-kumar.Dommati@amd.com>,
-        <ajitkumar.pandey@amd.com>, <lucas.demarchi@intel.com>,
-        <nirmoy.das@linux.intel.com>, <lionel.g.landwerlin@intel.com>,
-        jie1zhan <jesse.zhang@amd.com>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        open list <linux-kernel@vger.kernel.org>
-Subject: [PATCH v2] drm/syncobj: Fix sync syncobj issue
-Date:   Thu, 7 Jul 2022 18:29:53 +0800
-Message-ID: <20220707102953.769684-1-jesse.zhang@amd.com>
-X-Mailer: git-send-email 2.25.1
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56710 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235136AbiGGKaC (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 7 Jul 2022 06:30:02 -0400
+Received: from mail-pf1-f177.google.com (mail-pf1-f177.google.com [209.85.210.177])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8EAB53D1C
+        for <linux-kernel@vger.kernel.org>; Thu,  7 Jul 2022 03:30:00 -0700 (PDT)
+Received: by mail-pf1-f177.google.com with SMTP id y9so4259098pff.12
+        for <linux-kernel@vger.kernel.org>; Thu, 07 Jul 2022 03:30:00 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
+         :content-disposition;
+        bh=/JzY69fgYbq8dtADJobUrT4pb7r35M4xnJaXr87cK3U=;
+        b=rgiYYPuFcJIxT6hilVKRcyC/Q3El0dVYuzJx4a5aYTWKaJo9v1ZUYz2wOeRkuMAWgr
+         wvG3S7B+tSIuH0otkB74xV1oF2m7oXx1fdh72/MroUP1H29jgOjNLfpFXlQTPe6cCaT2
+         +W3PxVJNBLiTTk+C1xmEXZa66ZzQACmEwDwjqqPnkptY36xPhDAoSuo+FKNXD4um5sAe
+         cUSyuGi/9flFykx8E9rbWdP6lbUVj/inSCPbxlo9IE4mgTwasNhCPdBgPRnnyMxS8QRZ
+         pckJtrANZkF5H69J6tl0zBe8dw2DuokZOES/m9WqtZOgLHstk1Cp8fJ0ciT3XJ3ek+Io
+         Oyvw==
+X-Gm-Message-State: AJIora8MDwszwFtuHYUNpq5k6BuYq+6WqxrG9wfdxIaMJnqOd3R2mf+i
+        u0FcxEzZFdQXQ/Qaz3tnjOd1eUFVXWI=
+X-Google-Smtp-Source: AGRyM1sP5WYD/HQ6rAdWuX3ltvmMcNxBEYTPCu9kKK5hzBuh5N6HbxYmHp/HV+1kgm1U4f9RpXQjfg==
+X-Received: by 2002:a05:6a00:1a15:b0:527:d02b:29c6 with SMTP id g21-20020a056a001a1500b00527d02b29c6mr49866585pfv.23.1657189800287;
+        Thu, 07 Jul 2022 03:30:00 -0700 (PDT)
+Received: from karthik-strix-linux.karthek.com ([61.3.52.131])
+        by smtp.gmail.com with ESMTPSA id f73-20020a62384c000000b005251ce498cfsm2725939pfa.191.2022.07.07.03.29.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 07 Jul 2022 03:29:59 -0700 (PDT)
+Date:   Thu, 7 Jul 2022 15:59:54 +0530
+From:   Karthik Alapati <mail@karthek.com>
+To:     Johan Hovold <johan@kernel.org>, Alex Elder <elder@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Shuah Khan <skhan@linuxfoundation.org>,
+        greybus-dev@lists.linaro.org, linux-staging@lists.linux.dev,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] staging: greybus: don't use index pointer after iter
+Message-ID: <Ysa1oopf0ELw+OfB@karthik-strix-linux.karthek.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 0867347c-502d-4f3b-f090-08da6003a521
-X-MS-TrafficTypeDiagnostic: MWHPR12MB1549:EE_
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: =?us-ascii?Q?oEn7hMSiiTye1upN6zCHbSLCTbCxB8us8TyjK/19uogly1are26v5UTS7UNw?=
- =?us-ascii?Q?yK1t4gUtVnMfyHaefKdMcLemAOcjWft/CAJteqnVevaNTTpUmRQf/x1ThvFt?=
- =?us-ascii?Q?RYYH5Nsx0cAFLSgh5RxDzvkKY8D778qfV7DgLidWGw1dRurrLD9PTh7OKeXF?=
- =?us-ascii?Q?ThR/SRRjy0RenM/vZjF/GLmVrsBC7SDyzXlH18j860QvcQOgUokrYKvNOfo4?=
- =?us-ascii?Q?1r/FpoxCcBUbde4mMxXiqVd858EDhk3nk8QBQYEaiNp8lwSP0nJz/B6s2228?=
- =?us-ascii?Q?UJaUWcpZOcv2nWxeJrHaj8+IyMoaWaGeX8Ql01KUpouiyMLB32SlXkDDbHND?=
- =?us-ascii?Q?8OF8sHadQhIIMq1Dhlcw/TD+3+6FTAc4VgEfEo8RdittXDxS0K5KYi4F5c93?=
- =?us-ascii?Q?vi1QE2jGq/VaLQJHADCbp/H6YvOG5GfrgubcI+jaT3u+CtG2L7rmrWMx47E5?=
- =?us-ascii?Q?wx7HMnOVVGQMo1mcgNMj4JV4z40drxjye6zNEVP2z7N6S7lC9SmltJ9JrFFf?=
- =?us-ascii?Q?b/1gVWMkGA91IVkO5PS45spSMzY5NU4nFiC+diHHFEzKlxGrpjSeuAx111NQ?=
- =?us-ascii?Q?eJeIj5bf35gN5P/r45MtdO6DvD/kKXEsACKbhfucj0XT/GfvoKFFmj6ePzMk?=
- =?us-ascii?Q?jliD/LX/Khe0n2PI3IISSmq6OR1H8yjR5t04mP7WnreFNRDQoV8jtAIMzGfF?=
- =?us-ascii?Q?Hb0YDnq/7FmgzcfrN5hBm4MNRR1dfy1HqL0DgtV1ISvPwcQQzq6obEc6LWcv?=
- =?us-ascii?Q?ecR5LfrJckhjOevWfQNr7zcnirc2J5XD4ipgOmdC3JrA2oCH+d4U68bCX7qE?=
- =?us-ascii?Q?jMNnaYOwQkFaThaX4/vB9jpWq2dVCwc9qrw4FqdMMw1Hsw5A+EiYvje0vvF8?=
- =?us-ascii?Q?+Jo6u/NPhEr74JXtWdMprGd19PnqF6PL23564KnO0NkVdTCziB1dLmcj1JGG?=
- =?us-ascii?Q?YA7VkfLxaDjljr10HP0a1A=3D=3D?=
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230016)(4636009)(136003)(376002)(396003)(346002)(39860400002)(46966006)(40470700004)(36840700001)(7696005)(8936002)(478600001)(40480700001)(36860700001)(7416002)(70206006)(2906002)(34020700004)(81166007)(356005)(4744005)(82740400003)(5660300002)(8676002)(4326008)(70586007)(36756003)(186003)(26005)(41300700001)(110136005)(40460700003)(47076005)(82310400005)(426003)(1076003)(2616005)(86362001)(336012)(316002)(54906003)(43062005)(36900700001)(414714003)(473944003);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Jul 2022 10:29:59.6886
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 0867347c-502d-4f3b-f090-08da6003a521
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT005.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MWHPR12MB1549
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-enable signaling after flatten dma_fence_chains on transfer
+There are some usages of index pointer of list(w) which may not point to
+the right entry when the required entry is not found and the list traversal
+completes with index pointer pointing to the last entry. So, use w_found
+flag to track the case where the entry is found.
 
-Signed-off-by: jie1zhan <jesse.zhang@amd.com>
+Currently, When the condition (w->dapm != dapm) is true the loop continues
+and when it is not then it compares the name strings and breaks out of the
+loop if they match with w pointing to the right entry and it also breaks
+out of loop if they didn't match by additionally setting w to NULL. But
+what if the condition (w->dapm != dapm) is never false and the list
+traversal completes with w pointing to last entry then usage of it after
+the iter may not be correct. And there is no way to know whether the entry
+is found. So, if we introduce w_found to track when the entry is found
+then we can account for the case where the entry is not actually found and
+the list traversal completes.
+
+Fixes coccinelle error:
+drivers/staging/greybus/audio_helper.c:135:7-8: ERROR:
+invalid reference to the index variable of the iterator on line 127
+
+Signed-off-by: Karthik Alapati <mail@karthek.com>
 ---
- drivers/gpu/drm/drm_syncobj.c | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/staging/greybus/audio_helper.c | 8 ++++++--
+ 1 file changed, 6 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/gpu/drm/drm_syncobj.c b/drivers/gpu/drm/drm_syncobj.c
-index 7e48dcd1bee4..0d9d3577325f 100644
---- a/drivers/gpu/drm/drm_syncobj.c
-+++ b/drivers/gpu/drm/drm_syncobj.c
-@@ -920,6 +920,7 @@ static int drm_syncobj_transfer_to_timeline(struct drm_file *file_private,
- 	if (ret)
- 		goto err_free_fence;
- 
-+	dma_fence_enable_sw_signaling(fence);
- 	chain = dma_fence_chain_alloc();
- 	if (!chain) {
- 		ret = -ENOMEM;
+diff --git a/drivers/staging/greybus/audio_helper.c b/drivers/staging/greybus/audio_helper.c
+index 843760675876..7c04897a22a2 100644
+--- a/drivers/staging/greybus/audio_helper.c
++++ b/drivers/staging/greybus/audio_helper.c
+@@ -116,6 +116,7 @@ int gbaudio_dapm_free_controls(struct snd_soc_dapm_context *dapm,
+ {
+ 	int i;
+ 	struct snd_soc_dapm_widget *w, *next_w;
++	bool w_found = false;
+ #ifdef CONFIG_DEBUG_FS
+ 	struct dentry *parent = dapm->debugfs_dapm;
+ 	struct dentry *debugfs_w = NULL;
+@@ -124,15 +125,18 @@ int gbaudio_dapm_free_controls(struct snd_soc_dapm_context *dapm,
+ 	mutex_lock(&dapm->card->dapm_mutex);
+ 	for (i = 0; i < num; i++) {
+ 		/* below logic can be optimized to identify widget pointer */
++		w_found = false
+ 		list_for_each_entry_safe(w, next_w, &dapm->card->widgets,
+ 					 list) {
+ 			if (w->dapm != dapm)
+ 				continue;
+-			if (!strcmp(w->name, widget->name))
++			if (!strcmp(w->name, widget->name)) {
++				w_found = true;
+ 				break;
++			}
+ 			w = NULL;
+ 		}
+-		if (!w) {
++		if (!w_found) {
+ 			dev_err(dapm->dev, "%s: widget not found\n",
+ 				widget->name);
+ 			widget++;
 -- 
-2.25.1
+2.36.1
 

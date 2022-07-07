@@ -2,233 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 63C2156A674
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 16:59:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D7BA856A66C
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 16:59:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236386AbiGGO64 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Jul 2022 10:58:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50570 "EHLO
+        id S235503AbiGGO7D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Jul 2022 10:59:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50596 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236732AbiGGO6P (ORCPT
+        with ESMTP id S236746AbiGGO6T (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Jul 2022 10:58:15 -0400
-Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
-        by lindbergh.monkeyblade.net (Postfix) with SMTP id 3EBAA57272
-        for <linux-kernel@vger.kernel.org>; Thu,  7 Jul 2022 07:57:43 -0700 (PDT)
-Received: (qmail 427876 invoked by uid 1000); 7 Jul 2022 10:57:42 -0400
-Date:   Thu, 7 Jul 2022 10:57:42 -0400
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     Maxim Devaev <mdevaev@gmail.com>
-Cc:     linux-usb@vger.kernel.org, balbi@kernel.org,
-        gregkh@linuxfoundation.org, caihuoqing@baidu.com,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] usb: gadget: f_mass_storage: forced_eject attribute
-Message-ID: <Ysb0ZiEveXvmrC2f@rowland.harvard.edu>
-References: <20220706185936.24692-1-mdevaev@gmail.com>
+        Thu, 7 Jul 2022 10:58:19 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6CB23C32
+        for <linux-kernel@vger.kernel.org>; Thu,  7 Jul 2022 07:57:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1657205868;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=BPPyfbm7cP61/jDVpNfbjlUmaFCLU4YcNzeyYG8WmXc=;
+        b=dBXBk+Df5Pj5p9vcoHut1p1ZjxXRc/8OnZzY1jwPeKahGX59HI/vT+unF7GRzTWeHVVh/E
+        oxm+PFujqoznfgYyF4rONJhpXMUj582AAosA1ugTk6Dv3Ln8RyT30z0gi25Sn4Uq1xgnPl
+        fMs4xlXlTvNad9fFSNCdi9v7HN8ID9w=
+Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
+ [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-606-K19ejAFcN4mbz_bQygF27Q-1; Thu, 07 Jul 2022 10:57:47 -0400
+X-MC-Unique: K19ejAFcN4mbz_bQygF27Q-1
+Received: by mail-wm1-f70.google.com with SMTP id v8-20020a05600c214800b003a1819451b1so9663273wml.7
+        for <linux-kernel@vger.kernel.org>; Thu, 07 Jul 2022 07:57:47 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
+         :message-id:mime-version;
+        bh=BPPyfbm7cP61/jDVpNfbjlUmaFCLU4YcNzeyYG8WmXc=;
+        b=a8U8e+5UvxsrFVlsPS+dg4ezc4iipzJy+hlj7586KH6Qa9lwoGNXXYcghwLTY9fnaa
+         4mn6sMbEeRg5e0z/tH8KObZhhxJnTbLBoDcrYXKtfJu83JJ8QMjmMEs4meYgXmdd2jFB
+         u51Xbv51fPYKCJrR7VMI6LofJWQyOeJAQgbXueNSY3U1N0+t8nyTOOj00r1HvUuu1+jZ
+         TiLiAzch4LDenLTZu5hHbmSSi0ave3OSaV+TEiHEzIgckra6kyJAslz1XiukqAYQLW7M
+         o4bVVhlkfeKOIm0xUj991IvUCQvIEqj/XOWoL24uKhuEtb5FM1pEYLf/BK004/fzqeB3
+         AqYg==
+X-Gm-Message-State: AJIora+BuXR9yj6490PqoVitJWTW2dnRmskgYx0bTws3bx9WSJqU0hyq
+        pjb7YKDR6KWISUDkMha0c1WZvpCuuUYeOJJ4IXdGexAZCLkmK2OXUc7usSC18swf0GTfWvAxRAk
+        sjXklOil9Q8MZRaUb19As9z7dtaf71QLOjwZbLiUa9D92/BHagr55Ww1OrVLK95GYdoRyzbyF4m
+        CW
+X-Received: by 2002:a05:600c:3511:b0:3a1:9992:f72f with SMTP id h17-20020a05600c351100b003a19992f72fmr5166870wmq.164.1657205866263;
+        Thu, 07 Jul 2022 07:57:46 -0700 (PDT)
+X-Google-Smtp-Source: AGRyM1u0/E4oQnfuVVwr2Quhckj80YkdpdC1DUvgHP9mLEG3FQiLuZoO9arVkl3lDbI9tW7XUnCGwg==
+X-Received: by 2002:a05:600c:3511:b0:3a1:9992:f72f with SMTP id h17-20020a05600c351100b003a19992f72fmr5166839wmq.164.1657205866008;
+        Thu, 07 Jul 2022 07:57:46 -0700 (PDT)
+Received: from fedora (nat-2.ign.cz. [91.219.240.2])
+        by smtp.gmail.com with ESMTPSA id y8-20020adfee08000000b0021d6e49e4ebsm9673078wrn.10.2022.07.07.07.57.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 07 Jul 2022 07:57:45 -0700 (PDT)
+From:   Vitaly Kuznetsov <vkuznets@redhat.com>
+To:     Sean Christopherson <seanjc@google.com>,
+        Jim Mattson <jmattson@google.com>
+Cc:     kvm@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
+        Anirudh Rayabharam <anrayabh@linux.microsoft.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Maxim Levitsky <mlevitsk@redhat.com>,
+        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 22/28] KVM: VMX: Clear controls obsoleted by EPT at
+ runtime, not setup
+In-Reply-To: <CALMp9eRA0v6BK6KG81ZE_iLKF6VNXxemN=E4gAE4AM-V4gkdHQ@mail.gmail.com>
+References: <20220629150625.238286-1-vkuznets@redhat.com>
+ <20220629150625.238286-23-vkuznets@redhat.com>
+ <CALMp9eRA0v6BK6KG81ZE_iLKF6VNXxemN=E4gAE4AM-V4gkdHQ@mail.gmail.com>
+Date:   Thu, 07 Jul 2022 16:57:44 +0200
+Message-ID: <87wncpotqv.fsf@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220706185936.24692-1-mdevaev@gmail.com>
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jul 06, 2022 at 09:59:37PM +0300, Maxim Devaev wrote:
-> It allows to reset prevent_medium_removal flag and "eject" the image.
-> 
-> The patch is a completely alternative implementation of the previously
-> proposed [1], the idea of which was born after the mentioned discussion.
+Jim Mattson <jmattson@google.com> writes:
 
-Generally quite good, but the documentation needs some improvement.
+> On Wed, Jun 29, 2022 at 8:07 AM Vitaly Kuznetsov <vkuznets@redhat.com> wrote:
+>>
+>> From: Sean Christopherson <seanjc@google.com>
+>>
+>> Clear the CR3 and INVLPG interception controls at runtime based on
+>> whether or not EPT is being _used_, as opposed to clearing the bits at
+>> setup if EPT is _supported_ in hardware, and then restoring them when EPT
+>> is not used.  Not mucking with the base config will allow using the base
+>> config as the starting point for emulating the VMX capability MSRs.
+>>
+>> Signed-off-by: Sean Christopherson <seanjc@google.com>
+>> Signed-off-by: Vitaly Kuznetsov <vkuznets@redhat.com>
+> Nit: These controls aren't "obsoleted" by EPT; they're just no longer
+> required.
 
-> Signed-off-by: Maxim Devaev <mdevaev@gmail.com>
-> Link: https://lore.kernel.org/lkml/20220406092445.215288-1-mdevaev@gmail.com [1]
-> ---
->  .../testing/configfs-usb-gadget-mass-storage  |  6 +++++
->  Documentation/usb/gadget-testing.rst          |  6 +++++
->  Documentation/usb/mass-storage.rst            |  9 +++++++
->  drivers/usb/gadget/function/f_mass_storage.c  | 25 +++++++++++++++++++
->  drivers/usb/gadget/function/storage_common.c  | 11 ++++++++
->  drivers/usb/gadget/function/storage_common.h  |  2 ++
->  6 files changed, 59 insertions(+)
-> 
-> diff --git a/Documentation/ABI/testing/configfs-usb-gadget-mass-storage b/Documentation/ABI/testing/configfs-usb-gadget-mass-storage
-> index c86b63a7bb43..87859ef40579 100644
-> --- a/Documentation/ABI/testing/configfs-usb-gadget-mass-storage
-> +++ b/Documentation/ABI/testing/configfs-usb-gadget-mass-storage
-> @@ -32,4 +32,10 @@ Description:
->  				being a CD-ROM.
->  		nofua		Flag specifying that FUA flag
->  				in SCSI WRITE(10,12)
-> +		forced_eject	This write-only flag only makes sence when
+Sean,
 
-s/flag/file/
+I'm going to update the subject line to "KVM: VMX: Clear controls
+unneded with EPT at runtime, not setup" retaining your authorship in v3
+(if there are no objections, of course).
 
-Instead of "only makes sense" (note the spelling), how about "is useful 
-only" or "operates only"?
+>
+> Reviewed-by: Jim Mattson <jmattson@google.com>
+>
 
-By the way, what does happen if someone writes to this attribute file 
-before the function is active?  Have you tested this?
+Thanks!
 
-> +				the function is active. It causes a forced
-> +				detaching of the backing file from the LUN,
+-- 
+Vitaly
 
-Slightly improved wording: "It causes the backing file to be forcibly 
-detached from the LUN".
-
-> +				regardless of whether the host has allowed it.
-> +				Any non-zero number of bytes written will
-> +				result in ejection.
-
-Doesn't a zero-byte write also work?
-
-The same suggested changes apply to the documentation added below.
-
->  		===========	==============================================
-> diff --git a/Documentation/usb/gadget-testing.rst b/Documentation/usb/gadget-testing.rst
-> index c18113077889..1481173d8719 100644
-> --- a/Documentation/usb/gadget-testing.rst
-> +++ b/Documentation/usb/gadget-testing.rst
-> @@ -333,6 +333,12 @@ In each lun directory there are the following attribute files:
->  			being a CD-ROM.
->  	nofua		Flag specifying that FUA flag
->  			in SCSI WRITE(10,12)
-> +	forced_eject	This write-only flag only makes sence when
-> +			the function is active. It causes a forced
-> +			detaching of the backing file from the LUN,
-> +			regardless of whether the host has allowed it.
-> +			Any non-zero number of bytes written will
-> +			result in ejection.
->  	=============== ==============================================
->  
->  Testing the MASS STORAGE function
-> diff --git a/Documentation/usb/mass-storage.rst b/Documentation/usb/mass-storage.rst
-> index d181b47c3cb6..f72e59237bce 100644
-> --- a/Documentation/usb/mass-storage.rst
-> +++ b/Documentation/usb/mass-storage.rst
-> @@ -181,6 +181,15 @@ sysfs entries
->      Reflects the state of nofua flag for given logical unit.  It can
->      be read and written.
->  
-> +  - forced_eject
-> +
-> +    When written into, it allows to detach the backing file for given
-
-This should be phrased in the same way as above.  The file doesn't 
-"allow" anything; it _causes_ the backing file to be detached.
-
-> +    logical unit, regardless of whether the host has allowed it.
-
-Same as above, use "LUN" here instead of "logical unit".
-
-Alan Stern
-
-> +    The content doesn't matter, any non-zero number of bytes will
-> +    lead the forced eject.
-> +
-> +    Can not be read.
-> +
->    Other then those, as usual, the values of module parameters can be
->    read from /sys/module/g_mass_storage/parameters/* files.
->  
-> diff --git a/drivers/usb/gadget/function/f_mass_storage.c b/drivers/usb/gadget/function/f_mass_storage.c
-> index 6ad669dde41c..00cac2a38178 100644
-> --- a/drivers/usb/gadget/function/f_mass_storage.c
-> +++ b/drivers/usb/gadget/function/f_mass_storage.c
-> @@ -2520,10 +2520,21 @@ static ssize_t file_store(struct device *dev, struct device_attribute *attr,
->  	return fsg_store_file(curlun, filesem, buf, count);
->  }
->  
-> +static ssize_t forced_eject_store(struct device *dev,
-> +				  struct device_attribute *attr,
-> +				  const char *buf, size_t count)
-> +{
-> +	struct fsg_lun		*curlun = fsg_lun_from_dev(dev);
-> +	struct rw_semaphore	*filesem = dev_get_drvdata(dev);
-> +
-> +	return fsg_store_forced_eject(curlun, filesem, buf, count);
-> +}
-> +
->  static DEVICE_ATTR_RW(nofua);
->  /* mode wil be set in fsg_lun_attr_is_visible() */
->  static DEVICE_ATTR(ro, 0, ro_show, ro_store);
->  static DEVICE_ATTR(file, 0, file_show, file_store);
-> +static DEVICE_ATTR_WO(forced_eject);
->  
->  /****************************** FSG COMMON ******************************/
->  
-> @@ -2677,6 +2688,7 @@ static struct attribute *fsg_lun_dev_attrs[] = {
->  	&dev_attr_ro.attr,
->  	&dev_attr_file.attr,
->  	&dev_attr_nofua.attr,
-> +	&dev_attr_forced_eject.attr,
->  	NULL
->  };
->  
-> @@ -3090,6 +3102,18 @@ static ssize_t fsg_lun_opts_inquiry_string_store(struct config_item *item,
->  
->  CONFIGFS_ATTR(fsg_lun_opts_, inquiry_string);
->  
-> +static ssize_t fsg_lun_opts_forced_eject_store(struct config_item *item,
-> +					       const char *page, size_t len)
-> +{
-> +	struct fsg_lun_opts *opts = to_fsg_lun_opts(item);
-> +	struct fsg_opts *fsg_opts = to_fsg_opts(opts->group.cg_item.ci_parent);
-> +
-> +	return fsg_store_forced_eject(opts->lun, &fsg_opts->common->filesem,
-> +				      page, len);
-> +}
-> +
-> +CONFIGFS_ATTR_WO(fsg_lun_opts_, forced_eject);
-> +
->  static struct configfs_attribute *fsg_lun_attrs[] = {
->  	&fsg_lun_opts_attr_file,
->  	&fsg_lun_opts_attr_ro,
-> @@ -3097,6 +3121,7 @@ static struct configfs_attribute *fsg_lun_attrs[] = {
->  	&fsg_lun_opts_attr_cdrom,
->  	&fsg_lun_opts_attr_nofua,
->  	&fsg_lun_opts_attr_inquiry_string,
-> +	&fsg_lun_opts_attr_forced_eject,
->  	NULL,
->  };
->  
-> diff --git a/drivers/usb/gadget/function/storage_common.c b/drivers/usb/gadget/function/storage_common.c
-> index b859a158a414..8cd95bf7831f 100644
-> --- a/drivers/usb/gadget/function/storage_common.c
-> +++ b/drivers/usb/gadget/function/storage_common.c
-> @@ -519,4 +519,15 @@ ssize_t fsg_store_inquiry_string(struct fsg_lun *curlun, const char *buf,
->  }
->  EXPORT_SYMBOL_GPL(fsg_store_inquiry_string);
->  
-> +ssize_t fsg_store_forced_eject(struct fsg_lun *curlun, struct rw_semaphore *filesem,
-> +			       const char *buf, size_t count)
-> +{
-> +	int ret;
-> +
-> +	curlun->prevent_medium_removal = 0;
-> +	ret = fsg_store_file(curlun, filesem, "", 0);
-> +	return ret < 0 ? ret : count;
-> +}
-> +EXPORT_SYMBOL_GPL(fsg_store_forced_eject);
-> +
->  MODULE_LICENSE("GPL");
-> diff --git a/drivers/usb/gadget/function/storage_common.h b/drivers/usb/gadget/function/storage_common.h
-> index bdeb1e233fc9..0a544a82cbf8 100644
-> --- a/drivers/usb/gadget/function/storage_common.h
-> +++ b/drivers/usb/gadget/function/storage_common.h
-> @@ -219,5 +219,7 @@ ssize_t fsg_store_removable(struct fsg_lun *curlun, const char *buf,
->  			    size_t count);
->  ssize_t fsg_store_inquiry_string(struct fsg_lun *curlun, const char *buf,
->  				 size_t count);
-> +ssize_t fsg_store_forced_eject(struct fsg_lun *curlun, struct rw_semaphore *filesem,
-> +			       const char *buf, size_t count);
->  
->  #endif /* USB_STORAGE_COMMON_H */
-> -- 
-> 2.37.0
-> 

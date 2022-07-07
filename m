@@ -2,68 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 60B9956A629
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 16:51:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5CE7856A62C
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 16:52:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236180AbiGGOuw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Jul 2022 10:50:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43010 "EHLO
+        id S236216AbiGGOwR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Jul 2022 10:52:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41956 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236169AbiGGOtp (ORCPT
+        with ESMTP id S236209AbiGGOvS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Jul 2022 10:49:45 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5928745064;
-        Thu,  7 Jul 2022 07:49:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1657205361; x=1688741361;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=TEUKuQx9USOP2T+nvEZZr/kxzSMyhTyJTrEOtEoTws0=;
-  b=wz9ba9gCsVfGfotE/0D0G+cO8XDiqfj5CTa6hP+0aQBLbAattdLOx7jn
-   cJHy8DjRyhVXsHKCAzRkCd6MSRZAOaavHpGtEyGrXZrhAXba1WL8kA5a6
-   4tcfkaidFSCIjQpjGLCbAZR/Kl+m6MfmzeBdxkuM2lBzxAUDy0B+U2uaM
-   axwaod8FdLpz9gKDU8nTfejWlFF/j5vobhxJtzBJpvk2Hs5MirLT3tPy1
-   bOu2/SlZGdnpFHzZSGPUW2+rBsYbkLS6bvng4qlPe6kEq4BTXTrmNyYgU
-   cDFuuUmrcJ2dYwUAD5kYF9eeHqjiUttgU8sOR+p3FSCotf1z6fmAk7I2a
-   Q==;
-X-IronPort-AV: E=Sophos;i="5.92,253,1650956400"; 
-   d="scan'208";a="171177345"
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa5.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 07 Jul 2022 07:49:20 -0700
-Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
- chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.17; Thu, 7 Jul 2022 07:49:20 -0700
-Received: from [10.159.245.112] (10.10.115.15) by chn-vm-ex04.mchp-main.com
- (10.10.85.152) with Microsoft SMTP Server id 15.1.2375.17 via Frontend
- Transport; Thu, 7 Jul 2022 07:49:18 -0700
-Message-ID: <269587dd-c7ba-ee12-8be0-51c9a795a36a@microchip.com>
-Date:   Thu, 7 Jul 2022 16:49:16 +0200
+        Thu, 7 Jul 2022 10:51:18 -0400
+Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1E0531DEE;
+        Thu,  7 Jul 2022 07:50:47 -0700 (PDT)
+Received: by mail-wm1-x336.google.com with SMTP id m6-20020a05600c3b0600b003a0489f412cso1043667wms.1;
+        Thu, 07 Jul 2022 07:50:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=zKCQPtlV/zp+9AxyutmXUkykhKgpm+t7LU8VMAQOZXo=;
+        b=EBJoSIWSMNh7Q1ibq+I4sYH0CrcGDJBR7HCFsUv3WlC6lIeY+WB0iD1pZHLWb5hEYg
+         5oqhc10dDEvdDxWkISeBeVwaC00jPuQ2y4i2S4X/deZg2PRdyztDaHCmgc4XkoNnHPdU
+         0zrAezlOOkUNUpMt+vInfnHF+UPKzZR6VK11mkt1xOrjDbDyaJmSQcmnDbUnNAd2WCaZ
+         1xhm07yun2rNWjUM8ridi0XFR6SiPbEaV6U7ef/YsAnydnkrhBpLUwerTNKcNPaSaRGo
+         mn7N0pWFXGLMB8XhfqCS0MLZtgW8jpiIvbjGd7/WaMJlyhL4H75btFIyDomTkOJ7Rbtd
+         UqUQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=zKCQPtlV/zp+9AxyutmXUkykhKgpm+t7LU8VMAQOZXo=;
+        b=L4pXUdqlTy9UV7So//e8Oy6y775BdXwjaRGwUyylzKlPsgXCEQFNlHmHqjPuShFE6y
+         I+Bzb8Q4hIE08m9l5UqXsYxipNF3LBD0OcfcR/QrgBDriycr8sPjVQJmJS52eIU2igfq
+         3Qn5hV2FKMc/7FF79B/PrC8/KJ91afGsb6gNBDQHIHo/H8EktRmydm8rHryaPSKqIjdu
+         AMp80/MNdQuwK8xJTKoLvRPJ86RVCMmw/Uyyr0clus+fdSYFQt/mSvpiQ69rTKDeRePT
+         zy4BUGYtnHQ6bzOkastmSp6Vc8nkK4/cgZtyY3QxxU3lQpA5OKSEn6VQk9JORh0IFX0h
+         2qMg==
+X-Gm-Message-State: AJIora+5l9QceaJbeGMOqMx0r94S6pUTi+s4rPRi5Z/6h9FEkuAmg9us
+        zXTY8hUOG23uemmTvK+a6VxAHZ4BIPJz0Q==
+X-Google-Smtp-Source: AGRyM1tbSjA0Rr6Nv9IbQQWPXRgiLpd2Jgw9p/RhFNjcuTYsVoEOhwrw3W1uyeQOYlyX7Q3o45E0JA==
+X-Received: by 2002:a05:600c:3b87:b0:3a2:c7c1:a89 with SMTP id n7-20020a05600c3b8700b003a2c7c10a89mr5051361wms.159.1657205446330;
+        Thu, 07 Jul 2022 07:50:46 -0700 (PDT)
+Received: from [192.168.2.177] ([207.188.167.132])
+        by smtp.gmail.com with ESMTPSA id n35-20020a05600c3ba300b003a039054567sm29099955wms.18.2022.07.07.07.50.44
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 07 Jul 2022 07:50:45 -0700 (PDT)
+Message-ID: <de6412d4-732c-79cf-ac00-e0fccee44270@gmail.com>
+Date:   Thu, 7 Jul 2022 16:50:44 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH] dt-binding: sound: Convert atmel pdmic to json-schema
+ Thunderbird/91.11.0
+Subject: Re: [PATCH v3] arm64: dts: mt8173: Fix elm panel DT node
 Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        <Ryan.Wanner@microchip.com>, <Claudiu.Beznea@microchip.com>,
-        <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
-        Mark Brown <broonie@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>
-CC:     <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>
-References: <20220705162142.17558-1-Ryan.Wanner@microchip.com>
- <8d71000b-e9d7-3586-5421-36a1fb367b5e@linaro.org>
-From:   Nicolas Ferre <nicolas.ferre@microchip.com>
-Organization: microchip
-In-Reply-To: <8d71000b-e9d7-3586-5421-36a1fb367b5e@linaro.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+To:     Pin-Yen Lin <treapking@chromium.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>
+Cc:     Hsin-Yi Wang <hsinyi@chromium.org>,
+        Eizan Miyamoto <eizan@chromium.org>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-mediatek@lists.infradead.org
+References: <20220621091854.1904372-1-treapking@chromium.org>
+From:   Matthias Brugger <matthias.bgg@gmail.com>
+In-Reply-To: <20220621091854.1904372-1-treapking@chromium.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,38 +78,77 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Krzysztof, Mark,
 
-On 05/07/2022 at 19:56, Krzysztof Kozlowski wrote:
-> On 05/07/2022 18:21, Ryan.Wanner@microchip.com wrote:
->> From: Ryan Wanner <Ryan.Wanner@microchip.com>
->>
->> Convert Atmel PDMIC devicetree binding to json-schema.
->> Change file naming to match json-schema naming.
->>
->> Signed-off-by: Ryan Wanner <Ryan.Wanner@microchip.com>
->> ---
->>   .../bindings/sound/atmel,sama5d2-pdmic.yaml   | 104 ++++++++++++++++++
->>   .../devicetree/bindings/sound/atmel-pdmic.txt |  55 ---------
+
+On 21/06/2022 11:18, Pin-Yen Lin wrote:
+> Move the panel DT node under `aux-bus` node, so it won't use the buggy
+> `ps8640_bridge_get_edid` to get the display modes. Also, change the
+> compatible string from "lg,lp120up1" to "edp-panel", so the panel-edp
+> driver gets the displays modes from the EDID instead of using the
+> predefined display mode (`lg_lp129qe_mode`) in the driver, which is
+> actually not working.
 > 
-> You need to send the patches to proper folks with proper subject prefix.
-> Use get_maintainers.pl for the first and `git log --oneline --` for the
-> second.
 
-Just to let you know that Codrin who was in charge of audio is not with 
-Microchip anymore. We'll change the MAINTAINERS file soon so that it's 
-clearer for everyone.
-Anyway, we'll make sure to add Mark and Liam to the list.
+Do we need a fixes tag here? I'm not quite sure if we fix an upstream bug here, 
+to be honest.
 
-Best regards,
-   Nicolas
+Regards,
+Matthias
 
->>   2 files changed, 104 insertions(+), 55 deletions(-)
->>   create mode 100644 Documentation/devicetree/bindings/sound/atmel,sama5d2-pdmic.yaml
->>   delete mode 100644 Documentation/devicetree/bindings/sound/atmel-pdmic.txt
-
-[..]
-
-
--- 
-Nicolas Ferre
+> Signed-off-by: Pin-Yen Lin <treapking@chromium.org>
+> ---
+> 
+> Changes in v3:
+> - Include more details in the commit message.
+> 
+> Changes in v2:
+> - Remove the Fixes tag because this change is not compatible with the
+>    old kernel versions.
+> 
+>   arch/arm64/boot/dts/mediatek/mt8173-elm.dtsi | 26 +++++++++++---------
+>   1 file changed, 14 insertions(+), 12 deletions(-)
+> 
+> diff --git a/arch/arm64/boot/dts/mediatek/mt8173-elm.dtsi b/arch/arm64/boot/dts/mediatek/mt8173-elm.dtsi
+> index 9c75fbb31f98..1e0802a6f6d2 100644
+> --- a/arch/arm64/boot/dts/mediatek/mt8173-elm.dtsi
+> +++ b/arch/arm64/boot/dts/mediatek/mt8173-elm.dtsi
+> @@ -90,18 +90,6 @@ volume_up {
+>   		};
+>   	};
+>   
+> -	panel: panel {
+> -		compatible = "lg,lp120up1";
+> -		power-supply = <&panel_fixed_3v3>;
+> -		backlight = <&backlight>;
+> -
+> -		port {
+> -			panel_in: endpoint {
+> -				remote-endpoint = <&ps8640_out>;
+> -			};
+> -		};
+> -	};
+> -
+>   	panel_fixed_3v3: regulator1 {
+>   		compatible = "regulator-fixed";
+>   		regulator-name = "PANEL_3V3";
+> @@ -282,6 +270,20 @@ ps8640_out: endpoint {
+>   				};
+>   			};
+>   		};
+> +
+> +		aux-bus {
+> +			panel {
+> +				compatible = "edp-panel";
+> +				power-supply = <&panel_fixed_3v3>;
+> +				backlight = <&backlight>;
+> +
+> +				port {
+> +					panel_in: endpoint {
+> +						remote-endpoint = <&ps8640_out>;
+> +					};
+> +				};
+> +			};
+> +		};
+>   	};
+>   };
+>   

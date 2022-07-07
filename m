@@ -2,79 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5861256A6D6
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 17:25:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BE41A56A6DD
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 17:27:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235767AbiGGPZr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Jul 2022 11:25:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48434 "EHLO
+        id S235844AbiGGP1i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Jul 2022 11:27:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49166 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235122AbiGGPZp (ORCPT
+        with ESMTP id S231897AbiGGP1d (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Jul 2022 11:25:45 -0400
-Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCF2B2CC95;
-        Thu,  7 Jul 2022 08:25:43 -0700 (PDT)
-Received: by mail-lf1-x12f.google.com with SMTP id d12so8397327lfq.12;
-        Thu, 07 Jul 2022 08:25:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=4z3J663gkFkbp472Bx8Crc/uidLLLx8KpS8uotKO5LA=;
-        b=iLcRUJzeI4c2gYOsmAYZ5/Dhcz85wIaP3s5pEOdCBIIVKzFTP/ogqV+Mnh5tiM0JpQ
-         qwMvF5G7Fd39dTWmpr91gPPAsMRyJWMec//lNDQ/gvJE3sk0WVZxUBRm1GxNngw4jDcF
-         gDXE9smqoqNZSJoPNUxCnkV0PeasTtsm7PVEWpsug/21zRWSIsomNYLKat6NjDJBkoWl
-         krEYoeRZrSS4BcgEHGLqnHzwl4m9B0LTsJC4oY7T8RVWoCrbVM0yh1hiFzfxfT79U6Wr
-         0hsgZC4cttaqDDamuPpVI3yWXTtlG91/YrIzBcX1H4PUC7X3/dvcBp7mp60eWfvldEY8
-         K6hQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=4z3J663gkFkbp472Bx8Crc/uidLLLx8KpS8uotKO5LA=;
-        b=2s3Q9vakp8oD3MSSf29oDkpKZQ/vvTJUIzwvUiCfbuDLAoPsZMaQQQzvtpUAvnXl0F
-         Wc4+c7RpRWgDcd8FgVbSUDEsWZ4sotApXoIfbTaEjEAdW2MlC7IOTRfdTNmX4KOhMah2
-         67KiGu6Sm+QOLo2HZEetJROf7L1H4ApXd8GNfa3gb4Dds7yFxwW8AC7yyhrUZu9rEoTK
-         B1amnhoJa11ZatoHTED2ThkIGtSGoUMoy/11lm7mWKDzEDzIOZ3PXa8F+kHKmiEK0Y4q
-         TEJRS6ESBo7fqsE0yCS9UNk1ERzXPnPhd8bO5cESpju0nDhR0wtMcEmCDS7/1zYOzuee
-         87eQ==
-X-Gm-Message-State: AJIora87z5g5dGCUq5/vb12NN9LFYGkxFRZttPe6LBqgBE9rQRWSmlYQ
-        HcVwQ9PaQxbTgEI0rJn7xG4=
-X-Google-Smtp-Source: AGRyM1sB79BSnFqpgp1BveiIrl7G8QFiRp/78fOZt4UfoGYkhtPFEwIc/2uZIadvSM/Uv0DLI1omrg==
-X-Received: by 2002:a05:6512:3b83:b0:47f:7419:5e58 with SMTP id g3-20020a0565123b8300b0047f74195e58mr29966749lfv.302.1657207541912;
-        Thu, 07 Jul 2022 08:25:41 -0700 (PDT)
-Received: from mobilestation ([95.79.140.178])
-        by smtp.gmail.com with ESMTPSA id o1-20020a05651205c100b0048459950d65sm1352593lfo.306.2022.07.07.08.25.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 07 Jul 2022 08:25:41 -0700 (PDT)
-Date:   Thu, 7 Jul 2022 18:25:39 +0300
-From:   Serge Semin <fancer.lancer@gmail.com>
-To:     Rob Herring <robh@kernel.org>
-Cc:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
-        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
+        Thu, 7 Jul 2022 11:27:33 -0400
+Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2050.outbound.protection.outlook.com [40.107.237.50])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBA6F2E6A9;
+        Thu,  7 Jul 2022 08:27:32 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=HQ6iK8ZMk32JEZ7j47i+b5AdZbA2MFOx4QK8b1krvsIIPz3up3Hcu+FkrDb09ckIOAPlWySuITWLOO/MC52KV1n9zgi45gEbT2jqtLHWp6h/6cYd6KR1abIXhOKiwqmC6IHtfe+qBE1Ja4r1t1q0NqKN55uYeMFaE07gy4RtKC1H7gksw6TNOBYdoPKGdehzbQYFlJvWaxrNtCzpLHcrDDotRiCJEk7glHH6BPva6xn20IWAXejG3pyoVBmKlP9M2djdZCTJW+6eG+1XEsEl4eUuTM0Pk1RV5BB7SHBvD7EQ0ndCQr40puFooazdMPqEYAWmFJcnrXNs9oEwFoSouA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=cflTPdaTBS1qx1FqCstuBaDzkotQcI+iTKIiMAHC/y0=;
+ b=Vpu+bucFYSgSXzXNZ6Wlhf13sV9dBxfBEeM5ZvxRHxo0ygRBoSNy/reLXW/4/AVWY9XvFX5NXf6vbrSqq9GYPTpuPMQeiEJZAYkaYDGPucLkbcHq5CR8yK2agjSsFh/hWQZi1JR/UL+HyWGh/QBCs42aJkie4gzPiy13JATrzcLGRMXvcrfQuyEWEI59RzHSkaCrIyqrJSN2ZYFQi9aAStCrFwRlEseRtyz0ND5hV4YkyDtkEJB7D4wyOVzqQORJbtNdCNkm6Li50VnOCLrWdgQx4gXgAs9sUsecHBr6VMinm/zjT0aS4c9ZAgkNCP/diBci30Jmko9YZua9T9+eFQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=cflTPdaTBS1qx1FqCstuBaDzkotQcI+iTKIiMAHC/y0=;
+ b=BQYI3TWWgKOK5DulZ7X2dLwiZnnKfsF9cnoORRkTQWR1zF+8/wsU1VUB1Pzih+Q19vxm/AfrnPmxjO4Jg5EypxwDNU7VnCIinWKtXt/6VUH10/7dLVnB4juyKV8arRfbicwaFEvdtpEsbC9NRa6lSph8QaAPR2SoH8kMmDMmXgM=
+Received: from MN0PR12MB6101.namprd12.prod.outlook.com (2603:10b6:208:3cb::10)
+ by DM6PR12MB3483.namprd12.prod.outlook.com (2603:10b6:5:11f::14) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5373.18; Thu, 7 Jul
+ 2022 15:27:24 +0000
+Received: from MN0PR12MB6101.namprd12.prod.outlook.com
+ ([fe80::1143:10a5:987a:7598]) by MN0PR12MB6101.namprd12.prod.outlook.com
+ ([fe80::1143:10a5:987a:7598%5]) with mapi id 15.20.5395.021; Thu, 7 Jul 2022
+ 15:27:24 +0000
+From:   "Limonciello, Mario" <Mario.Limonciello@amd.com>
+To:     Grzegorz Jaszczyk <jaz@semihalf.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+CC:     "dmy@semihalf.com" <dmy@semihalf.com>,
+        "seanjc@google.com" <seanjc@google.com>,
+        "dbehr@google.com" <dbehr@google.com>,
+        "upstream@semihalf.com" <upstream@semihalf.com>,
+        "zide.chen@intel.corp-partner.google.com" 
+        <zide.chen@intel.corp-partner.google.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>,
         Hans de Goede <hdegoede@redhat.com>,
-        Jens Axboe <axboe@kernel.dk>, Hannes Reinecke <hare@suse.de>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
-        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
-        linux-ide@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org
-Subject: Re: [PATCH v4 17/23] dt-bindings: ata: ahci: Add DWC AHCI SATA
- controller DT schema
-Message-ID: <20220707152539.tktdo4qnvwormkqk@mobilestation>
-References: <20220610081801.11854-1-Sergey.Semin@baikalelectronics.ru>
- <20220610081801.11854-18-Sergey.Semin@baikalelectronics.ru>
- <20220614222754.GA2830345-robh@kernel.org>
- <20220617193744.av27axznbogademt@mobilestation>
- <20220706223642.GC572635-robh@kernel.org>
+        Mark Gross <markgross@kernel.org>, Pavel Machek <pavel@ucw.cz>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Sachi King <nakato@nakato.io>,
+        "open list:ACPI" <linux-acpi@vger.kernel.org>,
+        "open list:X86 PLATFORM DRIVERS" 
+        <platform-driver-x86@vger.kernel.org>,
+        "open list:HIBERNATION (aka Software Suspend, aka swsusp)" 
+        <linux-pm@vger.kernel.org>
+Subject: RE: [RFC PATCH 0/2] x86: allow to notify host about guest entering
+ s2idle
+Thread-Topic: [RFC PATCH 0/2] x86: allow to notify host about guest entering
+ s2idle
+Thread-Index: AQHYkgDy4lzAjPGC9UKu5zAtzCiz0q1zB75w
+Date:   Thu, 7 Jul 2022 15:27:24 +0000
+Message-ID: <MN0PR12MB610107D8E99AC05C7884AEE6E2839@MN0PR12MB6101.namprd12.prod.outlook.com>
+References: <20220707125329.378277-1-jaz@semihalf.com>
+In-Reply-To: <20220707125329.378277-1-jaz@semihalf.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+msip_labels: MSIP_Label_d4243a53-6221-4f75-8154-e4b33a5707a1_Enabled=true;
+ MSIP_Label_d4243a53-6221-4f75-8154-e4b33a5707a1_SetDate=2022-07-07T15:27:21Z;
+ MSIP_Label_d4243a53-6221-4f75-8154-e4b33a5707a1_Method=Privileged;
+ MSIP_Label_d4243a53-6221-4f75-8154-e4b33a5707a1_Name=Public-AIP 2.0;
+ MSIP_Label_d4243a53-6221-4f75-8154-e4b33a5707a1_SiteId=3dd8961f-e488-4e60-8e11-a82d994e183d;
+ MSIP_Label_d4243a53-6221-4f75-8154-e4b33a5707a1_ActionId=5e06c8fa-9fa7-4eef-8d22-2ac09137181a;
+ MSIP_Label_d4243a53-6221-4f75-8154-e4b33a5707a1_ContentBits=1
+msip_label_d4243a53-6221-4f75-8154-e4b33a5707a1_enabled: true
+msip_label_d4243a53-6221-4f75-8154-e4b33a5707a1_setdate: 2022-07-07T15:27:23Z
+msip_label_d4243a53-6221-4f75-8154-e4b33a5707a1_method: Privileged
+msip_label_d4243a53-6221-4f75-8154-e4b33a5707a1_name: Public-AIP 2.0
+msip_label_d4243a53-6221-4f75-8154-e4b33a5707a1_siteid: 3dd8961f-e488-4e60-8e11-a82d994e183d
+msip_label_d4243a53-6221-4f75-8154-e4b33a5707a1_actionid: de8b1b8a-0829-411d-8f2b-c933272e8c83
+msip_label_d4243a53-6221-4f75-8154-e4b33a5707a1_contentbits: 0
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 342b7545-8776-403e-e510-08da602d3195
+x-ms-traffictypediagnostic: DM6PR12MB3483:EE_
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: MbkCYreULCjtP+eb8nktS3Nm4V4H7hwRH0bXEWA9g58wsymtdf+p4pfdptfw8XnhmD0/CNQcizMf4F6BG22p3HnHnMckT2CotBY70snCsqbhFhEoSawvzNpI6k7JjXS/HoKWt/C7LBjsImYTwGcR4ypIWOhcxNIc9S0Cne4N03ybCdbwF5cbBBLX9vRU3TBsYUyUJxRXDuL6RZNQ9jlcd+tjuQnh+ozGR7JjOkfBHOgYJUxMLCGNu4kuxkUMfwiWGB1TMU+SDF2g/pbTI7SrHIR7cJcAV9UUb0sdgFa8A6/2mzYGg9fp4cjIG8M+EltC0YH0yHr1tIJDN4YGGbHDu/OP4vRfUHalfC8cUDDmO5PqUhtwVDvHzFsQCS8UXROaywKzD8g6c7QJk/N6wmi+VG9REjSTDbT2k1Pv7zjmCrHxFoWeppc4f1qNmW13uezYuilfFxMTeIsKugX8SWaezNGG/125VbgKMMKbhvzkECeGdiyd909x/84EbdZOJLNyq74yGXg/u17gxzWvlrMcRTgVZPg+6Pb/Zs2kRDgFJ7zLSQBw4fI0U7rB8jehmkVuRcdCzP3swcjO28FH4QhWsS72gOaoldvIh7CJPYRCaauWHC9DNHS3jTzBWPL9MIZJaKUoXX/3sF6CWLseU+XYfjZ0N9STyEO4gAQch2wGV9KpfsSeBJER1ic8pgnvRz27xHhEc8H/HwnPjkOe+5yklUQp2FUasIAJOzt65/G0nVU7ayP3jiHh0vJ4rU3fSvPhBfNSpZKCm7jXZXVskK19QdnQSF+p05Axe/rqrLDXpjWp+j+u28vmhRJcA7DtknPkawFn6XmP7Y0/6ksnGkFRzWL+IkMGdiXiwhSGWJY0ZDXt5s2sOjcMJjE3Gim9Rgbz
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN0PR12MB6101.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(366004)(136003)(346002)(396003)(39860400002)(376002)(45080400002)(6506007)(966005)(9686003)(54906003)(110136005)(38100700002)(186003)(316002)(41300700001)(8676002)(66946007)(38070700005)(4326008)(76116006)(53546011)(26005)(8936002)(86362001)(122000001)(64756008)(55016003)(52536014)(83380400001)(7416002)(478600001)(71200400001)(2906002)(5660300002)(66446008)(66556008)(7696005)(33656002)(66476007);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?WUz86dADOHKj3ckIaSvg4QCKzvI8bD7h3kr5a+UqB2u4PqZNV8z7d5DKS9E+?=
+ =?us-ascii?Q?I/rnWSKWxmrQKhnHKmRRez0wgafw+EwzV2jRegfTNMwNRXP6/knwQYTqIC37?=
+ =?us-ascii?Q?Vtsrp86SRqlYssey3k2MaR4D5rdAau49nNA6ySBgBJRhLczGB7xgVweXxu7i?=
+ =?us-ascii?Q?uPdm4UxNKoEsaoonStcrvttZ7vnIAORcClc4njJWhVSJNjNZilQRTu8+kf3n?=
+ =?us-ascii?Q?aFLzz41SALnJY7O0Ivg7FuskOysi/ObwGNVRDHPauAD9FRDj4O0WvXnMRd/j?=
+ =?us-ascii?Q?8AFgbtG5LmjOB3GQMfa03+IqC4QdR8YKAB7FobpBND/E/l4qR++/pdkbNr3F?=
+ =?us-ascii?Q?5hHlkoONkfUkwJu3ETUioLvVLyCd2Y9ZeZ3TGW66+/dinQp2sq4ihRUpoM+J?=
+ =?us-ascii?Q?cLlCWu5OreIF7Dy7yq6XQ8tFoH/uxEr9kN10OThWxf3ITE9tOgpjrFsUv+5Z?=
+ =?us-ascii?Q?/OpLCLEJUoIC2oaAy/hvzcfBoQEMaJwFIQ64+szLC2us2vRo2bAS7TDphOpZ?=
+ =?us-ascii?Q?xEqiC29ERU3/F5ek08Zn7IQ+Oa/tOiQ/7CED5P2kh4fjbMsBbQN4p4eEKOjl?=
+ =?us-ascii?Q?AIV0X3nXcrHNd3gBT7aRJalCpeRPNFFrhnL34gFPskZ4mdwadVuU7Hwmq96D?=
+ =?us-ascii?Q?NVkfIc34W+pg7pUAYLlRRMX29eG4iuqzbmqj8rZZYB86vq4hrRUdx0LW59+0?=
+ =?us-ascii?Q?fEpGKJjHM7Wtq4YzHa9lBhbTnM6rzwG+rGVXY8qThDN+uYhepoxt1vwxHQQr?=
+ =?us-ascii?Q?NUDRl438dj54DjD0tv66RElEET1iBaPBvhuxnI5C6Ebgr3IVp+8KjyCC4CDz?=
+ =?us-ascii?Q?LA1IUE194B8X3RvOSoAW+oJW7ZbnRKFw4lC3O5NYbFtNWc5Ifqh5HIcXlJ7N?=
+ =?us-ascii?Q?DSbtNeUZhclBGVyHkTJYTkb3NNZy31tCe/thrwmwrwBMWMGxa0rjbCTIy5dR?=
+ =?us-ascii?Q?aenaVvrSRFbie6h0ECJrnNAX/hi8unWJa7BSuYdEru6GdHQKfqgC0MYWN6Ow?=
+ =?us-ascii?Q?mYlGTUyNYMMY5XAp/Fp9L508Tc6e1B6+ReeTi+MAaZ3OFL41uz9appA6ZQuM?=
+ =?us-ascii?Q?/YrcDjPUNAgOkJCd910zr+pg7jX0xKvt3WmoH8fN8PMQqmO4RlhB4wxK4tWx?=
+ =?us-ascii?Q?+qqLI5BpyGBmcG8PjLKeSosvmqxZh+TMhTmP7mscH5BUx8JoKPOEfZgk98Vc?=
+ =?us-ascii?Q?K8cZvhtfgy99sG5lCrFytIG2lPfM9ub39DCa9LjXvB3YC5o/9B7/RLivdvtj?=
+ =?us-ascii?Q?KL4R2X/gQ+raDscCB9P92Y9BjPC3kiRXDKhJbAymFR5MPY5onYpOElHZL2av?=
+ =?us-ascii?Q?ac/qs/DthCQ5k+ZknuxI8eVtDYstF/rwS3fC5W5Tq157DUvqudACcavzIjQ3?=
+ =?us-ascii?Q?ZuuQF87jPkNha3NT60cWOmt9IUDqyY12a/jTAcWRngDEoDWgtiodQbdLpcQL?=
+ =?us-ascii?Q?ODcCeLS/CNzaRS3YngR6acSht5Dihmny82BJhbUovL9QoGYNGGh1KOtoj04F?=
+ =?us-ascii?Q?QO/7BdKY7+y2vzVlNjvkzLdpZOfYCLcYUDt5MEoDg5RD4vqj+g+UdKTfbYmE?=
+ =?us-ascii?Q?srtJ0zOBLJGGokg85hw=3D?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220706223642.GC572635-robh@kernel.org>
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: MN0PR12MB6101.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 342b7545-8776-403e-e510-08da602d3195
+X-MS-Exchange-CrossTenant-originalarrivaltime: 07 Jul 2022 15:27:24.7266
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: 3qf+KEi9z7U15mZ535ATNjBqQnXhyxyjOq6W6mpoFxM+0Q+JL8itaOumJOUMWAi76M5daF2Wr2QvCSsvGK/lEQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR12MB3483
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -82,260 +147,106 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jul 06, 2022 at 04:36:42PM -0600, Rob Herring wrote:
-> On Fri, Jun 17, 2022 at 10:37:44PM +0300, Serge Semin wrote:
-> > On Tue, Jun 14, 2022 at 04:27:54PM -0600, Rob Herring wrote:
-> > > On Fri, Jun 10, 2022 at 11:17:55AM +0300, Serge Semin wrote:
-> > > > Synopsys AHCI SATA controller is mainly compatible with the generic AHCI
-> > > > SATA controller except a few peculiarities and the platform environment
-> > > > requirements. In particular it can have one or two reference clocks to
-> > > > feed up its AXI/AHB interface and SATA PHYs domain and at least one reset
-> > > > control for the application clock domain. In addition to that the DMA
-> > > > interface of each port can be tuned up to work with the predefined maximum
-> > > > data chunk size. Note unlike generic AHCI controller DWC AHCI can't have
-> > > > more than 8 ports. All of that is reflected in the new DWC AHCI SATA
-> > > > device DT binding.
-> > > > 
-> > > > Note the DWC AHCI SATA controller DT-schema has been created in a way so
-> > > > to be reused for the vendor-specific DT-schemas (see for example the
-> > > > "snps,dwc-ahci" compatible string binding). One of which we are about to
-> > > > introduce.
-> > > > 
-> > > > Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
-> > > > 
-> > > > ---
-> > > > 
-> > > > Changelog v2:
-> > > > - Replace min/max constraints of the snps,{tx,rx}-ts-max property with
-> > > >   enum [ 1, 2, 4, ..., 1024 ]. (@Rob)
-> > > > 
-> > > > Changelog v4:
-> > > > - Decrease the "additionalProperties" property identation otherwise it's
-> > > >   percieved as the node property instead of the key one. (@Rob)
-> > > > - Use the ahci-port properties definition from the AHCI common schema
-> > > >   in order to extend it with DWC AHCI SATA port properties. (@Rob)
-> > > > - Remove the Hannes' rb tag since the patch content has changed.
-> > > > ---
-> > > >  .../bindings/ata/ahci-platform.yaml           |   8 --
-> > > >  .../bindings/ata/snps,dwc-ahci.yaml           | 129 ++++++++++++++++++
-> > > >  2 files changed, 129 insertions(+), 8 deletions(-)
-> > > >  create mode 100644 Documentation/devicetree/bindings/ata/snps,dwc-ahci.yaml
-> > > > 
-> > > > diff --git a/Documentation/devicetree/bindings/ata/ahci-platform.yaml b/Documentation/devicetree/bindings/ata/ahci-platform.yaml
-> > > > index e19cf9828e68..7dc2a2e8f598 100644
-> > > > --- a/Documentation/devicetree/bindings/ata/ahci-platform.yaml
-> > > > +++ b/Documentation/devicetree/bindings/ata/ahci-platform.yaml
-> > > > @@ -30,8 +30,6 @@ select:
-> > > >            - marvell,armada-3700-ahci
-> > > >            - marvell,armada-8k-ahci
-> > > >            - marvell,berlin2q-ahci
-> > > > -          - snps,dwc-ahci
-> > > > -          - snps,spear-ahci
-> > > >    required:
-> > > >      - compatible
-> > > >  
-> > > > @@ -48,17 +46,11 @@ properties:
-> > > >                - marvell,berlin2-ahci
-> > > >                - marvell,berlin2q-ahci
-> > > >            - const: generic-ahci
-> > > > -      - items:
-> > > > -          - enum:
-> > > > -              - rockchip,rk3568-dwc-ahci
-> > > > -          - const: snps,dwc-ahci
-> > > >        - enum:
-> > > >            - cavium,octeon-7130-ahci
-> > > >            - hisilicon,hisi-ahci
-> > > >            - ibm,476gtr-ahci
-> > > >            - marvell,armada-3700-ahci
-> > > > -          - snps,dwc-ahci
-> > > > -          - snps,spear-ahci
-> > > >  
-> > > >    reg:
-> > > >      minItems: 1
-> > > > diff --git a/Documentation/devicetree/bindings/ata/snps,dwc-ahci.yaml b/Documentation/devicetree/bindings/ata/snps,dwc-ahci.yaml
-> > > > new file mode 100644
-> > > > index 000000000000..af78f6c9b857
-> > > > --- /dev/null
-> > > > +++ b/Documentation/devicetree/bindings/ata/snps,dwc-ahci.yaml
-> > > > @@ -0,0 +1,129 @@
-> > > > +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> > > > +%YAML 1.2
-> > > > +---
-> > > > +$id: http://devicetree.org/schemas/ata/snps,dwc-ahci.yaml#
-> > > > +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> > > > +
-> > > > +title: Synopsys DWC AHCI SATA controller
-> > > > +
-> > > > +maintainers:
-> > > > +  - Serge Semin <fancer.lancer@gmail.com>
-> > > > +
-> > > > +description:
-> > > > +  This document defines device tree bindings for the Synopsys DWC
-> > > > +  implementation of the AHCI SATA controller.
-> > > > +
-> > > > +allOf:
-> > > > +  - $ref: ahci-common.yaml#
-> > > > +
-> > > > +properties:
-> > > > +  compatible:
-> > > > +    oneOf:
-> > > > +      - description: Synopsys AHCI SATA-compatible devices
-> > > > +        contains:
-> > > > +          const: snps,dwc-ahci
-> > > > +      - description: SPEAr1340 AHCI SATA device
-> > > > +        const: snps,spear-ahci
-> > > > +      - description: Rockhip RK3568 ahci controller
-> > > > +        const: rockchip,rk3568-dwc-ahci
-> > > 
-> > 
-> > > This is never true because there is a fallback. We should keep what we 
-> > > had before.
-> > 
-> > Could you be more specific what you meant? I don't see
-> > "snps,spear-ahci" and "rockchip,rk3568-dwc-ahci" used with the fallback
-> > string so modification is correct in that case.
-> 
+[Public]
 
-> Spear does not, just rockchip:
-> 
-> arch/arm64/boot/dts/rockchip/rk3568.dtsi:               compatible = "rockchip,rk3568-dwc-ahci", "snps,dwc-ahci";
-> arch/arm64/boot/dts/rockchip/rk356x.dtsi:               compatible = "rockchip,rk3568-dwc-ahci", "snps,dwc-ahci";
-> arch/arm64/boot/dts/rockchip/rk356x.dtsi:               compatible = "rockchip,rk3568-dwc-ahci", "snps,dwc-ahci";
-> 
-> So the 3rd entry is never true.
 
-Then I'll have to split the schema up into two bindings:
-1. snps,dwc-ahci-common.yaml: generic DW SATA AHCI properties and no "compatible"
-property constraint since you said fallback was useless.
-2. snps,dwc-ahci.yaml: generic DW SATA AHCI DT-schema with
-competibles: ("snps,dwc-ahci"), ("snps,spear-ahci"),
-("rockchip,rk3568-dwc-ahci","snps,dwc-ahci").
 
-Are you ok with this?
+> -----Original Message-----
+> From: Grzegorz Jaszczyk <jaz@semihalf.com>
+> Sent: Thursday, July 7, 2022 07:53
+> To: linux-kernel@vger.kernel.org
+> Cc: jaz@semihalf.com; dmy@semihalf.com; Limonciello, Mario
+> <Mario.Limonciello@amd.com>; seanjc@google.com; dbehr@google.com;
+> upstream@semihalf.com; zide.chen@intel.corp-partner.google.com; Rafael J.
+> Wysocki <rafael@kernel.org>; Len Brown <lenb@kernel.org>; Hans de Goede
+> <hdegoede@redhat.com>; Mark Gross <markgross@kernel.org>; Pavel Machek
+> <pavel@ucw.cz>; Mika Westerberg <mika.westerberg@linux.intel.com>; Sachi
+> King <nakato@nakato.io>; open list:ACPI <linux-acpi@vger.kernel.org>; ope=
+n
+> list:X86 PLATFORM DRIVERS <platform-driver-x86@vger.kernel.org>; open
+> list:HIBERNATION (aka Software Suspend, aka swsusp) <linux-
+> pm@vger.kernel.org>
+> Subject: [RFC PATCH 0/2] x86: allow to notify host about guest entering s=
+2idle
+>=20
+> According to the mailing list discussion [1] about the preferred approach
+> for notifying hypervisor/VMM about guest entering s2idle state this RFC w=
+as
+> implemented.
+>=20
+> Instead of original hypercall based approach, which involves KVM change [=
+2]
+> and makes it hypervisor specific, implement different mechanism, which
+> takes advantage of MMIO/PIO trapping and makes it hypervisor independent.
+>=20
+> Patch #1 extends S2Idle ops by new notify handler which will be invoked a=
+s
+> a very last command before system actually enters S2Idle states. It also
+> allows to register and use driver specific notification hook which is use=
+d
+> in patch #2.
+>=20
+> Patch #2 introduces new driver for virtual PMC, which registers
+> acpi_s2idle_dev_ops's notify handler. Its implementation is based on an
+> ACPI _DSM evaluation, which in turn can perform MMIO access and allow to
+> trap and therefore notify the VMM about guest entering S2Idle state.
+>=20
+> Please see individual patches and commit logs for more verbose descriptio=
+n.
+>=20
+> This patchset is marked as RFC since patch #2 implements driver for non
+> existing device "HYPE0001", which ACPI ID was not registered yet.
+> Furthermore the required registration process [3] will not be started
+> before getting positive feedback about this patchset.
+>=20
+> [1]
+> https://nam11.safelinks.protection.outlook.com/?url=3Dhttps%3A%2F%2Fpatch=
+w
+> ork.kernel.org%2Fproject%2Flinux-pm%2Fpatch%2F20220609110337.1238762-
+> 2-
+> jaz%40semihalf.com%2F&amp;data=3D05%7C01%7Cmario.limonciello%40amd.co
+> m%7C514a545cf9aa4a7b6d9508da6018138b%7C3dd8961fe4884e608e11a82d9
+> 94e183d%7C0%7C0%7C637927953769026163%7CUnknown%7CTWFpbGZsb3d8
+> eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%
+> 7C3000%7C%7C%7C&amp;sdata=3DRIDiHUNpHUsBYyK3pwGND%2BWJoioXZNCKt
+> mML2%2F1LAxs%3D&amp;reserved=3D0
+> [2]
+> https://nam11.safelinks.protection.outlook.com/?url=3Dhttps%3A%2F%2Fpatch=
+w
+> ork.kernel.org%2Fproject%2Flinux-pm%2Fpatch%2F20220609110337.1238762-
+> 3-
+> jaz%40semihalf.com%2F&amp;data=3D05%7C01%7Cmario.limonciello%40amd.co
+> m%7C514a545cf9aa4a7b6d9508da6018138b%7C3dd8961fe4884e608e11a82d9
+> 94e183d%7C0%7C0%7C637927953769026163%7CUnknown%7CTWFpbGZsb3d8
+> eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%
+> 7C3000%7C%7C%7C&amp;sdata=3DBqykAwWzO%2BfeGPSsAqTmX13O8F0Vvm3G
+> PL56EpmdSJ8%3D&amp;reserved=3D0
+> [3]
+> https://nam11.safelinks.protection.outlook.com/?url=3Dhttps%3A%2F%2Fuefi.=
+org
+> %2FPNP_ACPI_Registry&amp;data=3D05%7C01%7Cmario.limonciello%40amd.co
+> m%7C514a545cf9aa4a7b6d9508da6018138b%7C3dd8961fe4884e608e11a82d9
+> 94e183d%7C0%7C0%7C637927953769026163%7CUnknown%7CTWFpbGZsb3d8
+> eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%
+> 7C3000%7C%7C%7C&amp;sdata=3DQXK52zFXJGEBm6xIv6IFeF7Xxgz4Yp5UmgLSQ
+> diXtlI%3D&amp;reserved=3D0
+>=20
+> Grzegorz Jaszczyk (2):
+>   suspend: extend S2Idle ops by new notify handler
+>   platform/x86: Add virtual PMC driver used for S2Idle
+>=20
+>  drivers/acpi/x86/s2idle.c       | 11 +++++
+>  drivers/platform/x86/Kconfig    |  7 ++++
+>  drivers/platform/x86/Makefile   |  1 +
+>  drivers/platform/x86/virt_pmc.c | 73 +++++++++++++++++++++++++++++++++
+>  include/linux/acpi.h            |  1 +
+>  include/linux/suspend.h         |  1 +
+>  kernel/power/suspend.c          |  4 ++
+>  7 files changed, 98 insertions(+)
+>  create mode 100644 drivers/platform/x86/virt_pmc.c
+>=20
+> --
+> 2.37.0.rc0.161.g10f37bed90-goog
 
-BTW if we had the fallback required the splitting up couldn't have
-been needed.
-
-> 
-> > My idea was to have the compatible strings with the required generic
-> > fallback "snps,dwc-ahci" for all new devices thus identifying the
-> > controller IP-core origin. But later you said "The generic IP block
-> > fallbacks have proven to be useless." I do agree that functionally it
-> > isn't that often used, but in some cases it can be handy for instance
-> > to implement quirks in the generic code or use the fallback as an
-> > additional info regarding the IP-core origin/version. So if I were you
-> > I wouldn't be that strict about dropping the generic IP-core fallback
-> > identifier. It's much easier to have it specified from the very
-> > beginning than adding it after it has been declared as not required.
-> 
-> I wish they were useful, but experience has shown they are not.
-
-So what to do with the generic fallback compatibles then? Please
-answer to the next questions so I would correct all my currently
-stashed patches in accordance with it.
-
-1) Do you want all the new DT-binding schemas refusing to have the
-fallback compatibles except for the nodes which bindings have already
-been defined that way?
-
-2) What if a device IP-core has some versioning, but it's either
-not auto-detectable at runtime or can be auto-detected but starting
-from some IP-core version? Do we need it being specified in addition
-to the vendor-specific compatible string?
-
-3) The same as 2), but shall it have a generic version-less fallback
-compatible string too?
-
-4) The same as 2), but what if it concerns a device which driver
-relies on the versioning?
-
-5) The same as 2), but what if it concerns the device which currently
-doesn't have a driver relying on the IP-core version?
-
-6) What if we don't have the generic fallback compatible string
-required, but at some point a kernel would need it to
-implement a version/IP-core-specific quirk? If we had the generic
-fallback specified in dts the older systems would have been supported
-out-of-box, otherwise the firmware update would also needed.
-
-IMO having the IP-core version + generic compatibles give many
-benefits and it's much easier to have them required from the very
-beginning instead of adding afterwards when then a need arises.
-
--Sergey
-
-> 
-> > > > +  reg:
-> > > > +    maxItems: 1
-> > > > +
-> > > > +  interrupts:
-> > > > +    maxItems: 1
-> > > > +
-> > > > +  clocks:
-> > > > +    description:
-> > > > +      Basic DWC AHCI SATA clock sources like application AXI/AHB BIU clock
-> > > > +      and embedded PHYs reference clock together with vendor-specific set
-> > > > +      of clocks.
-> > > > +    minItems: 1
-> > > > +    maxItems: 4
-> > > > +
-> > > > +  clock-names:
-> > > > +    contains:
-> > > > +      anyOf:
-> > > > +        - description: Application AXI/AHB BIU clock source
-> > > > +          enum:
-> > > > +            - aclk
-> > > > +            - sata
-> > > > +        - description: SATA Ports reference clock
-> > > > +          enum:
-> > > > +            - ref
-> > > > +            - sata_ref
-> > > > +
-> > > > +  resets:
-> > > > +    description:
-> > > > +      At least basic core and application clock domains reset is normally
-> > > > +      supported by the DWC AHCI SATA controller. Some platform specific
-> > > > +      clocks can be also specified though.
-> > > 
-> > 
-> > > s/clocks/resets/ ?
-> > 
-> > Right, but only in the reference to "platform specific clocks" -> "... resets".
-> > 
-> > > 
-> > > This allows any number of resets which isn't great. I think this schema 
-> > > should just be the 'simple' cases where there's only 1 reset and 1 
-> > > clock (or how many the DWC block actually has if you have that info). 
-> > > More complicated cases get there own schema.
-> > 
-> > DWC SATA reference manual claims there can be resets implemented to
-> > each clock domain.
-> > 1) PM-clk <- PM-rst - PM keep-alive clock/reset.
-> > 2) aclk/hclk <- aresetn/hresetn - AXI/AHB clock domain/reset.
-> > 3) rbc*_clk <- rbc*_rst - PHY Receive Clock domain/reset. (Up to
-> > number of ports <= 8.)
-> > 4) asic*_clk <- asic*_rst - PHY Transmit Clock domain/reset. (Up to
-> > number of ports <= 8.)
-> > 5) rxoob*_clk <- rxoob*_rst - RxOOB Detection Clock domain/reset. (Up
-> > to number of ports <= 8.)
-> > 
-> > So to speak the IP-core can be equipped with up to 26 clocks and
-> > resets. Should we be more strict we would have needed to define the
-> > properties with all the names above and permit up to 26 clocks/resets
-> > items. (Do you want it to be done?). In our case for instance there
-> > is "aclk" and a single common "ref" clock for all 3, 4 and 5 domain
-> > (clock 1 is missing).
-> 
-
-> I imagine most implementations just tie most clocks together.
-> 
-> I guess there's not going to be much new SATA h/w, so perhaps fine 
-> as-is.
-
-Do you mean to keep the "resets" property with no num-of-items constraints
-then?
-
--Sergey
-
-> 
-> Rob
+Thanks, you matched the implementation I was expecting.
+This looks fine by me.

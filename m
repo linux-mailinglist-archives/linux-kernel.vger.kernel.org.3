@@ -2,55 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CA039569B3E
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 09:03:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 91E6F569B34
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 09:03:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230419AbiGGHAo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Jul 2022 03:00:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54368 "EHLO
+        id S235082AbiGGHBR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Jul 2022 03:01:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54244 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235048AbiGGG7o (ORCPT
+        with ESMTP id S235153AbiGGHAj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Jul 2022 02:59:44 -0400
-Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC0A6DFE1
-        for <linux-kernel@vger.kernel.org>; Wed,  6 Jul 2022 23:59:24 -0700 (PDT)
-Received: by mail-lf1-x130.google.com with SMTP id e20so800737lfq.11
-        for <linux-kernel@vger.kernel.org>; Wed, 06 Jul 2022 23:59:24 -0700 (PDT)
+        Thu, 7 Jul 2022 03:00:39 -0400
+Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F88331DE6
+        for <linux-kernel@vger.kernel.org>; Wed,  6 Jul 2022 23:59:52 -0700 (PDT)
+Received: by mail-lf1-x134.google.com with SMTP id t25so29540667lfg.7
+        for <linux-kernel@vger.kernel.org>; Wed, 06 Jul 2022 23:59:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=message-id:date:mime-version:user-agent:subject:content-language:to
          :references:from:in-reply-to:content-transfer-encoding;
-        bh=iD4mGg+qM8HG6/1MdfbFXBy3mtObyupuyZ17+Do+v7o=;
-        b=ONpy15sjpZhrdm7lyMQyfqEirPUf4QXweXCqJDoF3TmiXGQBcXclsdsNCXlcl8/U+7
-         DHpIipWoFQ2JGNOTVXBFjUvRiXX+brHFVQw8VAqi+cqWUBrcnRSHcuuubuR7WylgjEUT
-         W06VefkS0KRN8y7Xd5+RYq7YlxaY6rVJFYxsccYJVMzwiREVouKmUB0Vz3SiNdExmagD
-         7LpZ1RJHWjIPqKx0E1eONMR9prhM8FrLTy9c7lR9slmEaI6LhQNJIo67MldHHf87cekH
-         4rOck3CrGYOAexdyBOYaJspX7yERoJnZxnOurumSYlJtITEDcY6heba9W0bFQOI0Vt3F
-         7wcQ==
+        bh=uudX0qE0EodfyOAtpNxIObBg7BD+vU4kR+vip3L6w9k=;
+        b=XsaW2j2vWBNrkQD0Fkp2Ibp4T8yUX5Vd0jRIPq7pCGZnJUMW/1yeRbtYaC/4RWKbkL
+         fowDz3z3jCu3YlbuSB5fRE8RglF22BzYSMoUWun72K9H9J1hmkk8BDKj/zODSARvMPZ2
+         wrTK/RMs3N0l0XFlAbYzNbW+qreJjh2u4vLBg6qPtbrakn0mKck6vvZoWO6k6tOO1bly
+         51suRCchE8Xzi05t3h8NwHY+XoK/76sJXG0iP+ZQZDiJn56PQFIXvoheT97e34vb+huE
+         5wc8fpGFr2NOf+g0cY+MdlEewqLNrXysmhaMw1+UQ/VoybbIHj8mg3ADwJyxdx+Vs5xT
+         lq5Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
          :content-language:to:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=iD4mGg+qM8HG6/1MdfbFXBy3mtObyupuyZ17+Do+v7o=;
-        b=zSreeJoN8d93dol0vFW5Z1Oar7tWX1nIajMRatT09hdi9wrn1vRcR0OZigI0naY+55
-         ikE616in1XDot3zMFzse5WO5xwCZ0GQsDOGaLBCg/4xY21zNZoLkeyWj3wovq0Gi+fAH
-         KWBVKKOU8wK4eeF2ZLb7EVeUMChEIKVWQxWGs0ICotkx/zshFwlsQ3exiaE4H+CTK6Ao
-         5txQqrwiC4rY2E2/BUCkSGyT241jMrlOUTbFnKYnE+DP6fV7W2SNK38+ZQEta6/yGtnC
-         HyIX2E128sSeFtLRAadxOPwxdv8m3Rs2g4vec4d1mCIbe6sttQFb+u4Ebj3F0LorZclS
-         ozMw==
-X-Gm-Message-State: AJIora+3ASxtbMLcxn/QIWE6HR112yw6umdth717IrPkj5RZIJK/GIkn
-        /Po6m7vIRafU0R1xaVOKkfFmLQ==
-X-Google-Smtp-Source: AGRyM1tMrmU5392DvadV6XBmRrqfiY+I0d31ph62y1mTwXDIkZJ91YrBcx12opHaqwcWL7mnx0+fZQ==
-X-Received: by 2002:a05:6512:3146:b0:482:e8c8:1a7f with SMTP id s6-20020a056512314600b00482e8c81a7fmr9900182lfi.62.1657177163289;
-        Wed, 06 Jul 2022 23:59:23 -0700 (PDT)
+        bh=uudX0qE0EodfyOAtpNxIObBg7BD+vU4kR+vip3L6w9k=;
+        b=HF27mN2ciVNrQjOnu0aBaGsBizd2WT2Tm+dCEIyyEI8w0BBxQGPfzpC8JOLY+SwlXu
+         ftNz7721+Tfw2EC2k41narISxc0PAMkm4sgTGsnyNvcMcq/f8wUinosJ6Uvmtnsx3DqG
+         zMP+v79Gdhr/0+zClTYsgGT7TJS17Q5PcCSQrfkl0+eBUG3tMt84r5fY6JtpjGbdjpJ0
+         zSHyleF6kwxJFrPEV4Xkprf6hkrpRyCA1IIQXrqKv2ZJvQGNddklY7bk4dg3Ekq7Hfql
+         YIRkXxybV8kYY7CJH298+5ZaevM6DAdrHlCr/0PXpUEi4iznkpD5NKkZVltvKsf4iB9W
+         u46A==
+X-Gm-Message-State: AJIora+ZXraKn81v/mHrAf17qBwd0k9vBP1dY5c1+psyeGDLzZnDYZ2b
+        3B4+/rKym2shr79Zze9XFnkZDw==
+X-Google-Smtp-Source: AGRyM1uDcC2/uLeUv+nYCg4YXUX0JLtGsAJ2rhsItJBnSNg3ojhNi98v7mFkxoLbyJVzOpFG4NQ1lg==
+X-Received: by 2002:a05:6512:1303:b0:482:d0df:280f with SMTP id x3-20020a056512130300b00482d0df280fmr10006946lfu.14.1657177191963;
+        Wed, 06 Jul 2022 23:59:51 -0700 (PDT)
 Received: from [192.168.1.52] ([84.20.121.239])
-        by smtp.gmail.com with ESMTPSA id bp23-20020a056512159700b0047f65b60323sm6681329lfb.3.2022.07.06.23.59.21
+        by smtp.gmail.com with ESMTPSA id v27-20020ac258fb000000b00478f739f1fdsm1047602lfo.103.2022.07.06.23.59.50
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 06 Jul 2022 23:59:22 -0700 (PDT)
-Message-ID: <379291a5-c48d-7d78-fdec-9b67d6b71fd9@linaro.org>
-Date:   Thu, 7 Jul 2022 08:59:21 +0200
+        Wed, 06 Jul 2022 23:59:51 -0700 (PDT)
+Message-ID: <98f7c329-b4b8-f7d6-33b4-b8471f23d174@linaro.org>
+Date:   Thu, 7 Jul 2022 08:59:50 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.11.0
@@ -85,12 +85,8 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 On 07/07/2022 03:30, Christian Marangi wrote:
 > Add missing smem compatible and hwlocks binding for ipq8064 dtsi
-> smem node.
-> 
-> Signed-off-by: Christian Marangi <ansuelsmth@gmail.com>
 
-
-Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+s/binding/phandle/
 
 
 Best regards,

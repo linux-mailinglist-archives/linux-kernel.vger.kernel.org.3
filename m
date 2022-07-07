@@ -2,93 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9AF7D56A117
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 13:34:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 824F856A10D
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 13:32:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235428AbiGGLeD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Jul 2022 07:34:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42646 "EHLO
+        id S235292AbiGGLcx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Jul 2022 07:32:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41256 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235385AbiGGLdy (ORCPT
+        with ESMTP id S235038AbiGGLct (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Jul 2022 07:33:54 -0400
-Received: from mta-64-227.siemens.flowmailer.net (mta-64-227.siemens.flowmailer.net [185.136.64.227])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE54A30564
-        for <linux-kernel@vger.kernel.org>; Thu,  7 Jul 2022 04:33:52 -0700 (PDT)
-Received: by mta-64-227.siemens.flowmailer.net with ESMTPSA id 20220707113350cce0cc7fefb8b37d1a
-        for <linux-kernel@vger.kernel.org>;
-        Thu, 07 Jul 2022 13:33:51 +0200
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; s=fm1;
- d=siemens.com; i=daniel.starke@siemens.com;
- h=Date:From:Subject:To:Message-ID:MIME-Version:Content-Type:Content-Transfer-Encoding:Cc:References:In-Reply-To;
- bh=dmsPVO/ob5l26R3xUoVk7IKDPFVjQUBwffjZsB2FjME=;
- b=fuObogHGxaCf7YeIywwKa5Xb2x6mvl0/hoF9lr59apW4GkCU+2bVT63otI8wa2OumikRrI
- zgNJqEPWYJSghpEz4UjJZ0dY2Y4HEe3XwwQOjDwzUgiAZL66ybOUyuSZguSPwwO0G4AczqyE
- 7gFuuqdAlJPUCvtv8sOobgf2hYafQ=;
-From:   "D. Starke" <daniel.starke@siemens.com>
-To:     linux-serial@vger.kernel.org, gregkh@linuxfoundation.org,
-        jirislaby@kernel.org
-Cc:     linux-kernel@vger.kernel.org,
-        Daniel Starke <daniel.starke@siemens.com>
-Subject: [PATCH v2 4/4] tty: n_gsm: fix missing corner cases in gsmld_poll()
-Date:   Thu,  7 Jul 2022 13:32:23 +0200
-Message-Id: <20220707113223.3685-4-daniel.starke@siemens.com>
-In-Reply-To: <20220707113223.3685-1-daniel.starke@siemens.com>
-References: <20220707113223.3685-1-daniel.starke@siemens.com>
+        Thu, 7 Jul 2022 07:32:49 -0400
+Received: from out30-43.freemail.mail.aliyun.com (out30-43.freemail.mail.aliyun.com [115.124.30.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C18CD2FFF2;
+        Thu,  7 Jul 2022 04:32:47 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R151e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046059;MF=baolin.wang@linux.alibaba.com;NM=1;PH=DS;RN=33;SR=0;TI=SMTPD_---0VIdIQWG_1657193558;
+Received: from 30.97.48.62(mailfrom:baolin.wang@linux.alibaba.com fp:SMTPD_---0VIdIQWG_1657193558)
+          by smtp.aliyun-inc.com;
+          Thu, 07 Jul 2022 19:32:40 +0800
+Message-ID: <ef376131-bf5f-7e5b-ea1b-1e8f64a6d060@linux.alibaba.com>
+Date:   Thu, 7 Jul 2022 19:32:44 +0800
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Flowmailer-Platform: Siemens
-Feedback-ID: 519:519-314044:519-21489:flowmailer
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH 0/3] Add PUD and kernel PTE level pagetable account
+To:     Dave Hansen <dave.hansen@intel.com>, akpm@linux-foundation.org
+Cc:     rppt@linux.ibm.com, willy@infradead.org, will@kernel.org,
+        aneesh.kumar@linux.ibm.com, npiggin@gmail.com,
+        peterz@infradead.org, catalin.marinas@arm.com,
+        chenhuacai@kernel.org, kernel@xen0n.name,
+        tsbogend@alpha.franken.de, dave.hansen@linux.intel.com,
+        luto@kernel.org, tglx@linutronix.de, mingo@redhat.com,
+        bp@alien8.de, hpa@zytor.com, arnd@arndb.de, guoren@kernel.org,
+        monstr@monstr.eu, jonas@southpole.se,
+        stefan.kristiansson@saunalahti.fi, shorne@gmail.com,
+        x86@kernel.org, linux-arch@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, loongarch@lists.linux.dev,
+        linux-mips@vger.kernel.org, linux-csky@vger.kernel.org,
+        openrisc@lists.librecores.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+References: <cover.1657096412.git.baolin.wang@linux.alibaba.com>
+ <d2d58cc2-7e6d-aa2d-3096-a500ce321494@intel.com>
+From:   Baolin Wang <baolin.wang@linux.alibaba.com>
+In-Reply-To: <d2d58cc2-7e6d-aa2d-3096-a500ce321494@intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Daniel Starke <daniel.starke@siemens.com>
 
-gsmld_poll() currently fails to handle the following corner cases correctly:
-- remote party closed the associated tty
 
-Add the missing checks and map those to EPOLLHUP.
-Reorder the checks to group them by their reaction.
+On 7/6/2022 11:48 PM, Dave Hansen wrote:
+> On 7/6/22 01:59, Baolin Wang wrote:
+>> Now we will miss to account the PUD level pagetable and kernel PTE level
+>> pagetable, as well as missing to set the PG_table flags for these pagetable
+>> pages, which will get an inaccurate pagetable accounting, and miss
+>> PageTable() validation in some cases. So this patch set introduces new
+>> helpers to help to account PUD and kernel PTE pagetable pages.
+> 
+> Could you explain the motivation for this series a bit more?  Is there a
+> real-world problem that this fixes?
 
-Fixes: e1eaea46bb40 ("tty: n_gsm line discipline")
-Signed-off-by: Daniel Starke <daniel.starke@siemens.com>
----
- drivers/tty/n_gsm.c | 7 +++++--
- 1 file changed, 5 insertions(+), 2 deletions(-)
-
-Check for valid pointer in tty->disc_data has been removed compared to v1.
-
-Link: https://lore.kernel.org/all/17759c4b-5858-12bb-4beb-c4a1d58c89ae@kernel.org/
-
-diff --git a/drivers/tty/n_gsm.c b/drivers/tty/n_gsm.c
-index 51447ccccbab..caa5c14ed57f 100644
---- a/drivers/tty/n_gsm.c
-+++ b/drivers/tty/n_gsm.c
-@@ -3053,12 +3053,15 @@ static __poll_t gsmld_poll(struct tty_struct *tty, struct file *file,
- 
- 	poll_wait(file, &tty->read_wait, wait);
- 	poll_wait(file, &tty->write_wait, wait);
-+
-+	if (gsm->dead)
-+		mask |= EPOLLHUP;
- 	if (tty_hung_up_p(file))
- 		mask |= EPOLLHUP;
-+	if (test_bit(TTY_OTHER_CLOSED, &tty->flags))
-+		mask |= EPOLLHUP;
- 	if (!tty_is_writelocked(tty) && tty_write_room(tty) > 0)
- 		mask |= EPOLLOUT | EPOLLWRNORM;
--	if (gsm->dead)
--		mask |= EPOLLHUP;
- 	return mask;
- }
- 
--- 
-2.34.1
-
+Not fix real problem. The motivation is that making the pagetable 
+accounting more accurate, which helps us to analyse the consumption of 
+the pagetable pages in some cases, and maybe help to do some empty 
+pagetable reclaiming in future.

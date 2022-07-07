@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B9FDE56A2DF
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 14:53:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A29056A2E1
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 14:53:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235876AbiGGMxh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Jul 2022 08:53:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46286 "EHLO
+        id S235926AbiGGMxm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Jul 2022 08:53:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46848 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235517AbiGGMxP (ORCPT
+        with ESMTP id S235761AbiGGMxT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Jul 2022 08:53:15 -0400
-Received: from mail-pg1-x52a.google.com (mail-pg1-x52a.google.com [IPv6:2607:f8b0:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5029A2CC97;
-        Thu,  7 Jul 2022 05:53:11 -0700 (PDT)
-Received: by mail-pg1-x52a.google.com with SMTP id 73so2926575pgb.10;
-        Thu, 07 Jul 2022 05:53:11 -0700 (PDT)
+        Thu, 7 Jul 2022 08:53:19 -0400
+Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7AC0B2CDFF;
+        Thu,  7 Jul 2022 05:53:18 -0700 (PDT)
+Received: by mail-pf1-x429.google.com with SMTP id y141so19172522pfb.7;
+        Thu, 07 Jul 2022 05:53:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=OkXjFR+NYH0OoqXK6diEul5vRaNtuMp4IaWe2/sFDXI=;
-        b=nuqQ+wJ5o95y7jGGqpjCELTfPjPUHgi7E7FTZs0gaGOCcqFLscKyTXuknhl2r0Tr8i
-         GOKY+oU6XKhO8aGgFKaqc5b+9pKcLFKJ7RiiUd+QY6xRysPA/boO7vrt9gotnDM1k9VM
-         zIFmA8SksMiiE9HHckgX6o3SgQiX8ApGKfCA6UHTrz2tEszAPlMUEjm835NOJBg9WeDe
-         CzWBlbfIOMzbr9uTof81U+ft8J7xcwV9GCdQefl3HC72cHN8J4/cN0Wni9gPCz5OCWIl
-         olZjBjGuiap0t573baIhDwmeLQibM5GcnlMYqdobD9no36jFTc8y4Ce7Val9hIgEyvo+
-         VDXA==
+        bh=KohxSBlyb2gPjZjQOuscJE9srXX9sKJcN9WDxnjJeNE=;
+        b=Z/4G+j0uofz5mjT+m2wBBS33jHt4uCc2grw6vajzycA8dAivB2I1E1uYK99jJIfo3O
+         +QVMHgjhpLcxM5rK9KyJLhGd/2RG7WG+m+aIuZ3X5Dg4EPoe2WAdSN9T1oNWhnIRZCdt
+         ZtoFweBV2b0oTa0dw6ht0oMasl/SwPv6uthPPSyM3N0RJ0saHZLDz4W90bArUtgevKYX
+         m4cfQNFxf1WMKIGk+78eEF2P//QSs/IM5W/9lyROXPgyN8uTHDD7SQNwWbsVEYeSgcNq
+         xvvHmPTuceHpBwtGmhSs2cQ4RtAGjDNqkq+j6cmwe55l10OUsxpR+oO0AVJ7Iz/bxSVX
+         mLOg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=OkXjFR+NYH0OoqXK6diEul5vRaNtuMp4IaWe2/sFDXI=;
-        b=xDfBu1WYtW4bi2uZAltdY/BMqrDR4eg/nOLObgDYTu33ryFzHLCRFtWf7scU5nDNca
-         p3as1bh4uj790tra1qkEXrEev/dAnyx1LL0SXzXVZHuAHdplrkylm59iYnsfsGf/WhzC
-         tL942duvc+D5Uy6DI/SaT8xrPhEZN4NP1YXWu3CW46doElDGoRGUvDUry7Khhkjpxsce
-         sLrkMg+R81tdIskW4QV5Q/mfzC7Hj44SKItXcCnmhyGqUb0dRJKwk7NZzsRrKnrCGuBN
-         M7uNfIJXHFIcK7mY+O2MP3MwaauU3POPhOLaOJFyQWgUUOSzvtANA1+m24Mgp4/qBg/g
-         jzJA==
-X-Gm-Message-State: AJIora9TLtiMH10hzo4Bes8wOrbgNEugaj1iv06v03Tw39UrqoRzHxtA
-        GmUOvroDoXbXnCZ3EVS+uB4=
-X-Google-Smtp-Source: AGRyM1v1964MD/IIcSfx/8Y5slyYPx4KMBqa/W04tHsO/yrwZoWnhZV8fVssXI0+aMYp8g1qivWNHw==
-X-Received: by 2002:a63:f415:0:b0:408:808b:238f with SMTP id g21-20020a63f415000000b00408808b238fmr38849185pgi.469.1657198390801;
-        Thu, 07 Jul 2022 05:53:10 -0700 (PDT)
+        bh=KohxSBlyb2gPjZjQOuscJE9srXX9sKJcN9WDxnjJeNE=;
+        b=cvbqJSSfSsjGidSP1hJphxXmVRX340kNxEWxRqzjeg7YoQ08zd6PJrntmaWDlCw969
+         Xjsev7bFQu9Dm4mTrwmck1VyeAFRhjdOlbdjywDkqpHrOOe0A3QGALKMrENcjehu+/1P
+         h75tJ146a9uAwmOHRhGMRj+P95VJ3n/3KpHVUqc/+K1W1UwiCkoRURzKipJM40vhQZpG
+         Kox97XlnvI4zUh9aWbA/8MwtkDIPm1R1eH1tz9JWP8fPTI53j6ao2UxLkczlPoDpvOD6
+         sN2PYw9oK3kH/aahZSSx5vJ/Kedonehn+XrnZAdKmP/3X2kwCzruBgPoBKqYpyZBQ0LT
+         EqVg==
+X-Gm-Message-State: AJIora9H8OvWdp6Ms1WJrgdR9EUk1yjlBCiT+8f3tmSI1ohXsijvrdlU
+        H0wRmUuF309DQjtw1qqqhJE=
+X-Google-Smtp-Source: AGRyM1tvGgyyQudlC4LStAUoiLkQLMqA8RlR3btbebQT65iLnPCQfEEP4u4looKoNOsGSkmoEtUiHg==
+X-Received: by 2002:a17:902:e809:b0:16a:22dc:d23a with SMTP id u9-20020a170902e80900b0016a22dcd23amr53568912plg.119.1657198397970;
+        Thu, 07 Jul 2022 05:53:17 -0700 (PDT)
 Received: from localhost.localdomain (47-72-206-164.dsl.dyn.ihug.co.nz. [47.72.206.164])
-        by smtp.gmail.com with ESMTPSA id a11-20020a1709027e4b00b0016a3b5a46f0sm27907831pln.241.2022.07.07.05.53.03
+        by smtp.gmail.com with ESMTPSA id a11-20020a1709027e4b00b0016a3b5a46f0sm27907831pln.241.2022.07.07.05.53.11
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 07 Jul 2022 05:53:10 -0700 (PDT)
+        Thu, 07 Jul 2022 05:53:17 -0700 (PDT)
 From:   Barry Song <21cnbao@gmail.com>
 To:     akpm@linux-foundation.org, linux-mm@kvack.org,
         linux-arm-kernel@lists.infradead.org, x86@kernel.org,
@@ -58,9 +58,9 @@ Cc:     corbet@lwn.net, arnd@arndb.de, linux-kernel@vger.kernel.org,
         guojian@oppo.com, realmz6@gmail.com,
         Barry Song <v-songbaohua@oppo.com>,
         Nadav Amit <namit@vmware.com>, Mel Gorman <mgorman@suse.de>
-Subject: [PATCH 1/4] Revert "Documentation/features: mark BATCHED_UNMAP_TLB_FLUSH doesn't apply to ARM64"
-Date:   Fri,  8 Jul 2022 00:52:39 +1200
-Message-Id: <20220707125242.425242-2-21cnbao@gmail.com>
+Subject: [PATCH 2/4] mm: rmap: Allow platforms without mm_cpumask to defer TLB flush
+Date:   Fri,  8 Jul 2022 00:52:40 +1200
+Message-Id: <20220707125242.425242-3-21cnbao@gmail.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220707125242.425242-1-21cnbao@gmail.com>
 References: <20220707125242.425242-1-21cnbao@gmail.com>
@@ -78,51 +78,38 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Barry Song <v-songbaohua@oppo.com>
 
-This reverts commit 6bfef171d0d74cb050112e0e49feb20bfddf7f42.
+Platforms like ARM64 have hareware TLB shootdown broadcast. They
+don't maintain mm_cpumask and they just send tlbi and related
+sync instructions for TLB flush.
+So if mm_cpumask is empty, we also allow deferred TLB flush
 
-I was wrong to say batched tlb flush didn't apply to ARM. The fact
-is though ARM64 has hardware TLB flush, it is not free and could
-be quite expensive.
-
-We still have a good chance to enable batched and deferred TLB flush
-on ARM64 for memory reclamation. A possible way is that we only queue
-tlbi instructions in hardware's queue. When we have to broadcast TLB,
-we broadcast it by dsb. We just need to get adapted to the existing
-framework of BATCHED_UNMAP_TLB_FLUSH.
-
-Cc: Will Deacon <will@kernel.org>
-Cc: Jonathan Corbet <corbet@lwn.net>
 Cc: Nadav Amit <namit@vmware.com>
 Cc: Mel Gorman <mgorman@suse.de>
-Signed-off-by: Barry Song <v-songbaohua@oppo.com>
+Signed-off-by: Barry Song <v-songbaohua@oppo.com>>
 ---
- Documentation/features/arch-support.txt        | 1 -
- Documentation/features/vm/TLB/arch-support.txt | 2 +-
- 2 files changed, 1 insertion(+), 2 deletions(-)
+ mm/rmap.c | 9 +++++++--
+ 1 file changed, 7 insertions(+), 2 deletions(-)
 
-diff --git a/Documentation/features/arch-support.txt b/Documentation/features/arch-support.txt
-index 118ae031840b..d22a1095e661 100644
---- a/Documentation/features/arch-support.txt
-+++ b/Documentation/features/arch-support.txt
-@@ -8,5 +8,4 @@ The meaning of entries in the tables is:
-     | ok |  # feature supported by the architecture
-     |TODO|  # feature not yet supported by the architecture
-     | .. |  # feature cannot be supported by the hardware
--    | N/A|  # feature doesn't apply to the architecture
+diff --git a/mm/rmap.c b/mm/rmap.c
+index 5bcb334cd6f2..d320c29a4ad8 100644
+--- a/mm/rmap.c
++++ b/mm/rmap.c
+@@ -692,8 +692,13 @@ static bool should_defer_flush(struct mm_struct *mm, enum ttu_flags flags)
+ 	if (!(flags & TTU_BATCH_FLUSH))
+ 		return false;
  
-diff --git a/Documentation/features/vm/TLB/arch-support.txt b/Documentation/features/vm/TLB/arch-support.txt
-index 039e4e91ada3..1c009312b9c1 100644
---- a/Documentation/features/vm/TLB/arch-support.txt
-+++ b/Documentation/features/vm/TLB/arch-support.txt
-@@ -9,7 +9,7 @@
-     |       alpha: | TODO |
-     |         arc: | TODO |
-     |         arm: | TODO |
--    |       arm64: | N/A  |
-+    |       arm64: | TODO |
-     |        csky: | TODO |
-     |     hexagon: | TODO |
-     |        ia64: | TODO |
+-	/* If remote CPUs need to be flushed then defer batch the flush */
+-	if (cpumask_any_but(mm_cpumask(mm), get_cpu()) < nr_cpu_ids)
++	/*
++	 * If remote CPUs need to be flushed then defer batch the flush;
++	 * If ARCHs like ARM64 have hardware TLB flush broadcast, thus
++	 * they don't maintain mm_cpumask() at all, defer batch as well.
++	 */
++	if (cpumask_any_but(mm_cpumask(mm), get_cpu()) < nr_cpu_ids ||
++	    cpumask_empty(mm_cpumask(mm)))
+ 		should_defer = true;
+ 	put_cpu();
+ 
 -- 
 2.25.1
 

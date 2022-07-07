@@ -2,382 +2,287 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3796B56A35B
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 15:21:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8701D56A360
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 15:22:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235188AbiGGNVH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Jul 2022 09:21:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42900 "EHLO
+        id S235348AbiGGNVy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Jul 2022 09:21:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43158 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234943AbiGGNVF (ORCPT
+        with ESMTP id S234943AbiGGNVx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Jul 2022 09:21:05 -0400
-Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EEE9C13CD6;
-        Thu,  7 Jul 2022 06:21:03 -0700 (PDT)
-Received: by mail-pf1-x436.google.com with SMTP id w185so15616091pfb.4;
-        Thu, 07 Jul 2022 06:21:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:date:to:cc:subject:message-id:mime-version:content-disposition
-         :user-agent;
-        bh=+caqaU2jwST9KjN/1/t0QJXzQd9mk2HRl/4WLQkOIpE=;
-        b=qj1jUTa+a16S+5xt1vMAZXARDDSWN3npWT1MmERzCIpdpE0MhmAmf89PevNTj8wnPr
-         OTp0d19UaiaslgInZDHUP8H7KYzAd9fbJUM3xFvljQ3Iiolk9wq09ehO9PT6VAf+h1RD
-         6WSTOpO4u19LbmRxRK9x2P/j3v99EmAo9OtZqe+4oW05en50lj9tE8E88ieMZT++4eez
-         knS8pxOGzkol+8+/hBKQWHh4UevAPec8NCZzpy4992MU8naUC8KAY4bYRusf7lbCJmrY
-         eu8cpOWV9XpbJOwP6cfdtLVUWKZ5fwl3ySspU+V0zCIcjaCDLupOWuVg7dI1p4TGiLCL
-         P9eA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:date:to:cc:subject:message-id:mime-version
-         :content-disposition:user-agent;
-        bh=+caqaU2jwST9KjN/1/t0QJXzQd9mk2HRl/4WLQkOIpE=;
-        b=QXqERi/9u/KCdjwUS6dgzhQvjC80uxOSrIrd6p02oVDBgZh1F9mKJPcfYN/9qlkpH+
-         GugtumIoGG4e1ICVM+TQ1Qrs9ax3Nf7b0P5UH9NLs8Uvdf13jYjTV97n+HrRZCrSIvxK
-         c3yiYGLnJdsJ8d6PcKM3jTBeN3mJNGVTvTI260V8lYNJUZTu3t6dM8OfSkNIVpFEMRO4
-         0l5L2Vdi7CVYPqsgTt34Jb5LtZ6Qj381vXXfPiZ+f7TiCB4HpKLeJuaIbbEfOLXWimwq
-         sZhv+X3mVcM5uqT5nD4OwWD5yRTLTMvgLSaCfDIuyqFGlvqKyf87Xs5H3bSr8UXsqxbo
-         dQqw==
-X-Gm-Message-State: AJIora8i0F5hQBplReKbgD1UWxl6xUB9KfEzL1yrxEa8YbojBJdOgjpV
-        b6z55FeCFlSxnD7RkrnSwjpo8y4nOgC8Uw==
-X-Google-Smtp-Source: AGRyM1s3wvKu78PUF+WXF3NMQ9GECIokSiccqeMC9d7E21f6skakUIT71qtz1xi8mB6rHtSMVnrRVw==
-X-Received: by 2002:a05:6a00:240a:b0:528:5bbc:aa1b with SMTP id z10-20020a056a00240a00b005285bbcaa1bmr25954547pfh.70.1657200063324;
-        Thu, 07 Jul 2022 06:21:03 -0700 (PDT)
-Received: from logan-ThinkPad-T14-Gen-1 ([117.253.178.206])
-        by smtp.gmail.com with ESMTPSA id bk21-20020aa78315000000b005254e44b748sm26633625pfb.84.2022.07.07.06.20.57
-        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Thu, 07 Jul 2022 06:21:02 -0700 (PDT)
-From:   Logananth Sundararaj <logananth13.hcl@gmail.com>
-X-Google-Original-From: Logananth Sundararaj <logananth_s@hcl.com>
-Date:   Thu, 7 Jul 2022 18:50:54 +0530
-To:     Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
-        soc@kernel.org, Rob Herring <robh+dt@kernel.org>,
-        Joel Stanley <joel@jms.id.au>,
-        Andrew Jeffery <andrew@aj.id.au>,
-        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-aspeed@lists.ozlabs.org,
-        openbmc@lists.ozlabs.org
-Cc:     garnermic@gmail.com, thangavel.k@hcl.com, naveen.mosess@hcl.com,
-        patrick@stwcx.xyz, velumanit@hcl.com
-Subject: [PATCH v3] The Yosemite V3.5 is a facebook multi-node server
- platform that host four OCP server. The BMC in the Yosemite V3.5 platform
- based on AST2600 SoC.
-Message-ID: <20220707132054.GA10610@logan-ThinkPad-T14-Gen-1>
+        Thu, 7 Jul 2022 09:21:53 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 798A813D60
+        for <linux-kernel@vger.kernel.org>; Thu,  7 Jul 2022 06:21:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1657200111;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=OOBRD0wmr2rvfwmljryCiegH8fKKnPBuD2ipRfg+U4U=;
+        b=ht4c4E+Mvqas3xM3yQFI/bbV/rYBSKbnceCWIu9T7xI22bFRDyDIqk7cpd5kIGg50HvpU8
+        O1sf1zL98mIEaJd4LKdilJAxAtBEQz9UE5OQ0hj636YC92bxwgaq+SqFnExcmvKpx95WPP
+        ztRq8KOZL7gk+T1dWqCqanRDTsDCIxg=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-624-37mpEwMIMMyxmIa8w0AU5w-1; Thu, 07 Jul 2022 09:21:48 -0400
+X-MC-Unique: 37mpEwMIMMyxmIa8w0AU5w-1
+Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 8415E85A582;
+        Thu,  7 Jul 2022 13:21:47 +0000 (UTC)
+Received: from warthog.procyon.org.uk (unknown [10.33.37.50])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id CE4542166B29;
+        Thu,  7 Jul 2022 13:21:45 +0000 (UTC)
+Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
+        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
+        Kingdom.
+        Registered in England and Wales under Company Registration No. 3798903
+From:   David Howells <dhowells@redhat.com>
+In-Reply-To: <20220707045112.10177-1-xiubli@redhat.com>
+References: <20220707045112.10177-1-xiubli@redhat.com>
+To:     xiubli@redhat.com
+Cc:     dhowells@redhat.com, idryomov@gmail.com, jlayton@kernel.org,
+        marc.dionne@auristor.com, willy@infradead.org,
+        keescook@chromium.org, kirill.shutemov@linux.intel.com,
+        william.kucharski@oracle.com, linux-afs@lists.infradead.org,
+        linux-kernel@vger.kernel.org, ceph-devel@vger.kernel.org,
+        linux-cachefs@redhat.com, vshankar@redhat.com
+Subject: [PATCH v4] netfs: do not unlock and put the folio twice
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <2520850.1657200105.1@warthog.procyon.org.uk>
+Content-Transfer-Encoding: quoted-printable
+Date:   Thu, 07 Jul 2022 14:21:45 +0100
+Message-ID: <2520851.1657200105@warthog.procyon.org.uk>
+X-Scanned-By: MIMEDefang 2.78 on 10.11.54.6
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This patch adds linux device tree entry related to
-Yosemite V3.5 specific devices connected to BMC SoC.
+Here's my take on this.  I've made the error: path handle folio =3D=3D NUL=
+L, so
+you don't need to split that error case.  I've also changed
+->check_write_begin() so that it returns 0, not -EAGAIN, if we drop the fo=
+lio;
+the process is retried then if the folio pointer got cleared.
 
-Signed-off-by: Logananth Sundararaj <logananth_s@hcl.com>
+As a result, you don't have to discard the page if you want to return an e=
+rror
+and thus don't need the additional afs patch
 
+David
 ---
---- v3 - addressed v2 patch comments.
---- v2 - Enabled i2c drivers.
---- v1 - Initial draft.
----
----
- arch/arm/boot/dts/Makefile                    |   1 +
- .../boot/dts/aspeed-bmc-facebook-fby35.dts    | 266 ++++++++++++++++++
- 2 files changed, 267 insertions(+)
- create mode 100644 arch/arm/boot/dts/aspeed-bmc-facebook-fby35.dts
+commit 8489c89f6a186272593ab5e3fffbd47ea21185b7
+Author: Xiubo Li <xiubli@redhat.com>
+Date:   Thu Jul 7 12:51:11 2022 +0800
 
-diff --git a/arch/arm/boot/dts/Makefile b/arch/arm/boot/dts/Makefile
-index 7e0934180724..58add093e5fb 100644
---- a/arch/arm/boot/dts/Makefile
-+++ b/arch/arm/boot/dts/Makefile
-@@ -1465,6 +1465,7 @@ dtb-$(CONFIG_ARCH_ASPEED) += \
- 	aspeed-bmc-facebook-cloudripper.dtb \
- 	aspeed-bmc-facebook-cmm.dtb \
- 	aspeed-bmc-facebook-elbert.dtb \
-+	aspeed-bmc-facebook-fby35.dtb \
- 	aspeed-bmc-facebook-fuji.dtb \
- 	aspeed-bmc-facebook-galaxy100.dtb \
- 	aspeed-bmc-facebook-minipack.dtb \
-diff --git a/arch/arm/boot/dts/aspeed-bmc-facebook-fby35.dts b/arch/arm/boot/dts/aspeed-bmc-facebook-fby35.dts
-new file mode 100644
-index 000000000000..32262cf1d9ea
---- /dev/null
-+++ b/arch/arm/boot/dts/aspeed-bmc-facebook-fby35.dts
-@@ -0,0 +1,266 @@
-+// SPDX-License-Identifier: GPL-2.0-or-later
-+// Copyright (c) 2020 Facebook Inc.
-+
-+/dts-v1/;
-+
-+#include "aspeed-g6.dtsi"
-+#include <dt-bindings/gpio/aspeed-gpio.h>
-+#include <dt-bindings/i2c/i2c.h>
-+
-+/ {
-+	model = "Facebook fby35";
-+	compatible = "facebook,fby35", "aspeed,ast2600";
-+
-+	aliases {
-+		serial4 = &uart5;
-+	};
-+
-+	chosen {
-+		stdout-path = &uart5;
-+		bootargs = "console=ttyS4,57600n8 root=/dev/ram rw vmalloc=384M";
-+	};
-+
-+	memory@80000000 {
-+		device_type = "memory";
-+		reg = <0x80000000 0x80000000>;
-+	};
-+
-+	iio-hwmon {
-+		compatible = "iio-hwmon";
-+		io-channels = <&adc0 0>, <&adc0 1>, <&adc0 2>, <&adc0 3>,
-+			<&adc0 4>, <&adc0 5>, <&adc0 6>, <&adc0 7>,
-+			<&adc1 0>, <&adc1 1>, <&adc1 2>, <&adc1 3>,
-+			<&adc1 4>, <&adc1 5>, <&adc1 6>;
-+	};
-+	spi_gpio: spi-gpio {
-+		status = "okay";
-+		compatible = "spi-gpio";
-+		#address-cells = <1>;
-+		#size-cells = <0>;
-+
-+		gpio-sck = <&gpio0 ASPEED_GPIO(X, 3) GPIO_ACTIVE_HIGH>;
-+		gpio-mosi = <&gpio0 ASPEED_GPIO(X, 4) GPIO_ACTIVE_HIGH>;
-+		gpio-miso = <&gpio0 ASPEED_GPIO(X, 5) GPIO_ACTIVE_HIGH>;
-+		num-chipselects = <1>;
-+		cs-gpios = <&gpio0 ASPEED_GPIO(X, 0) GPIO_ACTIVE_LOW>;
-+
-+		tpmdev@0 {
-+			compatible = "tcg,tpm_tis-spi";
-+			spi-max-frequency = <33000000>;
-+			reg = <0>;
-+		};
-+	};
-+
-+};
-+
-+&mac3 {
-+	status = "okay";
-+
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&pinctrl_rmii4_default>;
-+	no-hw-checksum;
-+	use-ncsi;
-+	mlx,multi-host;
-+	ncsi-ctrl,start-redo-probe;
-+	ncsi-ctrl,no-channel-monitor;
-+	ncsi-package = <1>;
-+	ncsi-channel = <1>;
-+	ncsi-rexmit = <1>;
-+	ncsi-timeout = <2>;
-+};
-+
-+&uart1 {
-+	status = "okay";
-+};
-+
-+&uart2 {
-+	status = "okay";
-+};
-+
-+&uart3 {
-+	status = "okay";
-+};
-+
-+&uart4 {
-+	status = "okay";
-+};
-+
-+&uart5 {
-+	status = "okay";
-+	compatible = "snps,dw-apb-uart";
-+};
-+
-+&wdt1 {
-+	status = "okay";
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&pinctrl_wdtrst1_default>;
-+	aspeed,reset-type = "soc";
-+	aspeed,external-signal;
-+	aspeed,ext-push-pull;
-+	aspeed,ext-active-high;
-+	aspeed,ext-pulse-duration = <256>;
-+};
-+
-+&rtc {
-+	status = "okay";
-+};
-+
-+&fmc {
-+	status = "okay";
-+	flash@0 {
-+		status = "okay";
-+		m25p,fast-read;
-+		label = "spi0.1";
-+		spi-max-frequency = <50000000>;
-+		#include "openbmc-flash-layout-128.dtsi"
-+	};
-+	flash@1 {
-+		status = "okay";
-+		m25p,fast-read;
-+		label = "spi0.0";
-+		spi-max-frequency = <50000000>;
-+		#include "openbmc-flash-layout.dtsi"
-+	};
-+};
-+
-+&i2c0 {
-+	//Host1 IPMB bus
-+	status = "okay";
-+	multi-master;
-+	ipmb0@10 {
-+		compatible = "ipmb-dev";
-+		reg = <(0x10 | I2C_OWN_SLAVE_ADDRESS)>;
-+		i2c-protocol;
-+	};
-+};
-+
-+&i2c1 {
-+	//Host2 IPMB bus
-+	status = "okay";
-+	multi-master;
-+	ipmb1@10 {
-+		compatible = "ipmb-dev";
-+		reg = <(0x10 | I2C_OWN_SLAVE_ADDRESS)>;
-+		i2c-protocol;
-+	};
-+};
-+
-+&i2c2 {
-+	//Host3 IPMB bus
-+	status = "okay";
-+	multi-master;
-+	ipmb2@10 {
-+		compatible = "ipmb-dev";
-+		reg = <(0x10 | I2C_OWN_SLAVE_ADDRESS)>;
-+		i2c-protocol;
-+	};
-+};
-+
-+&i2c3 {
-+	//Host1 IPMB bus
-+	status = "okay";
-+	multi-master;
-+	ipmb3@10 {
-+		compatible = "ipmb-dev";
-+		reg = <(0x10 | I2C_OWN_SLAVE_ADDRESS)>;
-+		i2c-protocol;
-+	};
-+};
-+
-+&i2c4 {
-+	status = "okay";
-+};
-+
-+&i2c5 {
-+	status = "okay";
-+};
-+
-+&i2c6 {
-+	status = "okay";
-+};
-+
-+&i2c7 {
-+	status = "okay";
-+};
-+
-+&i2c8 {
-+	//NIC SENSOR TEMP
-+	status = "okay";
-+	tmp421@1f {
-+		compatible = "ti,tmp421";
-+		reg = <0x1f>;
-+	};
-+};
-+
-+&i2c9 {
-+	// Debug-Card IPMB bus
-+	status = "okay";
-+	multi-master;
-+	ipmb9@30 {
-+		compatible = "ipmb-dev";
-+		reg = <(0x30 | I2C_OWN_SLAVE_ADDRESS)>;
-+		i2c-protocol;
-+	};
-+};
-+
-+&i2c10 {
-+	status = "okay";
-+};
-+
-+&i2c11 {
-+	status = "okay";
-+	//FRU EEPROM
-+	eeprom@51 {
-+		compatible = "atmel,24c64";
-+		reg = <0x51>;
-+		pagesize = <32>;
-+	};
-+};
-+
-+&i2c12 {
-+	status = "okay";
-+	//INLET TEMP
-+	tmp75@4e {
-+		compatible = "ti,tmp75";
-+		reg = <0x4e>;
-+	};
-+	//OUTLET TEMP
-+	tmp75@4f {
-+		compatible = "ti,tmp75";
-+		reg = <0x4f>;
-+	};
-+};
-+
-+&i2c13 {
-+	status = "okay";
-+};
-+
-+&adc0 {
-+	ref_voltage = <2500>;
-+	status = "okay";
-+
-+	pinctrl-0 = <&pinctrl_adc0_default &pinctrl_adc1_default
-+		&pinctrl_adc2_default &pinctrl_adc3_default
-+		&pinctrl_adc4_default &pinctrl_adc5_default
-+		&pinctrl_adc6_default &pinctrl_adc7_default>;
-+};
-+
-+&adc1 {
-+	ref_voltage = <2500>;
-+	status = "okay";
-+
-+	pinctrl-0 = <&pinctrl_adc8_default &pinctrl_adc9_default
-+		&pinctrl_adc10_default &pinctrl_adc11_default
-+		&pinctrl_adc12_default &pinctrl_adc13_default>;
-+};
-+&ehci0 {
-+	status = "okay";
-+};
-+
-+&ehci1 {
-+	status = "okay";
-+};
-+
-+&uhci {
-+	status = "okay";
-+};
--- 
-2.17.1
+    netfs: do not unlock and put the folio twice
+    =
+
+    check_write_begin() will unlock and put the folio when return
+    non-zero.  So we should avoid unlocking and putting it twice in
+    netfs layer.
+    =
+
+    Change the way ->check_write_begin() works in the following two ways:
+    =
+
+     (1) Pass it a pointer to the folio pointer, allowing it to unlock and=
+ put
+         the folio prior to doing the stuff it wants to do, provided it cl=
+ears
+         the folio pointer.
+    =
+
+     (2) Change the return values such that 0 with folio pointer set means
+         continue, 0 with folio pointer cleared means re-get and all error
+         codes indicating an error (no special treatment for -EAGAIN).
+    =
+
+    Link: https://tracker.ceph.com/issues/56423
+    Link: https://lore.kernel.org/r/20220707045112.10177-2-xiubli@redhat.c=
+om/
+    Signed-off-by: Xiubo Li <xiubli@redhat.com>
+    Co-developed-by: David Howells <dhowells@redhat.com>
+    Signed-off-by: David Howells <dhowells@redhat.com>
+
+diff --git a/Documentation/filesystems/netfs_library.rst b/Documentation/f=
+ilesystems/netfs_library.rst
+index 4d19b19bcc08..89085e1c22db 100644
+--- a/Documentation/filesystems/netfs_library.rst
++++ b/Documentation/filesystems/netfs_library.rst
+@@ -301,7 +301,7 @@ through which it can issue requests and negotiate::
+ 		void (*issue_read)(struct netfs_io_subrequest *subreq);
+ 		bool (*is_still_valid)(struct netfs_io_request *rreq);
+ 		int (*check_write_begin)(struct file *file, loff_t pos, unsigned len,
+-					 struct folio *folio, void **_fsdata);
++					 struct folio **_folio, void **_fsdata);
+ 		void (*done)(struct netfs_io_request *rreq);
+ 	};
+ =
+
+@@ -381,8 +381,10 @@ The operations are as follows:
+    allocated/grabbed the folio to be modified to allow the filesystem to =
+flush
+    conflicting state before allowing it to be modified.
+ =
+
+-   It should return 0 if everything is now fine, -EAGAIN if the folio sho=
+uld be
+-   regrabbed and any other error code to abort the operation.
++   It may unlock and discard the folio it was given and set the caller's =
+folio
++   pointer to NULL.  It should return 0 if everything is now fine (*_foli=
+o
++   left set) or the op should be retried (*_folio cleared) and any other =
+error
++   code to abort the operation.
+ =
+
+  * ``done``
+ =
+
+diff --git a/fs/afs/file.c b/fs/afs/file.c
+index 42118a4f3383..afacce797fb9 100644
+--- a/fs/afs/file.c
++++ b/fs/afs/file.c
+@@ -375,7 +375,7 @@ static int afs_begin_cache_operation(struct netfs_io_r=
+equest *rreq)
+ }
+ =
+
+ static int afs_check_write_begin(struct file *file, loff_t pos, unsigned =
+len,
+-				 struct folio *folio, void **_fsdata)
++				 struct folio **folio, void **_fsdata)
+ {
+ 	struct afs_vnode *vnode =3D AFS_FS_I(file_inode(file));
+ =
+
+diff --git a/fs/ceph/addr.c b/fs/ceph/addr.c
+index 6dee88815491..ab070a24ca23 100644
+--- a/fs/ceph/addr.c
++++ b/fs/ceph/addr.c
+@@ -63,7 +63,7 @@
+ 	 (CONGESTION_ON_THRESH(congestion_kb) >> 2))
+ =
+
+ static int ceph_netfs_check_write_begin(struct file *file, loff_t pos, un=
+signed int len,
+-					struct folio *folio, void **_fsdata);
++					struct folio **folio, void **_fsdata);
+ =
+
+ static inline struct ceph_snap_context *page_snap_context(struct page *pa=
+ge)
+ {
+@@ -1288,18 +1288,19 @@ ceph_find_incompatible(struct page *page)
+ }
+ =
+
+ static int ceph_netfs_check_write_begin(struct file *file, loff_t pos, un=
+signed int len,
+-					struct folio *folio, void **_fsdata)
++					struct folio **folio, void **_fsdata)
+ {
+ 	struct inode *inode =3D file_inode(file);
+ 	struct ceph_inode_info *ci =3D ceph_inode(inode);
+ 	struct ceph_snap_context *snapc;
+ =
+
+-	snapc =3D ceph_find_incompatible(folio_page(folio, 0));
++	snapc =3D ceph_find_incompatible(folio_page(*folio, 0));
+ 	if (snapc) {
+ 		int r;
+ =
+
+-		folio_unlock(folio);
+-		folio_put(folio);
++		folio_unlock(*folio);
++		folio_put(*folio);
++		*folio =3D NULL;
+ 		if (IS_ERR(snapc))
+ 			return PTR_ERR(snapc);
+ =
+
+diff --git a/fs/netfs/buffered_read.c b/fs/netfs/buffered_read.c
+index 42f892c5712e..69bbf1c25cf4 100644
+--- a/fs/netfs/buffered_read.c
++++ b/fs/netfs/buffered_read.c
+@@ -319,8 +319,9 @@ static bool netfs_skip_folio_read(struct folio *folio,=
+ loff_t pos, size_t len,
+  * conflicting writes once the folio is grabbed and locked.  It is passed=
+ a
+  * pointer to the fsdata cookie that gets returned to the VM to be passed=
+ to
+  * write_end.  It is permitted to sleep.  It should return 0 if the reque=
+st
+- * should go ahead; unlock the folio and return -EAGAIN to cause the foli=
+o to
+- * be regot; or return an error.
++ * should go ahead or it may return an error.  It may also unlock and put=
+ the
++ * folio, provided it sets *_folio to NULL, in which case a return of 0 w=
+ill
++ * cause the folio to be re-got and the process to be retried.
+  *
+  * The calling netfs must initialise a netfs context contiguous to the vf=
+s
+  * inode before calling this.
+@@ -348,13 +349,13 @@ int netfs_write_begin(struct netfs_inode *ctx,
+ =
+
+ 	if (ctx->ops->check_write_begin) {
+ 		/* Allow the netfs (eg. ceph) to flush conflicts. */
+-		ret =3D ctx->ops->check_write_begin(file, pos, len, folio, _fsdata);
++		ret =3D ctx->ops->check_write_begin(file, pos, len, &folio, _fsdata);
+ 		if (ret < 0) {
+ 			trace_netfs_failure(NULL, NULL, ret, netfs_fail_check_write_begin);
+-			if (ret =3D=3D -EAGAIN)
+-				goto retry;
+ 			goto error;
+ 		}
++		if (!folio)
++			goto retry;
+ 	}
+ =
+
+ 	if (folio_test_uptodate(folio))
+@@ -416,8 +417,10 @@ int netfs_write_begin(struct netfs_inode *ctx,
+ error_put:
+ 	netfs_put_request(rreq, false, netfs_rreq_trace_put_failed);
+ error:
+-	folio_unlock(folio);
+-	folio_put(folio);
++	if (folio) {
++		folio_unlock(folio);
++		folio_put(folio);
++	}
+ 	_leave(" =3D %d", ret);
+ 	return ret;
+ }
+diff --git a/include/linux/netfs.h b/include/linux/netfs.h
+index 1773e5df8e65..6ab5d56dac74 100644
+--- a/include/linux/netfs.h
++++ b/include/linux/netfs.h
+@@ -214,7 +214,7 @@ struct netfs_request_ops {
+ 	void (*issue_read)(struct netfs_io_subrequest *subreq);
+ 	bool (*is_still_valid)(struct netfs_io_request *rreq);
+ 	int (*check_write_begin)(struct file *file, loff_t pos, unsigned len,
+-				 struct folio *folio, void **_fsdata);
++				 struct folio **_folio, void **_fsdata);
+ 	void (*done)(struct netfs_io_request *rreq);
+ };
+ =
 

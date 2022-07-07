@@ -2,134 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A3DDB569908
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 06:12:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 20FFE56990D
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 06:16:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235015AbiGGEMO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Jul 2022 00:12:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39500 "EHLO
+        id S234774AbiGGEQZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Jul 2022 00:16:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41328 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229472AbiGGEML (ORCPT
+        with ESMTP id S229472AbiGGEQY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Jul 2022 00:12:11 -0400
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B04CC1D0CA;
-        Wed,  6 Jul 2022 21:12:05 -0700 (PDT)
-X-UUID: 9e664c8c274342e1a9d2ce4616027e2f-20220707
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.8,REQID:a5e76897-188b-4de8-a872-8f8b29e6c46f,OB:0,LO
-        B:0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACTI
-        ON:release,TS:0
-X-CID-META: VersionHash:0f94e32,CLOUDID:ea45a263-0b3f-4b2c-b3a6-ed5c044366a0,C
-        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,IP:nil,URL:0,File:nil
-        ,QS:nil,BEC:nil,COL:0
-X-UUID: 9e664c8c274342e1a9d2ce4616027e2f-20220707
-Received: from mtkmbs10n2.mediatek.inc [(172.21.101.183)] by mailgw02.mediatek.com
-        (envelope-from <ck.hu@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 732966436; Thu, 07 Jul 2022 12:11:56 +0800
-Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
- mtkmbs11n2.mediatek.inc (172.21.101.187) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.792.3;
- Thu, 7 Jul 2022 12:11:55 +0800
-Received: from mtksdccf07 (172.21.84.99) by mtkmbs11n2.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.2.792.3 via Frontend
- Transport; Thu, 7 Jul 2022 12:11:55 +0800
-Message-ID: <a9bba0b30073465dd85ca61220a0c476e8a33048.camel@mediatek.com>
-Subject: Re: [PATCH v13 05/10] drm/mediatek: Add MT8195 Embedded DisplayPort
- driver
-From:   CK Hu <ck.hu@mediatek.com>
-To:     Bo-Chen Chen <rex-bc.chen@mediatek.com>, <chunkuang.hu@kernel.org>,
-        <p.zabel@pengutronix.de>, <daniel@ffwll.ch>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <mripard@kernel.org>,
-        <tzimmermann@suse.de>, <matthias.bgg@gmail.com>, <deller@gmx.de>,
-        <airlied@linux.ie>
-CC:     <msp@baylibre.com>, <granquet@baylibre.com>,
-        <jitao.shi@mediatek.com>, <wenst@chromium.org>,
-        <angelogioacchino.delregno@collabora.com>,
-        <liangxu.xu@mediatek.com>, <dri-devel@lists.freedesktop.org>,
-        <linux-mediatek@lists.infradead.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-fbdev@vger.kernel.org>,
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>
-Date:   Thu, 7 Jul 2022 12:11:55 +0800
-In-Reply-To: <20220701062808.18596-6-rex-bc.chen@mediatek.com>
-References: <20220701062808.18596-1-rex-bc.chen@mediatek.com>
-         <20220701062808.18596-6-rex-bc.chen@mediatek.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+        Thu, 7 Jul 2022 00:16:24 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA8B92C654
+        for <linux-kernel@vger.kernel.org>; Wed,  6 Jul 2022 21:16:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1657167383; x=1688703383;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=NYUem57k4d9KlwTi4E1UdwPd14YIObBaInKLMcgeXPk=;
+  b=NaoIu5OT31UOI/t+msKgcE6Ch/OhVbSA/I5XxjSSxoaDT3iGxKav2QYw
+   VB53C5MVFQtCTStfz4Tr4z4gZIoxd55NXwJBqxIVRTAaFJ7JW8DdNU8vC
+   i7RwdCjwoE/Mrlxkeu3sk8InsRuq17DJflefrD8RGGRSqVix7G2dcl1CW
+   ApG+ZngW30Iqj2qjZdI/JPPAh4L8QiviZ0KNVXLmgJu5JnKiT7jAmHErB
+   xLMUuwoKBVhd6hMttejhuI1pJBNx9l8BGTmesWIrTqEDPdUlHEKREfI/w
+   we3tz119+KzdE3OU3GNcL6uN6rgOxzD6iicDP+QzbYY1NzKNKGh6X4RQy
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10400"; a="281473572"
+X-IronPort-AV: E=Sophos;i="5.92,251,1650956400"; 
+   d="scan'208";a="281473572"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jul 2022 21:16:22 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.92,251,1650956400"; 
+   d="scan'208";a="620612989"
+Received: from lkp-server01.sh.intel.com (HELO 68b931ab7ac1) ([10.239.97.150])
+  by orsmga008.jf.intel.com with ESMTP; 06 Jul 2022 21:16:21 -0700
+Received: from kbuild by 68b931ab7ac1 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1o9Iw8-000LWI-V0;
+        Thu, 07 Jul 2022 04:16:20 +0000
+Date:   Thu, 7 Jul 2022 12:15:32 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Logan Gunthorpe <logang@deltatee.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: [sbates130272-p2pmem:p2pdma_user_cmb_v8 7/21]
+ drivers/iommu/iommu.c:2460:21: error: implicit declaration of function
+ 'sg_is_dma_bus_address'; did you mean 'sg_dma_address'?
+Message-ID: <202207071221.UPqIJ9mF-lkp@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-MTK:  N
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
-        RDNS_NONE,SPF_HELO_PASS,T_SCC_BODY_TEXT_LINE,T_SPF_TEMPERROR,
-        UNPARSEABLE_RELAY autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, Bo-Chen:
+tree:   https://github.com/sbates130272/linux-p2pmem.git p2pdma_user_cmb_v8
+head:   a2dd359c3f1baca6c0438adec8900b7fe57f92af
+commit: 34dbc33ec51c9e22ca9094054216d5e63d5cab08 [7/21] iommu: Explicitly skip bus address marked segments  in __iommu_map_sg()
+config: xtensa-randconfig-r015-20220706 (https://download.01.org/0day-ci/archive/20220707/202207071221.UPqIJ9mF-lkp@intel.com/config)
+compiler: xtensa-linux-gcc (GCC) 11.3.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/sbates130272/linux-p2pmem/commit/34dbc33ec51c9e22ca9094054216d5e63d5cab08
+        git remote add sbates130272-p2pmem https://github.com/sbates130272/linux-p2pmem.git
+        git fetch --no-tags sbates130272-p2pmem p2pdma_user_cmb_v8
+        git checkout 34dbc33ec51c9e22ca9094054216d5e63d5cab08
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=xtensa SHELL=/bin/bash drivers/iommu/
 
-On Fri, 2022-07-01 at 14:28 +0800, Bo-Chen Chen wrote:
-> From: Markus Schneider-Pargmann <msp@baylibre.com>
-> 
-> This patch adds a embedded displayport driver for the MediaTek mt8195
-> SoC.
-> 
-> It supports the MT8195, the embedded DisplayPort units. It offers
-> DisplayPort 1.4 with up to 4 lanes.
-> 
-> The driver creates a child device for the phy. The child device will
-> never exist without the parent being active. As they are sharing a
-> register range, the parent passes a regmap pointer to the child so
-> that
-> both can work with the same register range. The phy driver sets
-> device
-> data that is read by the parent to get the phy device that can be
-> used
-> to control the phy properties.
-> 
-> This driver is based on an initial version by
-> Jitao shi <jitao.shi@mediatek.com>
-> 
-> Signed-off-by: Markus Schneider-Pargmann <msp@baylibre.com>
-> Signed-off-by: Guillaume Ranquet <granquet@baylibre.com>
-> Signed-off-by: Bo-Chen Chen <rex-bc.chen@mediatek.com>
-> ---
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-[snip]
+All errors (new ones prefixed by >>):
 
-> +
-> +static irqreturn_t mtk_dp_hpd_event_thread(int hpd, void *dev)
-> +{
-> +	struct mtk_dp *mtk_dp = dev;
-> +	u8 buf[DP_RECEIVER_CAP_SIZE] = {};
-> +
-> +	if (mtk_dp->train_info.cable_state_change) {
-> +		mtk_dp->train_info.cable_state_change = false;
-> +
-> +		mtk_dp_update_bits(mtk_dp, MTK_DP_TOP_PWR_STATE,
-> +				   DP_PWR_STATE_BANDGAP_TPLL_LANE,
-> +				   DP_PWR_STATE_MASK);
-> +		drm_dp_read_dpcd_caps(&mtk_dp->aux, buf);
+   drivers/iommu/iommu.c: In function '__iommu_map_sg':
+>> drivers/iommu/iommu.c:2460:21: error: implicit declaration of function 'sg_is_dma_bus_address'; did you mean 'sg_dma_address'? [-Werror=implicit-function-declaration]
+    2460 |                 if (sg_is_dma_bus_address(sg))
+         |                     ^~~~~~~~~~~~~~~~~~~~~
+         |                     sg_dma_address
+   cc1: some warnings being treated as errors
 
-Why do you read dpcd caps into 'buf'. 'buf' is not used elsewhere.
 
-Regards,
-CK
+vim +2460 drivers/iommu/iommu.c
 
-> +	}
-> +
-> +	if (mtk_dp->train_info.irq_sta.hpd_inerrupt) {
-> +		dev_dbg(mtk_dp->dev, "MTK_DP_HPD_INTERRUPT\n");
-> +		mtk_dp->train_info.irq_sta.hpd_inerrupt = false;
-> +		mtk_dp_hpd_sink_event(mtk_dp);
-> +	}
-> +
-> +	return IRQ_HANDLED;
-> +}
-> +
+  2435	
+  2436	static ssize_t __iommu_map_sg(struct iommu_domain *domain, unsigned long iova,
+  2437			struct scatterlist *sg, unsigned int nents, int prot,
+  2438			gfp_t gfp)
+  2439	{
+  2440		const struct iommu_domain_ops *ops = domain->ops;
+  2441		size_t len = 0, mapped = 0;
+  2442		phys_addr_t start;
+  2443		unsigned int i = 0;
+  2444		int ret;
+  2445	
+  2446		while (i <= nents) {
+  2447			phys_addr_t s_phys = sg_phys(sg);
+  2448	
+  2449			if (len && s_phys != start + len) {
+  2450				ret = __iommu_map(domain, iova + mapped, start,
+  2451						len, prot, gfp);
+  2452	
+  2453				if (ret)
+  2454					goto out_err;
+  2455	
+  2456				mapped += len;
+  2457				len = 0;
+  2458			}
+  2459	
+> 2460			if (sg_is_dma_bus_address(sg))
+  2461				goto next;
+  2462	
+  2463			if (len) {
+  2464				len += sg->length;
+  2465			} else {
+  2466				len = sg->length;
+  2467				start = s_phys;
+  2468			}
+  2469	
+  2470	next:
+  2471			if (++i < nents)
+  2472				sg = sg_next(sg);
+  2473		}
+  2474	
+  2475		if (ops->iotlb_sync_map)
+  2476			ops->iotlb_sync_map(domain, iova, mapped);
+  2477		return mapped;
+  2478	
+  2479	out_err:
+  2480		/* undo mappings already done */
+  2481		iommu_unmap(domain, iova, mapped);
+  2482	
+  2483		return ret;
+  2484	}
+  2485	
 
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

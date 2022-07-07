@@ -2,154 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E02E956A8F5
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 19:03:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 245DB56A8BE
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 19:00:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236474AbiGGRAb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Jul 2022 13:00:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38830 "EHLO
+        id S236441AbiGGQ7t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Jul 2022 12:59:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37876 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231320AbiGGRAO (ORCPT
+        with ESMTP id S236180AbiGGQ7i (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Jul 2022 13:00:14 -0400
-Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2045.outbound.protection.outlook.com [40.107.220.45])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A276C599DC;
-        Thu,  7 Jul 2022 10:00:12 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Hri5LPJ3x9sFKoNR2XVHrJFxN6juTLceIcUjMdFdVL5ya8MX5dENg2SDQUp6sb9+VWvFU/U2lQUSHVqJGrBtfwSQHE3qpPpvlRPtkmCQE27k9NyXy5U280dkXI3hAUaketBwoaSg0WRkgmAfx4DhVfS/+VBSk7iTkxSeAed/xOyO1cU+j3rNr+3jx/EEuTIqHI3zMOKnI9/6Wzn7WUeF9JXvKWeNW7CEHR7AtVPw30CkMAQ2gkscXcXxnugTNSYa6XvMkN5Po52YnKV7QdyPbGAHjPj9TAKapepimY5tmRY4IxDEyDIZfVbFuVwdsIjs050amCou5vcWgfMOXafyiw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=76f2SBmh7P/rRxfMHYyBcgNGlGwGPtXKjcuhDvE1FVA=;
- b=EfImrCVOcK7eXGwuspwrFEGRnq8bnSCOOr6HNPGp02R7LgBzIYoL3KjFtBmIUliQn2iQE6gudhjk1JSJ8JCyAS0j/AolgGck/f+1YB3ohSqHmuXKVhRR4MT47K2Fj7NDl4rI0072lm+s38J+Jry6hVue72DykPjxWIlLa1J4+4KwWaKJuzz4fFiv7BiTzjEV5Ae/Ns18CD2WIkns/8KIt2uDEXa1p6rnLsaeDi2Z0F/oziQC8HeuKgc7cIQ1S+Ltw8pkF15muBszProFEd7deAuS+vaJdLKqJy6TfDOMcfb5bnKWk1W7SzWLjRvUBR9GkgObQUSk9+ObHL9BkHuckA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=intel.com smtp.mailfrom=amd.com; dmarc=pass
- (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=76f2SBmh7P/rRxfMHYyBcgNGlGwGPtXKjcuhDvE1FVA=;
- b=E5M6+o8ZtvdtDNHsfQqNzQTquVtSBM96fXzaE6EKgdhkBjk0I9MHFlKlyzo/z1jfqpiw+7ngyWbxWNg6hWcXatcf9aUa1BFLs6cwm5XUt3/euCajOhE29zLtkwD/U6fx1HdcD6QhSunUDXfSiRRZKRZecCJU11jfkLAXSA4e12k=
-Received: from BN8PR16CA0024.namprd16.prod.outlook.com (2603:10b6:408:4c::37)
- by DM5PR12MB4664.namprd12.prod.outlook.com (2603:10b6:4:a1::16) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5395.15; Thu, 7 Jul
- 2022 17:00:08 +0000
-Received: from BN8NAM11FT061.eop-nam11.prod.protection.outlook.com
- (2603:10b6:408:4c:cafe::90) by BN8PR16CA0024.outlook.office365.com
- (2603:10b6:408:4c::37) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5395.20 via Frontend
- Transport; Thu, 7 Jul 2022 17:00:08 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- BN8NAM11FT061.mail.protection.outlook.com (10.13.177.144) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.5417.15 via Frontend Transport; Thu, 7 Jul 2022 17:00:08 +0000
-Received: from pyuan-desktop.amd.com (10.180.168.240) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.28; Thu, 7 Jul
- 2022 12:00:00 -0500
-From:   Perry Yuan <Perry.Yuan@amd.com>
-To:     <rafael.j.wysocki@intel.com>, <viresh.kumar@linaro.org>,
-        <Ray.Huang@amd.com>, Huang Rui <ray.huang@amd.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-CC:     <Deepak.Sharma@amd.com>, <Mario.Limonciello@amd.com>,
-        <Nathan.Fontenot@amd.com>, <Alexander.Deucher@amd.com>,
-        <Jinzhou.Su@amd.com>, <Xinmei.Huang@amd.com>,
-        <Xiaojian.Du@amd.com>, <Li.Meng@amd.com>,
-        Perry Yuan <Perry.Yuan@amd.com>
-Subject: [PATCH 05/12] cpufreq: amd-pstate: simplify cpudata pointer assignment
-Date:   Thu, 7 Jul 2022 12:59:28 -0400
-Message-ID: <20220707165928.215684-1-Perry.Yuan@amd.com>
-X-Mailer: git-send-email 2.25.1
+        Thu, 7 Jul 2022 12:59:38 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 247D0220C7;
+        Thu,  7 Jul 2022 09:59:37 -0700 (PDT)
+Date:   Thu, 07 Jul 2022 16:59:34 -0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1657213175;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=tgibuu+EFRnH1uIrGERfpnS0e8DCu52RTUBeQNCvX90=;
+        b=0CxbqQ17oGk16+2Q1FtJwKlyuPtpnr6d2y17NevFwH427tD4QO8oimrsDg8jNSlSyeiHb0
+        OcGdhjsbRxshpM4VLadManhlHR0zWEp1QWXizxJmFwbBZY999UclVRif1jZ6yVRONZ4VOf
+        +bntJT5tk/gFLp989JoS/xjgazDvys+faMlO28aGOjgtXKQZnZ4Dmu+QxRlUOM2FsP/QCK
+        Dbpf86Vy9CzwmVHXDhIUtg5bsDR13stBOyi5Jbd67aRSuNzS7nww70/p5y1QXgEdhN03nu
+        HZuuhwU23+4vDleTHxwmvzD/OYpxtXD+eOKUWZlvSS3tekc3YqTvdD/puphRbA==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1657213175;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=tgibuu+EFRnH1uIrGERfpnS0e8DCu52RTUBeQNCvX90=;
+        b=GJjpYkhn6Ml/K+BeExG2EP+1ZeqHlUCRyAjrw6qeF4wqNJY6T1Qrsa+FfIqtG/fxzaTTTP
+        jnevhTQgPgLLHWAw==
+From:   "tip-bot2 for Lukas Bulwahn" <tip-bot2@linutronix.de>
+Sender: tip-bot2@linutronix.de
+Reply-to: linux-kernel@vger.kernel.org
+To:     linux-tip-commits@vger.kernel.org
+Subject: [tip: x86/cleanups] x86/mm: Refer to the intended config
+ STRICT_DEVMEM in a comment
+Cc:     Dave Hansen <dave.hansen@intel.com>,
+        Lukas Bulwahn <lukas.bulwahn@gmail.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        linux-kernel@vger.kernel.org
+In-Reply-To: <20220707115442.21107-1-lukas.bulwahn@gmail.com>
+References: <20220707115442.21107-1-lukas.bulwahn@gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.180.168.240]
-X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
- (10.181.40.145)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 1f9c517c-a67e-407a-1304-08da603a25b3
-X-MS-TrafficTypeDiagnostic: DM5PR12MB4664:EE_
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: FA4ErcmA63nmZ63TDBot9ajk+HcmMNPW6Rm4LL8Tn2hEi5GVhmyUXUvu0DOF+XPHmBWuPtYXTGs9eF9AStWl37c4YXsBTzw1qdsNFYiKPx/CfSfa8ubO+ipOvco0gO9/0cCrFi0UoluoxRmlOmW14pXet4MMLv92dDUitbnn+k4NKjxPtvcvlU/SYrx61UHKw/syZW0eGmMlaSAgtPw+pYNlwI0c2mGvpdbywZ8bxQWQzTbw9l2Rz7S9s6V6qWazPwKEvXTxVAhQBudDkSiGoKJTub7QOuMLSVddGM+WSU49l2l3VlhMDpw1WLEgi7VZ0cgjweDDWMwa480ik9c/qaH/5t8S9oo93iwTO1KfhsRY2X1HO1qgIFIkuyRoptw6fKJ8VU4zYOE/Xlx2XjaBbW1otW4bi8vPbBWHE7yv0P6F1BdKh7tz5Ow2pq8E9gwoiXUPs//0EsuJQr7w/hRoqb8/6jHwI2Yukr6nFwYCu/e1KIuNNXk3+IvLHHslQFSt+YMjUjRh4h+L2ujJj/eMyeilvaKSnozzb61Umnp0+1/ZqCImULciiuu1lbt0347+Kj2Y/MVAGh97UinhJM/RCgcvlC/grCpI0wREGm77xyeki+4GJcjY0cgjtmPpu12+INiFSGp3Tw5NJAMAct8UrDfhFek33k6HOMlKa12gfCDeleYuHaW4XDXlNH0Zwy+bSE0m2LXQjBtAoaaX+RyTrjvjkFeV7lACavpo2HdnCkOYJZEkIqm7Hi8oc0n5LxGaEPRskI8138bujjp80h5iOwYdbw5kyrJ6uO1e3ecOrABSHcWe0n1TpWSAQWUeGvfTFP7NKVbJvLig9byoWShivx1UHttDPvc2kuBBuw/AJLmghOwdrhTOV3pcS4J+XCw+
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230016)(4636009)(136003)(376002)(346002)(396003)(39860400002)(36840700001)(40470700004)(46966006)(478600001)(34020700004)(1076003)(186003)(16526019)(40480700001)(36756003)(41300700001)(7696005)(2616005)(110136005)(6666004)(2906002)(81166007)(316002)(8936002)(5660300002)(54906003)(82740400003)(426003)(82310400005)(47076005)(336012)(356005)(26005)(8676002)(70586007)(86362001)(83380400001)(70206006)(36860700001)(40460700003)(4326008)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Jul 2022 17:00:08.2584
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 1f9c517c-a67e-407a-1304-08da603a25b3
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT061.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM5PR12MB4664
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Message-ID: <165721317403.15455.225520286962176252.tip-bot2@tip-bot2>
+Robot-ID: <tip-bot2@linutronix.de>
+Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-move the cpudata assignment to cpudata declaration which
-will simplify the functions.
+The following commit has been merged into the x86/cleanups branch of tip:
 
-No functional change intended.
+Commit-ID:     9de76f41ea2188f2784f48352f9278819d249afc
+Gitweb:        https://git.kernel.org/tip/9de76f41ea2188f2784f48352f9278819d249afc
+Author:        Lukas Bulwahn <lukas.bulwahn@gmail.com>
+AuthorDate:    Thu, 07 Jul 2022 13:54:42 +02:00
+Committer:     Dave Hansen <dave.hansen@linux.intel.com>
+CommitterDate: Thu, 07 Jul 2022 09:51:36 -07:00
 
-Signed-off-by: Perry Yuan <Perry.Yuan@amd.com>
+x86/mm: Refer to the intended config STRICT_DEVMEM in a comment
+
+Commit a4866aa81251 ("mm: Tighten x86 /dev/mem with zeroing reads") adds a
+comment to the function devmem_is_allowed() referring to a non-existing
+config STRICT_IOMEM, whereas the comment very likely intended to refer to
+the config STRICT_DEVMEM, as the commit adds some behavior for the config
+STRICT_DEVMEM.
+
+Most of the initial analysis was actually done by Dave Hansen in the
+email thread below (see Link).
+
+Refer to the intended and existing config STRICT_DEVMEM.
+
+Suggested-by: Dave Hansen <dave.hansen@intel.com>
+Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
+Signed-off-by: Dave Hansen <dave.hansen@linux.intel.com>
+Link: https://lore.kernel.org/r/f9074e8d-9314-9d7d-7bf5-5b5538c8be8d@intel.com/
+Link: https://lkml.kernel.org/r/20220707115442.21107-1-lukas.bulwahn@gmail.com
 ---
- drivers/cpufreq/amd-pstate.c | 12 +++---------
- 1 file changed, 3 insertions(+), 9 deletions(-)
+ arch/x86/mm/init.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/cpufreq/amd-pstate.c b/drivers/cpufreq/amd-pstate.c
-index e4904da54541..fc0de9fd643b 100644
---- a/drivers/cpufreq/amd-pstate.c
-+++ b/drivers/cpufreq/amd-pstate.c
-@@ -571,9 +571,7 @@ static int amd_pstate_cpu_init(struct cpufreq_policy *policy)
+diff --git a/arch/x86/mm/init.c b/arch/x86/mm/init.c
+index d8cfce2..5d747a1 100644
+--- a/arch/x86/mm/init.c
++++ b/arch/x86/mm/init.c
+@@ -846,7 +846,7 @@ int devmem_is_allowed(unsigned long pagenr)
  
- static int amd_pstate_cpu_exit(struct cpufreq_policy *policy)
- {
--	struct amd_cpudata *cpudata;
--
--	cpudata = policy->driver_data;
-+	struct amd_cpudata *cpudata = policy->driver_data;
- 
- 	freq_qos_remove_request(&cpudata->req[1]);
- 	freq_qos_remove_request(&cpudata->req[0]);
-@@ -615,9 +613,7 @@ static ssize_t show_amd_pstate_max_freq(struct cpufreq_policy *policy,
- 					char *buf)
- {
- 	int max_freq;
--	struct amd_cpudata *cpudata;
--
--	cpudata = policy->driver_data;
-+	struct amd_cpudata *cpudata = policy->driver_data;
- 
- 	max_freq = amd_get_max_freq(cpudata);
- 	if (max_freq < 0)
-@@ -630,9 +626,7 @@ static ssize_t show_amd_pstate_lowest_nonlinear_freq(struct cpufreq_policy *poli
- 						     char *buf)
- {
- 	int freq;
--	struct amd_cpudata *cpudata;
--
--	cpudata = policy->driver_data;
-+	struct amd_cpudata *cpudata = policy->driver_data;
- 
- 	freq = amd_get_lowest_nonlinear_freq(cpudata);
- 	if (freq < 0)
--- 
-2.25.1
-
+ 	/*
+ 	 * This must follow RAM test, since System RAM is considered a
+-	 * restricted resource under CONFIG_STRICT_IOMEM.
++	 * restricted resource under CONFIG_STRICT_DEVMEM.
+ 	 */
+ 	if (iomem_is_exclusive(pagenr << PAGE_SHIFT)) {
+ 		/* Low 1MB bypasses iomem restrictions. */

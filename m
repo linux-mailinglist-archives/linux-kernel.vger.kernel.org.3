@@ -2,155 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E13A569899
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 05:09:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7985856989E
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 05:10:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234837AbiGGDJC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Jul 2022 23:09:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40116 "EHLO
+        id S235004AbiGGDJz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Jul 2022 23:09:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40864 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234689AbiGGDJA (ORCPT
+        with ESMTP id S234818AbiGGDJw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Jul 2022 23:09:00 -0400
-Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2050.outbound.protection.outlook.com [40.107.237.50])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8203F3056D
-        for <linux-kernel@vger.kernel.org>; Wed,  6 Jul 2022 20:08:59 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=nD/1RhAKCMacZwXIehXdnvPiev7txtkFirh6PLlgRI6I1hdMG6C3Vv8PYfVuzD4rhFo5AoAKx+evWLgIYWUabeRF2H24D0Dj/r1TRUKCST3AdOdAMj/pTwPlOUWjCIBWiz9LoZiFw4IrmDl7WpLipXUdRLi+GeqZbhA2ViQdvQpjI4QUTsTH04Tm40IUElHfWpX7Nmxu5fBBf+LIJG8mXTcfaOel2K+xiW0wN2UCcz/FvxKRs1iwBWiQmP+LAtiVnVhlAmTRzky94WwzdhlXivcEtvI3iRog5UFFAydY6P/YvT40Znh53PVHE2oUzXC2288XCOOrsC1qDxx0Jq8jug==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=KxRGhgWWZLBaMofv67QO2JJLLoym+6H00Y+ucZcT3bI=;
- b=MynYTIr4nD+MQB45jMP9yrQBtsJ6VnTL1trRheApwYo64d//rC9pJAcRN92EI0yXoa0GvA0tRS5gV8isOj70z3wOx0Hg0f2F3CkGPJ2mRN5MAyBcAJR8Rw1Svj43H2JmXb6GlLBfbYGBlPmX/cb8You5rze1UZ92vNCL3vjgRQUz1HFYMkLidyzYkDoJN1mqEbWKKqS/OXatIVlfCKD49ttfBbfNOc7LzrlvxvKk7isxadKD1jGDxZeZMNDkDApyoulOO0PWmf8WJ8lZEuHRl4Jt5rX2Otx2+QNeqzDrXlq7WCEOxCyn1c/KvKPooIkIHPG/QpxkiZndKMM4AiLQ0Q==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=kernel.org smtp.mailfrom=amd.com; dmarc=pass
- (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=KxRGhgWWZLBaMofv67QO2JJLLoym+6H00Y+ucZcT3bI=;
- b=JaOGXRK5pX1DwybyKrLI9Gg30aKCLHU8SqEetZqs977IUIl+PNtf+9MxShu6cOKdsxt5c2/AY3Q8DYrBNnzV9m9RvVwywx9xYCOAXUcbXpHo3BavOKvb3RmjJYCZN/t97tzc4j2G7DcuVVmkGinqbu5sh6QF0dseW9szbE3gq08=
-Received: from CO2PR07CA0066.namprd07.prod.outlook.com (2603:10b6:100::34) by
- CH0PR12MB5154.namprd12.prod.outlook.com (2603:10b6:610:b9::17) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.5417.15; Thu, 7 Jul 2022 03:08:57 +0000
-Received: from CO1NAM11FT015.eop-nam11.prod.protection.outlook.com
- (2603:10b6:100:0:cafe::2c) by CO2PR07CA0066.outlook.office365.com
- (2603:10b6:100::34) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5417.16 via Frontend
- Transport; Thu, 7 Jul 2022 03:08:57 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- CO1NAM11FT015.mail.protection.outlook.com (10.13.175.130) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.5417.15 via Frontend Transport; Thu, 7 Jul 2022 03:08:56 +0000
-Received: from SATLEXMB04.amd.com (10.181.40.145) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.28; Wed, 6 Jul
- 2022 22:08:55 -0500
-Received: from dev-desktop.guestwireless.amd.com (10.180.168.240) by
- SATLEXMB04.amd.com (10.181.40.145) with Microsoft SMTP Server id 15.1.2375.28
- via Frontend Transport; Wed, 6 Jul 2022 22:08:46 -0500
-From:   jie1zhan <jesse.zhang@amd.com>
-To:     <broonie@kernel.org>, <dri-devel-bounces@lists.freedesktop.org>,
-        <dri-devel@lists.freedesktop.org>
-CC:     <Christian.Koenig@amd.com>, <Vijendar.Mukunda@amd.com>,
-        <Basavaraj.Hiregoudar@amd.com>, <Sunil-kumar.Dommati@amd.com>,
-        <ajitkumar.pandey@amd.com>, <lucas.demarchi@intel.com>,
-        <nirmoy.das@linux.intel.com>, <lionel.g.landwerlin@intel.com>,
-        jie1zhan <jesse.zhang@amd.com>,
-        =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        open list <linux-kernel@vger.kernel.org>
-Subject: [PATCH v1] drm/syncobj: Fix sync syncobj issue
-Date:   Thu, 7 Jul 2022 11:08:45 +0800
-Message-ID: <20220707030845.4059465-1-jesse.zhang@amd.com>
-X-Mailer: git-send-email 2.25.1
+        Wed, 6 Jul 2022 23:09:52 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D381E30574;
+        Wed,  6 Jul 2022 20:09:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=ITh/kBo08G4zvJ+AcbAFvZopADq2rIsMdPM9xbzcnWU=; b=WBajSaJ9KODDVHIUU7HDjKT185
+        jZfcpj60XcYVAOuWmnz5uv/JtWX194F4uCYkNrWBuGbyWskGN3nF7skwdKpTjbjM+cQARxY6Xx+3L
+        oYBHt2qy2M4UwE4P+vpo9couEkEdUN6F1WLrh59oF37uZlb+ZxMlPq0G//etIVM9Ox/yNIfv4MK5j
+        gKcpeXF3I4HyUmGYDo4SaKDPR8gHSWmxRfcmJAL/vDCRfkIH/2NMTAppe3ZNz90g/f8GtiHvKg55X
+        u7d0bca7OEtGrv0qnz20aUkAyq/a3ZRBEPxwoJMFuaLzuQaff64jgQQi4VJYOBhpzGxz0L+HYjQV6
+        49qPqXlw==;
+Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1o9HtR-002E3r-Tn; Thu, 07 Jul 2022 03:09:29 +0000
+Date:   Thu, 7 Jul 2022 04:09:29 +0100
+From:   Matthew Wilcox <willy@infradead.org>
+To:     Liu Shixin <liushixin2@huawei.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Jan Kara <jack@suse.cz>,
+        William Kucharski <william.kucharski@oracle.com>,
+        Christoph Hellwig <hch@lst.de>, linux-kernel@vger.kernel.org,
+        stable@vger.kernel.org
+Subject: Re: [PATCH 5.15 v4] mm/filemap: fix UAF in find_lock_entries
+Message-ID: <YsZOafRSNZWY0EpM@casper.infradead.org>
+References: <20220707020938.2122198-1-liushixin2@huawei.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8bit
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 38cf8906-ab21-40d6-0d92-08da5fc6081e
-X-MS-TrafficTypeDiagnostic: CH0PR12MB5154:EE_
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: =?utf-8?B?QnN0dXY5OUdIcGYxWFZxQ1p0TWpMQm5vSXVZNWxKaVZZekxleEswL25IZksy?=
- =?utf-8?B?VVdzMlA1Sm5tQXpaek9zVk5WK24xV2ZoNnlzd09mc0xsRVFST2EvWm5qTVlj?=
- =?utf-8?B?bnJmUkhQNWN1ZngwU2c1dmc3a0JZR2hqamRoZW45WjczUmR3dmlPemRRL2FE?=
- =?utf-8?B?TStUK0xJSHp4OHZIZ0tCZFpnNjJVUGVrQnYxaVh1NFp3WUozR0dBem00UStq?=
- =?utf-8?B?TUExVm1xNW1SYUlweWtwdVI0VXhPWmdGTHNuZ1NwVnYyYTdocm52NnBoOE1H?=
- =?utf-8?B?RmEvU2pGZVVNTFJpS25ZMDJZcHRmS1hzclVVcXd3YjJXMXc2SVNFUHVzOE9X?=
- =?utf-8?B?MVdVbHVCUkxoY1BCMndCamg4WkNNbHBVYTVZZjZ3NXdYOCtlNGJ6RFppaUd6?=
- =?utf-8?B?a1NKRWRxcmdmNnZDY0NqUUZMWlRSWFJNTVU1NXVTVWk0aGtQMlJUL2pGL2Va?=
- =?utf-8?B?dzhvYmVreTZRSFRHcU9mRXNDQnQvZms4TFFCdXQreW1hRjZKYnpybGUxTVFQ?=
- =?utf-8?B?WnRnbm9tcmUvblFZRmlMTzhGRFVqR0RabTNtMnVNVFRRc2hsRmRwQ1BwazRD?=
- =?utf-8?B?QnRDZytONjJ2cmZIM0hDS0FETkR6Q0VINnVnV25HL284OU5iYldoU2h3R1Fx?=
- =?utf-8?B?K0ZsNjRGQnQrUWFUdEVFY0RmRHdocWJsOWFmdHZOdHBTdE13UzIrdk9QR3BQ?=
- =?utf-8?B?Vll3ODdOa2Q1a2psUXYzMlJqNWUyTFZTeEZBZ3dLTUtZd1p0Sm5VaElaWTY0?=
- =?utf-8?B?SXptTUI4cGVoQkFTdnVSS0M4ZlNrazJndEN5ekthSHlvTnJqMy8waStUWExZ?=
- =?utf-8?B?VHBEMW9zbTYranJTK3VneHBFbnNnY3dNckQvelBTaWxvZlYzc2F4ZVRwTVdp?=
- =?utf-8?B?TDNwU2lFY0lTN2loSVYxQkxvMGovaTVYTUM5Z1hFTWR6TklwZWpMVEo5QVhS?=
- =?utf-8?B?b1ZaaDlGY2hSakNXd1IrbURJUHArb2cxd0Fld0cwZzAyNEtJQ20zcFlRZnZi?=
- =?utf-8?B?VDBZUmFqM2pMbzdQQjFQMG5IbEdxOGRFYkJ0Q010Zi9GMGxITDJnZWc2d0Fz?=
- =?utf-8?B?RjBobjR3L29yY3ZlY0tRMmxTKzF3ZUZaak8xb1JkY3lyNnVQSWxHN3g2dEF5?=
- =?utf-8?B?em1xN3A4K2JsSFRXb1kwR0loSWd3REg4WjFldkFMZG81dUNVWUsxaUVJZWty?=
- =?utf-8?B?TWh5NzZXZDYrbDQvWkFFek00OXNCc3AxNTg1c1ljSlJkRzc3N1huYWNEc3Rx?=
- =?utf-8?B?cGpXMW5lbWVlNWhzRVJVaWNrZnAyM1NRdDU2SU91c2wwR3RnZz09?=
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230016)(4636009)(346002)(136003)(376002)(396003)(39860400002)(40470700004)(46966006)(36840700001)(2906002)(8936002)(5660300002)(81166007)(86362001)(7416002)(82740400003)(36756003)(70206006)(478600001)(356005)(8676002)(40460700003)(4744005)(70586007)(186003)(4326008)(40480700001)(36860700001)(82310400005)(34020700004)(316002)(2616005)(41300700001)(336012)(47076005)(426003)(54906003)(7696005)(1076003)(110136005)(26005)(43062005)(36900700001)(473944003)(414714003);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Jul 2022 03:08:56.8822
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 38cf8906-ab21-40d6-0d92-08da5fc6081e
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT015.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH0PR12MB5154
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220707020938.2122198-1-liushixin2@huawei.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-enable signaling after flatten dma_fence_chains on transfer
+On Thu, Jul 07, 2022 at 10:09:38AM +0800, Liu Shixin wrote:
+> Release refcount after xas_set to fix UAF which may cause panic like this:
+> 
+>  page:ffffea000491fa40 refcount:1 mapcount:0 mapping:0000000000000000 index:0x1 pfn:0x1247e9
+>  head:ffffea000491fa00 order:3 compound_mapcount:0 compound_pincount:0
+>  memcg:ffff888104f91091
+>  flags: 0x2fffff80010200(slab|head|node=0|zone=2|lastcpupid=0x1fffff)
+> ...
+> page dumped because: VM_BUG_ON_PAGE(PageTail(page))
+>  ------------[ cut here ]------------
+>  kernel BUG at include/linux/page-flags.h:632!
+>  invalid opcode: 0000 [#1] SMP DEBUG_PAGEALLOC KASAN
+>  CPU: 1 PID: 7642 Comm: sh Not tainted 5.15.51-dirty #26
+> ...
+>  Call Trace:
+>   <TASK>
+>   __invalidate_mapping_pages+0xe7/0x540
+>   drop_pagecache_sb+0x159/0x320
+>   iterate_supers+0x120/0x240
+>   drop_caches_sysctl_handler+0xaa/0xe0
+>   proc_sys_call_handler+0x2b4/0x480
+>   new_sync_write+0x3d6/0x5c0
+>   vfs_write+0x446/0x7a0
+>   ksys_write+0x105/0x210
+>   do_syscall_64+0x35/0x80
+>   entry_SYSCALL_64_after_hwframe+0x44/0xae
+>  RIP: 0033:0x7f52b5733130
+> ...
+> 
+> This problem has been fixed on mainline by patch 6b24ca4a1a8d ("mm: Use
+> multi-index entries in the page cache") since it deletes the related code.
+> 
+> Fixes: 5c211ba29deb ("mm: add and use find_lock_entries")
+> Signed-off-by: Liu Shixin <liushixin2@huawei.com>
 
-Signed-off-by: jie1zhan <jesse.zhang@amd.com>
+Acked-by: Matthew Wilcox (Oracle) <willy@infradead.org>
 
-Reviewed-by: Christian König <christian.koenig@amd.com>
-
-Reviewed-by: Nirmoy Das <nirmoy.das@linux.intel.com>
----
- drivers/gpu/drm/drm_syncobj.c | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/drivers/gpu/drm/drm_syncobj.c b/drivers/gpu/drm/drm_syncobj.c
-index 7e48dcd1bee4..0d9d3577325f 100644
---- a/drivers/gpu/drm/drm_syncobj.c
-+++ b/drivers/gpu/drm/drm_syncobj.c
-@@ -920,6 +920,7 @@ static int drm_syncobj_transfer_to_timeline(struct drm_file *file_private,
- 	if (ret)
- 		goto err_free_fence;
- 
-+	dma_fence_enable_sw_signaling(fence);
- 	chain = dma_fence_chain_alloc();
- 	if (!chain) {
- 		ret = -ENOMEM;
--- 
-2.25.1
-
+> ---
+>  mm/filemap.c | 12 +++++++-----
+>  1 file changed, 7 insertions(+), 5 deletions(-)
+> 
+> diff --git a/mm/filemap.c b/mm/filemap.c
+> index 00e391e75880..dbc461703ff4 100644
+> --- a/mm/filemap.c
+> +++ b/mm/filemap.c
+> @@ -2090,7 +2090,11 @@ unsigned find_lock_entries(struct address_space *mapping, pgoff_t start,
+>  
+>  	rcu_read_lock();
+>  	while ((page = find_get_entry(&xas, end, XA_PRESENT))) {
+> +		unsigned long next_idx = xas.xa_index + 1;
+> +
+>  		if (!xa_is_value(page)) {
+> +			if (PageTransHuge(page))
+> +				next_idx = page->index + thp_nr_pages(page);
+>  			if (page->index < start)
+>  				goto put;
+>  			if (page->index + thp_nr_pages(page) - 1 > end)
+> @@ -2111,13 +2115,11 @@ unsigned find_lock_entries(struct address_space *mapping, pgoff_t start,
+>  put:
+>  		put_page(page);
+>  next:
+> -		if (!xa_is_value(page) && PageTransHuge(page)) {
+> -			unsigned int nr_pages = thp_nr_pages(page);
+> -
+> +		if (next_idx != xas.xa_index + 1) {
+>  			/* Final THP may cross MAX_LFS_FILESIZE on 32-bit */
+> -			xas_set(&xas, page->index + nr_pages);
+> -			if (xas.xa_index < nr_pages)
+> +			if (next_idx < xas.xa_index)
+>  				break;
+> +			xas_set(&xas, next_idx);
+>  		}
+>  	}
+>  	rcu_read_unlock();
+> -- 
+> 2.25.1
+> 

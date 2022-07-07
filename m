@@ -2,55 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C19A569E02
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 10:52:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AA31D569E12
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 10:52:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235303AbiGGIuG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Jul 2022 04:50:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36932 "EHLO
+        id S235366AbiGGIuH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Jul 2022 04:50:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36948 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234249AbiGGIuD (ORCPT
+        with ESMTP id S235251AbiGGIuF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Jul 2022 04:50:03 -0400
+        Thu, 7 Jul 2022 04:50:05 -0400
 Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98D2E326D7
-        for <linux-kernel@vger.kernel.org>; Thu,  7 Jul 2022 01:50:02 -0700 (PDT)
-Date:   Thu, 07 Jul 2022 08:50:00 -0000
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D619326DB
+        for <linux-kernel@vger.kernel.org>; Thu,  7 Jul 2022 01:50:03 -0700 (PDT)
+Date:   Thu, 07 Jul 2022 08:50:01 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1657183801;
+        s=2020; t=1657183802;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=pk/nyvZvfxAsWaQ3xp5fqzHH5sPv5ifPLKhjyXhXNqk=;
-        b=qR+Ld5OgdVuHp+IIYV9XLlVoUtNUrbkWERmthwLzGURyo32bK1csF6qHlsyVAiFc9nSgp5
-        Lvmyx7RM9vZdW+9kjIxS8tFb5ZEehLFqm9LYV8XB38iVAXLMgqoLN4Aq9v9bwC0GMaEde2
-        Jf52hXE0s2CXnZvYRTyDrkKJ+CwBWf5Gtgo6Q/BVKZP6w/s1rHv8MRiAubLvhCfgvXyUlM
-        aaMXSlUhUD8TvOHSuQyPAFpZZxhsyJ20BbrwP+t9iTLVC75M66vLouS1F5ZWbIvZZSl4z6
-        8I9fGqHvg2puICabbVZgMH9+RLnzKpYE7lVhckqHmQdTgj+zN4VFCHGMERhf+g==
+        bh=VYTl58K8GBYOaSytl/VpcVqapix1z06o7NSj3HdrPlo=;
+        b=x8LBYxJcytqm/3i8+vmmvRYXm1kClJW8JDV5wSriiacZebqkEjI860s/gZ9qR4T0v28HDc
+        ExapQRpja7a48+l97+gsqiD8e1KkEYhMuRgcEVgCc3abUU/0KUlaYOEaNAhd5yQpocozit
+        zx1yTl0HBXaM8Xr8N0/k14HC+Um3nJp5qWlm6KLl6UTqZQonxl+HmThp+MVbOy4iGXUj9S
+        qVVITuE0wSBfa3Or/GPa/t23l+CY6Uu76Xye53lEeaoNRPfkE0lc6LuheCprrE5kAL2e30
+        nwO+lHMbsAgFd2g7P2S8atJmL+wryrzz0iFnwsZFBEWAhemp33oPGYqsXY8iig==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1657183801;
+        s=2020e; t=1657183802;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=pk/nyvZvfxAsWaQ3xp5fqzHH5sPv5ifPLKhjyXhXNqk=;
-        b=0Nklokvjus2i1w2vy3+rIb9pCAZYU+pTRtDayT6rXY0IYx+ogajMHrTx+YDvUI00DmTgi7
-        ynoCq+nwE9v1f7AA==
+        bh=VYTl58K8GBYOaSytl/VpcVqapix1z06o7NSj3HdrPlo=;
+        b=cdZ4sXcs6nEwFrNZTBlEGqjoSpH+DJ9+RNk+956paGOeaYlIWFuEeeo+coOBnUNZRPy4x7
+        2/drhlYsaAY3HIBQ==
 From:   "irqchip-bot for Samuel Holland" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-kernel@vger.kernel.org
-Subject: [irqchip: irq/irqchip-next] genirq: Provide an IRQ affinity mask in
- non-SMP configs
+Subject: [irqchip: irq/irqchip-next] genirq: Return a const cpumask from
+ irq_data_get_affinity_mask
 Cc:     Samuel Holland <samuel@sholland.org>,
+        Michael Kelley <mikelley@microsoft.com>,
         Marc Zyngier <maz@kernel.org>, tglx@linutronix.de
-In-Reply-To: <20220701200056.46555-9-samuel@sholland.org>
-References: <20220701200056.46555-9-samuel@sholland.org>
+In-Reply-To: <20220701200056.46555-8-samuel@sholland.org>
+References: <20220701200056.46555-8-samuel@sholland.org>
 MIME-Version: 1.0
-Message-ID: <165718380003.15455.9821341691594991462.tip-bot2@tip-bot2>
+Message-ID: <165718380111.15455.7110763554511972062.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -67,64 +68,334 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 The following commit has been merged into the irq/irqchip-next branch of irqchip:
 
-Commit-ID:     aa0813581b8d37bdd91cd40b67ef79ffa45104b2
-Gitweb:        https://git.kernel.org/pub/scm/linux/kernel/git/maz/arm-platforms/aa0813581b8d37bdd91cd40b67ef79ffa45104b2
+Commit-ID:     4d0b8298818b623f5fa51d5c49e1a142d3618ac9
+Gitweb:        https://git.kernel.org/pub/scm/linux/kernel/git/maz/arm-platforms/4d0b8298818b623f5fa51d5c49e1a142d3618ac9
 Author:        Samuel Holland <samuel@sholland.org>
-AuthorDate:    Fri, 01 Jul 2022 15:00:56 -05:00
+AuthorDate:    Fri, 01 Jul 2022 15:00:55 -05:00
 Committer:     Marc Zyngier <maz@kernel.org>
 CommitterDate: Thu, 07 Jul 2022 09:38:04 +01:00
 
-genirq: Provide an IRQ affinity mask in non-SMP configs
+genirq: Return a const cpumask from irq_data_get_affinity_mask
 
-IRQ affinity masks are not allocated in uniprocessor configurations.
-This requires special case non-SMP code in drivers for irqchips which
-have per-CPU enable or mask registers.
+Now that the irq_data_update_affinity helper exists, enforce its use
+by returning a a const cpumask from irq_data_get_affinity_mask.
 
-Since IRQ affinity is always the same in a uniprocessor configuration,
-we can provide a correct affinity mask without allocating one per IRQ.
-
-By returning a real cpumask from irq_data_get_affinity_mask even when
-SMP is disabled, irqchip drivers which iterate over that mask will
-automatically do the right thing.
+Since the previous commit already updated places that needed to call
+irq_data_update_affinity, this commit updates the remaining code that
+either did not modify the cpumask or immediately passed the modified
+mask to irq_set_affinity.
 
 Signed-off-by: Samuel Holland <samuel@sholland.org>
+Reviewed-by: Michael Kelley <mikelley@microsoft.com>
 Signed-off-by: Marc Zyngier <maz@kernel.org>
-Link: https://lore.kernel.org/r/20220701200056.46555-9-samuel@sholland.org
+Link: https://lore.kernel.org/r/20220701200056.46555-8-samuel@sholland.org
 ---
- include/linux/irq.h | 8 ++++++++
- 1 file changed, 8 insertions(+)
+ arch/mips/cavium-octeon/octeon-irq.c |  4 ++--
+ arch/sh/kernel/irq.c                 |  7 ++++---
+ arch/x86/hyperv/irqdomain.c          |  2 +-
+ arch/xtensa/kernel/irq.c             |  7 ++++---
+ drivers/iommu/hyperv-iommu.c         |  2 +-
+ drivers/pci/controller/pci-hyperv.c  | 10 +++++-----
+ include/linux/irq.h                  | 12 +++++++-----
+ kernel/irq/chip.c                    |  8 +++++---
+ kernel/irq/debugfs.c                 |  2 +-
+ kernel/irq/ipi.c                     | 16 +++++++++-------
+ 10 files changed, 39 insertions(+), 31 deletions(-)
 
+diff --git a/arch/mips/cavium-octeon/octeon-irq.c b/arch/mips/cavium-octeon/octeon-irq.c
+index 6cdcbf4..9cb9ed4 100644
+--- a/arch/mips/cavium-octeon/octeon-irq.c
++++ b/arch/mips/cavium-octeon/octeon-irq.c
+@@ -263,7 +263,7 @@ static int next_cpu_for_irq(struct irq_data *data)
+ 
+ #ifdef CONFIG_SMP
+ 	int cpu;
+-	struct cpumask *mask = irq_data_get_affinity_mask(data);
++	const struct cpumask *mask = irq_data_get_affinity_mask(data);
+ 	int weight = cpumask_weight(mask);
+ 	struct octeon_ciu_chip_data *cd = irq_data_get_irq_chip_data(data);
+ 
+@@ -758,7 +758,7 @@ static void octeon_irq_cpu_offline_ciu(struct irq_data *data)
+ {
+ 	int cpu = smp_processor_id();
+ 	cpumask_t new_affinity;
+-	struct cpumask *mask = irq_data_get_affinity_mask(data);
++	const struct cpumask *mask = irq_data_get_affinity_mask(data);
+ 
+ 	if (!cpumask_test_cpu(cpu, mask))
+ 		return;
+diff --git a/arch/sh/kernel/irq.c b/arch/sh/kernel/irq.c
+index ef0f082..56269c2 100644
+--- a/arch/sh/kernel/irq.c
++++ b/arch/sh/kernel/irq.c
+@@ -230,16 +230,17 @@ void migrate_irqs(void)
+ 		struct irq_data *data = irq_get_irq_data(irq);
+ 
+ 		if (irq_data_get_node(data) == cpu) {
+-			struct cpumask *mask = irq_data_get_affinity_mask(data);
++			const struct cpumask *mask = irq_data_get_affinity_mask(data);
+ 			unsigned int newcpu = cpumask_any_and(mask,
+ 							      cpu_online_mask);
+ 			if (newcpu >= nr_cpu_ids) {
+ 				pr_info_ratelimited("IRQ%u no longer affine to CPU%u\n",
+ 						    irq, cpu);
+ 
+-				cpumask_setall(mask);
++				irq_set_affinity(irq, cpu_all_mask);
++			} else {
++				irq_set_affinity(irq, mask);
+ 			}
+-			irq_set_affinity(irq, mask);
+ 		}
+ 	}
+ }
+diff --git a/arch/x86/hyperv/irqdomain.c b/arch/x86/hyperv/irqdomain.c
+index 7e0f6be..42c70d2 100644
+--- a/arch/x86/hyperv/irqdomain.c
++++ b/arch/x86/hyperv/irqdomain.c
+@@ -192,7 +192,7 @@ static void hv_irq_compose_msi_msg(struct irq_data *data, struct msi_msg *msg)
+ 	struct pci_dev *dev;
+ 	struct hv_interrupt_entry out_entry, *stored_entry;
+ 	struct irq_cfg *cfg = irqd_cfg(data);
+-	cpumask_t *affinity;
++	const cpumask_t *affinity;
+ 	int cpu;
+ 	u64 status;
+ 
+diff --git a/arch/xtensa/kernel/irq.c b/arch/xtensa/kernel/irq.c
+index 529fe92..42f1060 100644
+--- a/arch/xtensa/kernel/irq.c
++++ b/arch/xtensa/kernel/irq.c
+@@ -169,7 +169,7 @@ void migrate_irqs(void)
+ 
+ 	for_each_active_irq(i) {
+ 		struct irq_data *data = irq_get_irq_data(i);
+-		struct cpumask *mask;
++		const struct cpumask *mask;
+ 		unsigned int newcpu;
+ 
+ 		if (irqd_is_per_cpu(data))
+@@ -185,9 +185,10 @@ void migrate_irqs(void)
+ 			pr_info_ratelimited("IRQ%u no longer affine to CPU%u\n",
+ 					    i, cpu);
+ 
+-			cpumask_setall(mask);
++			irq_set_affinity(i, cpu_all_mask);
++		} else {
++			irq_set_affinity(i, mask);
+ 		}
+-		irq_set_affinity(i, mask);
+ 	}
+ }
+ #endif /* CONFIG_HOTPLUG_CPU */
+diff --git a/drivers/iommu/hyperv-iommu.c b/drivers/iommu/hyperv-iommu.c
+index e285a22..51bd66a 100644
+--- a/drivers/iommu/hyperv-iommu.c
++++ b/drivers/iommu/hyperv-iommu.c
+@@ -194,7 +194,7 @@ hyperv_root_ir_compose_msi_msg(struct irq_data *irq_data, struct msi_msg *msg)
+ 	u32 vector;
+ 	struct irq_cfg *cfg;
+ 	int ioapic_id;
+-	struct cpumask *affinity;
++	const struct cpumask *affinity;
+ 	int cpu;
+ 	struct hv_interrupt_entry entry;
+ 	struct hyperv_root_ir_data *data = irq_data->chip_data;
+diff --git a/drivers/pci/controller/pci-hyperv.c b/drivers/pci/controller/pci-hyperv.c
+index db814f7..aebada4 100644
+--- a/drivers/pci/controller/pci-hyperv.c
++++ b/drivers/pci/controller/pci-hyperv.c
+@@ -642,7 +642,7 @@ static void hv_arch_irq_unmask(struct irq_data *data)
+ 	struct hv_retarget_device_interrupt *params;
+ 	struct tran_int_desc *int_desc;
+ 	struct hv_pcibus_device *hbus;
+-	struct cpumask *dest;
++	const struct cpumask *dest;
+ 	cpumask_var_t tmp;
+ 	struct pci_bus *pbus;
+ 	struct pci_dev *pdev;
+@@ -1613,7 +1613,7 @@ out:
+ }
+ 
+ static u32 hv_compose_msi_req_v1(
+-	struct pci_create_interrupt *int_pkt, struct cpumask *affinity,
++	struct pci_create_interrupt *int_pkt, const struct cpumask *affinity,
+ 	u32 slot, u8 vector, u8 vector_count)
+ {
+ 	int_pkt->message_type.type = PCI_CREATE_INTERRUPT_MESSAGE;
+@@ -1641,7 +1641,7 @@ static int hv_compose_msi_req_get_cpu(struct cpumask *affinity)
+ }
+ 
+ static u32 hv_compose_msi_req_v2(
+-	struct pci_create_interrupt2 *int_pkt, struct cpumask *affinity,
++	struct pci_create_interrupt2 *int_pkt, const struct cpumask *affinity,
+ 	u32 slot, u8 vector, u8 vector_count)
+ {
+ 	int cpu;
+@@ -1660,7 +1660,7 @@ static u32 hv_compose_msi_req_v2(
+ }
+ 
+ static u32 hv_compose_msi_req_v3(
+-	struct pci_create_interrupt3 *int_pkt, struct cpumask *affinity,
++	struct pci_create_interrupt3 *int_pkt, const struct cpumask *affinity,
+ 	u32 slot, u32 vector, u8 vector_count)
+ {
+ 	int cpu;
+@@ -1697,7 +1697,7 @@ static void hv_compose_msi_msg(struct irq_data *data, struct msi_msg *msg)
+ 	struct hv_pci_dev *hpdev;
+ 	struct pci_bus *pbus;
+ 	struct pci_dev *pdev;
+-	struct cpumask *dest;
++	const struct cpumask *dest;
+ 	struct compose_comp_ctxt comp;
+ 	struct tran_int_desc *int_desc;
+ 	struct msi_desc *msi_desc;
 diff --git a/include/linux/irq.h b/include/linux/irq.h
-index 02073f7..996e227 100644
+index adcfebc..02073f7 100644
 --- a/include/linux/irq.h
 +++ b/include/linux/irq.h
-@@ -151,7 +151,9 @@ struct irq_common_data {
- #endif
- 	void			*handler_data;
- 	struct msi_desc		*msi_desc;
-+#ifdef CONFIG_SMP
- 	cpumask_var_t		affinity;
-+#endif
- #ifdef CONFIG_GENERIC_IRQ_EFFECTIVE_AFF_MASK
- 	cpumask_var_t		effective_affinity;
- #endif
-@@ -882,13 +884,19 @@ static inline int irq_data_get_node(struct irq_data *d)
- static inline
- const struct cpumask *irq_data_get_affinity_mask(struct irq_data *d)
+@@ -879,7 +879,8 @@ static inline int irq_data_get_node(struct irq_data *d)
+ 	return irq_common_data_get_node(d->common);
+ }
+ 
+-static inline struct cpumask *irq_data_get_affinity_mask(struct irq_data *d)
++static inline
++const struct cpumask *irq_data_get_affinity_mask(struct irq_data *d)
  {
-+#ifdef CONFIG_SMP
  	return d->common->affinity;
-+#else
-+	return cpumask_of(0);
-+#endif
  }
- 
- static inline void irq_data_update_affinity(struct irq_data *d,
- 					    const struct cpumask *m)
- {
-+#ifdef CONFIG_SMP
+@@ -890,7 +891,7 @@ static inline void irq_data_update_affinity(struct irq_data *d,
  	cpumask_copy(d->common->affinity, m);
-+#endif
  }
  
- static inline const struct cpumask *irq_get_affinity_mask(int irq)
+-static inline struct cpumask *irq_get_affinity_mask(int irq)
++static inline const struct cpumask *irq_get_affinity_mask(int irq)
+ {
+ 	struct irq_data *d = irq_get_irq_data(irq);
+ 
+@@ -899,7 +900,7 @@ static inline struct cpumask *irq_get_affinity_mask(int irq)
+ 
+ #ifdef CONFIG_GENERIC_IRQ_EFFECTIVE_AFF_MASK
+ static inline
+-struct cpumask *irq_data_get_effective_affinity_mask(struct irq_data *d)
++const struct cpumask *irq_data_get_effective_affinity_mask(struct irq_data *d)
+ {
+ 	return d->common->effective_affinity;
+ }
+@@ -914,13 +915,14 @@ static inline void irq_data_update_effective_affinity(struct irq_data *d,
+ {
+ }
+ static inline
+-struct cpumask *irq_data_get_effective_affinity_mask(struct irq_data *d)
++const struct cpumask *irq_data_get_effective_affinity_mask(struct irq_data *d)
+ {
+ 	return irq_data_get_affinity_mask(d);
+ }
+ #endif
+ 
+-static inline struct cpumask *irq_get_effective_affinity_mask(unsigned int irq)
++static inline
++const struct cpumask *irq_get_effective_affinity_mask(unsigned int irq)
+ {
+ 	struct irq_data *d = irq_get_irq_data(irq);
+ 
+diff --git a/kernel/irq/chip.c b/kernel/irq/chip.c
+index 886789d..9c7ad22 100644
+--- a/kernel/irq/chip.c
++++ b/kernel/irq/chip.c
+@@ -188,7 +188,8 @@ enum {
+ 
+ #ifdef CONFIG_SMP
+ static int
+-__irq_startup_managed(struct irq_desc *desc, struct cpumask *aff, bool force)
++__irq_startup_managed(struct irq_desc *desc, const struct cpumask *aff,
++		      bool force)
+ {
+ 	struct irq_data *d = irq_desc_get_irq_data(desc);
+ 
+@@ -224,7 +225,8 @@ __irq_startup_managed(struct irq_desc *desc, struct cpumask *aff, bool force)
+ }
+ #else
+ static __always_inline int
+-__irq_startup_managed(struct irq_desc *desc, struct cpumask *aff, bool force)
++__irq_startup_managed(struct irq_desc *desc, const struct cpumask *aff,
++		      bool force)
+ {
+ 	return IRQ_STARTUP_NORMAL;
+ }
+@@ -252,7 +254,7 @@ static int __irq_startup(struct irq_desc *desc)
+ int irq_startup(struct irq_desc *desc, bool resend, bool force)
+ {
+ 	struct irq_data *d = irq_desc_get_irq_data(desc);
+-	struct cpumask *aff = irq_data_get_affinity_mask(d);
++	const struct cpumask *aff = irq_data_get_affinity_mask(d);
+ 	int ret = 0;
+ 
+ 	desc->depth = 0;
+diff --git a/kernel/irq/debugfs.c b/kernel/irq/debugfs.c
+index bc8e40c..bbcaac6 100644
+--- a/kernel/irq/debugfs.c
++++ b/kernel/irq/debugfs.c
+@@ -30,7 +30,7 @@ static void irq_debug_show_bits(struct seq_file *m, int ind, unsigned int state,
+ static void irq_debug_show_masks(struct seq_file *m, struct irq_desc *desc)
+ {
+ 	struct irq_data *data = irq_desc_get_irq_data(desc);
+-	struct cpumask *msk;
++	const struct cpumask *msk;
+ 
+ 	msk = irq_data_get_affinity_mask(data);
+ 	seq_printf(m, "affinity: %*pbl\n", cpumask_pr_args(msk));
+diff --git a/kernel/irq/ipi.c b/kernel/irq/ipi.c
+index 08ce7da..bbd945b 100644
+--- a/kernel/irq/ipi.c
++++ b/kernel/irq/ipi.c
+@@ -115,11 +115,11 @@ free_descs:
+ int irq_destroy_ipi(unsigned int irq, const struct cpumask *dest)
+ {
+ 	struct irq_data *data = irq_get_irq_data(irq);
+-	struct cpumask *ipimask = data ? irq_data_get_affinity_mask(data) : NULL;
++	const struct cpumask *ipimask;
+ 	struct irq_domain *domain;
+ 	unsigned int nr_irqs;
+ 
+-	if (!irq || !data || !ipimask)
++	if (!irq || !data)
+ 		return -EINVAL;
+ 
+ 	domain = data->domain;
+@@ -131,7 +131,8 @@ int irq_destroy_ipi(unsigned int irq, const struct cpumask *dest)
+ 		return -EINVAL;
+ 	}
+ 
+-	if (WARN_ON(!cpumask_subset(dest, ipimask)))
++	ipimask = irq_data_get_affinity_mask(data);
++	if (!ipimask || WARN_ON(!cpumask_subset(dest, ipimask)))
+ 		/*
+ 		 * Must be destroying a subset of CPUs to which this IPI
+ 		 * was set up to target
+@@ -162,12 +163,13 @@ int irq_destroy_ipi(unsigned int irq, const struct cpumask *dest)
+ irq_hw_number_t ipi_get_hwirq(unsigned int irq, unsigned int cpu)
+ {
+ 	struct irq_data *data = irq_get_irq_data(irq);
+-	struct cpumask *ipimask = data ? irq_data_get_affinity_mask(data) : NULL;
++	const struct cpumask *ipimask;
+ 
+-	if (!data || !ipimask || cpu >= nr_cpu_ids)
++	if (!data || cpu >= nr_cpu_ids)
+ 		return INVALID_HWIRQ;
+ 
+-	if (!cpumask_test_cpu(cpu, ipimask))
++	ipimask = irq_data_get_affinity_mask(data);
++	if (!ipimask || !cpumask_test_cpu(cpu, ipimask))
+ 		return INVALID_HWIRQ;
+ 
+ 	/*
+@@ -186,7 +188,7 @@ EXPORT_SYMBOL_GPL(ipi_get_hwirq);
+ static int ipi_send_verify(struct irq_chip *chip, struct irq_data *data,
+ 			   const struct cpumask *dest, unsigned int cpu)
+ {
+-	struct cpumask *ipimask = irq_data_get_affinity_mask(data);
++	const struct cpumask *ipimask = irq_data_get_affinity_mask(data);
+ 
+ 	if (!chip || !ipimask)
+ 		return -EINVAL;

@@ -2,74 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8BF9656A5CB
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 16:47:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AF42156A5C2
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 16:45:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235783AbiGGOq4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Jul 2022 10:46:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40008 "EHLO
+        id S235959AbiGGOpc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Jul 2022 10:45:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38960 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235234AbiGGOqx (ORCPT
+        with ESMTP id S230209AbiGGOpb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Jul 2022 10:46:53 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13CE82FFCB;
-        Thu,  7 Jul 2022 07:46:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1657205213; x=1688741213;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=KZoOhYr8rZQDf+CrGeMco6Jgl7zOhXbo9W38e2RlFZY=;
-  b=hNFXZqPDVnyhUk1GuJEIZQVPloNRoGZHxvrqdmEmGtnoIQljEEg3ornY
-   Kfd4ydF4NV+3kiJTdnU/76Lkt8FAPMPAwwnrgvs2/rX12IBXpgGAZq1ik
-   ZUjn3BIWRRi03YCgI0ihp28cnkpM4sKikyUjRbiiXKPxOG1RoCgOpt7po
-   VFL7mw5AsENeNhf37qRYancbXw07x2KWh/D4OoIJIHNQp7gILmU5dpKhH
-   byI8d/arwY2NiZIOZfMP0GrfhsE/aQSpRFEbTJboXjz5a99J0mBBSVCOQ
-   e1CwvXMEVPBJEKmef7SZDFtEPbbYIcvqGEhhwyHRky8xTcRw72Cy9Jg9h
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10400"; a="282793101"
-X-IronPort-AV: E=Sophos;i="5.92,253,1650956400"; 
-   d="scan'208";a="282793101"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jul 2022 07:46:52 -0700
-X-IronPort-AV: E=Sophos;i="5.92,253,1650956400"; 
-   d="scan'208";a="568544278"
-Received: from nmajidi-mobl.amr.corp.intel.com (HELO [10.251.17.238]) ([10.251.17.238])
-  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jul 2022 07:46:51 -0700
-Message-ID: <8821beda-4d60-4d01-b5c8-1629a19c7f0d@intel.com>
-Date:   Thu, 7 Jul 2022 07:44:39 -0700
+        Thu, 7 Jul 2022 10:45:31 -0400
+Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3EFA62656C;
+        Thu,  7 Jul 2022 07:45:30 -0700 (PDT)
+Received: by mail-wr1-x434.google.com with SMTP id r14so20875084wrg.1;
+        Thu, 07 Jul 2022 07:45:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=0vvOcF04of4eueNy3j0/G+PNUIgeaFTAvFOiC1ayUAM=;
+        b=YoegBB6KD2BGYIwIFRuRldiaXMtgQZEaon/lxSPUd/NBq5ujfuIiFdwN/Kk9CF9tdK
+         m+6sCUv0gqnFnqu1i4kEiFHay3+ZgSbUYH0IYJipabvCJ44Sp+uN70qHfJu5fLygqBPa
+         RtMkk5Ds78rZTaUGBBpLJpWrCGF8x5kF+uXNKwMO2PWTawaAacXeEytSLMnJhtR/gxi9
+         JJbw9w1+8kwfDx8c7MaYBsGSME72NkmqggVbbgq/+NLCfOjNrTAEbUMcRunSdX+kzWhN
+         KBdcIAGmcDoC7+3rGU+TOcT8NGPMjoU1GQkBes2xKamQp69VvQO7yGZvMHVtH7HDFoi6
+         uhKA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=0vvOcF04of4eueNy3j0/G+PNUIgeaFTAvFOiC1ayUAM=;
+        b=B+xY3EEGh4DAuSnsdUm8GU7EdXQUM+lYz89INk4KDPJCD9s8lHQunWGrnxoRyTJo45
+         76drmDvfvBiG5Q9TV7+c9JYMcFzbtvc5N6zXsZA5CSbihcvv7EoP7CWd/zrCINHTJImU
+         jHazvF9Jts/Qsw2qvwiHJQlrCkk/qyhMF2+So9e1BmQm/ZIBHTV3l98whUnNOSr2oTUW
+         OsDp/PDWxH7oIBIPFcI0OSU5ljBntvDKOQh1QAqGXOh5PxduTIx304/mDl9aHuSWmf5J
+         L8852YK+AfaTTkDcP/E3Q7IY68v0NTnVRbhzHp3WUiBMx+O+3hxasReMUtPHicQ6beuI
+         z5/A==
+X-Gm-Message-State: AJIora/QNgo15qnVGC4ThiOtF6pejgLHvSxuJgErpdGNx4FN6ueDkMqN
+        6KSIdUI6aAuoIuM6ykQLv1+t/ryBnBPLtQ==
+X-Google-Smtp-Source: AGRyM1tfcd/EN9bNHOdB0lihfDHNkoRbGPVjLa6AfF628mIVWi+vg43I+Azq7HsKQTP5OitdCjQiuA==
+X-Received: by 2002:a05:6000:1ac7:b0:21d:134e:5d74 with SMTP id i7-20020a0560001ac700b0021d134e5d74mr44844340wry.78.1657205128650;
+        Thu, 07 Jul 2022 07:45:28 -0700 (PDT)
+Received: from [192.168.2.177] ([207.188.167.132])
+        by smtp.gmail.com with ESMTPSA id g3-20020a05600c140300b0039c96b97359sm29684100wmi.37.2022.07.07.07.45.27
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 07 Jul 2022 07:45:27 -0700 (PDT)
+Message-ID: <4447e5dc-8c79-7260-2d65-d86b5416d9a2@gmail.com>
+Date:   Thu, 7 Jul 2022 16:45:26 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH 0/3] Add PUD and kernel PTE level pagetable account
+ Thunderbird/91.11.0
+Subject: Re: [PATCH] arm64: dts: mt7622: fix BPI-R64 WPS button
 Content-Language: en-US
-To:     Baolin Wang <baolin.wang@linux.alibaba.com>,
-        akpm@linux-foundation.org
-Cc:     rppt@linux.ibm.com, willy@infradead.org, will@kernel.org,
-        aneesh.kumar@linux.ibm.com, npiggin@gmail.com,
-        peterz@infradead.org, catalin.marinas@arm.com,
-        chenhuacai@kernel.org, kernel@xen0n.name,
-        tsbogend@alpha.franken.de, dave.hansen@linux.intel.com,
-        luto@kernel.org, tglx@linutronix.de, mingo@redhat.com,
-        bp@alien8.de, hpa@zytor.com, arnd@arndb.de, guoren@kernel.org,
-        monstr@monstr.eu, jonas@southpole.se,
-        stefan.kristiansson@saunalahti.fi, shorne@gmail.com,
-        x86@kernel.org, linux-arch@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, loongarch@lists.linux.dev,
-        linux-mips@vger.kernel.org, linux-csky@vger.kernel.org,
-        openrisc@lists.librecores.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-References: <cover.1657096412.git.baolin.wang@linux.alibaba.com>
- <d2d58cc2-7e6d-aa2d-3096-a500ce321494@intel.com>
- <ef376131-bf5f-7e5b-ea1b-1e8f64a6d060@linux.alibaba.com>
-From:   Dave Hansen <dave.hansen@intel.com>
-In-Reply-To: <ef376131-bf5f-7e5b-ea1b-1e8f64a6d060@linux.alibaba.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+To:     Nick Hainke <vincent@systemli.org>,
+        linux-mediatek@lists.infradead.org
+Cc:     INAGAKI Hiroshi <musashino.open@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Ryder Lee <ryder.lee@mediatek.com>, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <20220630111746.4098-1-vincent@systemli.org>
+From:   Matthias Brugger <matthias.bgg@gmail.com>
+In-Reply-To: <20220630111746.4098-1-vincent@systemli.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,49 +78,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 7/7/22 04:32, Baolin Wang wrote:
-> On 7/6/2022 11:48 PM, Dave Hansen wrote:
->> On 7/6/22 01:59, Baolin Wang wrote:
->>> Now we will miss to account the PUD level pagetable and kernel PTE level
->>> pagetable, as well as missing to set the PG_table flags for these
->>> pagetable
->>> pages, which will get an inaccurate pagetable accounting, and miss
->>> PageTable() validation in some cases. So this patch set introduces new
->>> helpers to help to account PUD and kernel PTE pagetable pages.
->>
->> Could you explain the motivation for this series a bit more?  Is there a
->> real-world problem that this fixes?
+
+
+On 30/06/2022 13:16, Nick Hainke wrote:
+> The bananapi R64 (BPI-R64) experiences wrong WPS button signals.
+> In OpenWrt pushing the WPS button while powering on the device will set
+> it to recovery mode. Currently, this also happens without any user
+> interaction. In particular, the wrong signals appear while booting the
+> device or restarting it, e.g. after doing a system upgrade. If the
+> device is in recovery mode the user needs to manually power cycle or
+> restart it.
 > 
-> Not fix real problem. The motivation is that making the pagetable
-> accounting more accurate, which helps us to analyse the consumption of
-> the pagetable pages in some cases, and maybe help to do some empty
-> pagetable reclaiming in future.
+> The official BPI-R64 sources set the WPS button to GPIO_ACTIVE_LOW in
+> the device tree. This setting seems to suppress the unwanted WPS button
+> press signals. So this commit changes the button from GPIO_ACTIVE_HIGH to
+> GPIO_ACTIVE_LOW.
+> 
+> The official BPI-R64 sources can be found on
+> https://github.com/BPI-SINOVOIP/BPI-R64-openwrt
+> 
+> Fixes: 0b6286dd96c0 ("arm64: dts: mt7622: add bananapi BPI-R64 board")
+> 
+> Suggested-by: INAGAKI Hiroshi <musashino.open@gmail.com>
+> Signed-off-by: Nick Hainke <vincent@systemli.org>
 
-This accounting isn't free.  It costs storage (and also parts of
-cachelines) in each mm and CPU time to maintain it, plus maintainer
-eyeballs to maintain.  PUD pages are also fundamentally (on x86 at
-least) 0.0004% of the overhead of PTE and 0.2% of the overhead of PMD
-pages unless someone is using gigantic hugetlbfs mappings.
+Applied, thanks!
 
-Even with 1G gigantic pages, you would need a quarter of a million
-(well, 262144 or 512*512) mappings of one 1G page to consume 1G of
-memory on PUD pages.
-
-That just doesn't seem like something anyone is likely to actually do in
-practice.  That makes the benefits of the PUD portion of this series
-rather unclear in the real world.
-
-As for the kernel page tables, I'm not really aware of them causing any
-problems.  We have a pretty good idea how much space they consume from
-the DirectMap* entries in meminfo:
-
-	DirectMap4k:     2262720 kB
-	DirectMap2M:    40507392 kB
-	DirectMap1G:    24117248 kB
-
-as well as our page table debugging infrastructure.  I haven't found
-myself dying for more specific info on them.
-
-So, nothing in this series seems like a *BAD* idea, but I'm not sure in
-the end it solves more problems than it creates.
-
+> ---
+>   arch/arm64/boot/dts/mediatek/mt7622-bananapi-bpi-r64.dts | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/arch/arm64/boot/dts/mediatek/mt7622-bananapi-bpi-r64.dts b/arch/arm64/boot/dts/mediatek/mt7622-bananapi-bpi-r64.dts
+> index 2b9bf8dd14ec..7538918c7a82 100644
+> --- a/arch/arm64/boot/dts/mediatek/mt7622-bananapi-bpi-r64.dts
+> +++ b/arch/arm64/boot/dts/mediatek/mt7622-bananapi-bpi-r64.dts
+> @@ -49,7 +49,7 @@ factory {
+>   		wps {
+>   			label = "wps";
+>   			linux,code = <KEY_WPS_BUTTON>;
+> -			gpios = <&pio 102 GPIO_ACTIVE_HIGH>;
+> +			gpios = <&pio 102 GPIO_ACTIVE_LOW>;
+>   		};
+>   	};
+>   

@@ -2,123 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4EE1356A591
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 16:36:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F15A56A3D1
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 15:37:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235742AbiGGOgT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Jul 2022 10:36:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57722 "EHLO
+        id S235991AbiGGNhw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Jul 2022 09:37:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59498 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235687AbiGGOgR (ORCPT
+        with ESMTP id S235519AbiGGNhu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Jul 2022 10:36:17 -0400
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.17.10])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5122130F63;
-        Thu,  7 Jul 2022 07:36:16 -0700 (PDT)
-Received: from mail-yb1-f181.google.com ([209.85.219.181]) by
- mrelayeu.kundenserver.de (mreue106 [213.165.67.113]) with ESMTPSA (Nemesis)
- id 1MbSXf-1ncahT0pa5-00bruD; Thu, 07 Jul 2022 16:36:14 +0200
-Received: by mail-yb1-f181.google.com with SMTP id n74so3186785yba.3;
-        Thu, 07 Jul 2022 07:36:13 -0700 (PDT)
-X-Gm-Message-State: AJIora+7XjcN0A9VqOGxgcMrZGmvZ1orltDVH8rwKdTK5HJNCFxvi4K6
-        kA8Smnd5+NqQoMVh/JsAEmvATtClVhJb4lgSys8=
-X-Google-Smtp-Source: AGRyM1sHO0vLH5lK7prAzcvvwHxD+arEX2LzrQE6vcetrOrIovZ6/GAY1MqKVLA47Mf3l6xqB5z1R2OI4jP17F1EQlE=
-X-Received: by 2002:a81:f8f:0:b0:31c:bd9f:31ce with SMTP id
- 137-20020a810f8f000000b0031cbd9f31cemr19094869ywp.347.1657201076632; Thu, 07
- Jul 2022 06:37:56 -0700 (PDT)
+        Thu, 7 Jul 2022 09:37:50 -0400
+Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C99741EAEF
+        for <linux-kernel@vger.kernel.org>; Thu,  7 Jul 2022 06:37:49 -0700 (PDT)
+Received: by mail-ed1-x52e.google.com with SMTP id g1so15546957edb.12
+        for <linux-kernel@vger.kernel.org>; Thu, 07 Jul 2022 06:37:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :references:from:in-reply-to:content-transfer-encoding;
+        bh=IfZQ5gf6I0wnqhKd/NWryvEg+xuPTzb9q9RJYF/x4hI=;
+        b=DR1QzbDxXP/SdV+7VElfFmnVdNSMGD70rpBpE8Ki4gmT7lATSzJZCToOknrKmCO+CX
+         PyrVLj0sg8UqEHYMv0Z0WMABq3ppLWO2JP6V3UmlCDxCV2Dppnf4iSf6kPKrcfLMdvWB
+         SJ8WPoH3qKlplUmD4IHLgWRME7l2fjo+TJLHK0AtdahGX7CwwmshrFAIcHCR1GbsoAmE
+         zebSO7WJr8ztBjJUVtkiTRngXqNvehcH4D03qonP6flUF5tRAVaP5ayjeZVprwtamWco
+         r6f8UGCMVpj7KN43eceGJjuecix5jiU22/qzRiowwl0ACmk/WEtKFKElpFuwU7//31JT
+         lb+A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=IfZQ5gf6I0wnqhKd/NWryvEg+xuPTzb9q9RJYF/x4hI=;
+        b=fraQx+YgfGyMSgHHZxmvjt6JdVNwWvLrTJssLs41g/K58r2sSHtc13n+6yGmhfoiIf
+         qUhmMHSusfgi/vK2e5EBb3JlpsNqpGOKat+TvAb3VCwKt4hBDIyNxUVYJqzNC2YvHVYB
+         YmUit/AexOPzecsn1we15dLA6AQ+3THfG2Bve57VA6NV/Zfjigxo1wOtCU6+9TEI3nmq
+         4uXF4SCt+K+Vit3RnABTR6/6DRf3Q0fCn4e3rDfEjHIWuLDAIRgRaaVEeoQzC93924CY
+         gQGGvE8wzNWiq1hVQK9BMDNqhE4StK1Mbo4fx87+0DFTdgt2Cy4r37zJ4/pdZHBWuykR
+         KCiQ==
+X-Gm-Message-State: AJIora8tuoRgMph7PmhRcmvPLMd6DQbWbYmwYETrc7iZuev+0iWChq6D
+        MX7vl5a3mu98xwftTqK69gs=
+X-Google-Smtp-Source: AGRyM1stGUOKzLD1ycd4kXtJRDhMWSm9EKgOzNeHZ46NGDu8hpWmb7Mn7tYGrWMga94c8P9YklK2zw==
+X-Received: by 2002:aa7:cd91:0:b0:438:33a1:d5aa with SMTP id x17-20020aa7cd91000000b0043833a1d5aamr56730529edv.157.1657201068450;
+        Thu, 07 Jul 2022 06:37:48 -0700 (PDT)
+Received: from ?IPV6:2620:10d:c096:310::2eef? ([2620:10d:c092:600::2:338f])
+        by smtp.gmail.com with ESMTPSA id m11-20020a50ef0b000000b0043a6c9e50f4sm8904918eds.29.2022.07.07.06.37.47
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 07 Jul 2022 06:37:47 -0700 (PDT)
+Message-ID: <2041c8d8-e57d-01bf-1378-3ad2c72f69d6@gmail.com>
+Date:   Thu, 7 Jul 2022 14:37:42 +0100
 MIME-Version: 1.0
-References: <20220622225822.2166305-1-mail@conchuod.ie> <a39bad24-d2bb-ef3e-d57a-2ac4fa1156ef@microchip.com>
-In-Reply-To: <a39bad24-d2bb-ef3e-d57a-2ac4fa1156ef@microchip.com>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Thu, 7 Jul 2022 15:37:40 +0200
-X-Gmail-Original-Message-ID: <CAK8P3a04WLx4Me_=hm9v+Kpq31i3ZCDfPiDhT64RyE_pZZPDVg@mail.gmail.com>
-Message-ID: <CAK8P3a04WLx4Me_=hm9v+Kpq31i3ZCDfPiDhT64RyE_pZZPDVg@mail.gmail.com>
-Subject: Re: [RESEND PATCH v4] MAINTAINERS: add polarfire rng, pci and clock drivers
-To:     Conor Dooley <Conor.Dooley@microchip.com>
-Cc:     Palmer Dabbelt <palmer@rivosinc.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Arnd Bergmann <arnd@arndb.de>, Cyril.Jean@microchip.com,
-        Daire McNamara <Daire.McNamara@microchip.com>,
-        Lewis Hanly <Lewis.Hanly@microchip.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        gregkh <gregkh@linuxfoundation.org>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        =?UTF-8?Q?Krzysztof_Wilczy=C5=84ski?= <kw@linux.com>,
-        linux-clk <linux-clk@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-pci <linux-pci@vger.kernel.org>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Rob Herring <robh@kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Stephen Boyd <sboyd@kernel.org>, Wolfram Sang <wsa@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:QWoM2sjcc/Ov3bhjeHTkVkhf5NvG6Oq+ia1j/GsIqsUZ78Xbcca
- kzsnt0CWR8JZREjXEXIKmhLfe1YvdbP0grxZpvIEFieuPMe7nZlkAQ/PBCVTkQ0kIVpAFWB
- 6qQ7qfAb5Z+C4ekAtrucs8T3pYs5K00kRyKq0WMZV979c8YXRHidsNAwFVcQ1bwj005x5MV
- pr8pTIzZbGEPL8m/Y1Cbg==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:Rp4YGC2HfCI=:WHEdgZLYv9/EZJKjErR/+S
- tlwyMUjZJ70o9wYaow14RRyx6XMMleZMsaKmdQTJrUt+nnaTZRKxvIkM6AHmHPEFRZ69ZOCmv
- nqheMezaj8bRegH8pagROx0D0qJ/kBbXVQWfpyab9WTEQcCaja3CqBL8D0u4bB/u7OXxWy0Oo
- tOxjczsZ9n0OfYKo8AUufynA6/fcWMhFEzi19YtGOHhfHagEtYtfXVpoYzf9S+Gt0TpJPPOug
- E12I2p1Tmd0MFzQF0Clvm4V4KoLyHo4WjC5c3hUQfInsssHqHiMncYmBOeeg5GGxgxAk+dqv6
- bmwCJdSQHzr6hUqz0V98bEpCqwe4r50GMYEQ6CFIinhZi6bAXL8HBlaHoBPSJ0fNxl67yWrSr
- NQJXHh2gkPTC0pRZbXqcFa69QNlApTCdt318/GJrzn9X7KtAKyicYS+QkV60seZyxRmH4GNBX
- IUWtaYUnMmqaEOTvUiWewIM+IyqE4pJg2XoETt5eE4ImfL865Gp4RL6cexVoOxZ+BcEPdqIIN
- 7uvdFH4HXM61nLD13XaUVm/heCpC5Tf7XBVlxyakJlcQYYaijzP5Ekii66Grojkib4sHcJzS9
- tXfmDyBL9TxVtuZDjgP26ooGg1tlx9g2PDoxxh90G6D9FxX1oq8khIiu5lr5aHyYsijqf/YO9
- ESDlw3db1osB0XM/gTSBlIRGIB/L5te2oe8rjjLOQVDZ/028AHDDrjAdcb7nPfqp1JvAjrSdm
- X0YiTm/uCTkO4SX77SQ0SvOnTOO2D56b1xLkTRSsLQPP6XdAg6dBs3Lk6kHiw8L9/6/exhwIC
- vinA59WCftx7bRGJ0LIJDbwF0/vh0tee0yoSuXRNJr651Mmyi1ZOQ/0fVt6wJm4H7XzFlmwOP
- 5bymmYNS+11jH9WKEbl74xOKug1kEh7ZvECCHyKHY=
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [syzbot] KASAN: use-after-free Read in pty_close
+Content-Language: en-US
+To:     syzbot <syzbot+49950ba66096b1f0209b@syzkaller.appspotmail.com>,
+        axboe@kernel.dk, gregkh@linuxfoundation.org, jirislaby@kernel.org,
+        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com
+References: <00000000000045b69505e33720b0@google.com>
+From:   Pavel Begunkov <asml.silence@gmail.com>
+In-Reply-To: <00000000000045b69505e33720b0@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jul 7, 2022 at 3:30 PM <Conor.Dooley@microchip.com> wrote:
->
-> On 22/06/2022 23:58, Conor Dooley wrote:
-> > From: Conor Dooley <conor.dooley@microchip.com>
-> >
-> > Hardware random, PCI and clock drivers for the PolarFire SoC have been
-> > upstreamed but are not covered by the MAINTAINERS entry, so add them.
-> > Daire is the author of the clock & PCI drivers, so add him as a
-> > maintainer in place of Lewis.
-> >
-> > Acked-by: Bjorn Helgaas <bhelgaas@google.com>
-> > Acked-by: Stephen Boyd <sboyd@kernel.org>
-> > Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
->
-> Arnd, Palmer:
-> Does the SoC tree make more sense for this patch?
-> I am missing an ack from Herbert (but I don't think that's blocking
-> for a MAINTAINERS update to my own entry?).
->
-> If SoC is the better option, should I resend this to soc@kernel.org?
-> Unfortunately, since I originally sent this patch there have been
-> other changes to this entry that will conflict in -next (all are
-> additions so easily resolved...).
->
-> I was hoping to get this patch applied to v5.19-rc(foo) since we
-> never added maintainers entries for these drivers rather than wait
-> for v5.20.
->
-> If you (plural) would rather wait for v5.20, I can resubmit this patch
-> after v5.20-mw1 with an additional i2c entry (if the driver is applied)
-> that already has an ack from Wolfram.
+On 7/7/22 14:33, syzbot wrote:
+> Hello,
+> 
+> syzbot tried to test the proposed patch but the build/boot failed:
 
-I tend to take MAINTAINERS updates as bugfixes in the soc tre
-(for 5.19), and I can pick it up if you send it to soc@kernel.org.
+#syz test: https://github.com/isilence/linux.git poll-syz
 
-There should never be a need to wait for the merge window
-with these updates, it's either a bugfix (for 5.19) or for the current
--next cycle (5.20).
 
-       Arnd
+> failed to checkout kernel repo git@github.com:isilence/linux.git/poll-syz: failed to run ["git" "fetch" "--force" "eab646780d8603fd6348e6bccafebcb1c0ddc5bc" "poll-syz"]: exit status 128
+> Host key verification failed.
+> fatal: Could not read from remote repository.
+> 
+> Please make sure you have the correct access rights
+> and the repository exists.
+> 
+> 
+> 
+> Tested on:
+> 
+> commit:         [unknown
+> git tree:       git@github.com:isilence/linux.git poll-syz
+> dashboard link: https://syzkaller.appspot.com/bug?extid=49950ba66096b1f0209b
+> compiler:
+> 
+> Note: no patches were applied.
+
+-- 
+Pavel Begunkov

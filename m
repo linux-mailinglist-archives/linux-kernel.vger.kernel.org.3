@@ -2,126 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 25A4F5697BF
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 04:03:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C1275569785
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 03:33:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234779AbiGGCC0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 6 Jul 2022 22:02:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52578 "EHLO
+        id S234381AbiGGBce (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 6 Jul 2022 21:32:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34436 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234678AbiGGCCY (ORCPT
+        with ESMTP id S231607AbiGGBcc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 6 Jul 2022 22:02:24 -0400
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BF852F031;
-        Wed,  6 Jul 2022 19:02:22 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Ldfmq5fYTz4xL4;
-        Thu,  7 Jul 2022 12:02:19 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1657159341;
-        bh=UwtjIoglRDJEKGedzdm0Ahvx+a41vhCrbpYe2EuiEYw=;
-        h=Date:From:To:Cc:Subject:From;
-        b=o0Bd03RSQlOUl1QxEGvhTrgpmUnJdnAH7j2M5I8TcnWM/NmHQMDiEMxOsuBtx75hW
-         m82hhMRIOD0OHV1iCwrmIzKaAg5YFRbr64TiejWxjnDPQWVG+BzHUb27tdhTgbunga
-         rKxZJIGszYZTOi2hjOvZK2rcNj8tK6DdwCYLo/2HUJEQzFeS0q42nbjS3T1F7QZA6K
-         5GkiSDAJrY0MaKr8sYj55WqZ4lDGuV7pDSEbJ2tb/JW/5OSGnqbzaX7Cbo4tpgVWNP
-         sHmgGuyEQ8Nt5FdX8HnvOP0EGExrgMV5NpM93tBp+cGQmTrQpSiUMp+8xyUKbCCzcn
-         WJVyf8xAE2C2Q==
-Date:   Thu, 7 Jul 2022 11:31:10 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Herbert Xu <herbert@gondor.apana.org.au>,
-        Linux Crypto List <linux-crypto@vger.kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>
-Cc:     Guangbin Huang <huangguangbin2@huawei.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Zhou Wang <wangzhou1@hisilicon.com>
-Subject: linux-next: manual merge of the crypto tree with the arm-perf,
- arm64 trees
-Message-ID: <20220707113110.5d11a098@canb.auug.org.au>
+        Wed, 6 Jul 2022 21:32:32 -0400
+Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C1E42E9DA;
+        Wed,  6 Jul 2022 18:32:31 -0700 (PDT)
+Received: from lelv0266.itg.ti.com ([10.180.67.225])
+        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 2671WLFZ018273;
+        Wed, 6 Jul 2022 20:32:21 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1657157541;
+        bh=H2y9cV240I3t50jNxUep/dhPtMe/CKGbzfDMOXtcQwY=;
+        h=From:To:CC:Subject:Date:In-Reply-To:References;
+        b=L91qhH7G+x1BkN0sOO8mgn+B2BWZkO9N+6lnAxbtcYCxzprP9VWyEdWbgT2JCd1pz
+         SsapNwrz5oVMMFqUa7v+U9inVak1KuKujUxGhy0/sFXuz4lh8Ilad7/g8TEPWC0wF/
+         UnXqYfJaEOaRym5THUrM235J05olB1Hw1CKLNnYI=
+Received: from DLEE100.ent.ti.com (dlee100.ent.ti.com [157.170.170.30])
+        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 2671WLDg042675
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Wed, 6 Jul 2022 20:32:21 -0500
+Received: from DLEE102.ent.ti.com (157.170.170.32) by DLEE100.ent.ti.com
+ (157.170.170.30) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Wed, 6
+ Jul 2022 20:32:21 -0500
+Received: from fllv0040.itg.ti.com (10.64.41.20) by DLEE102.ent.ti.com
+ (157.170.170.32) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
+ Frontend Transport; Wed, 6 Jul 2022 20:32:21 -0500
+Received: from localhost (ileax41-snat.itg.ti.com [10.172.224.153])
+        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 2671WLi0121294;
+        Wed, 6 Jul 2022 20:32:21 -0500
+From:   Nishanth Menon <nm@ti.com>
+To:     <kishon@ti.com>, Santosh Shilimkar <ssantosh@kernel.org>,
+        <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>
+CC:     Nishanth Menon <nm@ti.com>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>
+Subject: Re: [PATCH v2 0/3] soc: ti: Enable PRUSS-M on K3 AM62x SoCs
+Date:   Wed, 6 Jul 2022 20:32:20 -0500
+Message-ID: <165715751131.13899.13575622163713298040.b4-ty@ti.com>
+X-Mailer: git-send-email 2.31.1
+In-Reply-To: <20220602120613.2175-1-kishon@ti.com>
+References: <20220602120613.2175-1-kishon@ti.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/0TKCtQGOIzjzWHhqvSaSiPK";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/0TKCtQGOIzjzWHhqvSaSiPK
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+Hi Kishon Vijay Abraham I,
 
-Hi all,
+On Thu, 2 Jun 2022 17:36:10 +0530, Kishon Vijay Abraham I wrote:
+> Series adds AM62x specific compatible string to enable PRUSS-M in
+> AM62x SoCs.
+> 
+> Changes from v1:
+> 1) Added a new patch to re-arrange "compatible" in alphabetic
+>    order
+> 
+> [...]
 
-Today's linux-next merge of the crypto tree got a conflict in:
+I have applied the following to branch ti-drivers-soc-next on [1].
+Thank you!
 
-  MAINTAINERS
+[1/3] dt-bindings: soc: ti: pruss: Re-arrange "compatible" in alphabetic order
+      commit: b8c8d647f2fe4e263864b800f4647431ec0aabdf
+[2/3] dt-bindings: soc: ti: pruss: Update bindings for K3 AM62x SoCs
+      commit: 75938bab63a4bf5c654360aebfb96235de10d882
+[3/3] soc: ti: pruss: Enable support for PRUSS-M subsystem on K3 AM62x SoCs
+      commit: f16afe238a7ff3c71a943cf74392538974c29b22
 
-between commit:
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent up the chain during
+the next merge window (or sooner if it is a relevant bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
 
-  66637ab137b4 ("drivers/perf: hisi: add driver for HNS3 PMU")
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
 
-from the arm-perf, arm64 trees and commit:
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
 
-  ce6330f74b08 ("MAINTAINERS: update HiSilicon ZIP and QM maintainers")
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
 
-from the crypto tree.
+[1] git://git.kernel.org/pub/scm/linux/kernel/git/ti/linux.git
+-- 
+Regards,
+Nishanth Menon
+Key (0xDDB5849D1736249D) / Fingerprint: F8A2 8693 54EB 8232 17A3  1A34 DDB5 849D 1736 249D
 
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
-
---=20
-Cheers,
-Stephen Rothwell
-
-diff --cc MAINTAINERS
-index 027d9a232107,b04fb3324837..000000000000
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@@ -9069,13 -8936,8 +9069,14 @@@ F:	Documentation/admin-guide/perf/hisi-
-  F:	Documentation/admin-guide/perf/hisi-pmu.rst
-  F:	drivers/perf/hisilicon
- =20
- +HISILICON HNS3 PMU DRIVER
- +M:	Guangbin Huang <huangguangbin2@huawei.com>
- +S:	Supported
- +F:	Documentation/admin-guide/perf/hns3-pmu.rst
- +F:	drivers/perf/hisilicon/hns3_pmu.c
- +
-- HISILICON QM AND ZIP Controller DRIVER
-+ HISILICON QM DRIVER
-+ M:	Weili Qian <qianweili@huawei.com>
-  M:	Zhou Wang <wangzhou1@hisilicon.com>
-  L:	linux-crypto@vger.kernel.org
-  S:	Maintained
-
---Sig_/0TKCtQGOIzjzWHhqvSaSiPK
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmLGN14ACgkQAVBC80lX
-0GzkhQf9F2NtkvOfFRAwd5K1uneuCbqM/QJl03sWNw2rHzTAF1LHMiDlgjqzAM/y
-oqO+iLUDkp5U2NE6cxUovQjLQdzyUdSwjxBXNCgc+FFfYZhBwJ+dCf6EwD0D1RXM
-dq+fWKL/gSeI6W+ghhIk102hV0SZQ3J80PvEONLa+rUN/DENG/Qk5V3UJ/l+q4X6
-LRyx0Zm2vtS60mDXPvrTyE4HBgSKxF0kzESvkBC0b7yk3Np0JAFpJYXJ98+m9Coi
-Qq2RZRhHlzBuL4FmrfYzIK0HqwGK5sEFrvT+2X64MfhmZ4Okdp6+UWRyRQD8cyJH
-T/luLClhW+opiYfvmEKpIkdX7h1QlA==
-=y/Pe
------END PGP SIGNATURE-----
-
---Sig_/0TKCtQGOIzjzWHhqvSaSiPK--

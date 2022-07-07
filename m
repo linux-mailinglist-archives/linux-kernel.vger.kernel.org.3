@@ -2,447 +2,279 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B6956569E94
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 11:31:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 85FC8569E9C
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 11:36:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234837AbiGGJbk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Jul 2022 05:31:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38224 "EHLO
+        id S234942AbiGGJgQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Jul 2022 05:36:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40842 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229951AbiGGJbi (ORCPT
+        with ESMTP id S229951AbiGGJgP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Jul 2022 05:31:38 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA15633E05;
-        Thu,  7 Jul 2022 02:31:36 -0700 (PDT)
-Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 28BF66601978;
-        Thu,  7 Jul 2022 10:31:35 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1657186295;
-        bh=Ath3rq3p03H6MtSS6xBSdyqJicwlhpDEfZjXuEK6owM=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=gc+OBbTWuskc8471X915+qFwxJBafpGBa11wxtFgGBIYZWkvX/vj5OH6RYobXXc+W
-         Z3tMlf8Tb3/OPLHaxEh4Dj6J6gfHCFfiHtKLBAj4NAh98Wfh/Pcg3FL+/rDKchUdnl
-         ZTBbZTSIeRogDNhL2Wg/78lvx6B0yjYur/AdtszkHvB496RYqc8bj066knggGRbMmc
-         fuOCV9Em3Rbrx9CxJZE9ahczAy4RshJSoCrqSk+wI0K/f4AFKZLCwyccBk1rk4ziCt
-         ozt1pM4ZSye+gAOvAQH2ISxUgxrfCzNF+YaQNOEYmhu0nZkXeqsey56+YszWpjT37t
-         bsml5VhahXBcg==
-Message-ID: <ca179698-d79d-f643-95a8-a27d51efddef@collabora.com>
-Date:   Thu, 7 Jul 2022 11:31:32 +0200
+        Thu, 7 Jul 2022 05:36:15 -0400
+Received: from aposti.net (aposti.net [89.234.176.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07FFB33E3D;
+        Thu,  7 Jul 2022 02:36:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
+        s=mail; t=1657186572; h=from:from:sender:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=mqrfEj7cxAuXaCMhT9TxqrOJJX+8uDkMAnKnSFGyUXM=;
+        b=AqSa77YOSz9MeagWtB3RGK5nKLWX4IiwadXr4n5vnUudJv9N9s5Wo2zc0TU5xD2rc7h3ok
+        ii0LgKLhr0Tj5XoicFnWr/Q8v+C7JCYnI9O9jCy6wfBmEgLt0CeuXhbZDBFzV7uku6UV1q
+        2xlUhLVnALumzxGTW/ssD04YvGvGQEg=
+Date:   Thu, 07 Jul 2022 10:36:02 +0100
+From:   Paul Cercueil <paul@crapouillou.net>
+Subject: Re: [PATCH 04/11] ASoC: jz4740-i2s: Simplify using regmap fields
+To:     Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
+Cc:     lgirdwood@gmail.com, broonie@kernel.org, perex@perex.cz,
+        tiwai@suse.com, linux-mips@vger.kernel.org,
+        alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org
+Message-Id: <2C9NER.G722ABTZOI2P1@crapouillou.net>
+In-Reply-To: <20220706211330.120198-5-aidanmacdonald.0x0@gmail.com>
+References: <20220706211330.120198-1-aidanmacdonald.0x0@gmail.com>
+        <20220706211330.120198-5-aidanmacdonald.0x0@gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH v11 3/3] arm64: dts: Add MediaTek SoC MT8186 dts and
- evaluation board and Makefile
-Content-Language: en-US
-To:     Allen-KH Cheng <allen-kh.cheng@mediatek.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-Cc:     Project_Global_Chrome_Upstream_Group@mediatek.com,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-mediatek@lists.infradead.org,
-        Chen-Yu Tsai <wenst@chromium.org>,
-        Ryder Lee <ryder.lee@kernel.org>, hsinyi@chromium.org
-References: <20220520122217.30716-1-allen-kh.cheng@mediatek.com>
- <20220520122217.30716-4-allen-kh.cheng@mediatek.com>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20220520122217.30716-4-allen-kh.cheng@mediatek.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=iso-8859-1; format=flowed
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 20/05/22 14:22, Allen-KH Cheng ha scritto:
-> Add basic chip support for MediaTek MT8186.
-> 
-> Signed-off-by: Allen-KH Cheng <Allen-KH.Cheng@mediatek.com>
+
+
+Le mer., juil. 6 2022 at 22:13:23 +0100, Aidan MacDonald=20
+<aidanmacdonald.0x0@gmail.com> a =E9crit :
+> The differences between register fields on different SoC versions
+> can be abstracted away using the regmap field API. This is easier
+> to understand and extend than comparisons based on the version ID.
+>=20
+> Signed-off-by: Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
 > ---
->   arch/arm64/boot/dts/mediatek/Makefile       |    1 +
->   arch/arm64/boot/dts/mediatek/mt8186-evb.dts |  232 +++++
->   arch/arm64/boot/dts/mediatek/mt8186.dtsi    | 1016 +++++++++++++++++++
->   3 files changed, 1249 insertions(+)
->   create mode 100644 arch/arm64/boot/dts/mediatek/mt8186-evb.dts
->   create mode 100644 arch/arm64/boot/dts/mediatek/mt8186.dtsi
-> 
-> diff --git a/arch/arm64/boot/dts/mediatek/Makefile b/arch/arm64/boot/dts/mediatek/Makefile
-> index c7d4636a2cb7..50a2c58c5f56 100644
-> --- a/arch/arm64/boot/dts/mediatek/Makefile
-> +++ b/arch/arm64/boot/dts/mediatek/Makefile
-> @@ -37,6 +37,7 @@ dtb-$(CONFIG_ARCH_MEDIATEK) += mt8183-kukui-kodama-sku32.dtb
->   dtb-$(CONFIG_ARCH_MEDIATEK) += mt8183-kukui-krane-sku0.dtb
->   dtb-$(CONFIG_ARCH_MEDIATEK) += mt8183-kukui-krane-sku176.dtb
->   dtb-$(CONFIG_ARCH_MEDIATEK) += mt8183-pumpkin.dtb
-> +dtb-$(CONFIG_ARCH_MEDIATEK) += mt8186-evb.dtb
->   dtb-$(CONFIG_ARCH_MEDIATEK) += mt8192-evb.dtb
->   dtb-$(CONFIG_ARCH_MEDIATEK) += mt8195-demo.dtb
->   dtb-$(CONFIG_ARCH_MEDIATEK) += mt8195-evb.dtb
-> diff --git a/arch/arm64/boot/dts/mediatek/mt8186-evb.dts b/arch/arm64/boot/dts/mediatek/mt8186-evb.dts
-> new file mode 100644
-> index 000000000000..3e8018c1e802
-> --- /dev/null
-> +++ b/arch/arm64/boot/dts/mediatek/mt8186-evb.dts
-> @@ -0,0 +1,232 @@
-> +// SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +/*
-> + * Copyright (C) 2022 MediaTek Inc.
-> + */
-> +/dts-v1/;
-> +#include "mt8186.dtsi"
+>  sound/soc/jz4740/jz4740-i2s.c | 100=20
+> ++++++++++++++++++++++++----------
+>  1 file changed, 72 insertions(+), 28 deletions(-)
+>=20
+> diff --git a/sound/soc/jz4740/jz4740-i2s.c=20
+> b/sound/soc/jz4740/jz4740-i2s.c
+> index 66a901f56392..cbb89f724f64 100644
+> --- a/sound/soc/jz4740/jz4740-i2s.c
+> +++ b/sound/soc/jz4740/jz4740-i2s.c
+> @@ -91,12 +91,22 @@ enum jz47xx_i2s_version {
+>  struct i2s_soc_info {
+>  	enum jz47xx_i2s_version version;
+>  	struct snd_soc_dai_driver *dai;
 > +
-> +/ {
-> +	model = "MediaTek MT8186 evaluation board";
-> +	compatible = "mediatek,mt8186-evb", "mediatek,mt8186";
+> +	struct reg_field field_rx_fifo_thresh;
+> +	struct reg_field field_tx_fifo_thresh;
+> +	struct reg_field field_i2sdiv_capture;
+> +	struct reg_field field_i2sdiv_playback;
+>  };
+>=20
+>  struct jz4740_i2s {
+>  	struct resource *mem;
+>  	struct regmap *regmap;
+>=20
+> +	struct regmap_field *field_rx_fifo_thresh;
+> +	struct regmap_field *field_tx_fifo_thresh;
+> +	struct regmap_field *field_i2sdiv_capture;
+> +	struct regmap_field *field_i2sdiv_playback;
 > +
-> +	aliases {
-> +		serial0 = &uart0;
-> +	};
+>  	struct clk *clk_aic;
+>  	struct clk *clk_i2s;
+>=20
+> @@ -222,12 +232,12 @@ static int jz4740_i2s_hw_params(struct=20
+> snd_pcm_substream *substream,
+>  	struct snd_pcm_hw_params *params, struct snd_soc_dai *dai)
+>  {
+>  	struct jz4740_i2s *i2s =3D snd_soc_dai_get_drvdata(dai);
+> +	struct regmap_field *div_field;
+>  	unsigned int sample_size;
+> -	uint32_t ctrl, div_reg;
+> +	uint32_t ctrl;
+>  	int div;
+>=20
+>  	regmap_read(i2s->regmap, JZ_REG_AIC_CTRL, &ctrl);
+> -	regmap_read(i2s->regmap, JZ_REG_AIC_CLK_DIV, &div_reg);
+>=20
+>  	div =3D clk_get_rate(i2s->clk_i2s) / (64 * params_rate(params));
+>=20
+> @@ -250,23 +260,16 @@ static int jz4740_i2s_hw_params(struct=20
+> snd_pcm_substream *substream,
+>  		else
+>  			ctrl &=3D ~JZ_AIC_CTRL_MONO_TO_STEREO;
+>=20
+> -		div_reg &=3D ~I2SDIV_DV_MASK;
+> -		div_reg |=3D (div - 1) << I2SDIV_DV_SHIFT;
+> +		div_field =3D i2s->field_i2sdiv_playback;
+>  	} else {
+>  		ctrl &=3D ~JZ_AIC_CTRL_INPUT_SAMPLE_SIZE_MASK;
+>  		ctrl |=3D sample_size << JZ_AIC_CTRL_INPUT_SAMPLE_SIZE_OFFSET;
+>=20
+> -		if (i2s->soc_info->version >=3D JZ_I2S_JZ4770) {
+> -			div_reg &=3D ~I2SDIV_IDV_MASK;
+> -			div_reg |=3D (div - 1) << I2SDIV_IDV_SHIFT;
+> -		} else {
+> -			div_reg &=3D ~I2SDIV_DV_MASK;
+> -			div_reg |=3D (div - 1) << I2SDIV_DV_SHIFT;
+> -		}
+> +		div_field =3D i2s->field_i2sdiv_capture;
+>  	}
+>=20
+>  	regmap_write(i2s->regmap, JZ_REG_AIC_CTRL, ctrl);
+> -	regmap_write(i2s->regmap, JZ_REG_AIC_CLK_DIV, div_reg);
+> +	regmap_field_write(div_field, div - 1);
+>=20
+>  	return 0;
+>  }
+> @@ -342,7 +345,6 @@ static int jz4740_i2s_resume(struct=20
+> snd_soc_component *component)
+>  static int jz4740_i2s_dai_probe(struct snd_soc_dai *dai)
+>  {
+>  	struct jz4740_i2s *i2s =3D snd_soc_dai_get_drvdata(dai);
+> -	uint32_t conf;
+>  	int ret;
+>=20
+>  	ret =3D clk_prepare_enable(i2s->clk_aic);
+> @@ -352,22 +354,14 @@ static int jz4740_i2s_dai_probe(struct=20
+> snd_soc_dai *dai)
+>  	snd_soc_dai_init_dma_data(dai, &i2s->playback_dma_data,
+>  		&i2s->capture_dma_data);
+>=20
+> -	if (i2s->soc_info->version >=3D JZ_I2S_JZ4760) {
+> -		conf =3D (7 << JZ4760_AIC_CONF_FIFO_RX_THRESHOLD_OFFSET) |
+> -			(8 << JZ4760_AIC_CONF_FIFO_TX_THRESHOLD_OFFSET) |
+> -			JZ_AIC_CONF_OVERFLOW_PLAY_LAST |
+> -			JZ_AIC_CONF_I2S |
+> -			JZ_AIC_CONF_INTERNAL_CODEC;
+> -	} else {
+> -		conf =3D (7 << JZ_AIC_CONF_FIFO_RX_THRESHOLD_OFFSET) |
+> -			(8 << JZ_AIC_CONF_FIFO_TX_THRESHOLD_OFFSET) |
+
+I believe you can remove these macros completely now that they are=20
+unused. Same goes for I2S_IDV_MASK, etc.
+
+Cheers,
+-Paul
+
+> -			JZ_AIC_CONF_OVERFLOW_PLAY_LAST |
+> -			JZ_AIC_CONF_I2S |
+> -			JZ_AIC_CONF_INTERNAL_CODEC;
+> -	}
+> -
+>  	regmap_write(i2s->regmap, JZ_REG_AIC_CONF, JZ_AIC_CONF_RESET);
+> -	regmap_write(i2s->regmap, JZ_REG_AIC_CONF, conf);
 > +
-> +	chosen {
-> +		stdout-path = "serial0:921600n8";
-> +	};
+> +	regmap_write(i2s->regmap, JZ_REG_AIC_CONF,
+> +		     JZ_AIC_CONF_OVERFLOW_PLAY_LAST |
+> +		     JZ_AIC_CONF_I2S | JZ_AIC_CONF_INTERNAL_CODEC);
 > +
-> +	memory {
-> +		device_type = "memory";
-> +		reg = <0 0x40000000 0 0x80000000>;
-> +	};
-> +};
+> +	regmap_field_write(i2s->field_rx_fifo_thresh, 7);
+> +	regmap_field_write(i2s->field_tx_fifo_thresh, 8);
+>=20
+>  	return 0;
+>  }
+> @@ -414,11 +408,19 @@ static struct snd_soc_dai_driver jz4740_i2s_dai=20
+> =3D {
+>  static const struct i2s_soc_info jz4740_i2s_soc_info =3D {
+>  	.version =3D JZ_I2S_JZ4740,
+>  	.dai =3D &jz4740_i2s_dai,
+> +	.field_rx_fifo_thresh	=3D REG_FIELD(JZ_REG_AIC_CONF, 12, 15),
+> +	.field_tx_fifo_thresh	=3D REG_FIELD(JZ_REG_AIC_CONF, 8, 11),
+> +	.field_i2sdiv_capture	=3D REG_FIELD(JZ_REG_AIC_CLK_DIV, 0, 3),
+> +	.field_i2sdiv_playback	=3D REG_FIELD(JZ_REG_AIC_CLK_DIV, 0, 3),
+>  };
+>=20
+>  static const struct i2s_soc_info jz4760_i2s_soc_info =3D {
+>  	.version =3D JZ_I2S_JZ4760,
+>  	.dai =3D &jz4740_i2s_dai,
+> +	.field_rx_fifo_thresh	=3D REG_FIELD(JZ_REG_AIC_CONF, 24, 27),
+> +	.field_tx_fifo_thresh	=3D REG_FIELD(JZ_REG_AIC_CONF, 16, 20),
+> +	.field_i2sdiv_capture	=3D REG_FIELD(JZ_REG_AIC_CLK_DIV, 0, 3),
+> +	.field_i2sdiv_playback	=3D REG_FIELD(JZ_REG_AIC_CLK_DIV, 0, 3),
+>  };
+>=20
+>  static struct snd_soc_dai_driver jz4770_i2s_dai =3D {
+> @@ -442,11 +444,19 @@ static struct snd_soc_dai_driver jz4770_i2s_dai=20
+> =3D {
+>  static const struct i2s_soc_info jz4770_i2s_soc_info =3D {
+>  	.version =3D JZ_I2S_JZ4770,
+>  	.dai =3D &jz4770_i2s_dai,
+> +	.field_rx_fifo_thresh	=3D REG_FIELD(JZ_REG_AIC_CONF, 24, 27),
+> +	.field_tx_fifo_thresh	=3D REG_FIELD(JZ_REG_AIC_CONF, 16, 20),
+> +	.field_i2sdiv_capture	=3D REG_FIELD(JZ_REG_AIC_CLK_DIV, 8, 11),
+> +	.field_i2sdiv_playback	=3D REG_FIELD(JZ_REG_AIC_CLK_DIV, 0, 3),
+>  };
+>=20
+>  static const struct i2s_soc_info jz4780_i2s_soc_info =3D {
+>  	.version =3D JZ_I2S_JZ4780,
+>  	.dai =3D &jz4770_i2s_dai,
+> +	.field_rx_fifo_thresh	=3D REG_FIELD(JZ_REG_AIC_CONF, 24, 27),
+> +	.field_tx_fifo_thresh	=3D REG_FIELD(JZ_REG_AIC_CONF, 16, 20),
+> +	.field_i2sdiv_capture	=3D REG_FIELD(JZ_REG_AIC_CLK_DIV, 8, 11),
+> +	.field_i2sdiv_playback	=3D REG_FIELD(JZ_REG_AIC_CLK_DIV, 0, 3),
+>  };
+>=20
+>  static const struct snd_soc_component_driver jz4740_i2s_component =3D {
+> @@ -465,6 +475,36 @@ static const struct of_device_id=20
+> jz4740_of_matches[] =3D {
+>  };
+>  MODULE_DEVICE_TABLE(of, jz4740_of_matches);
+>=20
+> +static int jz4740_i2s_init_regmap_fields(struct device *dev,
+> +					 struct jz4740_i2s *i2s)
+> +{
+> +	i2s->field_rx_fifo_thresh =3D
+> +		devm_regmap_field_alloc(dev, i2s->regmap,
+> +					i2s->soc_info->field_rx_fifo_thresh);
+> +	if (IS_ERR(i2s->field_rx_fifo_thresh))
+> +		return PTR_ERR(i2s->field_rx_fifo_thresh);
 > +
-> +&i2c0 {
-> +	pinctrl-names = "default";
-> +	pinctrl-0 = <&i2c0_pins>;
-> +	#address-cells = <1>;
-> +	#size-cells = <0>;
-> +	status = "okay";
-> +};
+> +	i2s->field_tx_fifo_thresh =3D
+> +		devm_regmap_field_alloc(dev, i2s->regmap,
+> +					i2s->soc_info->field_tx_fifo_thresh);
+> +	if (IS_ERR(i2s->field_tx_fifo_thresh))
+> +		return PTR_ERR(i2s->field_tx_fifo_thresh);
 > +
-> +&i2c1 {
-> +	clock-frequency = <400000>;
-> +	i2c-scl-internal-delay-ns = <8000>;
-> +	pinctrl-names = "default";
-> +	pinctrl-0 = <&i2c1_pins>;
-> +	#address-cells = <1>;
-> +	#size-cells = <0>;
-> +	status = "okay";
-> +};
+> +	i2s->field_i2sdiv_capture =3D
+> +		devm_regmap_field_alloc(dev, i2s->regmap,
+> +					i2s->soc_info->field_i2sdiv_capture);
+> +	if (IS_ERR(i2s->field_i2sdiv_capture))
+> +		return PTR_ERR(i2s->field_i2sdiv_capture);
 > +
-
-Can you please reorder like:
-
-&i2c1 {
-	status = "okay";
-
-	clock-frequency = <400000>;
-	i2c-scl-internal-delay-ns = <12500>;
-	pinctrl-names = "default";
-	pinctrl-0 = <&i2c1_pins>;
-};
-
-Also, address and size cells are common properties and will not change
-on a per-board basis: please define them in mt8186.dtsi instead.
-
-Same for the other nodes.
-
-
-> +&i2c2 {
-
-..snip..
-
+> +	i2s->field_i2sdiv_playback =3D
+> +		devm_regmap_field_alloc(dev, i2s->regmap,
+> +					i2s->soc_info->field_i2sdiv_playback);
+> +	if (IS_ERR(i2s->field_i2sdiv_playback))
+> +		return PTR_ERR(i2s->field_i2sdiv_playback);
 > +
-> +&pio {
-> +	i2c0_pins: i2c0{
-
-Please perform a dtbs_check before pushing devicetrees upstream:
-this node will give you a warning, bindings related warnings are
-considered like code warnings and they shall not happen.
-
-pinctrl-mt8186.yaml defines patternProperties as '-pins$'
-so this should be:
-
-	i2c0_pins: i2c0-pins {
-
-Please fix.
-
-
-> +		pins-sda-scl {
-> +			pinmux = <PINMUX_GPIO128__FUNC_SDA0>,
-> +				 <PINMUX_GPIO127__FUNC_SCL0>;
-> +			bias-disable;
-> +			mediatek,drive-strength-adv = <0>;
-
-Do not use mediatek,drive-strength-adv: it's not right in principle
-to have this property, as it can be expressed with the standard
-drive-strength-microamp property instead.
-
-Check pinctrl-mt8192.yaml (or my commits to pinctrl-mt8195.yaml) for
-more information.
-
-> +			drive-strength = <MTK_DRIVE_4mA>;
-
-MTK_DRIVE_(x)mA maps to the actual value in mA: please stop using this
-definition and simply define this as
-
-			drive-strength = <4>;
-
-
-> +			input-enable;
-> +		};
-> +	};
+> +	return 0;
+> +}
 > +
-
-..snip..
-
+>  static const struct regmap_config jz4740_i2s_regmap_config =3D {
+>  	.reg_bits	=3D 32,
+>  	.reg_stride	=3D 4,
+> @@ -509,6 +549,10 @@ static int jz4740_i2s_dev_probe(struct=20
+> platform_device *pdev)
+>  	if (IS_ERR(i2s->regmap))
+>  		return PTR_ERR(i2s->regmap);
+>=20
+> +	ret =3D jz4740_i2s_init_regmap_fields(dev, i2s);
+> +	if (ret)
+> +		return ret;
 > +
-> +&u3phy0 {
-> +	status="okay";
-
-This should be
-
-	status = "okay";
-
-> +};
-> +
-> +&u3phy1 {
-> +	status="okay";
-> +};
-> +
-> +&uart0 {
-> +	status = "okay";
-> +};
-> +
-> +&xhci0 {
-> +	status = "okay";
-> +};
-> +
-> +&xhci1 {
-> +	status = "okay";
-> +};
-> diff --git a/arch/arm64/boot/dts/mediatek/mt8186.dtsi b/arch/arm64/boot/dts/mediatek/mt8186.dtsi
-> new file mode 100644
-> index 000000000000..35281db2e2b9
-> --- /dev/null
-> +++ b/arch/arm64/boot/dts/mediatek/mt8186.dtsi
-> @@ -0,0 +1,1016 @@
-> +// SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +/*
-> + * Copyright (C) 2022 MediaTek Inc.
-> + * Author: Allen-KH Cheng <allen-kh.cheng@mediatek.com>
-> + */
-> +/dts-v1/;
-> +#include <dt-bindings/clock/mt8186-clk.h>
-> +#include <dt-bindings/interrupt-controller/arm-gic.h>
-> +#include <dt-bindings/interrupt-controller/irq.h>
-> +#include <dt-bindings/pinctrl/mt8186-pinfunc.h>
-> +#include <dt-bindings/power/mt8186-power.h>
-> +#include <dt-bindings/phy/phy.h>
-> +#include <dt-bindings/reset/mt8186-resets.h>
-> +
-> +/ {
-> +	compatible = "mediatek,mt8186";
-> +	interrupt-parent = <&gic>;
-> +	#address-cells = <2>;
-> +	#size-cells = <2>;
-> +
-> +	cpus {
-> +		#address-cells = <1>;
-> +		#size-cells = <0>;
-> +
-
-..snip..
-
-> +
-> +		cpu0: cpu@0 {
-> +			device_type = "cpu";
-> +			compatible = "arm,cortex-a55";
-> +			reg = <0x000>;
-> +			enable-method = "psci";
-> +			clock-frequency = <2000000000>;
-> +			capacity-dmips-mhz = <382>;
-> +			cpu-idle-states = <&cpu_off_l &cluster_off_l>;
-> +			next-level-cache = <&l2_0>;
-
-No cooling cells?
-
-> +		};
-> +
-
-..snip..
-
-
-> +
-> +	soc {
-> +		#address-cells = <2>;
-> +		#size-cells = <2>;
-> +		compatible = "simple-bus";
-> +		ranges;
-> +
-> +		gic: interrupt-controller@c000000 {
-> +			compatible = "arm,gic-v3";
-> +			#interrupt-cells = <3>;
-
-You're describing PPI partitions below... even if you're not currently
-planning to define PPI affinity just yet, interrupt cells should be 4
-so that defining affinity will be pretty straightforward in the future.
-
-Please change interrupt-cells to 4.
-
-> +			#address-cells = <2>;
-> +			#size-cells = <2>;
-> +			#redistributor-regions = <1>;
-> +			interrupt-parent = <&gic>;
-> +			interrupt-controller;
-> +			reg = <0 0x0c000000 0 0x40000>,
-> +			      <0 0x0c040000 0 0x200000>;
-> +			interrupts = <GIC_PPI 9 IRQ_TYPE_LEVEL_HIGH>;
-> +
-> +			ppi-partitions {
-> +				ppi_cluster0: interrupt-partition-0 {
-> +					affinity = <&cpu0 &cpu1 &cpu2 &cpu3 &cpu4 &cpu5>;
-> +				};
-> +
-> +				ppi_cluster1: interrupt-partition-1 {
-> +					affinity = <&cpu6 &cpu7>;
-> +				};
-> +			};
-> +		};
-> +
-> +		mcusys: syscon@c53a000 {
-> +			compatible = "mediatek,mt8186-mcusys", "syscon";
-> +			reg = <0 0xc53a000 0 0x1000>;
-> +			#clock-cells = <1>;
-> +		};
-> +
-> +		topckgen: syscon@10000000 {
-> +			compatible = "mediatek,mt8186-topckgen", "syscon";
-> +			reg = <0 0x10000000 0 0x1000>;
-> +			#clock-cells = <1>;
-> +		};
-> +
-> +		infracfg_ao: syscon@10001000 {
-> +			compatible = "mediatek,mt8186-infracfg_ao", "syscon";
-> +			reg = <0 0x10001000 0 0x1000>;
-> +			#clock-cells = <1>;
-
-You missed reset-cells here. This driver is also defining a reset controller.
-
-> +		};
-> +
-> +		pericfg: syscon@10003000 {
-> +			compatible = "mediatek,mt8186-pericfg", "syscon";
-> +			reg = <0 0x10003000 0 0x1000>;
-> +		};
-> +
-> +		pio: pinctrl@10005000 {
-> +			compatible = "mediatek,mt8186-pinctrl";
-> +			reg = <0 0x10005000 0 0x1000>,
-> +			      <0 0x10002000 0 0x0200>,
-> +			      <0 0x10002200 0 0x0200>,
-> +			      <0 0x10002400 0 0x0200>,
-> +			      <0 0x10002600 0 0x0200>,
-> +			      <0 0x10002A00 0 0x0200>,
-> +			      <0 0x10002C00 0 0x0200>,
-> +			      <0 0x1000B000 0 0x1000>;
-> +			reg-names = "iocfg0", "iocfg_lt", "iocfg_lm", "iocfg_lb",
-> +				    "iocfg_bl", "iocfg_rb", "iocfg_rt", "eint";
-> +			gpio-controller;
-> +			#gpio-cells = <2>;
-> +			gpio-ranges = <&pio 0 0 185>;
-> +			interrupt-controller;
-> +			interrupts = <GIC_SPI 186 IRQ_TYPE_LEVEL_HIGH>;
-> +			#interrupt-cells = <2>;
-> +		};
-> +
-> +		scpsys: syscon@10006000 {
-> +			compatible = "syscon", "simple-mfd";
-> +			reg = <0 0x10006000 0 0x1000>;
-> +			#power-domain-cells = <1>;
-> +
-> +			/* System Power Manager */
-> +			spm: power-controller {
-> +				compatible = "mediatek,mt8186-power-controller";
-> +				#address-cells = <1>;
-> +				#size-cells = <0>;
-> +				#power-domain-cells = <1>;
-> +
-> +				/* power domain of the SoC */
-> +				mfg0: power-domain@MT8186_POWER_DOMAIN_MFG0 {
-> +					reg = <MT8186_POWER_DOMAIN_MFG0>;
-> +					clocks = <&topckgen CLK_TOP_MFG>;
-> +					clock-names= "mfg00";
-
-Missing space: `clock-names = "mfg00";`
-
-> +					#address-cells = <1>;
-> +					#size-cells = <0>;
-> +					#power-domain-cells = <1>;
-> +
-> +					power-domain@MT8186_POWER_DOMAIN_MFG1 {
-> +						reg = <MT8186_POWER_DOMAIN_MFG1>;
-> +						mediatek,infracfg = <&infracfg_ao>;
-> +						#address-cells = <1>;
-> +						#size-cells = <0>;
-> +						#power-domain-cells = <1>;
-> +
-> +						power-domain@MT8186_POWER_DOMAIN_MFG2 {
-> +							reg = <MT8186_POWER_DOMAIN_MFG2>;
-> +							#power-domain-cells = <0>;
-> +						};
-> +
-> +						power-domain@MT8186_POWER_DOMAIN_MFG3 {
-> +							reg = <MT8186_POWER_DOMAIN_MFG3>;
-> +							#power-domain-cells = <0>;
-> +						};
-> +					};
-> +				};
-> +
-> +				power-domain@MT8186_POWER_DOMAIN_CSIRX_TOP {
-> +					reg = <MT8186_POWER_DOMAIN_CSIRX_TOP>;
-> +					clocks = <&topckgen CLK_TOP_SENINF>,
-> +						 <&topckgen CLK_TOP_SENINF1>;
-> +					clock-names= "csirx_top0", "csirx_top1";
-
-Same here.
-
-> +					#power-domain-cells = <0>;
-> +				};
-> +
-> +				power-domain@MT8186_POWER_DOMAIN_SSUSB {
-> +					reg = <MT8186_POWER_DOMAIN_SSUSB>;
-> +					#power-domain-cells = <0>;
-> +				};
-> +
-> +				power-domain@MT8186_POWER_DOMAIN_SSUSB_P1 {
-> +					reg = <MT8186_POWER_DOMAIN_SSUSB_P1>;
-> +					#power-domain-cells = <0>;
-> +				};
-> +
-> +				power-domain@MT8186_POWER_DOMAIN_ADSP_AO {
-> +					reg = <MT8186_POWER_DOMAIN_ADSP_AO>;
-> +					clocks = <&topckgen CLK_TOP_AUDIODSP>,
-> +						 <&topckgen CLK_TOP_ADSP_BUS>;
-> +					clock-names= "adsp_ao0", "adsp_ao1";
-
-...and here, and everywhere else, please fix.
-
-> +					#address-cells = <1>;
-> +					#size-cells = <0>;
-> +					#power-domain-cells = <1>;
-> +
-
-Regards,
-Angelo
+>  	platform_set_drvdata(pdev, i2s);
+>=20
+>  	ret =3D devm_snd_soc_register_component(dev, &jz4740_i2s_component,
+> --
+> 2.35.1
+>=20
 
 

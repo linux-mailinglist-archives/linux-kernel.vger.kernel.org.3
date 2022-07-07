@@ -2,90 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5161056A16F
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 13:59:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4926156A1B2
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 14:00:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235075AbiGGL6x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Jul 2022 07:58:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56920 "EHLO
+        id S235052AbiGGMAS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Jul 2022 08:00:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38592 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235750AbiGGL50 (ORCPT
+        with ESMTP id S235642AbiGGMAC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Jul 2022 07:57:26 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6D595A2DD;
-        Thu,  7 Jul 2022 04:55:36 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 775E9B8213C;
-        Thu,  7 Jul 2022 11:55:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4BD74C3411E;
-        Thu,  7 Jul 2022 11:55:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1657194933;
-        bh=IQJDPVLJ4H47AUx8Ljjae/JPRhou/gHAHrF0+znEb8E=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=D+rdZAHylfBWCoO2RrECPmnBMH0cZjere+QAfwBFw8GFnHbrSoQT9D9ZlBfqxyrTb
-         PDPXgBP0RriwGv9jRQO5zvcI02Yi0lTaKT5WCoAYUQJxOartyudNb39sMYX2mruqXI
-         NaE/l4mBa7S4H9cttaqmX+ineSZwlndYxZy8NiB/n81J3M43BsENl5bQCzH+nwnb4s
-         KYOGHyr0j2yDziaK8UDrBzUkQZv5dAfVOS+R+GsHxBSXRZUpcQaANgM2JhJb85Tplr
-         zi1lcv+vf15CVi5jAQB4RztIlt1oyAu9AwvDwJw2rWvbZIW+2I95qN5h0piVa9qmdl
-         4DYwd0CMJqueg==
-Date:   Thu, 7 Jul 2022 12:55:28 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     "Mukunda,Vijendar" <vijendar.mukunda@amd.com>
-Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build failure after merge of the sound-asoc tree
-Message-ID: <YsbJsMzNVUpxBMNh@sirena.org.uk>
-References: <20220707200428.3eb1a20e@canb.auug.org.au>
- <872891aa-11ea-ed60-5090-940e8e7e4458@amd.com>
- <9f4d8898-eb5f-aa91-57d3-66a78e9c4316@amd.com>
+        Thu, 7 Jul 2022 08:00:02 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B0135925D
+        for <linux-kernel@vger.kernel.org>; Thu,  7 Jul 2022 04:58:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1657195084; x=1688731084;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=Y897ccQh9DniNRVq6CwkRyY6onhzd1oeECrmj1dS8v0=;
+  b=PBpUDtxpZPreo5XK0FPNp58UqL0ySFG0aRLQiV/SStWqxmrtXvQ+XjPC
+   cSw1UUT20t8elxZo2RJAnTJVznULekP158mRNv09FHI7pyNhEU/bSRFmZ
+   aQveGGD3cvPIfqb1RWaZVMQw8/gVGrWQYCGXoUsxC3ndsGx+fLf+PGDFh
+   WC2GLeDnyPv1NrsMhAE4+4OfGN7WvStxDWz5vVh9Wg0KYeMmw0e3JxEk4
+   NgkXHerSXZtCdyi/BuCihfyo48l1A3FlkAm2Cu8MzqRHAzfUAah9J5W7f
+   a/Pr/48alSEc8em/kGw1l5gVfRlSNfUa2hLvMn/m3T+tSrPruxAganyOZ
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10400"; a="284029853"
+X-IronPort-AV: E=Sophos;i="5.92,252,1650956400"; 
+   d="scan'208";a="284029853"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jul 2022 04:58:04 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.92,252,1650956400"; 
+   d="scan'208";a="620762106"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by orsmga008.jf.intel.com with ESMTP; 07 Jul 2022 04:58:00 -0700
+Received: by black.fi.intel.com (Postfix, from userid 1000)
+        id C5DCD400; Thu,  7 Jul 2022 14:58:07 +0300 (EEST)
+Date:   Thu, 7 Jul 2022 14:58:07 +0300
+From:   "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
+To:     Alexander Potapenko <glider@google.com>
+Cc:     Dave Hansen <dave.hansen@linux.intel.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        the arch/x86 maintainers <x86@kernel.org>,
+        Kostya Serebryany <kcc@google.com>,
+        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
+        Andrey Konovalov <andreyknvl@gmail.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        "H . J . Lu" <hjl.tools@gmail.com>,
+        Andi Kleen <ak@linux.intel.com>,
+        Rick Edgecombe <rick.p.edgecombe@intel.com>,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCHv4 3/8] mm: Pass down mm_struct to untagged_addr()
+Message-ID: <20220707115807.pzrj7bngm2ndcjwk@black.fi.intel.com>
+References: <20220622162230.83474-1-kirill.shutemov@linux.intel.com>
+ <20220622162230.83474-4-kirill.shutemov@linux.intel.com>
+ <CAG_fn=WgyitSd9h2ni2xpBBvgnoGTcwZOpWyNE5QRSRn+PcC=A@mail.gmail.com>
+ <20220706231349.4ghhewbfpzjln56u@black.fi.intel.com>
+ <CAG_fn=Ut8OaQ40VmNvG8HtJ7Cb4M03ce3ihFPrmj+PNQB0tF3A@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="NixQ1HU3mERZ+lRc"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <9f4d8898-eb5f-aa91-57d3-66a78e9c4316@amd.com>
-X-Cookie: Tell me what to think!!!
-X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <CAG_fn=Ut8OaQ40VmNvG8HtJ7Cb4M03ce3ihFPrmj+PNQB0tF3A@mail.gmail.com>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, Jul 07, 2022 at 10:56:53AM +0200, Alexander Potapenko wrote:
+> On Thu, Jul 7, 2022 at 1:14 AM Kirill A. Shutemov
+> <kirill.shutemov@linux.intel.com> wrote:
+> >
+> > On Tue, Jul 05, 2022 at 05:42:21PM +0200, Alexander Potapenko wrote:
+> > > Kirill,
+> > >
+> > >
+> > > > diff --git a/lib/strnlen_user.c b/lib/strnlen_user.c
+> > > > index feeb935a2299..abc096a68f05 100644
+> > > > --- a/lib/strnlen_user.c
+> > > > +++ b/lib/strnlen_user.c
+> > > > @@ -97,7 +97,7 @@ long strnlen_user(const char __user *str, long count)
+> > > >                 return 0;
+> > > >
+> > > >         max_addr = TASK_SIZE_MAX;
+> > > > -       src_addr = (unsigned long)untagged_addr(str);
+> > > > +       src_addr = (unsigned long)untagged_addr(current->mm, str);
+> > >
+> > > In a downstream kernel with LAM disabled I'm seeing current->mm being
+> > > NULL at this point, because strnlen_user() is being called by
+> > > kdevtmpfs.
+> > > IIUC current->mm is only guaranteed to be non-NULL in the userspace
+> > > process context, whereas untagged_addr() may get called in random
+> > > places.
+> > >
+> > > Am I missing something?
+> >
+> > Hm. Could you show a traceback?
+> >
+> > As strnlen_user() intended to be used on an user string I expected it to
+> > be called from a process context. I guess I'm wrong, but I don't yet
+> > understand why.
+> 
+> Oh, I see now. The old implementation of devtmpfsd()
+> (https://elixir.bootlin.com/linux/v5.4/source/drivers/base/devtmpfs.c#L397)
+> uses ksys_mount(), which assumes that the strings must be copied from
+> the userspace, whereas they are actually constants in kernel .rodata
+> 
+> Wonder if the validity of mm->current for userspace accesses is
+> actually enforced anyhow in newer kernels.
 
---NixQ1HU3mERZ+lRc
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+I think it is.
 
-On Thu, Jul 07, 2022 at 05:12:31PM +0530, Mukunda,Vijendar wrote:
+See 967747bbc084 and how it changes strnlen_user(). With max_addr equal to
+TASK_SIZE_MAX, strnlen_user() will always fail on a kernel string.
 
-> If we have to submit the patch freshly then earlier patch should be
-> reverted in for-next branch.
-> Should we resend the fix again or else should we submit patch freshly?
-
-If you have already sent a fix there's no need to resend.
-
---NixQ1HU3mERZ+lRc
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmLGybAACgkQJNaLcl1U
-h9AFMQf+KDF7TnuBRZxBUkRorxs4XsvW9Yli+TPSF+Ak1MOL1pC/Dw83uEygrEeM
-iVGuhmJ/xhnrsi9oUdKhHHZmKnqzY1jt8rWKFgwiJ9VAOuPw90WwBJkBb+d7rJmT
-bFCSK2kzg3fsEWapNjZnEe8kcJh4Qc1M5yMkWdjHLgyRhZia9415z07nP/+mYmyp
-ls9Sbc3fQKR5SQ2VNMCl7RzmyDKFN9W3umOUiOkDtceM+SinUP9HfogEKZMTaVyf
-7GEwdStTkNW23kZ3aG7MfBdlc5GeJ4jauoJjtrKDNBizzp5Rf+FMMIEVAFFqH2GW
-Z8m29KJ4J/r8HWTwX42V4ggsT6eqPg==
-=Hhnj
------END PGP SIGNATURE-----
-
---NixQ1HU3mERZ+lRc--
+-- 
+ Kirill A. Shutemov

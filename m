@@ -2,159 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9006D56ADC8
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 23:37:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7333056ADAB
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 23:32:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236863AbiGGVgw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Jul 2022 17:36:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46796 "EHLO
+        id S236801AbiGGVcj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Jul 2022 17:32:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42734 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236758AbiGGVgu (ORCPT
+        with ESMTP id S236587AbiGGVch (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Jul 2022 17:36:50 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 138FD380;
-        Thu,  7 Jul 2022 14:36:50 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id C17F92205A;
-        Thu,  7 Jul 2022 21:36:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1657229808;
-        h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
-         cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=8mYgLYJaMlifJ7x7wmAVpKrfTMPScwKzKzbkVAjdwQw=;
-        b=rHz/F22uoJXemg9/opH/Esb+D3hU8dXK6UYpll1C384EhonvRqIpEoXc4LVMeWhFFBCQNy
-        vkaifr+nbyiSgaYeN9b5f1sz7oU/KgO5xG390m77kPX9kunihw6uAq4MvDJYmKL2iFwm9x
-        rGhneOiPQ1OasxckuRM82CKSWjOQDKk=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1657229808;
-        h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
-         cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=8mYgLYJaMlifJ7x7wmAVpKrfTMPScwKzKzbkVAjdwQw=;
-        b=6R0BC3/dmLg+VyXxo56M722XT/i/EPqwuTUfafZT78IDbvoJfP1LJks0clHGkbp9gl1Iuy
-        DC6Zo9GDQyGiolCQ==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 6C92A13461;
-        Thu,  7 Jul 2022 21:36:48 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id /z94GfBRx2KLUQAAMHmgww
-        (envelope-from <dsterba@suse.cz>); Thu, 07 Jul 2022 21:36:48 +0000
-Date:   Thu, 7 Jul 2022 23:32:01 +0200
-From:   David Sterba <dsterba@suse.cz>
-To:     "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
-Cc:     Chris Mason <clm@fb.com>, Josef Bacik <josef@toxicpanda.com>,
-        David Sterba <dsterba@suse.com>,
-        Nick Terrell <terrelln@fb.com>,
-        Chris Down <chris@chrisdown.name>, Qu Wenruo <wqu@suse.com>,
-        Filipe Manana <fdmanana@suse.com>,
-        Gabriel Niebler <gniebler@suse.com>,
-        linux-btrfs@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Ira Weiny <ira.weiny@intel.com>, David Sterba <dsterba@suse.cz>
-Subject: Re: [PATCH] btrfs: Replace kmap_atomic() with kmap_local_page()
-Message-ID: <20220707213201.GR15169@twin.jikos.cz>
-Reply-To: dsterba@suse.cz
-Mail-Followup-To: dsterba@suse.cz,
-        "Fabio M. De Francesco" <fmdefrancesco@gmail.com>,
-        Chris Mason <clm@fb.com>, Josef Bacik <josef@toxicpanda.com>,
-        David Sterba <dsterba@suse.com>, Nick Terrell <terrelln@fb.com>,
-        Chris Down <chris@chrisdown.name>, Qu Wenruo <wqu@suse.com>,
-        Filipe Manana <fdmanana@suse.com>,
-        Gabriel Niebler <gniebler@suse.com>, linux-btrfs@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Ira Weiny <ira.weiny@intel.com>
-References: <20220627174849.29962-1-fmdefrancesco@gmail.com>
+        Thu, 7 Jul 2022 17:32:37 -0400
+Received: from mail-oo1-xc30.google.com (mail-oo1-xc30.google.com [IPv6:2607:f8b0:4864:20::c30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3A9332EEC
+        for <linux-kernel@vger.kernel.org>; Thu,  7 Jul 2022 14:32:36 -0700 (PDT)
+Received: by mail-oo1-xc30.google.com with SMTP id v33-20020a4a9764000000b0035f814bb06eso3693511ooi.11
+        for <linux-kernel@vger.kernel.org>; Thu, 07 Jul 2022 14:32:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=u2SOYnoMdx8IBvrKnymTBSvcOZ/zbN6d4SkV8cqAn1A=;
+        b=AgJgdrchkINgAqJ5cUSpp2w3dE9d5buWYCk1EA95XAOB4LlsuZCYvaEYLdSxf0BwZz
+         /fVuGNye+0hpTvhVidCOmJYs/EUeeE7s0DUvPcgzyPisUNnMG3IVIPAFW24LiAvk5iIC
+         x82LbBwvo6xxdcDldjKYPFemNgn8bZbG0ZarJrXucisGdTpD50A+HdKsiFfDGAP4gVwW
+         wTp/wYGVy1tFgcxgitSin9UUl1Uh1Wz4lxSQfMFEAaQQb0NnV0FpDcItk+bbuh1Qzuey
+         5+mWwh384fZobG8PsIjShS24XRO+s/331QvWBLQLln1CzuIKDFGWp4MRo5JjLH8+bZ1J
+         sgDg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=u2SOYnoMdx8IBvrKnymTBSvcOZ/zbN6d4SkV8cqAn1A=;
+        b=6QzMhNGUGWtfOLwv0l+NhOpCBWf+ht7w+OJQFYtjRBmV9W+NX3NNsDTLgSJ/5dYjKn
+         PcxK9b+bOWX8mC0gdc+3OJWR3Jtx7gTtKxqerRVc1bYb2Grc70ws8Wie6vmIvFU1wbrb
+         8OHoikqP1yoKX3+uYFcCvODcHjp1XeoEFAbBD595PPuWDq+kKzclVjYibu1xKAUEq02W
+         0W3l0Jrd9n0zMrFKYxXACm+WhpeM3mvXcICkfBPrM9fOVH51p2bQctXafU9y3J8+QOlV
+         6bDkTyPZ1hmgCI9HnVHV++Qlwj7kCjxqS2eP3Hd6BHtiTyMAPoYkrGQZ7KQ9LcS4DMgb
+         Vj3w==
+X-Gm-Message-State: AJIora+6JPjowrJt3igDN2q6nwuPkA/1cq81bCKt4JcPGZmcp+sjUi5c
+        +XzQl+kTceG+Cscao9g1HkUZjLpDv3bBT2OGE/2DwA==
+X-Google-Smtp-Source: AGRyM1uVHy+Y+mLBNj09lNqkFCm0pKmCiqbLXqn3UmHXZ3+2xDxcMe6fLlu8ugezy+h8U5wPcp4JxEOMxcDAhPjYp1E=
+X-Received: by 2002:a4a:b306:0:b0:425:8afc:a3d8 with SMTP id
+ m6-20020a4ab306000000b004258afca3d8mr75934ooo.47.1657229555846; Thu, 07 Jul
+ 2022 14:32:35 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220627174849.29962-1-fmdefrancesco@gmail.com>
-User-Agent: Mutt/1.5.23.1-rc1 (2014-03-12)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20220629150625.238286-1-vkuznets@redhat.com> <20220629150625.238286-23-vkuznets@redhat.com>
+ <CALMp9eRA0v6BK6KG81ZE_iLKF6VNXxemN=E4gAE4AM-V4gkdHQ@mail.gmail.com>
+ <87wncpotqv.fsf@redhat.com> <Ysc0TZaKxweEaelb@google.com>
+In-Reply-To: <Ysc0TZaKxweEaelb@google.com>
+From:   Jim Mattson <jmattson@google.com>
+Date:   Thu, 7 Jul 2022 14:32:25 -0700
+Message-ID: <CALMp9eTrtFd-pcEeWvyAs7eYe1R1FPvGr0pjQNP8o8F0YHhg8A@mail.gmail.com>
+Subject: Re: [PATCH v2 22/28] KVM: VMX: Clear controls obsoleted by EPT at
+ runtime, not setup
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     Vitaly Kuznetsov <vkuznets@redhat.com>, kvm@vger.kernel.org,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Anirudh Rayabharam <anrayabh@linux.microsoft.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Maxim Levitsky <mlevitsk@redhat.com>,
+        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 27, 2022 at 07:48:49PM +0200, Fabio M. De Francesco wrote:
-> kmap_atomic() is being deprecated in favor of kmap_local_page() where it
-> is feasible. With kmap_local_page() mappings are per thread, CPU local,
-> and not globally visible.
-> 
-> As far as I can see, the kmap_atomic() calls in compression.c and in
-> inode.c can be safely converted.
-> 
-> Above all else, David Sterba has confirmed that "The context in
-> check_compressed_csum is atomic [...]" and that "kmap_atomic() in inode.c
-> [...] also can be replaced by kmap_local_page().".[1]
-> 
-> Therefore, convert all kmap_atomic() calls currently still left in fs/btrfs
-> to kmap_local_page().
-> 
-> Tested with xfstests on a QEMU + KVM 32-bits VM with 4GB RAM and booting a
-> kernel with HIGHMEM64GB enabled.
-> 
-> [1] https://lore.kernel.org/linux-btrfs/20220601132545.GM20
-> 633@twin.jikos.cz/
-> 
-> Suggested-by: Ira Weiny <ira.weiny@intel.com>
-> Suggested-by: David Sterba <dsterba@suse.cz>
-> Signed-off-by: Fabio M. De Francesco <fmdefrancesco@gmail.com>
+On Thu, Jul 7, 2022 at 12:30 PM Sean Christopherson <seanjc@google.com> wrote:
+>
+> On Thu, Jul 07, 2022, Vitaly Kuznetsov wrote:
+> > Jim Mattson <jmattson@google.com> writes:
+> >
+> > > On Wed, Jun 29, 2022 at 8:07 AM Vitaly Kuznetsov <vkuznets@redhat.com> wrote:
+> > >>
+> > >> From: Sean Christopherson <seanjc@google.com>
+> > >>
+> > >> Clear the CR3 and INVLPG interception controls at runtime based on
+> > >> whether or not EPT is being _used_, as opposed to clearing the bits at
+> > >> setup if EPT is _supported_ in hardware, and then restoring them when EPT
+> > >> is not used.  Not mucking with the base config will allow using the base
+> > >> config as the starting point for emulating the VMX capability MSRs.
+> > >>
+> > >> Signed-off-by: Sean Christopherson <seanjc@google.com>
+> > >> Signed-off-by: Vitaly Kuznetsov <vkuznets@redhat.com>
+> > > Nit: These controls aren't "obsoleted" by EPT; they're just no longer
+> > > required.
+>
+> Isn't that the definition of "obsolete"?  They're "no longer in use" when KVM
+> enables EPT.
 
-Added to the kmap patches, thanks.
+There are still reasons to use them aside from shadow page table
+maintenance. For example, malware analysis may be interested in
+intercepting CR3 changes to track process context (and to
+enable/disable costly monitoring). EPT doesn't render these events
+"obsolete," because you can't intercept these events using EPT.
 
-> ---
-> 
-> Tests of groups "quick" and "compress" output several errors largely due
-> to memory leaks and shift-out-of-bounds. However, these errors are exactly
-> the same which are output without this and other conversions of mine to use
-> kmap_local_page(). Therefore, it looks like these changes don't introduce
-> regressions.
-> 
-> The previous RFC PATCH can be ignored:
-> https://lore.kernel.org/lkml/20220624084215.7287-1-fmdefrancesco@gmail.com/
-> 
-> With this patch, in fs/btrfs there are no longer call sites of kmap() and
-> kmap_atomic().
-> 
-> --- a/fs/btrfs/inode.c
-> +++ b/fs/btrfs/inode.c
-> @@ -332,9 +332,9 @@ static int insert_inline_extent(struct btrfs_trans_handle *trans,
->  			cur_size = min_t(unsigned long, compressed_size,
->  				       PAGE_SIZE);
->  
-> -			kaddr = kmap_atomic(cpage);
-> +			kaddr = kmap_local_page(cpage);
-
-After some cleanups and simplifications in checksumming functions (that
-mapped the buffers) only kmap_atomic in insert_inline_extent remains, so
-the final patch will be a bit shorter.
-
->  			write_extent_buffer(leaf, kaddr, ptr, cur_size);
-> -			kunmap_atomic(kaddr);
-> +			kunmap_local(kaddr);
->  
->  			i++;
->  			ptr += cur_size;
-> @@ -345,9 +345,9 @@ static int insert_inline_extent(struct btrfs_trans_handle *trans,
->  	} else {
->  		page = find_get_page(inode->vfs_inode.i_mapping, 0);
->  		btrfs_set_file_extent_compression(leaf, ei, 0);
-> -		kaddr = kmap_atomic(page);
-> +		kaddr = kmap_local_page(page);
->  		write_extent_buffer(leaf, kaddr, ptr, size);
-> -		kunmap_atomic(kaddr);
-> +		kunmap_local(kaddr);
->  		put_page(page);
->  	}
->  	btrfs_mark_buffer_dirty(leaf);
+> > I'm going to update the subject line to "KVM: VMX: Clear controls
+> > unneded with EPT at runtime, not setup" retaining your authorship in v3
+>
+> That's fine, though s/unneded/unneeded.

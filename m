@@ -2,146 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2787356A02E
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 12:42:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E5B9856A02A
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 12:42:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235273AbiGGKld (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Jul 2022 06:41:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35516 "EHLO
+        id S233808AbiGGKl4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Jul 2022 06:41:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36008 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234163AbiGGKlc (ORCPT
+        with ESMTP id S235363AbiGGKlu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Jul 2022 06:41:32 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A20214F66E
-        for <linux-kernel@vger.kernel.org>; Thu,  7 Jul 2022 03:41:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1657190490;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=Pwcg7T0JuistTDUMjOvWrknPf1gKH9MIp+DFOaxmRLk=;
-        b=fuEJw9ZUNg++bNFtkFC9byvxVKJ6yTXhgMsCSuFedlwBv1V6aeUQR/QnZ5PuvCdl5abyeH
-        7iQ0iSIojp6Rxc0amaXsctVpDqGpiUFHxTvrJf0yzWyht9hCI+o9kOfbc5d16KpCFDOYzh
-        gHQRL7w73huf8Fw7s36uOTJNTBFjMCM=
-Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
- [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-651-832HTB9TN7-LqQ0KG56UMQ-1; Thu, 07 Jul 2022 06:41:29 -0400
-X-MC-Unique: 832HTB9TN7-LqQ0KG56UMQ-1
-Received: by mail-wm1-f70.google.com with SMTP id j19-20020a05600c191300b003a048196712so9390909wmq.4
-        for <linux-kernel@vger.kernel.org>; Thu, 07 Jul 2022 03:41:29 -0700 (PDT)
+        Thu, 7 Jul 2022 06:41:50 -0400
+Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A4C557215;
+        Thu,  7 Jul 2022 03:41:48 -0700 (PDT)
+Received: by mail-wr1-x42e.google.com with SMTP id q9so25698025wrd.8;
+        Thu, 07 Jul 2022 03:41:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:content-language:to:cc
+         :references:from:subject:in-reply-to:content-transfer-encoding;
+        bh=AWk1Z5M5SWdApDSOa1sdcUjH/ZrS41Uj70CxP1iIBEY=;
+        b=Q9i8+V9mX7CMwLFG1MVGGhx8nrZVt5/zzB9FFoo4v8WHX89lbh1JhLeXgY5L9pKoco
+         iRbJ7H2bZDSvjTe6f/HnJob3uyUBaV55v2LPxGsdH94HrSQ4kvebHFCeCGv7LlB9AKu7
+         RrDEddLM6hngxF1yJMMC5JraOJsa1DnjE6RzRYjDsl4jBAqBV3rqxPXREKp8TwzsOkdt
+         Eg5XbdWvU5CFUhtBHkzXrvapyIWK1NQh9z3wjMr66enK0/aW/HMuDsJXPkttKS0NPW92
+         w+rYrB9voK80ctcuQI7pAdE/tLsBOd9B3EfrrL1e3CGs20Giw5HDR3jgeO8aneXyBXtk
+         bXfw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
-         :message-id:mime-version;
-        bh=Pwcg7T0JuistTDUMjOvWrknPf1gKH9MIp+DFOaxmRLk=;
-        b=wc5sb7NxF/Y3r63XIOfz4micGTVOZF/jH7PiBUNoaeZN7F1O0Ho+b49P1ZHCSePtMJ
-         2xIQ1l08ii4QThTz+gZgExEanXCXyrHI8XaPiRafYPSv5qNqxDIuJ2kRemWXXf2NhLmj
-         VblHVyoJJ+xSYKXkmxgB0kDkSE8o2ls9LhPRCWpExAoRgUrLDBNp5pAdY5j0/MgJ6bEL
-         Alt2RvWauhJU9TQizO8NSodqC7rDgB2mUe6E1lq+jaMYaL2cGm2zSeoQwFutvU5JfTux
-         Yxmd/qtlbis5WpmNuoAUQ0RzEHimRlz96SEMiCDimgkgJYtHAuC/EY2U3h0lKeKDheTk
-         6meg==
-X-Gm-Message-State: AJIora/qpkd3b3gJEcsOXcupIcEYnuZYupjK/TzwRAp0TvoninhSzif1
-        BGUtdD9c1cXJipTwLFHk83Z2WJmgNVrAd6Am6EU4UYSYo1tOxnMxqMubKN63aR6LC35ggqqck2w
-        +ZA8Bs62WRTR+DXfR13IeilZDwDGpSXBP8myNBnJysR6O5g4fPUgpI5Flz3tzhYG7SaSNu+nwX+
-        RJ
-X-Received: by 2002:a05:6000:1449:b0:21b:b171:5eb8 with SMTP id v9-20020a056000144900b0021bb1715eb8mr42593899wrx.634.1657190488473;
-        Thu, 07 Jul 2022 03:41:28 -0700 (PDT)
-X-Google-Smtp-Source: AGRyM1umfdWDsVBEWSxSBLaDDZ9YXVnNYpWt9Xos/OmPvPmnoyKP3JJo7OU6aWB2hLTWYc0keDEnWg==
-X-Received: by 2002:a05:6000:1449:b0:21b:b171:5eb8 with SMTP id v9-20020a056000144900b0021bb1715eb8mr42593876wrx.634.1657190488245;
-        Thu, 07 Jul 2022 03:41:28 -0700 (PDT)
-Received: from fedora (nat-2.ign.cz. [91.219.240.2])
-        by smtp.gmail.com with ESMTPSA id n35-20020a05600c3ba300b003a039054567sm28432130wms.18.2022.07.07.03.41.27
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 07 Jul 2022 03:41:27 -0700 (PDT)
-From:   Vitaly Kuznetsov <vkuznets@redhat.com>
-To:     Jim Mattson <jmattson@google.com>
-Cc:     kvm@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Anirudh Rayabharam <anrayabh@linux.microsoft.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Maxim Levitsky <mlevitsk@redhat.com>,
-        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 20/28] KVM: VMX: Add missing VMENTRY controls to
- vmcs_config
-In-Reply-To: <CALMp9eTVAOCvWQ-3A6VmwhJk6skES9phMPC3O-za7Rk05SfVTg@mail.gmail.com>
-References: <20220629150625.238286-1-vkuznets@redhat.com>
- <20220629150625.238286-21-vkuznets@redhat.com>
- <CALMp9eTVAOCvWQ-3A6VmwhJk6skES9phMPC3O-za7Rk05SfVTg@mail.gmail.com>
-Date:   Thu, 07 Jul 2022 12:41:26 +0200
-Message-ID: <87fsjdqk6h.fsf@redhat.com>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent
+         :content-language:to:cc:references:from:subject:in-reply-to
+         :content-transfer-encoding;
+        bh=AWk1Z5M5SWdApDSOa1sdcUjH/ZrS41Uj70CxP1iIBEY=;
+        b=BAtvHPMkmlqKaJ1udOYhPsKsFNt0joo6q7O5mtQ/Xut0/Xef+J7ucddUe7HeeTMeG1
+         OlpI1ag9bzWTOJIHlprWorrzquq++7OTB2e2F7sG84hvIkEBrvUa/HwwhCy5yjwaMcDC
+         Ve2ovd9HCPP2HxMxbEIiKR0QvexV4UNM341pMg7Jj2PuZsS6osBiUUebiTYL/DUZgKVB
+         jgLiSc5lAKUcfDljByXp4Mezv8rR3PG82rSpFx+aVXwBglSPP52IYvCcHT45AoXGO0wl
+         GLNS7oDIdZ/UMneVgQtGwib1fvVxQeij4zWTt8EVJkvFEilceZBzBxuvAzY+Mfqlltqq
+         Fbjg==
+X-Gm-Message-State: AJIora/TCNwx/xZchj4WdIv+iM3E+Wznam1yZC0F7kcumlHZ3ojPCGTe
+        gVlMd9SEnA2u4s5/6HQ2d6g=
+X-Google-Smtp-Source: AGRyM1t2zasbMiF3MWY2dw1TcEEKZ25K4+xE5Ii9yxj9FzxvwTPc8TRwQ7+xwCe9gkFE7vgFIV8tuw==
+X-Received: by 2002:a5d:6da2:0:b0:21b:c9cb:f96c with SMTP id u2-20020a5d6da2000000b0021bc9cbf96cmr42764518wrs.670.1657190506913;
+        Thu, 07 Jul 2022 03:41:46 -0700 (PDT)
+Received: from [192.168.2.177] ([207.188.167.132])
+        by smtp.gmail.com with ESMTPSA id d7-20020a5d5387000000b0021d5c52f4b4sm14133497wrv.34.2022.07.07.03.41.45
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 07 Jul 2022 03:41:45 -0700 (PDT)
+Message-ID: <640c1a9b-f8b5-aa89-19af-7d6f5c55eb12@gmail.com>
+Date:   Thu, 7 Jul 2022 12:41:44 +0200
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Content-Language: en-US
+To:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Allen-KH Cheng <allen-kh.cheng@mediatek.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>
+Cc:     Project_Global_Chrome_Upstream_Group@mediatek.com,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-mediatek@lists.infradead.org,
+        Xiandong Wang <xiandong.wang@mediatek.com>
+References: <20220705122627.2273-1-allen-kh.cheng@mediatek.com>
+ <20220705122627.2273-2-allen-kh.cheng@mediatek.com>
+ <5916c91b-41a1-c97a-84b4-7d48739a0639@collabora.com>
+From:   Matthias Brugger <matthias.bgg@gmail.com>
+Subject: Re: [PATCH 1/2] dt-bindings: soc: mediatek: add mdp3 mutex support
+ for mt8186
+In-Reply-To: <5916c91b-41a1-c97a-84b4-7d48739a0639@collabora.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Jim Mattson <jmattson@google.com> writes:
 
-> On Wed, Jun 29, 2022 at 8:07 AM Vitaly Kuznetsov <vkuznets@redhat.com> wrote:
+
+On 07/07/2022 10:52, AngeloGioacchino Del Regno wrote:
+> Il 05/07/22 14:26, Allen-KH Cheng ha scritto:
+>> Add mdp3 mutex compatible for mt8186 SoC.
 >>
->> As a preparation to reusing the result of setup_vmcs_config() in
->> nested VMX MSR setup, add the VMENTRY controls which KVM doesn't
->> use but supports for nVMX to KVM_OPT_VMX_VM_ENTRY_CONTROLS and
->> filter them out in vmx_vmentry_ctrl().
->>
->> No functional change intended.
->>
->> Signed-off-by: Vitaly Kuznetsov <vkuznets@redhat.com>
+>> Signed-off-by: Allen-KH Cheng <allen-kh.cheng@mediatek.com>
+>> Signed-off-by: Xiandong Wang <xiandong.wang@mediatek.com>
+> 
+> 
+> Please drop this commit. Adding a mdp3-mutex compatible is not needed here.
+> 
+
+Thanks for checking. We probably would need a fallback compatible. We can only 
+know from the HW engineers that can confirm if the IP block is the same as the 
+disp mutex or a different one.
+
+I'll drop both patches for now until things got clear.
+
+Regards,
+Matthias
+
 >> ---
->>  arch/x86/kvm/vmx/vmx.c | 3 +++
->>  arch/x86/kvm/vmx/vmx.h | 4 +++-
->>  2 files changed, 6 insertions(+), 1 deletion(-)
+>>   .../devicetree/bindings/soc/mediatek/mediatek,mutex.yaml         | 1 +
+>>   1 file changed, 1 insertion(+)
 >>
->> diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
->> index e5ab77ed37e4..b774b6391e0e 100644
->> --- a/arch/x86/kvm/vmx/vmx.c
->> +++ b/arch/x86/kvm/vmx/vmx.c
->> @@ -4179,6 +4179,9 @@ static u32 vmx_vmentry_ctrl(void)
->>  {
->>         u32 vmentry_ctrl = vmcs_config.vmentry_ctrl;
->>
->> +       /* Not used by KVM but supported for nesting. */
->> +       vmentry_ctrl &= ~(VM_ENTRY_SMM | VM_ENTRY_DEACT_DUAL_MONITOR);
->> +
->
-> LOL! KVM does not emulate the dual-monitor treatment of SMIs and SMM.
-> Do we actually claim to support these VM-entry controls today?!?
->
-
-No, just a brainfart on my side, nested_vmx_setup_ctls_msrs() filters
-them out too. I'll drop the patch.
-
->>         if (vmx_pt_mode_is_system())
->>                 vmentry_ctrl &= ~(VM_ENTRY_PT_CONCEAL_PIP |
->>                                   VM_ENTRY_LOAD_IA32_RTIT_CTL);
->> diff --git a/arch/x86/kvm/vmx/vmx.h b/arch/x86/kvm/vmx/vmx.h
->> index d4503a38735b..7ada8410a037 100644
->> --- a/arch/x86/kvm/vmx/vmx.h
->> +++ b/arch/x86/kvm/vmx/vmx.h
->> @@ -479,7 +479,9 @@ static inline u8 vmx_get_rvi(void)
->>                 __KVM_REQ_VMX_VM_ENTRY_CONTROLS
->>  #endif
->>  #define KVM_OPT_VMX_VM_ENTRY_CONTROLS                          \
->> -       (VM_ENTRY_LOAD_IA32_PERF_GLOBAL_CTRL |                  \
->> +       (VM_ENTRY_SMM |                                         \
->> +       VM_ENTRY_DEACT_DUAL_MONITOR |                           \
->> +       VM_ENTRY_LOAD_IA32_PERF_GLOBAL_CTRL |                   \
->>         VM_ENTRY_LOAD_IA32_PAT |                                \
->>         VM_ENTRY_LOAD_IA32_EFER |                               \
->>         VM_ENTRY_LOAD_BNDCFGS |                                 \
->> --
->> 2.35.3
->>
->
-
--- 
-Vitaly
-
+>> diff --git 
+>> a/Documentation/devicetree/bindings/soc/mediatek/mediatek,mutex.yaml 
+>> b/Documentation/devicetree/bindings/soc/mediatek/mediatek,mutex.yaml
+>> index 627dcc3e8b32..234fa5dc07c2 100644
+>> --- a/Documentation/devicetree/bindings/soc/mediatek/mediatek,mutex.yaml
+>> +++ b/Documentation/devicetree/bindings/soc/mediatek/mediatek,mutex.yaml
+>> @@ -30,6 +30,7 @@ properties:
+>>         - mediatek,mt8173-disp-mutex
+>>         - mediatek,mt8183-disp-mutex
+>>         - mediatek,mt8186-disp-mutex
+>> +      - mediatek,mt8186-mdp3-mutex
+>>         - mediatek,mt8192-disp-mutex
+>>         - mediatek,mt8195-disp-mutex
+> 
+> 
+> 

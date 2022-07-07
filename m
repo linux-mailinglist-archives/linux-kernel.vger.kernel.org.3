@@ -2,226 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A116B569EE0
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 11:53:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E06F3569EE4
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 11:53:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235026AbiGGJw0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Jul 2022 05:52:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52426 "EHLO
+        id S235083AbiGGJxS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Jul 2022 05:53:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53176 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235257AbiGGJwY (ORCPT
+        with ESMTP id S234897AbiGGJxR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Jul 2022 05:52:24 -0400
-Received: from mail-il1-f200.google.com (mail-il1-f200.google.com [209.85.166.200])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D1754F186
-        for <linux-kernel@vger.kernel.org>; Thu,  7 Jul 2022 02:52:21 -0700 (PDT)
-Received: by mail-il1-f200.google.com with SMTP id b11-20020a92340b000000b002d3dbbc7b15so9062575ila.5
-        for <linux-kernel@vger.kernel.org>; Thu, 07 Jul 2022 02:52:21 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
-        bh=UQOQ5NQhyZkSCTe3jrrRdbGYXhWeGf+6XHj7h5D7gvM=;
-        b=zmznpwIfoMsAAb5m8B6kJNvLGO3fYvN1tffHCb3BmDBV6072tAFLgjk4TbbBvFhCC1
-         XrII+Zr8wyl3cPMQI0LNrrquQXrAD4107F1YJ4nMiQyixdTlMX6CUOH0cVMzN2bEG0K4
-         tcDLIwd7f2llONEBmQ2ch5uF+QU8n1Zz2zuvwHPyyZGyFrgq5nI4wLl0b52YBoeSruV0
-         qEPy++pq9yAvu+TZiEbiRA4WoKROiBxN5+Uw3Ka6YmecX/ydlz0cJAqoWgGN77gdxq1U
-         dfms+8J6DPQPJDQwuTAzC00LRifwRwrpxWLpZuS25QQlzO/84nsIym/YQvsggFcXK9VV
-         2FDA==
-X-Gm-Message-State: AJIora8FjUGfC31O96IzbKEvst051Dn4VOavKsZqIdhtY9sGN3xLkPBt
-        qvb4l75y+T8aP/41al1jYosgHodrHQuofcQdfTN/6m5x4QDw
-X-Google-Smtp-Source: AGRyM1vZtMXXieIfod12GjtWlajeQzrtbRabPYzhrwNUJWH8iEX77HMCCHnkSkzuwIy9pZ/kIWObrqeoObtxPhFC8Gmlhsss5wAl
+        Thu, 7 Jul 2022 05:53:17 -0400
+Received: from aposti.net (aposti.net [89.234.176.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95C7D4F185;
+        Thu,  7 Jul 2022 02:53:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
+        s=mail; t=1657187594; h=from:from:sender:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=M2iuLPi3znYre9jdhTqzIq1pKMAjj+Qt7rBhbS9PMKc=;
+        b=TOmpTwpkYfoyrZfXgxN9P80ZdASQ8xAFueCXRyevhw88XDpsFtV4IV7mDsi6K5yFPNze8l
+        dqjj9z/hQSnOThUzJif9/1cTlTT2SQMQnbV1KdyJmlCP+P6Y0ONS+RMosmXgVFSLXzw4rr
+        s5a4qsRk8qXubcC8Ieb1GeXaMrlFpuw=
+Date:   Thu, 07 Jul 2022 10:53:05 +0100
+From:   Paul Cercueil <paul@crapouillou.net>
+Subject: Re: [PATCH 10/11] ASoC: jz4740-i2s: Support S20_LE and S24_LE sample
+ formats
+To:     Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
+Cc:     lgirdwood@gmail.com, broonie@kernel.org, perex@perex.cz,
+        tiwai@suse.com, linux-mips@vger.kernel.org,
+        alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org
+Message-Id: <H4ANER.XJSSJIHNXTEA1@crapouillou.net>
+In-Reply-To: <20220706211330.120198-11-aidanmacdonald.0x0@gmail.com>
+References: <20220706211330.120198-1-aidanmacdonald.0x0@gmail.com>
+        <20220706211330.120198-11-aidanmacdonald.0x0@gmail.com>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6e02:15c5:b0:2d7:a1cf:6f87 with SMTP id
- q5-20020a056e0215c500b002d7a1cf6f87mr26502806ilu.30.1657187540719; Thu, 07
- Jul 2022 02:52:20 -0700 (PDT)
-Date:   Thu, 07 Jul 2022 02:52:20 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000b0ddbe05e3340a3a@google.com>
-Subject: [syzbot] KASAN: use-after-free Read in pty_close
-From:   syzbot <syzbot+49950ba66096b1f0209b@syzkaller.appspotmail.com>
-To:     asml.silence@gmail.com, axboe@kernel.dk,
-        gregkh@linuxfoundation.org, jirislaby@kernel.org,
-        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1; format=flowed
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
-
-syzbot found the following issue on:
-
-HEAD commit:    cb71b93c2dc3 Add linux-next specific files for 20220628
-git tree:       linux-next
-console+strace: https://syzkaller.appspot.com/x/log.txt?x=14be3e84080000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=badbc1adb2d582eb
-dashboard link: https://syzkaller.appspot.com/bug?extid=49950ba66096b1f0209b
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=116d8ff4080000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=13993e97f00000
-
-The issue was bisected to:
-
-commit a18427bb2d9b2c8bbacccd4f862b7b6b0a83ab75
-Author: Pavel Begunkov <asml.silence@gmail.com>
-Date:   Thu Jun 23 13:24:49 2022 +0000
-
-    io_uring: optimise submission side poll_refs
-
-bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=1025755c080000
-final oops:     https://syzkaller.appspot.com/x/report.txt?x=1225755c080000
-console output: https://syzkaller.appspot.com/x/log.txt?x=1425755c080000
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+49950ba66096b1f0209b@syzkaller.appspotmail.com
-Fixes: a18427bb2d9b ("io_uring: optimise submission side poll_refs")
-
-==================================================================
-BUG: KASAN: use-after-free in __wake_up_common+0x637/0x650 kernel/sched/wait.c:100
-Read of size 8 at addr ffff8880253cdfb0 by task syz-executor106/3800
-
-CPU: 0 PID: 3800 Comm: syz-executor106 Not tainted 5.19.0-rc4-next-20220628-syzkaller #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 06/29/2022
-Call Trace:
- <TASK>
- __dump_stack lib/dump_stack.c:88 [inline]
- dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
- print_address_description mm/kasan/report.c:317 [inline]
- print_report.cold+0x2ba/0x719 mm/kasan/report.c:433
- kasan_report+0xbe/0x1f0 mm/kasan/report.c:495
- __wake_up_common+0x637/0x650 kernel/sched/wait.c:100
- __wake_up_common_lock+0xd0/0x130 kernel/sched/wait.c:137
- pty_close+0x224/0x4f0 drivers/tty/pty.c:68
- tty_release+0x45e/0x1200 drivers/tty/tty_io.c:1758
- __fput+0x277/0x9d0 fs/file_table.c:317
- task_work_run+0xdd/0x1a0 kernel/task_work.c:177
- ptrace_notify+0x114/0x140 kernel/signal.c:2353
- ptrace_report_syscall include/linux/ptrace.h:420 [inline]
- ptrace_report_syscall_exit include/linux/ptrace.h:482 [inline]
- syscall_exit_work kernel/entry/common.c:249 [inline]
- syscall_exit_to_user_mode_prepare+0x129/0x280 kernel/entry/common.c:276
- __syscall_exit_to_user_mode_work kernel/entry/common.c:281 [inline]
- syscall_exit_to_user_mode+0x9/0x50 kernel/entry/common.c:294
- do_syscall_64+0x42/0xb0 arch/x86/entry/common.c:86
- entry_SYSCALL_64_after_hwframe+0x46/0xb0
-RIP: 0033:0x7f4caf4b25d9
-Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 11 15 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007f4caf45f268 EFLAGS: 00000246 ORIG_RAX: 0000000000000001
-RAX: 0000000000006a00 RBX: 00007f4caf5394e0 RCX: 00007f4caf4b25d9
-RDX: 000000000000ff2e RSI: 0000000020000080 RDI: 0000000000000007
-RBP: 00007f4caf506074 R08: 0000000000000000 R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000246 R12: 00007f4caf5394e8
-R13: 0000000020004400 R14: 6d74702f7665642f R15: 0000000000000006
- </TASK>
-
-Allocated by task 3801:
- kasan_save_stack+0x1e/0x40 mm/kasan/common.c:38
- kasan_set_track mm/kasan/common.c:45 [inline]
- set_alloc_info mm/kasan/common.c:436 [inline]
- ____kasan_kmalloc mm/kasan/common.c:515 [inline]
- ____kasan_kmalloc mm/kasan/common.c:474 [inline]
- __kasan_kmalloc+0xa9/0xd0 mm/kasan/common.c:524
- kmalloc include/linux/slab.h:600 [inline]
- __io_queue_proc+0x2dc/0x950 io_uring/poll.c:429
- poll_wait include/linux/poll.h:49 [inline]
- n_tty_poll+0xb4/0x8a0 drivers/tty/n_tty.c:2425
- tty_poll+0x139/0x1b0 drivers/tty/tty_io.c:2212
- vfs_poll include/linux/poll.h:88 [inline]
- __io_arm_poll_handler+0x488/0x1060 io_uring/poll.c:511
- io_arm_poll_handler+0x5c6/0xce0 io_uring/poll.c:638
- io_queue_async+0xc1/0x3e0 io_uring/io_uring.c:1753
- io_queue_sqe io_uring/io_uring.c:1787 [inline]
- io_submit_sqe io_uring/io_uring.c:2036 [inline]
- io_submit_sqes+0x15fc/0x1ec0 io_uring/io_uring.c:2147
- __do_sys_io_uring_enter+0xb85/0x1eb0 io_uring/io_uring.c:3087
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x46/0xb0
-
-Freed by task 3803:
- kasan_save_stack+0x1e/0x40 mm/kasan/common.c:38
- kasan_set_track+0x21/0x30 mm/kasan/common.c:45
- kasan_set_free_info+0x20/0x30 mm/kasan/generic.c:370
- ____kasan_slab_free mm/kasan/common.c:366 [inline]
- ____kasan_slab_free+0x166/0x1c0 mm/kasan/common.c:328
- kasan_slab_free include/linux/kasan.h:200 [inline]
- slab_free_hook mm/slub.c:1754 [inline]
- slab_free_freelist_hook+0x8b/0x1c0 mm/slub.c:1780
- slab_free mm/slub.c:3534 [inline]
- kfree+0xe2/0x4d0 mm/slub.c:4562
- io_clean_op+0x1b1/0xa40 io_uring/io_uring.c:1555
- io_dismantle_req io_uring/io_uring.c:930 [inline]
- io_free_req+0xc9/0x299 io_uring/io_uring.c:940
- io_put_req_find_next io_uring/io_uring.c:1236 [inline]
- io_wq_free_work.cold+0x62/0x67 io_uring/io_uring.c:1636
- io_worker_handle_work+0xc48/0x1c60 io_uring/io-wq.c:590
- io_wqe_worker+0x640/0xe90 io_uring/io-wq.c:634
- ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:302
-
-The buggy address belongs to the object at ffff8880253cdf80
- which belongs to the cache kmalloc-64 of size 64
-The buggy address is located 48 bytes inside of
- 64-byte region [ffff8880253cdf80, ffff8880253cdfc0)
-
-The buggy address belongs to the physical page:
-page:ffffea000094f340 refcount:1 mapcount:0 mapping:0000000000000000 index:0x0 pfn:0x253cd
-flags: 0xfff00000000200(slab|node=0|zone=1|lastcpupid=0x7ff)
-raw: 00fff00000000200 ffffea0000963c00 dead000000000003 ffff888011841640
-raw: 0000000000000000 0000000080200020 00000001ffffffff 0000000000000000
-page dumped because: kasan: bad access detected
-page_owner tracks the page as allocated
-page last allocated via order 0, migratetype Unmovable, gfp_mask 0x12cc0(GFP_KERNEL|__GFP_NOWARN|__GFP_NORETRY), pid 11, tgid 11 (kworker/u4:1), ts 9976176866, free_ts 0
- prep_new_page mm/page_alloc.c:2535 [inline]
- get_page_from_freelist+0x210d/0x3a30 mm/page_alloc.c:4282
- __alloc_pages+0x1c7/0x510 mm/page_alloc.c:5506
- alloc_pages+0x1aa/0x310 mm/mempolicy.c:2280
- alloc_slab_page mm/slub.c:1824 [inline]
- allocate_slab+0x27e/0x3d0 mm/slub.c:1969
- new_slab mm/slub.c:2029 [inline]
- ___slab_alloc+0x89d/0xef0 mm/slub.c:3031
- __slab_alloc.constprop.0+0x4d/0xa0 mm/slub.c:3118
- slab_alloc_node mm/slub.c:3209 [inline]
- slab_alloc mm/slub.c:3251 [inline]
- __kmalloc+0x3a2/0x450 mm/slub.c:4420
- kmalloc include/linux/slab.h:605 [inline]
- kzalloc include/linux/slab.h:733 [inline]
- lsm_task_alloc security/security.c:615 [inline]
- security_task_alloc+0x10b/0x250 security/security.c:1655
- copy_process+0x23e0/0x7080 kernel/fork.c:2219
- kernel_clone+0xe7/0xab0 kernel/fork.c:2652
- user_mode_thread+0xad/0xe0 kernel/fork.c:2721
- call_usermodehelper_exec_work kernel/umh.c:174 [inline]
- call_usermodehelper_exec_work+0xcc/0x180 kernel/umh.c:160
- process_one_work+0x991/0x1610 kernel/workqueue.c:2289
- worker_thread+0x665/0x1080 kernel/workqueue.c:2436
- kthread+0x2e9/0x3a0 kernel/kthread.c:376
- ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:302
-page_owner free stack trace missing
-
-Memory state around the buggy address:
- ffff8880253cde80: 00 00 00 00 00 00 00 fc fc fc fc fc fc fc fc fc
- ffff8880253cdf00: fa fb fb fb fb fb fb fb fc fc fc fc fc fc fc fc
->ffff8880253cdf80: fa fb fb fb fb fb fb fb fc fc fc fc fc fc fc fc
-                                     ^
- ffff8880253ce000: fa fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
- ffff8880253ce080: fb fb fb fb fb fb fb fb fb fb fb fb fc fc fc fc
-==================================================================
 
 
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
+Le mer., juil. 6 2022 at 22:13:29 +0100, Aidan MacDonald=20
+<aidanmacdonald.0x0@gmail.com> a =E9crit :
+> The audio controller on JZ47xx SoCs supports 20- and 24-bit
+> samples coming from memory. Allow those formats to be used
+> with the I2S driver.
+>=20
+> Signed-off-by: Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
+> ---
+>  sound/soc/jz4740/jz4740-i2s.c | 12 ++++++++++--
+>  1 file changed, 10 insertions(+), 2 deletions(-)
+>=20
+> diff --git a/sound/soc/jz4740/jz4740-i2s.c=20
+> b/sound/soc/jz4740/jz4740-i2s.c
+> index 80b355d715ce..ee99c5e781ec 100644
+> --- a/sound/soc/jz4740/jz4740-i2s.c
+> +++ b/sound/soc/jz4740/jz4740-i2s.c
+> @@ -222,9 +222,15 @@ static int jz4740_i2s_hw_params(struct=20
+> snd_pcm_substream *substream,
+>  	case SNDRV_PCM_FORMAT_S8:
+>  		sample_size =3D 0;
+>  		break;
+> -	case SNDRV_PCM_FORMAT_S16:
+> +	case SNDRV_PCM_FORMAT_S16_LE:
+>  		sample_size =3D 1;
+>  		break;
+> +	case SNDRV_PCM_FORMAT_S20_LE:
+> +		sample_size =3D 3;
+> +		break;
+> +	case SNDRV_PCM_FORMAT_S24_LE:
+> +		sample_size =3D 4;
+> +		break;
 
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-For information about bisection process see: https://goo.gl/tpsmEJ#bisection
-syzbot can test patches for this issue, for details see:
-https://goo.gl/tpsmEJ#testing-patches
+Did you test these? It is unclear to me, looking at the JZ4740 PM, if=20
+the 18-bit, 20-bit and 24-bit samples are in 4 bytes or 3 bytes.
+
+Cheers,
+-Paul
+
+>  	default:
+>  		return -EINVAL;
+>  	}
+> @@ -362,7 +368,9 @@ static const struct snd_soc_dai_ops=20
+> jz4740_i2s_dai_ops =3D {
+>  };
+>=20
+>  #define JZ4740_I2S_FMTS (SNDRV_PCM_FMTBIT_S8 | \
+> -		SNDRV_PCM_FMTBIT_S16_LE)
+> +			 SNDRV_PCM_FMTBIT_S16_LE | \
+> +			 SNDRV_PCM_FMTBIT_S20_LE | \
+> +			 SNDRV_PCM_FMTBIT_S24_LE)
+>=20
+>  static struct snd_soc_dai_driver jz4740_i2s_dai =3D {
+>  	.probe =3D jz4740_i2s_dai_probe,
+> --
+> 2.35.1
+>=20
+
+

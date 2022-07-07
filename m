@@ -2,168 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A626756AF1A
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 01:42:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9274556AF28
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 01:52:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236956AbiGGXmI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Jul 2022 19:42:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44798 "EHLO
+        id S236926AbiGGXuz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Jul 2022 19:50:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48942 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236588AbiGGXmG (ORCPT
+        with ESMTP id S236867AbiGGXux (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Jul 2022 19:42:06 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13BD660694;
-        Thu,  7 Jul 2022 16:42:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1657237326; x=1688773326;
-  h=message-id:subject:from:to:cc:date:in-reply-to:
-   references:content-transfer-encoding:mime-version;
-  bh=1oAFq84mWfA/CQ19Wsv/7u5AVCUkDw9Y1yFTUvUAZEI=;
-  b=ea2sOUBVQ4sHWTdsup0S+i6X6Se4NXivjFxBIru4hw1O4h5eEWBS4ueh
-   Toz3NrlVdiSfTOELm+ci+UFyr7H5qtsnyDGTe8NJAqeeJFwPqLLwDAJeA
-   6yS4mBscWLOGa6B9lJojb0DbOoGOvoYVpBl0NIy0a4LRbcBU5ysLLa6Ha
-   X5fjWdf41MaVXMWuJN1RFEEKFfLi7OWSBEOEaPjXbl6j1fNpBpXW1Luuz
-   20W/EhUsCEIHGRZibchiZM/Hu8LfHXrtt+VpyiCGDwA3CTeAJMeLZUhOV
-   zblYNB/N6rwdoX7a1/VWF7Hqf1eia8Xf285juqvBLJwna6w0FWz6kISl/
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10401"; a="284886970"
-X-IronPort-AV: E=Sophos;i="5.92,253,1650956400"; 
-   d="scan'208";a="284886970"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jul 2022 16:42:05 -0700
-X-IronPort-AV: E=Sophos;i="5.92,253,1650956400"; 
-   d="scan'208";a="920786491"
-Received: from pantones-mobl1.amr.corp.intel.com (HELO khuang2-desk.gar.corp.intel.com) ([10.212.54.208])
-  by fmsmga005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jul 2022 16:42:02 -0700
-Message-ID: <700b6dc7e8f038b9f8f3fc07bee89109e3f329de.camel@intel.com>
-Subject: Re: [PATCH v5 12/22] x86/virt/tdx: Convert all memory regions in
- memblock to TDX memory
-From:   Kai Huang <kai.huang@intel.com>
-To:     Juergen Gross <jgross@suse.com>,
-        Dave Hansen <dave.hansen@intel.com>,
-        linux-kernel@vger.kernel.org, kvm@vger.kernel.org
-Cc:     seanjc@google.com, pbonzini@redhat.com, len.brown@intel.com,
-        tony.luck@intel.com, rafael.j.wysocki@intel.com,
-        reinette.chatre@intel.com, dan.j.williams@intel.com,
-        peterz@infradead.org, ak@linux.intel.com,
-        kirill.shutemov@linux.intel.com,
-        sathyanarayanan.kuppuswamy@linux.intel.com,
-        isaku.yamahata@intel.com
-Date:   Fri, 08 Jul 2022 11:42:00 +1200
-In-Reply-To: <d262b7dd-d7eb-0251-e3c7-0bb0a626749d@suse.com>
-References: <cover.1655894131.git.kai.huang@intel.com>
-         <8288396be7fedd10521a28531e138579594d757a.1655894131.git.kai.huang@intel.com>
-         <20d63398-928f-0c6f-47ec-8e225c049ad8@intel.com>
-         <76d7604ff21b26252733165478d5c54035d84d98.camel@intel.com>
-         <880f3991-09e5-2f96-d5ba-213cff05c458@intel.com>
-         <d262b7dd-d7eb-0251-e3c7-0bb0a626749d@suse.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.44.2 (3.44.2-1.fc36) 
+        Thu, 7 Jul 2022 19:50:53 -0400
+Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17D9360690
+        for <linux-kernel@vger.kernel.org>; Thu,  7 Jul 2022 16:50:52 -0700 (PDT)
+Received: by mail-wr1-x431.google.com with SMTP id d16so22047052wrv.10
+        for <linux-kernel@vger.kernel.org>; Thu, 07 Jul 2022 16:50:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=glYe1llh4n+rbmi4V6B2Mqs1aDtdgNFAYvpdpFFTObI=;
+        b=hL30sFUur8jowhJ/PnVIbYIsyLpopzsMOvsJBK3DhwljDzNEAfLiR9YMt8eNiqru2W
+         Y54TBRmud0yAxOtxKrcLM/lBEmBTPFfhqpTZIFKKQM1mRmnc9nsZZVBzUhRCxcINaNT7
+         v/8K/xSA+GDMsuACrJfO52FIrnJ1U2utcwxAVwLQWCENk4GZMuFJGqBrBRYPF8PgwQWT
+         flcbzln7ESjK/rGyUkAlbD7LrEZadmIibFx0/HZLekMcDHZA2hxa+bUoNCwkIJKzoja1
+         SgSe8DD7E+tCYNP+18qYpSoTQd4xfrxRPPyfnGhE8Fyao6HYyWvtmC5+z4G6wjzAC9+k
+         TBng==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=glYe1llh4n+rbmi4V6B2Mqs1aDtdgNFAYvpdpFFTObI=;
+        b=b8iaT4Q+OE1m83Ve4YvddQYbpyKULWHOSKiPuXVeCuYTUr8PJ6DBIquaOJZZewYuKR
+         QiA3BaZEG41kpboS334aQNqtwku03JpQYmiZbtXiSnyzmijfEzGCxtNTiI7jrGlfTcKf
+         DI85yIlpkknbuS1RTfUTUhSBRjabEsONooEaMRny91GyV3Lo6WVnJAhq0JAhWYcLsYx+
+         K8VhnHbXQlh+TQZ7I22Ea7DChkQFhV7roDQGP4lfGwolhsxidnFNbV9al3iH2OgIDgxU
+         AdwLXGYakbfc9P3uthAYDwXftg2om2qQHLHBCHMeeT+cyGVq/1SRN8TSvWntnXpVogxF
+         /SUw==
+X-Gm-Message-State: AJIora/B7WAzZ+KpxKEsRgbisTNXrBCk4BtA/6oCwVMRFi2TLAYnps2Q
+        B44uU1k0NAvkjMNEE496ptw=
+X-Google-Smtp-Source: AGRyM1sSdCcr35K5RyBzPf0V7hYBTlp5T0J5GxBVERguvefZ4eTGHoDCDnyXkLYFdwWiw6ZIHut4+w==
+X-Received: by 2002:a5d:48cf:0:b0:210:1229:2e7 with SMTP id p15-20020a5d48cf000000b00210122902e7mr370752wrs.567.1657237850487;
+        Thu, 07 Jul 2022 16:50:50 -0700 (PDT)
+Received: from opensuse.localnet (host-79-53-109-127.retail.telecomitalia.it. [79.53.109.127])
+        by smtp.gmail.com with ESMTPSA id p10-20020a05600c23ca00b003a2c67aa6c0sm348158wmb.23.2022.07.07.16.50.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 07 Jul 2022 16:50:49 -0700 (PDT)
+From:   "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
+To:     Eric Biederman <ebiederm@xmission.com>, kexec@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Cc:     Ira Weiny <ira.weiny@intel.com>
+Subject: Re: [PATCH] kexec: Replace kmap() with kmap_local_page()
+Date:   Fri, 08 Jul 2022 01:50:35 +0200
+Message-ID: <3183776.44csPzL39Z@opensuse>
+In-Reply-To: <20220707231412.1404-1-fmdefrancesco@gmail.com>
+References: <20220707231412.1404-1-fmdefrancesco@gmail.com>
 MIME-Version: 1.0
-X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 2022-07-07 at 16:36 +0200, Juergen Gross wrote:
-> On 07.07.22 16:26, Dave Hansen wrote:
-> > On 6/26/22 23:16, Kai Huang wrote:
-> > > On Fri, 2022-06-24 at 12:40 -0700, Dave Hansen wrote:
-> > > > > +/*
-> > > > > + * Walks over all memblock memory regions that are intended to b=
-e
-> > > > > + * converted to TDX memory.  Essentially, it is all memblock mem=
-ory
-> > > > > + * regions excluding the low memory below 1MB.
-> > > > > + *
-> > > > > + * This is because on some TDX platforms the low memory below 1M=
-B is
-> > > > > + * not included in CMRs.  Excluding the low 1MB can still guaran=
-tee
-> > > > > + * that the pages managed by the page allocator are always TDX m=
-emory,
-> > > > > + * as the low 1MB is reserved during kernel boot and won't end u=
-p to
-> > > > > + * the ZONE_DMA (see reserve_real_mode()).
-> > > > > + */
-> > > > > +#define memblock_for_each_tdx_mem_pfn_range(i, p_start, p_end, p=
-_nid)	\
-> > > > > +	for_each_mem_pfn_range(i, MAX_NUMNODES, p_start, p_end, p_nid)	=
-\
-> > > > > +		if (!pfn_range_skip_lowmem(p_start, p_end))
-> > > >=20
-> > > > Let's summarize where we are at this point:
-> > > >=20
-> > > > 1. All RAM is described in memblocks
-> > > > 2. Some memblocks are reserved and some are free
-> > > > 3. The lower 1MB is marked reserved
-> > > > 4. for_each_mem_pfn_range() walks all reserved and free memblocks, =
-so we
-> > > >     have to exclude the lower 1MB as a special case.
-> > > >=20
-> > > > That seems superficially rather ridiculous.  Shouldn't we just pick=
- a
-> > > > memblock iterator that skips the 1MB?  Surely there is such a thing=
-.
-> > >=20
-> > > Perhaps you are suggesting we should always loop the _free_ ranges so=
- we don't
-> > > need to care about the first 1MB which is reserved?
-> > >=20
-> > > The problem is some reserved memory regions are actually later freed =
-to the page
-> > > allocator, for example, initrd.  So to cover all those 'late-freed-re=
-served-
-> > > regions', I used for_each_mem_pfn_range(), instead of for_each_free_m=
-em_range().
-> >=20
-> > Why not just entirely remove the lower 1MB from the memblock structure
-> > on TDX systems?  Do something equivalent to adding this on the kernel
-> > command line:
-> >=20
-> > 	memmap=3D1M$0x0
-> >=20
-> > > Btw, I do have a checkpatch warning around this code:
-> > >=20
-> > > ERROR: Macros with complex values should be enclosed in parentheses
-> > > #109: FILE: arch/x86/virt/vmx/tdx/tdx.c:377:
-> > > +#define memblock_for_each_tdx_mem_pfn_range(i, p_start, p_end, p_nid=
-)	\
-> > > +	for_each_mem_pfn_range(i, MAX_NUMNODES, p_start, p_end, p_nid)	\
-> > > +		if (!pfn_range_skip_lowmem(p_start, p_end))
-> > >=20
-> > > But it looks like a false positive to me.
-> >=20
-> > I think it doesn't like the if().
+On venerd=C3=AC 8 luglio 2022 01:14:12 CEST Fabio M. De Francesco wrote:
+> The use of kmap() and kmap_atomic() are being deprecated in favor of
+> kmap_local_page().
 >=20
-> I think it is right.
+> With kmap_local_page(), the mappings are per thread, CPU local and not
+> globally visible. Furthermore, the mappings can be acquired from any
+> context (including interrupts).
 >=20
-> Consider:
+> Therefore, use kmap_local_page() in kexec_core.c because these mappings=20
+are
+> per thread, CPU local, and not globally visible.
 >=20
-> if (a)
->      memblock_for_each_tdx_mem_pfn_range(...)
->          func();
-> else
->      other_func();
+> Tested on a QEMU + KVM 32-bits VM booting a kernel with HIGHMEM64GB
+> enabled.
 >=20
+> Suggested-by: Ira Weiny <ira.weiny@intel.com>
+> Signed-off-by: Fabio M. De Francesco <fmdefrancesco@gmail.com>
+> ---
 >=20
+> v1->v2: A sentence of the commit message contained an error due to a
+> mistake in copy-pasting from a previous patch. Replace "aio.c" with
+> "kexec_core.c".
 >=20
-Interesting case.  Thanks.
+>  kernel/kexec_core.c | 8 ++++----
+>  1 file changed, 4 insertions(+), 4 deletions(-)
+>=20
+Sorry, another error... Please discard this patch because the version=20
+number is missing in the subject.
 
-Yes we will require explicit { } around memblock_for_each_tdx_mem_pfn_range=
-() in
-this case.
+The second version, hopefully final and correct, is at
+https://lore.kernel.org/lkml/20220707231550.1484-1-fmdefrancesco@gmail.com/
 
---=20
-Thanks,
--Kai
+Thank you,
+
+=46abio
+
 
 

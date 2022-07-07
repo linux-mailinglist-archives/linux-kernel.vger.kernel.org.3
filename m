@@ -2,103 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F1522569D8B
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 10:38:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D3FB569D84
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 10:36:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234526AbiGGIhv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Jul 2022 04:37:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52864 "EHLO
+        id S232927AbiGGIgj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Jul 2022 04:36:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52304 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230005AbiGGIhr (ORCPT
+        with ESMTP id S230005AbiGGIgi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Jul 2022 04:37:47 -0400
-Received: from syslogsrv (unknown [217.20.186.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C837326D5;
-        Thu,  7 Jul 2022 01:37:45 -0700 (PDT)
-Received: from fg200.ow.s ([172.20.254.44] helo=localhost.localdomain)
-        by syslogsrv with esmtp (Exim 4.90_1)
-        (envelope-from <maksym.glubokiy@plvision.eu>)
-        id 1o9MzS-000CqE-7C; Thu, 07 Jul 2022 11:36:02 +0300
-From:   Maksym Glubokiy <maksym.glubokiy@plvision.eu>
-To:     Taras Chornyi <tchornyi@marvell.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>
-Cc:     Maksym Glubokiy <maksym.glubokiy@plvision.eu>,
-        Volodymyr Mytnyk <volodymyr.mytnyk@plvision.eu>,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH net-next 2/2] net: prestera: add support for port range filters
-Date:   Thu,  7 Jul 2022 11:35:39 +0300
-Message-Id: <20220707083539.171242-2-maksym.glubokiy@plvision.eu>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220707083539.171242-1-maksym.glubokiy@plvision.eu>
-References: <20220707083539.171242-1-maksym.glubokiy@plvision.eu>
+        Thu, 7 Jul 2022 04:36:38 -0400
+Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 682D6326D5;
+        Thu,  7 Jul 2022 01:36:37 -0700 (PDT)
+Received: by mail-pf1-x42a.google.com with SMTP id n12so18048894pfq.0;
+        Thu, 07 Jul 2022 01:36:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=bbHqYuBn99/DfkRvYwDANfs5Ue+qL8CDS8Gq1N/QC3c=;
+        b=leOp8aP0C+gnUlK1n50j+dt/zeX94akVOP7HCvSF7uKiLRlBDKC8JD44AhMsxPkOag
+         7mhMjYytI56DhkOlGXsCGPzPuMHP47+mSNCCRT9iG092+bi2RXYSG+8H8XcseOI7764V
+         M8PfOG7qMjX8I9jlOwShgIpkeY/xKNzN7OEymVF02nCU81dduZW8p8fYAjcaeN2NEDUg
+         yBIc7Ah+XhQ2g4trwoiwk2aUdBYceTnW4WXLYRDk4hKfRKzhOYPCVVhnlE1oGkbdWpGO
+         GJT/zb+i3dMRr/0HjEnoJFTvT0skB9ckysIGehN4SZya5dZ2ANYB+lkaZj1nBHsAehP2
+         Jw5A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=bbHqYuBn99/DfkRvYwDANfs5Ue+qL8CDS8Gq1N/QC3c=;
+        b=TaKAqDWRlm6dBXAK0fw/uU3v8L1D8dOib2SX6lsd3mp5vMpf/htSSCF7vY/yyAYch/
+         TBYMtYa9BOxLYpdmLuIiw3J9U69mbesppdSl/gG3+MqPtrn2xBBvUYAfLEucqt5T0w40
+         UG77kH8f9MNWHPzK9IKHnRFjqu/dnW2QhACBV9kZjXq355j/mYDUTkaEZmryLAVoTpSV
+         tPXeKorcLzM3G70h43eq25QN/Y1sIP9pRKezy6T5/XAIm57QaZ/azlIZqsZ4+HfH9Mij
+         CkrpeZ5K6eiPH1PF6ndA/9lPrdwHDdf1jsieQhFdPKw0zLukxTklWGZzRgJzUkbxYCkO
+         aTRA==
+X-Gm-Message-State: AJIora+JrMLslzjaCW81VegBflv80GBaJW7ECz9bvqx2dsj2j5Xj9EvG
+        s3aEK0I0BUYjCjhzlSzCTTHOfUFqO9mDfqhMmZk=
+X-Google-Smtp-Source: AGRyM1tzr0TRNmLKst9jt5mDGNc1x7oAlPI16O1qUxNPaloXnP2iRsJ/o8KTnvlOzFFCcsmtajTjvbdhutypTbYn2N4=
+X-Received: by 2002:a17:902:7807:b0:16b:e3d5:b2ce with SMTP id
+ p7-20020a170902780700b0016be3d5b2cemr20794908pll.18.1657182996863; Thu, 07
+ Jul 2022 01:36:36 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,FSL_HELO_NON_FQDN_1,
-        HELO_NO_DOMAIN,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220623103543.4138-1-yongsuyoo0215@gmail.com>
+ <CANXPkT49g7_YaL3rABY5Uhohz=EPgPqOL2tb6K4SHsWmshtysw@mail.gmail.com> <a3d44193-68f1-81a6-6baa-19e8403c5cd6@selasky.org>
+In-Reply-To: <a3d44193-68f1-81a6-6baa-19e8403c5cd6@selasky.org>
+From:   =?UTF-8?B?7Jyg7Jqp7IiY?= <yongsuyoo0215@gmail.com>
+Date:   Thu, 7 Jul 2022 17:36:27 +0900
+Message-ID: <CANXPkT6cffk3uQm6fRiPpe2rvHzzvDKgwhYnQh+TVcBo_Dw=uQ@mail.gmail.com>
+Subject: Re: [PATCH] media: dvb_ringbuffer : Fix a bug in dvb_ringbuffer.c
+To:     Hans Petter Selasky <hps@selasky.org>, linux-media@vger.kernel.org,
+        linux-kernel@vger.kernel.org, mchehab@kernel.org,
+        Kieran Bingham <kieran.bingham@ideasonboard.com>
+Cc:     =?UTF-8?B?7Jyg7Jqp7IiY?= <yongsuyoo0215@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This adds support for port-range rules:
+Dear Hans Petter Selasky
+Thank you for your response and good advice and informations
 
-  $ tc qdisc add ... clsact
-  $ tc filter add ... flower ... src_port <PMIN>-<PMAX> ...
+Dear All
+How is this patch going ?
+Is there anyone who can share the current status ?
 
-Co-developed-by: Volodymyr Mytnyk <volodymyr.mytnyk@plvision.eu>
-Signed-off-by: Volodymyr Mytnyk <volodymyr.mytnyk@plvision.eu>
-Signed-off-by: Maksym Glubokiy <maksym.glubokiy@plvision.eu>
----
- .../marvell/prestera/prestera_flower.c        | 24 +++++++++++++++++++
- 1 file changed, 24 insertions(+)
-
-diff --git a/drivers/net/ethernet/marvell/prestera/prestera_flower.c b/drivers/net/ethernet/marvell/prestera/prestera_flower.c
-index a54748ac6541..652aa95e65ac 100644
---- a/drivers/net/ethernet/marvell/prestera/prestera_flower.c
-+++ b/drivers/net/ethernet/marvell/prestera/prestera_flower.c
-@@ -202,6 +202,7 @@ static int prestera_flower_parse(struct prestera_flow_block *block,
- 	      BIT(FLOW_DISSECTOR_KEY_IPV6_ADDRS) |
- 	      BIT(FLOW_DISSECTOR_KEY_ICMP) |
- 	      BIT(FLOW_DISSECTOR_KEY_PORTS) |
-+	      BIT(FLOW_DISSECTOR_KEY_PORTS_RANGE) |
- 	      BIT(FLOW_DISSECTOR_KEY_VLAN))) {
- 		NL_SET_ERR_MSG_MOD(f->common.extack, "Unsupported key");
- 		return -EOPNOTSUPP;
-@@ -301,6 +302,29 @@ static int prestera_flower_parse(struct prestera_flow_block *block,
- 		rule_match_set(r_match->mask, L4_PORT_DST, match.mask->dst);
- 	}
- 
-+	if (flow_rule_match_key(f_rule, FLOW_DISSECTOR_KEY_PORTS_RANGE)) {
-+		struct flow_match_ports_range match;
-+		__be32 tp_key, tp_mask;
-+
-+		flow_rule_match_ports_range(f_rule, &match);
-+
-+		/* src port range (min, max) */
-+		tp_key = htonl(ntohs(match.key->tp_min.src) |
-+			       (ntohs(match.key->tp_max.src) << 16));
-+		tp_mask = htonl(ntohs(match.mask->tp_min.src) |
-+				(ntohs(match.mask->tp_max.src) << 16));
-+		rule_match_set(r_match->key, L4_PORT_RANGE_SRC, tp_key);
-+		rule_match_set(r_match->mask, L4_PORT_RANGE_SRC, tp_mask);
-+
-+		/* dst port range (min, max) */
-+		tp_key = htonl(ntohs(match.key->tp_min.dst) |
-+			       (ntohs(match.key->tp_max.dst) << 16));
-+		tp_mask = htonl(ntohs(match.mask->tp_min.dst) |
-+				(ntohs(match.mask->tp_max.dst) << 16));
-+		rule_match_set(r_match->key, L4_PORT_RANGE_DST, tp_key);
-+		rule_match_set(r_match->mask, L4_PORT_RANGE_DST, tp_mask);
-+	}
-+
- 	if (flow_rule_match_key(f_rule, FLOW_DISSECTOR_KEY_VLAN)) {
- 		struct flow_match_vlan match;
- 
--- 
-2.25.1
-
+2022=EB=85=84 6=EC=9B=94 30=EC=9D=BC (=EB=AA=A9) =EC=98=A4=ED=9B=84 10:42, =
+Hans Petter Selasky <hps@selasky.org>=EB=8B=98=EC=9D=B4 =EC=9E=91=EC=84=B1:
+>
+> On 6/26/22 23:11, =EC=9C=A0=EC=9A=A9=EC=88=98 wrote:
+> > Hi ~
+> >
+> > How is this patch going ?
+> > Can you share current status ?
+> >
+> > Thank you
+> >
+>
+> Hi Yongsu,
+>
+> Linux guys can sometimes take a long time to include patches speaking
+> weeks and months. For now I've added your patch to multimedia/webcamd
+> (v5.17.1.1) which runs under FreeBSD 13.1 (not Linux).
+>
+> https://github.com/hselasky/webcamd/commit/0e4d4959a2aea2e6a88d316eb94359=
+2fe0b23d09
+>
+> --HPS

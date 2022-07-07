@@ -2,75 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 017075699BE
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 07:17:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BD0115699C3
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 07:19:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234897AbiGGFQs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Jul 2022 01:16:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45600 "EHLO
+        id S234919AbiGGFTq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Jul 2022 01:19:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47380 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229612AbiGGFQr (ORCPT
+        with ESMTP id S229612AbiGGFTo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Jul 2022 01:16:47 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3146531234
-        for <linux-kernel@vger.kernel.org>; Wed,  6 Jul 2022 22:16:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1657171005;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=1/5gQIogadsVarAHL6peGmK6MYhegEwuOEcNLhHz0wI=;
-        b=JveTPD/P/FtxCwwmmOlvWTUy8P0d7Htt6KcsTvzISaWBv7rHKtVnGlTV+yX8axUvu1S2Pm
-        z7SXOyCnSkxmP6mhl8axq5U0M6dZcmeS93NYTiqnH5YdoNCe6cfPlpHho8ehGpzxGxkhOq
-        yLkuPYRwAL6L4wH8EPha/JyyLI3Whlg=
-Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
- [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-12-4hGVzF9MPAqY9bOuJFZ5Zg-1; Thu, 07 Jul 2022 01:16:43 -0400
-X-MC-Unique: 4hGVzF9MPAqY9bOuJFZ5Zg-1
-Received: by mail-wm1-f69.google.com with SMTP id v67-20020a1cac46000000b003a2be9fa09cso2124643wme.3
-        for <linux-kernel@vger.kernel.org>; Wed, 06 Jul 2022 22:16:43 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=1/5gQIogadsVarAHL6peGmK6MYhegEwuOEcNLhHz0wI=;
-        b=sXJAm9w9bmzON4OoHgob6F4iqtmL6Xdt0eaIlG129/+NZ4woA5gAJauNL0NdjM/I3L
-         piX+DGDczvvi2b/gWWjUO60BR+gfYDsD/nXiOI0thKMWRlKx3R3biPtlLr9/FE9MsP3r
-         oDzvtx7QZxocFpiLQyjFYzkV3h4ATo18C8RN1vH5cIa4/2f7wzFk4g+/0goLnSCKoKQa
-         Wxt61IPT0HbIYJEy8jxEWpkAzjPEkkqe5UAOV+ssPSdwauSqBEq2/XHNK80GfLtQqgh4
-         zxEXVxZ0V7eJdsil4X56GrHBag89lcR60rF3Dk5YdnyXj8U/Hrs4K4cPitAk9c/jnlLk
-         Hm1A==
-X-Gm-Message-State: AJIora+KSw6+ql1YPU9LT1Z4a2OH92qRQHdoVvKt8fmeILP/MuuBOLps
-        F5IW8zQ7wp3twtus3zxD/Ua5SEayIV31aN7ZmPBJdp3e17EawXJ5lgiltXYoxDz+q5Foi5jQUSI
-        T4AwjqZ+ogfd9wQup1FAWLsBv
-X-Received: by 2002:a1c:770d:0:b0:3a0:3d95:4538 with SMTP id t13-20020a1c770d000000b003a03d954538mr2272524wmi.17.1657171002751;
-        Wed, 06 Jul 2022 22:16:42 -0700 (PDT)
-X-Google-Smtp-Source: AGRyM1szzNKb24PPtBh+b6VdvF9GQriDQNIAizLQlki1SQSJXfirR97xglPrMIyx3ky0UhetxN3TpQ==
-X-Received: by 2002:a1c:770d:0:b0:3a0:3d95:4538 with SMTP id t13-20020a1c770d000000b003a03d954538mr2272515wmi.17.1657171002572;
-        Wed, 06 Jul 2022 22:16:42 -0700 (PDT)
-Received: from redhat.com ([2.52.154.68])
-        by smtp.gmail.com with ESMTPSA id f18-20020adff992000000b0021b9416fa13sm15603260wrr.90.2022.07.06.22.16.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 06 Jul 2022 22:16:42 -0700 (PDT)
-Date:   Thu, 7 Jul 2022 01:16:38 -0400
-From:   "Michael S. Tsirkin" <mst@redhat.com>
-To:     Guo Zhi <qtxuning1999@sjtu.edu.cn>
-Cc:     jasowang@redhat.com, eperezma@redhat.com,
-        virtualization@lists.linux-foundation.org,
-        linux-kernel@vger.kernel.org, sgarzare@redhat.com
-Subject: Re: [PATCH v2 3/4] virtio_test: use random length scatterlists to
- test descriptor chain
-Message-ID: <20220707011015-mutt-send-email-mst@kernel.org>
-References: <20220707024409.1869-1-qtxuning1999@sjtu.edu.cn>
- <20220707024409.1869-4-qtxuning1999@sjtu.edu.cn>
+        Thu, 7 Jul 2022 01:19:44 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B4143122B
+        for <linux-kernel@vger.kernel.org>; Wed,  6 Jul 2022 22:19:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1657171183; x=1688707183;
+  h=subject:references:in-reply-to:to:cc:from:message-id:
+   date:mime-version:content-transfer-encoding;
+  bh=JnsdlBnemi3+nXZhtC2fFwNrIgLD1cmfnw2eTSz6klU=;
+  b=SHS30CCIP6Zezj6UX6VpLhrvPqgOEYrk0MDqavfUzY/HWOxtIGFD5imI
+   zeRxjy/tO6FZ4ZeoXlaJmWtPIbg05Hh0aRJB9j/B0e9rzmIkC7FV7r37g
+   Rpwb2VetaFcQLWMhAJVV4uPGKgzZbYWBWv5RIxqKXNyOPGpqspZnK5w1m
+   33/i0MJ+Y3/2Jvyge9tKZtMmkrD5NcJPTvS34O5oiOih5o/ZcQkoO4Gf+
+   BNGImA0h4XqxdOvAWRjiXtgJYEG+1AidnCdDwr528Mfu50nd/Bp/mReys
+   NOLT4Pi5aU+l4QLapVOMuMR0FFY//yLdoXT9uMgf4a2uajuyxs917Jqvz
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10400"; a="266962546"
+X-IronPort-AV: E=Sophos;i="5.92,251,1650956400"; 
+   d="scan'208";a="266962546"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jul 2022 22:19:26 -0700
+X-IronPort-AV: E=Sophos;i="5.92,251,1650956400"; 
+   d="scan'208";a="650975358"
+Received: from rongch2-mobl.ccr.corp.intel.com (HELO [10.255.31.6]) ([10.255.31.6])
+  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jul 2022 22:19:23 -0700
+Subject: Re: [PATCH v2 3/4] drm/gem: rename struct drm_gem_dma_object.{paddr
+ => dma_addr}
+References: <202207070426.Bj47lRp2-lkp@intel.com>
+In-Reply-To: <202207070426.Bj47lRp2-lkp@intel.com>
+To:     Danilo Krummrich <dakr@redhat.com>, daniel@ffwll.ch,
+        laurent.pinchart@ideasonboard.com, airlied@linux.ie,
+        tzimmermann@suse.de
+Cc:     kbuild-all@lists.01.org, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org, Danilo Krummrich <dakr@redhat.com>
+From:   kernel test robot <rong.a.chen@intel.com>
+X-Forwarded-Message-Id: <202207070426.Bj47lRp2-lkp@intel.com>
+Message-ID: <75985d03-11aa-1c0a-d1c0-6a6cbd56cbce@intel.com>
+Date:   Thu, 7 Jul 2022 13:19:21 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Firefox/78.0 Thunderbird/78.12.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220707024409.1869-4-qtxuning1999@sjtu.edu.cn>
+Content-Type: text/plain; charset=windows-1252; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
         SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -79,59 +66,94 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jul 07, 2022 at 10:44:08AM +0800, Guo Zhi wrote:
-> Prior implementation only use one descriptor for each io event, which
-> does't test code of descriptor chain. More importantly, one descriptor
-> will not use indirect feature even indirect feature is specified. Use
-> random length scatterlists here to test descriptor chain.
-> 
-> Signed-off-by: Guo Zhi <qtxuning1999@sjtu.edu.cn>
-> ---
->  tools/virtio/virtio_test.c | 11 ++++++++---
->  1 file changed, 8 insertions(+), 3 deletions(-)
-> 
-> diff --git a/tools/virtio/virtio_test.c b/tools/virtio/virtio_test.c
-> index 1ecd64271..363695b33 100644
-> --- a/tools/virtio/virtio_test.c
-> +++ b/tools/virtio/virtio_test.c
-> @@ -20,6 +20,7 @@
->  #include "../../drivers/vhost/test.h"
->  
->  #define RANDOM_BATCH -1
-> +#define MAX_SG_FRAGS 8UL
->  #define ALIGN 4096
->  #define RINGSIZE   256
->  #define TEST_BUF_NUM 0x100000
-> @@ -172,7 +173,8 @@ static void wait_for_interrupt(struct vdev_info *dev)
->  static void run_test(struct vdev_info *dev, struct vq_info *vq,
->  		     bool delayed, int batch, int reset_n, int bufs)
->  {
-> -	struct scatterlist sl;
-> +	struct scatterlist sg[MAX_SG_FRAGS];
-> +	int sg_size = 0;
->  	long started = 0, completed = 0, next_reset = reset_n;
->  	long completed_before, started_before;
->  	int r, test = 1;
-> @@ -197,8 +199,11 @@ static void run_test(struct vdev_info *dev, struct vq_info *vq,
->  
->  			while (started < bufs &&
->  			       (started - completed) < batch) {
-> -				sg_init_one(&sl, dev->buf, dev->buf_size);
-> -				r = virtqueue_add_outbuf(vq->vq, &sl, 1,
-> +				sg_size = random() % (MAX_SG_FRAGS - 1) + 1;
-> +				sg_init_table(sg, sg_size);
-> +				for (int i = 0; i < sg_size; ++i)
-> +					sg_set_buf(&sg[i], dev->buf + i, 0x1);
-> +				r = virtqueue_add_outbuf(vq->vq, sg, sg_size,
->  							 dev->buf + started,
->  							 GFP_ATOMIC);
->  				if (unlikely(r != 0)) {
+Hi Danilo,
 
-random on data path is pretty expensive.
-I would suggest get an array size from user (and maybe a seed?) and
-pregenerate some numbers, then reuse.
+Thank you for the patch! Yet something to improve:
+
+[auto build test ERROR on v5.19-rc5]
+[also build test ERROR on linus/master]
+[cannot apply to drm-misc/drm-misc-next anholt/for-next 
+pinchartl-media/drm/du/next next-20220706]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url: 
+https://github.com/intel-lab-lkp/linux/commits/Danilo-Krummrich/drm-rename-CMA-helpers-to-DMA-helpers/20220706-204716
+base:    88084a3df1672e131ddc1b4e39eeacfd39864acf
+config: arm-buildonly-randconfig-r003-20220706 
+(https://download.01.org/0day-ci/archive/20220707/202207070426.Bj47lRp2-lkp@intel.com/config)
+compiler: arm-linux-gnueabi-gcc (GCC) 11.3.0
+reproduce (this is a W=1 build):
+         wget 
+https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross 
+-O ~/bin/make.cross
+         chmod +x ~/bin/make.cross
+         # 
+https://github.com/intel-lab-lkp/linux/commit/54853a66aeea45ecb99d39dec51a7018803174e6
+         git remote add linux-review https://github.com/intel-lab-lkp/linux
+         git fetch --no-tags linux-review 
+Danilo-Krummrich/drm-rename-CMA-helpers-to-DMA-helpers/20220706-204716
+         git checkout 54853a66aeea45ecb99d39dec51a7018803174e6
+         # save the config file
+         mkdir build_dir && cp config build_dir/.config
+         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross 
+W=1 O=build_dir ARCH=arm SHELL=/bin/bash drivers/gpu/drm/tilcdc/
+
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>):
+
+    drivers/gpu/drm/tilcdc/tilcdc_crtc.c: In function 'set_scanout':
+>> drivers/gpu/drm/tilcdc/tilcdc_crtc.c:72:22: error: 'struct drm_gem_dma_object' has no member named 'paddr'; did you mean 'vaddr'?
+       72 |         start = gem->paddr + fb->offsets[0] +
+          |                      ^~~~~
+          |                      vaddr
 
 
-> -- 
-> 2.17.1
+vim +72 drivers/gpu/drm/tilcdc/tilcdc_crtc.c
 
+16ea975eac671fa Rob Clark        2013-01-08  61  2b2080d7e9ae246 Tomi 
+Valkeinen   2015-10-20  62  static void set_scanout(struct drm_crtc 
+*crtc, struct drm_framebuffer *fb)
+16ea975eac671fa Rob Clark        2013-01-08  63  {
+16ea975eac671fa Rob Clark        2013-01-08  64  	struct drm_device *dev 
+= crtc->dev;
+4c268d635f8d4f5 Daniel Schultz   2016-10-28  65  	struct 
+tilcdc_drm_private *priv = dev->dev_private;
+efb5bf503f38a8d Danilo Krummrich 2022-07-06  66  	struct 
+drm_gem_dma_object *gem;
+2b2080d7e9ae246 Tomi Valkeinen   2015-10-20  67  	dma_addr_t start, end;
+7eb9f069ff5dd39 Jyri Sarha       2016-08-26  68  	u64 dma_base_and_ceiling;
+16ea975eac671fa Rob Clark        2013-01-08  69  d47caa3aaf3da1e Danilo 
+Krummrich 2022-07-06  70  	gem = drm_fb_dma_get_gem_obj(fb, 0);
+16ea975eac671fa Rob Clark        2013-01-08  71  2b2080d7e9ae246 Tomi 
+Valkeinen   2015-10-20 @72  	start = gem->paddr + fb->offsets[0] +
+2b2080d7e9ae246 Tomi Valkeinen   2015-10-20  73  		crtc->y * 
+fb->pitches[0] +
+353c859899635ea Ville Syrjälä    2016-12-14  74  		crtc->x * 
+fb->format->cpp[0];
+16ea975eac671fa Rob Clark        2013-01-08  75  2b2080d7e9ae246 Tomi 
+Valkeinen   2015-10-20  76  	end = start + (crtc->mode.vdisplay * 
+fb->pitches[0]);
+16ea975eac671fa Rob Clark        2013-01-08  77  7eb9f069ff5dd39 Jyri 
+Sarha       2016-08-26  78  	/* Write LCDC_DMA_FB_BASE_ADDR_0_REG and 
+LCDC_DMA_FB_CEILING_ADDR_0_REG
+7eb9f069ff5dd39 Jyri Sarha       2016-08-26  79  	 * with a single 
+insruction, if available. This should make it more
+7eb9f069ff5dd39 Jyri Sarha       2016-08-26  80  	 * unlikely that LCDC 
+would fetch the DMA addresses in the middle of
+7eb9f069ff5dd39 Jyri Sarha       2016-08-26  81  	 * an update.
+7eb9f069ff5dd39 Jyri Sarha       2016-08-26  82  	 */
+4c268d635f8d4f5 Daniel Schultz   2016-10-28  83  	if (priv->rev == 1)
+4c268d635f8d4f5 Daniel Schultz   2016-10-28  84  		end -= 1;
+4c268d635f8d4f5 Daniel Schultz   2016-10-28  85  4c268d635f8d4f5 Daniel 
+Schultz   2016-10-28  86  	dma_base_and_ceiling = (u64)end << 32 | start;
+7eb9f069ff5dd39 Jyri Sarha       2016-08-26  87  	tilcdc_write64(dev, 
+LCDC_DMA_FB_BASE_ADDR_0_REG, dma_base_and_ceiling);
+16ea975eac671fa Rob Clark        2013-01-08  88  }
+16ea975eac671fa Rob Clark        2013-01-08  89
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

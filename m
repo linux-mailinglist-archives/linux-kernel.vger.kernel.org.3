@@ -2,129 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B9350569E3E
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 11:03:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E733569E51
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 11:13:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235218AbiGGJDL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Jul 2022 05:03:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47090 "EHLO
+        id S235019AbiGGJNJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Jul 2022 05:13:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54132 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235035AbiGGJDJ (ORCPT
+        with ESMTP id S231545AbiGGJNG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Jul 2022 05:03:09 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D45D5286DC
-        for <linux-kernel@vger.kernel.org>; Thu,  7 Jul 2022 02:03:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1657184588; x=1688720588;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=D/Z3jg8mUvi9rsToQV7j1faJzfJTLgmyvehdX2zqS6A=;
-  b=TdGkmPI9hVUiEDIEdonAovKwYjSHwjD9ZErZrEX5wRYRVCzSGeTwJSTE
-   9xgbUSlVn7w9rfftzgGNDChZuB81DbVjOxUgKu6wTEZp8CKRd3Ipybfk+
-   P8AH7fWA3hunt5Lu7sq/+HyuT4rH3yIOHjSkzeoepyQXYRbh/6rLyyS0y
-   1GqhdxAw+pdtFWO+K9NbB2w7nX8lt3NG+707HSZXw0YiuJ2naBh5kKi0y
-   v3IKw+KlWiSUb4jFPlEOx1LkqxKcbJWbbg60ZnSyJFsDarIY6pKF4Iebp
-   MxeP8lyv2ULrfCYbNFv/9i1io1MallcOwEzePJKz03o/pgsgNynNUZL+H
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10400"; a="284715001"
-X-IronPort-AV: E=Sophos;i="5.92,252,1650956400"; 
-   d="scan'208";a="284715001"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jul 2022 02:03:08 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,252,1650956400"; 
-   d="scan'208";a="770361205"
-Received: from crojewsk-ctrl.igk.intel.com ([10.102.9.28])
-  by orsmga005.jf.intel.com with ESMTP; 07 Jul 2022 02:03:05 -0700
-From:   Cezary Rojewski <cezary.rojewski@intel.com>
-To:     andy@kernel.org, broonie@kernel.org
-Cc:     alsa-devel@alsa-project.org, tiwai@suse.com, perex@perex.cz,
-        amadeuszx.slawinski@linux.intel.com,
-        pierre-louis.bossart@linux.intel.com, hdegoede@redhat.com,
-        peter.ujfalusi@linux.intel.com, ranjani.sridharan@linux.intel.com,
-        linux-kernel@vger.kernel.org, lgirdwood@gmail.com,
-        kai.vehmanen@linux.intel.com, yung-chuan.liao@linux.intel.com,
-        Cezary Rojewski <cezary.rojewski@intel.com>
-Subject: [PATCH 2/2] ASoC: SOF: Remove tokenize_input()
-Date:   Thu,  7 Jul 2022 11:13:01 +0200
-Message-Id: <20220707091301.1282291-2-cezary.rojewski@intel.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220707091301.1282291-1-cezary.rojewski@intel.com>
-References: <20220707091301.1282291-1-cezary.rojewski@intel.com>
+        Thu, 7 Jul 2022 05:13:06 -0400
+Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 549FA27B05;
+        Thu,  7 Jul 2022 02:13:05 -0700 (PDT)
+Received: by mail-ed1-x52c.google.com with SMTP id v12so9695426edc.10;
+        Thu, 07 Jul 2022 02:13:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=x+63eUrjXUS+FoLmYUnXUsHGEfQ+CC/XntxoPecjWQY=;
+        b=MZSl682fLdY5iXGZZoTOwJ/2sZL5DCelmQ9ACkQCf9eXeXxmEo7j93wyWmcpKINfRu
+         XbyS9U9t9bE/kGVT/NBlYlFkJf6CpCkWo68pTY5j3dgWwzW564NCmsbX4ULon0D5WuW1
+         tRaZMZ1EPnxbAnVxCbPgAzX2cEoSXt2/eiR240jY2pIryUebGuEgTS94+SKf4HPTgbLP
+         mguGaQtE+T0ounVqFWMK/CV6RA6M7hNqipiSLxPyyIcM31pxmvANtkBWaXt6JBWlafrS
+         s+e8ZeyjS19IBk9l7YgDh5u6CnfgyogFltZwFJBpKhbRYLa953ItBdO39iUzn3Lg5fTx
+         JrPg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=x+63eUrjXUS+FoLmYUnXUsHGEfQ+CC/XntxoPecjWQY=;
+        b=sacVKz/oDnsyX6hcAy4FUbZVqJ6psdQhPJZaHJ4mswtSgwVbtLaATETxp8wyqb1bLb
+         5cWUay5c30ylnDsUqwNgaceflG9Gpcc5IBAALGwMq+ljCyAohu20bmmILU93ArcYGah7
+         K/P0StM5nV4cPdGtGKEKRlSCVb4Uv1COOzr1xw/44Sce2IPwLL54F74KUZjC880MvkNi
+         qeznJf7m3nmY/AXbVdmz+A+/VClHiPMrbJI1PuHcJjKTmoui990eoS91mW8KhUhpukvM
+         oVDJm4HQ1bTLxORwzeP/dGBwRFudTKEND/cz/ba5e2wZz9+B59xICXpDYQbDT/VNmDBD
+         5uGQ==
+X-Gm-Message-State: AJIora8Hn3gX8Qcj73dLAAZkTw0oRXlr4euwbqNVaISio+BZJBv+3Zm+
+        JHHzQH1s2xdpPOsp3j/xZUw=
+X-Google-Smtp-Source: AGRyM1tYBw5UwvRzB1BekPXgl8hXIyXb25xvzrpMxlE3LhiqtZQ/kkB01z6WGG45sSJVN4TuEjaKwA==
+X-Received: by 2002:a05:6402:34c5:b0:43a:8f90:e643 with SMTP id w5-20020a05640234c500b0043a8f90e643mr8925308edc.88.1657185183791;
+        Thu, 07 Jul 2022 02:13:03 -0700 (PDT)
+Received: from debian64.daheim (pd9e295da.dip0.t-ipconnect.de. [217.226.149.218])
+        by smtp.gmail.com with ESMTPSA id b7-20020a17090630c700b0072aebed5937sm3385767ejb.221.2022.07.07.02.13.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 07 Jul 2022 02:13:03 -0700 (PDT)
+Received: from localhost.daheim ([127.0.0.1])
+        by debian64.daheim with esmtp (Exim 4.96)
+        (envelope-from <chunkeey@gmail.com>)
+        id 1o9NZH-00084J-0W;
+        Thu, 07 Jul 2022 11:13:03 +0200
+Message-ID: <1e1c7c7e-ef86-e4c9-92cc-f28bf6ec6b8a@gmail.com>
+Date:   Thu, 7 Jul 2022 11:13:03 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [RESEND] [PATCH] p54: Use the bitmap API to allocate bitmaps
+Content-Language: de-DE
+To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        Christian Lamparter <chunkeey@googlemail.com>,
+        Kalle Valo <kvalo@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>
+Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
+        linux-wireless@vger.kernel.org, netdev@vger.kernel.org
+References: <2755b8b7d85a2db0663d39ea6df823f94f3401b3.1656939750.git.christophe.jaillet@wanadoo.fr>
+From:   Christian Lamparter <chunkeey@gmail.com>
+In-Reply-To: <2755b8b7d85a2db0663d39ea6df823f94f3401b3.1656939750.git.christophe.jaillet@wanadoo.fr>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Now that we have strsplit_u32_user() tokenize_input() is needed no
-longer. Remove it and update all occurrences of its usage.
+Hi,
 
-Signed-off-by: Cezary Rojewski <cezary.rojewski@intel.com>
----
- sound/soc/sof/sof-client-probes.c | 27 ++-------------------------
- 1 file changed, 2 insertions(+), 25 deletions(-)
+I'm sending this again because Android added HTML. Sorry for that.
 
-diff --git a/sound/soc/sof/sof-client-probes.c b/sound/soc/sof/sof-client-probes.c
-index 48ebbe58e2b9..7a79a529e2b7 100644
---- a/sound/soc/sof/sof-client-probes.c
-+++ b/sound/soc/sof/sof-client-probes.c
-@@ -411,29 +411,6 @@ static const struct snd_compress_ops sof_probes_compressed_ops = {
- 	.copy = sof_probes_compr_copy,
- };
- 
--static int tokenize_input(const char __user *from, size_t count,
--			  loff_t *ppos, u32 **tkns, size_t *num_tkns)
--{
--	char *buf;
--	int ret;
--
--	buf = kmalloc(count + 1, GFP_KERNEL);
--	if (!buf)
--		return -ENOMEM;
--
--	ret = simple_write_to_buffer(buf, count, ppos, from, count);
--	if (ret != count) {
--		ret = ret >= 0 ? -EIO : ret;
--		goto exit;
--	}
--
--	buf[count] = '\0';
--	ret = strsplit_u32(buf, ",", tkns, num_tkns);
--exit:
--	kfree(buf);
--	return ret;
--}
--
- static ssize_t sof_probes_dfs_points_read(struct file *file, char __user *to,
- 					  size_t count, loff_t *ppos)
- {
-@@ -508,7 +485,7 @@ sof_probes_dfs_points_write(struct file *file, const char __user *from,
- 		return -ENOENT;
- 	}
- 
--	ret = tokenize_input(from, count, ppos, &tkns, &num_tkns);
-+	ret = strsplit_u32_user(from, count, ppos, ",", &tkns, &num_tkns);
- 	if (ret < 0)
- 		return ret;
- 	bytes = sizeof(*tkns) * num_tkns;
-@@ -563,7 +540,7 @@ sof_probes_dfs_points_remove_write(struct file *file, const char __user *from,
- 		return -ENOENT;
- 	}
- 
--	ret = tokenize_input(from, count, ppos, &tkns, &num_tkns);
-+	ret = strsplit_u32_user(from, count, ppos, ",", &tkns, &num_tkns);
- 	if (ret < 0)
- 		return ret;
- 	if (!num_tkns) {
--- 
-2.25.1
+On 04/07/2022 15:02, Christophe JAILLET wrote:
+> Use bitmap_zalloc()/bitmap_free() instead of hand-writing them.
+> 
+> It is less verbose and it improves the semantic.
+> 
+> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Acked-by: Christian Lamparter <chunkeey@gmail.com>
+
+> ---
+>   drivers/net/wireless/intersil/p54/fwio.c | 6 ++----
+>   drivers/net/wireless/intersil/p54/main.c | 2 +-
+>   2 files changed, 3 insertions(+), 5 deletions(-)
+> 
+> diff --git a/drivers/net/wireless/intersil/p54/fwio.c b/drivers/net/wireless/intersil/p54/fwio.c
+> index bece14e4ff0d..b52cce38115d 100644
+> --- a/drivers/net/wireless/intersil/p54/fwio.c
+> +++ b/drivers/net/wireless/intersil/p54/fwio.c
+> @@ -173,10 +173,8 @@ int p54_parse_firmware(struct ieee80211_hw *dev, const struct firmware *fw)
+>   		 * keeping a extra list for uploaded keys.
+>   		 */
+>   
+> -		priv->used_rxkeys = kcalloc(BITS_TO_LONGS(priv->rx_keycache_size),
+> -					    sizeof(long),
+> -					    GFP_KERNEL);
+> -
+> +		priv->used_rxkeys = bitmap_zalloc(priv->rx_keycache_size,
+> +						  GFP_KERNEL);
+>   		if (!priv->used_rxkeys)
+>   			return -ENOMEM;
+>   	}
+> diff --git a/drivers/net/wireless/intersil/p54/main.c b/drivers/net/wireless/intersil/p54/main.c
+> index 115be1f3f33d..c1e1711382a7 100644
+> --- a/drivers/net/wireless/intersil/p54/main.c
+> +++ b/drivers/net/wireless/intersil/p54/main.c
+> @@ -830,7 +830,7 @@ void p54_free_common(struct ieee80211_hw *dev)
+>   	kfree(priv->output_limit);
+>   	kfree(priv->curve_data);
+>   	kfree(priv->rssi_db);
+> -	kfree(priv->used_rxkeys);
+> +	bitmap_free(priv->used_rxkeys);
+>   	kfree(priv->survey);
+>   	priv->iq_autocal = NULL;
+>   	priv->output_limit = NULL;
 

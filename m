@@ -2,67 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 463B0569EFE
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 12:01:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CE376569F06
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 12:01:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235038AbiGGJ6k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Jul 2022 05:58:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57136 "EHLO
+        id S233560AbiGGJ6u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Jul 2022 05:58:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57362 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231775AbiGGJ6i (ORCPT
+        with ESMTP id S232927AbiGGJ6p (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Jul 2022 05:58:38 -0400
-Received: from mail-pg1-x52b.google.com (mail-pg1-x52b.google.com [IPv6:2607:f8b0:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 726DE32052
-        for <linux-kernel@vger.kernel.org>; Thu,  7 Jul 2022 02:58:36 -0700 (PDT)
-Received: by mail-pg1-x52b.google.com with SMTP id s27so17523268pga.13
-        for <linux-kernel@vger.kernel.org>; Thu, 07 Jul 2022 02:58:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=m4HG/EzZ4yDDFX9ZLe3tGPR/mp2zuB3XLszlvbX2wT0=;
-        b=oBdEAfaiagKKd/OutXLnPclA2lEf0G7KFP80f2aTDyy1KnozMKyeI6Pbm4w5TMKXd1
-         nVtTwwblWIebPNpAa+ogNWgoQNu4DMh+8y+dJbkiBnt+B37PXJBJZE3dBRBlYBxbSnCN
-         XYz30hJd4U1Uc8GTwVoCEGX5Zx4ckZ5qvnUuMOZS4ZtzF+xL/qgXb1LoDHzQs8Ujl29T
-         ENrpuknJ8MuWpIckjPyzTjidW5D4q7vtodavABDg67aNky/5meMIFETP89eBMOCDdUJZ
-         S35+JDntIrkn8r9tUg02hklcAbRgdWg43GtZ7Htq1x+4s5myhYhiFgSWPxO0ImFjiih5
-         qwiQ==
+        Thu, 7 Jul 2022 05:58:45 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 129D34D4FE
+        for <linux-kernel@vger.kernel.org>; Thu,  7 Jul 2022 02:58:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1657187922;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=cHwrl27E0EeeOGu38G3zOF3hR+C+aXkp6gH0jh13XhA=;
+        b=V5gK9hXBTBSNtSad98p9y92PFF2QuMdltWBFQsFv/EHOorhmEEbOGCoZadHSI07jadxVpp
+        TOzH9bT+FotQQgZZbuNVaFtWsoDi/uDwzckt7fPAoSy74ST4E0BmHOheBZzeWiU6/j6zHI
+        WxAOKBVvQ6clpb5Fxave9oG4S57y42o=
+Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com
+ [209.85.208.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-663-XeiQ-sS7Or61lcnybey0-A-1; Thu, 07 Jul 2022 05:58:41 -0400
+X-MC-Unique: XeiQ-sS7Or61lcnybey0-A-1
+Received: by mail-ed1-f71.google.com with SMTP id f13-20020a0564021e8d00b00437a2acb543so13513833edf.7
+        for <linux-kernel@vger.kernel.org>; Thu, 07 Jul 2022 02:58:41 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=m4HG/EzZ4yDDFX9ZLe3tGPR/mp2zuB3XLszlvbX2wT0=;
-        b=lKJPt5vcoV0GwUNmq/8KBV8bz38nOiBRe0V8WSSRPS0iW2oUxUy0jlrv/fIIQj5VVt
-         I3P7CK8fBschtoUiGsy1wA9IXuluYNLzROWAmhqqHS6BldPWBvFQcnXQ2ukNgD5q6hhh
-         JZOJQ9TVKym/ebQrSriw9YFkdtMc0Mdr3cxbKCkMmi1TnsYKQMv/IveeWuzGu9NaPMXN
-         /l3I9Ci498IUT4MctBTJn6y18foB2YGHz12Szjb7bxmfOURs81HYMj16sdPdhpJBf/dA
-         L/dsrb5gRB2ZW/wO9X4X16bcoMwMAMKeSEhJGQHLNrnd8WpGQncCgNzZFzXTZh8sHaY3
-         tSAw==
-X-Gm-Message-State: AJIora8fSwMi+Rzaul1jJZdfcAjO2+s/Vbu1UJ2DFQzCMq2wlmkxTkFA
-        Bs89O5KouPAZa/cLs2Ec6ePA8A==
-X-Google-Smtp-Source: AGRyM1sv2d47ZVfrMkLu7LHO/t5v2OTCRnI1aRQaGL/3uZGV4t3oKHyq4b78ACM45jaLg2vSXdlZVw==
-X-Received: by 2002:a17:902:cecc:b0:16b:da4d:7e8d with SMTP id d12-20020a170902cecc00b0016bda4d7e8dmr25287850plg.82.1657187915972;
-        Thu, 07 Jul 2022 02:58:35 -0700 (PDT)
-Received: from localhost ([122.171.18.80])
-        by smtp.gmail.com with ESMTPSA id g29-20020aa79f1d000000b0051c4f6d2d95sm26594677pfr.106.2022.07.07.02.58.35
+        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
+         :message-id:mime-version;
+        bh=cHwrl27E0EeeOGu38G3zOF3hR+C+aXkp6gH0jh13XhA=;
+        b=NkfGfqpl7dvUuIxCU3G3OCRnuXylA3yFiljGEek0BiNz/1tMUkllDE6t7mMOraVwHY
+         FEF2Q3lBqbA+VeHgawVpuptVOpOMWE+nzF3sxlnHwzDIp/snPHpdUzkYkmBVpP3u2PVv
+         92ggg5eG/Yo4eCGYLDuGNqJuVmRI3Uky5ae3/45jNg4pAWewztXWGb5CbTiPr/QJMizd
+         THi+kgzU1nxV+I8usly8zO4uc7Z0s+iSMkEgfdoK1A1jtItQe9gdcJ3BNQlSnjvmQkxP
+         Nk92bkxKpmfaBxdUJMnvJgiTB2SpNCmz1LlGYv8XWKS7VTGGVMfgO9mm+eNuLBvAEXrv
+         dinw==
+X-Gm-Message-State: AJIora8ILn8c4AnGY/Gb2LKpImwFD95HVmf8w1Ho87rTiGWrYHJWlLHl
+        bkLoqWt1CTKbKTsXAN3IeHSmc5E0iPW+VErQAhNaVUfKsOSOrWSNHH+0PR45CgAE+IpjIEmk8Q+
+        ZwX5rNaGEDT3dY5PuRNlI1Su9Hh6HcBUAKBzRb/djP6X4+U/4I02q9P5gqsHN+UduesLLLfIyms
+        Sn
+X-Received: by 2002:a17:907:a07c:b0:72a:b390:ee8a with SMTP id ia28-20020a170907a07c00b0072ab390ee8amr24435282ejc.96.1657187920490;
+        Thu, 07 Jul 2022 02:58:40 -0700 (PDT)
+X-Google-Smtp-Source: AGRyM1uLN8nFMmLxs9+8R8k/ZJmvejQdi+P9YfmR4vwmTSGFH2CRKzZN/QUUdlB4y3gq/oL96BYUNg==
+X-Received: by 2002:a17:907:a07c:b0:72a:b390:ee8a with SMTP id ia28-20020a170907a07c00b0072ab390ee8amr24435259ejc.96.1657187920243;
+        Thu, 07 Jul 2022 02:58:40 -0700 (PDT)
+Received: from fedora (nat-2.ign.cz. [91.219.240.2])
+        by smtp.gmail.com with ESMTPSA id u5-20020a170906068500b00703671ebe65sm18516064ejb.198.2022.07.07.02.58.39
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 07 Jul 2022 02:58:35 -0700 (PDT)
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>
-Cc:     linux-pm@vger.kernel.org,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH V3] cpufreq: Warn users while freeing active policy
-Date:   Thu,  7 Jul 2022 15:28:31 +0530
-Message-Id: <0af6e95f8da395f75c5a58363d8b1b40483252c8.1657187391.git.viresh.kumar@linaro.org>
-X-Mailer: git-send-email 2.31.1.272.g89b43f80a514
+        Thu, 07 Jul 2022 02:58:39 -0700 (PDT)
+From:   Vitaly Kuznetsov <vkuznets@redhat.com>
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     kvm@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
+        Anirudh Rayabharam <anrayabh@linux.microsoft.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Maxim Levitsky <mlevitsk@redhat.com>,
+        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 06/28] KVM: nVMX: Introduce
+ KVM_CAP_HYPERV_ENLIGHTENED_VMCS2
+In-Reply-To: <YsYAPL1UUKJB3/MJ@google.com>
+References: <20220629150625.238286-1-vkuznets@redhat.com>
+ <20220629150625.238286-7-vkuznets@redhat.com>
+ <YsYAPL1UUKJB3/MJ@google.com>
+Date:   Thu, 07 Jul 2022 11:58:38 +0200
+Message-ID: <87o7y1qm5t.fsf@redhat.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain
+X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,60 +83,62 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-With the new design in place, the show() and store() callbacks check if
-the policy is active or not before proceeding any further to avoid
-potential races. And in order to guarantee that cpufreq_policy_free()
-must be called after clearing the policy->cpus mask, i.e. by marking the
-policy inactive.
+Sean Christopherson <seanjc@google.com> writes:
 
-In order to avoid introducing a bug around this later, print a warning
-message if we end up freeing an active policy.
+> On Wed, Jun 29, 2022, Vitaly Kuznetsov wrote:
+>> Turns out Enlightened VMCS can gain new fields without version change
+>> and KVM_CAP_HYPERV_ENLIGHTENED_VMCS which KVM currently has cant's
+>> handle this reliably. In particular, just updating the current definition
+>> of eVMCSv1 with the new fields and adjusting the VMX MSR filtering will
+>> inevitably break live migration to older KVMs. Note: enabling eVMCS and
+>> setting VMX feature MSR can happen in any order.
+>> 
+>> Introduce a notion of KVM internal "Enlightened VMCS revision" and add
+>> a new capability allowing to add fields to Enlightened VMCS while keeping
+>> its version.
+>
+> Bumping a "minor" version number in KVM is going to be a nightmare.  KVM is going
+> to be stuck "supporting" old revisions in perpetuity, and userspace will be forced
+> to keep track of which features are available with which arbitrary revision (is
+> that information even communicated to userspace?).
 
-Also update cpufreq_online() a bit to make sure we clear the cpus mask
-for each error case before calling cpufreq_policy_free().
+My brain is certainly tainted with how we enable this in QEMU but why
+would userspace be interested in which features are actually filtered
+out?
 
-Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
----
-V3: BUG_ON() -> pr_warn()
+Currently (again, by QEMU), eVMCS is treated as a purely software
+feature. When enabled, certain controls are filtered out "under the
+hood" as VMX MSRs reported to VMM remain unfiltered (see
+'!msr_info->host_initiated' in vmx_get_msr()). Same stays true with any
+new revision: VMM's job is just to check that a) all hardware features
+are supported on both source and destination and b) the requested 'eVMCS
+revision' is supported by both. No need to know what's filtered out and
+what isn't.
 
- drivers/cpufreq/cpufreq.c | 10 ++++++++--
- 1 file changed, 8 insertions(+), 2 deletions(-)
+>
+> I think a more maintainable approach would be to expose the "filtered" VMX MSRs to
+> userspace, e.g. add KVM_GET_EVMCS_VMX_MSRS.  Then KVM just needs to document what
+> the "filters" are for KVM versions that don't support KVM_GET_EVMCS_VMX_MSRS.
+> KVM itself doesn't need to maintain version information because it's userspace's
+> responsibility to ensure that userspace doesn't try to migrate to a KVM that doesn't
+> support the desired feature set.
 
-diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
-index 73432360e6e9..954eef26685f 100644
---- a/drivers/cpufreq/cpufreq.c
-+++ b/drivers/cpufreq/cpufreq.c
-@@ -1273,6 +1273,13 @@ static void cpufreq_policy_free(struct cpufreq_policy *policy)
- 	unsigned long flags;
- 	int cpu;
- 
-+	/*
-+	 * The callers must ensure the policy is inactive by now, to avoid any
-+	 * races with show()/store() callbacks.
-+	 */
-+	if (unlikely(!policy_is_inactive(policy)))
-+		pr_warn("%s: Freeing active policy\n", __func__);
-+
- 	/* Remove policy from list */
- 	write_lock_irqsave(&cpufreq_driver_lock, flags);
- 	list_del(&policy->policy_list);
-@@ -1527,8 +1534,6 @@ static int cpufreq_online(unsigned int cpu)
- 	for_each_cpu(j, policy->real_cpus)
- 		remove_cpu_dev_symlink(policy, j, get_cpu_device(j));
- 
--	cpumask_clear(policy->cpus);
--
- out_offline_policy:
- 	if (cpufreq_driver->offline)
- 		cpufreq_driver->offline(policy);
-@@ -1538,6 +1543,7 @@ static int cpufreq_online(unsigned int cpu)
- 		cpufreq_driver->exit(policy);
- 
- out_free_policy:
-+	cpumask_clear(policy->cpus);
- 	up_write(&policy->rwsem);
- 
- 	cpufreq_policy_free(policy);
+That would be a reasonable (but complex for VMM) approach too but I
+don't think we need this (and this patch introducing 'eVMCS revisions'
+to this matter): luckily, Microsoft added a new PV CPUID feature bit
+inidicating the support for the new features in eVMCSv1 so KVM can just
+observe whether the bit was set by VMM or not and filter accordingly.
+
+>
+> That also avoids messes like unnecessarily blocking migration from "incompatible"
+> revisions when running on hardware that doesn't even support the control.
+
+Well yea, in case the difference between 'eVMCS revisions' is void
+because the hardware doesn't support these, it would still be possible
+to migrate to an older KVM which doesn't support the new revision but
+I'd stay strict: if a newer revision was requested it must be supported,
+no matter the hardware.
+
 -- 
-2.31.1.272.g89b43f80a514
+Vitaly
 

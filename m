@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1DCCA56A2F6
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 14:57:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 67B1956A303
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 14:58:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235942AbiGGM5S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Jul 2022 08:57:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49102 "EHLO
+        id S235517AbiGGM6C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Jul 2022 08:58:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46164 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235655AbiGGM4y (ORCPT
+        with ESMTP id S235885AbiGGM44 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Jul 2022 08:56:54 -0400
-Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0F8C31DF8
-        for <linux-kernel@vger.kernel.org>; Thu,  7 Jul 2022 05:56:23 -0700 (PDT)
-Received: by mail-lf1-x12f.google.com with SMTP id e12so30950255lfr.6
-        for <linux-kernel@vger.kernel.org>; Thu, 07 Jul 2022 05:56:23 -0700 (PDT)
+        Thu, 7 Jul 2022 08:56:56 -0400
+Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21CE732EF3
+        for <linux-kernel@vger.kernel.org>; Thu,  7 Jul 2022 05:56:31 -0700 (PDT)
+Received: by mail-lf1-x12e.google.com with SMTP id t24so30994131lfr.4
+        for <linux-kernel@vger.kernel.org>; Thu, 07 Jul 2022 05:56:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=semihalf.com; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=2+/ZVPt3U/lu0gkn4JYhnqM2dENcEUukg3rF+ztpMp8=;
-        b=aiInV8wkI4Ru4vjyTWbX9ib5eRWxnEEjwhFJbYSIBg3CqX0ravkePdB9v+Onju0LVb
-         K+eypJaNYPPgfOHCCII9hz0792sYA4Gu3Zxy6zRnPs/FQco7QEgMsBY4HjhmodJSkPW4
-         8h0Oq3lI6b7WbvVYEmUcXV0d5McEZvuHU5ZTWvxZNq4lTlI6iuu7teZtBlU4MrEI9SIm
-         ij+p1IFQzpEq4J1SNAo8vpYGish6Yo4NGQFOi0m58CEuyrKCdzCwGACHr0eB382yHqxg
-         qaIzhHmWTPrwq+0vIPgLCTFqMoRgG2H5Vuds/yvUU+ZIHXPBYgcgMUwnUZHPqhsPfXSs
-         /Bng==
+        bh=454tFgA3S0AdDHLCz9NCzDKFnu7jUDGP8ZhaUxLFAwM=;
+        b=ZBZNaeAww+Dou3ANR4Eicb8fz7bLlNgPQ80A7xVXd4cLFP/jtPon2GknTZ+8EtMU/y
+         D1d4W/S1z5kLi6xXr2EoGQRtv6DNFXc4fPxmiGCFMVzpRHOfV8WOSAorS53sV77apMMb
+         COE/hG8m0zyyAMG1MEMtnRpfLsLImDEkvBaTFLhPmDpvLdpAw096gSb0Xj/l50nw4c2F
+         8vvnqvNFKk18zK8GlZHC2r59j/j8KpS3CB1OOAedY2LGKNDLuIRTq0rVJZhPmUVIHibc
+         t24NdRzWzXTxXEjdFfXqQKrBM7msLM29t79+xi9GG5qIh9qGgeVLwvA7AMSHkf5lEwb1
+         wGJQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=2+/ZVPt3U/lu0gkn4JYhnqM2dENcEUukg3rF+ztpMp8=;
-        b=kBdQCkiL14QCZ23dEZlHNrbErexFVVKwfhoZq1CC6sayYoJbsvi7h96EciEbVElaXv
-         D2IsghsRUeCpLd8K6Ic3M5UGr8zWVPGJur3VGECa9AzFuQas8hftKmDcIEzTqVDuIF/B
-         vraKw/YWTSdXwoQz45IzykgD4jTX6y7gpAq+mYggxTNvXtvBTF7Ww4Iasq8Pd8zVN0c0
-         X73TfLAS0w9MurCmL22/J/N4pqSYFJgOMg4gl2mPrC/yxu7jfJEnVI74zB8gNNOAXgd9
-         pn9Abjs0phvIF6JJ29/nLXSlRQlFXbhQbWReZ3VYWMUkD+mhWFw1ZpgYJm5tnM9x7gOt
-         txyA==
-X-Gm-Message-State: AJIora96c328WBrR2gzxVpGUbObBtrvhLY358w8RebSQYdM3hF99vCsP
-        oBJ6M5pfdR6zswpuMHzkETs/AVCeUaqtmA==
-X-Google-Smtp-Source: AGRyM1sQMa/AsCwWa2+anJrNkfAWw1jwy0vKBCC9ftMR04N4rDu7gPvhFPpIUWkxTvpiSPGpcyEIeQ==
-X-Received: by 2002:a05:6512:2a91:b0:47f:6e1d:d22c with SMTP id dt17-20020a0565122a9100b0047f6e1dd22cmr31529344lfb.550.1657198581450;
-        Thu, 07 Jul 2022 05:56:21 -0700 (PDT)
+        bh=454tFgA3S0AdDHLCz9NCzDKFnu7jUDGP8ZhaUxLFAwM=;
+        b=z+CM4RzW4mKtuHN8JD+Nr4VlD+0a6XLdgo+dorkvAjc39sMOZdV3RhNlhOdeE9/pPc
+         gcQatat9f8bVHMYsFaashDwn7/tp5CX/3E6o0bn7jk+q3w34CYfYlyuOaCSh6CckRf5a
+         HeUcezFXRAqtdoFT4DRh1UEdhdDRtzMVsVqNbFjZLOZUm3QLuruu4SsZFpGhpglHKpuC
+         tkv15tk6XpXQ9VNNGg0fC7LRDAIZKXxOtpY9pILfTPjt+SwRPAVc7zPV8yLpP1r10XnL
+         RACgU1AF0sajIxdsbEaseS6wRvZvCEDRse78J65+3QA3pPknvR/LuoR8dHGaAq/2e1Um
+         LRPA==
+X-Gm-Message-State: AJIora9mNOVJGzfA/+84SIi9D0ndLE59Ip8hp9EGm76M3Mk70+E6r8qE
+        T48iHfw/8Rt7cRKFFgxJQZRymfg4Jv9/eQ==
+X-Google-Smtp-Source: AGRyM1tUIF+2YDWl6srviD3jNZnzTpeDIWSQK6Nxo7YmHYsOrhaaVVcT0yZfLbFNHGMKVZdRHQ/fIg==
+X-Received: by 2002:a05:6512:260b:b0:47f:b04e:3116 with SMTP id bt11-20020a056512260b00b0047fb04e3116mr31189424lfb.474.1657198589088;
+        Thu, 07 Jul 2022 05:56:29 -0700 (PDT)
 Received: from jazctssd.c.googlers.com.com (138.58.228.35.bc.googleusercontent.com. [35.228.58.138])
-        by smtp.gmail.com with ESMTPSA id d7-20020a05651221c700b0047255d2111csm6810361lft.75.2022.07.07.05.56.20
+        by smtp.gmail.com with ESMTPSA id d7-20020a05651221c700b0047255d2111csm6810361lft.75.2022.07.07.05.56.28
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 07 Jul 2022 05:56:20 -0700 (PDT)
+        Thu, 07 Jul 2022 05:56:28 -0700 (PDT)
 From:   Grzegorz Jaszczyk <jaz@semihalf.com>
 To:     linux-kernel@vger.kernel.org
 Cc:     jaz@semihalf.com, dmy@semihalf.com, mario.limonciello@amd.com,
@@ -57,15 +57,13 @@ Cc:     jaz@semihalf.com, dmy@semihalf.com, mario.limonciello@amd.com,
         Len Brown <lenb@kernel.org>,
         Hans de Goede <hdegoede@redhat.com>,
         Mark Gross <markgross@kernel.org>, Pavel Machek <pavel@ucw.cz>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
         Sachi King <nakato@nakato.io>,
         linux-acpi@vger.kernel.org (open list:ACPI),
         platform-driver-x86@vger.kernel.org (open list:X86 PLATFORM DRIVERS),
-        linux-pm@vger.kernel.org (open list:HIBERNATION (aka Software Suspend,
-        aka swsusp))
-Subject: [RFC PATCH 1/2] suspend: extend S2Idle ops by new notify handler
-Date:   Thu,  7 Jul 2022 12:53:23 +0000
-Message-Id: <20220707125329.378277-2-jaz@semihalf.com>
+        linux-pm@vger.kernel.org (open list:SUSPEND TO RAM)
+Subject: [RFC PATCH 2/2] platform/x86: Add virtual PMC driver used for S2Idle
+Date:   Thu,  7 Jul 2022 12:53:24 +0000
+Message-Id: <20220707125329.378277-3-jaz@semihalf.com>
 X-Mailer: git-send-email 2.37.0.rc0.161.g10f37bed90-goog
 In-Reply-To: <20220707125329.378277-1-jaz@semihalf.com>
 References: <20220707125329.378277-1-jaz@semihalf.com>
@@ -81,105 +79,132 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Currently the LPS0 prepare_late callback is aimed to run as the very
-last thing before entering the S2Idle state from LPS0 perspective,
-nevertheless between this call and the system actually entering the
-S2Idle state there are several places where the suspension process could
-be canceled.
+Virtual PMC driver is meant for the guest VMs for the S2Idle
+notification. Its purpose is to register S2Idle dev ops notify handler,
+which will evaluate ACPI _DSM as a very last command before the guest
+enters S2Idle power state.
 
-In order to notify VMM about guest entering suspend, extend the S2Idle
-ops by new notify callback, which will be really invoked as a very last
-thing before guest actually enters S2Idle state.
-
-Additionally extend the acpi_s2idle_dev_ops by notify() callback so
-any driver can hook into it and allow to implement its own notification.
-
-Taking advantage of e.g. existing acpi_s2idle_dev_ops's prepare/restore
-hooks is not an option since it will not allow to prevent race
-conditions:
-- VM0 enters s2idle
-- host notes about VM0 is in s2idle
-- host continues with system suspension but in the meantime VM0 exits
-s2idle and sends notification but it is already too late (VM could not
-even send notification on time).
-
-Introducing notify() as a very last step before the system enters S2Idle
-together with an assumption that the VMM has control over guest
-resumption allows preventing mentioned races.
+This allows to trap on MMIO access done as a consequence of _DSM
+evaluation and therefore notify the VMM about the guest entering S2Idle
+state.
 
 Signed-off-by: Grzegorz Jaszczyk <jaz@semihalf.com>
 ---
- drivers/acpi/x86/s2idle.c | 11 +++++++++++
- include/linux/acpi.h      |  1 +
- include/linux/suspend.h   |  1 +
- kernel/power/suspend.c    |  4 ++++
- 4 files changed, 17 insertions(+)
+ drivers/platform/x86/Kconfig    |  7 ++++
+ drivers/platform/x86/Makefile   |  1 +
+ drivers/platform/x86/virt_pmc.c | 73 +++++++++++++++++++++++++++++++++
+ 3 files changed, 81 insertions(+)
+ create mode 100644 drivers/platform/x86/virt_pmc.c
 
-diff --git a/drivers/acpi/x86/s2idle.c b/drivers/acpi/x86/s2idle.c
-index 2963229062f8..d5aff194c736 100644
---- a/drivers/acpi/x86/s2idle.c
-+++ b/drivers/acpi/x86/s2idle.c
-@@ -520,10 +520,21 @@ void acpi_s2idle_restore_early(void)
- 					lps0_dsm_func_mask, lps0_dsm_guid);
- }
+diff --git a/drivers/platform/x86/Kconfig b/drivers/platform/x86/Kconfig
+index bc4013e950ed..dee974321b01 100644
+--- a/drivers/platform/x86/Kconfig
++++ b/drivers/platform/x86/Kconfig
+@@ -479,6 +479,13 @@ config WIRELESS_HOTKEY
+ 	 To compile this driver as a module, choose M here: the module will
+ 	 be called wireless-hotkey.
  
-+static void acpi_s2idle_notify(void)
-+{
-+	struct acpi_s2idle_dev_ops *handler;
++config VIRT_PMC
++	tristate "Virt PMC"
++	depends on ACPI && SUSPEND
++	help
++	  The Virtual PMC driver is meant for the guest VMs and it's main
++	  purpose is to notify about guest entering s2idle state.
 +
-+	list_for_each_entry(handler, &lps0_s2idle_devops_head, list_node) {
-+		if (handler->notify)
-+			handler->notify();
-+	}
+ config HP_WMI
+ 	tristate "HP WMI extras"
+ 	depends on ACPI_WMI
+diff --git a/drivers/platform/x86/Makefile b/drivers/platform/x86/Makefile
+index 4a59f47a46e2..3c3e440f11bb 100644
+--- a/drivers/platform/x86/Makefile
++++ b/drivers/platform/x86/Makefile
+@@ -116,6 +116,7 @@ obj-$(CONFIG_MLX_PLATFORM)		+= mlx-platform.o
+ obj-$(CONFIG_TOUCHSCREEN_DMI)		+= touchscreen_dmi.o
+ obj-$(CONFIG_WIRELESS_HOTKEY)		+= wireless-hotkey.o
+ obj-$(CONFIG_X86_ANDROID_TABLETS)	+= x86-android-tablets.o
++obj-$(CONFIG_VIRT_PMC)			+= virt_pmc.o
+ 
+ # Intel uncore drivers
+ obj-$(CONFIG_INTEL_IPS)				+= intel_ips.o
+diff --git a/drivers/platform/x86/virt_pmc.c b/drivers/platform/x86/virt_pmc.c
+new file mode 100644
+index 000000000000..d0607db6cd22
+--- /dev/null
++++ b/drivers/platform/x86/virt_pmc.c
+@@ -0,0 +1,73 @@
++// SPDX-License-Identifier: GPL-2.0-only
++/*
++ * Virtual Power Management Controller Driver
++ *
++ * Author: Grzegorz Jaszczyk <jaz@semihalf.com>
++ */
++
++#include <linux/acpi.h>
++#include <linux/platform_device.h>
++
++#define ACPI_VIRT_PMC_DSM_UUID	"9ea49ba3-434a-49a6-be30-37cc55c4d397"
++#define ACPI_VIRT_PMC_NOTIFY 1
++
++static acpi_handle virt_pmc_handle;
++
++static void virt_pmc_s2idle_notify(void)
++{
++	union acpi_object *out_obj;
++	static guid_t dsm_guid;
++
++	guid_parse(ACPI_VIRT_PMC_DSM_UUID, &dsm_guid);
++
++	out_obj = acpi_evaluate_dsm(virt_pmc_handle, &dsm_guid,
++					0, ACPI_VIRT_PMC_NOTIFY, NULL);
++
++	acpi_handle_debug(virt_pmc_handle, "_DSM function %u evaluation %s\n",
++			  ACPI_VIRT_PMC_NOTIFY, out_obj ? "successful" : "failed");
++
++	ACPI_FREE(out_obj);
 +}
 +
- static const struct platform_s2idle_ops acpi_s2idle_ops_lps0 = {
- 	.begin = acpi_s2idle_begin,
- 	.prepare = acpi_s2idle_prepare,
- 	.prepare_late = acpi_s2idle_prepare_late,
-+	.notify = acpi_s2idle_notify,
- 	.wake = acpi_s2idle_wake,
- 	.restore_early = acpi_s2idle_restore_early,
- 	.restore = acpi_s2idle_restore,
-diff --git a/include/linux/acpi.h b/include/linux/acpi.h
-index 4f82a5bc6d98..b32c4baed99b 100644
---- a/include/linux/acpi.h
-+++ b/include/linux/acpi.h
-@@ -1068,6 +1068,7 @@ struct acpi_s2idle_dev_ops {
- 	struct list_head list_node;
- 	void (*prepare)(void);
- 	void (*restore)(void);
-+	void (*notify)(void);
- };
- int acpi_register_lps0_dev(struct acpi_s2idle_dev_ops *arg);
- void acpi_unregister_lps0_dev(struct acpi_s2idle_dev_ops *arg);
-diff --git a/include/linux/suspend.h b/include/linux/suspend.h
-index 70f2921e2e70..16ef7f9d9a03 100644
---- a/include/linux/suspend.h
-+++ b/include/linux/suspend.h
-@@ -191,6 +191,7 @@ struct platform_s2idle_ops {
- 	int (*begin)(void);
- 	int (*prepare)(void);
- 	int (*prepare_late)(void);
-+	void (*notify)(void);
- 	bool (*wake)(void);
- 	void (*restore_early)(void);
- 	void (*restore)(void);
-diff --git a/kernel/power/suspend.c b/kernel/power/suspend.c
-index 827075944d28..6ba211b94ed1 100644
---- a/kernel/power/suspend.c
-+++ b/kernel/power/suspend.c
-@@ -100,6 +100,10 @@ static void s2idle_enter(void)
- 
- 	/* Push all the CPUs into the idle loop. */
- 	wake_up_all_idle_cpus();
++static struct acpi_s2idle_dev_ops amd_pmc_s2idle_dev_ops = {
++	.notify = virt_pmc_s2idle_notify,
++};
 +
-+	if (s2idle_ops && s2idle_ops->notify)
-+		s2idle_ops->notify();
++static int virt_pmc_probe(struct platform_device *pdev)
++{
++	int err = 0;
 +
- 	/* Make the current CPU wait so it can enter the idle loop too. */
- 	swait_event_exclusive(s2idle_wait_head,
- 		    s2idle_state == S2IDLE_STATE_WAKE);
++	virt_pmc_handle = ACPI_HANDLE(&pdev->dev);
++
++	err = acpi_register_lps0_dev(&amd_pmc_s2idle_dev_ops);
++	if (err)
++		dev_warn(&pdev->dev, "failed to register LPS0 sleep handler\n");
++
++	return err;
++}
++
++static int virt_pmc_remove(struct platform_device *pdev)
++{
++	acpi_unregister_lps0_dev(&amd_pmc_s2idle_dev_ops);
++
++	return 0;
++}
++
++static const struct acpi_device_id virt_pmc_acpi_ids[] = {
++	{"HYPE0001", 0}, /* _HID for XXX Power Engine, _CID PNP0D80*/
++	{ }
++};
++MODULE_DEVICE_TABLE(acpi, virt_pmc_acpi_ids);
++
++static struct platform_driver virt_pmc_driver = {
++	.driver = {
++		.name = "virtual_pmc",
++		.acpi_match_table = ACPI_PTR(virt_pmc_acpi_ids),
++	},
++	.probe = virt_pmc_probe,
++	.remove = virt_pmc_remove,
++};
++
++module_platform_driver(virt_pmc_driver);
++
++MODULE_DESCRIPTION("Virtual PMC Driver");
 -- 
 2.37.0.rc0.161.g10f37bed90-goog
 

@@ -2,139 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A75856AAF6
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 20:43:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 40B1E56AAFA
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 20:46:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236544AbiGGSno (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Jul 2022 14:43:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43102 "EHLO
+        id S236324AbiGGSp1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Jul 2022 14:45:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44262 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235872AbiGGSnn (ORCPT
+        with ESMTP id S236249AbiGGSp0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Jul 2022 14:43:43 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8816330F5A
-        for <linux-kernel@vger.kernel.org>; Thu,  7 Jul 2022 11:43:42 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Thu, 7 Jul 2022 14:45:26 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B54CB2ED69
+        for <linux-kernel@vger.kernel.org>; Thu,  7 Jul 2022 11:45:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1657219523;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=ZHInCIkQUugLccZbd+xrohtB+C3yl1Vr9TS2L4m9vhM=;
+        b=FBs9QS2vJ+9vQYtFbsAw7hr49T+W3Ph25GxmxsgRZ9nkj06vrB41LeujXMO4BcOL8VqhW6
+        HqiWXHBcSh1IdP9UoQMYa91h4szfPtjcBJ5ga/xA/IRrlUFd6WyBN68XWot1Tp4UIiq20y
+        IIVTvXS7/s2PjHzco0Pj36w1qYdrUls=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-492-bU6Tbu2hNLmzKiKfwE428g-1; Thu, 07 Jul 2022 14:45:20 -0400
+X-MC-Unique: bU6Tbu2hNLmzKiKfwE428g-1
+Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 19D4EB8215D
-        for <linux-kernel@vger.kernel.org>; Thu,  7 Jul 2022 18:43:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id ABFFBC3411E;
-        Thu,  7 Jul 2022 18:43:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1657219419;
-        bh=X91w2s3hUBEJKzueE4a8QnnBJdFZ4qmysMaFWqtieW8=;
-        h=From:To:Cc:Subject:Date:From;
-        b=RaYdur2UIQSvJZV5FQkxANnCQt0U0P0pzQmezpzqVeElD3fyiyWi5oueWfNNKCPoy
-         WuClWYYENFBlKMAjZnxj3838d6FtG58MNDul78DsgAfmnXRA44qqtLONw+ozeT3CFG
-         B1jR3HFVGJ/C5yuxgWQ6ALKXSds5lXEC2RdtcOoFpUvkQ+/yJOVpqL6ep40vaBOFkC
-         Ie2ov+8Rx6yYiY/Q6j7Y0mUmFZDhc3JyyhJyeCmAcwAydKKnxYKBAc8q9v/G+Nflp2
-         nXzJ/MORl7D6V68xPONc6ywJdgF+zvBRMx3TmlAXkTKZVeT0XbrcoagbmgjPAoKk97
-         zVENHjZIjlkAg==
-Received: by pali.im (Postfix)
-        id AC6DE7B1; Thu,  7 Jul 2022 20:43:36 +0200 (CEST)
-From:   =?UTF-8?q?Pali=20Roh=C3=A1r?= <pali@kernel.org>
-To:     Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        =?UTF-8?q?Marek=20Beh=C3=BAn?= <kabel@kernel.org>
-Cc:     linux-mtd@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] mtd: rawnand: fsl_elbc: Fix none ECC mode
-Date:   Thu,  7 Jul 2022 20:43:28 +0200
-Message-Id: <20220707184328.3845-1-pali@kernel.org>
-X-Mailer: git-send-email 2.20.1
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 1C67A101A54E;
+        Thu,  7 Jul 2022 18:45:20 +0000 (UTC)
+Received: from [10.18.17.215] (dhcp-17-215.bos.redhat.com [10.18.17.215])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id BDEB6492C3B;
+        Thu,  7 Jul 2022 18:45:19 +0000 (UTC)
+Message-ID: <3e43bc07-053f-80d0-7ea1-93a2897ef03e@redhat.com>
+Date:   Thu, 7 Jul 2022 14:45:10 -0400
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH v3] locking/rtmutex: Limit # of lock stealing for non-RT
+ waiters
+Content-Language: en-US
+To:     Boqun Feng <boqun.feng@gmail.com>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
+        linux-kernel@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Mike Stowell <mstowell@redhat.com>
+References: <20220706135916.980580-1-longman@redhat.com>
+ <f3051cbb-313c-ba88-66c9-3f8f8d88d806@redhat.com>
+ <YsckV+iWLxPC+eH5@boqun-archlinux>
+From:   Waiman Long <longman@redhat.com>
+In-Reply-To: <YsckV+iWLxPC+eH5@boqun-archlinux>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 2.85 on 10.11.54.9
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Commit f6424c22aa36 ("mtd: rawnand: fsl_elbc: Make SW ECC work") added
-support for specifying ECC mode via DTS and skipping autodetection.
+On 7/7/22 14:22, Boqun Feng wrote:
+> On Wed, Jul 06, 2022 at 10:03:10AM -0400, Waiman Long wrote:
+>> On 7/6/22 09:59, Waiman Long wrote:
+>>> Commit 48eb3f4fcfd3 ("locking/rtmutex: Implement equal priority lock
+>>> stealing") allows unlimited number of lock stealing's for non-RT
+>>> tasks. That can lead to lock starvation of non-RT top waiter tasks if
+>>> there is a constant incoming stream of non-RT lockers. This can cause
+>>> rcu_preempt self-detected stall or even task lockup in PREEMPT_RT kernel.
+>>> For example,
+>>>
+>>> [77107.424943] rcu: INFO: rcu_preempt self-detected stall on CPU
+>>> [ 1249.921363] INFO: task systemd:2178 blocked for more than 622 seconds.
+>>>
+>>> Avoiding this problem and ensuring forward progress by limiting the
+>>> number of times that a lock can be stolen from each waiter. This patch
+>>> sets a threshold of 32. That number is arbitrary and can be changed
+>>> if needed.
+>>>
+>>> Fixes: 48eb3f4fcfd3 ("locking/rtmutex: Implement equal priority lock stealing")
+>>> Signed-off-by: Waiman Long <longman@redhat.com>
+>>> ---
+>>>    kernel/locking/rtmutex.c        | 9 ++++++---
+>>>    kernel/locking/rtmutex_common.h | 8 ++++++++
+>>>    2 files changed, 14 insertions(+), 3 deletions(-)
+>>>
+>>>    [v3: Increase threshold to 32 and add rcu_preempt self-detected stall]
+>> Note that I decided to increase the threshold to 32 from 10 to reduce the
+>> potential performance impact of this change, if any. We also found out that
+>> this patch can fix some of the rcu_preempt self-detected stall problems that
+>> we saw with the PREEMPT_RT kernel. So I added that information in the patch
+>> description.
+>>
+> Have you considered (and tested) whether we can set the threshold
+> directly proportional to nr_cpu_ids? Because IIUC, the favorable case
+> for lock stealing is that every CPU gets a chance to steal once. If one
+> CPU can steal twice, 1) either there is a context switch between two
+> tasks, which costs similarly as waking up the waiter, or 2) a task drops
+> and re-graps a lock, which means the task wants to yield to other
+> waiters of the lock.
 
-But it broke explicit specification of HW ECC mode in DTS as correct
-settings for HW ECC mode are applied only when NONE mode or nothing was
-specified in DTS file.
+There is no inherent restriction on not allowing the same cpu stealing 
+the lock twice or more. With rtmutex, the top waiter may be sleeping and 
+the wakeup latency can be considerable. By allowing another ready lock 
+waiter to steal the lock for productive use, it can improve system 
+throughput. There is no fairness in lock stealing and I don't believe it 
+is a worthwhile goal to allow each cpu to steal the lock once. It will 
+just complicate the code.
 
-Also it started aliasing NONE mode to be same as when ECC mode was not
-specified and disallowed usage of ON_DIE mode.
+On the other hand, unlimited lock stealing is bad and we have a put a 
+limit somehow to ensure forward progress.
 
-Fix all these issues. Use autodetection of ECC mode only in case when mode
-was really not specified in DTS file by checking that ecc value is invalid.
-Set HW ECC settings either when HW ECC was specified in DTS or it was
-autodetected. And do not fail when ON_DIE mode is set.
-
-Fixes: f6424c22aa36 ("mtd: rawnand: fsl_elbc: Make SW ECC work")
-Signed-off-by: Pali Rohár <pali@kernel.org>
----
- drivers/mtd/nand/raw/fsl_elbc_nand.c | 28 ++++++++++++++++------------
- 1 file changed, 16 insertions(+), 12 deletions(-)
-
-diff --git a/drivers/mtd/nand/raw/fsl_elbc_nand.c b/drivers/mtd/nand/raw/fsl_elbc_nand.c
-index aab93b9e6052..a18d121396aa 100644
---- a/drivers/mtd/nand/raw/fsl_elbc_nand.c
-+++ b/drivers/mtd/nand/raw/fsl_elbc_nand.c
-@@ -726,36 +726,40 @@ static int fsl_elbc_attach_chip(struct nand_chip *chip)
- 	struct fsl_lbc_regs __iomem *lbc = ctrl->regs;
- 	unsigned int al;
- 
--	switch (chip->ecc.engine_type) {
- 	/*
- 	 * if ECC was not chosen in DT, decide whether to use HW or SW ECC from
- 	 * CS Base Register
- 	 */
--	case NAND_ECC_ENGINE_TYPE_NONE:
-+	if (chip->ecc.engine_type == NAND_ECC_ENGINE_TYPE_INVALID) {
- 		/* If CS Base Register selects full hardware ECC then use it */
- 		if ((in_be32(&lbc->bank[priv->bank].br) & BR_DECC) ==
- 		    BR_DECC_CHK_GEN) {
--			chip->ecc.read_page = fsl_elbc_read_page;
--			chip->ecc.write_page = fsl_elbc_write_page;
--			chip->ecc.write_subpage = fsl_elbc_write_subpage;
--
- 			chip->ecc.engine_type = NAND_ECC_ENGINE_TYPE_ON_HOST;
--			mtd_set_ooblayout(mtd, &fsl_elbc_ooblayout_ops);
--			chip->ecc.size = 512;
--			chip->ecc.bytes = 3;
--			chip->ecc.strength = 1;
- 		} else {
- 			/* otherwise fall back to default software ECC */
- 			chip->ecc.engine_type = NAND_ECC_ENGINE_TYPE_SOFT;
- 			chip->ecc.algo = NAND_ECC_ALGO_HAMMING;
- 		}
-+	}
-+
-+	switch (chip->ecc.engine_type) {
-+	/* if HW ECC was chosen, setup ecc and oob layout */
-+	case NAND_ECC_ENGINE_TYPE_ON_HOST:
-+		chip->ecc.read_page = fsl_elbc_read_page;
-+		chip->ecc.write_page = fsl_elbc_write_page;
-+		chip->ecc.write_subpage = fsl_elbc_write_subpage;
-+		mtd_set_ooblayout(mtd, &fsl_elbc_ooblayout_ops);
-+		chip->ecc.size = 512;
-+		chip->ecc.bytes = 3;
-+		chip->ecc.strength = 1;
- 		break;
- 
--	/* if SW ECC was chosen in DT, we do not need to set anything here */
-+	/* if none or SW ECC was chosen, we do not need to set anything here */
-+	case NAND_ECC_ENGINE_TYPE_NONE:
- 	case NAND_ECC_ENGINE_TYPE_SOFT:
-+	case NAND_ECC_ENGINE_TYPE_ON_DIE:
- 		break;
- 
--	/* should we also implement *_ECC_ENGINE_CONTROLLER to do as above? */
- 	default:
- 		return -EINVAL;
- 	}
--- 
-2.20.1
+Cheers,
+Longman
 

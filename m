@@ -2,70 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 50A5156AAD5
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 20:35:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CBA8C56AAD0
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 20:35:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236649AbiGGSdO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Jul 2022 14:33:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54940 "EHLO
+        id S236650AbiGGSeI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Jul 2022 14:34:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35600 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236813AbiGGScl (ORCPT
+        with ESMTP id S236482AbiGGSdt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Jul 2022 14:32:41 -0400
-Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7EC945C954
-        for <linux-kernel@vger.kernel.org>; Thu,  7 Jul 2022 11:30:32 -0700 (PDT)
-Received: by mail-pf1-x435.google.com with SMTP id n12so21135203pfq.0
-        for <linux-kernel@vger.kernel.org>; Thu, 07 Jul 2022 11:30:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=broadcom.com; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=wMRHJF0T/fCycPHtXqV9dOYsYiXupPRSxklrtqmSdGQ=;
-        b=T+XB45XbwjrtEr+l24OzuY1QRNf3YoOt+iLwQJX/R01DqlLusd+uhM7ckiWIhDrfp1
-         8Q8ifzZJgZ+v08LGFdAnGWiPZ3nztmY8rAd91EuPnrF2XxYvDnr3GBdOMv5e80YvB+/f
-         Mt0MYvPX4UjD7+tv06aaQ5efsiGTDbgq4HJbk=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references;
-        bh=wMRHJF0T/fCycPHtXqV9dOYsYiXupPRSxklrtqmSdGQ=;
-        b=EeuDgus9Uzp/Sg7wWqEDE8+MNPxCLiw/OFewDk176mxSGToj2G0f9TBFG+AGBeVFS9
-         w1TWzpQ4IzLaaqTLH6Lovtz5iqx3jaKfsORLpCxkOxO077oqhLfRQZHozdMOXdl0XvPa
-         hgyHnyHj3TcCHUeEJ368yVgmTpGV/m0mCFlg5+HqHa5/GtjtqHSKOUxeQOAmfjawfa62
-         onvEhsk0Fjda44Tzsdz+B7m/Xo4BOkomXoILSHvJ2crTWPnbwsMfEU67pGfyQKbz+6Wa
-         LaSAYkOcYtsZlfttHxHL4rNA1zjONdJ/NXU282CXDfcsmaZV7Bm+kEnUWQsr8cRUMqhk
-         5RPA==
-X-Gm-Message-State: AJIora91A2XbEqxFPFLZu1QLja4zcwbXKwK8b5E15EMuADVvjE+eaRR7
-        /sUF4kOzsOzaQo5arWU+vpn3HA==
-X-Google-Smtp-Source: AGRyM1vkImAooEgYbw8Eu/32MDbRgX997w9QO1uZusEoQdHWIbEae5g2OIk1B7ZF3UUJf88LfmDvmA==
-X-Received: by 2002:a17:903:40c9:b0:16a:2d26:5553 with SMTP id t9-20020a17090340c900b0016a2d265553mr53925758pld.31.1657218630885;
-        Thu, 07 Jul 2022 11:30:30 -0700 (PDT)
-Received: from rahul_yocto_ubuntu18.ibn.broadcom.net ([192.19.252.250])
-        by smtp.gmail.com with ESMTPSA id pj9-20020a17090b4f4900b001ef92e0e7c1sm7132234pjb.10.2022.07.07.11.30.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 07 Jul 2022 11:30:30 -0700 (PDT)
-From:   Vikas Gupta <vikas.gupta@broadcom.com>
-To:     jiri@nvidia.com, kuba@kernel.org
-Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        davem@davemloft.net, dsahern@kernel.org,
-        stephen@networkplumber.org, edumazet@google.com, pabeni@redhat.com,
-        ast@kernel.org, leon@kernel.org, linux-doc@vger.kernel.org,
-        corbet@lwn.net, michael.chan@broadcom.com,
-        andrew.gospodarek@broadcom.com,
-        Vikas Gupta <vikas.gupta@broadcom.com>
-Subject: [PATCH net-next v2 3/3] bnxt_en: implement callbacks for devlink selftests
-Date:   Thu,  7 Jul 2022 23:59:50 +0530
-Message-Id: <20220707182950.29348-4-vikas.gupta@broadcom.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20220707182950.29348-1-vikas.gupta@broadcom.com>
-References: <20220628164241.44360-1-vikas.gupta@broadcom.com>
- <20220707182950.29348-1-vikas.gupta@broadcom.com>
-Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-        boundary="000000000000d7a15e05e33b473a"
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        MIME_HEADER_CTYPE_ONLY,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,T_TVD_MIME_NO_HEADERS autolearn=ham
+        Thu, 7 Jul 2022 14:33:49 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48FDA65D7A;
+        Thu,  7 Jul 2022 11:31:17 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id CC9706224A;
+        Thu,  7 Jul 2022 18:31:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E0738C3411E;
+        Thu,  7 Jul 2022 18:31:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1657218676;
+        bh=6H4otsM+waE4dVzYoIhYtGakU7UsxGvGs8V4UhCwWLk=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=AVcR9BEnIteKrsshXQBk3+8HHlfCwNMo1smY/GVwny7VKin6zGBR6GacZilBCsr11
+         JahP8UctdbsythFcaVx6o33iO1MSIhbesQiJqmPPgCu6CdL4/JBi718CJGzHreMiJR
+         +qBtMrbZh6XFFKXEm7NdOOviGGIS1shXKgnHdiWE7pKhAHZnxpn68F+w9bvPkwnMnC
+         LaD69S6gLKX26hhirXP7KB7pYEr8z1HHWPIh4uuZr+55wh6bMqKQYUWJGSPZfqu3u5
+         97jxigOgnLftXe9WL+HZpc7va+ERTvJzwsjtYU/PsupoPRe2R79M1LVRY03Lm45lgf
+         zxxyuy44HaPzQ==
+Received: by pali.im (Postfix)
+        id CC3F07B1; Thu,  7 Jul 2022 20:31:12 +0200 (CEST)
+Date:   Thu, 7 Jul 2022 20:31:12 +0200
+From:   Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>
+To:     Russell King <linux@armlinux.org.uk>, Andrew Lunn <andrew@lunn.ch>,
+        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
+        Gregory Clement <gregory.clement@bootlin.com>,
+        Jason Gunthorpe <jgg@nvidia.com>
+Cc:     linux-arm-kernel@lists.infradead.org, linux-pci@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 1/2] ARM: Marvell: Update PCIe fixup
+Message-ID: <20220707183112.f7dgz3lzordxnqhj@pali>
+References: <20211101150405.14618-1-pali@kernel.org>
+ <20211102171259.9590-1-pali@kernel.org>
+ <20211109225332.kqyfm4h4kwcnhhhl@pali>
+ <20220514182125.xfvnw7yj2rmxpi7l@pali>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220514182125.xfvnw7yj2rmxpi7l@pali>
+User-Agent: NeoMutt/20180716
+X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,188 +64,153 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---000000000000d7a15e05e33b473a
+PING? I have not received any reply!
 
-Add callbacks
-=============
-.selftests_show: populates flash test name.
-.selftests_run: implements a flash selftest.
-
-Signed-off-by: Vikas Gupta <vikas.gupta@broadcom.com>
-Reviewed-by: Michael Chan <michael.chan@broadcom.com>
-Reviewed-by: Andy Gospodarek <andrew.gospodarek@broadcom.com>
----
- .../net/ethernet/broadcom/bnxt/bnxt_devlink.c | 61 +++++++++++++++++++
- 1 file changed, 61 insertions(+)
-
-diff --git a/drivers/net/ethernet/broadcom/bnxt/bnxt_devlink.c b/drivers/net/ethernet/broadcom/bnxt/bnxt_devlink.c
-index 3528ce9849e6..750034b45049 100644
---- a/drivers/net/ethernet/broadcom/bnxt/bnxt_devlink.c
-+++ b/drivers/net/ethernet/broadcom/bnxt/bnxt_devlink.c
-@@ -20,6 +20,8 @@
- #include "bnxt_ulp.h"
- #include "bnxt_ptp.h"
- #include "bnxt_coredump.h"
-+#include "bnxt_nvm_defs.h"
-+#include "bnxt_ethtool.h"
- 
- static void __bnxt_fw_recover(struct bnxt *bp)
- {
-@@ -610,6 +612,63 @@ static int bnxt_dl_reload_up(struct devlink *dl, enum devlink_reload_action acti
- 	return rc;
- }
- 
-+static bool bnxt_nvm_test(struct bnxt *bp, struct netlink_ext_ack *extack)
-+{
-+	u32 datalen;
-+	u16 index;
-+	u8 *buf;
-+
-+	if (bnxt_find_nvram_item(bp->dev, BNX_DIR_TYPE_VPD,
-+				 BNX_DIR_ORDINAL_FIRST, BNX_DIR_EXT_NONE,
-+				 &index, NULL, &datalen) || !datalen) {
-+		NL_SET_ERR_MSG_MOD(extack, "nvm test vpd entry error");
-+		return false;
-+	}
-+
-+	buf = kzalloc(datalen, GFP_KERNEL);
-+	if (!buf) {
-+		NL_SET_ERR_MSG_MOD(extack, "insufficient memory for nvm test");
-+		return false;
-+	}
-+
-+	if (bnxt_get_nvram_item(bp->dev, index, 0, datalen, buf)) {
-+		NL_SET_ERR_MSG_MOD(extack, "nvm test vpd read error");
-+		goto err;
-+	}
-+
-+	if (bnxt_flash_nvram(bp->dev, BNX_DIR_TYPE_VPD, BNX_DIR_ORDINAL_FIRST,
-+			     BNX_DIR_EXT_NONE, 0, 0, buf, datalen)) {
-+		NL_SET_ERR_MSG_MOD(extack, "nvm test vpd write error");
-+		goto err;
-+	}
-+
-+	return true;
-+
-+err:
-+	kfree(buf);
-+	return false;
-+}
-+
-+static u32 bnxt_dl_selftests_show(struct devlink *dl,
-+				  struct netlink_ext_ack *extack)
-+{
-+	return DEVLINK_SELFTEST_FLASH;
-+}
-+
-+static void bnxt_dl_selftests_run(struct devlink *dl, u32 test_mask,
-+				  u8 *results, struct netlink_ext_ack *extack)
-+{
-+	struct bnxt *bp = bnxt_get_bp_from_dl(dl);
-+	bool res;
-+
-+	if (test_mask & DEVLINK_SELFTEST_FLASH) {
-+		res = bnxt_nvm_test(bp, extack);
-+		results[DEVLINK_SELFTEST_FLASH_BIT] = res ?
-+							DEVLINK_SELFTEST_PASS :
-+							DEVLINK_SELFTEST_FAIL;
-+	}
-+}
-+
- static const struct devlink_ops bnxt_dl_ops = {
- #ifdef CONFIG_BNXT_SRIOV
- 	.eswitch_mode_set = bnxt_dl_eswitch_mode_set,
-@@ -622,6 +681,8 @@ static const struct devlink_ops bnxt_dl_ops = {
- 	.reload_limits	  = BIT(DEVLINK_RELOAD_LIMIT_NO_RESET),
- 	.reload_down	  = bnxt_dl_reload_down,
- 	.reload_up	  = bnxt_dl_reload_up,
-+	.selftests_show	  = bnxt_dl_selftests_show,
-+	.selftests_run	  = bnxt_dl_selftests_run,
- };
- 
- static const struct devlink_ops bnxt_vf_dl_ops;
--- 
-2.31.1
-
-
---000000000000d7a15e05e33b473a
-Content-Type: application/pkcs7-signature; name="smime.p7s"
-Content-Transfer-Encoding: base64
-Content-Disposition: attachment; filename="smime.p7s"
-Content-Description: S/MIME Cryptographic Signature
-
-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
-I7qKxvF8Yo7eGTnHRTa99J+6yTd88AKVuhM5TEhpC8cS7qvrQXJje+Uing2xWC4FH76LEWIFH0Pt
-x8C1WoCU0ClXHU/XfzH2mYrFANBSCeP1Co6QdEfRAgMBAAGjggHZMIIB1TAOBgNVHQ8BAf8EBAMC
-BaAwgaMGCCsGAQUFBwEBBIGWMIGTME4GCCsGAQUFBzAChkJodHRwOi8vc2VjdXJlLmdsb2JhbHNp
-Z24uY29tL2NhY2VydC9nc2djY3IzcGVyc29uYWxzaWduMmNhMjAyMC5jcnQwQQYIKwYBBQUHMAGG
-NWh0dHA6Ly9vY3NwLmdsb2JhbHNpZ24uY29tL2dzZ2NjcjNwZXJzb25hbHNpZ24yY2EyMDIwME0G
-A1UdIARGMEQwQgYKKwYBBAGgMgEoCjA0MDIGCCsGAQUFBwIBFiZodHRwczovL3d3dy5nbG9iYWxz
-aWduLmNvbS9yZXBvc2l0b3J5LzAJBgNVHRMEAjAAMEkGA1UdHwRCMEAwPqA8oDqGOGh0dHA6Ly9j
-cmwuZ2xvYmFsc2lnbi5jb20vZ3NnY2NyM3BlcnNvbmFsc2lnbjJjYTIwMjAuY3JsMCMGA1UdEQQc
-MBqBGHZpa2FzLmd1cHRhQGJyb2FkY29tLmNvbTATBgNVHSUEDDAKBggrBgEFBQcDBDAfBgNVHSME
-GDAWgBSWM9HmWBdbNHWKgVZk1b5I3qGPzzAdBgNVHQ4EFgQUUc6J11rH3s6PyZQ0zIVZHIuP20Yw
-DQYJKoZIhvcNAQELBQADggEBALvCjXn9gy9a2nU/Ey0nphGZefIP33ggiyuKnmqwBt7Wk/uDHIIc
-kkIlqtTbo0x0PqphS9A23CxCDjKqZq2WN34fL5MMW83nrK0vqnPloCaxy9/6yuLbottBY4STNuvA
-mQ//Whh+PE+DZadqiDbxXbos3IH8AeFXH4A1zIqIrc0Um2/CSD/T6pvu9QrchtvemfP0z/f1Bk+8
-QbQ4ARVP93WV1I13US69evWXw+mOv9VnejShU9PMcDK203xjXbBOi9Hm+fthrWfwIyGoC5aEf7vd
-PKkEDt4VZ9RbudZU/c3N8+kURaHNtrvu2K+mQs5w/AF7HYZThqmOzQJnvMRjuL8xggJtMIICaQIB
-ATBrMFsxCzAJBgNVBAYTAkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMTEwLwYDVQQDEyhH
-bG9iYWxTaWduIEdDQyBSMyBQZXJzb25hbFNpZ24gMiBDQSAyMDIwAgwYjepatB64S625eswwDQYJ
-YIZIAWUDBAIBBQCggdQwLwYJKoZIhvcNAQkEMSIEIHyBkzoPN7j5YV8UC6iTUWfjRlZQcYpD8qUW
-ZhpazALGMBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcNAQkFMQ8XDTIyMDcwNzE4
-MzAzMVowaQYJKoZIhvcNAQkPMVwwWjALBglghkgBZQMEASowCwYJYIZIAWUDBAEWMAsGCWCGSAFl
-AwQBAjAKBggqhkiG9w0DBzALBgkqhkiG9w0BAQowCwYJKoZIhvcNAQEHMAsGCWCGSAFlAwQCATAN
-BgkqhkiG9w0BAQEFAASCAQC5JgJr6KR7l5gepCsZXHNFaVoCAXaZ/7tAekc+teIQsOZLp0vDmv/P
-ZQyqUIMTIslr8L81FuqREJVd0cAcl2HF7UDOpEDtNluj75fksVY5wdQbkYYtRTvlFgcZUnJ8RXwR
-KiIqg3zZ6pXkap5shRWZuXDIcp7p6Tcfe55WLLlYTfMIwpwfMMYgA7Tk1mYu9Wu4Wmi6U+Dm4ujm
-PZHrLsTlJXZ03fEH+nB5ajXf/mCpSLXiiyXGa1thrbAtSriI/x31R4dLsWATg7Qt+/L6SNhlL1oF
-U/fiw+8FeYjv35plr1SF9ethI10oXxG8teEL7a6ZplxdVHfdXiRkiblggwn1
---000000000000d7a15e05e33b473a--
+On Saturday 14 May 2022 20:21:25 Pali Rohár wrote:
+> On Tuesday 09 November 2021 23:53:32 Pali Rohár wrote:
+> > On Tuesday 02 November 2021 18:12:58 Pali Rohár wrote:
+> > > - The code relies on rc_pci_fixup being called, which only happens
+> > >   when CONFIG_PCI_QUIRKS is enabled, so add that to Kconfig. Omitting
+> > >   this causes a booting failure with a non-obvious cause.
+> > > - Update rc_pci_fixup to set the class properly, copying the
+> > >   more modern style from other places
+> > > - Correct the rc_pci_fixup comment
+> > > 
+> > > This patch just re-applies commit 1dc831bf53fd ("ARM: Kirkwood: Update
+> > > PCI-E fixup") for all other Marvell ARM platforms which have same buggy
+> > > PCIe controller and do not use pci-mvebu.c controller driver yet.
+> > > 
+> > > Long-term goal for these Marvell ARM platforms should be conversion to
+> > > pci-mvebu.c controller driver and removal of these fixups in arch code.
+> > > 
+> > > Signed-off-by: Pali Rohár <pali@kernel.org>
+> > > Cc: Jason Gunthorpe <jgg@nvidia.com>
+> > > Cc: stable@vger.kernel.org
+> > 
+> > Hello! Patch 2/2 was already applied into mips-next. Could you review
+> > also this patch 1/2?
+> 
+> PING?
+> 
+> > > 
+> > > ---
+> > > Changes in v2:
+> > > * Move MIPS change into separate patch
+> > > * Add information that this patch is for platforms which do not use pci-mvebu.c
+> > > ---
+> > >  arch/arm/Kconfig              |  1 +
+> > >  arch/arm/mach-dove/pcie.c     | 11 ++++++++---
+> > >  arch/arm/mach-mv78xx0/pcie.c  | 11 ++++++++---
+> > >  arch/arm/mach-orion5x/Kconfig |  1 +
+> > >  arch/arm/mach-orion5x/pci.c   | 12 +++++++++---
+> > >  5 files changed, 27 insertions(+), 9 deletions(-)
+> > > 
+> > > diff --git a/arch/arm/Kconfig b/arch/arm/Kconfig
+> > > index fc196421b2ce..9f157e973555 100644
+> > > --- a/arch/arm/Kconfig
+> > > +++ b/arch/arm/Kconfig
+> > > @@ -400,6 +400,7 @@ config ARCH_DOVE
+> > >  	select GENERIC_IRQ_MULTI_HANDLER
+> > >  	select GPIOLIB
+> > >  	select HAVE_PCI
+> > > +	select PCI_QUIRKS if PCI
+> > >  	select MVEBU_MBUS
+> > >  	select PINCTRL
+> > >  	select PINCTRL_DOVE
+> > > diff --git a/arch/arm/mach-dove/pcie.c b/arch/arm/mach-dove/pcie.c
+> > > index ee91ac6b5ebf..ecf057a0f5ba 100644
+> > > --- a/arch/arm/mach-dove/pcie.c
+> > > +++ b/arch/arm/mach-dove/pcie.c
+> > > @@ -135,14 +135,19 @@ static struct pci_ops pcie_ops = {
+> > >  	.write = pcie_wr_conf,
+> > >  };
+> > >  
+> > > +/*
+> > > + * The root complex has a hardwired class of PCI_CLASS_MEMORY_OTHER, when it
+> > > + * is operating as a root complex this needs to be switched to
+> > > + * PCI_CLASS_BRIDGE_HOST or Linux will errantly try to process the BAR's on
+> > > + * the device. Decoding setup is handled by the orion code.
+> > > + */
+> > >  static void rc_pci_fixup(struct pci_dev *dev)
+> > >  {
+> > > -	/*
+> > > -	 * Prevent enumeration of root complex.
+> > > -	 */
+> > >  	if (dev->bus->parent == NULL && dev->devfn == 0) {
+> > >  		int i;
+> > >  
+> > > +		dev->class &= 0xff;
+> > > +		dev->class |= PCI_CLASS_BRIDGE_HOST << 8;
+> > >  		for (i = 0; i < DEVICE_COUNT_RESOURCE; i++) {
+> > >  			dev->resource[i].start = 0;
+> > >  			dev->resource[i].end   = 0;
+> > > diff --git a/arch/arm/mach-mv78xx0/pcie.c b/arch/arm/mach-mv78xx0/pcie.c
+> > > index 636d84b40466..9362b5fc116f 100644
+> > > --- a/arch/arm/mach-mv78xx0/pcie.c
+> > > +++ b/arch/arm/mach-mv78xx0/pcie.c
+> > > @@ -177,14 +177,19 @@ static struct pci_ops pcie_ops = {
+> > >  	.write = pcie_wr_conf,
+> > >  };
+> > >  
+> > > +/*
+> > > + * The root complex has a hardwired class of PCI_CLASS_MEMORY_OTHER, when it
+> > > + * is operating as a root complex this needs to be switched to
+> > > + * PCI_CLASS_BRIDGE_HOST or Linux will errantly try to process the BAR's on
+> > > + * the device. Decoding setup is handled by the orion code.
+> > > + */
+> > >  static void rc_pci_fixup(struct pci_dev *dev)
+> > >  {
+> > > -	/*
+> > > -	 * Prevent enumeration of root complex.
+> > > -	 */
+> > >  	if (dev->bus->parent == NULL && dev->devfn == 0) {
+> > >  		int i;
+> > >  
+> > > +		dev->class &= 0xff;
+> > > +		dev->class |= PCI_CLASS_BRIDGE_HOST << 8;
+> > >  		for (i = 0; i < DEVICE_COUNT_RESOURCE; i++) {
+> > >  			dev->resource[i].start = 0;
+> > >  			dev->resource[i].end   = 0;
+> > > diff --git a/arch/arm/mach-orion5x/Kconfig b/arch/arm/mach-orion5x/Kconfig
+> > > index e94a61901ffd..7189a5b1ec46 100644
+> > > --- a/arch/arm/mach-orion5x/Kconfig
+> > > +++ b/arch/arm/mach-orion5x/Kconfig
+> > > @@ -6,6 +6,7 @@ menuconfig ARCH_ORION5X
+> > >  	select GPIOLIB
+> > >  	select MVEBU_MBUS
+> > >  	select FORCE_PCI
+> > > +	select PCI_QUIRKS
+> > >  	select PHYLIB if NETDEVICES
+> > >  	select PLAT_ORION_LEGACY
+> > >  	help
+> > > diff --git a/arch/arm/mach-orion5x/pci.c b/arch/arm/mach-orion5x/pci.c
+> > > index 76951bfbacf5..5145fe89702e 100644
+> > > --- a/arch/arm/mach-orion5x/pci.c
+> > > +++ b/arch/arm/mach-orion5x/pci.c
+> > > @@ -509,14 +509,20 @@ static int __init pci_setup(struct pci_sys_data *sys)
+> > >  /*****************************************************************************
+> > >   * General PCIe + PCI
+> > >   ****************************************************************************/
+> > > +
+> > > +/*
+> > > + * The root complex has a hardwired class of PCI_CLASS_MEMORY_OTHER, when it
+> > > + * is operating as a root complex this needs to be switched to
+> > > + * PCI_CLASS_BRIDGE_HOST or Linux will errantly try to process the BAR's on
+> > > + * the device. Decoding setup is handled by the orion code.
+> > > + */
+> > >  static void rc_pci_fixup(struct pci_dev *dev)
+> > >  {
+> > > -	/*
+> > > -	 * Prevent enumeration of root complex.
+> > > -	 */
+> > >  	if (dev->bus->parent == NULL && dev->devfn == 0) {
+> > >  		int i;
+> > >  
+> > > +		dev->class &= 0xff;
+> > > +		dev->class |= PCI_CLASS_BRIDGE_HOST << 8;
+> > >  		for (i = 0; i < DEVICE_COUNT_RESOURCE; i++) {
+> > >  			dev->resource[i].start = 0;
+> > >  			dev->resource[i].end   = 0;
+> > > -- 
+> > > 2.20.1
+> > > 

@@ -2,128 +2,173 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 83D37569A9A
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 08:38:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 90198569A9B
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 08:39:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233304AbiGGGim (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Jul 2022 02:38:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38174 "EHLO
+        id S234699AbiGGGix (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Jul 2022 02:38:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38380 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230124AbiGGGij (ORCPT
+        with ESMTP id S230124AbiGGGiw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Jul 2022 02:38:39 -0400
-Received: from mx07-00178001.pphosted.com (mx08-00178001.pphosted.com [91.207.212.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31AA227FF4;
-        Wed,  6 Jul 2022 23:38:38 -0700 (PDT)
-Received: from pps.filterd (m0046660.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 26715pJ4025688;
-        Thu, 7 Jul 2022 08:38:20 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=date : from : to :
- cc : subject : message-id : references : mime-version : content-type :
- in-reply-to; s=selector1; bh=zVSoqRqzuyLq0LopHTrb8YdEclj7FIl5rpVJUrthI2k=;
- b=w+uiFBF0FBVSp44RBV9b1Kcfs3BdqUZ74D9ShD5VGMkXXK0mYTb9Arap/KCgCGIifmWI
- rtdiT0iWPg8Vyyh4Nqo9U29dp9QAyeIzaTSI+DqR2Fb2jm7ykJgjknkPN4voXBu9PkG+
- FDOzzLYb2JDKTg+t2meV++Sg1eUAQ4Ea7Gj9mGEPFs9NC3RwXkUMIIh04LuGNbAKy5jV
- X1NbnD2ju33Gx4yMCguebN2TgG/M+zmKeEIziaciSOOcmIztE8XraC8AZsrGQ99QN7T+
- YH9a4vBLKTDi+cwFJE3xmNb5fe9asU7Chmc1uW9mLV+hs2uYcoR/IMG5Mp+jUEDOPxGa rg== 
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3h58bp6h7c-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 07 Jul 2022 08:38:20 +0200
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id D979810002A;
-        Thu,  7 Jul 2022 08:38:18 +0200 (CEST)
-Received: from Webmail-eu.st.com (shfdag1node1.st.com [10.75.129.69])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id B5B6420F570;
-        Thu,  7 Jul 2022 08:38:18 +0200 (CEST)
-Received: from gnbcxd0016.gnb.st.com (10.75.127.49) by SHFDAG1NODE1.st.com
- (10.75.129.69) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id 15.1.2308.20; Thu, 7 Jul
- 2022 08:38:18 +0200
-Date:   Thu, 7 Jul 2022 08:38:13 +0200
-From:   Alain Volmat <alain.volmat@foss.st.com>
-To:     Rob Herring <robh@kernel.org>
-CC:     <wsa@kernel.org>, <mark.rutland@arm.com>,
-        <pierre-yves.mordret@foss.st.com>, <mcoquelin.stm32@gmail.com>,
-        <alexandre.torgue@foss.st.com>, <linux-i2c@vger.kernel.org>,
-        <devicetree@vger.kernel.org>,
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <fabrice.gasnier@foss.st.com>,
-        <amelie.delaunay@foss.st.com>
-Subject: Re: [PATCH 1/4] dt-bindings: i2c: st,stm32-i2c: don't mandate a
- reset line
-Message-ID: <20220707063813.GA2428347@gnbcxd0016.gnb.st.com>
-Mail-Followup-To: Rob Herring <robh@kernel.org>, wsa@kernel.org,
-        mark.rutland@arm.com, pierre-yves.mordret@foss.st.com,
-        mcoquelin.stm32@gmail.com, alexandre.torgue@foss.st.com,
-        linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        fabrice.gasnier@foss.st.com, amelie.delaunay@foss.st.com
-References: <20220620105405.145959-1-alain.volmat@foss.st.com>
- <20220620105405.145959-2-alain.volmat@foss.st.com>
- <20220628134115.GA345270-robh@kernel.org>
+        Thu, 7 Jul 2022 02:38:52 -0400
+Received: from EUR05-VI1-obe.outbound.protection.outlook.com (mail-vi1eur05on2057.outbound.protection.outlook.com [40.107.21.57])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16217B1C
+        for <linux-kernel@vger.kernel.org>; Wed,  6 Jul 2022 23:38:51 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=BVqooPY1la/VXv31gWYrZTHxT8fwRCF6ukm0HF12mrMRN4beZPj7Qs+X4zmJceUJ7VPFzwVedo6nWUXix6YhLVhNUlDcYoQ7IT2DfU97ekbvzqRCksIGQpCex1pi6xQEgvUbfZg/0K3jdXA4NpxutM8t2HIfc3ZlfDzKuvlLSNhWebacfKdcb+WZvmnxht8U1GUkqmXBHcsVGZdLcyfFuOaoLPvNPIjkVGsh1twXaVYaeGdFkQF8u0/xo7vYfsTtHGHecMdCPXbUFH/an3lenqvP31PTlyNOXKR3QGzPN4L7GrTYpHQuhvU38dDeZBMzuL4XuxCfTKYp2JYLKtt1iA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=k8l4Nf8fQ67bEwIAO+a1iTiSd6Jzq1VNu3+xuHiRqxA=;
+ b=SIZicQKRhmS7mZw5aZgll9PXqIgDPwdvC8FnfULNzebu5w69jc5ZUR8RGIbGCUAPBTFKODPd69mA7UHm7p5VexzQREKY+aBjBvB0TEmKu0l78igY9h+SfkXgOfZnL+C+emG/1OdxVF7CYtaP+PMQQl3ccjWibvjfUg4dBVCEfzNXzr+9Qfutt8DHZ1zR1xwwAa3l3nlvmedPNQtAQxR4pxm3McPkIO9EE2+UNpSOgj+ySljwEXf4YSRqKEtBllGKbH6qKS2Ub/mdXGUKbME5MJHNMtpf0fBMnCPWCSrSVH7yX5bDEej+2j2gaA4QqFAfzRCCx6HZwy3b0icDuVto3g==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=suse.com; dmarc=pass action=none header.from=suse.com;
+ dkim=pass header.d=suse.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=k8l4Nf8fQ67bEwIAO+a1iTiSd6Jzq1VNu3+xuHiRqxA=;
+ b=W+Zw5AEgOicnQomNBnVhdLUTUQlpq9PPbHcSSEnBcVnbxlhXDrU3qhQlcjPdWDoXEXaJ4UQDmjqQdqLX5rlmuBhJt/Q4bWk8xbAfZWOuzMntemgQG/XCrvd1IaBeUhGXoUOUFguXVOEgO4jBFHunb8cJxZ5UJPPt5vUyk6q1sNjBKsapeaMKlY9yqssKc0rWtwAGt93N7Kaq7BDBOoOfUk0zHQxCFGI+kK4m8QVD70xsT8/myn50JkYKR4H70YgYHvbcHqZYLRU/nb2Rmg9H1CzK4266pMy+RT5Fp6hIVwUkfjaL22otAeE+p/NBslaUBhoVX45IDqhUPv680xOFAA==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=suse.com;
+Received: from VE1PR04MB6560.eurprd04.prod.outlook.com (2603:10a6:803:122::25)
+ by VI1PR04MB5790.eurprd04.prod.outlook.com (2603:10a6:803:e7::32) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5395.21; Thu, 7 Jul
+ 2022 06:38:47 +0000
+Received: from VE1PR04MB6560.eurprd04.prod.outlook.com
+ ([fe80::60ad:4d78:a28a:7df4]) by VE1PR04MB6560.eurprd04.prod.outlook.com
+ ([fe80::60ad:4d78:a28a:7df4%4]) with mapi id 15.20.5417.016; Thu, 7 Jul 2022
+ 06:38:47 +0000
+Message-ID: <bc13c66d-a885-e405-7b53-8cd7afdbecff@suse.com>
+Date:   Thu, 7 Jul 2022 08:38:44 +0200
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH] x86/PAT: have pat_enabled() properly reflect state when
+ running on e.g. Xen
+Content-Language: en-US
+To:     Borislav Petkov <bp@alien8.de>
+Cc:     Andrew Lutomirski <luto@kernel.org>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        lkml <linux-kernel@vger.kernel.org>,
+        "xen-devel@lists.xenproject.org" <xen-devel@lists.xenproject.org>
+References: <9385fa60-fa5d-f559-a137-6608408f88b0@suse.com>
+ <YsRTAGI2PhfZ5V7M@zn.tnic> <016d281b-7e40-f1bd-66ee-c19c3cc56efe@suse.com>
+ <YsRjX/U1XN8rq+8u@zn.tnic> <b7fa785b-cea3-3e05-c101-d6c7bd101ef3@suse.com>
+ <YsW/3/fEuNYAuFwZ@zn.tnic>
+From:   Jan Beulich <jbeulich@suse.com>
+In-Reply-To: <YsW/3/fEuNYAuFwZ@zn.tnic>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: AS9PR07CA0009.eurprd07.prod.outlook.com
+ (2603:10a6:20b:46c::9) To VE1PR04MB6560.eurprd04.prod.outlook.com
+ (2603:10a6:803:122::25)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20220628134115.GA345270-robh@kernel.org>
-X-Disclaimer: ce message est personnel / this message is private
-X-Originating-IP: [10.75.127.49]
-X-ClientProxiedBy: SFHDAG2NODE3.st.com (10.75.127.6) To SHFDAG1NODE1.st.com
- (10.75.129.69)
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
- definitions=2022-07-07_04,2022-06-28_01,2022-06-22_01
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 7e90a53b-a53e-4780-bd70-08da5fe3589b
+X-MS-TrafficTypeDiagnostic: VI1PR04MB5790:EE_
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: T0rEg8n6X0RTwHf3cXu5K/IKD/eV5Douibq3m9YtTyjnNtrvugrn2cQ09RbBk8MgQ06txc+nbi98jlYDK+irjZHMD/wQPnjzDoGYqU0ytxg3PlH+2cE8H0fUHGnqEhKp4/0B2pzig93+EQGesqpi8XS3t15+/vk0J7QFs/fOQNzXGhC5DdCRzh/s8Tc1cxQWxz3r8ekT438L3YT1J9hKXkMMMMTgZBUh5KEOr0PccuJYFf57fIk1Tr1hL3XcKZloONQu1wD2lW3ViuVY/B6YboIofSbnH91DEe5I1/CA12CYCNfuGovp78GDmJ2ic9UggWwaosK3TVPUwN6jB3YpHd7RoEPSzh0ceo3RmEshdqaxhqOfXVFXW3QXdI9ZG2bvZQXRMQToYDjgVI7R8YtqOkIacH+ZkxcmpCVz30dnrv0E8dc3y5TxEys+2aisI9ZQqBtLtbyJqPFuDLzyrJIyrCLEIGLDShFFLiGg+8ltnfawZdW7oh3+WEF09bRNOJpN93TaT0ONBvrhyUNKWqyYVL4HVMgQp87OXyO1XuVEfqKS0KvuwFzPUm4cn2YQctzDnmdeMT/6ITAaEl83zUblV/c1mlzmAe8JDMvuzjP2OrJqMo8pGA5lTUB/eX2jPgm1XmxH7TsRYrtcK2jPDRrRVBDKbdYDUiLlzk9gqoGVKu1gZixWAD9fhUXU8vbMxr0Qwc8RuQZL8SipbF1AEc/nW7nNi4m3kAcz9v7OKbU6OQtKrPcVk71sW0HttQeNgFvtaE1WkzPYlbGXk9/lMCTLzSmhjTFOAgfAoebNrGP1Wj7m6bDCaUhJVFJ5K2kqX7ceGacHuoAUafegy7gFJHA8iA==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VE1PR04MB6560.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(346002)(136003)(396003)(366004)(376002)(39860400002)(8936002)(54906003)(86362001)(2906002)(31696002)(26005)(66556008)(8676002)(66946007)(316002)(5660300002)(6512007)(4326008)(6916009)(66476007)(186003)(31686004)(2616005)(478600001)(38100700002)(6486002)(6666004)(53546011)(36756003)(41300700001)(6506007)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?RzlOMHhZV29sckdlVXBuRmpjaGgzYWtNdUY1M21UOEhxRS9pVnpKTlQ2cGx0?=
+ =?utf-8?B?cU51RUlrWUF1NG1kTStrVVFUMXozWHBWUnFhSlhRNTBrMno5a2laZ3o1U0dk?=
+ =?utf-8?B?U3pJMkcwbzZkNENrRkVuVTVBZkYwK0ROTDZyU3NNQjN4RU1BbThHQTh2eFl0?=
+ =?utf-8?B?N21PdTlYVjNyZEgxa0t5SlNCSUtWSnJxWjlPNW4wTUczWVd6NUp2RzdQcmYy?=
+ =?utf-8?B?aTJpeWNIQWpSclJtd0g1UmF3Y3gvSVRZb2MvWkJUeDdqRjUzVVdsdTJ3Uk80?=
+ =?utf-8?B?YlAzaHo2VEV1OGYrQi9JcmlIOE5SZFBMRndRaWhtSTRrMVptWEdacVVxbG4x?=
+ =?utf-8?B?Q24xYU1xTXV2RWN5OHpCQmNySGtlcWVzMjdqdDFuUnFOOWczcFFuWElUcFVK?=
+ =?utf-8?B?alJaUWhaMzlIOGpueGlqYzRWTVhOcmhFVWJQcGprYXhDK2l5NXpUYWE5VXhq?=
+ =?utf-8?B?VWpOT3RORWpWTG85dVF2OU9CYW9uY1pkb2dSNmNpWjNZOWhKeElRVG82dTNz?=
+ =?utf-8?B?ZGlGTnU0VVJXUENvTm43RkJDZFdBNVdaYU01MkZ1dGpRUW5KOUhxMjNtMUpN?=
+ =?utf-8?B?cmlQbStjUGt5SFc5a2NaUWgxT29manJrRy9PYjlhU0hwbGpLYTdUcWlSNlF3?=
+ =?utf-8?B?bnJtVS9RamFBTThaSjJiNDdQQkh2dFhsZGpuNjRRZFd3N1lXc3JibWM3bklu?=
+ =?utf-8?B?RzNMajBlb2ltdW4yaDRjS2M2a2dsSno4ckVXK2RYazlCTlRnTU0vais1dXY0?=
+ =?utf-8?B?aWRTb3Ira1k1OUxYR1pQWlltU2M3R1pPaXc1elBYaDhZc0ZOczNhVkhVNER3?=
+ =?utf-8?B?KzhQTysxVDlVU0J0N1dVM0FacktOTlhQWFhCam50S01JZTBRUi8yQ05Jclox?=
+ =?utf-8?B?REhsR0QvLzBzckl2MG5uNHQ5OTFCK0FQQlZPTWVwL2d2MmFPRHRWdUN0cTBB?=
+ =?utf-8?B?SVk3c2dCSWkzVDNiTXd5UFJLWFdTSDVYaVZ5aktwVElmc1IzWlMveTY4YWkz?=
+ =?utf-8?B?YnpiNnhONFI2cWpaTVIzR25FYU9MTnk2VEhzTnBsZFlHVFd5bVQxd3NOL3Fv?=
+ =?utf-8?B?YTRsa1NqU3Q2dEdlOWVPVFVUYWpEQzVIVm5uckx3bStXOWF6V0RBSy9wRWcz?=
+ =?utf-8?B?VFVqWUVJeXU0bFBHcHJUdytoVzhzL0lDOWVSUm91RFZJVC9kMC9pWi9jSXNN?=
+ =?utf-8?B?MXNSU0VQY282Lyt6bmJ6TE5XK2RUTHRTQzV1Qkh2aXBSMGlYWURMUW0zWVNE?=
+ =?utf-8?B?OWkxTkNVRkt2b0NNK0NkdDJMVEJDOFQ5cGxXWTFzblVTVXlBbFRWWDIzZ1V0?=
+ =?utf-8?B?RmEyTmFKbmhHa3VNbEdiaGhPbk1vaDBlNGtWUDBVMWwydzBaYmk2Z1pwMVVC?=
+ =?utf-8?B?SHdzSGtFa2Y2ZUhWcElOOGtEWGN5SWZESFluOTFzRHdzbWhyM0VHK01jUmVQ?=
+ =?utf-8?B?TkFuY3ZOREQ2K2lFS0hFVFpEcW1kcHNaamNadFZFaWduNnpxTXVrY2pQcEx3?=
+ =?utf-8?B?cXcvUTQwQUlWeTRYSTNvb3E1bkMxM3pHbWVza2JCVEtoejlrRjFuSXJ2dFBl?=
+ =?utf-8?B?ckJ4SWpDandWQ3FaMDZVaGE0VDRMRU1OdnVkMzJIUit6aVJmTzVxeTEwcHVJ?=
+ =?utf-8?B?TzRFeUNrWlluR2dLQVR1a1I2Znl0dnl0RndVVVF2alRKTGlIOFZSMGZ6OXpO?=
+ =?utf-8?B?cHVBSHJqenhDWTRMa2t6RU5NQjgxdDREMWhORFBKNENDa0ZNTE1GRHBnaXZJ?=
+ =?utf-8?B?ZjBrR3JLNlkwSHBQZU9yYnJIU1hFOC9lNnVyUERtQnloVFNyVU1ibnZnYk9p?=
+ =?utf-8?B?alROU3d0YWJFdlJISGVGaGhobnczbFVoYjdYa2pkOWtTT3hKVXEvWmdsOVdO?=
+ =?utf-8?B?UldTQnV4ZHRqcTQ0akZCSWtEMGNvSk4wMjZ5bzZEQW4wcU00UW9YRmV2eDBi?=
+ =?utf-8?B?M3BjVDE3OTNkcmw5R3ZyUnBJTFZ2SkY1TXEyckZFZklRSENvU09EYkpzcGZl?=
+ =?utf-8?B?emNhOU5ScHBXTTFPU0ZTSGlkWDgxZHNTSjYwWHJsQ0gyaHNFQ2lEQ0RvVGY3?=
+ =?utf-8?B?OHVNbVVNQlN0WEh1dUtycHNNTVBreVNxVkpXVnlWR0lUNXo1cGJqNEpCUGpS?=
+ =?utf-8?Q?SXro35KzhBwa3Jt01KMVtB+l3?=
+X-OriginatorOrg: suse.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 7e90a53b-a53e-4780-bd70-08da5fe3589b
+X-MS-Exchange-CrossTenant-AuthSource: VE1PR04MB6560.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Jul 2022 06:38:47.6881
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: f7a17af6-1c5c-4a36-aa8b-f5be247aa4ba
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: S40zdMHotd/81B+j4BnNjd8SZ3M6E+2s3AK6Lk8t6YkEA+gTC+VBVq/+Ezlp04osrzDojZEa85RTmwsvtOZpdQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR04MB5790
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Rob,
-
-On Tue, Jun 28, 2022 at 07:41:15AM -0600, Rob Herring wrote:
-> On Mon, Jun 20, 2022 at 12:54:02PM +0200, Alain Volmat wrote:
-> > Update the dt-bindings of the i2c-stm32 drivers to avoid the
-> > needs for a reset property in the device-tree.
+On 06.07.2022 19:01, Borislav Petkov wrote:
+> On Wed, Jul 06, 2022 at 08:17:41AM +0200, Jan Beulich wrote:
+>> Sure, but that alone won't help.
 > 
-> That is clear from the diff, but why. Some chips don't have a reset? 
-> If so, this should be combined with patch 2 as part of changes needed 
-> for a new version.
-
-Alexandre has just pushed a pull-request enabling support for the
-clock/reset [1] so I will shortly push a v2 of the serie dropping the
-first 2 patches.
-
-Thanks
-Alain
-
-[1] https://lore.kernel.org/all/a250f32b-f67c-2922-0748-e39dc791e95c@foss.st.com/
-
+> Well, the MTRR code looks at X86_FEATURE_MTRR. If Xen doesn't expose the
+> MTRRs, then that bit should be clear in the CPUID the guest sees.
 > 
-> > 
-> > Signed-off-by: Alain Volmat <alain.volmat@foss.st.com>
-> > ---
-> >  Documentation/devicetree/bindings/i2c/st,stm32-i2c.yaml | 1 -
-> >  1 file changed, 1 deletion(-)
-> > 
-> > diff --git a/Documentation/devicetree/bindings/i2c/st,stm32-i2c.yaml b/Documentation/devicetree/bindings/i2c/st,stm32-i2c.yaml
-> > index dccbb18b6dc0..8879144fbbfb 100644
-> > --- a/Documentation/devicetree/bindings/i2c/st,stm32-i2c.yaml
-> > +++ b/Documentation/devicetree/bindings/i2c/st,stm32-i2c.yaml
-> > @@ -94,7 +94,6 @@ required:
-> >    - compatible
-> >    - reg
-> >    - interrupts
-> > -  - resets
-> >    - clocks
-> >  
-> >  unevaluatedProperties: false
-> > -- 
-> > 2.25.1
-> > 
-> > 
+> So in that case, you could test X86_FEATURE_XENPV at the end of
+> mtrr_bp_init() and not disable PAT if running as a PV guest. Would that
+> work?
+> 
+>> There's a beneficial side effect of running through pat_disable():
+>> That way pat_init() will bail right away. Without that I'd need to
+>> further special case things there (as under Xen/PV PAT must not be
+>> written, only read)
+> 
+> We have wrmsr_safe for that.
+
+Well, right now the pvops hook for Xen swallows #GP anyway (wrongly
+so imo, but any of my earlier pointing out of that has been left
+unheard, despite even the code comments there saying "It may be worth
+changing that"). The point is therefore that after writing PAT, it
+would need reading back. In which case it feels (slightly) more clean
+to me to avoid the write attempt in the first place, when we know
+it's not going to work.
+
+>> Any decent hypervisor will allow overriding CPUID, so in principle
+>> I'd expect any to permit disabling MTRR to leave a guest to use
+>> the (more modern and less cumbersome) PAT alone.
+> 
+> So I'm being told that it would be generally beneficial for all kinds of
+> virtualization solutions to be able to support PAT only, without MTRRs
+> so it would be interesting to see how ugly it would become to decouple
+> PAT from MTRRs in Linux...
+
+If I may ask - doesn't this mean this patch, in its current shape, is
+already a (small) step in that direction? In any event what you say
+doesn't sound to me like a viable (backportable) route to addressing
+the regression at hand.
+
+Jan

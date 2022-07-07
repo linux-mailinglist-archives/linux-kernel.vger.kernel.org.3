@@ -2,188 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D66B756A63B
-	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 16:55:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 203AC56A63F
+	for <lists+linux-kernel@lfdr.de>; Thu,  7 Jul 2022 16:55:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235413AbiGGOzH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Jul 2022 10:55:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43414 "EHLO
+        id S236290AbiGGOym (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Jul 2022 10:54:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43428 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236254AbiGGOyb (ORCPT
+        with ESMTP id S235645AbiGGOyS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Jul 2022 10:54:31 -0400
-Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57F2232054
-        for <linux-kernel@vger.kernel.org>; Thu,  7 Jul 2022 07:53:41 -0700 (PDT)
-Received: by mail-pf1-x430.google.com with SMTP id n12so19941553pfq.0
-        for <linux-kernel@vger.kernel.org>; Thu, 07 Jul 2022 07:53:41 -0700 (PDT)
+        Thu, 7 Jul 2022 10:54:18 -0400
+Received: from mail-io1-xd32.google.com (mail-io1-xd32.google.com [IPv6:2607:f8b0:4864:20::d32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07EE72711
+        for <linux-kernel@vger.kernel.org>; Thu,  7 Jul 2022 07:53:26 -0700 (PDT)
+Received: by mail-io1-xd32.google.com with SMTP id v185so17040734ioe.11
+        for <linux-kernel@vger.kernel.org>; Thu, 07 Jul 2022 07:53:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ventanamicro.com; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=WpHsot62A1gxRtl/GwHVpqtU/9pvy/riu/S/EvqjSyI=;
-        b=Tr+JEW+ZEJKGKjheUXFYk1x2N+wl+60t3vWoFftJlnngVr5Fn8nG/d/DAFcSbs43W2
-         /VG1G2R+hotACgnJtCU8uZizBmJnDagJkQgQHnuXttm8t+3FxEBK4+yF49vDQCNID/t4
-         Wy8b36vc1qtdBmA/pC8w6AQJmap0P0ga50OlDxZ/ENzSCraCmR9qdFJBA5g4HspWcZ08
-         Wq3e+F+hW28ezbmPPzcUMbku6kijzfLAArAV2XmwQaJ8/kubSOKHefcYtXzHJ4ncvLfF
-         NN8ydnb6UQg87FrvYETD0a7THG40DVM0N3yfyrxxK9reogFpPAlJ603vcK3KnQruxwiX
-         ouZQ==
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=7RZhPlwt1IWmYSR6QIVRvM1HZdmbksMxnLZ6G0dxCYQ=;
+        b=dbVWNRlsTl7pk7ptifukmXY/Z4krWR8gWS1OPftdqSoHwDjWWnGVMVy30wrrJmPKKM
+         m0ZjLpTxKOMe2z/X6TWznoYb3kbkXITLAxeWjACt51IJ9WoapHp2v1xGaRa9UDPSfk7X
+         GpEOzxaenVdYrb//0k6tqNyS2ahPCcwz9r6jjuTurfbgqiOUgMcHkoLGNCx80BPAwRkb
+         cqxPGv08JM1nzHaSW8paawSNd7Zk81EwVEk0stflMy7AX3tTrPs4FAgk+NK+wQg+euEt
+         BYzYXF1shibZRX60BLl6dzud3s0hIauMRUtUgOp2j6JbGhDl4wOG53FHmw1ki6dzr9De
+         07dQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=WpHsot62A1gxRtl/GwHVpqtU/9pvy/riu/S/EvqjSyI=;
-        b=NCJHwRTzH5PTylhmehDLmpl6oZAxR95iq//7VRdMCTnA3rFNrLagHfxml1c27mec4k
-         t08mYA3vdynLaHNPjIXNqAJMaUFltBpcpqvkSpXjdERX8QbNBiQNdo1t65z1Kvq0rOeN
-         CKxQVHwhjolO5n1Yh2YOLQYxrsQCIcIO0lLOTKkVCTMEM1i+7ibJQNN6jP4ujUhP2gu6
-         hnpOe3PnsZXiGM42L4ezlkPM+rAaIdf60Ezeanyrvw3P3wPZD/+jmX2psTmDrz+BcYZJ
-         SIX0ChIJATmu6xoYAZXADZYz6Nh3R7mBDrrhczWPFxdQHkgKmtqgsOWx5pyLPIwc4NnZ
-         2adQ==
-X-Gm-Message-State: AJIora++k7LOYvKr3sWG/jzvYTnPNEYFi10kFAaJPwRIrYcruReRhkJU
-        jHi+Nl6El12rtPi28a/pxyPagw==
-X-Google-Smtp-Source: AGRyM1udvP3EHnOxHavdQ9dg0S+DvvpOEeaXRNKFmeLh8kDulADIUcXvLlMeJora4NRhq2LMa6dnug==
-X-Received: by 2002:aa7:9a11:0:b0:525:2412:920a with SMTP id w17-20020aa79a11000000b005252412920amr54805086pfj.66.1657205620353;
-        Thu, 07 Jul 2022 07:53:40 -0700 (PDT)
-Received: from anup-ubuntu64-vm.. ([223.226.40.162])
-        by smtp.gmail.com with ESMTPSA id b26-20020aa7951a000000b0052535e7c489sm27144231pfp.114.2022.07.07.07.53.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 07 Jul 2022 07:53:39 -0700 (PDT)
-From:   Anup Patel <apatel@ventanamicro.com>
-To:     Paolo Bonzini <pbonzini@redhat.com>,
-        Atish Patra <atishp@atishpatra.org>
-Cc:     Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Alistair Francis <Alistair.Francis@wdc.com>,
-        Anup Patel <anup@brainfault.org>, kvm@vger.kernel.org,
-        kvm-riscv@lists.infradead.org, linux-riscv@lists.infradead.org,
-        linux-kernel@vger.kernel.org, Anup Patel <apatel@ventanamicro.com>
-Subject: [PATCH 5/5] RISC-V: KVM: Add support for Svpbmt inside Guest/VM
-Date:   Thu,  7 Jul 2022 20:22:48 +0530
-Message-Id: <20220707145248.458771-6-apatel@ventanamicro.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220707145248.458771-1-apatel@ventanamicro.com>
-References: <20220707145248.458771-1-apatel@ventanamicro.com>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=7RZhPlwt1IWmYSR6QIVRvM1HZdmbksMxnLZ6G0dxCYQ=;
+        b=WOj8ZTj0pfqkDJTIDFKRJc4+1b/TeXfIqnF1zSugPUdV/JO0sk23ysAQ88n6GUfofn
+         szUENSUq9GSLEHejI6RzqfZG6txLiTA0EL8Gu24dsO4wCNSMwDJDyC5ZyVnVbCbj6T8g
+         F8V6bh9VH5VXnTHEK5tL4OwshGzAtCOq0lBpeS2/sIbsCyaLsDwfwu0jTae5BTLX9eID
+         R6TwhNdSEqGrP7ho2SzMDxDat8Ye8Y59IKY/X1NZb8n/4mCmDhjWo5/YScYR3W1kB92P
+         9hhW8nRF80kQerHWjERuP80utOGgMjJSPpPE6OoQYql2oyJFDADCodC05I1P+R+a/6Pp
+         pS+A==
+X-Gm-Message-State: AJIora9Dg8rgBWmhGLBQg06E75NRldA+EWsCXqfWAL0ZjVze7wCgZJdx
+        edYp7YW3z8BUn/quiJKT4bA=
+X-Google-Smtp-Source: AGRyM1trLe7RvY+9Rq0/Nq/y6Bbr3vIvsEr0rsX6bbBeVsNbTLy47V5SXuWGN+FGfuJ/2U+3fJpyLw==
+X-Received: by 2002:a05:6602:154b:b0:675:8bce:8a5 with SMTP id h11-20020a056602154b00b006758bce08a5mr24784705iow.108.1657205605448;
+        Thu, 07 Jul 2022 07:53:25 -0700 (PDT)
+Received: from [192.168.2.177] ([207.188.167.132])
+        by smtp.gmail.com with ESMTPSA id w1-20020a5ed601000000b00675305c58bdsm14794205iom.18.2022.07.07.07.53.22
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 07 Jul 2022 07:53:24 -0700 (PDT)
+Message-ID: <15fe441c-205e-2953-44b4-d3c377cba7b1@gmail.com>
+Date:   Thu, 7 Jul 2022 16:53:21 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH 2/2] arm64: dts: mt8183: Add panel rotation
+Content-Language: en-US
+To:     Hsin-Yi Wang <hsinyi@chromium.org>
+Cc:     Chun-Kuang Hu <chunkuang.hu@kernel.org>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        dri-devel@lists.freedesktop.org,
+        linux-mediatek@lists.infradead.org,
+        Rob Clark <robdclark@chromium.org>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Douglas Anderson <dianders@chromium.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <20220530113033.124072-1-hsinyi@chromium.org>
+ <20220530113033.124072-2-hsinyi@chromium.org>
+ <CAJMQK-jw+sgunEwgEQAw-V8DAbybZ7WVnZJ6vwOdzQ+-SX_bQg@mail.gmail.com>
+ <c3286fc9-06ed-d1e1-a731-94cdefdf7fab@gmail.com>
+ <CAJMQK-gJ4AoNQtLeKoOO=GLLtjDRhCdVnYuPJSBD4ZnFWJ5qrw@mail.gmail.com>
+From:   Matthias Brugger <matthias.bgg@gmail.com>
+In-Reply-To: <CAJMQK-gJ4AoNQtLeKoOO=GLLtjDRhCdVnYuPJSBD4ZnFWJ5qrw@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The Guest/VM can use Svpbmt in VS-stage page tables when allowed by the
-Hypervisor using the henvcfg.PBMTE bit.
 
-We add Svpbmt support for the KVM Guest/VM which can be enabled/disabled
-by the KVM user-space (QEMU/KVMTOOL) using the ISA extension ONE_REG
-interface.
 
-Signed-off-by: Anup Patel <apatel@ventanamicro.com>
----
- arch/riscv/include/asm/csr.h      | 16 ++++++++++++++++
- arch/riscv/include/uapi/asm/kvm.h |  1 +
- arch/riscv/kvm/vcpu.c             | 16 ++++++++++++++++
- 3 files changed, 33 insertions(+)
+On 17/06/2022 16:25, Hsin-Yi Wang wrote:
+> On Fri, Jun 17, 2022 at 10:10 PM Matthias Brugger
+> <matthias.bgg@gmail.com> wrote:
+>>
+>> Hi Hsin-Yi Wang,
+>>
+>> On 06/06/2022 17:29, Hsin-Yi Wang wrote:
+>>> On Mon, May 30, 2022 at 7:30 PM Hsin-Yi Wang <hsinyi@chromium.org> wrote:
+>>>>
+>>>> krane, kakadu, and kodama boards have a default panel rotation.
+>>>>
+>>>> Signed-off-by: Hsin-Yi Wang <hsinyi@chromium.org>
+>>>> Reviewed-by: Enric Balletbo i Serra <enric.balletbo@collabora.com>
+>>>> Tested-by: Enric Balletbo i Serra <enric.balletbo@collabora.com>
+>>>> ---
+>>>
+>>> Hi Matthias,
+>>>
+>>> The series ("Add a panel API to return panel orientation") might land
+>>> in drm-misc. With this series applied, we can add this patch to give
+>>> the correct default orientation for mt8183 kukui devices.
+>>> I didn't send this patch again with the series, since they might land
+>>> in different trees.
+>>>
+>>
+>> I had a look on Linux next (next-20220617) and wasn't able to find the mtk_dsi.c
+>> changes. What is the status of this?
+>>
+> The mtk_dsi change got dropped. The latest is this series:
+> https://lore.kernel.org/lkml/20220609072722.3488207-1-hsinyi@chromium.org/,
+> still waiting to be picked or others' comments.
+> 
 
-diff --git a/arch/riscv/include/asm/csr.h b/arch/riscv/include/asm/csr.h
-index 6d85655e7edf..17516afc389a 100644
---- a/arch/riscv/include/asm/csr.h
-+++ b/arch/riscv/include/asm/csr.h
-@@ -156,6 +156,18 @@
- 				 (_AC(1, UL) << IRQ_S_TIMER) | \
- 				 (_AC(1, UL) << IRQ_S_EXT))
- 
-+/* xENVCFG flags */
-+#define ENVCFG_STCE			(_AC(1, ULL) << 63)
-+#define ENVCFG_PBMTE			(_AC(1, ULL) << 62)
-+#define ENVCFG_CBZE			(_AC(1, UL) << 7)
-+#define ENVCFG_CBCFE			(_AC(1, UL) << 6)
-+#define ENVCFG_CBIE_SHIFT		4
-+#define ENVCFG_CBIE			(_AC(0x3, UL) << ENVCFG_CBIE_SHIFT)
-+#define ENVCFG_CBIE_ILL			_AC(0x0, UL)
-+#define ENVCFG_CBIE_FLUSH		_AC(0x1, UL)
-+#define ENVCFG_CBIE_INV			_AC(0x3, UL)
-+#define ENVCFG_FIOM			_AC(0x1, UL)
-+
- /* symbolic CSR names: */
- #define CSR_CYCLE		0xc00
- #define CSR_TIME		0xc01
-@@ -252,7 +264,9 @@
- #define CSR_HTIMEDELTA		0x605
- #define CSR_HCOUNTEREN		0x606
- #define CSR_HGEIE		0x607
-+#define CSR_HENVCFG		0x60a
- #define CSR_HTIMEDELTAH		0x615
-+#define CSR_HENVCFGH		0x61a
- #define CSR_HTVAL		0x643
- #define CSR_HIP			0x644
- #define CSR_HVIP		0x645
-@@ -264,6 +278,8 @@
- #define CSR_MISA		0x301
- #define CSR_MIE			0x304
- #define CSR_MTVEC		0x305
-+#define CSR_MENVCFG		0x30a
-+#define CSR_MENVCFGH		0x31a
- #define CSR_MSCRATCH		0x340
- #define CSR_MEPC		0x341
- #define CSR_MCAUSE		0x342
-diff --git a/arch/riscv/include/uapi/asm/kvm.h b/arch/riscv/include/uapi/asm/kvm.h
-index 6119368ba6d5..24b2a6e27698 100644
---- a/arch/riscv/include/uapi/asm/kvm.h
-+++ b/arch/riscv/include/uapi/asm/kvm.h
-@@ -96,6 +96,7 @@ enum KVM_RISCV_ISA_EXT_ID {
- 	KVM_RISCV_ISA_EXT_H,
- 	KVM_RISCV_ISA_EXT_I,
- 	KVM_RISCV_ISA_EXT_M,
-+	KVM_RISCV_ISA_EXT_SVPBMT,
- 	KVM_RISCV_ISA_EXT_MAX,
- };
- 
-diff --git a/arch/riscv/kvm/vcpu.c b/arch/riscv/kvm/vcpu.c
-index 6dd9cf729614..b7a433c54d0f 100644
---- a/arch/riscv/kvm/vcpu.c
-+++ b/arch/riscv/kvm/vcpu.c
-@@ -51,6 +51,7 @@ static const unsigned long kvm_isa_ext_arr[] = {
- 	RISCV_ISA_EXT_h,
- 	RISCV_ISA_EXT_i,
- 	RISCV_ISA_EXT_m,
-+	RISCV_ISA_EXT_SVPBMT,
- };
- 
- static unsigned long kvm_riscv_vcpu_base2isa_ext(unsigned long base_ext)
-@@ -777,6 +778,19 @@ int kvm_arch_vcpu_ioctl_set_guest_debug(struct kvm_vcpu *vcpu,
- 	return -EINVAL;
- }
- 
-+static void kvm_riscv_vcpu_update_config(const unsigned long *isa)
-+{
-+	u64 henvcfg = 0;
-+
-+	if (__riscv_isa_extension_available(isa, RISCV_ISA_EXT_SVPBMT))
-+		henvcfg |= ENVCFG_PBMTE;
-+
-+	csr_write(CSR_HENVCFG, henvcfg);
-+#ifdef CONFIG_32BIT
-+	csr_write(CSR_HENVCFGH, henvcfg >> 32);
-+#endif
-+}
-+
- void kvm_arch_vcpu_load(struct kvm_vcpu *vcpu, int cpu)
- {
- 	struct kvm_vcpu_csr *csr = &vcpu->arch.guest_csr;
-@@ -791,6 +805,8 @@ void kvm_arch_vcpu_load(struct kvm_vcpu *vcpu, int cpu)
- 	csr_write(CSR_HVIP, csr->hvip);
- 	csr_write(CSR_VSATP, csr->vsatp);
- 
-+	kvm_riscv_vcpu_update_config(vcpu->arch.isa);
-+
- 	kvm_riscv_gstage_update_hgatp(vcpu);
- 
- 	kvm_riscv_vcpu_timer_restore(vcpu);
--- 
-2.34.1
+I saw this got merged, so merging this patch now.
 
+Thanks!
+
+> If the dts patch is picked without the drm series, there will be a
+> WARN, but won't affect boot or display up.
+> 
+> 
+>> Regards,
+>> Matthias
+>>
+>>> Thanks.
+>>>
+>>>>    arch/arm64/boot/dts/mediatek/mt8183-kukui.dtsi | 1 +
+>>>>    1 file changed, 1 insertion(+)
+>>>>
+>>>> diff --git a/arch/arm64/boot/dts/mediatek/mt8183-kukui.dtsi b/arch/arm64/boot/dts/mediatek/mt8183-kukui.dtsi
+>>>> index 8d5bf73a9099..f0dd5a06629d 100644
+>>>> --- a/arch/arm64/boot/dts/mediatek/mt8183-kukui.dtsi
+>>>> +++ b/arch/arm64/boot/dts/mediatek/mt8183-kukui.dtsi
+>>>> @@ -276,6 +276,7 @@ panel: panel@0 {
+>>>>                   avee-supply = <&ppvarp_lcd>;
+>>>>                   pp1800-supply = <&pp1800_lcd>;
+>>>>                   backlight = <&backlight_lcd0>;
+>>>> +               rotation = <270>;
+>>>>                   port {
+>>>>                           panel_in: endpoint {
+>>>>                                   remote-endpoint = <&dsi_out>;
+>>>> --
+>>>> 2.36.1.124.g0e6072fb45-goog
+>>>>

@@ -2,177 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E58FF56B48A
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 10:33:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1838756B48E
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 10:35:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237350AbiGHIdI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Jul 2022 04:33:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36218 "EHLO
+        id S237856AbiGHIew (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Jul 2022 04:34:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38208 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237542AbiGHIdG (ORCPT
+        with ESMTP id S237206AbiGHIev (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Jul 2022 04:33:06 -0400
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E61798238F;
-        Fri,  8 Jul 2022 01:33:04 -0700 (PDT)
-X-UUID: b1ecc78bcf6b48208cda0da35d90a32d-20220708
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.8,REQID:36b04552-8f38-48ca-b1e0-4b040da3d21d,OB:0,LO
-        B:0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACTI
-        ON:release,TS:0
-X-CID-META: VersionHash:0f94e32,CLOUDID:98dff5d6-5d6d-4eaf-a635-828a3ee48b7c,C
-        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,IP:nil,URL:0,File:nil
-        ,QS:nil,BEC:nil,COL:0
-X-UUID: b1ecc78bcf6b48208cda0da35d90a32d-20220708
-Received: from mtkmbs11n1.mediatek.inc [(172.21.101.185)] by mailgw01.mediatek.com
-        (envelope-from <biao.huang@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 796111050; Fri, 08 Jul 2022 16:32:59 +0800
-Received: from mtkcas10.mediatek.inc (172.21.101.39) by
- mtkmbs11n1.mediatek.inc (172.21.101.185) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
- Fri, 8 Jul 2022 16:32:58 +0800
-Received: from mhfsdcap04 (10.17.3.154) by mtkcas10.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Fri, 8 Jul 2022 16:32:56 +0800
-Message-ID: <a748f941c39d46f749dfcd17e881b07242f5bfaf.camel@mediatek.com>
-Subject: Re: [PATCH net v2] stmmac: dwmac-mediatek: fix clock issue
-From:   Biao Huang <biao.huang@mediatek.com>
-To:     Matthias Brugger <matthias.bgg@gmail.com>,
-        David Miller <davem@davemloft.net>
-CC:     Giuseppe Cavallaro <peppe.cavallaro@st.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Jose Abreu <joabreu@synopsys.com>,
-        "Eric Dumazet" <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        "Paolo Abeni" <pabeni@redhat.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        <netdev@vger.kernel.org>,
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-mediatek@lists.infradead.org>, <macpaul.lin@mediatek.com>
-Date:   Fri, 8 Jul 2022 16:32:57 +0800
-In-Reply-To: <c088f936-00a1-4a7b-c995-dd49b011494f@gmail.com>
-References: <20220708075622.26342-1-biao.huang@mediatek.com>
-         <20220708075622.26342-2-biao.huang@mediatek.com>
-         <c088f936-00a1-4a7b-c995-dd49b011494f@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+        Fri, 8 Jul 2022 04:34:51 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0AFFC12615
+        for <linux-kernel@vger.kernel.org>; Fri,  8 Jul 2022 01:34:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1657269290;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=OP4X7LUwgicK2Z8iBMF1E87pgvSh5qnsKOoxYGUrQZE=;
+        b=dgT4PZDXP4at7xbMiDKB+8vMPo2GJC58YRyd9baWCa6nvxXkDpX3kALKYFWnWcexBPa2iD
+        NmGBc/vplfYf+KnVFfOK2ec24bqSzMBRISxK6SNwrh9ryVNir5hq8VJIwb9QPq6RzTCuha
+        DMcNNOr+uO5FEy33m78JjexDIO1aZqk=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-655-YLkXHmJ7MkK83y7yYijfCw-1; Fri, 08 Jul 2022 04:34:48 -0400
+X-MC-Unique: YLkXHmJ7MkK83y7yYijfCw-1
+Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id C18123C0ED4C;
+        Fri,  8 Jul 2022 08:34:47 +0000 (UTC)
+Received: from localhost (ovpn-12-169.pek2.redhat.com [10.72.12.169])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 17E662166B26;
+        Fri,  8 Jul 2022 08:34:46 +0000 (UTC)
+Date:   Fri, 8 Jul 2022 16:34:43 +0800
+From:   Baoquan He <bhe@redhat.com>
+To:     Jianglei Nie <niejianglei2021@163.com>, akpm@linux-foundation.org
+Cc:     vgoyal@redhat.com, dyoung@redhat.com, kexec@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org
+Subject: Re: [PATCH v2] proc/vmcore: fix potential memory leak in
+ vmcore_init()
+Message-ID: <YsfsIzjmhR5VQU3N@MiWiFi-R3L-srv>
+References: <20220704081839.2232996-1-niejianglei2021@163.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-MTK:  N
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220704081839.2232996-1-niejianglei2021@163.com>
+X-Scanned-By: MIMEDefang 2.78 on 10.11.54.6
+X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Dear Matthias,
+On 07/04/22 at 04:18pm, Jianglei Nie wrote:
+> elfcorehdr_alloc() allocates a memory chunk for elfcorehdr_addr with
+> kzalloc(). If is_vmcore_usable() returns false, elfcorehdr_addr is a
+> predefined value. If parse_crash_elf_headers() occurs some error and
+> returns a negetive value, the elfcorehdr_addr should be released with
+> elfcorehdr_free().
+> 
+> We can fix by calling elfcorehdr_free() when parse_crash_elf_headers()
+> fails.
 
-	Thanks for your comments.
+LGTM,
 
-Best Regards!
-Biao
-On Fri, 2022-07-08 at 10:17 +0200, Matthias Brugger wrote:
+Acked-by: Baoquan He <bhe@redhat.com>
+
 > 
-> On 08/07/2022 09:56, Biao Huang wrote:
-> > Since clocks are handled in mediatek_dwmac_clks_config(),
-> > remove the clocks configuration in init()/exit(), and
-> > invoke mediatek_dwmac_clks_config instead.
-> > 
-> > This issue is found in suspend/resume test.
-> > 
-> > Fixes: 3186bdad97d5 ("stmmac: dwmac-mediatek: add platform level
-> > clocks management")
-> > Signed-off-by: Biao Huang <biao.huang@mediatek.com>
-> > ---
-> >   .../ethernet/stmicro/stmmac/dwmac-mediatek.c  | 32 ++++++------
-> > -------
-> >   1 file changed, 10 insertions(+), 22 deletions(-)
-> > 
-> > diff --git a/drivers/net/ethernet/stmicro/stmmac/dwmac-mediatek.c
-> > b/drivers/net/ethernet/stmicro/stmmac/dwmac-mediatek.c
-> > index 6ff88df58767..6d82cf2658e0 100644
-> > --- a/drivers/net/ethernet/stmicro/stmmac/dwmac-mediatek.c
-> > +++ b/drivers/net/ethernet/stmicro/stmmac/dwmac-mediatek.c
-> > @@ -576,32 +576,12 @@ static int mediatek_dwmac_init(struct
-> > platform_device *pdev, void *priv)
-> >   		}
-> >   	}
-> >   
-> > -	ret = clk_bulk_prepare_enable(variant->num_clks, plat->clks);
-> > -	if (ret) {
-> > -		dev_err(plat->dev, "failed to enable clks, err = %d\n",
-> > ret);
-> > -		return ret;
-> > -	}
-> > -
-> > -	ret = clk_prepare_enable(plat->rmii_internal_clk);
-> > -	if (ret) {
-> > -		dev_err(plat->dev, "failed to enable rmii internal clk,
-> > err = %d\n", ret);
-> > -		goto err_clk;
-> > -	}
-> > -
-> >   	return 0;
-> > -
-> > -err_clk:
-> > -	clk_bulk_disable_unprepare(variant->num_clks, plat->clks);
-> > -	return ret;
-> >   }
-> >   
-> >   static void mediatek_dwmac_exit(struct platform_device *pdev,
-> > void *priv)
-> >   {
-> > -	struct mediatek_dwmac_plat_data *plat = priv;
-> > -	const struct mediatek_dwmac_variant *variant = plat->variant;
-> > -
-> > -	clk_disable_unprepare(plat->rmii_internal_clk);
-> > -	clk_bulk_disable_unprepare(variant->num_clks, plat->clks);
-> > +	/* nothing to do now */
+> Signed-off-by: Jianglei Nie <niejianglei2021@163.com>
+> ---
+>  fs/proc/vmcore.c | 5 ++++-
+>  1 file changed, 4 insertions(+), 1 deletion(-)
 > 
-> We can just leave the function pointer point to NULL, that get
-> checked before 
-> calling exit.
-OK, I'll delete this function, 
-and delete the exit assignment: 
-	plat->exit = mediatek_dwmac_exit;
-it should be ok since plat is allocated by devm_kzalloc.
+> diff --git a/fs/proc/vmcore.c b/fs/proc/vmcore.c
+> index 4eaeb645e759..86887bd90263 100644
+> --- a/fs/proc/vmcore.c
+> +++ b/fs/proc/vmcore.c
+> @@ -1569,7 +1569,7 @@ static int __init vmcore_init(void)
+>  	rc = parse_crash_elf_headers();
+>  	if (rc) {
+>  		pr_warn("Kdump: vmcore not initialized\n");
+> -		return rc;
+> +		goto fail;
+>  	}
+>  	elfcorehdr_free(elfcorehdr_addr);
+>  	elfcorehdr_addr = ELFCORE_ADDR_ERR;
+> @@ -1577,6 +1577,9 @@ static int __init vmcore_init(void)
+>  	proc_vmcore = proc_create("vmcore", S_IRUSR, NULL, &vmcore_proc_ops);
+>  	if (proc_vmcore)
+>  		proc_vmcore->size = vmcore_size;
+> +
+> +fail:
+> +	elfcorehdr_free(elfcorehdr_addr);
+>  	return 0;
+>  }
+>  fs_initcall(vmcore_init);
+> -- 
+> 2.25.1
 > 
-> Regards,
-> Matthias
-> 
-> >   }
-> >   
-> >   static int mediatek_dwmac_clks_config(void *priv, bool enabled)
-> > @@ -712,13 +692,21 @@ static int mediatek_dwmac_probe(struct
-> > platform_device *pdev)
-> >   	mediatek_dwmac_common_data(pdev, plat_dat, priv_plat);
-> >   	mediatek_dwmac_init(pdev, priv_plat);
-> >   
-> > +	ret = mediatek_dwmac_clks_config(priv_plat, true);
-> > +	if (ret)
-> > +		return ret;
-> > +
-> >   	ret = stmmac_dvr_probe(&pdev->dev, plat_dat, &stmmac_res);
-> >   	if (ret) {
-> >   		stmmac_remove_config_dt(pdev, plat_dat);
-> > -		return ret;
-> > +		goto err_drv_probe;
-> >   	}
-> >   
-> >   	return 0;
-> > +
-> > +err_drv_probe:
-> > +	mediatek_dwmac_clks_config(priv_plat, false);
-> > +	return ret;
-> >   }
-> >   
-> >   static const struct of_device_id mediatek_dwmac_match[] = {
 

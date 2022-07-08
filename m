@@ -2,62 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F82256BAFE
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 15:39:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5516956BB07
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 15:39:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238376AbiGHNi7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Jul 2022 09:38:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45398 "EHLO
+        id S238380AbiGHNjD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Jul 2022 09:39:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45396 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238385AbiGHNix (ORCPT
+        with ESMTP id S238374AbiGHNix (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 8 Jul 2022 09:38:53 -0400
-Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8DDF275FB;
-        Fri,  8 Jul 2022 06:38:50 -0700 (PDT)
-Received: by mail-ej1-x62f.google.com with SMTP id b11so416007eju.10;
-        Fri, 08 Jul 2022 06:38:50 -0700 (PDT)
+Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B41FA2BB21;
+        Fri,  8 Jul 2022 06:38:51 -0700 (PDT)
+Received: by mail-ed1-x529.google.com with SMTP id k30so18785848edk.8;
+        Fri, 08 Jul 2022 06:38:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=PfwS4GGde9mWJV/0ULh/19pUwGMjrZxv0owgG9wqUNk=;
-        b=X5Lw9rsmvSRSWD0YiP1xPs5KDgIX/IOsTpwzeytS4Xfo8HFc38JTK17a9eTiRN+Mux
-         XAVEFe0OXf230oHIKZXEw8bPYMd2Lovovh7BtZR/gZXmaSb+7AYhlyU03pEMN/iwozCL
-         fcSRNERgX5oKg/5ZdZudryEezOiRDVBGz8vns8yISFSOwmCLHmVFUCrd0iy4q/Y8E8rj
-         C753NashyGZIZnCiON7DTmGr/bFpU4bVKZQH1B8QDtBF+oSHJWOV94blOm9IlMKV2ZiN
-         ZCte/HKBeUTlwNPF5XCYIomq0Pq4c3pNCuusSj/HiTKIvb81VZSZETA2LHBeApaUtrfS
-         BP5Q==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=oAqZrnSh0jfK0LLUnYpJumK2YJTHAZakB+MOOLiwb1E=;
+        b=qTAkjs0kVjAAymmJCjSX4J2vmljnLyYcmlOXHQVQn2Fxqwt6KKRkteXrNzXATnFfEv
+         m0DTfnS4GK7//pTEZ4KWYcBkBoNNe0hvG78GUlXo20Q84Xrk++zSQiss8o03+De70uAh
+         YaogOiH3wbPpmYVyl++NqI8XY7fL/Y1utlSa2VJaOCzZ3rUshikRvCipT4nuAvvhsdUz
+         Tk0U8Euoxw/MmGakUOoLtrG1EIfBlKGPyreYy9ilZL6gWhcPP664CHfZihEei7u24JOS
+         ZXaXtCjxoG8dMsY0OGvNR1WOKoDSOpqDFlDqEKQ3qN+1F0v1pGxnUHslmsVCftSrG9JV
+         BeLA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=PfwS4GGde9mWJV/0ULh/19pUwGMjrZxv0owgG9wqUNk=;
-        b=QbRgb/1IGOy/1rOMRDWVlszhXgvDEpCjYnwQMHRzQMvg1mpCRxHCcBE1nH7ra1gnfv
-         FkYAZhXMeZBa7COpOaMoyNSuNcCnW5nk3i03+9s2bsiptQFTToH3NQ1Re0BX7vWu0NN1
-         Q/waKLvXXRbDMj1Nb/L6Rn3YtHceQJRymIxqcil81VF63N6jYQv/HEoEQZfuSmFkpNzU
-         drNSI0UKBPfmXOSwZ6oLi+1ypfzqRfS7+hrTDlE5IKHkkRcfH/J/fB7wljqxlFdo2FKT
-         QIZZgEzFX0d4D0AXuF/xfl8zts4/3bntuvl6/XCScHcSYoBlrv4tzJOuK32shyxb63qC
-         6TDw==
-X-Gm-Message-State: AJIora/VF4z5hczwbgPXKH4ApyS+RCTjQqCkDKAsBT/5ux3jGHBpt3xn
-        uFM0FkGWe9ufRF7/jSmV1B4=
-X-Google-Smtp-Source: AGRyM1tVx21c/odUuQlbedhO7DAKKPjC5OODlvkhc4H5byEROgd+PIldd4maYHhM0MHdnlfjFUwpPA==
-X-Received: by 2002:a17:907:75f3:b0:72b:1cde:2a00 with SMTP id jz19-20020a17090775f300b0072b1cde2a00mr3626863ejc.147.1657287528982;
-        Fri, 08 Jul 2022 06:38:48 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=oAqZrnSh0jfK0LLUnYpJumK2YJTHAZakB+MOOLiwb1E=;
+        b=la7ioUnEmO7oXMX4vzQZx/8ojuQUMW4JrE/r4oVMf8E98p3ywuHPBDh0eR5elesemR
+         n/y0O/d7GpX1DIMEuZ1B43L9pD7iiT0Dzsl+J48szAvxnOLSIqk4DWbk5Osy1dxy70CJ
+         hmW0/BluuIpgvGqtCdwvIY1BEqtwsue8V/8kWQOgTfZf1IBZx1vMII4LDs9uA/b8BcwX
+         m10c5d55V6LzQHSwyMB2owj8uwwMLGgORLBTvILkf1KveapTd86nUSiLonpR0cOQwGF3
+         nLHXhFV74Bj4wNJy0kiLScRTylwaQSpvckGKc5ifeMiJVANQJjxsFJQTtoC2LwYmEFB/
+         19fg==
+X-Gm-Message-State: AJIora9sspAJwIZfUNonorwfxIQ85Ff42+eEBfzpULXoKQpZlq6Zr9YB
+        pvH77w03ezez5ZbT3z+xy3b14ns6ZblzXQ==
+X-Google-Smtp-Source: AGRyM1te1UekoZ265JltFHL8NaJrPkjaM3+R9oxrHh1QBzOxt9jn/M8TJntQ9R2KNhYmrJiBIU2Clg==
+X-Received: by 2002:a05:6402:4144:b0:431:6ef0:bef7 with SMTP id x4-20020a056402414400b004316ef0bef7mr4732556eda.151.1657287530176;
+        Fri, 08 Jul 2022 06:38:50 -0700 (PDT)
 Received: from fedora.robimarko.hr (dh207-96-250.xnet.hr. [88.207.96.250])
-        by smtp.googlemail.com with ESMTPSA id d8-20020a056402000800b0043a71c376a2sm9583016edu.33.2022.07.08.06.38.47
+        by smtp.googlemail.com with ESMTPSA id d8-20020a056402000800b0043a71c376a2sm9583016edu.33.2022.07.08.06.38.49
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 08 Jul 2022 06:38:48 -0700 (PDT)
+        Fri, 08 Jul 2022 06:38:49 -0700 (PDT)
 From:   Robert Marko <robimarko@gmail.com>
 To:     agross@kernel.org, bjorn.andersson@linaro.org,
         konrad.dybcio@somainline.org, robh+dt@kernel.org,
         krzysztof.kozlowski+dt@linaro.org, linux-arm-msm@vger.kernel.org,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
 Cc:     Robert Marko <robimarko@gmail.com>
-Subject: [PATCH 1/2] arm64: dts: qcom: ipq8074: add #size/address-cells to DTSI
-Date:   Fri,  8 Jul 2022 15:38:45 +0200
-Message-Id: <20220708133846.599735-1-robimarko@gmail.com>
+Subject: [PATCH 2/2] arm64: dts: qcom: ipq8074: add interrupt-parent to DTSI
+Date:   Fri,  8 Jul 2022 15:38:46 +0200
+Message-Id: <20220708133846.599735-2-robimarko@gmail.com>
 X-Mailer: git-send-email 2.36.1
+In-Reply-To: <20220708133846.599735-1-robimarko@gmail.com>
+References: <20220708133846.599735-1-robimarko@gmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -70,59 +72,55 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add #size-cells and #address-cells to the SoC DTSI to avoid duplicating
-the same properties in board DTS files.
+Add interrupt-parent to the SoC DTSI to avoid duplicating it in each board
+DTS file.
 
-Remove the mentioned properties from current board DTS files.
+Remove interrupt-parent from existing board DTS files.
 
 Signed-off-by: Robert Marko <robimarko@gmail.com>
 ---
- arch/arm64/boot/dts/qcom/ipq8074-hk01.dts  | 2 --
- arch/arm64/boot/dts/qcom/ipq8074-hk10.dtsi | 3 ---
- arch/arm64/boot/dts/qcom/ipq8074.dtsi      | 3 +++
- 3 files changed, 3 insertions(+), 5 deletions(-)
+ arch/arm64/boot/dts/qcom/ipq8074-hk01.dts  | 1 -
+ arch/arm64/boot/dts/qcom/ipq8074-hk10.dtsi | 2 --
+ arch/arm64/boot/dts/qcom/ipq8074.dtsi      | 1 +
+ 3 files changed, 1 insertion(+), 3 deletions(-)
 
 diff --git a/arch/arm64/boot/dts/qcom/ipq8074-hk01.dts b/arch/arm64/boot/dts/qcom/ipq8074-hk01.dts
-index a73909a24935..9dfa2eefef29 100644
+index 9dfa2eefef29..b788e1605476 100644
 --- a/arch/arm64/boot/dts/qcom/ipq8074-hk01.dts
 +++ b/arch/arm64/boot/dts/qcom/ipq8074-hk01.dts
-@@ -6,8 +6,6 @@
- #include "pmp8074.dtsi"
- 
+@@ -8,7 +8,6 @@
  / {
--	#address-cells = <0x2>;
--	#size-cells = <0x2>;
  	model = "Qualcomm Technologies, Inc. IPQ8074-HK01";
  	compatible = "qcom,ipq8074-hk01", "qcom,ipq8074";
- 	interrupt-parent = <&intc>;
+-	interrupt-parent = <&intc>;
+ 
+ 	aliases {
+ 		serial0 = &blsp1_uart5;
 diff --git a/arch/arm64/boot/dts/qcom/ipq8074-hk10.dtsi b/arch/arm64/boot/dts/qcom/ipq8074-hk10.dtsi
-index ce86d9b10d69..c67181b173ca 100644
+index c67181b173ca..40415d988e4a 100644
 --- a/arch/arm64/boot/dts/qcom/ipq8074-hk10.dtsi
 +++ b/arch/arm64/boot/dts/qcom/ipq8074-hk10.dtsi
-@@ -7,9 +7,6 @@
+@@ -7,8 +7,6 @@
  #include "ipq8074.dtsi"
  
  / {
--	#address-cells = <0x2>;
--	#size-cells = <0x2>;
+-	interrupt-parent = <&intc>;
 -
- 	interrupt-parent = <&intc>;
- 
  	aliases {
+ 		serial0 = &blsp1_uart5;
+ 	};
 diff --git a/arch/arm64/boot/dts/qcom/ipq8074.dtsi b/arch/arm64/boot/dts/qcom/ipq8074.dtsi
-index 83f42e21ff43..73e7e9aad194 100644
+index 73e7e9aad194..a38b4f21ab9b 100644
 --- a/arch/arm64/boot/dts/qcom/ipq8074.dtsi
 +++ b/arch/arm64/boot/dts/qcom/ipq8074.dtsi
-@@ -8,6 +8,9 @@
- #include <dt-bindings/clock/qcom,gcc-ipq8074.h>
+@@ -13,6 +13,7 @@ / {
  
- / {
-+	#address-cells = <2>;
-+	#size-cells = <2>;
-+
  	model = "Qualcomm Technologies, Inc. IPQ8074";
  	compatible = "qcom,ipq8074";
++	interrupt-parent = <&intc>;
  
+ 	clocks: clocks {
+ 		sleep_clk: sleep_clk {
 -- 
 2.36.1
 

@@ -2,58 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C8B0A56B143
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 06:10:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 54FC556B145
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 06:13:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237003AbiGHEKQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Jul 2022 00:10:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51746 "EHLO
+        id S237001AbiGHEM6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Jul 2022 00:12:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52840 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230230AbiGHEKM (ORCPT
+        with ESMTP id S230230AbiGHEM4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Jul 2022 00:10:12 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 066A631343;
-        Thu,  7 Jul 2022 21:10:11 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Fri, 8 Jul 2022 00:12:56 -0400
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D0CA74DF1;
+        Thu,  7 Jul 2022 21:12:53 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7BB9D623A1;
-        Fri,  8 Jul 2022 04:10:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 733C6C341C0;
-        Fri,  8 Jul 2022 04:10:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1657253410;
-        bh=RKt4q5s2rd/Z1G/joTCkf/8KTmk6ZH1LUIi9T6SFsJc=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=VLrKqpCPTHZCq+G32MgSXGrzDQwGCjOsf6aa/+leinx9UrTzGtxpKrrXYOQjFk5Oz
-         ALqsC7q8YjzhnVU3wMZR/PhSNzYcFHmo8zVG+bjX7VtErHExZrMVV+64ix60WSK+B9
-         myifGoYwJ/FWjtqPvk013PjOrpDk5nPXNIboudOr+0zfJXNNhcUZWrKBOVh0bwZcVO
-         EMz0XKq/yJ4O2U79D0NQ7vBrJc3YbxwC6fWAiTeJUI2wV/tTDWGM1HYornIWhRT1l6
-         HERKAx6LW7vyBRCbg7qqe8QkOkrVz+AVq9qXE6ydd/1Fs+KdI5AwpQoa4KGlmOqMIT
-         NWe0QGkAntR+A==
-Message-ID: <2c49d634-bd8a-5a7f-0f66-65dba22bae0d@kernel.org>
-Date:   Thu, 7 Jul 2022 22:10:09 -0600
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4LfKcx21kSz4xRC;
+        Fri,  8 Jul 2022 14:12:49 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1657253571;
+        bh=fX2Jian+dbqZD4Xi7DB/wdjnbqHwKsZxYbiT10AEIp0=;
+        h=Date:From:To:Cc:Subject:From;
+        b=XyQI7NLOVt6P+WYM5Pakkd8XUv3Pl12Fj7AdKcheTa6RIgvvfSqdTjn5dOVScwJxm
+         Ct58BDA0CyJFzcV6KW5qxGfl6ytCsSRVS4NUJYFE0kV8CfNF8xJLAzZrEu0IvCbvZf
+         0i5YQq82XwZ4LZhN7ICKD+2/VAptH9e3izfWsnN4nJZbln0k8rp2I5dF7XFR+RFx3n
+         ZSJSXZeI4KBmyDlmLdrxblQz15gxY4SZhqrwcG45gqwOEP238yBQOpDnIMCDNk6gt3
+         Uf2SCmHvcbF6CbpGXhddUgAPxmNWH83Eh4aw+oLIL/m3hgHg4kdQfh9ahh5OtSPNXy
+         kt7ce8TEUPcxQ==
+Date:   Fri, 8 Jul 2022 14:12:46 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     "Paul E. McKenney" <paulmck@kernel.org>
+Cc:     Frederic Weisbecker <frederic@kernel.org>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Huacai Chen <chenhuacai@loongson.cn>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Lukas Bulwahn <lukas.bulwahn@gmail.com>
+Subject: linux-next: manual merge of the rcu tree with Linus' tree
+Message-ID: <20220708141246.43111241@canb.auug.org.au>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.11.0
-Subject: Re: [PATCH net-next v4 00/27] io_uring zerocopy send
-Content-Language: en-US
-To:     Pavel Begunkov <asml.silence@gmail.com>, io-uring@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     "David S . Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Jonathan Lemon <jonathan.lemon@gmail.com>,
-        Willem de Bruijn <willemb@google.com>,
-        Jens Axboe <axboe@kernel.dk>, kernel-team@fb.com
-References: <cover.1657194434.git.asml.silence@gmail.com>
-From:   David Ahern <dsahern@kernel.org>
-In-Reply-To: <cover.1657194434.git.asml.silence@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+Content-Type: multipart/signed; boundary="Sig_/MrJwq6tgl.9IFjTw3EWcIVo";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -61,52 +54,66 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 7/7/22 5:49 AM, Pavel Begunkov wrote:
-> NOTE: Not be picked directly. After getting necessary acks, I'll be working
->       out merging with Jakub and Jens.
-> 
-> The patchset implements io_uring zerocopy send. It works with both registered
-> and normal buffers, mixing is allowed but not recommended. Apart from usual
-> request completions, just as with MSG_ZEROCOPY, io_uring separately notifies
-> the userspace when buffers are freed and can be reused (see API design below),
-> which is delivered into io_uring's Completion Queue. Those "buffer-free"
-> notifications are not necessarily per request, but the userspace has control
-> over it and should explicitly attaching a number of requests to a single
-> notification. The series also adds some internal optimisations when used with
-> registered buffers like removing page referencing.
-> 
-> From the kernel networking perspective there are two main changes. The first
-> one is passing ubuf_info into the network layer from io_uring (inside of an
-> in kernel struct msghdr). This allows extra optimisations, e.g. ubuf_info
-> caching on the io_uring side, but also helps to avoid cross-referencing
-> and synchronisation problems. The second part is an optional optimisation
-> removing page referencing for requests with registered buffers.
-> 
-> Benchmarking with an optimised version of the selftest (see [1]), which sends
-> a bunch of requests, waits for completions and repeats. "+ flush" column posts
-> one additional "buffer-free" notification per request, and just "zc" doesn't
-> post buffer notifications at all.
-> 
-> NIC (requests / second):
-> IO size | non-zc    | zc             | zc + flush
-> 4000    | 495134    | 606420 (+22%)  | 558971 (+12%)
-> 1500    | 551808    | 577116 (+4.5%) | 565803 (+2.5%)
-> 1000    | 584677    | 592088 (+1.2%) | 560885 (-4%)
-> 600     | 596292    | 598550 (+0.4%) | 555366 (-6.7%)
-> 
-> dummy (requests / second):
-> IO size | non-zc    | zc             | zc + flush
-> 8000    | 1299916   | 2396600 (+84%) | 2224219 (+71%)
-> 4000    | 1869230   | 2344146 (+25%) | 2170069 (+16%)
-> 1200    | 2071617   | 2361960 (+14%) | 2203052 (+6%)
-> 600     | 2106794   | 2381527 (+13%) | 2195295 (+4%)
-> 
-> Previously it also brought a massive performance speedup compared to the
-> msg_zerocopy tool (see [3]), which is probably not super interesting.
-> 
+--Sig_/MrJwq6tgl.9IFjTw3EWcIVo
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-can you add a comment that the above results are for UDP.
+Hi all,
 
-You dropped comments about TCP testing; any progress there? If not, can
-you relay any issues you are hitting?
+Today's linux-next merge of the rcu tree got a conflict in:
 
+  arch/loongarch/Kconfig
+
+between commit:
+
+  7fd6ef61a5d6 ("LoongArch: Drop these obsolete selects in Kconfig")
+
+from Linus' tree and commit:
+
+  24a9c54182b3 ("context_tracking: Split user tracking Kconfig")
+
+from the rcu tree.
+
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+diff --cc arch/loongarch/Kconfig
+index 53a912befb62,130dc65f3c85..000000000000
+--- a/arch/loongarch/Kconfig
++++ b/arch/loongarch/Kconfig
+@@@ -75,7 -76,8 +75,7 @@@ config LOONGARC
+  	select HAVE_ARCH_TRACEHOOK
+  	select HAVE_ARCH_TRANSPARENT_HUGEPAGE
+  	select HAVE_ASM_MODVERSIONS
+- 	select HAVE_CONTEXT_TRACKING
++ 	select HAVE_CONTEXT_TRACKING_USER
+ -	select HAVE_COPY_THREAD_TLS
+  	select HAVE_DEBUG_STACKOVERFLOW
+  	select HAVE_DMA_CONTIGUOUS
+  	select HAVE_EXIT_THREAD
+
+--Sig_/MrJwq6tgl.9IFjTw3EWcIVo
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmLHrr4ACgkQAVBC80lX
+0Gw24Af/TcuFP3cBucEwyeVefWX2brhTs1Ig8v/3XRcTrFftPwFswVyXjMLl24a0
+hHjwwK+3WDKfwsRhqfHwVMcLgq4XGizFvPmK6inLMO20ddoCD5mOvpS78wTKPGkw
+X0+Nkb+E6SP403QmxLYJeKQ2GTa9/iqBOvg/cAPCEiW/VGlIn+h94yMY/Zs5TJo5
+VMvWsQ61b9sZPdy5mrDXKs8p+AeC+8JAPUvhxUGX0dtFN4P8NKPp67ydVaavnaYA
+LqgyVXb4hSPBt8//7Hkd/IT3F3QPvCg7meup75i7MyZRdi56ojwy5iOiZehuKTXR
+PgKGhaTsDxzP4R6OsQI+jSmY7ZMtFg==
+=qjwJ
+-----END PGP SIGNATURE-----
+
+--Sig_/MrJwq6tgl.9IFjTw3EWcIVo--

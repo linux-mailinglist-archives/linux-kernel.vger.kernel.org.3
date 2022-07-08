@@ -2,183 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C58D56B573
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 11:30:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1BEBD56B566
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 11:30:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237899AbiGHJXD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Jul 2022 05:23:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43664 "EHLO
+        id S237477AbiGHJZX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Jul 2022 05:25:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47384 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237588AbiGHJXB (ORCPT
+        with ESMTP id S237400AbiGHJZV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Jul 2022 05:23:01 -0400
-Received: from mail-io1-xd2b.google.com (mail-io1-xd2b.google.com [IPv6:2607:f8b0:4864:20::d2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41D032B63B;
-        Fri,  8 Jul 2022 02:23:00 -0700 (PDT)
-Received: by mail-io1-xd2b.google.com with SMTP id u20so19157004iob.8;
-        Fri, 08 Jul 2022 02:23:00 -0700 (PDT)
+        Fri, 8 Jul 2022 05:25:21 -0400
+Received: from mail-yw1-x112d.google.com (mail-yw1-x112d.google.com [IPv6:2607:f8b0:4864:20::112d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48457DEA2
+        for <linux-kernel@vger.kernel.org>; Fri,  8 Jul 2022 02:25:20 -0700 (PDT)
+Received: by mail-yw1-x112d.google.com with SMTP id 00721157ae682-31c89653790so141901917b3.13
+        for <linux-kernel@vger.kernel.org>; Fri, 08 Jul 2022 02:25:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=U7/XgC9RN4le35mQLRbV3pgGUKx0V1tiTu9hGjasAGI=;
-        b=SEK73+0Tdh+TtsYAOudd9GcFL0cnMQL6EwVH3NZG1Q30TqNpGfwvwxVJ2yocAZX8c+
-         tgT9JhTrxCYfJbYfH0P20SPZcvRqLljpJC9Lqbn8Ai+p4Hoy88XH5B3Ha0zLOPlN4iYB
-         3ZTQwMWmO1icAlPKhiYJqlojNR+8r3BJDGPkPcVh20KoN95cOiE3gUDbDhl+BsQJcDLy
-         mqhmI2yhnR3shxv2ESZ1BlMBJuSty2Y+4vKsbAG+W5Bwi1tXBKgHR+vlDlxZFWQW26qz
-         32gBntj83aot+8Ro4KWE1AXAxSgNtonorWstIOMmxwFD7D813RUTpEPn1XeNoGb+rtg7
-         CaVA==
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=bt6M2SPn7sqPgDE+o3lCFpdJOEHPR/4P0J6bq+ZpLW0=;
+        b=a56cDZTYX/zgUIqGbEScQvxd1p0LoQBd/n8XEeW0tgNp77yiXtbSvD0ucj/mFN0v9j
+         vhAsMdLZDPmfkX5ajXmtqBkGDgzK/LrZTvExCBIC4OpX3YaaSNEckkp5Jw1hDcDBS0X+
+         pBxpLcEGLkSFKdnmOpp6M0+5dVv7WGLIOEeZw=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=U7/XgC9RN4le35mQLRbV3pgGUKx0V1tiTu9hGjasAGI=;
-        b=kfBr5X3HeN2JY++eG/ItYFqpKtJ3aTVTCms68d7RuG/FnxySOBcH3IkBiHy2dgPQ27
-         3GSe+bf/sQ27l0DzGkHfRWcUBU21QIDaORBJF4yM+xuGtdoB+Hf6n9mf6tVtJjLwrB91
-         Vq9t45elgbmWJVegYGJ9tKNI6mcfYJFjRsTSE/fQ9vw/BG3n32mHAKkKdrUuORR7vRiE
-         HsorF5gUi1uYm1ipirAr1u753hQiJsYYRqQXNC+9OLE89FtW1QMkJTPWhn1fPNPRZ2hM
-         rBFzyMWTOEyvaeEC4rRdTkBnpdYN0EqBDGYJC5LNvZlrScqnRCe9P2Ee/lGZ6yb0Wlax
-         /BYw==
-X-Gm-Message-State: AJIora8adFYtAnlzPVXaOBvXltXwivHQHsaqzxwoGYqcyfMAWpqYJjI6
-        EKjLMdngXyficDf/06xXBO0=
-X-Google-Smtp-Source: AGRyM1t2xWCoYr09Jo0vvMoTX8WrRJ5XuGWsryJmy0bfppS9LrrILQXKs9QWucfoDSuMtqnmbOifuQ==
-X-Received: by 2002:a05:6602:164a:b0:678:682f:568b with SMTP id y10-20020a056602164a00b00678682f568bmr1403979iow.187.1657272179559;
-        Fri, 08 Jul 2022 02:22:59 -0700 (PDT)
-Received: from [192.168.1.145] ([207.188.167.132])
-        by smtp.gmail.com with ESMTPSA id l10-20020a92d94a000000b002dc616d93acsm63916ilq.28.2022.07.08.02.22.55
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 08 Jul 2022 02:22:58 -0700 (PDT)
-Message-ID: <14bf5e6b-4230-fffc-4134-c3015cf4d262@gmail.com>
-Date:   Fri, 8 Jul 2022 11:22:54 +0200
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=bt6M2SPn7sqPgDE+o3lCFpdJOEHPR/4P0J6bq+ZpLW0=;
+        b=wX28nuzzSGAT2pZcnkcyqqrSo0hE8D/RA3cSpdod+QO+WFKq2NjRfUtelmDTAUQxi6
+         iZ133CSoWRvvR29apc6DvSz3E32YbyEAir4srUBGQgSf1fcgWfTD4dShHa+f0ulJQjUM
+         RHjDsEzxystsYLXRXnLBRQKPWCxesG23MtlgchPHBOFLR4u/gGE4LcnfFJmxqx0rKCOO
+         xNch8sxk/kgFzCCV6Baxme1S8iy9u765mahKiziI6tRBKnqfJUxSH3/IX6lmqFjOouJR
+         JpJceUEUWdWxcH50s2xMvFNreOZCYyoevddl0APOdpACnsB1FFP8iKl1s0uNcMN9x2eQ
+         OMcQ==
+X-Gm-Message-State: AJIora+VUFuJgib7gyMFk/BxfImqIxy/w3sQEHlBG5gEWNvZbuUqUo6G
+        2Xmkq0XgxjeI08kklcj6LvtNHQkK5PC2jdsicss9pg==
+X-Google-Smtp-Source: AGRyM1vtGSuisdYLfNmPZk8yOb9MscT55bQFKNkQSzG0DCwoxrkPWyEk/g0cOBLqJZgs0WE7ycZ7QLAAiDX16u49jQY=
+X-Received: by 2002:a05:690c:316:b0:314:2147:2b90 with SMTP id
+ bg22-20020a05690c031600b0031421472b90mr2782649ywb.318.1657272319442; Fri, 08
+ Jul 2022 02:25:19 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH net v3] stmmac: dwmac-mediatek: fix clock issue
-Content-Language: en-US
-To:     Biao Huang <biao.huang@mediatek.com>,
-        David Miller <davem@davemloft.net>
-Cc:     Giuseppe Cavallaro <peppe.cavallaro@st.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Jose Abreu <joabreu@synopsys.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+References: <20220701105237.932332-1-wenst@chromium.org> <20220701105237.932332-5-wenst@chromium.org>
+ <daf5e3e6-8a13-3c16-5fa6-9c4e69883c49@xs4all.nl>
+In-Reply-To: <daf5e3e6-8a13-3c16-5fa6-9c4e69883c49@xs4all.nl>
+From:   Chen-Yu Tsai <wenst@chromium.org>
+Date:   Fri, 8 Jul 2022 17:25:08 +0800
+Message-ID: <CAGXv+5GR1+fgabiVR6SbxsqAKd03gDoByYO0KMSoX3-i2eLbWw@mail.gmail.com>
+Subject: Re: [PATCH 4/6] media: mediatek: vcodec: Revert driver name change in
+ encoder capabilities
+To:     Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Cc:     Tiffany Lin <tiffany.lin@mediatek.com>,
+        Andrew-CT Chen <andrew-ct.chen@mediatek.com>,
+        Yunfei Dong <yunfei.dong@mediatek.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
         AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>, netdev@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-mediatek@lists.infradead.org, macpaul.lin@mediatek.com
-References: <20220708083937.27334-1-biao.huang@mediatek.com>
- <20220708083937.27334-2-biao.huang@mediatek.com>
-From:   Matthias Brugger <matthias.bgg@gmail.com>
-In-Reply-To: <20220708083937.27334-2-biao.huang@mediatek.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        <angelogioacchino.delregno@collabora.com>,
+        Nicolas Dufresne <nicolas.dufresne@collabora.com>,
+        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mediatek@lists.infradead.org,
+        Matthias Brugger <matthias.bgg@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Fri, Jul 8, 2022 at 5:19 PM Hans Verkuil <hverkuil-cisco@xs4all.nl> wrote:
+>
+>
+>
+> On 7/1/22 12:52, Chen-Yu Tsai wrote:
+> > This partially reverts commit fd9f8050e355d7fd1e126cd207b06c96cde7f783.
+> >
+> > The driver name field should contain the actual driver name, not some
+> > otherwise unused string macro from the driver. To make this clear,
+> > copy the name from the driver's name field.
+> >
+> > Fixes: fd9f8050e355 ("media: mediatek: vcodec: Change encoder v4l2 capability value")
+> > Signed-off-by: Chen-Yu Tsai <wenst@chromium.org>
+> > ---
+> >  drivers/media/platform/mediatek/vcodec/mtk_vcodec_drv.h | 1 +
+> >  drivers/media/platform/mediatek/vcodec/mtk_vcodec_enc.c | 6 ++++--
+> >  2 files changed, 5 insertions(+), 2 deletions(-)
+> >
+> > diff --git a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_drv.h b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_drv.h
+> > index 4140b4dd85bf..dc6aada882d9 100644
+> > --- a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_drv.h
+> > +++ b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_drv.h
+> > @@ -22,6 +22,7 @@
+> >  #define MTK_VCODEC_DRV_NAME  "mtk_vcodec_drv"
+>
+> Note that this patch removes the last user of this define, so
+> you can drop that define as well.
+>
+> >  #define MTK_VCODEC_DEC_NAME  "mtk-vcodec-dec"
+> >  #define MTK_VCODEC_ENC_NAME  "mtk-vcodec-enc"
+> > +#define MTK_PLATFORM_STR     "platform:mt8173"
+>
+> Why add this?
+>
+> >
+> >  #define MTK_VCODEC_MAX_PLANES        3
+> >  #define MTK_V4L2_BENCHMARK   0
+> > diff --git a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_enc.c b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_enc.c
+> > index ccc753074816..30aac54d97fa 100644
+> > --- a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_enc.c
+> > +++ b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_enc.c
+> > @@ -232,11 +232,13 @@ static int mtk_vcodec_enc_get_chip_name(void *priv)
+> >  static int vidioc_venc_querycap(struct file *file, void *priv,
+> >                               struct v4l2_capability *cap)
+> >  {
+> > +     struct mtk_vcodec_ctx *ctx = fh_to_ctx(priv);
+> > +     struct device *dev = &ctx->dev->plat_dev->dev;
+> >       int platform_name = mtk_vcodec_enc_get_chip_name(priv);
+> >
+> > -     strscpy(cap->driver, MTK_VCODEC_DRV_NAME, sizeof(cap->driver));
+> > -     strscpy(cap->card, MTK_VCODEC_ENC_NAME, sizeof(cap->card));
+> > +     strscpy(cap->driver, dev->driver->name, sizeof(cap->driver));
+> >       snprintf(cap->bus_info, sizeof(cap->bus_info), "platform:mt%d-enc", platform_name);
+> > +     strscpy(cap->card, MTK_PLATFORM_STR, sizeof(cap->card));
+>
+> The next patch changes cap->card again, and leaves MTK_PLATFORM_STR unused.
+>
+> >
+> >       return 0;
+> >  }
+>
+> I think it makes more sense to combine patches 1-3 and 4-6 into single
+> patches, one for the decoder, one for the encoder. It's easier to follow
+> since they all touch on the same querycap function.
 
+I wrote this series as a revert plus additional changes. As you said, it
+makes sense to squash three patches into one.
 
-On 08/07/2022 10:39, Biao Huang wrote:
-> Since clocks are handled in mediatek_dwmac_clks_config(),
-> remove the clocks configuration in init()/exit(), and
-> invoke mediatek_dwmac_clks_config instead.
-> 
-> This issue is found in suspend/resume test.
-> 
+I'll respin.
 
-Commit message is rather confusing. Basically you are moving the clock enable 
-into probe instead of init and remove it from exit. That means, clocks get 
-enabled earlier and don't get disabled if the module gets unloaded. That doesn't 
-sound correct, I think we would at least need to disable the clocks in remove 
-function.
-
-I suppose that suspend calls exit and that there was a problem when we disable 
-the clocks there. Is this a HW issue that has no other possible fix?
-
-Regards,
-Matthias
-
-> Fixes: 3186bdad97d5 ("stmmac: dwmac-mediatek: add platform level clocks management")
-> Signed-off-by: Biao Huang <biao.huang@mediatek.com>
-> ---
->   .../ethernet/stmicro/stmmac/dwmac-mediatek.c  | 36 +++++--------------
->   1 file changed, 9 insertions(+), 27 deletions(-)
-> 
-> diff --git a/drivers/net/ethernet/stmicro/stmmac/dwmac-mediatek.c b/drivers/net/ethernet/stmicro/stmmac/dwmac-mediatek.c
-> index 6ff88df58767..e86f3e125cb4 100644
-> --- a/drivers/net/ethernet/stmicro/stmmac/dwmac-mediatek.c
-> +++ b/drivers/net/ethernet/stmicro/stmmac/dwmac-mediatek.c
-> @@ -576,32 +576,7 @@ static int mediatek_dwmac_init(struct platform_device *pdev, void *priv)
->   		}
->   	}
->   
-> -	ret = clk_bulk_prepare_enable(variant->num_clks, plat->clks);
-> -	if (ret) {
-> -		dev_err(plat->dev, "failed to enable clks, err = %d\n", ret);
-> -		return ret;
-> -	}
-> -
-> -	ret = clk_prepare_enable(plat->rmii_internal_clk);
-> -	if (ret) {
-> -		dev_err(plat->dev, "failed to enable rmii internal clk, err = %d\n", ret);
-> -		goto err_clk;
-> -	}
-> -
->   	return 0;
-> -
-> -err_clk:
-> -	clk_bulk_disable_unprepare(variant->num_clks, plat->clks);
-> -	return ret;
-> -}
-> -
-> -static void mediatek_dwmac_exit(struct platform_device *pdev, void *priv)
-> -{
-> -	struct mediatek_dwmac_plat_data *plat = priv;
-> -	const struct mediatek_dwmac_variant *variant = plat->variant;
-> -
-> -	clk_disable_unprepare(plat->rmii_internal_clk);
-> -	clk_bulk_disable_unprepare(variant->num_clks, plat->clks);
->   }
->   
->   static int mediatek_dwmac_clks_config(void *priv, bool enabled)
-> @@ -643,7 +618,6 @@ static int mediatek_dwmac_common_data(struct platform_device *pdev,
->   	plat->addr64 = priv_plat->variant->dma_bit_mask;
->   	plat->bsp_priv = priv_plat;
->   	plat->init = mediatek_dwmac_init;
-> -	plat->exit = mediatek_dwmac_exit;
->   	plat->clks_config = mediatek_dwmac_clks_config;
->   	if (priv_plat->variant->dwmac_fix_mac_speed)
->   		plat->fix_mac_speed = priv_plat->variant->dwmac_fix_mac_speed;
-> @@ -712,13 +686,21 @@ static int mediatek_dwmac_probe(struct platform_device *pdev)
->   	mediatek_dwmac_common_data(pdev, plat_dat, priv_plat);
->   	mediatek_dwmac_init(pdev, priv_plat);
->   
-> +	ret = mediatek_dwmac_clks_config(priv_plat, true);
-> +	if (ret)
-> +		return ret;
-> +
->   	ret = stmmac_dvr_probe(&pdev->dev, plat_dat, &stmmac_res);
->   	if (ret) {
->   		stmmac_remove_config_dt(pdev, plat_dat);
-> -		return ret;
-> +		goto err_drv_probe;
->   	}
->   
->   	return 0;
-> +
-> +err_drv_probe:
-> +	mediatek_dwmac_clks_config(priv_plat, false);
-> +	return ret;
->   }
->   
->   static const struct of_device_id mediatek_dwmac_match[] = {
+ChenYu

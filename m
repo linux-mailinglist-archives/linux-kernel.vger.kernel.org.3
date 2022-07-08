@@ -2,207 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DA6CE56BAB6
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 15:30:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A496856BAC5
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 15:30:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238123AbiGHN3t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Jul 2022 09:29:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35862 "EHLO
+        id S238170AbiGHNaT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Jul 2022 09:30:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36484 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238111AbiGHN3k (ORCPT
+        with ESMTP id S238151AbiGHNaR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Jul 2022 09:29:40 -0400
-Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42A8E2CC99;
-        Fri,  8 Jul 2022 06:29:39 -0700 (PDT)
-Received: by mail-ej1-x635.google.com with SMTP id b11so374014eju.10;
-        Fri, 08 Jul 2022 06:29:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=SitIzPNrykTUBpjOjgqXfttGV3muXZK07qKfzNiff9g=;
-        b=CFueulnM0SOTmW9AMBvEzSiCcP/V3J/9E6QKLzMQbBvlL9NAGQ9w8Xduk8WPIsf8zQ
-         rLan/VyQrdXZouRD1eWkztmeVcRgWAC9+Y9wRPUrW6+vFycoT5VMsxk9ziluu4OdWwhz
-         sbE5iDA/w/RolzziNFT0rooawNH58xu3mpqa28XoIQc/rGhaKASgcOaD4ZzX9OTarXz4
-         YgNjKWB+6heMp2cp7v7PL8HjDhyxPsJ5iZyA+4DJ8tvQcTGGyUuBbRII6xTIEWmkZUMe
-         t3QC1Uwv2pVXDicTHZvo0FieT/2oPowe18XuLeQKUIdVovmZHiAf5aEBU28SS9K5ztkh
-         pu8A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=SitIzPNrykTUBpjOjgqXfttGV3muXZK07qKfzNiff9g=;
-        b=Sv5l83agHK5MJZEXZujhKSmPacSbMQ3w4B42Jxh3zvzYnv8of3KNBNTtptxPqdxfw3
-         g1C7ZrvUc6knoSino7lJE4q2WIf7AvzBZS5Xg66L99sQWe+shIn1cpzKf6HbyXuPR02h
-         +XJfXZgWcJyQfXxKFl8MvlOtYPYbqZZ0ekrAJmS6AjCAiVS/f6YUVlUQ9VDHHZCGZ9Uj
-         fWm/Lg19+W6FYsyyHViX83tdBjje+1g2D7lYChh5wYSMYjkEFz/4kg0pTrzvcKAzKWj/
-         h16vwCLOj0i61p28ooZT0xLx+FcDHN6kcNQb33BX2R8Or2asYD2/ELlR352Vu7vjZ1LR
-         luWQ==
-X-Gm-Message-State: AJIora94pOJ7vhnVqUN0vfsgSJG9QOejItPZh5DfltoOlafJ0rzBphwx
-        CGzUFeLttH9HMNMkE6A79uY=
-X-Google-Smtp-Source: AGRyM1sLvVYYfiQq/coGi26gIDJfJWfPAI5lwfuGo71IIZ2PL3ZlCSrfP8F9V69NWGOggV3ZkImVRg==
-X-Received: by 2002:a17:907:9715:b0:726:2a3b:9f84 with SMTP id jg21-20020a170907971500b007262a3b9f84mr3533451ejc.414.1657286977788;
-        Fri, 08 Jul 2022 06:29:37 -0700 (PDT)
-Received: from fedora.robimarko.hr (dh207-96-250.xnet.hr. [88.207.96.250])
-        by smtp.googlemail.com with ESMTPSA id q4-20020a1709064cc400b006fec4ee28d0sm20170398ejt.189.2022.07.08.06.29.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 08 Jul 2022 06:29:37 -0700 (PDT)
-From:   Robert Marko <robimarko@gmail.com>
-To:     agross@kernel.org, bjorn.andersson@linaro.org,
-        konrad.dybcio@somainline.org, amitk@kernel.org,
-        thara.gopinath@gmail.com, rafael@kernel.org,
-        daniel.lezcano@linaro.org, rui.zhang@intel.com, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, linux-arm-msm@vger.kernel.org,
-        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Robert Marko <robimarko@gmail.com>
-Subject: [PATCH v5 5/5] arm64: dts: ipq8074: add thermal nodes
-Date:   Fri,  8 Jul 2022 15:29:30 +0200
-Message-Id: <20220708132930.595897-5-robimarko@gmail.com>
-X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220708132930.595897-1-robimarko@gmail.com>
-References: <20220708132930.595897-1-robimarko@gmail.com>
+        Fri, 8 Jul 2022 09:30:17 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6DD62CCB5;
+        Fri,  8 Jul 2022 06:30:15 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2674F6272E;
+        Fri,  8 Jul 2022 13:30:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 7D6B5C341CB;
+        Fri,  8 Jul 2022 13:30:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1657287014;
+        bh=8mJMsLzLnFaXdAAHdnwJWxIAa9x3j7A+VkciPYc9Tn0=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=Gr3+6HhM7MMD8zPk4VRlfOyq1nxlctXLNDPq+umc7VG3jUAuBlwhe19Jv78bjnf9f
+         NLCd79Dk/R50f6qAuqlmtndeBZ4Xh4zWSURxX+EItWRGzkBzCeyaP1KGYGDlIZ0VpG
+         ub/G4vHUS7r3BXta5HqMGqwJskE+EbgdrPJHLKWgedjMcIXVs5T/hOTCr3kDF+vg7M
+         yeXJ6IO/vIRdq6DGX9A4Vrc3eoUhcW90IlD+ZVsB4/DyZyZQdQf1OF6eIgBr923bVO
+         dV2xI6nOEGpKKgo2qUUbvIt8aLWsEbTWQ+0hcCGb2KnF00MwW6Eg/VytBkF+jID2H5
+         JGZGbzz8TCD3Q==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 61E3EE45BE1;
+        Fri,  8 Jul 2022 13:30:14 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Subject: Re: [PATCH net-next v2] net: ag71xx: switch to napi_build_skb() to reuse
+ skbuff_heads
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <165728701439.7845.10823920521689241514.git-patchwork-notify@kernel.org>
+Date:   Fri, 08 Jul 2022 13:30:14 +0000
+References: <20220707141056.2644-1-liew.s.piaw@gmail.com>
+In-Reply-To: <20220707141056.2644-1-liew.s.piaw@gmail.com>
+To:     Sieng-Piaw Liew <liew.s.piaw@gmail.com>
+Cc:     chris.snook@gmail.com, davem@davemloft.net, edumazet@google.com,
+        kuba@kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-IPQ8074 has a tsens v2.3.0 peripheral which monitors
-temperatures around the various subsystems on the
-die.
+Hello:
 
-So lets add the tsens and thermal zone nodes, passive
-CPU cooling will come in later patches after CPU frequency
-scaling is supported.
+This patch was applied to netdev/net-next.git (master)
+by David S. Miller <davem@davemloft.net>:
 
-Signed-off-by: Robert Marko <robimarko@gmail.com>
----
-Changes in v5:
-* Rebase to apply on next-20220708
----
- arch/arm64/boot/dts/qcom/ipq8074.dtsi | 96 +++++++++++++++++++++++++++
- 1 file changed, 96 insertions(+)
+On Thu,  7 Jul 2022 22:10:56 +0800 you wrote:
+> napi_build_skb() reuses NAPI skbuff_head cache in order to save some
+> cycles on freeing/allocating skbuff_heads on every new Rx or completed
+> Tx.
+> Use napi_consume_skb() to feed the cache with skbuff_heads of completed
+> Tx, so it's never empty. The budget parameter is added to indicate NAPI
+> context, as a value of zero can be passed in the case of netpoll.
+> 
+> [...]
 
-diff --git a/arch/arm64/boot/dts/qcom/ipq8074.dtsi b/arch/arm64/boot/dts/qcom/ipq8074.dtsi
-index 2f15a1ec4aae..68197d633271 100644
---- a/arch/arm64/boot/dts/qcom/ipq8074.dtsi
-+++ b/arch/arm64/boot/dts/qcom/ipq8074.dtsi
-@@ -308,6 +308,16 @@ prng: rng@e3000 {
- 			status = "disabled";
- 		};
- 
-+		tsens: thermal-sensor@4a9000 {
-+			compatible = "qcom,ipq8074-tsens";
-+			reg = <0x4a9000 0x1000>, /* TM */
-+			      <0x4a8000 0x1000>; /* SROT */
-+			interrupts = <GIC_SPI 184 IRQ_TYPE_LEVEL_HIGH>;
-+			interrupt-names = "combined";
-+			#qcom,sensors = <16>;
-+			#thermal-sensor-cells = <1>;
-+		};
-+
- 		cryptobam: dma-controller@704000 {
- 			compatible = "qcom,bam-v1.7.0";
- 			reg = <0x00704000 0x20000>;
-@@ -909,4 +919,90 @@ timer {
- 			     <GIC_PPI 4 (GIC_CPU_MASK_SIMPLE(4) | IRQ_TYPE_LEVEL_LOW)>,
- 			     <GIC_PPI 1 (GIC_CPU_MASK_SIMPLE(4) | IRQ_TYPE_LEVEL_LOW)>;
- 	};
-+
-+	thermal-zones {
-+		nss-top-thermal {
-+			polling-delay-passive = <250>;
-+			polling-delay = <1000>;
-+
-+			thermal-sensors = <&tsens 4>;
-+		};
-+
-+		nss0-thermal {
-+			polling-delay-passive = <250>;
-+			polling-delay = <1000>;
-+
-+			thermal-sensors = <&tsens 5>;
-+		};
-+
-+		nss1-thermal {
-+			polling-delay-passive = <250>;
-+			polling-delay = <1000>;
-+
-+			thermal-sensors = <&tsens 6>;
-+		};
-+
-+		wcss-phya0-thermal {
-+			polling-delay-passive = <250>;
-+			polling-delay = <1000>;
-+
-+			thermal-sensors = <&tsens 7>;
-+		};
-+
-+		wcss-phya1-thermal {
-+			polling-delay-passive = <250>;
-+			polling-delay = <1000>;
-+
-+			thermal-sensors = <&tsens 8>;
-+		};
-+
-+		cpu0_thermal: cpu0-thermal {
-+			polling-delay-passive = <250>;
-+			polling-delay = <1000>;
-+
-+			thermal-sensors = <&tsens 9>;
-+		};
-+
-+		cpu1_thermal: cpu1-thermal {
-+			polling-delay-passive = <250>;
-+			polling-delay = <1000>;
-+
-+			thermal-sensors = <&tsens 10>;
-+		};
-+
-+		cpu2_thermal: cpu2-thermal {
-+			polling-delay-passive = <250>;
-+			polling-delay = <1000>;
-+
-+			thermal-sensors = <&tsens 11>;
-+		};
-+
-+		cpu3_thermal: cpu3-thermal {
-+			polling-delay-passive = <250>;
-+			polling-delay = <1000>;
-+
-+			thermal-sensors = <&tsens 12>;
-+		};
-+
-+		cluster_thermal: cluster-thermal {
-+			polling-delay-passive = <250>;
-+			polling-delay = <1000>;
-+
-+			thermal-sensors = <&tsens 13>;
-+		};
-+
-+		wcss-phyb0-thermal {
-+			polling-delay-passive = <250>;
-+			polling-delay = <1000>;
-+
-+			thermal-sensors = <&tsens 14>;
-+		};
-+
-+		wcss-phyb1-thermal {
-+			polling-delay-passive = <250>;
-+			polling-delay = <1000>;
-+
-+			thermal-sensors = <&tsens 15>;
-+		};
-+	};
- };
+Here is the summary with links:
+  - [net-next,v2] net: ag71xx: switch to napi_build_skb() to reuse skbuff_heads
+    https://git.kernel.org/netdev/net-next/c/67d7ebdeb2d5
+
+You are awesome, thank you!
 -- 
-2.36.1
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
 

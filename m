@@ -2,162 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 76B2756B5EC
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 11:48:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 592B356B5EF
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 11:48:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237157AbiGHJor (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Jul 2022 05:44:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34138 "EHLO
+        id S237678AbiGHJpF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Jul 2022 05:45:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34410 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237469AbiGHJop (ORCPT
+        with ESMTP id S237533AbiGHJpD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Jul 2022 05:44:45 -0400
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1AD6B796A6;
-        Fri,  8 Jul 2022 02:44:43 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4LfSzq2YbFz4xj2;
-        Fri,  8 Jul 2022 19:44:39 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1657273479;
-        bh=dOThPvRv/B3YXUF/B31FdS2qXJrB/bxfQd3x43Yqbn4=;
-        h=Date:From:To:Cc:Subject:From;
-        b=QSwRgpgWE+eUCNkdJj7jeQlhUvSvqke8YhNF8hL6BfA+4Kqu1HN6DClvAbbLblMcN
-         HL0nZM5o/jzKZ0LCyO7EGsSI+ZYwmOsdB7l0lPWbkV4mA5P0R6ZGGD+2vSVc7nnp/u
-         //IBYr2aYEqLN6W7jpztkeshhFlaAInOJrDuTHkO36MX/Mvbeobe3+rkCM0KIFl3c3
-         I3PxHQ8p39pl6R4VzzkjTYuCXuh1nVXML8ZMv2t/QZKr2oF8boMNXgUPqEryhdTVmp
-         yGtc2fEJ0g8q6SzlyH2K2Ui46QB+XI+HbfsHfK3st0ZOD+9cHVHP2KeRyK2eQnsBC6
-         HCNjvGAdD7ypA==
-Date:   Fri, 8 Jul 2022 19:44:37 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Andrew Morton <akpm@linux-foundation.org>,
-        "Darrick J. Wong" <djwong@kernel.org>,
-        David Chinner <david@fromorbit.com>
-Cc:     <linux-xfs@vger.kernel.org>,
-        Shiyang Ruan <ruansy.fnst@fujitsu.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: build failure after merge of the mm tree
-Message-ID: <20220708194437.7eafe774@canb.auug.org.au>
+        Fri, 8 Jul 2022 05:45:03 -0400
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.22])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0AE8F7B36B;
+        Fri,  8 Jul 2022 02:45:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1657273496;
+        bh=bYx4iLT2+ds595MZ/RgQpapL+sI1v2/qdy+2mnOoejI=;
+        h=X-UI-Sender-Class:Date:From:To:Subject;
+        b=fl5i/kXWL2d8amI6IcaTHVHEt2SD8FcTQ4CeayzrGQw78g+ZacI7aJGL2e9bO0e2k
+         1zmi130GmS8ro7erbbMvAFYI+HmssU9fghoZoZ5r0ELNovbFSze+K/vMpb5x4+sluk
+         mYCGx5Z9S9t44PjJA0gI19fSQm8opqPXdleW2mww=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from p100 ([92.116.171.120]) by mail.gmx.net (mrgmx105
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1Mw9UK-1nHdsx3JZM-00s581; Fri, 08
+ Jul 2022 11:44:55 +0200
+Date:   Fri, 8 Jul 2022 11:44:54 +0200
+From:   Helge Deller <deller@gmx.de>
+To:     mcgrof@kernel.org, jeyu@kernel.org, linux-modules@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-parisc@vger.kernel.org
+Subject: [PATCH v3] modules: Ensure natural alignment for .altinstructions
+ and __bug_table sections
+Message-ID: <Ysf8lojv8UMZsvBM@p100>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/2aJEc2Hu6P5l7_NRF=TJvZr";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Provags-ID: V03:K1:3cVGiRXOX4mAe/DFDRgXP7qMYZvWpKJm3OwwLkEoz0F63K6wYKD
+ LdtPzv9lLfUTA1vwkcJEW2UNn7DVd2t23MUGZ2jDwxb6iGQOfbHRmcsSLp4lsm2dyJ8HvaM
+ BtSYWOQKd7EdbVuVuAN7KN2bi+SVNqnV/L6p0TPGSeMwKG42O+oRzwypmtGDFn4N4Sah+WT
+ B8ySHv7scaGq+8wS9T4Mw==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:LfMUMTxEuwA=:hWQaqpScGsQGXdy/bEBrkc
+ OI+wMS5aMY48/brHD1YMGvn3JlYIRl7NGkgRhe6Yus11p3IQ5CkLjXgDbWW4Nxq8Rjo5kGQst
+ 0DhLhCHHTVX6stvlHMmeMYaAtD20FqCuw7bqsxi37wu/AQqx+Dka7a/5us/KYpKNuw7RsBUJE
+ 9iaqrCThBVTKezgzTncwyN//H847i4RDKvZoCHx55V2D+iq6JYSl8koCK9smB1jLa06TiLWNo
+ NibByh2erZq8i1aXKK5YyGoKgHg6KaNkmTpPprliAXogjnQ0yoqCq+j6A6Dcq+HvlxYrgYGwp
+ Aa81xoB4wrr/m9LTp5oTJHivHgJieIg1lfdiyot06zOj0mfR6wFZ07z9KEfP0ljls/40K+KUO
+ TgF4Gzdwj5PmEakWGUqohK2kmk6uLDobTjlOZLrv9ILmLOdbzJ1BmdGJ6QOD2oE/VQRkVezRs
+ p7j7Sgzavmxq7LppmiYUyGZzjDAaq5ADo64RAWLM+Vioj+pHzTWGPWfQ1V2JRtKU1hd8rBi3v
+ LPdmSOk/BR+i6tPGXnE/R8LELCpy72huorlgKDXH2L02SxMKMBkDyHt4kncuISyAjnIGnffgj
+ 3FngTbsCFv3N88AY6OapIkjYxlStA5kxkvbGAXbKiwXk24YxHKC5PVNONldXVxfFsw9daq16d
+ fDXIIU98DXijGQ25riVrU2rJi/4ulHhZsyBEEHZG/i8a+/BxAkIPFF7O53OCab3dmOaYJV2Rb
+ qWalxBdarS3K519vkrJwO1mf4xqTSC8O41pfZ4t8AmsHLFPVCXr4XbkHFcV3YsgOA06Tr74mH
+ 9ieDe2UHAfKLpoBXF2LWepyLAyUhSeJkGWoCeJoqSTcYSDYzISdXXppegIfolNos4eJ8wh2tp
+ ny4p+mVf0PpTKt+5Z8FBW6j/5oxPhgM30PJcZVyUQZYzDDCPmX+yWkrHETZBCMNa0jPxOZDsh
+ BGTnqj3YryXLPC/HbfMLcFLbyDASzApISrYQ4Ho3x2RZ590Z4hJSk4vm90dgxTW83AD4C/Og2
+ TEpPNTxh5X8wEnGuQpF2F0PMa5pteA2fvN58VDzyB9U5EGd7HK6MLvJ2Qo4nvYuwxIH4qvt4O
+ yq7nY93WSVO2f9yEcIlQwBJz01SjYpCRNqiDt023+2KMlKvXlCsb0eW8g==
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/2aJEc2Hu6P5l7_NRF=TJvZr
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+In the kernel image vmlinux.lds.S linker scripts the .altinstructions
+and __bug_table sections are 4- or 8-byte aligned because they hold 32-
+and/or 64-bit values.
 
-Hi all,
+Most architectures use altinstructions and BUG() or WARN() in modules as
+well, but in the module linker script (module.lds.S) those sections are
+currently missing. As consequence the linker will store their content
+byte-aligned by default, which then can lead to unnecessary unaligned
+memory accesses by the CPU when those tables are processed at runtime.
 
-After merging the mm tree, today's linux-next build (x86_64 allmodconfig)
-failed like this:
+Usually unaligned memory accesses are unnoticed, because either the
+hardware (as on x86 CPUs) or in-kernel exception handlers (e.g. on
+parisc or sparc) emulate and fix them up at runtime. Nevertheless, such
+unaligned accesses introduce a performance penalty and can even crash
+the kernel if there is a bug in the unalignment exception handlers
+(which happened once to me on the parisc architecture and which is why I
+noticed that issue at all).
 
-fs/xfs/xfs_notify_failure.c: In function 'xfs_dax_notify_ddev_failure':
-fs/xfs/xfs_notify_failure.c:126:44: error: passing argument 1 of 'xfs_alloc=
-_read_agf' from incompatible pointer type [-Werror=3Dincompatible-pointer-t=
-ypes]
-  126 |                 error =3D xfs_alloc_read_agf(mp, tp, agno, 0, &agf_=
-bp);
-      |                                            ^~
-      |                                            |
-      |                                            struct xfs_mount *
-In file included from fs/xfs/xfs_notify_failure.c:12:
-fs/xfs/libxfs/xfs_alloc.h:173:42: note: expected 'struct xfs_perag *' but a=
-rgument is of type 'struct xfs_mount *'
-  173 | int xfs_alloc_read_agf(struct xfs_perag *pag, struct xfs_trans *tp,=
- int flags,
-      |                        ~~~~~~~~~~~~~~~~~~^~~
-fs/xfs/xfs_notify_failure.c:126:25: error: too many arguments to function '=
-xfs_alloc_read_agf'
-  126 |                 error =3D xfs_alloc_read_agf(mp, tp, agno, 0, &agf_=
-bp);
-      |                         ^~~~~~~~~~~~~~~~~~
-In file included from fs/xfs/xfs_notify_failure.c:12:
-fs/xfs/libxfs/xfs_alloc.h:173:5: note: declared here
-  173 | int xfs_alloc_read_agf(struct xfs_perag *pag, struct xfs_trans *tp,=
- int flags,
-      |     ^~~~~~~~~~~~~~~~~~
-cc1: all warnings being treated as errors
+This patch fixes a non-critical issue and might be backported at any time.
+It's trivial and shouldn't introduce any regression because it simply
+tells the linker to use a different (8-byte alignment) for those
+sections by default.
 
-Caused by commit
-
-  469a9c74c119 ("xfs: implement ->notify_failure() for XFS")
-
-interacting with commit
-
-  c4829aba9c8d ("xfs: pass perag to xfs_alloc_read_agf()")
-
-from the xfs tree.
-
-I have applied the following merge fix patch.
-
-From: Stephen Rothwell <sfr@canb.auug.org.au>
-Date: Fri, 8 Jul 2022 19:11:56 +1000
-Subject: [PATCH] fix up for "xfs: pass perag to xfs_alloc_read_agf()"
-
-interacting with "xfs: implement ->notify_failure() for XFS"
-
-Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
+Signed-off-by: Helge Deller <deller@gmx.de>
+Link: https://lore.kernel.org/all/Yr8%2Fgr8e8I7tVX4d@p100/
 ---
- fs/xfs/xfs_notify_failure.c | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+ scripts/module.lds.S | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/fs/xfs/xfs_notify_failure.c b/fs/xfs/xfs_notify_failure.c
-index aa8dc27c599c..f3c62c19475e 100644
---- a/fs/xfs/xfs_notify_failure.c
-+++ b/fs/xfs/xfs_notify_failure.c
-@@ -18,6 +18,7 @@
- #include "xfs_rmap_btree.h"
- #include "xfs_rtalloc.h"
- #include "xfs_trans.h"
-+#include "xfs_ag.h"
-=20
- #include <linux/mm.h>
- #include <linux/dax.h>
-@@ -122,8 +123,10 @@ xfs_dax_notify_ddev_failure(
- 		struct failure_info	notify;
- 		struct xfs_agf		*agf;
- 		xfs_agblock_t		agend;
-+		struct xfs_perag	*pag;
-=20
--		error =3D xfs_alloc_read_agf(mp, tp, agno, 0, &agf_bp);
-+		pag =3D xfs_perag_get(mp, agno);
-+		error =3D xfs_alloc_read_agf(pag, tp, 0, &agf_bp);
- 		if (error)
- 			break;
-=20
---=20
-2.35.1
+--
+Changes:
+v3: updated commit message
+v2: updated commit message
 
---=20
-Cheers,
-Stephen Rothwell
+diff --git a/scripts/module.lds.S b/scripts/module.lds.S
+index 1d0e1e4dc3d2..3a3aa2354ed8 100644
+--- a/scripts/module.lds.S
++++ b/scripts/module.lds.S
+@@ -27,6 +27,8 @@ SECTIONS {
+ 	.ctors			0 : ALIGN(8) { *(SORT(.ctors.*)) *(.ctors) }
+ 	.init_array		0 : ALIGN(8) { *(SORT(.init_array.*)) *(.init_array) }
 
---Sig_/2aJEc2Hu6P5l7_NRF=TJvZr
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
++	.altinstructions	0 : ALIGN(8) { KEEP(*(.altinstructions)) }
++	__bug_table		0 : ALIGN(8) { KEEP(*(__bug_table)) }
+ 	__jump_table		0 : ALIGN(8) { KEEP(*(__jump_table)) }
 
------BEGIN PGP SIGNATURE-----
+ 	__patchable_function_entries : { *(__patchable_function_entries) }
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmLH/IUACgkQAVBC80lX
-0GzAwQf/QDQ41wvuFrkD+Cj1zDeDdse7zWLF1H+rIWgpT0Z6KK1f44T7Vv2tBkhW
-l0ewa1BASdBZCz68xI6etd74uXQFNCqbs1lx4byHM+ek7wY3S7EtxPLkz58M2RYC
-jfn9eUpDZ8mrBgJg09svExezX+0vMsDSYB76ayUuot6r6gSlHEVrdDzZXaz/kSZs
-d0WqaCfJ5YqGjWryKQCisIo+Ju9vGylymP01jgu/8/NnhS26VhECc9RF8luENsLI
-3xwbPjFGl52qLsfNe1W1SViiYNatcv2nD6pTTl/KpaiQqup6DrzugGD0yFTufFy9
-1VgSfxY10mzAPv4l4us0prF1FZuS+A==
-=iafo
------END PGP SIGNATURE-----
 
---Sig_/2aJEc2Hu6P5l7_NRF=TJvZr--

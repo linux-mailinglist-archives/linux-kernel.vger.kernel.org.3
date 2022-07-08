@@ -2,109 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 81C4556C30E
-	for <lists+linux-kernel@lfdr.de>; Sat,  9 Jul 2022 01:13:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6501D56C2B6
+	for <lists+linux-kernel@lfdr.de>; Sat,  9 Jul 2022 01:13:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238081AbiGHWZn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Jul 2022 18:25:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49450 "EHLO
+        id S239111AbiGHW0X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Jul 2022 18:26:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49902 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237684AbiGHWZl (ORCPT
+        with ESMTP id S238089AbiGHW0V (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Jul 2022 18:25:41 -0400
-Received: from out01.mta.xmission.com (out01.mta.xmission.com [166.70.13.231])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CD0FA2E61
-        for <linux-kernel@vger.kernel.org>; Fri,  8 Jul 2022 15:25:40 -0700 (PDT)
-Received: from in01.mta.xmission.com ([166.70.13.51]:59826)
-        by out01.mta.xmission.com with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <ebiederm@xmission.com>)
-        id 1o9wPq-004o3a-Ov; Fri, 08 Jul 2022 16:25:38 -0600
-Received: from ip68-227-174-4.om.om.cox.net ([68.227.174.4]:43408 helo=email.froward.int.ebiederm.org.xmission.com)
-        by in01.mta.xmission.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <ebiederm@xmission.com>)
-        id 1o9wPp-00AEXn-O8; Fri, 08 Jul 2022 16:25:38 -0600
-From:   "Eric W. Biederman" <ebiederm@xmission.com>
-To:     Keno Fischer <keno@juliacomputing.com>
-Cc:     linux-kernel@vger.kernel.org, mingo@kernel.org,
-        bigeasy@linutronix.de, Peter Zijlstra <peterz@infradead.org>,
-        Jann Horn <jannh@google.com>,
-        Kees Cook <keescook@chromium.org>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Robert O'Callahan <roc@pernos.co>, Kyle Huey <khuey@pernos.co>,
-        Oleg Nesterov <oleg@redhat.com>
-References: <20220421150248.667412396@infradead.org>
-        <20220421150654.817117821@infradead.org>
-        <87czhap9dy.fsf@email.froward.int.ebiederm.org>
-        <878rrrh32q.fsf_-_@email.froward.int.ebiederm.org>
-        <87k0b7v9yk.fsf_-_@email.froward.int.ebiederm.org>
-        <87k0b0apne.fsf_-_@email.froward.int.ebiederm.org>
-        <87a6bv6dl6.fsf_-_@email.froward.int.ebiederm.org>
-        <87r13gd4xy.fsf_-_@email.froward.int.ebiederm.org>
-Date:   Fri, 08 Jul 2022 17:25:31 -0500
-In-Reply-To: <87r13gd4xy.fsf_-_@email.froward.int.ebiederm.org> (Eric
-        W. Biederman's message of "Wed, 22 Jun 2022 11:43:37 -0500")
-Message-ID: <87edyvgs2s.fsf@email.froward.int.ebiederm.org>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+        Fri, 8 Jul 2022 18:26:21 -0400
+Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D82CDA2E72;
+        Fri,  8 Jul 2022 15:26:20 -0700 (PDT)
+Received: by mail-ej1-x62a.google.com with SMTP id j22so13631741ejs.2;
+        Fri, 08 Jul 2022 15:26:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=HWlKpaLv2VR3Vok4iSI8gNXJv7MjF7LayWn7Z5iN4Q0=;
+        b=U8aaplgioalA7mIrEOI6BxlQFR6mErtWpV+io2v+ksxQVg+k9lnEYU+zCdHIv2Ac6X
+         I9nsORy3aehZXRS3syRxg3scRJHMdJXhMzT2fJSi0GF9wsbNnJvSyLVpmePzCGt0IQJ7
+         OCw9XBtGA0AkSM0ja5tk5M2vHFUfYb+LjreZu7aYLEJOUqBbOaRjrAiOSlWJ//C+NpUs
+         zKJjR2a0kIDhYaeGNWABr2hacMVUnvi1PXcvtUTFA6rpPko+hKaw4j2QaqL4/9PbHPLF
+         znos7RHZmL1Kkfh3B/JugMS0HkdzEjPP9nQd6wY61WglfVfM8pTvOx5qa2SMUrpM2aWq
+         i4ng==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=HWlKpaLv2VR3Vok4iSI8gNXJv7MjF7LayWn7Z5iN4Q0=;
+        b=tZcPfj/sMNJfxphZPSo5YpFciFnZp3B6FinbGNhO/l3QMHBnLew/3wgPp6RAYggxft
+         o4DrmQe5HFSP0VV56jbuIQYYU9w8+Up0CaMcUG9Pm6Hn8C2agNy869w0m6pB5jxD6NdL
+         NX9KP9J3QIJxWGLj9DVdiezx+dnf8QggVXQXZCn5ahXLWrlSVDtEFpRQ6e/o7dDlno2n
+         pGIFQzyQcdm3YZb+FtGN/mY0Na7MMHzxW0XApgH8GDH+YqbWSd1I6HyZ6IIekB7ZJ3XY
+         WwI/AAy/iqqxjW/7F/ksRw9nCJhkxD8mHezv0wfqk1sw2LdiYQgXVe3GQP4aWECxL47r
+         aHnw==
+X-Gm-Message-State: AJIora9J0cuL5+E06UlOAcN98wwCn44PS5U9ui+6o/EVXuq5XVxVJnhH
+        Mhu3Jmb6W/3JORx4RKBawEhLnBCttAxFF3Yt+Jk=
+X-Google-Smtp-Source: AGRyM1vgBr55LanK+nzR7AP78QmdrVahMi/alnIxc+HkET+hfgQ3FznBjGTDryn7qk9TY0BGng2tusZNvHb0lcBNuE8=
+X-Received: by 2002:a17:906:a3ca:b0:726:2bd2:87bc with SMTP id
+ ca10-20020a170906a3ca00b007262bd287bcmr5782990ejb.226.1657319179460; Fri, 08
+ Jul 2022 15:26:19 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-XM-SPF: eid=1o9wPp-00AEXn-O8;;;mid=<87edyvgs2s.fsf@email.froward.int.ebiederm.org>;;;hst=in01.mta.xmission.com;;;ip=68.227.174.4;;;frm=ebiederm@xmission.com;;;spf=softfail
-X-XM-AID: U2FsdGVkX1/stSDpTvjFDPy2IhraphYlslMz8o/ejjI=
-X-SA-Exim-Connect-IP: 68.227.174.4
-X-SA-Exim-Mail-From: ebiederm@xmission.com
+References: <1657113391-5624-1-git-send-email-alan.maguire@oracle.com> <1657113391-5624-2-git-send-email-alan.maguire@oracle.com>
+In-Reply-To: <1657113391-5624-2-git-send-email-alan.maguire@oracle.com>
+From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date:   Fri, 8 Jul 2022 15:26:08 -0700
+Message-ID: <CAEf4Bzbfi8Zx=riv5GOz0NqB18yvjixT02YtmowCd7ZSSggDfQ@mail.gmail.com>
+Subject: Re: [PATCH v4 bpf-next 1/2] bpf: add a ksym BPF iterator
+To:     Alan Maguire <alan.maguire@oracle.com>
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Martin Lau <kafai@fb.com>, Song Liu <songliubraving@fb.com>,
+        Yonghong Song <yhs@fb.com>,
+        john fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>, Jiri Olsa <jolsa@kernel.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        David Vernet <void@manifault.com>, swboyd@chromium.org,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Dmitrii Dolgov <9erthalion6@gmail.com>,
+        Kenny Yu <kennyyu@fb.com>,
+        Geliang Tang <geliang.tang@suse.com>,
+        Kuniyuki Iwashima <kuniyu@amazon.co.jp>,
+        bpf <bpf@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
-X-Spam-DCC: XMission; sa04 1397; Body=1 Fuz1=1 Fuz2=1 
-X-Spam-Combo: ****;Keno Fischer <keno@juliacomputing.com>
-X-Spam-Relay-Country: 
-X-Spam-Timing: total 454 ms - load_scoreonly_sql: 0.05 (0.0%),
-        signal_user_changed: 13 (2.8%), b_tie_ro: 11 (2.4%), parse: 1.23
-        (0.3%), extract_message_metadata: 15 (3.3%), get_uri_detail_list: 1.23
-        (0.3%), tests_pri_-1000: 19 (4.1%), tests_pri_-950: 1.60 (0.4%),
-        tests_pri_-900: 1.22 (0.3%), tests_pri_-90: 173 (38.1%), check_bayes:
-        171 (37.6%), b_tokenize: 7 (1.5%), b_tok_get_all: 7 (1.6%),
-        b_comp_prob: 2.6 (0.6%), b_tok_touch_all: 150 (33.0%), b_finish: 1.15
-        (0.3%), tests_pri_0: 208 (46.0%), check_dkim_signature: 0.88 (0.2%),
-        check_dkim_adsp: 3.6 (0.8%), poll_dns_idle: 1.41 (0.3%), tests_pri_10:
-        4.4 (1.0%), tests_pri_500: 14 (3.0%), rewrite_mail: 0.00 (0.0%)
-Subject: Re: [PATCH 0/3] ptrace: Stop supporting SIGKILL for PTRACE_EVENT_EXIT
-X-SA-Exim-Version: 4.2.1 (built Sat, 08 Feb 2020 21:53:50 +0000)
-X-SA-Exim-Scanned: Yes (on in01.mta.xmission.com)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-"Eric W. Biederman" <ebiederm@xmission.com> writes:
-
-> Recently I had a conversation where it was pointed out to me that
-> SIGKILL sent to a tracee stropped in PTRACE_EVENT_EXIT is quite
-> difficult for a tracer to handle.
+On Wed, Jul 6, 2022 at 6:17 AM Alan Maguire <alan.maguire@oracle.com> wrote:
 >
-> Keeping SIGKILL working for anything after the process has been killed
-> is also a real pain from an implementation point of view.
+> add a "ksym" iterator which provides access to a "struct kallsym_iter"
+> for each symbol.  Intent is to support more flexible symbol parsing
+> as discussed in [1].
 >
-> So I am attempting to remove this wart in the userspace API and see
-> if anyone cares.
+> [1] https://lore.kernel.org/all/YjRPZj6Z8vuLeEZo@krava/
 >
-> Eric W. Biederman (3):
->       signal: Ensure SIGNAL_GROUP_EXIT gets set in do_group_exit
->       signal: Guarantee that SIGNAL_GROUP_EXIT is set on process exit
->       signal: Drop signals received after a fatal signal has been processed
+> Suggested-by: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+> Signed-off-by: Alan Maguire <alan.maguire@oracle.com>
+> Acked-by: Yonghong Song <yhs@fb.com>
+> ---
+>  kernel/kallsyms.c | 95 +++++++++++++++++++++++++++++++++++++++++++++++++++++++
+>  1 file changed, 95 insertions(+)
 >
->  fs/coredump.c                |  2 +-
->  include/linux/sched/signal.h |  1 +
->  kernel/exit.c                | 20 +++++++++++++++++++-
->  kernel/fork.c                |  2 ++
->  kernel/signal.c              |  3 ++-
->  5 files changed, 25 insertions(+), 3 deletions(-)
 
-RR folks any comments?
+LGTM, except for unnecessary pr_warn(), see below
 
-Did I properly understand what Keno Fischer was asking for when we
-talked in person?
 
-Eric
+[...]
+
+> +
+> +BTF_ID_LIST(btf_ksym_iter_id)
+> +BTF_ID(struct, kallsym_iter)
+> +
+> +static int __init bpf_ksym_iter_register(void)
+> +{
+> +       int ret;
+> +
+> +       ksym_iter_reg_info.ctx_arg_info[0].btf_id = *btf_ksym_iter_id;
+> +       ret = bpf_iter_reg_target(&ksym_iter_reg_info);
+> +       if (ret)
+> +               pr_warn("Warning: could not register bpf ksym iterator: %d\n", ret);
+
+we don't emit such warnings for some other iterators I checked (map,
+link, etc). Do we really need this? It's very unlikely to happen
+anyways.
+
+> +       return ret;
+> +}
+> +
+> +late_initcall(bpf_ksym_iter_register);
+> +
+> +#endif /* CONFIG_BPF_SYSCALL */
+> +
+>  static inline int kallsyms_for_perf(void)
+>  {
+>  #ifdef CONFIG_PERF_EVENTS
+> --
+> 1.8.3.1
+>

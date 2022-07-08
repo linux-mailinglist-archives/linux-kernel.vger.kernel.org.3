@@ -2,91 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 32E9C56B3AA
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 09:37:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 039FA56B3AF
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 09:39:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237484AbiGHHgf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Jul 2022 03:36:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46992 "EHLO
+        id S237656AbiGHHix (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Jul 2022 03:38:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48684 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237293AbiGHHge (ORCPT
+        with ESMTP id S237480AbiGHHiv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Jul 2022 03:36:34 -0400
-Received: from wout2-smtp.messagingengine.com (wout2-smtp.messagingengine.com [64.147.123.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2E987C1B9;
-        Fri,  8 Jul 2022 00:36:32 -0700 (PDT)
-Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
-        by mailout.west.internal (Postfix) with ESMTP id E0FD5320090D;
-        Fri,  8 Jul 2022 03:36:28 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute4.internal (MEProxy); Fri, 08 Jul 2022 03:36:29 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sholland.org; h=
-        cc:cc:content-transfer-encoding:content-type:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to; s=fm1; t=1657265788; x=
-        1657352188; bh=z0PrsiMp/J8Gv6mQx5qf+wqbiMQmbkqPC6B/AdbiIY8=; b=i
-        w0jSHokLG+MkpRk/awanv/tvrseU28ynMDacGvU2JXIj0msMzSMttrU4Je8qj5i2
-        BP7Gn1VQkRIRgejxhiPF1AF1uz2IbGSDVmPHywdeu1+2p8rl6SzHXKxzIvx8T6yr
-        9BnT/IKOao7fHi7e8KPvp6SGHTz9TIeLyMxl7m0g+eQ8PAR3ZxSxKcFdWtipxp9D
-        gnnEL9TSH3ioqM0uRmpR+2y8ThZDULP8/4JrBM3BwfYFh2uhHSJp8xec1NeCxJA6
-        xsDO7gGaSlPL0FYeur3F0lmZ4x79b0V+4yoYpDl39RSNKoKKqWQjVQX9mCbp50BN
-        rHCeHgd6QTZ18HA1mTNBA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding
-        :content-type:date:date:feedback-id:feedback-id:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
-        :x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=1657265788; x=
-        1657352188; bh=z0PrsiMp/J8Gv6mQx5qf+wqbiMQmbkqPC6B/AdbiIY8=; b=U
-        xIbHS17H7qUB8ks06rKakXd2A/yS6I3aYCJel7XDIvMIvpbngXwBxoE1OkmsEyqk
-        JW05vxcNb2o/ewrZFznQZr/631B/2g3heSchiBsdu1mKmWO5BMA//zq8SkuHPDh2
-        e70sD24hcFxWordsX5EJyatva1Yx2XBo88NnDINA+IIyDBCxlXPTrDDswQVcs4lj
-        qMbNtCLmmpt1r0+rN2NJcGjTZy2Vw7/pbpNt1y8mn2pVxO/r4GJwteTTshXW8eju
-        hO2x2qDKGTAoXJPt+NYn5BamnEJmNnrM8ww36HetwJ7RBls4AkVbjZBoI+auoFnM
-        grWAPt8/R0IjXJ4BgzB9Q==
-X-ME-Sender: <xms:e97HYuu_jaLYqWX--4K4uzOGZoq8Fw5AybMHYgKebeo-WWmqE9z9iw>
-    <xme:e97HYjf1YY__iVsJngVIDlYxNskiXLndNyPjs1rI5t7yPQZ2X5KgCUfZc_elslC9j
-    y14m5pbhAmM-NUGQQ>
-X-ME-Received: <xmr:e97HYpwqGccGGZiackWtnGkcSU03h619n4WZ4Jfht6ntpwmol3Dof8CIj39887Xyx2WIiUlRcC-uE_Ch0KjdEVZSlOVR0bCjH_ATJzalrF0yNu-WiKHkakAEfA>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrudeiiedguddvtdcutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enucfjughrpefuvfevfhfhkffffgggjggtgfesthejredttdefjeenucfhrhhomhepufgr
-    mhhuvghlucfjohhllhgrnhguuceoshgrmhhuvghlsehshhholhhlrghnugdrohhrgheqne
-    cuggftrfgrthhtvghrnhepffdtveekvdegkeeuueetgfetffeileevudekuefhheelvdfh
-    iedtheduhfduhefhnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilh
-    hfrhhomhepshgrmhhuvghlsehshhholhhlrghnugdrohhrgh
-X-ME-Proxy: <xmx:e97HYpO4sjaSEfnKMi7ydtt-Y8nmnYXX-1AcCD52yBdL1aKjztctdw>
-    <xmx:e97HYu9stLmJetYfleSpZLK2-iCAvThtQTXKVuPXLQwjaHcgyJw5nA>
-    <xmx:e97HYhW461qiSC8m3kjb-CPQsjnpJi0jJN59qV2dIjYQYHzJau7W9Q>
-    <xmx:fN7HYhYkgyi9bcjSTXduyjWlKt0SJgCzgNy8Js4Bv-hAatlzIGSvww>
-Feedback-ID: i0ad843c9:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
- 8 Jul 2022 03:36:27 -0400 (EDT)
-Subject: Re: [PATCH v2] sunxi: dts: Fix SPI NOR campatible on Orange Pi Zero
-To:     Michal Suchanek <msuchanek@suse.de>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>
-Cc:     linux-sunxi@lists.linux.dev, Icenowy Zheng <icenowy@aosc.xyz>,
-        Andre Przywara <andre.przywara@arm.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Chen-Yu Tsai <wens@csie.org>, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <20220707174801.36e010da@donnerap.cambridge.arm.com>
- <20220707170721.20225-1-msuchanek@suse.de>
-From:   Samuel Holland <samuel@sholland.org>
-Message-ID: <0c575068-abd7-c69a-e59c-3140f8cb7813@sholland.org>
-Date:   Fri, 8 Jul 2022 02:36:26 -0500
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.6.0
+        Fri, 8 Jul 2022 03:38:51 -0400
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DEAD56B25E;
+        Fri,  8 Jul 2022 00:38:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1657265917;
+        bh=D7qLA/iJlSBt219O7ShLPD2VmW/Mh0zlsFCsD09xipk=;
+        h=X-UI-Sender-Class:Date:From:To:Cc:Subject;
+        b=CNCBPo5cFJy9jTNXF0KEQHs1ciAH0UaM4mMuy5Sr9/a9yB1b01LJRJKnUqnxhAgME
+         qiH3wBZR5JueKcqlyb/qE5Kudl6MyQ4imPppThKoXp1EyZ53Ey6BsEEAacofFwhq70
+         lpKvaN1dbHJtbdTyGgbREzMBWp0CpQWcohWEMhUc=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from ls3530 ([92.116.171.120]) by mail.gmx.net (mrgmx104
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1MTRMi-1o1yF641y0-00ToJk; Fri, 08
+ Jul 2022 09:38:37 +0200
+Date:   Fri, 8 Jul 2022 09:38:00 +0200
+From:   Helge Deller <deller@gmx.de>
+To:     Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-kernel@vger.kernel.org, linux-fbdev@vger.kernel.org,
+        dri-devel@lists.freedesktop.org
+Cc:     Hsin-Yi Wang <hsinyi@chromium.org>, Guiling Deng <greens9@163.com>
+Subject: [GIT PULL] fbdev updates & fixes for v5.19-rc6
+Message-ID: <Ysfe2JUDCg/S1ArT@ls3530>
 MIME-Version: 1.0
-In-Reply-To: <20220707170721.20225-1-msuchanek@suse.de>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Provags-ID: V03:K1:nJ3VXKnb6rO003B31GtKc9A3gfM+urPI3N8+onViOP6BaLUD24d
+ 2ixfeMSDhOccbMHOD5J1cPmkRe0gOdse1ZwSTa3M1+7sJrfIMvSYCj+gGgQWaDjJEnc5pH2
+ wsl1TVjIHvPzPcbPzROATlYC0jngHn4XL76TOlU0eqsw3aO8KLprl4ok8qmWFlN031usWa4
+ UWfc2Zg3jlh8ahRpwGR4A==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:bctC6tNHHYw=:DMLVXF6SgA58MF5C6Rp9eL
+ O3hvCLUDxLfhGI8uzTGN0irrzFmFpU44k/Ei9yZnkql6mqmhO6yDH9xuYkx2RwTM9/SOAPyM/
+ SQD/kR/9A0/PbanpF435xVXCI2UPUPaElxQ+rnZqKz2P5ncJg5qIICRNb6ntx12JKEmsO2QF1
+ NMZLn/AOUkc3WTVE53XLIIYZ3dXtH82iFVnncG3COC6CT87Y5um1wTeKbIFKRROYNjvfKwcio
+ mb/76c156+VLcdkY7A8PXwwkbYw/ti+u8Nw6K5ekKkcLfjNHQEKM4OBwbfiTKRdERi1KjnJxM
+ qPme1thlSWDAgb9X83p4sjxrZlaDpcgpUmwbsbCanLRuD+ZWqokDlPhfUaCeLWXHQYB3Dp2kh
+ 5fGbYXy9nsgWBcpIh2JcGSS7KJ5vygN/p3arF4I4i3+qa/wBKd02FiXf/4Eg8NzsWAOVii78p
+ vxr9tjlF3eCa3/u5XQ/g0QZWFm9gZK/PavwvLdLAlzHFua++a6fq9uKt96mehnZRRMidnPmo8
+ D5RihhD5JCcMqH8C581EcRw5T9OU+wzVMFUScgFJyKuC859cG5ba/dv098kTuxIBuGAPzntZy
+ fq2KaU/DKrRNA1FccNKPiGY7CLNnSrT54UTqMz250X07p4jfcHXIpxfeXkbYnZKqIlyK9+/Fx
+ 4LHPm4NRujw0ppVY7jS/MQ4fAJP/0cjcvWs/dLdsAtldrj8un+nmXhNeiHuQKC2ua3g3Srv/q
+ d1NZ0sDNwOO6zSbhdeLBJkBYlpsSEcDI70THMDW+kr0RreQ3KqVTM8QgtxYJyHgAz488IDrl8
+ vLImIdcwCfBZcSZ5QonXRxzi3RjFHFljRM1KVsWfXQY7MvvHrvN61XePuYGnWDkqABsTVkLat
+ m7lz9R4qKOM2dkRAoedVrtqfBKKGY0bTDPYpDRHMKdu80Z5m3ey8k7qynw3b2ZiGGKBt+++bs
+ N6XkCyswklQImhmNj2E8LqcruhajlQnSKsbA2T5fpOpCwMa9NIjQ9ZcorCc3iDvZxBkizCVTb
+ kofwxdK8ikOGvCH9i1RdB/4+A1yMGhFLej3KqocCtsnwmQIiZxMmpUf/4mrKXdbaGIsPav+ky
+ QCOwHoXEb77ub4c8+4bbZbRF0MQQusi0Y9R7+zekbFnkWVRLdzvX3mifg==
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -94,40 +68,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Michal,
+The following changes since commit 88084a3df1672e131ddc1b4e39eeacfd39864acf:
 
-The subject prefix should start with "ARM: dts:" (e.g. "ARM: dts: sunxi:").
-Generally it is a good idea to look at the log of the file and follow the
-pattern you see there.
+  Linux 5.19-rc5 (2022-07-03 15:39:28 -0700)
 
-On 7/7/22 12:07 PM, Michal Suchanek wrote:
-> Without "jedec,spi-nor" compatible the flash memory cannot be probed by
-> u-boot. The macronix part is what is shipped on the boards that come
-> with a flash chip.
-> 
+are available in the Git repository at:
 
-Fixes: 45857ae95478 ("ARM: dts: orange-pi-zero: add node for SPI NOR")
+  http://git.kernel.org/pub/scm/linux/kernel/git/deller/linux-fbdev.git tags/for-5.19/fbdev-3
 
-Regards,
-Samuel
+for you to fetch changes up to 53a6e66b1b4fea4b52f8bc62e5f9530af9061027:
 
-> Signed-off-by: Michal Suchanek <msuchanek@suse.de>
-> ---
->  arch/arm/boot/dts/sun8i-h2-plus-orangepi-zero.dts | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/arch/arm/boot/dts/sun8i-h2-plus-orangepi-zero.dts b/arch/arm/boot/dts/sun8i-h2-plus-orangepi-zero.dts
-> index f19ed981da9d..3706216ffb40 100644
-> --- a/arch/arm/boot/dts/sun8i-h2-plus-orangepi-zero.dts
-> +++ b/arch/arm/boot/dts/sun8i-h2-plus-orangepi-zero.dts
-> @@ -169,7 +169,7 @@ &spi0 {
->  	flash@0 {
->  		#address-cells = <1>;
->  		#size-cells = <1>;
-> -		compatible = "mxicy,mx25l1606e", "winbond,w25q128";
-> +		compatible = "mxicy,mx25l1606e", "jedec,spi-nor";
->  		reg = <0>;
->  		spi-max-frequency = <40000000>;
->  	};
-> 
+  fbcon: Use fbcon_info_from_console() in fbcon_modechange_possible() (2022-07-07 10:52:35 +0200)
 
+----------------------------------------------------------------
+fbdev fixes and updates for kernel v5.19-rc6:
+
+fbcon now prevents switching to screen resolutions which are smaller
+than the font size, and prevents enabling a font which is bigger than
+the current screen resolution. This fixes vmalloc-out-of-bounds accesses
+found by KASAN.
+
+Guiling Deng fixed a bug where the centered fbdev logo wasn't displayed
+correctly if the screen size matched the logo size.
+
+Hsin-Yi Wang provided a patch to include errno.h to fix build when
+CONFIG_OF isn't enabled.
+
+----------------------------------------------------------------
+Guiling Deng (1):
+      fbdev: fbmem: Fix logo center image dx issue
+
+Helge Deller (4):
+      fbcon: Disallow setting font bigger than screen size
+      fbcon: Prevent that screen size is smaller than font size
+      fbmem: Check virtual screen sizes in fb_set_var()
+      fbcon: Use fbcon_info_from_console() in fbcon_modechange_possible()
+
+Hsin-Yi Wang (1):
+      video: of_display_timing.h: include errno.h
+
+ drivers/video/fbdev/core/fbcon.c  | 33 +++++++++++++++++++++++++++++++++
+ drivers/video/fbdev/core/fbmem.c  | 16 ++++++++++++++--
+ include/linux/fbcon.h             |  4 ++++
+ include/video/of_display_timing.h |  2 ++
+ 4 files changed, 53 insertions(+), 2 deletions(-)

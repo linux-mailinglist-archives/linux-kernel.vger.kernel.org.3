@@ -2,113 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B17156C31A
-	for <lists+linux-kernel@lfdr.de>; Sat,  9 Jul 2022 01:14:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 38DFF56C3CA
+	for <lists+linux-kernel@lfdr.de>; Sat,  9 Jul 2022 01:14:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240426AbiGHVJB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Jul 2022 17:09:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59624 "EHLO
+        id S238512AbiGHVJa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Jul 2022 17:09:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59958 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240346AbiGHVI4 (ORCPT
+        with ESMTP id S240053AbiGHVJZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Jul 2022 17:08:56 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B3D27B34F
-        for <linux-kernel@vger.kernel.org>; Fri,  8 Jul 2022 14:08:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1657314535; x=1688850535;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=aYeqEtB0ol/kEHCAJj+GSoyDW6QM2eAkrk+BT95dSLk=;
-  b=NG5CEipFoPJlUQ0pZD6Rfugmz42KW3HumJHtqTL/UkdPyoQLeoTVDDON
-   Z41e2mh5+yplWWn6xNbr1jionzHeCmu3uGRusovQ5uZ5yIv4BK/Q2EqDs
-   0OcmeGjq8czwqUJc4vZejtC4zkq1akBFQJzXf6ELkznK4fEfMsnlbW8ZD
-   Q5fzWMc/W58i7bXMSL7ZiekaQEkGLXCf1Q21cQb71at54yNJ0BfKAxVo+
-   f4sPDHzLjpQ2meL+heXPMXAChrRO/nTtAIXQyxvFvb5gd9HMoaPLvkBTn
-   LHO9vh7a7JRLE+0Gbz7W+NfZ2EJHClQ6X3ENJXwIQ9Px8rAzizq3p8N11
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10402"; a="285494234"
-X-IronPort-AV: E=Sophos;i="5.92,256,1650956400"; 
-   d="scan'208";a="285494234"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jul 2022 14:08:54 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,256,1650956400"; 
-   d="scan'208";a="569078341"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by orsmga006.jf.intel.com with ESMTP; 08 Jul 2022 14:08:53 -0700
-Received: by black.fi.intel.com (Postfix, from userid 1003)
-        id B12A35AD; Sat,  9 Jul 2022 00:09:00 +0300 (EEST)
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        linux-kernel@vger.kernel.org
-Cc:     john.garry@huawei.com
-Subject: [PATCH v2 4/4] bus: hisi_lpc: Don't guard ACPI IDs with ACPI_PTR()
-Date:   Sat,  9 Jul 2022 00:08:59 +0300
-Message-Id: <20220708210859.6774-4-andriy.shevchenko@linux.intel.com>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220708210859.6774-1-andriy.shevchenko@linux.intel.com>
-References: <20220708210859.6774-1-andriy.shevchenko@linux.intel.com>
+        Fri, 8 Jul 2022 17:09:25 -0400
+Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 865087B348;
+        Fri,  8 Jul 2022 14:09:24 -0700 (PDT)
+Received: by mail-pf1-x42c.google.com with SMTP id o12so99681pfp.5;
+        Fri, 08 Jul 2022 14:09:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=9E/mZeimCA88giN6rs5vLbSeCJTF3k6+VjGGAIWcV/k=;
+        b=H7vyoKXshYAaDuCXHzumSvPd0vSlH3129MGT4JypuLk4D5nZpLuwDSs36U3poOsiD2
+         FU1NArC2BbIOa7agQMBZKUsReCbibYPtmKapbY+OoejaSXc9MXV6VnFijbRa8gOamfLn
+         gt7A4XeD/X1Ktt0QSUc17tlRDoAFXx4TqOH1AKrkN2cRva4LRzRvIaw76QrYClPcrztf
+         pz8whfX8uueDz7mez0k7DRv/YskMPQ4+eGsMx79REZhGKoUn60cvLaeyWYsnIxP0kaye
+         VKtZ0d8ebrpBN6zew6qv0W8TNvu7vpY4E1DO0z+WKVQWscYVUN+y1RCDiji9w0pZvC4v
+         n+0Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=9E/mZeimCA88giN6rs5vLbSeCJTF3k6+VjGGAIWcV/k=;
+        b=rl5eUSDhmQYSot4BGMYTsXpLVGwVHQF15Ob+PqUOD1nUESqPKpAgXOWhI5UQr9DCOh
+         EvAwlX1TWMJnmdDO1C0yCvk1qnnLRw8ETeHq0adkuFbxdU9iVkjC/L7eBTkHSvmy8n/B
+         wxZ+vPECU+QvZi/ZutPxXJVdJUDGBuQvkm4VStE0zvi+JbuqXwoXXU4nZbOXEbli8t5x
+         T5nI9jaQUqC6M8g9LXYoH+4eBWp+gMfBfQZZ+AqegkuB8HFJa+fWFzjRvR5x9HPeu8fb
+         49khswZ8iCuJlx0Ct6jjFzT+4bUp65QpsnwFWuBAO3XBGDKFrC8JEOEPzEizgLCFtF/0
+         CT6Q==
+X-Gm-Message-State: AJIora9twr7R+1sRxqw1FwrAQGBsi9O6pouPTWFJVlRdX1mHF7yKKVQm
+        BpIw7eedV5+cOgOh1VAhREI=
+X-Google-Smtp-Source: AGRyM1ugzG/hWta6GrNXvx8TwkDWRE+33xf7z7yDD3ABzTqFoJGGI3w37eb8VXs8f7UPN2v+VqSsyQ==
+X-Received: by 2002:a63:d711:0:b0:415:c581:2aff with SMTP id d17-20020a63d711000000b00415c5812affmr1902658pgg.278.1657314563948;
+        Fri, 08 Jul 2022 14:09:23 -0700 (PDT)
+Received: from fainelli-desktop.igp.broadcom.net ([192.19.223.252])
+        by smtp.gmail.com with ESMTPSA id q4-20020a17090311c400b0016bfaee8244sm7402307plh.14.2022.07.08.14.09.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 08 Jul 2022 14:09:23 -0700 (PDT)
+From:   Florian Fainelli <f.fainelli@gmail.com>
+To:     bcm-kernel-feedback-list@broadcom.com,
+        William Zhang <william.zhang@broadcom.com>,
+        Linux ARM List <linux-arm-kernel@lists.infradead.org>
+Cc:     anand.gore@broadcom.com, dan.beygelman@broadcom.com,
+        kursad.oney@broadcom.com, joel.peshkin@broadcom.com,
+        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
+        linux-ide@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [RESEND PATCH 2/8] ata: ahci_brcm: bcmbca: Replace ARCH_BCM_63XX with ARCH_BCMBCA
+Date:   Fri,  8 Jul 2022 14:09:21 -0700
+Message-Id: <20220708210921.2660714-1-f.fainelli@gmail.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20220707065800.261269-2-william.zhang@broadcom.com>
+References: <20220707065800.261269-1-william.zhang@broadcom.com> <20220707065800.261269-2-william.zhang@broadcom.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The OF ID table is not guarded, and the ACPI table does not needs it either.
-The IDs do not depend on the configuration. Hence drop ACPI_PTR() from the
-code and move ID table closer to its user.
+On Wed,  6 Jul 2022 23:57:53 -0700, William Zhang <william.zhang@broadcom.com> wrote:
+> Prepare for the BCM63138 ARCH_BCM_63XX migration to ARCH_BCMBCA. Make
+> AHCI_BRCM depending on ARCH_BCMBCA.
+> 
+> Signed-off-by: William Zhang <william.zhang@broadcom.com>
+> Acked-by: Damien Le Moal <damien.lemoal@opensource.wdc.com>
+> ---
 
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Acked-by: John Garry <john.garry@huawei.com>
-Reviewed-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
----
-v2: added tags (John, Rafael), improved commit message (John)
- drivers/bus/hisi_lpc.c | 12 ++++++------
- 1 file changed, 6 insertions(+), 6 deletions(-)
-
-diff --git a/drivers/bus/hisi_lpc.c b/drivers/bus/hisi_lpc.c
-index a6513a571d7b..74f4448bff9d 100644
---- a/drivers/bus/hisi_lpc.c
-+++ b/drivers/bus/hisi_lpc.c
-@@ -589,11 +589,6 @@ static int hisi_lpc_acpi_probe(struct device *hostdev)
- 
- 	return ret;
- }
--
--static const struct acpi_device_id hisi_lpc_acpi_match[] = {
--	{"HISI0191"},
--	{}
--};
- #else
- static int hisi_lpc_acpi_probe(struct device *dev)
- {
-@@ -688,11 +683,16 @@ static const struct of_device_id hisi_lpc_of_match[] = {
- 	{}
- };
- 
-+static const struct acpi_device_id hisi_lpc_acpi_match[] = {
-+	{"HISI0191"},
-+	{}
-+};
-+
- static struct platform_driver hisi_lpc_driver = {
- 	.driver = {
- 		.name           = DRV_NAME,
- 		.of_match_table = hisi_lpc_of_match,
--		.acpi_match_table = ACPI_PTR(hisi_lpc_acpi_match),
-+		.acpi_match_table = hisi_lpc_acpi_match,
- 	},
- 	.probe = hisi_lpc_probe,
- 	.remove = hisi_lpc_remove,
--- 
-2.35.1
-
+Applied to https://github.com/Broadcom/stblinux/commits/drivers/next, thanks!
+--
+Florian

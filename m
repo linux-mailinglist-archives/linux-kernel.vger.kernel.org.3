@@ -2,88 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 75C6C56BDEC
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 18:09:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7259456BDB7
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 18:08:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238785AbiGHPOO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Jul 2022 11:14:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35202 "EHLO
+        id S238782AbiGHPQT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Jul 2022 11:16:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36514 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238759AbiGHPON (ORCPT
+        with ESMTP id S235427AbiGHPQR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Jul 2022 11:14:13 -0400
-Received: from mail-yb1-xb2e.google.com (mail-yb1-xb2e.google.com [IPv6:2607:f8b0:4864:20::b2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82B9230F46;
-        Fri,  8 Jul 2022 08:14:12 -0700 (PDT)
-Received: by mail-yb1-xb2e.google.com with SMTP id p129so8549625yba.7;
-        Fri, 08 Jul 2022 08:14:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=K0qR0/WRFp+dSGfUNqNNESrvV3EATxxD7VgxKv3r2KA=;
-        b=CqgxYBea7Xw8XvBT6EpataJvt/NaLXh1Uxm9wsKrINnwqJX3Gbz56Df6QnJgWZbcaU
-         dTzBYOavgJ8q6MdQf4bgCfsZhy24Y2CjLnWKjfhmXuSpl+gfbDPsrVLGTCijWOvI7VVW
-         OuRlwZmYd0mN37Dzrf3Kner0I7hXKzgLj4G9okLcUbchcICzwsWM3QtqTsE6v4vKw/ZE
-         liT8laDllBnSuA2LSkq0IxnT7ar0xNj4TBgCD/AScz536LD+AYFqmnqf80O9HrQV0F8o
-         VrURbpzS8hamWc6dvmqn/vydN0p+9cbeKAvvSu/x9u3YD1nyNc8NZKDzTjD/l2nJc27n
-         7CDg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=K0qR0/WRFp+dSGfUNqNNESrvV3EATxxD7VgxKv3r2KA=;
-        b=p0aCCWO2uASzVIzpRCrCcaw7JYlq8EymExqdMIpFwa780EQqez/AaTWqbviOJRqluR
-         jYdw4WXT/jMCeMv3uSr3UheuFxO2tT18BvILmMKwqOrRA31ulnTWutkicw4smgkj0e1T
-         AktS03DEf5zqU6IhQQ0CBdIOdJzjww4kWM4408cmVNypV6Fd/3iRQDvuPxVa24cpbt5f
-         XB6HBG//BeGJOw0nub0Ze/zZT5zZsPR769OU0Hr7yHRnkmueIlFY8/94YFa9BD8xsWsS
-         daa7aSp5XGQzEIXoCIgd8bGz/8fa6LRoBKg3ysgCg72N7ESqyIqV1NfXlV3bUWehwFb3
-         NC1A==
-X-Gm-Message-State: AJIora/UxcgdXlTsq84IwMuo62K/BIxiQXksas+7juv8TWkqeNbBGl7v
-        /t4dy+g3VBXjhgRoPG4eCTIbSLaFBO5gvqontKY=
-X-Google-Smtp-Source: AGRyM1saoM2+5oEj3fiXHKMiUuO+fy8OeA39Dff92b/anSd471hPJoxxEr02uRCnKwb+GctLJrfZr3s8YDh6Nob616I=
-X-Received: by 2002:a05:6902:154c:b0:66e:8254:146e with SMTP id
- r12-20020a056902154c00b0066e8254146emr4447945ybu.570.1657293251579; Fri, 08
- Jul 2022 08:14:11 -0700 (PDT)
+        Fri, 8 Jul 2022 11:16:17 -0400
+Received: from smtpbg.qq.com (unknown [43.155.67.158])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62D2D33A27;
+        Fri,  8 Jul 2022 08:16:10 -0700 (PDT)
+X-QQ-mid: bizesmtp69t1657293348t6s3famc
+Received: from localhost.localdomain ( [182.148.15.249])
+        by bizesmtp.qq.com (ESMTP) with 
+        id ; Fri, 08 Jul 2022 23:15:44 +0800 (CST)
+X-QQ-SSF: 01000000002000B0C000B00A0000000
+X-QQ-FEAT: y7VdHXLcy7CsmIVhVBlYtNJVJnsh9ScX8bhg2g9VQhhgvZHksjAJMX13kBThG
+        dfBIz1bsti9GmwgR2po4MYMOH0JpYw5ojUCNE5x9TggoJg9uIhOOYOtJsg7YcW3J6z/lVfs
+        E0FkBQt7HF1OEetYJ1ZnO5Cm3mTr5+uND4Z3/tB6VQcwF/g/CL6muqFLfJNoeIR4LcbInQD
+        Y5WxWljpFZlbIwrnMzYkcu+s6+iaMnE1y7QjE094xr+M9nbGvU9k8ScMfIk+oAfqbJGUuGO
+        CglpGBx37J4Xw2UGD7XjbU8b0U4fqnYs+nsDOKG3+1y6v3elH2G56dHwu3Eclz2EpgXPC6e
+        a4jXCYxZmNuuH22lYaJD6Tf2cPRfO6SnzRvzZ249nzFxo7Fki4=
+X-QQ-GoodBg: 0
+From:   Jilin Yuan <yuanjilin@cdjrlc.com>
+To:     alex.aring@gmail.com, stefan@datenfreihafen.org,
+        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com
+Cc:     linux-wpan@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Jilin Yuan <yuanjilin@cdjrlc.com>
+Subject: [PATCH] net/ieee802154: fix repeated words in comments
+Date:   Fri,  8 Jul 2022 23:15:38 +0800
+Message-Id: <20220708151538.51483-1-yuanjilin@cdjrlc.com>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
-References: <585795d19c13a7136bc4b61307114591af2aea69.1657279521.git.viresh.kumar@linaro.org>
- <CAMRc=MdHAZ=OE+jjxx5BV_4Z2L4g0WmEVaiyifN+nu2JnMx82g@mail.gmail.com>
-In-Reply-To: <CAMRc=MdHAZ=OE+jjxx5BV_4Z2L4g0WmEVaiyifN+nu2JnMx82g@mail.gmail.com>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Fri, 8 Jul 2022 17:13:34 +0200
-Message-ID: <CAHp75VdWe_EaJB3Bqz13rb362uDBTJAGaVh7Sjeq874tm=wrgA@mail.gmail.com>
-Subject: Re: [PATCH] gpiolib: cdev: Don't access uninitialized descriptor
-To:     Bartosz Golaszewski <brgl@bgdev.pl>
-Cc:     Viresh Kumar <viresh.kumar@linaro.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Dipen Patel <dipenp@nvidia.com>,
-        Thierry Reding <treding@nvidia.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:cdjrlc.com:qybglogicsvr:qybglogicsvr4
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,RDNS_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,T_SPF_HELO_TEMPERROR autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jul 8, 2022 at 3:32 PM Bartosz Golaszewski <brgl@bgdev.pl> wrote:
-> On Fri, Jul 8, 2022 at 1:25 PM Viresh Kumar <viresh.kumar@linaro.org> wrote:
+ Delete the redundant word 'was'.
 
-...
+Signed-off-by: Jilin Yuan <yuanjilin@cdjrlc.com>
+---
+ drivers/net/ieee802154/ca8210.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-> Kent beat you to it with commit c8e27a4a5136e7230f9e4ffcf132705bf56864cc.
-
-https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=c8e27a4a5136e7230f9e4ffcf132705bf56864cc
-Notice: this object is not reachable from any branch.
-
-Rebased?
-
+diff --git a/drivers/net/ieee802154/ca8210.c b/drivers/net/ieee802154/ca8210.c
+index 42c0b451088d..450b16ad40a4 100644
+--- a/drivers/net/ieee802154/ca8210.c
++++ b/drivers/net/ieee802154/ca8210.c
+@@ -2293,7 +2293,7 @@ static int ca8210_set_csma_params(
+  * @retries:  Number of retries
+  *
+  * Sets the number of times to retry a transmission if no acknowledgment was
+- * was received from the other end when one was requested.
++ * received from the other end when one was requested.
+  *
+  * Return: 0 or linux error code
+  */
 -- 
-With Best Regards,
-Andy Shevchenko
+2.36.1
+

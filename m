@@ -2,118 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 96CF256BF0C
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 20:35:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 04AB356C0C1
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 20:37:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238744AbiGHR4K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Jul 2022 13:56:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54004 "EHLO
+        id S238829AbiGHR7P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Jul 2022 13:59:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55608 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237887AbiGHR4I (ORCPT
+        with ESMTP id S238598AbiGHR7N (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Jul 2022 13:56:08 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B39065A467;
-        Fri,  8 Jul 2022 10:56:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Transfer-Encoding:
-        Content-Type:MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:
-        Sender:Reply-To:Content-ID:Content-Description;
-        bh=9hHckX53YDQa5nb13U0zKcPQMhp/7FlgpDGHpfNA0gQ=; b=LOVXAne1wYs5U555F1ZYS5Knvp
-        +BzllGqyR1JUwv6RrS9lbb22AG83oaviOmJkTnhQpJPnGdsKl9mwvrQ3LkCJzBg59N0ZnCUZKaCrx
-        DY9Eqd/z9jm2q5K6aOtmb8w5R3JRcJDyLqNC4S+cqBqgXVJF9xmyMVPoBre2prh+LX48/zYBVIDWO
-        S5QCrZwNcQUNaLKDReKwQqh89pXe1q4QEom2iYdI/z4yiBbHlvoct2FKGbe84Fr1VD9pT6tmhDIXK
-        SbzwS5yHQJf0v3+suaWduLeDF6G7oFw2L4x9nGzf62ueLAr6X/XbSzM+PSP5gJclYZfDKX82aHGyj
-        Bg6CvUww==;
-Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1o9sCc-003gX6-TH; Fri, 08 Jul 2022 17:55:42 +0000
-Date:   Fri, 8 Jul 2022 18:55:42 +0100
-From:   Matthew Wilcox <willy@infradead.org>
-To:     Nadav Amit <namit@vmware.com>
-Cc:     Ajay Kaher <akaher@vmware.com>, Bjorn Helgaas <helgaas@kernel.org>,
-        "bhelgaas@google.com" <bhelgaas@google.com>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "bp@alien8.de" <bp@alien8.de>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        "x86@kernel.org" <x86@kernel.org>, "hpa@zytor.com" <hpa@zytor.com>,
-        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "rostedt@goodmis.org" <rostedt@goodmis.org>,
-        Srivatsa Bhat <srivatsab@vmware.com>,
-        "srivatsa@csail.mit.edu" <srivatsa@csail.mit.edu>,
-        Alexey Makhalov <amakhalov@vmware.com>,
-        Anish Swaminathan <anishs@vmware.com>,
-        Vasavi Sirnapalli <vsirnapalli@vmware.com>,
-        "er.ajay.kaher@gmail.com" <er.ajay.kaher@gmail.com>
-Subject: Re: [PATCH] MMIO should have more priority then IO
-Message-ID: <YshvnodeqmJV6uIJ@casper.infradead.org>
-References: <1656433761-9163-1-git-send-email-akaher@vmware.com>
- <20220628180919.GA1850423@bhelgaas>
- <25F843ED-7EB4-4D00-96CB-7DE1AC886460@vmware.com>
- <YsgplrrJnk5Ly19z@casper.infradead.org>
- <96D533E5-F3AF-4062-B095-8C143C307E37@vmware.com>
+        Fri, 8 Jul 2022 13:59:13 -0400
+Received: from mail-oi1-x22c.google.com (mail-oi1-x22c.google.com [IPv6:2607:f8b0:4864:20::22c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CF181EC5E
+        for <linux-kernel@vger.kernel.org>; Fri,  8 Jul 2022 10:59:12 -0700 (PDT)
+Received: by mail-oi1-x22c.google.com with SMTP id s188so27649345oib.6
+        for <linux-kernel@vger.kernel.org>; Fri, 08 Jul 2022 10:59:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=mime-version:in-reply-to:references:from:user-agent:date:message-id
+         :subject:to;
+        bh=YHV2Cc5LaBeGv/AExh1dctdQCQcN3cDdvTIsITOZX7o=;
+        b=SldvymO6Yx3hvrPoQMk0aRKOPOW/TDdG0xvoqwq2gjl3jQDewEQNxT7IZ2n4Y6Gu4l
+         1xcyHRkCgBMAuyc9PpJUug4dwDal14CECAA7tgXkyHs4GcEPkOxnJ2O2ak6sdWhta0wq
+         q6WxCmt02sZKcOWwAvCuLlMjiru2aylxIdRlo=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:in-reply-to:references:from
+         :user-agent:date:message-id:subject:to;
+        bh=YHV2Cc5LaBeGv/AExh1dctdQCQcN3cDdvTIsITOZX7o=;
+        b=pd0Ci5tD3WsO1p2PDttEs9/76zHuQP+d5evKaMEJInVHVl6lxg6fZnAjn+mY4DXt9E
+         ujbb39Wzng0eqaI0ukoQ9eKOfQZe46nQDPnY4qOjfz5qxUG3EBdf3MCy0yMD7YkgVhQe
+         AsFBa1iyAqWadk7iKKbk8RghRwqPFwlHVsyEFTSg1XUGzNmaUGV4OINtkgrZtR0GjZKc
+         HUUD+eFw7FZxMy3PFzUw+0MJGMDaPtJ7fbm7eHsYTXKERoIOO9S0vZo01gL/LlWf3Qmv
+         Wlf4Bj3DnPFXbsEXinvk4HPPQ/wBA2n8um9nyA2w32FaEIjypCxcBrv5Z5v2XaZMDNOx
+         39TQ==
+X-Gm-Message-State: AJIora/RYg3ANHcJWLB2ZgpuXRRb1y0s2JsWR0Pmt2H+egN3fumFLcjM
+        Xu3jqScTkT8WVuNbdojcwXCL4DJA8Nx2Ogmk5HW7yxnDFPQ=
+X-Google-Smtp-Source: AGRyM1uArgMx4SavTqMDhwhs03SUm2moqY8zMl1EvGjoPdvbyFKjlJ+ON6yeDAIwwIeg6LPbcSDqSg6//DxGeB4CkAs=
+X-Received: by 2002:a05:6808:e87:b0:32e:4789:d2c with SMTP id
+ k7-20020a0568080e8700b0032e47890d2cmr578880oil.193.1657303151889; Fri, 08 Jul
+ 2022 10:59:11 -0700 (PDT)
+Received: from 753933720722 named unknown by gmailapi.google.com with
+ HTTPREST; Fri, 8 Jul 2022 10:59:11 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <96D533E5-F3AF-4062-B095-8C143C307E37@vmware.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <1657197381-1271-1-git-send-email-quic_srivasam@quicinc.com>
+References: <1657197381-1271-1-git-send-email-quic_srivasam@quicinc.com>
+From:   Stephen Boyd <swboyd@chromium.org>
+User-Agent: alot/0.10
+Date:   Fri, 8 Jul 2022 10:59:11 -0700
+Message-ID: <CAE-0n53X8yyWr+Q+3RpciCeZcW+t+jgZs3eqNF9O8hJcw0cq0Q@mail.gmail.com>
+Subject: Re: [PATCH v2] arm64: dts: qcom: sc7280: Move wcd specific pin conf
+ to common file
+To:     Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>,
+        agross@kernel.org, bjorn.andersson@linaro.org,
+        devicetree@vger.kernel.org, dianders@chromium.org,
+        judyhsiao@chromium.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, quic_rohkumar@quicinc.com,
+        robh+dt@kernel.org, srinivas.kandagatla@linaro.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jul 08, 2022 at 04:45:00PM +0000, Nadav Amit wrote:
-> On Jul 8, 2022, at 5:56 AM, Matthew Wilcox <willy@infradead.org> wrote:
-> 
-> > And looking at the results above, it's not so much the PIO vs MMIO
-> > that makes a difference, it's the virtualisation. A mmio access goes
-> > from 269ns to 85us. Rather than messing around with preferring MMIO
-> > over PIO for config space, having an "enlightenment" to do config
-> > space accesses would be a more profitable path.
-> 
-> I am unfamiliar with the motivation for this patch, but I just wanted to
-> briefly regard the advice about enlightments.
-> 
-> “enlightenment”, AFAIK, is Microsoft’s term for "para-virtualization", so
-> let’s regard the generic term. I think that you consider the bare-metal
-> results as the possible results from a paravirtual machine, which is mostly
-> wrong. Para-virtualization usually still requires a VM-exit and for the most
-> part the hypervisor/host runs similar code for MMIO/hypercall (conceptually;
-> the code of paravirtual and fully-virtual devices is often different, but
-> IIUC, this is not what Ajay measured).
-> 
-> Para-virtualization could have *perhaps* helped to reduce the number of
-> PIO/MMIO and improve performance this way. If, for instance, all the
-> PIO/MMIO are done during initialization, a paravirtual interface can be use
-> to batch them together, and that would help. But it is more complicated to
-> get a performance benefit from paravirtualization if the PIO/MMIO accesses
-> are “spread”, for instance, done after each interrupt.
+Quoting Srinivasa Rao Mandadapu (2022-07-07 05:36:21)
+> diff --git a/arch/arm64/boot/dts/qcom/sc7280-herobrine-audio-wcd9385.dtsi b/arch/arm64/boot/dts/qcom/sc7280-herobrine-audio-wcd9385.dtsi
+> index 32a1e78..859faaa 100644
+> --- a/arch/arm64/boot/dts/qcom/sc7280-herobrine-audio-wcd9385.dtsi
+> +++ b/arch/arm64/boot/dts/qcom/sc7280-herobrine-audio-wcd9385.dtsi
+> @@ -5,6 +5,70 @@
+>   * Copyright (c) 2022, The Linux Foundation. All rights reserved.
+>   */
+>
+> +/* PINCTRL */
+> +
+> +&lpass_dmic01_clk {
+> +       drive-strength = <8>;
+> +       bias-disable;
+> +};
+> +
+> +&lpass_dmic01_clk_sleep {
+> +       drive-strength = <2>;
+> +};
+> +
+> +&lpass_dmic01_data {
+> +       bias-pull-down;
+> +};
+> +
+> +&lpass_dmic23_clk {
+> +       drive-strength = <8>;
+> +       bias-disable;
+> +};
+> +
+> +&lpass_dmic23_clk_sleep {
+> +       drive-strength = <2>;
+> +};
+> +
+> +&lpass_dmic23_data {
+> +       bias-pull-down;
+> +};
+> +
+> +&lpass_rx_swr_clk {
+> +       drive-strength = <2>;
+> +       slew-rate = <1>;
+> +       bias-disable;
+> +};
+> +
+> +&lpass_rx_swr_clk_sleep {
+> +       bias-pull-down;
+> +};
+> +
+> +&lpass_rx_swr_data {
+> +       drive-strength = <2>;
 
-What kind of lousy programming interface requires you to do a config
-space access after every interrupt?  This is looney-tunes.
+I suspect this was discussed before, but why do we need to modify drive
+strengths on pins that aren't in output mode? I assume either rx_swr or
+tx_swr is unidirectional.
 
-You've used a lot of words to not answer the question that was so
-important that I asked it twice.  What's the use case, what's the
-workload that would benefit from this patch?
-
-> Para-virtauilzation and full-virtualization both have pros and cons.
-> Para-virtualization is many times more efficient, but requires the VM to
-> have dedicated device drivers for the matter. Try to run a less-common OS
-> than Linux and it would not work since the OS would not have drivers for the
-> paras-virtual devices. And even if you add support today for a para-virtual
-> devices, there are many deployed OSes that do not have such support, and you
-> would not be able to run them in a VM.
-> 
-> Regardless to virtualization, Ajay’s results show PIO is slower on
-> bare-metal, and according to his numbers by 165ns, which is significant.
-> Emulating PIO in hypervisors on x86 is inherently more complex than MMIO, so
-> the results he got would most likely happen on all hypervisors.
-> 
-> tl;dr: Let’s keep this discussion focused and put paravirtualization aside.
-> It is not a solution for all the problems in the world.
+> +       slew-rate = <1>;
+> +       bias-bus-hold;
+> +};
+> +
+> +&lpass_rx_swr_data_sleep {
+> +       bias-pull-down;
+> +};
+> +
+> +&lpass_tx_swr_clk {
+> +       drive-strength = <2>;
+> +       slew-rate = <1>;
+> +       bias-disable;
+> +};
+> +
+> +&lpass_tx_swr_clk_sleep {
+> +       bias-pull-down;
+> +};
+> +
+> +&lpass_tx_swr_data {
+> +       drive-strength = <2>;
+> +       slew-rate = <1>;
+> +       bias-bus-hold;
+> +};
+> +
+>  &mi2s1_data0 {
+>         drive-strength = <6>;
+>         bias-disable;

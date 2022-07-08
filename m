@@ -2,62 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EEC7856C475
-	for <lists+linux-kernel@lfdr.de>; Sat,  9 Jul 2022 01:15:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 37B9F56C2EA
+	for <lists+linux-kernel@lfdr.de>; Sat,  9 Jul 2022 01:13:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239951AbiGHWNi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Jul 2022 18:13:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40168 "EHLO
+        id S239358AbiGHWOW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Jul 2022 18:14:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40950 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239536AbiGHWNe (ORCPT
+        with ESMTP id S240060AbiGHWOU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Jul 2022 18:13:34 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26E23A469;
-        Fri,  8 Jul 2022 15:13:33 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id C621CB8299F;
-        Fri,  8 Jul 2022 22:13:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6DAA0C341C0;
-        Fri,  8 Jul 2022 22:13:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1657318410;
-        bh=qr9hXyMtBnv4Vq7MoL7+czDkG7MtG1o0tmvCrXRDC6g=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=DqL5PeTbNUlDvoTSwNfxSjrege045KYRB2xgaMAbQ7vDkGwkLhNsVabxY54rmiy5u
-         6tR7sbpvQwdtfPWzy8N9FPz6+e3+KMTVc6iwhG8RPEq8TIFV7GG5KEvC6dJqsy9kyE
-         TsqVCdtD3DQss1WTIwIsrKbDpPdmeQZKPlt60/DfjIXSYiiCehqjxUaPSvfFaWtZYm
-         3qTVgIpLduSNcYNu+fYFcUtKcBACdHB5kw18ike4msyfVMMcCseJn3o5YQKq6bNURO
-         WysBBevhWAjcNNNrgHCh7FqllYjrcmynLhWvCdeNrIpIdP+FOKcywSJCFf0BqmiH6y
-         Hn/Lky+5iQVDQ==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id 01A965C0835; Fri,  8 Jul 2022 15:13:29 -0700 (PDT)
-Date:   Fri, 8 Jul 2022 15:13:29 -0700
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     "Zhang, Qiang1" <qiang1.zhang@intel.com>
-Cc:     "frederic@kernel.org" <frederic@kernel.org>,
-        "quic_neeraju@quicinc.com" <quic_neeraju@quicinc.com>,
-        "rcu@vger.kernel.org" <rcu@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v2] rcu: Make tiny RCU support leak callbacks for
- debug-object errors
-Message-ID: <20220708221329.GZ1790663@paulmck-ThinkPad-P17-Gen-1>
-Reply-To: paulmck@kernel.org
-References: <20220701024404.2228367-1-qiang1.zhang@intel.com>
- <20220705174109.GD1790663@paulmck-ThinkPad-P17-Gen-1>
- <PH0PR11MB5880370195C11E8E943069CBDA809@PH0PR11MB5880.namprd11.prod.outlook.com>
- <20220706035040.GG1790663@paulmck-ThinkPad-P17-Gen-1>
- <PH0PR11MB5880E86FD8C97088EC65B0A1DA809@PH0PR11MB5880.namprd11.prod.outlook.com>
- <PH0PR11MB5880176B380D4177EC6E8C61DA809@PH0PR11MB5880.namprd11.prod.outlook.com>
+        Fri, 8 Jul 2022 18:14:20 -0400
+Received: from mail-io1-f50.google.com (mail-io1-f50.google.com [209.85.166.50])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55CA62A707;
+        Fri,  8 Jul 2022 15:14:20 -0700 (PDT)
+Received: by mail-io1-f50.google.com with SMTP id z81so284306iof.0;
+        Fri, 08 Jul 2022 15:14:20 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=qizlKD9bE5dN8tJcWqnW6FaDP0qSa79ZfPV40HiDdGQ=;
+        b=Yiu1EWliG8RLFfRL/e3eAzDNbrkLPyf+vzABOthH0KsHQ/X9K0O9HkrwSedV5c5C3H
+         bAm8pLNlNJx7+3vo6yHhEggx879Bk782o5qFCQ72Bljrud9REIxrTbEQZ5e2ov5JVQ9U
+         EwDtpSlRn5r3OKh1o9o0asnbd1QQ78+dsVCQbd1u5DrNo/ZI0zC+ywc6Cfq03fzCgmNA
+         GlG9oiBOTNfw6cd7tWmEWLY+fifqnTxzb7dgXFdNgifPMqVtDrlx1o8aTl4jAa8YWUjC
+         7HkOtmXZW83AmvwAfnTwxaxwY8zFAxO+9r0ORM2U60kOzrEdRcnCaEByg/L/zP4oCbth
+         BNLg==
+X-Gm-Message-State: AJIora/79bt9+kiZRi6/LrVQTowdNGHjwc5S+LE8qhf7g1aaaKkA/nEj
+        /ZpILCjeya8DnRQ7gAOMvQ==
+X-Google-Smtp-Source: AGRyM1t4peia84G04eriBOduqU7X4VUiKCFhcEgAmMHSCwj5GjAENVk5PMLOfC7mJNOQOcZb13sK1g==
+X-Received: by 2002:a05:6602:2e8e:b0:669:d5b1:3fc9 with SMTP id m14-20020a0566022e8e00b00669d5b13fc9mr3158325iow.210.1657318459564;
+        Fri, 08 Jul 2022 15:14:19 -0700 (PDT)
+Received: from robh.at.kernel.org ([98.38.210.73])
+        by smtp.gmail.com with ESMTPSA id w10-20020a92db4a000000b002dad39ff841sm10133296ilq.19.2022.07.08.15.14.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 08 Jul 2022 15:14:19 -0700 (PDT)
+Received: (nullmailer pid 1573273 invoked by uid 1000);
+        Fri, 08 Jul 2022 22:14:17 -0000
+Date:   Fri, 8 Jul 2022 16:14:17 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Mia Lin <mimi05633@gmail.com>
+Cc:     avifishman70@gmail.com, devicetree@vger.kernel.org,
+        tmaimon77@gmail.com, alexandre.belloni@bootlin.com,
+        yuenn@google.com, KFTING@nuvoton.com, venture@google.com,
+        robh+dt@kernel.org, linux-kernel@vger.kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, YSCHU@nuvoton.com,
+        tali.perry1@gmail.com, ctcchien@nuvoton.com,
+        benjaminfair@google.com, mylin1@nuvoton.com,
+        openbmc@lists.ozlabs.org, KWLIU@nuvoton.com, JJLIU0@nuvoton.com,
+        a.zummo@towertech.it, linux-rtc@vger.kernel.org
+Subject: Re: [PATCH v4 1/3] dt-bindings: rtc: nuvoton: add NCT3018Y Real Time
+ Clock
+Message-ID: <20220708221417.GA1573219-robh@kernel.org>
+References: <20220707073054.3954-1-mimi05633@gmail.com>
+ <20220707073054.3954-2-mimi05633@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <PH0PR11MB5880176B380D4177EC6E8C61DA809@PH0PR11MB5880.namprd11.prod.outlook.com>
-X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+In-Reply-To: <20220707073054.3954-2-mimi05633@gmail.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -65,150 +71,15 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jul 06, 2022 at 04:24:03AM +0000, Zhang, Qiang1 wrote:
+On Thu, 07 Jul 2022 15:30:52 +0800, Mia Lin wrote:
+> Document devicetree bindings for the Nuvoton NCT3018Y Real Time Clock.
 > 
-> On Wed, Jul 06, 2022 at 02:00:51AM +0000, Zhang, Qiang1 wrote:
-> > On Fri, Jul 01, 2022 at 10:44:04AM +0800, Zqiang wrote:
-> > > Currently, only tree RCU support leak callbacks setting when do
-> > > duplicate call_rcu(). this commit add leak callbacks setting when
-> > > fo duplicate call_rcu() for tiny RCU.
-> > > 
-> > > Signed-off-by: Zqiang <qiang1.zhang@intel.com>
-> > 
-> > >This does look plausible, thank you!
-> > >
-> > >What testing have you done?
-> > >
-> > >One important test for Tiny RCU is that the size of the kernel not
-> > >grow without a very good reason.  In this case, the added code should
-> > >be dead code in a production build (CONFIG_DEBUG_OBJECTS_RCU_HEAD=n),
-> > >but it is good to check.
-> > >
-> > >It is of course also good to check that the messages print as expected,
-> > >which is what rcutorture.object_debug is there to help with.
-> > 
-> > In the condition that the CONFIG_DEBUG_OBJECTS_RCU_HEAD=n, the function directly returns zero.
-> > 
-> > #else   /* !CONFIG_DEBUG_OBJECTS_RCU_HEAD */
-> > static inline int debug_rcu_head_queue(struct rcu_head *head)
-> > {
-> >         return 0;
-> > }
-> >
-> >Yes, like I said, the added code -should- be dead code.  But there is
-> >often a gap between "should" and "is", for example, compilers don't
-> >always do what we would like them to.  So please use the "size vmlinux"
-> >command with and without your patch for a kernel built (both times)
-> >with CONFIG_TINY_RCU=y and CONFIG_DEBUG_OBJECTS_RCU_HEAD==n.
-> >
-> >The rest of the test results look good, thank you!
+> Signed-off-by: Mia Lin <mimi05633@gmail.com>
+> ---
+>  .../bindings/rtc/nuvoton,nct3018y.yaml        | 45 +++++++++++++++++++
+>  MAINTAINERS                                   |  1 +
+>  2 files changed, 46 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/rtc/nuvoton,nct3018y.yaml
 > 
-> Hi Paul
-> 
-> 1. CONFIG_TINY_RCU=y and CONFIG_DEBUG_OBJECTS_RCU_HEAD=y
-> 
-> Original:
-> text                      data                   bss                   dec                     hex       filename
-> 26291319        20160143        15212544        61664006        3aceb06    vmlinux
-> 
-> Applay patch:
-> text                       data                  bss                     dec                 hex    filename
-> 26291319        20160431        15212544        61664294        3acec26 vmlinux
-> 
-> 2. CONFIG_TINY_RCU=y and CONFIG_DEBUG_OBJECTS_RCU_HEAD=n
-> 
-> Original:
-> text                    data                   bss                          dec     hex filename
-> 26290663        20159823        15212544        61663030        3ace736 vmlinux
-> 
-> Applay patch:
-> text                     data                     bss                    dec     hex filename
-> 26290663        20159823        15212544        61663030        3ace736 vmlinux
 
-Much better, thank you!
-
-Please see below for the commit updated with this information and
-wordsmithed a bit.  As always, please let me know if I messed something
-up.
-
-							Thanx, Paul
-
-------------------------------------------------------------------------
-
-commit 88cea4e18ed430aa1187063450236fc00408eaac
-Author: Zqiang <qiang1.zhang@intel.com>
-Date:   Fri Jul 1 10:44:04 2022 +0800
-
-    rcu: Make tiny RCU support leak callbacks for debug-object errors
-    
-    Currently, only Tree RCU leaks callbacks setting when it detects a
-    duplicate call_rcu().  This commit causes Tiny RCU to also leak
-    callbacks in this situation.
-    
-    Because this is Tiny RCU, kernel size is important:
-    
-    1. CONFIG_TINY_RCU=y and CONFIG_DEBUG_OBJECTS_RCU_HEAD=n
-       (Production kernel)
-    
-        Original:
-        text      data      bss       dec       hex     filename
-        26290663  20159823  15212544  61663030  3ace736 vmlinux
-    
-        With this commit:
-        text      data      bss       dec       hex     filename
-        26290663  20159823  15212544  61663030  3ace736 vmlinux
-    
-    2. CONFIG_TINY_RCU=y and CONFIG_DEBUG_OBJECTS_RCU_HEAD=y
-       (Debugging kernel)
-    
-        Original:
-        text      data      bss       dec       hex     filename
-        26291319  20160143  15212544  61664006  3aceb06 vmlinux
-    
-        With this commit:
-        text      data      bss       dec       hex     filename
-        26291319  20160431  15212544  61664294  3acec26 vmlinux
-    
-    These results show that the kernel size is unchanged for production
-    kernels, as desired.
-    
-    Signed-off-by: Zqiang <qiang1.zhang@intel.com>
-    Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
-
-diff --git a/kernel/rcu/tiny.c b/kernel/rcu/tiny.c
-index f0561ee16b9c2..943d431b908f6 100644
---- a/kernel/rcu/tiny.c
-+++ b/kernel/rcu/tiny.c
-@@ -158,6 +158,10 @@ void synchronize_rcu(void)
- }
- EXPORT_SYMBOL_GPL(synchronize_rcu);
- 
-+static void tiny_rcu_leak_callback(struct rcu_head *rhp)
-+{
-+}
-+
- /*
-  * Post an RCU callback to be invoked after the end of an RCU grace
-  * period.  But since we have but one CPU, that would be after any
-@@ -165,9 +169,20 @@ EXPORT_SYMBOL_GPL(synchronize_rcu);
-  */
- void call_rcu(struct rcu_head *head, rcu_callback_t func)
- {
-+	static atomic_t doublefrees;
- 	unsigned long flags;
- 
--	debug_rcu_head_queue(head);
-+	if (debug_rcu_head_queue(head)) {
-+		if (atomic_inc_return(&doublefrees) < 4) {
-+			pr_err("%s(): Double-freed CB %p->%pS()!!!  ", __func__, head, head->func);
-+			mem_dump_obj(head);
-+		}
-+
-+		if (!__is_kvfree_rcu_offset((unsigned long)head->func))
-+			WRITE_ONCE(head->func, tiny_rcu_leak_callback);
-+		return;
-+	}
-+
- 	head->func = func;
- 	head->next = NULL;
- 
+Reviewed-by: Rob Herring <robh@kernel.org>

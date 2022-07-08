@@ -2,189 +2,243 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 790F056BD83
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 18:08:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5AD8756BDA6
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 18:08:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238624AbiGHPeR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Jul 2022 11:34:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52124 "EHLO
+        id S238666AbiGHPeU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Jul 2022 11:34:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52138 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232748AbiGHPeP (ORCPT
+        with ESMTP id S238613AbiGHPeR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Jul 2022 11:34:15 -0400
-Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C60311A3A6;
-        Fri,  8 Jul 2022 08:34:14 -0700 (PDT)
-Received: by mail-wm1-x336.google.com with SMTP id n185so12598383wmn.4;
-        Fri, 08 Jul 2022 08:34:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=MAqLoi+55aml5N6fFSPK1rUqMXnOHduR/XoxC2k56IQ=;
-        b=aBInTkdfKEbuCecWBfZTYBsX4pUvITVCPZg6LYSP+R7TTijdbEIlhjuLniqz7iqDLT
-         N9lputlg96scgD8vmFch3VKZPdBFs/4Rtus1IKiZdq3vIYYqOuH+FgGK9SGDdxSHfaMx
-         tVd+lRAUvCiR9C356gGavD38VLJr+ahNtI8b4EjlHmpeL4swe+YMSW03QZzPf/6kiNCz
-         Z76F1yjmN02kgpKeQiRhk6CBIIldbqJJRfvkzyrmsamXW4Qdc2KyCsov3mK3lpg8pQ8G
-         zN8jifKQG265+LEqfqGKruL1+PJ5STxAxnRHHeQ+PLfPJqFxaZHc+Wr5fQKPnID194vE
-         +wUQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=MAqLoi+55aml5N6fFSPK1rUqMXnOHduR/XoxC2k56IQ=;
-        b=Mtk6V8vCSA2S0+y1yEm9WCa4JTcqqhBh5foLWBWnfdBon42jfBGrAcpG4Md7ECealk
-         t+72KMGu8Ee/M0mToOABoGjkGAV2XH+mYfsWOgsCBTAXISLSFBIXIIUreWYzZ21+kDXQ
-         h5vewHX5/udgf1/LXolFDJE4tPuUJXkCYuvSoz50EVZdr7Nb9GdoMj21+JcU08d/WMPz
-         2lBAC4pXeRhh/6cKyepGrEQTHkUh8tr39ykYQuieIPon0r8ebvO90W8ytftcJg0J0L7e
-         QejsjH9sqdsGfpCBjHPmv9ylcK0v4pigLbYVG+yjw+c79sB7R4EGtSQN5uS9VCRWrPIH
-         b2gw==
-X-Gm-Message-State: AJIora8VMHkhYXmqkZdKZfYWCr6QOFy6rFYXFF663z78D1fTj021qqDx
-        HRGvFJMbWBlZ0vcII1uWKns=
-X-Google-Smtp-Source: AGRyM1vJh5BBswMOyUfeUEhKlXJeDvX61sP0BSyfepc6oJN5VGNdZqaoBvRL8zEWyyEan5Yznxgl1A==
-X-Received: by 2002:a7b:cd94:0:b0:3a1:7c5c:b11d with SMTP id y20-20020a7bcd94000000b003a17c5cb11dmr393698wmj.87.1657294453162;
-        Fri, 08 Jul 2022 08:34:13 -0700 (PDT)
-Received: from [192.168.1.145] ([207.188.167.132])
-        by smtp.gmail.com with ESMTPSA id c3-20020adfef43000000b0021bab0ba755sm42956689wrp.106.2022.07.08.08.34.10
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 08 Jul 2022 08:34:11 -0700 (PDT)
-Message-ID: <d1a93418-587b-a03d-ed9b-01646345deeb@gmail.com>
-Date:   Fri, 8 Jul 2022 17:34:10 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH v24 04/10] soc: mediatek: add mtk_mmsys_update_bits API
+        Fri, 8 Jul 2022 11:34:17 -0400
+Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5FE031A3A6;
+        Fri,  8 Jul 2022 08:34:16 -0700 (PDT)
+Received: from pps.filterd (m0109334.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 2686HETX022113;
+        Fri, 8 Jul 2022 08:34:15 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
+ : date : message-id : references : in-reply-to : content-type : content-id
+ : mime-version; s=facebook;
+ bh=KHuRAmkjWXGkEbEaOgra6KB65MUFyEEv1Q8DSQVuWko=;
+ b=LrmBVsZ9wq/gm+BrhwG/fffZUu8mDYapuebWPUreiaJTkUOXjwC9FoyE7rDcG8udydUa
+ 8WeAdr+jES4ch7PSHQrBlxI1mUWYT1UB6sZTrKEaxzv3OGgEsFGWgkmT7XT/JSzRVvk7
+ OJc2jIxDdtK4fmDCWMsgPdxGDDKhbgw4gLQ= 
+Received: from nam12-mw2-obe.outbound.protection.outlook.com (mail-mw2nam12lp2048.outbound.protection.outlook.com [104.47.66.48])
+        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3h6f69tpca-2
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 08 Jul 2022 08:34:15 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=mjd674sENYZNy0xaoXqUBrz6cRGcWU2Eo2j29jH3DGp874cOJtk3BgMXgOZuNMp6LcIott1Js0+mmt5kkcKGF3dADVAtcb44HpSzRcx8x1ZBA7Y5ltk4K4qSWnBfIZafnbDXclvA7nxuLNW/GQPJ+C8Uz7Edljr65GO+g1ilMZlWlVfHtNJMKs5Gpz3f2hOjDbpZiSwMFTPqycpKOHuDEfdf45V+AUuUfEGiRKMLYXFMBHcqB4ayuQzzDtMq6T/iXV39ccckcXQR6YUwBIpmR/R4L+SfIP1U2mq42enJfsRa+B/yO/qBUDYfelNTqoX1o/rioGLw9XqSaHTmHmryTw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=KHuRAmkjWXGkEbEaOgra6KB65MUFyEEv1Q8DSQVuWko=;
+ b=BDZYUMYhg2VWFliJGwFp35HPJul/g51DJFGRz/h+FXiM0XkYyzmmTQTRPIWvJ4A58fcuNH24l1mWm/eKSdI2t37odXGamBpKcxHwnOMrLDWpJ4wb4jnCCRCOc0gFdBC1A2bZeijrVj4h2V34E6GQ1ZPQf+lhI1DtTjzN4O1R5VxPnAfAKCUC5S57i9m9fentxp9S9I+cqaYrANLJPlnqTHoHkg0uufp5iBz4l2qTQLL5hZ7yH/F9jkKJKL8KLtoH0pZWSl5BG9HdP7XMWqzRFsZFVIjkEle8llKeBecluyeoe6QI+Ak7PXq4G0hCab66rCvr5jQ0AU6cWcxGmQF6MQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=fb.com; dmarc=pass action=none header.from=fb.com; dkim=pass
+ header.d=fb.com; arc=none
+Received: from SJ0PR15MB4552.namprd15.prod.outlook.com (2603:10b6:a03:379::12)
+ by MN2PR15MB3198.namprd15.prod.outlook.com (2603:10b6:208:39::30) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5417.16; Fri, 8 Jul
+ 2022 15:34:12 +0000
+Received: from SJ0PR15MB4552.namprd15.prod.outlook.com
+ ([fe80::81f9:c21c:c5bf:e174]) by SJ0PR15MB4552.namprd15.prod.outlook.com
+ ([fe80::81f9:c21c:c5bf:e174%8]) with mapi id 15.20.5417.017; Fri, 8 Jul 2022
+ 15:34:12 +0000
+From:   Jonathan McDowell <noodles@fb.com>
+To:     Mimi Zohar <zohar@linux.ibm.com>
+CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
+        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
+        "linux-security-module@vger.kernel.org" 
+        <linux-security-module@vger.kernel.org>,
+        "kexec@lists.infradead.org" <kexec@lists.infradead.org>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
+        James Morris <jmorris@namei.org>,
+        "Serge E. Hallyn" <serge@hallyn.com>,
+        Matthew Garrett <mjg59@srcf.ucam.org>,
+        Dmitrii Potoskuev <dpotoskuev@fb.com>,
+        Roberto Sassu <roberto.sassu@huawei.com>,
+        Eugeniu Rosca <erosca@de.adit-jv.com>
+Subject: Re: [RFC PATCH 0/7] ima: Support measurement of kexec initramfs
+ components
+Thread-Topic: [RFC PATCH 0/7] ima: Support measurement of kexec initramfs
+ components
+Thread-Index: AQHYkrL0bI78Vrzdvk2Q1fjMWNCY+K10XEwAgAA+oIA=
+Date:   Fri, 8 Jul 2022 15:34:12 +0000
+Message-ID: <YshObzBwiUoyJ3oP@noodles-fedora.dhcp.thefacebook.com>
+References: <cover.1657272362.git.noodles@fb.com>
+ <01c9e6e230b54831091757fe7a09714ccf4bd898.camel@linux.ibm.com>
+In-Reply-To: <01c9e6e230b54831091757fe7a09714ccf4bd898.camel@linux.ibm.com>
+Accept-Language: en-GB, en-US
 Content-Language: en-US
-To:     "Nancy.Lin" <nancy.lin@mediatek.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>, wim@linux-watchdog.org,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>, linux@roeck-us.net
-Cc:     David Airlie <airlied@linux.ie>, Daniel Vetter <daniel@ffwll.ch>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        "jason-jh . lin" <jason-jh.lin@mediatek.com>,
-        Yongqiang Niu <yongqiang.niu@mediatek.com>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org,
-        dri-devel@lists.freedesktop.org, llvm@lists.linux.dev,
-        singo.chang@mediatek.com,
-        Project_Global_Chrome_Upstream_Group@mediatek.com
-References: <20220622130824.29143-1-nancy.lin@mediatek.com>
- <20220622130824.29143-5-nancy.lin@mediatek.com>
-From:   Matthias Brugger <matthias.bgg@gmail.com>
-In-Reply-To: <20220622130824.29143-5-nancy.lin@mediatek.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: dc8b94f4-a1a4-4b64-218c-08da60f74efc
+x-ms-traffictypediagnostic: MN2PR15MB3198:EE_
+x-fb-source: Internal
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: nd7J1GuSn8mlPUxjryh72EJ/WnhjkvJ5L1J4qhBf4ciMlOmaklWWMiQl9mvKmdAvvkIT//Gc4ogbwj3hGzNAjszdVYC4fSPtEWQhGfblitAS2NqY3y/Im1I9IszeiHSPkHLuN4nvWzh/iJIHMd465PCcWepWG7JESQ+Zi8FSozt1B7Ww9CQXk2TYFdFAoKbFlXYMXTNbUBgOKpDbPAaOW9TmaCAsCmQvhmEZjxEE+Hycx2e8L9SMKLuCMPWpWbk0ObJRVSSmotgL/nbtr8ieb0yBHDobMaEojcTukXziH1pOiFzv0ANPPTyCUTqOhTrrSxXZlU7kc3qppSN+HBNW1ZHaTRpc/hnEXnmfq7rmC2XUaIYtuPMjGSRuaAJm/MVMRwDslvJEWQj+7IqYyi01UTBobesrwA9WbJGzwu7oa6FvyYfBlb3U5GlthxhOdetHQhvRQDlQsIT9/hMYFvf6LeIrkaAL98vp0W7EbEaC/06FPiUl8B30p7FCe8Ba6Mwj109F5FYK/hdYGBv7gJpLLj3gmcnWsMvTJcIagzCqEZjBpilnncrkA7jNiwyJhE+Pwoo+JYpxS4YpBYuLD6u1i+hODPvNrjVS+0aw5qaajKo7D0bcCQ+HC2NNuZqGSUpT2EdZag6sa+cX5rSDRHf+2SOzmc8sVFkAw+k9msWRUcrhrLENZpPex75UOYOQihFlGC/NsLt2qd+Fx0UlBoQMjXaNs4JcgyClQm4wna+cNr17rNe8PkEBHRqv+WcAngOmYr29RwRg2Wt1b5jCPDVO0+szSot/s7Vl8dsD+3PiEJrhoCo9arK25Np3PY+7/M9S
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SJ0PR15MB4552.namprd15.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(346002)(39860400002)(366004)(136003)(376002)(396003)(86362001)(6916009)(66556008)(4326008)(41300700001)(6486002)(76116006)(38100700002)(316002)(478600001)(8676002)(64756008)(66476007)(66446008)(186003)(66946007)(6506007)(26005)(91956017)(83380400001)(2906002)(6512007)(54906003)(122000001)(9686003)(7416002)(5660300002)(71200400001)(8936002)(38070700005);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?8qrRr7ykkSIJz973rMKEPtUf8MdtH1jzbxZjd/1VpJLEkXTrnJRWAkPS1w0G?=
+ =?us-ascii?Q?+Bf9/ZzPZqaQyo/+tcLmYIfZgEgKf1eY889amzgduXw47IHjbWkcxcV9S5Kh?=
+ =?us-ascii?Q?NnuTm+F6Gc2R+GbE4LzCc32Hh7z2RI8QZmePmIT+54P3x/rmud46sY52hZZc?=
+ =?us-ascii?Q?zX93miNtexY3sWb9KjncQhSZbkqkRiY6hw+1hzjGcn7w/50L2KOfbG17Ovrv?=
+ =?us-ascii?Q?DNtVT090i82x/aNm++HLp92UH3pPpPXbbnH2UG8I/46OPMi08VNERwIZcG7X?=
+ =?us-ascii?Q?wylVJIlRk4Az/e+e6xYSwoOOAlGD+Mcp+sPTb8PmvhWRD8EtqNsibFusuivP?=
+ =?us-ascii?Q?B5HjaRDLFEEs5FELIbrfw8VHjKDNTzudnQG/KQZl4xNrHLKJrSbfDKZQeGj5?=
+ =?us-ascii?Q?ynhR8v9qHgkjXFW3jIT6zi527t+b99gQKYhNzVgDl5OCmYCQZG/WcwSu/h+v?=
+ =?us-ascii?Q?r0NZ3jOyOhu6phn1UkAbNxu7xDYFxvXvSeq0nPG1I66IpPZBCRWpA0QDKPL5?=
+ =?us-ascii?Q?pW7akSKED6wCTdAVCYKiPUSDnSNkcWoAnPW1FdC4Uzp3XfGA1fv9nPMNDpxC?=
+ =?us-ascii?Q?IHGLgfhke0MbyYi41SN1F+asZ3pm4SYOOyUWoa0uWzOhoyW+5bx6uf9eKby0?=
+ =?us-ascii?Q?b8u6bbJFY+WbvMaQ+CWvXqK4c5xOajFSdXOTcqRBBzvGs8VYb8aKJ2u+e1uy?=
+ =?us-ascii?Q?GXE3lhvpy4PGdiga1ZOTrJqEXk8aEzi2N64AaSSTBmhJ4dSKxCQTFi2tgUXG?=
+ =?us-ascii?Q?AOcmzTkcoTZDtiA8CCUiAoKSD25+BedbVenT2JaRUuS5h5/GVVdV8XwqtqvK?=
+ =?us-ascii?Q?TlXleWyEvSN8cw916dm+Scm7G0saw99VTJCIAURkXwpmK/np26RffGyyXhMX?=
+ =?us-ascii?Q?lJNHgNLOzXxI/9svyQ/1EVGlP5dvGbzctYtNWP1fUOZ8QVT19pRIKatjOfvD?=
+ =?us-ascii?Q?xubXZ5y/vRAY1mJQkRlToJ/+5vUM1AZBj6J8LPxHC7WgSmlLlBFuynG7EcBo?=
+ =?us-ascii?Q?7r+TSK+GvS1ZdAZ6lVB9SNMbaTTnyBNkph6nMi9xt3Pb4b9t1rnosddMvSeD?=
+ =?us-ascii?Q?RP2BOwcIWYCPgPb4fUT5DXDVAmjd54BLTiHM7lQ+gFfFhWSMqZbpeZwkI10d?=
+ =?us-ascii?Q?rBBuK0lf5ky5sotw8qldSg4QJpIjHHQnOgJu5GvJ+FZ/4g0Lb33EUI83uAYw?=
+ =?us-ascii?Q?p3Itp3FVqCsmul2UkDKMZ799e53OCULrK8jnlItvw+VM1soHViIjJY59n3l8?=
+ =?us-ascii?Q?YSJIGm4WGMGo/sQmtZfKOmhbBYuLhmTHzLtBWg1ncrl+pzO4fxH1JL16hsvo?=
+ =?us-ascii?Q?Fat8jBGpH368NQlhks9osRlfX0FDRVvl4MCtoMw6DIf1M9fc1oUmhGl7ZRzB?=
+ =?us-ascii?Q?Mt/Lk/853BoLp9NfWwKOQ6FAY1cPa+8UjHTEjCPQoy5lMKPnXeEu1as5D5e7?=
+ =?us-ascii?Q?jx63UGtaHisZDS4jxVbJoKZPkC8SoIKlHKkmMrGH41ZONDids5z0lDAlz15O?=
+ =?us-ascii?Q?cF4Zwtcs76ABs3Sy7nehiWBJpdJm4KT2Si8QLNQfku3aBQli1Acb57p3EKhA?=
+ =?us-ascii?Q?tLoe/5SmMk12vaofhck6//S95YlFCzU7um64d0XQ?=
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <699E7F58919E8D4F9D08CB78C3879D6D@namprd15.prod.outlook.com>
+MIME-Version: 1.0
+X-OriginatorOrg: fb.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: SJ0PR15MB4552.namprd15.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: dc8b94f4-a1a4-4b64-218c-08da60f74efc
+X-MS-Exchange-CrossTenant-originalarrivaltime: 08 Jul 2022 15:34:12.4524
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 8ae927fe-1255-47a7-a2af-5f3a069daaa2
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: 0+GEkhXJqTxWA7Vo8guA9KgjQcM6xPB2E4R3LSp09kWfAeNNC1somWBb3y7Nn2at
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR15MB3198
+X-Proofpoint-ORIG-GUID: EShIWND1gyTj0B5KLwDnMhLxzKM5tT9r
+X-Proofpoint-GUID: EShIWND1gyTj0B5KLwDnMhLxzKM5tT9r
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
+ definitions=2022-07-08_13,2022-07-08_01,2022-06-22_01
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 22/06/2022 15:08, Nancy.Lin wrote:
-> Add mtk_mmsys_update_bits API. Simplify code for update  mmsys reg.
-> It is a preparation for adding support for mmsys config API.
+On Fri, Jul 08, 2022 at 07:49:58AM -0400, Mimi Zohar wrote:
+> On Fri, 2022-07-08 at 10:10 +0000, Jonathan McDowell wrote:
+> > This patchset is not yet complete, but it's already moving around a
+> > bunch of stuff so I am sending it out to get either some agreement that
+> > it's a vaguely sane approach, or some pointers about how I should be
+> > doing this instead.
+> > 
+> > It aims to add an option to IMA to measure the individual components
+> > that make up an initramfs that is being used for kexec, rather than the
+> > entire initramfs blob. For example in the situation where the initramfs
+> > blob contains some uncompressed early firmware and then a compressed
+> > filesystem there will be 2 measurements folded into the TPM, and logged
+> > into the IMA log.
+> > 
+> > Why is this useful? Consider the situation where images have been split
+> > out to a set of firmware, an initial userspace image that does the usual
+> > piece of finding the right root device and switching into it, and an
+> > image that contains the necessary kernel modules.
+> > 
+> > For a given machine the firmware + userspace images are unlikely to
+> > change often, while the kernel modules change with each upgrade. If we
+> > measure the concatenated image as a single blob then it is necessary to
+> > calculate all the permutations of images that result, which means
+> > building and hashing the combinations. By measuring each piece
+> > individually a hash can be calculated for each component up front
+> > allowing for easier analysis of whether the running state is an expected
+> > one.
+> > 
+> > The KEXEC_FILE_LOAD syscall only allows a single initramfs image to be
+> > passed in; one option would be to add a new syscall that supports
+> > multiple initramfs fds and read each in kimage_file_prepare_segments().
+> > 
+> > Instead I've taken a more complicated approach that doesn't involve a
+> > new syscall or altering the kexec userspace, building on top of the way
+> > the boot process parses the initramfs and using that same technique
+> > within the IMA measurement for the READING_KEXEC_INITRAMFS path.
+> > 
+> > To that end I've pulled the cpio handling code out of init/initramfs.c
+> > and into lib/ and made it usable outside of __init when required. That's
+> > involved having to pull some of the init_syscall file handling routines
+> > into the cpio code (and cleaning them up when the cpio code is the only
+> > user). I think there's the potential for a bit more code clean up here,
+> > but I've tried to keep it limited to providing the functionality I need
+> > and making checkpatch happy for the moment.
+> > 
+> > Patch 1 pulls the code out to lib/ and moves the global static variables
+> > that hold the state into a single context structure.
+> > 
+> > Patch 2 does some minimal error path improvements so we're not just
+> > passing a string around to indicate there's been an error.
+> > 
+> > Patch 3 is where I pull the file handling routines into the cpio code.
+> > It didn't seem worth moving this to somewhere other code could continue
+> > to use them when only the cpio code was doing so, but it did involve a
+> > few extra exported functions from fs/
+> > 
+> > Patch 4 actually allows the use of the cpio code outside of __init when
+> > CONFIG_CPIO is selected.
+> > 
+> > Patch 5 is a hack so I can use the generic decompress + gzip outside of
+> > __init. If this overall approach is acceptable then I'll do some work to
+> > make this generically available in the same manner as the cpio code
+> > before actually submitting for inclusion.
+> > 
+> > Patch 6 is the actual piece I'm interested in; doing individual
+> > measurements for each component within IMA.
 > 
-> Signed-off-by: Nancy.Lin <nancy.lin@mediatek.com>
-> Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-> Reviewed-by: CK Hu <ck.hu@mediatek.com>
-> Tested-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-> Tested-by: Bo-Chen Chen <rex-bc.chen@mediatek.com>
-> ---
->   drivers/soc/mediatek/mtk-mmsys.c | 37 +++++++++++++-------------------
->   1 file changed, 15 insertions(+), 22 deletions(-)
+> Hi Jonathan,
 > 
-> diff --git a/drivers/soc/mediatek/mtk-mmsys.c b/drivers/soc/mediatek/mtk-mmsys.c
-> index a74c86197d6a..ca5bf07114fa 100644
-> --- a/drivers/soc/mediatek/mtk-mmsys.c
-> +++ b/drivers/soc/mediatek/mtk-mmsys.c
-> @@ -192,22 +192,27 @@ static int mtk_mmsys_find_match_drvdata(struct mtk_mmsys *mmsys,
->   	return -EINVAL;
->   }
->   
-> +static void mtk_mmsys_update_bits(struct mtk_mmsys *mmsys, u32 offset, u32 mask, u32 val)
-> +{
-> +	u32 tmp;
-> +
-> +	tmp = readl_relaxed(mmsys->regs + offset);
-> +	tmp = (tmp & ~mask) | val;
-> +	writel_relaxed(tmp, mmsys->regs + offset);
-> +}
-> +
->   void mtk_mmsys_ddp_connect(struct device *dev,
->   			   enum mtk_ddp_comp_id cur,
->   			   enum mtk_ddp_comp_id next)
->   {
->   	struct mtk_mmsys *mmsys = dev_get_drvdata(dev);
->   	const struct mtk_mmsys_routes *routes = mmsys->data->routes;
-> -	u32 reg;
->   	int i;
->   
->   	for (i = 0; i < mmsys->data->num_routes; i++)
-> -		if (cur == routes[i].from_comp && next == routes[i].to_comp) {
-> -			reg = readl_relaxed(mmsys->regs + routes[i].addr);
-> -			reg &= ~routes[i].mask;
-> -			reg |= routes[i].val;
-> -			writel_relaxed(reg, mmsys->regs + routes[i].addr);
-> -		}
-> +		if (cur == routes[i].from_comp && next == routes[i].to_comp)
-> +			mtk_mmsys_update_bits(mmsys, routes[i].addr, routes[i].mask,
-> +					      routes[i].val);
->   }
->   EXPORT_SYMBOL_GPL(mtk_mmsys_ddp_connect);
->   
-> @@ -217,15 +222,11 @@ void mtk_mmsys_ddp_disconnect(struct device *dev,
->   {
->   	struct mtk_mmsys *mmsys = dev_get_drvdata(dev);
->   	const struct mtk_mmsys_routes *routes = mmsys->data->routes;
-> -	u32 reg;
->   	int i;
->   
->   	for (i = 0; i < mmsys->data->num_routes; i++)
-> -		if (cur == routes[i].from_comp && next == routes[i].to_comp) {
-> -			reg = readl_relaxed(mmsys->regs + routes[i].addr);
-> -			reg &= ~routes[i].mask;
-> -			writel_relaxed(reg, mmsys->regs + routes[i].addr);
-> -		}
-> +		if (cur == routes[i].from_comp && next == routes[i].to_comp)
-> +			mtk_mmsys_update_bits(mmsys, routes[i].addr, routes[i].mask, 0);
->   }
->   EXPORT_SYMBOL_GPL(mtk_mmsys_ddp_disconnect);
->   
-> @@ -234,18 +235,10 @@ static int mtk_mmsys_reset_update(struct reset_controller_dev *rcdev, unsigned l
->   {
->   	struct mtk_mmsys *mmsys = container_of(rcdev, struct mtk_mmsys, rcdev);
->   	unsigned long flags;
-> -	u32 reg;
->   
->   	spin_lock_irqsave(&mmsys->lock, flags);
->   
-> -	reg = readl_relaxed(mmsys->regs + mmsys->data->sw0_rst_offset);
-> -
-> -	if (assert)
-> -		reg &= ~BIT(id);
-> -	else
-> -		reg |= BIT(id);
-> -
-> -	writel_relaxed(reg, mmsys->regs + mmsys->data->sw0_rst_offset);
-> +	mtk_mmsys_update_bits(mmsys, mmsys->data->sw0_rst_offset, BIT(id), assert ? 0 : BIT(id));
+> Before going down this path, just making sure you're aware:
+> - of the IMA hooks for measuring and appraising firmware.
 
-Let's be this a normal if (assert) else but calling mtk_mmsys_update_bits().
+Yes, I'm aware of the FIRMWARE_CHECK hooks. This is more accurately
+early stage firmware e.g. CPU microcode and it's not that we're
+expecting this to load over a kexec but instead that the kernel /
+initramfs loaded via kexec are what is also used for a traditional disk
+boot, the kexec is just being used to shorten restart time. So although
+the firmware isn't actually loaded it's part of the image and we'd like
+to be able to keep the measurements for the parts separate.
 
-Other then that patch looks good.
+> - of Roberto Sassu's "initramfs: add support for xattrs in the initial
+> ram disk" patch set that have been lingering for lack of review and
+> upstreaming.[1]   There's been some recent interest in it.
+> 
+> [1] Message-Id: <21b3aeab20554a30b9796b82cc58e55b@huawei.com>
 
-Matthias
+That looks interesting, and obviously has some overlap in the areas I'm
+touching, but I don't think it gives me the information I want from a
+measurement perspective. The desire is that we can build a suitable
+initramfs from a set of component building blocks, rather than a custom
+image for each machine, and that we can measure the blocks rather than
+the final result so that we just store the hash for each building block.
+I think xattrs start to be more interesting when we extend to use some
+sort of signing or fs-verity approach (which is in progress), but we'll
+still want the measurement piece so we understand exactly what it is we
+used to get to the current point in time.
 
->   
->   	spin_unlock_irqrestore(&mmsys->lock, flags);
->   
+J.

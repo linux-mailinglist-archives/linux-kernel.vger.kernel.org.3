@@ -2,57 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C4D0256B9DA
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 14:39:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3279556B9DE
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 14:41:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238261AbiGHMiq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Jul 2022 08:38:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59488 "EHLO
+        id S237960AbiGHMl1 convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 8 Jul 2022 08:41:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60970 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237619AbiGHMil (ORCPT
+        with ESMTP id S238163AbiGHMlX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Jul 2022 08:38:41 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D1B91180B;
-        Fri,  8 Jul 2022 05:38:40 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 08FD9CE2A7E;
-        Fri,  8 Jul 2022 12:38:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A0C22C341C0;
-        Fri,  8 Jul 2022 12:38:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1657283915;
-        bh=5h6p+C2YCmoTHZKEs1ifkYD/9q78xN4MnVC5rO6q8gI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=cT4QujeKTMaCqkogk6RL+mlv917FcMdplNnTbIeFaNVPhWChN79HjaUOQanR73cYx
-         n1L/IgJYsKT9JuRR1dAnq2JzlXpBxpWVFs7edgFasAV8cIrA1qgfSHuDWrc3FEwUX4
-         cxUIR+lW2NPni3q7r0g5QlLxMvyti8GnFDCggtFM=
-Date:   Fri, 8 Jul 2022 14:38:32 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Prashant Malani <pmalani@chromium.org>
-Cc:     linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        chrome-platform@lists.linux.dev, bleung@chromium.org,
-        heikki.krogerus@linux.intel.com,
-        Daisuke Nojiri <dnojiri@chromium.org>,
-        "Dustin L. Howett" <dustin@howett.net>,
-        Guenter Roeck <groeck@chromium.org>,
-        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Sebastian Reichel <sebastian.reichel@collabora.com>,
-        Tzung-Bi Shih <tzungbi@kernel.org>
-Subject: Re: [PATCH v3 1/9] usb: typec: Add support for retimers
-Message-ID: <YsglSJvB/bvwSGZ2@kroah.com>
-References: <20220707222045.1415417-1-pmalani@chromium.org>
- <20220707222045.1415417-2-pmalani@chromium.org>
+        Fri, 8 Jul 2022 08:41:23 -0400
+Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.86.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 59B268238B
+        for <linux-kernel@vger.kernel.org>; Fri,  8 Jul 2022 05:41:21 -0700 (PDT)
+Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ uk-mta-15-e2xvJ3RBP5GiHGYgfSzsTQ-1; Fri, 08 Jul 2022 13:41:18 +0100
+X-MC-Unique: e2xvJ3RBP5GiHGYgfSzsTQ-1
+Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
+ AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
+ Server (TLS) id 15.0.1497.36; Fri, 8 Jul 2022 13:41:17 +0100
+Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
+ AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
+ 15.00.1497.036; Fri, 8 Jul 2022 13:41:17 +0100
+From:   David Laight <David.Laight@ACULAB.COM>
+To:     'Saurabh Singh Sengar' <ssengar@linux.microsoft.com>
+CC:     'Praveen Kumar' <kumarpraveen@linux.microsoft.com>,
+        "kys@microsoft.com" <kys@microsoft.com>,
+        "haiyangz@microsoft.com" <haiyangz@microsoft.com>,
+        "sthemmin@microsoft.com" <sthemmin@microsoft.com>,
+        "wei.liu@kernel.org" <wei.liu@kernel.org>,
+        "decui@microsoft.com" <decui@microsoft.com>,
+        "jejb@linux.ibm.com" <jejb@linux.ibm.com>,
+        "martin.petersen@oracle.com" <martin.petersen@oracle.com>,
+        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
+        "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "ssengar@microsoft.com" <ssengar@microsoft.com>,
+        "mikelley@microsoft.com" <mikelley@microsoft.com>
+Subject: RE: [PATCH] scsi: storvsc: Prevent running tasklet for long
+Thread-Topic: [PATCH] scsi: storvsc: Prevent running tasklet for long
+Thread-Index: AQHYkRjhlVfTnLUZGEKVRk7w2SiyFK1xLt+AgAMM44CAAC7FkA==
+Date:   Fri, 8 Jul 2022 12:41:17 +0000
+Message-ID: <2638aa8409104c41a560548be5628173@AcuMS.aculab.com>
+References: <1657035141-2132-1-git-send-email-ssengar@linux.microsoft.com>
+ <b4fea161-41c5-a03e-747b-316c74eb986c@linux.microsoft.com>
+ <a9af8d8d5ee24d19a87c3353a4e8941d@AcuMS.aculab.com>
+ <20220708104203.GA10366@linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net>
+In-Reply-To: <20220708104203.GA10366@linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220707222045.1415417-2-pmalani@chromium.org>
-X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Authentication-Results: relay.mimecast.com;
+        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -60,22 +73,70 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jul 07, 2022 at 10:20:08PM +0000, Prashant Malani wrote:
-> Introduce a retimer device class and associated functions that register
-> and use retimer "switch" devices. These operate in a manner similar to
-> the "mode-switch" and help configure retimers that exist between the
-> Type-C connector and host controller(s).
+From: Saurabh Singh Sengar
+> Sent: 08 July 2022 11:42
 > 
-> Type C ports can be linked to retimers using firmware node device
-> references (again, in a manner similar to "mode-switch").
+> On Wed, Jul 06, 2022 at 11:09:43AM +0000, David Laight wrote:
+> > From: Praveen Kumar
+> > > Sent: 06 July 2022 10:15
+> > >
+> > > On 05-07-2022 21:02, Saurabh Sengar wrote:
+> > > > There can be scenarios where packets in ring buffer are continuously
+> > > > getting queued from upper layer and dequeued from storvsc interrupt
+> > > > handler, such scenarios can hold the foreach_vmbus_pkt loop (which is
+> > > > executing as a tasklet) for a long duration. Theoretically its possible
+> > > > that this loop executes forever. Add a condition to limit execution of
+> > > > this tasklet for finite amount of time to avoid such hazardous scenarios.
+> >
+> > Does this really make much difference?
+> >
+> > I'd guess the tasklet gets immediately rescheduled as soon as
+> > the upper layer queues another packet?
+> >
+> > Or do you get a different 'bug' where it is never woken again
+> > because the ring is stuck full?
+> >
+> > 	David
 > 
-> Signed-off-by: Prashant Malani <pmalani@chromium.org>
+> My initial understanding was that staying in a tasklet for "too long" may not be a
+> good idea, however I was not sure what the "too long" value be, thus we are thinking
+> to provide this parameter as a configurable sysfs entry. I couldn't find any linux
+> doc justifying this, so please correct me here if I am mistaken.
+> We have also considered the networking drivers NAPI budget feature while deciding
+> this approach, where softirq exits once the budget is crossed. This budget feature
+> act as a performance tuning parameter for driver, and also can help with ring buffer
+> overflow. I believe similar reasons are true for scsi softirq as well.
+> 
+> NAPI budget Ref : https://wiki.linuxfoundation.org/networking/napi.
 
-As you are adding things to sysfs, do you need to add any
-Documentation/ABI/ entries as well?  I can't see any new sysfs files
-being created here, but explicitly saying so in the changelog here would
-be good.
+The NAPI 'budget' just changes where the system loops.
+Instead of looping inside the ethernet driver rx processing
+it first loops through the other functions of that 'napi' and
+then loops in the softirq code.
+All that just allows other 'softint' functions to run.
+The softint code itself will defer to a kernel thread.
+The softint code got patched (by Eric) to make it defer to
+the thread less often (to avoid dropping packets), but that
+change got reverted (well the original check was added back)
+so the problem Eric was fixing got re-introduced.
 
-thanks,
+If you are trying to stop rx ring buffer overflow then you
+do need it to loop. If the softint code ever defers to a thread
+you lose big-time.
 
-greg k-h
+The only way I've managed to receive 500,000 packets/sec is
+using threaded napi and setting the napi thread to run under
+the RT scheduler.
+
+If you are looping from the softint scheduler you probably need to
+return within a few microseconds - otherwise the ethernet
+receive will start dropping packets at moderate loads.
+
+OTOH I don't know where 'tasklet' get scheduler from.
+
+	David
+
+-
+Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
+Registration No: 1397386 (Wales)
+

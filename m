@@ -2,208 +2,202 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B74656BDEB
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 18:09:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 72CF056BDE6
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 18:09:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238933AbiGHP7m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Jul 2022 11:59:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42702 "EHLO
+        id S238939AbiGHQAc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Jul 2022 12:00:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43994 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238914AbiGHP7j (ORCPT
+        with ESMTP id S238914AbiGHQA3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Jul 2022 11:59:39 -0400
-Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2073.outbound.protection.outlook.com [40.107.94.73])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D50A6D569;
-        Fri,  8 Jul 2022 08:59:37 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Z7pcE+KZHdkhtQ7PT1mMHpqO3ao872eS4H3ZqPji6tdlk9Qit1+5h2uxsB+wlDau7esYOxR0LqIBCayBbuH1wBVeo2NUbu9I/WvYT/S8eAdRlq1g84oiQph6tARsPwSpiyuw3TfZVWez9+f1NBRVLmej8D8wuqfJytHRodtwpGcIUv95k4XQBPUXDr+CTZwdKQfuB279h54Q8fQW/07OY1vy4CxR/szAYwLoSCiQWPZ92piigbzfD9c+q8FMO9d8RUIwQRBhwm9MEhx5JOpiSNLmQKyizCtqR93+2Tq2MfqeZ70ggp/4cb9tTFTOk8c64mkddygPpo/ypQlLUf/fOw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=FyjnSQWr2k9z5kjq65GVeHkHLKSloVmqtsse6GTKAd8=;
- b=Ckf57/YvtuvdN/yrQUfDBk5+WULyYy1oUuK4ddw9GO4wJqhSLZbQkubEaiWIbOqKip/9oScYi3FQgNo6EUsEAEeHcXcYr3MaR35zeBHqxo+bvFhPpz2KwYaZKPds+B/2NbYWViB/SPHegopzIdKVD7DmSXqUTBccjFazI8KkB8Cpfc1SRkjcsHZa3Uj3WL1LE5LJLCp57eHQDVcuQdr5Q5jzUohqFTKd5nH/KzqeM4cKIf1X4AcVBXmZc6lr1klzf/pEP+o0Qx/9gSwXfsCRKAwNmo6y84yAhmccR13cQQ0AK8ZXn1Vi1NywIT6vAIGHBNp4PahHshCvEhHACVUZrw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=FyjnSQWr2k9z5kjq65GVeHkHLKSloVmqtsse6GTKAd8=;
- b=Ra07olvB72sqnjAYtxqyorjxa598yzCHeNoFgvI8qaPXSkidx+xVk+spaFHLNYXoyRUB2CrV7nAhMBQo5fzCFyvAAYe+sPUPZs1AE4k+65ax6F9j42a7C/WJcquY4TiEwEBtEflZkPXSLhk7/33D6JbmsvQKkgwCyPGMBNya6jY=
-Received: from SN6PR12MB2767.namprd12.prod.outlook.com (2603:10b6:805:75::23)
- by SJ1PR12MB6218.namprd12.prod.outlook.com (2603:10b6:a03:457::17) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5417.16; Fri, 8 Jul
- 2022 15:59:34 +0000
-Received: from SN6PR12MB2767.namprd12.prod.outlook.com
- ([fe80::8953:6baa:97bb:a15d]) by SN6PR12MB2767.namprd12.prod.outlook.com
- ([fe80::8953:6baa:97bb:a15d%7]) with mapi id 15.20.5417.016; Fri, 8 Jul 2022
- 15:59:33 +0000
-From:   "Kalra, Ashish" <Ashish.Kalra@amd.com>
-To:     Peter Gonda <pgonda@google.com>
-CC:     the arch/x86 maintainers <x86@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        kvm list <kvm@vger.kernel.org>,
-        "linux-coco@lists.linux.dev" <linux-coco@lists.linux.dev>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Joerg Roedel <jroedel@suse.de>,
-        "Lendacky, Thomas" <Thomas.Lendacky@amd.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, Ard Biesheuvel <ardb@kernel.org>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Jim Mattson <jmattson@google.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Sergio Lopez <slp@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        David Rientjes <rientjes@google.com>,
-        Dov Murik <dovmurik@linux.ibm.com>,
-        Tobin Feldman-Fitzthum <tobin@ibm.com>,
-        Borislav Petkov <bp@alien8.de>,
-        "Roth, Michael" <Michael.Roth@amd.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        "Kirill A . Shutemov" <kirill@shutemov.name>,
-        Andi Kleen <ak@linux.intel.com>,
-        Tony Luck <tony.luck@intel.com>, Marc Orr <marcorr@google.com>,
-        Sathyanarayanan Kuppuswamy 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        Alper Gun <alpergun@google.com>,
-        "Dr. David Alan Gilbert" <dgilbert@redhat.com>,
-        "jarkko@kernel.org" <jarkko@kernel.org>
-Subject: RE: [PATCH Part2 v6 35/49] KVM: SVM: Remove the long-lived GHCB host
- map
-Thread-Topic: [PATCH Part2 v6 35/49] KVM: SVM: Remove the long-lived GHCB host
- map
-Thread-Index: AQHYh9zZ2YXyQRnTe0iEslSS4jvfv61e+v3wgBRvg4CAAAHU4IABSe8AgAAAYBA=
-Date:   Fri, 8 Jul 2022 15:59:33 +0000
-Message-ID: <SN6PR12MB276775A947EEE7323B54F63D8E829@SN6PR12MB2767.namprd12.prod.outlook.com>
-References: <cover.1655761627.git.ashish.kalra@amd.com>
- <7845d453af6344d0b156493eb4555399aad78615.1655761627.git.ashish.kalra@amd.com>
- <CAMkAt6oGzqoMxN5ws9QZ9P1q5Rah92bb4V2KSYBgi0guMGUKAQ@mail.gmail.com>
- <SN6PR12MB2767CC5405E25A083E76CFFB8EB49@SN6PR12MB2767.namprd12.prod.outlook.com>
- <CAMkAt6pdoMY1yV+kcUzOftD2WKS8sQy-R2b=Aty8wS-gGp-21Q@mail.gmail.com>
- <SN6PR12MB276787F711EE80D3546431848E839@SN6PR12MB2767.namprd12.prod.outlook.com>
- <CAMkAt6oea8CfjupTRBS1CQQogaixNakF1+KjSZ-+bhRBRj3GvQ@mail.gmail.com>
-In-Reply-To: <CAMkAt6oea8CfjupTRBS1CQQogaixNakF1+KjSZ-+bhRBRj3GvQ@mail.gmail.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-msip_labels: MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_Enabled=true;
- MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_SetDate=2022-07-08T15:55:44Z;
- MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_Method=Standard;
- MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_Name=General;
- MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_SiteId=3dd8961f-e488-4e60-8e11-a82d994e183d;
- MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_ActionId=9f786f9e-54cd-4090-aa6d-7a1f5dc9f53b;
- MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_ContentBits=1
-msip_label_4342314e-0df4-4b58-84bf-38bed6170a0f_enabled: true
-msip_label_4342314e-0df4-4b58-84bf-38bed6170a0f_setdate: 2022-07-08T15:59:31Z
-msip_label_4342314e-0df4-4b58-84bf-38bed6170a0f_method: Standard
-msip_label_4342314e-0df4-4b58-84bf-38bed6170a0f_name: General
-msip_label_4342314e-0df4-4b58-84bf-38bed6170a0f_siteid: 3dd8961f-e488-4e60-8e11-a82d994e183d
-msip_label_4342314e-0df4-4b58-84bf-38bed6170a0f_actionid: e392fd9b-9141-4d66-8917-d4877bc36f3c
-msip_label_4342314e-0df4-4b58-84bf-38bed6170a0f_contentbits: 0
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 6dfe6dac-94e2-4fcf-fbb6-08da60fad9c7
-x-ms-traffictypediagnostic: SJ1PR12MB6218:EE_
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: B6mGD2WX7mvbOkcFNhN8Mt0Bsmo8/K3u4KJFvLi80e3t/vTwViom7IqHCA/0SdJ/hQ+Ow2GB73DmK+ayIoRrO0Ge2vnwY0axRQ1nRA9oVngqL9b5g3mVsANDVCRN5OZvwlPquwDtdL8HK3vTKVO4vjaUSXQt4ROdRRiUzQFKx7kLNtHhhrgMLkvpMwZC9LfBAa0rxgWlCefs0MbZCiUICTLqmXO/VFJTRCJ4f4pYchOuonCFoYq79AIXeHghaoOhI3IbMSZ9tZZZY64mhnth7mbOdm8YznXdwSjEh+O/YMYFufZTIpl+jKjeetjDveQc5RGnm/xqPx5IwzlmrF9M18jzfa4QsNSADGPsHKPPARcGy+OUtKRtFmIN3YnQ8q2zq/UI61BcOG90xzERdlr70KbUOnMg3VonriHzWFZukHS4kB4XCWmdiHJpcetOUXHFG5u078fMU/kLw0MIgpy7vrUGhSqqrvyTjqcu6S2DyneSaiTN3SKxNoe4MWNG0BNHQNC76EOOr/er0zUw+asS0I89DuyJfzjtjwGBz+RpY6HcNuYFYSldlE6CzFqufG0A9AywKB6IqvFf6+dja60q1mWSpVAPb+0dcdXHtAdPNK7/k81CblQ5T3AT8hUKfEU6vqSxa2PKLnoWG8IJIp9HwyfT4LYZGqjNg5EwfaYcBAFkghO/QpcKJqbP3ovLa5gsfxZgVV1S2THwCQgMqkFe0JZuSvfCKI/jTJtS9mOb0IOPE3oZPa0jaqRgL6rbgwuRoDCKm8Q+HHFanNP4ASwnGjwR+YsI61a0EaWeF8OdUnro0zPBjMIR/XPTxLTCLlLnnGwULVDuCJsvmt3sKq8pkw==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SN6PR12MB2767.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(39860400002)(346002)(396003)(376002)(366004)(136003)(84040400005)(5660300002)(478600001)(86362001)(7406005)(8936002)(26005)(38070700005)(52536014)(76116006)(6506007)(7696005)(38100700002)(33656002)(2906002)(41300700001)(7416002)(9686003)(71200400001)(55016003)(122000001)(186003)(54906003)(66946007)(66476007)(66556008)(6916009)(966005)(64756008)(4326008)(8676002)(83380400001)(45080400002)(316002)(66446008);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?mwXl3DTvohucRDv+T04ZtEuxoxfkL+UPMkNKAR7SyDpOEkWjtHLZOsRahhlI?=
- =?us-ascii?Q?WN1341AId2fT7h7i8doBAKmAYBBH0piVDerbSBfP14Aw3+1kA6hLfTCCURaI?=
- =?us-ascii?Q?Iojz3twh+1mwTFF07YBiWExFwr9Tqf3RDPde4ptKW45UWUEhgGHSxzQE4Ifo?=
- =?us-ascii?Q?HCS9p17TswYaD+XqpsuFKlh7heHp2aTOSpZEajzEshdYNcpf4KJrCGWfbl3B?=
- =?us-ascii?Q?ecrAKx8yUQZPAD2qmO4O4oTUEdJnLF+9/j72edVSDAY1NMZqYbdJovmpn9Ii?=
- =?us-ascii?Q?pZQMDdMtzM6oRGhIIVVElUTGuCUjjePXAdm3pDaMVR7vo6TcrodmByio4zar?=
- =?us-ascii?Q?KIOUl7Yg1W0uWl/0+iz4jF7wJIgpsZsM7IsS7D54BT41bV9w72Tdwdem8r4g?=
- =?us-ascii?Q?0u33aHTsSpjgIc3jHOUpiiXreKG+aHDgE2GWmslBJ0WNsF03h66uEXuPY8vI?=
- =?us-ascii?Q?xuQXwQyARvicr5801jFUG6VVpstvVjnY5LmtATDDTvUmi8p18/viL/oOA44I?=
- =?us-ascii?Q?76WDxWW8Pbr14t24yCcxm7pgFyjRQ34LqfJU9EhjTJo4fU21KNLCMWTHXxI3?=
- =?us-ascii?Q?SXMwv9rws03Hl3a8b8JQKEkL6zC3T5D7bL9PmNgfGQeuTE7msGA69n4xC0IX?=
- =?us-ascii?Q?ZMiOZBuELT5K1vDdScmDQtoacYDn/78/qvEHFDzrELOK/vZTl3jAj7fhiV0J?=
- =?us-ascii?Q?7Br6BhqQmzcjvuKc5ruoGQNyPt3FV7j4i5fyr3oAuhlDrGjalAofbcTx8Tdl?=
- =?us-ascii?Q?StciojVZwvzCI6mCjuNDb8wOL9HO1WjI8qqfKPfvsbbogGoZi+q58O5z/UMi?=
- =?us-ascii?Q?n+7uS+PptdJSYdInKkM2b66wlxmdIoxfsYyIofFckQIzGcgqpqVy6C32zYmQ?=
- =?us-ascii?Q?/sBdc2P/1f4wIqFe+hLmPWNk+7sdR/J99iAMMirAFQD9S5uQY54KyS3vVEs5?=
- =?us-ascii?Q?+t1DGz9r12IfIznnbJU0/Otush6zErouYKK4wOTSZx62ES1Tomo1eNOhtIcP?=
- =?us-ascii?Q?GSsaEoKYUoHkd+RGazrbJqphDDxqWL+49bcDKupLRYJp6ChyywhVuGZR1UQs?=
- =?us-ascii?Q?YPgcR3SqqvQO/vH9qZmi8NSzAQsz9Z+W0qsl5L7PZnW67Y+7cm1pr24awjja?=
- =?us-ascii?Q?rNOTHr0dMEMg2lTgshqA2gICkOMP0z44ma5vGB82V1tsxv95XdbFeQEVgIS1?=
- =?us-ascii?Q?HTz3b72l46jUTsFCrB1kLSl14oLc2zQKOQ6OR1/Y9qjCoQKCM1FFh+E1lijy?=
- =?us-ascii?Q?SDtYKMR31JZp5Bw1fvKmVEzjkbP+MXWZzUQTtZ2mcWHVV20oNsr8KkDHjEt4?=
- =?us-ascii?Q?TJYuIESwjss2N/sKunTlvMMXisEvVPIWWrF1iiN+ROIC4oUCyYfhQsyk4qbq?=
- =?us-ascii?Q?lvYDv9mz01FwU8Vpuh2cOrXAs7MxqoRLAWGyirF5E5PXkAi7oDKyKJFiWFDi?=
- =?us-ascii?Q?D8omHrPr+IV0SyIYgHGpMS5WtZnVSJrcgHBNkgL7VNcl3hccysmOERNVCZvh?=
- =?us-ascii?Q?hoYVQu1LvhFoOoiH0HGKWkzldZNHzx4EXoXxG5tfVugibKPp1LQJplz1omMq?=
- =?us-ascii?Q?UQOd9wWcNAYLZKD+2m8=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        Fri, 8 Jul 2022 12:00:29 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D3556D571;
+        Fri,  8 Jul 2022 09:00:28 -0700 (PDT)
+Received: from [IPV6:2a01:e0a:120:3210:3cab:61a1:2b1f:896b] (unknown [IPv6:2a01:e0a:120:3210:3cab:61a1:2b1f:896b])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: benjamin.gaignard)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 76C0B66019F2;
+        Fri,  8 Jul 2022 17:00:26 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1657296027;
+        bh=e0/jiW3XfT4O/Zq416vlwfO7YhtF1rfLZdEy+RlBmfc=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=TkizvFEqK/XB/KEc40AR6NU3n5lURvLcLZoZFdfZXjSvmZoHM+usmnUXa1V0R2o1M
+         0OUslPg3PJ8RMh6qGnIaSBNekSI5mjaaLinjBG5ag8sF0/Kcmpq7WS4tdqi7yelo+v
+         SvZTkr5WQv7N64GGlpQiUSuBKblYXLwNh1Cw1JqBtflgPFpBp9xUN5u4sByHvLcMVI
+         ddxL/X974xcXTr9LBm1qoIEK4ah1DiHG3kJN1dAmNHbtpB7pjbDe65w+pGvCaFdlxj
+         zehF4fwRvcvkaMc2R9W46pJNNszISMUzQktns9jVYuDgR3/w3NzX/sZf81GddnVpfn
+         vSbpQSkgA3MQw==
+Message-ID: <5e346689-5a0c-8fc7-129d-53a6f28e5349@collabora.com>
+Date:   Fri, 8 Jul 2022 18:00:24 +0200
 MIME-Version: 1.0
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: SN6PR12MB2767.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 6dfe6dac-94e2-4fcf-fbb6-08da60fad9c7
-X-MS-Exchange-CrossTenant-originalarrivaltime: 08 Jul 2022 15:59:33.7730
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: RraS8h700ljUnzmA6aqfdQ2s+MdjRHgcumP/9mDAGqiG/J0p5JvA6Cx0/00wwZwnHGDmLKGCLXhzL8wBWPj47Q==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ1PR12MB6218
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH v12 11/17] media: uapi: Add
+ V4L2_CID_STATELESS_HEVC_ENTRY_POINT_OFFSETS control
+Content-Language: en-US
+To:     =?UTF-8?Q?Jernej_=c5=a0krabec?= <jernej.skrabec@gmail.com>,
+        mchehab@kernel.org, hverkuil@xs4all.nl,
+        ezequiel@vanguardiasur.com.ar, p.zabel@pengutronix.de,
+        gregkh@linuxfoundation.org, mripard@kernel.org,
+        paul.kocialkowski@bootlin.com, wens@csie.org, samuel@sholland.org,
+        nicolas.dufresne@collabora.com, andrzej.p@collabora.com
+Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-rockchip@lists.infradead.org, linux-staging@lists.linux.dev,
+        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
+        kernel@collabora.com
+References: <20220708120554.495495-1-benjamin.gaignard@collabora.com>
+ <20220708120554.495495-12-benjamin.gaignard@collabora.com>
+ <2106581.irdbgypaU6@jernej-laptop>
+From:   Benjamin Gaignard <benjamin.gaignard@collabora.com>
+In-Reply-To: <2106581.irdbgypaU6@jernej-laptop>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-[AMD Official Use Only - General]
 
-Hello Peter,
-
->> > I don't see anything mechanism for this patch to add the page state ch=
-ange protection discussed. Can't another vCPU still convert the GHCB to pri=
-vate?
+Le 08/07/2022 à 16:02, Jernej Škrabec a écrit :
+> Hi Benjamin!
+>
+> Dne petek, 08. julij 2022 ob 14:05:48 CEST je Benjamin Gaignard napisal(a):
+>> The number of 'entry point offset' can be very variable.
+>> Instead of using a large static array define a v4l2 dynamic array
+>> of U32 (V4L2_CTRL_TYPE_U32).
+>> The number of entry point offsets is reported by the elems field
+>> and in struct v4l2_ctrl_hevc_slice_params.num_entry_point_offsets
+>> field.
 >>
->> We do have the protections for GHCB getting mapped to private=20
->> specifically, there are new post_{map|unmap}_gfn functions added to veri=
-fy if it is safe to map GHCB pages. There is a PSC spinlock added which pro=
-tects again page state change for these mapped pages.
->> Below is the reference to this patch:
->> https://nam11.safelinks.protection.outlook.com/?url=3Dhttps%3A%2F%2Flore
->> .kernel.org%2Flkml%2Fcover.1655761627.git.ashish.kalra%40amd.com%2FT%2
->> F%23mafcaac7296eb9a92c0ea58730dbd3ca47a8e0756&amp;data=3D05%7C01%7CAshis
->> h.Kalra%40amd.com%7C647218cdb2a040bf354e08da60fa2968%7C3dd8961fe4884e6
->> 08e11a82d994e183d%7C0%7C0%7C637928924845082803%7CUnknown%7CTWFpbGZsb3d
->> 8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C
->> 3000%7C%7C%7C&amp;sdata=3Dss8%2F5qualccXQero9phARIG2wvYhtp8SMdve3GglZeU%
->> 3D&amp;reserved=3D0
+>> Signed-off-by: Benjamin Gaignard <benjamin.gaignard@collabora.com>
+>> Acked-by: Nicolas Dufresne <nicolas.dufresne@collabora.com>
+>> Tested-by: Jernej Skrabec <jernej.skrabec@gmail.com>
+>> ---
+>> version 12:
+>> - Reword num_entry_point_offsets documentation
 >>
->> But do note that there is protection only for GHCB pages and there is=20
->> a need to add generic post_{map,unmap}_gfn() ops that can be used to ver=
-ify that it's safe to map a given guest page in the hypervisor. This is a T=
-ODO right now and probably this is something which UPM can address more cle=
-anly.
+>>   .../userspace-api/media/v4l/ext-ctrls-codec.rst     | 13 +++++++++++++
+>>   drivers/media/v4l2-core/v4l2-ctrls-defs.c           |  5 +++++
+>>   include/media/hevc-ctrls.h                          |  5 ++++-
+>>   3 files changed, 22 insertions(+), 1 deletion(-)
+>>
+>> diff --git a/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst
+>> b/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst index
+>> c2e0adece613..0cd967126fdf 100644
+>> --- a/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst
+>> +++ b/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst
+>> @@ -3010,6 +3010,11 @@ enum v4l2_mpeg_video_hevc_size_of_length_field -
+>>       * - __u32
+>>         - ``data_bit_offset``
+>>         - Offset (in bits) to the video data in the current slice data.
+>> +    * - __u32
+>> +      - ``num_entry_point_offsets``
+>> +      - Specifies the number of entry point offset syntax elements in the
+>> slice header. +        When the driver supports it, the
+>> ``V4L2_CID_STATELESS_HEVC_ENTRY_POINT_OFFSETS`` +        must be set.
+>>       * - __u8
+>>         - ``nal_unit_type``
+>>         - Specifies the coding type of the slice (B, P or I).
+>> @@ -3150,6 +3155,14 @@ enum v4l2_mpeg_video_hevc_size_of_length_field -
+>>
+>>       \normalsize
+>>
+>> +``V4L2_CID_STATELESS_HEVC_ENTRY_POINT_OFFSETS (integer)``
+>> +    Specifies entry point offsets in bytes.
+>> +    This control is a dynamically sized array. The number of entry point
+>> +    offsets is reported by the ``elems`` field.
+>> +    This bitstream parameter is defined according to :ref:`hevc`.
+>> +    They are described in section 7.4.7.1 "General slice segment header
+>> +    semantics" of the specification.
+> You forgot to update above description per Ezequiel comment.
 
->Thank you Ashish. I had missed that.
+No it was num_entry_point_offsets which was needed to be updated
+not this control.
 
->Can you help me understand why its OK to use kvm_write_guest() for the
->|snp_certs_data| inside of snp_handle_ext_guest_request() in patch
->42/49? I would have thought we'd have the same 2M vs 4K mapping issues.
+Regards,
+Benjamin
 
-Preemption is not disabled there, hence the RMP page fault handler can do
-the split of 2M to 4K on host pages without any issues.
-
-Thanks,
-Ashish
+>
+> Best regards,
+> Jernej
+>
+>> +
+>>   ``V4L2_CID_STATELESS_HEVC_SCALING_MATRIX (struct)``
+>>       Specifies the HEVC scaling matrix parameters used for the scaling
+>> process for transform coefficients.
+>> diff --git a/drivers/media/v4l2-core/v4l2-ctrls-defs.c
+>> b/drivers/media/v4l2-core/v4l2-ctrls-defs.c index
+>> d594efbcbb93..e22921e7ea61 100644
+>> --- a/drivers/media/v4l2-core/v4l2-ctrls-defs.c
+>> +++ b/drivers/media/v4l2-core/v4l2-ctrls-defs.c
+>> @@ -1188,6 +1188,7 @@ const char *v4l2_ctrl_get_name(u32 id)
+>>   	case V4L2_CID_STATELESS_HEVC_DECODE_PARAMS:		return
+> "HEVC Decode
+>> Parameters"; case V4L2_CID_STATELESS_HEVC_DECODE_MODE:		return
+> "HEVC Decode
+>> Mode"; case V4L2_CID_STATELESS_HEVC_START_CODE:		return
+> "HEVC Start Code";
+>> +	case V4L2_CID_STATELESS_HEVC_ENTRY_POINT_OFFSETS:	return
+> "HEVC Entry
+>> Point Offsets";
+>>
+>>   	/* Colorimetry controls */
+>>   	/* Keep the order of the 'case's the same as in v4l2-controls.h!
+> */
+>> @@ -1518,6 +1519,10 @@ void v4l2_ctrl_fill(u32 id, const char **name, enum
+>> v4l2_ctrl_type *type, case V4L2_CID_STATELESS_HEVC_DECODE_PARAMS:
+>>   		*type = V4L2_CTRL_TYPE_HEVC_DECODE_PARAMS;
+>>   		break;
+>> +	case V4L2_CID_STATELESS_HEVC_ENTRY_POINT_OFFSETS:
+>> +		*type = V4L2_CTRL_TYPE_U32;
+>> +		*flags |= V4L2_CTRL_FLAG_DYNAMIC_ARRAY;
+>> +		break;
+>>   	case V4L2_CID_STATELESS_VP9_COMPRESSED_HDR:
+>>   		*type = V4L2_CTRL_TYPE_VP9_COMPRESSED_HDR;
+>>   		break;
+>> diff --git a/include/media/hevc-ctrls.h b/include/media/hevc-ctrls.h
+>> index a372c184689e..3a6601a46ced 100644
+>> --- a/include/media/hevc-ctrls.h
+>> +++ b/include/media/hevc-ctrls.h
+>> @@ -20,6 +20,7 @@
+>>   #define V4L2_CID_STATELESS_HEVC_DECODE_PARAMS	(V4L2_CID_CODEC_BASE
+> + 1012)
+>>   #define V4L2_CID_STATELESS_HEVC_DECODE_MODE	(V4L2_CID_CODEC_BASE + 1015)
+>>   #define V4L2_CID_STATELESS_HEVC_START_CODE	(V4L2_CID_CODEC_BASE + 1016)
+>> +#define V4L2_CID_STATELESS_HEVC_ENTRY_POINT_OFFSETS (V4L2_CID_CODEC_BASE +
+>> 1017)
+>>
+>>   /* enum v4l2_ctrl_type type values */
+>>   #define V4L2_CTRL_TYPE_HEVC_SPS 0x0120
+>> @@ -316,6 +317,8 @@ struct v4l2_hevc_pred_weight_table {
+>>    *
+>>    * @bit_size: size (in bits) of the current slice data
+>>    * @data_bit_offset: offset (in bits) to the video data in the current
+>> slice data + * @num_entry_point_offsets: specifies the number of entry
+>> point offset syntax + *			     elements in the slice
+> header.
+>>    * @nal_unit_type: specifies the coding type of the slice (B, P or I)
+>>    * @nuh_temporal_id_plus1: minus 1 specifies a temporal identifier for the
+>> NAL unit * @slice_type: see V4L2_HEVC_SLICE_TYPE_{}
+>> @@ -358,7 +361,7 @@ struct v4l2_hevc_pred_weight_table {
+>>   struct v4l2_ctrl_hevc_slice_params {
+>>   	__u32	bit_size;
+>>   	__u32	data_bit_offset;
+>> -
+>> +	__u32	num_entry_point_offsets;
+>>   	/* ISO/IEC 23008-2, ITU-T Rec. H.265: NAL unit header */
+>>   	__u8	nal_unit_type;
+>>   	__u8	nuh_temporal_id_plus1;
+>
+>
+>

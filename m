@@ -2,67 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C76E56B14F
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 06:17:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 05F9A56B150
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 06:17:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237055AbiGHERW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Jul 2022 00:17:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55320 "EHLO
+        id S237069AbiGHERe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Jul 2022 00:17:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55510 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236924AbiGHERT (ORCPT
+        with ESMTP id S236924AbiGHERd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Jul 2022 00:17:19 -0400
-Received: from mail-pg1-x52b.google.com (mail-pg1-x52b.google.com [IPv6:2607:f8b0:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 798F426127
-        for <linux-kernel@vger.kernel.org>; Thu,  7 Jul 2022 21:17:17 -0700 (PDT)
-Received: by mail-pg1-x52b.google.com with SMTP id 145so21347221pga.12
-        for <linux-kernel@vger.kernel.org>; Thu, 07 Jul 2022 21:17:17 -0700 (PDT)
+        Fri, 8 Jul 2022 00:17:33 -0400
+Received: from mail-qt1-x82b.google.com (mail-qt1-x82b.google.com [IPv6:2607:f8b0:4864:20::82b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D64927CDE
+        for <linux-kernel@vger.kernel.org>; Thu,  7 Jul 2022 21:17:32 -0700 (PDT)
+Received: by mail-qt1-x82b.google.com with SMTP id y3so4724122qtv.5
+        for <linux-kernel@vger.kernel.org>; Thu, 07 Jul 2022 21:17:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=MNbzz6HqiT+aecUMfuE4HCVdk2tTR9rWqUJn0foYaOs=;
-        b=oY7JqxN2PctvkKLjoYKFZyyXgicFmSo0BLEeEtO+de9X5TF3XFOdIHs2BRhVNO0+0e
-         Wl+au6rKUin2DCSdQVaGmM605EOjQ38w7auKF7EAXjqgG6eZXyVfk6jJZXgH5hGOKIoA
-         Iu20bdc2ZsNp7n0PZje8YFi2fCYvRVXOiKkiY=
+        d=joelfernandes.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=uGoy5SHC3OQwhZlm2IT5uM+W5kXJSSMgEQTx8s2qElc=;
+        b=v7C/SD2n/xR97dosIcWJVUeECNHIjuG1oHxTMiH3BiPHtH5O2vCHfnxT4nJ7BaCfjC
+         1GzcHFMTNlW4KnRttTVVskdHvFl+iyo2rkGjCy7VbEegG0Il9go17UqqaevcvjZULSfD
+         Cw24NvgzegAnGIM/s67DnOdFzTXO+wF5XPD/w=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=MNbzz6HqiT+aecUMfuE4HCVdk2tTR9rWqUJn0foYaOs=;
-        b=DspOfqo2FMkwZ6FQre8BUnU57LEw4s8lyMK4GQZWIA1XT5AZMG7GcxjHneWVxg1QxL
-         tpDMKYZFBUzL76daHAbZ2LJIrAOob8Aj/ik3wWTTF1gvbYik+Al2GrR9vzZH7r232VPD
-         QErwrIsNabZb60eD1sra2oY8MOHWtN9rbRQClB7x15MprbJmhMOp+LGk1VfvY9BLUvpe
-         62mJ+4FMv7qEP/ied+g6463DIqBryvkwbFNF9GXdIoKmJoqSjXfw6Bzjvw6UkPWb9tJ5
-         xM0b6b9cWOE1pFzu5RlTNXS9H2ypAd7LreAZwmJaeEhZcEtP5jKFoWUeIxWO1sID9Ou+
-         PbDA==
-X-Gm-Message-State: AJIora9NJcmY/adub6e4cNWA3IYxB2MlR8Ct1LUN6cgPOnS8wKbhKu5J
-        CWAz5WGZtEIxzmcwwUIcc0Tf6w==
-X-Google-Smtp-Source: AGRyM1u3YRxbpHHoAR2gLio3os223bzxP+inwrZHFd21UtN01SzXjzuwNuJq0VZUjYZDjiasTgFdLQ==
-X-Received: by 2002:a63:1759:0:b0:40d:5aba:4bb0 with SMTP id 25-20020a631759000000b0040d5aba4bb0mr1512690pgx.496.1657253836714;
-        Thu, 07 Jul 2022 21:17:16 -0700 (PDT)
-Received: from dlunevwfh.roam.corp.google.com (n122-107-196-14.sbr2.nsw.optusnet.com.au. [122.107.196.14])
-        by smtp.gmail.com with ESMTPSA id kk8-20020a17090b4a0800b001ef899eb51fsm435629pjb.29.2022.07.07.21.17.12
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=uGoy5SHC3OQwhZlm2IT5uM+W5kXJSSMgEQTx8s2qElc=;
+        b=lbnUHRB7XjT40ym0ZOdTb85/yJL0+wFi8yuf0RmtGUQ+UL1m4xTTLTxt1+OBbLtooj
+         ij5xNY2yh7ninv7loqIJ9QpdrddpaC9exu1aXBrUJvuTgRbU09i3PVBVZ5/+/ZrSDdQv
+         /eiPfN6wcu6vJfGAkE7kcriHrBesYP8n2IecHc0grnYAd50aGhVniU08v4Spk5KXMw3b
+         tfZ1zN1KB3NVDXsTlrhkx6CnQhPxv1SxYhPgBuTm5Y56TnoKLqDuaH9tAbEINpq+5jwr
+         7YhGL2wnl1oEWcvmh5HAHsEgSiJvfEPgcl4bgAHpLjyL/Eh6aZurA9IY0hlHHzi16Bcb
+         gksg==
+X-Gm-Message-State: AJIora8ZPklQ+1WYYJsmikZVtbxbkS1DCrVtvIZuT49wkdio+NXezdMb
+        2P/2deOI10sS77ICqjY2iAkHIxhTl2rIGA==
+X-Google-Smtp-Source: AGRyM1ujMKRohqwU3MDLZwVDRoNOfBtY4Z79IawBLrj08rRTfhFWnS9F4aRCa/Of+pGM1gE3GR1Cpg==
+X-Received: by 2002:ac8:5713:0:b0:31a:c706:50ef with SMTP id 19-20020ac85713000000b0031ac70650efmr1299549qtw.267.1657253851629;
+        Thu, 07 Jul 2022 21:17:31 -0700 (PDT)
+Received: from localhost (228.221.150.34.bc.googleusercontent.com. [34.150.221.228])
+        by smtp.gmail.com with ESMTPSA id n8-20020a05620a222800b006ab935c1563sm31103220qkh.8.2022.07.07.21.17.30
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 07 Jul 2022 21:17:16 -0700 (PDT)
-From:   Daniil Lunev <dlunev@chromium.org>
-To:     Adrian Hunter <adrian.hunter@intel.com>
-Cc:     Daniil Lunev <dlunev@chromium.org>,
-        Avri Altman <avri.altman@wdc.com>,
-        Bart Van Assche <bvanassche@acm.org>,
-        Bean Huo <beanhuo@micron.com>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        linux-kernel@vger.kernel.org, linux-scsi@vger.kernel.org
-Subject: [PATCH] scsi: ufs: ufs-pci: default clock frequency for Intel's UFS controller
-Date:   Fri,  8 Jul 2022 14:17:07 +1000
-Message-Id: <20220708141612.1.Ice2e8173bd0937c7c4898b112350120063572269@changeid>
-X-Mailer: git-send-email 2.31.0
+        Thu, 07 Jul 2022 21:17:31 -0700 (PDT)
+Date:   Fri, 8 Jul 2022 04:17:30 +0000
+From:   Joel Fernandes <joel@joelfernandes.org>
+To:     "Paul E. McKenney" <paulmck@kernel.org>
+Cc:     rcu@vger.kernel.org, linux-kernel@vger.kernel.org,
+        rushikesh.s.kadam@intel.com, urezki@gmail.com,
+        neeraj.iitr10@gmail.com, frederic@kernel.org, rostedt@goodmis.org,
+        vineeth@bitbyteword.org
+Subject: Re: [PATCH v2 0/8] Implement call_rcu_lazy() and miscellaneous fixes
+Message-ID: <Ysev2jbxFGNkLvjG@google.com>
+References: <20220622225102.2112026-1-joel@joelfernandes.org>
+ <20220626031206.GJ1790663@paulmck-ThinkPad-P17-Gen-1>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220626031206.GJ1790663@paulmck-ThinkPad-P17-Gen-1>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,33 +70,77 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-ARM platforms rely on 'ref_clk' of a UFS controller's node in DTS to set
-up the proper bRefClkFreq for the UFS storage device. The facility is
-not available on x86. To circumvene that, default the parameter,
-responsible for carrying the value to the UFS storage device
-initialization, to the one that Intel's controllers support. This is
-required to support provisioning of UFS storage devices from userspace,
-without relying on FW and/or bootloader to make the necessary
-preparations.
+On Sat, Jun 25, 2022 at 08:12:06PM -0700, Paul E. McKenney wrote:
+> On Wed, Jun 22, 2022 at 10:50:53PM +0000, Joel Fernandes (Google) wrote:
+> > 
+> > Hello!
+> > Please find the next improved version of call_rcu_lazy() attached.  The main
+> > difference between the previous version is that it is now using bypass lists,
+> > and thus handling rcu_barrier() and hotplug situations, with some small changes
+> > to those parts.
+> > 
+> > I also don't see the TREE07 RCU stall from v1 anymore.
+> > 
+> > In the v1, we some numbers below (testing on v2 is in progress). Rushikesh,
+> > feel free to pull these patches into your tree. Just to note, you will also
+> > need to pull the call_rcu_lazy() user patches from v1. I have dropped in this
+> > series, just to make the series focus on the feature code first.
+> > 
+> > Following are power savings we see on top of RCU_NOCB_CPU on an Intel platform.
+> > The observation is that due to a 'trickle down' effect of RCU callbacks, the
+> > system is very lightly loaded but constantly running few RCU callbacks very
+> > often. This confuses the power management hardware that the system is active,
+> > when it is in fact idle.
+> > 
+> > For example, when ChromeOS screen is off and user is not doing anything on the
+> > system, we can see big power savings.
+> > Before:
+> > Pk%pc10 = 72.13
+> > PkgWatt = 0.58
+> > CorWatt = 0.04
+> > 
+> > After:
+> > Pk%pc10 = 81.28
+> > PkgWatt = 0.41
+> > CorWatt = 0.03
+> 
+> So not quite 30% savings in power at the package level?  Not bad at all!
 
-Signed-off-by: Daniil Lunev <dlunev@chromium.org>
----
+Yes this is the package residency amount, not the amount of power. This % is
+not power.
 
- drivers/ufs/host/ufshcd-pci.c | 1 +
- 1 file changed, 1 insertion(+)
+> > Further, when ChromeOS screen is ON but system is idle or lightly loaded, we
+> > can see that the display pipeline is constantly doing RCU callback queuing due
+> > to open/close of file descriptors associated with graphics buffers. This is
+> > attributed to the file_free_rcu() path which this patch series also touches.
+> > 
+> > This patch series adds a simple but effective, and lockless implementation of
+> > RCU callback batching. On memory pressure, timeout or queue growing too big, we
+> > initiate a flush of one or more per-CPU lists.
+> 
+> It is no longer lockless, correct?  Or am I missing something subtle?
+> 
+> Full disclosure: I don't see a whole lot of benefit to its being lockless.
+> But truth in advertising!  ;-)
 
-diff --git a/drivers/ufs/host/ufshcd-pci.c b/drivers/ufs/host/ufshcd-pci.c
-index 04166bda41daa..a6f9222cbea74 100644
---- a/drivers/ufs/host/ufshcd-pci.c
-+++ b/drivers/ufs/host/ufshcd-pci.c
-@@ -336,6 +336,7 @@ static int ufs_intel_common_init(struct ufs_hba *hba)
- 	struct intel_host *host;
- 
- 	hba->caps |= UFSHCD_CAP_RPM_AUTOSUSPEND;
-+	hba->dev_ref_clk_freq = REF_CLK_FREQ_19_2_MHZ;
- 
- 	host = devm_kzalloc(hba->dev, sizeof(*host), GFP_KERNEL);
- 	if (!host)
--- 
-2.31.0
+Yes, you are right. Maybe a better way I could put it is it is "lock
+contention less" :D
+
+> > Similar results can be achieved by increasing jiffies_till_first_fqs, however
+> > that also has the effect of slowing down RCU. Especially I saw huge slow down
+> > of function graph tracer when increasing that.
+> > 
+> > One drawback of this series is, if another frequent RCU callback creeps up in
+> > the future, that's not lazy, then that will again hurt the power. However, I
+> > believe identifying and fixing those is a more reasonable approach than slowing
+> > RCU down for the whole system.
+> 
+> Very good!  I have you down as the official call_rcu_lazy() whack-a-mole
+> developer.  ;-)
+
+:-D
+
+thanks,
+
+ - Joel
 

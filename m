@@ -2,111 +2,163 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E8A756C473
-	for <lists+linux-kernel@lfdr.de>; Sat,  9 Jul 2022 01:15:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0728956C234
+	for <lists+linux-kernel@lfdr.de>; Sat,  9 Jul 2022 01:12:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239579AbiGHTjR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Jul 2022 15:39:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45956 "EHLO
+        id S238758AbiGHTj2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Jul 2022 15:39:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47908 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238693AbiGHTjP (ORCPT
+        with ESMTP id S238693AbiGHTj0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Jul 2022 15:39:15 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BA63264;
-        Fri,  8 Jul 2022 12:39:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1657309154; x=1688845154;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=LpoDI14rXdWMtl4+x5dyiQKRVxSqj32tjZgTDJN6bu8=;
-  b=PN4bpZJykrRj/+kj2wkTatzHsV8bA8ENTbOJZoV6ABCVdAYZsXe4fFpi
-   3nxUds9T/ClYX+R31NFxU16D82LUc9g2hbWr9LTKwxtIOWCp10fjdwBuJ
-   miN0lErIqxTF55Pg4MDBtGFrc47i1TpzxhVMxF0Dv1T/yNK6iTchQY4Vp
-   c5PudI22vUN9JHHIB4WX47wtB2kCbcq75D/47BgW6BUc1uWbSZ9192Kvs
-   sFSn7mRHSMF0cQJwq57vKbta6bxrHAfjARjAeQJDtmCWDJJ/cR1YXP5WZ
-   Q9uI/5gYbvtGJ3RUjDg2F1xH7VFKfInM0e4mXGSJM5G+cgtKBkejBImFy
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10402"; a="264764071"
-X-IronPort-AV: E=Sophos;i="5.92,256,1650956400"; 
-   d="scan'208";a="264764071"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jul 2022 12:39:12 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,256,1650956400"; 
-   d="scan'208";a="661876727"
-Received: from lkp-server01.sh.intel.com (HELO 68b931ab7ac1) ([10.239.97.150])
-  by fmsmga004.fm.intel.com with ESMTP; 08 Jul 2022 12:39:09 -0700
-Received: from kbuild by 68b931ab7ac1 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1o9toe-000Nqg-0N;
-        Fri, 08 Jul 2022 19:39:04 +0000
-Date:   Sat, 9 Jul 2022 03:38:35 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Tanmay Shah <tanmay.shah@amd.com>, bjorn.andersson@linaro.org,
-        mathieu.poirier@linaro.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, michal.simek@xilinx.com,
-        ben.levinsky@xilinx.com, tanmay.shah@xilinx.com,
-        michal.simek@amd.com
-Cc:     Paul Gazzillo <paul@pgazz.com>,
-        Necip Fazil Yildiran <fazilyildiran@gmail.com>,
-        kbuild-all@lists.01.org, linux-remoteproc@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        Tanmay Shah <tanmay.shah@amd.com>
-Subject: Re: [PATCH v9 6/6] drivers: remoteproc: Add Xilinx r5 remoteproc
- driver
-Message-ID: <202207090358.SyMJbHIZ-lkp@intel.com>
-References: <20220708013955.2340449-7-tanmay.shah@amd.com>
+        Fri, 8 Jul 2022 15:39:26 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E96EB10FC2
+        for <linux-kernel@vger.kernel.org>; Fri,  8 Jul 2022 12:39:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1657309164;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=KxGqFxRQR4oJiNCtgb+KA18OJIiQLKlXQ2U1quSzXO4=;
+        b=TK1R7WYrGA9z85NZAGrZAyMkK94B8O9Ji/V1NMd0WDzABqc8N0ioQSq+blazwWaI9Gvuto
+        LbLRJkGYHXsgGN/RmZo3jnik3BXThkewdxjHPgVTqSs2pgUb2e+LStehOy2VKUUWWj/T4C
+        jg4PuShbudbuarzfDmc5tZG0m9rmuNk=
+Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com
+ [209.85.208.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-557-kGJ51_H3PRmJ6mvaMpc8Qg-1; Fri, 08 Jul 2022 15:39:22 -0400
+X-MC-Unique: kGJ51_H3PRmJ6mvaMpc8Qg-1
+Received: by mail-ed1-f70.google.com with SMTP id h17-20020a056402281100b0043aa5c0493dso2426251ede.16
+        for <linux-kernel@vger.kernel.org>; Fri, 08 Jul 2022 12:39:22 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=KxGqFxRQR4oJiNCtgb+KA18OJIiQLKlXQ2U1quSzXO4=;
+        b=rv1PRKexTdrqzhMksavzUa4Z/JHjnpX/z9wi0Q0onF9kWVWLExiRubdGgDxNL83vQD
+         eyG274JwQLz6vrNPIo0I8w0EsgyBYGB+ulOYvehKNgfQsAXAk0ymvpVI9WQrFu0teBdZ
+         4WFUikKytBscc6r5vkiIE8uT08URJPmHw4wGLLYZAhCBF8rPyHQb56pBUNoybwRtSX87
+         02S8LTDrfAW99utwKsajtqgXFRGToP9FJ0KIZqtTQCHcd8oH3lMS0KglOrAWt2uxpPsc
+         IHM2V2+INpC5goMPv9u/Uew4PJPb3TMIvx/Lgq8rVQHxEoHTs04/3cOZU6IY9c7C8ubQ
+         Dy4w==
+X-Gm-Message-State: AJIora91PXFsQDC/ieDN+PhFAlNkK7ebDDn+xqmXFk64Gpiirmmn36pD
+        Svz3s2mghN+Oppf6yrm9yWmjBdOfnfQYXVm7pDCt4qTktbMjEv4WZ36nrb8SG6kjU+Q4RRNBO5S
+        aqBzrFjLg+XBBiNUsgStkveMM
+X-Received: by 2002:a17:907:7355:b0:72a:efdc:8245 with SMTP id dq21-20020a170907735500b0072aefdc8245mr5098662ejc.168.1657309161411;
+        Fri, 08 Jul 2022 12:39:21 -0700 (PDT)
+X-Google-Smtp-Source: AGRyM1u2APmFNnX7GyBA8SbRKKbY+1grb6KBUOEXEEeA0NI4es/IDfGe5CyIynaHCgtfXODqFTkjbQ==
+X-Received: by 2002:a17:907:7355:b0:72a:efdc:8245 with SMTP id dq21-20020a170907735500b0072aefdc8245mr5098655ejc.168.1657309161263;
+        Fri, 08 Jul 2022 12:39:21 -0700 (PDT)
+Received: from ?IPV6:2001:1c00:c1e:bf00:d69d:5353:dba5:ee81? (2001-1c00-0c1e-bf00-d69d-5353-dba5-ee81.cable.dynamic.v6.ziggo.nl. [2001:1c00:c1e:bf00:d69d:5353:dba5:ee81])
+        by smtp.gmail.com with ESMTPSA id z10-20020aa7c64a000000b0043a21e3b4a5sm13255832edr.40.2022.07.08.12.39.20
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 08 Jul 2022 12:39:20 -0700 (PDT)
+Message-ID: <37a7e536-252a-c8a9-1412-37d3f2052a6d@redhat.com>
+Date:   Fri, 8 Jul 2022 21:39:20 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220708013955.2340449-7-tanmay.shah@amd.com>
-X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Subject: Re: [PATCH 2/2] Input: i8042 - add TUXEDO devices to i8042 quirk
+ tables for partial fix
+Content-Language: en-US
+To:     Werner Sembach <wse@tuxedocomputers.com>,
+        dmitry.torokhov@gmail.com, tiwai@suse.de, samuel@cavoj.net,
+        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220708161005.1251929-1-wse@tuxedocomputers.com>
+ <20220708161005.1251929-3-wse@tuxedocomputers.com>
+From:   Hans de Goede <hdegoede@redhat.com>
+In-Reply-To: <20220708161005.1251929-3-wse@tuxedocomputers.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Tanmay,
+Hi,
 
-Thank you for the patch! Perhaps something to improve:
+On 7/8/22 18:10, Werner Sembach wrote:
+> A lot of modern Clevo barebones have touchpad and/or keyboard issues after
+> suspend fixable with nomux + reset + noloop + nopnp. Luckily, none of them
+> have an external PS/2 port so this can safely be set for all of them.
+> 
+> I'm not entirely sure if every device listed really needs all four quirks,
+> but after testing and production use. No negative effects could be
+> observed when setting all four.
+> 
+> Setting SERIO_QUIRK_NOMUX or SERIO_QUIRK_RESET_ALWAYS on the Clevo N150CU
+> and the Clevo NHxxRZQ makes the keyboard very laggy for ~5 seconds after
+> boot and sometimes also after resume. However both are required for the
+> keyboard to not fail completely sometimes after boot or resume.
 
-[auto build test WARNING on c6a669485125145afd22230df6e0e6c37f19ad41]
+Hmm, the very laggy bit does not sound good. Have you looked into other
+solutions, e.g. what happens if you use just nomux without any of the
+other 3 options ?
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Tanmay-Shah/Add-Xilinx-RPU-subsystem-support/20220708-094221
-base:   c6a669485125145afd22230df6e0e6c37f19ad41
-config: (https://download.01.org/0day-ci/archive/20220709/202207090358.SyMJbHIZ-lkp@intel.com/config)
-reproduce:
-        # https://github.com/intel-lab-lkp/linux/commit/77a934574239ba990778a8007045b8c43955d9f5
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Tanmay-Shah/Add-Xilinx-RPU-subsystem-support/20220708-094221
-        git checkout 77a934574239ba990778a8007045b8c43955d9f5
-        # 1. reproduce by kismet
-           # install kmax per https://github.com/paulgazz/kmax/blob/master/README.md
-           kismet --linux-ksrc=linux --selectees CONFIG_ZYNQMP_IPI_MBOX --selectors CONFIG_XLNX_R5_REMOTEPROC -a=arm64
-        # 2. reproduce by make
-           # save the config file to linux source tree
-           cd linux
-           make ARCH=arm64 olddefconfig
+Regards,
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+Hans
 
 
-kismet warnings: (new ones prefixed by >>)
->> kismet: WARNING: unmet direct dependencies detected for ZYNQMP_IPI_MBOX when selected by XLNX_R5_REMOTEPROC
-   
-   WARNING: unmet direct dependencies detected for ZYNQMP_IPI_MBOX
-     Depends on [n]: MAILBOX [=n] && ARCH_ZYNQMP [=y] && OF [=y]
-     Selected by [y]:
-     - XLNX_R5_REMOTEPROC [=y] && REMOTEPROC [=y] && PM [=y] && ARCH_ZYNQMP [=y] && ZYNQMP_FIRMWARE [=y]
+> 
+> Signed-off-by: Werner Sembach <wse@tuxedocomputers.com>
+> Cc: stable@vger.kernel.org
+> ---
+>  drivers/input/serio/i8042-x86ia64io.h | 28 +++++++++++++++++++++++++++
+>  1 file changed, 28 insertions(+)
+> 
+> diff --git a/drivers/input/serio/i8042-x86ia64io.h b/drivers/input/serio/i8042-x86ia64io.h
+> index 5204a7dd61d4..9dc0266e5168 100644
+> --- a/drivers/input/serio/i8042-x86ia64io.h
+> +++ b/drivers/input/serio/i8042-x86ia64io.h
+> @@ -1107,6 +1107,20 @@ static const struct dmi_system_id i8042_dmi_quirk_table[] __initconst = {
+>  		.driver_data = (void *)(SERIO_QUIRK_NOMUX | SERIO_QUIRK_RESET_ALWAYS |
+>  					SERIO_QUIRK_NOLOOP | SERIO_QUIRK_NOPNP)
+>  	},
+> +	{
+> +		/*
+> +		 * Setting SERIO_QUIRK_NOMUX or SERIO_QUIRK_RESET_ALWAYS makes
+> +		 * the keyboard very laggy for ~5 seconds after boot and
+> +		 * sometimes also after resume.
+> +		 * However both are required for the keyboard to not fail
+> +		 * completely sometimes after boot or resume.
+> +		 */
+> +		.matches = {
+> +			DMI_MATCH(DMI_BOARD_NAME, "N150CU"),
+> +		},
+> +		.driver_data = (void *)(SERIO_QUIRK_NOMUX | SERIO_QUIRK_RESET_ALWAYS |
+> +					SERIO_QUIRK_NOLOOP | SERIO_QUIRK_NOPNP)
+> +	},
+>  	{
+>  		.matches = {
+>  			DMI_MATCH(DMI_BOARD_NAME, "NH5xAx"),
+> @@ -1114,6 +1128,20 @@ static const struct dmi_system_id i8042_dmi_quirk_table[] __initconst = {
+>  		.driver_data = (void *)(SERIO_QUIRK_NOMUX | SERIO_QUIRK_RESET_ALWAYS |
+>  					SERIO_QUIRK_NOLOOP | SERIO_QUIRK_NOPNP)
+>  	},
+> +	{
+> +		/*
+> +		 * Setting SERIO_QUIRK_NOMUX or SERIO_QUIRK_RESET_ALWAYS makes
+> +		 * the keyboard very laggy for ~5 seconds after boot and
+> +		 * sometimes also after resume.
+> +		 * However both are required for the keyboard to not fail
+> +		 * completely sometimes after boot or resume.
+> +		 */
+> +		.matches = {
+> +			DMI_MATCH(DMI_BOARD_NAME, "NHxxRZQ"),
+> +		},
+> +		.driver_data = (void *)(SERIO_QUIRK_NOMUX | SERIO_QUIRK_RESET_ALWAYS |
+> +					SERIO_QUIRK_NOLOOP | SERIO_QUIRK_NOPNP)
+> +	},
+>  	{
+>  		.matches = {
+>  			DMI_MATCH(DMI_BOARD_NAME, "NL5xRU"),
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp

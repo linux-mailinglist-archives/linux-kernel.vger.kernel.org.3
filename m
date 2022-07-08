@@ -2,116 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BDDD656C360
-	for <lists+linux-kernel@lfdr.de>; Sat,  9 Jul 2022 01:14:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9669456C286
+	for <lists+linux-kernel@lfdr.de>; Sat,  9 Jul 2022 01:13:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240083AbiGHVDi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Jul 2022 17:03:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55334 "EHLO
+        id S240070AbiGHVBp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Jul 2022 17:01:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53378 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239883AbiGHVDg (ORCPT
+        with ESMTP id S240083AbiGHVBn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Jul 2022 17:03:36 -0400
-Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02A1D38B0
-        for <linux-kernel@vger.kernel.org>; Fri,  8 Jul 2022 14:03:33 -0700 (PDT)
-Received: by mail-ed1-x532.google.com with SMTP id k30so20090008edk.8
-        for <linux-kernel@vger.kernel.org>; Fri, 08 Jul 2022 14:03:33 -0700 (PDT)
+        Fri, 8 Jul 2022 17:01:43 -0400
+Received: from mail-oi1-x22a.google.com (mail-oi1-x22a.google.com [IPv6:2607:f8b0:4864:20::22a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D19BF6B247
+        for <linux-kernel@vger.kernel.org>; Fri,  8 Jul 2022 14:01:42 -0700 (PDT)
+Received: by mail-oi1-x22a.google.com with SMTP id i126so151497oih.4
+        for <linux-kernel@vger.kernel.org>; Fri, 08 Jul 2022 14:01:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=vanguardiasur-com-ar.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=9D1dMV/wl41srQTjtMRnPPYS9ui9XJnIPQ6Za9rlFlg=;
-        b=Mlj28zlSyiapgPsOC25mOdGjceagThnpsZDNvLIpB7QkJW/z+m4J3T6Vk8spQtLuNB
-         2eWAunXuB/JvF8RbkQfVwtJSh49Ok/ziOZisiRDpFnXJpR0JdPBUL7U0IW0PPf9T7vgv
-         NV5gxcEPQV45UetlaHVv3DZIizscOXMC80vExiOL93YMySdvKLSnu0hLum2XqRQl/xOw
-         Rz4bevfs/GtrIiMAGs14zhOXpTGOH9YD1qXnW8gqMEeP55u4atRTA2lxBgVPGwvAqSZo
-         2zbeWe5zWAAZgfSIcEMZPZp3Qho6vrLkSmuR/FRN2l/2QZVLb9UtfTL356262LScfrma
-         fA2A==
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=SQUHR8cqfec6xaCwS1slMaoEVFnhpSwFvJqKIFprcuc=;
+        b=hYaiZ0ZlAM6D9t9CfTzB1qcI0NbhYGcnCJ3VHfnVF5DK2EP6dQDdQ7TFArVXvQ02Lr
+         bdsIQbnTsUYUY88y73MVEmUCtNzrggYb8thic/FQCVb8v4iNrfly8ZmPqFpNvG6nRazL
+         A6Dq+a7S1CrJecd8n/3ydmhRYIgZQ7cfRvmVRz4wx8mw/laLCkEY/Xh1UFdGqMhS/L4D
+         rxoKiFJ4nIQ6lMFEzVDJuQhzfEvSZhGNBilDk3eXMfFAQSXfrZgHQAH3KVyEAz/OK/CW
+         l78Md/Ows7IqBUHuLoiDssv/c8RgSNMZLi1k6SubjSow3j1xqD4Q0OyDiv7RzOX7IyNf
+         aecg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=9D1dMV/wl41srQTjtMRnPPYS9ui9XJnIPQ6Za9rlFlg=;
-        b=P4O8eT7+QwyfKQVBFDwL4F+GIkyP7+uOgVBMdrYuZqBTcONVNPHRtuGX35vvkPoIJY
-         23XQsLj+YKrUY9GX9HCy7HpEp+eRWIZ2AGbeqaZnUnFLpwxxpzJ9Ky7qibmfZxqpX86y
-         M6GN7FqLUpQdcfeFFrt0Hr0lAMpkpHkPqetnlR6z7LrKn53ls+irJmNaHvYDBSGlU7fR
-         j3VF/fIap3oip9xWeIANdTBBmH4gbwq7+ovQz4bZwQqY9kiLc03Me4c+D7Xjcq9X5zkV
-         icRVYBkI9UxYqQ3/U2GihHVMzTQvQBdUQoNNorxBVjlJrIIFutiBNViCDyNkLWfnwNnz
-         RrVw==
-X-Gm-Message-State: AJIora/g8QOIGD4Kqwd5spRdls+EV94OIGgGw1DuBP5Qaav4JYxIPlG2
-        DUkMXomtYVVzLt/Yw3hgs2vLKwJqqlD2RTEvTZtzpA==
-X-Google-Smtp-Source: AGRyM1tbbwYUYYk8XsfwFscqxkdupkHc0W0XT3xF1BJa3FD/cJrFY8UDnnp5VugaDFT3MkN/EHCuTvnbkg4NIYarsF4=
-X-Received: by 2002:a05:6402:5306:b0:437:8bbd:b313 with SMTP id
- eo6-20020a056402530600b004378bbdb313mr7426246edb.123.1657314212044; Fri, 08
- Jul 2022 14:03:32 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=SQUHR8cqfec6xaCwS1slMaoEVFnhpSwFvJqKIFprcuc=;
+        b=Ub9H/pr05C2BZrlVRkH5IbbvJ3fVPmkySfOj6ipCoQv+vlAtKfxEh8YSPIbCp2AHIu
+         X20myZ7whAAMT55psV29LflQXhAprPg88KMxmZsub+I1xzx5PC9y6voXz86H3hdtWMa0
+         TdzfOjVeNLotLeS4zYAVmU9rN3KDy3XNuf/Wfe08Ajuldl7BXmVrd7m9597G/XpqrGAO
+         94AjkhWCTDFwXUmwR9UEP2YUsWI+4fDNI9dYkWWW15dpPjZeh9CvUN6e6LEZJQTpHWHj
+         MPGwQ5evWPiy5Nsrc2PnW06JyoxyFOf2JgDAiaq4i40919s2jHDyjEC98+7EU8KsC5IK
+         78Hw==
+X-Gm-Message-State: AJIora+YIcjX85748qLyvC6dwkNETksDeRoKNL930rk9DAv6p1PvQavh
+        tNKDFGlysMeAkaQQ10Pjpj0GSA==
+X-Google-Smtp-Source: AGRyM1tfDkomylt7OKStARhG3F6XT1w/Ga+GjAvIvazJt53EyhaACMtrmRWw3aqAwn75btHaMat/FQ==
+X-Received: by 2002:a05:6808:1928:b0:335:6073:f96a with SMTP id bf40-20020a056808192800b003356073f96amr924497oib.249.1657314102152;
+        Fri, 08 Jul 2022 14:01:42 -0700 (PDT)
+Received: from ripper (104-57-184-186.lightspeed.austtx.sbcglobal.net. [104.57.184.186])
+        by smtp.gmail.com with ESMTPSA id t11-20020a0568301e2b00b0061c266a1bf8sm11096otr.26.2022.07.08.14.01.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 08 Jul 2022 14:01:41 -0700 (PDT)
+Date:   Fri, 8 Jul 2022 14:04:13 -0700
+From:   Bjorn Andersson <bjorn.andersson@linaro.org>
+To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Cc:     Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Shawn Guo <shawnguo@kernel.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Marcel Ziswiler <marcel.ziswiler@toradex.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Biju Das <biju.das.jz@bp.renesas.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org,
+        Johan Hovold <johan+linaro@kernel.org>,
+        manivannan.sadhasivam@linaro.org
+Subject: Re: [PATCH] arm64: defconfig: Enable Qualcomm SC8280XP providers
+Message-ID: <YsibzePW58/DKWrI@ripper>
+References: <20220707161014.3178798-1-bjorn.andersson@linaro.org>
+ <CAA8EJpoZ4WKALrvtCtfHNTJ5FDBk-Qy=Mr4TNr8qfcc8=hSMjQ@mail.gmail.com>
 MIME-Version: 1.0
-References: <20220706184133.210888-1-ezequiel@vanguardiasur.com.ar> <2ae24b07-92ae-8bdb-8b2d-f90a4a9557a9@redhat.com>
-In-Reply-To: <2ae24b07-92ae-8bdb-8b2d-f90a4a9557a9@redhat.com>
-From:   Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
-Date:   Fri, 8 Jul 2022 18:03:21 -0300
-Message-ID: <CAAEAJfCwmdJEoayanWLodd9mj3hx0Y_4BME10SeTu4MF7pvWyw@mail.gmail.com>
-Subject: Re: [PATCH] drm/ssd130x: Fix pre-charge period setting
-To:     Javier Martinez Canillas <javierm@redhat.com>
-Cc:     dri-devel <dri-devel@lists.freedesktop.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        David Airlie <airlied@linux.ie>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAA8EJpoZ4WKALrvtCtfHNTJ5FDBk-Qy=Mr4TNr8qfcc8=hSMjQ@mail.gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jul 7, 2022 at 5:37 AM Javier Martinez Canillas
-<javierm@redhat.com> wrote:
->
-> Hello Ezequiel,
->
-> Thanks a lot for your patch.
->
-> On 7/6/22 20:41, Ezequiel Garcia wrote:
-> > Fix small typo which causes the mask for the 'precharge1' setting
-> > to be used with the 'precharge2' value.
+On Thu 07 Jul 10:41 PDT 2022, Dmitry Baryshkov wrote:
+
+> On Thu, 7 Jul 2022 at 19:07, Bjorn Andersson <bjorn.andersson@linaro.org> wrote:
 > >
-> > Signed-off-by: Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
+> > The Qualcomm SC8280XP need the global clock controller, interconnect
+> > provider and TLMM pinctrl in order to boot. Enable these as builtin, as
+> > they are needed in order to provide e.g. UART.
+> >
+> > Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
 > > ---
-> >  drivers/gpu/drm/solomon/ssd130x.c | 2 +-
-> >  1 file changed, 1 insertion(+), 1 deletion(-)
+> >  arch/arm64/configs/defconfig | 3 +++
+> >  1 file changed, 3 insertions(+)
 > >
-> > diff --git a/drivers/gpu/drm/solomon/ssd130x.c b/drivers/gpu/drm/solomon/ssd130x.c
-> > index 08394444dd6e..f4886e66ff34 100644
-> > --- a/drivers/gpu/drm/solomon/ssd130x.c
-> > +++ b/drivers/gpu/drm/solomon/ssd130x.c
-> > @@ -350,7 +350,7 @@ static int ssd130x_init(struct ssd130x_device *ssd130x)
+> > diff --git a/arch/arm64/configs/defconfig b/arch/arm64/configs/defconfig
+> > index d2615b37d857..8e44f6a2172c 100644
+> > --- a/arch/arm64/configs/defconfig
+> > +++ b/arch/arm64/configs/defconfig
+> > @@ -541,6 +541,7 @@ CONFIG_PINCTRL_QDF2XXX=y
+> >  CONFIG_PINCTRL_QCOM_SPMI_PMIC=y
+> >  CONFIG_PINCTRL_SC7180=y
+> >  CONFIG_PINCTRL_SC7280=y
+> > +CONFIG_PINCTRL_SC8280XP=y
+> >  CONFIG_PINCTRL_SDM845=y
+> >  CONFIG_PINCTRL_SM8150=y
+> >  CONFIG_PINCTRL_SM8250=y
+> > @@ -1056,6 +1057,7 @@ CONFIG_MSM_GCC_8998=y
+> >  CONFIG_QCS_GCC_404=y
+> >  CONFIG_SC_GCC_7180=y
+> >  CONFIG_SC_GCC_7280=y
+> > +CONFIG_SC_GCC_8280XP=y
+> >  CONFIG_SDM_CAMCC_845=m
+> >  CONFIG_SDM_GPUCC_845=y
+> >  CONFIG_SDM_VIDEOCC_845=y
+> > @@ -1266,6 +1268,7 @@ CONFIG_INTERCONNECT_QCOM_OSM_L3=m
+> >  CONFIG_INTERCONNECT_QCOM_QCS404=m
+> >  CONFIG_INTERCONNECT_QCOM_SC7180=m
+> >  CONFIG_INTERCONNECT_QCOM_SC7280=y
+> > +CONFIG_INTERCONNECT_QCOM_SC8280XP=y
+> 
+> = m? I see other SoCs build interconnect drivers as modules (well,
+> except sdm845).
+> 
+
+I have interconnects specified for the UART and keeping the interconnect
+provider as module means that the serial  until after late_initcall,
+which in my testing implies that systemd doesn't find a proper console.
+
+Perhaps this is something I'm doing incorrectly?
+
+Regards,
+Bjorn
+
+> >  CONFIG_INTERCONNECT_QCOM_SDM845=y
+> >  CONFIG_INTERCONNECT_QCOM_SM8150=m
+> >  CONFIG_INTERCONNECT_QCOM_SM8250=m
+> > --
+> > 2.35.1
 > >
-> >       /* Set precharge period in number of ticks from the internal clock */
-> >       precharge = (SSD130X_SET_PRECHARGE_PERIOD1_SET(ssd130x->prechargep1) |
-> > -                  SSD130X_SET_PRECHARGE_PERIOD1_SET(ssd130x->prechargep2));
-> > +                  SSD130X_SET_PRECHARGE_PERIOD2_SET(ssd130x->prechargep2));
->
-> It's a typo indeed. Nice catch!
->
-> I wonder how did you notice this. Or was it just looking at the code ?
->
-
-Indeed, I was just reviewing the code while getting a SH1106 display to work.
-
-> Acked-by: Javier Martinez Canillas <javierm@redhat.com>
->
-> I'll push it to drm-misc (drm-misc-fixes).
->
-
-Thanks!
-Ezequiel
-
-> --
-> Best regards,
->
-> Javier Martinez Canillas
-> Linux Engineering
-> Red Hat
->
+> 
+> 
+> -- 
+> With best wishes
+> Dmitry

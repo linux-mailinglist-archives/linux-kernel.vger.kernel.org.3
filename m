@@ -2,102 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B014956B9C0
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 14:34:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EA9AC56B9CA
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 14:38:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238030AbiGHMec (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Jul 2022 08:34:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55562 "EHLO
+        id S238215AbiGHMfI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Jul 2022 08:35:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56016 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237735AbiGHMea (ORCPT
+        with ESMTP id S238143AbiGHMfA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Jul 2022 08:34:30 -0400
-Received: from mailout-taastrup.gigahost.dk (mailout-taastrup.gigahost.dk [46.183.139.199])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6401B6EE9E;
-        Fri,  8 Jul 2022 05:34:28 -0700 (PDT)
-Received: from mailout.gigahost.dk (mailout.gigahost.dk [89.186.169.112])
-        by mailout-taastrup.gigahost.dk (Postfix) with ESMTP id 1662F1887129;
-        Fri,  8 Jul 2022 12:34:26 +0000 (UTC)
-Received: from smtp.gigahost.dk (smtp.gigahost.dk [89.186.169.109])
-        by mailout.gigahost.dk (Postfix) with ESMTP id 0BDBB25032B7;
-        Fri,  8 Jul 2022 12:34:26 +0000 (UTC)
-Received: by smtp.gigahost.dk (Postfix, from userid 1000)
-        id EE690A1E00AD; Fri,  8 Jul 2022 12:34:25 +0000 (UTC)
-X-Screener-Id: 413d8c6ce5bf6eab4824d0abaab02863e8e3f662
+        Fri, 8 Jul 2022 08:35:00 -0400
+Received: from mail-lj1-x232.google.com (mail-lj1-x232.google.com [IPv6:2a00:1450:4864:20::232])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3123879692;
+        Fri,  8 Jul 2022 05:34:59 -0700 (PDT)
+Received: by mail-lj1-x232.google.com with SMTP id a11so25762998ljb.5;
+        Fri, 08 Jul 2022 05:34:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=kvgTqdQjxH2uleYeYoM+LdF54XELxeDYcQEtIsJKsUo=;
+        b=FZ1KJntd4lKxixBfrdLSiQrDjABP5gyyoB9X310uzRt/9Ev3GGHIyhqrdmWz0XNfX/
+         FG7f7oad84IyjH9F0C9PR7YA3pm36FEzvdLgGh6z3lZ7NwC+MGrC+WxzcKvPLO+YrAE9
+         Vk6aqeYreAiK+rVwd+/xFqDAk+vcC1dI9Ue45JBDD0A7h/cq05EitWicGjKm1BhJlc3O
+         Ub667sk5b+QX0vU9Re0M+gcXyqNylkyBQdLpSJoKrlYV5rckffp8+eclfzWWxktgA509
+         1M6v3ELrhZSFyyhiHRuV/qp5UUH+hL8pI+M6khHvWlxz3sx5h55t+UFbrzG9JeNYB6ke
+         9vYw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=kvgTqdQjxH2uleYeYoM+LdF54XELxeDYcQEtIsJKsUo=;
+        b=7mjDRx2chpKJ0rsxrWISsB/1POOBFEy/rXgiIg0df6t/lSQoZFtUCDiv8cCPwnQ0WF
+         qmDFffVS4mTz5WjMZncrarChGjd2w/Q00wmmGBCYFOecGnk1SSn2r2JbqxvKeTSOGMam
+         VpwNnrXOZVkSOpSzFVdJDdgUZ2pZHgbbB9I34AePsEAgAN0120kSzNYNgz2QPOkil3l3
+         4XN+rFPJJniFCWEsAgWKUZO2ZTbX8MSX4982tCSCT/q3Kb7Rb7AYbEOa/zMubtyp4pc4
+         QOTDmcGjBVv7+9u9nK8XrCnNoyO6hV0PQY3QdFD2UsEWd/n8/qi8oBQPXlQX9xYeg24s
+         hNuA==
+X-Gm-Message-State: AJIora+wRIHkCUQ3xMrByXIxL96Wa/2l26wRPzoeJCKZFlXQw/+4OBih
+        uvZm3/T6diOpyl+pzD14aWQ=
+X-Google-Smtp-Source: AGRyM1tGe3lSnhDZc16pdwUzPBuYWe2//F/i/yPXT5QRFPbTSyTH/CKSzguYluqIngsyolqoYDjzzA==
+X-Received: by 2002:a2e:95d3:0:b0:25d:543f:78d3 with SMTP id y19-20020a2e95d3000000b0025d543f78d3mr1809812ljh.344.1657283697449;
+        Fri, 08 Jul 2022 05:34:57 -0700 (PDT)
+Received: from mobilestation ([95.79.140.178])
+        by smtp.gmail.com with ESMTPSA id p11-20020a056512234b00b0047f6b4a53cdsm7378222lfu.172.2022.07.08.05.34.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 08 Jul 2022 05:34:56 -0700 (PDT)
+Date:   Fri, 8 Jul 2022 15:34:54 +0300
+From:   Serge Semin <fancer.lancer@gmail.com>
+To:     Florian Fainelli <f.fainelli@gmail.com>
+Cc:     linux-mips@vger.kernel.org,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        open list <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] MIPS: Make phys_to_virt utilize __va()
+Message-ID: <20220708123454.mj7f3gdzk3ct6seb@mobilestation>
+References: <20220707203743.1226302-1-f.fainelli@gmail.com>
 MIME-Version: 1.0
-Date:   Fri, 08 Jul 2022 14:34:25 +0200
-From:   netdev@kapio-technology.com
-To:     Vladimir Oltean <olteanv@gmail.com>
-Cc:     davem@davemloft.net, kuba@kernel.org, netdev@vger.kernel.org,
-        Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>, Jiri Pirko <jiri@resnulli.us>,
-        Ivan Vecera <ivecera@redhat.com>,
-        Roopa Prabhu <roopa@nvidia.com>,
-        Nikolay Aleksandrov <razor@blackwall.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Ido Schimmel <idosch@nvidia.com>, linux-kernel@vger.kernel.org,
-        bridge@lists.linux-foundation.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v4 net-next 3/6] drivers: net: dsa: add locked fdb entry
- flag to drivers
-In-Reply-To: <20220708115624.rrjzjtidlhcqczjv@skbuf>
-References: <20220707152930.1789437-1-netdev@kapio-technology.com>
- <20220707152930.1789437-4-netdev@kapio-technology.com>
- <20220708084904.33otb6x256huddps@skbuf>
- <e6f418705e19df370c8d644993aa9a6f@kapio-technology.com>
- <20220708091550.2qcu3tyqkhgiudjg@skbuf>
- <e3ea3c0d72c2417430e601a150c7f0dd@kapio-technology.com>
- <20220708115624.rrjzjtidlhcqczjv@skbuf>
-User-Agent: Gigahost Webmail
-Message-ID: <723e2995314b41ff323272536ef27341@kapio-technology.com>
-X-Sender: netdev@kapio-technology.com
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,FROM_FMBLA_NEWDOM,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220707203743.1226302-1-f.fainelli@gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-07-08 13:56, Vladimir Oltean wrote:
-> On Fri, Jul 08, 2022 at 11:50:33AM +0200, netdev@kapio-technology.com 
-> wrote:
->> On 2022-07-08 11:15, Vladimir Oltean wrote:
->> > When the possibility for it to be true will exist, _all_ switchdev
->> > drivers will need to be updated to ignore that (mlxsw, cpss, ocelot,
->> > rocker, prestera, etc etc), not just DSA. And you don't need to
->> > propagate the is_locked flag to all individual DSA sub-drivers when none
->> > care about is_locked in the ADD_TO_DEVICE direction, you can just ignore
->> > within DSA until needed otherwise.
->> >
->> 
->> Maybe I have it wrong, but I think that Ido requested me to send it to 
->> all
->> the drivers, and have them ignore entries with is_locked=true ...
+On Thu, Jul 07, 2022 at 01:37:42PM -0700, Florian Fainelli wrote:
+> The implementation is exactly the same, so avoid open-coding it in two
+> different locations.
 > 
-> I don't think Ido requested you to ignore is_locked from all DSA
-> drivers, but instead from all switchdev drivers maybe. Quite different.
+> Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
 
-So without changing the signature on port_fdb_add(). If that is to avoid 
-changing that signature, which needs to be changed anyhow for any 
-switchcore driver to act on it, then my next patch set will change the 
-signarure also as it is needed for creating dynamic ATU entries from 
-userspace, which is needed to make the whole thing complete.
+Seems reasonable. Thanks.
 
-As it is already done (with the is_locked to the drivers) and needed for 
-future application, I would like Ido to comment on it before I take 
-action.
+Reviewed-by: Serge Semin <fancer.lancer@gmail.com>
 
+*Note it now looks exactly as the generic phys_to_virt().
+
+-Sergey
+
+> ---
+>  arch/mips/include/asm/io.h | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> In any case I'm going to take a look at this patch set more closely and
-> run the selftest on my Marvell switch, but I can't do this today
-> unfortunately. I'll return with more comments.
-
-Yes :-)
+> diff --git a/arch/mips/include/asm/io.h b/arch/mips/include/asm/io.h
+> index 6f5c86d2bab4..880048a54362 100644
+> --- a/arch/mips/include/asm/io.h
+> +++ b/arch/mips/include/asm/io.h
+> @@ -131,7 +131,7 @@ static inline phys_addr_t virt_to_phys(const volatile void *x)
+>   */
+>  static inline void * phys_to_virt(unsigned long address)
+>  {
+> -	return (void *)(address + PAGE_OFFSET - PHYS_OFFSET);
+> +	return __va(address);
+>  }
+>  
+>  /*
+> -- 
+> 2.25.1
+> 

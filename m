@@ -2,96 +2,214 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F163156BFAB
+	by mail.lfdr.de (Postfix) with ESMTP id A87CD56BFAA
 	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 20:36:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239086AbiGHQ1a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Jul 2022 12:27:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35152 "EHLO
+        id S239261AbiGHQ2S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Jul 2022 12:28:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35884 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239268AbiGHQ0y (ORCPT
+        with ESMTP id S239210AbiGHQ1k (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Jul 2022 12:26:54 -0400
-Received: from mail-il1-x135.google.com (mail-il1-x135.google.com [IPv6:2607:f8b0:4864:20::135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C99F14D3F
-        for <linux-kernel@vger.kernel.org>; Fri,  8 Jul 2022 09:26:49 -0700 (PDT)
-Received: by mail-il1-x135.google.com with SMTP id a12so8016091ilp.13
-        for <linux-kernel@vger.kernel.org>; Fri, 08 Jul 2022 09:26:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=sQUw4vZY4BvnSh7KPHSdmuXaETUv1lHaapC2abhfgfg=;
-        b=ct3+ktVH49MCfFiJ6o81DBq3HSZbOLLwONJvqNT9yh9cpEYi4ozyEA6eXPJ3VdIOHI
-         CRVA6tguzlrwAwa0dWLc6Ca9m0MqfW6RwMgo8+50nSoEOvWNO4jj7QG7g7tOdx5SIEdM
-         IsE6Wpm9/oGsOekCMaKHdu7bA3aZn1+u/+Noc=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=sQUw4vZY4BvnSh7KPHSdmuXaETUv1lHaapC2abhfgfg=;
-        b=7xY4gH6pbA1la1MBJ0l7d0lEslEodn4bJOtSoEc8oZARNNtyHTfVo8fda9LblvGYKu
-         NOwopsOj/1mfkw+0uPUCX/LKPOE/wZyWWdQh3jT57+Jpi8PjmhoyTecLndBMgMOp6xXg
-         eQt/1gUckGy074mIQZGYQ5dRkgz3AHVfsLKCgHwUTlS1EV0NzF7U5ejX7ResgYitwiLC
-         6I3Yg5FNh+0sdnlGS2ws9QYUHuE0GWDRZslCPGJx+u2qYrEdkztFeNnj6Yft3Y3DMhVX
-         R0MxGX/kFV1veU7x7uquV0BtqO/rHUiSjYYvZ/L72pofcR/ThSKfeceuQsZuHWO7FVAY
-         Ae3g==
-X-Gm-Message-State: AJIora9WnDFePp+RomuYQ9ONtDICHHwwxUhg24XaNe6qQnubQowet1Zx
-        fjQgRAS722T5qlkfIJ2WyaewYw==
-X-Google-Smtp-Source: AGRyM1sThFjcS5EqDvpKoJme+Hhv9hDsq21JqDJPqe2ryiWhf+tjo7cLo2LxtpV0YJW/liRhaq6hHw==
-X-Received: by 2002:a05:6e02:219d:b0:2dc:41c2:a1f3 with SMTP id j29-20020a056e02219d00b002dc41c2a1f3mr2794697ila.79.1657297608686;
-        Fri, 08 Jul 2022 09:26:48 -0700 (PDT)
-Received: from [192.168.1.128] ([38.15.45.1])
-        by smtp.gmail.com with ESMTPSA id g6-20020a02bb86000000b0033c14d2386bsm1498295jan.75.2022.07.08.09.26.47
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 08 Jul 2022 09:26:48 -0700 (PDT)
-Subject: Re: [PATCH v13 3/4] selftests/ftrace: Add testcases for objtrace
-To:     Jeff Xie <xiehuan09@gmail.com>, rostedt@goodmis.org
-Cc:     mingo@redhat.com, mhiramat@kernel.org, zanussi@kernel.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        shuah@kernel.org, linux-doc@vger.kernel.org, corbet@lwn.net,
-        chensong_2000@189.cn, Shuah Khan <skhan@linuxfoundation.org>
-References: <20220626025604.277413-1-xiehuan09@gmail.com>
- <20220626025604.277413-4-xiehuan09@gmail.com>
-From:   Shuah Khan <skhan@linuxfoundation.org>
-Message-ID: <db539a80-8cad-b5bf-3bea-6a883f48585e@linuxfoundation.org>
-Date:   Fri, 8 Jul 2022 10:26:46 -0600
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.1
+        Fri, 8 Jul 2022 12:27:40 -0400
+Received: from metanate.com (unknown [IPv6:2001:8b0:1628:5005::111])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA8A684EE6;
+        Fri,  8 Jul 2022 09:27:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=metanate.com; s=stronger; h=Content-Transfer-Encoding:Message-Id:Date:
+        Subject:Cc:To:From:Content-Type:Reply-To:Content-ID:Content-Description:
+        In-Reply-To:References; bh=dqnvtOM9WRzBsACI8H2L3qMUFDa4G14/jQNmiIiim1o=; b=0q
+        VJ7nyLpqBFZuGWKuZU5pwnNicPDxJKiXcxXJXvR5Ine7DIjHx2uvYOD4gdFAj/ppkPlnpT94lK96/
+        Hr7kyUV0teLKteVzyHEuUGgcRkW7m4ZxJNSTofHAzR63W/LhNaNMtnxu20/AnNBHFv89bxD44jEAQ
+        6dEt7fW7H/iECjix3qjMaNuX4Zuy1p8zBKYVkoS71hjNkWPZxJSZqyPiG4dhKuurkkGiPmydFgHWH
+        LBSOfcbMbPwfF8qnbvg3i6oF/hi1/GmvpEGaBxZVhMe/YmzP6YKZAxmvEddm/LmK3lyh9I5i6i47d
+        1+DpClV3+lqWwsY89AamjLP6eu03nWPw==;
+Received: from [81.174.171.191] (helo=donbot.metanate.com)
+        by email.metanate.com with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <john@metanate.com>)
+        id 1o9qow-0002UW-2C;
+        Fri, 08 Jul 2022 17:27:11 +0100
+From:   John Keeping <john@metanate.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     linux-rt-users@vger.kernel.org, John Keeping <john@metanate.com>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Valentin Schneider <vschneid@redhat.com>
+Subject: [PATCH v3] sched/core: Always flush pending blk_plug
+Date:   Fri,  8 Jul 2022 17:27:02 +0100
+Message-Id: <20220708162702.1758865-1-john@metanate.com>
+X-Mailer: git-send-email 2.37.0
 MIME-Version: 1.0
-In-Reply-To: <20220626025604.277413-4-xiehuan09@gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Authenticated: YES
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RDNS_NONE,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/25/22 8:56 PM, Jeff Xie wrote:
-> Add a series of testcases to illustrate correct and incorrect usage of
-> objtrace trigger.
-> 
-> Signed-off-by: Jeff Xie <xiehuan09@gmail.com>
-> Tested-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
-> Acked-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
-> ---
->   .../ftrace/test.d/trigger/trigger-objtrace.tc | 41 +++++++++++++++++++
->   1 file changed, 41 insertions(+)
->   create mode 100644 tools/testing/selftests/ftrace/test.d/trigger/trigger-objtrace.tc
-> 
+With CONFIG_PREEMPT_RT, it is possible to hit a deadlock between two
+normal priority tasks (SCHED_OTHER, nice level zero):
 
-Assuming this patch depends on the other kernel/trace changes in this
-series, here is my Ack for this series to go through tracing tree
+	INFO: task kworker/u8:0:8 blocked for more than 491 seconds.
+	      Not tainted 5.15.49-rt46 #1
+	"echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
+	task:kworker/u8:0    state:D stack:    0 pid:    8 ppid:     2 flags:0x00000000
+	Workqueue: writeback wb_workfn (flush-7:0)
+	[<c08a3a10>] (__schedule) from [<c08a3d84>] (schedule+0xdc/0x134)
+	[<c08a3d84>] (schedule) from [<c08a65a0>] (rt_mutex_slowlock_block.constprop.0+0xb8/0x174)
+	[<c08a65a0>] (rt_mutex_slowlock_block.constprop.0) from [<c08a6708>]
+	+(rt_mutex_slowlock.constprop.0+0xac/0x174)
+	[<c08a6708>] (rt_mutex_slowlock.constprop.0) from [<c0374d60>] (fat_write_inode+0x34/0x54)
+	[<c0374d60>] (fat_write_inode) from [<c0297304>] (__writeback_single_inode+0x354/0x3ec)
+	[<c0297304>] (__writeback_single_inode) from [<c0297998>] (writeback_sb_inodes+0x250/0x45c)
+	[<c0297998>] (writeback_sb_inodes) from [<c0297c20>] (__writeback_inodes_wb+0x7c/0xb8)
+	[<c0297c20>] (__writeback_inodes_wb) from [<c0297f24>] (wb_writeback+0x2c8/0x2e4)
+	[<c0297f24>] (wb_writeback) from [<c0298c40>] (wb_workfn+0x1a4/0x3e4)
+	[<c0298c40>] (wb_workfn) from [<c0138ab8>] (process_one_work+0x1fc/0x32c)
+	[<c0138ab8>] (process_one_work) from [<c0139120>] (worker_thread+0x22c/0x2d8)
+	[<c0139120>] (worker_thread) from [<c013e6e0>] (kthread+0x16c/0x178)
+	[<c013e6e0>] (kthread) from [<c01000fc>] (ret_from_fork+0x14/0x38)
+	Exception stack(0xc10e3fb0 to 0xc10e3ff8)
+	3fa0:                                     00000000 00000000 00000000 00000000
+	3fc0: 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000
+	3fe0: 00000000 00000000 00000000 00000000 00000013 00000000
 
-Acked-by: Shuah Khan <skhan@linuxfoundation.org>
+	INFO: task tar:2083 blocked for more than 491 seconds.
+	      Not tainted 5.15.49-rt46 #1
+	"echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
+	task:tar             state:D stack:    0 pid: 2083 ppid:  2082 flags:0x00000000
+	[<c08a3a10>] (__schedule) from [<c08a3d84>] (schedule+0xdc/0x134)
+	[<c08a3d84>] (schedule) from [<c08a41b0>] (io_schedule+0x14/0x24)
+	[<c08a41b0>] (io_schedule) from [<c08a455c>] (bit_wait_io+0xc/0x30)
+	[<c08a455c>] (bit_wait_io) from [<c08a441c>] (__wait_on_bit_lock+0x54/0xa8)
+	[<c08a441c>] (__wait_on_bit_lock) from [<c08a44f4>] (out_of_line_wait_on_bit_lock+0x84/0xb0)
+	[<c08a44f4>] (out_of_line_wait_on_bit_lock) from [<c0371fb0>] (fat_mirror_bhs+0xa0/0x144)
+	[<c0371fb0>] (fat_mirror_bhs) from [<c0372a68>] (fat_alloc_clusters+0x138/0x2a4)
+	[<c0372a68>] (fat_alloc_clusters) from [<c0370b14>] (fat_alloc_new_dir+0x34/0x250)
+	[<c0370b14>] (fat_alloc_new_dir) from [<c03787c0>] (vfat_mkdir+0x58/0x148)
+	[<c03787c0>] (vfat_mkdir) from [<c0277b60>] (vfs_mkdir+0x68/0x98)
+	[<c0277b60>] (vfs_mkdir) from [<c027b484>] (do_mkdirat+0xb0/0xec)
+	[<c027b484>] (do_mkdirat) from [<c0100060>] (ret_fast_syscall+0x0/0x1c)
+	Exception stack(0xc2e1bfa8 to 0xc2e1bff0)
+	bfa0:                   01ee42f0 01ee4208 01ee42f0 000041ed 00000000 00004000
+	bfc0: 01ee42f0 01ee4208 00000000 00000027 01ee4302 00000004 000dcb00 01ee4190
+	bfe0: 000dc368 bed11924 0006d4b0 b6ebddfc
 
-thanks,
--- Shuah
+Here the kworker is waiting on msdos_sb_info::s_lock which is held by
+tar which is in turn waiting for a buffer which is locked waiting to be
+flushed, but this operation is plugged in the kworker.
+
+The lock is a normal struct mutex, so tsk_is_pi_blocked() will always
+return false on !RT and thus the behaviour changes for RT.
+
+It seems that the intent here is to skip blk_flush_plug() in the case
+where a non-preemptible lock (such as a spinlock) has been converted to
+a rtmutex on RT, which is the case covered by the SM_RTLOCK_WAIT
+schedule flag.  But sched_submit_work() is only called from schedule()
+which is never called in this scenario, so the check can simply be
+deleted.
+
+Looking at the history of the -rt patchset, in fact this change was
+present from v5.9.1-rt20 until being dropped in v5.13-rt1 as it was part
+of a larger patch [1] most of which was replaced by commit b4bfa3fcfe3b
+("sched/core: Rework the __schedule() preempt argument").
+
+As described in [1]:
+
+   The schedule process must distinguish between blocking on a regular
+   sleeping lock (rwsem and mutex) and a RT-only sleeping lock (spinlock
+   and rwlock):
+   - rwsem and mutex must flush block requests (blk_schedule_flush_plug())
+     even if blocked on a lock. This can not deadlock because this also
+     happens for non-RT.
+     There should be a warning if the scheduling point is within a RCU read
+     section.
+
+   - spinlock and rwlock must not flush block requests. This will deadlock
+     if the callback attempts to acquire a lock which is already acquired.
+     Similarly to being preempted, there should be no warning if the
+     scheduling point is within a RCU read section.
+
+and with the tsk_is_pi_blocked() in the scheduler path, we hit the first
+issue.
+
+[1] https://git.kernel.org/pub/scm/linux/kernel/git/rt/linux-rt-devel.git/tree/patches/0022-locking-rtmutex-Use-custom-scheduling-function-for-s.patch?h=linux-5.10.y-rt-patches
+
+Cc: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+Cc: Peter Zijlstra <peterz@infradead.org>
+Cc: Thomas Gleixner <tglx@linutronix.de>
+Reviewed-by: Steven Rostedt (Google) <rostedt@goodmis.org>
+Signed-off-by: John Keeping <john@metanate.com>
+---
+v3:
+- Add SCHED_WARN_ON(current->__state & TASK_RTLOCK_WAIT) as suggested by
+  Peter
+v2:
+- Add Steven's R-b and update the commit message with his suggested
+  quote from [1]
+
+ include/linux/sched/rt.h | 8 --------
+ kernel/sched/core.c      | 8 ++++++--
+ 2 files changed, 6 insertions(+), 10 deletions(-)
+
+diff --git a/include/linux/sched/rt.h b/include/linux/sched/rt.h
+index e5af028c08b49..994c25640e156 100644
+--- a/include/linux/sched/rt.h
++++ b/include/linux/sched/rt.h
+@@ -39,20 +39,12 @@ static inline struct task_struct *rt_mutex_get_top_task(struct task_struct *p)
+ }
+ extern void rt_mutex_setprio(struct task_struct *p, struct task_struct *pi_task);
+ extern void rt_mutex_adjust_pi(struct task_struct *p);
+-static inline bool tsk_is_pi_blocked(struct task_struct *tsk)
+-{
+-	return tsk->pi_blocked_on != NULL;
+-}
+ #else
+ static inline struct task_struct *rt_mutex_get_top_task(struct task_struct *task)
+ {
+ 	return NULL;
+ }
+ # define rt_mutex_adjust_pi(p)		do { } while (0)
+-static inline bool tsk_is_pi_blocked(struct task_struct *tsk)
+-{
+-	return false;
+-}
+ #endif
+ 
+ extern void normalize_rt_tasks(void);
+diff --git a/kernel/sched/core.c b/kernel/sched/core.c
+index 1d4660a1915b3..71d6385ece83f 100644
+--- a/kernel/sched/core.c
++++ b/kernel/sched/core.c
+@@ -6578,8 +6578,12 @@ static inline void sched_submit_work(struct task_struct *tsk)
+ 			io_wq_worker_sleeping(tsk);
+ 	}
+ 
+-	if (tsk_is_pi_blocked(tsk))
+-		return;
++	/*
++	 * spinlock and rwlock must not flush block requests.  This will
++	 * deadlock if the callback attempts to acquire a lock which is
++	 * already acquired.
++	 */
++	SCHED_WARN_ON(current->__state & TASK_RTLOCK_WAIT);
+ 
+ 	/*
+ 	 * If we are going to sleep and we have plugged IO queued,
+-- 
+2.37.0
 

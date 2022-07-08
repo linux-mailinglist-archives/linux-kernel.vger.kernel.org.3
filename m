@@ -2,227 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 06B3156BED3
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 20:35:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9193156BFCD
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 20:36:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239399AbiGHQvj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Jul 2022 12:51:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35470 "EHLO
+        id S239470AbiGHQwO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Jul 2022 12:52:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35852 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239216AbiGHQvR (ORCPT
+        with ESMTP id S239421AbiGHQvt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Jul 2022 12:51:17 -0400
-Received: from ale.deltatee.com (ale.deltatee.com [204.191.154.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E462272EC9;
-        Fri,  8 Jul 2022 09:51:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=deltatee.com; s=20200525; h=Subject:MIME-Version:References:In-Reply-To:
-        Message-Id:Date:Cc:To:From:content-disposition;
-        bh=8e834mcfkj5DyYp2F7UpIZpl608YuXQCo9cN4RiJA8E=; b=WQyaLzDGqtTKF10L2+k70xp9Zo
-        NYO4sof7irrsBjsiQVjw1cHzkTxZgXB1h5a5O6NMRW89IIoXRNEpVv7KFcBTW6j1OvJcmHsLoJCxn
-        /mEJsikT4B81IGCKUlRCAWy1fZAyQtibqwdtEx9aZxIEgxlSPuXnj12feUz+Be1smzXTtG3cMnLpr
-        dTw46g/FTQ55xAU5+nCGsBrSJ/7qPQcXPPeoZynV3DebYjPLYCOff7+AaQKaksgShCUC08bgOokwT
-        J0OuyWraBgjmAEa2EuGyOYPvCqb2K1T55hrlC5reJaTouQYCjCr2r5r2JIgBk9y/EtpL+8b/QMTdL
-        ELRV/teQ==;
-Received: from cgy1-donard.priv.deltatee.com ([172.16.1.31])
-        by ale.deltatee.com with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <gunthorp@deltatee.com>)
-        id 1o9rCD-009xkH-83; Fri, 08 Jul 2022 10:51:14 -0600
-Received: from gunthorp by cgy1-donard.priv.deltatee.com with local (Exim 4.94.2)
-        (envelope-from <gunthorp@deltatee.com>)
-        id 1o9rCB-0001KT-5B; Fri, 08 Jul 2022 10:51:11 -0600
-From:   Logan Gunthorpe <logang@deltatee.com>
-To:     linux-kernel@vger.kernel.org, linux-nvme@lists.infradead.org,
-        linux-block@vger.kernel.org, linux-pci@vger.kernel.org,
-        linux-mm@kvack.org, iommu@lists.linux-foundation.org,
-        iommu@lists.linux.dev
-Cc:     Stephen Bates <sbates@raithlin.com>,
-        Christoph Hellwig <hch@lst.de>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
-        John Hubbard <jhubbard@nvidia.com>,
-        Don Dutile <ddutile@redhat.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Daniel Vetter <daniel.vetter@ffwll.ch>,
-        Minturn Dave B <dave.b.minturn@intel.com>,
-        Jason Ekstrand <jason@jlekstrand.net>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Xiong Jianxin <jianxin.xiong@intel.com>,
-        Bjorn Helgaas <helgaas@kernel.org>,
-        Ira Weiny <ira.weiny@intel.com>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Martin Oliveira <martin.oliveira@eideticom.com>,
-        Chaitanya Kulkarni <ckulkarnilinux@gmail.com>,
-        Ralph Campbell <rcampbell@nvidia.com>,
-        Logan Gunthorpe <logang@deltatee.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Max Gurtovoy <mgurtovoy@nvidia.com>
-Date:   Fri,  8 Jul 2022 10:51:04 -0600
-Message-Id: <20220708165104.5005-14-logang@deltatee.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20220708165104.5005-1-logang@deltatee.com>
-References: <20220708165104.5005-1-logang@deltatee.com>
+        Fri, 8 Jul 2022 12:51:49 -0400
+Received: from mail-io1-xd34.google.com (mail-io1-xd34.google.com [IPv6:2607:f8b0:4864:20::d34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1EEE7392B
+        for <linux-kernel@vger.kernel.org>; Fri,  8 Jul 2022 09:51:42 -0700 (PDT)
+Received: by mail-io1-xd34.google.com with SMTP id 190so4125917iou.6
+        for <linux-kernel@vger.kernel.org>; Fri, 08 Jul 2022 09:51:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=YVbA5kJPpRyIxTtw0oRvwhHjq4HhLwWNl4x41X1Nw/0=;
+        b=GEZJ3uFcU/SI5PU0Cqabw2GMig+Ouoh8ntsVxK6QKR7GfsdfxXZUAUDtyTOvgAAxrB
+         Osv4nfw+iUs5YvBNMRxFwAPMluBfmF+J28IgJvgRAHpTLdQ1wkR+zbWgZangj7W/LPB1
+         NLtVMme+1vZrbaLHwaynnLli8SvWmVhISiVXQ=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=YVbA5kJPpRyIxTtw0oRvwhHjq4HhLwWNl4x41X1Nw/0=;
+        b=ZDhDTyJIVS4k65otiax6pIAIabnthPoFJflLPk+JeIQ8WEGGo9XtDlvUIEqrdZDsfQ
+         UURo1r7DEVwgtjdU5XTydyNaV0trBjseD91XQhu1cZXgshxR/o5E9RpmnE70R9p+5L1S
+         NSU98NSmkmvLyeJURqsN+IkWe1/ysZEJ28rs4mTav8e2dn+rJ1VqlfmyXlpCsEvkQ8NG
+         Pm4ko06ABGWYGAQQxcjObYhrPkKt8sjGzyeZxqU+kiK7aRa5q+fgx6+18yJErWZJC79a
+         LLnTMX4objgQy4sydyWJ9jWb4UmvHqhmz4bHffplixy/vtOgMiClVVAbS60Kx0/NwgGu
+         YCGg==
+X-Gm-Message-State: AJIora9KUIxOZ++hvldaNQmosd18tYwzd2yhmb/KLytev9An6YLedru0
+        ARG9Oram5Xl0K5F2t2axO7iH/A==
+X-Google-Smtp-Source: AGRyM1sTFQ4I6JSicDmJK2DXm8th1grclkWYK5LII+hpjwWSEh2RPJ28k04G2awPdDg5E0RHlAR24A==
+X-Received: by 2002:a05:6638:25c4:b0:33e:a176:c227 with SMTP id u4-20020a05663825c400b0033ea176c227mr2531074jat.61.1657299102336;
+        Fri, 08 Jul 2022 09:51:42 -0700 (PDT)
+Received: from [192.168.1.128] ([38.15.45.1])
+        by smtp.gmail.com with ESMTPSA id cn22-20020a0566383a1600b0033171dafaa0sm10410108jab.178.2022.07.08.09.51.41
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 08 Jul 2022 09:51:41 -0700 (PDT)
+Subject: Re: [PATCH] docs/kselftest: Fix build commands in guidelines
+To:     Muhammad Usama Anjum <usama.anjum@collabora.com>,
+        Shuah Khan <shuah@kernel.org>, Jonathan Corbet <corbet@lwn.net>
+Cc:     kernel@collabora.com, linux-kselftest@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Shuah Khan <skhan@linuxfoundation.org>
+References: <20220704083426.1867401-1-usama.anjum@collabora.com>
+From:   Shuah Khan <skhan@linuxfoundation.org>
+Message-ID: <58aad5c5-339f-85b9-8f48-0ffbd133b0cb@linuxfoundation.org>
+Date:   Fri, 8 Jul 2022 10:51:40 -0600
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.8.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 172.16.1.31
-X-SA-Exim-Rcpt-To: linux-nvme@lists.infradead.org, linux-kernel@vger.kernel.org, linux-block@vger.kernel.org, linux-pci@vger.kernel.org, linux-mm@kvack.org, iommu@lists.linux-foundation.org, iommu@lists.linux.dev, sbates@raithlin.com, hch@lst.de, jgg@ziepe.ca, christian.koenig@amd.com, ddutile@redhat.com, willy@infradead.org, daniel.vetter@ffwll.ch, jason@jlekstrand.net, dave.hansen@linux.intel.com, helgaas@kernel.org, dan.j.williams@intel.com, dave.b.minturn@intel.com, jianxin.xiong@intel.com, ira.weiny@intel.com, robin.murphy@arm.com, martin.oliveira@eideticom.com, ckulkarnilinux@gmail.com, logang@deltatee.com, bhelgaas@google.com, jhubbard@nvidia.com, rcampbell@nvidia.com, jgg@nvidia.com, mgurtovoy@nvidia.com
-X-SA-Exim-Mail-From: gunthorp@deltatee.com
+In-Reply-To: <20220704083426.1867401-1-usama.anjum@collabora.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-X-Spam-Level: 
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
-Subject: [PATCH v8 13/13] PCI/P2PDMA: Remove pci_p2pdma_[un]map_sg()
-X-SA-Exim-Version: 4.2.1 (built Sat, 13 Feb 2021 17:57:42 +0000)
-X-SA-Exim-Scanned: Yes (on ale.deltatee.com)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This interface is superseded by support in dma_map_sg() which now supports
-heterogeneous scatterlists. There are no longer any users, so remove it.
+On 7/4/22 2:34 AM, Muhammad Usama Anjum wrote:
+> Build commands start with "make". It is missing. Add "make" to the start
+> of the build command.
+> 
+> Fixes: 820636106342 ("docs/kselftest: add more guidelines for adding new tests")
+> Signed-off-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
+> ---
+>   Documentation/dev-tools/kselftest.rst | 6 +++---
+>   1 file changed, 3 insertions(+), 3 deletions(-)
+> 
+> diff --git a/Documentation/dev-tools/kselftest.rst b/Documentation/dev-tools/kselftest.rst
+> index ee6467ca8293..9dd94c334f05 100644
+> --- a/Documentation/dev-tools/kselftest.rst
+> +++ b/Documentation/dev-tools/kselftest.rst
+> @@ -255,9 +255,9 @@ Contributing new tests (details)
+>   
+>    * All changes should pass::
+>   
+> -    kselftest-{all,install,clean,gen_tar}
+> -    kselftest-{all,install,clean,gen_tar} O=abo_path
+> -    kselftest-{all,install,clean,gen_tar} O=rel_path
+> +    make kselftest-{all,install,clean,gen_tar}
+> +    make kselftest-{all,install,clean,gen_tar} O=abs_path
+> +    make kselftest-{all,install,clean,gen_tar} O=rel_path
+>       make -C tools/testing/selftests {all,install,clean,gen_tar}
+>       make -C tools/testing/selftests {all,install,clean,gen_tar} O=abs_path
+>       make -C tools/testing/selftests {all,install,clean,gen_tar} O=rel_path
+> 
 
-Signed-off-by: Logan Gunthorpe <logang@deltatee.com>
-Acked-by: Bjorn Helgaas <bhelgaas@google.com>
-Reviewed-by: Jason Gunthorpe <jgg@nvidia.com>
-Reviewed-by: Max Gurtovoy <mgurtovoy@nvidia.com>
-Reviewed-by: Christoph Hellwig <hch@lst.de>
----
- drivers/pci/p2pdma.c       | 66 --------------------------------------
- include/linux/pci-p2pdma.h | 27 ----------------
- 2 files changed, 93 deletions(-)
+Looks like it depends on a patch already in doc tree?
 
-diff --git a/drivers/pci/p2pdma.c b/drivers/pci/p2pdma.c
-index 5d2538aa0778..4496a7c5c478 100644
---- a/drivers/pci/p2pdma.c
-+++ b/drivers/pci/p2pdma.c
-@@ -872,72 +872,6 @@ static enum pci_p2pdma_map_type pci_p2pdma_map_type(struct dev_pagemap *pgmap,
- 	return type;
- }
- 
--static int __pci_p2pdma_map_sg(struct pci_p2pdma_pagemap *p2p_pgmap,
--		struct device *dev, struct scatterlist *sg, int nents)
--{
--	struct scatterlist *s;
--	int i;
--
--	for_each_sg(sg, s, nents, i) {
--		s->dma_address = sg_phys(s) + p2p_pgmap->bus_offset;
--		sg_dma_len(s) = s->length;
--	}
--
--	return nents;
--}
--
--/**
-- * pci_p2pdma_map_sg_attrs - map a PCI peer-to-peer scatterlist for DMA
-- * @dev: device doing the DMA request
-- * @sg: scatter list to map
-- * @nents: elements in the scatterlist
-- * @dir: DMA direction
-- * @attrs: DMA attributes passed to dma_map_sg() (if called)
-- *
-- * Scatterlists mapped with this function should be unmapped using
-- * pci_p2pdma_unmap_sg_attrs().
-- *
-- * Returns the number of SG entries mapped or 0 on error.
-- */
--int pci_p2pdma_map_sg_attrs(struct device *dev, struct scatterlist *sg,
--		int nents, enum dma_data_direction dir, unsigned long attrs)
--{
--	struct pci_p2pdma_pagemap *p2p_pgmap =
--		to_p2p_pgmap(sg_page(sg)->pgmap);
--
--	switch (pci_p2pdma_map_type(sg_page(sg)->pgmap, dev)) {
--	case PCI_P2PDMA_MAP_THRU_HOST_BRIDGE:
--		return dma_map_sg_attrs(dev, sg, nents, dir, attrs);
--	case PCI_P2PDMA_MAP_BUS_ADDR:
--		return __pci_p2pdma_map_sg(p2p_pgmap, dev, sg, nents);
--	default:
--		/* Mapping is not Supported */
--		return 0;
--	}
--}
--EXPORT_SYMBOL_GPL(pci_p2pdma_map_sg_attrs);
--
--/**
-- * pci_p2pdma_unmap_sg_attrs - unmap a PCI peer-to-peer scatterlist that was
-- *	mapped with pci_p2pdma_map_sg()
-- * @dev: device doing the DMA request
-- * @sg: scatter list to map
-- * @nents: number of elements returned by pci_p2pdma_map_sg()
-- * @dir: DMA direction
-- * @attrs: DMA attributes passed to dma_unmap_sg() (if called)
-- */
--void pci_p2pdma_unmap_sg_attrs(struct device *dev, struct scatterlist *sg,
--		int nents, enum dma_data_direction dir, unsigned long attrs)
--{
--	enum pci_p2pdma_map_type map_type;
--
--	map_type = pci_p2pdma_map_type(sg_page(sg)->pgmap, dev);
--
--	if (map_type == PCI_P2PDMA_MAP_THRU_HOST_BRIDGE)
--		dma_unmap_sg_attrs(dev, sg, nents, dir, attrs);
--}
--EXPORT_SYMBOL_GPL(pci_p2pdma_unmap_sg_attrs);
--
- /**
-  * pci_p2pdma_map_segment - map an sg segment determining the mapping type
-  * @state: State structure that should be declared outside of the for_each_sg()
-diff --git a/include/linux/pci-p2pdma.h b/include/linux/pci-p2pdma.h
-index 8318a97c9c61..2c07aa6b7665 100644
---- a/include/linux/pci-p2pdma.h
-+++ b/include/linux/pci-p2pdma.h
-@@ -30,10 +30,6 @@ struct scatterlist *pci_p2pmem_alloc_sgl(struct pci_dev *pdev,
- 					 unsigned int *nents, u32 length);
- void pci_p2pmem_free_sgl(struct pci_dev *pdev, struct scatterlist *sgl);
- void pci_p2pmem_publish(struct pci_dev *pdev, bool publish);
--int pci_p2pdma_map_sg_attrs(struct device *dev, struct scatterlist *sg,
--		int nents, enum dma_data_direction dir, unsigned long attrs);
--void pci_p2pdma_unmap_sg_attrs(struct device *dev, struct scatterlist *sg,
--		int nents, enum dma_data_direction dir, unsigned long attrs);
- int pci_p2pdma_enable_store(const char *page, struct pci_dev **p2p_dev,
- 			    bool *use_p2pdma);
- ssize_t pci_p2pdma_enable_show(char *page, struct pci_dev *p2p_dev,
-@@ -83,17 +79,6 @@ static inline void pci_p2pmem_free_sgl(struct pci_dev *pdev,
- static inline void pci_p2pmem_publish(struct pci_dev *pdev, bool publish)
- {
- }
--static inline int pci_p2pdma_map_sg_attrs(struct device *dev,
--		struct scatterlist *sg, int nents, enum dma_data_direction dir,
--		unsigned long attrs)
--{
--	return 0;
--}
--static inline void pci_p2pdma_unmap_sg_attrs(struct device *dev,
--		struct scatterlist *sg, int nents, enum dma_data_direction dir,
--		unsigned long attrs)
--{
--}
- static inline int pci_p2pdma_enable_store(const char *page,
- 		struct pci_dev **p2p_dev, bool *use_p2pdma)
- {
-@@ -119,16 +104,4 @@ static inline struct pci_dev *pci_p2pmem_find(struct device *client)
- 	return pci_p2pmem_find_many(&client, 1);
- }
- 
--static inline int pci_p2pdma_map_sg(struct device *dev, struct scatterlist *sg,
--				    int nents, enum dma_data_direction dir)
--{
--	return pci_p2pdma_map_sg_attrs(dev, sg, nents, dir, 0);
--}
--
--static inline void pci_p2pdma_unmap_sg(struct device *dev,
--		struct scatterlist *sg, int nents, enum dma_data_direction dir)
--{
--	pci_p2pdma_unmap_sg_attrs(dev, sg, nents, dir, 0);
--}
--
- #endif /* _LINUX_PCI_P2P_H */
--- 
-2.30.2
+Acked-by: Shuah Khan <skhan@linuxfoundation.org>
 
+thanks,
+-- Shuah

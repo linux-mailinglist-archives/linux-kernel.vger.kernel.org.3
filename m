@@ -2,44 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D191056B7C7
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 12:56:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A61056B7CA
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 12:56:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238040AbiGHKxJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Jul 2022 06:53:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56542 "EHLO
+        id S237922AbiGHK4L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Jul 2022 06:56:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60066 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238108AbiGHKw6 (ORCPT
+        with ESMTP id S237678AbiGHK4J (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Jul 2022 06:52:58 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3156884EF3;
-        Fri,  8 Jul 2022 03:52:57 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 5A5CF106F;
-        Fri,  8 Jul 2022 03:52:57 -0700 (PDT)
-Received: from donnerap.arm.com (donnerap.cambridge.arm.com [10.1.197.42])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 824413F70D;
-        Fri,  8 Jul 2022 03:52:55 -0700 (PDT)
-From:   Andre Przywara <andre.przywara@arm.com>
-To:     Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Samuel Holland <samuel@sholland.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     Linus Walleij <linus.walleij@linaro.org>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: [PATCH v13 7/7] arm64: dts: allwinner: h616: Add X96 Mate TV box support
-Date:   Fri,  8 Jul 2022 11:52:35 +0100
-Message-Id: <20220708105235.3983266-8-andre.przywara@arm.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220708105235.3983266-1-andre.przywara@arm.com>
-References: <20220708105235.3983266-1-andre.przywara@arm.com>
+        Fri, 8 Jul 2022 06:56:09 -0400
+Received: from outbound-smtp12.blacknight.com (outbound-smtp12.blacknight.com [46.22.139.17])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 769B48737F
+        for <linux-kernel@vger.kernel.org>; Fri,  8 Jul 2022 03:56:07 -0700 (PDT)
+Received: from mail.blacknight.com (pemlinmail06.blacknight.ie [81.17.255.152])
+        by outbound-smtp12.blacknight.com (Postfix) with ESMTPS id 091421C3A87
+        for <linux-kernel@vger.kernel.org>; Fri,  8 Jul 2022 11:56:06 +0100 (IST)
+Received: (qmail 27842 invoked from network); 8 Jul 2022 10:56:05 -0000
+Received: from unknown (HELO techsingularity.net) (mgorman@techsingularity.net@[84.203.198.246])
+  by 81.17.254.9 with ESMTPSA (AES256-SHA encrypted, authenticated); 8 Jul 2022 10:56:05 -0000
+Date:   Fri, 8 Jul 2022 11:56:03 +0100
+From:   Mel Gorman <mgorman@techsingularity.net>
+To:     Vlastimil Babka <vbabka@suse.cz>
+Cc:     Oliver Sang <oliver.sang@intel.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        0day robot <lkp@intel.com>,
+        LKML <linux-kernel@vger.kernel.org>, linux-mm@kvack.org,
+        lkp@lists.01.org, Nicolas Saenz Julienne <nsaenzju@redhat.com>,
+        Marcelo Tosatti <mtosatti@redhat.com>,
+        Michal Hocko <mhocko@kernel.org>,
+        Hugh Dickins <hughd@google.com>
+Subject: Re: [mm/page_alloc] 2bd8eec68f:
+ BUG:sleeping_function_called_from_invalid_context_at_mm/gup.c
+Message-ID: <20220708105603.GI27531@techsingularity.net>
+References: <20220613125622.18628-8-mgorman@techsingularity.net>
+ <YsFk/qU+QtWun04h@xsang-OptiPlex-9020>
+ <20220703132209.875b823d1cb7169a8d51d56d@linux-foundation.org>
+ <YsRB3fZHAfik0M/q@xsang-OptiPlex-9020>
+ <1d3a26ac-89b3-0211-f8f2-5165ffa732fd@suse.cz>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=iso-8859-15
+Content-Disposition: inline
+In-Reply-To: <1d3a26ac-89b3-0211-f8f2-5165ffa732fd@suse.cz>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -47,223 +54,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The X96 Mate is an Allwinner H616 based TV box, featuring:
-  - Four ARM Cortex-A53 cores, Mali-G31 MP2 GPU
-  - 2GiB/4GiB RAM (fully usable!)
-  - 16/32/64GiB eMMC
-  - 100Mbps Ethernet (via embedded AC200 EPHY, not yet supported)
-  - Unsupported Allwinner WiFi chip
-  - 2 x USB 2.0 host ports
-  - HDMI port
-  - IR receiver
-  - 5V/2A DC power supply via barrel plug
+On Thu, Jul 07, 2022 at 11:55:35PM +0200, Vlastimil Babka wrote:
+> On 7/5/22 15:51, Oliver Sang wrote:
+> > Hi Andrew Morton,
+> > 
+> > On Sun, Jul 03, 2022 at 01:22:09PM -0700, Andrew Morton wrote:
+> >> On Sun, 3 Jul 2022 17:44:30 +0800 kernel test robot <oliver.sang@intel.com> wrote:
+> >> 
+> >> > FYI, we noticed the following commit (built with gcc-11):
+> >> > 
+> >> > commit: 2bd8eec68f740608db5ea58ecff06965228764cb ("[PATCH 7/7] mm/page_alloc: Replace local_lock with normal spinlock")
+> >> > url: https://github.com/intel-lab-lkp/linux/commits/Mel-Gorman/Drain-remote-per-cpu-directly/20220613-230139
+> >> > base: https://git.kernel.org/cgit/linux/kernel/git/torvalds/linux.git b13baccc3850ca8b8cccbf8ed9912dbaa0fdf7f3
+> >> > patch link: https://lore.kernel.org/lkml/20220613125622.18628-8-mgorman@techsingularity.net
+> >> > 
+> >> 
+> >> Did this test include the followup patch
+> >> mm-page_alloc-replace-local_lock-with-normal-spinlock-fix.patch?
+> > 
+> > no, we just fetched original patch set and test upon it.
+> 
+> It appears you fetched v4, not v5. I noticed it from the threading of your
+> report that was threaded in the v4 thread, and also the github url: above.
+> In v4, pcpu_spin_trylock_irqsave() was missing an unpin, and indeed it's
+> missing in the github branch you were testing:
+> 
 
-Add a basic devicetree for it, with SD card and eMMC working, as
-well as serial and the essential peripherals, like the AXP PMIC.
+Thanks Vlastimil! This is my fault, I failed to verify that the code in
+my tree, Andrew's tree and what Oliver tested were the same so no wonder I
+could not find where the missing unpin was. I've gone through mm-unstable
+commits be42c869b8e..4143c9b5266 and can confirm that they are now identical
+to my own tree which includes Andrew's fix for the smatch warning that
+Dan reported.
 
-This DT is somewhat minimal, and should work on many other similar TV
-boxes with the Allwinner H616 chip.
+# git diff HEAD^..mm-pcpspinnoirq-v6r1-mmunstable | wc -l
+0
 
-Signed-off-by: Andre Przywara <andre.przywara@arm.com>
-Reviewed-by: Samuel Holland <samuel@sholland.org>
----
- arch/arm64/boot/dts/allwinner/Makefile        |   1 +
- .../dts/allwinner/sun50i-h616-x96-mate.dts    | 177 ++++++++++++++++++
- 2 files changed, 178 insertions(+)
- create mode 100644 arch/arm64/boot/dts/allwinner/sun50i-h616-x96-mate.dts
+The only difference between my tree and Andrew's is that there is a head
+commit for "mm/page_alloc: Do not disable IRQs for per-cpu allocations"
+which has been put on hold for now.
 
-diff --git a/arch/arm64/boot/dts/allwinner/Makefile b/arch/arm64/boot/dts/allwinner/Makefile
-index df2214e6d946a..6a96494a2e0a3 100644
---- a/arch/arm64/boot/dts/allwinner/Makefile
-+++ b/arch/arm64/boot/dts/allwinner/Makefile
-@@ -39,3 +39,4 @@ dtb-$(CONFIG_ARCH_SUNXI) += sun50i-h6-pine-h64-model-b.dtb
- dtb-$(CONFIG_ARCH_SUNXI) += sun50i-h6-tanix-tx6.dtb
- dtb-$(CONFIG_ARCH_SUNXI) += sun50i-h6-tanix-tx6-mini.dtb
- dtb-$(CONFIG_ARCH_SUNXI) += sun50i-h616-orangepi-zero2.dtb
-+dtb-$(CONFIG_ARCH_SUNXI) += sun50i-h616-x96-mate.dtb
-diff --git a/arch/arm64/boot/dts/allwinner/sun50i-h616-x96-mate.dts b/arch/arm64/boot/dts/allwinner/sun50i-h616-x96-mate.dts
-new file mode 100644
-index 0000000000000..6619db34714a4
---- /dev/null
-+++ b/arch/arm64/boot/dts/allwinner/sun50i-h616-x96-mate.dts
-@@ -0,0 +1,177 @@
-+// SPDX-License-Identifier: (GPL-2.0+ or MIT)
-+/*
-+ * Copyright (C) 2021 Arm Ltd.
-+ */
-+
-+/dts-v1/;
-+
-+#include "sun50i-h616.dtsi"
-+
-+#include <dt-bindings/gpio/gpio.h>
-+#include <dt-bindings/interrupt-controller/arm-gic.h>
-+
-+/ {
-+	model = "X96 Mate";
-+	compatible = "hechuang,x96-mate", "allwinner,sun50i-h616";
-+
-+	aliases {
-+		serial0 = &uart0;
-+	};
-+
-+	chosen {
-+		stdout-path = "serial0:115200n8";
-+	};
-+
-+	reg_vcc5v: vcc5v {
-+		/* board wide 5V supply directly from the DC input */
-+		compatible = "regulator-fixed";
-+		regulator-name = "vcc-5v";
-+		regulator-min-microvolt = <5000000>;
-+		regulator-max-microvolt = <5000000>;
-+		regulator-always-on;
-+	};
-+};
-+
-+&ir {
-+	status = "okay";
-+};
-+
-+&mmc0 {
-+	vmmc-supply = <&reg_dcdce>;
-+	cd-gpios = <&pio 5 6 GPIO_ACTIVE_LOW>;	/* PF6 */
-+	bus-width = <4>;
-+	status = "okay";
-+};
-+
-+&mmc2 {
-+	vmmc-supply = <&reg_dcdce>;
-+	vqmmc-supply = <&reg_bldo1>;
-+	bus-width = <8>;
-+	non-removable;
-+	cap-mmc-hw-reset;
-+	mmc-ddr-1_8v;
-+	mmc-hs200-1_8v;
-+	status = "okay";
-+};
-+
-+&r_rsb {
-+	status = "okay";
-+
-+	axp305: pmic@745 {
-+		compatible = "x-powers,axp305", "x-powers,axp805",
-+			     "x-powers,axp806";
-+		interrupt-controller;
-+		#interrupt-cells = <1>;
-+		reg = <0x745>;
-+
-+		x-powers,self-working-mode;
-+		vina-supply = <&reg_vcc5v>;
-+		vinb-supply = <&reg_vcc5v>;
-+		vinc-supply = <&reg_vcc5v>;
-+		vind-supply = <&reg_vcc5v>;
-+		vine-supply = <&reg_vcc5v>;
-+		aldoin-supply = <&reg_vcc5v>;
-+		bldoin-supply = <&reg_vcc5v>;
-+		cldoin-supply = <&reg_vcc5v>;
-+
-+		regulators {
-+			reg_aldo1: aldo1 {
-+				regulator-always-on;
-+				regulator-min-microvolt = <3300000>;
-+				regulator-max-microvolt = <3300000>;
-+				regulator-name = "vcc-sys";
-+			};
-+
-+			/* Enabled by the Android BSP */
-+			reg_aldo2: aldo2 {
-+				regulator-min-microvolt = <3300000>;
-+				regulator-max-microvolt = <3300000>;
-+				regulator-name = "vcc3v3-ext";
-+				status = "disabled";
-+			};
-+
-+			/* Enabled by the Android BSP */
-+			reg_aldo3: aldo3 {
-+				regulator-min-microvolt = <3300000>;
-+				regulator-max-microvolt = <3300000>;
-+				regulator-name = "vcc3v3-ext2";
-+				status = "disabled";
-+			};
-+
-+			reg_bldo1: bldo1 {
-+				regulator-always-on;
-+				regulator-min-microvolt = <1800000>;
-+				regulator-max-microvolt = <1800000>;
-+				regulator-name = "vcc1v8";
-+			};
-+
-+			/* Enabled by the Android BSP */
-+			reg_bldo2: bldo2 {
-+				regulator-min-microvolt = <1800000>;
-+				regulator-max-microvolt = <1800000>;
-+				regulator-name = "vcc1v8-2";
-+				status = "disabled";
-+			};
-+
-+			bldo3 {
-+				/* unused */
-+			};
-+
-+			bldo4 {
-+				/* unused */
-+			};
-+
-+			cldo1 {
-+				regulator-min-microvolt = <2500000>;
-+				regulator-max-microvolt = <2500000>;
-+				regulator-name = "vcc2v5";
-+			};
-+
-+			cldo2 {
-+				/* unused */
-+			};
-+
-+			cldo3 {
-+				/* unused */
-+			};
-+
-+			reg_dcdca: dcdca {
-+				regulator-always-on;
-+				regulator-min-microvolt = <810000>;
-+				regulator-max-microvolt = <1100000>;
-+				regulator-name = "vdd-cpu";
-+			};
-+
-+			reg_dcdcc: dcdcc {
-+				regulator-always-on;
-+				regulator-min-microvolt = <810000>;
-+				regulator-max-microvolt = <990000>;
-+				regulator-name = "vdd-gpu-sys";
-+			};
-+
-+			reg_dcdcd: dcdcd {
-+				regulator-always-on;
-+				regulator-min-microvolt = <1360000>;
-+				regulator-max-microvolt = <1360000>;
-+				regulator-name = "vdd-dram";
-+			};
-+
-+			reg_dcdce: dcdce {
-+				regulator-always-on;
-+				regulator-min-microvolt = <3300000>;
-+				regulator-max-microvolt = <3300000>;
-+				regulator-name = "vcc-eth-mmc";
-+			};
-+
-+			sw {
-+				/* unused */
-+			};
-+		};
-+	};
-+};
-+
-+&uart0 {
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&uart0_ph_pins>;
-+	status = "okay";
-+};
 -- 
-2.25.1
-
+Mel Gorman
+SUSE Labs

@@ -2,203 +2,224 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 486CA56B457
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 10:21:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BE29256B45D
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 10:22:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237710AbiGHITg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Jul 2022 04:19:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53054 "EHLO
+        id S237512AbiGHIWP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Jul 2022 04:22:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54558 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237700AbiGHITd (ORCPT
+        with ESMTP id S237205AbiGHIWN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Jul 2022 04:19:33 -0400
-Received: from mail-io1-xd2a.google.com (mail-io1-xd2a.google.com [IPv6:2607:f8b0:4864:20::d2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BED2804AB;
-        Fri,  8 Jul 2022 01:19:31 -0700 (PDT)
-Received: by mail-io1-xd2a.google.com with SMTP id r76so2898773iod.10;
-        Fri, 08 Jul 2022 01:19:31 -0700 (PDT)
+        Fri, 8 Jul 2022 04:22:13 -0400
+Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF13A81481
+        for <linux-kernel@vger.kernel.org>; Fri,  8 Jul 2022 01:22:11 -0700 (PDT)
+Received: by mail-pl1-x631.google.com with SMTP id b2so15759255plx.7
+        for <linux-kernel@vger.kernel.org>; Fri, 08 Jul 2022 01:22:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=vqCjltQk8I2tU7mx1MrFC3tkT7yAdLDtPhqi15VnAKc=;
-        b=keaZZ/15eYgScyXtLOqU1DW2ZKvwxgb58uT0uXkDm5jIXJQnw1n/0S89fkCI+p3V/G
-         I0sIrQwXTSg4BniBjndlPmc9l5Lhw7sANIlipdqKv7HYzSD2cpBFxRkcXx6vIOs5xoBl
-         GIiJk2KgFd86WsthsePRNLyg5OHAhT/TzdE0wLCMuUySTnNnlT3VRaWKzTgW6xyMoX2B
-         lQ9TzDzRRDRuGjC3xhlBxSWMWDgXxNrrvt+6zaCYZAnsnhemVOV2H+YFrK4AtQ+ukhBd
-         1/rveWjCrOy+DwbxfcYhGiaugLfvMxRSIyifH0dX9QbrBHsCGnbfqhFhrWzUCzq+GLBw
-         6OGg==
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=TYvSfrHPstnzZJynd8muvpANEKz59daC1D9QhUGyBsM=;
+        b=8S3yywRTtMIjxIbmB2flA4mlE78K7EBRrgf2m5In+lt0C+3X/5Vf/tTjj1izXHBalu
+         AV0aGsKbi/7a+twTRdFq3yHJKSxcSScq9KBDF747wJ3mngNrnukrV5zIqZuVCjPC6R+L
+         G+cXhQGev+W1XhTy+AG5a8ITD0yxuiWjYhpKqrYL3YMtW/19UueJ9ElQrZljBJbgU7TP
+         BHxnHRGSJE1eNT3N49c/c8W93Unt6EWBX4Z00NySj+KqRC7STeodgQIsmeCdswiuMDKj
+         6g/crwKcDMZBCB4I5tAjUyv0EUG7gEh+dOACEqIOqMdkORqq/ko7odDQiWx+9VBB6ZjM
+         dplg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=vqCjltQk8I2tU7mx1MrFC3tkT7yAdLDtPhqi15VnAKc=;
-        b=i2RUhCf6ZpmfNJWdhQGsV6jeX+QkHDxFgpS8NpzNSUWmuRZxM7s6RDks8ZCcku0Kyx
-         +A1GDSIrIer4Lptp3ayi84+rvHwilYyDsBbu1sgxNoja1qAXdG2Cx3cZvSK/W0j5vfhb
-         AudPWWzGyjLlfUygq/uMauE9HIhtZQQ9hYoa6YG+mMg6VNxJnoACh8q8+a6S4Nrw4UQR
-         R2slerPMlUzbRFaF1VVdSzOp/CAr3wYkauwG+C4scuPmUh6uVziJaUljSU5Va2MFJlDI
-         ynkELR3DmYHftrB9ZMaEQkl/m1UQdWEMq8EfHTJOWa9b6ZfKEV1o3renpVtYHuwLFq3K
-         3i3w==
-X-Gm-Message-State: AJIora+yysuJAKKBmdkaP7yej7VJudFHPBJZebD8IfZwBAgIqTyh2V07
-        x5+IVa3LoHhPV/I8mrGY1ftRQgtCNpLLLpqQ
-X-Google-Smtp-Source: AGRyM1vCl6u+NPkYq/MEqdBUcy3Zpq5zMWpGOh9L9fZ0JMLVZDj8LJqlJjfHREvLIxclxjKUpRXPog==
-X-Received: by 2002:a6b:710f:0:b0:675:20a7:84e6 with SMTP id q15-20020a6b710f000000b0067520a784e6mr1276054iog.42.1657268370450;
-        Fri, 08 Jul 2022 01:19:30 -0700 (PDT)
-Received: from [192.168.1.145] ([207.188.167.132])
-        by smtp.gmail.com with ESMTPSA id r20-20020a5d9b94000000b0066952cfe3e2sm18991505iom.39.2022.07.08.01.19.27
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 08 Jul 2022 01:19:29 -0700 (PDT)
-Message-ID: <2f2f8bfe-4c7f-d81c-30bf-bcd60b42e245@gmail.com>
-Date:   Fri, 8 Jul 2022 10:19:26 +0200
+        bh=TYvSfrHPstnzZJynd8muvpANEKz59daC1D9QhUGyBsM=;
+        b=eWKlM5+fvwgSLgdV3sPZRHzoEQXKcuYIAApP2o74JxwRHmA+idDTSe5nVZUWMfeGTR
+         CzmXOc0tPvtncs9qY7Kx0KY3FLq/OB7l4lZncIh/OKF/010/fguF3ZAu2zWCs9Pc1lHa
+         gda5THEF8y5CjT5B68dK76vm03aNBo13woiWoxLzXy181OtM6JY671hU6U6UFEARf06h
+         JMYHySpvJ7OOM9bmiIjUMklmq7rej0u5tLtetqgfNZzv0v1Ew8ilnqvNMnsooCVP3K/T
+         WYhRPG+9HOC/Fk1Tw9bqvtnPL6a4Xywe9hnusDRlPNhsVQnr2s7Pt6uZUhyfN4GChII8
+         7wkg==
+X-Gm-Message-State: AJIora89eiDaiozchX3RsfWF1Dr7zv5Y3ygeI6TodlKISGMKzvfozPjw
+        ikPhiDHDL67CGVjr8zLG0nrCow==
+X-Google-Smtp-Source: AGRyM1tcEE95Ekpp4tq/jJm3aTC46fHNhCwmQGo2VLd2iQl+tjB6CnBUyJJtwF4xhqrjmqieK2tKVg==
+X-Received: by 2002:a17:902:a502:b0:16b:fbd9:7fc5 with SMTP id s2-20020a170902a50200b0016bfbd97fc5mr2516757plq.112.1657268531484;
+        Fri, 08 Jul 2022 01:22:11 -0700 (PDT)
+Received: from C02FT5A6MD6R.bytedance.net ([139.177.225.241])
+        by smtp.gmail.com with ESMTPSA id x65-20020a636344000000b00412b1043f33sm3329291pgb.39.2022.07.08.01.21.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 08 Jul 2022 01:22:10 -0700 (PDT)
+From:   Gang Li <ligang.bdlg@bytedance.com>
+To:     mhocko@suse.com, akpm@linux-foundation.org, surenb@google.com
+Cc:     hca@linux.ibm.com, gor@linux.ibm.com, agordeev@linux.ibm.com,
+        borntraeger@linux.ibm.com, svens@linux.ibm.com,
+        viro@zeniv.linux.org.uk, ebiederm@xmission.com,
+        keescook@chromium.org, rostedt@goodmis.org, mingo@redhat.com,
+        peterz@infradead.org, acme@kernel.org, mark.rutland@arm.com,
+        alexander.shishkin@linux.intel.com, jolsa@kernel.org,
+        namhyung@kernel.org, david@redhat.com, imbrenda@linux.ibm.com,
+        adobriyan@gmail.com, yang.yang29@zte.com.cn, brauner@kernel.org,
+        stephen.s.brennan@oracle.com, zhengqi.arch@bytedance.com,
+        haolee.swjtu@gmail.com, xu.xin16@zte.com.cn,
+        Liam.Howlett@Oracle.com, ohoono.kwon@samsung.com,
+        peterx@redhat.com, arnd@arndb.de, shy828301@gmail.com,
+        alex.sierra@amd.com, xianting.tian@linux.alibaba.com,
+        willy@infradead.org, ccross@google.com, vbabka@suse.cz,
+        sujiaxun@uniontech.com, sfr@canb.auug.org.au,
+        vasily.averin@linux.dev, mgorman@suse.de, vvghjk1234@gmail.com,
+        tglx@linutronix.de, luto@kernel.org, bigeasy@linutronix.de,
+        fenghua.yu@intel.com, linux-s390@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-mm@kvack.org, linux-perf-users@vger.kernel.org,
+        Gang Li <ligang.bdlg@bytedance.com>
+Subject: [PATCH v2 0/5] mm, oom: Introduce per numa node oom for CONSTRAINT_{MEMORY_POLICY,CPUSET}
+Date:   Fri,  8 Jul 2022 16:21:24 +0800
+Message-Id: <20220708082129.80115-1-ligang.bdlg@bytedance.com>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH 1/2] dt-bindings: soc: mediatek: add mdp3 mutex support
- for mt8186
-Content-Language: en-US
-To:     "allen-kh.cheng" <allen-kh.cheng@mediatek.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>
-Cc:     Project_Global_Chrome_Upstream_Group@mediatek.com,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-mediatek@lists.infradead.org,
-        Xiandong Wang <xiandong.wang@mediatek.com>
-References: <20220705122627.2273-1-allen-kh.cheng@mediatek.com>
- <20220705122627.2273-2-allen-kh.cheng@mediatek.com>
- <5916c91b-41a1-c97a-84b4-7d48739a0639@collabora.com>
- <640c1a9b-f8b5-aa89-19af-7d6f5c55eb12@gmail.com>
- <243b30ca-a552-3cb7-8a4e-6e54a56ff60a@collabora.com>
- <55fafa62684e077f75c3b8b192a59df62ad01692.camel@mediatek.com>
-From:   Matthias Brugger <matthias.bgg@gmail.com>
-In-Reply-To: <55fafa62684e077f75c3b8b192a59df62ad01692.camel@mediatek.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+TLDR
+----
+If a mempolicy or cpuset is in effect, out_of_memory() will select victim
+on specific node to kill. So that kernel can avoid accidental killing on
+NUMA system.
 
+Problem
+-------
+Before this patch series, oom will only kill the process with the highest 
+memory usage by selecting process with the highest oom_badness on the
+entire system.
 
-On 08/07/2022 10:14, allen-kh.cheng wrote:
-> Hi Angelo,
-> 
-> On Thu, 2022-07-07 at 12:59 +0200, AngeloGioacchino Del Regno wrote:
->> Il 07/07/22 12:41, Matthias Brugger ha scritto:
->>>
->>>
->>> On 07/07/2022 10:52, AngeloGioacchino Del Regno wrote:
->>>> Il 05/07/22 14:26, Allen-KH Cheng ha scritto:
->>>>> Add mdp3 mutex compatible for mt8186 SoC.
->>>>>
->>>>> Signed-off-by: Allen-KH Cheng <allen-kh.cheng@mediatek.com>
->>>>> Signed-off-by: Xiandong Wang <xiandong.wang@mediatek.com>
->>>>
->>>>
->>>> Please drop this commit. Adding a mdp3-mutex compatible is not
->>>> needed here.
->>>>
->>>
->>> Thanks for checking. We probably would need a fallback compatible.
->>> We can only know
->>> from the HW engineers that can confirm if the IP block is the same
->>> as the disp
->>> mutex or a different one.
->>>
->>> I'll drop both patches for now until things got clear.
->>>
->>
->> They're located in a different iospace from each other, but either
->> the platform
->> data needs to *not be* joined together, or if they're together, I
->> would not like
->> having two different compatible strings for essentially the same
->> thing.
->>
->> I would at this point prefer dropping '-disp' from 'mediatek,mt8186-
->> disp-mutex'
->> so that we would be able to declare two 'mediatek,mt8186-mutex' in
->> devicetree...
->> ...or simply have two mediatek,mt8186-disp-mutex (although logically
->> incorrect?).
->>
->> Cheers,
->> Angelo
->>
-> 
-> Thanks for your opinion.
-> 
-> They are two different hardwares for different address spaces.
-> 
-> I think we drop '-disp' from 'mediatek,mt8186-disp-mutex' will be
-> excessive because we also need to modify mutex node in all exited dts
-> files.
-> 
-> I prefer havingg two mediatek,mt8186-disp-mutex.
-> 
-> ex:
-> mutex: mutex@14001000 {
-> 	compatible = "mediatek,mt8186-disp-mutex";
-> 	..
-> }
-> 
-> mdp3_mutex0: mutex@1b001000 {
-> 	compatible = "mediatek,mt8186-disp-mutex";
-> 	...
-> }
-> 
-> What do you think?
+This works fine on UMA system, but may have some accidental killing on NUMA
+system.
 
-I think that's an acceptable solution.
+As shown below, if process c.out is bind to Node1 and keep allocating pages
+from Node1, a.out will be killed first. But killing a.out did't free any
+mem on Node1, so c.out will be killed then.
 
-Regards,
-Matthias
+A lot of AMD machines have 8 numa nodes. In these systems, there is a
+greater chance of triggering this problem.
 
-> 
-> Best regards,
-> Allen
-> 
->>> Regards,
->>> Matthias
->>>
->>>>> ---
->>>>>   
->>>>> .../devicetree/bindings/soc/mediatek/mediatek,mutex.yaml
->>>>>    | 1 +
->>>>>    1 file changed, 1 insertion(+)
->>>>>
->>>>> diff --git
->>>>> a/Documentation/devicetree/bindings/soc/mediatek/mediatek,mutex
->>>>> .yaml
->>>>> b/Documentation/devicetree/bindings/soc/mediatek/mediatek,mutex
->>>>> .yaml
->>>>> index 627dcc3e8b32..234fa5dc07c2 100644
->>>>> ---
->>>>> a/Documentation/devicetree/bindings/soc/mediatek/mediatek,mutex
->>>>> .yaml
->>>>> +++
->>>>> b/Documentation/devicetree/bindings/soc/mediatek/mediatek,mutex
->>>>> .yaml
->>>>> @@ -30,6 +30,7 @@ properties:
->>>>>          - mediatek,mt8173-disp-mutex
->>>>>          - mediatek,mt8183-disp-mutex
->>>>>          - mediatek,mt8186-disp-mutex
->>>>> +      - mediatek,mt8186-mdp3-mutex
->>>>>          - mediatek,mt8192-disp-mutex
->>>>>          - mediatek,mt8195-disp-mutex
->>>>
->>>>
->>>>
->>
->>
-> 
+OOM before patches:
+```
+Per-node process memory usage (in MBs)
+PID             Node 0        Node 1    Total
+----------- ---------- ------------- --------
+3095 a.out     3073.34          0.11  3073.45(Killed first. Max mem usage)
+3199 b.out      501.35       1500.00  2001.35
+3805 c.out        1.52 (grow)2248.00  2249.52(Killed then. Node1 is full)
+----------- ---------- ------------- --------
+Total          3576.21       3748.11  7324.31
+```
+
+Solution
+--------
+We store per node rss in mm_rss_stat for each process.
+
+If a page allocation with mempolicy or cpuset in effect triger oom. We will
+calculate oom_badness with rss counter for the corresponding node. Then
+select the process with the highest oom_badness on the corresponding node
+to kill.
+
+OOM after patches:
+```
+Per-node process memory usage (in MBs)
+PID             Node 0        Node 1     Total
+----------- ---------- ------------- ----------
+3095 a.out     3073.34          0.11    3073.45
+3199 b.out      501.35       1500.00    2001.35
+3805 c.out        1.52 (grow)2248.00    2249.52(killed)
+----------- ---------- ------------- ----------
+Total          3576.21       3748.11    7324.31
+```
+
+Overhead
+--------
+CPU:
+
+According to the result of Unixbench. There is less than one percent
+performance loss in most cases.
+
+On 40c512g machine.
+
+40 parallel copies of tests:
++----------+----------+-----+----------+---------+---------+---------+
+| numastat | FileCopy | ... |   Pipe   |  Fork   | syscall |  total  |
++----------+----------+-----+----------+---------+---------+---------+
+| off      | 2920.24  | ... | 35926.58 | 6980.14 | 2617.18 | 8484.52 |
+| on       | 2919.15  | ... | 36066.07 | 6835.01 | 2724.82 | 8461.24 |
+| overhead | 0.04%    | ... | -0.39%   | 2.12%   | -3.95%  | 0.28%   |
++----------+----------+-----+----------+---------+---------+---------+
+
+1 parallel copy of tests:
++----------+----------+-----+---------+--------+---------+---------+
+| numastat | FileCopy | ... |  Pipe   |  Fork  | syscall |  total  |
++----------+----------+-----+---------+--------+---------+---------+
+| off      | 1515.37  | ... | 1473.97 | 546.88 | 1152.37 | 1671.2  |
+| on       | 1508.09  | ... | 1473.75 | 532.61 | 1148.83 | 1662.72 |
+| overhead | 0.48%    | ... | 0.01%   | 2.68%  | 0.31%   | 0.51%   |
++----------+----------+-----+---------+--------+---------+---------+
+
+MEM:
+
+per task_struct:
+sizeof(int) * num_possible_nodes() + sizeof(int*)
+typically 4 * 2 + 8 bytes
+
+per mm_struct:
+sizeof(atomic_long_t) * num_possible_nodes() + sizeof(atomic_long_t*)
+typically 8 * 2 + 8 bytes
+
+zap_pte_range:
+sizeof(int) * num_possible_nodes() + sizeof(int*)
+typically 4 * 2 + 8 bytes 
+
+Changelog
+----------
+v2:
+  - enable per numa node oom for `CONSTRAINT_CPUSET`.
+  - add benchmark result in cover letter.
+
+Gang Li (5):
+  mm: add a new parameter `node` to `get/add/inc/dec_mm_counter`
+  mm: add numa_count field for rss_stat
+  mm: add numa fields for tracepoint rss_stat
+  mm: enable per numa node rss_stat count
+  mm, oom: enable per numa node oom for
+    CONSTRAINT_{MEMORY_POLICY,CPUSET}
+
+ arch/s390/mm/pgtable.c        |   4 +-
+ fs/exec.c                     |   2 +-
+ fs/proc/base.c                |   6 +-
+ fs/proc/task_mmu.c            |  14 ++--
+ include/linux/mm.h            |  59 ++++++++++++-----
+ include/linux/mm_types_task.h |  16 +++++
+ include/linux/oom.h           |   2 +-
+ include/trace/events/kmem.h   |  27 ++++++--
+ kernel/events/uprobes.c       |   6 +-
+ kernel/fork.c                 |  70 +++++++++++++++++++-
+ mm/huge_memory.c              |  13 ++--
+ mm/khugepaged.c               |   4 +-
+ mm/ksm.c                      |   2 +-
+ mm/madvise.c                  |   2 +-
+ mm/memory.c                   | 119 ++++++++++++++++++++++++----------
+ mm/migrate.c                  |   4 ++
+ mm/migrate_device.c           |   2 +-
+ mm/oom_kill.c                 |  69 +++++++++++++++-----
+ mm/rmap.c                     |  19 +++---
+ mm/swapfile.c                 |   6 +-
+ mm/userfaultfd.c              |   2 +-
+ 21 files changed, 335 insertions(+), 113 deletions(-)
+
+-- 
+2.20.1
+

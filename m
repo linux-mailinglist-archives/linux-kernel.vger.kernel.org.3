@@ -2,113 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A080356B27D
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 08:04:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 31BFD56B282
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 08:07:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236998AbiGHGCq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Jul 2022 02:02:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39264 "EHLO
+        id S237122AbiGHGGu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Jul 2022 02:06:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41150 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237133AbiGHGCp (ORCPT
+        with ESMTP id S237037AbiGHGGq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Jul 2022 02:02:45 -0400
-Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id ED4FD7B344
-        for <linux-kernel@vger.kernel.org>; Thu,  7 Jul 2022 23:02:42 -0700 (PDT)
-Received: from [10.20.42.19] (unknown [10.20.42.19])
-        by mail.loongson.cn (Coremail) with SMTP id AQAAf9DxT9J3yMdiFb0QAA--.4650S3;
-        Fri, 08 Jul 2022 14:02:31 +0800 (CST)
-Subject: Re: [PATCH V14 01/15] ACPICA: MADT: Add LoongArch APICs support
-To:     Marc Zyngier <maz@kernel.org>
-Cc:     Thomas Gleixner <tglx@linutronix.de>, linux-kernel@vger.kernel.org,
-        Hanjun Guo <guohanjun@huawei.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Huacai Chen <chenhuacai@loongson.cn>
-References: <1656837932-18257-1-git-send-email-lvjianmin@loongson.cn>
- <1656837932-18257-2-git-send-email-lvjianmin@loongson.cn>
- <875yk9mdk3.wl-maz@kernel.org>
-From:   Jianmin Lv <lvjianmin@loongson.cn>
-Message-ID: <d96296d0-0e12-a2e3-7d7f-f04c4c6fb989@loongson.cn>
-Date:   Fri, 8 Jul 2022 14:02:31 +0800
-User-Agent: Mozilla/5.0 (X11; Linux loongarch64; rv:68.0) Gecko/20100101
- Thunderbird/68.7.0
+        Fri, 8 Jul 2022 02:06:46 -0400
+Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DCB624F17
+        for <linux-kernel@vger.kernel.org>; Thu,  7 Jul 2022 23:06:44 -0700 (PDT)
+Received: by mail-lf1-x12c.google.com with SMTP id t19so34033319lfl.5
+        for <linux-kernel@vger.kernel.org>; Thu, 07 Jul 2022 23:06:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=yDcFqeczHGyZYd7T238OgZvCCK1eXFIoTBdYc3SeZos=;
+        b=DittmnZPcRT+xjFr0ed9UvAlzAFmVKUPNDmbhL2Xp88Abar5gi3sxJN4MHIPC8oBri
+         +kAmgOZX95RtjJD6AcqYQIdiw1XHTh3e5knHYqmil56Av1TN6O4cOoQHvI26Iyc73Y90
+         VJBKK8nB8ovQ5ZPoeO8+A2MTtM0qgCutPIz/D/nBnhMmFMfLU3Aw4DMieUBq6JwHLUOy
+         g6M/acHahuel+dFTIQAKAhLLEpbugR5KCP5VNdLxC5iWqB8rrqL6iUPylXYrxlv2YBvT
+         x5CYJWIQvNFNAzsixoH8VJDl+lngq0VfCvAM5PPFxoJaqEVzI3CkI6fd049rvjlAjxDL
+         Iapw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=yDcFqeczHGyZYd7T238OgZvCCK1eXFIoTBdYc3SeZos=;
+        b=YXL5KzNrEqMVZEoCut6ll3mE9yUUrwgAi7K97eozntGTYR1QtVuRqKurcXDGAsknJY
+         ryFdG3Oe7jg+NnoEMsRIEttggENyA6+3HOq8d49HOLnHiFwGwgErAc5lAlmPqmYUIl4X
+         yyMZ4XsS8xzuYYGx9vfOVwFAkSKBBPaM+PhhPFfwc0kqXfEFN9QwR1pDGgrWWL7kKahL
+         aglV9QTXp0kb4y/YPDRMsWdScf922WVhQgJ5Mlz35v7CSBVBm2J3DRHVBODiIg/hvsQB
+         klj0et4VdPgYdwa6dxjMkJ5dxGT2SgeaGuPrnaxV/e5pi6yDQsUqMGckkNGwNxmqRQty
+         fD0g==
+X-Gm-Message-State: AJIora8Cv62h7iuDZ6jVUxMa8+9RYHqT54i3ckoMPnnqiXy51kGOdvnG
+        2fAV7etccRxwXFKwy9z9IGK1hKnGN68usrshS4ZzNA==
+X-Google-Smtp-Source: AGRyM1sTtjfrNu/fSE3mT7VoMqjGcZ4ClYdoRho9XcGSkjNBrML2LhgLhFEP2pyAGlMoHwoO0ig22H81jkQ3gZammY0=
+X-Received: by 2002:a05:6512:114b:b0:482:c057:60b3 with SMTP id
+ m11-20020a056512114b00b00482c05760b3mr1284786lfg.206.1657260402433; Thu, 07
+ Jul 2022 23:06:42 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <875yk9mdk3.wl-maz@kernel.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf9DxT9J3yMdiFb0QAA--.4650S3
-X-Coremail-Antispam: 1UD129KBjvJXoW7tr43tw1xGF1kAr4DCF1kuFg_yoW8AFyrpr
-        WS9a1DGw4DJ3ZYyFsrK3yFqF1a9an3ta4xJw4qkFsru3sxt343JF109F15Wa9xCr95JF12
-        vrWUGa1kuF18AFJanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUU9Y1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s1l1IIY67AE
-        w4v_Jr0_Jr4l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2
-        IY67AKxVW8JVW5JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwA2z4x0Y4vEx4A2
-        jsIE14v26F4UJVW0owA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_GcCE3s1le2I262IYc4CY6c
-        8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_Jr0_
-        Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvEwIxGrw
-        ACjI8F5VA0II8E6IAqYI8I648v4I1lc7I2V7IY0VAS07AlzVAYIcxG8wCY02Avz4vE-syl
-        42xK82IYc2Ij64vIr41l42xK82IY6x8ErcxFaVAv8VW5Wr1UJr1l4I8I3I0E4IkC6x0Yz7
-        v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF
-        1VAY17CE14v26r126r1DMIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIx
-        AIcVC0I7IYx2IY6xkF7I0E14v26r1j6r4UMIIF0xvE42xK8VAvwI8IcIk0rVWrJr0_WFyU
-        JwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCT
-        nIWIevJa73UjIFyTuYvjfUoOJ5UUUUU
-X-CM-SenderInfo: 5oymxthqpl0qxorr0wxvrqhubq/
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <YsPOEYU7ZqmpD8dw@kroah.com> <a1fcc07e-51ef-eaad-f14b-33f1263e45ac@I-love.SAKURA.ne.jp>
+ <CACT4Y+bUw8LebceH0fDZriqAivuwNSNntTTS1647CQF-j2C4RQ@mail.gmail.com> <YsQOG3+ItWmrpaFt@kroah.com>
+In-Reply-To: <YsQOG3+ItWmrpaFt@kroah.com>
+From:   Dmitry Vyukov <dvyukov@google.com>
+Date:   Fri, 8 Jul 2022 08:06:30 +0200
+Message-ID: <CACT4Y+asMhzEh+6WvHTX6-DNCf3A+oqwZJ27oedPCaP8kv7TVg@mail.gmail.com>
+Subject: Re: [PATCH] char: misc: make misc_open() and misc_register() killable
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>,
+        syzkaller <syzkaller@googlegroups.com>,
+        Aleksandr Nogikh <nogikh@google.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
+        Arnd Bergmann <arnd@arndb.de>,
+        LKML <linux-kernel@vger.kernel.org>, linux-pm@vger.kernel.org,
+        Wedson Almeida Filho <wedsonaf@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Tue, 5 Jul 2022 at 12:10, Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
+>
+> On Tue, Jul 05, 2022 at 09:20:24AM +0200, Dmitry Vyukov wrote:
+> > On Tue, 5 Jul 2022 at 07:54, Tetsuo Handa
+> > <penguin-kernel@i-love.sakura.ne.jp> wrote:
+> > > On Tue, Jul 05, 2022 at 02:21:17PM +0900, Tetsuo Handa wrote:
+> > > > On 2022/07/04 23:31, Greg KH wrote:
+> > > > > I don't understand what you are trying to "fix" here.  What is userspace
+> > > > > doing (as a normal user) that is causing a problem, and what problem is
+> > > > > it causing and for what device/hardware/driver is this a problem?
+> > > >
+> > > > Currently the root cause is unknown.
+> > > > This might be another example of deadlock hidden by device_initialize().
+> > > >
+> > > > We can see from https://syzkaller.appspot.com/text?tag=CrashReport&x=11feb7e0080000 that
+> > > > when khungtaskd reports that a process is blocked waiting for misc_mtx at misc_open(),
+> > > > there is a process which is holding system_transition_mutex from snapshot_open().
+> > >
+> > > /dev/snapshot is not read/writable by anyone but root for obvious
+> > > reasons.
+> > >
+> > > And perhaps it's something that syzbot shouldn't be fuzzing unless it
+> > > wants to take the system down easily :)
+> >
+> > We could turn CONFIG_HIBERNATION_SNAPSHOT_DEV off for syzbot, but it
+> > will also mean this part of the kernel won't be tested at all.
+> > I see it has 14 ioclt's (below) and not all of them look problematic
+> > (like POWER_OFF).
+> > Perhaps the kernel could restrict access only to reboot/restore
+> > functionality? This way we could at least test everything related to
+> > snapshot creation.
+>
+> This is already restricted to root, why would you want to restrict it
+> anymore?
+
+Root like the wrong criteria here. Root protection is for global
+machine state and in some cases closing unreliable code. It's not
+about if this code should be randomly tested or not. In fact,
+unreliable code (bpf, filesystems) is exactly the code that needs to
+be tested as much as possible. But it is restricted with root as well.
+
+Though, I noticed syzkaller already avoids SNAPSHOT_FREEZE and
+SNAPSHOT_POWER_OFF:
+https://github.com/google/syzkaller/blob/bff65f44b47bd73f56c3d6a5c3899de5f5775136/sys/linux/init.go#L310-L315
+This should work fine (unless the IOCTL const values don't collide
+with any other IOCTL const values, otherwise these duplicate values
+won't be tested as well).
 
 
-On 2022/7/7 下午6:18, Marc Zyngier wrote:
-> On Sun, 03 Jul 2022 09:45:18 +0100,
-> Jianmin Lv <lvjianmin@loongson.cn> wrote:
->>
->> From: Huacai Chen <chenhuacai@loongson.cn>
->>
->> LoongArch-specific interrupt controllers (similar to APIC) are added
->> in the next revision of ACPI Specification (current revision is 6.4),
->> which including CORE_PIC (CPUINTC), LIO_PIC (LIOINTC), EIO_PIC (EIOINTC),
->> HT_PIC (HTVECINTC), BIO_PIC (PCHINTC), LPC_PIC (PCHLPC) and MSI_PIC
->> (PCHMSI). This patch add their definition.
->>
->> ACPI changes of LoongArch-specific interrupt controllers have already
->> been approved in the ECRs, and will be public in the next revision of
->> ACPI Specification.
->>
->> Reference: https://mantis.uefi.org/mantis/view.php?id=2203
->> Reference: https://mantis.uefi.org/mantis/view.php?id=2313
-> 
-> These links are pretty useless without an account on uefi.org (most
-> people don't have one, and I certainly don't). Is there a link to
-> something *public*?
-> 
 
-Sorry for inaccessible links, I take the patch from ACPICA, and the 
-links here are intended to provide to ACPI maintainers when the patch 
-was submitted to ACPICA.
-
-The ACPI spec 6.5 is not published yet, and I have asked the ACPI spec 
-work group, their reply is that I can not share the unpublished spec
-draft link to the public, only using for member to review. I think
-I can put the ECR(Engineering Change Request) file that described
-LoongArch APICs on my github and put the link in the patch.
-
-https://github.com/lvjianmin-loongson/acpica/blob/master/Add%20APIC%20Structures%20for%20Loongarch%20in%20MADT-rev3.pdf
-
- From mail of the ACPI spec work group , the ACPI spec 6.5 will be 
-published in late July or early August.
-
-
-> Thanks,
-> 
-> 	M.
-> 
-
+> > #define SNAPSHOT_FREEZE _IO(SNAPSHOT_IOC_MAGIC, 1)
+> > #define SNAPSHOT_UNFREEZE _IO(SNAPSHOT_IOC_MAGIC, 2)
+> > #define SNAPSHOT_ATOMIC_RESTORE _IO(SNAPSHOT_IOC_MAGIC, 4)
+> > #define SNAPSHOT_FREE _IO(SNAPSHOT_IOC_MAGIC, 5)
+> > #define SNAPSHOT_FREE_SWAP_PAGES _IO(SNAPSHOT_IOC_MAGIC, 9)
+> > #define SNAPSHOT_S2RAM _IO(SNAPSHOT_IOC_MAGIC, 11)
+> > #define SNAPSHOT_SET_SWAP_AREA _IOW(SNAPSHOT_IOC_MAGIC, 13, struct
+> > resume_swap_area)
+> > #define SNAPSHOT_GET_IMAGE_SIZE _IOR(SNAPSHOT_IOC_MAGIC, 14, __kernel_loff_t)
+> > #define SNAPSHOT_PLATFORM_SUPPORT _IO(SNAPSHOT_IOC_MAGIC, 15)
+> > #define SNAPSHOT_POWER_OFF _IO(SNAPSHOT_IOC_MAGIC, 16)
+> > #define SNAPSHOT_CREATE_IMAGE _IOW(SNAPSHOT_IOC_MAGIC, 17, int)
+> > #define SNAPSHOT_PREF_IMAGE_SIZE _IO(SNAPSHOT_IOC_MAGIC, 18)
+> > #define SNAPSHOT_AVAIL_SWAP_SIZE _IOR(SNAPSHOT_IOC_MAGIC, 19, __kernel_loff_t)
+> > #define SNAPSHOT_ALLOC_SWAP_PAGE _IOR(SNAPSHOT_IOC_MAGIC, 20, __kernel_loff_t)
+>
+> Fuzzing this is always nice, but be very aware of the system state
+> changes that you are creating.  Also know when you make these state
+> changes, the rest of the system's functionality also changes.
+>
+> thanks,
+>
+> greg k-h

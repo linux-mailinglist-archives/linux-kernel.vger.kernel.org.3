@@ -2,68 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C46C56BC70
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 17:09:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 35AD856BCAB
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 17:09:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238193AbiGHOx6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Jul 2022 10:53:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49246 "EHLO
+        id S238305AbiGHOyx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Jul 2022 10:54:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49678 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237623AbiGHOx4 (ORCPT
+        with ESMTP id S237623AbiGHOyv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Jul 2022 10:53:56 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 997682A73D;
-        Fri,  8 Jul 2022 07:53:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=9/lkeRcGIhHu6UVP5xYmV7mYlWFVVjg4XhlUmR+XakU=; b=u/hJU81hiwYxXnG04A+ldFArw5
-        FTQjbsTDMajhXO2rUfAsuJI5/r3v1zr7iPeLiKDX6NrmpYwS8sf/5S306VLzRoZFaBIwztvkTEkXm
-        eUm4v4oYRwLM561NqYLJA1JF3xrDFVyWq9meyhaNJYzbINN0H+pDxN8ehYUW/hUtRd3BomZ6BuHhx
-        w1GKs/7ZEFQf3u8WfpHzqdV2N1ch2jMDqeEICZKZfgnuXpbopkkQqToE1231YgyyF7abGsJNymMS4
-        rwxXRjkK5P4E5oT7IseYLrsfKCYMu4F76TCxKwWUCnUBPhXutUNM7GduKN+ZeGdWwcUOKY0ynubE/
-        IYEil3TQ==;
-Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1o9pMc-003a34-EH; Fri, 08 Jul 2022 14:53:50 +0000
-Date:   Fri, 8 Jul 2022 15:53:50 +0100
-From:   Matthew Wilcox <willy@infradead.org>
-To:     ira.weiny@intel.com
-Cc:     Dan Williams <dan.j.williams@intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Alison Schofield <alison.schofield@intel.com>,
-        Vishal Verma <vishal.l.verma@intel.com>,
-        linux-kernel@vger.kernel.org, linux-cxl@vger.kernel.org,
-        linux-pci@vger.kernel.org, linux-fsdevel@vger.kernel.org
-Subject: Re: [RFC PATCH 1/3] xarray: Introduce devm_xa_init()
-Message-ID: <YshE/pwSUBPAeybU@casper.infradead.org>
-References: <20220705232159.2218958-1-ira.weiny@intel.com>
- <20220705232159.2218958-2-ira.weiny@intel.com>
+        Fri, 8 Jul 2022 10:54:51 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9A9D18E13
+        for <linux-kernel@vger.kernel.org>; Fri,  8 Jul 2022 07:54:49 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 3400C21FE0;
+        Fri,  8 Jul 2022 14:54:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1657292088; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=l7Aw7CUlH7hnP8Qg6TBNYPcNryVs2jtH5tretlprBAE=;
+        b=ecouykwpcGwwihI2S1zbFptGgJiA2LHezwWP2/VlZH3l/NXsKxjCfE5nXyaW4xJVTiRlmG
+        mb0go9GQLRRhHFp0C7RwF9/GK03quAByTPran4XRBLF15sItKFpC7hC82VZUCb7vsAKOuh
+        LAxTT6QCbC3C3ktulb0h6fm8gWDONWs=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1657292088;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=l7Aw7CUlH7hnP8Qg6TBNYPcNryVs2jtH5tretlprBAE=;
+        b=108E4Ct+4NeOjPX3bV02xPwutJ+TucYy9lQchqrTiBLy9q2HKhTvn9TqcWEITsO3QLq7xb
+        Ns+Pb93b6kJakcAw==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 0B45A13A80;
+        Fri,  8 Jul 2022 14:54:48 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id /9DUAThFyGJyZAAAMHmgww
+        (envelope-from <vbabka@suse.cz>); Fri, 08 Jul 2022 14:54:48 +0000
+Message-ID: <a78f95e9-298a-bc97-9776-14e0f02f62b9@suse.cz>
+Date:   Fri, 8 Jul 2022 16:54:47 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220705232159.2218958-2-ira.weiny@intel.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH] mm/page_alloc: replace local_lock with normal spinlock
+ -fix -fix
+Content-Language: en-US
+To:     Mel Gorman <mgorman@techsingularity.net>,
+        Andrew Morton <akpm@linux-foundation.org>
+Cc:     Nicolas Saenz Julienne <nsaenzju@redhat.com>,
+        Marcelo Tosatti <mtosatti@redhat.com>,
+        Michal Hocko <mhocko@kernel.org>,
+        Hugh Dickins <hughd@google.com>, Yu Zhao <yuzhao@google.com>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Linux-MM <linux-mm@kvack.org>
+References: <20220708144406.GJ27531@techsingularity.net>
+From:   Vlastimil Babka <vbabka@suse.cz>
+In-Reply-To: <20220708144406.GJ27531@techsingularity.net>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jul 05, 2022 at 04:21:57PM -0700, ira.weiny@intel.com wrote:
-> The main issue I see with this is defining devm_xa_init() in device.h.
-> This makes sense because a device is required to use the call.  However,
-> I'm worried about if users will find the call there vs including it in
-> xarray.h?
+On 7/8/22 16:44, Mel Gorman wrote:
+> pcpu_spin_unlock and pcpu_spin_unlock_irqrestore both unlock
+> pcp->lock and then enable preemption. This lacks symmetry against
+> both the pcpu_spin helpers and differs from how local_unlock_* is
+> implemented. While this is harmless, it's unnecessary and it's generally
+> better to unwind locks and preemption state in the reverse order as
+> they were acquired.
 
-Honestly, I don't want users to find it.  This only makes sense if you're
-already bought in to the devm cult.  I worry people will think that
-they don't need to do anything else; that everything will be magically
-freed for them, and we'll leak the objects pointed to from the xarray.
-I don't even like having xa_destroy() in the API, because of exactly this.
+Hm I'm confused, it seems it's done in reverse order (which I agree with)
+before this -fix-fix, but not after it?
+
+before, pcpu_spin_lock() (and variants) do pcpu_task_pin() and then
+spin_lock() (or variant), and pcpu_spin_unlock() does spin_unlock() and then
+pcpu_task_unpin(). That seems symmetrical, i.e. reverse order to me? And
+seems to match what local_lock family does too.
+
+> This is a fix on top of the mm-unstable patch
+> mm-page_alloc-replace-local_lock-with-normal-spinlock-fix.patch
+> 
+> Signed-off-by: Mel Gorman <mgorman@techsingularity.net>
+> ---
+>  mm/page_alloc.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/mm/page_alloc.c b/mm/page_alloc.c
+> index 934d1b5a5449..d0141e51e613 100644
+> --- a/mm/page_alloc.c
+> +++ b/mm/page_alloc.c
+> @@ -192,14 +192,14 @@ static DEFINE_MUTEX(pcp_batch_high_lock);
+>  
+>  #define pcpu_spin_unlock(member, ptr)					\
+>  ({									\
+> -	spin_unlock(&ptr->member);					\
+>  	pcpu_task_unpin();						\
+> +	spin_unlock(&ptr->member);					\
+>  })
+>  
+>  #define pcpu_spin_unlock_irqrestore(member, ptr, flags)			\
+>  ({									\
+> -	spin_unlock_irqrestore(&ptr->member, flags);			\
+>  	pcpu_task_unpin();						\
+> +	spin_unlock_irqrestore(&ptr->member, flags);			\
+>  })
+>  
+>  /* struct per_cpu_pages specific helpers. */
 

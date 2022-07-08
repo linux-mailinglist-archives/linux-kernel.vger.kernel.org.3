@@ -2,187 +2,363 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E7A256AFFB
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 03:52:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 45CFA56B00F
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 03:53:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236501AbiGHBgs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Jul 2022 21:36:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50364 "EHLO
+        id S236188AbiGHBgl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Jul 2022 21:36:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50310 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236812AbiGHBgn (ORCPT
+        with ESMTP id S230229AbiGHBgi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Jul 2022 21:36:43 -0400
-Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61B4272EFB;
-        Thu,  7 Jul 2022 18:36:42 -0700 (PDT)
-Received: from pps.filterd (m0109333.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 267LPV9K001608;
-        Thu, 7 Jul 2022 18:36:42 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
- : date : message-id : references : in-reply-to : content-type : content-id
- : mime-version; s=facebook;
- bh=8aXbjVjccTswwh9qsED8+63/7Q/vI+t77jwUHnXwxx0=;
- b=X5ZzMOhhjjxl9C8CDSqerrdKHVXMdODK9BLArnIu8qghvQa4eLsTa+sSTfJ3ti4rnUcz
- BGinBZCbPmE/dsJdBkaNKdaCk2cjGiVGuvdtIz1x/IYVStL/+ozTXt0nOc3oKv6LeL+y
- sw06lOvuzhF2jDSEijIua6K9aixPACYivus= 
-Received: from nam11-dm6-obe.outbound.protection.outlook.com (mail-dm6nam11lp2175.outbound.protection.outlook.com [104.47.57.175])
-        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3h67d21ahu-2
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 07 Jul 2022 18:36:41 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=hfzcLSrcO1BuUJxizyjZTqhzYBFCDQRebRkx8l3d6TPHRE3/SD0ZLKpnDdOtsvwV60qiEUlPgKB/dsFfNQWe76jYzd3yl06RK+EmfnMmxBfMtHZZY0A/HC8PWdgbyA4SHSDU2lqBvqeV0ebz2xiRgWIeg75qlyelKHANB3fleTiJ9u1fXOG08tmr4GplzimRooz82JWTZqO1/MTt36CB8ckhWXgXTIG8ySIH8CdeM94PTD1MY+FTo2fkfWMAzcrKy5uaGKx5H1czlfzYqnVEjSa/G0N5Aqb69XAn5jYizfSmfmwwy/F2pjj+YKgNWIPI3xz6tGQ25EIBK0HgXV5JPw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=8aXbjVjccTswwh9qsED8+63/7Q/vI+t77jwUHnXwxx0=;
- b=Btn6+MhrVp9y0265RDo3Vzvb61iyyTC+9+Yt3RnHEVAGBrE3RcfZTjqs5vpnihHcHS9d1mJK6JMv/nFPtLfV7InUGTbY0IWQDMLD/+DJp2bsA46A6ZH3IhkaZJiHSoEFA3/n7WSJ2VvXOtXvaNjnTmnd5EreA6H3C+Yf8/aAqJ/4XkqSRkI4/HW0kQ+KVAbr1Gr1JueaSvnzTt0sKfwRu8oMRRz/5Pph1oIx3P+l8e3VsTJ7eVA++zttteaXZfVkXOGZeJOHDK/0+an7jKca0IeqxTcFaWphRf8ZvSmFk8epsXdfOIHf1kDr40FGhbCryCfvS3exsI2tsf8eT4JWXg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=fb.com; dmarc=pass action=none header.from=fb.com; dkim=pass
- header.d=fb.com; arc=none
-Received: from SA1PR15MB5109.namprd15.prod.outlook.com (2603:10b6:806:1dc::10)
- by MN2PR15MB2541.namprd15.prod.outlook.com (2603:10b6:208:122::23) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5417.17; Fri, 8 Jul
- 2022 01:36:25 +0000
-Received: from SA1PR15MB5109.namprd15.prod.outlook.com
- ([fe80::e8cd:89e9:95b6:e19a]) by SA1PR15MB5109.namprd15.prod.outlook.com
- ([fe80::e8cd:89e9:95b6:e19a%7]) with mapi id 15.20.5417.016; Fri, 8 Jul 2022
- 01:36:25 +0000
-From:   Song Liu <songliubraving@fb.com>
-To:     Luis Chamberlain <mcgrof@kernel.org>
-CC:     Song Liu <song@kernel.org>, bpf <bpf@vger.kernel.org>,
-        lkml <linux-kernel@vger.kernel.org>,
-        Linux-MM <linux-mm@kvack.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Kernel Team <Kernel-team@fb.com>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        "rick.p.edgecombe@intel.com" <rick.p.edgecombe@intel.com>
-Subject: Re: [PATCH v6 bpf-next 0/5] bpf_prog_pack followup
-Thread-Topic: [PATCH v6 bpf-next 0/5] bpf_prog_pack followup
-Thread-Index: AQHYklIC37qezjyxh0moueFgoO/pNa1zhdgAgAAO4YCAABD0AIAAC/MA
-Date:   Fri, 8 Jul 2022 01:36:25 +0000
-Message-ID: <C96F5607-6FFE-4B45-9A9D-B89E3F67A79A@fb.com>
-References: <20220707223546.4124919-1-song@kernel.org>
- <YsdlXjpRrlE9Z+Jq@bombadil.infradead.org>
- <F000FF60-CF95-4E6B-85BD-45FC668AAE0A@fb.com>
- <YseAEsjE49AZDp8c@bombadil.infradead.org>
-In-Reply-To: <YseAEsjE49AZDp8c@bombadil.infradead.org>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-mailer: Apple Mail (2.3696.100.31)
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 53ac25da-d2fe-4923-3818-08da60824578
-x-ms-traffictypediagnostic: MN2PR15MB2541:EE_
-x-fb-source: Internal
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: DHgV4lcEZM6J3GjfDhbq0ZgDDc8Q6WJ6egMZ+ANEDQHaUtYvsdnCu/99Xd0Ir8a14MR3jIBlDE+gbDY/irwxB8OMqGrz8Ec+d35JvZIERiO+MS0ZfCXxgauDuTO9OvL6mrBRuVm7/dBn/ip6LuYjrFUDdvxuSzrLuNDErpJKLK4eXcpO+ahEOmUfRxf4VBUnyD8L9rBYgwDx0VGoJmHsl77RxvIodFjln0OXjmWyVSK/Y3H8FWSR5o8k0OhBxum/3QHqO/arlc4DgYiMmjnk9nsZIV3R06dPey4v6gduq2NkhD7f1lawb3dAHcPWhmPb1to2fTp/2vIpZHhzmh/NE4Jd3Ks+15wcUZf41K8upWhIukc6dm5Z/Dvr1MK9/CS/nAGXkaH1ZrTa3AfAfNEC75vsPSWX/MS1hdps4d9l9BA6nEwOmpDAim9UuhmEJLikbu7fnU5ta1kjsG/lYvcdQ6VYU6521oEq4He+kJbtNTQYjjfeXKo4a2VsdDyrZH9OXjWi1mwptvD9UAxZFHI8kkQKfjzjrSXL7v5fbpTKWrwWz+AfEWJ7qX5MRBTWADdWDm/uSCw4JgjCDWzuNTvyvuuTBRKeGij+QICpCDzQdXdaqJdUDAFx+VkpI+wEMqNHLSx9uLJfPSzF+BddkGoujatzNcIpF5k/G00llOuUyvreK9T3U7Sx0trTcs7vUoH/rLhn9lZDCPjE3jyxJ1QLVREftBoQr+XBVVMpGlrK8MJooah1AYVp7DQUrAi9DRjse14GUNFVaZTW0gdT5+zvEBN7tmsYt9vq6cHoKm2+5HKz4b3tA+1tnalAPddx/Sq9nlyw0t71VOvpgh8xGaq4QA==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SA1PR15MB5109.namprd15.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(396003)(39860400002)(376002)(136003)(366004)(346002)(91956017)(4326008)(6916009)(54906003)(86362001)(8676002)(66476007)(66556008)(66946007)(36756003)(66446008)(38070700005)(64756008)(6486002)(76116006)(478600001)(122000001)(8936002)(316002)(5660300002)(38100700002)(2906002)(33656002)(53546011)(41300700001)(6506007)(83380400001)(71200400001)(6512007)(186003)(2616005)(45980500001);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?WqczCwWMdGBn2wN8dmrlcH9rBMPC0u01q/Vkv5QItfaNA2eIiFfnQ7cTcQYL?=
- =?us-ascii?Q?i+xuteVARGzMEzXWactQ75OG4wdQyKx0ZBZskYXC5HBPy1oy20djRogCXAYb?=
- =?us-ascii?Q?RIu8E8QulQL7fXn/HWGN1haMd/vBf0TKhFsalKRwsGTabtZzDjrID7Sdsf/6?=
- =?us-ascii?Q?r8OCLcu4jCa16y2WBuauH3lO0eO2g9t82Bvhy0lpw/Qjk8FHRzq44fBc3sPv?=
- =?us-ascii?Q?1jEFmicInTv+dSgv6U7vgEz1FJFPnVn0JjWMYGg7gDqEYkxz1s30OxMFj+pj?=
- =?us-ascii?Q?lA3WW6BDX+O+Uk6UvxmkBoEOBxI6G6J0vICnRB2p11h7A3Y2KC9wEQgdZveB?=
- =?us-ascii?Q?kSdeF64IHnyfqldB7kpu7F5mEOsZ6rOhrn09oYGw47c8gQVGCrpzTBuIsbP2?=
- =?us-ascii?Q?6hTfEhP2DPIEfipXdMilRR4ZAFj0XyeFYUXaTKWId5NwiTPtj6YuL0IDGLdH?=
- =?us-ascii?Q?EMIKgDEdLERriBRNrNup6S5+LZF2T5dFeLQYtboO2LUeCmZbV+WYtryt4IJn?=
- =?us-ascii?Q?sj3LnNuEcsZN4pR6DfNdsANCrmY76hm736bXM9M4vHz5oLYKYO+7X+Ks9UzX?=
- =?us-ascii?Q?pj2zUT/48lLyd2GmKd1mWtu62UKFUBlPKHbDqYC9mlbsSgUex389ReYIPalL?=
- =?us-ascii?Q?kXm7Xds8nfSNdl1pVXdKngCh7kP3PiEbYm7JfSWh3k8Wxs5IqZLsJpN8Aa4V?=
- =?us-ascii?Q?DV88lmbF7G9vNmH+Y6rN1OSXNoULIXqfipt1VIGAmmxMAD7GR6ZYe0Xsn68W?=
- =?us-ascii?Q?ey4+Kxkmb1mBiEwlV0YZ3dC8g6piFgXKz4xHlWh4LQoqK0bBLxobo1b8/8td?=
- =?us-ascii?Q?O4/BorrAVbcLFtExiF2hnx0/NR40LD5DxbVO5xeZWwz54NVHyE3vExsbNPMv?=
- =?us-ascii?Q?8i/JBw04FwF83l9uQ3Y1iHQALvPqdU1JcUz2+KJOUPZVccf7OMMj5fXWQb1s?=
- =?us-ascii?Q?SG4Ycih6aUp8fTpu4RnOzc53SaOULy11VWNUc3+2vYe3X9ISN84STTfD+TBg?=
- =?us-ascii?Q?DWnfW3Ja/CaoLpTejvyh0kJkEgX+dxJs3240nTVH//D2pdUx2J08VCS26whn?=
- =?us-ascii?Q?RHAO3+AF6nE05z8HgOPhzJLkUJyHAmTCDPklkpSK6edMqN7UOq+f1tC2y2jY?=
- =?us-ascii?Q?RSQlwbujTbkwhqpXHmB6KO5JzPvZvI5qtf+/7w/3fIYXKm+vA3NoPjj8DN1C?=
- =?us-ascii?Q?5lCax/ZABM6FdhWXplqSindwWYEMlqg4Vm1aF2sPlU+MLjcGNEIN6q8OvFWR?=
- =?us-ascii?Q?8UPCDA6qRAIl7ZyLXhrvJMyhdBQCWImbsfc7DuG+IoNzNWFQ+eB8Wwp6c83x?=
- =?us-ascii?Q?oGBFNryGuxdPzwMGbN4mxDVtWG6TBNhQeoeEFKX8u1urUhk6m5SkLNiejUkV?=
- =?us-ascii?Q?G625i5Qa7c0RQUQu/TifaINsv9wPp9yqy79sUTV22cm8rDtSywPuEESrUV88?=
- =?us-ascii?Q?tSD8f1WP8v7uXJ95yM/NTl/tmL0oEg2JbPEQ5LoGXtNgLUr2OB4wPWOjOgib?=
- =?us-ascii?Q?qjxuvUnXV/dJdQWkcKH4zsSCFOFVCagfS5jnG4bH/YAtRhItLv2+fZ6ZwvNW?=
- =?us-ascii?Q?DsGGn22uap4LPEkUblpAOVZQ32nh1AMrLIKJ5WhNr5zht6tR4OFrZOX1nepF?=
- =?us-ascii?Q?h2nB9hMHMne6R8yb8tPmM0U=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <5DC89D8DCE80EF4FB28322F5DEA72D65@namprd15.prod.outlook.com>
-MIME-Version: 1.0
-X-OriginatorOrg: fb.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: SA1PR15MB5109.namprd15.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 53ac25da-d2fe-4923-3818-08da60824578
-X-MS-Exchange-CrossTenant-originalarrivaltime: 08 Jul 2022 01:36:25.3712
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 8ae927fe-1255-47a7-a2af-5f3a069daaa2
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: ei6sgvpxp/w+RB/55jpOcPrKg1lZbHbpcc1oFd7cvbyXyNS0PHQ5XZWIbQDBDSI1VaSuhQBNvW6xteFMXJn9mQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR15MB2541
-X-Proofpoint-GUID: 1HRP-4Em_2Fu0U02aDdJb_v9q5AJdDAr
-X-Proofpoint-ORIG-GUID: 1HRP-4Em_2Fu0U02aDdJb_v9q5AJdDAr
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
- definitions=2022-07-07_19,2022-06-28_01,2022-06-22_01
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        Thu, 7 Jul 2022 21:36:38 -0400
+Received: from mail-pl1-x649.google.com (mail-pl1-x649.google.com [IPv6:2607:f8b0:4864:20::649])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1812672EF9
+        for <linux-kernel@vger.kernel.org>; Thu,  7 Jul 2022 18:36:36 -0700 (PDT)
+Received: by mail-pl1-x649.google.com with SMTP id n10-20020a170902d2ca00b0016c1aa1f844so277084plc.21
+        for <linux-kernel@vger.kernel.org>; Thu, 07 Jul 2022 18:36:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=ODgBEmEsl6rJt2EylFcnojNKRR8OgMdKvcL6VaOiX+w=;
+        b=kGzY4rmoueVx8pzGnUgsiXuHksm/6KkwxWV5DiERjqjh2dFXzFTo4K4jyDmrholloJ
+         m88uOd2FZADYSZkTuohMXEJMpsqy5zzrnBm3UaNSenDmIUkEbVFmU6Jz1kJuvZDY4FoR
+         w5IGi+7S2LX6+X+omaOu9nF+0EGNI1jW+61HqV33z4/UT2t6gEH0uzVFOgUmsJR2R3vU
+         L5tsUQYO3B6FU+eqyc7RI6qGwEAvT6Nkebfa/UwJqcpSA3Mu5iEaapURnTrptcQrcM4A
+         ltwR69dsbS2zO6AkXUuXRfEG/IfNKNQubDapGh6o12ByrEakXfR/T+TSWa4u/+ex3txz
+         5ewQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=ODgBEmEsl6rJt2EylFcnojNKRR8OgMdKvcL6VaOiX+w=;
+        b=ZeTnGj0yY9dnuZ9EKb6Q7XCrBVgZOdF+z/rnTN/Q/D89Jj43xrJcR7ZzGazw+3pKfM
+         73Dtt8hEquYtFqYAKJ+PnOrkZIpON7At0rKK/s8PFyyvs69kZLL0UBWRtDty+A7D4HXB
+         0KNjxVfwpzFWSg5zFR68edvm3cpZn3B7/FW4imt0O7NrtxnmdYnEjHxtAVge0H5goUMB
+         mFA9mSQLBTI381z6QW6kuCYT13N9hsOlP6ijk7DqENTESGKydGMFnePVHFs51vGcEVsm
+         iNGtGSyvJkUIBJtwSgIGjO8s3equ/gbKsh9k+ggDcJz7eVNRHk+pDNM10nLFGm4TUsHY
+         HVrA==
+X-Gm-Message-State: AJIora/3BosL9cOHclNtBpNL4jB8cEgJHR5PCx/ut1W5tWurvrUGxWPE
+        dxWDBv2pBrT+yptnOQkDh1O+x6PuXMXacw==
+X-Google-Smtp-Source: AGRyM1v2XdtgG64jw4csnYN8EGLp7K3RGY75Unj6RkvSQ3kjwGXowENaMzWzV2203FmSBiVCja3yg3DcJRiYcA==
+X-Received: from dlatypov-spec.c.googlers.com ([fda3:e722:ac3:cc00:24:72f4:c0a8:3f35])
+ (user=dlatypov job=sendgmr) by 2002:a17:90a:f8d1:b0:1ef:8795:c7e with SMTP id
+ l17-20020a17090af8d100b001ef87950c7emr1006572pjd.74.1657244195596; Thu, 07
+ Jul 2022 18:36:35 -0700 (PDT)
+Date:   Fri,  8 Jul 2022 01:36:32 +0000
+Message-Id: <20220708013632.1210466-1-dlatypov@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.37.0.rc0.161.g10f37bed90-goog
+Subject: [PATCH v4] kunit: tool: make --kunitconfig repeatable, blindly concat
+From:   Daniel Latypov <dlatypov@google.com>
+To:     brendanhiggins@google.com, davidgow@google.com
+Cc:     linux-kernel@vger.kernel.org, kunit-dev@googlegroups.com,
+        linux-kselftest@vger.kernel.org, skhan@linuxfoundation.org,
+        Daniel Latypov <dlatypov@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+It's come up a few times that it would be useful to have --kunitconfig
+be repeatable [1][2].
 
+This could be done before with a bit of shell-fu, e.g.
+  $ find fs/ -name '.kunitconfig' -exec cat {} + | \
+    ./tools/testing/kunit/kunit.py run --kunitconfig=/dev/stdin
+or equivalently:
+  $ cat fs/ext4/.kunitconfig fs/fat/.kunitconfig | \
+    ./tools/testing/kunit/kunit.py run --kunitconfig=/dev/stdin
 
-> On Jul 7, 2022, at 5:53 PM, Luis Chamberlain <mcgrof@kernel.org> wrote:
-> 
-> On Thu, Jul 07, 2022 at 11:52:58PM +0000, Song Liu wrote:
->>> On Jul 7, 2022, at 3:59 PM, Luis Chamberlain <mcgrof@kernel.org> wrote:
->>> 
->>> On Thu, Jul 07, 2022 at 03:35:41PM -0700, Song Liu wrote:
->>>> This set is the second half of v4 [1].
->>>> 
->>>> Changes v5 => v6:
->>>> 1. Rebase and extend CC list.
->>> 
->>> Why post a new iteration so soon without completing the discussion we
->>> had? It seems like we were at least going somewhere. If it's just
->>> to include mm as I requested, sure, that's fine, but this does not
->>> provide context as to what we last were talking about.
->> 
->> Sorry for sending v6 too soon. The primary reason was to extend the CC
->> list and add it back to patchwork (v5 somehow got archived). 
->> 
->> Also, I think vmalloc_exec_ work would be a separate project, while this 
->> set is the followup work of bpf_prog_pack. Does this make sense? 
->> 
->> Btw, vmalloc_exec_ work could be a good topic for LPC. It will be much
->> more efficient to discuss this in person. 
-> 
-> What we need is input from mm / arch folks. What is not done here is
-> what that stuff we're talking about is and so mm folks can't guess. My
-> preference is to address that.
-> 
-> I don't think in person discussion is needed if the only folks
-> discussing this topic so far is just you and me.
+But this can be fairly clunky to use in practice.
 
-How about we start a thread with mm / arch folks for the vmalloc_exec_*
-topic? I will summarize previous discussions and include pointers to 
-these discussions. If necessary, we can continue the discussion at LPC.
+And having explicit support in kunit.py opens the door to having more
+config fragments of interest, e.g. options for PCI on UML [1], UML
+coverage [2], variants of tests [3].
+There's another argument to be made that users can just use multiple
+--kconfig_add's, but this gets very clunky very fast (e.g. [2]).
 
-OTOH, I guess the outcome of that discussion should not change this set? 
-If we have concern about module_alloc_huge(), maybe we can have bpf code 
-call vmalloc directly (until we have vmalloc_exec_)? 
+Note: there's a big caveat here that some kconfig options might be
+incompatible. We try to give a clearish error message in the simple case
+where the same option appears multiple times with conflicting values,
+but more subtle ones (e.g. mutually exclusive options) will be
+potentially very confusing for the user. I don't know we can do better.
 
-What do you think about this plan?
+Note 2: if you want to combine a --kunitconfig with the default, you
+either have to do to specify the current build_dir
+> --kunitconfig=.kunit --kunitconfig=additional.config
+or
+> --kunitconfig=tools/testing/kunit/configs/default.config --kunitconifg=additional.config
+each of which have their downsides (former depends on --build_dir,
+doesn't work if you don't have a .kunitconfig yet), etc.
 
-Thanks,
-Song
+Example with conflicting values:
+> $ ./tools/testing/kunit/kunit.py config --kunitconfig=lib/kunit --kunitconfig=/dev/stdin <<EOF
+> CONFIG_KUNIT_TEST=n
+> CONFIG_KUNIT=m
+> EOF
+> ...
+> kunit_kernel.ConfigError: Multiple values specified for 2 options in kunitconfig:
+> CONFIG_KUNIT=y
+>   vs from /dev/stdin
+> CONFIG_KUNIT=m
+>
+> CONFIG_KUNIT_TEST=y
+>   vs from /dev/stdin
+> # CONFIG_KUNIT_TEST is not set
+
+[1] https://lists.freedesktop.org/archives/dri-devel/2022-June/357616.html
+[2] https://lore.kernel.org/linux-kselftest/CAFd5g45f3X3xF2vz2BkTHRqOC4uW6GZxtUUMaP5mwwbK8uNVtA@mail.gmail.com/
+[3] https://lore.kernel.org/linux-kselftest/CANpmjNOdSy6DuO6CYZ4UxhGxqhjzx4tn0sJMbRqo2xRFv9kX6Q@mail.gmail.com/
+
+Signed-off-by: Daniel Latypov <dlatypov@google.com>
+Reviewed-by: Brendan Higgins <brendanhiggins@google.com>
+---
+v1 -> v3: merge with kunitconfig refactor patch, rename
+differing_options() to conflicting_options()
+
+v3 -> v4: add Brendan's RB tag, rebase onto the -kselftest kunit branch.
+The 1/3 and 3/3 of the initial series applied cleanly, but this one
+didn't, so I'm sending just this one out by itself now.
+Specifically, there were significant merge conflicts with the
+--qemu_args patch.
+---
+ tools/testing/kunit/kunit.py           |  7 ++--
+ tools/testing/kunit/kunit_config.py    | 11 ++++-
+ tools/testing/kunit/kunit_kernel.py    | 38 +++++++++++------
+ tools/testing/kunit/kunit_tool_test.py | 56 ++++++++++++++++++++++----
+ 4 files changed, 89 insertions(+), 23 deletions(-)
+
+diff --git a/tools/testing/kunit/kunit.py b/tools/testing/kunit/kunit.py
+index b686126afb40..e132b0654029 100755
+--- a/tools/testing/kunit/kunit.py
++++ b/tools/testing/kunit/kunit.py
+@@ -293,8 +293,9 @@ def add_common_opts(parser) -> None:
+ 	parser.add_argument('--kunitconfig',
+ 			     help='Path to Kconfig fragment that enables KUnit tests.'
+ 			     ' If given a directory, (e.g. lib/kunit), "/.kunitconfig" '
+-			     'will get  automatically appended.',
+-			     metavar='PATH')
++			     'will get  automatically appended. If repeated, the files '
++			     'blindly concatenated, which might not work in all cases.',
++			     action='append', metavar='PATHS')
+ 	parser.add_argument('--kconfig_add',
+ 			     help='Additional Kconfig options to append to the '
+ 			     '.kunitconfig, e.g. CONFIG_KASAN=y. Can be repeated.',
+@@ -381,7 +382,7 @@ def tree_from_args(cli_args: argparse.Namespace) -> kunit_kernel.LinuxSourceTree
+ 			qemu_args.extend(shlex.split(arg))
+ 
+ 	return kunit_kernel.LinuxSourceTree(cli_args.build_dir,
+-			kunitconfig_path=cli_args.kunitconfig,
++			kunitconfig_paths=cli_args.kunitconfig,
+ 			kconfig_add=cli_args.kconfig_add,
+ 			arch=cli_args.arch,
+ 			cross_compile=cli_args.cross_compile,
+diff --git a/tools/testing/kunit/kunit_config.py b/tools/testing/kunit/kunit_config.py
+index 898b2a35eb29..48b5f34b2e5d 100644
+--- a/tools/testing/kunit/kunit_config.py
++++ b/tools/testing/kunit/kunit_config.py
+@@ -8,7 +8,7 @@
+ 
+ from dataclasses import dataclass
+ import re
+-from typing import Dict, Iterable, Set
++from typing import Dict, Iterable, List, Set, Tuple
+ 
+ CONFIG_IS_NOT_SET_PATTERN = r'^# CONFIG_(\w+) is not set$'
+ CONFIG_PATTERN = r'^CONFIG_(\w+)=(\S+|".*")$'
+@@ -60,6 +60,15 @@ class Kconfig:
+ 				return False
+ 		return True
+ 
++	def conflicting_options(self, other: 'Kconfig') -> List[Tuple[KconfigEntry, KconfigEntry]]:
++		diff = []  # type: List[Tuple[KconfigEntry, KconfigEntry]]
++		for name, value in self._entries.items():
++			b = other._entries.get(name)
++			if b and value != b:
++				pair = (KconfigEntry(name, value), KconfigEntry(name, b))
++				diff.append(pair)
++		return diff
++
+ 	def merge_in_entries(self, other: 'Kconfig') -> None:
+ 		for name, value in other._entries.items():
+ 			self._entries[name] = value
+diff --git a/tools/testing/kunit/kunit_kernel.py b/tools/testing/kunit/kunit_kernel.py
+index 94ec9f65ef19..56492090e28e 100644
+--- a/tools/testing/kunit/kunit_kernel.py
++++ b/tools/testing/kunit/kunit_kernel.py
+@@ -177,6 +177,30 @@ def get_kunitconfig_path(build_dir: str) -> str:
+ def get_old_kunitconfig_path(build_dir: str) -> str:
+ 	return os.path.join(build_dir, OLD_KUNITCONFIG_PATH)
+ 
++def get_parsed_kunitconfig(build_dir: str,
++			   kunitconfig_paths: Optional[List[str]]=None) -> kunit_config.Kconfig:
++	if not kunitconfig_paths:
++		path = get_kunitconfig_path(build_dir)
++		if not os.path.exists(path):
++			shutil.copyfile(DEFAULT_KUNITCONFIG_PATH, path)
++		return kunit_config.parse_file(path)
++
++	merged = kunit_config.Kconfig()
++
++	for path in kunitconfig_paths:
++		if os.path.isdir(path):
++			path = os.path.join(path, KUNITCONFIG_PATH)
++		if not os.path.exists(path):
++			raise ConfigError(f'Specified kunitconfig ({path}) does not exist')
++
++		partial = kunit_config.parse_file(path)
++		diff = merged.conflicting_options(partial)
++		if diff:
++			diff_str = '\n\n'.join(f'{a}\n  vs from {path}\n{b}' for a, b in diff)
++			raise ConfigError(f'Multiple values specified for {len(diff)} options in kunitconfig:\n{diff_str}')
++		merged.merge_in_entries(partial)
++	return merged
++
+ def get_outfile_path(build_dir: str) -> str:
+ 	return os.path.join(build_dir, OUTFILE_PATH)
+ 
+@@ -221,7 +245,7 @@ class LinuxSourceTree:
+ 	def __init__(
+ 	      self,
+ 	      build_dir: str,
+-	      kunitconfig_path='',
++	      kunitconfig_paths: Optional[List[str]]=None,
+ 	      kconfig_add: Optional[List[str]]=None,
+ 	      arch=None,
+ 	      cross_compile=None,
+@@ -238,17 +262,7 @@ class LinuxSourceTree:
+ 				qemu_config_path = _default_qemu_config_path(self._arch)
+ 				_, self._ops = _get_qemu_ops(qemu_config_path, extra_qemu_args, cross_compile)
+ 
+-		if kunitconfig_path:
+-			if os.path.isdir(kunitconfig_path):
+-				kunitconfig_path = os.path.join(kunitconfig_path, KUNITCONFIG_PATH)
+-			if not os.path.exists(kunitconfig_path):
+-				raise ConfigError(f'Specified kunitconfig ({kunitconfig_path}) does not exist')
+-		else:
+-			kunitconfig_path = get_kunitconfig_path(build_dir)
+-			if not os.path.exists(kunitconfig_path):
+-				shutil.copyfile(DEFAULT_KUNITCONFIG_PATH, kunitconfig_path)
+-
+-		self._kconfig = kunit_config.parse_file(kunitconfig_path)
++		self._kconfig = get_parsed_kunitconfig(build_dir, kunitconfig_paths)
+ 		if kconfig_add:
+ 			kconfig = kunit_config.parse_from_string('\n'.join(kconfig_add))
+ 			self._kconfig.merge_in_entries(kconfig)
+diff --git a/tools/testing/kunit/kunit_tool_test.py b/tools/testing/kunit/kunit_tool_test.py
+index e56544d58147..ad63d0d34f3f 100755
+--- a/tools/testing/kunit/kunit_tool_test.py
++++ b/tools/testing/kunit/kunit_tool_test.py
+@@ -356,17 +356,46 @@ class LinuxSourceTreeTest(unittest.TestCase):
+ 
+ 	def test_invalid_kunitconfig(self):
+ 		with self.assertRaisesRegex(kunit_kernel.ConfigError, 'nonexistent.* does not exist'):
+-			kunit_kernel.LinuxSourceTree('', kunitconfig_path='/nonexistent_file')
++			kunit_kernel.LinuxSourceTree('', kunitconfig_paths=['/nonexistent_file'])
+ 
+ 	def test_valid_kunitconfig(self):
+ 		with tempfile.NamedTemporaryFile('wt') as kunitconfig:
+-			kunit_kernel.LinuxSourceTree('', kunitconfig_path=kunitconfig.name)
++			kunit_kernel.LinuxSourceTree('', kunitconfig_paths=[kunitconfig.name])
+ 
+ 	def test_dir_kunitconfig(self):
+ 		with tempfile.TemporaryDirectory('') as dir:
+ 			with open(os.path.join(dir, '.kunitconfig'), 'w'):
+ 				pass
+-			kunit_kernel.LinuxSourceTree('', kunitconfig_path=dir)
++			kunit_kernel.LinuxSourceTree('', kunitconfig_paths=[dir])
++
++	def test_multiple_kunitconfig(self):
++		want_kconfig = kunit_config.Kconfig()
++		want_kconfig.add_entry('KUNIT', 'y')
++		want_kconfig.add_entry('KUNIT_TEST', 'm')
++
++		with tempfile.TemporaryDirectory('') as dir:
++			other = os.path.join(dir, 'otherkunitconfig')
++			with open(os.path.join(dir, '.kunitconfig'), 'w') as f:
++				f.write('CONFIG_KUNIT=y')
++			with open(other, 'w') as f:
++				f.write('CONFIG_KUNIT_TEST=m')
++				pass
++
++			tree = kunit_kernel.LinuxSourceTree('', kunitconfig_paths=[dir, other])
++			self.assertTrue(want_kconfig.is_subset_of(tree._kconfig), msg=tree._kconfig)
++
++
++	def test_multiple_kunitconfig_invalid(self):
++		with tempfile.TemporaryDirectory('') as dir:
++			other = os.path.join(dir, 'otherkunitconfig')
++			with open(os.path.join(dir, '.kunitconfig'), 'w') as f:
++				f.write('CONFIG_KUNIT=y')
++			with open(other, 'w') as f:
++				f.write('CONFIG_KUNIT=m')
++
++			with self.assertRaisesRegex(kunit_kernel.ConfigError, '(?s)Multiple values.*CONFIG_KUNIT'):
++				kunit_kernel.LinuxSourceTree('', kunitconfig_paths=[dir, other])
++
+ 
+ 	def test_kconfig_add(self):
+ 		want_kconfig = kunit_config.Kconfig()
+@@ -636,7 +665,7 @@ class KUnitMainTest(unittest.TestCase):
+ 		kunit.main(['run', '--kunitconfig=mykunitconfig'])
+ 		# Just verify that we parsed and initialized it correctly here.
+ 		self.mock_linux_init.assert_called_once_with('.kunit',
+-						kunitconfig_path='mykunitconfig',
++						kunitconfig_paths=['mykunitconfig'],
+ 						kconfig_add=None,
+ 						arch='um',
+ 						cross_compile=None,
+@@ -647,18 +676,31 @@ class KUnitMainTest(unittest.TestCase):
+ 		kunit.main(['config', '--kunitconfig=mykunitconfig'])
+ 		# Just verify that we parsed and initialized it correctly here.
+ 		self.mock_linux_init.assert_called_once_with('.kunit',
+-						kunitconfig_path='mykunitconfig',
++						kunitconfig_paths=['mykunitconfig'],
+ 						kconfig_add=None,
+ 						arch='um',
+ 						cross_compile=None,
+ 						qemu_config_path=None,
+ 						extra_qemu_args=[])
+ 
++	@mock.patch.object(kunit_kernel, 'LinuxSourceTree')
++	def test_run_multiple_kunitconfig(self, mock_linux_init):
++		mock_linux_init.return_value = self.linux_source_mock
++		kunit.main(['run', '--kunitconfig=mykunitconfig', '--kunitconfig=other'])
++		# Just verify that we parsed and initialized it correctly here.
++		mock_linux_init.assert_called_once_with('.kunit',
++							kunitconfig_paths=['mykunitconfig', 'other'],
++							kconfig_add=None,
++							arch='um',
++							cross_compile=None,
++							qemu_config_path=None,
++							extra_qemu_args=[])
++
+ 	def test_run_kconfig_add(self):
+ 		kunit.main(['run', '--kconfig_add=CONFIG_KASAN=y', '--kconfig_add=CONFIG_KCSAN=y'])
+ 		# Just verify that we parsed and initialized it correctly here.
+ 		self.mock_linux_init.assert_called_once_with('.kunit',
+-						kunitconfig_path=None,
++						kunitconfig_paths=None,
+ 						kconfig_add=['CONFIG_KASAN=y', 'CONFIG_KCSAN=y'],
+ 						arch='um',
+ 						cross_compile=None,
+@@ -669,7 +711,7 @@ class KUnitMainTest(unittest.TestCase):
+ 		kunit.main(['run', '--arch=x86_64', '--qemu_args', '-m 2048'])
+ 		# Just verify that we parsed and initialized it correctly here.
+ 		self.mock_linux_init.assert_called_once_with('.kunit',
+-						kunitconfig_path=None,
++						kunitconfig_paths=None,
+ 						kconfig_add=None,
+ 						arch='x86_64',
+ 						cross_compile=None,
+
+base-commit: 1d202d1496a0be94100d8cbc2b658dcd980a3edf
+-- 
+2.37.0.rc0.161.g10f37bed90-goog
+

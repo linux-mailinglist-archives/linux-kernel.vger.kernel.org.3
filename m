@@ -2,70 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0454656C313
-	for <lists+linux-kernel@lfdr.de>; Sat,  9 Jul 2022 01:13:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4887356C3DE
+	for <lists+linux-kernel@lfdr.de>; Sat,  9 Jul 2022 01:15:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238647AbiGHSkh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Jul 2022 14:40:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60952 "EHLO
+        id S239072AbiGHSlu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Jul 2022 14:41:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33414 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236808AbiGHSkg (ORCPT
+        with ESMTP id S236808AbiGHSlr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Jul 2022 14:40:36 -0400
-Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BECA13CFE;
-        Fri,  8 Jul 2022 11:40:35 -0700 (PDT)
-Received: by mail-lf1-x129.google.com with SMTP id d12so14369824lfq.12;
-        Fri, 08 Jul 2022 11:40:35 -0700 (PDT)
+        Fri, 8 Jul 2022 14:41:47 -0400
+Received: from mail-oa1-x2e.google.com (mail-oa1-x2e.google.com [IPv6:2001:4860:4864:20::2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C95F1A827;
+        Fri,  8 Jul 2022 11:41:47 -0700 (PDT)
+Received: by mail-oa1-x2e.google.com with SMTP id 586e51a60fabf-f2a4c51c45so30268794fac.9;
+        Fri, 08 Jul 2022 11:41:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=DfjJfpHS3v6csJ5REpxxK0NrTLQeFjR+dlso3qlNSvU=;
-        b=OE/4FaWK7bD0OhB0sQ5cglvrD5JgM7ooEm7igt8XC8kzKlH+RN0SxabKKtkoudFqUU
-         QB7cV8mdy6m5tMK8lfrl01i+sJr5op5A0zzzApDOvNi9xiJSoecxM+tpd9I7iq8xM/5o
-         mZ6FnsYPPe1r1WH7L0P9mTlNdjIUSf+ytIoYHRrw7bYr7M7ZfaGtesm9t/TWbxCe0i5B
-         4Ck2N2S/mSQ+M+esaelczHGu385KP4UvDF/BsUjkoXcdYeT+YmT21w3hpyR4qNcky3vn
-         i5vjqh64WrObvUsdtAjBP9UuJFI1X1oLJXCKnk6WHZhsYk8zj/A0mJJqw6n1yeGwy5nW
-         IF2A==
+        bh=E0+g3v6pC8RZHHJAWVXJd2G4KVUBkvrj09rmmxGrR+E=;
+        b=kSYmvN1LCA3HQHM673GLcBGagoKwVuIV8NANpt2rxPMcLLWoBx+CfJY8ie9CG4TGzW
+         ugF84N5L5QD3G75H5LrXyrM8YkCRQMnK+iZ1dI4DI2zTyth8s05//EGrQJvdGqb9yi4S
+         B/tjHLAOt5UvECMIo6t8OqiACR6SiWt3V+3dF6sUQfeq7kyW6jlLw8j1l2035R9lcPch
+         UcUr8O7CrHvwRQ5lzMep3rsle82S1UVvgN2dAsAoTVQ/xJgiAO/JI8phqK4EF8y6kmpS
+         s0J76+Tjs1AkkNP5UpMf4RoGm4qheTfRTJS/0uObwUMh44154LXbdFg062bUyBbKKDhI
+         FLew==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=DfjJfpHS3v6csJ5REpxxK0NrTLQeFjR+dlso3qlNSvU=;
-        b=O2u4sCjgpLk2WtSMIyThjnZ9i5UGBbGsyDrJC4zNfCUK7xMi93UAGavErqV3OeZK8I
-         jxHnsv2pXEEp3siqaYCmFl5X3ewkTGPIaLV4Vjk1BGxlZU52TWpfsyI7Hx2aCM0ztTfu
-         nIouXb1os+mYyA3s1qvTiLnJQmIJe9+3IGLgpLSdtPvsUhY2Lh7RJNJPNePuwl0kx7H5
-         AE+SgiVZXrX5l0vwSm0oUTSU9nfpKeHfqXhAYAh+wpiWgOJ/VhsmR08TdF82U+TgB/EJ
-         nPK2Rp1jcjDn49UcQLdz38UEH7xF7s1KmVIrVLdpBtnXS//AmBi/3VQtmFMiIr2JsE2V
-         xyiw==
-X-Gm-Message-State: AJIora9r6lUvcxLS0LNtVLDterZMqCOGMlB9CFQnfIA4CS94KuF5bBYt
-        nSs/ja75DKVkPMueh/2ytS60A1+0SD7GEeuPI2g=
-X-Google-Smtp-Source: AGRyM1ueOgfntledxcBKr3ksLbw/BRAgaD6wdlm81vWNHvF+9rBG70KkAhcVXM6DFjcZLlfZcnoQAl8unxsBmqwklos=
-X-Received: by 2002:a05:6512:108d:b0:481:6f3:e641 with SMTP id
- j13-20020a056512108d00b0048106f3e641mr3032801lfg.251.1657305632618; Fri, 08
- Jul 2022 11:40:32 -0700 (PDT)
+        bh=E0+g3v6pC8RZHHJAWVXJd2G4KVUBkvrj09rmmxGrR+E=;
+        b=atIxdAkwCQK2dtTUogb/H8IcAGoCR5yCOQeOL2c97cOK54rstCmv0GQXO22b1uRxrH
+         cDnw7irOWvkEtoyghsqBgGgPtqe8rQ8be/kLNq+7dsZg02XMvjZfCPmM+mn2TtccZkQn
+         EX/5zBpvdkqAjf1HRMjParC55s7hmC2RQXwr+HixpzWjMWMfP0srMlgnBG2PRoFxhNn+
+         0MEWDRRHyYqJ19aaapyt4UNdqX9cvl43hNU+J248n1oF6l+TKbhDG+UQtpWtjAsBsXqV
+         nDIBTWxsXrh5Z7UiUST0kD5mQESHH7cBxN/yXwFNnrFeL34HonczNuZlPs6uWPdWuMeH
+         Zn0A==
+X-Gm-Message-State: AJIora8ywGuPxXS3I1MV37Vz/GiYCpGbys4h72bbZgnJc4BdeNjUwNCj
+        2JOM5Dp1Iwq8EbAxEV3btU2pA+NgRAwQH7KXBERWhW60zxX+5A==
+X-Google-Smtp-Source: AGRyM1tJ/cjliLSb05PEgv9ikZiVR60MsFIKWxl5kdrWfbZDUl5sqhyFFPR61swqCmtESYW1a7F/DCBBVWpAqv0OAXU=
+X-Received: by 2002:a05:6870:88a8:b0:101:6409:ae26 with SMTP id
+ m40-20020a05687088a800b001016409ae26mr736747oam.160.1657305706145; Fri, 08
+ Jul 2022 11:41:46 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220707151420.v3.1.Iaf638bb9f885f5880ab1b4e7ae2f73dd53a54661@changeid>
- <20220707151420.v3.2.I39885624992dacff236aed268bdaa69107cd1310@changeid>
- <CABBYNZL5oXFsyBN6JRdt1JeD2v5h3MOpCAa4hF0sXfw5F6u3Pg@mail.gmail.com> <CAGPPCLDBVwaXNbr6_wsj-M+Lbdbn6CbZippHYS5F-2vREBPHbg@mail.gmail.com>
-In-Reply-To: <CAGPPCLDBVwaXNbr6_wsj-M+Lbdbn6CbZippHYS5F-2vREBPHbg@mail.gmail.com>
-From:   Luiz Augusto von Dentz <luiz.dentz@gmail.com>
-Date:   Fri, 8 Jul 2022 11:40:21 -0700
-Message-ID: <CABBYNZLWTbogiUvs3pxE=JPtVX-bxpBa7dKNUL3jh1-a8axR5A@mail.gmail.com>
-Subject: Re: [PATCH v3 2/3] Bluetooth: Add sysfs entry to enable/disable devcoredump
-To:     Manish Mandlik <mmandlik@google.com>
-Cc:     Marcel Holtmann <marcel@holtmann.org>,
-        "linux-bluetooth@vger.kernel.org" <linux-bluetooth@vger.kernel.org>,
-        ChromeOS Bluetooth Upstreaming 
-        <chromeos-bluetooth-upstreaming@chromium.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Johan Hedberg <johan.hedberg@gmail.com>,
-        Paolo Abeni <pabeni@redhat.com>,
+References: <20220608161150.58919-1-linux@fw-web.de> <20220608161150.58919-2-linux@fw-web.de>
+ <5611d1c5-44db-4144-3c46-256323d39fe3@arm.com>
+In-Reply-To: <5611d1c5-44db-4144-3c46-256323d39fe3@arm.com>
+From:   Peter Geis <pgwipeout@gmail.com>
+Date:   Fri, 8 Jul 2022 14:41:35 -0400
+Message-ID: <CAMdYzYo=Wft93OEKapVFx-oxe8ocU7OuhU+MOdqUw8-QjqzDGg@mail.gmail.com>
+Subject: Re: [PATCH 1/2] rtc: hym8563: try multiple times to init device
+To:     Robin Murphy <robin.murphy@arm.com>
+Cc:     Frank Wunderlich <linux@fw-web.de>,
+        "open list:ARM/Rockchip SoC..." <linux-rockchip@lists.infradead.org>,
+        Frank Wunderlich <frank-w@public-files.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        devicetree <devicetree@vger.kernel.org>,
+        arm-mail-list <linux-arm-kernel@lists.infradead.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "open list:NETWORKING [GENERAL]" <netdev@vger.kernel.org>
+        linux-rtc@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
@@ -77,109 +77,66 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Manish,
+On Fri, Jul 8, 2022 at 12:18 PM Robin Murphy <robin.murphy@arm.com> wrote:
+>
+> On 2022-06-08 17:11, Frank Wunderlich wrote:
+> > From: Peter Geis <pgwipeout@gmail.com>
+> >
+> > RTC sometimes does not respond the first time in init.
+> > Try multiple times to get a response.
+>
+> FWIW, given that HYM8563 is fairly common on RK3288 boards - I can't say
+> I've ever noticed an issue with mine, for instance - it seems dubious
+> that this would be a general issue of the chip itself. Are you sure it's
+> not a SoC or board-level issue with the I2C bus being in a funny initial
+> state, timings being marginal, or suchlike?
 
-On Fri, Jul 8, 2022 at 11:30 AM Manish Mandlik <mmandlik@google.com> wrote:
->
-> Hi Luiz,
->
-> On Fri, Jul 8, 2022 at 10:24 AM Luiz Augusto von Dentz <luiz.dentz@gmail.com> wrote:
->>
->> Hi Manish,
->>
->> On Thu, Jul 7, 2022 at 3:15 PM Manish Mandlik <mmandlik@google.com> wrote:
->> >
->> > Since device/firmware dump is a debugging feature, we may not need it
->> > all the time. Add a sysfs attribute to enable/disable bluetooth
->> > devcoredump capturing. The default state of this feature would be
->> > disabled and it can be enabled by echoing 1 to enable_coredump sysfs
->> > entry as follow:
->> >
->> > $ echo 1 > /sys/class/bluetooth/<device>/enable_coredump
->> >
->> > Signed-off-by: Manish Mandlik <mmandlik@google.com>
->> > ---
->> >
->> > Changes in v3:
->> > - New patch in the series to enable/disable feature via sysfs entry
->> >
->> >  net/bluetooth/hci_sysfs.c | 36 ++++++++++++++++++++++++++++++++++++
->> >  1 file changed, 36 insertions(+)
->> >
->> > diff --git a/net/bluetooth/hci_sysfs.c b/net/bluetooth/hci_sysfs.c
->> > index 4e3e0451b08c..df0d54a5ae3f 100644
->> > --- a/net/bluetooth/hci_sysfs.c
->> > +++ b/net/bluetooth/hci_sysfs.c
->> > @@ -91,9 +91,45 @@ static void bt_host_release(struct device *dev)
->> >         module_put(THIS_MODULE);
->> >  }
->> >
->> > +#ifdef CONFIG_DEV_COREDUMP
->> > +static ssize_t enable_coredump_show(struct device *dev,
->> > +                                   struct device_attribute *attr,
->> > +                                   char *buf)
->> > +{
->> > +       struct hci_dev *hdev = to_hci_dev(dev);
->> > +
->> > +       return scnprintf(buf, 3, "%d\n", hdev->dump.enabled);
->> > +}
->> > +
->> > +static ssize_t enable_coredump_store(struct device *dev,
->> > +                                    struct device_attribute *attr,
->> > +                                    const char *buf, size_t count)
->> > +{
->> > +       struct hci_dev *hdev = to_hci_dev(dev);
->> > +
->> > +       /* Consider any non-zero value as true */
->> > +       if (simple_strtol(buf, NULL, 10))
->> > +               hdev->dump.enabled = true;
->> > +       else
->> > +               hdev->dump.enabled = false;
->> > +
->> > +       return count;
->> > +}
->> > +DEVICE_ATTR_RW(enable_coredump);
->> > +#endif
->> > +
->> > +static struct attribute *bt_host_attrs[] = {
->> > +#ifdef CONFIG_DEV_COREDUMP
->> > +       &dev_attr_enable_coredump.attr,
->> > +#endif
->> > +       NULL,
->> > +};
->> > +ATTRIBUTE_GROUPS(bt_host);
->> > +
->> >  static const struct device_type bt_host = {
->> >         .name    = "host",
->> >         .release = bt_host_release,
->> > +       .groups = bt_host_groups,
->> >  };
->> >
->> >  void hci_init_sysfs(struct hci_dev *hdev)
->> > --
->> > 2.37.0.rc0.161.g10f37bed90-goog
->>
->> It seems devcoredump.c creates its own sysfs entries so perhaps this
->> should be included there and documented in sysfs-devices-coredump.
->
-> I deliberately created it here. We need to have this entry/switch per hci device, whereas the sysfs entry created by devcoredump.c disables the devcoredump feature entirely for anyone who's using it, so it can act as a global switch for the devcoredump.
-
-We should probably check if there is a reason why this is not on per
-device and anyway if seem wrong to each subsystem to come up with its
-own sysfs entries when it could be easily generalized so the userspace
-tools using those entries don't have to look into different entries
-depending on the subsystem the device belongs.
+I don't think this is an SoC issue since this is the first instance
+I've encountered it. Mind you we don't have the reset lines hooked up
+at all for the Rockchip i2c driver, so it's possible that's the case,
+but I'd imagine it would be observed more broadly if that was the
+case. I've tried pushing the timings out pretty far as well as bumping
+up the drive strength to no change. It seems to occur only with the
+hym rtc used on this board. I suspect it's a new variant of the hym
+that has slightly different behavior.
 
 >
->>
->> --
->> Luiz Augusto von Dentz
+> Robin.
 >
->
-> Regards,
-> Manish.
-
-
-
--- 
-Luiz Augusto von Dentz
+> > Signed-off-by: Peter Geis <pgwipeout@gmail.com>
+> > Signed-off-by: Frank Wunderlich <frank-w@public-files.de>
+> > ---
+> >   drivers/rtc/rtc-hym8563.c | 11 +++++++++--
+> >   1 file changed, 9 insertions(+), 2 deletions(-)
+> >
+> > diff --git a/drivers/rtc/rtc-hym8563.c b/drivers/rtc/rtc-hym8563.c
+> > index 90e602e99d03..9adcedaa4613 100644
+> > --- a/drivers/rtc/rtc-hym8563.c
+> > +++ b/drivers/rtc/rtc-hym8563.c
+> > @@ -13,6 +13,7 @@
+> >   #include <linux/clk-provider.h>
+> >   #include <linux/i2c.h>
+> >   #include <linux/bcd.h>
+> > +#include <linux/delay.h>
+> >   #include <linux/rtc.h>
+> >
+> >   #define HYM8563_CTL1                0x00
+> > @@ -438,10 +439,16 @@ static irqreturn_t hym8563_irq(int irq, void *dev_id)
+> >
+> >   static int hym8563_init_device(struct i2c_client *client)
+> >   {
+> > -     int ret;
+> > +     int ret, i;
+> >
+> >       /* Clear stop flag if present */
+> > -     ret = i2c_smbus_write_byte_data(client, HYM8563_CTL1, 0);
+> > +     for (i = 0; i < 3; i++) {
+> > +             ret = i2c_smbus_write_byte_data(client, HYM8563_CTL1, 0);
+> > +             if (ret == 0)
+> > +                     break;
+> > +             msleep(20);
+> > +     }
+> > +
+> >       if (ret < 0)
+> >               return ret;
+> >

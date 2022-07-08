@@ -2,74 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E986056BD8E
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 18:08:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C23BD56BD58
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 18:08:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238789AbiGHPVO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Jul 2022 11:21:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40198 "EHLO
+        id S238824AbiGHPVR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Jul 2022 11:21:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40216 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232168AbiGHPVL (ORCPT
+        with ESMTP id S238808AbiGHPVM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Jul 2022 11:21:11 -0400
-Received: from smtpbg.qq.com (unknown [43.155.67.158])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4AB171ADA3;
-        Fri,  8 Jul 2022 08:21:06 -0700 (PDT)
-X-QQ-mid: bizesmtp66t1657293648t1bpiyjn
-Received: from localhost.localdomain ( [182.148.15.249])
-        by bizesmtp.qq.com (ESMTP) with 
-        id ; Fri, 08 Jul 2022 23:20:45 +0800 (CST)
-X-QQ-SSF: 01000000002000B0C000B00A0000000
-X-QQ-FEAT: +HVWQWZs/U14RI5AL/nek+wt3LHA5NtsHl0z4aqL3kVFCSyAaqy6yApCJxRva
-        I+J0tKxTeI9OsvVyhUgFC4Z402Vc0tDrlueo3Jy74Rb483/Ru3l+9/4CtghJMjD2+OQLswQ
-        qEMl75w3ByWf9Z51bO7ovU/51bsV9nRlOmm/dO9ABCtaklV4NjWX12qB8l3iD8B/PaFJngN
-        2GbIIpPHbMC9+5+NU09nfVjDHXmxJ2sTcsu1HxKBFtQsDiFprl4P2MxusouobMiZi1ykIDV
-        hvRKVnbMzVhgNVOzne059X/MveqLFOTadVXZO5EjogN8G9v9Z69Y1sNUCqBg65Z/qDkZznm
-        HfgxQ2wsm+uGTrmAPBXiOdE0BvIfW3P1PYSybg3oqfPEz1Kjis=
-X-QQ-GoodBg: 0
-From:   Jilin Yuan <yuanjilin@cdjrlc.com>
-To:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com
-Cc:     elder@kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Jilin Yuan <yuanjilin@cdjrlc.com>
-Subject: [PATCH] net/ipa: fix repeated words in comments
-Date:   Fri,  8 Jul 2022 23:20:38 +0800
-Message-Id: <20220708152038.55840-1-yuanjilin@cdjrlc.com>
-X-Mailer: git-send-email 2.36.1
+        Fri, 8 Jul 2022 11:21:12 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD37D1ADA3;
+        Fri,  8 Jul 2022 08:21:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=2qYi6QRAXIoC5/GJOd8/GV/65rQmXuZYuqFcmMvOenA=; b=tDqThvukfm6Rl5xaMglGGZGrf1
+        MiBVvWRZyhOOG1UkM2V3/fcFJhNBTIj9vf2VxfKOonHWkgcvn2236UOsja3d9CFiR+8Ab7bvTFJMi
+        D4ndHEUZJMfJVdOIkVZpC38Yi+5VL9t0m9NdBkV8ToKZywmYeV56R2dW7tp4cJAawwEzw5zI8dG6e
+        /8+oD7Pb4b3LCi0LZn+7YJgF8Cph+r1gWE7lq6EHH/MP5YAMMfoas6FGGrd/TuZdtFAp/Vzmc8TKn
+        rTwQa77sxBCuee+HfbI1mk5Rv+tYb92XbSpI4lSkiDY5hOfSRfEPTXyC4+9Hb0XI1TqMK7YMy5sAa
+        oMKIcETQ==;
+Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1o9pmy-003b17-Ag; Fri, 08 Jul 2022 15:21:04 +0000
+Date:   Fri, 8 Jul 2022 16:21:04 +0100
+From:   Matthew Wilcox <willy@infradead.org>
+To:     Ira Weiny <ira.weiny@intel.com>
+Cc:     Dan Williams <dan.j.williams@intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Alison Schofield <alison.schofield@intel.com>,
+        Vishal Verma <vishal.l.verma@intel.com>,
+        linux-kernel@vger.kernel.org, linux-cxl@vger.kernel.org,
+        linux-pci@vger.kernel.org, linux-fsdevel@vger.kernel.org
+Subject: Re: [RFC PATCH 1/3] xarray: Introduce devm_xa_init()
+Message-ID: <YshLYPTxyOosmSKt@casper.infradead.org>
+References: <20220705232159.2218958-1-ira.weiny@intel.com>
+ <20220705232159.2218958-2-ira.weiny@intel.com>
+ <YshE/pwSUBPAeybU@casper.infradead.org>
+ <YshGSgHiAiu9QwiZ@iweiny-desk3>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtp:cdjrlc.com:qybglogicsvr:qybglogicsvr4
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,RDNS_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,T_SPF_HELO_TEMPERROR autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YshGSgHiAiu9QwiZ@iweiny-desk3>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
- Delete the redundant word 'the'.
+On Fri, Jul 08, 2022 at 07:59:22AM -0700, Ira Weiny wrote:
+> On Fri, Jul 08, 2022 at 03:53:50PM +0100, Matthew Wilcox wrote:
+> > On Tue, Jul 05, 2022 at 04:21:57PM -0700, ira.weiny@intel.com wrote:
+> > > The main issue I see with this is defining devm_xa_init() in device.h.
+> > > This makes sense because a device is required to use the call.  However,
+> > > I'm worried about if users will find the call there vs including it in
+> > > xarray.h?
+> > 
+> > Honestly, I don't want users to find it.  This only makes sense if you're
+> > already bought in to the devm cult.  I worry people will think that
+> > they don't need to do anything else; that everything will be magically
+> > freed for them, and we'll leak the objects pointed to from the xarray.
+> > I don't even like having xa_destroy() in the API, because of exactly this.
+> > 
+> 
+> Fair enough.  Are you ok with the concept though?
 
-Signed-off-by: Jilin Yuan <yuanjilin@cdjrlc.com>
----
- drivers/net/ipa/gsi_private.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/net/ipa/gsi_private.h b/drivers/net/ipa/gsi_private.h
-index ea333a244cf5..d7065e23c92e 100644
---- a/drivers/net/ipa/gsi_private.h
-+++ b/drivers/net/ipa/gsi_private.h
-@@ -108,7 +108,7 @@ void *gsi_ring_virt(struct gsi_ring *ring, u32 index);
-  * gsi_channel_tx_queued() - Report the number of bytes queued to hardware
-  * @channel:	Channel whose bytes have been queued
-  *
-- * This arranges for the the number of transactions and bytes for
-+ * This arranges for the number of transactions and bytes for
-  * transfer that have been queued to hardware to be reported.  It
-  * passes this information up the network stack so it can be used to
-  * throttle transmissions.
--- 
-2.36.1
-
-
+I'd rather have it in one place than open-coded in two.

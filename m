@@ -2,100 +2,159 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F264456B89F
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 13:35:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F301256B895
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 13:35:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237981AbiGHLdo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Jul 2022 07:33:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59886 "EHLO
+        id S238023AbiGHLdx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Jul 2022 07:33:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60244 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237568AbiGHLdl (ORCPT
+        with ESMTP id S237832AbiGHLdt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Jul 2022 07:33:41 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60FBD13E83;
-        Fri,  8 Jul 2022 04:33:39 -0700 (PDT)
-Received: from pps.filterd (m0098404.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 268AhpgP003069;
-        Fri, 8 Jul 2022 11:33:37 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=7xrOGjIsWAEbDM49IOKliT1dOZH/keObOYt2wLlK0qA=;
- b=lgIy1DXzsv9XlaV49r6vIDkrbcCTa8rwbkcshFDm/DFh9dmsEtSfOrfwX/mw5MeComim
- JMnrHubTwR5O3oCddXwwV6XkCOoEit3JbXvlRhVP9b+oIQGbsLflNV1QfsqEHtJTYMLn
- rZi6wQMefNafk8EnDnWajx4Ie3fLayCPBvUO6umQnij6bKRpRbwGpnfJqXDlbM4+sBkF
- MdjVYQbdFZUliusvtXLQKYxSfHH1XNwidUdDjdcEbVGSi9oFAIykadmdoqfgtsbPGsn8
- p0xKpxzMqOpmDB1GEjxM6ezwt2h6b+9+tVWjE3gnG4uAoZIy+3bRD3xXGRduJ4A3gobX pw== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3h6k36h357-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 08 Jul 2022 11:33:36 +0000
-Received: from m0098404.ppops.net (m0098404.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 268AkiXe018085;
-        Fri, 8 Jul 2022 11:33:36 GMT
-Received: from ppma05fra.de.ibm.com (6c.4a.5195.ip4.static.sl-reverse.com [149.81.74.108])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3h6k36h34e-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 08 Jul 2022 11:33:36 +0000
-Received: from pps.filterd (ppma05fra.de.ibm.com [127.0.0.1])
-        by ppma05fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 268BL1cW024404;
-        Fri, 8 Jul 2022 11:33:33 GMT
-Received: from b06avi18878370.portsmouth.uk.ibm.com (b06avi18878370.portsmouth.uk.ibm.com [9.149.26.194])
-        by ppma05fra.de.ibm.com with ESMTP id 3h4uk9aw5q-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 08 Jul 2022 11:33:33 +0000
-Received: from d06av22.portsmouth.uk.ibm.com (d06av22.portsmouth.uk.ibm.com [9.149.105.58])
-        by b06avi18878370.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 268BXdUk28377420
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 8 Jul 2022 11:33:39 GMT
-Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 063694C04A;
-        Fri,  8 Jul 2022 11:33:30 +0000 (GMT)
-Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id F0CDB4C040;
-        Fri,  8 Jul 2022 11:33:28 +0000 (GMT)
-Received: from [9.171.9.15] (unknown [9.171.9.15])
-        by d06av22.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Fri,  8 Jul 2022 11:33:28 +0000 (GMT)
-Message-ID: <aa48903f-1354-6cca-4a52-86c073d3071d@linux.ibm.com>
-Date:   Fri, 8 Jul 2022 13:33:28 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH v9 00/21] KVM: s390: enable zPCI for interpretive
- execution
+        Fri, 8 Jul 2022 07:33:49 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E240424F04
+        for <linux-kernel@vger.kernel.org>; Fri,  8 Jul 2022 04:33:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1657280027; x=1688816027;
+  h=message-id:date:subject:to:cc:references:from:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=xDT0r+0/pa+5D8aRtJ+tx4UJ47KzykzdL7qcJ/Fqd98=;
+  b=gmtZjIAs0wAbghoWWhDZr+8o2UDWytxRyPXEBJSsFxHU1II8ga6Jrusc
+   eEn/Of+/HdthC3t0TfqIP2CB44z+9Amx9udasst9rqAetL2GEXxdi3jlH
+   0R6VKFZVViA+DToRm0YfonjtL1NZKnfmS2p4IqA0vCFVUMxlbouRNUJm3
+   uAmgcbMeHGPCVbZldKEZQK63dox9Q1bdenHFaJwqAN4PILiIDgjR+sWwx
+   fkhOulWbU16aM48q5GIeTN6lQAng52tLLyoeXL/wpSnYp9qdYRz/UX9ux
+   Rt+pkqKeRLOtv7ZrG72PTd6oC8EEnIGrditG11rfKgoNqUaOhcZLIXhPZ
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10401"; a="285002439"
+X-IronPort-AV: E=Sophos;i="5.92,255,1650956400"; 
+   d="scan'208";a="285002439"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jul 2022 04:33:47 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.92,255,1650956400"; 
+   d="scan'208";a="920967560"
+Received: from orsmsx602.amr.corp.intel.com ([10.22.229.15])
+  by fmsmga005.fm.intel.com with ESMTP; 08 Jul 2022 04:33:46 -0700
+Received: from orsmsx611.amr.corp.intel.com (10.22.229.24) by
+ ORSMSX602.amr.corp.intel.com (10.22.229.15) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.27; Fri, 8 Jul 2022 04:33:46 -0700
+Received: from ORSEDG601.ED.cps.intel.com (10.7.248.6) by
+ orsmsx611.amr.corp.intel.com (10.22.229.24) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.27 via Frontend Transport; Fri, 8 Jul 2022 04:33:46 -0700
+Received: from NAM11-CO1-obe.outbound.protection.outlook.com (104.47.56.173)
+ by edgegateway.intel.com (134.134.137.102) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2308.27; Fri, 8 Jul 2022 04:33:46 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Ce1u+kdA2weMk1XGyJUHqIC629wzKhVRqKJfx1aejcJAGN/cbUIOQFySuAiSFLc/YACd4sTdT0b75uT09WSfqe+N14lU+9WrPWm3fVoxbVGsf4w+F4NUFf0KTz8SLVjbypMv8Tzl69NyXkfblnTCDG2pwiRhE0Y0il8BelI0s6hhJzI2FnE8oZQ0NYyq8KwO41ct7w4SncLg9MaC9UGxC5HwN5+Vxh2YrfhoWM8n0jVqqD5/OYcQOg2u+Z9H9qxXmGVIHuYoNU0l/iE8UWxZ3V9sNb5L3pYhtMD6mmb2/H6R80pb2/htdMrXy2sTNUxWhnzCmMX6RK32N+AktUerpQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=ethphZFGgMixvYNEuEJXD+p2Td/av/ItTNDhGzzoaCs=;
+ b=QooIJuteHP8LgentLguH6kJ8NjkSnENM+rZUAmCy8J7Ty2R2WYnd/zviFfsFrdPQvYg47j/w+Fxa2OSXsEqUSlx51XfDD2XRDAmlzkm6wVLHuqwjNGUl5OGfKtkr1L4cBfXM5RLD3FXDzC0t0FZpQKfWY9ywaB4y2pbKKoIl2F4QDyfESn4usUlhVdc20/TWBAHgJHiQqGkDl/BasSNlnJbdyS9XFCvmF7rJGHfDW+GsKNp/1q+zqWC3r2OzZHP7krvefk4eNRwSz/UHPrg96TfaOL4vrIvb7Hh9nwK6ROZj6gThfoNMrrwsbPeaTJcInlDhAPvm7nr/OudIHHDYLA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from DS0PR11MB6375.namprd11.prod.outlook.com (2603:10b6:8:c9::21) by
+ BN6PR11MB3923.namprd11.prod.outlook.com (2603:10b6:405:78::34) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.5395.20; Fri, 8 Jul 2022 11:33:44 +0000
+Received: from DS0PR11MB6375.namprd11.prod.outlook.com
+ ([fe80::8b5:ae20:1c12:421b]) by DS0PR11MB6375.namprd11.prod.outlook.com
+ ([fe80::8b5:ae20:1c12:421b%7]) with mapi id 15.20.5417.020; Fri, 8 Jul 2022
+ 11:33:44 +0000
+Message-ID: <f05a9b04-b635-df6f-1c94-b44371d24041@intel.com>
+Date:   Fri, 8 Jul 2022 13:33:37 +0200
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Firefox/91.0 Thunderbird/91.10.0
+Subject: Re: [PATCH 1/2] lib/string_helpers: Introduce strsplit_u32()
 Content-Language: en-US
-To:     Matthew Rosato <mjrosato@linux.ibm.com>,
-        linux-s390@vger.kernel.org, alex.williamson@redhat.com,
-        pbonzini@redhat.com, hca@linux.ibm.com, gor@linux.ibm.com
-Cc:     cohuck@redhat.com, schnelle@linux.ibm.com, farman@linux.ibm.com,
-        pmorel@linux.ibm.com, gerald.schaefer@linux.ibm.com,
-        agordeev@linux.ibm.com, svens@linux.ibm.com, frankja@linux.ibm.com,
-        david@redhat.com, imbrenda@linux.ibm.com, vneethv@linux.ibm.com,
-        oberpar@linux.ibm.com, freude@linux.ibm.com, thuth@redhat.com,
-        pasic@linux.ibm.com, corbet@lwn.net, jgg@nvidia.com,
-        kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org
-References: <20220606203325.110625-1-mjrosato@linux.ibm.com>
-From:   Christian Borntraeger <borntraeger@linux.ibm.com>
-In-Reply-To: <20220606203325.110625-1-mjrosato@linux.ibm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: Z-nYG6kolGfyHIgz53xS4AXPTi2GZbpd
-X-Proofpoint-ORIG-GUID: CrcPjwB1UDjtQA3cAPI_RM46Rsj7S50E
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
- definitions=2022-07-08_08,2022-07-08_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- bulkscore=0 phishscore=0 mlxlogscore=999 spamscore=0 suspectscore=0
- malwarescore=0 mlxscore=0 adultscore=0 lowpriorityscore=0 impostorscore=0
- clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2206140000 definitions=main-2207080042
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+To:     =?UTF-8?Q?P=c3=a9ter_Ujfalusi?= <peter.ujfalusi@linux.intel.com>,
+        <andy@kernel.org>, <broonie@kernel.org>
+CC:     <alsa-devel@alsa-project.org>, <tiwai@suse.com>, <perex@perex.cz>,
+        <amadeuszx.slawinski@linux.intel.com>,
+        <pierre-louis.bossart@linux.intel.com>, <hdegoede@redhat.com>,
+        <ranjani.sridharan@linux.intel.com>,
+        <linux-kernel@vger.kernel.org>, <lgirdwood@gmail.com>,
+        <kai.vehmanen@linux.intel.com>, <yung-chuan.liao@linux.intel.com>
+References: <20220707091301.1282291-1-cezary.rojewski@intel.com>
+ <aecaf6aa-12b0-05bb-8ad4-8d09ca4eff10@linux.intel.com>
+From:   Cezary Rojewski <cezary.rojewski@intel.com>
+In-Reply-To: <aecaf6aa-12b0-05bb-8ad4-8d09ca4eff10@linux.intel.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: AM5PR1001CA0027.EURPRD10.PROD.OUTLOOK.COM
+ (2603:10a6:206:2::40) To DS0PR11MB6375.namprd11.prod.outlook.com
+ (2603:10b6:8:c9::21)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 373391c2-b6fe-4b3c-abf3-08da60d5b733
+X-MS-TrafficTypeDiagnostic: BN6PR11MB3923:EE_
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: +oSKfRmPQCjs5i1aJAhglpksMp4E2VHDNxaVkMflHXksWC90JIiVzaOVTen1qJScLL+kb3lJP6Tacug/Xp7oenuVR4eDJVACAkH2WL43rVRPTekGv7Yo/ALQ8dVLosOhxBII00Jv97kv0cRfW0rfGXwtPRZCyTJ4pjekRJ0GFaqL37lWctoWhPCC1siN5AiZQGM1UNfnDAELDic6hhvqB6jaXI+Dg8yJ+hwhOV44zXSEBGyQKbfzuPfklpyoBI4IDNiF3QvX+/GbJCspE7gfE6mjABOzWe8nFfTEATLcwOT67gXd3gzo5p8VMJ/yPA4H0s4LJ1fQYxGNw1NysI3jNZNaZl4LAhuAfkpEScjCz4TaJwGKy6K3nyYLBqXDgdCXwP0Xga+5uddcz/BIc2RgX7WH8NAnHqF5SQdDDCYLCU/zOpT2Kov7Oo/jMkqYoURRXaVMQPPpzzoKv05yp/N3LDBanTlmxPST3zOlWaZYw4Fe+L+u8luwgeLyItmpuG1Jn9D5spEd3exVsMas36Vba1yyFtJS0t0v/noq4l0yc3aVKS5Fv102CwAVEHgbv4xu5aJy0R0yxH7EK7t3dhujEpuswOGyaUE9PbZddLuzBs/jBK1eSltEynGPfUqtmEpY+38RTWHTSL40r4xvXl6fcOBsRu2cMm1IM1PG3eB8DEiWEtKZZUJUGy3kC/bGr6sRiDZwLegnoO5rP1UJfVhOD3QxmzvCApX/ebmEZ+Y17fWhqeHeUaP8uIAEAcVZCZjcdWjv1NYAIELt8lAUxX98DG0lyiOHkz2xwCDMsL0uh12jZBSiP9cAwC8jwQtXIxNLeXXPSZt451EpNPIl7mtxt8ojvbFf+jeaUkQ8n5qpQpM=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DS0PR11MB6375.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(136003)(396003)(346002)(39860400002)(376002)(366004)(31686004)(4326008)(8676002)(66476007)(2616005)(66946007)(66556008)(6506007)(2906002)(36756003)(38100700002)(82960400001)(186003)(44832011)(7416002)(6512007)(478600001)(6666004)(26005)(6486002)(86362001)(31696002)(53546011)(5660300002)(316002)(4744005)(41300700001)(8936002)(43740500002)(45980500001);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?ZXBjTlBzMENyYmlkSDZBS2I0TWxadVh3bGtvTitOL2pVMUQwajNrWmJ0WE12?=
+ =?utf-8?B?T1g2NTE5TTJWaHlxUDk4Tm9JSk9nTjkyaGZqVGd0cTBhL1hUdWF5SHV0Wkd3?=
+ =?utf-8?B?TlRSNDFtMWh3NnN6S2tVdTNFQkF6elIyUGNjL1lad3BOZkt0ZCsrZWlFZDNW?=
+ =?utf-8?B?NDlBVWZ1YXZZcHd3ZGF5VkFMR2g4dGNaK3hUNThvRTkyeVg1Vkc4dUYraGl2?=
+ =?utf-8?B?OVRTL09GMFNrd09ZY2xLbmJOYVVXdjcyMlE4MDNhZUMzdlUvaUtScjdWNjEr?=
+ =?utf-8?B?c0VUTkU0dWJHMkZRZUR5Y3p4dThlS3BQWFBtNExKQ1BteVRkOVU4Vnh4WUNa?=
+ =?utf-8?B?VjN3VElaYkhIbGs4U1RWWjVtaUxMc3EzNmhKSWRHV0FpUVVCNTRDU3lFU1JU?=
+ =?utf-8?B?Q0pmelBVNjI4ZldnZGF0enEyUHdNQ0RLSzkyTTNPZnRpWDNtblU0M2lUeWdP?=
+ =?utf-8?B?MHEvVWgyY1RHK3kzUUZFaHBQVWFzSHFiK2dZMEhlYzFwZS81MzdTZU9vUUN4?=
+ =?utf-8?B?WUYyZktLa2xzSSs2WSs5cmJOUEhxdmsvUko5QmpJK0NmTll6Y2RtR09KemdI?=
+ =?utf-8?B?NTh3OGcvaEJhbzNkYTJBR2ZRM0JJSU5mRDU1MDdFT2VFQTdudzI0SGZwSVpa?=
+ =?utf-8?B?V0lnZk1zQUFxc2VmZFRUNm1WYlpHK000VjNzTi94NlRMRndYS3ZzOXE5Y2pW?=
+ =?utf-8?B?V21OS2NMaVFLTzdpVjNpcGE2ZWQ1RURBK2MzdUhFN0Q1UTY3NE9pNm5yWWhw?=
+ =?utf-8?B?N1l4TFJyUjRUZmdTZU5uUDFxbVh6MllScXcyYTVYSWNneUp3Y1Rha3o0NmRD?=
+ =?utf-8?B?N1N6SzZMa2pUTkVETjA0MW5sNWhiejhaY2pQbFZFTHNzSENMcmJ6TDdLZlk1?=
+ =?utf-8?B?YlJNRlQ5Y0R2MGh2dkhEMi82ZFlVTEJlU3JRbnFoazcvdkpTcVQyTWVEMGdm?=
+ =?utf-8?B?SzdVV2gyZ3YwUjF0bzFpa1Uzc3Y2YjlvZmxEaXBERyt5aUtTaXVtNnl0WUk2?=
+ =?utf-8?B?RVRNYUowV0drcnl1enphYkZPMGMrSmQ1aFduejU3SDltTHlrbkEwYkxDUGhK?=
+ =?utf-8?B?OTkySnQyV2RrUThiNUZkM2c4ZXkzclhQaUVsbHErYlhyTkpLRWlwb3d3aFdk?=
+ =?utf-8?B?VTl4MTd3TGhOZE9ZWTNJUUdmZFQyeUVlRG92U3NqSEMySG1GMXVvVG9neHZn?=
+ =?utf-8?B?VTlwYWFlV3llRnNmQXVEbnEzOGxNdFFKQS9Yc3V5dXdaZDZ1MHhpS0dzQ3JM?=
+ =?utf-8?B?OFlPcGxPSVAvajFTYVh1NkYxQXlWSzlvbkxDbVd6NDdkMVRpblk5SWpLUTA1?=
+ =?utf-8?B?aWxiYWE0dEw1TUNablRKYks3eEZvM2RtL3NJRUdoQk1JWmJoc1Y2U0oyWUVP?=
+ =?utf-8?B?ZTJFWFQ3eGVIR0NmZUd2QXM1UkVKUHovczFZTTl3R21qbEVFWXR0UVFpRlcr?=
+ =?utf-8?B?MTdRSTVlOVhERWNvMWNOc1Bmc3pYMXhNSGErYjB0bUhzcVJXWUFrYWkzWFNv?=
+ =?utf-8?B?MEM1Y0Z3NkQraHJzdm9vbXA5WEhkZnh0c1VqRUhPYXgxdmc2MVdkZHJudkh6?=
+ =?utf-8?B?WmxsSFNRK3hCaWpxd0prYWhGN2QrZkgwa0tkOW9aYWw0bVlrdWJoMGVRVnVQ?=
+ =?utf-8?B?OVlOU0VsdXd4MEM3VVZRRjY2WGJCbXRKQ053MWJLV1BtZ2hBaENZVzh5NTVK?=
+ =?utf-8?B?b1dwd2FmTkZPb0tIY1ZNWlB4bUZCNmxlQVNXS1Z0VjNZS1NzNllPcDVFTUdC?=
+ =?utf-8?B?ajVXQTVoeURKaE96ZythUVBYbHcwZU5BQ25Xb2J0dkk5VVJHS3laeVFHdVBS?=
+ =?utf-8?B?RVZuVFo5eEZSS2lOcHQ1T0E1TWZ6bHJjNlBoQzhwSnNrOUhFY0tidkd4ZzYv?=
+ =?utf-8?B?NXQwVWtOUWRsSlZRcktOSEZVM3lJTmwrQ0ZZcEh3WHFjQ3Q2aERBeWRJUUtq?=
+ =?utf-8?B?cVBaN3R1UzN6dTVmWE1SMHJvNFRqczJvOGdzYkFIUXVraTdlYlE4Uzc0b0RF?=
+ =?utf-8?B?dU00V3hJSW0yek14YmRiMlg4M2p5eVRyaXJrdlFjWVlTRjRHU0J0OEpPNCtO?=
+ =?utf-8?B?N2NsN0dCWE1LdHJyMzBVWTVYcGlheW8rVzdkQlQ1QlJHRExvRFFSVVA3ZEZp?=
+ =?utf-8?B?anR5M3JUS1VMbXNEK0pzSDczOEN3b2wzVzNFTEFsWGxLRGRKY0RhaDVaQkx3?=
+ =?utf-8?B?d0E9PQ==?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: 373391c2-b6fe-4b3c-abf3-08da60d5b733
+X-MS-Exchange-CrossTenant-AuthSource: DS0PR11MB6375.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 08 Jul 2022 11:33:44.5357
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: KtDBJTTKr+z5UYs0wL0iCUfqSywFY7iPNjUtpT9GkmUyrVyhkai70XMABLGBvcoUGl5J+prsHT1ZDxB39s2cWMS5rpbogGZpOKu+p8einOc=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN6PR11MB3923
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -103,110 +162,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 2022-07-07 3:51 PM, Péter Ujfalusi wrote:
+> On 07/07/2022 12:13, Cezary Rojewski wrote:
 
-Am 06.06.22 um 22:33 schrieb Matthew Rosato:
-> Enable interpretive execution of zPCI instructions + adapter interruption
-> forwarding for s390x KVM vfio-pci.  This is done by triggering a routine
-> when the VFIO group is associated with the KVM guest, transmitting to
-> firmware a special token (GISA designation) to enable that specific guest
-> for interpretive execution on that zPCI device.  Load/store interpreation
-> enablement is then controlled by userspace (based upon whether or not a
-> SHM bit is placed in the virtual function handle).  Adapter Event
-> Notification interpretation is controlled from userspace via a new KVM
-> ioctl.
+...
+
+>> +int strsplit_u32(const char *str, const char *delim, u32 **tkns, size_t *num_tkns)
+>> +{
+>> +	size_t max_count = 32;
+>> +	size_t count = 0;
+>> +	char *s, **p;
+>> +	u32 *buf, *tmp;
+>> +	int ret = 0;
+>> +
+>> +	p = (char **)&str;
+>> +	*tkns = NULL;
+>> +	*num_tkns = 0;
+>> +
+>> +	buf = kcalloc(max_count, sizeof(*buf), GFP_KERNEL);
+>> +	if (!buf)
+>> +		return -ENOMEM;
+>> +
+>> +	while ((s = strsep(p, delim)) != NULL) {
+>> +		ret = kstrtouint(s, 0, buf + count);
+>> +		if (ret)
+>> +			goto free_buf;
+>> +
+>> +		if (++count > max_count) {
 > 
-> By allowing intepretation of zPCI instructions and firmware delivery of
-> interrupts to guests, we can reduce the frequency of guest SIE exits for
-> zPCI.
+> I think this should be as it was originally:
+> if (++count >= max_count) {
 > 
->  From the perspective of guest configuration, you passthrough zPCI devices
-> in the same manner as before, with intepretation support being used by
-> default if available in kernel+qemu.
-> 
-> Will follow up with a link the most recent QEMU series.
-> 
-> Changelog v8->v9:
-> - Rebase on top of 5.19-rc1, adjust ioctl and capability defines
-> - s/kzdev = 0/kzdev = NULL/ (Alex)
-> - rename vfio_pci_zdev_open to vfio_pci_zdev_open_device (Jason)
-> - rename vfio_pci_zdev_release to vfio_pci_zdev_close_device (Jason)
-> - make vfio_pci_zdev_close_device return void, instead WARN_ON or ignore
->    errors in lower level function (kvm_s390_pci_unregister_kvm) (Jason)
-> - remove notifier accidentally left in struct zpci_dev + associated
->    include statment (Jason)
-> - Remove patch 'KVM: s390: introduce CPU feature for zPCI Interpretation'
->    based on discussion in QEMU thread.
-> 
-> Matthew Rosato (21):
->    s390/sclp: detect the zPCI load/store interpretation facility
->    s390/sclp: detect the AISII facility
->    s390/sclp: detect the AENI facility
->    s390/sclp: detect the AISI facility
->    s390/airq: pass more TPI info to airq handlers
->    s390/airq: allow for airq structure that uses an input vector
->    s390/pci: externalize the SIC operation controls and routine
->    s390/pci: stash associated GISA designation
->    s390/pci: stash dtsm and maxstbl
->    vfio/pci: introduce CONFIG_VFIO_PCI_ZDEV_KVM
->    KVM: s390: pci: add basic kvm_zdev structure
->    KVM: s390: pci: do initial setup for AEN interpretation
->    KVM: s390: pci: enable host forwarding of Adapter Event Notifications
->    KVM: s390: mechanism to enable guest zPCI Interpretation
->    KVM: s390: pci: provide routines for enabling/disabling interrupt
->      forwarding
->    KVM: s390: pci: add routines to start/stop interpretive execution
->    vfio-pci/zdev: add open/close device hooks
->    vfio-pci/zdev: add function handle to clp base capability
->    vfio-pci/zdev: different maxstbl for interpreted devices
->    KVM: s390: add KVM_S390_ZPCI_OP to manage guest zPCI devices
->    MAINTAINERS: additional files related kvm s390 pci passthrough
-> 
->   Documentation/virt/kvm/api.rst   |  47 +++
->   MAINTAINERS                      |   1 +
->   arch/s390/include/asm/airq.h     |   7 +-
->   arch/s390/include/asm/kvm_host.h |  23 ++
->   arch/s390/include/asm/pci.h      |  11 +
->   arch/s390/include/asm/pci_clp.h  |   9 +-
->   arch/s390/include/asm/pci_insn.h |  29 +-
->   arch/s390/include/asm/sclp.h     |   4 +
->   arch/s390/include/asm/tpi.h      |  13 +
->   arch/s390/kvm/Makefile           |   1 +
->   arch/s390/kvm/interrupt.c        |  96 ++++-
->   arch/s390/kvm/kvm-s390.c         |  83 +++-
->   arch/s390/kvm/kvm-s390.h         |  10 +
->   arch/s390/kvm/pci.c              | 690 +++++++++++++++++++++++++++++++
->   arch/s390/kvm/pci.h              |  88 ++++
->   arch/s390/pci/pci.c              |  16 +
->   arch/s390/pci/pci_clp.c          |   7 +
->   arch/s390/pci/pci_insn.c         |   4 +-
->   arch/s390/pci/pci_irq.c          |  48 ++-
->   drivers/s390/char/sclp_early.c   |   4 +
->   drivers/s390/cio/airq.c          |  12 +-
->   drivers/s390/cio/qdio_thinint.c  |   6 +-
->   drivers/s390/crypto/ap_bus.c     |   9 +-
->   drivers/s390/virtio/virtio_ccw.c |   6 +-
->   drivers/vfio/pci/Kconfig         |  11 +
->   drivers/vfio/pci/Makefile        |   2 +-
->   drivers/vfio/pci/vfio_pci_core.c |  10 +-
->   drivers/vfio/pci/vfio_pci_zdev.c |  35 +-
->   include/linux/sched/user.h       |   3 +-
->   include/linux/vfio_pci_core.h    |  12 +-
->   include/uapi/linux/kvm.h         |  31 ++
->   include/uapi/linux/vfio_zdev.h   |   7 +
->   32 files changed, 1279 insertions(+), 56 deletions(-)
->   create mode 100644 arch/s390/kvm/pci.c
->   create mode 100644 arch/s390/kvm/pci.h
+> Otherwise when we reach the max_count we would not realloc to get more
+> space and the data + max_count is pointing outside of the allocated area.
 
-So I pulled this into a topic branch and will merge that into kvms390/next. We can
-merge this topic  branch into vfio-next and/or s390-next when the conflicts get
-to complicated.
+I believe you're right. Will change in v2.
 
-While pulling I fixed up the numbers for the capability to
 
-#define KVM_CAP_S390_ZPCI_OP 221
-
-and the doc number to
-
-4.137 KVM_S390_ZPCI_OP
-
-to minize struggle when doing backports.
+Regards,
+Czarek

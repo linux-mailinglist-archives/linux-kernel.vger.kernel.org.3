@@ -2,92 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AED4556BC46
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 17:09:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 489B456BCB4
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 17:09:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238172AbiGHOtr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Jul 2022 10:49:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43840 "EHLO
+        id S238689AbiGHOuV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Jul 2022 10:50:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43902 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238766AbiGHOt3 (ORCPT
+        with ESMTP id S238766AbiGHOuC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Jul 2022 10:49:29 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D14421276E;
-        Fri,  8 Jul 2022 07:48:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1657291738; x=1688827738;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=A2lLFi5u8UsxZhn0WXa3lBiGFwloEe9xAauBS7sD2kM=;
-  b=EXwCZvvlIFiuVi6tYqmwv511lrd2lmdXnjfim1z22W+bpmpoRgegAJkj
-   9v7OQOHoqxIiU4Hny6tZXaoYl0ppIy6P0V/cE7bdIPxxmKagnFxmR+7s5
-   FvvXxTT26kPcSvElzWGTnIOGfoAynz5PzqlBY0WrafKb4OGjzU7kJFmk1
-   ORjm8dbZQHo/eFhXenJAfcbn8QYmaJtcOiLIuENldiGHUbCykCJss+2Ma
-   3WRoUXY6Nj7APLxvfPagj6SOnjIQJH39DLdjGQvdYfkte2Rs4QoIxPNFw
-   /KENn+gmgij7sEJaS9eJkrP8eZZxuvm14N+nw8Z2H6tmm9CMBBA8w2PAt
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10401"; a="370608681"
-X-IronPort-AV: E=Sophos;i="5.92,255,1650956400"; 
-   d="scan'208";a="370608681"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jul 2022 07:48:58 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,255,1650956400"; 
-   d="scan'208";a="683680886"
-Received: from lkp-server01.sh.intel.com (HELO 68b931ab7ac1) ([10.239.97.150])
-  by FMSMGA003.fm.intel.com with ESMTP; 08 Jul 2022 07:48:54 -0700
-Received: from kbuild by 68b931ab7ac1 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1o9pHq-000Nbs-4I;
-        Fri, 08 Jul 2022 14:48:54 +0000
-Date:   Fri, 8 Jul 2022 22:48:29 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Vikas Gupta <vikas.gupta@broadcom.com>, jiri@nvidia.com,
-        kuba@kernel.org
-Cc:     kbuild-all@lists.01.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, davem@davemloft.net,
-        dsahern@kernel.org, stephen@networkplumber.org,
-        edumazet@google.com, pabeni@redhat.com, ast@kernel.org,
-        leon@kernel.org, linux-doc@vger.kernel.org, corbet@lwn.net,
-        michael.chan@broadcom.com, andrew.gospodarek@broadcom.com,
-        Vikas Gupta <vikas.gupta@broadcom.com>
-Subject: Re: [PATCH net-next v2 1/3] devlink: introduce framework for
- selftests
-Message-ID: <202207082224.8QYTEsje-lkp@intel.com>
-References: <20220707182950.29348-2-vikas.gupta@broadcom.com>
+        Fri, 8 Jul 2022 10:50:02 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BEA3F3D;
+        Fri,  8 Jul 2022 07:49:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=QAciJFIg4zoCTHHi5juCYJWiFjMadA5FnHFcPU+cSGU=; b=vkiriIIdCQqnGp2fFPao0drgRk
+        +uBI7Ksn1Zl7LZxqeJb8Whhcxgt+Ehf2tn4kSsz7FJxOOohPE6FkPZg/kLKdtvBcnFvkxWCsgHZoY
+        tBMSbEHEoY3fjeguT4ervzbV6WJkPwm1d4SzR9Mf/jw+F7IcczTm3fBDTHZE3N1ykqCKLXwlRiesD
+        ULTCQB3v4lghZ5+lyP9Zx7qTPe8XqwJoU9shAq5Cb2WzyaXDRAjJ+95LpcuDSIRo9Y5FW5ikeWBG4
+        mwVK6Dsy2eO2WWG+YuYfoUds+Zt+Hv97W926YpwniFaWLBI+iB9YDWcck+aEmUrfDI4CLdoliHsy8
+        VztsQR8w==;
+Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1o9pIl-003Zr0-Gv; Fri, 08 Jul 2022 14:49:51 +0000
+Date:   Fri, 8 Jul 2022 15:49:51 +0100
+From:   Matthew Wilcox <willy@infradead.org>
+To:     Ira Weiny <ira.weiny@intel.com>
+Cc:     Bjorn Helgaas <helgaas@kernel.org>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Alison Schofield <alison.schofield@intel.com>,
+        Vishal Verma <vishal.l.verma@intel.com>,
+        linux-kernel@vger.kernel.org, linux-cxl@vger.kernel.org,
+        linux-pci@vger.kernel.org, linux-fsdevel@vger.kernel.org
+Subject: Re: [RFC PATCH 2/3] pci/doe: Use devm_xa_init()
+Message-ID: <YshED+nm7LdcmL75@casper.infradead.org>
+References: <20220705232159.2218958-3-ira.weiny@intel.com>
+ <20220707160646.GA306751@bhelgaas>
+ <YshC+Jaua01dPQak@iweiny-desk3>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220707182950.29348-2-vikas.gupta@broadcom.com>
-X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <YshC+Jaua01dPQak@iweiny-desk3>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Vikas,
+On Fri, Jul 08, 2022 at 07:45:12AM -0700, Ira Weiny wrote:
+> On Thu, Jul 07, 2022 at 11:06:46AM -0500, Bjorn Helgaas wrote:
+> > On Tue, Jul 05, 2022 at 04:21:58PM -0700, ira.weiny@intel.com wrote:
+> > > From: Ira Weiny <ira.weiny@intel.com>
+> > > 
+> > > The XArray being used to store the protocols does not even store
+> > > allocated objects.
+> > 
+> > I guess the point is that the doe_mb->prots XArray doesn't reference
+> > any other objects that would need to be freed when destroying
+> > doe_mb->prots?
+> 
+> Yes.
+> 
+> > A few more words here would make the commit log more
+> > useful to non-XArray experts.
+> 
+> I'll update this to be more clear in a V1 if it goes that far.  But to clarify
+> here; the protocol information is a u16 vendor id and u8 protocol number.  So
+> we are able to store that in the unsigned long value that would normally be a
+> pointer to something in the XArray.
 
-Thank you for the patch! Perhaps something to improve:
+Er.  Signed long.  I can't find drivers/pci/doe.c in linux-next, so
+I have no idea if you're doing something wrong.  But what you said here
+sounds wrong.
 
-[auto build test WARNING on net-next/master]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Vikas-Gupta/devlink-introduce-framework-for-selftests/20220708-033020
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/davem/net-next.git cf21b355ccb39b0de0b6a7362532bb5584c84a80
-reproduce: make htmldocs
-
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
-
-All warnings (new ones prefixed by >>):
-
->> Documentation/networking/devlink/devlink-selftests.rst: WARNING: document isn't included in any toctree
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp

@@ -2,71 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4561A56B1AD
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 06:42:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A4D2656B1C6
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 06:48:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237167AbiGHElR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Jul 2022 00:41:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42462 "EHLO
+        id S237308AbiGHEnR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Jul 2022 00:43:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43246 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236767AbiGHElP (ORCPT
+        with ESMTP id S237262AbiGHEmg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Jul 2022 00:41:15 -0400
-Received: from mail-qk1-x72e.google.com (mail-qk1-x72e.google.com [IPv6:2607:f8b0:4864:20::72e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B518C3123C
-        for <linux-kernel@vger.kernel.org>; Thu,  7 Jul 2022 21:41:14 -0700 (PDT)
-Received: by mail-qk1-x72e.google.com with SMTP id p11so14930567qkg.12
-        for <linux-kernel@vger.kernel.org>; Thu, 07 Jul 2022 21:41:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=IHH3SerUe7hKO3BcCPKIuExwbHnarbaRnq1Rsg7Fq/w=;
-        b=TP503sPZhE1MYj+YbYdKd4ZCL7uxCJlbRd24w4Gupkrbxt6jCTXK9pbWHfM3nSvxcY
-         1gPZxS423c5LPoPy+c99VIVAgppBRfPwLVj4V+09zJlL5ceS7y/J+pZIpEwVea5fYgit
-         VMe2me75H7Jk4DE2d/hEXoAiDqVt6RHvzGkEQ=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=IHH3SerUe7hKO3BcCPKIuExwbHnarbaRnq1Rsg7Fq/w=;
-        b=W36yPDkS4H7r6bMKh7CchdJlY8yqAhdqvXUYgTb6A5SFeFXKuYi3SMA3P5C2AAtM5t
-         Kctfz4YU2R2DrUEtlzV59Wf1f9GNcXnwIKePHjIInq+wj6AU/rduYrCnNe0OYCpWoALY
-         c/u60PJzVWkx6JBuAkvZ9VZiK9v3jFiCmFWRbJePFTM6iEShMjEYncmNtizZbIJXFX+s
-         l3Wxjbl65zBgcCRXNA6bSKAlX6pTQNH94tZ0FDDpRvu74F5yl+oklGrbC/8EUW7SkaKZ
-         pOvWmXDl5lrtxewoTDYrJk/ZCZSI4r6ykv9CKwe4qBEximIsRdo9U1/hbXE28s6SQisw
-         4btQ==
-X-Gm-Message-State: AJIora9JQTUTexDtqAuo0eE+/wnYoBVGNDqK3z0v485qIePwjfrTPj7y
-        BNnIeookEoXvZeP8qEJkw/SwRgxDl4hiW1eN
-X-Google-Smtp-Source: AGRyM1u84bAekyfnbtCL75kXbbCzn+TT7lszNbL/opLarBn0INT91QYWO99FfjQ2wJ0Bxfe5IKJUcA==
-X-Received: by 2002:a05:620a:400c:b0:6a6:f8e6:92cc with SMTP id h12-20020a05620a400c00b006a6f8e692ccmr1038424qko.561.1657255273607;
-        Thu, 07 Jul 2022 21:41:13 -0700 (PDT)
-Received: from mail-yb1-f178.google.com (mail-yb1-f178.google.com. [209.85.219.178])
-        by smtp.gmail.com with ESMTPSA id g11-20020ac8480b000000b003051ba1f8bcsm26883126qtq.15.2022.07.07.21.41.07
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 07 Jul 2022 21:41:09 -0700 (PDT)
-Received: by mail-yb1-f178.google.com with SMTP id g4so36018326ybg.9
-        for <linux-kernel@vger.kernel.org>; Thu, 07 Jul 2022 21:41:07 -0700 (PDT)
-X-Received: by 2002:a25:8286:0:b0:66e:9272:5944 with SMTP id
- r6-20020a258286000000b0066e92725944mr1513134ybk.261.1657255267111; Thu, 07
- Jul 2022 21:41:07 -0700 (PDT)
+        Fri, 8 Jul 2022 00:42:36 -0400
+Received: from mx0b-0016f401.pphosted.com (mx0b-0016f401.pphosted.com [67.231.156.173])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B82847392B;
+        Thu,  7 Jul 2022 21:42:32 -0700 (PDT)
+Received: from pps.filterd (m0045851.ppops.net [127.0.0.1])
+        by mx0b-0016f401.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 2684aaQf008602;
+        Thu, 7 Jul 2022 21:42:00 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=marvell.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-transfer-encoding :
+ content-type; s=pfpt0220; bh=JhC0H31gsS3HfHuHJqwbvFY/RpBEFbCPwhDHVzhcIMg=;
+ b=K/tUAtY5mYh9G3fukltUD2ubmgW/mBTxZxI0XT/w+XFVJS9WHz3W8lGZq8KheNB9j0PR
+ dNsEKC9rGcLjm96NXYFTfMj2sLcQV1Z6G8KCxzXkzENSPtughBUvwOekigaOHIPknQrT
+ mI1X50bM8C7bj497oOlm2n7D51Xo6pegK2KE9Wk+SuhBGX1H6uNPUlLnQuqWrubw7dtK
+ Ogp38F91gy7P3RYOk93lHkvTNISSvqxqt+aWvNkGUlNAjenxGgzAkVs4glQDb3Llv2ig
+ Lf0VgRTvRGvFsaPBmABoUil6It9QkHfAs+ObaouwH2lBsXPwAIX9WnFkuq6vSfJAKDa9 hg== 
+Received: from dc5-exch01.marvell.com ([199.233.59.181])
+        by mx0b-0016f401.pphosted.com (PPS) with ESMTPS id 3h635w2cw6-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT);
+        Thu, 07 Jul 2022 21:41:59 -0700
+Received: from DC5-EXCH02.marvell.com (10.69.176.39) by DC5-EXCH01.marvell.com
+ (10.69.176.38) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Thu, 7 Jul
+ 2022 21:41:57 -0700
+Received: from maili.marvell.com (10.69.176.80) by DC5-EXCH02.marvell.com
+ (10.69.176.39) with Microsoft SMTP Server id 15.0.1497.18 via Frontend
+ Transport; Thu, 7 Jul 2022 21:41:57 -0700
+Received: from IPBU-BLR-SERVER1.marvell.com (IPBU-BLR-SERVER1.marvell.com [10.28.8.41])
+        by maili.marvell.com (Postfix) with ESMTP id C42283F7074;
+        Thu,  7 Jul 2022 21:41:54 -0700 (PDT)
+From:   Ratheesh Kannoth <rkannoth@marvell.com>
+To:     <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+CC:     <sgoutham@marvell.com>, <davem@davemloft.net>,
+        <edumazet@google.com>, <kuba@kernel.org>, <pabeni@redhat.com>,
+        Ratheesh Kannoth <rkannoth@marvell.com>
+Subject: [net-next PATCH v5 00/12] octeontx2: Exact Match Table.
+Date:   Fri, 8 Jul 2022 10:11:39 +0530
+Message-ID: <20220708044151.2972645-1-rkannoth@marvell.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <20220706182657.210650-1-ezequiel@vanguardiasur.com.ar> <20220706182657.210650-7-ezequiel@vanguardiasur.com.ar>
-In-Reply-To: <20220706182657.210650-7-ezequiel@vanguardiasur.com.ar>
-From:   Tomasz Figa <tfiga@chromium.org>
-Date:   Fri, 8 Jul 2022 13:40:53 +0900
-X-Gmail-Original-Message-ID: <CAAFQd5BSDnZ6MyXfcRWNM9f9WF82sjPX3F1ZjYjcOuz3b1fPkw@mail.gmail.com>
-Message-ID: <CAAFQd5BSDnZ6MyXfcRWNM9f9WF82sjPX3F1ZjYjcOuz3b1fPkw@mail.gmail.com>
-Subject: Re: [PATCH 6/8] rkvdec: Use vb2_find_buffer
-To:     Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
-Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Marek Szyprowski <m.szyprowski@samsung.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Proofpoint-GUID: tRAxILPbsbBlbXXC-87oRRLP8-VqA_Qx
+X-Proofpoint-ORIG-GUID: tRAxILPbsbBlbXXC-87oRRLP8-VqA_Qx
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
+ definitions=2022-07-08_02,2022-06-28_01,2022-06-22_01
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,140 +66,156 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Ezequiel,
+Exact match table and Field hash support for CN10KB silicon
 
-On Thu, Jul 7, 2022 at 3:27 AM Ezequiel Garcia
-<ezequiel@vanguardiasur.com.ar> wrote:
->
-> Use the newly introduced vb2_find_buffer API to get a vb2_buffer
-> given a buffer timestamp.
->
-> Signed-off-by: Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
-> ---
->  drivers/staging/media/rkvdec/rkvdec-h264.c | 41 ++++++++--------------
->  drivers/staging/media/rkvdec/rkvdec-vp9.c  | 10 +++---
->  2 files changed, 19 insertions(+), 32 deletions(-)
->
-> diff --git a/drivers/staging/media/rkvdec/rkvdec-h264.c b/drivers/staging/media/rkvdec/rkvdec-h264.c
-> index 2992fb87cf72..4af5a831bde0 100644
-> --- a/drivers/staging/media/rkvdec/rkvdec-h264.c
-> +++ b/drivers/staging/media/rkvdec/rkvdec-h264.c
-> @@ -109,7 +109,7 @@ struct rkvdec_h264_run {
->         const struct v4l2_ctrl_h264_sps *sps;
->         const struct v4l2_ctrl_h264_pps *pps;
->         const struct v4l2_ctrl_h264_scaling_matrix *scaling_matrix;
-> -       int ref_buf_idx[V4L2_H264_NUM_DPB_ENTRIES];
-> +       struct vb2_buffer *ref_buf[V4L2_H264_NUM_DPB_ENTRIES];
+ChangeLog
+---------
+  1) V0 to V1
+     a) Removed change IDs from all patches.
 
-How do we guarantee that those pointers remain valid through the
-lifetime of this structure?
+  2) V1 to V2
+     a)Fixed all compile warnings and cleanly compiled all patches.
 
-Best regards,
-Tomasz
+  3) V2 to V3
+     a) Fixed patch series subject text.
 
->  };
->
->  struct rkvdec_h264_ctx {
-> @@ -742,17 +742,16 @@ static void lookup_ref_buf_idx(struct rkvdec_ctx *ctx,
->                 struct v4l2_m2m_ctx *m2m_ctx = ctx->fh.m2m_ctx;
->                 const struct v4l2_h264_dpb_entry *dpb = run->decode_params->dpb;
->                 struct vb2_queue *cap_q = &m2m_ctx->cap_q_ctx.q;
-> -               int buf_idx = -1;
-> +               struct vb2_buffer *buf = NULL;
->
->                 if (dpb[i].flags & V4L2_H264_DPB_ENTRY_FLAG_ACTIVE) {
-> -                       buf_idx = vb2_find_timestamp(cap_q,
-> -                                                    dpb[i].reference_ts, 0);
-> -                       if (buf_idx < 0)
-> +                       buf = vb2_find_buffer(cap_q, dpb[i].reference_ts);
-> +                       if (!buf)
->                                 pr_debug("No buffer for reference_ts %llu",
->                                          dpb[i].reference_ts);
->                 }
->
-> -               run->ref_buf_idx[i] = buf_idx;
-> +               run->ref_buf[i] = buf;
->         }
->  }
->
-> @@ -805,7 +804,7 @@ static void assemble_hw_rps(struct rkvdec_ctx *ctx,
->                         if (WARN_ON(ref->index >= ARRAY_SIZE(dec_params->dpb)))
->                                 continue;
->
-> -                       dpb_valid = run->ref_buf_idx[ref->index] >= 0;
-> +                       dpb_valid = run->ref_buf[ref->index] != NULL;
->                         bottom = ref->fields == V4L2_H264_BOTTOM_FIELD_REF;
->
->                         set_ps_field(hw_rps, DPB_INFO(i, j),
-> @@ -881,24 +880,6 @@ static const u32 poc_reg_tbl_bottom_field[16] = {
->         RKVDEC_REG_H264_POC_REFER2(1)
->  };
->
-> -static struct vb2_buffer *
-> -get_ref_buf(struct rkvdec_ctx *ctx, struct rkvdec_h264_run *run,
-> -           unsigned int dpb_idx)
-> -{
-> -       struct v4l2_m2m_ctx *m2m_ctx = ctx->fh.m2m_ctx;
-> -       struct vb2_queue *cap_q = &m2m_ctx->cap_q_ctx.q;
-> -       int buf_idx = run->ref_buf_idx[dpb_idx];
-> -
-> -       /*
-> -        * If a DPB entry is unused or invalid, address of current destination
-> -        * buffer is returned.
-> -        */
-> -       if (buf_idx < 0)
-> -               return &run->base.bufs.dst->vb2_buf;
-> -
-> -       return vb2_get_buffer(cap_q, buf_idx);
-> -}
-> -
->  static void config_registers(struct rkvdec_ctx *ctx,
->                              struct rkvdec_h264_run *run)
->  {
-> @@ -971,8 +952,14 @@ static void config_registers(struct rkvdec_ctx *ctx,
->
->         /* config ref pic address & poc */
->         for (i = 0; i < ARRAY_SIZE(dec_params->dpb); i++) {
-> -               struct vb2_buffer *vb_buf = get_ref_buf(ctx, run, i);
-> -
-> +               struct vb2_buffer *vb_buf = run->ref_buf[i];
-> +
-> +               /*
-> +                * If a DPB entry is unused or invalid, address of current destination
-> +                * buffer is returned.
-> +                */
-> +               if (!vb_buf)
-> +                       vb_buf = &dst_buf->vb2_buf;
->                 refer_addr = vb2_dma_contig_plane_dma_addr(vb_buf, 0);
->
->                 if (dpb[i].flags & V4L2_H264_DPB_ENTRY_FLAG_ACTIVE)
-> diff --git a/drivers/staging/media/rkvdec/rkvdec-vp9.c b/drivers/staging/media/rkvdec/rkvdec-vp9.c
-> index c2f42e76be10..d8c1c0db15c7 100644
-> --- a/drivers/staging/media/rkvdec/rkvdec-vp9.c
-> +++ b/drivers/staging/media/rkvdec/rkvdec-vp9.c
-> @@ -383,17 +383,17 @@ get_ref_buf(struct rkvdec_ctx *ctx, struct vb2_v4l2_buffer *dst, u64 timestamp)
->  {
->         struct v4l2_m2m_ctx *m2m_ctx = ctx->fh.m2m_ctx;
->         struct vb2_queue *cap_q = &m2m_ctx->cap_q_ctx.q;
-> -       int buf_idx;
-> +       struct vb2_buffer *buf;
->
->         /*
->          * If a ref is unused or invalid, address of current destination
->          * buffer is returned.
->          */
-> -       buf_idx = vb2_find_timestamp(cap_q, timestamp, 0);
-> -       if (buf_idx < 0)
-> -               return vb2_to_rkvdec_decoded_buf(&dst->vb2_buf);
-> +       buf = vb2_find_buffer(cap_q, timestamp);
-> +       if (!buf)
-> +               buf = &dst->vb2_buf;
->
-> -       return vb2_to_rkvdec_decoded_buf(vb2_get_buffer(cap_q, buf_idx));
-> +       return vb2_to_rkvdec_decoded_buf(buf);
->  }
->
->  static dma_addr_t get_mv_base_addr(struct rkvdec_decoded_buffer *buf)
-> --
-> 2.34.3
->
+  4) V3 to V4
+     a) Fixed sparse errors.
+     b) Fixed warnings by -Wsometimes-uninitialized option
+
+  5) V4 to V5
+     a) Fixed doc error.
+
+Ratheesh Kannoth (11):
+
+These patch series enables exact match table in CN10KB silicon. Legacy
+silicon used NPC mcam to do packet fields/channel matching for NPC rules.
+NPC mcam resources exahausted as customer use case increased.
+Supporting many DMAC filter becomes a challenge, as RPM based filter
+count is less. Exact match table has 4way 2K entry table and a 32 entry
+fully associative cam table. Second table is to handle hash
+table collision over flow in 4way 2K entry table. Enabling exact match
+table results in KEX key to be appended with Hit/Miss status. This can be
+used to match in NPC mcam for a more generic rule and drop those packets
+than having DMAC drop rules for each DMAC entry in NPC mcam.
+
+  octeontx2-af: Exact match support
+  octeontx2-af: Exact match scan from kex profile
+  octeontx2-af: devlink configuration support
+  octeontx2-af: FLR handler for exact match table.
+  octeontx2-af: Drop rules for NPC MCAM
+  octeontx2-af: Debugsfs support for exact match.
+  octeontx2: Modify mbox request and response structures
+  octeontx2-af: Wrapper functions for mac addr add/del/update/reset
+  octeontx2-af: Invoke exact match functions if supported
+  octeontx2-pf: Add support for exact match table.
+  octeontx2-af: Enable Exact match flag in kex profile
+
+Suman Ghosh (1):
+  octeontx2-af: Support to hash reduce of actual field into MCAM key
+
+ .../ethernet/marvell/octeontx2/af/Makefile    |    2 +-
+ First patch in the series "octeontx2-af: Support to hash reduce of actual
+ field into MCAM key" introduced new C file. Makefile is modified to
+ compile the same.
+
+ .../net/ethernet/marvell/octeontx2/af/mbox.h  |   41 +-
+ Mbox request and response structures requires modification.
+ RPM based DMAC filter can be modified at any location
+ in the RPM filter table as entry's location has no relation to content.
+ But for NPC exact match's 2K, 4way table is based on hash.
+ This means that modification of an entry may fail if hash mismatches.
+ In these cases, we need to delete existing entry and create a new entry
+ in a different slot determined by hash value. This index has to
+ be returned to caller.
+
+ .../net/ethernet/marvell/octeontx2/af/npc.h   |   25 +
+ New data types (enums and macros) for this feature.
+
+ .../marvell/octeontx2/af/npc_profile.h        |    5 +-
+ Kex profile changes to add exact match HIT bit in the Key.
+ Inorder to accommodate this nibble, NPC_PARSE_NIBBLE_ERRCODE
+ is deleted as it is not used.
+
+ .../net/ethernet/marvell/octeontx2/af/rvu.c   |   17 +
+ Exact match HW capability flag is initialized to false.
+ FLR handler changes to invoke rvu_npc_exact_reset()
+ to free all exact match resources in case of interface reset.
+
+ .../net/ethernet/marvell/octeontx2/af/rvu.h   |   24 +-
+ Exact match table info is defined in rvu_hwinfo structure.
+  This table structure is heap allocated and maintains
+ all information about available/free/allocated resources.
+
+ .../ethernet/marvell/octeontx2/af/rvu_cgx.c   |   41 +-
+ As of today, RPM based DMAC filter is configured upon user command.
+ Each of these mbox handler is trapped and checked for NPC exact match
+ support. If support is enabled, invokes Exact match API instead of
+ RPM dmac based calls.
+
+ .../marvell/octeontx2/af/rvu_debugfs.c        |  179 ++
+ Three debugfs entries would be created if Exact match table is supported.
+  1. exact_entries : List out npc exact match entries
+  2. exact_info : Info related exact match tables (mem and cam table)
+  3. exact_drop_cnt: Drop packet counter for each NPC mcam drop rule.
+
+ .../marvell/octeontx2/af/rvu_devlink.c        |   71 +-
+ Devlink provides flexibility to user to switch to RPM based DMAC filters
+ on CN10KB silicon. Please note that devlink command fails if user added
+ DMAC filters prior to devlink command to disable exact match table.
+
+ .../ethernet/marvell/octeontx2/af/rvu_nix.c   |    7 +
+ Promiscuous mode enable must disable this Exact match table based drop
+ rule on NPC mcam. set rx mode routine calls enable/disable corresponding
+ NPC exact drop rule when promiscuous mode is toggled.
+
+ .../ethernet/marvell/octeontx2/af/rvu_npc.c   |   51 +-
+ APIs to reserve NPC mcam entries. This is used to reserve and
+ configure NPC drop rules.
+
+ .../marvell/octeontx2/af/rvu_npc_fs.c         |  162 +-
+ For each PF, there is a drop rule installed in NPC mcam.
+ This installation is done during rvu probe itself.
+ Drop rule has multicast and broadcast bits turned off.
+ This means that broadcast and multicast packets will
+ never get dropped irrespective of NPC exact match table.
+ This rule action is drop if exact table match bit
+ 0 and channel is matched. This means if there is no hit
+ is exact match table and channel match, packets will
+ be dropped.
+
+ .../marvell/octeontx2/af/rvu_npc_fs.h         |   17 +
+
+ .../marvell/octeontx2/af/rvu_npc_hash.c       | 1958 +++++++++++++++++
+ New file added. This file implements add/del/update to exact match table,
+ probing of the feature and invokes function to install drop ruleis
+ in NPC mcam.
+
+ .../marvell/octeontx2/af/rvu_npc_hash.h       |  233 ++
+ function declarations for rvu_npc_hash.c
+
+ .../ethernet/marvell/octeontx2/af/rvu_reg.h   |   15 +
+ Register access macros for NPC exact match.
+
+ .../marvell/octeontx2/nic/otx2_common.h       |   10 +-
+ Since NPC exact match table has more entries than RPM DMAC filter,
+ size of bmap_to_dmacindex is increased from 8 to 32bit.
+ Maximum number of dmac entries available also increased
+ (increased the size of bitmap)
+
+ .../marvell/octeontx2/nic/otx2_dmac_flt.c     |   46 +-
+ .../marvell/octeontx2/nic/otx2_flows.c        |   40 +-
+ .../ethernet/marvell/octeontx2/nic/otx2_pf.c  |    2 +-
+ Above change in marvell/octeontx2/nic/otx2_common.h,
+ require corresponding modification in these 3 C files.
+ Please note that we need to modify/change existing entry index as
+ mentioned in description of net/ethernet/marvell/octeontx2/af/mbox.h
+ in this cover letter.
+
+ 20 files changed, 2879 insertions(+), 67 deletions(-)
+ create mode 100644 drivers/net/ethernet/marvell/octeontx2/af/rvu_npc_fs.h
+ create mode 100644 drivers/net/ethernet/marvell/octeontx2/af/rvu_npc_hash.c
+ create mode 100644 drivers/net/ethernet/marvell/octeontx2/af/rvu_npc_hash.h
+
+--
+2.25.1

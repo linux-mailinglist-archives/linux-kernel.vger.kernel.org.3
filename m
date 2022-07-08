@@ -2,114 +2,170 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A3EC56B455
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 10:19:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DE5E456B451
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 10:19:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237587AbiGHISA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Jul 2022 04:18:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51200 "EHLO
+        id S237695AbiGHISI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Jul 2022 04:18:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51266 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236902AbiGHIRz (ORCPT
+        with ESMTP id S236902AbiGHISF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Jul 2022 04:17:55 -0400
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F8048049E;
-        Fri,  8 Jul 2022 01:17:54 -0700 (PDT)
-Received: from pps.filterd (m0127361.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 2686bfeG002418;
-        Fri, 8 Jul 2022 08:17:36 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : in-reply-to : references : content-type :
- content-transfer-encoding : mime-version; s=pp1;
- bh=xu4rCDT68mfO5MudmK6UmIYbKX3my2hBQzJ60S+24hQ=;
- b=Lyr920IHY24YJdACfJBEbx+YhwQg2zV536m5TfEzFiLuWb9bM4551+eHtC+62umKXNGh
- v/NFJU2uayTkGICCY7Gq0YzsTSmC1y2BQ2OcFyKQ2V96U2JwVg+MRcHdEMYEURPFEL/k
- M3/qUHQt0o1W/uAFQ5ly8pdHc9TCgK1brmj0gI1oGasaDIZ5Wh0UoNxztKvlghseBMDx
- gDwoVcPSEoUllVK8Ld8r3DUZO9V7lHk9I6/yUCWk4sjmvuhpzdJmb27gTHKB+HrMnh2Q
- 9SFGq8Y5D+ntSbxWwQjYJODqmQbKzndjusrSHvJ7Gx7omnj9xIVBtbc0nuSXP/Tl7y96 2A== 
-Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3h6e9ymfyc-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 08 Jul 2022 08:17:36 +0000
-Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
-        by ppma04ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 268860be014846;
-        Fri, 8 Jul 2022 08:17:34 GMT
-Received: from b06cxnps4075.portsmouth.uk.ibm.com (d06relay12.portsmouth.uk.ibm.com [9.149.109.197])
-        by ppma04ams.nl.ibm.com with ESMTP id 3h4v4jupng-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 08 Jul 2022 08:17:34 +0000
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (b06wcsmtp001.portsmouth.uk.ibm.com [9.149.105.160])
-        by b06cxnps4075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 2688HVlG24903996
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 8 Jul 2022 08:17:31 GMT
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 5B368A4054;
-        Fri,  8 Jul 2022 08:17:31 +0000 (GMT)
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id ADC66A405F;
-        Fri,  8 Jul 2022 08:17:30 +0000 (GMT)
-Received: from sig-9-145-21-70.uk.ibm.com (unknown [9.145.21.70])
-        by b06wcsmtp001.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Fri,  8 Jul 2022 08:17:30 +0000 (GMT)
-Message-ID: <44c823d7c9ab15579d30734761200c0a6ed44a6f.camel@linux.ibm.com>
-Subject: Re: [PATCH v3 00/15] iommu: Retire bus_set_iommu()
-From:   Niklas Schnelle <schnelle@linux.ibm.com>
-To:     Robin Murphy <robin.murphy@arm.com>, joro@8bytes.org,
-        Matthew Rosato <mjrosato@linux.ibm.com>
-Cc:     will@kernel.org, iommu@lists.linux.dev,
-        linux-arm-kernel@lists.infradead.org, baolu.lu@linux.intel.com,
-        suravee.suthikulpanit@amd.com, vasant.hegde@amd.com,
-        mjrosato@linux.ibm.com, gerald.schaefer@linux.ibm.com,
-        linux-s390@vger.kernel.org, linux-kernel@vger.kernel.org
-Date:   Fri, 08 Jul 2022 10:17:30 +0200
-In-Reply-To: <cover.1657034827.git.robin.murphy@arm.com>
-References: <cover.1657034827.git.robin.murphy@arm.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: MWVqaxMEq8CD8_OlP2DoJ9y5jxZ7Sui9
-X-Proofpoint-ORIG-GUID: MWVqaxMEq8CD8_OlP2DoJ9y5jxZ7Sui9
-Content-Transfer-Encoding: 7bit
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+        Fri, 8 Jul 2022 04:18:05 -0400
+Received: from mail-il1-x136.google.com (mail-il1-x136.google.com [IPv6:2607:f8b0:4864:20::136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 732E181481;
+        Fri,  8 Jul 2022 01:18:04 -0700 (PDT)
+Received: by mail-il1-x136.google.com with SMTP id a20so7723278ilk.9;
+        Fri, 08 Jul 2022 01:18:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=P6Gd+dIUTT3KkGrv9ENkxJer9nCvFgdfmHoOd7OvfxA=;
+        b=MXWXmsdiLUQnCnslmIwo2CH3pAvsVQmDpyWIyYp9f7wga1G+VyuLRAz/FltCJ0DMon
+         qlSREkRY0G2UDgvQV1IwPGaoISST0gSuQeBY1XKGFgQvEqllJbydZSWKtUURftpz5Hpe
+         XfeNCZpdv6p7oe/Yzhqb8WqZcTs8SmmIYIG+je+fKAwtkecCAzBbiWVMoIz7jAcMAzI2
+         Uze4Yo3RQ7KwKqDvf+Uvsdp7aANozHX4n0LESp/DxleVp2ocNDmEeOirGG5BQU4Fw5V2
+         Dques4ELlQEy+G+X5jOJEmyaldF5VIGSUmFxL6jOzUC0sIO25BQkgaferMTWPufdyidJ
+         aTGg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=P6Gd+dIUTT3KkGrv9ENkxJer9nCvFgdfmHoOd7OvfxA=;
+        b=hxNU/o/DEvafv3YhtIsyhK/iBA7iuVgrEBp9x3BHSsXOZ7CGhARz1MaTPGWmLfLRVy
+         /pPznyBGmg++vNRx3xONMX87e8bRy87xqm+c7sZl2htfyd3cDqhTcEujL8pQR9f0LbON
+         E+Kih3TqZTYVaqu4arzXrwX2g3ssKn7R1/crA23k7oqszrFnoRIorkcgBLngJi1d+8Fs
+         VAbZgYHPEt2Mt8BwUugKOm8bp+43706x9HIZ1O8vc7/ZwFe83/dKQ/eeeNiC6srOZEL9
+         jUdsD0xrUvN4v78pZ5BjWJqJRnn0XEoHqQB9dcde2h+TFjfWcxDIRAke/dTbDqGW4LiW
+         eJZg==
+X-Gm-Message-State: AJIora+EFbsbSZ2eM2XxARziXUDWpNld3TdrVaZaW5475TRPRp+4eEaO
+        Ag+Ej5FaLsXHwjvMg8iu9Jk=
+X-Google-Smtp-Source: AGRyM1sMYLA3oN2FhV8iRlBxBKPC6Ma2VfIhQd5iP198thNMgX+FuuPQHfTYCjFgSpS9UIvXNT8yBA==
+X-Received: by 2002:a05:6e02:1549:b0:2dc:616a:1dd4 with SMTP id j9-20020a056e02154900b002dc616a1dd4mr47747ilu.131.1657268283864;
+        Fri, 08 Jul 2022 01:18:03 -0700 (PDT)
+Received: from [192.168.1.145] ([207.188.167.132])
+        by smtp.gmail.com with ESMTPSA id g18-20020a05663810f200b0033cbfb5202esm2928253jae.11.2022.07.08.01.18.00
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 08 Jul 2022 01:18:02 -0700 (PDT)
+Message-ID: <c088f936-00a1-4a7b-c995-dd49b011494f@gmail.com>
+Date:   Fri, 8 Jul 2022 10:17:59 +0200
 MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
- definitions=2022-07-08_06,2022-06-28_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 spamscore=0
- adultscore=0 priorityscore=1501 malwarescore=0 lowpriorityscore=0
- bulkscore=0 mlxlogscore=780 clxscore=1015 suspectscore=0 impostorscore=0
- mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2206140000 definitions=main-2207080030
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH net v2] stmmac: dwmac-mediatek: fix clock issue
+Content-Language: en-US
+To:     Biao Huang <biao.huang@mediatek.com>,
+        David Miller <davem@davemloft.net>
+Cc:     Giuseppe Cavallaro <peppe.cavallaro@st.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Jose Abreu <joabreu@synopsys.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>, netdev@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-mediatek@lists.infradead.org, macpaul.lin@mediatek.com
+References: <20220708075622.26342-1-biao.huang@mediatek.com>
+ <20220708075622.26342-2-biao.huang@mediatek.com>
+From:   Matthias Brugger <matthias.bgg@gmail.com>
+In-Reply-To: <20220708075622.26342-2-biao.huang@mediatek.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 2022-07-05 at 18:08 +0100, Robin Murphy wrote:
-> v2: https://lore.kernel.org/linux-iommu/cover.1650890638.git.robin.murphy@arm.com/
+
+
+On 08/07/2022 09:56, Biao Huang wrote:
+> Since clocks are handled in mediatek_dwmac_clks_config(),
+> remove the clocks configuration in init()/exit(), and
+> invoke mediatek_dwmac_clks_config instead.
 > 
-> Hi all,
+> This issue is found in suspend/resume test.
 > 
-> Here's v3, now with working x86! Having finally made sense of how I
-> broke Intel, I've given AMD the same fix by inspection. I'm still not
-> 100% sure about s390, but it looks like it should probably be OK since
-> it seems to register an IOMMU instance for each PCI device (?!) before
-> disappearing into PCI hotplug code, wherein I assume we should never see
-> a PCI device appear without its IOMMU already registered.
+> Fixes: 3186bdad97d5 ("stmmac: dwmac-mediatek: add platform level clocks management")
+> Signed-off-by: Biao Huang <biao.huang@mediatek.com>
+> ---
+>   .../ethernet/stmicro/stmmac/dwmac-mediatek.c  | 32 ++++++-------------
+>   1 file changed, 10 insertions(+), 22 deletions(-)
+> 
+> diff --git a/drivers/net/ethernet/stmicro/stmmac/dwmac-mediatek.c b/drivers/net/ethernet/stmicro/stmmac/dwmac-mediatek.c
+> index 6ff88df58767..6d82cf2658e0 100644
+> --- a/drivers/net/ethernet/stmicro/stmmac/dwmac-mediatek.c
+> +++ b/drivers/net/ethernet/stmicro/stmmac/dwmac-mediatek.c
+> @@ -576,32 +576,12 @@ static int mediatek_dwmac_init(struct platform_device *pdev, void *priv)
+>   		}
+>   	}
+>   
+> -	ret = clk_bulk_prepare_enable(variant->num_clks, plat->clks);
+> -	if (ret) {
+> -		dev_err(plat->dev, "failed to enable clks, err = %d\n", ret);
+> -		return ret;
+> -	}
+> -
+> -	ret = clk_prepare_enable(plat->rmii_internal_clk);
+> -	if (ret) {
+> -		dev_err(plat->dev, "failed to enable rmii internal clk, err = %d\n", ret);
+> -		goto err_clk;
+> -	}
+> -
+>   	return 0;
+> -
+> -err_clk:
+> -	clk_bulk_disable_unprepare(variant->num_clks, plat->clks);
+> -	return ret;
+>   }
+>   
+>   static void mediatek_dwmac_exit(struct platform_device *pdev, void *priv)
+>   {
+> -	struct mediatek_dwmac_plat_data *plat = priv;
+> -	const struct mediatek_dwmac_variant *variant = plat->variant;
+> -
+> -	clk_disable_unprepare(plat->rmii_internal_clk);
+> -	clk_bulk_disable_unprepare(variant->num_clks, plat->clks);
+> +	/* nothing to do now */
 
-Yes, this is a bit unusual as our PCI architecture doesn't really have
-a notion of an IOMMU device only of I/O translation tables. These are
-then registered per PCI function. PCI functions may share I/O
-translation tables and thus DMA address spaces but this is not done at
-the moment. As Matt already mentioned we do need a small change for
-this patch series. Since that was still mangled in his mail for me I
-just replied with that using "git send-email". With Matt's patch
-applied I can confirm that this works fine for us and does look like a
-useful simplification. So feel free to add my
+We can just leave the function pointer point to NULL, that get checked before 
+calling exit.
 
-Tested-by: Niklas Schnelle <schnelle@linux.ibm.com>
+Regards,
+Matthias
 
+>   }
+>   
+>   static int mediatek_dwmac_clks_config(void *priv, bool enabled)
+> @@ -712,13 +692,21 @@ static int mediatek_dwmac_probe(struct platform_device *pdev)
+>   	mediatek_dwmac_common_data(pdev, plat_dat, priv_plat);
+>   	mediatek_dwmac_init(pdev, priv_plat);
+>   
+> +	ret = mediatek_dwmac_clks_config(priv_plat, true);
+> +	if (ret)
+> +		return ret;
+> +
+>   	ret = stmmac_dvr_probe(&pdev->dev, plat_dat, &stmmac_res);
+>   	if (ret) {
+>   		stmmac_remove_config_dt(pdev, plat_dat);
+> -		return ret;
+> +		goto err_drv_probe;
+>   	}
+>   
+>   	return 0;
+> +
+> +err_drv_probe:
+> +	mediatek_dwmac_clks_config(priv_plat, false);
+> +	return ret;
+>   }
+>   
+>   static const struct of_device_id mediatek_dwmac_match[] = {

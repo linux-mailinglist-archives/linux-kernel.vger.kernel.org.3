@@ -2,59 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A0DF156C230
-	for <lists+linux-kernel@lfdr.de>; Sat,  9 Jul 2022 01:12:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7013B56C395
+	for <lists+linux-kernel@lfdr.de>; Sat,  9 Jul 2022 01:14:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240480AbiGHVcI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Jul 2022 17:32:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46078 "EHLO
+        id S240492AbiGHVcL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Jul 2022 17:32:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46102 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238368AbiGHVcG (ORCPT
+        with ESMTP id S240483AbiGHVcI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Jul 2022 17:32:06 -0400
-Received: from mail-il1-f180.google.com (mail-il1-f180.google.com [209.85.166.180])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F07D9FE30;
-        Fri,  8 Jul 2022 14:32:05 -0700 (PDT)
-Received: by mail-il1-f180.google.com with SMTP id b12so904946ilh.4;
-        Fri, 08 Jul 2022 14:32:05 -0700 (PDT)
+        Fri, 8 Jul 2022 17:32:08 -0400
+Received: from mail-il1-f171.google.com (mail-il1-f171.google.com [209.85.166.171])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49BAEA0266;
+        Fri,  8 Jul 2022 14:32:08 -0700 (PDT)
+Received: by mail-il1-f171.google.com with SMTP id h16so5603208ila.2;
+        Fri, 08 Jul 2022 14:32:08 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:in-reply-to:references:subject:date
          :message-id;
-        bh=mPK7JqtCJf89laULVPANQB+hprBgnI5b+pSKYiY3/w8=;
-        b=8ACxCXkywtP4blRLHr4+X1xls1PN631DIDPOcXsZM7tYI5oOqdxPet2yfggkjdU6oe
-         R5RSQW2OdJdvDiOPcv932cyOgnslnbeqookhLU4rYKe8uJduQruwtLwnQVXG7ZSGom7m
-         tPExlk6FOgIJqkogoXcMbFq0GPfwFRQcWTVnI2PgneJ7OqX7uo40lkEixBuuIDWQpKhT
-         GAOyER2jJ4LQHg8LQYZlNByD+AnpSBVTvKAjLuUh51e5Lr2PWHJ7pbSfYsAmCPRqa2i/
-         vp4nCGt+jDefhXHx2Ouub2VTKAgF4gO/EX16DE6Bvvw/G0IfW1GdEysM5aCZQXUhubvU
-         bGmQ==
-X-Gm-Message-State: AJIora+XBKirke44SSl9F7O/tChhH77kZ6gyW09QvrsNNzK43ZXoxr2/
-        N6rp4sAty6NAZVTM5PkEdQ==
-X-Google-Smtp-Source: AGRyM1tCjV1LWB4OVa94Ub7ppM+PyrcTgBMr3Gdo0En5H45DKfvVy4UHV6k2oZR63GxcoKo/GZSd4A==
-X-Received: by 2002:a92:c811:0:b0:2dc:14bf:e15d with SMTP id v17-20020a92c811000000b002dc14bfe15dmr3121986iln.305.1657315924369;
-        Fri, 08 Jul 2022 14:32:04 -0700 (PDT)
+        bh=2c8hNn/HcSsNuhk2VZkSz28XgxLYEcL3R/BmDHkTe1Y=;
+        b=NJ5MpovZ0YAnHZEbkxcI73+hIPzRTbPnlDSz7Iyvc4XWI2lVURuwoBR84ItHNaYN43
+         ME15zYAt+Kx8bWQFd1ooaVyp6XLVKd7cPVAVmXb0j8z3phY8AMcYJyLqnPobXIophfTC
+         lqwqTfKpLu3NLF7T6Q9eaogO0jQjhEtGSbJPN9362JfBM0ILiVTRCx9fbaWxs+k2dRMs
+         pSaFgkl8Ldq5Rn/WHMkJsi/4lJlYwrbeoIY0L1mZndrScK1uEOx1mKjbyJLZk4WtBwnW
+         c3XBllnA4MbDv31U9kclGf9EVCV/yhggF20zb3Bdq16FUMx0OkSr8Yy6JM2IfxUHGEwu
+         bVCQ==
+X-Gm-Message-State: AJIora8PxFmLLjNPkshyFF2crCVis2TrC3DyO0x+3PsW3kWNN2G5Vi2z
+        IqBapw1pU/48I5el9VnXZw==
+X-Google-Smtp-Source: AGRyM1vPbXrieqMHwm2ebeU3CsWBQ7/Skb1GSUm9tzvGAV+/lPgBdXG9me75jXQNeSTpNLyUbB8o8Q==
+X-Received: by 2002:a92:6c05:0:b0:2da:b9e8:24df with SMTP id h5-20020a926c05000000b002dab9e824dfmr3316030ilc.99.1657315927467;
+        Fri, 08 Jul 2022 14:32:07 -0700 (PDT)
 Received: from robh.at.kernel.org ([98.38.210.73])
-        by smtp.gmail.com with ESMTPSA id a11-20020a02734b000000b0033ebd47834fsm1530397jae.128.2022.07.08.14.32.03
+        by smtp.gmail.com with ESMTPSA id a17-20020a027a11000000b0033f2f249a69sm1086501jac.129.2022.07.08.14.32.06
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 08 Jul 2022 14:32:03 -0700 (PDT)
-Received: (nullmailer pid 1508198 invoked by uid 1000);
+        Fri, 08 Jul 2022 14:32:07 -0700 (PDT)
+Received: (nullmailer pid 1508206 invoked by uid 1000);
         Fri, 08 Jul 2022 21:32:02 -0000
 From:   Rob Herring <robh@kernel.org>
-To:     Frank Li <Frank.Li@nxp.com>
-Cc:     shawnguo@kernel.org, aisheng.dong@nxp.com, kw@linux.com,
-        tglx@linutronix.de, peng.fan@nxp.com, linux-kernel@vger.kernel.org,
-        kishon@ti.com, linux-imx@nxp.com,
-        krzysztof.kozlowski+dt@linaro.org, s.hauer@pengutronix.de,
-        kernel@pengutronix.de, linux-arm-kernel@lists.infradead.org,
-        robh+dt@kernel.org, jdmason@kudzu.us, lorenzo.pieralisi@arm.com,
-        devicetree@vger.kernel.org, festevam@gmail.com,
-        ntb@lists.linux.dev, maz@kernel.org, bhelgaas@google.com,
-        linux-pci@vger.kernel.org
-In-Reply-To: <20220707210238.917477-2-Frank.Li@nxp.com>
-References: <20220707210238.917477-1-Frank.Li@nxp.com> <20220707210238.917477-2-Frank.Li@nxp.com>
-Subject: Re: [PATCH 2/3] dt-bindings: irqchip: imx mu work as msi controller
+To:     Jayesh Choudhary <j-choudhary@ti.com>
+Cc:     linux-kernel@vger.kernel.org, linux-crypto@vger.kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, devicetree@vger.kernel.org,
+        vigneshr@ti.com, davem@davemloft.net, robh+dt@kernel.org,
+        herbert@gondor.apana.org.au, j-keerthy@ti.com
+In-Reply-To: <20220707110756.16169-1-j-choudhary@ti.com>
+References: <20220707110756.16169-1-j-choudhary@ti.com>
+Subject: Re: [PATCH] dt-bindings: crypto: ti,sa2ul: drop dma-coherent property
 Date:   Fri, 08 Jul 2022 15:32:02 -0600
-Message-Id: <1657315922.435976.1508197.nullmailer@robh.at.kernel.org>
+Message-Id: <1657315922.470955.1508205.nullmailer@robh.at.kernel.org>
 X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
         FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
         HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
@@ -66,42 +61,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 07 Jul 2022 16:02:37 -0500, Frank Li wrote:
-> imx mu support generate irq by write a register.
-> provide msi controller support so other driver
-> can use it by standard msi interface.
+On Thu, 07 Jul 2022 16:37:56 +0530, Jayesh Choudhary wrote:
+> crypto driver itself is not dma-coherent. It is the dmaengine
+> that moves data and the buffers are to be mapped to the
+> dmaengine provider. So this property should be dropped.
 > 
-> Signed-off-by: Frank Li <Frank.Li@nxp.com>
+> Fixes: 2ce9a7299bf6 ('dt-bindings: crypto: Add TI SA2UL crypto accelerator documentation')
+> Signed-off-by: Jayesh Choudhary <j-choudhary@ti.com>
 > ---
->  .../interrupt-controller/fsl,mu-msi.yaml      | 94 +++++++++++++++++++
->  1 file changed, 94 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/interrupt-controller/fsl,mu-msi.yaml
+>  .../devicetree/bindings/crypto/ti,sa2ul.yaml        | 13 -------------
+>  1 file changed, 13 deletions(-)
 > 
 
-My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
-on your patch (DT_CHECKER_FLAGS is new in v5.13):
+Running 'make dtbs_check' with the schema in this patch gives the
+following warnings. Consider if they are expected or the schema is
+incorrect. These may not be new warnings.
 
-yamllint warnings/errors:
+Note that it is not yet a requirement to have 0 warnings for dtbs_check.
+This will change in the future.
 
-dtschema/dtc warnings/errors:
-Error: Documentation/devicetree/bindings/interrupt-controller/fsl,mu-msi.example.dts:31.41-42 syntax error
-FATAL ERROR: Unable to parse input tree
-make[1]: *** [scripts/Makefile.lib:383: Documentation/devicetree/bindings/interrupt-controller/fsl,mu-msi.example.dtb] Error 1
-make[1]: *** Waiting for unfinished jobs....
-make: *** [Makefile:1404: dt_binding_check] Error 2
+Full log is available here: https://patchwork.ozlabs.org/patch/
 
-doc reference errors (make refcheckdocs):
 
-See https://patchwork.ozlabs.org/patch/
-
-This check can fail if there are any dependencies. The base for a patch
-series is generally the most recent rc1.
-
-If you already ran 'make dt_binding_check' and didn't see the above
-error(s), then make sure 'yamllint' is installed and dt-schema is up to
-date:
-
-pip3 install dtschema --upgrade
-
-Please check and re-submit.
+crypto@4e00000: 'dma-coherent' does not match any of the regexes: '^rng@[a-f0-9]+$', 'pinctrl-[0-9]+'
+	arch/arm64/boot/dts/ti/k3-am6528-iot2050-basic.dtb
+	arch/arm64/boot/dts/ti/k3-am6528-iot2050-basic-pg2.dtb
+	arch/arm64/boot/dts/ti/k3-am6548-iot2050-advanced.dtb
+	arch/arm64/boot/dts/ti/k3-am6548-iot2050-advanced-pg2.dtb
+	arch/arm64/boot/dts/ti/k3-am654-base-board.dtb
+	arch/arm64/boot/dts/ti/k3-j721e-common-proc-board.dtb
+	arch/arm64/boot/dts/ti/k3-j721e-sk.dtb
 

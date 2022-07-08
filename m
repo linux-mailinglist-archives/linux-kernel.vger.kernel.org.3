@@ -2,164 +2,177 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F008156B487
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 10:33:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E58FF56B48A
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 10:33:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237699AbiGHIc1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Jul 2022 04:32:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35942 "EHLO
+        id S237350AbiGHIdI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Jul 2022 04:33:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36218 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237200AbiGHIcZ (ORCPT
+        with ESMTP id S237542AbiGHIdG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Jul 2022 04:32:25 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D29882391;
-        Fri,  8 Jul 2022 01:32:25 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9AA4E621DC;
-        Fri,  8 Jul 2022 08:32:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EF74AC341C0;
-        Fri,  8 Jul 2022 08:32:21 +0000 (UTC)
-Message-ID: <f07764ce-ef3c-f38c-f484-91b53463a1d5@xs4all.nl>
-Date:   Fri, 8 Jul 2022 10:32:20 +0200
+        Fri, 8 Jul 2022 04:33:06 -0400
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E61798238F;
+        Fri,  8 Jul 2022 01:33:04 -0700 (PDT)
+X-UUID: b1ecc78bcf6b48208cda0da35d90a32d-20220708
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.8,REQID:36b04552-8f38-48ca-b1e0-4b040da3d21d,OB:0,LO
+        B:0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACTI
+        ON:release,TS:0
+X-CID-META: VersionHash:0f94e32,CLOUDID:98dff5d6-5d6d-4eaf-a635-828a3ee48b7c,C
+        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,IP:nil,URL:0,File:nil
+        ,QS:nil,BEC:nil,COL:0
+X-UUID: b1ecc78bcf6b48208cda0da35d90a32d-20220708
+Received: from mtkmbs11n1.mediatek.inc [(172.21.101.185)] by mailgw01.mediatek.com
+        (envelope-from <biao.huang@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 796111050; Fri, 08 Jul 2022 16:32:59 +0800
+Received: from mtkcas10.mediatek.inc (172.21.101.39) by
+ mtkmbs11n1.mediatek.inc (172.21.101.185) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
+ Fri, 8 Jul 2022 16:32:58 +0800
+Received: from mhfsdcap04 (10.17.3.154) by mtkcas10.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Fri, 8 Jul 2022 16:32:56 +0800
+Message-ID: <a748f941c39d46f749dfcd17e881b07242f5bfaf.camel@mediatek.com>
+Subject: Re: [PATCH net v2] stmmac: dwmac-mediatek: fix clock issue
+From:   Biao Huang <biao.huang@mediatek.com>
+To:     Matthias Brugger <matthias.bgg@gmail.com>,
+        David Miller <davem@davemloft.net>
+CC:     Giuseppe Cavallaro <peppe.cavallaro@st.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Jose Abreu <joabreu@synopsys.com>,
+        "Eric Dumazet" <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        "Paolo Abeni" <pabeni@redhat.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        <netdev@vger.kernel.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-mediatek@lists.infradead.org>, <macpaul.lin@mediatek.com>
+Date:   Fri, 8 Jul 2022 16:32:57 +0800
+In-Reply-To: <c088f936-00a1-4a7b-c995-dd49b011494f@gmail.com>
+References: <20220708075622.26342-1-biao.huang@mediatek.com>
+         <20220708075622.26342-2-biao.huang@mediatek.com>
+         <c088f936-00a1-4a7b-c995-dd49b011494f@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH v2] media: amphion: only insert the first sequence
- startcode for vc1l format
-Content-Language: en-US
-From:   Hans Verkuil <hverkuil-cisco@xs4all.nl>
-To:     Ming Qian <ming.qian@nxp.com>, mchehab@kernel.org
-Cc:     shawnguo@kernel.org, robh+dt@kernel.org, s.hauer@pengutronix.de,
-        kernel@pengutronix.de, festevam@gmail.com, linux-imx@nxp.com,
-        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-References: <20220630013041.1251-1-ming.qian@nxp.com>
- <22136ebe-b3b4-797f-beb0-3fb73d617dbe@xs4all.nl>
-In-Reply-To: <22136ebe-b3b4-797f-beb0-3fb73d617dbe@xs4all.nl>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-MTK:  N
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Please ignore. I had accidentally both v1 and v2 of this patch in my patch series.
+Dear Matthias,
 
-Sorry for the noise.
+	Thanks for your comments.
 
-Still, based on the comments on v1 this v2 needs an update anyway.
-
-Regards,
-
-	Hans
-
-On 7/8/22 10:24, Hans Verkuil wrote:
-> Hi Ming Qian,
+Best Regards!
+Biao
+On Fri, 2022-07-08 at 10:17 +0200, Matthias Brugger wrote:
 > 
-> Since the v1 has already been merged, this patch no longer applies.
+> On 08/07/2022 09:56, Biao Huang wrote:
+> > Since clocks are handled in mediatek_dwmac_clks_config(),
+> > remove the clocks configuration in init()/exit(), and
+> > invoke mediatek_dwmac_clks_config instead.
+> > 
+> > This issue is found in suspend/resume test.
+> > 
+> > Fixes: 3186bdad97d5 ("stmmac: dwmac-mediatek: add platform level
+> > clocks management")
+> > Signed-off-by: Biao Huang <biao.huang@mediatek.com>
+> > ---
+> >   .../ethernet/stmicro/stmmac/dwmac-mediatek.c  | 32 ++++++------
+> > -------
+> >   1 file changed, 10 insertions(+), 22 deletions(-)
+> > 
+> > diff --git a/drivers/net/ethernet/stmicro/stmmac/dwmac-mediatek.c
+> > b/drivers/net/ethernet/stmicro/stmmac/dwmac-mediatek.c
+> > index 6ff88df58767..6d82cf2658e0 100644
+> > --- a/drivers/net/ethernet/stmicro/stmmac/dwmac-mediatek.c
+> > +++ b/drivers/net/ethernet/stmicro/stmmac/dwmac-mediatek.c
+> > @@ -576,32 +576,12 @@ static int mediatek_dwmac_init(struct
+> > platform_device *pdev, void *priv)
+> >   		}
+> >   	}
+> >   
+> > -	ret = clk_bulk_prepare_enable(variant->num_clks, plat->clks);
+> > -	if (ret) {
+> > -		dev_err(plat->dev, "failed to enable clks, err = %d\n",
+> > ret);
+> > -		return ret;
+> > -	}
+> > -
+> > -	ret = clk_prepare_enable(plat->rmii_internal_clk);
+> > -	if (ret) {
+> > -		dev_err(plat->dev, "failed to enable rmii internal clk,
+> > err = %d\n", ret);
+> > -		goto err_clk;
+> > -	}
+> > -
+> >   	return 0;
+> > -
+> > -err_clk:
+> > -	clk_bulk_disable_unprepare(variant->num_clks, plat->clks);
+> > -	return ret;
+> >   }
+> >   
+> >   static void mediatek_dwmac_exit(struct platform_device *pdev,
+> > void *priv)
+> >   {
+> > -	struct mediatek_dwmac_plat_data *plat = priv;
+> > -	const struct mediatek_dwmac_variant *variant = plat->variant;
+> > -
+> > -	clk_disable_unprepare(plat->rmii_internal_clk);
+> > -	clk_bulk_disable_unprepare(variant->num_clks, plat->clks);
+> > +	/* nothing to do now */
 > 
-> Can you make a v3 on top of https://git.linuxtv.org/media_stage.git/?
-> 
-> The only change that a v3 has to do is the removal of V4L2_FMT_FLAG_DYN_RESOLUTION.
+> We can just leave the function pointer point to NULL, that get
+> checked before 
+> calling exit.
+OK, I'll delete this function, 
+and delete the exit assignment: 
+	plat->exit = mediatek_dwmac_exit;
+it should be ok since plat is allocated by devm_kzalloc.
 > 
 > Regards,
+> Matthias
 > 
-> 	Hans
-> 
-> On 6/30/22 03:30, Ming Qian wrote:
->> For some formats, the amphion vpu requires startcode
->> before sequence and frame, such as vc1, vp8.
->>
->> But for V4L2_PIX_FMT_VC1_ANNEX_L, only the first sequence startcode
->> is needed, the extra startcode will cause decoding error.
->> So after seek, we don't need to insert the sequence startcode.
->>
->> In other words, for V4L2_PIX_FMT_VC1_ANNEX_L,
->> the vpu doesn't support dynamic resolution change.
->>
->> Fixes: 145e936380edb ("media: amphion: implement malone decoder rpc interface")
->> Signed-off-by: Ming Qian <ming.qian@nxp.com>
->> ---
->> v2
->> - remove V4L2_FMT_FLAG_DYN_RESOLUTION from the format V4L2_PIX_FMT_VC1_ANNEX_L
->>  drivers/media/platform/amphion/vdec.c       | 2 +-
->>  drivers/media/platform/amphion/vpu.h        | 1 +
->>  drivers/media/platform/amphion/vpu_malone.c | 2 ++
->>  drivers/media/platform/amphion/vpu_rpc.h    | 7 ++++++-
->>  4 files changed, 10 insertions(+), 2 deletions(-)
->>
->> diff --git a/drivers/media/platform/amphion/vdec.c b/drivers/media/platform/amphion/vdec.c
->> index 09d4f27970ec..6eab9e711cba 100644
->> --- a/drivers/media/platform/amphion/vdec.c
->> +++ b/drivers/media/platform/amphion/vdec.c
->> @@ -104,7 +104,6 @@ static const struct vpu_format vdec_formats[] = {
->>  		.pixfmt = V4L2_PIX_FMT_VC1_ANNEX_L,
->>  		.num_planes = 1,
->>  		.type = V4L2_BUF_TYPE_VIDEO_OUTPUT_MPLANE,
->> -		.flags = V4L2_FMT_FLAG_DYN_RESOLUTION
->>  	},
->>  	{
->>  		.pixfmt = V4L2_PIX_FMT_MPEG2,
->> @@ -731,6 +730,7 @@ static void vdec_stop_done(struct vpu_inst *inst)
->>  	vdec->eos_received = 0;
->>  	vdec->is_source_changed = false;
->>  	vdec->source_change = 0;
->> +	inst->total_input_count = 0;
->>  	vpu_inst_unlock(inst);
->>  }
->>  
->> diff --git a/drivers/media/platform/amphion/vpu.h b/drivers/media/platform/amphion/vpu.h
->> index e56b96a7e5d3..f914de6ed81e 100644
->> --- a/drivers/media/platform/amphion/vpu.h
->> +++ b/drivers/media/platform/amphion/vpu.h
->> @@ -258,6 +258,7 @@ struct vpu_inst {
->>  	struct vpu_format cap_format;
->>  	u32 min_buffer_cap;
->>  	u32 min_buffer_out;
->> +	u32 total_input_count;
->>  
->>  	struct v4l2_rect crop;
->>  	u32 colorspace;
->> diff --git a/drivers/media/platform/amphion/vpu_malone.c b/drivers/media/platform/amphion/vpu_malone.c
->> index c62b49e85060..f4a488bf9880 100644
->> --- a/drivers/media/platform/amphion/vpu_malone.c
->> +++ b/drivers/media/platform/amphion/vpu_malone.c
->> @@ -1314,6 +1314,8 @@ static int vpu_malone_insert_scode_vc1_l_seq(struct malone_scode_t *scode)
->>  	int size = 0;
->>  	u8 rcv_seqhdr[MALONE_VC1_RCV_SEQ_HEADER_LEN];
->>  
->> +	if (scode->inst->total_input_count)
->> +		return 0;
->>  	scode->need_data = 0;
->>  
->>  	ret = vpu_malone_insert_scode_seq(scode, MALONE_CODEC_ID_VC1_SIMPLE, sizeof(rcv_seqhdr));
->> diff --git a/drivers/media/platform/amphion/vpu_rpc.h b/drivers/media/platform/amphion/vpu_rpc.h
->> index 25119e5e807e..7eb6f01e6ab5 100644
->> --- a/drivers/media/platform/amphion/vpu_rpc.h
->> +++ b/drivers/media/platform/amphion/vpu_rpc.h
->> @@ -312,11 +312,16 @@ static inline int vpu_iface_input_frame(struct vpu_inst *inst,
->>  					struct vb2_buffer *vb)
->>  {
->>  	struct vpu_iface_ops *ops = vpu_core_get_iface(inst->core);
->> +	int ret;
->>  
->>  	if (!ops || !ops->input_frame)
->>  		return -EINVAL;
->>  
->> -	return ops->input_frame(inst->core->iface, inst, vb);
->> +	ret = ops->input_frame(inst->core->iface, inst, vb);
->> +	if (ret < 0)
->> +		return ret;
->> +	inst->total_input_count++;
->> +	return ret;
->>  }
->>  
->>  static inline int vpu_iface_config_memory_resource(struct vpu_inst *inst,
+> >   }
+> >   
+> >   static int mediatek_dwmac_clks_config(void *priv, bool enabled)
+> > @@ -712,13 +692,21 @@ static int mediatek_dwmac_probe(struct
+> > platform_device *pdev)
+> >   	mediatek_dwmac_common_data(pdev, plat_dat, priv_plat);
+> >   	mediatek_dwmac_init(pdev, priv_plat);
+> >   
+> > +	ret = mediatek_dwmac_clks_config(priv_plat, true);
+> > +	if (ret)
+> > +		return ret;
+> > +
+> >   	ret = stmmac_dvr_probe(&pdev->dev, plat_dat, &stmmac_res);
+> >   	if (ret) {
+> >   		stmmac_remove_config_dt(pdev, plat_dat);
+> > -		return ret;
+> > +		goto err_drv_probe;
+> >   	}
+> >   
+> >   	return 0;
+> > +
+> > +err_drv_probe:
+> > +	mediatek_dwmac_clks_config(priv_plat, false);
+> > +	return ret;
+> >   }
+> >   
+> >   static const struct of_device_id mediatek_dwmac_match[] = {
+

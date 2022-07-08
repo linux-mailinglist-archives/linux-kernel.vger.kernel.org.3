@@ -2,110 +2,253 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7299A56B2BF
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 08:25:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 58AFF56B2B1
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 08:25:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237297AbiGHGVg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Jul 2022 02:21:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50548 "EHLO
+        id S237301AbiGHGWG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Jul 2022 02:22:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50928 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236958AbiGHGVc (ORCPT
+        with ESMTP id S237302AbiGHGWD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Jul 2022 02:21:32 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 878F72409B;
-        Thu,  7 Jul 2022 23:21:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1657261291; x=1688797291;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=2+Q11omODNcL1YvdnrPZrcbEdnlk0V7G8eOhRvnexJo=;
-  b=TE9z43hO/StC9J4a3Qgr/hBy4slCQKZVDJl8mhmdlAvmepFEKUK9TrK2
-   DiQOl1ds1wqqEUpHy/xcW1QWf2Os6QDHWW/g7IlDiTSH5wnaaZEoco/HN
-   Ie1Wh07INmHB+bp6/+QzFpu7by/XyLWgxtD6XI+XDHysw4dQx13LEe26w
-   IsGOfrK/YTvlaCjsVaBkBnaJNoshDpQvZqfA37HVSZteuTV9HxcZcFHK6
-   2u/RMox6XJOjitAuP4VhprHFniKnKmE7D2iygSHw3wI1tlaaqMlYRh91m
-   Bxa9EgxTHeev2KMvsPg7nEvTcWY8x6enbukzuq0Byy0/MwOwhP44tt83g
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10401"; a="284943716"
-X-IronPort-AV: E=Sophos;i="5.92,254,1650956400"; 
-   d="scan'208";a="284943716"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jul 2022 23:21:31 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,254,1650956400"; 
-   d="scan'208";a="621092749"
-Received: from lkp-server01.sh.intel.com (HELO 68b931ab7ac1) ([10.239.97.150])
-  by orsmga008.jf.intel.com with ESMTP; 07 Jul 2022 23:21:28 -0700
-Received: from kbuild by 68b931ab7ac1 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1o9hMm-000N1K-2x;
-        Fri, 08 Jul 2022 06:21:28 +0000
-Date:   Fri, 8 Jul 2022 14:21:14 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Horatiu Vultur <horatiu.vultur@microchip.com>,
-        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     kbuild-all@lists.01.org, linus.walleij@linaro.org,
-        kavyasree.kotagiri@microchip.com, alexandre.belloni@bootlin.com,
-        colin.foster@in-advantage.com, UNGLinuxDriver@microchip.com,
-        maxime.chevallier@bootlin.com,
-        Horatiu Vultur <horatiu.vultur@microchip.com>
-Subject: Re: [PATCH 2/2] pinctrl: ocelot: Fix pincfg
-Message-ID: <202207081432.wshyILwP-lkp@intel.com>
-References: <20220707185342.2697569-3-horatiu.vultur@microchip.com>
+        Fri, 8 Jul 2022 02:22:03 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 633A52CE3D;
+        Thu,  7 Jul 2022 23:22:00 -0700 (PDT)
+Received: from canpemm500009.china.huawei.com (unknown [172.30.72.53])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4LfNPd5KfxzTgRl;
+        Fri,  8 Jul 2022 14:18:13 +0800 (CST)
+Received: from [10.67.102.169] (10.67.102.169) by
+ canpemm500009.china.huawei.com (7.192.105.203) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Fri, 8 Jul 2022 14:21:51 +0800
+CC:     <yangyicong@hisilicon.com>, <corbet@lwn.net>, <arnd@arndb.de>,
+        <linux-kernel@vger.kernel.org>, <darren@os.amperecomputing.com>,
+        <huzhanyuan@oppo.com>, <lipeifeng@oppo.com>,
+        <zhangshiming@oppo.com>, <guojian@oppo.com>, <realmz6@gmail.com>,
+        Barry Song <v-songbaohua@oppo.com>,
+        Nadav Amit <namit@vmware.com>, Mel Gorman <mgorman@suse.de>
+Subject: Re: [PATCH 4/4] arm64: support batched/deferred tlb shootdown during
+ page reclamation
+To:     Barry Song <21cnbao@gmail.com>, <akpm@linux-foundation.org>,
+        <linux-mm@kvack.org>, <linux-arm-kernel@lists.infradead.org>,
+        <x86@kernel.org>, <catalin.marinas@arm.com>, <will@kernel.org>,
+        <linux-doc@vger.kernel.org>
+References: <20220707125242.425242-1-21cnbao@gmail.com>
+ <20220707125242.425242-5-21cnbao@gmail.com>
+From:   Yicong Yang <yangyicong@huawei.com>
+Message-ID: <b41ce185-38c0-7fdb-fb19-2b219aab7e0f@huawei.com>
+Date:   Fri, 8 Jul 2022 14:21:50 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.5.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220707185342.2697569-3-horatiu.vultur@microchip.com>
-X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220707125242.425242-5-21cnbao@gmail.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.67.102.169]
+X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
+ canpemm500009.china.huawei.com (7.192.105.203)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Horatiu,
+Hi Barry,
 
-I love your patch! Perhaps something to improve:
+On 2022/7/7 20:52, Barry Song wrote:
+> From: Barry Song <v-songbaohua@oppo.com>
+> 
+> on x86, batched and deferred tlb shootdown has lead to 90%
+> performance increase on tlb shootdown. on arm64, HW can do
+> tlb shootdown without software IPI. But sync tlbi is still
+> quite expensive.
+> 
+> Even running a simplest program which requires swapout can
+> prove this is true,
+>  #include <sys/types.h>
+>  #include <unistd.h>
+>  #include <sys/mman.h>
+>  #include <string.h>
+> 
+>  int main()
+>  {
+>  #define SIZE (1 * 1024 * 1024)
+>          volatile unsigned char *p = mmap(NULL, SIZE, PROT_READ | PROT_WRITE,
+>                                           MAP_SHARED | MAP_ANONYMOUS, -1, 0);
+> 
+>          memset(p, 0x88, SIZE);
+> 
+>          for (int k = 0; k < 10000; k++) {
+>                  /* swap in */
+>                  for (int i = 0; i < SIZE; i += 4096) {
+>                          (void)p[i];
+>                  }
+> 
+>                  /* swap out */
+>                  madvise(p, SIZE, MADV_PAGEOUT);
+>          }
+>  }
+> 
+> Perf result on snapdragon 888 with 8 cores by using zRAM
+> as the swap block device.
+> 
+>  ~ # perf record taskset -c 4 ./a.out
+>  [ perf record: Woken up 10 times to write data ]
+>  [ perf record: Captured and wrote 2.297 MB perf.data (60084 samples) ]
+>  ~ # perf report
+>  # To display the perf.data header info, please use --header/--header-only options.
+>  # To display the perf.data header info, please use --header/--header-only options.
+>  #
+>  #
+>  # Total Lost Samples: 0
+>  #
+>  # Samples: 60K of event 'cycles'
+>  # Event count (approx.): 35706225414
+>  #
+>  # Overhead  Command  Shared Object      Symbol
+>  # ........  .......  .................  .............................................................................
+>  #
+>     21.07%  a.out    [kernel.kallsyms]  [k] _raw_spin_unlock_irq
+>      8.23%  a.out    [kernel.kallsyms]  [k] _raw_spin_unlock_irqrestore
+>      6.67%  a.out    [kernel.kallsyms]  [k] filemap_map_pages
+>      6.16%  a.out    [kernel.kallsyms]  [k] __zram_bvec_write
+>      5.36%  a.out    [kernel.kallsyms]  [k] ptep_clear_flush
+>      3.71%  a.out    [kernel.kallsyms]  [k] _raw_spin_lock
+>      3.49%  a.out    [kernel.kallsyms]  [k] memset64
+>      1.63%  a.out    [kernel.kallsyms]  [k] clear_page
+>      1.42%  a.out    [kernel.kallsyms]  [k] _raw_spin_unlock
+>      1.26%  a.out    [kernel.kallsyms]  [k] mod_zone_state.llvm.8525150236079521930
+>      1.23%  a.out    [kernel.kallsyms]  [k] xas_load
+>      1.15%  a.out    [kernel.kallsyms]  [k] zram_slot_lock
+> 
+> ptep_clear_flush() takes 5.36% CPU in the micro-benchmark
+> swapping in/out a page mapped by only one process. If the
+> page is mapped by multiple processes, typically, like more
+> than 100 on a phone, the overhead would be much higher as
+> we have to run tlb flush 100 times for one single page.
+> Plus, tlb flush overhead will increase with the number
+> of CPU cores due to the bad scalability of tlb shootdown
+> in HW, so those ARM64 servers should expect much higher
+> overhead.
+> 
+> Further perf annonate shows 95% cpu time of ptep_clear_flush
+> is actually used by the final dsb() to wait for the completion
+> of tlb flush. This provides us a very good chance to leverage
+> the existing batched tlb in kernel. The minimum modification
+> is that we only send async tlbi in the first stage and we send
+> dsb while we have to sync in the second stage.
+> 
+> With the above simplest micro benchmark, collapsed time to
+> finish the program decreases around 5%.
+> 
+> Typical collapsed time w/o patch:
+>  ~ # time taskset -c 4 ./a.out
+>  0.21user 14.34system 0:14.69elapsed
+> w/ patch:
+>  ~ # time taskset -c 4 ./a.out
+>  0.22user 13.45system 0:13.80elapsed
+> 
 
-[auto build test WARNING on linusw-pinctrl/devel]
-[also build test WARNING on linus/master v5.19-rc5 next-20220707]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Tested with benchmark in the commit on Kunpeng920 arm64 server, observed an improvement
+around 12.5% with command `time ./swap_bench`.
+	w/o		w/
+real	0m13.460s	0m11.771s
+user	0m0.248s	0m0.279s
+sys	0m12.039s	0m11.458s
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Horatiu-Vultur/pinctrl-ocelot-Add-fixes-for-ocelot-driver/20220708-025029
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-pinctrl.git devel
-config: i386-randconfig-m021 (https://download.01.org/0day-ci/archive/20220708/202207081432.wshyILwP-lkp@intel.com/config)
-compiler: gcc-11 (Debian 11.3.0-3) 11.3.0
+Originally it's noticed a 16.99% overhead of ptep_clear_flush() which has been eliminated
+by this patch:
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+[root@localhost yang]# perf record -- ./swap_bench && perf report
+[...]
+    16.99%  swap_bench  [kernel.kallsyms]  [k] ptep_clear_flush
 
-smatch warnings:
-drivers/pinctrl/pinctrl-ocelot.c:1954 ocelot_pinctrl_create_pincfg() warn: inconsistent indenting
+Feel free to add:
+Tested-by: Yicong Yang <yangyicong@hisilicon.com>
 
-vim +1954 drivers/pinctrl/pinctrl-ocelot.c
 
-ce8dc0943357a5 Alexandre Belloni 2018-01-06  1949  
-076d9e71bcf8a8 Colin Foster      2021-11-19  1950  static struct regmap *ocelot_pinctrl_create_pincfg(struct platform_device *pdev)
-076d9e71bcf8a8 Colin Foster      2021-11-19  1951  {
-076d9e71bcf8a8 Colin Foster      2021-11-19  1952  	void __iomem *base;
-076d9e71bcf8a8 Colin Foster      2021-11-19  1953  
-94ef32970d4076 Michael Walle     2022-02-16 @1954  		base = devm_platform_ioremap_resource(pdev, 1);
-076d9e71bcf8a8 Colin Foster      2021-11-19  1955  	if (IS_ERR(base)) {
-076d9e71bcf8a8 Colin Foster      2021-11-19  1956  		dev_dbg(&pdev->dev, "Failed to ioremap config registers (no extended pinconf)\n");
-076d9e71bcf8a8 Colin Foster      2021-11-19  1957  		return NULL;
-076d9e71bcf8a8 Colin Foster      2021-11-19  1958  	}
-076d9e71bcf8a8 Colin Foster      2021-11-19  1959  
-162d70439a9da8 Horatiu Vultur    2022-07-07  1960  	return devm_regmap_init_mmio(&pdev->dev, base, &regmap_pincfg);
-076d9e71bcf8a8 Colin Foster      2021-11-19  1961  }
-076d9e71bcf8a8 Colin Foster      2021-11-19  1962  
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+> Cc: Jonathan Corbet <corbet@lwn.net>
+> Cc: Nadav Amit <namit@vmware.com>
+> Cc: Mel Gorman <mgorman@suse.de>
+> Signed-off-by: Barry Song <v-songbaohua@oppo.com>
+> ---
+>  Documentation/features/vm/TLB/arch-support.txt |  2 +-
+>  arch/arm64/Kconfig                             |  1 +
+>  arch/arm64/include/asm/tlbbatch.h              | 12 ++++++++++++
+>  arch/arm64/include/asm/tlbflush.h              | 13 +++++++++++++
+>  4 files changed, 27 insertions(+), 1 deletion(-)
+>  create mode 100644 arch/arm64/include/asm/tlbbatch.h
+> 
+> diff --git a/Documentation/features/vm/TLB/arch-support.txt b/Documentation/features/vm/TLB/arch-support.txt
+> index 1c009312b9c1..2caf815d7c6c 100644
+> --- a/Documentation/features/vm/TLB/arch-support.txt
+> +++ b/Documentation/features/vm/TLB/arch-support.txt
+> @@ -9,7 +9,7 @@
+>      |       alpha: | TODO |
+>      |         arc: | TODO |
+>      |         arm: | TODO |
+> -    |       arm64: | TODO |
+> +    |       arm64: |  ok  |
+>      |        csky: | TODO |
+>      |     hexagon: | TODO |
+>      |        ia64: | TODO |
+> diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig
+> index 1652a9800ebe..e94913a0b040 100644
+> --- a/arch/arm64/Kconfig
+> +++ b/arch/arm64/Kconfig
+> @@ -93,6 +93,7 @@ config ARM64
+>  	select ARCH_SUPPORTS_INT128 if CC_HAS_INT128
+>  	select ARCH_SUPPORTS_NUMA_BALANCING
+>  	select ARCH_SUPPORTS_PAGE_TABLE_CHECK
+> +	select ARCH_WANT_BATCHED_UNMAP_TLB_FLUSH
+>  	select ARCH_WANT_COMPAT_IPC_PARSE_VERSION if COMPAT
+>  	select ARCH_WANT_DEFAULT_BPF_JIT
+>  	select ARCH_WANT_DEFAULT_TOPDOWN_MMAP_LAYOUT
+> diff --git a/arch/arm64/include/asm/tlbbatch.h b/arch/arm64/include/asm/tlbbatch.h
+> new file mode 100644
+> index 000000000000..fedb0b87b8db
+> --- /dev/null
+> +++ b/arch/arm64/include/asm/tlbbatch.h
+> @@ -0,0 +1,12 @@
+> +/* SPDX-License-Identifier: GPL-2.0 */
+> +#ifndef _ARCH_ARM64_TLBBATCH_H
+> +#define _ARCH_ARM64_TLBBATCH_H
+> +
+> +struct arch_tlbflush_unmap_batch {
+> +	/*
+> +	 * For arm64, HW can do tlb shootdown, so we don't
+> +	 * need to record cpumask for sending IPI
+> +	 */
+> +};
+> +
+> +#endif /* _ARCH_ARM64_TLBBATCH_H */
+> diff --git a/arch/arm64/include/asm/tlbflush.h b/arch/arm64/include/asm/tlbflush.h
+> index 412a3b9a3c25..b3ed163267ca 100644
+> --- a/arch/arm64/include/asm/tlbflush.h
+> +++ b/arch/arm64/include/asm/tlbflush.h
+> @@ -272,6 +272,19 @@ static inline void flush_tlb_page(struct vm_area_struct *vma,
+>  	dsb(ish);
+>  }
+>  
+> +static inline void arch_tlbbatch_add_mm(struct arch_tlbflush_unmap_batch *batch,
+> +					struct mm_struct *mm,
+> +					struct vm_area_struct *vma,
+> +					unsigned long uaddr)
+> +{
+> +	flush_tlb_page_nosync(vma, uaddr);
+> +}
+> +
+> +static inline void arch_tlbbatch_flush(struct arch_tlbflush_unmap_batch *batch)
+> +{
+> +	dsb(ish);
+> +}
+> +
+>  /*
+>   * This is meant to avoid soft lock-ups on large TLB flushing ranges and not
+>   * necessarily a performance improvement.
+> 

@@ -2,47 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DDD6056BF60
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 20:35:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C34056BFE1
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 20:36:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239563AbiGHSZg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Jul 2022 14:25:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45846 "EHLO
+        id S239575AbiGHSZj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Jul 2022 14:25:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46694 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239548AbiGHSZX (ORCPT
+        with ESMTP id S239501AbiGHSZb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Jul 2022 14:25:23 -0400
+        Fri, 8 Jul 2022 14:25:31 -0400
 Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com [IPv6:2607:f8b0:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76CE183F35
-        for <linux-kernel@vger.kernel.org>; Fri,  8 Jul 2022 11:25:22 -0700 (PDT)
-Received: by mail-pf1-x42f.google.com with SMTP id b9so8137968pfp.10
-        for <linux-kernel@vger.kernel.org>; Fri, 08 Jul 2022 11:25:22 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD81587360
+        for <linux-kernel@vger.kernel.org>; Fri,  8 Jul 2022 11:25:29 -0700 (PDT)
+Received: by mail-pf1-x42f.google.com with SMTP id b9so8138186pfp.10
+        for <linux-kernel@vger.kernel.org>; Fri, 08 Jul 2022 11:25:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=broadcom.com; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version;
-        bh=PrmRwvu0KS3KOCh2kMQ5QCPQjx+o/iZe+yMYywQxT4c=;
-        b=M6S8ugVfCU/kLVSWuF3fxBBDGk1+Ln/qIYx4YtBDQY2pDNwQJjspus+UmaAFBXYi6T
-         fCQgWviekEnx9wFiykeWiIo1Ti9+OUTgsF4VULZ8fJlp2Ohcj35R9A2qEFBxylN6IvB5
-         8/tXVsBPRofa0QY4I/6uiwc+ST47RTxbTKQng=
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version;
+        bh=o9aJGfGOn3TjRnVxvcZr8YOrG2vwEH4YUWKEjIec3UI=;
+        b=DP0TuxPFbCTdtI4H7hsKiURGrrfMe3yFz03mCnFfxHi6iWm59AkiQWOlA4rMvii0GQ
+         0QMXnT2eZErq7mrfpyXv+wKQ9RI0myeW+XAunT3VPCg13NZ02FO20Iw0AZpfyj8qeiZX
+         HuETMZTQ1xywIJFCxiN6o0ryJKNRAsj3qUkNE=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version;
-        bh=PrmRwvu0KS3KOCh2kMQ5QCPQjx+o/iZe+yMYywQxT4c=;
-        b=BsEwotqyK0Ok+sxZpWqmqV341pVWTi7wWL2dtGr8Cg99QDgOJpQZVlXRRUwVfubznY
-         aKvIiE9zigs26yfgNsoHKhPyxRy5gsvFm7dxJ/Xnanx0a7KB/9kVMhMsU8job72m3kH0
-         d03/vNpJkGQ5bugsE9mIFSjLQI9TItlwANXkbEFsj9xuuRmUVyKrXP6e0DQNKffQSiNh
-         GVbtoahmsbgA/zO8ZoaitujKHClNY49d/AvFe3hEiWEPGJhEbKYudOpHy90QSCYu4Yku
-         AxNjOTs6So/vQxqC4yEHX/NovRpeRC2kE5HQKwycykUmSdAsIkupV1xbyGRFRXxI4FUB
-         giIA==
-X-Gm-Message-State: AJIora9WOy8oBXeOIycnlyyFr9C+10+r8xkujWTg30UCnUjQUCvNW73y
-        LMdp9CDWqxG9/lkUwZzqgDMwqw==
-X-Google-Smtp-Source: AGRyM1sLxZ42xZ3TfMroYrzw3b5AW5c9DwlmdNp8WOg7wi4YbCOROcl4SPN0iGb29VPNph39wDfGuA==
-X-Received: by 2002:a63:6888:0:b0:3fe:49fc:3be3 with SMTP id d130-20020a636888000000b003fe49fc3be3mr4197674pgc.182.1657304721762;
-        Fri, 08 Jul 2022 11:25:21 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version;
+        bh=o9aJGfGOn3TjRnVxvcZr8YOrG2vwEH4YUWKEjIec3UI=;
+        b=ahrT+L6IguzOrD9GDBcUzg5cAe1c/X0Znf37dpBN4LPc7Rc44eNeCoKXpca0/tB3Qo
+         TZVvwj2/6LK8F7CO0wwCXrutx3QssJiCS11YeKXd7GgT1hUptG2z6K1y3zT5Tu2AZnbB
+         Tr3P/inuDNdtMOWb24RTgVXH+c9R0iMEbiyOetbYL27hHWAtHXGeC2WHqRXCV3vYcmHD
+         FAAnCI4uQuXIrBA9tQeljuqDugl7AAoB11kEQMG3+ZajZVXQdwDtFlUF6LMZh8tzPnCQ
+         Pg2nLtjCvj+x8nELXGEOjCMvc+I9ulNeWuDwlafquqH74alXrs6YGUnh/fJxNCzAt5Qj
+         5ZUg==
+X-Gm-Message-State: AJIora/Y0M9uTSty4gfJs/ReUfKw+kRgusEFtJ/p5FTmplDrzEQBzx1w
+        +RceRhh58OLLTrnGawSW9C7RSA==
+X-Google-Smtp-Source: AGRyM1uTgFyu50b7XMsZ1uPHfkbTAPklvLuVY1bohwS5Y/DG+7uCfO3K46/PYovBjgK5832k1CJKwQ==
+X-Received: by 2002:a63:be41:0:b0:40c:b4a8:dee9 with SMTP id g1-20020a63be41000000b0040cb4a8dee9mr4289647pgo.107.1657304729398;
+        Fri, 08 Jul 2022 11:25:29 -0700 (PDT)
 Received: from ubuntu-22.localdomain ([192.19.222.250])
-        by smtp.gmail.com with ESMTPSA id 17-20020a17090a1a1100b001ef8de342b8sm1992855pjk.15.2022.07.08.11.25.19
+        by smtp.gmail.com with ESMTPSA id 17-20020a17090a1a1100b001ef8de342b8sm1992855pjk.15.2022.07.08.11.25.28
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 08 Jul 2022 11:25:20 -0700 (PDT)
+        Fri, 08 Jul 2022 11:25:28 -0700 (PDT)
 From:   William Zhang <william.zhang@broadcom.com>
 To:     Linux ARM List <linux-arm-kernel@lists.infradead.org>
 Cc:     Broadcom Kernel List <bcm-kernel-feedback-list@broadcom.com>,
@@ -52,32 +54,35 @@ Cc:     Broadcom Kernel List <bcm-kernel-feedback-list@broadcom.com>,
         =?UTF-8?q?Rafa=C5=82=20Mi=C5=82ecki?= <rafal@milecki.pl>,
         Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH v2 1/2] arm64: dts: broadcom: bcm4908: Fix timer node for BCM4906 SoC
-Date:   Fri,  8 Jul 2022 11:25:06 -0700
-Message-Id: <20220708182507.23542-1-william.zhang@broadcom.com>
+Subject: [PATCH v2 2/2] arm64: dts: broadcom: bcm4908: Fix cpu node for smp boot
+Date:   Fri,  8 Jul 2022 11:25:07 -0700
+Message-Id: <20220708182507.23542-2-william.zhang@broadcom.com>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20220708182507.23542-1-william.zhang@broadcom.com>
+References: <20220708182507.23542-1-william.zhang@broadcom.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-        boundary="0000000000003f851e05e34f53a2"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,MIME_NO_TEXT,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        boundary="000000000000b3180f05e34f53f2"
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---0000000000003f851e05e34f53a2
+--000000000000b3180f05e34f53f2
 Content-Transfer-Encoding: 8bit
 
-The cpu mask value in interrupt property inherits from bcm4908.dtsi
-which sets to four cpus. Correct the value to two cpus for dual core
-BCM4906 SoC.
+Add spin-table enable-method and cpu-release-addr properties for
+cpu0 node. This is required by all ARMv8 SoC. Otherwise some
+bootloader like u-boot can not update cpu-release-addr and linux
+fails to start up secondary cpus.
 
-Fixes: c8b404fb05dc ("arm64: dts: broadcom: bcm4908: add BCM4906
-Netgear R8000P DTS files")
+Fixes: 2961f69f151c ("arm64: dts: broadcom: add BCM4908 and Asus
+GT-AC5300 early DTS files")
 
 Signed-off-by: William Zhang <william.zhang@broadcom.com>
 Reviewed-by: Florian Fainelli <f.fainelli@gmail.com>
@@ -87,33 +92,27 @@ Reviewed-by: Florian Fainelli <f.fainelli@gmail.com>
 Changes in v2:
 - Split into two patches and add fix reference
 
- arch/arm64/boot/dts/broadcom/bcm4908/bcm4906.dtsi | 8 ++++++++
- 1 file changed, 8 insertions(+)
+ arch/arm64/boot/dts/broadcom/bcm4908/bcm4908.dtsi | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/arch/arm64/boot/dts/broadcom/bcm4908/bcm4906.dtsi b/arch/arm64/boot/dts/broadcom/bcm4908/bcm4906.dtsi
-index 66023d553524..d084c33d5ca8 100644
---- a/arch/arm64/boot/dts/broadcom/bcm4908/bcm4906.dtsi
-+++ b/arch/arm64/boot/dts/broadcom/bcm4908/bcm4906.dtsi
-@@ -9,6 +9,14 @@ cpus {
- 		/delete-node/ cpu@3;
- 	};
+diff --git a/arch/arm64/boot/dts/broadcom/bcm4908/bcm4908.dtsi b/arch/arm64/boot/dts/broadcom/bcm4908/bcm4908.dtsi
+index a4be040a00c0..967d2cd3c3ce 100644
+--- a/arch/arm64/boot/dts/broadcom/bcm4908/bcm4908.dtsi
++++ b/arch/arm64/boot/dts/broadcom/bcm4908/bcm4908.dtsi
+@@ -29,6 +29,8 @@ cpu0: cpu@0 {
+ 			device_type = "cpu";
+ 			compatible = "brcm,brahma-b53";
+ 			reg = <0x0>;
++			enable-method = "spin-table";
++			cpu-release-addr = <0x0 0xfff8>;
+ 			next-level-cache = <&l2>;
+ 		};
  
-+	timer {
-+		compatible = "arm,armv8-timer";
-+		interrupts = <GIC_PPI 13 (GIC_CPU_MASK_SIMPLE(2) | IRQ_TYPE_LEVEL_LOW)>,
-+			     <GIC_PPI 14 (GIC_CPU_MASK_SIMPLE(2) | IRQ_TYPE_LEVEL_LOW)>,
-+			     <GIC_PPI 11 (GIC_CPU_MASK_SIMPLE(2) | IRQ_TYPE_LEVEL_LOW)>,
-+			     <GIC_PPI 10 (GIC_CPU_MASK_SIMPLE(2) | IRQ_TYPE_LEVEL_LOW)>;
-+	};
-+
- 	pmu {
- 		compatible = "arm,cortex-a53-pmu";
- 		interrupts = <GIC_SPI 9 IRQ_TYPE_LEVEL_HIGH>,
 -- 
 2.34.1
 
 
---0000000000003f851e05e34f53a2
+--000000000000b3180f05e34f53f2
 Content-Type: application/pkcs7-signature; name="smime.p7s"
 Content-Transfer-Encoding: base64
 Content-Disposition: attachment; filename="smime.p7s"
@@ -184,13 +183,13 @@ W0KkR8025J0L5L4yXfkSO6psD/k4VcTsMJHLN4RfMuaXIT6EM0cNO6h3GypyTuPf1N1X+F6WQPKb
 1u+rvdML63P9fX7e7mwwGt5klRnf8aK2VU7mIdYCcrFHaKDTW3fkG6kIgrE1wWSgiZYL400xggJt
 MIICaQIBATBrMFsxCzAJBgNVBAYTAkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMTEwLwYD
 VQQDEyhHbG9iYWxTaWduIEdDQyBSMyBQZXJzb25hbFNpZ24gMiBDQSAyMDIwAgw28eX6TfvsbNfu
-SIMwDQYJYIZIAWUDBAIBBQCggdQwLwYJKoZIhvcNAQkEMSIEIC9NY8q3oAQdR0BX06hmP00PB9ux
-+2R6GN5UfjgpWJRwMBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcNAQkFMQ8XDTIy
-MDcwODE4MjUyMlowaQYJKoZIhvcNAQkPMVwwWjALBglghkgBZQMEASowCwYJYIZIAWUDBAEWMAsG
+SIMwDQYJYIZIAWUDBAIBBQCggdQwLwYJKoZIhvcNAQkEMSIEIP8yg+GMYjj8wFLEwV8xqKTrXuE/
+hH238ViW0J13vhOuMBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcNAQkFMQ8XDTIy
+MDcwODE4MjUyOVowaQYJKoZIhvcNAQkPMVwwWjALBglghkgBZQMEASowCwYJYIZIAWUDBAEWMAsG
 CWCGSAFlAwQBAjAKBggqhkiG9w0DBzALBgkqhkiG9w0BAQowCwYJKoZIhvcNAQEHMAsGCWCGSAFl
-AwQCATANBgkqhkiG9w0BAQEFAASCAQBO0EUAXxuBOqzzAyC16a1cjgQKMLtoTRSxl/VQyDjsMbvD
-QkzhEASrgZisPXexHt+sZK+YNeEIU75CR3pzwMgHBkYyoM/V0errQNmQ3umlrFINPPCb8/LvsODc
-VCbiCU4o5lb2NhyxLKtkwe9uHaIKd+Kr+aljQQ6EwTW/qgFSltmxJYVF4LDGtpIDxCOoWsMoHJpW
-4v6BOEypqpaeEW1X6uwRNwEi4Xq6Itjk2p0hQj61yTcyZ/SEmG4z4xppHxPoeDM1vy2HutnA8j3F
-Ezg820Ey4ASrS2FeXZ9R+dQtojRX9eRucIAEEMrgNXJ67yM9RZmJa/EdASC0I5tZRrCN
---0000000000003f851e05e34f53a2--
+AwQCATANBgkqhkiG9w0BAQEFAASCAQAeeq/zc41CUljXgrKWGK0TGOns0LOatADCNAgAZ06XV1lB
+cWeJKldaXKVBbCqhKHd47T4Lr4vtN0Aty4keM1Tjzaf3XKjpaW76iscNHVUsMsudhOBi0LDVzMUD
+kLxbjSVReAFLe0EqYUHfBSC+0fRSKKFW+eeoAmOdyuR49Z1AIac5jiJLejUP/n17qS1kagg8pWhd
+oMtqWOoTd00F3JQLJWYcy70hItmqYbKN3s8K2SuB1hPG5hEuVUxyYOTmqqplMZKcbQxX+1f5ocix
+zGdQD13Efildy8Gbi/bRA+9RHaonzGdYfx1l6C5qKWS3MLYbKPAcCQw5YyKDnjDtmsfM
+--000000000000b3180f05e34f53f2--

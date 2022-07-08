@@ -2,110 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 32BA356B372
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 09:25:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0497D56B383
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 09:30:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237494AbiGHHZQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Jul 2022 03:25:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37518 "EHLO
+        id S237540AbiGHH0F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Jul 2022 03:26:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37730 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237413AbiGHHZN (ORCPT
+        with ESMTP id S237413AbiGHH0B (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Jul 2022 03:25:13 -0400
-Received: from mail-qt1-f169.google.com (mail-qt1-f169.google.com [209.85.160.169])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 308001837B
-        for <linux-kernel@vger.kernel.org>; Fri,  8 Jul 2022 00:25:13 -0700 (PDT)
-Received: by mail-qt1-f169.google.com with SMTP id e7so625507qts.1
-        for <linux-kernel@vger.kernel.org>; Fri, 08 Jul 2022 00:25:13 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=VqT3m8gA4t9MFZN2vHoFQVMTXYsGoD6rUVaQJigFX7s=;
-        b=HaZ4G39/vnYuvfYtOLXjbdld6ETo8O1KHaAKUbMreT2xSEAFAHKl/IzFxK0HO6th5E
-         IG5VPupc8cCq7lMESzsmG6W1/Y4Z7LaVu3cWye00b8h4H4DCXuNXhVErJSNP6djkvNuy
-         CNiiYTUonw7MxdK6Agy1KX43CKkCliouZtecPjESif4z6AALgZYX1unTR8zbJBIqFWpW
-         9iaWWmHq8snv13MDoFgGQp3fO8qdn5N4TMDpY8pXnMIs3zM1oVdEWnpd+rrPifLp994D
-         QF4DoCyA+VwoAAN/kj05UEjwhHIo8ySX/cqGwGcb+7yNwgKxLb5+BLWTKSIh8CwSXvHI
-         9+vA==
-X-Gm-Message-State: AJIora+OX0fIYfnQSQR07gGUtW85thjhiWym/X3YpSpgFxnc5ALE6WCP
-        rN2g5kSZNXbgEIpNE4+OukhNzD9+xrXRCQ==
-X-Google-Smtp-Source: AGRyM1tSOZ2/yvNtiKGYZp2OI9fiqa5pHFJdHD9+n8AXDGsZoKSaTr0vBSJuDr7zVab2/e0wEpFoqA==
-X-Received: by 2002:ac8:478b:0:b0:31a:89a8:ea63 with SMTP id k11-20020ac8478b000000b0031a89a8ea63mr1743388qtq.79.1657265112152;
-        Fri, 08 Jul 2022 00:25:12 -0700 (PDT)
-Received: from mail-yw1-f172.google.com (mail-yw1-f172.google.com. [209.85.128.172])
-        by smtp.gmail.com with ESMTPSA id u5-20020a37ab05000000b006b4748535a1sm10260190qke.16.2022.07.08.00.25.11
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 08 Jul 2022 00:25:11 -0700 (PDT)
-Received: by mail-yw1-f172.google.com with SMTP id 00721157ae682-3137316bb69so190553947b3.10
-        for <linux-kernel@vger.kernel.org>; Fri, 08 Jul 2022 00:25:11 -0700 (PDT)
-X-Received: by 2002:a81:5404:0:b0:31c:c24d:94b0 with SMTP id
- i4-20020a815404000000b0031cc24d94b0mr2436888ywb.502.1657265110382; Fri, 08
- Jul 2022 00:25:10 -0700 (PDT)
+        Fri, 8 Jul 2022 03:26:01 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10BF9A1B6;
+        Fri,  8 Jul 2022 00:26:01 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A176F62570;
+        Fri,  8 Jul 2022 07:26:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 09013C341C0;
+        Fri,  8 Jul 2022 07:26:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1657265160;
+        bh=HgjugEAjKnXuiWUzDEFoDZIQxIti3cWoD34a5DDDhRc=;
+        h=From:To:Cc:Subject:Date:From;
+        b=m1vanb1pyvTZm2lekW6U9uNKmjaXe0kzYg9evNz4yhX0XCNQ3NgeU29Gu5OLHkLvf
+         xjCWYvorx1gO+lBtH5p0xSOuysRLpCFr9vxi6Myx8+ABCuuImANgpK+joXw1VSlFaW
+         q7iywrjmB84km7YVfBmhcAAESLH3XjIzykdKOxdqG/S6dv5Yr/RxJHsrqBOUFKovNX
+         OXQJ64gxQPOmUg+g7PZTapzsr9FOcolGJhS41OV8x/KzbX4e+Axl/1mToCKNfz4WVk
+         Zw9xNeW/Qedu5loEoOrD+JAwxiVcCDU+gqzN/4mz06gIWQ2shHHNzTPYYoV9idlzWS
+         UaGWoRJk/NpDw==
+Received: from johan by xi.lan with local (Exim 4.94.2)
+        (envelope-from <johan+linaro@kernel.org>)
+        id 1o9iNG-0001Dm-OJ; Fri, 08 Jul 2022 09:26:02 +0200
+From:   Johan Hovold <johan+linaro@kernel.org>
+To:     Bjorn Andersson <bjorn.andersson@linaro.org>
+Cc:     Andy Gross <agross@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Johan Hovold <johan+linaro@kernel.org>
+Subject: [PATCH] arm64: dts: qcom: sc8280xp: fix DP PHY node unit addresses
+Date:   Fri,  8 Jul 2022 09:25:56 +0200
+Message-Id: <20220708072556.4687-1-johan+linaro@kernel.org>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-References: <20220531174514.1586248-1-laurent@vivier.eu> <CAMuHMdUbUZU3YA6nDC_LDAfUYQVmHTuCzrCfxDqwF=ZZyR5fqw@mail.gmail.com>
- <YseHZq/u9OkVltxW@zx2c4.com>
-In-Reply-To: <YseHZq/u9OkVltxW@zx2c4.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Fri, 8 Jul 2022 09:24:59 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdX7JPKJbth9xw4MbPbi29fgQNSva0r394JX-etEZiUJ_A@mail.gmail.com>
-Message-ID: <CAMuHMdX7JPKJbth9xw4MbPbi29fgQNSva0r394JX-etEZiUJ_A@mail.gmail.com>
-Subject: Re: [PATCH] m68k: virt: Kconfig minor fixes
-To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
-Cc:     Laurent Vivier <laurent@vivier.eu>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        linux-m68k <linux-m68k@lists.linux-m68k.org>,
-        Arnd Bergmann <arnd@arndb.de>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Jason,
+Fix up the DP PHY node which had the wrong unit address.
 
-On Fri, Jul 8, 2022 at 3:25 AM Jason A. Donenfeld <Jason@zx2c4.com> wrote:
-> On Thu, Jun 02, 2022 at 09:13:14AM +0200, Geert Uytterhoeven wrote:
-> > On Tue, May 31, 2022 at 7:45 PM Laurent Vivier <laurent@vivier.eu> wrote:
-> > > Select VIRTIO_MENU as it is needed by VIRTIO_MMIO.
-> > >
-> > > Add an ending period at the end the virt machine help message.
-> > >
-> > > Reported-by: Randy Dunlap <rdunlap@infradead.org>
-> > > Signed-off-by: Laurent Vivier <laurent@vivier.eu>
-> >
-> > Reviewed-by: Geert Uytterhoeven <geert@linux-m68k.org>
-> > i.e. will queue in the m68k for-v5.20 branch.
->
-> Shouldn't this fix make it for 5.19? It causes Kconfig warnings during
-> builds. So this seems like a ordinary mid-cycle bug that can be fixed.
->
-> For example, if you ctrl+f for "unmet direct" in this log, you'll see
-> this splat in the wireguard CI:
-> https://build.wireguard.com/random/108f4fea7b6053dfd09039af74c0ac0c32c956be/m68k.log
+Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
+---
+ arch/arm64/boot/dts/qcom/sc8280xp.dtsi | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-These are merely configuration warnings, there is no build or runtime
-failure.
-I reverted this patch, disabled CONFIG_VIRTIO_MENU (which BTW defaults
-to y), built and booted a kernel fine, and could login on the console.
+diff --git a/arch/arm64/boot/dts/qcom/sc8280xp.dtsi b/arch/arm64/boot/dts/qcom/sc8280xp.dtsi
+index 9de6dedb102f..3542bcc34080 100644
+--- a/arch/arm64/boot/dts/qcom/sc8280xp.dtsi
++++ b/arch/arm64/boot/dts/qcom/sc8280xp.dtsi
+@@ -1252,7 +1252,7 @@ usb_1_ssphy: usb3-phy@8903400 {
+ 				clock-output-names = "usb1_phy_pipe_clk_src";
+ 			};
+ 
+-			usb_1_dpphy: dp-phy@88ed200 {
++			usb_1_dpphy: dp-phy@8904200 {
+ 				reg = <0 0x08904200 0 0x200>,
+ 				      <0 0x08904400 0 0x200>,
+ 				      <0 0x08904a00 0 0x200>,
+-- 
+2.35.1
 
-So IMHO it can wait.
-
-Gr{oetje,eeting}s,
-
-                        Geert
-
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds

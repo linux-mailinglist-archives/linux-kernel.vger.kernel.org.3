@@ -2,64 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 596C256C556
-	for <lists+linux-kernel@lfdr.de>; Sat,  9 Jul 2022 02:29:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 72DBB56C575
+	for <lists+linux-kernel@lfdr.de>; Sat,  9 Jul 2022 02:30:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229489AbiGHXmq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Jul 2022 19:42:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46934 "EHLO
+        id S229560AbiGHXsR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Jul 2022 19:48:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33242 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229484AbiGHXml (ORCPT
+        with ESMTP id S229436AbiGHXsP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Jul 2022 19:42:41 -0400
-Received: from mail-lj1-x233.google.com (mail-lj1-x233.google.com [IPv6:2a00:1450:4864:20::233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F36976BC36
-        for <linux-kernel@vger.kernel.org>; Fri,  8 Jul 2022 16:42:39 -0700 (PDT)
-Received: by mail-lj1-x233.google.com with SMTP id a39so160781ljq.11
-        for <linux-kernel@vger.kernel.org>; Fri, 08 Jul 2022 16:42:39 -0700 (PDT)
+        Fri, 8 Jul 2022 19:48:15 -0400
+Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34CDDA79F7
+        for <linux-kernel@vger.kernel.org>; Fri,  8 Jul 2022 16:48:13 -0700 (PDT)
+Received: by mail-lf1-x134.google.com with SMTP id u13so176385lfn.5
+        for <linux-kernel@vger.kernel.org>; Fri, 08 Jul 2022 16:48:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=e1z/XYffrQE1ulbZWqvB17ZvgZDPHSFhdrO4bt0sud0=;
-        b=rwQIfx2Rbka3ZHXrSst/zHyIhKR2xW8QfdqVBrkvu70qG4LbOgX2/R7lqpN7urgSGj
-         kW/vig2rxrw5x7BzghZ113H429+v5QNUXswiV5ZJ4sglOAcVoa1d/8+i15DcFgPlA4F/
-         FRbh2JPOxgmXZOYbz9bx0muHxBonv8wFVGhPibkcY0RkzlW3wmuKuW4PYg9BS1NTBJYO
-         bBlB9zQqFoE1tfmMg3xHd9pgI11PYjcfO3Ta5JHIuhEzYKZTr4o9w5zuOnGrakuZoksG
-         ZHVXkuBvG253i4A3tfL6Pwgf+HtvL4RaNLKtDz5Um8913lZvvDuPY1bD1Zad3vxX5WPE
-         jQeA==
+        bh=pv/kMkRXLTmjNlh49xKQLUzHkabn6pqCOnhb5uu/n7E=;
+        b=Iqd/944B5JiBG7p6ksdmO0GUZ4qrnQMi/cOZtevlIaX7we0yVtFSiQV6u/gVu87PVu
+         iSdor1XOrotUAnhOBPJnkHwpepagsDEG7xfH1y7+7UwJnJHrhiBpn0rqcXVAv/btO3ko
+         t/fEV8xFM8pDS3IaDHC5dcc6c4kMMjBwu8a7Pk4HB0XtW03UwVqZ0acr6lq97X7/9MSn
+         OMtrHoVJgmuF8/yNZnpIA9Ko+0UDIRksYUoZE0w5bgsaI68L0hszdNPHfh2zTm+Ll9Vi
+         ycVv4QI8zAXSdOBrYxfw3A5x3VjJnvrw49gQM+Eh+dFXuNmCY8NK0u5F5M3HFGYNuyT9
+         eTbA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=e1z/XYffrQE1ulbZWqvB17ZvgZDPHSFhdrO4bt0sud0=;
-        b=32g48+2kDJmCal1W4B9/Li3Y/fHue+/coFq6sLnk4SDBj/9DYXGueoIUzdPndoi9rG
-         LpJ8u/EddrXUzzIaILpR68bR6t7BRq0gauaks1GusIBt7umpJcd/BjTpoa234KeTnG2Q
-         DKHNWGDtqrKqKw3uMEga3m00b14XLuA6KyJXlIn4vt4lz0/QFpSgq3hgy0PK4RSI7baO
-         dKxLQXGIvmcTm3M4uwm4NZyhb6Luv8jh0tBIbb8D1eEXs83//fJbz70RIp2qSD/4WyS7
-         GVr142IyjIM3ySFZQAvyjh0Y66to4NlsSZrsgfzTFy9ywq6vUxJZLmq3aPlEYTrds4C6
-         yzXA==
-X-Gm-Message-State: AJIora8GqawalOWL5i0wUoLwJickuMPMw/9KPAst+VGNIBr2/20mX70D
-        zLdTBfmNkhQCu0WL9Kb3oBZ2nzh2AHFOv3SI7qaTCWZVYA2XkQ==
-X-Google-Smtp-Source: AGRyM1vOYSphaV8U+fKakVnibkqv4glTuEdXHVh6JjOdl+7EiEGP/eDNnQirMA5rO1tyZG9VLt5QlYutmIVp385/51c=
-X-Received: by 2002:a2e:3109:0:b0:25a:8a0c:40e2 with SMTP id
- x9-20020a2e3109000000b0025a8a0c40e2mr3237589ljx.26.1657323757825; Fri, 08 Jul
- 2022 16:42:37 -0700 (PDT)
+        bh=pv/kMkRXLTmjNlh49xKQLUzHkabn6pqCOnhb5uu/n7E=;
+        b=ppcR65Tp2KNt5vrbsJwyPz22k0T5bOa88MY/9CZpr/HVWxosV6t+ylm7eky9BdYzkJ
+         4IK6udNnO/sKMF7UERW6aWWvKIhCfBXg/IU83olFogqX5snT8Ao2Ghnyn2sCVEyQBrzJ
+         KYz8Ysz0d2XMFnk6227La53qZzW6WPQbYcWHR8gTbFulhsa9kr+bPH4G3Jv63ZWWAL0k
+         zLulcfLAnz8JN+S+DDK27SOizpx/hZSmAWuP4FOyG0Bqc5vX7hrgSlouuopZTnsMQUxq
+         T8Cf8apYUagT8VRl/kIlsvZaF1hRY3gZwb/8VD4n12YUNQ8bW/IYfK14ryHofrh89yS1
+         jmHw==
+X-Gm-Message-State: AJIora+w3/c9Z7ERAdfZ/CeX/AhcZmysMdMjayT2Y9JLSSO45VKrd6DA
+        8fPpPllm4wn4FQgjAGZQ5rQdDYM0Ge2g0noFIr3EPA==
+X-Google-Smtp-Source: AGRyM1uoxri5xBzbkCOkKoBGRKW38ISN7unT41Wp5JJBP9Qk62V89Vj/Xf1lfVnuMPdipiZkscI6YtbzhbxPPQIRiaA=
+X-Received: by 2002:a05:6512:2623:b0:47d:ace7:c804 with SMTP id
+ bt35-20020a056512262300b0047dace7c804mr3937905lfb.647.1657324091178; Fri, 08
+ Jul 2022 16:48:11 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220708211447.135209-1-justinstitt@google.com>
-In-Reply-To: <20220708211447.135209-1-justinstitt@google.com>
+References: <20220708232653.556488-1-justinstitt@google.com>
+In-Reply-To: <20220708232653.556488-1-justinstitt@google.com>
 From:   Nick Desaulniers <ndesaulniers@google.com>
-Date:   Fri, 8 Jul 2022 16:42:25 -0700
-Message-ID: <CAKwvOdmXCB7VoQLXfBgfyxdMvqaNeacMVbkCFptAqzX21KuPtg@mail.gmail.com>
-Subject: Re: [PATCH] target: iscsi: fix clang -Wformat warning
+Date:   Fri, 8 Jul 2022 16:47:59 -0700
+Message-ID: <CAKwvOdnhzwg0OswLc+RwgX0=Z4beF6EEO09w8Ezdhg-YyXQeJg@mail.gmail.com>
+Subject: Re: [PATCH] amd-xgbe: fix clang -Wformat warnings
 To:     Justin Stitt <justinstitt@google.com>
-Cc:     "Martin K . Petersen" <martin.petersen@oracle.com>,
+Cc:     "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
         Nathan Chancellor <nathan@kernel.org>,
-        Tom Rix <trix@redhat.com>,
-        Mike Christie <michael.christie@oracle.com>,
-        Max Gurtovoy <mgurtovoy@nvidia.com>,
-        Mingzhe Zou <mingzhe.zou@easystack.cn>,
-        linux-scsi@vger.kernel.org, target-devel@vger.kernel.org,
+        Tom Rix <trix@redhat.com>, netdev@vger.kernel.org,
         linux-kernel@vger.kernel.org, llvm@lists.linux.dev
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
@@ -73,53 +73,68 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jul 8, 2022 at 2:15 PM Justin Stitt <justinstitt@google.com> wrote:
+On Fri, Jul 8, 2022 at 4:27 PM Justin Stitt <justinstitt@google.com> wrote:
 >
-> When building with Clang we encounter these warnings:
-> | drivers/target/iscsi/iscsi_target_login.c:719:24: error: format
-> | specifies type 'unsigned short' but the argument has type 'int'
-> | [-Werror,-Wformat] " from node: %s\n", atomic_read(&sess->nconn),
-> -
-> | drivers/target/iscsi/iscsi_target_login.c:767:12: error: format
-> | specifies type 'unsigned short' but the argument has type 'int'
-> | [-Werror,-Wformat] " %s\n", atomic_read(&sess->nconn),
+> When building with Clang we encounter the following warning:
+> | drivers/net/ethernet/amd/xgbe/xgbe-dcb.c:234:42: error: format specifies
+> | type 'unsigned char' but the argument has type '__u16' (aka 'unsigned
+> | short') [-Werror,-Wformat] pfc->pfc_cap, pfc->pfc_en, pfc->mbc,
+> | pfc->delay);
 >
-> For both warnings, the format specifier is `%hu` which describes an
-> unsigned short. The resulting type of atomic_read is an int. The
-> proposed fix is to listen to Clang and swap the format specifier.
+> pfc->pfc_cap , pfc->pfc_cn, pfc->mbc are all of type `u8` while pfc->delay is
+> of type `u16`. The correct format specifiers `%hh[u|x]` were used for
+> the first three but not for pfc->delay, which is causing the warning
+> above.
+>
+> Variadic functions (printf-like) undergo default argument promotion.
+> Documentation/core-api/printk-formats.rst specifically recommends using
+> the promoted-to-type's format flag. In this case `%d` (or `%x` to
+> maintain hex representation) should be used since both u8's and u16's
+> are fully representable by an int.
+>
+> Moreover, C11 6.3.1.1 states:
+> (https://www.open-std.org/jtc1/sc22/wg14/www/docs/n1548.pdf) `If an int
+> can represent all values of the original type ..., the value is
+> converted to an int; otherwise, it is converted to an unsigned int.
+> These are called the integer promotions.`
 >
 > Link: https://github.com/ClangBuiltLinux/linux/issues/378
 > Signed-off-by: Justin Stitt <justinstitt@google.com>
 
-See also:
-https://lore.kernel.org/lkml/CAKwvOd=uOrDe5DWnXn7fx8+kTCF6gQVYhgqpnDFbaKunfBBVVg@mail.gmail.com/
+Thanks for the patch, this fixes an instance of -Wformat I observe for
+x86_64 allmodconfig.  I thought you had already fixed this file up?
+https://lore.kernel.org/llvm/20220607191119.20686-1-jstitt007@gmail.com/
+which was merged. I'm guessing that was from a defconfig, while this
+was from an allmodconfig?
+Seems like there's a bunch of config ifdef'ery around the definition
+of netif_dbg.
+
+Either way, thanks for the patches and
+
+Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
+Tested-by: Nick Desaulniers <ndesaulniers@google.com>
 
 > ---
->  drivers/target/iscsi/iscsi_target_login.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
+> For clarification, the first three parameters given to netif_dbg did NOT
+> cause a -Wformat warning. I changed them simply to follow what the
+> standard and documentation recommend.
 >
-> diff --git a/drivers/target/iscsi/iscsi_target_login.c b/drivers/target/iscsi/iscsi_target_login.c
-> index 6b94eecc4790..0778591abae7 100644
-> --- a/drivers/target/iscsi/iscsi_target_login.c
-> +++ b/drivers/target/iscsi/iscsi_target_login.c
-> @@ -715,7 +715,7 @@ void iscsi_post_login_handler(
+>  drivers/net/ethernet/amd/xgbe/xgbe-dcb.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 >
->                 list_add_tail(&conn->conn_list, &sess->sess_conn_list);
->                 atomic_inc(&sess->nconn);
-> -               pr_debug("Incremented iSCSI Connection count to %hu"
-> +               pr_debug("Incremented iSCSI Connection count to %d"
->                         " from node: %s\n", atomic_read(&sess->nconn),
->                         sess->sess_ops->InitiatorName);
->                 spin_unlock_bh(&sess->conn_lock);
-> @@ -763,7 +763,7 @@ void iscsi_post_login_handler(
->         spin_lock_bh(&sess->conn_lock);
->         list_add_tail(&conn->conn_list, &sess->sess_conn_list);
->         atomic_inc(&sess->nconn);
-> -       pr_debug("Incremented iSCSI Connection count to %hu from node:"
-> +       pr_debug("Incremented iSCSI Connection count to %d from node:"
->                 " %s\n", atomic_read(&sess->nconn),
->                 sess->sess_ops->InitiatorName);
->         spin_unlock_bh(&sess->conn_lock);
+> diff --git a/drivers/net/ethernet/amd/xgbe/xgbe-dcb.c b/drivers/net/ethernet/amd/xgbe/xgbe-dcb.c
+> index 895d35639129..c68ace804e37 100644
+> --- a/drivers/net/ethernet/amd/xgbe/xgbe-dcb.c
+> +++ b/drivers/net/ethernet/amd/xgbe/xgbe-dcb.c
+> @@ -230,7 +230,7 @@ static int xgbe_dcb_ieee_setpfc(struct net_device *netdev,
+>         struct xgbe_prv_data *pdata = netdev_priv(netdev);
+>
+>         netif_dbg(pdata, drv, netdev,
+> -                 "cap=%hhu, en=%#hhx, mbc=%hhu, delay=%hhu\n",
+> +                 "cap=%d, en=%#x, mbc=%d, delay=%d\n",
+>                   pfc->pfc_cap, pfc->pfc_en, pfc->mbc, pfc->delay);
+>
+>         /* Check PFC for supported number of traffic classes */
 > --
 > 2.37.0.rc0.161.g10f37bed90-goog
 >

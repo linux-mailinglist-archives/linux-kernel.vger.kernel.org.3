@@ -2,106 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5CC9356C27F
-	for <lists+linux-kernel@lfdr.de>; Sat,  9 Jul 2022 01:13:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ADE8356C2F5
+	for <lists+linux-kernel@lfdr.de>; Sat,  9 Jul 2022 01:13:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239959AbiGHUEb convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 8 Jul 2022 16:04:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36558 "EHLO
+        id S239726AbiGHUHB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Jul 2022 16:07:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37532 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238564AbiGHUEa (ORCPT
+        with ESMTP id S229496AbiGHUG5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Jul 2022 16:04:30 -0400
-Received: from mout.kundenserver.de (mout.kundenserver.de [217.72.192.73])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC8C315817
-        for <linux-kernel@vger.kernel.org>; Fri,  8 Jul 2022 13:04:28 -0700 (PDT)
-Received: from mail-yb1-f182.google.com ([209.85.219.182]) by
- mrelayeu.kundenserver.de (mreue109 [213.165.67.113]) with ESMTPSA (Nemesis)
- id 1MK3eC-1nroYu3Bsc-00LXkx for <linux-kernel@vger.kernel.org>; Fri, 08 Jul
- 2022 22:04:26 +0200
-Received: by mail-yb1-f182.google.com with SMTP id h132so8804614ybb.4
-        for <linux-kernel@vger.kernel.org>; Fri, 08 Jul 2022 13:04:26 -0700 (PDT)
-X-Gm-Message-State: AJIora+mvlUh37pWQdA/TtdPkD8+t6ZLpz2x4ZRCyNPQtHF3vclrsayQ
-        KWKCukCFuyECn+ARiMW6qn9f42IrGLMVxhkwlek=
-X-Google-Smtp-Source: AGRyM1savU/Qw4Umj3pyp2adCxX0XYcdGWhZpyJOvSwo6AcbUz+MBNyDLd6G6BSJJDRVleS8AnJ0WO3o2LAilMgwrYM=
-X-Received: by 2002:a5b:b47:0:b0:66e:3617:d262 with SMTP id
- b7-20020a5b0b47000000b0066e3617d262mr5273482ybr.106.1657310665592; Fri, 08
- Jul 2022 13:04:25 -0700 (PDT)
+        Fri, 8 Jul 2022 16:06:57 -0400
+Received: from mail-qt1-f180.google.com (mail-qt1-f180.google.com [209.85.160.180])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C978A15817;
+        Fri,  8 Jul 2022 13:06:56 -0700 (PDT)
+Received: by mail-qt1-f180.google.com with SMTP id bs20so28965966qtb.11;
+        Fri, 08 Jul 2022 13:06:56 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=PrAYMou5WShK8tYCJZhhedzGwf63ebeVvEWKhQgZ9ig=;
+        b=Tdn4rg7T5hHvt6R8E+cBGKmgB20+fx+mFomvz5vcSdriCirous7ZXWfSQq0d9Gc6AX
+         brj0Fh+upgv682c0a3uu8bCZ3lehdqLT5LW/8l8oL+tUtMq8Z3LFw/U4C9XeQ9gAoDo8
+         52WLuAZqkd/HWVgxG3F2LqRGPJucs6DN5YxxrAV6zYLVcXXKINEcd1/zdfp8atP1jPqr
+         e2JO7Rf4mDUABNRQZ7r8a+rYEqnHXvxWgNnEr6+uP+R1O149akFAdVZtNKfkM94ozOm4
+         3L002k6j7KehC7jYsvQWBz9P/Gdi28gVM0YmivIR1R+yGpMC4zSGE+htcv1J9w1r8Ezz
+         GczA==
+X-Gm-Message-State: AJIora8efIHGMirJuIUk97+lTSfLYasqq2PxJPvEKfiUdvSCKXS2dvBq
+        Gx0jkchIF2cQxnb0Va+EsF4ySFjjK5tRsQ==
+X-Google-Smtp-Source: AGRyM1uxag7u/C6MTuWdpEbCmE/+oqvHVhpKyumejyQDM2B++G8HLyupj36i7Y4PjQqk+XHQFyztUQ==
+X-Received: by 2002:a05:622a:44d:b0:316:fccc:9aa0 with SMTP id o13-20020a05622a044d00b00316fccc9aa0mr4660784qtx.154.1657310815688;
+        Fri, 08 Jul 2022 13:06:55 -0700 (PDT)
+Received: from mail-yw1-f182.google.com (mail-yw1-f182.google.com. [209.85.128.182])
+        by smtp.gmail.com with ESMTPSA id o16-20020a05620a2a1000b006a68fdc2d18sm32741273qkp.130.2022.07.08.13.06.54
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 08 Jul 2022 13:06:54 -0700 (PDT)
+Received: by mail-yw1-f182.google.com with SMTP id 00721157ae682-31c89111f23so157918027b3.0;
+        Fri, 08 Jul 2022 13:06:54 -0700 (PDT)
+X-Received: by 2002:a81:5404:0:b0:31c:c24d:94b0 with SMTP id
+ i4-20020a815404000000b0031cc24d94b0mr6013965ywb.502.1657310814238; Fri, 08
+ Jul 2022 13:06:54 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220524093939.30927-1-pali@kernel.org> <20220702094405.tp7eo4df7fjvn2ng@pali>
- <8D562851-304F-4153-9194-426CC22B7FF2@ellerman.id.au> <20220704103951.nm4m4kpgnus3ucqo@pali>
- <CAK8P3a2tdny8SA7jcqhUZT13iq1mYqjFueC-gnTUZA1JKCtfgg@mail.gmail.com> <20220708171227.74nbcgsk63y4bdna@pali>
-In-Reply-To: <20220708171227.74nbcgsk63y4bdna@pali>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Fri, 8 Jul 2022 22:04:08 +0200
-X-Gmail-Original-Message-ID: <CAK8P3a3YMqGEjRr+ZD4Enm4pnuNNZOaeXqpY=PDXAP7w3P7y4A@mail.gmail.com>
-Message-ID: <CAK8P3a3YMqGEjRr+ZD4Enm4pnuNNZOaeXqpY=PDXAP7w3P7y4A@mail.gmail.com>
-Subject: Re: [PATCH] powerpc: e500: Fix compilation with gcc e500 compiler
-To:     =?UTF-8?Q?Pali_Roh=C3=A1r?= <pali@kernel.org>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        Michael Ellerman <michael@ellerman.id.au>,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
+References: <cover.1657301107.git.geert@linux-m68k.org> <64e2e9b14c26df28908789374253fd12072c26c2.1657301107.git.geert@linux-m68k.org>
+ <b7d937bc-d7c3-6f7a-047c-fc6e5756a5a0@redhat.com>
+In-Reply-To: <b7d937bc-d7c3-6f7a-047c-fc6e5756a5a0@redhat.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Fri, 8 Jul 2022 22:06:42 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdWCz4j5bxKBY-W3zWiCLRc9QP+OKco-haGH_9YUhaROgA@mail.gmail.com>
+Message-ID: <CAMuHMdWCz4j5bxKBY-W3zWiCLRc9QP+OKco-haGH_9YUhaROgA@mail.gmail.com>
+Subject: Re: [PATCH 1/5] drm/modes: parse_cmdline: Handle empty mode name part
+To:     Hans de Goede <hdegoede@redhat.com>
+Cc:     Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        DRI Development <dri-devel@lists.freedesktop.org>,
+        Linux Fbdev development list <linux-fbdev@vger.kernel.org>,
+        "Linux/m68k" <linux-m68k@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Provags-ID: V03:K1:YjtXZ4WSmWX9jKUxjdS3jZ9wOHyp0zzRNLlBkRST/UBGYPYJzET
- Rp3cbUkaywPjfo1REmUKLFD3aUowGbxx1InHTzAOMYAYAVMZVvwicFqcTi72bVR6CnQxaZW
- n1dSetfGjzvMaSzjUimR/YdHNhz61k2Ck1+4NvzWLXz6G199GIFjjHtsfW03b1hMFeL7NVm
- ln5fdOfRseyvU6v4prPVw==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:X+0oUCDcVIk=:7Dhk8PA75E/bdq2WAGWn8P
- 3RWSZ8WbSrVMvbvDWM3CR7HCEbbIr5D9W8p9xNUTB1SrqBxoX9paeyeADY1t+Vo2qJcwDjwrn
- pZFCST0iGZy6tmUFuoTJA7BX79oPCS6SrgDb4DS6weZz56zICqBOXXAKisw6MLDbCsT8W9oa3
- iSoBH1Dwm2oLvNCw2DBDXEtHLZXGJ4DRGR7As4ITFO4uqfrK6tdf0reBn0DaQ2rmllzPbqimw
- FeAflHy0aLIXlgQsS7S1XV7+ysBok3UTYS9QGbVqcXbvlQAnP2sKvG7rN/wYXt+NKhCsxGFk8
- sVDL8PJ+Uhnr/S21lRgq1l7vzf0N9DgAZiJafm9j76p5FsGpsQ/c8pDSawAgg8ogw+3T3+uJ4
- skrSGTJp6SGQ+AxcxTqBjYsVxZ1MP5pWl/YPqMSPKl0M/o9uG3PUUX/rNw3GI3adpVybpGLqi
- Epn0hKQvg3TrGODoTHEa669N/9lFDhOmDScB+xRSMfPEnroe+7U/UZ1Jlz/+QU0vmWMdTjLjc
- fUaqO2BqrCOQA8MWet4FqSiM1QQGofg3FIv0LXI+5J5vzCD1MQTzG7MmZgQahk24unt1gFX73
- yNdmu86ai5fNsAuN9IPhiXXQQWivoMJWss+74O8ILMQ4vT5EvtZPVcthMWnpkGNMr2VcS4A72
- GUXZO/CZ8OhyykQ8vFaK3bE8bQ2shooRZbeAj8kqwjnxAw4oOTCLKJ/L0Oi4YrzOn9lFsM2VT
- 8wifmixscE/gEdEBFNuByUrE4S55QTjTgbfwwmSkWE401TPvfxA9xc4VCaMM68QsBt2T3cF4e
- 4nrp5Cz8wtW74p14mu/TU5ufk3mjJm1vIKbX+AVA5KzeLIkcUpG8Alxaqzm/5AVI+Hcyc54Bv
- duwTK9V5Og9fhKryQePQ==
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jul 8, 2022 at 7:12 PM Pali Rohár <pali@kernel.org> wrote:
->
-> On Monday 04 July 2022 14:07:10 Arnd Bergmann wrote:
-> > Another problem I see is that a kernel that is built for both E500 and E500MC
-> > uses -mcpu=e500mc and may not actually work on the older ones either
-> > (even with your patch).
->
-> Such configuration is not supported, see arch/powerpc/platforms/Kconfig.cputype:
->
-> config PPC_E500MC
->         bool "e500mc Support"
->         select PPC_FPU
->         select COMMON_CLK
->         depends on E500
->         help
->           This must be enabled for running on e500mc (and derivatives
->           such as e5500/e6500), and must be disabled for running on
->           e500v1 or e500v2.
->
-> Based on this option you can enable either support for e500v1/e500v2 or
-> for e500mc. But not both.
+Hi Hans.
 
-This looks like a bad decision in Kconfig though, as there is nothing
-enforcing the rule: If you want support for E500MC, you have to select
-PPC_85xx, which implies E500 and allows selecting any combination
-of E500v1, E500v2 and E500MC based machines, but enabling
-any E500MC based one breaks all the others.
+On Fri, Jul 8, 2022 at 9:28 PM Hans de Goede <hdegoede@redhat.com> wrote:
+> On 7/8/22 20:21, Geert Uytterhoeven wrote:
+> > If no mode name part was specified, mode_end is zero, and the "ret ==
+> > mode_end" check does the wrong thing.
+> >
+> > Fix this by checking for a non-zero return value instead.
+>
+> Which is wrong to do, since now if you have e.g. a mode list
+> with:
+>
+> "dblntsc",
+> "dblntsc-ff"
+>
+> in there and the cmdline contains "dblntsc-ff" then you
+> will already stop with a (wrong!) match at "dblntsc".
 
-If this is a hard dependency, I think it should be enforced by making
-E500MC a separate top-level option in the "Processor Type" choice
-statement. However, if they can actually coexist, the help text and
-the Makefile need to be fixed.
+It indeed behaves that way, and did so before, as str_has_prefix()
+checks for a matching prefix, and thus may never get to the full
+match.  However, can we change that to an exact match, without
+introducing regressions?
+This can be avoided by reverse-sorting the modelist (or iterating
+backwards through a sorted modelist), though.
 
-       Arnd
+> > While at it, skip all named mode handling when mode_end is zero, as it
+> > is futile.
+>
+> AFAICT, this is actually what needs to be done to fix this, while keeping
+> the ret == mode_end check.
+
+"ret == mode_end" or "ret" doesn't matter (except for the special
+case of mode_end is zero), as str_has_prefix() returns either zero or
+the length of the prefix.  Hence it never returns a non-zero value
+smaller than the length of the prefix.
+
+> > Fixes: 7b1cce760afe38b4 ("drm/modes: parse_cmdline: Allow specifying stand-alone options")
+> > Signed-off-by: Geert Uytterhoeven <geert@linux-m68k.org>
+> > ---
+> >  drivers/gpu/drm/drm_modes.c | 4 ++--
+> >  1 file changed, 2 insertions(+), 2 deletions(-)
+> >
+> > diff --git a/drivers/gpu/drm/drm_modes.c b/drivers/gpu/drm/drm_modes.c
+> > index 14b746f7ba975954..30a7be97707bfb16 100644
+> > --- a/drivers/gpu/drm/drm_modes.c
+> > +++ b/drivers/gpu/drm/drm_modes.c
+> > @@ -1823,9 +1823,9 @@ bool drm_mode_parse_command_line_for_connector(const char *mode_option,
+> >       }
+> >
+> >       /* First check for a named mode */
+> > -     for (i = 0; i < ARRAY_SIZE(drm_named_modes_whitelist); i++) {
+> > +     for (i = 0; mode_end && i < ARRAY_SIZE(drm_named_modes_whitelist); i++) {
+> >               ret = str_has_prefix(name, drm_named_modes_whitelist[i]);
+> > -             if (ret == mode_end) {
+> > +             if (ret) {
+> >                       if (refresh_ptr)
+> >                               return false; /* named + refresh is invalid */
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds

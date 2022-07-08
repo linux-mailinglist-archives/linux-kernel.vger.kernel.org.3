@@ -2,76 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6CFEF56C4A5
-	for <lists+linux-kernel@lfdr.de>; Sat,  9 Jul 2022 01:16:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 342A356C3E4
+	for <lists+linux-kernel@lfdr.de>; Sat,  9 Jul 2022 01:15:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240430AbiGHVJv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Jul 2022 17:09:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60660 "EHLO
+        id S239966AbiGHVKH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Jul 2022 17:10:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60956 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240062AbiGHVJr (ORCPT
+        with ESMTP id S240013AbiGHVKF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Jul 2022 17:09:47 -0400
-Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 568B019C39;
-        Fri,  8 Jul 2022 14:09:46 -0700 (PDT)
-Received: by mail-pj1-x1034.google.com with SMTP id z12-20020a17090a7b8c00b001ef84000b8bso3124815pjc.1;
-        Fri, 08 Jul 2022 14:09:46 -0700 (PDT)
+        Fri, 8 Jul 2022 17:10:05 -0400
+Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D80426D572
+        for <linux-kernel@vger.kernel.org>; Fri,  8 Jul 2022 14:10:03 -0700 (PDT)
+Received: by mail-pj1-x1036.google.com with SMTP id t5-20020a17090a6a0500b001ef965b262eso2810819pjj.5
+        for <linux-kernel@vger.kernel.org>; Fri, 08 Jul 2022 14:10:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=5p+PR5ptOVcK72SzQs+cEHkIkQJ2Wi18+TxTVP867P0=;
-        b=Ciy82PPD5pO7IB93XpAY0+w/SZ6155loOCl+FBCBlfF/G7PepX1j0A+xPLdF6ZGX7u
-         zzUaCvn5NsP1xyHvefzvwcO9nUkyErnsnsh2PMJUITTRLANHwe+sBc1K2AjLrvI+I4FA
-         mJtDO24h3N6eYk+A/nLyyHPA+hJ5eANWBQM3kLMtsKguKIR5OQSSvyXFi11ZQaCJMlyy
-         iIpvu8AIERAdTe7vEtAbpxbvkdT8eP4xNnOctuum2rZdZH3o65+PodN94bBm+hiZQ3E4
-         SdIVuZUbCWUzW3//azmW3wL7cL5FmmXRNIQAbx73lNh1gieCci3TbH/hoDPBYXvdrj23
-         mWVw==
+        bh=RMmp67crMhq7PWWgYC+oDhvsTdKYOIxkTFPZEODBIXc=;
+        b=V6+rubc2RgfxmFafvlgEYRMyNK7pQjM9CyUyqwmXU4mu2VolWpJ+8H0H6f984MwZq0
+         xp+GBCAwIXA2/Wt4+K1y0VlfnggWGPM80T4eCbsq1powQ7s/SELrMKKokoyZ214ZqfH9
+         IvcEM4R6qW47/P1u53kn9zz1VLfbnNPZICG4uErOD7bI+wbo5dR2pCCC5bHcQl9qfEeQ
+         eSXD4ClctFcsaEvuxzPg3MTUHh5fTj1hQBcjmKMtXvkcD+0vhTtmEVlrjKT+oWzTf1bm
+         4vyjNe4Xpk9ErxOY1jBxqOBHuRAdp8LQpd0ZYLjwmxApr+XlTYef8Hcen8VlsiIlEfhp
+         F14w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=5p+PR5ptOVcK72SzQs+cEHkIkQJ2Wi18+TxTVP867P0=;
-        b=mH1Sps45GV8K+yxW3FejVUcFaAJCtRPxRCWwtjupll71yI13srXuOjwWYvsC3WIiWI
-         qZ05Z+cExV+01lp+5eVlcOgMsDvJ7fkB7kmQH8GP3i2uyXgHbcko/DbRfuDTJ2tNQFKQ
-         Wq+mq6oLPCLCNylgSpZ13wcxhjN705AyTvX9NGneskdIBI++5uUeyyNu7kJJFDu4OXAL
-         R9d/fkfYhihoP9obcguqNmPc9PVha+wz9wsvUb8RIbPTqhnBDm/NhtLYNKBia/59RMBq
-         5UEiHHramGlPCSg6I2s3z5EuZMiq2uRFjsfZbBebt9JFWez6ZaKxUiSg4b2nk/kDpgRZ
-         ncgw==
-X-Gm-Message-State: AJIora/INhsWnxZXNI4oM2q2rErpawOr+G/ERBUvDAhHOekZiwe/+sMl
-        j4DCuSlL/ki25ahymQZ+ATA=
-X-Google-Smtp-Source: AGRyM1t+7r6V/rHlf4Jgeo5aDKtFc+InAKxp4/GZS52cmp0hOAcY7ZN91tQLhT5vfYhpZvYZjHGOiQ==
-X-Received: by 2002:a17:903:2447:b0:16a:3b58:48c1 with SMTP id l7-20020a170903244700b0016a3b5848c1mr5938675pls.44.1657314585831;
-        Fri, 08 Jul 2022 14:09:45 -0700 (PDT)
+        bh=RMmp67crMhq7PWWgYC+oDhvsTdKYOIxkTFPZEODBIXc=;
+        b=yCSajoA+55Zq47YTHfHt48iujPJFDaSYkIdojKBT+i4wILswUhFocdKT/xHKn3Bg6E
+         6HKq+OnLNGSWNWmtg6S9t07eANxJjRliwa+hACFnJJZf3PsnkteBBr9AujeIEqhuik4q
+         Kz7bm9bE6Hj5NlhHOde7wjUm7xeRGyeAVdH9VGMkfa6YMGLo59ESoIZWJ1EmLHeDYI0M
+         YfqVfcTt8NRx7mdMeGDCjqTeq+P/beZy0EM0sP8RsfskSHQpKvaJyygoEugttb+4Ex2g
+         hxnCWGR2X5tSYMkzaYhP4kVl9XOrcIs368Oa6Fn60K5HhMT0pd7dvsb8OWP5oWEIgVyN
+         Hmig==
+X-Gm-Message-State: AJIora/Gw24AbXI4eUa6FIF9sHSMBprIzBIZzMQ8W6uPw15B3lQvmcdX
+        h44hkdkahajD9jwQlSUtRds=
+X-Google-Smtp-Source: AGRyM1uxeKx7gaOfdIL+u6yF6SPE91AaQ2/VL4LqgQj+efcRTMx0j7H5cxNrg67yxye8CdwlHBZu0w==
+X-Received: by 2002:a17:90b:38c5:b0:1ef:a7ad:ebb9 with SMTP id nn5-20020a17090b38c500b001efa7adebb9mr2086742pjb.110.1657314603373;
+        Fri, 08 Jul 2022 14:10:03 -0700 (PDT)
 Received: from fainelli-desktop.igp.broadcom.net ([192.19.223.252])
-        by smtp.gmail.com with ESMTPSA id r3-20020a170903020300b0016a11b7472csm30251495plh.166.2022.07.08.14.09.44
+        by smtp.gmail.com with ESMTPSA id l9-20020a170902f68900b0016a111c83cdsm1848957plg.119.2022.07.08.14.10.01
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 08 Jul 2022 14:09:45 -0700 (PDT)
+        Fri, 08 Jul 2022 14:10:02 -0700 (PDT)
 From:   Florian Fainelli <f.fainelli@gmail.com>
 To:     bcm-kernel-feedback-list@broadcom.com,
         William Zhang <william.zhang@broadcom.com>,
         Linux ARM List <linux-arm-kernel@lists.infradead.org>
 Cc:     anand.gore@broadcom.com, dan.beygelman@broadcom.com,
         kursad.oney@broadcom.com, joel.peshkin@broadcom.com,
-        Wolfram Sang <wsa@kernel.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Jan Dabros <jsd@semihalf.com>,
-        Jarkko Nikula <jarkko.nikula@linux.intel.com>,
-        Jie Deng <jie.deng@intel.com>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Lukas Bulwahn <lukas.bulwahn@gmail.com>,
-        Rob Herring <robh@kernel.org>,
-        Sam Protsenko <semen.protsenko@linaro.org>,
-        Sven Peter <sven@svenpeter.dev>,
-        Tyrone Ting <kfting@nuvoton.com>, linux-i2c@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [RESEND PATCH 5/8] i2c: brcmstb: bcmbca: Replace ARCH_BCM_63XX with ARCH_BCMBCA
-Date:   Fri,  8 Jul 2022 14:09:43 -0700
-Message-Id: <20220708210943.2660952-1-f.fainelli@gmail.com>
+        Vinod Koul <vkoul@kernel.org>, Al Cooper <alcooperx@gmail.com>,
+        Cai Huoqing <cai.huoqing@linux.dev>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        =?iso-8859-2?q?Rafa=B3_Mi=B3ecki?= <rafal@milecki.pl>,
+        linux-kernel@vger.kernel.org, linux-phy@lists.infradead.org
+Subject: Re: [RESEND PATCH 6/8] phy: brcm-sata: bcmbca: Replace ARCH_BCM_63XX with ARCH_BCMBCA
+Date:   Fri,  8 Jul 2022 14:10:00 -0700
+Message-Id: <20220708211000.2661166-1-f.fainelli@gmail.com>
 X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220707065800.261269-5-william.zhang@broadcom.com>
-References: <20220707065800.261269-1-william.zhang@broadcom.com> <20220707065800.261269-5-william.zhang@broadcom.com>
+In-Reply-To: <20220707065800.261269-6-william.zhang@broadcom.com>
+References: <20220707065800.261269-1-william.zhang@broadcom.com> <20220707065800.261269-6-william.zhang@broadcom.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -84,12 +77,12 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed,  6 Jul 2022 23:57:56 -0700, William Zhang <william.zhang@broadcom.com> wrote:
+On Wed,  6 Jul 2022 23:57:57 -0700, William Zhang <william.zhang@broadcom.com> wrote:
 > Prepare for the BCM63138 ARCH_BCM_63XX migration to ARCH_BCMBCA. Make
-> I2C_BRCMSTB depending on ARCH_BCMBCA.
+> PHY_BRCM_SATA depending on ARCH_BCMBCA.
 > 
 > Signed-off-by: William Zhang <william.zhang@broadcom.com>
-> Acked-by: Wolfram Sang <wsa@kernel.org>
+> Acked-by: Vinod Koul <vkoul@kernel.org>
 > ---
 
 Applied to https://github.com/Broadcom/stblinux/commits/drivers/next, thanks!

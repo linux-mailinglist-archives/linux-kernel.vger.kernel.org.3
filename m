@@ -2,157 +2,181 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F1D1D56B56F
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 11:30:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7DB1556B541
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 11:22:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237972AbiGHJ2g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Jul 2022 05:28:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50218 "EHLO
+        id S237584AbiGHJUw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Jul 2022 05:20:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41738 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237988AbiGHJ2e (ORCPT
+        with ESMTP id S237594AbiGHJUu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Jul 2022 05:28:34 -0400
-Received: from mail-qk1-f175.google.com (mail-qk1-f175.google.com [209.85.222.175])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCAB411446
-        for <linux-kernel@vger.kernel.org>; Fri,  8 Jul 2022 02:28:33 -0700 (PDT)
-Received: by mail-qk1-f175.google.com with SMTP id z12so15270435qki.3
-        for <linux-kernel@vger.kernel.org>; Fri, 08 Jul 2022 02:28:33 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=8P8vfH9HKefblWeEsLpHl1JryF7MgcGtCA94wYmgSRA=;
-        b=Uoqg6QwyC/ESTi8l7zHuyO831bTd4zXVVNiY3nFlym9hNFCZkpnuQYgQfVZ/egoDbV
-         W6BOxFQYqUCh4lJgI90WaFQvrsRmVPhFP/ZSjYinm1fwPp3XpAzXg9TxvptLlXUtkCDB
-         5Q7FUTlO7qdyTDnhEA1buxsB0T1BK3VLug4TmmvFOCQ2USHMGCyz+isWBKaZWuj76wD5
-         AOjyCcNdROMenEL3NELMtSEiowCOGi9QpSy4khyvvOIY0MZ0noAj4XWNUzE4SURvCkfB
-         aAKZ7gaph1Tj1YY1nOxNhPPZ1UI5MYaaHnwJ/CUCpKJX4gVInvrzIwausjhAtMm4pWlY
-         mFAg==
-X-Gm-Message-State: AJIora/DRgtFs/P1hGWC0Gth/ttHY3uqNr0FTAVZC04PEAr24yzskDUA
-        R7xJcEygUJqZqpzfh62UcNr3KajVoRaLrQ==
-X-Google-Smtp-Source: AGRyM1u1fRZzAllqG9/NIwRNn+VO1IkqnmZ1DXO3NDSb19sFbg5RK3gSZBnWXa3tXek8/FEm4ZKZJw==
-X-Received: by 2002:a05:620a:4914:b0:6af:3011:585f with SMTP id ed20-20020a05620a491400b006af3011585fmr1471984qkb.245.1657272512815;
-        Fri, 08 Jul 2022 02:28:32 -0700 (PDT)
-Received: from mail-yw1-f170.google.com (mail-yw1-f170.google.com. [209.85.128.170])
-        by smtp.gmail.com with ESMTPSA id ff27-20020a05622a4d9b00b0031cc5db5aebsm19008691qtb.85.2022.07.08.02.28.31
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 08 Jul 2022 02:28:32 -0700 (PDT)
-Received: by mail-yw1-f170.google.com with SMTP id 00721157ae682-31bf3656517so192749587b3.12
-        for <linux-kernel@vger.kernel.org>; Fri, 08 Jul 2022 02:28:31 -0700 (PDT)
-X-Received: by 2002:a0d:dd09:0:b0:31c:e3b9:7442 with SMTP id
- g9-20020a0ddd09000000b0031ce3b97442mr2831959ywe.47.1657272511310; Fri, 08 Jul
- 2022 02:28:31 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220707220436.4105443-1-mail@conchuod.ie> <20220707220436.4105443-3-mail@conchuod.ie>
- <20220708082443.azoqvuj7afrg7ox7@bogus> <473e6b17-465b-3d14-b04d-01b187390e66@microchip.com>
- <20220708092100.c6mgmnt7e2k7u634@bogus>
-In-Reply-To: <20220708092100.c6mgmnt7e2k7u634@bogus>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Fri, 8 Jul 2022 11:28:19 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdXUjmG9n3BuRAz_irkmHQbp=7SYxe5VEfOhMdT4D2JfwQ@mail.gmail.com>
-Message-ID: <CAMuHMdXUjmG9n3BuRAz_irkmHQbp=7SYxe5VEfOhMdT4D2JfwQ@mail.gmail.com>
-Subject: Re: [RFC 2/4] arch-topology: add a default implementation of store_cpu_topology()
-To:     Sudeep Holla <sudeep.holla@arm.com>
-Cc:     Conor Dooley <Conor.Dooley@microchip.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Palmer Dabbelt <palmer@rivosinc.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
+        Fri, 8 Jul 2022 05:20:50 -0400
+Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1D8B1CB38;
+        Fri,  8 Jul 2022 02:20:49 -0700 (PDT)
+Received: from kwepemi500013.china.huawei.com (unknown [172.30.72.54])
+        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4LfSRJ4gzDzpWCY;
+        Fri,  8 Jul 2022 17:19:56 +0800 (CST)
+Received: from huawei.com (10.67.174.197) by kwepemi500013.china.huawei.com
+ (7.221.188.120) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Fri, 8 Jul
+ 2022 17:20:45 +0800
+From:   Xu Kuohai <xukuohai@huawei.com>
+To:     <bpf@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <netdev@vger.kernel.org>,
+        Jean-Philippe Brucker <jean-philippe@linaro.org>,
+        Will Deacon <will@kernel.org>, KP Singh <kpsingh@kernel.org>
+CC:     Mark Rutland <mark.rutland@arm.com>,
         Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Daire.McNamara@microchip.com,
-        Niklas Cassel <niklas.cassel@wdc.com>,
-        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
-        Zong Li <zong.li@sifive.com>,
-        Emil Renner Berthing <kernel@esmil.dk>, hahnjo@hahnjo.de,
-        Guo Ren <guoren@kernel.org>, Anup Patel <anup@brainfault.org>,
-        Atish Patra <atishp@atishpatra.org>, changbin.du@intel.com,
-        Heiko Stuebner <heiko@sntech.de>, philipp.tomsich@vrull.eu,
-        Rob Herring <robh@kernel.org>, Marc Zyngier <maz@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Brice.Goglin@inria.fr
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Zi Shen Lim <zlim.lnx@gmail.com>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        David Ahern <dsahern@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, <x86@kernel.org>,
+        "H . Peter Anvin" <hpa@zytor.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        Russell King <rmk+kernel@armlinux.org.uk>,
+        James Morse <james.morse@arm.com>,
+        Hou Tao <houtao1@huawei.com>,
+        Jason Wang <wangborong@cdjrlc.com>
+Subject: [PATCH bpf-next v7 0/4] bpf trampoline for arm64
+Date:   Fri, 8 Jul 2022 05:30:28 -0400
+Message-ID: <20220708093032.1832755-1-xukuohai@huawei.com>
+X-Mailer: git-send-email 2.30.2
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.67.174.197]
+X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
+ kwepemi500013.china.huawei.com (7.221.188.120)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Sudeep,
+This patchset introduces bpf trampoline on arm64. A bpf trampoline converts
+native calling convention to bpf calling convention and is used to implement
+various bpf features, such as fentry, fexit, fmod_ret and struct_ops.
 
-On Fri, Jul 8, 2022 at 11:22 AM Sudeep Holla <sudeep.holla@arm.com> wrote:
-> On Fri, Jul 08, 2022 at 08:35:57AM +0000, Conor.Dooley@microchip.com wrote:
-> > On 08/07/2022 09:24, Sudeep Holla wrote:
-> > > On Thu, Jul 07, 2022 at 11:04:35PM +0100, Conor Dooley wrote:
-> > >> From: Conor Dooley <conor.dooley@microchip.com>
-> > >>
-> > >> RISC-V & arm64 both use an almost identical method of filling in
-> > >> default vales for arch topology. Create a weakly defined default
-> > >> implementation with the intent of migrating both archs to use it.
-> > >>
-> > >> Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
-> > >> ---
-> > >>   drivers/base/arch_topology.c  | 19 +++++++++++++++++++
-> > >>   include/linux/arch_topology.h |  1 +
-> > >>   2 files changed, 20 insertions(+)
-> > >>
-> > >> diff --git a/drivers/base/arch_topology.c b/drivers/base/arch_topology.c
-> > >> index 441e14ac33a4..07e84c6ac5c2 100644
-> > >> --- a/drivers/base/arch_topology.c
-> > >> +++ b/drivers/base/arch_topology.c
-> > >> @@ -765,6 +765,25 @@ void update_siblings_masks(unsigned int cpuid)
-> > >>    }
-> > >>   }
-> > >>
-> > >> +void __weak store_cpu_topology(unsigned int cpuid)
-> >
-> > Does using __weak here make sense to you?
-> >
->
-> I don't want any weak definition and arch to override as we know only
-> arm64 and RISC-V are the only users and they are aligned to have same
-> implementation. So weak definition doesn't make sense to me.
->
-> > >
-> > > I prefer to have this as default implementation. So just get the risc-v
-> > > one pushed to upstream first(for v5.20) and get all the backports if required.
-> > > Next cycle(i.e. v5.21), you can move both RISC-V and arm64.
-> > >
-> >
-> > Yeah, that was my intention. I meant to label patch 1/4 as "PATCH"
-> > and (2,3,4)/4 as RFC but forgot. I talked with Palmer about doing
-> > the risc-v impl. and then migrate both on IRC & he seemed happy with
-> > it.
-> >
->
-> Ah OK, good.
->
-> > If you're okay with patch 1/4, I'll resubmit it as a standalone v2.
-> >
->
-> That would be great, thanks. You can most the code to move to generic from
-> both arm64 and risc-v once we have this in v5.20-rc1
+The trampoline introduced does essentially the same thing as the bpf
+trampoline does on x86.
 
-Why not ignore risc-v for now, and move the arm64 implementation to
-the generic code for v5.20, so every arch will have it at once?
+Tested on raspberry pi 4b and qemu:
 
-Gr{oetje,eeting}s,
+ #18 /1     bpf_tcp_ca/dctcp:OK
+ #18 /2     bpf_tcp_ca/cubic:OK
+ #18 /3     bpf_tcp_ca/invalid_license:OK
+ #18 /4     bpf_tcp_ca/dctcp_fallback:OK
+ #18 /5     bpf_tcp_ca/rel_setsockopt:OK
+ #18        bpf_tcp_ca:OK
+ #51 /1     dummy_st_ops/dummy_st_ops_attach:OK
+ #51 /2     dummy_st_ops/dummy_init_ret_value:OK
+ #51 /3     dummy_st_ops/dummy_init_ptr_arg:OK
+ #51 /4     dummy_st_ops/dummy_multiple_args:OK
+ #51        dummy_st_ops:OK
+ #57 /1     fexit_bpf2bpf/target_no_callees:OK
+ #57 /2     fexit_bpf2bpf/target_yes_callees:OK
+ #57 /3     fexit_bpf2bpf/func_replace:OK
+ #57 /4     fexit_bpf2bpf/func_replace_verify:OK
+ #57 /5     fexit_bpf2bpf/func_sockmap_update:OK
+ #57 /6     fexit_bpf2bpf/func_replace_return_code:OK
+ #57 /7     fexit_bpf2bpf/func_map_prog_compatibility:OK
+ #57 /8     fexit_bpf2bpf/func_replace_multi:OK
+ #57 /9     fexit_bpf2bpf/fmod_ret_freplace:OK
+ #57        fexit_bpf2bpf:OK
+ #237       xdp_bpf2bpf:OK
 
-                        Geert
+v7:
+ - Fix return value register usage error
+ - Typo fixes, etc
 
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+v6: https://lore.kernel.org/bpf/20220625161255.547944-1-xukuohai@huawei.com/
+- Since Mark is refactoring arm64 ftrace to support long jump and reduce the
+  ftrace trampoline overhead, it's not clear how we'll attach bpf trampoline
+  to regular kernel functions, so remove ftrace related patches for now.
+- Add long jump support for attaching bpf trampoline to bpf prog, since bpf
+  trampoline and bpf prog are allocated via vmalloc, there is chance the
+  distance exceeds the max branch range.
+- Collect ACK/Review-by, not sure if the ACK and Review-bys for bpf_arch_text_poke()
+  should be kept, since the changes to it is not trivial
+- Update some commit messages and comments
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+v5: https://lore.kernel.org/bpf/20220518131638.3401509-1-xukuohai@huawei.com/
+- As Alexei suggested, remove is_valid_bpf_tramp_flags()
+
+v4: https://lore.kernel.org/bpf/20220517071838.3366093-1-xukuohai@huawei.com/
+- Run the test cases on raspberry pi 4b
+- Rebase and add cookie to trampoline
+- As Steve suggested, move trace_direct_tramp() back to entry-ftrace.S to
+  avoid messing up generic code with architecture specific code
+- As Jakub suggested, merge patch 4 and patch 5 of v3 to provide full function
+  in one patch
+- As Mark suggested, add a comment for the use of aarch64_insn_patch_text_nosync()
+- Do not generate trampoline for long jump to avoid triggering ftrace_bug
+- Round stack size to multiples of 16B to avoid SPAlignmentFault
+- Use callee saved register x20 to reduce the use of mov_i64
+- Add missing BTI J instructions
+- Trivial spelling and code style fixes
+
+v3: https://lore.kernel.org/bpf/20220424154028.1698685-1-xukuohai@huawei.com/
+- Append test results for bpf_tcp_ca, dummy_st_ops, fexit_bpf2bpf,
+  xdp_bpf2bpf
+- Support to poke bpf progs
+- Fix return value of arch_prepare_bpf_trampoline() to the total number
+  of bytes instead of number of instructions 
+- Do not check whether CONFIG_DYNAMIC_FTRACE_WITH_REGS is enabled in
+  arch_prepare_bpf_trampoline, since the trampoline may be hooked to a bpf
+  prog
+- Restrict bpf_arch_text_poke() to poke bpf text only, as kernel functions
+  are poked by ftrace
+- Rewrite trace_direct_tramp() in inline assembly in trace_selftest.c
+  to avoid messing entry-ftrace.S
+- isolate arch_ftrace_set_direct_caller() with macro
+  CONFIG_HAVE_DYNAMIC_FTRACE_WITH_DIRECT_CALLS to avoid compile error
+  when this macro is disabled
+- Some trivial code sytle fixes
+
+v2: https://lore.kernel.org/bpf/20220414162220.1985095-1-xukuohai@huawei.com/
+- Add Song's ACK
+- Change the multi-line comment in is_valid_bpf_tramp_flags() into net
+  style (patch 3)
+- Fix a deadloop issue in ftrace selftest (patch 2)
+- Replace pt_regs->x0 with pt_regs->orig_x0 in patch 1 commit message 
+- Replace "bpf trampoline" with "custom trampoline" in patch 1, as
+  ftrace direct call is not only used by bpf trampoline.
+
+v1: https://lore.kernel.org/bpf/20220413054959.1053668-1-xukuohai@huawei.com/
+
+Xu Kuohai (4):
+  bpf: Remove is_valid_bpf_tramp_flags()
+  arm64: Add LDR (literal) instruction
+  bpf, arm64: Implement bpf_arch_text_poke() for arm64
+  bpf, arm64: bpf trampoline for arm64
+
+ arch/arm64/include/asm/insn.h |   3 +
+ arch/arm64/lib/insn.c         |  30 +-
+ arch/arm64/net/bpf_jit.h      |   7 +
+ arch/arm64/net/bpf_jit_comp.c | 723 +++++++++++++++++++++++++++++++++-
+ arch/x86/net/bpf_jit_comp.c   |  20 -
+ kernel/bpf/bpf_struct_ops.c   |   3 +
+ kernel/bpf/trampoline.c       |   3 +
+ 7 files changed, 748 insertions(+), 41 deletions(-)
+
+-- 
+2.30.2
+

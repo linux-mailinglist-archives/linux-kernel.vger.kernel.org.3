@@ -2,54 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 236FB56C37F
-	for <lists+linux-kernel@lfdr.de>; Sat,  9 Jul 2022 01:14:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 41FD356C3C2
+	for <lists+linux-kernel@lfdr.de>; Sat,  9 Jul 2022 01:14:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240095AbiGHWOa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Jul 2022 18:14:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41006 "EHLO
+        id S239841AbiGHWP7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Jul 2022 18:15:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42498 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239139AbiGHWO1 (ORCPT
+        with ESMTP id S229749AbiGHWP4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Jul 2022 18:14:27 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FD15286D5;
-        Fri,  8 Jul 2022 15:14:26 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 2A098B829A0;
-        Fri,  8 Jul 2022 22:14:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8C0BCC341C0;
-        Fri,  8 Jul 2022 22:14:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1657318463;
-        bh=hnkI3EzBsIYdVofpLd1p8NWR26J1mZBS0im12Dq1kVo=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=PzoMvn2pH5N1J1BbZKd10pCEe59haLGaXhOWwWyqxjrghzlMx6CYoi8j4ULfiRebv
-         aG0Nx9uDylhvn4s13wdqCejNIOANRlUKEcCPfIjhjvBf/kX0lthz/1ZMFcD9SpiPk7
-         pwQDsey96LV+5b7h/waF5ERUxNvB0yymG0kfl1W9AI5kP+vejdza/DBdgpUFeZY0FG
-         SVq22Go+7DMkuBFfmAVs2KUR+Tai4PkfzioOLs4krOSeiMw46+jZz8P2O8qn6U7+qf
-         fSyG+doHXwTCU0Io80WWs2WWaJcaGnl+draRZIE5gWhJS4DluMBMjRUXJ4ZswMwiUi
-         QozrCbh1DfUdA==
-Date:   Fri, 8 Jul 2022 15:14:22 -0700
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     Zhongjun Tan <hbut_tan@163.com>
-Cc:     jesse.brandeburg@intel.com, anthony.l.nguyen@intel.com,
-        davem@davemloft.net, edumazet@google.com, pabeni@redhat.com,
-        intel-wired-lan@lists.osuosl.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Zhongjun Tan <tanzhongjun@coolpad.com>
-Subject: Re: [PATCH] iavf: Remove condition with no effect
-Message-ID: <20220708151422.57456006@kernel.org>
-In-Reply-To: <20220708035154.44079-1-hbut_tan@163.com>
-References: <20220708035154.44079-1-hbut_tan@163.com>
+        Fri, 8 Jul 2022 18:15:56 -0400
+Received: from mail-il1-f169.google.com (mail-il1-f169.google.com [209.85.166.169])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3845F76EA1;
+        Fri,  8 Jul 2022 15:15:56 -0700 (PDT)
+Received: by mail-il1-f169.google.com with SMTP id a20so19837ilk.9;
+        Fri, 08 Jul 2022 15:15:56 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=sNAXLwnHlgZL+RRPcwyuf08NpY2oRUI/xPRVTLc8Kv4=;
+        b=LLvIxWbV4Ebtjp66YiQmkCQ5WnPAUM8WBSMItGOreaFVwEi1lh+SQR1EEV0NwLbNS/
+         DnuPFG2IbBuZShAWesYWXCKJxHu01YYH/yG/7WqGR62dKQwPNI3zUDzDI7hBCeCP05bb
+         cpTkBCYX35MzlNu+ZKwgQjrzSgSrJ8vTWbPN3UdoN6WamRHiHOVdiZpVXaq9IBmfUT5/
+         FzXaiBZj9+Toi+uhxjJ20Rj9QICYLg7aEYUkTHvjjcg+OTIMxrlCItpHyLEaCH0f6OPZ
+         CB+Gvhi8qkcaWWB/W7+ekphYHSV8xfqYd4o7Kf4ijZUWel0j2LWkBTNW9WFhKPJpsY7/
+         A3gQ==
+X-Gm-Message-State: AJIora+A2h8/og/0BsvzIzdgWhhjreWPdYe3HxFgU0wnIlrAIrewPfNk
+        3+DRlzSdjKbLetJGKlShZg==
+X-Google-Smtp-Source: AGRyM1sTh/9Jg+iKmfYd7WSDHoFeviiLxTHvbNq5LkBdkESc3E6BkRI9GjzwzexP1vAAvU154ityyQ==
+X-Received: by 2002:a92:d705:0:b0:2dc:583:f588 with SMTP id m5-20020a92d705000000b002dc0583f588mr3459501iln.158.1657318555415;
+        Fri, 08 Jul 2022 15:15:55 -0700 (PDT)
+Received: from robh.at.kernel.org ([98.38.210.73])
+        by smtp.gmail.com with ESMTPSA id e39-20020a022127000000b0032e49fcc241sm18560635jaa.176.2022.07.08.15.15.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 08 Jul 2022 15:15:55 -0700 (PDT)
+Received: (nullmailer pid 1575582 invoked by uid 1000);
+        Fri, 08 Jul 2022 22:15:54 -0000
+Date:   Fri, 8 Jul 2022 16:15:54 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Alain Volmat <alain.volmat@foss.st.com>
+Cc:     mcoquelin.stm32@gmail.com,
+        linux-stm32@st-md-mailman.stormreply.com,
+        pierre-yves.mordret@foss.st.com, wsa@kernel.org,
+        fabrice.gasnier@foss.st.com, amelie.delaunay@foss.st.com,
+        devicetree@vger.kernel.org, alexandre.torgue@foss.st.com,
+        robh+dt@kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
+        mark.rutland@arm.com
+Subject: Re: [PATCH v2 1/2] dt-bindings: i2c: st,stm32-i2c: add entry for
+ stm32mp13
+Message-ID: <20220708221554.GA1575535-robh@kernel.org>
+References: <20220707074402.2429786-1-alain.volmat@foss.st.com>
+ <20220707074402.2429786-2-alain.volmat@foss.st.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220707074402.2429786-2-alain.volmat@foss.st.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -57,10 +70,13 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri,  8 Jul 2022 11:51:54 +0800 Zhongjun Tan wrote:
-> From: Zhongjun Tan <tanzhongjun@coolpad.com>
+On Thu, 07 Jul 2022 09:44:01 +0200, Alain Volmat wrote:
+> Add the new compatible for the stm32mp13.
 > 
-> Remove condition with no effect
+> Signed-off-by: Alain Volmat <alain.volmat@foss.st.com>
+> ---
+>  Documentation/devicetree/bindings/i2c/st,stm32-i2c.yaml | 2 ++
+>  1 file changed, 2 insertions(+)
+> 
 
-The code is fine, please fix the tool you're using to not generate such
-patches.
+Acked-by: Rob Herring <robh@kernel.org>

@@ -2,54 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 22A3A56BB0E
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 15:41:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C69E556BAE1
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 15:34:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238042AbiGHNlJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Jul 2022 09:41:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47100 "EHLO
+        id S238197AbiGHNc3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Jul 2022 09:32:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38772 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237743AbiGHNlI (ORCPT
+        with ESMTP id S238196AbiGHNcY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Jul 2022 09:41:08 -0400
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28DBC2A703;
-        Fri,  8 Jul 2022 06:41:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=ZG0X/u2bNGrOSRwgd/Cf/2JtluWVYNjaS55/gTNyDxw=; b=pbDHg+nEKoKVOqF3TDDxJ06kJ3
-        O4m88Cjk7bksbzNMCeGew8G7e2Hjr8fVMkoZDD/pkMPvQ3nxTa8P2zg/tOn6UIBc1NIdhJ8jYBQB5
-        RcLDzyJhnsNeSaTLJTqYsPzOcHhw32jtpe/le3spGQ+LNOw+iUqd/lnm/0k2wi2h5sdrG6Ss4IgtI
-        nK2orJW28DkUW9K/yE2HB0T2vXWgwYw8V5L0nPxtecVVyKHbgnVpo3xI+LAisa7SSxOkVbVflgSX7
-        aU7REpWJ38CcLNgQ+RS9HLx5+oV7kqlMmWu46iR8rKreOQlf07ufehyKaih8NJyqtjTuAGTm9mbBC
-        caYJn+Vg==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=worktop.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1o9oE2-001kOL-UQ; Fri, 08 Jul 2022 13:40:56 +0000
-Received: by worktop.programming.kicks-ass.net (Postfix, from userid 1000)
-        id CCE2598007C; Fri,  8 Jul 2022 15:31:59 +0200 (CEST)
-Date:   Fri, 8 Jul 2022 15:31:59 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     James Clark <james.clark@arm.com>
-Cc:     Anshuman Khandual <anshuman.khandual@arm.com>,
-        linux-kernel@vger.kernel.org, Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        linux-perf-users@vger.kernel.org
-Subject: Re: [PATCH] perf/core: Add macros for possible
- sysctl_perf_event_paranoid values
-Message-ID: <Ysgxzxl0N7+J8Vbt@worktop.programming.kicks-ass.net>
-References: <20220701063949.1769434-1-anshuman.khandual@arm.com>
- <b9da8d22-6896-68a3-b4e5-e8fd7b82b711@arm.com>
+        Fri, 8 Jul 2022 09:32:24 -0400
+Received: from mail-qt1-x82f.google.com (mail-qt1-x82f.google.com [IPv6:2607:f8b0:4864:20::82f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 555DD2CDD5
+        for <linux-kernel@vger.kernel.org>; Fri,  8 Jul 2022 06:32:23 -0700 (PDT)
+Received: by mail-qt1-x82f.google.com with SMTP id e7so1673521qts.1
+        for <linux-kernel@vger.kernel.org>; Fri, 08 Jul 2022 06:32:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ndufresne-ca.20210112.gappssmtp.com; s=20210112;
+        h=message-id:subject:from:to:cc:date:in-reply-to:references
+         :content-transfer-encoding:user-agent:mime-version;
+        bh=Yu8bKYHlHx+dbL+sw5q4ZRjn4fcee2CGtMmXinJvd+o=;
+        b=lY7hu066xUzcIPr5UD259wVv9tm24Aiv8xv3EQDHIa7pTX8DiAkoXNDgAydq0rTAU9
+         Cz9TuaHrjf2ikc6wmyiA9loansNDWN21rEMN6Ui+IvKWmhdNuGb9HiuiqoL5flj5/hso
+         CwgngzRxtPC6wfCBamtm6LzR9nxj5sqqw/4RtcV7461qSGIMGBeqnPw/DF4F1Av9eIRf
+         cqQ9356+V7IVsFw8iB7db4Q3WiOGoottS7uPymvy6FluV1b16WCV/zaWqBsM89d9dAEi
+         kjm1A5sS0LJA5yAQKngHzyVh6k2Wr0pxiP3bLeQ7OowW5O1keZEn6H+COK6Wfp22Fapc
+         ogHQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
+         :references:content-transfer-encoding:user-agent:mime-version;
+        bh=Yu8bKYHlHx+dbL+sw5q4ZRjn4fcee2CGtMmXinJvd+o=;
+        b=fQCl81q+f2VieW8Tcttsz8Ra9Nbr8lrlCmhmDyY1CZHcMbj8uAy5MND8vcn4f15/vW
+         ncqcth7ZMJOE0s1BZtW1R9lfi3ilQwoASEsLt1D3YtwCtE129tKAo48hYGQaiAS0H+1n
+         wUA21ZuMTLfAPA7SNkI3hUoJoFQVJjd+IOPVzfXzms8q+dFJzDGEpc0SQNLGxzEHzlbQ
+         eJryMItXWNKalpoWP674V+a4ZS64tt+Wm3lCxKr47IEhROwRXMyYoY+wfTwYUhHXByG/
+         KTrDlaboMYxf4Z4hxm2fLE268LLzPrOEEK3jaJYOLEuFeV0H/tZeKArLJTBa8hignWKH
+         QunQ==
+X-Gm-Message-State: AJIora+ZpCR3MNUf0srkyycgoDuWvHpXG033TKHB+ekB0QhpIhUzkUt/
+        UegGpXMdtxzq5lcXPfGYQZ4YHw==
+X-Google-Smtp-Source: AGRyM1uyuIWyl91hCY2bh60iyU9jBQdwPs2f+kbRSM+PSbqNROmEadcwNKqkO4tizj21zxRlydHeVw==
+X-Received: by 2002:a05:6214:1c89:b0:46e:4048:ca2c with SMTP id ib9-20020a0562141c8900b0046e4048ca2cmr2703474qvb.60.1657287142094;
+        Fri, 08 Jul 2022 06:32:22 -0700 (PDT)
+Received: from nicolas-tpx395.localdomain (192-222-136-102.qc.cable.ebox.net. [192.222.136.102])
+        by smtp.gmail.com with ESMTPSA id h16-20020a05620a401000b006a6a7b4e7besm39100667qko.109.2022.07.08.06.32.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 08 Jul 2022 06:32:21 -0700 (PDT)
+Message-ID: <2f35d8250ce133e21eb3987977a92af583e32d0d.camel@ndufresne.ca>
+Subject: Re: [EXT] Re: [PATCH] media: amphion: only insert the first
+ sequence startcode for vc1l format
+From:   Nicolas Dufresne <nicolas@ndufresne.ca>
+To:     Ming Qian <ming.qian@nxp.com>,
+        "mchehab@kernel.org" <mchehab@kernel.org>,
+        "hverkuil-cisco@xs4all.nl" <hverkuil-cisco@xs4all.nl>
+Cc:     "shawnguo@kernel.org" <shawnguo@kernel.org>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>,
+        "kernel@pengutronix.de" <kernel@pengutronix.de>,
+        "festevam@gmail.com" <festevam@gmail.com>,
+        dl-linux-imx <linux-imx@nxp.com>,
+        "linux-media@vger.kernel.org" <linux-media@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>
+Date:   Fri, 08 Jul 2022 09:32:20 -0400
+In-Reply-To: <AM6PR04MB63416B4BA53E80123037AC8EE7809@AM6PR04MB6341.eurprd04.prod.outlook.com>
+References: <20220628052017.26979-1-ming.qian@nxp.com>
+         <6e54af5243d324c5df1c9ec18d4b091fbd52150f.camel@ndufresne.ca>
+         <AM6PR04MB6341F4EB028CAE9B61C85157E7819@AM6PR04MB6341.eurprd04.prod.outlook.com>
+         <AM6PR04MB634136824EC98EE804FAD0CEE7819@AM6PR04MB6341.eurprd04.prod.outlook.com>
+         <42ba6a9516f4359b757d2f94b16c1bb23cc41cb2.camel@ndufresne.ca>
+         <AM6PR04MB63416B4BA53E80123037AC8EE7809@AM6PR04MB6341.eurprd04.prod.outlook.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.44.2 (3.44.2-1.fc36) 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <b9da8d22-6896-68a3-b4e5-e8fd7b82b711@arm.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -57,69 +87,21 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jul 08, 2022 at 10:10:15AM +0100, James Clark wrote:
-> 
-> 
-> On 01/07/2022 07:39, Anshuman Khandual wrote:
-> > sysctl_perf_event_paranoid can have values from [-1, 0, 1, 2] which decides
-> > on perf event restrictions for unprivileged users. But using them directly
-> > makes it difficult to correlate exact restriction level they might impose.
-> > This just adds macros for those numerical restriction values, making them
-> > clear and improving readability.
-> > 
-> > Cc: Peter Zijlstra <peterz@infradead.org>
-> > Cc: Ingo Molnar <mingo@redhat.com>
-> > Cc: Arnaldo Carvalho de Melo <acme@kernel.org>
-> > Cc: Mark Rutland <mark.rutland@arm.com>
-> > Cc: linux-perf-users@vger.kernel.org
-> > Cc: linux-kernel@vger.kernel.org
-> > Signed-off-by: Anshuman Khandual <anshuman.khandual@arm.com>
-> > ---
-> >  include/linux/perf_event.h | 22 ++++++++++++++++++----
-> >  kernel/events/core.c       |  9 +--------
-> >  kernel/kallsyms.c          |  3 ++-
-> >  3 files changed, 21 insertions(+), 13 deletions(-)
-> > 
-> > diff --git a/include/linux/perf_event.h b/include/linux/perf_event.h
-> > index da759560eec5..78156b9154df 100644
-> > --- a/include/linux/perf_event.h
-> > +++ b/include/linux/perf_event.h
-> > @@ -1359,14 +1359,28 @@ int perf_event_max_stack_handler(struct ctl_table *table, int write,
-> >  #define PERF_SECURITY_KERNEL		2
-> >  #define PERF_SECURITY_TRACEPOINT	3
-> >  
-> > +/*
-> > + * perf event paranoia level:
-> > + *  -1 - not paranoid at all
-> > + *   0 - disallow raw tracepoint access for unpriv
-> > + *   1 - disallow cpu events for unpriv
-> > + *   2 - disallow kernel profiling for unpriv
-> > + */
-> > +enum {
-> > +	PERF_EVENT_DISALLOW_NONE	= -1,
-> > +	PERF_EVENT_DISALLOW_TRACE,
-> > +	PERF_EVENT_DISALLOW_CPU,
-> > +	PERF_EVENT_DISALLOW_KERNEL
-> > +};
-> > +
-> >  static inline int perf_is_paranoid(void)
-> >  {
-> > -	return sysctl_perf_event_paranoid > -1;
-> > +	return sysctl_perf_event_paranoid > PERF_EVENT_DISALLOW_NONE;
-> >  }
-> >  
-> 
-> Hi Anshuman,
-> 
-> There are quite a few other instances of integers left in the tools code.
-> If you search for perf_event_paranoid_check() and perf_event_paranoid()
-> you will find them.
-> 
-> I'm also wondering if it makes sense to return your new enum from all of
-> the helper functions instead of an int and make it explicit that it's
-> an instance of this new type? Although the compiler doesn't seem to warn
-> about using integers so maybe it's not worth doing this.
+Le mercredi 06 juillet 2022 =C3=A0 04:09 +0000, Ming Qian a =C3=A9crit=C2=
+=A0:
+> > Can't you save the slow copy by using data_offset then ? I think most o=
+f the
+> > confusion comes from this commit message, someone else then you should =
+be
+> > able to understand what it means.
+>=20
+> I'll modify the commit message that remove the unrelated vp8 description.
+> And unfortunately the amphion vpu only support the ring buffer mode, so
+> copying is inevitable.
 
-so I don't see the point of all this; it's already wrapped in these
-helper functions that have a descriptive name, why do we need more muck
-on top?
+Great thanks, I had forgotten that Amphion was based on a ring buffer. Inde=
+ed,
+this is the way to go, same applied to CODA driver.
+
+Nicolas
+

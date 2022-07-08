@@ -2,62 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 42ED156C48C
-	for <lists+linux-kernel@lfdr.de>; Sat,  9 Jul 2022 01:15:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0287556C23E
+	for <lists+linux-kernel@lfdr.de>; Sat,  9 Jul 2022 01:12:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239779AbiGHThT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Jul 2022 15:37:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44976 "EHLO
+        id S239291AbiGHTmt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Jul 2022 15:42:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50308 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238095AbiGHThS (ORCPT
+        with ESMTP id S239162AbiGHTmp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Jul 2022 15:37:18 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46A2B65D52;
-        Fri,  8 Jul 2022 12:37:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1657309035; x=1688845035;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=Lm5ZpyWdcwQjlYsBBiZlq62XmFMEHwCGoAEYptsewiQ=;
-  b=m5B5jaC5ZoYPE5N8WV9zQd+D+LTBzG972dQRrasM6C2+iEj9K19GnVF2
-   ai5miAA4/M6JhpsPGbYwofHn4jlvy7fjb7FdtF4/bt4SAIrImD6vC5S/K
-   CSeBfFnRCQEGnJIdWDzKmCjde/cHTlu0yMmTpDOBDINgsuQePo5E8A5aY
-   3OPCJDygrjTLa93auOxXWZhqY2BZbLfSgjTYdtgdLtbmuP4/Q78GBpCoO
-   bJ1amGkdrlcBvNkOrdoLs44exaChoo+iL9Wn0K6djn1hKyMqXuQc5baNZ
-   jpxiZA5qs2IHVpKdKZ7NR+7DiUlQcFEsv0zYVeSaFue9u4xvslRXj98qF
-   w==;
-X-IronPort-AV: E=Sophos;i="5.92,256,1650956400"; 
-   d="scan'208";a="171652679"
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa3.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 08 Jul 2022 12:37:14 -0700
-Received: from chn-vm-ex02.mchp-main.com (10.10.85.144) by
- chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.17; Fri, 8 Jul 2022 12:37:14 -0700
-Received: from localhost (10.10.115.15) by chn-vm-ex02.mchp-main.com
- (10.10.85.144) with Microsoft SMTP Server id 15.1.2375.17 via Frontend
- Transport; Fri, 8 Jul 2022 12:37:13 -0700
-Date:   Fri, 8 Jul 2022 21:41:12 +0200
-From:   Horatiu Vultur <horatiu.vultur@microchip.com>
-To:     Colin Foster <colin.foster@in-advantage.com>
-CC:     <linux-gpio@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linus.walleij@linaro.org>, <kavyasree.kotagiri@microchip.com>,
-        <alexandre.belloni@bootlin.com>, <UNGLinuxDriver@microchip.com>,
-        <maxime.chevallier@bootlin.com>
-Subject: Re: [PATCH 2/2] pinctrl: ocelot: Fix pincfg
-Message-ID: <20220708194112.wkbn5uw5ous6hzwz@soft-dev3-1.localhost>
-References: <20220707185342.2697569-1-horatiu.vultur@microchip.com>
- <20220707185342.2697569-3-horatiu.vultur@microchip.com>
- <Ysd64LTu7CtBjV4R@COLIN-DESKTOP1.localdomain>
+        Fri, 8 Jul 2022 15:42:45 -0400
+Received: from alexa-out-sd-02.qualcomm.com (alexa-out-sd-02.qualcomm.com [199.106.114.39])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D175D84EF9
+        for <linux-kernel@vger.kernel.org>; Fri,  8 Jul 2022 12:42:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1657309364; x=1688845364;
+  h=message-id:date:mime-version:subject:from:to:cc:
+   references:in-reply-to:content-transfer-encoding;
+  bh=cvvPOf0ESif5qtfECCusv626UD+VI6e+YqhLOB1P/oY=;
+  b=hFPh6gyZQjewkfV/hszb7vVMr8O2dY3t2UDCKAhwzOE65kf69phv4Bsm
+   kSgvBK1G/vVTaSHZov6aX45Any2NH1yMOjbCxkfvH0is5iNUHc7n3v6gJ
+   1Bo0UrC2oW536CdCA6GlTyZZZx8k1fwbYTCW0/kPaInkswgNgwJeiSN9o
+   Q=;
+Received: from unknown (HELO ironmsg-SD-alpha.qualcomm.com) ([10.53.140.30])
+  by alexa-out-sd-02.qualcomm.com with ESMTP; 08 Jul 2022 12:42:44 -0700
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg-SD-alpha.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jul 2022 12:42:44 -0700
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Fri, 8 Jul 2022 12:42:43 -0700
+Received: from [10.111.160.191] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Fri, 8 Jul 2022
+ 12:42:41 -0700
+Message-ID: <ffad2e39-f775-00de-3119-f9b0ca3fe4f7@quicinc.com>
+Date:   Fri, 8 Jul 2022 12:42:39 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Disposition: inline
-In-Reply-To: <Ysd64LTu7CtBjV4R@COLIN-DESKTOP1.localdomain>
-X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.2
+Subject: Re: [PATCH] drm/msm/dsi: Set panel orientation when directly
+ connected
+Content-Language: en-US
+From:   Abhinav Kumar <quic_abhinavk@quicinc.com>
+To:     Doug Anderson <dianders@chromium.org>,
+        Stephen Boyd <swboyd@chromium.org>
+CC:     Rob Clark <robdclark@gmail.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        LKML <linux-kernel@vger.kernel.org>, <patches@lists.linux.dev>,
+        Sean Paul <sean@poorly.run>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        freedreno <freedreno@lists.freedesktop.org>,
+        Hsin-Yi Wang <hsinyi@chromium.org>
+References: <20220706191442.1150634-1-swboyd@chromium.org>
+ <CAD=FV=UrYCwm2ByN_5EN3fq-ayMJNjmWfJ5sooRy51ZiCoMcjA@mail.gmail.com>
+ <60252405-81f2-2465-bc20-5f91a9072031@quicinc.com>
+In-Reply-To: <60252405-81f2-2465-bc20-5f91a9072031@quicinc.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -65,116 +75,84 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The 07/07/2022 17:31, Colin Foster wrote:
-> EXTERNAL EMAIL: Do not click links or open attachments unless you know the content is safe
+
+
+On 7/8/2022 9:00 AM, Abhinav Kumar wrote:
 > 
-> Hi Horatiu,
-
-Hi Colin,
-
 > 
-> On Thu, Jul 07, 2022 at 08:53:42PM +0200, Horatiu Vultur wrote:
-> > The blamed commit changed to use regmaps instead of __iomem. But it
-> > didn't update the register offsets to be at word offset, so it uses byte
-> > offset.
-> >
-> > Fixes: 076d9e71bcf8 ("pinctrl: ocelot: convert pinctrl to regmap")
-> > Signed-off-by: Horatiu Vultur <horatiu.vultur@microchip.com>
+> On 7/8/2022 8:25 AM, Doug Anderson wrote:
+>> Hi,
+>>
+>> On Wed, Jul 6, 2022 at 12:14 PM Stephen Boyd <swboyd@chromium.org> wrote:
+>>>
+>>> Set the panel orientation in drm when the panel is directly connected,
+>>> i.e. we're not using an external bridge. The external bridge case is
+>>> already handled by the panel bridge code, so we only update the path we
+>>> take when the panel is directly connected/internal. This silences a
+>>> warning splat coming from __drm_mode_object_add() on Wormdingler boards.
+>>>
+>>> Cc: Hsin-Yi Wang <hsinyi@chromium.org>
+>>> Cc: Douglas Anderson <dianders@chromium.org>
+>>> Signed-off-by: Stephen Boyd <swboyd@chromium.org>
+>>> ---
+>>>
+>>> This relies on commit 5e41b01a7808 ("drm/panel: Add an API to allow drm
+>>> to set orientation from panel") which is in drm-misc
+>>>
+>>>   drivers/gpu/drm/msm/dsi/dsi_manager.c | 2 ++
+>>>   1 file changed, 2 insertions(+)
+>>
+>> I don't personally have objections to this, but (to my understanding)
+>> "the future" is that everyone should use panel_bridge. If we made the
+>> move to panel_bridge today then we wouldn't need to do this. In
+>> general I think panel_bridge would end up letting us delete a bunch of
+>> code...
+>>
+>> See commit 4e5763f03e10 ("drm/bridge: ti-sn65dsi86: Wrap panel with
+>> panel-bridge") for when this was done by ti-sn65dsi86.
+>>
+>> Then again, I spent a small amount of time looking into this and it's
+>> definitely non-trivial. Still likely worthwhile, but not worth
+>> blocking a tiny fix like this. It also should be fairly obvious that
+>> we should delete this when we switch to panel_bridge.
 > 
-> Sorry about this one. It sounded familiar though:
-> https://patchwork.ozlabs.org/project/linux-gpio/patch/20220125161245.418882-1-horatiu.vultur@microchip.com/
+> Right, from what I saw on IRC, panel_bridge is the way forward and 
+> dmitry did push a change to do that
 > 
-> The only takeaway from that was the use of regmap_get_reg_stride, which
-> was done in
-> commit baf927a833ca ("microchip-sgpio: Fix support for regmap")
-
-That is correct. I will update this to use regmap_get_reg_stride.
-
+> https://patchwork.freedesktop.org/patch/492585/
 > 
-> And I see it is only for pincfg - which I don't have any hardware to
-> test that. Apologies again!
-
-No worries.
-
+> But I think we can go ahead with this change because its simple enough.
 > 
-> > ---
-> >  drivers/pinctrl/pinctrl-ocelot.c | 28 +++++++++++++++-------------
-> >  1 file changed, 15 insertions(+), 13 deletions(-)
-> >
-> > diff --git a/drivers/pinctrl/pinctrl-ocelot.c b/drivers/pinctrl/pinctrl-ocelot.c
-> > index 6212abe2b66f..e84f2f82901f 100644
-> > --- a/drivers/pinctrl/pinctrl-ocelot.c
-> > +++ b/drivers/pinctrl/pinctrl-ocelot.c
-> > @@ -303,6 +303,13 @@ static const char *const ocelot_function_names[] = {
-> >       [FUNC_RCVRD_CLK]        = "rcvrd_clk",
-> >  };
-> >
-> > +const struct regmap_config regmap_pincfg = {
-> > +             .reg_bits = 32,
-> > +             .val_bits = 32,
-> > +             .reg_stride = 4,
-> > +             .name = "pincfg",
-> > +};
-> > +
-> >  struct ocelot_pmx_func {
-> >       const char **groups;
-> >       unsigned int ngroups;
-> > @@ -1334,7 +1341,8 @@ static int ocelot_hw_get_value(struct ocelot_pinctrl *info,
-> >       if (info->pincfg) {
-> >               u32 regcfg;
-> >
-> > -             ret = regmap_read(info->pincfg, pin, &regcfg);
-> > +             ret = regmap_read(info->pincfg, pin * regmap_pincfg.reg_stride,
-> > +                               &regcfg);
-> >               if (ret)
-> >                       return ret;
-> >
-> > @@ -1368,14 +1376,16 @@ static int ocelot_pincfg_clrsetbits(struct ocelot_pinctrl *info, u32 regaddr,
-> >       u32 val;
-> >       int ret;
-> >
-> > -     ret = regmap_read(info->pincfg, regaddr, &val);
-> > +     ret = regmap_read(info->pincfg, regaddr * regmap_pincfg.reg_stride,
-> > +                       &val);
-> >       if (ret)
-> >               return ret;
-> >
-> >       val &= ~clrbits;
-> >       val |= setbits;
-> >
-> > -     ret = regmap_write(info->pincfg, regaddr, val);
-> > +     ret = regmap_write(info->pincfg, regaddr * regmap_pincfg.reg_stride,
-> > +                        val);
-> >
-> >       return ret;
-> >  }
-> > @@ -1940,21 +1950,13 @@ static struct regmap *ocelot_pinctrl_create_pincfg(struct platform_device *pdev)
-> >  {
-> >       void __iomem *base;
-> >
-> > -     const struct regmap_config regmap_config = {
-> > -             .reg_bits = 32,
-> > -             .val_bits = 32,
-> > -             .reg_stride = 4,
-> > -             .max_register = 32,
-> > -             .name = "pincfg",
-> > -     };
-> > -
-> > -     base = devm_platform_ioremap_resource(pdev, 1);
-> > +             base = devm_platform_ioremap_resource(pdev, 1);
-> >       if (IS_ERR(base)) {
-> >               dev_dbg(&pdev->dev, "Failed to ioremap config registers (no extended pinconf)\n");
-> >               return NULL;
-> >       }
-> >
-> > -     return devm_regmap_init_mmio(&pdev->dev, base, &regmap_config);
-> > +     return devm_regmap_init_mmio(&pdev->dev, base, &regmap_pincfg);
-> >  }
-> >
-> >  static int ocelot_pinctrl_probe(struct platform_device *pdev)
-> > --
-> > 2.33.0
-> >
+> Regarding the panel_bridge migration, I am going to start reviewing that 
+> as well.
+> 
 
--- 
-/Horatiu
+I did some more digging up on the panel_bridge migration.
+
+Dmitry has posted this towards december last year
+
+https://patches.linaro.org/project/dri-devel/patch/20211207222901.988484-3-dmitry.baryshkov@linaro.org/ 
+
+
+and I had given my R-b on this already in Jan.
+
+I am not sure why this change was dropped OR was not part of msm-next 
+already.
+
+Dmitry, any reason this change was left out so long and why the R-b was 
+not retained and this was reposted?
+
+ From what i can see the change looks identical.
+
+Thanks
+
+Abhinav
+>>
+>> Thus:
+>>
+>> Reviewed-by: Douglas Anderson <dianders@chromium.org>
+>>
+>> I'll assume that we'll just snooze this commit until drm-misc-next
+>> merges into a tree that msm-next is based on, which will probably be
+>> the next -rc1. If desired and Acked I could land this in
+>> drm-misc-next, but it's probably not worth it?

@@ -2,102 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 604B356B43D
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 10:16:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DC3CE56B444
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 10:16:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237733AbiGHIOF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Jul 2022 04:14:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48276 "EHLO
+        id S237742AbiGHIOm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Jul 2022 04:14:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48764 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237722AbiGHIOD (ORCPT
+        with ESMTP id S237628AbiGHIOl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Jul 2022 04:14:03 -0400
-Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B6B471BFA
-        for <linux-kernel@vger.kernel.org>; Fri,  8 Jul 2022 01:14:01 -0700 (PDT)
-Received: by mail-pf1-x434.google.com with SMTP id l124so12543197pfl.8
-        for <linux-kernel@vger.kernel.org>; Fri, 08 Jul 2022 01:14:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=dl82gz8QjmANwna+I20UXlrSEeJ1+WO2UZanVzGM0so=;
-        b=CZSXGcFDCZp9VbC5FmUr5/iPgXLOqnr+60QCezEU4A5g7VFUwLtvbvGa8psin8X/fE
-         h1+wvf1+Wt1N/lOwTpaiF5YioutMWPJrueOuIoSV/+yXTurxCWx4ReXRFrpJPtQGxdDN
-         aE6V7tWwwf9DV8sbReSdtVvCtMNBzAURZtL4em3QL5If7q/g19Lu+vhAAgOAS0vS/bQB
-         QGnJI8M+V8YNTCzT4ObD8fvL3fUicj6stZainTO4eD/gQ5xoqKUdPR5T40Y1ZlUq8Kwx
-         Zc7iYB8p67fW0y8LhnGzb0zwfY0/vRE7p8NCzgaczoUtVGHVjFENmXdvz6uFvKXLDcwA
-         sSFw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=dl82gz8QjmANwna+I20UXlrSEeJ1+WO2UZanVzGM0so=;
-        b=Kv+vDbL+0OTGCPwx33He9HR0g5KCSoqsOHrxQrj2Izioufpo8DrRZWgbtSGrzcg3XQ
-         75BvopBSJYpoApV3BmRk8V1SJ5IWb8VT0lcF7Dj6Qth6/4CYG8JCqrvKb2+QkLlMqzsO
-         AKhxUMWeNyBbLLRNYBqvCr9dZF1Y5eDB6OKkqvwr2m2MvLjs/35PyDsYidOPWkU3fXF1
-         HCOYgLEips+qMjp6XnjGs63sD7uCKFnPh2rIIjvCTiWEbCrvnFx93PfaeorMr/XXgqH+
-         JaRiRT6JJhWtEGe/WMOCaYH5LOjo1SfwLV+yV0o2fjCYtByyMRISGTdA0V1xRLBAT7kL
-         kb+A==
-X-Gm-Message-State: AJIora9QfW8s9GCKJPAtBhRqJWC4q8PLpjPpuhBjRGgCB372cyc7pRoQ
-        cKz8W3XxoOHpVWLuMPsGT+Ou7Q==
-X-Google-Smtp-Source: AGRyM1u1VL9RI6muZTqV+yjUK0SBUkQP4Hy/5vLre7Pmw0+rdutvZOufYdaMHzt147Jc8SA1X+QKkQ==
-X-Received: by 2002:a05:6a00:22cb:b0:525:ba83:559a with SMTP id f11-20020a056a0022cb00b00525ba83559amr2760170pfj.54.1657268041108;
-        Fri, 08 Jul 2022 01:14:01 -0700 (PDT)
-Received: from localhost ([122.171.18.80])
-        by smtp.gmail.com with ESMTPSA id h7-20020a170902680700b0016bfbd99f64sm5766698plk.118.2022.07.08.01.14.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 08 Jul 2022 01:14:00 -0700 (PDT)
-Date:   Fri, 8 Jul 2022 13:43:58 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Dmitry Osipenko <dmitry.osipenko@collabora.com>
-Cc:     Chanwoo Choi <cw00.choi@samsung.com>,
-        Dmitry Osipenko <digetx@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Kyungmin Park <kyungmin.park@samsung.com>,
-        MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Nishanth Menon <nm@ti.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Viresh Kumar <vireshk@kernel.org>, linux-pm@vger.kernel.org,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-tegra@vger.kernel.org,
-        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-        Rob Herring <robh@kernel.org>
-Subject: Re: [PATCH V2 00/13] OPP: Add support for multiple clocks*
-Message-ID: <20220708081358.o4ozv5qwf5xpqpb5@vireshk-i7>
-References: <cover.1657003420.git.viresh.kumar@linaro.org>
- <d557bbd0-2afb-12dc-1287-1aeb44ef55f5@collabora.com>
- <20220708071926.zehurtbcf35s5tv6@vireshk-i7>
- <8c52e1d2-6c6d-9a09-e426-e5292f68a3f0@collabora.com>
- <f018df81-e51d-ce4f-f10a-65ea25db48e9@collabora.com>
+        Fri, 8 Jul 2022 04:14:41 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD56F7392C;
+        Fri,  8 Jul 2022 01:14:40 -0700 (PDT)
+Received: from pps.filterd (m0098399.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 2688CH29017346;
+        Fri, 8 Jul 2022 08:14:25 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : date : message-id : in-reply-to : references : mime-version :
+ content-transfer-encoding; s=pp1;
+ bh=KjwhQRkfiywh2HTVFoTtksOCx5nrgNL3/4qAheIYzs0=;
+ b=WVQdenRVrLfitup3WLMCy/4R5lBAYQKgBrcPvA23aZBvXbCNEd9++jIW1OFa42WVW9h3
+ ZpC1XmR/5fpZr7dvkUNZRmcpldfQlx0/pJeM7FZDazEOhBHw9yDBaHlyegiK21j72YuP
+ p/RgQyjA/x6WAdT8UpdVt/1P4/TL4UGD9iQkdNNSQ20T8EHGmVXbxk8QRLrGSqrJZp9c
+ XvjIgW2NGfMScKTTHvvV/W8u0vN1v2ES/bvVj86WZvHPPxKcv1dL+dXhS2eWnH9oMC/H
+ 6KFouBEOi7hsJDt/khoHn5Q97YPuH6FDBu1lZz7E2pLc6wtzKW266E1QmTAJGgLwVlIC Lw== 
+Received: from ppma02fra.de.ibm.com (47.49.7a9f.ip4.static.sl-reverse.com [159.122.73.71])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3h6guy81jq-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 08 Jul 2022 08:14:25 +0000
+Received: from pps.filterd (ppma02fra.de.ibm.com [127.0.0.1])
+        by ppma02fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 26884vMM018005;
+        Fri, 8 Jul 2022 08:14:22 GMT
+Received: from b06avi18626390.portsmouth.uk.ibm.com (b06avi18626390.portsmouth.uk.ibm.com [9.149.26.192])
+        by ppma02fra.de.ibm.com with ESMTP id 3h4uwp2qb9-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 08 Jul 2022 08:14:22 +0000
+Received: from d06av24.portsmouth.uk.ibm.com (d06av24.portsmouth.uk.ibm.com [9.149.105.60])
+        by b06avi18626390.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 2688CxWg22544650
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 8 Jul 2022 08:12:59 GMT
+Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 9356942041;
+        Fri,  8 Jul 2022 08:14:19 +0000 (GMT)
+Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 2C3B442042;
+        Fri,  8 Jul 2022 08:14:19 +0000 (GMT)
+Received: from tuxmaker.boeblingen.de.ibm.com (unknown [9.152.85.9])
+        by d06av24.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Fri,  8 Jul 2022 08:14:19 +0000 (GMT)
+From:   Niklas Schnelle <schnelle@linux.ibm.com>
+To:     mjrosato@linux.ibm.com
+Cc:     baolu.lu@linux.intel.com, gerald.schaefer@linux.ibm.com,
+        iommu@lists.linux.dev, joro@8bytes.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-s390@vger.kernel.org, robin.murphy@arm.com,
+        schnelle@linux.ibm.com, suravee.suthikulpanit@amd.com,
+        vasant.hegde@amd.com, will@kernel.org
+Subject: [PATCH] iommu/s390: fail probe for non-pci device
+Date:   Fri,  8 Jul 2022 10:14:18 +0200
+Message-Id: <20220708081418.2691301-1-schnelle@linux.ibm.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <4c25e3ad-0eb6-5c41-48b2-7c10e745bd5d@linux.ibm.com>
+References: <4c25e3ad-0eb6-5c41-48b2-7c10e745bd5d@linux.ibm.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <f018df81-e51d-ce4f-f10a-65ea25db48e9@collabora.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: CPljTlbL3W45HRul6XZibOWR73EZbyAn
+X-Proofpoint-GUID: CPljTlbL3W45HRul6XZibOWR73EZbyAn
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
+ definitions=2022-07-08_06,2022-06-28_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 malwarescore=0
+ priorityscore=1501 lowpriorityscore=0 clxscore=1011 suspectscore=0
+ adultscore=0 impostorscore=0 phishscore=0 spamscore=0 mlxlogscore=999
+ bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2206140000 definitions=main-2207080030
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 08-07-22, 10:30, Dmitry Osipenko wrote:
-> BTW, maybe we should consider to start adding kselftests for OPP, like
-> clk framework did. That will be handy to have given that it's not easy
-> to test the whole OPP core without having specific devices.
+From: Matthew Rosato <mjrosato@linux.ibm.com>
 
-After being regularly bitten by such issues, I added some for cpufreq
-earlier. Its time that I invest some time for OPP core too I think :)
+s390-iommu only supports pci_bus_type today
 
-I don't know though when I will be able to find time for that :(
+Signed-off-by: Matthew Rosato <mjrosato@linux.ibm.com>
+---
+ drivers/iommu/s390-iommu.c | 7 ++++++-
+ 1 file changed, 6 insertions(+), 1 deletion(-)
 
+diff --git a/drivers/iommu/s390-iommu.c b/drivers/iommu/s390-iommu.c
+index dd957145fb81..762f892b4ec3 100644
+--- a/drivers/iommu/s390-iommu.c
++++ b/drivers/iommu/s390-iommu.c
+@@ -185,7 +185,12 @@ static void s390_iommu_detach_device(struct iommu_domain *domain,
+ 
+ static struct iommu_device *s390_iommu_probe_device(struct device *dev)
+ {
+-	struct zpci_dev *zdev = to_zpci_dev(dev);
++	struct zpci_dev *zdev;
++
++	if (!dev_is_pci(dev))
++		return ERR_PTR(-ENODEV);
++
++	zdev = to_zpci_dev(dev);
+ 
+ 	return &zdev->iommu_dev;
+ }
 -- 
-viresh
+2.34.1
+

@@ -2,114 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1CC8F56BDC3
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 18:08:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DB28056BE07
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 18:09:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238876AbiGHP4V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Jul 2022 11:56:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40286 "EHLO
+        id S238921AbiGHP6Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Jul 2022 11:58:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41108 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238231AbiGHP4U (ORCPT
+        with ESMTP id S238878AbiGHP6P (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Jul 2022 11:56:20 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A51070E56;
-        Fri,  8 Jul 2022 08:56:18 -0700 (PDT)
+        Fri, 8 Jul 2022 11:58:15 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 442A573922;
+        Fri,  8 Jul 2022 08:58:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
         Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=HoXhP8EOLekBdBcy/x+v3URd54YeRxp4rSwpn2gqPfY=; b=h7dLsvTcMAcpFVOpTTt9EgcXLz
-        YG+zs2fKUN8GjB0qd5UWx51u5SUzuUU5NhVd/YRyStMyrJ8iFJ9CW6EAydpZi5JzfBpXKAQSWPzpV
-        WsttHDXZTcIDhpLhE9pB43otACAOryZGWgaZph9TUfXscVAVxavNOv08rJcE8UcfxOjF1ZzJEV4hA
-        ky43E55V0pjs+vCJUhhqa8+662C/VKmgo1vHBKVQGSA+BTZjtKW89FhRoHgQD2Y2ifblnbe1spt8X
-        QlAmqTFb5GZTrUhh9TljDfq5egeb5MDvOlDwVB7R1BNViSbXK4jNmlCDTDBpOd4ythp+2xuYCuk89
-        TYin33qg==;
-Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1o9qKW-003c8p-CP; Fri, 08 Jul 2022 15:55:44 +0000
-Date:   Fri, 8 Jul 2022 16:55:44 +0100
-From:   Matthew Wilcox <willy@infradead.org>
-To:     Tao Zhou <tao.zhou@linux.dev>
-Cc:     Daniel Bristot de Oliveira <bristot@kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Ingo Molnar <mingo@redhat.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Will Deacon <will@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Marco Elver <elver@google.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Gabriele Paoloni <gpaoloni@redhat.com>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Clark Williams <williams@redhat.com>,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-trace-devel@vger.kernel.org
-Subject: Re: [PATCH V4 01/20] rv: Add Runtime Verification (RV) interface
-Message-ID: <YshTgMJcVBPuiEUN@casper.infradead.org>
-References: <cover.1655368610.git.bristot@kernel.org>
- <60548902dbccaa7ba420e40e46835693e27f643f.1655368610.git.bristot@kernel.org>
- <YsXLDvjHqOxYtckg@geo.homenetwork>
- <YsXMEeqGr2vdJCa7@casper.infradead.org>
- <YshO5tSeNyFpNFc4@geo.homenetwork>
+        bh=6RqQ8+XNVDVObMJIyPeKINSrkjPLTw+0lvhGuSc1mv4=; b=U/181vdzVYQuUne6r4DSfvY+yg
+        Qp6rXidC6C9LEBdozRcX7xo/qlo8qm4YTHwa+5tM++bKx1vSdPeNWBhbhmZNnefGmT6KhhVc09xee
+        +A7G9itA8blRQMvCB4Vo5CgudikDfZrNXVUeFZ0sMtJsGxpxdyh3ZGnNYMXL/jSwMyLo3MsT6T9T2
+        wIAPsGLZup7bDPOqfjynoKwYV7hiO43NC8p8DQVShXMX6WIl97tAk9dPcWhcN4yvfSUO/XGf3XtVr
+        7Ierci+IrPeQU2BuSRPE5zp1AlgTMI7aqsG4Kj5RnglyRUdpbd2TOZUkI2feTeyeA0CZEUZTIXdtb
+        mwZm7L2Q==;
+Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1o9qMq-004UMR-T3; Fri, 08 Jul 2022 15:58:08 +0000
+Date:   Fri, 8 Jul 2022 08:58:08 -0700
+From:   Luis Chamberlain <mcgrof@kernel.org>
+To:     Song Liu <songliubraving@fb.com>
+Cc:     Song Liu <song@kernel.org>, bpf <bpf@vger.kernel.org>,
+        lkml <linux-kernel@vger.kernel.org>,
+        Linux-MM <linux-mm@kvack.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Kernel Team <Kernel-team@fb.com>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        "rick.p.edgecombe@intel.com" <rick.p.edgecombe@intel.com>
+Subject: Re: [PATCH v6 bpf-next 0/5] bpf_prog_pack followup
+Message-ID: <YshUEEQ0lk1ON7H6@bombadil.infradead.org>
+References: <20220707223546.4124919-1-song@kernel.org>
+ <YsdlXjpRrlE9Z+Jq@bombadil.infradead.org>
+ <F000FF60-CF95-4E6B-85BD-45FC668AAE0A@fb.com>
+ <YseAEsjE49AZDp8c@bombadil.infradead.org>
+ <C96F5607-6FFE-4B45-9A9D-B89E3F67A79A@fb.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <YshO5tSeNyFpNFc4@geo.homenetwork>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <C96F5607-6FFE-4B45-9A9D-B89E3F67A79A@fb.com>
+Sender: Luis Chamberlain <mcgrof@infradead.org>
+X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jul 08, 2022 at 11:36:06PM +0800, Tao Zhou wrote:
-> On Wed, Jul 06, 2022 at 06:53:21PM +0100, Matthew Wilcox wrote:
+On Fri, Jul 08, 2022 at 01:36:25AM +0000, Song Liu wrote:
 > 
-> > On Thu, Jul 07, 2022 at 01:49:02AM +0800, Tao Zhou wrote:
-> > > > +struct rv_monitor {
-> > > > +	const char		*name;
-> > > > +	const char		*description;
-> > > > +	bool			enabled;
-> > > 
-> > > Can the 'bool enabled;' be put at the end like the definition of
-> > > structure rv_monitor_def. If '8+8+sizeof(bool)+8+8+8' not the same
-> > > as '8+8+8+8+8+sizeof(bool)', I mean is it possible that after the
-> > > end of stucture there is a int or char not require to align to 8 as
-> > > an example from my nonsense.
+> 
+> > On Jul 7, 2022, at 5:53 PM, Luis Chamberlain <mcgrof@kernel.org> wrote:
 > > 
-> > That will make no difference at all.  C doesn't allow other variables
-> > to "fill in the hole" at the end of the structure like that.  For
-> > example, one could legitimately do 'memset(&rvm, sizeof(rvm))',
-> > and that would wipe out those other variables as well.
+> > On Thu, Jul 07, 2022 at 11:52:58PM +0000, Song Liu wrote:
+> >>> On Jul 7, 2022, at 3:59 PM, Luis Chamberlain <mcgrof@kernel.org> wrote:
+> >>> 
+> >>> On Thu, Jul 07, 2022 at 03:35:41PM -0700, Song Liu wrote:
+> >>>> This set is the second half of v4 [1].
+> >>>> 
+> >>>> Changes v5 => v6:
+> >>>> 1. Rebase and extend CC list.
+> >>> 
+> >>> Why post a new iteration so soon without completing the discussion we
+> >>> had? It seems like we were at least going somewhere. If it's just
+> >>> to include mm as I requested, sure, that's fine, but this does not
+> >>> provide context as to what we last were talking about.
+> >> 
+> >> Sorry for sending v6 too soon. The primary reason was to extend the CC
+> >> list and add it back to patchwork (v5 somehow got archived). 
+> >> 
+> >> Also, I think vmalloc_exec_ work would be a separate project, while this 
+> >> set is the followup work of bpf_prog_pack. Does this make sense? 
+> >> 
+> >> Btw, vmalloc_exec_ work could be a good topic for LPC. It will be much
+> >> more efficient to discuss this in person. 
+> > 
+> > What we need is input from mm / arch folks. What is not done here is
+> > what that stuff we're talking about is and so mm folks can't guess. My
+> > preference is to address that.
+> > 
+> > I don't think in person discussion is needed if the only folks
+> > discussing this topic so far is just you and me.
 > 
-> I mean if it is possible that if @enabled placed at the end of the
-> structure rv_monitor will save some bytes.
-> If @enabled place in between, the next function pointer which is 8 bytes
-> will align to be in x8 address and the size of structure rv_monitor is
-> larger than been placed at the end of the structure.
-> Or the compiler can do magic that I can not guess.
-> 
-> Sorry for my late reply. I am not sure about this. But your reply is not
-> about what I mean. You say that the size of structure is the same(I doute about this).
-> But what my concert is that the other data next to the structure rv_monitor 
-> how to align if placing the @enabled at the end.
-> 
-> Place in between, bytes:
-> 8+8+8(padd)+8+8+8=48
-> 
-> Place at the end, bytes:
-> 8+8+8+8+8+sizeof(bool)=?
-> 
-> ? is small than 48 and the data next to the data structure rv_monitor can use
-> the saved byte which is the result of placing @enabled at the end of structure
-> to place the data.
+> How about we start a thread with mm / arch folks for the vmalloc_exec_*
+> topic? I will summarize previous discussions and include pointers to 
+> these discussions. If necessary, we can continue the discussion at LPC.
 
-You don't need to take my word for it.  You can try it yourself.
+This sounds like a nice thread to use as this is why we are talking
+about that topic.
+
+> OTOH, I guess the outcome of that discussion should not change this set? 
+
+If the above is done right then actually I think it would show similar
+considerations for a respective free for module_alloc_huge().
+
+> If we have concern about module_alloc_huge(), maybe we can have bpf code 
+> call vmalloc directly (until we have vmalloc_exec_)? 
+
+You'd need to then still open code in a similar way the same things
+which we are trying to reach consensus on.
+
+> What do you think about this plan?
+
+I think we should strive to not be lazy and sloppy, and prevent growth
+of sloppy code. So long as we do that I think this is all reasoanble.
+
+  Luis

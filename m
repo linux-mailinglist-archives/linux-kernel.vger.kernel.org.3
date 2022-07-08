@@ -2,83 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CC52B56C1DD
-	for <lists+linux-kernel@lfdr.de>; Sat,  9 Jul 2022 01:12:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BCE7456C45D
+	for <lists+linux-kernel@lfdr.de>; Sat,  9 Jul 2022 01:15:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239580AbiGHTYQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Jul 2022 15:24:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35768 "EHLO
+        id S239616AbiGHT0P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Jul 2022 15:26:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36886 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239571AbiGHTYC (ORCPT
+        with ESMTP id S238768AbiGHT0O (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Jul 2022 15:24:02 -0400
-Received: from smtp.smtpout.orange.fr (smtp09.smtpout.orange.fr [80.12.242.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48773255B2
-        for <linux-kernel@vger.kernel.org>; Fri,  8 Jul 2022 12:24:02 -0700 (PDT)
-Received: from pop-os.home ([90.11.190.129])
-        by smtp.orange.fr with ESMTPA
-        id 9ta1o86XNV0xU9ta1oRIrR; Fri, 08 Jul 2022 21:24:00 +0200
-X-ME-Helo: pop-os.home
-X-ME-Auth: YWZlNiIxYWMyZDliZWIzOTcwYTEyYzlhMmU3ZiQ1M2U2MzfzZDfyZTMxZTBkMTYyNDBjNDJlZmQ3ZQ==
-X-ME-Date: Fri, 08 Jul 2022 21:24:00 +0200
-X-ME-IP: 90.11.190.129
-From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-To:     Nishanth Menon <nm@ti.com>, Tero Kristo <kristo@kernel.org>,
-        Santosh Shilimkar <ssantosh@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        linux-arm-kernel@lists.infradead.org
-Subject: [PATCH 2/2] firmware: ti_sci: Use the non-atomic bitmap API when applicable
-Date:   Fri,  8 Jul 2022 21:23:56 +0200
-Message-Id: <fb7edc555b6fa7c74707f13e422196693a834bc8.1657308216.git.christophe.jaillet@wanadoo.fr>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <3ee11e9e83f7c1552d237f5c28f554319fcbbf1f.1657308216.git.christophe.jaillet@wanadoo.fr>
-References: <3ee11e9e83f7c1552d237f5c28f554319fcbbf1f.1657308216.git.christophe.jaillet@wanadoo.fr>
+        Fri, 8 Jul 2022 15:26:14 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83A8E20189;
+        Fri,  8 Jul 2022 12:26:13 -0700 (PDT)
+Received: from notapiano.myfiosgateway.com (pool-98-113-53-228.nycmny.fios.verizon.net [98.113.53.228])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: nfraprado)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 52D5866019F2;
+        Fri,  8 Jul 2022 20:26:10 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1657308371;
+        bh=XB+Q5+iW9bzcYdl1fBbqu9s42fjAPkdcGjUotn5OaPM=;
+        h=From:To:Cc:Subject:Date:From;
+        b=aAjTkJkxs/dZshN+srt3jMFNrbpIL9P4Xd9CTTckQX5iZDBqf1Ce/WjXCA+ekWoUE
+         qBLcmyhpoR/8rczvCLZwMVOp4tKqKTs9Y/nUzg+TSzbowItA6xb/GoxwjnEV2pUDgB
+         wAF0Qq97/uPv3kXY8F5kdsfP3OrqUMLHDBulNZ1JJlqSACpP5Cx6vCW2rhmXt36eWf
+         DXne89DgjSxE1AZWLja3vqAJiinx/G7Y1bTSjNcL07NZ5rg8zj9cC05qP4uLgFIEhT
+         Jv5DHCY/Re4aRnglvJYWNVPjGBV75pGJDCmpGMO7p7OQDDQqqorNEs+XcEcptx5D8J
+         UNHbLJPMIl2hA==
+From:   =?UTF-8?q?N=C3=ADcolas=20F=2E=20R=2E=20A=2E=20Prado?= 
+        <nfraprado@collabora.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     kernel@collabora.com,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        =?UTF-8?q?N=C3=ADcolas=20F=2E=20R=2E=20A=2E=20Prado?= 
+        <nfraprado@collabora.com>,
+        Chunfeng Yun <chunfeng.yun@mediatek.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-mediatek@lists.infradead.org, linux-usb@vger.kernel.org
+Subject: [PATCH] Revert "dt-bindings: usb: mtk-xhci: Make all clocks required"
+Date:   Fri,  8 Jul 2022 15:26:05 -0400
+Message-Id: <20220708192605.43351-1-nfraprado@collabora.com>
+X-Mailer: git-send-email 2.37.0
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Usages of the 'res_map' bitmap is protected with a spinlock, so non-atomic
-functions can be used to set/clear bits.
+This reverts commit ebc4969ae125e65fdb563f66f4bfa7aec95f7eb4. That
+commit was supposed to make the binding better reflect the MediaTek XHCI
+hardware block by requiring all clocks to be present. But doing that
+also causes too much noise in the devicetrees, since it requires
+updating old MediaTek DTs to add clock handles for the fixed clocks, and
+going forward every new clock added to the binding would require even
+more updates.
 
-Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+The commit also didn't update the example to match the changes, causing
+additional warnings.
+
+Instead let's keep the clocks optional so that old devicetrees can keep
+omitting the fixed clocks, and we'll just add the clocks as required on
+new DTs.
+
+Signed-off-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
+
 ---
- drivers/firmware/ti_sci.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/firmware/ti_sci.c b/drivers/firmware/ti_sci.c
-index 522be2b75ce1..49677533f376 100644
---- a/drivers/firmware/ti_sci.c
-+++ b/drivers/firmware/ti_sci.c
-@@ -3096,7 +3096,7 @@ u16 ti_sci_get_free_resource(struct ti_sci_resource *res)
+ Documentation/devicetree/bindings/usb/mediatek,mtk-xhci.yaml | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
+
+diff --git a/Documentation/devicetree/bindings/usb/mediatek,mtk-xhci.yaml b/Documentation/devicetree/bindings/usb/mediatek,mtk-xhci.yaml
+index 1444d18ef9bc..63cbc2b62d18 100644
+--- a/Documentation/devicetree/bindings/usb/mediatek,mtk-xhci.yaml
++++ b/Documentation/devicetree/bindings/usb/mediatek,mtk-xhci.yaml
+@@ -67,6 +67,7 @@ properties:
+     maxItems: 1
  
- 		free_bit = find_first_zero_bit(desc->res_map, res_count);
- 		if (free_bit != res_count) {
--			set_bit(free_bit, desc->res_map);
-+			__set_bit(free_bit, desc->res_map);
- 			raw_spin_unlock_irqrestore(&res->lock, flags);
+   clocks:
++    minItems: 1
+     items:
+       - description: Controller clock used by normal mode
+       - description: Reference clock used by low power mode etc
+@@ -75,8 +76,9 @@ properties:
+       - description: controller clock
  
- 			if (desc->num && free_bit < desc->num)
-@@ -3127,10 +3127,10 @@ void ti_sci_release_resource(struct ti_sci_resource *res, u16 id)
- 
- 		if (desc->num && desc->start <= id &&
- 		    (desc->start + desc->num) > id)
--			clear_bit(id - desc->start, desc->res_map);
-+			__clear_bit(id - desc->start, desc->res_map);
- 		else if (desc->num_sec && desc->start_sec <= id &&
- 			 (desc->start_sec + desc->num_sec) > id)
--			clear_bit(id - desc->start_sec, desc->res_map);
-+			__clear_bit(id - desc->start_sec, desc->res_map);
- 	}
- 	raw_spin_unlock_irqrestore(&res->lock, flags);
- }
+   clock-names:
++    minItems: 1
+     items:
+-      - const: sys_ck
++      - const: sys_ck  # required, the following ones are optional
+       - const: ref_ck
+       - const: mcu_ck
+       - const: dma_ck
 -- 
-2.34.1
+2.37.0
 

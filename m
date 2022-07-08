@@ -2,215 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4CE9F56B5E8
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 11:48:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CC80856B601
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 11:54:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237717AbiGHJqe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Jul 2022 05:46:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35874 "EHLO
+        id S237745AbiGHJsg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Jul 2022 05:48:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37492 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237111AbiGHJqc (ORCPT
+        with ESMTP id S237169AbiGHJsa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Jul 2022 05:46:32 -0400
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 441C3796A6;
-        Fri,  8 Jul 2022 02:46:26 -0700 (PDT)
-X-UUID: f445e572e15c473aae8bf64039675d76-20220708
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.8,REQID:21ced59d-68bc-48e8-967d-0ed1acd4328b,OB:10,L
-        OB:10,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:51,FILE:0,RULE:Release_Ham,A
-        CTION:release,TS:51
-X-CID-INFO: VERSION:1.1.8,REQID:21ced59d-68bc-48e8-967d-0ed1acd4328b,OB:10,LOB
-        :10,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:51,FILE:0,RULE:Release_Ham,ACT
-        ION:release,TS:51
-X-CID-META: VersionHash:0f94e32,CLOUDID:bfd0f7d6-5d6d-4eaf-a635-828a3ee48b7c,C
-        OID:3d2f4a1c2f7a,Recheck:0,SF:28|17|19|48,TC:nil,Content:0,EDM:-3,IP:nil,U
-        RL:0,File:nil,QS:nil,BEC:nil,COL:0
-X-UUID: f445e572e15c473aae8bf64039675d76-20220708
-Received: from mtkcas11.mediatek.inc [(172.21.101.40)] by mailgw01.mediatek.com
-        (envelope-from <biao.huang@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 1951850205; Fri, 08 Jul 2022 17:46:20 +0800
-Received: from mtkcas10.mediatek.inc (172.21.101.39) by
- mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.2.792.15; Fri, 8 Jul 2022 17:46:18 +0800
-Received: from mhfsdcap04 (10.17.3.154) by mtkcas10.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Fri, 8 Jul 2022 17:46:17 +0800
-Message-ID: <410b8c62ea399b51c11021c4838bd6a62d542703.camel@mediatek.com>
-Subject: Re: [PATCH net v3] stmmac: dwmac-mediatek: fix clock issue
-From:   Biao Huang <biao.huang@mediatek.com>
-To:     Matthias Brugger <matthias.bgg@gmail.com>,
-        David Miller <davem@davemloft.net>
-CC:     Giuseppe Cavallaro <peppe.cavallaro@st.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Jose Abreu <joabreu@synopsys.com>,
-        "Eric Dumazet" <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        "Paolo Abeni" <pabeni@redhat.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        <netdev@vger.kernel.org>,
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-mediatek@lists.infradead.org>, <macpaul.lin@mediatek.com>
-Date:   Fri, 8 Jul 2022 17:46:17 +0800
-In-Reply-To: <14bf5e6b-4230-fffc-4134-c3015cf4d262@gmail.com>
-References: <20220708083937.27334-1-biao.huang@mediatek.com>
-         <20220708083937.27334-2-biao.huang@mediatek.com>
-         <14bf5e6b-4230-fffc-4134-c3015cf4d262@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+        Fri, 8 Jul 2022 05:48:30 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4AFB3CC6
+        for <linux-kernel@vger.kernel.org>; Fri,  8 Jul 2022 02:48:27 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 3A1B1106F;
+        Fri,  8 Jul 2022 02:48:27 -0700 (PDT)
+Received: from bogus (unknown [10.57.39.193])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 6BD4E3F66F;
+        Fri,  8 Jul 2022 02:48:21 -0700 (PDT)
+Date:   Fri, 8 Jul 2022 10:47:10 +0100
+From:   Sudeep Holla <sudeep.holla@arm.com>
+To:     Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     Conor Dooley <Conor.Dooley@microchip.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Palmer Dabbelt <palmer@rivosinc.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Daire.McNamara@microchip.com,
+        Niklas Cassel <niklas.cassel@wdc.com>,
+        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
+        Zong Li <zong.li@sifive.com>,
+        Emil Renner Berthing <kernel@esmil.dk>, hahnjo@hahnjo.de,
+        Guo Ren <guoren@kernel.org>, Anup Patel <anup@brainfault.org>,
+        Atish Patra <atishp@atishpatra.org>, changbin.du@intel.com,
+        Heiko Stuebner <heiko@sntech.de>, philipp.tomsich@vrull.eu,
+        Rob Herring <robh@kernel.org>, Marc Zyngier <maz@kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Brice.Goglin@inria.fr
+Subject: Re: [RFC 2/4] arch-topology: add a default implementation of
+ store_cpu_topology()
+Message-ID: <20220708094710.rxk6flrueegdsggr@bogus>
+References: <20220707220436.4105443-1-mail@conchuod.ie>
+ <20220707220436.4105443-3-mail@conchuod.ie>
+ <20220708082443.azoqvuj7afrg7ox7@bogus>
+ <473e6b17-465b-3d14-b04d-01b187390e66@microchip.com>
+ <20220708092100.c6mgmnt7e2k7u634@bogus>
+ <CAMuHMdXUjmG9n3BuRAz_irkmHQbp=7SYxe5VEfOhMdT4D2JfwQ@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-MTK:  N
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_PASS,T_SCC_BODY_TEXT_LINE,T_SPF_TEMPERROR,UNPARSEABLE_RELAY
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAMuHMdXUjmG9n3BuRAz_irkmHQbp=7SYxe5VEfOhMdT4D2JfwQ@mail.gmail.com>
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Dear Mattias,
-	Thanks for your comments.
-
-On Fri, 2022-07-08 at 11:22 +0200, Matthias Brugger wrote:
+On Fri, Jul 08, 2022 at 11:28:19AM +0200, Geert Uytterhoeven wrote:
+> Hi Sudeep,
 > 
-> On 08/07/2022 10:39, Biao Huang wrote:
-> > Since clocks are handled in mediatek_dwmac_clks_config(),
-> > remove the clocks configuration in init()/exit(), and
-> > invoke mediatek_dwmac_clks_config instead.
-> > 
-> > This issue is found in suspend/resume test.
-> > 
+> On Fri, Jul 8, 2022 at 11:22 AM Sudeep Holla <sudeep.holla@arm.com> wrote:
+> > On Fri, Jul 08, 2022 at 08:35:57AM +0000, Conor.Dooley@microchip.com wrote:
+> > > On 08/07/2022 09:24, Sudeep Holla wrote:
+> > > > On Thu, Jul 07, 2022 at 11:04:35PM +0100, Conor Dooley wrote:
+> > > >> From: Conor Dooley <conor.dooley@microchip.com>
+> > > >>
+> > > >> RISC-V & arm64 both use an almost identical method of filling in
+> > > >> default vales for arch topology. Create a weakly defined default
+> > > >> implementation with the intent of migrating both archs to use it.
+> > > >>
+> > > >> Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
+> > > >> ---
+> > > >>   drivers/base/arch_topology.c  | 19 +++++++++++++++++++
+> > > >>   include/linux/arch_topology.h |  1 +
+> > > >>   2 files changed, 20 insertions(+)
+> > > >>
+> > > >> diff --git a/drivers/base/arch_topology.c b/drivers/base/arch_topology.c
+> > > >> index 441e14ac33a4..07e84c6ac5c2 100644
+> > > >> --- a/drivers/base/arch_topology.c
+> > > >> +++ b/drivers/base/arch_topology.c
+> > > >> @@ -765,6 +765,25 @@ void update_siblings_masks(unsigned int cpuid)
+> > > >>    }
+> > > >>   }
+> > > >>
+> > > >> +void __weak store_cpu_topology(unsigned int cpuid)
+> > >
+> > > Does using __weak here make sense to you?
+> > >
+> >
+> > I don't want any weak definition and arch to override as we know only
+> > arm64 and RISC-V are the only users and they are aligned to have same
+> > implementation. So weak definition doesn't make sense to me.
+> >
+> > > >
+> > > > I prefer to have this as default implementation. So just get the risc-v
+> > > > one pushed to upstream first(for v5.20) and get all the backports if required.
+> > > > Next cycle(i.e. v5.21), you can move both RISC-V and arm64.
+> > > >
+> > >
+> > > Yeah, that was my intention. I meant to label patch 1/4 as "PATCH"
+> > > and (2,3,4)/4 as RFC but forgot. I talked with Palmer about doing
+> > > the risc-v impl. and then migrate both on IRC & he seemed happy with
+> > > it.
+> > >
+> >
+> > Ah OK, good.
+> >
+> > > If you're okay with patch 1/4, I'll resubmit it as a standalone v2.
+> > >
+> >
+> > That would be great, thanks. You can most the code to move to generic from
+> > both arm64 and risc-v once we have this in v5.20-rc1
 > 
-> Commit message is rather confusing. Basically you are moving the
-> clock enable 
-> into probe instead of init and remove it from exit. That means,
-> clocks get 
-> enabled earlier and don't get disabled if the module gets unloaded.
-> That doesn't 
-> sound correct, I think we would at least need to disable the clocks
-> in remove 
-> function.
-there is pm_runtime support in driver, and clocks will be
-disabled/enabled in stmmac_runtime_suspend/stmmac_runtime_resume.
+> Why not ignore risc-v for now, and move the arm64 implementation to
+> the generic code for v5.20, so every arch will have it at once?
+>
 
-stmmac_dvr_probe() invoke pm_runtime_put(device) at the end, and
-disable clocks, but no clock enable at the beginning.
-so vendor's probe entry should enable clocks to ensure normal behavior.
+We could but,
+1. This arch_topology is new and has been going through lot of changes
+   recently and having code there might make it difficult to backport
+   changes that are required for RISC-V(my guess)
 
-As to clocks in remove function, we did not test it
-We should implement a vendor specified remove function who will take
-care of clocks rather than invoke stmmac_pltfr_remove directly.
+2. May be too late for v5.20, I would like to see if we can even drop tiny
+   arm64 bit in the code. It may be risky to try that this late and also
+   with other topology changes we already have queued.
 
-Anyway, we miss the clock handling case in remove function,
-and will
-test it and feed back.
-> 
-> I suppose that suspend calls exit and that there was a problem when
-> we disable 
-> the clocks there. Is this a HW issue that has no other possible fix?
-Not a HW issue. suspend/resume will disable/enable clocks by invoking 
-stmmac_pltfr_noirq_suspend/stmmac_pltfr_noirq_resume --> 
-pm_runtime_force_suspend/pm_runtime_force_resume--> 
-mediatek_dwmac_clks_config, so old clock handling in init/exit is no
-longer a proper choice.
+Let me know if that makes sense.
 
-Best Regards!
-Biao
-
-> 
-> Regards,
-> Matthias
-> 
-> > Fixes: 3186bdad97d5 ("stmmac: dwmac-mediatek: add platform level
-> > clocks management")
-> > Signed-off-by: Biao Huang <biao.huang@mediatek.com>
-> > ---
-> >   .../ethernet/stmicro/stmmac/dwmac-mediatek.c  | 36 +++++---------
-> > -----
-> >   1 file changed, 9 insertions(+), 27 deletions(-)
-> > 
-> > diff --git a/drivers/net/ethernet/stmicro/stmmac/dwmac-mediatek.c
-> > b/drivers/net/ethernet/stmicro/stmmac/dwmac-mediatek.c
-> > index 6ff88df58767..e86f3e125cb4 100644
-> > --- a/drivers/net/ethernet/stmicro/stmmac/dwmac-mediatek.c
-> > +++ b/drivers/net/ethernet/stmicro/stmmac/dwmac-mediatek.c
-> > @@ -576,32 +576,7 @@ static int mediatek_dwmac_init(struct
-> > platform_device *pdev, void *priv)
-> >   		}
-> >   	}
-> >   
-> > -	ret = clk_bulk_prepare_enable(variant->num_clks, plat->clks);
-> > -	if (ret) {
-> > -		dev_err(plat->dev, "failed to enable clks, err = %d\n",
-> > ret);
-> > -		return ret;
-> > -	}
-> > -
-> > -	ret = clk_prepare_enable(plat->rmii_internal_clk);
-> > -	if (ret) {
-> > -		dev_err(plat->dev, "failed to enable rmii internal clk,
-> > err = %d\n", ret);
-> > -		goto err_clk;
-> > -	}
-> > -
-> >   	return 0;
-> > -
-> > -err_clk:
-> > -	clk_bulk_disable_unprepare(variant->num_clks, plat->clks);
-> > -	return ret;
-> > -}
-> > -
-> > -static void mediatek_dwmac_exit(struct platform_device *pdev, void
-> > *priv)
-> > -{
-> > -	struct mediatek_dwmac_plat_data *plat = priv;
-> > -	const struct mediatek_dwmac_variant *variant = plat->variant;
-> > -
-> > -	clk_disable_unprepare(plat->rmii_internal_clk);
-> > -	clk_bulk_disable_unprepare(variant->num_clks, plat->clks);
-> >   }
-> >   
-> >   static int mediatek_dwmac_clks_config(void *priv, bool enabled)
-> > @@ -643,7 +618,6 @@ static int mediatek_dwmac_common_data(struct
-> > platform_device *pdev,
-> >   	plat->addr64 = priv_plat->variant->dma_bit_mask;
-> >   	plat->bsp_priv = priv_plat;
-> >   	plat->init = mediatek_dwmac_init;
-> > -	plat->exit = mediatek_dwmac_exit;
-> >   	plat->clks_config = mediatek_dwmac_clks_config;
-> >   	if (priv_plat->variant->dwmac_fix_mac_speed)
-> >   		plat->fix_mac_speed = priv_plat->variant-
-> > >dwmac_fix_mac_speed;
-> > @@ -712,13 +686,21 @@ static int mediatek_dwmac_probe(struct
-> > platform_device *pdev)
-> >   	mediatek_dwmac_common_data(pdev, plat_dat, priv_plat);
-> >   	mediatek_dwmac_init(pdev, priv_plat);
-> >   
-> > +	ret = mediatek_dwmac_clks_config(priv_plat, true);
-> > +	if (ret)
-> > +		return ret;
-> > +
-> >   	ret = stmmac_dvr_probe(&pdev->dev, plat_dat, &stmmac_res);
-> >   	if (ret) {
-> >   		stmmac_remove_config_dt(pdev, plat_dat);
-> > -		return ret;
-> > +		goto err_drv_probe;
-> >   	}
-> >   
-> >   	return 0;
-> > +
-> > +err_drv_probe:
-> > +	mediatek_dwmac_clks_config(priv_plat, false);
-> > +	return ret;
-> >   }
-> >   
-> >   static const struct of_device_id mediatek_dwmac_match[] = {
-
+-- 
+Regards,
+Sudeep

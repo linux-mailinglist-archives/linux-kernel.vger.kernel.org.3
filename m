@@ -2,99 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DB26856C2C3
-	for <lists+linux-kernel@lfdr.de>; Sat,  9 Jul 2022 01:13:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EF7B856C41A
+	for <lists+linux-kernel@lfdr.de>; Sat,  9 Jul 2022 01:15:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240175AbiGHUgU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Jul 2022 16:36:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32938 "EHLO
+        id S240318AbiGHUiY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Jul 2022 16:38:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34588 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240225AbiGHUgJ (ORCPT
+        with ESMTP id S239891AbiGHUiU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Jul 2022 16:36:09 -0400
-Received: from mail-pl1-x649.google.com (mail-pl1-x649.google.com [IPv6:2607:f8b0:4864:20::649])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4240E9FE29
-        for <linux-kernel@vger.kernel.org>; Fri,  8 Jul 2022 13:36:05 -0700 (PDT)
-Received: by mail-pl1-x649.google.com with SMTP id a17-20020a170902ecd100b0016c012c4cf3so3376642plh.15
-        for <linux-kernel@vger.kernel.org>; Fri, 08 Jul 2022 13:36:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:message-id:mime-version:subject:from:to:cc;
-        bh=6l2CjPLXl85Q15DcTvzQiYj2hwKWjzB2O4EVtvxw9k4=;
-        b=BePOGD043IgAR5e+hSZbNy1h9F5Y0m1k7v84h0obB/WrgkLEFoueASGq3zFANmGHOz
-         Fqenh8TRKEczyYt13TyKQ/Ft75B26xUhSuGyvRQ1zAE6itMoB59ht02AEvEnakmLUxo1
-         YrgKYzHPAUKlGfQtuamRhtSX+m7/2OihMg+kF6Vo0qNw8krFAz6tlcVoW3lneuVLIR/h
-         GEyuzB8p4Kl6HFl5aYAKmtmecKC3zCIjOrhRDPP0KBARRNl50UsDmdCI3DwTygCZo8M7
-         b40SJKdfrcVjMe9jgBYSzHx/b6Wb5XtUSgOuz6jyPFwQ9k+6mebwJ2kKzNw9KUQELzMt
-         6jOw==
+        Fri, 8 Jul 2022 16:38:20 -0400
+Received: from mail-oa1-f42.google.com (mail-oa1-f42.google.com [209.85.160.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40F7D39E;
+        Fri,  8 Jul 2022 13:38:20 -0700 (PDT)
+Received: by mail-oa1-f42.google.com with SMTP id 586e51a60fabf-10c0052da61so36613fac.12;
+        Fri, 08 Jul 2022 13:38:20 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
-        bh=6l2CjPLXl85Q15DcTvzQiYj2hwKWjzB2O4EVtvxw9k4=;
-        b=rOBkD1dwUKnL840p0xJcDQnghzKcj/pZyHu53jXLVWm/qTartufhqu/KEsNncKcSPQ
-         M9TtgxuzjQbxtLQRNYyEYCw9RvMXtKLmd58SM80ai1ACRSlwGn92122OCm9v1Se0Jtil
-         Eu4/JJAMmtGvF0qipExAY4JKT7diFGrUCbNhc0Z095SAJbHwPZseCZ+4RpUTR27OKtbH
-         ZCcB7kUoN6HeWxvdrED9lKl8Q5fDOS75vTryD9qBunbLOl6NSbwHe7oYcdUIpMyZUrDs
-         qlpGaL23JtwjzevjYVvR8yyQ0ivl+FKpryD+vKYXRxlefIU4CESE2VhxO7/SLDdJ6ONG
-         ONNA==
-X-Gm-Message-State: AJIora/mx1jYD10HyWuBJwurkXrIYoGvScXhWx81hqAurQHzYNaxZvDA
-        fVH3Uuptgtjcqb00a6bhcoELQqDAto95no2wPA==
-X-Google-Smtp-Source: AGRyM1tWj8XkMwJhTmMQrFk7gxtfhZc4z1G9yxzQYISYkgHffEzjFg1VIhwaywiaaEPo5AH9Nu2FnTrjfLxNFc3emA==
-X-Received: from justinstitt.mtv.corp.google.com ([2620:15c:211:202:f21c:9185:9405:36f])
- (user=justinstitt job=sendgmr) by 2002:a05:6a00:8cf:b0:522:93a6:46e9 with
- SMTP id s15-20020a056a0008cf00b0052293a646e9mr5910494pfu.62.1657312564619;
- Fri, 08 Jul 2022 13:36:04 -0700 (PDT)
-Date:   Fri,  8 Jul 2022 13:35:49 -0700
-Message-Id: <20220708203549.3834790-1-justinstitt@google.com>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.37.0.rc0.161.g10f37bed90-goog
-Subject: [PATCH] mei: me: fix clang -Wformat warning
-From:   Justin Stitt <justinstitt@google.com>
-To:     Tomas Winkler <tomas.winkler@intel.com>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Tom Rix <trix@redhat.com>, linux-kernel@vger.kernel.org,
-        llvm@lists.linux.dev, Justin Stitt <justinstitt@google.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=UjVd1XkbkANkjR5Bsgl6puPps0K5SQjeSgIiynnBvz4=;
+        b=f1lx6jQnN7WQuw4sm3aWu3r5wUsegxfmxgLa6Jpn/bJjkMuBmm154t0JJfQl7U6V4z
+         /hbqirSdGbNmruYEXgkQwcuRC82HTOKOnxdWfZH62TGNDQOjwrok/NRTUMKhCNms+rPQ
+         mr3ddcxYHOF2EYix38aaP/TP3Gj5C7MP+pH8bnlPIRaIZFHMSbh4KlRPID0WOUG6n9N4
+         yQrr7/iaABtK5tujf8Be7X/fKOdpePn2G/SuU/USOTeo1QyawnkQ7tm1Rx1rAtWoDjTL
+         sflcq6HOwf6V/1yyyfcn3j/Kg5Hc7pxQh/XPlYKWawyBbkJEkldiBr4EeAnnYTdZ5hIM
+         Fwzw==
+X-Gm-Message-State: AJIora+AwgXX3ADOMHh6hNa91LdYOaDQB4EAXeDRcg7JoSL/xrXWB61I
+        0ruBTJ5X+pWeyefll9891iUPh7xEy2v82RszwxA=
+X-Google-Smtp-Source: AGRyM1vXjH7bIiEh+WpGXSTQO+gPtd83pCggdxsIVu5ULO1XgvZxMd9QTJjdDAqMESn0xiWtg2N3TRHXGL9oKCgUUHE=
+X-Received: by 2002:a05:6870:2f15:b0:108:c28d:3304 with SMTP id
+ qj21-20020a0568702f1500b00108c28d3304mr1028943oab.92.1657312699603; Fri, 08
+ Jul 2022 13:38:19 -0700 (PDT)
+MIME-Version: 1.0
+References: <20220706210613.1987767-1-mpratt@google.com>
+In-Reply-To: <20220706210613.1987767-1-mpratt@google.com>
+From:   Namhyung Kim <namhyung@kernel.org>
+Date:   Fri, 8 Jul 2022 13:38:08 -0700
+Message-ID: <CAM9d7cjTUQtLLfj-eZiKgjByDzduBnkWM87srmH6EJKiRa3mdA@mail.gmail.com>
+Subject: Re: [PATCH] perf: uapi: fix PERF_RECORD_SAMPLE format documentation
+To:     Michael Pratt <mpratt@google.com>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Tejun Heo <tj@kernel.org>,
+        Kan Liang <kan.liang@linux.intel.com>,
+        Stephane Eranian <eranian@google.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        linux-perf-users <linux-perf-users@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When building with Clang we encounter the following warning:
-| drivers/misc/mei/hw-me.c:564:44: error: format specifies type 'unsigned
-| short' but the argument has type 'int' [-Werror,-Wformat]
-| dev_dbg(dev->dev, "empty slots = %hu.\n", empty_slots);
+Hello,
 
-The format specifier used is `%hu` which specifies an unsigned short,
-however, empty_slots is an int -- hence the warning.
+On Wed, Jul 6, 2022 at 2:06 PM Michael Pratt <mpratt@google.com> wrote:
+>
+> The documented format of PERF_RECORD_SAMPLE does not match the actual
+> format emitted by perf_output_sample:
+>
+> * The cgroup field is missing entirely.
+> * The data_page_size and code_page_size fields are output before the aux
+>   data, but are documented before.
+>
+> Fixes: 6546b19f95ac ("perf/core: Add PERF_SAMPLE_CGROUP feature")
+> Fixes: 8d97e71811aa ("perf/core: Add PERF_SAMPLE_DATA_PAGE_SIZE")
+> Fixes: 995f088efebe ("perf/core: Add support for PERF_SAMPLE_CODE_PAGE_SIZE")
+> Signed-off-by: Michael Pratt <mpratt@google.com>
 
-Link: https://github.com/ClangBuiltLinux/linux/issues/378
-Signed-off-by: Justin Stitt <justinstitt@google.com>
----
- drivers/misc/mei/hw-me.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Acked-by: Namhyung Kim <namhyung@kernel.org>
 
-diff --git a/drivers/misc/mei/hw-me.c b/drivers/misc/mei/hw-me.c
-index befa491e3344..3a95fe7d4e33 100644
---- a/drivers/misc/mei/hw-me.c
-+++ b/drivers/misc/mei/hw-me.c
-@@ -561,7 +561,7 @@ static int mei_me_hbuf_write(struct mei_device *dev,
- 	dev_dbg(dev->dev, MEI_HDR_FMT, MEI_HDR_PRM((struct mei_msg_hdr *)hdr));
- 
- 	empty_slots = mei_hbuf_empty_slots(dev);
--	dev_dbg(dev->dev, "empty slots = %hu.\n", empty_slots);
-+	dev_dbg(dev->dev, "empty slots = %d.\n", empty_slots);
- 
- 	if (empty_slots < 0)
- 		return -EOVERFLOW;
--- 
-2.37.0.rc0.161.g10f37bed90-goog
-
+Thanks,
+Namhyung

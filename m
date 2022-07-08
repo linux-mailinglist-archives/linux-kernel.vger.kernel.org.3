@@ -2,71 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 815B756BA8C
+	by mail.lfdr.de (Postfix) with ESMTP id CD8D556BA8D
 	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 15:20:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237978AbiGHNTe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Jul 2022 09:19:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57428 "EHLO
+        id S238028AbiGHNUP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Jul 2022 09:20:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58070 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231287AbiGHNTc (ORCPT
+        with ESMTP id S231287AbiGHNUN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Jul 2022 09:19:32 -0400
-Received: from mail-qt1-x82f.google.com (mail-qt1-x82f.google.com [IPv6:2607:f8b0:4864:20::82f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8B7F275D7;
-        Fri,  8 Jul 2022 06:19:31 -0700 (PDT)
-Received: by mail-qt1-x82f.google.com with SMTP id e7so1620707qts.1;
-        Fri, 08 Jul 2022 06:19:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=JtDIuSDJgMHOnSZ7PDsNMgEqGS4IDU10U0hH9sHl3tg=;
-        b=F1TT9/4N2rf2mudIbCeIRjEmhB/dOOSNMlAnJije4cTLlMr+FJ96dYAM3lSjRN82Fn
-         5phQrraQEKfjUbDlb2u08NXgt4TDCjj9vbuvnJ2SyivezzJxr3FYhYouCxzVqIWPYfYW
-         kI8p2+w2VA1XVe0uwwkP2s4Q1+KKicxu7LYfQymp7H4TTECwVWMWpj9lEhEZwX6StSYO
-         0T1M9bS9eY27tmsDZKaHxYY592yn5PkQ57uyQ8Nt0K9DjpU9ZgJDvZ7IsNkafjWiFqf9
-         u/BOHf3LNPoqR548ZyHd3pk9jyMgHaPHVj2fJbw3ZXFJ3BKJqb6dNlng4aH/ZckF+8+b
-         2DZw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=JtDIuSDJgMHOnSZ7PDsNMgEqGS4IDU10U0hH9sHl3tg=;
-        b=XPzMYq3XMRr7QOlMLgNhJysAsm4Pr6ccg50dw0j0eofSAkOCFUqqPjK/1m7bAucdAd
-         i/uyRgrSQiwtNZQdPFetp7TuGh84ZwlU9LycfW8qD/UbpOkFui3LuidjwgRgwIzshylD
-         KWHWvU2ma5dzYOaQGTQeBsRj9hoXr+3EiFuev2lYQbHbzoLpz+7amGWgcYFI0XI0eJQY
-         vz3954YMGUCm7uDV+O2XTh8Ghn19V3OlIhQyKQWpzzMZDTJR63OCJaSF9/vxEc4c7V9o
-         Ndh/0p6neOabYG8v7zwb3C3LG55mEB/hUN5yJHzBdprtRG8jNgC3cM+9dKuVx1xPNTfc
-         f3gg==
-X-Gm-Message-State: AJIora8LJmBdq3bfpmdZxVP39FtudiUnSAkUs31XRrhgYFnVAQLhV6Qz
-        IdyAM5+EuftdhhfME3w6x5fodCVohzucJbD4y7ewy0gGe0E=
-X-Google-Smtp-Source: AGRyM1tOJmb8x3r+oLBvKHiggRAd8q9ZzGU7GGBH5P9GK5C4c87aPPF8+j7O07cl13llleHzkRCaPLfYivNLIdaYh0M=
-X-Received: by 2002:ac8:5dcb:0:b0:31d:42c8:95d7 with SMTP id
- e11-20020ac85dcb000000b0031d42c895d7mr2859884qtx.546.1657286370465; Fri, 08
- Jul 2022 06:19:30 -0700 (PDT)
+        Fri, 8 Jul 2022 09:20:13 -0400
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 985852A41D
+        for <linux-kernel@vger.kernel.org>; Fri,  8 Jul 2022 06:20:08 -0700 (PDT)
+X-UUID: 4dfd1f9a9af34c2b93db8d42b015d21e-20220708
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.8,REQID:77e217b6-f735-4215-a17c-ae3ac49991ff,OB:0,LO
+        B:0,IP:0,URL:0,TC:0,Content:-5,EDM:0,RT:0,SF:100,FILE:0,RULE:Release_Ham,A
+        CTION:release,TS:95
+X-CID-INFO: VERSION:1.1.8,REQID:77e217b6-f735-4215-a17c-ae3ac49991ff,OB:0,LOB:
+        0,IP:0,URL:0,TC:0,Content:-5,EDM:0,RT:0,SF:100,FILE:0,RULE:Spam_GS981B3D,A
+        CTION:quarantine,TS:95
+X-CID-META: VersionHash:0f94e32,CLOUDID:bfc9eb86-57f0-47ca-ba27-fe8c57fbf305,C
+        OID:6461a1b93461,Recheck:0,SF:28|17|19|48,TC:nil,Content:0,EDM:-3,IP:nil,U
+        RL:0,File:nil,QS:nil,BEC:nil,COL:0
+X-UUID: 4dfd1f9a9af34c2b93db8d42b015d21e-20220708
+Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw02.mediatek.com
+        (envelope-from <mark-pk.tsai@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 1647103973; Fri, 08 Jul 2022 21:20:01 +0800
+Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
+ mtkmbs11n1.mediatek.inc (172.21.101.185) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.792.3;
+ Fri, 8 Jul 2022 21:20:00 +0800
+Received: from mtksdccf07.mediatek.inc (172.21.84.99) by
+ mtkmbs11n2.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
+ 15.2.792.3 via Frontend Transport; Fri, 8 Jul 2022 21:20:00 +0800
+From:   Mark-PK Tsai <mark-pk.tsai@mediatek.com>
+To:     Matthias Brugger <matthias.bgg@gmail.com>
+CC:     <yj.chiang@mediatek.com>, Mark-PK Tsai <mark-pk.tsai@mediatek.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Zhen Lei <thunder.leizhen@huawei.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Jacob Keller <jacob.e.keller@intel.com>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>
+Subject: [PATCH] lib: devres: use numa aware allocation
+Date:   Fri, 8 Jul 2022 21:19:47 +0800
+Message-ID: <20220708131952.14500-1-mark-pk.tsai@mediatek.com>
+X-Mailer: git-send-email 2.18.0
 MIME-Version: 1.0
-References: <20220705191017.1683716-1-robimarko@gmail.com> <fa748405-ca38-8ec8-0e8d-83a99a0c9c57@somainline.org>
-In-Reply-To: <fa748405-ca38-8ec8-0e8d-83a99a0c9c57@somainline.org>
-From:   Robert Marko <robimarko@gmail.com>
-Date:   Fri, 8 Jul 2022 15:19:19 +0200
-Message-ID: <CAOX2RU4bpd5xAMA-2wFWW9iypbqijkhnwkLZ_gqBorCkyuKegQ@mail.gmail.com>
-Subject: Re: [PATCH v5 1/3] clk: qcom: clk-alpha-pll: add support for APSS PLL
-To:     Konrad Dybcio <konrad.dybcio@somainline.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        krzysztof.kozlowski+dt@linaro.org,
-        open list <linux-kernel@vger.kernel.org>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
-        linux-clk@vger.kernel.org,
-        Devicetree List <devicetree@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+Content-Type: text/plain
+X-MTK:  N
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_PASS,T_SCC_BODY_TEXT_LINE,T_SPF_TEMPERROR,UNPARSEABLE_RELAY
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,66 +65,68 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 6 Jul 2022 at 15:14, Konrad Dybcio <konrad.dybcio@somainline.org> wrote:
->
->
->
-> On 5.07.2022 21:10, Robert Marko wrote:
-> > APSS PLL type will be used by the IPQ8074 APSS driver for providing the
-> > CPU core clocks and enabling CPU Frequency scaling.
-> >
-> > This is ported from the downstream 5.4 kernel.
-> >
-> > Signed-off-by: Robert Marko <robimarko@gmail.com>
-> > ---
-> >  drivers/clk/qcom/clk-alpha-pll.c | 12 ++++++++++++
-> >  drivers/clk/qcom/clk-alpha-pll.h |  1 +
-> >  2 files changed, 13 insertions(+)
-> >
-> > diff --git a/drivers/clk/qcom/clk-alpha-pll.c b/drivers/clk/qcom/clk-alpha-pll.c
-> > index 4406cf609aae..8270363ff98e 100644
-> > --- a/drivers/clk/qcom/clk-alpha-pll.c
-> > +++ b/drivers/clk/qcom/clk-alpha-pll.c
-> > @@ -154,6 +154,18 @@ const u8 clk_alpha_pll_regs[][PLL_OFF_MAX_REGS] = {
-> >               [PLL_OFF_TEST_CTL_U] = 0x30,
-> >               [PLL_OFF_TEST_CTL_U1] = 0x34,
-> >       },
-> > +     [CLK_ALPHA_PLL_TYPE_APSS] = {
-> The name is surely not correct, can somebody from qcom chime in
-> and suggest what it should be?
+Allocate device resource from local node memory
+when the numa locality of the device is specified.
 
-Hi Konrad,
-That is how Qualcomm refers to the type in the downstream 4.4 and 5.4 kernels.
-I dont have any other reference to the name unless somebody from
-Qualcomm can chime in.
+Signed-off-by: Mark-PK Tsai <mark-pk.tsai@mediatek.com>
+---
+ lib/devres.c | 15 ++++++++++-----
+ 1 file changed, 10 insertions(+), 5 deletions(-)
 
-Regards,
-Robert
->
-> Konrad
-> > +             [PLL_OFF_L_VAL] = 0x08,
-> > +             [PLL_OFF_ALPHA_VAL] = 0x10,
-> > +             [PLL_OFF_ALPHA_VAL_U] = 0xff,
-> > +             [PLL_OFF_USER_CTL] = 0x18,
-> > +             [PLL_OFF_USER_CTL_U] = 0xff,
-> > +             [PLL_OFF_CONFIG_CTL] = 0x20,
-> > +             [PLL_OFF_CONFIG_CTL_U] = 0x24,
-> > +             [PLL_OFF_TEST_CTL] = 0x30,
-> > +             [PLL_OFF_TEST_CTL_U] = 0x34,
-> > +             [PLL_OFF_STATUS] = 0x28,
-> > +     },
-> >  };
-> >  EXPORT_SYMBOL_GPL(clk_alpha_pll_regs);
-> >
-> > diff --git a/drivers/clk/qcom/clk-alpha-pll.h b/drivers/clk/qcom/clk-alpha-pll.h
-> > index 6e9907deaf30..626fdf80336d 100644
-> > --- a/drivers/clk/qcom/clk-alpha-pll.h
-> > +++ b/drivers/clk/qcom/clk-alpha-pll.h
-> > @@ -18,6 +18,7 @@ enum {
-> >       CLK_ALPHA_PLL_TYPE_AGERA,
-> >       CLK_ALPHA_PLL_TYPE_ZONDA,
-> >       CLK_ALPHA_PLL_TYPE_LUCID_EVO,
-> > +     CLK_ALPHA_PLL_TYPE_APSS,
-> >       CLK_ALPHA_PLL_TYPE_MAX,
-> >  };
-> >
+diff --git a/lib/devres.c b/lib/devres.c
+index 14664bbb4875..55eb07e80cbb 100644
+--- a/lib/devres.c
++++ b/lib/devres.c
+@@ -29,7 +29,8 @@ static void __iomem *__devm_ioremap(struct device *dev, resource_size_t offset,
+ {
+ 	void __iomem **ptr, *addr = NULL;
+ 
+-	ptr = devres_alloc(devm_ioremap_release, sizeof(*ptr), GFP_KERNEL);
++	ptr = devres_alloc_node(devm_ioremap_release, sizeof(*ptr), GFP_KERNEL,
++				dev_to_node(dev));
+ 	if (!ptr)
+ 		return NULL;
+ 
+@@ -292,7 +293,8 @@ void __iomem *devm_ioport_map(struct device *dev, unsigned long port,
+ {
+ 	void __iomem **ptr, *addr;
+ 
+-	ptr = devres_alloc(devm_ioport_map_release, sizeof(*ptr), GFP_KERNEL);
++	ptr = devres_alloc_node(devm_ioport_map_release, sizeof(*ptr), GFP_KERNEL,
++				dev_to_node(dev));
+ 	if (!ptr)
+ 		return NULL;
+ 
+@@ -366,7 +368,8 @@ void __iomem * const *pcim_iomap_table(struct pci_dev *pdev)
+ 	if (dr)
+ 		return dr->table;
+ 
+-	new_dr = devres_alloc(pcim_iomap_release, sizeof(*new_dr), GFP_KERNEL);
++	new_dr = devres_alloc_node(pcim_iomap_release, sizeof(*new_dr), GFP_KERNEL,
++				   dev_to_node(&pdev->dev));
+ 	if (!new_dr)
+ 		return NULL;
+ 	dr = devres_get(&pdev->dev, new_dr, NULL, NULL);
+@@ -548,7 +551,8 @@ int devm_arch_phys_wc_add(struct device *dev, unsigned long base, unsigned long
+ 	int *mtrr;
+ 	int ret;
+ 
+-	mtrr = devres_alloc(devm_arch_phys_ac_add_release, sizeof(*mtrr), GFP_KERNEL);
++	mtrr = devres_alloc_node(devm_arch_phys_ac_add_release, sizeof(*mtrr), GFP_KERNEL,
++				 dev_to_node(dev));
+ 	if (!mtrr)
+ 		return -ENOMEM;
+ 
+@@ -593,7 +597,8 @@ int devm_arch_io_reserve_memtype_wc(struct device *dev, resource_size_t start,
+ 	struct arch_io_reserve_memtype_wc_devres *dr;
+ 	int ret;
+ 
+-	dr = devres_alloc(devm_arch_io_free_memtype_wc_release, sizeof(*dr), GFP_KERNEL);
++	dr = devres_alloc_node(devm_arch_io_free_memtype_wc_release, sizeof(*dr), GFP_KERNEL,
++			       dev_to_node(dev));
+ 	if (!dr)
+ 		return -ENOMEM;
+ 
+-- 
+2.32.0
+

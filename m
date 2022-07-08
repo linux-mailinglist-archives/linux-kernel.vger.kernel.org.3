@@ -2,144 +2,203 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3BA5C56B452
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 10:19:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 486CA56B457
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 10:21:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237739AbiGHITI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Jul 2022 04:19:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52582 "EHLO
+        id S237710AbiGHITg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Jul 2022 04:19:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53054 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237698AbiGHITE (ORCPT
+        with ESMTP id S237700AbiGHITd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Jul 2022 04:19:04 -0400
-Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41D8C7694B
-        for <linux-kernel@vger.kernel.org>; Fri,  8 Jul 2022 01:19:03 -0700 (PDT)
-Received: by mail-wm1-x32c.google.com with SMTP id n185so11968026wmn.4
-        for <linux-kernel@vger.kernel.org>; Fri, 08 Jul 2022 01:19:03 -0700 (PDT)
+        Fri, 8 Jul 2022 04:19:33 -0400
+Received: from mail-io1-xd2a.google.com (mail-io1-xd2a.google.com [IPv6:2607:f8b0:4864:20::d2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BED2804AB;
+        Fri,  8 Jul 2022 01:19:31 -0700 (PDT)
+Received: by mail-io1-xd2a.google.com with SMTP id r76so2898773iod.10;
+        Fri, 08 Jul 2022 01:19:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=IRHop/Q9bOB6K90zq0W59vf8hzLmWFwLAu49XupFkZI=;
-        b=ZfOQnNvZS+61ImvjHbFW0xLS5SfVP8CadQnWvtcAsmAABylUG+xbGiQ5m1tcni58U6
-         nBIp4TUTKnfuNCIaQsY+QVe8g+HsiPEXrUU0RvmeKumauzen1XdEjGJiRjoKFGLfyx83
-         usrAYBqO3MqPk43/Gg8gRB54oJHwMgPyop6Ab1fIqaCz1LwWtcxk2myQhwsLrsEAcGY8
-         JiSN/NMNyVzDWNMnG2D5qJTLqWkciVZioZ8I35e7cogwcIXJy7bvWZykwL1Iw3AMu6Af
-         KZqVKSrXlG1FKOPCaBGV96FdGar0toonEvyP9ljsbg2SmtCw3RMCs8RdzfVyuy5usE1H
-         OV3Q==
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=vqCjltQk8I2tU7mx1MrFC3tkT7yAdLDtPhqi15VnAKc=;
+        b=keaZZ/15eYgScyXtLOqU1DW2ZKvwxgb58uT0uXkDm5jIXJQnw1n/0S89fkCI+p3V/G
+         I0sIrQwXTSg4BniBjndlPmc9l5Lhw7sANIlipdqKv7HYzSD2cpBFxRkcXx6vIOs5xoBl
+         GIiJk2KgFd86WsthsePRNLyg5OHAhT/TzdE0wLCMuUySTnNnlT3VRaWKzTgW6xyMoX2B
+         lQ9TzDzRRDRuGjC3xhlBxSWMWDgXxNrrvt+6zaCYZAnsnhemVOV2H+YFrK4AtQ+ukhBd
+         1/rveWjCrOy+DwbxfcYhGiaugLfvMxRSIyifH0dX9QbrBHsCGnbfqhFhrWzUCzq+GLBw
+         6OGg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=IRHop/Q9bOB6K90zq0W59vf8hzLmWFwLAu49XupFkZI=;
-        b=6cDvYGsxXGVeqMWCMKBY3CfX2z2Ate7Nzse8qnbS0ygn3lwS0ke81LyCKBsGwIO04z
-         jNZ48FCyb7EumO9ShtNv3wpRG1HAmNsmxd+VEJ+zXPBsKGhrUfabAZAvbC9KbKZBoKBN
-         AKxBgGx2zUunJZJwUq60rmaMI/VfRDSIfO+DvibaNOAtWwkfoV3ZOMQHSG2HeYbpOeO8
-         09JZ5qydJIUdQBXsuI5YeRS4MnDoZLn2epwu9cZeSs0I48TwGD0yRV2mM/fX50GApvqP
-         JfkEGHnUnbCEzFGNhvjAka9gYIvaxVazjgxQLLbauTIBd1IosPPQNhc9Y70hkDF0zHto
-         9EOw==
-X-Gm-Message-State: AJIora9Iy4NSa3su2WycypWJbkOeQe78vafRLC1UGcjRgJJEOsX2KKZC
-        TxOerokdBXz3UBRjNzwggJk+jw==
-X-Google-Smtp-Source: AGRyM1tR49BJcx8MfGtbkNemgsXk1vcZaxMude2C65rkYmp+isYP0s1nW+BkZEC/7D+0xnFtQ03P8g==
-X-Received: by 2002:a05:600c:3491:b0:3a1:8609:ba7e with SMTP id a17-20020a05600c349100b003a18609ba7emr2284834wmq.79.1657268341602;
-        Fri, 08 Jul 2022 01:19:01 -0700 (PDT)
-Received: from google.com (88.140.78.34.bc.googleusercontent.com. [34.78.140.88])
-        by smtp.gmail.com with ESMTPSA id o11-20020a5d684b000000b0021badf3cb26sm5436574wrw.63.2022.07.08.01.19.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 08 Jul 2022 01:19:00 -0700 (PDT)
-Date:   Fri, 8 Jul 2022 08:18:59 +0000
-From:   Sebastian Ene <sebastianene@google.com>
-To:     Will Deacon <will@kernel.org>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Dragan Cvetic <dragan.cvetic@xilinx.com>,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        maz@kernel.org, vdonnefort@google.com,
-        Guenter Roeck <linux@roeck-us.net>
-Subject: Re: [PATCH v10 2/2] misc: Add a mechanism to detect stalls on guest
- vCPUs
-Message-ID: <Ysfoc2YhQCLge1iY@google.com>
-References: <20220707154226.1478674-1-sebastianene@google.com>
- <20220707154226.1478674-3-sebastianene@google.com>
- <20220707182737.GE4852@willie-the-truck>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=vqCjltQk8I2tU7mx1MrFC3tkT7yAdLDtPhqi15VnAKc=;
+        b=i2RUhCf6ZpmfNJWdhQGsV6jeX+QkHDxFgpS8NpzNSUWmuRZxM7s6RDks8ZCcku0Kyx
+         +A1GDSIrIer4Lptp3ayi84+rvHwilYyDsBbu1sgxNoja1qAXdG2Cx3cZvSK/W0j5vfhb
+         AudPWWzGyjLlfUygq/uMauE9HIhtZQQ9hYoa6YG+mMg6VNxJnoACh8q8+a6S4Nrw4UQR
+         R2slerPMlUzbRFaF1VVdSzOp/CAr3wYkauwG+C4scuPmUh6uVziJaUljSU5Va2MFJlDI
+         ynkELR3DmYHftrB9ZMaEQkl/m1UQdWEMq8EfHTJOWa9b6ZfKEV1o3renpVtYHuwLFq3K
+         3i3w==
+X-Gm-Message-State: AJIora+yysuJAKKBmdkaP7yej7VJudFHPBJZebD8IfZwBAgIqTyh2V07
+        x5+IVa3LoHhPV/I8mrGY1ftRQgtCNpLLLpqQ
+X-Google-Smtp-Source: AGRyM1vCl6u+NPkYq/MEqdBUcy3Zpq5zMWpGOh9L9fZ0JMLVZDj8LJqlJjfHREvLIxclxjKUpRXPog==
+X-Received: by 2002:a6b:710f:0:b0:675:20a7:84e6 with SMTP id q15-20020a6b710f000000b0067520a784e6mr1276054iog.42.1657268370450;
+        Fri, 08 Jul 2022 01:19:30 -0700 (PDT)
+Received: from [192.168.1.145] ([207.188.167.132])
+        by smtp.gmail.com with ESMTPSA id r20-20020a5d9b94000000b0066952cfe3e2sm18991505iom.39.2022.07.08.01.19.27
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 08 Jul 2022 01:19:29 -0700 (PDT)
+Message-ID: <2f2f8bfe-4c7f-d81c-30bf-bcd60b42e245@gmail.com>
+Date:   Fri, 8 Jul 2022 10:19:26 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220707182737.GE4852@willie-the-truck>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH 1/2] dt-bindings: soc: mediatek: add mdp3 mutex support
+ for mt8186
+Content-Language: en-US
+To:     "allen-kh.cheng" <allen-kh.cheng@mediatek.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>
+Cc:     Project_Global_Chrome_Upstream_Group@mediatek.com,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-mediatek@lists.infradead.org,
+        Xiandong Wang <xiandong.wang@mediatek.com>
+References: <20220705122627.2273-1-allen-kh.cheng@mediatek.com>
+ <20220705122627.2273-2-allen-kh.cheng@mediatek.com>
+ <5916c91b-41a1-c97a-84b4-7d48739a0639@collabora.com>
+ <640c1a9b-f8b5-aa89-19af-7d6f5c55eb12@gmail.com>
+ <243b30ca-a552-3cb7-8a4e-6e54a56ff60a@collabora.com>
+ <55fafa62684e077f75c3b8b192a59df62ad01692.camel@mediatek.com>
+From:   Matthias Brugger <matthias.bgg@gmail.com>
+In-Reply-To: <55fafa62684e077f75c3b8b192a59df62ad01692.camel@mediatek.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jul 07, 2022 at 07:27:38PM +0100, Will Deacon wrote:
-> Hi Sebastian,
-> 
-> On Thu, Jul 07, 2022 at 03:42:27PM +0000, Sebastian Ene wrote:
 
-Hi Will,
 
-> > This driver creates per-cpu hrtimers which are required to do the
-> > periodic 'pet' operation. On a conventional watchdog-core driver, the
-> > userspace is responsible for delivering the 'pet' events by writing to
-> > the particular /dev/watchdogN node. In this case we require a strong
-> > thread affinity to be able to account for lost time on a per vCPU.
-> > 
-> > This part of the driver is the 'frontend' which is reponsible for
-> > delivering the periodic 'pet' events, configuring the virtual peripheral
-> > and listening for cpu hotplug events. The other part of the driver is
-> > an emulated MMIO device which is part of the KVM virtual machine
-> > monitor and this part accounts for lost time by looking at the
-> > /proc/{}/task/{}/stat entries.
-> > 
-> > Signed-off-by: Sebastian Ene <sebastianene@google.com>
-> > ---
-> >  drivers/misc/Kconfig               |  14 ++
-> >  drivers/misc/Makefile              |   1 +
-> >  drivers/misc/vcpu_stall_detector.c | 209 +++++++++++++++++++++++++++++
-> >  3 files changed, 224 insertions(+)
-> >  create mode 100644 drivers/misc/vcpu_stall_detector.c
+On 08/07/2022 10:14, allen-kh.cheng wrote:
+> Hi Angelo,
 > 
-> Thanks for addressing all of my feedback on v9 so promptly:
+> On Thu, 2022-07-07 at 12:59 +0200, AngeloGioacchino Del Regno wrote:
+>> Il 07/07/22 12:41, Matthias Brugger ha scritto:
+>>>
+>>>
+>>> On 07/07/2022 10:52, AngeloGioacchino Del Regno wrote:
+>>>> Il 05/07/22 14:26, Allen-KH Cheng ha scritto:
+>>>>> Add mdp3 mutex compatible for mt8186 SoC.
+>>>>>
+>>>>> Signed-off-by: Allen-KH Cheng <allen-kh.cheng@mediatek.com>
+>>>>> Signed-off-by: Xiandong Wang <xiandong.wang@mediatek.com>
+>>>>
+>>>>
+>>>> Please drop this commit. Adding a mdp3-mutex compatible is not
+>>>> needed here.
+>>>>
+>>>
+>>> Thanks for checking. We probably would need a fallback compatible.
+>>> We can only know
+>>> from the HW engineers that can confirm if the IP block is the same
+>>> as the disp
+>>> mutex or a different one.
+>>>
+>>> I'll drop both patches for now until things got clear.
+>>>
+>>
+>> They're located in a different iospace from each other, but either
+>> the platform
+>> data needs to *not be* joined together, or if they're together, I
+>> would not like
+>> having two different compatible strings for essentially the same
+>> thing.
+>>
+>> I would at this point prefer dropping '-disp' from 'mediatek,mt8186-
+>> disp-mutex'
+>> so that we would be able to declare two 'mediatek,mt8186-mutex' in
+>> devicetree...
+>> ...or simply have two mediatek,mt8186-disp-mutex (although logically
+>> incorrect?).
+>>
+>> Cheers,
+>> Angelo
+>>
 > 
-> Reviewed-by: Will Deacon <will@kernel.org>
+> Thanks for your opinion.
 > 
-> Just one question on this part:
+> They are two different hardwares for different address spaces.
 > 
-> > +static enum hrtimer_restart
-> > +vcpu_stall_detect_timer_fn(struct hrtimer *hrtimer)
-> > +{
-> > +	u32 ticks, ping_timeout_ms;
-> > +
-> > +	/* Reload the stall detector counter register every
-> > +	 * `ping_timeout_ms` to prevent the virtual device
-> > +	 * from decrementing it to 0. The virtual device decrements this
-> > +	 * register at 'clock_freq_hz' frequency.
-> > +	 */
-> > +	ticks = vcpu_stall_config.clock_freq_hz *
-> > +		vcpu_stall_config.stall_timeout_sec;
+> I think we drop '-disp' from 'mediatek,mt8186-disp-mutex' will be
+> excessive because we also need to modify mutex node in all exited dts
+> files.
 > 
-> It would be quite easy for this to overflow 32 bits, so perhaps it would
-> be best to check the values from the DT during probe and fallback to the
-> defaults (with a warning) if the result of the multiplication is out
-> of range for the 32-bit register.
+> I prefer havingg two mediatek,mt8186-disp-mutex.
 > 
-> What do you think? My review stands in any case, as this shouldn't happen
-> in practice with sensible values.
+> ex:
+> mutex: mutex@14001000 {
+> 	compatible = "mediatek,mt8186-disp-mutex";
+> 	..
+> }
 > 
+> mdp3_mutex0: mutex@1b001000 {
+> 	compatible = "mediatek,mt8186-disp-mutex";
+> 	...
+> }
+> 
+> What do you think?
 
-Good point ! I think falling back to defaults in case the values from the
-DT exceed a limit is a good approach. I will do that in the next
-version.
+I think that's an acceptable solution.
 
-> Will
+Regards,
+Matthias
 
-Thanks,
-Seb
+> 
+> Best regards,
+> Allen
+> 
+>>> Regards,
+>>> Matthias
+>>>
+>>>>> ---
+>>>>>   
+>>>>> .../devicetree/bindings/soc/mediatek/mediatek,mutex.yaml
+>>>>>    | 1 +
+>>>>>    1 file changed, 1 insertion(+)
+>>>>>
+>>>>> diff --git
+>>>>> a/Documentation/devicetree/bindings/soc/mediatek/mediatek,mutex
+>>>>> .yaml
+>>>>> b/Documentation/devicetree/bindings/soc/mediatek/mediatek,mutex
+>>>>> .yaml
+>>>>> index 627dcc3e8b32..234fa5dc07c2 100644
+>>>>> ---
+>>>>> a/Documentation/devicetree/bindings/soc/mediatek/mediatek,mutex
+>>>>> .yaml
+>>>>> +++
+>>>>> b/Documentation/devicetree/bindings/soc/mediatek/mediatek,mutex
+>>>>> .yaml
+>>>>> @@ -30,6 +30,7 @@ properties:
+>>>>>          - mediatek,mt8173-disp-mutex
+>>>>>          - mediatek,mt8183-disp-mutex
+>>>>>          - mediatek,mt8186-disp-mutex
+>>>>> +      - mediatek,mt8186-mdp3-mutex
+>>>>>          - mediatek,mt8192-disp-mutex
+>>>>>          - mediatek,mt8195-disp-mutex
+>>>>
+>>>>
+>>>>
+>>
+>>
+> 

@@ -2,181 +2,280 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3EF0956B313
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 09:04:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A28C656B311
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 09:04:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237399AbiGHHDx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Jul 2022 03:03:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47922 "EHLO
+        id S237128AbiGHHDu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Jul 2022 03:03:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47758 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237348AbiGHHDp (ORCPT
+        with ESMTP id S237291AbiGHHDk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Jul 2022 03:03:45 -0400
-Received: from mail-yw1-x1129.google.com (mail-yw1-x1129.google.com [IPv6:2607:f8b0:4864:20::1129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0CE071BE1
-        for <linux-kernel@vger.kernel.org>; Fri,  8 Jul 2022 00:03:44 -0700 (PDT)
-Received: by mail-yw1-x1129.google.com with SMTP id 00721157ae682-31c8a1e9e33so138168577b3.5
-        for <linux-kernel@vger.kernel.org>; Fri, 08 Jul 2022 00:03:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=2r1OKhE7nPaz8Ibdpa/NFUSBILiriMdou2alvBZWJn8=;
-        b=FOoq+XCQcOUOGAxMBkVFot96nKbM5UJXZ+fyNso8kcf6ozqH1iJAZiHaqOga9g8T1c
-         TaBVqFq0/woyIq7nWqdt7XH5iJz5rTpeViLFHZEsKgmGfftRwRB8L5ayV3TUwnkdeCE/
-         OEzY+0uLlw5yZO9fpce5tRpmkF5CrMwqnsoBoFozT+ntQN8p3BFOzOYxxUKlSLFsD0sZ
-         ubXSZG5ZYnDVMdKGb59mipPNtdfPXBTxO+lC6QcyNJoE8/MY2pc+Y+z1089y1NCruX1A
-         9CzSED9O1V4TFBUz6iz9HzWsfRARS8fQLWn+b+Fb6bzvFAfIWcnwqj7CmXORZ/654MoU
-         L4BQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=2r1OKhE7nPaz8Ibdpa/NFUSBILiriMdou2alvBZWJn8=;
-        b=PED78g2dTO3FpopI0Fyw4I7ze7YFWiIf9TQvcWQQCchL3e8LfL6OuJH9m/gAWoPgYk
-         d5cEKlTEUFA6YZH+8IckZ0iEQ4LOuInJfZHGxLzTmvBFmHRmoptRXU1uHYXIzMI4gPQa
-         16/9cnxUqXzIhHalizTP9Z1ftRwmeMK5gpMbbgwWSVfT3h12bDNKG88ExTbGuSaqyP7C
-         gc1psjtO8TNeXNq+OVS97B9c84HtqcZSkb17aF74+ynE8SKe1LW1e6LxD9zh6Ad5akLg
-         9R/Wxj2ujjeaWCa3E6ZSj4YSiM7ncWmbVzGaAlujNXBqElI7ilPh5nbK5HNoGIPD57uj
-         RNJg==
-X-Gm-Message-State: AJIora+vji86Go6POyUgIj8v42QNu8T9nvQVfSCR9j08KK4KZ+l+qT1S
-        gJoZXXremHd8sIECryNlZT0IzcYeiKO5tdA8BOrLow==
-X-Google-Smtp-Source: AGRyM1s1zxKeJaH04JGKD2OfBZEMYPMyBL6RTZC7T4tvDBmbfjGBd5ReKp27rZGd+/NDGyM+a5OOMP3Cs4OyxKUVovQ=
-X-Received: by 2002:a0d:dd09:0:b0:31c:e3b9:7442 with SMTP id
- g9-20020a0ddd09000000b0031ce3b97442mr2350367ywe.47.1657263823522; Fri, 08 Jul
- 2022 00:03:43 -0700 (PDT)
+        Fri, 8 Jul 2022 03:03:40 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD47A6D568;
+        Fri,  8 Jul 2022 00:03:38 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 44009621DC;
+        Fri,  8 Jul 2022 07:03:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3AAECC341C0;
+        Fri,  8 Jul 2022 07:03:34 +0000 (UTC)
+Message-ID: <fffca68c-abe8-591b-43af-656599d0d2f0@xs4all.nl>
+Date:   Fri, 8 Jul 2022 09:03:32 +0200
 MIME-Version: 1.0
-References: <20220708063257.1192311-1-yajun.deng@linux.dev>
-In-Reply-To: <20220708063257.1192311-1-yajun.deng@linux.dev>
-From:   Eric Dumazet <edumazet@google.com>
-Date:   Fri, 8 Jul 2022 09:03:31 +0200
-Message-ID: <CANn89iKuTLb15AMxXY8Q7FHF__f7kfRuDQFSkK1SwUR5m4fn+A@mail.gmail.com>
-Subject: Re: [PATCH net-next] net: rtnetlink: add rx_otherhost_dropped for
- struct rtnl_link_stats
-To:     Yajun Deng <yajun.deng@linux.dev>
-Cc:     David Miller <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        netdev <netdev@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Jeffrey Ji <jeffreyji@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH v11 15/17] media: uapi: HEVC: fix padding in v4l2 control
+ structures
+Content-Language: en-US
+To:     Benjamin Gaignard <benjamin.gaignard@collabora.com>,
+        mchehab@kernel.org, ezequiel@vanguardiasur.com.ar,
+        p.zabel@pengutronix.de, gregkh@linuxfoundation.org,
+        mripard@kernel.org, paul.kocialkowski@bootlin.com, wens@csie.org,
+        jernej.skrabec@gmail.com, samuel@sholland.org,
+        nicolas.dufresne@collabora.com, andrzej.p@collabora.com
+Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-rockchip@lists.infradead.org, linux-staging@lists.linux.dev,
+        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
+        kernel@collabora.com
+References: <20220706093803.158810-1-benjamin.gaignard@collabora.com>
+ <20220706093803.158810-16-benjamin.gaignard@collabora.com>
+From:   Hans Verkuil <hverkuil@xs4all.nl>
+In-Reply-To: <20220706093803.158810-16-benjamin.gaignard@collabora.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jul 8, 2022 at 8:33 AM Yajun Deng <yajun.deng@linux.dev> wrote:
->
-> The commit 794c24e9921f ("net-core: rx_otherhost_dropped to core_stats")
-> introduce rx_otherhost_dropped, add rx_otherhost_dropped for struct
-> rtnl_link_stats to keep sync with struct rtnl_link_stats64.
->
-> As the same time, add BUILD_BUG_ON() in copy_rtnl_link_stats().
->
 
-Any reason you chose to not cc the original patch author ?
 
-If I remember well, not adding fields into legacy 'struct
-rtnl_link_stats' was a conscious decision.
+On 7/6/22 11:38, Benjamin Gaignard wrote:
+> Fix padding where needed to remove holes and stay aligned on cache boundaries
 
-There is no requirement to keep rtnl_link_stats & rtnl_link_stats64 in sync.
-rtnl_link_stats is deprecated, user space really wants to use
-rtnl_link_stats64 instead,
-if they need access to new fields added in recent kernels.
+If a v12 is needed, then please drop the " and stay aligned on cache boundaries"
+part since that's a left-over from previous versions. I've manually removed it
+in my branch so no need to do anything unless a v12 is needed.
 
-Thank you.
+Regards,
 
-[1]
-commit 9256645af09807bc52fa8b2e66ecd28ab25318c4
-Author: Jarod Wilson <jarod@redhat.com>
-Date:   Mon Feb 1 18:51:04 2016 -0500
+	Hans
 
-    net/core: relax BUILD_BUG_ON in netdev_stats_to_stats64
-
-    The netdev_stats_to_stats64 function copies the deprecated
-    net_device_stats format stats into rtnl_link_stats64 for legacy support
-    purposes, but with the BUILD_BUG_ON as it was, it wasn't possible to
-    extend rtnl_link_stats64 without also extending net_device_stats. Relax
-    the BUILD_BUG_ON to only require that rtnl_link_stats64 is larger, and
-    zero out all the stat counters that aren't present in net_device_stats.
-
-    CC: Eric Dumazet <edumazet@google.com>
-    CC: netdev@vger.kernel.org
-    Signed-off-by: Jarod Wilson <jarod@redhat.com>
-    Signed-off-by: David S. Miller <davem@davemloft.net>
-
-> Signed-off-by: Yajun Deng <yajun.deng@linux.dev>
+> 
+> Signed-off-by: Benjamin Gaignard <benjamin.gaignard@collabora.com>
+> Acked-by: Nicolas Dufresne <nicolas.dufresne@collabora.com>
+> Tested-by: Jernej Skrabec <jernej.skrabec@gmail.com>
 > ---
->  include/uapi/linux/if_link.h |  1 +
->  net/core/rtnetlink.c         | 36 +++++++-----------------------------
->  2 files changed, 8 insertions(+), 29 deletions(-)
->
-> diff --git a/include/uapi/linux/if_link.h b/include/uapi/linux/if_link.h
-> index e36d9d2c65a7..fd6776d665c8 100644
-> --- a/include/uapi/linux/if_link.h
-> +++ b/include/uapi/linux/if_link.h
-> @@ -37,6 +37,7 @@ struct rtnl_link_stats {
->         __u32   tx_compressed;
->
->         __u32   rx_nohandler;
-> +       __u32   rx_otherhost_dropped;
+>  .../media/v4l/ext-ctrls-codec.rst             |  6 ++---
+>  drivers/media/v4l2-core/v4l2-ctrls-core.c     | 15 -------------
+>  include/media/hevc-ctrls.h                    | 22 ++++++++++++-------
+>  3 files changed, 17 insertions(+), 26 deletions(-)
+> 
+> diff --git a/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst b/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst
+> index 59e751c38d06..d5ef91ae3539 100644
+> --- a/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst
+> +++ b/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst
+> @@ -3513,9 +3513,6 @@ enum v4l2_mpeg_video_hevc_size_of_length_field -
+>      * - __u8
+>        - ``num_active_dpb_entries``
+>        - The number of entries in ``dpb``.
+> -    * - struct :c:type:`v4l2_hevc_dpb_entry`
+> -      - ``dpb[V4L2_HEVC_DPB_ENTRIES_NUM_MAX]``
+> -      - The decoded picture buffer, for meta-data about reference frames.
+>      * - __u8
+>        - ``num_poc_st_curr_before``
+>        - The number of reference pictures in the short-term set that come before
+> @@ -3539,6 +3536,9 @@ enum v4l2_mpeg_video_hevc_size_of_length_field -
+>        - ``poc_lt_curr[V4L2_HEVC_DPB_ENTRIES_NUM_MAX]``
+>        - PocLtCurr as described in section 8.3.2 "Decoding process for reference
+>          picture set": provides the index of the long term references in DPB array.
+> +    * - struct :c:type:`v4l2_hevc_dpb_entry`
+> +      - ``dpb[V4L2_HEVC_DPB_ENTRIES_NUM_MAX]``
+> +      - The decoded picture buffer, for meta-data about reference frames.
+>      * - __u64
+>        - ``flags``
+>        - See :ref:`Decode Parameters Flags <hevc_decode_params_flags>`
+> diff --git a/drivers/media/v4l2-core/v4l2-ctrls-core.c b/drivers/media/v4l2-core/v4l2-ctrls-core.c
+> index c5c5407584ff..1f85828d6694 100644
+> --- a/drivers/media/v4l2-core/v4l2-ctrls-core.c
+> +++ b/drivers/media/v4l2-core/v4l2-ctrls-core.c
+> @@ -536,7 +536,6 @@ static int std_validate_compound(const struct v4l2_ctrl *ctrl, u32 idx,
+>  	struct v4l2_ctrl_h264_decode_params *p_h264_dec_params;
+>  	struct v4l2_ctrl_hevc_sps *p_hevc_sps;
+>  	struct v4l2_ctrl_hevc_pps *p_hevc_pps;
+> -	struct v4l2_ctrl_hevc_slice_params *p_hevc_slice_params;
+>  	struct v4l2_ctrl_hdr10_mastering_display *p_hdr10_mastering;
+>  	struct v4l2_ctrl_hevc_decode_params *p_hevc_decode_params;
+>  	struct v4l2_area *area;
+> @@ -814,8 +813,6 @@ static int std_validate_compound(const struct v4l2_ctrl *ctrl, u32 idx,
+>  			p_hevc_pps->pps_beta_offset_div2 = 0;
+>  			p_hevc_pps->pps_tc_offset_div2 = 0;
+>  		}
+> -
+> -		zero_padding(*p_hevc_pps);
+>  		break;
+>  
+>  	case V4L2_CTRL_TYPE_HEVC_DECODE_PARAMS:
+> @@ -824,21 +821,9 @@ static int std_validate_compound(const struct v4l2_ctrl *ctrl, u32 idx,
+>  		if (p_hevc_decode_params->num_active_dpb_entries >
+>  		    V4L2_HEVC_DPB_ENTRIES_NUM_MAX)
+>  			return -EINVAL;
+> -
+> -		for (i = 0; i < p_hevc_decode_params->num_active_dpb_entries;
+> -		     i++) {
+> -			struct v4l2_hevc_dpb_entry *dpb_entry =
+> -				&p_hevc_decode_params->dpb[i];
+> -
+> -			zero_padding(*dpb_entry);
+> -		}
+>  		break;
+>  
+>  	case V4L2_CTRL_TYPE_HEVC_SLICE_PARAMS:
+> -		p_hevc_slice_params = p;
+> -
+> -		zero_padding(p_hevc_slice_params->pred_weight_table);
+> -		zero_padding(*p_hevc_slice_params);
+>  		break;
+>  
+>  	case V4L2_CTRL_TYPE_HDR10_CLL_INFO:
+> diff --git a/include/media/hevc-ctrls.h b/include/media/hevc-ctrls.h
+> index 9239e8b649e0..7358cbfc3e4d 100644
+> --- a/include/media/hevc-ctrls.h
+> +++ b/include/media/hevc-ctrls.h
+> @@ -105,6 +105,7 @@ enum v4l2_stateless_hevc_start_code {
+>   * @chroma_format_idc: specifies the chroma sampling
+>   * @sps_max_sub_layers_minus1: this value plus 1 specifies the maximum number
+>   *                             of temporal sub-layers
+> + * @reserved: padding field. Should be zeroed by applications.
+>   * @flags: see V4L2_HEVC_SPS_FLAG_{}
+>   */
+>  struct v4l2_ctrl_hevc_sps {
+> @@ -133,6 +134,7 @@ struct v4l2_ctrl_hevc_sps {
+>  	__u8	chroma_format_idc;
+>  	__u8	sps_max_sub_layers_minus1;
+>  
+> +	__u8	reserved[6];
+>  	__u64	flags;
 >  };
->
+>  
+> @@ -192,6 +194,7 @@ struct v4l2_ctrl_hevc_sps {
+>   *			divided by 2
+>   * @log2_parallel_merge_level_minus2: this value plus 2 specifies the value of
+>   *                                    the variable Log2ParMrgLevel
+> + * @reserved: padding field. Should be zeroed by applications.
+>   * @flags: see V4L2_HEVC_PPS_FLAG_{}
+>   */
+>  struct v4l2_ctrl_hevc_pps {
+> @@ -210,8 +213,7 @@ struct v4l2_ctrl_hevc_pps {
+>  	__s8	pps_beta_offset_div2;
+>  	__s8	pps_tc_offset_div2;
+>  	__u8	log2_parallel_merge_level_minus2;
+> -
+> -	__u8	padding[4];
+> +	__u8	reserved;
+>  	__u64	flags;
+>  };
+>  
+> @@ -239,14 +241,15 @@ struct v4l2_ctrl_hevc_pps {
+>   * @timestamp: timestamp of the V4L2 capture buffer to use as reference.
+>   * @flags: long term flag for the reference frame
+>   * @field_pic: whether the reference is a field picture or a frame.
+> + * @reserved: padding field. Should be zeroed by applications.
+>   * @pic_order_cnt_val: the picture order count of the reference.
+>   */
+>  struct v4l2_hevc_dpb_entry {
+>  	__u64	timestamp;
+>  	__u8	flags;
+>  	__u8	field_pic;
+> +	__u16	reserved;
+>  	__s32	pic_order_cnt_val;
+> -	__u8	padding[2];
+>  };
+>  
 >  /**
-> diff --git a/net/core/rtnetlink.c b/net/core/rtnetlink.c
-> index ac45328607f7..818649850b2c 100644
-> --- a/net/core/rtnetlink.c
-> +++ b/net/core/rtnetlink.c
-> @@ -908,35 +908,13 @@ static unsigned int rtnl_dev_combine_flags(const struct net_device *dev,
->  static void copy_rtnl_link_stats(struct rtnl_link_stats *a,
->                                  const struct rtnl_link_stats64 *b)
->  {
-> -       a->rx_packets = b->rx_packets;
-> -       a->tx_packets = b->tx_packets;
-> -       a->rx_bytes = b->rx_bytes;
-> -       a->tx_bytes = b->tx_bytes;
-> -       a->rx_errors = b->rx_errors;
-> -       a->tx_errors = b->tx_errors;
-> -       a->rx_dropped = b->rx_dropped;
-> -       a->tx_dropped = b->tx_dropped;
+> @@ -285,8 +288,6 @@ struct v4l2_hevc_pred_weight_table {
+>  	__s8	delta_chroma_weight_l1[V4L2_HEVC_DPB_ENTRIES_NUM_MAX][2];
+>  	__s8	chroma_offset_l1[V4L2_HEVC_DPB_ENTRIES_NUM_MAX][2];
+>  
+> -	__u8	padding[6];
 > -
-> -       a->multicast = b->multicast;
-> -       a->collisions = b->collisions;
-> -
-> -       a->rx_length_errors = b->rx_length_errors;
-> -       a->rx_over_errors = b->rx_over_errors;
-> -       a->rx_crc_errors = b->rx_crc_errors;
-> -       a->rx_frame_errors = b->rx_frame_errors;
-> -       a->rx_fifo_errors = b->rx_fifo_errors;
-> -       a->rx_missed_errors = b->rx_missed_errors;
-> -
-> -       a->tx_aborted_errors = b->tx_aborted_errors;
-> -       a->tx_carrier_errors = b->tx_carrier_errors;
-> -       a->tx_fifo_errors = b->tx_fifo_errors;
-> -       a->tx_heartbeat_errors = b->tx_heartbeat_errors;
-> -       a->tx_window_errors = b->tx_window_errors;
-> -
-> -       a->rx_compressed = b->rx_compressed;
-> -       a->tx_compressed = b->tx_compressed;
-> -
-> -       a->rx_nohandler = b->rx_nohandler;
-> +       size_t i, n = sizeof(*b) / sizeof(u64);
-> +       const u64 *src = (const u64 *)b;
-> +       u32 *dst = (u32 *)a;
-> +
-> +       BUILD_BUG_ON(n != sizeof(*a) / sizeof(u32));
-> +       for (i = 0; i < n; i++)
-> +               dst[i] = src[i];
->  }
->
->  /* All VF info */
-> --
-> 2.25.1
->
+>  	__u8	luma_log2_weight_denom;
+>  	__s8	delta_chroma_log2_weight_denom;
+>  };
+> @@ -339,6 +340,7 @@ struct v4l2_hevc_pred_weight_table {
+>   * @slice_tc_offset_div2: specify the deblocking parameter offsets for tC divided by 2
+>   * @pic_struct: indicates whether a picture should be displayed as a frame or as one or
+>   *		more fields
+> + * @reserved0: padding field. Should be zeroed by applications.
+>   * @slice_segment_addr: specifies the address of the first coding tree block in
+>   *			the slice segment
+>   * @ref_idx_l0: the list of L0 reference elements as indices in the DPB
+> @@ -349,6 +351,7 @@ struct v4l2_hevc_pred_weight_table {
+>   *				picture include in the SPS
+>   * @pred_weight_table: the prediction weight coefficients for inter-picture
+>   *		       prediction
+> + * @reserved1: padding field. Should be zeroed by applications.
+>   * @flags: see V4L2_HEVC_SLICE_PARAMS_FLAG_{}
+>   */
+>  struct v4l2_ctrl_hevc_slice_params {
+> @@ -379,17 +382,18 @@ struct v4l2_ctrl_hevc_slice_params {
+>  	/* ISO/IEC 23008-2, ITU-T Rec. H.265: Picture timing SEI message */
+>  	__u8	pic_struct;
+>  
+> +	__u8	reserved0[3];
+>  	/* ISO/IEC 23008-2, ITU-T Rec. H.265: General slice segment header */
+>  	__u32	slice_segment_addr;
+>  	__u8	ref_idx_l0[V4L2_HEVC_DPB_ENTRIES_NUM_MAX];
+>  	__u8	ref_idx_l1[V4L2_HEVC_DPB_ENTRIES_NUM_MAX];
+>  	__u16	short_term_ref_pic_set_size;
+>  	__u16	long_term_ref_pic_set_size;
+> -	__u8	padding;
+>  
+>  	/* ISO/IEC 23008-2, ITU-T Rec. H.265: Weighted prediction parameter */
+>  	struct v4l2_hevc_pred_weight_table pred_weight_table;
+>  
+> +	__u8	reserved1[2];
+>  	__u64	flags;
+>  };
+>  
+> @@ -406,7 +410,6 @@ struct v4l2_ctrl_hevc_slice_params {
+>   * @long_term_ref_pic_set_size: specifies the size of long-term reference
+>   *				pictures set include in the SPS of the first slice
+>   * @num_active_dpb_entries: the number of entries in dpb
+> - * @dpb: the decoded picture buffer, for meta-data about reference frames
+>   * @num_poc_st_curr_before: the number of reference pictures in the short-term
+>   *			    set that come before the current frame
+>   * @num_poc_st_curr_after: the number of reference pictures in the short-term
+> @@ -417,6 +420,8 @@ struct v4l2_ctrl_hevc_slice_params {
+>   * @poc_st_curr_after: provides the index of the short term after references
+>   *		       in DPB array
+>   * @poc_lt_curr: provides the index of the long term references in DPB array
+> + * @reserved: padding field. Should be zeroed by applications.
+> + * @dpb: the decoded picture buffer, for meta-data about reference frames
+>   * @flags: see V4L2_HEVC_DECODE_PARAM_FLAG_{}
+>   */
+>  struct v4l2_ctrl_hevc_decode_params {
+> @@ -424,13 +429,14 @@ struct v4l2_ctrl_hevc_decode_params {
+>  	__u16	short_term_ref_pic_set_size;
+>  	__u16	long_term_ref_pic_set_size;
+>  	__u8	num_active_dpb_entries;
+> -	struct	v4l2_hevc_dpb_entry dpb[V4L2_HEVC_DPB_ENTRIES_NUM_MAX];
+>  	__u8	num_poc_st_curr_before;
+>  	__u8	num_poc_st_curr_after;
+>  	__u8	num_poc_lt_curr;
+>  	__u8	poc_st_curr_before[V4L2_HEVC_DPB_ENTRIES_NUM_MAX];
+>  	__u8	poc_st_curr_after[V4L2_HEVC_DPB_ENTRIES_NUM_MAX];
+>  	__u8	poc_lt_curr[V4L2_HEVC_DPB_ENTRIES_NUM_MAX];
+> +	__u8	reserved[4];
+> +	struct	v4l2_hevc_dpb_entry dpb[V4L2_HEVC_DPB_ENTRIES_NUM_MAX];
+>  	__u64	flags;
+>  };
+>  

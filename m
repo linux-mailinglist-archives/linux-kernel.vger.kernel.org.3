@@ -2,25 +2,25 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8960A56B7C6
+	by mail.lfdr.de (Postfix) with ESMTP id 40F0856B7C5
 	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 12:56:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238101AbiGHKw5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Jul 2022 06:52:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56474 "EHLO
+        id S238113AbiGHKxC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Jul 2022 06:53:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56496 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237850AbiGHKww (ORCPT
+        with ESMTP id S238091AbiGHKwy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Jul 2022 06:52:52 -0400
+        Fri, 8 Jul 2022 06:52:54 -0400
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id EF0CA87369;
-        Fri,  8 Jul 2022 03:52:51 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id CDA3687370;
+        Fri,  8 Jul 2022 03:52:53 -0700 (PDT)
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 231191063;
-        Fri,  8 Jul 2022 03:52:52 -0700 (PDT)
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id F3F18106F;
+        Fri,  8 Jul 2022 03:52:53 -0700 (PDT)
 Received: from donnerap.arm.com (donnerap.cambridge.arm.com [10.1.197.42])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 334623F70D;
-        Fri,  8 Jul 2022 03:52:50 -0700 (PDT)
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id F276E3F70D;
+        Fri,  8 Jul 2022 03:52:51 -0700 (PDT)
 From:   Andre Przywara <andre.przywara@arm.com>
 To:     Chen-Yu Tsai <wens@csie.org>,
         Jernej Skrabec <jernej.skrabec@gmail.com>,
@@ -31,9 +31,9 @@ Cc:     Linus Walleij <linus.walleij@linaro.org>,
         devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org,
         Rob Herring <robh@kernel.org>
-Subject: [PATCH v13 4/7] dt-bindings: pinctrl: sunxi: allow vcc-pi-supply
-Date:   Fri,  8 Jul 2022 11:52:32 +0100
-Message-Id: <20220708105235.3983266-5-andre.przywara@arm.com>
+Subject: [PATCH v13 5/7] dt-bindings: arm: sunxi: Add two H616 board compatible strings
+Date:   Fri,  8 Jul 2022 11:52:33 +0100
+Message-Id: <20220708105235.3983266-6-andre.przywara@arm.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220708105235.3983266-1-andre.przywara@arm.com>
 References: <20220708105235.3983266-1-andre.przywara@arm.com>
@@ -48,31 +48,57 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The Allwinner H616 SoC contains a VCC_PI pin, which supplies the voltage
-for GPIO port I.
-Extend the range of supply port names to include vcc-pi-supply to cover
-that.
+This adds the two board compatible strings of two boards with the
+Allwinner H616 SoC. One is a development board from OrangePi, the other
+some TV box from some formerly unused vendor. Add that vendor to the
+vendor list on the way.
 
 Signed-off-by: Andre Przywara <andre.przywara@arm.com>
 Acked-by: Rob Herring <robh@kernel.org>
-Acked-by: Samuel Holland <samuel@sholland.org>
 ---
- .../bindings/pinctrl/allwinner,sun4i-a10-pinctrl.yaml           | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ Documentation/devicetree/bindings/arm/sunxi.yaml       | 10 ++++++++++
+ Documentation/devicetree/bindings/vendor-prefixes.yaml |  2 ++
+ 2 files changed, 12 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/pinctrl/allwinner,sun4i-a10-pinctrl.yaml b/Documentation/devicetree/bindings/pinctrl/allwinner,sun4i-a10-pinctrl.yaml
-index 360dcd757e9da..0681b9a3965f0 100644
---- a/Documentation/devicetree/bindings/pinctrl/allwinner,sun4i-a10-pinctrl.yaml
-+++ b/Documentation/devicetree/bindings/pinctrl/allwinner,sun4i-a10-pinctrl.yaml
-@@ -127,7 +127,7 @@ patternProperties:
+diff --git a/Documentation/devicetree/bindings/arm/sunxi.yaml b/Documentation/devicetree/bindings/arm/sunxi.yaml
+index 95278a6a9a8ec..0c2356778208a 100644
+--- a/Documentation/devicetree/bindings/arm/sunxi.yaml
++++ b/Documentation/devicetree/bindings/arm/sunxi.yaml
+@@ -863,6 +863,11 @@ properties:
+           - const: yones-toptech,bs1078-v2
+           - const: allwinner,sun6i-a31s
  
-     additionalProperties: false
++      - description: X96 Mate TV box
++        items:
++          - const: hechuang,x96-mate
++          - const: allwinner,sun50i-h616
++
+       - description: Xunlong OrangePi
+         items:
+           - const: xunlong,orangepi
+@@ -963,4 +968,9 @@ properties:
+           - const: xunlong,orangepi-zero-plus2-h3
+           - const: allwinner,sun8i-h3
  
--  "^vcc-p[a-hlm]-supply$":
-+  "^vcc-p[a-ilm]-supply$":
-     description:
-       Power supplies for pin banks.
- 
++      - description: Xunlong OrangePi Zero 2
++        items:
++          - const: xunlong,orangepi-zero2
++          - const: allwinner,sun50i-h616
++
+ additionalProperties: true
+diff --git a/Documentation/devicetree/bindings/vendor-prefixes.yaml b/Documentation/devicetree/bindings/vendor-prefixes.yaml
+index 6bb20b4554d7e..628ca77949c73 100644
+--- a/Documentation/devicetree/bindings/vendor-prefixes.yaml
++++ b/Documentation/devicetree/bindings/vendor-prefixes.yaml
+@@ -507,6 +507,8 @@ patternProperties:
+     description: Haoyu Microelectronic Co. Ltd.
+   "^hardkernel,.*":
+     description: Hardkernel Co., Ltd
++  "^hechuang,.*":
++    description: Shenzhen Hechuang Intelligent Co.
+   "^hideep,.*":
+     description: HiDeep Inc.
+   "^himax,.*":
 -- 
 2.25.1
 

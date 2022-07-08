@@ -2,100 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3FE8756B04E
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 03:59:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E84256B054
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 04:00:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236458AbiGHB66 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Jul 2022 21:58:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36760 "EHLO
+        id S236564AbiGHCAB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Jul 2022 22:00:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37290 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233524AbiGHB65 (ORCPT
+        with ESMTP id S236471AbiGHB77 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Jul 2022 21:58:57 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E43E5073C;
-        Thu,  7 Jul 2022 18:58:56 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 080976206B;
-        Fri,  8 Jul 2022 01:58:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4D984C3411E;
-        Fri,  8 Jul 2022 01:58:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1657245535;
-        bh=581nZoa/QIS5ELgdL9caPtn7qbYWWd0p4FNJ0ipmNjQ=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=X1yaLQ54EiXjodlehEyd/W8jwBqIH53CYezd6bkaw1qmmASUEHdkJXiAPxr3evVQd
-         MbFp1QAFV1vKv2jeXS8a4cW6QBFlxzR6zo/ci4K9gSLFe1Rt0D0YKMsoZtZ8LnZHI0
-         PNdzm4zBXN8JkHlapB8rTYvFktdiv8pkJdNmmfGdpXVoJUGHSoPUlOB236wciz7LtN
-         G6BDp1Md0/IOoN0BxdTIZLxpU6j79g7GoLIL4i3j4GqhmbeVf7F9zIXs/t11kgfP/o
-         p0RsJ6sJrjWsgjEfsRa7YhCfwmp7RkD0nUozJ9pGJrquWPYNmetvPLlgMAFTjTqcPG
-         J/hKWkQnWowpw==
-Message-ID: <d14f6884-348b-252a-5d37-707e71284b2d@kernel.org>
-Date:   Fri, 8 Jul 2022 11:58:50 +1000
+        Thu, 7 Jul 2022 21:59:59 -0400
+Received: from unicom146.biz-email.net (unicom146.biz-email.net [210.51.26.146])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADEB073905;
+        Thu,  7 Jul 2022 18:59:56 -0700 (PDT)
+Received: from ([60.208.111.195])
+        by unicom146.biz-email.net ((D)) with ASMTP (SSL) id CYP00149;
+        Fri, 08 Jul 2022 09:59:49 +0800
+Received: from localhost.localdomain (10.200.104.97) by
+ jtjnmail201612.home.langchao.com (10.100.2.12) with Microsoft SMTP Server id
+ 15.1.2507.9; Fri, 8 Jul 2022 09:59:50 +0800
+From:   Bo Liu <liubo03@inspur.com>
+To:     <mani@kernel.org>, <quic_hemantk@quicinc.com>
+CC:     <mhi@lists.linux.dev>, <linux-arm-msm@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, Bo Liu <liubo03@inspur.com>
+Subject: [PATCH] bus: mhi: ep: Check dev_set_name() return value
+Date:   Thu, 7 Jul 2022 21:59:48 -0400
+Message-ID: <20220708015948.4091-1-liubo03@inspur.com>
+X-Mailer: git-send-email 2.18.2
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH] MIPS: vdso: Utilize __pa() for gic_pfn
-Content-Language: en-US
-To:     Florian Fainelli <f.fainelli@gmail.com>, linux-mips@vger.kernel.org
-Cc:     Serge Semin <fancer.lancer@gmail.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        open list <linux-kernel@vger.kernel.org>
-References: <20220707202759.1224809-1-f.fainelli@gmail.com>
-From:   Greg Ungerer <gerg@kernel.org>
-In-Reply-To: <20220707202759.1224809-1-f.fainelli@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.200.104.97]
+tUid:   2022708095950ed6942c3ae8fce442d2f8adff4aa7a25
+X-Abuse-Reports-To: service@corp-email.com
+Abuse-Reports-To: service@corp-email.com
+X-Complaints-To: service@corp-email.com
+X-Report-Abuse-To: service@corp-email.com
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+It's possible that dev_set_name() returns -ENOMEM, catch and handle this.
 
-On 8/7/22 06:27, Florian Fainelli wrote:
-> The GIC user offset is mapped into every process' virtual address and is
-> therefore part of the hot-path of arch_setup_additional_pages(). Utilize
-> __pa() such that we are more optimal even when CONFIG_DEBUG_VIRTUAL is
-> enabled, and while at it utilize PFN_DOWN() instead of open-coding the
-> right shift by PAGE_SHIFT.
-> 
-> Reported-by: Greg Ungerer <gerg@kernel.org>
-> Suggested-by: Serge Semin <fancer.lancer@gmail.com>
-> Fixes: dfad83cb7193 ("MIPS: Add support for CONFIG_DEBUG_VIRTUAL")
-> Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
+Signed-off-by: Bo Liu <liubo03@inspur.com>
+---
+ drivers/bus/mhi/ep/main.c | 11 +++++++++--
+ 1 file changed, 9 insertions(+), 2 deletions(-)
 
-Fixes the issue of warnings on every process start with CONFIG_DEBUG_VIRTUAL
-enabled for me. Thanks. So if you want:
+diff --git a/drivers/bus/mhi/ep/main.c b/drivers/bus/mhi/ep/main.c
+index 40109a79017a..1dc8a3557a46 100644
+--- a/drivers/bus/mhi/ep/main.c
++++ b/drivers/bus/mhi/ep/main.c
+@@ -1242,9 +1242,13 @@ static int mhi_ep_create_device(struct mhi_ep_cntrl *mhi_cntrl, u32 ch_id)
+ 
+ 	/* Channel name is same for both UL and DL */
+ 	mhi_dev->name = mhi_chan->name;
+-	dev_set_name(&mhi_dev->dev, "%s_%s",
++	ret = dev_set_name(&mhi_dev->dev, "%s_%s",
+ 		     dev_name(&mhi_cntrl->mhi_dev->dev),
+ 		     mhi_dev->name);
++	if (ret) {
++		put_device(&mhi_dev->dev);
++		return ret;
++	}
+ 
+ 	ret = device_add(&mhi_dev->dev);
+ 	if (ret)
+@@ -1408,7 +1412,10 @@ int mhi_ep_register_controller(struct mhi_ep_cntrl *mhi_cntrl,
+ 		goto err_free_irq;
+ 	}
+ 
+-	dev_set_name(&mhi_dev->dev, "mhi_ep%u", mhi_cntrl->index);
++	ret = dev_set_name(&mhi_dev->dev, "mhi_ep%u", mhi_cntrl->index);
++	if (ret)
++		goto err_put_dev;
++
+ 	mhi_dev->name = dev_name(&mhi_dev->dev);
+ 	mhi_cntrl->mhi_dev = mhi_dev;
+ 
+-- 
+2.27.0
 
-Acked-by: Greg Ungerer <gerg@kernel.org>
-Tested-by: Greg Ungerer <gerg@kernel.org>
-
-Regards
-Greg
-
-
-
-> ---
->   arch/mips/kernel/vdso.c | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/arch/mips/kernel/vdso.c b/arch/mips/kernel/vdso.c
-> index 3d0cf471f2fe..b2cc2c2dd4bf 100644
-> --- a/arch/mips/kernel/vdso.c
-> +++ b/arch/mips/kernel/vdso.c
-> @@ -159,7 +159,7 @@ int arch_setup_additional_pages(struct linux_binprm *bprm, int uses_interp)
->   	/* Map GIC user page. */
->   	if (gic_size) {
->   		gic_base = (unsigned long)mips_gic_base + MIPS_GIC_USER_OFS;
-> -		gic_pfn = virt_to_phys((void *)gic_base) >> PAGE_SHIFT;
-> +		gic_pfn = PFN_DOWN(__pa(gic_base));
->   
->   		ret = io_remap_pfn_range(vma, base, gic_pfn, gic_size,
->   					 pgprot_noncached(vma->vm_page_prot));

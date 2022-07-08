@@ -2,342 +2,184 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8484C56BABF
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 15:30:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C9B3556BAAF
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 15:30:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238155AbiGHN3x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Jul 2022 09:29:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35872 "EHLO
+        id S238121AbiGHN3o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Jul 2022 09:29:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35820 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237925AbiGHN3l (ORCPT
+        with ESMTP id S238055AbiGHN3h (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Jul 2022 09:29:41 -0400
-Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4BD22CCAC
-        for <linux-kernel@vger.kernel.org>; Fri,  8 Jul 2022 06:29:39 -0700 (PDT)
-Received: by mail-ej1-x630.google.com with SMTP id h23so37668366ejj.12
-        for <linux-kernel@vger.kernel.org>; Fri, 08 Jul 2022 06:29:39 -0700 (PDT)
+        Fri, 8 Jul 2022 09:29:37 -0400
+Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F0062CC8B;
+        Fri,  8 Jul 2022 06:29:36 -0700 (PDT)
+Received: by mail-ej1-x62d.google.com with SMTP id u15so13300602ejx.9;
+        Fri, 08 Jul 2022 06:29:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=broadcom.com; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=xxaUzWP5kjOKnJRfyBVc4g8f/FYgkgPxn7VHNjUxSs4=;
-        b=V31ENY5AHSY2scsIBPtL1f+qM8g2NPCvgNOAzCCAz8ksSJHDwrrtZ3c0+NZPgPwric
-         ZzRlrf6sAeqla3uoJjX5LssAZZhw0bGEJS1GbHh+3IACPk4twPlj1hPFbNLKE8sP7jAS
-         3EuZyHlY6e4Haz00E+9eu03tJVIpRCBSBnOrI=
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=Mf9QD3GHPi2dAtkpnGJWi0YjEFXVxgWqICyVyGpLbJE=;
+        b=Gbr7dq2gC75XrzER6Laakpmvpmid0nGUhowV1ohSKsie3LVG7yCWKUywgdcHU2T3Lg
+         1iecW/Vq7NaVmSxbIA7CdlylYX7Ovglx9b16AH0tE1+sqiF/BNj+xwF8WZ8UrvAQUod3
+         H3WHD51paad8ZSFYIE/5RYKoFcAO68DAl8As3GITPJCqzOQIylpd69aNF4S0QFR+l1/a
+         ExCSDLpAmDFSGFDPJXaG4O5XeNhRkK36SL0juxqTE6847bqqEHcV//TVfYT+rbzQNZww
+         nbMTrCsv8aEVgtdy28ZxjvdN5CZMbCqI8J5P8ZV5m3GD2yUE4YAJG0UZNu8tWe0w0QbY
+         vHWw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=xxaUzWP5kjOKnJRfyBVc4g8f/FYgkgPxn7VHNjUxSs4=;
-        b=7JrKxsgddqS/Llyk6oEg3lAg0Drm4Jpk7Vj1eNAoAKBPNdcNqma+/ESVdAR3LC4ZjZ
-         T+jJPsvbGyRiKcdO/ZZytYptp2jg+b87fWELgGdmSCgutegatyM4zYzp4fFMpgBGHPQi
-         WTkf/x/RZsnFYryJvbF9MRnXLurjGGAlQIGbO6TKeOUX2UMsE/WsqgeWyPYrEtpKWD23
-         PAbbvTfXy5I7QinsgC1q2CsQL988oVye7JkoDfYrCuoENcnG8G5+Z7O0q502V38/R8rh
-         noxqeID0y0i4jgaaDgnf4wKWD97WoakQyB2S7cUtWjfzSnsbCOIrRJVDmp+kuGH7sdcL
-         xlPw==
-X-Gm-Message-State: AJIora90PDTmqGhvFZJhKi6LYyqp1mDr4cKu41FDbL/7rnoPiPM2iORS
-        Tf2Yaxr69uQc4PXDlEeXnjmQvdaCfkw0GjFRz/qadQ==
-X-Google-Smtp-Source: AGRyM1vEDj25P8EV7USK0urrEat3wXgNEwKcGOJl0L24kfrPqzLoYuAIUnEf3VJgZeeT/wYsqfY3UZexC0iQ3VUl5/s=
-X-Received: by 2002:a17:907:6e05:b0:72a:a141:962 with SMTP id
- sd5-20020a1709076e0500b0072aa1410962mr3629511ejc.545.1657286978295; Fri, 08
- Jul 2022 06:29:38 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=Mf9QD3GHPi2dAtkpnGJWi0YjEFXVxgWqICyVyGpLbJE=;
+        b=DqQiicLUPw/XlTmAIVK+HGZ5NOXUtmM8cZVTQYSOAYQMLrYgu/ds5Ry8OrohVWrl0P
+         m0+fWFt2bBHl1PXy98IQpqFgIQLLLZk49Ln2nc4lhqwSq19kZAcwR5cDjOVL494NV31Z
+         vbpw+FHM65WBRnvmzF0s1STXqekauYqzMEIygGMo8uJ1Gnlv3Q1SMjJf70YgFDcwN+TT
+         0yUJYiJ4XJJFsKa8GC54z2O7VQ6qwxskJODKG7t5ptsRDsiIlXa36rYSq7bfDwoLl8d/
+         VeEfoUhuohdpvmXQVTTw/zXCqQ70qjglTANnQAVxDwdhYsCDGQmWhBSy7we06mfEXe5j
+         eETw==
+X-Gm-Message-State: AJIora/MvZelEAm/yAojKFsIaoz7zvqwJ31nC3UKHFY8smw6/BNgNCqd
+        pXdY5KOzjCJGTFLXLiTFYHA=
+X-Google-Smtp-Source: AGRyM1tQAc2txivU3OSH9k9WGthZMG2qzaiZ+X9FP0J0bMsfEVRhR+YhA+9pfsiOAvXXOZytZh9WBA==
+X-Received: by 2002:a17:907:3e05:b0:71c:2ba5:1ab with SMTP id hp5-20020a1709073e0500b0071c2ba501abmr3491482ejc.93.1657286975186;
+        Fri, 08 Jul 2022 06:29:35 -0700 (PDT)
+Received: from fedora.robimarko.hr (dh207-96-250.xnet.hr. [88.207.96.250])
+        by smtp.googlemail.com with ESMTPSA id q4-20020a1709064cc400b006fec4ee28d0sm20170398ejt.189.2022.07.08.06.29.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 08 Jul 2022 06:29:34 -0700 (PDT)
+From:   Robert Marko <robimarko@gmail.com>
+To:     agross@kernel.org, bjorn.andersson@linaro.org,
+        konrad.dybcio@somainline.org, amitk@kernel.org,
+        thara.gopinath@gmail.com, rafael@kernel.org,
+        daniel.lezcano@linaro.org, rui.zhang@intel.com, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, linux-arm-msm@vger.kernel.org,
+        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Robert Marko <robimarko@gmail.com>
+Subject: [PATCH v5 3/5] drivers: thermal: tsens: allow configuring min and max trips
+Date:   Fri,  8 Jul 2022 15:29:28 +0200
+Message-Id: <20220708132930.595897-3-robimarko@gmail.com>
+X-Mailer: git-send-email 2.36.1
+In-Reply-To: <20220708132930.595897-1-robimarko@gmail.com>
+References: <20220708132930.595897-1-robimarko@gmail.com>
 MIME-Version: 1.0
-References: <20220701162726.31346-2-jim2101024@gmail.com> <20220706215603.GA221278@bhelgaas>
-In-Reply-To: <20220706215603.GA221278@bhelgaas>
-From:   Jim Quinlan <james.quinlan@broadcom.com>
-Date:   Fri, 8 Jul 2022 09:29:27 -0400
-Message-ID: <CA+-6iNzQZVi8MbyeZNcBzE0hGjGiYSUk3riSXxTALtFyC00aPQ@mail.gmail.com>
-Subject: Re: [PATCH v1 1/4] PCI: brcmstb: Split brcm_pcie_setup() into two funcs
-To:     Bjorn Helgaas <helgaas@kernel.org>
-Cc:     Jim Quinlan <jim2101024@gmail.com>,
-        "open list:PCI NATIVE HOST BRIDGE AND ENDPOINT DRIVERS" 
-        <linux-pci@vger.kernel.org>,
-        Nicolas Saenz Julienne <nsaenz@kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Cyril Brulebois <kibi@debian.org>,
-        "maintainer:BROADCOM BCM7XXX ARM ARCHITECTURE" 
-        <bcm-kernel-feedback-list@broadcom.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Rob Herring <robh@kernel.org>,
-        =?UTF-8?Q?Krzysztof_Wilczy=C5=84ski?= <kw@linux.com>,
-        "moderated list:BROADCOM BCM2711/BCM2835 ARM ARCHITECTURE" 
-        <linux-rpi-kernel@lists.infradead.org>,
-        "moderated list:BROADCOM BCM2711/BCM2835 ARM ARCHITECTURE" 
-        <linux-arm-kernel@lists.infradead.org>,
-        open list <linux-kernel@vger.kernel.org>
-Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-        boundary="000000000000a6888f05e34b31c5"
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---000000000000a6888f05e34b31c5
-Content-Type: text/plain; charset="UTF-8"
+IPQ8074 and IPQ6018 dont support negative trip temperatures and support
+up to 204 degrees C as the max trip temperature.
 
-On Wed, Jul 6, 2022 at 5:56 PM Bjorn Helgaas <helgaas@kernel.org> wrote:
->
-> On Fri, Jul 01, 2022 at 12:27:22PM -0400, Jim Quinlan wrote:
-> > We need to take some code in brcm_pcie_setup() and put it in a new function
-> > brcm_pcie_linkup().  In future commits the brcm_pcie_linkup() function will
-> > be called indirectly by pci_host_probe() as opposed to the host driver
-> > invoking it directly.
-> >
-> > Some code that was executed after the PCIe linkup is now placed so that it
-> > executes prior to linkup, since this code has to run prior to the
-> > invocation of pci_host_probe().
->
-> This says we need to move some code from brcm_pcie_setup() to
-> brcm_pcie_linkup(), but not *why* we need to do that.
-I will elaborate in the commit message.
->
-> In brcm_pcie_resume(), they're called together:
->
->   brcm_pcie_resume
->     brcm_pcie_setup
->     brcm_pcie_linkup
->
-> In the probe path, they're not called together, but they're in the
-> same order:
->
->   brcm_pcie_probe
->     brcm_pcie_setup
->     pci_host_probe
->       ...
->         brcm_pcie_add_bus               # bus->ops->add_bus
->           brcm_pcie_linkup
->
-> Is there something that must happen *between* them in the probe path?
+So, instead of always setting the -40 as min and 120 degrees C as max
+allow it to be configured as part of the features.
 
-Yes.  In the probe() case, we must do things in this order:
+Signed-off-by: Robert Marko <robimarko@gmail.com>
+---
+ drivers/thermal/qcom/tsens-8960.c | 2 ++
+ drivers/thermal/qcom/tsens-v0_1.c | 2 ++
+ drivers/thermal/qcom/tsens-v1.c   | 2 ++
+ drivers/thermal/qcom/tsens-v2.c   | 2 ++
+ drivers/thermal/qcom/tsens.c      | 4 ++--
+ drivers/thermal/qcom/tsens.h      | 4 ++++
+ 6 files changed, 14 insertions(+), 2 deletions(-)
 
-1. brcm_pcie_setup()
-2. Turn on regulators
-3. brcm_pcie_linkup()
+diff --git a/drivers/thermal/qcom/tsens-8960.c b/drivers/thermal/qcom/tsens-8960.c
+index ee584e5b07e5..4585904fb380 100644
+--- a/drivers/thermal/qcom/tsens-8960.c
++++ b/drivers/thermal/qcom/tsens-8960.c
+@@ -273,6 +273,8 @@ static struct tsens_features tsens_8960_feat = {
+ 	.adc		= 1,
+ 	.srot_split	= 0,
+ 	.max_sensors	= 11,
++	.trip_min_temp	= -40000,
++	.trip_max_temp	= 120000,
+ };
+ 
+ struct tsens_plat_data data_8960 = {
+diff --git a/drivers/thermal/qcom/tsens-v0_1.c b/drivers/thermal/qcom/tsens-v0_1.c
+index 6effb822bf3c..2c203ff374e6 100644
+--- a/drivers/thermal/qcom/tsens-v0_1.c
++++ b/drivers/thermal/qcom/tsens-v0_1.c
+@@ -543,6 +543,8 @@ static struct tsens_features tsens_v0_1_feat = {
+ 	.adc		= 1,
+ 	.srot_split	= 1,
+ 	.max_sensors	= 11,
++	.trip_min_temp	= -40000,
++	.trip_max_temp	= 120000,
+ };
+ 
+ static const struct reg_field tsens_v0_1_regfields[MAX_REGFIELDS] = {
+diff --git a/drivers/thermal/qcom/tsens-v1.c b/drivers/thermal/qcom/tsens-v1.c
+index a4f561a6e582..1d7f8a80bd13 100644
+--- a/drivers/thermal/qcom/tsens-v1.c
++++ b/drivers/thermal/qcom/tsens-v1.c
+@@ -306,6 +306,8 @@ static struct tsens_features tsens_v1_feat = {
+ 	.adc		= 1,
+ 	.srot_split	= 1,
+ 	.max_sensors	= 11,
++	.trip_min_temp	= -40000,
++	.trip_max_temp	= 120000,
+ };
+ 
+ static const struct reg_field tsens_v1_regfields[MAX_REGFIELDS] = {
+diff --git a/drivers/thermal/qcom/tsens-v2.c b/drivers/thermal/qcom/tsens-v2.c
+index 129cdb247381..9babc69bfd22 100644
+--- a/drivers/thermal/qcom/tsens-v2.c
++++ b/drivers/thermal/qcom/tsens-v2.c
+@@ -35,6 +35,8 @@ static struct tsens_features tsens_v2_feat = {
+ 	.adc		= 0,
+ 	.srot_split	= 1,
+ 	.max_sensors	= 16,
++	.trip_min_temp	= -40000,
++	.trip_max_temp	= 120000,
+ };
+ 
+ static const struct reg_field tsens_v2_regfields[MAX_REGFIELDS] = {
+diff --git a/drivers/thermal/qcom/tsens.c b/drivers/thermal/qcom/tsens.c
+index 8029cd1172bd..f65e80e44d34 100644
+--- a/drivers/thermal/qcom/tsens.c
++++ b/drivers/thermal/qcom/tsens.c
+@@ -572,8 +572,8 @@ static int tsens_set_trips(void *_sensor, int low, int high)
+ 	dev_dbg(dev, "[%u] %s: proposed thresholds: (%d:%d)\n",
+ 		hw_id, __func__, low, high);
+ 
+-	cl_high = clamp_val(high, -40000, 120000);
+-	cl_low  = clamp_val(low, -40000, 120000);
++	cl_high = clamp_val(high, priv->feat->trip_min_temp, priv->feat->trip_max_temp);
++	cl_low  = clamp_val(low, priv->feat->trip_min_temp, priv->feat->trip_max_temp);
+ 
+ 	high_val = tsens_mC_to_hw(s, cl_high);
+ 	low_val  = tsens_mC_to_hw(s, cl_low);
+diff --git a/drivers/thermal/qcom/tsens.h b/drivers/thermal/qcom/tsens.h
+index 4614177944d6..747004476347 100644
+--- a/drivers/thermal/qcom/tsens.h
++++ b/drivers/thermal/qcom/tsens.h
+@@ -501,6 +501,8 @@ enum regfield_ids {
+  *              with SROT only being available to secure boot firmware?
+  * @has_watchdog: does this IP support watchdog functionality?
+  * @max_sensors: maximum sensors supported by this version of the IP
++ * @trip_min_temp: minimum trip temperature supported by this version of the IP
++ * @trip_max_temp: maximum trip temperature supported by this version of the IP
+  */
+ struct tsens_features {
+ 	unsigned int ver_major;
+@@ -510,6 +512,8 @@ struct tsens_features {
+ 	unsigned int srot_split:1;
+ 	unsigned int has_watchdog:1;
+ 	unsigned int max_sensors;
++	int trip_min_temp;
++	int trip_max_temp;
+ };
+ 
+ /**
+-- 
+2.36.1
 
-Since the voltage regulators are turned on during enumeration, pci_host_probe()
-must be invoked prior to 3.  Before regulators, we did not care.
-
-In the resume case, there is no enumeration of course but our driver
-has a handle to
-the regulators and can turn them on/off w/o help.
-
-Regards,
-Jim  Quinlan
-Broradcom STB
-
->
-> > Link: https://lore.kernel.org/r/20220106160332.2143-5-jim2101024@gmail.com
-> > Signed-off-by: Jim Quinlan <jim2101024@gmail.com>
-> > ---
-> >  drivers/pci/controller/pcie-brcmstb.c | 69 +++++++++++++++++----------
-> >  1 file changed, 43 insertions(+), 26 deletions(-)
-> >
-> > diff --git a/drivers/pci/controller/pcie-brcmstb.c b/drivers/pci/controller/pcie-brcmstb.c
-> > index e61058e13818..2bf5cc399fd0 100644
-> > --- a/drivers/pci/controller/pcie-brcmstb.c
-> > +++ b/drivers/pci/controller/pcie-brcmstb.c
-> > @@ -926,16 +926,9 @@ static inline int brcm_pcie_get_rc_bar2_size_and_offset(struct brcm_pcie *pcie,
-> >
-> >  static int brcm_pcie_setup(struct brcm_pcie *pcie)
-> >  {
-> > -     struct pci_host_bridge *bridge = pci_host_bridge_from_priv(pcie);
-> >       u64 rc_bar2_offset, rc_bar2_size;
-> >       void __iomem *base = pcie->base;
-> > -     struct device *dev = pcie->dev;
-> > -     struct resource_entry *entry;
-> > -     bool ssc_good = false;
-> > -     struct resource *res;
-> > -     int num_out_wins = 0;
-> > -     u16 nlw, cls, lnksta;
-> > -     int i, ret, memc;
-> > +     int ret, memc;
-> >       u32 tmp, burst, aspm_support;
-> >
-> >       /* Reset the bridge */
-> > @@ -1025,6 +1018,40 @@ static int brcm_pcie_setup(struct brcm_pcie *pcie)
-> >       if (pcie->gen)
-> >               brcm_pcie_set_gen(pcie, pcie->gen);
-> >
-> > +     /* Don't advertise L0s capability if 'aspm-no-l0s' */
-> > +     aspm_support = PCIE_LINK_STATE_L1;
-> > +     if (!of_property_read_bool(pcie->np, "aspm-no-l0s"))
-> > +             aspm_support |= PCIE_LINK_STATE_L0S;
-> > +     tmp = readl(base + PCIE_RC_CFG_PRIV1_LINK_CAPABILITY);
-> > +     u32p_replace_bits(&tmp, aspm_support,
-> > +             PCIE_RC_CFG_PRIV1_LINK_CAPABILITY_ASPM_SUPPORT_MASK);
-> > +     writel(tmp, base + PCIE_RC_CFG_PRIV1_LINK_CAPABILITY);
-> > +
-> > +     /*
-> > +      * For config space accesses on the RC, show the right class for
-> > +      * a PCIe-PCIe bridge (the default setting is to be EP mode).
-> > +      */
-> > +     tmp = readl(base + PCIE_RC_CFG_PRIV1_ID_VAL3);
-> > +     u32p_replace_bits(&tmp, 0x060400,
-> > +                       PCIE_RC_CFG_PRIV1_ID_VAL3_CLASS_CODE_MASK);
-> > +     writel(tmp, base + PCIE_RC_CFG_PRIV1_ID_VAL3);
-> > +
-> > +     return 0;
-> > +}
-> > +
-> > +static int brcm_pcie_linkup(struct brcm_pcie *pcie)
-> > +{
-> > +     struct pci_host_bridge *bridge = pci_host_bridge_from_priv(pcie);
-> > +     struct device *dev = pcie->dev;
-> > +     void __iomem *base = pcie->base;
-> > +     struct resource_entry *entry;
-> > +     struct resource *res;
-> > +     int num_out_wins = 0;
-> > +     u16 nlw, cls, lnksta;
-> > +     bool ssc_good = false;
-> > +     u32 tmp;
-> > +     int ret, i;
-> > +
-> >       /* Unassert the fundamental reset */
-> >       pcie->perst_set(pcie, 0);
-> >
-> > @@ -1075,24 +1102,6 @@ static int brcm_pcie_setup(struct brcm_pcie *pcie)
-> >               num_out_wins++;
-> >       }
-> >
-> > -     /* Don't advertise L0s capability if 'aspm-no-l0s' */
-> > -     aspm_support = PCIE_LINK_STATE_L1;
-> > -     if (!of_property_read_bool(pcie->np, "aspm-no-l0s"))
-> > -             aspm_support |= PCIE_LINK_STATE_L0S;
-> > -     tmp = readl(base + PCIE_RC_CFG_PRIV1_LINK_CAPABILITY);
-> > -     u32p_replace_bits(&tmp, aspm_support,
-> > -             PCIE_RC_CFG_PRIV1_LINK_CAPABILITY_ASPM_SUPPORT_MASK);
-> > -     writel(tmp, base + PCIE_RC_CFG_PRIV1_LINK_CAPABILITY);
-> > -
-> > -     /*
-> > -      * For config space accesses on the RC, show the right class for
-> > -      * a PCIe-PCIe bridge (the default setting is to be EP mode).
-> > -      */
-> > -     tmp = readl(base + PCIE_RC_CFG_PRIV1_ID_VAL3);
-> > -     u32p_replace_bits(&tmp, 0x060400,
-> > -                       PCIE_RC_CFG_PRIV1_ID_VAL3_CLASS_CODE_MASK);
-> > -     writel(tmp, base + PCIE_RC_CFG_PRIV1_ID_VAL3);
-> > -
-> >       if (pcie->ssc) {
-> >               ret = brcm_pcie_set_ssc(pcie);
-> >               if (ret == 0)
-> > @@ -1281,6 +1290,10 @@ static int brcm_pcie_resume(struct device *dev)
-> >       if (ret)
-> >               goto err_reset;
-> >
-> > +     ret = brcm_pcie_linkup(pcie);
-> > +     if (ret)
-> > +             goto err_reset;
-> > +
-> >       if (pcie->msi)
-> >               brcm_msi_set_regs(pcie->msi);
-> >
-> > @@ -1398,6 +1411,10 @@ static int brcm_pcie_probe(struct platform_device *pdev)
-> >       if (ret)
-> >               goto fail;
-> >
-> > +     ret = brcm_pcie_linkup(pcie);
-> > +     if (ret)
-> > +             goto fail;
-> > +
-> >       pcie->hw_rev = readl(pcie->base + PCIE_MISC_REVISION);
-> >       if (pcie->type == BCM4908 && pcie->hw_rev >= BRCM_PCIE_HW_REV_3_20) {
-> >               dev_err(pcie->dev, "hardware revision with unsupported PERST# setup\n");
-> > --
-> > 2.17.1
-> >
-> >
-> > _______________________________________________
-> > linux-arm-kernel mailing list
-> > linux-arm-kernel@lists.infradead.org
-> > http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
-
---000000000000a6888f05e34b31c5
-Content-Type: application/pkcs7-signature; name="smime.p7s"
-Content-Transfer-Encoding: base64
-Content-Disposition: attachment; filename="smime.p7s"
-Content-Description: S/MIME Cryptographic Signature
-
-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
-LeylbuEJGL9I80yqq8e6Z+Q6ulLxa6SopzpoysJe/vEVHgp9jPNppZzwKngVd2iDBRqpKlCngIAM
-DXgVGyEojXnuEbRs3NlB7wq1kJGlYysrnDug55ncJM8CAwEAAaOCAdswggHXMA4GA1UdDwEB/wQE
-AwIFoDCBowYIKwYBBQUHAQEEgZYwgZMwTgYIKwYBBQUHMAKGQmh0dHA6Ly9zZWN1cmUuZ2xvYmFs
-c2lnbi5jb20vY2FjZXJ0L2dzZ2NjcjNwZXJzb25hbHNpZ24yY2EyMDIwLmNydDBBBggrBgEFBQcw
-AYY1aHR0cDovL29jc3AuZ2xvYmFsc2lnbi5jb20vZ3NnY2NyM3BlcnNvbmFsc2lnbjJjYTIwMjAw
-TQYDVR0gBEYwRDBCBgorBgEEAaAyASgKMDQwMgYIKwYBBQUHAgEWJmh0dHBzOi8vd3d3Lmdsb2Jh
-bHNpZ24uY29tL3JlcG9zaXRvcnkvMAkGA1UdEwQCMAAwSQYDVR0fBEIwQDA+oDygOoY4aHR0cDov
-L2NybC5nbG9iYWxzaWduLmNvbS9nc2djY3IzcGVyc29uYWxzaWduMmNhMjAyMC5jcmwwJQYDVR0R
-BB4wHIEaamFtZXMucXVpbmxhbkBicm9hZGNvbS5jb20wEwYDVR0lBAwwCgYIKwYBBQUHAwQwHwYD
-VR0jBBgwFoAUljPR5lgXWzR1ioFWZNW+SN6hj88wHQYDVR0OBBYEFCeTeUYv84Mo3T1V+OyDdxib
-DDLvMA0GCSqGSIb3DQEBCwUAA4IBAQCCqR1PBVtHPvQHuG8bjMFQ94ZB7jmFEGhgfAsFJMaSMLov
-qyt8DKr8suCYF4dKGzqalbxo5QU9mmZXdLifqceHdt/Satxb+iGJjBhZg4E0cDds24ofYq+Lbww2
-YlIKC2HHxIN+JX2mFpavSXkshR5GT29B9EIJ8hgSjbs61XXeAcrmVIDfYbXQEmGbsnwqxdq+DJpQ
-S2kM2wvSlgSWDb6pL7myuKR5lCkQhj7piGSgrVLJRDRrMPw1L4MvnV9DjUFMlGCB40Hm6xqn/jm0
-8FCLlWhxve5mj+hgUOPETiKbjhCxJhhAPDdCvDRkZtJlQ8oxUVvXHugG8jm1YqB5AWx7MYICbTCC
-AmkCAQEwazBbMQswCQYDVQQGEwJCRTEZMBcGA1UEChMQR2xvYmFsU2lnbiBudi1zYTExMC8GA1UE
-AxMoR2xvYmFsU2lnbiBHQ0MgUjMgUGVyc29uYWxTaWduIDIgQ0EgMjAyMAIMI+Aj9XRk/wFexb9/
-MA0GCWCGSAFlAwQCAQUAoIHUMC8GCSqGSIb3DQEJBDEiBCAZ0O7we2fMsvGb7CAm/oSCu+EHbfpQ
-N1qm687MzuXvojAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcBMBwGCSqGSIb3DQEJBTEPFw0yMjA3
-MDgxMzI5MzhaMGkGCSqGSIb3DQEJDzFcMFowCwYJYIZIAWUDBAEqMAsGCWCGSAFlAwQBFjALBglg
-hkgBZQMEAQIwCgYIKoZIhvcNAwcwCwYJKoZIhvcNAQEKMAsGCSqGSIb3DQEBBzALBglghkgBZQME
-AgEwDQYJKoZIhvcNAQEBBQAEggEAvC5IEheQB/Qgx8flHQ00tHe+X9e373ctEGN0c3rlmki4cKq/
-Y0dselqrlexT6YPTT/s+R2mVaSVbtjp2qQwr9Br3VRD9H+hPtyd8VJZqO5rnyQg8e6wfEyBlOBcm
-YueaPG9YLJn4UXNI4CcxYKGzKSKpuvKIgxAzWhKrRyWBQ7LejPWQbuDbLnezfFmtoW3H+sRyoPbg
-AjdP+1BA/6f541zRAPbB7bHd1lH3pv4Zh5ax3975aXDyOvegDzaoum/cNKlZA1dttPa1pNklIBCA
-z85YQKvUpvCkIPBIQtf0d/zb/hOX3wWO9PWdtOjgGIsZXe32qEcfGnzWrfoh+P+UnA==
---000000000000a6888f05e34b31c5--

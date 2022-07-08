@@ -2,135 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 579F856BD4D
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 18:08:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1931D56BD7A
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 18:08:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238568AbiGHP0B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Jul 2022 11:26:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44990 "EHLO
+        id S238800AbiGHP0F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Jul 2022 11:26:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45034 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238099AbiGHPZ7 (ORCPT
+        with ESMTP id S238710AbiGHP0C (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Jul 2022 11:25:59 -0400
-Received: from mail-yb1-xb31.google.com (mail-yb1-xb31.google.com [IPv6:2607:f8b0:4864:20::b31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C72030F43
-        for <linux-kernel@vger.kernel.org>; Fri,  8 Jul 2022 08:25:58 -0700 (PDT)
-Received: by mail-yb1-xb31.google.com with SMTP id 136so6563708ybl.5
-        for <linux-kernel@vger.kernel.org>; Fri, 08 Jul 2022 08:25:58 -0700 (PDT)
+        Fri, 8 Jul 2022 11:26:02 -0400
+Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 464343134D
+        for <linux-kernel@vger.kernel.org>; Fri,  8 Jul 2022 08:26:01 -0700 (PDT)
+Received: by mail-ej1-x632.google.com with SMTP id os14so8040265ejb.4
+        for <linux-kernel@vger.kernel.org>; Fri, 08 Jul 2022 08:26:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
+        d=chromium.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=EIFiVH9lUi23KkCa9V/IOGOENSKqD85uGqpTdZl7zAY=;
-        b=fWK7HkQgFIGRyNUeE7G9RPw3OTeLrtzQBU6e4ZqpzOQamkRYX5OaqR/9XQ1BNla4l8
-         fJVA0X6+czUZHqfcGk1SUUtBiciNfPjS8ygo/Q6RuZd7jfYz/j2GMp1DCbjY/7bRvfpJ
-         F5onpKz8wwWV2aFzs1edfnh8TuAa9hui6zfGFkGILvjlCaqauUH3edoBJz90XprJjq5m
-         sMhL3cew/FXdjmQBFlFsMQ+Ru5D5bCwlsKsBL01juon4WXx5g2yHPcu1T1hPjrqs7dWS
-         LKo91I2os4Gs4yuSPHvZW0PEQrbAREEz95O7WuFrbHmojuhknjtDUp7BdZBRHGa+lJhT
-         bafw==
+         :cc;
+        bh=jgYORBt3h5oNBznarFeGPU7nreEFffTVmMqBLDJdiu4=;
+        b=DtmFdPpzZsHOuwOoYohjvI7a3T6485xiQKNorp7om5YF58QOgdZIm+69XDuFDPu6eT
+         G0VKI4aJemTOakYgNYfi5goKPkr/OciMNayYQVZC/wYVDtjj4SxaE/DpjQ7w7Sglpy6j
+         S9t6UDJqFztUm1k/IXK8WjVFIKnnN4cdaWiLQ=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=EIFiVH9lUi23KkCa9V/IOGOENSKqD85uGqpTdZl7zAY=;
-        b=s+jjh8bHFbeSWgo1aR21vwEo8SJnxU/aRr5P4uZr2Z7/pJC0K/Axksit6b2W184AdK
-         3SlWdVHWGSFlZyMi4AY+/yHQjIiC2rXaXHEw/0KO8T9ECDLkoVG/hacOevQrnlQBJQta
-         vx2n0uInNbRC0llZk8L8HTLwQuylFtSbYduHKR8dANQmzEpVC6GJzxQS28+mCf+YloRr
-         qS3C06K/uonCgCDg8vr2W73hgKR7vxGNzVsX8fJ1oeghbptL+IaU8TopF/f8v2sax3jt
-         XOpPfunARn6sRxgaxYCgC1LlXic8lNatOnR5hHWn2ygvN1ScsDWismj/WzzDMUw8R/jE
-         gc/w==
-X-Gm-Message-State: AJIora+hUgTbdVsFqu7NUaDXT6kT9o3hGEe1nDh4Zo2m6GRtqs/Un854
-        scchR589K+8tSgyxGW+00mAXk0/wMGTAeAxFK+I=
-X-Google-Smtp-Source: AGRyM1uhtmB9cS/RxSD8hUp+5PnXY+7NZya0HJicQKj7l3rlxuBdooljqAlXBFkG9G+H4axTI+jmt9UBpj3HctV9YRg=
-X-Received: by 2002:a25:dd83:0:b0:66c:8d8d:4f5f with SMTP id
- u125-20020a25dd83000000b0066c8d8d4f5fmr4307324ybg.79.1657293957266; Fri, 08
+         :message-id:subject:to:cc;
+        bh=jgYORBt3h5oNBznarFeGPU7nreEFffTVmMqBLDJdiu4=;
+        b=XuNrnjKlQFLVfkEalr3lTybXI+IiruMb++PadIiuRfo2b6kAEyf9ZbhNh/GH5SmOf9
+         FCuAS2qhkgN26wW88Hg1naTl5FoeEkt9thM6b4MZfAsgvTw2K3brUT8v0oXuj3Iyp2Kx
+         gUz72oJRqOwLccXdRHk6eiRkDfwaXp03rYhDtSqMfYp+JTjC8QT4JnuTW/lnwwODRPsB
+         8D9l+eiAEkrambgLGlXHAncmGaiOdvP7V6aPHDj0DMLQocq91kccUBy187sqXpAiRq6r
+         daNebhMBulcDIV3b/sEETvsULqY6ijvpBa4bua1BjIlzZnniQ7GH+PnsRsYaE3CZhiPe
+         /LEw==
+X-Gm-Message-State: AJIora85oOSzXuVLZ35oRx81+ydPhWrGntYMR/20EvDd0bhgTCclGIpc
+        lDUVfTAb8+ti7tY55NpDgbulWosEMx0img==
+X-Google-Smtp-Source: AGRyM1sU9is3dKxvj+CKy+nw/Wq6sKkXwLhe1cLYZ8gth1mLRTl4JRbXr7xNObZ8p94wjwzPwZNiGg==
+X-Received: by 2002:a17:907:c14:b0:726:9118:3326 with SMTP id ga20-20020a1709070c1400b0072691183326mr4171126ejc.68.1657293959593;
+        Fri, 08 Jul 2022 08:25:59 -0700 (PDT)
+Received: from mail-wr1-f50.google.com (mail-wr1-f50.google.com. [209.85.221.50])
+        by smtp.gmail.com with ESMTPSA id kz15-20020a17090777cf00b0072af4af2f45sm4294743ejc.199.2022.07.08.08.25.58
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 08 Jul 2022 08:25:58 -0700 (PDT)
+Received: by mail-wr1-f50.google.com with SMTP id b26so31041903wrc.2
+        for <linux-kernel@vger.kernel.org>; Fri, 08 Jul 2022 08:25:58 -0700 (PDT)
+X-Received: by 2002:adf:fb12:0:b0:20c:79b2:a200 with SMTP id
+ c18-20020adffb12000000b0020c79b2a200mr3937186wrr.617.1657293957904; Fri, 08
  Jul 2022 08:25:57 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220707091301.1282291-1-cezary.rojewski@intel.com>
- <CAHp75VceKBoxXVPP4dRYb8LQqHMMDHFp6-E2iuZ-h2RTK8PWQQ@mail.gmail.com>
- <e0c7d254-ace3-625c-cc83-52ca0b45e9fc@intel.com> <CAHp75VckU2ZraLJ-frjWXjUu9pFW+-XmWgTbYqUXOUNAD-1HGA@mail.gmail.com>
- <6c8e4104-2239-a188-649d-585f059cabdd@intel.com> <YsgjdKEtE7pMDTnZ@smile.fi.intel.com>
- <a73b3ec0-5abb-ddfd-414b-b9807f05413e@linux.intel.com>
-In-Reply-To: <a73b3ec0-5abb-ddfd-414b-b9807f05413e@linux.intel.com>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Fri, 8 Jul 2022 17:25:20 +0200
-Message-ID: <CAHp75Vd4D0KF7ik+aMOwv-+bofWja_tDe4YUmihQBF+RiHZTmA@mail.gmail.com>
-Subject: Re: [PATCH 1/2] lib/string_helpers: Introduce strsplit_u32()
-To:     =?UTF-8?Q?P=C3=A9ter_Ujfalusi?= <peter.ujfalusi@linux.intel.com>
-Cc:     Cezary Rojewski <cezary.rojewski@intel.com>,
-        Andy Shevchenko <andy@kernel.org>,
-        Mark Brown <broonie@kernel.org>,
-        ALSA Development Mailing List <alsa-devel@alsa-project.org>,
-        Takashi Iwai <tiwai@suse.com>,
-        Jaroslav Kysela <perex@perex.cz>,
-        amadeuszx.slawinski@linux.intel.com,
-        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Ranjani Sridharan <ranjani.sridharan@linux.intel.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Kai Vehmanen <kai.vehmanen@linux.intel.com>,
-        Bard Liao <yung-chuan.liao@linux.intel.com>
+References: <20220706191442.1150634-1-swboyd@chromium.org>
+In-Reply-To: <20220706191442.1150634-1-swboyd@chromium.org>
+From:   Doug Anderson <dianders@chromium.org>
+Date:   Fri, 8 Jul 2022 08:25:44 -0700
+X-Gmail-Original-Message-ID: <CAD=FV=UrYCwm2ByN_5EN3fq-ayMJNjmWfJ5sooRy51ZiCoMcjA@mail.gmail.com>
+Message-ID: <CAD=FV=UrYCwm2ByN_5EN3fq-ayMJNjmWfJ5sooRy51ZiCoMcjA@mail.gmail.com>
+Subject: Re: [PATCH] drm/msm/dsi: Set panel orientation when directly connected
+To:     Stephen Boyd <swboyd@chromium.org>
+Cc:     Rob Clark <robdclark@gmail.com>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        LKML <linux-kernel@vger.kernel.org>, patches@lists.linux.dev,
+        Sean Paul <sean@poorly.run>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        freedreno <freedreno@lists.freedesktop.org>,
+        Hsin-Yi Wang <hsinyi@chromium.org>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jul 8, 2022 at 2:34 PM P=C3=A9ter Ujfalusi
-<peter.ujfalusi@linux.intel.com> wrote:
-> On 08/07/2022 15:30, Andy Shevchenko wrote:
-> > On Fri, Jul 08, 2022 at 02:13:14PM +0200, Cezary Rojewski wrote:
+Hi,
 
-...
+On Wed, Jul 6, 2022 at 12:14 PM Stephen Boyd <swboyd@chromium.org> wrote:
+>
+> Set the panel orientation in drm when the panel is directly connected,
+> i.e. we're not using an external bridge. The external bridge case is
+> already handled by the panel bridge code, so we only update the path we
+> take when the panel is directly connected/internal. This silences a
+> warning splat coming from __drm_mode_object_add() on Wormdingler boards.
+>
+> Cc: Hsin-Yi Wang <hsinyi@chromium.org>
+> Cc: Douglas Anderson <dianders@chromium.org>
+> Signed-off-by: Stephen Boyd <swboyd@chromium.org>
+> ---
+>
+> This relies on commit 5e41b01a7808 ("drm/panel: Add an API to allow drm
+> to set orientation from panel") which is in drm-misc
+>
+>  drivers/gpu/drm/msm/dsi/dsi_manager.c | 2 ++
+>  1 file changed, 2 insertions(+)
 
-> > It seems you are missing the (1). The code has checks for the case wher=
-e you
-> > can do get number upfront, it would just require two passes, but it's n=
-othing
-> > in comparison of heave realloc().
-> >
-> >   unsigned int *tokens;
-> >   char *p;
-> >   int num;
-> >
-> >   p =3D get_options(str, 0, &num);
-> >   if (num =3D=3D 0)
-> >       // No numbers in the string!
-> >
-> >   tokens =3D kcalloc(num + 1, sizeof(*tokens), GFP_KERNEL);
-> >   if (!tokens)
-> >       return -ENOMEM;
-> >
-> >   p =3D get_oprions(str, num, &tokens);
-> >   if (*p)
-> >       // String was parsed only partially!
-> >       // assuming it's not a fatal error
-> >
-> >   return tokens;
+I don't personally have objections to this, but (to my understanding)
+"the future" is that everyone should use panel_bridge. If we made the
+move to panel_bridge today then we wouldn't need to do this. In
+general I think panel_bridge would end up letting us delete a bunch of
+code...
 
-> This diff is tested and works:
+See commit 4e5763f03e10 ("drm/bridge: ti-sn65dsi86: Wrap panel with
+panel-bridge") for when this was done by ti-sn65dsi86.
 
-Thanks, Peter!
+Then again, I spent a small amount of time looking into this and it's
+definitely non-trivial. Still likely worthwhile, but not worth
+blocking a tiny fix like this. It also should be fairly obvious that
+we should delete this when we switch to panel_bridge.
 
-But at least you can memove() to avoid second allocation.
-ideally to refactor that the result of get_options is consumed as is
-(it may be casted to struct tokens { int n; u32 v[]; })
+Thus:
 
-...
+Reviewed-by: Douglas Anderson <dianders@chromium.org>
 
-> Could be made nicer with some brain work put to it, we need strict u32 wi=
-thin the IPC message for the array...
-
-True, it needs to be thought through. But I guess you got the idea of
-how to use existing library routines.
-
---=20
-With Best Regards,
-Andy Shevchenko
+I'll assume that we'll just snooze this commit until drm-misc-next
+merges into a tree that msm-next is based on, which will probably be
+the next -rc1. If desired and Acked I could land this in
+drm-misc-next, but it's probably not worth it?

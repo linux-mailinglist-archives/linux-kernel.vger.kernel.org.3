@@ -2,78 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0EBF756BDF4
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 18:09:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A402556BDB1
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 18:08:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238791AbiGHPQ2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Jul 2022 11:16:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36636 "EHLO
+        id S238748AbiGHPN7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Jul 2022 11:13:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34974 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238787AbiGHPQZ (ORCPT
+        with ESMTP id S235427AbiGHPN6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Jul 2022 11:16:25 -0400
-Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 301F661D63
-        for <linux-kernel@vger.kernel.org>; Fri,  8 Jul 2022 08:16:21 -0700 (PDT)
-Received: by mail-ej1-x629.google.com with SMTP id os14so7996745ejb.4
-        for <linux-kernel@vger.kernel.org>; Fri, 08 Jul 2022 08:16:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=broadcom.com; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=cZrc2hIeDO8o5PZWP5SXE73mrzS0YOyLFsn5DmTzbZU=;
-        b=GRFrSqv2rMTfnwXIeZ5hZPuJAHH8jmdjv5SwX/arVIQaOvPS65462idVpv+XKhyNzo
-         fP8nPTvj30PfI7KycUVWUb27RqpwzEnihPkBPmjUVyb1wAitaEnpMQFoFza2hIqxJ4zO
-         tumoX29bbI8gVO4BcjjlUxShG512GA7XaFA7A=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=cZrc2hIeDO8o5PZWP5SXE73mrzS0YOyLFsn5DmTzbZU=;
-        b=kQ+cDR4iUMEKlQO4CtPVaX+sqATtzZZVbV49XNHMPjVFcdbi+qCy/w588YPEJG9nVK
-         i/xpRe2TwhIr409PEg/dW0UvB69lD9UUKCpX0T3J6zmAYgZZDzGxIBPNvYOENQFc8n8s
-         8VLIRhwXdBlFnbWRU8+iKn2LlSTo8z3dQUtbDAiquloPALNDqXNxneb9z5bJCMGL7wD7
-         ZBeQgW2FnmVh9YNUt0EQWALKRO1Dj6/9J1odKpyfkRHTqQXjvXbz6dE+OEUNKALZcPRq
-         185JlsotRnW1N+nW5+BnZEylyUANDRJx4gb4ya39gbBC1YY9f5qHlFIoGVD5zZ+E9sd1
-         tPNg==
-X-Gm-Message-State: AJIora+80JS2lsH6WwjUp9X1rh3Riod83c8+mo5P0LGC6P4opfrUyrkw
-        ZcMkhF3ZpAm/vy/vX2uITHNvUHBYJSR2JO7GExgtCw==
-X-Google-Smtp-Source: AGRyM1v4Oh5eb0d6LZma5Pcb1nClj5nir6hOOmIYYnHGXTHdCc430WfXK2TT7XgoIcXZeHsG9iJmRAOaYAbZkbMhtic=
-X-Received: by 2002:a17:907:9693:b0:726:372c:2c02 with SMTP id
- hd19-20020a170907969300b00726372c2c02mr4099897ejc.483.1657293379557; Fri, 08
- Jul 2022 08:16:19 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220701162726.31346-4-jim2101024@gmail.com> <20220706231323.GA237418@bhelgaas>
-In-Reply-To: <20220706231323.GA237418@bhelgaas>
-From:   Jim Quinlan <james.quinlan@broadcom.com>
-Date:   Fri, 8 Jul 2022 11:16:08 -0400
-Message-ID: <CA+-6iNxg1sMrejizShy7iDhdhun7b_4Yo1OA43=FufkZ_W6iyA@mail.gmail.com>
-Subject: Re: [PATCH v1 3/4] PCI: brcmstb: Add control of subdevice voltage regulators
-To:     Bjorn Helgaas <helgaas@kernel.org>
-Cc:     Jim Quinlan <jim2101024@gmail.com>,
-        "open list:PCI NATIVE HOST BRIDGE AND ENDPOINT DRIVERS" 
-        <linux-pci@vger.kernel.org>,
-        Nicolas Saenz Julienne <nsaenz@kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Cyril Brulebois <kibi@debian.org>,
-        "maintainer:BROADCOM BCM7XXX ARM ARCHITECTURE" 
-        <bcm-kernel-feedback-list@broadcom.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Rob Herring <robh@kernel.org>,
-        =?UTF-8?Q?Krzysztof_Wilczy=C5=84ski?= <kw@linux.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        "moderated list:BROADCOM BCM2711/BCM2835 ARM ARCHITECTURE" 
-        <linux-rpi-kernel@lists.infradead.org>,
-        "moderated list:BROADCOM BCM2711/BCM2835 ARM ARCHITECTURE" 
+        Fri, 8 Jul 2022 11:13:58 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41EA223BD4
+        for <linux-kernel@vger.kernel.org>; Fri,  8 Jul 2022 08:13:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1657293236; x=1688829236;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=BzeOzLqO978xxyCov4it/ZgIZwyg61Vim6TdwwrQ678=;
+  b=I4uDZOVxwURAHSNaQBec1/QYg1MXUuA+lEFp3jt1N2OXEQgtl+Er5dlc
+   T75FY+UHXQS5Q8QCDqdeTfTvc94We8ofh1G2ZKdJ4XHf7YGMvhMT28TJF
+   F6Or+6M4AbkgkZvsft63Jrm/glmH0pqQypdIQ3hks5YrrlL3nk0CqGwEX
+   Tsi125FqrIuKLYjXibvdIm52YhtzukGtOAfrRh/2Z6r5oOxcVG7SoCgoZ
+   HhelSsSPhfQe7dBxWR6BB03uSkoYbcT5FKRfLsdteitH1aYMEWhZtJQjM
+   M1So3f07NdYIEEX5M37B6KoUwxf1ZADcb2/kmtGoIVaMS5gcycvqwfkfj
+   w==;
+X-IronPort-AV: E=Sophos;i="5.92,256,1650956400"; 
+   d="scan'208";a="167018455"
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa2.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 08 Jul 2022 08:13:55 -0700
+Received: from chn-vm-ex02.mchp-main.com (10.10.85.144) by
+ chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.17; Fri, 8 Jul 2022 08:13:55 -0700
+Received: from localhost.localdomain (10.10.115.15) by
+ chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server id
+ 15.1.2375.17 via Frontend Transport; Fri, 8 Jul 2022 08:13:53 -0700
+From:   Claudiu Beznea <claudiu.beznea@microchip.com>
+To:     <arnd@arndb.de>, <olof@lixom.net>, <arm@kernel.org>,
+        <soc@kernel.org>
+CC:     <nicolas.ferre@microchip.com>, <alexandre.belloni@bootlin.com>,
         <linux-arm-kernel@lists.infradead.org>,
-        open list <linux-kernel@vger.kernel.org>
-Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-        boundary="000000000000330fc805e34caf28"
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        <linux-kernel@vger.kernel.org>
+Subject: [GIT PULL] AT91 fixes for v5.19 #2
+Date:   Fri, 8 Jul 2022 18:16:21 +0300
+Message-ID: <20220708151621.860339-1-claudiu.beznea@microchip.com>
+X-Mailer: git-send-email 2.33.0
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -81,338 +62,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---000000000000330fc805e34caf28
-Content-Type: text/plain; charset="UTF-8"
+Hi, Arnd, Olof, ARM SoC maintainers,
 
-On Wed, Jul 6, 2022 at 7:13 PM Bjorn Helgaas <helgaas@kernel.org> wrote:
->
-> On Fri, Jul 01, 2022 at 12:27:24PM -0400, Jim Quinlan wrote:
-> > This Broadcom STB PCIe RC driver has one port and connects directly to one
-> > device, be it a switch or an endpoint.  We want to be able to leverage the
-> > recently added mechanism that allocates and turns on/off subdevice
-> > regulators.
-> >
-> > All that needs to be done is to put the regulator DT nodes in the bridge
-> > below host and to set the pci_ops methods add_bus and remove_bus.
-> >
-> > Note that the pci_subdev_regulators_add_bus() method is wrapped for two
-> > reasons:
-> >
-> >    1. To achieve link up after the voltage regulators are turned on.
-> >
-> >    2. If, in the case of an unsuccessful link up, to redirect any PCIe
-> >       accesses to subdevices, e.g. the scan for DEV/ID.  This redirection
-> >       is needed because the Broadcom PCIe HW will issue a CPU abort if such
-> >       an access is made when the link is down.
-> >
-> > [bhelgaas: fold in
-> > https://lore.kernel.org/r/20220112013100.48029-1-jim2101024@gmail.com]
-> > Link: https://lore.kernel.org/r/20220106160332.2143-7-jim2101024@gmail.com
-> > Signed-off-by: Jim Quinlan <jim2101024@gmail.com>
-> > ---
-> >  drivers/pci/controller/pcie-brcmstb.c | 86 ++++++++++++++++++++++++---
-> >  1 file changed, 77 insertions(+), 9 deletions(-)
-> >
-> > diff --git a/drivers/pci/controller/pcie-brcmstb.c b/drivers/pci/controller/pcie-brcmstb.c
-> > index 661d3834c6da..a86bf502a265 100644
-> > --- a/drivers/pci/controller/pcie-brcmstb.c
-> > +++ b/drivers/pci/controller/pcie-brcmstb.c
-> > @@ -196,6 +196,8 @@ static inline void brcm_pcie_bridge_sw_init_set_generic(struct brcm_pcie *pcie,
-> >  static inline void brcm_pcie_perst_set_4908(struct brcm_pcie *pcie, u32 val);
-> >  static inline void brcm_pcie_perst_set_7278(struct brcm_pcie *pcie, u32 val);
-> >  static inline void brcm_pcie_perst_set_generic(struct brcm_pcie *pcie, u32 val);
-> > +static int brcm_pcie_linkup(struct brcm_pcie *pcie);
-> > +static int brcm_pcie_add_bus(struct pci_bus *bus);
->
-> I think the brcm_pcie_add_bus() declaration is unnecessary.
-Will remove.
+In case it is not too late, please pull these 2 fixes for 5.19.
+They are necessary for proper working of:
+- I2S1 interface on SAMA5D2
+- switch available on kswitch-d10 based boards.
 
->
-> The brcm_pcie_linkup() one is probably unnecessary, too, but would
-> require a lot of reordering that I don't think we should do in this
-> series.
+Thank you,
+Claudiu Beznea
 
-I have a future commit that will remove all forward declarations.  I just
-wanted to keep this the un-revert patchset simple.
+The following changes since commit 91d60e259c0f58c855f88f3fe5b7909aec563525:
 
->
-> >  enum {
-> >       RGR1_SW_INIT_1,
-> > @@ -329,6 +331,8 @@ struct brcm_pcie {
-> >       u32                     hw_rev;
-> >       void                    (*perst_set)(struct brcm_pcie *pcie, u32 val);
-> >       void                    (*bridge_sw_init_set)(struct brcm_pcie *pcie, u32 val);
-> > +     bool                    refusal_mode;
-> > +     struct subdev_regulators *sr;
-> >  };
-> >
-> >  static inline bool is_bmips(const struct brcm_pcie *pcie)
-> > @@ -497,6 +501,33 @@ static int pci_subdev_regulators_add_bus(struct pci_bus *bus)
-> >       return 0;
-> >  }
-> >
-> > +static int brcm_pcie_add_bus(struct pci_bus *bus)
-> > +{
-> > +     struct brcm_pcie *pcie = (struct brcm_pcie *) bus->sysdata;
-> > +     int ret;
-> > +
-> > +     if (!bus->parent || !pci_is_root_bus(bus->parent))
-> > +             return 0;
-> > +
-> > +     ret = pci_subdev_regulators_add_bus(bus);
-> > +     if (ret)
-> > +             return ret;
-> > +
-> > +     /* Grab the regulators for suspend/resume */
-> > +     pcie->sr = bus->dev.driver_data;
-> > +
-> > +     /*
-> > +      * If we have failed linkup there is no point to return an error as
-> > +      * currently it will cause a WARNING() from pci_alloc_child_bus().
-> > +      * We return 0 and turn on the "refusal_mode" so that any further
-> > +      * accesses to the pci_dev just get 0xffffffff
-> > +      */
-> > +     if (brcm_pcie_linkup(pcie) != 0)
-> > +             pcie->refusal_mode = true;
->
-> Is there a bisection hole between the previous patch and this one?
-> The previous patch sets .add_bus() to pci_subdev_regulators_add_bus(),
-> so we'll turn on the regulators, but we don't know whether the link
-> came up.  If it didn't come up, it looks like we might get a CPU abort
-> when enumerating?
+  ARM: at91: pm: Mark at91_pm_secure_init as __init (2022-06-28 12:55:32 +0300)
 
-I don't think so.  At this commit, attempting the link-up is still
-done before the call
-to pci_host_probe().  Since there is no power there will be no link,
-the probe will
-fail and pci_host_probe() will never be invoked.
+are available in the Git repository at:
 
->
-> I think we should split out the refusal_mode patch:
->
->   - Add refusal mode
->   - Add subdev regulator mechanism
->   - This patch (which would then be clearly about managing regulators
->     in suspend/resume, IIUC)
+  git://git.kernel.org/pub/scm/linux/kernel/git/at91/linux.git tags/at91-fixes-5.19-2
 
-Will do.
+for you to fetch changes up to 2fdf15b50a46e366740df4cccbe2343269b4ff55:
 
->
-> > +     return 0;
-> > +}
-> > +
-> >  static void pci_subdev_regulators_remove_bus(struct pci_bus *bus)
-> >  {
-> >       struct device *dev = &bus->dev;
-> > @@ -826,6 +857,18 @@ static void __iomem *brcm_pcie_map_conf(struct pci_bus *bus, unsigned int devfn,
-> >       /* Accesses to the RC go right to the RC registers if slot==0 */
-> >       if (pci_is_root_bus(bus))
-> >               return PCI_SLOT(devfn) ? NULL : base + where;
-> > +     if (pcie->refusal_mode) {
-> > +             /*
-> > +              * At this point we do not have link.  There will be a CPU
-> > +              * abort -- a quirk with this controller --if Linux tries
-> > +              * to read any config-space registers besides those
-> > +              * targeting the host bridge.  To prevent this we hijack
-> > +              * the address to point to a safe access that will return
-> > +              * 0xffffffff.
-> > +              */
-> > +             writel(0xffffffff, base + PCIE_MISC_RC_BAR2_CONFIG_HI);
-> > +             return base + PCIE_MISC_RC_BAR2_CONFIG_HI + (where & 0x3);
-> > +     }
-> >
-> >       /* For devices, write to the config space index register */
-> >       idx = PCIE_ECAM_OFFSET(bus->number, devfn, 0);
-> > @@ -854,7 +897,7 @@ static struct pci_ops brcm_pcie_ops = {
-> >       .map_bus = brcm_pcie_map_conf,
-> >       .read = pci_generic_config_read,
-> >       .write = pci_generic_config_write,
-> > -     .add_bus = pci_subdev_regulators_add_bus,
-> > +     .add_bus = brcm_pcie_add_bus,
-> >       .remove_bus = pci_subdev_regulators_remove_bus,
-> >  };
-> >
-> > @@ -1327,6 +1370,14 @@ static int brcm_pcie_suspend(struct device *dev)
-> >               return ret;
-> >       }
-> >
-> > +     if (pcie->sr) {
-> > +             ret = regulator_bulk_disable(pcie->sr->num_supplies, pcie->sr->supplies);
-> > +             if (ret) {
-> > +                     dev_err(dev, "Could not turn off regulators\n");
-> > +                     reset_control_reset(pcie->rescal);
-> > +                     return ret;
-> > +             }
-> > +     }
-> >       clk_disable_unprepare(pcie->clk);
-> >
-> >       return 0;
-> > @@ -1344,9 +1395,17 @@ static int brcm_pcie_resume(struct device *dev)
-> >       if (ret)
-> >               return ret;
-> >
-> > +     if (pcie->sr) {
-> > +             ret = regulator_bulk_enable(pcie->sr->num_supplies, pcie->sr->supplies);
-> > +             if (ret) {
-> > +                     dev_err(dev, "Could not turn on regulators\n");
-> > +                     goto err_disable_clk;
-> > +             }
-> > +     }
-> > +
-> >       ret = reset_control_reset(pcie->rescal);
-> >       if (ret)
-> > -             goto err_disable_clk;
-> > +             goto err_regulator;
-> >
-> >       ret = brcm_phy_start(pcie);
-> >       if (ret)
-> > @@ -1378,6 +1437,9 @@ static int brcm_pcie_resume(struct device *dev)
-> >
-> >  err_reset:
-> >       reset_control_rearm(pcie->rescal);
-> > +err_regulator:
-> > +     if (pcie->sr)
-> > +             regulator_bulk_disable(pcie->sr->num_supplies, pcie->sr->supplies);
-> >  err_disable_clk:
-> >       clk_disable_unprepare(pcie->clk);
-> >       return ret;
-> > @@ -1488,10 +1550,6 @@ static int brcm_pcie_probe(struct platform_device *pdev)
-> >       if (ret)
-> >               goto fail;
-> >
-> > -     ret = brcm_pcie_linkup(pcie);
-> > -     if (ret)
-> > -             goto fail;
-> > -
-> >       pcie->hw_rev = readl(pcie->base + PCIE_MISC_REVISION);
-> >       if (pcie->type == BCM4908 && pcie->hw_rev >= BRCM_PCIE_HW_REV_3_20) {
-> >               dev_err(pcie->dev, "hardware revision with unsupported PERST# setup\n");
-> > @@ -1513,7 +1571,17 @@ static int brcm_pcie_probe(struct platform_device *pdev)
-> >
-> >       platform_set_drvdata(pdev, pcie);
-> >
-> > -     return pci_host_probe(bridge);
-> > +     ret = pci_host_probe(bridge);
-> > +     if (!ret && !brcm_pcie_link_up(pcie))
-> > +             ret = -ENODEV;
-> > +
-> > +     if (ret) {
-> > +             brcm_pcie_remove(pdev);
-> > +             return ret;
-> > +     }
-> > +
-> > +     return 0;
-> > +
-> >  fail:
-> >       __brcm_pcie_remove(pcie);
-> >       return ret;
-> > @@ -1522,8 +1590,8 @@ static int brcm_pcie_probe(struct platform_device *pdev)
-> >  MODULE_DEVICE_TABLE(of, brcm_pcie_match);
-> >
-> >  static const struct dev_pm_ops brcm_pcie_pm_ops = {
-> > -     .suspend = brcm_pcie_suspend,
-> > -     .resume = brcm_pcie_resume,
-> > +     .suspend_noirq = brcm_pcie_suspend,
-> > +     .resume_noirq = brcm_pcie_resume,
->
-> Can you name these brcm_pcie_suspend_noirq() and
-> brcm_pcie_resume_noirq() to match the hook names?
-Yes.
+  ARM: dts: at91: sama5d2: Fix typo in i2s1 node (2022-07-08 17:44:33 +0300)
 
-Jim Quintlan
-Broadcom STB
+----------------------------------------------------------------
+AT91 fixes for 5.19 #2
 
->
-> >  };
-> >
-> >  static struct platform_driver brcm_pcie_driver = {
-> > --
-> > 2.17.1
-> >
-> >
-> > _______________________________________________
-> > linux-arm-kernel mailing list
-> > linux-arm-kernel@lists.infradead.org
-> > http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
+It contains 2 DT fixes:
+- one for SAMA5D2 to fix the i2s1 assigned-clock-parents property
+- one for kswitch-d10 (LAN966 based) enforcing proper settings
+  on GPIO pins
 
---000000000000330fc805e34caf28
-Content-Type: application/pkcs7-signature; name="smime.p7s"
-Content-Transfer-Encoding: base64
-Content-Disposition: attachment; filename="smime.p7s"
-Content-Description: S/MIME Cryptographic Signature
+----------------------------------------------------------------
+Michael Walle (1):
+      ARM: dts: kswitch-d10: use open drain mode for coma-mode pins
 
-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
-LeylbuEJGL9I80yqq8e6Z+Q6ulLxa6SopzpoysJe/vEVHgp9jPNppZzwKngVd2iDBRqpKlCngIAM
-DXgVGyEojXnuEbRs3NlB7wq1kJGlYysrnDug55ncJM8CAwEAAaOCAdswggHXMA4GA1UdDwEB/wQE
-AwIFoDCBowYIKwYBBQUHAQEEgZYwgZMwTgYIKwYBBQUHMAKGQmh0dHA6Ly9zZWN1cmUuZ2xvYmFs
-c2lnbi5jb20vY2FjZXJ0L2dzZ2NjcjNwZXJzb25hbHNpZ24yY2EyMDIwLmNydDBBBggrBgEFBQcw
-AYY1aHR0cDovL29jc3AuZ2xvYmFsc2lnbi5jb20vZ3NnY2NyM3BlcnNvbmFsc2lnbjJjYTIwMjAw
-TQYDVR0gBEYwRDBCBgorBgEEAaAyASgKMDQwMgYIKwYBBQUHAgEWJmh0dHBzOi8vd3d3Lmdsb2Jh
-bHNpZ24uY29tL3JlcG9zaXRvcnkvMAkGA1UdEwQCMAAwSQYDVR0fBEIwQDA+oDygOoY4aHR0cDov
-L2NybC5nbG9iYWxzaWduLmNvbS9nc2djY3IzcGVyc29uYWxzaWduMmNhMjAyMC5jcmwwJQYDVR0R
-BB4wHIEaamFtZXMucXVpbmxhbkBicm9hZGNvbS5jb20wEwYDVR0lBAwwCgYIKwYBBQUHAwQwHwYD
-VR0jBBgwFoAUljPR5lgXWzR1ioFWZNW+SN6hj88wHQYDVR0OBBYEFCeTeUYv84Mo3T1V+OyDdxib
-DDLvMA0GCSqGSIb3DQEBCwUAA4IBAQCCqR1PBVtHPvQHuG8bjMFQ94ZB7jmFEGhgfAsFJMaSMLov
-qyt8DKr8suCYF4dKGzqalbxo5QU9mmZXdLifqceHdt/Satxb+iGJjBhZg4E0cDds24ofYq+Lbww2
-YlIKC2HHxIN+JX2mFpavSXkshR5GT29B9EIJ8hgSjbs61XXeAcrmVIDfYbXQEmGbsnwqxdq+DJpQ
-S2kM2wvSlgSWDb6pL7myuKR5lCkQhj7piGSgrVLJRDRrMPw1L4MvnV9DjUFMlGCB40Hm6xqn/jm0
-8FCLlWhxve5mj+hgUOPETiKbjhCxJhhAPDdCvDRkZtJlQ8oxUVvXHugG8jm1YqB5AWx7MYICbTCC
-AmkCAQEwazBbMQswCQYDVQQGEwJCRTEZMBcGA1UEChMQR2xvYmFsU2lnbiBudi1zYTExMC8GA1UE
-AxMoR2xvYmFsU2lnbiBHQ0MgUjMgUGVyc29uYWxTaWduIDIgQ0EgMjAyMAIMI+Aj9XRk/wFexb9/
-MA0GCWCGSAFlAwQCAQUAoIHUMC8GCSqGSIb3DQEJBDEiBCAHcX8jENCL0ZkQyxx8LpddpdtSpcFj
-NHlM9ybZvfFkkDAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcBMBwGCSqGSIb3DQEJBTEPFw0yMjA3
-MDgxNTE2MTlaMGkGCSqGSIb3DQEJDzFcMFowCwYJYIZIAWUDBAEqMAsGCWCGSAFlAwQBFjALBglg
-hkgBZQMEAQIwCgYIKoZIhvcNAwcwCwYJKoZIhvcNAQEKMAsGCSqGSIb3DQEBBzALBglghkgBZQME
-AgEwDQYJKoZIhvcNAQEBBQAEggEAee2xcdqVHCYIVlgGgs2MR14h08NUFDyzzATAwmBS8WwMdBTY
-ftw9r9DpzFseZNT0bsaLvjaAdg9u1LXygHMVBWeRfqAnOptWI7fUh11Zvl1CCW0sh00mYsuMVUxD
-URD2CvwZ5kIHU01T3uSZa/cA2icaI9pDDTKSD5DEfhdcAMD2TDJlpqnyuCkABjmo4dvugB+PO8BG
-qYelcxlW7dOiOSEDbbJm3EmwqWFxwiGUgPWlK8MEzZCSHpfOvbQnS6ZrB8MxfuvswXI1I9MCiIB/
-9d1c6kjaeEKR7WpURrat20aYowFvngE2Vh/aepPDHi0mruP0v0076FlObN+wWfNIfw==
---000000000000330fc805e34caf28--
+Ryan Wanner (1):
+      ARM: dts: at91: sama5d2: Fix typo in i2s1 node
+
+ arch/arm/boot/dts/lan966x-kontron-kswitch-d10-mmt.dtsi | 8 ++++----
+ arch/arm/boot/dts/sama5d2.dtsi                         | 2 +-
+ 2 files changed, 5 insertions(+), 5 deletions(-)

@@ -2,49 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7743156C0AA
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 20:37:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A3A756C068
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 20:37:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238304AbiGHQp0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Jul 2022 12:45:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58228 "EHLO
+        id S238361AbiGHQrj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Jul 2022 12:47:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59878 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237590AbiGHQpY (ORCPT
+        with ESMTP id S238798AbiGHQrc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Jul 2022 12:45:24 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B2B88E005;
-        Fri,  8 Jul 2022 09:45:23 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id D78831063;
-        Fri,  8 Jul 2022 09:45:23 -0700 (PDT)
-Received: from [192.168.99.12] (unknown [172.31.20.19])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 7632B3F66F;
-        Fri,  8 Jul 2022 09:45:22 -0700 (PDT)
-Message-ID: <34db7cf2-32cc-5d9b-d98d-a29928ea898b@foss.arm.com>
-Date:   Fri, 8 Jul 2022 17:45:07 +0100
+        Fri, 8 Jul 2022 12:47:32 -0400
+Received: from smtp.smtpout.orange.fr (smtp05.smtpout.orange.fr [80.12.242.127])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A9E171BEE
+        for <linux-kernel@vger.kernel.org>; Fri,  8 Jul 2022 09:47:31 -0700 (PDT)
+Received: from pop-os.home ([90.11.190.129])
+        by smtp.orange.fr with ESMTPA
+        id 9r8aoCK06ZDzU9r8aojqo6; Fri, 08 Jul 2022 18:47:28 +0200
+X-ME-Helo: pop-os.home
+X-ME-Auth: YWZlNiIxYWMyZDliZWIzOTcwYTEyYzlhMmU3ZiQ1M2U2MzfzZDfyZTMxZTBkMTYyNDBjNDJlZmQ3ZQ==
+X-ME-Date: Fri, 08 Jul 2022 18:47:28 +0200
+X-ME-IP: 90.11.190.129
+From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+To:     "Md. Haris Iqbal" <haris.iqbal@ionos.com>,
+        Jack Wang <jinpu.wang@ionos.com>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        Leon Romanovsky <leon@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        linux-rdma@vger.kernel.org
+Subject: [PATCH 1/2] RDMA/rtrs-clt: Use the bitmap API to allocate bitmaps
+Date:   Fri,  8 Jul 2022 18:47:27 +0200
+Message-Id: <ca9c5c8301d76d60de34640568b3db0d4401d050.1657298747.git.christophe.jaillet@wanadoo.fr>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Subject: Re: [PATCH 10/14] perf test: Add thread loop test shell scripts
-Content-Language: en-US
-To:     Mike Leach <mike.leach@linaro.org>
-Cc:     James Clark <james.clark@arm.com>, linux-kernel@vger.kernel.org,
-        coresight@lists.linaro.org, mathieu.poirier@linaro.org,
-        linux-perf-users@vger.kernel.org, acme@kernel.org,
-        Suzuki K Poulose <suzuki.poulose@arm.com>
-References: <20220701120804.3226396-1-carsten.haitzler@foss.arm.com>
- <20220701120804.3226396-11-carsten.haitzler@foss.arm.com>
- <a14e7015-7446-8cb3-612c-00dcb469c939@arm.com>
- <e55094af-557e-8044-fc14-00189bd392a2@foss.arm.com>
- <CAJ9a7VjQ4B8yudKqHZ_f8pGRGcM9t=6M0zfQK9-LmyTf4pZbZw@mail.gmail.com>
-From:   Carsten Haitzler <carsten.haitzler@foss.arm.com>
-Organization: Arm Ltd.
-In-Reply-To: <CAJ9a7VjQ4B8yudKqHZ_f8pGRGcM9t=6M0zfQK9-LmyTf4pZbZw@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -52,152 +45,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Use bitmap_zalloc()/bitmap_free() instead of hand-writing them.
 
+It is less verbose and it improves the semantic.
 
-On 7/8/22 11:27, Mike Leach wrote:
-> Hi,
-> 
-> On Fri, 8 Jul 2022 at 10:22, Carsten Haitzler
-> <carsten.haitzler@foss.arm.com> wrote:
->>
->>
->>
->> On 7/5/22 14:53, James Clark wrote:
->>>
->>>
->>> On 01/07/2022 13:07, carsten.haitzler@foss.arm.com wrote:
->>>> From: "Carsten Haitzler (Rasterman)" <raster@rasterman.com>
->>>>
->>>> Add a script to drive the thread loop test that gathers data so
->>>> it passes a minimum bar (in this case do we get any perf context data
->>>> for every thread).
->>>>
->>>> Signed-off-by: Carsten Haitzler <carsten.haitzler@arm.com>
->>>
->>> Hi Carsten,
->>>
->>> I checked this on N1SDP and I get failures in both threads tests. This is
->>> because it's looking for "CID=..." when in my output threads are shown as
->>> "VMID=...":
->>>
->>>       Idx:628048; ID:10;       I_ADDR_CTXT_L_64IS0 : Address & Context, Long, 64 bit, IS0.; Addr=0x0000AAAAE3BF0B18; Ctxt: AArch64,EL0, NS; VMID=0xa588c;
->>>
->>> I think with a change to the grep it should work.
->>
->> Errrr... I get no VMID= ... it's all
->>
->> Idx:563008; ID:12;      I_ADDR_CTXT_L_64IS0 : Address & Context, Long, 64
->> bit, IS0.; Addr=0x0000AAAAE4B00A60; Ctxt: AArch64,EL0, NS; CID=0x00004aff;
->>
->> are you using containers or something? because:
->>
->>               if(context.updated_c)
->>               {
->>                   oss << "CID=0x" << std::hex << std::setfill('0') <<
->> std::setw(8) << context.ctxtID << "; ";
->>               }
->>               if(context.updated_v)
->>               {
->>                   oss << "VMID=0x" << std::hex << std::setfill('0') <<
->> std::setw(4) << context.VMID << "; ";
->>               }
->>
->> I'm running without any containers etc. - bare metal. Haven't bothered
->> with any VM stuff.
->>
->> In OpenOCD the CID should be the the pid/thread id. It seems to not be
->> the same thing as VMID. I haven't traced this beyond here as to exactly
->> what this represents though my first reaction is "This is extra VM info
->> and not the PID/TID being looked for". OpenOCD is full of tests with log
->> dumps that produce CID and VMID:
->>
->> Idx:1676; ID:10;        I_ADDR_CTXT_L_64IS0 : Address & Context, Long,
->> 64 bit, IS0.; Addr=0xFFFFFFC000096A00; Ctxt: AArch64,EL1, NS;
->> CID=0x00000000; VMID=0x0000;
->>
->> A quick git grep CID= in OpenCD will show them all. My understanding is
->> CID is the thread/process ID and thus the test/check "Do we get reported
->> data from all threads? - anything?".
->>
->> I don't think using VMID is right. The fact you are missing a CID is an
->> issue though...
->>
-> 
-> The register used for linux TID trace is dependent on the EL of the kernel.
-> EL1 => CONTEXT_IDR_EL1
-> EL2 => CONTEXT_IDR_EL2.
-> 
-> By design, the trace hardware traces CONTEXT_IDR_EL2 as the VMID packet.
-> 
-> So, depending on your kernel build, TID can validly be traced as CID or VMID
+Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+---
+ drivers/infiniband/ulp/rtrs/rtrs-clt.c | 7 +++----
+ 1 file changed, 3 insertions(+), 4 deletions(-)
 
-Ahhh I haven't encountered that. So basically look for CID=xxx OR 
-VMID=xxx if no CID=xxx is there.
+diff --git a/drivers/infiniband/ulp/rtrs/rtrs-clt.c b/drivers/infiniband/ulp/rtrs/rtrs-clt.c
+index 9809c3883979..06c27a3d83f5 100644
+--- a/drivers/infiniband/ulp/rtrs/rtrs-clt.c
++++ b/drivers/infiniband/ulp/rtrs/rtrs-clt.c
+@@ -1403,8 +1403,7 @@ static int alloc_permits(struct rtrs_clt_sess *clt)
+ 	unsigned int chunk_bits;
+ 	int err, i;
+ 
+-	clt->permits_map = kcalloc(BITS_TO_LONGS(clt->queue_depth),
+-				   sizeof(long), GFP_KERNEL);
++	clt->permits_map = bitmap_zalloc(clt->queue_depth, GFP_KERNEL);
+ 	if (!clt->permits_map) {
+ 		err = -ENOMEM;
+ 		goto out_err;
+@@ -1426,7 +1425,7 @@ static int alloc_permits(struct rtrs_clt_sess *clt)
+ 	return 0;
+ 
+ err_map:
+-	kfree(clt->permits_map);
++	bitmap_free(clt->permits_map);
+ 	clt->permits_map = NULL;
+ out_err:
+ 	return err;
+@@ -1440,7 +1439,7 @@ static void free_permits(struct rtrs_clt_sess *clt)
+ 		wait_event(clt->permits_wait,
+ 			   find_first_bit(clt->permits_map, sz) >= sz);
+ 	}
+-	kfree(clt->permits_map);
++	bitmap_free(clt->permits_map);
+ 	clt->permits_map = NULL;
+ 	kfree(clt->permits);
+ 	clt->permits = NULL;
+-- 
+2.34.1
 
-> Regards
-> 
-> Mike
-> 
->>> Thanks
->>> James
->>>
->>>> ---
->>>>    .../coresight/thread_loop_check_tid_10.sh     | 19 +++++++++++++++++++
->>>>    .../coresight/thread_loop_check_tid_2.sh      | 19 +++++++++++++++++++
->>>>    2 files changed, 38 insertions(+)
->>>>    create mode 100755 tools/perf/tests/shell/coresight/thread_loop_check_tid_10.sh
->>>>    create mode 100755 tools/perf/tests/shell/coresight/thread_loop_check_tid_2.sh
->>>>
->>>> diff --git a/tools/perf/tests/shell/coresight/thread_loop_check_tid_10.sh b/tools/perf/tests/shell/coresight/thread_loop_check_tid_10.sh
->>>> new file mode 100755
->>>> index 000000000000..7c13636fc778
->>>> --- /dev/null
->>>> +++ b/tools/perf/tests/shell/coresight/thread_loop_check_tid_10.sh
->>>> @@ -0,0 +1,19 @@
->>>> +#!/bin/sh -e
->>>> +# CoreSight / Thread Loop 10 Threads - Check TID
->>>> +
->>>> +# SPDX-License-Identifier: GPL-2.0
->>>> +# Carsten Haitzler <carsten.haitzler@arm.com>, 2021
->>>> +
->>>> +TEST="thread_loop"
->>>> +. $(dirname $0)/../lib/coresight.sh
->>>> +ARGS="10 1"
->>>> +DATV="check-tid-10th"
->>>> +DATA="$DATD/perf-$TEST-$DATV.data"
->>>> +STDO="$DATD/perf-$TEST-$DATV.stdout"
->>>> +
->>>> +SHOW_TID=1 perf record -s $PERFRECOPT -o "$DATA" "$BIN" $ARGS > $STDO
->>>> +
->>>> +perf_dump_aux_tid_verify "$DATA" "$STDO"
->>>> +
->>>> +err=$?
->>>> +exit $err
->>>> diff --git a/tools/perf/tests/shell/coresight/thread_loop_check_tid_2.sh b/tools/perf/tests/shell/coresight/thread_loop_check_tid_2.sh
->>>> new file mode 100755
->>>> index 000000000000..a067145af43c
->>>> --- /dev/null
->>>> +++ b/tools/perf/tests/shell/coresight/thread_loop_check_tid_2.sh
->>>> @@ -0,0 +1,19 @@
->>>> +#!/bin/sh -e
->>>> +# CoreSight / Thread Loop 2 Threads - Check TID
->>>> +
->>>> +# SPDX-License-Identifier: GPL-2.0
->>>> +# Carsten Haitzler <carsten.haitzler@arm.com>, 2021
->>>> +
->>>> +TEST="thread_loop"
->>>> +. $(dirname $0)/../lib/coresight.sh
->>>> +ARGS="2 20"
->>>> +DATV="check-tid-2th"
->>>> +DATA="$DATD/perf-$TEST-$DATV.data"
->>>> +STDO="$DATD/perf-$TEST-$DATV.stdout"
->>>> +
->>>> +SHOW_TID=1 perf record -s $PERFRECOPT -o "$DATA" "$BIN" $ARGS > $STDO
->>>> +
->>>> +perf_dump_aux_tid_verify "$DATA" "$STDO"
->>>> +
->>>> +err=$?
->>>> +exit $err
-> 
-> 
-> 

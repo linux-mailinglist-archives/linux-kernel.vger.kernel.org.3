@@ -2,149 +2,164 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 458A756B488
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 10:33:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F008156B487
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 10:33:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237549AbiGHIcU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Jul 2022 04:32:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35890 "EHLO
+        id S237699AbiGHIc1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Jul 2022 04:32:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35942 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237200AbiGHIcT (ORCPT
+        with ESMTP id S237200AbiGHIcZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Jul 2022 04:32:19 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 728458238F;
-        Fri,  8 Jul 2022 01:32:18 -0700 (PDT)
-Received: from pps.filterd (m0098399.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 2688Ttqv029870;
-        Fri, 8 Jul 2022 08:31:19 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=dHzoABMdFE8XEKTymXMUuxjuP3z7HbIjG6GmfQRPD8Q=;
- b=jfPvBh5SeNSwT0AvJCO98SWs9pi+ZnPth2+eZL+CY8HNDkz9lfTpBwZhFNfdGgfdLkHv
- D7kSMgaNO7JFCP78IoHRtUdgzYjLOpRSJvi9d/a/vYMTFFFYNqFoSJMw8/KLjXn4RD7q
- HtXmABzm2ljBIdVU7KyS+atwq72LPQnrx3vzCCBHMZs+hxzTPRUOgIGlOTrXQAI4kPSM
- iTCRAM8Fe9JuYyNW+rvyrA83LJzTSDKW2+WJdYwlzA0hWmgVBZkGW1caPGzbDYn5xNKO
- Orb8+okKcBgtVLne6F8LyYGdmyjwdzU3WWu74KLkJwWWAbnJjvKTAuUDzUg7Q7Mvy7eq EQ== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3h6h4fg15d-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 08 Jul 2022 08:31:18 +0000
-Received: from m0098399.ppops.net (m0098399.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 2688UlSD000429;
-        Fri, 8 Jul 2022 08:31:18 GMT
-Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3h6h4fg13x-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 08 Jul 2022 08:31:17 +0000
-Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
-        by ppma04ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 2688LqGo027759;
-        Fri, 8 Jul 2022 08:31:14 GMT
-Received: from b06cxnps4076.portsmouth.uk.ibm.com (d06relay13.portsmouth.uk.ibm.com [9.149.109.198])
-        by ppma04ams.nl.ibm.com with ESMTP id 3h4v4juq71-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 08 Jul 2022 08:31:14 +0000
-Received: from d06av25.portsmouth.uk.ibm.com (d06av25.portsmouth.uk.ibm.com [9.149.105.61])
-        by b06cxnps4076.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 2688VBds16187856
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 8 Jul 2022 08:31:11 GMT
-Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id C0C1311C05B;
-        Fri,  8 Jul 2022 08:31:11 +0000 (GMT)
-Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 2FEEF11C050;
-        Fri,  8 Jul 2022 08:31:11 +0000 (GMT)
-Received: from [9.145.4.47] (unknown [9.145.4.47])
-        by d06av25.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Fri,  8 Jul 2022 08:31:11 +0000 (GMT)
-Message-ID: <0bc35725-43eb-271c-d66e-ca11e5001794@linux.ibm.com>
-Date:   Fri, 8 Jul 2022 10:31:10 +0200
+        Fri, 8 Jul 2022 04:32:25 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D29882391;
+        Fri,  8 Jul 2022 01:32:25 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9AA4E621DC;
+        Fri,  8 Jul 2022 08:32:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EF74AC341C0;
+        Fri,  8 Jul 2022 08:32:21 +0000 (UTC)
+Message-ID: <f07764ce-ef3c-f38c-f484-91b53463a1d5@xs4all.nl>
+Date:   Fri, 8 Jul 2022 10:32:20 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH v6 2/2] perf test: Json format checking
+ Thunderbird/91.10.0
+Subject: Re: [PATCH v2] media: amphion: only insert the first sequence
+ startcode for vc1l format
 Content-Language: en-US
-To:     Ian Rogers <irogers@google.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Kan Liang <kan.liang@linux.intel.com>,
-        Zhengjun Xing <zhengjun.xing@linux.intel.com>,
-        Sandipan Das <sandipan.das@amd.com>,
-        Claire Jensen <cjense@google.com>, Alyssa Ross <hi@alyssa.is>,
-        Like Xu <likexu@tencent.com>,
-        James Clark <james.clark@arm.com>,
-        Florian Fischer <florian.fischer@muhq.space>,
-        linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
-        Claire Jensen <clairej735@gmail.com>
-Cc:     Stephane Eranian <eranian@google.com>
-References: <20220707201213.331663-1-irogers@google.com>
- <20220707201213.331663-3-irogers@google.com>
-From:   Thomas Richter <tmricht@linux.ibm.com>
-Organization: IBM
-In-Reply-To: <20220707201213.331663-3-irogers@google.com>
+From:   Hans Verkuil <hverkuil-cisco@xs4all.nl>
+To:     Ming Qian <ming.qian@nxp.com>, mchehab@kernel.org
+Cc:     shawnguo@kernel.org, robh+dt@kernel.org, s.hauer@pengutronix.de,
+        kernel@pengutronix.de, festevam@gmail.com, linux-imx@nxp.com,
+        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+References: <20220630013041.1251-1-ming.qian@nxp.com>
+ <22136ebe-b3b4-797f-beb0-3fb73d617dbe@xs4all.nl>
+In-Reply-To: <22136ebe-b3b4-797f-beb0-3fb73d617dbe@xs4all.nl>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: mgqVWLhs-H3cIg8cudiINcoDB65u7bOC
-X-Proofpoint-GUID: GjnDGMYcxOkI3bcHwvCMqoxdwPo5WNtx
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
- definitions=2022-07-08_06,2022-06-28_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
- malwarescore=0 bulkscore=0 mlxlogscore=999 adultscore=0 mlxscore=0
- suspectscore=0 impostorscore=0 clxscore=1011 priorityscore=1501
- phishscore=0 spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2206140000 definitions=main-2207080032
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 7/7/22 22:12, Ian Rogers wrote:
-> From: Claire Jensen <cjense@google.com>
+Please ignore. I had accidentally both v1 and v2 of this patch in my patch series.
+
+Sorry for the noise.
+
+Still, based on the comments on v1 this v2 needs an update anyway.
+
+Regards,
+
+	Hans
+
+On 7/8/22 10:24, Hans Verkuil wrote:
+> Hi Ming Qian,
 > 
-> Add field checking tests for perf stat JSON output.
-> Sanity checks the expected number of fields are present, that the
-> expected keys are present and they have the correct values.
+> Since the v1 has already been merged, this patch no longer applies.
 > 
-> Signed-off-by: Claire Jensen <cjense@google.com>
-> Signed-off-by: Ian Rogers <irogers@google.com>
-> ---
->  .../tests/shell/lib/perf_json_output_lint.py  |  95 +++++++++++
->  tools/perf/tests/shell/stat+json_output.sh    | 147 ++++++++++++++++++
->  2 files changed, 242 insertions(+)
->  create mode 100644 tools/perf/tests/shell/lib/perf_json_output_lint.py
->  create mode 100755 tools/perf/tests/shell/stat+json_output.sh
+> Can you make a v3 on top of https://git.linuxtv.org/media_stage.git/?
 > 
-....
-I wonder if it is really necessary to have a python file to post process the
-perf stat output?
-
-With
-commit 7473ee56dbc9 ("perf test: Add checking for perf stat CSV output.")
-the same approach was done which led to issues on s390 and required an additional
-patch to fix this:
-commit ec906102e5b7 ("perf test: Fix "perf stat CSV output linter" test on s390").
-
-I wonder if you can do the perf stat output checking using bash/linux tools as it
-was done in commit ec906102e5b7. This would make maintenance much easier.
-
-Just me 2 cents...
-
--- 
-Thomas Richter, Dept 3303, IBM s390 Linux Development, Boeblingen, Germany
---
-Vorsitzender des Aufsichtsrats: Gregor Pillen
-Geschäftsführung: David Faller
-Sitz der Gesellschaft: Böblingen / Registergericht: Amtsgericht Stuttgart, HRB 243294
+> The only change that a v3 has to do is the removal of V4L2_FMT_FLAG_DYN_RESOLUTION.
+> 
+> Regards,
+> 
+> 	Hans
+> 
+> On 6/30/22 03:30, Ming Qian wrote:
+>> For some formats, the amphion vpu requires startcode
+>> before sequence and frame, such as vc1, vp8.
+>>
+>> But for V4L2_PIX_FMT_VC1_ANNEX_L, only the first sequence startcode
+>> is needed, the extra startcode will cause decoding error.
+>> So after seek, we don't need to insert the sequence startcode.
+>>
+>> In other words, for V4L2_PIX_FMT_VC1_ANNEX_L,
+>> the vpu doesn't support dynamic resolution change.
+>>
+>> Fixes: 145e936380edb ("media: amphion: implement malone decoder rpc interface")
+>> Signed-off-by: Ming Qian <ming.qian@nxp.com>
+>> ---
+>> v2
+>> - remove V4L2_FMT_FLAG_DYN_RESOLUTION from the format V4L2_PIX_FMT_VC1_ANNEX_L
+>>  drivers/media/platform/amphion/vdec.c       | 2 +-
+>>  drivers/media/platform/amphion/vpu.h        | 1 +
+>>  drivers/media/platform/amphion/vpu_malone.c | 2 ++
+>>  drivers/media/platform/amphion/vpu_rpc.h    | 7 ++++++-
+>>  4 files changed, 10 insertions(+), 2 deletions(-)
+>>
+>> diff --git a/drivers/media/platform/amphion/vdec.c b/drivers/media/platform/amphion/vdec.c
+>> index 09d4f27970ec..6eab9e711cba 100644
+>> --- a/drivers/media/platform/amphion/vdec.c
+>> +++ b/drivers/media/platform/amphion/vdec.c
+>> @@ -104,7 +104,6 @@ static const struct vpu_format vdec_formats[] = {
+>>  		.pixfmt = V4L2_PIX_FMT_VC1_ANNEX_L,
+>>  		.num_planes = 1,
+>>  		.type = V4L2_BUF_TYPE_VIDEO_OUTPUT_MPLANE,
+>> -		.flags = V4L2_FMT_FLAG_DYN_RESOLUTION
+>>  	},
+>>  	{
+>>  		.pixfmt = V4L2_PIX_FMT_MPEG2,
+>> @@ -731,6 +730,7 @@ static void vdec_stop_done(struct vpu_inst *inst)
+>>  	vdec->eos_received = 0;
+>>  	vdec->is_source_changed = false;
+>>  	vdec->source_change = 0;
+>> +	inst->total_input_count = 0;
+>>  	vpu_inst_unlock(inst);
+>>  }
+>>  
+>> diff --git a/drivers/media/platform/amphion/vpu.h b/drivers/media/platform/amphion/vpu.h
+>> index e56b96a7e5d3..f914de6ed81e 100644
+>> --- a/drivers/media/platform/amphion/vpu.h
+>> +++ b/drivers/media/platform/amphion/vpu.h
+>> @@ -258,6 +258,7 @@ struct vpu_inst {
+>>  	struct vpu_format cap_format;
+>>  	u32 min_buffer_cap;
+>>  	u32 min_buffer_out;
+>> +	u32 total_input_count;
+>>  
+>>  	struct v4l2_rect crop;
+>>  	u32 colorspace;
+>> diff --git a/drivers/media/platform/amphion/vpu_malone.c b/drivers/media/platform/amphion/vpu_malone.c
+>> index c62b49e85060..f4a488bf9880 100644
+>> --- a/drivers/media/platform/amphion/vpu_malone.c
+>> +++ b/drivers/media/platform/amphion/vpu_malone.c
+>> @@ -1314,6 +1314,8 @@ static int vpu_malone_insert_scode_vc1_l_seq(struct malone_scode_t *scode)
+>>  	int size = 0;
+>>  	u8 rcv_seqhdr[MALONE_VC1_RCV_SEQ_HEADER_LEN];
+>>  
+>> +	if (scode->inst->total_input_count)
+>> +		return 0;
+>>  	scode->need_data = 0;
+>>  
+>>  	ret = vpu_malone_insert_scode_seq(scode, MALONE_CODEC_ID_VC1_SIMPLE, sizeof(rcv_seqhdr));
+>> diff --git a/drivers/media/platform/amphion/vpu_rpc.h b/drivers/media/platform/amphion/vpu_rpc.h
+>> index 25119e5e807e..7eb6f01e6ab5 100644
+>> --- a/drivers/media/platform/amphion/vpu_rpc.h
+>> +++ b/drivers/media/platform/amphion/vpu_rpc.h
+>> @@ -312,11 +312,16 @@ static inline int vpu_iface_input_frame(struct vpu_inst *inst,
+>>  					struct vb2_buffer *vb)
+>>  {
+>>  	struct vpu_iface_ops *ops = vpu_core_get_iface(inst->core);
+>> +	int ret;
+>>  
+>>  	if (!ops || !ops->input_frame)
+>>  		return -EINVAL;
+>>  
+>> -	return ops->input_frame(inst->core->iface, inst, vb);
+>> +	ret = ops->input_frame(inst->core->iface, inst, vb);
+>> +	if (ret < 0)
+>> +		return ret;
+>> +	inst->total_input_count++;
+>> +	return ret;
+>>  }
+>>  
+>>  static inline int vpu_iface_config_memory_resource(struct vpu_inst *inst,

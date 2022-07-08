@@ -2,114 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D14756B3BC
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 09:43:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 61E4956B3CC
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 09:48:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237396AbiGHHnG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Jul 2022 03:43:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51032 "EHLO
+        id S237413AbiGHHrp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Jul 2022 03:47:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53706 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237486AbiGHHnD (ORCPT
+        with ESMTP id S237316AbiGHHrn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Jul 2022 03:43:03 -0400
-Received: from out2.migadu.com (out2.migadu.com [188.165.223.204])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 357DF7D1DB;
-        Fri,  8 Jul 2022 00:43:02 -0700 (PDT)
+        Fri, 8 Jul 2022 03:47:43 -0400
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2A4C7D1E4;
+        Fri,  8 Jul 2022 00:47:41 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4LfQNp3q1wz4xXD;
+        Fri,  8 Jul 2022 17:47:38 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1657266460;
+        bh=BufiTmFOjOTRKTxthIni/3WqGCUldD57kd+VeVSwYLc=;
+        h=Date:From:To:Cc:Subject:From;
+        b=aX56pxlG/2Wuw25ozUllP6Pjl+Vrz6E9WVq1as29r4ToQZlyI8EjXipFxbqSYHxKJ
+         dXwcQEqWWdoclHnf2DFHlR30N2CH5ovO92qq3nDcOISR+8Ix+mjOV5Ygryc/GbmzLH
+         i673RtW61oL1ZJZEnk/2TlNWGfEdWrzgwuJgoAxb8NZ7A/eQ+rqyfsnDHaJgrvot9y
+         Aq9PjVEIlQDMupLUFYEq4rj7/dbmkfv44cN0ANACOxa1/X+dGe4ZmSR5aisx44ZxFK
+         rP1GS5PQDaxGIrd8F090ARv4ebCfRBebJ/svr6Oh3/B37OdisLQ5JWihz7uJjRVXE8
+         nBmd4F/R2ob3w==
+Date:   Fri, 8 Jul 2022 17:47:37 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Yury Norov <yury.norov@gmail.com>
+Cc:     Paul Menzel <pmenzel@molgen.mpg.de>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: build failure after merge of the bitmap tree
+Message-ID: <20220708174737.52d569c8@canb.auug.org.au>
 MIME-Version: 1.0
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1657266180;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=2chcDZoP7VrhRaGcDfWRBGm+iWZ2br0eyitmpkg5ZNw=;
-        b=rDkOZpIMyEqSoRiLqkPHm9aJq5WIe1t7nwclPV6ZODTLZQ47QIfFFm9J+zC5n2mF/N3KPl
-        EYZayuolQxFdpCOCJgBjeCpuWBN/8bEWAhynSJpDYesKQ9HoYVgms8rcVh39uP3RnzABcC
-        2lAYep+cYz8AWEmIDe410lTxFf1DGWI=
-Date:   Fri, 08 Jul 2022 07:43:00 +0000
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From:   "Yajun Deng" <yajun.deng@linux.dev>
-Message-ID: <889ac4e3230740beb6acae5fd48cbc0f@linux.dev>
-Subject: Re: [PATCH net-next] net: rtnetlink: add rx_otherhost_dropped for
- struct rtnl_link_stats
-To:     "Eric Dumazet" <edumazet@google.com>
-Cc:     "David Miller" <davem@davemloft.net>,
-        "Jakub Kicinski" <kuba@kernel.org>,
-        "Paolo Abeni" <pabeni@redhat.com>,
-        "netdev" <netdev@vger.kernel.org>,
-        "LKML" <linux-kernel@vger.kernel.org>,
-        "Jeffrey Ji" <jeffreyji@google.com>
-In-Reply-To: <CANn89iKuTLb15AMxXY8Q7FHF__f7kfRuDQFSkK1SwUR5m4fn+A@mail.gmail.com>
-References: <CANn89iKuTLb15AMxXY8Q7FHF__f7kfRuDQFSkK1SwUR5m4fn+A@mail.gmail.com>
- <20220708063257.1192311-1-yajun.deng@linux.dev>
-X-Migadu-Flow: FLOW_OUT
-X-Migadu-Auth-User: linux.dev
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/QE_j9YWfk8R.jkLw/IhID=R";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-July 8, 2022 3:03 PM, "Eric Dumazet" <edumazet@google.com> wrote:=0A=0A> =
-On Fri, Jul 8, 2022 at 8:33 AM Yajun Deng <yajun.deng@linux.dev> wrote:=
-=0A> =0A>> The commit 794c24e9921f ("net-core: rx_otherhost_dropped to co=
-re_stats")=0A>> introduce rx_otherhost_dropped, add rx_otherhost_dropped =
-for struct=0A>> rtnl_link_stats to keep sync with struct rtnl_link_stats6=
-4.=0A>> =0A>> As the same time, add BUILD_BUG_ON() in copy_rtnl_link_stat=
-s().=0A> =0A> Any reason you chose to not cc the original patch author ?=
-=0A> =0ASorry for that, I'll do it later.=0A=0A> If I remember well, not =
-adding fields into legacy 'struct=0A> rtnl_link_stats' was a conscious de=
-cision.=0A> =0A> There is no requirement to keep rtnl_link_stats & rtnl_l=
-ink_stats64 in sync.=0A> rtnl_link_stats is deprecated, user space really=
- wants to use=0A> rtnl_link_stats64 instead,=0A> if they need access to n=
-ew fields added in recent kernels.=0A> =0AGot it. Thanks.=0A=0A> Thank yo=
-u.=0A> =0A> [1]=0A> commit 9256645af09807bc52fa8b2e66ecd28ab25318c4=0A> A=
-uthor: Jarod Wilson <jarod@redhat.com>=0A> Date: Mon Feb 1 18:51:04 2016 =
--0500=0A> =0A> net/core: relax BUILD_BUG_ON in netdev_stats_to_stats64=0A=
-> =0A> The netdev_stats_to_stats64 function copies the deprecated=0A> net=
-_device_stats format stats into rtnl_link_stats64 for legacy support=0A> =
-purposes, but with the BUILD_BUG_ON as it was, it wasn't possible to=0A> =
-extend rtnl_link_stats64 without also extending net_device_stats. Relax=
-=0A> the BUILD_BUG_ON to only require that rtnl_link_stats64 is larger, a=
-nd=0A> zero out all the stat counters that aren't present in net_device_s=
-tats.=0A> =0A> CC: Eric Dumazet <edumazet@google.com>=0A> CC: netdev@vger=
-.kernel.org=0A> Signed-off-by: Jarod Wilson <jarod@redhat.com>=0A> Signed=
--off-by: David S. Miller <davem@davemloft.net>=0A> =0A>> Signed-off-by: Y=
-ajun Deng <yajun.deng@linux.dev>=0A>> ---=0A>> include/uapi/linux/if_link=
-.h | 1 +=0A>> net/core/rtnetlink.c | 36 +++++++--------------------------=
----=0A>> 2 files changed, 8 insertions(+), 29 deletions(-)=0A>> =0A>> dif=
-f --git a/include/uapi/linux/if_link.h b/include/uapi/linux/if_link.h=0A>=
-> index e36d9d2c65a7..fd6776d665c8 100644=0A>> --- a/include/uapi/linux/i=
-f_link.h=0A>> +++ b/include/uapi/linux/if_link.h=0A>> @@ -37,6 +37,7 @@ s=
-truct rtnl_link_stats {=0A>> __u32 tx_compressed;=0A>> =0A>> __u32 rx_noh=
-andler;=0A>> + __u32 rx_otherhost_dropped;=0A>> };=0A>> =0A>> /**=0A>> di=
-ff --git a/net/core/rtnetlink.c b/net/core/rtnetlink.c=0A>> index ac45328=
-607f7..818649850b2c 100644=0A>> --- a/net/core/rtnetlink.c=0A>> +++ b/net=
-/core/rtnetlink.c=0A>> @@ -908,35 +908,13 @@ static unsigned int rtnl_dev=
-_combine_flags(const struct net_device *dev,=0A>> static void copy_rtnl_l=
-ink_stats(struct rtnl_link_stats *a,=0A>> const struct rtnl_link_stats64 =
-*b)=0A>> {=0A>> - a->rx_packets =3D b->rx_packets;=0A>> - a->tx_packets =
-=3D b->tx_packets;=0A>> - a->rx_bytes =3D b->rx_bytes;=0A>> - a->tx_bytes=
- =3D b->tx_bytes;=0A>> - a->rx_errors =3D b->rx_errors;=0A>> - a->tx_erro=
-rs =3D b->tx_errors;=0A>> - a->rx_dropped =3D b->rx_dropped;=0A>> - a->tx=
-_dropped =3D b->tx_dropped;=0A>> -=0A>> - a->multicast =3D b->multicast;=
-=0A>> - a->collisions =3D b->collisions;=0A>> -=0A>> - a->rx_length_error=
-s =3D b->rx_length_errors;=0A>> - a->rx_over_errors =3D b->rx_over_errors=
-;=0A>> - a->rx_crc_errors =3D b->rx_crc_errors;=0A>> - a->rx_frame_errors=
- =3D b->rx_frame_errors;=0A>> - a->rx_fifo_errors =3D b->rx_fifo_errors;=
-=0A>> - a->rx_missed_errors =3D b->rx_missed_errors;=0A>> -=0A>> - a->tx_=
-aborted_errors =3D b->tx_aborted_errors;=0A>> - a->tx_carrier_errors =3D =
-b->tx_carrier_errors;=0A>> - a->tx_fifo_errors =3D b->tx_fifo_errors;=0A>=
-> - a->tx_heartbeat_errors =3D b->tx_heartbeat_errors;=0A>> - a->tx_windo=
-w_errors =3D b->tx_window_errors;=0A>> -=0A>> - a->rx_compressed =3D b->r=
-x_compressed;=0A>> - a->tx_compressed =3D b->tx_compressed;=0A>> -=0A>> -=
- a->rx_nohandler =3D b->rx_nohandler;=0A>> + size_t i, n =3D sizeof(*b) /=
- sizeof(u64);=0A>> + const u64 *src =3D (const u64 *)b;=0A>> + u32 *dst =
-=3D (u32 *)a;=0A>> +=0A>> + BUILD_BUG_ON(n !=3D sizeof(*a) / sizeof(u32))=
-;=0A>> + for (i =3D 0; i < n; i++)=0A>> + dst[i] =3D src[i];=0A>> }=0A>> =
-=0A>> /* All VF info */=0A>> --=0A>> 2.25.1
+--Sig_/QE_j9YWfk8R.jkLw/IhID=R
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
+
+Hi all,
+
+After merging the bitmap tree, today's linux-next build (powerpc
+ppc64_defconfig) failed like this:
+
+lib/bitmap.c:351:6: error: conflicting types for '__bitmap_set'; have 'void=
+(long unsigned int *, unsigned int,  unsigned int)'
+  351 | void __bitmap_set(unsigned long *map, unsigned int start, unsigned =
+int len)
+      |      ^~~~~~~~~~~~
+In file included from lib/bitmap.c:7:
+include/linux/bitmap.h:167:6: note: previous declaration of '__bitmap_set' =
+with type 'void(long unsigned int *, unsigned int,  int)'
+  167 | void __bitmap_set(unsigned long *map, unsigned int start, int len);
+      |      ^~~~~~~~~~~~
+In file included from include/linux/linkage.h:7,
+                 from include/linux/printk.h:8,
+                 from include/asm-generic/bug.h:22,
+                 from arch/powerpc/include/asm/bug.h:158,
+                 from include/linux/bug.h:5,
+                 from lib/bitmap.c:9:
+lib/bitmap.c:370:15: error: conflicting types for '__bitmap_set'; have 'voi=
+d(long unsigned int *, unsigned int,  unsigned int)'
+  370 | EXPORT_SYMBOL(__bitmap_set);
+      |               ^~~~~~~~~~~~
+include/linux/export.h:87:28: note: in definition of macro '___EXPORT_SYMBO=
+L'
+   87 |         extern typeof(sym) sym;                                    =
+             \
+      |                            ^~~
+include/linux/export.h:147:41: note: in expansion of macro '__EXPORT_SYMBOL'
+  147 | #define _EXPORT_SYMBOL(sym, sec)        __EXPORT_SYMBOL(sym, sec, "=
+")
+      |                                         ^~~~~~~~~~~~~~~
+include/linux/export.h:150:41: note: in expansion of macro '_EXPORT_SYMBOL'
+  150 | #define EXPORT_SYMBOL(sym)              _EXPORT_SYMBOL(sym, "")
+      |                                         ^~~~~~~~~~~~~~
+lib/bitmap.c:370:1: note: in expansion of macro 'EXPORT_SYMBOL'
+  370 | EXPORT_SYMBOL(__bitmap_set);
+      | ^~~~~~~~~~~~~
+In file included from lib/bitmap.c:7:
+include/linux/bitmap.h:167:6: note: previous declaration of '__bitmap_set' =
+with type 'void(long unsigned int *, unsigned int,  int)'
+  167 | void __bitmap_set(unsigned long *map, unsigned int start, int len);
+      |      ^~~~~~~~~~~~
+
+Caused by commit
+
+  aaa4ab5ec044 ("lib/bitmap: Make length parameter `len` unsigned")
+
+I have reverted that commit for today.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/QE_j9YWfk8R.jkLw/IhID=R
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmLH4RkACgkQAVBC80lX
+0GzC4wf/fZvuuy8PT/HsMWEk0gbxdXRLtobp2h471ccc0PE85+oTUMMZ68G+5FyM
+DnT8kNucZNxCbJdCcsbXBaGwcAF8DkJQqdkmWdxroe/y3yPllGzzeLprVY6uNmM9
+sWrJL2s9HPpUPwRW3r0mKQPPkH99pORB+5Pm39r8suN+sNZm3HpW/mbSziwyeM5M
+/HGU5fmDgCeXf9gfkPw/NWQ+e3LgMjxL5uFWoeBAJQ4/pSxbZF/zgXUxqnbmf5HU
+n574GCfFJ16XwI54ZMdl1XJORifjWNZcNUF3dl0O3et6Jw9MCWapjIN3h5VjGyxy
+KvG4gJfL8j2liPoVGnaVJdt4hd9wrA==
+=0app
+-----END PGP SIGNATURE-----
+
+--Sig_/QE_j9YWfk8R.jkLw/IhID=R--

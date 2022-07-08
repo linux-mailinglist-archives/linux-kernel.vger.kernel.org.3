@@ -2,101 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A250356C518
-	for <lists+linux-kernel@lfdr.de>; Sat,  9 Jul 2022 02:29:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E0B156C555
+	for <lists+linux-kernel@lfdr.de>; Sat,  9 Jul 2022 02:29:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238853AbiGHXWl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Jul 2022 19:22:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55990 "EHLO
+        id S239406AbiGHXXO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Jul 2022 19:23:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56248 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232885AbiGHXWi (ORCPT
+        with ESMTP id S238350AbiGHXXJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Jul 2022 19:22:38 -0400
-Received: from mail-io1-xd36.google.com (mail-io1-xd36.google.com [IPv6:2607:f8b0:4864:20::d36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8B6A419B8
-        for <linux-kernel@vger.kernel.org>; Fri,  8 Jul 2022 16:22:37 -0700 (PDT)
-Received: by mail-io1-xd36.google.com with SMTP id u20so326459iob.8
-        for <linux-kernel@vger.kernel.org>; Fri, 08 Jul 2022 16:22:37 -0700 (PDT)
+        Fri, 8 Jul 2022 19:23:09 -0400
+Received: from mail-pl1-x64a.google.com (mail-pl1-x64a.google.com [IPv6:2607:f8b0:4864:20::64a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65861419AE
+        for <linux-kernel@vger.kernel.org>; Fri,  8 Jul 2022 16:23:08 -0700 (PDT)
+Received: by mail-pl1-x64a.google.com with SMTP id h11-20020a170902f54b00b0016bfdca124fso28569plf.9
+        for <linux-kernel@vger.kernel.org>; Fri, 08 Jul 2022 16:23:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=juliacomputing.com; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=A1ej6xhQ4FQa3gB+bjJzvRwbSKtsNZgXVjMOdxWop0U=;
-        b=T5+dnDjMlpvDZ95jVJ0Gbkjx7yW9RrbWDQen7vlZbSwo8htD2oWpwMrAqo19j/oWY2
-         Ql09fEK9qIzBQ4etmbl54LV21ZcDN27D5wpd0TEC8g2ifL8WFPaRJ6fwziZgccp7I6d9
-         Bs4SzxOiQB+xb6Jhun8odbaT6ehL1c+18X4QqvO8BId4J95rFyeal72lISX8lilgtZjb
-         hvWe/ksm9W0uNty1uDhm2v8Zm6pkxJZxoWWnw7qAnZ5Q4iQYJpQ6Jb3SWmpkz+6ckPw0
-         1KyOgb5Rxb/Zyky6LqxvzNQbM8XbQDto4jJ/cn2HDxtcl8WUtqH0oC5aBXRS6hvJgAd7
-         LNzw==
+        d=google.com; s=20210112;
+        h=reply-to:date:message-id:mime-version:subject:from:to:cc;
+        bh=+6AcP1HWw661Qpr+lBZwEqnetiODARhUxEJKO0pVxWU=;
+        b=j/tiBmyZblQHV+HNo+8wJ4bia1A4rlEbbmJw7VT15wepVlBA4N3bOcEu5H7Sa5994x
+         L0yl+Csc6g1gSFJUeVfxdH9pf4Q4QkPqD17crVXXtT6VyIFLPhUIRF4tV5cfbfkU6wam
+         1JlFyQmvSc9lyOtPpXudz0Zkr7v11SbJJupEeV4n9D4geJC0CEoj7cSGQ3bNEwYLytGp
+         L52TxW867lXpOW5wNg5ZbMqr7Lwc9o3yi0HB9dxcWi5xKC6iGwRYB0OIGEEbKvhhmjsm
+         8ZDo5kSt11btuPU8dH8kPUbsE4W+27qYlWWWi6VvnVEoqoxAX7/BPMj5f3Lyy2FYmRvM
+         W53Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=A1ej6xhQ4FQa3gB+bjJzvRwbSKtsNZgXVjMOdxWop0U=;
-        b=AioaTsgsrMs8W4tzLUv/64KhPnXZCkB/BqTehLXlXvjV8Hs+jYnnU5l1e2+PHxI8La
-         0kE5K1MQIB2/iQ4f7EBTp14tZ4kH3kyhZBu8+snT3JpXYlXQFVcJ1kg+eY+1PhSnE+Xx
-         o9Mt+CeKTNwZHImQbndDqcmD7QFTp80HeJyK7igdTLrounwHSiu8Gzsow5f60OcOllcA
-         W1pTiFqbSNOw49tgArfqPvY0S3/ezdUJF6UB0wIC/g53wrQuFoafOWc7xfdhfHuizyRn
-         XDTUdLCSB255XmC6Q6wlKYawiGJln8adymFvMcHEx8+HGOtMiiFsTGfMw0Alj5o/Om/9
-         Usyw==
-X-Gm-Message-State: AJIora83p/7f+Ct2fZzuSfqTHsTFevFfchByhRErqbSnpfk7Qx0yQVuf
-        /R7CboLpKzzRinhsXhLVwGlQ0yNTcOCIarO1f/+7YA==
-X-Google-Smtp-Source: AGRyM1uav8UBMS/JUkZBWQNip2eXO7srgkoO7bZ5Y7THjyyE5hC8rSU3z9GPO/e5ccxXmCqAOghIX+aIDHdAJRvrdw8=
-X-Received: by 2002:a05:6638:250c:b0:33b:adde:3077 with SMTP id
- v12-20020a056638250c00b0033badde3077mr3756924jat.148.1657322557119; Fri, 08
- Jul 2022 16:22:37 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220421150248.667412396@infradead.org> <20220421150654.817117821@infradead.org>
- <87czhap9dy.fsf@email.froward.int.ebiederm.org> <878rrrh32q.fsf_-_@email.froward.int.ebiederm.org>
- <87k0b7v9yk.fsf_-_@email.froward.int.ebiederm.org> <87k0b0apne.fsf_-_@email.froward.int.ebiederm.org>
- <87a6bv6dl6.fsf_-_@email.froward.int.ebiederm.org> <87r13gd4xy.fsf_-_@email.froward.int.ebiederm.org>
- <87edyvgs2s.fsf@email.froward.int.ebiederm.org>
-In-Reply-To: <87edyvgs2s.fsf@email.froward.int.ebiederm.org>
-From:   Keno Fischer <keno@juliacomputing.com>
-Date:   Fri, 8 Jul 2022 19:22:01 -0400
-Message-ID: <CABV8kRxQNPUzLaJ1tFF8H-E_iqCkz0+Ac5rPBurnmA3GcofMmQ@mail.gmail.com>
-Subject: Re: [PATCH 0/3] ptrace: Stop supporting SIGKILL for PTRACE_EVENT_EXIT
-To:     "Eric W. Biederman" <ebiederm@xmission.com>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        mingo@kernel.org,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Jann Horn <jannh@google.com>,
-        Kees Cook <keescook@chromium.org>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        "Robert O'Callahan" <roc@pernos.co>, Kyle Huey <khuey@pernos.co>,
-        Oleg Nesterov <oleg@redhat.com>
+        h=x-gm-message-state:reply-to:date:message-id:mime-version:subject
+         :from:to:cc;
+        bh=+6AcP1HWw661Qpr+lBZwEqnetiODARhUxEJKO0pVxWU=;
+        b=t6OFOULCl6K3VsP1Htik2oPN+/33WjnOdlhWI6ynTdQBrMNt4P4M/OexV9AXF9vCcx
+         7PzExaE59Wjk+/MvbMrqFEHYmA6/MD5tEQkA+3+v5jauuuXOko0fkVN+1sO8DXZapdyr
+         e73FLhstC2nlySQSveXBf7nFUgEMoZ8ypVota/TH25tGxCTpTgl2su5TDR+IoFeUvyTv
+         p4LxRpw2aDICEhOxiojJ3fTqr21lvNYVwcc/27Tw+lCsrPOHslrd40N5mPNjOni/EeK+
+         1vtTnvu1Xtf9hDq5OvPwVUZPjU2buy+tMf5fXxGSffnDzsqJ6r7Q3xirhFoxfFJJCvJb
+         F3jw==
+X-Gm-Message-State: AJIora+6fKZdMAUP+/5jYUp/slhd4tHHPiEwRsmmOvwmOguxhGK0YxG4
+        cAnJAEVXnjZ8+UllS/KOWhcaKhTlHoa6
+X-Google-Smtp-Source: AGRyM1sMnSAK5x1LioJXvUOqDZwyZnrYbj/8VTx9+GqrlJTmSFDKn1x7xTu9SL5jVQzzY+TCHZA1W8+Brf/3
+X-Received: from mizhang-super.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:1071])
+ (user=mizhang job=sendgmr) by 2002:a63:ea05:0:b0:411:f94f:b80f with SMTP id
+ c5-20020a63ea05000000b00411f94fb80fmr5116719pgi.189.1657322587944; Fri, 08
+ Jul 2022 16:23:07 -0700 (PDT)
+Reply-To: Mingwei Zhang <mizhang@google.com>
+Date:   Fri,  8 Jul 2022 23:23:02 +0000
+Message-Id: <20220708232304.1001099-1-mizhang@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.37.0.144.g8ac04bfd2-goog
+Subject: [PATCH 0/2] Extend KVM trace_kvm_nested_vmrun() to support VMX
+From:   Mingwei Zhang <mizhang@google.com>
+To:     Paolo Bonzini <pbonzini@redhat.com>
+Cc:     Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Mingwei Zhang <mizhang@google.com>,
+        David Matlack <dmatlack@google.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Eric,
+This patch set update trace_kvm_nested_vmrun() to support VMX:
+ - Change the print of EPT/NPT enabled boolean to print of nested
+   EPT/NPT address in the trace;
+ - Add a caller from vmx/nested.c.
+ - Fix some minor format fixes from the callsites and Update the trace
+   output naming according to the x86 vendor.
 
-On Fri, Jul 8, 2022 at 6:25 PM Eric W. Biederman <ebiederm@xmission.com> wrote:
-> > Recently I had a conversation where it was pointed out to me that
-> > SIGKILL sent to a tracee stropped in PTRACE_EVENT_EXIT is quite
-> > difficult for a tracer to handle.
-> >
->
-> RR folks any comments?
->
-> Did I properly understand what Keno Fischer was asking for when we
-> talked in person?
+David Matlack (1):
+  kvm: nVMX: add tracepoint for kvm:kvm_nested_vmrun
 
-Yes, this is indeed what I had in mind. I have not yet had the opportunity
-to try out your patch series (sorry), but from visual inspection, it does indeed
-do what I wanted, which is to make sure that a tracee stays in
-PTRACE_EVENT_EXIT for the tracer to inspect, even if there is another
-SIGKILL incoming simultaneously (since otherwise it may be impossible
-for the tracer to observe the PTRACE_EVENT_EXIT if two SIGKILLs
-come in rapid succession). I will try to take this series for a proper spin
-shortly.
+Mingwei Zhang (1):
+  KVM: nested/x86: update trace_kvm_nested_vmrun() to suppot VMX
 
-Keno
+ arch/x86/kvm/svm/nested.c |  4 +++-
+ arch/x86/kvm/trace.h      | 19 +++++++++++++------
+ arch/x86/kvm/vmx/nested.c |  9 +++++++++
+ 3 files changed, 25 insertions(+), 7 deletions(-)
+
+-- 
+2.37.0.144.g8ac04bfd2-goog
+

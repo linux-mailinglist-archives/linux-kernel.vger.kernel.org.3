@@ -2,53 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 01AA156B479
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 10:29:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AC7AD56B478
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 10:29:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237822AbiGHI2L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Jul 2022 04:28:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60936 "EHLO
+        id S237733AbiGHI2v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Jul 2022 04:28:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33814 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237593AbiGHI2K (ORCPT
+        with ESMTP id S237578AbiGHI2r (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Jul 2022 04:28:10 -0400
-Received: from ssl.serverraum.org (ssl.serverraum.org [176.9.125.105])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1F11814B9;
-        Fri,  8 Jul 2022 01:28:07 -0700 (PDT)
-Received: from mwalle01.kontron.local. (unknown [213.135.10.150])
+        Fri, 8 Jul 2022 04:28:47 -0400
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6FE776944;
+        Fri,  8 Jul 2022 01:28:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=tZqJpdO9mWHvfo40+BrDE5gDm81r18HOvRnoVU7AxhE=; b=ZHBJrcAlGSicxPGyzNcW6jjtGb
+        UihST65d0mhDIdXVy0vepaPfEU9cNn/CFvfQGNX/RDjPqvOu4DHTs6S0vu3+A5MfGVsn/y2NDvEYv
+        DDOUgjjBFYeOBD/eZJwwIK2Pj6gqFKCFji11hDIa0aCrimiINryZhcgH46cAfv5x+IF84mN2GUJ8k
+        6BafMRo7BbcbjNfnU6+Lwuwj5PPzPc2GgVu4ZZhiTGNeJgZSqAtsnnxuUN48Xghc8HJD/3dboufjP
+        gQGwvh5cisG4Su887/XYtsk98bTLhuOfST78VXT2XAUG21ZnhtVUKJovFXgZgc70Cnct0+Kktnpye
+        xxXSiyaQ==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1o9jLE-001efP-Gb; Fri, 08 Jul 2022 08:28:05 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-384) server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by ssl.serverraum.org (Postfix) with ESMTPSA id EE00A221D4;
-        Fri,  8 Jul 2022 10:28:04 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2016061301;
-        t=1657268885;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=ID/+qW4zs1m53ZSU7+O0Bo0ZHpvrpLWwIGXzC/NBmL0=;
-        b=mpilrBbTo0R4ScG1a5DqNUsMa3Ui38t1xQi/Qso0boC3IBLQIi5uAQ8yvcUPuJohc+lHan
-        y5MxV0Ezi3K89QGhN2X+axW7GvhN9ytHvG3C86T3iaomz9GmreBroxN9BbmDb2Lg7kr2tn
-        PdR4EpQmU022RlzqdKHEUedPIgBtRK0=
-From:   Michael Walle <michael@walle.cc>
-To:     horatiu.vultur@microchip.com
-Cc:     UNGLinuxDriver@microchip.com, alexandre.belloni@bootlin.com,
-        colin.foster@in-advantage.com, kavyasree.kotagiri@microchip.com,
-        linus.walleij@linaro.org, linux-gpio@vger.kernel.org,
-        linux-kernel@vger.kernel.org, maxime.chevallier@bootlin.com,
-        Michael Walle <michael@walle.cc>
-Subject: Re: [PATCH 1/2] pinctrl: ocelot: Fix pincfg for lan966x
-Date:   Fri,  8 Jul 2022 10:27:52 +0200
-Message-Id: <20220708082752.1745233-1-michael@walle.cc>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20220707185342.2697569-2-horatiu.vultur@microchip.com>
-References: <20220707185342.2697569-2-horatiu.vultur@microchip.com>
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id D2800300222;
+        Fri,  8 Jul 2022 10:27:58 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id BD0B5200E5E5E; Fri,  8 Jul 2022 10:27:58 +0200 (CEST)
+Date:   Fri, 8 Jul 2022 10:27:58 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Nadav Amit <namit@vmware.com>
+Cc:     Barry Song <21cnbao@gmail.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        "darren@os.amperecomputing.com" <darren@os.amperecomputing.com>,
+        "guojian@oppo.com" <guojian@oppo.com>,
+        "huzhanyuan@oppo.com" <huzhanyuan@oppo.com>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "lipeifeng@oppo.com" <lipeifeng@oppo.com>,
+        "mgorman@suse.de" <mgorman@suse.de>,
+        "realmz6@gmail.com" <realmz6@gmail.com>,
+        "v-songbaohua@oppo.com" <v-songbaohua@oppo.com>,
+        "will@kernel.org" <will@kernel.org>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "yangyicong@hisilicon.com" <yangyicong@hisilicon.com>,
+        "zhangshiming@oppo.com" <zhangshiming@oppo.com>
+Subject: Re: [PATCH 2/4] mm: rmap: Allow platforms without mm_cpumask to
+ defer TLB flush
+Message-ID: <YsfqjsntneiX0xYE@hirez.programming.kicks-ass.net>
+References: <67943544-6DAA-4C8A-A04D-029D2D36C318@vmware.com>
+ <20220708065957.3859-1-21cnbao@gmail.com>
+ <EE0C38ED-A213-4F5C-9F87-FD90E5035C21@vmware.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <EE0C38ED-A213-4F5C-9F87-FD90E5035C21@vmware.com>
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -56,28 +80,25 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> -static struct pinctrl_desc luton_desc = {
-> -	.name = "luton-pinctrl",
-> -	.pins = luton_pins,
-> -	.npins = ARRAY_SIZE(luton_pins),
-> -	.pctlops = &ocelot_pctl_ops,
-> -	.pmxops = &ocelot_pmx_ops,
-> -	.owner = THIS_MODULE,
-> +static struct ocelot_match_data luton_desc = {
-> +	{
-.desc = {
+On Fri, Jul 08, 2022 at 08:08:45AM +0000, Nadav Amit wrote:
 
-Same for all the structs. Also it looks like it is way too big
-for a stable backport:
- "It cannot be bigger than 100 lines, with context."
+> Is it really only x86 that has mm_cpumask()?
 
-> +		.name = "luton-pinctrl",
-> +		.pins = luton_pins,
-> +		.npins = ARRAY_SIZE(luton_pins),
-> +		.pctlops = &ocelot_pctl_ops,
-> +		.pmxops = &ocelot_pmx_ops,
-> +		.owner = THIS_MODULE,
-> +	}
->  };
+Unlikely, everybody who needs to IPI (eg. doesn't have broadcast
+invalidate) has benefit to track this mask more accurately.
 
--michael
+The below greps for clearing CPUs in the mask and ought to be a fair
+indicator:
+
+$ git grep -l "cpumask_clear_cpu.*mm_cpumask" arch/
+arch/arm/include/asm/mmu_context.h
+arch/loongarch/include/asm/mmu_context.h
+arch/loongarch/mm/tlb.c
+arch/mips/include/asm/mmu_context.h
+arch/openrisc/mm/tlb.c
+arch/powerpc/include/asm/book3s/64/mmu.h
+arch/powerpc/mm/book3s64/radix_tlb.c
+arch/riscv/mm/context.c
+arch/s390/kernel/smp.c
+arch/um/include/asm/mmu_context.h
+arch/x86/mm/tlb.c

@@ -2,123 +2,220 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3278B56BAA7
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 15:28:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E6B256BAB7
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 15:30:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237981AbiGHN1W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Jul 2022 09:27:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33748 "EHLO
+        id S238049AbiGHN3h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Jul 2022 09:29:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35802 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231287AbiGHN1U (ORCPT
+        with ESMTP id S237813AbiGHN3f (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Jul 2022 09:27:20 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1A7A2CC80
-        for <linux-kernel@vger.kernel.org>; Fri,  8 Jul 2022 06:27:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1657286839; x=1688822839;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=l9IHZQoctXuefILwa08DrWHT1twoVyGQpEM+ac2JZDQ=;
-  b=LqCq9JLJHwHtnH4ueAFuRhwrAm/JqFDj96FpRNSUGPDzV4v8zY6aGhix
-   l9sqdwIrvQUp4loOUEhmDYFE9Qq+5VplqHoDYzPvm4jexvUkwCAy22jZQ
-   gTYBkAp5m7HcWMa4EuioeKpOglw3yQnkPR77YPjAmBt3CRrm5ZdolflJE
-   RF9EM9q160ynExnekfxdOSIr/7KLi8Bhdu0iNA65V/dOc5aUueY9xJmNo
-   g/xAgZsEcf6L3t32ZP6wi5Aezk2RAX3F77nvFo73qUFNpKBIqaxNSm5ZO
-   xsC5PUedwkfEHrC3WfshMFXh5Xr4+YGLxNbOTRpjxODpdo1jJW+PhmvmJ
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10401"; a="267310013"
-X-IronPort-AV: E=Sophos;i="5.92,255,1650956400"; 
-   d="scan'208";a="267310013"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jul 2022 06:27:19 -0700
-X-IronPort-AV: E=Sophos;i="5.92,255,1650956400"; 
-   d="scan'208";a="661771827"
-Received: from cmchugh-mobl.ger.corp.intel.com (HELO [10.213.229.21]) ([10.213.229.21])
-  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jul 2022 06:27:16 -0700
-Message-ID: <68231920-8eef-1e10-df40-ac8cd0dd0802@intel.com>
-Date:   Fri, 8 Jul 2022 14:27:14 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Firefox/91.0 Thunderbird/91.11.0
-Subject: Re: [PATCH v10 04/11] drm/i915/gem: selftest should not attempt mmap
- of private regions
-Content-Language: en-GB
-To:     Robert Beckett <bob.beckett@collabora.com>,
-        dri-devel@lists.freedesktop.org, intel-gfx@lists.freedesktop.org,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>
-Cc:     =?UTF-8?Q?Thomas_Hellstr=c3=b6m?= 
-        <thomas.hellstrom@linux.intel.com>, kernel@collabora.com,
+        Fri, 8 Jul 2022 09:29:35 -0400
+Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C7182CC8E;
+        Fri,  8 Jul 2022 06:29:34 -0700 (PDT)
+Received: by mail-ed1-x536.google.com with SMTP id v12so14250741edc.10;
+        Fri, 08 Jul 2022 06:29:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=A5yNT274X8JVIXWHK9IfpidEsdTyKnF8Wkvv4Lr1xrM=;
+        b=T49Dpozw8GmXePIozCQt/BaE/hs09JQQS4VxY2XNYeGltK2ufde6tdkHJ+qV49MBb/
+         cgwtD6o1chIsu+K45lOGnt78rWTmMo8vN1vybAtnydtU+Pk1wXJGbUa4BvPHJvUl6F46
+         0IO+W3gYuGyE74EWOFwblBeMc6VAEVL4ujHWVs5RZIoKT1DyIQXJLnTME3n15/m/I9x1
+         juYtvJDLa9gOAoN8tv9ma5PzIfq8zYzwwPY4SLiPTiCzL4SZ3ZTkIJC6d8T5xif4FN/D
+         40VPwo8Jo2XzQoMVmeWzQDUNSieBneVh12KQgzHI+MWJUjixLMEPHUQ/5wUu8JJsKjaC
+         fv3w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=A5yNT274X8JVIXWHK9IfpidEsdTyKnF8Wkvv4Lr1xrM=;
+        b=gWXmQuF0onXbp4/7jHrv/6f0D4Xz4UT4Be5dwk3b6M9oC7Pe4uQ3QvZfb6BSDs9h4F
+         NkFbnoKKUAeC9L/rqKpzMuWwokKxpk4ekrhFcXH3IIuJVooBXp37tsyZczTTxFbInfv7
+         wooBsAMp5PBqVzA5v0gkQGrb7VoQf9mpd70w7j0egtQA4gER8Lk5dgDY8JUhpZY2ZoHK
+         s2dZivHef4VwfalEC4NsVY8vuGd/KWJpMt1pBHjT8cGojmSaTRKeAZPs4mJf1v7mccGY
+         1Pm8IomLl09+hz+xGzE2doEvS7BJcgsnV5az0864LorgV3AanJsDS8jyrC8LBFNyXJvV
+         9U/g==
+X-Gm-Message-State: AJIora+7s1mS89rBTPw+4nCFqeN438ho1cgcuspWvzLm+sbVGRfPEBli
+        L7xpw/ega9CZ6pPLWudVjbo=
+X-Google-Smtp-Source: AGRyM1vrAKpKJdOECJLFrVkdBIXOKfAQt31+tD63iuif8bqLLfCeZhXJEam7m9XwSLL0XuoHuXbtQQ==
+X-Received: by 2002:a05:6402:2687:b0:43a:6025:1658 with SMTP id w7-20020a056402268700b0043a60251658mr4658569edd.271.1657286972649;
+        Fri, 08 Jul 2022 06:29:32 -0700 (PDT)
+Received: from fedora.robimarko.hr (dh207-96-250.xnet.hr. [88.207.96.250])
+        by smtp.googlemail.com with ESMTPSA id q4-20020a1709064cc400b006fec4ee28d0sm20170398ejt.189.2022.07.08.06.29.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 08 Jul 2022 06:29:32 -0700 (PDT)
+From:   Robert Marko <robimarko@gmail.com>
+To:     agross@kernel.org, bjorn.andersson@linaro.org,
+        konrad.dybcio@somainline.org, amitk@kernel.org,
+        thara.gopinath@gmail.com, rafael@kernel.org,
+        daniel.lezcano@linaro.org, rui.zhang@intel.com, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, linux-arm-msm@vger.kernel.org,
+        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org
-References: <20220707200230.1657555-1-bob.beckett@collabora.com>
- <20220707200230.1657555-5-bob.beckett@collabora.com>
- <6e387f90-dce3-486d-83e9-26a975777265@intel.com>
- <08d33248-be80-15ab-d245-a6e23fe55423@collabora.com>
-From:   Matthew Auld <matthew.auld@intel.com>
-In-Reply-To: <08d33248-be80-15ab-d245-a6e23fe55423@collabora.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Cc:     Robert Marko <robimarko@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: [PATCH v5 1/5] dt-bindings: thermal: tsens: Add ipq8074 compatible
+Date:   Fri,  8 Jul 2022 15:29:26 +0200
+Message-Id: <20220708132930.595897-1-robimarko@gmail.com>
+X-Mailer: git-send-email 2.36.1
+MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 08/07/2022 14:22, Robert Beckett wrote:
-> 
-> 
-> On 08/07/2022 08:53, Matthew Auld wrote:
->> On 07/07/2022 21:02, Robert Beckett wrote:
->>> During testing make can_mmap consider whether the region is private.
->>
->> Do we still need this with: 938d2fd17d17 ("drm/i915/selftests: skip 
->> the mman tests for stolen") ?
-> 
-> huh, I guess not. That wasn't in my tree. I guess I should rebase.
-> 
-> Looking at it, my patch would have been preferable initially I think. 
-> Each location of the additional checks in that patch first call 
-> cam_mmap(), which I think is the most appropriate place to make the 
-> decision.
+Qualcomm IPQ8074 has tsens v2.3.0 block, though unlike existing v2 IP it
+only uses one IRQ, so tsens v2 compatible cannot be used as the fallback.
 
-It fails at the object_create() I think (on small-BAR I mean), which is 
-before we can call can_mmap(), passing in the object.
+We also have to make sure that correct interrupts are set according to
+compatibles, so populate interrupt information per compatibles.
 
-> 
-> I could do a replacement patch that reverts that one if preferred, or we 
-> can leave it as is and I will drop this patch.
-> 
-> 
->>
->>>
->>> Signed-off-by: Robert Beckett <bob.beckett@collabora.com>
->>> Reviewed-by: Thomas Hellström <thomas.hellstrom@linux.intel.com>
->>> ---
->>>   drivers/gpu/drm/i915/gem/selftests/i915_gem_mman.c | 3 +++
->>>   1 file changed, 3 insertions(+)
->>>
->>> diff --git a/drivers/gpu/drm/i915/gem/selftests/i915_gem_mman.c 
->>> b/drivers/gpu/drm/i915/gem/selftests/i915_gem_mman.c
->>> index 5bc93a1ce3e3..76181e28c75e 100644
->>> --- a/drivers/gpu/drm/i915/gem/selftests/i915_gem_mman.c
->>> +++ b/drivers/gpu/drm/i915/gem/selftests/i915_gem_mman.c
->>> @@ -869,6 +869,9 @@ static bool can_mmap(struct drm_i915_gem_object 
->>> *obj, enum i915_mmap_type type)
->>>       struct drm_i915_private *i915 = to_i915(obj->base.dev);
->>>       bool no_map;
->>> +    if (obj->mm.region && obj->mm.region->private)
->>> +        return false;
->>> +
->>>       if (obj->ops->mmap_offset)
->>>           return type == I915_MMAP_TYPE_FIXED;
->>>       else if (type == I915_MMAP_TYPE_FIXED)
+Signed-off-by: Robert Marko <robimarko@gmail.com>
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+---
+Changes in v4:
+* Add the forgotten Reviewed-by tag from Krzysztof
+
+Changes in v3:
+* Remove implied min/maxItem properties as pointed by Rob
+
+Changes in v2:
+* No need for a list in compatible check
+* Specify minItems and maxItems for interrupt and interrupt-names
+---
+ .../bindings/thermal/qcom-tsens.yaml          | 76 ++++++++++++++++---
+ 1 file changed, 65 insertions(+), 11 deletions(-)
+
+diff --git a/Documentation/devicetree/bindings/thermal/qcom-tsens.yaml b/Documentation/devicetree/bindings/thermal/qcom-tsens.yaml
+index 038d81338fcf..fee2b6281417 100644
+--- a/Documentation/devicetree/bindings/thermal/qcom-tsens.yaml
++++ b/Documentation/devicetree/bindings/thermal/qcom-tsens.yaml
+@@ -59,6 +59,10 @@ properties:
+               - qcom,sm8350-tsens
+           - const: qcom,tsens-v2
+ 
++      - description: v2 of TSENS with combined interrupt
++        enum:
++          - qcom,ipq8074-tsens
++
+   reg:
+     items:
+       - description: TM registers
+@@ -66,15 +70,11 @@ properties:
+ 
+   interrupts:
+     minItems: 1
+-    items:
+-      - description: Combined interrupt if upper or lower threshold crossed
+-      - description: Interrupt if critical threshold crossed
++    maxItems: 2
+ 
+   interrupt-names:
+     minItems: 1
+-    items:
+-      - const: uplow
+-      - const: critical
++    maxItems: 2
+ 
+   nvmem-cells:
+     minItems: 1
+@@ -128,22 +128,61 @@ allOf:
+     then:
+       properties:
+         interrupts:
+-          maxItems: 1
++          items:
++            - description: Combined interrupt if upper or lower threshold crossed
+         interrupt-names:
+-          maxItems: 1
++          items:
++            - const: uplow
+ 
+-    else:
++  - if:
++      properties:
++        compatible:
++          contains:
++            enum:
++              - qcom,msm8953-tsens
++              - qcom,msm8996-tsens
++              - qcom,msm8998-tsens
++              - qcom,sc7180-tsens
++              - qcom,sc7280-tsens
++              - qcom,sc8180x-tsens
++              - qcom,sdm630-tsens
++              - qcom,sdm845-tsens
++              - qcom,sm8150-tsens
++              - qcom,sm8250-tsens
++              - qcom,sm8350-tsens
++              - qcom,tsens-v2
++    then:
++      properties:
++        interrupts:
++          items:
++            - description: Combined interrupt if upper or lower threshold crossed
++            - description: Interrupt if critical threshold crossed
++        interrupt-names:
++          items:
++            - const: uplow
++            - const: critical
++
++  - if:
++      properties:
++        compatible:
++          contains:
++            enum:
++              - qcom,ipq8074-tsens
++    then:
+       properties:
+         interrupts:
+-          minItems: 2
++          items:
++            - description: Combined interrupt if upper, lower or critical thresholds crossed
+         interrupt-names:
+-          minItems: 2
++          items:
++            - const: combined
+ 
+   - if:
+       properties:
+         compatible:
+           contains:
+             enum:
++              - qcom,ipq8074-tsens
+               - qcom,tsens-v0_1
+               - qcom,tsens-v1
+               - qcom,tsens-v2
+@@ -226,4 +265,19 @@ examples:
+            #qcom,sensors = <13>;
+            #thermal-sensor-cells = <1>;
+     };
++
++  - |
++    #include <dt-bindings/interrupt-controller/arm-gic.h>
++    // Example 4 (for any IPQ8074 based SoC-s):
++    tsens4: thermal-sensor@4a9000 {
++           compatible = "qcom,ipq8074-tsens";
++           reg = <0x4a9000 0x1000>,
++                 <0x4a8000 0x1000>;
++
++           interrupts = <GIC_SPI 184 IRQ_TYPE_LEVEL_HIGH>;
++           interrupt-names = "combined";
++
++           #qcom,sensors = <16>;
++           #thermal-sensor-cells = <1>;
++    };
+ ...
+-- 
+2.36.1
+

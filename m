@@ -2,106 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C69E556BAE1
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 15:34:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7993D56BAE6
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 15:34:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238197AbiGHNc3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Jul 2022 09:32:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38772 "EHLO
+        id S238193AbiGHNdB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Jul 2022 09:33:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39396 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238196AbiGHNcY (ORCPT
+        with ESMTP id S237622AbiGHNc6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Jul 2022 09:32:24 -0400
-Received: from mail-qt1-x82f.google.com (mail-qt1-x82f.google.com [IPv6:2607:f8b0:4864:20::82f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 555DD2CDD5
-        for <linux-kernel@vger.kernel.org>; Fri,  8 Jul 2022 06:32:23 -0700 (PDT)
-Received: by mail-qt1-x82f.google.com with SMTP id e7so1673521qts.1
-        for <linux-kernel@vger.kernel.org>; Fri, 08 Jul 2022 06:32:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ndufresne-ca.20210112.gappssmtp.com; s=20210112;
-        h=message-id:subject:from:to:cc:date:in-reply-to:references
-         :content-transfer-encoding:user-agent:mime-version;
-        bh=Yu8bKYHlHx+dbL+sw5q4ZRjn4fcee2CGtMmXinJvd+o=;
-        b=lY7hu066xUzcIPr5UD259wVv9tm24Aiv8xv3EQDHIa7pTX8DiAkoXNDgAydq0rTAU9
-         Cz9TuaHrjf2ikc6wmyiA9loansNDWN21rEMN6Ui+IvKWmhdNuGb9HiuiqoL5flj5/hso
-         CwgngzRxtPC6wfCBamtm6LzR9nxj5sqqw/4RtcV7461qSGIMGBeqnPw/DF4F1Av9eIRf
-         cqQ9356+V7IVsFw8iB7db4Q3WiOGoottS7uPymvy6FluV1b16WCV/zaWqBsM89d9dAEi
-         kjm1A5sS0LJA5yAQKngHzyVh6k2Wr0pxiP3bLeQ7OowW5O1keZEn6H+COK6Wfp22Fapc
-         ogHQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
-         :references:content-transfer-encoding:user-agent:mime-version;
-        bh=Yu8bKYHlHx+dbL+sw5q4ZRjn4fcee2CGtMmXinJvd+o=;
-        b=fQCl81q+f2VieW8Tcttsz8Ra9Nbr8lrlCmhmDyY1CZHcMbj8uAy5MND8vcn4f15/vW
-         ncqcth7ZMJOE0s1BZtW1R9lfi3ilQwoASEsLt1D3YtwCtE129tKAo48hYGQaiAS0H+1n
-         wUA21ZuMTLfAPA7SNkI3hUoJoFQVJjd+IOPVzfXzms8q+dFJzDGEpc0SQNLGxzEHzlbQ
-         eJryMItXWNKalpoWP674V+a4ZS64tt+Wm3lCxKr47IEhROwRXMyYoY+wfTwYUhHXByG/
-         KTrDlaboMYxf4Z4hxm2fLE268LLzPrOEEK3jaJYOLEuFeV0H/tZeKArLJTBa8hignWKH
-         QunQ==
-X-Gm-Message-State: AJIora+ZpCR3MNUf0srkyycgoDuWvHpXG033TKHB+ekB0QhpIhUzkUt/
-        UegGpXMdtxzq5lcXPfGYQZ4YHw==
-X-Google-Smtp-Source: AGRyM1uyuIWyl91hCY2bh60iyU9jBQdwPs2f+kbRSM+PSbqNROmEadcwNKqkO4tizj21zxRlydHeVw==
-X-Received: by 2002:a05:6214:1c89:b0:46e:4048:ca2c with SMTP id ib9-20020a0562141c8900b0046e4048ca2cmr2703474qvb.60.1657287142094;
-        Fri, 08 Jul 2022 06:32:22 -0700 (PDT)
-Received: from nicolas-tpx395.localdomain (192-222-136-102.qc.cable.ebox.net. [192.222.136.102])
-        by smtp.gmail.com with ESMTPSA id h16-20020a05620a401000b006a6a7b4e7besm39100667qko.109.2022.07.08.06.32.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 08 Jul 2022 06:32:21 -0700 (PDT)
-Message-ID: <2f35d8250ce133e21eb3987977a92af583e32d0d.camel@ndufresne.ca>
-Subject: Re: [EXT] Re: [PATCH] media: amphion: only insert the first
- sequence startcode for vc1l format
-From:   Nicolas Dufresne <nicolas@ndufresne.ca>
-To:     Ming Qian <ming.qian@nxp.com>,
-        "mchehab@kernel.org" <mchehab@kernel.org>,
-        "hverkuil-cisco@xs4all.nl" <hverkuil-cisco@xs4all.nl>
-Cc:     "shawnguo@kernel.org" <shawnguo@kernel.org>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>,
-        "kernel@pengutronix.de" <kernel@pengutronix.de>,
-        "festevam@gmail.com" <festevam@gmail.com>,
-        dl-linux-imx <linux-imx@nxp.com>,
-        "linux-media@vger.kernel.org" <linux-media@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>
-Date:   Fri, 08 Jul 2022 09:32:20 -0400
-In-Reply-To: <AM6PR04MB63416B4BA53E80123037AC8EE7809@AM6PR04MB6341.eurprd04.prod.outlook.com>
-References: <20220628052017.26979-1-ming.qian@nxp.com>
-         <6e54af5243d324c5df1c9ec18d4b091fbd52150f.camel@ndufresne.ca>
-         <AM6PR04MB6341F4EB028CAE9B61C85157E7819@AM6PR04MB6341.eurprd04.prod.outlook.com>
-         <AM6PR04MB634136824EC98EE804FAD0CEE7819@AM6PR04MB6341.eurprd04.prod.outlook.com>
-         <42ba6a9516f4359b757d2f94b16c1bb23cc41cb2.camel@ndufresne.ca>
-         <AM6PR04MB63416B4BA53E80123037AC8EE7809@AM6PR04MB6341.eurprd04.prod.outlook.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.44.2 (3.44.2-1.fc36) 
+        Fri, 8 Jul 2022 09:32:58 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B95932EC1
+        for <linux-kernel@vger.kernel.org>; Fri,  8 Jul 2022 06:32:57 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 458D9B824C0
+        for <linux-kernel@vger.kernel.org>; Fri,  8 Jul 2022 13:32:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 14690C341C0;
+        Fri,  8 Jul 2022 13:32:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1657287175;
+        bh=Ql4CWUsQY3uyAyViakp7n8C9XLj6sQivCxWpOs75cSs=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=DhHMPYrsbk0PaeLfqUeyAs6Lg8qKaDVciIXIqWuirB+/lV8kZwHlrxqFmFcRpp2hd
+         0OW+x9xDjlAbXhB4Clx+jFvyfoykLrLYvIKohLUNsD+BnXPyB28vk3Pm03nhud5URG
+         M0Xbj4lAKo/y8Uo7D0uLHiHYosb6+V7+Cfb2bGmy4oRGPf0ZS7uT0vFinFgq71jYhV
+         8jiWW9VmH32nwkPJFcLGZj7cEOWZR/Y9uzh0kJmGNKD+W6BzZIy0nb20kT3vBbeDbs
+         OCxSBz3OFLI3UH9hunh+UeUDkqRBsht9fJhpAZUMfFjHRALcmVJqk2eNowy6Fcsaz7
+         uKFT0IWGzyM7A==
+Date:   Fri, 8 Jul 2022 14:32:49 +0100
+From:   Will Deacon <will@kernel.org>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     Jann Horn <jannh@google.com>,
+        Linus Torvalds <torvalds@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        Dave Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Guo Ren <guoren@kernel.org>, David Miller <davem@davemloft.net>
+Subject: Re: [PATCH 3/4] mmu_gather: Let there be one tlb_{start,end}_vma()
+ implementation
+Message-ID: <20220708133248.GD5989@willie-the-truck>
+References: <20220708071802.751003711@infradead.org>
+ <20220708071834.084532973@infradead.org>
 MIME-Version: 1.0
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220708071834.084532973@infradead.org>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Le mercredi 06 juillet 2022 =C3=A0 04:09 +0000, Ming Qian a =C3=A9crit=C2=
-=A0:
-> > Can't you save the slow copy by using data_offset then ? I think most o=
-f the
-> > confusion comes from this commit message, someone else then you should =
-be
-> > able to understand what it means.
->=20
-> I'll modify the commit message that remove the unrelated vp8 description.
-> And unfortunately the amphion vpu only support the ring buffer mode, so
-> copying is inevitable.
+On Fri, Jul 08, 2022 at 09:18:05AM +0200, Peter Zijlstra wrote:
+> Now that architectures are no longer allowed to override
+> tlb_{start,end}_vma() re-arrange code so that there is only one
+> implementation for each of these functions.
+> 
+> This much simplifies trying to figure out what they actually do.
+> 
+> Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+> ---
+>  include/asm-generic/tlb.h |   15 ++-------------
+>  1 file changed, 2 insertions(+), 13 deletions(-)
+> 
+> --- a/include/asm-generic/tlb.h
+> +++ b/include/asm-generic/tlb.h
+> @@ -346,8 +346,8 @@ static inline void __tlb_reset_range(str
+>  
+>  #ifdef CONFIG_MMU_GATHER_NO_RANGE
+>  
+> -#if defined(tlb_flush) || defined(tlb_start_vma) || defined(tlb_end_vma)
+> -#error MMU_GATHER_NO_RANGE relies on default tlb_flush(), tlb_start_vma() and tlb_end_vma()
+> +#if defined(tlb_flush)
+> +#error MMU_GATHER_NO_RANGE relies on default tlb_flush()
+>  #endif
+>  
+>  /*
+> @@ -367,17 +367,10 @@ static inline void tlb_flush(struct mmu_
+>  static inline void
+>  tlb_update_vma_flags(struct mmu_gather *tlb, struct vm_area_struct *vma) { }
+>  
+> -#define tlb_end_vma tlb_end_vma
+> -static inline void tlb_end_vma(struct mmu_gather *tlb, struct vm_area_struct *vma) { }
+> -
+>  #else /* CONFIG_MMU_GATHER_NO_RANGE */
+>  
+>  #ifndef tlb_flush
+>  
+> -#if defined(tlb_start_vma) || defined(tlb_end_vma)
+> -#error Default tlb_flush() relies on default tlb_start_vma() and tlb_end_vma()
+> -#endif
+> -
+>  /*
+>   * When an architecture does not provide its own tlb_flush() implementation
+>   * but does have a reasonably efficient flush_vma_range() implementation
+> @@ -498,7 +491,6 @@ static inline unsigned long tlb_get_unma
+>   * case where we're doing a full MM flush.  When we're doing a munmap,
+>   * the vmas are adjusted to only cover the region to be torn down.
+>   */
+> -#ifndef tlb_start_vma
+>  static inline void tlb_start_vma(struct mmu_gather *tlb, struct vm_area_struct *vma)
+>  {
+>  	if (tlb->fullmm)
+> @@ -509,9 +501,7 @@ static inline void tlb_start_vma(struct
+>  	flush_cache_range(vma, vma->vm_start, vma->vm_end);
+>  #endif
+>  }
+> -#endif
+>  
+> -#ifndef tlb_end_vma
+>  static inline void tlb_end_vma(struct mmu_gather *tlb, struct vm_area_struct *vma)
+>  {
+>  	if (tlb->fullmm || IS_ENABLED(CONFIG_MMU_GATHER_MERGE_VMAS))
+> @@ -525,7 +515,6 @@ static inline void tlb_end_vma(struct mm
+>  	 */
+>  	tlb_flush_mmu_tlbonly(tlb);
+>  }
+> -#endif
 
-Great thanks, I had forgotten that Amphion was based on a ring buffer. Inde=
-ed,
-this is the way to go, same applied to CODA driver.
+Much nicer:
 
-Nicolas
+Acked-by: Will Deacon <will@kernel.org>
 
+Will

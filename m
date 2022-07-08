@@ -2,145 +2,231 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 05F9A56B150
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 06:17:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 34E9B56B155
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 06:24:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237069AbiGHERe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Jul 2022 00:17:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55510 "EHLO
+        id S236708AbiGHEXu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Jul 2022 00:23:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58654 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236924AbiGHERd (ORCPT
+        with ESMTP id S229957AbiGHEXs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Jul 2022 00:17:33 -0400
-Received: from mail-qt1-x82b.google.com (mail-qt1-x82b.google.com [IPv6:2607:f8b0:4864:20::82b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D64927CDE
-        for <linux-kernel@vger.kernel.org>; Thu,  7 Jul 2022 21:17:32 -0700 (PDT)
-Received: by mail-qt1-x82b.google.com with SMTP id y3so4724122qtv.5
-        for <linux-kernel@vger.kernel.org>; Thu, 07 Jul 2022 21:17:32 -0700 (PDT)
+        Fri, 8 Jul 2022 00:23:48 -0400
+Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6661FF5B5
+        for <linux-kernel@vger.kernel.org>; Thu,  7 Jul 2022 21:23:47 -0700 (PDT)
+Received: by mail-pl1-x633.google.com with SMTP id j12so8594372plj.8
+        for <linux-kernel@vger.kernel.org>; Thu, 07 Jul 2022 21:23:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=joelfernandes.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=uGoy5SHC3OQwhZlm2IT5uM+W5kXJSSMgEQTx8s2qElc=;
-        b=v7C/SD2n/xR97dosIcWJVUeECNHIjuG1oHxTMiH3BiPHtH5O2vCHfnxT4nJ7BaCfjC
-         1GzcHFMTNlW4KnRttTVVskdHvFl+iyo2rkGjCy7VbEegG0Il9go17UqqaevcvjZULSfD
-         Cw24NvgzegAnGIM/s67DnOdFzTXO+wF5XPD/w=
+        d=gmail.com; s=20210112;
+        h=mime-version:subject:from:in-reply-to:date:cc
+         :content-transfer-encoding:message-id:references:to;
+        bh=cXx67UAEHDEms/ZWdhD86sRM6wFjqHtEAMk+ffjRrxE=;
+        b=JFSekI06NM32A65VsCUGKY5q7uKVQrOkBNr0f/7Me7qwFMfpuKcMw4eV0gHCTpzq8y
+         q9WzUxmA91ezdxkWfSvUgECuEq8neZW3wtKRx9wzJ0/5ZDdrfGejiqVNsdzP/33wUevE
+         XQVHAbLCDj8f8fEKk79Q6Sv5l+duvSg4uZnqsh+gpv9fJvQwv+CIyDA2rZULrV9rzX6L
+         WXWBVZLo/CdxLUNpnJAnj3/otAN51nHHm5/mPaeyt7OP/x2yWrLSp+xWyEfHJ9kzYBem
+         ScX4Xueawd2Gtl8EKfbIWyuNUsOi2YNjQUk0SfDSNYhJn4/NlzKRBASrB2yyRdjr4aQ9
+         6m9A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=uGoy5SHC3OQwhZlm2IT5uM+W5kXJSSMgEQTx8s2qElc=;
-        b=lbnUHRB7XjT40ym0ZOdTb85/yJL0+wFi8yuf0RmtGUQ+UL1m4xTTLTxt1+OBbLtooj
-         ij5xNY2yh7ninv7loqIJ9QpdrddpaC9exu1aXBrUJvuTgRbU09i3PVBVZ5/+/ZrSDdQv
-         /eiPfN6wcu6vJfGAkE7kcriHrBesYP8n2IecHc0grnYAd50aGhVniU08v4Spk5KXMw3b
-         tfZ1zN1KB3NVDXsTlrhkx6CnQhPxv1SxYhPgBuTm5Y56TnoKLqDuaH9tAbEINpq+5jwr
-         7YhGL2wnl1oEWcvmh5HAHsEgSiJvfEPgcl4bgAHpLjyL/Eh6aZurA9IY0hlHHzi16Bcb
-         gksg==
-X-Gm-Message-State: AJIora8ZPklQ+1WYYJsmikZVtbxbkS1DCrVtvIZuT49wkdio+NXezdMb
-        2P/2deOI10sS77ICqjY2iAkHIxhTl2rIGA==
-X-Google-Smtp-Source: AGRyM1ujMKRohqwU3MDLZwVDRoNOfBtY4Z79IawBLrj08rRTfhFWnS9F4aRCa/Of+pGM1gE3GR1Cpg==
-X-Received: by 2002:ac8:5713:0:b0:31a:c706:50ef with SMTP id 19-20020ac85713000000b0031ac70650efmr1299549qtw.267.1657253851629;
-        Thu, 07 Jul 2022 21:17:31 -0700 (PDT)
-Received: from localhost (228.221.150.34.bc.googleusercontent.com. [34.150.221.228])
-        by smtp.gmail.com with ESMTPSA id n8-20020a05620a222800b006ab935c1563sm31103220qkh.8.2022.07.07.21.17.30
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 07 Jul 2022 21:17:31 -0700 (PDT)
-Date:   Fri, 8 Jul 2022 04:17:30 +0000
-From:   Joel Fernandes <joel@joelfernandes.org>
-To:     "Paul E. McKenney" <paulmck@kernel.org>
-Cc:     rcu@vger.kernel.org, linux-kernel@vger.kernel.org,
-        rushikesh.s.kadam@intel.com, urezki@gmail.com,
-        neeraj.iitr10@gmail.com, frederic@kernel.org, rostedt@goodmis.org,
-        vineeth@bitbyteword.org
-Subject: Re: [PATCH v2 0/8] Implement call_rcu_lazy() and miscellaneous fixes
-Message-ID: <Ysev2jbxFGNkLvjG@google.com>
-References: <20220622225102.2112026-1-joel@joelfernandes.org>
- <20220626031206.GJ1790663@paulmck-ThinkPad-P17-Gen-1>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220626031206.GJ1790663@paulmck-ThinkPad-P17-Gen-1>
+        h=x-gm-message-state:mime-version:subject:from:in-reply-to:date:cc
+         :content-transfer-encoding:message-id:references:to;
+        bh=cXx67UAEHDEms/ZWdhD86sRM6wFjqHtEAMk+ffjRrxE=;
+        b=2O87faAKZF6kXfDObOZdNKdU/bAgVQZhgo5gaDXvfIdx3yPrwlQkyxOA2JLKwtf9VY
+         TIZZdQ86ECOqJiP/GV0h6UG/NQFrYmEW927wzUT2zf9PrMyAMVq26NhdRO9HyYDVoQbB
+         bpORx9Y3kg2zFZAIOQ5WawnNBskRAir/3D7avkRCkA+PTvKEG/3+OC2/O2w9pSJlQMAd
+         7nPp3G/4r/vsNcSbeDC2Y79HEx1HDdijJKRrEK+OFwz+hkmaKtOGfhXtKx1/8NkNFDCK
+         ANUldfpOXA0BaOKHpLHPqPcSnVZA5JwerbvdRyinRVKEn4ji7kC7njBdd7l6Yb2Ykolv
+         Z+ZQ==
+X-Gm-Message-State: AJIora9Ab2YbCImmk5oQcEHRpn8m1b55LIGQW+fRH667YyubcxsXDY99
+        HpmXiIyjsn0+tvb3J4s4GLk=
+X-Google-Smtp-Source: AGRyM1uBTt9rPkZ3Sgf5UWN0qyjSLmOVDBH6bD8Gpgk2mUCSmEImTx7E15TRBWxg5odBsQbtkdoYPw==
+X-Received: by 2002:a17:902:7881:b0:16b:c4a6:1dc9 with SMTP id q1-20020a170902788100b0016bc4a61dc9mr1652435pll.83.1657254226580;
+        Thu, 07 Jul 2022 21:23:46 -0700 (PDT)
+Received: from smtpclient.apple (c-24-6-216-183.hsd1.ca.comcast.net. [24.6.216.183])
+        by smtp.gmail.com with ESMTPSA id 123-20020a621481000000b00527bb6fff6csm20668884pfu.119.2022.07.07.21.23.45
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Thu, 07 Jul 2022 21:23:46 -0700 (PDT)
+Content-Type: text/plain;
+        charset=utf-8
+Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3696.100.31\))
+Subject: Re: [PATCH v2] x86/mm/tlb: avoid reading mm_tlb_gen when possible
+From:   Nadav Amit <nadav.amit@gmail.com>
+In-Reply-To: <df9e416a-a6a2-34a-9fa9-dcb92fe6cee2@google.com>
+Date:   Thu, 7 Jul 2022 21:23:44 -0700
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@kernel.org>,
+        Andy Lutomirski <luto@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>, x86@kernel.org,
+        linux-mm@kvack.org
+Content-Transfer-Encoding: quoted-printable
+Message-Id: <904C4BCE-78E7-4FEE-BD8D-03DCE75A5B8B@gmail.com>
+References: <20220606180123.2485171-1-namit@vmware.com>
+ <df9e416a-a6a2-34a-9fa9-dcb92fe6cee2@google.com>
+To:     Hugh Dickins <hughd@google.com>
+X-Mailer: Apple Mail (2.3696.100.31)
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Jun 25, 2022 at 08:12:06PM -0700, Paul E. McKenney wrote:
-> On Wed, Jun 22, 2022 at 10:50:53PM +0000, Joel Fernandes (Google) wrote:
-> > 
-> > Hello!
-> > Please find the next improved version of call_rcu_lazy() attached.  The main
-> > difference between the previous version is that it is now using bypass lists,
-> > and thus handling rcu_barrier() and hotplug situations, with some small changes
-> > to those parts.
-> > 
-> > I also don't see the TREE07 RCU stall from v1 anymore.
-> > 
-> > In the v1, we some numbers below (testing on v2 is in progress). Rushikesh,
-> > feel free to pull these patches into your tree. Just to note, you will also
-> > need to pull the call_rcu_lazy() user patches from v1. I have dropped in this
-> > series, just to make the series focus on the feature code first.
-> > 
-> > Following are power savings we see on top of RCU_NOCB_CPU on an Intel platform.
-> > The observation is that due to a 'trickle down' effect of RCU callbacks, the
-> > system is very lightly loaded but constantly running few RCU callbacks very
-> > often. This confuses the power management hardware that the system is active,
-> > when it is in fact idle.
-> > 
-> > For example, when ChromeOS screen is off and user is not doing anything on the
-> > system, we can see big power savings.
-> > Before:
-> > Pk%pc10 = 72.13
-> > PkgWatt = 0.58
-> > CorWatt = 0.04
-> > 
-> > After:
-> > Pk%pc10 = 81.28
-> > PkgWatt = 0.41
-> > CorWatt = 0.03
-> 
-> So not quite 30% savings in power at the package level?  Not bad at all!
+On Jul 7, 2022, at 8:27 PM, Hugh Dickins <hughd@google.com> wrote:
 
-Yes this is the package residency amount, not the amount of power. This % is
-not power.
+> On Mon, 6 Jun 2022, Nadav Amit wrote:
+>=20
+>> From: Nadav Amit <namit@vmware.com>
+>>=20
+>> On extreme TLB shootdown storms, the mm's tlb_gen cacheline is highly
+>> contended and reading it should (arguably) be avoided as much as
+>> possible.
+>>=20
+>> Currently, flush_tlb_func() reads the mm's tlb_gen unconditionally,
+>> even when it is not necessary (e.g., the mm was already switched).
+>> This is wasteful.
+>>=20
+>> Moreover, one of the existing optimizations is to read mm's tlb_gen =
+to
+>> see if there are additional in-flight TLB invalidations and flush the
+>> entire TLB in such a case. However, if the request's tlb_gen was =
+already
+>> flushed, the benefit of checking the mm's tlb_gen is likely to be =
+offset
+>> by the overhead of the check itself.
+>>=20
+>> Running will-it-scale with tlb_flush1_threads show a considerable
+>> benefit on 56-core Skylake (up to +24%):
+>>=20
+>> threads		Baseline (v5.17+)	+Patch
+>> 1		159960			160202
+>> 5		310808			308378 (-0.7%)
+>> 10		479110			490728
+>> 15		526771			562528
+>> 20		534495			587316
+>> 25		547462			628296
+>> 30		579616			666313
+>> 35		594134			701814
+>> 40		612288			732967
+>> 45		617517			749727
+>> 50		637476			735497
+>> 55		614363			778913 (+24%)
+>>=20
+>> Acked-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+>> Cc: Dave Hansen <dave.hansen@linux.intel.com>
+>> Cc: Ingo Molnar <mingo@kernel.org>
+>> Cc: Andy Lutomirski <luto@kernel.org>
+>> Cc: Thomas Gleixner <tglx@linutronix.de>
+>> Cc: x86@kernel.org
+>> Signed-off-by: Nadav Amit <namit@vmware.com>
+>>=20
+>> --
+>>=20
+>> Note: The benchmarked kernels include Dave's revert of commit
+>> 6035152d8eeb ("x86/mm/tlb: Open-code on_each_cpu_cond_mask() for
+>> tlb_is_not_lazy()
+>> ---
+>> arch/x86/mm/tlb.c | 18 +++++++++++++++++-
+>> 1 file changed, 17 insertions(+), 1 deletion(-)
+>>=20
+>> diff --git a/arch/x86/mm/tlb.c b/arch/x86/mm/tlb.c
+>> index d400b6d9d246..d9314cc8b81f 100644
+>> --- a/arch/x86/mm/tlb.c
+>> +++ b/arch/x86/mm/tlb.c
+>> @@ -734,10 +734,10 @@ static void flush_tlb_func(void *info)
+>> 	const struct flush_tlb_info *f =3D info;
+>> 	struct mm_struct *loaded_mm =3D =
+this_cpu_read(cpu_tlbstate.loaded_mm);
+>> 	u32 loaded_mm_asid =3D =
+this_cpu_read(cpu_tlbstate.loaded_mm_asid);
+>> -	u64 mm_tlb_gen =3D atomic64_read(&loaded_mm->context.tlb_gen);
+>> 	u64 local_tlb_gen =3D =
+this_cpu_read(cpu_tlbstate.ctxs[loaded_mm_asid].tlb_gen);
+>> 	bool local =3D smp_processor_id() =3D=3D f->initiating_cpu;
+>> 	unsigned long nr_invalidate =3D 0;
+>> +	u64 mm_tlb_gen;
+>>=20
+>> 	/* This code cannot presently handle being reentered. */
+>> 	VM_WARN_ON(!irqs_disabled());
+>> @@ -771,6 +771,22 @@ static void flush_tlb_func(void *info)
+>> 		return;
+>> 	}
+>>=20
+>> +	if (f->new_tlb_gen <=3D local_tlb_gen) {
+>> +		/*
+>> +		 * The TLB is already up to date in respect to =
+f->new_tlb_gen.
+>> +		 * While the core might be still behind mm_tlb_gen, =
+checking
+>> +		 * mm_tlb_gen unnecessarily would have negative caching =
+effects
+>> +		 * so avoid it.
+>> +		 */
+>> +		return;
+>> +	}
+>> +
+>> +	/*
+>> +	 * Defer mm_tlb_gen reading as long as possible to avoid cache
+>> +	 * contention.
+>> +	 */
+>> +	mm_tlb_gen =3D atomic64_read(&loaded_mm->context.tlb_gen);
+>> +
+>> 	if (unlikely(local_tlb_gen =3D=3D mm_tlb_gen)) {
+>> 		/*
+>> 		 * There's nothing to do: we're already up to date.  =
+This can
+>> --=20
+>> 2.25.1
+>=20
+> I'm sorry, but bisection and reversion show that this commit,
+> aa44284960d550eb4d8614afdffebc68a432a9b4 in current linux-next,
+> is responsible for the "internal compiler error: Segmentation fault"s
+> I get when running kernel builds on tmpfs in 1G memory, lots of =
+swapping.
+>=20
+> That tmpfs is using huge pages as much as it can, so splitting and
+> collapsing, compaction and page migration entailed, in case that's
+> relevant (maybe this commit is perfect, but there's a TLB flushing
+> bug over there in mm which this commit just exposes).
+>=20
+> Whether those segfaults happen without the huge page element,
+> I have not done enough testing to tell - there are other bugs with
+> swapping in current linux-next, indeed, I wouldn't even have found
+> this one, if I hadn't already been on a bisection for another bug,
+> and got thrown off course by these segfaults.
+>=20
+> I hope that you can work out what might be wrong with this,
+> but meantime I think it needs to be reverted.
 
-> > Further, when ChromeOS screen is ON but system is idle or lightly loaded, we
-> > can see that the display pipeline is constantly doing RCU callback queuing due
-> > to open/close of file descriptors associated with graphics buffers. This is
-> > attributed to the file_free_rcu() path which this patch series also touches.
-> > 
-> > This patch series adds a simple but effective, and lockless implementation of
-> > RCU callback batching. On memory pressure, timeout or queue growing too big, we
-> > initiate a flush of one or more per-CPU lists.
-> 
-> It is no longer lockless, correct?  Or am I missing something subtle?
-> 
-> Full disclosure: I don't see a whole lot of benefit to its being lockless.
-> But truth in advertising!  ;-)
+I find it always surprising how trivial one liners fail.
 
-Yes, you are right. Maybe a better way I could put it is it is "lock
-contention less" :D
+As you probably know, debugging these kind of things is hard. I see two
+possible cases:
 
-> > Similar results can be achieved by increasing jiffies_till_first_fqs, however
-> > that also has the effect of slowing down RCU. Especially I saw huge slow down
-> > of function graph tracer when increasing that.
-> > 
-> > One drawback of this series is, if another frequent RCU callback creeps up in
-> > the future, that's not lazy, then that will again hurt the power. However, I
-> > believe identifying and fixing those is a more reasonable approach than slowing
-> > RCU down for the whole system.
-> 
-> Very good!  I have you down as the official call_rcu_lazy() whack-a-mole
-> developer.  ;-)
+1. The failure is directly related to this optimization. The immediate
+suspect in my mind is something to do with PCID/ASID.
 
-:-D
+2. The failure is due to another bug that was papered by =E2=80=9Cenough=E2=
+=80=9D TLB
+flushes.
 
-thanks,
+I will look into the code. But if it is possible, it would be helpful to
+know whether you get the failure with the =E2=80=9Cnopcid=E2=80=9D =
+kernel parameter. If it
+passes, it wouldn=E2=80=99t say much, but if it fails, I think (2) is =
+more likely.
 
- - Joel
+Not arguing about a revert, but, in some way, if the test fails, it can
+indicate that the optimization =E2=80=9Cworks=E2=80=9D=E2=80=A6
+
+I=E2=80=99ll put some time to look deeper into the code, but it would be =
+very
+helpful if you can let me know what happens with nopcid.
 

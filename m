@@ -2,43 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7933756B90B
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 13:57:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D1CE856B8FD
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 13:57:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238217AbiGHL5h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Jul 2022 07:57:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52162 "EHLO
+        id S238233AbiGHL5k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Jul 2022 07:57:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52214 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238124AbiGHL5R (ORCPT
+        with ESMTP id S238232AbiGHL5Y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Jul 2022 07:57:17 -0400
+        Fri, 8 Jul 2022 07:57:24 -0400
 Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 497D59A6B9;
-        Fri,  8 Jul 2022 04:57:17 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CBAD9A6BF;
+        Fri,  8 Jul 2022 04:57:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
   d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1657281437; x=1688817437;
+  t=1657281443; x=1688817443;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=fyYMzbEVBdCrRqau7PZBrDmY2vLx5Tjgwub2EQAW23A=;
-  b=V4pIK31P2GgSzPzQ2PQcx7emhRHp1fWIvUxN7alBeOf66xOfX5NmWjSZ
-   sbyJkDQsU+oYhyCXcOlUhRN8IQHJA/nQUbNNX7FkHXQXaMkImNqbFlWIF
-   lUoDXe5pYP1KinU7nZudIA7nypelM2ltO+nJM+MArvtTAbHsF6ysLjoA1
-   HH+VHBy0JVTskugCbL2sy13+MqJK+0+z8mQpkDruUjWYSPt1Gp/5wscRE
-   8RSBXuHHY2Zz0DdQpmUysSNebMEfeXlPZYQdPiC6MgaQKmPY0TaW33qmk
-   1EaT3G+21I4eTo8nec11nI3wRmp/WouT9FO2BMsMp+j0jGA9KdN8QLWjY
-   A==;
+  bh=H1+NVcVeMFv/dpBApw6TQFy2RKpgd+ViJsOVvdT/uts=;
+  b=XBb9gJKPcMYtMJByqZDMekDf08tK9Av7ehYS4WvMG9pbnr2vKCRHSikc
+   TTZqQLr1lO7jm5rT6pOqDoiUpfkK4jEJVAwNFtk6+5kqfnq1wmmBsVM4P
+   1EN0Z24Ni/Z+cXo6rrlIIY0UuXfwlGvt86wxGsm69/dbEU0YLTqDpRaWa
+   fbdRNGDhFc2AAKs3YJwTUIyKk80B1HhCDrr4dku+4iD6VzN/uCBNpWgKU
+   xbdkp27MaSG+wTD8HVWOQssCw/QW8TOB9MgrMA4fquSOCIwfkP0SmNGbn
+   NWgkj2epQoqr7Yxg9Fa4RaVmJenK+hEHcyiCtEvJcFcGtC7PVq+wDDVwd
+   w==;
 X-IronPort-AV: E=Sophos;i="5.92,255,1650956400"; 
-   d="scan'208";a="171312680"
+   d="scan'208";a="171312688"
 Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa5.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 08 Jul 2022 04:57:17 -0700
+  by esa5.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 08 Jul 2022 04:57:23 -0700
 Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
- chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
+ chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.17; Fri, 8 Jul 2022 04:57:16 -0700
+ 15.1.2375.17; Fri, 8 Jul 2022 04:57:22 -0700
 Received: from kavya.microchip.com (10.10.115.15) by chn-vm-ex03.mchp-main.com
  (10.10.85.151) with Microsoft SMTP Server id 15.1.2375.17 via Frontend
- Transport; Fri, 8 Jul 2022 04:57:12 -0700
+ Transport; Fri, 8 Jul 2022 04:57:18 -0700
 From:   Kavyasree Kotagiri <kavyasree.kotagiri@microchip.com>
 To:     <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
         <nicolas.ferre@microchip.com>, <alexandre.belloni@bootlin.com>,
@@ -46,9 +46,9 @@ To:     <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
 CC:     <devicetree@vger.kernel.org>,
         <linux-arm-kernel@lists.infradead.org>,
         <linux-kernel@vger.kernel.org>, <Kavyasree.Kotagiri@microchip.com>
-Subject: [PATCH v8 2/3] dt-bindings: mfd: atmel,sama5d2-flexcom: Add new compatible string for lan966x
-Date:   Fri, 8 Jul 2022 09:56:18 -0200
-Message-ID: <20220708115619.254073-3-kavyasree.kotagiri@microchip.com>
+Subject: [PATCH v8 3/3] mfd: atmel-flexcom: Add support for lan966x flexcom chip-select configuration
+Date:   Fri, 8 Jul 2022 09:56:19 -0200
+Message-ID: <20220708115619.254073-4-kavyasree.kotagiri@microchip.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220708115619.254073-1-kavyasree.kotagiri@microchip.com>
 References: <20220708115619.254073-1-kavyasree.kotagiri@microchip.com>
@@ -65,135 +65,170 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-LAN966x SoC flexcoms has two optional I/O lines. Namely, CS0 and CS1
-in flexcom SPI mode. CTS and RTS in flexcom USART mode. These pins
-can be mapped to lan966x FLEXCOM_SHARED[0-20] pins and usage depends on
-functions being configured.
+LAN966x SoC have 5 flexcoms. Each flexcom has 2 chip-selects
+which are optional I/O lines. For each chip select of each
+flexcom there is a configuration register FLEXCOM_SHARED[0-4]:SS_MASK[0-1].
+The width of configuration register is 21 because there are
+21 shared pins on each of which the chip select can be mapped.
+Each bit of the register represents a different FLEXCOM_SHARED pin.
 
 Signed-off-by: Kavyasree Kotagiri <kavyasree.kotagiri@microchip.com>
 ---
 v7 -> v8:
- - Changed compatible string to microchip,lan9668-flexcom. 
+ - Changed compatible string to microchip,lan9668-flexcom.
 
 v6 -> v7:
- - Add #address-cells, #size-cells to flx3 example.
+ - No changes.
 
 v5 -> v6:
- - Removed spi node from flx3 example.
+ - No changes.
 
 v4 -> v5:
- - Fixed indentations and dt-schema errors.
- - No errors seen with 'make dt_binding_check'.
+ - No changes.
 
 v3 -> v4:
- - Added else condition to allOf:if:then.
+ - Add condition for a flexcom whether to configure chip-select lines
+   or not, based on "microchip,flx-shrd-pins" property existence because
+   chip-select lines are optional.
 
 v2 -> v3:
- - Add reg property of lan966x missed in v2.
+ - used goto label for clk_disable in error cases.
 
 v1 -> v2:
- - Use allOf:if:then for lan966x dt properties
+ - use GENMASK for mask, macros for maximum allowed values.
+ - use u32 values for flexcom chipselects instead of strings.
+ - disable clock in case of errors.
 
- .../bindings/mfd/atmel,sama5d2-flexcom.yaml   | 65 ++++++++++++++++++-
- 1 file changed, 64 insertions(+), 1 deletion(-)
+ drivers/mfd/atmel-flexcom.c | 94 ++++++++++++++++++++++++++++++++++++-
+ 1 file changed, 93 insertions(+), 1 deletion(-)
 
-diff --git a/Documentation/devicetree/bindings/mfd/atmel,sama5d2-flexcom.yaml b/Documentation/devicetree/bindings/mfd/atmel,sama5d2-flexcom.yaml
-index bfa7d340a198..568da7cb630c 100644
---- a/Documentation/devicetree/bindings/mfd/atmel,sama5d2-flexcom.yaml
-+++ b/Documentation/devicetree/bindings/mfd/atmel,sama5d2-flexcom.yaml
-@@ -18,9 +18,11 @@ properties:
-   compatible:
-     enum:
-       - atmel,sama5d2-flexcom
-+      - microchip,lan9668-flexcom
+diff --git a/drivers/mfd/atmel-flexcom.c b/drivers/mfd/atmel-flexcom.c
+index 33caa4fba6af..92ea15d5fd72 100644
+--- a/drivers/mfd/atmel-flexcom.c
++++ b/drivers/mfd/atmel-flexcom.c
+@@ -28,15 +28,68 @@
+ #define FLEX_MR_OPMODE(opmode)	(((opmode) << FLEX_MR_OPMODE_OFFSET) &	\
+ 				 FLEX_MR_OPMODE_MASK)
  
-   reg:
--    maxItems: 1
-+    minItems: 1
-+    maxItems: 2
++/* LAN966x flexcom shared register offsets */
++#define FLEX_SHRD_SS_MASK_0	0x0
++#define FLEX_SHRD_SS_MASK_1	0x4
++#define FLEX_SHRD_PIN_MAX	20
++#define FLEX_CS_MAX		1
++#define FLEX_SHRD_MASK		GENMASK(20, 0)
++
++struct atmel_flex_caps {
++	bool has_flx_cs;
++};
++
+ struct atmel_flexcom {
+ 	void __iomem *base;
++	void __iomem *flexcom_shared_base;
+ 	u32 opmode;
+ 	struct clk *clk;
+ };
  
-   clocks:
-     maxItems: 1
-@@ -47,6 +49,27 @@ properties:
-     $ref: /schemas/types.yaml#/definitions/uint32
-     enum: [1, 2, 3]
++static int atmel_flexcom_lan966x_cs_config(struct platform_device *pdev)
++{
++	struct atmel_flexcom *ddata = dev_get_drvdata(&pdev->dev);
++	struct device_node *np = pdev->dev.of_node;
++	u32 flx_shrd_pins[2], flx_cs[2], val;
++	int err, i, count;
++
++	count = of_property_count_u32_elems(np, "microchip,flx-shrd-pins");
++	if (count <= 0 || count > 2) {
++		dev_err(&pdev->dev, "Invalid %s property (%d)\n", "flx-shrd-pins",
++				count);
++		return -EINVAL;
++	}
++
++	err = of_property_read_u32_array(np, "microchip,flx-shrd-pins", flx_shrd_pins, count);
++	if (err)
++		return err;
++
++	err = of_property_read_u32_array(np, "microchip,flx-cs", flx_cs, count);
++	if (err)
++		return err;
++
++	for (i = 0; i < count; i++) {
++		if (flx_shrd_pins[i] > FLEX_SHRD_PIN_MAX)
++			return -EINVAL;
++
++		if (flx_cs[i] > FLEX_CS_MAX)
++			return -EINVAL;
++
++		val = ~(1 << flx_shrd_pins[i]) & FLEX_SHRD_MASK;
++
++		if (flx_cs[i] == 0)
++			writel(val, ddata->flexcom_shared_base + FLEX_SHRD_SS_MASK_0);
++		else
++			writel(val, ddata->flexcom_shared_base + FLEX_SHRD_SS_MASK_1);
++	}
++
++	return 0;
++}
++
+ static int atmel_flexcom_probe(struct platform_device *pdev)
+ {
+ 	struct device_node *np = pdev->dev.of_node;
++	const struct atmel_flex_caps *caps;
+ 	struct resource *res;
+ 	struct atmel_flexcom *ddata;
+ 	int err;
+@@ -76,13 +129,52 @@ static int atmel_flexcom_probe(struct platform_device *pdev)
+ 	 */
+ 	writel(FLEX_MR_OPMODE(ddata->opmode), ddata->base + FLEX_MR);
  
-+  microchip,flx-shrd-pins:
-+    description: Specify the Flexcom shared pins to be used for flexcom
-+      chip-selects.
-+    $ref: /schemas/types.yaml#/definitions/uint32-array
-+    minItems: 1
-+    maxItems: 2
-+    items:
-+      minimum: 0
-+      maximum: 20
++	caps = of_device_get_match_data(&pdev->dev);
++	if (!caps) {
++		dev_err(&pdev->dev, "Could not retrieve flexcom caps\n");
++		err = -EINVAL;
++		goto clk_disable;
++	}
 +
-+  microchip,flx-cs:
-+    description: Flexcom chip selects. Here, value of '0' represents "cts" line
-+      of flexcom USART or "cs0" line of flexcom SPI and value of '1' represents
-+      "rts" line of flexcom USART or "cs1" line of flexcom SPI.
-+    $ref: /schemas/types.yaml#/definitions/uint32-array
-+    minItems: 1
-+    maxItems: 2
-+    items:
-+      minimum: 0
-+      maximum: 1
++	if (caps->has_flx_cs && of_property_read_bool(np, "microchip,flx-shrd-pins")) {
++		ddata->flexcom_shared_base = devm_platform_get_and_ioremap_resource(pdev, 1, NULL);
++		if (IS_ERR(ddata->flexcom_shared_base)) {
++			err = dev_err_probe(&pdev->dev,
++					PTR_ERR(ddata->flexcom_shared_base),
++					"failed to get flexcom shared base address\n");
++			goto clk_disable;
++		}
 +
- patternProperties:
-   "^serial@[0-9a-f]+$":
-     type: object
-@@ -74,6 +97,31 @@ required:
-   - ranges
-   - atmel,flexcom-mode
++		err = atmel_flexcom_lan966x_cs_config(pdev);
++		if (err)
++			goto clk_disable;
++	}
++
++clk_disable:
+ 	clk_disable_unprepare(ddata->clk);
++	if (err)
++		return err;
  
-+allOf:
-+  - if:
-+      properties:
-+        compatible:
-+          contains:
-+            const: microchip,lan9668-flexcom
-+
-+    then:
-+      properties:
-+        reg:
-+          items:
-+            - description: Flexcom base registers map
-+            - description: Flexcom shared registers map
-+      required:
-+        - microchip,flx-shrd-pins
-+        - microchip,flx-cs
-+
-+    else:
-+      properties:
-+        reg:
-+          items:
-+            - description: Flexcom base registers map
-+        microchip,flx-shrd-pins: false
-+        microchip,flx-cs: false
-+
- additionalProperties: false
+ 	return devm_of_platform_populate(&pdev->dev);
+ }
  
- examples:
-@@ -89,4 +137,19 @@ examples:
-         ranges = <0x0 0xf8034000 0x800>;
-         atmel,flexcom-mode = <2>;
-     };
-+  - |
-+    #include <dt-bindings/interrupt-controller/arm-gic.h>
++static const struct atmel_flex_caps atmel_flexcom_caps = {};
 +
-+    flx3: flexcom@e0064000 {
-+        compatible = "microchip,lan9668-flexcom";
-+        reg = <0xe0064000 0x100>,
-+              <0xe2004180 0x8>;
-+        clocks = <&flx0_clk>;
-+        #address-cells = <1>;
-+        #size-cells = <1>;
-+        ranges = <0x0 0xe0040000 0x800>;
-+        atmel,flexcom-mode = <2>;
-+        microchip,flx-shrd-pins = <9>;
-+        microchip,flx-cs = <0>;
-+    };
- ...
++static const struct atmel_flex_caps lan966x_flexcom_caps = {
++	.has_flx_cs = true,
++};
++
+ static const struct of_device_id atmel_flexcom_of_match[] = {
+-	{ .compatible = "atmel,sama5d2-flexcom" },
++	{
++		.compatible = "atmel,sama5d2-flexcom",
++		.data = &atmel_flexcom_caps,
++	},
++
++	{
++		.compatible = "microchip,lan9668-flexcom",
++		.data = &lan966x_flexcom_caps,
++	},
++
+ 	{ /* sentinel */ }
+ };
+ MODULE_DEVICE_TABLE(of, atmel_flexcom_of_match);
 -- 
 2.25.1
 

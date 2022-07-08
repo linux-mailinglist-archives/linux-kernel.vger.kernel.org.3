@@ -2,120 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 576E356B24D
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 07:41:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 14B3556B255
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 07:43:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236703AbiGHFkb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Jul 2022 01:40:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55608 "EHLO
+        id S230388AbiGHFl6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Jul 2022 01:41:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56218 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229637AbiGHFk3 (ORCPT
+        with ESMTP id S237190AbiGHFl4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Jul 2022 01:40:29 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 356BA2AE
-        for <linux-kernel@vger.kernel.org>; Thu,  7 Jul 2022 22:40:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1657258828; x=1688794828;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=RejFxuZNOyQtMVrDj19TKfdSTi+LhnFqwl0PLN1HOvI=;
-  b=H8McJcxvxxwTiXs9wmr3rosQHiVOjrmp7lW6VpXRbLbsyxcVmS5jEcRt
-   xamHcABsaj5+8tJriuebjyD8xTjsfd1ZTlpK/1yLfpH0f61ls/29FkupM
-   ZMeDCWmaklnZluDTKoiT4+/XiVWbju6OZf21KMfSOxwJnDdN84k0/4nUF
-   11Ck1I/Lrarrh+17yPD6WJaEx/661vthLYrvwXICWWd62GzyZ/vwyjQVN
-   xjazO2cCHRmAjUf4s7LiMr9XaKLLrDS5EmqJlm61XEnZjYQAVKSEuT72J
-   096ZzHb6yv9t73vx/DWIFKQQVVMxQ7w+50fIk4c8+3LPpufAH8gYQTEsu
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10401"; a="264609445"
-X-IronPort-AV: E=Sophos;i="5.92,254,1650956400"; 
-   d="scan'208";a="264609445"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jul 2022 22:40:27 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,254,1650956400"; 
-   d="scan'208";a="696768025"
-Received: from lkp-server01.sh.intel.com (HELO 68b931ab7ac1) ([10.239.97.150])
-  by fmsmga002.fm.intel.com with ESMTP; 07 Jul 2022 22:40:26 -0700
-Received: from kbuild by 68b931ab7ac1 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1o9gj3-000MyM-MH;
-        Fri, 08 Jul 2022 05:40:25 +0000
-Date:   Fri, 8 Jul 2022 13:39:59 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Masahiro Yamada <masahiroy@kernel.org>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Subject: arch/mips/boot/compressed/../../lib/bswapdi.c:5:28: warning: no
- previous prototype for '__bswapdi2'
-Message-ID: <202207081322.pj8QnG2I-lkp@intel.com>
+        Fri, 8 Jul 2022 01:41:56 -0400
+Received: from out199-3.us.a.mail.aliyun.com (out199-3.us.a.mail.aliyun.com [47.90.199.3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 282D16308
+        for <linux-kernel@vger.kernel.org>; Thu,  7 Jul 2022 22:41:52 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R101e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045168;MF=hsiangkao@linux.alibaba.com;NM=1;PH=DS;RN=6;SR=0;TI=SMTPD_---0VIiBeZe_1657258907;
+Received: from B-P7TQMD6M-0146.local(mailfrom:hsiangkao@linux.alibaba.com fp:SMTPD_---0VIiBeZe_1657258907)
+          by smtp.aliyun-inc.com;
+          Fri, 08 Jul 2022 13:41:49 +0800
+Date:   Fri, 8 Jul 2022 13:41:47 +0800
+From:   Gao Xiang <hsiangkao@linux.alibaba.com>
+To:     guowei du <duguoweisz@gmail.com>
+Cc:     xiang@kernel.org, Chao Yu <chao@kernel.org>,
+        linux-erofs@lists.ozlabs.org,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        duguowei <duguowei@xiaomi.com>
+Subject: Re: [PATCH 2/2] erofs: sequence each shrink task
+Message-ID: <YsfDm5q9wIyewtWR@B-P7TQMD6M-0146.local>
+References: <20220708031155.21878-1-duguoweisz@gmail.com>
+ <YsejnaY7cy3SeHBF@B-P7TQMD6M-0146.local>
+ <CAC+1NxvifeHmrerWUqhC-gCUk11vudLVc=o=Hnr5EwYJv+N0ZA@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAC+1NxvifeHmrerWUqhC-gCUk11vudLVc=o=Hnr5EwYJv+N0ZA@mail.gmail.com>
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Masahiro,
+Hi,
 
-FYI, the error/warning still remains.
+On Fri, Jul 08, 2022 at 12:49:07PM +0800, guowei du wrote:
+> hi,
+> I am sorry，there is only one patch.
+> 
+> If two or more tasks are doing a shrinking job, there are different results
+> for each task.
+> That is to say, the status of each task is not persistent each time,
+> although they have
+> the same purpose to release memory.
+> 
+> And, If two tasks are shrinking, the erofs_sb_list will become no order,
+> because each task will
+> move one sbi to tail, but sbi is random, so results are more complex.
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   e8a4e1c1bb697b1d9fc48f0e56dc0f50bc024bee
-commit: f78b25ee922ef6faf59a258af1b9388ca894cfd9 mips: decompressor: do not copy source files while building
-date:   8 months ago
-config: mips-randconfig-r033-20220707 (https://download.01.org/0day-ci/archive/20220708/202207081322.pj8QnG2I-lkp@intel.com/config)
-compiler: mipsel-linux-gcc (GCC) 11.3.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=f78b25ee922ef6faf59a258af1b9388ca894cfd9
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout f78b25ee922ef6faf59a258af1b9388ca894cfd9
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash
+Thanks for the explanation. So it doesn't sound like a real issue but seems
+like an improvement? If it's more like this, you could patch this to the
+products first and beta for more time and see if it works well.. I'm
+more careful about such change to shrinker since it could impact
+downstream users...
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+Yes, I know this behavior, but I'm not sure if it's needed to be treated
+as this way, because in principle shrinker can be processed by multiple
+tasks since otherwise it could be stuck by some low priority task (I
+remember it sometimes happens in Android.)
 
-All warnings (new ones prefixed by >>):
+> 
+> Because of the use of the local variable 'run_no', it took me a long time
+> to understand the
+> procedure of each task when they are concurrent.
+> 
+> There is the same issue for other fs, such as
+> fs/ubifs/shrink.c、fs/f2fs/shrink.c.
+> 
+> If scan_objects cost a long time ,it will trigger a watchdog, shrinking
+> should
+> not make work time-consuming. It should be done ASAP.
+> So, I add a new spin lock to let tasks shrink fs sequentially, it will just
+> make all tasks shrink
+> one by one.
 
-   In file included from arch/mips/boot/compressed/bswapdi.c:2:
->> arch/mips/boot/compressed/../../lib/bswapdi.c:5:28: warning: no previous prototype for '__bswapdi2' [-Wmissing-prototypes]
-       5 | unsigned long long notrace __bswapdi2(unsigned long long u)
-         |                            ^~~~~~~~~~
+Actually such shrinker is used for managed slots (sorry I needs more
+work to rename workgroup to such name). But currently one of my ongoing
+improvements is to remove pclusters immediately from managed slots if
+no compressed buffer is cached, so it's used for inflight I/Os (to merge
+decompression requests, including ongoing deduplication requests) and
+cached I/O only.  So in that way objects will be more fewer than now.
 
+> 
+> 
+> Thanks very much.
 
-vim +/__bswapdi2 +5 arch/mips/boot/compressed/../../lib/bswapdi.c
+Thank you.
 
-1ee3630a3e57f3 Ralf Baechle 2015-09-29   4  
-aedcfbe06558a9 Harvey Hunt  2016-05-25  @5  unsigned long long notrace __bswapdi2(unsigned long long u)
-1ee3630a3e57f3 Ralf Baechle 2015-09-29   6  {
-1ee3630a3e57f3 Ralf Baechle 2015-09-29   7  	return (((u) & 0xff00000000000000ull) >> 56) |
-1ee3630a3e57f3 Ralf Baechle 2015-09-29   8  	       (((u) & 0x00ff000000000000ull) >> 40) |
-1ee3630a3e57f3 Ralf Baechle 2015-09-29   9  	       (((u) & 0x0000ff0000000000ull) >> 24) |
-1ee3630a3e57f3 Ralf Baechle 2015-09-29  10  	       (((u) & 0x000000ff00000000ull) >>  8) |
-1ee3630a3e57f3 Ralf Baechle 2015-09-29  11  	       (((u) & 0x00000000ff000000ull) <<  8) |
-1ee3630a3e57f3 Ralf Baechle 2015-09-29  12  	       (((u) & 0x0000000000ff0000ull) << 24) |
-1ee3630a3e57f3 Ralf Baechle 2015-09-29  13  	       (((u) & 0x000000000000ff00ull) << 40) |
-1ee3630a3e57f3 Ralf Baechle 2015-09-29  14  	       (((u) & 0x00000000000000ffull) << 56);
-1ee3630a3e57f3 Ralf Baechle 2015-09-29  15  }
-1ee3630a3e57f3 Ralf Baechle 2015-09-29  16  
+Thanks,
+Gao Xiang
 
-:::::: The code at line 5 was first introduced by commit
-:::::: aedcfbe06558a9f53002e82d5be64c6c94687726 MIPS: lib: Mark intrinsics notrace
-
-:::::: TO: Harvey Hunt <harvey.hunt@imgtec.com>
-:::::: CC: Ralf Baechle <ralf@linux-mips.org>
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp

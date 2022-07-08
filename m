@@ -2,95 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 94F9C56C487
-	for <lists+linux-kernel@lfdr.de>; Sat,  9 Jul 2022 01:15:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 01F0156C25E
+	for <lists+linux-kernel@lfdr.de>; Sat,  9 Jul 2022 01:13:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240040AbiGHVgF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Jul 2022 17:36:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49072 "EHLO
+        id S240483AbiGHVpm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Jul 2022 17:45:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53394 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239233AbiGHVgB (ORCPT
+        with ESMTP id S230366AbiGHVpk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Jul 2022 17:36:01 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66A68A2396;
-        Fri,  8 Jul 2022 14:36:00 -0700 (PDT)
+        Fri, 8 Jul 2022 17:45:40 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44DA72AD5;
+        Fri,  8 Jul 2022 14:45:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1657316160; x=1688852160;
-  h=message-id:subject:from:reply-to:to:cc:date:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=Y6FNRfINwjCBhXzxRBDNlrAGOF4VTM1y+XTMActF2Sg=;
-  b=m8l9F4PVNXI9iJDwLDaen1Ki1EBwUu9vVENkxFptw2TUkVV/TmCqkdHE
-   L4AMq8kVfdUEqTJGCNYWjYOrx8a58Io/NtUvjP3Z0wNmhLSjtQ51ld7p1
-   clKLIof1NCxkDSvky2Mt0GiHCub/AJwdPq4YVdncx9YBFFqTE+deqquYX
-   ieFKRwEzHV1spG336whZejH/b79WBlRfeu9wPUxfaiasMzfWJ4Yj7S8sB
-   P73WiSqmnETdmj9paPfnZ9EQgJCrl26e+Nto/46tbXhgfabXCGecDIUTE
-   q6H12gKnTBL0fpFyl3t9L4DrPFYsBP9aeHk47xJLMoAvcRKEGNDibhido
+  t=1657316739; x=1688852739;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=TO3L/2mlXPf9Cl0nFuphhIinNmA5v99+jhzw984jMJI=;
+  b=Tt2Bex/Mlo1oBnflgjH9QcKcd93khskZ3O06oNHA2XISN0h9e9ZGv+wj
+   qeldmmTqPo7S6jOp33m4MFSBq5w+MM62GggTpRgGr0U4DW29Hd3AedIa9
+   mQjJYDE+ADLXmfFAbuDKHEBVd18fQC4Xnamjhbi389R5mPs5NlBAUaRJh
+   8MSUgw8kMXdSMKTRnJFNyUvYJH46otQk/IM/E+ZsLYioTCtEFgnkiDt2v
+   bkx7PifBlnEqQRf6LKkye/wP9TKzojY/8bDTU4i/d1otfOIol+4X3aXPm
+   9s8gokfIJs7k4urSbyAj9FQU6CDYlIU3i8sE9TSOWZDuSnC6Zm+/uiOdw
    w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10402"; a="267410273"
+X-IronPort-AV: E=McAfee;i="6400,9594,10402"; a="264786054"
 X-IronPort-AV: E=Sophos;i="5.92,256,1650956400"; 
-   d="scan'208";a="267410273"
+   d="scan'208";a="264786054"
 Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jul 2022 14:35:59 -0700
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jul 2022 14:45:38 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.92,256,1650956400"; 
-   d="scan'208";a="736473055"
-Received: from wopr.jf.intel.com ([10.54.75.125])
-  by fmsmga001.fm.intel.com with ESMTP; 08 Jul 2022 14:35:59 -0700
-Message-ID: <045ebee30af2b80aaeace1dab18ecd113e3f17c7.camel@linux.intel.com>
-Subject: Re: PNP0501 serial driver takes almost 2 seconds to suspend/resume
- (printk issue)
-From:   Todd Brandt <todd.e.brandt@linux.intel.com>
-Reply-To: todd.e.brandt@linux.intel.com
-To:     John Ogness <john.ogness@linutronix.de>, pmladek@suse.com
-Cc:     linux-kernel@vger.kernel.org, linux-serial@vger.kernel.org,
-        senozhatsky@chromium.org, rostedt@goodmis.org
-Date:   Fri, 08 Jul 2022 14:35:59 -0700
-In-Reply-To: <87czegxccb.fsf@jogness.linutronix.de>
-References: <12fb98fe27e23e3f74a139e5e8eb83a97a343372.camel@linux.intel.com>
-         <51b9e2cc3baf61a604bd239b736ec2d12f1f6695.camel@linux.intel.com>
-         <87czegxccb.fsf@jogness.linutronix.de>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+   d="scan'208";a="736475816"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by fmsmga001.fm.intel.com with ESMTP; 08 Jul 2022 14:45:35 -0700
+Received: by black.fi.intel.com (Postfix, from userid 1003)
+        id 0B27BCE; Sat,  9 Jul 2022 00:45:42 +0300 (EEST)
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Rob Herring <robh@kernel.org>,
+        Frank Rowand <frank.rowand@sony.com>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-gpio@vger.kernel.org
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Frank Rowand <frowand.list@gmail.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Subject: [PATCH v4 1/2] of: unittest: Switch to use fwnode instead of of_node
+Date:   Sat,  9 Jul 2022 00:45:38 +0300
+Message-Id: <20220708214539.7254-1-andriy.shevchenko@linux.intel.com>
+X-Mailer: git-send-email 2.35.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 2022-07-08 at 10:07 +0206, John Ogness wrote:
-> Hi Todd,
-> 
-> Thanks for reporting this.
-> 
-> On 2022-07-07, Todd Brandt <todd.e.brandt@linux.intel.com> wrote:
-> > Ever since 5.19.0-rc1 the serial device has taken almost a second
-> > longer in both suspend and resume. This effect is witnessed in half
-> > the machines in our lab (~10 machines). It occurs on dell, asus,
-> > gigabyte and other machines so it's not hardware specific.
-> 
-> Please provide a full dmesg log if you can. The important parts of
-> the
-> log would be:
-> 
-> - boot arguments
-> - any lines with "printk" in it
-> - timing information
-> - messages during suspend and resume
-> 
-> pr_flush() uses a timeout of 1 second. I assume your console driver
-> is
-> not printing and therefore not making any forward progress.
-> 
-> John Ogness
+The OF node in the GPIO library is deprecated and soon will be removed.
+GPIO library now accepts fwnode as a firmware node, so switch the module
+to use it instead.
 
-The dmesg logs are in the html timelines themselves, just click the
-"dmesg" button in the upper right hand corner. The log button shows all
-kinds of system info as well.
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Reviewed-by: Bartosz Golaszewski <brgl@bgdev.pl>
+---
+v2: added tag (Bart), clarify the purpose in the commit message (Rob)
+ drivers/of/unittest.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/of/unittest.c b/drivers/of/unittest.c
+index 7f6bba18c515..5a842dfc27e8 100644
+--- a/drivers/of/unittest.c
++++ b/drivers/of/unittest.c
+@@ -1602,7 +1602,7 @@ static int unittest_gpio_probe(struct platform_device *pdev)
+ 
+ 	platform_set_drvdata(pdev, devptr);
+ 
+-	devptr->chip.of_node = pdev->dev.of_node;
++	devptr->chip.fwnode = dev_fwnode(&pdev->dev);
+ 	devptr->chip.label = "of-unittest-gpio";
+ 	devptr->chip.base = -1; /* dynamic allocation */
+ 	devptr->chip.ngpio = 5;
+@@ -1611,7 +1611,7 @@ static int unittest_gpio_probe(struct platform_device *pdev)
+ 	ret = gpiochip_add_data(&devptr->chip, NULL);
+ 
+ 	unittest(!ret,
+-		 "gpiochip_add_data() for node @%pOF failed, ret = %d\n", devptr->chip.of_node, ret);
++		 "gpiochip_add_data() for node @%pfw failed, ret = %d\n", devptr->chip.fwnode, ret);
+ 
+ 	if (!ret)
+ 		unittest_gpio_probe_pass_count++;
+-- 
+2.35.1
 

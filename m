@@ -2,71 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 99B2656B8D2
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 13:50:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 807BE56B8DF
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 13:50:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238116AbiGHLrn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Jul 2022 07:47:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42366 "EHLO
+        id S238142AbiGHLsZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Jul 2022 07:48:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43256 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238114AbiGHLrj (ORCPT
+        with ESMTP id S238126AbiGHLsX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Jul 2022 07:47:39 -0400
-Received: from mail-qt1-x836.google.com (mail-qt1-x836.google.com [IPv6:2607:f8b0:4864:20::836])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 811D5951E5
-        for <linux-kernel@vger.kernel.org>; Fri,  8 Jul 2022 04:47:38 -0700 (PDT)
-Received: by mail-qt1-x836.google.com with SMTP id c13so26794789qtq.10
-        for <linux-kernel@vger.kernel.org>; Fri, 08 Jul 2022 04:47:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=UzvQM908Jy3z5GL48S8s+55sngOGG+1Pc7lf5lQnBIE=;
-        b=B+WLrHnUpf4IwJX0fM9iKELpWbwiEZR2q0T5c2SjIkdDYwj3/DfXAuz2d5VXl7DOJ+
-         NY1rQM7C7zHA6ARDY6KjkfeLOT3TypcJeCRHuWLA67ZHd5a0tiIhzx44Hv06GQrMRvRA
-         uv5dcJ2TvsdyocWpeIsb0jEPDx5ggXg+Bkg9o=
+        Fri, 8 Jul 2022 07:48:23 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 18E23951E1
+        for <linux-kernel@vger.kernel.org>; Fri,  8 Jul 2022 04:48:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1657280901;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=Qz83jQ6ie8rpR79Lw5oBAFua2qVBO7q3ChvGPuAzjrw=;
+        b=T2bivFwuHapcklp2AKZVISQTV/DHQp3r3CCLenZK7lYDGAOQGD2g8f7cu3c0wb+Q8kKnef
+        x6b7hcJJ546X8GWVmdMdVz+o+LpOHMqJfoGHRWutttNejW8WWN6ZhjRnjW83I9hzasFGQi
+        MLGqHZPKfzW6tIgnPWdd8+3tbWj5j24=
+Received: from mail-qk1-f200.google.com (mail-qk1-f200.google.com
+ [209.85.222.200]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-651-cXCv-5QyMjqti7Fz1bXKyQ-1; Fri, 08 Jul 2022 07:48:20 -0400
+X-MC-Unique: cXCv-5QyMjqti7Fz1bXKyQ-1
+Received: by mail-qk1-f200.google.com with SMTP id bm2-20020a05620a198200b006a5dac37fa2so20752809qkb.16
+        for <linux-kernel@vger.kernel.org>; Fri, 08 Jul 2022 04:48:20 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=UzvQM908Jy3z5GL48S8s+55sngOGG+1Pc7lf5lQnBIE=;
-        b=BOG1zml1myzj6rezKx4DTagVZyQcs3j9QXrqVpbXERlKEtIj1OL32jJ4+GzbcYX+I0
-         5UJIM5hjK79aDSiB7l08TQOYg1faVrVUI+7ItkQOYVbnX4QN/CjN5J0uJF7tReUlVQeP
-         mG61uzWHY2PBVJrctNiIlWh9cKcund0U02SNt40F0enRWR6GPdwssRlL6uP1RxdSlncQ
-         256JLCyGQ7iUj7ivgV8gKJTL0PTKv/PwlW3nGEdR8siIkxAzlK9QjL5Scd9gs0sdr3YT
-         zyItD1BshjEeC1EpzR5GODiReoWBymTlALWoa28IQTazX/AfM/77kQY9y1DZNkN79wXs
-         kpxw==
-X-Gm-Message-State: AJIora8LQvr+V3Y4RehFh7zTfqtWhgFfTyIuINQFo/WL4PJIcktDivst
-        UA7FtQNFSfsntk7lANhMXZHw4va4BTSqTw==
-X-Google-Smtp-Source: AGRyM1tOENfroXdH+IreCC2ZpiPCfzqHv/8ew1t7YlJdoemzrr+x3+VVMD72iz9aVFlQneDKoe4TxA==
-X-Received: by 2002:a05:622a:7:b0:31b:74bd:1597 with SMTP id x7-20020a05622a000700b0031b74bd1597mr2364798qtw.677.1657280857401;
-        Fri, 08 Jul 2022 04:47:37 -0700 (PDT)
-Received: from mail-yb1-f178.google.com (mail-yb1-f178.google.com. [209.85.219.178])
-        by smtp.gmail.com with ESMTPSA id l12-20020a37f90c000000b006b14fb1ba18sm21132623qkj.35.2022.07.08.04.47.36
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 08 Jul 2022 04:47:36 -0700 (PDT)
-Received: by mail-yb1-f178.google.com with SMTP id y195so6147924yby.0
-        for <linux-kernel@vger.kernel.org>; Fri, 08 Jul 2022 04:47:36 -0700 (PDT)
-X-Received: by 2002:a25:1583:0:b0:668:e74a:995f with SMTP id
- 125-20020a251583000000b00668e74a995fmr3183243ybv.1.1657280855797; Fri, 08 Jul
- 2022 04:47:35 -0700 (PDT)
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=Qz83jQ6ie8rpR79Lw5oBAFua2qVBO7q3ChvGPuAzjrw=;
+        b=4obKLvkzN8akLuYCo1qpI7VHWDsVVe8EQS6OJogTvZuc2XWj7FSIIH8IBS5BP/fsql
+         AB68r3Xtku73/OmrgvHO/Xn2Qt62O5kB7ZgyNoFTcVVeHFuA4TtDESsmTRJl3P5jf0lu
+         /83ZdZgHTyCZ+c3wkVcM3bWdaVSS70eHX5lBmJOmP/i1kamDxz6i0CTTQBFwtddVxwwI
+         XWynP0O9+bllr3M4Qt+e0lxIldyqGVMcQOEF9kAJ+SLxtJLPocPtaD1qi2Kybhjt5TSV
+         cr0OAhSCzYyWHyhUXcoepKmyEHktG5NpbBocQRX9CM3KLOi/LLDuifKLPPX/3MOjBqXS
+         NO2g==
+X-Gm-Message-State: AJIora8UawagrNWg09LrVist+9PcXTvMcrYll82THuy64iUzwrkQgyX3
+        j4xpBDAA4YtvX1aAZPp2ci8bl2eOfUyqXrVFyp5PzctgGyXAQOzrjVxnOk87S0DO4YuI0AATcLC
+        EPIdNSLFOThHz6lNCb/LI03ubGdB3WVo2h4qmWmz8
+X-Received: by 2002:ac8:5b51:0:b0:317:3513:cf60 with SMTP id n17-20020ac85b51000000b003173513cf60mr2447545qtw.495.1657280899662;
+        Fri, 08 Jul 2022 04:48:19 -0700 (PDT)
+X-Google-Smtp-Source: AGRyM1usVpZKD7lAzE4htKPsep3j+Ey0tw3eoaPrJNum/msse0zljtQvQdftD4RelMyTVPVazDTazPU1BOO+SKyLp1g=
+X-Received: by 2002:ac8:5b51:0:b0:317:3513:cf60 with SMTP id
+ n17-20020ac85b51000000b003173513cf60mr2447536qtw.495.1657280899449; Fri, 08
+ Jul 2022 04:48:19 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220706182657.210650-1-ezequiel@vanguardiasur.com.ar> <CAAFQd5Ap=oY8nf8d=o3p1D8avkmxPXvJz5X5SAaAS3M-pTC7_Q@mail.gmail.com>
-In-Reply-To: <CAAFQd5Ap=oY8nf8d=o3p1D8avkmxPXvJz5X5SAaAS3M-pTC7_Q@mail.gmail.com>
-From:   Tomasz Figa <tfiga@chromium.org>
-Date:   Fri, 8 Jul 2022 20:47:25 +0900
-X-Gmail-Original-Message-ID: <CAAFQd5C--1RFVxBvLWXZqOp3sh+fxiOobDrht_7ejRHSBHfdHg@mail.gmail.com>
-Message-ID: <CAAFQd5C--1RFVxBvLWXZqOp3sh+fxiOobDrht_7ejRHSBHfdHg@mail.gmail.com>
-Subject: Re: [PATCH 0/8] videobuf2: Replace vb2_find_timestamp() with vb2_find_buffer()
-To:     Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
-Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Marek Szyprowski <m.szyprowski@samsung.com>
+References: <20220623160738.632852-1-eperezma@redhat.com> <20220623160738.632852-4-eperezma@redhat.com>
+ <CAGxU2F43+5zsQOR4ReTtQtEF47s6y-XKcevosMOzUdEqpLhAsg@mail.gmail.com>
+In-Reply-To: <CAGxU2F43+5zsQOR4ReTtQtEF47s6y-XKcevosMOzUdEqpLhAsg@mail.gmail.com>
+From:   Eugenio Perez Martin <eperezma@redhat.com>
+Date:   Fri, 8 Jul 2022 13:47:43 +0200
+Message-ID: <CAJaqyWdn=mShLEZzfJB_+PwM+pkLhLMJaMOjdFtuW8tYbbU3FQ@mail.gmail.com>
+Subject: Re: [PATCH v6 3/4] vhost-vdpa: uAPI to suspend the device
+To:     Stefano Garzarella <sgarzare@redhat.com>
+Cc:     netdev <netdev@vger.kernel.org>, Jason Wang <jasowang@redhat.com>,
+        kernel list <linux-kernel@vger.kernel.org>,
+        Linux Virtualization <virtualization@lists.linux-foundation.org>,
+        kvm <kvm@vger.kernel.org>, "Michael S. Tsirkin" <mst@redhat.com>,
+        Parav Pandit <parav@nvidia.com>,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        Cindy Lu <lulu@redhat.com>,
+        "Kamde, Tanuj" <tanuj.kamde@amd.com>,
+        Si-Wei Liu <si-wei.liu@oracle.com>,
+        "Uminski, Piotr" <Piotr.Uminski@intel.com>,
+        habetsm.xilinx@gmail.com, "Dawar, Gautam" <gautam.dawar@amd.com>,
+        Pablo Cascon Katchadourian <pabloc@xilinx.com>,
+        Zhu Lingshan <lingshan.zhu@intel.com>,
+        Laurent Vivier <lvivier@redhat.com>,
+        Longpeng <longpeng2@huawei.com>,
+        Dinan Gunawardena <dinang@xilinx.com>,
+        Martin Petrus Hubertus Habets <martinh@xilinx.com>,
+        Martin Porter <martinpo@xilinx.com>,
+        Eli Cohen <elic@nvidia.com>, ecree.xilinx@gmail.com,
+        Wu Zongyong <wuzongyong@linux.alibaba.com>,
+        Dan Carpenter <dan.carpenter@oracle.com>,
+        Harpreet Singh Anand <hanand@xilinx.com>,
+        Xie Yongji <xieyongji@bytedance.com>,
+        Zhang Min <zhang.min9@zte.com.cn>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,62 +97,113 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jul 8, 2022 at 1:47 PM Tomasz Figa <tfiga@chromium.org> wrote:
+On Tue, Jun 28, 2022 at 3:45 PM Stefano Garzarella <sgarzare@redhat.com> wr=
+ote:
 >
-> Hi Ezequiel,
+> On Thu, Jun 23, 2022 at 06:07:37PM +0200, Eugenio P=C3=A9rez wrote:
+> >The ioctl adds support for suspending the device from userspace.
+> >
+> >This is a must before getting virtqueue indexes (base) for live migratio=
+n,
+> >since the device could modify them after userland gets them. There are
+> >individual ways to perform that action for some devices
+> >(VHOST_NET_SET_BACKEND, VHOST_VSOCK_SET_RUNNING, ...) but there was no
+> >way to perform it for any vhost device (and, in particular, vhost-vdpa).
+> >
+> >After a successful return of the ioctl call the device must not process
+> >more virtqueue descriptors. The device can answer to read or writes of
+> >config fields as if it were not suspended. In particular, writing to
+> >"queue_enable" with a value of 1 will not make the device start
+> >processing buffers of the virtqueue.
+> >
+> >Signed-off-by: Eugenio P=C3=A9rez <eperezma@redhat.com>
+> >---
+> > drivers/vhost/vdpa.c       | 19 +++++++++++++++++++
+> > include/uapi/linux/vhost.h | 14 ++++++++++++++
+> > 2 files changed, 33 insertions(+)
+> >
+> >diff --git a/drivers/vhost/vdpa.c b/drivers/vhost/vdpa.c
+> >index 3d636e192061..7fa671ac4bdf 100644
+> >--- a/drivers/vhost/vdpa.c
+> >+++ b/drivers/vhost/vdpa.c
+> >@@ -478,6 +478,22 @@ static long vhost_vdpa_get_vqs_count(struct vhost_v=
+dpa *v, u32 __user *argp)
+> >       return 0;
+> > }
+> >
+> >+/* After a successful return of ioctl the device must not process more
+> >+ * virtqueue descriptors. The device can answer to read or writes of co=
+nfig
+> >+ * fields as if it were not suspended. In particular, writing to "queue=
+_enable"
+> >+ * with a value of 1 will not make the device start processing buffers.
+> >+ */
+> >+static long vhost_vdpa_suspend(struct vhost_vdpa *v)
+> >+{
+> >+      struct vdpa_device *vdpa =3D v->vdpa;
+> >+      const struct vdpa_config_ops *ops =3D vdpa->config;
+> >+
+> >+      if (!ops->suspend)
+> >+              return -EOPNOTSUPP;
+> >+
+> >+      return ops->suspend(vdpa);
+> >+}
+> >+
+> > static long vhost_vdpa_vring_ioctl(struct vhost_vdpa *v, unsigned int c=
+md,
+> >                                  void __user *argp)
+> > {
+> >@@ -654,6 +670,9 @@ static long vhost_vdpa_unlocked_ioctl(struct file *f=
+ilep,
+> >       case VHOST_VDPA_GET_VQS_COUNT:
+> >               r =3D vhost_vdpa_get_vqs_count(v, argp);
+> >               break;
+> >+      case VHOST_VDPA_SUSPEND:
+> >+              r =3D vhost_vdpa_suspend(v);
+> >+              break;
+> >       default:
+> >               r =3D vhost_dev_ioctl(&v->vdev, cmd, argp);
+> >               if (r =3D=3D -ENOIOCTLCMD)
+> >diff --git a/include/uapi/linux/vhost.h b/include/uapi/linux/vhost.h
+> >index cab645d4a645..6d9f45163155 100644
+> >--- a/include/uapi/linux/vhost.h
+> >+++ b/include/uapi/linux/vhost.h
+> >@@ -171,4 +171,18 @@
+> > #define VHOST_VDPA_SET_GROUP_ASID     _IOW(VHOST_VIRTIO, 0x7C, \
+> >                                            struct vhost_vring_state)
+> >
+> >+/* Suspend or resume a device so it does not process virtqueue requests=
+ anymore
+> >+ *
+> >+ * After the return of ioctl with suspend !=3D 0, the device must finis=
+h any
+> >+ * pending operations like in flight requests. It must also preserve al=
+l the
+> >+ * necessary state (the virtqueue vring base plus the possible device s=
+pecific
+> >+ * states) that is required for restoring in the future. The device mus=
+t not
+> >+ * change its configuration after that point.
+> >+ *
+> >+ * After the return of ioctl with suspend =3D=3D 0, the device can cont=
+inue
+> >+ * processing buffers as long as typical conditions are met (vq is enab=
+led,
+> >+ * DRIVER_OK status bit is enabled, etc).
+> >+ */
+> >+#define VHOST_VDPA_SUSPEND            _IOW(VHOST_VIRTIO, 0x7D, int)
+>                                          ^
+> IIUC we are not using the argument anymore, so this should be changed in
+> _IO(VHOST_VIRTIO, 0x7D).
 >
-> On Thu, Jul 7, 2022 at 3:27 AM Ezequiel Garcia
-> <ezequiel@vanguardiasur.com.ar> wrote:
-> >
-> > All users of vb2_find_timestamp() combine it with vb2_get_buffer()
-> > to retrieve a videobuf2 buffer, given a u64 timestamp.
-> >
-> > Therefore, this series removes vb2_find_timestamp() and instead
-> > introduces a vb2_find_buffer, which is more suitable, making
-> > videobuf2 API slightly cleaner.
-> >
-> > Ezequiel Garcia (8):
-> >   videobuf2: Introduce vb2_find_buffer()
-> >   mediatek: vcodec: Use vb2_find_buffer
-> >   tegra-vde: Use vb2_find_buffer
-> >   vicodec: Use vb2_find_buffer
-> >   hantro: Use vb2_find_buffer
-> >   rkvdec: Use vb2_find_buffer
-> >   cedrus: Use vb2_find_buffer
-> >   videobuf2: Remove vb2_find_timestamp()
-> >
-> >  .../media/common/videobuf2/videobuf2-v4l2.c   | 12 ++---
-> >  .../vcodec/vdec/vdec_h264_req_common.c        |  7 ++-
-> >  .../mediatek/vcodec/vdec/vdec_vp8_req_if.c    |  7 ++-
-> >  .../vcodec/vdec/vdec_vp9_req_lat_if.c         |  8 +--
-> >  .../media/platform/nvidia/tegra-vde/h264.c    |  9 ++--
-> >  .../media/test-drivers/vicodec/vicodec-core.c |  8 +--
-> >  drivers/staging/media/hantro/hantro_drv.c     |  6 +--
-> >  .../staging/media/hantro/hantro_g2_vp9_dec.c  | 10 ++--
-> >  drivers/staging/media/rkvdec/rkvdec-h264.c    | 41 ++++++---------
-> >  drivers/staging/media/rkvdec/rkvdec-vp9.c     | 10 ++--
-> >  drivers/staging/media/sunxi/cedrus/cedrus.h   | 13 +----
-> >  .../staging/media/sunxi/cedrus/cedrus_h264.c  | 16 +++---
-> >  .../staging/media/sunxi/cedrus/cedrus_h265.c  | 16 +++---
-> >  .../staging/media/sunxi/cedrus/cedrus_mpeg2.c | 36 ++++++-------
-> >  .../staging/media/sunxi/cedrus/cedrus_vp8.c   | 50 ++++++-------------
-> >  include/media/videobuf2-v4l2.h                | 12 ++---
-> >  16 files changed, 100 insertions(+), 161 deletions(-)
-> >
-> > --
-> > 2.34.3
-> >
+> And we should update a bit the documentation.
 >
-> Thanks for the series! I think it's a nice cleanup indeed, but please
-> see a few comments in my replies to individual patches.
 
-As we clarified my concern in one of the patches and the other one was
-purely stylistic, feel free to just add my
+Totally right, replacing it for the next version.
 
-Acked-by: Tomasz Figa <tfiga@chromium.org>
+Thanks!
 
-to the entire series. The stylistic one can be ignored if there is no
-other change needed.
+> Thanks,
+> Stefano
+>
 
-Best regards,
-Tomasz

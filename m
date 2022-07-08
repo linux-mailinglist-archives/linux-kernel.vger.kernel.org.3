@@ -2,79 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9081556BAF3
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 15:39:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 07F1956BAFD
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 15:39:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238237AbiGHNgd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Jul 2022 09:36:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42852 "EHLO
+        id S238315AbiGHNhd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Jul 2022 09:37:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43482 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237385AbiGHNgc (ORCPT
+        with ESMTP id S238317AbiGHNh1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Jul 2022 09:36:32 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 529F863E8
-        for <linux-kernel@vger.kernel.org>; Fri,  8 Jul 2022 06:36:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1657287390;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=jS9QPRZ27XhQQ8+oiZrtqWPGy1J/SaGEji7xBp7spQY=;
-        b=MECj1QziEXYmSgCbqaoC3HMOC17xUJJ6Qej2b+KKMd2E7zcX4aoo0nC0YQhU1OpqyFtkUO
-        IhcRGCm+FWOW4oWEkS9Vtv4IXs7gFuxwQhuGgH9BZoOerEnvoev/AvU6WOTx16QgB9ZtYs
-        JeRmQ2Gj825/dzSqQx/z6y6JyxHnNko=
-Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
- [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-287-5bXA_TTROPKKQ8GibrLKqA-1; Fri, 08 Jul 2022 09:36:29 -0400
-X-MC-Unique: 5bXA_TTROPKKQ8GibrLKqA-1
-Received: by mail-wm1-f70.google.com with SMTP id 2-20020a1c0202000000b003a2cfab44eeso988551wmc.6
-        for <linux-kernel@vger.kernel.org>; Fri, 08 Jul 2022 06:36:29 -0700 (PDT)
+        Fri, 8 Jul 2022 09:37:27 -0400
+Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF4B163E8
+        for <linux-kernel@vger.kernel.org>; Fri,  8 Jul 2022 06:37:26 -0700 (PDT)
+Received: by mail-ej1-x631.google.com with SMTP id l23so5966483ejr.5
+        for <linux-kernel@vger.kernel.org>; Fri, 08 Jul 2022 06:37:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=broadcom.com; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=i3QBsowXqy+KhixVODKTcgt3NYM3NBmSZlOGT88FqGA=;
+        b=PuPWbGnciysXH5awQ/Bc5cfnEdTfPho69BEJXxjyfp0jVx7EcUKiHaUXcbgNA00S3F
+         WVNFVcFAOnKmQMn+6jSErw2wFLTmDKi1KQ5lmGAK0c2JOjRIZJRGgX2+Ztr/q8RLg3jI
+         Uof8LFOEWfN34BN27j6F+60zbpbSxjiItC2OA=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=jS9QPRZ27XhQQ8+oiZrtqWPGy1J/SaGEji7xBp7spQY=;
-        b=kyIh7BXvdRdrEPOqCYUdtN5EPt6SUe+XeI6J7PU7AE33qnNQxcLNQnWmB1y26eFYCR
-         W09FhSQoo8G2MEbiJZB+mTOLcUHfFgXchtA6ciM4e4vLBn3FNGFDVMumursacmSK6ZyG
-         p/2bw7RD8tzyiaz0XL7zxnEqau54QYqRrMZ+oetUQ2p86HeGr84DKpnVb6m2XiNfaM07
-         0Z0gR9SAxuKc+QJcCzfq6Y96w8Q86HGZll+42q6JgxIf79oh06dXjh9VrVjc5/lFTB/g
-         QCtlNmrc1YWYNb79w7BlwcWpylBaSP6aOZSkD6zdohibWOv5zGBvxuQUz6DuBk6bnctB
-         o5tQ==
-X-Gm-Message-State: AJIora82rvNDdWBVOPiyeZoP2OSN+VJrR/2faCVSiXk0ywDhtzSLt5DE
-        4F8sD92lnM7h87eUPhSa1iyyk8XfRZXzYQVcurokFiGfklPPgD/f7AlN0npqcJekyCaBNK6Y5hb
-        u1CxMPxiRNzAahTj0+TCOHUxl
-X-Received: by 2002:a05:6000:1d98:b0:21b:aead:9b6c with SMTP id bk24-20020a0560001d9800b0021baead9b6cmr3332991wrb.531.1657287388239;
-        Fri, 08 Jul 2022 06:36:28 -0700 (PDT)
-X-Google-Smtp-Source: AGRyM1sISNaiqw7kzmnWF5De1JLKP1VEpdf/EMlWjYJDrqBYFBGhS9dQjE/+x6lUGaSIp2dBwKvoBw==
-X-Received: by 2002:a05:6000:1d98:b0:21b:aead:9b6c with SMTP id bk24-20020a0560001d9800b0021baead9b6cmr3332971wrb.531.1657287387995;
-        Fri, 08 Jul 2022 06:36:27 -0700 (PDT)
-Received: from localhost.localdomain ([151.29.51.61])
-        by smtp.gmail.com with ESMTPSA id 83-20020a1c0256000000b003a0375c4f73sm2121995wmc.44.2022.07.08.06.36.27
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 08 Jul 2022 06:36:27 -0700 (PDT)
-Date:   Fri, 8 Jul 2022 15:36:25 +0200
-From:   Juri Lelli <juri.lelli@redhat.com>
-To:     Dietmar Eggemann <dietmar.eggemann@arm.com>
-Cc:     Ingo Molnar <mingo@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Valentin Schneider <vschneid@redhat.com>,
-        Mel Gorman <mgorman@suse.de>, Ben Segall <bsegall@google.com>,
-        Luca Abeni <luca.abeni@santannapisa.it>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 0/3] DL capacity-aware fixes
-Message-ID: <Ysgy2XkdceBaHz04@localhost.localdomain>
-References: <20220629122053.287165-1-dietmar.eggemann@arm.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=i3QBsowXqy+KhixVODKTcgt3NYM3NBmSZlOGT88FqGA=;
+        b=L+XM41CLqZZfXrdHVAL8LsRY4LYtiVqJ+v7E74jeDKboXPCW1gWMD5rO8ie/4pDR78
+         v9ySS7RYO6SIrtaDUfyp3TLbxCjZQ8dzQ4dBuXM8IJSw2eyegpuLZN14mpmP4jNnq6K+
+         Sb0rzR32Dq/qulEayh4YKOiVEeST0PVR5chdWuIvp3niETusy8URKEGanXQDLSRidq31
+         kduas9TXwH5Ag9GGGrXgld51btjO0PxqT1Pp0SInxkGNSL5qKPaPH/AVXo1f7XXYE8Ha
+         KNGpFJMHEZKyTg7/Cl3/c2kbkrasL5oVTC3MReyx8muTvNNWNSbAhWHhNiq2IGQyP8u3
+         ZYbQ==
+X-Gm-Message-State: AJIora/GaBb22a5vioCf2gmK4J/WchdLXmV5ZGeYeUJgtsLl99Qah3Gh
+        +uOyYoD6dCkdh16j7sEpoRD+0TEWhsCWIM1rwQh/4Q==
+X-Google-Smtp-Source: AGRyM1s4rld7Wmpu+ONRxJ5moE7eScQMqXggKBr4ZEDxcdvi5wAft8JZX4EuT909ciAVOYr0W0TpgqKsee/JoVQkH58=
+X-Received: by 2002:a17:906:106:b0:715:7cdf:400f with SMTP id
+ 6-20020a170906010600b007157cdf400fmr3683089eje.1.1657287444838; Fri, 08 Jul
+ 2022 06:37:24 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220629122053.287165-1-dietmar.eggemann@arm.com>
-X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+References: <20211209204726.6676-5-jim2101024@gmail.com> <20220706214200.GA224369@bhelgaas>
+In-Reply-To: <20220706214200.GA224369@bhelgaas>
+From:   Jim Quinlan <james.quinlan@broadcom.com>
+Date:   Fri, 8 Jul 2022 09:37:13 -0400
+Message-ID: <CA+-6iNyViHVgdmvhzTEMWDdaP7mm-38iqhdyknyq0z8Au2gWBg@mail.gmail.com>
+Subject: Re: [PATCH v1 4/4] PCI: brcmstb: Augment driver for MIPs SOCs
+To:     Bjorn Helgaas <helgaas@kernel.org>
+Cc:     Jim Quinlan <jim2101024@gmail.com>,
+        "open list:PCI NATIVE HOST BRIDGE AND ENDPOINT DRIVERS" 
+        <linux-pci@vger.kernel.org>, linux-mips@vger.kernel.org,
+        Nicolas Saenz Julienne <nsaenz@kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Kevin Cernekee <cernekee@gmail.com>,
+        "maintainer:BROADCOM BCM7XXX ARM ARCHITECTURE" 
+        <bcm-kernel-feedback-list@broadcom.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Rob Herring <robh@kernel.org>,
+        =?UTF-8?Q?Krzysztof_Wilczy=C5=84ski?= <kw@linux.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        open list <linux-kernel@vger.kernel.org>,
+        "moderated list:BROADCOM BCM2711/BCM2835 ARM ARCHITECTURE" 
+        <linux-rpi-kernel@lists.infradead.org>,
+        "moderated list:BROADCOM BCM2711/BCM2835 ARM ARCHITECTURE" 
+        <linux-arm-kernel@lists.infradead.org>
+Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
+        boundary="00000000000079fb1905e34b4d3d"
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -83,28 +79,152 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+--00000000000079fb1905e34b4d3d
+Content-Type: text/plain; charset="UTF-8"
 
-On 29/06/22 14:20, Dietmar Eggemann wrote:
-> While testing cpusets on asymmetric CPU capacity systems I realized that
-> the admission control, which kicks in when the cpumask of a cpuset is
-> about to be changed, is not capacity-aware. [PATCH 2/3] addresses this
-> issue.
-> 
-> Overview:
-> 
-> [PATCH 1/3] - Not part of the DL related changes but here for
->               convenience : Inline helper function around
->               static_branch_unlikely(&sched_asym_cpucapacity)
-> 
-> [PATCH 2/3] - Make dl_cpuset_cpumask_can_shrink() capacity-aware.
-> 
-> [PATCH 3/3] - Save a multiplication in dl_task_fits_capacity() by using
-> 	      already maintained dl_density.
+On Wed, Jul 6, 2022 at 5:42 PM Bjorn Helgaas <helgaas@kernel.org> wrote:
+>
+> On Thu, Dec 09, 2021 at 03:47:25PM -0500, Jim Quinlan wrote:
+> > The current brcmstb driver works for Arm and Arm64.  A few things are
+> > modified here for us to support MIPs as well.
+> >
+> >   o There are four outbound range register groups and each directs a window
+> >     of up to 128MB.  Even though there are four 128MB DT "ranges" in the
+> >     bmips PCIe DT node, these ranges are contiguous and are collapsed into
+> >     a single range by the OF range parser.  Now the driver assumes a single
+> >     range -- for MIPs only -- and splits it back into 128MB sizes.
+> >
+> >   o For bcm7425, the config space accesses must be 32-bit reads or
+> >     writes.  In addition, the 4k config space register array is missing
+> >     and not used.
+> >
+> >   o The registers for the upper 32-bits of the outbound window address do
+> >     not exist.
+> >
+> >   o Burst size must be set to 256 (this refers to an internal bus).
+> > ...
+>
+> > @@ -118,6 +118,7 @@
+> >  #define PCIE_MISC_HARD_PCIE_HARD_DEBUG                                       0x4204
+> >  #define  PCIE_MISC_HARD_PCIE_HARD_DEBUG_CLKREQ_DEBUG_ENABLE_MASK     0x2
+> >  #define  PCIE_MISC_HARD_PCIE_HARD_DEBUG_SERDES_IDDQ_MASK             0x08000000
+> > +#define  PCIE_BMIPS_MISC_HARD_PCIE_HARD_DEBUG_SERDES_IDDQ_MASK               0x00800000
+>
+> > @@ -883,7 +937,10 @@ static int brcm_pcie_setup(struct brcm_pcie *pcie)
+> >       pcie->bridge_sw_init_set(pcie, 0);
+> >
+> >       tmp = readl(base + PCIE_MISC_HARD_PCIE_HARD_DEBUG);
+> > -     tmp &= ~PCIE_MISC_HARD_PCIE_HARD_DEBUG_SERDES_IDDQ_MASK;
+> > +     if (is_bmips(pcie))
+> > +             tmp &= ~PCIE_BMIPS_MISC_HARD_PCIE_HARD_DEBUG_SERDES_IDDQ_MASK;
+> > +     else
+> > +             tmp &= ~PCIE_MISC_HARD_PCIE_HARD_DEBUG_SERDES_IDDQ_MASK;
+> >       writel(tmp, base + PCIE_MISC_HARD_PCIE_HARD_DEBUG);
+> >       /* Wait for SerDes to be stable */
+> >       usleep_range(100, 200);
+>
+> brcm_pcie_resume() has similar code that updates
+> PCIE_MISC_HARD_PCIE_HARD_DEBUG [1]:
+>
+>   tmp = readl(base + PCIE_MISC_HARD_PCIE_HARD_DEBUG);
+>   u32p_replace_bits(&tmp, 0, PCIE_MISC_HARD_PCIE_HARD_DEBUG_SERDES_IDDQ_MASK);
+>   writel(tmp, base + PCIE_MISC_HARD_PCIE_HARD_DEBUG);
+>
+>   /* wait for serdes to be stable */
+>   udelay(100);
+>
+> This patch didn't change brcm_pcie_resume() to check is_bmips().
+> Should it?
+>
+> If so, it would be nice to use the same method for updating the value
+> (either u32p_replace_bits or plain C bitops) in both places.
 
-I had a look as well and, other than Vincent's comment on 3/3, the set
-looked good to me. Looking forward for v2. :)
+Will send a patch to fix this, thanks.
 
-Thanks,
-Juri
+Jim Quinlan
+Broadcom STB
 
+>
+> [1] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers/pci/controller/pcie-brcmstb.c?id=v5.18#n1452
+
+--00000000000079fb1905e34b4d3d
+Content-Type: application/pkcs7-signature; name="smime.p7s"
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment; filename="smime.p7s"
+Content-Description: S/MIME Cryptographic Signature
+
+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
+LeylbuEJGL9I80yqq8e6Z+Q6ulLxa6SopzpoysJe/vEVHgp9jPNppZzwKngVd2iDBRqpKlCngIAM
+DXgVGyEojXnuEbRs3NlB7wq1kJGlYysrnDug55ncJM8CAwEAAaOCAdswggHXMA4GA1UdDwEB/wQE
+AwIFoDCBowYIKwYBBQUHAQEEgZYwgZMwTgYIKwYBBQUHMAKGQmh0dHA6Ly9zZWN1cmUuZ2xvYmFs
+c2lnbi5jb20vY2FjZXJ0L2dzZ2NjcjNwZXJzb25hbHNpZ24yY2EyMDIwLmNydDBBBggrBgEFBQcw
+AYY1aHR0cDovL29jc3AuZ2xvYmFsc2lnbi5jb20vZ3NnY2NyM3BlcnNvbmFsc2lnbjJjYTIwMjAw
+TQYDVR0gBEYwRDBCBgorBgEEAaAyASgKMDQwMgYIKwYBBQUHAgEWJmh0dHBzOi8vd3d3Lmdsb2Jh
+bHNpZ24uY29tL3JlcG9zaXRvcnkvMAkGA1UdEwQCMAAwSQYDVR0fBEIwQDA+oDygOoY4aHR0cDov
+L2NybC5nbG9iYWxzaWduLmNvbS9nc2djY3IzcGVyc29uYWxzaWduMmNhMjAyMC5jcmwwJQYDVR0R
+BB4wHIEaamFtZXMucXVpbmxhbkBicm9hZGNvbS5jb20wEwYDVR0lBAwwCgYIKwYBBQUHAwQwHwYD
+VR0jBBgwFoAUljPR5lgXWzR1ioFWZNW+SN6hj88wHQYDVR0OBBYEFCeTeUYv84Mo3T1V+OyDdxib
+DDLvMA0GCSqGSIb3DQEBCwUAA4IBAQCCqR1PBVtHPvQHuG8bjMFQ94ZB7jmFEGhgfAsFJMaSMLov
+qyt8DKr8suCYF4dKGzqalbxo5QU9mmZXdLifqceHdt/Satxb+iGJjBhZg4E0cDds24ofYq+Lbww2
+YlIKC2HHxIN+JX2mFpavSXkshR5GT29B9EIJ8hgSjbs61XXeAcrmVIDfYbXQEmGbsnwqxdq+DJpQ
+S2kM2wvSlgSWDb6pL7myuKR5lCkQhj7piGSgrVLJRDRrMPw1L4MvnV9DjUFMlGCB40Hm6xqn/jm0
+8FCLlWhxve5mj+hgUOPETiKbjhCxJhhAPDdCvDRkZtJlQ8oxUVvXHugG8jm1YqB5AWx7MYICbTCC
+AmkCAQEwazBbMQswCQYDVQQGEwJCRTEZMBcGA1UEChMQR2xvYmFsU2lnbiBudi1zYTExMC8GA1UE
+AxMoR2xvYmFsU2lnbiBHQ0MgUjMgUGVyc29uYWxTaWduIDIgQ0EgMjAyMAIMI+Aj9XRk/wFexb9/
+MA0GCWCGSAFlAwQCAQUAoIHUMC8GCSqGSIb3DQEJBDEiBCCeYBHuLa/ys0kLMipzxxve69uaeFZL
+3HJKHcRYyJd63TAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcBMBwGCSqGSIb3DQEJBTEPFw0yMjA3
+MDgxMzM3MjVaMGkGCSqGSIb3DQEJDzFcMFowCwYJYIZIAWUDBAEqMAsGCWCGSAFlAwQBFjALBglg
+hkgBZQMEAQIwCgYIKoZIhvcNAwcwCwYJKoZIhvcNAQEKMAsGCSqGSIb3DQEBBzALBglghkgBZQME
+AgEwDQYJKoZIhvcNAQEBBQAEggEAXL/FFlhM2qBgkAR83p/e3hoMYVVRB+nFSsmkYOU5iCACx3/a
+CXTr79M2JsyU3U7zMlo+LYD1LnWU22/0ex3txXKe0PP2RuoHQp9WqFJL+PsrWwRdaxB3/9e8TkLY
+a4/wIDlTWS90vCt+W7svIVFgWvX+3v9qSF0fwHHqm0fuFntp2NIRArvZj0AfIYRokdzQUvrEss61
++rYz2BPxUTrYbXLcse5wRHB/WngqabjZro6AvADbHVtUQa4ITz5CZpifVeRrWUJr9rbiNtJz0goE
+kk8Dy3NbFcbeSpMQ0N1xjQPGYsSkeEVNAAt1c/3txrfQS92TnwQF5Hlcd78tHUUVfw==
+--00000000000079fb1905e34b4d3d--

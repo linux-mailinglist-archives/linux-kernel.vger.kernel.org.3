@@ -2,83 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A6E7B56AF81
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 03:07:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6323156AFA6
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 03:07:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236615AbiGHA4k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Jul 2022 20:56:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56376 "EHLO
+        id S236649AbiGHA6r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Jul 2022 20:58:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58362 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236578AbiGHA4i (ORCPT
+        with ESMTP id S236431AbiGHA6o (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Jul 2022 20:56:38 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5EB8271BC2;
-        Thu,  7 Jul 2022 17:56:37 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id CDF0361549;
-        Fri,  8 Jul 2022 00:56:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EB864C3411E;
-        Fri,  8 Jul 2022 00:56:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1657241796;
-        bh=ayQK51zQUw6L0j2QP5jHygvivUNFb7EtQeLp3gQ4Twg=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=kc8Y3i1RZ5F7Wq74+CuWysW4VctMxt6YR101tUjXAcIkho6nYaISfcbTQdarzPjO4
-         d+eAaFFLKbBRMCIQzKBCGyPN9hH6G+EXPlG+8IpWwLuDEFc5DnMyCiB44m4MM4cpO9
-         2Vhqfc6sq+rI0NLKmKsDaxiao0WLjj4STr8Km63Dak8OW9GTBTw0Vg/5+fxY37Hrf8
-         G5IrcEa4wHVIT2kwijf7/+4yJcuR4kwhOvqTAUFVggzn1GieU+/v6Mx7UeMDi2HZfs
-         7ugxaGTtbcZM+z8fhowDIlEVDJqxi5ahGAfaMri5DVk7J4UEUuGP5eJgCjA78EniN9
-         lY4QeaOcXFKeg==
-Date:   Thu, 7 Jul 2022 17:56:27 -0700
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     Maksym Glubokiy <maksym.glubokiy@plvision.eu>
-Cc:     "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Jamal Hadi Salim <jhs@mojatatu.com>,
-        Cong Wang <xiyou.wangcong@gmail.com>,
-        Jiri Pirko <jiri@resnulli.us>,
-        Volodymyr Mytnyk <volodymyr.mytnyk@plvision.eu>,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH net-next 1/2] net: extract port range fields from
- fl_flow_key
-Message-ID: <20220707175627.7c6fc403@kernel.org>
-In-Reply-To: <20220707083539.171242-1-maksym.glubokiy@plvision.eu>
-References: <20220707083539.171242-1-maksym.glubokiy@plvision.eu>
+        Thu, 7 Jul 2022 20:58:44 -0400
+Received: from mail-pg1-f195.google.com (mail-pg1-f195.google.com [209.85.215.195])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C717C186FB;
+        Thu,  7 Jul 2022 17:58:43 -0700 (PDT)
+Received: by mail-pg1-f195.google.com with SMTP id i190so8469239pge.7;
+        Thu, 07 Jul 2022 17:58:43 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=wqH5lkEcgEYk9IYTlg7iiusMTMJ78GFXYQavtNkHZMw=;
+        b=tY1CseSFgf1BX+Xb0hgwKGonuCKpWHRdahzU1iZXdFZCMbdXAkiNd1qvro9i7v7Kkp
+         5OO8eCRRMkwFylG9hJHiwbCPomQTVZYff1yknfBrWDDvohYubOMLRJIRHxZCoQI+m9uf
+         Zaf33qmSOvlqNxEdraPHvMHxT/sW5vA93ZWnoau5r5SPXT/9EV+gImL7H1kYIdtSN3Kt
+         UTK8WN++QGPgcTJUP/UmCp/F94KlqaasJ5QioYeMM3VJaNXXHPqRDmcDmS/ctGgHW63v
+         2IPBb40UtUm39wV5iX+kOfkVpdcDuW2F32NR5tnb+rI2BFyDhXzby6RTjhhn8/Z2mTjj
+         Zo8g==
+X-Gm-Message-State: AJIora9DASxokymVOVJc01ZHbfDVpy5Mh71ogF3/3mN6kzSqqZD/hdD6
+        UrP7viq90Fchn91H0869/g==
+X-Google-Smtp-Source: AGRyM1vacj7yRlF6w+n1Bho6IKjJtTx/+ZIht2cmpzn70gZgkzg8M8pXSk63aKGy6xj6m/IaJpgGqw==
+X-Received: by 2002:a63:ea05:0:b0:411:f94f:b80f with SMTP id c5-20020a63ea05000000b00411f94fb80fmr789435pgi.189.1657241923152;
+        Thu, 07 Jul 2022 17:58:43 -0700 (PDT)
+Received: from localhost.localdomain ([156.146.53.107])
+        by smtp.gmail.com with ESMTPSA id a140-20020a621a92000000b005289fbef7c4sm5034884pfa.140.2022.07.07.17.58.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 07 Jul 2022 17:58:42 -0700 (PDT)
+From:   sunliming <sunliming@kylinos.cn>
+To:     christian.koenig@amd.com, robdclark@gmail.com,
+        quic_abhinavk@quicinc.com, dmitry.baryshkov@linaro.org
+Cc:     freedreno@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, kelulanainsley@gmail.com,
+        sunliming <sunliming@kylinos.cn>,
+        kernel test robot <lkp@intel.com>
+Subject: [PATCH RESEND] drm/msm/dsi: fix the inconsistent indenting
+Date:   Fri,  8 Jul 2022 08:58:32 +0800
+Message-Id: <20220708005832.439722-1-sunliming@kylinos.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu,  7 Jul 2022 11:35:38 +0300 Maksym Glubokiy wrote:
-> +/**
-> + * flow_dissector_key_ports_range:
-> + *		tp:     port number from packet
-> + *		tp_min: min port number in range
-> + *		tp_max: max port number in range
-> + */
+Fix the inconsistent indenting in function msm_dsi_dphy_timing_calc_v3().
 
-This is not valid kdoc, please see
-Documentation/doc-guide/kernel-doc.rst
+Fix the following smatch warnings:
 
-> +struct flow_dissector_key_ports_range {
-> +	union {
-> +		struct flow_dissector_key_ports tp;
-> +		struct {
-> +			struct flow_dissector_key_ports tp_min;
-> +			struct flow_dissector_key_ports tp_max;
-> +		};
-> +	};
-> +};
+drivers/gpu/drm/msm/dsi/phy/dsi_phy.c:350 msm_dsi_dphy_timing_calc_v3() warn: inconsistent indenting
+
+Reported-by: kernel test robot <lkp@intel.com>
+Signed-off-by: sunliming <sunliming@kylinos.cn>
+---
+ drivers/gpu/drm/msm/dsi/phy/dsi_phy.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/gpu/drm/msm/dsi/phy/dsi_phy.c b/drivers/gpu/drm/msm/dsi/phy/dsi_phy.c
+index a39de3bdc7fa..56dfa2d24be1 100644
+--- a/drivers/gpu/drm/msm/dsi/phy/dsi_phy.c
++++ b/drivers/gpu/drm/msm/dsi/phy/dsi_phy.c
+@@ -347,7 +347,7 @@ int msm_dsi_dphy_timing_calc_v3(struct msm_dsi_dphy_timing *timing,
+ 	} else {
+ 		timing->shared_timings.clk_pre =
+ 			linear_inter(tmax, tmin, pcnt2, 0, false);
+-			timing->shared_timings.clk_pre_inc_by_2 = 0;
++		timing->shared_timings.clk_pre_inc_by_2 = 0;
+ 	}
+ 
+ 	timing->ta_go = 3;
+-- 
+2.25.1
 

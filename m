@@ -2,94 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E52AA56B47C
+	by mail.lfdr.de (Postfix) with ESMTP id 5252456B47A
 	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 10:29:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237678AbiGHI02 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Jul 2022 04:26:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59528 "EHLO
+        id S237555AbiGHI0L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Jul 2022 04:26:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59156 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237564AbiGHI00 (ORCPT
+        with ESMTP id S237510AbiGHI0J (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Jul 2022 04:26:26 -0400
-Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CF12814AA
-        for <linux-kernel@vger.kernel.org>; Fri,  8 Jul 2022 01:26:25 -0700 (PDT)
-Received: by mail-wm1-x333.google.com with SMTP id ay25so2328750wmb.1
-        for <linux-kernel@vger.kernel.org>; Fri, 08 Jul 2022 01:26:25 -0700 (PDT)
+        Fri, 8 Jul 2022 04:26:09 -0400
+Received: from mail-lj1-x22d.google.com (mail-lj1-x22d.google.com [IPv6:2a00:1450:4864:20::22d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB8438149F
+        for <linux-kernel@vger.kernel.org>; Fri,  8 Jul 2022 01:26:08 -0700 (PDT)
+Received: by mail-lj1-x22d.google.com with SMTP id bn33so3701214ljb.13
+        for <linux-kernel@vger.kernel.org>; Fri, 08 Jul 2022 01:26:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=/OVTFWFueCRPCSOvGcnm5qhmYMmcAYT2qYgKyKk2GrU=;
-        b=QayVImNEczOhK0XOfo/Un1TkE91WIaEh4vd5WGqaoap8Zp3zXyX1dE2P6RqQrpT1XS
-         oy1BzMte5WWi0qpuvNFLbedtjg2n7Za2D4EYGowA6pIDEJpZATtjx7KTCqtGGcRO+0Hm
-         w4Ot42GczZ1AqfqjZNrfsIYwRBv4+h7ReSSB9exmjeAS3NcLvVOm3Cp0vlKsBAUZLeK4
-         3U0QqPn/SGSigUG8o6BjBZ/4XRXPETHIM0smmMd84MTwqwWFc+HDBmhlrFEZT6wwwNtr
-         wRf5occqwIOBxSXFsjoS+goTKLITad0wByayOqYY9Tj1R8PO6+gn4sR8T1ZFngyCv/Yb
-         FUxA==
+        d=rasmusvillemoes.dk; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=QcuR31vW41GUzhVABKFvJEfXITQ2atVEdkZJRGOLjc0=;
+        b=imhC2SZYsAxajeYaHaEGj5cgIcJ2UtGvjGz1O1fniWFyM6vSGMflOvSmmY8f/DCkE7
+         ETn74yO6Lln5p7gj0Ox1gmPB7gsNRt2WJ5c32/2LfokIadIZxVsZAr+kLkP68SAFrJ3Q
+         SFbDZYLTKgmaWW614S4DMOWgfQcRXfWkc2H+Y=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=/OVTFWFueCRPCSOvGcnm5qhmYMmcAYT2qYgKyKk2GrU=;
-        b=MwpM5MDpXF9l4YpwgEupHnLSb3AejAOe4pl7SIE1A7wBmf3C1H+fjVE01OOle4DkV1
-         SJeibrjBemj+5mCPxC7+03bbSqw09PTw+BD0OK0sgwc1Uxm66Oz5vfQ3aJc4O1kaJD99
-         iE16SLtg6xOHxTzDIPzSYo/u2nize3lv/bOqOTWgHGpU9oEw7v3qyi0TAeOA5AQcKGS6
-         1jYjKWhrhFgE/AgjIED9aGhsypNXcaQVg/SjobXwVko85eYFYfU0vEN6qCIfaVHHJOC0
-         2Ehhakp2MxA4UKzrTFUnhuwfQbRqwyvyESZGfEJQ8WwZvGwa5B+zAcEFL3Qf/eoEbwKa
-         UqRQ==
-X-Gm-Message-State: AJIora9A8IJrRzReCZY3fbo6ovb2LtUQ+3DMKUnboaXhC3jKkw5tLRMm
-        Dx4vZzP4dVWn12pdmOBqvX7C+Q==
-X-Google-Smtp-Source: AGRyM1v4J522/CsbJ15YeUOvSaWI8hyF/D8ynhoDdCisWlk5JSxaXP8LbE/H1oMLQMyP+D4lTEzv7Q==
-X-Received: by 2002:a05:600c:3491:b0:3a0:4d4a:2e2d with SMTP id a17-20020a05600c349100b003a04d4a2e2dmr9448093wmq.4.1657268783790;
-        Fri, 08 Jul 2022 01:26:23 -0700 (PDT)
-Received: from myrica (cpc92880-cmbg19-2-0-cust679.5-4.cable.virginm.net. [82.27.106.168])
-        by smtp.gmail.com with ESMTPSA id l1-20020a7bc441000000b003a2cf1535aasm1403895wmi.17.2022.07.08.01.26.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 08 Jul 2022 01:26:23 -0700 (PDT)
-Date:   Fri, 8 Jul 2022 09:25:58 +0100
-From:   Jean-Philippe Brucker <jean-philippe@linaro.org>
-To:     Xu Kuohai <xukuohai@huawei.com>
-Cc:     bpf@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        Mark Rutland <mark.rutland@arm.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Zi Shen Lim <zlim.lnx@gmail.com>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        "David S . Miller" <davem@davemloft.net>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        David Ahern <dsahern@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H . Peter Anvin" <hpa@zytor.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        Russell King <rmk+kernel@armlinux.org.uk>,
-        James Morse <james.morse@arm.com>,
-        Hou Tao <houtao1@huawei.com>,
-        Jason Wang <wangborong@cdjrlc.com>
-Subject: Re: [PATCH bpf-next v6 3/4] bpf, arm64: Impelment
- bpf_arch_text_poke() for arm64
-Message-ID: <YsfqFp+IkhvXPoDl@myrica>
-References: <20220625161255.547944-1-xukuohai@huawei.com>
- <20220625161255.547944-4-xukuohai@huawei.com>
- <YscMo+jlif44bxBP@larix>
- <b2d21d18-2fc1-be68-f8ac-d185fcfadbbd@huawei.com>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=QcuR31vW41GUzhVABKFvJEfXITQ2atVEdkZJRGOLjc0=;
+        b=orLHi23UcoB0u5PhQ7X3LpiiEJs6rezdISirBh1bUkgnfAxdXZWt2p0lBnBkgFgpd7
+         /mIQxprt8xcK7m+5TVz8uI2rXfxfrSmLU0T+XVJTat8Bjg7UjV9CJRve7010xorfSkWZ
+         mtVUd98GubuXRX3VcCaQIXgCtx4am0bbyAe2ge8YTTB7EdWiOoCWt8yAs2EheYxH+GEr
+         3QFVPf3nvOEmzTwzrrhRUKp4FJfQhcDYKNJeAci00E3sDBlD0B7v+7PxA/LQHMRUkJ30
+         NkpEd81WkKu+LCfXRtujPeFh8CEoAZveIsNGBCDM0XSz4RvAshW07a3uvULbMvFiGTaF
+         QIyA==
+X-Gm-Message-State: AJIora9yXFbAg29a7FNTVxRJ1UGtuFNKzZN1LwMpyGfqncylgImyRhnV
+        qT/Kc5+w84AGLVJGXfeo1UwMvA==
+X-Google-Smtp-Source: AGRyM1tFSbzy0c34K2tQw0le8avqgts4y+aW0HZExcIoKSt3CboVkAvDX2MhDeSXCkyKjSBgPE2OGQ==
+X-Received: by 2002:a05:651c:b0f:b0:25d:38e0:a5a5 with SMTP id b15-20020a05651c0b0f00b0025d38e0a5a5mr1290650ljr.278.1657268767090;
+        Fri, 08 Jul 2022 01:26:07 -0700 (PDT)
+Received: from [172.16.11.74] ([81.216.59.226])
+        by smtp.gmail.com with ESMTPSA id r14-20020ac252ae000000b0047fa2cc38ccsm7274697lfm.198.2022.07.08.01.26.05
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 08 Jul 2022 01:26:06 -0700 (PDT)
+Message-ID: <d86ad462-fb4c-4768-b060-201511f9ff64@rasmusvillemoes.dk>
+Date:   Fri, 8 Jul 2022 10:26:04 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <b2d21d18-2fc1-be68-f8ac-d185fcfadbbd@huawei.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH 1/5] lib: add find_nth(,and,andnot)_bit()
+Content-Language: en-US
+To:     Yury Norov <yury.norov@gmail.com>
+Cc:     linux-kernel@vger.kernel.org,
+        Alexander Lobakin <alexandr.lobakin@intel.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Arnd Bergmann <arnd@arndb.de>, David Gow <davidgow@google.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Isabella Basso <isabbasso@riseup.net>,
+        Kees Cook <keescook@chromium.org>,
+        Keith Busch <kbusch@kernel.org>,
+        Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+        Marco Elver <elver@google.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        =?UTF-8?Q?Toke_H=c3=b8iland-J=c3=b8rgensen?= <toke@redhat.com>
+References: <20220706182300.70862-1-yury.norov@gmail.com>
+ <20220706182300.70862-2-yury.norov@gmail.com>
+ <423c4368-0a1c-792c-2637-768532fc7782@rasmusvillemoes.dk>
+ <YsdKMQzUFVwIaqtJ@yury-laptop>
+From:   Rasmus Villemoes <linux@rasmusvillemoes.dk>
+In-Reply-To: <YsdKMQzUFVwIaqtJ@yury-laptop>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -98,44 +85,20 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jul 08, 2022 at 10:41:46AM +0800, Xu Kuohai wrote:
-> >> +/* generated prologue:
-> >> + *      bti c // if CONFIG_ARM64_BTI_KERNEL
-> >> + *      mov x9, lr
-> >> + *      nop  // POKE_OFFSET
-> >> + *      paciasp // if CONFIG_ARM64_PTR_AUTH_KERNEL
-> > 
-> > Any reason for the change regarding BTI and pointer auth?  We used to put
-> > 'bti c' at the function entry if (BTI && !PA), or 'paciasp' if (BTI && PA),
-> > because 'paciasp' is an implicit BTI.
-> > 
-> 
-> Assuming paciasp is the first instruction if (BTI && PA), when a
-> trampoline with BPF_TRAMP_F_CALL_ORIG flag attached, we'll encounter the
-> following scenario.
-> 
-> bpf_prog:
->         paciasp // LR1
->         mov x9, lr
->         bl <trampoline> ----> trampoline:
->                                       ....
->                                       mov x10, <entry_for_CALL_ORIG>
->                                       blr x10
->                                         |
-> CALL_ORIG_entry:                        |
->         bti c        <------------------|
->         stp x29, lr, [sp, #- 16]!
->         ...
->         autiasp // LR2
->         ret
-> 
-> Because LR1 and LR2 are not equal, the autiasp will fail!
-> 
-> To make this scenario work properly, the first instruction should be
-> 'bti c'.
+On 07/07/2022 23.03, Yury Norov wrote:
 
-Right my mistake, this layout is also what GCC generates for normal kernel
-functions when (BTI && PA), so it makes sense to use the same
+>> And I don't
+>> like that the index is apparently 1-based (and that surprising API isn't
+>> spelled out anywhere).
+> 
+> Yeah... My motivation to start counting from 1 is to keep consistency
+> with ffs: __ffs(word) <=> fns(word, 1). 
 
-Thanks,
-Jean
+I understand that you're translating that second f in ffs (find First
+set) to a 1. But I disagree that that's necessarily a logical thing to
+do. Everybody understands that (given a C or python or... context) when
+some prose talks about "the first element in an array", it's the one at
+[0]. So I find it much more natural that the set bits in a word are
+enumerated 0, 1, ..., popcount(w)-1.
+
+Rasmus

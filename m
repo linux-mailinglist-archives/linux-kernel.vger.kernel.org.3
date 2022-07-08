@@ -2,216 +2,342 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 21FB356BAB0
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 15:30:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8484C56BABF
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 15:30:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238108AbiGHN3i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Jul 2022 09:29:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35804 "EHLO
+        id S238155AbiGHN3x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Jul 2022 09:29:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35872 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237925AbiGHN3g (ORCPT
+        with ESMTP id S237925AbiGHN3l (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Jul 2022 09:29:36 -0400
-Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 435AC2CC99;
-        Fri,  8 Jul 2022 06:29:35 -0700 (PDT)
-Received: by mail-ej1-x631.google.com with SMTP id os14so7491505ejb.4;
-        Fri, 08 Jul 2022 06:29:35 -0700 (PDT)
+        Fri, 8 Jul 2022 09:29:41 -0400
+Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4BD22CCAC
+        for <linux-kernel@vger.kernel.org>; Fri,  8 Jul 2022 06:29:39 -0700 (PDT)
+Received: by mail-ej1-x630.google.com with SMTP id h23so37668366ejj.12
+        for <linux-kernel@vger.kernel.org>; Fri, 08 Jul 2022 06:29:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=uKpz2hIFkMSX8+Jn3dQ6G5odMPV44ms8vUCSjM1Q8xE=;
-        b=R2T851vRAWZbPMbQshMB1K4HXXvQGKLBfFMP4eYektBWPKFN4TeFTJzE6xg2ttgT+K
-         wDZChTcbOdi/0w9w2iV9Izxaq+uQ2k+Qvr1rPZWfF9afaypiFpJ9HxaMsCNuv2DiSlpB
-         bBXB9y2XV0xlDpSSOSJfeAfx9dERK8g9EBejf+RjHeiiSHTtBhCYiA0QtXt1+olLbGVJ
-         vT3Vi8l9zd1C4Xn/vXB4PCiOFEb+9j8FZutF28c4eLkNCLwQwH0YsO5LEmj10yA9693k
-         ffnlppw7IkoXp3H5YavG5ypMd/7vGi8bV1jsD122UGp2LWJY2IIH2Y3ea6cgIXPH97yC
-         G77w==
+        d=broadcom.com; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=xxaUzWP5kjOKnJRfyBVc4g8f/FYgkgPxn7VHNjUxSs4=;
+        b=V31ENY5AHSY2scsIBPtL1f+qM8g2NPCvgNOAzCCAz8ksSJHDwrrtZ3c0+NZPgPwric
+         ZzRlrf6sAeqla3uoJjX5LssAZZhw0bGEJS1GbHh+3IACPk4twPlj1hPFbNLKE8sP7jAS
+         3EuZyHlY6e4Haz00E+9eu03tJVIpRCBSBnOrI=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=uKpz2hIFkMSX8+Jn3dQ6G5odMPV44ms8vUCSjM1Q8xE=;
-        b=4lWEpbqoip/u3lXBbamYqwKZc3bgdvM3QdKQHmNajUvKJ2xehU5tQNzMl4AZLMqW11
-         3SGJ1o9r+QxIWDl66aFgOpVMn25DBEqhtvUB9ZDFtC6a9RkFxRB0Jt7SKDNyUUKDxvKO
-         bPJF4CcqL1qOwmYbH8fQtHHgbSZkMsYk+k+Z4wXPR/fjXpO6y35ypWXDZOBiGQFuY7qH
-         O3doYReZJoTmgHdsfMPlHVnw+ay9F9xmzgoqBnzPAy5cbq80lf4qCUFyd7Y/dZoklCt7
-         AgYwg8VJrPoU6hsUclR2cZa0vLxHJMrjAt+QyP9+ZSuW5EO/VGExCwRMEy5rYUsGjXy9
-         iAWQ==
-X-Gm-Message-State: AJIora8ADir6zuP2yr3YMhY0Sva9QPJn6Qr3XaYUZgOIREPGLfoK7Eul
-        vlOylcSvLUzyiNq6VFXm4QTdXLWokQxpeQ==
-X-Google-Smtp-Source: AGRyM1v8wrUxFSLlQjG3zZ+CFLAKsVWRTzldotgyH0w9zklfx99kiM0osVvik7zfy7qzUbIFD6Bksw==
-X-Received: by 2002:a17:906:8a4a:b0:72a:3de2:1268 with SMTP id gx10-20020a1709068a4a00b0072a3de21268mr3722941ejc.152.1657286973811;
-        Fri, 08 Jul 2022 06:29:33 -0700 (PDT)
-Received: from fedora.robimarko.hr (dh207-96-250.xnet.hr. [88.207.96.250])
-        by smtp.googlemail.com with ESMTPSA id q4-20020a1709064cc400b006fec4ee28d0sm20170398ejt.189.2022.07.08.06.29.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 08 Jul 2022 06:29:33 -0700 (PDT)
-From:   Robert Marko <robimarko@gmail.com>
-To:     agross@kernel.org, bjorn.andersson@linaro.org,
-        konrad.dybcio@somainline.org, amitk@kernel.org,
-        thara.gopinath@gmail.com, rafael@kernel.org,
-        daniel.lezcano@linaro.org, rui.zhang@intel.com, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, linux-arm-msm@vger.kernel.org,
-        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Robert Marko <robimarko@gmail.com>
-Subject: [PATCH v5 2/5] drivers: thermal: tsens: Add support for combined interrupt
-Date:   Fri,  8 Jul 2022 15:29:27 +0200
-Message-Id: <20220708132930.595897-2-robimarko@gmail.com>
-X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220708132930.595897-1-robimarko@gmail.com>
-References: <20220708132930.595897-1-robimarko@gmail.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=xxaUzWP5kjOKnJRfyBVc4g8f/FYgkgPxn7VHNjUxSs4=;
+        b=7JrKxsgddqS/Llyk6oEg3lAg0Drm4Jpk7Vj1eNAoAKBPNdcNqma+/ESVdAR3LC4ZjZ
+         T+jJPsvbGyRiKcdO/ZZytYptp2jg+b87fWELgGdmSCgutegatyM4zYzp4fFMpgBGHPQi
+         WTkf/x/RZsnFYryJvbF9MRnXLurjGGAlQIGbO6TKeOUX2UMsE/WsqgeWyPYrEtpKWD23
+         PAbbvTfXy5I7QinsgC1q2CsQL988oVye7JkoDfYrCuoENcnG8G5+Z7O0q502V38/R8rh
+         noxqeID0y0i4jgaaDgnf4wKWD97WoakQyB2S7cUtWjfzSnsbCOIrRJVDmp+kuGH7sdcL
+         xlPw==
+X-Gm-Message-State: AJIora90PDTmqGhvFZJhKi6LYyqp1mDr4cKu41FDbL/7rnoPiPM2iORS
+        Tf2Yaxr69uQc4PXDlEeXnjmQvdaCfkw0GjFRz/qadQ==
+X-Google-Smtp-Source: AGRyM1vEDj25P8EV7USK0urrEat3wXgNEwKcGOJl0L24kfrPqzLoYuAIUnEf3VJgZeeT/wYsqfY3UZexC0iQ3VUl5/s=
+X-Received: by 2002:a17:907:6e05:b0:72a:a141:962 with SMTP id
+ sd5-20020a1709076e0500b0072aa1410962mr3629511ejc.545.1657286978295; Fri, 08
+ Jul 2022 06:29:38 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20220701162726.31346-2-jim2101024@gmail.com> <20220706215603.GA221278@bhelgaas>
+In-Reply-To: <20220706215603.GA221278@bhelgaas>
+From:   Jim Quinlan <james.quinlan@broadcom.com>
+Date:   Fri, 8 Jul 2022 09:29:27 -0400
+Message-ID: <CA+-6iNzQZVi8MbyeZNcBzE0hGjGiYSUk3riSXxTALtFyC00aPQ@mail.gmail.com>
+Subject: Re: [PATCH v1 1/4] PCI: brcmstb: Split brcm_pcie_setup() into two funcs
+To:     Bjorn Helgaas <helgaas@kernel.org>
+Cc:     Jim Quinlan <jim2101024@gmail.com>,
+        "open list:PCI NATIVE HOST BRIDGE AND ENDPOINT DRIVERS" 
+        <linux-pci@vger.kernel.org>,
+        Nicolas Saenz Julienne <nsaenz@kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Cyril Brulebois <kibi@debian.org>,
+        "maintainer:BROADCOM BCM7XXX ARM ARCHITECTURE" 
+        <bcm-kernel-feedback-list@broadcom.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Rob Herring <robh@kernel.org>,
+        =?UTF-8?Q?Krzysztof_Wilczy=C5=84ski?= <kw@linux.com>,
+        "moderated list:BROADCOM BCM2711/BCM2835 ARM ARCHITECTURE" 
+        <linux-rpi-kernel@lists.infradead.org>,
+        "moderated list:BROADCOM BCM2711/BCM2835 ARM ARCHITECTURE" 
+        <linux-arm-kernel@lists.infradead.org>,
+        open list <linux-kernel@vger.kernel.org>
+Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
+        boundary="000000000000a6888f05e34b31c5"
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Despite using tsens v2.3 IP, IPQ8074 and IPQ6018 only have one IRQ for
-signaling both up/low and critical trips.
+--000000000000a6888f05e34b31c5
+Content-Type: text/plain; charset="UTF-8"
 
-Signed-off-by: Robert Marko <robimarko@gmail.com>
----
- drivers/thermal/qcom/tsens-8960.c |  1 +
- drivers/thermal/qcom/tsens-v0_1.c |  1 +
- drivers/thermal/qcom/tsens-v1.c   |  1 +
- drivers/thermal/qcom/tsens-v2.c   |  1 +
- drivers/thermal/qcom/tsens.c      | 37 ++++++++++++++++++++++++++-----
- drivers/thermal/qcom/tsens.h      |  2 ++
- 6 files changed, 37 insertions(+), 6 deletions(-)
+On Wed, Jul 6, 2022 at 5:56 PM Bjorn Helgaas <helgaas@kernel.org> wrote:
+>
+> On Fri, Jul 01, 2022 at 12:27:22PM -0400, Jim Quinlan wrote:
+> > We need to take some code in brcm_pcie_setup() and put it in a new function
+> > brcm_pcie_linkup().  In future commits the brcm_pcie_linkup() function will
+> > be called indirectly by pci_host_probe() as opposed to the host driver
+> > invoking it directly.
+> >
+> > Some code that was executed after the PCIe linkup is now placed so that it
+> > executes prior to linkup, since this code has to run prior to the
+> > invocation of pci_host_probe().
+>
+> This says we need to move some code from brcm_pcie_setup() to
+> brcm_pcie_linkup(), but not *why* we need to do that.
+I will elaborate in the commit message.
+>
+> In brcm_pcie_resume(), they're called together:
+>
+>   brcm_pcie_resume
+>     brcm_pcie_setup
+>     brcm_pcie_linkup
+>
+> In the probe path, they're not called together, but they're in the
+> same order:
+>
+>   brcm_pcie_probe
+>     brcm_pcie_setup
+>     pci_host_probe
+>       ...
+>         brcm_pcie_add_bus               # bus->ops->add_bus
+>           brcm_pcie_linkup
+>
+> Is there something that must happen *between* them in the probe path?
 
-diff --git a/drivers/thermal/qcom/tsens-8960.c b/drivers/thermal/qcom/tsens-8960.c
-index 67c1748cdf73..ee584e5b07e5 100644
---- a/drivers/thermal/qcom/tsens-8960.c
-+++ b/drivers/thermal/qcom/tsens-8960.c
-@@ -269,6 +269,7 @@ static const struct tsens_ops ops_8960 = {
- static struct tsens_features tsens_8960_feat = {
- 	.ver_major	= VER_0,
- 	.crit_int	= 0,
-+	.combo_int	= 0,
- 	.adc		= 1,
- 	.srot_split	= 0,
- 	.max_sensors	= 11,
-diff --git a/drivers/thermal/qcom/tsens-v0_1.c b/drivers/thermal/qcom/tsens-v0_1.c
-index f136cb350238..6effb822bf3c 100644
---- a/drivers/thermal/qcom/tsens-v0_1.c
-+++ b/drivers/thermal/qcom/tsens-v0_1.c
-@@ -539,6 +539,7 @@ static int calibrate_9607(struct tsens_priv *priv)
- static struct tsens_features tsens_v0_1_feat = {
- 	.ver_major	= VER_0_1,
- 	.crit_int	= 0,
-+	.combo_int	= 0,
- 	.adc		= 1,
- 	.srot_split	= 1,
- 	.max_sensors	= 11,
-diff --git a/drivers/thermal/qcom/tsens-v1.c b/drivers/thermal/qcom/tsens-v1.c
-index 573e261ccca7..a4f561a6e582 100644
---- a/drivers/thermal/qcom/tsens-v1.c
-+++ b/drivers/thermal/qcom/tsens-v1.c
-@@ -302,6 +302,7 @@ static int calibrate_8976(struct tsens_priv *priv)
- static struct tsens_features tsens_v1_feat = {
- 	.ver_major	= VER_1_X,
- 	.crit_int	= 0,
-+	.combo_int	= 0,
- 	.adc		= 1,
- 	.srot_split	= 1,
- 	.max_sensors	= 11,
-diff --git a/drivers/thermal/qcom/tsens-v2.c b/drivers/thermal/qcom/tsens-v2.c
-index b293ed32174b..129cdb247381 100644
---- a/drivers/thermal/qcom/tsens-v2.c
-+++ b/drivers/thermal/qcom/tsens-v2.c
-@@ -31,6 +31,7 @@
- static struct tsens_features tsens_v2_feat = {
- 	.ver_major	= VER_2_X,
- 	.crit_int	= 1,
-+	.combo_int	= 0,
- 	.adc		= 0,
- 	.srot_split	= 1,
- 	.max_sensors	= 16,
-diff --git a/drivers/thermal/qcom/tsens.c b/drivers/thermal/qcom/tsens.c
-index 7963ee33bf75..8029cd1172bd 100644
---- a/drivers/thermal/qcom/tsens.c
-+++ b/drivers/thermal/qcom/tsens.c
-@@ -532,6 +532,26 @@ static irqreturn_t tsens_irq_thread(int irq, void *data)
- 	return IRQ_HANDLED;
- }
- 
-+/**
-+ * tsens_combined_irq_thread - Threaded interrupt handler for combined interrupts
-+ * @irq: irq number
-+ * @data: tsens controller private data
-+ *
-+ * Handle the combined interrupt as if it were 2 separate interrupts, so call the
-+ * critical handler first and then the up/low one.
-+ *
-+ * Return: IRQ_HANDLED
-+ */
-+static irqreturn_t tsens_combined_irq_thread(int irq, void *data)
-+{
-+	irqreturn_t ret;
-+
-+	ret = tsens_critical_irq_thread(irq, data);
-+	ret = tsens_irq_thread(irq, data);
-+
-+	return ret;
-+}
-+
- static int tsens_set_trips(void *_sensor, int low, int high)
- {
- 	struct tsens_sensor *s = _sensor;
-@@ -1083,13 +1103,18 @@ static int tsens_register(struct tsens_priv *priv)
- 				   tsens_mC_to_hw(priv->sensor, 0));
- 	}
- 
--	ret = tsens_register_irq(priv, "uplow", tsens_irq_thread);
--	if (ret < 0)
--		return ret;
-+	if (priv->feat->combo_int) {
-+		ret = tsens_register_irq(priv, "combined",
-+					 tsens_combined_irq_thread);
-+	} else {
-+		ret = tsens_register_irq(priv, "uplow", tsens_irq_thread);
-+		if (ret < 0)
-+			return ret;
- 
--	if (priv->feat->crit_int)
--		ret = tsens_register_irq(priv, "critical",
--					 tsens_critical_irq_thread);
-+		if (priv->feat->crit_int)
-+			ret = tsens_register_irq(priv, "critical",
-+						 tsens_critical_irq_thread);
-+	}
- 
- 	return ret;
- }
-diff --git a/drivers/thermal/qcom/tsens.h b/drivers/thermal/qcom/tsens.h
-index 1471a2c00f15..4614177944d6 100644
---- a/drivers/thermal/qcom/tsens.h
-+++ b/drivers/thermal/qcom/tsens.h
-@@ -495,6 +495,7 @@ enum regfield_ids {
-  * struct tsens_features - Features supported by the IP
-  * @ver_major: Major number of IP version
-  * @crit_int: does the IP support critical interrupts?
-+ * @combo_int: does the IP use one IRQ for up, low and critical thresholds?
-  * @adc:      do the sensors only output adc code (instead of temperature)?
-  * @srot_split: does the IP neatly splits the register space into SROT and TM,
-  *              with SROT only being available to secure boot firmware?
-@@ -504,6 +505,7 @@ enum regfield_ids {
- struct tsens_features {
- 	unsigned int ver_major;
- 	unsigned int crit_int:1;
-+	unsigned int combo_int:1;
- 	unsigned int adc:1;
- 	unsigned int srot_split:1;
- 	unsigned int has_watchdog:1;
--- 
-2.36.1
+Yes.  In the probe() case, we must do things in this order:
 
+1. brcm_pcie_setup()
+2. Turn on regulators
+3. brcm_pcie_linkup()
+
+Since the voltage regulators are turned on during enumeration, pci_host_probe()
+must be invoked prior to 3.  Before regulators, we did not care.
+
+In the resume case, there is no enumeration of course but our driver
+has a handle to
+the regulators and can turn them on/off w/o help.
+
+Regards,
+Jim  Quinlan
+Broradcom STB
+
+>
+> > Link: https://lore.kernel.org/r/20220106160332.2143-5-jim2101024@gmail.com
+> > Signed-off-by: Jim Quinlan <jim2101024@gmail.com>
+> > ---
+> >  drivers/pci/controller/pcie-brcmstb.c | 69 +++++++++++++++++----------
+> >  1 file changed, 43 insertions(+), 26 deletions(-)
+> >
+> > diff --git a/drivers/pci/controller/pcie-brcmstb.c b/drivers/pci/controller/pcie-brcmstb.c
+> > index e61058e13818..2bf5cc399fd0 100644
+> > --- a/drivers/pci/controller/pcie-brcmstb.c
+> > +++ b/drivers/pci/controller/pcie-brcmstb.c
+> > @@ -926,16 +926,9 @@ static inline int brcm_pcie_get_rc_bar2_size_and_offset(struct brcm_pcie *pcie,
+> >
+> >  static int brcm_pcie_setup(struct brcm_pcie *pcie)
+> >  {
+> > -     struct pci_host_bridge *bridge = pci_host_bridge_from_priv(pcie);
+> >       u64 rc_bar2_offset, rc_bar2_size;
+> >       void __iomem *base = pcie->base;
+> > -     struct device *dev = pcie->dev;
+> > -     struct resource_entry *entry;
+> > -     bool ssc_good = false;
+> > -     struct resource *res;
+> > -     int num_out_wins = 0;
+> > -     u16 nlw, cls, lnksta;
+> > -     int i, ret, memc;
+> > +     int ret, memc;
+> >       u32 tmp, burst, aspm_support;
+> >
+> >       /* Reset the bridge */
+> > @@ -1025,6 +1018,40 @@ static int brcm_pcie_setup(struct brcm_pcie *pcie)
+> >       if (pcie->gen)
+> >               brcm_pcie_set_gen(pcie, pcie->gen);
+> >
+> > +     /* Don't advertise L0s capability if 'aspm-no-l0s' */
+> > +     aspm_support = PCIE_LINK_STATE_L1;
+> > +     if (!of_property_read_bool(pcie->np, "aspm-no-l0s"))
+> > +             aspm_support |= PCIE_LINK_STATE_L0S;
+> > +     tmp = readl(base + PCIE_RC_CFG_PRIV1_LINK_CAPABILITY);
+> > +     u32p_replace_bits(&tmp, aspm_support,
+> > +             PCIE_RC_CFG_PRIV1_LINK_CAPABILITY_ASPM_SUPPORT_MASK);
+> > +     writel(tmp, base + PCIE_RC_CFG_PRIV1_LINK_CAPABILITY);
+> > +
+> > +     /*
+> > +      * For config space accesses on the RC, show the right class for
+> > +      * a PCIe-PCIe bridge (the default setting is to be EP mode).
+> > +      */
+> > +     tmp = readl(base + PCIE_RC_CFG_PRIV1_ID_VAL3);
+> > +     u32p_replace_bits(&tmp, 0x060400,
+> > +                       PCIE_RC_CFG_PRIV1_ID_VAL3_CLASS_CODE_MASK);
+> > +     writel(tmp, base + PCIE_RC_CFG_PRIV1_ID_VAL3);
+> > +
+> > +     return 0;
+> > +}
+> > +
+> > +static int brcm_pcie_linkup(struct brcm_pcie *pcie)
+> > +{
+> > +     struct pci_host_bridge *bridge = pci_host_bridge_from_priv(pcie);
+> > +     struct device *dev = pcie->dev;
+> > +     void __iomem *base = pcie->base;
+> > +     struct resource_entry *entry;
+> > +     struct resource *res;
+> > +     int num_out_wins = 0;
+> > +     u16 nlw, cls, lnksta;
+> > +     bool ssc_good = false;
+> > +     u32 tmp;
+> > +     int ret, i;
+> > +
+> >       /* Unassert the fundamental reset */
+> >       pcie->perst_set(pcie, 0);
+> >
+> > @@ -1075,24 +1102,6 @@ static int brcm_pcie_setup(struct brcm_pcie *pcie)
+> >               num_out_wins++;
+> >       }
+> >
+> > -     /* Don't advertise L0s capability if 'aspm-no-l0s' */
+> > -     aspm_support = PCIE_LINK_STATE_L1;
+> > -     if (!of_property_read_bool(pcie->np, "aspm-no-l0s"))
+> > -             aspm_support |= PCIE_LINK_STATE_L0S;
+> > -     tmp = readl(base + PCIE_RC_CFG_PRIV1_LINK_CAPABILITY);
+> > -     u32p_replace_bits(&tmp, aspm_support,
+> > -             PCIE_RC_CFG_PRIV1_LINK_CAPABILITY_ASPM_SUPPORT_MASK);
+> > -     writel(tmp, base + PCIE_RC_CFG_PRIV1_LINK_CAPABILITY);
+> > -
+> > -     /*
+> > -      * For config space accesses on the RC, show the right class for
+> > -      * a PCIe-PCIe bridge (the default setting is to be EP mode).
+> > -      */
+> > -     tmp = readl(base + PCIE_RC_CFG_PRIV1_ID_VAL3);
+> > -     u32p_replace_bits(&tmp, 0x060400,
+> > -                       PCIE_RC_CFG_PRIV1_ID_VAL3_CLASS_CODE_MASK);
+> > -     writel(tmp, base + PCIE_RC_CFG_PRIV1_ID_VAL3);
+> > -
+> >       if (pcie->ssc) {
+> >               ret = brcm_pcie_set_ssc(pcie);
+> >               if (ret == 0)
+> > @@ -1281,6 +1290,10 @@ static int brcm_pcie_resume(struct device *dev)
+> >       if (ret)
+> >               goto err_reset;
+> >
+> > +     ret = brcm_pcie_linkup(pcie);
+> > +     if (ret)
+> > +             goto err_reset;
+> > +
+> >       if (pcie->msi)
+> >               brcm_msi_set_regs(pcie->msi);
+> >
+> > @@ -1398,6 +1411,10 @@ static int brcm_pcie_probe(struct platform_device *pdev)
+> >       if (ret)
+> >               goto fail;
+> >
+> > +     ret = brcm_pcie_linkup(pcie);
+> > +     if (ret)
+> > +             goto fail;
+> > +
+> >       pcie->hw_rev = readl(pcie->base + PCIE_MISC_REVISION);
+> >       if (pcie->type == BCM4908 && pcie->hw_rev >= BRCM_PCIE_HW_REV_3_20) {
+> >               dev_err(pcie->dev, "hardware revision with unsupported PERST# setup\n");
+> > --
+> > 2.17.1
+> >
+> >
+> > _______________________________________________
+> > linux-arm-kernel mailing list
+> > linux-arm-kernel@lists.infradead.org
+> > http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
+
+--000000000000a6888f05e34b31c5
+Content-Type: application/pkcs7-signature; name="smime.p7s"
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment; filename="smime.p7s"
+Content-Description: S/MIME Cryptographic Signature
+
+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
+LeylbuEJGL9I80yqq8e6Z+Q6ulLxa6SopzpoysJe/vEVHgp9jPNppZzwKngVd2iDBRqpKlCngIAM
+DXgVGyEojXnuEbRs3NlB7wq1kJGlYysrnDug55ncJM8CAwEAAaOCAdswggHXMA4GA1UdDwEB/wQE
+AwIFoDCBowYIKwYBBQUHAQEEgZYwgZMwTgYIKwYBBQUHMAKGQmh0dHA6Ly9zZWN1cmUuZ2xvYmFs
+c2lnbi5jb20vY2FjZXJ0L2dzZ2NjcjNwZXJzb25hbHNpZ24yY2EyMDIwLmNydDBBBggrBgEFBQcw
+AYY1aHR0cDovL29jc3AuZ2xvYmFsc2lnbi5jb20vZ3NnY2NyM3BlcnNvbmFsc2lnbjJjYTIwMjAw
+TQYDVR0gBEYwRDBCBgorBgEEAaAyASgKMDQwMgYIKwYBBQUHAgEWJmh0dHBzOi8vd3d3Lmdsb2Jh
+bHNpZ24uY29tL3JlcG9zaXRvcnkvMAkGA1UdEwQCMAAwSQYDVR0fBEIwQDA+oDygOoY4aHR0cDov
+L2NybC5nbG9iYWxzaWduLmNvbS9nc2djY3IzcGVyc29uYWxzaWduMmNhMjAyMC5jcmwwJQYDVR0R
+BB4wHIEaamFtZXMucXVpbmxhbkBicm9hZGNvbS5jb20wEwYDVR0lBAwwCgYIKwYBBQUHAwQwHwYD
+VR0jBBgwFoAUljPR5lgXWzR1ioFWZNW+SN6hj88wHQYDVR0OBBYEFCeTeUYv84Mo3T1V+OyDdxib
+DDLvMA0GCSqGSIb3DQEBCwUAA4IBAQCCqR1PBVtHPvQHuG8bjMFQ94ZB7jmFEGhgfAsFJMaSMLov
+qyt8DKr8suCYF4dKGzqalbxo5QU9mmZXdLifqceHdt/Satxb+iGJjBhZg4E0cDds24ofYq+Lbww2
+YlIKC2HHxIN+JX2mFpavSXkshR5GT29B9EIJ8hgSjbs61XXeAcrmVIDfYbXQEmGbsnwqxdq+DJpQ
+S2kM2wvSlgSWDb6pL7myuKR5lCkQhj7piGSgrVLJRDRrMPw1L4MvnV9DjUFMlGCB40Hm6xqn/jm0
+8FCLlWhxve5mj+hgUOPETiKbjhCxJhhAPDdCvDRkZtJlQ8oxUVvXHugG8jm1YqB5AWx7MYICbTCC
+AmkCAQEwazBbMQswCQYDVQQGEwJCRTEZMBcGA1UEChMQR2xvYmFsU2lnbiBudi1zYTExMC8GA1UE
+AxMoR2xvYmFsU2lnbiBHQ0MgUjMgUGVyc29uYWxTaWduIDIgQ0EgMjAyMAIMI+Aj9XRk/wFexb9/
+MA0GCWCGSAFlAwQCAQUAoIHUMC8GCSqGSIb3DQEJBDEiBCAZ0O7we2fMsvGb7CAm/oSCu+EHbfpQ
+N1qm687MzuXvojAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcBMBwGCSqGSIb3DQEJBTEPFw0yMjA3
+MDgxMzI5MzhaMGkGCSqGSIb3DQEJDzFcMFowCwYJYIZIAWUDBAEqMAsGCWCGSAFlAwQBFjALBglg
+hkgBZQMEAQIwCgYIKoZIhvcNAwcwCwYJKoZIhvcNAQEKMAsGCSqGSIb3DQEBBzALBglghkgBZQME
+AgEwDQYJKoZIhvcNAQEBBQAEggEAvC5IEheQB/Qgx8flHQ00tHe+X9e373ctEGN0c3rlmki4cKq/
+Y0dselqrlexT6YPTT/s+R2mVaSVbtjp2qQwr9Br3VRD9H+hPtyd8VJZqO5rnyQg8e6wfEyBlOBcm
+YueaPG9YLJn4UXNI4CcxYKGzKSKpuvKIgxAzWhKrRyWBQ7LejPWQbuDbLnezfFmtoW3H+sRyoPbg
+AjdP+1BA/6f541zRAPbB7bHd1lH3pv4Zh5ax3975aXDyOvegDzaoum/cNKlZA1dttPa1pNklIBCA
+z85YQKvUpvCkIPBIQtf0d/zb/hOX3wWO9PWdtOjgGIsZXe32qEcfGnzWrfoh+P+UnA==
+--000000000000a6888f05e34b31c5--

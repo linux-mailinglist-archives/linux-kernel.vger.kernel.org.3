@@ -2,69 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2445556C33F
-	for <lists+linux-kernel@lfdr.de>; Sat,  9 Jul 2022 01:14:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C39056C45B
+	for <lists+linux-kernel@lfdr.de>; Sat,  9 Jul 2022 01:15:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239489AbiGHW2P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Jul 2022 18:28:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50896 "EHLO
+        id S239859AbiGHW3I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Jul 2022 18:29:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52354 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239372AbiGHW2M (ORCPT
+        with ESMTP id S239601AbiGHW3E (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Jul 2022 18:28:12 -0400
-Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E99113B458;
-        Fri,  8 Jul 2022 15:28:10 -0700 (PDT)
-Received: by mail-wr1-x436.google.com with SMTP id v16so83507wrd.13;
-        Fri, 08 Jul 2022 15:28:09 -0700 (PDT)
+        Fri, 8 Jul 2022 18:29:04 -0400
+Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2BB213B448;
+        Fri,  8 Jul 2022 15:29:03 -0700 (PDT)
+Received: by mail-ej1-x631.google.com with SMTP id dn9so34609126ejc.7;
+        Fri, 08 Jul 2022 15:29:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=EIKl0L/6XyzwPBWrn8iMPtQb4hMXI8B9L0xH/4E3HCY=;
-        b=MgDq5RMsQmJt9tw/jQx7WxD1GQkperIilUkq33xlccftDqAO0jIIoVfCwEGcNyijdE
-         BsAMfGSutmB9peyEQZf+hcJzgO5sYT3Khxte88s1AStzx5SX0+znI7sH7hScQRu9SH1y
-         kNOAHEMN6LvqjYrUofYrgZCwhZtbJ27oD20w+O3FXL6jvATCOwJWdTUp+h3YExNK/k+X
-         QzsCqjHPLj8T/qQVJY2HN0Bc3a3dP5e5ey4NJy1U3zNbvzgTn88S/0nD8GXs9fcSAppk
-         s+/tpJEfRGtEpkg3LuFr+UeYqL8IFKYqogUaaIM49gVl8rACQj8BV19rHLVRFVqAdN/e
-         5+ig==
+        d=googlemail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=/Wt1t+gGbbDZ9PHq/lAlWLmts02V8uVl3YQUMJTQPTw=;
+        b=Ff/t2k+V3YD7+eZxVQHpBBBvVb92DnA6vEVVaEQ98rhdkrE9UuP/24tFeks3vlerLj
+         bZclV4xkP66nqZPvec0tiMa+qP08FIlvuLlvwFD4iL3BkLVH2bN3RKf8M8OLyPrT7/n0
+         TwodjpKKeCivvvFTgZQOws9ZfE0fyeP7qkd+wJ5r2Fynh3VhdsYGg9vKOeeSAntsxJYu
+         ON2kUFgOaO2IMt9NNnxCnstr5oVzp/6lY7a4fYBnRzR+DK2PUY0Vd3unAHrvwYU1nHxy
+         pzILOl81zrbqOfRn/+/sf/EKCxUmuNMt4STX0dYKEnGuodQaOUybfasE0hq0Cc6cucoP
+         7cKA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=EIKl0L/6XyzwPBWrn8iMPtQb4hMXI8B9L0xH/4E3HCY=;
-        b=eoc6cQOtLuR4bkQpDSQqAz9baH+qoGePJzbukhd11VFA8I1+atwBZyCCUhKmDaTe9O
-         fM9hGcpZoXlbpT3n+SxgRxLoTO06l08CcE94nyKn5JTsGkX1XxJVqjsJCKTED4s/PKkP
-         4mLDBVRKF/CgwWF55rTNLPGgRNmi0tZb6BSDg3LrMUiCs/wzH1FciH7krhpXkeuvoISx
-         RHQr7amF49A+UjZLRweU0Wwwn5YNfDuQDwrSkc0eSuhZZ73RzpLQFX6dxDX1iFiI+XLv
-         wYm9aHBEWCabb8rpWEkxvLPBbd04M451gGG2mF3zzv7lndNkT+L2SAPJWdGwpamvdG5k
-         NwOw==
-X-Gm-Message-State: AJIora9P7qvBmYV/RArRnXQSNteZc/sHhavy/iVXUWOtWzjcUa6xc0gH
-        +B2uQsdfOByPS8w9p/gnyNqBChuofKc=
-X-Google-Smtp-Source: AGRyM1sy7iGlWXrLjM6rZEjw7qCKnbPfNyNZ37jI2gkj9+26YLYamSTZGZEsORMFjUilPbc+4UGxQw==
-X-Received: by 2002:a05:6000:114e:b0:21d:6cd1:695d with SMTP id d14-20020a056000114e00b0021d6cd1695dmr5386806wrx.474.1657319288365;
-        Fri, 08 Jul 2022 15:28:08 -0700 (PDT)
-Received: from localhost.localdomain (93-42-70-190.ip85.fastwebnet.it. [93.42.70.190])
-        by smtp.googlemail.com with ESMTPSA id e36-20020a05600c4ba400b0039c54bb28f2sm3031596wmp.36.2022.07.08.15.28.07
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 08 Jul 2022 15:28:07 -0700 (PDT)
-From:   Christian Marangi <ansuelsmth@gmail.com>
-To:     Stanimir Varbanov <svarbanov@mm-sol.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Rob Herring <robh@kernel.org>,
-        =?UTF-8?q?Krzysztof=20Wilczy=C5=84ski?= <kw@linux.com>,
-        Bjorn Helgaas <bhelgaas@google.com>, linux-pci@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Christian Marangi <ansuelsmth@gmail.com>, stable@vger.kernel.org
-Subject: [PATCH] PCI: qcom: Enable clocks only after PARF_PHY setup for rev 2.1.0
-Date:   Sat,  9 Jul 2022 00:27:43 +0200
-Message-Id: <20220708222743.27019-1-ansuelsmth@gmail.com>
-X-Mailer: git-send-email 2.36.1
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=/Wt1t+gGbbDZ9PHq/lAlWLmts02V8uVl3YQUMJTQPTw=;
+        b=ZVZDzHGb0q5lmE6KewHSAagHYRKB7UCEbICa8jNZ7b+MDna3E/gDOtvfNjTX94SfDs
+         +/5G2V14aHtoHQanquQmwOenQ0WSPFCEqgxCL5eaLiGkF5dnfKofdCGuJGkJ43riOmVi
+         lnBOTagfxTAFr+A2Iy+WRukvkE7fQyTn9VEB2mr0s5TMZf3DrQS0nxjUWQOy6xTF0L7h
+         rcKugZTPw5itZkj6goN/xoZj02a7jlMAbUlEnKmbGD7jAb6dV8pxvSCYshMLLivd6sDr
+         3Sx8bmqlbgXlFLpKoVjG7YKI8LShYC78TrUQizGjLXjDjW/gB6plgmrbjV5OPvgxYWsf
+         IVXA==
+X-Gm-Message-State: AJIora9N71SI49/lW5lQ8O4AjcZSwsIJuYPYRNwuTL54xzP1fD92Wy7v
+        hy2nMwBKZGMaaEJdebzOQISalRoYrPKTTlyPR18=
+X-Google-Smtp-Source: AGRyM1tGmOwYacc977nCBMDQs0faZ/lMDSsiUOkwt61kpjiUxDXrzb9CBsWtQkROdOXgQJuXBg2es+mW0W307QqADeU=
+X-Received: by 2002:a17:907:75f3:b0:72b:1cde:2a00 with SMTP id
+ jz19-20020a17090775f300b0072b1cde2a00mr5790980ejc.147.1657319342393; Fri, 08
+ Jul 2022 15:29:02 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20220707135532.1783925-1-martin.blumenstingl@googlemail.com> <20220707222519.movgavbpbptncuu6@skbuf>
+In-Reply-To: <20220707222519.movgavbpbptncuu6@skbuf>
+From:   Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+Date:   Sat, 9 Jul 2022 00:28:51 +0200
+Message-ID: <CAFBinCAcRDQQ51DUKr7K4Vtf3z61JTiNiB9saeKVsHs8qRJpXQ@mail.gmail.com>
+Subject: Re: [PATCH 0/2] selftests: forwarding: Install two missing tests
+To:     Vladimir Oltean <vladimir.oltean@nxp.com>
+Cc:     "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "pabeni@redhat.com" <pabeni@redhat.com>,
+        "kuba@kernel.org" <kuba@kernel.org>,
+        "edumazet@google.com" <edumazet@google.com>,
+        "davem@davemloft.net" <davem@davemloft.net>,
+        "shuah@kernel.org" <shuah@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -75,60 +72,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-We currently enable clocks BEFORE we write to PARF_PHY_CTRL reg to
-enable clocks and resets. This case the driver to never set to a ready
-state with the error 'Phy link never came up'.
+Hi Vladimir,
 
-This in fact is caused by the phy clock getting enabled before setting
-the required bits in the PARF regs.
+On Fri, Jul 8, 2022 at 12:25 AM Vladimir Oltean <vladimir.oltean@nxp.com> wrote:
+>
+> Hi Martin,
+>
+> On Thu, Jul 07, 2022 at 03:55:30PM +0200, Martin Blumenstingl wrote:
+> > For some distributions (e.g. OpenWrt) we don't want to rely on rsync
+> > to copy the tests to the target as some extra dependencies need to be
+> > installed. The Makefile in tools/testing/selftests/net/forwarding
+> > already installs most of the tests.
+> >
+> > This series adds the two missing tests to the list of installed tests.
+> > That way a downstream distribution can build a package using this
+> > Makefile (and add dependencies there as needed).
+>
+> Just for future reference, the netdev process is to mark patch sets such
+> as this one with "PATCH net" since they fix a packaging problem with an
+> rc kernel. There's more information about this in
+> Documentation/process/maintainer-netdev.rst.
+noted
 
-A workaround for this was set but with this new discovery we can drop
-the workaround and use a proper solution to the problem by just enabling
-the clock only AFTER the PARF_PHY_CTRL bit is set.
+> Do we need to create a Makefile for the selftests symlinked by DSA in
+> tools/testing/selftests/drivers/net/dsa/, for the symlinks to be
+> installed, or how do you see this?
+Yes, we should have a Makefile there as well (IMO). I'll send a patch for this.
 
-This correctly setup the pcie line and makes it usable even when a
-bootloader leave the pcie line to a underfined state.
+> The reason why I created the symlinks was to make use of the custom
+> forwarding.config provided there, and also to reduce the clutter a bit
+> and only focus on the selftests I felt were relevant for DSA for now.
+Makes sense, I'll make sure that this one is installed by the Makefile as well
 
-Fixes: 82a823833f4e ("PCI: qcom: Add Qualcomm PCIe controller driver")
-Cc: stable@vger.kernel.org # v5.4+
-Signed-off-by: Christian Marangi <ansuelsmth@gmail.com>
----
- drivers/pci/controller/dwc/pcie-qcom.c | 10 ++++------
- 1 file changed, 4 insertions(+), 6 deletions(-)
 
-diff --git a/drivers/pci/controller/dwc/pcie-qcom.c b/drivers/pci/controller/dwc/pcie-qcom.c
-index 2ea13750b492..da13a66ced14 100644
---- a/drivers/pci/controller/dwc/pcie-qcom.c
-+++ b/drivers/pci/controller/dwc/pcie-qcom.c
-@@ -337,8 +337,6 @@ static int qcom_pcie_init_2_1_0(struct qcom_pcie *pcie)
- 	reset_control_assert(res->ext_reset);
- 	reset_control_assert(res->phy_reset);
- 
--	writel(1, pcie->parf + PCIE20_PARF_PHY_CTRL);
--
- 	ret = regulator_bulk_enable(ARRAY_SIZE(res->supplies), res->supplies);
- 	if (ret < 0) {
- 		dev_err(dev, "cannot enable regulators\n");
-@@ -381,15 +379,15 @@ static int qcom_pcie_init_2_1_0(struct qcom_pcie *pcie)
- 		goto err_deassert_axi;
- 	}
- 
--	ret = clk_bulk_prepare_enable(ARRAY_SIZE(res->clks), res->clks);
--	if (ret)
--		goto err_clks;
--
- 	/* enable PCIe clocks and resets */
- 	val = readl(pcie->parf + PCIE20_PARF_PHY_CTRL);
- 	val &= ~BIT(0);
- 	writel(val, pcie->parf + PCIE20_PARF_PHY_CTRL);
- 
-+	ret = clk_bulk_prepare_enable(ARRAY_SIZE(res->clks), res->clks);
-+	if (ret)
-+		goto err_clks;
-+
- 	if (of_device_is_compatible(node, "qcom,pcie-ipq8064") ||
- 	    of_device_is_compatible(node, "qcom,pcie-ipq8064-v2")) {
- 		writel(PCS_DEEMPH_TX_DEEMPH_GEN1(24) |
--- 
-2.36.1
-
+Best regards,
+Martin

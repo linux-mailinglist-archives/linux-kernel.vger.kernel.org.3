@@ -2,218 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E08A656B8BE
+	by mail.lfdr.de (Postfix) with ESMTP id 993F456B8BD
 	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 13:43:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237238AbiGHLkw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Jul 2022 07:40:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37386 "EHLO
+        id S237907AbiGHLkm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Jul 2022 07:40:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37232 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237704AbiGHLkt (ORCPT
+        with ESMTP id S237509AbiGHLki (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Jul 2022 07:40:49 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C749C20F5A;
-        Fri,  8 Jul 2022 04:40:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1657280448; x=1688816448;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=ZdDYQxLCE/FVW3YmiAHPRARr9uSRhV0hY5cuMuzEJx0=;
-  b=MMTD1AIMtYlwPfte9/38kC20k2FtoXUpaZy+BPdvuVHGYGMoAPoAoujn
-   iD2NWJ/l9ZXMph21xw/zbaNy4HAYL9lWSYYZ1zvDezTIpb0y0bNtNbId+
-   7DgK110b14bvvbnhY7si9xPKA/jk0RbSl+mWGJG+dhkGYtIUpMS5s1xtc
-   ihJugeLXqNGu+nmy1sIRUFboB3NY6g+7i5Zta+U1DeS4qj5mo8TynNBIe
-   OLhSlYzwIAtlNgcp+lse7beIltITi0Ktg/0zI0zIOGZbf+JrHyU4MXcz+
-   4isKtH/Z7nDqZA0HAoowNXRA5oFRe8uETqw4CCBW20Brsslf1MlWjZddJ
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10401"; a="348246301"
-X-IronPort-AV: E=Sophos;i="5.92,255,1650956400"; 
-   d="scan'208";a="348246301"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jul 2022 04:40:48 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,255,1650956400"; 
-   d="scan'208";a="626681120"
-Received: from lkp-server01.sh.intel.com (HELO 68b931ab7ac1) ([10.239.97.150])
-  by orsmga001.jf.intel.com with ESMTP; 08 Jul 2022 04:40:46 -0700
-Received: from kbuild by 68b931ab7ac1 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1o9mLl-000NPf-Cc;
-        Fri, 08 Jul 2022 11:40:45 +0000
-Date:   Fri, 8 Jul 2022 19:40:28 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Bhupesh Sharma <bhupesh.sharma@linaro.org>,
-        linux-pm@vger.kernel.org
-Cc:     kbuild-all@lists.01.org, bhupesh.sharma@linaro.org,
-        bhupesh.linux@gmail.com, linux-kernel@vger.kernel.org,
-        bjorn.andersson@linaro.org, Amit Kucheria <amitk@kernel.org>,
-        Thara Gopinath <thara.gopinath@gmail.com>,
-        linux-arm-msm@vger.kernel.org
-Subject: Re: [PATCH 3/3] thermal: qcom: tsens: Implement re-initialization
- workaround quirk
-Message-ID: <202207081955.SXcfKpLo-lkp@intel.com>
-References: <20220701145815.2037993-4-bhupesh.sharma@linaro.org>
+        Fri, 8 Jul 2022 07:40:38 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7307B24F14
+        for <linux-kernel@vger.kernel.org>; Fri,  8 Jul 2022 04:40:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1657280436;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=wXQSLj7N0OPVrbql97FSOxJxi1gzgZ5rqCr//cm7fcI=;
+        b=ctTYfaJZENyaLzHZGGSUnTypAT5BM65S/TWKanlgrszc+buYAt6BNk8I+2mRKBlKeV7lZS
+        eZGUhXqedatkcAkp+e1roOUK+JbDbxgIsb0ksbVXR+2E4K+uD01hyZfWWAIyaMuX5r9hdb
+        znOLEN4KdmBiYWQ1c0HBeLqK4kGgbps=
+Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
+ [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-294-R8C7gWqeOZq481-V6QcY9A-1; Fri, 08 Jul 2022 07:40:35 -0400
+X-MC-Unique: R8C7gWqeOZq481-V6QcY9A-1
+Received: by mail-wm1-f69.google.com with SMTP id v67-20020a1cac46000000b003a2be9fa09cso3884607wme.3
+        for <linux-kernel@vger.kernel.org>; Fri, 08 Jul 2022 04:40:35 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:organization:in-reply-to
+         :content-transfer-encoding;
+        bh=wXQSLj7N0OPVrbql97FSOxJxi1gzgZ5rqCr//cm7fcI=;
+        b=h2k1JNd6ioN5AE3E9JRxu+jr2SUHm9JBzkWIzH2QIJ6+nQ+9D4bApPIxxu/q0vyWBM
+         Chele8pndweiX06BuOYz0SLLY6q4c5DvBngNMrqptLQQATOV2uAp4xf8rEKvDnhNeTdX
+         BcIhmrvo7rmQKszlO8RYp7LOgztkdK/2C3zARl3MgCDk9ADBsbpTKTES3IQtpDSLgAPT
+         e134ZffHV8K/sYSp78rwik5PoG8oMvM640+h6icbeUd+b6yit+62fdiWZNlK2iLrR0IV
+         XzGyyyYfbit6m3dQVPB0XhxN/vzTMkdxJ4Y5W0c1ZUGOvmlfpgalwFJgu06nsRSubYy4
+         en6w==
+X-Gm-Message-State: AJIora/dJoqEMqyPqj2p7U+OVEVIVJmcpfD2F9JnUloczT+ebZpSiYub
+        MHO9486Ljxzd0/awtNwltg8wRj904RzB/8jKl/ZQPxvn/5BL4ODcBb+uq9TIPIqWRAoKstrUe5P
+        UnOO9suvGHPv8nYtfZo3uVn+v
+X-Received: by 2002:a05:600c:3594:b0:3a2:b918:fc99 with SMTP id p20-20020a05600c359400b003a2b918fc99mr10447689wmq.46.1657280434239;
+        Fri, 08 Jul 2022 04:40:34 -0700 (PDT)
+X-Google-Smtp-Source: AGRyM1sleJHiOa+wExrCN0/v8cRomeDekDTZvjWj0FUXinjSVbAalf0ycjKaPNjpP8yzp8DxqMxtlA==
+X-Received: by 2002:a05:600c:3594:b0:3a2:b918:fc99 with SMTP id p20-20020a05600c359400b003a2b918fc99mr10447657wmq.46.1657280434013;
+        Fri, 08 Jul 2022 04:40:34 -0700 (PDT)
+Received: from ?IPV6:2003:cb:c702:6300:c44f:789a:59b5:91e9? (p200300cbc7026300c44f789a59b591e9.dip0.t-ipconnect.de. [2003:cb:c702:6300:c44f:789a:59b5:91e9])
+        by smtp.gmail.com with ESMTPSA id bh21-20020a05600c3d1500b003a2d6c623f3sm1954808wmb.19.2022.07.08.04.40.33
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 08 Jul 2022 04:40:33 -0700 (PDT)
+Message-ID: <b573a9c6-2ee0-20dc-1f28-84d3a81d40a2@redhat.com>
+Date:   Fri, 8 Jul 2022 13:40:32 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220701145815.2037993-4-bhupesh.sharma@linaro.org>
-X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH] x86/mm/tlb: ignore f->new_tlb_gen when zero
+Content-Language: en-US
+To:     Nadav Amit <nadav.amit@gmail.com>, linux-kernel@vger.kernel.org,
+        Hugh Dickins <hughd@google.com>,
+        Thomas Gleixner <tglx@linutronix.de>
+Cc:     Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        x86@kernel.org, Linux MM <linux-mm@kvack.org>,
+        Nadav Amit <namit@vmware.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Andy Lutomirski <luto@kernel.org>
+References: <20220708003053.158480-1-namit@vmware.com>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+In-Reply-To: <20220708003053.158480-1-namit@vmware.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Bhupesh,
+On 08.07.22 02:30, Nadav Amit wrote:
+> From: Nadav Amit <namit@vmware.com>
+> 
+> Commit aa44284960d5 ("x86/mm/tlb: Avoid reading mm_tlb_gen when
+> possible") introduced an optimization of skipping the flush if the TLB
+> generation that is flushed (as provided in flush_tlb_info) was already
+> flushed.
+> 
+> However, arch_tlbbatch_flush() does not provide any generation in
+> flush_tlb_info. As a result, try_to_unmap_one() would not perform any
+> TLB flushes.
+> 
+> Fix it by checking whether f->new_tlb_gen is nonzero. Zero value is
+> anyhow is an invalid generation value.
+> 
+> In addition, add the missing unlikely() and jump to get tracing right.
+> 
+> Fixes: aa44284960d5 ("x86/mm/tlb: Avoid reading mm_tlb_gen when possible")
+> Reported-by: Hugh Dickins <hughd@google.com>
+> Cc: Dave Hansen <dave.hansen@linux.intel.com>
+> Cc: Peter Zijlstra (Intel) <peterz@infradead.org>
+> Cc: Andy Lutomirski <luto@kernel.org>
+> Signed-off-by: Nadav Amit <namit@vmware.com>
+> ---
+>  arch/x86/mm/tlb.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/arch/x86/mm/tlb.c b/arch/x86/mm/tlb.c
+> index d9314cc8b81f..d81b4084bb8a 100644
+> --- a/arch/x86/mm/tlb.c
+> +++ b/arch/x86/mm/tlb.c
+> @@ -771,14 +771,14 @@ static void flush_tlb_func(void *info)
+>  		return;
+>  	}
+>  
+> -	if (f->new_tlb_gen <= local_tlb_gen) {
+> +	if (unlikely(f->new_tlb_gen != 0 && f->new_tlb_gen <= local_tlb_gen)) {
+>  		/*
+>  		 * The TLB is already up to date in respect to f->new_tlb_gen.
+>  		 * While the core might be still behind mm_tlb_gen, checking
+>  		 * mm_tlb_gen unnecessarily would have negative caching effects
+>  		 * so avoid it.
+>  		 */
+> -		return;
+> +		goto done;
 
-Thank you for the patch! Yet something to improve:
-
-[auto build test ERROR on rafael-pm/thermal]
-[also build test ERROR on linus/master v5.19-rc5 next-20220707]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Bhupesh-Sharma/Add-support-for-tsens-controller-reinit-via-trustzone/20220701-230113
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git thermal
-config: arm64-randconfig-r015-20220707 (https://download.01.org/0day-ci/archive/20220708/202207081955.SXcfKpLo-lkp@intel.com/config)
-compiler: aarch64-linux-gcc (GCC) 11.3.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/32929e13eb338e76b714bb8b4805899e2857734f
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Bhupesh-Sharma/Add-support-for-tsens-controller-reinit-via-trustzone/20220701-230113
-        git checkout 32929e13eb338e76b714bb8b4805899e2857734f
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash
-
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
-
-All errors (new ones prefixed by >>):
-
-   aarch64-linux-ld: Unexpected GOT/PLT entries detected!
-   aarch64-linux-ld: Unexpected run-time procedure linkages detected!
-   aarch64-linux-ld: ID map text too big or misaligned
-   aarch64-linux-ld: drivers/thermal/qcom/tsens.o: in function `tsens_probe':
->> drivers/thermal/qcom/tsens.c:1337: undefined reference to `qcom_scm_is_available'
-   aarch64-linux-ld: drivers/thermal/qcom/tsens.o: in function `get_temp_tsens_valid':
->> drivers/thermal/qcom/tsens.c:714: undefined reference to `qcom_scm_tsens_reinit'
-
-
-vim +1337 drivers/thermal/qcom/tsens.c
-
-  1293	
-  1294	static int tsens_probe(struct platform_device *pdev)
-  1295	{
-  1296		int ret, i;
-  1297		struct device *dev;
-  1298		struct device_node *np;
-  1299		struct tsens_priv *priv;
-  1300		const struct tsens_plat_data *data;
-  1301		const struct of_device_id *id;
-  1302		u32 num_sensors;
-  1303	
-  1304		if (pdev->dev.of_node)
-  1305			dev = &pdev->dev;
-  1306		else
-  1307			dev = pdev->dev.parent;
-  1308	
-  1309		np = dev->of_node;
-  1310	
-  1311		id = of_match_node(tsens_table, np);
-  1312		if (id)
-  1313			data = id->data;
-  1314		else
-  1315			data = &data_8960;
-  1316	
-  1317		num_sensors = data->num_sensors;
-  1318	
-  1319		if (np)
-  1320			of_property_read_u32(np, "#qcom,sensors", &num_sensors);
-  1321	
-  1322		if (num_sensors <= 0) {
-  1323			dev_err(dev, "%s: invalid number of sensors\n", __func__);
-  1324			return -EINVAL;
-  1325		}
-  1326	
-  1327		priv = devm_kzalloc(dev,
-  1328				     struct_size(priv, sensor, num_sensors),
-  1329				     GFP_KERNEL);
-  1330		if (!priv)
-  1331			return -ENOMEM;
-  1332	
-  1333		priv->dev = dev;
-  1334		priv->num_sensors = num_sensors;
-  1335		priv->needs_reinit_wa = data->needs_reinit_wa;
-  1336	
-> 1337		if (priv->needs_reinit_wa && !qcom_scm_is_available())
-  1338			return -EPROBE_DEFER;
-  1339	
-  1340		if (priv->needs_reinit_wa) {
-  1341			priv->reinit_wa_worker = alloc_workqueue("tsens_reinit_work",
-  1342								 WQ_HIGHPRI, 0);
-  1343			if (!priv->reinit_wa_worker)
-  1344				return -ENOMEM;
-  1345	
-  1346			INIT_WORK(&priv->reinit_wa_notify, tsens_reinit_worker_notify);
-  1347		}
-  1348	
-  1349		priv->ops = data->ops;
-  1350		for (i = 0;  i < priv->num_sensors; i++) {
-  1351			if (data->hw_ids)
-  1352				priv->sensor[i].hw_id = data->hw_ids[i];
-  1353			else
-  1354				priv->sensor[i].hw_id = i;
-  1355		}
-  1356		priv->feat = data->feat;
-  1357		priv->fields = data->fields;
-  1358	
-  1359		platform_set_drvdata(pdev, priv);
-  1360	
-  1361		if (!priv->ops || !priv->ops->init || !priv->ops->get_temp) {
-  1362			ret = -EINVAL;
-  1363			goto free_wq;
-  1364		}
-  1365	
-  1366		ret = priv->ops->init(priv);
-  1367		if (ret < 0) {
-  1368			dev_err(dev, "%s: init failed\n", __func__);
-  1369			goto free_wq;
-  1370		}
-  1371	
-  1372		if (priv->ops->calibrate) {
-  1373			ret = priv->ops->calibrate(priv);
-  1374			if (ret < 0) {
-  1375				if (ret != -EPROBE_DEFER)
-  1376					dev_err(dev, "%s: calibration failed\n", __func__);
-  1377	
-  1378				goto free_wq;
-  1379			}
-  1380		}
-  1381	
-  1382		ret = tsens_register(priv);
-  1383		if (ret < 0) {
-  1384			dev_err(dev, "%s: registration failed\n", __func__);
-  1385			goto free_wq;
-  1386		}
-  1387	
-  1388		list_add_tail(&priv->list, &tsens_device_list);
-  1389		return 0;
-  1390	
-  1391	free_wq:
-  1392		destroy_workqueue(priv->reinit_wa_worker);
-  1393		return ret;
-  1394	}
-  1395	
+Does this affect the performance numbers from aa44284960d5 ("x86/mm/tlb:
+Avoid reading mm_tlb_gen when possible")?
 
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Thanks,
+
+David / dhildenb
+

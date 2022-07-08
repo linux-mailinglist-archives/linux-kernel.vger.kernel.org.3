@@ -2,52 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0497D56B383
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 09:30:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C2B7C56B38B
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 09:30:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237540AbiGHH0F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Jul 2022 03:26:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37730 "EHLO
+        id S237413AbiGHH0V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Jul 2022 03:26:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37872 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237413AbiGHH0B (ORCPT
+        with ESMTP id S237541AbiGHH0R (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Jul 2022 03:26:01 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10BF9A1B6;
-        Fri,  8 Jul 2022 00:26:01 -0700 (PDT)
+        Fri, 8 Jul 2022 03:26:17 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB63B1837B;
+        Fri,  8 Jul 2022 00:26:16 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A176F62570;
-        Fri,  8 Jul 2022 07:26:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 09013C341C0;
-        Fri,  8 Jul 2022 07:26:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1657265160;
-        bh=HgjugEAjKnXuiWUzDEFoDZIQxIti3cWoD34a5DDDhRc=;
-        h=From:To:Cc:Subject:Date:From;
-        b=m1vanb1pyvTZm2lekW6U9uNKmjaXe0kzYg9evNz4yhX0XCNQ3NgeU29Gu5OLHkLvf
-         xjCWYvorx1gO+lBtH5p0xSOuysRLpCFr9vxi6Myx8+ABCuuImANgpK+joXw1VSlFaW
-         q7iywrjmB84km7YVfBmhcAAESLH3XjIzykdKOxdqG/S6dv5Yr/RxJHsrqBOUFKovNX
-         OXQJ64gxQPOmUg+g7PZTapzsr9FOcolGJhS41OV8x/KzbX4e+Axl/1mToCKNfz4WVk
-         Zw9xNeW/Qedu5loEoOrD+JAwxiVcCDU+gqzN/4mz06gIWQ2shHHNzTPYYoV9idlzWS
-         UaGWoRJk/NpDw==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan+linaro@kernel.org>)
-        id 1o9iNG-0001Dm-OJ; Fri, 08 Jul 2022 09:26:02 +0200
-From:   Johan Hovold <johan+linaro@kernel.org>
-To:     Bjorn Andersson <bjorn.andersson@linaro.org>
-Cc:     Andy Gross <agross@kernel.org>, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Johan Hovold <johan+linaro@kernel.org>
-Subject: [PATCH] arm64: dts: qcom: sc8280xp: fix DP PHY node unit addresses
-Date:   Fri,  8 Jul 2022 09:25:56 +0200
-Message-Id: <20220708072556.4687-1-johan+linaro@kernel.org>
-X-Mailer: git-send-email 2.35.1
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 85A4A62573;
+        Fri,  8 Jul 2022 07:26:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 93C0BC341C0;
+        Fri,  8 Jul 2022 07:26:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1657265175;
+        bh=QdvPGPSzMNSg9331rSs6uqhsyZcyL0jGteXXpQTEB54=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=eQpH3wwn/LMkE/zE1L6/QVSe2SW+7eP99yr6bduwIXYsXehxUIblhDiThhWU+HDob
+         8HSMfy3fkaLzxj9YpXXGxnDFRb5rvabUFzB0Uh4X2Rq9OHFJb0e8/8ePL3t53pYk4n
+         Vwnk/2vgWmp0/yVxfz/G6Z2tyf63Ad7nyYYWLZi8=
+Date:   Fri, 8 Jul 2022 09:26:13 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Chunfeng Yun <chunfeng.yun@mediatek.com>
+Cc:     Matthias Brugger <matthias.bgg@gmail.com>,
+        linux-usb@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Felipe Balbi <balbi@kernel.org>,
+        Eddie Hung <eddie.hung@mediatek.com>
+Subject: Re: [PATCH 1/5] usb: mtu3: fix coverity of string buffer
+Message-ID: <YsfcFXtkDxe6ndFT@kroah.com>
+References: <20220708071903.25752-1-chunfeng.yun@mediatek.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220708071903.25752-1-chunfeng.yun@mediatek.com>
 X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -58,26 +54,73 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Fix up the DP PHY node which had the wrong unit address.
+On Fri, Jul 08, 2022 at 03:18:59PM +0800, Chunfeng Yun wrote:
+> Use snprintf instead of sprintf which could cause buffer overflow.
 
-Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
----
- arch/arm64/boot/dts/qcom/sc8280xp.dtsi | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+How can it cause an overflow?
 
-diff --git a/arch/arm64/boot/dts/qcom/sc8280xp.dtsi b/arch/arm64/boot/dts/qcom/sc8280xp.dtsi
-index 9de6dedb102f..3542bcc34080 100644
---- a/arch/arm64/boot/dts/qcom/sc8280xp.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sc8280xp.dtsi
-@@ -1252,7 +1252,7 @@ usb_1_ssphy: usb3-phy@8903400 {
- 				clock-output-names = "usb1_phy_pipe_clk_src";
- 			};
- 
--			usb_1_dpphy: dp-phy@88ed200 {
-+			usb_1_dpphy: dp-phy@8904200 {
- 				reg = <0 0x08904200 0 0x200>,
- 				      <0 0x08904400 0 0x200>,
- 				      <0 0x08904a00 0 0x200>,
--- 
-2.35.1
+> 
+> Signed-off-by: Chunfeng Yun <chunfeng.yun@mediatek.com>
+> ---
+>  drivers/usb/mtu3/mtu3.h         | 4 +++-
+>  drivers/usb/mtu3/mtu3_debugfs.c | 2 +-
+>  drivers/usb/mtu3/mtu3_gadget.c  | 4 ++--
+>  3 files changed, 6 insertions(+), 4 deletions(-)
+> 
+> diff --git a/drivers/usb/mtu3/mtu3.h b/drivers/usb/mtu3/mtu3.h
+> index 8408e1b1a24a..9893dd1bafbb 100644
+> --- a/drivers/usb/mtu3/mtu3.h
+> +++ b/drivers/usb/mtu3/mtu3.h
+> @@ -92,6 +92,8 @@ struct mtu3_request;
+>  
+>  #define BULK_CLKS_CNT	4
+>  
+> +#define MTU3_EP_NAME_LEN	12
+> +
+>  /* device operated link and speed got from DEVICE_CONF register */
+>  enum mtu3_speed {
+>  	MTU3_SPEED_INACTIVE = 0,
+> @@ -272,7 +274,7 @@ struct ssusb_mtk {
+>   */
+>  struct mtu3_ep {
+>  	struct usb_ep ep;
+> -	char name[12];
+> +	char name[MTU3_EP_NAME_LEN];
+>  	struct mtu3 *mtu;
+>  	u8 epnum;
+>  	u8 type;
+> diff --git a/drivers/usb/mtu3/mtu3_debugfs.c b/drivers/usb/mtu3/mtu3_debugfs.c
+> index d27de647c86a..a6f72494b819 100644
+> --- a/drivers/usb/mtu3/mtu3_debugfs.c
+> +++ b/drivers/usb/mtu3/mtu3_debugfs.c
+> @@ -132,7 +132,7 @@ static void mtu3_debugfs_regset(struct mtu3 *mtu, void __iomem *base,
+>  	if (!mregs)
+>  		return;
+>  
+> -	sprintf(mregs->name, "%s", name);
+> +	snprintf(mregs->name, MTU3_DEBUGFS_NAME_LEN, "%s", name);
 
+Where does name come from?  It looks like you control this string, so
+there is no overflow anywhere.
+
+>  	regset = &mregs->regset;
+>  	regset->regs = regs;
+>  	regset->nregs = nregs;
+> diff --git a/drivers/usb/mtu3/mtu3_gadget.c b/drivers/usb/mtu3/mtu3_gadget.c
+> index 30999b4debb8..a751e0533c2d 100644
+> --- a/drivers/usb/mtu3/mtu3_gadget.c
+> +++ b/drivers/usb/mtu3/mtu3_gadget.c
+> @@ -635,8 +635,8 @@ static void init_hw_ep(struct mtu3 *mtu, struct mtu3_ep *mep,
+>  
+>  	INIT_LIST_HEAD(&mep->req_list);
+>  
+> -	sprintf(mep->name, "ep%d%s", epnum,
+> -		!epnum ? "" : (is_in ? "in" : "out"));
+> +	snprintf(mep->name, MTU3_EP_NAME_LEN, "ep%d%s", epnum,
+> +		 !epnum ? "" : (is_in ? "in" : "out"));
+
+Same here, you already control this string size, so where is the issue?
+
+thanks,
+
+greg k-h

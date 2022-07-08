@@ -2,52 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B75456BC67
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 17:09:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F0E2956BC21
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 17:08:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238292AbiGHOkN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Jul 2022 10:40:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58680 "EHLO
+        id S238344AbiGHOmj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Jul 2022 10:42:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60904 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234285AbiGHOkM (ORCPT
+        with ESMTP id S237442AbiGHOmf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Jul 2022 10:40:12 -0400
-Received: from mail-io1-f71.google.com (mail-io1-f71.google.com [209.85.166.71])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C6E913F0D
-        for <linux-kernel@vger.kernel.org>; Fri,  8 Jul 2022 07:40:11 -0700 (PDT)
-Received: by mail-io1-f71.google.com with SMTP id c8-20020a056602334800b0067500ca88aaso11385890ioz.0
-        for <linux-kernel@vger.kernel.org>; Fri, 08 Jul 2022 07:40:11 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
-         :from:to;
-        bh=BGyGI0nhO1tZ1AiSieZOwo6ROGPm380AjmQ87Ia1ekY=;
-        b=BSjzMA7PP1UffyRFkr2qnVEn0t9ZuA+UuKjf2pHDSx096bHUsppQFariZBI5doaICL
-         0nsVsukP5mrGZ5ZheZZ4aKcRxASXWlnbKkbazjB4ZCcUaT8JytaIG6dgZn3EjkjuyQVY
-         nzUWouMqGMTTRTt8wAR4D6fpLSbGcPOVewz1zLvZA3LwW9V0Cg4cafIDCnPPoeeKnEP6
-         DpDP5mxs5O4RjC6B+h5sKfGJnn8O/ttRpv3O0lE5jOkRE49wOSje3Ht3zqj0ta5s5Cjq
-         GhjAUPRxCkPjeYG5IChKkn7DgoZXH7E1AYRdqPcKyXLLS3scEbmmpBkKohx0a4QagLMU
-         nbiw==
-X-Gm-Message-State: AJIora9WMvhZFItnEYiHy4ROJkryjFHIEAj79wJmWp/UZlLgO5Vhaqmt
-        ipeQu8vz2eMDuPrzBnbGSROthEtxBURcpHUPBw+OFJFBkqty
-X-Google-Smtp-Source: AGRyM1tm3H3yD6tBRgRxZsaFRN6bkJTuDaIc+hjHrKNa80PBrWifvwUGsdveaWT7rXDpL7dEKho2VTMAefF18WP4P4t9kM8/w7Lo
+        Fri, 8 Jul 2022 10:42:35 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 42A7157240
+        for <linux-kernel@vger.kernel.org>; Fri,  8 Jul 2022 07:42:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1657291351;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=T4/lX3GtkFoEUn7AHHNPmGNZmkEvYlCcVIk40bRD/7k=;
+        b=EVD81Ljx/w3YwjCQr7Hbw0qZkPsy5G2OQcl5/3fYUbfQgB2x1OxtsdVESzsKlLnmAjRuDe
+        DPeo9uPfLEOuZi8g9tyJnr9t5Xh+2R30eWHE4pAtNBcr0qWJkblFtRmb9q2h97SKyYaahF
+        1nYeWzEEJewjWloAitV4brpQIraej6A=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-12-UYT2hIByMLSykwEEktHYBA-1; Fri, 08 Jul 2022 10:42:28 -0400
+X-MC-Unique: UYT2hIByMLSykwEEktHYBA-1
+Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 2546E1C05AF1;
+        Fri,  8 Jul 2022 14:42:28 +0000 (UTC)
+Received: from fedora.redhat.com (unknown [10.40.193.250])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 50D69492C3B;
+        Fri,  8 Jul 2022 14:42:24 +0000 (UTC)
+From:   Vitaly Kuznetsov <vkuznets@redhat.com>
+To:     kvm@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
+        Sean Christopherson <seanjc@google.com>
+Cc:     Anirudh Rayabharam <anrayabh@linux.microsoft.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Maxim Levitsky <mlevitsk@redhat.com>,
+        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v3 00/25] KVM: VMX: Support updated eVMCSv1 revision + use vmcs_config for L1 VMX MSRs
+Date:   Fri,  8 Jul 2022 16:41:58 +0200
+Message-Id: <20220708144223.610080-1-vkuznets@redhat.com>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6e02:1d15:b0:2dc:20a1:f3f with SMTP id
- i21-20020a056e021d1500b002dc20a10f3fmr2340565ila.60.1657291210840; Fri, 08
- Jul 2022 07:40:10 -0700 (PDT)
-Date:   Fri, 08 Jul 2022 07:40:10 -0700
-In-Reply-To: <20220708111638.2224-1-hdanton@sina.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000e9631505e34c2d7f@google.com>
-Subject: Re: [syzbot] WARNING in notifier_chain_register
-From:   syzbot <syzbot+5214f8dac5863061e37c@syzkaller.appspotmail.com>
-To:     hdanton@sina.com, linux-kernel@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+Content-Type: text/plain
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 2.85 on 10.11.54.10
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -55,20 +62,105 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+This series continues:
+- "[PATCH v2 00/28] KVM: VMX: Support TscScaling and EnclsExitingBitmap
+ with eVMCS + use vmcs_config for L1 VMX MSRs" work:
+https://lore.kernel.org/kvm/20220629150625.238286-1-vkuznets@redhat.com/
 
-syzbot has tested the proposed patch and the reproducer did not trigger any issue:
+Changes since v1:
+- Turns out the updated eVMCSv1 revision comes with a CPUID feature bit
+  and this changes a lot as we don't need to invent our own eVMCS
+  revisions. Adjust the whole series accordingly, drop now unneeded
+  KVM_CAP_HYPERV_ENLIGHTENED_VMCS2.
+- VM_{EXIT,ENTRY}_LOAD_IA32_PERF_GLOBAL_CTRL are now supported for both
+  Hyper-V on KVM and KVM on Hyper-V.
+- Make CPU_BASED_NMI_WINDOW_EXITING optional [Sean].
+- Drop erroneous "KVM: VMX: Add missing VMENTRY controls to vmcs_config"
+  [Jim].
+- Include Jim's "KVM: x86: VMX: Replace some Intel model numbers with
+  mnemonics" into the series.
+- "KVM: nVMX: Always set required-1 bits of pinbased_ctls to 
+  PIN_BASED_ALWAYSON_WITHOUT_TRUE_MSR" added [Jim]. It allows to get rid
+  of required-1 bits caching in vmcs_config, patches dropped.
+- Collect R-b tags [Jim].
+- Other minor tweaks (descriptions, comments) [Jim, Sean].
 
-Reported-and-tested-by: syzbot+5214f8dac5863061e37c@syzkaller.appspotmail.com
+Original description:
 
-Tested on:
+Enlightened VMCS v1 definition was updates to include fields for the
+following features:
+    - PerfGlobalCtrl
+    - EnclsExitingBitmap
+    - TSC scaling
+    - GuestLbrCtl
+    - CET
+    - SSP
+While the information is missing in the publicly available TLFS, the
+updated definition comes with a new feature bit in CPUID.0x4000000A.EBX
+(BIT 0). Use a made up HV_X64_NESTED_EVMCS1_2022_UPDATE name for it.
 
-commit:         cb71b93c Add linux-next specific files for 20220628
-git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
-console output: https://syzkaller.appspot.com/x/log.txt?x=14bedff4080000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=badbc1adb2d582eb
-dashboard link: https://syzkaller.appspot.com/bug?extid=5214f8dac5863061e37c
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-patch:          https://syzkaller.appspot.com/x/patch.diff?x=163fa292080000
+Add support for the new revision to KVM. SSP, CET and GuestLbrCtl
+features are not currently supported by KVM.
 
-Note: testing is done by a robot and is best-effort only.
+While on it, implement Sean's idea to use vmcs_config for setting up
+L1 VMX control MSRs instead of re-reading host MSRs.
+
+Jim Mattson (1):
+  KVM: x86: VMX: Replace some Intel model numbers with mnemonics
+
+Sean Christopherson (1):
+  KVM: VMX: Adjust CR3/INVPLG interception for EPT=y at runtime, not
+    setup
+
+Vitaly Kuznetsov (23):
+  KVM: x86: hyper-v: Expose access to debug MSRs in the partition
+    privilege flags
+  x86/hyperv: Fix 'struct hv_enlightened_vmcs' definition
+  x86/hyperv: Update 'struct hv_enlightened_vmcs' definition
+  KVM: VMX: Define VMCS-to-EVMCS conversion for the new fields
+  KVM: nVMX: Support several new fields in eVMCSv1
+  KVM: x86: hyper-v: Cache HYPERV_CPUID_NESTED_FEATURES CPUID leaf
+  KVM: selftests: Add ENCLS_EXITING_BITMAP{,HIGH} VMCS fields
+  KVM: selftests: Switch to updated eVMCSv1 definition
+  KVM: VMX: nVMX: Support TSC scaling and PERF_GLOBAL_CTRL with
+    enlightened VMCS
+  KVM: selftests: Enable TSC scaling in evmcs selftest
+  KVM: VMX: Get rid of eVMCS specific VMX controls sanitization
+  KVM: VMX: Check VM_ENTRY_IA32E_MODE in setup_vmcs_config()
+  KVM: VMX: Check CPU_BASED_{INTR,NMI}_WINDOW_EXITING in
+    setup_vmcs_config()
+  KVM: VMX: Tweak the special handling of SECONDARY_EXEC_ENCLS_EXITING
+    in setup_vmcs_config()
+  KVM: VMX: Extend VMX controls macro shenanigans
+  KVM: VMX: Move CPU_BASED_CR8_{LOAD,STORE}_EXITING filtering out of
+    setup_vmcs_config()
+  KVM: VMX: Add missing VMEXIT controls to vmcs_config
+  KVM: VMX: Add missing CPU based VM execution controls to vmcs_config
+  KVM: VMX: Move LOAD_IA32_PERF_GLOBAL_CTRL errata handling out of
+    setup_vmcs_config()
+  KVM: nVMX: Always set required-1 bits of pinbased_ctls to
+    PIN_BASED_ALWAYSON_WITHOUT_TRUE_MSR
+  KVM: nVMX: Use sanitized allowed-1 bits for VMX control MSRs
+  KVM: VMX: Cache MSR_IA32_VMX_MISC in vmcs_config
+  KVM: nVMX: Use cached host MSR_IA32_VMX_MISC value for setting up
+    nested MSR
+
+ arch/x86/include/asm/hyperv-tlfs.h            |  22 +-
+ arch/x86/include/asm/kvm_host.h               |   2 +
+ arch/x86/kvm/hyperv.c                         |  12 +-
+ arch/x86/kvm/vmx/capabilities.h               |  14 +-
+ arch/x86/kvm/vmx/evmcs.c                      | 127 +++++++---
+ arch/x86/kvm/vmx/evmcs.h                      |  18 +-
+ arch/x86/kvm/vmx/nested.c                     |  70 ++++--
+ arch/x86/kvm/vmx/nested.h                     |   2 +-
+ arch/x86/kvm/vmx/vmx.c                        | 235 ++++++++----------
+ arch/x86/kvm/vmx/vmx.h                        | 116 +++++++++
+ include/asm-generic/hyperv-tlfs.h             |   2 +
+ .../selftests/kvm/include/x86_64/evmcs.h      |  45 +++-
+ .../selftests/kvm/include/x86_64/vmx.h        |   2 +
+ .../testing/selftests/kvm/x86_64/evmcs_test.c |  31 ++-
+ 14 files changed, 477 insertions(+), 221 deletions(-)
+
+-- 
+2.35.3
+

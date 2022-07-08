@@ -2,73 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8051456B7ED
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 13:03:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B3CE056B7F4
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 13:05:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238027AbiGHLDL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Jul 2022 07:03:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35410 "EHLO
+        id S238050AbiGHLEA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Jul 2022 07:04:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36702 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237375AbiGHLDJ (ORCPT
+        with ESMTP id S238036AbiGHLD7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Jul 2022 07:03:09 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B370888F12
-        for <linux-kernel@vger.kernel.org>; Fri,  8 Jul 2022 04:03:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1657278188; x=1688814188;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=HttklPYMVqCkBKla4Z5JeQC9Wp5Ab2UuWXTG+/ppt9Q=;
-  b=NeMel/fK/VdTkEQgiKHDrrU3PipHNDJcLokARx1YtT6NJD3OdYXBnR5H
-   yTB3r4nQx1vehsRTu0Z5PkC7N8CeiPZaiK06nRBBc3Pr9Z+9zcNpIrxt7
-   IALF5QibMp/xSCSu4pN4OrNbu7iNV2OMcoK124Z3N3S/xvpql5eJSQ0Du
-   mHGXsAu5ohbYL/s6ccYPceA/LFx6V+7dfrEKcR4K3mrsSqeBv/WIhtoAc
-   z0HIOUUzoS0jTbEJfL5rwsk3pYwqhxJfg9XlDnBinfOnDG0POR0UUdsVC
-   pDEMDp+rlikgELb1voYsZFS8hxF2P67oGQ3QVDaj6l39MJViAF2KMsyWf
+        Fri, 8 Jul 2022 07:03:59 -0400
+Received: from smtp1.axis.com (smtp1.axis.com [195.60.68.17])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 640242A95A;
+        Fri,  8 Jul 2022 04:03:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=axis.com; q=dns/txt; s=axis-central1; t=1657278238;
+  x=1688814238;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=hVRYG3p50qnDjZtNI+vfDnB95JRUiYZHlJYn4fjg5XI=;
+  b=oLf7m50dZHcCbEkrUM1CNHA52EB+8+aZG9yXBlytJ1xCmRukEr4H1F6Q
+   Buj6VynI+8iwtjP3aVljzBN0QejvLnrx/Epooyzw0ejUkby/VD29PJxyw
+   OJmEPej4M0r/GrBnbfCuAxVTHwUQ6IKokoZNqjOSmhcNpyqDIXh+07O1V
+   1ZJN+pFZM+UE/QD5aujiOQS9SYN9w0D7iSREUUhFrWznK7eieVPhv0TQA
+   fQRMW1dJaEXbd0HxV7s5SKCP6mJGkGxEYbVd0f7AhCF1HRkNxUKH56NoC
+   /vpUx+p366asFk2Dqrrnf5Zk+fovrHWZAh24u/7ycd5KBLC/xsqq3j7PD
    Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10401"; a="267286813"
-X-IronPort-AV: E=Sophos;i="5.92,255,1650956400"; 
-   d="scan'208";a="267286813"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jul 2022 04:02:59 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,255,1650956400"; 
-   d="scan'208";a="651526186"
-Received: from brentlu-brix.itwn.intel.com ([10.5.253.25])
-  by fmsmga008.fm.intel.com with ESMTP; 08 Jul 2022 04:02:55 -0700
-From:   Brent Lu <brent.lu@intel.com>
-To:     alsa-devel@alsa-project.org
-Cc:     Cezary Rojewski <cezary.rojewski@intel.com>,
-        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
-        Liam Girdwood <liam.r.girdwood@linux.intel.com>,
-        Peter Ujfalusi <peter.ujfalusi@linux.intel.com>,
-        Bard Liao <yung-chuan.liao@linux.intel.com>,
-        Ranjani Sridharan <ranjani.sridharan@linux.intel.com>,
-        Kai Vehmanen <kai.vehmanen@linux.intel.com>,
-        Mark Brown <broonie@kernel.org>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>, Brent Lu <brent.lu@intel.com>,
-        Akihiko Odaki <akihiko.odaki@gmail.com>,
-        linux-kernel@vger.kernel.org, Rander Wang <rander.wang@intel.com>,
-        Gongjun Song <gongjun.song@intel.com>,
-        Mac Chiang <mac.chiang@intel.com>,
-        Ajye Huang <ajye_huang@compal.corp-partner.google.com>,
-        Libin Yang <libin.yang@intel.com>,
-        Muralidhar Reddy <muralidhar.reddy@intel.com>,
-        David Lin <CTLIN0@nuvoton.com>
-Subject: [PATCH v8 2/2] ASoC: Intel: sof_cs42l42: add adl_mx98360a_cs4242 board config
-Date:   Fri,  8 Jul 2022 19:00:30 +0800
-Message-Id: <20220708110030.658468-3-brent.lu@intel.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220708110030.658468-1-brent.lu@intel.com>
-References: <20220708110030.658468-1-brent.lu@intel.com>
+Date:   Fri, 8 Jul 2022 13:03:26 +0200
+From:   Vincent Whitchurch <vincent.whitchurch@axis.com>
+To:     Oliver Neukum <oneukum@suse.com>,
+        "rafael.j.wysocki@intel.com" <rafael.j.wysocki@intel.com>
+CC:     "jic23@kernel.org" <jic23@kernel.org>,
+        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-iio@vger.kernel.org" <linux-iio@vger.kernel.org>
+Subject: Re: PM runtime_error handling missing in many drivers?
+Message-ID: <20220708110325.GA5307@axis.com>
+References: <20220620144231.GA23345@axis.com>
+ <5caa944f-c841-6f74-8e43-a278b2b93b06@suse.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <5caa944f-c841-6f74-8e43-a278b2b93b06@suse.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,56 +55,61 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This patch adds driver data for adl_mx98360a_cs4242 which supports
-two max98360a speaker amplifiers on SSP1 and cs42l42 headphone codec
-on SSP0 running on ADL platform.
+On Tue, Jun 21, 2022 at 11:38:33AM +0200, Oliver Neukum wrote:
+> On 20.06.22 16:42, Vincent Whitchurch wrote:
+> > [110778.050000][   T27] rpm_resume: 0-0009 flags-4 cnt-1  dep-0  auto-1 p-0 irq-0 child-0
+> > [110778.050000][   T27] rpm_return_int: rpm_resume+0x24d/0x11d0:0-0009 ret=-22
+> > 
+> > The following patch fixes the issue on vcnl4000, but is this the right in the
+> > fix?  And, unless I'm missing something, there are dozens of drivers
+> > with the same problem.
+> 
+> Yes. The point of pm_runtime_resume_and_get() is to remove the need
+> for handling errors when the resume fails. So I fail to see why a
+> permanent record of a failure makes sense for this API.
 
-Signed-off-by: Brent Lu <brent.lu@intel.com>
----
- sound/soc/intel/boards/sof_cs42l42.c              | 11 +++++++++++
- sound/soc/intel/common/soc-acpi-intel-adl-match.c |  7 +++++++
- 2 files changed, 18 insertions(+)
+I don't understand it either.
 
-diff --git a/sound/soc/intel/boards/sof_cs42l42.c b/sound/soc/intel/boards/sof_cs42l42.c
-index 3d53bb420c66..85ffd065895d 100644
---- a/sound/soc/intel/boards/sof_cs42l42.c
-+++ b/sound/soc/intel/boards/sof_cs42l42.c
-@@ -700,6 +700,17 @@ static const struct platform_device_id board_ids[] = {
- 					SOF_CS42L42_SSP_AMP(1)) |
- 					SOF_CS42L42_DAILINK(LINK_HP, LINK_DMIC, LINK_HDMI, LINK_SPK, LINK_NONE),
- 	},
-+	{
-+		.name = "adl_mx98360a_cs4242",
-+		.driver_data = (kernel_ulong_t)(SOF_CS42L42_SSP_CODEC(0) |
-+				SOF_SPEAKER_AMP_PRESENT |
-+				SOF_MAX98360A_SPEAKER_AMP_PRESENT |
-+				SOF_CS42L42_SSP_AMP(1) |
-+				SOF_CS42L42_NUM_HDMIDEV(4) |
-+				SOF_BT_OFFLOAD_PRESENT |
-+				SOF_CS42L42_SSP_BT(2) |
-+				SOF_CS42L42_DAILINK(LINK_HP, LINK_DMIC, LINK_HDMI, LINK_SPK, LINK_BT)),
-+	},
- 	{ }
- };
- MODULE_DEVICE_TABLE(platform, board_ids);
-diff --git a/sound/soc/intel/common/soc-acpi-intel-adl-match.c b/sound/soc/intel/common/soc-acpi-intel-adl-match.c
-index c1385161cdc8..fea087d3fa15 100644
---- a/sound/soc/intel/common/soc-acpi-intel-adl-match.c
-+++ b/sound/soc/intel/common/soc-acpi-intel-adl-match.c
-@@ -479,6 +479,13 @@ struct snd_soc_acpi_mach snd_soc_acpi_intel_adl_machines[] = {
- 		.drv_name = "adl_rt5682",
- 		.sof_tplg_filename = "sof-adl-rt5682.tplg",
- 	},
-+	{
-+		.id = "10134242",
-+		.drv_name = "adl_mx98360a_cs4242",
-+		.machine_quirk = snd_soc_acpi_codec_list,
-+		.quirk_data = &adl_max98360a_amp,
-+		.sof_tplg_filename = "sof-adl-max98360a-cs42l42.tplg",
-+	},
- 	/* place amp-only boards in the end of table */
- 	{
- 		.id = "CSC3541",
--- 
-2.25.1
+> > diff --git a/drivers/iio/light/vcnl4000.c b/drivers/iio/light/vcnl4000.c
+> > index e02e92bc2928..082b8969fe2f 100644
+> > --- a/drivers/iio/light/vcnl4000.c
+> > +++ b/drivers/iio/light/vcnl4000.c
+> > @@ -414,6 +414,8 @@ static int vcnl4000_set_pm_runtime_state(struct vcnl4000_data *data, bool on)
+> >  
+> >  	if (on) {
+> >  		ret = pm_runtime_resume_and_get(dev);
+> > +		if (ret)
+> > +			pm_runtime_set_suspended(dev);
+> >  	} else {
+> >  		pm_runtime_mark_last_busy(dev);
+> >  		ret = pm_runtime_put_autosuspend(dev);
+> 
+> If you need to add this to every driver, you can just as well add it to
+> pm_runtime_resume_and_get() to avoid the duplication.
 
+Yes, the documentation says that the error should be cleared, but it's
+unclear why the driver is expected to do it.  From the documentation it
+looks the driver is supposed to choose between pm_runtime_set_active()
+and pm_runtime_set_suspended() to clear the error, but how/why is this
+choice supposed to be made in the driver when the driver doesn't know
+more than the framework about the status of the device?
+
+Perhaps Rafael can shed some light on this.
+
+> But I am afraid we need to ask a deeper question. Is there a point
+> in recording failures to resume? The error code is reported back.
+> If a driver wishes to act upon it, it can. The core really only
+> uses the result to block new PM operations.
+> But nobody requests a resume unless it is necessary. Thus I fail
+> to see the point of checking this flag in resume as opposed to
+> suspend. If we fail, we fail, why not retry? It seems to me that the
+> record should be used only during runtime suspend.
+
+I guess this is also a question for Rafael.
+
+Even if the error recording is removed from runtime_resume and only done
+on suspend failures, all these drivers still have the problem of not
+clearing the error, since the next resume will fail if that is not done.
+
+> And as an immediate band aid, some errors like ENOMEM should
+> never be recorded.

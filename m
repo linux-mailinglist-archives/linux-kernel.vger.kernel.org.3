@@ -2,123 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1931D56BD7A
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 18:08:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F18256BDFC
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 18:09:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238800AbiGHP0F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Jul 2022 11:26:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45034 "EHLO
+        id S238854AbiGHP1H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Jul 2022 11:27:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45684 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238710AbiGHP0C (ORCPT
+        with ESMTP id S238099AbiGHP1E (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Jul 2022 11:26:02 -0400
-Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 464343134D
-        for <linux-kernel@vger.kernel.org>; Fri,  8 Jul 2022 08:26:01 -0700 (PDT)
-Received: by mail-ej1-x632.google.com with SMTP id os14so8040265ejb.4
-        for <linux-kernel@vger.kernel.org>; Fri, 08 Jul 2022 08:26:01 -0700 (PDT)
+        Fri, 8 Jul 2022 11:27:04 -0400
+Received: from mail-io1-xd2c.google.com (mail-io1-xd2c.google.com [IPv6:2607:f8b0:4864:20::d2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDAF472EFA
+        for <linux-kernel@vger.kernel.org>; Fri,  8 Jul 2022 08:27:03 -0700 (PDT)
+Received: by mail-io1-xd2c.google.com with SMTP id m13so20064435ioj.0
+        for <linux-kernel@vger.kernel.org>; Fri, 08 Jul 2022 08:27:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=jgYORBt3h5oNBznarFeGPU7nreEFffTVmMqBLDJdiu4=;
-        b=DtmFdPpzZsHOuwOoYohjvI7a3T6485xiQKNorp7om5YF58QOgdZIm+69XDuFDPu6eT
-         G0VKI4aJemTOakYgNYfi5goKPkr/OciMNayYQVZC/wYVDtjj4SxaE/DpjQ7w7Sglpy6j
-         S9t6UDJqFztUm1k/IXK8WjVFIKnnN4cdaWiLQ=
+        d=ieee.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=F1gk+Prfsqp7B5fRbU+ZlaqTg/Oc9XMgn05ZNfxHc6k=;
+        b=TMFub2RhO98hm6yRFI1f2+XY4MvsygPgJ8Qah6PZm+159gDohno9a5hQ/16fByVKu6
+         H2Pp2pIdeNvVgDcnmOqHmultuW4/gxJwNXyMm4q1FTGlcaSD5llw4aENDd913VMEXcEx
+         WDwyilt3HyegG3eg8luWkkUVXx2Vo9Jp0yEgU=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=jgYORBt3h5oNBznarFeGPU7nreEFffTVmMqBLDJdiu4=;
-        b=XuNrnjKlQFLVfkEalr3lTybXI+IiruMb++PadIiuRfo2b6kAEyf9ZbhNh/GH5SmOf9
-         FCuAS2qhkgN26wW88Hg1naTl5FoeEkt9thM6b4MZfAsgvTw2K3brUT8v0oXuj3Iyp2Kx
-         gUz72oJRqOwLccXdRHk6eiRkDfwaXp03rYhDtSqMfYp+JTjC8QT4JnuTW/lnwwODRPsB
-         8D9l+eiAEkrambgLGlXHAncmGaiOdvP7V6aPHDj0DMLQocq91kccUBy187sqXpAiRq6r
-         daNebhMBulcDIV3b/sEETvsULqY6ijvpBa4bua1BjIlzZnniQ7GH+PnsRsYaE3CZhiPe
-         /LEw==
-X-Gm-Message-State: AJIora85oOSzXuVLZ35oRx81+ydPhWrGntYMR/20EvDd0bhgTCclGIpc
-        lDUVfTAb8+ti7tY55NpDgbulWosEMx0img==
-X-Google-Smtp-Source: AGRyM1sU9is3dKxvj+CKy+nw/Wq6sKkXwLhe1cLYZ8gth1mLRTl4JRbXr7xNObZ8p94wjwzPwZNiGg==
-X-Received: by 2002:a17:907:c14:b0:726:9118:3326 with SMTP id ga20-20020a1709070c1400b0072691183326mr4171126ejc.68.1657293959593;
-        Fri, 08 Jul 2022 08:25:59 -0700 (PDT)
-Received: from mail-wr1-f50.google.com (mail-wr1-f50.google.com. [209.85.221.50])
-        by smtp.gmail.com with ESMTPSA id kz15-20020a17090777cf00b0072af4af2f45sm4294743ejc.199.2022.07.08.08.25.58
-        for <linux-kernel@vger.kernel.org>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=F1gk+Prfsqp7B5fRbU+ZlaqTg/Oc9XMgn05ZNfxHc6k=;
+        b=19WjyIS43TaR1F9rHgWwUS62RHBMV4qm1arBz1iDmxvPHlZTxF3cXZlCDXT/lD8/ri
+         KiwKp2xhuud43d73YCOFrkHfseK84A0FQUJu20MQhHnFX+Fy5PmeP6ymgv1XQjDCLzcv
+         Nuy987TxFjXPLgdcKDcZLB65jpi8F85M6mF5rmfEfWot0Kl8NTmPcMrfrhPJfSAAmVL7
+         0Wa+iYnH4GdBreJt9hL4bvNFIgvf27uiSlKZ38UTCD4RoXNdpAX+Taz2IK9mtvC6Txcu
+         eADETPWCGG/e3EF9qMwq8JckV5lnnmGehCIfqL2wYA1rM0O5MEfzjim3BNgU34dEOsOh
+         D84Q==
+X-Gm-Message-State: AJIora8epfSm/Vn9GM/LOcImanAgDUGqL+lZzc+Z/qk8DOv34m7qTkIp
+        3LBftkrjFBiCSDYB6ytiyqHRdQ==
+X-Google-Smtp-Source: AGRyM1unHcvN2OIn63qXDsRgczQII0J2vwif+D4LuJuDzcAiJGJF9UIOU06GfuUBYGO1BLKhMmGWlg==
+X-Received: by 2002:a05:6638:14d1:b0:339:e8ea:a7c4 with SMTP id l17-20020a05663814d100b00339e8eaa7c4mr2531570jak.309.1657294023215;
+        Fri, 08 Jul 2022 08:27:03 -0700 (PDT)
+Received: from [172.22.22.4] (c-73-185-129-58.hsd1.mn.comcast.net. [73.185.129.58])
+        by smtp.googlemail.com with ESMTPSA id ay3-20020a056638410300b00331a3909e46sm7554532jab.68.2022.07.08.08.27.02
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 08 Jul 2022 08:25:58 -0700 (PDT)
-Received: by mail-wr1-f50.google.com with SMTP id b26so31041903wrc.2
-        for <linux-kernel@vger.kernel.org>; Fri, 08 Jul 2022 08:25:58 -0700 (PDT)
-X-Received: by 2002:adf:fb12:0:b0:20c:79b2:a200 with SMTP id
- c18-20020adffb12000000b0020c79b2a200mr3937186wrr.617.1657293957904; Fri, 08
- Jul 2022 08:25:57 -0700 (PDT)
+        Fri, 08 Jul 2022 08:27:02 -0700 (PDT)
+Message-ID: <44529968-c679-198c-0eb3-c62316681dff@ieee.org>
+Date:   Fri, 8 Jul 2022 10:27:01 -0500
 MIME-Version: 1.0
-References: <20220706191442.1150634-1-swboyd@chromium.org>
-In-Reply-To: <20220706191442.1150634-1-swboyd@chromium.org>
-From:   Doug Anderson <dianders@chromium.org>
-Date:   Fri, 8 Jul 2022 08:25:44 -0700
-X-Gmail-Original-Message-ID: <CAD=FV=UrYCwm2ByN_5EN3fq-ayMJNjmWfJ5sooRy51ZiCoMcjA@mail.gmail.com>
-Message-ID: <CAD=FV=UrYCwm2ByN_5EN3fq-ayMJNjmWfJ5sooRy51ZiCoMcjA@mail.gmail.com>
-Subject: Re: [PATCH] drm/msm/dsi: Set panel orientation when directly connected
-To:     Stephen Boyd <swboyd@chromium.org>
-Cc:     Rob Clark <robdclark@gmail.com>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        LKML <linux-kernel@vger.kernel.org>, patches@lists.linux.dev,
-        Sean Paul <sean@poorly.run>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        freedreno <freedreno@lists.freedesktop.org>,
-        Hsin-Yi Wang <hsinyi@chromium.org>
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH] net/ipa: fix repeated words in comments
+Content-Language: en-US
+To:     Jilin Yuan <yuanjilin@cdjrlc.com>, davem@davemloft.net,
+        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com
+Cc:     elder@kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220708152038.55840-1-yuanjilin@cdjrlc.com>
+From:   Alex Elder <elder@ieee.org>
+In-Reply-To: <20220708152038.55840-1-yuanjilin@cdjrlc.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On 7/8/22 10:20 AM, Jilin Yuan wrote:
+>   Delete the redundant word 'the'.
+> 
+> Signed-off-by: Jilin Yuan <yuanjilin@cdjrlc.com>
 
-On Wed, Jul 6, 2022 at 12:14 PM Stephen Boyd <swboyd@chromium.org> wrote:
->
-> Set the panel orientation in drm when the panel is directly connected,
-> i.e. we're not using an external bridge. The external bridge case is
-> already handled by the panel bridge code, so we only update the path we
-> take when the panel is directly connected/internal. This silences a
-> warning splat coming from __drm_mode_object_add() on Wormdingler boards.
->
-> Cc: Hsin-Yi Wang <hsinyi@chromium.org>
-> Cc: Douglas Anderson <dianders@chromium.org>
-> Signed-off-by: Stephen Boyd <swboyd@chromium.org>
+These are trivial changes.  Please do them all in a single commit.
+
+					-Alex
+
 > ---
->
-> This relies on commit 5e41b01a7808 ("drm/panel: Add an API to allow drm
-> to set orientation from panel") which is in drm-misc
->
->  drivers/gpu/drm/msm/dsi/dsi_manager.c | 2 ++
->  1 file changed, 2 insertions(+)
+>   drivers/net/ipa/gsi_private.h | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/net/ipa/gsi_private.h b/drivers/net/ipa/gsi_private.h
+> index ea333a244cf5..d7065e23c92e 100644
+> --- a/drivers/net/ipa/gsi_private.h
+> +++ b/drivers/net/ipa/gsi_private.h
+> @@ -108,7 +108,7 @@ void *gsi_ring_virt(struct gsi_ring *ring, u32 index);
+>    * gsi_channel_tx_queued() - Report the number of bytes queued to hardware
+>    * @channel:	Channel whose bytes have been queued
+>    *
+> - * This arranges for the the number of transactions and bytes for
+> + * This arranges for the number of transactions and bytes for
+>    * transfer that have been queued to hardware to be reported.  It
+>    * passes this information up the network stack so it can be used to
+>    * throttle transmissions.
 
-I don't personally have objections to this, but (to my understanding)
-"the future" is that everyone should use panel_bridge. If we made the
-move to panel_bridge today then we wouldn't need to do this. In
-general I think panel_bridge would end up letting us delete a bunch of
-code...
-
-See commit 4e5763f03e10 ("drm/bridge: ti-sn65dsi86: Wrap panel with
-panel-bridge") for when this was done by ti-sn65dsi86.
-
-Then again, I spent a small amount of time looking into this and it's
-definitely non-trivial. Still likely worthwhile, but not worth
-blocking a tiny fix like this. It also should be fairly obvious that
-we should delete this when we switch to panel_bridge.
-
-Thus:
-
-Reviewed-by: Douglas Anderson <dianders@chromium.org>
-
-I'll assume that we'll just snooze this commit until drm-misc-next
-merges into a tree that msm-next is based on, which will probably be
-the next -rc1. If desired and Acked I could land this in
-drm-misc-next, but it's probably not worth it?

@@ -2,61 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 61EE256B437
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 10:13:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CC25A56B431
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 10:13:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237673AbiGHIJK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Jul 2022 04:09:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43982 "EHLO
+        id S237638AbiGHIIt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Jul 2022 04:08:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43618 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237666AbiGHIJI (ORCPT
+        with ESMTP id S237037AbiGHIIr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Jul 2022 04:09:08 -0400
-Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3060A8049D
-        for <linux-kernel@vger.kernel.org>; Fri,  8 Jul 2022 01:09:06 -0700 (PDT)
-Received: from lelv0266.itg.ti.com ([10.180.67.225])
-        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 26888pQK112021;
-        Fri, 8 Jul 2022 03:08:51 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1657267732;
-        bh=pSW4QP6rE3DVVlQfx3e1KIdZpOm5BpSBOMUsYnQDylE=;
-        h=From:To:CC:Subject:Date:In-Reply-To:References;
-        b=FO5lvJ0XOuP77VtwHGwC676BL+YKlQNrmFMr5UU6cSxqLF1gXhzkb5z4HkDma0OAp
-         sB7/T+yZFoRe454yDRJ4ALA4trCjnuFSRXyzElh4j3UzHACNuG//+qBqmGFp3ESCcc
-         l85E2qPKaHfPtmRswGmfdkg4SaQO8ZdY5EbgPiEA=
-Received: from DLEE103.ent.ti.com (dlee103.ent.ti.com [157.170.170.33])
-        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 26888p3r052915
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Fri, 8 Jul 2022 03:08:51 -0500
-Received: from DLEE104.ent.ti.com (157.170.170.34) by DLEE103.ent.ti.com
- (157.170.170.33) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Fri, 8
- Jul 2022 03:08:51 -0500
-Received: from lelv0327.itg.ti.com (10.180.67.183) by DLEE104.ent.ti.com
- (157.170.170.34) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
- Frontend Transport; Fri, 8 Jul 2022 03:08:51 -0500
-Received: from ubuntu.ent.ti.com (ileax41-snat.itg.ti.com [10.172.224.153])
-        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 26888ioh119145;
-        Fri, 8 Jul 2022 03:08:49 -0500
-From:   Matt Ranostay <mranostay@ti.com>
-To:     <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>
-CC:     Matt Ranostay <mranostay@ti.com>
-Subject: [PATCH 2/2] dmaengine: ti: k3-psil: add additional TX threads for j7200
-Date:   Fri, 8 Jul 2022 01:08:36 -0700
-Message-ID: <20220708080836.431043-3-mranostay@ti.com>
-X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220708080836.431043-1-mranostay@ti.com>
-References: <20220708080836.431043-1-mranostay@ti.com>
+        Fri, 8 Jul 2022 04:08:47 -0400
+Received: from mail-io1-xd2c.google.com (mail-io1-xd2c.google.com [IPv6:2607:f8b0:4864:20::d2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB67C6D575;
+        Fri,  8 Jul 2022 01:08:46 -0700 (PDT)
+Received: by mail-io1-xd2c.google.com with SMTP id y2so19029926ior.12;
+        Fri, 08 Jul 2022 01:08:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=x19UJHgjPg1vEn3I77WJvz3u/9s5b1I3mV+7Vr6AYRs=;
+        b=p/jzrIBVCE2L4aAKNVKDJM1P2kkf3ator6FleDhAOT5oC2wkfI7BmMLkCvKRQn1Zgg
+         IgjbC3cNV5fofpi/RUucJXfsW/7LrZ6YWTzbayjSZ3S43NZ74mqUxcsiTxlJJl4UYKYU
+         AvhahGc8ElzOyZKm9n+Y5bArRtZ6Aqa20GcInmsqkb0Oe1Ea2b1UurI9ZmpvvY5l6vdm
+         B83oVRQD8ipAyFs0mC9Wz+JbuGqzR89t65MEk/zb6VsoqmsqeR35Z17gf7aK3iwt01sq
+         tWhhe5+JJM6FSriE9Y5xKdfKzBujN1ZLUv5LZgAVcACMI2vu6+oV/M3218o5WW8zkmKo
+         Nofw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=x19UJHgjPg1vEn3I77WJvz3u/9s5b1I3mV+7Vr6AYRs=;
+        b=W+2mQROPqhkUc5GQIOEqmxpDYiaFaoG4Yj/JNAU+4FsfLV83oHAixlcs0Zvuzksndv
+         oFNDgQAdXUEf3B4SFv/xiMQMahaLVn6M1uxF9KNWXL4UlfIuh6DiRHT+3Iz1v7ZeK5oT
+         aMORwCpnqjTJGRqr57EYaHOHivGmiFO0xjVF+/Q6OmQCPfjTl5sNUl4qQYuczhfOITKP
+         kWu2AA0KyeGYzv8ecAkyMdMjAuElzQZvQozVTu6Y0L1GobrW6G+bUJtCjbGmA/9HMjqi
+         G8fz5CGoifNkZJPI+pK4OR7/ELcZ66ID+EolAu4A36J4GW0T2yGuRtCzun1WEciQiZ43
+         01MA==
+X-Gm-Message-State: AJIora8QxoIq8CcGvPJffCIR5MM5MpOKe3csNZaf8wH5ipjj69Edjsd9
+        yL25xhD1vmiee5EEVZLNwp8=
+X-Google-Smtp-Source: AGRyM1vbWDtr7QrSSlCBjpesSmtTsxWNtNYZogM0xwXarCLfVwdswt0oZzNRXkkcFkXi3jf0j+/itQ==
+X-Received: by 2002:a05:6638:3043:b0:314:7ce2:4a6e with SMTP id u3-20020a056638304300b003147ce24a6emr1384191jak.258.1657267726084;
+        Fri, 08 Jul 2022 01:08:46 -0700 (PDT)
+Received: from [192.168.1.145] ([207.188.167.132])
+        by smtp.gmail.com with ESMTPSA id s10-20020a5ec64a000000b0067520155dedsm16960578ioo.15.2022.07.08.01.08.42
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 08 Jul 2022 01:08:45 -0700 (PDT)
+Message-ID: <81af48c4-757c-384d-9a96-9cf16acb317c@gmail.com>
+Date:   Fri, 8 Jul 2022 10:08:41 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,UPPERCASE_50_75
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [RESEND v4 2/2] i2c: mediatek: Add i2c compatible for Mediatek
+ MT8188
+Content-Language: en-US
+To:     kewei.xu@mediatek.com, wsa@the-dreams.de
+Cc:     robh+dt@kernel.org, linux-i2c@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-mediatek@lists.infradead.org,
+        leilk.liu@mediatek.com, qii.wang@mediatek.com,
+        liguo.zhang@mediatek.com, caiyu.chen@mediatek.com,
+        housong.zhang@mediatek.com, yuhan.wei@mediatek.com,
+        david-yh.chiu@mediatek.com, liju-clr.chen@mediatek.com
+References: <20220708034758.22747-1-kewei.xu@mediatek.com>
+ <20220708034758.22747-2-kewei.xu@mediatek.com>
+From:   Matthias Brugger <matthias.bgg@gmail.com>
+In-Reply-To: <20220708034758.22747-2-kewei.xu@mediatek.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -64,99 +81,96 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add matching PSI-L threads mapping for transmission DMA channels
-on the J7200 platform.
 
-Signed-off-by: Matt Ranostay <mranostay@ti.com>
----
- drivers/dma/ti/k3-psil-j7200.c | 67 ++++++++++++++++++++++++++++++++++
- 1 file changed, 67 insertions(+)
 
-diff --git a/drivers/dma/ti/k3-psil-j7200.c b/drivers/dma/ti/k3-psil-j7200.c
-index 5ea63ea74822..e3feff869991 100644
---- a/drivers/dma/ti/k3-psil-j7200.c
-+++ b/drivers/dma/ti/k3-psil-j7200.c
-@@ -143,6 +143,57 @@ static struct psil_ep j7200_src_ep_map[] = {
- 
- /* PSI-L destination thread IDs, used for TX (DMA_MEM_TO_DEV) */
- static struct psil_ep j7200_dst_ep_map[] = {
-+	/* PDMA_MCASP - McASP0-2 */
-+	PSIL_PDMA_MCASP(0xc400),
-+	PSIL_PDMA_MCASP(0xc401),
-+	PSIL_PDMA_MCASP(0xc402),
-+	/* PDMA_SPI_G0 - SPI0-3 */
-+	PSIL_PDMA_XY_PKT(0xc600),
-+	PSIL_PDMA_XY_PKT(0xc601),
-+	PSIL_PDMA_XY_PKT(0xc602),
-+	PSIL_PDMA_XY_PKT(0xc603),
-+	PSIL_PDMA_XY_PKT(0xc604),
-+	PSIL_PDMA_XY_PKT(0xc605),
-+	PSIL_PDMA_XY_PKT(0xc606),
-+	PSIL_PDMA_XY_PKT(0xc607),
-+	PSIL_PDMA_XY_PKT(0xc608),
-+	PSIL_PDMA_XY_PKT(0xc609),
-+	PSIL_PDMA_XY_PKT(0xc60a),
-+	PSIL_PDMA_XY_PKT(0xc60b),
-+	PSIL_PDMA_XY_PKT(0xc60c),
-+	PSIL_PDMA_XY_PKT(0xc60d),
-+	PSIL_PDMA_XY_PKT(0xc60e),
-+	PSIL_PDMA_XY_PKT(0xc60f),
-+	/* PDMA_SPI_G1 - SPI4-7 */
-+	PSIL_PDMA_XY_PKT(0xc610),
-+	PSIL_PDMA_XY_PKT(0xc611),
-+	PSIL_PDMA_XY_PKT(0xc612),
-+	PSIL_PDMA_XY_PKT(0xc613),
-+	PSIL_PDMA_XY_PKT(0xc614),
-+	PSIL_PDMA_XY_PKT(0xc615),
-+	PSIL_PDMA_XY_PKT(0xc616),
-+	PSIL_PDMA_XY_PKT(0xc617),
-+	PSIL_PDMA_XY_PKT(0xc618),
-+	PSIL_PDMA_XY_PKT(0xc619),
-+	PSIL_PDMA_XY_PKT(0xc61a),
-+	PSIL_PDMA_XY_PKT(0xc61b),
-+	PSIL_PDMA_XY_PKT(0xc61c),
-+	PSIL_PDMA_XY_PKT(0xc61d),
-+	PSIL_PDMA_XY_PKT(0xc61e),
-+	PSIL_PDMA_XY_PKT(0xc61f),
-+	/* PDMA_USART_G0 - UART0-1 */
-+	PSIL_PDMA_XY_PKT(0xc700),
-+	PSIL_PDMA_XY_PKT(0xc701),
-+	/* PDMA_USART_G1 - UART2-3 */
-+	PSIL_PDMA_XY_PKT(0xc702),
-+	PSIL_PDMA_XY_PKT(0xc703),
-+	/* PDMA_USART_G2 - UART4-9 */
-+	PSIL_PDMA_XY_PKT(0xc704),
-+	PSIL_PDMA_XY_PKT(0xc705),
-+	PSIL_PDMA_XY_PKT(0xc706),
-+	PSIL_PDMA_XY_PKT(0xc707),
-+	PSIL_PDMA_XY_PKT(0xc708),
-+	PSIL_PDMA_XY_PKT(0xc709),
- 	/* CPSW5 */
- 	PSIL_ETHERNET(0xca00),
- 	PSIL_ETHERNET(0xca01),
-@@ -161,6 +212,22 @@ static struct psil_ep j7200_dst_ep_map[] = {
- 	PSIL_ETHERNET(0xf005),
- 	PSIL_ETHERNET(0xf006),
- 	PSIL_ETHERNET(0xf007),
-+	/* MCU_PDMA_MISC_G0 - SPI0 */
-+	PSIL_PDMA_XY_PKT(0xf100),
-+	PSIL_PDMA_XY_PKT(0xf101),
-+	PSIL_PDMA_XY_PKT(0xf102),
-+	PSIL_PDMA_XY_PKT(0xf103),
-+	/* MCU_PDMA_MISC_G1 - SPI1-2 */
-+	PSIL_PDMA_XY_PKT(0xf200),
-+	PSIL_PDMA_XY_PKT(0xf201),
-+	PSIL_PDMA_XY_PKT(0xf202),
-+	PSIL_PDMA_XY_PKT(0xf203),
-+	PSIL_PDMA_XY_PKT(0xf204),
-+	PSIL_PDMA_XY_PKT(0xf205),
-+	PSIL_PDMA_XY_PKT(0xf206),
-+	PSIL_PDMA_XY_PKT(0xf207),
-+	/* MCU_PDMA_MISC_G2 - UART0 */
-+	PSIL_PDMA_XY_PKT(0xf300),
- 	/* SA2UL */
- 	PSIL_SA2UL(0xf500, 1),
- 	PSIL_SA2UL(0xf501, 1),
--- 
-2.36.1
+On 08/07/2022 05:47, kewei.xu@mediatek.com wrote:
+> From: Kewei Xu <kewei.xu@mediatek.com>
+> 
+> Add i2c compatible for MT8188. Compare to MT8192 i2c controller,
+> The MT8188 i2c OFFSET_SLAVE_ADDR register changed from 0x04 to 0x94.
+> 
 
+Having a look at mt8192_compat there seem to be more changes. I suppose you 
+wanted to say, that in the register mapping the only difference is the 
+OFFSET_SLAVE_ADDR address, that changes.
+
+Regards,
+Matthias
+
+> Signed-off-by: Kewei Xu <kewei.xu@mediatek.com>
+> ---
+> v4: no changes
+> V3: no changes
+> V2: added mt_i2c_regs_v3[] to replace slave_addr_version.
+> ---
+>   drivers/i2c/busses/i2c-mt65xx.c | 43 +++++++++++++++++++++++++++++++++
+>   1 file changed, 43 insertions(+)
+> 
+> diff --git a/drivers/i2c/busses/i2c-mt65xx.c b/drivers/i2c/busses/i2c-mt65xx.c
+> index 8e6985354fd5..70aff42adf5d 100644
+> --- a/drivers/i2c/busses/i2c-mt65xx.c
+> +++ b/drivers/i2c/busses/i2c-mt65xx.c
+> @@ -229,6 +229,35 @@ static const u16 mt_i2c_regs_v2[] = {
+>   	[OFFSET_DCM_EN] = 0xf88,
+>   };
+>   
+> +static const u16 mt_i2c_regs_v3[] = {
+> +	[OFFSET_DATA_PORT] = 0x0,
+> +	[OFFSET_SLAVE_ADDR] = 0x94,
+> +	[OFFSET_INTR_MASK] = 0x8,
+> +	[OFFSET_INTR_STAT] = 0xc,
+> +	[OFFSET_CONTROL] = 0x10,
+> +	[OFFSET_TRANSFER_LEN] = 0x14,
+> +	[OFFSET_TRANSAC_LEN] = 0x18,
+> +	[OFFSET_DELAY_LEN] = 0x1c,
+> +	[OFFSET_TIMING] = 0x20,
+> +	[OFFSET_START] = 0x24,
+> +	[OFFSET_EXT_CONF] = 0x28,
+> +	[OFFSET_LTIMING] = 0x2c,
+> +	[OFFSET_HS] = 0x30,
+> +	[OFFSET_IO_CONFIG] = 0x34,
+> +	[OFFSET_FIFO_ADDR_CLR] = 0x38,
+> +	[OFFSET_SDA_TIMING] = 0x3c,
+> +	[OFFSET_TRANSFER_LEN_AUX] = 0x44,
+> +	[OFFSET_CLOCK_DIV] = 0x48,
+> +	[OFFSET_SOFTRESET] = 0x50,
+> +	[OFFSET_MULTI_DMA] = 0x8c,
+> +	[OFFSET_SCL_MIS_COMP_POINT] = 0x90,
+> +	[OFFSET_DEBUGSTAT] = 0xe4,
+> +	[OFFSET_DEBUGCTRL] = 0xe8,
+> +	[OFFSET_FIFO_STAT] = 0xf4,
+> +	[OFFSET_FIFO_THRESH] = 0xf8,
+> +	[OFFSET_DCM_EN] = 0xf88,
+> +};
+> +
+>   struct mtk_i2c_compatible {
+>   	const struct i2c_adapter_quirks *quirks;
+>   	const u16 *regs;
+> @@ -442,6 +471,19 @@ static const struct mtk_i2c_compatible mt8186_compat = {
+>   	.max_dma_support = 36,
+>   };
+>   
+> +static const struct mtk_i2c_compatible mt8188_compat = {
+> +	.regs = mt_i2c_regs_v3,
+> +	.pmic_i2c = 0,
+> +	.dcm = 0,
+> +	.auto_restart = 1,
+> +	.aux_len_reg = 1,
+> +	.timing_adjust = 1,
+> +	.dma_sync = 0,
+> +	.ltiming_adjust = 1,
+> +	.apdma_sync = 1,
+> +	.max_dma_support = 36,
+> +};
+> +
+>   static const struct mtk_i2c_compatible mt8192_compat = {
+>   	.quirks = &mt8183_i2c_quirks,
+>   	.regs = mt_i2c_regs_v2,
+> @@ -465,6 +507,7 @@ static const struct of_device_id mtk_i2c_of_match[] = {
+>   	{ .compatible = "mediatek,mt8173-i2c", .data = &mt8173_compat },
+>   	{ .compatible = "mediatek,mt8183-i2c", .data = &mt8183_compat },
+>   	{ .compatible = "mediatek,mt8186-i2c", .data = &mt8186_compat },
+> +	{ .compatible = "mediatek,mt8188-i2c", .data = &mt8188_compat },
+>   	{ .compatible = "mediatek,mt8192-i2c", .data = &mt8192_compat },
+>   	{}
+>   };

@@ -2,129 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 43B8256B9F4
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 14:46:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 087D756B9FD
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 14:46:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238310AbiGHMn7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Jul 2022 08:43:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34712 "EHLO
+        id S238286AbiGHMoU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Jul 2022 08:44:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34962 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237695AbiGHMn6 (ORCPT
+        with ESMTP id S238347AbiGHMoN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Jul 2022 08:43:58 -0400
-Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7A3165593;
-        Fri,  8 Jul 2022 05:43:57 -0700 (PDT)
-Received: by linux.microsoft.com (Postfix, from userid 1112)
-        id 2B929204C3FB; Fri,  8 Jul 2022 05:43:57 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 2B929204C3FB
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1657284237;
-        bh=mQklIKku3pJkCpsILZUFKU3IMBOUE5LuHgsfE1Y7rHg=;
+        Fri, 8 Jul 2022 08:44:13 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4B242D1FF;
+        Fri,  8 Jul 2022 05:44:11 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 8472EB8263A;
+        Fri,  8 Jul 2022 12:44:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D9E64C341C6;
+        Fri,  8 Jul 2022 12:44:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1657284249;
+        bh=BxRFS74/wPXVWhnRUFG6v6MJTHoa+rf4xlBesuE0Hd8=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=NwHRksgZjSvlFmeFFZ5U6tUS3HvnrNQ/Qa/WMG1a7a2HmKTunhyaZBAvmuVZXe1yi
-         zSgZ/zwXoc7JFamjgegHtaF7W7LecOHSieHSI+ZNPIknLIJMo3pV460RxVMqwHd+VU
-         /3+tPEDQegd0I6jqHHrwn1y2X10PqwszK8Zd6++8=
-Date:   Fri, 8 Jul 2022 05:43:57 -0700
-From:   Jeremi Piotrowski <jpiotrowski@linux.microsoft.com>
-To:     Saurabh Singh Sengar <ssengar@linux.microsoft.com>
-Cc:     David Laight <David.Laight@ACULAB.COM>,
-        'Praveen Kumar' <kumarpraveen@linux.microsoft.com>,
-        "kys@microsoft.com" <kys@microsoft.com>,
-        "haiyangz@microsoft.com" <haiyangz@microsoft.com>,
-        "sthemmin@microsoft.com" <sthemmin@microsoft.com>,
-        "wei.liu@kernel.org" <wei.liu@kernel.org>,
-        "decui@microsoft.com" <decui@microsoft.com>,
-        "jejb@linux.ibm.com" <jejb@linux.ibm.com>,
-        "martin.petersen@oracle.com" <martin.petersen@oracle.com>,
-        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
-        "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "ssengar@microsoft.com" <ssengar@microsoft.com>,
-        "mikelley@microsoft.com" <mikelley@microsoft.com>
-Subject: Re: [PATCH] scsi: storvsc: Prevent running tasklet for long
-Message-ID: <20220708124357.GA26068@linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net>
-References: <1657035141-2132-1-git-send-email-ssengar@linux.microsoft.com>
- <b4fea161-41c5-a03e-747b-316c74eb986c@linux.microsoft.com>
- <a9af8d8d5ee24d19a87c3353a4e8941d@AcuMS.aculab.com>
- <20220708104203.GA10366@linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net>
+        b=M9fd+19FkzNtAqLhIan/U6Be0K9sXFROEBzEgAQTXsaN6Lbn1onla82CqFYdNyH5T
+         8RLJy844UNDQmodz/TfLMrq70GztnZ2dq2VZOIiUe6Vy9mIHHG2uGibLGYYcvFxplw
+         VuccJADL5kwO9Uu1O1mnOl+CQAHYBjGEDczHF8ucFoKQ72vKNtGplq7yRC9/tEoVtA
+         UXcb933U6Xa55bR1sG9YxzP3NEGM5utMyv+d76gxq+AimHs/P17hEVUzISYQdWZ6pp
+         BRjQ60Jb/TrQ+FqD1RIA6V4XFyHzYZf8deFPSDIe2unCLn4xNb2tXiS7vPveWuMEui
+         vsovH2uBwfU2g==
+Date:   Fri, 8 Jul 2022 13:44:00 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
+Cc:     paul@crapouillou.net, lgirdwood@gmail.com, perex@perex.cz,
+        tiwai@suse.com, linux-mips@vger.kernel.org,
+        alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 04/11] ASoC: jz4740-i2s: Handle independent FIFO flush
+ bits
+Message-ID: <YsgmkBpk4JBTkjPz@sirena.org.uk>
+References: <20220708104304.51415-1-aidanmacdonald.0x0@gmail.com>
+ <20220708104304.51415-5-aidanmacdonald.0x0@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="iMtDllGA45iC7Bq8"
 Content-Disposition: inline
-In-Reply-To: <20220708104203.GA10366@linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net>
-User-Agent: Mutt/1.5.21 (2010-09-15)
-X-Spam-Status: No, score=-19.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,
-        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220708104304.51415-5-aidanmacdonald.0x0@gmail.com>
+X-Cookie: Baby On Board.
+X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jul 08, 2022 at 03:42:03AM -0700, Saurabh Singh Sengar wrote:
-> On Wed, Jul 06, 2022 at 11:09:43AM +0000, David Laight wrote:
-> > From: Praveen Kumar
-> > > Sent: 06 July 2022 10:15
-> > > 
-> > > On 05-07-2022 21:02, Saurabh Sengar wrote:
-> > > > There can be scenarios where packets in ring buffer are continuously
-> > > > getting queued from upper layer and dequeued from storvsc interrupt
-> > > > handler, such scenarios can hold the foreach_vmbus_pkt loop (which is
-> > > > executing as a tasklet) for a long duration. Theoretically its possible
-> > > > that this loop executes forever. Add a condition to limit execution of
-> > > > this tasklet for finite amount of time to avoid such hazardous scenarios.
-> > 
-> > Does this really make much difference?
-> > 
-> > I'd guess the tasklet gets immediately rescheduled as soon as
-> > the upper layer queues another packet?
-> > 
-> > Or do you get a different 'bug' where it is never woken again
-> > because the ring is stuck full?
-> > 
-> > 	David
-> 
-> My initial understanding was that staying in a tasklet for "too long" may not be a
-> good idea, however I was not sure what the "too long" value be, thus we are thinking
-> to provide this parameter as a configurable sysfs entry. I couldn't find any linux
-> doc justifying this, so please correct me here if I am mistaken.
 
-Staying in tasklet for "too long" is only an issue if you have other imporant
-work to do. You might be interested in improving fairness/latency of various
-kinds of workloads vs. storvsc:
-* different storage devices
-* storvsc vs. netdevs
-* storvsc vs. userspace
+--iMtDllGA45iC7Bq8
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Which one are you trying to address? Or is performance the highest concern?
-Then you would likely prefer to keep polling as long as possible.
+On Fri, Jul 08, 2022 at 11:42:57AM +0100, Aidan MacDonald wrote:
+> On the JZ4740, there is a single bit that flushes (empties) both
+> the transmit and receive FIFO. Later SoCs have independent flush
+> bits for each FIFO, which allows us to flush the right FIFO when
+> starting up a stream.
+>=20
+> This also fixes a bug: since we were only setting the JZ4740's
+> flush bit, which corresponds to the TX FIFO flush bit on other
+> SoCs, other SoCs were not having their RX FIFO flushed at all.
+>=20
+> Fixes: 967beb2e8777 ("ASoC: jz4740: Add jz4780 support")
 
-> We have also considered the networking drivers NAPI budget feature while deciding
-> this approach, where softirq exits once the budget is crossed. This budget feature
-> act as a performance tuning parameter for driver, and also can help with ring buffer
-> overflow. I believe similar reasons are true for scsi softirq as well.
-> 
-> NAPI budget Ref : https://wiki.linuxfoundation.org/networking/napi.
-> 
-> - Saurabh
+Fixes should generally be at the start of a patch series so they don't
+end up depending on other patches needlessly.
 
-Reading code here https://elixir.bootlin.com/linux/latest/source/drivers/hv/connection.c#L448,
-it looks like if you restricted storvsc to only process a finite amount of
-packets per call you would achieve the *budget* effect. You would get called
-again if there are more packets to consume and there is already a timeout in
-that function. Having two different timeouts at these 2 levels will have weird
-interactions.
+--iMtDllGA45iC7Bq8
+Content-Type: application/pgp-signature; name="signature.asc"
 
-There is also the irq_poll facility that exists for the block layer and serves
-a similar purpose as NAPI. You would need to switch to using HV_CALL_ISR.
+-----BEGIN PGP SIGNATURE-----
 
-Jeremi
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmLIJo8ACgkQJNaLcl1U
+h9B9kgf8CT0MfwU8RkShIGj7UdUEyFOhRfUqIEDavq/R9O1q1FvEygiH0xnSn2G7
+YZ0Vez4b0jAt0eRtXGfW87yw5YoX0J489Gb4Cwd1OOHXd1AfN5v6mOuYxccuPzVb
+q+tuMq7GCNZCVbqcCgHR+FaBLgbP/3YYLontc0Dl0tx0M6nqGs1/6u2IEY5kv2Gl
+f3sP5jb1Q1b8LIyUnF2uLz0GV++dCt0vsQ70Ji6bPyE6dVVTEH8Cf0GVvIsOo4SU
+2BjTqZoppM2ZVOhyyZ90au6bjKjrL8frjl7AmRdKTuguAzhi6Q6OHGLrj+Z1ztIb
+CCwyurB2OTlUhERrjDewaqU468jK9Q==
+=lFdd
+-----END PGP SIGNATURE-----
 
-> 
-> 
-> > 
-> > -
-> > Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
-> > Registration No: 1397386 (Wales)
+--iMtDllGA45iC7Bq8--

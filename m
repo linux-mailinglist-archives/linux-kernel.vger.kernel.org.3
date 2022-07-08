@@ -2,131 +2,187 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D17B256BDFA
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 18:09:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 65CFF56BDC4
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 18:08:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238448AbiGHPyT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Jul 2022 11:54:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38636 "EHLO
+        id S238835AbiGHPyn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Jul 2022 11:54:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39048 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238231AbiGHPyR (ORCPT
+        with ESMTP id S238727AbiGHPyk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Jul 2022 11:54:17 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0453070E56;
-        Fri,  8 Jul 2022 08:54:17 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8122D61627;
-        Fri,  8 Jul 2022 15:54:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B8B32C341C0;
-        Fri,  8 Jul 2022 15:54:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1657295655;
-        bh=iLR0PBjtzcQHZ8I6cmvlIl/1ubOtBKp214rW7GPgt0M=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=g8m0mmGWAah9lT1Bsw24STNVGlhp7gkQ2Eh629fjj1zAjLGMz0QHdOb2vxpx0ZyBv
-         EFqcjwUU+9g0Ob7BSm+TmldqNMHgTDcNBK0GCWApRieMZBcVYXLk34Bp+W6uySeAhg
-         7ij9js5JyNVBin0F1DZI+cK8M+sDdCS+7Y7GdRBdEPvP8sYCIMz6oiBQZ6P5Rl2DWp
-         UWMYA5JJcKI8QzVp/fgV/MFTzV4s7UnHlt0/RrPpSMAvYb+MzEwM/I+xNLDFqDtXsm
-         VKttXAYj954bYMxYi9sZ6VsLQxoXM/GbBMzVAcph6AiIuBcrvWgRvHNxehNQ8Aemur
-         JgLqoKawesxEg==
-Received: by pali.im (Postfix)
-        id 3E1577D1; Fri,  8 Jul 2022 17:54:13 +0200 (CEST)
-Date:   Fri, 8 Jul 2022 17:54:13 +0200
-From:   Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>
-To:     Andy Shevchenko <andy.shevchenko@gmail.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Johan Hovold <johan@kernel.org>,
-        Marek =?utf-8?B?QmVow7pu?= <kabel@kernel.org>,
-        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 0/3] serial: Fix support for UPF_SPD_* flags
-Message-ID: <20220708155413.rlc3iyf72tdwthfa@pali>
-References: <20220321163055.4058-1-pali@kernel.org>
- <CAHp75VddDG-ZJpbAb5ZhKaMpP0L+CMEx2pcYy3FOMiaxNydCWA@mail.gmail.com>
- <YmK7drS0XgnTQcaf@kroah.com>
- <20220707084840.jvsstvyx2ul5ltb6@pali>
- <YsgsH94PV/wAX0Vu@kroah.com>
- <20220708132621.4v2es73h52aq3izn@pali>
- <Ysg2RW0B/cLL3k+k@kroah.com>
- <20220708142001.7fciqnfckznlvsa4@pali>
- <CAHp75Vci1zeDV1axd_v_PLLPGfF5AzAzmmcegjD1djqnR6XUcA@mail.gmail.com>
+        Fri, 8 Jul 2022 11:54:40 -0400
+Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E099270E46
+        for <linux-kernel@vger.kernel.org>; Fri,  8 Jul 2022 08:54:37 -0700 (PDT)
+Received: by mail-lf1-x133.google.com with SMTP id z25so19449810lfr.2
+        for <linux-kernel@vger.kernel.org>; Fri, 08 Jul 2022 08:54:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=/os5t3S4cPsz3I/S9Mj4qyigjvCHgQQtkEVeDgJ05RM=;
+        b=PsBVmJ6R6GowUlEMeEe8ZRY8jb52v2WfXzscfT5jLoCOQsbZ36cbawSyHAtGiHnafj
+         HaFtIhvPwrjTsy3gBfiNpXk6CLJYS++w+8CYIEoISvqmxuuVetqxorhjsydgFa23mZKQ
+         5/cnrNL72sWZGEGfjILngANqq9MIg3cWbdiTWVR/h5IQrycCXuvQ4YGYcrr2ICC+JjoL
+         DyDSxQSfjivojcSr1c9UT0BUbasRhFYlNTGM0VY5acbNpT07M1F5BIlW4gQlVvfNsmya
+         l77+tZgU/wKnuxcPYeZ/vqIStbc7H1V+E0CACaXVs84rluFvh1bSyYJPimKqQ++dB94y
+         p0rw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=/os5t3S4cPsz3I/S9Mj4qyigjvCHgQQtkEVeDgJ05RM=;
+        b=lQtM3W/goaUQN0R+2C8kiSlFaD7z1Zg36VzrVchMzwuNjGwBCgX3cAVwHXY5TUn8ez
+         pRXS1Z/xx2iX5hzfovI3vEbbvB2xU5BmjJ90DPrzcRSJLBxe4VFRn9ivoqFA3gJjDkSI
+         pgYwSj6j3+iVMh1rWHdYTWeJOKg4U+mihl4U7MEGZKPYgqYADR+7n5iKBFcZYOhFBP8v
+         Khda7EaOHWxfZod+nHsy9wiNrQ8mtwGp7QbPg6Xxbtxazyohss5u84wL1iK4KOwldgYP
+         S/SmT0HUhTTBaWSEt5sTWszD20woyLtCKhZbkq/9/qX5Gr35HFal4I5aEh3C3l9uzdo0
+         Q4Yw==
+X-Gm-Message-State: AJIora+4ICCUNktSsfSvkhu9w7Hg1XCJRezw7z1HMiya/i8bVOpK5QT+
+        pYiWSESY81sPdX+ki2EayrjIRO6xYsN40nutFRQjeQ==
+X-Google-Smtp-Source: AGRyM1vakIVeDaj9C17a1elb+iyUeaYTA/kg2lyv8/76nZi9IF95NVCr4t6HVeEbFti0eBxcXliDfOCnMI7CCXuWRVI=
+X-Received: by 2002:a05:6512:a8c:b0:484:73f8:704d with SMTP id
+ m12-20020a0565120a8c00b0048473f8704dmr3076083lfu.193.1657295675981; Fri, 08
+ Jul 2022 08:54:35 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAHp75Vci1zeDV1axd_v_PLLPGfF5AzAzmmcegjD1djqnR6XUcA@mail.gmail.com>
-User-Agent: NeoMutt/20180716
-X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <cover.1655761627.git.ashish.kalra@amd.com> <7845d453af6344d0b156493eb4555399aad78615.1655761627.git.ashish.kalra@amd.com>
+ <CAMkAt6oGzqoMxN5ws9QZ9P1q5Rah92bb4V2KSYBgi0guMGUKAQ@mail.gmail.com>
+ <SN6PR12MB2767CC5405E25A083E76CFFB8EB49@SN6PR12MB2767.namprd12.prod.outlook.com>
+ <CAMkAt6pdoMY1yV+kcUzOftD2WKS8sQy-R2b=Aty8wS-gGp-21Q@mail.gmail.com> <SN6PR12MB276787F711EE80D3546431848E839@SN6PR12MB2767.namprd12.prod.outlook.com>
+In-Reply-To: <SN6PR12MB276787F711EE80D3546431848E839@SN6PR12MB2767.namprd12.prod.outlook.com>
+From:   Peter Gonda <pgonda@google.com>
+Date:   Fri, 8 Jul 2022 09:54:24 -0600
+Message-ID: <CAMkAt6oea8CfjupTRBS1CQQogaixNakF1+KjSZ-+bhRBRj3GvQ@mail.gmail.com>
+Subject: Re: [PATCH Part2 v6 35/49] KVM: SVM: Remove the long-lived GHCB host map
+To:     "Kalra, Ashish" <Ashish.Kalra@amd.com>
+Cc:     "the arch/x86 maintainers" <x86@kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        kvm list <kvm@vger.kernel.org>,
+        "linux-coco@lists.linux.dev" <linux-coco@lists.linux.dev>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Joerg Roedel <jroedel@suse.de>,
+        "Lendacky, Thomas" <Thomas.Lendacky@amd.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, Ard Biesheuvel <ardb@kernel.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Jim Mattson <jmattson@google.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Sergio Lopez <slp@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        David Rientjes <rientjes@google.com>,
+        Dov Murik <dovmurik@linux.ibm.com>,
+        Tobin Feldman-Fitzthum <tobin@ibm.com>,
+        Borislav Petkov <bp@alien8.de>,
+        "Roth, Michael" <Michael.Roth@amd.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        "Kirill A . Shutemov" <kirill@shutemov.name>,
+        Andi Kleen <ak@linux.intel.com>,
+        Tony Luck <tony.luck@intel.com>, Marc Orr <marcorr@google.com>,
+        Sathyanarayanan Kuppuswamy 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        Alper Gun <alpergun@google.com>,
+        "Dr. David Alan Gilbert" <dgilbert@redhat.com>,
+        "jarkko@kernel.org" <jarkko@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Friday 08 July 2022 17:42:03 Andy Shevchenko wrote:
-> On Fri, Jul 8, 2022 at 4:20 PM Pali Rohár <pali@kernel.org> wrote:
-> > On Friday 08 July 2022 15:51:01 Greg Kroah-Hartman wrote:
-> > > On Fri, Jul 08, 2022 at 03:26:21PM +0200, Pali Rohár wrote:
-> > > > On Friday 08 July 2022 15:07:43 Greg Kroah-Hartman wrote:
-> > > > > On Thu, Jul 07, 2022 at 10:48:40AM +0200, Pali Rohár wrote:
-> > > > > > On Friday 22 April 2022 16:28:06 Greg Kroah-Hartman wrote:
-> 
-> ...
-> 
-> > > > > I'm not saying remove them, I'm saying let us not add any more
-> > > > > dependancies on them in order to keep new applications from ever wanting
-> > > > > to use them.
-> > > >
-> > > > Last time you wrote to remove them. Now saying not to remove them. So I
-> > > > do not understand you now.
-> 
-> There was a _new_ addition of the ugly SPD_CUST, that's what I believe
-> Greg opposes to. And I support that.
+On Thu, Jul 7, 2022 at 2:31 PM Kalra, Ashish <Ashish.Kalra@amd.com> wrote:
+>
+> [AMD Official Use Only - General]
+>
+> Hello Peter,
+>
+> >> >There is a perf cost to this suggestion but it might make accessing
+> >> >the GHCB safer for KVM. Have you thought about just using
+> >> >kvm_read_guest() or copy_from_user() to fully copy out the GCHB into =
+a KVM owned buffer, then copying it back before the VMRUN. That way the KVM=
+ doesn't need to guard against page_state_changes on the GHCBs, that could =
+be a perf ?>>improvement in a follow up.
+> >>
+> >> Along with the performance costs you mentioned, the main concern here
+> >> will be the GHCB write-back path (copying it back) before VMRUN: this
+> >> will again hit the issue we have currently with
+> >> kvm_write_guest() / copy_to_user(), when we use it to sync the scratch
+> >> buffer back to GHCB. This can fail if guest RAM is mapped using huge-p=
+age(s) and RMP is 4K. Please refer to the patch/fix mentioned below, kvm_wr=
+ite_guest() potentially can fail before VMRUN in case of SNP :
+> >>
+> >> commit 94ed878c2669532ebae8eb9b4503f19aa33cd7aa
+> >> Author: Ashish Kalra <ashish.kalra@amd.com>
+> >> Date:   Mon Jun 6 22:28:01 2022 +0000
+> >>
+> >>     KVM: SVM: Sync the GHCB scratch buffer using already mapped ghcb
+> >>
+> >>    Using kvm_write_guest() to sync the GHCB scratch buffer can fail
+> >>     due to host mapping being 2M, but RMP being 4K. The page fault han=
+dling
+> >>     in do_user_addr_fault() fails to split the 2M page to handle RMP f=
+ault due
+> >>     to it being called here in a non-preemptible context. Instead use
+> >>     the already kernel mapped ghcb to sync the scratch buffer when the
+> >>     scratch buffer is contained within the GHCB.
+>
+> >Ah I didn't see that issue thanks for the pointer.
+>
+> >The patch description says "When SEV-SNP is enabled the mapped GPA needs=
+ to be protected against a page state change." since if the guest were to c=
+onvert the GHCB page to private when the host is using the GHCB the host co=
+uld get an RMP violation right?
+>
+> Right.
+>
+> >That RMP violation would cause the host to crash unless we use some copy=
+_to_user() type protections.
+>
+> As such copy_to_user() will only swallow the RMP violation and return fai=
+lure, so the host can retry the write.
+>
+> > I don't see anything mechanism for this patch to add the page state cha=
+nge protection discussed. Can't another vCPU still convert the GHCB to priv=
+ate?
+>
+> We do have the protections for GHCB getting mapped to private specificall=
+y, there are new post_{map|unmap}_gfn functions added to verify if it is sa=
+fe to map
+> GHCB pages. There is a PSC spinlock added which protects again page state=
+ change for these mapped pages.
+> Below is the reference to this patch:
+> https://lore.kernel.org/lkml/cover.1655761627.git.ashish.kalra@amd.com/T/=
+#mafcaac7296eb9a92c0ea58730dbd3ca47a8e0756
+>
+> But do note that there is protection only for GHCB pages and there is a n=
+eed to add generic post_{map,unmap}_gfn() ops that can be used to verify
+> that it's safe to map a given guest page in the hypervisor. This is a TOD=
+O right now and probably this is something which UPM can address more clean=
+ly.
 
-Which addition? I do not understand you. There was not any new driver
-with introduction of SPD support.
+Thank you Ashish. I had missed that.
 
-> > > I'm sorry, I am totally lost.
-> >
-> > So look what you have wrote? Who is lost here is me.
-> >
-> > > How about starting over and resubmitting
-> > > the changes you want and we can go from there.
-> >
-> > What to resubmit? I do not understand you. In case you lost emails or
-> > accidentally removed them, you can look at them in archive, not? I hope
-> > that you do not want me to copy+paste all existing patches with all your
-> > quotes on them which you wrote into new emails.
-> 
-> That change that adds the new user of SPD_CUST?
+Can you help me understand why its OK to use kvm_write_guest() for the
+|snp_certs_data| inside of snp_handle_ext_guest_request() in patch
+42/49? I would have thought we'd have the same 2M vs 4K mapping
+issues.
 
-What you are talking about? Which user?
-
-> In any case the best summary about BOTHER I ever read is this [1] (and
-> an initial steps in picocom [2]).
-
-Is not that example in manpage enough?
-
-> And I believe that instead of
-> SPD_CUST we should get rid (or at least minimize) the problems with
-> BOTHER in user space.
-
-I looked into archives and seems that glibc people are not interested in
-this area. And I'm not going to spend time on another project which seems
-to be useless.
-
-> [1]: https://github.com/npat-efault/picocom/blob/master/termios2.txt
-> [2]: https://github.com/jmesmon/picocom/issues/2
-> 
-> 
-> 
-> -- 
-> With Best Regards,
-> Andy Shevchenko
+>
+> >I was wrong about the importance of this though seanjc@ walked me throug=
+h how UPM will solve this issue so no worries about this until the series i=
+s rebased on to UPM.
+>
+> Thanks,
+> Ashish

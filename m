@@ -2,172 +2,229 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9719C56B54E
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 11:22:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4637256B570
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 11:30:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237888AbiGHJWO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Jul 2022 05:22:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42826 "EHLO
+        id S237709AbiGHJWx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Jul 2022 05:22:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43536 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237540AbiGHJWL (ORCPT
+        with ESMTP id S237662AbiGHJWv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Jul 2022 05:22:11 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id CCFAE2C677;
-        Fri,  8 Jul 2022 02:22:09 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id E950BD6E;
-        Fri,  8 Jul 2022 02:22:09 -0700 (PDT)
-Received: from [192.168.99.12] (unknown [172.31.20.19])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 8AB173F66F;
-        Fri,  8 Jul 2022 02:22:08 -0700 (PDT)
-Message-ID: <e55094af-557e-8044-fc14-00189bd392a2@foss.arm.com>
-Date:   Fri, 8 Jul 2022 10:21:59 +0100
+        Fri, 8 Jul 2022 05:22:51 -0400
+Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6C1830F58
+        for <linux-kernel@vger.kernel.org>; Fri,  8 Jul 2022 02:22:49 -0700 (PDT)
+Received: by mail-pl1-x633.google.com with SMTP id f11so3329429plr.4
+        for <linux-kernel@vger.kernel.org>; Fri, 08 Jul 2022 02:22:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=fortu-net.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=Y0gFTgEw8o/sZzcpqT/zqeJVyFwXwGnVGICet2zwIx0=;
+        b=sBE6RD34qzqgs778DVxBQqGSxgy5SBH9j19gPIGTpGn01WSwkFlOGZ+0RiCGEdX9mW
+         BCWm4cukAIrNz3heoRcLqTnzf6Fb79D91vPm7Lul7XyT1jL0ol+sPsszXJGakic9tb/8
+         gfR1UWNSuMBmeFIxDl4gwFfphGhhWoH3sPlGZpW4bMJlQCmRA5UcpHxESPODbmJXEAr4
+         kdFbbvX83cDRmE7PQ+GWVqwtNaCR1AulbaGNQ/KsDJNhiwS4zGei/rWMUrMhN939PioD
+         uBXBidrjE5H0VGsKmPBH6sczfM+gMgRxw7aC42HHLotuLdaGJ16/YLJvLW1aDXSceD/L
+         GKFw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Y0gFTgEw8o/sZzcpqT/zqeJVyFwXwGnVGICet2zwIx0=;
+        b=c7EW0jit0X8bAeZeDbAprLH24P7AlqAxCrMbHRwi5JZj3rKvrG0nQS3IU3qowGqYJw
+         UarHbq3gwbk6iVOTsXX6qxDm4IE9KRZc0aPW2hRnAzPJ8UkURUboRkLocMmIYth+HFGe
+         SOmskXcWv9RfMCSLGob/qXl/99zDhE/TBrlwq81Ayaq1rSpEFAnYn3RrRvnb048px3t3
+         RFFeERnvUrjXDkNcwa71XDVPSoJiZ8XZ5GsseDcrZsr1ao/E7ZO6tFQKyH3mSSWzmjII
+         25IOfIFsVBm9+e6b3ylGhaUWcCX8zpiCpSuMBMrT8b+xpAf4R7v8m9ihSOoBxPrAnrAL
+         PTvA==
+X-Gm-Message-State: AJIora90plTvQQYiSXWw2JuRJGbDcKTqMijLJXC6K1kkMBANdSwuyu+K
+        2IEXvD1osMcN0EC8SpAtSMGQZxciiVxEcnoU0m3P
+X-Google-Smtp-Source: AGRyM1uSZoyIcGr4GVhCV/Gjjw1nutNmCi1SbSgTEu383XlWcc1SQglU0jXyjf7VafdFTCkZc0/UUxzUY0BmyFrRH8k=
+X-Received: by 2002:a17:90b:1b07:b0:1ec:c617:a314 with SMTP id
+ nu7-20020a17090b1b0700b001ecc617a314mr2890719pjb.214.1657272169161; Fri, 08
+ Jul 2022 02:22:49 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Subject: Re: [PATCH 10/14] perf test: Add thread loop test shell scripts
-Content-Language: en-US
-To:     James Clark <james.clark@arm.com>, linux-kernel@vger.kernel.org
-Cc:     coresight@lists.linaro.org, mathieu.poirier@linaro.org,
-        mike.leach@linaro.org, linux-perf-users@vger.kernel.org,
-        acme@kernel.org, Suzuki K Poulose <suzuki.poulose@arm.com>
-References: <20220701120804.3226396-1-carsten.haitzler@foss.arm.com>
- <20220701120804.3226396-11-carsten.haitzler@foss.arm.com>
- <a14e7015-7446-8cb3-612c-00dcb469c939@arm.com>
-From:   Carsten Haitzler <carsten.haitzler@foss.arm.com>
-Organization: Arm Ltd.
-In-Reply-To: <a14e7015-7446-8cb3-612c-00dcb469c939@arm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20220328111828.1554086-1-sashal@kernel.org> <20220328111828.1554086-42-sashal@kernel.org>
+ <872f2a21-7bf7-0cc3-298f-f817429f6997@fortu.net> <MN0PR12MB6101729CF68952653E8F55EFE2839@MN0PR12MB6101.namprd12.prod.outlook.com>
+In-Reply-To: <MN0PR12MB6101729CF68952653E8F55EFE2839@MN0PR12MB6101.namprd12.prod.outlook.com>
+From:   Tom Crossland <tomc@fortu.net>
+Date:   Fri, 8 Jul 2022 11:22:38 +0200
+Message-ID: <CACdrSeLjKDDpBG3=FZowro_vPGNmwbwvF6iVKw7QkVhgU6LgxQ@mail.gmail.com>
+Subject: Re: [PATCH AUTOSEL 5.17 42/43] Revert "ACPI: Pass the same
+ capabilities to the _OSC regardless of the query flag"
+To:     "Limonciello, Mario" <Mario.Limonciello@amd.com>
+Cc:     Sasha Levin <sashal@kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "stable@vger.kernel.org" <stable@vger.kernel.org>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        "Huang, Ray" <Ray.Huang@amd.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        "rafael@kernel.org" <rafael@kernel.org>,
+        "linux-acpi@vger.kernel.org" <linux-acpi@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+I can confirm that the ACPI BIOS Errors no longer appear in the kernel
+log using mainline 5.19.0-rc5 with the patch applied.
 
+Many thanks
 
-On 7/5/22 14:53, James Clark wrote:
-> 
-> 
-> On 01/07/2022 13:07, carsten.haitzler@foss.arm.com wrote:
->> From: "Carsten Haitzler (Rasterman)" <raster@rasterman.com>
->>
->> Add a script to drive the thread loop test that gathers data so
->> it passes a minimum bar (in this case do we get any perf context data
->> for every thread).
->>
->> Signed-off-by: Carsten Haitzler <carsten.haitzler@arm.com>
-> 
-> Hi Carsten,
-> 
-> I checked this on N1SDP and I get failures in both threads tests. This is
-> because it's looking for "CID=..." when in my output threads are shown as
-> "VMID=...":
-> 
->      Idx:628048; ID:10;	I_ADDR_CTXT_L_64IS0 : Address & Context, Long, 64 bit, IS0.; Addr=0x0000AAAAE3BF0B18; Ctxt: AArch64,EL0, NS; VMID=0xa588c;
-> 
-> I think with a change to the grep it should work.
-
-Errrr... I get no VMID= ... it's all
-
-Idx:563008; ID:12;	I_ADDR_CTXT_L_64IS0 : Address & Context, Long, 64 
-bit, IS0.; Addr=0x0000AAAAE4B00A60; Ctxt: AArch64,EL0, NS; CID=0x00004aff;
-
-are you using containers or something? because:
-
-             if(context.updated_c)
-             {
-                 oss << "CID=0x" << std::hex << std::setfill('0') << 
-std::setw(8) << context.ctxtID << "; ";
-             }
-             if(context.updated_v)
-             {
-                 oss << "VMID=0x" << std::hex << std::setfill('0') << 
-std::setw(4) << context.VMID << "; ";
-             }
-
-I'm running without any containers etc. - bare metal. Haven't bothered 
-with any VM stuff.
-
-In OpenOCD the CID should be the the pid/thread id. It seems to not be 
-the same thing as VMID. I haven't traced this beyond here as to exactly 
-what this represents though my first reaction is "This is extra VM info 
-and not the PID/TID being looked for". OpenOCD is full of tests with log 
-dumps that produce CID and VMID:
-
-Idx:1676; ID:10;        I_ADDR_CTXT_L_64IS0 : Address & Context, Long, 
-64 bit, IS0.; Addr=0xFFFFFFC000096A00; Ctxt: AArch64,EL1, NS; 
-CID=0x00000000; VMID=0x0000;
-
-A quick git grep CID= in OpenCD will show them all. My understanding is 
-CID is the thread/process ID and thus the test/check "Do we get reported 
-data from all threads? - anything?".
-
-I don't think using VMID is right. The fact you are missing a CID is an 
-issue though...
-
-> Thanks
-> James
-> 
->> ---
->>   .../coresight/thread_loop_check_tid_10.sh     | 19 +++++++++++++++++++
->>   .../coresight/thread_loop_check_tid_2.sh      | 19 +++++++++++++++++++
->>   2 files changed, 38 insertions(+)
->>   create mode 100755 tools/perf/tests/shell/coresight/thread_loop_check_tid_10.sh
->>   create mode 100755 tools/perf/tests/shell/coresight/thread_loop_check_tid_2.sh
->>
->> diff --git a/tools/perf/tests/shell/coresight/thread_loop_check_tid_10.sh b/tools/perf/tests/shell/coresight/thread_loop_check_tid_10.sh
->> new file mode 100755
->> index 000000000000..7c13636fc778
->> --- /dev/null
->> +++ b/tools/perf/tests/shell/coresight/thread_loop_check_tid_10.sh
->> @@ -0,0 +1,19 @@
->> +#!/bin/sh -e
->> +# CoreSight / Thread Loop 10 Threads - Check TID
->> +
->> +# SPDX-License-Identifier: GPL-2.0
->> +# Carsten Haitzler <carsten.haitzler@arm.com>, 2021
->> +
->> +TEST="thread_loop"
->> +. $(dirname $0)/../lib/coresight.sh
->> +ARGS="10 1"
->> +DATV="check-tid-10th"
->> +DATA="$DATD/perf-$TEST-$DATV.data"
->> +STDO="$DATD/perf-$TEST-$DATV.stdout"
->> +
->> +SHOW_TID=1 perf record -s $PERFRECOPT -o "$DATA" "$BIN" $ARGS > $STDO
->> +
->> +perf_dump_aux_tid_verify "$DATA" "$STDO"
->> +
->> +err=$?
->> +exit $err
->> diff --git a/tools/perf/tests/shell/coresight/thread_loop_check_tid_2.sh b/tools/perf/tests/shell/coresight/thread_loop_check_tid_2.sh
->> new file mode 100755
->> index 000000000000..a067145af43c
->> --- /dev/null
->> +++ b/tools/perf/tests/shell/coresight/thread_loop_check_tid_2.sh
->> @@ -0,0 +1,19 @@
->> +#!/bin/sh -e
->> +# CoreSight / Thread Loop 2 Threads - Check TID
->> +
->> +# SPDX-License-Identifier: GPL-2.0
->> +# Carsten Haitzler <carsten.haitzler@arm.com>, 2021
->> +
->> +TEST="thread_loop"
->> +. $(dirname $0)/../lib/coresight.sh
->> +ARGS="2 20"
->> +DATV="check-tid-2th"
->> +DATA="$DATD/perf-$TEST-$DATV.data"
->> +STDO="$DATD/perf-$TEST-$DATV.stdout"
->> +
->> +SHOW_TID=1 perf record -s $PERFRECOPT -o "$DATA" "$BIN" $ARGS > $STDO
->> +
->> +perf_dump_aux_tid_verify "$DATA" "$STDO"
->> +
->> +err=$?
->> +exit $err
+On Thu, Jul 7, 2022 at 11:36 PM Limonciello, Mario
+<Mario.Limonciello@amd.com> wrote:
+>
+> [Public]
+>
+>
+>
+> > -----Original Message-----
+> > From: Tom Crossland <tomc@fortu.net>
+> > Sent: Thursday, July 7, 2022 16:31
+> > To: Sasha Levin <sashal@kernel.org>; linux-kernel@vger.kernel.org;
+> > stable@vger.kernel.org
+> > Cc: Rafael J. Wysocki <rafael.j.wysocki@intel.com>; Limonciello, Mario
+> > <Mario.Limonciello@amd.com>; Huang, Ray <Ray.Huang@amd.com>; Mika
+> > Westerberg <mika.westerberg@linux.intel.com>; rafael@kernel.org; linux-
+> > acpi@vger.kernel.org
+> > Subject: Re: [PATCH AUTOSEL 5.17 42/43] Revert "ACPI: Pass the same
+> > capabilities to the _OSC regardless of the query flag"
+> >
+> > Hi, I'm observing the issue described here which I think is due to a
+> > recent regression:
+> >
+> > https://nam11.safelinks.protection.outlook.com/?url=https%3A%2F%2Fgithub.c
+> > om%2Fintel%2Flinux-intel-
+> > lts%2Fissues%2F22&amp;data=05%7C01%7CMario.Limonciello%40amd.com%7
+> > C77419b612f9540e333ff08da606002ee%7C3dd8961fe4884e608e11a82d994e18
+> > 3d%7C0%7C0%7C637928263354159054%7CUnknown%7CTWFpbGZsb3d8eyJWI
+> > joiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C300
+> > 0%7C%7C%7C&amp;sdata=X%2FEAU9GbRD%2FfYxCMUmnWI1cJ8dk8sICk0iYu
+> > %2BKGqtl4%3D&amp;reserved=0
+> >
+> > sudo dmesg -t -l err
+> >
+> > ACPI BIOS Error (bug): Could not resolve symbol [\_PR.PR00._CPC],
+> > AE_NOT_FOUND (20211217/psargs-330)
+> > ACPI Error: Aborting method \_PR.PR01._CPC due to previous error
+> > (AE_NOT_FOUND) (20211217/psparse-529)
+> > ACPI BIOS Error (bug): Could not resolve symbol [\_PR.PR00._CPC],
+> > AE_NOT_FOUND (20211217/psargs-330)
+> > ACPI Error: Aborting method \_PR.PR02._CPC due to previous error
+> > (AE_NOT_FOUND) (20211217/psparse-529)
+> > ACPI BIOS Error (bug): Could not resolve symbol [\_PR.PR00._CPC],
+> > AE_NOT_FOUND (20211217/psargs-330)
+> > ACPI Error: Aborting method \_PR.PR03._CPC due to previous error
+> > (AE_NOT_FOUND) (20211217/psparse-529)
+> >
+> > System:
+> >    Kernel: 5.18.9-arch1-1 arch: x86_64 bits: 64 compiler: gcc v: 12.1.0
+> >      parameters: initrd=\intel-ucode.img initrd=\initramfs-linux.img
+> >      root=xxx intel_iommu=on iommu=pt
+> >   Machine:
+> >    Type: Desktop Mobo: Intel model: NUC7i5BNB v: J31144-304 serial: <filter>
+> >      UEFI: Intel v: BNKBL357.86A.0088.2022.0125.1102 date: 01/25/2022
+> >
+> > I hope this is the correct forum to report the issue. Apologies if not.
+> >
+>
+> This is the fix for it:
+>
+> https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git/commit/?h=linux-next&id=7feec7430edddb87c24b0a86b08a03d0b496a755
+>
+>
+> > On 28/03/2022 13.18, Sasha Levin wrote:
+> > > From: "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>
+> > >
+> > > [ Upstream commit 2ca8e6285250c07a2e5a22ecbfd59b5a4ef73484 ]
+> > >
+> > > Revert commit 159d8c274fd9 ("ACPI: Pass the same capabilities to the
+> > > _OSC regardless of the query flag") which caused legitimate usage
+> > > scenarios (when the platform firmware does not want the OS to control
+> > > certain platform features controlled by the system bus scope _OSC) to
+> > > break and was misguided by some misleading language in the _OSC
+> > > definition in the ACPI specification (in particular, Section 6.2.11.1.3
+> > > "Sequence of _OSC Calls" that contradicts other perts of the _OSC
+> > > definition).
+> > >
+> > > Link:
+> > https://nam11.safelinks.protection.outlook.com/?url=https%3A%2F%2Flore.ker
+> > nel.org%2Flinux-
+> > acpi%2FCAJZ5v0iStA0JmO0H3z%2BVgQsVuQONVjKPpw0F5HKfiq%3DGb6B5yw%
+> > 40mail.gmail.com&amp;data=05%7C01%7CMario.Limonciello%40amd.com%7C
+> > 77419b612f9540e333ff08da606002ee%7C3dd8961fe4884e608e11a82d994e183
+> > d%7C0%7C0%7C637928263354159054%7CUnknown%7CTWFpbGZsb3d8eyJWIj
+> > oiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C300
+> > 0%7C%7C%7C&amp;sdata=Te3BK%2B0q2QmrqqoG5mbV%2FNguoMgiwzILNHl
+> > %2BhUMLFlY%3D&amp;reserved=0
+> > > Reported-by: Mario Limonciello <Mario.Limonciello@amd.com>
+> > > Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> > > Tested-by: Mario Limonciello <mario.limonciello@amd.com>
+> > > Acked-by: Huang Rui <ray.huang@amd.com>
+> > > Reviewed-by: Mika Westerberg <mika.westerberg@linux.intel.com>
+> > > Signed-off-by: Sasha Levin <sashal@kernel.org>
+> > > ---
+> > >   drivers/acpi/bus.c | 27 +++++++++++++++++++--------
+> > >   1 file changed, 19 insertions(+), 8 deletions(-)
+> > >
+> > > diff --git a/drivers/acpi/bus.c b/drivers/acpi/bus.c
+> > > index 07f604832fd6..079b952ab59f 100644
+> > > --- a/drivers/acpi/bus.c
+> > > +++ b/drivers/acpi/bus.c
+> > > @@ -332,21 +332,32 @@ static void
+> > acpi_bus_osc_negotiate_platform_control(void)
+> > >     if (ACPI_FAILURE(acpi_run_osc(handle, &context)))
+> > >             return;
+> > >
+> > > -   kfree(context.ret.pointer);
+> > > +   capbuf_ret = context.ret.pointer;
+> > > +   if (context.ret.length <= OSC_SUPPORT_DWORD) {
+> > > +           kfree(context.ret.pointer);
+> > > +           return;
+> > > +   }
+> > >
+> > > -   /* Now run _OSC again with query flag clear */
+> > > +   /*
+> > > +    * Now run _OSC again with query flag clear and with the caps
+> > > +    * supported by both the OS and the platform.
+> > > +    */
+> > >     capbuf[OSC_QUERY_DWORD] = 0;
+> > > +   capbuf[OSC_SUPPORT_DWORD] =
+> > capbuf_ret[OSC_SUPPORT_DWORD];
+> > > +   kfree(context.ret.pointer);
+> > >
+> > >     if (ACPI_FAILURE(acpi_run_osc(handle, &context)))
+> > >             return;
+> > >
+> > >     capbuf_ret = context.ret.pointer;
+> > > -   osc_sb_apei_support_acked =
+> > > -           capbuf_ret[OSC_SUPPORT_DWORD] &
+> > OSC_SB_APEI_SUPPORT;
+> > > -   osc_pc_lpi_support_confirmed =
+> > > -           capbuf_ret[OSC_SUPPORT_DWORD] &
+> > OSC_SB_PCLPI_SUPPORT;
+> > > -   osc_sb_native_usb4_support_confirmed =
+> > > -           capbuf_ret[OSC_SUPPORT_DWORD] &
+> > OSC_SB_NATIVE_USB4_SUPPORT;
+> > > +   if (context.ret.length > OSC_SUPPORT_DWORD) {
+> > > +           osc_sb_apei_support_acked =
+> > > +                   capbuf_ret[OSC_SUPPORT_DWORD] &
+> > OSC_SB_APEI_SUPPORT;
+> > > +           osc_pc_lpi_support_confirmed =
+> > > +                   capbuf_ret[OSC_SUPPORT_DWORD] &
+> > OSC_SB_PCLPI_SUPPORT;
+> > > +           osc_sb_native_usb4_support_confirmed =
+> > > +                   capbuf_ret[OSC_SUPPORT_DWORD] &
+> > OSC_SB_NATIVE_USB4_SUPPORT;
+> > > +   }
+> > >
+> > >     kfree(context.ret.pointer);
+> > >   }

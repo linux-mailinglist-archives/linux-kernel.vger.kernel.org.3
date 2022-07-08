@@ -2,54 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CFEC956B51B
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 11:09:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6DC8256B51D
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 11:09:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237836AbiGHJHw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Jul 2022 05:07:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32768 "EHLO
+        id S237850AbiGHJIN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Jul 2022 05:08:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33040 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230230AbiGHJHu (ORCPT
+        with ESMTP id S237847AbiGHJIK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Jul 2022 05:07:50 -0400
-Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 459B722BF5;
-        Fri,  8 Jul 2022 02:07:48 -0700 (PDT)
-Received: from dggemv711-chm.china.huawei.com (unknown [172.30.72.53])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4LfS6Q2vNtz1L8tg;
-        Fri,  8 Jul 2022 17:05:18 +0800 (CST)
-Received: from kwepemm600013.china.huawei.com (7.193.23.68) by
- dggemv711-chm.china.huawei.com (10.1.198.66) with Microsoft SMTP Server
+        Fri, 8 Jul 2022 05:08:10 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E664922BC6;
+        Fri,  8 Jul 2022 02:08:08 -0700 (PDT)
+Received: from kwepemi500013.china.huawei.com (unknown [172.30.72.53])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4LfS7w3r6BzhXYy;
+        Fri,  8 Jul 2022 17:06:36 +0800 (CST)
+Received: from [10.67.111.192] (10.67.111.192) by
+ kwepemi500013.china.huawei.com (7.221.188.120) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Fri, 8 Jul 2022 17:07:46 +0800
-Received: from [10.174.178.46] (10.174.178.46) by
- kwepemm600013.china.huawei.com (7.193.23.68) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Fri, 8 Jul 2022 17:07:45 +0800
-Subject: Re: [PATCH] ubi: fastmap: Use the bitmap API to allocate bitmaps
-To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        Richard Weinberger <richard@nod.at>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        "Vignesh Raghavendra" <vigneshr@ti.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>
-CC:     <linux-kernel@vger.kernel.org>, <kernel-janitors@vger.kernel.org>,
-        <linux-mtd@lists.infradead.org>,
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        <linux-arm-kernel@lists.infradead.org>
-References: <64cde893efca8f4dc381184cd7f6e5a54cd000f9.1656960335.git.christophe.jaillet@wanadoo.fr>
-From:   Zhihao Cheng <chengzhihao1@huawei.com>
-Message-ID: <16e6eef2-bf83-f5c1-6543-8c49a70c7d85@huawei.com>
-Date:   Fri, 8 Jul 2022 17:07:44 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
- Thunderbird/68.5.0
+ 15.1.2375.24; Fri, 8 Jul 2022 17:08:05 +0800
+Message-ID: <bbca91f2-d770-af69-8e6d-bfd18c7f1ec1@huawei.com>
+Date:   Fri, 8 Jul 2022 17:08:04 +0800
 MIME-Version: 1.0
-In-Reply-To: <64cde893efca8f4dc381184cd7f6e5a54cd000f9.1656960335.git.christophe.jaillet@wanadoo.fr>
-Content-Type: text/plain; charset="gbk"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.174.178.46]
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+Subject: Re: [PATCH bpf-next v6 4/4] bpf, arm64: bpf trampoline for arm64
+Content-Language: en-US
+To:     Jean-Philippe Brucker <jean-philippe@linaro.org>
+CC:     <bpf@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <netdev@vger.kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Zi Shen Lim <zlim.lnx@gmail.com>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        "David S . Miller" <davem@davemloft.net>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        David Ahern <dsahern@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, <x86@kernel.org>,
+        "H . Peter Anvin" <hpa@zytor.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        Russell King <rmk+kernel@armlinux.org.uk>,
+        James Morse <james.morse@arm.com>,
+        Hou Tao <houtao1@huawei.com>,
+        Jason Wang <wangborong@cdjrlc.com>
+References: <20220625161255.547944-1-xukuohai@huawei.com>
+ <20220625161255.547944-5-xukuohai@huawei.com> <YscL4t1pYHYApIiK@larix>
+ <a24109d5-b79a-99de-0fd5-66b0ec34e5ed@huawei.com> <YsfptiexC0wFABFL@myrica>
+From:   Xu Kuohai <xukuohai@huawei.com>
+In-Reply-To: <YsfptiexC0wFABFL@myrica>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.67.111.192]
 X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
- kwepemm600013.china.huawei.com (7.193.23.68)
+ kwepemi500013.china.huawei.com (7.221.188.120)
 X-CFilter-Loop: Reflected
 X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
         RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -60,57 +76,81 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-ÔÚ 2022/7/5 2:46, Christophe JAILLET Ð´µÀ:
-> Use bitmap_zalloc()/bitmap_free() instead of hand-writing them.
+On 7/8/2022 4:24 PM, Jean-Philippe Brucker wrote:
+> On Fri, Jul 08, 2022 at 12:35:33PM +0800, Xu Kuohai wrote:
+>>>> +
+>>>> +	emit(A64_ADD_I(1, A64_R(0), A64_SP, args_off), ctx);
+>>>> +	if (!p->jited)
+>>>> +		emit_addr_mov_i64(A64_R(1), (const u64)p->insnsi, ctx);
+>>>> +
+>>>> +	emit_call((const u64)p->bpf_func, ctx);
+>>>> +
+>>>> +	/* store return value */
+>>>> +	if (save_ret)
+>>>> +		emit(A64_STR64I(r0, A64_SP, retval_off), ctx);
+>>>
+>>> Here too I think it should be x0. I'm guessing r0 may work for jitted
+>>> functions but not interpreted ones
+>>>
+>>
+>> Yes, r0 is only correct for jitted code, will fix it to:
+>>
+>> if (save_ret)
+>>         emit(A64_STR64I(p->jited ? r0 : A64_R(0), A64_SP, retval_off),
+>>              ctx);
 > 
-> It is less verbose and it improves the semantic.
+> I don't think we need this test because x0 should be correct in all cases.
+> x7 happens to equal x0 when jitted due to the way build_epilogue() builds
+> the function at the moment, but we shouldn't rely on that.
 > 
-> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-> ---
->   drivers/mtd/ubi/fastmap.c | 10 ++++------
->   1 file changed, 4 insertions(+), 6 deletions(-)
 > 
-> diff --git a/drivers/mtd/ubi/fastmap.c b/drivers/mtd/ubi/fastmap.c
-> index 6e95c4b1473e..ca2d9efe62c3 100644
-> --- a/drivers/mtd/ubi/fastmap.c
-> +++ b/drivers/mtd/ubi/fastmap.c
-> @@ -20,8 +20,7 @@ static inline unsigned long *init_seen(struct ubi_device *ubi)
->   	if (!ubi_dbg_chk_fastmap(ubi))
->   		return NULL;
->   
-> -	ret = kcalloc(BITS_TO_LONGS(ubi->peb_count), sizeof(unsigned long),
-> -		      GFP_KERNEL);
-> +	ret = bitmap_zalloc(ubi->peb_count, GFP_KERNEL);
->   	if (!ret)
->   		return ERR_PTR(-ENOMEM);
->   
-> @@ -34,7 +33,7 @@ static inline unsigned long *init_seen(struct ubi_device *ubi)
->    */
->   static inline void free_seen(unsigned long *seen)
->   {
-> -	kfree(seen);
-> +	bitmap_free(seen);
->   }
->   
->   /**
-> @@ -1108,8 +1107,7 @@ int ubi_fastmap_init_checkmap(struct ubi_volume *vol, int leb_count)
->   	if (!ubi->fast_attach)
->   		return 0;
->   
-> -	vol->checkmap = kcalloc(BITS_TO_LONGS(leb_count), sizeof(unsigned long),
-> -				GFP_KERNEL);
-> +	vol->checkmap = bitmap_zalloc(leb_count, GFP_KERNEL);
->   	if (!vol->checkmap)
->   		return -ENOMEM;
->   
-> @@ -1118,7 +1116,7 @@ int ubi_fastmap_init_checkmap(struct ubi_volume *vol, int leb_count)
->   
->   void ubi_fastmap_destroy_checkmap(struct ubi_volume *vol)
->   {
-> -	kfree(vol->checkmap);
-> +	bitmap_free(vol->checkmap);
->   }
->   
->   /**
+>>>> +	if (flags & BPF_TRAMP_F_CALL_ORIG) {
+>>>> +		restore_args(ctx, args_off, nargs);
+>>>> +		/* call original func */
+>>>> +		emit(A64_LDR64I(A64_R(10), A64_SP, retaddr_off), ctx);
+>>>> +		emit(A64_BLR(A64_R(10)), ctx);
+>>>
+>>> I don't think we can do this when BTI is enabled because we're not jumping
+>>> to a BTI instruction. We could introduce one in a patched BPF function
+>>> (there currently is one if CONFIG_ARM64_PTR_AUTH_KERNEL), but probably not
+>>> in a kernel function.
+>>>
+>>> We could fo like FUNCTION_GRAPH_TRACER does and return to the patched
+>>> function after modifying its LR. Not sure whether that works with pointer
+>>> auth though.
+>>>
+>>
+>> Yes, the blr instruction should be replaced with ret instruction, thanks!
+>>
+>> The layout for bpf prog and regular kernel function is as follows, with
+>> bti always coming first and paciasp immediately after patchsite, so the
+>> ret instruction should work in all cases.
+>>
+>> bpf prog or kernel function:
+>>         bti c // if BTI
+>>         mov x9, lr
+>>         bl <trampoline>    ------> trampoline:
+>>                                            ...
+>>                                            mov lr, <return_entry>
+>>                                            mov x10, <ORIG_CALL_entry>
+>> ORIG_CALL_entry:           <-------        ret x10
+>>                                    return_entry:
+>>                                            ...
+>>         paciasp // if PA
+>>         ...
 > 
-Reviewed-by: Zhihao Cheng <chengzhihao1@huawei.com>
+> Actually I just noticed that CONFIG_ARM64_BTI_KERNEL depends on
+> CONFIG_ARM64_PTR_AUTH_KERNEL, so we should be able to rely on there always
+> being a PACIASP at ORIG_CALL_entry, and since it's a landing pad for BLR
+> we don't need to make this a RET
+> 
+>  92e2294d870b ("arm64: bti: Support building kernel C code using BTI")
+> 
+
+oh, yeah, thanks
+
+> Thanks,
+> Jean
+> 
+> .
+

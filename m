@@ -2,257 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6269256B8B1
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 13:39:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3389756B8BF
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 13:43:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237352AbiGHLjn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Jul 2022 07:39:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36216 "EHLO
+        id S237865AbiGHLkf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Jul 2022 07:40:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37188 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237768AbiGHLjj (ORCPT
+        with ESMTP id S231533AbiGHLkd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Jul 2022 07:39:39 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84C4322BF4
-        for <linux-kernel@vger.kernel.org>; Fri,  8 Jul 2022 04:39:37 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 13ECC6252B
-        for <linux-kernel@vger.kernel.org>; Fri,  8 Jul 2022 11:39:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 939F7C341C0;
-        Fri,  8 Jul 2022 11:39:35 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="pIHIu3lN"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1657280373;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=1ozSK2k6t5LL60jbBd4SqfwKGsr/sN2fIoHdIrYtyrs=;
-        b=pIHIu3lNhN5V3Tckck6V9DdWEKlAN6mdvvYIuXVDv1/hrlpFNRR/7xdyzPqpyb4zE8/B6B
-        S45PUKtZK6K8dkgGBYrABl5ziTg1dEssz/VkS5I3kGP2AR9/JEEBCRK+c0PnLUGay8+7+d
-        ga5UlNhIednROJrB6Cfs4U4xHWObUxo=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id a36a4f4e (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
-        Fri, 8 Jul 2022 11:39:33 +0000 (UTC)
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-To:     hpa@zytor.com, Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        X86 ML <x86@kernel.org>, LKML <linux-kernel@vger.kernel.org>,
-        "Andy Lutomirski" <luto@kernel.org>
-Cc:     "Jason A. Donenfeld" <Jason@zx2c4.com>
-Subject: [PATCH tip v8] x86/setup: Use rng seeds from setup_data
-Date:   Fri,  8 Jul 2022 13:39:07 +0200
-Message-Id: <20220708113907.891319-1-Jason@zx2c4.com>
-In-Reply-To: <20220707000852.523788-1-Jason@zx2c4.com>
-References: <20220707000852.523788-1-Jason@zx2c4.com>
+        Fri, 8 Jul 2022 07:40:33 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 70E3122BF4
+        for <linux-kernel@vger.kernel.org>; Fri,  8 Jul 2022 04:40:32 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 5ACE61063;
+        Fri,  8 Jul 2022 04:40:32 -0700 (PDT)
+Received: from bogus (unknown [10.57.39.193])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id EAF3D3F70D;
+        Fri,  8 Jul 2022 04:40:26 -0700 (PDT)
+Date:   Fri, 8 Jul 2022 12:39:15 +0100
+From:   Sudeep Holla <sudeep.holla@arm.com>
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     Geert Uytterhoeven <geert@linux-m68k.org>,
+        Conor Dooley <Conor.Dooley@microchip.com>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Palmer Dabbelt <palmer@rivosinc.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Daire.McNamara@microchip.com,
+        Niklas Cassel <niklas.cassel@wdc.com>,
+        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
+        Zong Li <zong.li@sifive.com>,
+        Emil Renner Berthing <kernel@esmil.dk>, hahnjo@hahnjo.de,
+        Guo Ren <guoren@kernel.org>, Anup Patel <anup@brainfault.org>,
+        Atish Patra <atishp@atishpatra.org>, changbin.du@intel.com,
+        Heiko Stuebner <heiko@sntech.de>, philipp.tomsich@vrull.eu,
+        Rob Herring <robh@kernel.org>, Marc Zyngier <maz@kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Brice.Goglin@inria.fr
+Subject: Re: [RFC 2/4] arch-topology: add a default implementation of
+ store_cpu_topology()
+Message-ID: <20220708113915.ui77mgqckjzalwlh@bogus>
+References: <20220707220436.4105443-1-mail@conchuod.ie>
+ <20220707220436.4105443-3-mail@conchuod.ie>
+ <20220708082443.azoqvuj7afrg7ox7@bogus>
+ <473e6b17-465b-3d14-b04d-01b187390e66@microchip.com>
+ <20220708092100.c6mgmnt7e2k7u634@bogus>
+ <CAMuHMdXUjmG9n3BuRAz_irkmHQbp=7SYxe5VEfOhMdT4D2JfwQ@mail.gmail.com>
+ <20220708094710.rxk6flrueegdsggr@bogus>
+ <YsgA/eycDF9TgCIT@kroah.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YsgA/eycDF9TgCIT@kroah.com>
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Currently the only way x86 can get an early boot RNG seed is via EFI,
-which is generally always used now for physical machines, but is very
-rarely used in VMs, especially VMs that are optimized for starting
-"instantaneously", such as Firecracker's MicroVM. For tiny fast booting
-VMs, EFI is not something you generally need or want.
+On Fri, Jul 08, 2022 at 12:03:41PM +0200, Greg KH wrote:
+> On Fri, Jul 08, 2022 at 10:47:10AM +0100, Sudeep Holla wrote:
+> > On Fri, Jul 08, 2022 at 11:28:19AM +0200, Geert Uytterhoeven wrote:
+> > > Hi Sudeep,
+> > > 
+> > > On Fri, Jul 8, 2022 at 11:22 AM Sudeep Holla <sudeep.holla@arm.com> wrote:
+> > > > On Fri, Jul 08, 2022 at 08:35:57AM +0000, Conor.Dooley@microchip.com wrote:
+> > > > > On 08/07/2022 09:24, Sudeep Holla wrote:
+> > > > > > On Thu, Jul 07, 2022 at 11:04:35PM +0100, Conor Dooley wrote:
+> > > > > >> From: Conor Dooley <conor.dooley@microchip.com>
+> > > > > >>
+> > > > > >> RISC-V & arm64 both use an almost identical method of filling in
+> > > > > >> default vales for arch topology. Create a weakly defined default
+> > > > > >> implementation with the intent of migrating both archs to use it.
+> > > > > >>
+> > > > > >> Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
+> > > > > >> ---
+> > > > > >>   drivers/base/arch_topology.c  | 19 +++++++++++++++++++
+> > > > > >>   include/linux/arch_topology.h |  1 +
+> > > > > >>   2 files changed, 20 insertions(+)
+> > > > > >>
+> > > > > >> diff --git a/drivers/base/arch_topology.c b/drivers/base/arch_topology.c
+> > > > > >> index 441e14ac33a4..07e84c6ac5c2 100644
+> > > > > >> --- a/drivers/base/arch_topology.c
+> > > > > >> +++ b/drivers/base/arch_topology.c
+> > > > > >> @@ -765,6 +765,25 @@ void update_siblings_masks(unsigned int cpuid)
+> > > > > >>    }
+> > > > > >>   }
+> > > > > >>
+> > > > > >> +void __weak store_cpu_topology(unsigned int cpuid)
+> > > > >
+> > > > > Does using __weak here make sense to you?
+> > > > >
+> > > >
+> > > > I don't want any weak definition and arch to override as we know only
+> > > > arm64 and RISC-V are the only users and they are aligned to have same
+> > > > implementation. So weak definition doesn't make sense to me.
+> > > >
+> > > > > >
+> > > > > > I prefer to have this as default implementation. So just get the risc-v
+> > > > > > one pushed to upstream first(for v5.20) and get all the backports if required.
+> > > > > > Next cycle(i.e. v5.21), you can move both RISC-V and arm64.
+> > > > > >
+> > > > >
+> > > > > Yeah, that was my intention. I meant to label patch 1/4 as "PATCH"
+> > > > > and (2,3,4)/4 as RFC but forgot. I talked with Palmer about doing
+> > > > > the risc-v impl. and then migrate both on IRC & he seemed happy with
+> > > > > it.
+> > > > >
+> > > >
+> > > > Ah OK, good.
+> > > >
+> > > > > If you're okay with patch 1/4, I'll resubmit it as a standalone v2.
+> > > > >
+> > > >
+> > > > That would be great, thanks. You can most the code to move to generic from
+> > > > both arm64 and risc-v once we have this in v5.20-rc1
+> > > 
+> > > Why not ignore risc-v for now, and move the arm64 implementation to
+> > > the generic code for v5.20, so every arch will have it at once?
+> > >
+> > 
+> > We could but,
+> > 1. This arch_topology is new and has been going through lot of changes
+> >    recently and having code there might make it difficult to backport
+> >    changes that are required for RISC-V(my guess)
+> 
+> Worry about future issues in the future.  Make it simple now as you know
+> what you are dealing with at the moment.
+>
 
-Rather, here we want the ability for the image loader or firmware to
-pass a single random seed, exactly as device tree platforms do with the
-"rng-seed" property. Additionally, this is something that bootloaders
-can append, with their own seed file management, which is something
-every other major OS ecosystem has that we do not (yet).
+Sure, I was just suggesting and expecting someone from RISC-V community or
+maintainers to make a call. As I said it is based on my understanding.
+hence I have mentioned as guess. So I am not against it as such.
 
-This patch adds SETUP_RNG_SEED, similar to the other seven setup_data
-entries that are parsed at boot. It also takes care to zero out the seed
-immediately after using, in order to retain forward secrecy. This all
-takes about 7 trivial lines of code.
 
-Then, on kexec_file_load(), a new fresh seed is generated and passed to
-the next kernel, just as is done on device tree architectures when
-using kexec. And, importantly, I've tested that QEMU is able to properly
-pass SETUP_RNG_SEED as well, making this work for every step of the way.
-This code too is pretty straight forward.
-
-Together these measures ensure that VMs and nested kexec()'d kernels
-always receive a proper boot time RNG seed at the earliest possible
-stage from their parents:
-
-   - Host [already has strongly initialized RNG]
-     - QEMU [passes fresh seed in SETUP_RNG_SEED field]
-       - Linux [uses parent's seed and gathers entropy of its own]
-         - kexec [passes this in SETUP_RNG_SEED field]
-           - Linux [uses parent's seed and gathers entropy of its own]
-             - kexec [passes this in SETUP_RNG_SEED field]
-               - Linux [uses parent's seed and gathers entropy of its own]
-                 - kexec [passes this in SETUP_RNG_SEED field]
-		   - ...
-
-I've verified in several scenarios that this works quite well from a
-host kernel to QEMU and down inwards, mixing and matching loaders, with
-every layer providing a seed to the next.
-
-Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
----
-Changes v7->v8:
-- Rebase against tip.
-Changes v6->v7:
-- [amluto] Add comment about zeroing fields - data for forward secrecy, len in
-  case of accidental reset-to-entry-jump bug.
-Changes v5->v6:
-- [hpa] Rework commit message to be less confusing and not improperly
-  mention e820.
-Changes v4->v5:
-- Populate field when loading bzimages for kexec, just like device tree
-  platforms do.
-Changes v3->v4:
-- Zero out data after using, for forward secrecy.
-Changes v2->v3:
-- Actually memmap the right area with the random bytes in it. This
-  worked before because of page sizes, but the code wasn't right. Now
-  it's right.
-Changes v1->v2:
-- Fix small typo of data_len -> data->len.
-
- arch/x86/include/uapi/asm/bootparam.h |  1 +
- arch/x86/kernel/kexec-bzimage64.c     | 40 +++++++++++++++++++++++----
- arch/x86/kernel/setup.c               | 10 +++++++
- 3 files changed, 45 insertions(+), 6 deletions(-)
-
-diff --git a/arch/x86/include/uapi/asm/bootparam.h b/arch/x86/include/uapi/asm/bootparam.h
-index ca0796ac4403..2cbfe630230d 100644
---- a/arch/x86/include/uapi/asm/bootparam.h
-+++ b/arch/x86/include/uapi/asm/bootparam.h
-@@ -12,6 +12,7 @@
- #define SETUP_JAILHOUSE			6
- #define SETUP_CC_BLOB			7
- #define SETUP_IMA			8
-+#define SETUP_RNG_SEED			9
- 
- #define SETUP_INDIRECT			(1<<31)
- 
-diff --git a/arch/x86/kernel/kexec-bzimage64.c b/arch/x86/kernel/kexec-bzimage64.c
-index c63974e94272..e39d8932249d 100644
---- a/arch/x86/kernel/kexec-bzimage64.c
-+++ b/arch/x86/kernel/kexec-bzimage64.c
-@@ -18,6 +18,7 @@
- #include <linux/mm.h>
- #include <linux/efi.h>
- #include <linux/verification.h>
-+#include <linux/random.h>
- 
- #include <asm/bootparam.h>
- #include <asm/setup.h>
-@@ -110,6 +111,26 @@ static int setup_e820_entries(struct boot_params *params)
- 	return 0;
- }
- 
-+enum { RNG_SEED_LENGTH = 32 };
-+
-+static void
-+setup_rng_seed(struct boot_params *params, unsigned long params_load_addr,
-+	       unsigned int rng_seed_setup_data_offset)
-+{
-+	struct setup_data *sd = (void *)params + rng_seed_setup_data_offset;
-+	unsigned long setup_data_phys;
-+
-+	if (!rng_is_initialized())
-+		return;
-+
-+	sd->type = SETUP_RNG_SEED;
-+	sd->len = RNG_SEED_LENGTH;
-+	get_random_bytes(sd->data, RNG_SEED_LENGTH);
-+	setup_data_phys = params_load_addr + rng_seed_setup_data_offset;
-+	sd->next = params->hdr.setup_data;
-+	params->hdr.setup_data = setup_data_phys;
-+}
-+
- #ifdef CONFIG_EFI
- static int setup_efi_info_memmap(struct boot_params *params,
- 				  unsigned long params_load_addr,
-@@ -191,7 +212,6 @@ setup_ima_state(const struct kimage *image, struct boot_params *params,
- 		unsigned long params_load_addr,
- 		unsigned int ima_setup_data_offset)
- {
--#ifdef CONFIG_IMA_KEXEC
- 	struct setup_data *sd = (void *)params + ima_setup_data_offset;
- 	unsigned long setup_data_phys;
- 	struct ima_setup_data *ima;
-@@ -210,7 +230,6 @@ setup_ima_state(const struct kimage *image, struct boot_params *params,
- 	setup_data_phys = params_load_addr + ima_setup_data_offset;
- 	sd->next = params->hdr.setup_data;
- 	params->hdr.setup_data = setup_data_phys;
--#endif /* CONFIG_IMA_KEXEC */
- }
- 
- static int
-@@ -277,9 +296,16 @@ setup_boot_parameters(struct kimage *image, struct boot_params *params,
- 			sizeof(struct efi_setup_data);
- #endif
- 
--	/* Setup IMA log buffer state */
--	setup_ima_state(image, params, params_load_addr,
--			setup_data_offset);
-+	if (IS_ENABLED(CONFIG_IMA_KEXEC)) {
-+		/* Setup IMA log buffer state */
-+		setup_ima_state(image, params, params_load_addr,
-+				setup_data_offset);
-+		setup_data_offset += sizeof(struct setup_data) +
-+				     sizeof(struct ima_setup_data);
-+	}
-+
-+	/* Setup RNG seed */
-+	setup_rng_seed(params, params_load_addr, setup_data_offset);
- 
- 	/* Setup EDD info */
- 	memcpy(params->eddbuf, boot_params.eddbuf,
-@@ -435,7 +461,9 @@ static void *bzImage64_load(struct kimage *image, char *kernel,
- 	params_cmdline_sz = ALIGN(params_cmdline_sz, 16);
- 	kbuf.bufsz = params_cmdline_sz + ALIGN(efi_map_sz, 16) +
- 				sizeof(struct setup_data) +
--				sizeof(struct efi_setup_data);
-+				sizeof(struct efi_setup_data) +
-+				sizeof(struct setup_data) +
-+				RNG_SEED_LENGTH;
- 
- 	if (IS_ENABLED(CONFIG_IMA_KEXEC))
- 		kbuf.bufsz += sizeof(struct setup_data) +
-diff --git a/arch/x86/kernel/setup.c b/arch/x86/kernel/setup.c
-index 53f863f28b4c..216fee7144ee 100644
---- a/arch/x86/kernel/setup.c
-+++ b/arch/x86/kernel/setup.c
-@@ -24,6 +24,7 @@
- #include <linux/usb/xhci-dbgp.h>
- #include <linux/static_call.h>
- #include <linux/swiotlb.h>
-+#include <linux/random.h>
- 
- #include <uapi/linux/mount.h>
- 
-@@ -418,6 +419,15 @@ static void __init parse_setup_data(void)
- 		case SETUP_IMA:
- 			add_early_ima_buffer(pa_data);
- 			break;
-+		case SETUP_RNG_SEED:
-+			data = early_memremap(pa_data, data_len);
-+			add_bootloader_randomness(data->data, data->len);
-+			/* Zero seed for forward secrecy. */
-+			memzero_explicit(data->data, data->len);
-+			/* Zero length in case we find ourselves back here by accident. */
-+			memzero_explicit(&data->len, sizeof(data->len));
-+			early_memunmap(data, data_len);
-+			break;
- 		default:
- 			break;
- 		}
 -- 
-2.35.1
-
+Regards,
+Sudeep

@@ -2,109 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C0A3156C3F9
-	for <lists+linux-kernel@lfdr.de>; Sat,  9 Jul 2022 01:15:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CFD0656C335
+	for <lists+linux-kernel@lfdr.de>; Sat,  9 Jul 2022 01:14:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239074AbiGHUuL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Jul 2022 16:50:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42554 "EHLO
+        id S240054AbiGHUvD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Jul 2022 16:51:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43002 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239153AbiGHUuK (ORCPT
+        with ESMTP id S239997AbiGHUvA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Jul 2022 16:50:10 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 758297B359
-        for <linux-kernel@vger.kernel.org>; Fri,  8 Jul 2022 13:50:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1657313409; x=1688849409;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=f4+Pv6ztoVQxNmpihMiCo2tCWAEketMWZRexCM0xWHU=;
-  b=ItVIkoN6kZ3S1XaS/P2cJXwMr6Hjfg8tEjLQFvNPTwsiJdF3Ms68HGN3
-   in1EV7fVmkKILd8755+cvM/T8uBbUiBVgiyla09JBdonu0WclKWZrqe2K
-   rUxtoQoJwbODGTRctFwBao2KeAGWJ9QsgacEr9cGz0pJybgWhN2vd8ISq
-   2C4Qq4qa8BkedjbhD8Co1oz5zc8P3WcWiQmY+azIWVD9O54qIEboQbUf/
-   CVaGS3qkdZWdxIDsPwhsgsmrzZrQjmHBylQS2hvpKYoomxkv814alPuko
-   5myer5UnyZ2+2vc6NwzgEYJoYY7B2YQHIzjXrAHEb+rAaXj5WzDwT+Oqr
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10402"; a="370675774"
-X-IronPort-AV: E=Sophos;i="5.92,256,1650956400"; 
-   d="scan'208";a="370675774"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jul 2022 13:50:09 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,256,1650956400"; 
-   d="scan'208";a="921120227"
-Received: from lkp-server01.sh.intel.com (HELO 68b931ab7ac1) ([10.239.97.150])
-  by fmsmga005.fm.intel.com with ESMTP; 08 Jul 2022 13:50:07 -0700
-Received: from kbuild by 68b931ab7ac1 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1o9uvP-000NvK-5D;
-        Fri, 08 Jul 2022 20:50:07 +0000
-Date:   Sat, 9 Jul 2022 04:49:58 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Ard Biesheuvel <ardb@kernel.org>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org, x86@kernel.org
-Subject: [tip:locking/core 2/4] arch/mips/kernel/jump_label.c:93:6: warning:
- no previous prototype for function 'jump_label_apply_nops'
-Message-ID: <202207090424.PgjCetK5-lkp@intel.com>
+        Fri, 8 Jul 2022 16:51:00 -0400
+Received: from mail-ot1-f51.google.com (mail-ot1-f51.google.com [209.85.210.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2923884EEA
+        for <linux-kernel@vger.kernel.org>; Fri,  8 Jul 2022 13:51:00 -0700 (PDT)
+Received: by mail-ot1-f51.google.com with SMTP id e1-20020a05683013c100b0061c1a6b8d11so1847otq.8
+        for <linux-kernel@vger.kernel.org>; Fri, 08 Jul 2022 13:51:00 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=iOGIydgMFyNgxWS6MSkgAIHo8uyw56XkP591wy7NS5w=;
+        b=zp1aP5SFkM+DSdELm+do03k/BLomnSrFi1UjsUcdFdj/QmZ1YHYmC7coW0RNTVAgVR
+         QYSWil0RE47jOnrBLXLIew3Xosff1Bk7wpXm79co8Ro5PvMwTCkmrWPb/gtkZvWwR3M4
+         H1eipJvtPmbv3aSkYVozGXHo+OP5z7SjA5ounHzyxxm5sWEhw1zp7rBpAF05GfnNEwG6
+         oYkFWW3BqAeuFThsHBGBY7Za2ZIeKpPyrihfyUVoGLfiZRPQZLb0btDSuqJXj4Sdq7HH
+         TOPyjAyGELCkxsu33F2yM1Et12ObcvuNCFttH5LVsJfBWICLuyOjv7fyfZuAV/Hd0GmW
+         hZeQ==
+X-Gm-Message-State: AJIora+mfF9fyh1PWTFOOErIEMXa8XXwiBU0lny3yXfzdC15zwVhAr+0
+        3eq8YZFWaHftKUmGT+kAUK3zb5Pj1MgSwQ0n1kW3xnoQ
+X-Google-Smtp-Source: AGRyM1v2mcWJ0OjwOjGsBUU8j6+N4X0VfPk8e1CjLVl5EYg0Om7aQnrtDFo1RzXNDqN5ruhZyQ+djiMIjZt6q2zDl+g=
+X-Received: by 2002:a05:6830:1da2:b0:616:93a7:be5f with SMTP id
+ z2-20020a0568301da200b0061693a7be5fmr2392924oti.247.1657313459436; Fri, 08
+ Jul 2022 13:50:59 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220707090900.572584-1-naveen.n.rao@linux.vnet.ibm.com>
+In-Reply-To: <20220707090900.572584-1-naveen.n.rao@linux.vnet.ibm.com>
+From:   Namhyung Kim <namhyung@kernel.org>
+Date:   Fri, 8 Jul 2022 13:50:48 -0700
+Message-ID: <CAM9d7cjUVd+O3Ftg3vSAEHnZqS2ZAGez26BjyjY_ZZ3ce40qyA@mail.gmail.com>
+Subject: Re: [PATCH v2] perf trace: Fix SIGSEGV when processing syscall args
+To:     "Naveen N. Rao" <naveen.n.rao@linux.vnet.ibm.com>
+Cc:     Arnaldo Carvalho de Melo <acme@kernel.org>, cclaudio@linux.ibm.com,
+        Jiri Olsa <jolsa@kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Ard,
+Hello,
 
-FYI, the error/warning still remains.
+On Thu, Jul 7, 2022 at 2:09 AM Naveen N. Rao
+<naveen.n.rao@linux.vnet.ibm.com> wrote:
+>
+> On powerpc, 'perf trace' is crashing with a SIGSEGV when trying to
+> process a perf.data file created with 'perf trace record -p':
+>
+>   #0  0x00000001225b8988 in syscall_arg__scnprintf_augmented_string <snip> at builtin-trace.c:1492
+>   #1  syscall_arg__scnprintf_filename <snip> at builtin-trace.c:1492
+>   #2  syscall_arg__scnprintf_filename <snip> at builtin-trace.c:1486
+>   #3  0x00000001225bdd9c in syscall_arg_fmt__scnprintf_val <snip> at builtin-trace.c:1973
+>   #4  syscall__scnprintf_args <snip> at builtin-trace.c:2041
+>   #5  0x00000001225bff04 in trace__sys_enter <snip> at builtin-trace.c:2319
+>
+> That points to the below code in tools/perf/builtin-trace.c:
+>         /*
+>          * If this is raw_syscalls.sys_enter, then it always comes with the 6 possible
+>          * arguments, even if the syscall being handled, say "openat", uses only 4 arguments
+>          * this breaks syscall__augmented_args() check for augmented args, as we calculate
+>          * syscall->args_size using each syscalls:sys_enter_NAME tracefs format file,
+>          * so when handling, say the openat syscall, we end up getting 6 args for the
+>          * raw_syscalls:sys_enter event, when we expected just 4, we end up mistakenly
+>          * thinking that the extra 2 u64 args are the augmented filename, so just check
+>          * here and avoid using augmented syscalls when the evsel is the raw_syscalls one.
+>          */
+>         if (evsel != trace->syscalls.events.sys_enter)
+>                 augmented_args = syscall__augmented_args(sc, sample, &augmented_args_size, trace->raw_augmented_syscalls_args_size);
+>
+> As the comment points out, we should not be trying to augment the args
+> for raw_syscalls. However, when processing a perf.data file, we are not
+> initializing those properly. Fix the same.
+>
+> Reported-by: Claudio Carvalho <cclaudio@linux.ibm.com>
+> Signed-off-by: Naveen N. Rao <naveen.n.rao@linux.vnet.ibm.com>
+> ---
+>  tools/perf/builtin-trace.c | 2 ++
+>  1 file changed, 2 insertions(+)
+>
+> diff --git a/tools/perf/builtin-trace.c b/tools/perf/builtin-trace.c
+> index 897fc504918b91..f075cf37a65ef8 100644
+> --- a/tools/perf/builtin-trace.c
+> +++ b/tools/perf/builtin-trace.c
+> @@ -4280,6 +4280,7 @@ static int trace__replay(struct trace *trace)
+>                 goto out;
+>
+>         evsel = evlist__find_tracepoint_by_name(session->evlist, "raw_syscalls:sys_enter");
+> +       trace->syscalls.events.sys_enter = evsel;
+>         /* older kernels have syscalls tp versus raw_syscalls */
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git locking/core
-head:   eae6d58d67d9739be5f7ae2dbead1d0ef6528243
-commit: fdfd42892f311e2b3695852036e5be23661dc590 [2/4] jump_label: mips: move module NOP patching into arch code
-config: mips-randconfig-r035-20220708 (https://download.01.org/0day-ci/archive/20220709/202207090424.PgjCetK5-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 562c3467a6738aa89203f72fc1d1343e5baadf3c)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install mips cross compiling tool for clang build
-        # apt-get install binutils-mips-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git/commit/?id=fdfd42892f311e2b3695852036e5be23661dc590
-        git remote add tip https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git
-        git fetch --no-tags tip locking/core
-        git checkout fdfd42892f311e2b3695852036e5be23661dc590
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash arch/mips/kernel/ fs/ksmbd/
+Isn't it better to set it after the NULL check below?
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+>         if (evsel == NULL)
+>                 evsel = evlist__find_tracepoint_by_name(session->evlist, "syscalls:sys_enter");
+> @@ -4292,6 +4293,7 @@ static int trace__replay(struct trace *trace)
+>         }
+>
+>         evsel = evlist__find_tracepoint_by_name(session->evlist, "raw_syscalls:sys_exit");
+> +       trace->syscalls.events.sys_exit = evsel;
 
-All warnings (new ones prefixed by >>):
+Ditto.
 
->> arch/mips/kernel/jump_label.c:93:6: warning: no previous prototype for function 'jump_label_apply_nops' [-Wmissing-prototypes]
-   void jump_label_apply_nops(struct module *mod)
-        ^
-   arch/mips/kernel/jump_label.c:93:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void jump_label_apply_nops(struct module *mod)
-   ^
-   static 
-   1 warning generated.
+Thanks,
+Namhyung
 
 
-vim +/jump_label_apply_nops +93 arch/mips/kernel/jump_label.c
-
-    91	
-    92	#ifdef CONFIG_MODULES
-  > 93	void jump_label_apply_nops(struct module *mod)
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+>         if (evsel == NULL)
+>                 evsel = evlist__find_tracepoint_by_name(session->evlist, "syscalls:sys_exit");
+>         if (evsel &&
+>
+> base-commit: 52f28b7bac75da9b8508f17438c9a8d83ab48e5d
+> --
+> 2.36.1
+>

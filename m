@@ -2,78 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 46F5156B5F5
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 11:54:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 20A9756B602
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 11:54:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237822AbiGHJsP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Jul 2022 05:48:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37026 "EHLO
+        id S237837AbiGHJtD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Jul 2022 05:49:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38410 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237745AbiGHJsM (ORCPT
+        with ESMTP id S237827AbiGHJtB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Jul 2022 05:48:12 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 915257E014;
-        Fri,  8 Jul 2022 02:48:11 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id DF65D621B3;
-        Fri,  8 Jul 2022 09:48:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 42467C341C0;
-        Fri,  8 Jul 2022 09:48:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1657273690;
-        bh=jh5gWjN504oG2VIQVhjUJ6awryeK4kG9bLyyFcKUZb8=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=J0mN0kb8BszGexKgP2TR/Konu1FNhSKLfU1dFk8MjbV9m7dxbBYbF7wwZZqxMrDOr
-         F2lUZZbiAoibyzsScrc+PqTDnUNQtvqgiIQRLx+9QXwEy71uIlZvZibgVknoklSdR3
-         N5ej6+Cm1mxWT82xms9zIjE+kIojLNBIi/syuWuMiojBoq8gL4lbqP2fdR4MIRR5aC
-         C3otI4srlob2HKRGqzFgtB+NkDdngWbUpx5Yan/H9nA5wO5bog/qQzNIgkjEnalQT/
-         OhQHVVnJ4iu0TKhX6ULYi7/yPg+BKcMgFSIBiwxtrlrtdvCYjxTJwBxwY398mZfvn4
-         ctAgmZK0ZrrCw==
-Received: by mail-vs1-f49.google.com with SMTP id f68so5959428vsc.11;
-        Fri, 08 Jul 2022 02:48:10 -0700 (PDT)
-X-Gm-Message-State: AJIora96dsnmFzU0r+taN40ryFlyuRZC2ysrZymnKnUpyGH7oUVmtaS/
-        WJe3wZB9wBVMyUjEuyR8DZkolymU3c2KFdgwpDA=
-X-Google-Smtp-Source: AGRyM1trh8V62HAkUcCKd0tDx5d1m4TVW3lDdgWUkgyB2uid/kYHUhgnGZyGqTvYMyG8IlCpF+vPKmaWyo2itMFkJxg=
-X-Received: by 2002:a05:6102:3543:b0:357:3ae7:bbd0 with SMTP id
- e3-20020a056102354300b003573ae7bbd0mr431000vss.84.1657273689209; Fri, 08 Jul
- 2022 02:48:09 -0700 (PDT)
+        Fri, 8 Jul 2022 05:49:01 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 795927E022;
+        Fri,  8 Jul 2022 02:49:00 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id A1EB7106F;
+        Fri,  8 Jul 2022 02:49:00 -0700 (PDT)
+Received: from donnerap.cambridge.arm.com (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 062BB3F66F;
+        Fri,  8 Jul 2022 02:48:58 -0700 (PDT)
+Date:   Fri, 8 Jul 2022 10:48:56 +0100
+From:   Andre Przywara <andre.przywara@arm.com>
+To:     Samuel Holland <samuel@sholland.org>
+Cc:     Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v12 7/7] arm64: dts: allwinner: h616: Add X96 Mate TV
+ box support
+Message-ID: <20220708104856.70a40730@donnerap.cambridge.arm.com>
+In-Reply-To: <22aa3412-2dc2-4d7e-1c61-c5d35b25fe6d@sholland.org>
+References: <20220701112453.2310722-1-andre.przywara@arm.com>
+ <20220701112453.2310722-8-andre.przywara@arm.com>
+ <22aa3412-2dc2-4d7e-1c61-c5d35b25fe6d@sholland.org>
+Organization: ARM
+X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.32; aarch64-unknown-linux-gnu)
 MIME-Version: 1.0
-References: <20220704112526.2492342-1-chenhuacai@loongson.cn>
- <20220704112526.2492342-4-chenhuacai@loongson.cn> <20220705092937.GA552@willie-the-truck>
- <CAAhV-H5r8HDaxt8fkO97in5-eH8X9gokVNervmUWn6km4S0e-w@mail.gmail.com> <20220706161736.GC3204@willie-the-truck>
-In-Reply-To: <20220706161736.GC3204@willie-the-truck>
-From:   Huacai Chen <chenhuacai@kernel.org>
-Date:   Fri, 8 Jul 2022 17:47:56 +0800
-X-Gmail-Original-Message-ID: <CAAhV-H7uY_KiLJRRjj4+8mewcWbuhvC=zDp5VAs03=BLdSMKLw@mail.gmail.com>
-Message-ID: <CAAhV-H7uY_KiLJRRjj4+8mewcWbuhvC=zDp5VAs03=BLdSMKLw@mail.gmail.com>
-Subject: Re: [PATCH V4 3/4] mm/sparse-vmemmap: Generalise vmemmap_populate_hugepages()
-To:     Will Deacon <will@kernel.org>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Sudarshan Rajagopalan <sudaraja@codeaurora.org>
-Cc:     Huacai Chen <chenhuacai@loongson.cn>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        loongarch@lists.linux.dev, linux-arch <linux-arch@vger.kernel.org>,
-        Xuefeng Li <lixuefeng@loongson.cn>,
-        Guo Ren <guoren@kernel.org>, Xuerui Wang <kernel@xen0n.name>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Linux-MM <linux-mm@kvack.org>,
-        "open list:MIPS" <linux-mips@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        Feiyang Chen <chenfeiyang@loongson.cn>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -81,88 +52,253 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-+Dan Williams
-+Sudarshan Rajagopalan
+On Mon, 4 Jul 2022 20:29:45 -0500
+Samuel Holland <samuel@sholland.org> wrote:
 
-On Thu, Jul 7, 2022 at 12:17 AM Will Deacon <will@kernel.org> wrote:
->
-> On Tue, Jul 05, 2022 at 09:07:59PM +0800, Huacai Chen wrote:
-> > On Tue, Jul 5, 2022 at 5:29 PM Will Deacon <will@kernel.org> wrote:
-> > > On Mon, Jul 04, 2022 at 07:25:25PM +0800, Huacai Chen wrote:
-> > > > diff --git a/mm/sparse-vmemmap.c b/mm/sparse-vmemmap.c
-> > > > index 33e2a1ceee72..6f2e40bb695d 100644
-> > > > --- a/mm/sparse-vmemmap.c
-> > > > +++ b/mm/sparse-vmemmap.c
-> > > > @@ -686,6 +686,60 @@ int __meminit vmemmap_populate_basepages(unsigned long start, unsigned long end,
-> > > >       return vmemmap_populate_range(start, end, node, altmap, NULL);
-> > > >  }
-> > > >
-> > > > +void __weak __meminit vmemmap_set_pmd(pmd_t *pmd, void *p, int node,
-> > > > +                                   unsigned long addr, unsigned long next)
-> > > > +{
-> > > > +}
-> > > > +
-> > > > +int __weak __meminit vmemmap_check_pmd(pmd_t *pmd, int node, unsigned long addr,
-> > > > +                                    unsigned long next)
-> > > > +{
-> > > > +     return 0;
-> > > > +}
-> > > > +
-> > > > +int __meminit vmemmap_populate_hugepages(unsigned long start, unsigned long end,
-> > > > +                                      int node, struct vmem_altmap *altmap)
-> > > > +{
-> > > > +     unsigned long addr;
-> > > > +     unsigned long next;
-> > > > +     pgd_t *pgd;
-> > > > +     p4d_t *p4d;
-> > > > +     pud_t *pud;
-> > > > +     pmd_t *pmd;
-> > > > +
-> > > > +     for (addr = start; addr < end; addr = next) {
-> > > > +             next = pmd_addr_end(addr, end);
-> > > > +
-> > > > +             pgd = vmemmap_pgd_populate(addr, node);
-> > > > +             if (!pgd)
-> > > > +                     return -ENOMEM;
-> > > > +
-> > > > +             p4d = vmemmap_p4d_populate(pgd, addr, node);
-> > > > +             if (!p4d)
-> > > > +                     return -ENOMEM;
-> > > > +
-> > > > +             pud = vmemmap_pud_populate(p4d, addr, node);
-> > > > +             if (!pud)
-> > > > +                     return -ENOMEM;
-> > > > +
-> > > > +             pmd = pmd_offset(pud, addr);
-> > > > +             if (pmd_none(READ_ONCE(*pmd))) {
-> > > > +                     void *p;
-> > > > +
-> > > > +                     p = vmemmap_alloc_block_buf(PMD_SIZE, node, altmap);
-> > > > +                     if (p) {
-> > > > +                             vmemmap_set_pmd(pmd, p, node, addr, next);
-> > > > +                             continue;
-> > > > +                     } else if (altmap)
-> > > > +                             return -ENOMEM; /* no fallback */
-> > >
-> > > Why do you return -ENOMEM if 'altmap' here? That seems to be different to
-> > > what we currently have on arm64 and it's not clear to me why we're happy
-> > > with an altmap for the pmd case, but not for the pte case.
-> > The generic version is the same as X86. It seems that ARM64 always
-> > fallback whether there is an altmap, but X86 only fallback in the no
-> > altmap case. I don't know the reason of X86, can Dan Williams give
-> > some explaination?
->
-> Right, I think we need to understand the new behaviour here before we adopt
-> it on arm64.
-Hi, Dan,
-Could you please tell us the reason? Thanks.
+Hi,
 
-And Sudarshan,
-You are the author of adding a fallback mechanism to ARM64,  do you
-know why ARM64 is different from X86 (only fallback in no altmap
-case)?
+> On 7/1/22 6:24 AM, Andre Przywara wrote:
+> > The X96 Mate is an Allwinner H616 based TV box, featuring:
+> >   - Four ARM Cortex-A53 cores, Mali-G31 MP2 GPU
+> >   - 2GiB/4GiB RAM (fully usable!)
+> >   - 16/32/64GiB eMMC
+> >   - 100Mbps Ethernet (via embedded AC200 EPHY, not yet supported)
+> >   - Unsupported Allwinner WiFi chip
+> >   - 2 x USB 2.0 host ports
+> >   - HDMI port
+> >   - IR receiver
+> >   - 5V/2A DC power supply via barrel plug
+> > 
+> > Add a basic devicetree for it, with SD card and eMMC working, as
+> > well as serial and the essential peripherals, like the AXP PMIC.
+> > 
+> > This DT is somewhat minimal, and should work on many other similar TV
+> > boxes with the Allwinner H616 chip.
+> > 
+> > Signed-off-by: Andre Przywara <andre.przywara@arm.com>  
+> 
+> Looks good to me, with one question below.
+> 
+> Reviewed-by: Samuel Holland <samuel@sholland.org>
 
-Huacai
+Thanks!
 
->
-> Will
+> > ---
+> >  arch/arm64/boot/dts/allwinner/Makefile        |   1 +
+> >  .../dts/allwinner/sun50i-h616-x96-mate.dts    | 177 ++++++++++++++++++
+> >  2 files changed, 178 insertions(+)
+> >  create mode 100644 arch/arm64/boot/dts/allwinner/sun50i-h616-x96-mate.dts
+> > 
+> > diff --git a/arch/arm64/boot/dts/allwinner/Makefile b/arch/arm64/boot/dts/allwinner/Makefile
+> > index df2214e6d946a..6a96494a2e0a3 100644
+> > --- a/arch/arm64/boot/dts/allwinner/Makefile
+> > +++ b/arch/arm64/boot/dts/allwinner/Makefile
+> > @@ -39,3 +39,4 @@ dtb-$(CONFIG_ARCH_SUNXI) += sun50i-h6-pine-h64-model-b.dtb
+> >  dtb-$(CONFIG_ARCH_SUNXI) += sun50i-h6-tanix-tx6.dtb
+> >  dtb-$(CONFIG_ARCH_SUNXI) += sun50i-h6-tanix-tx6-mini.dtb
+> >  dtb-$(CONFIG_ARCH_SUNXI) += sun50i-h616-orangepi-zero2.dtb
+> > +dtb-$(CONFIG_ARCH_SUNXI) += sun50i-h616-x96-mate.dtb
+> > diff --git a/arch/arm64/boot/dts/allwinner/sun50i-h616-x96-mate.dts b/arch/arm64/boot/dts/allwinner/sun50i-h616-x96-mate.dts
+> > new file mode 100644
+> > index 0000000000000..30b76140b9c8a
+> > --- /dev/null
+> > +++ b/arch/arm64/boot/dts/allwinner/sun50i-h616-x96-mate.dts
+> > @@ -0,0 +1,177 @@
+> > +// SPDX-License-Identifier: (GPL-2.0+ or MIT)
+> > +/*
+> > + * Copyright (C) 2021 Arm Ltd.
+> > + */
+> > +
+> > +/dts-v1/;
+> > +
+> > +#include "sun50i-h616.dtsi"
+> > +
+> > +#include <dt-bindings/gpio/gpio.h>
+> > +#include <dt-bindings/interrupt-controller/arm-gic.h>
+> > +
+> > +/ {
+> > +	model = "X96 Mate";
+> > +	compatible = "hechuang,x96-mate", "allwinner,sun50i-h616";
+> > +
+> > +	aliases {
+> > +		serial0 = &uart0;
+> > +	};
+> > +
+> > +	chosen {
+> > +		stdout-path = "serial0:115200n8";
+> > +	};
+> > +
+> > +	reg_vcc5v: vcc5v {
+> > +		/* board wide 5V supply directly from the DC input */
+> > +		compatible = "regulator-fixed";
+> > +		regulator-name = "vcc-5v";
+> > +		regulator-min-microvolt = <5000000>;
+> > +		regulator-max-microvolt = <5000000>;
+> > +		regulator-always-on;
+> > +	};
+> > +};
+> > +
+> > +&ir {
+> > +	status = "okay";
+> > +};
+> > +
+> > +&mmc0 {
+> > +	vmmc-supply = <&reg_dcdce>;
+> > +	cd-gpios = <&pio 5 6 GPIO_ACTIVE_LOW>;	/* PF6 */
+> > +	bus-width = <4>;
+> > +	status = "okay";
+> > +};
+> > +
+> > +&mmc2 {
+> > +	vmmc-supply = <&reg_dcdce>;
+> > +	vqmmc-supply = <&reg_bldo1>;
+> > +	bus-width = <8>;
+> > +	non-removable;
+> > +	cap-mmc-hw-reset;
+> > +	mmc-ddr-1_8v;
+> > +	mmc-hs200-1_8v;
+> > +	status = "okay";
+> > +};
+> > +
+> > +&r_rsb {
+> > +	status = "okay";
+> > +
+> > +	axp305: pmic@745 {
+> > +		compatible = "x-powers,axp305", "x-powers,axp805",
+> > +			     "x-powers,axp806";
+> > +		interrupt-controller;
+> > +		#interrupt-cells = <1>;
+> > +		reg = <0x745>;
+> > +
+> > +		x-powers,self-working-mode;
+> > +		vina-supply = <&reg_vcc5v>;
+> > +		vinb-supply = <&reg_vcc5v>;
+> > +		vinc-supply = <&reg_vcc5v>;
+> > +		vind-supply = <&reg_vcc5v>;
+> > +		vine-supply = <&reg_vcc5v>;
+> > +		aldoin-supply = <&reg_vcc5v>;
+> > +		bldoin-supply = <&reg_vcc5v>;
+> > +		cldoin-supply = <&reg_vcc5v>;
+> > +
+> > +		regulators {
+> > +			reg_aldo1: aldo1 {
+> > +				regulator-always-on;
+> > +				regulator-min-microvolt = <3300000>;
+> > +				regulator-max-microvolt = <3300000>;
+> > +				regulator-name = "vcc-sys";
+> > +			};
+> > +
+> > +			/* Enabled by the Android BSP */
+> > +			reg_aldo2: aldo2 {
+> > +				regulator-min-microvolt = <3300000>;
+> > +				regulator-max-microvolt = <3300000>;
+> > +				regulator-name = "vcc3v3-ext";
+> > +				status = "disabled";  
+> 
+> If you disable these nodes, the regulator core will ignore them and not apply
+> the voltages. Is that what you want?
+
+It's what works ;-)
+ALDO2 was enabled and set to 3.3V by Android, also set in their DTB.
+However I figured it's not needed for our operation, at least not with
+the peripherals we support (including USB): turning it on or off didn't
+change anything. I just kept this in as documentation and a guide for
+future enablement, as this may drive *something*.
+
+Cheers,
+Andre
+
+> 
+> Regards,
+> Samuel
+> 
+> > +			};
+> > +
+> > +			/* Enabled by the Android BSP */
+> > +			reg_aldo3: aldo3 {
+> > +				regulator-min-microvolt = <3300000>;
+> > +				regulator-max-microvolt = <3300000>;
+> > +				regulator-name = "vcc3v3-ext2";
+> > +				status = "disabled";
+> > +			};
+> > +
+> > +			reg_bldo1: bldo1 {
+> > +				regulator-always-on;
+> > +				regulator-min-microvolt = <1800000>;
+> > +				regulator-max-microvolt = <1800000>;
+> > +				regulator-name = "vcc1v8";
+> > +			};
+> > +
+> > +			/* Enabled by the Android BSP */
+> > +			reg_bldo2: bldo2 {
+> > +				regulator-min-microvolt = <1800000>;
+> > +				regulator-max-microvolt = <1800000>;
+> > +				regulator-name = "vcc1v8-2";
+> > +				status = "disabled";
+> > +			};
+> > +
+> > +			bldo3 {
+> > +				/* unused */
+> > +			};
+> > +
+> > +			bldo4 {
+> > +				/* unused */
+> > +			};
+> > +
+> > +			cldo1 {
+> > +				regulator-min-microvolt = <2500000>;
+> > +				regulator-max-microvolt = <2500000>;
+> > +				regulator-name = "vcc2v5";
+> > +			};
+> > +
+> > +			cldo2 {
+> > +				/* unused */
+> > +			};
+> > +
+> > +			cldo3 {
+> > +				/* unused */
+> > +			};
+> > +
+> > +			reg_dcdca: dcdca {
+> > +				regulator-always-on;
+> > +				regulator-min-microvolt = <810000>;
+> > +				regulator-max-microvolt = <1080000>;
+> > +				regulator-name = "vdd-cpu";
+> > +			};
+> > +
+> > +			reg_dcdcc: dcdcc {
+> > +				regulator-always-on;
+> > +				regulator-min-microvolt = <810000>;
+> > +				regulator-max-microvolt = <1080000>;
+> > +				regulator-name = "vdd-gpu-sys";
+> > +			};
+> > +
+> > +			reg_dcdcd: dcdcd {
+> > +				regulator-always-on;
+> > +				regulator-min-microvolt = <1360000>;
+> > +				regulator-max-microvolt = <1360000>;
+> > +				regulator-name = "vdd-dram";
+> > +			};
+> > +
+> > +			reg_dcdce: dcdce {
+> > +				regulator-always-on;
+> > +				regulator-min-microvolt = <3300000>;
+> > +				regulator-max-microvolt = <3300000>;
+> > +				regulator-name = "vcc-eth-mmc";
+> > +			};
+> > +
+> > +			sw {
+> > +				/* unused */
+> > +			};
+> > +		};
+> > +	};
+> > +};
+> > +
+> > +&uart0 {
+> > +	pinctrl-names = "default";
+> > +	pinctrl-0 = <&uart0_ph_pins>;
+> > +	status = "okay";
+> > +};
+> >   
+> 
+

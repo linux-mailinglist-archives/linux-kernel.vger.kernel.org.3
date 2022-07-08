@@ -2,130 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C68E156B243
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 07:36:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CDDB756B245
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 07:38:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237129AbiGHFgA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Jul 2022 01:36:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51628 "EHLO
+        id S237158AbiGHFhm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Jul 2022 01:37:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52316 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230147AbiGHFfz (ORCPT
+        with ESMTP id S230147AbiGHFhh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Jul 2022 01:35:55 -0400
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B449426AFC;
-        Thu,  7 Jul 2022 22:35:48 -0700 (PDT)
-X-UUID: 17bb8d15316e4e4f80e080164af5ba3d-20220708
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.8,REQID:2a6a6774-90f1-4a00-bae0-af0bb8878e4a,OB:0,LO
-        B:0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACTI
-        ON:release,TS:0
-X-CID-META: VersionHash:0f94e32,CLOUDID:5425e186-57f0-47ca-ba27-fe8c57fbf305,C
-        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,IP:nil,URL:0,File:nil
-        ,QS:nil,BEC:nil,COL:0
-X-UUID: 17bb8d15316e4e4f80e080164af5ba3d-20220708
-Received: from mtkmbs11n1.mediatek.inc [(172.21.101.185)] by mailgw02.mediatek.com
-        (envelope-from <yunfei.dong@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 1840264530; Fri, 08 Jul 2022 13:35:44 +0800
-Received: from mtkcas10.mediatek.inc (172.21.101.39) by
- mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.2.792.15; Fri, 8 Jul 2022 13:35:43 +0800
-Received: from mhfsdcap04 (10.17.3.154) by mtkcas10.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Fri, 8 Jul 2022 13:35:42 +0800
-Message-ID: <42c0fd8acfb5a99fd33cb5245a54ed9037124f4f.camel@mediatek.com>
-Subject: Re: [PATCH] media: mediatek: vcodec: Initialize decoder parameters
- for each instance
-From:   "yunfei.dong@mediatek.com" <yunfei.dong@mediatek.com>
-To:     Chen-Yu Tsai <wenst@chromium.org>,
-        Tiffany Lin <tiffany.lin@mediatek.com>,
-        Andrew-CT Chen <andrew-ct.chen@mediatek.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>
-CC:     <linux-media@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-mediatek@lists.infradead.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>
-Date:   Fri, 8 Jul 2022 13:35:42 +0800
-In-Reply-To: <20220704084930.1625768-1-wenst@chromium.org>
-References: <20220704084930.1625768-1-wenst@chromium.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+        Fri, 8 Jul 2022 01:37:37 -0400
+Received: from out2.migadu.com (out2.migadu.com [IPv6:2001:41d0:2:aacc::])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DDB526AFC
+        for <linux-kernel@vger.kernel.org>; Thu,  7 Jul 2022 22:37:36 -0700 (PDT)
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1657258654;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=9bOl8oP64G0XGZtdjv61c28GEDmXYXsYcMM3i5L7xd0=;
+        b=mxRxJbqABfnOpidFV+OiF06xQCC6cYvTfH3PMLu8c3Pu1HEW1746yojW4q+4GwJy3QwKhM
+        yAZXp3ZxMf/rD9Ca07y87XhXbtE/4hYuSefFofrEbPIxDLOW+fr1h2KJrmuos6bGmnoJLQ
+        dhE7oScZxQBBteGyR9sTXqEqAjfV7wk=
+From:   Naoya Horiguchi <naoya.horiguchi@linux.dev>
+To:     linux-mm@kvack.org
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        David Hildenbrand <david@redhat.com>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Miaohe Lin <linmiaohe@huawei.com>,
+        Liu Shixin <liushixin2@huawei.com>,
+        Yang Shi <shy828301@gmail.com>,
+        Oscar Salvador <osalvador@suse.de>,
+        Muchun Song <songmuchun@bytedance.com>,
+        Naoya Horiguchi <naoya.horiguchi@nec.com>,
+        linux-kernel@vger.kernel.org
+Subject: [mm-unstable PATCH v5 0/8] mm, hwpoison: enable 1GB hugepage support (v5)
+Date:   Fri,  8 Jul 2022 14:36:45 +0900
+Message-Id: <20220708053653.964464-1-naoya.horiguchi@linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-MTK:  N
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,T_SPF_HELO_TEMPERROR,UNPARSEABLE_RELAY
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
+X-Migadu-Auth-User: linux.dev
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Chen-Yu,
+Here is v5 of "enabling memory error handling on 1GB hugepage" patchset.
 
-Thanks for your patch.
+I applied feedbacks provided for v4, thank you very much.
 
-Reviewed-by: Yunfei Dong <yunfei.dong@mediatek.com>
+Change overview (see changelog in individual patches for details):
 
-Best Regards,
-Yunfei Dong
+- rebased onto mm-everything-2022-07-08-01-43.
+- removed the patch "mm/hugetlb: separate path for hwpoison entry in
+  copy_hugetlb_page_range()" because it's separately handled and already
+  in mm-hotfixes.
 
-On Mon, 2022-07-04 at 16:49 +0800, Chen-Yu Tsai wrote:
-> The decoder parameters are stored in each instance's context data.
-> This
-> needs to be initialized per-instance, but a previous fix incorrectly
-> changed it to only be initialized for the first opened instance. This
-> resulted in subsequent instances not correctly signaling the
-> requirement
-> for the Requests API.
-> 
-> Fix this by calling the initializing function outside of the
-> v4l2_fh_is_singular() conditional block.
-> 
-> Fixes: faddaa735c20 ("media: mediatek: vcodec: Initialize decoder
-> parameters after getting dec_capability")
-> Signed-off-by: Chen-Yu Tsai <wenst@chromium.org>
-> ---
-> This was found during backport of mtk-vcodec patches onto the
-> ChromeOS
-> v5.10 kernel, which caused one of our tests that does multiple
-> concurrent
-> decodes to fail, as some decoder instances didn't have their
-> requires_requests and supports_requests flags marked correctly.
-> Evidently my previous testing of culprit patch was not thorough
-> enough.
-> 
-> This fixes commit faddaa735c20 ("media: mediatek: vcodec: Initialize
-> decoder
-> parameters after getting dec_capability") in the media stage repo.
-> This
-> could either be queued up after it, or squashed into it.
-> 
->  drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec_drv.c | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
-> 
-> diff --git
-> a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec_drv.c
-> b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec_drv.c
-> index 55dffb61e58c..e0b6ae9d6caa 100644
-> --- a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec_drv.c
-> +++ b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec_drv.c
-> @@ -208,11 +208,12 @@ static int fops_vcodec_open(struct file *file)
->  
->  		dev->dec_capability =
->  			mtk_vcodec_fw_get_vdec_capa(dev->fw_handler);
-> -		ctx->dev->vdec_pdata->init_vdec_params(ctx);
->  
->  		mtk_v4l2_debug(0, "decoder capability %x", dev-
-> >dec_capability);
->  	}
->  
-> +	ctx->dev->vdec_pdata->init_vdec_params(ctx);
-> +
->  	list_add(&ctx->list, &dev->ctx_list);
->  
->  	mutex_unlock(&dev->dev_mutex);
+- v1: https://lore.kernel.org/linux-mm/20220602050631.771414-1-naoya.horiguchi@linux.dev/T/#u
+- v2: https://lore.kernel.org/linux-mm/20220623235153.2623702-1-naoya.horiguchi@linux.dev/T/#u
+- v3: https://lore.kernel.org/linux-mm/20220630022755.3362349-1-naoya.horiguchi@linux.dev/T/#u
+- v4: https://lore.kernel.org/linux-mm/20220704013312.2415700-1-naoya.horiguchi@linux.dev/T/#u
 
+Thanks,
+Naoya Horiguchi
+---
+Summary:
+
+Naoya Horiguchi (8):
+      mm/hugetlb: check gigantic_page_runtime_supported() in return_unused_surplus_pages()
+      mm/hugetlb: make pud_huge() and follow_huge_pud() aware of non-present pud entry
+      mm, hwpoison, hugetlb: support saving mechanism of raw error pages
+      mm, hwpoison: make unpoison aware of raw error info in hwpoisoned hugepage
+      mm, hwpoison: set PG_hwpoison for busy hugetlb pages
+      mm, hwpoison: make __page_handle_poison returns int
+      mm, hwpoison: skip raw hwpoison page in freeing 1GB hugepage
+      mm, hwpoison: enable memory error handling on 1GB hugepage
+
+ arch/x86/mm/hugetlbpage.c |   8 ++-
+ include/linux/hugetlb.h   |  18 ++++-
+ include/linux/mm.h        |   2 +-
+ include/linux/swapops.h   |   9 +++
+ include/ras/ras_event.h   |   1 -
+ mm/hugetlb.c              |  67 +++++++++++++++----
+ mm/memory-failure.c       | 165 +++++++++++++++++++++++++++++++++++++---------
+ 7 files changed, 222 insertions(+), 48 deletions(-)

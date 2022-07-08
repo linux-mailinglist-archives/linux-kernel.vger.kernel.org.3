@@ -2,79 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 26C7856BD92
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 18:08:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AA00456BE03
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 18:09:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238231AbiGHP6o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Jul 2022 11:58:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41710 "EHLO
+        id S238892AbiGHP6p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Jul 2022 11:58:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41796 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238151AbiGHP6k (ORCPT
+        with ESMTP id S238880AbiGHP6n (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Jul 2022 11:58:40 -0400
-Received: from outbound-smtp26.blacknight.com (outbound-smtp26.blacknight.com [81.17.249.194])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83C815A2F7
-        for <linux-kernel@vger.kernel.org>; Fri,  8 Jul 2022 08:58:38 -0700 (PDT)
-Received: from mail.blacknight.com (pemlinmail01.blacknight.ie [81.17.254.10])
-        by outbound-smtp26.blacknight.com (Postfix) with ESMTPS id 30C05CABF0
-        for <linux-kernel@vger.kernel.org>; Fri,  8 Jul 2022 16:58:37 +0100 (IST)
-Received: (qmail 2989 invoked from network); 8 Jul 2022 15:58:37 -0000
-Received: from unknown (HELO techsingularity.net) (mgorman@techsingularity.net@[84.203.198.246])
-  by 81.17.254.9 with ESMTPSA (AES256-SHA encrypted, authenticated); 8 Jul 2022 15:58:37 -0000
-Date:   Fri, 8 Jul 2022 16:58:35 +0100
-From:   Mel Gorman <mgorman@techsingularity.net>
-To:     Vlastimil Babka <vbabka@suse.cz>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Nicolas Saenz Julienne <nsaenzju@redhat.com>,
-        Marcelo Tosatti <mtosatti@redhat.com>,
-        Michal Hocko <mhocko@kernel.org>,
-        Hugh Dickins <hughd@google.com>, Yu Zhao <yuzhao@google.com>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Linux-MM <linux-mm@kvack.org>
-Subject: Re: [PATCH] mm/page_alloc: replace local_lock with normal spinlock
- -fix -fix
-Message-ID: <20220708155835.GK27531@techsingularity.net>
-References: <20220708144406.GJ27531@techsingularity.net>
- <a78f95e9-298a-bc97-9776-14e0f02f62b9@suse.cz>
+        Fri, 8 Jul 2022 11:58:43 -0400
+Received: from mail-pg1-x532.google.com (mail-pg1-x532.google.com [IPv6:2607:f8b0:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62C6D6B253
+        for <linux-kernel@vger.kernel.org>; Fri,  8 Jul 2022 08:58:41 -0700 (PDT)
+Received: by mail-pg1-x532.google.com with SMTP id 145so22678184pga.12
+        for <linux-kernel@vger.kernel.org>; Fri, 08 Jul 2022 08:58:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=B8w4bwYuqV6DXk3ShmGJ/aTll0ynf+VvQDcahL2hqj4=;
+        b=bfCBNAPgf5AtCFBnWe/2nrt7kg29z/w5Q01kuQ6lA+gveTZTp/emDFQxX4//qULTB1
+         /cK4O+t1Z+i0p4mGAfgY8TN8v0tQ0RSvxquGKJmX4QGik5uArQ6ecp3U65ZSDt8cnezy
+         vGAyYDn3mUw1c2vTleiOPAnO9QfnpJOoCWVDhAsvcFJI8Rk2RlC4oZQdtEHG3DzFVxZP
+         R7aHe9QHxnyRN9lRq7Va+0rjvw5ejyajU+vbEeLjLx7KjBkbz3wGUd+8NPfsVNnERiK3
+         WjZgiDfSHkSo40HlMmmR7c5mwZVjIi/thPN0pGgF4588q13cCYCzUgZ6bUJtMN5IYvkD
+         57Ng==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=B8w4bwYuqV6DXk3ShmGJ/aTll0ynf+VvQDcahL2hqj4=;
+        b=aFrwhgufk0fUDHf2s+ARIN+rxNeYLBGdOIaTrymIAJCrfmuQRArf5Iql9aIOKNJIXG
+         hH9cNs2TRL5/uVvniDFdrSQPszcMIdMut8bJmVx4/eIjB81PNP1smwClddPDMycJV2jn
+         rJ+5hX7U0dZp/W8bmQAPf237vHg/Cz/pgbBiBNw7nEDMFQin3zaMiy32pEO5P5KTvhlV
+         L7ooHbnR5/AECQjPwlWUbJyeOdpxwTEOLm+Dj7XZfhHTSNH52FAEGvslGra3eLuN0vku
+         F5spbk8+xU/dhfXthOxfuZYGMZeX8JyRxUULkeiY0LCBopCEjWO10/e+RVoJ6XB/JLPo
+         bD9g==
+X-Gm-Message-State: AJIora9qOjRNWf9V7ZpqdmzW+FEzRLZdTvjDgdlHWdqCCB4lDA4Un9wt
+        EhF6UQ/6Gw/Xnih8ZAD/2L3ZXA==
+X-Google-Smtp-Source: AGRyM1vTv4xL2/UTTju5PFq9Kvb5or53YEm+WZJ52+HPaHJtWg1ukrZVjJdpIkPwNcaRQPI2DCWFkQ==
+X-Received: by 2002:a05:6a00:188e:b0:52a:b545:559f with SMTP id x14-20020a056a00188e00b0052ab545559fmr1935105pfh.18.1657295920505;
+        Fri, 08 Jul 2022 08:58:40 -0700 (PDT)
+Received: from google.com (123.65.230.35.bc.googleusercontent.com. [35.230.65.123])
+        by smtp.gmail.com with ESMTPSA id w23-20020a1709026f1700b00161ccdc172dsm30065208plk.300.2022.07.08.08.58.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 08 Jul 2022 08:58:40 -0700 (PDT)
+Date:   Fri, 8 Jul 2022 15:58:36 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Vitaly Kuznetsov <vkuznets@redhat.com>
+Cc:     kvm@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] KVM: x86: Fully initialize 'struct kvm_lapic_irq' in
+ kvm_pv_kick_cpu_op()
+Message-ID: <YshULK9IG9mw7ms3@google.com>
+References: <20220708125147.593975-1-vkuznets@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-15
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <a78f95e9-298a-bc97-9776-14e0f02f62b9@suse.cz>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20220708125147.593975-1-vkuznets@redhat.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jul 08, 2022 at 04:54:47PM +0200, Vlastimil Babka wrote:
-> On 7/8/22 16:44, Mel Gorman wrote:
-> > pcpu_spin_unlock and pcpu_spin_unlock_irqrestore both unlock
-> > pcp->lock and then enable preemption. This lacks symmetry against
-> > both the pcpu_spin helpers and differs from how local_unlock_* is
-> > implemented. While this is harmless, it's unnecessary and it's generally
-> > better to unwind locks and preemption state in the reverse order as
-> > they were acquired.
+On Fri, Jul 08, 2022, Vitaly Kuznetsov wrote:
+> 'vector' and 'trig_mode' fields of 'struct kvm_lapic_irq' are left
+> uninitialized in kvm_pv_kick_cpu_op(). While these fields are normally
+> not needed for APIC_DM_REMRD, they're still referenced by
+> __apic_accept_irq() for trace_kvm_apic_accept_irq(). Fully initialize
+> the structure to avoid consuming random stack memory.
 > 
-> Hm I'm confused, it seems it's done in reverse order (which I agree with)
-> before this -fix-fix, but not after it?
-> 
-> before, pcpu_spin_lock() (and variants) do pcpu_task_pin() and then
-> spin_lock() (or variant), and pcpu_spin_unlock() does spin_unlock() and then
-> pcpu_task_unpin(). That seems symmetrical, i.e. reverse order to me? And
-> seems to match what local_lock family does too.
-> 
+> Fixes: a183b638b61c ("KVM: x86: make apic_accept_irq tracepoint more generic")
+> Reported-by: syzbot+d6caa905917d353f0d07@syzkaller.appspotmail.com
+> Signed-off-by: Vitaly Kuznetsov <vkuznets@redhat.com>
+> ---
 
-You're not confused, I am. The patch and the changelog are outright brain
-damage from excessive context switching and a sign that it's time for the
-weekend to start.
-
-Sorry for this absolute misfortune.
-
--- 
-Mel Gorman
-SUSE Labs
+Reviewed-by: Sean Christopherson <seanjc@google.com>

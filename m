@@ -2,167 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C1F756BBD8
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 16:35:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AAA0D56BBDC
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 16:35:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238028AbiGHOfc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Jul 2022 10:35:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55058 "EHLO
+        id S238096AbiGHOfo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Jul 2022 10:35:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55198 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237974AbiGHOfY (ORCPT
+        with ESMTP id S237974AbiGHOfk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Jul 2022 10:35:24 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 387AF22522;
-        Fri,  8 Jul 2022 07:35:23 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 63713B8255E;
-        Fri,  8 Jul 2022 14:35:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 75A1EC341C0;
-        Fri,  8 Jul 2022 14:35:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1657290919;
-        bh=AwPkpBjvUMzrILQ+qIDIWQS3U2aLgq3UVGKJV7XFLoU=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=E/wLQrpEgcm63ktpq34MjFig3s5y6zF1aJE63yFFiDpCJF5i9PUWcIlwgp39+KFCc
-         2cTPGJ6lzjUKQ4TQSaA14Yri+7ZW7qg3W0XI+ib2qDResYRbMsy/VtwFZDSXo5Wbzq
-         X5e1Oa4nCIgjcfmiIq312iod0lPmXO7l3J9mUSd6lHA5E8oeynfrKfJWuePexrznyJ
-         PCVbkl9us8mEVVT3kZopTu+CPcWkacE+YjkDzeUsSyFqLGKwugC915soobTOru2QEc
-         JQIakRAlTkfh/C6SxvEhEBRbgurOoglJ0K5qPklqGMaHxFLvyccM/e47D9AVWsWUse
-         uQ4ZmmwmIlPeg==
-Date:   Fri, 8 Jul 2022 16:35:11 +0200
-From:   Christian Brauner <brauner@kernel.org>
-To:     Frederick Lawler <fred@cloudflare.com>
-Cc:     Christian =?utf-8?B?R8O2dHRzY2hl?= <cgzones@googlemail.com>,
-        KP Singh <kpsingh@kernel.org>, revest@chromium.org,
-        jackmanb@chromium.org, Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        James Morris <jmorris@namei.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>,
-        Paul Moore <paul@paul-moore.com>,
-        Stephen Smalley <stephen.smalley.work@gmail.com>,
-        Eric Paris <eparis@parisplace.org>, shuah@kernel.org,
-        Casey Schaufler <casey@schaufler-ca.com>,
-        "Eric W. Biederman" <ebiederm@xmission.com>, bpf@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        SElinux list <selinux@vger.kernel.org>,
-        linux-kselftest@vger.kernel.org,
-        Linux kernel mailing list <linux-kernel@vger.kernel.org>,
-        netdev@vger.kernel.org, kernel-team@cloudflare.com
-Subject: Re: [PATCH v2 0/4] Introduce security_create_user_ns()
-Message-ID: <20220708143511.wx4oix4efvy5pmkh@wittgenstein>
-References: <20220707223228.1940249-1-fred@cloudflare.com>
- <CAJ2a_DezgSpc28jvJuU_stT7V7et-gD7qjy409oy=ZFaUxJneg@mail.gmail.com>
- <3dbd5b30-f869-b284-1383-309ca6994557@cloudflare.com>
+        Fri, 8 Jul 2022 10:35:40 -0400
+Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D432823BC9;
+        Fri,  8 Jul 2022 07:35:39 -0700 (PDT)
+Received: by mail-wr1-x436.google.com with SMTP id h17so17674879wrx.0;
+        Fri, 08 Jul 2022 07:35:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=ppR38sJTn4e6UkCiroOOj/awvQOastGoKzwCSCjDPkk=;
+        b=NABPHaAvOVdVUD2XiOt4+I646KM6yqphbI9sKrSh1qyNVdO8wYiFlfVF2B5NttT5hi
+         dqLBTHiGRj4gHsGsDJSiuWA483+IZLD69AtENs5wFWWSOW5EpJPRPkT9H0YZhBtfZInu
+         Ei4jqBXjFRG/bI3B1v9+BTSHzYJ0hhsVczCungcC12DZ+p6JEy4yvZCQ6lP53WT2iPEk
+         bWALtLRLHsIbnKqu6PnYMJ5Jc4u8BbwfhN4ZniMutnG/u5j7q8eO+sKfpbyDG8XQeRSO
+         64KwOZt1t87EBfJgbQsbzyBVuu8+7Tnrhg1p9SxwAg4NRerUf1WpsUwp29EmeyG311PJ
+         vWdQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=ppR38sJTn4e6UkCiroOOj/awvQOastGoKzwCSCjDPkk=;
+        b=x2nxvHRmv/zOqENBm3qEI+dXhBQV/JhbGMzzzk2X4PIDIVbH7Fr07AmPH5jfsEfdbB
+         hyA8BPg0GqYWelTBLRLM02JlYbrCJRn0SidE/V6T6hNf6Anm6DicMeluR6fcn4A+lLg8
+         HZplb3GUSip6zgpSgwo/98rSN5kRcZGnFX3lbz1NhUPOq95dX71r1nLy4tn+sb+T8MQ/
+         mhvLjsyq350jCPoFJg87E0/XkEL+okc2SzXNercHgPzOsy/+Ls536S8uBAv7ABi0RzaJ
+         WeQ58jIuEfyX5Uc9MLOrNog1yRttYFUiyoOijOVF1s4vJltLb6NG5UbCCu8svQGQh88j
+         ztMA==
+X-Gm-Message-State: AJIora8ikQDJDT/IMWwfnS6RrOwerU2JvNYqtCkBNcZpESbqhiJOSaO1
+        uU5bYphUTDk/oiv2rHvlkhgdNQZN51U=
+X-Google-Smtp-Source: AGRyM1u2Oee3xZ5+iHTTliZq8AEVz1GxAmAFO24MCgJdXMTKbP/oBsD1BCUuJ7kWEAccbCqwmsjInQ==
+X-Received: by 2002:a05:6000:25a:b0:21d:727b:5017 with SMTP id m26-20020a056000025a00b0021d727b5017mr3570510wrz.184.1657290938309;
+        Fri, 08 Jul 2022 07:35:38 -0700 (PDT)
+Received: from orome (p200300e41f12c800f22f74fffe1f3a53.dip0.t-ipconnect.de. [2003:e4:1f12:c800:f22f:74ff:fe1f:3a53])
+        by smtp.gmail.com with ESMTPSA id c9-20020a05600c0a4900b0039c4ba160absm11292953wmq.2.2022.07.08.07.35.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 08 Jul 2022 07:35:37 -0700 (PDT)
+Date:   Fri, 8 Jul 2022 16:35:35 +0200
+From:   Thierry Reding <thierry.reding@gmail.com>
+To:     Akhil R <akhilrajeev@nvidia.com>
+Cc:     dmaengine@vger.kernel.org, jonathanh@nvidia.com,
+        ldewangan@nvidia.com, linux-kernel@vger.kernel.org,
+        linux-tegra@vger.kernel.org, p.zabel@pengutronix.de,
+        vkoul@kernel.org, robh+dt@kernel.org, devicetree@vger.kernel.org
+Subject: Re: [PATCH v2 1/3] dt-bindings: dmaengine: Add compatible for
+ Tegra234
+Message-ID: <YshAt5WAG9zUkrpy@orome>
+References: <20220707145729.41876-1-akhilrajeev@nvidia.com>
+ <20220707145729.41876-2-akhilrajeev@nvidia.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="7KrFkS22rogEsCYQ"
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <3dbd5b30-f869-b284-1383-309ca6994557@cloudflare.com>
-X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220707145729.41876-2-akhilrajeev@nvidia.com>
+User-Agent: Mutt/2.2.6 (2022-06-05)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jul 08, 2022 at 09:01:32AM -0500, Frederick Lawler wrote:
-> On 7/8/22 7:10 AM, Christian Göttsche wrote:
-> > ,On Fri, 8 Jul 2022 at 00:32, Frederick Lawler <fred@cloudflare.com> wrote:
-> > > 
-> > > While creating a LSM BPF MAC policy to block user namespace creation, we
-> > > used the LSM cred_prepare hook because that is the closest hook to prevent
-> > > a call to create_user_ns().
-> > > 
-> > > The calls look something like this:
-> > > 
-> > >      cred = prepare_creds()
-> > >          security_prepare_creds()
-> > >              call_int_hook(cred_prepare, ...
-> > >      if (cred)
-> > >          create_user_ns(cred)
-> > > 
-> > > We noticed that error codes were not propagated from this hook and
-> > > introduced a patch [1] to propagate those errors.
-> > > 
-> > > The discussion notes that security_prepare_creds()
-> > > is not appropriate for MAC policies, and instead the hook is
-> > > meant for LSM authors to prepare credentials for mutation. [2]
-> > > 
-> > > Ultimately, we concluded that a better course of action is to introduce
-> > > a new security hook for LSM authors. [3]
-> > > 
-> > > This patch set first introduces a new security_create_user_ns() function
-> > > and create_user_ns LSM hook, then marks the hook as sleepable in BPF.
-> > 
-> > Some thoughts:
-> > 
-> > I.
-> > 
-> > Why not make the hook more generic, e.g. support all other existing
-> > and potential future namespaces?
-> 
-> The main issue with a generic hook is that different namespaces have
-> different calling contexts. We decided in a previous discussion to opt-out
-> of a generic hook for this reason. [1]
 
-Agreed.
+--7KrFkS22rogEsCYQ
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-> 
-> > Also I think the naming scheme is <object>_<verb>.
-> 
-> That's a good call out. I was originally hoping to keep the security_*()
-> match with the hook name matched with the caller function to keep things all
-> aligned. If no one objects to renaming the hook, I can rename the hook for
-> v3.
-> 
-> > 
-> >      LSM_HOOK(int, 0, namespace_create, const struct cred *cred,
-> > unsigned int flags)
-> > 
-> > where flags is a bitmap of CLONE flags from include/uapi/linux/sched.h
-> > (like CLONE_NEWUSER).
-> > 
-> > II.
-> > 
-> > While adding policing for namespaces maybe also add a new hook for setns(2)
-> > 
-> >      LSM_HOOK(int, 0, namespace_join, const struct cred *subj,  const
-> > struct cred *obj, unsigned int flags)
-> > 
-> 
-> IIUC, setns() will create a new namespace for the other namespaces except
-> for user namespace. If we add a security hook for the other create_*_ns()
+On Thu, Jul 07, 2022 at 08:27:27PM +0530, Akhil R wrote:
+> Document the compatible string used by GPCDMA controller for Tegra234.
+>=20
+> Signed-off-by: Akhil R <akhilrajeev@nvidia.com>
+> ---
+>  .../devicetree/bindings/dma/nvidia,tegra186-gpc-dma.yaml         | 1 +
+>  1 file changed, 1 insertion(+)
+>=20
+> diff --git a/Documentation/devicetree/bindings/dma/nvidia,tegra186-gpc-dm=
+a.yaml b/Documentation/devicetree/bindings/dma/nvidia,tegra186-gpc-dma.yaml
+> index 9dd1476d1849..81f3badbc8ec 100644
+> --- a/Documentation/devicetree/bindings/dma/nvidia,tegra186-gpc-dma.yaml
+> +++ b/Documentation/devicetree/bindings/dma/nvidia,tegra186-gpc-dma.yaml
+> @@ -23,6 +23,7 @@ properties:
+>      oneOf:
+>        - const: nvidia,tegra186-gpcdma
+>        - items:
+> +          - const: nvidia,tegra234-gpcdma
+>            - const: nvidia,tegra194-gpcdma
+>            - const: nvidia,tegra186-gpcdma
 
-setns() doesn't create new namespaces. It just switches to already
-existing ones:
+I don't think this works because it will now fail to validate Tegra194
+device trees. You'll need to create a separate set of items for
+Tegra234.
 
-setns(<pidfd>, <flags>)
--> prepare_nsset()
-      /* 
-       * Notice the 0 passed as flags which means all namespaces will
-       * just take a reference.
-       */
-   -> create_new_namespaces(0, ...)
+Thierry
 
-you're thinking about unshare() and unshare() will be caught in
-create_user_ns().
+--7KrFkS22rogEsCYQ
+Content-Type: application/pgp-signature; name="signature.asc"
 
-> functions, then we can catch setns() at that point.
+-----BEGIN PGP SIGNATURE-----
 
-If you block the creation of user namespaces by unprivileged users in
-create_user_ns() you can only create user namespaces as a privileged
-user. Consequently only a privileged users can setns() to a user
-namespace. So either the caller has CAP_SYS_ADMIN in the parent userns
-or they are located in the parent userns and are the owner of the userns
-they are attaching to. So if you lock create_user_ns() to
-capable(CAP_SYS_ADMIN) you should be done.
+iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAmLIQLcACgkQ3SOs138+
+s6F9wA/+PevJYM9sYGjtbmt0Td1G/xEVvLlkGtAzYtC2f2I9YJl43ag4RwxvG3ok
+/i366YAeBcA61nBwuLsnPflTivsKa8W6MXUGByTJOCBsNYq5S3LGsqSi0KlsD1Xr
+ARLkiz3WDyncUohNXOOBxGEzEOrO/YT/7Itb8dwr1ig5T+W0PtumgVnAH86iX+DM
+mpiwLHuWFqMwU/tziEiR+JyzK6EYAwS3STDuCeaiGw7siF+cuf08Z8zmvwNU47sv
+iIwwdPaSDvKVPyKRbl/YwJbbMkas4lF1itH0DhImspBbUEZIGTjcf1U7G8mrVSKL
+HAj+S6rmhHM7cP1V99zcAQIDamEaWko9rGtrE7ihKpWG0R5Q+6+7qyZ08g6HeZ7S
+aAA/uEhPU+SCy7Bc4wp13/fupQsSLmekewcNUSBSQXO1ZiQ6P9Lx+tkzNVT+xuk5
+wev7ncXsqG8k2p1uv/EhvlA/LvHZ5V0obqcmhJB63tlDyncgdr+YmB4r3XHG4uB2
+DseZSKeX6xqAhTOSC9FRmDcuNVoK6kllfbvY4xqpxiPmIc6drbEKan8FdqQVsKi+
+YO3W+4fvigR+Bx9k7oCvTlSLko6iUkvlifessg4Du9zZW23+/FT7svBxL4uHSwEx
+ozKor/mOpEdsHoe1FE8TQ38KpV9+XWzc9J7mjPc1LiFclEZ85a0=
+=fR/G
+-----END PGP SIGNATURE-----
+
+--7KrFkS22rogEsCYQ--

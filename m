@@ -2,121 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DA0EA56B669
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 12:06:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2DCAD56B6E1
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 12:16:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237889AbiGHKGS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Jul 2022 06:06:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52000 "EHLO
+        id S237941AbiGHKJA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Jul 2022 06:09:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54558 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237242AbiGHKGR (ORCPT
+        with ESMTP id S237918AbiGHKI6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Jul 2022 06:06:17 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C79E983F25;
-        Fri,  8 Jul 2022 03:06:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1657274776; x=1688810776;
-  h=date:from:to:subject:message-id:references:mime-version:
-   in-reply-to;
-  bh=lbqQjKB+wMbVvhshNl7agCaUpV1RPa7FLoLbtHU0PKQ=;
-  b=KTbvY+CqZlIxq8LWCyw9tgYlT8zYK45rEM91ppbZnZq4ADp5/Vt1HC8W
-   zVBy4LWGlJ7TDIGAJnNnn33Tzv+UD+6fXo14n/sJp/mIwo//OU8FUc4fY
-   KLf9MV+lZmikFUO0XA5w3ru92rn6lLx1KpRDWFfkKFDwhu1L2zWslRxWs
-   AvuygH/FMuo9fgAI/Wc/Ct0HmhjfiddWQq5Nmtf6BpIxWid7E0mYWdLu8
-   cZ4FZce2EAg8g9qKi7Ya6XW+kC38DbgJt3KygqV+EosrlAmkM15ereSzi
-   tJvUqFaeFuuwn008GYmZR5zaL/NGs+XQfiIs5qrdIo2eUcY30/jz0/gpy
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10401"; a="282999030"
-X-IronPort-AV: E=Sophos;i="5.92,255,1650956400"; 
-   d="scan'208";a="282999030"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jul 2022 03:06:16 -0700
-X-IronPort-AV: E=Sophos;i="5.92,255,1650956400"; 
-   d="scan'208";a="683618026"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jul 2022 03:06:12 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1o9ksD-0017y9-0P;
-        Fri, 08 Jul 2022 13:06:09 +0300
-Date:   Fri, 8 Jul 2022 13:06:08 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        Michael Walle <michael@walle.cc>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Sam Protsenko <semen.protsenko@linaro.org>,
-        Lucas De Marchi <lucas.demarchi@intel.com>,
-        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org,
-        linux-renesas-soc@vger.kernel.org,
-        Codrin Ciubotariu <codrin.ciubotariu@microchip.com>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Till Harbaum <till@harbaum.org>
-Subject: Re: [PATCH v2 2/2] i2c: Introduce i2c_str_read_write() and make use
- of it
-Message-ID: <YsgBkDeq/KeQ15HU@smile.fi.intel.com>
-References: <20220703154232.55549-1-andriy.shevchenko@linux.intel.com>
- <20220703154232.55549-2-andriy.shevchenko@linux.intel.com>
- <YsWI4nzQa9gmqKdw@shikoro>
+        Fri, 8 Jul 2022 06:08:58 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E7B6B83F17
+        for <linux-kernel@vger.kernel.org>; Fri,  8 Jul 2022 03:08:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1657274934;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=R31VwcSPJiQ7JIw87RxF+TN0+eL/CdtqRF2EIROnvwo=;
+        b=T7WNCl10ejr8JfsUKnYtlPUzCCtHbJ3xwtQpTZWTYJkgcR2VKAhFdU3/59H9Ow8//0N6Ka
+        tuck8qPXAnLjH6EpN4ZHZBnaOChNqlEW2+0VjPv8RSHgTOLlKMpTMqELMfz1/lcpczxDD3
+        rnf75MeJL4fxVFPXgyiRhMu2V5ebqUg=
+Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com
+ [209.85.221.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-590-Om5y2iukNWWCmCNwCqmvOQ-1; Fri, 08 Jul 2022 06:08:50 -0400
+X-MC-Unique: Om5y2iukNWWCmCNwCqmvOQ-1
+Received: by mail-wr1-f72.google.com with SMTP id r17-20020adfa151000000b0021d6c4743b0so2891970wrr.10
+        for <linux-kernel@vger.kernel.org>; Fri, 08 Jul 2022 03:08:50 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=R31VwcSPJiQ7JIw87RxF+TN0+eL/CdtqRF2EIROnvwo=;
+        b=C8znvYARVtUc3doJk5O93hXdfqIN2qKeYXfjrkSP44XthodNWQzAf8hCkyqgJSyn/u
+         nIxhrUBkdR2T3/U+JokS8aBPUkVrvpmzx1Co1GRAdh1Ukre9DmIcU1Dv/8ClBi0Yz897
+         tGk/+/oc2auYCQv0NzHQBH9VjZcuUdqb9oKCavG9HQb06gvX0a/JlAojvbj5odJTNI5b
+         n1RwqMI8+X0tLWNhF3Uvh7Av8C2gTwIUEjYBOQ05LHVW/ZceJ9l53kQxy8WJS3jqIJM2
+         L/Lt91l82tJYMS38RitaneSbTNSGsCkJoUqNwIENbXVfaMh9ONyb6wy69ubOH+1nt7IR
+         E3MQ==
+X-Gm-Message-State: AJIora9R0PdHnczW+qYBscwFeDyotJADoicJzQ2igNJE75o9ghQM42f3
+        g6qOF9diUvj79XiRdmk90aoQeMeQKi8E722m07KYFy/HwID1YcVOFkf8MlQn6LxjpDtAREEdiC1
+        CpJBaLlJCs18ytBQUwUJJzUJv
+X-Received: by 2002:a05:600c:4e8b:b0:3a0:5826:3321 with SMTP id f11-20020a05600c4e8b00b003a058263321mr2822306wmq.108.1657274929750;
+        Fri, 08 Jul 2022 03:08:49 -0700 (PDT)
+X-Google-Smtp-Source: AGRyM1syukJVbZC5Q5vHTRyn7SXZAqXHIKjGpeSBXFwl4fsGgBLNx7VcuUla/SxRd4bJfBA7oD8ULA==
+X-Received: by 2002:a05:600c:4e8b:b0:3a0:5826:3321 with SMTP id f11-20020a05600c4e8b00b003a058263321mr2822281wmq.108.1657274929580;
+        Fri, 08 Jul 2022 03:08:49 -0700 (PDT)
+Received: from debian.home (2a01cb058d1194004161f17a6a9ad508.ipv6.abo.wanadoo.fr. [2a01:cb05:8d11:9400:4161:f17a:6a9a:d508])
+        by smtp.gmail.com with ESMTPSA id z10-20020a1cf40a000000b003a2c7bf0497sm1654705wma.16.2022.07.08.03.08.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 08 Jul 2022 03:08:49 -0700 (PDT)
+Date:   Fri, 8 Jul 2022 12:08:47 +0200
+From:   Guillaume Nault <gnault@redhat.com>
+To:     Justin Stitt <justinstitt@google.com>
+Cc:     "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Tom Rix <trix@redhat.com>, Tom Parkin <tparkin@katalix.com>,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        llvm@lists.linux.dev
+Subject: Re: [PATCH] l2tp: l2tp_debugfs: fix Clang -Wformat warnings
+Message-ID: <20220708100847.GA26192@debian.home>
+References: <20220707221456.1782048-1-justinstitt@google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <YsWI4nzQa9gmqKdw@shikoro>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20220707221456.1782048-1-justinstitt@google.com>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jul 06, 2022 at 03:06:42PM +0200, Wolfram Sang wrote:
-> On Sun, Jul 03, 2022 at 06:42:32PM +0300, Andy Shevchenko wrote:
-> > str_read_write() returns a string literal "read" or "write" based
-> > on the value. It also allows to unify usage of a such in the kernel.
-> > 
-> > For i2c case introduce a wrapper that takes struct i2c_msg as parameter.
-> > 
-> > Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+On Thu, Jul 07, 2022 at 03:14:56PM -0700, Justin Stitt wrote:
+> When building with Clang we encounter the following warnings:
+> | net/l2tp/l2tp_debugfs.c:187:40: error: format specifies type 'unsigned
+> | short' but the argument has type 'u32' (aka 'unsigned int')
+> | [-Werror,-Wformat] seq_printf(m, "   nr %hu, ns %hu\n", session->nr,
+> | session->ns);
+> -
+> | net/l2tp/l2tp_debugfs.c:196:32: error: format specifies type 'unsigned
+> | short' but the argument has type 'int' [-Werror,-Wformat]
+> | session->l2specific_type, l2tp_get_l2specific_len(session));
+> -
+> | net/l2tp/l2tp_debugfs.c:219:6: error: format specifies type 'unsigned
+> | short' but the argument has type 'u32' (aka 'unsigned int')
+> | [-Werror,-Wformat] session->nr, session->ns,
 > 
-> To be honest, I don't think this series is very useful. Most of the
-> converted strings here are debug printouts which could rather be removed
-> because we have a tracepoint for i2c_transfer (which is the preferred
-> unification). 
+> Both session->nr and ->nc are of type `u32`. The currently used format
+> specifier is `%hu` which describes a `u16`. My proposed fix is to listen
+> to Clang and use the correct format specifier `%u`.
+> 
+> For the warning at line 196, l2tp_get_l2specific_len() returns an int
+> and should therefore be using the `%d` format specifier.
 
-OK.
-
-> The warnings printed on timeouts are plain wrong, because
-> timeouts can happen and need to be handled by the client driver.
-
-OK
-
-> And the
-> change in the I2C core is not worth the hazzle IMHO.
-
-OK
-
-Just noticed yet another (but not in the category of the above) debug message
-[1]. Would it be acceptable to use patch 1 from this series and its use in (a
-completely new) patch 2?
-
-[1]: i2c-scmi.c:
-
-	dev_dbg(&adap->dev, "access size: %d %s\n", size,
-                (read_write) ? "READ" : "WRITE");
-
--- 
-With Best Regards,
-Andy Shevchenko
-
+Acked-by: Guillaume Nault <gnault@redhat.com>
 

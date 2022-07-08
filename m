@@ -2,197 +2,207 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E1B056C303
-	for <lists+linux-kernel@lfdr.de>; Sat,  9 Jul 2022 01:13:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F31E56C4AA
+	for <lists+linux-kernel@lfdr.de>; Sat,  9 Jul 2022 01:16:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239377AbiGHXKU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Jul 2022 19:10:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48640 "EHLO
+        id S237146AbiGHXPc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Jul 2022 19:15:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51060 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229850AbiGHXKR (ORCPT
+        with ESMTP id S229850AbiGHXPa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Jul 2022 19:10:17 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF2D93F33D;
-        Fri,  8 Jul 2022 16:10:16 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 7B207B82A18;
-        Fri,  8 Jul 2022 23:10:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 35AF5C341D0;
-        Fri,  8 Jul 2022 23:10:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1657321814;
-        bh=djzIzVFpeo7WTuaeZTv/ckums1eZ/Ec9nzlvV4baO6A=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=OiXQaqF6ZvxXW9bprOSn/sI8RkPPeZN7orfdEkqcY9qo1uuB3EcqdUQLT0IVQDVP+
-         SQAeeoEVJBy9LX+nHT65uE+rLY2EVbC69W2KzCPrsmCdAqlGKuhjGr/hRpLviHAIVD
-         ZzRfWLowNSjCwi9P2djnYpYLEH5D/vM03sdm2gUZI13SeiDrDa0rw4gaNVKQZteTRw
-         g8VczXdw577Jbu/8KU5No7ab/mdozwPKZjZlvbCBr7+4dg+Y+8j6tD3LthuOXrG3Vn
-         7MsonCtz8ILLtggr9jvgUsLtCeusKDADjp6R4e/5eMtDYzJQguM4E1qWjBw9o9bxKG
-         DXqSyWx3gruxA==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id C8E285C0835; Fri,  8 Jul 2022 16:10:13 -0700 (PDT)
-Date:   Fri, 8 Jul 2022 16:10:13 -0700
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     Joel Fernandes <joel@joelfernandes.org>
-Cc:     rcu@vger.kernel.org, linux-kernel@vger.kernel.org,
-        rushikesh.s.kadam@intel.com, urezki@gmail.com,
-        neeraj.iitr10@gmail.com, frederic@kernel.org, rostedt@goodmis.org,
-        vineeth@bitbyteword.org
-Subject: Re: [PATCH v2 1/8] rcu: Introduce call_rcu_lazy() API implementation
-Message-ID: <20220708231013.GD1790663@paulmck-ThinkPad-P17-Gen-1>
-Reply-To: paulmck@kernel.org
-References: <20220622225102.2112026-1-joel@joelfernandes.org>
- <20220622225102.2112026-3-joel@joelfernandes.org>
- <20220626040019.GK1790663@paulmck-ThinkPad-P17-Gen-1>
- <Ysh6yWThHu6GAfJM@google.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Ysh6yWThHu6GAfJM@google.com>
-X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Fri, 8 Jul 2022 19:15:30 -0400
+Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3698F193D4
+        for <linux-kernel@vger.kernel.org>; Fri,  8 Jul 2022 16:15:29 -0700 (PDT)
+Received: by mail-yb1-xb4a.google.com with SMTP id w15-20020a25ac0f000000b0066e50e4a553so40669ybi.16
+        for <linux-kernel@vger.kernel.org>; Fri, 08 Jul 2022 16:15:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
+         :cc;
+        bh=KH9mJv0ZR2SU3DtFmyDpUkXKfdlQZNCvgcG+OHeVrdo=;
+        b=W/TSmyxBgmti9FoirOZMYegvHytBo9QLpIGhOsiyi+uEpRKokLGzcxCC6Duk5A9p/z
+         YC5JHhETfvHNfNe8G6gju732HG/EdpUMgkgPlWhgktsk/wdYjaOlvuMmmNhJdej1HhXb
+         Jbud8fWMQX25jnbqxLEWlhFhvfdwh+qXYd+fA8y6bYV/A3uTXo0dphePcewxjPnVysTI
+         eEGP3wJPTHvy6nNN92fXdoUa/WkfcgSYLQInl5DdGGj1DArkx5f0fO47WIAMfbIVRd+n
+         Lrt7DGDsC/4WpDR34FyWzGFlLgm1HGaTeikrLhqn4ye1hTv83CUKFdBW2GcRYN4la0As
+         7oYA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
+         :references:subject:from:to:cc;
+        bh=KH9mJv0ZR2SU3DtFmyDpUkXKfdlQZNCvgcG+OHeVrdo=;
+        b=xkG/x2meQE5rsskceKDNQbGSDtLIdwfcWmIuKuogwBNQ2+OGQShW4/KzkTDmrB/NKR
+         NChcqx/iLNitEnKkClu3vOO7fHO/wJBRuo0cSFdQVdrGuTd1790Ofxsk0ZGCiIsJIMBW
+         HySyKFL6sbiGDKP7YzowbyHomB+ko8UjFbDMerHRguvRPJHPR7iBxULkBbx+ffbLxonJ
+         KAWe6iEU7++QhLD10MrONhy2FjUYUFvJxxIaZIBu+rRc/lK+BRYT1VT7UA7e2PnywDGF
+         hKgwodih9erAItAEPm38YyyQzLcobsCdh+N08eF7BuAzRcREd4wriLHdtXJW/S2ArDQL
+         7Auw==
+X-Gm-Message-State: AJIora9JbpZiPRf6sdSSKARi2uV56besc7IIexU8RSGOj3Z1Nci+cPUn
+        KmKJcz+FQ6gLmoWwf9SejT5xRiI81vAj0e6SgFM=
+X-Google-Smtp-Source: AGRyM1v7HcWlAUUp2rbkrPhHWg9uP0oL5xlTYPMpOjl1u9YY7GAIlTdLGTCzQiHKS0scijjZi5QV1cgwOMw7K35sBg8=
+X-Received: from ndesaulniers1.mtv.corp.google.com ([2620:15c:211:202:d00c:5934:2a57:8a6e])
+ (user=ndesaulniers job=sendgmr) by 2002:a25:3206:0:b0:66e:1dac:b1c8 with SMTP
+ id y6-20020a253206000000b0066e1dacb1c8mr5871083yby.609.1657322128415; Fri, 08
+ Jul 2022 16:15:28 -0700 (PDT)
+Date:   Fri,  8 Jul 2022 16:15:20 -0700
+In-Reply-To: <https://lore.kernel.org/llvm/6b330119-fbf2-1c34-7ad3-0ae789658d22@arm.com/>
+Message-Id: <20220708231520.3958391-1-ndesaulniers@google.com>
+Mime-Version: 1.0
+References: <https://lore.kernel.org/llvm/6b330119-fbf2-1c34-7ad3-0ae789658d22@arm.com/>
+X-Developer-Key: i=ndesaulniers@google.com; a=ed25519; pk=lvO/pmg+aaCb6dPhyGC1GyOCvPueDrrc8Zeso5CaGKE=
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1657322119; l=5131;
+ i=ndesaulniers@google.com; s=20211004; h=from:subject; bh=Y4az1r2se6u+3RbjkapgXQQ3GpGFMe8yfK+67cNeZME=;
+ b=Sishl6BCwJR0395PFgjHA3OTgt8GP/QRxYZrdVV7Isa0eYpkLpkkMC5UQOROpPu3C/fnD0vS3dIQ
+ XJKN9ImHDDUaw5JHFkI7jzuSWbjTNoL8AX3Nwnhpjm8MDNEWJUnD
+X-Mailer: git-send-email 2.37.0.rc0.161.g10f37bed90-goog
+Subject: [PATCH v6] coresight: etm4x: avoid build failure with unrolled loops
+From:   Nick Desaulniers <ndesaulniers@google.com>
+To:     Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>
+Cc:     David Laight <David.Laight@aculab.com>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Arnd Bergmann <arnd@kernel.org>,
+        Tao Zhang <quic_taozha@quicinc.com>,
+        Mike Leach <mike.leach@linaro.org>,
+        Leo Yan <leo.yan@linaro.org>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Tom Rix <trix@redhat.com>, coresight@lists.linaro.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jul 08, 2022 at 06:43:21PM +0000, Joel Fernandes wrote:
-> On Sat, Jun 25, 2022 at 09:00:19PM -0700, Paul E. McKenney wrote:
-> > On Wed, Jun 22, 2022 at 10:50:55PM +0000, Joel Fernandes (Google) wrote:
-> > > Implement timer-based RCU lazy callback batching. The batch is flushed
-> > > whenever a certain amount of time has passed, or the batch on a
-> > > particular CPU grows too big. Also memory pressure will flush it in a
-> > > future patch.
-> > > 
-> > > To handle several corner cases automagically (such as rcu_barrier() and
-> > > hotplug), we re-use bypass lists to handle lazy CBs. The bypass list
-> > > length has the lazy CB length included in it. A separate lazy CB length
-> > > counter is also introduced to keep track of the number of lazy CBs.
-> > > 
-> > > Suggested-by: Paul McKenney <paulmck@kernel.org>
-> > > Signed-off-by: Joel Fernandes (Google) <joel@joelfernandes.org>
-> > 
-> > Not bad, but some questions and comments below.
-> 
-> Thanks a lot for these, real helpful and I replied below:
-> 
-> > > diff --git a/include/linux/rcu_segcblist.h b/include/linux/rcu_segcblist.h
-> > > index 659d13a7ddaa..9a992707917b 100644
-> > > --- a/include/linux/rcu_segcblist.h
-> > > +++ b/include/linux/rcu_segcblist.h
-> > > @@ -22,6 +22,7 @@ struct rcu_cblist {
-> > >  	struct rcu_head *head;
-> > >  	struct rcu_head **tail;
-> > >  	long len;
-> > > +	long lazy_len;
-> > >  };
-> > >  
-> > >  #define RCU_CBLIST_INITIALIZER(n) { .head = NULL, .tail = &n.head }
-> > > diff --git a/include/linux/rcupdate.h b/include/linux/rcupdate.h
-> > > index 1a32036c918c..9191a3d88087 100644
-> > > --- a/include/linux/rcupdate.h
-> > > +++ b/include/linux/rcupdate.h
-> > > @@ -82,6 +82,12 @@ static inline int rcu_preempt_depth(void)
-> > >  
-> > >  #endif /* #else #ifdef CONFIG_PREEMPT_RCU */
-> > >  
-> > > +#ifdef CONFIG_RCU_LAZY
-> > > +void call_rcu_lazy(struct rcu_head *head, rcu_callback_t func);
-> > > +#else
-> > > +#define call_rcu_lazy(head, func) call_rcu(head, func)
-> > > +#endif
-> > > +
-> > >  /* Internal to kernel */
-> > >  void rcu_init(void);
-> > >  extern int rcu_scheduler_active;
-> > > diff --git a/kernel/rcu/Kconfig b/kernel/rcu/Kconfig
-> > > index 27aab870ae4c..0bffa992fdc4 100644
-> > > --- a/kernel/rcu/Kconfig
-> > > +++ b/kernel/rcu/Kconfig
-> > > @@ -293,4 +293,12 @@ config TASKS_TRACE_RCU_READ_MB
-> > >  	  Say N here if you hate read-side memory barriers.
-> > >  	  Take the default if you are unsure.
-> > >  
-> > > +config RCU_LAZY
-> > > +	bool "RCU callback lazy invocation functionality"
-> > > +	depends on RCU_NOCB_CPU
-> > > +	default n
-> > > +	help
-> > > +	  To save power, batch RCU callbacks and flush after delay, memory
-> > > +          pressure or callback list growing too big.
-> > 
-> > Spaces vs. tabs.
-> 
-> Fixed, thanks.
-> 
-> > The checkpatch warning is unhelpful ("please write a help paragraph that
-> > fully describes the config symbol")
-> 
-> Good old checkpatch :D
+When the following configs are enabled:
+* CORESIGHT
+* CORESIGHT_SOURCE_ETM4X
+* UBSAN
+* UBSAN_TRAP
 
-;-) ;-) ;-)
+Clang fails assemble the kernel with the error:
+<instantiation>:1:7: error: expected constant expression in '.inst' directive
+.inst (0xd5200000|((((2) << 19) | ((1) << 16) | (((((((((((0x160 + (i * 4))))) >> 2))) >> 7) & 0x7)) << 12) | ((((((((((0x160 + (i * 4))))) >> 2))) & 0xf)) << 8) | (((((((((((0x160 + (i * 4))))) >> 2))) >> 4) & 0x7)) << 5)))|(.L__reg_num_x8))
+      ^
+drivers/hwtracing/coresight/coresight-etm4x-core.c:702:4: note: while in
+macro instantiation
+etm4x_relaxed_read32(csa, TRCCNTVRn(i));
+^
+drivers/hwtracing/coresight/coresight-etm4x.h:403:4: note: expanded from
+macro 'etm4x_relaxed_read32'
+read_etm4x_sysreg_offset((offset), false)))
+^
+drivers/hwtracing/coresight/coresight-etm4x.h:383:12: note: expanded
+from macro 'read_etm4x_sysreg_offset'
+__val = read_etm4x_sysreg_const_offset((offset));       \
+        ^
+drivers/hwtracing/coresight/coresight-etm4x.h:149:2: note: expanded from
+macro 'read_etm4x_sysreg_const_offset'
+READ_ETM4x_REG(ETM4x_OFFSET_TO_REG(offset))
+^
+drivers/hwtracing/coresight/coresight-etm4x.h:144:2: note: expanded from
+macro 'READ_ETM4x_REG'
+read_sysreg_s(ETM4x_REG_NUM_TO_SYSREG((reg)))
+^
+arch/arm64/include/asm/sysreg.h:1108:15: note: expanded from macro
+'read_sysreg_s'
+asm volatile(__mrs_s("%0", r) : "=r" (__val));                  \
+             ^
+arch/arm64/include/asm/sysreg.h:1074:2: note: expanded from macro '__mrs_s'
+"       mrs_s " v ", " __stringify(r) "\n"                      \
+ ^
 
-> > >  endmenu # "RCU Subsystem"
-> > > diff --git a/kernel/rcu/rcu_segcblist.c b/kernel/rcu/rcu_segcblist.c
-> > > index c54ea2b6a36b..627a3218a372 100644
-> > > --- a/kernel/rcu/rcu_segcblist.c
-> > > +++ b/kernel/rcu/rcu_segcblist.c
-> > > @@ -20,6 +20,7 @@ void rcu_cblist_init(struct rcu_cblist *rclp)
-> > >  	rclp->head = NULL;
-> > >  	rclp->tail = &rclp->head;
-> > >  	rclp->len = 0;
-> > > +	rclp->lazy_len = 0;
-> > >  }
-> > >  
-> > >  /*
-> > > @@ -32,6 +33,15 @@ void rcu_cblist_enqueue(struct rcu_cblist *rclp, struct rcu_head *rhp)
-> > >  	WRITE_ONCE(rclp->len, rclp->len + 1);
-> > >  }
-> > >  
-> > > +/*
-> > > + * Enqueue an rcu_head structure onto the specified callback list.
-> > 
-> > Please also note the fact that it is enqueuing lazily.
-> 
-> Sorry, done.
-> 
-> > > + */
-> > > +void rcu_cblist_enqueue_lazy(struct rcu_cblist *rclp, struct rcu_head *rhp)
-> > > +{
-> > > +	rcu_cblist_enqueue(rclp, rhp);
-> > > +	WRITE_ONCE(rclp->lazy_len, rclp->lazy_len + 1);
-> > 
-> > Except...  Why not just add a "lazy" parameter to rcu_cblist_enqueue()?
-> > IS_ENABLED() can make it fast.
-> 
-> Yeah good idea, it simplifies the code too. Thank you!
-> 
-> So you mean I should add in this function so that the branch gets optimized:
-> if (lazy && IS_ENABLE(CONFIG_RCU_LAZY)) {
->   ...
-> }
-> 
-> That makes total sense considering the compiler may otherwise not be able to
-> optimize the function viewing just the individual translation unit. I fixed
-> it.
+Consider the definitions of TRCSSCSRn and TRCCNTVRn:
+drivers/hwtracing/coresight/coresight-etm4x.h:56
+ #define TRCCNTVRn(n)      (0x160 + (n * 4))
+drivers/hwtracing/coresight/coresight-etm4x.h:81
+ #define TRCSSCSRn(n)      (0x2A0 + (n * 4))
 
-Or the other way around:
+Where the macro parameter is expanded to i; a loop induction variable
+from etm4_disable_hw.
 
-	if (IS_ENABLE(CONFIG_RCU_LAZY) && lazy) {
+When any compiler can determine that loops may be unrolled, then the
+__builtin_constant_p check in read_etm4x_sysreg_offset() defined in
+drivers/hwtracing/coresight/coresight-etm4x.h may evaluate to true. This
+can lead to the expression `(0x160 + (i * 4))` being passed to
+read_etm4x_sysreg_const_offset. Via the trace above, this is passed
+through READ_ETM4x_REG, read_sysreg_s, and finally to __mrs_s where it
+is string-ified and used directly in inline asm.
 
-Just in case the compiler is stumbling over its boolean logic.  Or in
-case the human reader is.  ;-)
+Regardless of which compiler or compiler options determine whether a
+loop can or can't be unrolled, which determines whether
+__builtin_constant_p evaluates to true when passed an expression using a
+loop induction variable, it is NEVER safe to allow the preprocessor to
+construct inline asm like:
+  asm volatile (".inst (0x160 + (i * 4))" : "=r"(__val));
+                                 ^ expected constant expression
 
-> The 6 month old baby and wife are calling my attention now. I will continue
-> to reply to the other parts of this and other emails this evening and thanks
-> for your help!
+Instead of read_etm4x_sysreg_offset() using __builtin_constant_p(), use
+__is_constexpr from include/linux/const.h instead to ensure only
+expressions that are valid integer constant expressions get passed
+through to read_sysreg_s().
 
-Ah, for those who believe that SIGCHLD can be ignored in real life!  ;-)
+This is not a bug in clang; it's a potentially unsafe use of the macro
+arguments in read_etm4x_sysreg_offset dependent on __builtin_constant_p.
 
-							Thanx, Paul
+Link: https://github.com/ClangBuiltLinux/linux/issues/1310
+Reported-by: Arnd Bergmann <arnd@kernel.org>
+Reported-by: Tao Zhang <quic_taozha@quicinc.com>
+Signed-off-by: Nick Desaulniers <ndesaulniers@google.com>
+---
+Changes v5 -> v6:
+* Rework patch to replace use of __builtin_constant_p with __is_constexpr in
+  read_etm4x_sysreg_offset().
+* Drop Suzuki's suggested by tag, since this is a different approach.
+* Convert Tao's suggested by tag to a reported by tag.
+* Reword bottom part of commit message.
+
+V5 (Nick):
+https://lore.kernel.org/llvm/20220623174131.3818333-1-ndesaulniers@google.com/
+V4 (Nick):
+https://lore.kernel.org/llvm/20220614220229.1640085-1-ndesaulniers@google.com/
+V3 (Tao):
+https://lore.kernel.org/lkml/1632652550-26048-1-git-send-email-quic_taozha@quicinc.com/
+V2 (Arnd):
+https://lore.kernel.org/lkml/20210429145752.3218324-1-arnd@kernel.org/
+V1 (Arnd):
+https://lore.kernel.org/lkml/20210225094324.3542511-1-arnd@kernel.org/
+
+ drivers/hwtracing/coresight/coresight-etm4x.h | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/hwtracing/coresight/coresight-etm4x.h b/drivers/hwtracing/coresight/coresight-etm4x.h
+index 33869c1d20c3..a7bfea31f7d8 100644
+--- a/drivers/hwtracing/coresight/coresight-etm4x.h
++++ b/drivers/hwtracing/coresight/coresight-etm4x.h
+@@ -7,6 +7,7 @@
+ #define _CORESIGHT_CORESIGHT_ETM_H
+ 
+ #include <asm/local.h>
++#include <linux/const.h>
+ #include <linux/spinlock.h>
+ #include <linux/types.h>
+ #include "coresight-priv.h"
+@@ -515,7 +516,7 @@
+ 	({									\
+ 		u64 __val;							\
+ 										\
+-		if (__builtin_constant_p((offset)))				\
++		if (__is_constexpr((offset)))					\
+ 			__val = read_etm4x_sysreg_const_offset((offset));	\
+ 		else								\
+ 			__val = etm4x_sysreg_read((offset), true, (_64bit));	\
+
+base-commit: 525496a030de4ae64bb9e1d6bfc88eec6f5fe6e2
+-- 
+2.37.0.rc0.161.g10f37bed90-goog
+

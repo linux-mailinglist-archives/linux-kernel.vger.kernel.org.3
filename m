@@ -2,206 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5779556BB74
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 16:04:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A3C356BB6E
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 16:04:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238300AbiGHOCr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Jul 2022 10:02:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33742 "EHLO
+        id S238421AbiGHOC5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Jul 2022 10:02:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33872 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238158AbiGHOCp (ORCPT
+        with ESMTP id S238158AbiGHOCy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Jul 2022 10:02:45 -0400
-Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C16A17AB0;
-        Fri,  8 Jul 2022 07:02:44 -0700 (PDT)
-Received: by mail-ed1-x533.google.com with SMTP id fd6so26982306edb.5;
-        Fri, 08 Jul 2022 07:02:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=F7oZGiTf22yduXzKnlRZ5i/UEiJcCIYtZr80JfrcWJA=;
-        b=jX99svRh8xS9/r4UdMiq3Y43MyPOaKw23r0VGQpXgkg3bioDTKO58NGaP49lqcXvpc
-         DFBO6tQcbxHsWjsGqky0/k1S76xj5BSrxed1s2pSnnXFyInXkzuJmcQXTb0PVCtEaTDb
-         jitJSvt3JPKrhn6U7i2dLTbuS/pK6AFioBujioBFbqGEykPog3kNwEZ1yBki79CqYn1l
-         4ZuRg+Uk4ejPWhlNRn0Pzuk7qu+w2qQBTJSQej5gWEFRr1awgBY7EVSA1r4bE02WyhJi
-         QLwZ8OTYPirLS2KvJK0+5Uhz0nv3rbxAOmIrJ1IKw3XRA0BWZpcN1A/Umt72OoYc1TpX
-         g11w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=F7oZGiTf22yduXzKnlRZ5i/UEiJcCIYtZr80JfrcWJA=;
-        b=LqPUuue2Zr8OXumUdXmjU7NaXo7HF43/+qoZwLnpmGS90v5aVS3OqxkL9B4c/vapvm
-         Mdghh9/Wz0HZZ6gps1c2Hqe1tHxV4w5HeQBKEx7qs/tSazJ88LF3Q4PVrggbDD1iFCQN
-         Hor26ECiHEc8npHV1NLopoPIWTccpKfz1cC2/0vJDDYI4M8oJ6LPJFnNT/n1OS+q4knW
-         RCK3pefjUULa3Fz3GKCkcf5Dys2gTD2o1Vy1HDDOcISMV77sNyT8mAmTzuTJIWOBadOE
-         0g2eCQxo6sjfxrMo856ZYfiljhLflcVCqav21CFMyjyb2QatB02SQJ9dPwLjjIO5ZdFX
-         0xww==
-X-Gm-Message-State: AJIora+mlk1wbuhMWZ+C/36axxdXVGOCDMuyLTHRp9T8BhpXZ7XhHhV9
-        Fsts3FmhBBITTMRaWs11ByA=
-X-Google-Smtp-Source: AGRyM1uL3PNKL7wSHt7HyGuMnLf4+atBsviy3tmAb8n+32sYhrZgr9xVlpYX+JxNRGbN+AcQxRdQSA==
-X-Received: by 2002:a05:6402:22b5:b0:43a:8e9f:f495 with SMTP id cx21-20020a05640222b500b0043a8e9ff495mr4961017edb.324.1657288962504;
-        Fri, 08 Jul 2022 07:02:42 -0700 (PDT)
-Received: from jernej-laptop.localnet (213-161-3-76.dynamic.telemach.net. [213.161.3.76])
-        by smtp.gmail.com with ESMTPSA id o19-20020a170906769300b0072b13a10477sm2143227ejm.108.2022.07.08.07.02.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 08 Jul 2022 07:02:42 -0700 (PDT)
-From:   Jernej =?utf-8?B?xaBrcmFiZWM=?= <jernej.skrabec@gmail.com>
-To:     mchehab@kernel.org, hverkuil@xs4all.nl,
-        ezequiel@vanguardiasur.com.ar, p.zabel@pengutronix.de,
-        gregkh@linuxfoundation.org, mripard@kernel.org,
-        paul.kocialkowski@bootlin.com, wens@csie.org, samuel@sholland.org,
-        nicolas.dufresne@collabora.com, andrzej.p@collabora.com,
-        Benjamin Gaignard <benjamin.gaignard@collabora.com>
-Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-rockchip@lists.infradead.org, linux-staging@lists.linux.dev,
-        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
-        kernel@collabora.com,
-        Benjamin Gaignard <benjamin.gaignard@collabora.com>
-Subject: Re: [PATCH v12 11/17] media: uapi: Add V4L2_CID_STATELESS_HEVC_ENTRY_POINT_OFFSETS control
-Date:   Fri, 08 Jul 2022 16:02:40 +0200
-Message-ID: <2106581.irdbgypaU6@jernej-laptop>
-In-Reply-To: <20220708120554.495495-12-benjamin.gaignard@collabora.com>
-References: <20220708120554.495495-1-benjamin.gaignard@collabora.com> <20220708120554.495495-12-benjamin.gaignard@collabora.com>
+        Fri, 8 Jul 2022 10:02:54 -0400
+Received: from ms.lwn.net (ms.lwn.net [IPv6:2600:3c01:e000:3a1::42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80D951A386;
+        Fri,  8 Jul 2022 07:02:53 -0700 (PDT)
+Received: from localhost (unknown [IPv6:2601:281:8300:73::5f6])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ms.lwn.net (Postfix) with ESMTPSA id 0841C52AE;
+        Fri,  8 Jul 2022 14:02:52 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 ms.lwn.net 0841C52AE
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lwn.net; s=20201203;
+        t=1657288973; bh=wSpnYxDKlFB0S/OcW2eFZmHCzB6IpCnff31hbX//2zI=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=Gzmx5KU/wYdL1A7UoLseIPA/r6GW9pdGKU5mVPltm6/PizYT0x++9s838oxckhRkW
+         8cPE74vw83rOUWlJmwyo9Sokm7S4f4wRiKFMExEzTDPiylj4rQqbJ2CM099Xc2z0ZR
+         k+wyjXFFLpBFXGBHcakbRPR5YuUROAothLDC4MpcamuEjQKFCF/pknuJSfdWZpbQGJ
+         lxczEBtsfT+g1CrzxFx+0J9kqsLim3A8w8JNx7h764y6XNxr35i6sxjgzrte54D80E
+         vmItzuiP/+edCGIq3pHIURrxRcQnhE0TtqH9lPOZVSu2pB9P6YUccCp2DrNdbldKqR
+         O/zoRIjYcCRBA==
+From:   Jonathan Corbet <corbet@lwn.net>
+To:     Akira Yokosawa <akiyks@gmail.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>
+Cc:     ksummit-discuss@lists.linuxfoundation.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        mchehab+huawei@kernel.org, Akira Yokosawa <akiyks@gmail.com>
+Subject: Re: Expectation to --no-pdf option (was Re: [PATCH v2 0/5] Address
+ some issues with sphinx detection)
+In-Reply-To: <3ba5a52e-cab6-05cf-a66e-adc58c467e1f@gmail.com>
+References: <cover.1656756450.git.mchehab@kernel.org>
+ <d0e1a08a-b965-ada6-e026-4e1cc38fbd90@gmail.com>
+ <20220707211558.438a27d4@sal.lan>
+ <3ba5a52e-cab6-05cf-a66e-adc58c467e1f@gmail.com>
+Date:   Fri, 08 Jul 2022 08:02:52 -0600
+Message-ID: <87bktzhfcj.fsf@meer.lwn.net>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
+Content-Type: text/plain
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Benjamin!
+Akira Yokosawa <akiyks@gmail.com> writes:
 
-Dne petek, 08. julij 2022 ob 14:05:48 CEST je Benjamin Gaignard napisal(a):
-> The number of 'entry point offset' can be very variable.
-> Instead of using a large static array define a v4l2 dynamic array
-> of U32 (V4L2_CTRL_TYPE_U32).
-> The number of entry point offsets is reported by the elems field
-> and in struct v4l2_ctrl_hevc_slice_params.num_entry_point_offsets
-> field.
-> 
-> Signed-off-by: Benjamin Gaignard <benjamin.gaignard@collabora.com>
-> Acked-by: Nicolas Dufresne <nicolas.dufresne@collabora.com>
-> Tested-by: Jernej Skrabec <jernej.skrabec@gmail.com>
-> ---
-> version 12:
-> - Reword num_entry_point_offsets documentation
-> 
->  .../userspace-api/media/v4l/ext-ctrls-codec.rst     | 13 +++++++++++++
->  drivers/media/v4l2-core/v4l2-ctrls-defs.c           |  5 +++++
->  include/media/hevc-ctrls.h                          |  5 ++++-
->  3 files changed, 22 insertions(+), 1 deletion(-)
-> 
-> diff --git a/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst
-> b/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst index
-> c2e0adece613..0cd967126fdf 100644
-> --- a/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst
-> +++ b/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst
-> @@ -3010,6 +3010,11 @@ enum v4l2_mpeg_video_hevc_size_of_length_field -
->      * - __u32
->        - ``data_bit_offset``
->        - Offset (in bits) to the video data in the current slice data.
-> +    * - __u32
-> +      - ``num_entry_point_offsets``
-> +      - Specifies the number of entry point offset syntax elements in the
-> slice header. +        When the driver supports it, the
-> ``V4L2_CID_STATELESS_HEVC_ENTRY_POINT_OFFSETS`` +        must be set.
->      * - __u8
->        - ``nal_unit_type``
->        - Specifies the coding type of the slice (B, P or I).
-> @@ -3150,6 +3155,14 @@ enum v4l2_mpeg_video_hevc_size_of_length_field -
-> 
->      \normalsize
-> 
-> +``V4L2_CID_STATELESS_HEVC_ENTRY_POINT_OFFSETS (integer)``
-> +    Specifies entry point offsets in bytes.
-> +    This control is a dynamically sized array. The number of entry point
-> +    offsets is reported by the ``elems`` field.
-> +    This bitstream parameter is defined according to :ref:`hevc`.
-> +    They are described in section 7.4.7.1 "General slice segment header
-> +    semantics" of the specification.
+> In my tests, the mathjax extension works with all the versions of Sphinx
+> I tested (1.7.9, 2.4.4, 3.4.3 (debian bullseye), 4.2.0 (openSUSE LEAP 15.4),
+> and 5.0.2).
+> Note that math expressions should look much sharper (vector fonts)
+> than those from imgmath (pixel images).
+> The time for a browser to complete the rendering might be longer than
+> with imgmath, especially for pages with a lot of math expressions,
+> though.  (Yes, I see some of media documents have a lot of them.)
+>
+> When you are detached from network connections, browsers will give
+> up and show those expressions in mathjax source code.
 
-You forgot to update above description per Ezequiel comment.
+Pulling in a bunch of JavaScript from the net while browsing the kernel
+docs is not an entirely pleasing solution either.  But perhaps it's
+preferable to loading the system with Latex.  I kind of wish we could
+just do without the fancy math processing entirely, but I lost that
+battle some time ago...:)
 
-Best regards,
-Jernej
+Mauro, have you looked at that option?
 
-> +
->  ``V4L2_CID_STATELESS_HEVC_SCALING_MATRIX (struct)``
->      Specifies the HEVC scaling matrix parameters used for the scaling
-> process for transform coefficients.
-> diff --git a/drivers/media/v4l2-core/v4l2-ctrls-defs.c
-> b/drivers/media/v4l2-core/v4l2-ctrls-defs.c index
-> d594efbcbb93..e22921e7ea61 100644
-> --- a/drivers/media/v4l2-core/v4l2-ctrls-defs.c
-> +++ b/drivers/media/v4l2-core/v4l2-ctrls-defs.c
-> @@ -1188,6 +1188,7 @@ const char *v4l2_ctrl_get_name(u32 id)
->  	case V4L2_CID_STATELESS_HEVC_DECODE_PARAMS:		return 
-"HEVC Decode
-> Parameters"; case V4L2_CID_STATELESS_HEVC_DECODE_MODE:		return 
-"HEVC Decode
-> Mode"; case V4L2_CID_STATELESS_HEVC_START_CODE:		return 
-"HEVC Start Code";
-> +	case V4L2_CID_STATELESS_HEVC_ENTRY_POINT_OFFSETS:	return 
-"HEVC Entry
-> Point Offsets";
-> 
->  	/* Colorimetry controls */
->  	/* Keep the order of the 'case's the same as in v4l2-controls.h! 
-*/
-> @@ -1518,6 +1519,10 @@ void v4l2_ctrl_fill(u32 id, const char **name, enum
-> v4l2_ctrl_type *type, case V4L2_CID_STATELESS_HEVC_DECODE_PARAMS:
->  		*type = V4L2_CTRL_TYPE_HEVC_DECODE_PARAMS;
->  		break;
-> +	case V4L2_CID_STATELESS_HEVC_ENTRY_POINT_OFFSETS:
-> +		*type = V4L2_CTRL_TYPE_U32;
-> +		*flags |= V4L2_CTRL_FLAG_DYNAMIC_ARRAY;
-> +		break;
->  	case V4L2_CID_STATELESS_VP9_COMPRESSED_HDR:
->  		*type = V4L2_CTRL_TYPE_VP9_COMPRESSED_HDR;
->  		break;
-> diff --git a/include/media/hevc-ctrls.h b/include/media/hevc-ctrls.h
-> index a372c184689e..3a6601a46ced 100644
-> --- a/include/media/hevc-ctrls.h
-> +++ b/include/media/hevc-ctrls.h
-> @@ -20,6 +20,7 @@
->  #define V4L2_CID_STATELESS_HEVC_DECODE_PARAMS	(V4L2_CID_CODEC_BASE 
-+ 1012)
->  #define V4L2_CID_STATELESS_HEVC_DECODE_MODE	(V4L2_CID_CODEC_BASE + 1015)
->  #define V4L2_CID_STATELESS_HEVC_START_CODE	(V4L2_CID_CODEC_BASE + 1016)
-> +#define V4L2_CID_STATELESS_HEVC_ENTRY_POINT_OFFSETS (V4L2_CID_CODEC_BASE +
-> 1017)
-> 
->  /* enum v4l2_ctrl_type type values */
->  #define V4L2_CTRL_TYPE_HEVC_SPS 0x0120
-> @@ -316,6 +317,8 @@ struct v4l2_hevc_pred_weight_table {
->   *
->   * @bit_size: size (in bits) of the current slice data
->   * @data_bit_offset: offset (in bits) to the video data in the current
-> slice data + * @num_entry_point_offsets: specifies the number of entry
-> point offset syntax + *			     elements in the slice 
-header.
->   * @nal_unit_type: specifies the coding type of the slice (B, P or I)
->   * @nuh_temporal_id_plus1: minus 1 specifies a temporal identifier for the
-> NAL unit * @slice_type: see V4L2_HEVC_SLICE_TYPE_{}
-> @@ -358,7 +361,7 @@ struct v4l2_hevc_pred_weight_table {
->  struct v4l2_ctrl_hevc_slice_params {
->  	__u32	bit_size;
->  	__u32	data_bit_offset;
-> -
-> +	__u32	num_entry_point_offsets;
->  	/* ISO/IEC 23008-2, ITU-T Rec. H.265: NAL unit header */
->  	__u8	nal_unit_type;
->  	__u8	nuh_temporal_id_plus1;
+Thanks,
 
-
-
-
+jon

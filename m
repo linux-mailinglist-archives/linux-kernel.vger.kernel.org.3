@@ -2,67 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9968756BAD5
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 15:34:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 22A3A56BB0E
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 15:41:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238191AbiGHNbu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Jul 2022 09:31:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38242 "EHLO
+        id S238042AbiGHNlJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Jul 2022 09:41:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47100 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231918AbiGHNbt (ORCPT
+        with ESMTP id S237743AbiGHNlI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Jul 2022 09:31:49 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3E462F390
-        for <linux-kernel@vger.kernel.org>; Fri,  8 Jul 2022 06:31:48 -0700 (PDT)
-Received: from [192.168.178.53] (82-71-8-225.dsl.in-addr.zen.co.uk [82.71.8.225])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (No client certificate requested)
-        (Authenticated sender: bbeckett)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id E7B9966019BD;
-        Fri,  8 Jul 2022 14:31:46 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1657287107;
-        bh=9aqKBEmL0mePVbm0H5VgD1JSnIfv5pf2hncBFPn3xBc=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=R0CLTGeYI4w4Tf9rZXPEZvkC2OGM7L1krC9voBm79jzgDd3rImBOZZhjpBn8cMkM3
-         LZ78QLZTevWRBvNKLbMZIWmc3eIF9059xfwnR8IwKsPrWmhmZQY6uPsXEnDpG/kgFN
-         F3qo/6O0n4njt5VADrPuLpnJUP/UB+gfiCUi7OMY8y6Kquipv3jSP2iuNFB7SzkMqr
-         TnLZZFVo1fALcrAFRk/yhCjKOZYq58vwcb4nfhuclyMlEhTSzD9scWfcUxP+V4rvXw
-         PEBV+Ye/ZfIz7bvOoiE9zKEy0mZdUrI7l/HwSKNhwRAekDqa70cZR0kls26d37TQSn
-         M8d60n/WXHwSA==
-Message-ID: <9546dda7-48ec-58fe-d464-53338948b0d3@collabora.com>
-Date:   Fri, 8 Jul 2022 14:31:44 +0100
+        Fri, 8 Jul 2022 09:41:08 -0400
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28DBC2A703;
+        Fri,  8 Jul 2022 06:41:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=ZG0X/u2bNGrOSRwgd/Cf/2JtluWVYNjaS55/gTNyDxw=; b=pbDHg+nEKoKVOqF3TDDxJ06kJ3
+        O4m88Cjk7bksbzNMCeGew8G7e2Hjr8fVMkoZDD/pkMPvQ3nxTa8P2zg/tOn6UIBc1NIdhJ8jYBQB5
+        RcLDzyJhnsNeSaTLJTqYsPzOcHhw32jtpe/le3spGQ+LNOw+iUqd/lnm/0k2wi2h5sdrG6Ss4IgtI
+        nK2orJW28DkUW9K/yE2HB0T2vXWgwYw8V5L0nPxtecVVyKHbgnVpo3xI+LAisa7SSxOkVbVflgSX7
+        aU7REpWJ38CcLNgQ+RS9HLx5+oV7kqlMmWu46iR8rKreOQlf07ufehyKaih8NJyqtjTuAGTm9mbBC
+        caYJn+Vg==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=worktop.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1o9oE2-001kOL-UQ; Fri, 08 Jul 2022 13:40:56 +0000
+Received: by worktop.programming.kicks-ass.net (Postfix, from userid 1000)
+        id CCE2598007C; Fri,  8 Jul 2022 15:31:59 +0200 (CEST)
+Date:   Fri, 8 Jul 2022 15:31:59 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     James Clark <james.clark@arm.com>
+Cc:     Anshuman Khandual <anshuman.khandual@arm.com>,
+        linux-kernel@vger.kernel.org, Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        linux-perf-users@vger.kernel.org
+Subject: Re: [PATCH] perf/core: Add macros for possible
+ sysctl_perf_event_paranoid values
+Message-ID: <Ysgxzxl0N7+J8Vbt@worktop.programming.kicks-ass.net>
+References: <20220701063949.1769434-1-anshuman.khandual@arm.com>
+ <b9da8d22-6896-68a3-b4e5-e8fd7b82b711@arm.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH v10 04/11] drm/i915/gem: selftest should not attempt mmap
- of private regions
-Content-Language: en-US
-To:     Matthew Auld <matthew.auld@intel.com>,
-        dri-devel@lists.freedesktop.org, intel-gfx@lists.freedesktop.org,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>
-Cc:     =?UTF-8?Q?Thomas_Hellstr=c3=b6m?= 
-        <thomas.hellstrom@linux.intel.com>, kernel@collabora.com,
-        linux-kernel@vger.kernel.org
-References: <20220707200230.1657555-1-bob.beckett@collabora.com>
- <20220707200230.1657555-5-bob.beckett@collabora.com>
- <6e387f90-dce3-486d-83e9-26a975777265@intel.com>
- <08d33248-be80-15ab-d245-a6e23fe55423@collabora.com>
- <68231920-8eef-1e10-df40-ac8cd0dd0802@intel.com>
-From:   Robert Beckett <bob.beckett@collabora.com>
-In-Reply-To: <68231920-8eef-1e10-df40-ac8cd0dd0802@intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <b9da8d22-6896-68a3-b4e5-e8fd7b82b711@arm.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,59 +57,69 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 08/07/2022 14:27, Matthew Auld wrote:
-> On 08/07/2022 14:22, Robert Beckett wrote:
->>
->>
->> On 08/07/2022 08:53, Matthew Auld wrote:
->>> On 07/07/2022 21:02, Robert Beckett wrote:
->>>> During testing make can_mmap consider whether the region is private.
->>>
->>> Do we still need this with: 938d2fd17d17 ("drm/i915/selftests: skip 
->>> the mman tests for stolen") ?
->>
->> huh, I guess not. That wasn't in my tree. I guess I should rebase.
->>
->> Looking at it, my patch would have been preferable initially I think. 
->> Each location of the additional checks in that patch first call 
->> cam_mmap(), which I think is the most appropriate place to make the 
->> decision.
+On Fri, Jul 08, 2022 at 10:10:15AM +0100, James Clark wrote:
 > 
-> It fails at the object_create() I think (on small-BAR I mean), which is 
-> before we can call can_mmap(), passing in the object.
-
-ah, okay. That makes sense to keep as is then.
-I'll drop this patch.
-Thanks.
-
 > 
->>
->> I could do a replacement patch that reverts that one if preferred, or 
->> we can leave it as is and I will drop this patch.
->>
->>
->>>
->>>>
->>>> Signed-off-by: Robert Beckett <bob.beckett@collabora.com>
->>>> Reviewed-by: Thomas Hellström <thomas.hellstrom@linux.intel.com>
->>>> ---
->>>>   drivers/gpu/drm/i915/gem/selftests/i915_gem_mman.c | 3 +++
->>>>   1 file changed, 3 insertions(+)
->>>>
->>>> diff --git a/drivers/gpu/drm/i915/gem/selftests/i915_gem_mman.c 
->>>> b/drivers/gpu/drm/i915/gem/selftests/i915_gem_mman.c
->>>> index 5bc93a1ce3e3..76181e28c75e 100644
->>>> --- a/drivers/gpu/drm/i915/gem/selftests/i915_gem_mman.c
->>>> +++ b/drivers/gpu/drm/i915/gem/selftests/i915_gem_mman.c
->>>> @@ -869,6 +869,9 @@ static bool can_mmap(struct drm_i915_gem_object 
->>>> *obj, enum i915_mmap_type type)
->>>>       struct drm_i915_private *i915 = to_i915(obj->base.dev);
->>>>       bool no_map;
->>>> +    if (obj->mm.region && obj->mm.region->private)
->>>> +        return false;
->>>> +
->>>>       if (obj->ops->mmap_offset)
->>>>           return type == I915_MMAP_TYPE_FIXED;
->>>>       else if (type == I915_MMAP_TYPE_FIXED)
+> On 01/07/2022 07:39, Anshuman Khandual wrote:
+> > sysctl_perf_event_paranoid can have values from [-1, 0, 1, 2] which decides
+> > on perf event restrictions for unprivileged users. But using them directly
+> > makes it difficult to correlate exact restriction level they might impose.
+> > This just adds macros for those numerical restriction values, making them
+> > clear and improving readability.
+> > 
+> > Cc: Peter Zijlstra <peterz@infradead.org>
+> > Cc: Ingo Molnar <mingo@redhat.com>
+> > Cc: Arnaldo Carvalho de Melo <acme@kernel.org>
+> > Cc: Mark Rutland <mark.rutland@arm.com>
+> > Cc: linux-perf-users@vger.kernel.org
+> > Cc: linux-kernel@vger.kernel.org
+> > Signed-off-by: Anshuman Khandual <anshuman.khandual@arm.com>
+> > ---
+> >  include/linux/perf_event.h | 22 ++++++++++++++++++----
+> >  kernel/events/core.c       |  9 +--------
+> >  kernel/kallsyms.c          |  3 ++-
+> >  3 files changed, 21 insertions(+), 13 deletions(-)
+> > 
+> > diff --git a/include/linux/perf_event.h b/include/linux/perf_event.h
+> > index da759560eec5..78156b9154df 100644
+> > --- a/include/linux/perf_event.h
+> > +++ b/include/linux/perf_event.h
+> > @@ -1359,14 +1359,28 @@ int perf_event_max_stack_handler(struct ctl_table *table, int write,
+> >  #define PERF_SECURITY_KERNEL		2
+> >  #define PERF_SECURITY_TRACEPOINT	3
+> >  
+> > +/*
+> > + * perf event paranoia level:
+> > + *  -1 - not paranoid at all
+> > + *   0 - disallow raw tracepoint access for unpriv
+> > + *   1 - disallow cpu events for unpriv
+> > + *   2 - disallow kernel profiling for unpriv
+> > + */
+> > +enum {
+> > +	PERF_EVENT_DISALLOW_NONE	= -1,
+> > +	PERF_EVENT_DISALLOW_TRACE,
+> > +	PERF_EVENT_DISALLOW_CPU,
+> > +	PERF_EVENT_DISALLOW_KERNEL
+> > +};
+> > +
+> >  static inline int perf_is_paranoid(void)
+> >  {
+> > -	return sysctl_perf_event_paranoid > -1;
+> > +	return sysctl_perf_event_paranoid > PERF_EVENT_DISALLOW_NONE;
+> >  }
+> >  
+> 
+> Hi Anshuman,
+> 
+> There are quite a few other instances of integers left in the tools code.
+> If you search for perf_event_paranoid_check() and perf_event_paranoid()
+> you will find them.
+> 
+> I'm also wondering if it makes sense to return your new enum from all of
+> the helper functions instead of an int and make it explicit that it's
+> an instance of this new type? Although the compiler doesn't seem to warn
+> about using integers so maybe it's not worth doing this.
+
+so I don't see the point of all this; it's already wrapped in these
+helper functions that have a descriptive name, why do we need more muck
+on top?

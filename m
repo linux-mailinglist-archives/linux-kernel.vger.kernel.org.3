@@ -2,106 +2,170 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F3D8156B46D
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 10:25:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0089956B473
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 10:25:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237780AbiGHIXD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Jul 2022 04:23:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55182 "EHLO
+        id S237809AbiGHIYz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Jul 2022 04:24:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57558 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237766AbiGHIW5 (ORCPT
+        with ESMTP id S237539AbiGHIYv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Jul 2022 04:22:57 -0400
-Received: from mail-io1-xd33.google.com (mail-io1-xd33.google.com [IPv6:2607:f8b0:4864:20::d33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2D1B81497;
-        Fri,  8 Jul 2022 01:22:55 -0700 (PDT)
-Received: by mail-io1-xd33.google.com with SMTP id d3so19046375ioi.9;
-        Fri, 08 Jul 2022 01:22:55 -0700 (PDT)
+        Fri, 8 Jul 2022 04:24:51 -0400
+Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2975814A1
+        for <linux-kernel@vger.kernel.org>; Fri,  8 Jul 2022 01:24:48 -0700 (PDT)
+Received: by mail-wr1-x431.google.com with SMTP id o4so29509195wrh.3
+        for <linux-kernel@vger.kernel.org>; Fri, 08 Jul 2022 01:24:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=Akov7SZtUyEX9D0+3zzLnuIGNu/dLwAPRoI7n7xKXwA=;
-        b=TRV50Pwd5sFVo2E1gPlLsmgMiLSKMpheIV4nJ2xcXHBx97J8Am/NdIsQmb5jiSueRF
-         khKbAvo7q6avJHCZi7XdEzpRx9PIwpak6EdVOisplHkLfW6Vsbsr7bljDySt/V/2BEbJ
-         q1gMNptzMFfKjBChwI0lnmtdrb+RPDAPzhWyYuoqe10Lo71y9vleLsbPmakin0OmMVKL
-         uWXfsHI9iEjKUEe6mpVLpjQo1HRjDLZFP499HogUkQ598g5o9PWJ4CrLEXomSYOP9vGh
-         mMPyIME28eRynOIhLPAsTuFMOwg5M8CMFxst36RJIp/b74fT0wj00cAxc8zxkpGNp29I
-         YsKQ==
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=mIwFg075RvwVYz9+/Y+xL9IEwu5sJHlYJ/YyVZSg0lY=;
+        b=Hb9QsIsy3zrdkNF7D7KWN7V9xWmBnlnqukEu8VQO760EvPnCTgR7YaaANXCVvHFhG8
+         azGVU8v/yUeYegEIgmmaKflxUqaohJdfHBD0rtW/STrfWOLiHNQTL2u3xQe8ziPn37Tp
+         KperCCH8+Rsgixu8wrN/mbJVA3rhSsKGl2aOlADbg6XXnewNcscnnFvz+pqLe4iqnJHA
+         zq3s15m3tNnJHcbuScXgMIPMUNpfZjSdtaTKbGQrtAGToOwTcSyiz9akBnE8KKn7Cahy
+         sS9hB+7l1qMZEn7F61+CTCeYnNdL/RgeTOMXypf4x/Gnu8ySOpRtLqY0aWNZCHpwATqH
+         tn0w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=Akov7SZtUyEX9D0+3zzLnuIGNu/dLwAPRoI7n7xKXwA=;
-        b=tTPYXQkv0ROfMo+ok243qqWc8gBm5ES2KZlT2BKz2/aRgcD7SDYtgjn4vom7I96+zJ
-         5enrAM9XtQLXwZEmldPOhRiFWekmkbgk/aT0vbGKnHBwvzkFhwEvvj04D7b2gIQb7vsN
-         Wc3a9jUNof7cbmiw+0mdO/Hoym9yX8QmkhshbfElwHTD/Sp0WMCSTh4teA8xDgmufW+u
-         DBhhG2oCuc0lgR3Ea5vb5Z0nMlzB9daWDvaYkp/uSbkJgzH6iGW0LonvSorekWIMMBqK
-         Eksi4yX4RW+c+wAl2fVQpcMMawNhEw13p/J8aFJfoyfj5pEL5CVuJzGv5FcoJXcG32+T
-         4+ug==
-X-Gm-Message-State: AJIora8HfHYp/jRhBjNg42ktSF+v99mqCkHTrQhzK49CQH4BNOqXnqUs
-        CXKtyUDNCvOa9BSDV945oJoXXP8MyCRjnTFB
-X-Google-Smtp-Source: AGRyM1tfdSkTBt7EaCr+m3mYoeilSPCzVf9/PiNlHAX15oqMZh5CVi/9v4QlhKpiOcCqveypnOPygw==
-X-Received: by 2002:a02:a70f:0:b0:339:de0d:4ed6 with SMTP id k15-20020a02a70f000000b00339de0d4ed6mr1413393jam.292.1657268575018;
-        Fri, 08 Jul 2022 01:22:55 -0700 (PDT)
-Received: from [192.168.1.145] ([207.188.167.132])
-        by smtp.gmail.com with ESMTPSA id r3-20020a02aa03000000b0033cd78a3612sm10838734jam.18.2022.07.08.01.22.52
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 08 Jul 2022 01:22:53 -0700 (PDT)
-Message-ID: <184ce9e3-6031-98ab-cae6-a4aa2015b5c4@gmail.com>
-Date:   Fri, 8 Jul 2022 10:22:51 +0200
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=mIwFg075RvwVYz9+/Y+xL9IEwu5sJHlYJ/YyVZSg0lY=;
+        b=B7qEhxfxuegTehv1J3XMoymS+F9tBSnHCU7xXyA3oENw2NKL1kyKbPGdJlGXyIsi0x
+         w+CMOzVfChg31eUhwTbbFsqsFmUM4ubSf4gNcJOMdw/sty457wiCOWpcqt2MVUJgDgt4
+         2DjUP8SWOYaQTvgmvelBfA3IvayJHiodyq+jDzD0P91yx4Ty1UhU9GMms2rtpfi5FMN5
+         d2oU/8iYTb2ci9GraHv+m6TqJyhncqdp7y+idHoIC8VvpJOUzRcmAH/mqnW/X859tWWA
+         jGFdpcFfoGN54dBygDOCSnVi5pgdrqao22r6bfR0be01GdhQQcymkD2P8I88yTrWQ41v
+         ThlA==
+X-Gm-Message-State: AJIora9V9Zi0Mn3Dg1ue5in9vqTQbLBJtv+8vRAhRCPjkXYoaFutqjVv
+        RWGcFnV851oZS1QPdpZkDsAkbg==
+X-Google-Smtp-Source: AGRyM1viKjtVrmUoxTanFr1pV6d7LMrE7leuT0XIliXYQcDoe0Ro78y5UhOmXgHGos2nagi880AGAA==
+X-Received: by 2002:a5d:588d:0:b0:21d:865c:54e9 with SMTP id n13-20020a5d588d000000b0021d865c54e9mr2109574wrf.3.1657268687247;
+        Fri, 08 Jul 2022 01:24:47 -0700 (PDT)
+Received: from myrica (cpc92880-cmbg19-2-0-cust679.5-4.cable.virginm.net. [82.27.106.168])
+        by smtp.gmail.com with ESMTPSA id h15-20020a1ccc0f000000b0039749b01ea7sm1670902wmb.32.2022.07.08.01.24.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 08 Jul 2022 01:24:46 -0700 (PDT)
+Date:   Fri, 8 Jul 2022 09:24:22 +0100
+From:   Jean-Philippe Brucker <jean-philippe@linaro.org>
+To:     Xu Kuohai <xukuohai@huawei.com>
+Cc:     bpf@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        Mark Rutland <mark.rutland@arm.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Zi Shen Lim <zlim.lnx@gmail.com>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        "David S . Miller" <davem@davemloft.net>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        David Ahern <dsahern@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H . Peter Anvin" <hpa@zytor.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        Russell King <rmk+kernel@armlinux.org.uk>,
+        James Morse <james.morse@arm.com>,
+        Hou Tao <houtao1@huawei.com>,
+        Jason Wang <wangborong@cdjrlc.com>
+Subject: Re: [PATCH bpf-next v6 4/4] bpf, arm64: bpf trampoline for arm64
+Message-ID: <YsfptiexC0wFABFL@myrica>
+References: <20220625161255.547944-1-xukuohai@huawei.com>
+ <20220625161255.547944-5-xukuohai@huawei.com>
+ <YscL4t1pYHYApIiK@larix>
+ <a24109d5-b79a-99de-0fd5-66b0ec34e5ed@huawei.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH v2 1/2] arm64: dts: mt8173: Fix nor_flash node
-Content-Language: en-US
-To:     "xiangsheng.hou" <xiangsheng.hou@mediatek.com>, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org
-Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, bin.zhang@mediatek.com,
-        benliang.zhao@mediatek.com, linux-mediatek@lists.infradead.org
-References: <20220630090157.29486-1-xiangsheng.hou@mediatek.com>
- <20220630090157.29486-2-xiangsheng.hou@mediatek.com>
- <24bf3c0f-7070-0bcd-2fae-9fe086d146b2@gmail.com>
- <e4a50d4e165887ac4741c0b8d68470dc2f060655.camel@mediatek.com>
-From:   Matthias Brugger <matthias.bgg@gmail.com>
-In-Reply-To: <e4a50d4e165887ac4741c0b8d68470dc2f060655.camel@mediatek.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <a24109d5-b79a-99de-0fd5-66b0ec34e5ed@huawei.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 08/07/2022 03:40, xiangsheng.hou wrote:
-> Hi Matthias,
+On Fri, Jul 08, 2022 at 12:35:33PM +0800, Xu Kuohai wrote:
+> >> +
+> >> +	emit(A64_ADD_I(1, A64_R(0), A64_SP, args_off), ctx);
+> >> +	if (!p->jited)
+> >> +		emit_addr_mov_i64(A64_R(1), (const u64)p->insnsi, ctx);
+> >> +
+> >> +	emit_call((const u64)p->bpf_func, ctx);
+> >> +
+> >> +	/* store return value */
+> >> +	if (save_ret)
+> >> +		emit(A64_STR64I(r0, A64_SP, retval_off), ctx);
+> > 
+> > Here too I think it should be x0. I'm guessing r0 may work for jitted
+> > functions but not interpreted ones
+> > 
 > 
-> On Thu, 2022-07-07 at 16:43 +0200, Matthias Brugger wrote:
->>
->> On 30/06/2022 11:01, Xiangsheng Hou wrote:
->>> Add axi clock since the driver change to DMA mode which need
->>> to enable axi clock. And change spi clock to 26MHz as default.
->>>
->>> Signed-off-by: Xiangsheng Hou <xiangsheng.hou@mediatek.com>
->>
->> Applied, thanks!
->>
-> I will send a new patch v3 since there need a change in [PATCH v2 2/2]
-> by review.
+> Yes, r0 is only correct for jitted code, will fix it to:
 > 
+> if (save_ret)
+>         emit(A64_STR64I(p->jited ? r0 : A64_R(0), A64_SP, retval_off),
+>              ctx);
 
-Thanks from letting me know. From what I can see, 1/2 in v3 did not change, so 
-as I already applied it, you could have dropped it from the series.
+I don't think we need this test because x0 should be correct in all cases.
+x7 happens to equal x0 when jitted due to the way build_epilogue() builds
+the function at the moment, but we shouldn't rely on that.
 
-Please correct me if I'm wrong.
 
-Best regards,
-Matthias
+> >> +	if (flags & BPF_TRAMP_F_CALL_ORIG) {
+> >> +		restore_args(ctx, args_off, nargs);
+> >> +		/* call original func */
+> >> +		emit(A64_LDR64I(A64_R(10), A64_SP, retaddr_off), ctx);
+> >> +		emit(A64_BLR(A64_R(10)), ctx);
+> > 
+> > I don't think we can do this when BTI is enabled because we're not jumping
+> > to a BTI instruction. We could introduce one in a patched BPF function
+> > (there currently is one if CONFIG_ARM64_PTR_AUTH_KERNEL), but probably not
+> > in a kernel function.
+> > 
+> > We could fo like FUNCTION_GRAPH_TRACER does and return to the patched
+> > function after modifying its LR. Not sure whether that works with pointer
+> > auth though.
+> > 
+> 
+> Yes, the blr instruction should be replaced with ret instruction, thanks!
+> 
+> The layout for bpf prog and regular kernel function is as follows, with
+> bti always coming first and paciasp immediately after patchsite, so the
+> ret instruction should work in all cases.
+> 
+> bpf prog or kernel function:
+>         bti c // if BTI
+>         mov x9, lr
+>         bl <trampoline>    ------> trampoline:
+>                                            ...
+>                                            mov lr, <return_entry>
+>                                            mov x10, <ORIG_CALL_entry>
+> ORIG_CALL_entry:           <-------        ret x10
+>                                    return_entry:
+>                                            ...
+>         paciasp // if PA
+>         ...
+
+Actually I just noticed that CONFIG_ARM64_BTI_KERNEL depends on
+CONFIG_ARM64_PTR_AUTH_KERNEL, so we should be able to rely on there always
+being a PACIASP at ORIG_CALL_entry, and since it's a landing pad for BLR
+we don't need to make this a RET
+
+ 92e2294d870b ("arm64: bti: Support building kernel C code using BTI")
+
+Thanks,
+Jean
+

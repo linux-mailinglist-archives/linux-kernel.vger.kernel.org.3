@@ -2,144 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 99A7656B33A
+	by mail.lfdr.de (Postfix) with ESMTP id 5189956B339
 	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 09:14:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237469AbiGHHNn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Jul 2022 03:13:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54746 "EHLO
+        id S237454AbiGHHNS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Jul 2022 03:13:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53742 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237206AbiGHHNl (ORCPT
+        with ESMTP id S237450AbiGHHNM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Jul 2022 03:13:41 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C42A13F63;
-        Fri,  8 Jul 2022 00:13:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1657264419; x=1688800419;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=QnZ104EyG7R40U+ZFVN/xtqfTjTBSCm2mjg2XawQNXM=;
-  b=HWjAk9zQBdLcl1csApgbILbBOrMfGQlvsy6zSbeTyCOc+aZhY3J73GMm
-   C+o8FAoQ6QAtt5gepUR7kH9C9H3r4XKZfWe+zUbS6RvN4m7a30yJ+ldLg
-   PJoFHxYHX65Meorni5MGJ8nANvkoOS1YS+PQaMcO+7i7XmKTshtZCo2RF
-   JdtsFg5zydTKii26jkaZ7JlWcNQAL2UccxtsuMWJ+bZ3Zc4qMag74d2fO
-   06SMyk12AOsH0Ee+6KFHjK9hVoJMdFnbPI+034v7APfspVQxoK3cUK+Ds
-   wcD8Hk7XsMkOy3KQNjMoOHjQCCR0eY9vsuHrh5FYgWvCHaSanp2p9wipN
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10401"; a="284236567"
-X-IronPort-AV: E=Sophos;i="5.92,254,1650956400"; 
-   d="scan'208";a="284236567"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jul 2022 00:13:39 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,254,1650956400"; 
-   d="scan'208";a="683575110"
-Received: from lkp-server01.sh.intel.com (HELO 68b931ab7ac1) ([10.239.97.150])
-  by FMSMGA003.fm.intel.com with ESMTP; 08 Jul 2022 00:13:31 -0700
-Received: from kbuild by 68b931ab7ac1 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1o9iB9-000N5S-1w;
-        Fri, 08 Jul 2022 07:13:31 +0000
-Date:   Fri, 8 Jul 2022 15:12:51 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Hans Schultz <netdev@kapio-technology.com>, davem@davemloft.net,
-        kuba@kernel.org
-Cc:     kbuild-all@lists.01.org, netdev@vger.kernel.org,
-        Hans Schultz <netdev@kapio-technology.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>, Jiri Pirko <jiri@resnulli.us>,
-        Ivan Vecera <ivecera@redhat.com>,
-        Roopa Prabhu <roopa@nvidia.com>,
-        Nikolay Aleksandrov <razor@blackwall.org>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Ido Schimmel <idosch@nvidia.com>, linux-kernel@vger.kernel.org,
-        bridge@lists.linux-foundation.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v4 net-next 3/6] drivers: net: dsa: add locked fdb entry
- flag to drivers
-Message-ID: <202207081529.riNiUWOf-lkp@intel.com>
-References: <20220707152930.1789437-4-netdev@kapio-technology.com>
+        Fri, 8 Jul 2022 03:13:12 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4AFB9796AF;
+        Fri,  8 Jul 2022 00:13:10 -0700 (PDT)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out1.suse.de (Postfix) with ESMTP id A005621ED5;
+        Fri,  8 Jul 2022 07:13:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1657264388; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+        bh=53CEXyeuRhvrLzAgd2XWwxskqq0rZQskDVZ5oBYdUxw=;
+        b=tknenM3NcdSgTGy93KDhDPMo1KEuJ0fj1X9YVl/SInidx5FkTa74E4QfRzAs9TIyryFsRx
+        DIl94p7mhKbHD118bW8zM093M0xelRzLh1vwwKoU+ppy0kyjSbFOL0I97Az64SJj1X7V7h
+        Y3J3UAlUovGfFAs1uY38gxsZT4EfBdE=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1657264388;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+        bh=53CEXyeuRhvrLzAgd2XWwxskqq0rZQskDVZ5oBYdUxw=;
+        b=aewu6It07jAUR9yXN1SCJeRTNqj6gQK4W7YSXPHegYFC+yuv60WmeTGHMULx5HcrBqF+Bj
+        aJ51EWAxFuWJ6dBA==
+Received: from localhost.localdomain (unknown [10.100.201.122])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id 552BD2C141;
+        Fri,  8 Jul 2022 07:13:08 +0000 (UTC)
+From:   Jiri Slaby <jslaby@suse.cz>
+To:     mturquette@baylibre.com
+Cc:     linux-kernel@vger.kernel.org, Andi Kleen <ak@linux.intel.com>,
+        Stephen Boyd <sboyd@kernel.org>, linux-clk@vger.kernel.org,
+        Martin Liska <mliska@suse.cz>, Jiri Slaby <jslaby@suse.cz>
+Subject: [PATCH v2 1/2] clk: pistachio: Fix initconst confusion
+Date:   Fri,  8 Jul 2022 09:13:05 +0200
+Message-Id: <20220708071306.4354-1-jslaby@suse.cz>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220707152930.1789437-4-netdev@kapio-technology.com>
-X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Hans,
+From: Andi Kleen <ak@linux.intel.com>
 
-Thank you for the patch! Yet something to improve:
+A variable pointing to const isn't const itself. It has to contain
+"const" keyword after "*" too. So to keep it in __initconst (and not
+mark properly as __initdata), add the "const" keyword exactly there.
 
-[auto build test ERROR on net/master]
-[also build test ERROR on shuah-kselftest/next linus/master v5.19-rc5]
-[cannot apply to net-next/master next-20220707]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Note we need to update struct pistachio_mux too. On the other hand, the
+clk core already counts with "const char *const" already.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Hans-Schultz/Extend-locked-port-feature-with-FDB-locked-flag-MAC-Auth-MAB/20220707-233246
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/davem/net.git 07266d066301b97ad56a693f81b29b7ced429b27
-config: i386-allyesconfig (https://download.01.org/0day-ci/archive/20220708/202207081529.riNiUWOf-lkp@intel.com/config)
-compiler: gcc-11 (Debian 11.3.0-3) 11.3.0
-reproduce (this is a W=1 build):
-        # https://github.com/intel-lab-lkp/linux/commit/ebd598d7ea6c015001489c4293da887763491086
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Hans-Schultz/Extend-locked-port-feature-with-FDB-locked-flag-MAC-Auth-MAB/20220707-233246
-        git checkout ebd598d7ea6c015001489c4293da887763491086
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        make W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
+[js] more explanatory commit message.
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+Cc: Michael Turquette <mturquette@baylibre.com>
+Cc: Stephen Boyd <sboyd@kernel.org>
+Cc: linux-clk@vger.kernel.org
+Cc: Martin Liska <mliska@suse.cz>
+Signed-off-by: Andi Kleen <ak@linux.intel.com>
+Signed-off-by: Jiri Slaby <jslaby@suse.cz>
+---
 
-All errors (new ones prefixed by >>):
+Notes:
+    [v2] as suggested by Stephen, instead of switching to __initdata, make
+         it real const
 
-   drivers/net/dsa/sja1105/sja1105_main.c: In function 'sja1105_mdb_add':
->> drivers/net/dsa/sja1105/sja1105_main.c:1952:63: error: incompatible type for argument 5 of 'sja1105_fdb_add'
-    1952 |         return sja1105_fdb_add(ds, port, mdb->addr, mdb->vid, db);
-         |                                                               ^~
-         |                                                               |
-         |                                                               struct dsa_db
-   drivers/net/dsa/sja1105/sja1105_main.c:1805:33: note: expected 'bool' {aka '_Bool'} but argument is of type 'struct dsa_db'
-    1805 |                            bool is_locked,
-         |                            ~~~~~^~~~~~~~~
->> drivers/net/dsa/sja1105/sja1105_main.c:1952:16: error: too few arguments to function 'sja1105_fdb_add'
-    1952 |         return sja1105_fdb_add(ds, port, mdb->addr, mdb->vid, db);
-         |                ^~~~~~~~~~~~~~~
-   drivers/net/dsa/sja1105/sja1105_main.c:1803:12: note: declared here
-    1803 | static int sja1105_fdb_add(struct dsa_switch *ds, int port,
-         |            ^~~~~~~~~~~~~~~
-   drivers/net/dsa/sja1105/sja1105_main.c:1953:1: error: control reaches end of non-void function [-Werror=return-type]
-    1953 | }
-         | ^
-   cc1: some warnings being treated as errors
+ drivers/clk/pistachio/clk.h | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-
-vim +/sja1105_fdb_add +1952 drivers/net/dsa/sja1105/sja1105_main.c
-
-5126ec72a094bd3 Vladimir Oltean 2021-08-08  1947  
-a52b2da778fc93e Vladimir Oltean 2021-01-09  1948  static int sja1105_mdb_add(struct dsa_switch *ds, int port,
-c26933639b5402c Vladimir Oltean 2022-02-25  1949  			   const struct switchdev_obj_port_mdb *mdb,
-c26933639b5402c Vladimir Oltean 2022-02-25  1950  			   struct dsa_db db)
-291d1e72b756424 Vladimir Oltean 2019-05-02  1951  {
-c26933639b5402c Vladimir Oltean 2022-02-25 @1952  	return sja1105_fdb_add(ds, port, mdb->addr, mdb->vid, db);
-291d1e72b756424 Vladimir Oltean 2019-05-02  1953  }
-291d1e72b756424 Vladimir Oltean 2019-05-02  1954  
-
+diff --git a/drivers/clk/pistachio/clk.h b/drivers/clk/pistachio/clk.h
+index f9c31e3a0e47..2f4ffbd98282 100644
+--- a/drivers/clk/pistachio/clk.h
++++ b/drivers/clk/pistachio/clk.h
+@@ -31,10 +31,10 @@ struct pistachio_mux {
+ 	unsigned int shift;
+ 	unsigned int num_parents;
+ 	const char *name;
+-	const char **parents;
++	const char *const *parents;
+ };
+ 
+-#define PNAME(x) static const char *x[] __initconst
++#define PNAME(x) static const char *const x[] __initconst
+ 
+ #define MUX(_id, _name, _pnames, _reg, _shift)			\
+ 	{							\
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+2.36.1
+

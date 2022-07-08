@@ -2,396 +2,188 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2045756C0F7
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 20:38:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D768056BEFD
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 20:35:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238721AbiGHQpO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Jul 2022 12:45:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58090 "EHLO
+        id S238668AbiGHQpH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Jul 2022 12:45:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58038 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238234AbiGHQpK (ORCPT
+        with ESMTP id S238365AbiGHQpF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Jul 2022 12:45:10 -0400
-Received: from mail-qk1-x733.google.com (mail-qk1-x733.google.com [IPv6:2607:f8b0:4864:20::733])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94BB52DA88;
-        Fri,  8 Jul 2022 09:45:09 -0700 (PDT)
-Received: by mail-qk1-x733.google.com with SMTP id x11so787788qki.1;
-        Fri, 08 Jul 2022 09:45:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=ZThGptq7h5vtkvYTEqQOjJHDp96c1xA4HJ53tM0Cq7I=;
-        b=XfbYr7nYKQzSjNbhfWTRJv4r2l3M96KbNuUKVdTITaSXakF2uXSfLLyAHUjEKNLcZg
-         6HedJYW9nb9YX7Griof39wAY+Opz+imI7/uR2YytrMGrYJYHWrZ9luLTkRceUfs2c0E5
-         erarSiAZTvw5g+0CrBaDCDe3yPR8R0CFqg7kv35qN/XoYBzyp2or9chTxzbz8J098/pD
-         W1DsFVOO+mowngJfWU8O+z09DCIW6TupjE2HZakzxRhmquD0PXFeLhTo4qGsS7zVAzyA
-         4onzI1AgOPAq5GU5dtqeIfOTsIDmd8iP9AChovXrqY3rHqIiH32Sg/fTqgDW+KcgCY2u
-         GaAw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=ZThGptq7h5vtkvYTEqQOjJHDp96c1xA4HJ53tM0Cq7I=;
-        b=rTtzQ8FvbUxDTfgAf7kZ3iz5WFKKZE91/aGNdgv7FV7zOpjaThzZNPODB/P8NC+DGO
-         9pElq0taddWHl40+yFLzpakG3YjdnNL6Xt9R2AkhAF3ghJ96Rws+I001UjGknKJv1tqy
-         CoAy8ZQ3IAFGZMjsHTpIVgtRSSOJ5AZq/M/wVoWukLIFoEepxk+27qPZ+TC4Y7zcm69h
-         H60gBcI5nmXmukMDf2U3GC3nqWdiTbKNFwGnuzV4VQ+1WPnQIxlMUgKVOWTFQbsYOMD4
-         1al9y0ewHSnWQaBzqTnjNwU/0zvxpVaON46BM5cYloJSsMsGyapOfJ8N6utha+SCgx+U
-         94lg==
-X-Gm-Message-State: AJIora8RgCafCIkk3m3upwSzh/FWS3x8tTPV8a63BM5a6yv6++nRGDLG
-        sN0MSMGJrES8owU+JRhidkgYdkFdIlOv1z6hkVM=
-X-Google-Smtp-Source: AGRyM1vm3Sz06iZw23zFJKL4aCV6vtw06v1+bIfXshboOMlt0Qh4zT50XgACo4dXGHfx7M8PQpyxfX8oFEFDnpvpgCk=
-X-Received: by 2002:a05:620a:1a23:b0:6af:6ceb:2ed with SMTP id
- bk35-20020a05620a1a2300b006af6ceb02edmr3109700qkb.42.1657298708601; Fri, 08
- Jul 2022 09:45:08 -0700 (PDT)
+        Fri, 8 Jul 2022 12:45:05 -0400
+Received: from NAM02-BN1-obe.outbound.protection.outlook.com (mail-bn1nam07on2058.outbound.protection.outlook.com [40.107.212.58])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 788EDE005;
+        Fri,  8 Jul 2022 09:45:03 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=DoN82lBuVPVAhEdNpWhGA55aDnZqRSSG/P2WOxUFZ9jvN19SurX0FRWqGhwJflR48zIJaiWe3GzhnK8weXSnziqwX8FJeYWHVGe54lnkaML6FlIpS4S3ADqxtZrlmRIsPrsX5aM8/7GPonG1p6f+C3tnnv+Zq3A4jjcQEpPhqv9DWnuerjYWKQubKsqaCBFYLAnXdV99GMEAYGweF3aIFA9cIiY1ImCVGIGKah0TG/bA9MhZvBNT50jbHQuZyUwlhRepadvGegJAwg3AWeY1EYUMLdVjgxj0cPVyZ+D4bPeHocF27kf4grsPn87yTROeMgDTE5XYs1JLOdu0G9/Rvw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=FJMapcwEpQTL8k0hUZaJlaDn0KJCWsd4KvzGaGew0UI=;
+ b=a1NcGVUcGvFp1zWYuZebNmGGmGviAIBcIfvtagspQxLzLefP+Xyh0i974M0+paJqfHd9XWX9kFqddBW2FOoyMUD/SsgQYC53LLCDo1FQwsgpI1FuOUzAbLbK/mhb8NSK09Vnp3BLCU+IOFu9Wia8B+8SMmx99lQSm+2m7tK4o5fu6o1nj3l6zXzBQQ4STbRNlCdvLg6bwi47VY8LbuSvUrN4FEdSsBWGf30PSlOPZlyQyr0TtgqzUZTpRn6HEekJ6cMd0QXNMeddp6MuTYogJT2klrCZ43Z7VajpcgwnxbmSwQezuJaRc3esCDrWekKjnuSZKdCVYXpp/q2ccv7t0w==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=vmware.com; dmarc=pass action=none header.from=vmware.com;
+ dkim=pass header.d=vmware.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vmware.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=FJMapcwEpQTL8k0hUZaJlaDn0KJCWsd4KvzGaGew0UI=;
+ b=mqDqaie3h80BUnz7YNUKoxUGTPVfyL2btXSdawjJZ0bZRyPlFgE+H6qKDOwM27gT5sfWjYtHEeo6EdUei2HxMAp9uioUXhtWyCL8KFUx3G7qhXTvvjWsWFjhOiq/Q5wlW3/TIpo8pXz5blDpqaIXOPz7OopB1qCn8O4LD7fVkKg=
+Received: from BY3PR05MB8531.namprd05.prod.outlook.com (2603:10b6:a03:3ce::6)
+ by CH2PR05MB7144.namprd05.prod.outlook.com (2603:10b6:610:49::23) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5417.14; Fri, 8 Jul
+ 2022 16:45:00 +0000
+Received: from BY3PR05MB8531.namprd05.prod.outlook.com
+ ([fe80::a4f8:718a:b2a0:977f]) by BY3PR05MB8531.namprd05.prod.outlook.com
+ ([fe80::a4f8:718a:b2a0:977f%6]) with mapi id 15.20.5417.021; Fri, 8 Jul 2022
+ 16:45:00 +0000
+From:   Nadav Amit <namit@vmware.com>
+To:     Matthew Wilcox <willy@infradead.org>
+CC:     Ajay Kaher <akaher@vmware.com>, Bjorn Helgaas <helgaas@kernel.org>,
+        "bhelgaas@google.com" <bhelgaas@google.com>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "bp@alien8.de" <bp@alien8.de>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        "x86@kernel.org" <x86@kernel.org>, "hpa@zytor.com" <hpa@zytor.com>,
+        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "rostedt@goodmis.org" <rostedt@goodmis.org>,
+        Srivatsa Bhat <srivatsab@vmware.com>,
+        "srivatsa@csail.mit.edu" <srivatsa@csail.mit.edu>,
+        Alexey Makhalov <amakhalov@vmware.com>,
+        Anish Swaminathan <anishs@vmware.com>,
+        Vasavi Sirnapalli <vsirnapalli@vmware.com>,
+        "er.ajay.kaher@gmail.com" <er.ajay.kaher@gmail.com>
+Subject: Re: [PATCH] MMIO should have more priority then IO
+Thread-Topic: [PATCH] MMIO should have more priority then IO
+Thread-Index: AQHYiw9NzqWSNRsR1kyxPrXhcjObWa1lHkCAgA7qdoCAAHWQAIAAP7qA
+Date:   Fri, 8 Jul 2022 16:45:00 +0000
+Message-ID: <96D533E5-F3AF-4062-B095-8C143C307E37@vmware.com>
+References: <1656433761-9163-1-git-send-email-akaher@vmware.com>
+ <20220628180919.GA1850423@bhelgaas>
+ <25F843ED-7EB4-4D00-96CB-7DE1AC886460@vmware.com>
+ <YsgplrrJnk5Ly19z@casper.infradead.org>
+In-Reply-To: <YsgplrrJnk5Ly19z@casper.infradead.org>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-mailer: Apple Mail (2.3696.100.31)
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=vmware.com;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 1a3917dd-8a06-4398-70a6-08da61013317
+x-ms-traffictypediagnostic: CH2PR05MB7144:EE_
+x-ld-processed: b39138ca-3cee-4b4a-a4d6-cd83d9dd62f0,ExtAddr
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: YVUxZpHIllMX3gWUfH7mF6yA7ldgt1HB3czIHmaS8rXhiNGwFBPCpdXztRCy8vmcdauGwKic/RO6qoeNNi7SXjANAi+PjNsL1PON2yTaalNBhDllVZYDrGNsFLXcXtSL3FODX2suLus9tIz69TeiTTczsFTncY+WYvMZI5SgLM46fHAoSp2bbY38gA+tm+iDSfH8Cpx67paXnbH7Wl6JgW+SLENvDb/XwKM6YKnUDPqOBfP5wI/gaVXjAHHqHrA87+4gw2LCqPTMFGHyr/7JVPdYkSGT+mrIlFKAFWnFslY5uJZu+QoEv+ngIh7djSWyYG/hxKg7isQtJwhD9yc88DrxOpot4EvD/hI+SFDPTxAqc47NRA0KFxmnLhx08eYvm0Key60esaY4LzQz8wN+XFnLHIj0eiG+mnhewVA+PWvceRCLHuu7ivjaH6hswWXdI7wM4clS/F9mq88FJUp98xoFc+zERwzqMaSUJOJdpzy17oJ0UJSmPAG17pnhkuAWN3nj9wOrBSGSLWqeh/hLCNuuC1Tx/vbUDM9POOvdIUVuavgxk08mGpQhAPQ2NebHYn/7zaXJ78KqtagoE+YxCKl/40NYu1KLFF29SGcCB80peJ5Lo98mCe4pso+Nlr55zntR28El4zDs8swhoR9P64lhJGYQDaX1fcu8g8qRHA3/VGRHCLFCq7hYWMgrNANVtmUI8j3tC0EJ50YM7IeR0qTw28ZKcnPz83+QqpIwJa7cRU/H7j042AWu7XjZHo4+EO8ADgpad0P7p0YFN++v+lyNPYU/xgQIij0+eT2f5nWvM2Cs0MAmheD5Z30pIpyC9Iy5maGD497VsPVCmhF4xf2xISCiLahOAgwdHyRAy7o=
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BY3PR05MB8531.namprd05.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(376002)(39860400002)(136003)(396003)(346002)(366004)(478600001)(6506007)(6916009)(38100700002)(6486002)(53546011)(186003)(64756008)(66446008)(33656002)(36756003)(54906003)(66946007)(8936002)(8676002)(2906002)(66556008)(41300700001)(316002)(71200400001)(2616005)(45080400002)(6512007)(26005)(7416002)(4326008)(83380400001)(86362001)(122000001)(5660300002)(76116006)(38070700005)(66476007)(45980500001);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?enJQb0YxWkthcFFlMk94aGZjb05mVVNCRUR5cVVwYm1tb2JpSGpWNzRXeDJG?=
+ =?utf-8?B?c293eXUyTVBJcVpJODNiOW45T3VYdllqaG5mU1JpaEY3NnI0WC9WNlR1OFR3?=
+ =?utf-8?B?MjNWUVd2M25JUE9UZ2hUZS83OVNKNVhBRHdyeWZYaXF2MWVLVTRoT281MzlH?=
+ =?utf-8?B?enRreCs4RTVTNnFVSjlVQ0x0STQ1Q1dkMFJUQngxUWRXNzNTRG9hZ0Y0VGRn?=
+ =?utf-8?B?aDRtTE12RHdIK3VsM25zUWpIcFRLT3lOaEpWbzlXQm4xZUtZaEM2MmRXRkNw?=
+ =?utf-8?B?U3V6Qmp5ZmNNT09TcmUzMHN3Z25Za2UvZnNQbnN1eGRnS0E5WDVZY2RFZ01K?=
+ =?utf-8?B?YkpQaGxPOXJCZU9QY3ZyZVZJaW9HbG94RjQwQmlwbVR0Wnd6NWtSd0puczJX?=
+ =?utf-8?B?N0x5bWxIN254a1c1MUVITnVFTTh5bndrZk50aCtZUjhQdzZXajFWWlpyRjFw?=
+ =?utf-8?B?NkVsUGxMWDcvN05tOFJ4c0xkQm5VTUxlcHhHOERmWm9ldFNDNEVnM1pZaGls?=
+ =?utf-8?B?UElQSVdhYnZWcDY5bGlnUk5OL0hYTmdxVVFyVk0vN3Npd1NYS0orTXBTczJ1?=
+ =?utf-8?B?Q2w0aUtucUdYZWVvVFhoay8zekpCM3Z0eDRMNWRoTVNkQzdjdyt4Wnk3RnZa?=
+ =?utf-8?B?YnZLdFAwcGdXRGNYNzV5TGUwWDFpL2JiRDQwVXZtUUdMaGFkWGVKSnE1bnZG?=
+ =?utf-8?B?V3h5WnpEUnVVeG9tVDNCQUQwSVFjeVc1aDhWMXdXSTJMZ1hsSXBLdmk3Z3NX?=
+ =?utf-8?B?S2tTeGJQd0FySzlmSFRTNFJZdE5TTERsTmhxM2hkN0hjaE15bW1ENi9TaE9a?=
+ =?utf-8?B?aCtjSmc4VGhQUFBoTmNhTmpHWHBqMHd3cnVCYlN5ZXdWcjJWeVdLY0UydUNu?=
+ =?utf-8?B?REtZVE50aG1vTXgrblkyWHo4enJJdlVQaDhLM1pGaThDb2JWSElmU3cyb0ZG?=
+ =?utf-8?B?Z3Q1Z3VtTUNDK0ZUaWN0bk1LazhYdEgxUkFhL1FoTGhjeGNtOGp1MmIzZWpu?=
+ =?utf-8?B?ajNMZzg5Qi9OVE40WlYxWnI2djdTaWNBVy9oU1VJVVJGdFp2OUF2d3FNRWFC?=
+ =?utf-8?B?VlBHTE05SENpYVArTmJWSUxibXBMeURkY2hHVU9XOVl1SDhCZjNMeVE5QTRp?=
+ =?utf-8?B?KzB6OGYzOC83aDArdm1WYW5PdU9LODFmSEhKaEZLNjBlTG5ObitNNGdIbW9K?=
+ =?utf-8?B?Z3pBSktXQk5LREQ3MzF6TjFTQmJyMzhGUjAzQmx1dmw0enlXK2h1OTBxZXlE?=
+ =?utf-8?B?OTBBUEI2MXVaZmlYOU5yL2tkWG03ZGU1MDJ3VnNVdEFENk5CRTdMMkdoaHRB?=
+ =?utf-8?B?MmJDQ2t5RW9aWXQ2NXNPK2ZRR3RWcVNremZTNzlyalZSODVCcndxTE5GWGls?=
+ =?utf-8?B?amN2b1lzUEF1Qm9ROHA2VlNnZkVPMWVadTFnSkRuVzFFa0cxNXJDaWZKaUY2?=
+ =?utf-8?B?cGxkdnJ5RGEvbUt3YVRLeFF3NUx6VTNWU29GV0ZnMEhoZlBnOVBLcExtT0VJ?=
+ =?utf-8?B?bTRkOEdHSkpJZ09XM3FIVnhGS0RyWHpSYUhPUndyemZLbjI2UFpKT2huRnE0?=
+ =?utf-8?B?ZmliYlhmU212eVNzZkdCVVVZbXBvaGQ2UjRCMlZyN2orNFdqZDVTZFJ5ZUEr?=
+ =?utf-8?B?d2pUQ2hNckNlWXErNnAxbDNOK0tVM2NPQXRycVlrS3hDekMyZGNRU1NWeEpj?=
+ =?utf-8?B?WDR3dzg4QjdhbFZVWFRRdG4zNWkxK2doRlJaaEJ5ck1IT3JUVTFOLy9MNUxa?=
+ =?utf-8?B?VkE5UWpnTlJUTWxkdUFsMDJNem10YnB1U2Qvay9ZaEgrOE1ha2dlR0FBRmg4?=
+ =?utf-8?B?cHlQZ2V2TXBsaHl3eEdVTm5Qb0syaGxwc1YwQkVwMHYxRlhPQjVydnVzZlZT?=
+ =?utf-8?B?dG9adFZlcnhDUXRxOTFKQVgwai9UdmVvWGZUYTNkWEU4WmVGaEFWNUlVNUpx?=
+ =?utf-8?B?bEQzeXpycG1CU3BCNkJCN0xOSmNHMnpMODQ2cng1Ymh3SWN6ZnQvclpKZDNp?=
+ =?utf-8?B?RWFQdEdsYUxBckdKTEwxUXhVdnp4aXlDRVJ6UjVyY204bEFRQmNYZ2xURS82?=
+ =?utf-8?B?U1FjbkdTSUNDb3dhUFBJZmpzT3JOWVNIcklhclc5MnVtT1hveHppYVlBUFYz?=
+ =?utf-8?Q?VeSkG0Gz4iIHPkWSDXuiHLBxi?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <458D88FC099C9247B36928A9787BC561@namprd05.prod.outlook.com>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-References: <20220705191017.1683716-1-robimarko@gmail.com> <20220705191017.1683716-3-robimarko@gmail.com>
- <bab08104-8474-0247-6d64-d6335535c37c@somainline.org>
-In-Reply-To: <bab08104-8474-0247-6d64-d6335535c37c@somainline.org>
-From:   Robert Marko <robimarko@gmail.com>
-Date:   Fri, 8 Jul 2022 18:44:57 +0200
-Message-ID: <CAOX2RU6gmz6AHS2NzaX-duXPW_1U4QsqMH4LeCU-PFLLpVFc9g@mail.gmail.com>
-Subject: Re: [PATCH v5 3/3] clk: qcom: Add IPQ8074 APSS clock controller
-To:     Konrad Dybcio <konrad.dybcio@somainline.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        krzysztof.kozlowski+dt@linaro.org,
-        open list <linux-kernel@vger.kernel.org>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
-        linux-clk@vger.kernel.org,
-        Devicetree List <devicetree@vger.kernel.org>,
-        Christian Marangi <ansuelsmth@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-OriginatorOrg: vmware.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: BY3PR05MB8531.namprd05.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 1a3917dd-8a06-4398-70a6-08da61013317
+X-MS-Exchange-CrossTenant-originalarrivaltime: 08 Jul 2022 16:45:00.6226
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: b39138ca-3cee-4b4a-a4d6-cd83d9dd62f0
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: h18o2An/U7kPrTq4vcFQZu+z3Xl58Z7Gh1dPUfZOLUYKljTekbeqr6pFp85UUJoUB8cDZG/tID344YGrjvAC2w==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH2PR05MB7144
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 6 Jul 2022 at 15:21, Konrad Dybcio <konrad.dybcio@somainline.org> wrote:
->
->
->
-> On 5.07.2022 21:10, Robert Marko wrote:
-> > IPQ8074 APSS clock controller provides the clock for the IPQ8074 CPU
-> > cores, thus also providing support for CPU frequency scaling.
-> >
-> > It looks like they are clocked by the XO and a custom APSS type PLL.
-> >
-> > Co-developed-by: Christian Marangi <ansuelsmth@gmail.com>
-> > Signed-off-by: Christian Marangi <ansuelsmth@gmail.com>
-> > Signed-off-by: Robert Marko <robimarko@gmail.com>
-> > ---
-> > Changes in v5:
-> > * Drop F define as its already defined in clk-rgc.h
-> > * Correct the driver name to not include commas
-> > * Correct Christian-s SoB
-> > * Add MODULE_ALIAS so it gets loaded if built as a module
-> >
-> > Changes in v2:
-> > * Convert to using parent-data instead of parent-names
-> > ---
-> >  drivers/clk/qcom/Kconfig        |  11 +++
-> >  drivers/clk/qcom/Makefile       |   1 +
-> >  drivers/clk/qcom/apss-ipq8074.c | 169 ++++++++++++++++++++++++++++++++
-> >  3 files changed, 181 insertions(+)
-> >  create mode 100644 drivers/clk/qcom/apss-ipq8074.c
-> >
-> > diff --git a/drivers/clk/qcom/Kconfig b/drivers/clk/qcom/Kconfig
-> > index fc45d00eec42..a3ba541a9dee 100644
-> > --- a/drivers/clk/qcom/Kconfig
-> > +++ b/drivers/clk/qcom/Kconfig
-> > @@ -134,6 +134,17 @@ config IPQ_APSS_6018
-> >         Say Y if you want to support CPU frequency scaling on
-> >         ipq based devices.
-> >
-> > +config IPQ_APSS_8074
-> > +     tristate "IPQ8074 APSS Clock Controller"
-> > +     select IPQ_GCC_8074
-> > +     depends on QCOM_APCS_IPC || COMPILE_TEST
-> > +     help
-> > +       Support for APSS clock controller on IPQ8074 platforms. The
-> > +       APSS clock controller manages the Mux and enable block that feeds the
-> > +       CPUs.
-> > +       Say Y if you want to support CPU frequency scaling on
-> > +       IPQ8074 based devices.
-> > +
-> >  config IPQ_GCC_4019
-> >       tristate "IPQ4019 Global Clock Controller"
-> >       help
-> > diff --git a/drivers/clk/qcom/Makefile b/drivers/clk/qcom/Makefile
-> > index 08594230c1c1..226f3b5cefde 100644
-> > --- a/drivers/clk/qcom/Makefile
-> > +++ b/drivers/clk/qcom/Makefile
-> > @@ -23,6 +23,7 @@ obj-$(CONFIG_APQ_MMCC_8084) += mmcc-apq8084.o
-> >  obj-$(CONFIG_CLK_GFM_LPASS_SM8250) += lpass-gfm-sm8250.o
-> >  obj-$(CONFIG_IPQ_APSS_PLL) += apss-ipq-pll.o
-> >  obj-$(CONFIG_IPQ_APSS_6018) += apss-ipq6018.o
-> > +obj-$(CONFIG_IPQ_APSS_8074) += apss-ipq8074.o
-> >  obj-$(CONFIG_IPQ_GCC_4019) += gcc-ipq4019.o
-> >  obj-$(CONFIG_IPQ_GCC_6018) += gcc-ipq6018.o
-> >  obj-$(CONFIG_IPQ_GCC_806X) += gcc-ipq806x.o
-> > diff --git a/drivers/clk/qcom/apss-ipq8074.c b/drivers/clk/qcom/apss-ipq8074.c
-> > new file mode 100644
-> > index 000000000000..36fafa71c4ea
-> > --- /dev/null
-> > +++ b/drivers/clk/qcom/apss-ipq8074.c
-> > @@ -0,0 +1,169 @@
-> > +// SPDX-License-Identifier: GPL-2.0
-> > +/*
-> > + * Copyright (c) 2022, The Linux Foundation. All rights reserved.
-> > + */
-> > +
-> > +#include <linux/clk-provider.h>
-> > +#include <linux/err.h>
-> > +#include <linux/kernel.h>
-> > +#include <linux/module.h>
-> > +#include <linux/platform_device.h>
-> > +#include <linux/regmap.h>
-> > +
-> > +#include <dt-bindings/clock/qcom,apss-ipq8074.h>
-> > +
-> > +#include "common.h"
-> > +#include "clk-regmap.h"
-> > +#include "clk-pll.h"
-> > +#include "clk-rcg.h"
-> > +#include "clk-branch.h"
-> > +#include "clk-alpha-pll.h"
-> > +#include "clk-regmap-divider.h"
-> > +#include "clk-regmap-mux.h"
-> > +
-> > +enum {
-> > +     P_XO,
-> > +     P_GPLL0,
-> > +     P_GPLL2,
-> > +     P_GPLL4,
-> > +     P_APSS_PLL_EARLY,
-> > +     P_APSS_PLL
-> > +};
-> > +
-> > +static struct clk_alpha_pll apss_pll_early = {
-> > +     .offset = 0x5000,
-> > +     .regs = clk_alpha_pll_regs[CLK_ALPHA_PLL_TYPE_APSS],
-> > +     .clkr = {
-> > +             .enable_reg = 0x5000,
-> > +             .enable_mask = BIT(0),
-> > +             .hw.init = &(struct clk_init_data){
-> > +                     .name = "apss_pll_early",
-> > +                     .parent_data = &(const struct clk_parent_data) {
-> > +                             .fw_name = "xo", .name = "xo"
-> Since you're only adding this driver now, no DT uses it an you
-> should drop the .name lookup.
-
-Hi Konrad,
-I will fix it up, also need to update the dtschema and DT node patch for APCS
-node as "xo" is not a valid clock currently for it.
->
->
-> > +                     },
-> > +                     .num_parents = 1,
-> > +                     .ops = &clk_alpha_pll_huayra_ops,
-> > +             },
-> > +     },
-> > +};
-> > +
-> > +static struct clk_alpha_pll_postdiv apss_pll = {
-> > +     .offset = 0x5000,
-> > +     .regs = clk_alpha_pll_regs[CLK_ALPHA_PLL_TYPE_APSS],
-> > +     .width = 2,
-> > +     .clkr.hw.init = &(struct clk_init_data){
-> > +             .name = "apss_pll",
-> > +             .parent_hws = (const struct clk_hw *[]){
-> > +                     &apss_pll_early.clkr.hw },
-> > +             .num_parents = 1,
-> > +             .ops = &clk_alpha_pll_postdiv_ro_ops,
-> > +     },
-> > +};
-> > +
-> > +static const struct clk_parent_data parents_apcs_alias0_clk_src[] = {
-> > +     { .fw_name = "xo", .name = "xo" },
-> > +     { .fw_name = "gpll0", .name = "gpll0" },
-> > +     { .fw_name = "gpll2", .name = "gpll2" },
-> > +     { .fw_name = "gpll4", .name = "gpll4" },
-> > +     { .hw = &apss_pll.clkr.hw },
-> > +     { .hw = &apss_pll_early.clkr.hw },
-> > +};
-> > +
-> > +static const struct parent_map parents_apcs_alias0_clk_src_map[] = {
-> > +     { P_XO, 0 },
-> > +     { P_GPLL0, 4 },
-> > +     { P_GPLL2, 2 },
-> > +     { P_GPLL4, 1 },
-> > +     { P_APSS_PLL, 3 },
-> > +     { P_APSS_PLL_EARLY, 5 },
-> Looks like it only supports frequencies with APSS_PLL_EARLY and XO
-> as parents? Are all of these other PLLs necessary here?
-
-Unfortunately, I dont have any docs on this, this is based on the downstream 5.4
-driver.
-
-I got rid of GPLL-s as parents and it seems to still be able to set
-the correct frequency
-, however, initially the frequency that is read during boot then
-matches the XO frequency
-of 19.2 MHz which is obviously incorrect:
-[    1.632308] cpufreq: cpufreq_online: CPU0: Running at unlisted
-initial frequency: 19200 KHz, changing to: 1017600 KHz
-
-I can then use the userspace governor and go through all OPP points
-without an issue and
-using the mhz [1] tool I can confirm that frequency matches the requested one.
-
-[1] https://github.com/wtarreau/mhz
->
-> > +};
-> > +
-> > +struct freq_tbl ftbl_apcs_alias0_clk_src[] = {
-> > +     F(19200000, P_XO, 1, 0, 0),
-> > +     F(403200000, P_APSS_PLL_EARLY, 1, 0, 0),
-> > +     F(806400000, P_APSS_PLL_EARLY, 1, 0, 0),
-> > +     F(1017600000, P_APSS_PLL_EARLY, 1, 0, 0),
-> > +     F(1382400000, P_APSS_PLL_EARLY, 1, 0, 0),
-> > +     F(1651200000, P_APSS_PLL_EARLY, 1, 0, 0),
-> > +     F(1843200000, P_APSS_PLL_EARLY, 1, 0, 0),
-> > +     F(1920000000, P_APSS_PLL_EARLY, 1, 0, 0),
-> > +     F(2208000000UL, P_APSS_PLL_EARLY, 1, 0, 0),
-> Every frequency is a div1 and comes from a single clock..
-> is this correct? This sounds like a simple mux that only
-> switches between XO and APSS_PLL_EARLY..
-
-I tested this using the IPQ6018 clk_regmap_mux apcs_alias0_clk_src
-and it appears to work, I am able to switch through all of the OPP-s:
-# cat scaling_available_frequencies
-1017600 1382400 1651200 1843200 1920000 2208000
-# echo 1017600 > scaling_setspeed
-# mhz
-count=413212 us50=20314 us250=101571 diff=81257 cpu_MHz=1017.050
-# echo 1382400 > scaling_setspeed
-# mhz
-count=645643 us50=23381 us250=116811 diff=93430 cpu_MHz=1382.089
-# echo 1651200 > scaling_setspeed
-# mhz
-count=807053 us50=24452 us250=122238 diff=97786 cpu_MHz=1650.651
-# echo 1843200 > scaling_setspeed
-# mhz
-count=807053 us50=21901 us250=109503 diff=87602 cpu_MHz=1842.545
-# echo 1920000 > scaling_setspeed
-# mhz
-count=807053 us50=21023 us250=105125 diff=84102 cpu_MHz=1919.224
-# echo 2208000 > scaling_setspeed
-# mhz
-count=1008816 us50=22857 us250=114255 diff=91398 cpu_MHz=2207.523
-
-Seems like IPQ6018 and IPQ8074 use the same mux, though PLL is different.
-
->
-> > +     { }
-> > +};
-> > +
-> > +struct clk_rcg2 apcs_alias0_clk_src = {
-> > +     .cmd_rcgr = 0x0050,
-> > +     .freq_tbl = ftbl_apcs_alias0_clk_src,
-> > +     .hid_width = 5,
-> > +     .parent_map = parents_apcs_alias0_clk_src_map,
-> > +     .clkr.hw.init = &(struct clk_init_data){
-> > +             .name = "apcs_alias0_clk_src",
-> > +             .parent_data = parents_apcs_alias0_clk_src,
-> > +             .num_parents = ARRAY_SIZE(parents_apcs_alias0_clk_src),
-> > +             .ops = &clk_rcg2_ops,
-> > +             .flags = CLK_SET_RATE_PARENT,
-> > +     },
-> > +};
-> > +
-> > +static struct clk_branch apcs_alias0_core_clk = {
-> > +     .halt_reg = 0x0058,
-> > +     .halt_bit = 31,
-> > +     .clkr = {
-> > +             .enable_reg = 0x0058,
-> > +             .enable_mask = BIT(0),
-> > +             .hw.init = &(struct clk_init_data){
-> > +                     .name = "apcs_alias0_core_clk",
-> > +                     .parent_hws = (const struct clk_hw *[]){
-> > +                             &apcs_alias0_clk_src.clkr.hw },
-> > +                     .num_parents = 1,
-> > +                     .flags = CLK_SET_RATE_PARENT |
-> > +                             CLK_IS_CRITICAL,
-> This can fit in a single line.
-
-I will fix it in v6.
->
-> > +                     .ops = &clk_branch2_ops,
-> > +             },
-> > +     },
-> > +};
-> > +
-> > +static struct clk_regmap *apss_ipq8074_clks[] = {
-> > +     [APSS_PLL_EARLY] = &apss_pll_early.clkr,
-> > +     [APSS_PLL] = &apss_pll.clkr,
-> > +     [APCS_ALIAS0_CLK_SRC] = &apcs_alias0_clk_src.clkr,
-> > +     [APCS_ALIAS0_CORE_CLK] = &apcs_alias0_core_clk.clkr,
-> > +};
-> > +
-> > +static const struct regmap_config apss_ipq8074_regmap_config = {
-> > +     .reg_bits       = 32,
-> > +     .reg_stride     = 4,
-> > +     .val_bits       = 32,
-> > +     .max_register   = 0x5ffc,
-> > +     .fast_io        = true,
-> > +};
-> > +
-> > +static const struct qcom_cc_desc apss_ipq8074_desc = {
-> > +     .config = &apss_ipq8074_regmap_config,
-> > +     .clks = apss_ipq8074_clks,
-> > +     .num_clks = ARRAY_SIZE(apss_ipq8074_clks),
-> > +};
-> > +
-> > +static int apss_ipq8074_probe(struct platform_device *pdev)
-> > +{
-> > +     struct regmap *regmap;
-> > +
-> > +     regmap = dev_get_regmap(pdev->dev.parent, NULL);
-> > +     if (!regmap)
-> > +             return -ENODEV;
-> > +
-> > +     return qcom_cc_really_probe(pdev, &apss_ipq8074_desc, regmap);
-> qcom_cc_probe?
-
-qcom_cc_probe would not work as it calls qcom_cc_map which works only on the
-device MMIO resource, and we have to get the regmap from the parent which is
-APCS as they share the same register space.
-
->
-> > +}
-> > +
-> > +static struct platform_driver apss_ipq8074_driver = {
-> > +     .probe = apss_ipq8074_probe,
-> > +     .driver = {
-> > +             .name   = "qcom-apss-ipq8074-clk",
-> > +     },
-> > +};
-> > +
-> > +module_platform_driver(apss_ipq8074_driver);
-> > +
-> > +MODULE_ALIAS("platform:qcom-apss-ipq8074-clk");
-> > +MODULE_DESCRIPTION("Qualcomm IPQ8074 APSS clock driver");
-> > +MODULE_LICENSE("GPL");
-> "GPL v2"?
-
-Checkpatch now warns on GPL v2 and other variants that GPL is
-preferred since 5.18:
-https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/commit/scripts/checkpatch.pl?h=v5.18.10&id=6e8f42dc9c8548c6b37566f3b8bda1873700c4a6
-
-Originally had "GPL v2" and then checkpatch pointed this out.
-
-Regards,
-Robert
->
-> Konrad
+T24gSnVsIDgsIDIwMjIsIGF0IDU6NTYgQU0sIE1hdHRoZXcgV2lsY294IDx3aWxseUBpbmZyYWRl
+YWQub3JnPiB3cm90ZToNCg0KPiBBbmQgbG9va2luZyBhdCB0aGUgcmVzdWx0cyBhYm92ZSwgaXQn
+cyBub3Qgc28gbXVjaCB0aGUgUElPIHZzIE1NSU8NCj4gdGhhdCBtYWtlcyBhIGRpZmZlcmVuY2Us
+IGl0J3MgdGhlIHZpcnR1YWxpc2F0aW9uLiBBIG1taW8gYWNjZXNzIGdvZXMNCj4gZnJvbSAyNjlu
+cyB0byA4NXVzLiBSYXRoZXIgdGhhbiBtZXNzaW5nIGFyb3VuZCB3aXRoIHByZWZlcnJpbmcgTU1J
+Tw0KPiBvdmVyIFBJTyBmb3IgY29uZmlnIHNwYWNlLCBoYXZpbmcgYW4gImVubGlnaHRlbm1lbnQi
+IHRvIGRvIGNvbmZpZw0KPiBzcGFjZSBhY2Nlc3NlcyB3b3VsZCBiZSBhIG1vcmUgcHJvZml0YWJs
+ZSBwYXRoLg0KDQpJIGFtIHVuZmFtaWxpYXIgd2l0aCB0aGUgbW90aXZhdGlvbiBmb3IgdGhpcyBw
+YXRjaCwgYnV0IEkganVzdCB3YW50ZWQgdG8NCmJyaWVmbHkgcmVnYXJkIHRoZSBhZHZpY2UgYWJv
+dXQgZW5saWdodG1lbnRzLg0KDQrigJxlbmxpZ2h0ZW5tZW504oCdLCBBRkFJSywgaXMgTWljcm9z
+b2Z04oCZcyB0ZXJtIGZvciAicGFyYS12aXJ0dWFsaXphdGlvbiIsIHNvDQpsZXTigJlzIHJlZ2Fy
+ZCB0aGUgZ2VuZXJpYyB0ZXJtLiBJIHRoaW5rIHRoYXQgeW91IGNvbnNpZGVyIHRoZSBiYXJlLW1l
+dGFsDQpyZXN1bHRzIGFzIHRoZSBwb3NzaWJsZSByZXN1bHRzIGZyb20gYSBwYXJhdmlydHVhbCBt
+YWNoaW5lLCB3aGljaCBpcyBtb3N0bHkNCndyb25nLiBQYXJhLXZpcnR1YWxpemF0aW9uIHVzdWFs
+bHkgc3RpbGwgcmVxdWlyZXMgYSBWTS1leGl0IGFuZCBmb3IgdGhlIG1vc3QNCnBhcnQgdGhlIGh5
+cGVydmlzb3IvaG9zdCBydW5zIHNpbWlsYXIgY29kZSBmb3IgTU1JTy9oeXBlcmNhbGwgKGNvbmNl
+cHR1YWxseTsNCnRoZSBjb2RlIG9mIHBhcmF2aXJ0dWFsIGFuZCBmdWxseS12aXJ0dWFsIGRldmlj
+ZXMgaXMgb2Z0ZW4gZGlmZmVyZW50LCBidXQNCklJVUMsIHRoaXMgaXMgbm90IHdoYXQgQWpheSBt
+ZWFzdXJlZCkuDQoNClBhcmEtdmlydHVhbGl6YXRpb24gY291bGQgaGF2ZSAqcGVyaGFwcyogaGVs
+cGVkIHRvIHJlZHVjZSB0aGUgbnVtYmVyIG9mDQpQSU8vTU1JTyBhbmQgaW1wcm92ZSBwZXJmb3Jt
+YW5jZSB0aGlzIHdheS4gSWYsIGZvciBpbnN0YW5jZSwgYWxsIHRoZQ0KUElPL01NSU8gYXJlIGRv
+bmUgZHVyaW5nIGluaXRpYWxpemF0aW9uLCBhIHBhcmF2aXJ0dWFsIGludGVyZmFjZSBjYW4gYmUg
+dXNlDQp0byBiYXRjaCB0aGVtIHRvZ2V0aGVyLCBhbmQgdGhhdCB3b3VsZCBoZWxwLiBCdXQgaXQg
+aXMgbW9yZSBjb21wbGljYXRlZCB0bw0KZ2V0IGEgcGVyZm9ybWFuY2UgYmVuZWZpdCBmcm9tIHBh
+cmF2aXJ0dWFsaXphdGlvbiBpZiB0aGUgUElPL01NSU8gYWNjZXNzZXMNCmFyZSDigJxzcHJlYWTi
+gJ0sIGZvciBpbnN0YW5jZSwgZG9uZSBhZnRlciBlYWNoIGludGVycnVwdC4NCg0KUGFyYS12aXJ0
+YXVpbHphdGlvbiBhbmQgZnVsbC12aXJ0dWFsaXphdGlvbiBib3RoIGhhdmUgcHJvcyBhbmQgY29u
+cy4NClBhcmEtdmlydHVhbGl6YXRpb24gaXMgbWFueSB0aW1lcyBtb3JlIGVmZmljaWVudCwgYnV0
+IHJlcXVpcmVzIHRoZSBWTSB0bw0KaGF2ZSBkZWRpY2F0ZWQgZGV2aWNlIGRyaXZlcnMgZm9yIHRo
+ZSBtYXR0ZXIuIFRyeSB0byBydW4gYSBsZXNzLWNvbW1vbiBPUw0KdGhhbiBMaW51eCBhbmQgaXQg
+d291bGQgbm90IHdvcmsgc2luY2UgdGhlIE9TIHdvdWxkIG5vdCBoYXZlIGRyaXZlcnMgZm9yIHRo
+ZQ0KcGFyYXMtdmlydHVhbCBkZXZpY2VzLiBBbmQgZXZlbiBpZiB5b3UgYWRkIHN1cHBvcnQgdG9k
+YXkgZm9yIGEgcGFyYS12aXJ0dWFsDQpkZXZpY2VzLCB0aGVyZSBhcmUgbWFueSBkZXBsb3llZCBP
+U2VzIHRoYXQgZG8gbm90IGhhdmUgc3VjaCBzdXBwb3J0LCBhbmQgeW91DQp3b3VsZCBub3QgYmUg
+YWJsZSB0byBydW4gdGhlbSBpbiBhIFZNLg0KDQpSZWdhcmRsZXNzIHRvIHZpcnR1YWxpemF0aW9u
+LCBBamF54oCZcyByZXN1bHRzIHNob3cgUElPIGlzIHNsb3dlciBvbg0KYmFyZS1tZXRhbCwgYW5k
+IGFjY29yZGluZyB0byBoaXMgbnVtYmVycyBieSAxNjVucywgd2hpY2ggaXMgc2lnbmlmaWNhbnQu
+DQpFbXVsYXRpbmcgUElPIGluIGh5cGVydmlzb3JzIG9uIHg4NiBpcyBpbmhlcmVudGx5IG1vcmUg
+Y29tcGxleCB0aGFuIE1NSU8sIHNvDQp0aGUgcmVzdWx0cyBoZSBnb3Qgd291bGQgbW9zdCBsaWtl
+bHkgaGFwcGVuIG9uIGFsbCBoeXBlcnZpc29ycy4NCg0KdGw7ZHI6IExldOKAmXMga2VlcCB0aGlz
+IGRpc2N1c3Npb24gZm9jdXNlZCBhbmQgcHV0IHBhcmF2aXJ0dWFsaXphdGlvbiBhc2lkZS4NCkl0
+IGlzIG5vdCBhIHNvbHV0aW9uIGZvciBhbGwgdGhlIHByb2JsZW1zIGluIHRoZSB3b3JsZC4=

@@ -2,87 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5156956BAA2
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 15:28:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3278B56BAA7
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 15:28:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238043AbiGHN1p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Jul 2022 09:27:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33886 "EHLO
+        id S237981AbiGHN1W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Jul 2022 09:27:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33748 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231287AbiGHN1n (ORCPT
+        with ESMTP id S231287AbiGHN1U (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Jul 2022 09:27:43 -0400
-Received: from mxout4.routing.net (mxout4.routing.net [IPv6:2a03:2900:1:a::9])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FD082CC86;
-        Fri,  8 Jul 2022 06:27:41 -0700 (PDT)
-Received: from mxbox4.masterlogin.de (unknown [192.168.10.79])
-        by mxout4.routing.net (Postfix) with ESMTP id 1379A100463;
-        Fri,  8 Jul 2022 13:27:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mailerdienst.de;
-        s=20200217; t=1657286859;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=fR7O+l5or7VHcLvd1mcGAyTpT5RtG0rRA1NvN2Fb1Zo=;
-        b=qnxo+P6VXmEXFjzvIT0zNhzr/LOw53Z8vsAFhQcyxpkgXl6JvRueF63cVywimnh48DjzI3
-        CNHaMB2QfxXjDorcOroL7wVhwqssxPDys++4p268BZz5LbAee4Yo318h4lJiTOrXDezYpU
-        unFpu5JudGO8z4HgfpEhS8wGeHsn4bk=
-Received: from frank-G5.. (fttx-pool-157.180.225.69.bambit.de [157.180.225.69])
-        by mxbox4.masterlogin.de (Postfix) with ESMTPSA id 5199580798;
-        Fri,  8 Jul 2022 13:27:38 +0000 (UTC)
-From:   Frank Wunderlich <linux@fw-web.de>
-To:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Heiko Stuebner <heiko@sntech.de>, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org
-Cc:     Frank Wunderlich <frank-w@public-files.de>
-Subject: [PATCH] arm64: dts: rk356x: fix upper usb port on BPI-R2-Pro
-Date:   Fri,  8 Jul 2022 15:27:06 +0200
-Message-Id: <20220708132706.81450-1-linux@fw-web.de>
-X-Mailer: git-send-email 2.34.1
+        Fri, 8 Jul 2022 09:27:20 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1A7A2CC80
+        for <linux-kernel@vger.kernel.org>; Fri,  8 Jul 2022 06:27:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1657286839; x=1688822839;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=l9IHZQoctXuefILwa08DrWHT1twoVyGQpEM+ac2JZDQ=;
+  b=LqCq9JLJHwHtnH4ueAFuRhwrAm/JqFDj96FpRNSUGPDzV4v8zY6aGhix
+   l9sqdwIrvQUp4loOUEhmDYFE9Qq+5VplqHoDYzPvm4jexvUkwCAy22jZQ
+   gTYBkAp5m7HcWMa4EuioeKpOglw3yQnkPR77YPjAmBt3CRrm5ZdolflJE
+   RF9EM9q160ynExnekfxdOSIr/7KLi8Bhdu0iNA65V/dOc5aUueY9xJmNo
+   g/xAgZsEcf6L3t32ZP6wi5Aezk2RAX3F77nvFo73qUFNpKBIqaxNSm5ZO
+   xsC5PUedwkfEHrC3WfshMFXh5Xr4+YGLxNbOTRpjxODpdo1jJW+PhmvmJ
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10401"; a="267310013"
+X-IronPort-AV: E=Sophos;i="5.92,255,1650956400"; 
+   d="scan'208";a="267310013"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jul 2022 06:27:19 -0700
+X-IronPort-AV: E=Sophos;i="5.92,255,1650956400"; 
+   d="scan'208";a="661771827"
+Received: from cmchugh-mobl.ger.corp.intel.com (HELO [10.213.229.21]) ([10.213.229.21])
+  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jul 2022 06:27:16 -0700
+Message-ID: <68231920-8eef-1e10-df40-ac8cd0dd0802@intel.com>
+Date:   Fri, 8 Jul 2022 14:27:14 +0100
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Firefox/91.0 Thunderbird/91.11.0
+Subject: Re: [PATCH v10 04/11] drm/i915/gem: selftest should not attempt mmap
+ of private regions
+Content-Language: en-GB
+To:     Robert Beckett <bob.beckett@collabora.com>,
+        dri-devel@lists.freedesktop.org, intel-gfx@lists.freedesktop.org,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>
+Cc:     =?UTF-8?Q?Thomas_Hellstr=c3=b6m?= 
+        <thomas.hellstrom@linux.intel.com>, kernel@collabora.com,
+        linux-kernel@vger.kernel.org
+References: <20220707200230.1657555-1-bob.beckett@collabora.com>
+ <20220707200230.1657555-5-bob.beckett@collabora.com>
+ <6e387f90-dce3-486d-83e9-26a975777265@intel.com>
+ <08d33248-be80-15ab-d245-a6e23fe55423@collabora.com>
+From:   Matthew Auld <matthew.auld@intel.com>
+In-Reply-To: <08d33248-be80-15ab-d245-a6e23fe55423@collabora.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Mail-ID: b312386b-2fd2-4af4-91ee-331822f9d4ad
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Frank Wunderlich <frank-w@public-files.de>
+On 08/07/2022 14:22, Robert Beckett wrote:
+> 
+> 
+> On 08/07/2022 08:53, Matthew Auld wrote:
+>> On 07/07/2022 21:02, Robert Beckett wrote:
+>>> During testing make can_mmap consider whether the region is private.
+>>
+>> Do we still need this with: 938d2fd17d17 ("drm/i915/selftests: skip 
+>> the mman tests for stolen") ?
+> 
+> huh, I guess not. That wasn't in my tree. I guess I should rebase.
+> 
+> Looking at it, my patch would have been preferable initially I think. 
+> Each location of the additional checks in that patch first call 
+> cam_mmap(), which I think is the most appropriate place to make the 
+> decision.
 
-- extcon is no more needed in 5.19 - so drop it
-  commit 51a9b2c03dd3 ("phy: rockchip-inno-usb2: Handle ID IRQ")
-- dr_mode was changed from host to otg in rk356x.dtsi
-  commit bc405bb3eeee ("arm64: dts: rockchip: enable otg/drd
-    operation of usb_host0_xhci in rk356x")
-  change it back on board level as id-pin on r2pro is not connected
+It fails at the object_create() I think (on small-BAR I mean), which is 
+before we can call can_mmap(), passing in the object.
 
-Signed-off-by: Frank Wunderlich <frank-w@public-files.de>
----
-for hostmode to work this fix is needed:
-https://patchwork.kernel.org/project/linux-rockchip/patch/20220708061434.38115-1-samuel@sholland.org/
----
- arch/arm64/boot/dts/rockchip/rk3568-bpi-r2-pro.dts | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/arch/arm64/boot/dts/rockchip/rk3568-bpi-r2-pro.dts b/arch/arm64/boot/dts/rockchip/rk3568-bpi-r2-pro.dts
-index acc6b3a98415..02bafb938fb6 100644
---- a/arch/arm64/boot/dts/rockchip/rk3568-bpi-r2-pro.dts
-+++ b/arch/arm64/boot/dts/rockchip/rk3568-bpi-r2-pro.dts
-@@ -678,7 +678,7 @@ &usb_host0_ohci {
- };
- 
- &usb_host0_xhci {
--	extcon = <&usb2phy0>;
-+	dr_mode = "host";
- 	status = "okay";
- };
- 
--- 
-2.34.1
-
+> 
+> I could do a replacement patch that reverts that one if preferred, or we 
+> can leave it as is and I will drop this patch.
+> 
+> 
+>>
+>>>
+>>> Signed-off-by: Robert Beckett <bob.beckett@collabora.com>
+>>> Reviewed-by: Thomas Hellström <thomas.hellstrom@linux.intel.com>
+>>> ---
+>>>   drivers/gpu/drm/i915/gem/selftests/i915_gem_mman.c | 3 +++
+>>>   1 file changed, 3 insertions(+)
+>>>
+>>> diff --git a/drivers/gpu/drm/i915/gem/selftests/i915_gem_mman.c 
+>>> b/drivers/gpu/drm/i915/gem/selftests/i915_gem_mman.c
+>>> index 5bc93a1ce3e3..76181e28c75e 100644
+>>> --- a/drivers/gpu/drm/i915/gem/selftests/i915_gem_mman.c
+>>> +++ b/drivers/gpu/drm/i915/gem/selftests/i915_gem_mman.c
+>>> @@ -869,6 +869,9 @@ static bool can_mmap(struct drm_i915_gem_object 
+>>> *obj, enum i915_mmap_type type)
+>>>       struct drm_i915_private *i915 = to_i915(obj->base.dev);
+>>>       bool no_map;
+>>> +    if (obj->mm.region && obj->mm.region->private)
+>>> +        return false;
+>>> +
+>>>       if (obj->ops->mmap_offset)
+>>>           return type == I915_MMAP_TYPE_FIXED;
+>>>       else if (type == I915_MMAP_TYPE_FIXED)

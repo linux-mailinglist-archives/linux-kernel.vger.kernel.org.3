@@ -2,88 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AA00456BE03
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 18:09:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6AF4956BDD6
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 18:08:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238892AbiGHP6p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Jul 2022 11:58:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41796 "EHLO
+        id S238911AbiGHP7c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Jul 2022 11:59:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42526 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238880AbiGHP6n (ORCPT
+        with ESMTP id S238414AbiGHP73 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Jul 2022 11:58:43 -0400
-Received: from mail-pg1-x532.google.com (mail-pg1-x532.google.com [IPv6:2607:f8b0:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62C6D6B253
-        for <linux-kernel@vger.kernel.org>; Fri,  8 Jul 2022 08:58:41 -0700 (PDT)
-Received: by mail-pg1-x532.google.com with SMTP id 145so22678184pga.12
-        for <linux-kernel@vger.kernel.org>; Fri, 08 Jul 2022 08:58:41 -0700 (PDT)
+        Fri, 8 Jul 2022 11:59:29 -0400
+Received: from mail-yb1-xb2a.google.com (mail-yb1-xb2a.google.com [IPv6:2607:f8b0:4864:20::b2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24EE46D55C;
+        Fri,  8 Jul 2022 08:59:29 -0700 (PDT)
+Received: by mail-yb1-xb2a.google.com with SMTP id n74so8864284yba.3;
+        Fri, 08 Jul 2022 08:59:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=B8w4bwYuqV6DXk3ShmGJ/aTll0ynf+VvQDcahL2hqj4=;
-        b=bfCBNAPgf5AtCFBnWe/2nrt7kg29z/w5Q01kuQ6lA+gveTZTp/emDFQxX4//qULTB1
-         /cK4O+t1Z+i0p4mGAfgY8TN8v0tQ0RSvxquGKJmX4QGik5uArQ6ecp3U65ZSDt8cnezy
-         vGAyYDn3mUw1c2vTleiOPAnO9QfnpJOoCWVDhAsvcFJI8Rk2RlC4oZQdtEHG3DzFVxZP
-         R7aHe9QHxnyRN9lRq7Va+0rjvw5ejyajU+vbEeLjLx7KjBkbz3wGUd+8NPfsVNnERiK3
-         WjZgiDfSHkSo40HlMmmR7c5mwZVjIi/thPN0pGgF4588q13cCYCzUgZ6bUJtMN5IYvkD
-         57Ng==
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=JIFsfOSVQfXvBX0XrqyFJCcU4eKxtUIBtIyIMnlR/d0=;
+        b=Xl8u1ENIUNBQhTTOE5t4JNqEmRipm9EBBREnAES0k9aa1UbMLxMBTGsusTv203kd9s
+         0fZc8DLeOOiBt7Kb5aoI0qsl/VkODJAA9j6bRtMpEooSocNgj5JIhlvNKO24FkkWZtQl
+         vUwWG/w+DvDQ0+PE3qWWeclifxolJwG4zkyOZpvlzdYetzKeQttoF5LCsgKSBgCX7DXv
+         lWxyG/CWauM7LGsRfW9YTWu/I6sjJOUKSzH4BraS8GwoYzFvdf0eWLE1SI+YJVMvsDiS
+         PqtVEzEGfu/Ld0XfvNR+fLXzRmLEREfG7NLoNiu9FGpYqHrqOCwZ4d4G4pfYMGXfpE7C
+         W9IQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=B8w4bwYuqV6DXk3ShmGJ/aTll0ynf+VvQDcahL2hqj4=;
-        b=aFrwhgufk0fUDHf2s+ARIN+rxNeYLBGdOIaTrymIAJCrfmuQRArf5Iql9aIOKNJIXG
-         hH9cNs2TRL5/uVvniDFdrSQPszcMIdMut8bJmVx4/eIjB81PNP1smwClddPDMycJV2jn
-         rJ+5hX7U0dZp/W8bmQAPf237vHg/Cz/pgbBiBNw7nEDMFQin3zaMiy32pEO5P5KTvhlV
-         L7ooHbnR5/AECQjPwlWUbJyeOdpxwTEOLm+Dj7XZfhHTSNH52FAEGvslGra3eLuN0vku
-         F5spbk8+xU/dhfXthOxfuZYGMZeX8JyRxUULkeiY0LCBopCEjWO10/e+RVoJ6XB/JLPo
-         bD9g==
-X-Gm-Message-State: AJIora9qOjRNWf9V7ZpqdmzW+FEzRLZdTvjDgdlHWdqCCB4lDA4Un9wt
-        EhF6UQ/6Gw/Xnih8ZAD/2L3ZXA==
-X-Google-Smtp-Source: AGRyM1vTv4xL2/UTTju5PFq9Kvb5or53YEm+WZJ52+HPaHJtWg1ukrZVjJdpIkPwNcaRQPI2DCWFkQ==
-X-Received: by 2002:a05:6a00:188e:b0:52a:b545:559f with SMTP id x14-20020a056a00188e00b0052ab545559fmr1935105pfh.18.1657295920505;
-        Fri, 08 Jul 2022 08:58:40 -0700 (PDT)
-Received: from google.com (123.65.230.35.bc.googleusercontent.com. [35.230.65.123])
-        by smtp.gmail.com with ESMTPSA id w23-20020a1709026f1700b00161ccdc172dsm30065208plk.300.2022.07.08.08.58.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 08 Jul 2022 08:58:40 -0700 (PDT)
-Date:   Fri, 8 Jul 2022 15:58:36 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Vitaly Kuznetsov <vkuznets@redhat.com>
-Cc:     kvm@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] KVM: x86: Fully initialize 'struct kvm_lapic_irq' in
- kvm_pv_kick_cpu_op()
-Message-ID: <YshULK9IG9mw7ms3@google.com>
-References: <20220708125147.593975-1-vkuznets@redhat.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=JIFsfOSVQfXvBX0XrqyFJCcU4eKxtUIBtIyIMnlR/d0=;
+        b=OFqeTAOxCcIlp9DJOXrBIAod3vpLpIfshQ4Wvv8YuYwS1bJqRh1aMir+xNNgfuOUMt
+         r/lzC8qfV64YqWOeeRno19ONImXOjRkeds8++7eow21KhcYGG4MUuhcq4kfU0msGFHqS
+         LbdYSiPA11fhNH4FtfEWnLX1F3ndB7PP1daBTVeZxJEuPDC2LqV4eQ8jLvC2f9Oz9IfQ
+         J4PFc8mgGpUvFjADyrFWUYkPHLCG5m7my/DHVO7UYy1mQJAaEhmGtI4XZEvljbXfvUe/
+         p5cv34plDz0uB2Y/jy3qY7BRsgdvbHfeuGzcD65db1P5UE/Z+sXcIuwBB+noExrY8+Y0
+         6NBA==
+X-Gm-Message-State: AJIora/2kYBwo0yx8AbEvWANV2RyBdoxl65QU9H7BD5fgducLgCKZZCl
+        L+21l5hiiksezMgOMYV9FOLEQ+RXSDW0ryKgFlM=
+X-Google-Smtp-Source: AGRyM1squvqQ9ABX/jhZ3VK0FtqZmCMqquBhgcf3oL7ktfaTXhDh+hRyB1BDUIo5cwHztujLr1s7GVpkXTpoSTEUduk=
+X-Received: by 2002:a25:cbcf:0:b0:66e:8893:a02c with SMTP id
+ b198-20020a25cbcf000000b0066e8893a02cmr4399948ybg.460.1657295968321; Fri, 08
+ Jul 2022 08:59:28 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220708125147.593975-1-vkuznets@redhat.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+References: <20220701154604.2211008-1-imran.f.khan@oracle.com>
+In-Reply-To: <20220701154604.2211008-1-imran.f.khan@oracle.com>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Fri, 8 Jul 2022 17:58:51 +0200
+Message-ID: <CAHp75VdY=UoBnL=vGkq2xPX6OBD2aDgB+t85z=zKpS1ovin4=w@mail.gmail.com>
+Subject: Re: [RESEND PATCH] kernfs: Avoid re-adding kernfs_node into kernfs_notify_list.
+To:     Imran Khan <imran.f.khan@oracle.com>
+Cc:     Tejun Heo <tj@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Michael Walle <michael@walle.cc>,
+        Rob Herring <robh@kernel.org>,
+        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Guillaume Tucker <guillaume.tucker@collabora.com>,
+        Petr Mladek <pmladek@suse.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jul 08, 2022, Vitaly Kuznetsov wrote:
-> 'vector' and 'trig_mode' fields of 'struct kvm_lapic_irq' are left
-> uninitialized in kvm_pv_kick_cpu_op(). While these fields are normally
-> not needed for APIC_DM_REMRD, they're still referenced by
-> __apic_accept_irq() for trace_kvm_apic_accept_irq(). Fully initialize
-> the structure to avoid consuming random stack memory.
-> 
-> Fixes: a183b638b61c ("KVM: x86: make apic_accept_irq tracepoint more generic")
-> Reported-by: syzbot+d6caa905917d353f0d07@syzkaller.appspotmail.com
-> Signed-off-by: Vitaly Kuznetsov <vkuznets@redhat.com>
-> ---
+On Fri, Jul 1, 2022 at 5:49 PM Imran Khan <imran.f.khan@oracle.com> wrote:
 
-Reviewed-by: Sean Christopherson <seanjc@google.com>
+...
+
+> +       if (kn->attr.notify_next.next != NULL) {
+
+Isn't there a helper to get next pointer from an llist pointer?
+
+> +               kernfs_get(kn);
+> +               llist_add(&kn->attr.notify_next, &kernfs_notify_list);
+> +               schedule_work(&kernfs_notify_work);
+> +       }
+
+-- 
+With Best Regards,
+Andy Shevchenko

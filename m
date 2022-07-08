@@ -2,53 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 114B856BB67
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 16:01:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A176856BB78
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 16:04:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238288AbiGHOAl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Jul 2022 10:00:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60490 "EHLO
+        id S238416AbiGHOCD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Jul 2022 10:02:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33150 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231905AbiGHOAk (ORCPT
+        with ESMTP id S238276AbiGHOCB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Jul 2022 10:00:40 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id DF2F317586
-        for <linux-kernel@vger.kernel.org>; Fri,  8 Jul 2022 07:00:38 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 070901063;
-        Fri,  8 Jul 2022 07:00:38 -0700 (PDT)
-Received: from [10.57.86.102] (unknown [10.57.86.102])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 2A2523F66F;
-        Fri,  8 Jul 2022 07:00:34 -0700 (PDT)
-Message-ID: <3316f487-a826-1777-0c4b-7cfa89612af9@arm.com>
-Date:   Fri, 8 Jul 2022 15:00:29 +0100
+        Fri, 8 Jul 2022 10:02:01 -0400
+Received: from mail-ot1-x333.google.com (mail-ot1-x333.google.com [IPv6:2607:f8b0:4864:20::333])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B40E1A061
+        for <linux-kernel@vger.kernel.org>; Fri,  8 Jul 2022 07:02:00 -0700 (PDT)
+Received: by mail-ot1-x333.google.com with SMTP id h19-20020a9d6f93000000b0061c1ad77d5fso3175943otq.6
+        for <linux-kernel@vger.kernel.org>; Fri, 08 Jul 2022 07:02:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=cloudflare.com; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=AgCA7JC4n87M0J4Cctl8zaLThkaSJBjNpAQEBOK0n1E=;
+        b=YuCU3LC4EmqmDANYLVa2rGn4cR9g+9cw2DLgXF8oCoF6AZxLFRfSQJPVMFb5dcnxhI
+         a05pFGlm/tVZW44jkqy1SXPlR5wDktz+7LIkeToD/5YkiElWGugxmgLSpDUf+s2OskWJ
+         Cp37s+zDo3qupWC0gw3gLYxdm4Zdfrlycfxyk=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=AgCA7JC4n87M0J4Cctl8zaLThkaSJBjNpAQEBOK0n1E=;
+        b=C1egtyJngzmV4lF+YA+7Gw8nLNLtQ/lGau1TuWrLlV2SaUXi3O3Tc0u/jWO3ix3/M2
+         C2PkU54tSlb2XR1WVLsrsMsCUuEZubPCHyCA9VlZCgxTSc/hSxTdbiSamigHHQYQn18c
+         Eo4SjCqwynhxWcVUei/jynmBnvCC62kiSEJrZKXexKOzCP6T0ucrZ57rOTL7P3d3/wCo
+         trWxQsfpwf1UsfJW99H4HgMVZAJiWZWznZiC3aVMx2N/RP1GRYRlA6VNysM5gcetMi7G
+         qwborN1mA0f5NYkvZH06HepPygXHbyt+G5PnKezCzYiWkaH0mQ1gYU8srjVHNY+TgA7y
+         21NQ==
+X-Gm-Message-State: AJIora8WBf+gbj7w1OTRONFhrzRHclBcvFUz9E0LkJKJT72VKZ2UVawy
+        bP3x50PomT16W1LpcRFH38bURQ==
+X-Google-Smtp-Source: AGRyM1sIQoZ2at//x/8ubeDtbsVzTdvW8iCJcL4x2IwszMFpKBYhfmP4STbUFtn8jkNHayqOr+h8zw==
+X-Received: by 2002:a05:6830:2331:b0:61c:2c18:555 with SMTP id q17-20020a056830233100b0061c2c180555mr1212008otg.367.1657288919372;
+        Fri, 08 Jul 2022 07:01:59 -0700 (PDT)
+Received: from [192.168.0.41] ([184.4.90.121])
+        by smtp.gmail.com with ESMTPSA id x10-20020a9d704a000000b00616d98ad780sm12787337otj.52.2022.07.08.07.01.36
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 08 Jul 2022 07:01:43 -0700 (PDT)
+Message-ID: <3dbd5b30-f869-b284-1383-309ca6994557@cloudflare.com>
+Date:   Fri, 8 Jul 2022 09:01:32 -0500
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH v3] arm64: mm: fix linear mapping mem access performance
- degradation
-Content-Language: en-GB
-To:     "guanghui.fgh" <guanghuifeng@linux.alibaba.com>,
-        Catalin Marinas <catalin.marinas@arm.com>
-Cc:     baolin.wang@linux.alibaba.com, will@kernel.org,
-        akpm@linux-foundation.org, david@redhat.com, jianyong.wu@arm.com,
-        james.morse@arm.com, quic_qiancai@quicinc.com,
-        christophe.leroy@csgroup.eu, jonathan@marek.ca,
-        mark.rutland@arm.com, thunder.leizhen@huawei.com,
-        anshuman.khandual@arm.com, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, rppt@kernel.org,
-        geert+renesas@glider.be, ardb@kernel.org, linux-mm@kvack.org,
-        yaohongbo@linux.alibaba.com, alikernel-developer@linux.alibaba.com
-References: <1656586222-98555-1-git-send-email-guanghuifeng@linux.alibaba.com>
- <Yr8tzOJi5CGBl767@arm.com>
- <4cc8284a-6162-8f9d-50b3-e594d46751f8@linux.alibaba.com>
-From:   Robin Murphy <robin.murphy@arm.com>
-In-Reply-To: <4cc8284a-6162-8f9d-50b3-e594d46751f8@linux.alibaba.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH v2 0/4] Introduce security_create_user_ns()
+Content-Language: en-US
+To:     =?UTF-8?Q?Christian_G=c3=b6ttsche?= <cgzones@googlemail.com>
+Cc:     KP Singh <kpsingh@kernel.org>, revest@chromium.org,
+        jackmanb@chromium.org, Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        James Morris <jmorris@namei.org>,
+        "Serge E. Hallyn" <serge@hallyn.com>,
+        Paul Moore <paul@paul-moore.com>,
+        Stephen Smalley <stephen.smalley.work@gmail.com>,
+        Eric Paris <eparis@parisplace.org>, shuah@kernel.org,
+        Christian Brauner <brauner@kernel.org>,
+        Casey Schaufler <casey@schaufler-ca.com>,
+        "Eric W. Biederman" <ebiederm@xmission.com>, bpf@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        SElinux list <selinux@vger.kernel.org>,
+        linux-kselftest@vger.kernel.org,
+        Linux kernel mailing list <linux-kernel@vger.kernel.org>,
+        netdev@vger.kernel.org, kernel-team@cloudflare.com
+References: <20220707223228.1940249-1-fred@cloudflare.com>
+ <CAJ2a_DezgSpc28jvJuU_stT7V7et-gD7qjy409oy=ZFaUxJneg@mail.gmail.com>
+From:   Frederick Lawler <fred@cloudflare.com>
+In-Reply-To: <CAJ2a_DezgSpc28jvJuU_stT7V7et-gD7qjy409oy=ZFaUxJneg@mail.gmail.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -56,138 +90,125 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-07-08 13:13, guanghui.fgh wrote:
-> Thanks.
-> 
-> 在 2022/7/2 1:24, Catalin Marinas 写道:
->> On Thu, Jun 30, 2022 at 06:50:22PM +0800, Guanghui Feng wrote:
->>> +static void init_pmd_remap(pud_t *pudp, unsigned long addr, unsigned 
->>> long end,
->>> +               phys_addr_t phys, pgprot_t prot,
->>> +               phys_addr_t (*pgtable_alloc)(int), int flags)
->>> +{
->>> +    unsigned long next;
->>> +    pmd_t *pmdp;
->>> +    phys_addr_t map_offset;
->>> +    pmdval_t pmdval;
->>> +
->>> +    pmdp = pmd_offset(pudp, addr);
->>> +    do {
->>> +        next = pmd_addr_end(addr, end);
->>> +
->>> +        if (!pmd_none(*pmdp) && pmd_sect(*pmdp)) {
->>> +            phys_addr_t pte_phys = pgtable_alloc(PAGE_SHIFT);
->>> +            pmd_clear(pmdp);
->>> +            pmdval = PMD_TYPE_TABLE | PMD_TABLE_UXN;
->>> +            if (flags & NO_EXEC_MAPPINGS)
->>> +                pmdval |= PMD_TABLE_PXN;
->>> +            __pmd_populate(pmdp, pte_phys, pmdval);
->>> +            flush_tlb_kernel_range(addr, addr + PAGE_SIZE);
+On 7/8/22 7:10 AM, Christian Göttsche wrote:
+> ,On Fri, 8 Jul 2022 at 00:32, Frederick Lawler <fred@cloudflare.com> wrote:
 >>
->> This doesn't follow the architecture requirements for "break before
->> make" when changing live page tables. While it may work, it risks
->> triggering a TLB conflict abort. The correct sequence normally is:
+>> While creating a LSM BPF MAC policy to block user namespace creation, we
+>> used the LSM cred_prepare hook because that is the closest hook to prevent
+>> a call to create_user_ns().
 >>
->>     pmd_clear();
->>     flush_tlb_kernel_range();
->>     __pmd_populate();
+>> The calls look something like this:
 >>
->> However, do we have any guarantees that the kernel doesn't access the
->> pmd range being unmapped temporarily? The page table itself might live
->> in one of these sections, so set_pmd() etc. can get a translation fault.
+>>      cred = prepare_creds()
+>>          security_prepare_creds()
+>>              call_int_hook(cred_prepare, ...
+>>      if (cred)
+>>          create_user_ns(cred)
 >>
-> Thanks.
+>> We noticed that error codes were not propagated from this hook and
+>> introduced a patch [1] to propagate those errors.
+>>
+>> The discussion notes that security_prepare_creds()
+>> is not appropriate for MAC policies, and instead the hook is
+>> meant for LSM authors to prepare credentials for mutation. [2]
+>>
+>> Ultimately, we concluded that a better course of action is to introduce
+>> a new security hook for LSM authors. [3]
+>>
+>> This patch set first introduces a new security_create_user_ns() function
+>> and create_user_ns LSM hook, then marks the hook as sleepable in BPF.
 > 
-> The cpu can generate a TLB conflict abort if it detects that the address 
-> being looked up in the TLB hits multiple entries.
+> Some thoughts:
 > 
-> (1).I think when gathering small page to block/section mapping, there 
-> maybe tlb conflict if no complying with BBM.
+> I.
 > 
-> Namely:
-> a.Map a 4KB page (address X)
->    Touch that page, in order to get the translation cached in the TLB
-> 
-> b.Modify the translation tables
->    replacing the mapping for address X with a 2MB mapping - DO NOT 
-> INVALIDATE the TLB
-> 
-> c.Touch "X + 4KB"
->    This will/should miss in the TLB, causing a new walk returning the 
-> 2MB mapping
-> 
-> d.Touch X
->    Assuming they've not been evicted, you'll hit both on the 4KB and 2MB 
-> mapping - as both cover address X.
-> 
-> There is tlb conflict.
-> (link: 
-> https://community.arm.com/support-forums/f/dev-platforms-forum/13583/tlb-conflict-abort) 
-> 
-> 
-> 
-> 
-> (2).But when spliting large block/section mapping to small granularity, 
-> there maybe no tlb conflict.
-> 
-> Namely:
-> a.rebuild the pte level mapping without any change to orgin pagetable
->    (the relation between virtual address and physicall address keep same)
-> 
-> b.modify 1G mappting to use the new pte level mapping in the [[[mem]]] 
-> without tlb flush
-> 
-> c.When the cpu access the 1G mem(anywhere),
->    If 1G tlb entry already cached in tlb, all the 1G mem will access 
-> success(without any tlb loaded, no confilict)
+> Why not make the hook more generic, e.g. support all other existing
+> and potential future namespaces?
 
-No. The CPU could still have prefetched the new table entry for any 
-reason as soon as it became visible, then raise an abort when it 
-realises it already has a leaf entry cached for that address range. Or 
-worse, *not* raise an abort but instead use "An amalgamation of the old 
-and new data or control values" for the resulting translation (see 
-K1.2.3 "CONSTRAINED UNPREDICTABLE behaviors due to caching of control or 
-data values" in the Armv8 ARM) and quietly corrupt memory elsewhere.
+The main issue with a generic hook is that different namespaces have 
+different calling contexts. We decided in a previous discussion to 
+opt-out of a generic hook for this reason. [1]
 
-Robin.
+> Also I think the naming scheme is <object>_<verb>.
+
+That's a good call out. I was originally hoping to keep the security_*() 
+match with the hook name matched with the caller function to keep things 
+all aligned. If no one objects to renaming the hook, I can rename the 
+hook for v3.
 
 > 
->    If 1G tlb entry has been evicted, then the tlb will access pagetable 
-> in mem(despite the cpu "catch" the old(1G) or new(4k) mapped pagetale in 
-> the mem, all the 1G mem can access sucess)(load new tlb entry, no conflict)
+>      LSM_HOOK(int, 0, namespace_create, const struct cred *cred,
+> unsigned int flags)
 > 
-> d.Afterward, we flush the tlb and force cpu use the new pagetable.(no 
-> conflict)
+> where flags is a bitmap of CLONE flags from include/uapi/linux/sched.h
+> (like CLONE_NEWUSER).
 > 
-> It seems that there are no two tlb entries for a same virtual address in 
-> the tlb cache When spliting large block/section mapping.
+> II.
 > 
+> While adding policing for namespaces maybe also add a new hook for setns(2)
 > 
+>      LSM_HOOK(int, 0, namespace_join, const struct cred *subj,  const
+> struct cred *obj, unsigned int flags)
 > 
-> (3).At the same time, I think we can use another way.
-> As the system linear maping is builded with init_pg_dir, we can also 
-> resue the init_pg_dir to split the block/setion mapping sometime.
-> As init_pg_dir contain all kernel text/data access and we can comply 
-> with the BBM requirement.
+
+IIUC, setns() will create a new namespace for the other namespaces 
+except for user namespace. If we add a security hook for the other 
+create_*_ns() functions, then we can catch setns() at that point.
+
+> III.
 > 
-> a.rebuild new pte level mapping without any change to the old 
-> mapping(the cpu can't walk access the new page mapping, it's isolated)
+> Maybe even attach a security context to namespaces so they can be
+> further governed?
+> SELinux example:
 > 
-> b.change to use init_pg_dir
+>      type domainA_userns_t;
+>      type_transition domainA_t domainA_t : namespace domainA_userns_t "user";
+>      allow domainA_t domainA_userns_t:namespace create;
 > 
-> c.clear the old 1G block mapping and flush tlb
+>      # domainB calling setns(2) with domainA as target
+>      allow domainB_t domainA_userns_t:namespace join;
 > 
-> d.modify the linear mapping to use new pte level page mapping with 
-> init_pg_dir(TLB BBM)
-> 
-> e.switch to swapper_pg_dir
-> 
-> 
-> Could you give me some advice?
-> 
-> Thanks.
-> 
-> _______________________________________________
-> linux-arm-kernel mailing list
-> linux-arm-kernel@lists.infradead.org
-> http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
+
+Links:
+1. 
+https://lore.kernel.org/all/CAHC9VhSTkEMT90Tk+=iTyp3npWEm+3imrkFVX2qb=XsOPp9F=A@mail.gmail.com/
+
+>>
+>> Links:
+>> 1. https://lore.kernel.org/all/20220608150942.776446-1-fred@cloudflare.com/
+>> 2. https://lore.kernel.org/all/87y1xzyhub.fsf@email.froward.int.ebiederm.org/
+>> 3. https://lore.kernel.org/all/9fe9cd9f-1ded-a179-8ded-5fde8960a586@cloudflare.com/
+>>
+>> Changes since v1:
+>> - Add selftests/bpf: Add tests verifying bpf lsm create_user_ns hook patch
+>> - Add selinux: Implement create_user_ns hook patch
+>> - Change function signature of security_create_user_ns() to only take
+>>    struct cred
+>> - Move security_create_user_ns() call after id mapping check in
+>>    create_user_ns()
+>> - Update documentation to reflect changes
+>>
+>> Frederick Lawler (4):
+>>    security, lsm: Introduce security_create_user_ns()
+>>    bpf-lsm: Make bpf_lsm_create_user_ns() sleepable
+>>    selftests/bpf: Add tests verifying bpf lsm create_user_ns hook
+>>    selinux: Implement create_user_ns hook
+>>
+>>   include/linux/lsm_hook_defs.h                 |  1 +
+>>   include/linux/lsm_hooks.h                     |  4 +
+>>   include/linux/security.h                      |  6 ++
+>>   kernel/bpf/bpf_lsm.c                          |  1 +
+>>   kernel/user_namespace.c                       |  5 ++
+>>   security/security.c                           |  5 ++
+>>   security/selinux/hooks.c                      |  9 ++
+>>   security/selinux/include/classmap.h           |  2 +
+>>   .../selftests/bpf/prog_tests/deny_namespace.c | 88 +++++++++++++++++++
+>>   .../selftests/bpf/progs/test_deny_namespace.c | 39 ++++++++
+>>   10 files changed, 160 insertions(+)
+>>   create mode 100644 tools/testing/selftests/bpf/prog_tests/deny_namespace.c
+>>   create mode 100644 tools/testing/selftests/bpf/progs/test_deny_namespace.c
+>>
+>> --
+>> 2.30.2
+>>
+

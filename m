@@ -2,112 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B3F456AF3E
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 02:12:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F31E56AF44
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 02:12:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236926AbiGHADR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Jul 2022 20:03:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55044 "EHLO
+        id S237005AbiGHADv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Jul 2022 20:03:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55936 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236448AbiGHADP (ORCPT
+        with ESMTP id S236937AbiGHADs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Jul 2022 20:03:15 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FAD66EE84
-        for <linux-kernel@vger.kernel.org>; Thu,  7 Jul 2022 17:03:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1657238594; x=1688774594;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=mr0tTST7+RPahHby1oQ1rXExTGfFu1KWfF0lR3cVpqU=;
-  b=OhuKFIyfJ9bIpBGrt7YN+zMcVXdhUW4TZyx9NBaOPaSVYfSjSzIW02yZ
-   d6Shytq22xF59sXgWtE/kUVMizLxT7g8WQ3eUaK9JWIdWROlQ5bN32Y2D
-   6vy/nmoHVFiIhwa53OMuHSVtXyPh7bxj+Q1sZ3qhf/vfxlMh1SQYL1OGI
-   mrJw09LixW6Or9FhWpXupMxQdSMC2mUgT/QGk+UCiNiSpWwHKhJwp83Qc
-   7fb5W0aS18OXVePz9jxsOp3AYXJ7j2iF9gc+U9hsoc+FIf5PVGCJQ6smk
-   z+NRPPXnrTwyzjRza6YxUHZKOH5rivPEX/ryt8BSkP0Jat4hFpvw4RmyK
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10401"; a="370462313"
-X-IronPort-AV: E=Sophos;i="5.92,253,1650956400"; 
-   d="scan'208";a="370462313"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jul 2022 17:03:14 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,253,1650956400"; 
-   d="scan'208";a="683482749"
-Received: from lkp-server01.sh.intel.com (HELO 68b931ab7ac1) ([10.239.97.150])
-  by FMSMGA003.fm.intel.com with ESMTP; 07 Jul 2022 17:03:12 -0700
-Received: from kbuild by 68b931ab7ac1 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1o9bSi-000Mdw-5i;
-        Fri, 08 Jul 2022 00:03:12 +0000
-Date:   Fri, 8 Jul 2022 08:02:24 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Andi Kleen <ak@linux.intel.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Kuppuswamy Sathyanarayanan 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>
-Subject: [intel-tdx:guest-hardening-rebased 11/23]
- arch/x86/coco/tdx/tdx.c:297:14: warning: no previous prototype for
- 'tdx_write_msr'
-Message-ID: <202207080723.aRk54tCZ-lkp@intel.com>
+        Thu, 7 Jul 2022 20:03:48 -0400
+Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C552255AB;
+        Thu,  7 Jul 2022 17:03:45 -0700 (PDT)
+Received: by mail-ed1-x533.google.com with SMTP id y8so19299658eda.3;
+        Thu, 07 Jul 2022 17:03:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=JSxzmKxjlNqM9TSDpV5dH/r3annlSczSnTdVT/KLPhw=;
+        b=Y4xpKzWJ150rdoYLQkrNCVmTdbKT+opqIncuCi6XAAQWCf/O9CqPuHaiV/GH9sYmpX
+         7/o1ysUs3g1mFlmliPj7H6uZiCuEkqcSCYIj685Bn00iffibCxTS6NPTmlWpLrVU7XfA
+         Qfxh+KK7MOitA+9cP++ujDWPtft20wECs0lUTdT1AXhqhN5I3Ly6eMYXcRSxkjfWR77w
+         hnWscmSh0JFutTEAzJePwoOlh0Jz6sbhp3SpDQ6pjum652/JaIecgFMgetCNSsqmfgwx
+         yUM2visa+WAPJZqYwO/lDn0pne2DPKc+OuX5KxWyFJ+8JjNvE1sVS6xVu3m0J1RKmKsh
+         nWcw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=JSxzmKxjlNqM9TSDpV5dH/r3annlSczSnTdVT/KLPhw=;
+        b=rwSgGMn4fq5tHJ+ZjppFQzHP7zvQZaRpa7fajhb6k82W+BF9xrJINwH4kno18PgweS
+         +0tbhgJtt2VbFJBUPdyviU1A4qe0RW+D4jB7GsD3pciUszYMPpilufWbeoqAwqN0F0RC
+         UEnPD5sh8wkrBZ2FxNRB7koIxl3j/GrY96/zSPJNsd/1GygldkBUpxsit62QlW5X/1Hc
+         57GMK/rcneOBa2L4HSZvcvKxbDeFxodL5BucE9hldvMimMErJR2OhGAuDh/B5WrFFKWZ
+         0DlRF8MFnvlAWFRzkefkSWrDQg6RebQrVsoV+mmvlCe+Lq/CVhLHkVmKclHnWWKixqW6
+         bDwQ==
+X-Gm-Message-State: AJIora/lRWASEuqEoJPMa+3lJMX6vWBGqM2X8DGkcvzg0umniGobG2n3
+        iiYez0AxZc06EB3KlTP4RAUQCMZ312A=
+X-Google-Smtp-Source: AGRyM1tyhJphCEF8w4d79Ik+3ixfdLIFmyh8AIaaYU7qjHqT1+YKFbaBEt5XfA8VMEUZZ7Z6FvnZCQ==
+X-Received: by 2002:a05:6402:2985:b0:439:651b:c1f4 with SMTP id eq5-20020a056402298500b00439651bc1f4mr954113edb.276.1657238623466;
+        Thu, 07 Jul 2022 17:03:43 -0700 (PDT)
+Received: from localhost.localdomain (93-42-70-190.ip85.fastwebnet.it. [93.42.70.190])
+        by smtp.googlemail.com with ESMTPSA id f22-20020a056402069600b0043a7404314csm8093974edy.8.2022.07.07.17.03.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 07 Jul 2022 17:03:43 -0700 (PDT)
+From:   Christian Marangi <ansuelsmth@gmail.com>
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
+Cc:     Christian Marangi <ansuelsmth@gmail.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Rob Herring <robh@kernel.org>
+Subject: [PATCH v5 1/3] dt-bindings: clock: add pcm reset for ipq806x lcc
+Date:   Fri,  8 Jul 2022 02:03:36 +0200
+Message-Id: <20220708000338.26572-1-ansuelsmth@gmail.com>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/intel/tdx.git guest-hardening-rebased
-head:   64a4c4e66ca9cce1ca55de6d801f32284fbf7c8e
-commit: d1a7216a37f68b347a3622a0c8498134d5cb8970 [11/23] x86/tdx: Use direct paravirt call for wrmsrl
-config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20220708/202207080723.aRk54tCZ-lkp@intel.com/config)
-compiler: gcc-11 (Debian 11.3.0-3) 11.3.0
-reproduce (this is a W=1 build):
-        # https://github.com/intel/tdx/commit/d1a7216a37f68b347a3622a0c8498134d5cb8970
-        git remote add intel-tdx https://github.com/intel/tdx.git
-        git fetch --no-tags intel-tdx guest-hardening-rebased
-        git checkout d1a7216a37f68b347a3622a0c8498134d5cb8970
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash arch/x86/coco/tdx/ arch/x86/mm/
+Add pcm reset define for ipq806x lcc.
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+Signed-off-by: Christian Marangi <ansuelsmth@gmail.com>
+Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Acked-by: Rob Herring <robh@kernel.org>
+---
+v3:
+ - Added review tag
+ - Added ack tag
+v2:
+ - Fix Sob tag
 
-All warnings (new ones prefixed by >>):
+ include/dt-bindings/clock/qcom,lcc-ipq806x.h | 2 ++
+ 1 file changed, 2 insertions(+)
 
->> arch/x86/coco/tdx/tdx.c:297:14: warning: no previous prototype for 'tdx_write_msr' [-Wmissing-prototypes]
-     297 | void notrace tdx_write_msr(unsigned int msr, u32 low, u32 high)
-         |              ^~~~~~~~~~~~~
-
-
-vim +/tdx_write_msr +297 arch/x86/coco/tdx/tdx.c
-
-   296	
- > 297	void notrace tdx_write_msr(unsigned int msr, u32 low, u32 high)
-   298	{
-   299		struct tdx_hypercall_args args = {
-   300			.r10 = TDX_HYPERCALL_STANDARD,
-   301			.r11 = hcall_func(EXIT_REASON_MSR_WRITE),
-   302			.r12 = msr,
-   303			.r13 = (u64)high << 32 | low,
-   304		};
-   305	
-   306		if (tdx_fast_tdcall_path_msr(msr))
-   307			__tdx_hypercall(&args, 0);
-   308		else
-   309			native_write_msr(msr, low, high);
-   310	}
-   311	
-
+diff --git a/include/dt-bindings/clock/qcom,lcc-ipq806x.h b/include/dt-bindings/clock/qcom,lcc-ipq806x.h
+index 25b92bbf0ab4..e0fb4acf4ba8 100644
+--- a/include/dt-bindings/clock/qcom,lcc-ipq806x.h
++++ b/include/dt-bindings/clock/qcom,lcc-ipq806x.h
+@@ -19,4 +19,6 @@
+ #define SPDIF_CLK			10
+ #define AHBIX_CLK			11
+ 
++#define LCC_PCM_RESET			0
++
+ #endif
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+2.36.1
+

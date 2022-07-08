@@ -2,66 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7CBD656B606
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 11:55:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F27E056B5F4
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 11:54:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237680AbiGHJx6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Jul 2022 05:53:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43128 "EHLO
+        id S237827AbiGHJy1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Jul 2022 05:54:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43358 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237612AbiGHJx5 (ORCPT
+        with ESMTP id S237789AbiGHJyZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Jul 2022 05:53:57 -0400
-Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BC56823B5
-        for <linux-kernel@vger.kernel.org>; Fri,  8 Jul 2022 02:53:56 -0700 (PDT)
-Received: by mail-ed1-x52f.google.com with SMTP id g1so18607654edb.12
-        for <linux-kernel@vger.kernel.org>; Fri, 08 Jul 2022 02:53:56 -0700 (PDT)
+        Fri, 8 Jul 2022 05:54:25 -0400
+Received: from mail-oi1-x236.google.com (mail-oi1-x236.google.com [IPv6:2607:f8b0:4864:20::236])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BE3F823BC
+        for <linux-kernel@vger.kernel.org>; Fri,  8 Jul 2022 02:54:23 -0700 (PDT)
+Received: by mail-oi1-x236.google.com with SMTP id i126so26438303oih.4
+        for <linux-kernel@vger.kernel.org>; Fri, 08 Jul 2022 02:54:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=9CsNiG9gNGdYVbUKKzqCxuAt7nlOt4uKYT3q8NTFK18=;
-        b=xWm4R0VrydRB9h71CQX0pqrYowh0ln0y6UktzQXnKFKjVyOgbM6xjFCM9HoXpkl+rJ
-         7q/T+9UTAV3xP0ewyNIJaWxyFLlZ6H4bWAVIrSgV+FWGvqtpOfl3+kk9sPtOsunddIHg
-         L7nYJ/UKFaiuNhRcKfUcb6Tx5WHF1qiKs3ArCVyPV3r2rcGtRRkvaAsYF7bjHx1e++Q2
-         mlbUrRR5weplXyu05SWta0SSw5rZi894UIUM2j+ChJtQ/wgkyP/AsS7eQTkoqjkCDotn
-         Kv/zQHqE5cf7yf4LXYT3kvzuFhWYI7jnCRnjTW2X3AOehxTW6Ux4yV4WGND4Xvd+s3Q2
-         m82A==
+        d=vanguardiasur-com-ar.20210112.gappssmtp.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=vEaJ5po9Za//FEsrnkPxw8yZtxSE9rhk4WCBsPOWM7o=;
+        b=IKPynV5CRGV7vLXVINTPyxkKjJie+puMmQK+dPjIBcPew6KRz2RR05MmLQG9MQGwK6
+         4lhKjJMDx0RhUt1VGaTH/NQvXq0/hjYiY6MaLRdMInpaOH3E8VXCXBbupYvOBIXXvfcX
+         rdHsJPLSGFljCjcLKPVLBv9pO/Vj64ltNtjPloOoU0OT35mWSxBaN4rKPhcT8actbOiI
+         H9G2S4h3fz0vfo/q1kc9d/xmS5Bs1U1RHp6iOmFpatIy4ZTpgvXV4LG6mhATxYpO5Zfa
+         R4q1vFDGI1WVz6fOL3ckOwlc7NzapmEGuUv67cmI+GSYJIv6CcNcAPdZG/q41zI06Vwf
+         59ZA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=9CsNiG9gNGdYVbUKKzqCxuAt7nlOt4uKYT3q8NTFK18=;
-        b=qDDGB/a4Isk7CvwOxZa3fk5Nh2eMWyIlkZkt84hsvtF5lNf64Eb/3vOHNGFKqHjaqL
-         rgxC30eyfMlb3nZf+dv6qYSL71l1iRM7es0u4C13G4Ijzn9BXD8eZbKdf1vwCqeZgpsr
-         j6G3G7AV4t5rQhYxH4aUY2Ofh28Bwnnphqcv/rN4DD227wYNLiuQbJ1bpzjQ7OQMLHhZ
-         AO1L3x0fEz/gMEDPobRCFpWoG94XqpW2U78BnPuftGSEUR0cbUz06a6lxaDCvT0HnNHR
-         3z5SWFUwnnQRyC7kxYXO0vgP+/K5Gjolc9+m7Pt+XMvJL4LUWvnBc7SDDqBFr67YuVj9
-         C0ow==
-X-Gm-Message-State: AJIora81DAp0CLdIJGOM9UWt6IDqw24/Xi1D8M8JxWGsRj7a5AZF7+k7
-        qsfJA9t6jcgt0EPgauVSDLUCmf5RaNgoMg0FyKmC
-X-Google-Smtp-Source: AGRyM1tbwlDj/K2IJgqHtWLAVcqmTicDferGWDwamFG0dIl2C3s8V7gfmzCi97ksM3Faq7kOIGHWHApBw2UA2o/fJ4U=
-X-Received: by 2002:aa7:d555:0:b0:43a:1be7:9e17 with SMTP id
- u21-20020aa7d555000000b0043a1be79e17mr3687236edr.183.1657274035180; Fri, 08
- Jul 2022 02:53:55 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=vEaJ5po9Za//FEsrnkPxw8yZtxSE9rhk4WCBsPOWM7o=;
+        b=jAkLpOb20WcaHR8jt9X63M8eU0unnh72irfRxpGCefIh8PG+Y77xLqccdd8Oxe5wNq
+         CWq8PXoeAfM2s8Zo7HU31O3c6fAMLHAdI50eSs2bqiihNpzmrP/36pGHFriezggEanu6
+         L0Qtm1blm8hk9F4+LUZvACV/K6VXfFTHRQorZWnhIa6uYHWWbgwZhRlVCLq/Gxpf3WSN
+         xCmYUG1LoPYKE4FPNLtLMU/Z7C1vm866uEfYmRwj99kJRnzAikXzY7my868T8UFtRreT
+         pH0K8nGxnNOosGluZGi2Q3WiiLXJHi4GMhm9Pzz3Ydca9ZiArNozPwWK82OkgAed5QaY
+         zKFA==
+X-Gm-Message-State: AJIora9YO1YqD27lSjgNviDWORmCKqq3YdZNtq8RF8DNfVj6tmmUJwt/
+        4HCLvChLnhVwOQHU8v54WOl5TQ==
+X-Google-Smtp-Source: AGRyM1v4wJ7JVr6gpnAq37NLXMjnCZVAR1q0WYYm/dBK+pZJG0d6tLmmRs6CSDsDhSuogKiYR+xGfw==
+X-Received: by 2002:a05:6808:eca:b0:2f9:c581:3f76 with SMTP id q10-20020a0568080eca00b002f9c5813f76mr1328601oiv.138.1657274062762;
+        Fri, 08 Jul 2022 02:54:22 -0700 (PDT)
+Received: from eze-laptop ([186.13.97.246])
+        by smtp.gmail.com with ESMTPSA id b11-20020a9d60cb000000b00616dfd2c859sm11916643otk.59.2022.07.08.02.54.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 08 Jul 2022 02:54:21 -0700 (PDT)
+Date:   Fri, 8 Jul 2022 06:54:13 -0300
+From:   Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
+To:     Benjamin Gaignard <benjamin.gaignard@collabora.com>
+Cc:     mchehab@kernel.org, hverkuil@xs4all.nl, p.zabel@pengutronix.de,
+        gregkh@linuxfoundation.org, mripard@kernel.org,
+        paul.kocialkowski@bootlin.com, wens@csie.org,
+        jernej.skrabec@gmail.com, samuel@sholland.org,
+        nicolas.dufresne@collabora.com, andrzej.p@collabora.com,
+        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-rockchip@lists.infradead.org, linux-staging@lists.linux.dev,
+        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
+        kernel@collabora.com
+Subject: Re: [PATCH v11 13/17] media: controls: Log HEVC stateless control in
+ .std_log
+Message-ID: <Ysf+xcbuIyYy7HIn@eze-laptop>
+References: <20220706093803.158810-1-benjamin.gaignard@collabora.com>
+ <20220706093803.158810-14-benjamin.gaignard@collabora.com>
 MIME-Version: 1.0
-References: <20220706050503.171-1-xieyongji@bytedance.com> <CACGkMEv1tzenaGSUvYXEuxdmXyaZxQ24QspXRRA_95mMp4PWSg@mail.gmail.com>
- <CACycT3u3kOzzQjKBYNAB5vtpgcmPg7FjJ5yTYMtQo0SJVrBmZg@mail.gmail.com> <CACGkMEvtC1VmGjhV6QpEeu+nUikGj5eT79hhyS59rpK1s31TUg@mail.gmail.com>
-In-Reply-To: <CACGkMEvtC1VmGjhV6QpEeu+nUikGj5eT79hhyS59rpK1s31TUg@mail.gmail.com>
-From:   Yongji Xie <xieyongji@bytedance.com>
-Date:   Fri, 8 Jul 2022 17:53:45 +0800
-Message-ID: <CACycT3sNnmV8jrnjFkft6oST_6SGLc43f8Y4ZpomkPeOsvsorQ@mail.gmail.com>
-Subject: Re: [PATCH v2 0/5] VDUSE: Support registering userspace memory as
- bounce buffer
-To:     Jason Wang <jasowang@redhat.com>
-Cc:     mst <mst@redhat.com>, Liu Xiaodong <xiaodong.liu@intel.com>,
-        Maxime Coquelin <maxime.coquelin@redhat.com>,
-        Stefan Hajnoczi <stefanha@redhat.com>,
-        songmuchun@bytedance.com,
-        virtualization <virtualization@lists.linux-foundation.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220706093803.158810-14-benjamin.gaignard@collabora.com>
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
@@ -71,75 +78,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jul 8, 2022 at 4:38 PM Jason Wang <jasowang@redhat.com> wrote:
->
-> On Wed, Jul 6, 2022 at 6:16 PM Yongji Xie <xieyongji@bytedance.com> wrote:
-> >
-> > On Wed, Jul 6, 2022 at 5:30 PM Jason Wang <jasowang@redhat.com> wrote:
-> > >
-> > > On Wed, Jul 6, 2022 at 1:05 PM Xie Yongji <xieyongji@bytedance.com> wrote:
-> > > >
-> > > > Hi all,
-> > > >
-> > > > This series introduces some new ioctls: VDUSE_IOTLB_GET_INFO,
-> > > > VDUSE_IOTLB_REG_UMEM and VDUSE_IOTLB_DEREG_UMEM to support
-> > > > registering and de-registering userspace memory for IOTLB
-> > > > as bounce buffer in virtio-vdpa case.
-> > > >
-> > > > The VDUSE_IOTLB_GET_INFO ioctl can help user to query IOLTB
-> > > > information such as bounce buffer size. Then user can use
-> > > > those information on VDUSE_IOTLB_REG_UMEM and
-> > > > VDUSE_IOTLB_DEREG_UMEM ioctls to register and de-register
-> > > > userspace memory for IOTLB.
-> > > >
-> > > > During registering and de-registering, the DMA data in use
-> > > > would be copied from kernel bounce pages to userspace bounce
-> > > > pages and back.
-> > > >
-> > > > With this feature, some existing application such as SPDK
-> > > > and DPDK can leverage the datapath of VDUSE directly and
-> > > > efficiently as discussed before [1][2]. They can register
-> > > > some preallocated hugepages to VDUSE to avoid an extra
-> > > > memcpy from bounce-buffer to hugepages.
-> > >
-> > > This is really interesting.
-> > >
-> > > But a small concern on uAPI is that this seems to expose the VDUSE
-> > > internal implementation (bounce buffer) to userspace. We tried hard to
-> > > hide it via the GET_FD before. Anyway can we keep it?
-> > >
-> >
-> > Another way is changing GET_FD ioctl to add a flag or reuse 'perm'
-> > field to indicate whether a IOVA region supports userspace memory
-> > registration. Then userspace can use
-> > VDUSE_IOTLB_REG_UMEM/VDUSE_IOTLB_DEREG_UMEM to register/deregister
-> > userspace memory for this IOVA region.
->
-> Looks better.
->
+On Wed, Jul 06, 2022 at 11:37:59AM +0200, Benjamin Gaignard wrote:
+> Simply print the type of the control.
+> 
+> Signed-off-by: Benjamin Gaignard <benjamin.gaignard@collabora.com>
+> Acked-by: Nicolas Dufresne <nicolas.dufresne@collabora.com>
+> Tested-by: Jernej Skrabec <jernej.skrabec@gmail.com>
 
-OK.
+Reviewed-by: Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
 
-> > Any suggestions?
->
-> I wonder what's the value of keeping the compatibility with the kernel
-> mmaped bounce buffer. It means we need to take extra care on e.g data
-> copying when reg/reg user space memory.
->
-
-I'm not sure I get your point on the compatibility with the kernel
-bounce buffer. Do you mean they use the same iova region?
-
-The userspace daemon might crash or reboot. In those cases, we still
-need a kernel buffer to store/recover the data.
-
-> Can we simply allow the third kind of fd that only works for umem registration?
->
-
-Do you mean using another iova region for umem? I think we don't need
-a fd in umem case since the userspace daemon can access the memory
-directly without using mmap() to map it into the address space in
-advance.
-
-Thanks,
-Yongji
+> ---
+>  drivers/media/v4l2-core/v4l2-ctrls-core.c | 15 +++++++++++++++
+>  1 file changed, 15 insertions(+)
+> 
+> diff --git a/drivers/media/v4l2-core/v4l2-ctrls-core.c b/drivers/media/v4l2-core/v4l2-ctrls-core.c
+> index ff8a61f24d0a..c5c5407584ff 100644
+> --- a/drivers/media/v4l2-core/v4l2-ctrls-core.c
+> +++ b/drivers/media/v4l2-core/v4l2-ctrls-core.c
+> @@ -307,6 +307,21 @@ static void std_log(const struct v4l2_ctrl *ctrl)
+>  	case V4L2_CTRL_TYPE_VP9_FRAME:
+>  		pr_cont("VP9_FRAME");
+>  		break;
+> +	case V4L2_CTRL_TYPE_HEVC_SPS:
+> +		pr_cont("HEVC_SPS");
+> +		break;
+> +	case V4L2_CTRL_TYPE_HEVC_PPS:
+> +		pr_cont("HEVC_PPS");
+> +		break;
+> +	case V4L2_CTRL_TYPE_HEVC_SLICE_PARAMS:
+> +		pr_cont("HEVC_SLICE_PARAMS");
+> +		break;
+> +	case V4L2_CTRL_TYPE_HEVC_SCALING_MATRIX:
+> +		pr_cont("HEVC_SCALING_MATRIX");
+> +		break;
+> +	case V4L2_CTRL_TYPE_HEVC_DECODE_PARAMS:
+> +		pr_cont("HEVC_DECODE_PARAMS");
+> +		break;
+>  	default:
+>  		pr_cont("unknown type %d", ctrl->type);
+>  		break;
+> -- 
+> 2.32.0
+> 

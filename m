@@ -2,75 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D0DE56AF90
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 03:07:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C26456AFA1
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 03:07:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237055AbiGHAf1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Jul 2022 20:35:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44076 "EHLO
+        id S235510AbiGHAky (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Jul 2022 20:40:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47072 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237018AbiGHAfZ (ORCPT
+        with ESMTP id S229572AbiGHAkw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Jul 2022 20:35:25 -0400
-Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A68B4D157;
-        Thu,  7 Jul 2022 17:35:23 -0700 (PDT)
-Received: by mail-lf1-x131.google.com with SMTP id bf9so10600460lfb.13;
-        Thu, 07 Jul 2022 17:35:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=+FPDA9bpaQNxNay43TNVS3DDzoTOq/wXCfl3H+fiAR4=;
-        b=CoBKaqbtvrcNGCDdvhwGOug/bNENd37YzHSLmd4wFY8hVY/0ER+VTIDdpxVi1QpSO7
-         9hpDfQtTiRrw8zjII7AV9rm9OE5OBqHydS+4618WY+1vBTkWr49LYgyft3j/6P89oZZ+
-         kTlqqFxc+/0qFPdH2cu8SjRW5s+BAQfbLUWy3t+bJax1DtXcJ8UG2vELQnenJ9hxu48E
-         5GKeFWcHpybntCvx1rVfh4f1KCICmZ25kHiz2r5+GB6yC1OlHhKO8UxKVax9bxvqNsGh
-         PdKsGkAlLVMYAQmKW9ZFxqmy7H5ifnOEwZ/L0ZLSU5uiKyRSbbGtYTeKmzE8U1uRg4bo
-         Nt3g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=+FPDA9bpaQNxNay43TNVS3DDzoTOq/wXCfl3H+fiAR4=;
-        b=bCsq7U6hWO/D987sb9IBUcTurgbdW//kjOxz8g6Sf5KX1e6kuLciam2TUKAfwsNUVg
-         +JiJ/maotwULmSVg2L48XbXsFM/8aX4DY2PVNWUjq+KEOkSe4RM3XL+KYn71gZTq050c
-         Tki98soMioN15D+JiwgLdIMmksIfxaM6Gvbxl2T4J2ZI2lMzFijlaojPDy7mVeDqdP5L
-         xQPzA8OrWjz6EOmRtgb759U/+So9kpvZYKxE+1ZSsHMKQwpOVIVLo/UdpuHd3weEFynY
-         UYSSDqo2V//bkUySgX6KEqAmgj8xergMG6LVQOz74dkWOXfXbavqM35CQjHhSuvhhtuq
-         nBmA==
-X-Gm-Message-State: AJIora+hint+on4angZavZcihcRWXX6mhD7XSlr+/Qd45ZmUNXh4Bqbh
-        QYfFuvE4B1RMi84qRtVvoCI+kPztg4ubtVdrbVPugxiX
-X-Google-Smtp-Source: AGRyM1t5m32p0KnvzP/URVtSroili6PPvSNhkQV/VEmwv77Af9SVxVU9AcqksZDeEjAJ9fitRK+1gzz8NxuDolm2hyQ=
-X-Received: by 2002:a05:6512:22c8:b0:488:e69b:9311 with SMTP id
- g8-20020a05651222c800b00488e69b9311mr528666lfu.564.1657240520992; Thu, 07 Jul
- 2022 17:35:20 -0700 (PDT)
+        Thu, 7 Jul 2022 20:40:52 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B49532ED0;
+        Thu,  7 Jul 2022 17:40:50 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id DF284B824A9;
+        Fri,  8 Jul 2022 00:40:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EBCA6C3411E;
+        Fri,  8 Jul 2022 00:40:45 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="RclVAwBR"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+        t=1657240843;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=kicI3xe4M/M0q6EBkMRrn7r8qxFKT8ETjSSIWQKtBA4=;
+        b=RclVAwBRhRVR1P6rACDO4iMccm9wSQnuB/BNVEooIzE6Pr7vgH9hJwRc5xIfUuQ4fOOqF5
+        SahGJrMhfGJIddaE9wVroCKPuCwZPRq8lD9hqTAtbSZb3veFmLmwvAHEUaVP6sb8WSsMIR
+        CB4/1h4eXP5GdR5aDCxaJNB3dWlbmKw=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 42ef07a1 (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
+        Fri, 8 Jul 2022 00:40:42 +0000 (UTC)
+From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
+To:     Borislav Petkov <bp@alien8.de>, "H. Peter Anvin" <hpa@zytor.com>,
+        linux-arm-kernel@lists.infradead.org,
+        linuxppc-dev@lists.ozlabs.org, linux-s390@vger.kernel.org,
+        linux-kernel@vger.kernel.org, x86@kernel.org,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@suse.de>
+Cc:     "Jason A. Donenfeld" <Jason@zx2c4.com>
+Subject: [PATCH v5] random: remove CONFIG_ARCH_RANDOM
+Date:   Fri,  8 Jul 2022 02:40:32 +0200
+Message-Id: <20220708004032.733426-1-Jason@zx2c4.com>
+In-Reply-To: <20220706143521.459565-1-Jason@zx2c4.com>
+References: <20220706143521.459565-1-Jason@zx2c4.com>
 MIME-Version: 1.0
-References: <20220623123549.v2.1.Iaf638bb9f885f5880ab1b4e7ae2f73dd53a54661@changeid>
- <CABBYNZKMNGu1K23AoiW+1yfxpBSkFqUsJWNNMhA6+P5hqic9ew@mail.gmail.com> <CAGPPCLCq7DtKJ-mQqzZEgFrc6UOPUPDssap7bYuayr26VDdi4g@mail.gmail.com>
-In-Reply-To: <CAGPPCLCq7DtKJ-mQqzZEgFrc6UOPUPDssap7bYuayr26VDdi4g@mail.gmail.com>
-From:   Luiz Augusto von Dentz <luiz.dentz@gmail.com>
-Date:   Thu, 7 Jul 2022 17:35:09 -0700
-Message-ID: <CABBYNZJr3EGdLODS6oJGEoNZ10g44nFSa=gDAeGZyZHiX0=dfw@mail.gmail.com>
-Subject: Re: [PATCH v2 1/2] Bluetooth: Add support for devcoredump
-To:     Manish Mandlik <mmandlik@google.com>
-Cc:     Marcel Holtmann <marcel@holtmann.org>,
-        ChromeOS Bluetooth Upstreaming 
-        <chromeos-bluetooth-upstreaming@chromium.org>,
-        "linux-bluetooth@vger.kernel.org" <linux-bluetooth@vger.kernel.org>,
-        Abhishek Pandit-Subedi <abhishekpandit@chromium.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Johan Hedberg <johan.hedberg@gmail.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "open list:NETWORKING [GENERAL]" <netdev@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,890 +67,493 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Manish,
+When RDRAND was introduced, there was much discussion on whether it
+should be trusted and how the kernel should handle that. Initially, two
+mechanisms cropped up, CONFIG_ARCH_RANDOM, a compile time switch, and
+"nordrand", a boot-time switch.
 
-On Thu, Jul 7, 2022 at 3:29 PM Manish Mandlik <mmandlik@google.com> wrote:
->
-> Hi Luiz,
->
->
-> On Wed, Jun 29, 2022 at 5:07 PM Luiz Augusto von Dentz <luiz.dentz@gmail.=
-com> wrote:
->>
->> Hi Manish,
->>
->> On Thu, Jun 23, 2022 at 12:38 PM Manish Mandlik <mmandlik@google.com> wr=
-ote:
->> >
->> > From: Abhishek Pandit-Subedi <abhishekpandit@chromium.org>
->> >
->> > Add devcoredump APIs to hci core so that drivers only have to provide
->> > the dump skbs instead of managing the synchronization and timeouts.
->> >
->> > The devcoredump APIs should be used in the following manner:
->> >  - hci_devcoredump_init is called to allocate the dump.
->> >  - hci_devcoredump_append is called to append any skbs with dump data
->> >    OR hci_devcoredump_append_pattern is called to insert a pattern.
->> >  - hci_devcoredump_complete is called when all dump packets have been
->> >    sent OR hci_devcoredump_abort is called to indicate an error and
->> >    cancel an ongoing dump collection.
->> >
->> > The high level APIs just prepare some skbs with the appropriate data a=
-nd
->> > queue it for the dump to process. Packets part of the crashdump can be
->> > intercepted in the driver in interrupt context and forwarded directly =
-to
->> > the devcoredump APIs.
->> >
->> > Internally, there are 5 states for the dump: idle, active, complete,
->> > abort and timeout. A devcoredump will only be in active state after it
->> > has been initialized. Once active, it accepts data to be appended,
->> > patterns to be inserted (i.e. memset) and a completion event or an abo=
-rt
->> > event to generate a devcoredump. The timeout is initialized at the sam=
-e
->> > time the dump is initialized (defaulting to 10s) and will be cleared
->> > either when the timeout occurs or the dump is complete or aborted.
->> >
->> > Signed-off-by: Abhishek Pandit-Subedi <abhishekpandit@chromium.org>
->> > Signed-off-by: Manish Mandlik <mmandlik@google.com>
->> > Reviewed-by: Abhishek Pandit-Subedi <abhishekpandit@chromium.org>
->> > ---
->> >
->> > Changes in v2:
->> > - Move hci devcoredump implementation to new files
->> > - Move dump queue and dump work to hci_devcoredump struct
->> > - Add CONFIG_DEV_COREDUMP conditional compile
->>
->> Looks like you didn't add an experimental UUID for enabling it, it
->> should be per index and we mark as supported when the driver supports
->> it then userspace can mark it to be used via main.conf so we can
->> properly experiment with it before marking it as stable.
->
-> We want to keep bluetooth devcoredump implementation to kernel only and n=
-ot have any dependency on the userspace bluez. But I agree that we should n=
-ot have it enabled by default without experimenting. So, I have added anoth=
-er attribute to enable/disable hci devcoredump and the default state is set=
- to disabled. This can be enabled via bluetooth sysfs entry `enable_coredum=
-p`. I have sent a v3 series with this new patch to add a sysfs entry. Pleas=
-e take a look. I was anyway working on a mechanism to enable/disable devcor=
-edump and I feel this could be the right way. Please let me know your thoug=
-hts. Thanks!
+Later the thinking evolved. With a properly designed RNG, using RDRAND
+values alone won't harm anything, even if the outputs are malicious.
+Rather, the issue is whether those values are being *trusted* to be good
+or not. And so a new set of options were introduced as the real
+ones that people use -- CONFIG_RANDOM_TRUST_CPU and "random.trust_cpu".
+With these options, RDRAND is used, but it's not always credited. So in
+the worst case, it does nothing, and in the best case, maybe it helps.
 
-Not sure I understand about not depending on userspace BlueZ, I mean
-we might need a userspace interface to enable it or are you suggesting
-to not use the MGMT interface for enabling it? If there is a is a
-generic method for enabling devcoredumps then yes that is probably
-preferable otherwise if is bluetooth specific that is what MGMT
-interface is for.
+Along the way, CONFIG_ARCH_RANDOM's meaning got sort of pulled into the
+center and became something certain platforms force-select.
 
->
->>
->> >
->> >  include/net/bluetooth/coredump.h | 109 +++++++
->> >  include/net/bluetooth/hci_core.h |   5 +
->> >  net/bluetooth/Makefile           |   2 +
->> >  net/bluetooth/coredump.c         | 504 ++++++++++++++++++++++++++++++=
+The old options don't really help with much, and it's a bit odd to have
+special handling for these instructions when the kernel can deal fine
+with the existence or untrusted existence or broken existence or
+non-existence of that CPU capability.
+
+Simplify the situation by removing CONFIG_ARCH_RANDOM and using the
+ordinary asm-generic fallback pattern instead, keeping the two options
+that are actually used. For now it leaves "nordrand" for now, as the
+removal of that will take a different route.
+
+Cc: Catalin Marinas <catalin.marinas@arm.com>
+Cc: Will Deacon <will@kernel.org>
+Cc: Michael Ellerman <mpe@ellerman.id.au>
+Cc: Alexander Gordeev <agordeev@linux.ibm.com>
+Cc: Thomas Gleixner <tglx@linutronix.de>
+Cc: H. Peter Anvin <hpa@zytor.com>
+Acked-by: Borislav Petkov <bp@suse.de>
+Acked-by: Heiko Carstens <hca@linux.ibm.com>
+Acked-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
+---
+Changes v4->v5:
+- Squelch warning on ARCH=um.
+- Include asm-generic on arm instead of duplicating code.
+Changes v3->v4:
+- Use asm-generic for fallback.
+Changes v2->v3:
+- Keep compiling on archs with no ARCH_RANDOM.
+Changes v1->v2:
+- Get rid of nordrand change for now.
+
+ arch/arm/include/asm/archrandom.h             |  2 ++
+ arch/arm64/Kconfig                            |  8 ------
+ arch/arm64/include/asm/archrandom.h           | 10 --------
+ arch/arm64/kernel/cpufeature.c                |  2 --
+ arch/powerpc/Kconfig                          |  3 ---
+ arch/powerpc/include/asm/archrandom.h         |  3 ---
+ arch/powerpc/include/asm/machdep.h            |  2 --
+ arch/powerpc/platforms/microwatt/Kconfig      |  1 -
+ arch/powerpc/platforms/powernv/Kconfig        |  1 -
+ arch/powerpc/platforms/pseries/Kconfig        |  1 -
+ arch/s390/Kconfig                             | 15 -----------
+ arch/s390/configs/zfcpdump_defconfig          |  1 -
+ arch/s390/crypto/Makefile                     |  2 +-
+ arch/s390/include/asm/archrandom.h            |  3 ---
+ arch/x86/Kconfig                              |  9 -------
+ arch/x86/include/asm/archrandom.h             | 14 +++--------
+ arch/x86/kernel/cpu/rdrand.c                  |  2 --
+ drivers/char/Kconfig                          |  1 -
+ drivers/char/hw_random/s390-trng.c            |  9 -------
+ include/asm-generic/Kbuild                    |  1 +
+ include/asm-generic/archrandom.h              | 25 +++++++++++++++++++
+ include/linux/random.h                        |  9 +------
+ .../selftests/wireguard/qemu/kernel.config    |  1 -
+ 23 files changed, 34 insertions(+), 91 deletions(-)
+ create mode 100644 include/asm-generic/archrandom.h
+
+diff --git a/arch/arm/include/asm/archrandom.h b/arch/arm/include/asm/archrandom.h
+index a8e84ca5c2ee..cc4714eb1a75 100644
+--- a/arch/arm/include/asm/archrandom.h
++++ b/arch/arm/include/asm/archrandom.h
+@@ -7,4 +7,6 @@ static inline bool __init smccc_probe_trng(void)
+ 	return false;
+ }
+ 
++#include <asm-generic/archrandom.h>
 +
->> >  net/bluetooth/hci_core.c         |   9 +
->> >  net/bluetooth/hci_sync.c         |   2 +
->> >  6 files changed, 631 insertions(+)
->> >  create mode 100644 include/net/bluetooth/coredump.h
->> >  create mode 100644 net/bluetooth/coredump.c
->> >
->> > diff --git a/include/net/bluetooth/coredump.h b/include/net/bluetooth/=
-coredump.h
->> > new file mode 100644
->> > index 000000000000..73601c409c6e
->> > --- /dev/null
->> > +++ b/include/net/bluetooth/coredump.h
->> > @@ -0,0 +1,109 @@
->> > +// SPDX-License-Identifier: GPL-2.0-only
->> > +/*
->> > + * Copyright (C) 2022 Google Corporation
->> > + */
->> > +
->> > +#ifndef __COREDUMP_H
->> > +#define __COREDUMP_H
->> > +
->> > +#define DEVCOREDUMP_TIMEOUT    msecs_to_jiffies(10000) /* 10 sec */
->> > +
->> > +typedef int  (*dmp_hdr_t)(struct hci_dev *hdev, char *buf, size_t siz=
-e);
->> > +typedef void (*notify_change_t)(struct hci_dev *hdev, int state);
->> > +
->> > +/* struct hci_devcoredump - Devcoredump state
->> > + *
->> > + * @supported: Indicates if FW dump collection is supported by driver
->> > + * @state: Current state of dump collection
->> > + * @alloc_size: Total size of the dump
->> > + * @head: Start of the dump
->> > + * @tail: Pointer to current end of dump
->> > + * @end: head + alloc_size for easy comparisons
->> > + *
->> > + * @dump_q: Dump queue for state machine to process
->> > + * @dump_rx: Devcoredump state machine work
->> > + * @dump_timeout: Devcoredump timeout work
->> > + *
->> > + * @dmp_hdr: Create a dump header to identify controller/fw/driver in=
-fo
->> > + * @notify_change: Notify driver when devcoredump state has changed
->> > + */
->> > +struct hci_devcoredump {
->> > +       bool            supported;
->> > +
->> > +       enum devcoredump_state {
->> > +               HCI_DEVCOREDUMP_IDLE,
->> > +               HCI_DEVCOREDUMP_ACTIVE,
->> > +               HCI_DEVCOREDUMP_DONE,
->> > +               HCI_DEVCOREDUMP_ABORT,
->> > +               HCI_DEVCOREDUMP_TIMEOUT
->> > +       } state;
->> > +
->> > +       u32             alloc_size;
->> > +       char            *head;
->> > +       char            *tail;
->> > +       char            *end;
->> > +
->> > +       struct sk_buff_head     dump_q;
->> > +       struct work_struct      dump_rx;
->> > +       struct delayed_work     dump_timeout;
->> > +
->> > +       dmp_hdr_t       dmp_hdr;
->> > +       notify_change_t notify_change;
->> > +};
->> > +
->> > +#ifdef CONFIG_DEV_COREDUMP
->> > +
->> > +void hci_devcoredump_reset(struct hci_dev *hdev);
->> > +void hci_devcoredump_rx(struct work_struct *work);
->> > +void hci_devcoredump_timeout(struct work_struct *work);
->> > +int hci_devcoredump_register(struct hci_dev *hdev, dmp_hdr_t dmp_hdr,
->> > +                            notify_change_t notify_change);
->> > +int hci_devcoredump_init(struct hci_dev *hdev, u32 dmp_size);
->> > +int hci_devcoredump_append(struct hci_dev *hdev, struct sk_buff *skb)=
-;
->> > +int hci_devcoredump_append_pattern(struct hci_dev *hdev, u8 pattern, =
-u32 len);
->> > +int hci_devcoredump_complete(struct hci_dev *hdev);
->> > +int hci_devcoredump_abort(struct hci_dev *hdev);
->> > +
->> > +#else
->> > +
->> > +static inline void hci_devcoredump_reset(struct hci_dev *hdev) {}
->> > +static inline void hci_devcoredump_rx(struct work_struct *work) {}
->> > +static inline void hci_devcoredump_timeout(struct work_struct *work) =
-{}
->> > +
->> > +static inline int hci_devcoredump_register(struct hci_dev *hdev,
->> > +                                          dmp_hdr_t dmp_hdr,
->> > +                                          notify_change_t notify_chan=
-ge)
->> > +{
->> > +       return -EOPNOTSUPP;
->> > +}
->> > +
->> > +static inline int hci_devcoredump_init(struct hci_dev *hdev, u32 dmp_=
-size)
->> > +{
->> > +       return -EOPNOTSUPP;
->> > +}
->> > +
->> > +static inline int hci_devcoredump_append(struct hci_dev *hdev,
->> > +                                        struct sk_buff *skb)
->> > +{
->> > +       return -EOPNOTSUPP;
->> > +}
->> > +
->> > +static inline int hci_devcoredump_append_pattern(struct hci_dev *hdev=
-,
->> > +                                                u8 pattern, u32 len)
->> > +{
->> > +       return -EOPNOTSUPP;
->> > +}
->> > +
->> > +static inline int hci_devcoredump_complete(struct hci_dev *hdev)
->> > +{
->> > +       return -EOPNOTSUPP;
->> > +}
->> > +
->> > +static inline int hci_devcoredump_abort(struct hci_dev *hdev)
->> > +{
->> > +       return -EOPNOTSUPP;
->> > +}
->> > +
->> > +#endif /* CONFIG_DEV_COREDUMP */
->> > +
->> > +#endif /* __COREDUMP_H */
->> > diff --git a/include/net/bluetooth/hci_core.h b/include/net/bluetooth/=
-hci_core.h
->> > index 15237ee5f761..9ccc034c8fde 100644
->> > --- a/include/net/bluetooth/hci_core.h
->> > +++ b/include/net/bluetooth/hci_core.h
->> > @@ -32,6 +32,7 @@
->> >  #include <net/bluetooth/hci.h>
->> >  #include <net/bluetooth/hci_sync.h>
->> >  #include <net/bluetooth/hci_sock.h>
->> > +#include <net/bluetooth/coredump.h>
->> >
->> >  /* HCI priority */
->> >  #define HCI_PRIO_MAX   7
->> > @@ -582,6 +583,10 @@ struct hci_dev {
->> >         const char              *fw_info;
->> >         struct dentry           *debugfs;
->> >
->> > +#ifdef CONFIG_DEV_COREDUMP
->> > +       struct hci_devcoredump  dump;
->> > +#endif
->> > +
->> >         struct device           dev;
->> >
->> >         struct rfkill           *rfkill;
->> > diff --git a/net/bluetooth/Makefile b/net/bluetooth/Makefile
->> > index a52bba8500e1..4e894e452869 100644
->> > --- a/net/bluetooth/Makefile
->> > +++ b/net/bluetooth/Makefile
->> > @@ -17,6 +17,8 @@ bluetooth-y :=3D af_bluetooth.o hci_core.o hci_conn.=
-o hci_event.o mgmt.o \
->> >         ecdh_helper.o hci_request.o mgmt_util.o mgmt_config.o hci_code=
-c.o \
->> >         eir.o hci_sync.o
->> >
->> > +bluetooth-$(CONFIG_DEV_COREDUMP) +=3D coredump.o
->> > +
->> >  bluetooth-$(CONFIG_BT_BREDR) +=3D sco.o
->> >  bluetooth-$(CONFIG_BT_HS) +=3D a2mp.o amp.o
->> >  bluetooth-$(CONFIG_BT_LEDS) +=3D leds.o
->> > diff --git a/net/bluetooth/coredump.c b/net/bluetooth/coredump.c
->> > new file mode 100644
->> > index 000000000000..43c355cd7ad3
->> > --- /dev/null
->> > +++ b/net/bluetooth/coredump.c
->> > @@ -0,0 +1,504 @@
->> > +// SPDX-License-Identifier: GPL-2.0-only
->> > +/*
->> > + * Copyright (C) 2022 Google Corporation
->> > + */
->> > +
->> > +#include <linux/devcoredump.h>
->> > +
->> > +#include <net/bluetooth/bluetooth.h>
->> > +#include <net/bluetooth/hci_core.h>
->> > +
->> > +enum hci_devcoredump_pkt_type {
->> > +       HCI_DEVCOREDUMP_PKT_INIT,
->> > +       HCI_DEVCOREDUMP_PKT_SKB,
->> > +       HCI_DEVCOREDUMP_PKT_PATTERN,
->> > +       HCI_DEVCOREDUMP_PKT_COMPLETE,
->> > +       HCI_DEVCOREDUMP_PKT_ABORT,
->> > +};
->> > +
->> > +struct hci_devcoredump_skb_cb {
->> > +       u16 pkt_type;
->> > +};
->> > +
->> > +struct hci_devcoredump_skb_pattern {
->> > +       u8 pattern;
->> > +       u32 len;
->> > +} __packed;
->> > +
->> > +#define hci_dmp_cb(skb)        ((struct hci_devcoredump_skb_cb *)((sk=
-b)->cb))
->> > +
->> > +#define MAX_DEVCOREDUMP_HDR_SIZE       512     /* bytes */
->> > +
->> > +static int hci_devcoredump_update_hdr_state(char *buf, size_t size, i=
-nt state)
->> > +{
->> > +       if (!buf)
->> > +               return 0;
->> > +
->> > +       return snprintf(buf, size, "Bluetooth devcoredump\nState: %d\n=
-", state);
->> > +}
->> > +
->> > +/* Call with hci_dev_lock only. */
->> > +static int hci_devcoredump_update_state(struct hci_dev *hdev, int sta=
-te)
->> > +{
->> > +       hdev->dump.state =3D state;
->> > +
->> > +       return hci_devcoredump_update_hdr_state(hdev->dump.head,
->> > +                                               hdev->dump.alloc_size,=
- state);
->> > +}
->> > +
->> > +static int hci_devcoredump_mkheader(struct hci_dev *hdev, char *buf,
->> > +                                   size_t buf_size)
->> > +{
->> > +       char *ptr =3D buf;
->> > +       size_t rem =3D buf_size;
->> > +       size_t read =3D 0;
->> > +
->> > +       read =3D hci_devcoredump_update_hdr_state(ptr, rem, HCI_DEVCOR=
-EDUMP_IDLE);
->> > +       read +=3D 1; /* update_hdr_state adds \0 at the end upon state=
- rewrite */
->> > +       rem -=3D read;
->> > +       ptr +=3D read;
->> > +
->> > +       if (hdev->dump.dmp_hdr) {
->> > +               /* dmp_hdr() should return number of bytes written */
->> > +               read =3D hdev->dump.dmp_hdr(hdev, ptr, rem);
->> > +               rem -=3D read;
->> > +               ptr +=3D read;
->> > +       }
->> > +
->> > +       read =3D snprintf(ptr, rem, "--- Start dump ---\n");
->> > +       rem -=3D read;
->> > +       ptr +=3D read;
->> > +
->> > +       return buf_size - rem;
->> > +}
->> > +
->> > +/* Do not call with hci_dev_lock since this calls driver code. */
->> > +static void hci_devcoredump_notify(struct hci_dev *hdev, int state)
->> > +{
->> > +       if (hdev->dump.notify_change)
->> > +               hdev->dump.notify_change(hdev, state);
->> > +}
->> > +
->> > +/* Call with hci_dev_lock only. */
->> > +void hci_devcoredump_reset(struct hci_dev *hdev)
->> > +{
->> > +       hdev->dump.head =3D NULL;
->> > +       hdev->dump.tail =3D NULL;
->> > +       hdev->dump.alloc_size =3D 0;
->> > +
->> > +       hci_devcoredump_update_state(hdev, HCI_DEVCOREDUMP_IDLE);
->> > +
->> > +       cancel_delayed_work(&hdev->dump.dump_timeout);
->> > +       skb_queue_purge(&hdev->dump.dump_q);
->> > +}
->> > +
->> > +/* Call with hci_dev_lock only. */
->> > +static void hci_devcoredump_free(struct hci_dev *hdev)
->> > +{
->> > +       if (hdev->dump.head)
->> > +               vfree(hdev->dump.head);
->> > +
->> > +       hci_devcoredump_reset(hdev);
->> > +}
->> > +
->> > +/* Call with hci_dev_lock only. */
->> > +static int hci_devcoredump_alloc(struct hci_dev *hdev, u32 size)
->> > +{
->> > +       hdev->dump.head =3D vmalloc(size);
->> > +       if (!hdev->dump.head)
->> > +               return -ENOMEM;
->> > +
->> > +       hdev->dump.alloc_size =3D size;
->> > +       hdev->dump.tail =3D hdev->dump.head;
->> > +       hdev->dump.end =3D hdev->dump.head + size;
->> > +
->> > +       hci_devcoredump_update_state(hdev, HCI_DEVCOREDUMP_IDLE);
->> > +
->> > +       return 0;
->> > +}
->> > +
->> > +/* Call with hci_dev_lock only. */
->> > +static bool hci_devcoredump_copy(struct hci_dev *hdev, char *buf, u32=
- size)
->> > +{
->> > +       if (hdev->dump.tail + size > hdev->dump.end)
->> > +               return false;
->> > +
->> > +       memcpy(hdev->dump.tail, buf, size);
->> > +       hdev->dump.tail +=3D size;
->> > +
->> > +       return true;
->> > +}
->> > +
->> > +/* Call with hci_dev_lock only. */
->> > +static bool hci_devcoredump_memset(struct hci_dev *hdev, u8 pattern, =
-u32 len)
->> > +{
->> > +       if (hdev->dump.tail + len > hdev->dump.end)
->> > +               return false;
->> > +
->> > +       memset(hdev->dump.tail, pattern, len);
->> > +       hdev->dump.tail +=3D len;
->> > +
->> > +       return true;
->> > +}
->> > +
->> > +/* Call with hci_dev_lock only. */
->> > +static int hci_devcoredump_prepare(struct hci_dev *hdev, u32 dump_siz=
-e)
->> > +{
->> > +       char *dump_hdr;
->> > +       int dump_hdr_size;
->> > +       u32 size;
->> > +       int err =3D 0;
->> > +
->> > +       dump_hdr =3D vmalloc(MAX_DEVCOREDUMP_HDR_SIZE);
->> > +       if (!dump_hdr) {
->> > +               err =3D -ENOMEM;
->> > +               goto hdr_free;
->> > +       }
->> > +
->> > +       dump_hdr_size =3D hci_devcoredump_mkheader(hdev, dump_hdr,
->> > +                                                MAX_DEVCOREDUMP_HDR_S=
-IZE);
->> > +       size =3D dump_hdr_size + dump_size;
->> > +
->> > +       if (hci_devcoredump_alloc(hdev, size)) {
->> > +               err =3D -ENOMEM;
->> > +               goto hdr_free;
->> > +       }
->> > +
->> > +       /* Insert the device header */
->> > +       if (!hci_devcoredump_copy(hdev, dump_hdr, dump_hdr_size)) {
->> > +               bt_dev_err(hdev, "Failed to insert header");
->> > +               hci_devcoredump_free(hdev);
->> > +
->> > +               err =3D -ENOMEM;
->> > +               goto hdr_free;
->> > +       }
->> > +
->> > +hdr_free:
->> > +       if (dump_hdr)
->> > +               vfree(dump_hdr);
->> > +
->> > +       return err;
->> > +}
->> > +
->> > +/* Bluetooth devcoredump state machine.
->> > + *
->> > + * Devcoredump states:
->> > + *
->> > + *      HCI_DEVCOREDUMP_IDLE: The default state.
->> > + *
->> > + *      HCI_DEVCOREDUMP_ACTIVE: A devcoredump will be in this state o=
-nce it has
->> > + *              been initialized using hci_devcoredump_init(). Once a=
-ctive, the
->> > + *              driver can append data using hci_devcoredump_append()=
- or insert
->> > + *              a pattern using hci_devcoredump_append_pattern().
->> > + *
->> > + *      HCI_DEVCOREDUMP_DONE: Once the dump collection is complete, t=
-he drive
->> > + *              can signal the completion using hci_devcoredump_compl=
-ete(). A
->> > + *              devcoredump is generated indicating the completion ev=
-ent and
->> > + *              then the state machine is reset to the default state.
->> > + *
->> > + *      HCI_DEVCOREDUMP_ABORT: The driver can cancel ongoing dump col=
-lection in
->> > + *              case of any error using hci_devcoredump_abort(). A de=
-vcoredump
->> > + *              is still generated with the available data indicating=
- the abort
->> > + *              event and then the state machine is reset to the defa=
-ult state.
->> > + *
->> > + *      HCI_DEVCOREDUMP_TIMEOUT: A timeout timer for HCI_DEVCOREDUMP_=
-TIMEOUT sec
->> > + *              is started during devcoredump initialization. Once th=
-e timeout
->> > + *              occurs, the driver is notified, a devcoredump is gene=
-rated with
->> > + *              the available data indicating the timeout event and t=
-hen the
->> > + *              state machine is reset to the default state.
->> > + *
->> > + * The driver must register using hci_devcoredump_register() before u=
-sing the
->> > + * hci devcoredump APIs.
->> > + */
->> > +void hci_devcoredump_rx(struct work_struct *work)
->> > +{
->> > +       struct hci_dev *hdev =3D container_of(work, struct hci_dev, du=
-mp.dump_rx);
->> > +       struct sk_buff *skb;
->> > +       struct hci_devcoredump_skb_pattern *pattern;
->> > +       u32 dump_size;
->> > +       int start_state;
->> > +
->> > +#define DBG_UNEXPECTED_STATE() \
->> > +               bt_dev_dbg(hdev, \
->> > +                          "Unexpected packet (%d) for state (%d). ", =
-\
->> > +                          hci_dmp_cb(skb)->pkt_type, hdev->dump.state=
-)
->> > +
->> > +       while ((skb =3D skb_dequeue(&hdev->dump.dump_q))) {
->> > +               hci_dev_lock(hdev);
->> > +               start_state =3D hdev->dump.state;
->> > +
->> > +               switch (hci_dmp_cb(skb)->pkt_type) {
->> > +               case HCI_DEVCOREDUMP_PKT_INIT:
->> > +                       if (hdev->dump.state !=3D HCI_DEVCOREDUMP_IDLE=
-) {
->> > +                               DBG_UNEXPECTED_STATE();
->> > +                               goto loop_continue;
->> > +                       }
->> > +
->> > +                       if (skb->len !=3D sizeof(dump_size)) {
->> > +                               bt_dev_dbg(hdev, "Invalid dump init pk=
-t");
->> > +                               goto loop_continue;
->> > +                       }
->> > +
->> > +                       dump_size =3D *((u32 *)skb->data);
->> > +                       if (!dump_size) {
->> > +                               bt_dev_err(hdev, "Zero size dump init =
-pkt");
->> > +                               goto loop_continue;
->> > +                       }
->> > +
->> > +                       if (hci_devcoredump_prepare(hdev, dump_size)) =
-{
->> > +                               bt_dev_err(hdev, "Failed to prepare fo=
-r dump");
->> > +                               goto loop_continue;
->> > +                       }
->> > +
->> > +                       hci_devcoredump_update_state(hdev,
->> > +                                                    HCI_DEVCOREDUMP_A=
-CTIVE);
->> > +                       queue_delayed_work(hdev->workqueue,
->> > +                                          &hdev->dump.dump_timeout,
->> > +                                          DEVCOREDUMP_TIMEOUT);
->> > +                       break;
->> > +
->> > +               case HCI_DEVCOREDUMP_PKT_SKB:
->> > +                       if (hdev->dump.state !=3D HCI_DEVCOREDUMP_ACTI=
-VE) {
->> > +                               DBG_UNEXPECTED_STATE();
->> > +                               goto loop_continue;
->> > +                       }
->> > +
->> > +                       if (!hci_devcoredump_copy(hdev, skb->data, skb=
-->len))
->> > +                               bt_dev_dbg(hdev, "Failed to insert skb=
-");
->> > +                       break;
->> > +
->> > +               case HCI_DEVCOREDUMP_PKT_PATTERN:
->> > +                       if (hdev->dump.state !=3D HCI_DEVCOREDUMP_ACTI=
-VE) {
->> > +                               DBG_UNEXPECTED_STATE();
->> > +                               goto loop_continue;
->> > +                       }
->> > +
->> > +                       if (skb->len !=3D sizeof(*pattern)) {
->> > +                               bt_dev_dbg(hdev, "Invalid pattern skb"=
-);
->> > +                               goto loop_continue;
->> > +                       }
->> > +
->> > +                       pattern =3D (void *)skb->data;
->> > +
->> > +                       if (!hci_devcoredump_memset(hdev, pattern->pat=
-tern,
->> > +                                                   pattern->len))
->> > +                               bt_dev_dbg(hdev, "Failed to set patter=
-n");
->> > +                       break;
->> > +
->> > +               case HCI_DEVCOREDUMP_PKT_COMPLETE:
->> > +                       if (hdev->dump.state !=3D HCI_DEVCOREDUMP_ACTI=
-VE) {
->> > +                               DBG_UNEXPECTED_STATE();
->> > +                               goto loop_continue;
->> > +                       }
->> > +
->> > +                       hci_devcoredump_update_state(hdev,
->> > +                                                    HCI_DEVCOREDUMP_D=
-ONE);
->> > +                       dump_size =3D hdev->dump.tail - hdev->dump.hea=
-d;
->> > +
->> > +                       bt_dev_info(hdev,
->> > +                                   "Devcoredump complete with size %u=
- "
->> > +                                   "(expect %u)",
->> > +                                   dump_size, hdev->dump.alloc_size);
->> > +
->> > +                       dev_coredumpv(&hdev->dev, hdev->dump.head, dum=
-p_size,
->> > +                                     GFP_KERNEL);
->> > +                       break;
->> > +
->> > +               case HCI_DEVCOREDUMP_PKT_ABORT:
->> > +                       if (hdev->dump.state !=3D HCI_DEVCOREDUMP_ACTI=
-VE) {
->> > +                               DBG_UNEXPECTED_STATE();
->> > +                               goto loop_continue;
->> > +                       }
->> > +
->> > +                       hci_devcoredump_update_state(hdev,
->> > +                                                    HCI_DEVCOREDUMP_A=
-BORT);
->> > +                       dump_size =3D hdev->dump.tail - hdev->dump.hea=
-d;
->> > +
->> > +                       bt_dev_info(hdev,
->> > +                                   "Devcoredump aborted with size %u =
-"
->> > +                                   "(expect %u)",
->> > +                                   dump_size, hdev->dump.alloc_size);
->> > +
->> > +                       /* Emit a devcoredump with the available data =
-*/
->> > +                       dev_coredumpv(&hdev->dev, hdev->dump.head, dum=
-p_size,
->> > +                                     GFP_KERNEL);
->> > +                       break;
->> > +
->> > +               default:
->> > +                       bt_dev_dbg(hdev,
->> > +                                  "Unknown packet (%d) for state (%d)=
-. ",
->> > +                                  hci_dmp_cb(skb)->pkt_type, hdev->du=
-mp.state);
->> > +                       break;
->> > +               }
->> > +
->> > +loop_continue:
->> > +               kfree_skb(skb);
->> > +               hci_dev_unlock(hdev);
->> > +
->> > +               if (start_state !=3D hdev->dump.state)
->> > +                       hci_devcoredump_notify(hdev, hdev->dump.state)=
-;
->> > +
->> > +               hci_dev_lock(hdev);
->> > +               if (hdev->dump.state =3D=3D HCI_DEVCOREDUMP_DONE ||
->> > +                   hdev->dump.state =3D=3D HCI_DEVCOREDUMP_ABORT)
->> > +                       hci_devcoredump_reset(hdev);
->> > +               hci_dev_unlock(hdev);
->> > +       }
->> > +}
->> > +EXPORT_SYMBOL(hci_devcoredump_rx);
->> > +
->> > +void hci_devcoredump_timeout(struct work_struct *work)
->> > +{
->> > +       struct hci_dev *hdev =3D container_of(work, struct hci_dev,
->> > +                                           dump.dump_timeout.work);
->> > +       u32 dump_size;
->> > +
->> > +       hci_devcoredump_notify(hdev, HCI_DEVCOREDUMP_TIMEOUT);
->> > +
->> > +       hci_dev_lock(hdev);
->> > +
->> > +       cancel_work_sync(&hdev->dump.dump_rx);
->> > +
->> > +       hci_devcoredump_update_state(hdev, HCI_DEVCOREDUMP_TIMEOUT);
->> > +       dump_size =3D hdev->dump.tail - hdev->dump.head;
->> > +       bt_dev_info(hdev, "Devcoredump timeout with size %u (expect %u=
-)",
->> > +                   dump_size, hdev->dump.alloc_size);
->> > +
->> > +       /* Emit a devcoredump with the available data */
->> > +       dev_coredumpv(&hdev->dev, hdev->dump.head, dump_size, GFP_KERN=
-EL);
->> > +
->> > +       hci_devcoredump_reset(hdev);
->> > +
->> > +       hci_dev_unlock(hdev);
->> > +}
->> > +EXPORT_SYMBOL(hci_devcoredump_timeout);
->> > +
->> > +int hci_devcoredump_register(struct hci_dev *hdev, dmp_hdr_t dmp_hdr,
->> > +                            notify_change_t notify_change)
->> > +{
->> > +       /* driver must implement dmp_hdr() function for bluetooth devc=
-oredump */
->> > +       if (!dmp_hdr)
->> > +               return -EINVAL;
->> > +
->> > +       hci_dev_lock(hdev);
->> > +       hdev->dump.dmp_hdr =3D dmp_hdr;
->> > +       hdev->dump.notify_change =3D notify_change;
->> > +       hdev->dump.supported =3D true;
->> > +       hci_dev_unlock(hdev);
->> > +
->> > +       return 0;
->> > +}
->> > +EXPORT_SYMBOL(hci_devcoredump_register);
->> > +
->> > +int hci_devcoredump_init(struct hci_dev *hdev, u32 dmp_size)
->> > +{
->> > +       struct sk_buff *skb =3D NULL;
->> > +
->> > +       if (!hdev->dump.supported)
->> > +               return -EOPNOTSUPP;
->> > +
->> > +       skb =3D alloc_skb(sizeof(dmp_size), GFP_ATOMIC);
->> > +       if (!skb) {
->> > +               bt_dev_err(hdev, "Failed to allocate devcoredump init"=
-);
->> > +               return -ENOMEM;
->> > +       }
->> > +
->> > +       hci_dmp_cb(skb)->pkt_type =3D HCI_DEVCOREDUMP_PKT_INIT;
->> > +       skb_put_data(skb, &dmp_size, sizeof(dmp_size));
->> > +
->> > +       skb_queue_tail(&hdev->dump.dump_q, skb);
->> > +       queue_work(hdev->workqueue, &hdev->dump.dump_rx);
->> > +
->> > +       return 0;
->> > +}
->> > +EXPORT_SYMBOL(hci_devcoredump_init);
->> > +
->> > +int hci_devcoredump_append(struct hci_dev *hdev, struct sk_buff *skb)
->> > +{
->> > +       if (!skb)
->> > +               return -ENOMEM;
->> > +
->> > +       if (!hdev->dump.supported) {
->> > +               kfree_skb(skb);
->> > +               return -EOPNOTSUPP;
->> > +       }
->> > +
->> > +       hci_dmp_cb(skb)->pkt_type =3D HCI_DEVCOREDUMP_PKT_SKB;
->> > +
->> > +       skb_queue_tail(&hdev->dump.dump_q, skb);
->> > +       queue_work(hdev->workqueue, &hdev->dump.dump_rx);
->> > +
->> > +       return 0;
->> > +}
->> > +EXPORT_SYMBOL(hci_devcoredump_append);
->> > +
->> > +int hci_devcoredump_append_pattern(struct hci_dev *hdev, u8 pattern, =
-u32 len)
->> > +{
->> > +       struct hci_devcoredump_skb_pattern p;
->> > +       struct sk_buff *skb =3D NULL;
->> > +
->> > +       if (!hdev->dump.supported)
->> > +               return -EOPNOTSUPP;
->> > +
->> > +       skb =3D alloc_skb(sizeof(p), GFP_ATOMIC);
->> > +       if (!skb) {
->> > +               bt_dev_err(hdev, "Failed to allocate devcoredump patte=
-rn");
->> > +               return -ENOMEM;
->> > +       }
->> > +
->> > +       p.pattern =3D pattern;
->> > +       p.len =3D len;
->> > +
->> > +       hci_dmp_cb(skb)->pkt_type =3D HCI_DEVCOREDUMP_PKT_PATTERN;
->> > +       skb_put_data(skb, &p, sizeof(p));
->> > +
->> > +       skb_queue_tail(&hdev->dump.dump_q, skb);
->> > +       queue_work(hdev->workqueue, &hdev->dump.dump_rx);
->> > +
->> > +       return 0;
->> > +}
->> > +EXPORT_SYMBOL(hci_devcoredump_append_pattern);
->> > +
->> > +int hci_devcoredump_complete(struct hci_dev *hdev)
->> > +{
->> > +       struct sk_buff *skb =3D NULL;
->> > +
->> > +       if (!hdev->dump.supported)
->> > +               return -EOPNOTSUPP;
->> > +
->> > +       skb =3D alloc_skb(0, GFP_ATOMIC);
->> > +       if (!skb) {
->> > +               bt_dev_err(hdev, "Failed to allocate devcoredump compl=
-ete");
->> > +               return -ENOMEM;
->> > +       }
->> > +
->> > +       hci_dmp_cb(skb)->pkt_type =3D HCI_DEVCOREDUMP_PKT_COMPLETE;
->> > +
->> > +       skb_queue_tail(&hdev->dump.dump_q, skb);
->> > +       queue_work(hdev->workqueue, &hdev->dump.dump_rx);
->> > +
->> > +       return 0;
->> > +}
->> > +EXPORT_SYMBOL(hci_devcoredump_complete);
->> > +
->> > +int hci_devcoredump_abort(struct hci_dev *hdev)
->> > +{
->> > +       struct sk_buff *skb =3D NULL;
->> > +
->> > +       if (!hdev->dump.supported)
->> > +               return -EOPNOTSUPP;
->> > +
->> > +       skb =3D alloc_skb(0, GFP_ATOMIC);
->> > +       if (!skb) {
->> > +               bt_dev_err(hdev, "Failed to allocate devcoredump abort=
-");
->> > +               return -ENOMEM;
->> > +       }
->> > +
->> > +       hci_dmp_cb(skb)->pkt_type =3D HCI_DEVCOREDUMP_PKT_ABORT;
->> > +
->> > +       skb_queue_tail(&hdev->dump.dump_q, skb);
->> > +       queue_work(hdev->workqueue, &hdev->dump.dump_rx);
->> > +
->> > +       return 0;
->> > +}
->> > +EXPORT_SYMBOL(hci_devcoredump_abort);
->> > diff --git a/net/bluetooth/hci_core.c b/net/bluetooth/hci_core.c
->> > index 05c13f639b94..743c5bdb8daa 100644
->> > --- a/net/bluetooth/hci_core.c
->> > +++ b/net/bluetooth/hci_core.c
->> > @@ -2516,14 +2516,23 @@ struct hci_dev *hci_alloc_dev_priv(int sizeof_=
-priv)
->> >         INIT_WORK(&hdev->tx_work, hci_tx_work);
->> >         INIT_WORK(&hdev->power_on, hci_power_on);
->> >         INIT_WORK(&hdev->error_reset, hci_error_reset);
->> > +#ifdef CONFIG_DEV_COREDUMP
->> > +       INIT_WORK(&hdev->dump.dump_rx, hci_devcoredump_rx);
->> > +#endif
->> >
->> >         hci_cmd_sync_init(hdev);
->> >
->> >         INIT_DELAYED_WORK(&hdev->power_off, hci_power_off);
->> > +#ifdef CONFIG_DEV_COREDUMP
->> > +       INIT_DELAYED_WORK(&hdev->dump.dump_timeout, hci_devcoredump_ti=
-meout);
->> > +#endif
->> >
->> >         skb_queue_head_init(&hdev->rx_q);
->> >         skb_queue_head_init(&hdev->cmd_q);
->> >         skb_queue_head_init(&hdev->raw_q);
->> > +#ifdef CONFIG_DEV_COREDUMP
->> > +       skb_queue_head_init(&hdev->dump.dump_q);
->> > +#endif
->> >
->> >         init_waitqueue_head(&hdev->req_wait_q);
->> >
->> > diff --git a/net/bluetooth/hci_sync.c b/net/bluetooth/hci_sync.c
->> > index e5602e209b63..a3d049b55b70 100644
->> > --- a/net/bluetooth/hci_sync.c
->> > +++ b/net/bluetooth/hci_sync.c
->> > @@ -3924,6 +3924,8 @@ int hci_dev_open_sync(struct hci_dev *hdev)
->> >                 goto done;
->> >         }
->> >
->> > +       hci_devcoredump_reset(hdev);
->> > +
->> >         set_bit(HCI_RUNNING, &hdev->flags);
->> >         hci_sock_dev_event(hdev, HCI_DEV_OPEN);
->> >
->> > --
->> > 2.37.0.rc0.104.g0611611a94-goog
->> >
->>
->>
->> --
->> Luiz Augusto von Dentz
->
->
-> Regards,
-> Manish.
+ #endif /* _ASM_ARCHRANDOM_H */
+diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig
+index 1652a9800ebe..1880f71c2547 100644
+--- a/arch/arm64/Kconfig
++++ b/arch/arm64/Kconfig
+@@ -1858,14 +1858,6 @@ config ARM64_E0PD
+ 
+ 	  This option enables E0PD for TTBR1 where available.
+ 
+-config ARCH_RANDOM
+-	bool "Enable support for random number generation"
+-	default y
+-	help
+-	  Random number generation (part of the ARMv8.5 Extensions)
+-	  provides a high bandwidth, cryptographically secure
+-	  hardware random number generator.
+-
+ config ARM64_AS_HAS_MTE
+ 	# Initial support for MTE went in binutils 2.32.0, checked with
+ 	# ".arch armv8.5-a+memtag" below. However, this was incomplete
+diff --git a/arch/arm64/include/asm/archrandom.h b/arch/arm64/include/asm/archrandom.h
+index 3a6b6d38c5b8..c3b9fa56af67 100644
+--- a/arch/arm64/include/asm/archrandom.h
++++ b/arch/arm64/include/asm/archrandom.h
+@@ -2,8 +2,6 @@
+ #ifndef _ASM_ARCHRANDOM_H
+ #define _ASM_ARCHRANDOM_H
+ 
+-#ifdef CONFIG_ARCH_RANDOM
+-
+ #include <linux/arm-smccc.h>
+ #include <linux/bug.h>
+ #include <linux/kernel.h>
+@@ -167,12 +165,4 @@ arch_get_random_seed_long_early(unsigned long *v)
+ }
+ #define arch_get_random_seed_long_early arch_get_random_seed_long_early
+ 
+-#else /* !CONFIG_ARCH_RANDOM */
+-
+-static inline bool __init smccc_probe_trng(void)
+-{
+-	return false;
+-}
+-
+-#endif /* CONFIG_ARCH_RANDOM */
+ #endif /* _ASM_ARCHRANDOM_H */
+diff --git a/arch/arm64/kernel/cpufeature.c b/arch/arm64/kernel/cpufeature.c
+index 8d88433de81d..0e9462abeb77 100644
+--- a/arch/arm64/kernel/cpufeature.c
++++ b/arch/arm64/kernel/cpufeature.c
+@@ -2416,7 +2416,6 @@ static const struct arm64_cpu_capabilities arm64_features[] = {
+ 		.cpu_enable = cpu_enable_e0pd,
+ 	},
+ #endif
+-#ifdef CONFIG_ARCH_RANDOM
+ 	{
+ 		.desc = "Random Number Generator",
+ 		.capability = ARM64_HAS_RNG,
+@@ -2428,7 +2427,6 @@ static const struct arm64_cpu_capabilities arm64_features[] = {
+ 		.sign = FTR_UNSIGNED,
+ 		.min_field_value = 1,
+ 	},
+-#endif
+ #ifdef CONFIG_ARM64_BTI
+ 	{
+ 		.desc = "Branch Target Identification",
+diff --git a/arch/powerpc/Kconfig b/arch/powerpc/Kconfig
+index 7aa12e88c580..623deb5bedf6 100644
+--- a/arch/powerpc/Kconfig
++++ b/arch/powerpc/Kconfig
+@@ -1252,9 +1252,6 @@ config PHYSICAL_START
+ 	default "0x00000000"
+ endif
+ 
+-config	ARCH_RANDOM
+-	def_bool n
+-
+ config PPC_LIB_RHEAP
+ 	bool
+ 
+diff --git a/arch/powerpc/include/asm/archrandom.h b/arch/powerpc/include/asm/archrandom.h
+index 9a53e29680f4..25ba65df6b1a 100644
+--- a/arch/powerpc/include/asm/archrandom.h
++++ b/arch/powerpc/include/asm/archrandom.h
+@@ -2,8 +2,6 @@
+ #ifndef _ASM_POWERPC_ARCHRANDOM_H
+ #define _ASM_POWERPC_ARCHRANDOM_H
+ 
+-#ifdef CONFIG_ARCH_RANDOM
+-
+ #include <asm/machdep.h>
+ 
+ static inline bool __must_check arch_get_random_long(unsigned long *v)
+@@ -35,7 +33,6 @@ static inline bool __must_check arch_get_random_seed_int(unsigned int *v)
+ 
+ 	return rc;
+ }
+-#endif /* CONFIG_ARCH_RANDOM */
+ 
+ #ifdef CONFIG_PPC_POWERNV
+ int powernv_hwrng_present(void);
+diff --git a/arch/powerpc/include/asm/machdep.h b/arch/powerpc/include/asm/machdep.h
+index 358d171ae8e0..6c1002043367 100644
+--- a/arch/powerpc/include/asm/machdep.h
++++ b/arch/powerpc/include/asm/machdep.h
+@@ -200,9 +200,7 @@ struct machdep_calls {
+ 	ssize_t (*cpu_release)(const char *, size_t);
+ #endif
+ 
+-#ifdef CONFIG_ARCH_RANDOM
+ 	int (*get_random_seed)(unsigned long *v);
+-#endif
+ };
+ 
+ extern void e500_idle(void);
+diff --git a/arch/powerpc/platforms/microwatt/Kconfig b/arch/powerpc/platforms/microwatt/Kconfig
+index 5e320f49583a..6af443a1db99 100644
+--- a/arch/powerpc/platforms/microwatt/Kconfig
++++ b/arch/powerpc/platforms/microwatt/Kconfig
+@@ -6,7 +6,6 @@ config PPC_MICROWATT
+ 	select PPC_ICS_NATIVE
+ 	select PPC_ICP_NATIVE
+ 	select PPC_UDBG_16550
+-	select ARCH_RANDOM
+ 	help
+           This option enables support for FPGA-based Microwatt implementations.
+ 
+diff --git a/arch/powerpc/platforms/powernv/Kconfig b/arch/powerpc/platforms/powernv/Kconfig
+index 161dfe024085..e1a05c5a9004 100644
+--- a/arch/powerpc/platforms/powernv/Kconfig
++++ b/arch/powerpc/platforms/powernv/Kconfig
+@@ -12,7 +12,6 @@ config PPC_POWERNV
+ 	select EPAPR_BOOT
+ 	select PPC_INDIRECT_PIO
+ 	select PPC_UDBG_16550
+-	select ARCH_RANDOM
+ 	select CPU_FREQ
+ 	select PPC_DOORBELL
+ 	select MMU_NOTIFIER
+diff --git a/arch/powerpc/platforms/pseries/Kconfig b/arch/powerpc/platforms/pseries/Kconfig
+index f7fd91d153a4..f4a647c1f0b2 100644
+--- a/arch/powerpc/platforms/pseries/Kconfig
++++ b/arch/powerpc/platforms/pseries/Kconfig
+@@ -19,7 +19,6 @@ config PPC_PSERIES
+ 	select PPC_UDBG_16550
+ 	select PPC_DOORBELL
+ 	select HOTPLUG_CPU
+-	select ARCH_RANDOM
+ 	select FORCE_SMP
+ 	select SWIOTLB
+ 	default y
+diff --git a/arch/s390/Kconfig b/arch/s390/Kconfig
+index 8cd9e56c629b..9b6e4e7cb17b 100644
+--- a/arch/s390/Kconfig
++++ b/arch/s390/Kconfig
+@@ -507,21 +507,6 @@ config KEXEC_SIG
+ 	  verification for the corresponding kernel image type being
+ 	  loaded in order for this to work.
+ 
+-config ARCH_RANDOM
+-	def_bool y
+-	prompt "s390 architectural random number generation API"
+-	help
+-	  Enable the s390 architectural random number generation API
+-	  to provide random data for all consumers within the Linux
+-	  kernel.
+-
+-	  When enabled the arch_random_* functions declared in linux/random.h
+-	  are implemented. The implementation is based on the s390 CPACF
+-	  instruction subfunction TRNG which provides a real true random
+-	  number generator.
+-
+-	  If unsure, say Y.
+-
+ config KERNEL_NOBP
+ 	def_bool n
+ 	prompt "Enable modified branch prediction for the kernel by default"
+diff --git a/arch/s390/configs/zfcpdump_defconfig b/arch/s390/configs/zfcpdump_defconfig
+index a87fcc45e307..f4976f611b94 100644
+--- a/arch/s390/configs/zfcpdump_defconfig
++++ b/arch/s390/configs/zfcpdump_defconfig
+@@ -15,7 +15,6 @@ CONFIG_TUNE_ZEC12=y
+ # CONFIG_COMPAT is not set
+ CONFIG_NR_CPUS=2
+ CONFIG_HZ_100=y
+-# CONFIG_ARCH_RANDOM is not set
+ # CONFIG_RELOCATABLE is not set
+ # CONFIG_CHSC_SCH is not set
+ # CONFIG_SCM_BUS is not set
+diff --git a/arch/s390/crypto/Makefile b/arch/s390/crypto/Makefile
+index c63abfeb6d17..1b1cc478fa94 100644
+--- a/arch/s390/crypto/Makefile
++++ b/arch/s390/crypto/Makefile
+@@ -15,7 +15,7 @@ obj-$(CONFIG_CRYPTO_CHACHA_S390) += chacha_s390.o
+ obj-$(CONFIG_S390_PRNG) += prng.o
+ obj-$(CONFIG_CRYPTO_GHASH_S390) += ghash_s390.o
+ obj-$(CONFIG_CRYPTO_CRC32_S390) += crc32-vx_s390.o
+-obj-$(CONFIG_ARCH_RANDOM) += arch_random.o
++obj-y += arch_random.o
+ 
+ crc32-vx_s390-y := crc32-vx.o crc32le-vx.o crc32be-vx.o
+ chacha_s390-y := chacha-glue.o chacha-s390.o
+diff --git a/arch/s390/include/asm/archrandom.h b/arch/s390/include/asm/archrandom.h
+index 2c6e1c6ecbe7..0a1c2e66c709 100644
+--- a/arch/s390/include/asm/archrandom.h
++++ b/arch/s390/include/asm/archrandom.h
+@@ -11,8 +11,6 @@
+ #ifndef _ASM_S390_ARCHRANDOM_H
+ #define _ASM_S390_ARCHRANDOM_H
+ 
+-#ifdef CONFIG_ARCH_RANDOM
+-
+ #include <linux/static_key.h>
+ #include <linux/atomic.h>
+ #include <asm/cpacf.h>
+@@ -50,5 +48,4 @@ static inline bool __must_check arch_get_random_seed_int(unsigned int *v)
+ 	return false;
+ }
+ 
+-#endif /* CONFIG_ARCH_RANDOM */
+ #endif /* _ASM_S390_ARCHRANDOM_H */
+diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
+index be0b95e51df6..59b82135c814 100644
+--- a/arch/x86/Kconfig
++++ b/arch/x86/Kconfig
+@@ -1833,15 +1833,6 @@ config ARCH_USES_PG_UNCACHED
+ 	def_bool y
+ 	depends on X86_PAT
+ 
+-config ARCH_RANDOM
+-	def_bool y
+-	prompt "x86 architectural random number generator" if EXPERT
+-	help
+-	  Enable the x86 architectural RDRAND instruction
+-	  (Intel Bull Mountain technology) to generate random numbers.
+-	  If supported, this is a high bandwidth, cryptographically
+-	  secure hardware random number generator.
+-
+ config X86_UMIP
+ 	def_bool y
+ 	prompt "User Mode Instruction Prevention" if EXPERT
+diff --git a/arch/x86/include/asm/archrandom.h b/arch/x86/include/asm/archrandom.h
+index ebc248e49549..fb235b696175 100644
+--- a/arch/x86/include/asm/archrandom.h
++++ b/arch/x86/include/asm/archrandom.h
+@@ -65,10 +65,8 @@ static inline bool __must_check rdseed_int(unsigned int *v)
+ 
+ /*
+  * These are the generic interfaces; they must not be declared if the
+- * stubs in <linux/random.h> are to be invoked,
+- * i.e. CONFIG_ARCH_RANDOM is not defined.
++ * stubs in <linux/random.h> are to be invoked.
+  */
+-#ifdef CONFIG_ARCH_RANDOM
+ 
+ static inline bool __must_check arch_get_random_long(unsigned long *v)
+ {
+@@ -90,12 +88,8 @@ static inline bool __must_check arch_get_random_seed_int(unsigned int *v)
+ 	return static_cpu_has(X86_FEATURE_RDSEED) ? rdseed_int(v) : false;
+ }
+ 
+-extern void x86_init_rdrand(struct cpuinfo_x86 *c);
+-
+-#else  /* !CONFIG_ARCH_RANDOM */
+-
+-static inline void x86_init_rdrand(struct cpuinfo_x86 *c) { }
+-
+-#endif  /* !CONFIG_ARCH_RANDOM */
++#ifndef CONFIG_UML
++void x86_init_rdrand(struct cpuinfo_x86 *c);
++#endif
+ 
+ #endif /* ASM_X86_ARCHRANDOM_H */
+diff --git a/arch/x86/kernel/cpu/rdrand.c b/arch/x86/kernel/cpu/rdrand.c
+index 23b901cc46df..6f4b196fe97d 100644
+--- a/arch/x86/kernel/cpu/rdrand.c
++++ b/arch/x86/kernel/cpu/rdrand.c
+@@ -20,7 +20,6 @@
+  * If it fails, it is simple to disable RDRAND and RDSEED here.
+  */
+ 
+-#ifdef CONFIG_ARCH_RANDOM
+ void x86_init_rdrand(struct cpuinfo_x86 *c)
+ {
+ 	enum { SAMPLES = 8, MIN_CHANGE = 5 };
+@@ -60,4 +59,3 @@ void x86_init_rdrand(struct cpuinfo_x86 *c)
+ 		pr_emerg("RDRAND and RDSEED are not reliable on this platform; disabling.\n");
+ 	}
+ }
+-#endif
+diff --git a/drivers/char/Kconfig b/drivers/char/Kconfig
+index 0b6c03643ddc..30192e123e5f 100644
+--- a/drivers/char/Kconfig
++++ b/drivers/char/Kconfig
+@@ -431,7 +431,6 @@ config ADI
+ config RANDOM_TRUST_CPU
+ 	bool "Initialize RNG using CPU RNG instructions"
+ 	default y
+-	depends on ARCH_RANDOM
+ 	help
+ 	  Initialize the RNG using random numbers supplied by the CPU's
+ 	  RNG instructions (e.g. RDRAND), if supported and available. These
+diff --git a/drivers/char/hw_random/s390-trng.c b/drivers/char/hw_random/s390-trng.c
+index 2beaa35c0d74..488808dc17a2 100644
+--- a/drivers/char/hw_random/s390-trng.c
++++ b/drivers/char/hw_random/s390-trng.c
+@@ -108,7 +108,6 @@ static ssize_t trng_counter_show(struct device *dev,
+ {
+ 	u64 dev_counter = atomic64_read(&trng_dev_counter);
+ 	u64 hwrng_counter = atomic64_read(&trng_hwrng_counter);
+-#if IS_ENABLED(CONFIG_ARCH_RANDOM)
+ 	u64 arch_counter = atomic64_read(&s390_arch_random_counter);
+ 
+ 	return sysfs_emit(buf,
+@@ -118,14 +117,6 @@ static ssize_t trng_counter_show(struct device *dev,
+ 			"total: %llu\n",
+ 			dev_counter, hwrng_counter, arch_counter,
+ 			dev_counter + hwrng_counter + arch_counter);
+-#else
+-	return sysfs_emit(buf,
+-			"trng:  %llu\n"
+-			"hwrng: %llu\n"
+-			"total: %llu\n",
+-			dev_counter, hwrng_counter,
+-			dev_counter + hwrng_counter);
+-#endif
+ }
+ static DEVICE_ATTR(byte_counter, 0444, trng_counter_show, NULL);
+ 
+diff --git a/include/asm-generic/Kbuild b/include/asm-generic/Kbuild
+index 8e47d483b524..36db8b9eb68a 100644
+--- a/include/asm-generic/Kbuild
++++ b/include/asm-generic/Kbuild
+@@ -5,6 +5,7 @@
+ # asm headers from the host architecutre.)
+ 
+ mandatory-y += atomic.h
++mandatory-y += archrandom.h
+ mandatory-y += barrier.h
+ mandatory-y += bitops.h
+ mandatory-y += bug.h
+diff --git a/include/asm-generic/archrandom.h b/include/asm-generic/archrandom.h
+new file mode 100644
+index 000000000000..3a5ee202dd86
+--- /dev/null
++++ b/include/asm-generic/archrandom.h
+@@ -0,0 +1,25 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++#ifndef __ASM_GENERIC_ARCHRANDOM_H__
++#define __ASM_GENERIC_ARCHRANDOM_H__
++
++static inline bool __must_check arch_get_random_long(unsigned long *v)
++{
++	return false;
++}
++
++static inline bool __must_check arch_get_random_int(unsigned int *v)
++{
++	return false;
++}
++
++static inline bool __must_check arch_get_random_seed_long(unsigned long *v)
++{
++	return false;
++}
++
++static inline bool __must_check arch_get_random_seed_int(unsigned int *v)
++{
++	return false;
++}
++
++#endif
+diff --git a/include/linux/random.h b/include/linux/random.h
+index 20e389a14e5c..865770e29f3e 100644
+--- a/include/linux/random.h
++++ b/include/linux/random.h
+@@ -106,14 +106,7 @@ declare_get_random_var_wait(long, unsigned long)
+  */
+ #include <linux/prandom.h>
+ 
+-#ifdef CONFIG_ARCH_RANDOM
+-# include <asm/archrandom.h>
+-#else
+-static inline bool __must_check arch_get_random_long(unsigned long *v) { return false; }
+-static inline bool __must_check arch_get_random_int(unsigned int *v) { return false; }
+-static inline bool __must_check arch_get_random_seed_long(unsigned long *v) { return false; }
+-static inline bool __must_check arch_get_random_seed_int(unsigned int *v) { return false; }
+-#endif
++#include <asm/archrandom.h>
+ 
+ /*
+  * Called from the boot CPU during startup; not valid to call once
+diff --git a/tools/testing/selftests/wireguard/qemu/kernel.config b/tools/testing/selftests/wireguard/qemu/kernel.config
+index bad88f4b0a03..e1858ce7003f 100644
+--- a/tools/testing/selftests/wireguard/qemu/kernel.config
++++ b/tools/testing/selftests/wireguard/qemu/kernel.config
+@@ -58,7 +58,6 @@ CONFIG_NO_HZ_IDLE=y
+ CONFIG_NO_HZ_FULL=n
+ CONFIG_HZ_PERIODIC=n
+ CONFIG_HIGH_RES_TIMERS=y
+-CONFIG_ARCH_RANDOM=y
+ CONFIG_FILE_LOCKING=y
+ CONFIG_POSIX_TIMERS=y
+ CONFIG_DEVTMPFS=y
+-- 
+2.35.1
 
-
-
---=20
-Luiz Augusto von Dentz

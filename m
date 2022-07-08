@@ -2,100 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2980456B3D9
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 09:54:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 055C756B3E2
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 09:56:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237138AbiGHHx5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Jul 2022 03:53:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58346 "EHLO
+        id S237317AbiGHHz6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Jul 2022 03:55:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59616 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237490AbiGHHxt (ORCPT
+        with ESMTP id S237432AbiGHHzy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Jul 2022 03:53:49 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD82D2CE01
-        for <linux-kernel@vger.kernel.org>; Fri,  8 Jul 2022 00:53:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1657266828; x=1688802828;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=226n02MK38Ht0X6q4rCIPnDL++KJz3PSWDz7ZAUD+1w=;
-  b=HKz3qwxDYMVMqAhWITTPB116RJrukIagwdJys6K0Xqndjd24hAPG2SoK
-   Bhx37uQnTAbwNC2AsB+p1RNgR0lWYmmN2wRjLQe+SW2RxYFS+kgIxuAEb
-   RyNtoA7F7kMDSTCt2AS+f1eD7ZCWZ0Ln+y8hVTO5X7TW6zxyXbdyRcC4c
-   4KCoTinxLK8l3Yh5rezZmcbyl7HQXF+1MpRFebpeCMeKZ8oxpElkbrWU7
-   AOMnWPYjxy/tV1RWo4zlXaxfa+qSCaqrDonQ4d2WHle50xsY/FAiNreC8
-   xZtgL4fq1Xtwz1UMjCBMGTd4+obER5DRy45NTY6f9VhOzYKcPNjhnX8US
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10401"; a="282974159"
-X-IronPort-AV: E=Sophos;i="5.92,254,1650956400"; 
-   d="scan'208";a="282974159"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jul 2022 00:53:47 -0700
-X-IronPort-AV: E=Sophos;i="5.92,254,1650956400"; 
-   d="scan'208";a="661691042"
-Received: from cmchugh-mobl.ger.corp.intel.com (HELO [10.213.229.21]) ([10.213.229.21])
-  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jul 2022 00:53:45 -0700
-Message-ID: <6e387f90-dce3-486d-83e9-26a975777265@intel.com>
-Date:   Fri, 8 Jul 2022 08:53:43 +0100
+        Fri, 8 Jul 2022 03:55:54 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 810967E008
+        for <linux-kernel@vger.kernel.org>; Fri,  8 Jul 2022 00:55:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1657266949;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=HAAKsCoSYhF/bkc1lBCytOqkp21Aily9JDFQCiAKZoo=;
+        b=EF2gUvM+OfAnuQa7AleYtnVIkHzL61D7CMp4mnNSkVdMbfV4t6nPpWtdQvOnCCDyuvbPyu
+        eLp9hsKm51EuWC/B0+ErAV8UBWl6m5wM85RL6FFYeeeslX+WWbTd9Ps2qnyHHFOx+Ld/CW
+        OtFli1xxerM6dZgiZT3McNo0LHQW9M4=
+Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com
+ [209.85.208.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-433-7PrD8y4uOmG3tL1dxHqJmw-1; Fri, 08 Jul 2022 03:55:48 -0400
+X-MC-Unique: 7PrD8y4uOmG3tL1dxHqJmw-1
+Received: by mail-ed1-f69.google.com with SMTP id y5-20020a056402358500b0043592ac3961so15385483edc.6
+        for <linux-kernel@vger.kernel.org>; Fri, 08 Jul 2022 00:55:48 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
+         :message-id:mime-version;
+        bh=HAAKsCoSYhF/bkc1lBCytOqkp21Aily9JDFQCiAKZoo=;
+        b=VZi13eApKeSRuepK3DPugx44UA+rGJQ0kw1isPE3lVqMQv8FUBat5ENornjFGfTtMN
+         0T66zhq8AukgPsfZmpH8aBs/jaIwgFqV8dvApnCiSscYHjGwXYV//zOsTmjRATY/AgdC
+         p7b8s+8GSZMrCgJJD6b51M8ZCSr0VHa0tjZ4fjhiDOJIDzEa9C29OG4qLguQ/VEUn45c
+         a4SkTPhRhrzWKEcFEdc/vh6l/uezaxRtFMKcCuUtLEIA9yzZjvgfHtj46sZJugFOmGBK
+         /p/zdV9PhJXeHtaEpShSG8fdbm7ulfJMBHD94RcsqFM6i29AAeSodtmN2yDcD4meDoTF
+         W0xg==
+X-Gm-Message-State: AJIora9r656XMxA+/O2C2nZAMDEpXSCjA6YK/c5zdfJxKvS6AiNnjLDN
+        8POo+6DkZLJqSpPFDRtyS4hGAxU5wai6f4CYvS9/Ol25MC0suf11ShscYu37Jtz2uYd52aX5T4s
+        XZSdWXBDEXcHnk3GpAxg94Mr/f6F/Gn0cWag4rhLSEa0EeXzLIodlwIFhwg0jiqj7tEjTjpVp23
+        xL
+X-Received: by 2002:a17:906:9bde:b0:72b:2e5:deb5 with SMTP id de30-20020a1709069bde00b0072b02e5deb5mr2313719ejc.21.1657266947382;
+        Fri, 08 Jul 2022 00:55:47 -0700 (PDT)
+X-Google-Smtp-Source: AGRyM1spvCJWZP6FKE/wq/QU7UVcLahUIL6ee/g2jmNHTxTrCbpxOQC9KoxkC1SeyW5GOmLz61H/Yw==
+X-Received: by 2002:a17:906:9bde:b0:72b:2e5:deb5 with SMTP id de30-20020a1709069bde00b0072b02e5deb5mr2313692ejc.21.1657266947080;
+        Fri, 08 Jul 2022 00:55:47 -0700 (PDT)
+Received: from fedora (nat-2.ign.cz. [91.219.240.2])
+        by smtp.gmail.com with ESMTPSA id f3-20020a170906138300b0072124df085bsm20087328ejc.15.2022.07.08.00.55.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 08 Jul 2022 00:55:46 -0700 (PDT)
+From:   Vitaly Kuznetsov <vkuznets@redhat.com>
+To:     Sean Christopherson <seanjc@google.com>,
+        Jim Mattson <jmattson@google.com>
+Cc:     kvm@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
+        Anirudh Rayabharam <anrayabh@linux.microsoft.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Maxim Levitsky <mlevitsk@redhat.com>,
+        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 22/28] KVM: VMX: Clear controls obsoleted by EPT at
+ runtime, not setup
+In-Reply-To: <YsdSfP7xmMcLv8i9@google.com>
+References: <20220629150625.238286-1-vkuznets@redhat.com>
+ <20220629150625.238286-23-vkuznets@redhat.com>
+ <CALMp9eRA0v6BK6KG81ZE_iLKF6VNXxemN=E4gAE4AM-V4gkdHQ@mail.gmail.com>
+ <87wncpotqv.fsf@redhat.com> <Ysc0TZaKxweEaelb@google.com>
+ <CALMp9eTrtFd-pcEeWvyAs7eYe1R1FPvGr0pjQNP8o8F0YHhg8A@mail.gmail.com>
+ <YsdSfP7xmMcLv8i9@google.com>
+Date:   Fri, 08 Jul 2022 09:55:45 +0200
+Message-ID: <87tu7sox6m.fsf@redhat.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Firefox/91.0 Thunderbird/91.11.0
-Subject: Re: [PATCH v10 04/11] drm/i915/gem: selftest should not attempt mmap
- of private regions
-Content-Language: en-GB
-To:     Robert Beckett <bob.beckett@collabora.com>,
-        dri-devel@lists.freedesktop.org, intel-gfx@lists.freedesktop.org,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>
-Cc:     kernel@collabora.com,
-        =?UTF-8?Q?Thomas_Hellstr=c3=b6m?= 
-        <thomas.hellstrom@linux.intel.com>, linux-kernel@vger.kernel.org
-References: <20220707200230.1657555-1-bob.beckett@collabora.com>
- <20220707200230.1657555-5-bob.beckett@collabora.com>
-From:   Matthew Auld <matthew.auld@intel.com>
-In-Reply-To: <20220707200230.1657555-5-bob.beckett@collabora.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 07/07/2022 21:02, Robert Beckett wrote:
-> During testing make can_mmap consider whether the region is private.
+Sean Christopherson <seanjc@google.com> writes:
 
-Do we still need this with: 938d2fd17d17 ("drm/i915/selftests: skip the 
-mman tests for stolen") ?
+> On Thu, Jul 07, 2022, Jim Mattson wrote:
+>> On Thu, Jul 7, 2022 at 12:30 PM Sean Christopherson <seanjc@google.com> wrote:
+>> >
+>> > On Thu, Jul 07, 2022, Vitaly Kuznetsov wrote:
+>> > > Jim Mattson <jmattson@google.com> writes:
+>> > >
+>> > > > On Wed, Jun 29, 2022 at 8:07 AM Vitaly Kuznetsov <vkuznets@redhat.com> wrote:
+>> > > >>
+>> > > >> From: Sean Christopherson <seanjc@google.com>
+>> > > >>
+>> > > >> Clear the CR3 and INVLPG interception controls at runtime based on
+>> > > >> whether or not EPT is being _used_, as opposed to clearing the bits at
+>> > > >> setup if EPT is _supported_ in hardware, and then restoring them when EPT
+>> > > >> is not used.  Not mucking with the base config will allow using the base
+>> > > >> config as the starting point for emulating the VMX capability MSRs.
+>> > > >>
+>> > > >> Signed-off-by: Sean Christopherson <seanjc@google.com>
+>> > > >> Signed-off-by: Vitaly Kuznetsov <vkuznets@redhat.com>
+>> > > > Nit: These controls aren't "obsoleted" by EPT; they're just no longer
+>> > > > required.
+>
+> Actually, they're still required if unrestricted guest isn't supported.
+>
+>> > Isn't that the definition of "obsolete"?  They're "no longer in use" when KVM
+>> > enables EPT.
+>> 
+>> There are still reasons to use them aside from shadow page table
+>> maintenance. For example, malware analysis may be interested in
+>> intercepting CR3 changes to track process context (and to
+>> enable/disable costly monitoring). EPT doesn't render these events
+>> "obsolete," because you can't intercept these events using EPT.
+>
+> Fair enough, I was using "EPT" in the "KVM is using EPT" sense.  But even that's
+> wrong as KVM intercepts CR3 accesses when EPT is enabled, but unrestricted guest
+> is disabled and the guest disables paging.
+>
+> Vitaly, since the CR3 fields are still technically "needed", maybe just be
+> explicit?
+>
+>   KVM: VMX: Adjust CR3/INVPLG interception for EPT=y at runtime, not setup
+>
 
-> 
-> Signed-off-by: Robert Beckett <bob.beckett@collabora.com>
-> Reviewed-by: Thomas Hellström <thomas.hellstrom@linux.intel.com>
-> ---
->   drivers/gpu/drm/i915/gem/selftests/i915_gem_mman.c | 3 +++
->   1 file changed, 3 insertions(+)
-> 
-> diff --git a/drivers/gpu/drm/i915/gem/selftests/i915_gem_mman.c b/drivers/gpu/drm/i915/gem/selftests/i915_gem_mman.c
-> index 5bc93a1ce3e3..76181e28c75e 100644
-> --- a/drivers/gpu/drm/i915/gem/selftests/i915_gem_mman.c
-> +++ b/drivers/gpu/drm/i915/gem/selftests/i915_gem_mman.c
-> @@ -869,6 +869,9 @@ static bool can_mmap(struct drm_i915_gem_object *obj, enum i915_mmap_type type)
->   	struct drm_i915_private *i915 = to_i915(obj->base.dev);
->   	bool no_map;
->   
-> +	if (obj->mm.region && obj->mm.region->private)
-> +		return false;
-> +
->   	if (obj->ops->mmap_offset)
->   		return type == I915_MMAP_TYPE_FIXED;
->   	else if (type == I915_MMAP_TYPE_FIXED)
+Sounds good, adjusted!
+
+-- 
+Vitaly
+

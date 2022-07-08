@@ -2,90 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6323156AFA6
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 03:07:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9BB7856AFAC
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 03:07:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236649AbiGHA6r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Jul 2022 20:58:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58362 "EHLO
+        id S236708AbiGHBAL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Jul 2022 21:00:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59094 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236431AbiGHA6o (ORCPT
+        with ESMTP id S236054AbiGHBAJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Jul 2022 20:58:44 -0400
-Received: from mail-pg1-f195.google.com (mail-pg1-f195.google.com [209.85.215.195])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C717C186FB;
-        Thu,  7 Jul 2022 17:58:43 -0700 (PDT)
-Received: by mail-pg1-f195.google.com with SMTP id i190so8469239pge.7;
-        Thu, 07 Jul 2022 17:58:43 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=wqH5lkEcgEYk9IYTlg7iiusMTMJ78GFXYQavtNkHZMw=;
-        b=tY1CseSFgf1BX+Xb0hgwKGonuCKpWHRdahzU1iZXdFZCMbdXAkiNd1qvro9i7v7Kkp
-         5OO8eCRRMkwFylG9hJHiwbCPomQTVZYff1yknfBrWDDvohYubOMLRJIRHxZCoQI+m9uf
-         Zaf33qmSOvlqNxEdraPHvMHxT/sW5vA93ZWnoau5r5SPXT/9EV+gImL7H1kYIdtSN3Kt
-         UTK8WN++QGPgcTJUP/UmCp/F94KlqaasJ5QioYeMM3VJaNXXHPqRDmcDmS/ctGgHW63v
-         2IPBb40UtUm39wV5iX+kOfkVpdcDuW2F32NR5tnb+rI2BFyDhXzby6RTjhhn8/Z2mTjj
-         Zo8g==
-X-Gm-Message-State: AJIora9DASxokymVOVJc01ZHbfDVpy5Mh71ogF3/3mN6kzSqqZD/hdD6
-        UrP7viq90Fchn91H0869/g==
-X-Google-Smtp-Source: AGRyM1vacj7yRlF6w+n1Bho6IKjJtTx/+ZIht2cmpzn70gZgkzg8M8pXSk63aKGy6xj6m/IaJpgGqw==
-X-Received: by 2002:a63:ea05:0:b0:411:f94f:b80f with SMTP id c5-20020a63ea05000000b00411f94fb80fmr789435pgi.189.1657241923152;
-        Thu, 07 Jul 2022 17:58:43 -0700 (PDT)
-Received: from localhost.localdomain ([156.146.53.107])
-        by smtp.gmail.com with ESMTPSA id a140-20020a621a92000000b005289fbef7c4sm5034884pfa.140.2022.07.07.17.58.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 07 Jul 2022 17:58:42 -0700 (PDT)
-From:   sunliming <sunliming@kylinos.cn>
-To:     christian.koenig@amd.com, robdclark@gmail.com,
-        quic_abhinavk@quicinc.com, dmitry.baryshkov@linaro.org
-Cc:     freedreno@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, kelulanainsley@gmail.com,
-        sunliming <sunliming@kylinos.cn>,
-        kernel test robot <lkp@intel.com>
-Subject: [PATCH RESEND] drm/msm/dsi: fix the inconsistent indenting
-Date:   Fri,  8 Jul 2022 08:58:32 +0800
-Message-Id: <20220708005832.439722-1-sunliming@kylinos.cn>
-X-Mailer: git-send-email 2.25.1
+        Thu, 7 Jul 2022 21:00:09 -0400
+Received: from baidu.com (mx20.baidu.com [111.202.115.85])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 82F11183A3;
+        Thu,  7 Jul 2022 18:00:08 -0700 (PDT)
+Received: from BC-Mail-Ex18.internal.baidu.com (unknown [172.31.51.12])
+        by Forcepoint Email with ESMTPS id CBCCE2E67E316B519FAF;
+        Fri,  8 Jul 2022 09:00:05 +0800 (CST)
+Received: from BC-Mail-Ex25.internal.baidu.com (172.31.51.19) by
+ BC-Mail-Ex18.internal.baidu.com (172.31.51.12) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
+ 15.1.2308.20; Fri, 8 Jul 2022 09:00:07 +0800
+Received: from BC-Mail-Ex25.internal.baidu.com ([172.31.51.19]) by
+ BC-Mail-Ex25.internal.baidu.com ([172.31.51.19]) with mapi id 15.01.2308.020;
+ Fri, 8 Jul 2022 09:00:07 +0800
+From:   "Wang,Guangju" <wangguangju@baidu.com>
+To:     Sean Christopherson <seanjc@google.com>
+CC:     "pbonzini@redhat.com" <pbonzini@redhat.com>,
+        "vkuznets@redhat.com" <vkuznets@redhat.com>,
+        "jmattson@google.com" <jmattson@google.com>,
+        "wanpengli@tencent.com" <wanpengli@tencent.com>,
+        "bp@alien8.de" <bp@alien8.de>, "joro@8bytes.org" <joro@8bytes.org>,
+        "suravee.suthikulpanit@amd.com" <suravee.suthikulpanit@amd.com>,
+        "hpa@zytor.com" <hpa@zytor.com>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "Chu,Kaiping" <chukaiping@baidu.com>
+Subject: =?gb2312?B?tPC4tDogW1BBVENIXSBLVk06IHg4NjogQWRkIEVPSV9JTkRVQ0VEIGV4aXQg?=
+ =?gb2312?Q?handlers_for_Hyper-V_SynIC_vectors?=
+Thread-Topic: [PATCH] KVM: x86: Add EOI_INDUCED exit handlers for Hyper-V
+ SynIC vectors
+Thread-Index: AQHYkf0ndxqgj4EsMEqsgQUTLQABEa1ylY4AgAESAGA=
+Date:   Fri, 8 Jul 2022 01:00:07 +0000
+Message-ID: <4068ff4962154900a6a3535454f4706e@baidu.com>
+References: <20220707122854.87-1-wangguangju@baidu.com>
+ <YscLvipHbNx+Wy9y@google.com>
+In-Reply-To: <YscLvipHbNx+Wy9y@google.com>
+Accept-Language: zh-CN, en-US
+Content-Language: zh-CN
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [172.22.192.211]
+Content-Type: text/plain; charset="gb2312"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Fix the inconsistent indenting in function msm_dsi_dphy_timing_calc_v3().
-
-Fix the following smatch warnings:
-
-drivers/gpu/drm/msm/dsi/phy/dsi_phy.c:350 msm_dsi_dphy_timing_calc_v3() warn: inconsistent indenting
-
-Reported-by: kernel test robot <lkp@intel.com>
-Signed-off-by: sunliming <sunliming@kylinos.cn>
----
- drivers/gpu/drm/msm/dsi/phy/dsi_phy.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/gpu/drm/msm/dsi/phy/dsi_phy.c b/drivers/gpu/drm/msm/dsi/phy/dsi_phy.c
-index a39de3bdc7fa..56dfa2d24be1 100644
---- a/drivers/gpu/drm/msm/dsi/phy/dsi_phy.c
-+++ b/drivers/gpu/drm/msm/dsi/phy/dsi_phy.c
-@@ -347,7 +347,7 @@ int msm_dsi_dphy_timing_calc_v3(struct msm_dsi_dphy_timing *timing,
- 	} else {
- 		timing->shared_timings.clk_pre =
- 			linear_inter(tmax, tmin, pcnt2, 0, false);
--			timing->shared_timings.clk_pre_inc_by_2 = 0;
-+		timing->shared_timings.clk_pre_inc_by_2 = 0;
- 	}
- 
- 	timing->ta_go = 3;
--- 
-2.25.1
-
+PiBSYXRoZXIgdGhhbiBhZGQgYSB0aGlyZCBoZWxwZXIsIHdoYXQgYWJvdXQgcmVuYW1pbmcga3Zt
+X2FwaWNfc2V0X2VvaV9hY2NlbGVyYXRlZCgpIGFuZCBoYXZpbmcgdGhlIG5vbi1hY2NlbGVyYXRl
+ZCBoZWxwZXIgY2FsbCB0aGUgImFjY2xlcmF0ZWQiIHZlcnNpb24/ICBUaGF0IHdpbGwgZG9jdW1l
+bnQgdGhlIGRlbHRhIGJldHdlZW4gdGhlIG5vbi1hY2NlbGVyYXRlZCBwYXRjaCBhbmQgdGhlIGFj
+Y2VsZXJhdGVkIHBhdGguDQo+IFRoZSBvbmx5IGhpY2N1cCBpcyB0cmFjaW5nLCBidXQgdGhhdCdz
+IGVhc3kgdG8gcmVzb2x2ZSAob3Igd2UgY291bGQganVzdCBub3QgdHJhY2UgaWYgdGhlcmUncyBu
+byB2YWxpZCB2ZWN0b3IgdG8gRU9JKSwgZS5nLg0KDQpZZWFoLCByZW5hbWUgdGhlIGZ1bmN0aW9u
+IGFuZCBpbnRlZ3JhdGUgdHdvIHBhdGhzIGxvb2tzIGNsZWFyZXIgYW5kIGVhc2llciB0byB1bmRl
+cnN0YW5kPw0KVGhhbmtzIFNlYW4gZm9yIHRoZSBzdWdnZXN0aW9uLCBJIHdpbGwgc2VuZCBhIG5l
+dyBwYXRjaCB3aXRoIGEgbmV3IHN1YmplY3QgYW5kIGNoYW5nZWxvZy4NCg0KLS0NCldhbmcNCg0K

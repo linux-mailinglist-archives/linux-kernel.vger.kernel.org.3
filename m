@@ -2,183 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 84E3C56B8F9
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 13:55:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F1B7A56B8F1
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 13:55:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238160AbiGHLup (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Jul 2022 07:50:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46698 "EHLO
+        id S238107AbiGHLu0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Jul 2022 07:50:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46132 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238173AbiGHLuk (ORCPT
+        with ESMTP id S238036AbiGHLuV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Jul 2022 07:50:40 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33FB29A6A8;
-        Fri,  8 Jul 2022 04:50:28 -0700 (PDT)
-Received: from pps.filterd (m0187473.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 268BM0tL029788;
-        Fri, 8 Jul 2022 11:50:08 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : in-reply-to : references : content-type :
- mime-version : content-transfer-encoding; s=pp1;
- bh=9lirF09Kmt0HGQk1TfIGDd4fJQRMu7hqmmT+uH9e9ck=;
- b=lgR+wc0ahBhfEyMyrk6h1AMNSXqis1tdeTPEgqju57+bZIZ9Hd0Ai9Ywd9pDQbsLzEtc
- tb2HXyGeVKeE0ygxzM85Nm/PBM0HtsvXF0rlpC2tUlMfwLzZLXV71KLAYvyr9li0yXA4
- wyK61kWIlq/stLJl5YW357PcDTHHduFP4g9WXmx9XQNnXArw4MFRYOnr9y7ee5kW6VmX
- 8ek5wdlaBXWn+pzzWDu7Vp2xJzZ6DqO64gIPdnq+Mp+ET5lKb/ylfi+jN6JrC14LaruN
- QNOpEJukgXgTsVc7ikRkvG4UM7/ynfe2Ot164wqLLYWkREHWKCiHn8B9wpN4rLMmypnp SA== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3h6kn4rgs4-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 08 Jul 2022 11:50:08 +0000
-Received: from m0187473.ppops.net (m0187473.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 268BNVM8031916;
-        Fri, 8 Jul 2022 11:50:07 GMT
-Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3h6kn4rgr8-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 08 Jul 2022 11:50:07 +0000
-Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
-        by ppma06ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 268BMHt9008105;
-        Fri, 8 Jul 2022 11:50:05 GMT
-Received: from b06avi18626390.portsmouth.uk.ibm.com (b06avi18626390.portsmouth.uk.ibm.com [9.149.26.192])
-        by ppma06ams.nl.ibm.com with ESMTP id 3h4usd3x7s-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 08 Jul 2022 11:50:05 +0000
-Received: from d06av21.portsmouth.uk.ibm.com (d06av21.portsmouth.uk.ibm.com [9.149.105.232])
-        by b06avi18626390.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 268Bmg7s24248692
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 8 Jul 2022 11:48:42 GMT
-Received: from d06av21.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id C65055204F;
-        Fri,  8 Jul 2022 11:50:02 +0000 (GMT)
-Received: from li-f45666cc-3089-11b2-a85c-c57d1a57929f.ibm.com (unknown [9.211.64.141])
-        by d06av21.portsmouth.uk.ibm.com (Postfix) with ESMTP id B9CD452050;
-        Fri,  8 Jul 2022 11:49:59 +0000 (GMT)
-Message-ID: <01c9e6e230b54831091757fe7a09714ccf4bd898.camel@linux.ibm.com>
-Subject: Re: [RFC PATCH 0/7] ima: Support measurement of kexec initramfs
- components
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     Jonathan McDowell <noodles@fb.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
-        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
-        "linux-security-module@vger.kernel.org" 
-        <linux-security-module@vger.kernel.org>,
-        "kexec@lists.infradead.org" <kexec@lists.infradead.org>
-Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
-        Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
-        James Morris <jmorris@namei.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>,
-        Matthew Garrett <mjg59@srcf.ucam.org>,
-        Dmitrii Potoskuev <dpotoskuev@fb.com>,
-        Roberto Sassu <roberto.sassu@huawei.com>,
-        Eugeniu Rosca <erosca@de.adit-jv.com>
-Date:   Fri, 08 Jul 2022 07:49:58 -0400
-In-Reply-To: <cover.1657272362.git.noodles@fb.com>
-References: <cover.1657272362.git.noodles@fb.com>
-Content-Type: text/plain; charset="ISO-8859-15"
-X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: kTyHucsnhDSKbscf09Oh3zDa-C4FtSr_
-X-Proofpoint-GUID: UwNG2QbbcUtmRMAfCoOHPXgyQiHrAfeH
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
- definitions=2022-07-08_08,2022-07-08_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 clxscore=1011
- malwarescore=0 bulkscore=0 lowpriorityscore=0 mlxlogscore=999 adultscore=0
- priorityscore=1501 spamscore=0 impostorscore=0 mlxscore=0 suspectscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2206140000
- definitions=main-2207080042
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        Fri, 8 Jul 2022 07:50:21 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41E61951EB;
+        Fri,  8 Jul 2022 04:50:18 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E849DB8260F;
+        Fri,  8 Jul 2022 11:50:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 99097C341C6;
+        Fri,  8 Jul 2022 11:50:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1657281015;
+        bh=nKFRnI+qALnsmOp08E2u0eqpSS7GSFw5iOH6b23gX2Q=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=NaqCqu2GFUhdUplRVuVVP7s2+Zjk4SV86thNmRGM47CJfsa8aV/hMsUDQnMODOiJJ
+         qLywkqS4XxJJVcRUIIBYOpORFKZ7HgoeoZjzsh9bUj7ID6NPUh1fBVhFM4SYN189Nh
+         BgqHpE0viGWAo9zi4JYM7eSz/ORbobLY4Y4Kbb+AYj+5OhmXzF9JD3+FB4oJO/+znv
+         F/uxXIIlHUuVduFQmuJu5+7Y+1/gsdBvq2R6H3+feAVADafB+31bir8BTJm6XIZ2vi
+         5HdLy0W68gQCXtS4pefD/lpPNt+dIl1EqibSabIK4NEoplkXPNmswWd+AP85qwOt73
+         pdviKb/C9TO8Q==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 7B13CE45BDB;
+        Fri,  8 Jul 2022 11:50:15 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH v2 net 00/12] sysctl: Fix data-races around ipv4_table.
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <165728101550.21070.5217821052702542560.git-patchwork-notify@kernel.org>
+Date:   Fri, 08 Jul 2022 11:50:15 +0000
+References: <20220706234003.66760-1-kuniyu@amazon.com>
+In-Reply-To: <20220706234003.66760-1-kuniyu@amazon.com>
+To:     Kuniyuki Iwashima <kuniyu@amazon.com>
+Cc:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, mcgrof@kernel.org, keescook@chromium.org,
+        yzaikin@google.com, kuni1840@gmail.com, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 2022-07-08 at 10:10 +0000, Jonathan McDowell wrote:
-> This patchset is not yet complete, but it's already moving around a
-> bunch of stuff so I am sending it out to get either some agreement that
-> it's a vaguely sane approach, or some pointers about how I should be
-> doing this instead.
-> 
-> It aims to add an option to IMA to measure the individual components
-> that make up an initramfs that is being used for kexec, rather than the
-> entire initramfs blob. For example in the situation where the initramfs
-> blob contains some uncompressed early firmware and then a compressed
-> filesystem there will be 2 measurements folded into the TPM, and logged
-> into the IMA log.
-> 
-> Why is this useful? Consider the situation where images have been split
-> out to a set of firmware, an initial userspace image that does the usual
-> piece of finding the right root device and switching into it, and an
-> image that contains the necessary kernel modules.
-> 
-> For a given machine the firmware + userspace images are unlikely to
-> change often, while the kernel modules change with each upgrade. If we
-> measure the concatenated image as a single blob then it is necessary to
-> calculate all the permutations of images that result, which means
-> building and hashing the combinations. By measuring each piece
-> individually a hash can be calculated for each component up front
-> allowing for easier analysis of whether the running state is an expected
-> one.
-> 
-> The KEXEC_FILE_LOAD syscall only allows a single initramfs image to be
-> passed in; one option would be to add a new syscall that supports
-> multiple initramfs fds and read each in kimage_file_prepare_segments().
-> 
-> Instead I've taken a more complicated approach that doesn't involve a
-> new syscall or altering the kexec userspace, building on top of the way
-> the boot process parses the initramfs and using that same technique
-> within the IMA measurement for the READING_KEXEC_INITRAMFS path.
-> 
-> To that end I've pulled the cpio handling code out of init/initramfs.c
-> and into lib/ and made it usable outside of __init when required. That's
-> involved having to pull some of the init_syscall file handling routines
-> into the cpio code (and cleaning them up when the cpio code is the only
-> user). I think there's the potential for a bit more code clean up here,
-> but I've tried to keep it limited to providing the functionality I need
-> and making checkpatch happy for the moment.
-> 
-> Patch 1 pulls the code out to lib/ and moves the global static variables
-> that hold the state into a single context structure.
-> 
-> Patch 2 does some minimal error path improvements so we're not just
-> passing a string around to indicate there's been an error.
-> 
-> Patch 3 is where I pull the file handling routines into the cpio code.
-> It didn't seem worth moving this to somewhere other code could continue
-> to use them when only the cpio code was doing so, but it did involve a
-> few extra exported functions from fs/
-> 
-> Patch 4 actually allows the use of the cpio code outside of __init when
-> CONFIG_CPIO is selected.
-> 
-> Patch 5 is a hack so I can use the generic decompress + gzip outside of
-> __init. If this overall approach is acceptable then I'll do some work to
-> make this generically available in the same manner as the cpio code
-> before actually submitting for inclusion.
-> 
-> Patch 6 is the actual piece I'm interested in; doing individual
-> measurements for each component within IMA.
+Hello:
 
-Hi Jonathan,
+This series was applied to netdev/net.git (master)
+by David S. Miller <davem@davemloft.net>:
 
-Before going down this path, just making sure you're aware:
-- of the IMA hooks for measuring and appraising firmware.
+On Wed, 6 Jul 2022 16:39:51 -0700 you wrote:
+> A sysctl variable is accessed concurrently, and there is always a chance
+> of data-race.  So, all readers and writers need some basic protection to
+> avoid load/store-tearing.
+> 
+> The first half of this series changes some proc handlers used in ipv4_table
+> to use READ_ONCE() and WRITE_ONCE() internally to fix data-races on the
+> sysctl side.  Then, the second half adds READ_ONCE() to the other readers
+> of ipv4_table.
+> 
+> [...]
 
-- of Roberto Sassu's "initramfs: add support for xattrs in the initial
-ram disk" patch set that have been lingering for lack of review and
-upstreaming.[1]   There's been some recent interest in it.
+Here is the summary with links:
+  - [v2,net,01/12] sysctl: Fix data races in proc_dointvec().
+    https://git.kernel.org/netdev/net/c/1f1be04b4d48
+  - [v2,net,02/12] sysctl: Fix data races in proc_douintvec().
+    https://git.kernel.org/netdev/net/c/4762b532ec95
+  - [v2,net,03/12] sysctl: Fix data races in proc_dointvec_minmax().
+    https://git.kernel.org/netdev/net/c/f613d86d014b
+  - [v2,net,04/12] sysctl: Fix data races in proc_douintvec_minmax().
+    https://git.kernel.org/netdev/net/c/2d3b559df3ed
+  - [v2,net,05/12] sysctl: Fix data races in proc_doulongvec_minmax().
+    https://git.kernel.org/netdev/net/c/c31bcc8fb89f
+  - [v2,net,06/12] sysctl: Fix data races in proc_dointvec_jiffies().
+    https://git.kernel.org/netdev/net/c/e87782087766
+  - [v2,net,07/12] tcp: Fix a data-race around sysctl_tcp_max_orphans.
+    https://git.kernel.org/netdev/net/c/47e6ab24e8c6
+  - [v2,net,08/12] inetpeer: Fix data-races around sysctl.
+    https://git.kernel.org/netdev/net/c/3d32edf1f3c3
+  - [v2,net,09/12] net: Fix data-races around sysctl_mem.
+    https://git.kernel.org/netdev/net/c/310731e2f161
+  - [v2,net,10/12] cipso: Fix data-races around sysctl.
+    https://git.kernel.org/netdev/net/c/dd44f04b9214
+  - [v2,net,11/12] icmp: Fix data-races around sysctl.
+    https://git.kernel.org/netdev/net/c/48d7ee321ea5
+  - [v2,net,12/12] ipv4: Fix a data-race around sysctl_fib_sync_mem.
+    https://git.kernel.org/netdev/net/c/73318c4b7dbd
 
-[1] Message-Id: <21b3aeab20554a30b9796b82cc58e55b@huawei.com>
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
-thanks,
-
-Mimi
 

@@ -2,171 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E34056B0E7
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 05:42:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E142056B109
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 05:42:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236028AbiGHDaH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Jul 2022 23:30:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59258 "EHLO
+        id S236685AbiGHDgf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Jul 2022 23:36:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33750 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236946AbiGHDaE (ORCPT
+        with ESMTP id S235510AbiGHDgd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Jul 2022 23:30:04 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36F7E747B5;
-        Thu,  7 Jul 2022 20:30:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1657251003; x=1688787003;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=PT02IACBa7Wm0O3NAyqOHw8PuqCfYgWEKpI8T6m3E9Q=;
-  b=gWBFJ8bKzkdleLNFzf1MYRu/9xaIowwykmV0ryKxUQJMp6NekZWLYtE7
-   kmxCrg465f1yTjOiNVQuMExTbU8UecqXo8Fvj9rLEA0K4l6veTIk8g+8H
-   iILMULRbXp+Ro/i7c4A+gHfXHdB064MiQCOb1n2ouCyRiTttUrnXZgfyD
-   HQV1/5/XDurl4rNY1U8MYVhXQDV+0l+oQ701Ksk9qJr8Sp8ejWbJFWi0R
-   mcJyAMS9Cu/mJ23qq0kpl/UdpwCh1pw6cRr/cJK1UflDcJ2fvjNUIaEBa
-   ja4rAI3Cdvh1OxGxSicSuxFo+3yzMMp+9gHoUEwI4j/7Ff7m2WDDrXriB
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10401"; a="370492166"
-X-IronPort-AV: E=Sophos;i="5.92,254,1650956400"; 
-   d="scan'208";a="370492166"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jul 2022 20:30:02 -0700
-X-IronPort-AV: E=Sophos;i="5.92,254,1650956400"; 
-   d="scan'208";a="651398466"
-Received: from xiaoyaol-hp-g830.ccr.corp.intel.com (HELO [10.249.175.131]) ([10.249.175.131])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jul 2022 20:29:51 -0700
-Message-ID: <5d0b9341-78b5-0959-2517-0fb1fe83a205@intel.com>
-Date:   Fri, 8 Jul 2022 11:29:49 +0800
+        Thu, 7 Jul 2022 23:36:33 -0400
+Received: from mail-io1-xd36.google.com (mail-io1-xd36.google.com [IPv6:2607:f8b0:4864:20::d36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C5FB735BD;
+        Thu,  7 Jul 2022 20:36:32 -0700 (PDT)
+Received: by mail-io1-xd36.google.com with SMTP id r76so2497989iod.10;
+        Thu, 07 Jul 2022 20:36:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=1nEpcbWWBpE3b8WlOr/etnrR3ATmUbpbxzoGFQMckxI=;
+        b=mPxKB+MEqY67kiGFEE5EhZd4Bjphdd+29NRvv62yj1iiF/v2OcMFy52539cYwddbtx
+         Vx3KEqqRZLPqtA0m1vMqWea9hUOfaNGwUMILEvWo7n48KmMgOjO9bRcig9M2oyI5lXvG
+         agkhM/OfK2kRTPdSul+a3gcbs8+lWnDNQGaAlDhomiQOVdUjhTjkEQo63+NdMPZK39CZ
+         50oUDIcdDd8toKyAXeuESn3ADdh5d/Z6/bhskSTRUxvVaBUX86sgPniwqZzeTrw9cbgV
+         BEspLlFbzugBZvdOP8pMtEZZKytAsCnv/5t6zzKA5AXhrTkL493hkonoOcGIw3jRiY+h
+         1vdg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=1nEpcbWWBpE3b8WlOr/etnrR3ATmUbpbxzoGFQMckxI=;
+        b=67Xj/AKhecRgtb27WiytIOgLxXtlu4pW3AQMGlmtRvPSks3VuwwHFKeg02H35Qw6ee
+         3BxNpfA0mankO/xAWOz4j6iTZT8xzxZ1yVthbiUI66nHy1GQJZmTSN1POUBV4eYRNcEa
+         JddfqrHL4qvLmMYgyAuMpkQU/dRWQWAUs941Gzg4rajglDk0eis/uL1F3z9YF0bZjhgR
+         j5aGYi1IVAXGMEJUcKEhvUcWUCKmyW3CwwfAuNCvohdEiuRNZr0Cv8jCjIfvX5COkvtM
+         gD3TOC6H7peVcoAC1+OCqU4wZ8YcTz5+Dn4eEoErJHF5U2cEvrmn9ChWQ+VVE3E7znDp
+         kdFg==
+X-Gm-Message-State: AJIora8lYygXcEark5QVpfglZDHoJ/0eg7RRkgtPlqlEGH43fRzCVt4w
+        yUUmjPmI0wVHWoaMyIjPj2BM66hmnIWqCBPyEp8=
+X-Google-Smtp-Source: AGRyM1vdpip4CSiT7Uez+RwzkhWBuCEAcIGaSeqj6PrAhpBLP17jxBfwmU6cX1ShR23q8fZi4cZzVwNrhDy7SgQVRB0=
+X-Received: by 2002:a05:6638:1493:b0:33e:c04e:56e4 with SMTP id
+ j19-20020a056638149300b0033ec04e56e4mr971061jak.282.1657251391950; Thu, 07
+ Jul 2022 20:36:31 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Firefox/91.0 Thunderbird/91.11.0
-Subject: Re: [PATCH v6 6/8] KVM: Handle page fault for private memory
-Content-Language: en-US
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     Michael Roth <michael.roth@amd.com>,
-        Vishal Annapurve <vannapurve@google.com>,
-        Chao Peng <chao.p.peng@linux.intel.com>,
-        "Nikunj A. Dadhania" <nikunj@amd.com>,
-        kvm list <kvm@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>, linux-mm@kvack.org,
-        linux-fsdevel@vger.kernel.org, linux-api@vger.kernel.org,
-        linux-doc@vger.kernel.org, qemu-devel@nongnu.org,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        x86 <x86@kernel.org>, "H . Peter Anvin" <hpa@zytor.com>,
-        Hugh Dickins <hughd@google.com>,
-        Jeff Layton <jlayton@kernel.org>,
-        "J . Bruce Fields" <bfields@fieldses.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Mike Rapoport <rppt@kernel.org>,
-        Steven Price <steven.price@arm.com>,
-        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Yu Zhang <yu.c.zhang@linux.intel.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Jun Nakajima <jun.nakajima@intel.com>,
-        Dave Hansen <dave.hansen@intel.com>,
-        Andi Kleen <ak@linux.intel.com>,
-        David Hildenbrand <david@redhat.com>, aarcange@redhat.com,
-        ddutile@redhat.com, dhildenb@redhat.com,
-        Quentin Perret <qperret@google.com>, mhocko@suse.com
-References: <20220519153713.819591-1-chao.p.peng@linux.intel.com>
- <20220519153713.819591-7-chao.p.peng@linux.intel.com>
- <b3ce0855-0e4b-782a-599c-26590df948dd@amd.com>
- <20220624090246.GA2181919@chaop.bj.intel.com>
- <CAGtprH82H_fjtRbL0KUxOkgOk4pgbaEbAydDYfZ0qxz41JCnAQ@mail.gmail.com>
- <20220630222140.of4md7bufd5jv5bh@amd.com>
- <4fe3b47d-e94a-890a-5b87-6dfb7763bc7e@intel.com>
- <Ysc9JDcVAnlVrGC8@google.com>
-From:   Xiaoyao Li <xiaoyao.li@intel.com>
-In-Reply-To: <Ysc9JDcVAnlVrGC8@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HK_RANDOM_ENVFROM,
-        HK_RANDOM_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220329174057.GA17778@srcf.ucam.org> <f9622b47-c45f-8c91-cb85-e5db7fd541cf@apertussolutions.com>
+ <CAMj1kXEUT8BK_akqjF1Wx0JkLniFyV_h9s1TfQnPqfxCHsKfWw@mail.gmail.com>
+ <7aab2990-9c57-2456-b08d-299ae96ac919@apertussolutions.com>
+ <CAELHeEfZ-feZnexp7Gx3VAJPerENcoO1Uccbe3xxUX95jvLUdA@mail.gmail.com> <b1e7b545-8e66-5dc0-ff5a-9f69d1751a5f@apertussolutions.com>
+In-Reply-To: <b1e7b545-8e66-5dc0-ff5a-9f69d1751a5f@apertussolutions.com>
+From:   Brendan Trotter <btrotter@gmail.com>
+Date:   Fri, 8 Jul 2022 13:06:19 +0930
+Message-ID: <CAELHeEcEN=4YrPJROvzHoOiqqe5Bk0f8pDCZDnQ6aS=2LdwNow@mail.gmail.com>
+Subject: Re: Linux DRTM on UEFI platforms
+To:     "Daniel P. Smith" <dpsmith@apertussolutions.com>
+Cc:     The development of GNU GRUB <grub-devel@gnu.org>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Matthew Garrett <mjg59@srcf.ucam.org>,
+        Daniel Kiper <daniel.kiper@oracle.com>,
+        Alec Brown <alec.r.brown@oracle.com>,
+        Kanth Ghatraju <kanth.ghatraju@oracle.com>,
+        Ross Philipson <ross.philipson@oracle.com>,
+        "piotr.krol@3mdeb.com" <piotr.krol@3mdeb.com>,
+        "krystian.hebel@3mdeb.com" <krystian.hebel@3mdeb.com>,
+        "persaur@gmail.com" <persaur@gmail.com>,
+        "Yoder, Stuart" <stuart.yoder@arm.com>,
+        Andrew Cooper <andrew.cooper3@citrix.com>,
+        "michal.zygowski@3mdeb.com" <michal.zygowski@3mdeb.com>,
+        James Bottomley <James.Bottomley@hansenpartnership.com>,
+        "lukasz@hawrylko.pl" <lukasz@hawrylko.pl>,
+        linux-efi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        James Morris <jmorris@namei.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 7/8/2022 4:08 AM, Sean Christopherson wrote:
-> On Fri, Jul 01, 2022, Xiaoyao Li wrote:
->> On 7/1/2022 6:21 AM, Michael Roth wrote:
->>> On Thu, Jun 30, 2022 at 12:14:13PM -0700, Vishal Annapurve wrote:
->>>> With transparent_hugepages=always setting I see issues with the
->>>> current implementation.
-> 
-> ...
-> 
->>>> Looks like with transparent huge pages enabled kvm tried to handle the
->>>> shared memory fault on 0x84d gfn by coalescing nearby 4K pages
->>>> to form a contiguous 2MB page mapping at gfn 0x800, since level 2 was
->>>> requested in kvm_mmu_spte_requested.
->>>> This caused the private memory contents from regions 0x800-0x84c and
->>>> 0x86e-0xa00 to get unmapped from the guest leading to guest vm
->>>> shutdown.
->>>
->>> Interesting... seems like that wouldn't be an issue for non-UPM SEV, since
->>> the private pages would still be mapped as part of that 2M mapping, and
->>> it's completely up to the guest as to whether it wants to access as
->>> private or shared. But for UPM it makes sense this would cause issues.
->>>
->>>>
->>>> Does getting the mapping level as per the fault access type help
->>>> address the above issue? Any such coalescing should not cross between
->>>> private to
->>>> shared or shared to private memory regions.
->>>
->>> Doesn't seem like changing the check to fault->is_private would help in
->>> your particular case, since the subsequent host_pfn_mapping_level() call
->>> only seems to limit the mapping level to whatever the mapping level is
->>> for the HVA in the host page table.
->>>
->>> Seems like with UPM we need some additional handling here that also
->>> checks that the entire 2M HVA range is backed by non-private memory.
->>>
->>> Non-UPM SNP hypervisor patches already have a similar hook added to
->>> host_pfn_mapping_level() which implements such a check via RMP table, so
->>> UPM might need something similar:
->>>
->>>     https://github.com/AMDESE/linux/commit/ae4475bc740eb0b9d031a76412b0117339794139
->>>
->>> -Mike
->>>
->>
->> For TDX, we try to track the page type (shared, private, mixed) of each gfn
->> at given level. Only when the type is shared/private, can it be mapped at
->> that level. When it's mixed, i.e., it contains both shared pages and private
->> pages at given level, it has to go to next smaller level.
->>
->> https://github.com/intel/tdx/commit/ed97f4042eb69a210d9e972ccca6a84234028cad
-> 
-> Hmm, so a new slot->arch.page_attr array shouldn't be necessary, KVM can instead
-> update slot->arch.lpage_info on shared<->private conversions.  Detecting whether
-> a given range is partially mapped could get nasty if KVM defers tracking to the
-> backing store, but if KVM itself does the tracking as was previously suggested[*],
-> then updating lpage_info should be relatively straightfoward, e.g. use
-> xa_for_each_range() to see if a given 2mb/1gb range is completely covered (fully
-> shared) or not covered at all (fully private).
-> 
-> [*] https://lore.kernel.org/all/YofeZps9YXgtP3f1@google.com
+Hi,
 
-Yes, slot->arch.page_attr was introduced to help identify whether a page 
-is completely shared/private at given level. It seems XARRAY can serve 
-the same purpose, though I know nothing about it. Looking forward to 
-seeing the patch of using XARRAY.
+On Thu, Jul 7, 2022 at 7:18 PM Daniel P. Smith
+<dpsmith@apertussolutions.com> wrote:
+> On 7/5/22 20:03, Brendan Trotter wrote:
+> Greetings!
+>
+> Not sure why I got dropped from distro, but no worries.
+>
+> > On Wed, Jul 6, 2022 at 4:52 AM Daniel P. Smith
+> > <dpsmith@apertussolutions.com> wrote:
+> >> On 6/10/22 12:40, Ard Biesheuvel wrote:> On Thu, 19 May 2022 at 22:59,
+> >> To help provide clarity, consider the following flows for comparison,
+> >>
+> >> Normal/existing efi-stub:
+> >>    EFI -> efi-stub -> head_64.S
+> >>
+> >> Proposed secure launch:
+> >>    EFI -> efi-stub -> dl-handler -> [cpu] -> sl_stub ->head_64.S
+> >
+> > For more clarity; the entire point is to ensure that the kernel only
+> > has to trust itself and the CPU/TPM hardware (and does not have to
+> > trust a potentially malicious boot loader)..Any attempt to avoid a
+> > one-off solution for Linux is an attempt to weaken security.
+>
+> Please elaborate so I might understand how this entrypoint allows for
+> the kernel to only trust itself and the CPU/TPM.
 
-yes, update slot->arch.lpage_info is good to utilize the existing logic 
-and Isaku has applied it to slot->arch.lpage_info for 2MB support patches.
+Is this a serious request?
+
+Kernel is started (via. firmware using the kernel's efi-stub, or via.
+"kexec()", or..); and regardless of how the kernel was started the
+kernel establishes its own dynamic root of trust.(e.g. AMD"s SKINIT or
+Intel's TXT, followed by measuring the remainder of itself and
+anything passed from firmware like APCI tables) without relying on a
+call-back provided by "untrusted by kernel" third-parties that don't
+exist in most cases. The dynamic root of trust that kernel creates
+depends on the kernel, CPU, TPM, etc (and excludes untrusted and
+unnecessary third parties)..
+
+The only potential benefit that the callback solution provides is that
+it, in theory, it could reduce duplication of work for other operating
+systems (FreeBSD, Solaris, Haiku, Fuchsia, .. could use the same
+callback instead of doing it themselves); but previous discussions
+(talk of formalising the contract between the boot stub and the Linux
+kernel) suggest that you aren't interested in any other OS.
+
+This leaves me wondering what your true motivation is. Are you trying
+to benefit GRUB/Trenchboot (at the expense of security, end-user
+convenience, distro installer hassle, etc); or trying to manufacture
+scope for future man-in-the middle attacks (by promoting a solution
+that requires something between firmware and kernel)?
+
+- Brendan

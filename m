@@ -2,67 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 41FD356C3C2
-	for <lists+linux-kernel@lfdr.de>; Sat,  9 Jul 2022 01:14:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 304B256C38B
+	for <lists+linux-kernel@lfdr.de>; Sat,  9 Jul 2022 01:14:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239841AbiGHWP7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Jul 2022 18:15:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42498 "EHLO
+        id S237191AbiGHWTJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Jul 2022 18:19:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44380 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229749AbiGHWP4 (ORCPT
+        with ESMTP id S232760AbiGHWTH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Jul 2022 18:15:56 -0400
-Received: from mail-il1-f169.google.com (mail-il1-f169.google.com [209.85.166.169])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3845F76EA1;
-        Fri,  8 Jul 2022 15:15:56 -0700 (PDT)
-Received: by mail-il1-f169.google.com with SMTP id a20so19837ilk.9;
-        Fri, 08 Jul 2022 15:15:56 -0700 (PDT)
+        Fri, 8 Jul 2022 18:19:07 -0400
+Received: from mail-ot1-x332.google.com (mail-ot1-x332.google.com [IPv6:2607:f8b0:4864:20::332])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BFBDA2E57
+        for <linux-kernel@vger.kernel.org>; Fri,  8 Jul 2022 15:19:06 -0700 (PDT)
+Received: by mail-ot1-x332.google.com with SMTP id t26-20020a9d775a000000b006168f7563daso156270otl.2
+        for <linux-kernel@vger.kernel.org>; Fri, 08 Jul 2022 15:19:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=Q7GsjyD5ZIUuB9wkT8wQatMbGivKt7bFeoH+S+1Drso=;
+        b=aQtiASxaGDbA6G15nNaIcGm1nMi8rRXy0dSuIoQgU4z5AiPD9Sqidya8BPCcd2J2JR
+         9Hv1FTkQebDPiYBpYIho1CN8H4fKL7q7hnVY/NJzymXqR29FGfgDg4nxVqArokyhs3aY
+         wg9KAzzp/Y8a+393QEbnzdmQI9wi8zcLZj6HGBDcxQrzSrOSpja8WbOaIDlls+qmIlai
+         T3BhabwJ6DDMWRovTDbzNWYYyoJ/56MWStmQIz4ElRwLtSgi4PpuzF+BN8MU9scf3BT1
+         RLrV+z90lq8sSwZ/akcn1xmB/C0ix17gpY1BWM35vOTPc/ELPyqbNF/hkn4INQrBgPmO
+         F9Jg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=sNAXLwnHlgZL+RRPcwyuf08NpY2oRUI/xPRVTLc8Kv4=;
-        b=LLvIxWbV4Ebtjp66YiQmkCQ5WnPAUM8WBSMItGOreaFVwEi1lh+SQR1EEV0NwLbNS/
-         DnuPFG2IbBuZShAWesYWXCKJxHu01YYH/yG/7WqGR62dKQwPNI3zUDzDI7hBCeCP05bb
-         cpTkBCYX35MzlNu+ZKwgQjrzSgSrJ8vTWbPN3UdoN6WamRHiHOVdiZpVXaq9IBmfUT5/
-         FzXaiBZj9+Toi+uhxjJ20Rj9QICYLg7aEYUkTHvjjcg+OTIMxrlCItpHyLEaCH0f6OPZ
-         CB+Gvhi8qkcaWWB/W7+ekphYHSV8xfqYd4o7Kf4ijZUWel0j2LWkBTNW9WFhKPJpsY7/
-         A3gQ==
-X-Gm-Message-State: AJIora+A2h8/og/0BsvzIzdgWhhjreWPdYe3HxFgU0wnIlrAIrewPfNk
-        3+DRlzSdjKbLetJGKlShZg==
-X-Google-Smtp-Source: AGRyM1sTh/9Jg+iKmfYd7WSDHoFeviiLxTHvbNq5LkBdkESc3E6BkRI9GjzwzexP1vAAvU154ityyQ==
-X-Received: by 2002:a92:d705:0:b0:2dc:583:f588 with SMTP id m5-20020a92d705000000b002dc0583f588mr3459501iln.158.1657318555415;
-        Fri, 08 Jul 2022 15:15:55 -0700 (PDT)
-Received: from robh.at.kernel.org ([98.38.210.73])
-        by smtp.gmail.com with ESMTPSA id e39-20020a022127000000b0032e49fcc241sm18560635jaa.176.2022.07.08.15.15.54
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=Q7GsjyD5ZIUuB9wkT8wQatMbGivKt7bFeoH+S+1Drso=;
+        b=FjN3ZKmLfzdP4VWk+61X/QfbvT6/OXKkNAz0omb2cbAESjEtrC0ngbZ8FnQ9XA9mq+
+         ntoF95xnK0z7E6p+DBn/AHALE3gkdx1VI0eQbGuQDHpYcwqyp+OTbOFDflMDsK9/8aBI
+         qNDDdyXumrYbD8/+NRYC5k2D1jwyM9Tps4FuARygAUQgtqHQ4GFK/O73dOjRtYsItC99
+         pLRCFDZRD2r4aTmWFNYepYqkjm5Fj7tNX/hrZOGzYPH8oPMnTR80hBD6AqvMaWjvKxPF
+         OmooOqVyDApc/9rNGUGmznYC3Nyd5H3aCrUQERtJUJIPH5A8OI3+vvkJiCRbcz/9pwmh
+         eYlA==
+X-Gm-Message-State: AJIora+luQxD4kZ+ZCqfymRB+aGDm4R6EVZo1OpLw9p5QFLukZQ3PV5p
+        52hVoAKFHY0AcZlQ7bswYp42Ng==
+X-Google-Smtp-Source: AGRyM1vjNEAD9R+jnkAnxWGD+Mwyymetsx+lLSaxGkwW+QfmWQOFvT1NBkgnA6G9VOIpbVybaTaCVw==
+X-Received: by 2002:a9d:2f42:0:b0:616:eb86:e8b4 with SMTP id h60-20020a9d2f42000000b00616eb86e8b4mr2588486otb.333.1657318745806;
+        Fri, 08 Jul 2022 15:19:05 -0700 (PDT)
+Received: from builder.lan (104-57-184-186.lightspeed.austtx.sbcglobal.net. [104.57.184.186])
+        by smtp.gmail.com with ESMTPSA id y10-20020a9d518a000000b00616a2aa298asm48907otg.75.2022.07.08.15.19.04
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 08 Jul 2022 15:15:55 -0700 (PDT)
-Received: (nullmailer pid 1575582 invoked by uid 1000);
-        Fri, 08 Jul 2022 22:15:54 -0000
-Date:   Fri, 8 Jul 2022 16:15:54 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Alain Volmat <alain.volmat@foss.st.com>
-Cc:     mcoquelin.stm32@gmail.com,
-        linux-stm32@st-md-mailman.stormreply.com,
-        pierre-yves.mordret@foss.st.com, wsa@kernel.org,
-        fabrice.gasnier@foss.st.com, amelie.delaunay@foss.st.com,
-        devicetree@vger.kernel.org, alexandre.torgue@foss.st.com,
-        robh+dt@kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
-        mark.rutland@arm.com
-Subject: Re: [PATCH v2 1/2] dt-bindings: i2c: st,stm32-i2c: add entry for
- stm32mp13
-Message-ID: <20220708221554.GA1575535-robh@kernel.org>
-References: <20220707074402.2429786-1-alain.volmat@foss.st.com>
- <20220707074402.2429786-2-alain.volmat@foss.st.com>
+        Fri, 08 Jul 2022 15:19:05 -0700 (PDT)
+From:   Bjorn Andersson <bjorn.andersson@linaro.org>
+To:     Johan Hovold <johan+linaro@kernel.org>
+Cc:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Andy Gross <agross@kernel.org>, linux-kernel@vger.kernel.org,
+        Rob Herring <robh+dt@kernel.org>
+Subject: Re: [PATCH] arm64: dts: qcom: sc7280: fix PCIe clock reference
+Date:   Fri,  8 Jul 2022 17:19:01 -0500
+Message-Id: <165731872887.1018153.10612611844186430044.b4-ty@linaro.org>
+X-Mailer: git-send-email 2.32.0
+In-Reply-To: <20220707064222.15717-1-johan+linaro@kernel.org>
+References: <20220707064222.15717-1-johan+linaro@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220707074402.2429786-2-alain.volmat@foss.st.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,13 +74,17 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 07 Jul 2022 09:44:01 +0200, Alain Volmat wrote:
-> Add the new compatible for the stm32mp13.
+On Thu, 7 Jul 2022 08:42:22 +0200, Johan Hovold wrote:
+> The recent commit that dropped the PCIe PHY clock index failed to update
+> the PCIe node reference.
 > 
-> Signed-off-by: Alain Volmat <alain.volmat@foss.st.com>
-> ---
->  Documentation/devicetree/bindings/i2c/st,stm32-i2c.yaml | 2 ++
->  1 file changed, 2 insertions(+)
 > 
 
-Acked-by: Rob Herring <robh@kernel.org>
+Applied, thanks!
+
+[1/1] arm64: dts: qcom: sc7280: fix PCIe clock reference
+      commit: 330fc08dbdd913ac37a31f8aec1a88f68e39ae39
+
+Best regards,
+-- 
+Bjorn Andersson <bjorn.andersson@linaro.org>

@@ -2,74 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BCA6856B9F9
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 14:46:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E17D56BA00
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 14:48:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238347AbiGHMof (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Jul 2022 08:44:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35254 "EHLO
+        id S237443AbiGHMrP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Jul 2022 08:47:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36952 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238052AbiGHMod (ORCPT
+        with ESMTP id S237030AbiGHMrL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Jul 2022 08:44:33 -0400
+        Fri, 8 Jul 2022 08:47:11 -0400
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A9F382DA8C
-        for <linux-kernel@vger.kernel.org>; Fri,  8 Jul 2022 05:44:32 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0C5B057238
+        for <linux-kernel@vger.kernel.org>; Fri,  8 Jul 2022 05:47:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1657284271;
+        s=mimecast20190719; t=1657284427;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=og2F5W6+9WT1C1Kw9t/+eCrqcYEdBDo/kmOC6lhEAFQ=;
-        b=WJzHai9B+ym6Jgng5927o4aL8lpVjYj2wz5ez4DreSoeR915ZZfptZmyPc5PtZn1Pe0dSN
-        jbN13oJC43jpOpEtPzSPgxy/iVLCmr4QmuOMN8k0Lz0HqIUxeXWvL3Efj2TBLXelZ5PaIY
-        2ZuTyG7aWHru7fj9kHMSMIkbr0u9C0M=
-Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
- [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=dE7am2qZLWCC7z65J2aM6/B2V9+Pl8ooChSgECZZn1k=;
+        b=AosZpzKWR+iqHiXmQFkUnGRJ82eZzEyRwlmTSkdWReFeVHQ2DJQ7a9EBY1ripC5WnOvYhb
+        5C4gH/R3aa0JSJ2ow3glzv/PXy0Xc+gNcBxM7wNnJ1yx0Sf3CUVtCXAXg0/YUrjoVU6TOt
+        /JX4+1Md9d1751/Ih2g9gsx89St8D2o=
+Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com
+ [209.85.208.72]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-398-AN_RAcm2PAOkV9CO4fIcOw-1; Fri, 08 Jul 2022 08:44:24 -0400
-X-MC-Unique: AN_RAcm2PAOkV9CO4fIcOw-1
-Received: by mail-wm1-f72.google.com with SMTP id k16-20020a7bc310000000b0038e6cf00439so973315wmj.0
-        for <linux-kernel@vger.kernel.org>; Fri, 08 Jul 2022 05:44:24 -0700 (PDT)
+ us-mta-112-inQJhO0FPyieZiuvM-V42w-1; Fri, 08 Jul 2022 08:47:03 -0400
+X-MC-Unique: inQJhO0FPyieZiuvM-V42w-1
+Received: by mail-ed1-f72.google.com with SMTP id s1-20020a056402520100b00439658fad14so16373083edd.20
+        for <linux-kernel@vger.kernel.org>; Fri, 08 Jul 2022 05:47:02 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
-         :message-id:mime-version;
-        bh=og2F5W6+9WT1C1Kw9t/+eCrqcYEdBDo/kmOC6lhEAFQ=;
-        b=4sjX+eevwRAwXzIW75pWWp3pdrPw/zHxtRGcpz4A9hYue5eQRQlf4KUXA08YVsjxm6
-         tfj5s06NvPBdciSzqXsXz1FMSnv6HJQyXnYPElUEVceQ8svjEJu2KPpyWS8ur11XRmhx
-         PGi6einfIXMmNgkFYrFho9UZvr3NW7S4jlNtZyYjietEBimlTH31CwemIJEAxFfueoLn
-         kQrx2V/Ngyvdywqjx8YWRJfbo/aGlLmMw3BOpE2at1Z5+mfySdNjblh7Zi0QderHsnFD
-         NFluMmXQqBwvl1GJ79pB78zjtdue+dGZooNltW4+xYserRdDtnDKi784zjmpoGTsMtx8
-         qZDA==
-X-Gm-Message-State: AJIora/6xq46PdX9chmFnu/TAUZtjeC4mqlJG6NZAcx8JSRrC2nM47FG
-        6bLdf/kCPcSeVGDuz9L01DlfPZQO5muUDscJFiyAggYN25E/PWPM3tr4yMNgrHQ4Y2wQM4kIefR
-        qbRuMsoqIy2GsYYrL3UJSU7N72iTH5AHX83jNooL/xa2iGqwEfd8MARqNpUOEwpzTT9O/VwO028
-        xC
-X-Received: by 2002:a7b:c3cd:0:b0:3a1:95b6:3fd0 with SMTP id t13-20020a7bc3cd000000b003a195b63fd0mr3477631wmj.75.1657284263821;
-        Fri, 08 Jul 2022 05:44:23 -0700 (PDT)
-X-Google-Smtp-Source: AGRyM1ujgsgeIbwU5waLbajwPocytxadwSUtOmLGxGcjzp1zhfqje44S6b5BwhXOgjW+1K914IxbSg==
-X-Received: by 2002:a7b:c3cd:0:b0:3a1:95b6:3fd0 with SMTP id t13-20020a7bc3cd000000b003a195b63fd0mr3477584wmj.75.1657284263262;
-        Fri, 08 Jul 2022 05:44:23 -0700 (PDT)
-Received: from fedora (nat-2.ign.cz. [91.219.240.2])
-        by smtp.gmail.com with ESMTPSA id l5-20020a05600c4f0500b003a04e6410e0sm1980040wmq.33.2022.07.08.05.44.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 08 Jul 2022 05:44:22 -0700 (PDT)
-From:   Vitaly Kuznetsov <vkuznets@redhat.com>
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     kvm@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] KVM: x86: Fully initialize 'struct kvm_lapic_irq' in
- kvm_pv_kick_cpu_op()
-In-Reply-To: <YscZMCBpuoJUlQ+H@google.com>
-References: <20220628133057.107344-1-vkuznets@redhat.com>
- <YscZMCBpuoJUlQ+H@google.com>
-Date:   Fri, 08 Jul 2022 14:44:21 +0200
-Message-ID: <87r12vpye2.fsf@redhat.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=dE7am2qZLWCC7z65J2aM6/B2V9+Pl8ooChSgECZZn1k=;
+        b=snH9xZqh/KsiY/EeYPP8Gu2SDuKzhfHEa25gNnbwLHrvPBSNmOuWH1PzHIWeX/lUmP
+         hfEkQTt8eO9sQV05HddQ2DeT9mmyxWx4e881D1QbxUwDfF7jjJox+RhyefMSuzSsekEs
+         M/iIJkXpZS+e5yk8kE2xbx+lBYC8Aq/faTR+iVJ+31oYVPNLKGKY0UvhHu6vM125EYg+
+         zDfK3VXapLr2g9ql5NDNhyLcv9GNzfR2gssUdHMNz7VWwBPudPa/dZfx2c5EoeVDY51P
+         cG+tecAQ6vpM7ysIKF22xTYnFmXE2P1IbhYE52ZD8I4x2M8xoSPPlEK1+HkPx6mQw6pU
+         fJ0g==
+X-Gm-Message-State: AJIora82JtiDOQmbjmsJQ687AJMEnZ3QGcDc4OYjmk/ca9Br1FeAIj8D
+        2Av5uJbYgokJexNnYn7VIjCmuhxKg2m7epY6U8KAi/lbFn6RKkpq9Cwr6cUSna7StpiZkZLk1nm
+        yAdi2kn2I0a9cH8oTNDue7rn5uarNH7sTxnL1wmM3
+X-Received: by 2002:a05:6402:3551:b0:43a:a5c0:2fbc with SMTP id f17-20020a056402355100b0043aa5c02fbcmr4533859edd.288.1657284422067;
+        Fri, 08 Jul 2022 05:47:02 -0700 (PDT)
+X-Google-Smtp-Source: AGRyM1t0baia0qjnBRPMWggkVJVUHjsBDBJIk0iKohafPMy/4sJgj8fQu1EU9tbAdY4QzjAnUHsY+KoFz7Su7AFx8yk=
+X-Received: by 2002:a05:6402:3551:b0:43a:a5c0:2fbc with SMTP id
+ f17-20020a056402355100b0043aa5c02fbcmr4533846edd.288.1657284421915; Fri, 08
+ Jul 2022 05:47:01 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
+References: <20220620131618.952133-1-vdronov@redhat.com> <20220627195144.976741-1-vdronov@redhat.com>
+ <YsfappxjOaj99WEV@gondor.apana.org.au>
+In-Reply-To: <YsfappxjOaj99WEV@gondor.apana.org.au>
+From:   Vlad Dronov <vdronov@redhat.com>
+Date:   Fri, 8 Jul 2022 14:46:51 +0200
+Message-ID: <CAMusb+Q=Y8CSAnHDF3W56s=SvqNKYV=EYQ9+J=Me35mCA8ZYig@mail.gmail.com>
+Subject: Re: [PATCH v3] crypto: fips - make proc files report fips module name
+ and version
+To:     Herbert Xu <herbert@gondor.apana.org.au>
+Cc:     "David S . Miller" <davem@davemloft.net>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        linux-crypto@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
+        Simo Sorce <simo@redhat.com>
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
@@ -80,82 +76,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Sean Christopherson <seanjc@google.com> writes:
+Hi, Herbert,
 
-> On Tue, Jun 28, 2022, Vitaly Kuznetsov wrote:
->> 'vector' and 'trig_mode' fields of 'struct kvm_lapic_irq' are left
->> uninitialized in kvm_pv_kick_cpu_op(). While these fields are normally
->> not needed for APIC_DM_REMRD, they're still referenced by
->> __apic_accept_irq() for trace_kvm_apic_accept_irq(). Fully initialize
->> the structure to avoid consuming random stack memory.
->> 
->> Fixes: a183b638b61c ("KVM: x86: make apic_accept_irq tracepoint more generic")
->> Reported-by: syzbot+d6caa905917d353f0d07@syzkaller.appspotmail.com
->> Signed-off-by: Vitaly Kuznetsov <vkuznets@redhat.com>
->> ---
->>  arch/x86/kvm/x86.c | 18 ++++++++++--------
->>  1 file changed, 10 insertions(+), 8 deletions(-)
->> 
->> diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
->> index 567d13405445..8a98608dad4f 100644
->> --- a/arch/x86/kvm/x86.c
->> +++ b/arch/x86/kvm/x86.c
->> @@ -9340,15 +9340,17 @@ static int kvm_pv_clock_pairing(struct kvm_vcpu *vcpu, gpa_t paddr,
->>   */
->>  static void kvm_pv_kick_cpu_op(struct kvm *kvm, int apicid)
->>  {
->> -	struct kvm_lapic_irq lapic_irq;
->> -
->> -	lapic_irq.shorthand = APIC_DEST_NOSHORT;
->> -	lapic_irq.dest_mode = APIC_DEST_PHYSICAL;
->> -	lapic_irq.level = 0;
->> -	lapic_irq.dest_id = apicid;
->> -	lapic_irq.msi_redir_hint = false;
->> +	struct kvm_lapic_irq lapic_irq = {
->> +		.vector = 0,
->> +		.delivery_mode = APIC_DM_REMRD,
->> +		.dest_mode = APIC_DEST_PHYSICAL,
->> +		.level = false,
->> +		.trig_mode = 0,
->> +		.shorthand = APIC_DEST_NOSHORT,
->> +		.dest_id = apicid,
->> +		.msi_redir_hint = false
->> +	};
+On Fri, Jul 8, 2022 at 10:27 AM Herbert Xu <herbert@gondor.apana.org.au> wrote:
 >
-> What if we rely on the compiler to zero-initialize omitted fields?  E.g.
+> On Mon, Jun 27, 2022 at 09:51:44PM +0200, Vladis Dronov wrote:
+> >
+> > diff --git a/crypto/fips.c b/crypto/fips.c
+> > index 7b1d8caee669..d820f83cb878 100644
+> > --- a/crypto/fips.c
+> > +++ b/crypto/fips.c
+> > @@ -30,13 +30,37 @@ static int fips_enable(char *str)
+> >
+> >  __setup("fips=", fips_enable);
+> >
+> > +#define FIPS_MODULE_NAME CONFIG_CRYPTO_FIPS_NAME
+> > +#ifdef CONFIG_CRYPTO_FIPS_CUSTOM_VERSION
+> > +#define FIPS_MODULE_VERSION CONFIG_CRYPTO_FIPS_VERSION
+> > +#else
+> > +#define FIPS_MODULE_VERSION UTS_RELEASE
+> > +#endif
+> > +
+> > +static char fips_name[] = FIPS_MODULE_NAME;
+> > +static char fips_version[] = FIPS_MODULE_VERSION;
 >
-> 	/*
-> 	 * All other fields are unused for APIC_DM_REMRD, but may be consumed by
-> 	 * common code, e.g. for tracing.  Defer initialization to the compiler.
-> 	 */
-> 	struct kvm_lapic_irq lapic_irq = {
-> 		.delivery_mode = APIC_DM_REMRD,
-> 		.dest_mode = APIC_DEST_PHYSICAL,
-> 		.shorthand = APIC_DEST_NOSHORT,
-> 		.dest_id = apicid,
-> 	};
->
-> KVM doesn't actually care about the vector, level, trig_mode, etc... for its magic
-> magic DM_REMRD, i.e. using 0/false is completely arbitrary.  
+> This doesn't compile for me because you need to include
+> generated/utsrelease.h.
 
-Honestly, I just always forget whether zero-initializing of omitted
-fields is a de-facto or de-jure standard. We don't care much whether
-these fields are zero of not but some random values in tracing may
-confuse an unprepared reader.
+Dang, it does not build now indeed. I'm not sure how my previous
+build succeeded so I've assumed utsrelease.h is included in fips.c
+via some other .h file.
 
-I'll send v2 with your amendment.
+I've posted v4 to this same thread below, it just adds the "#include
+<generated/utsrelease.h>" line.
 
->
->>  
->> -	lapic_irq.delivery_mode = APIC_DM_REMRD;
->>  	kvm_irq_delivery_to_apic(kvm, NULL, &lapic_irq, NULL);
->>  }
->>  
->> -- 
->> 2.35.3
->> 
->
+I'm sorry for the noise.
 
--- 
-Vitaly
+Best regards,
+Vladis Dronov | Red Hat, Inc. | The Core Kernel | Senior Software Engineer
 

@@ -2,58 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B57F56BDD0
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 18:08:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9DD1956BD94
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 18:08:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238850AbiGHPXY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Jul 2022 11:23:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42026 "EHLO
+        id S238486AbiGHPYl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Jul 2022 11:24:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43870 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237631AbiGHPXV (ORCPT
+        with ESMTP id S231890AbiGHPYj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Jul 2022 11:23:21 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D79F6D559;
-        Fri,  8 Jul 2022 08:23:21 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id CE8CB611DC;
-        Fri,  8 Jul 2022 15:23:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 36808C341C0;
-        Fri,  8 Jul 2022 15:23:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1657293800;
-        bh=ZcgjiUXsY2nVzDJIVwV5cYUXobg29wTGZ1OMibhE4ls=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=O2M3khxdqUno1UAN7PwcZYfpvHkHY/ehW83XX5vYBg9Nqu99m26BEi+jhvSBIs9bm
-         YHmT5suNUC+p9yLxbjm5s7qg6HObXb26MzggTi77lJeONjwny4EiZZTR7gLUCCtFqP
-         63/PVys9Z/IK73VjcFhQxKN/AxKYk1FzC+/ft3hu7Yk1kgjTLHyuAFv9q0BrR0vecG
-         hjWYzYWFCx0+fYXquqYd/IZnRJOGTU/f1c5vOtosNCBfbl8dyofQjPiAI6AkByTmd2
-         quNvr3LsfKJclvDbfDUMjmlOd4s1aYETeIhXNl2zK3v3lUN5odp9u/gWmuGjD0089K
-         i4c/ikvV1pTfw==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id B38A15C0328; Fri,  8 Jul 2022 08:23:19 -0700 (PDT)
-Date:   Fri, 8 Jul 2022 08:23:19 -0700
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Frederic Weisbecker <frederic@kernel.org>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Huacai Chen <chenhuacai@loongson.cn>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Lukas Bulwahn <lukas.bulwahn@gmail.com>
-Subject: Re: linux-next: manual merge of the rcu tree with Linus' tree
-Message-ID: <20220708152319.GS1790663@paulmck-ThinkPad-P17-Gen-1>
-Reply-To: paulmck@kernel.org
-References: <20220708141246.43111241@canb.auug.org.au>
+        Fri, 8 Jul 2022 11:24:39 -0400
+Received: from smtpbg.qq.com (biz-43-154-54-12.mail.qq.com [43.154.54.12])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD4D1EA2;
+        Fri,  8 Jul 2022 08:24:34 -0700 (PDT)
+X-QQ-mid: bizesmtp73t1657293841tk4og5o6
+Received: from localhost.localdomain ( [182.148.15.249])
+        by bizesmtp.qq.com (ESMTP) with 
+        id ; Fri, 08 Jul 2022 23:23:57 +0800 (CST)
+X-QQ-SSF: 01000000002000B0C000B00A0000000
+X-QQ-FEAT: +HVWQWZs/U06PrLoaKVc06hTl196eHxl6vlvDoekGWywfqN3D5j1LSLTQgk5j
+        POEJr2jKVJgEhVWhJxe/Dz9SCmx9PPiYO+M4gvFUr50dKrq6R8mGgkns2bY7GfpwwbrtVzo
+        ltM5y1r/Ae13K6VlzFqJqQ5U7YF0gnandpoYXXv5jAL8KshTG6CEj4yPODoWSo70rKCIZLg
+        dhbjfJIkH91SV8r4YyD6YaEQ/aQe7bb6wbi3UkucVkQlzszCzOdx2TQ/BzdHYbAdGCIKayN
+        o3CFGQdUazupOd67xKV17lwwmhUGriNOItyZPPuFGIBxMFRDglD8uDxl72sA4FW/N0SnTXU
+        WJN4HQ8QTW7/+1Ad599f0ru1tAj+4RDK2tmk4m1tCbR1dYiXow=
+X-QQ-GoodBg: 0
+From:   Jilin Yuan <yuanjilin@cdjrlc.com>
+To:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com
+Cc:     elder@kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Jilin Yuan <yuanjilin@cdjrlc.com>
+Subject: [PATCH] net/ipa: fix repeated words in comments
+Date:   Fri,  8 Jul 2022 23:23:51 +0800
+Message-Id: <20220708152351.58913-1-yuanjilin@cdjrlc.com>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220708141246.43111241@canb.auug.org.au>
-X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Transfer-Encoding: 8bit
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:cdjrlc.com:qybglogicsvr:qybglogicsvr4
+X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,RDNS_DYNAMIC,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,T_SPF_HELO_TEMPERROR autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -61,51 +49,26 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jul 08, 2022 at 02:12:46PM +1000, Stephen Rothwell wrote:
-> Hi all,
-> 
-> Today's linux-next merge of the rcu tree got a conflict in:
-> 
->   arch/loongarch/Kconfig
-> 
-> between commit:
-> 
->   7fd6ef61a5d6 ("LoongArch: Drop these obsolete selects in Kconfig")
-> 
-> from Linus' tree and commit:
-> 
->   24a9c54182b3 ("context_tracking: Split user tracking Kconfig")
-> 
-> from the rcu tree.
-> 
-> I fixed it up (see below) and can carry the fix as necessary. This
-> is now fixed as far as linux-next is concerned, but any non trivial
-> conflicts should be mentioned to your upstream maintainer when your tree
-> is submitted for merging.  You may also want to consider cooperating
-> with the maintainer of the conflicting tree to minimise any particularly
-> complex conflicts.
+ Delete the redundant word 'the'.
 
-Thank you, Stephen!  I have noted this for my pull request.
+Signed-off-by: Jilin Yuan <yuanjilin@cdjrlc.com>
+---
+ drivers/net/ipa/ipa_qmi_msg.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-							Thanx, Paul
-
-> -- 
-> Cheers,
-> Stephen Rothwell
-> 
-> diff --cc arch/loongarch/Kconfig
-> index 53a912befb62,130dc65f3c85..000000000000
-> --- a/arch/loongarch/Kconfig
-> +++ b/arch/loongarch/Kconfig
-> @@@ -75,7 -76,8 +75,7 @@@ config LOONGARC
->   	select HAVE_ARCH_TRACEHOOK
->   	select HAVE_ARCH_TRANSPARENT_HUGEPAGE
->   	select HAVE_ASM_MODVERSIONS
-> - 	select HAVE_CONTEXT_TRACKING
-> + 	select HAVE_CONTEXT_TRACKING_USER
->  -	select HAVE_COPY_THREAD_TLS
->   	select HAVE_DEBUG_STACKOVERFLOW
->   	select HAVE_DMA_CONTIGUOUS
->   	select HAVE_EXIT_THREAD
-
+diff --git a/drivers/net/ipa/ipa_qmi_msg.h b/drivers/net/ipa/ipa_qmi_msg.h
+index 3233d145fd87..495e85abe50b 100644
+--- a/drivers/net/ipa/ipa_qmi_msg.h
++++ b/drivers/net/ipa/ipa_qmi_msg.h
+@@ -214,7 +214,7 @@ struct ipa_init_modem_driver_req {
+ 
+ /* The response to a IPA_QMI_INIT_DRIVER request begins with a standard
+  * QMI response, but contains other information as well.  Currently we
+- * simply wait for the the INIT_DRIVER transaction to complete and
++ * simply wait for the INIT_DRIVER transaction to complete and
+  * ignore any other data that might be returned.
+  */
+ struct ipa_init_modem_driver_rsp {
+-- 
+2.36.1
 

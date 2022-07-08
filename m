@@ -2,149 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5474A56C222
-	for <lists+linux-kernel@lfdr.de>; Sat,  9 Jul 2022 01:12:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AF48556C3F2
+	for <lists+linux-kernel@lfdr.de>; Sat,  9 Jul 2022 01:15:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239965AbiGHULd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Jul 2022 16:11:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40724 "EHLO
+        id S239996AbiGHUO3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Jul 2022 16:14:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42614 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238794AbiGHULb (ORCPT
+        with ESMTP id S238380AbiGHUO0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Jul 2022 16:11:31 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DED41BEA0;
-        Fri,  8 Jul 2022 13:11:30 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id C1A0BB82953;
-        Fri,  8 Jul 2022 20:11:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 31E4BC341C0;
-        Fri,  8 Jul 2022 20:11:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1657311087;
-        bh=dSuZEii2kPeJ5k08UvvanEJ35KgMk4ZNaDHgAgpT+JY=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=f4xCtLZaM1SXzL8phG9I0RtcgPWeZQ6SqT41LIjkYrifHkklWm96Qcc1hAJ8Ax1HL
-         Y946fYtWQyodl0FwDnpWsV41o4Oo8XkXPOqvZGzQ/T5SF2yhd+uUvG9iiDrsm2Lhfd
-         QCPh6VlPn4BCTlao7wAnI5ejw+dcBVNjjptp/JyBVYN7sjKSK5w5hSZovdsDzX7XwV
-         1JGRogN5k+6HUL+9hVfy8zEwpVKEcsrPBF48OheRkOGi1SD6sIs54fbc/AbHSH5BoQ
-         L3TH9e8vKhRg+d9sA5mmrDid042KVtYLKdIkHxGD0D8/ByaLfZP3wXKlfrUVmXZzwQ
-         6cw8m14ifSNvA==
-Date:   Fri, 8 Jul 2022 15:11:25 -0500
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Christian Marangi <ansuelsmth@gmail.com>
-Cc:     Robert Marko <robimarko@gmail.com>,
-        Stanimir Varbanov <svarbanov@mm-sol.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        lpieralisi@kernel.org, Rob Herring <robh@kernel.org>, kw@linux.com,
-        Bjorn Helgaas <bhelgaas@google.com>, p.zabel@pengutronix.de,
-        jingoohan1@gmail.com, linux-pci@vger.kernel.org,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        johan+linaro@kernel.org,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Subject: Re: [PATCH v4 2/2] PCI: qcom: Move all DBI register accesses after
- phy_power_on()
-Message-ID: <20220708201125.GA371162@bhelgaas>
+        Fri, 8 Jul 2022 16:14:26 -0400
+Received: from mail-qt1-f170.google.com (mail-qt1-f170.google.com [209.85.160.170])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6135E2496C;
+        Fri,  8 Jul 2022 13:14:24 -0700 (PDT)
+Received: by mail-qt1-f170.google.com with SMTP id ck6so28955559qtb.7;
+        Fri, 08 Jul 2022 13:14:24 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=/zOe+CzPYZZs/hmA7mLwnSYETa9zn5ouTBI7OSu/RXM=;
+        b=B46l2DUVt8IV8Z3vH+VjVlLm1GTPMDQw8nfCx8xoV1G640XPHNgN0nnalQ8Htqd7lH
+         nJZXP1TnwC93xhinWA45GH7FeI2pVL9Yx6wsMgj0nSp5QZXLGmers8Luts2NiwEPlxto
+         GNwJ/1/jjUR+NHm/zRJJiKSl0N94MEk6fkQwJLuFrDYZQKxAGpBapcWhzn0cR//j4H8Q
+         DqzxFFN6d9YckxaV87+wVm6njiVixxKK/ZLn3NIRl8PWwYJmCwtx7ITHsjcQVu518b3b
+         dsn6e0PrJjTxelY5GoNjNivVjuqy2XuWJ/B3fzdAMIOtWtRsIyG4Fj6wcLmIMQXHBjS0
+         /EIw==
+X-Gm-Message-State: AJIora/2tJkSPpvZ+ddzop6WPa8ClgJFEgMV2bIbZpwhfhsI6HexwcWj
+        i+ZioYYY232+1UzS6r2ZN5+CPxLA/XSPxA==
+X-Google-Smtp-Source: AGRyM1sLv6Wj7wNfCmiXzq0SB0ogtFSm+SbnC84MMghTfsS7jwnfNZt/kYjXa5PtzxxL7ruRL46bFA==
+X-Received: by 2002:ac8:5808:0:b0:31b:ef47:38b3 with SMTP id g8-20020ac85808000000b0031bef4738b3mr4537504qtg.510.1657311263352;
+        Fri, 08 Jul 2022 13:14:23 -0700 (PDT)
+Received: from mail-yb1-f180.google.com (mail-yb1-f180.google.com. [209.85.219.180])
+        by smtp.gmail.com with ESMTPSA id j17-20020ac84c91000000b002f39b99f6a4sm23461297qtv.62.2022.07.08.13.14.18
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 08 Jul 2022 13:14:20 -0700 (PDT)
+Received: by mail-yb1-f180.google.com with SMTP id 136so7761829ybl.5;
+        Fri, 08 Jul 2022 13:14:18 -0700 (PDT)
+X-Received: by 2002:a05:6902:701:b0:66e:a06d:53d7 with SMTP id
+ k1-20020a056902070100b0066ea06d53d7mr5316435ybt.604.1657311257860; Fri, 08
+ Jul 2022 13:14:17 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <62c883e3.1c69fb81.45d3d.7d2a@mx.google.com>
-X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <cover.1657301107.git.geert@linux-m68k.org> <402dea47269f2e3960946d186ba3cb118066e74a.1657301107.git.geert@linux-m68k.org>
+ <c95724ad-a3b0-2ac8-5413-b971626e7e63@redhat.com>
+In-Reply-To: <c95724ad-a3b0-2ac8-5413-b971626e7e63@redhat.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Fri, 8 Jul 2022 22:14:06 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdU4tmYfnc96SGKuvdKC_JGNOHUmmNwrN4DdOmw0LijPvA@mail.gmail.com>
+Message-ID: <CAMuHMdU4tmYfnc96SGKuvdKC_JGNOHUmmNwrN4DdOmw0LijPvA@mail.gmail.com>
+Subject: Re: [PATCH 2/5] drm/modes: Extract drm_mode_parse_cmdline_named_mode()
+To:     Hans de Goede <hdegoede@redhat.com>
+Cc:     Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        DRI Development <dri-devel@lists.freedesktop.org>,
+        Linux Fbdev development list <linux-fbdev@vger.kernel.org>,
+        "Linux/m68k" <linux-m68k@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jul 08, 2022 at 09:22:09PM +0200, Christian Marangi wrote:
-> On Fri, Jul 08, 2022 at 02:17:09PM -0500, Bjorn Helgaas wrote:
-> > On Fri, Jul 08, 2022 at 07:02:48PM +0200, Christian Marangi wrote:
-> > > On Fri, Jul 08, 2022 at 06:47:57PM +0200, Christian Marangi wrote:
-> > > > On Fri, Jul 08, 2022 at 06:39:37PM +0200, Robert Marko wrote:
-> > > > > On Thu, 7 Jul 2022 at 21:41, Bjorn Helgaas <helgaas@kernel.org> wrote:
-> > > > > > On Fri, Jun 24, 2022 at 12:44:20PM +0200, Robert Marko wrote:
-> > > > > > > IPQ8074 requires the PHY to be powered on before accessing DBI registers.
-> > > > > > > It's not clear whether other variants have the same dependency, but there
-> > > > > > > seems to be no reason for them to be different, so move all the DBI
-> > > > > > > accesses from .init() to .post_init() so they are all after phy_power_on().
-> > > > > > >
-> > > > > > > Signed-off-by: Robert Marko <robimarko@gmail.com>
-> > > > > >
-> > > > > > Would any of the qcom driver folks care to review and ack this?
-> > > > > > Stanimir, Andy, Bjorn A (from get_maintainer.pl)?
-> > > > 
-> > > > Hi Bjorn,
-> > > > I tested this on ipq806x and the current patch cause regression as pci
-> > > > doesn't work anymore...
-> > > > This is a before the patch [1] and this is an after [2].
-> > > > 
-> > > > As you notice the main problem here is
-> > > > [    2.559962] qcom-pcie 1b700000.pci: Phy link never came up
-> > > > 
-> > > > The cause of this has already been bisected and actually it was a fixup
-> > > > pushed some time ago for 2_1_0.
-> > > > 
-> > > > Uboot can leave the pci in an underfined state and this
-> > > > writel(1, pcie->parf + PCIE20_PARF_PHY_CTRL);
-> > > > is never called.
-> > > > 
-> > > > This is mandatory to a correct init and MUST be called before regulator
-> > > > enable and reset deassert or the "Phy link never came up" problem is
-> > > > triggered.
-> > > > 
-> > > > So to fix this we just have to have
-> > > > writel(1, pcie->parf + PCIE20_PARF_PHY_CTRL);
-> > > > in qcom_pcie_init_2_1_0 right after the reset_contro_assert.
-> > > > 
-> > > > This command is also present in qcom_pcie_init_2_3_2 where the same
-> > > > exact reg is written so I assume 2_3_2 have the same regression and the
-> > > > write must be placed in init and can't be moved to post_init.
-> > > > 
-> > > > Feel free to tell me how to proceed if I should post an additional patch
-> > > > or you prefer Robi to respin this with the few lines reverted.
-> > > > 
-> > > > [1] https://gist.github.com/Ansuel/ec827319e585630356fc586273db6f0d
-> > > > [2] https://gist.github.com/Ansuel/63fbcab2681cd28a61ec52d7874fa30d
-> > > 
-> > > While testing this I notice something odd...
-> > > 
-> > > 2_4_2 prepare the pipe clock only AFTER PCIe clocks and reset are
-> > > enabled while in 2_1_0... That made me think there could be a problem
-> > > with the current code of 2_1_0... A quick change made me discover that
-> > > the problem is actually that we enable prepare_enable clock BEFORE the
-> > > value is written in PCIE20_PARF_PHY_CTRL.
-> > > 
-> > > By moving the clk_bulk_prepare_enable after the "enable PCIe clocks and
-> > > resets" make the pci work with the current change...
-> > > 
-> > > So it could be that the current changes are correct and it's really just
-> > > a bug in 2_1_0 enabling clock before writing the correct value...
-> > > 
-> > > Tell me how to proceed... think at this point a good idea would be to
-> > > create a separate patch and fix this for good.
-> > 
-> > Hmm, I think I made a mistake when I put this patch in the middle and
-> > applied other stuff on top of it.  I'd like to just postpone this
-> > patch while we work out these issues, but I think it's not completely
-> > trivial since it's in the middle.  I'll try to straighten this out
-> > next week.
-> 
-> From my discoveries it really seems just a bug in 2_1_0 with enabling
-> the phy clk BEFORE setting the require bit...
-> 
-> Moving the bulk_prepare_enable after the bit is set makes everything
-> works as it should... If you want I can send a patch as that is clearly
-> a bug and currenty we have a workaround in place...
+Hi Hans,
 
-That'd be great!  Since it's an actual bug fix, I think it would be
-good if it were a separate patch instead of doing in the middle of a
-patch that also does other things.
+On Fri, Jul 8, 2022 at 9:46 PM Hans de Goede <hdegoede@redhat.com> wrote:
+> On 7/8/22 20:21, Geert Uytterhoeven wrote:
+> > Extract the code to check for a named mode parameter into its own
+> > function, to streamline the main parsing flow.
+> >
+> > Signed-off-by: Geert Uytterhoeven <geert@linux-m68k.org>
 
-Bjorn
+> > --- a/drivers/gpu/drm/drm_modes.c
+> > +++ b/drivers/gpu/drm/drm_modes.c
+> > @@ -1749,6 +1749,30 @@ static const char * const drm_named_modes_whitelist[] = {
+> >       "PAL",
+> >  };
+> >
+> > +static int drm_mode_parse_cmdline_named_mode(const char *name,
+> > +                                          unsigned int length,
+> > +                                          bool refresh,
+> > +                                          struct drm_cmdline_mode *mode)
+> > +{
+> > +     unsigned int i;
+> > +     int ret;
+> > +
+> > +     for (i = 0; i < ARRAY_SIZE(drm_named_modes_whitelist); i++) {
+> > +             ret = str_has_prefix(name, drm_named_modes_whitelist[i]);
+> > +             if (!ret)
+>
+> As discussed in my review of 1/5 this needs to become:
+>
+>                 if (ret != length)
+> > +                     continue;
+
+Agreed.
+
+> Which renders my other comment on this patch (length not being used) mute.
+
+/me wonders if he would have seen the light earlier if gcc would have
+warned about that...
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds

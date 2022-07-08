@@ -2,98 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9913A56B0E3
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 05:42:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 14D4456B0F3
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 05:42:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236950AbiGHDKU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Jul 2022 23:10:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46840 "EHLO
+        id S237008AbiGHDLZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Jul 2022 23:11:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47434 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236180AbiGHDKS (ORCPT
+        with ESMTP id S236180AbiGHDLX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Jul 2022 23:10:18 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73D7E31214;
-        Thu,  7 Jul 2022 20:10:17 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 5872AB81A9C;
-        Fri,  8 Jul 2022 03:10:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 0B18EC341C8;
-        Fri,  8 Jul 2022 03:10:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1657249814;
-        bh=hUb1J/cfIQYBVKSFpdw41ZNmvs0ACmGBKvHJvHy42ro=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=jPXSS3qatkE8XGA+Q37axo+fmvhKlGV03kTtV4olQMlgw/6rdexi+nlXMD1zEIqdw
-         1A5lTXSz7W07VLWp85l15mBdWTihZ11Qais0mZqlEOrb/0U3ovUl9Fg1X6NMkezYEH
-         TttXmCwsImp4mXaJb5OXFv9VhgXxohbg3xOSRW+K06RBpqSBV2m4bLcZC+6a2ehqlH
-         Dqskct21lxq4VlmN2cxIG9ttlE4YoNUszkQUPwnovFtmRZx3f5bvKfT/Ex5FDed9KU
-         ksI6wrpk+DiWCyeUUq2pYwjavctOJYCl7kJnKagpo64PwRCNB0YLvzmus7z9FNDMsn
-         k9iJ2Gt9YFR3A==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id E381AE45BDC;
-        Fri,  8 Jul 2022 03:10:13 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        Thu, 7 Jul 2022 23:11:23 -0400
+Received: from m12-17.163.com (m12-17.163.com [220.181.12.17])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1BD3373594
+        for <linux-kernel@vger.kernel.org>; Thu,  7 Jul 2022 20:11:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=r2cOE
+        uXAAAXANaMg92EJ+3l5uhuP8HS5zodz6szymtE=; b=i+kRGJxaXdIw8n7aqMDzz
+        q9fxpRfqZIYhU2xDope3LqxrkoA28HKBkTH3yxfAa5ZyIiJ5BE0r5i+QsqsQaZ3b
+        V0rhHi4/gakJsjpCyu5NNCgyvGdk0jw30unpsOpclpYhuabA5NxdmSmixEovfPUK
+        ghEnHdh8DSNPXrC8dgRpU8=
+Received: from bf-rmsz-11.ccdomain.com (unknown [218.17.89.92])
+        by smtp13 (Coremail) with SMTP id EcCowACHj2E_oMdi_5ZWMQ--.36352S2;
+        Fri, 08 Jul 2022 11:10:57 +0800 (CST)
+From:   Zhongjun Tan <hbut_tan@163.com>
+To:     harry.wentland@amd.com, sunpeng.li@amd.com,
+        Rodrigo.Siqueira@amd.com, alexander.deucher@amd.com,
+        christian.koenig@amd.com, Xinhui.Pan@amd.com, airlied@linux.ie,
+        daniel@ffwll.ch, chandan.vurdigerenataraj@amd.com,
+        tanzhongjun@coolpad.com, aurabindo.pillai@amd.com
+Cc:     amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] drm/amd/display: Remove condition with no effect
+Date:   Fri,  8 Jul 2022 11:10:48 +0800
+Message-Id: <20220708031048.43472-1-hbut_tan@163.com>
+X-Mailer: git-send-email 2.29.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [net-next PATCH v3 0/5] PolarFire SoC macb reset support
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <165724981392.15320.15228672706280247998.git-patchwork-notify@kernel.org>
-Date:   Fri, 08 Jul 2022 03:10:13 +0000
-References: <20220706095129.828253-1-conor.dooley@microchip.com>
-In-Reply-To: <20220706095129.828253-1-conor.dooley@microchip.com>
-To:     Conor Dooley <conor.dooley@microchip.com>
-Cc:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, nicolas.ferre@microchip.com,
-        claudiu.beznea@microchip.com, netdev@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-riscv@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-CM-TRANSID: EcCowACHj2E_oMdi_5ZWMQ--.36352S2
+X-Coremail-Antispam: 1Uf129KBjvdXoW7Xw1DAF45trWUArWUXr4xZwb_yoWkWFbEgF
+        4vqFn5Kr15Ar4qgr47Zr1F9ryvvan8KF4DXrWIq3s0ywnIga47GFZ7GwnrWr1jvFsrXFZI
+        ya10kF48Can7WjkaLaAFLSUrUUUUjb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUvcSsGvfC2KfnxnUUI43ZEXa7IUnDKsUUUUUU==
+X-Originating-IP: [218.17.89.92]
+X-CM-SenderInfo: xkex3sxwdqqiywtou0bp/1tbiSAE4xl+Fe25bJwAAsE
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
+From: Zhongjun Tan <tanzhongjun@coolpad.com>
 
-This series was applied to netdev/net-next.git (master)
-by Jakub Kicinski <kuba@kernel.org>:
+Remove condition with no effect
 
-On Wed, 6 Jul 2022 10:51:24 +0100 you wrote:
-> Hey all,
-> Jakub requested that these patches be split off from the series
-> adding the reset controller itself that I sent ~yesterday~ last
-> week [0].
-> 
-> The Cadence MACBs on PolarFire SoC (MPFS) have reset capability and are
-> compatible with the zynqmp's init function. I have removed the zynqmp
-> specific comments from that function & renamed it to reflect what it
-> does, since it is no longer zynqmp only.
-> 
-> [...]
+Signed-off-by: Zhongjun Tan <tanzhongjun@coolpad.com>
+---
+ .../drm/amd/display/dc/dml/dcn32/display_mode_vba_util_32.c   | 4 ----
+ 1 file changed, 4 deletions(-)
 
-Here is the summary with links:
-  - [net-next,v3,1/5] dt-bindings: net: cdns,macb: document polarfire soc's macb
-    https://git.kernel.org/netdev/net-next/c/b09c6f8ff731
-  - [net-next,v3,2/5] net: macb: add polarfire soc reset support
-    https://git.kernel.org/netdev/net-next/c/8aad66aa59be
-  - [net-next,v3,3/5] net: macb: unify macb_config alignment style
-    https://git.kernel.org/netdev/net-next/c/649bef9c7663
-  - [net-next,v3,4/5] net: macb: simplify error paths in init_reset_optional()
-    https://git.kernel.org/netdev/net-next/c/ea242f821a2d
-  - [net-next,v3,5/5] net: macb: sort init_reset_optional() with other init()s
-    https://git.kernel.org/netdev/net-next/c/8a78ac73de20
-
-You are awesome, thank you!
+diff --git a/drivers/gpu/drm/amd/display/dc/dml/dcn32/display_mode_vba_util_32.c b/drivers/gpu/drm/amd/display/dc/dml/dcn32/display_mode_vba_util_32.c
+index 07f3a85f8edf..ec3ea94d3802 100644
+--- a/drivers/gpu/drm/amd/display/dc/dml/dcn32/display_mode_vba_util_32.c
++++ b/drivers/gpu/drm/amd/display/dc/dml/dcn32/display_mode_vba_util_32.c
+@@ -4670,10 +4670,6 @@ void dml32_CalculateMinAndMaxPrefetchMode(
+ 	} else if (AllowForPStateChangeOrStutterInVBlankFinal == dm_prefetch_support_uclk_fclk_and_stutter) {
+ 		*MinPrefetchMode = 0;
+ 		*MaxPrefetchMode = 0;
+-	} else if (AllowForPStateChangeOrStutterInVBlankFinal ==
+-			dm_prefetch_support_uclk_fclk_and_stutter_if_possible) {
+-		*MinPrefetchMode = 0;
+-		*MaxPrefetchMode = 3;
+ 	} else {
+ 		*MinPrefetchMode = 0;
+ 		*MaxPrefetchMode = 3;
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
+2.29.0
 

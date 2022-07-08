@@ -2,126 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F7E356BA7B
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 15:15:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4116A56BA85
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 15:19:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238084AbiGHNPB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Jul 2022 09:15:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55040 "EHLO
+        id S237862AbiGHNSs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Jul 2022 09:18:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56812 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231890AbiGHNPA (ORCPT
+        with ESMTP id S231287AbiGHNSr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Jul 2022 09:15:00 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F14DD98;
-        Fri,  8 Jul 2022 06:15:00 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id C220121ECC;
-        Fri,  8 Jul 2022 13:14:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1657286098; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
-        bh=36XAfuKXjscIMRoDtiDJGKATV58DDVN9bq8xNSF9IGE=;
-        b=LOwT+zhDaiJgx3k1OdpAf7iPB3UfjhPRvulCjGstCP+2FsaxLiKewwWtC9llkLUIyeAlxb
-        QxuaV7Ty2+jFclwaxx8SueMiQ/50/emx8Ogzkn5gCfShWmIWBMRfM8e3Um6ANNV0CNR983
-        IPXbnduDUEYWkwF6+sRxyiYzSg6BRNM=
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 6484213A80;
-        Fri,  8 Jul 2022 13:14:58 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id VH/ZFtItyGJYNQAAMHmgww
-        (envelope-from <jgross@suse.com>); Fri, 08 Jul 2022 13:14:58 +0000
-From:   Juergen Gross <jgross@suse.com>
-To:     xen-devel@lists.xenproject.org, x86@kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Juergen Gross <jgross@suse.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        "H. Peter Anvin" <hpa@zytor.com>, stable@vger.kernel.org
-Subject: [PATCH v3] x86/pat: fix x86_has_pat_wp()
-Date:   Fri,  8 Jul 2022 15:14:56 +0200
-Message-Id: <20220708131456.5645-1-jgross@suse.com>
-X-Mailer: git-send-email 2.35.3
+        Fri, 8 Jul 2022 09:18:47 -0400
+Received: from mail-lj1-x236.google.com (mail-lj1-x236.google.com [IPv6:2a00:1450:4864:20::236])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D46C71C91A
+        for <linux-kernel@vger.kernel.org>; Fri,  8 Jul 2022 06:18:45 -0700 (PDT)
+Received: by mail-lj1-x236.google.com with SMTP id s14so25938624ljs.3
+        for <linux-kernel@vger.kernel.org>; Fri, 08 Jul 2022 06:18:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=1Yam3y0DcCFqvtPSG9KOweCqxMOCqoZ/tVs5qs0X19I=;
+        b=kQj86bjG5zvMHEWhoxQWhFXTOUb15TA7YqDTqLA361xfX3dMGb3sA66mMwl6cGu1Cp
+         6Q867H9s0YhApBd6xEXsnrThqvBSoz4fZBP7GLTRSaQ2QnK2HHIHWLF7Bkz+/ibQrGx9
+         WmOhWen94YFgjXDgtkMpIKy7LhOV3xpqHo7pF7uXoOeJux9kYLux8b8Da6NFvugnft3J
+         7IDixkpvl3CYYIAi1v+2agBHTgmcIGWQ7LyOylWYDH605GAIKDf+ueY84GGCLvQA03zg
+         h7ZrE3ctcGYV6khkrm9AlNVaQcIRWiW0Aabx9L/vnPGrhtaV+DOamJDJZOY0RVy/mPqT
+         Q1rA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=1Yam3y0DcCFqvtPSG9KOweCqxMOCqoZ/tVs5qs0X19I=;
+        b=qUnDNWt3Pe+ACJRKf7JXJsVxHUkB8KfgWTP6XvpBlE7KehsT+wCndke0jWqfJn6ZkP
+         hqJlLl5Y19E5IULEIaIvbbACslOmu659fxCm9fXoK/dIbCzaXjfUN5Ds2W3k9Nx2PG+d
+         I/mqXmPmvO3EaJeyhaWgPaH0MEZQQvR1Uek6PYZUV7a9PLczm8WnhjSK1J1vSQ02InmG
+         CVeV8Sv9OCglgpmI58BGWa5dcMsMtn07W6BeIBbFFaCnBxfx0W7dzFEHTn24Sfa8VUlT
+         HyQkWNJw4aCyfJIrl7ElNlgfP1mB2a34expwzSjjGZ+l3LxHcAtRZEIdgNXBZJaxGxx7
+         ofBQ==
+X-Gm-Message-State: AJIora/fFnV5aSTo/HCvptGTlKtUwgmmX+YQz6rKthGYXfJjwHmTPdb3
+        yHZs2xeXO3oba2m1hKlUx/9OhMaTx8/oAMR/5z4vLQ==
+X-Google-Smtp-Source: AGRyM1uIshwbshScAbeRQz3UVgzvkjmr6Hms69W47MrzRQoRsZF9RKD+toMCTMaHHbdrVf4EyhuKSDLC3CiVAnM6wtg=
+X-Received: by 2002:a2e:a413:0:b0:25d:4844:9d65 with SMTP id
+ p19-20020a2ea413000000b0025d48449d65mr1997343ljn.169.1657286324182; Fri, 08
+ Jul 2022 06:18:44 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20220702213724.3949-1-semen.protsenko@linaro.org>
+ <20220702213724.3949-2-semen.protsenko@linaro.org> <9afb1e98-706f-ed61-892c-e3cc321364b4@linaro.org>
+In-Reply-To: <9afb1e98-706f-ed61-892c-e3cc321364b4@linaro.org>
+From:   Sam Protsenko <semen.protsenko@linaro.org>
+Date:   Fri, 8 Jul 2022 16:18:32 +0300
+Message-ID: <CAPLW+4kfrHOb8utzynhB=2KLDQu-NC08UYpAVjpg__NQSeSQyg@mail.gmail.com>
+Subject: Re: [PATCH 1/4] iommu/exynos: Set correct dma mask for SysMMU v5+
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Marek Szyprowski <m.szyprowski@samsung.com>,
+        Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Janghyuck Kim <janghyuck.kim@samsung.com>,
+        Cho KyongHo <pullip.cho@samsung.com>,
+        Daniel Mentz <danielmentz@google.com>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        iommu@lists.linux-foundation.org, iommu@lists.linux.dev,
+        linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-x86_has_pat_wp() is using a wrong test, as it relies on the normal
-PAT configuration used by the kernel. In case the PAT MSR has been
-setup by another entity (e.g. Xen hypervisor) it might return false
-even if the PAT configuration is allowing WP mappings. This due to the
-fact that when running as Xen PV guest the PAT MSR is setup by the
-hypervisor and cannot be changed by the guest. This results in the WP
-related entry to be at a different position when running as Xen PV
-guest compared to the bare metal or fully virtualized case.
+On Sun, 3 Jul 2022 at 21:50, Krzysztof Kozlowski
+<krzysztof.kozlowski@linaro.org> wrote:
+>
+> On 02/07/2022 23:37, Sam Protsenko wrote:
+> > SysMMU v5+ supports 36 bit physical address space. Set corresponding DMA
+> > mask to avoid falling back to SWTLBIO usage in dma_map_single() because
+> > of failed dma_capable() check.
+> >
+> > The original code for this fix was suggested by Marek.
+> >
+> > Originally-by: Marek Szyprowski <m.szyprowski@samsung.com>
+>
+> This is some tip specific tag, I don't think checkpatch allows it.
+> Either use suggesgted-by or co-developed-by + SoB.
+>
 
-The correct way to test for WP support is:
+Yes, checkpatch is swearing at that line, though I encountered that
+tag mentioning somewhere in Documentation. Will rework it in v2.
 
-1. Get the PTE protection bits needed to select WP mode by reading
-   __cachemode2pte_tbl[_PAGE_CACHE_MODE_WP] (depending on the PAT MSR
-   setting this might return protection bits for a stronger mode, e.g.
-   UC-)
-2. Translate those bits back into the real cache mode selected by those
-   PTE bits by reading __pte2cachemode_tbl[__pte2cm_idx(prot)]
-3. Test for the cache mode to be _PAGE_CACHE_MODE_WP
+> > Signed-off-by: Sam Protsenko <semen.protsenko@linaro.org>
+> > ---
+> >  drivers/iommu/exynos-iommu.c | 8 ++++++++
+> >  1 file changed, 8 insertions(+)
+> >
+> > diff --git a/drivers/iommu/exynos-iommu.c b/drivers/iommu/exynos-iommu.c
+> > index 71f2018e23fe..28f8c8d93aa3 100644
+> > --- a/drivers/iommu/exynos-iommu.c
+> > +++ b/drivers/iommu/exynos-iommu.c
+> > @@ -647,6 +647,14 @@ static int exynos_sysmmu_probe(struct platform_device *pdev)
+> >               }
+> >       }
+> >
+> > +     if (MMU_MAJ_VER(data->version) >= 5) {
+> > +             ret = dma_set_mask(dev, DMA_BIT_MASK(36));
+> > +             if (ret) {
+> > +                     dev_err(dev, "Unable to set DMA mask: %d\n", ret);
+>
+> Missing cleanup: iommu_device_unregister
+> and probably also: iommu_device_sysfs_remove
+>
 
-Cc: <stable@vger.kernel.org> # 4.14
-Fixes: f88a68facd9a ("x86/mm: Extend early_memremap() support with additional attrs")
-Signed-off-by: Juergen Gross <jgross@suse.com>
----
-V2:
-- fix indexing into __pte2cachemode_tbl[]
-V3:
-- expand commit message, add comment (Boris Petkov)
----
- arch/x86/mm/init.c | 14 ++++++++++++--
- 1 file changed, 12 insertions(+), 2 deletions(-)
+Right. Also the correct cleanup should be added for failing
+iommu_device_register() case, above of the quoted code. Will do that
+in v2, thanks.
 
-diff --git a/arch/x86/mm/init.c b/arch/x86/mm/init.c
-index d8cfce221275..57ba5502aecf 100644
---- a/arch/x86/mm/init.c
-+++ b/arch/x86/mm/init.c
-@@ -77,10 +77,20 @@ static uint8_t __pte2cachemode_tbl[8] = {
- 	[__pte2cm_idx(_PAGE_PWT | _PAGE_PCD | _PAGE_PAT)] = _PAGE_CACHE_MODE_UC,
- };
- 
--/* Check that the write-protect PAT entry is set for write-protect */
-+/*
-+ * Check that the write-protect PAT entry is set for write-protect.
-+ * To do this without making assumptions how PAT has been set up (Xen has
-+ * another layout than the kernel), translate the _PAGE_CACHE_MODE_WP cache
-+ * mode via the __cachemode2pte_tbl[] into protection bits (those protection
-+ * bits will select a cache mode of WP or better), and then translate the
-+ * protection bits back into the cache mode using __pte2cm_idx() and the
-+ * __pte2cachemode_tbl[] array. This will return the really used cache mode.
-+ */
- bool x86_has_pat_wp(void)
- {
--	return __pte2cachemode_tbl[_PAGE_CACHE_MODE_WP] == _PAGE_CACHE_MODE_WP;
-+	uint16_t prot = __cachemode2pte_tbl[_PAGE_CACHE_MODE_WP];
-+
-+	return __pte2cachemode_tbl[__pte2cm_idx(prot)] == _PAGE_CACHE_MODE_WP;
- }
- 
- enum page_cache_mode pgprot2cachemode(pgprot_t pgprot)
--- 
-2.35.3
+Another thing is that "remove" method is missing. But guess I'll get
+to it later, when adding modularization support for this driver.
 
+> > +                     return ret;
+> > +             }
+> > +     }
+> > +
+> >       /*
+> >        * use the first registered sysmmu device for performing
+> >        * dma mapping operations on iommu page tables (cpu cache flush)
+>
+>
+> Best regards,
+> Krzysztof

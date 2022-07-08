@@ -2,97 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3957756BBA4
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 16:24:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B2C9F56BB86
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 16:14:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238426AbiGHOOy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Jul 2022 10:14:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41368 "EHLO
+        id S238404AbiGHOOj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Jul 2022 10:14:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41202 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238250AbiGHOOv (ORCPT
+        with ESMTP id S237980AbiGHOOh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Jul 2022 10:14:51 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A3762714D
-        for <linux-kernel@vger.kernel.org>; Fri,  8 Jul 2022 07:14:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1657289689; x=1688825689;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=mZw4zJhnWLu6q25nq6HwCIlugQZ35aroc8hQi8XIXbM=;
-  b=MKWCoa6MdBYI4liHb2/1GvGiqBkd6/zcvbraJ1xtuyhXqTCyhHvw1If6
-   cW/sTbfoISH2XrER51LitrtKYSLpElQ04L+LXcggvG4hHZSWu+7u839wG
-   Rwd2YGxDf6hnuqnOspVNnF1NbCIODVWsuugRPPHA6/KGeiucwfXxs0KWQ
-   8mGoO9iYO5BVOj5EKAJz2lOB2ktFPpYaafYfIhJqu9kkCG7Dg1uk27w6+
-   WCgoIOUwUIg9MdTNJTWYseDaCQnHM6gvL63oftXnffl1DbL8nUVVgqObH
-   xAGJghuNNMhmgJVEKf5uuarjurnvs1oZddU9rHVaXMKq5jxeTqkZCawzG
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10401"; a="264068714"
-X-IronPort-AV: E=Sophos;i="5.92,255,1650956400"; 
-   d="scan'208";a="264068714"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jul 2022 07:14:48 -0700
-X-IronPort-AV: E=Sophos;i="5.92,255,1650956400"; 
-   d="scan'208";a="626714088"
-Received: from gcisnero-mobl.amr.corp.intel.com (HELO [10.212.87.49]) ([10.212.87.49])
-  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jul 2022 07:14:47 -0700
-Message-ID: <4fd78c53-2294-0f19-1551-39bafe87d94c@linux.intel.com>
-Date:   Fri, 8 Jul 2022 09:11:11 -0500
+        Fri, 8 Jul 2022 10:14:37 -0400
+Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9C4E18E13;
+        Fri,  8 Jul 2022 07:14:35 -0700 (PDT)
+Received: by mail-ej1-x635.google.com with SMTP id os14so7705410ejb.4;
+        Fri, 08 Jul 2022 07:14:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=Z0XOec91623/KuMv+Ej/7gZUuHsCJ62v6usunFr5b6A=;
+        b=f6IhZTBULbQ7llaZot4o9crrDH/bVkSBG4cnMtEpeURfPACgFjn6vJq/r5K9ktnt1p
+         LERVggmRob4jL/GCkTX2w7v74r1KkY3FTdHWj4yihWbrOZUOANV5aUCghGUOwU0dnxko
+         /PZTw+0EqCC4O3OgTunDclurFhOm+fOeM7DwyLzfawWZNxV75iEId53Bz12llAwF3zZA
+         CxlP1Y+szHux5dgocUVRRMZVsnAep+OILxAx64nCQmbv+MyobgioKifPwL4r/ZjZE8Ln
+         pQduBNe9DY1hriNkcdpRfW0SVuCcc5CUW3dFFnTn/mtPcA5nKFiMo8hNefUcad7CmpbW
+         7uVQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=Z0XOec91623/KuMv+Ej/7gZUuHsCJ62v6usunFr5b6A=;
+        b=2bWVjD2wcED/t2bvI5RGppREQfkPw4wTAXMUCnW6e6uKbn6zzHGRCfYX+To6B0C1S6
+         YGpBR6DJm0bY1LyiWYAOHeyKQhAABYymNo3ZThriLX5FVmC3eE37KOhemlsukErUvEsx
+         m+sWUibOqGpY1aJ1yY1cvsENyKaI5V+Y5igUu1LUph13AFiUIRFyrH+U0iNVi0KKXHiF
+         S45LL6AFqS9TNYpUIhQiLlMUCKAIKoBgeJ4o2Vr/E0nH4au2YSKzvA1I2XymCvHYKRph
+         lEbztsK18olCmJxRTmkvbC5Ac34VXu7YOAanT7V0zDaQWLBzOQmoYkXw7Eimj9EQucew
+         oSkQ==
+X-Gm-Message-State: AJIora84G1DHCGO4O8hZ6eG2JSY+njMaVQetFkngqFhV9jw2jQxOSt1/
+        gkYf7aeINhrLLkdrk3Wkd4ZBHLPOwNBTmA==
+X-Google-Smtp-Source: AGRyM1v6rPWBPZilFN90Jv15KQMt+j6kMHP6jk8djEs05COCTktH+9O11oNXRuqjRUVfaq+6AN/t3g==
+X-Received: by 2002:a17:907:3dac:b0:722:e6ab:8d9 with SMTP id he44-20020a1709073dac00b00722e6ab08d9mr4190126ejc.20.1657289674494;
+        Fri, 08 Jul 2022 07:14:34 -0700 (PDT)
+Received: from jernej-laptop.localnet (213-161-3-76.dynamic.telemach.net. [213.161.3.76])
+        by smtp.gmail.com with ESMTPSA id q2-20020a170906a08200b006fed93bf71fsm20603401ejy.18.2022.07.08.07.14.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 08 Jul 2022 07:14:34 -0700 (PDT)
+From:   Jernej =?utf-8?B?xaBrcmFiZWM=?= <jernej.skrabec@gmail.com>
+To:     Michal Suchanek <msuchanek@suse.de>,
+        Samuel Holland <samuel@sholland.org>
+Cc:     linux-sunxi@lists.linux.dev, Icenowy Zheng <icenowy@aosc.xyz>,
+        Andre Przywara <andre.przywara@arm.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Chen-Yu Tsai <wens@csie.org>, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] sunxi: dts: Fix SPI NOR campatible on Orange Pi Zero
+Date:   Fri, 08 Jul 2022 16:13:11 +0200
+Message-ID: <10106175.nUPlyArG6x@jernej-laptop>
+In-Reply-To: <0c575068-abd7-c69a-e59c-3140f8cb7813@sholland.org>
+References: <20220707174801.36e010da@donnerap.cambridge.arm.com> <20220707170721.20225-1-msuchanek@suse.de> <0c575068-abd7-c69a-e59c-3140f8cb7813@sholland.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Firefox/91.0 Thunderbird/91.10.0
-Subject: Re: [PATCH v8 0/2] ASoC: Intel: sof_cs42l42: adding support for ADL
- configuration and BT offload
-Content-Language: en-US
-To:     Brent Lu <brent.lu@intel.com>, alsa-devel@alsa-project.org
-Cc:     Cezary Rojewski <cezary.rojewski@intel.com>,
-        Liam Girdwood <liam.r.girdwood@linux.intel.com>,
-        Peter Ujfalusi <peter.ujfalusi@linux.intel.com>,
-        Bard Liao <yung-chuan.liao@linux.intel.com>,
-        Ranjani Sridharan <ranjani.sridharan@linux.intel.com>,
-        Kai Vehmanen <kai.vehmanen@linux.intel.com>,
-        Mark Brown <broonie@kernel.org>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>,
-        Akihiko Odaki <akihiko.odaki@gmail.com>,
-        linux-kernel@vger.kernel.org, Rander Wang <rander.wang@intel.com>,
-        Gongjun Song <gongjun.song@intel.com>,
-        Mac Chiang <mac.chiang@intel.com>,
-        Ajye Huang <ajye_huang@compal.corp-partner.google.com>,
-        Libin Yang <libin.yang@intel.com>,
-        Muralidhar Reddy <muralidhar.reddy@intel.com>,
-        David Lin <CTLIN0@nuvoton.com>
-References: <20220708110030.658468-1-brent.lu@intel.com>
-From:   Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
-In-Reply-To: <20220708110030.658468-1-brent.lu@intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Michal,
 
+sorry, but I was a bit too quick with giving r-b line. See comments below.
 
-On 7/8/22 06:00, Brent Lu wrote:
-> 1. Add BT offload fetch to cs42l42 machine driver
-> 2. Support cs42l42+max98360a on ADL platform
+Dne petek, 08. julij 2022 ob 09:36:26 CEST je Samuel Holland napisal(a):
+> Hi Michal,
 > 
-> V8 Changes:
-> - split the V7 patch into two patches; one for BT offload feature, the other for new board config
-> - change topology name to sof-adl-max98360a-cs42l42.tplg
-> - remove useless variable 'ret' in create_bt_offload_dai_links
+> The subject prefix should start with "ARM: dts:" (e.g. "ARM: dts: sunxi:").
+> Generally it is a good idea to look at the log of the file and follow the
+> pattern you see there.
 > 
-> Brent Lu (2):
->   ASoC: Intel: sof_cs42l42: support BT offload audio
->   ASoC: Intel: sof_cs42l42: add adl_mx98360a_cs4242 board config
+> On 7/7/22 12:07 PM, Michal Suchanek wrote:
+> > Without "jedec,spi-nor" compatible the flash memory cannot be probed by
+> > u-boot. The macronix part is what is shipped on the boards that come
+> > with a flash chip.
 
-LGTM, thanks Brent
+Please reword this a bit. DT isn't user specific, so U-Boot should not be 
+mentioned. But you can write about compatible being wrong. According to DT 
+bindings, it should be manufacturer specific compatible, followed by 
+"jedec,spi-nor".
 
-Acked-by: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
+Once both issues are addressed, you can keep my r-b tag and include fixes tag 
+posted by Sameul.
+
+Best regards,
+Jernej
+
+> 
+> Fixes: 45857ae95478 ("ARM: dts: orange-pi-zero: add node for SPI NOR")
+> 
+> Regards,
+> Samuel
+> 
+> > Signed-off-by: Michal Suchanek <msuchanek@suse.de>
+> > ---
+> > 
+> >  arch/arm/boot/dts/sun8i-h2-plus-orangepi-zero.dts | 2 +-
+> >  1 file changed, 1 insertion(+), 1 deletion(-)
+> > 
+> > diff --git a/arch/arm/boot/dts/sun8i-h2-plus-orangepi-zero.dts
+> > b/arch/arm/boot/dts/sun8i-h2-plus-orangepi-zero.dts index
+> > f19ed981da9d..3706216ffb40 100644
+> > --- a/arch/arm/boot/dts/sun8i-h2-plus-orangepi-zero.dts
+> > +++ b/arch/arm/boot/dts/sun8i-h2-plus-orangepi-zero.dts
+> > @@ -169,7 +169,7 @@ &spi0 {
+> > 
+> >  	flash@0 {
+> >  	
+> >  		#address-cells = <1>;
+> >  		#size-cells = <1>;
+> > 
+> > -		compatible = "mxicy,mx25l1606e", "winbond,w25q128";
+> > +		compatible = "mxicy,mx25l1606e", "jedec,spi-nor";
+> > 
+> >  		reg = <0>;
+> >  		spi-max-frequency = <40000000>;
+> >  	
+> >  	};
+
+
+
+

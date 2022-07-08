@@ -2,30 +2,30 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BFFA556B248
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 07:38:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1831456B249
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 07:38:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237181AbiGHFhp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Jul 2022 01:37:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52336 "EHLO
+        id S237217AbiGHFhx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Jul 2022 01:37:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52386 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237148AbiGHFhk (ORCPT
+        with ESMTP id S237180AbiGHFho (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Jul 2022 01:37:40 -0400
+        Fri, 8 Jul 2022 01:37:44 -0400
 Received: from out2.migadu.com (out2.migadu.com [IPv6:2001:41d0:2:aacc::])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E76B526AFC
-        for <linux-kernel@vger.kernel.org>; Thu,  7 Jul 2022 22:37:39 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EEF026AFC
+        for <linux-kernel@vger.kernel.org>; Thu,  7 Jul 2022 22:37:44 -0700 (PDT)
 X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1657258658;
+        t=1657258662;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=/78PY3uv4dMYi2rgsK50O1qa1/bVeZOW9OatOK9YQlA=;
-        b=USG5qXuejk9c625UJ+AOO6x6ZUGQNRdXqP9XY15lxUlFeVZU/Elll6MVQOM8ij7G9r1HML
-        xl9GdvUSa9Qkoay9aStnwx+ApYy48fppVIlNnxlj542vvAHorR7eknz0oosdqSyqscJSlD
-        GivdmWJgTrU1Cqhswfad9lOApa+EX7Y=
+        bh=uxYP30zRX3+087a7ADNvtSYGr7OYdBOK6+qjv5apzug=;
+        b=QmNYSzR8WxPgvEHooLZcizvFyZgAoinmGHv6QYOIerCWy+kH2jeZvEKTg+JreBmUeK+29J
+        qa49GAc/9y1cLVpURCTvHcjQxSsn0b5f1rC/YVXJv5L9INjsnoKfgmZT/iJT4k3nkFrAL9
+        bLYw8aaYAFzt9LBjxNgBsejCWUl8lGA=
 From:   Naoya Horiguchi <naoya.horiguchi@linux.dev>
 To:     linux-mm@kvack.org
 Cc:     Andrew Morton <akpm@linux-foundation.org>,
@@ -38,9 +38,9 @@ Cc:     Andrew Morton <akpm@linux-foundation.org>,
         Muchun Song <songmuchun@bytedance.com>,
         Naoya Horiguchi <naoya.horiguchi@nec.com>,
         linux-kernel@vger.kernel.org
-Subject: [mm-unstable PATCH v5 1/8] mm/hugetlb: check gigantic_page_runtime_supported() in return_unused_surplus_pages()
-Date:   Fri,  8 Jul 2022 14:36:46 +0900
-Message-Id: <20220708053653.964464-2-naoya.horiguchi@linux.dev>
+Subject: [mm-unstable PATCH v5 2/8] mm/hugetlb: make pud_huge() and follow_huge_pud() aware of non-present pud entry
+Date:   Fri,  8 Jul 2022 14:36:47 +0900
+Message-Id: <20220708053653.964464-3-naoya.horiguchi@linux.dev>
 In-Reply-To: <20220708053653.964464-1-naoya.horiguchi@linux.dev>
 References: <20220708053653.964464-1-naoya.horiguchi@linux.dev>
 MIME-Version: 1.0
@@ -59,65 +59,97 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Naoya Horiguchi <naoya.horiguchi@nec.com>
 
-I found a weird state of 1GB hugepage pool, caused by the following
-procedure:
+follow_pud_mask() does not support non-present pud entry now.  As long as
+I tested on x86_64 server, follow_pud_mask() still simply returns
+no_page_table() for non-present_pud_entry() due to pud_bad(), so no severe
+user-visible effect should happen.  But generally we should call
+follow_huge_pud() for non-present pud entry for 1GB hugetlb page.
 
-  - run a process reserving all free 1GB hugepages,
-  - shrink free 1GB hugepage pool to zero (i.e. writing 0 to
-    /sys/kernel/mm/hugepages/hugepages-1048576kB/nr_hugepages), then
-  - kill the reserving process.
-
-, then all the hugepages are free *and* surplus at the same time.
-
-  $ cat /sys/kernel/mm/hugepages/hugepages-1048576kB/nr_hugepages
-  3
-  $ cat /sys/kernel/mm/hugepages/hugepages-1048576kB/free_hugepages
-  3
-  $ cat /sys/kernel/mm/hugepages/hugepages-1048576kB/resv_hugepages
-  0
-  $ cat /sys/kernel/mm/hugepages/hugepages-1048576kB/surplus_hugepages
-  3
-
-This state is resolved by reserving and allocating the pages then
-freeing them again, so this seems not to result in serious problem.
-But it's a little surprising (shrinking pool suddenly fails).
-
-This behavior is caused by hstate_is_gigantic() check in
-return_unused_surplus_pages(). This was introduced so long ago in 2008
-by commit aa888a74977a ("hugetlb: support larger than MAX_ORDER"), and
-at that time the gigantic pages were not supposed to be allocated/freed
-at run-time.  Now kernel can support runtime allocation/free, so let's
-check gigantic_page_runtime_supported() together.
+Update pud_huge() and follow_huge_pud() to handle non-present pud entries.
+The changes are similar to previous works for pud entries commit e66f17ff7177
+("mm/hugetlb: take page table lock in follow_huge_pmd()") and commit
+cbef8478bee5 ("mm/hugetlb: pmd_huge() returns true for non-present hugepage").
 
 Signed-off-by: Naoya Horiguchi <naoya.horiguchi@nec.com>
+Reviewed-by: Miaohe Lin <linmiaohe@huawei.com>
+Reviewed-by: Mike Kravetz <mike.kravetz@oracle.com>
 ---
-v4 -> v5:
-- drop additional gigantic_page_runtime_supported() checks.
-
 v2 -> v3:
-- Fixed typo in patch description,
-- add !gigantic_page_runtime_supported() check instead of removing
-  hstate_is_gigantic() check (suggested by Miaohe and Muchun)
-- add a few more !gigantic_page_runtime_supported() check in
-  set_max_huge_pages() (by Mike).
+- fixed typos in subject and description,
+- added comment on pud_huge(),
+- added comment about fallback for hwpoisoned entry,
+- updated initial check about FOLL_{PIN,GET} flags.
 ---
- mm/hugetlb.c | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+ arch/x86/mm/hugetlbpage.c |  8 +++++++-
+ mm/hugetlb.c              | 32 ++++++++++++++++++++++++++++++--
+ 2 files changed, 37 insertions(+), 3 deletions(-)
 
+diff --git a/arch/x86/mm/hugetlbpage.c b/arch/x86/mm/hugetlbpage.c
+index 509408da0da1..6b3033845c6d 100644
+--- a/arch/x86/mm/hugetlbpage.c
++++ b/arch/x86/mm/hugetlbpage.c
+@@ -30,9 +30,15 @@ int pmd_huge(pmd_t pmd)
+ 		(pmd_val(pmd) & (_PAGE_PRESENT|_PAGE_PSE)) != _PAGE_PRESENT;
+ }
+ 
++/*
++ * pud_huge() returns 1 if @pud is hugetlb related entry, that is normal
++ * hugetlb entry or non-present (migration or hwpoisoned) hugetlb entry.
++ * Otherwise, returns 0.
++ */
+ int pud_huge(pud_t pud)
+ {
+-	return !!(pud_val(pud) & _PAGE_PSE);
++	return !pud_none(pud) &&
++		(pud_val(pud) & (_PAGE_PRESENT|_PAGE_PSE)) != _PAGE_PRESENT;
+ }
+ 
+ #ifdef CONFIG_HUGETLB_PAGE
 diff --git a/mm/hugetlb.c b/mm/hugetlb.c
-index a4506ed1f1db..cf8ccee7654c 100644
+index cf8ccee7654c..77119d93a0f9 100644
 --- a/mm/hugetlb.c
 +++ b/mm/hugetlb.c
-@@ -2432,8 +2432,7 @@ static void return_unused_surplus_pages(struct hstate *h,
- 	/* Uncommit the reservation */
- 	h->resv_huge_pages -= unused_resv_pages;
+@@ -6978,10 +6978,38 @@ struct page * __weak
+ follow_huge_pud(struct mm_struct *mm, unsigned long address,
+ 		pud_t *pud, int flags)
+ {
+-	if (flags & (FOLL_GET | FOLL_PIN))
++	struct page *page = NULL;
++	spinlock_t *ptl;
++	pte_t pte;
++
++	if (WARN_ON_ONCE(flags & FOLL_PIN))
+ 		return NULL;
  
--	/* Cannot return gigantic pages currently */
--	if (hstate_is_gigantic(h))
-+	if (hstate_is_gigantic(h) && !gigantic_page_runtime_supported())
- 		goto out;
+-	return pte_page(*(pte_t *)pud) + ((address & ~PUD_MASK) >> PAGE_SHIFT);
++retry:
++	ptl = huge_pte_lock(hstate_sizelog(PUD_SHIFT), mm, (pte_t *)pud);
++	if (!pud_huge(*pud))
++		goto out;
++	pte = huge_ptep_get((pte_t *)pud);
++	if (pte_present(pte)) {
++		page = pud_page(*pud) + ((address & ~PUD_MASK) >> PAGE_SHIFT);
++		if (WARN_ON_ONCE(!try_grab_page(page, flags))) {
++			page = NULL;
++			goto out;
++		}
++	} else {
++		if (is_hugetlb_entry_migration(pte)) {
++			spin_unlock(ptl);
++			__migration_entry_wait(mm, (pte_t *)pud, ptl);
++			goto retry;
++		}
++		/*
++		 * hwpoisoned entry is treated as no_page_table in
++		 * follow_page_mask().
++		 */
++	}
++out:
++	spin_unlock(ptl);
++	return page;
+ }
  
- 	/*
+ struct page * __weak
 -- 
 2.25.1
 

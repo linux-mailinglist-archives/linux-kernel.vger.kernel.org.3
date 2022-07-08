@@ -2,52 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5794256BB31
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 15:53:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9FB4E56BB3E
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 15:56:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238307AbiGHNwp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Jul 2022 09:52:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53626 "EHLO
+        id S238104AbiGHNxe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Jul 2022 09:53:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54394 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237408AbiGHNwo (ORCPT
+        with ESMTP id S238313AbiGHNxa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Jul 2022 09:52:44 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A147819034;
-        Fri,  8 Jul 2022 06:52:43 -0700 (PDT)
+        Fri, 8 Jul 2022 09:53:30 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7023A2C1
+        for <linux-kernel@vger.kernel.org>; Fri,  8 Jul 2022 06:53:26 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 60B01B8286A;
-        Fri,  8 Jul 2022 13:52:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 95C84C341C0;
-        Fri,  8 Jul 2022 13:52:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1657288361;
-        bh=dWgUfcl57UvS0TwOtzEgblzBsozkUjqJ4CbUIdLRBdc=;
-        h=Subject:From:In-Reply-To:References:To:Cc:Date:From;
-        b=HoXSrgvoH8IJbmahKM7OZa/dU6/k/6AVvRp1NVATCrH5EeahyuG9m/hgQZQ8i4YaJ
-         3DNLvPqepGiYWY8jjRXRZTQ2F5R9vi++m2Yd8Pm4Jw5Yz7u5SEWT8iVwQMf/gXlcam
-         g9NdNKhNxZvqOn/F3nqQeJFOMhwqQTfT8829UTZTV/DJXziYXbakLdkwvW/eM877bx
-         SIE1ib2iLc2O8ST8pT1W33/AL+dTz5QM1TqJAt8xWI6Lo4LLBzPEIELAXZpLKgo9VI
-         8VsqYco4lGLf7BZYXmPyc9yEmq7vyrj8BQLt+7jFqPChbkzf8wabdq/w8OxSqYeUCY
-         L/5D+u46hx+sA==
-Content-Type: text/plain; charset="utf-8"
+        by dfw.source.kernel.org (Postfix) with ESMTPS id BC11260B63
+        for <linux-kernel@vger.kernel.org>; Fri,  8 Jul 2022 13:53:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CD34FC341C0;
+        Fri,  8 Jul 2022 13:53:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1657288405;
+        bh=3LA0Rgq1HsUpGHRfvLb3NyoQ/vc9lNU/5cei4B9c+OE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=HcFuxaVbnWOgUPqHHSoFJrBAQFydMOGm69Dy4o0T7t94t1FvkO3fps5Qj3Nmlm8sZ
+         zcjiWyOtPjW5Mweruur0WzwRU64J69ArXAQ8FJGyQO3zRdHs5N+JpS/4Oxt/uTfP8K
+         zVkpXcYs0x3k4DI4ymSSzOi9o4PfQ82SYGBf/YWw=
+Date:   Fri, 8 Jul 2022 15:53:22 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Aleksa =?utf-8?B?VnXEjWtvdmnEhw==?= <aleksav013@gmail.com>
+Cc:     Arnd Bergmann <arnd@arndb.de>, linux-kernel@vger.kernel.org,
+        Shuah Khan <skhan@linuxfoundation.org>
+Subject: Re: PROBLEM: dmesg tracedumps on rtsx_usb module loading during boot
+Message-ID: <Ysg20t2t/S11idyx@kroah.com>
+References: <20220708134942.r3nhwzgh4nchaebi@artix.localdomain>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Subject: Re: [PATCH] ath11k: Fix typo in comments
-From:   Kalle Valo <kvalo@kernel.org>
-In-Reply-To: <20220704030004.16484-1-jiaming@nfschina.com>
-References: <20220704030004.16484-1-jiaming@nfschina.com>
-To:     Zhang Jiaming <jiaming@nfschina.com>
-Cc:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, ath11k@lists.infradead.org,
-        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, liqiong@nfschina.com,
-        renyu@nfschina.com, Zhang Jiaming <jiaming@nfschina.com>
-User-Agent: pwcli/0.1.1-git (https://github.com/kvalo/pwcli/) Python/3.7.3
-Message-ID: <165728835557.16445.10510816476274107000.kvalo@kernel.org>
-Date:   Fri,  8 Jul 2022 13:52:38 +0000 (UTC)
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220708134942.r3nhwzgh4nchaebi@artix.localdomain>
 X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -58,20 +52,18 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Zhang Jiaming <jiaming@nfschina.com> wrote:
+On Fri, Jul 08, 2022 at 03:49:42PM +0200, Aleksa Vučković wrote:
+> [1.] One line summary of the problem:
+> dmesg tracedumps on rtsx_usb module loading during boot
 
-> There is a typo(isn't') in comments.
-> It maybe 'isn't' instead of 'isn't''.
-> 
-> Signed-off-by: Zhang Jiaming <jiaming@nfschina.com>
-> Signed-off-by: Kalle Valo <quic_kvalo@quicinc.com>
+This should be fixed in linux-next now, right?
 
-Patch applied to ath-next branch of ath.git, thanks.
+Shuah (on cc:) send in some commits to resolve this, look at this
+thread:
+	https://lore.kernel.org/all/cover.1656642167.git.skhan@linuxfoundation.org/
 
-7d1e59a35ffa ath11k: Fix typo in comments
+If you could test those 2 patches, that would be great.
 
--- 
-https://patchwork.kernel.org/project/linux-wireless/patch/20220704030004.16484-1-jiaming@nfschina.com/
+thanks,
 
-https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatches
-
+greg k-h

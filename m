@@ -2,73 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9DD1956BD94
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 18:08:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 579F856BD4D
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 18:08:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238486AbiGHPYl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Jul 2022 11:24:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43870 "EHLO
+        id S238568AbiGHP0B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Jul 2022 11:26:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44990 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231890AbiGHPYj (ORCPT
+        with ESMTP id S238099AbiGHPZ7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Jul 2022 11:24:39 -0400
-Received: from smtpbg.qq.com (biz-43-154-54-12.mail.qq.com [43.154.54.12])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD4D1EA2;
-        Fri,  8 Jul 2022 08:24:34 -0700 (PDT)
-X-QQ-mid: bizesmtp73t1657293841tk4og5o6
-Received: from localhost.localdomain ( [182.148.15.249])
-        by bizesmtp.qq.com (ESMTP) with 
-        id ; Fri, 08 Jul 2022 23:23:57 +0800 (CST)
-X-QQ-SSF: 01000000002000B0C000B00A0000000
-X-QQ-FEAT: +HVWQWZs/U06PrLoaKVc06hTl196eHxl6vlvDoekGWywfqN3D5j1LSLTQgk5j
-        POEJr2jKVJgEhVWhJxe/Dz9SCmx9PPiYO+M4gvFUr50dKrq6R8mGgkns2bY7GfpwwbrtVzo
-        ltM5y1r/Ae13K6VlzFqJqQ5U7YF0gnandpoYXXv5jAL8KshTG6CEj4yPODoWSo70rKCIZLg
-        dhbjfJIkH91SV8r4YyD6YaEQ/aQe7bb6wbi3UkucVkQlzszCzOdx2TQ/BzdHYbAdGCIKayN
-        o3CFGQdUazupOd67xKV17lwwmhUGriNOItyZPPuFGIBxMFRDglD8uDxl72sA4FW/N0SnTXU
-        WJN4HQ8QTW7/+1Ad599f0ru1tAj+4RDK2tmk4m1tCbR1dYiXow=
-X-QQ-GoodBg: 0
-From:   Jilin Yuan <yuanjilin@cdjrlc.com>
-To:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com
-Cc:     elder@kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Jilin Yuan <yuanjilin@cdjrlc.com>
-Subject: [PATCH] net/ipa: fix repeated words in comments
-Date:   Fri,  8 Jul 2022 23:23:51 +0800
-Message-Id: <20220708152351.58913-1-yuanjilin@cdjrlc.com>
-X-Mailer: git-send-email 2.36.1
+        Fri, 8 Jul 2022 11:25:59 -0400
+Received: from mail-yb1-xb31.google.com (mail-yb1-xb31.google.com [IPv6:2607:f8b0:4864:20::b31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C72030F43
+        for <linux-kernel@vger.kernel.org>; Fri,  8 Jul 2022 08:25:58 -0700 (PDT)
+Received: by mail-yb1-xb31.google.com with SMTP id 136so6563708ybl.5
+        for <linux-kernel@vger.kernel.org>; Fri, 08 Jul 2022 08:25:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=EIFiVH9lUi23KkCa9V/IOGOENSKqD85uGqpTdZl7zAY=;
+        b=fWK7HkQgFIGRyNUeE7G9RPw3OTeLrtzQBU6e4ZqpzOQamkRYX5OaqR/9XQ1BNla4l8
+         fJVA0X6+czUZHqfcGk1SUUtBiciNfPjS8ygo/Q6RuZd7jfYz/j2GMp1DCbjY/7bRvfpJ
+         F5onpKz8wwWV2aFzs1edfnh8TuAa9hui6zfGFkGILvjlCaqauUH3edoBJz90XprJjq5m
+         sMhL3cew/FXdjmQBFlFsMQ+Ru5D5bCwlsKsBL01juon4WXx5g2yHPcu1T1hPjrqs7dWS
+         LKo91I2os4Gs4yuSPHvZW0PEQrbAREEz95O7WuFrbHmojuhknjtDUp7BdZBRHGa+lJhT
+         bafw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=EIFiVH9lUi23KkCa9V/IOGOENSKqD85uGqpTdZl7zAY=;
+        b=s+jjh8bHFbeSWgo1aR21vwEo8SJnxU/aRr5P4uZr2Z7/pJC0K/Axksit6b2W184AdK
+         3SlWdVHWGSFlZyMi4AY+/yHQjIiC2rXaXHEw/0KO8T9ECDLkoVG/hacOevQrnlQBJQta
+         vx2n0uInNbRC0llZk8L8HTLwQuylFtSbYduHKR8dANQmzEpVC6GJzxQS28+mCf+YloRr
+         qS3C06K/uonCgCDg8vr2W73hgKR7vxGNzVsX8fJ1oeghbptL+IaU8TopF/f8v2sax3jt
+         XOpPfunARn6sRxgaxYCgC1LlXic8lNatOnR5hHWn2ygvN1ScsDWismj/WzzDMUw8R/jE
+         gc/w==
+X-Gm-Message-State: AJIora+hUgTbdVsFqu7NUaDXT6kT9o3hGEe1nDh4Zo2m6GRtqs/Un854
+        scchR589K+8tSgyxGW+00mAXk0/wMGTAeAxFK+I=
+X-Google-Smtp-Source: AGRyM1uhtmB9cS/RxSD8hUp+5PnXY+7NZya0HJicQKj7l3rlxuBdooljqAlXBFkG9G+H4axTI+jmt9UBpj3HctV9YRg=
+X-Received: by 2002:a25:dd83:0:b0:66c:8d8d:4f5f with SMTP id
+ u125-20020a25dd83000000b0066c8d8d4f5fmr4307324ybg.79.1657293957266; Fri, 08
+ Jul 2022 08:25:57 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtp:cdjrlc.com:qybglogicsvr:qybglogicsvr4
-X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,RDNS_DYNAMIC,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,T_SPF_HELO_TEMPERROR autolearn=no
-        autolearn_force=no version=3.4.6
+References: <20220707091301.1282291-1-cezary.rojewski@intel.com>
+ <CAHp75VceKBoxXVPP4dRYb8LQqHMMDHFp6-E2iuZ-h2RTK8PWQQ@mail.gmail.com>
+ <e0c7d254-ace3-625c-cc83-52ca0b45e9fc@intel.com> <CAHp75VckU2ZraLJ-frjWXjUu9pFW+-XmWgTbYqUXOUNAD-1HGA@mail.gmail.com>
+ <6c8e4104-2239-a188-649d-585f059cabdd@intel.com> <YsgjdKEtE7pMDTnZ@smile.fi.intel.com>
+ <a73b3ec0-5abb-ddfd-414b-b9807f05413e@linux.intel.com>
+In-Reply-To: <a73b3ec0-5abb-ddfd-414b-b9807f05413e@linux.intel.com>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Fri, 8 Jul 2022 17:25:20 +0200
+Message-ID: <CAHp75Vd4D0KF7ik+aMOwv-+bofWja_tDe4YUmihQBF+RiHZTmA@mail.gmail.com>
+Subject: Re: [PATCH 1/2] lib/string_helpers: Introduce strsplit_u32()
+To:     =?UTF-8?Q?P=C3=A9ter_Ujfalusi?= <peter.ujfalusi@linux.intel.com>
+Cc:     Cezary Rojewski <cezary.rojewski@intel.com>,
+        Andy Shevchenko <andy@kernel.org>,
+        Mark Brown <broonie@kernel.org>,
+        ALSA Development Mailing List <alsa-devel@alsa-project.org>,
+        Takashi Iwai <tiwai@suse.com>,
+        Jaroslav Kysela <perex@perex.cz>,
+        amadeuszx.slawinski@linux.intel.com,
+        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Ranjani Sridharan <ranjani.sridharan@linux.intel.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Kai Vehmanen <kai.vehmanen@linux.intel.com>,
+        Bard Liao <yung-chuan.liao@linux.intel.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
- Delete the redundant word 'the'.
+On Fri, Jul 8, 2022 at 2:34 PM P=C3=A9ter Ujfalusi
+<peter.ujfalusi@linux.intel.com> wrote:
+> On 08/07/2022 15:30, Andy Shevchenko wrote:
+> > On Fri, Jul 08, 2022 at 02:13:14PM +0200, Cezary Rojewski wrote:
 
-Signed-off-by: Jilin Yuan <yuanjilin@cdjrlc.com>
----
- drivers/net/ipa/ipa_qmi_msg.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+...
 
-diff --git a/drivers/net/ipa/ipa_qmi_msg.h b/drivers/net/ipa/ipa_qmi_msg.h
-index 3233d145fd87..495e85abe50b 100644
---- a/drivers/net/ipa/ipa_qmi_msg.h
-+++ b/drivers/net/ipa/ipa_qmi_msg.h
-@@ -214,7 +214,7 @@ struct ipa_init_modem_driver_req {
- 
- /* The response to a IPA_QMI_INIT_DRIVER request begins with a standard
-  * QMI response, but contains other information as well.  Currently we
-- * simply wait for the the INIT_DRIVER transaction to complete and
-+ * simply wait for the INIT_DRIVER transaction to complete and
-  * ignore any other data that might be returned.
-  */
- struct ipa_init_modem_driver_rsp {
--- 
-2.36.1
+> > It seems you are missing the (1). The code has checks for the case wher=
+e you
+> > can do get number upfront, it would just require two passes, but it's n=
+othing
+> > in comparison of heave realloc().
+> >
+> >   unsigned int *tokens;
+> >   char *p;
+> >   int num;
+> >
+> >   p =3D get_options(str, 0, &num);
+> >   if (num =3D=3D 0)
+> >       // No numbers in the string!
+> >
+> >   tokens =3D kcalloc(num + 1, sizeof(*tokens), GFP_KERNEL);
+> >   if (!tokens)
+> >       return -ENOMEM;
+> >
+> >   p =3D get_oprions(str, num, &tokens);
+> >   if (*p)
+> >       // String was parsed only partially!
+> >       // assuming it's not a fatal error
+> >
+> >   return tokens;
 
+> This diff is tested and works:
+
+Thanks, Peter!
+
+But at least you can memove() to avoid second allocation.
+ideally to refactor that the result of get_options is consumed as is
+(it may be casted to struct tokens { int n; u32 v[]; })
+
+...
+
+> Could be made nicer with some brain work put to it, we need strict u32 wi=
+thin the IPC message for the array...
+
+True, it needs to be thought through. But I guess you got the idea of
+how to use existing library routines.
+
+--=20
+With Best Regards,
+Andy Shevchenko

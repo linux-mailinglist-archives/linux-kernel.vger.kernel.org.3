@@ -2,71 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D7DCA56B572
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 11:30:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9719C56B54E
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 11:22:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237706AbiGHJ0l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Jul 2022 05:26:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48208 "EHLO
+        id S237888AbiGHJWO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Jul 2022 05:22:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42826 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237374AbiGHJ0i (ORCPT
+        with ESMTP id S237540AbiGHJWL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Jul 2022 05:26:38 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC04FD134;
-        Fri,  8 Jul 2022 02:26:37 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 93E7DB82547;
-        Fri,  8 Jul 2022 09:26:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1B004C341C0;
-        Fri,  8 Jul 2022 09:26:35 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="pkqND3Bm"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1657272393;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=9HeHlnsW1JkxCnRYtTnfqUp3XvLQS0O+ZMfaM6JuHTA=;
-        b=pkqND3BmqSbPOit4Mj5DT7X7YDRtI4zI7ej6QO6XmUtlnWTRQiztuwTVTxkSF4floPVPF3
-        wONKVWOSD1FRpYgm/JX3WWShHVacfbrE/ETIJDTaYNshOkRnXfUF96isK0PDZGi0pY6E2f
-        VAZd8GYkwetZVfgCFTQ883t1gkuyj4A=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 38c5eef7 (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
-        Fri, 8 Jul 2022 09:26:33 +0000 (UTC)
-Received: by mail-io1-xd33.google.com with SMTP id n7so8623580ioo.7;
-        Fri, 08 Jul 2022 02:26:33 -0700 (PDT)
-X-Gm-Message-State: AJIora+BySM/lK8OjemrfbfLRVAe/P3JwA7bF6jt6m566hljETBJb10q
-        IJ1RanavNkBFlXEegIctnK75eJQrECYP/0EkNyI=
-X-Google-Smtp-Source: AGRyM1sLt4kVkbV8Gy6AgNOWbg/i+iKMh6Rjk1K7PZRGWXSuBZYL3v1vJfikjc33S9848G5nx2yxV9as9TJsIF5FCNU=
-X-Received: by 2002:a02:9709:0:b0:339:ef87:c30b with SMTP id
- x9-20020a029709000000b00339ef87c30bmr1513477jai.214.1657272091980; Fri, 08
- Jul 2022 02:21:31 -0700 (PDT)
+        Fri, 8 Jul 2022 05:22:11 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id CCFAE2C677;
+        Fri,  8 Jul 2022 02:22:09 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id E950BD6E;
+        Fri,  8 Jul 2022 02:22:09 -0700 (PDT)
+Received: from [192.168.99.12] (unknown [172.31.20.19])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 8AB173F66F;
+        Fri,  8 Jul 2022 02:22:08 -0700 (PDT)
+Message-ID: <e55094af-557e-8044-fc14-00189bd392a2@foss.arm.com>
+Date:   Fri, 8 Jul 2022 10:21:59 +0100
 MIME-Version: 1.0
-Received: by 2002:a05:6e02:16cc:0:0:0:0 with HTTP; Fri, 8 Jul 2022 02:21:31
- -0700 (PDT)
-In-Reply-To: <YsfnDyOaKXA3iIj4@zn.tnic>
-References: <20220708171030.135b12cd@canb.auug.org.au> <YsfnDyOaKXA3iIj4@zn.tnic>
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-Date:   Fri, 8 Jul 2022 11:21:31 +0200
-X-Gmail-Original-Message-ID: <CAHmME9o052ooE6pC-Sa4EzohW7yRdepNy0zZAFFX6qr9Q+MoHA@mail.gmail.com>
-Message-ID: <CAHmME9o052ooE6pC-Sa4EzohW7yRdepNy0zZAFFX6qr9Q+MoHA@mail.gmail.com>
-Subject: Re: linux-next: manual merge of the random tree with the tip tree
-To:     Borislav Petkov <bp@suse.de>
-Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        "Theodore Ts'o" <tytso@mit.edu>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Jonathan McDowell <noodles@fb.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+Subject: Re: [PATCH 10/14] perf test: Add thread loop test shell scripts
+Content-Language: en-US
+To:     James Clark <james.clark@arm.com>, linux-kernel@vger.kernel.org
+Cc:     coresight@lists.linaro.org, mathieu.poirier@linaro.org,
+        mike.leach@linaro.org, linux-perf-users@vger.kernel.org,
+        acme@kernel.org, Suzuki K Poulose <suzuki.poulose@arm.com>
+References: <20220701120804.3226396-1-carsten.haitzler@foss.arm.com>
+ <20220701120804.3226396-11-carsten.haitzler@foss.arm.com>
+ <a14e7015-7446-8cb3-612c-00dcb469c939@arm.com>
+From:   Carsten Haitzler <carsten.haitzler@foss.arm.com>
+Organization: Arm Ltd.
+In-Reply-To: <a14e7015-7446-8cb3-612c-00dcb469c939@arm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,33 +49,125 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 7/8/22, Borislav Petkov <bp@suse.de> wrote:
-> On Fri, Jul 08, 2022 at 05:10:30PM +1000, Stephen Rothwell wrote:
->> Hi all,
->>
->> Today's linux-next merge of the random tree got conflicts in:
->>
->>   arch/x86/include/uapi/asm/bootparam.h
->>   arch/x86/kernel/kexec-bzimage64.c
->>   arch/x86/kernel/setup.c
->>
->> between commit:
->>
->>   b69a2afd5afc ("x86/kexec: Carry forward IMA measurement log on kexec")
->>
->> from the tip tree and commit:
->>
->>   c337d5c7ec9b ("x86/setup: Use rng seeds from setup_data")
->
-> Why is a x86 patch in the random tree?
->
-> And it doesn't even have a single x86 person ack?
->
-> https://git.kernel.org/pub/scm/linux/kernel/git/crng/random.git/commit/?id=c337d5c7ec9bc1d11006fd628e99c65f08455803
->
-> This is not now the process works.
 
-Sorry; I pushed it there temporarily to kick some CI to test it and
-forgot to remove it.
 
-Jason
+On 7/5/22 14:53, James Clark wrote:
+> 
+> 
+> On 01/07/2022 13:07, carsten.haitzler@foss.arm.com wrote:
+>> From: "Carsten Haitzler (Rasterman)" <raster@rasterman.com>
+>>
+>> Add a script to drive the thread loop test that gathers data so
+>> it passes a minimum bar (in this case do we get any perf context data
+>> for every thread).
+>>
+>> Signed-off-by: Carsten Haitzler <carsten.haitzler@arm.com>
+> 
+> Hi Carsten,
+> 
+> I checked this on N1SDP and I get failures in both threads tests. This is
+> because it's looking for "CID=..." when in my output threads are shown as
+> "VMID=...":
+> 
+>      Idx:628048; ID:10;	I_ADDR_CTXT_L_64IS0 : Address & Context, Long, 64 bit, IS0.; Addr=0x0000AAAAE3BF0B18; Ctxt: AArch64,EL0, NS; VMID=0xa588c;
+> 
+> I think with a change to the grep it should work.
+
+Errrr... I get no VMID= ... it's all
+
+Idx:563008; ID:12;	I_ADDR_CTXT_L_64IS0 : Address & Context, Long, 64 
+bit, IS0.; Addr=0x0000AAAAE4B00A60; Ctxt: AArch64,EL0, NS; CID=0x00004aff;
+
+are you using containers or something? because:
+
+             if(context.updated_c)
+             {
+                 oss << "CID=0x" << std::hex << std::setfill('0') << 
+std::setw(8) << context.ctxtID << "; ";
+             }
+             if(context.updated_v)
+             {
+                 oss << "VMID=0x" << std::hex << std::setfill('0') << 
+std::setw(4) << context.VMID << "; ";
+             }
+
+I'm running without any containers etc. - bare metal. Haven't bothered 
+with any VM stuff.
+
+In OpenOCD the CID should be the the pid/thread id. It seems to not be 
+the same thing as VMID. I haven't traced this beyond here as to exactly 
+what this represents though my first reaction is "This is extra VM info 
+and not the PID/TID being looked for". OpenOCD is full of tests with log 
+dumps that produce CID and VMID:
+
+Idx:1676; ID:10;        I_ADDR_CTXT_L_64IS0 : Address & Context, Long, 
+64 bit, IS0.; Addr=0xFFFFFFC000096A00; Ctxt: AArch64,EL1, NS; 
+CID=0x00000000; VMID=0x0000;
+
+A quick git grep CID= in OpenCD will show them all. My understanding is 
+CID is the thread/process ID and thus the test/check "Do we get reported 
+data from all threads? - anything?".
+
+I don't think using VMID is right. The fact you are missing a CID is an 
+issue though...
+
+> Thanks
+> James
+> 
+>> ---
+>>   .../coresight/thread_loop_check_tid_10.sh     | 19 +++++++++++++++++++
+>>   .../coresight/thread_loop_check_tid_2.sh      | 19 +++++++++++++++++++
+>>   2 files changed, 38 insertions(+)
+>>   create mode 100755 tools/perf/tests/shell/coresight/thread_loop_check_tid_10.sh
+>>   create mode 100755 tools/perf/tests/shell/coresight/thread_loop_check_tid_2.sh
+>>
+>> diff --git a/tools/perf/tests/shell/coresight/thread_loop_check_tid_10.sh b/tools/perf/tests/shell/coresight/thread_loop_check_tid_10.sh
+>> new file mode 100755
+>> index 000000000000..7c13636fc778
+>> --- /dev/null
+>> +++ b/tools/perf/tests/shell/coresight/thread_loop_check_tid_10.sh
+>> @@ -0,0 +1,19 @@
+>> +#!/bin/sh -e
+>> +# CoreSight / Thread Loop 10 Threads - Check TID
+>> +
+>> +# SPDX-License-Identifier: GPL-2.0
+>> +# Carsten Haitzler <carsten.haitzler@arm.com>, 2021
+>> +
+>> +TEST="thread_loop"
+>> +. $(dirname $0)/../lib/coresight.sh
+>> +ARGS="10 1"
+>> +DATV="check-tid-10th"
+>> +DATA="$DATD/perf-$TEST-$DATV.data"
+>> +STDO="$DATD/perf-$TEST-$DATV.stdout"
+>> +
+>> +SHOW_TID=1 perf record -s $PERFRECOPT -o "$DATA" "$BIN" $ARGS > $STDO
+>> +
+>> +perf_dump_aux_tid_verify "$DATA" "$STDO"
+>> +
+>> +err=$?
+>> +exit $err
+>> diff --git a/tools/perf/tests/shell/coresight/thread_loop_check_tid_2.sh b/tools/perf/tests/shell/coresight/thread_loop_check_tid_2.sh
+>> new file mode 100755
+>> index 000000000000..a067145af43c
+>> --- /dev/null
+>> +++ b/tools/perf/tests/shell/coresight/thread_loop_check_tid_2.sh
+>> @@ -0,0 +1,19 @@
+>> +#!/bin/sh -e
+>> +# CoreSight / Thread Loop 2 Threads - Check TID
+>> +
+>> +# SPDX-License-Identifier: GPL-2.0
+>> +# Carsten Haitzler <carsten.haitzler@arm.com>, 2021
+>> +
+>> +TEST="thread_loop"
+>> +. $(dirname $0)/../lib/coresight.sh
+>> +ARGS="2 20"
+>> +DATV="check-tid-2th"
+>> +DATA="$DATD/perf-$TEST-$DATV.data"
+>> +STDO="$DATD/perf-$TEST-$DATV.stdout"
+>> +
+>> +SHOW_TID=1 perf record -s $PERFRECOPT -o "$DATA" "$BIN" $ARGS > $STDO
+>> +
+>> +perf_dump_aux_tid_verify "$DATA" "$STDO"
+>> +
+>> +err=$?
+>> +exit $err

@@ -2,112 +2,197 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A43356C2B9
-	for <lists+linux-kernel@lfdr.de>; Sat,  9 Jul 2022 01:13:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E1B056C303
+	for <lists+linux-kernel@lfdr.de>; Sat,  9 Jul 2022 01:13:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238975AbiGHXGb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Jul 2022 19:06:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46546 "EHLO
+        id S239377AbiGHXKU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Jul 2022 19:10:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48640 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239360AbiGHXG1 (ORCPT
+        with ESMTP id S229850AbiGHXKR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Jul 2022 19:06:27 -0400
-Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A056D3C14C
-        for <linux-kernel@vger.kernel.org>; Fri,  8 Jul 2022 16:06:24 -0700 (PDT)
-Received: by mail-ed1-x533.google.com with SMTP id x10so196775edd.13
-        for <linux-kernel@vger.kernel.org>; Fri, 08 Jul 2022 16:06:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=V3uz7RiSt5a+7sv4FuEPnm/V9cAp31RU7bmEVl/UAKU=;
-        b=NbxlYbo0ChI5HUxdUBq2tJosu3oGmwg0l1hnY6SU/ljs8+u3vBB5ftr5Imm/S80DY/
-         QnZGBRV5hId49A/g/Dxn0q23wvCNYOkiW9pvPXHQpYqDXfB3TsqHl/Q06GRgVMDCAasG
-         PRahrkew9qwtfInL3ibU2bdLxX78tIfILAChmOf4iWzSGb6FPk0DKyJlPY3kTpslM4t6
-         3Lt1L/MwWVpyg+APSV/UoVluFNzc0TPaNGTG6uA/apy5q7YEBqXyYPdhHJDwrSQYDoG7
-         uAdlNHbdcUXAi1t5nhAQE8tnHfs2GQgFpDfZ117UzfmTd4zIrES2hBL906ai85hHLlTa
-         TN1Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=V3uz7RiSt5a+7sv4FuEPnm/V9cAp31RU7bmEVl/UAKU=;
-        b=cJ8NDYbEkyVcoXObWJR5lY+FIRvgma3IMUvTMogT1tnXQqxzUD7rLJ0WKeIh9v8B5I
-         J1Bfb+T7lJXaLaVrH68NsqPITsPtaeu9F03qMm4kk2WVKy3xn4PSvkA3vlY//mn1WtSG
-         tpARMpUJygnD2MlYYpBSGjoQg5DvGhvkEM5wVKml5/qqxdHJKN2OX8M8e9LZLzMF8RrG
-         AesXKjFz0MUR8m+04p3PJmQ/GoO1K1BsVu/38cHYloYf3d/l741TB45IwmkdEMmIxwbT
-         HmY0KfMol5Okl6alHR448PZvIwMKa3pbHhFb2Ksn7baYHbkaAuSIKt14QC0b8rGNO3nc
-         UdUQ==
-X-Gm-Message-State: AJIora/pp/S166tk1CEebaHlTsW8YynoONAKUJk8FzBvNDCWln0vpR02
-        E4JMrBJjroi6ytIuMYcFcjEyG3ofVTkdyg==
-X-Google-Smtp-Source: AGRyM1uLgto2yfj0h3khFhGJbsldnlro7C5X3/QY65CXDn7bY4dYJxsrfchHRxJtv903jIvCXqyAzQ==
-X-Received: by 2002:a05:6402:5303:b0:435:7c46:e411 with SMTP id eo3-20020a056402530300b004357c46e411mr8265105edb.221.1657321583123;
-        Fri, 08 Jul 2022 16:06:23 -0700 (PDT)
-Received: from localhost (cable-89-216-134-246.dynamic.sbb.rs. [89.216.134.246])
-        by smtp.gmail.com with ESMTPSA id j8-20020a170906094800b006feed200464sm15500033ejd.131.2022.07.08.16.06.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 08 Jul 2022 16:06:22 -0700 (PDT)
-Date:   Sat, 9 Jul 2022 01:06:18 +0200
-From:   Aleksa =?utf-8?B?VnXEjWtvdmnEhw==?= <aleksav013@gmail.com>
-To:     Shuah Khan <skhan@linuxfoundation.org>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Arnd Bergmann <arnd@arndb.de>, linux-kernel@vger.kernel.org
-Subject: Re: PROBLEM: dmesg tracedumps on rtsx_usb module loading during boot
-Message-ID: <20220708230618.rlqa7azb6q7asvds@artix.localdomain>
-References: <20220708134942.r3nhwzgh4nchaebi@artix.localdomain>
- <Ysg20t2t/S11idyx@kroah.com>
- <0fc74c07-791e-a6f2-de43-510852a3517c@linuxfoundation.org>
+        Fri, 8 Jul 2022 19:10:17 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF2D93F33D;
+        Fri,  8 Jul 2022 16:10:16 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 7B207B82A18;
+        Fri,  8 Jul 2022 23:10:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 35AF5C341D0;
+        Fri,  8 Jul 2022 23:10:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1657321814;
+        bh=djzIzVFpeo7WTuaeZTv/ckums1eZ/Ec9nzlvV4baO6A=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=OiXQaqF6ZvxXW9bprOSn/sI8RkPPeZN7orfdEkqcY9qo1uuB3EcqdUQLT0IVQDVP+
+         SQAeeoEVJBy9LX+nHT65uE+rLY2EVbC69W2KzCPrsmCdAqlGKuhjGr/hRpLviHAIVD
+         ZzRfWLowNSjCwi9P2djnYpYLEH5D/vM03sdm2gUZI13SeiDrDa0rw4gaNVKQZteTRw
+         g8VczXdw577Jbu/8KU5No7ab/mdozwPKZjZlvbCBr7+4dg+Y+8j6tD3LthuOXrG3Vn
+         7MsonCtz8ILLtggr9jvgUsLtCeusKDADjp6R4e/5eMtDYzJQguM4E1qWjBw9o9bxKG
+         DXqSyWx3gruxA==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id C8E285C0835; Fri,  8 Jul 2022 16:10:13 -0700 (PDT)
+Date:   Fri, 8 Jul 2022 16:10:13 -0700
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     Joel Fernandes <joel@joelfernandes.org>
+Cc:     rcu@vger.kernel.org, linux-kernel@vger.kernel.org,
+        rushikesh.s.kadam@intel.com, urezki@gmail.com,
+        neeraj.iitr10@gmail.com, frederic@kernel.org, rostedt@goodmis.org,
+        vineeth@bitbyteword.org
+Subject: Re: [PATCH v2 1/8] rcu: Introduce call_rcu_lazy() API implementation
+Message-ID: <20220708231013.GD1790663@paulmck-ThinkPad-P17-Gen-1>
+Reply-To: paulmck@kernel.org
+References: <20220622225102.2112026-1-joel@joelfernandes.org>
+ <20220622225102.2112026-3-joel@joelfernandes.org>
+ <20220626040019.GK1790663@paulmck-ThinkPad-P17-Gen-1>
+ <Ysh6yWThHu6GAfJM@google.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <0fc74c07-791e-a6f2-de43-510852a3517c@linuxfoundation.org>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <Ysh6yWThHu6GAfJM@google.com>
+X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 22/07/08 01:09PM, Shuah Khan wrote:
-> On 7/8/22 7:53 AM, Greg Kroah-Hartman wrote:
-> > On Fri, Jul 08, 2022 at 03:49:42PM +0200, Aleksa Vučković wrote:
-> > > [1.] One line summary of the problem:
-> > > dmesg tracedumps on rtsx_usb module loading during boot
+On Fri, Jul 08, 2022 at 06:43:21PM +0000, Joel Fernandes wrote:
+> On Sat, Jun 25, 2022 at 09:00:19PM -0700, Paul E. McKenney wrote:
+> > On Wed, Jun 22, 2022 at 10:50:55PM +0000, Joel Fernandes (Google) wrote:
+> > > Implement timer-based RCU lazy callback batching. The batch is flushed
+> > > whenever a certain amount of time has passed, or the batch on a
+> > > particular CPU grows too big. Also memory pressure will flush it in a
+> > > future patch.
+> > > 
+> > > To handle several corner cases automagically (such as rcu_barrier() and
+> > > hotplug), we re-use bypass lists to handle lazy CBs. The bypass list
+> > > length has the lazy CB length included in it. A separate lazy CB length
+> > > counter is also introduced to keep track of the number of lazy CBs.
+> > > 
+> > > Suggested-by: Paul McKenney <paulmck@kernel.org>
+> > > Signed-off-by: Joel Fernandes (Google) <joel@joelfernandes.org>
 > > 
-> > This should be fixed in linux-next now, right?
-> > 
-> > Shuah (on cc:) send in some commits to resolve this, look at this
-> > thread:
-> > 	https://lore.kernel.org/all/cover.1656642167.git.skhan@linuxfoundation.org/
-> > 
-> > If you could test those 2 patches, that would be great.
-
-I just applied these two patches into staging tree and it seems to fix
-dma mapping error. There is no trace dump in dmesg now.
-
+> > Not bad, but some questions and comments below.
 > 
-> Yes. Please test these patches and send me the trace you are seeing
-> as well. It will help us confirm if it is the same problem or a new
-> one.
+> Thanks a lot for these, real helpful and I replied below:
 > 
-> thanks,
-> -- Shuah
+> > > diff --git a/include/linux/rcu_segcblist.h b/include/linux/rcu_segcblist.h
+> > > index 659d13a7ddaa..9a992707917b 100644
+> > > --- a/include/linux/rcu_segcblist.h
+> > > +++ b/include/linux/rcu_segcblist.h
+> > > @@ -22,6 +22,7 @@ struct rcu_cblist {
+> > >  	struct rcu_head *head;
+> > >  	struct rcu_head **tail;
+> > >  	long len;
+> > > +	long lazy_len;
+> > >  };
+> > >  
+> > >  #define RCU_CBLIST_INITIALIZER(n) { .head = NULL, .tail = &n.head }
+> > > diff --git a/include/linux/rcupdate.h b/include/linux/rcupdate.h
+> > > index 1a32036c918c..9191a3d88087 100644
+> > > --- a/include/linux/rcupdate.h
+> > > +++ b/include/linux/rcupdate.h
+> > > @@ -82,6 +82,12 @@ static inline int rcu_preempt_depth(void)
+> > >  
+> > >  #endif /* #else #ifdef CONFIG_PREEMPT_RCU */
+> > >  
+> > > +#ifdef CONFIG_RCU_LAZY
+> > > +void call_rcu_lazy(struct rcu_head *head, rcu_callback_t func);
+> > > +#else
+> > > +#define call_rcu_lazy(head, func) call_rcu(head, func)
+> > > +#endif
+> > > +
+> > >  /* Internal to kernel */
+> > >  void rcu_init(void);
+> > >  extern int rcu_scheduler_active;
+> > > diff --git a/kernel/rcu/Kconfig b/kernel/rcu/Kconfig
+> > > index 27aab870ae4c..0bffa992fdc4 100644
+> > > --- a/kernel/rcu/Kconfig
+> > > +++ b/kernel/rcu/Kconfig
+> > > @@ -293,4 +293,12 @@ config TASKS_TRACE_RCU_READ_MB
+> > >  	  Say N here if you hate read-side memory barriers.
+> > >  	  Take the default if you are unsure.
+> > >  
+> > > +config RCU_LAZY
+> > > +	bool "RCU callback lazy invocation functionality"
+> > > +	depends on RCU_NOCB_CPU
+> > > +	default n
+> > > +	help
+> > > +	  To save power, batch RCU callbacks and flush after delay, memory
+> > > +          pressure or callback list growing too big.
+> > 
+> > Spaces vs. tabs.
+> 
+> Fixed, thanks.
+> 
+> > The checkpatch warning is unhelpful ("please write a help paragraph that
+> > fully describes the config symbol")
+> 
+> Good old checkpatch :D
 
-However, I mistakenly assumed that dmesg trace was also only indicator
-that SD card reader does not work. It seems like these two issues are
-not connected, both 37fcacb50be7071d146144a6c5c5bf0194b9a1cf (last
-commit that does not have trace dump) and this version after patch do
-not register SD card.
+;-) ;-) ;-)
 
-I will do another bisect to find out which commit actually causes SD
-card reader to not register SD cards. I will contact you after I do more
-testing.
+> > >  endmenu # "RCU Subsystem"
+> > > diff --git a/kernel/rcu/rcu_segcblist.c b/kernel/rcu/rcu_segcblist.c
+> > > index c54ea2b6a36b..627a3218a372 100644
+> > > --- a/kernel/rcu/rcu_segcblist.c
+> > > +++ b/kernel/rcu/rcu_segcblist.c
+> > > @@ -20,6 +20,7 @@ void rcu_cblist_init(struct rcu_cblist *rclp)
+> > >  	rclp->head = NULL;
+> > >  	rclp->tail = &rclp->head;
+> > >  	rclp->len = 0;
+> > > +	rclp->lazy_len = 0;
+> > >  }
+> > >  
+> > >  /*
+> > > @@ -32,6 +33,15 @@ void rcu_cblist_enqueue(struct rcu_cblist *rclp, struct rcu_head *rhp)
+> > >  	WRITE_ONCE(rclp->len, rclp->len + 1);
+> > >  }
+> > >  
+> > > +/*
+> > > + * Enqueue an rcu_head structure onto the specified callback list.
+> > 
+> > Please also note the fact that it is enqueuing lazily.
+> 
+> Sorry, done.
+> 
+> > > + */
+> > > +void rcu_cblist_enqueue_lazy(struct rcu_cblist *rclp, struct rcu_head *rhp)
+> > > +{
+> > > +	rcu_cblist_enqueue(rclp, rhp);
+> > > +	WRITE_ONCE(rclp->lazy_len, rclp->lazy_len + 1);
+> > 
+> > Except...  Why not just add a "lazy" parameter to rcu_cblist_enqueue()?
+> > IS_ENABLED() can make it fast.
+> 
+> Yeah good idea, it simplifies the code too. Thank you!
+> 
+> So you mean I should add in this function so that the branch gets optimized:
+> if (lazy && IS_ENABLE(CONFIG_RCU_LAZY)) {
+>   ...
+> }
+> 
+> That makes total sense considering the compiler may otherwise not be able to
+> optimize the function viewing just the individual translation unit. I fixed
+> it.
 
-Sincerely,
-Aleksa Vuckovic
+Or the other way around:
+
+	if (IS_ENABLE(CONFIG_RCU_LAZY) && lazy) {
+
+Just in case the compiler is stumbling over its boolean logic.  Or in
+case the human reader is.  ;-)
+
+> The 6 month old baby and wife are calling my attention now. I will continue
+> to reply to the other parts of this and other emails this evening and thanks
+> for your help!
+
+Ah, for those who believe that SIGCHLD can be ignored in real life!  ;-)
+
+							Thanx, Paul

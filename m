@@ -2,149 +2,204 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A46256B10E
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 05:47:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BADFE56B10B
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 05:47:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237087AbiGHDpj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Jul 2022 23:45:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37610 "EHLO
+        id S236881AbiGHDr3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Jul 2022 23:47:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38392 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230230AbiGHDph (ORCPT
+        with ESMTP id S236471AbiGHDrZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Jul 2022 23:45:37 -0400
-Received: from mail-pg1-x533.google.com (mail-pg1-x533.google.com [IPv6:2607:f8b0:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 313B55A2C4;
-        Thu,  7 Jul 2022 20:45:37 -0700 (PDT)
-Received: by mail-pg1-x533.google.com with SMTP id z14so21382256pgh.0;
-        Thu, 07 Jul 2022 20:45:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=WEeOn4jKdlkOGkxP6pdkaQvICDgDChhavL9CTQCdf3M=;
-        b=BsoeAyJwtli9BgZoiMSiHq+LwjP3foVMbmGbU09qD5Gh79WUwwEqyU7YnypYgx5mg3
-         s53U+PGGI0nb6UWnpgYa0fmUBVf+zJSoSzqp+FbK9O2qm2+qPbUZfaspFjxpuxUOwGSQ
-         +fkY6AQ5OJEuCzEnw2NGIeNQGQVOOvTy79hLV4MVTAYiUFmQxAodlbJ7TjSkA6OEhKjV
-         XBvbTBHOmqpbll+qFxsYmtqkF43tHfVXYw12hjv7iPrhXtXTZWNwQ245wKRtIvRidpMk
-         OgCyAbxIg24TyMe4iLEqqTRqIXjokwl8DQBRG7WFwDk0fvySD16JoaKW3ayifaA1NDT2
-         arGw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=WEeOn4jKdlkOGkxP6pdkaQvICDgDChhavL9CTQCdf3M=;
-        b=CyxXHJUIWTIpjh8/JrfPAvKqUHWO14JcTrY4qg56z6jc8l0LkGTGvWjwIgd0AjaPFd
-         bI0v6HS0caeyN6JBZPV2Xk1JLYJt36oiv0TAuKNOdaiffNdf16GUU32DG7MiK007Fp4i
-         aBjLI5l058Wts++hsX6Jpe+JtTDQtzV/ZKTq6GOV6K0haYIkm+yjvCkI0u37tMfTIl3o
-         20GHVnT9BXR57mKlHFXE3Bo6EnjL++aHzs26oPM7Jndg1XSz2S2oS3g+DsDHyBJvPwe1
-         3E5qdcmK2nOh+VQvbZwlMa5tYyMl4+ecg5T7eZwewFFIqlrz3w3DowQNzBvnw76+Ne+O
-         ZsRg==
-X-Gm-Message-State: AJIora+jL13gqPntfbEekOmrj34FGEtTm+xVywlXWhIDEXve2zzKzLWt
-        pvLYcGOJhsbxu6RCXQMtT4c=
-X-Google-Smtp-Source: AGRyM1sdFbu0T9QzLqppBCoXhq8AdtL++0DjtWTi1pZ0Y0i0R2Zp+HBm78JDkXmR3STioxMWqpjSdw==
-X-Received: by 2002:a63:df49:0:b0:412:58fe:2332 with SMTP id h9-20020a63df49000000b0041258fe2332mr1292927pgj.505.1657251936525;
-        Thu, 07 Jul 2022 20:45:36 -0700 (PDT)
-Received: from [192.168.1.3] (ip72-194-116-95.oc.oc.cox.net. [72.194.116.95])
-        by smtp.gmail.com with ESMTPSA id o20-20020a17090aac1400b001efa332d365sm372271pjq.33.2022.07.07.20.45.35
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 07 Jul 2022 20:45:36 -0700 (PDT)
-Message-ID: <5f013801-1f58-dc55-e2f1-2c068166eca3@gmail.com>
-Date:   Thu, 7 Jul 2022 20:45:34 -0700
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.0.1
-Subject: Re: [PATCH] arm64: dts: broadcom: bcm4908: Fix cpu and timer node
-Content-Language: en-US
-To:     William Zhang <william.zhang@broadcom.com>,
-        Linux ARM List <linux-arm-kernel@lists.infradead.org>
-Cc:     Broadcom Kernel List <bcm-kernel-feedback-list@broadcom.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>,
-        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+        Thu, 7 Jul 2022 23:47:25 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E27A274DC3
+        for <linux-kernel@vger.kernel.org>; Thu,  7 Jul 2022 20:47:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1657252044; x=1688788044;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=a6tewsjtZFrx9ugYhZX9sqQNv1Saw6kwS91FeQfudEA=;
+  b=l64Q4QNyaHdRzL/slH3jzddGaa7IiplVHRsQuDFHeaYMOoUcH8yd+W55
+   pH6ihl7ET5FCjlJq1RbbKN00ZupMbgTudHkZ3dN0ViR2hlPcT7g78LJsv
+   Ku+JNhDO+wKyf1q/6BiDeWCwlcRCWj7Xa4xZR1RIDuJvH69IJtvoawSH/
+   Hbu1M3kCgeOLWEGZoDpF/VAXzI1IPwsxc+gpqKQzhyi3zWM46KWEvBqwi
+   s0VdiAYkBC1KVykIzSHNayKpk7yShde75e0PDSR4xDqJIJr6UINip/ANp
+   3X6AiDSE570o9WQpogW1lZVmm/WejgnQUj3NJ+9BOVDz3rXIq0/aJPpIF
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10401"; a="281729931"
+X-IronPort-AV: E=Sophos;i="5.92,254,1650956400"; 
+   d="scan'208";a="281729931"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jul 2022 20:47:24 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.92,254,1650956400"; 
+   d="scan'208";a="568778601"
+Received: from lkp-server01.sh.intel.com (HELO 68b931ab7ac1) ([10.239.97.150])
+  by orsmga006.jf.intel.com with ESMTP; 07 Jul 2022 20:47:22 -0700
+Received: from kbuild by 68b931ab7ac1 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1o9exe-000MsI-65;
+        Fri, 08 Jul 2022 03:47:22 +0000
+Date:   Fri, 8 Jul 2022 11:47:05 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     David Howells <dhowells@redhat.com>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
         linux-kernel@vger.kernel.org
-References: <20220708021807.19080-1-william.zhang@broadcom.com>
-From:   Florian Fainelli <f.fainelli@gmail.com>
-In-Reply-To: <20220708021807.19080-1-william.zhang@broadcom.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Subject: [ammarfaizi2-block:dhowells/linux-fs/cifs-for-viro 5/8]
+ fs/cifs/smb2ops.c:4785:11: warning: comparison of distinct pointer types
+ ('typeof (size - copied) *' (aka 'unsigned int *') and 'typeof (((1UL) <<
+ 12)) *' (aka 'unsigned long *'))
+Message-ID: <202207081133.gqSVQ0Ct-lkp@intel.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+tree:   https://github.com/ammarfaizi2/linux-block dhowells/linux-fs/cifs-for-viro
+head:   569e0acf4192ada33675e44b24701e679d87ebc9
+commit: f398cb911105297654980b5973ff230323061fce [5/8] cifs: Change the I/O paths to use an iterator rather than a page list
+config: i386-randconfig-a002 (https://download.01.org/0day-ci/archive/20220708/202207081133.gqSVQ0Ct-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 562c3467a6738aa89203f72fc1d1343e5baadf3c)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/ammarfaizi2/linux-block/commit/f398cb911105297654980b5973ff230323061fce
+        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
+        git fetch --no-tags ammarfaizi2-block dhowells/linux-fs/cifs-for-viro
+        git checkout f398cb911105297654980b5973ff230323061fce
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash fs/cifs/
+
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+>> fs/cifs/smb2ops.c:4785:11: warning: comparison of distinct pointer types ('typeof (size - copied) *' (aka 'unsigned int *') and 'typeof (((1UL) << 12)) *' (aka 'unsigned long *')) [-Wcompare-distinct-pointer-types]
+                                   seg = min(size - copied, PAGE_SIZE);
+                                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/minmax.h:45:19: note: expanded from macro 'min'
+   #define min(x, y)       __careful_cmp(x, y, <)
+                           ^~~~~~~~~~~~~~~~~~~~~~
+   include/linux/minmax.h:36:24: note: expanded from macro '__careful_cmp'
+           __builtin_choose_expr(__safe_cmp(x, y), \
+                                 ^~~~~~~~~~~~~~~~
+   include/linux/minmax.h:26:4: note: expanded from macro '__safe_cmp'
+                   (__typecheck(x, y) && __no_side_effects(x, y))
+                    ^~~~~~~~~~~~~~~~~
+   include/linux/minmax.h:20:28: note: expanded from macro '__typecheck'
+           (!!(sizeof((typeof(x) *)1 == (typeof(y) *)1)))
+                      ~~~~~~~~~~~~~~ ^  ~~~~~~~~~~~~~~
+   fs/cifs/smb2ops.c:4994:7: warning: variable 'length' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
+                   if (rdata->result != 0) {
+                       ^~~~~~~~~~~~~~~~~~
+   fs/cifs/smb2ops.c:5026:9: note: uninitialized use occurs here
+           return length;
+                  ^~~~~~
+   fs/cifs/smb2ops.c:4994:3: note: remove the 'if' if its condition is always true
+                   if (rdata->result != 0) {
+                   ^~~~~~~~~~~~~~~~~~~~~~~~
+   fs/cifs/smb2ops.c:4893:12: note: initialize the variable 'length' to silence this warning
+           int length;
+                     ^
+                      = 0
+   2 warnings generated.
 
 
-On 7/7/2022 7:18 PM, William Zhang wrote:
-> Add spin-table enable-method and cpu-release-addr properties for
-> cpu0 node. This is required by all ARMv8 SoC. Otherwise some
-> bootloader like u-boot can not update cpu-release-addr and linux
-> fails to start up secondary cpus.
-> 
-> Also fix the cpu mask in the interrupts property of the timer node
-> for dual core bcm4906 SoC.
-> 
-> Signed-off-by: William Zhang <william.zhang@broadcom.com>
+vim +4785 fs/cifs/smb2ops.c
 
-This looks good, however can you split this into 2 different patches and 
-add for the first hunk:
-
-Fixes: c8b404fb05dc ("arm64: dts: broadcom: bcm4908: add BCM4906 Netgear 
-R8000P DTS files")
-
-and:
-
-Fixes: 2961f69f151c ("arm64: dts: broadcom: add BCM4908 and Asus 
-GT-AC5300 early DTS files")
-
-for the second hunk to the commit message?
-
-Thanks!
-
-> 
-> ---
-> 
->   arch/arm64/boot/dts/broadcom/bcm4908/bcm4906.dtsi | 8 ++++++++
->   arch/arm64/boot/dts/broadcom/bcm4908/bcm4908.dtsi | 2 ++
->   2 files changed, 10 insertions(+)
-> 
-> diff --git a/arch/arm64/boot/dts/broadcom/bcm4908/bcm4906.dtsi b/arch/arm64/boot/dts/broadcom/bcm4908/bcm4906.dtsi
-> index 66023d553524..d084c33d5ca8 100644
-> --- a/arch/arm64/boot/dts/broadcom/bcm4908/bcm4906.dtsi
-> +++ b/arch/arm64/boot/dts/broadcom/bcm4908/bcm4906.dtsi
-> @@ -9,6 +9,14 @@ cpus {
->   		/delete-node/ cpu@3;
->   	};
->   
-> +	timer {
-> +		compatible = "arm,armv8-timer";
-> +		interrupts = <GIC_PPI 13 (GIC_CPU_MASK_SIMPLE(2) | IRQ_TYPE_LEVEL_LOW)>,
-> +			     <GIC_PPI 14 (GIC_CPU_MASK_SIMPLE(2) | IRQ_TYPE_LEVEL_LOW)>,
-> +			     <GIC_PPI 11 (GIC_CPU_MASK_SIMPLE(2) | IRQ_TYPE_LEVEL_LOW)>,
-> +			     <GIC_PPI 10 (GIC_CPU_MASK_SIMPLE(2) | IRQ_TYPE_LEVEL_LOW)>;
-> +	};
-> +
->   	pmu {
->   		compatible = "arm,cortex-a53-pmu";
->   		interrupts = <GIC_SPI 9 IRQ_TYPE_LEVEL_HIGH>,
-> diff --git a/arch/arm64/boot/dts/broadcom/bcm4908/bcm4908.dtsi b/arch/arm64/boot/dts/broadcom/bcm4908/bcm4908.dtsi
-> index a4be040a00c0..967d2cd3c3ce 100644
-> --- a/arch/arm64/boot/dts/broadcom/bcm4908/bcm4908.dtsi
-> +++ b/arch/arm64/boot/dts/broadcom/bcm4908/bcm4908.dtsi
-> @@ -29,6 +29,8 @@ cpu0: cpu@0 {
->   			device_type = "cpu";
->   			compatible = "brcm,brahma-b53";
->   			reg = <0x0>;
-> +			enable-method = "spin-table";
-> +			cpu-release-addr = <0x0 0xfff8>;
->   			next-level-cache = <&l2>;
->   		};
->   
+  4735	
+  4736	/*
+  4737	 * This function will initialize new_rq and encrypt the content.
+  4738	 * The first entry, new_rq[0], only contains a single iov which contains
+  4739	 * a smb2_transform_hdr and is pre-allocated by the caller.
+  4740	 * This function then populates new_rq[1+] with the content from olq_rq[0+].
+  4741	 *
+  4742	 * The end result is an array of smb_rqst structures where the first structure
+  4743	 * only contains a single iov for the transform header which we then can pass
+  4744	 * to crypt_message().
+  4745	 *
+  4746	 * new_rq[0].rq_iov[0] :  smb2_transform_hdr pre-allocated by the caller
+  4747	 * new_rq[1+].rq_iov[*] == old_rq[0+].rq_iov[*] : SMB2/3 requests
+  4748	 */
+  4749	static int
+  4750	smb3_init_transform_rq(struct TCP_Server_Info *server, int num_rqst,
+  4751			       struct smb_rqst *new_rq, struct smb_rqst *old_rq)
+  4752	{
+  4753		struct smb2_transform_hdr *tr_hdr = new_rq[0].rq_iov[0].iov_base;
+  4754		struct page *page;
+  4755		unsigned int orig_len = 0;
+  4756		int i, j;
+  4757		int rc = -ENOMEM;
+  4758	
+  4759		for (i = 1; i < num_rqst; i++) {
+  4760			struct smb_rqst *old = &old_rq[i - 1];
+  4761			struct smb_rqst *new = &new_rq[i];
+  4762			struct xarray *buffer = &new->rq_buffer;
+  4763			unsigned int npages;
+  4764			size_t size = iov_iter_count(&old->rq_iter), seg, copied = 0;
+  4765	
+  4766			xa_init(buffer);
+  4767	
+  4768			if (size > 0) {
+  4769				npages = DIV_ROUND_UP(size, PAGE_SIZE);
+  4770				for (j = 0; j < npages; j++) {
+  4771					void *o;
+  4772	
+  4773					rc = -ENOMEM;
+  4774					page = alloc_page(GFP_KERNEL|__GFP_HIGHMEM);
+  4775					if (!page)
+  4776						goto err_free;
+  4777					page->index = j;
+  4778					o = xa_store(buffer, j, page, GFP_KERNEL);
+  4779					if (xa_is_err(o)) {
+  4780						rc = xa_err(o);
+  4781						put_page(page);
+  4782						goto err_free;
+  4783					}
+  4784	
+> 4785					seg = min(size - copied, PAGE_SIZE);
+  4786					if (copy_page_from_iter(page, 0, seg, &old->rq_iter) != seg) {
+  4787						rc = -EFAULT;
+  4788						goto err_free;
+  4789					}
+  4790					copied += seg;
+  4791				}
+  4792				iov_iter_xarray(&new->rq_iter, iov_iter_rw(&old->rq_iter),
+  4793						buffer, 0, size);
+  4794			}
+  4795			new->rq_iov = old->rq_iov;
+  4796			new->rq_nvec = old->rq_nvec;
+  4797			orig_len += smb_rqst_len(server, new);
+  4798		}
+  4799	
+  4800		/* fill the 1st iov with a transform header */
+  4801		fill_transform_hdr(tr_hdr, orig_len, old_rq, server->cipher_type);
+  4802	
+  4803		rc = crypt_message(server, num_rqst, new_rq, 1);
+  4804		cifs_dbg(FYI, "Encrypt message returned %d\n", rc);
+  4805		if (rc)
+  4806			goto err_free;
+  4807	
+  4808		return rc;
+  4809	
+  4810	err_free:
+  4811		smb3_free_compound_rqst(num_rqst - 1, &new_rq[1]);
+  4812		return rc;
+  4813	}
+  4814	
 
 -- 
-Florian
+0-DAY CI Kernel Test Service
+https://01.org/lkp

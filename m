@@ -2,43 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 11FC656B904
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 13:57:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7933756B90B
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 13:57:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237883AbiGHL5N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Jul 2022 07:57:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52104 "EHLO
+        id S238217AbiGHL5h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Jul 2022 07:57:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52162 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238194AbiGHL5L (ORCPT
+        with ESMTP id S238124AbiGHL5R (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Jul 2022 07:57:11 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC4D39A6B7;
-        Fri,  8 Jul 2022 04:57:09 -0700 (PDT)
+        Fri, 8 Jul 2022 07:57:17 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 497D59A6B9;
+        Fri,  8 Jul 2022 04:57:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
   d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1657281430; x=1688817430;
+  t=1657281437; x=1688817437;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=CyBTxJhF4CejcV8FiE0ZwQp4QrBmvXQ9X9ymIPXP4U0=;
-  b=SjjzLQYe7Xblh0GDjzIPal4fWvpj5UCkR/Qj4uy2HGQfQpshbotmmtPt
-   gcT6ro7ih+1phslfvIQiiBiHOLrNrAcQ4NhEzGF3SP+IbV5E1xFCnQD6l
-   DkQShF1qDrwRYzkSAUnW7SjMvP4ZfZ3GHad8uSrq0W3SqHMhhJL+Lyw6j
-   tm3ukNzeapJaB5/7LYWbE7jIU9okQM2mTKw2AtVOGD2qy+tz7zW2AbRG5
-   CL9mzxodusWxMux/PlHgr/8W8lWc8n+gNAnKHNGDtECpC4U56Gc8LyDpm
-   jRIb0MEWzwMfJwSyGErrX+lsc9ZSMh4z0Z5CmpZSnEgyo75w1gu8umsqA
+  bh=fyYMzbEVBdCrRqau7PZBrDmY2vLx5Tjgwub2EQAW23A=;
+  b=V4pIK31P2GgSzPzQ2PQcx7emhRHp1fWIvUxN7alBeOf66xOfX5NmWjSZ
+   sbyJkDQsU+oYhyCXcOlUhRN8IQHJA/nQUbNNX7FkHXQXaMkImNqbFlWIF
+   lUoDXe5pYP1KinU7nZudIA7nypelM2ltO+nJM+MArvtTAbHsF6ysLjoA1
+   HH+VHBy0JVTskugCbL2sy13+MqJK+0+z8mQpkDruUjWYSPt1Gp/5wscRE
+   8RSBXuHHY2Zz0DdQpmUysSNebMEfeXlPZYQdPiC6MgaQKmPY0TaW33qmk
+   1EaT3G+21I4eTo8nec11nI3wRmp/WouT9FO2BMsMp+j0jGA9KdN8QLWjY
    A==;
 X-IronPort-AV: E=Sophos;i="5.92,255,1650956400"; 
-   d="scan'208";a="163912214"
+   d="scan'208";a="171312680"
 Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa4.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 08 Jul 2022 04:57:09 -0700
+  by esa5.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 08 Jul 2022 04:57:17 -0700
 Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
  chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.17; Fri, 8 Jul 2022 04:57:06 -0700
+ 15.1.2375.17; Fri, 8 Jul 2022 04:57:16 -0700
 Received: from kavya.microchip.com (10.10.115.15) by chn-vm-ex03.mchp-main.com
  (10.10.85.151) with Microsoft SMTP Server id 15.1.2375.17 via Frontend
- Transport; Fri, 8 Jul 2022 04:57:03 -0700
+ Transport; Fri, 8 Jul 2022 04:57:12 -0700
 From:   Kavyasree Kotagiri <kavyasree.kotagiri@microchip.com>
 To:     <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
         <nicolas.ferre@microchip.com>, <alexandre.belloni@bootlin.com>,
@@ -46,9 +46,9 @@ To:     <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
 CC:     <devicetree@vger.kernel.org>,
         <linux-arm-kernel@lists.infradead.org>,
         <linux-kernel@vger.kernel.org>, <Kavyasree.Kotagiri@microchip.com>
-Subject: [PATCH v8 1/3] dt-bindings: mfd: Convert atmel-flexcom to json-schema
-Date:   Fri, 8 Jul 2022 09:56:17 -0200
-Message-ID: <20220708115619.254073-2-kavyasree.kotagiri@microchip.com>
+Subject: [PATCH v8 2/3] dt-bindings: mfd: atmel,sama5d2-flexcom: Add new compatible string for lan966x
+Date:   Fri, 8 Jul 2022 09:56:18 -0200
+Message-ID: <20220708115619.254073-3-kavyasree.kotagiri@microchip.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220708115619.254073-1-kavyasree.kotagiri@microchip.com>
 References: <20220708115619.254073-1-kavyasree.kotagiri@microchip.com>
@@ -65,209 +65,135 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Convert the Atmel flexcom device tree bindings to json schema.
+LAN966x SoC flexcoms has two optional I/O lines. Namely, CS0 and CS1
+in flexcom SPI mode. CTS and RTS in flexcom USART mode. These pins
+can be mapped to lan966x FLEXCOM_SHARED[0-20] pins and usage depends on
+functions being configured.
 
 Signed-off-by: Kavyasree Kotagiri <kavyasree.kotagiri@microchip.com>
 ---
 v7 -> v8:
- - Added back patternProperties for child nodes.
+ - Changed compatible string to microchip,lan9668-flexcom. 
 
 v6 -> v7:
- - Change filename to atmel,sama5d2-flexcom.yaml
- - Add #address-cells, #size-cells to flexcom node - Fixed warnings.
+ - Add #address-cells, #size-cells to flx3 example.
 
 v5 -> v6:
- - Removed spi node from example as suggested by Rob and
-   also pattern properties(spi dt-bindings conversion to yaml patch is under review).
-   Once that is accepted, I will add back spi example through new patch.
+ - Removed spi node from flx3 example.
 
 v4 -> v5:
- - Fixed indentations.
+ - Fixed indentations and dt-schema errors.
+ - No errors seen with 'make dt_binding_check'.
 
 v3 -> v4:
- - Corrected format of enum used for compatible string.
+ - Added else condition to allOf:if:then.
 
 v2 -> v3:
- - used enum for compatible string.
- - changed irq flag to IRQ_TYPE_LEVEL_HIGH in example.
- - fixed dtschema errors.
+ - Add reg property of lan966x missed in v2.
 
 v1 -> v2:
- - Fix title.
+ - Use allOf:if:then for lan966x dt properties
 
- .../bindings/mfd/atmel,sama5d2-flexcom.yaml   | 92 +++++++++++++++++++
- .../devicetree/bindings/mfd/atmel-flexcom.txt | 63 -------------
- 2 files changed, 92 insertions(+), 63 deletions(-)
- create mode 100644 Documentation/devicetree/bindings/mfd/atmel,sama5d2-flexcom.yaml
- delete mode 100644 Documentation/devicetree/bindings/mfd/atmel-flexcom.txt
+ .../bindings/mfd/atmel,sama5d2-flexcom.yaml   | 65 ++++++++++++++++++-
+ 1 file changed, 64 insertions(+), 1 deletion(-)
 
 diff --git a/Documentation/devicetree/bindings/mfd/atmel,sama5d2-flexcom.yaml b/Documentation/devicetree/bindings/mfd/atmel,sama5d2-flexcom.yaml
-new file mode 100644
-index 000000000000..bfa7d340a198
---- /dev/null
+index bfa7d340a198..568da7cb630c 100644
+--- a/Documentation/devicetree/bindings/mfd/atmel,sama5d2-flexcom.yaml
 +++ b/Documentation/devicetree/bindings/mfd/atmel,sama5d2-flexcom.yaml
-@@ -0,0 +1,92 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/mfd/atmel,sama5d2-flexcom.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Atmel Flexcom (Flexible Serial Communication Unit)
-+
-+maintainers:
-+  - Kavyasree Kotagiri <kavyasree.kotagiri@microchip.com>
-+
-+description:
-+  The Atmel Flexcom is just a wrapper which embeds a SPI controller,
-+  an I2C controller and an USART. Only one function can be used at a
-+  time and is chosen at boot time according to the device tree.
-+
-+properties:
-+  compatible:
-+    enum:
-+      - atmel,sama5d2-flexcom
-+
-+  reg:
-+    maxItems: 1
-+
-+  clocks:
-+    maxItems: 1
-+
-+  "#address-cells":
-+    const: 1
-+
-+  "#size-cells":
-+    const: 1
-+
-+  ranges:
-+    description:
-+      One range for the full I/O register region. (including USART,
-+      TWI and SPI registers).
+@@ -18,9 +18,11 @@ properties:
+   compatible:
+     enum:
+       - atmel,sama5d2-flexcom
++      - microchip,lan9668-flexcom
+ 
+   reg:
+-    maxItems: 1
++    minItems: 1
++    maxItems: 2
+ 
+   clocks:
+     maxItems: 1
+@@ -47,6 +49,27 @@ properties:
+     $ref: /schemas/types.yaml#/definitions/uint32
+     enum: [1, 2, 3]
+ 
++  microchip,flx-shrd-pins:
++    description: Specify the Flexcom shared pins to be used for flexcom
++      chip-selects.
++    $ref: /schemas/types.yaml#/definitions/uint32-array
++    minItems: 1
++    maxItems: 2
 +    items:
-+      maxItems: 3
++      minimum: 0
++      maximum: 20
 +
-+  atmel,flexcom-mode:
-+    description: |
-+      Specifies the flexcom mode as follows:
-+      1: USART
-+      2: SPI
-+      3: I2C.
-+    $ref: /schemas/types.yaml#/definitions/uint32
-+    enum: [1, 2, 3]
++  microchip,flx-cs:
++    description: Flexcom chip selects. Here, value of '0' represents "cts" line
++      of flexcom USART or "cs0" line of flexcom SPI and value of '1' represents
++      "rts" line of flexcom USART or "cs1" line of flexcom SPI.
++    $ref: /schemas/types.yaml#/definitions/uint32-array
++    minItems: 1
++    maxItems: 2
++    items:
++      minimum: 0
++      maximum: 1
 +
-+patternProperties:
-+  "^serial@[0-9a-f]+$":
-+    type: object
-+    description:
-+      Child node describing USART. See atmel-usart.txt for details
-+      of USART bindings.
+ patternProperties:
+   "^serial@[0-9a-f]+$":
+     type: object
+@@ -74,6 +97,31 @@ required:
+   - ranges
+   - atmel,flexcom-mode
+ 
++allOf:
++  - if:
++      properties:
++        compatible:
++          contains:
++            const: microchip,lan9668-flexcom
 +
-+  "^spi@[0-9a-f]+$":
-+    type: object
-+    description:
-+      Child node describing SPI. See ../spi/spi_atmel.txt for details
-+      of SPI bindings.
++    then:
++      properties:
++        reg:
++          items:
++            - description: Flexcom base registers map
++            - description: Flexcom shared registers map
++      required:
++        - microchip,flx-shrd-pins
++        - microchip,flx-cs
 +
-+  "^i2c@[0-9a-f]+$":
-+    $ref: ../i2c/atmel,at91sam-i2c.yaml
-+    description:
-+      Child node describing I2C.
++    else:
++      properties:
++        reg:
++          items:
++            - description: Flexcom base registers map
++        microchip,flx-shrd-pins: false
++        microchip,flx-cs: false
 +
-+required:
-+  - compatible
-+  - reg
-+  - clocks
-+  - "#address-cells"
-+  - "#size-cells"
-+  - ranges
-+  - atmel,flexcom-mode
-+
-+additionalProperties: false
-+
-+examples:
+ additionalProperties: false
+ 
+ examples:
+@@ -89,4 +137,19 @@ examples:
+         ranges = <0x0 0xf8034000 0x800>;
+         atmel,flexcom-mode = <2>;
+     };
 +  - |
 +    #include <dt-bindings/interrupt-controller/arm-gic.h>
 +
-+    flx0: flexcom@f8034000 {
-+        compatible = "atmel,sama5d2-flexcom";
-+        reg = <0xf8034000 0x200>;
++    flx3: flexcom@e0064000 {
++        compatible = "microchip,lan9668-flexcom";
++        reg = <0xe0064000 0x100>,
++              <0xe2004180 0x8>;
 +        clocks = <&flx0_clk>;
 +        #address-cells = <1>;
 +        #size-cells = <1>;
-+        ranges = <0x0 0xf8034000 0x800>;
++        ranges = <0x0 0xe0040000 0x800>;
 +        atmel,flexcom-mode = <2>;
++        microchip,flx-shrd-pins = <9>;
++        microchip,flx-cs = <0>;
 +    };
-+...
-diff --git a/Documentation/devicetree/bindings/mfd/atmel-flexcom.txt b/Documentation/devicetree/bindings/mfd/atmel-flexcom.txt
-deleted file mode 100644
-index 9d837535637b..000000000000
---- a/Documentation/devicetree/bindings/mfd/atmel-flexcom.txt
-+++ /dev/null
-@@ -1,63 +0,0 @@
--* Device tree bindings for Atmel Flexcom (Flexible Serial Communication Unit)
--
--The Atmel Flexcom is just a wrapper which embeds a SPI controller, an I2C
--controller and an USART. Only one function can be used at a time and is chosen
--at boot time according to the device tree.
--
--Required properties:
--- compatible:		Should be "atmel,sama5d2-flexcom"
--- reg:			Should be the offset/length value for Flexcom dedicated
--			I/O registers (without USART, TWI or SPI registers).
--- clocks:		Should be the Flexcom peripheral clock from PMC.
--- #address-cells:	Should be <1>
--- #size-cells:		Should be <1>
--- ranges:		Should be one range for the full I/O register region
--			(including USART, TWI and SPI registers).
--- atmel,flexcom-mode:	Should be one of the following values:
--			- <1> for USART
--			- <2> for SPI
--			- <3> for I2C
--
--Required child:
--A single available child device of type matching the "atmel,flexcom-mode"
--property.
--
--The phandle provided by the clocks property of the child is the same as one for
--the Flexcom parent.
--
--For other properties, please refer to the documentations of the respective
--device:
--- ../serial/atmel-usart.txt
--- ../spi/spi_atmel.txt
--- ../i2c/i2c-at91.txt
--
--Example:
--
--flexcom@f8034000 {
--	compatible = "atmel,sama5d2-flexcom";
--	reg = <0xf8034000 0x200>;
--	clocks = <&flx0_clk>;
--	#address-cells = <1>;
--	#size-cells = <1>;
--	ranges = <0x0 0xf8034000 0x800>;
--	atmel,flexcom-mode = <2>;
--
--	spi@400 {
--		compatible = "atmel,at91rm9200-spi";
--		reg = <0x400 0x200>;
--		interrupts = <19 IRQ_TYPE_LEVEL_HIGH 7>;
--		pinctrl-names = "default";
--		pinctrl-0 = <&pinctrl_flx0_default>;
--		#address-cells = <1>;
--		#size-cells = <0>;
--		clocks = <&flx0_clk>;
--		clock-names = "spi_clk";
--		atmel,fifo-size = <32>;
--
--		flash@0 {
--			compatible = "atmel,at25f512b";
--			reg = <0>;
--			spi-max-frequency = <20000000>;
--		};
--	};
--};
+ ...
 -- 
 2.25.1
 

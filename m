@@ -2,145 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1BEBD56B566
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 11:30:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A8CC956B56E
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 11:30:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237477AbiGHJZX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Jul 2022 05:25:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47384 "EHLO
+        id S237720AbiGHJZu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Jul 2022 05:25:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47610 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237400AbiGHJZV (ORCPT
+        with ESMTP id S237536AbiGHJZr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Jul 2022 05:25:21 -0400
-Received: from mail-yw1-x112d.google.com (mail-yw1-x112d.google.com [IPv6:2607:f8b0:4864:20::112d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48457DEA2
-        for <linux-kernel@vger.kernel.org>; Fri,  8 Jul 2022 02:25:20 -0700 (PDT)
-Received: by mail-yw1-x112d.google.com with SMTP id 00721157ae682-31c89653790so141901917b3.13
-        for <linux-kernel@vger.kernel.org>; Fri, 08 Jul 2022 02:25:20 -0700 (PDT)
+        Fri, 8 Jul 2022 05:25:47 -0400
+Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDCEB6271
+        for <linux-kernel@vger.kernel.org>; Fri,  8 Jul 2022 02:25:45 -0700 (PDT)
+Received: by mail-pl1-x62c.google.com with SMTP id d5so15846752plo.12
+        for <linux-kernel@vger.kernel.org>; Fri, 08 Jul 2022 02:25:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=bt6M2SPn7sqPgDE+o3lCFpdJOEHPR/4P0J6bq+ZpLW0=;
-        b=a56cDZTYX/zgUIqGbEScQvxd1p0LoQBd/n8XEeW0tgNp77yiXtbSvD0ucj/mFN0v9j
-         vhAsMdLZDPmfkX5ajXmtqBkGDgzK/LrZTvExCBIC4OpX3YaaSNEckkp5Jw1hDcDBS0X+
-         pBxpLcEGLkSFKdnmOpp6M0+5dVv7WGLIOEeZw=
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=l76lwu0gnwm/BRNuFyHSAOJEi0ORTe8+eknNAmXKjds=;
+        b=rfzaFQGT5WylU8oFzZ3Bm68tK5cbUJbFE9StIG5s9hhsbRmfmyXpTX1vYAFS6j1sbO
+         54fzhiZV7ncHK4Nr8HGnmkIfr2ytnO8L9enycMsyVsVIL1tiXZVpZqSpKlDbdzlr1hkY
+         5SH3l1JlLCIaVKwtkJN3exq1MhVYULNmdtYE+3L2FEtWtbYyCTh7i5U27YS5hNLZS0Xi
+         TkCdvF8KuNND6fSaeYKOvdHkBq2ajs61bZsAjRcCL57hyN0L81gtcBE6SGAlrMn1jLvp
+         TQMFQ82Z2m2T8NG7gNKsoCwNbcmQba3/hsB+SpuTecMd4FglfijuRPwEi0zcwSVVDuyS
+         /4FQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=bt6M2SPn7sqPgDE+o3lCFpdJOEHPR/4P0J6bq+ZpLW0=;
-        b=wX28nuzzSGAT2pZcnkcyqqrSo0hE8D/RA3cSpdod+QO+WFKq2NjRfUtelmDTAUQxi6
-         iZ133CSoWRvvR29apc6DvSz3E32YbyEAir4srUBGQgSf1fcgWfTD4dShHa+f0ulJQjUM
-         RHjDsEzxystsYLXRXnLBRQKPWCxesG23MtlgchPHBOFLR4u/gGE4LcnfFJmxqx0rKCOO
-         xNch8sxk/kgFzCCV6Baxme1S8iy9u765mahKiziI6tRBKnqfJUxSH3/IX6lmqFjOouJR
-         JpJceUEUWdWxcH50s2xMvFNreOZCYyoevddl0APOdpACnsB1FFP8iKl1s0uNcMN9x2eQ
-         OMcQ==
-X-Gm-Message-State: AJIora+VUFuJgib7gyMFk/BxfImqIxy/w3sQEHlBG5gEWNvZbuUqUo6G
-        2Xmkq0XgxjeI08kklcj6LvtNHQkK5PC2jdsicss9pg==
-X-Google-Smtp-Source: AGRyM1vtGSuisdYLfNmPZk8yOb9MscT55bQFKNkQSzG0DCwoxrkPWyEk/g0cOBLqJZgs0WE7ycZ7QLAAiDX16u49jQY=
-X-Received: by 2002:a05:690c:316:b0:314:2147:2b90 with SMTP id
- bg22-20020a05690c031600b0031421472b90mr2782649ywb.318.1657272319442; Fri, 08
- Jul 2022 02:25:19 -0700 (PDT)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=l76lwu0gnwm/BRNuFyHSAOJEi0ORTe8+eknNAmXKjds=;
+        b=L6j+8t036dDCFLm2F7dniV1BiF+Js+Um6oAQPZryqmXmsy42HAfQeFsKx9PHetKXMh
+         rN9xFPhBf3ORpF3zeSAuIWCtJYV/i5wBkXoeyA9oey9A9rO9DZpT2z0bq1qPWfzijZuY
+         KXCyTJpoUmo2/wp77LnyuZ3JKiGwSeJGm4hN1kT7loke0LzJj2wR2bALkh4xkLf3Foz7
+         hKp059Oay+unvemK1naz3x87Dd4HJvyTANCsWrcr/cettbrCGGZm14U2qxZeDp7N1cMl
+         Us7oBCl7ji88PsuosTPSDo439dVDGGVEfjN7z/biRJQNspzi725u7VdMD8ZM7vFPsJoZ
+         fGmA==
+X-Gm-Message-State: AJIora8w+xjHHuoi/PIWciX6SDBnHW8XYqSpVRvhIWdvQaCnVRSNJKjQ
+        yS5vYQH/zf6sncqccG9fRjPRJg==
+X-Google-Smtp-Source: AGRyM1uqbelvg6m24YuvTJPV4Xejv5UL/IUxXrRtbsELGOPhY6RycQiwGj2gryVPaBaHnMht6h77RQ==
+X-Received: by 2002:a17:902:e80c:b0:16c:28a6:8aa0 with SMTP id u12-20020a170902e80c00b0016c28a68aa0mr422950plg.119.1657272345465;
+        Fri, 08 Jul 2022 02:25:45 -0700 (PDT)
+Received: from [10.255.210.8] ([139.177.225.241])
+        by smtp.gmail.com with ESMTPSA id z11-20020a1709027e8b00b0016b865ea2ddsm23212195pla.85.2022.07.08.02.25.31
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 08 Jul 2022 02:25:44 -0700 (PDT)
+Message-ID: <be9303de-3800-c26f-4530-9a29fe044956@bytedance.com>
+Date:   Fri, 8 Jul 2022 17:25:31 +0800
 MIME-Version: 1.0
-References: <20220701105237.932332-1-wenst@chromium.org> <20220701105237.932332-5-wenst@chromium.org>
- <daf5e3e6-8a13-3c16-5fa6-9c4e69883c49@xs4all.nl>
-In-Reply-To: <daf5e3e6-8a13-3c16-5fa6-9c4e69883c49@xs4all.nl>
-From:   Chen-Yu Tsai <wenst@chromium.org>
-Date:   Fri, 8 Jul 2022 17:25:08 +0800
-Message-ID: <CAGXv+5GR1+fgabiVR6SbxsqAKd03gDoByYO0KMSoX3-i2eLbWw@mail.gmail.com>
-Subject: Re: [PATCH 4/6] media: mediatek: vcodec: Revert driver name change in
- encoder capabilities
-To:     Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Cc:     Tiffany Lin <tiffany.lin@mediatek.com>,
-        Andrew-CT Chen <andrew-ct.chen@mediatek.com>,
-        Yunfei Dong <yunfei.dong@mediatek.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Nicolas Dufresne <nicolas.dufresne@collabora.com>,
-        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mediatek@lists.infradead.org,
-        Matthias Brugger <matthias.bgg@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.11.0
+Subject: Re: Re: [PATCH v2 0/5] mm, oom: Introduce per numa node oom for
+ CONSTRAINT_{MEMORY_POLICY,CPUSET}
+Content-Language: en-US
+To:     Michal Hocko <mhocko@suse.com>
+Cc:     akpm@linux-foundation.org, surenb@google.com, hca@linux.ibm.com,
+        gor@linux.ibm.com, agordeev@linux.ibm.com,
+        borntraeger@linux.ibm.com, svens@linux.ibm.com,
+        viro@zeniv.linux.org.uk, ebiederm@xmission.com,
+        keescook@chromium.org, rostedt@goodmis.org, mingo@redhat.com,
+        peterz@infradead.org, acme@kernel.org, mark.rutland@arm.com,
+        alexander.shishkin@linux.intel.com, jolsa@kernel.org,
+        namhyung@kernel.org, david@redhat.com, imbrenda@linux.ibm.com,
+        adobriyan@gmail.com, yang.yang29@zte.com.cn, brauner@kernel.org,
+        stephen.s.brennan@oracle.com, zhengqi.arch@bytedance.com,
+        haolee.swjtu@gmail.com, xu.xin16@zte.com.cn,
+        Liam.Howlett@oracle.com, ohoono.kwon@samsung.com,
+        peterx@redhat.com, arnd@arndb.de, shy828301@gmail.com,
+        alex.sierra@amd.com, xianting.tian@linux.alibaba.com,
+        willy@infradead.org, ccross@google.com, vbabka@suse.cz,
+        sujiaxun@uniontech.com, sfr@canb.auug.org.au,
+        vasily.averin@linux.dev, mgorman@suse.de, vvghjk1234@gmail.com,
+        tglx@linutronix.de, luto@kernel.org, bigeasy@linutronix.de,
+        fenghua.yu@intel.com, linux-s390@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-mm@kvack.org, linux-perf-users@vger.kernel.org
+References: <20220708082129.80115-1-ligang.bdlg@bytedance.com>
+ <YsfwyTHE/5py1kHC@dhcp22.suse.cz>
+From:   Gang Li <ligang.bdlg@bytedance.com>
+In-Reply-To: <YsfwyTHE/5py1kHC@dhcp22.suse.cz>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jul 8, 2022 at 5:19 PM Hans Verkuil <hverkuil-cisco@xs4all.nl> wrote:
->
->
->
-> On 7/1/22 12:52, Chen-Yu Tsai wrote:
-> > This partially reverts commit fd9f8050e355d7fd1e126cd207b06c96cde7f783.
-> >
-> > The driver name field should contain the actual driver name, not some
-> > otherwise unused string macro from the driver. To make this clear,
-> > copy the name from the driver's name field.
-> >
-> > Fixes: fd9f8050e355 ("media: mediatek: vcodec: Change encoder v4l2 capability value")
-> > Signed-off-by: Chen-Yu Tsai <wenst@chromium.org>
-> > ---
-> >  drivers/media/platform/mediatek/vcodec/mtk_vcodec_drv.h | 1 +
-> >  drivers/media/platform/mediatek/vcodec/mtk_vcodec_enc.c | 6 ++++--
-> >  2 files changed, 5 insertions(+), 2 deletions(-)
-> >
-> > diff --git a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_drv.h b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_drv.h
-> > index 4140b4dd85bf..dc6aada882d9 100644
-> > --- a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_drv.h
-> > +++ b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_drv.h
-> > @@ -22,6 +22,7 @@
-> >  #define MTK_VCODEC_DRV_NAME  "mtk_vcodec_drv"
->
-> Note that this patch removes the last user of this define, so
-> you can drop that define as well.
->
-> >  #define MTK_VCODEC_DEC_NAME  "mtk-vcodec-dec"
-> >  #define MTK_VCODEC_ENC_NAME  "mtk-vcodec-enc"
-> > +#define MTK_PLATFORM_STR     "platform:mt8173"
->
-> Why add this?
->
-> >
-> >  #define MTK_VCODEC_MAX_PLANES        3
-> >  #define MTK_V4L2_BENCHMARK   0
-> > diff --git a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_enc.c b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_enc.c
-> > index ccc753074816..30aac54d97fa 100644
-> > --- a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_enc.c
-> > +++ b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_enc.c
-> > @@ -232,11 +232,13 @@ static int mtk_vcodec_enc_get_chip_name(void *priv)
-> >  static int vidioc_venc_querycap(struct file *file, void *priv,
-> >                               struct v4l2_capability *cap)
-> >  {
-> > +     struct mtk_vcodec_ctx *ctx = fh_to_ctx(priv);
-> > +     struct device *dev = &ctx->dev->plat_dev->dev;
-> >       int platform_name = mtk_vcodec_enc_get_chip_name(priv);
-> >
-> > -     strscpy(cap->driver, MTK_VCODEC_DRV_NAME, sizeof(cap->driver));
-> > -     strscpy(cap->card, MTK_VCODEC_ENC_NAME, sizeof(cap->card));
-> > +     strscpy(cap->driver, dev->driver->name, sizeof(cap->driver));
-> >       snprintf(cap->bus_info, sizeof(cap->bus_info), "platform:mt%d-enc", platform_name);
-> > +     strscpy(cap->card, MTK_PLATFORM_STR, sizeof(cap->card));
->
-> The next patch changes cap->card again, and leaves MTK_PLATFORM_STR unused.
->
-> >
-> >       return 0;
-> >  }
->
-> I think it makes more sense to combine patches 1-3 and 4-6 into single
-> patches, one for the decoder, one for the encoder. It's easier to follow
-> since they all touch on the same querycap function.
+Oh apologize. I just realized what you mean.
 
-I wrote this series as a revert plus additional changes. As you said, it
-makes sense to squash three patches into one.
+I should try a "cpuset cgroup oom killer" selecting victim from a
+specific cpuset cgroup.
 
-I'll respin.
-
-ChenYu
+On 2022/7/8 16:54, Michal Hocko wrote:
+> On Fri 08-07-22 16:21:24, Gang Li wrote:
+> 
+> We have discussed this in your previous posting and an alternative
+> proposal was to use cpusets to partition NUMA aware workloads and
+> enhance the oom killer to be cpuset aware instead which should be a much
+> easier solution.

@@ -2,65 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CC80856B601
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 11:54:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5674F56B5E5
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 11:48:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237745AbiGHJsg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Jul 2022 05:48:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37492 "EHLO
+        id S237746AbiGHJr6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Jul 2022 05:47:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36642 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237169AbiGHJsa (ORCPT
+        with ESMTP id S237803AbiGHJry (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Jul 2022 05:48:30 -0400
+        Fri, 8 Jul 2022 05:47:54 -0400
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4AFB3CC6
-        for <linux-kernel@vger.kernel.org>; Fri,  8 Jul 2022 02:48:27 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 33CF17E03B;
+        Fri,  8 Jul 2022 02:47:52 -0700 (PDT)
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 3A1B1106F;
-        Fri,  8 Jul 2022 02:48:27 -0700 (PDT)
-Received: from bogus (unknown [10.57.39.193])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 6BD4E3F66F;
-        Fri,  8 Jul 2022 02:48:21 -0700 (PDT)
-Date:   Fri, 8 Jul 2022 10:47:10 +0100
-From:   Sudeep Holla <sudeep.holla@arm.com>
-To:     Geert Uytterhoeven <geert@linux-m68k.org>
-Cc:     Conor Dooley <Conor.Dooley@microchip.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Palmer Dabbelt <palmer@rivosinc.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Daire.McNamara@microchip.com,
-        Niklas Cassel <niklas.cassel@wdc.com>,
-        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
-        Zong Li <zong.li@sifive.com>,
-        Emil Renner Berthing <kernel@esmil.dk>, hahnjo@hahnjo.de,
-        Guo Ren <guoren@kernel.org>, Anup Patel <anup@brainfault.org>,
-        Atish Patra <atishp@atishpatra.org>, changbin.du@intel.com,
-        Heiko Stuebner <heiko@sntech.de>, philipp.tomsich@vrull.eu,
-        Rob Herring <robh@kernel.org>, Marc Zyngier <maz@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Brice.Goglin@inria.fr
-Subject: Re: [RFC 2/4] arch-topology: add a default implementation of
- store_cpu_topology()
-Message-ID: <20220708094710.rxk6flrueegdsggr@bogus>
-References: <20220707220436.4105443-1-mail@conchuod.ie>
- <20220707220436.4105443-3-mail@conchuod.ie>
- <20220708082443.azoqvuj7afrg7ox7@bogus>
- <473e6b17-465b-3d14-b04d-01b187390e66@microchip.com>
- <20220708092100.c6mgmnt7e2k7u634@bogus>
- <CAMuHMdXUjmG9n3BuRAz_irkmHQbp=7SYxe5VEfOhMdT4D2JfwQ@mail.gmail.com>
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 32615D6E;
+        Fri,  8 Jul 2022 02:47:52 -0700 (PDT)
+Received: from donnerap.cambridge.arm.com (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 863B93F66F;
+        Fri,  8 Jul 2022 02:47:50 -0700 (PDT)
+Date:   Fri, 8 Jul 2022 10:47:46 +0100
+From:   Andre Przywara <andre.przywara@arm.com>
+To:     Samuel Holland <samuel@sholland.org>
+Cc:     Jernej =?UTF-8?B?xaBrcmFiZWM=?= <jernej.skrabec@gmail.com>,
+        Chen-Yu Tsai <wens@csie.org>, Rob Herring <robh@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Icenowy Zheng <icenowy@aosc.io>,
+        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v11 3/6] arm64: dts: allwinner: Add Allwinner H616 .dtsi
+ file
+Message-ID: <20220708104746.6623e239@donnerap.cambridge.arm.com>
+In-Reply-To: <39537f95-2ed4-f526-5912-364c1c1ed512@sholland.org>
+References: <20220428230933.15262-1-andre.przywara@arm.com>
+        <22699277.6Emhk5qWAg@kista>
+        <20220704225534.3e1a901a@slackpad.lan>
+        <5278570.Sb9uPGUboI@kista>
+        <20220706141655.15d2dd0e@donnerap.cambridge.arm.com>
+        <39537f95-2ed4-f526-5912-364c1c1ed512@sholland.org>
+Organization: ARM
+X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.32; aarch64-unknown-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAMuHMdXUjmG9n3BuRAz_irkmHQbp=7SYxe5VEfOhMdT4D2JfwQ@mail.gmail.com>
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
@@ -70,77 +54,62 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jul 08, 2022 at 11:28:19AM +0200, Geert Uytterhoeven wrote:
-> Hi Sudeep,
+On Thu, 7 Jul 2022 01:30:32 -0500
+Samuel Holland <samuel@sholland.org> wrote:
+
+Hi Samuel,
+
+> Hi Andre, Jernej,
 > 
-> On Fri, Jul 8, 2022 at 11:22 AM Sudeep Holla <sudeep.holla@arm.com> wrote:
-> > On Fri, Jul 08, 2022 at 08:35:57AM +0000, Conor.Dooley@microchip.com wrote:
-> > > On 08/07/2022 09:24, Sudeep Holla wrote:
-> > > > On Thu, Jul 07, 2022 at 11:04:35PM +0100, Conor Dooley wrote:
-> > > >> From: Conor Dooley <conor.dooley@microchip.com>
-> > > >>
-> > > >> RISC-V & arm64 both use an almost identical method of filling in
-> > > >> default vales for arch topology. Create a weakly defined default
-> > > >> implementation with the intent of migrating both archs to use it.
-> > > >>
-> > > >> Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
-> > > >> ---
-> > > >>   drivers/base/arch_topology.c  | 19 +++++++++++++++++++
-> > > >>   include/linux/arch_topology.h |  1 +
-> > > >>   2 files changed, 20 insertions(+)
-> > > >>
-> > > >> diff --git a/drivers/base/arch_topology.c b/drivers/base/arch_topology.c
-> > > >> index 441e14ac33a4..07e84c6ac5c2 100644
-> > > >> --- a/drivers/base/arch_topology.c
-> > > >> +++ b/drivers/base/arch_topology.c
-> > > >> @@ -765,6 +765,25 @@ void update_siblings_masks(unsigned int cpuid)
-> > > >>    }
-> > > >>   }
-> > > >>
-> > > >> +void __weak store_cpu_topology(unsigned int cpuid)
-> > >
-> > > Does using __weak here make sense to you?
-> > >
-> >
-> > I don't want any weak definition and arch to override as we know only
-> > arm64 and RISC-V are the only users and they are aligned to have same
-> > implementation. So weak definition doesn't make sense to me.
-> >
-> > > >
-> > > > I prefer to have this as default implementation. So just get the risc-v
-> > > > one pushed to upstream first(for v5.20) and get all the backports if required.
-> > > > Next cycle(i.e. v5.21), you can move both RISC-V and arm64.
-> > > >
-> > >
-> > > Yeah, that was my intention. I meant to label patch 1/4 as "PATCH"
-> > > and (2,3,4)/4 as RFC but forgot. I talked with Palmer about doing
-> > > the risc-v impl. and then migrate both on IRC & he seemed happy with
-> > > it.
-> > >
-> >
-> > Ah OK, good.
-> >
-> > > If you're okay with patch 1/4, I'll resubmit it as a standalone v2.
-> > >
-> >
-> > That would be great, thanks. You can most the code to move to generic from
-> > both arm64 and risc-v once we have this in v5.20-rc1
+> On 7/6/22 8:16 AM, Andre Przywara wrote:
+> > so after seemingly having finished writing this email, I realised that
+> > this won't really help, as I think this diverts the discussion. And the
+> > problem has been around for a while, and won't probably be solved easily
+> > or quickly. I think we agree to disagree here, or we should admit that
+> > there are different approaches ("bundled firmware" vs. "UEFI"), so in the
+> > interest of not blocking the H616 series:
+> > 
+> > Shall I just keep the firmware node? This would work both ways, whereas
+> > dropping the node would impede the "bundled firmware" approach?  
 > 
-> Why not ignore risc-v for now, and move the arm64 implementation to
-> the generic code for v5.20, so every arch will have it at once?
->
+> Let me try to sum up the relevant portion of my thoughts (and save the rest for
+> elsewhere):
+> 
+> The only reason to add the reserved-memory node is to support externally-loaded
+> DTBs. By adding the node, we are committing to support externally-loaded DTBs on
+> this SoC.
+> 
+> Upgrading the kernel is not allowed to break boot. If we support
+> externally-loaded DTBs, that rule extends to DTBs shipped with the kernel.
+> 
+> If we remove the reserved-memory node, the combination of old U-Boot + new
+> externally-loaded DTB will stop booting (the kernel version is irrelevant).
+> Therefore, if we add the node, we can never remove it, full stop.
 
-We could but,
-1. This arch_topology is new and has been going through lot of changes
-   recently and having code there might make it difficult to backport
-   changes that are required for RISC-V(my guess)
+Well, this all depends on the initial commitment to support
+externally-loaded DTBs. I don't think we need to make this promise, I'd
+rather see this as a concession to people doing so *right now*, and for
+the sheer practicality of using this DT until we merge it into U-Boot.
 
-2. May be too late for v5.20, I would like to see if we can even drop tiny
-   arm64 bit in the code. It may be risky to try that this late and also
-   with other topology changes we already have queued.
+> I will (begrudgingly) accept that, as long as the node matches what TF-A
+> actually generates today. That means, please:
+>  - Drop the label and update the node name
 
-Let me know if that makes sense.
+I will drop the label. For the node name: the binding does not enforce it,
+but asks that "node names should reflect the purpose", so I went with
+"secmon", as used by other platforms. I will send a patch to TF-A to fix
+it there instead.
+If you disagree, feel free to fix this up before committing.
 
--- 
-Regards,
-Sudeep
+>  - Reduce the size to 256 KiB, matching (BL31_LIMIT - BL31_BASE)
+
+Verified in TF-A and changed.
+I also added a short comment explaining the situation. Feel free to amend
+this if needed.
+
+
+Many thanks for the discussion and for resolving this. I much appreciate
+your flexibility and pragmatism in this matter!
+
+Cheers,
+Andre

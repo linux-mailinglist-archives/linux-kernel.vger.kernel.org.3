@@ -2,229 +2,183 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4637256B570
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 11:30:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C58D56B573
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 11:30:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237709AbiGHJWx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Jul 2022 05:22:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43536 "EHLO
+        id S237899AbiGHJXD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Jul 2022 05:23:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43664 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237662AbiGHJWv (ORCPT
+        with ESMTP id S237588AbiGHJXB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Jul 2022 05:22:51 -0400
-Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6C1830F58
-        for <linux-kernel@vger.kernel.org>; Fri,  8 Jul 2022 02:22:49 -0700 (PDT)
-Received: by mail-pl1-x633.google.com with SMTP id f11so3329429plr.4
-        for <linux-kernel@vger.kernel.org>; Fri, 08 Jul 2022 02:22:49 -0700 (PDT)
+        Fri, 8 Jul 2022 05:23:01 -0400
+Received: from mail-io1-xd2b.google.com (mail-io1-xd2b.google.com [IPv6:2607:f8b0:4864:20::d2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41D032B63B;
+        Fri,  8 Jul 2022 02:23:00 -0700 (PDT)
+Received: by mail-io1-xd2b.google.com with SMTP id u20so19157004iob.8;
+        Fri, 08 Jul 2022 02:23:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=fortu-net.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=Y0gFTgEw8o/sZzcpqT/zqeJVyFwXwGnVGICet2zwIx0=;
-        b=sBE6RD34qzqgs778DVxBQqGSxgy5SBH9j19gPIGTpGn01WSwkFlOGZ+0RiCGEdX9mW
-         BCWm4cukAIrNz3heoRcLqTnzf6Fb79D91vPm7Lul7XyT1jL0ol+sPsszXJGakic9tb/8
-         gfR1UWNSuMBmeFIxDl4gwFfphGhhWoH3sPlGZpW4bMJlQCmRA5UcpHxESPODbmJXEAr4
-         kdFbbvX83cDRmE7PQ+GWVqwtNaCR1AulbaGNQ/KsDJNhiwS4zGei/rWMUrMhN939PioD
-         uBXBidrjE5H0VGsKmPBH6sczfM+gMgRxw7aC42HHLotuLdaGJ16/YLJvLW1aDXSceD/L
-         GKFw==
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=U7/XgC9RN4le35mQLRbV3pgGUKx0V1tiTu9hGjasAGI=;
+        b=SEK73+0Tdh+TtsYAOudd9GcFL0cnMQL6EwVH3NZG1Q30TqNpGfwvwxVJ2yocAZX8c+
+         tgT9JhTrxCYfJbYfH0P20SPZcvRqLljpJC9Lqbn8Ai+p4Hoy88XH5B3Ha0zLOPlN4iYB
+         3ZTQwMWmO1icAlPKhiYJqlojNR+8r3BJDGPkPcVh20KoN95cOiE3gUDbDhl+BsQJcDLy
+         mqhmI2yhnR3shxv2ESZ1BlMBJuSty2Y+4vKsbAG+W5Bwi1tXBKgHR+vlDlxZFWQW26qz
+         32gBntj83aot+8Ro4KWE1AXAxSgNtonorWstIOMmxwFD7D813RUTpEPn1XeNoGb+rtg7
+         CaVA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Y0gFTgEw8o/sZzcpqT/zqeJVyFwXwGnVGICet2zwIx0=;
-        b=c7EW0jit0X8bAeZeDbAprLH24P7AlqAxCrMbHRwi5JZj3rKvrG0nQS3IU3qowGqYJw
-         UarHbq3gwbk6iVOTsXX6qxDm4IE9KRZc0aPW2hRnAzPJ8UkURUboRkLocMmIYth+HFGe
-         SOmskXcWv9RfMCSLGob/qXl/99zDhE/TBrlwq81Ayaq1rSpEFAnYn3RrRvnb048px3t3
-         RFFeERnvUrjXDkNcwa71XDVPSoJiZ8XZ5GsseDcrZsr1ao/E7ZO6tFQKyH3mSSWzmjII
-         25IOfIFsVBm9+e6b3ylGhaUWcCX8zpiCpSuMBMrT8b+xpAf4R7v8m9ihSOoBxPrAnrAL
-         PTvA==
-X-Gm-Message-State: AJIora90plTvQQYiSXWw2JuRJGbDcKTqMijLJXC6K1kkMBANdSwuyu+K
-        2IEXvD1osMcN0EC8SpAtSMGQZxciiVxEcnoU0m3P
-X-Google-Smtp-Source: AGRyM1uSZoyIcGr4GVhCV/Gjjw1nutNmCi1SbSgTEu383XlWcc1SQglU0jXyjf7VafdFTCkZc0/UUxzUY0BmyFrRH8k=
-X-Received: by 2002:a17:90b:1b07:b0:1ec:c617:a314 with SMTP id
- nu7-20020a17090b1b0700b001ecc617a314mr2890719pjb.214.1657272169161; Fri, 08
- Jul 2022 02:22:49 -0700 (PDT)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=U7/XgC9RN4le35mQLRbV3pgGUKx0V1tiTu9hGjasAGI=;
+        b=kfBr5X3HeN2JY++eG/ItYFqpKtJ3aTVTCms68d7RuG/FnxySOBcH3IkBiHy2dgPQ27
+         3GSe+bf/sQ27l0DzGkHfRWcUBU21QIDaORBJF4yM+xuGtdoB+Hf6n9mf6tVtJjLwrB91
+         Vq9t45elgbmWJVegYGJ9tKNI6mcfYJFjRsTSE/fQ9vw/BG3n32mHAKkKdrUuORR7vRiE
+         HsorF5gUi1uYm1ipirAr1u753hQiJsYYRqQXNC+9OLE89FtW1QMkJTPWhn1fPNPRZ2hM
+         rBFzyMWTOEyvaeEC4rRdTkBnpdYN0EqBDGYJC5LNvZlrScqnRCe9P2Ee/lGZ6yb0Wlax
+         /BYw==
+X-Gm-Message-State: AJIora8adFYtAnlzPVXaOBvXltXwivHQHsaqzxwoGYqcyfMAWpqYJjI6
+        EKjLMdngXyficDf/06xXBO0=
+X-Google-Smtp-Source: AGRyM1t2xWCoYr09Jo0vvMoTX8WrRJ5XuGWsryJmy0bfppS9LrrILQXKs9QWucfoDSuMtqnmbOifuQ==
+X-Received: by 2002:a05:6602:164a:b0:678:682f:568b with SMTP id y10-20020a056602164a00b00678682f568bmr1403979iow.187.1657272179559;
+        Fri, 08 Jul 2022 02:22:59 -0700 (PDT)
+Received: from [192.168.1.145] ([207.188.167.132])
+        by smtp.gmail.com with ESMTPSA id l10-20020a92d94a000000b002dc616d93acsm63916ilq.28.2022.07.08.02.22.55
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 08 Jul 2022 02:22:58 -0700 (PDT)
+Message-ID: <14bf5e6b-4230-fffc-4134-c3015cf4d262@gmail.com>
+Date:   Fri, 8 Jul 2022 11:22:54 +0200
 MIME-Version: 1.0
-References: <20220328111828.1554086-1-sashal@kernel.org> <20220328111828.1554086-42-sashal@kernel.org>
- <872f2a21-7bf7-0cc3-298f-f817429f6997@fortu.net> <MN0PR12MB6101729CF68952653E8F55EFE2839@MN0PR12MB6101.namprd12.prod.outlook.com>
-In-Reply-To: <MN0PR12MB6101729CF68952653E8F55EFE2839@MN0PR12MB6101.namprd12.prod.outlook.com>
-From:   Tom Crossland <tomc@fortu.net>
-Date:   Fri, 8 Jul 2022 11:22:38 +0200
-Message-ID: <CACdrSeLjKDDpBG3=FZowro_vPGNmwbwvF6iVKw7QkVhgU6LgxQ@mail.gmail.com>
-Subject: Re: [PATCH AUTOSEL 5.17 42/43] Revert "ACPI: Pass the same
- capabilities to the _OSC regardless of the query flag"
-To:     "Limonciello, Mario" <Mario.Limonciello@amd.com>
-Cc:     Sasha Levin <sashal@kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "stable@vger.kernel.org" <stable@vger.kernel.org>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        "Huang, Ray" <Ray.Huang@amd.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        "rafael@kernel.org" <rafael@kernel.org>,
-        "linux-acpi@vger.kernel.org" <linux-acpi@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH net v3] stmmac: dwmac-mediatek: fix clock issue
+Content-Language: en-US
+To:     Biao Huang <biao.huang@mediatek.com>,
+        David Miller <davem@davemloft.net>
+Cc:     Giuseppe Cavallaro <peppe.cavallaro@st.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Jose Abreu <joabreu@synopsys.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>, netdev@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-mediatek@lists.infradead.org, macpaul.lin@mediatek.com
+References: <20220708083937.27334-1-biao.huang@mediatek.com>
+ <20220708083937.27334-2-biao.huang@mediatek.com>
+From:   Matthias Brugger <matthias.bgg@gmail.com>
+In-Reply-To: <20220708083937.27334-2-biao.huang@mediatek.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-I can confirm that the ACPI BIOS Errors no longer appear in the kernel
-log using mainline 5.19.0-rc5 with the patch applied.
 
-Many thanks
 
-On Thu, Jul 7, 2022 at 11:36 PM Limonciello, Mario
-<Mario.Limonciello@amd.com> wrote:
->
-> [Public]
->
->
->
-> > -----Original Message-----
-> > From: Tom Crossland <tomc@fortu.net>
-> > Sent: Thursday, July 7, 2022 16:31
-> > To: Sasha Levin <sashal@kernel.org>; linux-kernel@vger.kernel.org;
-> > stable@vger.kernel.org
-> > Cc: Rafael J. Wysocki <rafael.j.wysocki@intel.com>; Limonciello, Mario
-> > <Mario.Limonciello@amd.com>; Huang, Ray <Ray.Huang@amd.com>; Mika
-> > Westerberg <mika.westerberg@linux.intel.com>; rafael@kernel.org; linux-
-> > acpi@vger.kernel.org
-> > Subject: Re: [PATCH AUTOSEL 5.17 42/43] Revert "ACPI: Pass the same
-> > capabilities to the _OSC regardless of the query flag"
-> >
-> > Hi, I'm observing the issue described here which I think is due to a
-> > recent regression:
-> >
-> > https://nam11.safelinks.protection.outlook.com/?url=https%3A%2F%2Fgithub.c
-> > om%2Fintel%2Flinux-intel-
-> > lts%2Fissues%2F22&amp;data=05%7C01%7CMario.Limonciello%40amd.com%7
-> > C77419b612f9540e333ff08da606002ee%7C3dd8961fe4884e608e11a82d994e18
-> > 3d%7C0%7C0%7C637928263354159054%7CUnknown%7CTWFpbGZsb3d8eyJWI
-> > joiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C300
-> > 0%7C%7C%7C&amp;sdata=X%2FEAU9GbRD%2FfYxCMUmnWI1cJ8dk8sICk0iYu
-> > %2BKGqtl4%3D&amp;reserved=0
-> >
-> > sudo dmesg -t -l err
-> >
-> > ACPI BIOS Error (bug): Could not resolve symbol [\_PR.PR00._CPC],
-> > AE_NOT_FOUND (20211217/psargs-330)
-> > ACPI Error: Aborting method \_PR.PR01._CPC due to previous error
-> > (AE_NOT_FOUND) (20211217/psparse-529)
-> > ACPI BIOS Error (bug): Could not resolve symbol [\_PR.PR00._CPC],
-> > AE_NOT_FOUND (20211217/psargs-330)
-> > ACPI Error: Aborting method \_PR.PR02._CPC due to previous error
-> > (AE_NOT_FOUND) (20211217/psparse-529)
-> > ACPI BIOS Error (bug): Could not resolve symbol [\_PR.PR00._CPC],
-> > AE_NOT_FOUND (20211217/psargs-330)
-> > ACPI Error: Aborting method \_PR.PR03._CPC due to previous error
-> > (AE_NOT_FOUND) (20211217/psparse-529)
-> >
-> > System:
-> >    Kernel: 5.18.9-arch1-1 arch: x86_64 bits: 64 compiler: gcc v: 12.1.0
-> >      parameters: initrd=\intel-ucode.img initrd=\initramfs-linux.img
-> >      root=xxx intel_iommu=on iommu=pt
-> >   Machine:
-> >    Type: Desktop Mobo: Intel model: NUC7i5BNB v: J31144-304 serial: <filter>
-> >      UEFI: Intel v: BNKBL357.86A.0088.2022.0125.1102 date: 01/25/2022
-> >
-> > I hope this is the correct forum to report the issue. Apologies if not.
-> >
->
-> This is the fix for it:
->
-> https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git/commit/?h=linux-next&id=7feec7430edddb87c24b0a86b08a03d0b496a755
->
->
-> > On 28/03/2022 13.18, Sasha Levin wrote:
-> > > From: "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>
-> > >
-> > > [ Upstream commit 2ca8e6285250c07a2e5a22ecbfd59b5a4ef73484 ]
-> > >
-> > > Revert commit 159d8c274fd9 ("ACPI: Pass the same capabilities to the
-> > > _OSC regardless of the query flag") which caused legitimate usage
-> > > scenarios (when the platform firmware does not want the OS to control
-> > > certain platform features controlled by the system bus scope _OSC) to
-> > > break and was misguided by some misleading language in the _OSC
-> > > definition in the ACPI specification (in particular, Section 6.2.11.1.3
-> > > "Sequence of _OSC Calls" that contradicts other perts of the _OSC
-> > > definition).
-> > >
-> > > Link:
-> > https://nam11.safelinks.protection.outlook.com/?url=https%3A%2F%2Flore.ker
-> > nel.org%2Flinux-
-> > acpi%2FCAJZ5v0iStA0JmO0H3z%2BVgQsVuQONVjKPpw0F5HKfiq%3DGb6B5yw%
-> > 40mail.gmail.com&amp;data=05%7C01%7CMario.Limonciello%40amd.com%7C
-> > 77419b612f9540e333ff08da606002ee%7C3dd8961fe4884e608e11a82d994e183
-> > d%7C0%7C0%7C637928263354159054%7CUnknown%7CTWFpbGZsb3d8eyJWIj
-> > oiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C300
-> > 0%7C%7C%7C&amp;sdata=Te3BK%2B0q2QmrqqoG5mbV%2FNguoMgiwzILNHl
-> > %2BhUMLFlY%3D&amp;reserved=0
-> > > Reported-by: Mario Limonciello <Mario.Limonciello@amd.com>
-> > > Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> > > Tested-by: Mario Limonciello <mario.limonciello@amd.com>
-> > > Acked-by: Huang Rui <ray.huang@amd.com>
-> > > Reviewed-by: Mika Westerberg <mika.westerberg@linux.intel.com>
-> > > Signed-off-by: Sasha Levin <sashal@kernel.org>
-> > > ---
-> > >   drivers/acpi/bus.c | 27 +++++++++++++++++++--------
-> > >   1 file changed, 19 insertions(+), 8 deletions(-)
-> > >
-> > > diff --git a/drivers/acpi/bus.c b/drivers/acpi/bus.c
-> > > index 07f604832fd6..079b952ab59f 100644
-> > > --- a/drivers/acpi/bus.c
-> > > +++ b/drivers/acpi/bus.c
-> > > @@ -332,21 +332,32 @@ static void
-> > acpi_bus_osc_negotiate_platform_control(void)
-> > >     if (ACPI_FAILURE(acpi_run_osc(handle, &context)))
-> > >             return;
-> > >
-> > > -   kfree(context.ret.pointer);
-> > > +   capbuf_ret = context.ret.pointer;
-> > > +   if (context.ret.length <= OSC_SUPPORT_DWORD) {
-> > > +           kfree(context.ret.pointer);
-> > > +           return;
-> > > +   }
-> > >
-> > > -   /* Now run _OSC again with query flag clear */
-> > > +   /*
-> > > +    * Now run _OSC again with query flag clear and with the caps
-> > > +    * supported by both the OS and the platform.
-> > > +    */
-> > >     capbuf[OSC_QUERY_DWORD] = 0;
-> > > +   capbuf[OSC_SUPPORT_DWORD] =
-> > capbuf_ret[OSC_SUPPORT_DWORD];
-> > > +   kfree(context.ret.pointer);
-> > >
-> > >     if (ACPI_FAILURE(acpi_run_osc(handle, &context)))
-> > >             return;
-> > >
-> > >     capbuf_ret = context.ret.pointer;
-> > > -   osc_sb_apei_support_acked =
-> > > -           capbuf_ret[OSC_SUPPORT_DWORD] &
-> > OSC_SB_APEI_SUPPORT;
-> > > -   osc_pc_lpi_support_confirmed =
-> > > -           capbuf_ret[OSC_SUPPORT_DWORD] &
-> > OSC_SB_PCLPI_SUPPORT;
-> > > -   osc_sb_native_usb4_support_confirmed =
-> > > -           capbuf_ret[OSC_SUPPORT_DWORD] &
-> > OSC_SB_NATIVE_USB4_SUPPORT;
-> > > +   if (context.ret.length > OSC_SUPPORT_DWORD) {
-> > > +           osc_sb_apei_support_acked =
-> > > +                   capbuf_ret[OSC_SUPPORT_DWORD] &
-> > OSC_SB_APEI_SUPPORT;
-> > > +           osc_pc_lpi_support_confirmed =
-> > > +                   capbuf_ret[OSC_SUPPORT_DWORD] &
-> > OSC_SB_PCLPI_SUPPORT;
-> > > +           osc_sb_native_usb4_support_confirmed =
-> > > +                   capbuf_ret[OSC_SUPPORT_DWORD] &
-> > OSC_SB_NATIVE_USB4_SUPPORT;
-> > > +   }
-> > >
-> > >     kfree(context.ret.pointer);
-> > >   }
+On 08/07/2022 10:39, Biao Huang wrote:
+> Since clocks are handled in mediatek_dwmac_clks_config(),
+> remove the clocks configuration in init()/exit(), and
+> invoke mediatek_dwmac_clks_config instead.
+> 
+> This issue is found in suspend/resume test.
+> 
+
+Commit message is rather confusing. Basically you are moving the clock enable 
+into probe instead of init and remove it from exit. That means, clocks get 
+enabled earlier and don't get disabled if the module gets unloaded. That doesn't 
+sound correct, I think we would at least need to disable the clocks in remove 
+function.
+
+I suppose that suspend calls exit and that there was a problem when we disable 
+the clocks there. Is this a HW issue that has no other possible fix?
+
+Regards,
+Matthias
+
+> Fixes: 3186bdad97d5 ("stmmac: dwmac-mediatek: add platform level clocks management")
+> Signed-off-by: Biao Huang <biao.huang@mediatek.com>
+> ---
+>   .../ethernet/stmicro/stmmac/dwmac-mediatek.c  | 36 +++++--------------
+>   1 file changed, 9 insertions(+), 27 deletions(-)
+> 
+> diff --git a/drivers/net/ethernet/stmicro/stmmac/dwmac-mediatek.c b/drivers/net/ethernet/stmicro/stmmac/dwmac-mediatek.c
+> index 6ff88df58767..e86f3e125cb4 100644
+> --- a/drivers/net/ethernet/stmicro/stmmac/dwmac-mediatek.c
+> +++ b/drivers/net/ethernet/stmicro/stmmac/dwmac-mediatek.c
+> @@ -576,32 +576,7 @@ static int mediatek_dwmac_init(struct platform_device *pdev, void *priv)
+>   		}
+>   	}
+>   
+> -	ret = clk_bulk_prepare_enable(variant->num_clks, plat->clks);
+> -	if (ret) {
+> -		dev_err(plat->dev, "failed to enable clks, err = %d\n", ret);
+> -		return ret;
+> -	}
+> -
+> -	ret = clk_prepare_enable(plat->rmii_internal_clk);
+> -	if (ret) {
+> -		dev_err(plat->dev, "failed to enable rmii internal clk, err = %d\n", ret);
+> -		goto err_clk;
+> -	}
+> -
+>   	return 0;
+> -
+> -err_clk:
+> -	clk_bulk_disable_unprepare(variant->num_clks, plat->clks);
+> -	return ret;
+> -}
+> -
+> -static void mediatek_dwmac_exit(struct platform_device *pdev, void *priv)
+> -{
+> -	struct mediatek_dwmac_plat_data *plat = priv;
+> -	const struct mediatek_dwmac_variant *variant = plat->variant;
+> -
+> -	clk_disable_unprepare(plat->rmii_internal_clk);
+> -	clk_bulk_disable_unprepare(variant->num_clks, plat->clks);
+>   }
+>   
+>   static int mediatek_dwmac_clks_config(void *priv, bool enabled)
+> @@ -643,7 +618,6 @@ static int mediatek_dwmac_common_data(struct platform_device *pdev,
+>   	plat->addr64 = priv_plat->variant->dma_bit_mask;
+>   	plat->bsp_priv = priv_plat;
+>   	plat->init = mediatek_dwmac_init;
+> -	plat->exit = mediatek_dwmac_exit;
+>   	plat->clks_config = mediatek_dwmac_clks_config;
+>   	if (priv_plat->variant->dwmac_fix_mac_speed)
+>   		plat->fix_mac_speed = priv_plat->variant->dwmac_fix_mac_speed;
+> @@ -712,13 +686,21 @@ static int mediatek_dwmac_probe(struct platform_device *pdev)
+>   	mediatek_dwmac_common_data(pdev, plat_dat, priv_plat);
+>   	mediatek_dwmac_init(pdev, priv_plat);
+>   
+> +	ret = mediatek_dwmac_clks_config(priv_plat, true);
+> +	if (ret)
+> +		return ret;
+> +
+>   	ret = stmmac_dvr_probe(&pdev->dev, plat_dat, &stmmac_res);
+>   	if (ret) {
+>   		stmmac_remove_config_dt(pdev, plat_dat);
+> -		return ret;
+> +		goto err_drv_probe;
+>   	}
+>   
+>   	return 0;
+> +
+> +err_drv_probe:
+> +	mediatek_dwmac_clks_config(priv_plat, false);
+> +	return ret;
+>   }
+>   
+>   static const struct of_device_id mediatek_dwmac_match[] = {

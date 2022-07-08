@@ -2,105 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D331356B525
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 11:13:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B84956B527
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 11:14:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236956AbiGHJNS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Jul 2022 05:13:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36440 "EHLO
+        id S237682AbiGHJNv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Jul 2022 05:13:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37366 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236587AbiGHJNP (ORCPT
+        with ESMTP id S236587AbiGHJNu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Jul 2022 05:13:15 -0400
-Received: from mail-yb1-xb2e.google.com (mail-yb1-xb2e.google.com [IPv6:2607:f8b0:4864:20::b2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BACE255A6
-        for <linux-kernel@vger.kernel.org>; Fri,  8 Jul 2022 02:13:14 -0700 (PDT)
-Received: by mail-yb1-xb2e.google.com with SMTP id e69so30261010ybh.2
-        for <linux-kernel@vger.kernel.org>; Fri, 08 Jul 2022 02:13:14 -0700 (PDT)
+        Fri, 8 Jul 2022 05:13:50 -0400
+Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53F80C05
+        for <linux-kernel@vger.kernel.org>; Fri,  8 Jul 2022 02:13:46 -0700 (PDT)
+Received: by mail-pl1-x635.google.com with SMTP id m2so15878074plx.3
+        for <linux-kernel@vger.kernel.org>; Fri, 08 Jul 2022 02:13:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=t15woDQAKcLwTx4KSzr1H1UOGudxvBL6EDZDZBycJuo=;
-        b=IFqYXn/QYAIeCOOZhukGgGtSiZtEQuOAXDtCdI81/WdiBbHokVGMy2W0YQ74nPISpl
-         dDbbkZDodL5tCEFadouqwKtiGNWaAnXO/I7x4vOIKkDTil1CGYMgft78nJgEPtNLHCN7
-         zNutOamYTU8snjH7UWD+vh1xmOhvHZo2/HHu/u1f+ymBEXdJ65RsXjA2uUlC9E1C21Dc
-         gBwuQRZs2i/UdSBhI13OF2OdaResD3sdwEahDzvbt1ppyEO93sAC5oHpKcTSZijFVksu
-         1WxhBD+YYLLMJTjAoj8mvno4O/iMVfAsku3pusIZ62riq+jYxDDXVTXpVTaCiJrCY5CO
-         Hsdg==
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=zVyRbR0DGBBDzc8e+tgqABWD25IqCK95uXaIwHTGdIY=;
+        b=3805WzIbUsOPuIkyjfCss7sGKG+XrXODUnQ5Glj7CbijUmTsWwJ0CC7+aMsw+StOXi
+         R1Q1U0SBWpAC4qBQ2i8caxhRsaPmsUdEw82AxZT6cJQavu0NGE4wizuEnPvDDF3kxVVb
+         0LsOTC1yNIA2cvKIuhNPXFdig0/acqOpiq9SYrSxIcyLz3LhZ7sTG6R4JIJBRVo1o9iW
+         q0guyEJCMvaxRsNDEtKkj8C9JjpUNXt30Kw1ObjhOziHIVGesTjnx5DsptNT+snWHnpR
+         JtQnoFw2Nt/NtF1b2sjPt5XFk5qyPPVASVYK23CrzR+rAToKCvib55eVP4nGFuYX/lgu
+         K8tA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=t15woDQAKcLwTx4KSzr1H1UOGudxvBL6EDZDZBycJuo=;
-        b=5dlzNU/s/GjvV8UJ0PO+EsxHmnSKLu4YGZfIbAoTwylFEomPvlq9wdLrKy0FwZJRLb
-         edyE4C1KDX0ytDPJ9lZbVOgfeSlQP/X3LSdICfJe2PLnprTkK4cVEVjuZber1kN+RhX/
-         MWuSJGaN2W0NMgnOlqRLHwo8Rxh3VWZiPwt88p6duksltz7FCIX7Quh0xVSwUJdGgr9M
-         iI/VzKGe2RfGLmaEGy00gBdXB2ocM2Vz3ICHsYVBpHo06oe2upFPA1wR17ddwuOjQnWK
-         nYSSZeBFclmemV/xS8rMiUI5/FSGUsZgM1ZOKPfgzk144tgb1/2VfAK6M4JG/HMTv/i/
-         y5+Q==
-X-Gm-Message-State: AJIora/L9iZegxEJghlOqJrwAJt4VyKMVG8GPoih+CwmWO7B36xXutO7
-        d0ngprWXxPWhkHAG3PZpQUyCf22sLU/vXJO6WWI=
-X-Google-Smtp-Source: AGRyM1s0m/zQunZ0NH8/NYGY+Vr9KiOXctCX75dxdtDgNnaJTlSPuLZLRt5io0WBEQsAX8BJl5qDBspF+V5NkNitp5I=
-X-Received: by 2002:a25:858e:0:b0:66e:4898:63e2 with SMTP id
- x14-20020a25858e000000b0066e489863e2mr2610749ybk.296.1657271593413; Fri, 08
- Jul 2022 02:13:13 -0700 (PDT)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=zVyRbR0DGBBDzc8e+tgqABWD25IqCK95uXaIwHTGdIY=;
+        b=cnZZDtf1wzYGEPq++M0NgRgEZQ2fPKGYjXJalRd5mcVIr7bO0G4tGWw9PACNMYJ9tp
+         q5SWk40kVDxyP5Z/RELV935AS6zqDNvGpdvFcEyZIbFIs6QAjeW11LydZH59+v8kYLK1
+         W3x5AwtXjKf8ymKyuQneD1s56eP/evm5tHqbNJtyhipnch080DQgrufENIzWsRIOPQxe
+         t55YGRivWAXO69IYdX+gKitZvq6z5Qq+1dRaiWbGDXa8MX9ZR6H2XJgTa98dCYrwDPne
+         8ymx9222E2hxEVysGtnaWujGQHAvApKNT+jPboyk0VtVCy8RkmHLkYM9CKfapVaWqXEz
+         dKRA==
+X-Gm-Message-State: AJIora/VOKE/lUeK9Pu7fDeW0xvQ4JDCDqowLJfHASDh2FDJajEHkUQX
+        F0aMVJl4FVIJkYE8wySBSCNoDQ==
+X-Google-Smtp-Source: AGRyM1uozoWf82Kr2LZHt+6GXQN0FigtKVj/tNSxFD63eCofnTFa+ROGPha0Jz5M/nBdM+si3z6CwQ==
+X-Received: by 2002:a17:902:8345:b0:167:879c:abe8 with SMTP id z5-20020a170902834500b00167879cabe8mr2714707pln.7.1657271625765;
+        Fri, 08 Jul 2022 02:13:45 -0700 (PDT)
+Received: from [10.4.255.21] ([139.177.225.235])
+        by smtp.gmail.com with ESMTPSA id a9-20020a17090a008900b001ef8397571asm1054305pja.35.2022.07.08.02.13.42
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 08 Jul 2022 02:13:45 -0700 (PDT)
+Message-ID: <548be593-2849-a05b-7fef-66605d41bf5c@bytedance.com>
+Date:   Fri, 8 Jul 2022 17:13:40 +0800
 MIME-Version: 1.0
-References: <20220706182300.70862-1-yury.norov@gmail.com> <20220706182300.70862-2-yury.norov@gmail.com>
- <423c4368-0a1c-792c-2637-768532fc7782@rasmusvillemoes.dk> <YsdKMQzUFVwIaqtJ@yury-laptop>
- <d86ad462-fb4c-4768-b060-201511f9ff64@rasmusvillemoes.dk>
-In-Reply-To: <d86ad462-fb4c-4768-b060-201511f9ff64@rasmusvillemoes.dk>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Fri, 8 Jul 2022 11:12:36 +0200
-Message-ID: <CAHp75Vfx3RADfU0cm7Y0kYfOtba4K008xZSSVbACRa3OwbAKGw@mail.gmail.com>
-Subject: Re: [PATCH 1/5] lib: add find_nth(,and,andnot)_bit()
-To:     Rasmus Villemoes <linux@rasmusvillemoes.dk>
-Cc:     Yury Norov <yury.norov@gmail.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Alexander Lobakin <alexandr.lobakin@intel.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Arnd Bergmann <arnd@arndb.de>, David Gow <davidgow@google.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Isabella Basso <isabbasso@riseup.net>,
-        Kees Cook <keescook@chromium.org>,
-        Keith Busch <kbusch@kernel.org>,
-        Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-        Marco Elver <elver@google.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        =?UTF-8?B?VG9rZSBIw7hpbGFuZC1Kw7hyZ2Vuc2Vu?= <toke@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.0
+Subject: Re: [RFC PATCH 2/2] arm64: support HAVE_IRQ_EXIT_ON_IRQ_STACK
+Content-Language: en-US
+To:     Arnd Bergmann <arnd@arndb.de>
+Cc:     Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+References: <20220707110511.52129-1-zhengqi.arch@bytedance.com>
+ <20220707110511.52129-3-zhengqi.arch@bytedance.com>
+ <CAK8P3a1-rL391dp33D5r+SgQ+L0u7Neta_-DZoZL=+c1zPtNQg@mail.gmail.com>
+ <42bfd82c-b3fb-c942-d6f2-ae5adec90a26@bytedance.com>
+ <CAK8P3a17A1t=qkyToQNVnuVfGPp-7VpFx5qJ-gmpyrkJ3yRXTw@mail.gmail.com>
+ <33a63e76-fb71-2b9e-3b3c-cc6f7a675cf3@bytedance.com>
+ <CAK8P3a1GgnmhHj+_gRYZ52=TvfBQb_xxYt1Hg-jMJ2gZqCD42w@mail.gmail.com>
+ <b53dbf64-b824-89b0-dc00-b894cf9771a9@bytedance.com>
+ <CAK8P3a3DDEkr0D=dLiXN+Xek_OO-HX5xWaQpzdX1GQxTYWnHLw@mail.gmail.com>
+From:   Qi Zheng <zhengqi.arch@bytedance.com>
+In-Reply-To: <CAK8P3a3DDEkr0D=dLiXN+Xek_OO-HX5xWaQpzdX1GQxTYWnHLw@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jul 8, 2022 at 10:55 AM Rasmus Villemoes
-<linux@rasmusvillemoes.dk> wrote:
-> On 07/07/2022 23.03, Yury Norov wrote:
->
-> >> And I don't
-> >> like that the index is apparently 1-based (and that surprising API isn't
-> >> spelled out anywhere).
-> >
-> > Yeah... My motivation to start counting from 1 is to keep consistency
-> > with ffs: __ffs(word) <=> fns(word, 1).
->
-> I understand that you're translating that second f in ffs (find First
-> set) to a 1. But I disagree that that's necessarily a logical thing to
-> do. Everybody understands that (given a C or python or... context) when
-> some prose talks about "the first element in an array", it's the one at
-> [0]. So I find it much more natural that the set bits in a word are
-> enumerated 0, 1, ..., popcount(w)-1.
 
-I agree that here we operate with an array of bits, which naturally
-starts from bit 0.
+
+On 2022/7/8 16:52, Arnd Bergmann wrote:
+> On Fri, Jul 8, 2022 at 5:13 AM Qi Zheng <zhengqi.arch@bytedance.com> wrote:
+>> On 2022/7/8 04:55, Arnd Bergmann wrote:
+>>> On Thu, Jul 7, 2022 at 5:00 PM Qi Zheng <zhengqi.arch@bytedance.com> wrote:
+>>>> On 2022/7/7 22:41, Arnd Bergmann wrote:
+>>>>> On Thu, Jul 7, 2022 at 3:38 PM Qi Zheng <zhengqi.arch@bytedance.com> wrote:
+>>>>>> On 2022/7/7 20:49, Arnd Bergmann wrote:
+>>>>>
+>>>>> -asmlinkage void noinstr el1h_64_fiq_handler(struct pt_regs *regs)
+>>>>> +asmlinkage void noinstr el1h_64_irq_handler(struct pt_regs *regs)
+>>>>> +{
+>>>>> +       if (on_thread_stack())
+>>>>> +               call_on_irq_stack(regs, el1_irq);
+>>>>
+>>>> IMO, this can't work. Because el1_interrupt() will invoke
+>>>> arm64_preempt_schedule_irq(), which will cause scheduling on the
+>>>> IRQ stack.
+>>>
+>>> Ah, too bad. I spent some more time looking for a simpler approach,
+>>> but couldn't find one I'm happy with. One idea might be to have
+>>> callback functions for each combinations of irq/fiq with irq/pnmi
+>>> to avoid the nested callback pointers. Not sure if that helps.
+>>
+>> Maybe nested callback pointers are not always a wild beast. ;)
+>> This method does not change much, and we can also conveniently stuff
+>> all kinds of things in do_handler() that we want to run on the IRQ
+>> stack in addition to the handler().
+> 
+> Right, your approach is probably the one that changes the existing
+> code the least. I see that x86 handles this by having call_on_irq_stack()
+> in an inline asm, but this in turn complicates the asm implementation,
+> which is also worth keeping simple.
+
+Yes, and I see that the commit f2c5092190f2 ("arch/*: Disable softirq
+stacks on PREEMPT_RT.") has been merged into next-20220707, so I will
+rebase to the next-20220707 and send the next version.
+
+Thank you very much :)
+
+> 
+>           Arnd
 
 -- 
-With Best Regards,
-Andy Shevchenko
+Thanks,
+Qi

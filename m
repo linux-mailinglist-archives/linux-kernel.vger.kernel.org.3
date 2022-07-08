@@ -2,152 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C423956BB9D
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 16:24:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B881F56BBA3
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 16:24:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237590AbiGHOUO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Jul 2022 10:20:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44916 "EHLO
+        id S238055AbiGHOVp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Jul 2022 10:21:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45360 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236547AbiGHOUL (ORCPT
+        with ESMTP id S238064AbiGHOVl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Jul 2022 10:20:11 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7137D24F2F;
-        Fri,  8 Jul 2022 07:20:06 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 88B1462831;
-        Fri,  8 Jul 2022 14:20:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8E400C341C0;
-        Fri,  8 Jul 2022 14:20:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1657290005;
-        bh=bnnMOD+hVTtfzjkgSbWTdqdFyQ813Gs/UhdaiJL80eU=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Llpr1fGuCLViKrjtK5Czp26O1u18WarIs8xUC+Vl4YIqkb1sBLEXzFhyGBcz4Ni6B
-         mPWVUPQKxDWiR1FI6lNF/Mn6VF5ltqji9767/q1WmbaZDxOTLeEM2mHuGRICaARAIo
-         2YAkxWoSYmWTCIJzUCu7YFmQtH2ik8B3BIksJatqsRBOQ7cCusf1d4GabslcbHOFkS
-         Ic0ao6rIOsT8olsJgRZfETY0pwChDGxSFA92nd1BFc9+hQmCtE2IYRrcW0HhgPg5qa
-         EgLsUxH5de88mknx2bnahbiMq9Rp9xGu9F4KOKWqCZdWTv2Dl7uS/ctLVMi2yd9dLP
-         prKblrFK3mmcg==
-Received: by pali.im (Postfix)
-        id 4BC237D1; Fri,  8 Jul 2022 16:20:01 +0200 (CEST)
-Date:   Fri, 8 Jul 2022 16:20:01 +0200
-From:   Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Andy Shevchenko <andy.shevchenko@gmail.com>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Johan Hovold <johan@kernel.org>,
-        Marek =?utf-8?B?QmVow7pu?= <kabel@kernel.org>,
-        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 0/3] serial: Fix support for UPF_SPD_* flags
-Message-ID: <20220708142001.7fciqnfckznlvsa4@pali>
-References: <20220321163055.4058-1-pali@kernel.org>
- <CAHp75VddDG-ZJpbAb5ZhKaMpP0L+CMEx2pcYy3FOMiaxNydCWA@mail.gmail.com>
- <YmK7drS0XgnTQcaf@kroah.com>
- <20220707084840.jvsstvyx2ul5ltb6@pali>
- <YsgsH94PV/wAX0Vu@kroah.com>
- <20220708132621.4v2es73h52aq3izn@pali>
- <Ysg2RW0B/cLL3k+k@kroah.com>
+        Fri, 8 Jul 2022 10:21:41 -0400
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.22])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10FE2326D4;
+        Fri,  8 Jul 2022 07:21:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1657290076;
+        bh=6lhQbMhE6Tq/JsXBUhi3e+zhcqO27HN8eOz+uNLxVak=;
+        h=X-UI-Sender-Class:From:To:Cc:Subject:Date:In-Reply-To:References;
+        b=Qu8KxQ7va/kQoThEw5wcX6AZ+LOCulHcyvKRJiHoBxoLvr9kuCA6a4qs+Nc4Bpl5h
+         wecj1UMnBgTjPCCY1Sr4i6On96bzMKhWn0sH1dY+qeNcVRIYTWKXRQ6ZXc3/2p3jo3
+         g/3BXNJS4wCI8fA3ONdu8JdZr0SSbfIuKjroJzik=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from [157.180.225.69] ([157.180.225.69]) by web-mail.gmx.net
+ (3c-app-gmx-bs34.server.lan [172.19.170.86]) (via HTTP); Fri, 8 Jul 2022
+ 16:21:16 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <Ysg2RW0B/cLL3k+k@kroah.com>
-User-Agent: NeoMutt/20180716
-X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Message-ID: <trinity-23d198fe-40f0-40bb-8d95-2a64ae047a7d-1657290076363@3c-app-gmx-bs34>
+From:   Frank Wunderlich <frank-w@public-files.de>
+To:     Heiko Stuebner <heiko@sntech.de>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Frank Wunderlich <linux@fw-web.de>
+Subject: Aw: [PATCH] arm64: dts: rk356x: fix upper usb port on BPI-R2-Pro
+Content-Type: text/plain; charset=UTF-8
+Date:   Fri, 8 Jul 2022 16:21:16 +0200
+Importance: normal
+Sensitivity: Normal
+In-Reply-To: <20220708132706.81450-1-linux@fw-web.de>
+References: <20220708132706.81450-1-linux@fw-web.de>
+X-UI-Message-Type: mail
+X-Priority: 3
+X-Provags-ID: V03:K1:6POgQ4vFo6v2yxUWKuL4B/SKN+XUsFnyRZLUJ8RKpuNVB+CVRgUrtdqsuKTkX6DYgczdM
+ S79MFaUYh2YAHCctg75rCXezG2XeG6pSK72EuX6BaIiUykX1x9lVwIAUUgFUkoOPjpD5EqR6fUDl
+ go6/5GkbcWukqZ5Xv2tic2OdfZeeiwtMAiMkp1YxBJMudGPAC92m3KqlIw0RiMiA+LgQfn3zIbiF
+ UKzcgEK4EnU/Ccjn3f7QK2hNolEB93PTxFV4c2q1U2Me8VQuhKQ3Y9SNhyUP9cVWGo63AzzZpmtZ
+ yg=
+X-UI-Out-Filterresults: notjunk:1;V03:K0:2Ss00Y/hSzk=:W+x06xOV3HSvSsYyXdbK6F
+ 5sjv8mfCSOOHEOg6rxQHgGX/yqo9n/Irjw6ctZ9iYnFsjlASDEQ0anJ6kl/q+N0hIuMunTRh4
+ AUWZy2OJuiQoynH5m/huT/LHorj0WAUnYB04wT9JyxFyAjY8ONrOULoPO11I0uMmSkzS0WCm2
+ mv9NIIftZbU19iLpdoPTzFuibq+2PBwrPrD6OEks2V2icsj27YYhxOnYW4hdcP7UjPkyrgtn1
+ bOuEGeQl4ayrDs3jI+0n6rm3HUGxBONnL2v7MPHZXErdXWxYzFVC4pLk0V4U6elUDuce7V6VL
+ 2Vhl6wfvsI6q+222HDdV/fzEiERFnatmjY2RBX5HcjBefCYsmGPpO3tzISbJuty3EdItLalW4
+ mhpS81gsaLGM6RSEN9HZLmzglApx/rWoO+e3q3an9Zlpg+63LlsvcX8WioMNhlkSitiwnkJCR
+ WALLV2rjor6Whr6lyQK/jFBsh90gGRCz9e0Ja0YCkx9GAH9iyOIQvcZq0yzNfD0JcTk6cbOWy
+ /q1+Q7txmkFcADCG9oCjsaXZE2UpyeX9M+URxSQq3mWPqxndZPI1s3UUeWwDKOk5QDvynKSfn
+ BPDv3+foeeT3YfgeZ99QJVwrCBJQOPfJUf73G92JmPkaul70935GSvSATHdC61pH6WNxXw+Yr
+ BkjyB4sAF0eGx8JTpYHKSiwJWM43rKJ3MDP6mWBZ297YyCtOKajWUnCHRodmudp9CmYCGDdr5
+ DyXQaqSs5rxgXBrC3fuYbN8/e2HobxejxhbmPbA72ZHGRnnA5bXkXak03NtvsGaWJ7lfpBeXz
+ 8r4KUoU
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Friday 08 July 2022 15:51:01 Greg Kroah-Hartman wrote:
-> On Fri, Jul 08, 2022 at 03:26:21PM +0200, Pali Rohár wrote:
-> > On Friday 08 July 2022 15:07:43 Greg Kroah-Hartman wrote:
-> > > On Thu, Jul 07, 2022 at 10:48:40AM +0200, Pali Rohár wrote:
-> > > > On Friday 22 April 2022 16:28:06 Greg Kroah-Hartman wrote:
-> > > > > On Tue, Mar 22, 2022 at 04:29:08PM +0200, Andy Shevchenko wrote:
-> > > > > > On Mon, Mar 21, 2022 at 11:07 PM Pali Rohár <pali@kernel.org> wrote:
-> > > > > > >
-> > > > > > > Support for UPF_SPD_* flags is currently broken in more drivers for two
-> > > > > > > reasons. First one is that uart_update_timeout() function does not
-> > > > > > 
-> > > > > > the uart_update_timeout()
-> > > > > > 
-> > > > > > > calculate timeout for UPF_SPD_CUST flag correctly. Second reason is that
-> > > > > > > userspace termios structre is modified by most drivers after each
-> > > > > > 
-> > > > > > structure
-> > > > > > 
-> > > > > > ...
-> > > > > > 
-> > > > > > > (error handling was ommited for simplification)
-> > > > > > 
-> > > > > > omitted
-> > > > > > 
-> > > > > > > After calling set_active_spd_cust_baud() function SPD custom divisor
-> > > > > > > should be active and therefore is_spd_cust_active() should return true.
-> > > > > > >
-> > > > > > > But it is not active (cfgetospeed does not return B38400) and this patch
-> > > > > > > series should fix it. I have tested it with 8250 driver.
-> > > > > > 
-> > > > > > drivers
-> > > > > > 
-> > > > > > > Originally Johan Hovold reported that there may be issue with these
-> > > > > > > ASYNC_SPD_FLAGS in email:
-> > > > > > > https://lore.kernel.org/linux-serial/20211007133146.28949-1-johan@kernel.org/
-> > > > > > >
-> > > > > > >
-> > > > > > > Johan, Greg, could you please test these patches if there is not any
-> > > > > > > regression?
-> > > > > > 
-> > > > > > I'm wondering why we are still supporting this ugly hack?
-> > > > > > Doesn't BOTHER work for you?
-> > > > > 
-> > > > > Yes, I too do not want to add more support for these old flags.  If they
-> > > > > have not been working, let's not add support for them as obviously no
-> > > > > one is using them.  Let's try to remove them if at all possible.
-> > > > 
-> > > > Well, it works partially. For more drivers SET method is working, but
-> > > > GET method returns incorrect value. If your userspace application is
-> > > > written in a way that does not retrieve from kernel current settings
-> > > > then it has big probability that application works.
-> > > 
-> > > I do not understand, sorry, what do you mean by this?
-> > 
-> > I mean that SET methods are working, GET methods not. In this case SET
-> > done via ioctl(TIOCSSERIAL) and GET via ioctl(TIOCGSERIAL).
-> > 
-> > > And as you are responding to a months-old thread, I am totally lost, and
-> > > don't even know what the patch here was...
-> > > 
-> > > > So, do you really want to remove support for these old flags completely?
-> > > > That would of course break above applications.
-> > > 
-> > > I'm not saying remove them, I'm saying let us not add any more
-> > > dependancies on them in order to keep new applications from ever wanting
-> > > to use them.
-> > 
-> > Last time you wrote to remove them. Now saying not to remove them. So I
-> > do not understand you now.
-> 
-> I'm sorry, I am totally lost.
+Hi,
 
-So look what you have wrote? Who is lost here is me.
+noticed that prefix should be "arm64: dts: rockchip:", should i send a v2 or can this changed while applying?
 
-> How about starting over and resubmitting
-> the changes you want and we can go from there.
-> 
-> greg k-h
-
-What to resubmit? I do not understand you. In case you lost emails or
-accidentally removed them, you can look at them in archive, not? I hope
-that you do not want me to copy+paste all existing patches with all your
-quotes on them which you wrote into new emails.
+regards Frank

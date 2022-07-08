@@ -2,97 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5775A56B39B
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 09:34:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 882A456B39F
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 09:34:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237598AbiGHHa4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Jul 2022 03:30:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42864 "EHLO
+        id S237600AbiGHHb6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Jul 2022 03:31:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43536 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237466AbiGHHax (ORCPT
+        with ESMTP id S237115AbiGHHb5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Jul 2022 03:30:53 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 866E67C183;
-        Fri,  8 Jul 2022 00:30:52 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2562662581;
-        Fri,  8 Jul 2022 07:30:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2AEF8C341C0;
-        Fri,  8 Jul 2022 07:30:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1657265451;
-        bh=YM5abWNg2tGKSxJB89i/WV2dIVGzmizPdBTihjybm5g=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=gPY3fZ+dFcI3zmfDty9fdhxFAmOlf3JlGHXUUEgg+GccZc7z5gt2DcsgE0wlqE61h
-         WIZxyaEGCcLg9RCTEbI1GyvvlSTZuDk71hgp2gnmbMOGvorOZ0W4FOAXdfLvPmiGon
-         5GmMnxo+nnCFXppmpt2nQx2i1PeniIJ+5VXHePSM=
-Date:   Fri, 8 Jul 2022 09:30:49 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Kai Ye <yekai13@huawei.com>
-Cc:     herbert@gondor.apana.org.au, linux-crypto@vger.kernel.org,
-        linux-kernel@vger.kernel.org, wangzhou1@hisilicon.com
-Subject: Re: [PATCH v5 2/3] Documentation: add a isolation strategy sysfs
- node for uacce
-Message-ID: <YsfdKcMtgRr4wB3z@kroah.com>
-References: <20220708070820.43958-1-yekai13@huawei.com>
- <20220708070820.43958-3-yekai13@huawei.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220708070820.43958-3-yekai13@huawei.com>
-X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Fri, 8 Jul 2022 03:31:57 -0400
+Received: from out30-132.freemail.mail.aliyun.com (out30-132.freemail.mail.aliyun.com [115.124.30.132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52B6B7B379
+        for <linux-kernel@vger.kernel.org>; Fri,  8 Jul 2022 00:31:56 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R161e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04400;MF=xianting.tian@linux.alibaba.com;NM=1;PH=DS;RN=5;SR=0;TI=SMTPD_---0VIij5CL_1657265513;
+Received: from localhost(mailfrom:xianting.tian@linux.alibaba.com fp:SMTPD_---0VIij5CL_1657265513)
+          by smtp.aliyun-inc.com;
+          Fri, 08 Jul 2022 15:31:53 +0800
+From:   Xianting Tian <xianting.tian@linux.alibaba.com>
+To:     palmer@dabbelt.com
+Cc:     linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
+        guoren@kernel.org, Xianting Tian <xianting.tian@linux.alibaba.com>
+Subject: [RESEND PATCH V5 0/2] Two fixups for 5.19-rcx
+Date:   Fri,  8 Jul 2022 15:31:48 +0800
+Message-Id: <20220708073150.352830-1-xianting.tian@linux.alibaba.com>
+X-Mailer: git-send-email 2.17.1
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jul 08, 2022 at 03:08:19PM +0800, Kai Ye wrote:
-> Update documentation describing sysfs node that could help to
-> configure isolation strategy for users in the user space. And
-> describing sysfs node that could read the device isolated state.
-> 
-> Signed-off-by: Kai Ye <yekai13@huawei.com>
-> ---
->  Documentation/ABI/testing/sysfs-driver-uacce | 18 ++++++++++++++++++
->  1 file changed, 18 insertions(+)
-> 
-> diff --git a/Documentation/ABI/testing/sysfs-driver-uacce b/Documentation/ABI/testing/sysfs-driver-uacce
-> index 08f2591138af..a8056271a963 100644
-> --- a/Documentation/ABI/testing/sysfs-driver-uacce
-> +++ b/Documentation/ABI/testing/sysfs-driver-uacce
-> @@ -19,6 +19,24 @@ Contact:        linux-accelerators@lists.ozlabs.org
->  Description:    Available instances left of the device
->                  Return -ENODEV if uacce_ops get_available_instances is not provided
->  
-> +What:           /sys/class/uacce/<dev_name>/isolate_strategy
-> +Date:           Jul 2022
-> +KernelVersion:  5.20
-> +Contact:        linux-accelerators@lists.ozlabs.org
-> +Description:    A sysfs node that used to configures the hardware error
-> +                isolation strategy. This strategy is a configured integer value.
-> +                The default is 0. The maximum value is 65535. This value
-> +                indicates the number of device slot resets per unit time
-> +                that your service can tolerate.
-> +
-> +What:           /sys/class/uacce/<dev_name>/isolate
-> +Date:           Jul 2022
-> +KernelVersion:  5.20
-> +Contact:        linux-accelerators@lists.ozlabs.org
-> +Description:    A sysfs node that read the device isolated state. The value 0
-> +                means that the device is working. The value 1 means that the
-> +                device has been isolated.
-> +
+Hi Palmer,
+The 2 patches are some obviously fixups, could you please have a look?
+Recently, I finished the development of Crash-utility for RISCV64,
+I will submit the patches soon.
+We expect we can normally use Kdump & Crash for 5.19-rcx.
+thanks.
 
-You only describe 2 files here, yet your patch had 3 sysfs files.
-Please always document everything.
+Xianting Tian (2):
+  RISC-V: Fixup fast call of crash_kexec()
+  RISC-V: use __smp_processor_id() instead of smp_processor_id()
 
-thanks,
+ arch/riscv/kernel/machine_kexec.c | 2 +-
+ arch/riscv/kernel/traps.c         | 4 ++++
+ 2 files changed, 5 insertions(+), 1 deletion(-)
 
-greg k-h
+-- 
+2.17.1
+

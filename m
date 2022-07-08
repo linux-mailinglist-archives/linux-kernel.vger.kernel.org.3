@@ -2,328 +2,204 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 388FE56B3A4
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 09:36:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4705756B3AB
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 09:38:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237616AbiGHHey (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Jul 2022 03:34:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46158 "EHLO
+        id S237500AbiGHHie (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Jul 2022 03:38:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47998 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237279AbiGHHex (ORCPT
+        with ESMTP id S230395AbiGHHid (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Jul 2022 03:34:53 -0400
-Received: from mail-yw1-x1133.google.com (mail-yw1-x1133.google.com [IPv6:2607:f8b0:4864:20::1133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75C6D7C1A1
-        for <linux-kernel@vger.kernel.org>; Fri,  8 Jul 2022 00:34:51 -0700 (PDT)
-Received: by mail-yw1-x1133.google.com with SMTP id 00721157ae682-2ef5380669cso190839197b3.9
-        for <linux-kernel@vger.kernel.org>; Fri, 08 Jul 2022 00:34:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=cQe9ZGR3pEtZfJ9nwwiuu+mwJ6qeeO7zImIcxmMIjmY=;
-        b=JNFnGezuZAXvQ5Vz5dJpm+28514NIZgaEUg4Gp26QoywPmr6Nlbx0yqzXzouaz7N/o
-         +X3MuvMOanp1mA61vUgvZwjd80NIbcRxXjzQeVWVGoNX119z4Wxm1fK42FPt56zcehTl
-         mIWqCCw15NQ8XhtTkVbvb9vBYSpVGVDo878P0ahK4+VHWUjFmAHjtL03jLCHb2JYra/g
-         8MNyRBtRRV4PUKMR8ismi+dSPDrSlzhFc1y7skc0Rvkbx9Rk7Ws1Olfo+Tg5mRoQPPW1
-         iCaPwG37vXsRkJHtBy/U6a053V492MZq61Pc/tALjVw13kYyXSpJqqnMzCM5FIJUdWla
-         vD/A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=cQe9ZGR3pEtZfJ9nwwiuu+mwJ6qeeO7zImIcxmMIjmY=;
-        b=pGWfq5WVUoH48k/O0Qy3g6AUWxJVy61BEIfN2071pEUiVp1lP5lgFyBFN/8ao81Jfk
-         tcluXnZ2Ee03y7H86u+wKiQ7E7nmtCkigZ2AH6SHQfCVyHEf0ilHpCT41sGhIP1hlkmZ
-         YHAxqoWmfcPy8c4iUyCSrwIINaujdS3yN7Aow88APCJJ2MaQCwPfSN0WkemvmHjwEwKH
-         HJ6tNPlk9jrlMQcvb8kTw2VC6p++wkJMqUr7ujrXpIIQ3ToXLAu44JrMJ9ErF1eAVOR7
-         m3/Zbiqu3RLkB7Vum1jfypbZoRiEVZyRVcEESsk8utbEjzSAtiXBUr1UJjAUa2uPNXFS
-         /fSw==
-X-Gm-Message-State: AJIora+8mFb54SMGsAUna2/dhyWvJcES5QowY3HEaBgQqyza2XJO6jLv
-        kM2PElhVq0ZzRrHFfBTmvCd62vY+RQgaUO3u3eYsNQ==
-X-Google-Smtp-Source: AGRyM1vixSPdmMupMhCZ98wWGozcNESVFUfotmlUbBtb1eAZhtaVgdygDRdl7V6UvjRlGrp/Py2IxrRKkws65nowqaA=
-X-Received: by 2002:a81:7284:0:b0:31d:4c3:a3cc with SMTP id
- n126-20020a817284000000b0031d04c3a3ccmr2451308ywc.319.1657265690710; Fri, 08
- Jul 2022 00:34:50 -0700 (PDT)
+        Fri, 8 Jul 2022 03:38:33 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D94265A8;
+        Fri,  8 Jul 2022 00:38:32 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id ADBAE6252F;
+        Fri,  8 Jul 2022 07:38:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8DB77C341C0;
+        Fri,  8 Jul 2022 07:38:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1657265911;
+        bh=yz8NGHlv7MuTvipWDXMUMS8sxTYLjZQLRhkhm556pc4=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=bKpE/tfgasu7+hV7WJfpxdY/jFoKsi9x9tqfo5oATLkdaADLWBUQePXPRbxZd49G9
+         9rJ3qItJqm/9WAy2QrM0nUZOeEh4IxDxnUUBa2Du71ehSYnQ4GzEPh8LyRfDMYuOst
+         wWSEzDy1hkfhAvEiRDIgwQuwqRy1pjilxehZgeNM=
+Date:   Fri, 8 Jul 2022 09:35:14 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Kai Ye <yekai13@huawei.com>
+Cc:     herbert@gondor.apana.org.au, linux-crypto@vger.kernel.org,
+        linux-kernel@vger.kernel.org, wangzhou1@hisilicon.com
+Subject: Re: [PATCH v5 3/3] crypto: hisilicon/qm - defining the device
+ isolation strategy
+Message-ID: <YsfeMgbP+bxstf+7@kroah.com>
+References: <20220708070820.43958-1-yekai13@huawei.com>
+ <20220708070820.43958-4-yekai13@huawei.com>
 MIME-Version: 1.0
-References: <20220525065050.38905-1-songmuchun@bytedance.com>
- <YqIU3U+l1EDy7OgZ@bombadil.infradead.org> <CAMZfGtXj29Q-VeYRmU5VnW51tSyqCKbXsHCa9bi2z5WifEK_9w@mail.gmail.com>
- <YscUtVytP/fWyrkP@bombadil.infradead.org>
-In-Reply-To: <YscUtVytP/fWyrkP@bombadil.infradead.org>
-From:   Muchun Song <songmuchun@bytedance.com>
-Date:   Fri, 8 Jul 2022 15:34:13 +0800
-Message-ID: <CAMZfGtXZ2Dx_CXAs7GmFZ2HebTMiYGD2KCZ4=WwfKwoa-=+hkQ@mail.gmail.com>
-Subject: Re: [PATCH v3] sysctl: handle table->maxlen robustly for proc_dobool
-To:     Luis Chamberlain <mcgrof@kernel.org>
-Cc:     hejianet@gmail.com, Kees Cook <keescook@chromium.org>,
-        Pan Xinhui <xinhui@linux.vnet.ibm.com>,
-        Thomas Huth <thuth@redhat.com>,
-        Chuck Lever <chuck.lever@oracle.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
-        Matthew Wilcox <willy@infradead.org>,
-        Xiongchun duan <duanxiongchun@bytedance.com>,
-        Iurii Zaikin <yzaikin@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220708070820.43958-4-yekai13@huawei.com>
+X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jul 8, 2022 at 1:15 AM Luis Chamberlain <mcgrof@kernel.org> wrote:
->
-> On Fri, Jun 10, 2022 at 11:38:28AM +0800, Muchun Song wrote:
-> > On Thu, Jun 9, 2022 at 11:42 PM Luis Chamberlain <mcgrof@kernel.org> wrote:
-> > >
-> > > Please Cc the original authors of code if sending some follow up
-> > > possible enhancements.
-> >
-> > Will do. +Jia He
-> >
-> > >
-> > > On Wed, May 25, 2022 at 02:50:50PM +0800, Muchun Song wrote:
-> > > > Setting ->proc_handler to proc_dobool at the same time setting ->maxlen
-> > > > to sizeof(int) is counter-intuitive, it is easy to make mistakes in the
-> > > > future (When I first use proc_dobool() in my driver, I assign
-> > > > sizeof(variable) to table->maxlen.  Then I found it was wrong, it should
-> > > > be sizeof(int) which was very counter-intuitive).
-> > >
-> > > How did you find this out? If I change fs/lockd/svc.c's use I get
-> > > compile warnings on at least x86_64.
-> >
-> > I am writing a code like:
-> >
-> > static bool optimize_vmemmap_enabled;
-> >
-> > static struct ctl_table hugetlb_vmemmap_sysctls[] = {
-> >         {
-> >                 .procname = "hugetlb_optimize_vmemmap",
-> >                 .data = &optimize_vmemmap_enabled,
-> >                 .maxlen = sizeof(optimize_vmemmap_enabled),
-> >                 .mode = 0644,
-> >                 .proc_handler = proc_dobool,
-> >         },
-> >         { }
-> > };
-> >
-> > At least I don't see any warnings from compiler. And I found
-> > the assignment of ".data" should be "sizeof(int)", otherwise,
-> > it does not work properly. It is a little weird to me.
->
-> This is still odd to me but please clarify in your commit logs
-> how you found an issue. You don't need to specify the exact code
-> snippet, but just mentioning how you found it helps during
-> patch review.
+On Fri, Jul 08, 2022 at 03:08:20PM +0800, Kai Ye wrote:
+> Define the device isolation strategy by the device driver. The
+> user configures a frequency value by uacce interface. If the
+> slot reset frequency exceeds the value of setting for a certain
+> period of time, the device will not be available in user space.
+> The time window is one hour. The VF device use the PF device
+> isolation strategy. All the hardware errors are processed by PF
+> driver. This solution can be used for other drivers.
+> 
+> Signed-off-by: Kai Ye <yekai13@huawei.com>
+> ---
+>  drivers/crypto/hisilicon/qm.c | 163 +++++++++++++++++++++++++++++++---
+>  include/linux/hisi_acc_qm.h   |   9 ++
+>  2 files changed, 160 insertions(+), 12 deletions(-)
+> 
+> diff --git a/drivers/crypto/hisilicon/qm.c b/drivers/crypto/hisilicon/qm.c
+> index ad83c194d664..8eb3b790a655 100644
+> --- a/drivers/crypto/hisilicon/qm.c
+> +++ b/drivers/crypto/hisilicon/qm.c
+> @@ -417,6 +417,16 @@ struct hisi_qm_resource {
+>  	struct list_head list;
+>  };
+>  
+> +/**
+> + * struct qm_hw_err - Structure describing the device errors
+> + * @list: hardware error list
+> + * @timestamp: timestamp when the error occurred
+> + */
+> +struct qm_hw_err {
+> +	struct list_head list;
+> +	unsigned long long timestamp;
+> +};
+> +
+>  struct hisi_qm_hw_ops {
+>  	int (*get_vft)(struct hisi_qm *qm, u32 *base, u32 *number);
+>  	void (*qm_db)(struct hisi_qm *qm, u16 qn,
+> @@ -3410,6 +3420,111 @@ static long hisi_qm_uacce_ioctl(struct uacce_queue *q, unsigned int cmd,
+>  	return 0;
+>  }
+>  
+> +/**
+> + * qm_hw_err_isolate() - Try to isolate the uacce device with its VFs
+> + * according to user's configuration of isolation strategy. Warning: this
+> + * API should be called while there the users on this device are suspended
+> + * by slot resetting preparation of PCI AER.
+> + * @qm: the uacce device
+> + */
+> +static int qm_hw_err_isolate(struct hisi_qm *qm)
+> +{
+> +	struct qm_hw_err *err, *tmp, *hw_err;
+> +	struct qm_err_isolate *isolate;
+> +	u32 count = 0;
+> +
+> +	isolate = &qm->isolate_data;
+> +
+> +#define SECONDS_PER_HOUR	3600
+> +
+> +	/* All the hw errs are processed by PF driver */
+> +	if (qm->uacce->is_vf || isolate->is_isolate ||
+> +	    !isolate->hw_err_isolate_hz)
+> +		return 0;
+> +
+> +	hw_err = kzalloc(sizeof(*hw_err), GFP_ATOMIC);
 
-Will do.
+Why atomic?  What lock is held here?
 
->
-> > > > For robustness,
-> > > > rework proc_dobool() robustly.
-> > >
-> > > You mention robustness twice. Just say something like:
-> > >
-> > > To help make things clear, make the logic used by proc_dobool() very
-> > > clear with regards to its requirement with working with bools.
-> >
-> > Clearer! Thanks.
-> >
-> > >
-> > > > So it is an improvement not a real bug
-> > > > fix.
-> > > >
-> > > > Signed-off-by: Muchun Song <songmuchun@bytedance.com>
-> > > > Cc: Luis Chamberlain <mcgrof@kernel.org>
-> > > > Cc: Kees Cook <keescook@chromium.org>
-> > > > Cc: Iurii Zaikin <yzaikin@google.com>
-> > > > ---
-> > > > v3:
-> > > >  - Update commit log.
-> > > >
-> > > > v2:
-> > > >  - Reimplementing proc_dobool().
-> > > >
-> > > >  fs/lockd/svc.c  |  2 +-
-> > > >  kernel/sysctl.c | 38 +++++++++++++++++++-------------------
-> > > >  2 files changed, 20 insertions(+), 20 deletions(-)
-> > > >
-> > > > diff --git a/fs/lockd/svc.c b/fs/lockd/svc.c
-> > > > index 59ef8a1f843f..6e48ee787f49 100644
-> > > > --- a/fs/lockd/svc.c
-> > > > +++ b/fs/lockd/svc.c
-> > > > @@ -496,7 +496,7 @@ static struct ctl_table nlm_sysctls[] = {
-> > > >       {
-> > > >               .procname       = "nsm_use_hostnames",
-> > > >               .data           = &nsm_use_hostnames,
-> > > > -             .maxlen         = sizeof(int),
-> > > > +             .maxlen         = sizeof(nsm_use_hostnames),
-> > > >               .mode           = 0644,
-> > > >               .proc_handler   = proc_dobool,
-> > > >       },
-> > >
-> > > Should this be a separate patch? What about the rest of the kernel?
-> >
-> > I afraid not. Since this change of proc_dobool will break the
-> > "nsm_use_hostnames". It should be changed to
-> > sizeof(nsm_use_hostnames) at the same time.
->
-> OK!
->
-> > > I see it is only used once so the one commit should mention that also.
-> >
-> > Well, will do.
->
-> OK
->
-> > > Or did chaning this as you have it now alter the way the kernel
-> > > treats this sysctl? All these things would be useful to clarify
-> > > in the commit log.
-> >
-> > Make sense. I'll mention those things into commit log.
-> >
-> > >
-> > > > diff --git a/kernel/sysctl.c b/kernel/sysctl.c
-> > > > index e52b6e372c60..50a2c29efc94 100644
-> > > > --- a/kernel/sysctl.c
-> > > > +++ b/kernel/sysctl.c
-> > > > @@ -423,21 +423,6 @@ static void proc_put_char(void **buf, size_t *size, char c)
-> > > >       }
-> > > >  }
-> > > >
-> > > > -static int do_proc_dobool_conv(bool *negp, unsigned long *lvalp,
-> > > > -                             int *valp,
-> > > > -                             int write, void *data)
-> > > > -{
-> > > > -     if (write) {
-> > > > -             *(bool *)valp = *lvalp;
-> > > > -     } else {
-> > > > -             int val = *(bool *)valp;
-> > > > -
-> > > > -             *lvalp = (unsigned long)val;
-> > > > -             *negp = false;
-> > > > -     }
-> > > > -     return 0;
-> > > > -}
-> > > > -
-> > > >  static int do_proc_dointvec_conv(bool *negp, unsigned long *lvalp,
-> > > >                                int *valp,
-> > > >                                int write, void *data)
-> > > > @@ -708,16 +693,31 @@ int do_proc_douintvec(struct ctl_table *table, int write,
-> > > >   * @lenp: the size of the user buffer
-> > > >   * @ppos: file position
-> > > >   *
-> > > > - * Reads/writes up to table->maxlen/sizeof(unsigned int) integer
-> > > > - * values from/to the user buffer, treated as an ASCII string.
-> > > > + * Reads/writes up to table->maxlen/sizeof(bool) bool values from/to
-> > > > + * the user buffer, treated as an ASCII string.
-> > > >   *
-> > > >   * Returns 0 on success.
-> > > >   */
-> > > >  int proc_dobool(struct ctl_table *table, int write, void *buffer,
-> > > >               size_t *lenp, loff_t *ppos)
-> > > >  {
-> > > > -     return do_proc_dointvec(table, write, buffer, lenp, ppos,
-> > > > -                             do_proc_dobool_conv, NULL);
-> > > > +     struct ctl_table tmp = *table;
-> > > > +     bool *data = table->data;
-> > >
-> > > Previously do_proc_douintvec() is called, and that checks if table->data
-> > > is NULL previously before reading it and if so bails on
-> > > __do_proc_dointvec() as follows:
-> > >
-> > >         if (!tbl_data || !table->maxlen || !*lenp || (*ppos && !write)) {
-> > >                 *lenp = 0;
-> > >                 return 0;
-> > >         }
-> > >
-> > > Is it possible to have table->data be NULL? I think that's where the
-> > > above check comes from.
-> >
-> > At least now it cannot be NULL (no users do this now).
->
-> It does not mean new users where it is NULL can't be introduced.
+> +	if (!hw_err)
+> +		return -ENOMEM;
+> +
+> +	mutex_lock(&isolate->isolate_lock);
+> +	hw_err->timestamp = jiffies;
+> +	list_for_each_entry_safe(err, tmp, &isolate->uacce_hw_errs, list) {
+> +		if ((hw_err->timestamp - err->timestamp) / HZ >
+> +		    SECONDS_PER_HOUR) {
 
-Got it.
+No possiblity of wrapping the timestamp?
 
->
-> > > And, so if it was false but not NULL, would it never do anything?
-> >
-> > I think we can add the check of NULL in the future if it could be
-> > happened, just like proc_dou8vec_minmax and proc_do_static_key
-> > do (they do not check ->data as well).
->
-> Preventing bad uses ahead of time is definitely prefered.
+> +			list_del(&err->list);
+> +			kfree(err);
+> +		} else {
+> +			count++;
+> +		}
+> +	}
+> +	list_add(&hw_err->list, &isolate->uacce_hw_errs);
+> +	mutex_unlock(&isolate->isolate_lock);
+> +
+> +	if (count >= isolate->hw_err_isolate_hz)
+> +		isolate->is_isolate = true;
+> +
+> +	return 0;
+> +}
+> +
+> +static void qm_hw_err_destroy(struct hisi_qm *qm)
+> +{
+> +	struct qm_hw_err *err, *tmp;
+> +
+> +	mutex_lock(&qm->isolate_data.isolate_lock);
+> +	list_for_each_entry_safe(err, tmp, &qm->isolate_data.uacce_hw_errs, list) {
+> +		list_del(&err->list);
+> +		kfree(err);
+> +	}
+> +	mutex_unlock(&qm->isolate_data.isolate_lock);
+> +}
+> +
+> +static enum uacce_dev_state hisi_qm_get_isolate_state(struct uacce_device *uacce)
+> +{
+> +	struct hisi_qm *qm = uacce->priv;
+> +	struct hisi_qm *pf_qm;
+> +
+> +	if (uacce->is_vf)
+> +		pf_qm = pci_get_drvdata(pci_physfn(qm->pdev));
+> +	else
+> +		pf_qm = qm;
+> +
+> +	return pf_qm->isolate_data.is_isolate ?
+> +			UACCE_DEV_ISOLATE : UACCE_DEV_NORMAL;
+> +}
+> +
+> +static int hisi_qm_isolate_strategy_write(struct uacce_device *uacce,
+> +					  u32 freq)
+> +{
+> +	struct hisi_qm *qm = uacce->priv;
+> +
+> +	/* Must be set by PF */
+> +	if (uacce->is_vf)
+> +		return -EINVAL;
 
-Agree. Will do.
+But the value passed to you is not invalid, something else went wrong.
+Are you sure this is the correct error?
 
->
-> > > You can use lib/test_sysctl.c for this to proove / disprove correct
-> > > functionality.
-> >
-> > I didn't see the test for proc_bool in lib/test_sysctl.c. I think we can
-> > add a separate patch later to add a test for proc_bool.
->
-> Yes please.
+> +
+> +	if (qm->isolate_data.is_isolate)
+> +		return -EINVAL;
 
-OK.
+Same here, why is this correct?
 
->
-> > >
-> > > > +     unsigned int val = READ_ONCE(*data);
-> > > > +     int ret;
-> > > > +
-> > > > +     /* Do not support arrays yet. */
->
-> BTW I'd go furether. We don't want to add any more array
-> support for anything new. So "we don't support arrays" is better.
->
-> > > > +     if (table->maxlen != sizeof(bool))
-> > > > +             return -EINVAL;
-> > >
-> > > This is a separate change, and while I agree with it, as it simplifies
-> > > our implementation and we don't want to add more array crap support,
-> > > this should *alone* should be a separate commit.
-> >
-> > If you agree reusing do_proc_douintvec to implement proc_dobool(),
-> > I think a separate commit may be not suitable since do_proc_douintvec()
-> > only support non-array. Mentioning this in commit log makes sense to me.
-> >
-> > >
-> > > > +
-> > > > +     tmp.maxlen = sizeof(val);
-> > >
-> > > Why even set this as you do when we know it must be sizeof(bool)?
-> > > Or would this break things given do_proc_douintvec() is used?
-> >
-> > Since we reuse do_proc_douintvec(), which requires a uint type, to
-> > get/set the value from/to the users. I think you can refer to the implementation
-> > of proc_dou8vec_minmax().
-> >
-> > >
-> > > > +     tmp.data = &val;
-> > > > +     ret = do_proc_douintvec(&tmp, write, buffer, lenp, ppos, NULL, NULL);
-> > >
-> > > Ugh, since we are avoiding arrays and we are only dealing with bools
-> > > I'm inclined to just ask we simpify this a bool implementation which
-> > > does something like do_proc_do_bool() but without array and is optimized
-> > > just for bools.
-> >
-> > The current implementation of __do_proc_douintvec() is already only deal
-> > with non-array. Maybe it is better to reuse __do_proc_douintvec()? Otherwise,
-> > we need to implement a similar functionality (do_proc_do_bool) like it but just
-> > process bool type. I suspect the changes will be not small. I am wondering is it
-> > value to do this? If yes, should we also rework proc_dou8vec_minmax() as well?
->
-> I hate code which is obfuscates. Even if it s longer. My preference is
-> to open code a few things here even if it is adding new code.
->
+> +
+> +	qm->isolate_data.hw_err_isolate_hz = freq;
 
-All right. Let's recreate a good start.
+No validation of the value passed to you?  It can be anything?
 
-Thanks.
+> +
+> +	/* After the policy is updated, need to reset the hardware err list */
+> +	qm_hw_err_destroy(qm);
 
->   Luis
+No error checking?
+
+thanks,
+
+greg k-h

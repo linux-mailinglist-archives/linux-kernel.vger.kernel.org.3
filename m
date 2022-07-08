@@ -2,155 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CC64056B35F
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 09:20:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A342256B355
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 09:20:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237235AbiGHHUV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Jul 2022 03:20:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60632 "EHLO
+        id S237491AbiGHHTa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Jul 2022 03:19:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60046 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237505AbiGHHUM (ORCPT
+        with ESMTP id S237286AbiGHHTU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Jul 2022 03:20:12 -0400
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 392107B353
-        for <linux-kernel@vger.kernel.org>; Fri,  8 Jul 2022 00:20:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=Content-Type:MIME-Version:References:
-        Subject:Cc:To:From:Date:Message-ID:Sender:Reply-To:Content-Transfer-Encoding:
-        Content-ID:Content-Description:In-Reply-To;
-        bh=8Qg5PlV6I5tOH468X+xadgMPbp4kBu9FI4E8wShX5Lg=; b=I3s3dj+789fDlQeStJ3jAGPxDI
-        SzoLztxojDq6Q51I6LzBcB7rOt4xSq7AtOARBSwmtKbhUyxOH5CkhGfObLcV/kedd+7szZ/vw3xY9
-        Msp8KKV50g9bNFw2Kiie3d1hAhR8DNXplc+6l5b/cA/Udbai53yn/AABQJYTnr4GtTuo2+5gpPIZ7
-        IG0LekJsIE0kTH4hQDw94HcYiW4c1T+O4/Z7jwUt+Q6wcZO/50zlmzDB1+mmRhRe417tDt8GP08bz
-        o6O6jXq7bmsAnkO8NwyMYnf28wUmWWuMY+6eG4hJ+Cxx6aigzDd7Whk7eNOKIq9zLqAu27+zz6OjC
-        77HFJaPw==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1o9iHI-001dLu-Ii; Fri, 08 Jul 2022 07:19:53 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id B89DC301221;
-        Fri,  8 Jul 2022 09:19:51 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 0)
-        id 5A20E20CA4D1B; Fri,  8 Jul 2022 09:19:51 +0200 (CEST)
-Message-ID: <20220708071834.149930530@infradead.org>
-User-Agent: quilt/0.66
-Date:   Fri, 08 Jul 2022 09:18:06 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Jann Horn <jannh@google.com>,
-        Linus Torvalds <torvalds@linuxfoundation.org>,
-        Will Deacon <will@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        peterz@infradead.org, Dave Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Guo Ren <guoren@kernel.org>, David Miller <davem@davemloft.net>
-Subject: [PATCH 4/4] mmu_gather: Force tlb-flush VM_PFNMAP vmas
-References: <20220708071802.751003711@infradead.org>
+        Fri, 8 Jul 2022 03:19:20 -0400
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC1C3796BE;
+        Fri,  8 Jul 2022 00:19:14 -0700 (PDT)
+X-UUID: bf0b9e4ca3af4539821d9dfcb2efcbd9-20220708
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.8,REQID:0cb08816-709d-4a8d-8b0d-36ae2ecef3e3,OB:0,LO
+        B:10,IP:0,URL:5,TC:0,Content:0,EDM:0,RT:0,SF:95,FILE:0,RULE:Release_Ham,AC
+        TION:release,TS:100
+X-CID-INFO: VERSION:1.1.8,REQID:0cb08816-709d-4a8d-8b0d-36ae2ecef3e3,OB:0,LOB:
+        10,IP:0,URL:5,TC:0,Content:0,EDM:0,RT:0,SF:95,FILE:0,RULE:Spam_GS981B3D,AC
+        TION:quarantine,TS:100
+X-CID-META: VersionHash:0f94e32,CLOUDID:e2b5f3d6-5d6d-4eaf-a635-828a3ee48b7c,C
+        OID:7ed0fa5035a7,Recheck:0,SF:28|17|19|48,TC:nil,Content:0,EDM:-3,IP:nil,U
+        RL:1,File:nil,QS:nil,BEC:nil,COL:0
+X-UUID: bf0b9e4ca3af4539821d9dfcb2efcbd9-20220708
+Received: from mtkmbs10n1.mediatek.inc [(172.21.101.34)] by mailgw02.mediatek.com
+        (envelope-from <chunfeng.yun@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 1085040604; Fri, 08 Jul 2022 15:19:08 +0800
+Received: from mtkcas11.mediatek.inc (172.21.101.40) by
+ mtkmbs11n1.mediatek.inc (172.21.101.185) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
+ Fri, 8 Jul 2022 15:19:07 +0800
+Received: from localhost.localdomain (10.17.3.154) by mtkcas11.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Fri, 8 Jul 2022 15:19:06 +0800
+From:   Chunfeng Yun <chunfeng.yun@mediatek.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+CC:     Chunfeng Yun <chunfeng.yun@mediatek.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        <linux-usb@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, Felipe Balbi <balbi@kernel.org>,
+        Eddie Hung <eddie.hung@mediatek.com>
+Subject: [PATCH 1/5] usb: mtu3: fix coverity of string buffer
+Date:   Fri, 8 Jul 2022 15:18:59 +0800
+Message-ID: <20220708071903.25752-1-chunfeng.yun@mediatek.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-MTK:  N
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Jann reported a race between munmap() and unmap_mapping_range(), where
-unmap_mapping_range() will no-op once unmap_vmas() has unlinked the
-VMA; however munmap() will not yet have invalidated the TLBs.
+Use snprintf instead of sprintf which could cause buffer overflow.
 
-Therefore unmap_mapping_range() will complete while there are still
-(stale) TLB entries for the specified range.
-
-Mitigate this by force flushing TLBs for VM_PFNMAP ranges.
-
-Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+Signed-off-by: Chunfeng Yun <chunfeng.yun@mediatek.com>
 ---
- include/asm-generic/tlb.h |   33 +++++++++++++++++----------------
- 1 file changed, 17 insertions(+), 16 deletions(-)
+ drivers/usb/mtu3/mtu3.h         | 4 +++-
+ drivers/usb/mtu3/mtu3_debugfs.c | 2 +-
+ drivers/usb/mtu3/mtu3_gadget.c  | 4 ++--
+ 3 files changed, 6 insertions(+), 4 deletions(-)
 
---- a/include/asm-generic/tlb.h
-+++ b/include/asm-generic/tlb.h
-@@ -303,6 +303,7 @@ struct mmu_gather {
- 	 */
- 	unsigned int		vma_exec : 1;
- 	unsigned int		vma_huge : 1;
-+	unsigned int		vma_pfn  : 1;
+diff --git a/drivers/usb/mtu3/mtu3.h b/drivers/usb/mtu3/mtu3.h
+index 8408e1b1a24a..9893dd1bafbb 100644
+--- a/drivers/usb/mtu3/mtu3.h
++++ b/drivers/usb/mtu3/mtu3.h
+@@ -92,6 +92,8 @@ struct mtu3_request;
  
- 	unsigned int		batch_count;
+ #define BULK_CLKS_CNT	4
  
-@@ -373,7 +374,6 @@ tlb_update_vma_flags(struct mmu_gather *
- #else /* CONFIG_MMU_GATHER_NO_RANGE */
- 
- #ifndef tlb_flush
--
- /*
-  * When an architecture does not provide its own tlb_flush() implementation
-  * but does have a reasonably efficient flush_vma_range() implementation
-@@ -393,6 +393,9 @@ static inline void tlb_flush(struct mmu_
- 		flush_tlb_range(&vma, tlb->start, tlb->end);
- 	}
- }
-+#endif
++#define MTU3_EP_NAME_LEN	12
 +
-+#endif /* CONFIG_MMU_GATHER_NO_RANGE */
- 
- static inline void
- tlb_update_vma_flags(struct mmu_gather *tlb, struct vm_area_struct *vma)
-@@ -410,17 +413,9 @@ tlb_update_vma_flags(struct mmu_gather *
- 	 */
- 	tlb->vma_huge = is_vm_hugetlb_page(vma);
- 	tlb->vma_exec = !!(vma->vm_flags & VM_EXEC);
-+	tlb->vma_pfn  = !!(vma->vm_flags & VM_PFNMAP);
- }
- 
--#else
--
--static inline void
--tlb_update_vma_flags(struct mmu_gather *tlb, struct vm_area_struct *vma) { }
--
--#endif
--
--#endif /* CONFIG_MMU_GATHER_NO_RANGE */
--
- static inline void tlb_flush_mmu_tlbonly(struct mmu_gather *tlb)
- {
- 	/*
-@@ -507,16 +502,22 @@ static inline void tlb_start_vma(struct
- 
- static inline void tlb_end_vma(struct mmu_gather *tlb, struct vm_area_struct *vma)
- {
--	if (tlb->fullmm || IS_ENABLED(CONFIG_MMU_GATHER_MERGE_VMAS))
-+	if (tlb->fullmm)
+ /* device operated link and speed got from DEVICE_CONF register */
+ enum mtu3_speed {
+ 	MTU3_SPEED_INACTIVE = 0,
+@@ -272,7 +274,7 @@ struct ssusb_mtk {
+  */
+ struct mtu3_ep {
+ 	struct usb_ep ep;
+-	char name[12];
++	char name[MTU3_EP_NAME_LEN];
+ 	struct mtu3 *mtu;
+ 	u8 epnum;
+ 	u8 type;
+diff --git a/drivers/usb/mtu3/mtu3_debugfs.c b/drivers/usb/mtu3/mtu3_debugfs.c
+index d27de647c86a..a6f72494b819 100644
+--- a/drivers/usb/mtu3/mtu3_debugfs.c
++++ b/drivers/usb/mtu3/mtu3_debugfs.c
+@@ -132,7 +132,7 @@ static void mtu3_debugfs_regset(struct mtu3 *mtu, void __iomem *base,
+ 	if (!mregs)
  		return;
  
- 	/*
--	 * Do a TLB flush and reset the range at VMA boundaries; this avoids
--	 * the ranges growing with the unused space between consecutive VMAs,
--	 * but also the mmu_gather::vma_* flags from tlb_start_vma() rely on
--	 * this.
-+	 * VM_PFNMAP is more fragile because the core mm will not track the
-+	 * page mapcount -- there might not be page-frames for these PFNs after
-+	 * all. Force flush TLBs for such ranges to avoid munmap() vs
-+	 * unmap_mapping_range() races.
- 	 */
--	tlb_flush_mmu_tlbonly(tlb);
-+	if (tlb->vma_pfn || !IS_ENABLED(CONFIG_MMU_GATHER_MERGE_VMAS)) {
-+		/*
-+		 * Do a TLB flush and reset the range at VMA boundaries; this avoids
-+		 * the ranges growing with the unused space between consecutive VMAs.
-+		 */
-+		tlb_flush_mmu_tlbonly(tlb);
-+	}
- }
+-	sprintf(mregs->name, "%s", name);
++	snprintf(mregs->name, MTU3_DEBUGFS_NAME_LEN, "%s", name);
+ 	regset = &mregs->regset;
+ 	regset->regs = regs;
+ 	regset->nregs = nregs;
+diff --git a/drivers/usb/mtu3/mtu3_gadget.c b/drivers/usb/mtu3/mtu3_gadget.c
+index 30999b4debb8..a751e0533c2d 100644
+--- a/drivers/usb/mtu3/mtu3_gadget.c
++++ b/drivers/usb/mtu3/mtu3_gadget.c
+@@ -635,8 +635,8 @@ static void init_hw_ep(struct mtu3 *mtu, struct mtu3_ep *mep,
  
- /*
-
+ 	INIT_LIST_HEAD(&mep->req_list);
+ 
+-	sprintf(mep->name, "ep%d%s", epnum,
+-		!epnum ? "" : (is_in ? "in" : "out"));
++	snprintf(mep->name, MTU3_EP_NAME_LEN, "ep%d%s", epnum,
++		 !epnum ? "" : (is_in ? "in" : "out"));
+ 
+ 	mep->ep.name = mep->name;
+ 	INIT_LIST_HEAD(&mep->ep.ep_list);
+-- 
+2.18.0
 

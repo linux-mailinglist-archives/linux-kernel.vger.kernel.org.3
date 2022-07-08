@@ -2,78 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E24AF56B412
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 10:08:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3656656B413
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 10:08:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237260AbiGHIHJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Jul 2022 04:07:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41560 "EHLO
+        id S237549AbiGHIHk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Jul 2022 04:07:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42142 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237068AbiGHIHI (ORCPT
+        with ESMTP id S237707AbiGHIHg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Jul 2022 04:07:08 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id CB97480489
-        for <linux-kernel@vger.kernel.org>; Fri,  8 Jul 2022 01:07:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1657267625;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=HLYylxtBEzg+YALLvd9LbEGO9M2fLeX5WQLfMpASEEo=;
-        b=DOqRngZ61b9VZs13h0DOY9S7gl25CXfCoq2QlMtZJigBlxdWoJZbuUkrm7lxIrQeQyQyFA
-        uDuDCzK32GjGe4I9y1EYw9PLu7LXmujgSp9b4k/9bl9r8eXFNJOBliKFt9tzUBqZhiP9pb
-        WwvoN2EEXReqIWI6AXVxEC7NXxLETIM=
-Received: from mail-ua1-f72.google.com (mail-ua1-f72.google.com
- [209.85.222.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-589-fFRG49PDMeqpOvQq2XBPKQ-1; Fri, 08 Jul 2022 04:07:04 -0400
-X-MC-Unique: fFRG49PDMeqpOvQq2XBPKQ-1
-Received: by mail-ua1-f72.google.com with SMTP id l7-20020ab053c7000000b003791afd560cso6120518uaa.21
-        for <linux-kernel@vger.kernel.org>; Fri, 08 Jul 2022 01:07:04 -0700 (PDT)
+        Fri, 8 Jul 2022 04:07:36 -0400
+Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 161628049A
+        for <linux-kernel@vger.kernel.org>; Fri,  8 Jul 2022 01:07:35 -0700 (PDT)
+Received: by mail-pl1-x62b.google.com with SMTP id q5so110871plr.11
+        for <linux-kernel@vger.kernel.org>; Fri, 08 Jul 2022 01:07:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=yrPt4qD/JmjcNFx3ynJ+Aoh0y9NjRgnFT1MYYJEO1pc=;
+        b=mnyrqzCNMNXcxFBg5hrXHpQH3kGkG/YYp+PL4YagspWeH9/PEgNNP4xYt964mJgvFL
+         St8C+KafMB99DqcLeNo9lris91DOLgaX0IefvtgFOvOvW7zJMWZDWOuHPlQFFmiU1y0y
+         nqDq1qZQYeYkTcwpNz+odJMVYR0Ar8HsUJenw=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=HLYylxtBEzg+YALLvd9LbEGO9M2fLeX5WQLfMpASEEo=;
-        b=yEkXpBGafvzPy3cjXdD3p6SwYo3WQdptRapiIxf95/XxWdTdXxzf6KuRZ6PIQ7NZTj
-         675vbftVTc35mVoSUmqnBZB1YdeQEKNgdYc32TcRjl8XGQt2D+gRNVWG+XDghE9H+74y
-         7u0tQh5ZvSRtohjG68kUmYrT9o0quLhIqXZ/dTy6Uf3oZe8gWjDTFM3m8V89dlru9/CF
-         NS4XlPumhJSvglDG74x4uR6JoS+HmasNuamvOHzYz92Zvx4KxwcGcjWEV/1muzQf4ryR
-         +eKiOamPMdRoW3VlwB6Yps493MW2VCKepHL38heZOr8utaAGsmegQ0yOV5bl5Bz+8lF/
-         YR9A==
-X-Gm-Message-State: AJIora9wOJlg62/xbEXUdNFKrrEN1j57DWcKZIFtPwN0qGnMmduzSSXI
-        dg0Q1T9TG5rC9M0dMV5GjPz1VbSPmLHSMkKZxxmWEaNrsKm1PTFQmEFroAwDs5wEk4uZoF2CAkc
-        vVAUrL6Ug/SegCn+fWB2NbP3tLjSod1OcFULmnM9V
-X-Received: by 2002:a67:c894:0:b0:324:c5da:a9b5 with SMTP id v20-20020a67c894000000b00324c5daa9b5mr806352vsk.33.1657267624149;
-        Fri, 08 Jul 2022 01:07:04 -0700 (PDT)
-X-Google-Smtp-Source: AGRyM1vtSsw27PcDf3CxP61G0rXLMhfXJ7efh8iTUreeYkPunA27DUyKMkZxBK+PdSsgScu9YO7PPUz6YnRJa2vV24Y=
-X-Received: by 2002:a67:c894:0:b0:324:c5da:a9b5 with SMTP id
- v20-20020a67c894000000b00324c5daa9b5mr806338vsk.33.1657267623936; Fri, 08 Jul
- 2022 01:07:03 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=yrPt4qD/JmjcNFx3ynJ+Aoh0y9NjRgnFT1MYYJEO1pc=;
+        b=i4id3qL/PkYsOWGuS8DMC5pq/FCo9Cc9+xh5UgrEe5pqzaDLJ8QddmCvTH54d87WME
+         cUC1r3Ajg7XzHaRJH597OxGBn18nc0FnQzZEEOy6pA6hP+D0q19S9Eojmh2iKEFHYvB8
+         wI57gGor6L4GK7gBPh6NcOtGfRYZ3TAYfFAlIbmC6yoF30dCU9kHbTfKSePNyLPmc78U
+         42jn5ifT+LoaxzOuXbsxNKdITbv1BoyobVbPfyBzbjjh8lJKhnVaTqSPcfZqzYznvs6y
+         dkYdh6pKwK/RTGdv4ceSWN+86sprQAgE+lcKscdaq7jwMp+UY6ZsSDDGjMJnesj6G3Up
+         J1yA==
+X-Gm-Message-State: AJIora+BAWyZSy7Ra3/kgxK4ppJ2m8kcAjAJwb0gcUx6+gbkUjWz5pKI
+        +HO2eDGGmznKmJy/CDBI7RHN1g==
+X-Google-Smtp-Source: AGRyM1uamhzBFa5P+oq1pLu4V7IRdmSNjDjcV0bjdqsDBeS2d4DcCPkRKdaPuq5KRhwCbR/6CkH+rA==
+X-Received: by 2002:a17:90b:4a03:b0:1ed:2071:e8c with SMTP id kk3-20020a17090b4a0300b001ed20710e8cmr10559037pjb.216.1657267654589;
+        Fri, 08 Jul 2022 01:07:34 -0700 (PDT)
+Received: from judyhsiao0523.c.googlers.com.com (0.223.81.34.bc.googleusercontent.com. [34.81.223.0])
+        by smtp.gmail.com with ESMTPSA id a11-20020a170902b58b00b0015e8d4eb26esm29137786pls.184.2022.07.08.01.07.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 08 Jul 2022 01:07:33 -0700 (PDT)
+From:   Judy Hsiao <judyhsiao@chromium.org>
+To:     Heiko Stuebner <heiko@sntech.de>
+Cc:     Liam Girdwood <lgirdwood@gmail.com>, Lin Huang <hl@rock-chips.com>,
+        Elaine Zhang <zhangqing@rock-chips.com>,
+        Shunqian Zheng <zhengsq@rock-chips.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Brian Norris <briannorris@chromium.org>,
+        Mark Brown <broonie@kernel.org>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Chen-Yu Tsai <wenst@chromium.org>, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Judy Hsiao <judyhsiao@chromium.org>
+Subject: [PATCH v1] arm64: dts: rk3399: i2s: switch BCLK to GPIO
+Date:   Fri,  8 Jul 2022 08:07:26 +0000
+Message-Id: <20220708080726.4170711-1-judyhsiao@chromium.org>
+X-Mailer: git-send-email 2.37.0.rc0.161.g10f37bed90-goog
 MIME-Version: 1.0
-References: <20220531081412.22db88cc@kernel.org> <1654011382-2453-1-git-send-email-chen45464546@163.com>
- <20220531084704.480133fa@kernel.org> <CAKgT0UfQsbAzsJ1e__irHY2xBRevpB9m=FBYDis3C1fMua+Zag@mail.gmail.com>
- <3498989.c69f.1811f41186e.Coremail.chen45464546@163.com>
-In-Reply-To: <3498989.c69f.1811f41186e.Coremail.chen45464546@163.com>
-From:   Maurizio Lombardi <mlombard@redhat.com>
-Date:   Fri, 8 Jul 2022 10:06:53 +0200
-Message-ID: <CAFL455=ZcU_fyM9kiuZUJeVmRv9Jx_FmURcweCrTXheRoKkSqg@mail.gmail.com>
-Subject: Re: Re: [PATCH v2] mm: page_frag: Warn_on when frag_alloc size is
- bigger than PAGE_SIZE
-To:     =?UTF-8?B?5oSa5qCR?= <chen45464546@163.com>
-Cc:     Alexander Duyck <alexander.duyck@gmail.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        linux-mm <linux-mm@kvack.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Netdev <netdev@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -81,34 +74,97 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-st 1. 6. 2022 v 14:49 odes=C3=ADlatel =E6=84=9A=E6=A0=91 <chen45464546@163.=
-com> napsal:
-> Can we just add code to the relatively slow path to capture the mistake
-> before it lead to memory corruption?
-> Like:
-> diff --git a/mm/page_alloc.c b/mm/page_alloc.c
-> index e6f211d..ac60a97 100644
-> --- a/mm/page_alloc.c
-> +++ b/mm/page_alloc.c
-> @@ -5580,6 +5580,7 @@ void *page_frag_alloc_align(struct page_frag_cache =
-*nc,
->                 /* reset page count bias and offset to start of new frag =
-*/
->                 nc->pagecnt_bias =3D PAGE_FRAG_CACHE_MAX_SIZE + 1;
->                 offset =3D size - fragsz;
-> +               BUG_ON(offset < 0);
->         }
->
+We discoverd that the state of BCLK on, LRCLK off and SD_MODE on
+may cause the speaker melting issue. Removing LRCLK while BCLK
+is present can cause unexpected output behavior including a large
+DC output voltage as described in the Max98357a datasheet.
 
-Personally, I'm not really convinced this is the best solution.
-The next time a driver abuses  the page_frag_alloc() interface, the
-bug may go unnoticed for a long time...
-until a server in production runs into OOM and crashes because it hits
-the BUG_ON().
+In order to:
+  1. prevent BCLK from turning on by other component.
+  2. keep BCLK and LRCLK being present at the same time
 
-And why should the kernel panic? It's perfectly able to handle this
-condition by failing
-the allocation and returning NULL, and printing a warning maybe.
+This patch adjusts the device tree to allow BCLK to switch
+to GPIO func before LRCLK output, and switch back during
+LRCLK is output.
 
-Maurizio
+Signed-off-by: Judy Hsiao <judyhsiao@chromium.org>
+---
+ .../boot/dts/rockchip/rk3399-gru-scarlet.dtsi | 10 ++++++++
+ arch/arm64/boot/dts/rockchip/rk3399.dtsi      | 25 ++++++++++++++++++-
+ 2 files changed, 34 insertions(+), 1 deletion(-)
+
+diff --git a/arch/arm64/boot/dts/rockchip/rk3399-gru-scarlet.dtsi b/arch/arm64/boot/dts/rockchip/rk3399-gru-scarlet.dtsi
+index 913d845eb51a..df1647e9d487 100644
+--- a/arch/arm64/boot/dts/rockchip/rk3399-gru-scarlet.dtsi
++++ b/arch/arm64/boot/dts/rockchip/rk3399-gru-scarlet.dtsi
+@@ -766,6 +766,16 @@ &i2s0_8ch_bus {
+ 		<4 RK_PA0 1 &pcfg_pull_none_6ma>;
+ };
+ 
++&i2s0_8ch_bus_bclk_off {
++	rockchip,pins =
++		<3 RK_PD0 RK_FUNC_GPIO &pcfg_pull_none_6ma>,
++		<3 RK_PD1 1 &pcfg_pull_none_6ma>,
++		<3 RK_PD2 1 &pcfg_pull_none_6ma>,
++		<3 RK_PD3 1 &pcfg_pull_none_6ma>,
++		<3 RK_PD7 1 &pcfg_pull_none_6ma>,
++		<4 RK_PA0 1 &pcfg_pull_none_6ma>;
++};
++
+ /* there is no external pull up, so need to set this pin pull up */
+ &sdmmc_cd_pin {
+ 	rockchip,pins = <1 RK_PB3 RK_FUNC_GPIO &pcfg_pull_up>;
+diff --git a/arch/arm64/boot/dts/rockchip/rk3399.dtsi b/arch/arm64/boot/dts/rockchip/rk3399.dtsi
+index fbd0346624e6..311c8394cc84 100644
+--- a/arch/arm64/boot/dts/rockchip/rk3399.dtsi
++++ b/arch/arm64/boot/dts/rockchip/rk3399.dtsi
+@@ -1662,8 +1662,9 @@ i2s0: i2s@ff880000 {
+ 		dma-names = "tx", "rx";
+ 		clock-names = "i2s_clk", "i2s_hclk";
+ 		clocks = <&cru SCLK_I2S0_8CH>, <&cru HCLK_I2S0_8CH>;
+-		pinctrl-names = "default";
++		pinctrl-names = "bclk_on", "bclk_off";
+ 		pinctrl-0 = <&i2s0_8ch_bus>;
++		pinctrl-1 = <&i2s0_8ch_bus_bclk_off>;
+ 		power-domains = <&power RK3399_PD_SDIOAUDIO>;
+ 		#sound-dai-cells = <0>;
+ 		status = "disabled";
+@@ -2407,6 +2408,19 @@ i2s0_8ch_bus: i2s0-8ch-bus {
+ 					<3 RK_PD7 1 &pcfg_pull_none>,
+ 					<4 RK_PA0 1 &pcfg_pull_none>;
+ 			};
++
++			i2s0_8ch_bus_bclk_off: i2s0-8ch-bus-bclk-off {
++				rockchip,pins =
++					<3 RK_PD0 RK_FUNC_GPIO &pcfg_pull_none>,
++					<3 RK_PD1 1 &pcfg_pull_none>,
++					<3 RK_PD2 1 &pcfg_pull_none>,
++					<3 RK_PD3 1 &pcfg_pull_none>,
++					<3 RK_PD4 1 &pcfg_pull_none>,
++					<3 RK_PD5 1 &pcfg_pull_none>,
++					<3 RK_PD6 1 &pcfg_pull_none>,
++					<3 RK_PD7 1 &pcfg_pull_none>,
++					<4 RK_PA0 1 &pcfg_pull_none>;
++			};
+ 		};
+ 
+ 		i2s1 {
+@@ -2418,6 +2432,15 @@ i2s1_2ch_bus: i2s1-2ch-bus {
+ 					<4 RK_PA6 1 &pcfg_pull_none>,
+ 					<4 RK_PA7 1 &pcfg_pull_none>;
+ 			};
++
++			i2s1_2ch_bus_bclk_off: i2s1-2ch-bus-bclk-off {
++				rockchip,pins =
++					<4 RK_PA3 RK_FUNC_GPIO &pcfg_pull_none>,
++					<4 RK_PA4 1 &pcfg_pull_none>,
++					<4 RK_PA5 1 &pcfg_pull_none>,
++					<4 RK_PA6 1 &pcfg_pull_none>,
++					<4 RK_PA7 1 &pcfg_pull_none>;
++			};
+ 		};
+ 
+ 		sdio0 {
+-- 
+2.37.0.rc0.161.g10f37bed90-goog
 

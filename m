@@ -2,76 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 98C1856BC39
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 17:09:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D09D456BC2D
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 17:09:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238196AbiGHOjL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Jul 2022 10:39:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58200 "EHLO
+        id S238220AbiGHOj0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Jul 2022 10:39:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58320 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237847AbiGHOjI (ORCPT
+        with ESMTP id S237847AbiGHOjY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Jul 2022 10:39:08 -0400
-Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
-        by lindbergh.monkeyblade.net (Postfix) with SMTP id 2D89E1B7AC
-        for <linux-kernel@vger.kernel.org>; Fri,  8 Jul 2022 07:39:07 -0700 (PDT)
-Received: (qmail 7518 invoked by uid 1000); 8 Jul 2022 10:39:06 -0400
-Date:   Fri, 8 Jul 2022 10:39:06 -0400
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     Jozef Martiniak <jomajm@gmail.com>
-Cc:     Felipe Balbi <balbi@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jens Axboe <axboe@kernel.dk>, Hangyu Hua <hbh25y@gmail.com>,
-        "Darrick J. Wong" <djwong@kernel.org>,
-        Wei Ming Chen <jj251510319013@gmail.com>,
-        Ingo Molnar <mingo@kernel.org>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] gadgetfs: ep_io - wait until IRQ finishes
-Message-ID: <YshBijUt6HgPeB0U@rowland.harvard.edu>
-References: <20220708070645.6130-1-jomajm@gmail.com>
+        Fri, 8 Jul 2022 10:39:24 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FDC41C90D;
+        Fri,  8 Jul 2022 07:39:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1657291163; x=1688827163;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=VbdXyRUiSQBioCAGfM5AjkhlSoNyma51Up4CyM2gg9A=;
+  b=eyAcQdHQUqDJ2awOzHBfOevSMV/OdkkPo2cpa/SbS60pQy3EtjP7zNEm
+   DTZmFru2YtLGfqGQYxGrtNfyBC0MB2oSoM4rA3ijLgblQhFhqlx8vAHB0
+   rrFPbklCn2Owabeh0vIxDK5p0xxV40yD7c+RnaXXT4Np87WpISQn4+kw4
+   OjvKshfBNaEk7IJljlEXy3zzSBS1rbjjt9Hq7GacgBpBHNsQ3xOgxXMsz
+   W2xH6GxoNIiDu9j/WGQdEg6J4vapo/whLqYmYxZxOQARnaE4xxDB3ghdG
+   71oOiYo1+eczuXNmK3Epu+gSNbpwHFzK39iFM+k1dTsxrwOV/1fG9p7NO
+   g==;
+X-IronPort-AV: E=Sophos;i="5.92,255,1650956400"; 
+   d="scan'208";a="171611031"
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa3.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 08 Jul 2022 07:39:22 -0700
+Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
+ chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.17; Fri, 8 Jul 2022 07:39:22 -0700
+Received: from wendy.microchip.com (10.10.115.15) by chn-vm-ex03.mchp-main.com
+ (10.10.85.151) with Microsoft SMTP Server id 15.1.2375.17 via Frontend
+ Transport; Fri, 8 Jul 2022 07:39:20 -0700
+From:   Conor Dooley <conor.dooley@microchip.com>
+To:     Thierry Reding <thierry.reding@gmail.com>,
+        =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>,
+        "Lee Jones" <lee.jones@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>
+CC:     Daire McNamara <daire.mcnamara@microchip.com>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-pwm@vger.kernel.org>, <linux-riscv@lists.infradead.org>,
+        Conor Dooley <conor.dooley@microchip.com>
+Subject: [PATCH v5 0/4] Microchip soft ip corePWM driver
+Date:   Fri, 8 Jul 2022 15:39:19 +0100
+Message-ID: <20220708143923.1129928-1-conor.dooley@microchip.com>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220708070645.6130-1-jomajm@gmail.com>
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jul 08, 2022 at 09:06:44AM +0200, Jozef Martiniak wrote:
-> after usb_ep_queue() if wait_for_completion_interruptible() is
-> interrupted we need to wait until IRQ gets finished.
+Hey Uwe, all,
 
-This should say "request" or "I/O request", not "IRQ".  Not a big deal.
+Added some extra patches so I have a cover letter this time.
+You pointed out that I was overriding npwmcells in the driver and I 
+realised that the dt & binding were not correct so I have added two
+simple patches to deal with that. The dts patch I will take in my tree
+once the binding is applied.
 
-> 
-> Otherwise complete() from epio_complete() can corrupt stack.
-> 
-> Signed-off-by: Jozef Martiniak <jomajm@gmail.com>
-> ---
+For the maintainers entry, I mentioned before that I have several
+changes in-flight for it. We are late(ish) in the cycle so I doubt
+you'll be applying this for v5.20, but in the off chance you do - I
+would be happy to send it (with your Ack) alongside an i2c addition
+that is "deferred".
 
-Acked-by: Alan Stern <stern@rowland.harvard.edu>
+In your review of v3, you had a lot of comments about the period and
+duty cycle calculations, so I have had another run at them. I converted
+the period calculation to "search" from the bottom up for the suitable
+prescale value. The duty cycle calculation has been fixed - the problem
+was exactly what I suspected in my replies to your review. I had to block
+the use of a 0xFF period_steps register value (which I think should be
+covered by the updated comment and limitation #2).
 
->  drivers/usb/gadget/legacy/inode.c | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/drivers/usb/gadget/legacy/inode.c b/drivers/usb/gadget/legacy/inode.c
-> index 79990597c39f..01c3ead7d1b4 100644
-> --- a/drivers/usb/gadget/legacy/inode.c
-> +++ b/drivers/usb/gadget/legacy/inode.c
-> @@ -362,6 +362,7 @@ ep_io (struct ep_data *epdata, void *buf, unsigned len)
->  				spin_unlock_irq (&epdata->dev->lock);
->  
->  				DBG (epdata->dev, "endpoint gone\n");
-> +				wait_for_completion(&done);
->  				epdata->status = -ENODEV;
->  			}
->  		}
-> -- 
-> 2.25.1
-> 
+Beyond that, I have rebased on -next and converted to the devm_ stuff
+in probe that was recently added & dropped remove() - as requested.
+I added locking to protect the period racing, changed the #defines and
+switched to returning -EINVAL when the period is locked to a value
+greater than that requested.
+
+Thanks,
+Conor.
+
+Changes from v4:
+- dropped some accidentally added files
+
+Conor Dooley (4):
+  dt-bindings: pwm: fix microchip corePWM's pwm-cells
+  riscv: dts: fix the icicle's #pwm-cells
+  pwm: add microchip soft ip corePWM driver
+  MAINTAINERS: add pwm to PolarFire SoC entry
+
+ .../bindings/pwm/microchip,corepwm.yaml       |   4 +-
+ MAINTAINERS                                   |   1 +
+ .../dts/microchip/mpfs-icicle-kit-fabric.dtsi |   2 +-
+ drivers/pwm/Kconfig                           |  10 +
+ drivers/pwm/Makefile                          |   1 +
+ drivers/pwm/pwm-microchip-core.c              | 355 ++++++++++++++++++
+ 6 files changed, 371 insertions(+), 2 deletions(-)
+ create mode 100644 drivers/pwm/pwm-microchip-core.c
+
+
+base-commit: 088b9c375534d905a4d337c78db3b3bfbb52c4a0
+-- 
+2.36.1
+

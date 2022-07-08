@@ -2,93 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2634756B402
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 10:03:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6AB7B56B3F8
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 10:03:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237514AbiGHIBe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Jul 2022 04:01:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35964 "EHLO
+        id S237554AbiGHIBj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Jul 2022 04:01:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36006 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237490AbiGHIB0 (ORCPT
+        with ESMTP id S237491AbiGHIBb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Jul 2022 04:01:26 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D7EF7E030
-        for <linux-kernel@vger.kernel.org>; Fri,  8 Jul 2022 01:01:25 -0700 (PDT)
-Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        Fri, 8 Jul 2022 04:01:31 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A0717E01F;
+        Fri,  8 Jul 2022 01:01:30 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 3A78266019D0;
-        Fri,  8 Jul 2022 09:01:23 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1657267283;
-        bh=LzbKmXmv7B7il/FKmq7QEq+6QN2jxgs/LXih2F4BwGU=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=CjlJ+P8svhBRvMCG/0a0sKlb5G4gVagcN/c7sYzlGDV0AlznmiMr22htGcxjwHECC
-         qQKaGh5T9bsmqD1OCaP/ly9krlA961L8r7Vu6g3wK7WhMBZd/l2h6zWEITQvyY1HSP
-         rkgWbC1mffjvVsLGu75tZ+i1cjUMlDE5YjgTp7j9RcIZ5bO3TvMZQobsjxRX4updi8
-         t4+wGN2LqTvio2dWsk6hpC8E6lK3TyL9VrS3I6Wn+Z6pTXts220TGrWcDEWbZqlA/g
-         RVXOV22Ogoe45YCF+hIepEM7jvRx/nF7jW5KBqGZZXZcSh8K8S7F8Sk+2ud4ypjBc1
-         /JN5dK6+CBpFQ==
-Message-ID: <ee0d9788-b742-21bb-9cc5-7b729897408b@collabora.com>
-Date:   Fri, 8 Jul 2022 10:01:20 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH] ASoC: mediatek: mt8186: Remove condition with no effect
-Content-Language: en-US
-To:     Zhongjun Tan <hbut_tan@163.com>, lgirdwood@gmail.com,
-        broonie@kernel.org, perex@perex.c, tiwai@suse.com,
-        matthias.bgg@gmail.com, jiaxin.yu@mediatek.com,
-        tanzhongjun@coolpad.com, colin.king@intel.com
-Cc:     alsa-devel@alsa-project.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <20220708024651.42999-1-hbut_tan@163.com>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20220708024651.42999-1-hbut_tan@163.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        by ams.source.kernel.org (Postfix) with ESMTPS id A80C7B824C3;
+        Fri,  8 Jul 2022 08:01:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5F63DC341C8;
+        Fri,  8 Jul 2022 08:01:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1657267287;
+        bh=A/e4amBcKWeEZysL+s9cf7FK4eenhjcZ/1xT4QWPuqI=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=T4zwtyGcDb0Ny/O6g2O72Ub/1M4Rr7wdb6dY8isykavoXUliaMnhW03+lDuxCFDA7
+         8NAlBOAfFoPjev5Sk/nM4EWh/dLSOkvNrBPjYA2blrJbiGky2yJdIbECI0Alz4ZL9o
+         lxYQBS70343LhpueOZdptjUbQ9vecBfCLddat5dN3TLmhh2ZtGuiRenygQ7IFaqYEZ
+         /TCoMTEsP6KzhH70bp6An2DWGL37oefWXwW36Y8gXMyvLuo54tjX3Mmplnu9LdMkbf
+         cRvG6h1MlkJunsXS4yW+9o5XOHwSl4wetbb71/7A+OBeMw8BGP7S566TuEsNM0Yqe9
+         CTVpoINKGU7zw==
+Received: from [213.208.244.172] (helo=wait-a-minute.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <maz@kernel.org>)
+        id 1o9ivV-0065vk-1t;
+        Fri, 08 Jul 2022 09:01:25 +0100
+Date:   Fri, 08 Jul 2022 09:01:23 +0100
+Message-ID: <87tu7skp7w.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Frank Li <Frank.Li@nxp.com>
+Cc:     tglx@linutronix.de, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, shawnguo@kernel.org,
+        s.hauer@pengutronix.de, kw@linux.com, bhelgaas@google.com,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-pci@vger.kernel.org,
+        peng.fan@nxp.com, aisheng.dong@nxp.com, jdmason@kudzu.us,
+        kernel@pengutronix.de, festevam@gmail.com, linux-imx@nxp.com,
+        kishon@ti.com, lorenzo.pieralisi@arm.com, ntb@lists.linux.dev
+Subject: Re: [PATCH 1/3] irqchip: imx mu worked as msi controller
+In-Reply-To: <20220707210238.917477-1-Frank.Li@nxp.com>
+References: <20220707210238.917477-1-Frank.Li@nxp.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 213.208.244.172
+X-SA-Exim-Rcpt-To: Frank.Li@nxp.com, tglx@linutronix.de, robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org, shawnguo@kernel.org, s.hauer@pengutronix.de, kw@linux.com, bhelgaas@google.com, linux-kernel@vger.kernel.org, devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org, linux-pci@vger.kernel.org, peng.fan@nxp.com, aisheng.dong@nxp.com, jdmason@kudzu.us, kernel@pengutronix.de, festevam@gmail.com, linux-imx@nxp.com, kishon@ti.com, lorenzo.pieralisi@arm.com, ntb@lists.linux.dev
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 08/07/22 04:46, Zhongjun Tan ha scritto:
-> From: Zhongjun Tan <tanzhongjun@coolpad.com>
+On Thu, 07 Jul 2022 22:02:36 +0100,
+Frank Li <Frank.Li@nxp.com> wrote:
 > 
-> Remove condition with no effect
+> MU support generate irq by write data to a register.
+> This patch make mu worked as msi controller.
+> So MU can do doorbell by using standard msi api.
 > 
-> Signed-off-by: Zhongjun Tan <tanzhongjun@coolpad.com>
-> ---
->   sound/soc/mediatek/mt8186/mt8186-dai-adda.c | 2 --
->   1 file changed, 2 deletions(-)
-> 
-> diff --git a/sound/soc/mediatek/mt8186/mt8186-dai-adda.c b/sound/soc/mediatek/mt8186/mt8186-dai-adda.c
-> index db71b032770d..6be6d4f3b585 100644
-> --- a/sound/soc/mediatek/mt8186/mt8186-dai-adda.c
-> +++ b/sound/soc/mediatek/mt8186/mt8186-dai-adda.c
-> @@ -295,8 +295,6 @@ static int mtk_adda_pad_top_event(struct snd_soc_dapm_widget *w,
->   	case SND_SOC_DAPM_PRE_PMU:
->   		if (afe_priv->mtkaif_protocol == MTKAIF_PROTOCOL_2_CLK_P2)
->   			regmap_write(afe->regmap, AFE_AUD_PAD_TOP, 0x39);
-> -		else if (afe_priv->mtkaif_protocol == MTKAIF_PROTOCOL_2)
-> -			regmap_write(afe->regmap, AFE_AUD_PAD_TOP, 0x31);
+> Signed-off-by: Frank Li <Frank.Li@nxp.com>
 
-I think that this needs some clarification from MediaTek: was 0x31 a typo here?
+Where is the cover letter for this? How am I supposed to guess what
+this series is about? The rule is simple: you send a series with two
+patches or more, you include a cover letter describing your changes,
+what they provide, and how they interact with each other. Here, all I
+see is a bunch of seemingly unrelated changes.
 
-Regards,
-Angelo
+I could spend the next 2 hours trying to reverse engineer it, but it
+is probably a lot quicker for you to write an actual cover letter and
+send it for everyone's benefit.
 
->   		else
->   			regmap_write(afe->regmap, AFE_AUD_PAD_TOP, 0x31);
->   		break;
+Thanks,
 
+	M.
 
+-- 
+Without deviation from the norm, progress is not possible.

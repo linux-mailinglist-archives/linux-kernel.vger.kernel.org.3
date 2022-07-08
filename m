@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F31E56AF44
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 02:12:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 23F0856AF50
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 02:12:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237005AbiGHADv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Jul 2022 20:03:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55936 "EHLO
+        id S237019AbiGHAD6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Jul 2022 20:03:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55938 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236937AbiGHADs (ORCPT
+        with ESMTP id S236448AbiGHADs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 7 Jul 2022 20:03:48 -0400
-Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C552255AB;
+Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFF6832ECC;
         Thu,  7 Jul 2022 17:03:45 -0700 (PDT)
-Received: by mail-ed1-x533.google.com with SMTP id y8so19299658eda.3;
+Received: by mail-ej1-x62f.google.com with SMTP id o25so35093360ejm.3;
         Thu, 07 Jul 2022 17:03:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=JSxzmKxjlNqM9TSDpV5dH/r3annlSczSnTdVT/KLPhw=;
-        b=Y4xpKzWJ150rdoYLQkrNCVmTdbKT+opqIncuCi6XAAQWCf/O9CqPuHaiV/GH9sYmpX
-         7/o1ysUs3g1mFlmliPj7H6uZiCuEkqcSCYIj685Bn00iffibCxTS6NPTmlWpLrVU7XfA
-         Qfxh+KK7MOitA+9cP++ujDWPtft20wECs0lUTdT1AXhqhN5I3Ly6eMYXcRSxkjfWR77w
-         hnWscmSh0JFutTEAzJePwoOlh0Jz6sbhp3SpDQ6pjum652/JaIecgFMgetCNSsqmfgwx
-         yUM2visa+WAPJZqYwO/lDn0pne2DPKc+OuX5KxWyFJ+8JjNvE1sVS6xVu3m0J1RKmKsh
-         nWcw==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=TYMK3ln+pSNgbS7KOrXcaQql59e3lfO5o9Vh/Disa6M=;
+        b=ZKbpRToMi6jyV3hwOSo1uUsp5A2qXN9wFJRa96gvk196hYnz5W3lWtILMPKgf8xOGU
+         bU1bhSXK8XyDOv8nUKBXkkWGah30Ri55I/NA579nXfDv+atLw72BWOSDnRDx/KpRnSDP
+         8/xGLCYDLOFfb82kEw8H66uEm7EJcHL8DQG2m+WA/aTIHBgjbvU2JJBBGaoNRd0aUJE/
+         DKDYrFNkXxKnGv+RfPtS1PIYW3y1vrVVPBoFh8o79KEyTeJ8HyG+QckLe7R8BsbBkIi4
+         spZmqNJ+9KkVf1lcfcbZov4st15H3888ekogdp/JXMlUCjVCZM49Q+y/R1NteVPigpLh
+         2zIQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=JSxzmKxjlNqM9TSDpV5dH/r3annlSczSnTdVT/KLPhw=;
-        b=rwSgGMn4fq5tHJ+ZjppFQzHP7zvQZaRpa7fajhb6k82W+BF9xrJINwH4kno18PgweS
-         +0tbhgJtt2VbFJBUPdyviU1A4qe0RW+D4jB7GsD3pciUszYMPpilufWbeoqAwqN0F0RC
-         UEnPD5sh8wkrBZ2FxNRB7koIxl3j/GrY96/zSPJNsd/1GygldkBUpxsit62QlW5X/1Hc
-         57GMK/rcneOBa2L4HSZvcvKxbDeFxodL5BucE9hldvMimMErJR2OhGAuDh/B5WrFFKWZ
-         0DlRF8MFnvlAWFRzkefkSWrDQg6RebQrVsoV+mmvlCe+Lq/CVhLHkVmKclHnWWKixqW6
-         bDwQ==
-X-Gm-Message-State: AJIora/lRWASEuqEoJPMa+3lJMX6vWBGqM2X8DGkcvzg0umniGobG2n3
-        iiYez0AxZc06EB3KlTP4RAUQCMZ312A=
-X-Google-Smtp-Source: AGRyM1tyhJphCEF8w4d79Ik+3ixfdLIFmyh8AIaaYU7qjHqT1+YKFbaBEt5XfA8VMEUZZ7Z6FvnZCQ==
-X-Received: by 2002:a05:6402:2985:b0:439:651b:c1f4 with SMTP id eq5-20020a056402298500b00439651bc1f4mr954113edb.276.1657238623466;
-        Thu, 07 Jul 2022 17:03:43 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=TYMK3ln+pSNgbS7KOrXcaQql59e3lfO5o9Vh/Disa6M=;
+        b=nxOmtlXAA4zMFK12h1VOuUcy+tPGcfp9JmXU1MuZQPAthOVANGIItSVRgjKU0ZBndy
+         2ZJmGaqzaUVC4U31Ai1+D84w0ndFBrwOCa90TnOG0eMr7b5W79IxW6U/J34Fc13HtkZi
+         rvOgxMOHLIU6xG29Mxn68M+Jv8SvylWGi9WFottH6Co2QrUbvjPzOSEFgz5b/MusCuD2
+         DpJ475XbP9LOI48ZOxHK2P7xYWFn5MKikI2kSmRnWtgaT+hmb1YiMDRO+vFHKBqpO5Em
+         6dh01HC+lf3YDtfKvLVTSW0TPpBZe5TEZF6PE4I4NTz88llDF5MRuSGMA+UBqFpX6/yS
+         SpuA==
+X-Gm-Message-State: AJIora/g6hlE8BR5QRckZtScL+TSv4dlpIZabsLgp02yleOap+0AaDc+
+        7SesJlMcsW/W2iD3KKDLxzfpK6rOhwA=
+X-Google-Smtp-Source: AGRyM1t4pyloHNZGA9pASfm2WanV0iZW7zYakCRtwY8j58Z8FEO85octSai0Bvt1jLmD8WQaVJ69ZQ==
+X-Received: by 2002:a17:907:1b25:b0:6da:8206:fc56 with SMTP id mp37-20020a1709071b2500b006da8206fc56mr697039ejc.81.1657238624470;
+        Thu, 07 Jul 2022 17:03:44 -0700 (PDT)
 Received: from localhost.localdomain (93-42-70-190.ip85.fastwebnet.it. [93.42.70.190])
-        by smtp.googlemail.com with ESMTPSA id f22-20020a056402069600b0043a7404314csm8093974edy.8.2022.07.07.17.03.42
+        by smtp.googlemail.com with ESMTPSA id f22-20020a056402069600b0043a7404314csm8093974edy.8.2022.07.07.17.03.43
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 07 Jul 2022 17:03:43 -0700 (PDT)
+        Thu, 07 Jul 2022 17:03:44 -0700 (PDT)
 From:   Christian Marangi <ansuelsmth@gmail.com>
 To:     Andy Gross <agross@kernel.org>,
         Bjorn Andersson <bjorn.andersson@linaro.org>,
@@ -58,12 +58,13 @@ To:     Andy Gross <agross@kernel.org>,
         linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
         linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
 Cc:     Christian Marangi <ansuelsmth@gmail.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Rob Herring <robh@kernel.org>
-Subject: [PATCH v5 1/3] dt-bindings: clock: add pcm reset for ipq806x lcc
-Date:   Fri,  8 Jul 2022 02:03:36 +0200
-Message-Id: <20220708000338.26572-1-ansuelsmth@gmail.com>
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Subject: [PATCH v5 2/3] clk: qcom: lcc-ipq806x: add reset definition
+Date:   Fri,  8 Jul 2022 02:03:37 +0200
+Message-Id: <20220708000338.26572-2-ansuelsmth@gmail.com>
 X-Mailer: git-send-email 2.36.1
+In-Reply-To: <20220708000338.26572-1-ansuelsmth@gmail.com>
+References: <20220708000338.26572-1-ansuelsmth@gmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -76,32 +77,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add pcm reset define for ipq806x lcc.
+Add reset definition for lcc-ipq806x.
 
 Signed-off-by: Christian Marangi <ansuelsmth@gmail.com>
 Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Acked-by: Rob Herring <robh@kernel.org>
 ---
 v3:
  - Added review tag
- - Added ack tag
 v2:
  - Fix Sob tag
 
- include/dt-bindings/clock/qcom,lcc-ipq806x.h | 2 ++
- 1 file changed, 2 insertions(+)
+ drivers/clk/qcom/lcc-ipq806x.c | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-diff --git a/include/dt-bindings/clock/qcom,lcc-ipq806x.h b/include/dt-bindings/clock/qcom,lcc-ipq806x.h
-index 25b92bbf0ab4..e0fb4acf4ba8 100644
---- a/include/dt-bindings/clock/qcom,lcc-ipq806x.h
-+++ b/include/dt-bindings/clock/qcom,lcc-ipq806x.h
-@@ -19,4 +19,6 @@
- #define SPDIF_CLK			10
- #define AHBIX_CLK			11
+diff --git a/drivers/clk/qcom/lcc-ipq806x.c b/drivers/clk/qcom/lcc-ipq806x.c
+index 1a2be4aeb31d..ba90bebba597 100644
+--- a/drivers/clk/qcom/lcc-ipq806x.c
++++ b/drivers/clk/qcom/lcc-ipq806x.c
+@@ -22,6 +22,7 @@
+ #include "clk-branch.h"
+ #include "clk-regmap-divider.h"
+ #include "clk-regmap-mux.h"
++#include "reset.h"
  
-+#define LCC_PCM_RESET			0
+ static struct clk_pll pll4 = {
+ 	.l_reg = 0x4,
+@@ -405,6 +406,10 @@ static struct clk_regmap *lcc_ipq806x_clks[] = {
+ 	[AHBIX_CLK] = &ahbix_clk.clkr,
+ };
+ 
++static const struct qcom_reset_map lcc_ipq806x_resets[] = {
++	[LCC_PCM_RESET] = { 0x54, 13 },
++};
 +
- #endif
+ static const struct regmap_config lcc_ipq806x_regmap_config = {
+ 	.reg_bits	= 32,
+ 	.reg_stride	= 4,
+@@ -417,6 +422,8 @@ static const struct qcom_cc_desc lcc_ipq806x_desc = {
+ 	.config = &lcc_ipq806x_regmap_config,
+ 	.clks = lcc_ipq806x_clks,
+ 	.num_clks = ARRAY_SIZE(lcc_ipq806x_clks),
++	.resets = lcc_ipq806x_resets,
++	.num_resets = ARRAY_SIZE(lcc_ipq806x_resets),
+ };
+ 
+ static const struct of_device_id lcc_ipq806x_match_table[] = {
 -- 
 2.36.1
 

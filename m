@@ -2,105 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6BB6756B0DA
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 05:42:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 65DB756B108
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 05:42:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236593AbiGHDOd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Jul 2022 23:14:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49912 "EHLO
+        id S236881AbiGHDPg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Jul 2022 23:15:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50726 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236938AbiGHDO3 (ORCPT
+        with ESMTP id S236202AbiGHDPd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Jul 2022 23:14:29 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5C83574793
-        for <linux-kernel@vger.kernel.org>; Thu,  7 Jul 2022 20:14:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1657250067;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=6pWJ9vidmXiESXTHRmiFlc+OMg3mXWEt42MkWbaRXFo=;
-        b=Jm3zIBnoc6Kh3fSpf9GBnJab6AdKruWc9l8tHqQ9H3EswhpAEx0KkZM6LsO+x7kEJ0EgLw
-        RV00vflmtOvoG/k/XkL3D00UsUA7j3Ss4+4dmMV1q3CIjqbuB0fw7PKyI+TkAYJOt4Ji+o
-        PXSqhW2JshH6JY1D5eycE3JLsENemKg=
-Received: from mail-lf1-f71.google.com (mail-lf1-f71.google.com
- [209.85.167.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-650-xbY3YRtoNNWHRGl3M6EP7A-1; Thu, 07 Jul 2022 23:14:26 -0400
-X-MC-Unique: xbY3YRtoNNWHRGl3M6EP7A-1
-Received: by mail-lf1-f71.google.com with SMTP id f40-20020a0565123b2800b0048454c5aec2so3478418lfv.1
-        for <linux-kernel@vger.kernel.org>; Thu, 07 Jul 2022 20:14:25 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=6pWJ9vidmXiESXTHRmiFlc+OMg3mXWEt42MkWbaRXFo=;
-        b=0p+/RdHQvvODEqYnrOkIJqtJySlB2pikFlMkhJ5ye6Yx2MhQTURYON1oYiqfVJMt56
-         gFZbLq/YwGRqQ3w/Q00VNEZ0Q0JeI2V6h9aHB+y4hYl5mPcJ/NirMk+gxfftXv0GlRjg
-         0LMvj/FLeftDWiB8pSDRSFC0MnQ4cyzx4izbulfIVyIOtaD/DvQjN0fpybzDIE0aQgz3
-         fcoMxwx6fvCcRd8Ij/lFxuX0cU+BLkzdvzrK7LPuVy863FK8lDgl/SGpBK3l/5/k26J6
-         JwSNZGziyuawPRgg6MlYnW4kbuwMmpAEcB7AkzYuPJhPSIKfDAXsVPDmyISKcRS2Vw4p
-         61RA==
-X-Gm-Message-State: AJIora/Mt50oCg57dZeP0ZzSee3FdL66YPSy43vIG5j7DeCSYEyAtJpv
-        FT0ghyy+9AnQYKtMihfztV2NtutsQ16OqQqdGXHrp4ZA2OBpaTA2SGlRGIMEoOYpD/SEPuyE+FJ
-        khmnu9V/0UNAILucEfCfQwmB6MrNul41SCgFegRjj
-X-Received: by 2002:a05:6512:b0d:b0:481:5cb4:cf1e with SMTP id w13-20020a0565120b0d00b004815cb4cf1emr864065lfu.442.1657250064635;
-        Thu, 07 Jul 2022 20:14:24 -0700 (PDT)
-X-Google-Smtp-Source: AGRyM1sL5nNaKVUjLfzqmHqBuyERNjefQaJM/fNkZA4syaavKMsdSCdlbxtRU8opv07Qp1KDTOFhmmsBKmEyTtATiQ0=
-X-Received: by 2002:a05:6512:b0d:b0:481:5cb4:cf1e with SMTP id
- w13-20020a0565120b0d00b004815cb4cf1emr864054lfu.442.1657250064363; Thu, 07
- Jul 2022 20:14:24 -0700 (PDT)
+        Thu, 7 Jul 2022 23:15:33 -0400
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04CC17479D;
+        Thu,  7 Jul 2022 20:15:31 -0700 (PDT)
+X-UUID: 851d2b32e06a443590b9c92fb294fb02-20220708
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.8,REQID:ef15ba28-3672-490e-b6ca-151ca57b1ff8,OB:0,LO
+        B:0,IP:0,URL:0,TC:0,Content:-5,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACT
+        ION:release,TS:-5
+X-CID-META: VersionHash:0f94e32,CLOUDID:058aedd6-5d6d-4eaf-a635-828a3ee48b7c,C
+        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,IP:nil,URL:0,File:nil
+        ,QS:nil,BEC:nil,COL:0
+X-UUID: 851d2b32e06a443590b9c92fb294fb02-20220708
+Received: from mtkexhb01.mediatek.inc [(172.21.101.102)] by mailgw02.mediatek.com
+        (envelope-from <kewei.xu@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 65204318; Fri, 08 Jul 2022 11:15:26 +0800
+Received: from mtkcas11.mediatek.inc (172.21.101.40) by
+ mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.2.792.15; Fri, 8 Jul 2022 11:15:25 +0800
+Received: from localhost.localdomain (10.17.3.154) by mtkcas11.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Fri, 8 Jul 2022 11:15:24 +0800
+From:   <kewei.xu@mediatek.com>
+To:     <wsa@the-dreams.de>
+CC:     <matthias.bgg@gmail.com>, <robh+dt@kernel.org>,
+        <linux-i2c@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-mediatek@lists.infradead.org>, <leilk.liu@mediatek.com>,
+        <qii.wang@mediatek.com>, <liguo.zhang@mediatek.com>,
+        <caiyu.chen@mediatek.com>, <housong.zhang@mediatek.com>,
+        <yuhan.wei@mediatek.com>, <kewei.xu@mediatek.com>,
+        <david-yh.chiu@mediatek.com>, <liju-clr.chen@mediatek.com>
+Subject: [PATCH 1/2] dt-bindings: i2c: update bindings for MT8188 SoC
+Date:   Fri, 8 Jul 2022 11:15:18 +0800
+Message-ID: <20220708031520.22053-1-kewei.xu@mediatek.com>
+X-Mailer: git-send-email 2.18.0
 MIME-Version: 1.0
-References: <548e316fa282ce513fabb991a4c4d92258062eb5.1654688822.git.robin.murphy@arm.com>
-In-Reply-To: <548e316fa282ce513fabb991a4c4d92258062eb5.1654688822.git.robin.murphy@arm.com>
-From:   Jason Wang <jasowang@redhat.com>
-Date:   Fri, 8 Jul 2022 11:14:13 +0800
-Message-ID: <CACGkMEvkHKqOkTCEaTUHK4Ve=naeU5p09BpnvPW-y1cGqOTo_w@mail.gmail.com>
-Subject: Re: [PATCH] vdpa: Use device_iommu_capable()
-To:     Robin Murphy <robin.murphy@arm.com>
-Cc:     mst <mst@redhat.com>, kvm <kvm@vger.kernel.org>,
-        virtualization <virtualization@lists.linux-foundation.org>,
-        netdev <netdev@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-MTK:  N
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 8, 2022 at 7:53 PM Robin Murphy <robin.murphy@arm.com> wrote:
->
-> Use the new interface to check the capability for our device
-> specifically.
->
-> Signed-off-by: Robin Murphy <robin.murphy@arm.com>
+From: Kewei Xu <kewei.xu@mediatek.com>
 
-Acked-by: Jason Wang <jasowang@redhat.com>
+Add a DT binding documentation for the MT8188 soc.
 
-> ---
->  drivers/vhost/vdpa.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/drivers/vhost/vdpa.c b/drivers/vhost/vdpa.c
-> index 935a1d0ddb97..4cfebcc24a03 100644
-> --- a/drivers/vhost/vdpa.c
-> +++ b/drivers/vhost/vdpa.c
-> @@ -1074,7 +1074,7 @@ static int vhost_vdpa_alloc_domain(struct vhost_vdpa *v)
->         if (!bus)
->                 return -EFAULT;
->
-> -       if (!iommu_capable(bus, IOMMU_CAP_CACHE_COHERENCY))
-> +       if (!device_iommu_capable(dma_dev, IOMMU_CAP_CACHE_COHERENCY))
->                 return -ENOTSUPP;
->
->         v->domain = iommu_domain_alloc(bus);
-> --
-> 2.36.1.dirty
->
+Signed-off-by: Kewei Xu <kewei.xu@mediatek.com>
+Change-Id: Iae781c7c68becbf3c5dea3511acb18cdd40d5c08
+---
+ Documentation/devicetree/bindings/i2c/i2c-mt65xx.yaml | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/Documentation/devicetree/bindings/i2c/i2c-mt65xx.yaml b/Documentation/devicetree/bindings/i2c/i2c-mt65xx.yaml
+index 16a1a3118204..4e730fb7be56 100644
+--- a/Documentation/devicetree/bindings/i2c/i2c-mt65xx.yaml
++++ b/Documentation/devicetree/bindings/i2c/i2c-mt65xx.yaml
+@@ -27,6 +27,7 @@ properties:
+       - const: mediatek,mt8173-i2c
+       - const: mediatek,mt8183-i2c
+       - const: mediatek,mt8186-i2c
++      - const: mediatek,mt8188-i2c
+       - const: mediatek,mt8192-i2c
+       - items:
+           - enum:
+-- 
+2.18.0
 

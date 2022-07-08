@@ -2,117 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 777AF56C36C
-	for <lists+linux-kernel@lfdr.de>; Sat,  9 Jul 2022 01:14:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D4B0056C1E0
+	for <lists+linux-kernel@lfdr.de>; Sat,  9 Jul 2022 01:12:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239916AbiGHTqG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Jul 2022 15:46:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53348 "EHLO
+        id S239622AbiGHTpJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Jul 2022 15:45:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52746 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238387AbiGHTqD (ORCPT
+        with ESMTP id S238577AbiGHTpI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Jul 2022 15:46:03 -0400
-Received: from mail.baikalelectronics.com (mail.baikalelectronics.com [87.245.175.230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 575A588F11
-        for <linux-kernel@vger.kernel.org>; Fri,  8 Jul 2022 12:45:50 -0700 (PDT)
-Received: from mail (mail.baikal.int [192.168.51.25])
-        by mail.baikalelectronics.com (Postfix) with ESMTP id D1E0316C3;
-        Fri,  8 Jul 2022 22:47:35 +0300 (MSK)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mail.baikalelectronics.com D1E0316C3
+        Fri, 8 Jul 2022 15:45:08 -0400
+Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C78D983F1B;
+        Fri,  8 Jul 2022 12:45:07 -0700 (PDT)
+Received: by mail-pj1-x1036.google.com with SMTP id g16-20020a17090a7d1000b001ea9f820449so2934837pjl.5;
+        Fri, 08 Jul 2022 12:45:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baikalelectronics.ru; s=mail; t=1657309655;
-        bh=Gjf4Wg6tDAxYDxNLlcgkoZo/rjD6uSfhRtCOK8F6Wrs=;
-        h=From:To:CC:Subject:Date:In-Reply-To:References:From;
-        b=TC7g4eYlnlpgV6Eb8c3K3boHFrX87ta016m1fE60SgQ3Cv6RkiaD15Xw6JNsUlHBR
-         zRaeGzEG3PaVCfau56yxAMeHQZ+gdVSpxXRaTry55xe69L1/XaldXAavhb47OLSvre
-         5Uz7CtJ5NdkEf9QlWj4j7aeqFs9hDlgFvBhZ+qog=
-Received: from localhost (192.168.53.207) by mail (192.168.51.25) with
- Microsoft SMTP Server (TLS) id 15.0.1395.4; Fri, 8 Jul 2022 22:45:48 +0300
-From:   Serge Semin <Sergey.Semin@baikalelectronics.ru>
-To:     Arnd Bergmann <arnd@arndb.de>,
-        Philipp Zabel <p.zabel@pengutronix.de>
-CC:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
-        Serge Semin <fancer.lancer@gmail.com>,
-        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
-        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
-        <soc@kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: [PATCH RESEND v4 2/2] bus: bt1-axi: Don't print error on -EPROBE_DEFER
-Date:   Fri, 8 Jul 2022 22:44:48 +0300
-Message-ID: <20220708194448.10700-2-Sergey.Semin@baikalelectronics.ru>
-In-Reply-To: <20220708194448.10700-1-Sergey.Semin@baikalelectronics.ru>
-References: <20220708194448.10700-1-Sergey.Semin@baikalelectronics.ru>
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=N8DWxr3cOGfGJ0M5r5IGNCu5UhFIYsIjqooNs/duLE4=;
+        b=Lo1aR/J4wYvMpA8tQzeQV1wC1mQDSWrvOC1QAgXLY/cJssAQeZhp3PUFHEtEnzvVu6
+         T+VP1D7VEtf28FSvXqq5hv+AKW7bZ9abG+g43bXEskYKDXvsHxQKuKoGk9ja/5mMyzBi
+         eLUlfsEVLCQ+EEMKMeXpTkdWeWN/SvOSw26rXN4ooPnVkLBoPC1hox0SPEwwN+bsxR9y
+         iCiZ9sZHYCJasGKKO0uGaVoBgcnXBdHNvXpoO1viz0UCWOeTXEeF3uM0dCqjBz0eYLoZ
+         3a9oWLorRP/WxUoZYlbHq7Wh8Vri6Jy+yACO74ke1sAdpIyjwO6WGZlyEa0TGyzcLtkv
+         kFOQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=N8DWxr3cOGfGJ0M5r5IGNCu5UhFIYsIjqooNs/duLE4=;
+        b=c+kO+ieuSbxXjg10rzFPakfwG2PwUpUGTaF5h6cRjVDtYOcGc661tFKhPnhbdVcAH0
+         BUCYWjUw0yXuJvrjHipBNVHxE92emD4r6JfmJhv/jgM7/2TSMn5WLaXTF4vCztQt86pw
+         0ABw42OM/luMu+YOBEVhyESG06pAxGa9yipqaZK9R8J85efIwiLsb6tteO9ED10+fH5U
+         oRCoQai2e0PgWhAMtx+ff1vDxD/00/cAsWY9092pW0sjtkUhgcwqcaJSybBpAboAjweb
+         9v/ToGhNpDtoqpvK0Bs0EIvgVkdrhOk8CKbkUbFw8JAH4FNWSeHsAfJg11lwy9RA9FVj
+         D2iw==
+X-Gm-Message-State: AJIora/dNWNHT6QqOaiHeB1Y/PTvt1r6bXY/45aGEJaC6YyttlgjJJ74
+        HZmYmbpfROIFW43DE0g5JSE=
+X-Google-Smtp-Source: AGRyM1sKA/NE86R2wmVR+KhxAYqabDrR+Ti+/AoQzGgzdZR9rQiTHTywPJ5wdrOd0jjN/U/0NRATgg==
+X-Received: by 2002:a17:902:cecd:b0:16a:5cab:4721 with SMTP id d13-20020a170902cecd00b0016a5cab4721mr5301233plg.104.1657309507293;
+        Fri, 08 Jul 2022 12:45:07 -0700 (PDT)
+Received: from fainelli-desktop.igp.broadcom.net ([192.19.223.252])
+        by smtp.gmail.com with ESMTPSA id o9-20020a63e349000000b0040cf934a1a0sm28160649pgj.28.2022.07.08.12.45.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 08 Jul 2022 12:45:06 -0700 (PDT)
+From:   Florian Fainelli <f.fainelli@gmail.com>
+To:     bcm-kernel-feedback-list@broadcom.com,
+        William Zhang <william.zhang@broadcom.com>,
+        Linux ARM List <linux-arm-kernel@lists.infradead.org>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        =?iso-8859-2?q?Rafa=B3_Mi=B3ecki?= <rafal@milecki.pl>,
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 1/2] arm64: dts: broadcom: bcm4908: Fix timer node for BCM4906 SoC
+Date:   Fri,  8 Jul 2022 12:45:05 -0700
+Message-Id: <20220708194505.1857628-1-f.fainelli@gmail.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20220708182507.23542-1-william.zhang@broadcom.com>
+References: <20220708182507.23542-1-william.zhang@broadcom.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: MAIL.baikal.int (192.168.51.25) To mail (192.168.51.25)
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,
-        T_SCC_BODY_TEXT_LINE,T_SPF_PERMERROR autolearn=ham autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The Baikal-T1 AXI bus driver correctly handles the deferred probe
-situation, but still pollutes the system log with a misleading error
-message. Let's fix that by using the dev_err_probe() method to print the
-log message in case of the clocks/resets request errors.
+On Fri,  8 Jul 2022 11:25:06 -0700, William Zhang <william.zhang@broadcom.com> wrote:
+> The cpu mask value in interrupt property inherits from bcm4908.dtsi
+> which sets to four cpus. Correct the value to two cpus for dual core
+> BCM4906 SoC.
+> 
+> Fixes: c8b404fb05dc ("arm64: dts: broadcom: bcm4908: add BCM4906
+> Netgear R8000P DTS files")
+> 
+> Signed-off-by: William Zhang <william.zhang@broadcom.com>
+> Reviewed-by: Florian Fainelli <f.fainelli@gmail.com>
+> 
+> ---
 
-Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
-
----
-
-Link: https://lore.kernel.org/lkml/20220610080103.10689-1-Sergey.Semin@baikalelectronics.ru/
-Changelog v2:
-- Use the dev_err_probe() return value as the return status of the
-  corresponding method. (@Philipp)
-
-Link: https://lore.kernel.org/lkml/20220610104030.28399-2-Sergey.Semin@baikalelectronics.ru/
-Changelog v3:
-- Just resend.
-- Rebase onto the kernel v5.19-rcX.
-
-Link: https://lore.kernel.org/lkml/20220624211233.7529-2-Sergey.Semin@baikalelectronics.ru/
-Changelog v4:
-- Just resend.
----
- drivers/bus/bt1-axi.c | 14 ++++++--------
- 1 file changed, 6 insertions(+), 8 deletions(-)
-
-diff --git a/drivers/bus/bt1-axi.c b/drivers/bus/bt1-axi.c
-index e7a6744acc7b..70e49a6e5374 100644
---- a/drivers/bus/bt1-axi.c
-+++ b/drivers/bus/bt1-axi.c
-@@ -135,10 +135,9 @@ static int bt1_axi_request_rst(struct bt1_axi *axi)
- 	int ret;
- 
- 	axi->arst = devm_reset_control_get_optional_exclusive(axi->dev, "arst");
--	if (IS_ERR(axi->arst)) {
--		dev_warn(axi->dev, "Couldn't get reset control line\n");
--		return PTR_ERR(axi->arst);
--	}
-+	if (IS_ERR(axi->arst))
-+		return dev_err_probe(axi->dev, PTR_ERR(axi->arst),
-+				     "Couldn't get reset control line\n");
- 
- 	ret = reset_control_deassert(axi->arst);
- 	if (ret)
-@@ -159,10 +158,9 @@ static int bt1_axi_request_clk(struct bt1_axi *axi)
- 	int ret;
- 
- 	axi->aclk = devm_clk_get(axi->dev, "aclk");
--	if (IS_ERR(axi->aclk)) {
--		dev_err(axi->dev, "Couldn't get AXI Interconnect clock\n");
--		return PTR_ERR(axi->aclk);
--	}
-+	if (IS_ERR(axi->aclk))
-+		return dev_err_probe(axi->dev, PTR_ERR(axi->aclk),
-+				     "Couldn't get AXI Interconnect clock\n");
- 
- 	ret = clk_prepare_enable(axi->aclk);
- 	if (ret) {
--- 
-2.35.1
-
+Applied to https://github.com/Broadcom/stblinux/commits/devicetree-arm64/fixes, thanks!
+--
+Florian

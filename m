@@ -2,89 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7138F56B5C6
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 11:42:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A88D756B5C0
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 11:42:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237623AbiGHJkD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Jul 2022 05:40:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58624 "EHLO
+        id S237169AbiGHJkk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Jul 2022 05:40:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59688 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237190AbiGHJj7 (ORCPT
+        with ESMTP id S237676AbiGHJkd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Jul 2022 05:39:59 -0400
-Received: from mx01.omp.ru (mx01.omp.ru [90.154.21.10])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C3ED6B245;
-        Fri,  8 Jul 2022 02:39:58 -0700 (PDT)
-Received: from [192.168.1.103] (31.173.81.246) by msexch01.omp.ru
- (10.188.4.12) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.986.14; Fri, 8 Jul 2022
- 12:39:49 +0300
-Subject: Re: [PATCH v3 2/9] usb: typec: Add retimer handle to port
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-CC:     Prashant Malani <pmalani@chromium.org>,
-        <linux-kernel@vger.kernel.org>, <linux-usb@vger.kernel.org>,
-        <chrome-platform@lists.linux.dev>, <bleung@chromium.org>,
-        <heikki.krogerus@linux.intel.com>,
-        Daisuke Nojiri <dnojiri@chromium.org>,
-        "Dustin L. Howett" <dustin@howett.net>,
-        Guenter Roeck <groeck@chromium.org>,
-        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Sebastian Reichel <sebastian.reichel@collabora.com>,
-        Tzung-Bi Shih <tzungbi@kernel.org>
-References: <20220707222045.1415417-1-pmalani@chromium.org>
- <20220707222045.1415417-3-pmalani@chromium.org>
- <509bf6fe-4406-c577-aa70-6eb70801e375@omp.ru> <Ysf3F3VvmoqCFj4P@kroah.com>
-From:   Sergey Shtylyov <s.shtylyov@omp.ru>
-Organization: Open Mobile Platform
-Message-ID: <fb07d914-b756-1f9d-b670-4d18e84352bb@omp.ru>
-Date:   Fri, 8 Jul 2022 12:39:49 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.10.1
+        Fri, 8 Jul 2022 05:40:33 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A96EF76944
+        for <linux-kernel@vger.kernel.org>; Fri,  8 Jul 2022 02:40:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1657273230;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=6JiyHKi+RanBGbwj6xw5SpZG3A0gEDfy7D/V7kbGKoA=;
+        b=bkfz3VAfnq+bRL0PlXldZioTfw5fV4grZ1NDktQbyslPAODaUO822uRn+sKpXhCLXsuf3c
+        Vx+bdrNrcEwt0cuOhy5L/Ep9V4JWB6aRjtjLWNs5CU/cWqBrqJ3CuLV+eK8QyfF5Bu0Phy
+        rTwGoE7s5G6Uvf+veRQ1xo6h1JOPHVI=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-373-JnuF6LaBMJWwzmDk-p40DQ-1; Fri, 08 Jul 2022 05:40:25 -0400
+X-MC-Unique: JnuF6LaBMJWwzmDk-p40DQ-1
+Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 05C1F3C1068E;
+        Fri,  8 Jul 2022 09:40:25 +0000 (UTC)
+Received: from warthog.procyon.org.uk (unknown [10.33.36.6])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 5DCBE2026D64;
+        Fri,  8 Jul 2022 09:40:23 +0000 (UTC)
+Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
+        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
+        Kingdom.
+        Registered in England and Wales under Company Registration No. 3798903
+From:   David Howells <dhowells@redhat.com>
+In-Reply-To: <6a8e2e97ec48e5694e623126537af3448ed99f56.camel@perches.com>
+References: <6a8e2e97ec48e5694e623126537af3448ed99f56.camel@perches.com> <20220706235648.594609-1-justinstitt@google.com>
+To:     Joe Perches <joe@perches.com>
+Cc:     dhowells@redhat.com, Justin Stitt <justinstitt@google.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Marc Dionne <marc.dionne@auristor.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Tom Rix <trix@redhat.com>, linux-afs@lists.infradead.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        llvm@lists.linux.dev
+Subject: Re: [PATCH] net: rxrpc: fix clang -Wformat warning
 MIME-Version: 1.0
-In-Reply-To: <Ysf3F3VvmoqCFj4P@kroah.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [31.173.81.246]
-X-ClientProxiedBy: msexch01.omp.ru (10.188.4.12) To msexch01.omp.ru
- (10.188.4.12)
-X-KSE-ServerInfo: msexch01.omp.ru, 9
-X-KSE-AntiSpam-Interceptor-Info: scan successful
-X-KSE-AntiSpam-Version: 5.9.20, Database issued on: 07/08/2022 09:19:09
-X-KSE-AntiSpam-Status: KAS_STATUS_NOT_DETECTED
-X-KSE-AntiSpam-Method: none
-X-KSE-AntiSpam-Rate: 59
-X-KSE-AntiSpam-Info: Lua profiles 171638 [Jul 08 2022]
-X-KSE-AntiSpam-Info: Version: 5.9.20.0
-X-KSE-AntiSpam-Info: Envelope from: s.shtylyov@omp.ru
-X-KSE-AntiSpam-Info: LuaCore: 493 493 c80a237886b75a8eec705b487193915475443854
-X-KSE-AntiSpam-Info: {rep_avail}
-X-KSE-AntiSpam-Info: {Tracking_from_domain_doesnt_match_to}
-X-KSE-AntiSpam-Info: {relay has no DNS name}
-X-KSE-AntiSpam-Info: {SMTP from is not routable}
-X-KSE-AntiSpam-Info: {Found in DNSBL: 31.173.81.246 in (user)
- b.barracudacentral.org}
-X-KSE-AntiSpam-Info: {Found in DNSBL: 31.173.81.246 in (user)
- dbl.spamhaus.org}
-X-KSE-AntiSpam-Info: omp.ru:7.1.1;127.0.0.199:7.1.2;d41d8cd98f00b204e9800998ecf8427e.com:7.1.1;31.173.81.246:7.1.2
-X-KSE-AntiSpam-Info: ApMailHostAddress: 31.173.81.246
-X-KSE-AntiSpam-Info: {DNS response errors}
-X-KSE-AntiSpam-Info: Rate: 59
-X-KSE-AntiSpam-Info: Status: not_detected
-X-KSE-AntiSpam-Info: Method: none
-X-KSE-AntiSpam-Info: Auth:dmarc=temperror header.from=omp.ru;spf=temperror
- smtp.mailfrom=omp.ru;dkim=none
-X-KSE-Antiphishing-Info: Clean
-X-KSE-Antiphishing-ScanningType: Heuristic
-X-KSE-Antiphishing-Method: None
-X-KSE-Antiphishing-Bases: 07/08/2022 09:21:00
-X-KSE-AttachmentFiltering-Interceptor-Info: protection disabled
-X-KSE-Antivirus-Interceptor-Info: scan successful
-X-KSE-Antivirus-Info: Clean, bases: 7/8/2022 6:55:00 AM
-X-KSE-BulkMessagesFiltering-Scan-Result: InTheLimit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <1843690.1657273222.1@warthog.procyon.org.uk>
+Content-Transfer-Encoding: quoted-printable
+Date:   Fri, 08 Jul 2022 10:40:22 +0100
+Message-ID: <1843691.1657273222@warthog.procyon.org.uk>
+X-Scanned-By: MIMEDefang 2.78 on 10.11.54.4
+X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -92,49 +75,23 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 7/8/22 12:21 PM, Greg Kroah-Hartman wrote:
-[...]
->>> Similar to mux and orientation switch, add a handle for registered
->>> retimer to the port, so that it has handles to the various switches
->>> connected to it.
->>>
->>> Signed-off-by: Prashant Malani <pmalani@chromium.org>
->>> ---
->>>
->>> Changes since v2:
->>> - No changes.
->>>
->>> Changes since v1:
->>> - Relinquish retimer reference during typec_release.
->>>
->>>  drivers/usb/typec/class.c | 9 +++++++++
->>>  drivers/usb/typec/class.h | 1 +
->>>  2 files changed, 10 insertions(+)
->>>
->>> diff --git a/drivers/usb/typec/class.c b/drivers/usb/typec/class.c
->>> index 9062836bb638..f08e32d552b4 100644
->>> --- a/drivers/usb/typec/class.c
->>> +++ b/drivers/usb/typec/class.c
->> [...]
->>> @@ -2249,6 +2251,13 @@ struct typec_port *typec_register_port(struct device *parent,
->>>  		return ERR_PTR(ret);
->>>  	}
->>>  
->>> +	port->retimer = typec_retimer_get(&port->dev);
->>> +	if (IS_ERR(port->retimer)) {
->>> +		ret = PTR_ERR(port->retimer);
->>> +		put_device(&port->dev);
->>> +		return ERR_PTR(ret);
->>
->>    Why convert it to and fro, and not just return port->retimer?
-> 
-> That would be a use-after-free as port might now be gone.
+Joe Perches <joe@perches.com> wrote:
 
-   Ah, indeed!
-   It would also ensue an explicit pointer cast...
+> net/rxrpc/Kconfig:config AF_RXRPC_DEBUG
+> net/rxrpc/Kconfig-      bool "RxRPC dynamic debugging"
+> net/rxrpc/Kconfig-      help
+> net/rxrpc/Kconfig-        Say Y here to make runtime controllable debugg=
+ing messages appear.
+> net/rxrpc/Kconfig-
+> net/rxrpc/Kconfig-        See Documentation/networking/rxrpc.rst
+> =
 
-> thanks,
-> 
-> greg k-h
+> This seems to show there is debugging documentation, but it
+> doesn't seem to exist in this file.
 
-MBR, Sergey
+Try looking in net/rxrpc/ar-internal.h:
+
+	#elif defined(CONFIG_AF_RXRPC_DEBUG)
+
+David
+

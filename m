@@ -2,59 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5037856C0FB
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 20:38:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E80A56BF9B
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 20:36:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239100AbiGHQaU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Jul 2022 12:30:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43354 "EHLO
+        id S239129AbiGHQbq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Jul 2022 12:31:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47182 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239341AbiGHQ3s (ORCPT
+        with ESMTP id S232748AbiGHQbp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Jul 2022 12:29:48 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 083AF208;
-        Fri,  8 Jul 2022 09:29:27 -0700 (PDT)
+        Fri, 8 Jul 2022 12:31:45 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 996351091
+        for <linux-kernel@vger.kernel.org>; Fri,  8 Jul 2022 09:31:43 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id AEDEDB828A6;
-        Fri,  8 Jul 2022 16:29:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AFBF9C341C6;
-        Fri,  8 Jul 2022 16:29:22 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 5C631B828AE
+        for <linux-kernel@vger.kernel.org>; Fri,  8 Jul 2022 16:31:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 02B5DC341CD;
+        Fri,  8 Jul 2022 16:31:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1657297764;
-        bh=bnYt7XSKQbcRefHIMdh+InQ9CqN2VQX7nimG9Okphro=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=WomL5vW9a8IMxo80M+xawgDmjrK4aQEofHM5wARWcZI3nmY8mvW+pUSgA3j4jvMHx
-         3uDUpjNmfWdXC7CoDq9d3/M1Do/B+1JNrk+f5IQyv031tmQBWDJeuvfssvcLwthm/y
-         Ym9oHPbagYNWXUvK7MRD2FSKo/DdGTxPBSHNOEi6uoqqbTT2QwhaJ5cryZiC7nrqd/
-         Dqt/kFUzUAGEg4QrbVNJq/+/pbJeEiOMlf3TFPbhJ7KIPM6LvZpI9sEUCfChmsMBvR
-         UYt0F33WWEfHs8UYvp6diua1X/c7m26CKRgEPSJiJeDpfSdKOjeOlKuSg3YGmCSoL+
-         oF1qDHA092R6g==
-Date:   Fri, 8 Jul 2022 18:29:19 +0200
-From:   Marek =?UTF-8?B?QmVow7pu?= <kabel@kernel.org>
-To:     Pali =?UTF-8?B?Um9ow6Fy?= <pali@kernel.org>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Pavel Machek <pavel@ucw.cz>, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-leds@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 1/2] [RFT] dt-bindings: leds: Add
- cznic,turris1x-leds.yaml binding
-Message-ID: <20220708182919.2a1e4a52@thinkpad>
-In-Reply-To: <20220708160528.ysy4lzxfpwobfiwr@pali>
-References: <20220705000448.14337-1-pali@kernel.org>
-        <20220705155929.25565-1-pali@kernel.org>
-        <20220706131507.353f0bed@thinkpad>
-        <20220706111912.hz2mx4dc35lgq6l5@pali>
-        <20220706172732.6228d180@thinkpad>
-        <25b43586-eeb3-4b7b-7362-2d599aa89cf0@linaro.org>
-        <20220708160528.ysy4lzxfpwobfiwr@pali>
-X-Mailer: Claws Mail 3.19.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        s=k20201202; t=1657297901;
+        bh=+KcBQnDBBn868FciMPHZhD4GJ/zuql+WDwqJYuQjSXg=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=oi5R+s6zMMka3CnMUPVbNXZqOjEOpVF1CxGY5s7sKo1n3buOWAs4403IHJ64dmyf3
+         b+umhRd8TlrX75kvlrKTnO8l46dCxANQY3Z/I9S4MzAePlOpT69Vuqkq6UVpPTXrJe
+         C8QAaqMUkgn9Wsr2TqeP30qmXHipNOYuejTPOWXMh5m1hZbxdR0ZXQbuQCIQBDayjF
+         fcMLQ4O0KtsIxij2dacmG1AGU0XfpPXEA8W+IzpWv3doVqzXtTij0l63GeKrHMjqVi
+         12PRn4rOXpyeSoUqDpqd9QUSMQak9PMZP/BD9vL6Q0Qwb72fvy6+LwMwSXuhmSRaey
+         f/IN35Q1QJ7sg==
+Date:   Fri, 8 Jul 2022 17:31:35 +0100
+From:   Will Deacon <will@kernel.org>
+To:     Doug Anderson <dianders@chromium.org>
+Cc:     Sumit Garg <sumit.garg@linaro.org>,
+        Daniel Thompson <daniel.thompson@linaro.org>,
+        Wei Li <liwei391@huawei.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Jason Wessel <jason.wessel@windriver.com>,
+        Marc Zyngier <maz@kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v3 0/2] arm64: Fix pending single-step debugging issues
+Message-ID: <20220708163134.GB6286@willie-the-truck>
+References: <20220511060521.465744-1-sumit.garg@linaro.org>
+ <CAD=FV=WXoDvWuH=yjzCcqOZ5CeUtYun7C8zrtrBP4FC409GkqA@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAD=FV=WXoDvWuH=yjzCcqOZ5CeUtYun7C8zrtrBP4FC409GkqA@mail.gmail.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -65,66 +64,52 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 8 Jul 2022 18:05:28 +0200
-Pali Roh=C3=A1r <pali@kernel.org> wrote:
+On Fri, Jul 01, 2022 at 03:14:16PM -0700, Doug Anderson wrote:
+> Hi,
+> 
+> On Tue, May 10, 2022 at 11:05 PM Sumit Garg <sumit.garg@linaro.org> wrote:
+> >
+> > This patch-set reworks pending fixes from Wei's series [1] to make
+> > single-step debugging via kgdb/kdb on arm64 work as expected. There was
+> > a prior discussion on ML [2] regarding if we should keep the interrupts
+> > enabled during single-stepping. So patch #1 follows suggestion from Will
+> > [3] to not disable interrupts during single stepping but rather skip
+> > single stepping within interrupt handler.
+> >
+> > [1] https://lore.kernel.org/all/20200509214159.19680-1-liwei391@huawei.com/
+> > [2] https://lore.kernel.org/all/CAD=FV=Voyfq3Qz0T3RY+aYWYJ0utdH=P_AweB=13rcV8GDBeyQ@mail.gmail.com/
+> > [3] https://lore.kernel.org/all/20200626095551.GA9312@willie-the-truck/
+> >
+> > Changes in v3:
+> > - Reword commit descriptions as per Daniel's suggestions.
+> >
+> > Changes in v2:
+> > - Replace patch #1 to rather follow Will's suggestion.
+> >
+> > Sumit Garg (2):
+> >   arm64: entry: Skip single stepping into interrupt handlers
+> >   arm64: kgdb: Set PSTATE.SS to 1 to re-enable single-step
+> >
+> >  arch/arm64/include/asm/debug-monitors.h |  1 +
+> >  arch/arm64/kernel/debug-monitors.c      |  5 +++++
+> >  arch/arm64/kernel/entry-common.c        | 18 +++++++++++++++++-
+> >  arch/arm64/kernel/kgdb.c                |  2 ++
+> >  4 files changed, 25 insertions(+), 1 deletion(-)
+> 
+> Sorry it took so long for me to respond. I kept dreaming that I'd find
+> the time to really dig deep into this to understand it fully and I'm
+> finally giving up on it. I'm going to hope that Will and/or Catalin
+> knows this area of the code well and can give it a good review. If not
+> then I'll strive harder to make the time...
 
-> On Wednesday 06 July 2022 17:36:43 Krzysztof Kozlowski wrote:
-> > On 06/07/2022 17:27, Marek Beh=C3=BAn wrote: =20
-> > > On Wed, 6 Jul 2022 13:19:12 +0200
-> > > Pali Roh=C3=A1r <pali@kernel.org> wrote:
-> > >  =20
-> > >> On Wednesday 06 July 2022 13:15:07 Marek Beh=C3=BAn wrote: =20
-> > >>> On Tue,  5 Jul 2022 17:59:28 +0200
-> > >>> Pali Roh=C3=A1r <pali@kernel.org> wrote:
-> > >>>    =20
-> > >>>> +examples:
-> > >>>> +  - |
-> > >>>> +    #include <dt-bindings/leds/common.h>
-> > >>>> +
-> > >>>> +    cpld@3,0 {   =20
-> > >>>
-> > >>> The generic node name should be just "bus". That it is a CPLD
-> > >>> implementation should come from compatible string.   =20
-> > >>
-> > >> Sorry, I do not understand why "bus". Why other memory chips are nam=
-ed
-> > >> e.g. "nand" or "nor" and not "bus" too? =20
-> > >=20
-> > > As far as I understand this is because that is the preferred name for
-> > > busses and this is a bus, since there is also the simple-bus compatib=
-le.
-> > >  =20
-> > >> By this logic should not be _every_ node called just "bus"? Hm... an=
-d=20
-> > >> are names needed at all then? =20
-> > >=20
-> > > :-)
-> > >=20
-> > > The schema
-> > >   https://github.com/devicetree-org/dt-schema/blob/main/dtschema/sche=
-mas/simple-bus.yaml
-> > > allows for different names (soc|axi|ahb|*-bus) to avoid warnings on
-> > > existing old dts files.
-> > >=20
-> > > The preferred way is to not have the implementation in nodename,
-> > > similar to how we use 'switch' instead of 'mv88e6xxx', or
-> > > 'ethernet-phy' instead of 'mv88e151x', or 'led-controller', ... =20
-> >=20
-> > Thanks Marek for detailed explanation.
-> > The cases above rather trigger my comments and this one here, after
-> > Pali's explanation, do not fit them. pld is a generic class of a device,
-> > so it is okay here. cpld probably as well (although one could argue that
-> > it is a subset of pld, so the generic name is pld, but then one would
-> > say fpga also should be called pld). For me it does not have to be bus,
-> > just don't want mv88e6xxx or any other vendor/model names. Therefore
-> > cpld is fine. =20
->=20
-> Exactly. cpld, fpga, nor, nand, soc... all of them are not real buses.
->=20
-> simple-bus here is just name invented by device tree and without which
-> existing kernel drivers refuse to work.
+So the good news is that I spent a couple of days on this last week.
 
-OK, then cpld seems correct. I thought it was considered a bus in a way,
-since "simple-bus" is used in compatible.
+The bad news is that I'm nowhere done and about to disappear on holiday
+for a week!
 
-Marek
+But anyway, I might be able to give this a review when I'm back. Failing
+that, I wonder if enough of us have a little bit of time each that we
+could hack on an agreed design together which covers the debug exception
+behaviour beyond kgdb?
+
+Will

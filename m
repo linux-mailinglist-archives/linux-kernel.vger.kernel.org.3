@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A6FAC56C015
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 20:36:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CF03656C00F
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 20:36:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238981AbiGHRco (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Jul 2022 13:32:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36546 "EHLO
+        id S238968AbiGHRcj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Jul 2022 13:32:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36634 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238849AbiGHRcV (ORCPT
+        with ESMTP id S238869AbiGHRc1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Jul 2022 13:32:21 -0400
+        Fri, 8 Jul 2022 13:32:27 -0400
 Received: from pegase2.c-s.fr (pegase2.c-s.fr [93.17.235.10])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9154213F6A
-        for <linux-kernel@vger.kernel.org>; Fri,  8 Jul 2022 10:32:20 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3AFA275C8
+        for <linux-kernel@vger.kernel.org>; Fri,  8 Jul 2022 10:32:26 -0700 (PDT)
 Received: from localhost (mailhub3.si.c-s.fr [172.26.127.67])
-        by localhost (Postfix) with ESMTP id 4LfgMH12n6z9tM2;
-        Fri,  8 Jul 2022 19:32:11 +0200 (CEST)
+        by localhost (Postfix) with ESMTP id 4LfgMK2jcVz9tMH;
+        Fri,  8 Jul 2022 19:32:13 +0200 (CEST)
 X-Virus-Scanned: amavisd-new at c-s.fr
 Received: from pegase2.c-s.fr ([172.26.127.65])
         by localhost (pegase2.c-s.fr [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id 0nxTJTKzkPDW; Fri,  8 Jul 2022 19:32:11 +0200 (CEST)
+        with ESMTP id AbkTMMSGXD2h; Fri,  8 Jul 2022 19:32:13 +0200 (CEST)
 Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
-        by pegase2.c-s.fr (Postfix) with ESMTP id 4LfgMF35gVz9tMB;
+        by pegase2.c-s.fr (Postfix) with ESMTP id 4LfgMF3WVcz9tMJ;
         Fri,  8 Jul 2022 19:32:09 +0200 (CEST)
 Received: from localhost (localhost [127.0.0.1])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id 566998B7A9;
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id 604D78B763;
         Fri,  8 Jul 2022 19:32:09 +0200 (CEST)
 X-Virus-Scanned: amavisd-new at c-s.fr
 Received: from messagerie.si.c-s.fr ([127.0.0.1])
         by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
-        with ESMTP id nn8jgeTnKP0l; Fri,  8 Jul 2022 19:32:09 +0200 (CEST)
+        with ESMTP id 6bsXNL8okJL8; Fri,  8 Jul 2022 19:32:09 +0200 (CEST)
 Received: from PO20335.IDSI0.si.c-s.fr (unknown [192.168.233.202])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id C41FE8B763;
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id C5F2D8B76E;
         Fri,  8 Jul 2022 19:32:08 +0200 (CEST)
 Received: from PO20335.IDSI0.si.c-s.fr (localhost [127.0.0.1])
-        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.16.1) with ESMTPS id 268HW5If1000748
+        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.16.1) with ESMTPS id 268HW5lI1000752
         (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
         Fri, 8 Jul 2022 19:32:05 +0200
 Received: (from chleroy@localhost)
-        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.17.1/Submit) id 268HW5xw1000747;
+        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.17.1/Submit) id 268HW5XQ1000751;
         Fri, 8 Jul 2022 19:32:05 +0200
 X-Authentication-Warning: PO20335.IDSI0.si.c-s.fr: chleroy set sender to christophe.leroy@csgroup.eu using -f
 From:   Christophe Leroy <christophe.leroy@csgroup.eu>
@@ -53,14 +53,14 @@ To:     Michael Ellerman <mpe@ellerman.id.au>,
 Cc:     Christophe Leroy <christophe.leroy@csgroup.eu>,
         linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
         x86@kernel.org, chenzhongjin@huawei.com
-Subject: [PATCH v2 6/7] static_call_inline: Provide trampoline address when updating sites
-Date:   Fri,  8 Jul 2022 19:31:25 +0200
-Message-Id: <5dbe60ab94ea25eb1c1fa08ac3a2d20e870c7969.1657301423.git.christophe.leroy@csgroup.eu>
+Subject: [PATCH v2 7/7] powerpc/static_call: Implement inline static calls
+Date:   Fri,  8 Jul 2022 19:31:26 +0200
+Message-Id: <88ba230182bd0bcec7f03e35df9195c5aa690a0c.1657301423.git.christophe.leroy@csgroup.eu>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <cover.1657301423.git.christophe.leroy@csgroup.eu>
 References: <cover.1657301423.git.christophe.leroy@csgroup.eu>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1657301483; l=1420; s=20211009; h=from:subject:message-id; bh=LdcW+ZAOPWXfSsYDnKAYak5rrWIQXhfyKBvHGFcZat8=; b=wwcSGXnhV+OCjyh/+73EWsRT+VSwy/wqTX5zY6arEvzh1+Logg7S6kmRsGFkKMcle+R0Ijx71yeF AjVw/I7HDP0v+6tXyDT9fDO3TggUBuEMGg9wAcM6SrDXhZmLNu/u
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1657301483; l=4061; s=20211009; h=from:subject:message-id; bh=1PNkEQuYluUeSL+CT5bd1Q86VfFw6RtwUXmvSgfPJgw=; b=E4XCiD2YedzbCtor8E3k2DTEXY+6gwdPZ7Y/ioIsdwOJYno2bTzw/2HDxCUyYEPQ0hvDCU2XqhFa XyE0mK7QD2xi34CSUCXKCFkGp+muVlhL6OyuoW15HcWogTROrdB0
 X-Developer-Key: i=christophe.leroy@csgroup.eu; a=ed25519; pk=HIzTzUj91asvincQGOFx6+ZF5AoUuP9GdOtQChs7Mm0=
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
@@ -72,43 +72,117 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In preparation of support of inline static calls on powerpc, provide
-trampoline address when updating sites, so that if the destination
-function is too far for a direct function call, the call site will
-be patched with a call to the trampoline.
+Implement inline static calls:
+- Put a 'bl' to the destination function ('b' if tail call)
+- Put a 'nop' when the destination function is NULL ('blr' if tail call)
+- Put a 'li r3,0' when the destination is the RET0 function and not
+a tail call.
+
+If the destination is too far (over the 32Mb limit), go via the
+trampoline.
 
 Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
 ---
- arch/x86/kernel/static_call.c | 2 +-
- kernel/static_call_inline.c   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ arch/powerpc/Kconfig                   |  1 +
+ arch/powerpc/include/asm/static_call.h |  2 +
+ arch/powerpc/kernel/static_call.c      | 56 +++++++++++++++++++-------
+ 3 files changed, 44 insertions(+), 15 deletions(-)
 
-diff --git a/arch/x86/kernel/static_call.c b/arch/x86/kernel/static_call.c
-index aa72cefdd5be..4db30b0ea71c 100644
---- a/arch/x86/kernel/static_call.c
-+++ b/arch/x86/kernel/static_call.c
-@@ -102,7 +102,7 @@ void arch_static_call_transform(void *site, void *tramp, void *func, bool tail)
+diff --git a/arch/powerpc/Kconfig b/arch/powerpc/Kconfig
+index 00a43eb26418..cb92887acc3f 100644
+--- a/arch/powerpc/Kconfig
++++ b/arch/powerpc/Kconfig
+@@ -251,6 +251,7 @@ config PPC
+ 	select HAVE_STACKPROTECTOR		if PPC32 && $(cc-option,-mstack-protector-guard=tls -mstack-protector-guard-reg=r2)
+ 	select HAVE_STACKPROTECTOR		if PPC64 && $(cc-option,-mstack-protector-guard=tls -mstack-protector-guard-reg=r13)
+ 	select HAVE_STATIC_CALL			if PPC32
++	select HAVE_STATIC_CALL_INLINE		if PPC32
+ 	select HAVE_SYSCALL_TRACEPOINTS
+ 	select HAVE_VIRT_CPU_ACCOUNTING
+ 	select HUGETLB_PAGE_SIZE_VARIABLE	if PPC_BOOK3S_64 && HUGETLB_PAGE
+diff --git a/arch/powerpc/include/asm/static_call.h b/arch/powerpc/include/asm/static_call.h
+index de1018cc522b..e3d5d3823dac 100644
+--- a/arch/powerpc/include/asm/static_call.h
++++ b/arch/powerpc/include/asm/static_call.h
+@@ -26,4 +26,6 @@
+ #define ARCH_DEFINE_STATIC_CALL_NULL_TRAMP(name)	__PPC_SCT(name, "blr")
+ #define ARCH_DEFINE_STATIC_CALL_RET0_TRAMP(name)	__PPC_SCT(name, "b .+20")
+ 
++#define CALL_INSN_SIZE		4
++
+ #endif /* _ASM_POWERPC_STATIC_CALL_H */
+diff --git a/arch/powerpc/kernel/static_call.c b/arch/powerpc/kernel/static_call.c
+index 863a7aa24650..0093b471186d 100644
+--- a/arch/powerpc/kernel/static_call.c
++++ b/arch/powerpc/kernel/static_call.c
+@@ -8,26 +8,52 @@ void arch_static_call_transform(void *site, void *tramp, void *func, bool tail)
  {
+ 	int err;
+ 	bool is_ret0 = (func == __static_call_return0);
+-	unsigned long target = (unsigned long)(is_ret0 ? tramp + PPC_SCT_RET0 : func);
+-	bool is_short = is_offset_in_branch_range((long)target - (long)tramp);
+-
+-	if (!tramp)
+-		return;
++	unsigned long _tramp = (unsigned long)tramp;
++	unsigned long _func = (unsigned long)func;
++	unsigned long _ret0 = _tramp + PPC_SCT_RET0;
++	bool is_short = is_offset_in_branch_range((long)func - (long)(site ? : tramp));
+ 
  	mutex_lock(&text_mutex);
  
--	if (tramp) {
-+	if (tramp && !site) {
- 		__static_call_validate(tramp, true, true);
- 		__static_call_transform(tramp, __sc_insn(!func, true), func);
+-	if (func && !is_short) {
+-		err = patch_instruction(tramp + PPC_SCT_DATA, ppc_inst(target));
+-		if (err)
+-			goto out;
++	if (site && !tail) {
++		if (!func)
++			err = patch_instruction(site, ppc_inst(PPC_RAW_NOP()));
++		else if (is_ret0)
++			err = patch_instruction(site, ppc_inst(PPC_RAW_LI(_R3, 0)));
++		else if (is_short)
++			err = patch_branch(site, _func, BRANCH_SET_LINK);
++		else if (tramp)
++			err = patch_branch(site, _tramp, BRANCH_SET_LINK);
++		else
++			err = 0;
++	} else if (site) {
++		if (!func)
++			err = patch_instruction(site, ppc_inst(PPC_RAW_BLR()));
++		else if (is_ret0)
++			err = patch_branch(site, _ret0, 0);
++		else if (is_short)
++			err = patch_branch(site, _func, 0);
++		else if (tramp)
++			err = patch_branch(site, _tramp, 0);
++		else
++			err = 0;
++	} else if (tramp) {
++		if (func && !is_short) {
++			err = patch_instruction(tramp + PPC_SCT_DATA, ppc_inst(_func));
++			if (err)
++				goto out;
++		}
++
++		if (!func)
++			err = patch_instruction(tramp, ppc_inst(PPC_RAW_BLR()));
++		else if (is_ret0)
++			err = patch_branch(tramp, _ret0, 0);
++		else if (is_short)
++			err = patch_branch(tramp, _func, 0);
++		else
++			err = patch_instruction(tramp, ppc_inst(PPC_RAW_NOP()));
  	}
-diff --git a/kernel/static_call_inline.c b/kernel/static_call_inline.c
-index dc5665b62814..b5de9d92fa4e 100644
---- a/kernel/static_call_inline.c
-+++ b/kernel/static_call_inline.c
-@@ -195,7 +195,7 @@ void __static_call_update(struct static_call_key *key, void *tramp, void *func)
- 				continue;
- 			}
  
--			arch_static_call_transform(site_addr, NULL, func,
-+			arch_static_call_transform(site_addr, tramp, func,
- 						   static_call_is_tail(site));
- 		}
- 	}
+-	if (!func)
+-		err = patch_instruction(tramp, ppc_inst(PPC_RAW_BLR()));
+-	else if (is_short)
+-		err = patch_branch(tramp, target, 0);
+-	else
+-		err = patch_instruction(tramp, ppc_inst(PPC_RAW_NOP()));
+ out:
+ 	mutex_unlock(&text_mutex);
+ 
 -- 
 2.36.1
 

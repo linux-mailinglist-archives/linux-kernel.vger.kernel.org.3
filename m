@@ -2,107 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0648D56BF92
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 20:36:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C3C556BFD9
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 20:36:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238828AbiGHQPe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Jul 2022 12:15:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57762 "EHLO
+        id S238877AbiGHQQX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Jul 2022 12:16:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58508 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237995AbiGHQPb (ORCPT
+        with ESMTP id S237995AbiGHQQV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Jul 2022 12:15:31 -0400
-Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F3EE76EB4;
-        Fri,  8 Jul 2022 09:15:30 -0700 (PDT)
-Received: by mail-ej1-x635.google.com with SMTP id va17so2080186ejb.0;
-        Fri, 08 Jul 2022 09:15:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=SLM5PUwTV31o0kHfGXDzIJFVkz9EnZxECRqe7Eh0GBQ=;
-        b=QOVATOOfBLjHUxfN9QCROHwRyowlMCkwTO0uRvQYtkT7889uWXuqssJomf8UYieCOH
-         rOsyd0Qs1SZpcSisQbGXueVwVgpGfeIgniy7d4JTgKGCnFm7IXyjd34VQ8VDwgnbI34I
-         tHJqi8SnqOf99qKxi7g2sH1R2ZdV1jDmrdRdiHfQVHu3QeplkH6iZ5HP68HWKdebByl0
-         O08Wy+WH9jN4t84EPDCmr3iqRzhuv21trCJcNgcfVJj4T5sfTdnLpGFnmBHxNXUliXpO
-         97leioUbrmBwxj9sQK+4jjq3jyuNI6lPxHF5G/FeleG3IBhxIY5hhbZ6hKHPf11Zo7D5
-         CKCA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=SLM5PUwTV31o0kHfGXDzIJFVkz9EnZxECRqe7Eh0GBQ=;
-        b=3R7/a/Ot+yDPAJRXyc+EZk1jIcejeUyZaVf8EwHlpUd79NnJu6Iy6VJyHO6XR/8526
-         7uLMfF1WeAa4iQBpNPMrCTJmkqclFr3WJIkW/7wOJD6HxqmoUPtmSdJLqBhTmwHMnj6x
-         cU3fEgtTvdIhpj/k9XW/4zzyaDMJ3hBAWAtivFJDsgzbJxA9CQ6KsekSv/U7p71s5mIv
-         MyyIZddL4+H7MTYjepB+qDDidN2dhs2Uuy2jzvWJqqAgx4+Zv9ficJKeV1diZJk68jwm
-         CVXGOgT104tz+0OEjQi8X8tveVwQIXplI1FDqH1+P8wBgSFdGkbAif0Vfh2IA4lE62b8
-         SVdg==
-X-Gm-Message-State: AJIora8tlBKbV1Qj3SaKOQAcv9wIVNtqJAx/vYpavWznRnNJzO4VTy84
-        DVsRi7T17hInFcwT/oOGD0o=
-X-Google-Smtp-Source: AGRyM1sUnIACkJ+dK6objElcohl7xX5z6IIBO2igjeYRXpiLZCRqJ+I7upZxDk5p8T2cnAhMP/w6wA==
-X-Received: by 2002:a17:906:9b09:b0:72b:d70:32a6 with SMTP id eo9-20020a1709069b0900b0072b0d7032a6mr4248571ejc.723.1657296928940;
-        Fri, 08 Jul 2022 09:15:28 -0700 (PDT)
-Received: from kista.localnet (213-161-3-76.dynamic.telemach.net. [213.161.3.76])
-        by smtp.gmail.com with ESMTPSA id cn22-20020a0564020cb600b0043a896048basm6071727edb.85.2022.07.08.09.15.27
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 08 Jul 2022 09:15:28 -0700 (PDT)
-From:   Jernej =?utf-8?B?xaBrcmFiZWM=?= <jernej.skrabec@gmail.com>
-To:     samuel@sholland.org, Roman Stratiienko <r.stratiienko@gmail.com>
-Cc:     peron.clem@gmail.com, mturquette@baylibre.com, sboyd@kernel.org,
-        mripard@kernel.org, wens@csie.org, linux-clk@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
-        linux-kernel@vger.kernel.org,
-        Roman Stratiienko <r.stratiienko@gmail.com>
-Subject: Re: [PATCH v3] clk: sunxi-ng: sun50i: h6: Modify GPU clock configuration to support DFS
-Date:   Fri, 08 Jul 2022 18:15:27 +0200
-Message-ID: <1930698.8hb0ThOEGa@kista>
-In-Reply-To: <20220705075226.359475-1-r.stratiienko@gmail.com>
-References: <20220705075226.359475-1-r.stratiienko@gmail.com>
+        Fri, 8 Jul 2022 12:16:21 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE6DA76EB4
+        for <linux-kernel@vger.kernel.org>; Fri,  8 Jul 2022 09:16:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1657296981; x=1688832981;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=U8Q/JDShkN96zOSvjLaUmT9NJN1lPPjA0YfUSeO2/BM=;
+  b=NKpqIpoMvYOkgNR+UL2vpnxppb/T5Y11+P9RCW0EXQxuL4gq3rAxlau8
+   6vO1Uj5yG3BEI6sfwsT6TrRkphXbaiE5kqVKys6UOxogJjhau9/6SRnGP
+   tWL4CHcaTmqKkR4ZUt70agmZ0vtsG3VFPtZ/NkR8ja+oXb02/JoCFUs60
+   UVwDNpxGlWYrVq0zYujFi//gEYs6NC6OMF/Z2AAqTsvvxtJ2wfl4y3RRu
+   YSHdhuQ+43RT8wc3zH6F5Np/j86SIdg12A2St3YwvKFMCQNJweeV/kHeO
+   0Q4y1zXJAp7Y8U41gGFjwePQh2yGDo6ZaVSqQ3ArSvoeVplh1qrbN1TV8
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10402"; a="285056041"
+X-IronPort-AV: E=Sophos;i="5.92,256,1650956400"; 
+   d="scan'208";a="285056041"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jul 2022 09:15:59 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.92,256,1650956400"; 
+   d="scan'208";a="544260506"
+Received: from lkp-server01.sh.intel.com (HELO 68b931ab7ac1) ([10.239.97.150])
+  by orsmga003.jf.intel.com with ESMTP; 08 Jul 2022 09:15:58 -0700
+Received: from kbuild by 68b931ab7ac1 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1o9qe5-000NgU-R2;
+        Fri, 08 Jul 2022 16:15:57 +0000
+Date:   Sat, 9 Jul 2022 00:15:37 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Linus Walleij <linus.walleij@linaro.org>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org
+Subject: [arm-integrator:kernel-in-vmalloc-v5.19-rc1 27/35] ld.lld: error:
+ arch/powerpc/kernel/vdso/vdso32.lds:244: unknown directive: static
+Message-ID: <202207090002.wns3emYw-lkp@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Dne torek, 05. julij 2022 ob 09:52:26 CEST je Roman Stratiienko napisal(a):
-> Using simple bash script it was discovered that not all CCU registers
-> can be safely used for DFS, e.g.:
-> 
->     while true
->     do
->         devmem 0x3001030 4 0xb0003e02
->         devmem 0x3001030 4 0xb0001e02
->     done
-> 
-> Script above changes the GPU_PLL multiplier register value. While the
-> script is running, the user should interact with the user interface.
-> 
-> Using this method the following results were obtained:
-> | Register  | Name           | Bits  | Values | Result |
-> | --        | --             | --    | --     | --     |
-> | 0x3001030 | GPU_PLL.MULT   | 15..8 | 20-62  | OK     |
-> | 0x3001030 | GPU_PLL.INDIV  |     1 | 0-1    | OK     |
-> | 0x3001030 | GPU_PLL.OUTDIV |     0 | 0-1    | FAIL   |
-> | 0x3001670 | GPU_CLK.DIV    |  3..0 | ANY    | FAIL   |
-> 
-> DVFS started to work seamlessly once dividers which caused the
-> glitches were set to fixed values.
-> 
-> Signed-off-by: Roman Stratiienko <r.stratiienko@gmail.com>
-> 
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-integrator.git kernel-in-vmalloc-v5.19-rc1
+head:   144435741b0a6f31403d3084103678da3b4f9d11
+commit: 67a0731f120a735a7d6f8685d1fed092e460902e [27/35] powerpc: Make virt_to_pfn() a static inline
+config: powerpc-mpc8315_rdb_defconfig (https://download.01.org/0day-ci/archive/20220709/202207090002.wns3emYw-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 562c3467a6738aa89203f72fc1d1343e5baadf3c)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install powerpc cross compiling tool for clang build
+        # apt-get install binutils-powerpc-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-integrator.git/commit/?id=67a0731f120a735a7d6f8685d1fed092e460902e
+        git remote add arm-integrator https://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-integrator.git
+        git fetch --no-tags arm-integrator kernel-in-vmalloc-v5.19-rc1
+        git checkout 67a0731f120a735a7d6f8685d1fed092e460902e
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=powerpc prepare
 
-Applied, thanks!
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-Best regards,
-Jernej
+All errors (new ones prefixed by >>):
 
+>> ld.lld: error: arch/powerpc/kernel/vdso/vdso32.lds:244: unknown directive: static
+   >>> static inline unsigned long virt_to_pfn(const volatile void *kaddr)
+   >>> ^
+   clang-15: error: linker command failed with exit code 1 (use -v to see invocation)
+   make[2]: *** [arch/powerpc/kernel/vdso/Makefile:66: arch/powerpc/kernel/vdso/vdso32.so.dbg] Error 1
+   make[2]: Target 'include/generated/vdso32-offsets.h' not remade because of errors.
+   make[1]: *** [arch/powerpc/Makefile:422: vdso_prepare] Error 2
+   make[1]: Target 'prepare' not remade because of errors.
+   make: *** [Makefile:219: __sub-make] Error 2
+   make: Target 'prepare' not remade because of errors.
 
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

@@ -2,80 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4CFFE56BDC7
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 18:08:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B878456BDFD
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 18:09:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238579AbiGHP3X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Jul 2022 11:29:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48360 "EHLO
+        id S238520AbiGHP3I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Jul 2022 11:29:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48100 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238476AbiGHP3V (ORCPT
+        with ESMTP id S238310AbiGHP3F (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Jul 2022 11:29:21 -0400
-Received: from mail-yb1-xb30.google.com (mail-yb1-xb30.google.com [IPv6:2607:f8b0:4864:20::b30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D3DA201AC
-        for <linux-kernel@vger.kernel.org>; Fri,  8 Jul 2022 08:29:20 -0700 (PDT)
-Received: by mail-yb1-xb30.google.com with SMTP id i14so18645764yba.1
-        for <linux-kernel@vger.kernel.org>; Fri, 08 Jul 2022 08:29:20 -0700 (PDT)
+        Fri, 8 Jul 2022 11:29:05 -0400
+Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 534C3E74
+        for <linux-kernel@vger.kernel.org>; Fri,  8 Jul 2022 08:29:04 -0700 (PDT)
+Received: by mail-lf1-x133.google.com with SMTP id f39so36909113lfv.3
+        for <linux-kernel@vger.kernel.org>; Fri, 08 Jul 2022 08:29:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
+        d=google.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc:content-transfer-encoding;
-        bh=YMEGxIrE4woAf5cnzkZ+3hQp7ZS3VGf+M1Bxpp05xRA=;
-        b=ecaQUHS0lHe+xS7QeRj1P7pinsI/NrxvyEsdPWpDaG8YB0F0Gz5iEiFh9Ln9piexBw
-         zQwkOUXEIc0AVVNGhpCiTO4NKOH6r0qPLtCr0wX5GBIgI6AjppwEqmpJ6EA45WJ7GniL
-         H0cMz3WrgzTFVKC1UyQdBTLpO3kJ17s0sw0uPGMmQSrdlmq80M+yFSD1NuE9jEaBnymI
-         Ff+/kJsyLWJ3zVjyZgsEau9JwoRRBMKgEwL7wpIWCP2wI9w0zmjWCToJ4h+VEKDTKIDl
-         quGIcI3DxzcnjRkhNk83S6Gb79aPn+5X6FJWpwiFoxfQM4WzORdTLgDcc02w7Ir8g2Ww
-         Te2Q==
+        bh=EsqbPN5x+9PQgkB3EhpcwOrofU0GdaTgCdJPXG3XIDs=;
+        b=Cjnkmx6zMzqZ3p3G/vWvCi7H5Ak27tLHkdjhmkw9kNmIAPJUo8Zng3TS5lXIfi6DBw
+         X3tUPRJlg4MJWu+CehqG44HL/yX8UnZbaetVtGCue+/dkdQhexRD9soeCLZkESw3xgav
+         PADev3iQqDx6T63UIbOBv+bZJGarOCx/gjp/mT5vs2iAEenyNWCIpiGzUNYHEMlGwPxW
+         qZC7lCmjwJmRxifn9Rc6bcipQ7WFHZgUtl2Ho9HL5gHQrUb+LvEpMSwQ6e1O6/soqAhT
+         LZRfSUQ7NKWdx7lQcXIdC9xYJnjTWcyo16zxdsDVt5YINNiZ4TeBSrYhfklXh5wMLdbo
+         tZuw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc:content-transfer-encoding;
-        bh=YMEGxIrE4woAf5cnzkZ+3hQp7ZS3VGf+M1Bxpp05xRA=;
-        b=pprOfhhHHMIeOz7PhKCyMUXKYEVoZU8UD2461D/vLWmsf6if5BjOt+iLRbb9CWQZcp
-         tefKit0FJ+PGGxeoLV1Ef6jQkL2mP1FomuSfDmkwJR5IPCO2wNdKn1URo7xKwJW12HTF
-         8WoOA0XzxUHM9K8Ms9P0hupITfl7L6qwHp8ZcJnnQ5BSxunNAJOSqYAYGHF+C0h9hKmw
-         f37AydzHSfggUAHGSkrWsmqNVa0YRz8cKf6iwvLi6pVHTn4wzIyHrNhF2yZsdUeURow3
-         A3QJYOM+a8DVuUJHTg/UCQcnouBtZyfSqpYGxoDr/yik5Db8hycOjMQBOMFkp02FZQD9
-         TceQ==
-X-Gm-Message-State: AJIora+qcmn7/RZLuEs/auG81tE4ioHS+6SC1zG1ZPaWsgsK1E8LpKqP
-        mFFdh25+cePnmzG5l0eDE94ruEVHv8+/IcyiIbk=
-X-Google-Smtp-Source: AGRyM1swmlKZ4XV6RN24eaRkZwJll3K67xeqgJ9qYHEzq8RVNfkeSaXb0i1fFJ5yeI+4TVhowP1eXn8EehYYfXKEa3Q=
-X-Received: by 2002:a25:cbcf:0:b0:66e:8893:a02c with SMTP id
- b198-20020a25cbcf000000b0066e8893a02cmr4250392ybg.460.1657294159638; Fri, 08
- Jul 2022 08:29:19 -0700 (PDT)
+        bh=EsqbPN5x+9PQgkB3EhpcwOrofU0GdaTgCdJPXG3XIDs=;
+        b=Dl/6ipX39+yEqeyxsE9CK3luwDJ/WPdh/ZOy24VSFWChs4ALkq3ctot3d08eaR0Rgr
+         pbTnbj5cS3HfFWH85YbHMeClw9K7E0BQCUMUnf08b2hrZuV6BYfg1SmWK3/EqmPdMzyB
+         XLdclQOH3TN1S50Z5uqwSIlY5CJd5PqJynFYDaAMLN3uToCyLiaZ04O5J/69zOy+gDJb
+         fx1j/udj1+nnju3cGnHOKolBJOZ+9+SRfWDb/nmQwNHM1DbrQ5oLrggLV8FQHUzldXxD
+         6Mce/fx+Zz0Sg10xlWZJyP8U7lp6P9cvLqAuk6TWJBFAh/tufTwyEw3iaGu/KcNY71xB
+         b7Bg==
+X-Gm-Message-State: AJIora+7pDut290Zhx3UVnJuq0cVfBTia6rxqthwnj81xLdBnIWOfCZR
+        xGoFlpjDLHjcY+JgZ2cgnTe6S1RQYVpPATem6ahSwA==
+X-Google-Smtp-Source: AGRyM1sV1zq1ZnN2yjXTPuiG/7Xv8X9xkix73ZrgQZOxRd61c9fzZcS0BmfVarULhrHnBVAu75EPaoUECCydheenFzI=
+X-Received: by 2002:a05:6512:1112:b0:488:e0ac:fb41 with SMTP id
+ l18-20020a056512111200b00488e0acfb41mr3001464lfg.456.1657294142373; Fri, 08
+ Jul 2022 08:29:02 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220707091301.1282291-1-cezary.rojewski@intel.com>
- <CAHp75VceKBoxXVPP4dRYb8LQqHMMDHFp6-E2iuZ-h2RTK8PWQQ@mail.gmail.com>
- <e0c7d254-ace3-625c-cc83-52ca0b45e9fc@intel.com> <CAHp75VckU2ZraLJ-frjWXjUu9pFW+-XmWgTbYqUXOUNAD-1HGA@mail.gmail.com>
- <6c8e4104-2239-a188-649d-585f059cabdd@intel.com> <YsgjdKEtE7pMDTnZ@smile.fi.intel.com>
- <a73b3ec0-5abb-ddfd-414b-b9807f05413e@linux.intel.com> <CAHp75Vd4D0KF7ik+aMOwv-+bofWja_tDe4YUmihQBF+RiHZTmA@mail.gmail.com>
-In-Reply-To: <CAHp75Vd4D0KF7ik+aMOwv-+bofWja_tDe4YUmihQBF+RiHZTmA@mail.gmail.com>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Fri, 8 Jul 2022 17:28:43 +0200
-Message-ID: <CAHp75VcUmy3xa3kKQSsiG84f3VWd83xt9ZTGnAdA3Ub1PJ7raw@mail.gmail.com>
-Subject: Re: [PATCH 1/2] lib/string_helpers: Introduce strsplit_u32()
-To:     =?UTF-8?Q?P=C3=A9ter_Ujfalusi?= <peter.ujfalusi@linux.intel.com>
-Cc:     Cezary Rojewski <cezary.rojewski@intel.com>,
-        Andy Shevchenko <andy@kernel.org>,
-        Mark Brown <broonie@kernel.org>,
-        ALSA Development Mailing List <alsa-devel@alsa-project.org>,
-        Takashi Iwai <tiwai@suse.com>,
-        Jaroslav Kysela <perex@perex.cz>,
-        amadeuszx.slawinski@linux.intel.com,
-        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Ranjani Sridharan <ranjani.sridharan@linux.intel.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Kai Vehmanen <kai.vehmanen@linux.intel.com>,
-        Bard Liao <yung-chuan.liao@linux.intel.com>
+References: <cover.1655761627.git.ashish.kalra@amd.com> <5d05799fc61994684aa2b2ddb8c5b326a3279e25.1655761627.git.ashish.kalra@amd.com>
+ <CAMkAt6rGzSewSyO1uZehWUD2J6aLtRwP5N-uj-HPG73Pp0=Sjw@mail.gmail.com>
+ <SN6PR12MB2767B9F438A0F6413780F73E8EB99@SN6PR12MB2767.namprd12.prod.outlook.com>
+ <SN6PR12MB27675E821D5D1C423F2AF5768EBB9@SN6PR12MB2767.namprd12.prod.outlook.com>
+In-Reply-To: <SN6PR12MB27675E821D5D1C423F2AF5768EBB9@SN6PR12MB2767.namprd12.prod.outlook.com>
+From:   Peter Gonda <pgonda@google.com>
+Date:   Fri, 8 Jul 2022 09:28:50 -0600
+Message-ID: <CAMkAt6riwJuL445USAAc-dLZ+vUsmtr+spAM=RQhJ07-K=nyMg@mail.gmail.com>
+Subject: Re: [PATCH Part2 v6 42/49] KVM: SVM: Provide support for
+ SNP_GUEST_REQUEST NAE event
+To:     "Kalra, Ashish" <Ashish.Kalra@amd.com>
+Cc:     "the arch/x86 maintainers" <x86@kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        kvm list <kvm@vger.kernel.org>,
+        "linux-coco@lists.linux.dev" <linux-coco@lists.linux.dev>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Joerg Roedel <jroedel@suse.de>,
+        "Lendacky, Thomas" <Thomas.Lendacky@amd.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, Ard Biesheuvel <ardb@kernel.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Jim Mattson <jmattson@google.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Sergio Lopez <slp@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        David Rientjes <rientjes@google.com>,
+        Dov Murik <dovmurik@linux.ibm.com>,
+        Tobin Feldman-Fitzthum <tobin@ibm.com>,
+        Borislav Petkov <bp@alien8.de>,
+        "Roth, Michael" <Michael.Roth@amd.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        "Kirill A . Shutemov" <kirill@shutemov.name>,
+        Andi Kleen <ak@linux.intel.com>,
+        Tony Luck <tony.luck@intel.com>, Marc Orr <marcorr@google.com>,
+        Sathyanarayanan Kuppuswamy 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        Alper Gun <alpergun@google.com>,
+        "Dr. David Alan Gilbert" <dgilbert@redhat.com>,
+        "jarkko@kernel.org" <jarkko@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -83,18 +103,123 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jul 8, 2022 at 5:25 PM Andy Shevchenko
-<andy.shevchenko@gmail.com> wrote:
-> On Fri, Jul 8, 2022 at 2:34 PM P=C3=A9ter Ujfalusi
-> <peter.ujfalusi@linux.intel.com> wrote:
+On Wed, Jun 29, 2022 at 1:15 PM Kalra, Ashish <Ashish.Kalra@amd.com> wrote:
+>
+> [Public]
+>
+>
+> >> +static void snp_handle_ext_guest_request(struct vcpu_svm *svm, gpa_t
+> >> +req_gpa, gpa_t resp_gpa) {
+> >> +       struct sev_data_snp_guest_request req =3D {0};
+> >> +       struct kvm_vcpu *vcpu =3D &svm->vcpu;
+> >> +       struct kvm *kvm =3D vcpu->kvm;
+> >> +       unsigned long data_npages;
+> >> +       struct kvm_sev_info *sev;
+> >> +       unsigned long rc, err;
+> >> +       u64 data_gpa;
+> >> +
+> >> +       if (!sev_snp_guest(vcpu->kvm)) {
+> >> +               rc =3D SEV_RET_INVALID_GUEST;
+> >> +               goto e_fail;
+> >> +       }
+> >> +
+> >> +       sev =3D &to_kvm_svm(kvm)->sev_info;
+> >> +
+> >> +       data_gpa =3D vcpu->arch.regs[VCPU_REGS_RAX];
+> >> +       data_npages =3D vcpu->arch.regs[VCPU_REGS_RBX];
+> >> +
+> >> +       if (!IS_ALIGNED(data_gpa, PAGE_SIZE)) {
+> >> +               rc =3D SEV_RET_INVALID_ADDRESS;
+> >> +               goto e_fail;
+> >> +       }
+> >> +
+> >> +       /* Verify that requested blob will fit in certificate buffer *=
+/
+> >> +       if ((data_npages << PAGE_SHIFT) > SEV_FW_BLOB_MAX_SIZE) {
+> >> +               rc =3D SEV_RET_INVALID_PARAM;
+> >> +               goto e_fail;
+> >> +       }
+> >> +
+> >> +       mutex_lock(&sev->guest_req_lock);
+> >> +
+> >> +       rc =3D snp_setup_guest_buf(svm, &req, req_gpa, resp_gpa);
+> >> +       if (rc)
+> >> +               goto unlock;
+> >> +
+> >> +       rc =3D snp_guest_ext_guest_request(&req, (unsigned long)sev->s=
+np_certs_data,
+> >> +                                        &data_npages, &err);
+> >> +       if (rc) {
+> >> +               /*
+> >> +                * If buffer length is small then return the expected
+> >> +                * length in rbx.
+> >> +                */
+> >> +               if (err =3D=3D SNP_GUEST_REQ_INVALID_LEN)
+> >> +                       vcpu->arch.regs[VCPU_REGS_RBX] =3D data_npages=
+;
+> >> +
+> >> +               /* pass the firmware error code */
+> >> +               rc =3D err;
+> >> +               goto cleanup;
+> >> +       }
+> >> +
+> >> +       /* Copy the certificate blob in the guest memory */
+> >> +       if (data_npages &&
+> >> +           kvm_write_guest(kvm, data_gpa, sev->snp_certs_data, data_n=
+pages << PAGE_SHIFT))
+> >> +               rc =3D SEV_RET_INVALID_ADDRESS;
+>
+> >>Since at this point the PSP FW has correctly executed the command and i=
+ncremented the VMPCK sequence number I think we need another error signal h=
+ere since this will tell the guest the PSP had an error so it will not know=
+ if the VMPCK sequence >number should be incremented.
+>
+> >Similarly as above, as this is an error path, so what's the guarantee th=
+at the next guest message request will succeed completely,  isn=E2=80=99t i=
+t better to let the
+> >FW reject any subsequent guest messages once it has detected that the se=
+quence numbers are out of sync ?
+>
+> Alternately, we probably can return SEV_RET_INVALID_PAGE_STATE/SEV_RET_IN=
+VALID_PAGE_OWNER here, but that still does not indicate to the guest
+> that the FW has successfully executed the command and the error occurred =
+during cleanup/result phase and it needs to increment the VMPCK sequence nu=
+mber. There is nothing as such defined in SNP FW API specs to indicate such=
+ kind of failures to guest. As I mentioned earlier, this is probably indica=
+tive of
+> a bigger system failure and it is better to let the FW reject subsequent =
+guest messages/requests once it has detected that the sequence numbers are =
+out of sync.
 
-...
+Hmm I think the guest must be careful here because the guest could not
+trust the hypervisor here to be truthful about the sequence numbers
+incrementing. That's unfortunate since this means if these operations
+do fail with a well behaved hypervisor the guest cannot use that VMPCK
+again. But there is no harm in the guest re-issuing the
+SNP_GUEST_REQUEST (or extended version) with the exact same request
+just in at a different address. The GHCB spec actually calls this out
+" It is recommended that the hypervisor validate the guest physical
+address of the response page before invoking the SNP_GUEST_REQUEST API
+so that the sequence numbers do not get out of sync for the guest,
+possibly resulting in all successive requests failing".
 
-> (it may be casted to struct tokens { int n; u32 v[]; })
+Currently SVM_VMGEXIT_GUEST_REQUEST and SVM_VMGEXIT_EXT_GUEST_REQUEST
+have different hypervisor -> guest usage for SW_EXITINFO2. I think
+they both should be defined as what SVM_VMGEXIT_EXT_GUEST_REQUEST is
+now: the high 32bits are the hypervisor error code, the low 32bits are
+the FW error code. This would allow for both NAEs to have some signal
+to the guest say SEV_RET_INVALID_REQ_ADDRESS. The hypervisor can use
+this error code when doing the validation on the request and response
+regions, if some is wrong with them the guest can retry with the exact
+same request (so no IV reuse) in a corrected region.
 
-On second thought it is better not to do this (it will work on x86,
-but in general it may be surprising on BE-64).
+But another reason I think SVM_VMGEXIT_GUEST_REQUEST SW_EXITINFO2
+hypervisor->guest state should include this change is because in this
+patch we are currently overloading the lower 32bits with hypervisor
+error codes. In snp_handle_guest_request() if sev_snp_guest(),
+snp_setup_guest_buf(), or snp_cleanup_guest_buf() fails we use the low
+32bits of SW_EXITINFO2 to return hypervisor errors to the guest.
 
---=20
-With Best Regards,
-Andy Shevchenko
+>
+> Thanks,
+> Ashish

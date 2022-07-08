@@ -2,547 +2,206 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D970256B53C
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 11:22:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B34E56B57E
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 11:33:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237622AbiGHJVU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Jul 2022 05:21:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41870 "EHLO
+        id S237708AbiGHJce (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Jul 2022 05:32:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52660 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237809AbiGHJVC (ORCPT
+        with ESMTP id S237375AbiGHJcZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Jul 2022 05:21:02 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36B0A2B607;
-        Fri,  8 Jul 2022 02:21:00 -0700 (PDT)
-Received: from kwepemi500013.china.huawei.com (unknown [172.30.72.55])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4LfSQm2kvGzhZ3R;
-        Fri,  8 Jul 2022 17:19:28 +0800 (CST)
-Received: from huawei.com (10.67.174.197) by kwepemi500013.china.huawei.com
- (7.221.188.120) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Fri, 8 Jul
- 2022 17:20:56 +0800
-From:   Xu Kuohai <xukuohai@huawei.com>
-To:     <bpf@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <netdev@vger.kernel.org>,
-        Jean-Philippe Brucker <jean-philippe@linaro.org>,
-        Will Deacon <will@kernel.org>, KP Singh <kpsingh@kernel.org>
-CC:     Mark Rutland <mark.rutland@arm.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Zi Shen Lim <zlim.lnx@gmail.com>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        David Ahern <dsahern@kernel.org>,
+        Fri, 8 Jul 2022 05:32:25 -0400
+Received: from metanate.com (unknown [IPv6:2001:8b0:1628:5005::111])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D49831214;
+        Fri,  8 Jul 2022 02:32:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=metanate.com; s=stronger; h=Content-Transfer-Encoding:Message-Id:Date:
+        Subject:Cc:To:From:Content-Type:Reply-To:Content-ID:Content-Description:
+        In-Reply-To:References; bh=GRDtLrg1eo3rpDwABeMBkn3OTA3HriAEjs7QS83CUjk=; b=i3
+        qk2JIJp2WNfMWQ5AYXeH55kLCwjvkHM7dvsjvc+wPowDZ/9aEbBTO/vwbhKKlYOTQz6nbUWgA2wOs
+        KfIn6R+25OioHIRfiD45PH9cbxvmZicFk0OlBbgGZq6p+jGk+AUSz0mZkT7I8dTbjc4+6E3n2Fx5H
+        sSsirV9JwTCXmp1kcDDPA37BJ6Xu7CJwv6zOkI28THkCcVdPLCalMj3s+QQ19GUFGSox+piuAMjz/
+        4eAW9S5kmpcHS3Udi9ddTVR82fkD81OVCEdtAij7tMDZHo22M5REgQcybdp748kTVVD/8wgB8Fjyn
+        CpkZK+p8vWq3aZDM/nkzZLCqcOjAbamw==;
+Received: from [81.174.171.191] (helo=donbot.metanate.com)
+        by email.metanate.com with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <john@metanate.com>)
+        id 1o9kLS-0002vl-Br;
+        Fri, 08 Jul 2022 10:32:19 +0100
+From:   John Keeping <john@metanate.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     linux-rt-users@vger.kernel.org, John Keeping <john@metanate.com>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>,
         Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, <x86@kernel.org>,
-        "H . Peter Anvin" <hpa@zytor.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        Russell King <rmk+kernel@armlinux.org.uk>,
-        James Morse <james.morse@arm.com>,
-        Hou Tao <houtao1@huawei.com>,
-        Jason Wang <wangborong@cdjrlc.com>
-Subject: [PATCH bpf-next v7 4/4] bpf, arm64: bpf trampoline for arm64
-Date:   Fri, 8 Jul 2022 05:30:32 -0400
-Message-ID: <20220708093032.1832755-5-xukuohai@huawei.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20220708093032.1832755-1-xukuohai@huawei.com>
-References: <20220708093032.1832755-1-xukuohai@huawei.com>
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Valentin Schneider <vschneid@redhat.com>
+Subject: [PATCH v2] sched/core: Always flush pending blk_plug
+Date:   Fri,  8 Jul 2022 10:32:12 +0100
+Message-Id: <20220708093213.1635880-1-john@metanate.com>
+X-Mailer: git-send-email 2.37.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.67.174.197]
-X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
- kwepemi500013.china.huawei.com (7.221.188.120)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Authenticated: YES
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RDNS_NONE,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is arm64 version of commit fec56f5890d9 ("bpf: Introduce BPF
-trampoline"). A bpf trampoline converts native calling convention to bpf
-calling convention and is used to implement various bpf features, such
-as fentry, fexit, fmod_ret and struct_ops.
+With CONFIG_PREEMPT_RT, it is possible to hit a deadlock between two
+normal priority tasks (SCHED_OTHER, nice level zero):
 
-This patch does essentially the same thing that bpf trampoline does on x86.
+	INFO: task kworker/u8:0:8 blocked for more than 491 seconds.
+	      Not tainted 5.15.49-rt46 #1
+	"echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
+	task:kworker/u8:0    state:D stack:    0 pid:    8 ppid:     2 flags:0x00000000
+	Workqueue: writeback wb_workfn (flush-7:0)
+	[<c08a3a10>] (__schedule) from [<c08a3d84>] (schedule+0xdc/0x134)
+	[<c08a3d84>] (schedule) from [<c08a65a0>] (rt_mutex_slowlock_block.constprop.0+0xb8/0x174)
+	[<c08a65a0>] (rt_mutex_slowlock_block.constprop.0) from [<c08a6708>]
+	+(rt_mutex_slowlock.constprop.0+0xac/0x174)
+	[<c08a6708>] (rt_mutex_slowlock.constprop.0) from [<c0374d60>] (fat_write_inode+0x34/0x54)
+	[<c0374d60>] (fat_write_inode) from [<c0297304>] (__writeback_single_inode+0x354/0x3ec)
+	[<c0297304>] (__writeback_single_inode) from [<c0297998>] (writeback_sb_inodes+0x250/0x45c)
+	[<c0297998>] (writeback_sb_inodes) from [<c0297c20>] (__writeback_inodes_wb+0x7c/0xb8)
+	[<c0297c20>] (__writeback_inodes_wb) from [<c0297f24>] (wb_writeback+0x2c8/0x2e4)
+	[<c0297f24>] (wb_writeback) from [<c0298c40>] (wb_workfn+0x1a4/0x3e4)
+	[<c0298c40>] (wb_workfn) from [<c0138ab8>] (process_one_work+0x1fc/0x32c)
+	[<c0138ab8>] (process_one_work) from [<c0139120>] (worker_thread+0x22c/0x2d8)
+	[<c0139120>] (worker_thread) from [<c013e6e0>] (kthread+0x16c/0x178)
+	[<c013e6e0>] (kthread) from [<c01000fc>] (ret_from_fork+0x14/0x38)
+	Exception stack(0xc10e3fb0 to 0xc10e3ff8)
+	3fa0:                                     00000000 00000000 00000000 00000000
+	3fc0: 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000
+	3fe0: 00000000 00000000 00000000 00000000 00000013 00000000
 
-Tested on raspberry pi 4b and qemu:
+	INFO: task tar:2083 blocked for more than 491 seconds.
+	      Not tainted 5.15.49-rt46 #1
+	"echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
+	task:tar             state:D stack:    0 pid: 2083 ppid:  2082 flags:0x00000000
+	[<c08a3a10>] (__schedule) from [<c08a3d84>] (schedule+0xdc/0x134)
+	[<c08a3d84>] (schedule) from [<c08a41b0>] (io_schedule+0x14/0x24)
+	[<c08a41b0>] (io_schedule) from [<c08a455c>] (bit_wait_io+0xc/0x30)
+	[<c08a455c>] (bit_wait_io) from [<c08a441c>] (__wait_on_bit_lock+0x54/0xa8)
+	[<c08a441c>] (__wait_on_bit_lock) from [<c08a44f4>] (out_of_line_wait_on_bit_lock+0x84/0xb0)
+	[<c08a44f4>] (out_of_line_wait_on_bit_lock) from [<c0371fb0>] (fat_mirror_bhs+0xa0/0x144)
+	[<c0371fb0>] (fat_mirror_bhs) from [<c0372a68>] (fat_alloc_clusters+0x138/0x2a4)
+	[<c0372a68>] (fat_alloc_clusters) from [<c0370b14>] (fat_alloc_new_dir+0x34/0x250)
+	[<c0370b14>] (fat_alloc_new_dir) from [<c03787c0>] (vfat_mkdir+0x58/0x148)
+	[<c03787c0>] (vfat_mkdir) from [<c0277b60>] (vfs_mkdir+0x68/0x98)
+	[<c0277b60>] (vfs_mkdir) from [<c027b484>] (do_mkdirat+0xb0/0xec)
+	[<c027b484>] (do_mkdirat) from [<c0100060>] (ret_fast_syscall+0x0/0x1c)
+	Exception stack(0xc2e1bfa8 to 0xc2e1bff0)
+	bfa0:                   01ee42f0 01ee4208 01ee42f0 000041ed 00000000 00004000
+	bfc0: 01ee42f0 01ee4208 00000000 00000027 01ee4302 00000004 000dcb00 01ee4190
+	bfe0: 000dc368 bed11924 0006d4b0 b6ebddfc
 
- #18 /1     bpf_tcp_ca/dctcp:OK
- #18 /2     bpf_tcp_ca/cubic:OK
- #18 /3     bpf_tcp_ca/invalid_license:OK
- #18 /4     bpf_tcp_ca/dctcp_fallback:OK
- #18 /5     bpf_tcp_ca/rel_setsockopt:OK
- #18        bpf_tcp_ca:OK
- #51 /1     dummy_st_ops/dummy_st_ops_attach:OK
- #51 /2     dummy_st_ops/dummy_init_ret_value:OK
- #51 /3     dummy_st_ops/dummy_init_ptr_arg:OK
- #51 /4     dummy_st_ops/dummy_multiple_args:OK
- #51        dummy_st_ops:OK
- #57 /1     fexit_bpf2bpf/target_no_callees:OK
- #57 /2     fexit_bpf2bpf/target_yes_callees:OK
- #57 /3     fexit_bpf2bpf/func_replace:OK
- #57 /4     fexit_bpf2bpf/func_replace_verify:OK
- #57 /5     fexit_bpf2bpf/func_sockmap_update:OK
- #57 /6     fexit_bpf2bpf/func_replace_return_code:OK
- #57 /7     fexit_bpf2bpf/func_map_prog_compatibility:OK
- #57 /8     fexit_bpf2bpf/func_replace_multi:OK
- #57 /9     fexit_bpf2bpf/fmod_ret_freplace:OK
- #57        fexit_bpf2bpf:OK
- #237       xdp_bpf2bpf:OK
+Here the kworker is waiting on msdos_sb_info::s_lock which is held by
+tar which is in turn waiting for a buffer which is locked waiting to be
+flushed, but this operation is plugged in the kworker.
 
-Signed-off-by: Xu Kuohai <xukuohai@huawei.com>
-Acked-by: Song Liu <songliubraving@fb.com>
-Acked-by: KP Singh <kpsingh@kernel.org>
+The lock is a normal struct mutex, so tsk_is_pi_blocked() will always
+return false on !RT and thus the behaviour changes for RT.
+
+It seems that the intent here is to skip blk_flush_plug() in the case
+where a non-preemptible lock (such as a spinlock) has been converted to
+a rtmutex on RT, which is the case covered by the SM_RTLOCK_WAIT
+schedule flag.  But sched_submit_work() is only called from schedule()
+which is never called in this scenario, so the check can simply be
+deleted.
+
+Looking at the history of the -rt patchset, in fact this change was
+present from v5.9.1-rt20 until being dropped in v5.13-rt1 as it was part
+of a larger patch [1] most of which was replaced by commit b4bfa3fcfe3b
+("sched/core: Rework the __schedule() preempt argument").
+
+As described in [1]:
+
+   The schedule process must distinguish between blocking on a regular
+   sleeping lock (rwsem and mutex) and a RT-only sleeping lock (spinlock
+   and rwlock):
+   - rwsem and mutex must flush block requests (blk_schedule_flush_plug())
+     even if blocked on a lock. This can not deadlock because this also
+     happens for non-RT.
+     There should be a warning if the scheduling point is within a RCU read
+     section.
+
+   - spinlock and rwlock must not flush block requests. This will deadlock
+     if the callback attempts to acquire a lock which is already acquired.
+     Similarly to being preempted, there should be no warning if the
+     scheduling point is within a RCU read section.
+
+and with the tsk_is_pi_blocked() in the scheduler path, we hit the first
+issue.
+
+[1] https://git.kernel.org/pub/scm/linux/kernel/git/rt/linux-rt-devel.git/tree/patches/0022-locking-rtmutex-Use-custom-scheduling-function-for-s.patch?h=linux-5.10.y-rt-patches
+
+Cc: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+Cc: Peter Zijlstra <peterz@infradead.org>
+Cc: Thomas Gleixner <tglx@linutronix.de>
+Reviewed-by: Steven Rostedt (Google) <rostedt@goodmis.org>
+Signed-off-by: John Keeping <john@metanate.com>
 ---
- arch/arm64/net/bpf_jit_comp.c | 394 +++++++++++++++++++++++++++++++++-
- 1 file changed, 391 insertions(+), 3 deletions(-)
+v2:
+- Add Steven's R-b and update the commit message with his suggested
+  quote from [1]
 
-diff --git a/arch/arm64/net/bpf_jit_comp.c b/arch/arm64/net/bpf_jit_comp.c
-index 0ef35ec30d4e..073dad95a6a1 100644
---- a/arch/arm64/net/bpf_jit_comp.c
-+++ b/arch/arm64/net/bpf_jit_comp.c
-@@ -176,6 +176,14 @@ static inline void emit_addr_mov_i64(const int reg, const u64 val,
- 	}
+ include/linux/sched/rt.h | 8 --------
+ kernel/sched/core.c      | 3 ---
+ 2 files changed, 11 deletions(-)
+
+diff --git a/include/linux/sched/rt.h b/include/linux/sched/rt.h
+index e5af028c08b49..994c25640e156 100644
+--- a/include/linux/sched/rt.h
++++ b/include/linux/sched/rt.h
+@@ -39,20 +39,12 @@ static inline struct task_struct *rt_mutex_get_top_task(struct task_struct *p)
  }
- 
-+static inline void emit_call(u64 target, struct jit_ctx *ctx)
-+{
-+	u8 tmp = bpf2a64[TMP_REG_1];
-+
-+	emit_addr_mov_i64(tmp, target, ctx);
-+	emit(A64_BLR(tmp), ctx);
-+}
-+
- static inline int bpf2a64_offset(int bpf_insn, int off,
- 				 const struct jit_ctx *ctx)
+ extern void rt_mutex_setprio(struct task_struct *p, struct task_struct *pi_task);
+ extern void rt_mutex_adjust_pi(struct task_struct *p);
+-static inline bool tsk_is_pi_blocked(struct task_struct *tsk)
+-{
+-	return tsk->pi_blocked_on != NULL;
+-}
+ #else
+ static inline struct task_struct *rt_mutex_get_top_task(struct task_struct *task)
  {
-@@ -1072,8 +1080,7 @@ static int build_insn(const struct bpf_insn *insn, struct jit_ctx *ctx,
- 					    &func_addr, &func_addr_fixed);
- 		if (ret < 0)
- 			return ret;
--		emit_addr_mov_i64(tmp, func_addr, ctx);
--		emit(A64_BLR(tmp), ctx);
-+		emit_call(func_addr, ctx);
- 		emit(A64_MOV(1, r0, A64_R(0)), ctx);
- 		break;
- 	}
-@@ -1417,6 +1424,13 @@ static int validate_code(struct jit_ctx *ctx)
- 		if (a64_insn == AARCH64_BREAK_FAULT)
- 			return -1;
- 	}
-+	return 0;
-+}
-+
-+static int validate_ctx(struct jit_ctx *ctx)
-+{
-+	if (validate_code(ctx))
-+		return -1;
- 
- 	if (WARN_ON_ONCE(ctx->exentry_idx != ctx->prog->aux->num_exentries))
- 		return -1;
-@@ -1546,7 +1560,7 @@ struct bpf_prog *bpf_int_jit_compile(struct bpf_prog *prog)
- 	build_plt(&ctx);
- 
- 	/* 3. Extra pass to validate JITed code. */
--	if (validate_code(&ctx)) {
-+	if (validate_ctx(&ctx)) {
- 		bpf_jit_binary_free(header);
- 		prog = orig_prog;
- 		goto out_off;
-@@ -1624,6 +1638,380 @@ bool bpf_jit_supports_subprog_tailcalls(void)
- 	return true;
+ 	return NULL;
  }
+ # define rt_mutex_adjust_pi(p)		do { } while (0)
+-static inline bool tsk_is_pi_blocked(struct task_struct *tsk)
+-{
+-	return false;
+-}
+ #endif
  
-+static void invoke_bpf_prog(struct jit_ctx *ctx, struct bpf_tramp_link *l,
-+			    int args_off, int retval_off, int run_ctx_off,
-+			    bool save_ret)
-+{
-+	u32 *branch;
-+	u64 enter_prog;
-+	u64 exit_prog;
-+	u8 r0 = bpf2a64[BPF_REG_0];
-+	struct bpf_prog *p = l->link.prog;
-+	int cookie_off = offsetof(struct bpf_tramp_run_ctx, bpf_cookie);
-+
-+	if (p->aux->sleepable) {
-+		enter_prog = (u64)__bpf_prog_enter_sleepable;
-+		exit_prog = (u64)__bpf_prog_exit_sleepable;
-+	} else {
-+		enter_prog = (u64)__bpf_prog_enter;
-+		exit_prog = (u64)__bpf_prog_exit;
-+	}
-+
-+	if (l->cookie == 0) {
-+		/* if cookie is zero, one instruction is enough to store it */
-+		emit(A64_STR64I(A64_ZR, A64_SP, run_ctx_off + cookie_off), ctx);
-+	} else {
-+		emit_a64_mov_i64(A64_R(10), l->cookie, ctx);
-+		emit(A64_STR64I(A64_R(10), A64_SP, run_ctx_off + cookie_off),
-+		     ctx);
-+	}
-+
-+	/* save p to callee saved register x19 to avoid loading p with mov_i64
-+	 * each time.
-+	 */
-+	emit_addr_mov_i64(A64_R(19), (const u64)p, ctx);
-+
-+	/* arg1: prog */
-+	emit(A64_MOV(1, A64_R(0), A64_R(19)), ctx);
-+	/* arg2: &run_ctx */
-+	emit(A64_ADD_I(1, A64_R(1), A64_SP, run_ctx_off), ctx);
-+
-+	emit_call(enter_prog, ctx);
-+
-+	/* if (__bpf_prog_enter(prog) == 0)
-+	 *         goto skip_exec_of_prog;
-+	 */
-+	branch = ctx->image + ctx->idx;
-+	emit(A64_NOP, ctx);
-+
-+	/* save return value to callee saved register x20 */
-+	emit(A64_MOV(1, A64_R(20), A64_R(0)), ctx);
-+
-+	emit(A64_ADD_I(1, A64_R(0), A64_SP, args_off), ctx);
-+	if (!p->jited)
-+		emit_addr_mov_i64(A64_R(1), (const u64)p->insnsi, ctx);
-+
-+	emit_call((const u64)p->bpf_func, ctx);
-+
-+	/* store return value, which is held in r0 for JIT and in x0
-+	 * for interpreter.
-+	 */
-+	if (save_ret)
-+		emit(A64_STR64I(p->jited ? r0 : A64_R(0), A64_SP, retval_off),
-+		     ctx);
-+
-+	if (ctx->image) {
-+		int offset = &ctx->image[ctx->idx] - branch;
-+		*branch = A64_CBZ(1, A64_R(0), offset);
-+	}
-+
-+	/* arg1: prog */
-+	emit(A64_MOV(1, A64_R(0), A64_R(19)), ctx);
-+	/* arg2: start time */
-+	emit(A64_MOV(1, A64_R(1), A64_R(20)), ctx);
-+	/* arg3: &run_ctx */
-+	emit(A64_ADD_I(1, A64_R(2), A64_SP, run_ctx_off), ctx);
-+
-+	emit_call(exit_prog, ctx);
-+}
-+
-+static void invoke_bpf_mod_ret(struct jit_ctx *ctx, struct bpf_tramp_links *tl,
-+			       int args_off, int retval_off, int run_ctx_off,
-+			       u32 **branches)
-+{
-+	int i;
-+
-+	/* The first fmod_ret program will receive a garbage return value.
-+	 * Set this to 0 to avoid confusing the program.
-+	 */
-+	emit(A64_STR64I(A64_ZR, A64_SP, retval_off), ctx);
-+	for (i = 0; i < tl->nr_links; i++) {
-+		invoke_bpf_prog(ctx, tl->links[i], args_off, retval_off,
-+				run_ctx_off, true);
-+		/* if (*(u64 *)(sp + retval_off) !=  0)
-+		 *	goto do_fexit;
-+		 */
-+		emit(A64_LDR64I(A64_R(10), A64_SP, retval_off), ctx);
-+		/* Save the location of branch, and generate a nop.
-+		 * This nop will be replaced with a cbnz later.
-+		 */
-+		branches[i] = ctx->image + ctx->idx;
-+		emit(A64_NOP, ctx);
-+	}
-+}
-+
-+static void save_args(struct jit_ctx *ctx, int args_off, int nargs)
-+{
-+	int i;
-+
-+	for (i = 0; i < nargs; i++) {
-+		emit(A64_STR64I(i, A64_SP, args_off), ctx);
-+		args_off += 8;
-+	}
-+}
-+
-+static void restore_args(struct jit_ctx *ctx, int args_off, int nargs)
-+{
-+	int i;
-+
-+	for (i = 0; i < nargs; i++) {
-+		emit(A64_LDR64I(i, A64_SP, args_off), ctx);
-+		args_off += 8;
-+	}
-+}
-+
-+/* Based on the x86's implementation of arch_prepare_bpf_trampoline().
-+ *
-+ * bpf prog and function entry before bpf trampoline hooked:
-+ *   mov x9, lr
-+ *   nop
-+ *
-+ * bpf prog and function entry after bpf trampoline hooked:
-+ *   mov x9, lr
-+ *   bl  <bpf_trampoline or plt>
-+ *
-+ */
-+static int prepare_trampoline(struct jit_ctx *ctx, struct bpf_tramp_image *im,
-+			      struct bpf_tramp_links *tlinks, void *orig_call,
-+			      int nargs, u32 flags)
-+{
-+	int i;
-+	int stack_size;
-+	int retaddr_off;
-+	int regs_off;
-+	int retval_off;
-+	int args_off;
-+	int nargs_off;
-+	int ip_off;
-+	int run_ctx_off;
-+	struct bpf_tramp_links *fentry = &tlinks[BPF_TRAMP_FENTRY];
-+	struct bpf_tramp_links *fexit = &tlinks[BPF_TRAMP_FEXIT];
-+	struct bpf_tramp_links *fmod_ret = &tlinks[BPF_TRAMP_MODIFY_RETURN];
-+	bool save_ret;
-+	u32 **branches = NULL;
-+
-+	/* trampoline stack layout:
-+	 *                  [ parent ip         ]
-+	 *                  [ FP                ]
-+	 * SP + retaddr_off [ self ip           ]
-+	 *                  [ FP                ]
-+	 *
-+	 *                  [ padding           ] align SP to multiples of 16
-+	 *
-+	 *                  [ x20               ] callee saved reg x20
-+	 * SP + regs_off    [ x19               ] callee saved reg x19
-+	 *
-+	 * SP + retval_off  [ return value      ] BPF_TRAMP_F_CALL_ORIG or
-+	 *                                        BPF_TRAMP_F_RET_FENTRY_RET
-+	 *
-+	 *                  [ argN              ]
-+	 *                  [ ...               ]
-+	 * SP + args_off    [ arg1              ]
-+	 *
-+	 * SP + nargs_off   [ args count        ]
-+	 *
-+	 * SP + ip_off      [ traced function   ] BPF_TRAMP_F_IP_ARG flag
-+	 *
-+	 * SP + run_ctx_off [ bpf_tramp_run_ctx ]
-+	 */
-+
-+	stack_size = 0;
-+	run_ctx_off = stack_size;
-+	/* room for bpf_tramp_run_ctx */
-+	stack_size += round_up(sizeof(struct bpf_tramp_run_ctx), 8);
-+
-+	ip_off = stack_size;
-+	/* room for IP address argument */
-+	if (flags & BPF_TRAMP_F_IP_ARG)
-+		stack_size += 8;
-+
-+	nargs_off = stack_size;
-+	/* room for args count */
-+	stack_size += 8;
-+
-+	args_off = stack_size;
-+	/* room for args */
-+	stack_size += nargs * 8;
-+
-+	/* room for return value */
-+	retval_off = stack_size;
-+	save_ret = flags & (BPF_TRAMP_F_CALL_ORIG | BPF_TRAMP_F_RET_FENTRY_RET);
-+	if (save_ret)
-+		stack_size += 8;
-+
-+	/* room for callee saved registers, currently x19 and x20 are used */
-+	regs_off = stack_size;
-+	stack_size += 16;
-+
-+	/* round up to multiples of 16 to avoid SPAlignmentFault */
-+	stack_size = round_up(stack_size, 16);
-+
-+	/* return address locates above FP */
-+	retaddr_off = stack_size + 8;
-+
-+	/* bpf trampoline may be invoked by 3 instruction types:
-+	 * 1. bl, attached to bpf prog or kernel function via short jump
-+	 * 2. br, attached to bpf prog or kernel function via long jump
-+	 * 3. blr, working as a function pointer, used by struct_ops.
-+	 * So BTI_JC should used here to support both br and blr.
-+	 */
-+	emit_bti(A64_BTI_JC, ctx);
-+
-+	/* frame for parent function */
-+	emit(A64_PUSH(A64_FP, A64_R(9), A64_SP), ctx);
-+	emit(A64_MOV(1, A64_FP, A64_SP), ctx);
-+
-+	/* frame for patched function */
-+	emit(A64_PUSH(A64_FP, A64_LR, A64_SP), ctx);
-+	emit(A64_MOV(1, A64_FP, A64_SP), ctx);
-+
-+	/* allocate stack space */
-+	emit(A64_SUB_I(1, A64_SP, A64_SP, stack_size), ctx);
-+
-+	if (flags & BPF_TRAMP_F_IP_ARG) {
-+		/* save ip address of the traced function */
-+		emit_addr_mov_i64(A64_R(10), (const u64)orig_call, ctx);
-+		emit(A64_STR64I(A64_R(10), A64_SP, ip_off), ctx);
-+	}
-+
-+	/* save args count*/
-+	emit(A64_MOVZ(1, A64_R(10), nargs, 0), ctx);
-+	emit(A64_STR64I(A64_R(10), A64_SP, nargs_off), ctx);
-+
-+	/* save args */
-+	save_args(ctx, args_off, nargs);
-+
-+	/* save callee saved registers */
-+	emit(A64_STR64I(A64_R(19), A64_SP, regs_off), ctx);
-+	emit(A64_STR64I(A64_R(20), A64_SP, regs_off + 8), ctx);
-+
-+	if (flags & BPF_TRAMP_F_CALL_ORIG) {
-+		emit_addr_mov_i64(A64_R(0), (const u64)im, ctx);
-+		emit_call((const u64)__bpf_tramp_enter, ctx);
-+	}
-+
-+	for (i = 0; i < fentry->nr_links; i++)
-+		invoke_bpf_prog(ctx, fentry->links[i], args_off,
-+				retval_off, run_ctx_off,
-+				flags & BPF_TRAMP_F_RET_FENTRY_RET);
-+
-+	if (fmod_ret->nr_links) {
-+		branches = kcalloc(fmod_ret->nr_links, sizeof(u32 *),
-+				   GFP_KERNEL);
-+		if (!branches)
-+			return -ENOMEM;
-+
-+		invoke_bpf_mod_ret(ctx, fmod_ret, args_off, retval_off,
-+				   run_ctx_off, branches);
-+	}
-+
-+	if (flags & BPF_TRAMP_F_CALL_ORIG) {
-+		restore_args(ctx, args_off, nargs);
-+		/* call original func */
-+		emit(A64_LDR64I(A64_R(10), A64_SP, retaddr_off), ctx);
-+		emit(A64_BLR(A64_R(10)), ctx);
-+		/* store return value */
-+		if (is_bpf_text_address((unsigned long)orig_call))
-+			emit(A64_STR64I(bpf2a64[BPF_REG_0], A64_SP, retval_off),
-+			     ctx);
-+		else
-+			emit(A64_STR64I(A64_R(0), A64_SP, retval_off), ctx);
-+		/* reserve a nop for bpf_tramp_image_put */
-+		im->ip_after_call = ctx->image + ctx->idx;
-+		emit(A64_NOP, ctx);
-+	}
-+
-+	/* update the branches saved in invoke_bpf_mod_ret with cbnz */
-+	for (i = 0; i < fmod_ret->nr_links && ctx->image != NULL; i++) {
-+		int offset = &ctx->image[ctx->idx] - branches[i];
-+		*branches[i] = A64_CBNZ(1, A64_R(10), offset);
-+	}
-+
-+	for (i = 0; i < fexit->nr_links; i++)
-+		invoke_bpf_prog(ctx, fexit->links[i], args_off, retval_off,
-+				run_ctx_off, false);
-+
-+	if (flags & BPF_TRAMP_F_CALL_ORIG) {
-+		im->ip_epilogue = ctx->image + ctx->idx;
-+		emit_addr_mov_i64(A64_R(0), (const u64)im, ctx);
-+		emit_call((const u64)__bpf_tramp_exit, ctx);
-+	}
-+
-+	if (flags & BPF_TRAMP_F_RESTORE_REGS)
-+		restore_args(ctx, args_off, nargs);
-+
-+	/* restore callee saved register x19 and x20 */
-+	emit(A64_LDR64I(A64_R(19), A64_SP, regs_off), ctx);
-+	emit(A64_LDR64I(A64_R(20), A64_SP, regs_off + 8), ctx);
-+
-+	if (save_ret)
-+		emit(A64_LDR64I(A64_R(0), A64_SP, retval_off), ctx);
-+
-+	/* reset SP  */
-+	emit(A64_MOV(1, A64_SP, A64_FP), ctx);
-+
-+	/* pop frames  */
-+	emit(A64_POP(A64_FP, A64_LR, A64_SP), ctx);
-+	emit(A64_POP(A64_FP, A64_R(9), A64_SP), ctx);
-+
-+	if (flags & BPF_TRAMP_F_SKIP_FRAME) {
-+		/* skip patched function, return to parent */
-+		emit(A64_MOV(1, A64_LR, A64_R(9)), ctx);
-+		emit(A64_RET(A64_R(9)), ctx);
-+	} else {
-+		/* return to patched function */
-+		emit(A64_MOV(1, A64_R(10), A64_LR), ctx);
-+		emit(A64_MOV(1, A64_LR, A64_R(9)), ctx);
-+		emit(A64_RET(A64_R(10)), ctx);
-+	}
-+
-+	if (ctx->image)
-+		bpf_flush_icache(ctx->image, ctx->image + ctx->idx);
-+
-+	kfree(branches);
-+
-+	return ctx->idx;
-+}
-+
-+int arch_prepare_bpf_trampoline(struct bpf_tramp_image *im, void *image,
-+				void *image_end, const struct btf_func_model *m,
-+				u32 flags, struct bpf_tramp_links *tlinks,
-+				void *orig_call)
-+{
-+	int ret;
-+	int nargs = m->nr_args;
-+	int max_insns = ((long)image_end - (long)image) / AARCH64_INSN_SIZE;
-+	struct jit_ctx ctx = {
-+		.image = NULL,
-+		.idx = 0,
-+	};
-+
-+	/* the first 8 arguments are passed by registers */
-+	if (nargs > 8)
-+		return -ENOTSUPP;
-+
-+	ret = prepare_trampoline(&ctx, im, tlinks, orig_call, nargs, flags);
-+	if (ret < 0)
-+		return ret;
-+
-+	if (ret > max_insns)
-+		return -EFBIG;
-+
-+	ctx.image = image;
-+	ctx.idx = 0;
-+
-+	jit_fill_hole(image, (unsigned int)(image_end - image));
-+	ret = prepare_trampoline(&ctx, im, tlinks, orig_call, nargs, flags);
-+
-+	if (ret > 0 && validate_code(&ctx) < 0)
-+		ret = -EINVAL;
-+
-+	if (ret > 0)
-+		ret *= AARCH64_INSN_SIZE;
-+
-+	return ret;
-+}
-+
- static bool is_long_jump(void *ip, void *target)
- {
- 	long offset;
+ extern void normalize_rt_tasks(void);
+diff --git a/kernel/sched/core.c b/kernel/sched/core.c
+index 1d4660a1915b3..e4974fe003b5b 100644
+--- a/kernel/sched/core.c
++++ b/kernel/sched/core.c
+@@ -6578,9 +6578,6 @@ static inline void sched_submit_work(struct task_struct *tsk)
+ 			io_wq_worker_sleeping(tsk);
+ 	}
+ 
+-	if (tsk_is_pi_blocked(tsk))
+-		return;
+-
+ 	/*
+ 	 * If we are going to sleep and we have plugged IO queued,
+ 	 * make sure to submit it to avoid deadlocks.
 -- 
-2.30.2
+2.37.0
 

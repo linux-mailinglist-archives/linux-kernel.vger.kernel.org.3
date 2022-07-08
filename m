@@ -2,157 +2,162 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0287556C23E
-	for <lists+linux-kernel@lfdr.de>; Sat,  9 Jul 2022 01:12:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4430156C1E8
+	for <lists+linux-kernel@lfdr.de>; Sat,  9 Jul 2022 01:12:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239291AbiGHTmt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Jul 2022 15:42:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50308 "EHLO
+        id S239893AbiGHTn0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Jul 2022 15:43:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50894 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239162AbiGHTmp (ORCPT
+        with ESMTP id S239729AbiGHTnW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Jul 2022 15:42:45 -0400
-Received: from alexa-out-sd-02.qualcomm.com (alexa-out-sd-02.qualcomm.com [199.106.114.39])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D175D84EF9
-        for <linux-kernel@vger.kernel.org>; Fri,  8 Jul 2022 12:42:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1657309364; x=1688845364;
-  h=message-id:date:mime-version:subject:from:to:cc:
-   references:in-reply-to:content-transfer-encoding;
-  bh=cvvPOf0ESif5qtfECCusv626UD+VI6e+YqhLOB1P/oY=;
-  b=hFPh6gyZQjewkfV/hszb7vVMr8O2dY3t2UDCKAhwzOE65kf69phv4Bsm
-   kSgvBK1G/vVTaSHZov6aX45Any2NH1yMOjbCxkfvH0is5iNUHc7n3v6gJ
-   1Bo0UrC2oW536CdCA6GlTyZZZx8k1fwbYTCW0/kPaInkswgNgwJeiSN9o
-   Q=;
-Received: from unknown (HELO ironmsg-SD-alpha.qualcomm.com) ([10.53.140.30])
-  by alexa-out-sd-02.qualcomm.com with ESMTP; 08 Jul 2022 12:42:44 -0700
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg-SD-alpha.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jul 2022 12:42:44 -0700
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Fri, 8 Jul 2022 12:42:43 -0700
-Received: from [10.111.160.191] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Fri, 8 Jul 2022
- 12:42:41 -0700
-Message-ID: <ffad2e39-f775-00de-3119-f9b0ca3fe4f7@quicinc.com>
-Date:   Fri, 8 Jul 2022 12:42:39 -0700
+        Fri, 8 Jul 2022 15:43:22 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D795387372;
+        Fri,  8 Jul 2022 12:43:20 -0700 (PDT)
+Received: from notapiano.myfiosgateway.com (pool-98-113-53-228.nycmny.fios.verizon.net [98.113.53.228])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: nfraprado)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id D32E566019F4;
+        Fri,  8 Jul 2022 20:43:17 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1657309399;
+        bh=HsUUHgmSxVGoE99t9D33ofg+0MT1fLdgE9yRIXfbc5k=;
+        h=From:To:Cc:Subject:Date:From;
+        b=NFlrFAEcQLDYh2KzyNiBIAanYfG78/212pnVJp/Ef9PyFL98XpD1yTDF3og3uAbrk
+         EK6tDvCNILxi2YjDcfGAbaK0fZLkjNNCAf7d0988Ad3c9W+FsFHULfFHrDz+IpvGCA
+         oW4cfvzaJwE7TixCDvINh/sW/E9hhV1HhCqALfU/Gh83Gl6PE2DChRkJy9188zWfGh
+         EvlF6ZqzEBXFBUkaWpKfkFLmQSTgTGP04x5xwNGQj+SjacFzoRTpDwEyHGDYacmLG1
+         viBzuZNL395uGOq30CNCOkJ9qT9hkC+nNcYyt9fVqr/mDQpRWV0jIcLr8tDyEQRZuB
+         j8b0Xz41iaDdg==
+From:   =?UTF-8?q?N=C3=ADcolas=20F=2E=20R=2E=20A=2E=20Prado?= 
+        <nfraprado@collabora.com>
+To:     Matthias Brugger <matthias.bgg@gmail.com>
+Cc:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>, kernel@collabora.com,
+        =?UTF-8?q?N=C3=ADcolas=20F=2E=20R=2E=20A=2E=20Prado?= 
+        <nfraprado@collabora.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-mediatek@lists.infradead.org
+Subject: [PATCH] arm64: dts: mediatek: Add missing xHCI clocks for mt8192 and mt8195
+Date:   Fri,  8 Jul 2022 15:43:14 -0400
+Message-Id: <20220708194314.56922-1-nfraprado@collabora.com>
+X-Mailer: git-send-email 2.37.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.2
-Subject: Re: [PATCH] drm/msm/dsi: Set panel orientation when directly
- connected
-Content-Language: en-US
-From:   Abhinav Kumar <quic_abhinavk@quicinc.com>
-To:     Doug Anderson <dianders@chromium.org>,
-        Stephen Boyd <swboyd@chromium.org>
-CC:     Rob Clark <robdclark@gmail.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        LKML <linux-kernel@vger.kernel.org>, <patches@lists.linux.dev>,
-        Sean Paul <sean@poorly.run>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        freedreno <freedreno@lists.freedesktop.org>,
-        Hsin-Yi Wang <hsinyi@chromium.org>
-References: <20220706191442.1150634-1-swboyd@chromium.org>
- <CAD=FV=UrYCwm2ByN_5EN3fq-ayMJNjmWfJ5sooRy51ZiCoMcjA@mail.gmail.com>
- <60252405-81f2-2465-bc20-5f91a9072031@quicinc.com>
-In-Reply-To: <60252405-81f2-2465-bc20-5f91a9072031@quicinc.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+The MediaTek xHCI dt-binding expects a specific order for the clocks,
+but the mt8192 and mt8195 devicetrees were skipping some of the middle
+clocks. These clocks are wired to the controller hardware but aren't
+controllable.
 
+Add the missing clocks as handles to fixed clocks, so that the clock
+order is respected and the dtbs_check warnings are gone.
 
-On 7/8/2022 9:00 AM, Abhinav Kumar wrote:
-> 
-> 
-> On 7/8/2022 8:25 AM, Doug Anderson wrote:
->> Hi,
->>
->> On Wed, Jul 6, 2022 at 12:14 PM Stephen Boyd <swboyd@chromium.org> wrote:
->>>
->>> Set the panel orientation in drm when the panel is directly connected,
->>> i.e. we're not using an external bridge. The external bridge case is
->>> already handled by the panel bridge code, so we only update the path we
->>> take when the panel is directly connected/internal. This silences a
->>> warning splat coming from __drm_mode_object_add() on Wormdingler boards.
->>>
->>> Cc: Hsin-Yi Wang <hsinyi@chromium.org>
->>> Cc: Douglas Anderson <dianders@chromium.org>
->>> Signed-off-by: Stephen Boyd <swboyd@chromium.org>
->>> ---
->>>
->>> This relies on commit 5e41b01a7808 ("drm/panel: Add an API to allow drm
->>> to set orientation from panel") which is in drm-misc
->>>
->>>   drivers/gpu/drm/msm/dsi/dsi_manager.c | 2 ++
->>>   1 file changed, 2 insertions(+)
->>
->> I don't personally have objections to this, but (to my understanding)
->> "the future" is that everyone should use panel_bridge. If we made the
->> move to panel_bridge today then we wouldn't need to do this. In
->> general I think panel_bridge would end up letting us delete a bunch of
->> code...
->>
->> See commit 4e5763f03e10 ("drm/bridge: ti-sn65dsi86: Wrap panel with
->> panel-bridge") for when this was done by ti-sn65dsi86.
->>
->> Then again, I spent a small amount of time looking into this and it's
->> definitely non-trivial. Still likely worthwhile, but not worth
->> blocking a tiny fix like this. It also should be fairly obvious that
->> we should delete this when we switch to panel_bridge.
-> 
-> Right, from what I saw on IRC, panel_bridge is the way forward and 
-> dmitry did push a change to do that
-> 
-> https://patchwork.freedesktop.org/patch/492585/
-> 
-> But I think we can go ahead with this change because its simple enough.
-> 
-> Regarding the panel_bridge migration, I am going to start reviewing that 
-> as well.
-> 
+Signed-off-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
 
-I did some more digging up on the panel_bridge migration.
+---
+A previous attempt to solve this also made all clocks required and
+updated all MediaTek DTs using the xhci binding [1].
 
-Dmitry has posted this towards december last year
+To avoid the DT change noise, the binding change is now being reverted
+[2] and only mt8192 and mt8195 DTs are updated in this commit to get rid
+of the warnings.
 
-https://patches.linaro.org/project/dri-devel/patch/20211207222901.988484-3-dmitry.baryshkov@linaro.org/ 
+[1] https://lore.kernel.org/all/20220623193702.817996-4-nfraprado@collabora.com/
+[2] https://lore.kernel.org/all/20220708192605.43351-1-nfraprado@collabora.com
 
+ arch/arm64/boot/dts/mediatek/mt8192.dtsi |  9 ++++++---
+ arch/arm64/boot/dts/mediatek/mt8195.dtsi | 18 ++++++++++++++----
+ 2 files changed, 20 insertions(+), 7 deletions(-)
 
-and I had given my R-b on this already in Jan.
+diff --git a/arch/arm64/boot/dts/mediatek/mt8192.dtsi b/arch/arm64/boot/dts/mediatek/mt8192.dtsi
+index cbae5a5ee4a0..869958fd420c 100644
+--- a/arch/arm64/boot/dts/mediatek/mt8192.dtsi
++++ b/arch/arm64/boot/dts/mediatek/mt8192.dtsi
+@@ -724,9 +724,12 @@ xhci: usb@11200000 {
+ 			assigned-clock-parents = <&topckgen CLK_TOP_UNIVPLL_D5_D4>,
+ 						 <&topckgen CLK_TOP_UNIVPLL_D5_D4>;
+ 			clocks = <&infracfg CLK_INFRA_SSUSB>,
+-				 <&infracfg CLK_INFRA_SSUSB_XHCI>,
+-				 <&apmixedsys CLK_APMIXED_USBPLL>;
+-			clock-names = "sys_ck", "xhci_ck", "ref_ck";
++				 <&apmixedsys CLK_APMIXED_USBPLL>,
++				 <&clk26m>,
++				 <&clk26m>,
++				 <&infracfg CLK_INFRA_SSUSB_XHCI>;
++			clock-names = "sys_ck", "ref_ck", "mcu_ck", "dma_ck",
++				      "xhci_ck";
+ 			wakeup-source;
+ 			mediatek,syscon-wakeup = <&pericfg 0x420 102>;
+ 			status = "disabled";
+diff --git a/arch/arm64/boot/dts/mediatek/mt8195.dtsi b/arch/arm64/boot/dts/mediatek/mt8195.dtsi
+index 066c14989708..725985e599be 100644
+--- a/arch/arm64/boot/dts/mediatek/mt8195.dtsi
++++ b/arch/arm64/boot/dts/mediatek/mt8195.dtsi
+@@ -560,8 +560,10 @@ xhci0: usb@11200000 {
+ 			clocks = <&infracfg_ao CLK_INFRA_AO_SSUSB>,
+ 				 <&topckgen CLK_TOP_SSUSB_REF>,
+ 				 <&apmixedsys CLK_APMIXED_USB1PLL>,
++				 <&clk26m>,
+ 				 <&infracfg_ao CLK_INFRA_AO_SSUSB_XHCI>;
+-			clock-names = "sys_ck", "ref_ck", "mcu_ck", "xhci_ck";
++			clock-names = "sys_ck", "ref_ck", "mcu_ck", "dma_ck",
++				      "xhci_ck";
+ 			mediatek,syscon-wakeup = <&pericfg 0x400 103>;
+ 			wakeup-source;
+ 			status = "disabled";
+@@ -625,8 +627,10 @@ xhci1: usb@11290000 {
+ 			clocks = <&pericfg_ao CLK_PERI_AO_SSUSB_1P_BUS>,
+ 				 <&topckgen CLK_TOP_SSUSB_P1_REF>,
+ 				 <&apmixedsys CLK_APMIXED_USB1PLL>,
++				 <&clk26m>,
+ 				 <&pericfg_ao CLK_PERI_AO_SSUSB_1P_XHCI>;
+-			clock-names = "sys_ck", "ref_ck", "mcu_ck","xhci_ck";
++			clock-names = "sys_ck", "ref_ck", "mcu_ck", "dma_ck",
++				      "xhci_ck";
+ 			mediatek,syscon-wakeup = <&pericfg 0x400 104>;
+ 			wakeup-source;
+ 			status = "disabled";
+@@ -646,8 +650,11 @@ xhci2: usb@112a0000 {
+ 						 <&topckgen CLK_TOP_UNIVPLL_D5_D4>;
+ 			clocks = <&pericfg_ao CLK_PERI_AO_SSUSB_2P_BUS>,
+ 				 <&topckgen CLK_TOP_SSUSB_P2_REF>,
++				 <&clk26m>,
++				 <&clk26m>,
+ 				 <&pericfg_ao CLK_PERI_AO_SSUSB_2P_XHCI>;
+-			clock-names = "sys_ck", "ref_ck", "xhci_ck";
++			clock-names = "sys_ck", "ref_ck", "mcu_ck", "dma_ck",
++				      "xhci_ck";
+ 			mediatek,syscon-wakeup = <&pericfg 0x400 105>;
+ 			wakeup-source;
+ 			status = "disabled";
+@@ -667,8 +674,11 @@ xhci3: usb@112b0000 {
+ 						 <&topckgen CLK_TOP_UNIVPLL_D5_D4>;
+ 			clocks = <&pericfg_ao CLK_PERI_AO_SSUSB_3P_BUS>,
+ 				 <&topckgen CLK_TOP_SSUSB_P3_REF>,
++				 <&clk26m>,
++				 <&clk26m>,
+ 				 <&pericfg_ao CLK_PERI_AO_SSUSB_3P_XHCI>;
+-			clock-names = "sys_ck", "ref_ck", "xhci_ck";
++			clock-names = "sys_ck", "ref_ck", "mcu_ck", "dma_ck",
++				      "xhci_ck";
+ 			mediatek,syscon-wakeup = <&pericfg 0x400 106>;
+ 			wakeup-source;
+ 			status = "disabled";
+-- 
+2.37.0
 
-I am not sure why this change was dropped OR was not part of msm-next 
-already.
-
-Dmitry, any reason this change was left out so long and why the R-b was 
-not retained and this was reposted?
-
- From what i can see the change looks identical.
-
-Thanks
-
-Abhinav
->>
->> Thus:
->>
->> Reviewed-by: Douglas Anderson <dianders@chromium.org>
->>
->> I'll assume that we'll just snooze this commit until drm-misc-next
->> merges into a tree that msm-next is based on, which will probably be
->> the next -rc1. If desired and Acked I could land this in
->> drm-misc-next, but it's probably not worth it?

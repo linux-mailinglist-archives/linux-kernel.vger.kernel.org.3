@@ -2,69 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 11CD656BDA5
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 18:08:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AEC2156BDC5
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 18:08:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238837AbiGHPVx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Jul 2022 11:21:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40610 "EHLO
+        id S238758AbiGHPXC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Jul 2022 11:23:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41714 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238456AbiGHPVv (ORCPT
+        with ESMTP id S237631AbiGHPW6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Jul 2022 11:21:51 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C7AB1C92F;
-        Fri,  8 Jul 2022 08:21:50 -0700 (PDT)
-Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id D4723660191B;
-        Fri,  8 Jul 2022 16:21:47 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1657293708;
-        bh=/4l6Hm4ZPFYh5Jg9Pvp/I+AUhyuHpkqerH8ILiSQSbY=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=PjNsbvhO5bl88hl69hhVHhysA7/8JkOnWdDAwnz/eOlzd1dNw+kpkvZNFzr4vWZ1f
-         3UDbtNKz/QpabAffCJKQlG5tsj3DNm0jBrZCOu8rDa54DlKuSscV3xkOAI87pl3C40
-         g3yb/lFow1opOw6G5s64o+B5ADo9SyfmwWhaeJ/2Yoc/tN47psP/f59LU7YXKQol9l
-         +nCyZfPUYWRnXTXBqwGThXxnf0gWEATVY+ipfYonktwgk2YgBJHdpDu6i1ToWCyjpC
-         SykPd2bMqtZ/VWoUsT6bZce9VJsLI22GRC+ppBB8FfMYsR8jcb9MiPI29hywZxmveN
-         k9YnxZddOuQnQ==
-Message-ID: <b8709679-3c12-22aa-d118-803bcfa8b79e@collabora.com>
-Date:   Fri, 8 Jul 2022 17:21:45 +0200
+        Fri, 8 Jul 2022 11:22:58 -0400
+Received: from smtpbg.qq.com (biz-43-154-54-12.mail.qq.com [43.154.54.12])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3416A72EDB;
+        Fri,  8 Jul 2022 08:22:54 -0700 (PDT)
+X-QQ-mid: bizesmtp66t1657293744tscsuizl
+Received: from localhost.localdomain ( [182.148.15.249])
+        by bizesmtp.qq.com (ESMTP) with 
+        id ; Fri, 08 Jul 2022 23:22:22 +0800 (CST)
+X-QQ-SSF: 01000000002000B0C000B00A0000000
+X-QQ-FEAT: ZHw8t61CvCHMAMPtAtbrBFuZ0WRYes5hobwX9e1IGMf/Om6Zyzkd5MNGEFuNW
+        ZbidcFmM6MjQ/pt0LSWbASuSyHjpamxg1H1Zkcgirh4Eus6qt8hCT90W8/s7bCm1fHkBq/8
+        Kw6SuUAnWD/EHUeaZcUeJ5m1vyHagGDGfYktYFVXJpcqPA4I29739IE3JaDCSbcZ9LN2tiQ
+        XBvYtqpvyG30b1wx1pwZ7/kzeM0rb35eIgzE3BZiKifVwVRaVne3TB46Lzfi25dsJKaCw1g
+        ycALaqZam3J0X63szr/oPiqDXBQUHdWcfoCmpmCVQsYe91iiEvNMaYyivWuN0K9EK9VmgDR
+        DUqtrSY1XYbDMhKrhqtChphUYcX4quuoQgTPUIV+b8uhRE73bs=
+X-QQ-GoodBg: 0
+From:   Jilin Yuan <yuanjilin@cdjrlc.com>
+To:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com
+Cc:     elder@kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Jilin Yuan <yuanjilin@cdjrlc.com>
+Subject: [PATCH] net/ipa: fix repeated words in comments
+Date:   Fri,  8 Jul 2022 23:22:15 +0800
+Message-Id: <20220708152215.57295-1-yuanjilin@cdjrlc.com>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH v2] dt-bindings: mmc: Add compatible for MediaTek MT8188
-Content-Language: en-US
-To:     Johnson Wang <johnson.wang@mediatek.com>, ulf.hansson@linaro.org,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org
-Cc:     linux-mmc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org,
-        Project_Global_Chrome_Upstream_Group@mediatek.com
-References: <20220708114747.13878-1-johnson.wang@mediatek.com>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20220708114747.13878-1-johnson.wang@mediatek.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:cdjrlc.com:qybglogicsvr:qybglogicsvr4
+X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,RDNS_DYNAMIC,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,T_SPF_HELO_TEMPERROR autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 08/07/22 13:47, Johnson Wang ha scritto:
-> This commit adds dt-binding documentation of mmc for MediaTek MT8188 SoC
-> platform.
-> 
-> Signed-off-by: Johnson Wang <johnson.wang@mediatek.com>
+ Delete the redundant word 'the'.
 
-Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+Signed-off-by: Jilin Yuan <yuanjilin@cdjrlc.com>
+---
+ drivers/net/ipa/gsi_trans.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/net/ipa/gsi_trans.c b/drivers/net/ipa/gsi_trans.c
+index 55f8fe7d2668..5c6874d25548 100644
+--- a/drivers/net/ipa/gsi_trans.c
++++ b/drivers/net/ipa/gsi_trans.c
+@@ -351,7 +351,7 @@ struct gsi_trans *gsi_channel_trans_alloc(struct gsi *gsi, u32 channel_id,
+ 	if (!gsi_trans_tre_reserve(trans_info, tre_count))
+ 		return NULL;
+ 
+-	/* Allocate and initialize non-zero fields in the the transaction */
++	/* Allocate and initialize non-zero fields in the transaction */
+ 	trans = gsi_trans_pool_alloc(&trans_info->pool, 1);
+ 	trans->gsi = gsi;
+ 	trans->channel_id = channel_id;
+@@ -685,7 +685,7 @@ int gsi_trans_read_byte(struct gsi *gsi, u32 channel_id, dma_addr_t addr)
+ 	if (!gsi_trans_tre_reserve(trans_info, 1))
+ 		return -EBUSY;
+ 
+-	/* Now fill the the reserved TRE and tell the hardware */
++	/* Now fill the reserved TRE and tell the hardware */
+ 
+ 	dest_tre = gsi_ring_virt(ring, ring->index);
+ 	gsi_trans_tre_fill(dest_tre, addr, 1, true, false, IPA_CMD_NONE);
+-- 
+2.36.1
+

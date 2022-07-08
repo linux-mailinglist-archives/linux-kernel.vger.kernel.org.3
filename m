@@ -2,74 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CFF8656C037
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 20:36:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B04A56C0A1
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 20:37:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238872AbiGHRmS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Jul 2022 13:42:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44214 "EHLO
+        id S238414AbiGHRnq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Jul 2022 13:43:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45588 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238052AbiGHRmP (ORCPT
+        with ESMTP id S238571AbiGHRno (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Jul 2022 13:42:15 -0400
-Received: from mail-yb1-xb31.google.com (mail-yb1-xb31.google.com [IPv6:2607:f8b0:4864:20::b31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 818185A45D;
-        Fri,  8 Jul 2022 10:42:14 -0700 (PDT)
-Received: by mail-yb1-xb31.google.com with SMTP id r3so38959114ybr.6;
-        Fri, 08 Jul 2022 10:42:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=s7rfjFv2pxYiTyeXDG77gpPSG058438CTEH71lJGjxs=;
-        b=a+FsaUYfq0qtR9QY2OuR7v2E9iCsNpROO86nDvM+iv8/OyQ/3ekajl2TGQipjanxWt
-         ux6KoxQmY+BRsXLUwZbpeix6b9kxUO0lyE4zAjeWB5howOkzRXYxmvthu9qKWSaldXjB
-         pZgWRuogdlLAWdICjXtsZRN7BGkI/TppAc4rTkEP5Ez8piFWDT278DzW31VO63hAJwzR
-         oAHbmqQTQkIxdrV5ErR0i6BT1MCkRNGWGz9pfAQjV7j1C4I8o29T3meCECk9+jH6aeZP
-         AACL4Uc1Fp9Gc0FidFjeWqYXI5Ga0fZTg8T7Ej0/R5d9NeDoVQ3+jt0gARESimU3Bzxf
-         FfoQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=s7rfjFv2pxYiTyeXDG77gpPSG058438CTEH71lJGjxs=;
-        b=Frj0mJ3LSyWbacb0Jb0452rtANGF02za13xaeXuoPBM/iWS3Yt9nee6CFwNaa6zi+9
-         hJpAoDIhS9HgUZOnOd4DdsM5sRGbMZNzqP434W+O8Fc59bQP7Ehf5pf+P+Hf+vQ3uEe9
-         KdIG7yV4p1s8KGMkov3yHfGk5ubCeioam6eBE46UIjMNkzUcMbhxaLQjhqKZKeLmqyjC
-         VPmE82OphQb7e2GyDVayTtrV+1en+adHRcpU3vty60+/GyHWirzr4D9JVor5RXqLStbs
-         Mtf2Mg9Df5VLdXfmlBLoNqUiCXVt8zQz9BR9PRVJvqV537Rigc0T7Y+Gq5UUI4WryD5Y
-         CMOQ==
-X-Gm-Message-State: AJIora++W/pRcQzMhKf7Ktc2Pa0NYuLH0xMk5VAvmAhE0eJU5vmHADgN
-        soPTfJLFbeQM4okE1FSIwalUshxwZfX6Oqazts4=
-X-Google-Smtp-Source: AGRyM1stxFyo4NbOuYehHaTTVp9jk9rE09F65RoYnEjrYnP+TO+8Pg0Bk/5BqqC+tFmaTrH8bYc0ZYh5cFZDknGE2ew=
-X-Received: by 2002:a05:6902:c4:b0:64b:4677:331b with SMTP id
- i4-20020a05690200c400b0064b4677331bmr4733744ybs.93.1657302133662; Fri, 08 Jul
- 2022 10:42:13 -0700 (PDT)
+        Fri, 8 Jul 2022 13:43:44 -0400
+Received: from EUR01-HE1-obe.outbound.protection.outlook.com (mail-eopbgr130135.outbound.protection.outlook.com [40.107.13.135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D817F5B6;
+        Fri,  8 Jul 2022 10:43:40 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=lvff5trU9O3gA2tEn1PvwKjTC3KyuAYzFZgucS6rTT6cWeruinzKIY4qCbobHcYCa3f2ffEd5mAPrGtRWuajQ26JA9mcqb28C3OGCLoJsgsU6ymI3rZX8Va3vE+qdUmnoEXxuspVnN+D2VG0MJaMsU8uy7kEC2lRqOnxAwxqvxF065yt+VIvi9vBr9TDBfaKmCOaBYST4bE1DHxp6SPSD35CEcGIG6aQPG+IDI+qN0vmYdTHHOSotzG7yyZgHuv3iCP/pi6uLVT/zTLvSb8OuNSLNnC63uVX12ARnkQKvkvk458cZWY0rOYSooReHGiFIvCK2+yGYyovM7VazOL6+A==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=m1IPa4OA1O1CVJxjulxz5JUfQtL1dn5X27GHvv7Cuaw=;
+ b=gLFM1sm7wfqcpDaLXmKEolX057p/clg9nv4dZG4sn0j94ZECRc0WtigZPpifryMWu6jCOIqG4cGspZX0QphhchQ7P29tlxbVnNtBwmJM29d2vYG7UCEXL5b+BikOPRWX5jgY7QJGh1Y+gIc7zcX2FQUluncRO0WbAzugYuzpt0XImNb08ZKQb2Kf2YiSkJfsb+Y/4PyZjlM4hXf/7oY6rdlUiyHkM/nD+hLnsjD2DCzyOo6kZOtVVHS/XmklKX6tjcJngv6ql0Cs40L7xRoutzD0w5BhRWbvIrndb3Rj79lNy8ohfh3m8OV5zOveiuXSzkf2n7f+lrRaAc2Hm3oFEA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=plvision.eu; dmarc=pass action=none header.from=plvision.eu;
+ dkim=pass header.d=plvision.eu; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=plvision.eu;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=m1IPa4OA1O1CVJxjulxz5JUfQtL1dn5X27GHvv7Cuaw=;
+ b=Hd7aizJIjwf4IO1SAi5psvl71KSxM6nI63y4HkmJCrcwyAVuyDgaQstGDHhfzx8LBCjSFCvc0CApV/K/lWFlOuHRgy8lPvdofnUzTcp/lgYPSNtFc27WmnFv7hXMxIvi+pyPJxqTuPLooijS1uPh36Y+rOxw/Yg5s87qQGXp77A=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=plvision.eu;
+Received: from GV1P190MB2019.EURP190.PROD.OUTLOOK.COM (2603:10a6:150:5b::20)
+ by AS8P190MB1414.EURP190.PROD.OUTLOOK.COM (2603:10a6:20b:3f1::22) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5417.15; Fri, 8 Jul
+ 2022 17:43:37 +0000
+Received: from GV1P190MB2019.EURP190.PROD.OUTLOOK.COM
+ ([fe80::25a3:3edc:9320:f35e]) by GV1P190MB2019.EURP190.PROD.OUTLOOK.COM
+ ([fe80::25a3:3edc:9320:f35e%3]) with mapi id 15.20.5417.016; Fri, 8 Jul 2022
+ 17:43:37 +0000
+From:   Oleksandr Mazur <oleksandr.mazur@plvision.eu>
+To:     netdev@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, oleksandr.mazur@plvision.eu,
+        tchornyi@marvell.com, davem@davemloft.net, edumazet@google.com,
+        kuba@kernel.org, pabeni@redhat.com, lkp@intel.com,
+        Yevhen Orlov <yevhen.orlov@plvision.eu>
+Subject: [PATCH V4 net-next 0/4] net: marvell: prestera: add MDB offloading support
+Date:   Fri,  8 Jul 2022 20:43:20 +0300
+Message-Id: <20220708174324.18862-1-oleksandr.mazur@plvision.eu>
+X-Mailer: git-send-email 2.17.1
+Content-Type: text/plain
+X-ClientProxiedBy: GV3P280CA0045.SWEP280.PROD.OUTLOOK.COM
+ (2603:10a6:150:9::18) To GV1P190MB2019.EURP190.PROD.OUTLOOK.COM
+ (2603:10a6:150:5b::20)
 MIME-Version: 1.0
-References: <CAHp75VddDG-ZJpbAb5ZhKaMpP0L+CMEx2pcYy3FOMiaxNydCWA@mail.gmail.com>
- <YmK7drS0XgnTQcaf@kroah.com> <20220707084840.jvsstvyx2ul5ltb6@pali>
- <YsgsH94PV/wAX0Vu@kroah.com> <20220708132621.4v2es73h52aq3izn@pali>
- <Ysg2RW0B/cLL3k+k@kroah.com> <20220708142001.7fciqnfckznlvsa4@pali>
- <CAHp75Vci1zeDV1axd_v_PLLPGfF5AzAzmmcegjD1djqnR6XUcA@mail.gmail.com>
- <20220708155413.rlc3iyf72tdwthfa@pali> <CAHp75Vf=JGbmydAaeA=81YDViVtj7cG91Sr4teJ8mhFNH8AhAw@mail.gmail.com>
- <20220708162532.jefbmpokampkuahv@pali>
-In-Reply-To: <20220708162532.jefbmpokampkuahv@pali>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Fri, 8 Jul 2022 19:41:37 +0200
-Message-ID: <CAHp75VfD24SxejjQ6hq85BTaHpOGPj3-diEqxu5BGnABm0Yz1w@mail.gmail.com>
-Subject: Re: [PATCH 0/3] serial: Fix support for UPF_SPD_* flags
-To:     =?UTF-8?Q?Pali_Roh=C3=A1r?= <pali@kernel.org>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Johan Hovold <johan@kernel.org>,
-        =?UTF-8?B?TWFyZWsgQmVow7pu?= <kabel@kernel.org>,
-        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 67a9b3d3-632a-40c4-2ad8-08da61096344
+X-MS-TrafficTypeDiagnostic: AS8P190MB1414:EE_
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: +cg1VHrIJ9/YfW25ki+mw/jwvCpvn10rf1hpTMTTtg9bhT1Gbk9+YY8OCC20J5XabsabRq4AcApWceroA749TPcqB1VULWowWhJozIg4QacTbCCc+ORvuMRq0pnEoGJ3edLtKvOJ2WmASNU/7wtC6y+vaHgIs9zghLRZCwgyIZGDrdbWpO3frbEmJMjp25CSdjpPcCHhbxe+2ec3If4WFbLjqcFxDPBzINeA+nAHHmnUtcTWhNdFW6CtteqPglLI6fbnVRk/qEMy/Z4NluvBxSOubsLWGHdxWAABlNV0mhMVIKRF1X6f9GhqaY2iE2URbQ4htY1MVwbftN5HPonbFOv4kjNfRVpfcdJCzKmxkiojVAKJIKgWGw4uFWXbppFHnKWk7jZA4VnKTKFMhMf9jmwNITNFBVhPpxA+tEmLF/Z1R/mjtXf/BmMOeR73SzxGOh6ZFqDKLOsh/HayOP7kDoCLGRfEN2fICHx/NtdX7zi1KLMfIq/Hc2RhjHgp9ncVSdPXin/fDqu826pivE7e2HwzjeNdoyc9472fi7+ndpvOd+ZxsNueSdrCIHA9kVLyGcM0ZQE2gtCZM/Tvg2z1Xabul85aNXUMKE/9JCZPX6ogbfpW45Yu7GDcgC4AKgR3Ih0LOHfDz3wivDBpoERtAOT2LuLIAU9bCCWdK4nOX4SJbgP3niHn2YWAHz6oclUcQmBaOkA34YBG2dGUT2goNyZdEcXfbhH2cTJZNZc96UP0zxsbYg6NvFU7uKhA39bZ5lF/irsrukMvqY3reOG3y27dj3DFJau7wFY+VA2F5zTMxNn/mfniBP1UySvB00mn
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:GV1P190MB2019.EURP190.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230016)(4636009)(396003)(366004)(346002)(39830400003)(376002)(136003)(4326008)(66556008)(2906002)(52116002)(478600001)(316002)(6666004)(86362001)(6916009)(36756003)(6486002)(41300700001)(6512007)(6506007)(66946007)(26005)(8676002)(66476007)(66574015)(1076003)(83380400001)(38350700002)(38100700002)(2616005)(44832011)(5660300002)(8936002)(186003)(107886003);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?U84/xYJmoEg/E4EHpbyCatFv4AzKV1v1fPXdGb465/4S0LiOsQpP65G7KEwu?=
+ =?us-ascii?Q?TZAJv2ilx4BzBVW3sZrysNtQ5GcvzNNgR7UDUaB7Hpn2EM7LR9v3Br4S606g?=
+ =?us-ascii?Q?Rvv7WwOhGaKVl5Ij2gSawtEFZzxSoUpGabruj5ggKKoRczGHcvt1U4qdM0rg?=
+ =?us-ascii?Q?PlFd5RoORj46uSQfwXbyuYFRm74nIJbon4d+EwUeCACSrgUYF6KNoA1bEwZN?=
+ =?us-ascii?Q?E4ms+NvdgbesZ66XnAbGlpcIcXwfZOELF+mrRrpY+4nQN40fliwlVa2gm2s0?=
+ =?us-ascii?Q?Jp/n7gQ/M2CyTaMr1deHwftGEbHrQzdRR4+NSRqYqG5BpFsFfHkQSwZCbTKD?=
+ =?us-ascii?Q?4wgge+DfxGTjS2u6I+YEoPZArTzW3xstihmDeC8uoP/dHCzCpfl/q/2E1onr?=
+ =?us-ascii?Q?1481PIpe1h59KmrLsr7Pv7zUsUTpgf+6AbEpWds7vTFPbW3of0ZdlBMYciru?=
+ =?us-ascii?Q?3AN2GLx0XPY/dUS/QfqRdWWVfe61CG7v7VbtiVrNg0Lrv81jDFOQUDTWBmYT?=
+ =?us-ascii?Q?xo+YoBxJebSXQGaA+3nD14KKQXOVM02iY9Ed/ZDfY+VCwpoYeabTvwyk/QG1?=
+ =?us-ascii?Q?S1NSMdlLZvgPLU6fkPhvlBX8LQSr5rTKm3Utrp0iI/l2EMYcUa8VCjTlXp1S?=
+ =?us-ascii?Q?ppxVFR6/DMPnMH93cZspSX8ds2HkrfM4e3g+tveYvpmZ/wJpMKNZFGo4bSyU?=
+ =?us-ascii?Q?cM6oK4zuts2rbkz9fKTiwW88R7Tge9ofIZI5i4GgO1cycYNpxfp/2mz9lGzP?=
+ =?us-ascii?Q?laTK4RhqkAkDmjBCHM9o1e3boxt/cMvtMfRbaOrhLM279YaO/BgCpAnbRFoJ?=
+ =?us-ascii?Q?zrcf/Orb69GTzr8zn7sf9zHlsLo368CnoIw6pm44A/AmucnH72mYgQ8kgVIm?=
+ =?us-ascii?Q?r86SJGqS62vStycv8Pk4+nGhMDWRATDhaoAIu4yFZGtSVtTTeDGgXNpjCIKZ?=
+ =?us-ascii?Q?hkjUtkeKGUx1juIrYzC237sd0kWywzt9qkZFtDjzuVAemCTr9rCpmsVml0Tk?=
+ =?us-ascii?Q?OhjEEjEID+c5QV4kosDCYsomhKa813QIcUXx24WhKTwHsyb0qpW3o6GIXnlu?=
+ =?us-ascii?Q?AkX9iz1Pe0X1x6Xt02j5FJbDOrFi7gEjVW34wEsGjQdgO2Uik2GzoA5E+DYB?=
+ =?us-ascii?Q?Ue9wd3F8zdrRCBJpZ9d49Sg7ngnCyr94PXr+k2QjjinhxJWLCx1DX4pm0ID1?=
+ =?us-ascii?Q?JWCjvrF9b9wMp5uiKCwZ09wM40t4VgBRO6xEjkmD+jxLOV35fdesAutjRvp9?=
+ =?us-ascii?Q?ySpvBmeiMvA46XuLdAYlipQXR8sPYWSJPdlbCT5qFejdi0F0WNPK+yfbkS//?=
+ =?us-ascii?Q?ae1Oc0KNElNPuWthZuHfK/VJlHMuuaveH2LsiSpFyemsLF3q1/5wHrZ4N4pi?=
+ =?us-ascii?Q?yKOAXIpwc8c0WUIcc6oq4QCSXiNONfsnmDPRnHRaoCxU1ukgeLBlLZhPOZL6?=
+ =?us-ascii?Q?ukXgr/+6ISEvO1ordukX3ok2m8elQlvHP6xZuUtxEi55V0feLwBMUsjuXafN?=
+ =?us-ascii?Q?ARKgA5sFuZctHnoLncbsDMZJX2THYwJEKHiRZdgSVdZk5NaM6NhcKuGC6CeD?=
+ =?us-ascii?Q?f0U78mzP0j5XtNuvVWvhh/aGo9Li0lxnTVa6dkShZ9QPU/vez0NVeIGJN2uy?=
+ =?us-ascii?Q?IQ=3D=3D?=
+X-OriginatorOrg: plvision.eu
+X-MS-Exchange-CrossTenant-Network-Message-Id: 67a9b3d3-632a-40c4-2ad8-08da61096344
+X-MS-Exchange-CrossTenant-AuthSource: GV1P190MB2019.EURP190.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 08 Jul 2022 17:43:37.5764
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 03707b74-30f3-46b6-a0e0-ff0a7438c9c4
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: sFjE5Z7g1eH2gZfwq8DhPfTZi4TqyuoNvgcB20riGPBUXDrdjz7vYEAowj0HJyCStJggDZJ4jEsvCMiDIoNoF6RGuEJNQ/Uz6Q0/N1IUoCE=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS8P190MB1414
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,135 +114,67 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jul 8, 2022 at 6:25 PM Pali Roh=C3=A1r <pali@kernel.org> wrote:
->
-> On Friday 08 July 2022 18:09:07 Andy Shevchenko wrote:
-> > On Fri, Jul 8, 2022 at 5:54 PM Pali Roh=C3=A1r <pali@kernel.org> wrote:
-> > > On Friday 08 July 2022 17:42:03 Andy Shevchenko wrote:
-> > > > On Fri, Jul 8, 2022 at 4:20 PM Pali Roh=C3=A1r <pali@kernel.org> wr=
-ote:
-> > > > > On Friday 08 July 2022 15:51:01 Greg Kroah-Hartman wrote:
-> > > > > > On Fri, Jul 08, 2022 at 03:26:21PM +0200, Pali Roh=C3=A1r wrote=
-:
-> > > > > > > On Friday 08 July 2022 15:07:43 Greg Kroah-Hartman wrote:
-> > > > > > > > On Thu, Jul 07, 2022 at 10:48:40AM +0200, Pali Roh=C3=A1r w=
-rote:
-> > > > > > > > > On Friday 22 April 2022 16:28:06 Greg Kroah-Hartman wrote=
-:
-> > > >
-> > > > ...
-> > > >
-> > > > > > > > I'm not saying remove them, I'm saying let us not add any m=
-ore
-> > > > > > > > dependancies on them in order to keep new applications from=
- ever wanting
-> > > > > > > > to use them.
-> > > > > > >
-> > > > > > > Last time you wrote to remove them. Now saying not to remove =
-them. So I
-> > > > > > > do not understand you now.
-> > > >
-> > > > There was a _new_ addition of the ugly SPD_CUST, that's what I beli=
-eve
-> > > > Greg opposes to. And I support that.
-> > >
-> > > Which addition? I do not understand you. There was not any new driver
-> > > with introduction of SPD support.
-> >
-> > You stated that SPD_CUST is broken in some drivers, so you are trying
-> > to fix a broken ugly hack. Why? Instead of making it rot and be
-> > removed eventually, you pump life into frankenstein.
->
-> Firstly I got rejection of my other patches because they does not handle
-> SDP_CUST correctly. So I decided to look at those issues and fix it via
-> helper function which can be easily reused in all drivers. So helper
-> function wrap all "ugly" hacks. Then I got reaction that SDP should be
-> removed. Then I got another reaction that that "I'm not saying to remove
-> them" and another another reaction why to be removed eventually.
->
-> So how should I interpret this? I'm feeling that you are just trying to
-> annoy people with this "do this", "do opposite", "do again it", "do
-> again opposite"...
+This patch series adds support for the MDB handling for the marvell
+Prestera Driver. It's used to propagate IGMP groups registered within
+the Kernel to the underlying HW (offload registered groups).
 
-Ask someone who makes a decision. I wrote just my p.o.v. on the
-"problem". I think there is no problem with SPD_CUST, it should be
-oblivionized.
+Features:
+ - define (and implement) main internal MDB-related objects;
+ - define (and implement) main HW APIs for MDB handling;
+ - add MDB handling support for both regular ports as well as Bond
+   interfaces;
+ - Mirrored behavior of Bridge driver upon multicast router appearance
+   (all traffic flooded when there's no mcast router; mcast router
+    receives all mcast traffic, and only group-specific registered mcast
+    traffic is being received by ports who've explicitly joined any group
+    when there's a registered mcast router);
+ - Reworked prestera driver bridge flags (especially multicast)
+   setting - thus making it possible to react over mcast disabled messages
+   properly by offloading this state to the underlying HW
+   (disabling multicast flooding);
 
-> > > > > > I'm sorry, I am totally lost.
-> > > > >
-> > > > > So look what you have wrote? Who is lost here is me.
-> > > > >
-> > > > > > How about starting over and resubmitting
-> > > > > > the changes you want and we can go from there.
-> > > > >
-> > > > > What to resubmit? I do not understand you. In case you lost email=
-s or
-> > > > > accidentally removed them, you can look at them in archive, not? =
-I hope
-> > > > > that you do not want me to copy+paste all existing patches with a=
-ll your
-> > > > > quotes on them which you wrote into new emails.
-> > > >
-> > > > That change that adds the new user of SPD_CUST?
-> > >
-> > > What you are talking about? Which user?
-> >
-> > This I missed, I was thinking that you are talking about a new user,
-> > now I read briefly and it seems that it's about an existing user.
-> > Anyway, that change I suppose.
-> >
-> > > > In any case the best summary about BOTHER I ever read is this [1] (=
-and
-> > > > an initial steps in picocom [2]).
-> > >
-> > > Is not that example in manpage enough?
-> >
-> > Dunno.
-> > Can you point it out to me? I can't find it quickly.
->
-> Argh... Have you read emails to which you wrote reply? So copy+paste
-> relevant part from my previous email just for you:
->
->  "New version of tcsetattr and ioctl_tty manpages would have documented
->   how to use BOTHER (it is currently in the manpages git)."
+Limitations:
+ - Not full (partial) IGMPv3 support (due to limited switchdev
+   notification capabilities:
+     MDB events are being propagated only with a single MAC entry,
+     while IGMPv3 has Group-Specific requests and responses);
+ - It's possible that multiple IP groups would receive traffic from
+   other groups, as MDB events are being propagated with a single MAC
+   entry, which makes it possible to map a few IPs over same MAC;
 
-I do not know the "manpages git" URL. Neither its hosting. kernel.org?
-And then? It took time for you to just write something instead of helping m=
-e.
-Whatever. I found the commits.
+Co-developed-by: Yevhen Orlov <yevhen.orlov@plvision.eu>
+Signed-off-by: Yevhen Orlov <yevhen.orlov@plvision.eu>
+Signed-off-by: Oleksandr Mazur <oleksandr.mazur@plvision.eu>
 
-> Plus in past I also pointed to the extended version of that example from
-> manpage which is currently in my repo on github:
-> https://github.com/pali/linux-baudrate.git
->
-> > > > And I believe that instead of
-> > > > SPD_CUST we should get rid (or at least minimize) the problems with
-> > > > BOTHER in user space.
-> > >
-> > > I looked into archives and seems that glibc people are not interested=
- in
-> > > this area. And I'm not going to spend time on another project which s=
-eems
-> > > to be useless.
-> >
-> > So why should the kernel suffer if it already provides something good
-> > for the user and user space ignores that?
->
-> Because it is unusable? API which standard linux userspace applications
-> cannot use is useless. And for application develop it does not matter if
-> issue is in kernel part of API or userspace part of API. At the end
-> would be use used.
+PATCH V4:
+ - fix clang warning - var uninitialized when used.
+PATCH V3:
+ - add missing function implementations to 2/4 (HW API implementation),
+   only definitions were added int V1, V2, and implementation waas missed
+   by mistake.
 
-Then help make it happen?
+Reported-by: kernel test robot <lkp@intel.com>
+ - fix compiletime warning (unused variable)
 
-> With whole this discussion I have feeling that there correct way is just
-> to use SDP flags in userspace as there is no interest in fixing BOTHER's
-> c_ospeed and c_ispeed in kernel drivers and it was rejected just because
-> of not handling SDP flags correctly.
+PATCH V2:
+ - include all the patches of patch series (V1's been sent to
+   closed net-next, also had not all patches included);
 
-I'm puzzled who asked you about SPD_CUST implementation... It.is.an.ugly.ha=
-ck.
+Oleksandr Mazur (4):
+  net: marvell: prestera: rework bridge flags setting
+  net: marvell: prestera: define MDB/flood domain entries and HW API to
+    offload them to the HW
+  net: marvell: prestera: define and implement MDB / flood domain API
+    for entires creation and deletion
+  net: marvell: prestera: implement software MDB entries allocation
 
---=20
-With Best Regards,
-Andy Shevchenko
+ .../net/ethernet/marvell/prestera/prestera.h  |  47 ++
+ .../ethernet/marvell/prestera/prestera_hw.c   | 126 +--
+ .../ethernet/marvell/prestera/prestera_hw.h   |  15 +-
+ .../ethernet/marvell/prestera/prestera_main.c | 191 +++++
+ .../marvell/prestera/prestera_switchdev.c     | 730 +++++++++++++++++-
+ 5 files changed, 1018 insertions(+), 91 deletions(-)
+
+-- 
+2.17.1
+

@@ -2,61 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B78A156BD55
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 18:08:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B96B356BD4B
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 18:08:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238714AbiGHPnF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Jul 2022 11:43:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57480 "EHLO
+        id S238587AbiGHPoL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Jul 2022 11:44:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59400 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238707AbiGHPnB (ORCPT
+        with ESMTP id S238693AbiGHPoJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Jul 2022 11:43:01 -0400
-Received: from pegase2.c-s.fr (pegase2.c-s.fr [93.17.235.10])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B506973939
-        for <linux-kernel@vger.kernel.org>; Fri,  8 Jul 2022 08:42:59 -0700 (PDT)
-Received: from localhost (mailhub3.si.c-s.fr [172.26.127.67])
-        by localhost (Postfix) with ESMTP id 4LfcxF5Z83z9tLy;
-        Fri,  8 Jul 2022 17:42:57 +0200 (CEST)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from pegase2.c-s.fr ([172.26.127.65])
-        by localhost (pegase2.c-s.fr [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id MrLG8Zz7NbHn; Fri,  8 Jul 2022 17:42:57 +0200 (CEST)
-Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
-        by pegase2.c-s.fr (Postfix) with ESMTP id 4LfcxF4gdYz9tLp;
-        Fri,  8 Jul 2022 17:42:57 +0200 (CEST)
-Received: from localhost (localhost [127.0.0.1])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id 8E83F8B76E;
-        Fri,  8 Jul 2022 17:42:57 +0200 (CEST)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from messagerie.si.c-s.fr ([127.0.0.1])
-        by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
-        with ESMTP id GlkeXLTRQmNg; Fri,  8 Jul 2022 17:42:57 +0200 (CEST)
-Received: from [192.168.233.202] (unknown [192.168.233.202])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id DD89C8B763;
-        Fri,  8 Jul 2022 17:42:56 +0200 (CEST)
-Message-ID: <e5bee04b-f246-ab24-f019-b26011f32c32@csgroup.eu>
-Date:   Fri, 8 Jul 2022 17:42:56 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [RFC PATCH v3 00/12] objtool: Enable and implement --mcount
- option on powerpc
-Content-Language: fr-FR
-From:   Christophe Leroy <christophe.leroy@csgroup.eu>
-To:     Sathvika Vasireddy <sv@linux.ibm.com>,
-        linuxppc-dev@lists.ozlabs.org
-Cc:     jpoimboe@redhat.com, peterz@infradead.org,
-        linux-kernel@vger.kernel.org, aik@ozlabs.ru, mpe@ellerman.id.au,
-        mingo@redhat.com, rostedt@goodmis.org,
-        naveen.n.rao@linux.vnet.ibm.com, mbenes@suse.cz,
-        benh@kernel.crashing.org, paulus@samba.org
-References: <20220624183238.388144-1-sv@linux.ibm.com>
- <ae669ab4-681b-1a0d-3bbc-4fdf13b501a0@csgroup.eu>
-In-Reply-To: <ae669ab4-681b-1a0d-3bbc-4fdf13b501a0@csgroup.eu>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        Fri, 8 Jul 2022 11:44:09 -0400
+Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A907C67593
+        for <linux-kernel@vger.kernel.org>; Fri,  8 Jul 2022 08:44:06 -0700 (PDT)
+Received: by mail-wm1-x32a.google.com with SMTP id l68so12609240wml.3
+        for <linux-kernel@vger.kernel.org>; Fri, 08 Jul 2022 08:44:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id;
+        bh=+V+zkUMekO4XG1bTdYPDw5Qmp3filqJZgOeosyNq2oM=;
+        b=o+W2Ff1NW8PVyJK/h6KHikLcSLCBq9zkTWYGQ0r5LNotEw8uSvY6BHWg4jPsHXiks3
+         pPUR2d/MqFaOT1Xt3mJQZWj5+hReov1iu2b2IDwSddGU1fUNgE8IlUyIZ57zhu5KAXRa
+         yDyynIg3z4urKy89X6FPxaz5mkv0iwE+uYHLyODQRUIcAP1nr6LTS0aD+K3PYSTe6fpw
+         ppk42qSXqMv/6+i93Y7Dpv2oi/Z+CKiaI22bt0n95UB++fKYGARUw4htKvOLcxZkaMWq
+         rH9I1WIj8nLL2b3tEOA6zkol281FAbB8ZKkQFCv7pbcqL+pR/HdEpNJJx6aaqxVJ79M8
+         swaw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=+V+zkUMekO4XG1bTdYPDw5Qmp3filqJZgOeosyNq2oM=;
+        b=msiK9F+/1jd8jVN3oUqBG/46b0R/l4Ir4JngjM8FE5ld10y7Dj6sbFzuUv98HS4MaR
+         38bhvpnV2cVPjExngQjY/dr+v21etegdEDgfLLq7c8Khr5jTrYdP0pO5SAkfL2rdFYTk
+         HSC5fM3pdKmSSadmsJ8hU7FwEZE2LUIksFzOJIJxrtCJDlvMBU+ha9PcPge5Hl9jrxWy
+         j+YCchXgW+8FBsHqp4tjxG59m4XXOblUqJxcnsk3Wcf4ZciBPTJWTwK8wfRgwPbFzika
+         3ObhZ4EG/lbbHDWgW+7j0+biqAFvXlDMHLETxJYh5MNR+6/7SVN/etZwuAz2RY33xCyx
+         +k/Q==
+X-Gm-Message-State: AJIora/5LsA8XW3r7cbfSyL9zUIw8iUzGfuNf0snP8B23S9Ea5ew3iUf
+        et2DWEKUqTxJDtfzgKYQMg61IAYTwJc6Ew==
+X-Google-Smtp-Source: AGRyM1smpUrKatpfxvwtDsWj8Jh8NwZ3/7/xp2NzQ+F0TbFtniSIi2Q1u7vZ8EZ6VviZ7HKnh/oX/g==
+X-Received: by 2002:a05:600c:3491:b0:3a0:4d4a:2e2d with SMTP id a17-20020a05600c349100b003a04d4a2e2dmr521792wmq.4.1657295045171;
+        Fri, 08 Jul 2022 08:44:05 -0700 (PDT)
+Received: from localhost.localdomain ([2a01:e0a:f:6020:844d:1a43:7e34:efd9])
+        by smtp.gmail.com with ESMTPSA id c2-20020adfe702000000b0021d69860b66sm17397879wrm.9.2022.07.08.08.44.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 08 Jul 2022 08:44:04 -0700 (PDT)
+From:   Vincent Guittot <vincent.guittot@linaro.org>
+To:     mingo@redhat.com, peterz@infradead.org, juri.lelli@redhat.com,
+        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
+        mgorman@suse.de, bristot@redhat.com, vschneid@redhat.com,
+        linux-kernel@vger.kernel.org, david.chen@nutanix.com,
+        zhangqiao22@huawei.com
+Cc:     Vincent Guittot <vincent.guittot@linaro.org>
+Subject: [PATCH v2] sched/fair: fix case with reduced capacity CPU
+Date:   Fri,  8 Jul 2022 17:44:01 +0200
+Message-Id: <20220708154401.21411-1-vincent.guittot@linaro.org>
+X-Mailer: git-send-email 2.17.1
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -65,97 +67,134 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+The capacity of the CPU available for CFS tasks can be reduced because of
+other activities running on the latter. In such case, it's worth trying to
+move CFS tasks on a CPU with more available capacity.
+
+The rework of the load balance has filtered the case when the CPU is
+classified to be fully busy but its capacity is reduced.
+
+Check if CPU's capacity is reduced while gathering load balance statistic
+and classify it group_misfit_task instead of group_fully_busy so we can
+try to move the load on another CPU.
+
+Reported-by: David Chen <david.chen@nutanix.com>
+Reported-by: Zhang Qiao <zhangqiao22@huawei.com>
+Signed-off-by: Vincent Guittot <vincent.guittot@linaro.org>
+Tested-by: David Chen <david.chen@nutanix.com>
+Tested-by: Zhang Qiao <zhangqiao22@huawei.com>
+---
+
+v2:
+- fixed typo
+- removed useless comments for group_misfit_task
+- reorder conditions to make the code easier to read
 
 
-Le 08/07/2022 à 17:06, Christophe Leroy a écrit :
-> 
-> 
-> Le 24/06/2022 à 20:32, Sathvika Vasireddy a écrit :
->> These patches are rebased on top of objtool/core
->> branch of the tip tree, and are tested on
->> ppc64le with ppc64le_defconfig.
-> 
-> Seems like objtool/core has been merged in 5.19. I was able to apply 
-> your series on top of powerpc/merge branch. Only a small conflict with 
-> patch "objtool: Add --mnop as an option to --mcount" because of commit 
-> b42d23065024 ("kbuild: factor out the common objtool arguments")
+ kernel/sched/fair.c | 54 +++++++++++++++++++++++++++++++++++----------
+ 1 file changed, 42 insertions(+), 12 deletions(-)
 
-
-In order to build, you will also need the following new file:
-
-diff --git a/arch/powerpc/include/asm/asm.h b/arch/powerpc/include/asm/asm.h
-new file mode 100644
-index 000000000000..86f46b604e9a
---- /dev/null
-+++ b/arch/powerpc/include/asm/asm.h
-@@ -0,0 +1,7 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+#ifndef _ASM_POWERPC_ASM_H
-+#define _ASM_POWERPC_ASM_H
+diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
+index a78d2e3b9d49..914096c5b1ae 100644
+--- a/kernel/sched/fair.c
++++ b/kernel/sched/fair.c
+@@ -7711,8 +7711,8 @@ enum group_type {
+ 	 */
+ 	group_fully_busy,
+ 	/*
+-	 * SD_ASYM_CPUCAPACITY only: One task doesn't fit with CPU's capacity
+-	 * and must be migrated to a more powerful CPU.
++	 * One task doesn't fit with CPU's capacity and must be migrated to a
++	 * more powerful CPU.
+ 	 */
+ 	group_misfit_task,
+ 	/*
+@@ -8798,6 +8798,19 @@ sched_asym(struct lb_env *env, struct sd_lb_stats *sds,  struct sg_lb_stats *sgs
+ 	return sched_asym_prefer(env->dst_cpu, group->asym_prefer_cpu);
+ }
+ 
++static inline bool
++sched_reduced_capacity(struct rq *rq, struct sched_domain *sd)
++{
++	/*
++	 * When there is more than 1 task, the group_overloaded case already
++	 * takes care of cpu with reduced capacity
++	 */
++	if (rq->cfs.h_nr_running != 1)
++		return false;
 +
-+#define _ASM_PTR	" .long "
++	return check_cpu_capacity(rq, sd);
++}
 +
-+#endif /* _ASM_POWERPC_ASM_H */
+ /**
+  * update_sg_lb_stats - Update sched_group's statistics for load balancing.
+  * @env: The load balancing environment.
+@@ -8820,8 +8833,9 @@ static inline void update_sg_lb_stats(struct lb_env *env,
+ 
+ 	for_each_cpu_and(i, sched_group_span(group), env->cpus) {
+ 		struct rq *rq = cpu_rq(i);
++		unsigned long load = cpu_load(rq);
+ 
+-		sgs->group_load += cpu_load(rq);
++		sgs->group_load += load;
+ 		sgs->group_util += cpu_util_cfs(i);
+ 		sgs->group_runnable += cpu_runnable(rq);
+ 		sgs->sum_h_nr_running += rq->cfs.h_nr_running;
+@@ -8851,11 +8865,17 @@ static inline void update_sg_lb_stats(struct lb_env *env,
+ 		if (local_group)
+ 			continue;
+ 
+-		/* Check for a misfit task on the cpu */
+-		if (env->sd->flags & SD_ASYM_CPUCAPACITY &&
+-		    sgs->group_misfit_task_load < rq->misfit_task_load) {
+-			sgs->group_misfit_task_load = rq->misfit_task_load;
+-			*sg_status |= SG_OVERLOAD;
++		if (env->sd->flags & SD_ASYM_CPUCAPACITY) {
++			/* Check for a misfit task on the cpu */
++			if (sgs->group_misfit_task_load < rq->misfit_task_load) {
++				sgs->group_misfit_task_load = rq->misfit_task_load;
++				*sg_status |= SG_OVERLOAD;
++			}
++		} else if ((env->idle != CPU_NOT_IDLE) &&
++			   sched_reduced_capacity(rq, env->sd)) {
++			/* Check for a task running on a CPU with reduced capacity */
++			if (sgs->group_misfit_task_load < load)
++				sgs->group_misfit_task_load = load;
+ 		}
+ 	}
+ 
+@@ -8908,7 +8928,8 @@ static bool update_sd_pick_busiest(struct lb_env *env,
+ 	 * CPUs in the group should either be possible to resolve
+ 	 * internally or be covered by avg_load imbalance (eventually).
+ 	 */
+-	if (sgs->group_type == group_misfit_task &&
++	if ((env->sd->flags & SD_ASYM_CPUCAPACITY) &&
++	    (sgs->group_type == group_misfit_task) &&
+ 	    (!capacity_greater(capacity_of(env->dst_cpu), sg->sgc->max_capacity) ||
+ 	     sds->local_stat.group_type != group_has_spare))
+ 		return false;
+@@ -9517,9 +9538,18 @@ static inline void calculate_imbalance(struct lb_env *env, struct sd_lb_stats *s
+ 	busiest = &sds->busiest_stat;
+ 
+ 	if (busiest->group_type == group_misfit_task) {
+-		/* Set imbalance to allow misfit tasks to be balanced. */
+-		env->migration_type = migrate_misfit;
+-		env->imbalance = 1;
++		if (env->sd->flags & SD_ASYM_CPUCAPACITY) {
++			/* Set imbalance to allow misfit tasks to be balanced. */
++			env->migration_type = migrate_misfit;
++			env->imbalance = 1;
++		} else {
++			/*
++			 * Set load imbalance to allow moving task from cpu
++			 * with reduced capacity.
++			 */
++			env->migration_type = migrate_load;
++			env->imbalance = busiest->group_misfit_task_load;
++		}
+ 		return;
+ 	}
+ 
+-- 
+2.17.1
 
-
-
-> 
->>
->> Christophe Leroy (3):
->>    objtool: Fix SEGFAULT
->>    objtool: Use target file endianness instead of a compiled constant
->>    objtool: Use target file class size instead of a compiled constant
->>
->> Sathvika Vasireddy(9):
->>    objtool: Add --mnop as an option to --mcount
->>    powerpc: Skip objtool from running on VDSO files
->>    objtool: Read special sections with alts only when specific options 
->> are selected
->>    objtool: Use macros to define arch specific reloc types
->>    objtool: Add arch specific function arch_ftrace_match()
->>    objtool/powerpc: Enable objtool to be built on ppc
->>    objtool/powerpc: Add --mcount specific implementation
->>    powerpc: Remove unreachable() from WARN_ON()
->>    objtool/powerpc: Fix unannotated intra-function call warnings
->>
->>   Makefile                                      |  4 +-
->>   arch/powerpc/Kconfig                          |  2 +
->>   arch/powerpc/include/asm/bug.h                |  1 -
->>   arch/powerpc/kernel/entry_64.S                |  2 +
->>   arch/powerpc/kernel/exceptions-64s.S          |  7 +-
->>   arch/powerpc/kernel/head_64.S                 |  7 +-
->>   arch/powerpc/kernel/misc_64.S                 |  4 +-
->>   arch/powerpc/kernel/vdso/Makefile             |  2 +
->>   arch/powerpc/kernel/vector.S                  |  4 +-
->>   arch/powerpc/kvm/book3s_hv_interrupts.S       |  4 +-
->>   arch/powerpc/kvm/book3s_hv_rmhandlers.S       | 25 +++--
->>   arch/x86/Kconfig                              |  1 +
->>   scripts/Makefile.build                        |  1 +
->>   tools/objtool/arch/powerpc/Build              |  2 +
->>   tools/objtool/arch/powerpc/decode.c           | 96 +++++++++++++++++++
->>   .../arch/powerpc/include/arch/cfi_regs.h      | 11 +++
->>   tools/objtool/arch/powerpc/include/arch/elf.h | 10 ++
->>   .../arch/powerpc/include/arch/special.h       | 21 ++++
->>   tools/objtool/arch/powerpc/special.c          | 19 ++++
->>   tools/objtool/arch/x86/decode.c               |  8 ++
->>   tools/objtool/arch/x86/include/arch/elf.h     |  2 +
->>   .../arch/x86/include/arch/endianness.h        |  9 --
->>   tools/objtool/builtin-check.c                 | 14 +++
->>   tools/objtool/check.c                         | 51 +++++-----
->>   tools/objtool/elf.c                           |  8 +-
->>   tools/objtool/include/objtool/arch.h          |  2 +
->>   tools/objtool/include/objtool/builtin.h       |  1 +
->>   tools/objtool/include/objtool/elf.h           |  8 ++
->>   tools/objtool/include/objtool/endianness.h    | 32 +++----
->>   tools/objtool/orc_dump.c                      | 11 ++-
->>   tools/objtool/orc_gen.c                       |  4 +-
->>   tools/objtool/special.c                       |  3 +-
->>   32 files changed, 305 insertions(+), 71 deletions(-)
->>   create mode 100644 tools/objtool/arch/powerpc/Build
->>   create mode 100644 tools/objtool/arch/powerpc/decode.c
->>   create mode 100644 tools/objtool/arch/powerpc/include/arch/cfi_regs.h
->>   create mode 100644 tools/objtool/arch/powerpc/include/arch/elf.h
->>   create mode 100644 tools/objtool/arch/powerpc/include/arch/special.h
->>   create mode 100644 tools/objtool/arch/powerpc/special.c
->>   delete mode 100644 tools/objtool/arch/x86/include/arch/endianness.h
->>

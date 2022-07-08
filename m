@@ -2,129 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 61E4956B3CC
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 09:48:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B922356B3CD
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 09:49:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237413AbiGHHrp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Jul 2022 03:47:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53706 "EHLO
+        id S237232AbiGHHsd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Jul 2022 03:48:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54254 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237316AbiGHHrn (ORCPT
+        with ESMTP id S237058AbiGHHs1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Jul 2022 03:47:43 -0400
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2A4C7D1E4;
-        Fri,  8 Jul 2022 00:47:41 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        Fri, 8 Jul 2022 03:48:27 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37B8995;
+        Fri,  8 Jul 2022 00:48:25 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4LfQNp3q1wz4xXD;
-        Fri,  8 Jul 2022 17:47:38 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1657266460;
-        bh=BufiTmFOjOTRKTxthIni/3WqGCUldD57kd+VeVSwYLc=;
-        h=Date:From:To:Cc:Subject:From;
-        b=aX56pxlG/2Wuw25ozUllP6Pjl+Vrz6E9WVq1as29r4ToQZlyI8EjXipFxbqSYHxKJ
-         dXwcQEqWWdoclHnf2DFHlR30N2CH5ovO92qq3nDcOISR+8Ix+mjOV5Ygryc/GbmzLH
-         i673RtW61oL1ZJZEnk/2TlNWGfEdWrzgwuJgoAxb8NZ7A/eQ+rqyfsnDHaJgrvot9y
-         Aq9PjVEIlQDMupLUFYEq4rj7/dbmkfv44cN0ANACOxa1/X+dGe4ZmSR5aisx44ZxFK
-         rP1GS5PQDaxGIrd8F090ARv4ebCfRBebJ/svr6Oh3/B37OdisLQ5JWihz7uJjRVXE8
-         nBmd4F/R2ob3w==
-Date:   Fri, 8 Jul 2022 17:47:37 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Yury Norov <yury.norov@gmail.com>
-Cc:     Paul Menzel <pmenzel@molgen.mpg.de>,
+        by dfw.source.kernel.org (Postfix) with ESMTPS id CE8E9625AD;
+        Fri,  8 Jul 2022 07:48:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3B4E1C341C0;
+        Fri,  8 Jul 2022 07:48:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1657266504;
+        bh=1x7ORP/e34KlMltGH5I/g4CnsThKO3CPBd61O5n3IDk=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=nsYezn0NoYdW9sVGZEGNf64VcfwffgE6kPBdyk/kxRfm54B50lqzW3LrhqRuHRNan
+         0a5kk7hy0zdSJUaFl8j3Qz9ri1Frjs6NnaP/YmEJ+kLHgEFBFNbRYudbi6DRtKGa6t
+         SPoGqKA6JpP0F4w7hIiLT+ZE/n7aA0edq9FItP6aaolZzu2YhNJesnX7dXnqsdKUkH
+         TQb2qQYBPpK2r1hNYk/W+qcpNzTaluIUcTMuQRJ0FbnFskAZkfg4VorEImxMfD4i5W
+         8kUoxbjZQS5MUVAlWMRRnbx6/CrCZqR5WCDWssP7VSTYrujHanrb5N5JWOL7Rzq8fM
+         eDoF3qYgvM+4Q==
+Received: from [213.208.244.172] (helo=wait-a-minute.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <maz@kernel.org>)
+        id 1o9iir-0065nt-Vh;
+        Fri, 08 Jul 2022 08:48:22 +0100
+Date:   Fri, 08 Jul 2022 08:48:20 +0100
+Message-ID: <87v8s8kptn.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Samuel Holland <samuel@sholland.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: build failure after merge of the bitmap tree
-Message-ID: <20220708174737.52d569c8@canb.auug.org.au>
-MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/QE_j9YWfk8R.jkLw/IhID=R";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Subject: Re: linux-next: build failure after merge of the irqchip tree
+In-Reply-To: <20220708141344.3b521664@canb.auug.org.au>
+References: <20220708141344.3b521664@canb.auug.org.au>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 213.208.244.172
+X-SA-Exim-Rcpt-To: sfr@canb.auug.org.au, samuel@sholland.org, linux-kernel@vger.kernel.org, linux-next@vger.kernel.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/QE_j9YWfk8R.jkLw/IhID=R
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Fri, 08 Jul 2022 05:13:44 +0100,
+Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+> 
+> [1  <text/plain; US-ASCII (quoted-printable)>]
+> Hi all,
+> 
+> After merging the irqchip tree, today's linux-next build (x86_64
+> allmodconfig) failed like this:
+> 
+> drivers/pci/controller/pci-hyperv.c: In function 'hv_compose_msi_req_v2':
+> drivers/pci/controller/pci-hyperv.c:1654:42: error: passing argument 1 of 'hv_compose_msi_req_get_cpu' discards 'const' qualifier from pointer target type [-Werror=discarded-qualifiers]
+>  1654 |         cpu = hv_compose_msi_req_get_cpu(affinity);
+>       |                                          ^~~~~~~~
+> drivers/pci/controller/pci-hyperv.c:1638:55: note: expected 'struct cpumask *' but argument is of type 'const struct cpumask *'
+>  1638 | static int hv_compose_msi_req_get_cpu(struct cpumask *affinity)
+>       |                                       ~~~~~~~~~~~~~~~~^~~~~~~~
+> drivers/pci/controller/pci-hyperv.c: In function 'hv_compose_msi_req_v3':
+> drivers/pci/controller/pci-hyperv.c:1674:42: error: passing argument 1 of 'hv_compose_msi_req_get_cpu' discards 'const' qualifier from pointer target type [-Werror=discarded-qualifiers]
+>  1674 |         cpu = hv_compose_msi_req_get_cpu(affinity);
+>       |                                          ^~~~~~~~
+> drivers/pci/controller/pci-hyperv.c:1638:55: note: expected 'struct cpumask *' but argument is of type 'const struct cpumask *'
+>  1638 | static int hv_compose_msi_req_get_cpu(struct cpumask *affinity)
+>       |                                       ~~~~~~~~~~~~~~~~^~~~~~~~
+> cc1: all warnings being treated as errors
 
-Hi all,
+I've now merged Samuel's quick fix. Thanks both.
 
-After merging the bitmap tree, today's linux-next build (powerpc
-ppc64_defconfig) failed like this:
+	M.
 
-lib/bitmap.c:351:6: error: conflicting types for '__bitmap_set'; have 'void=
-(long unsigned int *, unsigned int,  unsigned int)'
-  351 | void __bitmap_set(unsigned long *map, unsigned int start, unsigned =
-int len)
-      |      ^~~~~~~~~~~~
-In file included from lib/bitmap.c:7:
-include/linux/bitmap.h:167:6: note: previous declaration of '__bitmap_set' =
-with type 'void(long unsigned int *, unsigned int,  int)'
-  167 | void __bitmap_set(unsigned long *map, unsigned int start, int len);
-      |      ^~~~~~~~~~~~
-In file included from include/linux/linkage.h:7,
-                 from include/linux/printk.h:8,
-                 from include/asm-generic/bug.h:22,
-                 from arch/powerpc/include/asm/bug.h:158,
-                 from include/linux/bug.h:5,
-                 from lib/bitmap.c:9:
-lib/bitmap.c:370:15: error: conflicting types for '__bitmap_set'; have 'voi=
-d(long unsigned int *, unsigned int,  unsigned int)'
-  370 | EXPORT_SYMBOL(__bitmap_set);
-      |               ^~~~~~~~~~~~
-include/linux/export.h:87:28: note: in definition of macro '___EXPORT_SYMBO=
-L'
-   87 |         extern typeof(sym) sym;                                    =
-             \
-      |                            ^~~
-include/linux/export.h:147:41: note: in expansion of macro '__EXPORT_SYMBOL'
-  147 | #define _EXPORT_SYMBOL(sym, sec)        __EXPORT_SYMBOL(sym, sec, "=
-")
-      |                                         ^~~~~~~~~~~~~~~
-include/linux/export.h:150:41: note: in expansion of macro '_EXPORT_SYMBOL'
-  150 | #define EXPORT_SYMBOL(sym)              _EXPORT_SYMBOL(sym, "")
-      |                                         ^~~~~~~~~~~~~~
-lib/bitmap.c:370:1: note: in expansion of macro 'EXPORT_SYMBOL'
-  370 | EXPORT_SYMBOL(__bitmap_set);
-      | ^~~~~~~~~~~~~
-In file included from lib/bitmap.c:7:
-include/linux/bitmap.h:167:6: note: previous declaration of '__bitmap_set' =
-with type 'void(long unsigned int *, unsigned int,  int)'
-  167 | void __bitmap_set(unsigned long *map, unsigned int start, int len);
-      |      ^~~~~~~~~~~~
-
-Caused by commit
-
-  aaa4ab5ec044 ("lib/bitmap: Make length parameter `len` unsigned")
-
-I have reverted that commit for today.
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/QE_j9YWfk8R.jkLw/IhID=R
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmLH4RkACgkQAVBC80lX
-0GzC4wf/fZvuuy8PT/HsMWEk0gbxdXRLtobp2h471ccc0PE85+oTUMMZ68G+5FyM
-DnT8kNucZNxCbJdCcsbXBaGwcAF8DkJQqdkmWdxroe/y3yPllGzzeLprVY6uNmM9
-sWrJL2s9HPpUPwRW3r0mKQPPkH99pORB+5Pm39r8suN+sNZm3HpW/mbSziwyeM5M
-/HGU5fmDgCeXf9gfkPw/NWQ+e3LgMjxL5uFWoeBAJQ4/pSxbZF/zgXUxqnbmf5HU
-n574GCfFJ16XwI54ZMdl1XJORifjWNZcNUF3dl0O3et6Jw9MCWapjIN3h5VjGyxy
-KvG4gJfL8j2liPoVGnaVJdt4hd9wrA==
-=0app
------END PGP SIGNATURE-----
-
---Sig_/QE_j9YWfk8R.jkLw/IhID=R--
+-- 
+Without deviation from the norm, progress is not possible.

@@ -2,302 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A75CB56B918
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 14:03:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BD30756B925
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 14:03:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238253AbiGHMBH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Jul 2022 08:01:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55948 "EHLO
+        id S238057AbiGHMB4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Jul 2022 08:01:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56956 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237714AbiGHMAy (ORCPT
+        with ESMTP id S237352AbiGHMBz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Jul 2022 08:00:54 -0400
-Received: from mail-oo1-xc36.google.com (mail-oo1-xc36.google.com [IPv6:2607:f8b0:4864:20::c36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57EA29B18E
-        for <linux-kernel@vger.kernel.org>; Fri,  8 Jul 2022 05:00:52 -0700 (PDT)
-Received: by mail-oo1-xc36.google.com with SMTP id o73-20020a4a2c4c000000b004284fd4e052so3987391ooo.7
-        for <linux-kernel@vger.kernel.org>; Fri, 08 Jul 2022 05:00:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=vanguardiasur-com-ar.20210112.gappssmtp.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=6MauRTxqZJVWRnLcZEPdOWjV0zGWMpnIXDwkFytfIIw=;
-        b=pzuFqANPRZpBcOzi8kD9+Rcj5U+To/xA2H+4vMnLfYGnqwYTJtqlz4XHk8Z++szdOf
-         X10I+9I0mRqV0ZgAr+GWFBseVQFQkYMSHMm3oHHYYjDn6/dxoUMZpEY4DIhmpfQ8/5/T
-         9Dk64iD68OisJewkMW1vVzdVfNoThVty1B17IARvBXabxJN/u8q1dyo+pDnlmniRAKDA
-         VT8AaiTqczPEwsQU1QW68UZOadwEQpQHMstsIONk09LwTyG9juZOgY1V71jY+3SDBrUo
-         F+5pgEP1W6wAWppJ+AVmmVRNY1Wtmff+275kCITt8E3/MjnzGpyEGBEVVpQ++bb9UZxf
-         9dtg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=6MauRTxqZJVWRnLcZEPdOWjV0zGWMpnIXDwkFytfIIw=;
-        b=ISDLANijTsbZSKnbDvnQCW9rP6pITZF8oSlwnnRZ41vHlEeM9D6Qg9x1sFK5NNUGCj
-         Db5BfV/AIqibjcoQnfIxi7jds9JfWkukFs9Tnl2hecLfvI4o/xuZ4FXTDDINZsUWDM6u
-         Wwc/SZHHSyThg8kAorBdugdqwGLGtJiNnwkr/PinBdTfbRqo1YZqdh3Lb4xLPACT0St3
-         5pFTsWqovRxWnI7zWIG4tcNYa5FuVNlaI82tQK9vGJvDERPwPdiouyzh3sCx+Jezzpq1
-         w3xj4mQYLa7o3rLSjh8jZ+4LVg3WXNqHzJGgWHW8iAHeErpypLVfMT9U+nLiOngsmZ+z
-         mTyw==
-X-Gm-Message-State: AJIora94dfBsm85sbDwR5sjetXEjCZCQY08HRXdDPOQFJAw8ZTUqYMDs
-        r37y27oDe/gGpPTWwSQzFLgwwQ==
-X-Google-Smtp-Source: AGRyM1tIi7U/tzN2kHzVbY/2pwhOSHhPeBqioCP6mz1og1DhqgVwVEAfdU36A/R+cx2ZjqIUXTBk6A==
-X-Received: by 2002:a4a:96b3:0:b0:422:23d3:46de with SMTP id s48-20020a4a96b3000000b0042223d346demr1240112ooi.70.1657281650312;
-        Fri, 08 Jul 2022 05:00:50 -0700 (PDT)
-Received: from eze-laptop ([186.13.97.246])
-        by smtp.gmail.com with ESMTPSA id m18-20020a9d7ad2000000b00618fa37308csm4085722otn.35.2022.07.08.05.00.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 08 Jul 2022 05:00:49 -0700 (PDT)
-Date:   Fri, 8 Jul 2022 09:00:42 -0300
-From:   Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
-To:     Benjamin Gaignard <benjamin.gaignard@collabora.com>
-Cc:     mchehab@kernel.org, hverkuil@xs4all.nl, p.zabel@pengutronix.de,
-        gregkh@linuxfoundation.org, mripard@kernel.org,
-        paul.kocialkowski@bootlin.com, wens@csie.org,
-        jernej.skrabec@gmail.com, samuel@sholland.org,
-        nicolas.dufresne@collabora.com, andrzej.p@collabora.com,
-        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-rockchip@lists.infradead.org, linux-staging@lists.linux.dev,
-        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
-        kernel@collabora.com
-Subject: Re: [PATCH v11 15/17] media: uapi: HEVC: fix padding in v4l2 control
- structures
-Message-ID: <YsgcagtDlwrJClbi@eze-laptop>
-References: <20220706093803.158810-1-benjamin.gaignard@collabora.com>
- <20220706093803.158810-16-benjamin.gaignard@collabora.com>
+        Fri, 8 Jul 2022 08:01:55 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41EE49B18E;
+        Fri,  8 Jul 2022 05:01:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1657281714; x=1688817714;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=SwEz0qtIHkoh3cq67PI8U+ibqI4Yeh/znuUgo64olhA=;
+  b=larTHcQWT7yfjkCOEu83WwYtIa94QhA36bmk7gPdDK7+DEz8HlEYGHbp
+   5KQ0f/mRoTuK5x7T9U/ECsSZHg+kThLqrLdBjV+VigkmOUfjKakkXQMY1
+   3zzO/RHHkP3FgesTpOLq7ZtcOk0XdpEMkAqYc6a+feuj+1qwMlhCgetDc
+   T45kqlZyUPDSUX8GBiAY7V4dnq2gB8RYOdY6bZ4u1MAxPPsUvIQ7xpjrw
+   Fhf/yyVnkuF5OQWclmESMocGN/f258/svvdYI0awxBQuMMWmozzSjrUH9
+   wEirC5ClXHL07QU1rOmvCcDMxiR/UcDk7qxW4w2w359Uv4q4AcysCDul+
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10401"; a="370578176"
+X-IronPort-AV: E=Sophos;i="5.92,255,1650956400"; 
+   d="scan'208";a="370578176"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jul 2022 05:01:48 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.92,255,1650956400"; 
+   d="scan'208";a="626686113"
+Received: from lkp-server01.sh.intel.com (HELO 68b931ab7ac1) ([10.239.97.150])
+  by orsmga001.jf.intel.com with ESMTP; 08 Jul 2022 05:01:47 -0700
+Received: from kbuild by 68b931ab7ac1 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1o9mg6-000NRU-BS;
+        Fri, 08 Jul 2022 12:01:46 +0000
+Date:   Fri, 8 Jul 2022 20:01:04 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     kbuild-all@lists.01.org,
+        Wolfram Sang <wsa-dev@sang-engineering.com>
+Subject: Re: [PATCH v2 1/1] i2c: scmi: Replace open coded
+ device_get_match_data()
+Message-ID: <202207081929.oBd7Xtwy-lkp@intel.com>
+References: <20220708100216.84300-1-andriy.shevchenko@linux.intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220706093803.158810-16-benjamin.gaignard@collabora.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220708100216.84300-1-andriy.shevchenko@linux.intel.com>
+X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jul 06, 2022 at 11:38:01AM +0200, Benjamin Gaignard wrote:
-> Fix padding where needed to remove holes and stay aligned on cache boundaries
-> 
-> Signed-off-by: Benjamin Gaignard <benjamin.gaignard@collabora.com>
-> Acked-by: Nicolas Dufresne <nicolas.dufresne@collabora.com>
-> Tested-by: Jernej Skrabec <jernej.skrabec@gmail.com>
+Hi Andy,
 
-I've checked the holes using pahole and it looks good.
+I love your patch! Perhaps something to improve:
 
-Reviewed-by: Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
+[auto build test WARNING on wsa/i2c/for-next]
+[also build test WARNING on linus/master v5.19-rc5 next-20220708]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-Thanks,
-Ezequiel
+url:    https://github.com/intel-lab-lkp/linux/commits/Andy-Shevchenko/i2c-scmi-Replace-open-coded-device_get_match_data/20220708-180449
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/wsa/linux.git i2c/for-next
+config: x86_64-rhel-8.3-func (https://download.01.org/0day-ci/archive/20220708/202207081929.oBd7Xtwy-lkp@intel.com/config)
+compiler: gcc-11 (Debian 11.3.0-3) 11.3.0
+reproduce (this is a W=1 build):
+        # https://github.com/intel-lab-lkp/linux/commit/c111b5704bd215394f238fa88925d6832cf2562c
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Andy-Shevchenko/i2c-scmi-Replace-open-coded-device_get_match_data/20220708-180449
+        git checkout c111b5704bd215394f238fa88925d6832cf2562c
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/i2c/busses/
 
-> ---
->  .../media/v4l/ext-ctrls-codec.rst             |  6 ++---
->  drivers/media/v4l2-core/v4l2-ctrls-core.c     | 15 -------------
->  include/media/hevc-ctrls.h                    | 22 ++++++++++++-------
->  3 files changed, 17 insertions(+), 26 deletions(-)
-> 
-> diff --git a/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst b/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst
-> index 59e751c38d06..d5ef91ae3539 100644
-> --- a/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst
-> +++ b/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst
-> @@ -3513,9 +3513,6 @@ enum v4l2_mpeg_video_hevc_size_of_length_field -
->      * - __u8
->        - ``num_active_dpb_entries``
->        - The number of entries in ``dpb``.
-> -    * - struct :c:type:`v4l2_hevc_dpb_entry`
-> -      - ``dpb[V4L2_HEVC_DPB_ENTRIES_NUM_MAX]``
-> -      - The decoded picture buffer, for meta-data about reference frames.
->      * - __u8
->        - ``num_poc_st_curr_before``
->        - The number of reference pictures in the short-term set that come before
-> @@ -3539,6 +3536,9 @@ enum v4l2_mpeg_video_hevc_size_of_length_field -
->        - ``poc_lt_curr[V4L2_HEVC_DPB_ENTRIES_NUM_MAX]``
->        - PocLtCurr as described in section 8.3.2 "Decoding process for reference
->          picture set": provides the index of the long term references in DPB array.
-> +    * - struct :c:type:`v4l2_hevc_dpb_entry`
-> +      - ``dpb[V4L2_HEVC_DPB_ENTRIES_NUM_MAX]``
-> +      - The decoded picture buffer, for meta-data about reference frames.
->      * - __u64
->        - ``flags``
->        - See :ref:`Decode Parameters Flags <hevc_decode_params_flags>`
-> diff --git a/drivers/media/v4l2-core/v4l2-ctrls-core.c b/drivers/media/v4l2-core/v4l2-ctrls-core.c
-> index c5c5407584ff..1f85828d6694 100644
-> --- a/drivers/media/v4l2-core/v4l2-ctrls-core.c
-> +++ b/drivers/media/v4l2-core/v4l2-ctrls-core.c
-> @@ -536,7 +536,6 @@ static int std_validate_compound(const struct v4l2_ctrl *ctrl, u32 idx,
->  	struct v4l2_ctrl_h264_decode_params *p_h264_dec_params;
->  	struct v4l2_ctrl_hevc_sps *p_hevc_sps;
->  	struct v4l2_ctrl_hevc_pps *p_hevc_pps;
-> -	struct v4l2_ctrl_hevc_slice_params *p_hevc_slice_params;
->  	struct v4l2_ctrl_hdr10_mastering_display *p_hdr10_mastering;
->  	struct v4l2_ctrl_hevc_decode_params *p_hevc_decode_params;
->  	struct v4l2_area *area;
-> @@ -814,8 +813,6 @@ static int std_validate_compound(const struct v4l2_ctrl *ctrl, u32 idx,
->  			p_hevc_pps->pps_beta_offset_div2 = 0;
->  			p_hevc_pps->pps_tc_offset_div2 = 0;
->  		}
-> -
-> -		zero_padding(*p_hevc_pps);
->  		break;
->  
->  	case V4L2_CTRL_TYPE_HEVC_DECODE_PARAMS:
-> @@ -824,21 +821,9 @@ static int std_validate_compound(const struct v4l2_ctrl *ctrl, u32 idx,
->  		if (p_hevc_decode_params->num_active_dpb_entries >
->  		    V4L2_HEVC_DPB_ENTRIES_NUM_MAX)
->  			return -EINVAL;
-> -
-> -		for (i = 0; i < p_hevc_decode_params->num_active_dpb_entries;
-> -		     i++) {
-> -			struct v4l2_hevc_dpb_entry *dpb_entry =
-> -				&p_hevc_decode_params->dpb[i];
-> -
-> -			zero_padding(*dpb_entry);
-> -		}
->  		break;
->  
->  	case V4L2_CTRL_TYPE_HEVC_SLICE_PARAMS:
-> -		p_hevc_slice_params = p;
-> -
-> -		zero_padding(p_hevc_slice_params->pred_weight_table);
-> -		zero_padding(*p_hevc_slice_params);
->  		break;
->  
->  	case V4L2_CTRL_TYPE_HDR10_CLL_INFO:
-> diff --git a/include/media/hevc-ctrls.h b/include/media/hevc-ctrls.h
-> index 9239e8b649e0..7358cbfc3e4d 100644
-> --- a/include/media/hevc-ctrls.h
-> +++ b/include/media/hevc-ctrls.h
-> @@ -105,6 +105,7 @@ enum v4l2_stateless_hevc_start_code {
->   * @chroma_format_idc: specifies the chroma sampling
->   * @sps_max_sub_layers_minus1: this value plus 1 specifies the maximum number
->   *                             of temporal sub-layers
-> + * @reserved: padding field. Should be zeroed by applications.
->   * @flags: see V4L2_HEVC_SPS_FLAG_{}
->   */
->  struct v4l2_ctrl_hevc_sps {
-> @@ -133,6 +134,7 @@ struct v4l2_ctrl_hevc_sps {
->  	__u8	chroma_format_idc;
->  	__u8	sps_max_sub_layers_minus1;
->  
-> +	__u8	reserved[6];
->  	__u64	flags;
->  };
->  
-> @@ -192,6 +194,7 @@ struct v4l2_ctrl_hevc_sps {
->   *			divided by 2
->   * @log2_parallel_merge_level_minus2: this value plus 2 specifies the value of
->   *                                    the variable Log2ParMrgLevel
-> + * @reserved: padding field. Should be zeroed by applications.
->   * @flags: see V4L2_HEVC_PPS_FLAG_{}
->   */
->  struct v4l2_ctrl_hevc_pps {
-> @@ -210,8 +213,7 @@ struct v4l2_ctrl_hevc_pps {
->  	__s8	pps_beta_offset_div2;
->  	__s8	pps_tc_offset_div2;
->  	__u8	log2_parallel_merge_level_minus2;
-> -
-> -	__u8	padding[4];
-> +	__u8	reserved;
->  	__u64	flags;
->  };
->  
-> @@ -239,14 +241,15 @@ struct v4l2_ctrl_hevc_pps {
->   * @timestamp: timestamp of the V4L2 capture buffer to use as reference.
->   * @flags: long term flag for the reference frame
->   * @field_pic: whether the reference is a field picture or a frame.
-> + * @reserved: padding field. Should be zeroed by applications.
->   * @pic_order_cnt_val: the picture order count of the reference.
->   */
->  struct v4l2_hevc_dpb_entry {
->  	__u64	timestamp;
->  	__u8	flags;
->  	__u8	field_pic;
-> +	__u16	reserved;
->  	__s32	pic_order_cnt_val;
-> -	__u8	padding[2];
->  };
->  
->  /**
-> @@ -285,8 +288,6 @@ struct v4l2_hevc_pred_weight_table {
->  	__s8	delta_chroma_weight_l1[V4L2_HEVC_DPB_ENTRIES_NUM_MAX][2];
->  	__s8	chroma_offset_l1[V4L2_HEVC_DPB_ENTRIES_NUM_MAX][2];
->  
-> -	__u8	padding[6];
-> -
->  	__u8	luma_log2_weight_denom;
->  	__s8	delta_chroma_log2_weight_denom;
->  };
-> @@ -339,6 +340,7 @@ struct v4l2_hevc_pred_weight_table {
->   * @slice_tc_offset_div2: specify the deblocking parameter offsets for tC divided by 2
->   * @pic_struct: indicates whether a picture should be displayed as a frame or as one or
->   *		more fields
-> + * @reserved0: padding field. Should be zeroed by applications.
->   * @slice_segment_addr: specifies the address of the first coding tree block in
->   *			the slice segment
->   * @ref_idx_l0: the list of L0 reference elements as indices in the DPB
-> @@ -349,6 +351,7 @@ struct v4l2_hevc_pred_weight_table {
->   *				picture include in the SPS
->   * @pred_weight_table: the prediction weight coefficients for inter-picture
->   *		       prediction
-> + * @reserved1: padding field. Should be zeroed by applications.
->   * @flags: see V4L2_HEVC_SLICE_PARAMS_FLAG_{}
->   */
->  struct v4l2_ctrl_hevc_slice_params {
-> @@ -379,17 +382,18 @@ struct v4l2_ctrl_hevc_slice_params {
->  	/* ISO/IEC 23008-2, ITU-T Rec. H.265: Picture timing SEI message */
->  	__u8	pic_struct;
->  
-> +	__u8	reserved0[3];
->  	/* ISO/IEC 23008-2, ITU-T Rec. H.265: General slice segment header */
->  	__u32	slice_segment_addr;
->  	__u8	ref_idx_l0[V4L2_HEVC_DPB_ENTRIES_NUM_MAX];
->  	__u8	ref_idx_l1[V4L2_HEVC_DPB_ENTRIES_NUM_MAX];
->  	__u16	short_term_ref_pic_set_size;
->  	__u16	long_term_ref_pic_set_size;
-> -	__u8	padding;
->  
->  	/* ISO/IEC 23008-2, ITU-T Rec. H.265: Weighted prediction parameter */
->  	struct v4l2_hevc_pred_weight_table pred_weight_table;
->  
-> +	__u8	reserved1[2];
->  	__u64	flags;
->  };
->  
-> @@ -406,7 +410,6 @@ struct v4l2_ctrl_hevc_slice_params {
->   * @long_term_ref_pic_set_size: specifies the size of long-term reference
->   *				pictures set include in the SPS of the first slice
->   * @num_active_dpb_entries: the number of entries in dpb
-> - * @dpb: the decoded picture buffer, for meta-data about reference frames
->   * @num_poc_st_curr_before: the number of reference pictures in the short-term
->   *			    set that come before the current frame
->   * @num_poc_st_curr_after: the number of reference pictures in the short-term
-> @@ -417,6 +420,8 @@ struct v4l2_ctrl_hevc_slice_params {
->   * @poc_st_curr_after: provides the index of the short term after references
->   *		       in DPB array
->   * @poc_lt_curr: provides the index of the long term references in DPB array
-> + * @reserved: padding field. Should be zeroed by applications.
-> + * @dpb: the decoded picture buffer, for meta-data about reference frames
->   * @flags: see V4L2_HEVC_DECODE_PARAM_FLAG_{}
->   */
->  struct v4l2_ctrl_hevc_decode_params {
-> @@ -424,13 +429,14 @@ struct v4l2_ctrl_hevc_decode_params {
->  	__u16	short_term_ref_pic_set_size;
->  	__u16	long_term_ref_pic_set_size;
->  	__u8	num_active_dpb_entries;
-> -	struct	v4l2_hevc_dpb_entry dpb[V4L2_HEVC_DPB_ENTRIES_NUM_MAX];
->  	__u8	num_poc_st_curr_before;
->  	__u8	num_poc_st_curr_after;
->  	__u8	num_poc_lt_curr;
->  	__u8	poc_st_curr_before[V4L2_HEVC_DPB_ENTRIES_NUM_MAX];
->  	__u8	poc_st_curr_after[V4L2_HEVC_DPB_ENTRIES_NUM_MAX];
->  	__u8	poc_lt_curr[V4L2_HEVC_DPB_ENTRIES_NUM_MAX];
-> +	__u8	reserved[4];
-> +	struct	v4l2_hevc_dpb_entry dpb[V4L2_HEVC_DPB_ENTRIES_NUM_MAX];
->  	__u64	flags;
->  };
->  
-> -- 
-> 2.32.0
-> 
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+   drivers/i2c/busses/i2c-scmi.c: In function 'acpi_smbus_cmi_add':
+>> drivers/i2c/busses/i2c-scmi.c:372:28: warning: assignment discards 'const' qualifier from pointer target type [-Wdiscarded-qualifiers]
+     372 |         smbus_cmi->methods = device_get_match_data(&device->dev);
+         |                            ^
+>> drivers/i2c/busses/i2c-scmi.c:364:38: warning: unused variable 'id' [-Wunused-variable]
+     364 |         const struct acpi_device_id *id;
+         |                                      ^~
+
+
+vim +/const +372 drivers/i2c/busses/i2c-scmi.c
+
+   360	
+   361	static int acpi_smbus_cmi_add(struct acpi_device *device)
+   362	{
+   363		struct acpi_smbus_cmi *smbus_cmi;
+ > 364		const struct acpi_device_id *id;
+   365		int ret;
+   366	
+   367		smbus_cmi = kzalloc(sizeof(struct acpi_smbus_cmi), GFP_KERNEL);
+   368		if (!smbus_cmi)
+   369			return -ENOMEM;
+   370	
+   371		smbus_cmi->handle = device->handle;
+ > 372		smbus_cmi->methods = device_get_match_data(&device->dev);
+   373		strcpy(acpi_device_name(device), ACPI_SMBUS_HC_DEVICE_NAME);
+   374		strcpy(acpi_device_class(device), ACPI_SMBUS_HC_CLASS);
+   375		device->driver_data = smbus_cmi;
+   376		smbus_cmi->cap_info = 0;
+   377		smbus_cmi->cap_read = 0;
+   378		smbus_cmi->cap_write = 0;
+   379	
+   380		acpi_walk_namespace(ACPI_TYPE_METHOD, smbus_cmi->handle, 1,
+   381				    acpi_smbus_cmi_query_methods, NULL, smbus_cmi, NULL);
+   382	
+   383		if (smbus_cmi->cap_info == 0) {
+   384			ret = -ENODEV;
+   385			goto err;
+   386		}
+   387	
+   388		snprintf(smbus_cmi->adapter.name, sizeof(smbus_cmi->adapter.name),
+   389			"SMBus CMI adapter %s",
+   390			acpi_device_name(device));
+   391		smbus_cmi->adapter.owner = THIS_MODULE;
+   392		smbus_cmi->adapter.algo = &acpi_smbus_cmi_algorithm;
+   393		smbus_cmi->adapter.algo_data = smbus_cmi;
+   394		smbus_cmi->adapter.class = I2C_CLASS_HWMON | I2C_CLASS_SPD;
+   395		smbus_cmi->adapter.dev.parent = &device->dev;
+   396	
+   397		ret = i2c_add_adapter(&smbus_cmi->adapter);
+   398		if (ret) {
+   399			dev_err(&device->dev, "Couldn't register adapter!\n");
+   400			goto err;
+   401		}
+   402	
+   403		return 0;
+   404	
+   405	err:
+   406		kfree(smbus_cmi);
+   407		device->driver_data = NULL;
+   408		return ret;
+   409	}
+   410	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

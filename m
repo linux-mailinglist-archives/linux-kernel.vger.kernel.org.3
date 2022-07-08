@@ -2,51 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A61056B7CA
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 12:56:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C16DD56B7E6
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 13:01:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237922AbiGHK4L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Jul 2022 06:56:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60066 "EHLO
+        id S237923AbiGHLAj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Jul 2022 07:00:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34260 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237678AbiGHK4J (ORCPT
+        with ESMTP id S237856AbiGHLAi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Jul 2022 06:56:09 -0400
-Received: from outbound-smtp12.blacknight.com (outbound-smtp12.blacknight.com [46.22.139.17])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 769B48737F
-        for <linux-kernel@vger.kernel.org>; Fri,  8 Jul 2022 03:56:07 -0700 (PDT)
-Received: from mail.blacknight.com (pemlinmail06.blacknight.ie [81.17.255.152])
-        by outbound-smtp12.blacknight.com (Postfix) with ESMTPS id 091421C3A87
-        for <linux-kernel@vger.kernel.org>; Fri,  8 Jul 2022 11:56:06 +0100 (IST)
-Received: (qmail 27842 invoked from network); 8 Jul 2022 10:56:05 -0000
-Received: from unknown (HELO techsingularity.net) (mgorman@techsingularity.net@[84.203.198.246])
-  by 81.17.254.9 with ESMTPSA (AES256-SHA encrypted, authenticated); 8 Jul 2022 10:56:05 -0000
-Date:   Fri, 8 Jul 2022 11:56:03 +0100
-From:   Mel Gorman <mgorman@techsingularity.net>
-To:     Vlastimil Babka <vbabka@suse.cz>
-Cc:     Oliver Sang <oliver.sang@intel.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        0day robot <lkp@intel.com>,
-        LKML <linux-kernel@vger.kernel.org>, linux-mm@kvack.org,
-        lkp@lists.01.org, Nicolas Saenz Julienne <nsaenzju@redhat.com>,
-        Marcelo Tosatti <mtosatti@redhat.com>,
-        Michal Hocko <mhocko@kernel.org>,
-        Hugh Dickins <hughd@google.com>
-Subject: Re: [mm/page_alloc] 2bd8eec68f:
- BUG:sleeping_function_called_from_invalid_context_at_mm/gup.c
-Message-ID: <20220708105603.GI27531@techsingularity.net>
-References: <20220613125622.18628-8-mgorman@techsingularity.net>
- <YsFk/qU+QtWun04h@xsang-OptiPlex-9020>
- <20220703132209.875b823d1cb7169a8d51d56d@linux-foundation.org>
- <YsRB3fZHAfik0M/q@xsang-OptiPlex-9020>
- <1d3a26ac-89b3-0211-f8f2-5165ffa732fd@suse.cz>
+        Fri, 8 Jul 2022 07:00:38 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A050988F07
+        for <linux-kernel@vger.kernel.org>; Fri,  8 Jul 2022 04:00:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1657278037; x=1688814037;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=vX0LXOjPe5wHubgKMhzK0+foV8zUXKysdUaRZeeDKDA=;
+  b=hLaI7rr6/GjLi4Ux1e2PxqI9hvDuOxsI+JHiyeSwtmIqXOLeAPZ6oiUx
+   o7m3ZSBKbgzKczbxPE6Qggg74fazLn5kUu9F1eLT3kWpJW8MUzQiMV6c3
+   7cASSlp7hfw4p/PJK1U+wL/QWgWgZMIL8brC9yaevHg59enmiHoMgZMQf
+   F6h7bWQlHNJotQqQL8Q6SPzAeI5T15mH2ErTNp5RMiQGeG1TIJhxRsQmg
+   q/ptOfsWoqG48vo/5ExFC9W54x3xhO+rfPEOQLgkXqRhbcNPpR7TqWLFu
+   nivOgvis3AEF0xjgGFHWuBAgsxBlXR92HpDSN1taal7GCXOPqfN29tZY6
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10401"; a="281804953"
+X-IronPort-AV: E=Sophos;i="5.92,255,1650956400"; 
+   d="scan'208";a="281804953"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jul 2022 04:00:37 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.92,255,1650956400"; 
+   d="scan'208";a="651524632"
+Received: from brentlu-brix.itwn.intel.com ([10.5.253.25])
+  by fmsmga008.fm.intel.com with ESMTP; 08 Jul 2022 04:00:33 -0700
+From:   Brent Lu <brent.lu@intel.com>
+To:     alsa-devel@alsa-project.org
+Cc:     Cezary Rojewski <cezary.rojewski@intel.com>,
+        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
+        Liam Girdwood <liam.r.girdwood@linux.intel.com>,
+        Peter Ujfalusi <peter.ujfalusi@linux.intel.com>,
+        Bard Liao <yung-chuan.liao@linux.intel.com>,
+        Ranjani Sridharan <ranjani.sridharan@linux.intel.com>,
+        Kai Vehmanen <kai.vehmanen@linux.intel.com>,
+        Mark Brown <broonie@kernel.org>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>, Brent Lu <brent.lu@intel.com>,
+        Akihiko Odaki <akihiko.odaki@gmail.com>,
+        linux-kernel@vger.kernel.org, Rander Wang <rander.wang@intel.com>,
+        Gongjun Song <gongjun.song@intel.com>,
+        Mac Chiang <mac.chiang@intel.com>,
+        Ajye Huang <ajye_huang@compal.corp-partner.google.com>,
+        Libin Yang <libin.yang@intel.com>,
+        Muralidhar Reddy <muralidhar.reddy@intel.com>,
+        David Lin <CTLIN0@nuvoton.com>
+Subject: [PATCH v8 0/2] ASoC: Intel: sof_cs42l42: adding support for ADL configuration and BT offload
+Date:   Fri,  8 Jul 2022 19:00:28 +0800
+Message-Id: <20220708110030.658468-1-brent.lu@intel.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-15
-Content-Disposition: inline
-In-Reply-To: <1d3a26ac-89b3-0211-f8f2-5165ffa732fd@suse.cz>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -54,46 +74,22 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jul 07, 2022 at 11:55:35PM +0200, Vlastimil Babka wrote:
-> On 7/5/22 15:51, Oliver Sang wrote:
-> > Hi Andrew Morton,
-> > 
-> > On Sun, Jul 03, 2022 at 01:22:09PM -0700, Andrew Morton wrote:
-> >> On Sun, 3 Jul 2022 17:44:30 +0800 kernel test robot <oliver.sang@intel.com> wrote:
-> >> 
-> >> > FYI, we noticed the following commit (built with gcc-11):
-> >> > 
-> >> > commit: 2bd8eec68f740608db5ea58ecff06965228764cb ("[PATCH 7/7] mm/page_alloc: Replace local_lock with normal spinlock")
-> >> > url: https://github.com/intel-lab-lkp/linux/commits/Mel-Gorman/Drain-remote-per-cpu-directly/20220613-230139
-> >> > base: https://git.kernel.org/cgit/linux/kernel/git/torvalds/linux.git b13baccc3850ca8b8cccbf8ed9912dbaa0fdf7f3
-> >> > patch link: https://lore.kernel.org/lkml/20220613125622.18628-8-mgorman@techsingularity.net
-> >> > 
-> >> 
-> >> Did this test include the followup patch
-> >> mm-page_alloc-replace-local_lock-with-normal-spinlock-fix.patch?
-> > 
-> > no, we just fetched original patch set and test upon it.
-> 
-> It appears you fetched v4, not v5. I noticed it from the threading of your
-> report that was threaded in the v4 thread, and also the github url: above.
-> In v4, pcpu_spin_trylock_irqsave() was missing an unpin, and indeed it's
-> missing in the github branch you were testing:
-> 
+1. Add BT offload fetch to cs42l42 machine driver
+2. Support cs42l42+max98360a on ADL platform
 
-Thanks Vlastimil! This is my fault, I failed to verify that the code in
-my tree, Andrew's tree and what Oliver tested were the same so no wonder I
-could not find where the missing unpin was. I've gone through mm-unstable
-commits be42c869b8e..4143c9b5266 and can confirm that they are now identical
-to my own tree which includes Andrew's fix for the smatch warning that
-Dan reported.
+V8 Changes:
+- split the V7 patch into two patches; one for BT offload feature, the other for new board config
+- change topology name to sof-adl-max98360a-cs42l42.tplg
+- remove useless variable 'ret' in create_bt_offload_dai_links
 
-# git diff HEAD^..mm-pcpspinnoirq-v6r1-mmunstable | wc -l
-0
+Brent Lu (2):
+  ASoC: Intel: sof_cs42l42: support BT offload audio
+  ASoC: Intel: sof_cs42l42: add adl_mx98360a_cs4242 board config
 
-The only difference between my tree and Andrew's is that there is a head
-commit for "mm/page_alloc: Do not disable IRQs for per-cpu allocations"
-which has been put on hold for now.
+ sound/soc/intel/boards/sof_cs42l42.c          | 86 ++++++++++++++++++-
+ .../intel/common/soc-acpi-intel-adl-match.c   |  7 ++
+ 2 files changed, 89 insertions(+), 4 deletions(-)
 
 -- 
-Mel Gorman
-SUSE Labs
+2.25.1
+

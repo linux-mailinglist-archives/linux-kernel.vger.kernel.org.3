@@ -2,137 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1BCF056C4E9
-	for <lists+linux-kernel@lfdr.de>; Sat,  9 Jul 2022 02:29:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E5E456C57B
+	for <lists+linux-kernel@lfdr.de>; Sat,  9 Jul 2022 02:30:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237589AbiGHXRZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Jul 2022 19:17:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51894 "EHLO
+        id S238377AbiGHXRh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Jul 2022 19:17:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52052 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238104AbiGHXRX (ORCPT
+        with ESMTP id S237068AbiGHXRf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Jul 2022 19:17:23 -0400
-Received: from mail-qk1-x72d.google.com (mail-qk1-x72d.google.com [IPv6:2607:f8b0:4864:20::72d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7FDC22B2E
-        for <linux-kernel@vger.kernel.org>; Fri,  8 Jul 2022 16:17:22 -0700 (PDT)
-Received: by mail-qk1-x72d.google.com with SMTP id z16so89713qkj.7
-        for <linux-kernel@vger.kernel.org>; Fri, 08 Jul 2022 16:17:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=DEpqZ3mGcZFuGVY/60/YxsPdqVYz+C2jqWw/2774RQI=;
-        b=Ixk4vk0BF/h3tA1u84YeWwn1BK/PukzP5AJ63goagamizvEgvX3cL01n9W0BElB1+y
-         HaJLmIDDCV40Cf/m52APuQbKDLS9n/5xwy8Msru0FwNLmQ6imK8dhqxLJTSARGkiX3mv
-         SbDgV2chJm8yzQTBFuqyyrNEeigjfcgduAOAE9l+zUQruizU1A9IbOhzVw3lLBh3ml35
-         v6mKnw+LblTOU/sPwal5CZ97vME50rcXYSo3+p+IVR3aYGs174qzYy5jt/WsbmwSB8pA
-         LE3TvIllf5hbbFhIuYf7wmhzY9oZMhFCRZ8eDc+q746PIrdMKYNkNKBkb029hXp8VH94
-         VcxA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=DEpqZ3mGcZFuGVY/60/YxsPdqVYz+C2jqWw/2774RQI=;
-        b=sC4dhi92gMlEKgRWHWEGHrRHsETTPttArL2Fa06E6O7D2NR26aIHYPAMwLnY9St1ay
-         ZWnjYttCpASEDG9DwYnIXi8MSjkDPlp6GXQnPfPM5ffj2aE8quPfLGZZ5ApZVIcK30T/
-         SP2cV/17lB/rq9hP7dhDwIZUM1UQE+IeOtyouE5xFEvqzzkZGWOwVy1QgWGWq6yc0isK
-         A0EayocAL9X+QgEzISv1Zpt5JvhnLwUq1XCUuuDWPmMJJ5Pw0I4Ht1yyyNFNia7f0Bw1
-         emXCENXrrcPv3bZSU3z+5vd9bijAq2Nvtnf9OMa8db07LL6nrEEsmWoCnNxD+HkN0VAt
-         eTSQ==
-X-Gm-Message-State: AJIora/RQgMsfDqZpXNen5r0eJEQHWsQYmigmtcprN0o8Kgj4pLAulP5
-        BbHSUx3fXB9cdkFaqkkibIJXgYtfgxmvwauUH9YJHQ==
-X-Google-Smtp-Source: AGRyM1tIPWcFlePAGHQYyXwBHQcoLJlC18/o7LXhR7c818g4fm/vLhfnI+CRDiqq2xs2srtXUKMmTFlKWv1M7V8cZ+w=
-X-Received: by 2002:a05:620a:f0e:b0:6b5:48f6:91da with SMTP id
- v14-20020a05620a0f0e00b006b548f691damr3951482qkl.446.1657322241720; Fri, 08
- Jul 2022 16:17:21 -0700 (PDT)
-MIME-Version: 1.0
-References: <1657113391-5624-1-git-send-email-alan.maguire@oracle.com> <1657113391-5624-2-git-send-email-alan.maguire@oracle.com>
-In-Reply-To: <1657113391-5624-2-git-send-email-alan.maguire@oracle.com>
-From:   Hao Luo <haoluo@google.com>
-Date:   Fri, 8 Jul 2022 16:17:10 -0700
-Message-ID: <CA+khW7h80NeCvUneKw1Sscpqt6xHhfV-pA8R_ygEBNharXnRSA@mail.gmail.com>
-Subject: Re: [PATCH v4 bpf-next 1/2] bpf: add a ksym BPF iterator
-To:     Alan Maguire <alan.maguire@oracle.com>
-Cc:     ast@kernel.org, andrii@kernel.org, daniel@iogearbox.net,
-        kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
-        john.fastabend@gmail.com, kpsingh@kernel.org, jolsa@kernel.org,
-        mhiramat@kernel.org, akpm@linux-foundation.org, void@manifault.com,
-        swboyd@chromium.org, ndesaulniers@google.com,
-        9erthalion6@gmail.com, kennyyu@fb.com, geliang.tang@suse.com,
-        kuniyu@amazon.co.jp, bpf@vger.kernel.org,
+        Fri, 8 Jul 2022 19:17:35 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB1A122B2E;
+        Fri,  8 Jul 2022 16:17:34 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 98D10B82A18;
+        Fri,  8 Jul 2022 23:17:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 4B415C341C0;
+        Fri,  8 Jul 2022 23:17:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1657322252;
+        bh=B+2TKIgb0kymI4gIoHFlRXXuiSc4mxiGgxCK/sB3R1A=;
+        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+        b=WbhihxDG+Qxgup006C2dG9JmAeZb6a0ru29GLxN2eAvvLcH9v+I9785oriGcmASem
+         4SLLEOx8VZHNGhhbdg5uAfK/1wgQ6NXmkXJGHcHvxA/sXB5sTYJ/yUWqQZokG+HC1/
+         Y2htKRANoQztFRa/pkM9s/vLTht6B9f3R9/nB+T4yn8rVUijA5ZlvrDek6qDbGQ13m
+         LshF/vIJXK3KEnLcOvCk+NFUVyB6m9aDoF2A+p9o4HOBGLA0kdXid85t7fWRPfF9fA
+         byjsjx7PcJzYKd9hChpQHkX6XaHoNpa2qwhLpPxohS3WsUMN06rc+qfwZrrjnUJQF9
+         M/rvT2hW9Rnkw==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 35996E45BDB;
+        Fri,  8 Jul 2022 23:17:32 +0000 (UTC)
+Subject: Re: [GIT PULL] fscache: Miscellaneous fixes
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <3753787.1657315951@warthog.procyon.org.uk>
+References: <3753787.1657315951@warthog.procyon.org.uk>
+X-PR-Tracked-List-Id: <linux-fsdevel.vger.kernel.org>
+X-PR-Tracked-Message-Id: <3753787.1657315951@warthog.procyon.org.uk>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/dhowells/linux-fs.git tags/fscache-fixes-20220708
+X-PR-Tracked-Commit-Id: 85e4ea1049c70fb99de5c6057e835d151fb647da
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: e5524c2a1fc4002a52e16236659e779767617a4f
+Message-Id: <165732225221.30799.13034712144647468572.pr-tracker-bot@kernel.org>
+Date:   Fri, 08 Jul 2022 23:17:32 +0000
+To:     David Howells <dhowells@redhat.com>
+Cc:     torvalds@linux-foundation.org, dhowells@redhat.com,
+        jlayton@kernel.org, Yue Hu <huyue2@coolpad.com>,
+        Gao Xiang <hsiangkao@linux.alibaba.com>,
+        Jeffle Xu <jefflexu@linux.alibaba.com>,
+        Jia Zhu <zhujia.zj@bytedance.com>,
+        Max Kellermann <mk@cm4all.com>, linux-cachefs@redhat.com,
+        linux-erofs@lists.ozlabs.org, linux-fsdevel@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Alan,
+The pull request you sent on Fri, 08 Jul 2022 22:32:31 +0100:
 
-On Wed, Jul 6, 2022 at 6:17 AM Alan Maguire <alan.maguire@oracle.com> wrote:
->
-> add a "ksym" iterator which provides access to a "struct kallsym_iter"
-> for each symbol.  Intent is to support more flexible symbol parsing
-> as discussed in [1].
->
-> [1] https://lore.kernel.org/all/YjRPZj6Z8vuLeEZo@krava/
->
-> Suggested-by: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-> Signed-off-by: Alan Maguire <alan.maguire@oracle.com>
-> Acked-by: Yonghong Song <yhs@fb.com>
-> ---
->  kernel/kallsyms.c | 95 +++++++++++++++++++++++++++++++++++++++++++++++++++++++
->  1 file changed, 95 insertions(+)
->
-[...]
-> +
-> +static struct bpf_iter_reg ksym_iter_reg_info = {
-> +       .target                 = "ksym",
-> +       .ctx_arg_info_size      = 1,
-> +       .ctx_arg_info           = {
-> +               { offsetof(struct bpf_iter__ksym, ksym),
-> +                 PTR_TO_BTF_ID_OR_NULL },
-> +       },
-> +       .seq_info               = &ksym_iter_seq_info,
-> +};
-> +
+> git://git.kernel.org/pub/scm/linux/kernel/git/dhowells/linux-fs.git tags/fscache-fixes-20220708
 
-Can we add allow resched here?
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/e5524c2a1fc4002a52e16236659e779767617a4f
 
- .feature = BPF_ITER_RESCHED,
+Thank you!
 
-I think this will improve the responsiveness of the kernel when iterating ksyms.
-
-Thanks,
-Hao
-
-> +BTF_ID_LIST(btf_ksym_iter_id)
-> +BTF_ID(struct, kallsym_iter)
-> +
-> +static int __init bpf_ksym_iter_register(void)
-> +{
-> +       int ret;
-> +
-> +       ksym_iter_reg_info.ctx_arg_info[0].btf_id = *btf_ksym_iter_id;
-> +       ret = bpf_iter_reg_target(&ksym_iter_reg_info);
-> +       if (ret)
-> +               pr_warn("Warning: could not register bpf ksym iterator: %d\n", ret);
-> +       return ret;
-> +}
-> +
-> +late_initcall(bpf_ksym_iter_register);
-> +
-> +#endif /* CONFIG_BPF_SYSCALL */
-> +
->  static inline int kallsyms_for_perf(void)
->  {
->  #ifdef CONFIG_PERF_EVENTS
-> --
-> 1.8.3.1
->
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html

@@ -2,100 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C61256BF2F
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 20:35:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 799EF56C04E
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 20:37:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238820AbiGHQty (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Jul 2022 12:49:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34076 "EHLO
+        id S239177AbiGHQuN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Jul 2022 12:50:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34364 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238099AbiGHQtw (ORCPT
+        with ESMTP id S238991AbiGHQuK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Jul 2022 12:49:52 -0400
-Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 748B124964
-        for <linux-kernel@vger.kernel.org>; Fri,  8 Jul 2022 09:49:51 -0700 (PDT)
-Received: by mail-wr1-x436.google.com with SMTP id o4so31319207wrh.3
-        for <linux-kernel@vger.kernel.org>; Fri, 08 Jul 2022 09:49:51 -0700 (PDT)
+        Fri, 8 Jul 2022 12:50:10 -0400
+Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3142C2C108;
+        Fri,  8 Jul 2022 09:50:09 -0700 (PDT)
+Received: by mail-ej1-x62d.google.com with SMTP id b11so1290942eju.10;
+        Fri, 08 Jul 2022 09:50:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=sifive.com; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=xpYvopWRDye1t/WPhr4FZs4vO+X9s+WDCsuSJIPNESw=;
-        b=WNli1ysfgn5wKLkAfGWIaJTBAb2A0tDwa/HWFDA5ky1HT4sAhOAeKoSDCDDQdR0cbp
-         ZZCy30UFwFJB8DgYofwVJcOIpBjs9BQfw+FI5h0dFfn32S9KyD79G1UpMgqsBKIwFZyM
-         rHfwWRfjD5PjzCv3xEIc/RoLyJYPqCXjN35cCF+TQL/QQRyTBKNcCc4bBTqCwBNhjvqb
-         XpjRl9g4+ytg+wW+NfmItvB/lkKBGfcoi/GL/2Q+TVUktKh2HnqOkrfhC2ryiM+9c4ux
-         6ty0PoV1W+8QxiMm8d0UqesxyrE+VB/75rpt6eEk5Jf2rRlg2vIg5nrtJVejVpJy290t
-         dUdA==
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=0VmPLkwd+jsfHM5+mRGOUxbGgxotW4G1hW6i/2hpi/U=;
+        b=j2lCJer7VQaif4Gj9+tDaqXNkwLb6+hi7pvOFMC5CUPaYGfI7QOihTIbv+xa4yYiet
+         Qx+WhsfxNnu4J9IpMo9qzMHwgRt8Z+C10ccQpyCP3dhAKw+LTofuaAP5iA2L3u8iToDe
+         ObOrYGT8wE0vN3Dz/QmQNh2zBPUqdfVmQizSjqP2ei6GDkHL92B0hNMmhJPyBWrp9pFH
+         IrBrQa8zJ1OYSnLeqTZNw6D8AFNoUCwp0z8vOWQOdw1eh9QTQdhYHGM09XMtiwDBMQaA
+         iWvqbkAupyFErhqV665byWsjB8TOIpOvhi5CQkZpBMDz5BEucLauXHoPWiRbLeJyBBxV
+         dMdg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=xpYvopWRDye1t/WPhr4FZs4vO+X9s+WDCsuSJIPNESw=;
-        b=3+n3zLuRzk+kUBwKsGeQZ/7g2Y9JfVyjioGAjkwCxrmzo8tFYTxWjcVXPm+/pbDwr8
-         5X9GqYM09ElWKsKjqzPt/51Dkyg7u7wZ63pby2YWjvwjVTufAWAiOg9AfHL1LtX7W+f2
-         LemsXtaB5QAOHPu19xCHqUlY88sJu52G7aMGG7AJLE+BYXY0g5dz++yGHEmX8TKrcHDV
-         sHz13vCF3NQPOi4S0VOuew5O0cpOqp1EcrCT05VbXr+bPnE3Zt78jcDuxtHvdy4W2Aak
-         zrKBXgEnP5oV+jDwYdBlhXqm+P4lj6vApsNIH6WcEYsQJyZn9fJ+R/nsy1TJaff3X8QK
-         B9pQ==
-X-Gm-Message-State: AJIora+Tmp2c2uwU61lUNr1DGUkB/e/BeUWxKAe7gi4BAR0IJSWQbzuh
-        1h8xePcDy7XIY7vvUhwP95dNXg==
-X-Google-Smtp-Source: AGRyM1tmsAifgz0ssa4G0nm5T1k8cUa1tdtM3m6GOkSyiG1S4urJX2rMNelVNljOAuONla02M/qFTg==
-X-Received: by 2002:a5d:6d07:0:b0:21d:1ee6:16c0 with SMTP id e7-20020a5d6d07000000b0021d1ee616c0mr4186192wrq.63.1657298990092;
-        Fri, 08 Jul 2022 09:49:50 -0700 (PDT)
-Received: from rainbowdash.office.codethink.co.uk ([167.98.27.226])
-        by smtp.gmail.com with ESMTPSA id i8-20020a05600c480800b0039c5a765388sm2472041wmo.28.2022.07.08.09.49.49
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=0VmPLkwd+jsfHM5+mRGOUxbGgxotW4G1hW6i/2hpi/U=;
+        b=1AMH5lWE+yAS01AlY+9sbJF63mdgZN7uByNtsRfcw7wKoAiIVsz5FYljE6Lq82libq
+         SnQIGM3nrZN1ZE8YijbMBFcVfFf4ARi52jLMIF9DJ/QD6IbZETUvH2YCv1fh8k4SuXvr
+         jy+1jDGxbYH2IMud1veLetIl3DXloaRRui2tsh9Pkk6pNH0HhPBuvnJgQ8oFrX3FZlm2
+         jbI1x+u2tL0dn01GW6b+Xjqf7VC1O/nvRhmaCyvOE3LelrQwd855DadTUqo0jwHpmLJL
+         IYnTmlagKgtzVuFpmUVxdSiCLR7llvucqpgYdVD2t2fIEcpfoFBKbwR25nJwBDhoAGy9
+         4s+g==
+X-Gm-Message-State: AJIora9JUN+/s367spXv9AYv0ug7gpKHCCSke1rUSLTJccRmarO2SgJH
+        0DrcwoHckKHowVlciUekMWQ=
+X-Google-Smtp-Source: AGRyM1u8pUAPgSJnIA4mi9w1D8Y2TiHSvOt67lcDD4EJjpozOfSw3fl72TuSp8do6cqLJme64f41uQ==
+X-Received: by 2002:a17:906:c048:b0:718:ca61:e7b9 with SMTP id bm8-20020a170906c04800b00718ca61e7b9mr4473154ejb.120.1657299007703;
+        Fri, 08 Jul 2022 09:50:07 -0700 (PDT)
+Received: from kista.localnet (213-161-3-76.dynamic.telemach.net. [213.161.3.76])
+        by smtp.gmail.com with ESMTPSA id g4-20020a17090669c400b006fe9f9d0938sm20819211ejs.175.2022.07.08.09.50.06
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 08 Jul 2022 09:49:49 -0700 (PDT)
-From:   Ben Dooks <ben.dooks@sifive.com>
-To:     linux-i3c@lists.infradead.org
-Cc:     linux-kernel@vger.kernel.org, alexandre.belloni@bootlin.com,
-        Jude Onyenegecha <jude.onyenegecha@sifive.com>,
-        Sudip Mukherjee <sudip.mukherjee@sifive.com>,
-        Ben Dooks <ben.dooks@sifive.com>
-Subject: [PATCH] i3c: master; add error print for invalid node
-Date:   Fri,  8 Jul 2022 17:49:48 +0100
-Message-Id: <20220708164948.268930-1-ben.dooks@sifive.com>
-X-Mailer: git-send-email 2.35.1
+        Fri, 08 Jul 2022 09:50:07 -0700 (PDT)
+From:   Jernej =?utf-8?B?xaBrcmFiZWM=?= <jernej.skrabec@gmail.com>
+To:     Chen-Yu Tsai <wens@csie.org>, Samuel Holland <samuel@sholland.org>
+Cc:     Samuel Holland <samuel@sholland.org>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Maxime Ripard <maxime@cerno.tech>,
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-sunxi@lists.linux.dev
+Subject: Re: [PATCH 1/2] dt-bindings: arm: sunxi: Default to the full MBUS binding
+Date:   Fri, 08 Jul 2022 18:50:06 +0200
+Message-ID: <7534543.lvqk35OSZv@kista>
+In-Reply-To: <20220702042447.26734-1-samuel@sholland.org>
+References: <20220702042447.26734-1-samuel@sholland.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Show an error if the OF code in the i3c master setup
-failed to read the register, so that if an incorrect
-node is supplied there is an error print to make it
-clear what the problem is
+Dne sobota, 02. julij 2022 ob 06:24:46 CEST je Samuel Holland napisal(a):
+> Some older SoCs use a deprecated MBUS binding with some clocks missing.
+> Currently, new SoCs must opt in to the complete binding. This should be
+> the default, so new SoCs do not accidentally use the deprecated version.
+> 
+> Signed-off-by: Samuel Holland <samuel@sholland.org>
 
-Signed-off-by: Ben Dooks <ben.dooks@sifive.com>
----
- drivers/i3c/master.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+Applied both, thanks!
 
-diff --git a/drivers/i3c/master.c b/drivers/i3c/master.c
-index 7850287dfe7a..271d687d0d07 100644
---- a/drivers/i3c/master.c
-+++ b/drivers/i3c/master.c
-@@ -2082,8 +2082,10 @@ static int of_i3c_master_add_dev(struct i3c_master_controller *master,
- 		return -EINVAL;
- 
- 	ret = of_property_read_u32_array(node, "reg", reg, ARRAY_SIZE(reg));
--	if (ret)
-+	if (ret) {
-+		dev_err(&master->dev, "i3c: invalid reg for %pOF\n", node);
- 		return ret;
-+	}
- 
- 	/*
- 	 * The manufacturer ID can't be 0. If reg[1] == 0 that means we're
--- 
-2.35.1
+Best regards,
+Jernej
+
 

@@ -2,109 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1247556B32E
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 09:14:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2467F56B335
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 09:14:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237407AbiGHHL4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Jul 2022 03:11:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52584 "EHLO
+        id S237456AbiGHHMv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Jul 2022 03:12:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53306 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237369AbiGHHLv (ORCPT
+        with ESMTP id S236525AbiGHHMu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Jul 2022 03:11:51 -0400
-Received: from pegase2.c-s.fr (pegase2.c-s.fr [93.17.235.10])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FE4776975;
-        Fri,  8 Jul 2022 00:11:50 -0700 (PDT)
-Received: from localhost (mailhub3.si.c-s.fr [172.26.127.67])
-        by localhost (Postfix) with ESMTP id 4LfPbN0nG9z9tKr;
-        Fri,  8 Jul 2022 09:11:44 +0200 (CEST)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from pegase2.c-s.fr ([172.26.127.65])
-        by localhost (pegase2.c-s.fr [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id GUC-TTr3AKPS; Fri,  8 Jul 2022 09:11:44 +0200 (CEST)
-Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
-        by pegase2.c-s.fr (Postfix) with ESMTP id 4LfPbK6l2yz9tFj;
-        Fri,  8 Jul 2022 09:11:41 +0200 (CEST)
-Received: from localhost (localhost [127.0.0.1])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id CE6C88B76C;
-        Fri,  8 Jul 2022 09:11:41 +0200 (CEST)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from messagerie.si.c-s.fr ([127.0.0.1])
-        by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
-        with ESMTP id NctDR-Rk0r9G; Fri,  8 Jul 2022 09:11:41 +0200 (CEST)
-Received: from PO20335.IDSI0.si.c-s.fr (unknown [192.168.233.202])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id 6FB338B763;
-        Fri,  8 Jul 2022 09:11:41 +0200 (CEST)
-Received: from PO20335.IDSI0.si.c-s.fr (localhost [127.0.0.1])
-        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.16.1) with ESMTPS id 2687BYYl603410
-        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
-        Fri, 8 Jul 2022 09:11:34 +0200
-Received: (from chleroy@localhost)
-        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.17.1/Submit) id 2687BXTU603406;
-        Fri, 8 Jul 2022 09:11:33 +0200
-X-Authentication-Warning: PO20335.IDSI0.si.c-s.fr: chleroy set sender to christophe.leroy@csgroup.eu using -f
-From:   Christophe Leroy <christophe.leroy@csgroup.eu>
-To:     Michael Ellerman <mpe@ellerman.id.au>,
-        Nicholas Piggin <npiggin@gmail.com>, deller@gmx.de,
-        manoj@linux.ibm.com, mrochs@linux.ibm.com, ukrishn@linux.ibm.com,
-        jejb@linux.ibm.com, martin.petersen@oracle.com, tzimmermann@suse.de
-Cc:     Christophe Leroy <christophe.leroy@csgroup.eu>,
-        linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-scsi@vger.kernel.org, linux-fbdev@vger.kernel.org,
-        dri-devel@lists.freedesktop.org
-Subject: [PATCH v3 4/4] powerpc: Finally remove unnecessary headers from asm/prom.h
-Date:   Fri,  8 Jul 2022 09:11:08 +0200
-Message-Id: <4be954abef978b34cff9193fc566ffefdd3517bb.1657264228.git.christophe.leroy@csgroup.eu>
-X-Mailer: git-send-email 2.36.1
-In-Reply-To: <f75b383673663e27f6b57e50b4abfb9fe3780b00.1657264228.git.christophe.leroy@csgroup.eu>
-References: <f75b383673663e27f6b57e50b4abfb9fe3780b00.1657264228.git.christophe.leroy@csgroup.eu>
+        Fri, 8 Jul 2022 03:12:50 -0400
+Received: from mailout-taastrup.gigahost.dk (mailout-taastrup.gigahost.dk [46.183.139.199])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C9287696F;
+        Fri,  8 Jul 2022 00:12:48 -0700 (PDT)
+Received: from mailout.gigahost.dk (mailout.gigahost.dk [89.186.169.112])
+        by mailout-taastrup.gigahost.dk (Postfix) with ESMTP id 910741887361;
+        Fri,  8 Jul 2022 07:12:46 +0000 (UTC)
+Received: from smtp.gigahost.dk (smtp.gigahost.dk [89.186.169.109])
+        by mailout.gigahost.dk (Postfix) with ESMTP id 8876325032B7;
+        Fri,  8 Jul 2022 07:12:46 +0000 (UTC)
+Received: by smtp.gigahost.dk (Postfix, from userid 1000)
+        id 70813A1E00B7; Fri,  8 Jul 2022 07:12:46 +0000 (UTC)
+X-Screener-Id: 413d8c6ce5bf6eab4824d0abaab02863e8e3f662
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1657264266; l=1143; s=20211009; h=from:subject:message-id; bh=rhMeWgMRVJCcnZ4LkUB/MevA+zWJ66UrLEuQIoq1Yg0=; b=aSzeb+chFstwLU0nCOuwBtbA5U5xgYndUebgzgAFOP3kvtFTlKpIphdt6XSL2LaRlBzvqMzXeceC 3WcuvQhNCXW3RZk7r1HJGuNvWAJdmtN/35jcrr7gzAg+rGVfsK9j
-X-Developer-Key: i=christophe.leroy@csgroup.eu; a=ed25519; pk=HIzTzUj91asvincQGOFx6+ZF5AoUuP9GdOtQChs7Mm0=
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Date:   Fri, 08 Jul 2022 09:12:46 +0200
+From:   netdev@kapio-technology.com
+To:     Vladimir Oltean <olteanv@gmail.com>
+Cc:     davem@davemloft.net, kuba@kernel.org, netdev@vger.kernel.org,
+        Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>, Jiri Pirko <jiri@resnulli.us>,
+        Ivan Vecera <ivecera@redhat.com>,
+        Roopa Prabhu <roopa@nvidia.com>,
+        Nikolay Aleksandrov <razor@blackwall.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Ido Schimmel <idosch@nvidia.com>, linux-kernel@vger.kernel.org,
+        bridge@lists.linux-foundation.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH net-next 1/1] net: dsa: mv88e6xxx: allow reading FID when
+ handling ATU violations
+In-Reply-To: <20220707102836.u7ig6rr2664mcrlf@skbuf>
+References: <20220706122502.1521819-1-netdev@kapio-technology.com>
+ <20220707102836.u7ig6rr2664mcrlf@skbuf>
+User-Agent: Gigahost Webmail
+Message-ID: <f8a4f54a90efa545cac1ff2cdbde78c7@kapio-technology.com>
+X-Sender: netdev@kapio-technology.com
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,FROM_FMBLA_NEWDOM,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Remove all headers included from asm/prom.h which are not used
-by asm/prom.h itself.
+On 2022-07-07 12:28, Vladimir Oltean wrote:
+> On Wed, Jul 06, 2022 at 02:25:02PM +0200, Hans Schultz wrote:
+>> For convenience the function mv88e6xxx_g1_atu_op() has been used to 
+>> read
+>> ATU violations, but the function has other purposes and does not 
+>> enable
+>> the possibility to read the FID when reading ATU violations.
+>> 
+>> The FID is needed to get hold of which VID was involved in the 
+>> violation,
+>> thus the need for future purposes to be able to read the FID.
+> 
+> Make no mistake, the existing code doesn't disallow reading back the 
+> FID
+> during an ATU Get/Clear Violation operation, and your patch isn't
+> "allowing" something that wasn't disallowed.
 
-Declare struct device_node and struct property locally to
-avoid including of.h
+It would only read 0 the way it worked. And I don't understand why
+mv88e6xxx_g1_atu_op() writes the FID?
 
-Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
----
- arch/powerpc/include/asm/prom.h | 10 ++--------
- 1 file changed, 2 insertions(+), 8 deletions(-)
+> 
+> The documentation for the ATU FID register says that its contents is
+> ignored before the operation starts, and it contains the returned ATU
+> entry's FID after the operation completes.
+> 
+> So the change simply says: don't bother to write the ATU FID register
+> with zero, it doesn't matter what this contains. This is probably true,
+> but the patch needs to do what's written on the box.
 
-diff --git a/arch/powerpc/include/asm/prom.h b/arch/powerpc/include/asm/prom.h
-index 6f109b5cb84e..2e82820fbd64 100644
---- a/arch/powerpc/include/asm/prom.h
-+++ b/arch/powerpc/include/asm/prom.h
-@@ -12,16 +12,10 @@
-  * Updates for PPC64 by Peter Bergner & David Engebretsen, IBM Corp.
-  */
- #include <linux/types.h>
--#include <asm/irq.h>
--#include <linux/atomic.h>
- #include <asm/firmware.h>
- 
--/* These includes should be removed once implicit includes are cleaned up. */
--#include <linux/of.h>
--#include <linux/of_fdt.h>
--#include <linux/of_address.h>
--#include <linux/of_irq.h>
--#include <linux/platform_device.h>
-+struct device_node;
-+struct property;
- 
- #define OF_DT_BEGIN_NODE	0x1		/* Start of node, full name */
- #define OF_DT_END_NODE		0x2		/* End node */
--- 
-2.36.1
+Writing 0 to the ATU fID register resulted in a read giving zero of 
+course.
 
+> 
+> Please note that this only even matters at all for switches with
+> mv88e6xxx_num_databases(chip) > 256, where MV88E6352_G1_ATU_FID is a
+> dedicated register which this patch avoids writing. For other switches,
+> the FID is embedded within MV88E6XXX_G1_ATU_CTL or MV88E6XXX_G1_ATU_OP.
+> So _practically_, for those switches, you are still emitting the
+> GET_CLR_VIOLATION ATU op with a FID of 0 whether you like it or not, 
+> and
+> this patch introduces a (most likely irrelevant) discrepancy between 
+> the
+> access methods for various switches.
+> 
+> Please note that this observation is relevant for your future changes 
+> to
+> read back the FID too. As I said here:
+> https://patchwork.kernel.org/project/netdevbpf/patch/20220524152144.40527-4-schultz.hans+netdev@gmail.com/#24912482
+> you can't just assume that the FID lies within the MV88E6352_G1_ATU_FID
+> register, just look at the way it is packed within 
+> mv88e6xxx_g1_atu_op().
+> You'll need to unpack it in the same way.
+
+So I need a new function to read the FID that mimics 
+mv88e6xxx_g1_atu_op()
+as far as I understand?

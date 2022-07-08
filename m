@@ -2,100 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A4FAD56C557
-	for <lists+linux-kernel@lfdr.de>; Sat,  9 Jul 2022 02:29:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CC71356C4C9
+	for <lists+linux-kernel@lfdr.de>; Sat,  9 Jul 2022 02:29:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239103AbiGHX2q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Jul 2022 19:28:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33012 "EHLO
+        id S239629AbiGHXdy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Jul 2022 19:33:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36028 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231440AbiGHX2n (ORCPT
+        with ESMTP id S238449AbiGHXdw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Jul 2022 19:28:43 -0400
-Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65438419A0
-        for <linux-kernel@vger.kernel.org>; Fri,  8 Jul 2022 16:28:42 -0700 (PDT)
-Received: by mail-pj1-x1031.google.com with SMTP id t5-20020a17090a6a0500b001ef965b262eso57160pjj.5
-        for <linux-kernel@vger.kernel.org>; Fri, 08 Jul 2022 16:28:42 -0700 (PDT)
+        Fri, 8 Jul 2022 19:33:52 -0400
+Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6771419AE
+        for <linux-kernel@vger.kernel.org>; Fri,  8 Jul 2022 16:33:50 -0700 (PDT)
+Received: by mail-lf1-x12d.google.com with SMTP id f39so153388lfv.3
+        for <linux-kernel@vger.kernel.org>; Fri, 08 Jul 2022 16:33:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=date:from:to:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=e+NeNkk39ltiGV+dj2RQPj4kbFE+Sv627jjV0PX2d7M=;
-        b=dsaUde/zuN7bmn8vqZ7jesXJOW7rruWwyUOCwZut7U6/s90osYHWC/m7gkxQZzagIR
-         7VMXuxgh5ETurEMF4m6lWBbm3ivjiNjpQe0Jgtw5K0aGaQ42bfvRwYKRiVbqC10YEvG/
-         z7c+TYBT3qYUktz2kFRF0nrKBBMo3avj/Bqtkki3olhZe4rd6NseXEf2yBqt7zhpzKB9
-         dr52ycepMPEKdha3GdA65UWimWF5/WMnhL809v1Znt03cjUJMyalE18Y31IA/KTuPRhI
-         y9JTSg3+HGKJOvXqEj3sgHdVzJ1i4D6YrZV0je5UQuIdXzOFATXg2SK+zOAHYx24qI2s
-         Vyww==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=f6TCUIosa5W4/Vb9XWvZYFOtAww3GSDuGtA/pDdfbF4=;
+        b=kLfgt0CyeLHwI1Zct0de1ZglNn4qUt2rr5geGoDsSTgx69fJt12j4VOiv3EMjJhrfP
+         4EfxQ8s9or1yPVXNnB6Nnv+VmaDKbN+Y8QSK1/izwn1niA9dh2Jau5kg1IoqVeJ2zL+/
+         yri/FIwuFlMNvsLB47gk6qvyn8+Hi7j5NeF62JksRYesZuV12v1mWoWdBrJdpgDH47LX
+         7qysqkSMPCfQnvyYybnOBfUTIiRSP67jOamssr8f+Pl0B7zgnLGjBqA617wXrmGj+mub
+         yU1Nn/n/9oKGz3f0hZFQVGZBJ3ZroXY+pe4WZkE4BpigDyIrjeTx/mys2PDNQj/dfO8I
+         3giQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=e+NeNkk39ltiGV+dj2RQPj4kbFE+Sv627jjV0PX2d7M=;
-        b=dG33t13Bpm6AQZsxMbfqPQBBqlJ3ffimGEEattQCkSv58L1G2aA4sIldoU+N1vgbbK
-         lEBnKEd9Vhu28CH/YMYWA3QqOyHUqF9zp9wRj1Oo0lF/StCVy5CbEEAcbxWKNWoNODzL
-         +gEkunB39cQLpk+WVwuEa1DhYNn30IeRyzMgLg50oULdADJVcqWD6anXjZo9FIAtxoBP
-         t2QtJ0dB4+r0qrzv+UKBdlexZG646Vsq8CO4l9CHOHsDuqKn7CLouXANayZBHTQ2aDW3
-         t925MJbkefVXDGUtL6K29Yt1SQ3gtVreevJUmk/xW5rOVoUpuvKQYoWKK/JreZlZjhdJ
-         jq+A==
-X-Gm-Message-State: AJIora/XVBAshwlmTj3El1sXFK0xXXjzr7WFol9OFfVEgijnX4gtxwM7
-        sM/nSvWp2c2/S5aSo6ZC7eZwHgpvoLhTIQ==
-X-Google-Smtp-Source: AGRyM1u/tDyTYyiQ9zhPGTuAVzDjyrmgTdmehsxbIKC6zKjYekVW5hGS+QKrJHiI8K7P1psxo5HuiQ==
-X-Received: by 2002:a17:90b:3811:b0:1ef:d704:24cf with SMTP id mq17-20020a17090b381100b001efd70424cfmr2526527pjb.14.1657322921668;
-        Fri, 08 Jul 2022 16:28:41 -0700 (PDT)
-Received: from google.com (123.65.230.35.bc.googleusercontent.com. [35.230.65.123])
-        by smtp.gmail.com with ESMTPSA id q5-20020a170902a3c500b0015e8d4eb2easm44851plb.308.2022.07.08.16.28.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 08 Jul 2022 16:28:41 -0700 (PDT)
-Date:   Fri, 8 Jul 2022 23:28:37 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>, linux-kernel@vger.kernel.org,
-        "Guilherme G . Piccoli" <gpiccoli@igalia.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Paolo Bonzini <pbonzini@redhat.com>
-Subject: Re: [PATCH v2 0/3] x86/crash: Fix double NMI shootdown bug
-Message-ID: <Ysi9pVFHsqM3uivr@google.com>
-References: <20220518001647.1291448-1-seanjc@google.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=f6TCUIosa5W4/Vb9XWvZYFOtAww3GSDuGtA/pDdfbF4=;
+        b=o2pMAg8ZnPPsQqpWdApTi/HwY0jD01fGX1bBW6QUMKdoz/RqNuZ08FPLwM4MEzzLZe
+         +dtFc6ZDXjEQ1vboOpp7+nnZtEm4Qj01VHOGLK6tUrB4qBiXGLiUbeqEHh8fQqHYBfRw
+         M7pzhwDHJRhQMzD4kYxdN6yiFYbSmb5vC7SUw6DqQv5JbIr8+1f/zMXY2h25xBENGH5h
+         ZoH0Ir3PVqmGJr1Wd7PTfY2+96rRpVF8oF9rKArMyYQfIvXBVeaxm7nZsC+7YNRWxJ7i
+         YZ4XyVJARZITvrbiDhijtDOYbo2KHubHkJN0sp7oFOv0/TW5KOZXGKq0aBcZ6QiX64UP
+         6QoA==
+X-Gm-Message-State: AJIora/TAMmlzrtZVNmNjipUuvqpaGgZ94NU7wygvw201p0sIuZP205Y
+        LufRNndWhnG0ErrUFzbBRpjn0RSEBWa5o+VIHclB2g==
+X-Google-Smtp-Source: AGRyM1sYwzFO76ZbUUlO+uxQCC5vi+M7eJm5XjlDoev9CqoJeGkALjAG+zYM/rC7CZhTfV/eDMYh4GGeHBCX1ORWazI=
+X-Received: by 2002:a05:6512:2623:b0:47d:ace7:c804 with SMTP id
+ bt35-20020a056512262300b0047dace7c804mr3904909lfb.647.1657323228912; Fri, 08
+ Jul 2022 16:33:48 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220518001647.1291448-1-seanjc@google.com>
+References: <20220707191745.840590-1-justinstitt@google.com>
+In-Reply-To: <20220707191745.840590-1-justinstitt@google.com>
+From:   Nick Desaulniers <ndesaulniers@google.com>
+Date:   Fri, 8 Jul 2022 16:33:37 -0700
+Message-ID: <CAKwvOd=qjQxGmRD29DrFjhEpbrDHyTUhRfHKJGJ2i-oo_RvF_A@mail.gmail.com>
+Subject: Re: [PATCH] netfilter: xt_TPROXY: fix clang -Wformat warnings:
+To:     Justin Stitt <justinstitt@google.com>
+Cc:     Pablo Neira Ayuso <pablo@netfilter.org>,
+        Jozsef Kadlecsik <kadlec@netfilter.org>,
+        Florian Westphal <fw@strlen.de>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Tom Rix <trix@redhat.com>, netfilter-devel@vger.kernel.org,
+        coreteam@netfilter.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
         ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 18, 2022, Sean Christopherson wrote:
-> Fix a double NMI shootdown bug found and debugged by Guilherme, who did all
-> the hard work.  NMI shootdown is a one-time thing; the handler leaves NMIs
-> blocked and enters halt.  At best, a second (or third...) shootdown is an
-> expensive nop, at worst it can hang the kernel and prevent kexec'ing into
-> a new kernel, e.g. prior to the hardening of register_nmi_handler(), a
-> double shootdown resulted in a double list_add(), which is fatal when running
-> with CONFIG_BUG_ON_DATA_CORRUPTION=y.
+On Thu, Jul 7, 2022 at 12:18 PM Justin Stitt <justinstitt@google.com> wrote:
+>
+> When building with Clang we encounter these warnings:
+> | net/netfilter/xt_TPROXY.c:173:5: error: format specifies type 'unsigned
+> | char' but the argument has type 'int' [-Werror,-Wformat] tproto,
+> | &iph->saddr, ntohs(hp->source),
+> -
+> | net/netfilter/xt_TPROXY.c:181:4: error: format specifies type 'unsigned
+> | char' but the argument has type 'int' [-Werror,-Wformat] tproto,
+> | &iph->saddr, ntohs(hp->source),
+>
+> The format specifier `%hhu` refers to a u8 while tproto is an int. In
+> this case we weren't losing any data because ipv6_find_hdr returns an
+> int but its return value (nexthdr) is a u8. This u8 gets widened to an
+> int when returned from ipv6_find_hdr and assigned to tproto. The
+> previous format specifier is functionally fine but still produces a
+> warning due to a type mismatch.
+>
+> The fix is simply to listen to Clang and change `%hhu` to `%d` for both
+> instances of the warning.
+>
+> Link: https://github.com/ClangBuiltLinux/linux/issues/378
+> Signed-off-by: Justin Stitt <justinstitt@google.com>
 
-...
+Thanks for the patch, this fixes the warning I observe when building
+ARCH=arm64 allmodconfig with -Wno-format removed!
+Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
+Tested-by: Nick Desaulniers <ndesaulniers@google.com>
 
-> Sean Christopherson (3):
->   x86/crash: Disable virt in core NMI crash handler to avoid double
->     shootdown
->   x86/reboot: Disable virtualization in an emergency if SVM is supported
->   x86/virt: Fold __cpu_emergency_vmxoff() into its sole caller
-> 
->  arch/x86/include/asm/reboot.h  |  1 +
->  arch/x86/include/asm/virtext.h | 14 +-----
->  arch/x86/kernel/crash.c        | 16 +-----
->  arch/x86/kernel/reboot.c       | 89 +++++++++++++++++++++++++---------
->  4 files changed, 69 insertions(+), 51 deletions(-)
+> ---
+> It should be noted that for this entire file to build without -Wformat
+> warnings you should apply this `ntohs` patch which fixed many, many
+> -Wformat warnings in the kernel.
+> https://lore.kernel.org/all/20220608223539.470472-1-justinstitt@google.com/
+>
+>  net/netfilter/xt_TPROXY.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+>
+> diff --git a/net/netfilter/xt_TPROXY.c b/net/netfilter/xt_TPROXY.c
+> index 459d0696c91a..5d74abffc94f 100644
+> --- a/net/netfilter/xt_TPROXY.c
+> +++ b/net/netfilter/xt_TPROXY.c
+> @@ -169,7 +169,7 @@ tproxy_tg6_v1(struct sk_buff *skb, const struct xt_action_param *par)
+>                    targets on the same rule yet */
+>                 skb->mark = (skb->mark & ~tgi->mark_mask) ^ tgi->mark_value;
+>
+> -               pr_debug("redirecting: proto %hhu %pI6:%hu -> %pI6:%hu, mark: %x\n",
+> +               pr_debug("redirecting: proto %d %pI6:%hu -> %pI6:%hu, mark: %x\n",
+>                          tproto, &iph->saddr, ntohs(hp->source),
+>                          laddr, ntohs(lport), skb->mark);
+>
+> @@ -177,7 +177,7 @@ tproxy_tg6_v1(struct sk_buff *skb, const struct xt_action_param *par)
+>                 return NF_ACCEPT;
+>         }
+>
+> -       pr_debug("no socket, dropping: proto %hhu %pI6:%hu -> %pI6:%hu, mark: %x\n",
+> +       pr_debug("no socket, dropping: proto %d %pI6:%hu -> %pI6:%hu, mark: %x\n",
+>                  tproto, &iph->saddr, ntohs(hp->source),
+>                  &iph->daddr, ntohs(hp->dest), skb->mark);
+>
+> --
+> 2.37.0.rc0.161.g10f37bed90-goog
+>
 
-Ping!  Still applies cleanly.
+
+-- 
+Thanks,
+~Nick Desaulniers

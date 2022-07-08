@@ -2,157 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A56A56B035
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 03:53:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 00DD656B01F
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 03:53:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236923AbiGHBU6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Jul 2022 21:20:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41780 "EHLO
+        id S236944AbiGHBY5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Jul 2022 21:24:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43856 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229468AbiGHBU4 (ORCPT
+        with ESMTP id S235434AbiGHBYy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Jul 2022 21:20:56 -0400
-Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69A4F72EDB
-        for <linux-kernel@vger.kernel.org>; Thu,  7 Jul 2022 18:20:55 -0700 (PDT)
-Received: by mail-wr1-x434.google.com with SMTP id v14so28570244wra.5
-        for <linux-kernel@vger.kernel.org>; Thu, 07 Jul 2022 18:20:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=reGckhTMb2AA8NDGwp9T0SSvAUm/l12G9OcR87LiTSA=;
-        b=cHtdC1dJTMfPKIC6WmxoNGM+pwXUwrC2uTYV6s3KV9JeDu6C0ADW5DEw5UVQuZfiR4
-         g1NBk0w4tHtSIBBv7wD3D9Nn707+0rYQtN31JHK0OaoRW7KPlpNXaxuHTQkFh270Vowb
-         2amsSb37IXkxXXVIdhvNzVmsGYDIgcnmGuZ48=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=reGckhTMb2AA8NDGwp9T0SSvAUm/l12G9OcR87LiTSA=;
-        b=Edf1kw/z+/YSL20bUP2nfFIF4dE8ILIBm3JRLRQbep41uV6olUtSK0h9p5djfqm7gK
-         Lp2n/sldYO5xbRdH9grIbM/BhntIXxea2NIog5sONpt7fJRNacoODjkUcHtaQvEn/exR
-         J5JhjjzjoAWHy9DzkdT96jpbBwmmFJYsEWK9XQ6OCQ3K0Ki3vNlBjueA1Tv1fb4hwYZR
-         kBI1KmqWz+209BGtvD/C5G29HGj6dRMr7R4DWJXX1KKHMji+2n5QJuJX7n6gNrRp/CYq
-         KtyouUBp+bkZ7dMSAoMik4bOCCut9hNHk0AtJlPIFBk/TUL/53gBmB+m6cnkhrLI4ppc
-         1bxg==
-X-Gm-Message-State: AJIora84aBCKtD8SztcfZxgYhtimhb8Z2ikwcyRYN2IcjfEdeyvSMA9q
-        kX9vCzsQ5Z4ahof/BuVw0LlW+w5RtknUis1lHfcI0Q==
-X-Google-Smtp-Source: AGRyM1vT+KuWIehOW7J4raxkCnF0J/u3XOtzNq7Etd42dnm2OFk74gHmMMAfL+02vgogrAFGcWWlB9Xx6YBVPXyjEQU=
-X-Received: by 2002:a5d:61d0:0:b0:21d:5e08:af3c with SMTP id
- q16-20020a5d61d0000000b0021d5e08af3cmr652042wrv.25.1657243253823; Thu, 07 Jul
- 2022 18:20:53 -0700 (PDT)
-MIME-Version: 1.0
-References: <CAODwPW9E8wWwxbYKyf4_-JFb4F-JSmLR3qOF_iudjX0f9ndF0A@mail.gmail.com>
- <CAODwPW8fiFSNehZbZDdR9kjHxohLGiyE7edU=Opy0xV_P8JbEQ@mail.gmail.com>
- <3bb0ffa0-8091-0848-66af-180a41a68bf7@linaro.org> <CAODwPW89xZQZiZdQNt6+CcRjz=nbEAAFH0h_dBFSE5v3aFU4rQ@mail.gmail.com>
- <8f51aed8-956b-ac09-3baf-2b4572db1352@linaro.org> <CAODwPW9MvYJo8QbKOoVcUAKJ8Hxon2MCv_H5qpv=yaSTLLc+ug@mail.gmail.com>
- <628a7302-1409-81f7-f72b-6b1645df9225@linaro.org>
-In-Reply-To: <628a7302-1409-81f7-f72b-6b1645df9225@linaro.org>
-From:   Julius Werner <jwerner@chromium.org>
-Date:   Thu, 7 Jul 2022 18:20:42 -0700
-Message-ID: <CAODwPW-4i+idH8Nz6=EmNUXYWgWkoOHs3wOZ7BbrH5GwGDZ1Ww@mail.gmail.com>
-Subject: Re: [RFC] Correct memory layout reporting for "jedec,lpddr2" and
- related bindings
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Julius Werner <jwerner@chromium.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Dmitry Osipenko <digetx@gmail.com>,
-        Jian-Jia Su <jjsu@google.com>,
-        Doug Anderson <dianders@chromium.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        Nikola Milosavljevic <mnidza@outlook.com>
+        Thu, 7 Jul 2022 21:24:54 -0400
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C14867588;
+        Thu,  7 Jul 2022 18:24:46 -0700 (PDT)
+X-UUID: 4232bf5c397840e4820673a0f342afdf-20220708
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.8,REQID:06b3f4c4-c987-498f-84ea-64fa7a0b7927,OB:0,LO
+        B:0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACTI
+        ON:release,TS:0
+X-CID-META: VersionHash:0f94e32,CLOUDID:9d7dda86-57f0-47ca-ba27-fe8c57fbf305,C
+        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,IP:nil,URL:0,File:nil
+        ,QS:nil,BEC:nil,COL:0
+X-UUID: 4232bf5c397840e4820673a0f342afdf-20220708
+Received: from mtkmbs11n1.mediatek.inc [(172.21.101.185)] by mailgw02.mediatek.com
+        (envelope-from <kewei.xu@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 2034212625; Fri, 08 Jul 2022 09:24:40 +0800
+Received: from mtkcas10.mediatek.inc (172.21.101.39) by
+ mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
+ Fri, 8 Jul 2022 09:24:39 +0800
+Received: from mhfsdcap04 (10.17.3.154) by mtkcas10.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Fri, 8 Jul 2022 09:24:38 +0800
+Message-ID: <0fba8d4ecf11a471da9e3eadb8ce3b2029261c2c.camel@mediatek.com>
+Subject: Re: [PATCH 2/2] i2c: mediatek: Add i2c compatible for Mediatek
+ MT8188
+From:   Kewei Xu <kewei.xu@mediatek.com>
+To:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>, <wsa@the-dreams.de>
+CC:     <matthias.bgg@gmail.com>, <robh+dt@kernel.org>,
+        <linux-i2c@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <srv_heupstream@mediatek.com>, <leilk.liu@mediatek.com>,
+        <qii.wang@mediatek.com>, <liguo.zhang@mediatek.com>,
+        <caiyu.chen@mediatek.com>, <housong.zhang@mediatek.com>,
+        <yuhan.wei@mediatek.com>, <david-yh.chiu@mediatek.com>,
+        <liju-clr.chen@mediatek.com>
+Date:   Fri, 8 Jul 2022 09:24:38 +0800
+In-Reply-To: <fae6c582-ec65-47d8-548f-934e8e829daf@collabora.com>
+References: <20220707054617.13583-1-kewei.xu@mediatek.com>
+         <20220707054617.13583-3-kewei.xu@mediatek.com>
+         <fae6c582-ec65-47d8-548f-934e8e829daf@collabora.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-10.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-MTK:  N
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,T_SPF_HELO_TEMPERROR,UNPARSEABLE_RELAY
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> Then I would assume that all lpddr properties can differ between ranks,
-> including the timings. But probably some SDRAM memory expert should
-> clarify that.
+On Thu, 2022-07-07 at 10:43 +0200, AngeloGioacchino Del Regno wrote:
+> Il 07/07/22 07:46, Kewei Xu ha scritto:
+> > Add i2c compatible for MT8188. Compare to MT8192 i2c controller,
+> > The MT8188 i2c OFFSET_SLAVE_ADDR register changed from 0x04 to
+> > 0x94.
+> > 
+> > Signed-off-by: Kewei Xu <kewei.xu@mediatek.com>
+> > ---
+> >   drivers/i2c/busses/i2c-mt65xx.c | 41
+> > +++++++++++++++++++++++++++++++--
+> >   1 file changed, 39 insertions(+), 2 deletions(-)
+> > 
+> > diff --git a/drivers/i2c/busses/i2c-mt65xx.c
+> > b/drivers/i2c/busses/i2c-mt65xx.c
+> > index 8e6985354fd5..aa2e1cb87420 100644
+> > --- a/drivers/i2c/busses/i2c-mt65xx.c
+> > +++ b/drivers/i2c/busses/i2c-mt65xx.c
+> > @@ -135,6 +135,7 @@ enum mtk_trans_op {
+> >   enum I2C_REGS_OFFSET {
+> >   	OFFSET_DATA_PORT,
+> >   	OFFSET_SLAVE_ADDR,
+> > +	OFFSET_SLAVE_ADDR1,
+> >   	OFFSET_INTR_MASK,
+> >   	OFFSET_INTR_STAT,
+> >   	OFFSET_CONTROL,
+> > @@ -203,6 +204,7 @@ static const u16 mt_i2c_regs_v1[] = {
+> >   static const u16 mt_i2c_regs_v2[] = {
+> >   	[OFFSET_DATA_PORT] = 0x0,
+> >   	[OFFSET_SLAVE_ADDR] = 0x4,
+> > +	[OFFSET_SLAVE_ADDR1] = 0x94,
+> 
+> Instead of adding a "slave addr version" entry... you can as well
+> just define
+> a new array here with an appropriate name.
+> 
+> static const u16 mt_i2c_regs_v3[] = {
+> 
+> .......
+> 
+> }
+> 
+> This way, you don't have to change all of the platform data entries
+> and you
+> also won't have to add checks in the do_transfer function, as that's
+> one of
+> the actual points of having these arrays of register offsets in here.
+> 
+> Regards,
+> Angelo
+> 
 
-Right, so that's what my proposal does -- separate timings nodes per
-rank (and channel).
+Hi Angelo,
 
-> > That really doesn't work for our use case, we can't generate a
-> > specific compatible string for each part number. This may work when
-> > your board is only using a single memory part and you can hardcode
-> > that in the DTB blob bundled with the kernel, but we are trying to do
-> > runtime identification between dozens of different parts on our
-> > boards. The whole point of us wanting to add these bindings is that we
-> > want to have the firmware inject the raw values it can read from mode
-> > registers into the device tree (with just the compatible string
-> > "jedec,lpddr3"),
->
-> You cannot have jedec,lpddr3 alone. You need specific compatible.
+Thank you very much for your suggestion, I will update the patch as
+soon as possible.
 
-Sorry, what do you mean we cannot? Why not? That's the way we need to
-do it for our use case. Why shouldn't it work that way? As far as I
-understand the binding definition, this is one of the legal compatible
-strings for it. (I'm not saying other platforms can't register and
-provide specific compatible strings if they want to, of course, but
-for our situation that really doesn't work.)
+Regards,
+Kewei
 
-> > so that we can then delegate the task of matching
-> > those values to part numbers to a userspace process.
->
-> Constructing a vendor from mode registers is like 10 lines of C code, so
-> this is not a problem. Trouble would be with device part of compatible.
-
-There's potentially 255 different manufacturer codes, and the
-assignments may be different for different LPDDR versions. That's a
-big string table that we don't want to have to fit in our firmware
-flash. Besides, as you said, that still only gives you the vendor...
-so then should we use "micron,lpddr3" or "elpida,lpddr3" instead of
-"jedec,lpddr3"? Where's the advantage in that?
-
-> > Can we please revert that deprecation and at least keep the property
-> > around as optional?
->
-> Yes, we can. You still would need to generate the compatible according
-> to the current bindings. Whether we can change it I am not sure. I think
-> it depends how much customization is possible per vendor, according to
-> JEDEC spec. If we never ever have to identify specific part, because
-> JEDEC spec and registers tell us everything, then we could skip it,
-> similarly to lpddr2 and jedec,spi-nor.
-
-Shouldn't that be decided per use case? In general LPDDR is a pretty
-rigid set of standards and memory controllers are generally compatible
-with any vendor without hardcoding vendor-specific behavior, so I
-don't anticipate that this would be likely (particularly since there
-is no "real" kernel device driver that needs to initialize the full
-memory controller, after all, these bindings are mostly
-informational). Of course there may always be mistakes and broken
-devices that need custom handling, and if someone has a platform with
-such a case I of course don't want to preclude them from tying special
-behavior to a custom compatible string. But why would that mean we
-need to make this mandatory for all platforms even if it's not
-relevant (and not practically feasible) for them? Why not allow both?
-
-> > We need to be able to report the information that's currently encoded
-> > in the "jedec,lpddr2" binding separately for each channel+rank
-> > combination, and we need to be able to tell how many LPDDR chips are
-> > combined under a single memory channel.
->
-> Who and why needs that information?
->
-> To me it's not a very useful information without knowing how memory
-> ranges are mapped to the chips and then only kernel drivers should be
-> able to utilize that info in a meaningful way. What driver are we
-> talking about?
-
-We're using this for diagnostic purposes, to be able to accurately
-report the installed memory configuration to the user or in automated
-error reporting. We're planning to just read it from userspace (via
-/proc/device-tree) and not actually add a kernel driver for it, but
-since it needs to come from the firmware through the device tree it
-should have a standardized binding all the same.

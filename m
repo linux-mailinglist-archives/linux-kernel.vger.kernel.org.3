@@ -2,63 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C8B4956B2DE
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 08:43:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A822B56B2EE
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 08:47:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237332AbiGHGme (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Jul 2022 02:42:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34190 "EHLO
+        id S237387AbiGHGpa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Jul 2022 02:45:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36492 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237316AbiGHGmc (ORCPT
+        with ESMTP id S236575AbiGHGp1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Jul 2022 02:42:32 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 150632F39F;
-        Thu,  7 Jul 2022 23:42:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1657262553; x=1688798553;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=o2koQnFr51eUN7ewniZDTy/mrRdv+JNwkyO1OQJmSPM=;
-  b=blQt7iZz6IiDJKtkoc3r214qv07iY/3B6xGzLTsAO+fwITxy6x4ABkil
-   2O1/+MW8EPx/vUxf3IDSImhGb1aOunKYvQToPz9yC8/fycyGOZbWhkTr8
-   T/+0oHP6ZDKKjLeRsY3V+G9nEWRe3b3ActfkKmdJzk+yi3O2gECBtGFcU
-   iBJ9j6qs1mDkroMbrS+hcRys/u6j5UpRC//98cgmW0hEtAJODyD7q27tA
-   rJZc02gY6kba+m8ia3LtLUsBwEc4es+vF5kdz4gyWMQqXxuuG7FWFKd24
-   Te3qlIgxzeCBdym2rExPGz0iDBFvn5vLlaZYD6fm2+4UnnZMLkazEV/7b
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10401"; a="345894344"
-X-IronPort-AV: E=Sophos;i="5.92,254,1650956400"; 
-   d="scan'208";a="345894344"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jul 2022 23:42:32 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,254,1650956400"; 
-   d="scan'208";a="621099895"
-Received: from lkp-server01.sh.intel.com (HELO 68b931ab7ac1) ([10.239.97.150])
-  by orsmga008.jf.intel.com with ESMTP; 07 Jul 2022 23:42:30 -0700
-Received: from kbuild by 68b931ab7ac1 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1o9hh7-000N3K-C9;
-        Fri, 08 Jul 2022 06:42:29 +0000
-Date:   Fri, 8 Jul 2022 14:41:38 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Atif Ofluoglu <Atif.Ofluoglu@analog.com>, linux@roeck-us.net
-Cc:     kbuild-all@lists.01.org, jdelvare@suse.com,
-        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Atif Ofluoglu <atif.ofluoglu@analog.com>
-Subject: Re: [PATCH 2/2] Added documentation for Maxim Integrated max20754
- hwmon userspace sysfs.
-Message-ID: <202207081439.A6GFlbPu-lkp@intel.com>
-References: <a8d037609be3e6f81bc15e2a6c24cb7809e3226b.1657204859.git.atif.ofluoglu@analog.com>
+        Fri, 8 Jul 2022 02:45:27 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 692ED4D4FC;
+        Thu,  7 Jul 2022 23:45:22 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 1B949B80189;
+        Fri,  8 Jul 2022 06:45:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1D42DC341C0;
+        Fri,  8 Jul 2022 06:45:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1657262719;
+        bh=FlwRiRHtGel2rCGS4TGuYsdGWisqlLhpOiaAc2cCkUU=;
+        h=From:To:Cc:Subject:References:Date:In-Reply-To:From;
+        b=I3BnsXq93SQnzAOwRFujOtCiPKruJMc25QSMiggQvZ2wBKS0/v4k5PgqgoNOnr9Qj
+         C5fu9Clucy3N+DXL+4tnrrWWdwaP1jX0xl+iIQ17n0iDsp6huelUwesErmoSLgVU9g
+         +LCFqlQP/PBOEyJEUeyt4Pk2c4MkYDBFhPaZtCfQzFnLRFWBkiCQuHYGqvAXgy3RYF
+         pyWKjiGAQQ56Tqpd3pkZQ2N2W8kGLthplZ68UjeVvWCqOjoW/myrx9a2g5z5ka39tx
+         R8sXHKcHMegDwNKMJtd7q0DXoETrueJo5UA9rt+k5b5i9fv4qmZOkfrXMAy8WlFrj1
+         0t44WfpHnjvDA==
+From:   Kalle Valo <kvalo@kernel.org>
+To:     Steven Rostedt <rostedt@goodmis.org>
+Cc:     linux-kernel@vger.kernel.org, Ingo Molnar <mingo@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, ath10k@lists.infradead.org,
+        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
+        ath11k@lists.infradead.org
+Subject: Re: [PATCH 03/13] tracing/ath: Use the new __vstring() helper
+References: <20220705224453.120955146@goodmis.org>
+        <20220705224749.430339634@goodmis.org>
+Date:   Fri, 08 Jul 2022 09:45:14 +0300
+In-Reply-To: <20220705224749.430339634@goodmis.org> (Steven Rostedt's message
+        of "Tue, 05 Jul 2022 18:44:56 -0400")
+Message-ID: <87edywt85h.fsf@kernel.org>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <a8d037609be3e6f81bc15e2a6c24cb7809e3226b.1657204859.git.atif.ofluoglu@analog.com>
-X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain
+X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -66,28 +62,31 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Atif,
+Steven Rostedt <rostedt@goodmis.org> writes:
 
-Thank you for the patch! Perhaps something to improve:
+> From: "Steven Rostedt (Google)" <rostedt@goodmis.org>
+>
+> Instead of open coding a __dynamic_array() with a fixed length (which
+> defeats the purpose of the dynamic array in the first place). Use the new
+> __vstring() helper that will use a va_list and only write enough of the
+> string into the ring buffer that is needed.
+>
+> Cc: Kalle Valo <kvalo@kernel.org>
+> Cc: "David S. Miller" <davem@davemloft.net>
+> Cc: Eric Dumazet <edumazet@google.com>
+> Cc: Jakub Kicinski <kuba@kernel.org>
+> Cc: Paolo Abeni <pabeni@redhat.com>
+> Cc: ath10k@lists.infradead.org
+> Cc: linux-wireless@vger.kernel.org
+> Cc: netdev@vger.kernel.org
+> Cc: ath11k@lists.infradead.org
+> Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
 
-[auto build test WARNING on groeck-staging/hwmon-next]
-[also build test WARNING on linus/master v5.19-rc5 next-20220707]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Feel free to take this via your tree:
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Atif-Ofluoglu/Adding-MAX20754-support/20220707-233249
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
-reproduce: make htmldocs
-
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
-
-All warnings (new ones prefixed by >>):
-
->> Documentation/hwmon/max20754.rst: WARNING: document isn't included in any toctree
->> Documentation/hwmon/max20754.rst:49: WARNING: Malformed table.
+Acked-by: Kalle Valo <kvalo@kernel.org>
 
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+https://patchwork.kernel.org/project/linux-wireless/list/
+
+https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatches

@@ -2,253 +2,266 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CC2EA56BFFF
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 20:36:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 70EB856BF42
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 20:35:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239386AbiGHQ2c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Jul 2022 12:28:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42782 "EHLO
+        id S239160AbiGHQ25 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Jul 2022 12:28:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40904 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239346AbiGHQ1p (ORCPT
+        with ESMTP id S239359AbiGHQ2i (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Jul 2022 12:27:45 -0400
-Received: from mail-pj1-x104a.google.com (mail-pj1-x104a.google.com [IPv6:2607:f8b0:4864:20::104a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F1E68736E
-        for <linux-kernel@vger.kernel.org>; Fri,  8 Jul 2022 09:27:21 -0700 (PDT)
-Received: by mail-pj1-x104a.google.com with SMTP id o20-20020a17090a9f9400b001ef92404bd0so1426140pjp.6
-        for <linux-kernel@vger.kernel.org>; Fri, 08 Jul 2022 09:27:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:message-id:mime-version:subject:from:to:cc
-         :content-transfer-encoding;
-        bh=Q/iRyvoXPEz0OuK0jrrOflnyHMomDksx7PC4C85yLGg=;
-        b=mfBiGkWGOPGNvfiac/hpFafX2LM9jWCc0WY9c6vJOJfpstMLiLkb32FtdShieTEyVQ
-         68qP7JoiNdSOxOWe3Dwk8PARy+E82wHl1aCGKQm7TgZsrZKFOtz2r3SaCWAnqFVP6Rzy
-         m228zMJFM4aa7ovr4UFKqW93g2alQFj/WhRyf/M/lKSfiaUAEhvePi2kdGNjhZENDS55
-         d/SeC62Qs+uGbkFceHmBBGb0F2XRgmMgHYeu7oRdc8JT+Ciw71jNfFAkhbVOXxwCGEvd
-         NqHlPCCdXzayANXA3TEDRSUB2Nk/Hg14+if46xh3RViixlh9AvPK+WXDQ1aH8HnmaoIc
-         yZKA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc
-         :content-transfer-encoding;
-        bh=Q/iRyvoXPEz0OuK0jrrOflnyHMomDksx7PC4C85yLGg=;
-        b=JfOmnmf5CIj0E+S4Ak+n1fh7rXWwAB1QzwYSphtLJpbgnDUACnIUAztAvb3fMiDEHn
-         kaCVP3tUXZIqlHtvnWjqRbZaX29TQx1yhScN4pWHJPO3ljjc54qzYTmlCFcddS/z47OI
-         +vT7IFCGYoZK4uZkkOFBhVGMfk8ULQ/b75pRu0lY2weRTWFzGHFd4yUXvB5z+xqK4mnl
-         lcLQACpkPRkdkkHliXizPuz+mh4vUv+ia4r7a6Deb8U7UNj28iqv65peYqVrUqSOVGdt
-         05L14Oc57V2lj89d7FTRUlEragpycyt7YzQCPNgTbZH7WmPjINACmVy8yoY26ufu7B+M
-         XR4A==
-X-Gm-Message-State: AJIora9Rd0DHJbDJ+B0RK/Holnx8Xfwk+EQ20V3364kG/rVvBEenyhxv
-        BagiJg0mZN5EBtO/X3VbKyfbS+wezcou4w==
-X-Google-Smtp-Source: AGRyM1sLJlwxfjqcNm/Fsdm7a+OffuFDWD2oUjsDH2QuDyuxoNm/fNvoT9Z8F/FLo+/1aeoJHpSeHvP6HN+vag==
-X-Received: from dlatypov-spec.c.googlers.com ([fda3:e722:ac3:cc00:24:72f4:c0a8:3f35])
- (user=dlatypov job=sendgmr) by 2002:a17:902:ea47:b0:16b:997b:5fd6 with SMTP
- id r7-20020a170902ea4700b0016b997b5fd6mr4426982plg.16.1657297639986; Fri, 08
- Jul 2022 09:27:19 -0700 (PDT)
-Date:   Fri,  8 Jul 2022 16:27:11 +0000
-Message-Id: <20220708162711.1309633-1-dlatypov@google.com>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.37.0.rc0.161.g10f37bed90-goog
-Subject: [PATCH v3] kunit: tool: Enable virtio/PCI by default on UML
-From:   Daniel Latypov <dlatypov@google.com>
-To:     brendanhiggins@google.com, davidgow@google.com
-Cc:     linux-kernel@vger.kernel.org, kunit-dev@googlegroups.com,
-        linux-kselftest@vger.kernel.org, skhan@linuxfoundation.org,
-        "=?UTF-8?q?Jos=C3=A9=20Exp=C3=B3sito?=" <jose.exposito89@gmail.com>,
-        Daniel Latypov <dlatypov@google.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        Fri, 8 Jul 2022 12:28:38 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 947BA20B;
+        Fri,  8 Jul 2022 09:27:44 -0700 (PDT)
+Received: from [IPV6:2a01:e0a:120:3210:3cab:61a1:2b1f:896b] (unknown [IPv6:2a01:e0a:120:3210:3cab:61a1:2b1f:896b])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (No client certificate requested)
+        (Authenticated sender: benjamin.gaignard)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id AD7BD66015BF;
+        Fri,  8 Jul 2022 17:27:42 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1657297663;
+        bh=M2XcgqYs6U+1Gi7Jie82t46uoCuX+14uCwhy1mBpf+M=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=d2km7C3FWFcz1KTim3I9/kIUdFITsY+FuaSR8gBCBJAfljtekinzQ0OzUVNyjua2q
+         /A4wTU80QYAD7JrR8LVMZkMwpooLuSp/jpvgv9m1nc1Z8DI3jBr3qqb5dQbbTVkYgJ
+         32HyiO486LLwBRY5eB/CYt/YcWhiiwUzLvthcObej84XGW3sRNk4OZ017mV0ncmBVp
+         l7WAf1P88rnD8NMstdzMwqABH71kyyEYJ8L7PTvl08bdzDyZJpT+mfMbx7GVwco7Rx
+         kQQNT15xNA5JpXc/yMqqDdG7ZAfNHxAyd7etOKrAfwwQDnGe0DJkgJiGvS7X27R3BB
+         NZGtgtBAR94Iw==
+Message-ID: <7041df2a-e248-56d4-da6a-343b610de8b4@collabora.com>
+Date:   Fri, 8 Jul 2022 18:27:40 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH v12 11/17] media: uapi: Add
+ V4L2_CID_STATELESS_HEVC_ENTRY_POINT_OFFSETS control
+Content-Language: en-US
+To:     =?UTF-8?Q?Jernej_=c5=a0krabec?= <jernej.skrabec@gmail.com>,
+        mchehab@kernel.org, hverkuil@xs4all.nl,
+        ezequiel@vanguardiasur.com.ar, p.zabel@pengutronix.de,
+        gregkh@linuxfoundation.org, mripard@kernel.org,
+        paul.kocialkowski@bootlin.com, wens@csie.org, samuel@sholland.org,
+        nicolas.dufresne@collabora.com, andrzej.p@collabora.com
+Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-rockchip@lists.infradead.org, linux-staging@lists.linux.dev,
+        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
+        kernel@collabora.com
+References: <20220708120554.495495-1-benjamin.gaignard@collabora.com>
+ <2106581.irdbgypaU6@jernej-laptop>
+ <5e346689-5a0c-8fc7-129d-53a6f28e5349@collabora.com>
+ <4604967.rnE6jSC6OK@kista>
+From:   Benjamin Gaignard <benjamin.gaignard@collabora.com>
+In-Reply-To: <4604967.rnE6jSC6OK@kista>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: David Gow <davidgow@google.com>
 
-There are several tests which depend on PCI, and hence need a bunch of
-extra options to run under UML. This makes it awkward to give
-configuration instructions (whether in documentation, or as part of a
-.kunitconfig file), as two separate, incompatible sets of config options
-are required for UML and "most other architectures".
+Le 08/07/2022 à 18:11, Jernej Škrabec a écrit :
+> Dne petek, 08. julij 2022 ob 18:00:24 CEST je Benjamin Gaignard napisal(a):
+>> Le 08/07/2022 à 16:02, Jernej Škrabec a écrit :
+>>> Hi Benjamin!
+>>>
+>>> Dne petek, 08. julij 2022 ob 14:05:48 CEST je Benjamin Gaignard
+> napisal(a):
+>>>> The number of 'entry point offset' can be very variable.
+>>>> Instead of using a large static array define a v4l2 dynamic array
+>>>> of U32 (V4L2_CTRL_TYPE_U32).
+>>>> The number of entry point offsets is reported by the elems field
+>>>> and in struct v4l2_ctrl_hevc_slice_params.num_entry_point_offsets
+>>>> field.
+>>>>
+>>>> Signed-off-by: Benjamin Gaignard <benjamin.gaignard@collabora.com>
+>>>> Acked-by: Nicolas Dufresne <nicolas.dufresne@collabora.com>
+>>>> Tested-by: Jernej Skrabec <jernej.skrabec@gmail.com>
+>>>> ---
+>>>> version 12:
+>>>> - Reword num_entry_point_offsets documentation
+>>>>
+>>>>    .../userspace-api/media/v4l/ext-ctrls-codec.rst     | 13 +++++++++++++
+>>>>    drivers/media/v4l2-core/v4l2-ctrls-defs.c           |  5 +++++
+>>>>    include/media/hevc-ctrls.h                          |  5 ++++-
+>>>>    3 files changed, 22 insertions(+), 1 deletion(-)
+>>>>
+>>>> diff --git a/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst
+>>>> b/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst index
+>>>> c2e0adece613..0cd967126fdf 100644
+>>>> --- a/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst
+>>>> +++ b/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst
+>>>> @@ -3010,6 +3010,11 @@ enum v4l2_mpeg_video_hevc_size_of_length_field -
+>>>>
+>>>>        * - __u32
+>>>>        
+>>>>          - ``data_bit_offset``
+>>>>          - Offset (in bits) to the video data in the current slice data.
+>>>>
+>>>> +    * - __u32
+>>>> +      - ``num_entry_point_offsets``
+>>>> +      - Specifies the number of entry point offset syntax elements in
+>>>> the
+>>>> slice header. +        When the driver supports it, the
+>>>> ``V4L2_CID_STATELESS_HEVC_ENTRY_POINT_OFFSETS`` +        must be set.
+>>>>
+>>>>        * - __u8
+>>>>        
+>>>>          - ``nal_unit_type``
+>>>>          - Specifies the coding type of the slice (B, P or I).
+>>>>
+>>>> @@ -3150,6 +3155,14 @@ enum v4l2_mpeg_video_hevc_size_of_length_field -
+>>>>
+>>>>        \normalsize
+>>>>
+>>>> +``V4L2_CID_STATELESS_HEVC_ENTRY_POINT_OFFSETS (integer)``
+>>>> +    Specifies entry point offsets in bytes.
+>>>> +    This control is a dynamically sized array. The number of entry point
+>>>> +    offsets is reported by the ``elems`` field.
+>>>> +    This bitstream parameter is defined according to :ref:`hevc`.
+>>>> +    They are described in section 7.4.7.1 "General slice segment header
+>>>> +    semantics" of the specification.
+>>> You forgot to update above description per Ezequiel comment.
+>> No it was num_entry_point_offsets which was needed to be updated
+>> not this control.
+> Both needs to be updated. Ezequiel said:
+>
+> "I would add Jernej's clarification about the length of the control
+> here, where the control is documented."
+>
+> ""
+> This control is a dynamically sized array. The number of entry point
+> offsets is reported by the ``elems`` field.
+> This bitstream parameter is defined according to :ref:`hevc`.
+> They are described in section 7.4.7.1 "General slice segment header
+> semantics" of the specification.
+> When multiple slices are submitted in a request, the length
+> of this array must be the sum of num_entry_point_offsets
+> of all the slices in the request.
+> ""
 
-For non-UML architectures, it's possible to add default kconfig options
-via the qemu_config python files, but there's no equivalent for UML. Add
-a new tools/testing/kunit/configs/arch_uml.config file containing extra
-kconfig options to use on UML.
+I have totally miss the last part.
+It is fix in v13.
 
-Tested-by: Jos=C3=A9 Exp=C3=B3sito <jose.exposito89@gmail.com>
-Reviewed-by: Daniel Latypov <dlatypov@google.com>
-Signed-off-by: David Gow <davidgow@google.com>
-Reviewed-by: Brendan Higgins <brendanhiggins@google.com>
-Signed-off-by: Daniel Latypov <dlatypov@google.com>
----
+Thanks for your review.
+Regards,
+Benjamin
 
-NOTE: This depends on v4 of the repeatable --kunitconfig patch here:
-https://patchwork.kernel.org/project/linux-kselftest/patch/20220708013632.1=
-210466-1-dlatypov@google.com/
-Please apply it first first.
-
-Changes since v2: (dlatypov@google.com)
-- Rebase on top of the -kselftest kunit branch + v4 of the --kunitconfig
-  patch. It rebased cleanly, but it evidently would not apply cleanly
-  due to all the conflicts v4 --kunitconfig had with --qemu_args
-
-Changes since v1:
-https://lore.kernel.org/linux-kselftest/20220624084400.1454579-1-davidgow@g=
-oogle.com/
-- (Hopefully) fix a pytype warning re: architecture being None in the
-  tests. (Thanks, Daniel)
-- Rebase on top of the new combined v3 of the kconfig/kunitconfig
-  patchset.
-- Add Jos=C3=A9's Tested-by and Daniel's Reviewed-by.
-
-Changes since RFC:
-https://lore.kernel.org/linux-kselftest/20220622035326.759935-1-davidgow@go=
-ogle.com/
-- Rebase on top of the previous kconfig patches.
-- Fix a missing make_arch_qemuconfig->make_arch_config rename (Thanks
-  Brendan)
-- Fix the tests to use the base LinuxSourceTreeOperations class, which
-  has no default kconfig options (and so won't conflict with those set
-  in the tests). Only test_build_reconfig_existing_config actually
-  failed, but I updated a few more in case the defaults changed.
-
----
- tools/testing/kunit/configs/arch_uml.config |  5 +++++
- tools/testing/kunit/kunit_kernel.py         | 14 ++++++++++----
- tools/testing/kunit/kunit_tool_test.py      | 12 ++++++++++++
- 3 files changed, 27 insertions(+), 4 deletions(-)
- create mode 100644 tools/testing/kunit/configs/arch_uml.config
-
-diff --git a/tools/testing/kunit/configs/arch_uml.config b/tools/testing/ku=
-nit/configs/arch_uml.config
-new file mode 100644
-index 000000000000..e824ce43b05a
---- /dev/null
-+++ b/tools/testing/kunit/configs/arch_uml.config
-@@ -0,0 +1,5 @@
-+# Config options which are added to UML builds by default
-+
-+# Enable virtio/pci, as a lot of tests require it.
-+CONFIG_VIRTIO_UML=3Dy
-+CONFIG_UML_PCI_OVER_VIRTIO=3Dy
-diff --git a/tools/testing/kunit/kunit_kernel.py b/tools/testing/kunit/kuni=
-t_kernel.py
-index 56492090e28e..f5c26ea89714 100644
---- a/tools/testing/kunit/kunit_kernel.py
-+++ b/tools/testing/kunit/kunit_kernel.py
-@@ -26,6 +26,7 @@ KUNITCONFIG_PATH =3D '.kunitconfig'
- OLD_KUNITCONFIG_PATH =3D 'last_used_kunitconfig'
- DEFAULT_KUNITCONFIG_PATH =3D 'tools/testing/kunit/configs/default.config'
- BROKEN_ALLCONFIG_PATH =3D 'tools/testing/kunit/configs/broken_on_uml.confi=
-g'
-+UML_KCONFIG_PATH =3D 'tools/testing/kunit/configs/arch_uml.config'
- OUTFILE_PATH =3D 'test.log'
- ABS_TOOL_PATH =3D os.path.abspath(os.path.dirname(__file__))
- QEMU_CONFIGS_DIR =3D os.path.join(ABS_TOOL_PATH, 'qemu_configs')
-@@ -53,7 +54,7 @@ class LinuxSourceTreeOperations:
- 		except subprocess.CalledProcessError as e:
- 			raise ConfigError(e.output.decode())
-=20
--	def make_arch_qemuconfig(self, base_kunitconfig: kunit_config.Kconfig) ->=
- kunit_config.Kconfig:
-+	def make_arch_config(self, base_kunitconfig: kunit_config.Kconfig) -> kun=
-it_config.Kconfig:
- 		return base_kunitconfig
-=20
- 	def make_allyesconfig(self, build_dir: str, make_options) -> None:
-@@ -109,7 +110,7 @@ class LinuxSourceTreeOperationsQemu(LinuxSourceTreeOper=
-ations):
- 		self._kernel_command_line =3D qemu_arch_params.kernel_command_line + ' k=
-unit_shutdown=3Dreboot'
- 		self._extra_qemu_params =3D qemu_arch_params.extra_qemu_params
-=20
--	def make_arch_qemuconfig(self, base_kunitconfig: kunit_config.Kconfig) ->=
- kunit_config.Kconfig:
-+	def make_arch_config(self, base_kunitconfig: kunit_config.Kconfig) -> kun=
-it_config.Kconfig:
- 		kconfig =3D kunit_config.parse_from_string(self._kconfig)
- 		kconfig.merge_in_entries(base_kunitconfig)
- 		return kconfig
-@@ -138,6 +139,11 @@ class LinuxSourceTreeOperationsUml(LinuxSourceTreeOper=
-ations):
- 	def __init__(self, cross_compile=3DNone):
- 		super().__init__(linux_arch=3D'um', cross_compile=3Dcross_compile)
-=20
-+	def make_arch_config(self, base_kunitconfig: kunit_config.Kconfig) -> kun=
-it_config.Kconfig:
-+		kconfig =3D kunit_config.parse_file(UML_KCONFIG_PATH)
-+		kconfig.merge_in_entries(base_kunitconfig)
-+		return kconfig
-+
- 	def make_allyesconfig(self, build_dir: str, make_options) -> None:
- 		stdout.print_with_timestamp(
- 			'Enabling all CONFIGs for UML...')
-@@ -298,7 +304,7 @@ class LinuxSourceTree:
- 		if build_dir and not os.path.exists(build_dir):
- 			os.mkdir(build_dir)
- 		try:
--			self._kconfig =3D self._ops.make_arch_qemuconfig(self._kconfig)
-+			self._kconfig =3D self._ops.make_arch_config(self._kconfig)
- 			self._kconfig.write_to_file(kconfig_path)
- 			self._ops.make_olddefconfig(build_dir, make_options)
- 		except ConfigError as e:
-@@ -329,7 +335,7 @@ class LinuxSourceTree:
- 			return self.build_config(build_dir, make_options)
-=20
- 		existing_kconfig =3D kunit_config.parse_file(kconfig_path)
--		self._kconfig =3D self._ops.make_arch_qemuconfig(self._kconfig)
-+		self._kconfig =3D self._ops.make_arch_config(self._kconfig)
-=20
- 		if self._kconfig.is_subset_of(existing_kconfig) and not self._kunitconfi=
-g_changed(build_dir):
- 			return True
-diff --git a/tools/testing/kunit/kunit_tool_test.py b/tools/testing/kunit/k=
-unit_tool_test.py
-index ad63d0d34f3f..446ac432d9a4 100755
---- a/tools/testing/kunit/kunit_tool_test.py
-+++ b/tools/testing/kunit/kunit_tool_test.py
-@@ -430,6 +430,10 @@ class LinuxSourceTreeTest(unittest.TestCase):
- 				f.write('CONFIG_KUNIT=3Dy')
-=20
- 			tree =3D kunit_kernel.LinuxSourceTree(build_dir)
-+			# Stub out the source tree operations, so we don't have
-+			# the defaults for any given architecture get in the
-+			# way.
-+			tree._ops =3D kunit_kernel.LinuxSourceTreeOperations('none', None)
- 			mock_build_config =3D mock.patch.object(tree, 'build_config').start()
-=20
- 			# Should generate the .config
-@@ -447,6 +451,10 @@ class LinuxSourceTreeTest(unittest.TestCase):
- 				f.write('CONFIG_KUNIT=3Dy\nCONFIG_KUNIT_TEST=3Dy')
-=20
- 			tree =3D kunit_kernel.LinuxSourceTree(build_dir)
-+			# Stub out the source tree operations, so we don't have
-+			# the defaults for any given architecture get in the
-+			# way.
-+			tree._ops =3D kunit_kernel.LinuxSourceTreeOperations('none', None)
- 			mock_build_config =3D mock.patch.object(tree, 'build_config').start()
-=20
- 			self.assertTrue(tree.build_reconfig(build_dir, make_options=3D[]))
-@@ -463,6 +471,10 @@ class LinuxSourceTreeTest(unittest.TestCase):
- 				f.write('CONFIG_KUNIT=3Dy\nCONFIG_KUNIT_TEST=3Dy')
-=20
- 			tree =3D kunit_kernel.LinuxSourceTree(build_dir)
-+			# Stub out the source tree operations, so we don't have
-+			# the defaults for any given architecture get in the
-+			# way.
-+			tree._ops =3D kunit_kernel.LinuxSourceTreeOperations('none', None)
- 			mock_build_config =3D mock.patch.object(tree, 'build_config').start()
-=20
- 			# ... so we should trigger a call to build_config()
-
-base-commit: cbb6bc7059151df198b45e883ed731d8f528b65b
---=20
-2.37.0.rc0.161.g10f37bed90-goog
-
+>
+> Best regards,
+> Jernej
+>
+>> Regards,
+>> Benjamin
+>>
+>>> Best regards,
+>>> Jernej
+>>>
+>>>> +
+>>>>
+>>>>    ``V4L2_CID_STATELESS_HEVC_SCALING_MATRIX (struct)``
+>>>>    
+>>>>        Specifies the HEVC scaling matrix parameters used for the scaling
+>>>>
+>>>> process for transform coefficients.
+>>>> diff --git a/drivers/media/v4l2-core/v4l2-ctrls-defs.c
+>>>> b/drivers/media/v4l2-core/v4l2-ctrls-defs.c index
+>>>> d594efbcbb93..e22921e7ea61 100644
+>>>> --- a/drivers/media/v4l2-core/v4l2-ctrls-defs.c
+>>>> +++ b/drivers/media/v4l2-core/v4l2-ctrls-defs.c
+>>>> @@ -1188,6 +1188,7 @@ const char *v4l2_ctrl_get_name(u32 id)
+>>>>
+>>>>    	case V4L2_CID_STATELESS_HEVC_DECODE_PARAMS:		return
+>>> "HEVC Decode
+>>>
+>>>> Parameters"; case V4L2_CID_STATELESS_HEVC_DECODE_MODE:		return
+>>> "HEVC Decode
+>>>
+>>>> Mode"; case V4L2_CID_STATELESS_HEVC_START_CODE:		return
+>>> "HEVC Start Code";
+>>>
+>>>> +	case V4L2_CID_STATELESS_HEVC_ENTRY_POINT_OFFSETS:	return
+>>> "HEVC Entry
+>>>
+>>>> Point Offsets";
+>>>>
+>>>>    	/* Colorimetry controls */
+>>>>    	/* Keep the order of the 'case's the same as in v4l2-controls.h!
+>>> */
+>>>
+>>>> @@ -1518,6 +1519,10 @@ void v4l2_ctrl_fill(u32 id, const char **name,
+>>>> enum
+>>>>
+>>>> v4l2_ctrl_type *type, case V4L2_CID_STATELESS_HEVC_DECODE_PARAMS:
+>>>>    		*type = V4L2_CTRL_TYPE_HEVC_DECODE_PARAMS;
+>>>>    		break;
+>>>>
+>>>> +	case V4L2_CID_STATELESS_HEVC_ENTRY_POINT_OFFSETS:
+>>>> +		*type = V4L2_CTRL_TYPE_U32;
+>>>> +		*flags |= V4L2_CTRL_FLAG_DYNAMIC_ARRAY;
+>>>> +		break;
+>>>>
+>>>>    	case V4L2_CID_STATELESS_VP9_COMPRESSED_HDR:
+>>>>    		*type = V4L2_CTRL_TYPE_VP9_COMPRESSED_HDR;
+>>>>    		break;
+>>>>
+>>>> diff --git a/include/media/hevc-ctrls.h b/include/media/hevc-ctrls.h
+>>>> index a372c184689e..3a6601a46ced 100644
+>>>> --- a/include/media/hevc-ctrls.h
+>>>> +++ b/include/media/hevc-ctrls.h
+>>>> @@ -20,6 +20,7 @@
+>>>>
+>>>>    #define V4L2_CID_STATELESS_HEVC_DECODE_PARAMS	
+> (V4L2_CID_CODEC_BASE
+>>> + 1012)
+>>>
+>>>>    #define V4L2_CID_STATELESS_HEVC_DECODE_MODE	(V4L2_CID_CODEC_BASE
+> +
+>>>>    1015)
+>>>>    #define V4L2_CID_STATELESS_HEVC_START_CODE	(V4L2_CID_CODEC_BASE + 1016)
+>>>>
+>>>> +#define V4L2_CID_STATELESS_HEVC_ENTRY_POINT_OFFSETS (V4L2_CID_CODEC_BASE
+>>>> +
+>>>> 1017)
+>>>>
+>>>>    /* enum v4l2_ctrl_type type values */
+>>>>    #define V4L2_CTRL_TYPE_HEVC_SPS 0x0120
+>>>>
+>>>> @@ -316,6 +317,8 @@ struct v4l2_hevc_pred_weight_table {
+>>>>
+>>>>     *
+>>>>     * @bit_size: size (in bits) of the current slice data
+>>>>     * @data_bit_offset: offset (in bits) to the video data in the current
+>>>>
+>>>> slice data + * @num_entry_point_offsets: specifies the number of entry
+>>>> point offset syntax + *			     elements in the slice
+>>> header.
+>>>
+>>>>     * @nal_unit_type: specifies the coding type of the slice (B, P or I)
+>>>>     * @nuh_temporal_id_plus1: minus 1 specifies a temporal identifier for
+>>>>     the
+>>>>
+>>>> NAL unit * @slice_type: see V4L2_HEVC_SLICE_TYPE_{}
+>>>> @@ -358,7 +361,7 @@ struct v4l2_hevc_pred_weight_table {
+>>>>
+>>>>    struct v4l2_ctrl_hevc_slice_params {
+>>>>    
+>>>>    	__u32	bit_size;
+>>>>    	__u32	data_bit_offset;
+>>>>
+>>>> -
+>>>> +	__u32	num_entry_point_offsets;
+>>>>
+>>>>    	/* ISO/IEC 23008-2, ITU-T Rec. H.265: NAL unit header */
+>>>>    	__u8	nal_unit_type;
+>>>>    	__u8	nuh_temporal_id_plus1;
+>

@@ -2,94 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0089956B473
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 10:25:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 62F0356B477
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 10:29:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237809AbiGHIYz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Jul 2022 04:24:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57558 "EHLO
+        id S237302AbiGHI0F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Jul 2022 04:26:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59026 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237539AbiGHIYv (ORCPT
+        with ESMTP id S237138AbiGHI0C (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Jul 2022 04:24:51 -0400
-Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2975814A1
-        for <linux-kernel@vger.kernel.org>; Fri,  8 Jul 2022 01:24:48 -0700 (PDT)
-Received: by mail-wr1-x431.google.com with SMTP id o4so29509195wrh.3
-        for <linux-kernel@vger.kernel.org>; Fri, 08 Jul 2022 01:24:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=mIwFg075RvwVYz9+/Y+xL9IEwu5sJHlYJ/YyVZSg0lY=;
-        b=Hb9QsIsy3zrdkNF7D7KWN7V9xWmBnlnqukEu8VQO760EvPnCTgR7YaaANXCVvHFhG8
-         azGVU8v/yUeYegEIgmmaKflxUqaohJdfHBD0rtW/STrfWOLiHNQTL2u3xQe8ziPn37Tp
-         KperCCH8+Rsgixu8wrN/mbJVA3rhSsKGl2aOlADbg6XXnewNcscnnFvz+pqLe4iqnJHA
-         zq3s15m3tNnJHcbuScXgMIPMUNpfZjSdtaTKbGQrtAGToOwTcSyiz9akBnE8KKn7Cahy
-         sS9hB+7l1qMZEn7F61+CTCeYnNdL/RgeTOMXypf4x/Gnu8ySOpRtLqY0aWNZCHpwATqH
-         tn0w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=mIwFg075RvwVYz9+/Y+xL9IEwu5sJHlYJ/YyVZSg0lY=;
-        b=B7qEhxfxuegTehv1J3XMoymS+F9tBSnHCU7xXyA3oENw2NKL1kyKbPGdJlGXyIsi0x
-         w+CMOzVfChg31eUhwTbbFsqsFmUM4ubSf4gNcJOMdw/sty457wiCOWpcqt2MVUJgDgt4
-         2DjUP8SWOYaQTvgmvelBfA3IvayJHiodyq+jDzD0P91yx4Ty1UhU9GMms2rtpfi5FMN5
-         d2oU/8iYTb2ci9GraHv+m6TqJyhncqdp7y+idHoIC8VvpJOUzRcmAH/mqnW/X859tWWA
-         jGFdpcFfoGN54dBygDOCSnVi5pgdrqao22r6bfR0be01GdhQQcymkD2P8I88yTrWQ41v
-         ThlA==
-X-Gm-Message-State: AJIora9V9Zi0Mn3Dg1ue5in9vqTQbLBJtv+8vRAhRCPjkXYoaFutqjVv
-        RWGcFnV851oZS1QPdpZkDsAkbg==
-X-Google-Smtp-Source: AGRyM1viKjtVrmUoxTanFr1pV6d7LMrE7leuT0XIliXYQcDoe0Ro78y5UhOmXgHGos2nagi880AGAA==
-X-Received: by 2002:a5d:588d:0:b0:21d:865c:54e9 with SMTP id n13-20020a5d588d000000b0021d865c54e9mr2109574wrf.3.1657268687247;
-        Fri, 08 Jul 2022 01:24:47 -0700 (PDT)
-Received: from myrica (cpc92880-cmbg19-2-0-cust679.5-4.cable.virginm.net. [82.27.106.168])
-        by smtp.gmail.com with ESMTPSA id h15-20020a1ccc0f000000b0039749b01ea7sm1670902wmb.32.2022.07.08.01.24.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 08 Jul 2022 01:24:46 -0700 (PDT)
-Date:   Fri, 8 Jul 2022 09:24:22 +0100
-From:   Jean-Philippe Brucker <jean-philippe@linaro.org>
-To:     Xu Kuohai <xukuohai@huawei.com>
-Cc:     bpf@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        Mark Rutland <mark.rutland@arm.com>,
+        Fri, 8 Jul 2022 04:26:02 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 675C97969A
+        for <linux-kernel@vger.kernel.org>; Fri,  8 Jul 2022 01:26:00 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 6E21E1063;
+        Fri,  8 Jul 2022 01:26:00 -0700 (PDT)
+Received: from bogus (unknown [10.57.39.193])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id A11A53F792;
+        Fri,  8 Jul 2022 01:25:54 -0700 (PDT)
+Date:   Fri, 8 Jul 2022 09:24:43 +0100
+From:   Sudeep Holla <sudeep.holla@arm.com>
+To:     Conor Dooley <mail@conchuod.ie>
+Cc:     Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Palmer Dabbelt <palmer@rivosinc.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
         Catalin Marinas <catalin.marinas@arm.com>,
         Will Deacon <will@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Zi Shen Lim <zlim.lnx@gmail.com>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        "David S . Miller" <davem@davemloft.net>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        David Ahern <dsahern@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H . Peter Anvin" <hpa@zytor.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        Russell King <rmk+kernel@armlinux.org.uk>,
-        James Morse <james.morse@arm.com>,
-        Hou Tao <houtao1@huawei.com>,
-        Jason Wang <wangborong@cdjrlc.com>
-Subject: Re: [PATCH bpf-next v6 4/4] bpf, arm64: bpf trampoline for arm64
-Message-ID: <YsfptiexC0wFABFL@myrica>
-References: <20220625161255.547944-1-xukuohai@huawei.com>
- <20220625161255.547944-5-xukuohai@huawei.com>
- <YscL4t1pYHYApIiK@larix>
- <a24109d5-b79a-99de-0fd5-66b0ec34e5ed@huawei.com>
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Daire McNamara <daire.mcnamara@microchip.com>,
+        Conor Dooley <conor.dooley@microchip.com>,
+        Niklas Cassel <niklas.cassel@wdc.com>,
+        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Zong Li <zong.li@sifive.com>,
+        Emil Renner Berthing <kernel@esmil.dk>,
+        Jonas Hahnfeld <hahnjo@hahnjo.de>, Guo Ren <guoren@kernel.org>,
+        Anup Patel <anup@brainfault.org>,
+        Atish Patra <atishp@atishpatra.org>,
+        Changbin Du <changbin.du@intel.com>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Philipp Tomsich <philipp.tomsich@vrull.eu>,
+        Rob Herring <robh@kernel.org>, Marc Zyngier <maz@kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        Brice Goglin <Brice.Goglin@inria.fr>
+Subject: Re: [RFC 2/4] arch-topology: add a default implementation of
+ store_cpu_topology()
+Message-ID: <20220708082443.azoqvuj7afrg7ox7@bogus>
+References: <20220707220436.4105443-1-mail@conchuod.ie>
+ <20220707220436.4105443-3-mail@conchuod.ie>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <a24109d5-b79a-99de-0fd5-66b0ec34e5ed@huawei.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+In-Reply-To: <20220707220436.4105443-3-mail@conchuod.ie>
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -97,75 +68,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jul 08, 2022 at 12:35:33PM +0800, Xu Kuohai wrote:
-> >> +
-> >> +	emit(A64_ADD_I(1, A64_R(0), A64_SP, args_off), ctx);
-> >> +	if (!p->jited)
-> >> +		emit_addr_mov_i64(A64_R(1), (const u64)p->insnsi, ctx);
-> >> +
-> >> +	emit_call((const u64)p->bpf_func, ctx);
-> >> +
-> >> +	/* store return value */
-> >> +	if (save_ret)
-> >> +		emit(A64_STR64I(r0, A64_SP, retval_off), ctx);
-> > 
-> > Here too I think it should be x0. I'm guessing r0 may work for jitted
-> > functions but not interpreted ones
-> > 
+On Thu, Jul 07, 2022 at 11:04:35PM +0100, Conor Dooley wrote:
+> From: Conor Dooley <conor.dooley@microchip.com>
 > 
-> Yes, r0 is only correct for jitted code, will fix it to:
+> RISC-V & arm64 both use an almost identical method of filling in
+> default vales for arch topology. Create a weakly defined default
+> implementation with the intent of migrating both archs to use it.
 > 
-> if (save_ret)
->         emit(A64_STR64I(p->jited ? r0 : A64_R(0), A64_SP, retval_off),
->              ctx);
-
-I don't think we need this test because x0 should be correct in all cases.
-x7 happens to equal x0 when jitted due to the way build_epilogue() builds
-the function at the moment, but we shouldn't rely on that.
-
-
-> >> +	if (flags & BPF_TRAMP_F_CALL_ORIG) {
-> >> +		restore_args(ctx, args_off, nargs);
-> >> +		/* call original func */
-> >> +		emit(A64_LDR64I(A64_R(10), A64_SP, retaddr_off), ctx);
-> >> +		emit(A64_BLR(A64_R(10)), ctx);
-> > 
-> > I don't think we can do this when BTI is enabled because we're not jumping
-> > to a BTI instruction. We could introduce one in a patched BPF function
-> > (there currently is one if CONFIG_ARM64_PTR_AUTH_KERNEL), but probably not
-> > in a kernel function.
-> > 
-> > We could fo like FUNCTION_GRAPH_TRACER does and return to the patched
-> > function after modifying its LR. Not sure whether that works with pointer
-> > auth though.
-> > 
+> Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
+> ---
+>  drivers/base/arch_topology.c  | 19 +++++++++++++++++++
+>  include/linux/arch_topology.h |  1 +
+>  2 files changed, 20 insertions(+)
 > 
-> Yes, the blr instruction should be replaced with ret instruction, thanks!
-> 
-> The layout for bpf prog and regular kernel function is as follows, with
-> bti always coming first and paciasp immediately after patchsite, so the
-> ret instruction should work in all cases.
-> 
-> bpf prog or kernel function:
->         bti c // if BTI
->         mov x9, lr
->         bl <trampoline>    ------> trampoline:
->                                            ...
->                                            mov lr, <return_entry>
->                                            mov x10, <ORIG_CALL_entry>
-> ORIG_CALL_entry:           <-------        ret x10
->                                    return_entry:
->                                            ...
->         paciasp // if PA
->         ...
+> diff --git a/drivers/base/arch_topology.c b/drivers/base/arch_topology.c
+> index 441e14ac33a4..07e84c6ac5c2 100644
+> --- a/drivers/base/arch_topology.c
+> +++ b/drivers/base/arch_topology.c
+> @@ -765,6 +765,25 @@ void update_siblings_masks(unsigned int cpuid)
+>  	}
+>  }
+>  
+> +void __weak store_cpu_topology(unsigned int cpuid)
 
-Actually I just noticed that CONFIG_ARM64_BTI_KERNEL depends on
-CONFIG_ARM64_PTR_AUTH_KERNEL, so we should be able to rely on there always
-being a PACIASP at ORIG_CALL_entry, and since it's a landing pad for BLR
-we don't need to make this a RET
+I prefer to have this as default implementation. So just get the risc-v
+one pushed to upstream first(for v5.20) and get all the backports if required.
+Next cycle(i.e. v5.21), you can move both RISC-V and arm64.
 
- 92e2294d870b ("arm64: bti: Support building kernel C code using BTI")
-
-Thanks,
-Jean
-
+-- 
+Regards,
+Sudeep

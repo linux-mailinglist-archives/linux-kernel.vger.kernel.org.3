@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C2AE56B057
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 04:00:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8ACF056B059
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 04:00:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236685AbiGHCAf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Jul 2022 22:00:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37692 "EHLO
+        id S236735AbiGHCAr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Jul 2022 22:00:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37868 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236471AbiGHCAc (ORCPT
+        with ESMTP id S236471AbiGHCAo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Jul 2022 22:00:32 -0400
-Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6AA1A73908;
-        Thu,  7 Jul 2022 19:00:30 -0700 (PDT)
-Received: by mail-pj1-x102e.google.com with SMTP id o31-20020a17090a0a2200b001ef7bd037bbso510574pjo.0;
-        Thu, 07 Jul 2022 19:00:30 -0700 (PDT)
+        Thu, 7 Jul 2022 22:00:44 -0400
+Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B87AC73912;
+        Thu,  7 Jul 2022 19:00:41 -0700 (PDT)
+Received: by mail-pj1-x102b.google.com with SMTP id z12-20020a17090a7b8c00b001ef84000b8bso547724pjc.1;
+        Thu, 07 Jul 2022 19:00:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
         bh=iw03oGF71b3zysC4+uPdzsUoRsfiaX31yyGGvUjpQEA=;
-        b=IjfvzthAl7JkCMEgDsHtKOVc3SmWH1knKy/0IVYdyETvYfcZSinYAPAE7X/j9Dev9Q
-         lLrgICj4BtsJEx1L98CJJPO9LBACT2TDcn5XbHGs+6fQCBtlZQ5LLmLxTL3NnyasI4jg
-         49tVYYbgW9xdg7112afuHt2lznv1AW3m2PRvSH6zA0yvO38eb8WlNLUT40VINEsUzWsl
-         mNFRXcM/nZiVHvnC02+pj4dDwq4wGfAorHRltvx3H9erum0V3Yp9AaHw/IxsBwGLgypr
-         v0Mrh2Kr1anDjCH6mCEgs4HW3Gu/cUe1CTd3VbqmsM7mLPzK22ZxPQCKSO6pA3qE1ofv
-         O1Dg==
+        b=nEBuoVADwIexJ+LQVTY91erY0SoD5Q3tUHNfp2gAssgdApFW9RLpDHBRdFFxwV+/fK
+         CRUGM0s91FYKklZtKvZLU5ldh2jssOEawMV9j5pwhS67bC3svKwIpHPZEjpOO7m8JieG
+         Qa949j2cYxpONryyq4lE7sF5ZgTujyP3/1tmBR5AHbVdd/N0si+0b2YARcqYQCUuEkPx
+         quF6SkHIFtvzzFQXelzI7gvFWl155ZXk66bKuhjkX1rKPx5JB+6VDl8UdFhpWo4XVXHc
+         byAz1EB42D1Ttn+fZzFBwCpCGzKPSB0VVwKq1NkkfSIsFg1LIyBRMHUWHS8NqRhMkpor
+         9aIg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
         bh=iw03oGF71b3zysC4+uPdzsUoRsfiaX31yyGGvUjpQEA=;
-        b=qrUqE0fvXQ7qWORnAIpbqOtNumsMd9sO4MsSbAZ1nZPLvssVh1Ff59cFTTKQE5B1rK
-         1nTcQSPM7CzA/bMEX9a1lHkUPQeSIOIQsIDJmQFPGLcpNRKVzo3fgem6CMf0IiHi/qpP
-         Lzx+CrScSPV+m+ALwUeeVwt1v2jNKjg2UARVitKmU0FUKuxj893CZCBS4nJXTcsigzLS
-         PWnaV6Dj40IU11BTfWojg0SMwyvkFbvWVxE68nxLJsfp+7r0kSCR7TGM/U1fwvhFd05R
-         jCNW4w3g160F6rRey1elEL5cK8E98fw3Xj22r6wMgdZ2e3mqGWGbT+dR3Y2JqN2WVssy
-         CuyQ==
-X-Gm-Message-State: AJIora90h4CvoK4y7P3b3rW2OmsHnp3sjhO+dOfK/uCyOp0d3KEPsN0T
-        SggJbE5e7aCm6HcpGYSLFic=
-X-Google-Smtp-Source: AGRyM1vb4jTe806qjLSsfb46b5UajKUPnMav9xfAE3LS5tYoYemNQFs8n1x55ghhFQdZrdb21ynERA==
-X-Received: by 2002:a17:90a:73c5:b0:1ef:880f:fe95 with SMTP id n5-20020a17090a73c500b001ef880ffe95mr1057581pjk.95.1657245629645;
-        Thu, 07 Jul 2022 19:00:29 -0700 (PDT)
+        b=NeiOAX4Pyz1y+ErxLbDFZlPx28G3nRILgguatxu2fBmfgHB5Vsv1wj45vxYaQcYb7h
+         r1j/NDKZwO0TjbeZb4CgjfR5Cva3yeEscmzLBqdM2/yPVjhlPSk2LF/ngOpTyewjQagh
+         38uVLOuzG6/BBVs/eCLmANE3SYgKENMW3WC3ARRL1srwzvge7kxIBwOidLwM23UJf8q1
+         64ZF78eD1H9VmTLkCHlBSpTBYbc9JD6CWWkrQCm8fYduAusJy2o/F1wEMMld2h8mn73l
+         lhxOM+mWaVr65rxIGDVQ8wIlpfSipFK8gKmUlIzx8MWal0ThF1e7vuerKyWvLEDHDnoC
+         f7wA==
+X-Gm-Message-State: AJIora8+7HJhOZbEvmxpR5syyyCX+VuShF0650fkfzBPFKabLZES/nKe
+        Vv4uFAamU8viU441k2J4FrK4OQYpWWfsA0SR
+X-Google-Smtp-Source: AGRyM1tSB3xgK9+ntWkALf2Qk6bbZ30SD12dTe6vYBxGeCTQwKey1PN2QYoUG7dy2gU3iPgB4HizTA==
+X-Received: by 2002:a17:902:f608:b0:168:e92b:47e8 with SMTP id n8-20020a170902f60800b00168e92b47e8mr1200950plg.115.1657245641030;
+        Thu, 07 Jul 2022 19:00:41 -0700 (PDT)
 Received: from localhost.localdomain ([112.0.189.16])
-        by smtp.gmail.com with ESMTPSA id m16-20020a17090b069000b001eab99a42efsm252363pjz.31.2022.07.07.19.00.23
+        by smtp.gmail.com with ESMTPSA id q14-20020a170902bd8e00b001677fa34a07sm28680514pls.43.2022.07.07.19.00.35
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 07 Jul 2022 19:00:28 -0700 (PDT)
+        Thu, 07 Jul 2022 19:00:40 -0700 (PDT)
 From:   MollySophia <mollysophia379@gmail.com>
 To:     Andy Gross <agross@kernel.org>,
         Bjorn Andersson <bjorn.andersson@linaro.org>,
@@ -59,8 +59,8 @@ To:     Andy Gross <agross@kernel.org>,
 Cc:     ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
         MollySophia <mollysophia379@gmail.com>
 Subject: [PATCH v2 1/2] arm64: dts: qcom: Add support for Xiaomi Mi Mix2s
-Date:   Fri,  8 Jul 2022 10:00:11 +0800
-Message-Id: <20220708020012.4780-1-mollysophia379@gmail.com>
+Date:   Fri,  8 Jul 2022 10:00:29 +0800
+Message-Id: <20220708020030.4955-1-mollysophia379@gmail.com>
 X-Mailer: git-send-email 2.37.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit

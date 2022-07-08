@@ -2,222 +2,218 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C8CF56B127
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 05:57:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ED5E556B13A
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 06:04:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236767AbiGHD4y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Jul 2022 23:56:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43982 "EHLO
+        id S236708AbiGHEDx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Jul 2022 00:03:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47896 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230230AbiGHD4w (ORCPT
+        with ESMTP id S230230AbiGHEDv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Jul 2022 23:56:52 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66DF974DE7;
-        Thu,  7 Jul 2022 20:56:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1657252611; x=1688788611;
-  h=message-id:subject:from:to:cc:date:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=MYEPcE7pN1KciP37QC/kj2gcO7ZMO75h5cRFJHszhV8=;
-  b=T6bOy/TvmUcr9pzFIzRgeCQMmXYKhBeTQ8Dt/rxvP1i94DOhdK3S/fVp
-   hY6m+oy7umIiCKrkIq3eGWJjS7ILXy8zSryRZhJaRNlfax4TSC01zQ0hP
-   fO8p9ltDUOFA3rPRvCLfn40yExfM4DpJZ0vdir170HcO+iNVBgxHv1+cy
-   D9AH4l/osVoMGmt4DEDFRJS7mEXV61W8gbvaSla6mmQkYJPOJuCTRTMP3
-   4Z9slRF+kmMgXE6Y1K+cIHvXzSCgWKROPunjJvuTuHbZQEBf8WZqS8Yob
-   KPtwbkBBmiyWciweBF5v+cAK4leLpyoE3tBzVvCiUlrzSv++xy2wLvB4J
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10401"; a="309744718"
-X-IronPort-AV: E=Sophos;i="5.92,254,1650956400"; 
-   d="scan'208";a="309744718"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jul 2022 20:56:50 -0700
-X-IronPort-AV: E=Sophos;i="5.92,254,1650956400"; 
-   d="scan'208";a="544063323"
-Received: from lshi10-mobl.ccr.corp.intel.com ([10.249.172.47])
-  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jul 2022 20:56:48 -0700
-Message-ID: <6f8d449906a42ba11698d3c0ae9740b83f918f42.camel@intel.com>
-Subject: Re: [PATCH 3/3] thermal/core: Fix thermal trip cross point
-From:   Zhang Rui <rui.zhang@intel.com>
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>, rafael@kernel.org
-Cc:     quic_manafm@quicinc.com, Amit Kucheria <amitk@kernel.org>,
-        "open list:THERMAL" <linux-pm@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>
-Date:   Fri, 08 Jul 2022 11:56:45 +0800
-In-Reply-To: <20220707214513.1133506-3-daniel.lezcano@linaro.org>
-References: <20220707214513.1133506-1-daniel.lezcano@linaro.org>
-         <20220707214513.1133506-3-daniel.lezcano@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.1 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        Fri, 8 Jul 2022 00:03:51 -0400
+Received: from alexa-out-sd-01.qualcomm.com (alexa-out-sd-01.qualcomm.com [199.106.114.38])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62D2E73596;
+        Thu,  7 Jul 2022 21:03:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1657253030; x=1688789030;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=ieabIjs/1UMKubAGBvSExYnswdhV6Tfe3w0OQQgbOLQ=;
+  b=ajpiSvCQTD8OKih1wqcaVtzPfFh0G1+JsQSEGZ+7Pftz3pLJRO5u6epN
+   jNrmWakpWYAj7DDzeFMmlhpEkC61OX0mh4Mq5AV61aJ7bsWCIhMyj5LVy
+   gKC8XquPIpnIT669caCk+M95n5Y5T8vzn32T5AkrFsJBlPIqh3S6FTvur
+   8=;
+Received: from unknown (HELO ironmsg02-sd.qualcomm.com) ([10.53.140.142])
+  by alexa-out-sd-01.qualcomm.com with ESMTP; 07 Jul 2022 21:03:50 -0700
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg02-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jul 2022 21:03:49 -0700
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Thu, 7 Jul 2022 21:03:49 -0700
+Received: from [10.216.11.69] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Thu, 7 Jul 2022
+ 21:03:45 -0700
+Message-ID: <33815bdd-3a30-594d-3304-8b81f2774190@quicinc.com>
+Date:   Fri, 8 Jul 2022 09:33:42 +0530
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH v14 00/12] Add soundcard support for sc7280 based
+ platforms.
+Content-Language: en-US
+To:     Bjorn Andersson <bjorn.andersson@linaro.org>
+CC:     <agross@kernel.org>, <robh+dt@kernel.org>,
+        <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <quic_rohkumar@quicinc.com>,
+        <srinivas.kandagatla@linaro.org>, <dianders@chromium.org>,
+        <swboyd@chromium.org>, <judyhsiao@chromium.org>
+References: <1657200184-29565-1-git-send-email-quic_srivasam@quicinc.com>
+ <Ysb7rZ4tIpN9fm8w@builder.lan>
+From:   Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
+Organization: Qualcomm
+In-Reply-To: <Ysb7rZ4tIpN9fm8w@builder.lan>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 2022-07-07 at 23:45 +0200, Daniel Lezcano wrote:
-> The routine doing trip point crossing the way up or down is actually
-> wrong.
-> 
-> A trip point is composed with a trip temperature and a hysteresis.
-> 
-> The trip temperature is used to detect when the trip point is crossed
-> the way up.
-> 
-> The trip temperature minus the hysteresis is used to detect when the
-> trip point is crossed the way down.
-> 
-> > -----------low--------high------------|
-> 
->              |<--------->|
->              |    hyst   |
->              |           |
->              |          -|--> crossed the way up
->              |
->          <---|-- crossed the way down
-> 
-> For that, there is a two point comparison: the current temperature
-> and
-> the previous temperature.
-> 
-> The actual code assumes if the current temperature is greater than
-> the
-> trip temperature and the previous temperature was lesser, then the
-> trip point is crossed the way up. That is true only if we crossed the
-> way down the low temperature boundary from the previous temperature
-> or
-> if the hysteresis is zero. The temperature can decrease between the
-> low and high, so the trip point is not crossed the way down and then
-> increase again and cross the high temperature raising a new trip
-> point
-> crossed detection which is incorrect. The same scenario happens when
-> crossing the way down.
-> 
-> The trip point crossing the way up and down must act as parenthesis,
-> a
-> trip point down must close a trip point up. Today we have multiple
-> trip point up without the corresponding trip point down.
-> 
-> In order to fix that, we store the previous trip point which gives
-> the
-> information about the previous trip.
-> 
-> As a sidenote, the thermal_zone_device structure has already the
-> prev_trip_low and prev_trip_high information which are used by the
-> thermal_zone_set_trips() function. This one can be changed to be
-> triggered by the trip temperature crossing function, which makes more
-> sense, and the two fields will disappear.
-> 
-> Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
-> ---
->  drivers/thermal/thermal_core.c | 32 ++++++++++++++++++++++----------
->  include/linux/thermal.h        |  2 ++
->  2 files changed, 24 insertions(+), 10 deletions(-)
-> 
-> diff --git a/drivers/thermal/thermal_core.c
-> b/drivers/thermal/thermal_core.c
-> index f66036b3daae..92bc9ddb6904 100644
-> --- a/drivers/thermal/thermal_core.c
-> +++ b/drivers/thermal/thermal_core.c
-> @@ -357,19 +357,30 @@ static void handle_critical_trips(struct
-> thermal_zone_device *tz,
->  static void handle_thermal_trip_crossed(struct thermal_zone_device
-> *tz, int trip,
->  					int trip_temp, int trip_hyst,
-> enum thermal_trip_type trip_type)
->  {
-> +	int trip_low_temp = trip_temp - trip_hyst;
-> +
->  	if (tz->last_temperature == THERMAL_TEMP_INVALID)
->  		return;
->  
-> -	if (tz->last_temperature < trip_temp &&
-> -	    tz->temperature >= trip_temp) {
-> -		thermal_notify_tz_trip_up(tz->id, trip,
-> -					  tz->temperature);
-> -	}
-> -
-> -	if (tz->last_temperature >= trip_temp &&
-> -	    tz->temperature < (trip_temp - trip_hyst)) {
-> -		thermal_notify_tz_trip_down(tz->id, trip,
-> -					    tz->temperature);
-> +	/*
-> +	 * Due to the hysteresis, a third information is needed to
-> +	 * detect when the temperature is wavering between the
-> +	 * trip_low_temp and the trip_temp. A trip point is crossed
-> +	 * the way up only if the temperature is above it while the
-> +	 * previous temperature was below *and* we crossed the
-> +	 * trip_temp_low before. The previous trip point give us the
-> +	 * previous trip point transition. The similar problem exists
-> +	 * when crossing the way down.
-> +	 */
-> +	if (tz->last_temperature < trip_temp && tz->temperature >=
-> trip_temp &&
-> +	    trip != tz->prev_trip) {
-> +		thermal_notify_tz_trip_up(tz->id, trip, tz-
-> >temperature);
-> +		tz->prev_trip = trip;
-> +		
-> +	} else if (tz->last_temperature >= trip_low_temp && tz-
-> >temperature < trip_low_temp &&
-> +	    trip == tz->prev_trip) {
-> +		thermal_notify_tz_trip_down(tz->id, trip, tz-
-> >temperature);
-> +		tz->prev_trip = trip - 1;
 
-Say, let's assume hysteresis is Zero,
-When the temperature increases and we do thermal_notify_tz_trip_up()
-for trip 0 and trip 1, tz->prev_trip is set to 1 in this case.
-And then the temperature drops below trip 0, we don't have chance to do
-thermal_notify_tz_trip_down() for trip 0, because we always handle the
-trips in ascending order, and tz->prev_trip is 1 when we do
-handle_thermal_trip(0).
+On 7/7/2022 8:58 PM, Bjorn Andersson wrote:
+Thanks for your time Bjorn!!!
+> On Thu 07 Jul 08:22 CDT 2022, Srinivasa Rao Mandadapu wrote:
+>
+>> This patch set is to add bolero digital macros, WCD and maxim codecs nodes
+>> for audio on sc7280 based platforms.
+>>
+>> This patch set depends on:
+>>      [LPASS DTS: wcd related pinmux reorg]
+>>      -- https://patchwork.kernel.org/project/linux-arm-msm/list/?series=657389
+>>      [Clock DTS: reset control changes]
+>>      -- https://patchwork.kernel.org/project/linux-arm-msm/list/?series=638002
+>>      [Clock: External MCLK and reset control driver changes]
+>>      -- https://patchwork.kernel.org/project/linux-arm-msm/list/?series=650267
+> As far as I understand I can't apply this series until Taniya's clock
+> patches has been picked up?
+Okay. It seems Taniya's patches also in final stage of review.
+>
+>>      [Clock DTS: lpasscc node disable and lpasscore node name changes]
+>>      -- https://patchwork.kernel.org/project/linux-arm-msm/list/?series=657325
+> You're the author of these 3 other patch sets, so why are you asking me
+> to stitch them together, instead of just sending me one series that I
+> can easily apply.
+Here 3 dependent patch series are of Clock Teams patches.  only patch 
+from me is [
 
-thanks,
-rui
+LPASS DTS: wcd related pinmux reorg] patch. Which is not dependent on any
+other patch and can be applied directly as it's reviewed by. Will take care next
+time and will combine patches wherever is possible.
 
->  	}
->  }
->  
-> @@ -427,6 +438,7 @@ static void thermal_zone_device_init(struct
-> thermal_zone_device *tz)
->  {
->  	struct thermal_instance *pos;
->  	tz->temperature = THERMAL_TEMP_INVALID;
-> +	tz->prev_trip = -1;
->  	tz->prev_low_trip = -INT_MAX;
->  	tz->prev_high_trip = INT_MAX;
->  	list_for_each_entry(pos, &tz->thermal_instances, tz_node)
-> diff --git a/include/linux/thermal.h b/include/linux/thermal.h
-> index 231bac2768fb..5b3bfb902d10 100644
-> --- a/include/linux/thermal.h
-> +++ b/include/linux/thermal.h
-> @@ -124,6 +124,7 @@ struct thermal_cooling_device {
->   * @last_temperature:	previous temperature read
->   * @emul_temperature:	emulated temperature when using
-> CONFIG_THERMAL_EMULATION
->   * @passive:		1 if you've crossed a passive trip point, 0
-> otherwise.
-> + * @prev_trip:		previous trip point the thermal zone
-> was, -1 if below all of them
->   * @prev_low_trip:	the low current temperature if you've crossed a
-> passive
->  			trip point.
->   * @prev_high_trip:	the above current temperature if you've crossed
-> a
-> @@ -159,6 +160,7 @@ struct thermal_zone_device {
->  	int last_temperature;
->  	int emul_temperature;
->  	int passive;
-> +	int prev_trip;
->  	int prev_low_trip;
->  	int prev_high_trip;
->  	atomic_t need_update;
-
+>
+> If you want your patches merged, make it easy for the maintainer to
+> merge them!
+Sure. Will take care next time.  For Now will keep it as it is, as it's 
+independent patch and only one.
+>
+> Regards,
+> Bjorn
+>
+>> Changes Since V13:
+>>      -- Move digital codecs enabling to separate wcd specific dtsi file in CRD 3.0+ patches.
+>>      -- Remove redundant output high setting in wcd reset node.
+>>      -- Revert external mclk name.
+>>      -- Update dependency list.
+>>      -- Rebase as per latest kernel repository.
+>> Changes Since V12:
+>>      -- Update 'lpasscore' clock node name to lpass_core to match latest clock patches.
+>>      -- Update external mclk0 name and it's source node.
+>>      -- Move sound node to separate wcd specific dtsi file.
+>>      -- Move CRD specific lpass_cpu node Enabling to separate wcd specific dtsi file.
+>>      -- Update dependency list.
+>> Changes Since V11:
+>>      -- Remove output-low pinconf setting in wcd-reset-n-sleep node.
+>>      -- Update dependency list.
+>> Changes Since V10:
+>>      -- Modify digital macro codecs pin control labels.
+>>      -- Updated dependency list.
+>> Changes Since V9:
+>>      -- Move wcd codec and digital codec nodes to sc7280-qcard file.
+>>      -- Modify the reg property as per link number in sound node.
+>>      -- Fix the us-euro pin control usage in wcd codec node.
+>>      -- Move wcd pin control nodes to specific crd board files.
+>>      -- Sort max98360a codec node in alphabetical order.
+>>      -- Modify the commit messages.
+>> Changes Since V8:
+>>      -- Split patches as per sc7280 CRD revision 3, 4 and 5 boards.
+>>      -- Add corresponding dt nodes for herobrine crd boards.
+>>      -- Update dai-link node names as per dt-bindings in sound node.
+>>      -- Add reg property in sound node as per dt-bindings which was removed in previous series.
+>>      -- Fix typo errors.
+>>      -- Update wcd codec pin control properties in board specific files.
+>> Changes Since V7:
+>>      -- Remove redundant interrupt names in soundwire node.
+>>      -- Fix typo errors.
+>>      -- Remove redundant reg property in sound node.
+>>      -- Rebased on top of latest kernel tip.
+>> Changes Since V6:
+>>      -- Modify link-names and audio routing in a sound node.
+>>      -- Move amp_en pin control node to appropriate consumer patch.
+>>      -- Split patches as per digital macro codecs and board specific codecs and sort it.
+>>      -- Modify label and node names to lpass specific.
+>> Changes Since V5:
+>>      -- Move soc specific bolero digital codec nodes to soc specific file.
+>>      -- Bring wcd938x codec reset pin control and US/EURO HS selection nodes from other series.
+>>      -- Change node name and remove redundant status property in sound node.
+>> Changes Since V4:
+>>      -- Update nodes in sorting order.
+>>      -- Update DTS node names as per dt-bindings.
+>>      -- Update Node properties in proper order.
+>>      -- Update missing pinctrl properties like US/EURO HS selection, wcd reset control.
+>>      -- Remove redundant labels.
+>>      -- Remove unused size cells and address cells in tx macro node.
+>>      -- Keep all same nodes at one place, which are defined in same file.
+>>      -- Add max98360a codec node to herobrine board specific targets.
+>> Changes Since V3:
+>>      -- Move digital codec macro nodes to board specific dtsi file.
+>>      -- Update pin controls in lpass cpu node.
+>>      -- Update dependency patch list.
+>>      -- Create patches on latest kernel.
+>> Changes Since V2:
+>>      -- Add power domains to digital codec macro nodes.
+>>      -- Change clock node usage in lpass cpu node.
+>>      -- Add codec mem clock to lpass cpu node.
+>>      -- Modify the node names to be generic.
+>>      -- Move sound and codec nodes to root node.
+>>      -- sort dai links as per reg.
+>>      -- Fix typo errors.
+>> Changes Since V1:
+>>      -- Update the commit message of cpu node patch.
+>>      -- Add gpio control property to support Euro headset in wcd938x node.
+>>      -- Fix clock properties in lpass cpu and digital codec macro node.
+>>
+>> Srinivasa Rao Mandadapu (12):
+>>    arm64: dts: qcom: sc7280: Add nodes for soundwire and va tx rx digital
+>>      macro codecs
+>>    arm64: dts: qcom: sc7280: Enable digital codecs and soundwire for CRD
+>>      1.0/2.0 and IDP boards
+>>    arm64: dts: qcom: sc7280: Enable digital codecs and soundwire for CRD
+>>      3.0/3.1
+>>    arm64: dts: qcom: sc7280: Add wcd9385 codec node for CRD 1.0/2.0 and
+>>      IDP boards
+>>    arm64: dts: qcom: sc7280: Add wcd9385 codec node for CRD 3.0/3.1
+>>    arm64: dts: qcom: sc7280: Add max98360a codec for CRD 1.0/2.0 and IDP
+>>      boards
+>>    arm64: dts: qcom: sc7280: herobrine: Add max98360a codec node
+>>    arm64: dts: qcom: sc7280: Add lpass cpu node
+>>    arm64: dts: qcom: sc7280: Enable lpass cpu node for CRD 1.0/2.0 and
+>>      IDP boards.
+>>    arm64: dts: qcom: sc7280: Enable lpass cpu node for CRD 3.0/3.1
+>>    arm64: dts: qcom: sc7280: Add sound node for CRD 1.0/2.0 and IDP
+>>      boards
+>>    arm64: dts: qcom: sc7280: Add sound node for CRD 3.0/3.1
+>>
+>>   arch/arm64/boot/dts/qcom/sc7280-crd-r3.dts         |  37 ++++
+>>   .../dts/qcom/sc7280-herobrine-audio-wcd9385.dtsi   | 155 +++++++++++++++
+>>   arch/arm64/boot/dts/qcom/sc7280-herobrine.dtsi     |   8 +
+>>   arch/arm64/boot/dts/qcom/sc7280-idp.dtsi           | 216 +++++++++++++++++++++
+>>   arch/arm64/boot/dts/qcom/sc7280-qcard.dtsi         |  73 +++++++
+>>   arch/arm64/boot/dts/qcom/sc7280.dtsi               | 190 ++++++++++++++++++
+>>   6 files changed, 679 insertions(+)
+>>
+>> -- 
+>> 2.7.4
+>>

@@ -2,131 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B84956B527
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 11:14:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EB1B456B533
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 11:17:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237682AbiGHJNv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Jul 2022 05:13:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37366 "EHLO
+        id S237770AbiGHJP4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Jul 2022 05:15:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38524 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236587AbiGHJNu (ORCPT
+        with ESMTP id S237473AbiGHJPz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Jul 2022 05:13:50 -0400
-Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53F80C05
-        for <linux-kernel@vger.kernel.org>; Fri,  8 Jul 2022 02:13:46 -0700 (PDT)
-Received: by mail-pl1-x635.google.com with SMTP id m2so15878074plx.3
-        for <linux-kernel@vger.kernel.org>; Fri, 08 Jul 2022 02:13:46 -0700 (PDT)
+        Fri, 8 Jul 2022 05:15:55 -0400
+Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6666321E28;
+        Fri,  8 Jul 2022 02:15:54 -0700 (PDT)
+Received: by mail-ed1-x535.google.com with SMTP id fd6so26134633edb.5;
+        Fri, 08 Jul 2022 02:15:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=zVyRbR0DGBBDzc8e+tgqABWD25IqCK95uXaIwHTGdIY=;
-        b=3805WzIbUsOPuIkyjfCss7sGKG+XrXODUnQ5Glj7CbijUmTsWwJ0CC7+aMsw+StOXi
-         R1Q1U0SBWpAC4qBQ2i8caxhRsaPmsUdEw82AxZT6cJQavu0NGE4wizuEnPvDDF3kxVVb
-         0LsOTC1yNIA2cvKIuhNPXFdig0/acqOpiq9SYrSxIcyLz3LhZ7sTG6R4JIJBRVo1o9iW
-         q0guyEJCMvaxRsNDEtKkj8C9JjpUNXt30Kw1ObjhOziHIVGesTjnx5DsptNT+snWHnpR
-         JtQnoFw2Nt/NtF1b2sjPt5XFk5qyPPVASVYK23CrzR+rAToKCvib55eVP4nGFuYX/lgu
-         K8tA==
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=wHmLJrl8JY97pnJUtLPIqF5xTBqgcIZw7/C7kgtVgmQ=;
+        b=XW4JdvdoO4/ukQzjguzcwAFZARJjsB7wnX/kVEl/FoFJqcjoxjFBmJU3E+DKU5yjcI
+         uS8+U2O1U+Wd/Shh2mWrWXeFj6aejm2IuOFAEpdlLwgBMUpEwYa/Ha+rHVfVdUye7MbU
+         yp/UwGkIAThZZnoo7vBAbi0ayyqjTVt9hjHj14puCSQ+fKIvqOL8rLkPjYtyrU6t387T
+         XCnDs5ii8osrZSMqQ9LnOXS+iEHQwbT/b3jKW7d5qhTH9WOJcoQWa/G9zK4Le7UUYjHl
+         j5tNxVmKwJdKvM60nRbTBAkbnO72NjcW1jKsCFgoaI6sZRgW/qBhaxDWlrD35wKjfRcO
+         LVPQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=zVyRbR0DGBBDzc8e+tgqABWD25IqCK95uXaIwHTGdIY=;
-        b=cnZZDtf1wzYGEPq++M0NgRgEZQ2fPKGYjXJalRd5mcVIr7bO0G4tGWw9PACNMYJ9tp
-         q5SWk40kVDxyP5Z/RELV935AS6zqDNvGpdvFcEyZIbFIs6QAjeW11LydZH59+v8kYLK1
-         W3x5AwtXjKf8ymKyuQneD1s56eP/evm5tHqbNJtyhipnch080DQgrufENIzWsRIOPQxe
-         t55YGRivWAXO69IYdX+gKitZvq6z5Qq+1dRaiWbGDXa8MX9ZR6H2XJgTa98dCYrwDPne
-         8ymx9222E2hxEVysGtnaWujGQHAvApKNT+jPboyk0VtVCy8RkmHLkYM9CKfapVaWqXEz
-         dKRA==
-X-Gm-Message-State: AJIora/VOKE/lUeK9Pu7fDeW0xvQ4JDCDqowLJfHASDh2FDJajEHkUQX
-        F0aMVJl4FVIJkYE8wySBSCNoDQ==
-X-Google-Smtp-Source: AGRyM1uozoWf82Kr2LZHt+6GXQN0FigtKVj/tNSxFD63eCofnTFa+ROGPha0Jz5M/nBdM+si3z6CwQ==
-X-Received: by 2002:a17:902:8345:b0:167:879c:abe8 with SMTP id z5-20020a170902834500b00167879cabe8mr2714707pln.7.1657271625765;
-        Fri, 08 Jul 2022 02:13:45 -0700 (PDT)
-Received: from [10.4.255.21] ([139.177.225.235])
-        by smtp.gmail.com with ESMTPSA id a9-20020a17090a008900b001ef8397571asm1054305pja.35.2022.07.08.02.13.42
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 08 Jul 2022 02:13:45 -0700 (PDT)
-Message-ID: <548be593-2849-a05b-7fef-66605d41bf5c@bytedance.com>
-Date:   Fri, 8 Jul 2022 17:13:40 +0800
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=wHmLJrl8JY97pnJUtLPIqF5xTBqgcIZw7/C7kgtVgmQ=;
+        b=o1g+JJ9Q/ZlsRrZ0Nf2Y6cL7bSkpYva37gIW8o0hCavwUPGGctzoX0jNvyxKRWZuYN
+         qYMN1raIs8KAljsylvXYbTRo7di4U+oO+Ji5e92u1UlHc+l2jUsqGZjXYCaRimThpt2V
+         Bum0bA/xiQKlO2jkv81xeHXJo/f++pNPI4ynr7C7V3H5tIUQzjjFxHLnaq1xrmq/A3O+
+         kRv6+1H5IFW/Z3WJ4lHTkdghwWX9tVbYFMASvIS2G+PE88q4l24I4DolHmqLMVcnSCN0
+         HsCUrAzhEMZGRzCc8Fa8qIHRsdDlWYGaNzirLiW4gdaIep6YYfSaeSsSsWt7vxRTF8Vc
+         sS4A==
+X-Gm-Message-State: AJIora/0m8VTipuLkS36zj6VufhvxiTuKVcgXMgFApcPQJeOFn3Ac9v4
+        n+evMfgscOT0VABmCDYoxiCEJAoLM4pAhQ==
+X-Google-Smtp-Source: AGRyM1skmIdMzLZUsxTOPXC0kET1dz3xxxMCUtpXOANF3SanR+/KfstqosHOYFDOwfKcyGqUrBuw8A==
+X-Received: by 2002:a05:6402:f08:b0:43a:b202:1f63 with SMTP id i8-20020a0564020f0800b0043ab2021f63mr207749eda.207.1657271752890;
+        Fri, 08 Jul 2022 02:15:52 -0700 (PDT)
+Received: from skbuf ([188.25.231.143])
+        by smtp.gmail.com with ESMTPSA id q25-20020a17090676d900b0072ab06bf296sm8523911ejn.23.2022.07.08.02.15.51
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 08 Jul 2022 02:15:52 -0700 (PDT)
+Date:   Fri, 8 Jul 2022 12:15:50 +0300
+From:   Vladimir Oltean <olteanv@gmail.com>
+To:     netdev@kapio-technology.com
+Cc:     davem@davemloft.net, kuba@kernel.org, netdev@vger.kernel.org,
+        Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>, Jiri Pirko <jiri@resnulli.us>,
+        Ivan Vecera <ivecera@redhat.com>,
+        Roopa Prabhu <roopa@nvidia.com>,
+        Nikolay Aleksandrov <razor@blackwall.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Ido Schimmel <idosch@nvidia.com>, linux-kernel@vger.kernel.org,
+        bridge@lists.linux-foundation.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v4 net-next 3/6] drivers: net: dsa: add locked fdb entry
+ flag to drivers
+Message-ID: <20220708091550.2qcu3tyqkhgiudjg@skbuf>
+References: <20220707152930.1789437-1-netdev@kapio-technology.com>
+ <20220707152930.1789437-4-netdev@kapio-technology.com>
+ <20220708084904.33otb6x256huddps@skbuf>
+ <e6f418705e19df370c8d644993aa9a6f@kapio-technology.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.0
-Subject: Re: [RFC PATCH 2/2] arm64: support HAVE_IRQ_EXIT_ON_IRQ_STACK
-Content-Language: en-US
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-References: <20220707110511.52129-1-zhengqi.arch@bytedance.com>
- <20220707110511.52129-3-zhengqi.arch@bytedance.com>
- <CAK8P3a1-rL391dp33D5r+SgQ+L0u7Neta_-DZoZL=+c1zPtNQg@mail.gmail.com>
- <42bfd82c-b3fb-c942-d6f2-ae5adec90a26@bytedance.com>
- <CAK8P3a17A1t=qkyToQNVnuVfGPp-7VpFx5qJ-gmpyrkJ3yRXTw@mail.gmail.com>
- <33a63e76-fb71-2b9e-3b3c-cc6f7a675cf3@bytedance.com>
- <CAK8P3a1GgnmhHj+_gRYZ52=TvfBQb_xxYt1Hg-jMJ2gZqCD42w@mail.gmail.com>
- <b53dbf64-b824-89b0-dc00-b894cf9771a9@bytedance.com>
- <CAK8P3a3DDEkr0D=dLiXN+Xek_OO-HX5xWaQpzdX1GQxTYWnHLw@mail.gmail.com>
-From:   Qi Zheng <zhengqi.arch@bytedance.com>
-In-Reply-To: <CAK8P3a3DDEkr0D=dLiXN+Xek_OO-HX5xWaQpzdX1GQxTYWnHLw@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <e6f418705e19df370c8d644993aa9a6f@kapio-technology.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 2022/7/8 16:52, Arnd Bergmann wrote:
-> On Fri, Jul 8, 2022 at 5:13 AM Qi Zheng <zhengqi.arch@bytedance.com> wrote:
->> On 2022/7/8 04:55, Arnd Bergmann wrote:
->>> On Thu, Jul 7, 2022 at 5:00 PM Qi Zheng <zhengqi.arch@bytedance.com> wrote:
->>>> On 2022/7/7 22:41, Arnd Bergmann wrote:
->>>>> On Thu, Jul 7, 2022 at 3:38 PM Qi Zheng <zhengqi.arch@bytedance.com> wrote:
->>>>>> On 2022/7/7 20:49, Arnd Bergmann wrote:
->>>>>
->>>>> -asmlinkage void noinstr el1h_64_fiq_handler(struct pt_regs *regs)
->>>>> +asmlinkage void noinstr el1h_64_irq_handler(struct pt_regs *regs)
->>>>> +{
->>>>> +       if (on_thread_stack())
->>>>> +               call_on_irq_stack(regs, el1_irq);
->>>>
->>>> IMO, this can't work. Because el1_interrupt() will invoke
->>>> arm64_preempt_schedule_irq(), which will cause scheduling on the
->>>> IRQ stack.
->>>
->>> Ah, too bad. I spent some more time looking for a simpler approach,
->>> but couldn't find one I'm happy with. One idea might be to have
->>> callback functions for each combinations of irq/fiq with irq/pnmi
->>> to avoid the nested callback pointers. Not sure if that helps.
->>
->> Maybe nested callback pointers are not always a wild beast. ;)
->> This method does not change much, and we can also conveniently stuff
->> all kinds of things in do_handler() that we want to run on the IRQ
->> stack in addition to the handler().
+On Fri, Jul 08, 2022 at 11:06:24AM +0200, netdev@kapio-technology.com wrote:
+> On 2022-07-08 10:49, Vladimir Oltean wrote:
+> > Hi Hans,
+> > 
+> > On Thu, Jul 07, 2022 at 05:29:27PM +0200, Hans Schultz wrote:
+> > > Ignore locked fdb entries coming in on all drivers.
+> > > 
+> > > Signed-off-by: Hans Schultz <netdev@kapio-technology.com>
+> > > ---
+> > 
+> > A good patch should have a reason for the change in the commit message.
+> > This has no reason because there is no reason.
+> > 
+> > Think about it, you've said it yourself in patch 1:
+> > 
+> > | Only the kernel can set this FDB entry flag, while userspace can read
+> > | the flag and remove it by replacing or deleting the FDB entry.
+> > 
+> > So if user space will never add locked FDB entries to the bridge,
+> > then FDB entries with is_locked=true are never transported using
+> > SWITCHDEV_FDB_ADD_TO_DEVICE to drivers, and so, there is no reason at
+> > all to pass is_locked to drivers, just for them to ignore something that
+> > won't appear.
 > 
-> Right, your approach is probably the one that changes the existing
-> code the least. I see that x86 handles this by having call_on_irq_stack()
-> in an inline asm, but this in turn complicates the asm implementation,
-> which is also worth keeping simple.
-
-Yes, and I see that the commit f2c5092190f2 ("arch/*: Disable softirq
-stacks on PREEMPT_RT.") has been merged into next-20220707, so I will
-rebase to the next-20220707 and send the next version.
-
-Thank you very much :)
-
+> Correct me if I am wrong, but since the bridge can add locked entries, and
+> the ensuring fdb update will create a SWITCHDEV_FDB_ADD_TO_DEVICE, those
+> entries
+> should reach the driver. The policy to ignore those in the driver can be
+> seen as either the right thing to do, or not yet implemented.
 > 
->           Arnd
+> I remember Ido wrote at a point that the scheme they use is to trap various
+> packets to the CPU and let the bridge add the locked entry, which I then
+> understand is sent to the driver with a SWITCHDEV_FDB_ADD_TO_DEVICE event.
 
--- 
-Thanks,
-Qi
+Well, yes, but if I'm correct, the bridge right now can't create locked
+FDB entries, so is_locked will always be false in the ADD_TO_DEVICE
+direction.
+
+When the possibility for it to be true will exist, _all_ switchdev
+drivers will need to be updated to ignore that (mlxsw, cpss, ocelot,
+rocker, prestera, etc etc), not just DSA. And you don't need to
+propagate the is_locked flag to all individual DSA sub-drivers when none
+care about is_locked in the ADD_TO_DEVICE direction, you can just ignore
+within DSA until needed otherwise.
+
+> > 
+> > You just need this for SWITCHDEV_FDB_ADD_TO_BRIDGE, so please keep it
+> > only in those code paths, and remove it from net/dsa/slave.c as well.
+> > 
+> > >  drivers/net/dsa/b53/b53_common.c       | 5 +++++
+> > >  drivers/net/dsa/b53/b53_priv.h         | 1 +
+> > >  drivers/net/dsa/hirschmann/hellcreek.c | 5 +++++
+> > >  drivers/net/dsa/lan9303-core.c         | 5 +++++
+> > >  drivers/net/dsa/lantiq_gswip.c         | 5 +++++
+> > >  drivers/net/dsa/microchip/ksz9477.c    | 5 +++++
+> > >  drivers/net/dsa/mt7530.c               | 5 +++++
+> > >  drivers/net/dsa/mv88e6xxx/chip.c       | 5 +++++
+> > >  drivers/net/dsa/ocelot/felix.c         | 5 +++++
+> > >  drivers/net/dsa/qca8k.c                | 5 +++++
+> > >  drivers/net/dsa/sja1105/sja1105_main.c | 5 +++++
+> > >  include/net/dsa.h                      | 1 +
+> > >  net/dsa/switch.c                       | 4 ++--
+> > >  13 files changed, 54 insertions(+), 2 deletions(-)

@@ -2,150 +2,156 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E523756B781
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 12:47:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CF5F256B779
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 12:47:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238029AbiGHKpj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Jul 2022 06:45:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50502 "EHLO
+        id S238028AbiGHKps (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Jul 2022 06:45:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50948 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238021AbiGHKpY (ORCPT
+        with ESMTP id S238021AbiGHKpl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Jul 2022 06:45:24 -0400
-Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C32F784EFA
-        for <linux-kernel@vger.kernel.org>; Fri,  8 Jul 2022 03:45:23 -0700 (PDT)
-Received: by mail-pf1-x42a.google.com with SMTP id w185so19497956pfb.4
-        for <linux-kernel@vger.kernel.org>; Fri, 08 Jul 2022 03:45:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=9YKU34GLEp41EDZn2kjkgQMLGLaO6pSs5EyA1lQO2E4=;
-        b=dqbnkEH5EoOPhrneF2bHotmJP/mn9F2++Fxt5LVJ29z+GMbvQWK6ebrdQzuHNmsHeV
-         WIPR5StC33VoXXUqOaOlaeK0FtPaepWuD+0e9218tCVd8psm4CdKuUr5r1EyXwDPoc36
-         m/XQg/0u3rcnxz1cTpUmqXV7llOPiA8ZGDIrY=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=9YKU34GLEp41EDZn2kjkgQMLGLaO6pSs5EyA1lQO2E4=;
-        b=hyJjajKSvduTyrM8BD/rM3/HAtUf7KdKXTk0je6ECgmO1WHv3XNfeLZOPkCzX7JdWG
-         zPGwfYW4LTefGUvThR1WWxB/yhP5wdpianPvEzLAvKWOTP3P3IcDVLXCtKNWe5IL/MuB
-         SdgZGYnp1ag5tojgEQNAC/kYZfcqvSE9IMMbsS4Qn/BuSPwuvRy35SjJA9TV4qw+C2sb
-         qgBFbh7I9J3Md7mIi1uT3txzVF6WgoI04OBovVY7Y9A67Utb4mu/WCqO7/UkwnPmm5qL
-         1CYsQaI0HerOLiH49F7qBkLOOr+YzpNJ614CL4DCSrhSBegoS+PBGIA4imaSSL42Mj+i
-         si2A==
-X-Gm-Message-State: AJIora+rrbof7NgBnyi3pPjpvuLfc4uEmaoZu1IZamKUrvBEUHxfrrmO
-        QKdB7U+2RFEqBBeiL9gMSba4tA==
-X-Google-Smtp-Source: AGRyM1v8Rsv6CDJhU/YyBCRySDcL9J8Fzw2nEIwQ5hE7WoNGbc8NMz0qBZ8qGhCMS99QTJ74qVZnAA==
-X-Received: by 2002:a65:6048:0:b0:412:73c7:cca9 with SMTP id a8-20020a656048000000b0041273c7cca9mr2837658pgp.257.1657277123264;
-        Fri, 08 Jul 2022 03:45:23 -0700 (PDT)
-Received: from wenstp920.tpe.corp.google.com ([2401:fa00:1:10:db98:ad5d:ca9:da58])
-        by smtp.gmail.com with ESMTPSA id m6-20020a635806000000b0040c9213a414sm27216187pgb.46.2022.07.08.03.45.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 08 Jul 2022 03:45:23 -0700 (PDT)
-From:   Chen-Yu Tsai <wenst@chromium.org>
-To:     Tiffany Lin <tiffany.lin@mediatek.com>,
-        Andrew-CT Chen <andrew-ct.chen@mediatek.com>,
-        Yunfei Dong <yunfei.dong@mediatek.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Cc:     Matthias Brugger <matthias.bgg@gmail.com>,
-        Chen-Yu Tsai <wenst@chromium.org>, linux-media@vger.kernel.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Nicolas Dufresne <nicolas@ndufresne.ca>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Nicolas Dufresne <nicolas.dufresne@collabora.com>
-Subject: [PATCH v2 2/2] media: mediatek: vcodec: Make encoder capability fields fit requirements
-Date:   Fri,  8 Jul 2022 18:44:51 +0800
-Message-Id: <20220708104451.3901064-3-wenst@chromium.org>
-X-Mailer: git-send-email 2.37.0.rc0.161.g10f37bed90-goog
-In-Reply-To: <20220708104451.3901064-1-wenst@chromium.org>
-References: <20220708104451.3901064-1-wenst@chromium.org>
+        Fri, 8 Jul 2022 06:45:41 -0400
+Received: from mx4.veeam.com (mx4.veeam.com [104.41.138.86])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8118CBCA2;
+        Fri,  8 Jul 2022 03:45:40 -0700 (PDT)
+Received: from usmail.veeam.com (colmbx01.amust.local [172.18.0.171])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mx4.veeam.com (Postfix) with ESMTPS id 15FDBCAFE8;
+        Fri,  8 Jul 2022 13:45:38 +0300 (MSK)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=veeam.com;
+        s=mx4-2022; t=1657277138;
+        bh=k2p6iW/otqptBXt9uJxTJ4gF8hPp0GmsUJIZED0Kuyw=;
+        h=Date:Subject:To:CC:References:From:In-Reply-To:From;
+        b=SgnCWTylYFEM7XR76ykdZWr6D8DR5JvUr6+5ehgeWqloMfenVqjC/jJJ8M3f3l5zM
+         K3F52Knpc5ohgX66UT2STyHHgaZT6iwKbYDI6ioQoFYZHXTkSLAT6NcFynPhBjuWgz
+         qmrjk8uAAomfVthSHP2o11f9/ZCKosAgMl52IxwVPuNJrKfJUmVjd5CmPdWpBpHbSg
+         T/zoL+kWCm14NzEpf97qU56KORa+HbGthQwHFgSse/GaWB0gXbDfBvd3CNdSz8PdwM
+         1nD2jMR0Qy243vfcDc62dx8OvB2xjZ6jtjrHaiqMZ4CeCzBXJmdBLzuozGqQOO43TO
+         imAfrkj5uyCDg==
+Received: from [172.24.11.83] (172.24.11.83) by colmbx01.amust.local
+ (172.18.0.171) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.9; Fri, 8 Jul 2022
+ 06:45:35 -0400
+Message-ID: <aec88137-070e-7c1d-215f-86a1e6d4b10a@veeam.com>
+Date:   Fri, 8 Jul 2022 12:45:33 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH 01/20] block, blk_filter: enable block device filters
+Content-Language: en-US
+To:     Christoph Hellwig <hch@infradead.org>
+CC:     "axboe@kernel.dk" <axboe@kernel.dk>,
+        "linux-block@vger.kernel.org" <linux-block@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+References: <1655135593-1900-1-git-send-email-sergei.shtepa@veeam.com>
+ <1655135593-1900-2-git-send-email-sergei.shtepa@veeam.com>
+ <YsWHHcCfSVFklh4M@infradead.org>
+ <ff78a1ee-8bc5-6e8e-040f-978cd07eacfe@veeam.com>
+ <YscXTGXumE5Ust15@infradead.org>
+From:   Sergei Shtepa <sergei.shtepa@veeam.com>
+In-Reply-To: <YscXTGXumE5Ust15@infradead.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [172.24.11.83]
+X-ClientProxiedBy: prgmbx02.amust.local (172.24.128.103) To
+ colmbx01.amust.local (172.18.0.171)
+X-EsetResult: clean, is OK
+X-EsetId: 37303A29078F7554657D6B
+X-Veeam-MMEX: True
 X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This partially reverts commit fd9f8050e355d7fd1e126cd207b06c96cde7f783,
-and changes things so that the capability string fields of the encoder
-conform to their requirements.
 
-The driver name field should contain the actual driver name, not some
-otherwise unused string macro from the driver. To make this clear,
-copy the name from the driver's name field.
 
-The card name for the video encoder previously held a static platform
-name that was fixed to match MT8173. This obviously doesn't make sense
-for newer chips. Since commit fd9f8050e355 ("media: mediatek: vcodec:
-Change encoder v4l2 capability value"), this field was changed to hold
-the driver's name, or "mtk-vcodec-dec". This doesn't make much sense
-either, since this still doesn't reflect what chip this is.
+On 7/7/22 19:26, Christoph Hellwig wrote:
+> 
+> On Thu, Jul 07, 2022 at 10:26:55AM +0200, Sergei Shtepa wrote:
+>> Thank you, Christoph, for your attention to the patch.
+>>
+>> I am preparing the next version of the patch. In it, I planned to
+>> simplify the bdev_filer code.
+>> I will make changes in it, in accordance with your comments, and
+>> will add your code and check it on my test labs.
+>>
+>> But I'm not sure if using the blk_mq_freeze_queue() is appropriate.
+>> If I understood the code correctly, it is based on the expectation
+>> that the counter q->q_usage_counter will decrease to zero.
+>> To increase it, a blk_queue_enter() is used. And at the time of
+>> calling the filter_bio() in the submit_bio_noacct(), this counter
+>> has not yet been increased. I will double check this and try to
+>> get rid of the bdev->bd_filter_lock.
+> Indeed.  For this to work we'd need to call the filter driver
+> later.  Which is brings up another question:  Is there a real
+> need to attach the filter driver to the bdev and thus potentially
+> partition?  The rest of the block layer operates on the whole disk
+> after the intial partition remapping, and besides allowing the
+> filter driver to be called under q_usage_counter, this would
+> also clean up some concepts.  It would probably also allow to
+> remove the repeat return value over just using submit_bio_noacct
+> similar to how normal stacking drivers reinject bios.
+> 
 
-Instead, fill in the card name with "MTxxxx video encoder" with the
-proper chip number.
+Thank you Christoph.
+This is the most crucial question for the entire patch.
+The filtering location sets restrictions for the filter code and
+determines its main algorithm.
 
-Since commit f2d8b6917f3b ("media: v4l: ioctl: Set bus_info in
-v4l_querycap()"), the V4L2 core provides a default value for the
-bus_info field for platform and PCI devices. This value will match
-the default value for media devices added by commit cef699749f37
-("media: mc: Set bus_info in media_device_init()"). These defaults
-are stable and device-specific.
+1. Work at the partition or disk level?
+At the user level, programs operate with block devices.
+In fact, the "disk" entity makes sense only for the kernel level. 
+When the user chooses which block devices to backup and which not,
+he operates with mounting points, which are converted into block
+devices, partitions. Therefore, it is better to handle bio before
+remapping to disk.
+If the filtering is performed after remapping, then we will be
+forced to apply a filter to the entire disk, or complicate the
+filtering algorithm by calculating which range of sectors bio is
+addressed to. And if bio is addressed to the partition boundary...
+Filtering at the block device level seems to me a simpler solution.
+But this is not the biggest problem.
 
-Drop the custom capability bus_info from the mtk-vcodec encoder
-driver, and use the defaults.
+2. Can the filter sleep or postpone bio processing to the worker thread?
+The problem is in the implementation of the COW algorithm.
+If I send a bio to read a chunk (one bio), and then pass a write bio,
+then with some probability I am reading partially overwritten data.
+Writing overtakes reading. And flags REQ_SYNC and REQ_PREFLUSH don't help.
+Maybe it's a disk driver issue, or a hypervisor, or a NAS, or a RAID,
+or maybe normal behavior. I don't know. Although, maybe I'm not working
+correctly with flags. I have seen the comments on patch 11/20, but I am
+not sure that the fixes will solve this problem.
+But because of this, I have to postpone the write until the read completes.
 
-As this patch removes the last usage of MTK_VCODEC_DRV_NAME, remove
-the macro as well.
+2.1 The easiest way to solve the problem is to block the writer's thread
+with a semaphore. And for bio with a flag REQ_NOWAIT, complete processing
+with bio_wouldblock_error(). This is the solution currently being used.
 
-Fixes: fd9f8050e355 ("media: mediatek: vcodec: Change encoder v4l2 capability value")
-Signed-off-by: Chen-Yu Tsai <wenst@chromium.org>
----
- drivers/media/platform/mediatek/vcodec/mtk_vcodec_drv.h | 1 -
- drivers/media/platform/mediatek/vcodec/mtk_vcodec_enc.c | 7 ++++---
- 2 files changed, 4 insertions(+), 4 deletions(-)
+2.2 Another solution is possible without putting the thread into a sleep
+state, but with placing a write bio in a queue to another thread.
+This solution is used in the veeamsnap out-of-tree module and it has
+performance issues. I don't like. But when handling make_request_fn,
+which was on kernels before 5.10, there was no choice.
 
-diff --git a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_drv.h b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_drv.h
-index 4140b4dd85bf..a8570a654561 100644
---- a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_drv.h
-+++ b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_drv.h
-@@ -19,7 +19,6 @@
- #include "mtk_vcodec_util.h"
- #include "vdec_msg_queue.h"
- 
--#define MTK_VCODEC_DRV_NAME	"mtk_vcodec_drv"
- #define MTK_VCODEC_DEC_NAME	"mtk-vcodec-dec"
- #define MTK_VCODEC_ENC_NAME	"mtk-vcodec-enc"
- 
-diff --git a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_enc.c b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_enc.c
-index ccc753074816..25e816863597 100644
---- a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_enc.c
-+++ b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_enc.c
-@@ -232,11 +232,12 @@ static int mtk_vcodec_enc_get_chip_name(void *priv)
- static int vidioc_venc_querycap(struct file *file, void *priv,
- 				struct v4l2_capability *cap)
- {
-+	struct mtk_vcodec_ctx *ctx = fh_to_ctx(priv);
-+	struct device *dev = &ctx->dev->plat_dev->dev;
- 	int platform_name = mtk_vcodec_enc_get_chip_name(priv);
- 
--	strscpy(cap->driver, MTK_VCODEC_DRV_NAME, sizeof(cap->driver));
--	strscpy(cap->card, MTK_VCODEC_ENC_NAME, sizeof(cap->card));
--	snprintf(cap->bus_info, sizeof(cap->bus_info), "platform:mt%d-enc", platform_name);
-+	strscpy(cap->driver, dev->driver->name, sizeof(cap->driver));
-+	snprintf(cap->card, sizeof(cap->card), "MT%d video encoder", platform_name);
- 
- 	return 0;
- }
--- 
-2.37.0.rc0.161.g10f37bed90-goog
+The current implementation, when the filtering is performed before
+remapping, allows to handle the bio to the partition, and allows to
+switch the writer's thread to the sleep state.
+I had to pay for it with a reference counter on the filter and a spinlock.
+It may be possible to do better with RCU. I haven't tried it yet.
+
+If I am blocked by the q->q_usage_counter counter, then I will not
+be able to execute COW in the context of the current thread due to deadlocks.
+I will have to use a scheme with an additional worker thread.
+Bio filtering will become much more complicated.
+
+From an architectural point of view, I see the filter as an intermediate
+layer between the file system and the block layer. If we lower the filter
+deep into the block layer, then restrictions will be imposed on its use.
 

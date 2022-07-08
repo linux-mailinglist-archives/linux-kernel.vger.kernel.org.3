@@ -2,98 +2,163 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CFEF056C06A
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 20:37:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1636C56BF69
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 20:35:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238784AbiGHRsL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Jul 2022 13:48:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49048 "EHLO
+        id S239066AbiGHRtB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Jul 2022 13:49:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50176 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237925AbiGHRsJ (ORCPT
+        with ESMTP id S238687AbiGHRsy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Jul 2022 13:48:09 -0400
-Received: from mail-pg1-x52c.google.com (mail-pg1-x52c.google.com [IPv6:2607:f8b0:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4944374DFD
-        for <linux-kernel@vger.kernel.org>; Fri,  8 Jul 2022 10:48:08 -0700 (PDT)
-Received: by mail-pg1-x52c.google.com with SMTP id r22so16031225pgr.2
-        for <linux-kernel@vger.kernel.org>; Fri, 08 Jul 2022 10:48:08 -0700 (PDT)
+        Fri, 8 Jul 2022 13:48:54 -0400
+Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86B17EE3B;
+        Fri,  8 Jul 2022 10:48:52 -0700 (PDT)
+Received: by mail-ej1-x630.google.com with SMTP id os14so8642108ejb.4;
+        Fri, 08 Jul 2022 10:48:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=SCpgoi0bej3E/k3q1Zzvx8WQzQbsCorWnUbIjfYa/X8=;
-        b=ml3Kny+TDNHdTGvuVDpKu9tNVsI9rg6LeipWZ5ZOkteqKLFBxM5ekj3E07IlhnmCZV
-         QEGA9z/6eokWng2H3lP1krXx7MXUvPNoY40dacqit8ht0YCevulLcYBnXMrbRvrml9OS
-         XyUb9Idq8wvH8qCWN0cfxK4yhsSKzD1PJ0xMs=
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=ShPD4wyN1AbBhQAonxsuDoDDYhIzfN54pj6aDdbJCDY=;
+        b=ZUlzH77AUbSN65w9CMhs17pUGYLrrrddFD5ApateSUyz1uwPFGkHyYZJInz5hX4+9B
+         1LhNbswofNSVxN7rVu8Kyrh6d0ymp/pLaAsnRm/ECa8OTqmI6djp7xj6osALsg1xtcGd
+         NJG7YW+o0Ed3cq9jS7xZfp1u7vwabyFLoh9S9u9aVTmEPHBqQeGDEgN9HFjdJBAclg1m
+         eGN/1BFlRgbdU6nlLGrkYlbAjVGIydbUsBVhFjphjH77T3hAuSb6wlnWgfieH2yBo9QO
+         1ApTguOFUBZvYvncwjFkNDFf0s0gzDx4XwnN/MJRkFXJizE/Kr47Ywkn+6US3NZo6iNW
+         cLyQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=SCpgoi0bej3E/k3q1Zzvx8WQzQbsCorWnUbIjfYa/X8=;
-        b=yoeaiVKPCh21P0jXUvIsYFrCW/FW5TvZj96256StSFv6V3BS6yc5jNYw0Q+EKUzbxD
-         Y4vKDU79XlJeNJVcCl9M8Gw2qpstUExSIYrlyiZORr8DQyDwOdJwA0pAs25UBfAcHWEy
-         XEmeFzM5gw69FuMV8wXsWhkQ+XC9m7TygClyM1aU3R93C1khtLJM2wnmSHYa1v4TAT83
-         TCmxZ750hYmpARCXNuG1P84u8A4urDiahYKQ1QExsxU6qTLxvq1fIzgJMN0ugusiYa0R
-         eN9uJraCJbSNTl2dIzrjIgpz5WkpOB66kKLDSSUA6mlKcuAEk67suQlDyg7+dZkv0VRn
-         0uvg==
-X-Gm-Message-State: AJIora9pv1GplDhsYX74ozI952X4G+7ElZbnFJyMwQv3kZ0rwn5C3GR7
-        /dTnvnILDyEDNdZLmJeSJVncfQ==
-X-Google-Smtp-Source: AGRyM1sZCb3nACbVv0Xqctc8zBRDdY2BX228aDhc1USUQoc2fpKbCJNkaQ1aAGFkZEau8j+w/Chrcg==
-X-Received: by 2002:a63:187:0:b0:411:6434:d017 with SMTP id 129-20020a630187000000b004116434d017mr4274618pgb.350.1657302487803;
-        Fri, 08 Jul 2022 10:48:07 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id a74-20020a621a4d000000b00528d4f647f2sm3404184pfa.91.2022.07.08.10.48.07
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=ShPD4wyN1AbBhQAonxsuDoDDYhIzfN54pj6aDdbJCDY=;
+        b=f1EBZ6BT6VIE3INsyJf2PufKoq2aHUhpi0xWmhJ2M2LXdG1nMFHiNvWCds2pLUw5SF
+         iol3ChvxmZgKkxSfJDmChPqLdfdFVPmzf3eStpF8YR3Qz4qvpv+8rHt1kUTFRuTI7425
+         zTsqkOcMcGwm331JanbB1WwVI26AnO8cGuFuiMuHExaOD23DvWL4cNrKpr52ePaazxUo
+         YXN+MmxA09FkHhWw8m6rgxSCE//EYiBC2bkQKgDXOCww241nXT3s/vleToCRbrm4hWej
+         0Qr8pZWmowKAy5n3AcewZJ+61v8j1XqiPV2aK9e7SVsF9RMA1T0enty+tV5pXKDCEyes
+         OOFg==
+X-Gm-Message-State: AJIora/InpJA8Ug3L/tXo/oZHkX0N1nSLsWgN7wV6bOidD+/kHnVkZFc
+        1ypr29bqAl4z3+yU8lGr1lL9XVaEgNo=
+X-Google-Smtp-Source: AGRyM1t1CJeULEb5y19pIL/pn7kkbQBeHx8US/ZVFL/uEKkB1KyC6iMgsMJIKIKtPRksInWU4lvG8Q==
+X-Received: by 2002:a17:907:7349:b0:72a:4d2a:1a66 with SMTP id dq9-20020a170907734900b0072a4d2a1a66mr4638798ejc.151.1657302531072;
+        Fri, 08 Jul 2022 10:48:51 -0700 (PDT)
+Received: from orome (p200300e41f12c800f22f74fffe1f3a53.dip0.t-ipconnect.de. [2003:e4:1f12:c800:f22f:74ff:fe1f:3a53])
+        by smtp.gmail.com with ESMTPSA id er13-20020a056402448d00b0043a5bcf80a2sm11308849edb.60.2022.07.08.10.48.49
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 08 Jul 2022 10:48:07 -0700 (PDT)
-From:   Kees Cook <keescook@chromium.org>
-To:     jmorris@namei.org, agk@redhat.com, snitzer@kernel.org,
-        mka@chromium.org, serge@hallyn.com
-Cc:     Kees Cook <keescook@chromium.org>, linux-raid@vger.kernel.org,
-        song@kernel.org, dianders@chromium.org,
-        linux-security-module@vger.kernel.org, dm-devel@redhat.com,
-        gmazyland@gmail.com, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v7 0/3] LoadPin: Enable loading from trusted dm-verity devices
-Date:   Fri,  8 Jul 2022 10:47:59 -0700
-Message-Id: <165730247648.3882109.12888837825450019581.b4-ty@chromium.org>
-X-Mailer: git-send-email 2.32.0
-In-Reply-To: <20220627153526.3750341-1-mka@chromium.org>
-References: <20220627153526.3750341-1-mka@chromium.org>
+        Fri, 08 Jul 2022 10:48:50 -0700 (PDT)
+Date:   Fri, 8 Jul 2022 19:48:48 +0200
+From:   Thierry Reding <thierry.reding@gmail.com>
+To:     Akhil R <akhilrajeev@nvidia.com>
+Cc:     "dmaengine@vger.kernel.org" <dmaengine@vger.kernel.org>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Laxman Dewangan <ldewangan@nvidia.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-tegra@vger.kernel.org" <linux-tegra@vger.kernel.org>,
+        "p.zabel@pengutronix.de" <p.zabel@pengutronix.de>,
+        "vkoul@kernel.org" <vkoul@kernel.org>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>
+Subject: Re: [PATCH v2 1/3] dt-bindings: dmaengine: Add compatible for
+ Tegra234
+Message-ID: <YshuAIhi2CBQecu6@orome>
+References: <20220707145729.41876-1-akhilrajeev@nvidia.com>
+ <20220707145729.41876-2-akhilrajeev@nvidia.com>
+ <YshAt5WAG9zUkrpy@orome>
+ <SJ1PR12MB6339A080E09C0CCCCB9F2E6BC0829@SJ1PR12MB6339.namprd12.prod.outlook.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="TiQvvnLkTwz7kPLP"
+Content-Disposition: inline
+In-Reply-To: <SJ1PR12MB6339A080E09C0CCCCB9F2E6BC0829@SJ1PR12MB6339.namprd12.prod.outlook.com>
+User-Agent: Mutt/2.2.6 (2022-06-05)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 27 Jun 2022 08:35:23 -0700, Matthias Kaehlcke wrote:
-> As of now LoadPin restricts loading of kernel files to a single pinned
-> filesystem, typically the rootfs. This works for many systems, however it
-> can result in a bloated rootfs (and OTA updates) on platforms where
-> multiple boards with different hardware configurations use the same rootfs
-> image. Especially when 'optional' files are large it may be preferable to
-> download/install them only when they are actually needed by a given board.
-> Chrome OS uses Downloadable Content (DLC) [1] to deploy certain 'packages'
-> at runtime. As an example a DLC package could contain firmware for a
-> peripheral that is not present on all boards. DLCs use dm-verity [2] to
-> verify the integrity of the DLC content.
-> 
-> [...]
 
-Applied to for-next/hardening, thanks!
+--TiQvvnLkTwz7kPLP
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-[1/3] dm: Add verity helpers for LoadPin
-      https://git.kernel.org/kees/c/b6c1c5745ccc
-[2/3] LoadPin: Enable loading from trusted dm-verity devices
-      https://git.kernel.org/kees/c/3f805f8cc23b
-[3/3] dm: verity-loadpin: Use CONFIG_SECURITY_LOADPIN_VERITY for conditional compilation
-      https://git.kernel.org/kees/c/231af4709018
+On Fri, Jul 08, 2022 at 04:10:47PM +0000, Akhil R wrote:
+> > On Thu, Jul 07, 2022 at 08:27:27PM +0530, Akhil R wrote:
+> > > Document the compatible string used by GPCDMA controller for Tegra234.
+> > >
+> > > Signed-off-by: Akhil R <akhilrajeev@nvidia.com>
+> > > ---
+> > >  .../devicetree/bindings/dma/nvidia,tegra186-gpc-dma.yaml         | 1=
+ +
+> > >  1 file changed, 1 insertion(+)
+> > >
+> > > diff --git
+> > > a/Documentation/devicetree/bindings/dma/nvidia,tegra186-gpc-dma.yaml
+> > > b/Documentation/devicetree/bindings/dma/nvidia,tegra186-gpc-dma.yaml
+> > > index 9dd1476d1849..81f3badbc8ec 100644
+> > > ---
+> > > a/Documentation/devicetree/bindings/dma/nvidia,tegra186-gpc-dma.yaml
+> > > +++ b/Documentation/devicetree/bindings/dma/nvidia,tegra186-gpc-dma.ya
+> > > +++ ml
+> > > @@ -23,6 +23,7 @@ properties:
+> > >      oneOf:
+> > >        - const: nvidia,tegra186-gpcdma
+> > >        - items:
+> > > +          - const: nvidia,tegra234-gpcdma
+> > >            - const: nvidia,tegra194-gpcdma
+> > >            - const: nvidia,tegra186-gpcdma
+> >=20
+> > I don't think this works because it will now fail to validate Tegra194 =
+device trees.
+> > You'll need to create a separate set of items for Tegra234.
+>=20
+> If I update it as below, would it work?
+>=20
+> - items:
+> 	- const: nvidia,tegra234-gpcdma
+> 	- const: nvidia,tegra186-gpcdma
+>=20
+> - items:
+> 	- const: nvidia,tegra194-gpcdma
+> 	- const: nvidia,tegra186-gpcdma
 
--- 
-Kees Cook
+Yeah, that should work. You can verify that this works by running the
+dtbs_check target, although this can be somewhat overwhelming right now
+given that there are quite a few errors/warnings, so it's easy to miss
+new ones.
 
+According to the DTS change that you posted as part of this series, the
+Tegra234 compatible string list also includes the Tegra194 compatible
+string, so that should either also be updated, or you need to include it
+in the binding as well, like in your original patch.
+
+Thierry
+
+--TiQvvnLkTwz7kPLP
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAmLIbf4ACgkQ3SOs138+
+s6Golg/+Nr0ZI1WGzLCZf7ETOImR5DeBoFHa8yEv82uj78FtwiDZxsHGPOgJL+C3
+6dunfW7CPg/RGpLbeKEAzNxdqiSEsbpmSAVni0BWdrH4idGrDrEIl2Aj/ORgNkKB
+aqap/j+BjKtcVsqHgF8bauQIyFcyGRtwkjhYLwGTJGWAzxq4/NLPwcXc+ah8gCFX
++oTguWZeGbX1eXpOLW4yPtCahtZBnfjoib/B+KMu+OfYnxHGcvbxf5YLSiTE8DGI
+aPCmTCiPFR/r289T+6vOfkzcseusbUDr0hbKUprR8z/eTAGm8J1HPJzTkTOyND7x
+B9t7cMCz8TXF3qgfE3XBW1QlheyTWgLyLNmpzW9Ya+TwvT/eKT3f8OObLyhbY+Ef
+5sAReS9chgCQsmHc5Y2CYyniKNn4m781bUQTbdu/07qKKqRWeI92VyZZttUgkMMk
+omUBSpewOFnkxFjIrv33xHMDUQt48pykLKWx4tA3szfQpeHgna99uhFmVtefiNw4
+WAXt/v0rg1nx8lbc8+iXo1nnf+BemuoEWrySSJKtCzMrl+vNONIeerjeOe8L4tj6
+eHmiN0c0eboRZbsPbEw1G01bCVAt/qQz8qrDwwP/pDtGQFiWIZ+xXk81TXhYsVly
+7xsGPz0w4+fAQhYcvQDjdHlBaff2vH5FHIxwH/YTh+5mq5SbGQg=
+=Z7VR
+-----END PGP SIGNATURE-----
+
+--TiQvvnLkTwz7kPLP--

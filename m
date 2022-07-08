@@ -2,75 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2714356BC6D
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 17:09:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C74FC56BC5C
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 17:09:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238455AbiGHPFD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Jul 2022 11:05:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57694 "EHLO
+        id S238747AbiGHPEY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Jul 2022 11:04:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56990 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231739AbiGHPFA (ORCPT
+        with ESMTP id S238189AbiGHPEV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Jul 2022 11:05:00 -0400
-Received: from smtpbg.qq.com (biz-43-154-54-12.mail.qq.com [43.154.54.12])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A5212CE37;
-        Fri,  8 Jul 2022 08:04:55 -0700 (PDT)
-X-QQ-mid: bizesmtp68t1657292646tnxdblf7
-Received: from localhost.localdomain ( [182.148.15.249])
-        by bizesmtp.qq.com (ESMTP) with 
-        id ; Fri, 08 Jul 2022 23:04:01 +0800 (CST)
-X-QQ-SSF: 01000000002000B0C000B00A0000000
-X-QQ-FEAT: qZu16BA30Err+swO0ObxsJvuzg/K2BB5PMsEr3EdcHw0malLovmoCSEn9VV4q
-        xM9Ta7LPg7o2Av4TbQxU4r8lLZRTlZChb2lSBg/ZfAzZmV3EIISX0IS7tU55pkwYJc8uko4
-        E0G2kY5MwA8/BNuh1EiRdDrrTTSjZHwLmRPxgtU2sqqrY6ixOS4Zpzl8HVl/2bWqsFfEZ/s
-        pTNjznhBjWSLtKIoirIFtRBRra38t3HYZHLePDONlkt5nUO5ZquS1npNVSptc41Sg3yCQUt
-        WN8WAxnlLSrKZmOJTxReL0Kxtod+1Pw2PqvD7JaXgs/hBengpXg18Y8bvASAg0me3XMfKJ4
-        tFv6CfDZRVF/APTiD+k8uQ6zxMHXY/DtaU0G4F5R7ixJM+N75mDYOiddEoTPg==
-X-QQ-GoodBg: 0
-From:   Jilin Yuan <yuanjilin@cdjrlc.com>
-To:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, mcoquelin.stm32@gmail.com,
-        alexandre.torgue@foss.st.com
-Cc:     netdev@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Jilin Yuan <yuanjilin@cdjrlc.com>
-Subject: [PATCH] fddi/skfp: fix repeated words in comments
-Date:   Fri,  8 Jul 2022 23:03:54 +0800
-Message-Id: <20220708150354.40101-1-yuanjilin@cdjrlc.com>
-X-Mailer: git-send-email 2.36.1
+        Fri, 8 Jul 2022 11:04:21 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E7F52F67E;
+        Fri,  8 Jul 2022 08:04:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=3jpvp1J2V3RiYjdNlHd4/ahZAB1KUqyXlwmwoUipWJ0=; b=e+7GDgz79BPotjw0lqXGRpcd/B
+        OJkyo7ZfBI5HADrhmC15E51UM2IZDoZ+5zsP6A8p7dfQMyPpXNoN/k6FIKqZg8nTJsDigOEg25ZU/
+        hUHIeSNm96S6FVnqqKSG0ALs3dNA0lBWk4l0haqvkZMmTS9l6YDquQQZDw92MsZWd2+xit4RC4n+7
+        VKvG3pFYh8rMWwcqt4ebIIVNRhA/a59eOhYVcsQQzF3hWuxvdOlOrI8gZtwrXMhLmMFsEIERyTgHm
+        KY4eQuyAyk79Tph0/kfYFPo9pRr8dCFiv4mn6o9AKah48N71tdHo+tvD+4fk6GdfLljZA0ApPMHj0
+        vMU6//og==;
+Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1o9pWX-003aRS-WF; Fri, 08 Jul 2022 15:04:06 +0000
+Date:   Fri, 8 Jul 2022 16:04:05 +0100
+From:   Matthew Wilcox <willy@infradead.org>
+To:     Ira Weiny <ira.weiny@intel.com>
+Cc:     Bjorn Helgaas <helgaas@kernel.org>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Alison Schofield <alison.schofield@intel.com>,
+        Vishal Verma <vishal.l.verma@intel.com>,
+        linux-kernel@vger.kernel.org, linux-cxl@vger.kernel.org,
+        linux-pci@vger.kernel.org, linux-fsdevel@vger.kernel.org
+Subject: Re: [RFC PATCH 2/3] pci/doe: Use devm_xa_init()
+Message-ID: <YshHZXK/dq3apNDu@casper.infradead.org>
+References: <20220705232159.2218958-3-ira.weiny@intel.com>
+ <20220707160646.GA306751@bhelgaas>
+ <YshC+Jaua01dPQak@iweiny-desk3>
+ <YshED+nm7LdcmL75@casper.infradead.org>
+ <YshFxnBZGUPN5LoC@iweiny-desk3>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtp:cdjrlc.com:qybglogicsvr:qybglogicsvr4
-X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,RDNS_DYNAMIC,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,T_SPF_HELO_TEMPERROR autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YshFxnBZGUPN5LoC@iweiny-desk3>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
- Delete the redundant word 'test'.
+On Fri, Jul 08, 2022 at 07:57:10AM -0700, Ira Weiny wrote:
+> > > I'll update this to be more clear in a V1 if it goes that far.  But to clarify
+> > > here; the protocol information is a u16 vendor id and u8 protocol number.  So
+> > > we are able to store that in the unsigned long value that would normally be a
+> > > pointer to something in the XArray.
+> > 
+> > Er.  Signed long.
+> 
+> Sorry I misspoke, xa_mk_value() takes an unsigned long.
 
-Signed-off-by: Jilin Yuan <yuanjilin@cdjrlc.com>
----
- drivers/net/fddi/skfp/fplustm.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+It does, *but* ...
 
-diff --git a/drivers/net/fddi/skfp/fplustm.c b/drivers/net/fddi/skfp/fplustm.c
-index 4cbb145c74ab..036062376c06 100644
---- a/drivers/net/fddi/skfp/fplustm.c
-+++ b/drivers/net/fddi/skfp/fplustm.c
-@@ -1314,7 +1314,7 @@ void mac_set_rx_mode(struct s_smc *smc, int mode)
- 	o Connect a UPPS ISA or EISA station to the network.
- 	o Give the FORMAC of UPPS station the command to send
- 	  restricted tokens until the ring becomes instable.
--	o Now connect your test test client.
-+	o Now connect your test client.
- 	o The restricted token monitor should detect the restricted token,
- 	  and your break point will be reached.
- 	o You can ovserve how the station will clean the ring.
--- 
-2.36.1
+static inline void *xa_mk_value(unsigned long v)
+{
+        WARN_ON((long)v < 0);
+        return (void *)((v << 1) | 1);
+}
 
+... you can't pass an integer that has the top bit set to it.
+
+> Can't I use xa_mk_value() to store data directly in the entry "pointer"?
+
+Yes, that's the purpose of xa_mk_value().  From what you said, it sounded
+like you were just storing the integer directly, which won't work.
+
+> +static void *pci_doe_xa_prot_entry(u16 vid, u8 prot)
+> +{
+> +	return xa_mk_value(((unsigned long)vid << 16) | prot);
+> +}
+> 
+> Both Dan and I thought this was acceptable in XArray?
+
+You haven't tested that on 32-bit, have you?  Shift vid by 8 instead of
+16, and it'll be fine.
+
+(Oh, and you don't need to cast vid; the standard C integer promotions
+will promote vid to int before shifting, and you won't lose any bits)

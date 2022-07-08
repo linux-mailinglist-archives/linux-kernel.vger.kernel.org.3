@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E421956C244
-	for <lists+linux-kernel@lfdr.de>; Sat,  9 Jul 2022 01:12:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4779956C2E4
+	for <lists+linux-kernel@lfdr.de>; Sat,  9 Jul 2022 01:13:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240255AbiGHUee (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Jul 2022 16:34:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57160 "EHLO
+        id S240303AbiGHUeh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Jul 2022 16:34:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56070 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240258AbiGHUeN (ORCPT
+        with ESMTP id S240271AbiGHUeP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Jul 2022 16:34:13 -0400
-Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 067E89FE39
-        for <linux-kernel@vger.kernel.org>; Fri,  8 Jul 2022 13:33:57 -0700 (PDT)
-Received: by mail-wr1-x432.google.com with SMTP id n10so6662320wrc.4
-        for <linux-kernel@vger.kernel.org>; Fri, 08 Jul 2022 13:33:56 -0700 (PDT)
+        Fri, 8 Jul 2022 16:34:15 -0400
+Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0913EA024F
+        for <linux-kernel@vger.kernel.org>; Fri,  8 Jul 2022 13:33:59 -0700 (PDT)
+Received: by mail-wr1-x435.google.com with SMTP id o4so31971474wrh.3
+        for <linux-kernel@vger.kernel.org>; Fri, 08 Jul 2022 13:33:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=conchuod.ie; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=3esZkwVy613d0mnGZgND5AwNK9S9FQGfuQwBw22Whgs=;
-        b=LkdUJp8NQYuFnVjXuy40IWe/u/nUF1iLbAgQ8kwt1DzSjr8TjfY8OK6w5l4+RjAXpk
-         iGEmip0XDsX5gphRrNhPKMRPlkxlJqghGpZhzZudw+mX4vXVSW5nv+HF7n2HqosjpiNM
-         YonBlNbVJGWEEjJWl6z8/W4YIUcSFU7ulSKNbE74naVf2Y99F3CuefQwEjYmdXe9v9b0
-         fYmg1JHhBwoNkaQ/eVpAo2iok0Zha85+oVM3BYxDZ5uGjFwyUdRev9zn8IzWlbt8z6Ob
-         Wtcv+QL+5yfEOCJSycnUNxWqTVOR4k8tyJi4/8LzdW7E9wG4na7ntkHzNCS6Ybym50G0
-         kWEQ==
+        bh=e7OziW02Y/9peL0FmHLT2XkVqPVR8DGTtiJWYX8th9g=;
+        b=UEqfB1NDxQ4fuxAn57jO5JOXC85gsDa3qdlYdPAfKQbBmBo41BVTJKXkQ286sHM7Mk
+         6LPutCJJYxobipDur8SaWiKWDNA7F/5yJRFFfnxODfMMcz5WhTAYkwlNnIqarCW/dNDm
+         rFrAmWedvKoHFxbVpej+fzrUb3wwchTtl0wkqL8p576qk2dEBMTgzryWnttyup4o4W1b
+         vpJyZHZGw1A/THM+W8xbwymP/08dQ+TkP+qO9f6dXb50g96NFnktqZ017+y/u5POCTQf
+         XwK6IzN//c27a0FxB5KOjGE/Vx49Btj/tOHFaKmR1x9LZWkDK0kNtASZsl6msEbRprvE
+         JfRw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=3esZkwVy613d0mnGZgND5AwNK9S9FQGfuQwBw22Whgs=;
-        b=Fdi9GcEjo4gVk5ti1ysR0kRPWZIQ+aGxbVvw9SJSA9mEXrprlZf7F6BLqI9Q8obLYC
-         sU/4t15I59ACPPJfxWAFzeBq1YjCztJ1DG2Khw4LgPUJj9JAHVPud3Y06L0qGMGTD6tD
-         ngbuqiCTzBOuD/vuR2MYvxaDr8ukigWAVemn+6imHEBDLLu24ea++tmfceFxzxuZkRCG
-         4v+DH2QM4RmERKVXo+xpcqeiqGTSyvUvzVPYj/bK++pM6c8Ev5TWHrmnk7H0zkpi+b22
-         y2Tv6XB2gtmTkJil/tESDOckndvqWvfUJpTDs6gUfrMYobvI4/c4SQxYkE4K9SPgOWO6
-         UybQ==
-X-Gm-Message-State: AJIora8KwawsdcVG/gOSBYUDsGqfJ/wyYi1S2p68UTlh3/dcYaECGSCF
-        XmRkLSGgxVKJmZ562wwRLzRORQ==
-X-Google-Smtp-Source: AGRyM1so5vGVqM4+gNIz7n/aN1RHiJ4Q1lPp5fkyRoMDo9JFFCW9Qz/vji4dAeXxwm+HNa/iGx/gUA==
-X-Received: by 2002:a05:6000:18d:b0:21b:901e:9b27 with SMTP id p13-20020a056000018d00b0021b901e9b27mr5062706wrx.389.1657312435597;
-        Fri, 08 Jul 2022 13:33:55 -0700 (PDT)
+        bh=e7OziW02Y/9peL0FmHLT2XkVqPVR8DGTtiJWYX8th9g=;
+        b=zawloq3Osc9m/cz98EGUPocurfKo6y/r+Cd1adXCO8RMpO/P8ijspphNd7VOtJHBt1
+         NzELUUhaoD+1fSoYpKLeXMnrb/zNF43rhRncgFiKOBs/jTSca9i+EA8u6WKsuy4hxboV
+         ly7azD2h6XiJ+hmsTqRnTf4fQ55QKL4mW1970ulSzhLrPc6lwMPUk1zCq+Ra346bhYK6
+         tn10mkvIrX5je9YE/EB3d1o8VC2bfNXHJT5Upc1C1McrEOD4i/4f2aKMY0WSXxwO/nAh
+         TNcM1xiwkzWDDuMeWN05QfEQoSvAz2G9+R6WUo7wfL+DtNwlHp6/I8SVHrRVr/LJEJFH
+         9ZQA==
+X-Gm-Message-State: AJIora+QbCAIUlmzxRCZyo/OFQx9kALw5TJ/5vwit4pcOwC70qZXRwgy
+        TyilKWHf04g9BV6O+ol0p1RdaQ==
+X-Google-Smtp-Source: AGRyM1tiuAM/tea7RwU3EO1DtUOng8CK5amFDnoeTVJhCd41MOb5se0+VDnHisrU3+re40/QC6r2Mw==
+X-Received: by 2002:a5d:4582:0:b0:21d:7c57:1f4b with SMTP id p2-20020a5d4582000000b0021d7c571f4bmr4906085wrq.146.1657312437558;
+        Fri, 08 Jul 2022 13:33:57 -0700 (PDT)
 Received: from henark71.. ([51.37.234.167])
-        by smtp.gmail.com with ESMTPSA id a3-20020a1cf003000000b0039c8a22554bsm3165034wmb.27.2022.07.08.13.33.53
+        by smtp.gmail.com with ESMTPSA id a3-20020a1cf003000000b0039c8a22554bsm3165034wmb.27.2022.07.08.13.33.55
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 08 Jul 2022 13:33:54 -0700 (PDT)
+        Fri, 08 Jul 2022 13:33:56 -0700 (PDT)
 From:   Conor Dooley <mail@conchuod.ie>
 To:     Paul Walmsley <paul.walmsley@sifive.com>,
         Palmer Dabbelt <palmer@dabbelt.com>,
@@ -75,9 +75,9 @@ Cc:     Daire McNamara <daire.mcnamara@microchip.com>,
         linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org,
         Brice Goglin <Brice.Goglin@inria.fr>
-Subject: [PATCH v2 1/2] arm64: topology: move store_cpu_topology() to shared code
-Date:   Fri,  8 Jul 2022 21:33:42 +0100
-Message-Id: <20220708203342.256459-2-mail@conchuod.ie>
+Subject: [PATCH v2 2/2] riscv: topology: fix default topology reporting
+Date:   Fri,  8 Jul 2022 21:33:43 +0100
+Message-Id: <20220708203342.256459-3-mail@conchuod.ie>
 X-Mailer: git-send-email 2.37.0
 In-Reply-To: <20220708203342.256459-1-mail@conchuod.ie>
 References: <20220708203342.256459-1-mail@conchuod.ie>
@@ -95,106 +95,84 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Conor Dooley <conor.dooley@microchip.com>
 
-arm64's method of defining a default cpu topology requires only minimal
-changes to apply to RISC-V also. The current arm64 implementation exits
-early in a uniprocessor configuration by reading MPIDR & claiming that
-uniprocessor can rely on the default values.
+RISC-V has no sane defaults to fall back on where there is no cpu-map
+in the devicetree.
+Without sane defaults, the package, core and thread IDs are all set to
+-1. This causes user-visible inaccuracies for tools like hwloc/lstopo
+which rely on the sysfs cpu topology files to detect a system's
+topology.
 
-This is appears to be a hangover from prior to '3102bc0e6ac7 ("arm64:
-topology: Stop using MPIDR for topology information")', because the
-current code just assigns default values for multiprocessor systems.
+On a PolarFire SoC, which should have 4 harts with a thread each,
+lstopo currently reports:
 
-With the MPIDR references removed, store_cpu_topolgy() can be moved to
-the common arch_topology code.
+Machine (793MB total)
+  Package L#0
+    NUMANode L#0 (P#0 793MB)
+    Core L#0
+      L1d L#0 (32KB) + L1i L#0 (32KB) + PU L#0 (P#0)
+      L1d L#1 (32KB) + L1i L#1 (32KB) + PU L#1 (P#1)
+      L1d L#2 (32KB) + L1i L#2 (32KB) + PU L#2 (P#2)
+      L1d L#3 (32KB) + L1i L#3 (32KB) + PU L#3 (P#3)
+
+Adding calls to store_cpu_topology() in {boot,smp} hart bringup code
+results in the correct topolgy being reported:
+
+Machine (793MB total)
+  Package L#0
+    NUMANode L#0 (P#0 793MB)
+    L1d L#0 (32KB) + L1i L#0 (32KB) + Core L#0 + PU L#0 (P#0)
+    L1d L#1 (32KB) + L1i L#1 (32KB) + Core L#1 + PU L#1 (P#1)
+    L1d L#2 (32KB) + L1i L#2 (32KB) + Core L#2 + PU L#2 (P#2)
+    L1d L#3 (32KB) + L1i L#3 (32KB) + Core L#3 + PU L#3 (P#3)
 
 CC: stable@vger.kernel.org
+Fixes: 03f11f03dbfe ("RISC-V: Parse cpu topology during boot.")
+Reported-by: Brice Goglin <Brice.Goglin@inria.fr>
+Link: https://github.com/open-mpi/hwloc/issues/536
 Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
 ---
- arch/arm64/kernel/topology.c | 40 ------------------------------------
- drivers/base/arch_topology.c | 19 +++++++++++++++++
- 2 files changed, 19 insertions(+), 40 deletions(-)
+---
+ arch/riscv/Kconfig          | 2 +-
+ arch/riscv/kernel/smpboot.c | 4 +++-
+ 2 files changed, 4 insertions(+), 2 deletions(-)
 
-diff --git a/arch/arm64/kernel/topology.c b/arch/arm64/kernel/topology.c
-index 869ffc4d4484..7889a00f5487 100644
---- a/arch/arm64/kernel/topology.c
-+++ b/arch/arm64/kernel/topology.c
-@@ -22,46 +22,6 @@
- #include <asm/cputype.h>
- #include <asm/topology.h>
- 
--void store_cpu_topology(unsigned int cpuid)
--{
--	struct cpu_topology *cpuid_topo = &cpu_topology[cpuid];
--	u64 mpidr;
--
--	if (cpuid_topo->package_id != -1)
--		goto topology_populated;
--
--	mpidr = read_cpuid_mpidr();
--
--	/* Uniprocessor systems can rely on default topology values */
--	if (mpidr & MPIDR_UP_BITMASK)
--		return;
--
--	/*
--	 * This would be the place to create cpu topology based on MPIDR.
--	 *
--	 * However, it cannot be trusted to depict the actual topology; some
--	 * pieces of the architecture enforce an artificial cap on Aff0 values
--	 * (e.g. GICv3's ICC_SGI1R_EL1 limits it to 15), leading to an
--	 * artificial cycling of Aff1, Aff2 and Aff3 values. IOW, these end up
--	 * having absolutely no relationship to the actual underlying system
--	 * topology, and cannot be reasonably used as core / package ID.
--	 *
--	 * If the MT bit is set, Aff0 *could* be used to define a thread ID, but
--	 * we still wouldn't be able to obtain a sane core ID. This means we
--	 * need to entirely ignore MPIDR for any topology deduction.
--	 */
--	cpuid_topo->thread_id  = -1;
--	cpuid_topo->core_id    = cpuid;
--	cpuid_topo->package_id = cpu_to_node(cpuid);
--
--	pr_debug("CPU%u: cluster %d core %d thread %d mpidr %#016llx\n",
--		 cpuid, cpuid_topo->package_id, cpuid_topo->core_id,
--		 cpuid_topo->thread_id, mpidr);
--
--topology_populated:
--	update_siblings_masks(cpuid);
--}
--
- #ifdef CONFIG_ACPI
- static bool __init acpi_cpu_is_threaded(int cpu)
+diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
+index 2af0701b7518..4b6c2fdbb57c 100644
+--- a/arch/riscv/Kconfig
++++ b/arch/riscv/Kconfig
+@@ -52,7 +52,7 @@ config RISCV
+ 	select COMMON_CLK
+ 	select CPU_PM if CPU_IDLE
+ 	select EDAC_SUPPORT
+-	select GENERIC_ARCH_TOPOLOGY if SMP
++	select GENERIC_ARCH_TOPOLOGY
+ 	select GENERIC_ATOMIC64 if !64BIT
+ 	select GENERIC_CLOCKEVENTS_BROADCAST if SMP
+ 	select GENERIC_EARLY_IOREMAP
+diff --git a/arch/riscv/kernel/smpboot.c b/arch/riscv/kernel/smpboot.c
+index f1e4948a4b52..a1c861f84fe2 100644
+--- a/arch/riscv/kernel/smpboot.c
++++ b/arch/riscv/kernel/smpboot.c
+@@ -40,6 +40,8 @@ static DECLARE_COMPLETION(cpu_running);
+ void __init smp_prepare_boot_cpu(void)
  {
-diff --git a/drivers/base/arch_topology.c b/drivers/base/arch_topology.c
-index 441e14ac33a4..07e84c6ac5c2 100644
---- a/drivers/base/arch_topology.c
-+++ b/drivers/base/arch_topology.c
-@@ -765,6 +765,25 @@ void update_siblings_masks(unsigned int cpuid)
- 	}
+ 	init_cpu_topology();
++
++	store_cpu_topology(smp_processor_id());
  }
  
-+void __weak store_cpu_topology(unsigned int cpuid)
-+{
-+	struct cpu_topology *cpuid_topo = &cpu_topology[cpuid];
-+
-+	if (cpuid_topo->package_id != -1)
-+		goto topology_populated;
-+
-+	cpuid_topo->thread_id = -1;
-+	cpuid_topo->core_id = cpuid;
-+	cpuid_topo->package_id = cpu_to_node(cpuid);
-+
-+	pr_debug("CPU%u: package %d core %d thread %d\n",
-+		 cpuid, cpuid_topo->package_id, cpuid_topo->core_id,
-+		 cpuid_topo->thread_id);
-+
-+topology_populated:
-+	update_siblings_masks(cpuid);
-+}
-+
- static void clear_cpu_topology(int cpu)
- {
- 	struct cpu_topology *cpu_topo = &cpu_topology[cpu];
+ void __init smp_prepare_cpus(unsigned int max_cpus)
+@@ -161,9 +163,9 @@ asmlinkage __visible void smp_callin(void)
+ 	mmgrab(mm);
+ 	current->active_mm = mm;
+ 
++	store_cpu_topology(curr_cpuid);
+ 	notify_cpu_starting(curr_cpuid);
+ 	numa_add_cpu(curr_cpuid);
+-	update_siblings_masks(curr_cpuid);
+ 	set_cpu_online(curr_cpuid, 1);
+ 
+ 	/*
 -- 
 2.37.0
 

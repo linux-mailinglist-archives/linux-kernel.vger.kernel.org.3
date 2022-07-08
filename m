@@ -2,242 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 281FA56C48F
-	for <lists+linux-kernel@lfdr.de>; Sat,  9 Jul 2022 01:15:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A43356C2B9
+	for <lists+linux-kernel@lfdr.de>; Sat,  9 Jul 2022 01:13:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237981AbiGHXGE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Jul 2022 19:06:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46284 "EHLO
+        id S238975AbiGHXGb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Jul 2022 19:06:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46546 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232561AbiGHXGC (ORCPT
+        with ESMTP id S239360AbiGHXG1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Jul 2022 19:06:02 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6DF237196;
-        Fri,  8 Jul 2022 16:06:01 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5FF8E6228C;
-        Fri,  8 Jul 2022 23:06:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A96ECC341C0;
-        Fri,  8 Jul 2022 23:06:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1657321560;
-        bh=iq3+qkgxISrmsW77SppHM1TflQly/C6hvP98TkXXAuY=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=OxeVJ4CRidknUVJo1ehgzJYni2Ruz63eRXSDIZmDHCstaEaw4rKB5yGQ7V+ASLRDf
-         GmqmmxMzDeDIVxN1Q/u2Bw/Ms3BD+UXEQvNHJbE3v72bQGxK1eyTnDZV/7SHNKHM9U
-         mJnsmUbESL7RJ2XRwGmKdEx+CgN8Q3BKEAnMApPymeQUmsTwNnbX11PNnQEPwfx2+A
-         y3ZmVdnGlKyxRxSM9+lsnxZBs07tdEAx4LSfBPQKLBTrAm1LMA8MsuqW0ShiCeGkGQ
-         bQ5cnHGqW2WyTQw50FJwHsyUb9kxpd32IGBhARN4wLvcPAI76uH/05XWI/Qm1aGAyB
-         +Bf0/A66sCdFg==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id 43EB25C0835; Fri,  8 Jul 2022 16:06:00 -0700 (PDT)
-Date:   Fri, 8 Jul 2022 16:06:00 -0700
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     Joel Fernandes <joel@joelfernandes.org>
-Cc:     rcu@vger.kernel.org, linux-kernel@vger.kernel.org,
-        rushikesh.s.kadam@intel.com, urezki@gmail.com,
-        neeraj.iitr10@gmail.com, frederic@kernel.org, rostedt@goodmis.org,
-        vineeth@bitbyteword.org
-Subject: Re: [PATCH v2 6/8] rcuscale: Add test for using call_rcu_lazy() to
- emulate kfree_rcu()
-Message-ID: <20220708230600.GC1790663@paulmck-ThinkPad-P17-Gen-1>
-Reply-To: paulmck@kernel.org
-References: <20220622225102.2112026-1-joel@joelfernandes.org>
- <20220622225102.2112026-8-joel@joelfernandes.org>
- <20220626041327.GN1790663@paulmck-ThinkPad-P17-Gen-1>
- <YsexpcG2iaplKPIs@google.com>
+        Fri, 8 Jul 2022 19:06:27 -0400
+Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A056D3C14C
+        for <linux-kernel@vger.kernel.org>; Fri,  8 Jul 2022 16:06:24 -0700 (PDT)
+Received: by mail-ed1-x533.google.com with SMTP id x10so196775edd.13
+        for <linux-kernel@vger.kernel.org>; Fri, 08 Jul 2022 16:06:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=V3uz7RiSt5a+7sv4FuEPnm/V9cAp31RU7bmEVl/UAKU=;
+        b=NbxlYbo0ChI5HUxdUBq2tJosu3oGmwg0l1hnY6SU/ljs8+u3vBB5ftr5Imm/S80DY/
+         QnZGBRV5hId49A/g/Dxn0q23wvCNYOkiW9pvPXHQpYqDXfB3TsqHl/Q06GRgVMDCAasG
+         PRahrkew9qwtfInL3ibU2bdLxX78tIfILAChmOf4iWzSGb6FPk0DKyJlPY3kTpslM4t6
+         3Lt1L/MwWVpyg+APSV/UoVluFNzc0TPaNGTG6uA/apy5q7YEBqXyYPdhHJDwrSQYDoG7
+         uAdlNHbdcUXAi1t5nhAQE8tnHfs2GQgFpDfZ117UzfmTd4zIrES2hBL906ai85hHLlTa
+         TN1Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=V3uz7RiSt5a+7sv4FuEPnm/V9cAp31RU7bmEVl/UAKU=;
+        b=cJ8NDYbEkyVcoXObWJR5lY+FIRvgma3IMUvTMogT1tnXQqxzUD7rLJ0WKeIh9v8B5I
+         J1Bfb+T7lJXaLaVrH68NsqPITsPtaeu9F03qMm4kk2WVKy3xn4PSvkA3vlY//mn1WtSG
+         tpARMpUJygnD2MlYYpBSGjoQg5DvGhvkEM5wVKml5/qqxdHJKN2OX8M8e9LZLzMF8RrG
+         AesXKjFz0MUR8m+04p3PJmQ/GoO1K1BsVu/38cHYloYf3d/l741TB45IwmkdEMmIxwbT
+         HmY0KfMol5Okl6alHR448PZvIwMKa3pbHhFb2Ksn7baYHbkaAuSIKt14QC0b8rGNO3nc
+         UdUQ==
+X-Gm-Message-State: AJIora/pp/S166tk1CEebaHlTsW8YynoONAKUJk8FzBvNDCWln0vpR02
+        E4JMrBJjroi6ytIuMYcFcjEyG3ofVTkdyg==
+X-Google-Smtp-Source: AGRyM1uLgto2yfj0h3khFhGJbsldnlro7C5X3/QY65CXDn7bY4dYJxsrfchHRxJtv903jIvCXqyAzQ==
+X-Received: by 2002:a05:6402:5303:b0:435:7c46:e411 with SMTP id eo3-20020a056402530300b004357c46e411mr8265105edb.221.1657321583123;
+        Fri, 08 Jul 2022 16:06:23 -0700 (PDT)
+Received: from localhost (cable-89-216-134-246.dynamic.sbb.rs. [89.216.134.246])
+        by smtp.gmail.com with ESMTPSA id j8-20020a170906094800b006feed200464sm15500033ejd.131.2022.07.08.16.06.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 08 Jul 2022 16:06:22 -0700 (PDT)
+Date:   Sat, 9 Jul 2022 01:06:18 +0200
+From:   Aleksa =?utf-8?B?VnXEjWtvdmnEhw==?= <aleksav013@gmail.com>
+To:     Shuah Khan <skhan@linuxfoundation.org>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Arnd Bergmann <arnd@arndb.de>, linux-kernel@vger.kernel.org
+Subject: Re: PROBLEM: dmesg tracedumps on rtsx_usb module loading during boot
+Message-ID: <20220708230618.rlqa7azb6q7asvds@artix.localdomain>
+References: <20220708134942.r3nhwzgh4nchaebi@artix.localdomain>
+ <Ysg20t2t/S11idyx@kroah.com>
+ <0fc74c07-791e-a6f2-de43-510852a3517c@linuxfoundation.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <YsexpcG2iaplKPIs@google.com>
-X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <0fc74c07-791e-a6f2-de43-510852a3517c@linuxfoundation.org>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jul 08, 2022 at 04:25:09AM +0000, Joel Fernandes wrote:
-> On Sat, Jun 25, 2022 at 09:13:27PM -0700, Paul E. McKenney wrote:
-> > On Wed, Jun 22, 2022 at 10:51:00PM +0000, Joel Fernandes (Google) wrote:
-> > > Reuse the kfree_rcu() test in order to be able to compare the memory reclaiming
-> > > properties of call_rcu_lazy() with kfree_rcu().
-> > > 
-> > > With this test, we find similar memory footprint and time call_rcu_lazy()
-> > > free'ing takes compared to kfree_rcu(). Also we confirm that call_rcu_lazy()
-> > > can survive OOM during extremely frequent calls.
-> > > 
-> > > If we really push it, i.e. boot system with low memory and compare
-> > > kfree_rcu() with call_rcu_lazy(), I find that call_rcu_lazy() is more
-> > > resilient and is much harder to produce OOM as compared to kfree_rcu().
+On 22/07/08 01:09PM, Shuah Khan wrote:
+> On 7/8/22 7:53 AM, Greg Kroah-Hartman wrote:
+> > On Fri, Jul 08, 2022 at 03:49:42PM +0200, Aleksa Vučković wrote:
+> > > [1.] One line summary of the problem:
+> > > dmesg tracedumps on rtsx_usb module loading during boot
 > > 
-> > Another approach would be to make rcutorture's forward-progress testing
-> > able to use call_rcu_lazy().  This would test lazy callback flooding.
+> > This should be fixed in linux-next now, right?
 > > 
-> > Yet another approach would be to keep one CPU idle other than a
-> > kthread doing call_rcu_lazy().  Of course "idle" includes redirecting
-> > those pesky interrupts.
+> > Shuah (on cc:) send in some commits to resolve this, look at this
+> > thread:
+> > 	https://lore.kernel.org/all/cover.1656642167.git.skhan@linuxfoundation.org/
 > > 
-> > It is almost certainly necessary for rcutorture to exercise the
-> > call_rcu_lazy() path regularly.
+> > If you could test those 2 patches, that would be great.
+
+I just applied these two patches into staging tree and it seems to fix
+dma mapping error. There is no trace dump in dmesg now.
+
 > 
-> Currently I added a test like the following which adds a new torture type, my
-> thought was to stress the new code to make sure nothing crashed or hung the
-> kernel. That is working well except I don't exactly understand the total-gps
-> print showing 0, which the other print shows 1188 GPs. I'll go dig into that
-> tomorrow.. thanks!
+> Yes. Please test these patches and send me the trace you are seeing
+> as well. It will help us confirm if it is the same problem or a new
+> one.
 > 
-> The print shows
-> TREE11 ------- 1474 GPs (12.2833/s) [rcu_lazy: g0 f0x0 total-gps=0]
-> TREE11 no success message, 7 successful version messages
+> thanks,
+> -- Shuah
 
-Nice!!!  It is very good to see you correctly using the rcu_torture_ops
-facility correctly!
+However, I mistakenly assumed that dmesg trace was also only indicator
+that SD card reader does not work. It seems like these two issues are
+not connected, both 37fcacb50be7071d146144a6c5c5bf0194b9a1cf (last
+commit that does not have trace dump) and this version after patch do
+not register SD card.
 
-And this could be good for your own testing, and I am happy to pull it
-in for that purpose (given it being fixed, having a good commit log,
-and so on).  After all, TREE10 is quite similar -- not part of CFLIST,
-but useful for certain types of focused testing.
+I will do another bisect to find out which commit actually causes SD
+card reader to not register SD cards. I will contact you after I do more
+testing.
 
-However, it would be very good to get call_rcu_lazy() testing going
-more generally, and in particular in TREE01 where offloading changes
-dynamically.  A good way to do this is to add a .call_lazy() component
-to the rcu_torture_ops structure, and check for it in a manner similar
-to that done for the .deferred_free() component.  Including adding a
-gp_normal_lazy module parameter.  This would allow habitual testing
-on a few scenarios and focused lazy testing on all of them via the
---bootargs parameter.
-
-On the total-gps=0, the usual suspicion would be that the lazy callbacks
-never got invoked.  It looks like you were doing about a two-minute run,
-so maybe a longer run?  Though weren't they supposed to kick in at 15
-seconds or so?  Or did this value of zero come about because this run
-used exactly 300 grace periods?
-
-							Thanx, Paul
-
-> diff --git a/kernel/rcu/rcutorture.c b/kernel/rcu/rcutorture.c
-> index 7120165a9342..cc6b7392d801 100644
-> --- a/kernel/rcu/rcutorture.c
-> +++ b/kernel/rcu/rcutorture.c
-> @@ -872,6 +872,64 @@ static struct rcu_torture_ops tasks_rude_ops = {
->  
->  #endif // #else #ifdef CONFIG_TASKS_RUDE_RCU
->  
-> +#ifdef CONFIG_RCU_LAZY
-> +
-> +/*
-> + * Definitions for lazy RCU torture testing.
-> + */
-> +unsigned long orig_jiffies_till_flush;
-> +
-> +static void rcu_sync_torture_init_lazy(void)
-> +{
-> +	rcu_sync_torture_init();
-> +
-> +	orig_jiffies_till_flush = rcu_lazy_get_jiffies_till_flush();
-> +	rcu_lazy_set_jiffies_till_flush(50);
-> +}
-> +
-> +static void rcu_lazy_cleanup(void)
-> +{
-> +	rcu_lazy_set_jiffies_till_flush(orig_jiffies_till_flush);
-> +}
-> +
-> +static struct rcu_torture_ops rcu_lazy_ops = {
-> +	.ttype			= RCU_LAZY_FLAVOR,
-> +	.init			= rcu_sync_torture_init_lazy,
-> +	.cleanup		= rcu_lazy_cleanup,
-> +	.readlock		= rcu_torture_read_lock,
-> +	.read_delay		= rcu_read_delay,
-> +	.readunlock		= rcu_torture_read_unlock,
-> +	.readlock_held		= torture_readlock_not_held,
-> +	.get_gp_seq		= rcu_get_gp_seq,
-> +	.gp_diff		= rcu_seq_diff,
-> +	.deferred_free		= rcu_torture_deferred_free,
-> +	.sync			= synchronize_rcu,
-> +	.exp_sync		= synchronize_rcu_expedited,
-> +	.get_gp_state		= get_state_synchronize_rcu,
-> +	.start_gp_poll		= start_poll_synchronize_rcu,
-> +	.poll_gp_state		= poll_state_synchronize_rcu,
-> +	.cond_sync		= cond_synchronize_rcu,
-> +	.call			= call_rcu_lazy,
-> +	.cb_barrier		= rcu_barrier,
-> +	.fqs			= rcu_force_quiescent_state,
-> +	.stats			= NULL,
-> +	.gp_kthread_dbg		= show_rcu_gp_kthreads,
-> +	.check_boost_failed	= rcu_check_boost_fail,
-> +	.stall_dur		= rcu_jiffies_till_stall_check,
-> +	.irq_capable		= 1,
-> +	.can_boost		= IS_ENABLED(CONFIG_RCU_BOOST),
-> +	.extendables		= RCUTORTURE_MAX_EXTEND,
-> +	.name			= "rcu_lazy"
-> +};
-> +
-> +#define LAZY_OPS &rcu_lazy_ops,
-> +
-> +#else // #ifdef CONFIG_RCU_LAZY
-> +
-> +#define LAZY_OPS
-> +
-> +#endif // #else #ifdef CONFIG_RCU_LAZY
-> +
->  
->  #ifdef CONFIG_TASKS_TRACE_RCU
->  
-> @@ -3145,7 +3203,7 @@ rcu_torture_init(void)
->  	unsigned long gp_seq = 0;
->  	static struct rcu_torture_ops *torture_ops[] = {
->  		&rcu_ops, &rcu_busted_ops, &srcu_ops, &srcud_ops, &busted_srcud_ops,
-> -		TASKS_OPS TASKS_RUDE_OPS TASKS_TRACING_OPS
-> +		TASKS_OPS TASKS_RUDE_OPS TASKS_TRACING_OPS LAZY_OPS
->  		&trivial_ops,
->  	};
->  
-> diff --git a/tools/testing/selftests/rcutorture/configs/rcu/TREE11 b/tools/testing/selftests/rcutorture/configs/rcu/TREE11
-> new file mode 100644
-> index 000000000000..436013f3e015
-> --- /dev/null
-> +++ b/tools/testing/selftests/rcutorture/configs/rcu/TREE11
-> @@ -0,0 +1,18 @@
-> +CONFIG_SMP=y
-> +CONFIG_PREEMPT_NONE=n
-> +CONFIG_PREEMPT_VOLUNTARY=n
-> +CONFIG_PREEMPT=y
-> +#CHECK#CONFIG_PREEMPT_RCU=y
-> +CONFIG_HZ_PERIODIC=n
-> +CONFIG_NO_HZ_IDLE=y
-> +CONFIG_NO_HZ_FULL=n
-> +CONFIG_RCU_TRACE=y
-> +CONFIG_HOTPLUG_CPU=y
-> +CONFIG_MAXSMP=y
-> +CONFIG_CPUMASK_OFFSTACK=y
-> +CONFIG_RCU_NOCB_CPU=y
-> +CONFIG_DEBUG_LOCK_ALLOC=n
-> +CONFIG_RCU_BOOST=n
-> +CONFIG_DEBUG_OBJECTS_RCU_HEAD=n
-> +CONFIG_RCU_EXPERT=y
-> +CONFIG_RCU_LAZY=y
-> diff --git a/tools/testing/selftests/rcutorture/configs/rcu/TREE11.boot b/tools/testing/selftests/rcutorture/configs/rcu/TREE11.boot
-> new file mode 100644
-> index 000000000000..9b6f720d4ccd
-> --- /dev/null
-> +++ b/tools/testing/selftests/rcutorture/configs/rcu/TREE11.boot
-> @@ -0,0 +1,8 @@
-> +maxcpus=8 nr_cpus=43
-> +rcutree.gp_preinit_delay=3
-> +rcutree.gp_init_delay=3
-> +rcutree.gp_cleanup_delay=3
-> +rcu_nocbs=0-7
-> +rcutorture.torture_type=rcu_lazy
-> +rcutorture.nocbs_nthreads=8
-> +rcutorture.fwd_progress=0
-> -- 
-> 2.37.0.rc0.161.g10f37bed90-goog
-> 
+Sincerely,
+Aleksa Vuckovic

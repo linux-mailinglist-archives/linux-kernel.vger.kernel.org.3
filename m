@@ -2,70 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AAA0D56BBDC
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 16:35:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9BD6856BC62
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 17:09:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238096AbiGHOfo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Jul 2022 10:35:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55198 "EHLO
+        id S238055AbiGHOij (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Jul 2022 10:38:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57518 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237974AbiGHOfk (ORCPT
+        with ESMTP id S235506AbiGHOih (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Jul 2022 10:35:40 -0400
-Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D432823BC9;
-        Fri,  8 Jul 2022 07:35:39 -0700 (PDT)
-Received: by mail-wr1-x436.google.com with SMTP id h17so17674879wrx.0;
-        Fri, 08 Jul 2022 07:35:39 -0700 (PDT)
+        Fri, 8 Jul 2022 10:38:37 -0400
+Received: from mail-ot1-x32c.google.com (mail-ot1-x32c.google.com [IPv6:2607:f8b0:4864:20::32c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADBCE17046
+        for <linux-kernel@vger.kernel.org>; Fri,  8 Jul 2022 07:38:36 -0700 (PDT)
+Received: by mail-ot1-x32c.google.com with SMTP id s16-20020a0568301c7000b0061c283d6c37so1374165otg.12
+        for <linux-kernel@vger.kernel.org>; Fri, 08 Jul 2022 07:38:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=ppR38sJTn4e6UkCiroOOj/awvQOastGoKzwCSCjDPkk=;
-        b=NABPHaAvOVdVUD2XiOt4+I646KM6yqphbI9sKrSh1qyNVdO8wYiFlfVF2B5NttT5hi
-         dqLBTHiGRj4gHsGsDJSiuWA483+IZLD69AtENs5wFWWSOW5EpJPRPkT9H0YZhBtfZInu
-         Ei4jqBXjFRG/bI3B1v9+BTSHzYJ0hhsVczCungcC12DZ+p6JEy4yvZCQ6lP53WT2iPEk
-         bWALtLRLHsIbnKqu6PnYMJ5Jc4u8BbwfhN4ZniMutnG/u5j7q8eO+sKfpbyDG8XQeRSO
-         64KwOZt1t87EBfJgbQsbzyBVuu8+7Tnrhg1p9SxwAg4NRerUf1WpsUwp29EmeyG311PJ
-         vWdQ==
+         :content-disposition:in-reply-to;
+        bh=jzhpCqh+Xn1+gXpi3kqOG96KCWE5A2eFiSKTN7tBjLo=;
+        b=Gs0V9VjgliuX8I571Q0l4ucdJ9eA2538iLkVuuYNziG8X94hqHrU/8Gksc/luQg2WG
+         kFlCXLU9tp8HvM98nUK+8QO22KuUOLhM7BIfTKR9FMlT1QpI8YLtg/IDJtOSQKhDGsc9
+         50D8Fmrn+ysmVSpvPXVvfoSjTw/j4BMxdAkOtZMUO0MT2ocwGbc1z8hHWYFNeb35sVOW
+         ziy4XBQx588hLe+PVw48WKKXYhkGHMGZ1w5HTx3UXyUmuIms7JN050cnZmtPyC+mBkyN
+         91tgE3d7bnlZ8EX2QE3QlOeZU9OJ00wYZ6E88nzQ6Ci2Lh4gQHjqoHrZl/xZDv3wd6yJ
+         z1LQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=ppR38sJTn4e6UkCiroOOj/awvQOastGoKzwCSCjDPkk=;
-        b=x2nxvHRmv/zOqENBm3qEI+dXhBQV/JhbGMzzzk2X4PIDIVbH7Fr07AmPH5jfsEfdbB
-         hyA8BPg0GqYWelTBLRLM02JlYbrCJRn0SidE/V6T6hNf6Anm6DicMeluR6fcn4A+lLg8
-         HZplb3GUSip6zgpSgwo/98rSN5kRcZGnFX3lbz1NhUPOq95dX71r1nLy4tn+sb+T8MQ/
-         mhvLjsyq350jCPoFJg87E0/XkEL+okc2SzXNercHgPzOsy/+Ls536S8uBAv7ABi0RzaJ
-         WeQ58jIuEfyX5Uc9MLOrNog1yRttYFUiyoOijOVF1s4vJltLb6NG5UbCCu8svQGQh88j
-         ztMA==
-X-Gm-Message-State: AJIora8ikQDJDT/IMWwfnS6RrOwerU2JvNYqtCkBNcZpESbqhiJOSaO1
-        uU5bYphUTDk/oiv2rHvlkhgdNQZN51U=
-X-Google-Smtp-Source: AGRyM1u2Oee3xZ5+iHTTliZq8AEVz1GxAmAFO24MCgJdXMTKbP/oBsD1BCUuJ7kWEAccbCqwmsjInQ==
-X-Received: by 2002:a05:6000:25a:b0:21d:727b:5017 with SMTP id m26-20020a056000025a00b0021d727b5017mr3570510wrz.184.1657290938309;
-        Fri, 08 Jul 2022 07:35:38 -0700 (PDT)
-Received: from orome (p200300e41f12c800f22f74fffe1f3a53.dip0.t-ipconnect.de. [2003:e4:1f12:c800:f22f:74ff:fe1f:3a53])
-        by smtp.gmail.com with ESMTPSA id c9-20020a05600c0a4900b0039c4ba160absm11292953wmq.2.2022.07.08.07.35.36
+         :mime-version:content-disposition:in-reply-to;
+        bh=jzhpCqh+Xn1+gXpi3kqOG96KCWE5A2eFiSKTN7tBjLo=;
+        b=LyXBHu3ucAhotMR3yH/xHV/BkXVLDUZ/LdyuY3rAYJlu/28Z2VNB81+k8Em7/uwf8e
+         6gjzOBJXg5HWHpPRP1teh5PxZ3iNc89UYwXJe3/8lcrQDLpoeaEJ+/Kh2KNO6UvDPIbo
+         BI7eEiA33v93rimkpD/Bs3UJHRwHbSIi8x25UN3o7WAeOyqbS9EUQ2pAwvn1RjFIF9iv
+         HiPHvECQA2MjQdDYv8s24JP+LASCGnYxsh1nfqhnwGCTsBNZxAUao7xbWdbvp9dhxk60
+         CsIYcgogSq7toSC82lbKw8EQ13CM7DSd4r8ZtK7n+4pxF25bM4kAJym4BPYWDn7IMCLz
+         KALA==
+X-Gm-Message-State: AJIora8Te7CgD9fZpAaksDLnIsj+OfJAWgZr8z2eNVy979ndZ9O+bD5X
+        BEYZuQJi2SaBGc3SnKRks+iy81nysEfGew==
+X-Google-Smtp-Source: AGRyM1sCJC5ARnj2EK3Cdme1qxyNVBiyvFcfMlbwxAjiEaijAj9HPgpq9WcmALbTCUntGJKHz6k6qw==
+X-Received: by 2002:a05:6830:4422:b0:616:ef53:918c with SMTP id q34-20020a056830442200b00616ef53918cmr1708725otv.151.1657291115941;
+        Fri, 08 Jul 2022 07:38:35 -0700 (PDT)
+Received: from localhost ([12.97.180.36])
+        by smtp.gmail.com with ESMTPSA id b132-20020aca348a000000b003357568e39fsm12492522oia.57.2022.07.08.07.38.35
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 08 Jul 2022 07:35:37 -0700 (PDT)
-Date:   Fri, 8 Jul 2022 16:35:35 +0200
-From:   Thierry Reding <thierry.reding@gmail.com>
-To:     Akhil R <akhilrajeev@nvidia.com>
-Cc:     dmaengine@vger.kernel.org, jonathanh@nvidia.com,
-        ldewangan@nvidia.com, linux-kernel@vger.kernel.org,
-        linux-tegra@vger.kernel.org, p.zabel@pengutronix.de,
-        vkoul@kernel.org, robh+dt@kernel.org, devicetree@vger.kernel.org
-Subject: Re: [PATCH v2 1/3] dt-bindings: dmaengine: Add compatible for
- Tegra234
-Message-ID: <YshAt5WAG9zUkrpy@orome>
-References: <20220707145729.41876-1-akhilrajeev@nvidia.com>
- <20220707145729.41876-2-akhilrajeev@nvidia.com>
+        Fri, 08 Jul 2022 07:38:35 -0700 (PDT)
+Date:   Fri, 8 Jul 2022 07:38:35 -0700
+From:   Yury Norov <yury.norov@gmail.com>
+To:     Paul Menzel <pmenzel@molgen.mpg.de>
+Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] lib/bitmap: Make parameter len unsigned
+Message-ID: <YshBa/87hSAZwIP3@yury-laptop>
+References: <20220708075239.9057-1-pmenzel@molgen.mpg.de>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="7KrFkS22rogEsCYQ"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220707145729.41876-2-akhilrajeev@nvidia.com>
-User-Agent: Mutt/2.2.6 (2022-06-05)
+In-Reply-To: <20220708075239.9057-1-pmenzel@molgen.mpg.de>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -76,57 +71,67 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Fri, Jul 08, 2022 at 09:52:40AM +0200, Paul Menzel wrote:
+> The length is non-negative, so make it unsigned.
+> 
+> Signed-off-by: Paul Menzel <pmenzel@molgen.mpg.de>
 
---7KrFkS22rogEsCYQ
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Hi Paul,
 
-On Thu, Jul 07, 2022 at 08:27:27PM +0530, Akhil R wrote:
-> Document the compatible string used by GPCDMA controller for Tegra234.
->=20
-> Signed-off-by: Akhil R <akhilrajeev@nvidia.com>
+Can you please tell more about your motivation for fixing
+__bitmap_set? The following __bitmap_clear has the same problem,
+and bitmap_parse{,_user}, and bitmap_print_to_pagebuf, and
+bitmap_parselist...
+
+Is there a particular problem that is resolved after fixing
+__bitmap_set()?
+
+I'm OK if this is a single patch, but for a cleanup work it would 
+be more logical to clean everything in a single patch/series...
+
+Thanks,
+Yury
+
 > ---
->  .../devicetree/bindings/dma/nvidia,tegra186-gpc-dma.yaml         | 1 +
->  1 file changed, 1 insertion(+)
->=20
-> diff --git a/Documentation/devicetree/bindings/dma/nvidia,tegra186-gpc-dm=
-a.yaml b/Documentation/devicetree/bindings/dma/nvidia,tegra186-gpc-dma.yaml
-> index 9dd1476d1849..81f3badbc8ec 100644
-> --- a/Documentation/devicetree/bindings/dma/nvidia,tegra186-gpc-dma.yaml
-> +++ b/Documentation/devicetree/bindings/dma/nvidia,tegra186-gpc-dma.yaml
-> @@ -23,6 +23,7 @@ properties:
->      oneOf:
->        - const: nvidia,tegra186-gpcdma
->        - items:
-> +          - const: nvidia,tegra234-gpcdma
->            - const: nvidia,tegra194-gpcdma
->            - const: nvidia,tegra186-gpcdma
-
-I don't think this works because it will now fail to validate Tegra194
-device trees. You'll need to create a separate set of items for
-Tegra234.
-
-Thierry
-
---7KrFkS22rogEsCYQ
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAmLIQLcACgkQ3SOs138+
-s6F9wA/+PevJYM9sYGjtbmt0Td1G/xEVvLlkGtAzYtC2f2I9YJl43ag4RwxvG3ok
-/i366YAeBcA61nBwuLsnPflTivsKa8W6MXUGByTJOCBsNYq5S3LGsqSi0KlsD1Xr
-ARLkiz3WDyncUohNXOOBxGEzEOrO/YT/7Itb8dwr1ig5T+W0PtumgVnAH86iX+DM
-mpiwLHuWFqMwU/tziEiR+JyzK6EYAwS3STDuCeaiGw7siF+cuf08Z8zmvwNU47sv
-iIwwdPaSDvKVPyKRbl/YwJbbMkas4lF1itH0DhImspBbUEZIGTjcf1U7G8mrVSKL
-HAj+S6rmhHM7cP1V99zcAQIDamEaWko9rGtrE7ihKpWG0R5Q+6+7qyZ08g6HeZ7S
-aAA/uEhPU+SCy7Bc4wp13/fupQsSLmekewcNUSBSQXO1ZiQ6P9Lx+tkzNVT+xuk5
-wev7ncXsqG8k2p1uv/EhvlA/LvHZ5V0obqcmhJB63tlDyncgdr+YmB4r3XHG4uB2
-DseZSKeX6xqAhTOSC9FRmDcuNVoK6kllfbvY4xqpxiPmIc6drbEKan8FdqQVsKi+
-YO3W+4fvigR+Bx9k7oCvTlSLko6iUkvlifessg4Du9zZW23+/FT7svBxL4uHSwEx
-ozKor/mOpEdsHoe1FE8TQ38KpV9+XWzc9J7mjPc1LiFclEZ85a0=
-=fR/G
------END PGP SIGNATURE-----
-
---7KrFkS22rogEsCYQ--
+> v2: Update signature in header file
+> 
+>  include/linux/bitmap.h | 2 +-
+>  lib/bitmap.c           | 4 ++--
+>  2 files changed, 3 insertions(+), 3 deletions(-)
+> 
+> diff --git a/include/linux/bitmap.h b/include/linux/bitmap.h
+> index 2e6cd5681040..feaf84cbc487 100644
+> --- a/include/linux/bitmap.h
+> +++ b/include/linux/bitmap.h
+> @@ -164,7 +164,7 @@ bool __bitmap_intersects(const unsigned long *bitmap1,
+>  bool __bitmap_subset(const unsigned long *bitmap1,
+>  		     const unsigned long *bitmap2, unsigned int nbits);
+>  int __bitmap_weight(const unsigned long *bitmap, unsigned int nbits);
+> -void __bitmap_set(unsigned long *map, unsigned int start, int len);
+> +void __bitmap_set(unsigned long *map, unsigned int start, unsigned int len);
+>  void __bitmap_clear(unsigned long *map, unsigned int start, int len);
+>  
+>  unsigned long bitmap_find_next_zero_area_off(unsigned long *map,
+> diff --git a/lib/bitmap.c b/lib/bitmap.c
+> index b18e31ea6e66..0746beb336df 100644
+> --- a/lib/bitmap.c
+> +++ b/lib/bitmap.c
+> @@ -348,14 +348,14 @@ int __bitmap_weight(const unsigned long *bitmap, unsigned int bits)
+>  }
+>  EXPORT_SYMBOL(__bitmap_weight);
+>  
+> -void __bitmap_set(unsigned long *map, unsigned int start, int len)
+> +void __bitmap_set(unsigned long *map, unsigned int start, unsigned int len)
+>  {
+>  	unsigned long *p = map + BIT_WORD(start);
+>  	const unsigned int size = start + len;
+>  	int bits_to_set = BITS_PER_LONG - (start % BITS_PER_LONG);
+>  	unsigned long mask_to_set = BITMAP_FIRST_WORD_MASK(start);
+>  
+> -	while (len - bits_to_set >= 0) {
+> +	while (len >= bits_to_set) {
+>  		*p |= mask_to_set;
+>  		len -= bits_to_set;
+>  		bits_to_set = BITS_PER_LONG;
+> -- 
+> 2.36.1

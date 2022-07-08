@@ -2,106 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D49156BFA5
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 20:36:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 21E9256BF80
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 20:36:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234285AbiGHQlD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Jul 2022 12:41:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55190 "EHLO
+        id S238425AbiGHQoZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Jul 2022 12:44:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57712 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238408AbiGHQlA (ORCPT
+        with ESMTP id S237833AbiGHQoY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Jul 2022 12:41:00 -0400
-Received: from mail-vs1-xe33.google.com (mail-vs1-xe33.google.com [IPv6:2607:f8b0:4864:20::e33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 086062A711
-        for <linux-kernel@vger.kernel.org>; Fri,  8 Jul 2022 09:40:59 -0700 (PDT)
-Received: by mail-vs1-xe33.google.com with SMTP id 185so10630115vse.6
-        for <linux-kernel@vger.kernel.org>; Fri, 08 Jul 2022 09:40:59 -0700 (PDT)
+        Fri, 8 Jul 2022 12:44:24 -0400
+Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38E51E005
+        for <linux-kernel@vger.kernel.org>; Fri,  8 Jul 2022 09:44:23 -0700 (PDT)
+Received: by mail-ed1-x533.google.com with SMTP id y4so14157487edc.4
+        for <linux-kernel@vger.kernel.org>; Fri, 08 Jul 2022 09:44:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
+        d=chromium.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=4OKQC1JfennXMYbCH8QLvSZ9ug8KCsBnDh54Yf6DjVM=;
-        b=JNrhC24tPcjj2Z6XWK9r9nRSuWELe3mhvLRc0RbRppcAtR4JfNGs/V0I8QkDuGWQ9k
-         aoDmdcO41Hxkve2tq7gX6+VEpZzyXv8GlgDSjSPqVUx/iVAaAuS7b74ClQ9Erre1UDFw
-         J0r97wURkzpgiR/9UxMBFTVtyGxTFrGirQnc2ja98n5g0Y01cgz0XnQL7DYJyPGXL/nV
-         aW5D0NkVD5413ncIxapey+9mKOyPqwsc3yV+2L2mLsIfSM/dUFuvXx8G3bCgnzupdLc/
-         nUS1j+VDbMhbYQeB7qDv02EDxQB2WijfDlTmnrO1jpGvgfAU68bseH37rrCRAlfRfpv3
-         W3Xg==
+        bh=dL+vZj8mZxlz+YJk30etzqurukOsDjVsMP7TniTfED4=;
+        b=DiTY8LvFLkKbw7nF8Oernoz2oFyfF2cwrOrbnr7BMJbtgvs/GXRIg+mRuSv8faM61M
+         D/G+Imrxv+cKLW84NOPfmMPLZLs6R/l0hPdnLoWtmHQjw1Qrk4NoyI5Uj6VHTQaONL+j
+         d3jjqcAo1smNH2sriBLo7GDF/HwYYUtMEHjnc=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=4OKQC1JfennXMYbCH8QLvSZ9ug8KCsBnDh54Yf6DjVM=;
-        b=mcO+Pwp/0TZ2winVXUn9VcMsfeqUSYdTgtdkECYXWAu+OBEent9FvBMEJZ8Z0PwdQH
-         Bv2VS7gcSanzpsKIyQLyrxyChOlYoya4O889Txyjn74SD0Y8m4DTqLd+KAFVi0zlFqgY
-         mgXyom5PFMLJkOLInlRX0tOkKOtYAIl96EvbbdwRjM2jx+XqFPv73CNNbK/EhDVoDKGe
-         BOLB8Esdtxj6Xo/YrH2MW5mpl9B13A3v58WauwWjYhb5B2arHRSbuUt2UNsDMxcRmd8Q
-         wBm4tdoYzYnRGXy7F9tEiZBWAm65VJm/J4jRAY9gH3ZR0fVqpC+XiQhhFHCIOL96XuIZ
-         d8xw==
-X-Gm-Message-State: AJIora8NS0bDEM02ukvn4klAnOElrWJV+bmIRkjRbwEQbiwDLj6NIofx
-        uv/nd9Hsiuc4hhYF1Q2kh/708H9dWeztlekABf8=
-X-Google-Smtp-Source: AGRyM1sBNryM/rW7zwsyvbHs9vVDhF7I5Qky84PEi7ygqiN8kumjn1yPRzZwOCmQfHDZu11Cpg3wAbUmcHtEr+HQWhs=
-X-Received: by 2002:a05:6102:3d9e:b0:357:4526:ae58 with SMTP id
- h30-20020a0561023d9e00b003574526ae58mr221179vsv.56.1657298458927; Fri, 08 Jul
- 2022 09:40:58 -0700 (PDT)
+        bh=dL+vZj8mZxlz+YJk30etzqurukOsDjVsMP7TniTfED4=;
+        b=O41XqIqtxvFasBXzhxClTiHQE26fHKfVSro7a7tyTVsbiWO9UiyPz/jT5Q6uLaNW9K
+         uuucZaYwypgsaTj/oIfLqsTGj+rJOjXw2xVAxpgotwxSNSbzs7cm0WJdAED7V+7Hompf
+         83B5iifuRCof3pTr0UseZE1qYIpYORMNmSINBds7z6pmTM2QdK0ZFJyKmxe9qSN3L3Ph
+         agUyaUQPkBAgzvym+RTV1d8eS5/PBh62jMfd1ZJbuY/o6/67KrCcPypyZHJuwferE3A/
+         HKIn9ND8Xuwg9hUK2NhAsg0EC1GUWnqULfzWMnFzzERIZhbzSInQh+RokVBwdecN+6dk
+         r5tQ==
+X-Gm-Message-State: AJIora/pv2xf+NcA525umKVKrjLWJDIyaSP326qFi6TpE0/VbCC9sGVp
+        S8oLsAQZpeb1ljxDwkwQTqmO+poIRF68UV/S
+X-Google-Smtp-Source: AGRyM1vEjHyJmQcLjVfw55TV+sAoO9rr1xP+O9ybNJ10xxcAcWy29VgapE9UXkSFkJ+10QeOP1JxsA==
+X-Received: by 2002:a50:fa91:0:b0:43a:4f13:4767 with SMTP id w17-20020a50fa91000000b0043a4f134767mr6015846edr.10.1657298661529;
+        Fri, 08 Jul 2022 09:44:21 -0700 (PDT)
+Received: from mail-wr1-f47.google.com (mail-wr1-f47.google.com. [209.85.221.47])
+        by smtp.gmail.com with ESMTPSA id j8-20020aa7c0c8000000b0043a9144d8ecsm4973144edp.71.2022.07.08.09.44.20
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 08 Jul 2022 09:44:20 -0700 (PDT)
+Received: by mail-wr1-f47.google.com with SMTP id o4so31300705wrh.3
+        for <linux-kernel@vger.kernel.org>; Fri, 08 Jul 2022 09:44:20 -0700 (PDT)
+X-Received: by 2002:adf:fb12:0:b0:20c:79b2:a200 with SMTP id
+ c18-20020adffb12000000b0020c79b2a200mr4255799wrr.617.1657298660044; Fri, 08
+ Jul 2022 09:44:20 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220706182300.70862-1-yury.norov@gmail.com> <20220706182300.70862-2-yury.norov@gmail.com>
- <423c4368-0a1c-792c-2637-768532fc7782@rasmusvillemoes.dk> <YsdKMQzUFVwIaqtJ@yury-laptop>
- <d86ad462-fb4c-4768-b060-201511f9ff64@rasmusvillemoes.dk> <CAHp75Vfx3RADfU0cm7Y0kYfOtba4K008xZSSVbACRa3OwbAKGw@mail.gmail.com>
-In-Reply-To: <CAHp75Vfx3RADfU0cm7Y0kYfOtba4K008xZSSVbACRa3OwbAKGw@mail.gmail.com>
-From:   Yury Norov <yury.norov@gmail.com>
-Date:   Fri, 8 Jul 2022 09:40:48 -0700
-Message-ID: <CAAH8bW9qP8YY8k_JOE+oezU0iFCZq6H2W6dv8sL2kr3Q_eLQ8Q@mail.gmail.com>
-Subject: Re: [PATCH 1/5] lib: add find_nth(,and,andnot)_bit()
-To:     Andy Shevchenko <andy.shevchenko@gmail.com>
-Cc:     Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Alexander Lobakin <alexandr.lobakin@intel.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Arnd Bergmann <arnd@arndb.de>, David Gow <davidgow@google.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Isabella Basso <isabbasso@riseup.net>,
-        Kees Cook <keescook@chromium.org>,
-        Keith Busch <kbusch@kernel.org>,
-        Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-        Marco Elver <elver@google.com>,
+References: <20220511060521.465744-1-sumit.garg@linaro.org>
+ <CAD=FV=WXoDvWuH=yjzCcqOZ5CeUtYun7C8zrtrBP4FC409GkqA@mail.gmail.com> <20220708163134.GB6286@willie-the-truck>
+In-Reply-To: <20220708163134.GB6286@willie-the-truck>
+From:   Doug Anderson <dianders@chromium.org>
+Date:   Fri, 8 Jul 2022 09:44:07 -0700
+X-Gmail-Original-Message-ID: <CAD=FV=UNEwP2FLOxW-OBJ0cQq9D+wr3AAERsOXBu-W7P6tYocQ@mail.gmail.com>
+Message-ID: <CAD=FV=UNEwP2FLOxW-OBJ0cQq9D+wr3AAERsOXBu-W7P6tYocQ@mail.gmail.com>
+Subject: Re: [PATCH v3 0/2] arm64: Fix pending single-step debugging issues
+To:     Will Deacon <will@kernel.org>
+Cc:     Sumit Garg <sumit.garg@linaro.org>,
+        Daniel Thompson <daniel.thompson@linaro.org>,
+        Wei Li <liwei391@huawei.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
         Mark Rutland <mark.rutland@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        =?UTF-8?B?VG9rZSBIw7hpbGFuZC1Kw7hyZ2Vuc2Vu?= <toke@redhat.com>
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Jason Wessel <jason.wessel@windriver.com>,
+        Marc Zyngier <maz@kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        LKML <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jul 8, 2022 at 2:13 AM Andy Shevchenko
-<andy.shevchenko@gmail.com> wrote:
->
-> On Fri, Jul 8, 2022 at 10:55 AM Rasmus Villemoes
-> <linux@rasmusvillemoes.dk> wrote:
-> > On 07/07/2022 23.03, Yury Norov wrote:
-> >
-> > >> And I don't
-> > >> like that the index is apparently 1-based (and that surprising API isn't
-> > >> spelled out anywhere).
-> > >
-> > > Yeah... My motivation to start counting from 1 is to keep consistency
-> > > with ffs: __ffs(word) <=> fns(word, 1).
-> >
-> > I understand that you're translating that second f in ffs (find First
-> > set) to a 1. But I disagree that that's necessarily a logical thing to
-> > do. Everybody understands that (given a C or python or... context) when
-> > some prose talks about "the first element in an array", it's the one at
-> > [0]. So I find it much more natural that the set bits in a word are
-> > enumerated 0, 1, ..., popcount(w)-1.
->
-> I agree that here we operate with an array of bits, which naturally
-> starts from bit 0.
+Hi,
 
-OK, I'll send v2 shortly
+On Fri, Jul 8, 2022 at 9:31 AM Will Deacon <will@kernel.org> wrote:
+>
+> On Fri, Jul 01, 2022 at 03:14:16PM -0700, Doug Anderson wrote:
+> > Hi,
+> >
+> > On Tue, May 10, 2022 at 11:05 PM Sumit Garg <sumit.garg@linaro.org> wrote:
+> > >
+> > > This patch-set reworks pending fixes from Wei's series [1] to make
+> > > single-step debugging via kgdb/kdb on arm64 work as expected. There was
+> > > a prior discussion on ML [2] regarding if we should keep the interrupts
+> > > enabled during single-stepping. So patch #1 follows suggestion from Will
+> > > [3] to not disable interrupts during single stepping but rather skip
+> > > single stepping within interrupt handler.
+> > >
+> > > [1] https://lore.kernel.org/all/20200509214159.19680-1-liwei391@huawei.com/
+> > > [2] https://lore.kernel.org/all/CAD=FV=Voyfq3Qz0T3RY+aYWYJ0utdH=P_AweB=13rcV8GDBeyQ@mail.gmail.com/
+> > > [3] https://lore.kernel.org/all/20200626095551.GA9312@willie-the-truck/
+> > >
+> > > Changes in v3:
+> > > - Reword commit descriptions as per Daniel's suggestions.
+> > >
+> > > Changes in v2:
+> > > - Replace patch #1 to rather follow Will's suggestion.
+> > >
+> > > Sumit Garg (2):
+> > >   arm64: entry: Skip single stepping into interrupt handlers
+> > >   arm64: kgdb: Set PSTATE.SS to 1 to re-enable single-step
+> > >
+> > >  arch/arm64/include/asm/debug-monitors.h |  1 +
+> > >  arch/arm64/kernel/debug-monitors.c      |  5 +++++
+> > >  arch/arm64/kernel/entry-common.c        | 18 +++++++++++++++++-
+> > >  arch/arm64/kernel/kgdb.c                |  2 ++
+> > >  4 files changed, 25 insertions(+), 1 deletion(-)
+> >
+> > Sorry it took so long for me to respond. I kept dreaming that I'd find
+> > the time to really dig deep into this to understand it fully and I'm
+> > finally giving up on it. I'm going to hope that Will and/or Catalin
+> > knows this area of the code well and can give it a good review. If not
+> > then I'll strive harder to make the time...
+>
+> So the good news is that I spent a couple of days on this last week.
+
+Excellent, thanks!
+
+
+> The bad news is that I'm nowhere done and about to disappear on holiday
+> for a week!
+
+No worries. It's been broken for so many years and isn't the most
+urgent thing, but it's also one of those things that I do eventually
+want to get fixed so I just want to make sure it doesn't get put off
+indefinitely...
+
+
+> But anyway, I might be able to give this a review when I'm back. Failing
+> that, I wonder if enough of us have a little bit of time each that we
+> could hack on an agreed design together which covers the debug exception
+> behaviour beyond kgdb?
+
+If it will unblock this then I can figure out how to make time for it.
+Definitely my biggest utility would be in testing, but I'm also happy
+to knock around ideas. ...and as per above if the way to move forward
+is to block off a day or two to learn more about all the status bits
+and how they interact in the kernel then I can do that too. Barring
+unforeseen circumstances I'll also be in Dublin in September if that's
+somehow useful. ;-)
+
+-Doug

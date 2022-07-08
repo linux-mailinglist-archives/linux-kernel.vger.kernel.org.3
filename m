@@ -2,181 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4BB1F56C3A1
-	for <lists+linux-kernel@lfdr.de>; Sat,  9 Jul 2022 01:14:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 81C4556C30E
+	for <lists+linux-kernel@lfdr.de>; Sat,  9 Jul 2022 01:13:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237565AbiGHWYp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Jul 2022 18:24:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48586 "EHLO
+        id S238081AbiGHWZn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Jul 2022 18:25:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49450 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231629AbiGHWYo (ORCPT
+        with ESMTP id S237684AbiGHWZl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Jul 2022 18:24:44 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B25CA2E42;
-        Fri,  8 Jul 2022 15:24:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=UHEzehHRKRsWXz+8IPbg41NbpQNGDaruCrZKYM7gqVs=; b=rnxODVY0bahe1vwOxdXRU4Q4CD
-        23CMxLYDMfuwShOZdcRgiTh/izRoE5wPPYJWpyuKDdpJN0TbXjYJ11HLnD/XhFLfHGLThb0BUh5i+
-        RAQXmru36B2JL95aXKu9mBtH9yb7HtxzmrTe0qnUcOMFGBDYwrCwcOKHpf1DM0ga3F/W5QUxOHI5m
-        CEkWpn6zEs/5IEjy2Pk7n8kjXp012hn4jnMAqFNWpeLBHxWQEtwUBnwku/31ks5kHp7QELfUsyOtK
-        6CZRonwrHEsQ2VgZgOXg+9TDUWL6rqQsw8In+Wy9r64TAspHaKK4qkt3PPXExVb7am1f8ivj5IUy8
-        X1lJp52A==;
-Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1o9wOs-006C4b-8a; Fri, 08 Jul 2022 22:24:38 +0000
-Date:   Fri, 8 Jul 2022 15:24:38 -0700
-From:   Luis Chamberlain <mcgrof@kernel.org>
-To:     Song Liu <songliubraving@fb.com>
-Cc:     Song Liu <song@kernel.org>, bpf <bpf@vger.kernel.org>,
-        Christoph Hellwig <hch@infradead.org>,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        lkml <linux-kernel@vger.kernel.org>,
-        Linux-MM <linux-mm@kvack.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Kernel Team <Kernel-team@fb.com>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        "rick.p.edgecombe@intel.com" <rick.p.edgecombe@intel.com>,
-        linux-modules@vger.kernel.org
-Subject: Re: [PATCH v6 bpf-next 0/5] bpf_prog_pack followup
-Message-ID: <YsiupnNJ8WANZiIc@bombadil.infradead.org>
-References: <20220707223546.4124919-1-song@kernel.org>
- <YsdlXjpRrlE9Z+Jq@bombadil.infradead.org>
- <F000FF60-CF95-4E6B-85BD-45FC668AAE0A@fb.com>
- <YseAEsjE49AZDp8c@bombadil.infradead.org>
- <C96F5607-6FFE-4B45-9A9D-B89E3F67A79A@fb.com>
- <YshUEEQ0lk1ON7H6@bombadil.infradead.org>
- <863A2D5B-976D-4724-AEB1-B2A494AD2BDB@fb.com>
+        Fri, 8 Jul 2022 18:25:41 -0400
+Received: from out01.mta.xmission.com (out01.mta.xmission.com [166.70.13.231])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CD0FA2E61
+        for <linux-kernel@vger.kernel.org>; Fri,  8 Jul 2022 15:25:40 -0700 (PDT)
+Received: from in01.mta.xmission.com ([166.70.13.51]:59826)
+        by out01.mta.xmission.com with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <ebiederm@xmission.com>)
+        id 1o9wPq-004o3a-Ov; Fri, 08 Jul 2022 16:25:38 -0600
+Received: from ip68-227-174-4.om.om.cox.net ([68.227.174.4]:43408 helo=email.froward.int.ebiederm.org.xmission.com)
+        by in01.mta.xmission.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <ebiederm@xmission.com>)
+        id 1o9wPp-00AEXn-O8; Fri, 08 Jul 2022 16:25:38 -0600
+From:   "Eric W. Biederman" <ebiederm@xmission.com>
+To:     Keno Fischer <keno@juliacomputing.com>
+Cc:     linux-kernel@vger.kernel.org, mingo@kernel.org,
+        bigeasy@linutronix.de, Peter Zijlstra <peterz@infradead.org>,
+        Jann Horn <jannh@google.com>,
+        Kees Cook <keescook@chromium.org>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Robert O'Callahan <roc@pernos.co>, Kyle Huey <khuey@pernos.co>,
+        Oleg Nesterov <oleg@redhat.com>
+References: <20220421150248.667412396@infradead.org>
+        <20220421150654.817117821@infradead.org>
+        <87czhap9dy.fsf@email.froward.int.ebiederm.org>
+        <878rrrh32q.fsf_-_@email.froward.int.ebiederm.org>
+        <87k0b7v9yk.fsf_-_@email.froward.int.ebiederm.org>
+        <87k0b0apne.fsf_-_@email.froward.int.ebiederm.org>
+        <87a6bv6dl6.fsf_-_@email.froward.int.ebiederm.org>
+        <87r13gd4xy.fsf_-_@email.froward.int.ebiederm.org>
+Date:   Fri, 08 Jul 2022 17:25:31 -0500
+In-Reply-To: <87r13gd4xy.fsf_-_@email.froward.int.ebiederm.org> (Eric
+        W. Biederman's message of "Wed, 22 Jun 2022 11:43:37 -0500")
+Message-ID: <87edyvgs2s.fsf@email.froward.int.ebiederm.org>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <863A2D5B-976D-4724-AEB1-B2A494AD2BDB@fb.com>
-Sender: Luis Chamberlain <mcgrof@infradead.org>
-X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-XM-SPF: eid=1o9wPp-00AEXn-O8;;;mid=<87edyvgs2s.fsf@email.froward.int.ebiederm.org>;;;hst=in01.mta.xmission.com;;;ip=68.227.174.4;;;frm=ebiederm@xmission.com;;;spf=softfail
+X-XM-AID: U2FsdGVkX1/stSDpTvjFDPy2IhraphYlslMz8o/ejjI=
+X-SA-Exim-Connect-IP: 68.227.174.4
+X-SA-Exim-Mail-From: ebiederm@xmission.com
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-DCC: XMission; sa04 1397; Body=1 Fuz1=1 Fuz2=1 
+X-Spam-Combo: ****;Keno Fischer <keno@juliacomputing.com>
+X-Spam-Relay-Country: 
+X-Spam-Timing: total 454 ms - load_scoreonly_sql: 0.05 (0.0%),
+        signal_user_changed: 13 (2.8%), b_tie_ro: 11 (2.4%), parse: 1.23
+        (0.3%), extract_message_metadata: 15 (3.3%), get_uri_detail_list: 1.23
+        (0.3%), tests_pri_-1000: 19 (4.1%), tests_pri_-950: 1.60 (0.4%),
+        tests_pri_-900: 1.22 (0.3%), tests_pri_-90: 173 (38.1%), check_bayes:
+        171 (37.6%), b_tokenize: 7 (1.5%), b_tok_get_all: 7 (1.6%),
+        b_comp_prob: 2.6 (0.6%), b_tok_touch_all: 150 (33.0%), b_finish: 1.15
+        (0.3%), tests_pri_0: 208 (46.0%), check_dkim_signature: 0.88 (0.2%),
+        check_dkim_adsp: 3.6 (0.8%), poll_dns_idle: 1.41 (0.3%), tests_pri_10:
+        4.4 (1.0%), tests_pri_500: 14 (3.0%), rewrite_mail: 0.00 (0.0%)
+Subject: Re: [PATCH 0/3] ptrace: Stop supporting SIGKILL for PTRACE_EVENT_EXIT
+X-SA-Exim-Version: 4.2.1 (built Sat, 08 Feb 2020 21:53:50 +0000)
+X-SA-Exim-Scanned: Yes (on in01.mta.xmission.com)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jul 08, 2022 at 07:58:44PM +0000, Song Liu wrote:
-> 
-> 
-> > On Jul 8, 2022, at 8:58 AM, Luis Chamberlain <mcgrof@kernel.org> wrote:
-> > 
-> > On Fri, Jul 08, 2022 at 01:36:25AM +0000, Song Liu wrote:
-> >> 
-> >> 
-> >>> On Jul 7, 2022, at 5:53 PM, Luis Chamberlain <mcgrof@kernel.org> wrote:
-> >>> 
-> >>> On Thu, Jul 07, 2022 at 11:52:58PM +0000, Song Liu wrote:
-> >>>>> On Jul 7, 2022, at 3:59 PM, Luis Chamberlain <mcgrof@kernel.org> wrote:
-> >>>>> 
-> >>>>> On Thu, Jul 07, 2022 at 03:35:41PM -0700, Song Liu wrote:
-> >>>>>> This set is the second half of v4 [1].
-> >>>>>> 
-> >>>>>> Changes v5 => v6:
-> >>>>>> 1. Rebase and extend CC list.
-> >>>>> 
-> >>>>> Why post a new iteration so soon without completing the discussion we
-> >>>>> had? It seems like we were at least going somewhere. If it's just
-> >>>>> to include mm as I requested, sure, that's fine, but this does not
-> >>>>> provide context as to what we last were talking about.
-> >>>> 
-> >>>> Sorry for sending v6 too soon. The primary reason was to extend the CC
-> >>>> list and add it back to patchwork (v5 somehow got archived). 
-> >>>> 
-> >>>> Also, I think vmalloc_exec_ work would be a separate project, while this 
-> >>>> set is the followup work of bpf_prog_pack. Does this make sense? 
-> >>>> 
-> >>>> Btw, vmalloc_exec_ work could be a good topic for LPC. It will be much
-> >>>> more efficient to discuss this in person. 
-> >>> 
-> >>> What we need is input from mm / arch folks. What is not done here is
-> >>> what that stuff we're talking about is and so mm folks can't guess. My
-> >>> preference is to address that.
-> >>> 
-> >>> I don't think in person discussion is needed if the only folks
-> >>> discussing this topic so far is just you and me.
-> >> 
-> >> How about we start a thread with mm / arch folks for the vmalloc_exec_*
-> >> topic? I will summarize previous discussions and include pointers to 
-> >> these discussions. If necessary, we can continue the discussion at LPC.
-> > 
-> > This sounds like a nice thread to use as this is why we are talking
-> > about that topic.
-> > 
-> >> OTOH, I guess the outcome of that discussion should not change this set? 
-> > 
-> > If the above is done right then actually I think it would show similar
-> > considerations for a respective free for module_alloc_huge().
-> > 
-> >> If we have concern about module_alloc_huge(), maybe we can have bpf code 
-> >> call vmalloc directly (until we have vmalloc_exec_)? 
-> > 
-> > You'd need to then still open code in a similar way the same things
-> > which we are trying to reach consensus on.
-> 
-> >> What do you think about this plan?
-> > 
-> > I think we should strive to not be lazy and sloppy, and prevent growth
-> > of sloppy code. So long as we do that I think this is all reasoanble.
-> 
-> Let me try to understand your concerns here. Say if we want module code
-> to be a temporary home for module_alloc_huge before we move it to mm
-> code. Would you think it is ready to ship if we:
+"Eric W. Biederman" <ebiederm@xmission.com> writes:
 
-Please CC Christoph and linux-modules@vger.kernel.org on future patches
-and dicussions aroudn this, and all others now CC'd.
+> Recently I had a conversation where it was pointed out to me that
+> SIGKILL sent to a tracee stropped in PTRACE_EVENT_EXIT is quite
+> difficult for a tracer to handle.
+>
+> Keeping SIGKILL working for anything after the process has been killed
+> is also a real pain from an implementation point of view.
+>
+> So I am attempting to remove this wart in the userspace API and see
+> if anyone cares.
+>
+> Eric W. Biederman (3):
+>       signal: Ensure SIGNAL_GROUP_EXIT gets set in do_group_exit
+>       signal: Guarantee that SIGNAL_GROUP_EXIT is set on process exit
+>       signal: Drop signals received after a fatal signal has been processed
+>
+>  fs/coredump.c                |  2 +-
+>  include/linux/sched/signal.h |  1 +
+>  kernel/exit.c                | 20 +++++++++++++++++++-
+>  kernel/fork.c                |  2 ++
+>  kernel/signal.c              |  3 ++-
+>  5 files changed, 25 insertions(+), 3 deletions(-)
 
-> 1) Rename module_alloc_huge as module_alloc_text_huge();
+RR folks any comments?
 
-module_alloc_text_huge() is too long, but I've suggested names before
-which are short and generic, and also suggested that if modules are
-not the only users this needs to go outside of modules and so
-vmalloc_text_huge() or whatever.
+Did I properly understand what Keno Fischer was asking for when we
+talked in person?
 
-To do this right it begs the question why we don't do that for the
-existing module_alloc(), as the users of this code is well outside of
-modules now. Last time a similar generic name was used all the special
-arch stuff was left to be done by the module code still, but still
-non-modules were still using that allocator. From my perspective the
-right thing to do is to deal with all the arch stuff as well in the
-generic handler, and have the module code *and* the other users which
-use module_alloc() to use that new caller as well.
-
-> 2) Add module_free_text_huge();
-
-Right, we have special handling for how we free this special code for regular
-module_alloc() and so similar considerations would be needed here for
-the huge stuff.
-
-> 3) Move set_memory_* and fill_ill_insn logic into module_alloc_text_huge()
->   and module_free_text_huge(). 
-
-Yes, that's a bit hairy now, and so a saner and consistent way to do
-this would be best.
-
-> Are these on the right direction? Did I miss anything important?
-
-I've also hinted before that another way to help here is to have draw
-up a simple lib/test_vmalloc_text.c or something like that which would
-enable a selftest to ensure correctness of this code on different archs
-and maybe even let you do performance analysis using perf [0]. You have
-good reasons to move to the huge allocator and the performance metrics
-are an abstract load, however perf measurements can also give you real
-raw data which you can reproduce and enable others to do similar
-comparisons later.
-
-The last thing I'd ask is just ensure you Cc folks who have already been in
-these discussions.
-
-[0] https://lkml.kernel.org/r/Yog+d+oR5TtPp2cs@bombadil.infradead.org
-
-  Luis
+Eric

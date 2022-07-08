@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2FA1A56C06E
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 20:37:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 41CA456C0EE
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 20:38:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238279AbiGHQKT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Jul 2022 12:10:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53290 "EHLO
+        id S238558AbiGHQKZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Jul 2022 12:10:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53292 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238026AbiGHQKR (ORCPT
+        with ESMTP id S238146AbiGHQKR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 8 Jul 2022 12:10:17 -0400
-Received: from srv6.fidu.org (srv6.fidu.org [159.69.62.71])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9204574368;
+Received: from srv6.fidu.org (srv6.fidu.org [IPv6:2a01:4f8:231:de0::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BEF0574371;
         Fri,  8 Jul 2022 09:10:15 -0700 (PDT)
 Received: from localhost (localhost.localdomain [127.0.0.1])
-        by srv6.fidu.org (Postfix) with ESMTP id AADA8C800AF;
-        Fri,  8 Jul 2022 18:10:13 +0200 (CEST)
+        by srv6.fidu.org (Postfix) with ESMTP id 242E0C800AD;
+        Fri,  8 Jul 2022 18:10:14 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=
         tuxedocomputers.com; h=content-transfer-encoding:mime-version
         :references:in-reply-to:x-mailer:message-id:date:date:subject
-        :subject:from:from; s=default; t=1657296613; x=1659111014; bh=nv
-        1yeQkccAF+ZdQu96d/KEVsM4YZKFWBOeyC2mkggzE=; b=VTE7fGn4HgNFcE8vW1
-        H6ht6z0tK2ZIhRaVvy5H+twPziq8YRCS+oqCKG8G9juSuDql6NeVQAD1145GYThV
-        DIqLAGpe54dSVCPjMdd+wIoEHXTvQBxE5x2eWzSs+vhCeK55JtkG58PcstNplzo3
-        BrCCmYZcqzxFDTWM/f9Dxk4DM=
+        :subject:from:from; s=default; t=1657296613; x=1659111014; bh=9K
+        AXvRDlHHjdnW1XQZ8Nn+6WBTtHcJlv6v3Wld1jtgo=; b=fqVQWbtTWYK61/FcND
+        do2lEIHdgg3TRNzSlSnGHc+5yzq2pPi3EcfEPMZxWa/+zogIno6Dwa84wc33NqAk
+        mQxYysXjyGS/LVjeZc3Bdut9W8v8vRbad5dpFsjRHd+2WFM0gzO45G6LaoXZi28l
+        aCw8/x7yZYmoLUQUoy1a9+1O0=
 X-Virus-Scanned: Debian amavisd-new at srv6.fidu.org
 Received: from srv6.fidu.org ([127.0.0.1])
         by localhost (srv6.fidu.org [127.0.0.1]) (amavisd-new, port 10026)
-        with LMTP id jMK6RkaHBlY0; Fri,  8 Jul 2022 18:10:13 +0200 (CEST)
+        with LMTP id XIGw24GGsAA5; Fri,  8 Jul 2022 18:10:13 +0200 (CEST)
 Received: from wsembach-tuxedo.fritz.box (host-212-18-30-247.customer.m-online.net [212.18.30.247])
         (Authenticated sender: wse@tuxedocomputers.com)
-        by srv6.fidu.org (Postfix) with ESMTPA id 3231AC800AD;
+        by srv6.fidu.org (Postfix) with ESMTPA id 77E76C800AC;
         Fri,  8 Jul 2022 18:10:13 +0200 (CEST)
 From:   Werner Sembach <wse@tuxedocomputers.com>
 To:     dmitry.torokhov@gmail.com, hdegoede@redhat.com, tiwai@suse.de,
         samuel@cavoj.net, linux-input@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH 1/2] Input: i8042 - add additional TUXEDO devices to i8042 quirk tables
-Date:   Fri,  8 Jul 2022 18:10:04 +0200
-Message-Id: <20220708161005.1251929-2-wse@tuxedocomputers.com>
+Subject: [PATCH 2/2] Input: i8042 - add TUXEDO devices to i8042 quirk tables for partial fix
+Date:   Fri,  8 Jul 2022 18:10:05 +0200
+Message-Id: <20220708161005.1251929-3-wse@tuxedocomputers.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220708161005.1251929-1-wse@tuxedocomputers.com>
 References: <20220708161005.1251929-1-wse@tuxedocomputers.com>
@@ -63,106 +63,63 @@ I'm not entirely sure if every device listed really needs all four quirks,
 but after testing and production use. No negative effects could be
 observed when setting all four.
 
+Setting SERIO_QUIRK_NOMUX or SERIO_QUIRK_RESET_ALWAYS on the Clevo N150CU
+and the Clevo NHxxRZQ makes the keyboard very laggy for ~5 seconds after
+boot and sometimes also after resume. However both are required for the
+keyboard to not fail completely sometimes after boot or resume.
+
 Signed-off-by: Werner Sembach <wse@tuxedocomputers.com>
 Cc: stable@vger.kernel.org
 ---
- drivers/input/serio/i8042-x86ia64io.h | 76 ++++++++++++++++++++++++---
- 1 file changed, 68 insertions(+), 8 deletions(-)
+ drivers/input/serio/i8042-x86ia64io.h | 28 +++++++++++++++++++++++++++
+ 1 file changed, 28 insertions(+)
 
 diff --git a/drivers/input/serio/i8042-x86ia64io.h b/drivers/input/serio/i8042-x86ia64io.h
-index 50b090e77fca..5204a7dd61d4 100644
+index 5204a7dd61d4..9dc0266e5168 100644
 --- a/drivers/input/serio/i8042-x86ia64io.h
 +++ b/drivers/input/serio/i8042-x86ia64io.h
-@@ -900,14 +900,6 @@ static const struct dmi_system_id i8042_dmi_quirk_table[] __initconst = {
- 		},
- 		.driver_data = (void *)(SERIO_QUIRK_NOMUX)
- 	},
--	{
--		/* Clevo P650RS, 650RP6, Sager NP8152-S, and others */
--		.matches = {
--			DMI_MATCH(DMI_SYS_VENDOR, "Notebook"),
--			DMI_MATCH(DMI_PRODUCT_NAME, "P65xRP"),
--		},
--		.driver_data = (void *)(SERIO_QUIRK_RESET_ALWAYS)
--	},
- 	{
- 		/* OQO Model 01 */
- 		.matches = {
-@@ -1162,6 +1154,74 @@ static const struct dmi_system_id i8042_dmi_quirk_table[] __initconst = {
+@@ -1107,6 +1107,20 @@ static const struct dmi_system_id i8042_dmi_quirk_table[] __initconst = {
  		.driver_data = (void *)(SERIO_QUIRK_NOMUX | SERIO_QUIRK_RESET_ALWAYS |
  					SERIO_QUIRK_NOLOOP | SERIO_QUIRK_NOPNP)
  	},
 +	{
 +		/*
-+		 * This is only a partial board_name and might be followed by
-+		 * another letter or number. DMI_MATCH however does do partial
-+		 * matching.
++		 * Setting SERIO_QUIRK_NOMUX or SERIO_QUIRK_RESET_ALWAYS makes
++		 * the keyboard very laggy for ~5 seconds after boot and
++		 * sometimes also after resume.
++		 * However both are required for the keyboard to not fail
++		 * completely sometimes after boot or resume.
 +		 */
 +		.matches = {
-+			DMI_MATCH(DMI_PRODUCT_NAME, "P65xH"),
-+		},
-+		.driver_data = (void *)(SERIO_QUIRK_NOMUX | SERIO_QUIRK_RESET_ALWAYS |
-+					SERIO_QUIRK_NOLOOP | SERIO_QUIRK_NOPNP)
-+	},
-+	{
-+		/* Clevo P650RS, 650RP6, Sager NP8152-S, and others */
-+		.matches = {
-+			DMI_MATCH(DMI_PRODUCT_NAME, "P65xRP"),
-+		},
-+		.driver_data = (void *)(SERIO_QUIRK_NOMUX | SERIO_QUIRK_RESET_ALWAYS |
-+					SERIO_QUIRK_NOLOOP | SERIO_QUIRK_NOPNP)
-+	},
-+	{
-+		/*
-+		 * This is only a partial board_name and might be followed by
-+		 * another letter or number. DMI_MATCH however does do partial
-+		 * matching.
-+		 */
-+		.matches = {
-+			DMI_MATCH(DMI_PRODUCT_NAME, "P65_P67H"),
-+		},
-+		.driver_data = (void *)(SERIO_QUIRK_NOMUX | SERIO_QUIRK_RESET_ALWAYS |
-+					SERIO_QUIRK_NOLOOP | SERIO_QUIRK_NOPNP)
-+	},
-+	{
-+		/*
-+		 * This is only a partial board_name and might be followed by
-+		 * another letter or number. DMI_MATCH however does do partial
-+		 * matching.
-+		 */
-+		.matches = {
-+			DMI_MATCH(DMI_PRODUCT_NAME, "P65_67RP"),
-+		},
-+		.driver_data = (void *)(SERIO_QUIRK_NOMUX | SERIO_QUIRK_RESET_ALWAYS |
-+					SERIO_QUIRK_NOLOOP | SERIO_QUIRK_NOPNP)
-+	},
-+	{
-+		/*
-+		 * This is only a partial board_name and might be followed by
-+		 * another letter or number. DMI_MATCH however does do partial
-+		 * matching.
-+		 */
-+		.matches = {
-+			DMI_MATCH(DMI_PRODUCT_NAME, "P65_67RS"),
-+		},
-+		.driver_data = (void *)(SERIO_QUIRK_NOMUX | SERIO_QUIRK_RESET_ALWAYS |
-+					SERIO_QUIRK_NOLOOP | SERIO_QUIRK_NOPNP)
-+	},
-+	{
-+		/*
-+		 * This is only a partial board_name and might be followed by
-+		 * another letter or number. DMI_MATCH however does do partial
-+		 * matching.
-+		 */
-+		.matches = {
-+			DMI_MATCH(DMI_PRODUCT_NAME, "P67xRP"),
++			DMI_MATCH(DMI_BOARD_NAME, "N150CU"),
 +		},
 +		.driver_data = (void *)(SERIO_QUIRK_NOMUX | SERIO_QUIRK_RESET_ALWAYS |
 +					SERIO_QUIRK_NOLOOP | SERIO_QUIRK_NOPNP)
 +	},
  	{
  		.matches = {
- 			DMI_MATCH(DMI_BOARD_NAME, "PB50_70DFx,DDx"),
+ 			DMI_MATCH(DMI_BOARD_NAME, "NH5xAx"),
+@@ -1114,6 +1128,20 @@ static const struct dmi_system_id i8042_dmi_quirk_table[] __initconst = {
+ 		.driver_data = (void *)(SERIO_QUIRK_NOMUX | SERIO_QUIRK_RESET_ALWAYS |
+ 					SERIO_QUIRK_NOLOOP | SERIO_QUIRK_NOPNP)
+ 	},
++	{
++		/*
++		 * Setting SERIO_QUIRK_NOMUX or SERIO_QUIRK_RESET_ALWAYS makes
++		 * the keyboard very laggy for ~5 seconds after boot and
++		 * sometimes also after resume.
++		 * However both are required for the keyboard to not fail
++		 * completely sometimes after boot or resume.
++		 */
++		.matches = {
++			DMI_MATCH(DMI_BOARD_NAME, "NHxxRZQ"),
++		},
++		.driver_data = (void *)(SERIO_QUIRK_NOMUX | SERIO_QUIRK_RESET_ALWAYS |
++					SERIO_QUIRK_NOLOOP | SERIO_QUIRK_NOPNP)
++	},
+ 	{
+ 		.matches = {
+ 			DMI_MATCH(DMI_BOARD_NAME, "NL5xRU"),
 -- 
 2.34.1
 

@@ -2,151 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 59F9E56B3E7
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 09:57:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2077A56B3EB
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 09:59:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237149AbiGHH4x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Jul 2022 03:56:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60190 "EHLO
+        id S237346AbiGHH6p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Jul 2022 03:58:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33350 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237351AbiGHH4p (ORCPT
+        with ESMTP id S237275AbiGHH6h (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Jul 2022 03:56:45 -0400
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D4157E00B;
-        Fri,  8 Jul 2022 00:56:44 -0700 (PDT)
-X-UUID: 9d0cc1b69b764816a7482ae4427ec87e-20220708
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.8,REQID:ad16ed64-be1a-4e93-9007-fd5a7875f4d1,OB:0,LO
-        B:0,IP:0,URL:0,TC:0,Content:-5,EDM:0,RT:0,SF:100,FILE:0,RULE:Release_Ham,A
-        CTION:release,TS:95
-X-CID-INFO: VERSION:1.1.8,REQID:ad16ed64-be1a-4e93-9007-fd5a7875f4d1,OB:0,LOB:
-        0,IP:0,URL:0,TC:0,Content:-5,EDM:0,RT:0,SF:100,FILE:0,RULE:Spam_GS981B3D,A
-        CTION:quarantine,TS:95
-X-CID-META: VersionHash:0f94e32,CLOUDID:f48ac263-0b3f-4b2c-b3a6-ed5c044366a0,C
-        OID:548fac83f2ca,Recheck:0,SF:28|17|19|48,TC:nil,Content:0,EDM:-3,IP:nil,U
-        RL:0,File:nil,QS:nil,BEC:nil,COL:0
-X-UUID: 9d0cc1b69b764816a7482ae4427ec87e-20220708
-Received: from mtkcas11.mediatek.inc [(172.21.101.40)] by mailgw01.mediatek.com
-        (envelope-from <biao.huang@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 807428127; Fri, 08 Jul 2022 15:56:38 +0800
-Received: from mtkcas10.mediatek.inc (172.21.101.39) by
- mtkmbs11n1.mediatek.inc (172.21.101.185) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
- Fri, 8 Jul 2022 15:56:36 +0800
-Received: from localhost.localdomain (10.17.3.154) by mtkcas10.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Fri, 8 Jul 2022 15:56:35 +0800
-From:   Biao Huang <biao.huang@mediatek.com>
-To:     David Miller <davem@davemloft.net>
-CC:     Giuseppe Cavallaro <peppe.cavallaro@st.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Jose Abreu <joabreu@synopsys.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Biao Huang <biao.huang@mediatek.com>, <netdev@vger.kernel.org>,
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-mediatek@lists.infradead.org>, <macpaul.lin@mediatek.com>
-Subject: [PATCH net v2] stmmac: dwmac-mediatek: fix clock issue
-Date:   Fri, 8 Jul 2022 15:56:22 +0800
-Message-ID: <20220708075622.26342-2-biao.huang@mediatek.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220708075622.26342-1-biao.huang@mediatek.com>
-References: <20220708075622.26342-1-biao.huang@mediatek.com>
+        Fri, 8 Jul 2022 03:58:37 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D7FC12AE8
+        for <linux-kernel@vger.kernel.org>; Fri,  8 Jul 2022 00:58:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1657267116; x=1688803116;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=rqKkPt3MPpjqyc4mN+BxX7fkKVYruefqKX/Mr0FjC8I=;
+  b=gJZzruConck0jV7YPFTL0TE3j5DE/ZfIJOytrnFrqoEapIfjpfqPagpM
+   DBht2fqezBZqLpdFiLBwidDUB3dhVS5UcDjrqcCHAxJCqr3y1lCfhOikz
+   leFd1K46+p1VjikcM4eTiXbWCxERmGNFKLiFepNX3h+eMibTiDFvzA/8J
+   8RLqva46FvL8sycud24GhuKiG4x+aMQdNoyOkf+xcBFqfaF2/3/w37p7O
+   F+3hFQBrmheCrFUEErdTJLc2CfVA8zir5ze4ij3tl4GSakq3KOOqELufl
+   +tY/J9unNqs+C+wt7qAMhChCEWvHRJIexH8Q9mvgCygCXYYQOk5t2gazY
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10401"; a="370537183"
+X-IronPort-AV: E=Sophos;i="5.92,254,1650956400"; 
+   d="scan'208";a="370537183"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jul 2022 00:58:36 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.92,254,1650956400"; 
+   d="scan'208";a="626626632"
+Received: from lkp-server01.sh.intel.com (HELO 68b931ab7ac1) ([10.239.97.150])
+  by orsmga001.jf.intel.com with ESMTP; 08 Jul 2022 00:58:35 -0700
+Received: from kbuild by 68b931ab7ac1 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1o9isk-000N9Q-FO;
+        Fri, 08 Jul 2022 07:58:34 +0000
+Date:   Fri, 08 Jul 2022 15:57:59 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "x86-ml" <x86@kernel.org>
+Cc:     linux-kernel@vger.kernel.org
+Subject: [tip:x86/sgx] BUILD SUCCESS
+ 6507cce561b43b071999502103804e3dc1478e60
+Message-ID: <62c7e387.cS6w8gT1tWMFnIy+%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-MTK:  N
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Since clocks are handled in mediatek_dwmac_clks_config(),
-remove the clocks configuration in init()/exit(), and
-invoke mediatek_dwmac_clks_config instead.
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git x86/sgx
+branch HEAD: 6507cce561b43b071999502103804e3dc1478e60  selftests/sgx: Page removal stress test
 
-This issue is found in suspend/resume test.
+elapsed time: 815m
 
-Fixes: 3186bdad97d5 ("stmmac: dwmac-mediatek: add platform level clocks management")
-Signed-off-by: Biao Huang <biao.huang@mediatek.com>
----
- .../ethernet/stmicro/stmmac/dwmac-mediatek.c  | 32 ++++++-------------
- 1 file changed, 10 insertions(+), 22 deletions(-)
+configs tested: 52
+configs skipped: 2
 
-diff --git a/drivers/net/ethernet/stmicro/stmmac/dwmac-mediatek.c b/drivers/net/ethernet/stmicro/stmmac/dwmac-mediatek.c
-index 6ff88df58767..6d82cf2658e0 100644
---- a/drivers/net/ethernet/stmicro/stmmac/dwmac-mediatek.c
-+++ b/drivers/net/ethernet/stmicro/stmmac/dwmac-mediatek.c
-@@ -576,32 +576,12 @@ static int mediatek_dwmac_init(struct platform_device *pdev, void *priv)
- 		}
- 	}
- 
--	ret = clk_bulk_prepare_enable(variant->num_clks, plat->clks);
--	if (ret) {
--		dev_err(plat->dev, "failed to enable clks, err = %d\n", ret);
--		return ret;
--	}
--
--	ret = clk_prepare_enable(plat->rmii_internal_clk);
--	if (ret) {
--		dev_err(plat->dev, "failed to enable rmii internal clk, err = %d\n", ret);
--		goto err_clk;
--	}
--
- 	return 0;
--
--err_clk:
--	clk_bulk_disable_unprepare(variant->num_clks, plat->clks);
--	return ret;
- }
- 
- static void mediatek_dwmac_exit(struct platform_device *pdev, void *priv)
- {
--	struct mediatek_dwmac_plat_data *plat = priv;
--	const struct mediatek_dwmac_variant *variant = plat->variant;
--
--	clk_disable_unprepare(plat->rmii_internal_clk);
--	clk_bulk_disable_unprepare(variant->num_clks, plat->clks);
-+	/* nothing to do now */
- }
- 
- static int mediatek_dwmac_clks_config(void *priv, bool enabled)
-@@ -712,13 +692,21 @@ static int mediatek_dwmac_probe(struct platform_device *pdev)
- 	mediatek_dwmac_common_data(pdev, plat_dat, priv_plat);
- 	mediatek_dwmac_init(pdev, priv_plat);
- 
-+	ret = mediatek_dwmac_clks_config(priv_plat, true);
-+	if (ret)
-+		return ret;
-+
- 	ret = stmmac_dvr_probe(&pdev->dev, plat_dat, &stmmac_res);
- 	if (ret) {
- 		stmmac_remove_config_dt(pdev, plat_dat);
--		return ret;
-+		goto err_drv_probe;
- 	}
- 
- 	return 0;
-+
-+err_drv_probe:
-+	mediatek_dwmac_clks_config(priv_plat, false);
-+	return ret;
- }
- 
- static const struct of_device_id mediatek_dwmac_match[] = {
+The following configs have been built successfully.
+More configs may be tested in the coming days.
+
+gcc tested configs:
+arm                                 defconfig
+arm                              allyesconfig
+arm64                            allyesconfig
+ia64                             allmodconfig
+arc                              allyesconfig
+alpha                            allyesconfig
+m68k                             allmodconfig
+m68k                             allyesconfig
+mips                             allyesconfig
+powerpc                          allmodconfig
+powerpc                           allnoconfig
+sh                               allmodconfig
+i386                                defconfig
+i386                             allyesconfig
+i386                          randconfig-a001
+i386                          randconfig-a003
+i386                          randconfig-a005
+x86_64                        randconfig-a013
+x86_64                        randconfig-a011
+x86_64                        randconfig-a015
+x86_64                        randconfig-a004
+x86_64                        randconfig-a002
+x86_64                        randconfig-a006
+i386                          randconfig-a014
+i386                          randconfig-a012
+i386                          randconfig-a016
+arc                  randconfig-r043-20220707
+riscv                randconfig-r042-20220707
+s390                 randconfig-r044-20220707
+um                             i386_defconfig
+um                           x86_64_defconfig
+x86_64                           rhel-8.3-syz
+x86_64                          rhel-8.3-func
+x86_64                         rhel-8.3-kunit
+x86_64                    rhel-8.3-kselftests
+x86_64                              defconfig
+x86_64                               rhel-8.3
+x86_64                           allyesconfig
+
+clang tested configs:
+i386                          randconfig-a002
+i386                          randconfig-a006
+i386                          randconfig-a004
+x86_64                        randconfig-a012
+x86_64                        randconfig-a014
+x86_64                        randconfig-a016
+x86_64                        randconfig-a001
+x86_64                        randconfig-a003
+x86_64                        randconfig-a005
+i386                          randconfig-a013
+i386                          randconfig-a011
+i386                          randconfig-a015
+hexagon              randconfig-r045-20220707
+hexagon              randconfig-r041-20220707
+
 -- 
-2.25.1
-
+0-DAY CI Kernel Test Service
+https://01.org/lkp

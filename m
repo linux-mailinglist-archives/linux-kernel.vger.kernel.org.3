@@ -2,155 +2,181 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 74A2D56B30D
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 09:04:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3EF0956B313
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 09:04:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237296AbiGHHDk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Jul 2022 03:03:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47660 "EHLO
+        id S237399AbiGHHDx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Jul 2022 03:03:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47922 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236733AbiGHHDh (ORCPT
+        with ESMTP id S237348AbiGHHDp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Jul 2022 03:03:37 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1E296B241;
-        Fri,  8 Jul 2022 00:03:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1657263815; x=1688799815;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=sLTf7xui5DUh0UIt7UN4rONb0R9ycQ6xpaAgmLAuY30=;
-  b=DIn7+74MJtv0OoDLRw3CjxBEDjGFAZqqq3WNnnxPvglSJM73a7v1+qPg
-   wB5Qv+Wf+SWV5R7xJ4kQAOfFF507DXgSHVeP3oGs2/o516yx5uS1q0bGG
-   vxCKl2qG7fK9MjKeXvQXsD2Cu+FpG2Y+bJCqC1KSli6UDH2Ws8v6mg1Wg
-   6fFyDiY7B+K7ZjPIWM9ZDoZd4DlcbHgka8yWYLpvqZxZ6dkwUTSwgU41R
-   17H56m/mrrWb82mow/88bIxsXX2AeuQKUX2hLPsVdYfDdmyHGpSCtUiUj
-   GeUA2Zba1c5eyHvezw/pXlaz02QfKQBRGIp1MzLNKZixBjKV876pw1Ahd
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10401"; a="281759989"
-X-IronPort-AV: E=Sophos;i="5.92,254,1650956400"; 
-   d="scan'208";a="281759989"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jul 2022 00:03:35 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,254,1650956400"; 
-   d="scan'208";a="920895624"
-Received: from lkp-server01.sh.intel.com (HELO 68b931ab7ac1) ([10.239.97.150])
-  by fmsmga005.fm.intel.com with ESMTP; 08 Jul 2022 00:03:31 -0700
-Received: from kbuild by 68b931ab7ac1 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1o9i1S-000N4s-JB;
-        Fri, 08 Jul 2022 07:03:30 +0000
-Date:   Fri, 8 Jul 2022 15:02:33 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Vijaya Krishna Nivarthi <quic_vnivarth@quicinc.com>,
-        agross@kernel.org, bjorn.andersson@linaro.org,
-        konrad.dybcio@somainline.org, gregkh@linuxfoundation.org,
-        jirislaby@kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        quic_msavaliy@quicinc.com, dianders@chromium.org, mka@chromium.org,
-        swboyd@chromium.org,
-        Vijaya Krishna Nivarthi <quic_vnivarth@quicinc.com>
-Subject: Re: [V3] tty: serial: qcom-geni-serial: Fix get_clk_div_rate() which
- otherwise could return a sub-optimal clock rate.
-Message-ID: <202207081429.4VXpQCls-lkp@intel.com>
-References: <1657221457-32494-1-git-send-email-quic_vnivarth@quicinc.com>
+        Fri, 8 Jul 2022 03:03:45 -0400
+Received: from mail-yw1-x1129.google.com (mail-yw1-x1129.google.com [IPv6:2607:f8b0:4864:20::1129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0CE071BE1
+        for <linux-kernel@vger.kernel.org>; Fri,  8 Jul 2022 00:03:44 -0700 (PDT)
+Received: by mail-yw1-x1129.google.com with SMTP id 00721157ae682-31c8a1e9e33so138168577b3.5
+        for <linux-kernel@vger.kernel.org>; Fri, 08 Jul 2022 00:03:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=2r1OKhE7nPaz8Ibdpa/NFUSBILiriMdou2alvBZWJn8=;
+        b=FOoq+XCQcOUOGAxMBkVFot96nKbM5UJXZ+fyNso8kcf6ozqH1iJAZiHaqOga9g8T1c
+         TaBVqFq0/woyIq7nWqdt7XH5iJz5rTpeViLFHZEsKgmGfftRwRB8L5ayV3TUwnkdeCE/
+         OEzY+0uLlw5yZO9fpce5tRpmkF5CrMwqnsoBoFozT+ntQN8p3BFOzOYxxUKlSLFsD0sZ
+         ubXSZG5ZYnDVMdKGb59mipPNtdfPXBTxO+lC6QcyNJoE8/MY2pc+Y+z1089y1NCruX1A
+         9CzSED9O1V4TFBUz6iz9HzWsfRARS8fQLWn+b+Fb6bzvFAfIWcnwqj7CmXORZ/654MoU
+         L4BQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=2r1OKhE7nPaz8Ibdpa/NFUSBILiriMdou2alvBZWJn8=;
+        b=PED78g2dTO3FpopI0Fyw4I7ze7YFWiIf9TQvcWQQCchL3e8LfL6OuJH9m/gAWoPgYk
+         d5cEKlTEUFA6YZH+8IckZ0iEQ4LOuInJfZHGxLzTmvBFmHRmoptRXU1uHYXIzMI4gPQa
+         16/9cnxUqXzIhHalizTP9Z1ftRwmeMK5gpMbbgwWSVfT3h12bDNKG88ExTbGuSaqyP7C
+         gc1psjtO8TNeXNq+OVS97B9c84HtqcZSkb17aF74+ynE8SKe1LW1e6LxD9zh6Ad5akLg
+         9R/Wxj2ujjeaWCa3E6ZSj4YSiM7ncWmbVzGaAlujNXBqElI7ilPh5nbK5HNoGIPD57uj
+         RNJg==
+X-Gm-Message-State: AJIora+vji86Go6POyUgIj8v42QNu8T9nvQVfSCR9j08KK4KZ+l+qT1S
+        gJoZXXremHd8sIECryNlZT0IzcYeiKO5tdA8BOrLow==
+X-Google-Smtp-Source: AGRyM1s1zxKeJaH04JGKD2OfBZEMYPMyBL6RTZC7T4tvDBmbfjGBd5ReKp27rZGd+/NDGyM+a5OOMP3Cs4OyxKUVovQ=
+X-Received: by 2002:a0d:dd09:0:b0:31c:e3b9:7442 with SMTP id
+ g9-20020a0ddd09000000b0031ce3b97442mr2350367ywe.47.1657263823522; Fri, 08 Jul
+ 2022 00:03:43 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1657221457-32494-1-git-send-email-quic_vnivarth@quicinc.com>
-X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220708063257.1192311-1-yajun.deng@linux.dev>
+In-Reply-To: <20220708063257.1192311-1-yajun.deng@linux.dev>
+From:   Eric Dumazet <edumazet@google.com>
+Date:   Fri, 8 Jul 2022 09:03:31 +0200
+Message-ID: <CANn89iKuTLb15AMxXY8Q7FHF__f7kfRuDQFSkK1SwUR5m4fn+A@mail.gmail.com>
+Subject: Re: [PATCH net-next] net: rtnetlink: add rx_otherhost_dropped for
+ struct rtnl_link_stats
+To:     Yajun Deng <yajun.deng@linux.dev>
+Cc:     David Miller <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        netdev <netdev@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Jeffrey Ji <jeffreyji@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Vijaya,
+On Fri, Jul 8, 2022 at 8:33 AM Yajun Deng <yajun.deng@linux.dev> wrote:
+>
+> The commit 794c24e9921f ("net-core: rx_otherhost_dropped to core_stats")
+> introduce rx_otherhost_dropped, add rx_otherhost_dropped for struct
+> rtnl_link_stats to keep sync with struct rtnl_link_stats64.
+>
+> As the same time, add BUILD_BUG_ON() in copy_rtnl_link_stats().
+>
 
-Thank you for the patch! Perhaps something to improve:
+Any reason you chose to not cc the original patch author ?
 
-[auto build test WARNING on tty/tty-testing]
-[also build test WARNING on linus/master v5.19-rc5 next-20220707]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+If I remember well, not adding fields into legacy 'struct
+rtnl_link_stats' was a conscious decision.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Vijaya-Krishna-Nivarthi/tty-serial-qcom-geni-serial-Fix-get_clk_div_rate-which-otherwise-could-return-a-sub-optimal-clock-rate/20220708-031921
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/tty.git tty-testing
-config: hexagon-randconfig-r023-20220707 (https://download.01.org/0day-ci/archive/20220708/202207081429.4VXpQCls-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 562c3467a6738aa89203f72fc1d1343e5baadf3c)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/fbd8a1a4b7d91ea5caa048e4557ab18b0d08ea86
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Vijaya-Krishna-Nivarthi/tty-serial-qcom-geni-serial-Fix-get_clk_div_rate-which-otherwise-could-return-a-sub-optimal-clock-rate/20220708-031921
-        git checkout fbd8a1a4b7d91ea5caa048e4557ab18b0d08ea86
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/tty/serial/
+There is no requirement to keep rtnl_link_stats & rtnl_link_stats64 in sync.
+rtnl_link_stats is deprecated, user space really wants to use
+rtnl_link_stats64 instead,
+if they need access to new fields added in recent kernels.
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+Thank you.
 
-All warnings (new ones prefixed by >>):
+[1]
+commit 9256645af09807bc52fa8b2e66ecd28ab25318c4
+Author: Jarod Wilson <jarod@redhat.com>
+Date:   Mon Feb 1 18:51:04 2016 -0500
 
->> drivers/tty/serial/qcom_geni_serial.c:1007:26: warning: format specifies type 'unsigned long' but the argument has type 'unsigned int' [-Wformat]
-                           desired_clk, ser_clk, *clk_div);
-                                                 ^~~~~~~~
-   include/linux/printk.h:610:38: note: expanded from macro 'pr_debug'
-           no_printk(KERN_DEBUG pr_fmt(fmt), ##__VA_ARGS__)
-                                       ~~~     ^~~~~~~~~~~
-   include/linux/printk.h:131:17: note: expanded from macro 'no_printk'
-                   printk(fmt, ##__VA_ARGS__);             \
-                          ~~~    ^~~~~~~~~~~
-   include/linux/printk.h:480:60: note: expanded from macro 'printk'
-   #define printk(fmt, ...) printk_index_wrap(_printk, fmt, ##__VA_ARGS__)
-                                                       ~~~    ^~~~~~~~~~~
-   include/linux/printk.h:452:19: note: expanded from macro 'printk_index_wrap'
-                   _p_func(_fmt, ##__VA_ARGS__);                           \
-                           ~~~~    ^~~~~~~~~~~
-   1 warning generated.
+    net/core: relax BUILD_BUG_ON in netdev_stats_to_stats64
 
+    The netdev_stats_to_stats64 function copies the deprecated
+    net_device_stats format stats into rtnl_link_stats64 for legacy support
+    purposes, but with the BUILD_BUG_ON as it was, it wasn't possible to
+    extend rtnl_link_stats64 without also extending net_device_stats. Relax
+    the BUILD_BUG_ON to only require that rtnl_link_stats64 is larger, and
+    zero out all the stat counters that aren't present in net_device_stats.
 
-vim +1007 drivers/tty/serial/qcom_geni_serial.c
+    CC: Eric Dumazet <edumazet@google.com>
+    CC: netdev@vger.kernel.org
+    Signed-off-by: Jarod Wilson <jarod@redhat.com>
+    Signed-off-by: David S. Miller <davem@davemloft.net>
 
-   983	
-   984	static unsigned long get_clk_div_rate(struct clk *clk, unsigned int baud,
-   985				unsigned int sampling_rate, unsigned int *clk_div)
-   986	{
-   987		unsigned long ser_clk;
-   988		unsigned long desired_clk;
-   989	
-   990		desired_clk = baud * sampling_rate;
-   991		if (!desired_clk) {
-   992			pr_err("%s: Invalid frequency\n", __func__);
-   993			return 0;
-   994		}
-   995	
-   996		/*
-   997		 * try to find a clock rate within 2% tolerance, then within
-   998		 */
-   999		ser_clk = find_clk_rate_in_tol(clk, desired_clk, clk_div, 2);
-  1000		if (!ser_clk)
-  1001			ser_clk = find_clk_rate_in_tol(clk, desired_clk, clk_div, 5);
-  1002	
-  1003		if (!ser_clk)
-  1004			pr_err("Couldn't find suitable clock rate for %lu\n", desired_clk);
-  1005		else
-  1006			pr_debug("desired_clk-%lu, ser_clk-%lu, clk_div-%lu\n",
-> 1007				desired_clk, ser_clk, *clk_div);
-  1008	
-  1009		return ser_clk;
-  1010	}
-  1011	
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+> Signed-off-by: Yajun Deng <yajun.deng@linux.dev>
+> ---
+>  include/uapi/linux/if_link.h |  1 +
+>  net/core/rtnetlink.c         | 36 +++++++-----------------------------
+>  2 files changed, 8 insertions(+), 29 deletions(-)
+>
+> diff --git a/include/uapi/linux/if_link.h b/include/uapi/linux/if_link.h
+> index e36d9d2c65a7..fd6776d665c8 100644
+> --- a/include/uapi/linux/if_link.h
+> +++ b/include/uapi/linux/if_link.h
+> @@ -37,6 +37,7 @@ struct rtnl_link_stats {
+>         __u32   tx_compressed;
+>
+>         __u32   rx_nohandler;
+> +       __u32   rx_otherhost_dropped;
+>  };
+>
+>  /**
+> diff --git a/net/core/rtnetlink.c b/net/core/rtnetlink.c
+> index ac45328607f7..818649850b2c 100644
+> --- a/net/core/rtnetlink.c
+> +++ b/net/core/rtnetlink.c
+> @@ -908,35 +908,13 @@ static unsigned int rtnl_dev_combine_flags(const struct net_device *dev,
+>  static void copy_rtnl_link_stats(struct rtnl_link_stats *a,
+>                                  const struct rtnl_link_stats64 *b)
+>  {
+> -       a->rx_packets = b->rx_packets;
+> -       a->tx_packets = b->tx_packets;
+> -       a->rx_bytes = b->rx_bytes;
+> -       a->tx_bytes = b->tx_bytes;
+> -       a->rx_errors = b->rx_errors;
+> -       a->tx_errors = b->tx_errors;
+> -       a->rx_dropped = b->rx_dropped;
+> -       a->tx_dropped = b->tx_dropped;
+> -
+> -       a->multicast = b->multicast;
+> -       a->collisions = b->collisions;
+> -
+> -       a->rx_length_errors = b->rx_length_errors;
+> -       a->rx_over_errors = b->rx_over_errors;
+> -       a->rx_crc_errors = b->rx_crc_errors;
+> -       a->rx_frame_errors = b->rx_frame_errors;
+> -       a->rx_fifo_errors = b->rx_fifo_errors;
+> -       a->rx_missed_errors = b->rx_missed_errors;
+> -
+> -       a->tx_aborted_errors = b->tx_aborted_errors;
+> -       a->tx_carrier_errors = b->tx_carrier_errors;
+> -       a->tx_fifo_errors = b->tx_fifo_errors;
+> -       a->tx_heartbeat_errors = b->tx_heartbeat_errors;
+> -       a->tx_window_errors = b->tx_window_errors;
+> -
+> -       a->rx_compressed = b->rx_compressed;
+> -       a->tx_compressed = b->tx_compressed;
+> -
+> -       a->rx_nohandler = b->rx_nohandler;
+> +       size_t i, n = sizeof(*b) / sizeof(u64);
+> +       const u64 *src = (const u64 *)b;
+> +       u32 *dst = (u32 *)a;
+> +
+> +       BUILD_BUG_ON(n != sizeof(*a) / sizeof(u32));
+> +       for (i = 0; i < n; i++)
+> +               dst[i] = src[i];
+>  }
+>
+>  /* All VF info */
+> --
+> 2.25.1
+>

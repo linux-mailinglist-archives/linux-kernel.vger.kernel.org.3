@@ -2,60 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 504C556B739
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 12:25:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 753EB56B742
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 12:28:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237478AbiGHKZh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Jul 2022 06:25:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38372 "EHLO
+        id S237622AbiGHK2A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Jul 2022 06:28:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39314 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236895AbiGHKZe (ORCPT
+        with ESMTP id S230392AbiGHK17 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Jul 2022 06:25:34 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 670A322BFB;
-        Fri,  8 Jul 2022 03:25:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1657275933; x=1688811933;
-  h=message-id:subject:from:to:cc:date:in-reply-to:
-   references:content-transfer-encoding:mime-version;
-  bh=Q+E4LoDet/Mx5+pBeJs1uVYlUAFyEaQJKSz+LHQc2b4=;
-  b=Z2D4Vle85WLNIJK3rtEYxeiMnqVuuezFYHveHVjXyXbUNaWg4Ir5nkJ3
-   6Bt7/wg/zBvP/rGUHTL049+eDbTk0ywjjgX5rzsiQStjmUtdGb4xQiY9M
-   BLujtJ76dsOR9xEnFQtaANSvlbZ68G14Tw3v0E6j/uAJLmgQjc9jYPkOM
-   okAhVh1+dK5CzrZXM5jQEgsF9K2iL+tiriKWwA2jd5ADiv48AE/xmVvaq
-   3ldqYoh9YhvX7UZmBDLx63wrL1iaIhFpcmX0pV15bEyhACx5q4/Db+Mcy
-   0MVwDa0Lvo71d41Xo85fcNRIBHVz7C7J0XlZRB9tv7YHd0lsja9xaIqT6
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10401"; a="285378336"
-X-IronPort-AV: E=Sophos;i="5.92,255,1650956400"; 
-   d="scan'208";a="285378336"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jul 2022 03:25:09 -0700
-X-IronPort-AV: E=Sophos;i="5.92,255,1650956400"; 
-   d="scan'208";a="626664222"
-Received: from pantones-mobl1.amr.corp.intel.com (HELO khuang2-desk.gar.corp.intel.com) ([10.212.54.208])
-  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jul 2022 03:25:07 -0700
-Message-ID: <5085857e16cdb133803ee3edf3b1e8b776b2a7b1.camel@intel.com>
-Subject: Re: [PATCH v7 050/102] KVM: VMX: Split out guts of EPT violation to
- common/exposed function
-From:   Kai Huang <kai.huang@intel.com>
-To:     isaku.yamahata@intel.com, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     isaku.yamahata@gmail.com, Paolo Bonzini <pbonzini@redhat.com>,
-        Sean Christopherson <sean.j.christopherson@intel.com>
-Date:   Fri, 08 Jul 2022 22:25:05 +1200
-In-Reply-To: <5202bef37eb1d9683891f29ccba182bbdceafca4.1656366338.git.isaku.yamahata@intel.com>
-References: <cover.1656366337.git.isaku.yamahata@intel.com>
-         <5202bef37eb1d9683891f29ccba182bbdceafca4.1656366338.git.isaku.yamahata@intel.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.44.2 (3.44.2-1.fc36) 
+        Fri, 8 Jul 2022 06:27:59 -0400
+Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE677248E0
+        for <linux-kernel@vger.kernel.org>; Fri,  8 Jul 2022 03:27:54 -0700 (PDT)
+Received: by mail-lf1-x131.google.com with SMTP id t24so35656434lfr.4
+        for <linux-kernel@vger.kernel.org>; Fri, 08 Jul 2022 03:27:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=cbsF5PTAq6FOA3zKl5faJoW6Yw9lknHZbslw9NFOih4=;
+        b=WBqc2lbXy7wamNrW8VgelKVhbLDu0hlvzTRL3zXa6IdalgE26IQG65MM1tGbynRAFk
+         LReuauOhG3rnKfwocWTcxbpGCGf0agmvECChYSrc0sL7b+jv5C2lj+jNrnDvi7Qp3azF
+         YZSM69nX2yO0dXKZKsGY1AJEytjKl7yBP4qho794UZh1d529B8IQr+hjr/AycB36T8dn
+         qLcMAPv2igeIfj/YdLJi8miZxJriw9PG7ekLsTDeafjH7yQaNFRovR6446xmkvzDjpjd
+         z0PfdYRyx5whOdWN7vp4xskYi0U+8ujciYNdfNSWkcntx8dV17ft+0JF+VYXmmPggwi6
+         nnkA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=cbsF5PTAq6FOA3zKl5faJoW6Yw9lknHZbslw9NFOih4=;
+        b=dwwJQprEZMUAGjtddrTTS67xyIlyP4pljupULqh7MbFQEZ77NN3oqewleBplGF5fkf
+         3r4gJaxJHL6x19XZoj/PY9/SNp2A5f12RMnNceJBs2HWP5yX4cDKskKmAGZBWmzUYup3
+         CkVJPnefpSFEVnmjCaAj0SKdCsw7qh4TTtwICtlSZ5r9/L9zJLwts24PTO61+X2cVZOP
+         MU1690RznrgNNdSFn4XjuTJ0keyp3dJpn0hMUXIFrzYagaTMiLyZYMsvew1pHxKJFhv8
+         a/J3RUAp+7FUzv/KwIiIpi54hA5UoAPxBHwj5dqVdn/dE/JYjvtbR4eTkCxaa4EZggDZ
+         wQxw==
+X-Gm-Message-State: AJIora8u4UGaObdzTgcJRZrJd32a4yJyirJrGjJ65NktkiUgZU8pjTCi
+        KFzxjzWS26JYYzfQjt3QdNOrVW9g6MEX01+VaP8Pbg==
+X-Google-Smtp-Source: AGRyM1vsTR6kwCBMil+gK4+M+5pKdbW5Sir/wIxDrF7VNoCtl3ku7sjgDoUJMhOQTTOwJxKESuVfdL3Dk2+niZUqdSQ=
+X-Received: by 2002:a05:6512:10c3:b0:47f:a97e:35c with SMTP id
+ k3-20020a05651210c300b0047fa97e035cmr1911173lfg.417.1657276073129; Fri, 08
+ Jul 2022 03:27:53 -0700 (PDT)
 MIME-Version: 1.0
-X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+References: <20220701120804.3226396-1-carsten.haitzler@foss.arm.com>
+ <20220701120804.3226396-11-carsten.haitzler@foss.arm.com> <a14e7015-7446-8cb3-612c-00dcb469c939@arm.com>
+ <e55094af-557e-8044-fc14-00189bd392a2@foss.arm.com>
+In-Reply-To: <e55094af-557e-8044-fc14-00189bd392a2@foss.arm.com>
+From:   Mike Leach <mike.leach@linaro.org>
+Date:   Fri, 8 Jul 2022 11:27:42 +0100
+Message-ID: <CAJ9a7VjQ4B8yudKqHZ_f8pGRGcM9t=6M0zfQK9-LmyTf4pZbZw@mail.gmail.com>
+Subject: Re: [PATCH 10/14] perf test: Add thread loop test shell scripts
+To:     Carsten Haitzler <carsten.haitzler@foss.arm.com>
+Cc:     James Clark <james.clark@arm.com>, linux-kernel@vger.kernel.org,
+        coresight@lists.linaro.org, mathieu.poirier@linaro.org,
+        linux-perf-users@vger.kernel.org, acme@kernel.org,
+        Suzuki K Poulose <suzuki.poulose@arm.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -63,142 +70,150 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 2022-06-27 at 14:53 -0700, isaku.yamahata@intel.com wrote:
-> From: Sean Christopherson <sean.j.christopherson@intel.com>
->=20
-> The difference of TDX EPT violation is how to retrieve information, GPA,
-> and exit qualification.  To share the code to handle EPT violation, split
-> out the guts of EPT violation handler so that VMX/TDX exit handler can ca=
-ll
-> it after retrieving GPA and exit qualification.
->=20
-> Signed-off-by: Sean Christopherson <sean.j.christopherson@intel.com>
-> Signed-off-by: Isaku Yamahata <isaku.yamahata@intel.com>
-> Reviewed-by: Paolo Bonzini <pbonzini@redhat.com>
-> ---
->  arch/x86/kvm/vmx/common.h | 33 +++++++++++++++++++++++++++++++++
->  arch/x86/kvm/vmx/vmx.c    | 32 ++++++--------------------------
->  2 files changed, 39 insertions(+), 26 deletions(-)
->  create mode 100644 arch/x86/kvm/vmx/common.h
->=20
-> diff --git a/arch/x86/kvm/vmx/common.h b/arch/x86/kvm/vmx/common.h
-> new file mode 100644
-> index 000000000000..235908f3e044
-> --- /dev/null
-> +++ b/arch/x86/kvm/vmx/common.h
-> @@ -0,0 +1,33 @@
-> +/* SPDX-License-Identifier: GPL-2.0-only */
-> +#ifndef __KVM_X86_VMX_COMMON_H
-> +#define __KVM_X86_VMX_COMMON_H
-> +
-> +#include <linux/kvm_host.h>
-> +
-> +#include "mmu.h"
-> +
-> +static inline int __vmx_handle_ept_violation(struct kvm_vcpu *vcpu, gpa_=
-t gpa,
-> +					     unsigned long exit_qualification)
-> +{
-> +	u64 error_code;
-> +
-> +	/* Is it a read fault? */
-> +	error_code =3D (exit_qualification & EPT_VIOLATION_ACC_READ)
-> +		     ? PFERR_USER_MASK : 0;
-> +	/* Is it a write fault? */
-> +	error_code |=3D (exit_qualification & EPT_VIOLATION_ACC_WRITE)
-> +		      ? PFERR_WRITE_MASK : 0;
-> +	/* Is it a fetch fault? */
-> +	error_code |=3D (exit_qualification & EPT_VIOLATION_ACC_INSTR)
-> +		      ? PFERR_FETCH_MASK : 0;
-> +	/* ept page table entry is present? */
-> +	error_code |=3D (exit_qualification & EPT_VIOLATION_RWX_MASK)
-> +		      ? PFERR_PRESENT_MASK : 0;
-> +
-> +	error_code |=3D (exit_qualification & EPT_VIOLATION_GVA_TRANSLATED) !=
-=3D 0 ?
-> +	       PFERR_GUEST_FINAL_MASK : PFERR_GUEST_PAGE_MASK;
-> +
-> +	return kvm_mmu_page_fault(vcpu, gpa, error_code, NULL, 0);
-> +}
-> +
-> +#endif /* __KVM_X86_VMX_COMMON_H */
-> diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
-> index e3d304b14df0..2f1dc06aec3c 100644
-> --- a/arch/x86/kvm/vmx/vmx.c
-> +++ b/arch/x86/kvm/vmx/vmx.c
-> @@ -50,6 +50,7 @@
->  #include <asm/vmx.h>
-> =20
->  #include "capabilities.h"
-> +#include "common.h"
->  #include "cpuid.h"
->  #include "evmcs.h"
->  #include "hyperv.h"
-> @@ -5578,11 +5579,10 @@ static int handle_task_switch(struct kvm_vcpu *vc=
-pu)
-> =20
->  static int handle_ept_violation(struct kvm_vcpu *vcpu)
->  {
-> -	unsigned long exit_qualification;
-> -	gpa_t gpa;
-> -	u64 error_code;
-> +	unsigned long exit_qualification =3D vmx_get_exit_qual(vcpu);
-> +	gpa_t gpa =3D vmcs_read64(GUEST_PHYSICAL_ADDRESS);
-> =20
-> -	exit_qualification =3D vmx_get_exit_qual(vcpu);
-> +	trace_kvm_page_fault(gpa, exit_qualification);
-> =20
->  	/*
->  	 * EPT violation happened while executing iret from NMI,
-> @@ -5591,29 +5591,9 @@ static int handle_ept_violation(struct kvm_vcpu *v=
-cpu)
->  	 * AAK134, BY25.
->  	 */
->  	if (!(to_vmx(vcpu)->idt_vectoring_info & VECTORING_INFO_VALID_MASK) &&
-> -			enable_vnmi &&
-> -			(exit_qualification & INTR_INFO_UNBLOCK_NMI))
-> +	    enable_vnmi && (exit_qualification & INTR_INFO_UNBLOCK_NMI))
+Hi,
 
-Why this code change?
+On Fri, 8 Jul 2022 at 10:22, Carsten Haitzler
+<carsten.haitzler@foss.arm.com> wrote:
+>
+>
+>
+> On 7/5/22 14:53, James Clark wrote:
+> >
+> >
+> > On 01/07/2022 13:07, carsten.haitzler@foss.arm.com wrote:
+> >> From: "Carsten Haitzler (Rasterman)" <raster@rasterman.com>
+> >>
+> >> Add a script to drive the thread loop test that gathers data so
+> >> it passes a minimum bar (in this case do we get any perf context data
+> >> for every thread).
+> >>
+> >> Signed-off-by: Carsten Haitzler <carsten.haitzler@arm.com>
+> >
+> > Hi Carsten,
+> >
+> > I checked this on N1SDP and I get failures in both threads tests. This is
+> > because it's looking for "CID=..." when in my output threads are shown as
+> > "VMID=...":
+> >
+> >      Idx:628048; ID:10;       I_ADDR_CTXT_L_64IS0 : Address & Context, Long, 64 bit, IS0.; Addr=0x0000AAAAE3BF0B18; Ctxt: AArch64,EL0, NS; VMID=0xa588c;
+> >
+> > I think with a change to the grep it should work.
+>
+> Errrr... I get no VMID= ... it's all
+>
+> Idx:563008; ID:12;      I_ADDR_CTXT_L_64IS0 : Address & Context, Long, 64
+> bit, IS0.; Addr=0x0000AAAAE4B00A60; Ctxt: AArch64,EL0, NS; CID=0x00004aff;
+>
+> are you using containers or something? because:
+>
+>              if(context.updated_c)
+>              {
+>                  oss << "CID=0x" << std::hex << std::setfill('0') <<
+> std::setw(8) << context.ctxtID << "; ";
+>              }
+>              if(context.updated_v)
+>              {
+>                  oss << "VMID=0x" << std::hex << std::setfill('0') <<
+> std::setw(4) << context.VMID << "; ";
+>              }
+>
+> I'm running without any containers etc. - bare metal. Haven't bothered
+> with any VM stuff.
+>
+> In OpenOCD the CID should be the the pid/thread id. It seems to not be
+> the same thing as VMID. I haven't traced this beyond here as to exactly
+> what this represents though my first reaction is "This is extra VM info
+> and not the PID/TID being looked for". OpenOCD is full of tests with log
+> dumps that produce CID and VMID:
+>
+> Idx:1676; ID:10;        I_ADDR_CTXT_L_64IS0 : Address & Context, Long,
+> 64 bit, IS0.; Addr=0xFFFFFFC000096A00; Ctxt: AArch64,EL1, NS;
+> CID=0x00000000; VMID=0x0000;
+>
+> A quick git grep CID= in OpenCD will show them all. My understanding is
+> CID is the thread/process ID and thus the test/check "Do we get reported
+> data from all threads? - anything?".
+>
+> I don't think using VMID is right. The fact you are missing a CID is an
+> issue though...
+>
 
-With this removed:
+The register used for linux TID trace is dependent on the EL of the kernel.
+EL1 => CONTEXT_IDR_EL1
+EL2 => CONTEXT_IDR_EL2.
 
-Reviewed-by: Kai Huang <kai.huang@intel.com>
+By design, the trace hardware traces CONTEXT_IDR_EL2 as the VMID packet.
 
->  		vmcs_set_bits(GUEST_INTERRUPTIBILITY_INFO, GUEST_INTR_STATE_NMI);
-> =20
-> -	gpa =3D vmcs_read64(GUEST_PHYSICAL_ADDRESS);
-> -	trace_kvm_page_fault(gpa, exit_qualification);
-> -
-> -	/* Is it a read fault? */
-> -	error_code =3D (exit_qualification & EPT_VIOLATION_ACC_READ)
-> -		     ? PFERR_USER_MASK : 0;
-> -	/* Is it a write fault? */
-> -	error_code |=3D (exit_qualification & EPT_VIOLATION_ACC_WRITE)
-> -		      ? PFERR_WRITE_MASK : 0;
-> -	/* Is it a fetch fault? */
-> -	error_code |=3D (exit_qualification & EPT_VIOLATION_ACC_INSTR)
-> -		      ? PFERR_FETCH_MASK : 0;
-> -	/* ept page table entry is present? */
-> -	error_code |=3D (exit_qualification & EPT_VIOLATION_RWX_MASK)
-> -		      ? PFERR_PRESENT_MASK : 0;
-> -
-> -	error_code |=3D (exit_qualification & EPT_VIOLATION_GVA_TRANSLATED) !=
-=3D 0 ?
-> -	       PFERR_GUEST_FINAL_MASK : PFERR_GUEST_PAGE_MASK;
-> -
->  	vcpu->arch.exit_qualification =3D exit_qualification;
-> =20
->  	/*
-> @@ -5627,7 +5607,7 @@ static int handle_ept_violation(struct kvm_vcpu *vc=
-pu)
->  	if (unlikely(allow_smaller_maxphyaddr && kvm_vcpu_is_illegal_gpa(vcpu, =
-gpa)))
->  		return kvm_emulate_instruction(vcpu, 0);
-> =20
-> -	return kvm_mmu_page_fault(vcpu, gpa, error_code, NULL, 0);
-> +	return __vmx_handle_ept_violation(vcpu, gpa, exit_qualification);
->  }
-> =20
->  static int handle_ept_misconfig(struct kvm_vcpu *vcpu)
+So, depending on your kernel build, TID can validly be traced as CID or VMID
 
+Regards
+
+Mike
+
+> > Thanks
+> > James
+> >
+> >> ---
+> >>   .../coresight/thread_loop_check_tid_10.sh     | 19 +++++++++++++++++++
+> >>   .../coresight/thread_loop_check_tid_2.sh      | 19 +++++++++++++++++++
+> >>   2 files changed, 38 insertions(+)
+> >>   create mode 100755 tools/perf/tests/shell/coresight/thread_loop_check_tid_10.sh
+> >>   create mode 100755 tools/perf/tests/shell/coresight/thread_loop_check_tid_2.sh
+> >>
+> >> diff --git a/tools/perf/tests/shell/coresight/thread_loop_check_tid_10.sh b/tools/perf/tests/shell/coresight/thread_loop_check_tid_10.sh
+> >> new file mode 100755
+> >> index 000000000000..7c13636fc778
+> >> --- /dev/null
+> >> +++ b/tools/perf/tests/shell/coresight/thread_loop_check_tid_10.sh
+> >> @@ -0,0 +1,19 @@
+> >> +#!/bin/sh -e
+> >> +# CoreSight / Thread Loop 10 Threads - Check TID
+> >> +
+> >> +# SPDX-License-Identifier: GPL-2.0
+> >> +# Carsten Haitzler <carsten.haitzler@arm.com>, 2021
+> >> +
+> >> +TEST="thread_loop"
+> >> +. $(dirname $0)/../lib/coresight.sh
+> >> +ARGS="10 1"
+> >> +DATV="check-tid-10th"
+> >> +DATA="$DATD/perf-$TEST-$DATV.data"
+> >> +STDO="$DATD/perf-$TEST-$DATV.stdout"
+> >> +
+> >> +SHOW_TID=1 perf record -s $PERFRECOPT -o "$DATA" "$BIN" $ARGS > $STDO
+> >> +
+> >> +perf_dump_aux_tid_verify "$DATA" "$STDO"
+> >> +
+> >> +err=$?
+> >> +exit $err
+> >> diff --git a/tools/perf/tests/shell/coresight/thread_loop_check_tid_2.sh b/tools/perf/tests/shell/coresight/thread_loop_check_tid_2.sh
+> >> new file mode 100755
+> >> index 000000000000..a067145af43c
+> >> --- /dev/null
+> >> +++ b/tools/perf/tests/shell/coresight/thread_loop_check_tid_2.sh
+> >> @@ -0,0 +1,19 @@
+> >> +#!/bin/sh -e
+> >> +# CoreSight / Thread Loop 2 Threads - Check TID
+> >> +
+> >> +# SPDX-License-Identifier: GPL-2.0
+> >> +# Carsten Haitzler <carsten.haitzler@arm.com>, 2021
+> >> +
+> >> +TEST="thread_loop"
+> >> +. $(dirname $0)/../lib/coresight.sh
+> >> +ARGS="2 20"
+> >> +DATV="check-tid-2th"
+> >> +DATA="$DATD/perf-$TEST-$DATV.data"
+> >> +STDO="$DATD/perf-$TEST-$DATV.stdout"
+> >> +
+> >> +SHOW_TID=1 perf record -s $PERFRECOPT -o "$DATA" "$BIN" $ARGS > $STDO
+> >> +
+> >> +perf_dump_aux_tid_verify "$DATA" "$STDO"
+> >> +
+> >> +err=$?
+> >> +exit $err
+
+
+
+-- 
+Mike Leach
+Principal Engineer, ARM Ltd.
+Manchester Design Centre. UK

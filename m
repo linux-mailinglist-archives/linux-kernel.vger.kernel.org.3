@@ -2,54 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C23BD56BD58
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 18:08:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 11CD656BDA5
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 18:08:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238824AbiGHPVR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Jul 2022 11:21:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40216 "EHLO
+        id S238837AbiGHPVx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Jul 2022 11:21:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40610 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238808AbiGHPVM (ORCPT
+        with ESMTP id S238456AbiGHPVv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Jul 2022 11:21:12 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD37D1ADA3;
-        Fri,  8 Jul 2022 08:21:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=2qYi6QRAXIoC5/GJOd8/GV/65rQmXuZYuqFcmMvOenA=; b=tDqThvukfm6Rl5xaMglGGZGrf1
-        MiBVvWRZyhOOG1UkM2V3/fcFJhNBTIj9vf2VxfKOonHWkgcvn2236UOsja3d9CFiR+8Ab7bvTFJMi
-        D4ndHEUZJMfJVdOIkVZpC38Yi+5VL9t0m9NdBkV8ToKZywmYeV56R2dW7tp4cJAawwEzw5zI8dG6e
-        /8+oD7Pb4b3LCi0LZn+7YJgF8Cph+r1gWE7lq6EHH/MP5YAMMfoas6FGGrd/TuZdtFAp/Vzmc8TKn
-        rTwQa77sxBCuee+HfbI1mk5Rv+tYb92XbSpI4lSkiDY5hOfSRfEPTXyC4+9Hb0XI1TqMK7YMy5sAa
-        oMKIcETQ==;
-Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1o9pmy-003b17-Ag; Fri, 08 Jul 2022 15:21:04 +0000
-Date:   Fri, 8 Jul 2022 16:21:04 +0100
-From:   Matthew Wilcox <willy@infradead.org>
-To:     Ira Weiny <ira.weiny@intel.com>
-Cc:     Dan Williams <dan.j.williams@intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Alison Schofield <alison.schofield@intel.com>,
-        Vishal Verma <vishal.l.verma@intel.com>,
-        linux-kernel@vger.kernel.org, linux-cxl@vger.kernel.org,
-        linux-pci@vger.kernel.org, linux-fsdevel@vger.kernel.org
-Subject: Re: [RFC PATCH 1/3] xarray: Introduce devm_xa_init()
-Message-ID: <YshLYPTxyOosmSKt@casper.infradead.org>
-References: <20220705232159.2218958-1-ira.weiny@intel.com>
- <20220705232159.2218958-2-ira.weiny@intel.com>
- <YshE/pwSUBPAeybU@casper.infradead.org>
- <YshGSgHiAiu9QwiZ@iweiny-desk3>
+        Fri, 8 Jul 2022 11:21:51 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C7AB1C92F;
+        Fri,  8 Jul 2022 08:21:50 -0700 (PDT)
+Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id D4723660191B;
+        Fri,  8 Jul 2022 16:21:47 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1657293708;
+        bh=/4l6Hm4ZPFYh5Jg9Pvp/I+AUhyuHpkqerH8ILiSQSbY=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=PjNsbvhO5bl88hl69hhVHhysA7/8JkOnWdDAwnz/eOlzd1dNw+kpkvZNFzr4vWZ1f
+         3UDbtNKz/QpabAffCJKQlG5tsj3DNm0jBrZCOu8rDa54DlKuSscV3xkOAI87pl3C40
+         g3yb/lFow1opOw6G5s64o+B5ADo9SyfmwWhaeJ/2Yoc/tN47psP/f59LU7YXKQol9l
+         +nCyZfPUYWRnXTXBqwGThXxnf0gWEATVY+ipfYonktwgk2YgBJHdpDu6i1ToWCyjpC
+         SykPd2bMqtZ/VWoUsT6bZce9VJsLI22GRC+ppBB8FfMYsR8jcb9MiPI29hywZxmveN
+         k9YnxZddOuQnQ==
+Message-ID: <b8709679-3c12-22aa-d118-803bcfa8b79e@collabora.com>
+Date:   Fri, 8 Jul 2022 17:21:45 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YshGSgHiAiu9QwiZ@iweiny-desk3>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH v2] dt-bindings: mmc: Add compatible for MediaTek MT8188
+Content-Language: en-US
+To:     Johnson Wang <johnson.wang@mediatek.com>, ulf.hansson@linaro.org,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org
+Cc:     linux-mmc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org,
+        Project_Global_Chrome_Upstream_Group@mediatek.com
+References: <20220708114747.13878-1-johnson.wang@mediatek.com>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <20220708114747.13878-1-johnson.wang@mediatek.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -57,21 +61,10 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jul 08, 2022 at 07:59:22AM -0700, Ira Weiny wrote:
-> On Fri, Jul 08, 2022 at 03:53:50PM +0100, Matthew Wilcox wrote:
-> > On Tue, Jul 05, 2022 at 04:21:57PM -0700, ira.weiny@intel.com wrote:
-> > > The main issue I see with this is defining devm_xa_init() in device.h.
-> > > This makes sense because a device is required to use the call.  However,
-> > > I'm worried about if users will find the call there vs including it in
-> > > xarray.h?
-> > 
-> > Honestly, I don't want users to find it.  This only makes sense if you're
-> > already bought in to the devm cult.  I worry people will think that
-> > they don't need to do anything else; that everything will be magically
-> > freed for them, and we'll leak the objects pointed to from the xarray.
-> > I don't even like having xa_destroy() in the API, because of exactly this.
-> > 
+Il 08/07/22 13:47, Johnson Wang ha scritto:
+> This commit adds dt-binding documentation of mmc for MediaTek MT8188 SoC
+> platform.
 > 
-> Fair enough.  Are you ok with the concept though?
+> Signed-off-by: Johnson Wang <johnson.wang@mediatek.com>
 
-I'd rather have it in one place than open-coded in two.
+Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>

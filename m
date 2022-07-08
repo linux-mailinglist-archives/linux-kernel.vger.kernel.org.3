@@ -2,65 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 62F0356B477
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 10:29:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DD25356B470
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 10:25:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237302AbiGHI0F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Jul 2022 04:26:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59026 "EHLO
+        id S237810AbiGHIZM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Jul 2022 04:25:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58090 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237138AbiGHI0C (ORCPT
+        with ESMTP id S237648AbiGHIZG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Jul 2022 04:26:02 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 675C97969A
-        for <linux-kernel@vger.kernel.org>; Fri,  8 Jul 2022 01:26:00 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 6E21E1063;
-        Fri,  8 Jul 2022 01:26:00 -0700 (PDT)
-Received: from bogus (unknown [10.57.39.193])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id A11A53F792;
-        Fri,  8 Jul 2022 01:25:54 -0700 (PDT)
-Date:   Fri, 8 Jul 2022 09:24:43 +0100
-From:   Sudeep Holla <sudeep.holla@arm.com>
-To:     Conor Dooley <mail@conchuod.ie>
-Cc:     Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Palmer Dabbelt <palmer@rivosinc.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Daire McNamara <daire.mcnamara@microchip.com>,
-        Conor Dooley <conor.dooley@microchip.com>,
-        Niklas Cassel <niklas.cassel@wdc.com>,
-        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Zong Li <zong.li@sifive.com>,
-        Emil Renner Berthing <kernel@esmil.dk>,
-        Jonas Hahnfeld <hahnjo@hahnjo.de>, Guo Ren <guoren@kernel.org>,
-        Anup Patel <anup@brainfault.org>,
-        Atish Patra <atishp@atishpatra.org>,
-        Changbin Du <changbin.du@intel.com>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Philipp Tomsich <philipp.tomsich@vrull.eu>,
-        Rob Herring <robh@kernel.org>, Marc Zyngier <maz@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        Brice Goglin <Brice.Goglin@inria.fr>
-Subject: Re: [RFC 2/4] arch-topology: add a default implementation of
- store_cpu_topology()
-Message-ID: <20220708082443.azoqvuj7afrg7ox7@bogus>
-References: <20220707220436.4105443-1-mail@conchuod.ie>
- <20220707220436.4105443-3-mail@conchuod.ie>
+        Fri, 8 Jul 2022 04:25:06 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 958788238F;
+        Fri,  8 Jul 2022 01:25:01 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id AF79DB824C3;
+        Fri,  8 Jul 2022 08:24:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 757ADC341C0;
+        Fri,  8 Jul 2022 08:24:56 +0000 (UTC)
+Message-ID: <22136ebe-b3b4-797f-beb0-3fb73d617dbe@xs4all.nl>
+Date:   Fri, 8 Jul 2022 10:24:55 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220707220436.4105443-3-mail@conchuod.ie>
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH v2] media: amphion: only insert the first sequence
+ startcode for vc1l format
+Content-Language: en-US
+To:     Ming Qian <ming.qian@nxp.com>, mchehab@kernel.org
+Cc:     shawnguo@kernel.org, robh+dt@kernel.org, s.hauer@pengutronix.de,
+        kernel@pengutronix.de, festevam@gmail.com, linux-imx@nxp.com,
+        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+References: <20220630013041.1251-1-ming.qian@nxp.com>
+From:   Hans Verkuil <hverkuil-cisco@xs4all.nl>
+In-Reply-To: <20220630013041.1251-1-ming.qian@nxp.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,33 +50,104 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jul 07, 2022 at 11:04:35PM +0100, Conor Dooley wrote:
-> From: Conor Dooley <conor.dooley@microchip.com>
+Hi Ming Qian,
+
+Since the v1 has already been merged, this patch no longer applies.
+
+Can you make a v3 on top of https://git.linuxtv.org/media_stage.git/?
+
+The only change that a v3 has to do is the removal of V4L2_FMT_FLAG_DYN_RESOLUTION.
+
+Regards,
+
+	Hans
+
+On 6/30/22 03:30, Ming Qian wrote:
+> For some formats, the amphion vpu requires startcode
+> before sequence and frame, such as vc1, vp8.
 > 
-> RISC-V & arm64 both use an almost identical method of filling in
-> default vales for arch topology. Create a weakly defined default
-> implementation with the intent of migrating both archs to use it.
+> But for V4L2_PIX_FMT_VC1_ANNEX_L, only the first sequence startcode
+> is needed, the extra startcode will cause decoding error.
+> So after seek, we don't need to insert the sequence startcode.
 > 
-> Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
+> In other words, for V4L2_PIX_FMT_VC1_ANNEX_L,
+> the vpu doesn't support dynamic resolution change.
+> 
+> Fixes: 145e936380edb ("media: amphion: implement malone decoder rpc interface")
+> Signed-off-by: Ming Qian <ming.qian@nxp.com>
 > ---
->  drivers/base/arch_topology.c  | 19 +++++++++++++++++++
->  include/linux/arch_topology.h |  1 +
->  2 files changed, 20 insertions(+)
+> v2
+> - remove V4L2_FMT_FLAG_DYN_RESOLUTION from the format V4L2_PIX_FMT_VC1_ANNEX_L
+>  drivers/media/platform/amphion/vdec.c       | 2 +-
+>  drivers/media/platform/amphion/vpu.h        | 1 +
+>  drivers/media/platform/amphion/vpu_malone.c | 2 ++
+>  drivers/media/platform/amphion/vpu_rpc.h    | 7 ++++++-
+>  4 files changed, 10 insertions(+), 2 deletions(-)
 > 
-> diff --git a/drivers/base/arch_topology.c b/drivers/base/arch_topology.c
-> index 441e14ac33a4..07e84c6ac5c2 100644
-> --- a/drivers/base/arch_topology.c
-> +++ b/drivers/base/arch_topology.c
-> @@ -765,6 +765,25 @@ void update_siblings_masks(unsigned int cpuid)
->  	}
+> diff --git a/drivers/media/platform/amphion/vdec.c b/drivers/media/platform/amphion/vdec.c
+> index 09d4f27970ec..6eab9e711cba 100644
+> --- a/drivers/media/platform/amphion/vdec.c
+> +++ b/drivers/media/platform/amphion/vdec.c
+> @@ -104,7 +104,6 @@ static const struct vpu_format vdec_formats[] = {
+>  		.pixfmt = V4L2_PIX_FMT_VC1_ANNEX_L,
+>  		.num_planes = 1,
+>  		.type = V4L2_BUF_TYPE_VIDEO_OUTPUT_MPLANE,
+> -		.flags = V4L2_FMT_FLAG_DYN_RESOLUTION
+>  	},
+>  	{
+>  		.pixfmt = V4L2_PIX_FMT_MPEG2,
+> @@ -731,6 +730,7 @@ static void vdec_stop_done(struct vpu_inst *inst)
+>  	vdec->eos_received = 0;
+>  	vdec->is_source_changed = false;
+>  	vdec->source_change = 0;
+> +	inst->total_input_count = 0;
+>  	vpu_inst_unlock(inst);
 >  }
 >  
-> +void __weak store_cpu_topology(unsigned int cpuid)
-
-I prefer to have this as default implementation. So just get the risc-v
-one pushed to upstream first(for v5.20) and get all the backports if required.
-Next cycle(i.e. v5.21), you can move both RISC-V and arm64.
-
--- 
-Regards,
-Sudeep
+> diff --git a/drivers/media/platform/amphion/vpu.h b/drivers/media/platform/amphion/vpu.h
+> index e56b96a7e5d3..f914de6ed81e 100644
+> --- a/drivers/media/platform/amphion/vpu.h
+> +++ b/drivers/media/platform/amphion/vpu.h
+> @@ -258,6 +258,7 @@ struct vpu_inst {
+>  	struct vpu_format cap_format;
+>  	u32 min_buffer_cap;
+>  	u32 min_buffer_out;
+> +	u32 total_input_count;
+>  
+>  	struct v4l2_rect crop;
+>  	u32 colorspace;
+> diff --git a/drivers/media/platform/amphion/vpu_malone.c b/drivers/media/platform/amphion/vpu_malone.c
+> index c62b49e85060..f4a488bf9880 100644
+> --- a/drivers/media/platform/amphion/vpu_malone.c
+> +++ b/drivers/media/platform/amphion/vpu_malone.c
+> @@ -1314,6 +1314,8 @@ static int vpu_malone_insert_scode_vc1_l_seq(struct malone_scode_t *scode)
+>  	int size = 0;
+>  	u8 rcv_seqhdr[MALONE_VC1_RCV_SEQ_HEADER_LEN];
+>  
+> +	if (scode->inst->total_input_count)
+> +		return 0;
+>  	scode->need_data = 0;
+>  
+>  	ret = vpu_malone_insert_scode_seq(scode, MALONE_CODEC_ID_VC1_SIMPLE, sizeof(rcv_seqhdr));
+> diff --git a/drivers/media/platform/amphion/vpu_rpc.h b/drivers/media/platform/amphion/vpu_rpc.h
+> index 25119e5e807e..7eb6f01e6ab5 100644
+> --- a/drivers/media/platform/amphion/vpu_rpc.h
+> +++ b/drivers/media/platform/amphion/vpu_rpc.h
+> @@ -312,11 +312,16 @@ static inline int vpu_iface_input_frame(struct vpu_inst *inst,
+>  					struct vb2_buffer *vb)
+>  {
+>  	struct vpu_iface_ops *ops = vpu_core_get_iface(inst->core);
+> +	int ret;
+>  
+>  	if (!ops || !ops->input_frame)
+>  		return -EINVAL;
+>  
+> -	return ops->input_frame(inst->core->iface, inst, vb);
+> +	ret = ops->input_frame(inst->core->iface, inst, vb);
+> +	if (ret < 0)
+> +		return ret;
+> +	inst->total_input_count++;
+> +	return ret;
+>  }
+>  
+>  static inline int vpu_iface_config_memory_resource(struct vpu_inst *inst,

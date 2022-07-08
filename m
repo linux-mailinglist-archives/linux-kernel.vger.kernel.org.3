@@ -2,51 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5674F56B5E5
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 11:48:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 46F5156B5F5
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 11:54:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237746AbiGHJr6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Jul 2022 05:47:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36642 "EHLO
+        id S237822AbiGHJsP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Jul 2022 05:48:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37026 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237803AbiGHJry (ORCPT
+        with ESMTP id S237745AbiGHJsM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Jul 2022 05:47:54 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 33CF17E03B;
-        Fri,  8 Jul 2022 02:47:52 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 32615D6E;
-        Fri,  8 Jul 2022 02:47:52 -0700 (PDT)
-Received: from donnerap.cambridge.arm.com (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 863B93F66F;
-        Fri,  8 Jul 2022 02:47:50 -0700 (PDT)
-Date:   Fri, 8 Jul 2022 10:47:46 +0100
-From:   Andre Przywara <andre.przywara@arm.com>
-To:     Samuel Holland <samuel@sholland.org>
-Cc:     Jernej =?UTF-8?B?xaBrcmFiZWM=?= <jernej.skrabec@gmail.com>,
-        Chen-Yu Tsai <wens@csie.org>, Rob Herring <robh@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Icenowy Zheng <icenowy@aosc.io>,
-        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v11 3/6] arm64: dts: allwinner: Add Allwinner H616 .dtsi
- file
-Message-ID: <20220708104746.6623e239@donnerap.cambridge.arm.com>
-In-Reply-To: <39537f95-2ed4-f526-5912-364c1c1ed512@sholland.org>
-References: <20220428230933.15262-1-andre.przywara@arm.com>
-        <22699277.6Emhk5qWAg@kista>
-        <20220704225534.3e1a901a@slackpad.lan>
-        <5278570.Sb9uPGUboI@kista>
-        <20220706141655.15d2dd0e@donnerap.cambridge.arm.com>
-        <39537f95-2ed4-f526-5912-364c1c1ed512@sholland.org>
-Organization: ARM
-X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.32; aarch64-unknown-linux-gnu)
+        Fri, 8 Jul 2022 05:48:12 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 915257E014;
+        Fri,  8 Jul 2022 02:48:11 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id DF65D621B3;
+        Fri,  8 Jul 2022 09:48:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 42467C341C0;
+        Fri,  8 Jul 2022 09:48:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1657273690;
+        bh=jh5gWjN504oG2VIQVhjUJ6awryeK4kG9bLyyFcKUZb8=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=J0mN0kb8BszGexKgP2TR/Konu1FNhSKLfU1dFk8MjbV9m7dxbBYbF7wwZZqxMrDOr
+         F2lUZZbiAoibyzsScrc+PqTDnUNQtvqgiIQRLx+9QXwEy71uIlZvZibgVknoklSdR3
+         N5ej6+Cm1mxWT82xms9zIjE+kIojLNBIi/syuWuMiojBoq8gL4lbqP2fdR4MIRR5aC
+         C3otI4srlob2HKRGqzFgtB+NkDdngWbUpx5Yan/H9nA5wO5bog/qQzNIgkjEnalQT/
+         OhQHVVnJ4iu0TKhX6ULYi7/yPg+BKcMgFSIBiwxtrlrtdvCYjxTJwBxwY398mZfvn4
+         ctAgmZK0ZrrCw==
+Received: by mail-vs1-f49.google.com with SMTP id f68so5959428vsc.11;
+        Fri, 08 Jul 2022 02:48:10 -0700 (PDT)
+X-Gm-Message-State: AJIora96dsnmFzU0r+taN40ryFlyuRZC2ysrZymnKnUpyGH7oUVmtaS/
+        WJe3wZB9wBVMyUjEuyR8DZkolymU3c2KFdgwpDA=
+X-Google-Smtp-Source: AGRyM1trh8V62HAkUcCKd0tDx5d1m4TVW3lDdgWUkgyB2uid/kYHUhgnGZyGqTvYMyG8IlCpF+vPKmaWyo2itMFkJxg=
+X-Received: by 2002:a05:6102:3543:b0:357:3ae7:bbd0 with SMTP id
+ e3-20020a056102354300b003573ae7bbd0mr431000vss.84.1657273689209; Fri, 08 Jul
+ 2022 02:48:09 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+References: <20220704112526.2492342-1-chenhuacai@loongson.cn>
+ <20220704112526.2492342-4-chenhuacai@loongson.cn> <20220705092937.GA552@willie-the-truck>
+ <CAAhV-H5r8HDaxt8fkO97in5-eH8X9gokVNervmUWn6km4S0e-w@mail.gmail.com> <20220706161736.GC3204@willie-the-truck>
+In-Reply-To: <20220706161736.GC3204@willie-the-truck>
+From:   Huacai Chen <chenhuacai@kernel.org>
+Date:   Fri, 8 Jul 2022 17:47:56 +0800
+X-Gmail-Original-Message-ID: <CAAhV-H7uY_KiLJRRjj4+8mewcWbuhvC=zDp5VAs03=BLdSMKLw@mail.gmail.com>
+Message-ID: <CAAhV-H7uY_KiLJRRjj4+8mewcWbuhvC=zDp5VAs03=BLdSMKLw@mail.gmail.com>
+Subject: Re: [PATCH V4 3/4] mm/sparse-vmemmap: Generalise vmemmap_populate_hugepages()
+To:     Will Deacon <will@kernel.org>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Sudarshan Rajagopalan <sudaraja@codeaurora.org>
+Cc:     Huacai Chen <chenhuacai@loongson.cn>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        loongarch@lists.linux.dev, linux-arch <linux-arch@vger.kernel.org>,
+        Xuefeng Li <lixuefeng@loongson.cn>,
+        Guo Ren <guoren@kernel.org>, Xuerui Wang <kernel@xen0n.name>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linux-MM <linux-mm@kvack.org>,
+        "open list:MIPS" <linux-mips@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        Feiyang Chen <chenfeiyang@loongson.cn>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -54,62 +81,88 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 7 Jul 2022 01:30:32 -0500
-Samuel Holland <samuel@sholland.org> wrote:
++Dan Williams
++Sudarshan Rajagopalan
 
-Hi Samuel,
+On Thu, Jul 7, 2022 at 12:17 AM Will Deacon <will@kernel.org> wrote:
+>
+> On Tue, Jul 05, 2022 at 09:07:59PM +0800, Huacai Chen wrote:
+> > On Tue, Jul 5, 2022 at 5:29 PM Will Deacon <will@kernel.org> wrote:
+> > > On Mon, Jul 04, 2022 at 07:25:25PM +0800, Huacai Chen wrote:
+> > > > diff --git a/mm/sparse-vmemmap.c b/mm/sparse-vmemmap.c
+> > > > index 33e2a1ceee72..6f2e40bb695d 100644
+> > > > --- a/mm/sparse-vmemmap.c
+> > > > +++ b/mm/sparse-vmemmap.c
+> > > > @@ -686,6 +686,60 @@ int __meminit vmemmap_populate_basepages(unsigned long start, unsigned long end,
+> > > >       return vmemmap_populate_range(start, end, node, altmap, NULL);
+> > > >  }
+> > > >
+> > > > +void __weak __meminit vmemmap_set_pmd(pmd_t *pmd, void *p, int node,
+> > > > +                                   unsigned long addr, unsigned long next)
+> > > > +{
+> > > > +}
+> > > > +
+> > > > +int __weak __meminit vmemmap_check_pmd(pmd_t *pmd, int node, unsigned long addr,
+> > > > +                                    unsigned long next)
+> > > > +{
+> > > > +     return 0;
+> > > > +}
+> > > > +
+> > > > +int __meminit vmemmap_populate_hugepages(unsigned long start, unsigned long end,
+> > > > +                                      int node, struct vmem_altmap *altmap)
+> > > > +{
+> > > > +     unsigned long addr;
+> > > > +     unsigned long next;
+> > > > +     pgd_t *pgd;
+> > > > +     p4d_t *p4d;
+> > > > +     pud_t *pud;
+> > > > +     pmd_t *pmd;
+> > > > +
+> > > > +     for (addr = start; addr < end; addr = next) {
+> > > > +             next = pmd_addr_end(addr, end);
+> > > > +
+> > > > +             pgd = vmemmap_pgd_populate(addr, node);
+> > > > +             if (!pgd)
+> > > > +                     return -ENOMEM;
+> > > > +
+> > > > +             p4d = vmemmap_p4d_populate(pgd, addr, node);
+> > > > +             if (!p4d)
+> > > > +                     return -ENOMEM;
+> > > > +
+> > > > +             pud = vmemmap_pud_populate(p4d, addr, node);
+> > > > +             if (!pud)
+> > > > +                     return -ENOMEM;
+> > > > +
+> > > > +             pmd = pmd_offset(pud, addr);
+> > > > +             if (pmd_none(READ_ONCE(*pmd))) {
+> > > > +                     void *p;
+> > > > +
+> > > > +                     p = vmemmap_alloc_block_buf(PMD_SIZE, node, altmap);
+> > > > +                     if (p) {
+> > > > +                             vmemmap_set_pmd(pmd, p, node, addr, next);
+> > > > +                             continue;
+> > > > +                     } else if (altmap)
+> > > > +                             return -ENOMEM; /* no fallback */
+> > >
+> > > Why do you return -ENOMEM if 'altmap' here? That seems to be different to
+> > > what we currently have on arm64 and it's not clear to me why we're happy
+> > > with an altmap for the pmd case, but not for the pte case.
+> > The generic version is the same as X86. It seems that ARM64 always
+> > fallback whether there is an altmap, but X86 only fallback in the no
+> > altmap case. I don't know the reason of X86, can Dan Williams give
+> > some explaination?
+>
+> Right, I think we need to understand the new behaviour here before we adopt
+> it on arm64.
+Hi, Dan,
+Could you please tell us the reason? Thanks.
 
-> Hi Andre, Jernej,
-> 
-> On 7/6/22 8:16 AM, Andre Przywara wrote:
-> > so after seemingly having finished writing this email, I realised that
-> > this won't really help, as I think this diverts the discussion. And the
-> > problem has been around for a while, and won't probably be solved easily
-> > or quickly. I think we agree to disagree here, or we should admit that
-> > there are different approaches ("bundled firmware" vs. "UEFI"), so in the
-> > interest of not blocking the H616 series:
-> > 
-> > Shall I just keep the firmware node? This would work both ways, whereas
-> > dropping the node would impede the "bundled firmware" approach?  
-> 
-> Let me try to sum up the relevant portion of my thoughts (and save the rest for
-> elsewhere):
-> 
-> The only reason to add the reserved-memory node is to support externally-loaded
-> DTBs. By adding the node, we are committing to support externally-loaded DTBs on
-> this SoC.
-> 
-> Upgrading the kernel is not allowed to break boot. If we support
-> externally-loaded DTBs, that rule extends to DTBs shipped with the kernel.
-> 
-> If we remove the reserved-memory node, the combination of old U-Boot + new
-> externally-loaded DTB will stop booting (the kernel version is irrelevant).
-> Therefore, if we add the node, we can never remove it, full stop.
+And Sudarshan,
+You are the author of adding a fallback mechanism to ARM64,  do you
+know why ARM64 is different from X86 (only fallback in no altmap
+case)?
 
-Well, this all depends on the initial commitment to support
-externally-loaded DTBs. I don't think we need to make this promise, I'd
-rather see this as a concession to people doing so *right now*, and for
-the sheer practicality of using this DT until we merge it into U-Boot.
+Huacai
 
-> I will (begrudgingly) accept that, as long as the node matches what TF-A
-> actually generates today. That means, please:
->  - Drop the label and update the node name
-
-I will drop the label. For the node name: the binding does not enforce it,
-but asks that "node names should reflect the purpose", so I went with
-"secmon", as used by other platforms. I will send a patch to TF-A to fix
-it there instead.
-If you disagree, feel free to fix this up before committing.
-
->  - Reduce the size to 256 KiB, matching (BL31_LIMIT - BL31_BASE)
-
-Verified in TF-A and changed.
-I also added a short comment explaining the situation. Feel free to amend
-this if needed.
-
-
-Many thanks for the discussion and for resolving this. I much appreciate
-your flexibility and pragmatism in this matter!
-
-Cheers,
-Andre
+>
+> Will

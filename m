@@ -2,90 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7190E56B3DA
+	by mail.lfdr.de (Postfix) with ESMTP id 2980456B3D9
 	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 09:54:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237483AbiGHHxp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Jul 2022 03:53:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58012 "EHLO
+        id S237138AbiGHHx5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Jul 2022 03:53:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58346 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236895AbiGHHxl (ORCPT
+        with ESMTP id S237490AbiGHHxt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Jul 2022 03:53:41 -0400
-Received: from mx1.molgen.mpg.de (mx3.molgen.mpg.de [141.14.17.11])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBBB21D308
-        for <linux-kernel@vger.kernel.org>; Fri,  8 Jul 2022 00:53:38 -0700 (PDT)
-Received: from localhost.localdomain (ip5f5aeb4e.dynamic.kabel-deutschland.de [95.90.235.78])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: pmenzel)
-        by mx.molgen.mpg.de (Postfix) with ESMTPSA id C942B61EA1929;
-        Fri,  8 Jul 2022 09:53:35 +0200 (CEST)
-From:   Paul Menzel <pmenzel@molgen.mpg.de>
-To:     Yury Norov <yury.norov@gmail.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>
-Cc:     Paul Menzel <pmenzel@molgen.mpg.de>, linux-kernel@vger.kernel.org
-Subject: [PATCH v2] lib/bitmap: Make parameter len unsigned
-Date:   Fri,  8 Jul 2022 09:52:40 +0200
-Message-Id: <20220708075239.9057-1-pmenzel@molgen.mpg.de>
-X-Mailer: git-send-email 2.36.1
+        Fri, 8 Jul 2022 03:53:49 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD82D2CE01
+        for <linux-kernel@vger.kernel.org>; Fri,  8 Jul 2022 00:53:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1657266828; x=1688802828;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=226n02MK38Ht0X6q4rCIPnDL++KJz3PSWDz7ZAUD+1w=;
+  b=HKz3qwxDYMVMqAhWITTPB116RJrukIagwdJys6K0Xqndjd24hAPG2SoK
+   Bhx37uQnTAbwNC2AsB+p1RNgR0lWYmmN2wRjLQe+SW2RxYFS+kgIxuAEb
+   RyNtoA7F7kMDSTCt2AS+f1eD7ZCWZ0Ln+y8hVTO5X7TW6zxyXbdyRcC4c
+   4KCoTinxLK8l3Yh5rezZmcbyl7HQXF+1MpRFebpeCMeKZ8oxpElkbrWU7
+   AOMnWPYjxy/tV1RWo4zlXaxfa+qSCaqrDonQ4d2WHle50xsY/FAiNreC8
+   xZtgL4fq1Xtwz1UMjCBMGTd4+obER5DRy45NTY6f9VhOzYKcPNjhnX8US
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10401"; a="282974159"
+X-IronPort-AV: E=Sophos;i="5.92,254,1650956400"; 
+   d="scan'208";a="282974159"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jul 2022 00:53:47 -0700
+X-IronPort-AV: E=Sophos;i="5.92,254,1650956400"; 
+   d="scan'208";a="661691042"
+Received: from cmchugh-mobl.ger.corp.intel.com (HELO [10.213.229.21]) ([10.213.229.21])
+  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jul 2022 00:53:45 -0700
+Message-ID: <6e387f90-dce3-486d-83e9-26a975777265@intel.com>
+Date:   Fri, 8 Jul 2022 08:53:43 +0100
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Firefox/91.0 Thunderbird/91.11.0
+Subject: Re: [PATCH v10 04/11] drm/i915/gem: selftest should not attempt mmap
+ of private regions
+Content-Language: en-GB
+To:     Robert Beckett <bob.beckett@collabora.com>,
+        dri-devel@lists.freedesktop.org, intel-gfx@lists.freedesktop.org,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>
+Cc:     kernel@collabora.com,
+        =?UTF-8?Q?Thomas_Hellstr=c3=b6m?= 
+        <thomas.hellstrom@linux.intel.com>, linux-kernel@vger.kernel.org
+References: <20220707200230.1657555-1-bob.beckett@collabora.com>
+ <20220707200230.1657555-5-bob.beckett@collabora.com>
+From:   Matthew Auld <matthew.auld@intel.com>
+In-Reply-To: <20220707200230.1657555-5-bob.beckett@collabora.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The length is non-negative, so make it unsigned.
+On 07/07/2022 21:02, Robert Beckett wrote:
+> During testing make can_mmap consider whether the region is private.
 
-Signed-off-by: Paul Menzel <pmenzel@molgen.mpg.de>
----
-v2: Update signature in header file
+Do we still need this with: 938d2fd17d17 ("drm/i915/selftests: skip the 
+mman tests for stolen") ?
 
- include/linux/bitmap.h | 2 +-
- lib/bitmap.c           | 4 ++--
- 2 files changed, 3 insertions(+), 3 deletions(-)
-
-diff --git a/include/linux/bitmap.h b/include/linux/bitmap.h
-index 2e6cd5681040..feaf84cbc487 100644
---- a/include/linux/bitmap.h
-+++ b/include/linux/bitmap.h
-@@ -164,7 +164,7 @@ bool __bitmap_intersects(const unsigned long *bitmap1,
- bool __bitmap_subset(const unsigned long *bitmap1,
- 		     const unsigned long *bitmap2, unsigned int nbits);
- int __bitmap_weight(const unsigned long *bitmap, unsigned int nbits);
--void __bitmap_set(unsigned long *map, unsigned int start, int len);
-+void __bitmap_set(unsigned long *map, unsigned int start, unsigned int len);
- void __bitmap_clear(unsigned long *map, unsigned int start, int len);
- 
- unsigned long bitmap_find_next_zero_area_off(unsigned long *map,
-diff --git a/lib/bitmap.c b/lib/bitmap.c
-index b18e31ea6e66..0746beb336df 100644
---- a/lib/bitmap.c
-+++ b/lib/bitmap.c
-@@ -348,14 +348,14 @@ int __bitmap_weight(const unsigned long *bitmap, unsigned int bits)
- }
- EXPORT_SYMBOL(__bitmap_weight);
- 
--void __bitmap_set(unsigned long *map, unsigned int start, int len)
-+void __bitmap_set(unsigned long *map, unsigned int start, unsigned int len)
- {
- 	unsigned long *p = map + BIT_WORD(start);
- 	const unsigned int size = start + len;
- 	int bits_to_set = BITS_PER_LONG - (start % BITS_PER_LONG);
- 	unsigned long mask_to_set = BITMAP_FIRST_WORD_MASK(start);
- 
--	while (len - bits_to_set >= 0) {
-+	while (len >= bits_to_set) {
- 		*p |= mask_to_set;
- 		len -= bits_to_set;
- 		bits_to_set = BITS_PER_LONG;
--- 
-2.36.1
-
+> 
+> Signed-off-by: Robert Beckett <bob.beckett@collabora.com>
+> Reviewed-by: Thomas Hellström <thomas.hellstrom@linux.intel.com>
+> ---
+>   drivers/gpu/drm/i915/gem/selftests/i915_gem_mman.c | 3 +++
+>   1 file changed, 3 insertions(+)
+> 
+> diff --git a/drivers/gpu/drm/i915/gem/selftests/i915_gem_mman.c b/drivers/gpu/drm/i915/gem/selftests/i915_gem_mman.c
+> index 5bc93a1ce3e3..76181e28c75e 100644
+> --- a/drivers/gpu/drm/i915/gem/selftests/i915_gem_mman.c
+> +++ b/drivers/gpu/drm/i915/gem/selftests/i915_gem_mman.c
+> @@ -869,6 +869,9 @@ static bool can_mmap(struct drm_i915_gem_object *obj, enum i915_mmap_type type)
+>   	struct drm_i915_private *i915 = to_i915(obj->base.dev);
+>   	bool no_map;
+>   
+> +	if (obj->mm.region && obj->mm.region->private)
+> +		return false;
+> +
+>   	if (obj->ops->mmap_offset)
+>   		return type == I915_MMAP_TYPE_FIXED;
+>   	else if (type == I915_MMAP_TYPE_FIXED)

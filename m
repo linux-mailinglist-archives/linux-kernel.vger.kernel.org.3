@@ -2,118 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CBC4156BFDD
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 20:36:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0FA8E56C0E4
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 20:38:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238491AbiGHRaW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Jul 2022 13:30:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35632 "EHLO
+        id S238827AbiGHRcR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Jul 2022 13:32:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36462 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238130AbiGHRaV (ORCPT
+        with ESMTP id S238646AbiGHRcO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Jul 2022 13:30:21 -0400
-Received: from mail-io1-xd32.google.com (mail-io1-xd32.google.com [IPv6:2607:f8b0:4864:20::d32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF19C13D1F
-        for <linux-kernel@vger.kernel.org>; Fri,  8 Jul 2022 10:30:17 -0700 (PDT)
-Received: by mail-io1-xd32.google.com with SMTP id k15so20336605iok.5
-        for <linux-kernel@vger.kernel.org>; Fri, 08 Jul 2022 10:30:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=vOrzN7Uqdgl/cFhlrzD5har4mn0v0Vu68SFM5bgzums=;
-        b=JtjiqBN/dO0JCgr4GzlHtgEqo3gowzLBF7UNED/+IujeYxOK+W4C7XhJqU5yeP7tDG
-         tO2QsYDqEI3YBBpPGN3tijQnN/nnXjK/JP7ZR3hX1GimcIZiCzk9hIunH1FSm5t0y7Bb
-         8MQW5wwyQ3SUZWdLoEoUkbiQvfwBhkVYKXBGA=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=vOrzN7Uqdgl/cFhlrzD5har4mn0v0Vu68SFM5bgzums=;
-        b=ykFuBHGtstm3SDWOfUkPj17iAZP/UgNvzjCFedpEzXt60StLrjcHpJa3VmZS6BOCBj
-         ZFRcNXk1ewCYDhTBu2xOAuQPsVOWXAbcGP+jpRsNMdwtl14trDK2oPN30O5FmGkv87J0
-         xUMITH7ilT/Q1DJZbkovGljYlUjEI5mcIdRrjAG6LuqNyXN7gGxVe4WCw1afmJWF2X9s
-         TSechPI7CflpriaCZiZ7/v1x6VK4Wg4RYXqAQZCKhvbPUZGfsRTiMQkFhBHcKnEElL++
-         iJ1KUSzSkNfvFQlxH0U3oq/2C6JsmZfTrHaoMStN2ahZY1r/M8//1asUvsQTGKaMghcA
-         a2Lg==
-X-Gm-Message-State: AJIora/aAYHFDrXl01w2g7ICaAdVYweUUXRvk6vG8Y+spCxi+PuD5Pf7
-        l7ZMNtxFvNKlwp25vNEULwnvSA==
-X-Google-Smtp-Source: AGRyM1sCuetchdeUiIDOwah0kWdSOi8konWQDV5pP2Io3vDgB/FJgeKue7VxuReWsyunVvOD59S3Iw==
-X-Received: by 2002:a02:a809:0:b0:339:e6ba:dee1 with SMTP id f9-20020a02a809000000b00339e6badee1mr2730125jaj.1.1657301417200;
-        Fri, 08 Jul 2022 10:30:17 -0700 (PDT)
-Received: from [192.168.1.128] ([38.15.45.1])
-        by smtp.gmail.com with ESMTPSA id a70-20020a021649000000b0033cd0f5cb36sm11887822jaa.173.2022.07.08.10.30.16
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 08 Jul 2022 10:30:16 -0700 (PDT)
-Subject: Re: [PATCH 08/12] kunit: test.h: fix a kernel-doc markup
-To:     David Gow <davidgow@google.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc:     Linux Doc Mailing List <linux-doc@vger.kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Brendan Higgins <brendanhiggins@google.com>,
-        KUnit Development <kunit-dev@googlegroups.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        Shuah Khan <skhan@linuxfoundation.org>
-References: <cover.1656759988.git.mchehab@kernel.org>
- <32a67e9ee77cc6c435d08a2cb5ef12559b417fee.1656759989.git.mchehab@kernel.org>
- <CABVgOS=W2mPts5uZci3cH7sRetz8ye46THU5U51+roQhuvTfqw@mail.gmail.com>
-From:   Shuah Khan <skhan@linuxfoundation.org>
-Message-ID: <fcdfd43a-207a-7008-6931-34061c1682b5@linuxfoundation.org>
-Date:   Fri, 8 Jul 2022 11:30:15 -0600
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.1
+        Fri, 8 Jul 2022 13:32:14 -0400
+Received: from pegase2.c-s.fr (pegase2.c-s.fr [93.17.235.10])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89E7213D1F
+        for <linux-kernel@vger.kernel.org>; Fri,  8 Jul 2022 10:32:13 -0700 (PDT)
+Received: from localhost (mailhub3.si.c-s.fr [172.26.127.67])
+        by localhost (Postfix) with ESMTP id 4LfgMF2zTHz9tJt;
+        Fri,  8 Jul 2022 19:32:09 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from pegase2.c-s.fr ([172.26.127.65])
+        by localhost (pegase2.c-s.fr [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id 2Cmxiou12xFy; Fri,  8 Jul 2022 19:32:09 +0200 (CEST)
+Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
+        by pegase2.c-s.fr (Postfix) with ESMTP id 4LfgMD3jcbz9tK2;
+        Fri,  8 Jul 2022 19:32:08 +0200 (CEST)
+Received: from localhost (localhost [127.0.0.1])
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id 6B89F8B79F;
+        Fri,  8 Jul 2022 19:32:08 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from messagerie.si.c-s.fr ([127.0.0.1])
+        by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
+        with ESMTP id yGjfhU1YAOkF; Fri,  8 Jul 2022 19:32:08 +0200 (CEST)
+Received: from PO20335.IDSI0.si.c-s.fr (unknown [192.168.233.202])
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id E26E28B76E;
+        Fri,  8 Jul 2022 19:32:07 +0200 (CEST)
+Received: from PO20335.IDSI0.si.c-s.fr (localhost [127.0.0.1])
+        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.16.1) with ESMTPS id 268HVwDp1000723
+        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
+        Fri, 8 Jul 2022 19:31:58 +0200
+Received: (from chleroy@localhost)
+        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.17.1/Submit) id 268HVsT81000717;
+        Fri, 8 Jul 2022 19:31:54 +0200
+X-Authentication-Warning: PO20335.IDSI0.si.c-s.fr: chleroy set sender to christophe.leroy@csgroup.eu using -f
+From:   Christophe Leroy <christophe.leroy@csgroup.eu>
+To:     Michael Ellerman <mpe@ellerman.id.au>,
+        Nicholas Piggin <npiggin@gmail.com>, sv@linux.ibm.com,
+        agust@denx.de, jpoimboe@kernel.org, peterz@infradead.org,
+        jbaron@akamai.com, rostedt@goodmis.org, ardb@kernel.org,
+        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        dave.hansen@linux.intel.com, hpa@zytor.com
+Cc:     Christophe Leroy <christophe.leroy@csgroup.eu>,
+        linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        x86@kernel.org, chenzhongjin@huawei.com
+Subject: [PATCH v2 0/7] Implement inline static calls on PPC32 - v2
+Date:   Fri,  8 Jul 2022 19:31:19 +0200
+Message-Id: <cover.1657301423.git.christophe.leroy@csgroup.eu>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
-In-Reply-To: <CABVgOS=W2mPts5uZci3cH7sRetz8ye46THU5U51+roQhuvTfqw@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1657301483; l=2522; s=20211009; h=from:subject:message-id; bh=srsHauWpCCSShw+tDnQuCN7IaYeyZicOYbEw8X38M5s=; b=9mXmhioPtuJKOkzJ526lABlrAYvbEtiTLvaEChNbWFTdSz6wSV9box2w6tlvRf+BXOtYmsrmc19/ DeWS0KGEBw0QDl9ftLF4oURG+dwMO/PJq9azqrSDFo2AfSalnNec
+X-Developer-Key: i=christophe.leroy@csgroup.eu; a=ed25519; pk=HIzTzUj91asvincQGOFx6+ZF5AoUuP9GdOtQChs7Mm0=
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 7/2/22 7:18 AM, David Gow wrote:
-> On Sat, Jul 2, 2022 at 7:07 PM Mauro Carvalho Chehab <mchehab@kernel.org> wrote:
->>
->> Fix this kernel-doc warning:
->>
->>          Documentation/dev-tools/kunit/api/test:9: ./include/kunit/test.h:323: WARNING: Inline interpreted text or phrase reference start-string without end-string.
->>
->> Functions should use func_name() on kernel-doc markups, as
->> documented at:
->>          Documentation/doc-guide/kernel-doc.rst
->>
->> Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
->> ---
->>
->> To avoid mailbombing on a large number of people, only mailing lists were C/C on the cover.
->> See [PATCH 00/12] at: https://lore.kernel.org/all/cover.1656759988.git.mchehab@kernel.org/
->>
-> 
-> Reviewed-by: David Gow <davidgow@google.com>
-> 
-> FYI, this is identical to:
-> https://lore.kernel.org/all/20220702051205.3292468-1-davidgow@google.com/
-> 
-> It doesn't matter which one goes through, so if this patch is applied
-> (e.g. to the docs tree as a part of this series), I'll make sure the
-> other one doesn't end up in the KUnit tree.
-> 
-> Cheers,
-> -- David
-> 
+This series applies on top of the series v3 "objtool: Enable and
+implement --mcount option on powerpc" [1] rebased on powerpc-next branch
 
-Applied this now to linux-kselftest kunit branch for 5.20-rc1
+A few modifications are done to core parts to enable powerpc
+implementation:
+- R_X86_64_PC32 is abstracted to R_REL32 so that it can then be
+redefined as R_PPC_REL32.
+- A call to static_call_init() is added to start_kernel() to avoid
+every architecture to have to call it
+- Trampoline address is provided to arch_static_call_transform() even
+when setting a site to fallback on a call to the trampoline when the
+target is too far.
 
-thanks,
--- Shuah
+[1] https://lore.kernel.org/lkml/70b6d08d-aced-7f4e-b958-a3c7ae1a9319@csgroup.eu/T/#rb3a073c54aba563a135fba891e0c34c46e47beef
+
+Christophe Leroy (7):
+  powerpc: Add missing asm/asm.h for objtool
+  objtool/powerpc: Activate objtool on PPC32
+  objtool: Add architecture specific R_REL32 macro
+  objtool/powerpc: Add necessary support for inline static calls
+  init: Call static_call_init() from start_kernel()
+  static_call_inline: Provide trampoline address when updating sites
+  powerpc/static_call: Implement inline static calls
+
+ arch/powerpc/Kconfig                          |  3 +-
+ arch/powerpc/include/asm/asm.h                |  7 +++
+ arch/powerpc/include/asm/static_call.h        |  2 +
+ arch/powerpc/kernel/cpu_setup_6xx.S           | 26 ++++++---
+ arch/powerpc/kernel/cpu_setup_fsl_booke.S     |  8 ++-
+ arch/powerpc/kernel/entry_32.S                |  8 ++-
+ arch/powerpc/kernel/head_40x.S                |  5 +-
+ arch/powerpc/kernel/head_8xx.S                |  5 +-
+ arch/powerpc/kernel/head_book3s_32.S          | 29 +++++++---
+ arch/powerpc/kernel/head_fsl_booke.S          |  5 +-
+ arch/powerpc/kernel/static_call.c             | 56 ++++++++++++++-----
+ arch/powerpc/kernel/swsusp_32.S               |  5 +-
+ arch/powerpc/kvm/fpu.S                        | 17 ++++--
+ arch/powerpc/platforms/52xx/lite5200_sleep.S  | 15 +++--
+ arch/x86/kernel/static_call.c                 |  2 +-
+ init/main.c                                   |  1 +
+ kernel/static_call_inline.c                   |  2 +-
+ tools/objtool/arch/powerpc/decode.c           | 16 ++++--
+ tools/objtool/arch/powerpc/include/arch/elf.h |  1 +
+ tools/objtool/arch/x86/include/arch/elf.h     |  1 +
+ tools/objtool/check.c                         | 10 ++--
+ tools/objtool/orc_gen.c                       |  2 +-
+ 22 files changed, 162 insertions(+), 64 deletions(-)
+ create mode 100644 arch/powerpc/include/asm/asm.h
+
+-- 
+2.36.1
 

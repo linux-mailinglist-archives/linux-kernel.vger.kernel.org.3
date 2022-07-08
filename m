@@ -2,363 +2,198 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 45CFA56B00F
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 03:53:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 325C756AFE3
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 03:52:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236188AbiGHBgl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Jul 2022 21:36:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50310 "EHLO
+        id S236592AbiGHBj1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Jul 2022 21:39:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52146 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230229AbiGHBgi (ORCPT
+        with ESMTP id S235477AbiGHBj0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Jul 2022 21:36:38 -0400
-Received: from mail-pl1-x649.google.com (mail-pl1-x649.google.com [IPv6:2607:f8b0:4864:20::649])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1812672EF9
-        for <linux-kernel@vger.kernel.org>; Thu,  7 Jul 2022 18:36:36 -0700 (PDT)
-Received: by mail-pl1-x649.google.com with SMTP id n10-20020a170902d2ca00b0016c1aa1f844so277084plc.21
-        for <linux-kernel@vger.kernel.org>; Thu, 07 Jul 2022 18:36:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:message-id:mime-version:subject:from:to:cc;
-        bh=ODgBEmEsl6rJt2EylFcnojNKRR8OgMdKvcL6VaOiX+w=;
-        b=kGzY4rmoueVx8pzGnUgsiXuHksm/6KkwxWV5DiERjqjh2dFXzFTo4K4jyDmrholloJ
-         m88uOd2FZADYSZkTuohMXEJMpsqy5zzrnBm3UaNSenDmIUkEbVFmU6Jz1kJuvZDY4FoR
-         w5IGi+7S2LX6+X+omaOu9nF+0EGNI1jW+61HqV33z4/UT2t6gEH0uzVFOgUmsJR2R3vU
-         L5tsUQYO3B6FU+eqyc7RI6qGwEAvT6Nkebfa/UwJqcpSA3Mu5iEaapURnTrptcQrcM4A
-         ltwR69dsbS2zO6AkXUuXRfEG/IfNKNQubDapGh6o12ByrEakXfR/T+TSWa4u/+ex3txz
-         5ewQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
-        bh=ODgBEmEsl6rJt2EylFcnojNKRR8OgMdKvcL6VaOiX+w=;
-        b=ZeTnGj0yY9dnuZ9EKb6Q7XCrBVgZOdF+z/rnTN/Q/D89Jj43xrJcR7ZzGazw+3pKfM
-         73Dtt8hEquYtFqYAKJ+PnOrkZIpON7At0rKK/s8PFyyvs69kZLL0UBWRtDty+A7D4HXB
-         0KNjxVfwpzFWSg5zFR68edvm3cpZn3B7/FW4imt0O7NrtxnmdYnEjHxtAVge0H5goUMB
-         mFA9mSQLBTI381z6QW6kuCYT13N9hsOlP6ijk7DqENTESGKydGMFnePVHFs51vGcEVsm
-         iNGtGSyvJkUIBJtwSgIGjO8s3equ/gbKsh9k+ggDcJz7eVNRHk+pDNM10nLFGm4TUsHY
-         HVrA==
-X-Gm-Message-State: AJIora/3BosL9cOHclNtBpNL4jB8cEgJHR5PCx/ut1W5tWurvrUGxWPE
-        dxWDBv2pBrT+yptnOQkDh1O+x6PuXMXacw==
-X-Google-Smtp-Source: AGRyM1v2XdtgG64jw4csnYN8EGLp7K3RGY75Unj6RkvSQ3kjwGXowENaMzWzV2203FmSBiVCja3yg3DcJRiYcA==
-X-Received: from dlatypov-spec.c.googlers.com ([fda3:e722:ac3:cc00:24:72f4:c0a8:3f35])
- (user=dlatypov job=sendgmr) by 2002:a17:90a:f8d1:b0:1ef:8795:c7e with SMTP id
- l17-20020a17090af8d100b001ef87950c7emr1006572pjd.74.1657244195596; Thu, 07
- Jul 2022 18:36:35 -0700 (PDT)
-Date:   Fri,  8 Jul 2022 01:36:32 +0000
-Message-Id: <20220708013632.1210466-1-dlatypov@google.com>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.37.0.rc0.161.g10f37bed90-goog
-Subject: [PATCH v4] kunit: tool: make --kunitconfig repeatable, blindly concat
-From:   Daniel Latypov <dlatypov@google.com>
-To:     brendanhiggins@google.com, davidgow@google.com
-Cc:     linux-kernel@vger.kernel.org, kunit-dev@googlegroups.com,
-        linux-kselftest@vger.kernel.org, skhan@linuxfoundation.org,
-        Daniel Latypov <dlatypov@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        Thu, 7 Jul 2022 21:39:26 -0400
+Received: from smtp01.aussiebb.com.au (smtp01.aussiebb.com.au [IPv6:2403:5800:3:25::1001])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 321AF72EF9;
+        Thu,  7 Jul 2022 18:39:25 -0700 (PDT)
+Received: from localhost (localhost.localdomain [127.0.0.1])
+        by smtp01.aussiebb.com.au (Postfix) with ESMTP id 664B1100505;
+        Fri,  8 Jul 2022 11:39:21 +1000 (AEST)
+X-Virus-Scanned: Debian amavisd-new at smtp01.aussiebb.com.au
+Received: from smtp01.aussiebb.com.au ([127.0.0.1])
+        by localhost (smtp01.aussiebb.com.au [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id qEfo4WgXJ19A; Fri,  8 Jul 2022 11:39:21 +1000 (AEST)
+Received: by smtp01.aussiebb.com.au (Postfix, from userid 116)
+        id 5B8161007B3; Fri,  8 Jul 2022 11:39:21 +1000 (AEST)
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
+Received: from donald.themaw.net (180-150-90-198.b4965a.per.nbn.aussiebb.net [180.150.90.198])
+        by smtp01.aussiebb.com.au (Postfix) with ESMTP id 1DA00100505;
+        Fri,  8 Jul 2022 11:39:19 +1000 (AEST)
+Subject: [REPOST PATCH v2] vfs: parse: deal with zero length string value
+From:   Ian Kent <raven@themaw.net>
+To:     Al Viro <viro@ZenIV.linux.org.uk>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Siddhesh Poyarekar <siddhesh@gotplt.org>,
+        David Howells <dhowells@redhat.com>,
+        Miklos Szeredi <miklos@szeredi.hu>,
+        Carlos Maiolino <cmaiolino@redhat.com>,
+        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
+        Kernel Mailing List <linux-kernel@vger.kernel.org>
+Date:   Fri, 08 Jul 2022 09:39:18 +0800
+Message-ID: <165724435867.30814.6980005089665688371.stgit@donald.themaw.net>
+User-Agent: StGit/1.1
+MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-It's come up a few times that it would be useful to have --kunitconfig
-be repeatable [1][2].
+Parsing an fs string that has zero length should result in the parameter
+being set to NULL so that downstream processing handles it correctly.
+For example, the proc mount table processing should print "(none)" in
+this case to preserve mount record field count, but if the value points
+to the NULL string this doesn't happen.
 
-This could be done before with a bit of shell-fu, e.g.
-  $ find fs/ -name '.kunitconfig' -exec cat {} + | \
-    ./tools/testing/kunit/kunit.py run --kunitconfig=/dev/stdin
-or equivalently:
-  $ cat fs/ext4/.kunitconfig fs/fat/.kunitconfig | \
-    ./tools/testing/kunit/kunit.py run --kunitconfig=/dev/stdin
+Changes:
 
-But this can be fairly clunky to use in practice.
+v2: fix possible oops if conversion functions such as fs_param_is_u32()
+    are called.
 
-And having explicit support in kunit.py opens the door to having more
-config fragments of interest, e.g. options for PCI on UML [1], UML
-coverage [2], variants of tests [3].
-There's another argument to be made that users can just use multiple
---kconfig_add's, but this gets very clunky very fast (e.g. [2]).
-
-Note: there's a big caveat here that some kconfig options might be
-incompatible. We try to give a clearish error message in the simple case
-where the same option appears multiple times with conflicting values,
-but more subtle ones (e.g. mutually exclusive options) will be
-potentially very confusing for the user. I don't know we can do better.
-
-Note 2: if you want to combine a --kunitconfig with the default, you
-either have to do to specify the current build_dir
-> --kunitconfig=.kunit --kunitconfig=additional.config
-or
-> --kunitconfig=tools/testing/kunit/configs/default.config --kunitconifg=additional.config
-each of which have their downsides (former depends on --build_dir,
-doesn't work if you don't have a .kunitconfig yet), etc.
-
-Example with conflicting values:
-> $ ./tools/testing/kunit/kunit.py config --kunitconfig=lib/kunit --kunitconfig=/dev/stdin <<EOF
-> CONFIG_KUNIT_TEST=n
-> CONFIG_KUNIT=m
-> EOF
-> ...
-> kunit_kernel.ConfigError: Multiple values specified for 2 options in kunitconfig:
-> CONFIG_KUNIT=y
->   vs from /dev/stdin
-> CONFIG_KUNIT=m
->
-> CONFIG_KUNIT_TEST=y
->   vs from /dev/stdin
-> # CONFIG_KUNIT_TEST is not set
-
-[1] https://lists.freedesktop.org/archives/dri-devel/2022-June/357616.html
-[2] https://lore.kernel.org/linux-kselftest/CAFd5g45f3X3xF2vz2BkTHRqOC4uW6GZxtUUMaP5mwwbK8uNVtA@mail.gmail.com/
-[3] https://lore.kernel.org/linux-kselftest/CANpmjNOdSy6DuO6CYZ4UxhGxqhjzx4tn0sJMbRqo2xRFv9kX6Q@mail.gmail.com/
-
-Signed-off-by: Daniel Latypov <dlatypov@google.com>
-Reviewed-by: Brendan Higgins <brendanhiggins@google.com>
+Signed-off-by: Ian Kent <raven@themaw.net>
 ---
-v1 -> v3: merge with kunitconfig refactor patch, rename
-differing_options() to conflicting_options()
+ fs/fs_context.c            |   17 ++++++++++++-----
+ fs/fs_parser.c             |   16 ++++++++++++++++
+ include/linux/fs_context.h |    3 ++-
+ 3 files changed, 30 insertions(+), 6 deletions(-)
 
-v3 -> v4: add Brendan's RB tag, rebase onto the -kselftest kunit branch.
-The 1/3 and 3/3 of the initial series applied cleanly, but this one
-didn't, so I'm sending just this one out by itself now.
-Specifically, there were significant merge conflicts with the
---qemu_args patch.
----
- tools/testing/kunit/kunit.py           |  7 ++--
- tools/testing/kunit/kunit_config.py    | 11 ++++-
- tools/testing/kunit/kunit_kernel.py    | 38 +++++++++++------
- tools/testing/kunit/kunit_tool_test.py | 56 ++++++++++++++++++++++----
- 4 files changed, 89 insertions(+), 23 deletions(-)
+diff --git a/fs/fs_context.c b/fs/fs_context.c
+index 24ce12f0db32..df04e5fc6d66 100644
+--- a/fs/fs_context.c
++++ b/fs/fs_context.c
+@@ -96,7 +96,9 @@ int vfs_parse_fs_param_source(struct fs_context *fc, struct fs_parameter *param)
+ 	if (strcmp(param->key, "source") != 0)
+ 		return -ENOPARAM;
+ 
+-	if (param->type != fs_value_is_string)
++	/* source value may be NULL */
++	if (param->type != fs_value_is_string &&
++	    param->type != fs_value_is_empty)
+ 		return invalf(fc, "Non-string source");
+ 
+ 	if (fc->source)
+@@ -175,10 +177,15 @@ int vfs_parse_fs_string(struct fs_context *fc, const char *key,
+ 	};
+ 
+ 	if (value) {
+-		param.string = kmemdup_nul(value, v_size, GFP_KERNEL);
+-		if (!param.string)
+-			return -ENOMEM;
+-		param.type = fs_value_is_string;
++		if (!v_size) {
++			param.string = NULL;
++			param.type = fs_value_is_empty;
++		} else {
++			param.string = kmemdup_nul(value, v_size, GFP_KERNEL);
++			if (!param.string)
++				return -ENOMEM;
++			param.type = fs_value_is_string;
++		}
+ 	}
+ 
+ 	ret = vfs_parse_fs_param(fc, &param);
+diff --git a/fs/fs_parser.c b/fs/fs_parser.c
+index ed40ce5742fd..2046f41ab00b 100644
+--- a/fs/fs_parser.c
++++ b/fs/fs_parser.c
+@@ -197,6 +197,8 @@ int fs_param_is_bool(struct p_log *log, const struct fs_parameter_spec *p,
+ 		     struct fs_parameter *param, struct fs_parse_result *result)
+ {
+ 	int b;
++	if (param->type == fs_value_is_empty)
++		return 0;
+ 	if (param->type != fs_value_is_string)
+ 		return fs_param_bad_value(log, param);
+ 	if (!*param->string && (p->flags & fs_param_can_be_empty))
+@@ -213,6 +215,8 @@ int fs_param_is_u32(struct p_log *log, const struct fs_parameter_spec *p,
+ 		    struct fs_parameter *param, struct fs_parse_result *result)
+ {
+ 	int base = (unsigned long)p->data;
++	if (param->type == fs_value_is_empty)
++		return 0;
+ 	if (param->type != fs_value_is_string)
+ 		return fs_param_bad_value(log, param);
+ 	if (!*param->string && (p->flags & fs_param_can_be_empty))
+@@ -226,6 +230,8 @@ EXPORT_SYMBOL(fs_param_is_u32);
+ int fs_param_is_s32(struct p_log *log, const struct fs_parameter_spec *p,
+ 		    struct fs_parameter *param, struct fs_parse_result *result)
+ {
++	if (param->type == fs_value_is_empty)
++		return 0;
+ 	if (param->type != fs_value_is_string)
+ 		return fs_param_bad_value(log, param);
+ 	if (!*param->string && (p->flags & fs_param_can_be_empty))
+@@ -239,6 +245,8 @@ EXPORT_SYMBOL(fs_param_is_s32);
+ int fs_param_is_u64(struct p_log *log, const struct fs_parameter_spec *p,
+ 		    struct fs_parameter *param, struct fs_parse_result *result)
+ {
++	if (param->type == fs_value_is_empty)
++		return 0;
+ 	if (param->type != fs_value_is_string)
+ 		return fs_param_bad_value(log, param);
+ 	if (!*param->string && (p->flags & fs_param_can_be_empty))
+@@ -253,6 +261,8 @@ int fs_param_is_enum(struct p_log *log, const struct fs_parameter_spec *p,
+ 		     struct fs_parameter *param, struct fs_parse_result *result)
+ {
+ 	const struct constant_table *c;
++	if (param->type == fs_value_is_empty)
++		return 0;
+ 	if (param->type != fs_value_is_string)
+ 		return fs_param_bad_value(log, param);
+ 	if (!*param->string && (p->flags & fs_param_can_be_empty))
+@@ -268,6 +278,8 @@ EXPORT_SYMBOL(fs_param_is_enum);
+ int fs_param_is_string(struct p_log *log, const struct fs_parameter_spec *p,
+ 		       struct fs_parameter *param, struct fs_parse_result *result)
+ {
++	if (param->type == fs_value_is_empty)
++		return 0;
+ 	if (param->type != fs_value_is_string ||
+ 	    (!*param->string && !(p->flags & fs_param_can_be_empty)))
+ 		return fs_param_bad_value(log, param);
+@@ -278,6 +290,8 @@ EXPORT_SYMBOL(fs_param_is_string);
+ int fs_param_is_blob(struct p_log *log, const struct fs_parameter_spec *p,
+ 		     struct fs_parameter *param, struct fs_parse_result *result)
+ {
++	if (param->type == fs_value_is_empty)
++		return 0;
+ 	if (param->type != fs_value_is_blob)
+ 		return fs_param_bad_value(log, param);
+ 	return 0;
+@@ -287,6 +301,8 @@ EXPORT_SYMBOL(fs_param_is_blob);
+ int fs_param_is_fd(struct p_log *log, const struct fs_parameter_spec *p,
+ 		  struct fs_parameter *param, struct fs_parse_result *result)
+ {
++	if (param->type == fs_value_is_empty)
++		return 0;
+ 	switch (param->type) {
+ 	case fs_value_is_string:
+ 		if ((!*param->string && !(p->flags & fs_param_can_be_empty)) ||
+diff --git a/include/linux/fs_context.h b/include/linux/fs_context.h
+index 13fa6f3df8e4..ff1375a16c8c 100644
+--- a/include/linux/fs_context.h
++++ b/include/linux/fs_context.h
+@@ -50,7 +50,8 @@ enum fs_context_phase {
+  */
+ enum fs_value_type {
+ 	fs_value_is_undefined,
+-	fs_value_is_flag,		/* Value not given a value */
++	fs_value_is_flag,		/* Does not take a value */
++	fs_value_is_empty,		/* Value is not given */
+ 	fs_value_is_string,		/* Value is a string */
+ 	fs_value_is_blob,		/* Value is a binary blob */
+ 	fs_value_is_filename,		/* Value is a filename* + dirfd */
 
-diff --git a/tools/testing/kunit/kunit.py b/tools/testing/kunit/kunit.py
-index b686126afb40..e132b0654029 100755
---- a/tools/testing/kunit/kunit.py
-+++ b/tools/testing/kunit/kunit.py
-@@ -293,8 +293,9 @@ def add_common_opts(parser) -> None:
- 	parser.add_argument('--kunitconfig',
- 			     help='Path to Kconfig fragment that enables KUnit tests.'
- 			     ' If given a directory, (e.g. lib/kunit), "/.kunitconfig" '
--			     'will get  automatically appended.',
--			     metavar='PATH')
-+			     'will get  automatically appended. If repeated, the files '
-+			     'blindly concatenated, which might not work in all cases.',
-+			     action='append', metavar='PATHS')
- 	parser.add_argument('--kconfig_add',
- 			     help='Additional Kconfig options to append to the '
- 			     '.kunitconfig, e.g. CONFIG_KASAN=y. Can be repeated.',
-@@ -381,7 +382,7 @@ def tree_from_args(cli_args: argparse.Namespace) -> kunit_kernel.LinuxSourceTree
- 			qemu_args.extend(shlex.split(arg))
- 
- 	return kunit_kernel.LinuxSourceTree(cli_args.build_dir,
--			kunitconfig_path=cli_args.kunitconfig,
-+			kunitconfig_paths=cli_args.kunitconfig,
- 			kconfig_add=cli_args.kconfig_add,
- 			arch=cli_args.arch,
- 			cross_compile=cli_args.cross_compile,
-diff --git a/tools/testing/kunit/kunit_config.py b/tools/testing/kunit/kunit_config.py
-index 898b2a35eb29..48b5f34b2e5d 100644
---- a/tools/testing/kunit/kunit_config.py
-+++ b/tools/testing/kunit/kunit_config.py
-@@ -8,7 +8,7 @@
- 
- from dataclasses import dataclass
- import re
--from typing import Dict, Iterable, Set
-+from typing import Dict, Iterable, List, Set, Tuple
- 
- CONFIG_IS_NOT_SET_PATTERN = r'^# CONFIG_(\w+) is not set$'
- CONFIG_PATTERN = r'^CONFIG_(\w+)=(\S+|".*")$'
-@@ -60,6 +60,15 @@ class Kconfig:
- 				return False
- 		return True
- 
-+	def conflicting_options(self, other: 'Kconfig') -> List[Tuple[KconfigEntry, KconfigEntry]]:
-+		diff = []  # type: List[Tuple[KconfigEntry, KconfigEntry]]
-+		for name, value in self._entries.items():
-+			b = other._entries.get(name)
-+			if b and value != b:
-+				pair = (KconfigEntry(name, value), KconfigEntry(name, b))
-+				diff.append(pair)
-+		return diff
-+
- 	def merge_in_entries(self, other: 'Kconfig') -> None:
- 		for name, value in other._entries.items():
- 			self._entries[name] = value
-diff --git a/tools/testing/kunit/kunit_kernel.py b/tools/testing/kunit/kunit_kernel.py
-index 94ec9f65ef19..56492090e28e 100644
---- a/tools/testing/kunit/kunit_kernel.py
-+++ b/tools/testing/kunit/kunit_kernel.py
-@@ -177,6 +177,30 @@ def get_kunitconfig_path(build_dir: str) -> str:
- def get_old_kunitconfig_path(build_dir: str) -> str:
- 	return os.path.join(build_dir, OLD_KUNITCONFIG_PATH)
- 
-+def get_parsed_kunitconfig(build_dir: str,
-+			   kunitconfig_paths: Optional[List[str]]=None) -> kunit_config.Kconfig:
-+	if not kunitconfig_paths:
-+		path = get_kunitconfig_path(build_dir)
-+		if not os.path.exists(path):
-+			shutil.copyfile(DEFAULT_KUNITCONFIG_PATH, path)
-+		return kunit_config.parse_file(path)
-+
-+	merged = kunit_config.Kconfig()
-+
-+	for path in kunitconfig_paths:
-+		if os.path.isdir(path):
-+			path = os.path.join(path, KUNITCONFIG_PATH)
-+		if not os.path.exists(path):
-+			raise ConfigError(f'Specified kunitconfig ({path}) does not exist')
-+
-+		partial = kunit_config.parse_file(path)
-+		diff = merged.conflicting_options(partial)
-+		if diff:
-+			diff_str = '\n\n'.join(f'{a}\n  vs from {path}\n{b}' for a, b in diff)
-+			raise ConfigError(f'Multiple values specified for {len(diff)} options in kunitconfig:\n{diff_str}')
-+		merged.merge_in_entries(partial)
-+	return merged
-+
- def get_outfile_path(build_dir: str) -> str:
- 	return os.path.join(build_dir, OUTFILE_PATH)
- 
-@@ -221,7 +245,7 @@ class LinuxSourceTree:
- 	def __init__(
- 	      self,
- 	      build_dir: str,
--	      kunitconfig_path='',
-+	      kunitconfig_paths: Optional[List[str]]=None,
- 	      kconfig_add: Optional[List[str]]=None,
- 	      arch=None,
- 	      cross_compile=None,
-@@ -238,17 +262,7 @@ class LinuxSourceTree:
- 				qemu_config_path = _default_qemu_config_path(self._arch)
- 				_, self._ops = _get_qemu_ops(qemu_config_path, extra_qemu_args, cross_compile)
- 
--		if kunitconfig_path:
--			if os.path.isdir(kunitconfig_path):
--				kunitconfig_path = os.path.join(kunitconfig_path, KUNITCONFIG_PATH)
--			if not os.path.exists(kunitconfig_path):
--				raise ConfigError(f'Specified kunitconfig ({kunitconfig_path}) does not exist')
--		else:
--			kunitconfig_path = get_kunitconfig_path(build_dir)
--			if not os.path.exists(kunitconfig_path):
--				shutil.copyfile(DEFAULT_KUNITCONFIG_PATH, kunitconfig_path)
--
--		self._kconfig = kunit_config.parse_file(kunitconfig_path)
-+		self._kconfig = get_parsed_kunitconfig(build_dir, kunitconfig_paths)
- 		if kconfig_add:
- 			kconfig = kunit_config.parse_from_string('\n'.join(kconfig_add))
- 			self._kconfig.merge_in_entries(kconfig)
-diff --git a/tools/testing/kunit/kunit_tool_test.py b/tools/testing/kunit/kunit_tool_test.py
-index e56544d58147..ad63d0d34f3f 100755
---- a/tools/testing/kunit/kunit_tool_test.py
-+++ b/tools/testing/kunit/kunit_tool_test.py
-@@ -356,17 +356,46 @@ class LinuxSourceTreeTest(unittest.TestCase):
- 
- 	def test_invalid_kunitconfig(self):
- 		with self.assertRaisesRegex(kunit_kernel.ConfigError, 'nonexistent.* does not exist'):
--			kunit_kernel.LinuxSourceTree('', kunitconfig_path='/nonexistent_file')
-+			kunit_kernel.LinuxSourceTree('', kunitconfig_paths=['/nonexistent_file'])
- 
- 	def test_valid_kunitconfig(self):
- 		with tempfile.NamedTemporaryFile('wt') as kunitconfig:
--			kunit_kernel.LinuxSourceTree('', kunitconfig_path=kunitconfig.name)
-+			kunit_kernel.LinuxSourceTree('', kunitconfig_paths=[kunitconfig.name])
- 
- 	def test_dir_kunitconfig(self):
- 		with tempfile.TemporaryDirectory('') as dir:
- 			with open(os.path.join(dir, '.kunitconfig'), 'w'):
- 				pass
--			kunit_kernel.LinuxSourceTree('', kunitconfig_path=dir)
-+			kunit_kernel.LinuxSourceTree('', kunitconfig_paths=[dir])
-+
-+	def test_multiple_kunitconfig(self):
-+		want_kconfig = kunit_config.Kconfig()
-+		want_kconfig.add_entry('KUNIT', 'y')
-+		want_kconfig.add_entry('KUNIT_TEST', 'm')
-+
-+		with tempfile.TemporaryDirectory('') as dir:
-+			other = os.path.join(dir, 'otherkunitconfig')
-+			with open(os.path.join(dir, '.kunitconfig'), 'w') as f:
-+				f.write('CONFIG_KUNIT=y')
-+			with open(other, 'w') as f:
-+				f.write('CONFIG_KUNIT_TEST=m')
-+				pass
-+
-+			tree = kunit_kernel.LinuxSourceTree('', kunitconfig_paths=[dir, other])
-+			self.assertTrue(want_kconfig.is_subset_of(tree._kconfig), msg=tree._kconfig)
-+
-+
-+	def test_multiple_kunitconfig_invalid(self):
-+		with tempfile.TemporaryDirectory('') as dir:
-+			other = os.path.join(dir, 'otherkunitconfig')
-+			with open(os.path.join(dir, '.kunitconfig'), 'w') as f:
-+				f.write('CONFIG_KUNIT=y')
-+			with open(other, 'w') as f:
-+				f.write('CONFIG_KUNIT=m')
-+
-+			with self.assertRaisesRegex(kunit_kernel.ConfigError, '(?s)Multiple values.*CONFIG_KUNIT'):
-+				kunit_kernel.LinuxSourceTree('', kunitconfig_paths=[dir, other])
-+
- 
- 	def test_kconfig_add(self):
- 		want_kconfig = kunit_config.Kconfig()
-@@ -636,7 +665,7 @@ class KUnitMainTest(unittest.TestCase):
- 		kunit.main(['run', '--kunitconfig=mykunitconfig'])
- 		# Just verify that we parsed and initialized it correctly here.
- 		self.mock_linux_init.assert_called_once_with('.kunit',
--						kunitconfig_path='mykunitconfig',
-+						kunitconfig_paths=['mykunitconfig'],
- 						kconfig_add=None,
- 						arch='um',
- 						cross_compile=None,
-@@ -647,18 +676,31 @@ class KUnitMainTest(unittest.TestCase):
- 		kunit.main(['config', '--kunitconfig=mykunitconfig'])
- 		# Just verify that we parsed and initialized it correctly here.
- 		self.mock_linux_init.assert_called_once_with('.kunit',
--						kunitconfig_path='mykunitconfig',
-+						kunitconfig_paths=['mykunitconfig'],
- 						kconfig_add=None,
- 						arch='um',
- 						cross_compile=None,
- 						qemu_config_path=None,
- 						extra_qemu_args=[])
- 
-+	@mock.patch.object(kunit_kernel, 'LinuxSourceTree')
-+	def test_run_multiple_kunitconfig(self, mock_linux_init):
-+		mock_linux_init.return_value = self.linux_source_mock
-+		kunit.main(['run', '--kunitconfig=mykunitconfig', '--kunitconfig=other'])
-+		# Just verify that we parsed and initialized it correctly here.
-+		mock_linux_init.assert_called_once_with('.kunit',
-+							kunitconfig_paths=['mykunitconfig', 'other'],
-+							kconfig_add=None,
-+							arch='um',
-+							cross_compile=None,
-+							qemu_config_path=None,
-+							extra_qemu_args=[])
-+
- 	def test_run_kconfig_add(self):
- 		kunit.main(['run', '--kconfig_add=CONFIG_KASAN=y', '--kconfig_add=CONFIG_KCSAN=y'])
- 		# Just verify that we parsed and initialized it correctly here.
- 		self.mock_linux_init.assert_called_once_with('.kunit',
--						kunitconfig_path=None,
-+						kunitconfig_paths=None,
- 						kconfig_add=['CONFIG_KASAN=y', 'CONFIG_KCSAN=y'],
- 						arch='um',
- 						cross_compile=None,
-@@ -669,7 +711,7 @@ class KUnitMainTest(unittest.TestCase):
- 		kunit.main(['run', '--arch=x86_64', '--qemu_args', '-m 2048'])
- 		# Just verify that we parsed and initialized it correctly here.
- 		self.mock_linux_init.assert_called_once_with('.kunit',
--						kunitconfig_path=None,
-+						kunitconfig_paths=None,
- 						kconfig_add=None,
- 						arch='x86_64',
- 						cross_compile=None,
-
-base-commit: 1d202d1496a0be94100d8cbc2b658dcd980a3edf
--- 
-2.37.0.rc0.161.g10f37bed90-goog
 

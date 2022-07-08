@@ -2,92 +2,178 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C60D56C21A
-	for <lists+linux-kernel@lfdr.de>; Sat,  9 Jul 2022 01:12:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 778E156C2E8
+	for <lists+linux-kernel@lfdr.de>; Sat,  9 Jul 2022 01:13:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239901AbiGHTpR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Jul 2022 15:45:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52800 "EHLO
+        id S239936AbiGHTqH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Jul 2022 15:46:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53496 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238577AbiGHTpQ (ORCPT
+        with ESMTP id S239908AbiGHTqE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Jul 2022 15:45:16 -0400
-Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 716198736E;
-        Fri,  8 Jul 2022 12:45:15 -0700 (PDT)
-Received: by mail-pl1-x62a.google.com with SMTP id q5so1510340plr.11;
-        Fri, 08 Jul 2022 12:45:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=UjgUg9m5Mx2p5AkJvp3yniZ4eG7XfhGCA+MBNolgs3g=;
-        b=n7mv1+7pdZuwst35d02aBT+vpfhnIkdOESZgauYGuYaOmYBJVGcxba4x2K9q62WMJ+
-         0Dt8yR4RLmBanqISHhQJv7q1jIMhK0M5S3S39h/9XEOkNV3qzf+e8F6Nt7VLuG4VO8Cx
-         N60XBhUnpN+b4JJtrrK3r+Nmzt+6fmpN4PBSvz/9cqE7Utr4dllRTtL7bGtDFrZ5Geof
-         HQ/808EbEPy4r0FERvmSqA85ibGyU/7/QYhCxMVDqswa9MciueQsJD4jM7/DODzFor7F
-         xY+uf7gQ0Rm6s5iRPo1trb85w/rmgp56wNTLilLfW/mtnsOcx2zL+X4o0TC5tBLXBuoM
-         PAcg==
+        Fri, 8 Jul 2022 15:46:04 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9749E904C9
+        for <linux-kernel@vger.kernel.org>; Fri,  8 Jul 2022 12:46:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1657309562;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=vLjxfS/IkYLw35yGStC8uj/FyqMkGDcG5weCQvZVRiw=;
+        b=UcCFRvYxdUpr0Ig8rGAe0wnHaolOcBy9nTlcUb+qSteeVDBbBdoyGt5rQYHWHxV0I2UbBO
+        j6cPGOAFXvb58HT7tLDx6Ttuzf9tdlJ5axddDktjUVv5R5WLTJz1HnbL//NvErmK7XgYkN
+        WLjKCv5qy1wzvfiPO0gkinQfG2ZrrB0=
+Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com
+ [209.85.208.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-191-XvrBXGQZPterpTmBQlqQNg-1; Fri, 08 Jul 2022 15:46:01 -0400
+X-MC-Unique: XvrBXGQZPterpTmBQlqQNg-1
+Received: by mail-ed1-f71.google.com with SMTP id m10-20020a056402510a00b0043a93d807ffso4805752edd.12
+        for <linux-kernel@vger.kernel.org>; Fri, 08 Jul 2022 12:46:00 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=UjgUg9m5Mx2p5AkJvp3yniZ4eG7XfhGCA+MBNolgs3g=;
-        b=B6tPPZ1+M4eqGsdu9Jn+SaODKrXAi0fMdaZJuQP3YkFtaWvJXvH0GzyNrUB+PyZo0Q
-         mLV2j2WJMPfiq1VEaBCg9BBPnyQPGGFxx0fRkRgKzxYVlRPkgOAfy2SwinI7+Z8hgzK6
-         a9egwCOFGQtOz9Nx8PvB8qylendupJST/GruwaC09D728lBdMwgS7irAtpyJSl277I4p
-         dJ5VFmxuhTAgq8Pffo6w8sWkFAqLocnpH2M2fsKyr0UeweSy2Caes/z0S8uIVTWkqKQG
-         lnrM7rTrwto8qEQ45GVHzD3twC89P86FHC5EZLEZ/fl5EuXkOvYTWHUyfcl/HD5nPafo
-         Oc1A==
-X-Gm-Message-State: AJIora/K8OsBX8o3jacMGgzKKp/UlYC/4bTPVduGIaLP8/qrGVahG+cX
-        fTeCOuHgefsEijSNN0G+9Ek=
-X-Google-Smtp-Source: AGRyM1vmy+p7PmKUu/aArbYwtrvA5gXRg9ql5tnhFEERwUEjhGcfHXXEUzQ7EbPLSb1flP98vnnYOw==
-X-Received: by 2002:a17:90b:1805:b0:1ed:1391:c8b7 with SMTP id lw5-20020a17090b180500b001ed1391c8b7mr1660423pjb.193.1657309514866;
-        Fri, 08 Jul 2022 12:45:14 -0700 (PDT)
-Received: from fainelli-desktop.igp.broadcom.net ([192.19.223.252])
-        by smtp.gmail.com with ESMTPSA id fv2-20020a17090b0e8200b001e292e30129sm2023727pjb.22.2022.07.08.12.45.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 08 Jul 2022 12:45:14 -0700 (PDT)
-From:   Florian Fainelli <f.fainelli@gmail.com>
-To:     bcm-kernel-feedback-list@broadcom.com,
-        William Zhang <william.zhang@broadcom.com>,
-        Linux ARM List <linux-arm-kernel@lists.infradead.org>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        =?iso-8859-2?q?Rafa=B3_Mi=B3ecki?= <rafal@milecki.pl>,
-        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 2/2] arm64: dts: broadcom: bcm4908: Fix cpu node for smp boot
-Date:   Fri,  8 Jul 2022 12:45:12 -0700
-Message-Id: <20220708194512.1857741-1-f.fainelli@gmail.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220708182507.23542-2-william.zhang@broadcom.com>
-References: <20220708182507.23542-1-william.zhang@broadcom.com> <20220708182507.23542-2-william.zhang@broadcom.com>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=vLjxfS/IkYLw35yGStC8uj/FyqMkGDcG5weCQvZVRiw=;
+        b=ayhU4XEGwBAXRDZbStuSo6keWvYV14+lIjveRE/0GlSJvaVC0WPhm0yaBfVJmfkPZu
+         jFqTfaT81LxpJRckWxQewS4h6tKEQ9H4iO5dK6SLhlZfZS17pRFBSzdcUFbZ8LOzlYVi
+         CnFk6GgDRhlfWbuvlbmRyWT9B+JqpzNRFrCXOhpWd4FzOy1Bk9Jr46yZQ6i/UwwlQOaO
+         Lfhyjf1aMtX6hAZhRt9qJ5fuGI7eJC56zP+YcgTDSjzQ8uUKfcLbSDE7B0PwDXvm6cWe
+         OVjoE9rPhv0zImsspO/mWLxswOwazdce50nA81sw3eLg7uzGX4KEYo2HC/RFEaIJ67z+
+         BWbQ==
+X-Gm-Message-State: AJIora+MO2dfVlNObpybfYm0qyURGjjvrQwgYKkKqScexFTCkgI6/Unx
+        u1Mi3kks9i2+OlSQD6CwxI7NgKxpwJIX5sRhxZHGwUEzdMKdAV+7y3dwwJfu98AKWEw/d7SjwnL
+        2mmpYdh1qr96i0OsJt6uI4SjY
+X-Received: by 2002:a17:906:84f0:b0:72b:136a:a406 with SMTP id zp16-20020a17090684f000b0072b136aa406mr5208087ejb.700.1657309559679;
+        Fri, 08 Jul 2022 12:45:59 -0700 (PDT)
+X-Google-Smtp-Source: AGRyM1soRNcaDcTHOuYD8Mr2wY+AfEJyajgo94gJG5OzKtzrgk5L+7s97fmEIdCygRjckvG23MWK6Q==
+X-Received: by 2002:a17:906:84f0:b0:72b:136a:a406 with SMTP id zp16-20020a17090684f000b0072b136aa406mr5208072ejb.700.1657309559515;
+        Fri, 08 Jul 2022 12:45:59 -0700 (PDT)
+Received: from ?IPV6:2001:1c00:c1e:bf00:d69d:5353:dba5:ee81? (2001-1c00-0c1e-bf00-d69d-5353-dba5-ee81.cable.dynamic.v6.ziggo.nl. [2001:1c00:c1e:bf00:d69d:5353:dba5:ee81])
+        by smtp.gmail.com with ESMTPSA id f13-20020a170906824d00b00726e108b566sm15039136ejx.173.2022.07.08.12.45.58
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 08 Jul 2022 12:45:59 -0700 (PDT)
+Message-ID: <c95724ad-a3b0-2ac8-5413-b971626e7e63@redhat.com>
+Date:   Fri, 8 Jul 2022 21:45:58 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Subject: Re: [PATCH 2/5] drm/modes: Extract
+ drm_mode_parse_cmdline_named_mode()
+Content-Language: en-US
+To:     Geert Uytterhoeven <geert@linux-m68k.org>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>
+Cc:     dri-devel@lists.freedesktop.org, linux-fbdev@vger.kernel.org,
+        linux-m68k@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <cover.1657301107.git.geert@linux-m68k.org>
+ <402dea47269f2e3960946d186ba3cb118066e74a.1657301107.git.geert@linux-m68k.org>
+From:   Hans de Goede <hdegoede@redhat.com>
+In-Reply-To: <402dea47269f2e3960946d186ba3cb118066e74a.1657301107.git.geert@linux-m68k.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri,  8 Jul 2022 11:25:07 -0700, William Zhang <william.zhang@broadcom.com> wrote:
-> Add spin-table enable-method and cpu-release-addr properties for
-> cpu0 node. This is required by all ARMv8 SoC. Otherwise some
-> bootloader like u-boot can not update cpu-release-addr and linux
-> fails to start up secondary cpus.
-> 
-> Fixes: 2961f69f151c ("arm64: dts: broadcom: add BCM4908 and Asus
-> GT-AC5300 early DTS files")
-> 
-> Signed-off-by: William Zhang <william.zhang@broadcom.com>
-> Reviewed-by: Florian Fainelli <f.fainelli@gmail.com>
-> 
-> ---
+Hi,
 
-Applied to https://github.com/Broadcom/stblinux/commits/devicetree-arm64/fixes, thanks!
---
-Florian
+On 7/8/22 20:21, Geert Uytterhoeven wrote:
+> Extract the code to check for a named mode parameter into its own
+> function, to streamline the main parsing flow.
+> 
+> Signed-off-by: Geert Uytterhoeven <geert@linux-m68k.org>
+> ---
+>  drivers/gpu/drm/drm_modes.c | 41 +++++++++++++++++++++++++++----------
+>  1 file changed, 30 insertions(+), 11 deletions(-)
+> 
+> diff --git a/drivers/gpu/drm/drm_modes.c b/drivers/gpu/drm/drm_modes.c
+> index 30a7be97707bfb16..434383469e9d984d 100644
+> --- a/drivers/gpu/drm/drm_modes.c
+> +++ b/drivers/gpu/drm/drm_modes.c
+> @@ -1749,6 +1749,30 @@ static const char * const drm_named_modes_whitelist[] = {
+>  	"PAL",
+>  };
+>  
+> +static int drm_mode_parse_cmdline_named_mode(const char *name,
+> +					     unsigned int length,
+> +					     bool refresh,
+> +					     struct drm_cmdline_mode *mode)
+> +{
+> +	unsigned int i;
+> +	int ret;
+> +
+> +	for (i = 0; i < ARRAY_SIZE(drm_named_modes_whitelist); i++) {
+> +		ret = str_has_prefix(name, drm_named_modes_whitelist[i]);
+> +		if (!ret)
+
+As discussed in my review of 1/5 this needs to become:
+
+		if (ret != length)
+> +			continue;
+
+Which renders my other comment on this patch (length not being used) mute.
+
+Regards,
+
+Hans
+
+> +
+> +		if (refresh)
+> +			return -EINVAL; /* named + refresh is invalid */
+> +
+> +		strcpy(mode->name, drm_named_modes_whitelist[i]);
+> +		mode->specified = true;
+> +		return 0;
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+>  /**
+>   * drm_mode_parse_command_line_for_connector - parse command line modeline for connector
+>   * @mode_option: optional per connector mode option
+> @@ -1785,7 +1809,7 @@ bool drm_mode_parse_command_line_for_connector(const char *mode_option,
+>  	const char *bpp_ptr = NULL, *refresh_ptr = NULL, *extra_ptr = NULL;
+>  	const char *options_ptr = NULL;
+>  	char *bpp_end_ptr = NULL, *refresh_end_ptr = NULL;
+> -	int i, len, ret;
+> +	int len, ret;
+>  
+>  	memset(mode, 0, sizeof(*mode));
+>  	mode->panel_orientation = DRM_MODE_PANEL_ORIENTATION_UNKNOWN;
+> @@ -1823,16 +1847,11 @@ bool drm_mode_parse_command_line_for_connector(const char *mode_option,
+>  	}
+>  
+>  	/* First check for a named mode */
+> -	for (i = 0; mode_end && i < ARRAY_SIZE(drm_named_modes_whitelist); i++) {
+> -		ret = str_has_prefix(name, drm_named_modes_whitelist[i]);
+> -		if (ret) {
+> -			if (refresh_ptr)
+> -				return false; /* named + refresh is invalid */
+> -
+> -			strcpy(mode->name, drm_named_modes_whitelist[i]);
+> -			mode->specified = true;
+> -			break;
+> -		}
+> +	if (mode_end) {
+> +		ret = drm_mode_parse_cmdline_named_mode(name, mode_end,
+> +							refresh_ptr, mode);
+> +		if (ret)
+> +			return false;
+>  	}
+>  
+>  	/* No named mode? Check for a normal mode argument, e.g. 1024x768 */
+

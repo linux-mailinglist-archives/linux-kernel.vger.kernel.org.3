@@ -2,89 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 342A356C3E4
-	for <lists+linux-kernel@lfdr.de>; Sat,  9 Jul 2022 01:15:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0DD9756C1E4
+	for <lists+linux-kernel@lfdr.de>; Sat,  9 Jul 2022 01:12:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239966AbiGHVKH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Jul 2022 17:10:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60956 "EHLO
+        id S239912AbiGHVLO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Jul 2022 17:11:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34032 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240013AbiGHVKF (ORCPT
+        with ESMTP id S240436AbiGHVLM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Jul 2022 17:10:05 -0400
-Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D80426D572
-        for <linux-kernel@vger.kernel.org>; Fri,  8 Jul 2022 14:10:03 -0700 (PDT)
-Received: by mail-pj1-x1036.google.com with SMTP id t5-20020a17090a6a0500b001ef965b262eso2810819pjj.5
-        for <linux-kernel@vger.kernel.org>; Fri, 08 Jul 2022 14:10:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=RMmp67crMhq7PWWgYC+oDhvsTdKYOIxkTFPZEODBIXc=;
-        b=V6+rubc2RgfxmFafvlgEYRMyNK7pQjM9CyUyqwmXU4mu2VolWpJ+8H0H6f984MwZq0
-         xp+GBCAwIXA2/Wt4+K1y0VlfnggWGPM80T4eCbsq1powQ7s/SELrMKKokoyZ214ZqfH9
-         IvcEM4R6qW47/P1u53kn9zz1VLfbnNPZICG4uErOD7bI+wbo5dR2pCCC5bHcQl9qfEeQ
-         eSXD4ClctFcsaEvuxzPg3MTUHh5fTj1hQBcjmKMtXvkcD+0vhTtmEVlrjKT+oWzTf1bm
-         4vyjNe4Xpk9ErxOY1jBxqOBHuRAdp8LQpd0ZYLjwmxApr+XlTYef8Hcen8VlsiIlEfhp
-         F14w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=RMmp67crMhq7PWWgYC+oDhvsTdKYOIxkTFPZEODBIXc=;
-        b=yCSajoA+55Zq47YTHfHt48iujPJFDaSYkIdojKBT+i4wILswUhFocdKT/xHKn3Bg6E
-         6HKq+OnLNGSWNWmtg6S9t07eANxJjRliwa+hACFnJJZf3PsnkteBBr9AujeIEqhuik4q
-         Kz7bm9bE6Hj5NlhHOde7wjUm7xeRGyeAVdH9VGMkfa6YMGLo59ESoIZWJ1EmLHeDYI0M
-         YfqVfcTt8NRx7mdMeGDCjqTeq+P/beZy0EM0sP8RsfskSHQpKvaJyygoEugttb+4Ex2g
-         hxnCWGR2X5tSYMkzaYhP4kVl9XOrcIs368Oa6Fn60K5HhMT0pd7dvsb8OWP5oWEIgVyN
-         Hmig==
-X-Gm-Message-State: AJIora/Gw24AbXI4eUa6FIF9sHSMBprIzBIZzMQ8W6uPw15B3lQvmcdX
-        h44hkdkahajD9jwQlSUtRds=
-X-Google-Smtp-Source: AGRyM1uxeKx7gaOfdIL+u6yF6SPE91AaQ2/VL4LqgQj+efcRTMx0j7H5cxNrg67yxye8CdwlHBZu0w==
-X-Received: by 2002:a17:90b:38c5:b0:1ef:a7ad:ebb9 with SMTP id nn5-20020a17090b38c500b001efa7adebb9mr2086742pjb.110.1657314603373;
-        Fri, 08 Jul 2022 14:10:03 -0700 (PDT)
-Received: from fainelli-desktop.igp.broadcom.net ([192.19.223.252])
-        by smtp.gmail.com with ESMTPSA id l9-20020a170902f68900b0016a111c83cdsm1848957plg.119.2022.07.08.14.10.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 08 Jul 2022 14:10:02 -0700 (PDT)
-From:   Florian Fainelli <f.fainelli@gmail.com>
-To:     bcm-kernel-feedback-list@broadcom.com,
-        William Zhang <william.zhang@broadcom.com>,
-        Linux ARM List <linux-arm-kernel@lists.infradead.org>
-Cc:     anand.gore@broadcom.com, dan.beygelman@broadcom.com,
-        kursad.oney@broadcom.com, joel.peshkin@broadcom.com,
-        Vinod Koul <vkoul@kernel.org>, Al Cooper <alcooperx@gmail.com>,
-        Cai Huoqing <cai.huoqing@linux.dev>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        =?iso-8859-2?q?Rafa=B3_Mi=B3ecki?= <rafal@milecki.pl>,
-        linux-kernel@vger.kernel.org, linux-phy@lists.infradead.org
-Subject: Re: [RESEND PATCH 6/8] phy: brcm-sata: bcmbca: Replace ARCH_BCM_63XX with ARCH_BCMBCA
-Date:   Fri,  8 Jul 2022 14:10:00 -0700
-Message-Id: <20220708211000.2661166-1-f.fainelli@gmail.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220707065800.261269-6-william.zhang@broadcom.com>
-References: <20220707065800.261269-1-william.zhang@broadcom.com> <20220707065800.261269-6-william.zhang@broadcom.com>
+        Fri, 8 Jul 2022 17:11:12 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32AE8A23B0
+        for <linux-kernel@vger.kernel.org>; Fri,  8 Jul 2022 14:11:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1657314671; x=1688850671;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=2JCvf91oRpLK80OmLNQDMg22hhmlua66lZr4/XxJfBQ=;
+  b=I4UJEGfxPedQwCo/Imwvh9a/GqBeFqXHpfLXbEEt6OUFvmyILFM1dw6t
+   vzJVBiD5/PtPn8WmiiGN6HwqedCLcRot9Es9RyJZKJ8qpma2CciKCflCl
+   htaQ+Q6+Ebk3y0VrjCK3iRaLZQGKtUtGkn/ZJRb1KS1iPeWHAtY6uUjRx
+   TaIsitHssYJrzmN1ipWECHsxzEmSLIcnygbmqvTDjSUQpuXt/Z0Xlsdjr
+   q/FgqZOQPCoeQ4sZ+4ZE3JV6WUaC47sUcgF8bNVqDXckmTVfYcRX4346J
+   5pHKcoW6r5qUkqoKaUxLvGmB+lFz52JFVA40lEbzWnHGb6Q78kUZiIYum
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10402"; a="285494615"
+X-IronPort-AV: E=Sophos;i="5.92,256,1650956400"; 
+   d="scan'208";a="285494615"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jul 2022 14:11:10 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.92,256,1650956400"; 
+   d="scan'208";a="736467752"
+Received: from lkp-server01.sh.intel.com (HELO 68b931ab7ac1) ([10.239.97.150])
+  by fmsmga001.fm.intel.com with ESMTP; 08 Jul 2022 14:11:09 -0700
+Received: from kbuild by 68b931ab7ac1 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1o9vFk-000Nx4-HO;
+        Fri, 08 Jul 2022 21:11:08 +0000
+Date:   Sat, 9 Jul 2022 05:10:32 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Arnd Bergmann <arnd@arndb.de>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Daniel Vetter <daniel.vetter@ffwll.ch>,
+        Kees Cook <keescook@chromium.org>
+Subject: arch/mips/boot/compressed/dbg.c:12:13: warning: no previous
+ prototype for 'putc'
+Message-ID: <202207090522.nxw0ERcT-lkp@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed,  6 Jul 2022 23:57:57 -0700, William Zhang <william.zhang@broadcom.com> wrote:
-> Prepare for the BCM63138 ARCH_BCM_63XX migration to ARCH_BCMBCA. Make
-> PHY_BRCM_SATA depending on ARCH_BCMBCA.
-> 
-> Signed-off-by: William Zhang <william.zhang@broadcom.com>
-> Acked-by: Vinod Koul <vkoul@kernel.org>
-> ---
+Hi Arnd,
 
-Applied to https://github.com/Broadcom/stblinux/commits/drivers/next, thanks!
+First bad commit (maybe != root cause):
+
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   a471da3100ef2e8feb8449d378a52e29dd1e9ae1
+commit: 606b102876e3741851dfb09d53f3ee57f650a52c drm: fb_helper: fix CONFIG_FB dependency
+date:   9 months ago
+config: mips-randconfig-r015-20220708 (https://download.01.org/0day-ci/archive/20220709/202207090522.nxw0ERcT-lkp@intel.com/config)
+compiler: mipsel-linux-gcc (GCC) 11.3.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=606b102876e3741851dfb09d53f3ee57f650a52c
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout 606b102876e3741851dfb09d53f3ee57f650a52c
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash
+
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
+
+Note: functions only called from assembly code should be annotated with the asmlinkage attribute
+All warnings (new ones prefixed by >>):
+
+>> arch/mips/boot/compressed/dbg.c:12:13: warning: no previous prototype for 'putc' [-Wmissing-prototypes]
+      12 | void __weak putc(char c)
+         |             ^~~~
+>> arch/mips/boot/compressed/dbg.c:16:6: warning: no previous prototype for 'puts' [-Wmissing-prototypes]
+      16 | void puts(const char *s)
+         |      ^~~~
+>> arch/mips/boot/compressed/dbg.c:26:6: warning: no previous prototype for 'puthex' [-Wmissing-prototypes]
+      26 | void puthex(unsigned long long val)
+         |      ^~~~~~
 --
-Florian
+>> arch/mips/boot/compressed/uart-alchemy.c:4:6: warning: no previous prototype for 'putc' [-Wmissing-prototypes]
+       4 | void putc(char c)
+         |      ^~~~
+
+
+vim +/putc +12 arch/mips/boot/compressed/dbg.c
+
+1b93b3c3e94be2 Wu Zhangjin 2009-10-14  11  
+e52dd9fc6b9e0c Wu Zhangjin 2010-01-26 @12  void __weak putc(char c)
+1b93b3c3e94be2 Wu Zhangjin 2009-10-14  13  {
+1b93b3c3e94be2 Wu Zhangjin 2009-10-14  14  }
+1b93b3c3e94be2 Wu Zhangjin 2009-10-14  15  
+1b93b3c3e94be2 Wu Zhangjin 2009-10-14 @16  void puts(const char *s)
+1b93b3c3e94be2 Wu Zhangjin 2009-10-14  17  {
+1b93b3c3e94be2 Wu Zhangjin 2009-10-14  18  	char c;
+1b93b3c3e94be2 Wu Zhangjin 2009-10-14  19  	while ((c = *s++) != '\0') {
+1b93b3c3e94be2 Wu Zhangjin 2009-10-14  20  		putc(c);
+1b93b3c3e94be2 Wu Zhangjin 2009-10-14  21  		if (c == '\n')
+1b93b3c3e94be2 Wu Zhangjin 2009-10-14  22  			putc('\r');
+1b93b3c3e94be2 Wu Zhangjin 2009-10-14  23  	}
+1b93b3c3e94be2 Wu Zhangjin 2009-10-14  24  }
+1b93b3c3e94be2 Wu Zhangjin 2009-10-14  25  
+1b93b3c3e94be2 Wu Zhangjin 2009-10-14 @26  void puthex(unsigned long long val)
+
+:::::: The code at line 12 was first introduced by commit
+:::::: e52dd9fc6b9e0c17b220bd38371ff15032a1a155 MIPS: Simplify the weak annotation with __weak
+
+:::::: TO: Wu Zhangjin <wuzhangjin@gmail.com>
+:::::: CC: Ralf Baechle <ralf@linux-mips.org>
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

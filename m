@@ -2,165 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C78F656B1E8
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 07:00:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1697A56B1DB
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 06:48:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237318AbiGHEsq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Jul 2022 00:48:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50472 "EHLO
+        id S237304AbiGHEsi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Jul 2022 00:48:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50464 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237246AbiGHEsa (ORCPT
+        with ESMTP id S237239AbiGHEs3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Jul 2022 00:48:30 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B35EDB7C5;
-        Thu,  7 Jul 2022 21:48:28 -0700 (PDT)
+        Fri, 8 Jul 2022 00:48:29 -0400
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB5B01156;
+        Thu,  7 Jul 2022 21:48:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1657255708; x=1688791708;
+  t=1657255707; x=1688791707;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=JMwN4AOFcj3XnN0nw4WIO8eRYRgOHL+c7NhVdR93iTc=;
-  b=KxwSwRdmmObG689t8WjU2EtDLUK0hTqpj1Gh3CmZ9OdU9fV1XBb4ixEE
-   p/iWA7COYTqKo3qeho+z9t8uSVYjgViahRzAB8bp4/0yAgrBvqCLqtRlv
-   hk5Kw+dAv2ryNhZ4eujmzQaTNWgmm/0pvBwys43QV39Lo4pSB+U/+s9B1
-   4QpPS8Ylg5AI23DlmA6zWnO4Wh4qrSCqpL8jnYxX/SOjySfKF4ziy0KyK
-   7AUslSDkWwbSmt7BzzYaZDKFg7LS2bFciwp1LUagNhRstUUiMMziHMEuJ
-   twmqLLf9JCoSNOc0vN+wg7GL0RGFx2N2TzgbAbQTM3HJ/lBO5lSdfMRQH
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10401"; a="267220402"
+  bh=EGhN4/wgpGUwd8gfvBwBgb7INh+JPLI5yLBYfzH2X2s=;
+  b=dCzdu7t+eTEC/uAcj5/2FjwZTeYGLm25RAUZqpSN3PAQSe/F4Q3Iv+sR
+   /rbicOLDCfZZUeRAebMnkQqDOHBsm8mxQNsi9r22i3LgmtVcrNrl7Iv8e
+   X7slFTPeXYUZpQnK3iDUSGY3SpUzqX6iPXQt/f74CisRkFy5kPS99L3YN
+   jjfvlDbDux0/i2N348MfhdMbL/+oXl3IRAJQ4mzIxLFND9n2RabyMvL1e
+   ubxhyfsrboLIPMXkbT5yFdA71mn32GMi+mK34pEFY76U9LDf6Wg3MB1kL
+   u8a7G87MfcksPZHP5EszB7wN6z0xoZ4o7ZqIB6MIUr5YzC+p/pMYKyl1Q
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10401"; a="263969270"
 X-IronPort-AV: E=Sophos;i="5.92,254,1650956400"; 
-   d="scan'208";a="267220402"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jul 2022 21:48:28 -0700
+   d="scan'208";a="263969270"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jul 2022 21:48:27 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.92,254,1650956400"; 
-   d="scan'208";a="920860672"
+   d="scan'208";a="736210955"
 Received: from lkp-server01.sh.intel.com (HELO 68b931ab7ac1) ([10.239.97.150])
-  by fmsmga005.fm.intel.com with ESMTP; 07 Jul 2022 21:48:25 -0700
+  by fmsmga001.fm.intel.com with ESMTP; 07 Jul 2022 21:48:25 -0700
 Received: from kbuild by 68b931ab7ac1 with local (Exim 4.95)
         (envelope-from <lkp@intel.com>)
-        id 1o9fui-000Mvu-B1;
+        id 1o9fui-000Mvw-BZ;
         Fri, 08 Jul 2022 04:48:24 +0000
-Date:   Fri, 8 Jul 2022 12:48:16 +0800
+Date:   Fri, 8 Jul 2022 12:48:18 +0800
 From:   kernel test robot <lkp@intel.com>
-To:     Vijaya Krishna Nivarthi <quic_vnivarth@quicinc.com>,
-        agross@kernel.org, bjorn.andersson@linaro.org,
-        konrad.dybcio@somainline.org, gregkh@linuxfoundation.org,
-        jirislaby@kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     kbuild-all@lists.01.org, quic_msavaliy@quicinc.com,
-        dianders@chromium.org, mka@chromium.org, swboyd@chromium.org,
-        Vijaya Krishna Nivarthi <quic_vnivarth@quicinc.com>
-Subject: Re: [V3] tty: serial: qcom-geni-serial: Fix get_clk_div_rate() which
- otherwise could return a sub-optimal clock rate.
-Message-ID: <202207081234.3SPgl4KO-lkp@intel.com>
-References: <1657221457-32494-1-git-send-email-quic_vnivarth@quicinc.com>
+To:     Aidan MacDonald <aidanmacdonald.0x0@gmail.com>,
+        paul@crapouillou.net, lgirdwood@gmail.com, broonie@kernel.org,
+        perex@perex.cz, tiwai@suse.com
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-mips@vger.kernel.org, alsa-devel@alsa-project.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 11/11] ASoC: jz4740-i2s: Refactor DAI probe/remove ops
+ as component ops
+Message-ID: <202207081227.ibiEiprJ-lkp@intel.com>
+References: <20220707194655.312892-12-aidanmacdonald.0x0@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1657221457-32494-1-git-send-email-quic_vnivarth@quicinc.com>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20220707194655.312892-12-aidanmacdonald.0x0@gmail.com>
+X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Vijaya,
+Hi Aidan,
 
-Thank you for the patch! Perhaps something to improve:
+Thank you for the patch! Yet something to improve:
 
-[auto build test WARNING on tty/tty-testing]
-[also build test WARNING on linus/master v5.19-rc5 next-20220707]
+[auto build test ERROR on broonie-sound/for-next]
+[cannot apply to linus/master v5.19-rc5 next-20220707]
 [If your patch is applied to the wrong git tree, kindly drop us a note.
 And when submitting patch, we suggest to use '--base' as documented in
 https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Vijaya-Krishna-Nivarthi/tty-serial-qcom-geni-serial-Fix-get_clk_div_rate-which-otherwise-could-return-a-sub-optimal-clock-rate/20220708-031921
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/tty.git tty-testing
-config: nios2-randconfig-r024-20220707 (https://download.01.org/0day-ci/archive/20220708/202207081234.3SPgl4KO-lkp@intel.com/config)
-compiler: nios2-linux-gcc (GCC) 11.3.0
+url:    https://github.com/intel-lab-lkp/linux/commits/Aidan-MacDonald/ASoC-cleanups-and-improvements-for-jz4740-i2s/20220708-034953
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/sound.git for-next
+config: arm64-buildonly-randconfig-r006-20220707 (https://download.01.org/0day-ci/archive/20220708/202207081227.ibiEiprJ-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 562c3467a6738aa89203f72fc1d1343e5baadf3c)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/fbd8a1a4b7d91ea5caa048e4557ab18b0d08ea86
+        # install arm64 cross compiling tool for clang build
+        # apt-get install binutils-aarch64-linux-gnu
+        # https://github.com/intel-lab-lkp/linux/commit/d990302616fcc22f1e2a3b963c25fdec9d787251
         git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Vijaya-Krishna-Nivarthi/tty-serial-qcom-geni-serial-Fix-get_clk_div_rate-which-otherwise-could-return-a-sub-optimal-clock-rate/20220708-031921
-        git checkout fbd8a1a4b7d91ea5caa048e4557ab18b0d08ea86
+        git fetch --no-tags linux-review Aidan-MacDonald/ASoC-cleanups-and-improvements-for-jz4740-i2s/20220708-034953
+        git checkout d990302616fcc22f1e2a3b963c25fdec9d787251
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=nios2 SHELL=/bin/bash drivers/tty/serial/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash sound/soc/jz4740/
 
 If you fix the issue, kindly add following tag where applicable
 Reported-by: kernel test robot <lkp@intel.com>
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
-   In file included from include/linux/kernel.h:29,
-                    from include/linux/clk.h:13,
-                    from drivers/tty/serial/qcom_geni_serial.c:4:
-   drivers/tty/serial/qcom_geni_serial.c: In function 'get_clk_div_rate':
->> drivers/tty/serial/qcom_geni_serial.c:1006:26: warning: format '%lu' expects argument of type 'long unsigned int', but argument 5 has type 'unsigned int' [-Wformat=]
-    1006 |                 pr_debug("desired_clk-%lu, ser_clk-%lu, clk_div-%lu\n",
-         |                          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/printk.h:370:21: note: in definition of macro 'pr_fmt'
-     370 | #define pr_fmt(fmt) fmt
-         |                     ^~~
-   include/linux/dynamic_debug.h:152:9: note: in expansion of macro '__dynamic_func_call'
-     152 |         __dynamic_func_call(__UNIQUE_ID(ddebug), fmt, func, ##__VA_ARGS__)
-         |         ^~~~~~~~~~~~~~~~~~~
-   include/linux/dynamic_debug.h:162:9: note: in expansion of macro '_dynamic_func_call'
-     162 |         _dynamic_func_call(fmt, __dynamic_pr_debug,             \
-         |         ^~~~~~~~~~~~~~~~~~
-   include/linux/printk.h:604:9: note: in expansion of macro 'dynamic_pr_debug'
-     604 |         dynamic_pr_debug(fmt, ##__VA_ARGS__)
-         |         ^~~~~~~~~~~~~~~~
-   drivers/tty/serial/qcom_geni_serial.c:1006:17: note: in expansion of macro 'pr_debug'
-    1006 |                 pr_debug("desired_clk-%lu, ser_clk-%lu, clk_div-%lu\n",
-         |                 ^~~~~~~~
-   drivers/tty/serial/qcom_geni_serial.c:1006:67: note: format string is defined here
-    1006 |                 pr_debug("desired_clk-%lu, ser_clk-%lu, clk_div-%lu\n",
-         |                                                                 ~~^
-         |                                                                   |
-         |                                                                   long unsigned int
-         |                                                                 %u
+>> sound/soc/jz4740/jz4740-i2s.c:442:2: error: use of undeclared identifier 'ret'
+           ret = clk_prepare_enable(i2s->clk_aic);
+           ^
+   sound/soc/jz4740/jz4740-i2s.c:443:6: error: use of undeclared identifier 'ret'
+           if (ret)
+               ^
+   sound/soc/jz4740/jz4740-i2s.c:444:10: error: use of undeclared identifier 'ret'
+                   return ret;
+                          ^
+   3 errors generated.
 
 
-vim +1006 drivers/tty/serial/qcom_geni_serial.c
+vim +/ret +442 sound/soc/jz4740/jz4740-i2s.c
 
-   983	
-   984	static unsigned long get_clk_div_rate(struct clk *clk, unsigned int baud,
-   985				unsigned int sampling_rate, unsigned int *clk_div)
-   986	{
-   987		unsigned long ser_clk;
-   988		unsigned long desired_clk;
-   989	
-   990		desired_clk = baud * sampling_rate;
-   991		if (!desired_clk) {
-   992			pr_err("%s: Invalid frequency\n", __func__);
-   993			return 0;
-   994		}
-   995	
-   996		/*
-   997		 * try to find a clock rate within 2% tolerance, then within
-   998		 */
-   999		ser_clk = find_clk_rate_in_tol(clk, desired_clk, clk_div, 2);
-  1000		if (!ser_clk)
-  1001			ser_clk = find_clk_rate_in_tol(clk, desired_clk, clk_div, 5);
-  1002	
-  1003		if (!ser_clk)
-  1004			pr_err("Couldn't find suitable clock rate for %lu\n", desired_clk);
-  1005		else
-> 1006			pr_debug("desired_clk-%lu, ser_clk-%lu, clk_div-%lu\n",
-  1007				desired_clk, ser_clk, *clk_div);
-  1008	
-  1009		return ser_clk;
-  1010	}
-  1011	
+   437	
+   438	static int jz4740_i2s_probe(struct snd_soc_component *component)
+   439	{
+   440		struct jz4740_i2s *i2s = snd_soc_component_get_drvdata(component);
+   441	
+ > 442		ret = clk_prepare_enable(i2s->clk_aic);
+   443		if (ret)
+   444			return ret;
+   445	
+   446		regmap_write(i2s->regmap, JZ_REG_AIC_CONF, JZ_AIC_CONF_RESET);
+   447	
+   448		regmap_write(i2s->regmap, JZ_REG_AIC_CONF,
+   449			     JZ_AIC_CONF_OVERFLOW_PLAY_LAST |
+   450			     JZ_AIC_CONF_I2S | JZ_AIC_CONF_INTERNAL_CODEC);
+   451	
+   452		regmap_field_write(i2s->field_rx_fifo_thresh, 7);
+   453		regmap_field_write(i2s->field_tx_fifo_thresh, 8);
+   454	
+   455		return 0;
+   456	}
+   457	
 
 -- 
 0-DAY CI Kernel Test Service

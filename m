@@ -2,116 +2,169 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CAF0956C29A
-	for <lists+linux-kernel@lfdr.de>; Sat,  9 Jul 2022 01:13:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D256C56C1C2
+	for <lists+linux-kernel@lfdr.de>; Sat,  9 Jul 2022 01:12:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240041AbiGHVPE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Jul 2022 17:15:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36464 "EHLO
+        id S240319AbiGHVRe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Jul 2022 17:17:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37392 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231845AbiGHVPB (ORCPT
+        with ESMTP id S231845AbiGHVRd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Jul 2022 17:15:01 -0400
-Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E7BE17A9B
-        for <linux-kernel@vger.kernel.org>; Fri,  8 Jul 2022 14:15:00 -0700 (PDT)
-Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-31d17879672so205667b3.8
-        for <linux-kernel@vger.kernel.org>; Fri, 08 Jul 2022 14:15:00 -0700 (PDT)
+        Fri, 8 Jul 2022 17:17:33 -0400
+Received: from alexa-out-sd-02.qualcomm.com (alexa-out-sd-02.qualcomm.com [199.106.114.39])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CF1D1A07D
+        for <linux-kernel@vger.kernel.org>; Fri,  8 Jul 2022 14:17:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:message-id:mime-version:subject:from:to:cc;
-        bh=qSHdgGbpXhivocKOF8obQspta2jJCcet6Y7m8IlB0FE=;
-        b=eruosEj+j8n8myliab6/ptl973Q0ZXiNMt6UUDheQNd7pnmyszOGFDf+GDlr7eL8uS
-         hdca4eZ5qUiIDcup6y1Canc4LvG+Fvn+yr7mQAyFEKjAmT0UJu2HEhhyzDDI8YLxk0Fd
-         EeTRQoPSqmilnT/J9DeHmpahsCPR9f5ZCWS9BXgx+QDfCcIT/TW/rYUOw2vfc6OeSWbA
-         ncBQTQ/t3m5KouK0Gm9XJ360+XoCbBsf0HSTutjeZauKG5LVUCuxi5HLfyYKaObseGvb
-         rYs+GPWldYsgt1ipEkRc22K6DILfhi16spn41fYYk4PP57TowU75f90w3nq8ef7fPf2n
-         td7g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
-        bh=qSHdgGbpXhivocKOF8obQspta2jJCcet6Y7m8IlB0FE=;
-        b=NaRp+pnc6SaTwEwH72eDDeLuGX574lTkLlnYL+1DMqPlb/VYzsFuHYH1JUmX7gWrcl
-         hpA4CqThpERZSjUUHRMD7Xdv++74ZjtIk5Fli4StIKWHBSwCqcXOvKBosbc+1HthHidl
-         Ucs0Mn7MhuxPlz1GkJnhmY7j/aaZAFDdH4fh2nuH3fzr8zz6omuO9c9346ztOFNiYe2s
-         LcclH+JOdF4aG9gHkVTjA4fIkSk/GEFkahV9DUK3ziaTDqvshNPcSrvAL+y1Qd2H2T7Z
-         OBb7oimUua0hl9lSfaJ3I5RC39e7zvY5wYjYDJYwDIzstkOCUa1MqAK4UlLwo0QPoK3E
-         6yFQ==
-X-Gm-Message-State: AJIora8Eh5ezQXfLPdFKwJVfEiOAcrr5ra6sdSCwikDSV8PPAGFAYAwm
-        rFlqFd/VqPDk/zoqxI6/Jk16jAT7Euza+0PzGw==
-X-Google-Smtp-Source: AGRyM1uadBJfbfldQBG3bWmaKwMY9oR7OdO3yCwtqywlN5csybNvYWICIA7nMB70vrKcu2KBBRATcenb9irlXL5AyQ==
-X-Received: from justinstitt.mtv.corp.google.com ([2620:15c:211:202:f21c:9185:9405:36f])
- (user=justinstitt job=sendgmr) by 2002:a0d:f285:0:b0:31b:c2d6:2ce9 with SMTP
- id b127-20020a0df285000000b0031bc2d62ce9mr6555061ywf.172.1657314899764; Fri,
- 08 Jul 2022 14:14:59 -0700 (PDT)
-Date:   Fri,  8 Jul 2022 14:14:47 -0700
-Message-Id: <20220708211447.135209-1-justinstitt@google.com>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.37.0.rc0.161.g10f37bed90-goog
-Subject: [PATCH] target: iscsi: fix clang -Wformat warning
-From:   Justin Stitt <justinstitt@google.com>
-To:     "Martin K . Petersen" <martin.petersen@oracle.com>
-Cc:     Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Tom Rix <trix@redhat.com>,
-        Mike Christie <michael.christie@oracle.com>,
-        Max Gurtovoy <mgurtovoy@nvidia.com>,
-        Mingzhe Zou <mingzhe.zou@easystack.cn>,
-        Justin Stitt <justinstitt@google.com>,
-        linux-scsi@vger.kernel.org, target-devel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1657315052; x=1688851052;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=Uaw0+e6VdRRhzLG+PpHuDpifABwLHhRV1vkNysKJ3Pk=;
+  b=LXD5vj6g1VKJne60TchK0Lq76Xh+bUna7ULV4CgiGLvmR0A8kzH9W565
+   qH9MUcoyTq3nyfO15VaqKc0NmMxhehRXENoLBHyxVP6zO5a7+8nQ3Ulrk
+   VYlosC7gd0xIitN1e7wv7kfnoz7dcyFEkCkY2aQqiW7v1dGVjNvwnfikV
+   E=;
+Received: from unknown (HELO ironmsg03-sd.qualcomm.com) ([10.53.140.143])
+  by alexa-out-sd-02.qualcomm.com with ESMTP; 08 Jul 2022 14:17:32 -0700
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg03-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jul 2022 14:17:31 -0700
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Fri, 8 Jul 2022 14:17:31 -0700
+Received: from [10.111.160.191] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Fri, 8 Jul 2022
+ 14:17:28 -0700
+Message-ID: <f4a9e0a6-fe8d-cec5-6b46-30ca4cdaeb0a@quicinc.com>
+Date:   Fri, 8 Jul 2022 14:17:26 -0700
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.2
+Subject: Re: [PATCH] drm/msm/dsi: Set panel orientation when directly
+ connected
+Content-Language: en-US
+To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+CC:     Doug Anderson <dianders@chromium.org>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Rob Clark <robdclark@gmail.com>,
+        LKML <linux-kernel@vger.kernel.org>, <patches@lists.linux.dev>,
+        Sean Paul <sean@poorly.run>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        freedreno <freedreno@lists.freedesktop.org>,
+        Hsin-Yi Wang <hsinyi@chromium.org>
+References: <20220706191442.1150634-1-swboyd@chromium.org>
+ <CAD=FV=UrYCwm2ByN_5EN3fq-ayMJNjmWfJ5sooRy51ZiCoMcjA@mail.gmail.com>
+ <60252405-81f2-2465-bc20-5f91a9072031@quicinc.com>
+ <ffad2e39-f775-00de-3119-f9b0ca3fe4f7@quicinc.com>
+ <CAA8EJpo-CS9ZUzA7wDZ05W+Wcz9P_1fXHYPaZACEhMOjnJv_Yg@mail.gmail.com>
+From:   Abhinav Kumar <quic_abhinavk@quicinc.com>
+In-Reply-To: <CAA8EJpo-CS9ZUzA7wDZ05W+Wcz9P_1fXHYPaZACEhMOjnJv_Yg@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When building with Clang we encounter these warnings:
-| drivers/target/iscsi/iscsi_target_login.c:719:24: error: format
-| specifies type 'unsigned short' but the argument has type 'int'
-| [-Werror,-Wformat] " from node: %s\n", atomic_read(&sess->nconn),
--
-| drivers/target/iscsi/iscsi_target_login.c:767:12: error: format
-| specifies type 'unsigned short' but the argument has type 'int'
-| [-Werror,-Wformat] " %s\n", atomic_read(&sess->nconn),
 
-For both warnings, the format specifier is `%hu` which describes an
-unsigned short. The resulting type of atomic_read is an int. The
-proposed fix is to listen to Clang and swap the format specifier.
 
-Link: https://github.com/ClangBuiltLinux/linux/issues/378
-Signed-off-by: Justin Stitt <justinstitt@google.com>
----
- drivers/target/iscsi/iscsi_target_login.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+On 7/8/2022 1:58 PM, Dmitry Baryshkov wrote:
+> On Fri, 8 Jul 2022 at 22:42, Abhinav Kumar <quic_abhinavk@quicinc.com> wrote:
+>>
+>>
+>>
+>> On 7/8/2022 9:00 AM, Abhinav Kumar wrote:
+>>>
+>>>
+>>> On 7/8/2022 8:25 AM, Doug Anderson wrote:
+>>>> Hi,
+>>>>
+>>>> On Wed, Jul 6, 2022 at 12:14 PM Stephen Boyd <swboyd@chromium.org> wrote:
+>>>>>
+>>>>> Set the panel orientation in drm when the panel is directly connected,
+>>>>> i.e. we're not using an external bridge. The external bridge case is
+>>>>> already handled by the panel bridge code, so we only update the path we
+>>>>> take when the panel is directly connected/internal. This silences a
+>>>>> warning splat coming from __drm_mode_object_add() on Wormdingler boards.
+>>>>>
+>>>>> Cc: Hsin-Yi Wang <hsinyi@chromium.org>
+>>>>> Cc: Douglas Anderson <dianders@chromium.org>
+>>>>> Signed-off-by: Stephen Boyd <swboyd@chromium.org>
+>>>>> ---
+>>>>>
+>>>>> This relies on commit 5e41b01a7808 ("drm/panel: Add an API to allow drm
+>>>>> to set orientation from panel") which is in drm-misc
+>>>>>
+>>>>>    drivers/gpu/drm/msm/dsi/dsi_manager.c | 2 ++
+>>>>>    1 file changed, 2 insertions(+)
+>>>>
+>>>> I don't personally have objections to this, but (to my understanding)
+>>>> "the future" is that everyone should use panel_bridge. If we made the
+>>>> move to panel_bridge today then we wouldn't need to do this. In
+>>>> general I think panel_bridge would end up letting us delete a bunch of
+>>>> code...
+>>>>
+>>>> See commit 4e5763f03e10 ("drm/bridge: ti-sn65dsi86: Wrap panel with
+>>>> panel-bridge") for when this was done by ti-sn65dsi86.
+>>>>
+>>>> Then again, I spent a small amount of time looking into this and it's
+>>>> definitely non-trivial. Still likely worthwhile, but not worth
+>>>> blocking a tiny fix like this. It also should be fairly obvious that
+>>>> we should delete this when we switch to panel_bridge.
+>>>
+>>> Right, from what I saw on IRC, panel_bridge is the way forward and
+>>> dmitry did push a change to do that
+>>>
+>>> https://patchwork.freedesktop.org/patch/492585/
+>>>
+>>> But I think we can go ahead with this change because its simple enough.
+>>>
+>>> Regarding the panel_bridge migration, I am going to start reviewing that
+>>> as well.
+>>>
+>>
+>> I did some more digging up on the panel_bridge migration.
+>>
+>> Dmitry has posted this towards december last year
+>>
+>> https://patches.linaro.org/project/dri-devel/patch/20211207222901.988484-3-dmitry.baryshkov@linaro.org/
+>>
+>>
+>> and I had given my R-b on this already in Jan.
+>>
+>> I am not sure why this change was dropped OR was not part of msm-next
+>> already.
+>>
+>> Dmitry, any reason this change was left out so long and why the R-b was
+>> not retained and this was reposted?
+>>
+>>   From what i can see the change looks identical.
+> 
+> I don't remember if it is identical or not. Basically it was postponed
+> to allow DSC to flow in. We used drm_panel to pass DSC pps data. And
+> if we use panel-bridge, we don't get a handle of the panel.
+> Later on I have posted the series moving DSC pps pointer from
+> drm_panel to mipi_dsi_device (which is logical anyway, since it's not
+> only the panel, who can provide the DSC pps info, some bridges can
+> process DSC-compressed data). But since that time it received no
+> feedback.
 
-diff --git a/drivers/target/iscsi/iscsi_target_login.c b/drivers/target/iscsi/iscsi_target_login.c
-index 6b94eecc4790..0778591abae7 100644
---- a/drivers/target/iscsi/iscsi_target_login.c
-+++ b/drivers/target/iscsi/iscsi_target_login.c
-@@ -715,7 +715,7 @@ void iscsi_post_login_handler(
- 
- 		list_add_tail(&conn->conn_list, &sess->sess_conn_list);
- 		atomic_inc(&sess->nconn);
--		pr_debug("Incremented iSCSI Connection count to %hu"
-+		pr_debug("Incremented iSCSI Connection count to %d"
- 			" from node: %s\n", atomic_read(&sess->nconn),
- 			sess->sess_ops->InitiatorName);
- 		spin_unlock_bh(&sess->conn_lock);
-@@ -763,7 +763,7 @@ void iscsi_post_login_handler(
- 	spin_lock_bh(&sess->conn_lock);
- 	list_add_tail(&conn->conn_list, &sess->sess_conn_list);
- 	atomic_inc(&sess->nconn);
--	pr_debug("Incremented iSCSI Connection count to %hu from node:"
-+	pr_debug("Incremented iSCSI Connection count to %d from node:"
- 		" %s\n", atomic_read(&sess->nconn),
- 		sess->sess_ops->InitiatorName);
- 	spin_unlock_bh(&sess->conn_lock);
--- 
-2.37.0.rc0.161.g10f37bed90-goog
+Thanks for the details.
 
+I will try to review the DRM core bits. But I guess for them to land, we 
+need some of the core maintainers to pitch in on that.
+
+
+> 
+> 

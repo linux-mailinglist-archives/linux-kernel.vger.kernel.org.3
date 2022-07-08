@@ -2,113 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A10A56C430
-	for <lists+linux-kernel@lfdr.de>; Sat,  9 Jul 2022 01:15:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A5D0156C267
+	for <lists+linux-kernel@lfdr.de>; Sat,  9 Jul 2022 01:13:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240493AbiGHVpo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Jul 2022 17:45:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53396 "EHLO
+        id S240057AbiGHVrI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Jul 2022 17:47:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54544 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239869AbiGHVpk (ORCPT
+        with ESMTP id S238649AbiGHVrH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Jul 2022 17:45:40 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DAEE23153;
-        Fri,  8 Jul 2022 14:45:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1657316739; x=1688852739;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=scaxfi9b+Fo210pb1G9BZje6ENg5BFTq+IGw3i8M+wA=;
-  b=PwzEZkGfsh1SmLyzQm388P1bDpRy8j8yQHyJZ6QlnVrpfXJJZQUQ2NFy
-   cHBus/O3/eT33gqJvFAx1dahkXZTbWF1yOvYMvdMWNirAuH0bafeyrYnj
-   PgEdfqi+q2/5LO5/J//k52Jp7dLaCaXcAWTXSaZzKJbdCfZGSucX4Ve6P
-   56+JP8k3N+W6IvwmilnE/jeGQb1BZwCzOsKPwd/g3bgtJ7RSalPsTnmY8
-   XjdM+hMB6lWAXtSFwvyvSmdkySAY52Ypv0y1p2LO/ppxXbLMekW614YGu
-   yHtXXqBKAeDpEfQP5miK0QAl744+h2tcqqR6xZihlKsPx6j9ul1/zWWbE
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10402"; a="264151935"
-X-IronPort-AV: E=Sophos;i="5.92,256,1650956400"; 
-   d="scan'208";a="264151935"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jul 2022 14:45:38 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,256,1650956400"; 
-   d="scan'208";a="569089890"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by orsmga006.jf.intel.com with ESMTP; 08 Jul 2022 14:45:35 -0700
-Received: by black.fi.intel.com (Postfix, from userid 1003)
-        id 16091AD; Sat,  9 Jul 2022 00:45:43 +0300 (EEST)
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Rob Herring <robh@kernel.org>,
-        Frank Rowand <frank.rowand@sony.com>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-gpio@vger.kernel.org
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Subject: [PATCH v4 2/2] of: unittest: make unittest_gpio_remove() consistent with unittest_gpio_probe()
-Date:   Sat,  9 Jul 2022 00:45:39 +0300
-Message-Id: <20220708214539.7254-2-andriy.shevchenko@linux.intel.com>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220708214539.7254-1-andriy.shevchenko@linux.intel.com>
-References: <20220708214539.7254-1-andriy.shevchenko@linux.intel.com>
+        Fri, 8 Jul 2022 17:47:07 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5EB532EE2;
+        Fri,  8 Jul 2022 14:47:06 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5057D61511;
+        Fri,  8 Jul 2022 21:47:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AE275C341C0;
+        Fri,  8 Jul 2022 21:47:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1657316825;
+        bh=oGe9mSKsZTpDJys53ZbJDTf1BlmyWm4UKF++hMlMXfQ=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=pKBVxy8KwZDOmG0FJH6dUdb7/xBcN2F/bb+JqvAFAaIpmMQQXfHeicecRhliDy6za
+         wZd6pML+HL/pJ5FIfmqvP85ML41OeBsd9DW6y7VqXoXnJKx9UJEc0c/yNJiSPo0ykW
+         s+PDenFc7EIqUtuWQ8sWMXONmyDzhLnHwwy8pHo654tnLi3IiavoSSXY96NdmF4al9
+         TzHvY7cR9/fg8nMvssIMBhzcNluEAzbAhrCUPXgW1kfLmylu7Lbt4OmI64tXrbn/to
+         vtkQ70hoCb0ePpygYgPBUdURPoSNjrTwg96cKgHaVSghrXg+3AriYj6Yw1nSyx9sC2
+         4YwYp1EZ9mqIw==
+Received: by mail-vs1-f41.google.com with SMTP id 189so22457938vsh.2;
+        Fri, 08 Jul 2022 14:47:05 -0700 (PDT)
+X-Gm-Message-State: AJIora+0HgmyLUxRL1LnqxrmcstVDvr9VHg8GKS9eDcUyydXzrbuoGTJ
+        +VX+/Kg7LPz4Bx7eWTGV28UC2/xjs9ZLrQtbiQ==
+X-Google-Smtp-Source: AGRyM1uWQCkd/PLMcPq5fEvA3rLv74ggDKeFx5f6qza9FRq6C/PwPfeI1THWRIbZf7Gy773kQ1oCxZYz4JOzmv4VLmc=
+X-Received: by 2002:a67:d194:0:b0:357:8ea:5554 with SMTP id
+ w20-20020a67d194000000b0035708ea5554mr2552488vsi.0.1657316824671; Fri, 08 Jul
+ 2022 14:47:04 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20220708170359.270226-1-ben.dooks@sifive.com>
+In-Reply-To: <20220708170359.270226-1-ben.dooks@sifive.com>
+From:   Rob Herring <robh+dt@kernel.org>
+Date:   Fri, 8 Jul 2022 15:46:52 -0600
+X-Gmail-Original-Message-ID: <CAL_JsqJ7VUxcVdDhrVhix9ucR=rhb+418cwP-0_brL_a3Y2UcQ@mail.gmail.com>
+Message-ID: <CAL_JsqJ7VUxcVdDhrVhix9ucR=rhb+418cwP-0_brL_a3Y2UcQ@mail.gmail.com>
+Subject: Re: [PATCH] scripts/dtc: dma-ranges is a multiple of 3 cells
+To:     Ben Dooks <ben.dooks@sifive.com>
+Cc:     devicetree@vger.kernel.org, Frank Rowand <frowand.list@gmail.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Sudip Mukherjee <sudip.mukherjee@sifive.com>,
+        Jude Onyenegecha <jude.onyenegecha@sifive.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On the ->remove() stage the callback uses physical device node instead of one
-from GPIO chip and the variable name which is different to one used in
-unittest_gpio_probe(). Make these consistent with unittest_gpio_probe().
+On Fri, Jul 8, 2022 at 11:04 AM Ben Dooks <ben.dooks@sifive.com> wrote:
+>
+> The dma-ranges property is a set 3 cells of #address-size, so don't treat
+> it like the ranges property when generating warnings.
 
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
----
-v2: no changes
- drivers/of/unittest.c | 13 ++++++-------
- 1 file changed, 6 insertions(+), 7 deletions(-)
+Uhh, no it is not. It's the same as 'ranges'.
 
-diff --git a/drivers/of/unittest.c b/drivers/of/unittest.c
-index 5a842dfc27e8..eafa8ffefbd0 100644
---- a/drivers/of/unittest.c
-+++ b/drivers/of/unittest.c
-@@ -1620,20 +1620,19 @@ static int unittest_gpio_probe(struct platform_device *pdev)
- 
- static int unittest_gpio_remove(struct platform_device *pdev)
- {
--	struct unittest_gpio_dev *gdev = platform_get_drvdata(pdev);
-+	struct unittest_gpio_dev *devptr = platform_get_drvdata(pdev);
- 	struct device *dev = &pdev->dev;
--	struct device_node *np = pdev->dev.of_node;
- 
--	dev_dbg(dev, "%s for node @%pOF\n", __func__, np);
-+	dev_dbg(dev, "%s for node @%pfw\n", __func__, devptr->chip.fwnode);
- 
--	if (!gdev)
-+	if (!devptr)
- 		return -EINVAL;
- 
--	if (gdev->chip.base != -1)
--		gpiochip_remove(&gdev->chip);
-+	if (devptr->chip.base != -1)
-+		gpiochip_remove(&devptr->chip);
- 
- 	platform_set_drvdata(pdev, NULL);
--	kfree(gdev);
-+	kfree(devptr);
- 
- 	return 0;
- }
--- 
-2.35.1
+Also, we don't take patches against the copy of dtc in the kernel.
+Submit them to upstream dtc.
 
+Rob
+
+
+>
+> Signed-off-by: Ben Dooks <ben.dooks@sifive.com>
+> ---
+>  scripts/dtc/checks.c | 31 ++++++++++++++++++++++++++++++-
+>  1 file changed, 30 insertions(+), 1 deletion(-)
+>
+> diff --git a/scripts/dtc/checks.c b/scripts/dtc/checks.c
+> index 781ba1129a8e..791b93e8e02a 100644
+> --- a/scripts/dtc/checks.c
+> +++ b/scripts/dtc/checks.c
+> @@ -823,7 +823,36 @@ static void check_ranges_format(struct check *c, struct dt_info *dti,
+>         }
+>  }
+>  WARNING(ranges_format, check_ranges_format, "ranges", &addr_size_cells);
+> -WARNING(dma_ranges_format, check_ranges_format, "dma-ranges", &addr_size_cells);
+> +
+> +static void check_dma_ranges_format(struct check *c, struct dt_info *dti,
+> +                               struct node *node)
+> +{
+> +       struct property *prop;
+> +       int c_size_cells, p_size_cells, entrylen;
+> +       const char *ranges = c->data;
+> +
+> +       prop = get_property(node, ranges);
+> +       if (!prop)
+> +               return;
+> +
+> +       if (!node->parent) {
+> +               FAIL_PROP(c, dti, node, prop, "Root node has a \"%s\" property",
+> +                         ranges);
+> +               return;
+> +       }
+> +
+> +       c_size_cells = node_size_cells(node);
+> +       p_size_cells = node_size_cells(node->parent);
+> +       entrylen = (p_size_cells + 2 * c_size_cells) * sizeof(cell_t);
+> +
+> +       if (!is_multiple_of(prop->val.len, entrylen)) {
+> +               FAIL_PROP(c, dti, node, prop, "\"%s\" property has invalid length (%d bytes) "
+> +                         "(parent #address-cells == %d, "
+> +                         "child #address-cells == %d)", ranges, prop->val.len,
+> +                         p_size_cells, c_size_cells);
+> +       }
+> +}
+> +WARNING(dma_ranges_format, check_dma_ranges_format, "dma-ranges", &addr_size_cells);
+>
+>  static const struct bus_type pci_bus = {
+>         .name = "PCI",
+> --
+> 2.35.1
+>

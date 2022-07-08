@@ -2,46 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A52A656B9AD
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 14:30:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C1B1D56B9AA
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 14:30:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238018AbiGHM0f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Jul 2022 08:26:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50364 "EHLO
+        id S237963AbiGHM22 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Jul 2022 08:28:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51280 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237735AbiGHM0d (ORCPT
+        with ESMTP id S231301AbiGHM20 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Jul 2022 08:26:33 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 086A23136B;
-        Fri,  8 Jul 2022 05:26:32 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 1FEF8D6E;
-        Fri,  8 Jul 2022 05:26:32 -0700 (PDT)
-Received: from [10.57.86.102] (unknown [10.57.86.102])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 5A4043F70D;
-        Fri,  8 Jul 2022 05:26:30 -0700 (PDT)
-Message-ID: <c601948c-699b-90da-5563-9aa6ad048363@arm.com>
-Date:   Fri, 8 Jul 2022 13:26:24 +0100
+        Fri, 8 Jul 2022 08:28:26 -0400
+Received: from out30-131.freemail.mail.aliyun.com (out30-131.freemail.mail.aliyun.com [115.124.30.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08E482E6B9
+        for <linux-kernel@vger.kernel.org>; Fri,  8 Jul 2022 05:28:24 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R161e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045170;MF=guanghuifeng@linux.alibaba.com;NM=1;PH=DS;RN=21;SR=0;TI=SMTPD_---0VIjXe4a_1657283299;
+Received: from 30.225.28.127(mailfrom:guanghuifeng@linux.alibaba.com fp:SMTPD_---0VIjXe4a_1657283299)
+          by smtp.aliyun-inc.com;
+          Fri, 08 Jul 2022 20:28:20 +0800
+Message-ID: <f0dd1176-39f1-0a08-d0e2-627dd437aa5f@linux.alibaba.com>
+Date:   Fri, 8 Jul 2022 20:28:18 +0800
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:91.0) Gecko/20100101
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
  Thunderbird/91.11.0
-Subject: Re: [PATCHv3] iommu/arm-smmu-qcom: Add debug support for TLB sync
- timeouts
-Content-Language: en-GB
-To:     Sai Prakash Ranjan <quic_saipraka@quicinc.com>,
-        Will Deacon <will@kernel.org>, Joerg Roedel <joro@8bytes.org>
-Cc:     iommu@lists.linux-foundation.org,
+Subject: Re: [PATCH RESEND v4] arm64: mm: fix linear mem mapping access
+ performance degradation
+To:     Catalin Marinas <catalin.marinas@arm.com>
+Cc:     Mike Rapoport <rppt@kernel.org>, Will Deacon <will@kernel.org>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        baolin.wang@linux.alibaba.com, akpm@linux-foundation.org,
+        david@redhat.com, jianyong.wu@arm.com, james.morse@arm.com,
+        quic_qiancai@quicinc.com, christophe.leroy@csgroup.eu,
+        jonathan@marek.ca, mark.rutland@arm.com,
+        thunder.leizhen@huawei.com, anshuman.khandual@arm.com,
         linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org,
-        Bjorn Andersson <bjorn.andersson@linaro.org>
-References: <20220708094230.4349-1-quic_saipraka@quicinc.com>
-From:   Robin Murphy <robin.murphy@arm.com>
-In-Reply-To: <20220708094230.4349-1-quic_saipraka@quicinc.com>
+        geert+renesas@glider.be, linux-mm@kvack.org,
+        yaohongbo@linux.alibaba.com, alikernel-developer@linux.alibaba.com
+References: <5d044fdd-a61a-d60f-d294-89e17de37712@linux.alibaba.com>
+ <20220705121115.GB1012@willie-the-truck> <YsRSajyMxahXe7ZS@kernel.org>
+ <YsRZ8V8mQ+HM31D6@arm.com> <YsRfgX7FFZLxQU50@kernel.org>
+ <YsRvPTORdvIwzShL@arm.com> <YsSi9HAOOzbPYN+w@kernel.org>
+ <YsVeKPzaO0SJdwFW@arm.com> <YsWULnvZZxoHtyRo@kernel.org>
+ <9974bea5-4db9-0104-c9c9-d9b49c390f1b@linux.alibaba.com>
+ <YsWtCLIG2qKETqmq@arm.com>
+From:   "guanghui.fgh" <guanghuifeng@linux.alibaba.com>
+In-Reply-To: <YsWtCLIG2qKETqmq@arm.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -49,371 +58,119 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-07-08 10:42, Sai Prakash Ranjan wrote:
-> TLB sync timeouts can be due to various reasons such as TBU power down
-> or pending TCU/TBU invalidation/sync and so on. Debugging these often
-> require dumping of some implementation defined registers to know the
-> status of TBU/TCU operations and some of these registers are not
-> accessible in non-secure world such as from kernel and requires SMC
-> calls to read them in the secure world. So, add this debug support
-> to dump implementation defined registers for TLB sync timeout issues.
+Thanks.
 
-FWIW,
+在 2022/7/6 23:40, Catalin Marinas 写道:
+> On Wed, Jul 06, 2022 at 11:18:22PM +0800, guanghui.fgh wrote:
+>> 在 2022/7/6 21:54, Mike Rapoport 写道:
+>>> One thing I can think of is to only remap the crash kernel memory if it is
+>>> a part of an allocation that exactly fits into one ore more PUDs.
+>>>
+>>> Say, in reserve_crashkernel() we try the memblock_phys_alloc() with
+>>> PUD_SIZE as alignment and size rounded up to PUD_SIZE. If this allocation
+>>> succeeds, we remap the entire area that now contains only memory allocated
+>>> in reserve_crashkernel() and free the extra memory after remapping is done.
+>>> If the large allocation fails, we fall back to the original size and
+>>> alignment and don't allow unmapping crash kernel memory in
+>>> arch_kexec_protect_crashkres().
+>>
+>> There is a new method.
+>> I think we should use the patch v3(similar but need add some changes)
+>>
+>> 1.We can walk crashkernle block/section pagetable,
+>> [[[(keep the origin block/section mapping valid]]]
+>> rebuild the pte level page mapping for the crashkernel mem
+>> rebuild left & right margin mem(which is in same block/section mapping but
+>> out of crashkernel mem) with block/section mapping
+>>
+>> 2.'replace' the origin block/section mapping by new builded mapping
+>> iterately
+>>
+>> With this method, all the mem mapping keep valid all the time.
+> 
+> As I already commented on one of your previous patches, this is not
+> allowed by the architecture. If FEAT_BBM is implemented (ARMv8.4 I
+> think), the worst that can happen is a TLB conflict abort and the
+> handler should invalidate the TLBs and restart the faulting instruction,
+> assuming the handler won't try to access the same conflicting virtual
+> address. Prior to FEAT_BBM, that's not possible as the architecture does
+> not describe a precise behaviour of conflicting TLB entries (you might
+> as well get the TLB output of multiple entries being or'ed together).
+> 
 
-Acked-by: Robin Murphy <robin.murphy@arm.com>
+The cpu can generate a TLB conflict abort if it detects that the address 
+being looked up in the TLB hits multiple entries.
 
-> Signed-off-by: Sai Prakash Ranjan <quic_saipraka@quicinc.com>
-> ---
-> 
-> Changes in v3:
->   * Move this debug feature to arm-smmu-qcom-debug.c (Will Deacon).
->   * Keep single ratelimit state and remove local variable (Robin).
-> 
-> Changes in v2:
->   * Use scm call consistently so that it works on older chipsets where
->     some of these regs are secure registers.
->   * Add device specific data to get the implementation defined register
->     offsets.
-> 
-> ---
->   drivers/iommu/Kconfig                         |  10 ++
->   drivers/iommu/arm/arm-smmu/Makefile           |   1 +
->   .../iommu/arm/arm-smmu/arm-smmu-qcom-debug.c  | 142 ++++++++++++++++++
->   drivers/iommu/arm/arm-smmu/arm-smmu-qcom.c    |  32 +++-
->   drivers/iommu/arm/arm-smmu/arm-smmu-qcom.h    |  28 ++++
->   drivers/iommu/arm/arm-smmu/arm-smmu.c         |   6 +-
->   drivers/iommu/arm/arm-smmu/arm-smmu.h         |   1 +
->   7 files changed, 211 insertions(+), 9 deletions(-)
->   create mode 100644 drivers/iommu/arm/arm-smmu/arm-smmu-qcom-debug.c
->   create mode 100644 drivers/iommu/arm/arm-smmu/arm-smmu-qcom.h
-> 
-> diff --git a/drivers/iommu/Kconfig b/drivers/iommu/Kconfig
-> index c79a0df090c0..5c5cb5bee8b6 100644
-> --- a/drivers/iommu/Kconfig
-> +++ b/drivers/iommu/Kconfig
-> @@ -363,6 +363,16 @@ config ARM_SMMU_QCOM
->   	  When running on a Qualcomm platform that has the custom variant
->   	  of the ARM SMMU, this needs to be built into the SMMU driver.
->   
-> +config ARM_SMMU_QCOM_DEBUG
-> +	bool "ARM SMMU QCOM implementation defined debug support"
-> +	depends on ARM_SMMU_QCOM
-> +	help
-> +	  Support for implementation specific debug features in ARM SMMU
-> +	  hardware found in QTI platforms.
-> +
-> +	  Say Y here to enable debug for issues such as TLB sync timeouts
-> +	  which requires implementation defined register dumps.
-> +
->   config ARM_SMMU_V3
->   	tristate "ARM Ltd. System MMU Version 3 (SMMUv3) Support"
->   	depends on ARM64
-> diff --git a/drivers/iommu/arm/arm-smmu/Makefile b/drivers/iommu/arm/arm-smmu/Makefile
-> index b0cc01aa20c9..2a5a95e8e3f9 100644
-> --- a/drivers/iommu/arm/arm-smmu/Makefile
-> +++ b/drivers/iommu/arm/arm-smmu/Makefile
-> @@ -3,3 +3,4 @@ obj-$(CONFIG_QCOM_IOMMU) += qcom_iommu.o
->   obj-$(CONFIG_ARM_SMMU) += arm_smmu.o
->   arm_smmu-objs += arm-smmu.o arm-smmu-impl.o arm-smmu-nvidia.o
->   arm_smmu-$(CONFIG_ARM_SMMU_QCOM) += arm-smmu-qcom.o
-> +arm_smmu-$(CONFIG_ARM_SMMU_QCOM_DEBUG) += arm-smmu-qcom-debug.o
-> diff --git a/drivers/iommu/arm/arm-smmu/arm-smmu-qcom-debug.c b/drivers/iommu/arm/arm-smmu/arm-smmu-qcom-debug.c
-> new file mode 100644
-> index 000000000000..6eed8e67a0ca
-> --- /dev/null
-> +++ b/drivers/iommu/arm/arm-smmu/arm-smmu-qcom-debug.c
-> @@ -0,0 +1,142 @@
-> +// SPDX-License-Identifier: GPL-2.0-only
-> +/*
-> + * Copyright (c) 2022 Qualcomm Innovation Center, Inc. All rights reserved.
-> + */
-> +
-> +#include <linux/of_device.h>
-> +#include <linux/qcom_scm.h>
-> +#include <linux/ratelimit.h>
-> +
-> +#include "arm-smmu.h"
-> +#include "arm-smmu-qcom.h"
-> +
-> +enum qcom_smmu_impl_reg_offset {
-> +	QCOM_SMMU_TBU_PWR_STATUS,
-> +	QCOM_SMMU_STATS_SYNC_INV_TBU_ACK,
-> +	QCOM_SMMU_MMU2QSS_AND_SAFE_WAIT_CNTR,
-> +};
-> +
-> +struct qcom_smmu_config {
-> +	const u32 *reg_offset;
-> +};
-> +
-> +void qcom_smmu_tlb_sync_debug(struct arm_smmu_device *smmu)
-> +{
-> +	int ret;
-> +	u32 tbu_pwr_status, sync_inv_ack, sync_inv_progress;
-> +	struct qcom_smmu *qsmmu = container_of(smmu, struct qcom_smmu, smmu);
-> +	const struct qcom_smmu_config *cfg;
-> +	static DEFINE_RATELIMIT_STATE(rs, DEFAULT_RATELIMIT_INTERVAL,
-> +				      DEFAULT_RATELIMIT_BURST);
-> +
-> +	if (__ratelimit(&rs)) {
-> +		dev_err(smmu->dev, "TLB sync timed out -- SMMU may be deadlocked\n");
-> +
-> +		cfg = qsmmu->cfg;
-> +		if (!cfg)
-> +			return;
-> +
-> +		ret = qcom_scm_io_readl(smmu->ioaddr + cfg->reg_offset[QCOM_SMMU_TBU_PWR_STATUS],
-> +					&tbu_pwr_status);
-> +		if (ret)
-> +			dev_err(smmu->dev,
-> +				"Failed to read TBU power status: %d\n", ret);
-> +
-> +		ret = qcom_scm_io_readl(smmu->ioaddr + cfg->reg_offset[QCOM_SMMU_STATS_SYNC_INV_TBU_ACK],
-> +					&sync_inv_ack);
-> +		if (ret)
-> +			dev_err(smmu->dev,
-> +				"Failed to read TBU sync/inv ack status: %d\n", ret);
-> +
-> +		ret = qcom_scm_io_readl(smmu->ioaddr + cfg->reg_offset[QCOM_SMMU_MMU2QSS_AND_SAFE_WAIT_CNTR],
-> +					&sync_inv_progress);
-> +		if (ret)
-> +			dev_err(smmu->dev,
-> +				"Failed to read TCU syn/inv progress: %d\n", ret);
-> +
-> +		dev_err(smmu->dev,
-> +			"TBU: power_status %#x sync_inv_ack %#x sync_inv_progress %#x\n",
-> +			tbu_pwr_status, sync_inv_ack, sync_inv_progress);
-> +	}
-> +}
-> +
-> +/* Implementation Defined Register Space 0 register offsets */
-> +static const u32 qcom_smmu_impl0_reg_offset[] = {
-> +	[QCOM_SMMU_TBU_PWR_STATUS]		= 0x2204,
-> +	[QCOM_SMMU_STATS_SYNC_INV_TBU_ACK]	= 0x25dc,
-> +	[QCOM_SMMU_MMU2QSS_AND_SAFE_WAIT_CNTR]	= 0x2670,
-> +};
-> +
-> +static const struct qcom_smmu_config qcm2290_smmu_cfg = {
-> +	.reg_offset = qcom_smmu_impl0_reg_offset,
-> +};
-> +
-> +static const struct qcom_smmu_config sc7180_smmu_cfg = {
-> +	.reg_offset = qcom_smmu_impl0_reg_offset,
-> +};
-> +
-> +static const struct qcom_smmu_config sc7280_smmu_cfg = {
-> +	.reg_offset = qcom_smmu_impl0_reg_offset,
-> +};
-> +
-> +static const struct qcom_smmu_config sc8180x_smmu_cfg = {
-> +	.reg_offset = qcom_smmu_impl0_reg_offset,
-> +};
-> +
-> +static const struct qcom_smmu_config sc8280xp_smmu_cfg = {
-> +	.reg_offset = qcom_smmu_impl0_reg_offset,
-> +};
-> +
-> +static const struct qcom_smmu_config sm6125_smmu_cfg = {
-> +	.reg_offset = qcom_smmu_impl0_reg_offset,
-> +};
-> +
-> +static const struct qcom_smmu_config sm6350_smmu_cfg = {
-> +	.reg_offset = qcom_smmu_impl0_reg_offset,
-> +};
-> +
-> +static const struct qcom_smmu_config sm8150_smmu_cfg = {
-> +	.reg_offset = qcom_smmu_impl0_reg_offset,
-> +};
-> +
-> +static const struct qcom_smmu_config sm8250_smmu_cfg = {
-> +	.reg_offset = qcom_smmu_impl0_reg_offset,
-> +};
-> +
-> +static const struct qcom_smmu_config sm8350_smmu_cfg = {
-> +	.reg_offset = qcom_smmu_impl0_reg_offset,
-> +};
-> +
-> +static const struct qcom_smmu_config sm8450_smmu_cfg = {
-> +	.reg_offset = qcom_smmu_impl0_reg_offset,
-> +};
-> +
-> +static const struct of_device_id __maybe_unused qcom_smmu_impl_debug_match[] = {
-> +	{ .compatible = "qcom,msm8998-smmu-v2" },
-> +	{ .compatible = "qcom,qcm2290-smmu-500", .data = &qcm2290_smmu_cfg },
-> +	{ .compatible = "qcom,sc7180-smmu-500", .data = &sc7180_smmu_cfg },
-> +	{ .compatible = "qcom,sc7280-smmu-500", .data = &sc7280_smmu_cfg},
-> +	{ .compatible = "qcom,sc8180x-smmu-500", .data = &sc8180x_smmu_cfg },
-> +	{ .compatible = "qcom,sc8280xp-smmu-500", .data = &sc8280xp_smmu_cfg },
-> +	{ .compatible = "qcom,sdm630-smmu-v2" },
-> +	{ .compatible = "qcom,sdm845-smmu-500" },
-> +	{ .compatible = "qcom,sm6125-smmu-500", .data = &sm6125_smmu_cfg},
-> +	{ .compatible = "qcom,sm6350-smmu-500", .data = &sm6350_smmu_cfg},
-> +	{ .compatible = "qcom,sm8150-smmu-500", .data = &sm8150_smmu_cfg },
-> +	{ .compatible = "qcom,sm8250-smmu-500", .data = &sm8250_smmu_cfg },
-> +	{ .compatible = "qcom,sm8350-smmu-500", .data = &sm8350_smmu_cfg },
-> +	{ .compatible = "qcom,sm8450-smmu-500", .data = &sm8450_smmu_cfg },
-> +	{ }
-> +};
-> +
-> +const void *qcom_smmu_impl_data(struct arm_smmu_device *smmu)
-> +{
-> +	const struct of_device_id *match;
-> +	const struct device_node *np = smmu->dev->of_node;
-> +
-> +	match = of_match_node(qcom_smmu_impl_debug_match, np);
-> +	if (!match)
-> +		return NULL;
-> +
-> +	return match->data;
-> +}
-> diff --git a/drivers/iommu/arm/arm-smmu/arm-smmu-qcom.c b/drivers/iommu/arm/arm-smmu/arm-smmu-qcom.c
-> index 2d470d867887..de25071e33ab 100644
-> --- a/drivers/iommu/arm/arm-smmu/arm-smmu-qcom.c
-> +++ b/drivers/iommu/arm/arm-smmu/arm-smmu-qcom.c
-> @@ -5,23 +5,40 @@
->   
->   #include <linux/acpi.h>
->   #include <linux/adreno-smmu-priv.h>
-> +#include <linux/delay.h>
->   #include <linux/of_device.h>
->   #include <linux/qcom_scm.h>
->   
->   #include "arm-smmu.h"
-> +#include "arm-smmu-qcom.h"
->   
-> -struct qcom_smmu {
-> -	struct arm_smmu_device smmu;
-> -	bool bypass_quirk;
-> -	u8 bypass_cbndx;
-> -	u32 stall_enabled;
-> -};
-> +#define QCOM_DUMMY_VAL	-1
->   
->   static struct qcom_smmu *to_qcom_smmu(struct arm_smmu_device *smmu)
->   {
->   	return container_of(smmu, struct qcom_smmu, smmu);
->   }
->   
-> +static void qcom_smmu_tlb_sync(struct arm_smmu_device *smmu, int page,
-> +				int sync, int status)
-> +{
-> +	unsigned int spin_cnt, delay;
-> +	u32 reg;
-> +
-> +	arm_smmu_writel(smmu, page, sync, QCOM_DUMMY_VAL);
-> +	for (delay = 1; delay < TLB_LOOP_TIMEOUT; delay *= 2) {
-> +		for (spin_cnt = TLB_SPIN_COUNT; spin_cnt > 0; spin_cnt--) {
-> +			reg = arm_smmu_readl(smmu, page, status);
-> +			if (!(reg & ARM_SMMU_sTLBGSTATUS_GSACTIVE))
-> +				return;
-> +			cpu_relax();
-> +		}
-> +		udelay(delay);
-> +	}
-> +
-> +	qcom_smmu_tlb_sync_debug(smmu);
-> +}
-> +
->   static void qcom_adreno_smmu_write_sctlr(struct arm_smmu_device *smmu, int idx,
->   		u32 reg)
->   {
-> @@ -375,6 +392,7 @@ static const struct arm_smmu_impl qcom_smmu_impl = {
->   	.def_domain_type = qcom_smmu_def_domain_type,
->   	.reset = qcom_smmu500_reset,
->   	.write_s2cr = qcom_smmu_write_s2cr,
-> +	.tlb_sync = qcom_smmu_tlb_sync,
->   };
->   
->   static const struct arm_smmu_impl qcom_adreno_smmu_impl = {
-> @@ -383,6 +401,7 @@ static const struct arm_smmu_impl qcom_adreno_smmu_impl = {
->   	.reset = qcom_smmu500_reset,
->   	.alloc_context_bank = qcom_adreno_smmu_alloc_context_bank,
->   	.write_sctlr = qcom_adreno_smmu_write_sctlr,
-> +	.tlb_sync = qcom_smmu_tlb_sync,
->   };
->   
->   static struct arm_smmu_device *qcom_smmu_create(struct arm_smmu_device *smmu,
-> @@ -399,6 +418,7 @@ static struct arm_smmu_device *qcom_smmu_create(struct arm_smmu_device *smmu,
->   		return ERR_PTR(-ENOMEM);
->   
->   	qsmmu->smmu.impl = impl;
-> +	qsmmu->cfg = qcom_smmu_impl_data(smmu);
->   
->   	return &qsmmu->smmu;
->   }
-> diff --git a/drivers/iommu/arm/arm-smmu/arm-smmu-qcom.h b/drivers/iommu/arm/arm-smmu/arm-smmu-qcom.h
-> new file mode 100644
-> index 000000000000..99ec8f8629a0
-> --- /dev/null
-> +++ b/drivers/iommu/arm/arm-smmu/arm-smmu-qcom.h
-> @@ -0,0 +1,28 @@
-> +/* SPDX-License-Identifier: GPL-2.0-only */
-> +/*
-> + * Copyright (c) 2022, Qualcomm Innovation Center, Inc. All rights reserved.
-> + */
-> +
-> +#ifndef _ARM_SMMU_QCOM_H
-> +#define _ARM_SMMU_QCOM_H
-> +
-> +struct qcom_smmu {
-> +	struct arm_smmu_device smmu;
-> +	const struct qcom_smmu_config *cfg;
-> +	bool bypass_quirk;
-> +	u8 bypass_cbndx;
-> +	u32 stall_enabled;
-> +};
-> +
-> +#ifdef CONFIG_ARM_SMMU_QCOM_DEBUG
-> +void qcom_smmu_tlb_sync_debug(struct arm_smmu_device *smmu);
-> +const void *qcom_smmu_impl_data(struct arm_smmu_device *smmu);
-> +#else
-> +static inline void qcom_smmu_tlb_sync_debug(struct arm_smmu_device *smmu) { }
-> +static inline const void *qcom_smmu_impl_data(struct arm_smmu_device *smmu)
-> +{
-> +	return NULL;
-> +}
-> +#endif
-> +
-> +#endif /* _ARM_SMMU_QCOM_H */
-> diff --git a/drivers/iommu/arm/arm-smmu/arm-smmu.c b/drivers/iommu/arm/arm-smmu/arm-smmu.c
-> index 2ed3594f384e..41633e5484f8 100644
-> --- a/drivers/iommu/arm/arm-smmu/arm-smmu.c
-> +++ b/drivers/iommu/arm/arm-smmu/arm-smmu.c
-> @@ -2074,7 +2074,6 @@ err_reset_platform_ops: __maybe_unused;
->   static int arm_smmu_device_probe(struct platform_device *pdev)
->   {
->   	struct resource *res;
-> -	resource_size_t ioaddr;
->   	struct arm_smmu_device *smmu;
->   	struct device *dev = &pdev->dev;
->   	int num_irqs, i, err;
-> @@ -2098,7 +2097,8 @@ static int arm_smmu_device_probe(struct platform_device *pdev)
->   	smmu->base = devm_platform_get_and_ioremap_resource(pdev, 0, &res);
->   	if (IS_ERR(smmu->base))
->   		return PTR_ERR(smmu->base);
-> -	ioaddr = res->start;
-> +	smmu->ioaddr = res->start;
-> +
->   	/*
->   	 * The resource size should effectively match the value of SMMU_TOP;
->   	 * stash that temporarily until we know PAGESIZE to validate it with.
-> @@ -2178,7 +2178,7 @@ static int arm_smmu_device_probe(struct platform_device *pdev)
->   	}
->   
->   	err = iommu_device_sysfs_add(&smmu->iommu, smmu->dev, NULL,
-> -				     "smmu.%pa", &ioaddr);
-> +				     "smmu.%pa", &smmu->ioaddr);
->   	if (err) {
->   		dev_err(dev, "Failed to register iommu in sysfs\n");
->   		return err;
-> diff --git a/drivers/iommu/arm/arm-smmu/arm-smmu.h b/drivers/iommu/arm/arm-smmu/arm-smmu.h
-> index 2b9b42fb6f30..703fd5817ec1 100644
-> --- a/drivers/iommu/arm/arm-smmu/arm-smmu.h
-> +++ b/drivers/iommu/arm/arm-smmu/arm-smmu.h
-> @@ -278,6 +278,7 @@ struct arm_smmu_device {
->   	struct device			*dev;
->   
->   	void __iomem			*base;
-> +	phys_addr_t			ioaddr;
->   	unsigned int			numpage;
->   	unsigned int			pgshift;
->   
+(1).I think when gathering small page to block/section mapping, there 
+maybe tlb conflict if no complying with BBM.
+
+Namely:
+a.Map a 4KB page (address X)
+   Touch that page, in order to get the translation cached in the TLB
+
+b.Modify the translation tables
+   replacing the mapping for address X with a 2MB mapping - DO NOT 
+INVALIDATE the TLB
+
+c.Touch "X + 4KB"
+   This will/should miss in the TLB, causing a new walk returning the 
+2MB mapping
+
+d.Touch X
+   Assuming they've not been evicted, you'll hit both on the 4KB and 2MB 
+mapping - as both cover address X.
+
+There is tlb conflict.
+(link: 
+https://community.arm.com/support-forums/f/dev-platforms-forum/13583/tlb-conflict-abort)
+
+
+
+(2).But when spliting large block/section mapping to small granularity, 
+there maybe no tlb conflict.
+
+Namely:
+a.rebuild the pte level mapping without any change to orgin pagetable
+   (the relation between virtual address and physicall address keep same)
+
+b.modify 1G mappting to use the new pte level mapping in the [[[mem]]] 
+without tlb flush
+
+c.When the cpu access the 1G mem(anywhere),
+   If 1G tlb entry already cached in tlb, all the 1G mem will access 
+success(without any tlb loaded, no confilict)
+
+   If 1G tlb entry has been evicted, then the tlb will access pagetable 
+in mem(despite the cpu "catch" the old(1G) or new(4k) mapped pagetale in 
+the mem, all the 1G mem can access sucess)(load new tlb entry, no conflict)
+
+d.Afterward, we flush the tlb and force cpu use the new pagetable.(no 
+conflict)
+
+It seems that there are no two tlb entries for a same virtual address in 
+the tlb cache When spliting large block/section mapping.
+
+
+
+(3).At the same time, I think we can use another way.
+As the system linear maping is builded with init_pg_dir, we can also 
+resue the init_pg_dir to split the block/setion mapping sometime.
+As init_pg_dir contain all kernel text/data access and we can comply 
+with the BBM requirement.
+
+a.rebuild new pte level mapping without any change to the old 
+mapping(the cpu can't walk access the new page mapping, it's isolated)
+
+b.change to use init_pg_dir
+
+c.clear the old 1G block mapping and flush tlb
+
+d.modify the linear mapping to use new pte level page mapping with 
+init_pg_dir(TLB BBM)
+
+e.switch to swapper_pg_dir
+
+
+Could you give me some advice?
+
+Thanks.

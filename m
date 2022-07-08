@@ -2,178 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 778E156C2E8
-	for <lists+linux-kernel@lfdr.de>; Sat,  9 Jul 2022 01:13:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D3FA956C478
+	for <lists+linux-kernel@lfdr.de>; Sat,  9 Jul 2022 01:15:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239936AbiGHTqH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Jul 2022 15:46:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53496 "EHLO
+        id S239338AbiGHTsh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Jul 2022 15:48:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55328 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239908AbiGHTqE (ORCPT
+        with ESMTP id S238387AbiGHTsd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Jul 2022 15:46:04 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9749E904C9
-        for <linux-kernel@vger.kernel.org>; Fri,  8 Jul 2022 12:46:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1657309562;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=vLjxfS/IkYLw35yGStC8uj/FyqMkGDcG5weCQvZVRiw=;
-        b=UcCFRvYxdUpr0Ig8rGAe0wnHaolOcBy9nTlcUb+qSteeVDBbBdoyGt5rQYHWHxV0I2UbBO
-        j6cPGOAFXvb58HT7tLDx6Ttuzf9tdlJ5axddDktjUVv5R5WLTJz1HnbL//NvErmK7XgYkN
-        WLjKCv5qy1wzvfiPO0gkinQfG2ZrrB0=
-Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com
- [209.85.208.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-191-XvrBXGQZPterpTmBQlqQNg-1; Fri, 08 Jul 2022 15:46:01 -0400
-X-MC-Unique: XvrBXGQZPterpTmBQlqQNg-1
-Received: by mail-ed1-f71.google.com with SMTP id m10-20020a056402510a00b0043a93d807ffso4805752edd.12
-        for <linux-kernel@vger.kernel.org>; Fri, 08 Jul 2022 12:46:00 -0700 (PDT)
+        Fri, 8 Jul 2022 15:48:33 -0400
+Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1329C1128;
+        Fri,  8 Jul 2022 12:48:30 -0700 (PDT)
+Received: by mail-pj1-x1036.google.com with SMTP id 89-20020a17090a09e200b001ef7638e536so2941975pjo.3;
+        Fri, 08 Jul 2022 12:48:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=rBeV/OEgLqBxkQbXvrr4ONvUzsJQ4WYLxaMOQiThl/s=;
+        b=jDqt9G4/34S4KPrCz3lhJU4XGUo6/qs8bw63wesqlk5h2wEvQwvZdwTglnG6zSnTew
+         5bPqCrADnep4xYq/9lSC9SCuT9T7hxAVT0apy7LEpQelXl6CC5+Oac+IN1Xt/k3V6CHJ
+         hCR664kwCscXuzRYC2mZkIaD49bG5BOb9wJ0KKdMGpPHfSF5GBQWbkNEJelol04oCNS4
+         ZbRvOXtjumR5y62qHIM5KGycBjw2A7BNSizwDmu9ccdlLawGTSFYVydfeoBTPjDPD1rK
+         H6mouPl5aAxiWDgm+xlv9tHIY+jcG0bCBnXBetOAAksF1E2ChGnZOA0pMh3KidM6HZM1
+         NPOw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=vLjxfS/IkYLw35yGStC8uj/FyqMkGDcG5weCQvZVRiw=;
-        b=ayhU4XEGwBAXRDZbStuSo6keWvYV14+lIjveRE/0GlSJvaVC0WPhm0yaBfVJmfkPZu
-         jFqTfaT81LxpJRckWxQewS4h6tKEQ9H4iO5dK6SLhlZfZS17pRFBSzdcUFbZ8LOzlYVi
-         CnFk6GgDRhlfWbuvlbmRyWT9B+JqpzNRFrCXOhpWd4FzOy1Bk9Jr46yZQ6i/UwwlQOaO
-         Lfhyjf1aMtX6hAZhRt9qJ5fuGI7eJC56zP+YcgTDSjzQ8uUKfcLbSDE7B0PwDXvm6cWe
-         OVjoE9rPhv0zImsspO/mWLxswOwazdce50nA81sw3eLg7uzGX4KEYo2HC/RFEaIJ67z+
-         BWbQ==
-X-Gm-Message-State: AJIora+MO2dfVlNObpybfYm0qyURGjjvrQwgYKkKqScexFTCkgI6/Unx
-        u1Mi3kks9i2+OlSQD6CwxI7NgKxpwJIX5sRhxZHGwUEzdMKdAV+7y3dwwJfu98AKWEw/d7SjwnL
-        2mmpYdh1qr96i0OsJt6uI4SjY
-X-Received: by 2002:a17:906:84f0:b0:72b:136a:a406 with SMTP id zp16-20020a17090684f000b0072b136aa406mr5208087ejb.700.1657309559679;
-        Fri, 08 Jul 2022 12:45:59 -0700 (PDT)
-X-Google-Smtp-Source: AGRyM1soRNcaDcTHOuYD8Mr2wY+AfEJyajgo94gJG5OzKtzrgk5L+7s97fmEIdCygRjckvG23MWK6Q==
-X-Received: by 2002:a17:906:84f0:b0:72b:136a:a406 with SMTP id zp16-20020a17090684f000b0072b136aa406mr5208072ejb.700.1657309559515;
-        Fri, 08 Jul 2022 12:45:59 -0700 (PDT)
-Received: from ?IPV6:2001:1c00:c1e:bf00:d69d:5353:dba5:ee81? (2001-1c00-0c1e-bf00-d69d-5353-dba5-ee81.cable.dynamic.v6.ziggo.nl. [2001:1c00:c1e:bf00:d69d:5353:dba5:ee81])
-        by smtp.gmail.com with ESMTPSA id f13-20020a170906824d00b00726e108b566sm15039136ejx.173.2022.07.08.12.45.58
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 08 Jul 2022 12:45:59 -0700 (PDT)
-Message-ID: <c95724ad-a3b0-2ac8-5413-b971626e7e63@redhat.com>
-Date:   Fri, 8 Jul 2022 21:45:58 +0200
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=rBeV/OEgLqBxkQbXvrr4ONvUzsJQ4WYLxaMOQiThl/s=;
+        b=zPIcdIYkBoowH2qgJw15HS5VpjNUGNaDKZQpJpmGrmtTvszinaP6dcs+heARYPNPhd
+         eVe8tp+fDt50/OmgOwS8Js7vUK1ugK/E5XNAF1qEjvhcDix2cm/wcBVowR4YGIG2t8pf
+         GGw18O/lTuErmnN54rCwqcOgITVm6vwWDnqQmfTGueYt9drb3VHSa/1oYN/9KTLIF96F
+         n4CXhIMY8snJWWxWrJogdbwQXEya9hE9TrpeQeEbNyGlQXHTcvDJWWW0y+3eVjVWnUF9
+         OnS5nQuow1AW8/Uq+379S0xszdS8uu2NUZwiwakZ+I7iTM8HBRAmJ1XVSFTLhrZ3i8ye
+         vkgw==
+X-Gm-Message-State: AJIora8f8JDCwFbiV3rFsW4kdjI7xCFibxMrgBuIUngv8MLOSfUrydW1
+        ye5jiOaVcri1189tL869re22TepxRM0tMP3SXRpXMy4IzYc=
+X-Google-Smtp-Source: AGRyM1vB/zeygFk5gaI/7h0y3iXb7EBHt12/zeW7dw9ssHDe4uPTSxddLEAjVzBkeY039sMTxaXRdPsAeMCc0rppxb8=
+X-Received: by 2002:a17:90b:4c8c:b0:1ef:9d26:3087 with SMTP id
+ my12-20020a17090b4c8c00b001ef9d263087mr1621043pjb.195.1657309709593; Fri, 08
+ Jul 2022 12:48:29 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Subject: Re: [PATCH 2/5] drm/modes: Extract
- drm_mode_parse_cmdline_named_mode()
-Content-Language: en-US
-To:     Geert Uytterhoeven <geert@linux-m68k.org>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>
-Cc:     dri-devel@lists.freedesktop.org, linux-fbdev@vger.kernel.org,
-        linux-m68k@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <cover.1657301107.git.geert@linux-m68k.org>
- <402dea47269f2e3960946d186ba3cb118066e74a.1657301107.git.geert@linux-m68k.org>
-From:   Hans de Goede <hdegoede@redhat.com>
-In-Reply-To: <402dea47269f2e3960946d186ba3cb118066e74a.1657301107.git.geert@linux-m68k.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+References: <20220708100952.1998673-1-ping.bai@nxp.com>
+In-Reply-To: <20220708100952.1998673-1-ping.bai@nxp.com>
+From:   Fabio Estevam <festevam@gmail.com>
+Date:   Fri, 8 Jul 2022 16:48:18 -0300
+Message-ID: <CAOMZO5BVrcodf+1wvdifsUWy_j4Md4Lz1kBhrvCJa_4JPtqAzQ@mail.gmail.com>
+Subject: Re: [PATCH] MAINTAINERS: Update freescale pin controllers maintainer
+To:     Jacky Bai <ping.bai@nxp.com>
+Cc:     Linus Walleij <linus.walleij@linaro.org>,
+        Dong Aisheng <aisheng.dong@nxp.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Stefan Agner <stefan@agner.ch>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        NXP Linux Team <linux-imx@nxp.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+Hi Jacky,
 
-On 7/8/22 20:21, Geert Uytterhoeven wrote:
-> Extract the code to check for a named mode parameter into its own
-> function, to streamline the main parsing flow.
-> 
-> Signed-off-by: Geert Uytterhoeven <geert@linux-m68k.org>
-> ---
->  drivers/gpu/drm/drm_modes.c | 41 +++++++++++++++++++++++++++----------
->  1 file changed, 30 insertions(+), 11 deletions(-)
-> 
-> diff --git a/drivers/gpu/drm/drm_modes.c b/drivers/gpu/drm/drm_modes.c
-> index 30a7be97707bfb16..434383469e9d984d 100644
-> --- a/drivers/gpu/drm/drm_modes.c
-> +++ b/drivers/gpu/drm/drm_modes.c
-> @@ -1749,6 +1749,30 @@ static const char * const drm_named_modes_whitelist[] = {
->  	"PAL",
->  };
->  
-> +static int drm_mode_parse_cmdline_named_mode(const char *name,
-> +					     unsigned int length,
-> +					     bool refresh,
-> +					     struct drm_cmdline_mode *mode)
-> +{
-> +	unsigned int i;
-> +	int ret;
-> +
-> +	for (i = 0; i < ARRAY_SIZE(drm_named_modes_whitelist); i++) {
-> +		ret = str_has_prefix(name, drm_named_modes_whitelist[i]);
-> +		if (!ret)
+On Fri, Jul 8, 2022 at 7:08 AM Jacky Bai <ping.bai@nxp.com> wrote:
+>
+> Add myself as co-maintainer of freescale pin controllers driver.
+>
+> Signed-off-by: Jacky Bai <ping.bai@nxp.com>
 
-As discussed in my review of 1/5 this needs to become:
+Thanks for offering help here:
 
-		if (ret != length)
-> +			continue;
-
-Which renders my other comment on this patch (length not being used) mute.
-
-Regards,
-
-Hans
-
-> +
-> +		if (refresh)
-> +			return -EINVAL; /* named + refresh is invalid */
-> +
-> +		strcpy(mode->name, drm_named_modes_whitelist[i]);
-> +		mode->specified = true;
-> +		return 0;
-> +	}
-> +
-> +	return 0;
-> +}
-> +
->  /**
->   * drm_mode_parse_command_line_for_connector - parse command line modeline for connector
->   * @mode_option: optional per connector mode option
-> @@ -1785,7 +1809,7 @@ bool drm_mode_parse_command_line_for_connector(const char *mode_option,
->  	const char *bpp_ptr = NULL, *refresh_ptr = NULL, *extra_ptr = NULL;
->  	const char *options_ptr = NULL;
->  	char *bpp_end_ptr = NULL, *refresh_end_ptr = NULL;
-> -	int i, len, ret;
-> +	int len, ret;
->  
->  	memset(mode, 0, sizeof(*mode));
->  	mode->panel_orientation = DRM_MODE_PANEL_ORIENTATION_UNKNOWN;
-> @@ -1823,16 +1847,11 @@ bool drm_mode_parse_command_line_for_connector(const char *mode_option,
->  	}
->  
->  	/* First check for a named mode */
-> -	for (i = 0; mode_end && i < ARRAY_SIZE(drm_named_modes_whitelist); i++) {
-> -		ret = str_has_prefix(name, drm_named_modes_whitelist[i]);
-> -		if (ret) {
-> -			if (refresh_ptr)
-> -				return false; /* named + refresh is invalid */
-> -
-> -			strcpy(mode->name, drm_named_modes_whitelist[i]);
-> -			mode->specified = true;
-> -			break;
-> -		}
-> +	if (mode_end) {
-> +		ret = drm_mode_parse_cmdline_named_mode(name, mode_end,
-> +							refresh_ptr, mode);
-> +		if (ret)
-> +			return false;
->  	}
->  
->  	/* No named mode? Check for a normal mode argument, e.g. 1024x768 */
-
+Reviewed-by: Fabio Estevam <festevam@gmail.com>

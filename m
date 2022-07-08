@@ -2,152 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 04AB356C0C1
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 20:37:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0CB8656C04D
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 20:37:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238829AbiGHR7P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Jul 2022 13:59:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55608 "EHLO
+        id S239006AbiGHSAX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Jul 2022 14:00:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56162 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238598AbiGHR7N (ORCPT
+        with ESMTP id S238493AbiGHSAV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Jul 2022 13:59:13 -0400
-Received: from mail-oi1-x22c.google.com (mail-oi1-x22c.google.com [IPv6:2607:f8b0:4864:20::22c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CF181EC5E
-        for <linux-kernel@vger.kernel.org>; Fri,  8 Jul 2022 10:59:12 -0700 (PDT)
-Received: by mail-oi1-x22c.google.com with SMTP id s188so27649345oib.6
-        for <linux-kernel@vger.kernel.org>; Fri, 08 Jul 2022 10:59:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:in-reply-to:references:from:user-agent:date:message-id
-         :subject:to;
-        bh=YHV2Cc5LaBeGv/AExh1dctdQCQcN3cDdvTIsITOZX7o=;
-        b=SldvymO6Yx3hvrPoQMk0aRKOPOW/TDdG0xvoqwq2gjl3jQDewEQNxT7IZ2n4Y6Gu4l
-         1xcyHRkCgBMAuyc9PpJUug4dwDal14CECAA7tgXkyHs4GcEPkOxnJ2O2ak6sdWhta0wq
-         q6WxCmt02sZKcOWwAvCuLlMjiru2aylxIdRlo=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:in-reply-to:references:from
-         :user-agent:date:message-id:subject:to;
-        bh=YHV2Cc5LaBeGv/AExh1dctdQCQcN3cDdvTIsITOZX7o=;
-        b=pd0Ci5tD3WsO1p2PDttEs9/76zHuQP+d5evKaMEJInVHVl6lxg6fZnAjn+mY4DXt9E
-         ujbb39Wzng0eqaI0ukoQ9eKOfQZe46nQDPnY4qOjfz5qxUG3EBdf3MCy0yMD7YkgVhQe
-         AsFBa1iyAqWadk7iKKbk8RghRwqPFwlHVsyEFTSg1XUGzNmaUGV4OINtkgrZtR0GjZKc
-         HUUD+eFw7FZxMy3PFzUw+0MJGMDaPtJ7fbm7eHsYTXKERoIOO9S0vZo01gL/LlWf3Qmv
-         Wlf4Bj3DnPFXbsEXinvk4HPPQ/wBA2n8um9nyA2w32FaEIjypCxcBrv5Z5v2XaZMDNOx
-         39TQ==
-X-Gm-Message-State: AJIora/RYg3ANHcJWLB2ZgpuXRRb1y0s2JsWR0Pmt2H+egN3fumFLcjM
-        Xu3jqScTkT8WVuNbdojcwXCL4DJA8Nx2Ogmk5HW7yxnDFPQ=
-X-Google-Smtp-Source: AGRyM1uArgMx4SavTqMDhwhs03SUm2moqY8zMl1EvGjoPdvbyFKjlJ+ON6yeDAIwwIeg6LPbcSDqSg6//DxGeB4CkAs=
-X-Received: by 2002:a05:6808:e87:b0:32e:4789:d2c with SMTP id
- k7-20020a0568080e8700b0032e47890d2cmr578880oil.193.1657303151889; Fri, 08 Jul
- 2022 10:59:11 -0700 (PDT)
-Received: from 753933720722 named unknown by gmailapi.google.com with
- HTTPREST; Fri, 8 Jul 2022 10:59:11 -0700
+        Fri, 8 Jul 2022 14:00:21 -0400
+Received: from mail.ispras.ru (mail.ispras.ru [83.149.199.84])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2FEB237C3;
+        Fri,  8 Jul 2022 11:00:19 -0700 (PDT)
+Received: from localhost.localdomain (unknown [176.59.170.159])
+        by mail.ispras.ru (Postfix) with ESMTPSA id D068440D403E;
+        Fri,  8 Jul 2022 18:00:08 +0000 (UTC)
+From:   Fedor Pchelkin <pchelkin@ispras.ru>
+To:     Robin van der Gracht <robin@protonic.nl>,
+        Oleksij Rempel <linux@rempel-privat.de>
+Cc:     Fedor Pchelkin <pchelkin@ispras.ru>, kernel@pengutronix.de,
+        Oliver Hartkopp <socketcan@hartkopp.net>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, linux-can@vger.kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        ldv-project@linuxtesting.org,
+        Alexey Khoroshilov <khoroshilov@ispras.ru>
+Subject: [PATCH] can: j1939: fix memory leak of skbs
+Date:   Fri,  8 Jul 2022 20:59:49 +0300
+Message-Id: <20220708175949.539064-1-pchelkin@ispras.ru>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-In-Reply-To: <1657197381-1271-1-git-send-email-quic_srivasam@quicinc.com>
-References: <1657197381-1271-1-git-send-email-quic_srivasam@quicinc.com>
-From:   Stephen Boyd <swboyd@chromium.org>
-User-Agent: alot/0.10
-Date:   Fri, 8 Jul 2022 10:59:11 -0700
-Message-ID: <CAE-0n53X8yyWr+Q+3RpciCeZcW+t+jgZs3eqNF9O8hJcw0cq0Q@mail.gmail.com>
-Subject: Re: [PATCH v2] arm64: dts: qcom: sc7280: Move wcd specific pin conf
- to common file
-To:     Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>,
-        agross@kernel.org, bjorn.andersson@linaro.org,
-        devicetree@vger.kernel.org, dianders@chromium.org,
-        judyhsiao@chromium.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, quic_rohkumar@quicinc.com,
-        robh+dt@kernel.org, srinivas.kandagatla@linaro.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Quoting Srinivasa Rao Mandadapu (2022-07-07 05:36:21)
-> diff --git a/arch/arm64/boot/dts/qcom/sc7280-herobrine-audio-wcd9385.dtsi b/arch/arm64/boot/dts/qcom/sc7280-herobrine-audio-wcd9385.dtsi
-> index 32a1e78..859faaa 100644
-> --- a/arch/arm64/boot/dts/qcom/sc7280-herobrine-audio-wcd9385.dtsi
-> +++ b/arch/arm64/boot/dts/qcom/sc7280-herobrine-audio-wcd9385.dtsi
-> @@ -5,6 +5,70 @@
->   * Copyright (c) 2022, The Linux Foundation. All rights reserved.
->   */
->
-> +/* PINCTRL */
-> +
-> +&lpass_dmic01_clk {
-> +       drive-strength = <8>;
-> +       bias-disable;
-> +};
-> +
-> +&lpass_dmic01_clk_sleep {
-> +       drive-strength = <2>;
-> +};
-> +
-> +&lpass_dmic01_data {
-> +       bias-pull-down;
-> +};
-> +
-> +&lpass_dmic23_clk {
-> +       drive-strength = <8>;
-> +       bias-disable;
-> +};
-> +
-> +&lpass_dmic23_clk_sleep {
-> +       drive-strength = <2>;
-> +};
-> +
-> +&lpass_dmic23_data {
-> +       bias-pull-down;
-> +};
-> +
-> +&lpass_rx_swr_clk {
-> +       drive-strength = <2>;
-> +       slew-rate = <1>;
-> +       bias-disable;
-> +};
-> +
-> +&lpass_rx_swr_clk_sleep {
-> +       bias-pull-down;
-> +};
-> +
-> +&lpass_rx_swr_data {
-> +       drive-strength = <2>;
+Syzkaller reported memory leak of skbs introduced with the commit
+2030043e616c ("can: j1939: fix Use-after-Free, hold skb ref while in use").
 
-I suspect this was discussed before, but why do we need to modify drive
-strengths on pins that aren't in output mode? I assume either rx_swr or
-tx_swr is unidirectional.
+Link to Syzkaller info and repro: https://forge.ispras.ru/issues/11743
 
-> +       slew-rate = <1>;
-> +       bias-bus-hold;
-> +};
-> +
-> +&lpass_rx_swr_data_sleep {
-> +       bias-pull-down;
-> +};
-> +
-> +&lpass_tx_swr_clk {
-> +       drive-strength = <2>;
-> +       slew-rate = <1>;
-> +       bias-disable;
-> +};
-> +
-> +&lpass_tx_swr_clk_sleep {
-> +       bias-pull-down;
-> +};
-> +
-> +&lpass_tx_swr_data {
-> +       drive-strength = <2>;
-> +       slew-rate = <1>;
-> +       bias-bus-hold;
-> +};
-> +
->  &mi2s1_data0 {
->         drive-strength = <6>;
->         bias-disable;
+The suggested solution was tested on the new memory-leak Syzkaller repro
+and on the old use-after-free repro (that use-after-free bug was solved
+with aforementioned commit). Although there can probably be another
+situations when the numbers of skb_get() and skb_unref() calls don't match
+and I don't see it in right way.
+
+Moreover, skb_unref() call can be harmlessly removed from line 338 in
+j1939_session_skb_drop_old() (/net/can/j1939/transport.c). But then I
+assume this removal ruins the whole reference counts logic...
+
+Overall, there is definitely something not clear in skb reference counts
+management with skb_get() and skb_unref(). The solution we suggested fixes
+the leaks and use-after-free's induced by Syzkaller but perhaps the origin
+of the problem can be somewhere else.
+
+Found by Linux Verification Center (linuxtesting.org) with Syzkaller.
+Signed-off-by: Fedor Pchelkin <pchelkin@ispras.ru>
+Signed-off-by: Alexey Khoroshilov <khoroshilov@ispras.ru>
+---
+ net/can/j1939/transport.c | 1 -
+ 1 file changed, 1 deletion(-)
+
+diff --git a/net/can/j1939/transport.c b/net/can/j1939/transport.c
+index 307ee1174a6e..9600b339cbf8 100644
+--- a/net/can/j1939/transport.c
++++ b/net/can/j1939/transport.c
+@@ -356,7 +356,6 @@ void j1939_session_skb_queue(struct j1939_session *session,
+ 
+ 	skcb->flags |= J1939_ECU_LOCAL_SRC;
+ 
+-	skb_get(skb);
+ 	skb_queue_tail(&session->skb_queue, skb);
+ }
+ 
+-- 
+2.25.1
+

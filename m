@@ -2,30 +2,30 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A1DA056B24E
+	by mail.lfdr.de (Postfix) with ESMTP id EC2C456B24F
 	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 07:41:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237307AbiGHFib (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Jul 2022 01:38:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52474 "EHLO
+        id S237136AbiGHFil (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Jul 2022 01:38:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52598 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237227AbiGHFiH (ORCPT
+        with ESMTP id S237240AbiGHFiI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Jul 2022 01:38:07 -0400
+        Fri, 8 Jul 2022 01:38:08 -0400
 Received: from out2.migadu.com (out2.migadu.com [IPv6:2001:41d0:2:aacc::])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29ADF7B349
-        for <linux-kernel@vger.kernel.org>; Thu,  7 Jul 2022 22:38:04 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 258E026AFC
+        for <linux-kernel@vger.kernel.org>; Thu,  7 Jul 2022 22:38:08 -0700 (PDT)
 X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1657258682;
+        t=1657258686;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=vOmKEsP5qHLQsoJSDPiON+o/eMH2bk607wMScNN4r/I=;
-        b=sM2ptqqmr90GKbmlteE88gbqhMsdouCnpfczZuEQd0cSpbWUr3S6Vqwtdci2TBB40cVSWM
-        qstknsxn//EHkKpCWkMk+BeNkNsTs4B31iyaZCfJVYoBVxsIw96s78oVZyhPOycCPLBz2A
-        tIGf4MA0iAEtUbrJFRzU9hw3dpkzVBw=
+        bh=Ss61C/7eiat90GPlQTY7SZczV4odc8E10C4i+gZumvA=;
+        b=pzd7nBpyFvj7x4I5lpt//Q/S05L53I3ag266sMGwSfkZBEI3LaDLxe1oDt1UfCSxgpnFqh
+        AqQJgfu2jq7UbTtYwCR1H5T44/kVR0tcRNhm4Yw9RbkwkkjEnOUPUOyi/zcbeiFOzsRvw7
+        F3qaP4/iNzJLGvUBeAKFubWKxn1wnko=
 From:   Naoya Horiguchi <naoya.horiguchi@linux.dev>
 To:     linux-mm@kvack.org
 Cc:     Andrew Morton <akpm@linux-foundation.org>,
@@ -38,9 +38,9 @@ Cc:     Andrew Morton <akpm@linux-foundation.org>,
         Muchun Song <songmuchun@bytedance.com>,
         Naoya Horiguchi <naoya.horiguchi@nec.com>,
         linux-kernel@vger.kernel.org
-Subject: [mm-unstable PATCH v5 7/8] mm, hwpoison: skip raw hwpoison page in freeing 1GB hugepage
-Date:   Fri,  8 Jul 2022 14:36:52 +0900
-Message-Id: <20220708053653.964464-8-naoya.horiguchi@linux.dev>
+Subject: [mm-unstable PATCH v5 8/8] mm, hwpoison: enable memory error handling on 1GB hugepage
+Date:   Fri,  8 Jul 2022 14:36:53 +0900
+Message-Id: <20220708053653.964464-9-naoya.horiguchi@linux.dev>
 In-Reply-To: <20220708053653.964464-1-naoya.horiguchi@linux.dev>
 References: <20220708053653.964464-1-naoya.horiguchi@linux.dev>
 MIME-Version: 1.0
@@ -59,79 +59,75 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Naoya Horiguchi <naoya.horiguchi@nec.com>
 
-Currently if memory_failure() (modified to remove blocking code with
-subsequent patch) is called on a page in some 1GB hugepage, memory error
-handling fails and the raw error page gets into leaked state.  The impact
-is small in production systems (just leaked single 4kB page), but this
-limits the testability because unpoison doesn't work for it.
-We can no longer create 1GB hugepage on the 1GB physical address range
-with such leaked pages, that's not useful when testing on small systems.
-
-When a hwpoison page in a 1GB hugepage is handled, it's caught by the
-PageHWPoison check in free_pages_prepare() because the 1GB hugepage is
-broken down into raw error pages before coming to this point:
-
-        if (unlikely(PageHWPoison(page)) && !order) {
-                ...
-                return false;
-        }
-
-Then, the page is not sent to buddy and the page refcount is left 0.
-
-Originally this check is supposed to work when the error page is freed from
-page_handle_poison() (that is called from soft-offline), but now we are
-opening another path to call it, so the callers of __page_handle_poison()
-need to handle the case by considering the return value 0 as success. Then
-page refcount for hwpoison is properly incremented so unpoison works.
+Now error handling code is prepared, so remove the blocking code and
+enable memory error handling on 1GB hugepage.
 
 Signed-off-by: Naoya Horiguchi <naoya.horiguchi@nec.com>
 Reviewed-by: Miaohe Lin <linmiaohe@huawei.com>
 ---
-v2 -> v3:
-- remove "res = MF_FAILED" in try_memory_failure_hugetlb (by Miaohe)
----
- mm/memory-failure.c | 10 ++++++----
- 1 file changed, 6 insertions(+), 4 deletions(-)
+ include/linux/mm.h      |  1 -
+ include/ras/ras_event.h |  1 -
+ mm/memory-failure.c     | 16 ----------------
+ 3 files changed, 18 deletions(-)
 
+diff --git a/include/linux/mm.h b/include/linux/mm.h
+index 7668831c919f..b0e83835184e 100644
+--- a/include/linux/mm.h
++++ b/include/linux/mm.h
+@@ -3241,7 +3241,6 @@ enum mf_action_page_type {
+ 	MF_MSG_DIFFERENT_COMPOUND,
+ 	MF_MSG_HUGE,
+ 	MF_MSG_FREE_HUGE,
+-	MF_MSG_NON_PMD_HUGE,
+ 	MF_MSG_UNMAP_FAILED,
+ 	MF_MSG_DIRTY_SWAPCACHE,
+ 	MF_MSG_CLEAN_SWAPCACHE,
+diff --git a/include/ras/ras_event.h b/include/ras/ras_event.h
+index d0337a41141c..cbd3ddd7c33d 100644
+--- a/include/ras/ras_event.h
++++ b/include/ras/ras_event.h
+@@ -360,7 +360,6 @@ TRACE_EVENT(aer_event,
+ 	EM ( MF_MSG_DIFFERENT_COMPOUND, "different compound page after locking" ) \
+ 	EM ( MF_MSG_HUGE, "huge page" )					\
+ 	EM ( MF_MSG_FREE_HUGE, "free huge page" )			\
+-	EM ( MF_MSG_NON_PMD_HUGE, "non-pmd-sized huge page" )		\
+ 	EM ( MF_MSG_UNMAP_FAILED, "unmapping failed page" )		\
+ 	EM ( MF_MSG_DIRTY_SWAPCACHE, "dirty swapcache page" )		\
+ 	EM ( MF_MSG_CLEAN_SWAPCACHE, "clean swapcache page" )		\
 diff --git a/mm/memory-failure.c b/mm/memory-failure.c
-index e38a94007ffe..cdf266aaabdf 100644
+index cdf266aaabdf..3640bbe5a3a2 100644
 --- a/mm/memory-failure.c
 +++ b/mm/memory-failure.c
-@@ -1084,7 +1084,6 @@ static int me_huge_page(struct page_state *ps, struct page *p)
- 		res = truncate_error_page(hpage, page_to_pfn(p), mapping);
- 		unlock_page(hpage);
- 	} else {
--		res = MF_FAILED;
- 		unlock_page(hpage);
- 		/*
- 		 * migration entry prevents later access on error hugepage,
-@@ -1092,9 +1091,11 @@ static int me_huge_page(struct page_state *ps, struct page *p)
- 		 * subpages.
- 		 */
- 		put_page(hpage);
--		if (__page_handle_poison(p) > 0) {
-+		if (__page_handle_poison(p) >= 0) {
- 			page_ref_inc(p);
- 			res = MF_RECOVERED;
-+		} else {
-+			res = MF_FAILED;
- 		}
- 	}
+@@ -765,7 +765,6 @@ static const char * const action_page_types[] = {
+ 	[MF_MSG_DIFFERENT_COMPOUND]	= "different compound page after locking",
+ 	[MF_MSG_HUGE]			= "huge page",
+ 	[MF_MSG_FREE_HUGE]		= "free huge page",
+-	[MF_MSG_NON_PMD_HUGE]		= "non-pmd-sized huge page",
+ 	[MF_MSG_UNMAP_FAILED]		= "unmapping failed page",
+ 	[MF_MSG_DIRTY_SWAPCACHE]	= "dirty swapcache page",
+ 	[MF_MSG_CLEAN_SWAPCACHE]	= "clean swapcache page",
+@@ -1873,21 +1872,6 @@ static int try_memory_failure_hugetlb(unsigned long pfn, int flags, int *hugetlb
  
-@@ -1860,10 +1861,11 @@ static int try_memory_failure_hugetlb(unsigned long pfn, int flags, int *hugetlb
- 	 */
- 	if (res == 0) {
- 		unlock_page(head);
--		res = MF_FAILED;
--		if (__page_handle_poison(p) > 0) {
-+		if (__page_handle_poison(p) >= 0) {
- 			page_ref_inc(p);
- 			res = MF_RECOVERED;
-+		} else {
-+			res = MF_FAILED;
- 		}
- 		action_result(pfn, MF_MSG_FREE_HUGE, res);
- 		return res == MF_RECOVERED ? 0 : -EBUSY;
+ 	page_flags = head->flags;
+ 
+-	/*
+-	 * TODO: hwpoison for pud-sized hugetlb doesn't work right now, so
+-	 * simply disable it. In order to make it work properly, we need
+-	 * make sure that:
+-	 *  - conversion of a pud that maps an error hugetlb into hwpoison
+-	 *    entry properly works, and
+-	 *  - other mm code walking over page table is aware of pud-aligned
+-	 *    hwpoison entries.
+-	 */
+-	if (huge_page_size(page_hstate(head)) > PMD_SIZE) {
+-		action_result(pfn, MF_MSG_NON_PMD_HUGE, MF_IGNORED);
+-		res = -EBUSY;
+-		goto out;
+-	}
+-
+ 	if (!hwpoison_user_mappings(p, pfn, flags, head)) {
+ 		action_result(pfn, MF_MSG_UNMAP_FAILED, MF_IGNORED);
+ 		res = -EBUSY;
 -- 
 2.25.1
 

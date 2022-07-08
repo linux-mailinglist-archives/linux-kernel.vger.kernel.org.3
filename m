@@ -2,103 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9227356B0F4
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 05:42:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C290B56B106
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 05:42:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236044AbiGHDXe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Jul 2022 23:23:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55406 "EHLO
+        id S237082AbiGHDZ0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Jul 2022 23:25:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56654 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236951AbiGHDXc (ORCPT
+        with ESMTP id S236630AbiGHDZY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Jul 2022 23:23:32 -0400
-Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C9F072655
-        for <linux-kernel@vger.kernel.org>; Thu,  7 Jul 2022 20:23:29 -0700 (PDT)
-Received: from [10.20.42.19] (unknown [10.20.42.19])
-        by mail.loongson.cn (Coremail) with SMTP id AQAAf9Dx_9Aro8dis4oQAA--.4460S3;
-        Fri, 08 Jul 2022 11:23:23 +0800 (CST)
-Subject: Re: [PATCH V14 03/15] ACPI: irq: Allow acpi_gsi_to_irq() to have an
- arch-specific fallback
-To:     Marc Zyngier <maz@kernel.org>
-Cc:     Thomas Gleixner <tglx@linutronix.de>, linux-kernel@vger.kernel.org,
-        Hanjun Guo <guohanjun@huawei.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Huacai Chen <chenhuacai@loongson.cn>
-References: <1656837932-18257-1-git-send-email-lvjianmin@loongson.cn>
- <1656837932-18257-4-git-send-email-lvjianmin@loongson.cn>
- <878rp5mdq7.wl-maz@kernel.org>
-From:   Jianmin Lv <lvjianmin@loongson.cn>
-Message-ID: <950c7ca4-00f7-7fd2-ec86-1fde871ebba6@loongson.cn>
-Date:   Fri, 8 Jul 2022 11:23:23 +0800
-User-Agent: Mozilla/5.0 (X11; Linux loongarch64; rv:68.0) Gecko/20100101
- Thunderbird/68.7.0
+        Thu, 7 Jul 2022 23:25:24 -0400
+Received: from out199-8.us.a.mail.aliyun.com (out199-8.us.a.mail.aliyun.com [47.90.199.8])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA16074799
+        for <linux-kernel@vger.kernel.org>; Thu,  7 Jul 2022 20:25:22 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R141e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046049;MF=hsiangkao@linux.alibaba.com;NM=1;PH=DS;RN=6;SR=0;TI=SMTPD_---0VIhZoLB_1657250717;
+Received: from B-P7TQMD6M-0146.local(mailfrom:hsiangkao@linux.alibaba.com fp:SMTPD_---0VIhZoLB_1657250717)
+          by smtp.aliyun-inc.com;
+          Fri, 08 Jul 2022 11:25:18 +0800
+Date:   Fri, 8 Jul 2022 11:25:17 +0800
+From:   Gao Xiang <hsiangkao@linux.alibaba.com>
+To:     Guowei Du <duguoweisz@gmail.com>
+Cc:     xiang@kernel.org, chao@kernel.org, linux-erofs@lists.ozlabs.org,
+        linux-kernel@vger.kernel.org, duguowei <duguowei@xiaomi.com>
+Subject: Re: [PATCH 2/2] erofs: sequence each shrink task
+Message-ID: <YsejnaY7cy3SeHBF@B-P7TQMD6M-0146.local>
+References: <20220708031155.21878-1-duguoweisz@gmail.com>
 MIME-Version: 1.0
-In-Reply-To: <878rp5mdq7.wl-maz@kernel.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf9Dx_9Aro8dis4oQAA--.4460S3
-X-Coremail-Antispam: 1UD129KBjvdXoWrtFyDWr48KF1rGr13Ww1rWFg_yoWDCFX_WF
-        sayF1kuw1DAF42ga45XFy5Ar9Fg3yUW3yUGr9xJw4Sq348tayDJF1fWrn3X3ZxArWkCrnI
-        g393Xr4Sk3W0gjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-        9fnUUIcSsGvfJTRUUUb3AFc2x0x2IEx4CE42xK8VAvwI8IcIk0rVWrJVCq3wAFIxvE14AK
-        wVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK021l84ACjcxK6xIIjxv20x
-        vE14v26F1j6w1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4UJVWxJr1l84ACjcxK6I8E
-        87Iv67AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVCY1x0267AKxVW0oVCq3wAS0I0E0xvYzx
-        vE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWU
-        XVWUAwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcVAKI4
-        8JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwCYjI0SjxkI62AI1cAE67vIY487MxkIecxEwVCm
-        -wCF04k20xvY0x0EwIxGrwCF04k20xvE74AGY7Cv6cx26ryrJr1UJwCFx2IqxVCFs4IE7x
-        kEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E
-        67AF67kF1VAFwI0_JF0_Jw1lIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCw
-        CI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6Fyj6rWU
-        JwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCT
-        nIWIevJa73UjIFyTuYvjfUouWlDUUUU
-X-CM-SenderInfo: 5oymxthqpl0qxorr0wxvrqhubq/
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20220708031155.21878-1-duguoweisz@gmail.com>
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Guowei,
 
-
-On 2022/7/7 下午6:14, Marc Zyngier wrote:
-> On Sun, 03 Jul 2022 09:45:20 +0100,
-> Jianmin Lv <lvjianmin@loongson.cn> wrote:
->>
->> From: Marc Zyngier <maz@kernel.org>
->>
->> It appears that the generic version of acpi_gsi_to_irq() doesn't
->> fallback to establishing a mapping if there is no pre-existing
->> one while the x86 version does.
->>
->> While arm64 seems unaffected by it, LoongArch is relying on the x86
->> behaviour. In an effort to prevent new architectures from reinventing
->> the proverbial wheel, provide an optional callback that the arch code
->> can set to restore the x86 behaviour.
->>
->> Hopefully we can eventually get rid of this in the future once
->> the expected behaviour has been clarified.
->>
->> Reported-by: Jianmin Lv <lvjianmin@loongson.cn>
->> Signed-off-by: Marc Zyngier <maz@kernel.org>
->> Signed-off-by: Jianmin Lv <lvjianmin@loongson.cn>
+On Fri, Jul 08, 2022 at 11:11:55AM +0800, Guowei Du wrote:
+> From: duguowei <duguowei@xiaomi.com>
 > 
-> Same thing about this patch. It is your duty to collect the tags when
-> you repost a series.
->
+> Because of 'list_move_tail', if two or more tasks are shrinking, there
+> will be different results for them.
 
-Ok, thanks, I'll add tags from Hanjun.
+Thanks for the patch. Two quick questions:
+ 1) where is the PATCH 1/2;
+ 2) What problem is the current patch trying to resolve...
 
-
-> Thanks,
 > 
-> 	M.
+> For example:
+> After the first round, if shrink_run_no of entry equals run_no of task,
+> task will break directly at the beginning of next round; if they are
+> not equal, task will continue to shrink until encounter one entry
+> which has the same number.
 > 
+> It is difficult to confirm the real results of all tasks, so add a lock
+> to only allow one task to shrink at the same time.
+> 
+> How to test:
+> task1:
+> root#echo 3 > /proc/sys/vm/drop_caches
+> [743071.839051] Call Trace:
+> [743071.839052]  <TASK>
+> [743071.839054]  do_shrink_slab+0x112/0x300
+> [743071.839058]  shrink_slab+0x211/0x2a0
+> [743071.839060]  drop_slab+0x72/0xe0
+> [743071.839061]  drop_caches_sysctl_handler+0x50/0xb0
+> [743071.839063]  proc_sys_call_handler+0x173/0x250
+> [743071.839066]  proc_sys_write+0x13/0x20
+> [743071.839067]  new_sync_write+0x104/0x180
+> [743071.839070]  ? send_command+0xe0/0x270
+> [743071.839073]  vfs_write+0x247/0x2a0
+> [743071.839074]  ksys_write+0xa7/0xe0
+> [743071.839075]  ? fpregs_assert_state_consistent+0x23/0x50
+> [743071.839078]  __x64_sys_write+0x1a/0x20
+> [743071.839079]  do_syscall_64+0x3a/0x80
+> [743071.839081]  entry_SYSCALL_64_after_hwframe+0x46/0xb0
+> 
+> task2:
+> root#echo 3 > /proc/sys/vm/drop_caches
+> [743079.843214] Call Trace:
+> [743079.843214]  <TASK>
+> [743079.843215]  do_shrink_slab+0x112/0x300
+> [743079.843219]  shrink_slab+0x211/0x2a0
+> [743079.843221]  drop_slab+0x72/0xe0
+> [743079.843222]  drop_caches_sysctl_handler+0x50/0xb0
+> [743079.843224]  proc_sys_call_handler+0x173/0x250
+> [743079.843227]  proc_sys_write+0x13/0x20
+> [743079.843228]  new_sync_write+0x104/0x180
+> [743079.843231]  ? send_command+0xe0/0x270
+> [743079.843233]  vfs_write+0x247/0x2a0
+> [743079.843234]  ksys_write+0xa7/0xe0
+> [743079.843235]  ? fpregs_assert_state_consistent+0x23/0x50
+> [743079.843238]  __x64_sys_write+0x1a/0x20
+> [743079.843239]  do_syscall_64+0x3a/0x80
+> [743079.843241]  entry_SYSCALL_64_after_hwframe+0x46/0xb0
+> 
+> Signed-off-by: duguowei <duguowei@xiaomi.com>
+> ---
+>  fs/erofs/utils.c | 16 ++++++++++------
+>  1 file changed, 10 insertions(+), 6 deletions(-)
+> 
+> diff --git a/fs/erofs/utils.c b/fs/erofs/utils.c
+> index ec9a1d780dc1..9eca13a7e594 100644
+> --- a/fs/erofs/utils.c
+> +++ b/fs/erofs/utils.c
+> @@ -186,6 +186,8 @@ static unsigned int shrinker_run_no;
+>  
+>  /* protects the mounted 'erofs_sb_list' */
+>  static DEFINE_SPINLOCK(erofs_sb_list_lock);
+> +/* sequence each shrink task */
+> +static DEFINE_SPINLOCK(erofs_sb_shrink_lock);
+>  static LIST_HEAD(erofs_sb_list);
+>  
+>  void erofs_shrinker_register(struct super_block *sb)
+> @@ -226,13 +228,14 @@ static unsigned long erofs_shrink_scan(struct shrinker *shrink,
+>  	struct list_head *p;
+>  
+>  	unsigned long nr = sc->nr_to_scan;
+> -	unsigned int run_no;
+>  	unsigned long freed = 0;
+>  
+> +	spin_lock(&erofs_sb_shrink_lock);
 
+Btw, we cannot make the whole shrinker under one spin_lock.
+
+Thanks,
+Gao Xiang

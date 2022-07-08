@@ -2,122 +2,156 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 83F9856BDD3
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 18:08:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B8F456BDAA
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 18:08:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238756AbiGHPv4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Jul 2022 11:51:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36684 "EHLO
+        id S238874AbiGHPwc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Jul 2022 11:52:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36862 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237623AbiGHPvx (ORCPT
+        with ESMTP id S238687AbiGHPwY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Jul 2022 11:51:53 -0400
-Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C12A273922
-        for <linux-kernel@vger.kernel.org>; Fri,  8 Jul 2022 08:51:51 -0700 (PDT)
-Received: by mail-ej1-x631.google.com with SMTP id d2so38452715ejy.1
-        for <linux-kernel@vger.kernel.org>; Fri, 08 Jul 2022 08:51:51 -0700 (PDT)
+        Fri, 8 Jul 2022 11:52:24 -0400
+Received: from mail-lj1-x236.google.com (mail-lj1-x236.google.com [IPv6:2a00:1450:4864:20::236])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95C0374358
+        for <linux-kernel@vger.kernel.org>; Fri,  8 Jul 2022 08:52:23 -0700 (PDT)
+Received: by mail-lj1-x236.google.com with SMTP id q7so4050254lji.12
+        for <linux-kernel@vger.kernel.org>; Fri, 08 Jul 2022 08:52:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20210112.gappssmtp.com; s=20210112;
+        d=google.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=y6xprDpcoZOGJDj+kaMmTTKPyjy0F33A9f2Olt1+Xws=;
-        b=v9hyV+haJfHpcHdA8b+dErnqxVGVjmEgLJE/af5R8VMDAXP8sPp5Yp3p8IU4Jo+7Rt
-         nHR5lgvsPZ1nT+wkRwW7EojB+UukkdYqKqq54JELDI3vgTB/XKQF2ELOYcWWq8DBcqzl
-         OpizpvkE+T159NNENJqqYY4LGqn2if7Pt9S99IDEjJLgU8RPbijnPJBgiwZSIakZvNfW
-         /nPfwi+XNCCAsThBbL/NemE2egw5L7mJkdZ9HPuHqczDoZfFFLnDfgYGCEin73g2K/BC
-         wU1UgqieyoWYiV5GD7WN/5M+Q3wIJcUwTOIFzWZjhvtPUvZ9XmSTwUaY8Yj/Y3x09NaG
-         /KBg==
+        bh=Ig0fLrjOD+WwRJX7jkWejWy3+d6k4pKBLJTMMKQa5iw=;
+        b=Mqyh4QjFFCuoyNFr0CN3GLBew8pB06B9rmKexH6PXBNdnsPjA5Md58/XIpQPVB/SNx
+         Fdg8T4Ihda5R1AerM47HKWqBiOFLE8uPspnFzm+sW8yi7Ohju85s8b7XnBWV0CHYkWUC
+         48mFRh6Ylo+QzrkP4bYNWMtxoR3Ao8BN4JbJKfy8P0TgVyJUqoX+wX1i7U0gDsQt5w00
+         n6vsEzz7vAVsXrPjUbIBtNB+N5rdmQt3277QmVWNukYdf5ZT/tPO1sUDJzL2oM3okjyQ
+         FV4gg0QAMhTV3U3YiD9rXSbc9NVfTiYmcX6Nc+slay1zNuSVWQs6lf2ecXGwhwCJTuIa
+         pXBQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=y6xprDpcoZOGJDj+kaMmTTKPyjy0F33A9f2Olt1+Xws=;
-        b=KzamG4eLfnDot37QsqGlYFm0uN/88XwqLgKPkZizbLiru1lh68DCwSjkLwcyqPALJV
-         3d6VcITYDPRk7F9wkBhZhaoK43MiL35ANNFd3alOFrJ7dl7Li542hKWUguZSsEJYzD9W
-         JS5j3/zO0W1hdGuDHzAqHrL44FfjEqvLYcKy6gRYhQGWKmlycPoTnMB9DEf8eGUcUygB
-         1DU0qXO2WKCIzVMXNkLf6Oh9mby9mXdTHjeoPa9OhHuB6dJ9PtYFkHTAM1+it01hq22I
-         Ql364JoIvypvj79+xgE1WKsAYp2xZLZ8mIvV1asvxvGVJmY5iG1J8/WNZAbFKJVlNkLT
-         S79w==
-X-Gm-Message-State: AJIora/OlNSUNjhFwgPu0/D0I5+/wxDE9I316Jgr7brwirIBSeyM4BS6
-        OpNxdxT0VdeCuZi3NzcD12YRrpqXLrR8PDkDIKhORQ==
-X-Google-Smtp-Source: AGRyM1su54Ku1qAjLu703d2IlpS702M7iuveg+SxBer7m6gSk7OkVFUZS1QfaeXnF5yXi0HSRKfz2jppaC02eDxApTw=
-X-Received: by 2002:a17:907:60cc:b0:722:e564:eb11 with SMTP id
- hv12-20020a17090760cc00b00722e564eb11mr4152727ejc.736.1657295510287; Fri, 08
- Jul 2022 08:51:50 -0700 (PDT)
+        bh=Ig0fLrjOD+WwRJX7jkWejWy3+d6k4pKBLJTMMKQa5iw=;
+        b=bwWQ5imt4SlM2iXItBfDTSYd7QsDb+8wDU3MWVXAReLv++lPtowuqSQ7iDbTMQDlTg
+         bVk+HiPab0o9WhWxIml1ozT8oaLXiv0OTp2uPwHjfaMpMJXVKbg1fRDk8GE8zQRBct+n
+         pjqUyYpDePtfHPkcuMTxbOFvzuieAHOWTfgou3iY38wr35ODuaCm6y6diQNSNHC1PbMo
+         kjsycQ6EvbfJe12p/qJMdvRjWxvd7b+Fo3KtqscrN6M2J6q9RB2T8Xv+kFPfyEPEMa71
+         rp4l8kqt+8wxooQydZ5BBhrsA5PQTWOY1ns0nXawyAJWpognHkpkWP+uNQjdLWPbaaHa
+         4Sjw==
+X-Gm-Message-State: AJIora+mNX6Wn2K0UKdnHw6q99RWTN8XVZj3UyhAcg+Dm6ESpOXbW/jy
+        KD3aJlfS2/y8NymSmz9RX1am7lVezS/WIrIEeQZZJQ==
+X-Google-Smtp-Source: AGRyM1ugMc7DOpiIBjn/5wZrEmy+dmJqdHB2WXpFBf34um1n4FQVNb4QbC6I50CLT1WURSb9AoEHk6VCeeVSYQgB6NM=
+X-Received: by 2002:a2e:7006:0:b0:25c:3f3c:c6dc with SMTP id
+ l6-20020a2e7006000000b0025c3f3cc6dcmr2272781ljc.469.1657295541820; Fri, 08
+ Jul 2022 08:52:21 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220707182314.66610-1-prabhakar.mahadev-lad.rj@bp.renesas.com> <20220707182314.66610-2-prabhakar.mahadev-lad.rj@bp.renesas.com>
-In-Reply-To: <20220707182314.66610-2-prabhakar.mahadev-lad.rj@bp.renesas.com>
-From:   Bartosz Golaszewski <brgl@bgdev.pl>
-Date:   Fri, 8 Jul 2022 17:51:39 +0200
-Message-ID: <CAMRc=McXyNk8r0bhAVKWY71+zXjDB-5wD4sx7pXjiBkLutsb8Q@mail.gmail.com>
-Subject: Re: [PATCH v8 1/6] gpio: Remove dynamic allocation from populate_parent_alloc_arg()
-To:     Prabhakar <prabhakar.csengg@gmail.com>
-Cc:     Marc Zyngier <maz@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        devicetree <devicetree@vger.kernel.org>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Biju Das <biju.das.jz@bp.renesas.com>,
-        Daniel Palmer <daniel@thingy.jp>,
-        Romain Perier <romain.perier@gmail.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Robert Richter <rric@kernel.org>,
-        Nobuhiro Iwamatsu <nobuhiro1.iwamatsu@toshiba.co.jp>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>
+References: <20220624173656.2033256-1-jthoughton@google.com>
+ <20220624173656.2033256-11-jthoughton@google.com> <CAHS8izNO+4Nzg=rgr1R027i2Evo-UKiFEK1gQcMHtF8uxcHzeQ@mail.gmail.com>
+In-Reply-To: <CAHS8izNO+4Nzg=rgr1R027i2Evo-UKiFEK1gQcMHtF8uxcHzeQ@mail.gmail.com>
+From:   James Houghton <jthoughton@google.com>
+Date:   Fri, 8 Jul 2022 08:52:10 -0700
+Message-ID: <CADrL8HWuDZKf+9ERzNGNqneEdotSnKHf7cqZs0enVJj30gOULw@mail.gmail.com>
+Subject: Re: [RFC PATCH 10/26] hugetlb: add for_each_hgm_shift
+To:     Mina Almasry <almasrymina@google.com>
+Cc:     Mike Kravetz <mike.kravetz@oracle.com>,
+        Muchun Song <songmuchun@bytedance.com>,
+        Peter Xu <peterx@redhat.com>,
+        David Hildenbrand <david@redhat.com>,
+        David Rientjes <rientjes@google.com>,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        Jue Wang <juew@google.com>,
+        Manish Mishra <manish.mishra@nutanix.com>,
+        "Dr . David Alan Gilbert" <dgilbert@redhat.com>,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jul 7, 2022 at 8:24 PM <prabhakar.csengg@gmail.com> wrote:
+On Tue, Jun 28, 2022 at 2:58 PM Mina Almasry <almasrymina@google.com> wrote:
 >
-> From: Marc Zyngier <maz@kernel.org>
+> On Fri, Jun 24, 2022 at 10:37 AM James Houghton <jthoughton@google.com> wrote:
+> >
+> > This is a helper macro to loop through all the usable page sizes for a
+> > high-granularity-enabled HugeTLB VMA. Given the VMA's hstate, it will
+> > loop, in descending order, through the page sizes that HugeTLB supports
+> > for this architecture; it always includes PAGE_SIZE.
+> >
+> > Signed-off-by: James Houghton <jthoughton@google.com>
+> > ---
+> >  mm/hugetlb.c | 10 ++++++++++
+> >  1 file changed, 10 insertions(+)
+> >
+> > diff --git a/mm/hugetlb.c b/mm/hugetlb.c
+> > index 8b10b941458d..557b0afdb503 100644
+> > --- a/mm/hugetlb.c
+> > +++ b/mm/hugetlb.c
+> > @@ -6989,6 +6989,16 @@ bool hugetlb_hgm_enabled(struct vm_area_struct *vma)
+> >         /* All shared VMAs have HGM enabled. */
+> >         return vma->vm_flags & VM_SHARED;
+> >  }
+> > +static unsigned int __shift_for_hstate(struct hstate *h)
+> > +{
+> > +       if (h >= &hstates[hugetlb_max_hstate])
+> > +               return PAGE_SHIFT;
 >
-> The gpiolib is unique in the way it uses intermediate fwspecs
-> when feeding an interrupt specifier to the parent domain, as it
-> relies on the populate_parent_alloc_arg() callback to perform
-> a dynamic allocation.
->
-> This is pretty inefficient (we free the structure almost immediately),
-> and the only reason this isn't a stack allocation is that our
-> ThunderX friend uses MSIs rather than a FW-constructed structure.
->
-> Let's solve it by providing a new type composed of the union
-> of a struct irq_fwspec and a msi_info_t, which satisfies both
-> requirements. This allows us to use a stack allocation, and we
-> can move the handful of users to this new scheme.
->
-> Also perform some additional cleanup, such as getting rid of the
-> stub versions of the irq_domain_translate_*cell helpers, which
-> are never used when CONFIG_IRQ_DOMAIN_HIERARCHY isn't selected.
->
-> Tested on a Tegra186.
->
-> Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
-> Signed-off-by: Marc Zyngier <maz@kernel.org>
-> Cc: Daniel Palmer <daniel@thingy.jp>
-> Cc: Romain Perier <romain.perier@gmail.com>
-> Cc: Bartosz Golaszewski <brgl@bgdev.pl>
-> Cc: Thierry Reding <thierry.reding@gmail.com>
-> Cc: Jonathan Hunter <jonathanh@nvidia.com>
-> Cc: Robert Richter <rric@kernel.org>
-> Cc: Nobuhiro Iwamatsu <nobuhiro1.iwamatsu@toshiba.co.jp>
-> Cc: Andy Gross <agross@kernel.org>
-> Cc: Bjorn Andersson <bjorn.andersson@linaro.org>
-> ---
+> h > &hstates[hugetlb_max_hstate] means that h is out of bounds, no? am
+> I missing something here?
 
-Acked-by: Bartosz Golaszewski <brgl@bgdev.pl>
+Yeah, it goes out of bounds intentionally. Maybe I should have called
+this out. We need for_each_hgm_shift to include PAGE_SHIFT, and there
+is no hstate for it. So to handle it, we iterate past the end of the
+hstate array, and when we are past the end, we return PAGE_SHIFT and
+stop iterating further. This is admittedly kind of gross; if you have
+other suggestions for a way to get a clean `for_each_hgm_shift` macro
+like this, I'm all ears. :)
+
+>
+> So is this intending to do:
+>
+> if (h == hstates[hugetlb_max_hstate]
+>     return PAGE_SHIFT;
+>
+> ? If so, could we write it as so?
+
+Yeah, this works. I'll write it this way instead. If that condition is
+true, `h` is out of bounds (`hugetlb_max_hstate` is past the end, not
+the index for the final element). I guess `hugetlb_max_hstate` is a
+bit of a misnomer.
+
+>
+> I'm also wondering why __shift_for_hstate(hstate[hugetlb_max_hstate])
+> == PAGE_SHIFT? Isn't the last hstate the smallest hstate which should
+> be 2MB on x86? Shouldn't this return PMD_SHIFT in that case?
+
+`huge_page_shift(hstate[hugetlb_max_hstate-1])` is PMD_SHIFT on x86.
+Actually reading `hstate[hugetlb_max_hstate]` would be bad, which is
+why `__shift_for_hstate` exists: to return PAGE_SIZE when we would
+otherwise attempt to compute
+`huge_page_shift(hstate[hugetlb_max_hstate])`.
+
+>
+> > +       return huge_page_shift(h);
+> > +}
+> > +#define for_each_hgm_shift(hstate, tmp_h, shift) \
+> > +       for ((tmp_h) = hstate; (shift) = __shift_for_hstate(tmp_h), \
+> > +                              (tmp_h) <= &hstates[hugetlb_max_hstate]; \
+
+Note the <= here. If we wanted to always remain inbounds here, we'd
+want < instead. But we don't have an hstate for PAGE_SIZE.
+
+> > +                              (tmp_h)++)
+> >  #endif /* CONFIG_HUGETLB_HIGH_GRANULARITY_MAPPING */
+> >
+> >  /*
+> > --
+> > 2.37.0.rc0.161.g10f37bed90-goog
+> >

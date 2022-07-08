@@ -2,57 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D01B656B1E5
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 07:00:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D7A8956B208
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 07:01:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237368AbiGHEth (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Jul 2022 00:49:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51622 "EHLO
+        id S237400AbiGHEtx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Jul 2022 00:49:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51656 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237328AbiGHEtY (ORCPT
+        with ESMTP id S237377AbiGHEtY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 8 Jul 2022 00:49:24 -0400
-Received: from mail-pf1-x44a.google.com (mail-pf1-x44a.google.com [IPv6:2607:f8b0:4864:20::44a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 459F376E89
-        for <linux-kernel@vger.kernel.org>; Thu,  7 Jul 2022 21:49:17 -0700 (PDT)
-Received: by mail-pf1-x44a.google.com with SMTP id a127-20020a624d85000000b00525950b1feeso8456179pfb.0
-        for <linux-kernel@vger.kernel.org>; Thu, 07 Jul 2022 21:49:17 -0700 (PDT)
+Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BE9E76EAF
+        for <linux-kernel@vger.kernel.org>; Thu,  7 Jul 2022 21:49:21 -0700 (PDT)
+Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-31c936387fbso94006627b3.2
+        for <linux-kernel@vger.kernel.org>; Thu, 07 Jul 2022 21:49:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=date:in-reply-to:message-id:mime-version:references:subject:from:to
          :cc;
-        bh=1A6qYqJKHf9NGGZzmDub8k30/R66by5jlEKXrPXJj44=;
-        b=SucqxFgX5rzmSoqNlZU2wpXRBbbPqhJVl8kphJxPAiVmOyq1RCb6fPcIgZTCECgvWY
-         ZvzyzFgvUUwI2OfgQCMK/ZMVW2DbcyvoVaCjOIk3Dd9X8NddhS2BqOJEBFi1zlZGoDG9
-         cBp+bBfHNgKW5bcgTDicUBNuURnwtK5JpSMpAudRip2/A0kgo09arl5cIxAqSggphD5h
-         DlmAsg0XbQxTyWvCbiLSwdJ7D5fZkkDKn5z2B8yBbrjY7kie+eVqFCLQ95btr4MHp9KJ
-         IkZ7oBqL3WHolRgwyxaP4j7aA4VVLVZ/jpHzsbqbpei9/XO0E7tMb7v8AsWgJnbkvxSx
-         KOIg==
+        bh=6xul3k/V0LAkdN8g3oGpIo31VJu1MYmTbIXu79NJSDg=;
+        b=aDpNy+75E3mcPP7KBpLgdT1SAr2dHsw4eslbdLBX/r7lYjiVoZ5cmPc2M43Pj11P3f
+         kch7BTM4NXRiKbDt1CEtWwTky4QK7BNwrceAWe9L9iFHFzGmyZzFCSebngXHlz23wP07
+         8Zc9T9OuQq6Yx/2mKR3gkcZLHi1ZzV/cJBz8V4q8XyVlgDx7yYZfuO9k0BvSms5Mwipp
+         7XBGBkrrqobYx+QyXkcvyy3n/4lqHSpK6HIVBByT1kcqKGdFNhBYVXNiyaG+gXOukYDq
+         zHsgIg6IueqEnTtY1qwpCH6I9VzIQaGjYPPtIk8pdO9eXemcYgGF58/en3Ub4BCrsYgi
+         tOZQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:in-reply-to:message-id:mime-version
          :references:subject:from:to:cc;
-        bh=1A6qYqJKHf9NGGZzmDub8k30/R66by5jlEKXrPXJj44=;
-        b=cF9r/Z3EPlv9B7Tiz9KJ8BDEJnFLFWs8pRBHcuY8YNeNdyMWLNngNYT4V3tdVR+6hB
-         iwcptgsOmYakvZK+0+nPOgFGHKMCFL/pJy3EUJe7nCHSYMjKTOiHLHO+ugs9svi5B+EG
-         oDR8eqcFw0lIpXLY074edI0IPnR6jU9RSzy0Mtk+DD8STClIujuH4G+5PisjL6eXg9Qo
-         MC+SAPWLXNvwfFShLNmkjaN59wKuTs0SoH7+IOhPob6VMBBhU5kUcLN9DZmBoefHjsO8
-         o7/qLW6GGcYqaX0UcWVP4NUPNGz1IXAxF64X+G/uYG0vyNfSMX/cUHCtEo6vHg4Q0YzF
-         Qafw==
-X-Gm-Message-State: AJIora+9s7EEQrUAJXUDuAzp1OJyEm6vkkxSYU5WQ38tNi4dJ6h1ZXQB
-        oRnE0oAiGI16GaXCDd3QlUUNh1LqTVZnVw==
-X-Google-Smtp-Source: AGRyM1sNiqa//ZLeKy8OfqscWC5TleJ9FjN0cVegp4W+XLXK7wRYhByeorgwSFiNKTOHYZCDeoM1MTU2M/LAsw==
+        bh=6xul3k/V0LAkdN8g3oGpIo31VJu1MYmTbIXu79NJSDg=;
+        b=nCCchZ++mY2yLgnA5jLfsHCc5CKNu4icUfznBO0V+JCPsaoEumEPrSqnAG9QL3tfHH
+         6dL5T4Qd3D49Ej7renfsMPt8MiHVb/agxCmqbHeZFo+qxEkMhrRtGgiT+Wm7aJxJYOCE
+         42ssc8utq09IbFqBsopjpe1IRv27wCfd5gZ4fiWUbllXDIagsSonPDeqeo6fkOXKtr42
+         e6kZZtFsYFX+WcIXRjS893m4aSv6KtJh6mzAVjOz1yNg9AsVb6L8ABi7fANhs9vqAKyJ
+         B1+q7K4VwpUMroYC4GQurKcg9YSNENnvp/3MZCL/RmVXRRNIRm+f67pUXCs7SsLhal4H
+         vlRQ==
+X-Gm-Message-State: AJIora8j23cE5lExS35uES9YgHyBTfqAd/V1gJgt+Aq00BPSjQIPuoNN
+        Yskcu5cleTloUDDh41L+1pwARvgkT3UAtg==
+X-Google-Smtp-Source: AGRyM1vYICx6sgyLY0eIH4w2y44yetzDaPhW0JYcwhxcz1tqUNq1ZpnKz/fW69P77v4SNqIXkp2pqBHUOkQkNg==
 X-Received: from slicestar.c.googlers.com ([fda3:e722:ac3:cc00:4f:4b78:c0a8:20a1])
- (user=davidgow job=sendgmr) by 2002:a17:90a:249:b0:1e0:a8a3:3c6c with SMTP id
- t9-20020a17090a024900b001e0a8a33c6cmr4643pje.0.1657255756113; Thu, 07 Jul
- 2022 21:49:16 -0700 (PDT)
-Date:   Fri,  8 Jul 2022 12:48:46 +0800
+ (user=davidgow job=sendgmr) by 2002:a05:6902:1508:b0:66d:212e:78c0 with SMTP
+ id q8-20020a056902150800b0066d212e78c0mr1657158ybu.184.1657255761071; Thu, 07
+ Jul 2022 21:49:21 -0700 (PDT)
+Date:   Fri,  8 Jul 2022 12:48:47 +0800
 In-Reply-To: <20220708044847.531566-1-davidgow@google.com>
-Message-Id: <20220708044847.531566-3-davidgow@google.com>
+Message-Id: <20220708044847.531566-4-davidgow@google.com>
 Mime-Version: 1.0
 References: <20220708044847.531566-1-davidgow@google.com>
 X-Mailer: git-send-email 2.37.0.rc0.161.g10f37bed90-goog
-Subject: [PATCH v6 3/4] kunit: Taint the kernel when KUnit tests are run
+Subject: [PATCH v6 4/4] selftest: Taint kernel when test module loaded
 From:   David Gow <davidgow@google.com>
 To:     Brendan Higgins <brendanhiggins@google.com>,
         Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
@@ -90,77 +90,113 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Make KUnit trigger the new TAINT_TEST taint when any KUnit test is run.
-Due to KUnit tests not being intended to run on production systems, and
-potentially causing problems (or security issues like leaking kernel
-addresses), the kernel's state should not be considered safe for
-production use after KUnit tests are run.
+Make any kselftest test module (using the kselftest_module framework)
+taint the kernel with TAINT_TEST on module load.
 
-This both marks KUnit modules as test modules using MODULE_INFO() and
-manually taints the kernel when tests are run (which catches builtin
-tests).
+Also mark the module as a test module using MODULE_INFO(test, "Y") so
+that other tools can tell this is a test module. We can't rely solely
+on this, though, as these test modules are also often built-in.
 
-Acked-by: Luis Chamberlain <mcgrof@kernel.org>
-Tested-by: Daniel Latypov <dlatypov@google.com>
-Reviewed-by: Brendan Higgins <brendanhiggins@google.com>
+Finally, update the kselftest documentation to mention that the kernel
+should be tainted, and how to do so manually (as below).
+
+Note that several selftests use kernel modules which are not based on
+the kselftest_module framework, and so will not automatically taint the
+kernel.
+
+This can be done in two ways:
+- Moving the module to the tools/testing directory. All modules under
+  this directory will taint the kernel.
+- Adding the 'test' module property with:
+  MODULE_INFO(test, "Y")
+
+Similarly, selftests which do not load modules into the kernel generally
+should not taint the kernel (or possibly should only do so on failure),
+as it's assumed that testing from user-space should be safe. Regardless,
+they can write to /proc/sys/kernel/tainted if required.
+
+Reviewed-by: Luis Chamberlain <mcgrof@kernel.org>
+Acked-by: Brendan Higgins <brendanhiggins@google.com>
 Signed-off-by: David Gow <davidgow@google.com>
 ---
 
-No changes since v5:
-https://lore.kernel.org/linux-kselftest/20220702040959.3232874-3-davidgow@google.com/
+Changes since v5:
+https://lore.kernel.org/linux-kselftest/20220702040959.3232874-4-davidgow@google.com/
+- Add Brendan's Acked-by tag.
 
-No changes since v4:
-https://lore.kernel.org/linux-kselftest/20220701084744.3002019-3-davidgow@google.com/
+Changes since v4:
+https://lore.kernel.org/lkml/20220513083212.3537869-3-davidgow@google.com/
+- Actually use the new TAINT_TEST name, instead of TAINT_KUNIT
+(Thanks, kernel-test-robot)
+- Document how to use this (or MODULE_INFO()) to taint the kernel.
+(Thanks, Luis)
+- Also add MODULE_INFO(test, "Y") to embed the fact that this is a
+test module into the .ko
+  - Nothing depends on it now, but it should allow us to tell this is
+a test module without executing it in the future.
 
-Changes since v3:
-https://lore.kernel.org/lkml/20220513083212.3537869-2-davidgow@google.com/
-- Use MODULE_INFO() for KUnit modules.
-  - This is technically redundant, as the KUnit executor will taint the
-    kernel when _any_ KUnit tests are run, but may be useful if some
-    other tool will parse the 'test' property.
-- Add {Acked,Tested,Reviewed}-by tags.
+No changes since v3:
+https://lore.kernel.org/lkml/20220513083212.3537869-3-davidgow@google.com/
 
 ---
- include/kunit/test.h | 3 ++-
- lib/kunit/test.c     | 4 ++++
- 2 files changed, 6 insertions(+), 1 deletion(-)
+ Documentation/dev-tools/kselftest.rst      | 9 +++++++++
+ tools/testing/selftests/kselftest_module.h | 4 ++++
+ 2 files changed, 13 insertions(+)
 
-diff --git a/include/kunit/test.h b/include/kunit/test.h
-index 8ffcd7de9607..ccae848720dc 100644
---- a/include/kunit/test.h
-+++ b/include/kunit/test.h
-@@ -277,7 +277,8 @@ static inline int kunit_run_all_tests(void)
- 	{								\
- 		return __kunit_test_suites_exit(__suites);		\
- 	}								\
--	module_exit(kunit_test_suites_exit)
-+	module_exit(kunit_test_suites_exit)				\
-+	MODULE_INFO(test, "Y");
- #else
- #define kunit_test_suites_for_module(__suites)
- #endif /* MODULE */
-diff --git a/lib/kunit/test.c b/lib/kunit/test.c
-index a5053a07409f..8b11552dc215 100644
---- a/lib/kunit/test.c
-+++ b/lib/kunit/test.c
-@@ -11,6 +11,7 @@
- #include <kunit/test-bug.h>
- #include <linux/kernel.h>
- #include <linux/moduleparam.h>
-+#include <linux/panic.h>
- #include <linux/sched/debug.h>
- #include <linux/sched.h>
+diff --git a/Documentation/dev-tools/kselftest.rst b/Documentation/dev-tools/kselftest.rst
+index a833ecf12fbc..1096a9833550 100644
+--- a/Documentation/dev-tools/kselftest.rst
++++ b/Documentation/dev-tools/kselftest.rst
+@@ -250,6 +250,14 @@ assist writing kernel modules that are for use with kselftest:
+ - ``tools/testing/selftests/kselftest_module.h``
+ - ``tools/testing/selftests/kselftest/module.sh``
  
-@@ -501,6 +502,9 @@ int kunit_run_tests(struct kunit_suite *suite)
- 	struct kunit_result_stats suite_stats = { 0 };
- 	struct kunit_result_stats total_stats = { 0 };
- 
-+	/* Taint the kernel so we know we've run tests. */
-+	add_taint(TAINT_TEST, LOCKDEP_STILL_OK);
++Note that test modules should taint the kernel with TAINT_TEST. This will
++happen automatically for modules which are in the ``tools/testing/``
++directory, or for modules which use the ``kselftest_module.h`` header above.
++Otherwise, you'll need to add ``MODULE_INFO(test, "Y")`` to your module
++source. selftests which do not load modules typically should not taint the
++kernel, but in cases where a non-test module is loaded, TEST_TAINT can be
++applied from userspace by writing to ``/proc/sys/kernel/tainted``.
 +
- 	if (suite->suite_init) {
- 		suite->suite_init_err = suite->suite_init(suite);
- 		if (suite->suite_init_err) {
+ How to use
+ ----------
+ 
+@@ -308,6 +316,7 @@ A bare bones test module might look like this:
+    KSTM_MODULE_LOADERS(test_foo);
+    MODULE_AUTHOR("John Developer <jd@fooman.org>");
+    MODULE_LICENSE("GPL");
++   MODULE_INFO(test, "Y");
+ 
+ Example test script
+ -------------------
+diff --git a/tools/testing/selftests/kselftest_module.h b/tools/testing/selftests/kselftest_module.h
+index e2ea41de3f35..63cd7487373f 100644
+--- a/tools/testing/selftests/kselftest_module.h
++++ b/tools/testing/selftests/kselftest_module.h
+@@ -3,6 +3,7 @@
+ #define __KSELFTEST_MODULE_H
+ 
+ #include <linux/module.h>
++#include <linux/panic.h>
+ 
+ /*
+  * Test framework for writing test modules to be loaded by kselftest.
+@@ -41,6 +42,7 @@ static inline int kstm_report(unsigned int total_tests, unsigned int failed_test
+ static int __init __module##_init(void)			\
+ {							\
+ 	pr_info("loaded.\n");				\
++	add_taint(TAINT_TEST, LOCKDEP_STILL_OK);	\
+ 	selftest();					\
+ 	return kstm_report(total_tests, failed_tests, skipped_tests);	\
+ }							\
+@@ -51,4 +53,6 @@ static void __exit __module##_exit(void)		\
+ module_init(__module##_init);				\
+ module_exit(__module##_exit)
+ 
++MODULE_INFO(test, "Y");
++
+ #endif	/* __KSELFTEST_MODULE_H */
 -- 
 2.37.0.rc0.161.g10f37bed90-goog
 

@@ -2,68 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3389756B8BF
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 13:43:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E08A656B8BE
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 13:43:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237865AbiGHLkf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Jul 2022 07:40:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37188 "EHLO
+        id S237238AbiGHLkw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Jul 2022 07:40:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37386 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231533AbiGHLkd (ORCPT
+        with ESMTP id S237704AbiGHLkt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Jul 2022 07:40:33 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 70E3122BF4
-        for <linux-kernel@vger.kernel.org>; Fri,  8 Jul 2022 04:40:32 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 5ACE61063;
-        Fri,  8 Jul 2022 04:40:32 -0700 (PDT)
-Received: from bogus (unknown [10.57.39.193])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id EAF3D3F70D;
-        Fri,  8 Jul 2022 04:40:26 -0700 (PDT)
-Date:   Fri, 8 Jul 2022 12:39:15 +0100
-From:   Sudeep Holla <sudeep.holla@arm.com>
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     Geert Uytterhoeven <geert@linux-m68k.org>,
-        Conor Dooley <Conor.Dooley@microchip.com>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Palmer Dabbelt <palmer@rivosinc.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Daire.McNamara@microchip.com,
-        Niklas Cassel <niklas.cassel@wdc.com>,
-        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
-        Zong Li <zong.li@sifive.com>,
-        Emil Renner Berthing <kernel@esmil.dk>, hahnjo@hahnjo.de,
-        Guo Ren <guoren@kernel.org>, Anup Patel <anup@brainfault.org>,
-        Atish Patra <atishp@atishpatra.org>, changbin.du@intel.com,
-        Heiko Stuebner <heiko@sntech.de>, philipp.tomsich@vrull.eu,
-        Rob Herring <robh@kernel.org>, Marc Zyngier <maz@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Brice.Goglin@inria.fr
-Subject: Re: [RFC 2/4] arch-topology: add a default implementation of
- store_cpu_topology()
-Message-ID: <20220708113915.ui77mgqckjzalwlh@bogus>
-References: <20220707220436.4105443-1-mail@conchuod.ie>
- <20220707220436.4105443-3-mail@conchuod.ie>
- <20220708082443.azoqvuj7afrg7ox7@bogus>
- <473e6b17-465b-3d14-b04d-01b187390e66@microchip.com>
- <20220708092100.c6mgmnt7e2k7u634@bogus>
- <CAMuHMdXUjmG9n3BuRAz_irkmHQbp=7SYxe5VEfOhMdT4D2JfwQ@mail.gmail.com>
- <20220708094710.rxk6flrueegdsggr@bogus>
- <YsgA/eycDF9TgCIT@kroah.com>
+        Fri, 8 Jul 2022 07:40:49 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C749C20F5A;
+        Fri,  8 Jul 2022 04:40:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1657280448; x=1688816448;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=ZdDYQxLCE/FVW3YmiAHPRARr9uSRhV0hY5cuMuzEJx0=;
+  b=MMTD1AIMtYlwPfte9/38kC20k2FtoXUpaZy+BPdvuVHGYGMoAPoAoujn
+   iD2NWJ/l9ZXMph21xw/zbaNy4HAYL9lWSYYZ1zvDezTIpb0y0bNtNbId+
+   7DgK110b14bvvbnhY7si9xPKA/jk0RbSl+mWGJG+dhkGYtIUpMS5s1xtc
+   ihJugeLXqNGu+nmy1sIRUFboB3NY6g+7i5Zta+U1DeS4qj5mo8TynNBIe
+   OLhSlYzwIAtlNgcp+lse7beIltITi0Ktg/0zI0zIOGZbf+JrHyU4MXcz+
+   4isKtH/Z7nDqZA0HAoowNXRA5oFRe8uETqw4CCBW20Brsslf1MlWjZddJ
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10401"; a="348246301"
+X-IronPort-AV: E=Sophos;i="5.92,255,1650956400"; 
+   d="scan'208";a="348246301"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jul 2022 04:40:48 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.92,255,1650956400"; 
+   d="scan'208";a="626681120"
+Received: from lkp-server01.sh.intel.com (HELO 68b931ab7ac1) ([10.239.97.150])
+  by orsmga001.jf.intel.com with ESMTP; 08 Jul 2022 04:40:46 -0700
+Received: from kbuild by 68b931ab7ac1 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1o9mLl-000NPf-Cc;
+        Fri, 08 Jul 2022 11:40:45 +0000
+Date:   Fri, 8 Jul 2022 19:40:28 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Bhupesh Sharma <bhupesh.sharma@linaro.org>,
+        linux-pm@vger.kernel.org
+Cc:     kbuild-all@lists.01.org, bhupesh.sharma@linaro.org,
+        bhupesh.linux@gmail.com, linux-kernel@vger.kernel.org,
+        bjorn.andersson@linaro.org, Amit Kucheria <amitk@kernel.org>,
+        Thara Gopinath <thara.gopinath@gmail.com>,
+        linux-arm-msm@vger.kernel.org
+Subject: Re: [PATCH 3/3] thermal: qcom: tsens: Implement re-initialization
+ workaround quirk
+Message-ID: <202207081955.SXcfKpLo-lkp@intel.com>
+References: <20220701145815.2037993-4-bhupesh.sharma@linaro.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <YsgA/eycDF9TgCIT@kroah.com>
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
+In-Reply-To: <20220701145815.2037993-4-bhupesh.sharma@linaro.org>
+X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -72,82 +69,151 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jul 08, 2022 at 12:03:41PM +0200, Greg KH wrote:
-> On Fri, Jul 08, 2022 at 10:47:10AM +0100, Sudeep Holla wrote:
-> > On Fri, Jul 08, 2022 at 11:28:19AM +0200, Geert Uytterhoeven wrote:
-> > > Hi Sudeep,
-> > > 
-> > > On Fri, Jul 8, 2022 at 11:22 AM Sudeep Holla <sudeep.holla@arm.com> wrote:
-> > > > On Fri, Jul 08, 2022 at 08:35:57AM +0000, Conor.Dooley@microchip.com wrote:
-> > > > > On 08/07/2022 09:24, Sudeep Holla wrote:
-> > > > > > On Thu, Jul 07, 2022 at 11:04:35PM +0100, Conor Dooley wrote:
-> > > > > >> From: Conor Dooley <conor.dooley@microchip.com>
-> > > > > >>
-> > > > > >> RISC-V & arm64 both use an almost identical method of filling in
-> > > > > >> default vales for arch topology. Create a weakly defined default
-> > > > > >> implementation with the intent of migrating both archs to use it.
-> > > > > >>
-> > > > > >> Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
-> > > > > >> ---
-> > > > > >>   drivers/base/arch_topology.c  | 19 +++++++++++++++++++
-> > > > > >>   include/linux/arch_topology.h |  1 +
-> > > > > >>   2 files changed, 20 insertions(+)
-> > > > > >>
-> > > > > >> diff --git a/drivers/base/arch_topology.c b/drivers/base/arch_topology.c
-> > > > > >> index 441e14ac33a4..07e84c6ac5c2 100644
-> > > > > >> --- a/drivers/base/arch_topology.c
-> > > > > >> +++ b/drivers/base/arch_topology.c
-> > > > > >> @@ -765,6 +765,25 @@ void update_siblings_masks(unsigned int cpuid)
-> > > > > >>    }
-> > > > > >>   }
-> > > > > >>
-> > > > > >> +void __weak store_cpu_topology(unsigned int cpuid)
-> > > > >
-> > > > > Does using __weak here make sense to you?
-> > > > >
-> > > >
-> > > > I don't want any weak definition and arch to override as we know only
-> > > > arm64 and RISC-V are the only users and they are aligned to have same
-> > > > implementation. So weak definition doesn't make sense to me.
-> > > >
-> > > > > >
-> > > > > > I prefer to have this as default implementation. So just get the risc-v
-> > > > > > one pushed to upstream first(for v5.20) and get all the backports if required.
-> > > > > > Next cycle(i.e. v5.21), you can move both RISC-V and arm64.
-> > > > > >
-> > > > >
-> > > > > Yeah, that was my intention. I meant to label patch 1/4 as "PATCH"
-> > > > > and (2,3,4)/4 as RFC but forgot. I talked with Palmer about doing
-> > > > > the risc-v impl. and then migrate both on IRC & he seemed happy with
-> > > > > it.
-> > > > >
-> > > >
-> > > > Ah OK, good.
-> > > >
-> > > > > If you're okay with patch 1/4, I'll resubmit it as a standalone v2.
-> > > > >
-> > > >
-> > > > That would be great, thanks. You can most the code to move to generic from
-> > > > both arm64 and risc-v once we have this in v5.20-rc1
-> > > 
-> > > Why not ignore risc-v for now, and move the arm64 implementation to
-> > > the generic code for v5.20, so every arch will have it at once?
-> > >
-> > 
-> > We could but,
-> > 1. This arch_topology is new and has been going through lot of changes
-> >    recently and having code there might make it difficult to backport
-> >    changes that are required for RISC-V(my guess)
-> 
-> Worry about future issues in the future.  Make it simple now as you know
-> what you are dealing with at the moment.
->
+Hi Bhupesh,
 
-Sure, I was just suggesting and expecting someone from RISC-V community or
-maintainers to make a call. As I said it is based on my understanding.
-hence I have mentioned as guess. So I am not against it as such.
+Thank you for the patch! Yet something to improve:
 
+[auto build test ERROR on rafael-pm/thermal]
+[also build test ERROR on linus/master v5.19-rc5 next-20220707]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Bhupesh-Sharma/Add-support-for-tsens-controller-reinit-via-trustzone/20220701-230113
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git thermal
+config: arm64-randconfig-r015-20220707 (https://download.01.org/0day-ci/archive/20220708/202207081955.SXcfKpLo-lkp@intel.com/config)
+compiler: aarch64-linux-gcc (GCC) 11.3.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/32929e13eb338e76b714bb8b4805899e2857734f
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Bhupesh-Sharma/Add-support-for-tsens-controller-reinit-via-trustzone/20220701-230113
+        git checkout 32929e13eb338e76b714bb8b4805899e2857734f
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash
+
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>):
+
+   aarch64-linux-ld: Unexpected GOT/PLT entries detected!
+   aarch64-linux-ld: Unexpected run-time procedure linkages detected!
+   aarch64-linux-ld: ID map text too big or misaligned
+   aarch64-linux-ld: drivers/thermal/qcom/tsens.o: in function `tsens_probe':
+>> drivers/thermal/qcom/tsens.c:1337: undefined reference to `qcom_scm_is_available'
+   aarch64-linux-ld: drivers/thermal/qcom/tsens.o: in function `get_temp_tsens_valid':
+>> drivers/thermal/qcom/tsens.c:714: undefined reference to `qcom_scm_tsens_reinit'
+
+
+vim +1337 drivers/thermal/qcom/tsens.c
+
+  1293	
+  1294	static int tsens_probe(struct platform_device *pdev)
+  1295	{
+  1296		int ret, i;
+  1297		struct device *dev;
+  1298		struct device_node *np;
+  1299		struct tsens_priv *priv;
+  1300		const struct tsens_plat_data *data;
+  1301		const struct of_device_id *id;
+  1302		u32 num_sensors;
+  1303	
+  1304		if (pdev->dev.of_node)
+  1305			dev = &pdev->dev;
+  1306		else
+  1307			dev = pdev->dev.parent;
+  1308	
+  1309		np = dev->of_node;
+  1310	
+  1311		id = of_match_node(tsens_table, np);
+  1312		if (id)
+  1313			data = id->data;
+  1314		else
+  1315			data = &data_8960;
+  1316	
+  1317		num_sensors = data->num_sensors;
+  1318	
+  1319		if (np)
+  1320			of_property_read_u32(np, "#qcom,sensors", &num_sensors);
+  1321	
+  1322		if (num_sensors <= 0) {
+  1323			dev_err(dev, "%s: invalid number of sensors\n", __func__);
+  1324			return -EINVAL;
+  1325		}
+  1326	
+  1327		priv = devm_kzalloc(dev,
+  1328				     struct_size(priv, sensor, num_sensors),
+  1329				     GFP_KERNEL);
+  1330		if (!priv)
+  1331			return -ENOMEM;
+  1332	
+  1333		priv->dev = dev;
+  1334		priv->num_sensors = num_sensors;
+  1335		priv->needs_reinit_wa = data->needs_reinit_wa;
+  1336	
+> 1337		if (priv->needs_reinit_wa && !qcom_scm_is_available())
+  1338			return -EPROBE_DEFER;
+  1339	
+  1340		if (priv->needs_reinit_wa) {
+  1341			priv->reinit_wa_worker = alloc_workqueue("tsens_reinit_work",
+  1342								 WQ_HIGHPRI, 0);
+  1343			if (!priv->reinit_wa_worker)
+  1344				return -ENOMEM;
+  1345	
+  1346			INIT_WORK(&priv->reinit_wa_notify, tsens_reinit_worker_notify);
+  1347		}
+  1348	
+  1349		priv->ops = data->ops;
+  1350		for (i = 0;  i < priv->num_sensors; i++) {
+  1351			if (data->hw_ids)
+  1352				priv->sensor[i].hw_id = data->hw_ids[i];
+  1353			else
+  1354				priv->sensor[i].hw_id = i;
+  1355		}
+  1356		priv->feat = data->feat;
+  1357		priv->fields = data->fields;
+  1358	
+  1359		platform_set_drvdata(pdev, priv);
+  1360	
+  1361		if (!priv->ops || !priv->ops->init || !priv->ops->get_temp) {
+  1362			ret = -EINVAL;
+  1363			goto free_wq;
+  1364		}
+  1365	
+  1366		ret = priv->ops->init(priv);
+  1367		if (ret < 0) {
+  1368			dev_err(dev, "%s: init failed\n", __func__);
+  1369			goto free_wq;
+  1370		}
+  1371	
+  1372		if (priv->ops->calibrate) {
+  1373			ret = priv->ops->calibrate(priv);
+  1374			if (ret < 0) {
+  1375				if (ret != -EPROBE_DEFER)
+  1376					dev_err(dev, "%s: calibration failed\n", __func__);
+  1377	
+  1378				goto free_wq;
+  1379			}
+  1380		}
+  1381	
+  1382		ret = tsens_register(priv);
+  1383		if (ret < 0) {
+  1384			dev_err(dev, "%s: registration failed\n", __func__);
+  1385			goto free_wq;
+  1386		}
+  1387	
+  1388		list_add_tail(&priv->list, &tsens_device_list);
+  1389		return 0;
+  1390	
+  1391	free_wq:
+  1392		destroy_workqueue(priv->reinit_wa_worker);
+  1393		return ret;
+  1394	}
+  1395	
 
 -- 
-Regards,
-Sudeep
+0-DAY CI Kernel Test Service
+https://01.org/lkp

@@ -2,159 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 036CA56C29E
-	for <lists+linux-kernel@lfdr.de>; Sat,  9 Jul 2022 01:13:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C1E0B56C289
+	for <lists+linux-kernel@lfdr.de>; Sat,  9 Jul 2022 01:13:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229571AbiGHWEE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Jul 2022 18:04:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35336 "EHLO
+        id S239395AbiGHWFO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Jul 2022 18:05:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35746 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229749AbiGHWEC (ORCPT
+        with ESMTP id S239136AbiGHWFK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Jul 2022 18:04:02 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 695B2192BA;
-        Fri,  8 Jul 2022 15:04:01 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 1E334B8296F;
-        Fri,  8 Jul 2022 22:04:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BCBB7C341C0;
-        Fri,  8 Jul 2022 22:03:57 +0000 (UTC)
-Date:   Fri, 8 Jul 2022 18:03:56 -0400
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     David Collins <quic_collinsd@quicinc.com>
-Cc:     Stephen Boyd <sboyd@kernel.org>, Ingo Molnar <mingo@redhat.com>,
-        <linux-kernel@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
-        Ankit Gupta <ankgupta@codeaurora.org>,
-        "Gilad Avidov" <gavidov@codeaurora.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        <stable@vger.kernel.org>
-Subject: Re: [PATCH] spmi: trace: fix stack-out-of-bound access in SPMI
- tracing functions
-Message-ID: <20220708180356.449203f9@gandalf.local.home>
-In-Reply-To: <20220627235512.2272783-1-quic_collinsd@quicinc.com>
-References: <20220627235512.2272783-1-quic_collinsd@quicinc.com>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        Fri, 8 Jul 2022 18:05:10 -0400
+Received: from mail-io1-f42.google.com (mail-io1-f42.google.com [209.85.166.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96B4B9CE33;
+        Fri,  8 Jul 2022 15:05:09 -0700 (PDT)
+Received: by mail-io1-f42.google.com with SMTP id y3so229884iof.4;
+        Fri, 08 Jul 2022 15:05:09 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=5Rz9ss1apWYLiwK2Swa5YhYzk+HeapOWk50LvWWFvLY=;
+        b=eqZSvOuf8pQGxI674QU5CmgZd8PamzInBwIb2Ir68fvYfQPAEJctlm+qW3RNbEqpLM
+         ejh2OlL6zPGnfAwW0eLDwhwF5zxvZKrHeJIaxJjwU35dYDUOwr2z57OnnMF7Jzxuk2Or
+         eKeCgkDjfY+9GrqES51HRJYUgs9nDa9zpgk1YL/try90vjYlikRZldjc8R69NhQPfFZ5
+         Y1DYsIvF71JCfMO4OHm10dtp7nTmOnlrTTqcImu5EoseE+zc5ekVmXmW8jZseO9x7R+0
+         qJN/cSXVy+cbWyLsfim1ezOtkJVr2oW3vx86OKxf8+eMLakXwaqH/xifz7YcICMq1Cx3
+         ApsA==
+X-Gm-Message-State: AJIora/O1kwARttdsdYUL3X4Gk9Up7nYadhlww9c9FdXtP/SvA5v/DlC
+        Hkkvr2/GQD4n+gmYfMgNFg==
+X-Google-Smtp-Source: AGRyM1uCZTA/9fsWbCIhKWnORtZ6n3s0D9rWOa74eKN2C621mxgYBaFokyWV+HmhbQVEXje2TLOw4g==
+X-Received: by 2002:a5d:83c7:0:b0:66c:cc68:2f2d with SMTP id u7-20020a5d83c7000000b0066ccc682f2dmr3070624ior.74.1657317908824;
+        Fri, 08 Jul 2022 15:05:08 -0700 (PDT)
+Received: from robh.at.kernel.org ([98.38.210.73])
+        by smtp.gmail.com with ESMTPSA id y22-20020a056638229600b00339e2f0a9bfsm2012983jas.13.2022.07.08.15.05.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 08 Jul 2022 15:05:08 -0700 (PDT)
+Received: (nullmailer pid 1560089 invoked by uid 1000);
+        Fri, 08 Jul 2022 22:05:07 -0000
+Date:   Fri, 8 Jul 2022 16:05:07 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Linux Input <linux-input@vger.kernel.org>,
+        devicetree@vger.kernel.org,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [RESEND PATCH v3 0/3] dt-bindings: input: gpio-keys: apply via
+ DT tree
+Message-ID: <20220708220507.GA1557227-robh@kernel.org>
+References: <20220705120356.94876-1-krzysztof.kozlowski@linaro.org>
+ <CAL_Jsq+LepF_67SJUqQ5mUO-TZAd-46LB+aYE5rZmnmmwMg=bw@mail.gmail.com>
+ <352f27e7-0da1-4a4a-83a4-ded370dfbd7f@linaro.org>
+ <YsiVH41gCLeIMyd6@google.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YsiVH41gCLeIMyd6@google.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 27 Jun 2022 16:55:12 -0700
-David Collins <quic_collinsd@quicinc.com> wrote:
+On Fri, Jul 08, 2022 at 01:35:43PM -0700, Dmitry Torokhov wrote:
+> Hi,
+> 
+> On Wed, Jul 06, 2022 at 08:30:54AM +0200, Krzysztof Kozlowski wrote:
+> > On 05/07/2022 21:11, Rob Herring wrote:
+> > > On Tue, Jul 5, 2022 at 6:04 AM Krzysztof Kozlowski
+> > > <krzysztof.kozlowski@linaro.org> wrote:
+> > >>
+> > >> Hi Rob,
+> > >>
+> > >> Can you apply these directly? You already reviewed them, but I dropped
+> > >> the tag so you will see them in Patchwork. It seems these won't go in
+> > >> through input [1].
+> > >>
+> > >> [1] https://lore.kernel.org/all/c2c1cf0c-9462-9ba5-a297-70d13a063de1@linaro.org/
+> > > 
+> > > Will give Dmitry a few more days first before I take both series.
+> > 
+> > Then let's keep your Rb for entire patchset:
+> > 
+> > Reviewed-by: Rob Herring <robh@kernel.org>
+> 
+> I am sorry but what series/branch this series is based on? I tried
+> applying but there are conflicts. The latest I have that is touching
+> gpio-keys.yaml is:
+> 
+> 4fda8a2df83a dt-bindings: input: use generic node names
 
-> trace_spmi_write_begin() and trace_spmi_read_end() both call
-> memcpy() with a length of "len + 1".  This leads to one extra
-> byte being read beyond the end of the specified buffer.  Fix
-> this out-of-bound memory access by using a length of "len"
-> instead.
-> 
-> Here is a KASAN log showing the issue:
-> 
-> BUG: KASAN: stack-out-of-bounds in trace_event_raw_event_spmi_read_end+0x1d0/0x234
-> Read of size 2 at addr ffffffc0265b7540 by task thermal@2.0-ser/1314
-> ...
-> Call trace:
->  dump_backtrace+0x0/0x3e8
->  show_stack+0x2c/0x3c
->  dump_stack_lvl+0xdc/0x11c
->  print_address_description+0x74/0x384
->  kasan_report+0x188/0x268
->  kasan_check_range+0x270/0x2b0
->  memcpy+0x90/0xe8
->  trace_event_raw_event_spmi_read_end+0x1d0/0x234
->  spmi_read_cmd+0x294/0x3ac
->  spmi_ext_register_readl+0x84/0x9c
->  regmap_spmi_ext_read+0x144/0x1b0 [regmap_spmi]
->  _regmap_raw_read+0x40c/0x754
->  regmap_raw_read+0x3a0/0x514
->  regmap_bulk_read+0x418/0x494
->  adc5_gen3_poll_wait_hs+0xe8/0x1e0 [qcom_spmi_adc5_gen3]
->  ...
->  __arm64_sys_read+0x4c/0x60
->  invoke_syscall+0x80/0x218
->  el0_svc_common+0xec/0x1c8
->  ...
-> 
-> addr ffffffc0265b7540 is located in stack of task thermal@2.0-ser/1314 at offset 32 in frame:
->  adc5_gen3_poll_wait_hs+0x0/0x1e0 [qcom_spmi_adc5_gen3]
-> 
-> this frame has 1 object:
->  [32, 33) 'status'
-> 
-> Memory state around the buggy address:
->  ffffffc0265b7400: 00 00 00 00 00 00 00 00 00 00 00 00 f1 f1 f1 f1
->  ffffffc0265b7480: 04 f3 f3 f3 00 00 00 00 00 00 00 00 00 00 00 00
-> >ffffffc0265b7500: 00 00 00 00 f1 f1 f1 f1 01 f3 f3 f3 00 00 00 00  
->                                            ^
->  ffffffc0265b7580: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
->  ffffffc0265b7600: f1 f1 f1 f1 01 f2 07 f2 f2 f2 01 f3 00 00 00 00
-> ==================================================================
-> 
-> Fixes: a9fce374815d ("spmi: add command tracepoints for SPMI")
-> Cc: stable@vger.kernel.org
-> Signed-off-by: David Collins <quic_collinsd@quicinc.com>
-> ---
->  include/trace/events/spmi.h | 12 ++++++------
->  1 file changed, 6 insertions(+), 6 deletions(-)
-> 
-> diff --git a/include/trace/events/spmi.h b/include/trace/events/spmi.h
-> index 8b60efe18ba6..a6819fd85cdf 100644
-> --- a/include/trace/events/spmi.h
-> +++ b/include/trace/events/spmi.h
-> @@ -21,15 +21,15 @@ TRACE_EVENT(spmi_write_begin,
->  		__field		( u8,         sid       )
->  		__field		( u16,        addr      )
->  		__field		( u8,         len       )
-> -		__dynamic_array	( u8,   buf,  len + 1   )
-> +		__dynamic_array	( u8,   buf,  len       )
->  	),
->  
->  	TP_fast_assign(
->  		__entry->opcode = opcode;
->  		__entry->sid    = sid;
->  		__entry->addr   = addr;
-> -		__entry->len    = len + 1;
-> -		memcpy(__get_dynamic_array(buf), buf, len + 1);
-> +		__entry->len    = len;
-> +		memcpy(__get_dynamic_array(buf), buf, len);
->  	),
->  
->  	TP_printk("opc=%d sid=%02d addr=0x%04x len=%d buf=0x[%*phD]",
-> @@ -92,7 +92,7 @@ TRACE_EVENT(spmi_read_end,
->  		__field		( u16,        addr      )
->  		__field		( int,        ret       )
->  		__field		( u8,         len       )
-> -		__dynamic_array	( u8,   buf,  len + 1   )
-> +		__dynamic_array	( u8,   buf,  len       )
->  	),
->  
->  	TP_fast_assign(
-> @@ -100,8 +100,8 @@ TRACE_EVENT(spmi_read_end,
->  		__entry->sid    = sid;
->  		__entry->addr   = addr;
->  		__entry->ret    = ret;
-> -		__entry->len    = len + 1;
-> -		memcpy(__get_dynamic_array(buf), buf, len + 1);
-> +		__entry->len    = len;
-> +		memcpy(__get_dynamic_array(buf), buf, len);
->  	),
+This one from me:
 
-Looks legit,
-
-Acked-by: Steven Rostedt (Google) <rostedt@goodmis.org>
-
--- Steve
-
->  
->  	TP_printk("opc=%d sid=%02d addr=0x%04x ret=%d len=%02d buf=0x[%*phD]",
-
+https://lore.kernel.org/all/20220608211207.2058487-1-robh@kernel.org/

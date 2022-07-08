@@ -2,199 +2,172 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C20E756BF13
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 20:35:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 40B0556C05F
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 20:37:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239316AbiGHSVw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Jul 2022 14:21:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41114 "EHLO
+        id S239164AbiGHSVS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Jul 2022 14:21:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40928 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239167AbiGHSVW (ORCPT
+        with ESMTP id S238834AbiGHSVN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Jul 2022 14:21:22 -0400
-Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F33D080485
-        for <linux-kernel@vger.kernel.org>; Fri,  8 Jul 2022 11:21:21 -0700 (PDT)
-Received: by mail-pf1-x42b.google.com with SMTP id e16so11386665pfm.11
-        for <linux-kernel@vger.kernel.org>; Fri, 08 Jul 2022 11:21:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=references:user-agent:from:to:cc:subject:date:in-reply-to
-         :message-id:mime-version;
-        bh=4EOv33gZFN/Naj7r2xac/i6dLKMvB/rAqCiXlJUJDrA=;
-        b=mmPdLw/1cQ1hZtI8Nil5n8qYvOmv6CACDwtUweXWjW0zU0/FA7qoiiaJI4I5eJ2XQh
-         uXKuzI+ZY7tHJrcGbzI0dn+vwq9TF3EhJaCFEtZd0N4A3/jp/4icUxwtdk53g9UflFpd
-         4KBOufnwzhqfZ0Kz+ZvpWTxwUYRAtZ8hDPjj/cfsok/cpuQX/6TLrXDEipAE647/CAcw
-         IPoRLPDSQipsO2A8eN5yjC0tBtEm0YO/h6JGwLlsvMAx2k58JziueN5MH0fIq/bRk5se
-         QDC+T6agx/dVpSh98QOYCRU++BNNDz9/oZlvVumNe94yIfOnSOP0s5rV9LAYzHLGqNT3
-         uXUA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:references:user-agent:from:to:cc:subject:date
-         :in-reply-to:message-id:mime-version;
-        bh=4EOv33gZFN/Naj7r2xac/i6dLKMvB/rAqCiXlJUJDrA=;
-        b=YAxlXqAmqksGOCENQj7jO3vDxm97HWeTScFkvQsnZKmIUchnYeNgDbcktf7V4ePHN6
-         kwGXEz094tE+2Kv7+60BqwtLpM1y9Mu2s2JEySiHRSfPtfbUp7zMsFc6nYvlzhXJsl7z
-         zIY/ypvoyO7Ll4NPSOY/elnItGtEAu6ZPZGHeLr+qCr65nFUsLVUMmAtE0tHxFL0aUWs
-         FTTAMhSgx0pvNtluXQCWbKIc9j6h62CdCNM7uAIHp7aRmGCw2B9XO3raUlcT5zBI/2uh
-         fVVPcKIexxDIkhWGjUF7oYcRNjVvpkrPH6oRtbM24UPFHOFXUgkaHU9wNrD+wuk5YHr8
-         fb1g==
-X-Gm-Message-State: AJIora+rzaTdCRv4KrZXKIE4ZIRjRSrfOqdjXu3W41DdZk2Pm/JM8H91
-        bxyAuLhPlL/45WhY5ePwKaoW5Bcv0rM+SA==
-X-Google-Smtp-Source: AGRyM1tWWTNBfttOFF1DW16Nf7mp8q8PpMygOO+nGqPLtF+amuxyJjujoByGMVDH6r2XbvLixsGbfA==
-X-Received: by 2002:a63:1b49:0:b0:411:c101:eda5 with SMTP id b9-20020a631b49000000b00411c101eda5mr4318323pgm.600.1657304481041;
-        Fri, 08 Jul 2022 11:21:21 -0700 (PDT)
-Received: from ArchLinux (ec2-13-59-0-164.us-east-2.compute.amazonaws.com. [13.59.0.164])
-        by smtp.gmail.com with ESMTPSA id ij23-20020a170902ab5700b0016bd5da20casm13844975plb.134.2022.07.08.11.21.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 08 Jul 2022 11:21:20 -0700 (PDT)
-References: <20220707165014.77127-1-schspa@gmail.com>
- <20220707135329.08cf74b0@gandalf.local.home> <m2h73snqja.fsf@gmail.com>
- <20220708140000.6aa75a50@gandalf.local.home>
-User-agent: mu4e 1.7.5; emacs 28.1
-From:   Schspa Shi <schspa@gmail.com>
-To:     Steven Rostedt <rostedt@goodmis.org>
-Cc:     mingo@redhat.com, peterz@infradead.org, juri.lelli@redhat.com,
-        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
-        bsegall@google.com, mgorman@suse.de, bristot@redhat.com,
-        vschneid@redhat.com, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3] sched/rt: fix bad task migration for rt tasks
-Date:   Sat, 09 Jul 2022 02:19:42 +0800
-In-reply-to: <20220708140000.6aa75a50@gandalf.local.home>
-Message-ID: <m2ilo779f9.fsf@gmail.com>
+        Fri, 8 Jul 2022 14:21:13 -0400
+Received: from laurent.telenet-ops.be (laurent.telenet-ops.be [IPv6:2a02:1800:110:4::f00:19])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8D46564FF
+        for <linux-kernel@vger.kernel.org>; Fri,  8 Jul 2022 11:21:10 -0700 (PDT)
+Received: from ramsan.of.borg ([84.195.186.194])
+        by laurent.telenet-ops.be with bizsmtp
+        id siM7270094C55Sk01iM7mo; Fri, 08 Jul 2022 20:21:08 +0200
+Received: from rox.of.borg ([192.168.97.57])
+        by ramsan.of.borg with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <geert@linux-m68k.org>)
+        id 1o9sbC-002fGb-Lh; Fri, 08 Jul 2022 20:21:06 +0200
+Received: from geert by rox.of.borg with local (Exim 4.93)
+        (envelope-from <geert@linux-m68k.org>)
+        id 1o9sbC-00BtJ3-7L; Fri, 08 Jul 2022 20:21:06 +0200
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+To:     Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>
+Cc:     dri-devel@lists.freedesktop.org, linux-fbdev@vger.kernel.org,
+        linux-m68k@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Geert Uytterhoeven <geert@linux-m68k.org>
+Subject: [PATCH v3 00/10] drm: Add support for low-color frame buffer formats
+Date:   Fri,  8 Jul 2022 20:20:45 +0200
+Message-Id: <cover.1657294931.git.geert@linux-m68k.org>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+	Hi all,
 
-Steven Rostedt <rostedt@goodmis.org> writes:
+A long outstanding issue with the DRM subsystem has been the lack of
+support for low-color displays, as used typically on older desktop
+systems, and on small embedded displays.
 
-> On Fri, 08 Jul 2022 12:51:14 +0800
-> Schspa Shi <schspa@gmail.com> wrote:
->
->> Steven Rostedt <rostedt@goodmis.org> writes:
->> 
->> > On Fri,  8 Jul 2022 00:50:14 +0800
->> > Schspa Shi <schspa@gmail.com> wrote:
->> >  
->> >> Please refer to the following scenarios.  
->> >
->> > I'm not sure this is what is happening. Do you have a trace to 
->> > back this up?
->> >  
->> 
->> I don't have a trace. This is inferred from the exception log.
->> 
->> >> 
->> >>            CPU0                                  CPU1
->> >> ------------------------------------------------------------------
->> >> push_rt_task
->> >>   check is_migration_disabled(next_task)
->> >>                                         task not running and
->> >>                                         migration_disabled == 0
->> >>   find_lock_lowest_rq(next_task, rq);
->> >>     _double_lock_balance(this_rq, busiest);
->> >>       raw_spin_rq_unlock(this_rq);
->> >>       double_rq_lock(this_rq, busiest);
->> >>         <<wait for busiest rq>>
->> >>                                             <wakeup>  
->> >
->> > Here's the problem I have. next_task is queued on CPU0, 
->> > (otherwise CPU0
->> > would not be pushing it). As CPU0 is currently running 
->> > push_rt_task, how
->> > did next_task start running to set its migrate_disable flag?  
->> 
->> THe next_task wasn't queued on CPU0, it's queued on CPU1 in this
->> scenarios.
->
-> Bah, I forgot that we still do pushing for other CPUs. I was thinking that
-> we removed that in favor of pulling. It's been a while since I worked on
-> this.
->
->> 
->> And it's because when task wakup, the rq argument is not the
->> current running CPU rq, it's next_task's rq
->> (i.e. CPU1's rq in this sample scenarios).
->> 
->> And you can check this with the Call trace from the crash log.
->> 
->>     [123671.996969] Call trace:
->>     [123671.996975]  set_task_cpu+0x8c/0x108
->>     [123671.996984]  push_rt_task.part.0+0x144/0x184
->>     [123671.996995]  push_rt_tasks+0x28/0x3c
->>     [123671.997002]  task_woken_rt+0x58/0x68
->>     [123671.997009]  ttwu_do_wakeup+0x5c/0xd0
->>     [123671.997019]  ttwu_do_activate+0xc0/0xd4
->>     [123671.997028]  try_to_wake_up+0x244/0x288
->>     [123671.997036]  wake_up_process+0x18/0x24
->>     [123671.997045]  __irq_wake_thread+0x64/0x80
->>     [123671.997056]  __handle_irq_event_percpu+0x110/0x124
->> 
->> Function ttwu_do_wakeup will lock the task's rq, not current 
->> running
->> cpu rq.
->> 
->> >
->> > Even if it was woken up on another CPU and ran there, by setting
->> > migrate_disable, it would not be put back to CPU0, because its
->> > migrate_disable flag is set (if it is, then there's the bug).
->> >  
->> 
->> It no needs to put it back to CPU0 for this issue, it's still on 
->> CPU1.
->> 
->
-> Worse things can actually happen then migrating a migrate disabled task.
-> What prevents next_task from being scheduled and in a running state, or
-> even migrated?
->
-> Hmm, that's covered in find_lock_lowest_rq().
->
-> Looks like the the migrate disable check needs to go there.
->
-> 		/* if the prio of this runqueue changed, try again */
-> 		if (double_lock_balance(rq, lowest_rq)) {
-> 			/*
-> 			 * We had to unlock the run queue. In
-> 			 * the mean time, task could have
-> 			 * migrated already or had its affinity changed.
-> 			 * Also make sure that it wasn't scheduled on its rq.
-> 			 */
-> 			if (unlikely(task_rq(task) != rq ||
-> 				     !cpumask_test_cpu(lowest_rq->cpu, &task->cpus_mask) ||
-> 				     task_running(rq, task) ||
-> 				     !rt_task(task) ||
-> +				     is_migrate_disabled(task) ||
-> 				     !task_on_rq_queued(task))) {
->
+This patch series adds support for color-indexed frame buffer formats
+with 2, 4, and 16 colors.  It has been tested on ARAnyM using a
+work-in-progress Atari DRM driver supporting 2, 4, 16, 256, and 65536
+colors, with text console operation, fbtest, and modetest.
 
-Yes, it's what I did in the V1 patch.
-Link: https://lore.kernel.org/all/20220623182932.58589-1-schspa@gmail.com/
+Overview:
+  - Patch 1 introduces a helper, to be used by later patches in the
+    series,
+  - Patch 2 introduces a flag to indicate color-indexed formats,
+  - Patches 3 and 4 correct calculations of bits per pixel for sub-byte
+    pixel formats,
+  - Patches 5 and 6 introduce the new C[124] formats,
+  - Patch 7 fixes an untested code path,
+  - Patch 8 documents the use of "red" for light-on-dark displays,
+  - Patches 9 and 10 add more fourcc codes for light-on-dark and
+    dark-on-light frame buffer formats, which may be useful for e.g. the
+    ssd130x and repaper drivers.
 
-But I think it's not the best solution for this problem.
-In these scenarios, we still have a chance to make the task run faster
-by retrying to retry to push the currently running task on this CPU away.
+Changes compared to v2[1]:
+  - Add Reviewed-by,
+  - Document fill order,
+  - Fix FB_VISUAL_TRUECOLOR,
+  - Replace light-on-dark/dark-on-light by direct/inverse relationship
+    between channel value and brightness.
 
-There is more details on V2 patch's replay message.
-Link: https://lore.kernel.org/all/CAMA88TrZ-o4W81Yfw9Wcs3ghoxwpeAKtFejtMTt78GNB0tKaSA@mail.gmail.com/#t
+Changes compared to v1[2]:
+  - Reshuffle patches,
+  - New patch "[PATCH v2 02/10] drm/fourcc: Add
+    drm_format_info.is_color_indexed flag",
+  - Improve pixel descriptions,
+  - Require depth to match bpp in drm_mode_legacy_fb_format(),
+  - Set .is_color_indexed flag.
+  - Use drm_format_info_bpp() helper instead of deprecated .depth field
+    or format-dependent calculations,
+  - Use new .is_color_indexed field instead of checking against a list
+    of formats,
+  - Add Acked-by,
+  - Replace FIXME by TODO comment,
+  - New patch "[PATCH v2 08/10] [RFC] drm/fourcc: Document that
+    single-channel "red" can be any color",
+  - Add rationale for adding new formats,
+  - Add D[248] for completeness.
 
-> 				double_unlock_balance(rq, lowest_rq);
-> 				lowest_rq = NULL;
-> 				break;
-> 			}
-> 		}
->
-> -- Steve
+Notes:
+  - This is the first patch series in a series of 3:
+      - To make high-color modes work on big-endian, you also need [3],
+      - To make mode selection on the command line work for Atari video
+	modes, you need [4].
+  - There is also a related series of 3 patch series for modetest:
+      - Using modetest with low-color formats (C[124]) requires [5],
+      - Using modetest with high-color formats (RG16, XR24) requires
+	[6],
+      - Using modetest with video mode names containing dashes requires
+	[7].
+  - As this was used on emulated hardware only, and I do not have Atari
+    hardware, I do not have performance figures to compare with fbdev.
+    I hope to do proper measuring with an Amiga DRM driver, eventually.
+  - While the Atari DRM driver is not fit for submission yet, you can
+    find it at [8], if you are adventurous.
+
+Thanks for your comments!
+
+[1] "[PATCH v2 00/10] drm: Add support for low-color frame buffer
+    formats"
+    https://lore.kernel.org/r/cover.1646683502.git.geert@linux-m68k.org/
+[2] "[PATCH 0/8] drm: Add support for low-color frame buffer formats"
+    https://lore.kernel.org/r/20220215165226.2738568-1-geert@linux-m68k.org/
+[3] "[PATCH 0/3] drm: Endianness fixes"
+    https://lore.kernel.org/r/cover.1657300532.git.geert@linux-m68k.org
+[4] "[PATCH 0/5] drm/modes: Command line mode selection fixes and
+    improvements"
+    https://lore.kernel.org/r/cover.1657301107.git.geert@linux-m68k.org
+[5] "[PATCH libdrm v2 00/10] Add support for low-color frame buffer
+    formats"
+    https://lore.kernel.org/r/cover.1657302034.git.geert@linux-m68k.org
+[6] "[PATCH libdrm v2 00/10] Big-endian fixes"
+    https://lore.kernel.org/r/cover.1657302103.git.geert@linux-m68k.org
+[7] "[PATCH libdrm] modetest: Add support for named modes containing
+    dashes"
+[8] https://git.kernel.org/pub/scm/linux/kernel/git/geert/linux-m68k.git/log/?h=atari-drm-wip
+
+Geert Uytterhoeven (10):
+  drm/fourcc: Add drm_format_info_bpp() helper
+  drm/fourcc: Add drm_format_info.is_color_indexed flag
+  drm/client: Use actual bpp when allocating frame buffers
+  drm/framebuffer: Use actual bpp for DRM_IOCTL_MODE_GETFB
+  drm/fourcc: Add DRM_FORMAT_C[124]
+  drm/fb-helper: Add support for DRM_FORMAT_C[124]
+  drm/gem-fb-helper: Use actual bpp for size calculations
+  drm/fourcc: Clarify the meaning of single-channel "red"
+  [RFC] drm/fourcc: Add DRM_FORMAT_R[124]
+  [RFC] drm/fourcc: Add DRM_FORMAT_D[1248]
+
+ drivers/gpu/drm/drm_client.c                 |   4 +-
+ drivers/gpu/drm/drm_fb_helper.c              | 101 ++++++++++++++-----
+ drivers/gpu/drm/drm_fourcc.c                 |  55 +++++++++-
+ drivers/gpu/drm/drm_framebuffer.c            |   2 +-
+ drivers/gpu/drm/drm_gem_framebuffer_helper.c |  12 +--
+ include/drm/drm_fourcc.h                     |   4 +
+ include/uapi/drm/drm_fourcc.h                |  32 +++++-
+ 7 files changed, 167 insertions(+), 43 deletions(-)
 
 -- 
-BRs
-Schspa Shi
+2.25.1
+
+Gr{oetje,eeting}s,
+
+						Geert
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+							    -- Linus Torvalds

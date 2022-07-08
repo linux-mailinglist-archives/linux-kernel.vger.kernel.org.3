@@ -2,59 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BA1E656B0B3
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 04:46:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E47C56B0B5
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 04:49:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236867AbiGHCq1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Jul 2022 22:46:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35228 "EHLO
+        id S236953AbiGHCsE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Jul 2022 22:48:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36262 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236022AbiGHCq0 (ORCPT
+        with ESMTP id S236763AbiGHCsB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Jul 2022 22:46:26 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA3C77436F;
-        Thu,  7 Jul 2022 19:46:23 -0700 (PDT)
-Received: from dggpemm500023.china.huawei.com (unknown [172.30.72.57])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4LfHfn3N5KzkXGJ;
-        Fri,  8 Jul 2022 10:44:17 +0800 (CST)
-Received: from dggpemm500019.china.huawei.com (7.185.36.180) by
- dggpemm500023.china.huawei.com (7.185.36.83) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Fri, 8 Jul 2022 10:46:21 +0800
-Received: from [10.67.109.184] (10.67.109.184) by
- dggpemm500019.china.huawei.com (7.185.36.180) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Fri, 8 Jul 2022 10:46:21 +0800
-Subject: Re: [PATCH bpf-next] samples: bpf: Fix cross-compiling error about
- bpftool
-To:     Song Liu <songliubraving@fb.com>
-CC:     bpf <bpf@vger.kernel.org>, Networking <netdev@vger.kernel.org>,
-        lkml <linux-kernel@vger.kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        "Daniel Borkmann" <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        "Martin Lau" <kafai@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>
-References: <20220707140811.603590-1-pulehui@huawei.com>
- <FDFF5B78-F555-4C55-96D3-B7B3FAA8E84F@fb.com>
-From:   Pu Lehui <pulehui@huawei.com>
-Message-ID: <c357fa1a-5160-ed85-19bf-51f3c188d56e@huawei.com>
-Date:   Fri, 8 Jul 2022 10:46:21 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.1
+        Thu, 7 Jul 2022 22:48:01 -0400
+Received: from m12-13.163.com (m12-13.163.com [220.181.12.13])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3D99174370
+        for <linux-kernel@vger.kernel.org>; Thu,  7 Jul 2022 19:47:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=1nzot
+        kOABl7OCJlNnnM2mS9ytvB/1yubrP9ZFwrsivc=; b=Z6IgAEVGPLj7J97ZlgIO9
+        O/S8/ta7p1gaNebKIYKo8zdYOsuVrxf/kyVLHnNIUN/3zcols739BRu7cUWBnnN3
+        MiRKs3wrv7JN6ufqfzEGKZHASbWudTS+F6HLrEmqf06HlPQkPemIvJHlSahWc/5q
+        qWBbowSiBEOsrcRm1+/1po=
+Received: from bf-rmsz-11.ccdomain.com (unknown [218.17.89.92])
+        by smtp9 (Coremail) with SMTP id DcCowAAHCKihmsdiYmyhNw--.45193S2;
+        Fri, 08 Jul 2022 10:46:58 +0800 (CST)
+From:   Zhongjun Tan <hbut_tan@163.com>
+To:     lgirdwood@gmail.com, broonie@kernel.org, perex@perex.c,
+        tiwai@suse.com, matthias.bgg@gmail.com,
+        angelogioacchino.delregno@collabora.com, jiaxin.yu@mediatek.com,
+        tanzhongjun@coolpad.com, colin.king@intel.com
+Cc:     alsa-devel@alsa-project.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] ASoC: mediatek: mt8186: Remove condition with no effect
+Date:   Fri,  8 Jul 2022 10:46:51 +0800
+Message-Id: <20220708024651.42999-1-hbut_tan@163.com>
+X-Mailer: git-send-email 2.29.0
 MIME-Version: 1.0
-In-Reply-To: <FDFF5B78-F555-4C55-96D3-B7B3FAA8E84F@fb.com>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.67.109.184]
-X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
- dggpemm500019.china.huawei.com (7.185.36.180)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: DcCowAAHCKihmsdiYmyhNw--.45193S2
+X-Coremail-Antispam: 1Uf129KBjvdXoWruFWxur4xXr1kGrW3Xr15XFb_yoWfKFc_G3
+        s7Gw17ua45GFW8C39rtr4kCr1DXFWrCa4v9F13twnIq34DWF4ru3sIv3s7ur4DZw4kZayf
+        Jw1Svr1fXrWqvjkaLaAFLSUrUUUUjb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUvcSsGvfC2KfnxnUUI43ZEXa7IUnqjg3UUUUU==
+X-Originating-IP: [218.17.89.92]
+X-CM-SenderInfo: xkex3sxwdqqiywtou0bp/xtbBXgM4xlaD+mHdqgAAsa
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -62,75 +54,28 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+From: Zhongjun Tan <tanzhongjun@coolpad.com>
 
+Remove condition with no effect
 
-On 2022/7/8 3:12, Song Liu wrote:
-> 
-> 
->> On Jul 7, 2022, at 7:08 AM, Pu Lehui <pulehui@huawei.com> wrote:
->>
->> Currently, when cross compiling bpf samples, the host side
->> cannot use arch-specific bpftool to generate vmlinux.h or
->> skeleton. We need to compile the bpftool with the host
->> compiler.
->>
->> Signed-off-by: Pu Lehui <pulehui@huawei.com>
->> ---
->> samples/bpf/Makefile | 8 ++++----
->> 1 file changed, 4 insertions(+), 4 deletions(-)
->>
->> diff --git a/samples/bpf/Makefile b/samples/bpf/Makefile
->> index 5002a5b9a7da..fe54a8c8f312 100644
->> --- a/samples/bpf/Makefile
->> +++ b/samples/bpf/Makefile
->> @@ -1,4 +1,5 @@
->> # SPDX-License-Identifier: GPL-2.0
->> +-include tools/scripts/Makefile.include
-> 
-> Why do we need the -include here?
-> 
+Signed-off-by: Zhongjun Tan <tanzhongjun@coolpad.com>
+---
+ sound/soc/mediatek/mt8186/mt8186-dai-adda.c | 2 --
+ 1 file changed, 2 deletions(-)
 
-HOSTLD is defined in tools/scripts/Makefile.include, we need to add it.
+diff --git a/sound/soc/mediatek/mt8186/mt8186-dai-adda.c b/sound/soc/mediatek/mt8186/mt8186-dai-adda.c
+index db71b032770d..6be6d4f3b585 100644
+--- a/sound/soc/mediatek/mt8186/mt8186-dai-adda.c
++++ b/sound/soc/mediatek/mt8186/mt8186-dai-adda.c
+@@ -295,8 +295,6 @@ static int mtk_adda_pad_top_event(struct snd_soc_dapm_widget *w,
+ 	case SND_SOC_DAPM_PRE_PMU:
+ 		if (afe_priv->mtkaif_protocol == MTKAIF_PROTOCOL_2_CLK_P2)
+ 			regmap_write(afe->regmap, AFE_AUD_PAD_TOP, 0x39);
+-		else if (afe_priv->mtkaif_protocol == MTKAIF_PROTOCOL_2)
+-			regmap_write(afe->regmap, AFE_AUD_PAD_TOP, 0x31);
+ 		else
+ 			regmap_write(afe->regmap, AFE_AUD_PAD_TOP, 0x31);
+ 		break;
+-- 
+2.29.0
 
-And for -include, mainly to resolve some conflicts:
-1. If workdir is kernel_src, then 'include 
-tools/scripts/Makefile.include' is fine when 'make M=samples/bpf'.
-2. Since the trick in samples/bpf/Makefile:
-
-# Trick to allow make to be run from this directory
-all:
-	$(MAKE) -C ../../ M=$(CURDIR) BPF_SAMPLES_PATH=$(CURDIR)
-
-If workdir is samples/bpf, the compile process will first load the 
-Makefile in samples/bpf, then change workdir to kernel_src and load the 
-kernel_src's Makefile. So if we just add 'include 
-tools/scripts/Makefile.include', then the first load will occur error 
-for not found the file, so we add -include to skip the first load.
-
-> Thanks,
-> Song
-> 
->>
->> BPF_SAMPLES_PATH ?= $(abspath $(srctree)/$(src))
->> TOOLS_PATH := $(BPF_SAMPLES_PATH)/../../tools
->> @@ -283,11 +284,10 @@ $(LIBBPF): $(wildcard $(LIBBPF_SRC)/*.[ch] $(LIBBPF_SRC)/Makefile) | $(LIBBPF_OU
->> BPFTOOLDIR := $(TOOLS_PATH)/bpf/bpftool
->> BPFTOOL_OUTPUT := $(abspath $(BPF_SAMPLES_PATH))/bpftool
->> BPFTOOL := $(BPFTOOL_OUTPUT)/bpftool
->> -$(BPFTOOL): $(LIBBPF) $(wildcard $(BPFTOOLDIR)/*.[ch] $(BPFTOOLDIR)/Makefile) | $(BPFTOOL_OUTPUT)
->> +$(BPFTOOL): $(wildcard $(BPFTOOLDIR)/*.[ch] $(BPFTOOLDIR)/Makefile) | $(BPFTOOL_OUTPUT)
->> 	    $(MAKE) -C $(BPFTOOLDIR) srctree=$(BPF_SAMPLES_PATH)/../../ \
->> -		OUTPUT=$(BPFTOOL_OUTPUT)/ \
->> -		LIBBPF_OUTPUT=$(LIBBPF_OUTPUT)/ \
->> -		LIBBPF_DESTDIR=$(LIBBPF_DESTDIR)/
->> +		ARCH= CROSS_COMPILE= CC=$(HOSTCC) LD=$(HOSTLD) \
->> +		OUTPUT=$(BPFTOOL_OUTPUT)/
->>
->> $(LIBBPF_OUTPUT) $(BPFTOOL_OUTPUT):
->> 	$(call msg,MKDIR,$@)
->> -- 
->> 2.25.1
->>
-> 
-> .
-> 

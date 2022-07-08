@@ -2,73 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7A68556BC7B
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 17:09:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C46C56BC70
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 17:09:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238458AbiGHOzP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Jul 2022 10:55:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49910 "EHLO
+        id S238193AbiGHOx6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Jul 2022 10:53:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49246 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237623AbiGHOzL (ORCPT
+        with ESMTP id S237623AbiGHOx4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Jul 2022 10:55:11 -0400
-Received: from smtpbg.qq.com (unknown [43.155.67.158])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4D272DA84;
-        Fri,  8 Jul 2022 07:55:01 -0700 (PDT)
-X-QQ-mid: bizesmtp78t1657292055t0bkdp6x
-Received: from localhost.localdomain ( [182.148.15.249])
-        by bizesmtp.qq.com (ESMTP) with 
-        id ; Fri, 08 Jul 2022 22:53:23 +0800 (CST)
-X-QQ-SSF: 01000000002000B0C000B00A0000000
-X-QQ-FEAT: pi5xsqT0CkQabcklx8t3nrcNlPS4BmpcwzP5drei+BR5GC85R8nLknIOV0rmS
-        6Iqhhz4Yf6c/pXmTPZRuKPUyzohl6VmfYEnMV4W/BvvWK6zk8kG8avGdj/2WA5dNTeIKOar
-        oDpqQS8ws612+ycucAWgJ6USI5F6Si+txUinPXJ2lCLEDA6/rNLxa8rrWTOnp04aHdDDHUl
-        x98wvwzcDrFJ+YKdtfMPADgY/vwGAkXhinrJjMhBIMyRh8L2dHSpqCSiFWtE29Nrgkmfkbo
-        t8GTybgZeJtKNJuVjkayPACjBvh6jzd+1pmba01DsOusgjIA/Pr0PKoe8Ju85Rauh2AdQrr
-        vAQLgikwLF/a1H2nDKufDjvyLFJe059tpY64L6W
-X-QQ-GoodBg: 0
-From:   Jilin Yuan <yuanjilin@cdjrlc.com>
-To:     romieu@fr.zoreil.com, davem@davemloft.net, edumazet@google.com,
-        kuba@kernel.org, pabeni@redhat.com
-Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jilin Yuan <yuanjilin@cdjrlc.com>
-Subject: [PATCH] ethernet/via: fix repeated words in comments
-Date:   Fri,  8 Jul 2022 22:53:04 +0800
-Message-Id: <20220708145304.31102-1-yuanjilin@cdjrlc.com>
-X-Mailer: git-send-email 2.36.1
+        Fri, 8 Jul 2022 10:53:56 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 997682A73D;
+        Fri,  8 Jul 2022 07:53:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=9/lkeRcGIhHu6UVP5xYmV7mYlWFVVjg4XhlUmR+XakU=; b=u/hJU81hiwYxXnG04A+ldFArw5
+        FTQjbsTDMajhXO2rUfAsuJI5/r3v1zr7iPeLiKDX6NrmpYwS8sf/5S306VLzRoZFaBIwztvkTEkXm
+        eUm4v4oYRwLM561NqYLJA1JF3xrDFVyWq9meyhaNJYzbINN0H+pDxN8ehYUW/hUtRd3BomZ6BuHhx
+        w1GKs/7ZEFQf3u8WfpHzqdV2N1ch2jMDqeEICZKZfgnuXpbopkkQqToE1231YgyyF7abGsJNymMS4
+        rwxXRjkK5P4E5oT7IseYLrsfKCYMu4F76TCxKwWUCnUBPhXutUNM7GduKN+ZeGdWwcUOKY0ynubE/
+        IYEil3TQ==;
+Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1o9pMc-003a34-EH; Fri, 08 Jul 2022 14:53:50 +0000
+Date:   Fri, 8 Jul 2022 15:53:50 +0100
+From:   Matthew Wilcox <willy@infradead.org>
+To:     ira.weiny@intel.com
+Cc:     Dan Williams <dan.j.williams@intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Alison Schofield <alison.schofield@intel.com>,
+        Vishal Verma <vishal.l.verma@intel.com>,
+        linux-kernel@vger.kernel.org, linux-cxl@vger.kernel.org,
+        linux-pci@vger.kernel.org, linux-fsdevel@vger.kernel.org
+Subject: Re: [RFC PATCH 1/3] xarray: Introduce devm_xa_init()
+Message-ID: <YshE/pwSUBPAeybU@casper.infradead.org>
+References: <20220705232159.2218958-1-ira.weiny@intel.com>
+ <20220705232159.2218958-2-ira.weiny@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtp:cdjrlc.com:qybglogicsvr:qybglogicsvr4
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,RDNS_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,T_SPF_HELO_TEMPERROR autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220705232159.2218958-2-ira.weiny@intel.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
- Delete the redundant word 'driver'.
+On Tue, Jul 05, 2022 at 04:21:57PM -0700, ira.weiny@intel.com wrote:
+> The main issue I see with this is defining devm_xa_init() in device.h.
+> This makes sense because a device is required to use the call.  However,
+> I'm worried about if users will find the call there vs including it in
+> xarray.h?
 
-Signed-off-by: Jilin Yuan <yuanjilin@cdjrlc.com>
----
- drivers/net/ethernet/via/via-velocity.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/net/ethernet/via/via-velocity.h b/drivers/net/ethernet/via/via-velocity.h
-index c02a9654dce6..ffdac6fac054 100644
---- a/drivers/net/ethernet/via/via-velocity.h
-+++ b/drivers/net/ethernet/via/via-velocity.h
-@@ -938,7 +938,7 @@ enum  velocity_owner {
- #define IMR_MASK_VALUE      0x0013FB0FUL	/* initial value of IMR
- 						   ignore MIBFI,RACEI to
- 						   reduce intr. frequency
--						   NOTE.... do not enable NoBuf int mask at driver driver
-+						   NOTE.... do not enable NoBuf int mask at driver
- 						      when (1) NoBuf -> RxThreshold = SF
- 							   (2) OK    -> RxThreshold = original value
- 						 */
--- 
-2.36.1
+Honestly, I don't want users to find it.  This only makes sense if you're
+already bought in to the devm cult.  I worry people will think that
+they don't need to do anything else; that everything will be magically
+freed for them, and we'll leak the objects pointed to from the xarray.
+I don't even like having xa_destroy() in the API, because of exactly this.
 

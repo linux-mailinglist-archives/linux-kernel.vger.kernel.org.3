@@ -2,120 +2,172 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DB28056BE07
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 18:09:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B26A56BD3D
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 18:08:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238921AbiGHP6Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Jul 2022 11:58:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41108 "EHLO
+        id S238903AbiGHP6s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Jul 2022 11:58:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41892 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238878AbiGHP6P (ORCPT
+        with ESMTP id S238893AbiGHP6q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Jul 2022 11:58:15 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 442A573922;
-        Fri,  8 Jul 2022 08:58:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=6RqQ8+XNVDVObMJIyPeKINSrkjPLTw+0lvhGuSc1mv4=; b=U/181vdzVYQuUne6r4DSfvY+yg
-        Qp6rXidC6C9LEBdozRcX7xo/qlo8qm4YTHwa+5tM++bKx1vSdPeNWBhbhmZNnefGmT6KhhVc09xee
-        +A7G9itA8blRQMvCB4Vo5CgudikDfZrNXVUeFZ0sMtJsGxpxdyh3ZGnNYMXL/jSwMyLo3MsT6T9T2
-        wIAPsGLZup7bDPOqfjynoKwYV7hiO43NC8p8DQVShXMX6WIl97tAk9dPcWhcN4yvfSUO/XGf3XtVr
-        7Ierci+IrPeQU2BuSRPE5zp1AlgTMI7aqsG4Kj5RnglyRUdpbd2TOZUkI2feTeyeA0CZEUZTIXdtb
-        mwZm7L2Q==;
-Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1o9qMq-004UMR-T3; Fri, 08 Jul 2022 15:58:08 +0000
-Date:   Fri, 8 Jul 2022 08:58:08 -0700
-From:   Luis Chamberlain <mcgrof@kernel.org>
-To:     Song Liu <songliubraving@fb.com>
-Cc:     Song Liu <song@kernel.org>, bpf <bpf@vger.kernel.org>,
-        lkml <linux-kernel@vger.kernel.org>,
-        Linux-MM <linux-mm@kvack.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Kernel Team <Kernel-team@fb.com>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        "rick.p.edgecombe@intel.com" <rick.p.edgecombe@intel.com>
-Subject: Re: [PATCH v6 bpf-next 0/5] bpf_prog_pack followup
-Message-ID: <YshUEEQ0lk1ON7H6@bombadil.infradead.org>
-References: <20220707223546.4124919-1-song@kernel.org>
- <YsdlXjpRrlE9Z+Jq@bombadil.infradead.org>
- <F000FF60-CF95-4E6B-85BD-45FC668AAE0A@fb.com>
- <YseAEsjE49AZDp8c@bombadil.infradead.org>
- <C96F5607-6FFE-4B45-9A9D-B89E3F67A79A@fb.com>
+        Fri, 8 Jul 2022 11:58:46 -0400
+Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07A8545066;
+        Fri,  8 Jul 2022 08:58:42 -0700 (PDT)
+Received: from lelv0265.itg.ti.com ([10.180.67.224])
+        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 268FwSAP089860;
+        Fri, 8 Jul 2022 10:58:28 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1657295908;
+        bh=bbfEE7t6ty3Uw+yroVSM9f1oWuAgijX5go8kEgIrGCU=;
+        h=From:To:CC:Subject:Date;
+        b=ljN4MlvFABM8dxEXlAS+n+d1imGUtx+0c9r+x8cxyzeS3N1FBt8jA6vYsaaiTZ8/z
+         k7H6FrG6tbG78t9kAR8qKPwbhFxUFUWOCj1VJWGKZ3lxZszUEqpC2nxk+YwZ2QdCFI
+         Vo0jPH1jVsOAtQs4r60O+PLVdI/38ubf+L1zQ9J4=
+Received: from DLEE109.ent.ti.com (dlee109.ent.ti.com [157.170.170.41])
+        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 268FwS52016574
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Fri, 8 Jul 2022 10:58:28 -0500
+Received: from DLEE105.ent.ti.com (157.170.170.35) by DLEE109.ent.ti.com
+ (157.170.170.41) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Fri, 8
+ Jul 2022 10:58:28 -0500
+Received: from fllv0039.itg.ti.com (10.64.41.19) by DLEE105.ent.ti.com
+ (157.170.170.35) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
+ Frontend Transport; Fri, 8 Jul 2022 10:58:28 -0500
+Received: from uda0132425.dhcp.ti.com (ileax41-snat.itg.ti.com [10.172.224.153])
+        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 268FwP5j105927;
+        Fri, 8 Jul 2022 10:58:26 -0500
+From:   Vignesh Raghavendra <vigneshr@ti.com>
+To:     Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+CC:     <linux-gpio@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Linux ARM Mailing List <linux-arm-kernel@lists.infradead.org>
+Subject: [RESEND][PATCH v5] dt-bindings: gpio: Convert TI TPIC2810 GPIO Controller bindings to YAML
+Date:   Fri, 8 Jul 2022 21:28:19 +0530
+Message-ID: <20220708155819.3096903-1-vigneshr@ti.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <C96F5607-6FFE-4B45-9A9D-B89E3F67A79A@fb.com>
-Sender: Luis Chamberlain <mcgrof@infradead.org>
-X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jul 08, 2022 at 01:36:25AM +0000, Song Liu wrote:
-> 
-> 
-> > On Jul 7, 2022, at 5:53 PM, Luis Chamberlain <mcgrof@kernel.org> wrote:
-> > 
-> > On Thu, Jul 07, 2022 at 11:52:58PM +0000, Song Liu wrote:
-> >>> On Jul 7, 2022, at 3:59 PM, Luis Chamberlain <mcgrof@kernel.org> wrote:
-> >>> 
-> >>> On Thu, Jul 07, 2022 at 03:35:41PM -0700, Song Liu wrote:
-> >>>> This set is the second half of v4 [1].
-> >>>> 
-> >>>> Changes v5 => v6:
-> >>>> 1. Rebase and extend CC list.
-> >>> 
-> >>> Why post a new iteration so soon without completing the discussion we
-> >>> had? It seems like we were at least going somewhere. If it's just
-> >>> to include mm as I requested, sure, that's fine, but this does not
-> >>> provide context as to what we last were talking about.
-> >> 
-> >> Sorry for sending v6 too soon. The primary reason was to extend the CC
-> >> list and add it back to patchwork (v5 somehow got archived). 
-> >> 
-> >> Also, I think vmalloc_exec_ work would be a separate project, while this 
-> >> set is the followup work of bpf_prog_pack. Does this make sense? 
-> >> 
-> >> Btw, vmalloc_exec_ work could be a good topic for LPC. It will be much
-> >> more efficient to discuss this in person. 
-> > 
-> > What we need is input from mm / arch folks. What is not done here is
-> > what that stuff we're talking about is and so mm folks can't guess. My
-> > preference is to address that.
-> > 
-> > I don't think in person discussion is needed if the only folks
-> > discussing this topic so far is just you and me.
-> 
-> How about we start a thread with mm / arch folks for the vmalloc_exec_*
-> topic? I will summarize previous discussions and include pointers to 
-> these discussions. If necessary, we can continue the discussion at LPC.
+From: Aparna M <a-m1@ti.com>
 
-This sounds like a nice thread to use as this is why we are talking
-about that topic.
+Convert gpio-tpic2810 bindings to yaml format and remove outdated
+bindings in .txt format.
 
-> OTOH, I guess the outcome of that discussion should not change this set? 
+Signed-off-by: Aparna M <a-m1@ti.com>
+Reviewed-by: Rob Herring <robh@kernel.org>
+Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
+Signed-off-by: Vignesh Raghavendra <vigneshr@ti.com>
+---
+v5 -> Resend v5: Collect R-bys
+v4 -> v5: Fix indentation issues
+v3 -> v4: Add gpio-line-names property
+v2 -> v3: Remove redundant descriptions and make minor change in example
+v1 -> v2: Fix identation issues and update commit message
 
-If the above is done right then actually I think it would show similar
-considerations for a respective free for module_alloc_huge().
+ .../bindings/gpio/gpio-tpic2810.txt           | 16 ------
+ .../bindings/gpio/gpio-tpic2810.yaml          | 51 +++++++++++++++++++
+ 2 files changed, 51 insertions(+), 16 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/gpio/gpio-tpic2810.txt
+ create mode 100644 Documentation/devicetree/bindings/gpio/gpio-tpic2810.yaml
 
-> If we have concern about module_alloc_huge(), maybe we can have bpf code 
-> call vmalloc directly (until we have vmalloc_exec_)? 
+diff --git a/Documentation/devicetree/bindings/gpio/gpio-tpic2810.txt b/Documentation/devicetree/bindings/gpio/gpio-tpic2810.txt
+deleted file mode 100644
+index 1afc2de7a537..000000000000
+--- a/Documentation/devicetree/bindings/gpio/gpio-tpic2810.txt
++++ /dev/null
+@@ -1,16 +0,0 @@
+-TPIC2810 GPIO controller bindings
+-
+-Required properties:
+- - compatible		: Should be "ti,tpic2810".
+- - reg			: The I2C address of the device
+- - gpio-controller	: Marks the device node as a GPIO controller.
+- - #gpio-cells		: Should be two. For consumer use see gpio.txt.
+-
+-Example:
+-
+-	gpio@60 {
+-		compatible = "ti,tpic2810";
+-		reg = <0x60>;
+-		gpio-controller;
+-		#gpio-cells = <2>;
+-	};
+diff --git a/Documentation/devicetree/bindings/gpio/gpio-tpic2810.yaml b/Documentation/devicetree/bindings/gpio/gpio-tpic2810.yaml
+new file mode 100644
+index 000000000000..cb8a5c376e1e
+--- /dev/null
++++ b/Documentation/devicetree/bindings/gpio/gpio-tpic2810.yaml
+@@ -0,0 +1,51 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/gpio/gpio-tpic2810.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: TPIC2810 GPIO controller bindings
++
++maintainers:
++  - Aswath Govindraju <a-govindraju@ti.com>
++
++properties:
++  compatible:
++    enum:
++      - ti,tpic2810
++
++  reg:
++    maxItems: 1
++
++  gpio-controller: true
++
++  "#gpio-cells":
++    const: 2
++
++  gpio-line-names:
++    minItems: 1
++    maxItems: 32
++
++required:
++  - compatible
++  - reg
++  - gpio-controller
++  - "#gpio-cells"
++
++additionalProperties: false
++
++examples:
++  - |
++    #include <dt-bindings/gpio/gpio.h>
++
++    i2c {
++        #address-cells = <1>;
++        #size-cells = <0>;
++        gpio@60 {
++            compatible = "ti,tpic2810";
++            reg = <0x60>;
++            gpio-controller;
++            #gpio-cells = <2>;
++            gpio-line-names = "LED A", "LED B", "LED C";
++        };
++    };
+-- 
+2.25.1
 
-You'd need to then still open code in a similar way the same things
-which we are trying to reach consensus on.
-
-> What do you think about this plan?
-
-I think we should strive to not be lazy and sloppy, and prevent growth
-of sloppy code. So long as we do that I think this is all reasoanble.
-
-  Luis

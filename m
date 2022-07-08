@@ -2,92 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0EBF056BD4C
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 18:08:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 73F7B56BD44
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 18:08:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238997AbiGHQDe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Jul 2022 12:03:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47048 "EHLO
+        id S238742AbiGHQDw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Jul 2022 12:03:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47724 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238127AbiGHQDa (ORCPT
+        with ESMTP id S238029AbiGHQDt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Jul 2022 12:03:30 -0400
-Received: from mail-yb1-xb35.google.com (mail-yb1-xb35.google.com [IPv6:2607:f8b0:4864:20::b35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A45FF1171;
-        Fri,  8 Jul 2022 09:03:28 -0700 (PDT)
-Received: by mail-yb1-xb35.google.com with SMTP id p129so8773528yba.7;
-        Fri, 08 Jul 2022 09:03:28 -0700 (PDT)
+        Fri, 8 Jul 2022 12:03:49 -0400
+Received: from alexa-out.qualcomm.com (alexa-out.qualcomm.com [129.46.98.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4EB25E097;
+        Fri,  8 Jul 2022 09:03:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=jC9bt20ORRlGeFu2nX1nb50U0xaaq8Zx5a1ATBqxDXc=;
-        b=m7g34KswNMNK+JzrpiOl2eVrf2NkrwDYewCexb/DRwTdwQzrQS/LxtTRERGBB5f6dF
-         sod11nuhuUNyU3vKNahTRSfBh6FPN8j5FXobLKn1glzxNg9UbhHQW7oq+cXdyPeDbJsc
-         fVUNNG6A+7rIOFIh4iX3U0xQgK8x5lsrtp+9fB2v9BTzfSfcsf7FJD5mgsAUyC3MiwG+
-         WQXEqh6zBc9gZq5tcN2NORS+4sh93YqR79IW+5brJpQacU7G49aAm79L7DRyftj9Sb2x
-         jYWz1Ic/d2LLzIdiOEfq2DYdNxE2WrVwgXXqIwkWrQmrotXBxNciw8WQz5s/4A4Vmgpc
-         9BqQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=jC9bt20ORRlGeFu2nX1nb50U0xaaq8Zx5a1ATBqxDXc=;
-        b=mcvwOMUBw4fOEtXu9UQFZV8ahsZyXhDOpjMEGSy0U8y/K3yAmwlHfFHwlfxHybKw4j
-         /ZKHRMrG8TU5nV7xsQqThZ60RTd8NqhPzzntnjXLazBzbFiSt5jq4u5iXditLVVMQ96m
-         Ys1aAFFl6PAWuO3bfkYtWI4ZNDaMb0RcpdlM3wtpVwDD29K/ODiZacUBzVvChGEH7uhy
-         epYRr0x6JrtA1btuZaEacgZkwhhJEzjzcrWmdx8kX8pIMM8yDXVxkvgHbpelJzE/apb3
-         3cneklTxXhowEjMxVAYWW5ncNfe6GidJV/uS3GJ7HWp0nAwcJ5D0hbjg8RWDaY6yExPw
-         eyew==
-X-Gm-Message-State: AJIora9lPLWbYdIl5ledvJxrIQDf06D70LVhJFtFdCikPWOtMRBgvmFu
-        F7JrVFKRu/UHjLWa9ZNAoQ+yAPj+DvYQmEnsgs8=
-X-Google-Smtp-Source: AGRyM1trwccebaK2LpZ94bVBfS1ySQhGM68O7j7fP8z78jBh83olSDAoI6ao6IQOU9x6j9JMgYbih3qYt4w3gsS4eMg=
-X-Received: by 2002:a05:6902:10c9:b0:668:e27c:8f7 with SMTP id
- w9-20020a05690210c900b00668e27c08f7mr4408148ybu.128.1657296207593; Fri, 08
- Jul 2022 09:03:27 -0700 (PDT)
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1657296229; x=1688832229;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=Bbltvf1E1n7dEQo4s8VfRTS+CjAivEgSlrXihksGW7Q=;
+  b=VFb4B/Xp/2IkHXUSVv8aXEKnjZr9nLz5yW3bGYxrQd7YgR2Ryo/5HslP
+   UXN/L0Nnkt+/Mg7L6/ftli6IcOaKTj2BCr7Uz1UmmSV0SCWzPwqfnd/EN
+   WQvcdoSXb2sVePhB0kF0uVtH+jM62HHOBSO2CjA6mdL/3E/9NKZVywEGM
+   A=;
+Received: from ironmsg-lv-alpha.qualcomm.com ([10.47.202.13])
+  by alexa-out.qualcomm.com with ESMTP; 08 Jul 2022 09:03:49 -0700
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg-lv-alpha.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jul 2022 09:03:48 -0700
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Fri, 8 Jul 2022 09:03:47 -0700
+Received: from [10.111.160.191] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Fri, 8 Jul 2022
+ 09:03:45 -0700
+Message-ID: <57d342b6-6254-9bb0-da80-a2f6b4d5eefe@quicinc.com>
+Date:   Fri, 8 Jul 2022 09:03:43 -0700
 MIME-Version: 1.0
-References: <20220705201026.2487665-1-imran.f.khan@oracle.com>
-In-Reply-To: <20220705201026.2487665-1-imran.f.khan@oracle.com>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Fri, 8 Jul 2022 18:02:51 +0200
-Message-ID: <CAHp75Vc6Oc+cjt8dWBiUFSVnJB8CbkA52Y_OTOT32AwZQcEdMw@mail.gmail.com>
-Subject: Re: [PATCH] Revert "kernfs: Change kernfs_notify_list to llist."
-To:     Imran Khan <imran.f.khan@oracle.com>
-Cc:     Tejun Heo <tj@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Michael Walle <michael@walle.cc>,
-        Rob Herring <robh@kernel.org>,
-        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Guillaume Tucker <guillaume.tucker@collabora.com>,
-        Petr Mladek <pmladek@suse.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.2
+Subject: Re: [PATCH RESEND] drm/msm/dsi: fix the inconsistent indenting
+Content-Language: en-US
+To:     sunliming <sunliming@kylinos.cn>, <christian.koenig@amd.com>,
+        <robdclark@gmail.com>, <dmitry.baryshkov@linaro.org>
+CC:     <freedreno@lists.freedesktop.org>, <linux-kernel@vger.kernel.org>,
+        <linux-arm-msm@vger.kernel.org>, <kelulanainsley@gmail.com>,
+        "kernel test robot" <lkp@intel.com>
+References: <20220708005832.439722-1-sunliming@kylinos.cn>
+From:   Abhinav Kumar <quic_abhinavk@quicinc.com>
+In-Reply-To: <20220708005832.439722-1-sunliming@kylinos.cn>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jul 5, 2022 at 10:24 PM Imran Khan <imran.f.khan@oracle.com> wrote:
-
-...
-
-> Reported-by: Nathan Chancellor <nathan@kernel.org>
-> Reported-by: Michael Walle <michael@walle.cc>
-> Reported-by: Marek Szyprowski <m.szyprowski@samsung.com>
->
-> Signed-off-by: Imran Khan <imran.f.khan@oracle.com>
-
-A tag block mustn't include blank lines.
 
 
--- 
-With Best Regards,
-Andy Shevchenko
+On 7/7/2022 5:58 PM, sunliming wrote:
+> Fix the inconsistent indenting in function msm_dsi_dphy_timing_calc_v3().
+> 
+> Fix the following smatch warnings:
+> 
+> drivers/gpu/drm/msm/dsi/phy/dsi_phy.c:350 msm_dsi_dphy_timing_calc_v3() warn: inconsistent indenting
+> 
+> Reported-by: kernel test robot <lkp@intel.com>
+> Signed-off-by: sunliming <sunliming@kylinos.cn>
+Reviewed-by: Abhinav Kumar <quic_abhinavk@quicinc.com>
+> ---
+>   drivers/gpu/drm/msm/dsi/phy/dsi_phy.c | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/gpu/drm/msm/dsi/phy/dsi_phy.c b/drivers/gpu/drm/msm/dsi/phy/dsi_phy.c
+> index a39de3bdc7fa..56dfa2d24be1 100644
+> --- a/drivers/gpu/drm/msm/dsi/phy/dsi_phy.c
+> +++ b/drivers/gpu/drm/msm/dsi/phy/dsi_phy.c
+> @@ -347,7 +347,7 @@ int msm_dsi_dphy_timing_calc_v3(struct msm_dsi_dphy_timing *timing,
+>   	} else {
+>   		timing->shared_timings.clk_pre =
+>   			linear_inter(tmax, tmin, pcnt2, 0, false);
+> -			timing->shared_timings.clk_pre_inc_by_2 = 0;
+> +		timing->shared_timings.clk_pre_inc_by_2 = 0;
+>   	}
+>   
+>   	timing->ta_go = 3;

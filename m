@@ -2,207 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F31E56C4AA
-	for <lists+linux-kernel@lfdr.de>; Sat,  9 Jul 2022 01:16:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1BCF056C4E9
+	for <lists+linux-kernel@lfdr.de>; Sat,  9 Jul 2022 02:29:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237146AbiGHXPc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Jul 2022 19:15:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51060 "EHLO
+        id S237589AbiGHXRZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Jul 2022 19:17:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51894 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229850AbiGHXPa (ORCPT
+        with ESMTP id S238104AbiGHXRX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Jul 2022 19:15:30 -0400
-Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3698F193D4
-        for <linux-kernel@vger.kernel.org>; Fri,  8 Jul 2022 16:15:29 -0700 (PDT)
-Received: by mail-yb1-xb4a.google.com with SMTP id w15-20020a25ac0f000000b0066e50e4a553so40669ybi.16
-        for <linux-kernel@vger.kernel.org>; Fri, 08 Jul 2022 16:15:29 -0700 (PDT)
+        Fri, 8 Jul 2022 19:17:23 -0400
+Received: from mail-qk1-x72d.google.com (mail-qk1-x72d.google.com [IPv6:2607:f8b0:4864:20::72d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7FDC22B2E
+        for <linux-kernel@vger.kernel.org>; Fri,  8 Jul 2022 16:17:22 -0700 (PDT)
+Received: by mail-qk1-x72d.google.com with SMTP id z16so89713qkj.7
+        for <linux-kernel@vger.kernel.org>; Fri, 08 Jul 2022 16:17:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=KH9mJv0ZR2SU3DtFmyDpUkXKfdlQZNCvgcG+OHeVrdo=;
-        b=W/TSmyxBgmti9FoirOZMYegvHytBo9QLpIGhOsiyi+uEpRKokLGzcxCC6Duk5A9p/z
-         YC5JHhETfvHNfNe8G6gju732HG/EdpUMgkgPlWhgktsk/wdYjaOlvuMmmNhJdej1HhXb
-         Jbud8fWMQX25jnbqxLEWlhFhvfdwh+qXYd+fA8y6bYV/A3uTXo0dphePcewxjPnVysTI
-         eEGP3wJPTHvy6nNN92fXdoUa/WkfcgSYLQInl5DdGGj1DArkx5f0fO47WIAMfbIVRd+n
-         Lrt7DGDsC/4WpDR34FyWzGFlLgm1HGaTeikrLhqn4ye1hTv83CUKFdBW2GcRYN4la0As
-         7oYA==
+        bh=DEpqZ3mGcZFuGVY/60/YxsPdqVYz+C2jqWw/2774RQI=;
+        b=Ixk4vk0BF/h3tA1u84YeWwn1BK/PukzP5AJ63goagamizvEgvX3cL01n9W0BElB1+y
+         HaJLmIDDCV40Cf/m52APuQbKDLS9n/5xwy8Msru0FwNLmQ6imK8dhqxLJTSARGkiX3mv
+         SbDgV2chJm8yzQTBFuqyyrNEeigjfcgduAOAE9l+zUQruizU1A9IbOhzVw3lLBh3ml35
+         v6mKnw+LblTOU/sPwal5CZ97vME50rcXYSo3+p+IVR3aYGs174qzYy5jt/WsbmwSB8pA
+         LE3TvIllf5hbbFhIuYf7wmhzY9oZMhFCRZ8eDc+q746PIrdMKYNkNKBkb029hXp8VH94
+         VcxA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
-         :references:subject:from:to:cc;
-        bh=KH9mJv0ZR2SU3DtFmyDpUkXKfdlQZNCvgcG+OHeVrdo=;
-        b=xkG/x2meQE5rsskceKDNQbGSDtLIdwfcWmIuKuogwBNQ2+OGQShW4/KzkTDmrB/NKR
-         NChcqx/iLNitEnKkClu3vOO7fHO/wJBRuo0cSFdQVdrGuTd1790Ofxsk0ZGCiIsJIMBW
-         HySyKFL6sbiGDKP7YzowbyHomB+ko8UjFbDMerHRguvRPJHPR7iBxULkBbx+ffbLxonJ
-         KAWe6iEU7++QhLD10MrONhy2FjUYUFvJxxIaZIBu+rRc/lK+BRYT1VT7UA7e2PnywDGF
-         hKgwodih9erAItAEPm38YyyQzLcobsCdh+N08eF7BuAzRcREd4wriLHdtXJW/S2ArDQL
-         7Auw==
-X-Gm-Message-State: AJIora9JbpZiPRf6sdSSKARi2uV56besc7IIexU8RSGOj3Z1Nci+cPUn
-        KmKJcz+FQ6gLmoWwf9SejT5xRiI81vAj0e6SgFM=
-X-Google-Smtp-Source: AGRyM1v7HcWlAUUp2rbkrPhHWg9uP0oL5xlTYPMpOjl1u9YY7GAIlTdLGTCzQiHKS0scijjZi5QV1cgwOMw7K35sBg8=
-X-Received: from ndesaulniers1.mtv.corp.google.com ([2620:15c:211:202:d00c:5934:2a57:8a6e])
- (user=ndesaulniers job=sendgmr) by 2002:a25:3206:0:b0:66e:1dac:b1c8 with SMTP
- id y6-20020a253206000000b0066e1dacb1c8mr5871083yby.609.1657322128415; Fri, 08
- Jul 2022 16:15:28 -0700 (PDT)
-Date:   Fri,  8 Jul 2022 16:15:20 -0700
-In-Reply-To: <https://lore.kernel.org/llvm/6b330119-fbf2-1c34-7ad3-0ae789658d22@arm.com/>
-Message-Id: <20220708231520.3958391-1-ndesaulniers@google.com>
-Mime-Version: 1.0
-References: <https://lore.kernel.org/llvm/6b330119-fbf2-1c34-7ad3-0ae789658d22@arm.com/>
-X-Developer-Key: i=ndesaulniers@google.com; a=ed25519; pk=lvO/pmg+aaCb6dPhyGC1GyOCvPueDrrc8Zeso5CaGKE=
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1657322119; l=5131;
- i=ndesaulniers@google.com; s=20211004; h=from:subject; bh=Y4az1r2se6u+3RbjkapgXQQ3GpGFMe8yfK+67cNeZME=;
- b=Sishl6BCwJR0395PFgjHA3OTgt8GP/QRxYZrdVV7Isa0eYpkLpkkMC5UQOROpPu3C/fnD0vS3dIQ
- XJKN9ImHDDUaw5JHFkI7jzuSWbjTNoL8AX3Nwnhpjm8MDNEWJUnD
-X-Mailer: git-send-email 2.37.0.rc0.161.g10f37bed90-goog
-Subject: [PATCH v6] coresight: etm4x: avoid build failure with unrolled loops
-From:   Nick Desaulniers <ndesaulniers@google.com>
-To:     Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>
-Cc:     David Laight <David.Laight@aculab.com>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Arnd Bergmann <arnd@kernel.org>,
-        Tao Zhang <quic_taozha@quicinc.com>,
-        Mike Leach <mike.leach@linaro.org>,
-        Leo Yan <leo.yan@linaro.org>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Tom Rix <trix@redhat.com>, coresight@lists.linaro.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        llvm@lists.linux.dev
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=DEpqZ3mGcZFuGVY/60/YxsPdqVYz+C2jqWw/2774RQI=;
+        b=sC4dhi92gMlEKgRWHWEGHrRHsETTPttArL2Fa06E6O7D2NR26aIHYPAMwLnY9St1ay
+         ZWnjYttCpASEDG9DwYnIXi8MSjkDPlp6GXQnPfPM5ffj2aE8quPfLGZZ5ApZVIcK30T/
+         SP2cV/17lB/rq9hP7dhDwIZUM1UQE+IeOtyouE5xFEvqzzkZGWOwVy1QgWGWq6yc0isK
+         A0EayocAL9X+QgEzISv1Zpt5JvhnLwUq1XCUuuDWPmMJJ5Pw0I4Ht1yyyNFNia7f0Bw1
+         emXCENXrrcPv3bZSU3z+5vd9bijAq2Nvtnf9OMa8db07LL6nrEEsmWoCnNxD+HkN0VAt
+         eTSQ==
+X-Gm-Message-State: AJIora/RQgMsfDqZpXNen5r0eJEQHWsQYmigmtcprN0o8Kgj4pLAulP5
+        BbHSUx3fXB9cdkFaqkkibIJXgYtfgxmvwauUH9YJHQ==
+X-Google-Smtp-Source: AGRyM1tIPWcFlePAGHQYyXwBHQcoLJlC18/o7LXhR7c818g4fm/vLhfnI+CRDiqq2xs2srtXUKMmTFlKWv1M7V8cZ+w=
+X-Received: by 2002:a05:620a:f0e:b0:6b5:48f6:91da with SMTP id
+ v14-20020a05620a0f0e00b006b548f691damr3951482qkl.446.1657322241720; Fri, 08
+ Jul 2022 16:17:21 -0700 (PDT)
+MIME-Version: 1.0
+References: <1657113391-5624-1-git-send-email-alan.maguire@oracle.com> <1657113391-5624-2-git-send-email-alan.maguire@oracle.com>
+In-Reply-To: <1657113391-5624-2-git-send-email-alan.maguire@oracle.com>
+From:   Hao Luo <haoluo@google.com>
+Date:   Fri, 8 Jul 2022 16:17:10 -0700
+Message-ID: <CA+khW7h80NeCvUneKw1Sscpqt6xHhfV-pA8R_ygEBNharXnRSA@mail.gmail.com>
+Subject: Re: [PATCH v4 bpf-next 1/2] bpf: add a ksym BPF iterator
+To:     Alan Maguire <alan.maguire@oracle.com>
+Cc:     ast@kernel.org, andrii@kernel.org, daniel@iogearbox.net,
+        kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
+        john.fastabend@gmail.com, kpsingh@kernel.org, jolsa@kernel.org,
+        mhiramat@kernel.org, akpm@linux-foundation.org, void@manifault.com,
+        swboyd@chromium.org, ndesaulniers@google.com,
+        9erthalion6@gmail.com, kennyyu@fb.com, geliang.tang@suse.com,
+        kuniyu@amazon.co.jp, bpf@vger.kernel.org,
+        linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When the following configs are enabled:
-* CORESIGHT
-* CORESIGHT_SOURCE_ETM4X
-* UBSAN
-* UBSAN_TRAP
+Hi Alan,
 
-Clang fails assemble the kernel with the error:
-<instantiation>:1:7: error: expected constant expression in '.inst' directive
-.inst (0xd5200000|((((2) << 19) | ((1) << 16) | (((((((((((0x160 + (i * 4))))) >> 2))) >> 7) & 0x7)) << 12) | ((((((((((0x160 + (i * 4))))) >> 2))) & 0xf)) << 8) | (((((((((((0x160 + (i * 4))))) >> 2))) >> 4) & 0x7)) << 5)))|(.L__reg_num_x8))
-      ^
-drivers/hwtracing/coresight/coresight-etm4x-core.c:702:4: note: while in
-macro instantiation
-etm4x_relaxed_read32(csa, TRCCNTVRn(i));
-^
-drivers/hwtracing/coresight/coresight-etm4x.h:403:4: note: expanded from
-macro 'etm4x_relaxed_read32'
-read_etm4x_sysreg_offset((offset), false)))
-^
-drivers/hwtracing/coresight/coresight-etm4x.h:383:12: note: expanded
-from macro 'read_etm4x_sysreg_offset'
-__val = read_etm4x_sysreg_const_offset((offset));       \
-        ^
-drivers/hwtracing/coresight/coresight-etm4x.h:149:2: note: expanded from
-macro 'read_etm4x_sysreg_const_offset'
-READ_ETM4x_REG(ETM4x_OFFSET_TO_REG(offset))
-^
-drivers/hwtracing/coresight/coresight-etm4x.h:144:2: note: expanded from
-macro 'READ_ETM4x_REG'
-read_sysreg_s(ETM4x_REG_NUM_TO_SYSREG((reg)))
-^
-arch/arm64/include/asm/sysreg.h:1108:15: note: expanded from macro
-'read_sysreg_s'
-asm volatile(__mrs_s("%0", r) : "=r" (__val));                  \
-             ^
-arch/arm64/include/asm/sysreg.h:1074:2: note: expanded from macro '__mrs_s'
-"       mrs_s " v ", " __stringify(r) "\n"                      \
- ^
+On Wed, Jul 6, 2022 at 6:17 AM Alan Maguire <alan.maguire@oracle.com> wrote:
+>
+> add a "ksym" iterator which provides access to a "struct kallsym_iter"
+> for each symbol.  Intent is to support more flexible symbol parsing
+> as discussed in [1].
+>
+> [1] https://lore.kernel.org/all/YjRPZj6Z8vuLeEZo@krava/
+>
+> Suggested-by: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+> Signed-off-by: Alan Maguire <alan.maguire@oracle.com>
+> Acked-by: Yonghong Song <yhs@fb.com>
+> ---
+>  kernel/kallsyms.c | 95 +++++++++++++++++++++++++++++++++++++++++++++++++++++++
+>  1 file changed, 95 insertions(+)
+>
+[...]
+> +
+> +static struct bpf_iter_reg ksym_iter_reg_info = {
+> +       .target                 = "ksym",
+> +       .ctx_arg_info_size      = 1,
+> +       .ctx_arg_info           = {
+> +               { offsetof(struct bpf_iter__ksym, ksym),
+> +                 PTR_TO_BTF_ID_OR_NULL },
+> +       },
+> +       .seq_info               = &ksym_iter_seq_info,
+> +};
+> +
 
-Consider the definitions of TRCSSCSRn and TRCCNTVRn:
-drivers/hwtracing/coresight/coresight-etm4x.h:56
- #define TRCCNTVRn(n)      (0x160 + (n * 4))
-drivers/hwtracing/coresight/coresight-etm4x.h:81
- #define TRCSSCSRn(n)      (0x2A0 + (n * 4))
+Can we add allow resched here?
 
-Where the macro parameter is expanded to i; a loop induction variable
-from etm4_disable_hw.
+ .feature = BPF_ITER_RESCHED,
 
-When any compiler can determine that loops may be unrolled, then the
-__builtin_constant_p check in read_etm4x_sysreg_offset() defined in
-drivers/hwtracing/coresight/coresight-etm4x.h may evaluate to true. This
-can lead to the expression `(0x160 + (i * 4))` being passed to
-read_etm4x_sysreg_const_offset. Via the trace above, this is passed
-through READ_ETM4x_REG, read_sysreg_s, and finally to __mrs_s where it
-is string-ified and used directly in inline asm.
+I think this will improve the responsiveness of the kernel when iterating ksyms.
 
-Regardless of which compiler or compiler options determine whether a
-loop can or can't be unrolled, which determines whether
-__builtin_constant_p evaluates to true when passed an expression using a
-loop induction variable, it is NEVER safe to allow the preprocessor to
-construct inline asm like:
-  asm volatile (".inst (0x160 + (i * 4))" : "=r"(__val));
-                                 ^ expected constant expression
+Thanks,
+Hao
 
-Instead of read_etm4x_sysreg_offset() using __builtin_constant_p(), use
-__is_constexpr from include/linux/const.h instead to ensure only
-expressions that are valid integer constant expressions get passed
-through to read_sysreg_s().
-
-This is not a bug in clang; it's a potentially unsafe use of the macro
-arguments in read_etm4x_sysreg_offset dependent on __builtin_constant_p.
-
-Link: https://github.com/ClangBuiltLinux/linux/issues/1310
-Reported-by: Arnd Bergmann <arnd@kernel.org>
-Reported-by: Tao Zhang <quic_taozha@quicinc.com>
-Signed-off-by: Nick Desaulniers <ndesaulniers@google.com>
----
-Changes v5 -> v6:
-* Rework patch to replace use of __builtin_constant_p with __is_constexpr in
-  read_etm4x_sysreg_offset().
-* Drop Suzuki's suggested by tag, since this is a different approach.
-* Convert Tao's suggested by tag to a reported by tag.
-* Reword bottom part of commit message.
-
-V5 (Nick):
-https://lore.kernel.org/llvm/20220623174131.3818333-1-ndesaulniers@google.com/
-V4 (Nick):
-https://lore.kernel.org/llvm/20220614220229.1640085-1-ndesaulniers@google.com/
-V3 (Tao):
-https://lore.kernel.org/lkml/1632652550-26048-1-git-send-email-quic_taozha@quicinc.com/
-V2 (Arnd):
-https://lore.kernel.org/lkml/20210429145752.3218324-1-arnd@kernel.org/
-V1 (Arnd):
-https://lore.kernel.org/lkml/20210225094324.3542511-1-arnd@kernel.org/
-
- drivers/hwtracing/coresight/coresight-etm4x.h | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/hwtracing/coresight/coresight-etm4x.h b/drivers/hwtracing/coresight/coresight-etm4x.h
-index 33869c1d20c3..a7bfea31f7d8 100644
---- a/drivers/hwtracing/coresight/coresight-etm4x.h
-+++ b/drivers/hwtracing/coresight/coresight-etm4x.h
-@@ -7,6 +7,7 @@
- #define _CORESIGHT_CORESIGHT_ETM_H
- 
- #include <asm/local.h>
-+#include <linux/const.h>
- #include <linux/spinlock.h>
- #include <linux/types.h>
- #include "coresight-priv.h"
-@@ -515,7 +516,7 @@
- 	({									\
- 		u64 __val;							\
- 										\
--		if (__builtin_constant_p((offset)))				\
-+		if (__is_constexpr((offset)))					\
- 			__val = read_etm4x_sysreg_const_offset((offset));	\
- 		else								\
- 			__val = etm4x_sysreg_read((offset), true, (_64bit));	\
-
-base-commit: 525496a030de4ae64bb9e1d6bfc88eec6f5fe6e2
--- 
-2.37.0.rc0.161.g10f37bed90-goog
-
+> +BTF_ID_LIST(btf_ksym_iter_id)
+> +BTF_ID(struct, kallsym_iter)
+> +
+> +static int __init bpf_ksym_iter_register(void)
+> +{
+> +       int ret;
+> +
+> +       ksym_iter_reg_info.ctx_arg_info[0].btf_id = *btf_ksym_iter_id;
+> +       ret = bpf_iter_reg_target(&ksym_iter_reg_info);
+> +       if (ret)
+> +               pr_warn("Warning: could not register bpf ksym iterator: %d\n", ret);
+> +       return ret;
+> +}
+> +
+> +late_initcall(bpf_ksym_iter_register);
+> +
+> +#endif /* CONFIG_BPF_SYSCALL */
+> +
+>  static inline int kallsyms_for_perf(void)
+>  {
+>  #ifdef CONFIG_PERF_EVENTS
+> --
+> 1.8.3.1
+>

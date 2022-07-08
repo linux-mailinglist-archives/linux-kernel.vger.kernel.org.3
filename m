@@ -2,56 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D138856B2FA
+	by mail.lfdr.de (Postfix) with ESMTP id 8851556B2F9
 	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 08:53:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237425AbiGHGwg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Jul 2022 02:52:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40560 "EHLO
+        id S237433AbiGHGwi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Jul 2022 02:52:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40572 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237409AbiGHGwd (ORCPT
+        with ESMTP id S237414AbiGHGwe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Jul 2022 02:52:33 -0400
+        Fri, 8 Jul 2022 02:52:34 -0400
 Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 710FD6EE99
-        for <linux-kernel@vger.kernel.org>; Thu,  7 Jul 2022 23:52:32 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5FF006EE9C;
+        Thu,  7 Jul 2022 23:52:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1657263152; x=1688799152;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=UCgoIzNJOQavXa+zaiB+/6E4QSPY7V0WDfEQ5NKLVx4=;
-  b=AUqHR2nKCQGImqiHUy2RCh8nJWiiP6zNtX9OncxqYvXz0Coum6SAIhSN
-   mcIaMsb5+vbVKQEUtKA6HqCf/4hBzb9eQRuje/NqBleWdu/nWp5GaWWvh
-   n4Bb71GiNjFix90vjROPOKZ+GILrfqdrZ1WgA4G/HRmcvAXadznLgtFME
-   X5Ko11cJXjFrw3Qt7m+jNB24yLv5NKsdmUWjDtYtsPQZizzR9KcOPMYOS
-   LuBjQdX0FFAh5VyOJL/mXadLKmQpTDjpVlRza5+xOUOMII9mqFdvrrYUh
-   yqheMDOOjhSvLUmRRv9ItNr6QmURPAADdpeIl3recuq9CABu4mEFhoiCJ
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10401"; a="284949287"
+  t=1657263153; x=1688799153;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=QIOfrS9Mg8mDpfgg0AWFxkQHpTHuQeEmTtCHCmLAbsc=;
+  b=EtjtPgeGc73fbn3ugI0CXgz6Sx7nreQ31HvzReNgj/roLiNUAKHuoiK0
+   vuR/4T0KZJo6ORII2iSqPgp3ANiAajdCU7vvjmXgBtoMELpCxzO8ydNhG
+   XEq8BQ9UuFa9DNe0nrNy6NjVcZ3OVjtN2HArYQ8G7Zi+RnLB2WCH0UyP2
+   MH5ZbbDd9nm+L+o+oFu6cxVWD/MVmzeillq4JMkcyuVjeZAQ7i06rxgGi
+   JnNg9/IyN5P5B+US3CfgDuB7I3K3/KAkP0Dp4qxhR/Z46sklylwfQoRPI
+   IMp9LX4NwGKJ/xEX0H1KC89t6Hg9Lzp2G5R0z52gSKXxHuSfikpuvO+YI
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10401"; a="284949289"
 X-IronPort-AV: E=Sophos;i="5.92,254,1650956400"; 
-   d="scan'208";a="284949287"
+   d="scan'208";a="284949289"
 Received: from fmsmga001.fm.intel.com ([10.253.24.23])
   by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jul 2022 23:52:32 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.92,254,1650956400"; 
-   d="scan'208";a="736239585"
+   d="scan'208";a="736239583"
 Received: from lkp-server01.sh.intel.com (HELO 68b931ab7ac1) ([10.239.97.150])
   by fmsmga001.fm.intel.com with ESMTP; 07 Jul 2022 23:52:30 -0700
 Received: from kbuild by 68b931ab7ac1 with local (Exim 4.95)
         (envelope-from <lkp@intel.com>)
-        id 1o9hqo-000N41-1V;
-        Fri, 08 Jul 2022 06:52:30 +0000
-Date:   Fri, 8 Jul 2022 14:51:57 +0800
+        id 1o9hqn-000N3q-OY;
+        Fri, 08 Jul 2022 06:52:29 +0000
+Date:   Fri, 8 Jul 2022 14:52:10 +0800
 From:   kernel test robot <lkp@intel.com>
-To:     Hector Martin <marcan@marcan.st>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Subject: [asahilinux:t8112/bringup 16/19]
- drivers/hid/dockchannel-hid/dockchannel-hid.c:305:28: error: implicit
- declaration of function 'FIELD_PREP'
-Message-ID: <202207081415.Rkx8mCkO-lkp@intel.com>
+To:     Manish Mandlik <mmandlik@google.com>, marcel@holtmann.org,
+        luiz.dentz@gmail.com
+Cc:     kbuild-all@lists.01.org, linux-bluetooth@vger.kernel.org,
+        chromeos-bluetooth-upstreaming@chromium.org,
+        Manish Mandlik <mmandlik@google.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Johan Hedberg <johan.hedberg@gmail.com>,
+        Paolo Abeni <pabeni@redhat.com>, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org
+Subject: Re: [PATCH v3 2/3] Bluetooth: Add sysfs entry to enable/disable
+ devcoredump
+Message-ID: <202207081448.MghkbBvn-lkp@intel.com>
+References: <20220707151420.v3.2.I39885624992dacff236aed268bdaa69107cd1310@changeid>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20220707151420.v3.2.I39885624992dacff236aed268bdaa69107cd1310@changeid>
 X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
@@ -62,158 +72,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/AsahiLinux/linux t8112/bringup
-head:   0e7640fed025ba0ce4b845a0bbf2a5fdceab631d
-commit: f40be88d7f037e2b682492c4abf36b136d136d22 [16/19] hid: Add Apple DockChannel HID transport driver
-config: sh-allmodconfig (https://download.01.org/0day-ci/archive/20220708/202207081415.Rkx8mCkO-lkp@intel.com/config)
-compiler: sh4-linux-gcc (GCC) 11.3.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/AsahiLinux/linux/commit/f40be88d7f037e2b682492c4abf36b136d136d22
-        git remote add asahilinux https://github.com/AsahiLinux/linux
-        git fetch --no-tags asahilinux t8112/bringup
-        git checkout f40be88d7f037e2b682492c4abf36b136d136d22
+Hi Manish,
+
+Thank you for the patch! Perhaps something to improve:
+
+[auto build test WARNING on bluetooth/master]
+[also build test WARNING on bluetooth-next/master linus/master v5.19-rc5 next-20220707]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Manish-Mandlik/Bluetooth-Add-support-for-devcoredump/20220708-061724
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/bluetooth/bluetooth.git master
+config: i386-randconfig-s002 (https://download.01.org/0day-ci/archive/20220708/202207081448.MghkbBvn-lkp@intel.com/config)
+compiler: gcc-11 (Debian 11.3.0-3) 11.3.0
+reproduce:
+        # apt-get install sparse
+        # sparse version: v0.6.4-39-gce1a6720-dirty
+        # https://github.com/intel-lab-lkp/linux/commit/0d785cbd11ed3a6de29aeb05926177440ab26d54
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Manish-Mandlik/Bluetooth-Add-support-for-devcoredump/20220708-061724
+        git checkout 0d785cbd11ed3a6de29aeb05926177440ab26d54
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=sh SHELL=/bin/bash drivers/hid/dockchannel-hid/
+        make W=1 C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=i386 SHELL=/bin/bash net/bluetooth/
 
 If you fix the issue, kindly add following tag where applicable
 Reported-by: kernel test robot <lkp@intel.com>
 
-All error/warnings (new ones prefixed by >>):
 
-   drivers/hid/dockchannel-hid/dockchannel-hid.c: In function 'dchid_cmd':
->> drivers/hid/dockchannel-hid/dockchannel-hid.c:305:28: error: implicit declaration of function 'FIELD_PREP' [-Werror=implicit-function-declaration]
-     305 |         iface->out_flags = FIELD_PREP(FLAGS_GROUP, type) | FIELD_PREP(FLAGS_REQ, req);
-         |                            ^~~~~~~~~~
-   In file included from include/linux/device.h:15,
-                    from drivers/hid/dockchannel-hid/dockchannel-hid.c:10:
-   drivers/hid/dockchannel-hid/dockchannel-hid.c: In function 'dchid_handle_ready':
->> drivers/hid/dockchannel-hid/dockchannel-hid.c:571:37: warning: format '%ld' expects argument of type 'long int', but argument 3 has type 'size_t' {aka 'unsigned int'} [-Wformat=]
-     571 |                 dev_err(dchid->dev, "Bad length for ready message: %ld\n", length);
-         |                                     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/dev_printk.h:110:30: note: in definition of macro 'dev_printk_index_wrap'
-     110 |                 _p_func(dev, fmt, ##__VA_ARGS__);                       \
-         |                              ^~~
-   include/linux/dev_printk.h:144:56: note: in expansion of macro 'dev_fmt'
-     144 |         dev_printk_index_wrap(_dev_err, KERN_ERR, dev, dev_fmt(fmt), ##__VA_ARGS__)
-         |                                                        ^~~~~~~
-   drivers/hid/dockchannel-hid/dockchannel-hid.c:571:17: note: in expansion of macro 'dev_err'
-     571 |                 dev_err(dchid->dev, "Bad length for ready message: %ld\n", length);
-         |                 ^~~~~~~
-   drivers/hid/dockchannel-hid/dockchannel-hid.c:571:70: note: format string is defined here
-     571 |                 dev_err(dchid->dev, "Bad length for ready message: %ld\n", length);
-         |                                                                    ~~^
-         |                                                                      |
-         |                                                                      long int
-         |                                                                    %d
-   drivers/hid/dockchannel-hid/dockchannel-hid.c: In function 'dchid_packet_work':
->> drivers/hid/dockchannel-hid/dockchannel-hid.c:812:20: error: implicit declaration of function 'FIELD_GET'; did you mean 'FOLL_GET'? [-Werror=implicit-function-declaration]
-     812 |         int type = FIELD_GET(FLAGS_GROUP, shdr->flags);
-         |                    ^~~~~~~~~
-         |                    FOLL_GET
-   In file included from include/linux/device.h:15,
-                    from drivers/hid/dockchannel-hid/dockchannel-hid.c:10:
->> drivers/hid/dockchannel-hid/dockchannel-hid.c:816:37: warning: format '%ld' expects argument of type 'long int', but argument 4 has type 'unsigned int' [-Wformat=]
-     816 |                 dev_err(dchid->dev, "Bad sub header length (%d > %ld)\n",
-         |                                     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/dev_printk.h:110:30: note: in definition of macro 'dev_printk_index_wrap'
-     110 |                 _p_func(dev, fmt, ##__VA_ARGS__);                       \
-         |                              ^~~
-   include/linux/dev_printk.h:144:56: note: in expansion of macro 'dev_fmt'
-     144 |         dev_printk_index_wrap(_dev_err, KERN_ERR, dev, dev_fmt(fmt), ##__VA_ARGS__)
-         |                                                        ^~~~~~~
-   drivers/hid/dockchannel-hid/dockchannel-hid.c:816:17: note: in expansion of macro 'dev_err'
-     816 |                 dev_err(dchid->dev, "Bad sub header length (%d > %ld)\n",
-         |                 ^~~~~~~
-   drivers/hid/dockchannel-hid/dockchannel-hid.c:816:68: note: format string is defined here
-     816 |                 dev_err(dchid->dev, "Bad sub header length (%d > %ld)\n",
-         |                                                                  ~~^
-         |                                                                    |
-         |                                                                    long int
-         |                                                                  %d
-   In file included from include/linux/device.h:15,
-                    from drivers/hid/dockchannel-hid/dockchannel-hid.c:10:
-   drivers/hid/dockchannel-hid/dockchannel-hid.c: In function 'dchid_handle_ack':
-   drivers/hid/dockchannel-hid/dockchannel-hid.c:842:44: warning: format '%ld' expects argument of type 'long int', but argument 4 has type 'unsigned int' [-Wformat=]
-     842 |                 dev_err(iface->dchid->dev, "Bad sub header length (%d > %ld)\n",
-         |                                            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/dev_printk.h:110:30: note: in definition of macro 'dev_printk_index_wrap'
-     110 |                 _p_func(dev, fmt, ##__VA_ARGS__);                       \
-         |                              ^~~
-   include/linux/dev_printk.h:144:56: note: in expansion of macro 'dev_fmt'
-     144 |         dev_printk_index_wrap(_dev_err, KERN_ERR, dev, dev_fmt(fmt), ##__VA_ARGS__)
-         |                                                        ^~~~~~~
-   drivers/hid/dockchannel-hid/dockchannel-hid.c:842:17: note: in expansion of macro 'dev_err'
-     842 |                 dev_err(iface->dchid->dev, "Bad sub header length (%d > %ld)\n",
-         |                 ^~~~~~~
-   drivers/hid/dockchannel-hid/dockchannel-hid.c:842:75: note: format string is defined here
-     842 |                 dev_err(iface->dchid->dev, "Bad sub header length (%d > %ld)\n",
-         |                                                                         ~~^
-         |                                                                           |
-         |                                                                           long int
-         |                                                                         %d
-   drivers/hid/dockchannel-hid/dockchannel-hid.c: In function 'dockchannel_hid_probe':
-   drivers/hid/dockchannel-hid/dockchannel-hid.c:962:14: warning: variable 'defer' set but not used [-Wunused-but-set-variable]
-     962 |         bool defer = false;
-         |              ^~~~~
-   cc1: some warnings being treated as errors
-
-Kconfig warnings: (for reference only)
-   WARNING: unmet direct dependencies detected for APPLE_ADMAC
-   Depends on DMADEVICES && (ARCH_APPLE || COMPILE_TEST
-   Selected by
-   - SND_SOC_APPLE_MCA && SOUND && !UML && SND && SND_SOC && (ARCH_APPLE || COMPILE_TEST
-
-
-vim +/FIELD_PREP +305 drivers/hid/dockchannel-hid/dockchannel-hid.c
-
-   294	
-   295	static int dchid_cmd(struct dchid_iface *iface, u32 type, u32 req,
-   296			     void *data, size_t size, void *resp_buf, size_t resp_size)
-   297	{
-   298		int ret;
-   299		int report_id = *(u8*)data;
-   300	
-   301		mutex_lock(&iface->out_mutex);
-   302	
-   303		WARN_ON(iface->out_report != -1);
-   304		iface->out_report = report_id;
- > 305		iface->out_flags = FIELD_PREP(FLAGS_GROUP, type) | FIELD_PREP(FLAGS_REQ, req);
-   306		iface->resp_buf = resp_buf;
-   307		iface->resp_size = resp_size;
-   308		reinit_completion(&iface->out_complete);
-   309	
-   310		ret = dchid_send(iface, iface->out_flags, data, size);
-   311		if (ret < 0)
-   312			goto done;
-   313	
-   314		if (!wait_for_completion_timeout(&iface->out_complete, msecs_to_jiffies(1000))) {
-   315			dev_err(iface->dchid->dev, "output report 0x%x to iface  %d (%s) timed out\n",
-   316				report_id, iface->index, iface->name);
-   317			ret = -ETIMEDOUT;
-   318			goto done;
-   319		}
-   320	
-   321		ret = iface->resp_size;
-   322		if (iface->retcode) {
-   323			dev_err(iface->dchid->dev,
-   324				"output report 0x%x to iface %d (%s) failed with err 0x%x\n",
-   325				report_id, iface->index, iface->name, iface->retcode);
-   326			ret = -EIO;
-   327		}
-   328	
-   329	done:
-   330		iface->tx_seq++;
-   331		iface->out_report = -1;
-   332		iface->out_flags = 0;
-   333		iface->resp_buf = NULL;
-   334		iface->resp_size = 0;
-   335		mutex_unlock(&iface->out_mutex);
-   336		return ret;
-   337	}
-   338	
+sparse warnings: (new ones prefixed by >>)
+>> net/bluetooth/hci_sysfs.c:118:1: sparse: sparse: symbol 'dev_attr_enable_coredump' was not declared. Should it be static?
 
 -- 
 0-DAY CI Kernel Test Service

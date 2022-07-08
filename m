@@ -2,53 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F37A56B1E6
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 07:00:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9211356B1F9
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 07:00:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237358AbiGHEtQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Jul 2022 00:49:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51324 "EHLO
+        id S237334AbiGHEt1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Jul 2022 00:49:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51610 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237340AbiGHEtJ (ORCPT
+        with ESMTP id S237110AbiGHEtX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Jul 2022 00:49:09 -0400
-Received: from mail-pj1-x1049.google.com (mail-pj1-x1049.google.com [IPv6:2607:f8b0:4864:20::1049])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC9147393B
-        for <linux-kernel@vger.kernel.org>; Thu,  7 Jul 2022 21:49:06 -0700 (PDT)
-Received: by mail-pj1-x1049.google.com with SMTP id l15-20020a17090a660f00b001ef7b1d2289so514889pjj.9
-        for <linux-kernel@vger.kernel.org>; Thu, 07 Jul 2022 21:49:06 -0700 (PDT)
+        Fri, 8 Jul 2022 00:49:23 -0400
+Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52EAD76972
+        for <linux-kernel@vger.kernel.org>; Thu,  7 Jul 2022 21:49:12 -0700 (PDT)
+Received: by mail-yb1-xb49.google.com with SMTP id e63-20020a253742000000b0066e1afdb46aso12410243yba.1
+        for <linux-kernel@vger.kernel.org>; Thu, 07 Jul 2022 21:49:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=date:message-id:mime-version:subject:from:to:cc;
-        bh=VZyJYOYOmyBhccquB8jdOUnepxpHA2EaXyI1P4UgbZk=;
-        b=OHzkH6CUxvF29C6YQodBsFfPokm7+7etvB60EYT5rIwMD9OH9U0AtmpXKx8ZweKRed
-         oVZZWfzMiTxQCiJZmTzZFy/2zT1zAwz/QiMCizqTeCDDUMzkWm28PYce3SbM5zzYBW77
-         yV0Uad6HwQFnl1WR7X0N9vmmphNFvmNcYpOaRGosGMuX2CSg5QrwApAEgKVwDHQTpcxy
-         Sky7eDBPBbF7SJ/f16wadWBTNZoJ/jocoStlAp9thvE9KSXkl3BZyWZ1QT9Zu68DamHv
-         OkCWlI0K2FLP1JijkIPh/bzpwjR0tPLlC54olqaueZJM3XL7OldUYMDKpjvcPNHZcS7f
-         1tug==
+        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
+         :cc;
+        bh=UquCbMkMEN53oDqhrIsDuW+/Yi+lnpJDBsKu7NltgmI=;
+        b=SPGqZ7snq0dDaZavBhTshBo3GD/RIz16PYHpkAZP09NkIM7rSc3+bp+s6l/7++Cv7B
+         XWa5GQMin+l++ZOP/yB/e+b60YfCQdDYXY2VcElGWwTBkz3vCLMTOOcnR9cOfsiNGmj8
+         tlqh1FLXZ3uERR/doIcBKL6AyyV2xy+uFI/GmTVeOB6R3o2WyolQeIvTIgXgI3a+UUqv
+         c5paBcyBylaDfDM1yzvksVPzvjik6pRI4mF17AwFW08HuS2JXclpRWj3VnAvBFZNo7Ea
+         6QdKwSftZV1L52yNE7NANxbkca+Rdd+HxSkS2rq66Tt7UH0+HZ+lXRb32QqGn/pRABWO
+         nFwg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
-        bh=VZyJYOYOmyBhccquB8jdOUnepxpHA2EaXyI1P4UgbZk=;
-        b=c8c7FFpYKYa0oad6I2mmyNWBJGbfWQS9GGxYBXg/irm5TYGPP0B/4W6p/LXJ/49GPw
-         rVfjWMlxkrHTMy1r01pFgwKXaYYA6WzRhE1LXM19xd4SCcbWj/sGQMEu1tNi3rPI9LTN
-         mCfsUNhqtmrEPNd3h5UIsjew0w+W0BXpw3bZ9ofqW/5VDI7f8YG+ePqxMk7BjauMW4XJ
-         ypSvSJnoFmICoAewFHWYwcscZbuwtIJPJVs9/RlgcOv2ycK/kyXO3guAvmZuBZ0ELM1a
-         rGT6yJVjLA7kDe7bVwY/cDn/IuYqNaWKwdi7bziqODPecuDxueMFwupIlLSGj9mRkGNa
-         qONQ==
-X-Gm-Message-State: AJIora8ryhbvBBB7h9AC0cKivHwfpywkm7p1NjL7l0fK1h+jk3ofamxO
-        hqgZ4W1LLQT6xr6pNYsjI9oJ95QZ5zZXmg==
-X-Google-Smtp-Source: AGRyM1v/UKrknfucMWmYcBRyH1xUQKjKyi5ZMpliyIdbk8sMgra7H2LLCj2bXBXPVZ4KhAqUnXO25gVfJYLhfQ==
+        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
+         :references:subject:from:to:cc;
+        bh=UquCbMkMEN53oDqhrIsDuW+/Yi+lnpJDBsKu7NltgmI=;
+        b=lwslEGmlroH9H6xZieW1qy4mQPWrRUp8txkjC0AZJVVQUQ00ao79qtc7eA/Z/VZOfo
+         LHGPV/G/7kI0rqEQX69CMcN7m2dwAGZCKS5qR5KMCiiJ4+5GWFoAHwTgl72aE8k1d8NH
+         a5RyGenDWvySPS1pLUT3tss/V5LsCCmVhrodehWl2mkReuExZQptqKk8JMB4uynQe/oz
+         Qv5mYFq3cWkNEu21cMW+Wiq5lrurQqZjA5/EkciOX6ClhwtdAVUZ87esNL7wpf2ks19f
+         1lttjQ/f8LsCj/AaRY9BBMO5B600/ikefDi1q8ViWtQ3D2JDB82E9E2JaFY40Zz6CjJZ
+         XUtw==
+X-Gm-Message-State: AJIora8fijclc73cthifACDovPoV3y3UG4dyiirX694dgzj673k+GxL2
+        BqJASt3RMS8WtaClYYj6628btNzwPRpL9Q==
+X-Google-Smtp-Source: AGRyM1s34hRTvZB8Y7Xk9te1i17z6IbWppPGWTLYgGaU9rmBgS1u+VkLNYZr0Wk1pk93+iVd+YYx2UmXUKNKpA==
 X-Received: from slicestar.c.googlers.com ([fda3:e722:ac3:cc00:4f:4b78:c0a8:20a1])
- (user=davidgow job=sendgmr) by 2002:a05:6a00:1895:b0:527:f270:64de with SMTP
- id x21-20020a056a00189500b00527f27064demr1678536pfh.61.1657255746437; Thu, 07
- Jul 2022 21:49:06 -0700 (PDT)
-Date:   Fri,  8 Jul 2022 12:48:44 +0800
-Message-Id: <20220708044847.531566-1-davidgow@google.com>
+ (user=davidgow job=sendgmr) by 2002:a25:ad14:0:b0:66e:cb9e:8d43 with SMTP id
+ y20-20020a25ad14000000b0066ecb9e8d43mr1664970ybi.176.1657255751621; Thu, 07
+ Jul 2022 21:49:11 -0700 (PDT)
+Date:   Fri,  8 Jul 2022 12:48:45 +0800
+In-Reply-To: <20220708044847.531566-1-davidgow@google.com>
+Message-Id: <20220708044847.531566-2-davidgow@google.com>
 Mime-Version: 1.0
+References: <20220708044847.531566-1-davidgow@google.com>
 X-Mailer: git-send-email 2.37.0.rc0.161.g10f37bed90-goog
-Subject: [PATCH v6 1/4] panic: Taint kernel if tests are run
+Subject: [PATCH v6 2/4] module: panic: Taint the kernel when selftest modules load
 From:   David Gow <davidgow@google.com>
 To:     Brendan Higgins <brendanhiggins@google.com>,
         Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
@@ -86,102 +90,79 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Most in-kernel tests (such as KUnit tests) are not supposed to run on
-production systems: they may do deliberately illegal things to trigger
-errors, and have security implications (for example, KUnit assertions
-will often deliberately leak kernel addresses).
+Taint the kernel with TAINT_TEST whenever a test module loads, by adding
+a new "TEST" module property, and setting it for all modules in the
+tools/testing directory. This property can also be set manually, for
+tests which live outside the tools/testing directory with:
+MODULE_INFO(test, "Y");
 
-Add a new taint type, TAINT_TEST to signal that a test has been run.
-This will be printed as 'N' (originally for kuNit, as every other
-sensible letter was taken.)
-
-This should discourage people from running these tests on production
-systems, and to make it easier to tell if tests have been run
-accidentally (by loading the wrong configuration, etc.)
-
-Acked-by: Luis Chamberlain <mcgrof@kernel.org>
-Reviewed-by: Brendan Higgins <brendanhiggins@google.com>
+Reviewed-by: Luis Chamberlain <mcgrof@kernel.org>
+Reviewed-by: Aaron Tomlin <atomlin@redhat.com>
+Acked-by: Brendan Higgins <brendanhiggins@google.com>
 Signed-off-by: David Gow <davidgow@google.com>
 ---
 
-This is v6 of the "make tests taint the kernel" patchset. The only
-changes since v5 (which is the version in linux-next at time of writing)
-are some rather critical fixes to patch 2/4, where the cruicial check
-was inverted. (Oops!)
+Version 6 of this patch fixes the issue pointed out by Nathan here,
+whereby the check for the module property was inverted:
+https://lore.kernel.org/linux-kselftest/Ysd9FG1fOSnzKv8d@dev-arch.thelio-3990X/
 
-The 'N' character for the taint is even less useful now that it's no
-longer short for kuNit, but all the letters in TEST are taken. :-(
+Changes since v5:
+https://lore.kernel.org/linux-kselftest/20220702040959.3232874-2-davidgow@google.com/
+- Fix the test for the module property being inverted, making this patch
+  do exactly the opposite of what it should. (Thanks Nathan Chancellor)
+- Revert to using pr_warn(), as we already don't warn if the kernel is
+  tainted, so won't spam the logs.
+- Add Reviewed-, Acked-by tags.
 
-No changes since v5:
-https://lore.kernel.org/linux-kselftest/20220702040959.3232874-1-davidgow@google.com/
+Changes since v4:
+https://lore.kernel.org/linux-kselftest/20220701084744.3002019-2-davidgow@google.com/
+- Use pr_warn_once() to only log a warning the first time a module
+taints the kernel with TAINT_TEST
+  - Loading lots of test modules is a common usecase, and this would
+otherwise spam the logs too much.
+  - Thanks Luis.
+- Remove a superfluous newline (Thanks Greg)
+- Add Luis' Reviewed-by tag.
 
-No changes since v4:
-https://lore.kernel.org/linux-kselftest/20220701084744.3002019-1-davidgow@google.com/
-
-Changes since v3:
-https://lore.kernel.org/lkml/20220513083212.3537869-1-davidgow@google.com/
-- Remove the mention of KUnit from the documentation.
-- Add Luis and Brendan's Acked/Reviewed-by tags.
-
-Changes since v2:
-https://lore.kernel.org/linux-kselftest/20220430030019.803481-1-davidgow@google.com/
-- Rename TAINT_KUNIT -> TAINT_TEST.
-- Split into separate patches for adding the taint, and triggering it.
-- Taint on a kselftest_module being loaded (patch 3/3)
-
-Changes since v1:
-https://lore.kernel.org/linux-kselftest/20220429043913.626647-1-davidgow@google.com/
-- Make the taint per-module, to handle the case when tests are in
-  (longer lasting) modules. (Thanks Greg KH).
-
-Note that this still has checkpatch.pl warnings around bracket
-placement, which are intentional as part of matching the surrounding
-code.
+This patch was new in v4 of the series.
 
 ---
- Documentation/admin-guide/tainted-kernels.rst | 1 +
- include/linux/panic.h                         | 3 ++-
- kernel/panic.c                                | 1 +
- 3 files changed, 4 insertions(+), 1 deletion(-)
+ kernel/module/main.c  | 7 +++++++
+ scripts/mod/modpost.c | 3 +++
+ 2 files changed, 10 insertions(+)
 
-diff --git a/Documentation/admin-guide/tainted-kernels.rst b/Documentation/admin-guide/tainted-kernels.rst
-index ceeed7b0798d..7d80e8c307d1 100644
---- a/Documentation/admin-guide/tainted-kernels.rst
-+++ b/Documentation/admin-guide/tainted-kernels.rst
-@@ -100,6 +100,7 @@ Bit  Log  Number  Reason that got the kernel tainted
-  15  _/K   32768  kernel has been live patched
-  16  _/X   65536  auxiliary taint, defined for and used by distros
-  17  _/T  131072  kernel was built with the struct randomization plugin
-+ 18  _/N  262144  an in-kernel test has been run
- ===  ===  ======  ========================================================
+diff --git a/kernel/module/main.c b/kernel/module/main.c
+index fed58d30725d..4723f1316709 100644
+--- a/kernel/module/main.c
++++ b/kernel/module/main.c
+@@ -1988,6 +1988,13 @@ static int check_modinfo(struct module *mod, struct load_info *info, int flags)
+ 	/* Set up license info based on the info section */
+ 	set_license(mod, get_modinfo(info, "license"));
  
- Note: The character ``_`` is representing a blank in this table to make reading
-diff --git a/include/linux/panic.h b/include/linux/panic.h
-index e71161da69c4..c7759b3f2045 100644
---- a/include/linux/panic.h
-+++ b/include/linux/panic.h
-@@ -68,7 +68,8 @@ static inline void set_arch_panic_timeout(int timeout, int arch_default_timeout)
- #define TAINT_LIVEPATCH			15
- #define TAINT_AUX			16
- #define TAINT_RANDSTRUCT		17
--#define TAINT_FLAGS_COUNT		18
-+#define TAINT_TEST			18
-+#define TAINT_FLAGS_COUNT		19
- #define TAINT_FLAGS_MAX			((1UL << TAINT_FLAGS_COUNT) - 1)
++	if (get_modinfo(info, "test")) {
++		if (!test_taint(TAINT_TEST))
++			pr_warn("%s: loading test module taints kernel.\n",
++				mod->name);
++		add_taint_module(mod, TAINT_TEST, LOCKDEP_STILL_OK);
++	}
++
+ 	return 0;
+ }
  
- struct taint_flag {
-diff --git a/kernel/panic.c b/kernel/panic.c
-index a3c758dba15a..6b3369e21026 100644
---- a/kernel/panic.c
-+++ b/kernel/panic.c
-@@ -428,6 +428,7 @@ const struct taint_flag taint_flags[TAINT_FLAGS_COUNT] = {
- 	[ TAINT_LIVEPATCH ]		= { 'K', ' ', true },
- 	[ TAINT_AUX ]			= { 'X', ' ', true },
- 	[ TAINT_RANDSTRUCT ]		= { 'T', ' ', true },
-+	[ TAINT_TEST ]			= { 'N', ' ', true },
- };
+diff --git a/scripts/mod/modpost.c b/scripts/mod/modpost.c
+index 29d5a841e215..5937212b4433 100644
+--- a/scripts/mod/modpost.c
++++ b/scripts/mod/modpost.c
+@@ -2191,6 +2191,9 @@ static void add_header(struct buffer *b, struct module *mod)
  
- /**
+ 	if (strstarts(mod->name, "drivers/staging"))
+ 		buf_printf(b, "\nMODULE_INFO(staging, \"Y\");\n");
++
++	if (strstarts(mod->name, "tools/testing"))
++		buf_printf(b, "\nMODULE_INFO(test, \"Y\");\n");
+ }
+ 
+ static void add_exported_symbols(struct buffer *buf, struct module *mod)
 -- 
 2.37.0.rc0.161.g10f37bed90-goog
 

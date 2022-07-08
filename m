@@ -2,158 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D8EAA56C32B
-	for <lists+linux-kernel@lfdr.de>; Sat,  9 Jul 2022 01:14:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7764E56C440
+	for <lists+linux-kernel@lfdr.de>; Sat,  9 Jul 2022 01:15:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240023AbiGHUSy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Jul 2022 16:18:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45208 "EHLO
+        id S240033AbiGHUUM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Jul 2022 16:20:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45854 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239177AbiGHUSv (ORCPT
+        with ESMTP id S239177AbiGHUUJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Jul 2022 16:18:51 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BC4A2DA8D;
-        Fri,  8 Jul 2022 13:18:50 -0700 (PDT)
+        Fri, 8 Jul 2022 16:20:09 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98ED71C91A
+        for <linux-kernel@vger.kernel.org>; Fri,  8 Jul 2022 13:20:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1657311530; x=1688847530;
-  h=date:from:to:cc:subject:message-id:references:
-   in-reply-to:mime-version;
-  bh=VVk3DH0J2s/uapV8NWCtaDc5GhklK5rVSPC7QvYirRw=;
-  b=I4HWS6DW7TPURtJjOnNQ6FJ8zcQK4/+AoZQ+SxXW0YrpJjx6kIRAiRP+
-   n0B2inkLJolYzsb8b/ZaeZPl2hn8l7xS7dcM3v8CBjVeiIZqL1XKvH0qB
-   /pS7cKrMOKJhaJh0iU6lCuTJF4G9+XqXeZjwSVCpHwGzVYVSj7sVDK8+P
-   gjucFaHCmQBOMThQ/59wdzTwY4hBet0KtvHNe1Z6soSMusHZx/xuw/9ky
-   IBqzdbOq7DoXhmvgPmwbXJDvW7WEddrpQlj/AHhBlKbdiEJpJTLBUDi+c
-   HLXm/G+W6dtj6TubPJugXzCLj3DG+qLdOJT/veETJ79nr47UHsun056SZ
+  t=1657311608; x=1688847608;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=rV3dhdPtTfcu/jomnR5C1BvDvT4TNSjTYVg09Gv4X+c=;
+  b=UWTSmDOqf51hsH0vmRQ4UpNfWLS+cn/S9nfT3fgdsnsWSST5pTsC7f/2
+   0TLaw4r3wpfR8iLx6ocibnpirBTMp3wbJoPxCy9fAkf57vO8tfjsefEeo
+   V9m6dwcEbNF2Nz4/zI4sXaxyXt329sQnwaAgrQTHNgfNHpZlSUC9+InQN
+   oFKqD7gXgNX+QanHE8pvD+stBaCj1242qQ/eBjjdlGUluExXn+rCWdMQx
+   WDk7lRs/UNBrvsPR66CZ3wl8UPFIzuYo9VVM4SR8dUkImjQVLs8WSGXdX
+   stc+A5mMGoxPjkf4YNPSMntwXaajtUqt/jOkjEXRRLLGYMm/d458No7sr
    w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10402"; a="284380544"
+X-IronPort-AV: E=McAfee;i="6400,9594,10402"; a="370670908"
 X-IronPort-AV: E=Sophos;i="5.92,256,1650956400"; 
-   d="scan'208";a="284380544"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jul 2022 13:18:49 -0700
+   d="scan'208";a="370670908"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jul 2022 13:20:08 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.92,256,1650956400"; 
-   d="scan'208";a="770891287"
-Received: from fmsmsx606.amr.corp.intel.com ([10.18.126.86])
-  by orsmga005.jf.intel.com with ESMTP; 08 Jul 2022 13:18:48 -0700
-Received: from fmsmsx602.amr.corp.intel.com (10.18.126.82) by
- fmsmsx606.amr.corp.intel.com (10.18.126.86) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.27; Fri, 8 Jul 2022 13:18:47 -0700
-Received: from FMSEDG603.ED.cps.intel.com (10.1.192.133) by
- fmsmsx602.amr.corp.intel.com (10.18.126.82) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.27 via Frontend Transport; Fri, 8 Jul 2022 13:18:47 -0700
-Received: from NAM12-MW2-obe.outbound.protection.outlook.com (104.47.66.42) by
- edgegateway.intel.com (192.55.55.68) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2308.27; Fri, 8 Jul 2022 13:18:46 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=UlBVGPo8ZOdxlkMKPoWw0QOF56YXG2y36tAURuXdUcHD/PwkriuF26XUwC303gnupt9O2WyUKd0/dN2BhBiIhI5CCNAD7BVzXC5KrAOaU5VELoBAb41FiR1iH66MeUSKYzwl6D6irmihmHung985geHzv1tchy3UkoAJzEGrhWvS8OfxukFqd+J6zteLzV80LBIa9qev4+OJ4ajxOfm7fsDyUgciMRXnQntDkTOLWVKm8RPMQm5PT7+77H4V+FplQ0HEc/+KhCiOEY8Zt67jeC6pBOc5mVhddxzAdHKw1sXEBPP2h9mY5Tb7ucT97v6gz0RRLGY5WgS2W2tq/wH47A==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=1dY29o8B4Mhyqv6tEXPMBWAevROIgmOmlR/cMTPpMT4=;
- b=N/pBaYNacXdRDAb7L46BJba6HBWDcET68gyNZH+U1BOn94tLhxMS1TAn7s5p7qpEL5161rHAx5PVUoWYgOwdcwC35oQ1Jj/mDdZi4SFecJWUliWsoJRIwpGxPpsbdKwkKGSouoeBlfmWqD2VKoQaE69ScA08JszFR26E6JsNnavwCmkxWvpEmMhluAnLrV5V9q157LAYpAU8IUUGHAx+q2qbNSj0VmcPswZuTxeKIgvOOp25qMIQXDUUPaEPmQkiS+6sJLBtENryUM1QAqnpO3ZV6k6JojbJP/X8Gh7uQIMMDXYRPMfR/fLSpuofZyKSvhICkKQHf+ASGTRWcdxTdw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from DM4PR11MB6311.namprd11.prod.outlook.com (2603:10b6:8:a6::21) by
- MWHPR11MB1296.namprd11.prod.outlook.com (2603:10b6:300:1d::22) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.5395.18; Fri, 8 Jul 2022 20:18:45 +0000
-Received: from DM4PR11MB6311.namprd11.prod.outlook.com
- ([fe80::f188:57e2:349e:51da]) by DM4PR11MB6311.namprd11.prod.outlook.com
- ([fe80::f188:57e2:349e:51da%9]) with mapi id 15.20.5417.020; Fri, 8 Jul 2022
- 20:18:45 +0000
-Date:   Fri, 8 Jul 2022 13:18:35 -0700
-From:   Ira Weiny <ira.weiny@intel.com>
-To:     "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
-CC:     Benjamin LaHaise <bcrl@kvack.org>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Eric Biederman <ebiederm@xmission.com>,
-        Kees Cook <keescook@chromium.org>,
-        Dan Williams <dan.j.williams@intel.com>,
-        "Matthew Wilcox" <willy@infradead.org>, Jan Kara <jack@suse.cz>,
-        Jeff Layton <jlayton@kernel.org>,
-        Chuck Lever <chuck.lever@oracle.com>,
-        Jens Axboe <axboe@kernel.dk>,
-        Pavel Begunkov <asml.silence@gmail.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        "Palmer Dabbelt" <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        "Nathan Chancellor" <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Tom Rix <trix@redhat.com>, <linux-aio@kvack.org>,
-        <linux-fsdevel@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-mm@kvack.org>, <nvdimm@lists.linux.dev>,
-        <io-uring@vger.kernel.org>, <linux-riscv@lists.infradead.org>,
-        <llvm@lists.linux.dev>
-Subject: Re: [PATCH] fs: Replace kmap{,_atomic}() with kmap_local_page()
-Message-ID: <YsiQptk19txHrG4c@iweiny-desk3>
-References: <20220630163527.9776-1-fmdefrancesco@gmail.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20220630163527.9776-1-fmdefrancesco@gmail.com>
-X-ClientProxiedBy: BYAPR05CA0036.namprd05.prod.outlook.com
- (2603:10b6:a03:c0::49) To DM4PR11MB6311.namprd11.prod.outlook.com
- (2603:10b6:8:a6::21)
+   d="scan'208";a="594239897"
+Received: from lkp-server01.sh.intel.com (HELO 68b931ab7ac1) ([10.239.97.150])
+  by orsmga002.jf.intel.com with ESMTP; 08 Jul 2022 13:20:06 -0700
+Received: from kbuild by 68b931ab7ac1 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1o9uSL-000Nu0-O9;
+        Fri, 08 Jul 2022 20:20:05 +0000
+Date:   Sat, 9 Jul 2022 04:19:21 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     kbuild-all@lists.01.org, linux-m68k@lists.linux-m68k.org,
+        linux-kernel@vger.kernel.org
+Subject: [geert-m68k:atari-drm-wip 35/35]
+ drivers/gpu/drm/tiny/atari_drm.c:1024:29: warning: variable 'linesize' set
+ but not used
+Message-ID: <202207090456.TkBv7Mpl-lkp@intel.com>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: f27b0ca9-3d98-41ff-4538-08da611f0f05
-X-MS-TrafficTypeDiagnostic: MWHPR11MB1296:EE_
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: h4AKFrD5SWs8KrDKuR0224t5bcnBpaCVkXRD/Tu0RPfmlp90uOpVT7UPwuhiKloGlM1kK1piwZHYjij1mFkFbSAXkawR2n0FhWShgxeTjse7MCGlxA62QR/SNGUIxhRh+bkQYMtYu2hKzsO0BVzX/LQDGwEypqf+9KG+R/hAz2g+LCdERO4zyfivriWmczWFataBJlGvSj/4wo1at2JvudlUqJHRHuxWsF3KxlpQku78C5t9ZVqBT7MbUWT5fAJLe452BH0hDsSS6f3vraNmHoupJci5gBkF7SR0a6ZMuqEH1PFjB7tuwI3iYbUnV9jDviiE7HOjtZLqVTUSC1dUKxRQkY0setOqCfLCTBT8nGaI/Bf5h4OepEyOYuxR2z5U+k6Xi0f1ZO+4SFnzOH9zPLkPEKI741ON8V+zhGyXtpPWFgWSqMNaJnXgRjPSNoNKJH/ipg1aG4ey6zicbRwRJiKZVRLipU9o0juy+zVR/1cYb8f89AY4TvWROQsefCE4aTTlvr8MZJnYeJCPanZrft/fYbRAdkamFJvHTUWdfLiwaY+qowHfuUggmhBGW9JZNuI8gdIRH4SsBoRnCmDAqI53G9aEOpKHjNqlvuvDvnoqK1i8VqciW08dVmNq9hOutX4UoQQUa+ZZ9uXo5hDqXzGbRSsG71z7morYIMvpVYeO2dp6sfL52wajjuhY8ipBBBUPFkrHpRUg/WBis98KFb7L+FJOwp0cT3FShrYVmpeOIa45QfW3OCQLjOu2tT/8
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM4PR11MB6311.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(7916004)(366004)(396003)(136003)(376002)(39860400002)(346002)(8676002)(66946007)(2906002)(66476007)(38100700002)(33716001)(83380400001)(4326008)(66556008)(8936002)(41300700001)(86362001)(5660300002)(7416002)(82960400001)(6506007)(9686003)(6666004)(54906003)(186003)(6486002)(44832011)(316002)(6916009)(6512007)(478600001);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?TRSjz3bBhhXqkrGhdMGqvCE8WJuRTFDICGtL22yi1BRfJu1G57KI4+oM3BsZ?=
- =?us-ascii?Q?cIsV86JGFPND923/5wcFVejez2ucZl/IHLTofg0b4w1nrXllV2GEXtuMtNZe?=
- =?us-ascii?Q?CAQag4n31avWzmKmd3dLZmJ4QyIEP2RWIywUDyA5fN3S5PvaT6d0bj20Ctpw?=
- =?us-ascii?Q?rowt9Gfazh5DRCE55hazf55xPQQMVSF3aEtkLMdzp2CovLqERCWPX3Fr1DzG?=
- =?us-ascii?Q?OZy1MM4Mq6MNg40qtMWExNYVdCj3qenwhTtSPFOg0Mmq8gS/VFB8CH4S69aW?=
- =?us-ascii?Q?cutxQ44ECvALRXhT/bFkea+rPLf6ggNmyBlA7qlc4lg81+F32lWWPMq2bdLl?=
- =?us-ascii?Q?/dGWS7aBdpbjI5zQa+bZjsOgufforGBN8Sh8Ogvg5Zo2SdOJOVz0CFzqPYij?=
- =?us-ascii?Q?x5J6B1Ok/flZN3E4JTiFziOb8ea5MfZpciQHqseWn8SIfeh/jPoxN2Zj4cUa?=
- =?us-ascii?Q?N5fNEHLHHMftLqqJPYxF8z/qtLhCTQqyoCVugubP374jekCr0v0q8i3lgDGd?=
- =?us-ascii?Q?kZuYZrFyBxrF7Kfb6fgpf7hmbsfNg1iUKAKWhiLu0H8Ds9OS9AgKbRb0SUAI?=
- =?us-ascii?Q?uvSjjeh/Ej/UHvhksxLmCGJRjQFbPdU3mJtsUKXaYTrpuZk5Ij33HpM0hbVY?=
- =?us-ascii?Q?VTWdweEVcIMPO+Q/sC2KnPqzkrdlbdUTXsFQ5Ra/c0k7lFkwpd+dHrjcoyDS?=
- =?us-ascii?Q?6aJFy5Ophe1L9gaBNNZhP6yDscodfam7RuRfbAb2NRccIdbBcBlldwWxee3W?=
- =?us-ascii?Q?UUo/Uv3vtNUPMDEhTJMRFyxZSSMDyLPEqoUYr5ZZz3M2wHRkM2Rjrcyi0G7G?=
- =?us-ascii?Q?AmgRoFEmO+h1XYfgIuIuKlPdLrJlneBcN9HhUxV3CVXOkEhA+WK1clqVKsCo?=
- =?us-ascii?Q?ccMnxf2AnwHRQTFi8heTOGMwZ5hyd3dThisR1vWJLEdwpiZgU6L6F0kdCf9p?=
- =?us-ascii?Q?vddFPlM4s+aJ2I6+k80oxO8+LWrQ9s2akw9NLXM9KZGm2KetFm0pA+iBfh4j?=
- =?us-ascii?Q?XtRQiuMXMQ30M3vZA2AxuwSODL9sEluQ4/9j6yhiHuHng16dJC4pOcmq8grK?=
- =?us-ascii?Q?QW958p/tc0kn19RDVuWtxqe/pT1DdRlivF9S/jsQezZ7obGorXakHVp7V0Fc?=
- =?us-ascii?Q?384tkoaU0ILblfdc7eyCyOkj03IZvoo9BBMO3TTFAW11vl8NjNc0dalsCYbM?=
- =?us-ascii?Q?PuubtWMP0KrgaOscF396sbedG8GBAQUaYJqkWaTRlDaQsfYqMDsyzurRLprI?=
- =?us-ascii?Q?PrPRXxEIm+HQ91snYkEkEeH4z8OERqyBL4nyvE38ARnvt6O9op7LIKPobDWd?=
- =?us-ascii?Q?XnBBYayIxpwvlgJ94bpgiAFoNgEKoBWj2gE5JPLukYYU/zRvLDyw6GOrlIUS?=
- =?us-ascii?Q?vADVQqehfu0WQXxos5FU0CacSlFoS+PDc0CTYfJgbdmoTfWay7+dHkdMlXLf?=
- =?us-ascii?Q?9lonRaBwrJje9zOo+548YmnUZunjykk7pc0MrmxawYVktXlgSn3mKMYfsC5l?=
- =?us-ascii?Q?oaCKLW1ZQ0l5PxHd1+WuxRhbx5uVUmKEYCUX/0Z3bx5jrDMuTHN7QupR9ZcA?=
- =?us-ascii?Q?15AdWzWj7HqEjKzZ6MS23pfyfw6yUsQ1DUQjQy9OBDJNxIlCQCn6WhUBygyj?=
- =?us-ascii?Q?Jao5t7ws7bcUOyrQiD265PxtuE3O0eQd6ruWhC7xP53u?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: f27b0ca9-3d98-41ff-4538-08da611f0f05
-X-MS-Exchange-CrossTenant-AuthSource: DM4PR11MB6311.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 08 Jul 2022 20:18:45.1949
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: kKweMs2Qyq8SjHVNH9lAGi4PWUc2cI+aObiL4wPSXvutv0f/KPGsyLHXGCm4XVAoWLn2UIw38A3IJ3c/sG7oCQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MWHPR11MB1296
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -162,89 +63,388 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 30, 2022 at 06:35:27PM +0200, Fabio M. De Francesco wrote:
-> The use of kmap() and kmap_atomic() are being deprecated in favor of
-> kmap_local_page().
-> 
-> With kmap_local_page(), the mappings are per thread, CPU local and not
-> globally visible. Furthermore, the mappings can be acquired from any
-> context (including interrupts).
-> 
-> Therefore, use kmap_local_page() in exec.c because these mappings are per
-> thread, CPU local, and not globally visible.
-> 
-> Tested with xfstests on a QEMU + KVM 32-bits VM booting a kernel with
-> HIGHMEM64GB enabled.
-> 
-> Suggested-by: Ira Weiny <ira.weiny@intel.com>
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/geert/linux-m68k.git atari-drm-wip
+head:   149db8fecb508c948620b3cb7a0737ebf226f862
+commit: 149db8fecb508c948620b3cb7a0737ebf226f862 [35/35] drm: atari: Add a DRM driver for Atari graphics hardware
+config: m68k-allmodconfig (https://download.01.org/0day-ci/archive/20220709/202207090456.TkBv7Mpl-lkp@intel.com/config)
+compiler: m68k-linux-gcc (GCC) 11.3.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/geert/linux-m68k.git/commit/?id=149db8fecb508c948620b3cb7a0737ebf226f862
+        git remote add geert-m68k https://git.kernel.org/pub/scm/linux/kernel/git/geert/linux-m68k.git
+        git fetch --no-tags geert-m68k atari-drm-wip
+        git checkout 149db8fecb508c948620b3cb7a0737ebf226f862
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=m68k SHELL=/bin/bash drivers/gpu/drm/tiny/
 
-This looks good but there is a kmap_atomic() in this file which I _think_ can
-be converted as well.  But that is good as a separate patch.
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-Reviewed-by: Ira Weiny <ira.weiny@intel.com>
+All warnings (new ones prefixed by >>):
 
-> Signed-off-by: Fabio M. De Francesco <fmdefrancesco@gmail.com>
-> ---
->  fs/exec.c | 14 +++++++-------
->  1 file changed, 7 insertions(+), 7 deletions(-)
-> 
-> diff --git a/fs/exec.c b/fs/exec.c
-> index 0989fb8472a1..4a2129c0d422 100644
-> --- a/fs/exec.c
-> +++ b/fs/exec.c
-> @@ -583,11 +583,11 @@ static int copy_strings(int argc, struct user_arg_ptr argv,
->  
->  				if (kmapped_page) {
->  					flush_dcache_page(kmapped_page);
-> -					kunmap(kmapped_page);
-> +					kunmap_local(kaddr);
->  					put_arg_page(kmapped_page);
->  				}
->  				kmapped_page = page;
-> -				kaddr = kmap(kmapped_page);
-> +				kaddr = kmap_local_page(kmapped_page);
->  				kpos = pos & PAGE_MASK;
->  				flush_arg_page(bprm, kpos, kmapped_page);
->  			}
-> @@ -601,7 +601,7 @@ static int copy_strings(int argc, struct user_arg_ptr argv,
->  out:
->  	if (kmapped_page) {
->  		flush_dcache_page(kmapped_page);
-> -		kunmap(kmapped_page);
-> +		kunmap_local(kaddr);
->  		put_arg_page(kmapped_page);
->  	}
->  	return ret;
-> @@ -883,11 +883,11 @@ int transfer_args_to_stack(struct linux_binprm *bprm,
->  
->  	for (index = MAX_ARG_PAGES - 1; index >= stop; index--) {
->  		unsigned int offset = index == stop ? bprm->p & ~PAGE_MASK : 0;
-> -		char *src = kmap(bprm->page[index]) + offset;
-> +		char *src = kmap_local_page(bprm->page[index]) + offset;
->  		sp -= PAGE_SIZE - offset;
->  		if (copy_to_user((void *) sp, src, PAGE_SIZE - offset) != 0)
->  			ret = -EFAULT;
-> -		kunmap(bprm->page[index]);
-> +		kunmap_local(src);
->  		if (ret)
->  			goto out;
->  	}
-> @@ -1680,13 +1680,13 @@ int remove_arg_zero(struct linux_binprm *bprm)
->  			ret = -EFAULT;
->  			goto out;
->  		}
-> -		kaddr = kmap_atomic(page);
-> +		kaddr = kmap_local_page(page);
->  
->  		for (; offset < PAGE_SIZE && kaddr[offset];
->  				offset++, bprm->p++)
->  			;
->  
-> -		kunmap_atomic(kaddr);
-> +		kunmap_local(kaddr);
->  		put_arg_page(page);
->  	} while (offset == PAGE_SIZE);
->  
-> -- 
-> 2.36.1
-> 
+   drivers/gpu/drm/tiny/atari_drm.c: In function 'falcon_decode_var':
+>> drivers/gpu/drm/tiny/atari_drm.c:1024:29: warning: variable 'linesize' set but not used [-Wunused-but-set-variable]
+    1024 |                         int linesize;
+         |                             ^~~~~~~~
+   drivers/gpu/drm/tiny/atari_drm.c: In function 'ext_set_col_reg':
+>> drivers/gpu/drm/tiny/atari_drm.c:2177:31: warning: variable 'tmp' set but not used [-Wunused-but-set-variable]
+    2177 |                 unsigned char tmp = INB(0x3da); \
+         |                               ^~~
+   drivers/gpu/drm/tiny/atari_drm.c:2199:17: note: in expansion of macro 'DACDelay'
+    2199 |                 DACDelay;
+         |                 ^~~~~~~~
+>> drivers/gpu/drm/tiny/atari_drm.c:2177:31: warning: variable 'tmp' set but not used [-Wunused-but-set-variable]
+    2177 |                 unsigned char tmp = INB(0x3da); \
+         |                               ^~~
+   drivers/gpu/drm/tiny/atari_drm.c:2201:17: note: in expansion of macro 'DACDelay'
+    2201 |                 DACDelay;
+         |                 ^~~~~~~~
+>> drivers/gpu/drm/tiny/atari_drm.c:2177:31: warning: variable 'tmp' set but not used [-Wunused-but-set-variable]
+    2177 |                 unsigned char tmp = INB(0x3da); \
+         |                               ^~~
+   drivers/gpu/drm/tiny/atari_drm.c:2203:17: note: in expansion of macro 'DACDelay'
+    2203 |                 DACDelay;
+         |                 ^~~~~~~~
+>> drivers/gpu/drm/tiny/atari_drm.c:2177:31: warning: variable 'tmp' set but not used [-Wunused-but-set-variable]
+    2177 |                 unsigned char tmp = INB(0x3da); \
+         |                               ^~~
+   drivers/gpu/drm/tiny/atari_drm.c:2205:17: note: in expansion of macro 'DACDelay'
+    2205 |                 DACDelay;
+         |                 ^~~~~~~~
+
+
+vim +/linesize +1024 drivers/gpu/drm/tiny/atari_drm.c
+
+   877	
+   878		/* Reject uninitialized mode */
+   879		if (!xres || !yres || !bpp)
+   880			return -EINVAL;
+   881	
+   882		if (mon_type == F_MON_SM && bpp != 1)
+   883			return -EINVAL;
+   884	
+   885		if (bpp <= 1) {
+   886			bpp = 1;
+   887			par->hw.falcon.f_shift = 0x400;
+   888			par->hw.falcon.st_shift = 0x200;
+   889		} else if (bpp <= 2) {
+   890			bpp = 2;
+   891			par->hw.falcon.f_shift = 0x000;
+   892			par->hw.falcon.st_shift = 0x100;
+   893		} else if (bpp <= 4) {
+   894			bpp = 4;
+   895			par->hw.falcon.f_shift = 0x000;
+   896			par->hw.falcon.st_shift = 0x000;
+   897		} else if (bpp <= 8) {
+   898			bpp = 8;
+   899			par->hw.falcon.f_shift = 0x010;
+   900		} else if (bpp <= 16) {
+   901			bpp = 16;		/* packed pixel mode */
+   902			par->hw.falcon.f_shift = 0x100;	/* hicolor, no overlay */
+   903		} else
+   904			return -EINVAL;
+   905		par->hw.falcon.bpp = bpp;
+   906	
+   907		if (mon_type == F_MON_SM || DontCalcRes) {
+   908			/* Skip all calculations. VGA/TV/SC1224 only supported. */
+   909			struct fb_var_screeninfo *myvar = &atafb_predefined[0];
+   910	
+   911			if (bpp > myvar->bits_per_pixel ||
+   912			    var->xres > myvar->xres ||
+   913			    var->yres > myvar->yres)
+   914				return -EINVAL;
+   915			fbhw->get_par(par);	/* Current par will be new par */
+   916			goto set_screen_base;	/* Don't forget this */
+   917		}
+   918	
+   919		/* Only some fixed resolutions < 640x400 */
+   920		if (xres <= 320)
+   921			xres = 320;
+   922		else if (xres <= 640 && bpp != 16)
+   923			xres = 640;
+   924		if (yres <= 200)
+   925			yres = 200;
+   926		else if (yres <= 240)
+   927			yres = 240;
+   928		else if (yres <= 400)
+   929			yres = 400;
+   930	
+   931		/* 2 planes must use STE compatibility mode */
+   932		par->hw.falcon.ste_mode = bpp == 2;
+   933		par->hw.falcon.mono = bpp == 1;
+   934	
+   935		/* Total and visible scanline length must be a multiple of one longword,
+   936		 * this and the console fontwidth yields the alignment for xres and
+   937		 * xres_virtual.
+   938		 * TODO: this way "odd" fontheights are not supported
+   939		 *
+   940		 * Special case in STE mode: blank and graphic positions don't align,
+   941		 * avoid trash at right margin
+   942		 */
+   943		if (par->hw.falcon.ste_mode)
+   944			xres = (xres + 63) & ~63;
+   945		else if (bpp == 1)
+   946			xres = (xres + 31) & ~31;
+   947		else
+   948			xres = (xres + 15) & ~15;
+   949		if (yres >= 400)
+   950			yres = (yres + 15) & ~15;
+   951		else
+   952			yres = (yres + 7) & ~7;
+   953	
+   954		if (xres_virtual < xres)
+   955			xres_virtual = xres;
+   956		else if (bpp == 1)
+   957			xres_virtual = (xres_virtual + 31) & ~31;
+   958		else
+   959			xres_virtual = (xres_virtual + 15) & ~15;
+   960	
+   961		if (yres_virtual <= 0)
+   962			yres_virtual = 0;
+   963		else if (yres_virtual < yres)
+   964			yres_virtual = yres;
+   965	
+   966		par->hw.falcon.line_width = bpp * xres / 16;
+   967		par->hw.falcon.line_offset = bpp * (xres_virtual - xres) / 16;
+   968	
+   969		/* single or double pixel width */
+   970		xstretch = (xres < 640) ? 2 : 1;
+   971	
+   972	#if 0 /* SM124 supports only 640x400, this is rejected above */
+   973		if (mon_type == F_MON_SM) {
+   974			if (xres != 640 && yres != 400)
+   975				return -EINVAL;
+   976			plen = 1;
+   977			pclock = &f32;
+   978			/* SM124-mode is special */
+   979			par->hw.falcon.ste_mode = 1;
+   980			par->hw.falcon.f_shift = 0x000;
+   981			par->hw.falcon.st_shift = 0x200;
+   982			left_margin = hsync_len = 128 / plen;
+   983			right_margin = 0;
+   984			/* TODO set all margins */
+   985		} else
+   986	#endif
+   987		if (mon_type == F_MON_SC || mon_type == F_MON_TV) {
+   988			plen = 2 * xstretch;
+   989			if (var->pixclock > f32.t * plen)
+   990				return -EINVAL;
+   991			pclock = &f32;
+   992			if (yres > 240)
+   993				interlace = 1;
+   994			if (var->pixclock == 0) {
+   995				/* set some minimal margins which center the screen */
+   996				left_margin = 32;
+   997				right_margin = 18;
+   998				hsync_len = pclock->hsync / plen;
+   999				upper_margin = 31;
+  1000				lower_margin = 14;
+  1001				vsync_len = interlace ? 3 : 4;
+  1002			} else {
+  1003				left_margin = var->left_margin;
+  1004				right_margin = var->right_margin;
+  1005				hsync_len = var->hsync_len;
+  1006				upper_margin = var->upper_margin;
+  1007				lower_margin = var->lower_margin;
+  1008				vsync_len = var->vsync_len;
+  1009				if (var->vmode & FB_VMODE_INTERLACED) {
+  1010					upper_margin = (upper_margin + 1) / 2;
+  1011					lower_margin = (lower_margin + 1) / 2;
+  1012					vsync_len = (vsync_len + 1) / 2;
+  1013				} else if (var->vmode & FB_VMODE_DOUBLE) {
+  1014					upper_margin *= 2;
+  1015					lower_margin *= 2;
+  1016					vsync_len *= 2;
+  1017				}
+  1018			}
+  1019		} else {			/* F_MON_VGA */
+  1020			if (bpp == 16)
+  1021				xstretch = 2;	/* Double pixel width only for hicolor */
+  1022			/* Default values are used for vert./hor. timing if no pixelclock given. */
+  1023			if (var->pixclock == 0) {
+> 1024				int linesize;
+  1025	
+  1026				/* Choose master pixelclock depending on hor. timing */
+  1027				plen = 1 * xstretch;
+  1028				if ((plen * xres + f25.right + f25.hsync + f25.left) *
+  1029				    fb_info.monspecs.hfmin < f25.f)
+  1030					pclock = &f25;
+  1031				else if ((plen * xres + f32.right + f32.hsync +
+  1032					  f32.left) * fb_info.monspecs.hfmin < f32.f)
+  1033					pclock = &f32;
+  1034				else if ((plen * xres + fext.right + fext.hsync +
+  1035					  fext.left) * fb_info.monspecs.hfmin < fext.f &&
+  1036				         fext.f)
+  1037					pclock = &fext;
+  1038				else
+  1039					return -EINVAL;
+  1040	
+  1041				left_margin = pclock->left / plen;
+  1042				right_margin = pclock->right / plen;
+  1043				hsync_len = pclock->hsync / plen;
+  1044				linesize = left_margin + xres + right_margin + hsync_len;
+  1045				upper_margin = 31;
+  1046				lower_margin = 11;
+  1047				vsync_len = 3;
+  1048			} else {
+  1049				/* Choose largest pixelclock <= wanted clock */
+  1050				int i;
+  1051				unsigned long pcl = ULONG_MAX;
+  1052				pclock = 0;
+  1053				for (i = 1; i <= 4; i *= 2) {
+  1054					if (f25.t * i >= var->pixclock &&
+  1055					    f25.t * i < pcl) {
+  1056						pcl = f25.t * i;
+  1057						pclock = &f25;
+  1058					}
+  1059					if (f32.t * i >= var->pixclock &&
+  1060					    f32.t * i < pcl) {
+  1061						pcl = f32.t * i;
+  1062						pclock = &f32;
+  1063					}
+  1064					if (fext.t && fext.t * i >= var->pixclock &&
+  1065					    fext.t * i < pcl) {
+  1066						pcl = fext.t * i;
+  1067						pclock = &fext;
+  1068					}
+  1069				}
+  1070				if (!pclock)
+  1071					return -EINVAL;
+  1072				plen = pcl / pclock->t;
+  1073	
+  1074				left_margin = var->left_margin;
+  1075				right_margin = var->right_margin;
+  1076				hsync_len = var->hsync_len;
+  1077				upper_margin = var->upper_margin;
+  1078				lower_margin = var->lower_margin;
+  1079				vsync_len = var->vsync_len;
+  1080				/* Internal unit is [single lines per (half-)frame] */
+  1081				if (var->vmode & FB_VMODE_INTERLACED) {
+  1082					/* # lines in half frame */
+  1083					/* External unit is [lines per full frame] */
+  1084					upper_margin = (upper_margin + 1) / 2;
+  1085					lower_margin = (lower_margin + 1) / 2;
+  1086					vsync_len = (vsync_len + 1) / 2;
+  1087				} else if (var->vmode & FB_VMODE_DOUBLE) {
+  1088					/* External unit is [double lines per frame] */
+  1089					upper_margin *= 2;
+  1090					lower_margin *= 2;
+  1091					vsync_len *= 2;
+  1092				}
+  1093			}
+  1094			if (pclock == &fext)
+  1095				longoffset = 1;	/* VIDEL doesn't synchronize on short offset */
+  1096		}
+  1097		/* Is video bus bandwidth (32MB/s) too low for this resolution? */
+  1098		/* this is definitely wrong if bus clock != 32MHz */
+  1099		if (pclock->f / plen / 8 * bpp > 32000000L)
+  1100			return -EINVAL;
+  1101	
+  1102		if (vsync_len < 1)
+  1103			vsync_len = 1;
+  1104	
+  1105		/* include sync lengths in right/lower margin for all calculations */
+  1106		right_margin += hsync_len;
+  1107		lower_margin += vsync_len;
+  1108	
+  1109		/* ! In all calculations of margins we use # of lines in half frame
+  1110		 * (which is a full frame in non-interlace mode), so we can switch
+  1111		 * between interlace and non-interlace without messing around
+  1112		 * with these.
+  1113		 */
+  1114	again:
+  1115		/* Set base_offset 128 and video bus width */
+  1116		par->hw.falcon.vid_control = mon_type | f030_bus_width;
+  1117		if (!longoffset)
+  1118			par->hw.falcon.vid_control |= VCO_SHORTOFFS;	/* base_offset 64 */
+  1119		if (var->sync & FB_SYNC_HOR_HIGH_ACT)
+  1120			par->hw.falcon.vid_control |= VCO_HSYPOS;
+  1121		if (var->sync & FB_SYNC_VERT_HIGH_ACT)
+  1122			par->hw.falcon.vid_control |= VCO_VSYPOS;
+  1123		/* Pixelclock */
+  1124		par->hw.falcon.vid_control |= pclock->control_mask;
+  1125		/* External or internal clock */
+  1126		par->hw.falcon.sync = pclock->sync_mask | 0x2;
+  1127		/* Pixellength and prescale */
+  1128		par->hw.falcon.vid_mode = (2 / plen) << 2;
+  1129		if (doubleline)
+  1130			par->hw.falcon.vid_mode |= VMO_DOUBLE;
+  1131		if (interlace)
+  1132			par->hw.falcon.vid_mode |= VMO_INTER;
+  1133	
+  1134		/*********************
+  1135		 * Horizontal timing: unit = [master clock cycles]
+  1136		 * unit of hxx-registers: [master clock cycles * prescale]
+  1137		 * Hxx-registers are 9 bit wide
+  1138		 *
+  1139		 * 1 line = ((hht + 2) * 2 * prescale) clock cycles
+  1140		 *
+  1141		 * graphic output = hdb & 0x200 ?
+  1142		 *        ((hht + 2) * 2 - hdb + hde) * prescale - hdboff + hdeoff:
+  1143		 *        (hht + 2  - hdb + hde) * prescale - hdboff + hdeoff
+  1144		 * (this must be a multiple of plen*128/bpp, on VGA pixels
+  1145		 *  to the right may be cut off with a bigger right margin)
+  1146		 *
+  1147		 * start of graphics relative to start of 1st halfline = hdb & 0x200 ?
+  1148		 *        (hdb - hht - 2) * prescale + hdboff :
+  1149		 *        hdb * prescale + hdboff
+  1150		 *
+  1151		 * end of graphics relative to start of 1st halfline =
+  1152		 *        (hde + hht + 2) * prescale + hdeoff
+  1153		 *********************/
+  1154		/* Calculate VIDEL registers */
+  1155	{
+  1156		prescale = hxx_prescale(&par->hw.falcon);
+  1157		base_off = par->hw.falcon.vid_control & VCO_SHORTOFFS ? 64 : 128;
+  1158	
+  1159		/* Offsets depend on video mode */
+  1160		/* Offsets are in clock cycles, divide by prescale to
+  1161		 * calculate hd[be]-registers
+  1162		 */
+  1163		if (par->hw.falcon.f_shift & 0x100) {
+  1164			align = 1;
+  1165			hde_off = 0;
+  1166			hdb_off = (base_off + 16 * plen) + prescale;
+  1167		} else {
+  1168			align = 128 / bpp;
+  1169			hde_off = ((128 / bpp + 2) * plen);
+  1170			if (par->hw.falcon.ste_mode)
+  1171				hdb_off = (64 + base_off + (128 / bpp + 2) * plen) + prescale;
+  1172			else
+  1173				hdb_off = (base_off + (128 / bpp + 18) * plen) + prescale;
+  1174		}
+  1175	
+  1176		gstart = (prescale / 2 + plen * left_margin) / prescale;
+  1177		/* gend1 is for hde (gend-gstart multiple of align), shifter's xres */
+  1178		gend1 = gstart + roundup(xres, align) * plen / prescale;
+  1179		/* gend2 is for hbb, visible xres (rest to gend1 is cut off by hblank) */
+  1180		gend2 = gstart + xres * plen / prescale;
+  1181		par->HHT = plen * (left_margin + xres + right_margin) /
+  1182				   (2 * prescale) - 2;
+  1183	/*	par->HHT = (gend2 + plen * right_margin / prescale) / 2 - 2;*/
+  1184	
+  1185		par->HDB = gstart - hdb_off / prescale;
+  1186		par->HBE = gstart;
+  1187		if (par->HDB < 0)
+  1188			par->HDB += par->HHT + 2 + 0x200;
+  1189		par->HDE = gend1 - par->HHT - 2 - hde_off / prescale;
+  1190		par->HBB = gend2 - par->HHT - 2;
+  1191	#if 0
+  1192		/* One more Videl constraint: data fetch of two lines must not overlap */
+  1193		if ((par->HDB & 0x200) && (par->HDB & ~0x200) - par->HDE <= 5) {
+  1194			/* if this happens increase margins, decrease hfreq. */
+  1195		}
+  1196	#endif
+  1197		if (hde_off % prescale)
+  1198			par->HBB++;		/* compensate for non matching hde and hbb */
+  1199		par->HSS = par->HHT + 2 - plen * hsync_len / prescale;
+  1200		if (par->HSS < par->HBB)
+  1201			par->HSS = par->HBB;
+  1202	}
+  1203	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

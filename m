@@ -2,132 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F306756BE04
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 18:09:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0602156BD67
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 18:08:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238952AbiGHQBC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Jul 2022 12:01:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44462 "EHLO
+        id S238945AbiGHQCO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Jul 2022 12:02:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45656 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238948AbiGHQA6 (ORCPT
+        with ESMTP id S238948AbiGHQCI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Jul 2022 12:00:58 -0400
-Received: from alexa-out-sd-01.qualcomm.com (alexa-out-sd-01.qualcomm.com [199.106.114.38])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 347C874DDE
-        for <linux-kernel@vger.kernel.org>; Fri,  8 Jul 2022 09:00:57 -0700 (PDT)
+        Fri, 8 Jul 2022 12:02:08 -0400
+Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10344747B3;
+        Fri,  8 Jul 2022 09:02:07 -0700 (PDT)
+Received: by mail-wr1-x435.google.com with SMTP id q9so31145458wrd.8;
+        Fri, 08 Jul 2022 09:02:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1657296057; x=1688832057;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=qeVM7SLbPnJ5NrmCgidT7re+bw94f7vWzQ6gi7bdXdY=;
-  b=SnHOGOw7+WVHH7g0rnfW4UDJuQYXFtO7L4XROlrzTZjOhRMcYjusObdY
-   ytdiOXaGgniKCLmoSeyWJDzhzjvI9ZHZU7cLIR8w0rFpznYMfDm1no0rl
-   EO0XVQXd8P3Kxepqyu0i2YtgjDoI+n7TxMPu72OPzcpo2HG1ww151Ti8V
-   w=;
-Received: from unknown (HELO ironmsg05-sd.qualcomm.com) ([10.53.140.145])
-  by alexa-out-sd-01.qualcomm.com with ESMTP; 08 Jul 2022 09:00:56 -0700
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg05-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jul 2022 09:00:56 -0700
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Fri, 8 Jul 2022 09:00:55 -0700
-Received: from [10.111.160.191] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Fri, 8 Jul 2022
- 09:00:53 -0700
-Message-ID: <60252405-81f2-2465-bc20-5f91a9072031@quicinc.com>
-Date:   Fri, 8 Jul 2022 09:00:51 -0700
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=Pro0cyE0Jn+rZnK315lxKLlhsCvoJbHZNzW9Cc6PhUM=;
+        b=DdALFxmXrrrET3rMR34tN44U4tdHIi66lU8JJgJj1T+SoKhoWIuZ47YnYx+bWP5dtT
+         cs/CICnTVgvS1+SkZUajmRDjZrJ5R/RW6WTpBSpbMk6iPxvPhcZfBonyBcskW+wwVZbe
+         mu1lyy0jcDbzhNGPVrMfL5d5yi8nb+7apnV2Z1M9R6TxH1OjkQBVLvlW7eAfHMxNvyOf
+         +BygGQmUPY2z7O6TUeO4f+5YMnMUqLq1zvNRXH5MPDfOl90Gg5BoDc0C1r3BeyxpRlTY
+         ghYCg5nwEBFB/1n0iy2HoPyxR2IIWY363ohyY1ZA2JB9+N7V41sp66Da85ibY1DIVUEE
+         cu1Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=Pro0cyE0Jn+rZnK315lxKLlhsCvoJbHZNzW9Cc6PhUM=;
+        b=Fan8Lr7Krwhoz9vhy8dTStrATX7WoK2CBOS2IZHApnO9RQllVNzW4Q7aa0Mxqkr6kj
+         OeJ5GDyOTXX9lgmcEgBUPhBB5DTGGwwB3SjAiM8Fhz+K8A9GnpMmEfGEDbNpxWoOfUY4
+         5cLPiV+fA/FMtJQpDFDNEqM8+SxqpJXkoKvIi0lDAZ4V/aSUcz9dJvO05UVcqijt+TRe
+         EWyb4FSDJxKjwCrEjl3ZnsHkpJ2CHSakqAcV/CpSmSb8zukwx39uucKQb68Wp4/5y5oW
+         Qydl81pKNt+ejjAb36OQxg6livTJdYHkbmhpJKceSqsO2cN/p1GqcNmRhUiL18PlYYYm
+         qMmA==
+X-Gm-Message-State: AJIora9it2dMULIGrWo5VFIoLUqFMF+REeEhi4AlmDaChTbxj0+cK3ih
+        03V3Hj0D2o5/gEZ608bjUYk=
+X-Google-Smtp-Source: AGRyM1sa1uwt7GX0FBbOcHiYKkmpTtcghJDD6LEDkMeWFUrD+Gsb5I/JS8R0WTKA5jwMbEcyVxHehw==
+X-Received: by 2002:a5d:59a6:0:b0:21b:a234:8314 with SMTP id p6-20020a5d59a6000000b0021ba2348314mr4026407wrr.316.1657296125630;
+        Fri, 08 Jul 2022 09:02:05 -0700 (PDT)
+Received: from localhost (92.40.203.144.threembb.co.uk. [92.40.203.144])
+        by smtp.gmail.com with ESMTPSA id u18-20020adfdd52000000b002185d79dc7fsm18237827wrm.75.2022.07.08.09.02.04
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 08 Jul 2022 09:02:04 -0700 (PDT)
+From:   Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
+To:     paul@crapouillou.net, lgirdwood@gmail.com, broonie@kernel.org,
+        perex@perex.cz, tiwai@suse.com
+Cc:     linux-mips@vger.kernel.org, alsa-devel@alsa-project.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v4 00/11] ASoC: cleanups and improvements for jz4740-i2s
+Date:   Fri,  8 Jul 2022 17:02:33 +0100
+Message-Id: <20220708160244.21933-1-aidanmacdonald.0x0@gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.2
-Subject: Re: [PATCH] drm/msm/dsi: Set panel orientation when directly
- connected
-Content-Language: en-US
-To:     Doug Anderson <dianders@chromium.org>,
-        Stephen Boyd <swboyd@chromium.org>
-CC:     Rob Clark <robdclark@gmail.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        LKML <linux-kernel@vger.kernel.org>, <patches@lists.linux.dev>,
-        Sean Paul <sean@poorly.run>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        freedreno <freedreno@lists.freedesktop.org>,
-        Hsin-Yi Wang <hsinyi@chromium.org>
-References: <20220706191442.1150634-1-swboyd@chromium.org>
- <CAD=FV=UrYCwm2ByN_5EN3fq-ayMJNjmWfJ5sooRy51ZiCoMcjA@mail.gmail.com>
-From:   Abhinav Kumar <quic_abhinavk@quicinc.com>
-In-Reply-To: <CAD=FV=UrYCwm2ByN_5EN3fq-ayMJNjmWfJ5sooRy51ZiCoMcjA@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+This series is a preparatory cleanup of the jz4740-i2s driver before
+adding support for a new SoC. The two improvements are lifting
+unnecessary restrictions on sample rates and formats -- the existing
+ones appear to be derived from the limitations of the JZ4740's internal
+codec and don't reflect the actual capabilities of the I2S controller.
 
+I'm unable to test the series on any JZ47xx SoCs, but I have tested
+on an X1000 (which is the SoC I'll be adding in a followup series).
 
-On 7/8/2022 8:25 AM, Doug Anderson wrote:
-> Hi,
-> 
-> On Wed, Jul 6, 2022 at 12:14 PM Stephen Boyd <swboyd@chromium.org> wrote:
->>
->> Set the panel orientation in drm when the panel is directly connected,
->> i.e. we're not using an external bridge. The external bridge case is
->> already handled by the panel bridge code, so we only update the path we
->> take when the panel is directly connected/internal. This silences a
->> warning splat coming from __drm_mode_object_add() on Wormdingler boards.
->>
->> Cc: Hsin-Yi Wang <hsinyi@chromium.org>
->> Cc: Douglas Anderson <dianders@chromium.org>
->> Signed-off-by: Stephen Boyd <swboyd@chromium.org>
->> ---
->>
->> This relies on commit 5e41b01a7808 ("drm/panel: Add an API to allow drm
->> to set orientation from panel") which is in drm-misc
->>
->>   drivers/gpu/drm/msm/dsi/dsi_manager.c | 2 ++
->>   1 file changed, 2 insertions(+)
-> 
-> I don't personally have objections to this, but (to my understanding)
-> "the future" is that everyone should use panel_bridge. If we made the
-> move to panel_bridge today then we wouldn't need to do this. In
-> general I think panel_bridge would end up letting us delete a bunch of
-> code...
-> 
-> See commit 4e5763f03e10 ("drm/bridge: ti-sn65dsi86: Wrap panel with
-> panel-bridge") for when this was done by ti-sn65dsi86.
-> 
-> Then again, I spent a small amount of time looking into this and it's
-> definitely non-trivial. Still likely worthwhile, but not worth
-> blocking a tiny fix like this. It also should be fairly obvious that
-> we should delete this when we switch to panel_bridge.
+Changes in v2:
 
-Right, from what I saw on IRC, panel_bridge is the way forward and 
-dmitry did push a change to do that
+* Drop two patches already in sound for-next.
+* Squash two removal patches into the regmap fields patch.
+* Remove the unused 'mem' resource in the driver private struct.
+* Use regmap_set_bits() and regmap_clear_bits() to improve readability.
+* Add fix for SoCs with independent FIFO flush bits (ie. most of them).
+* Update sample formats patch with a more informative commit message.
+* Add two new patches to refactor DAI/component probing.
 
-https://patchwork.freedesktop.org/patch/492585/
+Changes in v3:
 
-But I think we can go ahead with this change because its simple enough.
+* Fix missing 'ret' in patch 11 (yes, that was pretty silly of me)
 
-Regarding the panel_bridge migration, I am going to start reviewing that 
-as well.
+Changes in v4:
 
-> 
-> Thus:
-> 
-> Reviewed-by: Douglas Anderson <dianders@chromium.org>
-> 
-> I'll assume that we'll just snooze this commit until drm-misc-next
-> merges into a tree that msm-next is based on, which will probably be
-> the next -rc1. If desired and Acked I could land this in
-> drm-misc-next, but it's probably not worth it?
+* Refactor FIFO flush bits fix so it doesn't depend on regmap conversion.
+
+Aidan MacDonald (11):
+  ASoC: jz4740-i2s: Handle independent FIFO flush bits
+  ASoC: jz4740-i2s: Remove unused 'mem' resource
+  ASoC: jz4740-i2s: Convert to regmap API
+  ASoC: jz4740-i2s: Simplify using regmap fields
+  ASoC: jz4740-i2s: Use FIELD_PREP() macros in hw_params callback
+  ASoC: jz4740-i2s: Align macro values and sort includes
+  ASoC: jz4740-i2s: Make the PLL clock name SoC-specific
+  ASoC: jz4740-i2s: Support S20_LE and S24_LE sample formats
+  ASoC: jz4740-i2s: Support continuous sample rate
+  ASoC: jz4740-i2s: Move component functions near the component driver
+  ASoC: jz4740-i2s: Refactor DAI probe/remove ops as component ops
+
+ sound/soc/jz4740/Kconfig      |   1 +
+ sound/soc/jz4740/jz4740-i2s.c | 461 ++++++++++++++++++----------------
+ 2 files changed, 248 insertions(+), 214 deletions(-)
+
+-- 
+2.35.1
+

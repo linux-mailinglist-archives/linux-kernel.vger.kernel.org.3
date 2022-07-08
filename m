@@ -2,121 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B8C856C550
-	for <lists+linux-kernel@lfdr.de>; Sat,  9 Jul 2022 02:29:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 22D0B56C57A
+	for <lists+linux-kernel@lfdr.de>; Sat,  9 Jul 2022 02:30:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238464AbiGHX1G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Jul 2022 19:27:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59356 "EHLO
+        id S238731AbiGHX1Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Jul 2022 19:27:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59460 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237542AbiGHX1E (ORCPT
+        with ESMTP id S237520AbiGHX1O (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Jul 2022 19:27:04 -0400
-Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E91C4419BB
-        for <linux-kernel@vger.kernel.org>; Fri,  8 Jul 2022 16:27:03 -0700 (PDT)
-Received: by mail-yb1-xb4a.google.com with SMTP id z9-20020a258689000000b0066e38ab7122so70555ybk.9
-        for <linux-kernel@vger.kernel.org>; Fri, 08 Jul 2022 16:27:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:message-id:mime-version:subject:from:to:cc;
-        bh=Ve6oVejVoHe94bNa2F7Xf7bSBWGFdxZz7tlbGpk1Sxk=;
-        b=sXKlEOSNgGd96A9Vg+CIJ3VEjTYQeqJKiO+SuHhf7ewn3AK6Lc5uWtw5Lj7V1uf2nc
-         bqeJ38Jh7zdeUJR+VDKrPeqL8HDwi6vHPc87aX6OeJ2OQdWI5YovDZmXbpXvkkVOroRh
-         VdCMbu5KniLAdZb+XkMbP0wWQPpunOGClKmWSYhmDdjKPmYKFhJBnjyiLKoAUCND6vL5
-         NJ5qXBzKrEI2ZrFu5V+vpAaFUsEYJpGpAApF++2uTAD0j8iGe/bgS6bn7nuRTi0tCIBs
-         zZthxEFhqHm/ttVj4kgZOPEFUf+RvcZTeSNlYXySTFk07uz2XyZE35h2hFgeNYa4PVHK
-         rTig==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
-        bh=Ve6oVejVoHe94bNa2F7Xf7bSBWGFdxZz7tlbGpk1Sxk=;
-        b=KMF+r+D3+5oKP2IznhKjkAc4CDhj3Qi7e/PxtK+DlTdFh3pjOKvFcPOxBKwU8piPhA
-         ETMYDzYL/CNbl0eMhwofTtFfTeyLjQpgAiyTIdqzmxP+rLSFyjQdUlV72Pi7U+E1EmRt
-         88H6wSv8RiU2jyuBy3bqVoY8FOetN9q/SoZds5wqs7IfbFAvVPtu/U9oKTqR2ABnDbgA
-         vIOFr0shyd125JKMip/PvQPqpuurGcmmKbeqxsHywkTAeRLno6VrS7tqvckA1+r7afPP
-         qQWgk2nsBVZaBhuEdaXb82Htd/Peh5u9VBA27OR4gPzM15mdJr2cgkipkyb18TTsjErW
-         9o/w==
-X-Gm-Message-State: AJIora+zz2yhWhmoRsMLGWaMx/Zd9a8Oo62IEu6/FRgGJZ2EWeeblSvH
-        U5uod8qnskdQRkJu2CAI2vtshp/EqyquR/NE7Q==
-X-Google-Smtp-Source: AGRyM1sNY7fz2EAZn6AtNHZP6fkSQ7jOV3bw7W8d1Zpe0HYuj7GqiA6qSNpMOcTQeY8C+RQkSDtbUWvJyGgIyt2yDw==
-X-Received: from justinstitt.mtv.corp.google.com ([2620:15c:211:202:f21c:9185:9405:36f])
- (user=justinstitt job=sendgmr) by 2002:a0d:cbd8:0:b0:31d:a46:a1ee with SMTP
- id n207-20020a0dcbd8000000b0031d0a46a1eemr6802939ywd.201.1657322823258; Fri,
- 08 Jul 2022 16:27:03 -0700 (PDT)
-Date:   Fri,  8 Jul 2022 16:26:53 -0700
-Message-Id: <20220708232653.556488-1-justinstitt@google.com>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.37.0.rc0.161.g10f37bed90-goog
-Subject: [PATCH] amd-xgbe: fix clang -Wformat warnings
-From:   Justin Stitt <justinstitt@google.com>
-To:     "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>
-Cc:     Tom Lendacky <thomas.lendacky@amd.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Tom Rix <trix@redhat.com>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
-        Justin Stitt <justinstitt@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        Fri, 8 Jul 2022 19:27:14 -0400
+Received: from fllv0016.ext.ti.com (fllv0016.ext.ti.com [198.47.19.142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9AB65419BB
+        for <linux-kernel@vger.kernel.org>; Fri,  8 Jul 2022 16:27:12 -0700 (PDT)
+Received: from lelv0266.itg.ti.com ([10.180.67.225])
+        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 268NQtSp059322;
+        Fri, 8 Jul 2022 18:26:55 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1657322815;
+        bh=+bm3Wh1/TDP6a3e59S4Ynn5UhkVTq89RAIYkfdv0mkY=;
+        h=Date:From:To:CC:Subject;
+        b=Qo0rFyjzMv1E+wWw90kEN8hPGJjXhoKgszuD2E0cZxMvCyBEQGM3C+A3pOHCxL3k3
+         7u2OIT3oiCVXSn83deHx0FPpXQaIAnmRD/cZXNkQ7p6cGOHEU068L0rt7tdm4wjqL5
+         eKmGU9hB3/rAx2Ohn5eqfGIkYGfZGPLSsRZuHbDk=
+Received: from DFLE112.ent.ti.com (dfle112.ent.ti.com [10.64.6.33])
+        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 268NQtvo122764
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Fri, 8 Jul 2022 18:26:55 -0500
+Received: from DFLE101.ent.ti.com (10.64.6.22) by DFLE112.ent.ti.com
+ (10.64.6.33) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Fri, 8
+ Jul 2022 18:26:55 -0500
+Received: from lelv0327.itg.ti.com (10.180.67.183) by DFLE101.ent.ti.com
+ (10.64.6.22) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
+ Frontend Transport; Fri, 8 Jul 2022 18:26:55 -0500
+Received: from localhost (ileax41-snat.itg.ti.com [10.172.224.153])
+        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 268NQtku112567;
+        Fri, 8 Jul 2022 18:26:55 -0500
+Date:   Fri, 8 Jul 2022 18:26:55 -0500
+From:   Nishanth Menon <nm@ti.com>
+To:     Arnd <arnd@arndb.de>, Olof <olof@lixom.net>, SoC <soc@kernel.org>
+CC:     <arm@kernel.org>, <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>,
+        Santosh Shilimkar <ssantosh@kernel.org>,
+        Tony Lindgren <tony@atomide.com>
+Subject: [GIT PULL 1/3] TI SoC driver updates for v5.20
+Message-ID: <20220708232655.reqjdbib52ejdja4@unadvised>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="ay7qkbfwj2qln4rf"
+Content-Disposition: inline
+User-Agent: NeoMutt/20171215
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When building with Clang we encounter the following warning:
-| drivers/net/ethernet/amd/xgbe/xgbe-dcb.c:234:42: error: format specifies
-| type 'unsigned char' but the argument has type '__u16' (aka 'unsigned
-| short') [-Werror,-Wformat] pfc->pfc_cap, pfc->pfc_en, pfc->mbc,
-| pfc->delay);
+--ay7qkbfwj2qln4rf
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-pfc->pfc_cap , pfc->pfc_cn, pfc->mbc are all of type `u8` while pfc->delay is
-of type `u16`. The correct format specifiers `%hh[u|x]` were used for
-the first three but not for pfc->delay, which is causing the warning
-above.
+Hi ARM SoC maintainers,
 
-Variadic functions (printf-like) undergo default argument promotion.
-Documentation/core-api/printk-formats.rst specifically recommends using
-the promoted-to-type's format flag. In this case `%d` (or `%x` to
-maintain hex representation) should be used since both u8's and u16's
-are fully representable by an int.
+Please pull
 
-Moreover, C11 6.3.1.1 states:
-(https://www.open-std.org/jtc1/sc22/wg14/www/docs/n1548.pdf) `If an int
-can represent all values of the original type ..., the value is
-converted to an int; otherwise, it is converted to an unsigned int.
-These are called the integer promotions.`
+The following changes since commit f2906aa863381afb0015a9eb7fefad885d4e5a56:
 
-Link: https://github.com/ClangBuiltLinux/linux/issues/378
-Signed-off-by: Justin Stitt <justinstitt@google.com>
----
-For clarification, the first three parameters given to netif_dbg did NOT
-cause a -Wformat warning. I changed them simply to follow what the
-standard and documentation recommend.
+  Linux 5.19-rc1 (2022-06-05 17:18:54 -0700)
 
- drivers/net/ethernet/amd/xgbe/xgbe-dcb.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+are available in the Git repository at:
 
-diff --git a/drivers/net/ethernet/amd/xgbe/xgbe-dcb.c b/drivers/net/ethernet/amd/xgbe/xgbe-dcb.c
-index 895d35639129..c68ace804e37 100644
---- a/drivers/net/ethernet/amd/xgbe/xgbe-dcb.c
-+++ b/drivers/net/ethernet/amd/xgbe/xgbe-dcb.c
-@@ -230,7 +230,7 @@ static int xgbe_dcb_ieee_setpfc(struct net_device *netdev,
- 	struct xgbe_prv_data *pdata = netdev_priv(netdev);
- 
- 	netif_dbg(pdata, drv, netdev,
--		  "cap=%hhu, en=%#hhx, mbc=%hhu, delay=%hhu\n",
-+		  "cap=%d, en=%#x, mbc=%d, delay=%d\n",
- 		  pfc->pfc_cap, pfc->pfc_en, pfc->mbc, pfc->delay);
- 
- 	/* Check PFC for supported number of traffic classes */
--- 
-2.37.0.rc0.161.g10f37bed90-goog
+  git://git.kernel.org/pub/scm/linux/kernel/git/ti/linux.git tags/ti-driver=
+-soc-for-v5.20
 
+for you to fetch changes up to f16afe238a7ff3c71a943cf74392538974c29b22:
+
+  soc: ti: pruss: Enable support for PRUSS-M subsystem on K3 AM62x SoCs (20=
+22-07-06 19:34:45 -0500)
+
+----------------------------------------------------------------
+TI Driver updates for v5.20
+
+* pruss: Enable support for AM62, bindings cleanups
+* wkup_m3_ipc: cosmetic cleanup
+
+----------------------------------------------------------------
+Kishon Vijay Abraham I (3):
+      dt-bindings: soc: ti: pruss: Re-arrange "compatible" in alphabetic or=
+der
+      dt-bindings: soc: ti: pruss: Update bindings for K3 AM62x SoCs
+      soc: ti: pruss: Enable support for PRUSS-M subsystem on K3 AM62x SoCs
+
+Yang Li (1):
+      soc: ti: wkup_m3_ipc: Remove unneeded semicolon
+
+ Documentation/devicetree/bindings/soc/ti/ti,pruss.yaml | 5 +++--
+ drivers/soc/ti/pruss.c                                 | 1 +
+ drivers/soc/ti/wkup_m3_ipc.c                           | 2 +-
+ 3 files changed, 5 insertions(+), 3 deletions(-)
+
+--=20
+Regards,
+Nishanth Menon
+Key (0xDDB5849D1736249D) / Fingerprint: F8A2 8693 54EB 8232 17A3  1A34 DDB5=
+ 849D 1736 249D
+
+--ay7qkbfwj2qln4rf
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEE+KKGk1TrgjIXoxo03bWEnRc2JJ0FAmLIvTgACgkQ3bWEnRc2
+JJ1dSg//WDPjB2UiAEo8F7eh3WTgsW1vngaKgHX4++rhyE1QjpSsFRrvGH0bWUXp
+niRg0fiZ1UEkCkXZ7ZvGKIrol+UfQtjXSLo4jv3/y+wETlqAjDAiEV6Rk1B6J9WT
+ipdcU3fe+dBMncFFbLkA0gYC3NhtLLdwysi7E2aOf5Hf1HmQxAmRnlLDTNfPKXWA
+L6jCoHy13RBUW1YU9xxeYEaWBJdCDWqPCkqXuZ8CxoWwQjmsQAgi0zm5Pew7rJ8c
+qDpaA9fWwv9ck/eRtrgvHT5CqH4WIPiXFLdg3qiPhqKLypvSnl5aoSbbVFDmoapA
+y7Q91MLdo1Wbm5J5Rp14mmuk1ls7z5hqI02z8K8/lSHKSEqAp25U61qnUojgz9MM
+3CjoPkzFIbdBvZE4rALPH+PH4WUTHNeGY2jQ5aIucjVxRMpYa65MHcKm2Oaf9oNo
+Dil2f0bFKa0vVXV4qwI3iXDbtoNYpvvKuOrJgo1KLmbXU4nwGkY/G6H4nfV5Py9g
+eKcQ1G+uR2Qjjc/LEdPGLUVvs9ZgjPBAaiHH2zItCA6Sj0DsI2gfsXEUq1pDvCOR
+NbjL0UgUz9qfqB+sdW94bemGvBTvQTP/EPPGDHlInwz2HS2rtMuX3T+hxkKkrx4N
+4S1GuViC+GfOeJdzQQV9PaTnoyVCb2b7p/EonQFVdLbJBOeMQ4E=
+=twhQ
+-----END PGP SIGNATURE-----
+
+--ay7qkbfwj2qln4rf--

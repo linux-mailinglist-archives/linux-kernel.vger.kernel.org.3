@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D7E4856C45A
-	for <lists+linux-kernel@lfdr.de>; Sat,  9 Jul 2022 01:15:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E421956C244
+	for <lists+linux-kernel@lfdr.de>; Sat,  9 Jul 2022 01:12:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240123AbiGHUe3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Jul 2022 16:34:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55500 "EHLO
+        id S240255AbiGHUee (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Jul 2022 16:34:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57160 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240176AbiGHUeL (ORCPT
+        with ESMTP id S240258AbiGHUeN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Jul 2022 16:34:11 -0400
-Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69DDE9CE3D
-        for <linux-kernel@vger.kernel.org>; Fri,  8 Jul 2022 13:33:55 -0700 (PDT)
-Received: by mail-wr1-x436.google.com with SMTP id f2so26578935wrr.6
-        for <linux-kernel@vger.kernel.org>; Fri, 08 Jul 2022 13:33:55 -0700 (PDT)
+        Fri, 8 Jul 2022 16:34:13 -0400
+Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 067E89FE39
+        for <linux-kernel@vger.kernel.org>; Fri,  8 Jul 2022 13:33:57 -0700 (PDT)
+Received: by mail-wr1-x432.google.com with SMTP id n10so6662320wrc.4
+        for <linux-kernel@vger.kernel.org>; Fri, 08 Jul 2022 13:33:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=conchuod.ie; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=J7aE5Nbw36y+7KVb892AE4NEYNWfAfYQAkoZmLt8mFw=;
-        b=fZBU276Fcxl+YM1cb4rfqdQjDpEA4t7V5dMpP1OBWWH58JiTETtYGW+BhpcP+fWWYp
-         3l4Lw5RVRfJBZH+chhoxp0I0PDaILDdV7RCk9g4G4L6/FvxKEeAtAxhWM+qTj3pg/kbm
-         WPLGyPfzRX7XZhFQKaIknluxpK6Bou54UXV4kno0mEQeAMQ9FHVBVPvV0P8Y2IOSqDIz
-         jXEVgxbx0b2RdkhXNTVpD6oNq2gFLcF/noA9KWAMMaDq8KM708Jgoi5JZ4hmAFdCus/Q
-         K9EsM+fW4IqQCnZg4modEg5IplVjH/lxaI9H2MG1vpSVVSpeGR/fapKz0HfvACLYcCgX
-         08VA==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=3esZkwVy613d0mnGZgND5AwNK9S9FQGfuQwBw22Whgs=;
+        b=LkdUJp8NQYuFnVjXuy40IWe/u/nUF1iLbAgQ8kwt1DzSjr8TjfY8OK6w5l4+RjAXpk
+         iGEmip0XDsX5gphRrNhPKMRPlkxlJqghGpZhzZudw+mX4vXVSW5nv+HF7n2HqosjpiNM
+         YonBlNbVJGWEEjJWl6z8/W4YIUcSFU7ulSKNbE74naVf2Y99F3CuefQwEjYmdXe9v9b0
+         fYmg1JHhBwoNkaQ/eVpAo2iok0Zha85+oVM3BYxDZ5uGjFwyUdRev9zn8IzWlbt8z6Ob
+         Wtcv+QL+5yfEOCJSycnUNxWqTVOR4k8tyJi4/8LzdW7E9wG4na7ntkHzNCS6Ybym50G0
+         kWEQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=J7aE5Nbw36y+7KVb892AE4NEYNWfAfYQAkoZmLt8mFw=;
-        b=13yd8nGbU1REf0mFstwAof/6HCJVcpTAow97EVwyQe4y4RsdIevDmEfXMU+6xYQvry
-         JxRuLTZQ4CaFDPThAPRTr5nCUIehcK32jO3i/NTZLZBkDQoVXqSTjmebPRDcVa7Ek5lq
-         kLN6gM7pvuwFZ4iuTMCgI3xGyZn8m0kiFG1G3Gf+rDxsd8lFvc+kZ17EtH/hAubM0wYi
-         wHWpYpik88+H7JDKo6qMyvNXYr07sOWNAktPJBbNS5Wmbt4IV97zV243MXhNUIQGsMHR
-         ClKuwcugkkpU3MmtoNhTsfeUhNzKjJZVRFPv7Q8JOe4ySaJDnDylbrdEgPlzVZJC4WVw
-         sutg==
-X-Gm-Message-State: AJIora+ywTdhT1tJKswunVRp/dk+JR9KRDeSfnRTUgTmvuo8dRuUyOZ+
-        4mBjZKQp70opwlx6yrNtUT2iOQ==
-X-Google-Smtp-Source: AGRyM1vvjnkjIO4BJ/3OsUkxWtTWWxiuZDyW8gz8dsIe0ki9rXSxWqa7cMdlqhcr6EBYykIN6uzOxg==
-X-Received: by 2002:adf:f1d1:0:b0:21d:7f88:d638 with SMTP id z17-20020adff1d1000000b0021d7f88d638mr5126429wro.586.1657312433655;
-        Fri, 08 Jul 2022 13:33:53 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=3esZkwVy613d0mnGZgND5AwNK9S9FQGfuQwBw22Whgs=;
+        b=Fdi9GcEjo4gVk5ti1ysR0kRPWZIQ+aGxbVvw9SJSA9mEXrprlZf7F6BLqI9Q8obLYC
+         sU/4t15I59ACPPJfxWAFzeBq1YjCztJ1DG2Khw4LgPUJj9JAHVPud3Y06L0qGMGTD6tD
+         ngbuqiCTzBOuD/vuR2MYvxaDr8ukigWAVemn+6imHEBDLLu24ea++tmfceFxzxuZkRCG
+         4v+DH2QM4RmERKVXo+xpcqeiqGTSyvUvzVPYj/bK++pM6c8Ev5TWHrmnk7H0zkpi+b22
+         y2Tv6XB2gtmTkJil/tESDOckndvqWvfUJpTDs6gUfrMYobvI4/c4SQxYkE4K9SPgOWO6
+         UybQ==
+X-Gm-Message-State: AJIora8KwawsdcVG/gOSBYUDsGqfJ/wyYi1S2p68UTlh3/dcYaECGSCF
+        XmRkLSGgxVKJmZ562wwRLzRORQ==
+X-Google-Smtp-Source: AGRyM1so5vGVqM4+gNIz7n/aN1RHiJ4Q1lPp5fkyRoMDo9JFFCW9Qz/vji4dAeXxwm+HNa/iGx/gUA==
+X-Received: by 2002:a05:6000:18d:b0:21b:901e:9b27 with SMTP id p13-20020a056000018d00b0021b901e9b27mr5062706wrx.389.1657312435597;
+        Fri, 08 Jul 2022 13:33:55 -0700 (PDT)
 Received: from henark71.. ([51.37.234.167])
-        by smtp.gmail.com with ESMTPSA id a3-20020a1cf003000000b0039c8a22554bsm3165034wmb.27.2022.07.08.13.33.51
+        by smtp.gmail.com with ESMTPSA id a3-20020a1cf003000000b0039c8a22554bsm3165034wmb.27.2022.07.08.13.33.53
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 08 Jul 2022 13:33:52 -0700 (PDT)
+        Fri, 08 Jul 2022 13:33:54 -0700 (PDT)
 From:   Conor Dooley <mail@conchuod.ie>
 To:     Paul Walmsley <paul.walmsley@sifive.com>,
         Palmer Dabbelt <palmer@dabbelt.com>,
@@ -75,10 +75,12 @@ Cc:     Daire McNamara <daire.mcnamara@microchip.com>,
         linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org,
         Brice Goglin <Brice.Goglin@inria.fr>
-Subject: [PATCH v2 0/2] Fix RISC-V's arch-topology reporting
-Date:   Fri,  8 Jul 2022 21:33:41 +0100
-Message-Id: <20220708203342.256459-1-mail@conchuod.ie>
+Subject: [PATCH v2 1/2] arm64: topology: move store_cpu_topology() to shared code
+Date:   Fri,  8 Jul 2022 21:33:42 +0100
+Message-Id: <20220708203342.256459-2-mail@conchuod.ie>
 X-Mailer: git-send-email 2.37.0
+In-Reply-To: <20220708203342.256459-1-mail@conchuod.ie>
+References: <20220708203342.256459-1-mail@conchuod.ie>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -93,47 +95,106 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Conor Dooley <conor.dooley@microchip.com>
 
-Hey all,
-It's my first time messing around with arch/ code at all, let alone
-more than one arch, so forgive me if I have screwed up how to do a
-migration like this.
+arm64's method of defining a default cpu topology requires only minimal
+changes to apply to RISC-V also. The current arm64 implementation exits
+early in a uniprocessor configuration by reading MPIDR & claiming that
+uniprocessor can rely on the default values.
 
-The goal here is the fix the incorrectly reported arch topology on
-RISC-V which seems to have been broken since it was added.
-cpu, package and thread IDs are all currently reported as -1, so tools
-like lstopo think systems have multiple threads on the same core when
-this is not true:
-https://github.com/open-mpi/hwloc/issues/536
+This is appears to be a hangover from prior to '3102bc0e6ac7 ("arm64:
+topology: Stop using MPIDR for topology information")', because the
+current code just assigns default values for multiprocessor systems.
 
-arm64's topology code basically applies to RISC-V too, so it has been
-made generic along with the removal of MPIDR related code, which
-appears to be redudant code since '3102bc0e6ac7 ("arm64: topology: Stop
-using MPIDR for topology information")' replaced the code that actually
-interacted with MPIDR with default values.
+With the MPIDR references removed, store_cpu_topolgy() can be moved to
+the common arch_topology code.
 
-I only built tested for arm64, so hopefully it is not broken when used.
-Testing on both arm64 & !SMP RISC-V would really be appreciated!
-
-For V2, I dropped the idea of doing a RISC-V specific implementation
-followed by a move to the generic code & just went for the more straight
-forward method of moving to the shared version first. I also dropped the
-RFC :)
-
-Thanks,
-Conor.
-
-Conor Dooley (2):
-  arm64: topology: move store_cpu_topology() to shared code
-  riscv: topology: fix default topology reporting
-
+CC: stable@vger.kernel.org
+Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
+---
  arch/arm64/kernel/topology.c | 40 ------------------------------------
- arch/riscv/Kconfig           |  2 +-
- arch/riscv/kernel/smpboot.c  |  4 +++-
  drivers/base/arch_topology.c | 19 +++++++++++++++++
- 4 files changed, 23 insertions(+), 42 deletions(-)
+ 2 files changed, 19 insertions(+), 40 deletions(-)
 
-
-base-commit: b6f1f2fa2bddd69ff46a190b8120bd440fd50563
+diff --git a/arch/arm64/kernel/topology.c b/arch/arm64/kernel/topology.c
+index 869ffc4d4484..7889a00f5487 100644
+--- a/arch/arm64/kernel/topology.c
++++ b/arch/arm64/kernel/topology.c
+@@ -22,46 +22,6 @@
+ #include <asm/cputype.h>
+ #include <asm/topology.h>
+ 
+-void store_cpu_topology(unsigned int cpuid)
+-{
+-	struct cpu_topology *cpuid_topo = &cpu_topology[cpuid];
+-	u64 mpidr;
+-
+-	if (cpuid_topo->package_id != -1)
+-		goto topology_populated;
+-
+-	mpidr = read_cpuid_mpidr();
+-
+-	/* Uniprocessor systems can rely on default topology values */
+-	if (mpidr & MPIDR_UP_BITMASK)
+-		return;
+-
+-	/*
+-	 * This would be the place to create cpu topology based on MPIDR.
+-	 *
+-	 * However, it cannot be trusted to depict the actual topology; some
+-	 * pieces of the architecture enforce an artificial cap on Aff0 values
+-	 * (e.g. GICv3's ICC_SGI1R_EL1 limits it to 15), leading to an
+-	 * artificial cycling of Aff1, Aff2 and Aff3 values. IOW, these end up
+-	 * having absolutely no relationship to the actual underlying system
+-	 * topology, and cannot be reasonably used as core / package ID.
+-	 *
+-	 * If the MT bit is set, Aff0 *could* be used to define a thread ID, but
+-	 * we still wouldn't be able to obtain a sane core ID. This means we
+-	 * need to entirely ignore MPIDR for any topology deduction.
+-	 */
+-	cpuid_topo->thread_id  = -1;
+-	cpuid_topo->core_id    = cpuid;
+-	cpuid_topo->package_id = cpu_to_node(cpuid);
+-
+-	pr_debug("CPU%u: cluster %d core %d thread %d mpidr %#016llx\n",
+-		 cpuid, cpuid_topo->package_id, cpuid_topo->core_id,
+-		 cpuid_topo->thread_id, mpidr);
+-
+-topology_populated:
+-	update_siblings_masks(cpuid);
+-}
+-
+ #ifdef CONFIG_ACPI
+ static bool __init acpi_cpu_is_threaded(int cpu)
+ {
+diff --git a/drivers/base/arch_topology.c b/drivers/base/arch_topology.c
+index 441e14ac33a4..07e84c6ac5c2 100644
+--- a/drivers/base/arch_topology.c
++++ b/drivers/base/arch_topology.c
+@@ -765,6 +765,25 @@ void update_siblings_masks(unsigned int cpuid)
+ 	}
+ }
+ 
++void __weak store_cpu_topology(unsigned int cpuid)
++{
++	struct cpu_topology *cpuid_topo = &cpu_topology[cpuid];
++
++	if (cpuid_topo->package_id != -1)
++		goto topology_populated;
++
++	cpuid_topo->thread_id = -1;
++	cpuid_topo->core_id = cpuid;
++	cpuid_topo->package_id = cpu_to_node(cpuid);
++
++	pr_debug("CPU%u: package %d core %d thread %d\n",
++		 cpuid, cpuid_topo->package_id, cpuid_topo->core_id,
++		 cpuid_topo->thread_id);
++
++topology_populated:
++	update_siblings_masks(cpuid);
++}
++
+ static void clear_cpu_topology(int cpu)
+ {
+ 	struct cpu_topology *cpu_topo = &cpu_topology[cpu];
 -- 
 2.37.0
 

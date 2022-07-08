@@ -2,68 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4CDA156BB7C
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 16:07:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 260C656BB7F
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 16:08:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234643AbiGHOFT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Jul 2022 10:05:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36400 "EHLO
+        id S238229AbiGHOHu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Jul 2022 10:07:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37856 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231905AbiGHOFS (ORCPT
+        with ESMTP id S236628AbiGHOHs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Jul 2022 10:05:18 -0400
-Received: from mail-lj1-x22b.google.com (mail-lj1-x22b.google.com [IPv6:2a00:1450:4864:20::22b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 058A52FFC9
-        for <linux-kernel@vger.kernel.org>; Fri,  8 Jul 2022 07:05:17 -0700 (PDT)
-Received: by mail-lj1-x22b.google.com with SMTP id w2so9710071ljj.7
-        for <linux-kernel@vger.kernel.org>; Fri, 08 Jul 2022 07:05:16 -0700 (PDT)
+        Fri, 8 Jul 2022 10:07:48 -0400
+Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCF93313A8
+        for <linux-kernel@vger.kernel.org>; Fri,  8 Jul 2022 07:07:47 -0700 (PDT)
+Received: by mail-ej1-x62a.google.com with SMTP id h23so37850354ejj.12
+        for <linux-kernel@vger.kernel.org>; Fri, 08 Jul 2022 07:07:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=aVTg2EfXoOZ9XnqujjRV0ij3i1Nj1NxQHoIMerWnwe8=;
-        b=lgQvQnNGWjFCROQU/kiWQi5k0UhXTi37XTUY7d6h1QDsC/QQnOmyeMJwtf7J1ojI8q
-         /q21CHdvbxLtiW0HUyUpEzIZS+2Zs/IRnNgPFasj3Jb8S2YoT//h7zUZTOj1ut074AzV
-         mqE7LnYme3lOZs2fBH1HR9GoXUJBpVCDiMIDieeP8M3oMYnVLalBzooEQlSX5gVCG1/Y
-         VRvaiIRXgFePqxvtQgjWm1KbtK0k/7BevtCT7H/mr1NOoxRkeeXLUkyU7FmzgSjavfIo
-         chmSknvjXZB49IbDyIB8gCaYwPPkvuMKp+gm7b9Nu7FAaC/tV5ZaxjeIc2hZ5HfqUapN
-         7MOQ==
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=UmQMSw/Lo/aUgwdf6X3tLXsFA1/lan16IQ3/ce55QGc=;
+        b=e//7/zevFojSgOmv1iUZPcR9RxpOxiTq/3m9/uN6nMSXeI3cXH4ixaWg5fpOBb1Xyq
+         2/6CsOMlmIQ90xk3ZqpS9GmPsMEN77fRzrXujYwyvsFbFyV+Yr6pt7yDy8oh4YLBJHuI
+         J4kwdndVmwW26wL2r1fIHKQXzEUE7DZIyQAZGyj6Jt0fO9fs6YuDgnPOK9CNdckL5ovW
+         9ckRgnYGvYqeB3OyMnm6b6nYTos1wFBo2zRVCQH6TzwBZY1iiWIj/wS0HJu578+a/37m
+         CBMaGj+SfkKAEihV4KGfQTD6lzxvioUDTGkr2PHCMSz63svr+8UiaWd4Huyh6CIUuIWQ
+         Gt0g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=aVTg2EfXoOZ9XnqujjRV0ij3i1Nj1NxQHoIMerWnwe8=;
-        b=nhO9zIIiBy+dkoovaxqpuBISsSzr52w2fZrOq/zjORTON4O0Q0gs48Hhlxad0T8aEW
-         Mm4T0v6c1eablW7lOzYsU6sR709k1EPBhH8d+F/ihXymLdgtRbJsM9vIPxGuHsMXiNhK
-         pwzfcc2x5dJcsCtwFw1iVAzX44xqxd1dBB+k6kDrpNqms5djte4gujO+qEgZ16DcerKZ
-         EWcCXbHsAAYt+ycW9FNy12XguRdH7M/QqNTOrwB8t0h4Mt3qTXF6DIzUGp6H8q2x8iNE
-         uNNtU30JHwrEZp8Rn8xcMwU/PGdn/5ogeBthuVJxhmDrFh+Q5wowpe1WWXaJVh7EiZLf
-         eBWA==
-X-Gm-Message-State: AJIora9Tl7yB4aBK4d4iyqsTGzjiUjCcyKMGhSDdFqP9JsaPuhgOw8Cg
-        LX6ud6yVd1jeyqSSYlzfcADSaKcFvjzoIwRzOOes9mdS7+4tEA==
-X-Google-Smtp-Source: AGRyM1tmGrnZQtA2Cboc1CQNgT3n9CwH9z2FbssFjlcKIQ1HIzsuu0ZixwkFtEDPNh1Z/l+47lS8iXuoc854j0libmA=
-X-Received: by 2002:a2e:9f56:0:b0:25a:7381:6929 with SMTP id
- v22-20020a2e9f56000000b0025a73816929mr1995165ljk.93.1657289115126; Fri, 08
- Jul 2022 07:05:15 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=UmQMSw/Lo/aUgwdf6X3tLXsFA1/lan16IQ3/ce55QGc=;
+        b=YYsjxGiXX5iPnui2qAzY6Sx19tDduizZwFLHCW0pFWGMlzjjiP9vGPt/U1EiqcxAI1
+         bJ/IKNWvxo8wpvbcLe7tLT0ad/Veu7lSEpBUQiSmwMJN2N882LIMayREpN7YSx0OLMBa
+         Z8Hn/BwDVSvi2oGPslQzO6QSK8iI9yqmiddpU9BLmD66WAIyjhAbPWSqnDhBb1F7A/Rq
+         sxi3RJP7nLY8r1jz61lHDCJz89DoWeZwIoAGMcKWcPnwF/JaQomwm1epU2WGhukj8uFm
+         IX2xwaLDdmxk3laEbyIxRkmWE3CXDQ6DgSX+lvvfHuQNI28LS0lQ5E/LGIHYFlbPVkT1
+         uW9g==
+X-Gm-Message-State: AJIora8NXW7RZFR3+NiPndmewAPbMs3mhOM7/3BPAoq/sSAu/gUjjbgG
+        fJ/AOl722b8T+79UNaAdh3FrwUQ6gZI=
+X-Google-Smtp-Source: AGRyM1t1DjCzfOwLiRgELsKcXKYuqKjMDw7UMRA/ZepHVRPjeRcW0Dz4HWw2KyJ1desnWjuhUEvOGw==
+X-Received: by 2002:a17:906:e16:b0:726:a026:27ff with SMTP id l22-20020a1709060e1600b00726a02627ffmr3646857eji.573.1657289266405;
+        Fri, 08 Jul 2022 07:07:46 -0700 (PDT)
+Received: from localhost.localdomain ([46.248.82.114])
+        by smtp.gmail.com with ESMTPSA id 1-20020a170906308100b007030c97ae62sm9533959ejv.191.2022.07.08.07.07.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 08 Jul 2022 07:07:45 -0700 (PDT)
+From:   Uros Bizjak <ubizjak@gmail.com>
+To:     linux-mm@kvack.org, linux-kernel@vger.kernel.org
+Cc:     Uros Bizjak <ubizjak@gmail.com>,
+        Andrew Morton <akpm@linux-foundation.org>
+Subject: [PATCH] mm/page_alloc: use try_cmpxchg in set_pfnblock_flags_mask
+Date:   Fri,  8 Jul 2022 16:07:36 +0200
+Message-Id: <20220708140736.8737-1-ubizjak@gmail.com>
+X-Mailer: git-send-email 2.35.3
 MIME-Version: 1.0
-References: <20220708071802.751003711@infradead.org> <20220708071834.149930530@infradead.org>
-In-Reply-To: <20220708071834.149930530@infradead.org>
-From:   Jann Horn <jannh@google.com>
-Date:   Fri, 8 Jul 2022 16:04:38 +0200
-Message-ID: <CAG48ez1eFwoDYnuyqp3FSDCaEOFsQEbBzsT4pGS7Xw0eLVf+nQ@mail.gmail.com>
-Subject: Re: [PATCH 4/4] mmu_gather: Force tlb-flush VM_PFNMAP vmas
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     Linus Torvalds <torvalds@linuxfoundation.org>,
-        Will Deacon <will@kernel.org>, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, Dave Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Guo Ren <guoren@kernel.org>, David Miller <davem@davemloft.net>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,123 +68,61 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jul 8, 2022 at 9:19 AM Peter Zijlstra <peterz@infradead.org> wrote:
-> Jann reported a race between munmap() and unmap_mapping_range(), where
-> unmap_mapping_range() will no-op once unmap_vmas() has unlinked the
-> VMA; however munmap() will not yet have invalidated the TLBs.
->
-> Therefore unmap_mapping_range() will complete while there are still
-> (stale) TLB entries for the specified range.
->
-> Mitigate this by force flushing TLBs for VM_PFNMAP ranges.
->
-> Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-> ---
->  include/asm-generic/tlb.h |   33 +++++++++++++++++----------------
->  1 file changed, 17 insertions(+), 16 deletions(-)
->
-> --- a/include/asm-generic/tlb.h
-> +++ b/include/asm-generic/tlb.h
-> @@ -303,6 +303,7 @@ struct mmu_gather {
->          */
->         unsigned int            vma_exec : 1;
->         unsigned int            vma_huge : 1;
-> +       unsigned int            vma_pfn  : 1;
->
->         unsigned int            batch_count;
->
-> @@ -373,7 +374,6 @@ tlb_update_vma_flags(struct mmu_gather *
->  #else /* CONFIG_MMU_GATHER_NO_RANGE */
->
->  #ifndef tlb_flush
-> -
->  /*
->   * When an architecture does not provide its own tlb_flush() implementation
->   * but does have a reasonably efficient flush_vma_range() implementation
-> @@ -393,6 +393,9 @@ static inline void tlb_flush(struct mmu_
->                 flush_tlb_range(&vma, tlb->start, tlb->end);
->         }
->  }
-> +#endif
-> +
-> +#endif /* CONFIG_MMU_GATHER_NO_RANGE */
->
->  static inline void
->  tlb_update_vma_flags(struct mmu_gather *tlb, struct vm_area_struct *vma)
-> @@ -410,17 +413,9 @@ tlb_update_vma_flags(struct mmu_gather *
->          */
->         tlb->vma_huge = is_vm_hugetlb_page(vma);
->         tlb->vma_exec = !!(vma->vm_flags & VM_EXEC);
-> +       tlb->vma_pfn  = !!(vma->vm_flags & VM_PFNMAP);
+Use try_cmpxchg instead of cmpxchg in set_pfnblock_flags_mask.
+x86 CMPXCHG instruction returns success in ZF flag, so this
+change saves a compare after cmpxchg (and related move instruction
+in front of cmpxchg). The main loop improves from:
 
-We should probably handle VM_MIXEDMAP the same way as VM_PFNMAP here,
-I think? Conceptually I think the same issue can happen with
-device-owned pages that aren't managed by the kernel's page allocator,
-and for those, VM_MIXEDMAP is the same as VM_PFNMAP.
+    1c5d:	48 89 c2             	mov    %rax,%rdx
+    1c60:	48 89 c1             	mov    %rax,%rcx
+    1c63:	48 21 fa             	and    %rdi,%rdx
+    1c66:	4c 09 c2             	or     %r8,%rdx
+    1c69:	f0 48 0f b1 16       	lock cmpxchg %rdx,(%rsi)
+    1c6e:	48 39 c1             	cmp    %rax,%rcx
+    1c71:	75 ea                	jne    1c5d <...>
 
->  }
->
-> -#else
-> -
-> -static inline void
-> -tlb_update_vma_flags(struct mmu_gather *tlb, struct vm_area_struct *vma) { }
-> -
-> -#endif
-> -
-> -#endif /* CONFIG_MMU_GATHER_NO_RANGE */
-> -
->  static inline void tlb_flush_mmu_tlbonly(struct mmu_gather *tlb)
->  {
->         /*
-> @@ -507,16 +502,22 @@ static inline void tlb_start_vma(struct
->
->  static inline void tlb_end_vma(struct mmu_gather *tlb, struct vm_area_struct *vma)
->  {
-> -       if (tlb->fullmm || IS_ENABLED(CONFIG_MMU_GATHER_MERGE_VMAS))
-> +       if (tlb->fullmm)
->                 return;
+to:
 
-Is this correct, or would there still be a race between MM teardown
-(which sets ->fullmm, see exit_mmap()->tlb_gather_mmu_fullmm()) and
-unmap_mapping_range()? My understanding is that ->fullmm only
-guarantees a flush at tlb_finish_mmu(), but here we're trying to
-ensure a flush before unlink_file_vma().
+    1c60:	48 89 ca             	mov    %rcx,%rdx
+    1c63:	48 21 c2             	and    %rax,%rdx
+    1c66:	4c 09 c2             	or     %r8,%rdx
+    1c69:	f0 48 0f b1 16       	lock cmpxchg %rdx,(%rsi)
+    1c6e:	75 f0                	jne    1c60 <...>
 
->         /*
-> -        * Do a TLB flush and reset the range at VMA boundaries; this avoids
-> -        * the ranges growing with the unused space between consecutive VMAs,
-> -        * but also the mmu_gather::vma_* flags from tlb_start_vma() rely on
-> -        * this.
-> +        * VM_PFNMAP is more fragile because the core mm will not track the
-> +        * page mapcount -- there might not be page-frames for these PFNs after
-> +        * all. Force flush TLBs for such ranges to avoid munmap() vs
-> +        * unmap_mapping_range() races.
+Signed-off-by: Uros Bizjak <ubizjak@gmail.com>
+Cc: Andrew Morton <akpm@linux-foundation.org>
+---
+ mm/page_alloc.c | 10 +++-------
+ 1 file changed, 3 insertions(+), 7 deletions(-)
 
-Maybe add: "We do *not* guarantee that after munmap() has passed
-through tlb_end_vma(), there are no more stale TLB entries for this
-VMA; there could be a parallel PTE-zapping operation that has zapped
-PTEs before we looked at them but hasn't done the corresponding TLB
-flush yet. However, such a parallel zap can't be done through the
-mm_struct (we've unlinked the VMA), so it would have to be done under
-the ->i_mmap_sem in read mode, which we synchronize against in
-unlink_file_vma()."
+diff --git a/mm/page_alloc.c b/mm/page_alloc.c
+index e008a3df0485..d415d5b539b7 100644
+--- a/mm/page_alloc.c
++++ b/mm/page_alloc.c
+@@ -524,7 +524,7 @@ void set_pfnblock_flags_mask(struct page *page, unsigned long flags,
+ {
+ 	unsigned long *bitmap;
+ 	unsigned long bitidx, word_bitidx;
+-	unsigned long old_word, word;
++	unsigned long word;
+ 
+ 	BUILD_BUG_ON(NR_PAGEBLOCK_BITS != 4);
+ 	BUILD_BUG_ON(MIGRATE_TYPES > (1 << PB_migratetype_bits));
+@@ -540,12 +540,8 @@ void set_pfnblock_flags_mask(struct page *page, unsigned long flags,
+ 	flags <<= bitidx;
+ 
+ 	word = READ_ONCE(bitmap[word_bitidx]);
+-	for (;;) {
+-		old_word = cmpxchg(&bitmap[word_bitidx], word, (word & ~mask) | flags);
+-		if (word == old_word)
+-			break;
+-		word = old_word;
+-	}
++	do {
++	} while (!try_cmpxchg(&bitmap[word_bitidx], &word, (word & ~mask) | flags));
+ }
+ 
+ void set_pageblock_migratetype(struct page *page, int migratetype)
+-- 
+2.35.3
 
-I'm not convinced it's particularly nice to do a flush in
-tlb_end_vma() when we can't make guarantees about the TLB state wrt
-parallel invalidations, and when we only really care about having a
-flush between unmap_vmas() and free_pgtables(), but I guess it works?
-
->          */
-> -       tlb_flush_mmu_tlbonly(tlb);
-> +       if (tlb->vma_pfn || !IS_ENABLED(CONFIG_MMU_GATHER_MERGE_VMAS)) {
-> +               /*
-> +                * Do a TLB flush and reset the range at VMA boundaries; this avoids
-> +                * the ranges growing with the unused space between consecutive VMAs.
-> +                */
-> +               tlb_flush_mmu_tlbonly(tlb);
-> +       }
->  }
->
->  /*
->
->

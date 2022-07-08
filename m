@@ -2,141 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 028D656C367
-	for <lists+linux-kernel@lfdr.de>; Sat,  9 Jul 2022 01:14:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8756056C215
+	for <lists+linux-kernel@lfdr.de>; Sat,  9 Jul 2022 01:12:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239792AbiGHT2Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Jul 2022 15:28:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37632 "EHLO
+        id S239885AbiGHT33 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Jul 2022 15:29:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38544 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239784AbiGHT2R (ORCPT
+        with ESMTP id S239813AbiGHT2q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Jul 2022 15:28:17 -0400
-Received: from mail-yb1-f177.google.com (mail-yb1-f177.google.com [209.85.219.177])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A089153D06;
-        Fri,  8 Jul 2022 12:28:16 -0700 (PDT)
-Received: by mail-yb1-f177.google.com with SMTP id h132so8660553ybb.4;
-        Fri, 08 Jul 2022 12:28:16 -0700 (PDT)
+        Fri, 8 Jul 2022 15:28:46 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 391D4248D9
+        for <linux-kernel@vger.kernel.org>; Fri,  8 Jul 2022 12:28:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1657308516;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=x1DAicwEAPXBRBMe3z1xdAg47wBYVrbByTqaE+qHnm8=;
+        b=WoYx4/IUSp/Xz5ON3UXG7AHNt7zUshD6+AesLMGbAmEhoBXxwv1RUC7dESICrq1BnwyL7V
+        rRK9rDQH0YchL+292/jRWAZVDjSFNmiWeYvSMUC8m3y66F0T96pg+oCtOwYUml+KdjgYaH
+        gC7EKG7+gtTdW83YAo+4UNZ1vJXC568=
+Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com
+ [209.85.208.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-2-8ePKhVXDPLGzXnam0E9sGA-1; Fri, 08 Jul 2022 15:28:35 -0400
+X-MC-Unique: 8ePKhVXDPLGzXnam0E9sGA-1
+Received: by mail-ed1-f69.google.com with SMTP id q18-20020a056402519200b004358ce90d97so16455151edd.4
+        for <linux-kernel@vger.kernel.org>; Fri, 08 Jul 2022 12:28:34 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Adq262FqgbHF8RrsXNyOZR99yv/bgTrTtDi82M2Lai8=;
-        b=uMlKL0MvMx61bWaHIU9GTSc4KoaGqsoB2Xt7kgysYmO99916zTMo7ifyWJfKA7P8JN
-         s7m1nt+ZD9LenKM+hOga8l+V17vJXcBpmx5vZuZeWoM2QRgG4lNAVblr/yOCSFP7wCqV
-         U/Sg6UIi9fKgPYDrdwOf7x/qkwXcmuSdU/XNJbhY4sauo+l4qIKLypJ8WZ3XF6oW8lIo
-         dGhqbOnNauTu7Txme3F//HQp0Kra+7SUprpQAR1TIHXepjpLarj30RUNfP2HjqyS/3B2
-         7PSymvfVEArjqwND+060hagkONDV+B/himgDID/zXX8N4oalJ0dxPGnuFhq7zJK5wODY
-         79jg==
-X-Gm-Message-State: AJIora91XhAOmpcCrzeuqZwdvTiXAFxGLnctbselzzFUlVDfXnU4qAPJ
-        78QQ5Ff9fztXUmGe1C+JYoB2HsyuDCKJHYjCaUc=
-X-Google-Smtp-Source: AGRyM1uNOen2w4MD2F36UQSnxq6oGUS88nJifcsvzfTMSipLjWrvOecHgD4zbExkeIYYVyX0xKAMBRsgMyjM2cB5Ow0=
-X-Received: by 2002:a05:6902:1108:b0:66e:a9b1:3e48 with SMTP id
- o8-20020a056902110800b0066ea9b13e48mr5547856ybu.153.1657308495710; Fri, 08
- Jul 2022 12:28:15 -0700 (PDT)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=x1DAicwEAPXBRBMe3z1xdAg47wBYVrbByTqaE+qHnm8=;
+        b=RLGjhhrAyQgv9RrsJ64qDCrcf+i8IZN002KLNvhFOl10uu/EA0CVXzL7R/xjXflONp
+         xTaj/Upy+vSh/rJdD4PA0Trg2rUth7fssKscHWonfN1aWcqgZn8xpSQ3bQNq5Ol+fauD
+         kgR37ScUqtYRJdvfj+2ETgE0bgVHlz307IIN3Wl9AtuTEj5pG9Ok0amyOhgeP/5THCVk
+         My27/qKySvwqyBE/HW/BB8fK6HtLD7WT8fN6gcrkBW0gYdKbxHZSNvaCrQGdCCtfsnju
+         tGaT6p1434CEwURS5PIp3dZWjX7mFzDhHv5V2DewMXaV+2aRXp9Je5bDMMa7y4coUDcg
+         H3ZA==
+X-Gm-Message-State: AJIora/YrHCPl0D2xC3P3ZdMjkLH5JK6kqCctti04axgM+KCnbi1IiY1
+        DsoPI8HVzGC9Fj+GLdnYRaCvNu2VRAuGKnbWFmM8/wdZO1AuCAlHDvd9k+mbea0GFl7cb9QCfAX
+        WxZk64jXNeVjll1I5Qbd24eD6
+X-Received: by 2002:a17:907:86ac:b0:72a:fc15:98cf with SMTP id qa44-20020a17090786ac00b0072afc1598cfmr5087112ejc.474.1657308513962;
+        Fri, 08 Jul 2022 12:28:33 -0700 (PDT)
+X-Google-Smtp-Source: AGRyM1tkr+qWhrSzebZjZZfUfQqb4WSOleYalB7Ps0X+jp4B93iKsB3HUIVAIpQMdnYN+LbhqwjjIg==
+X-Received: by 2002:a17:907:86ac:b0:72a:fc15:98cf with SMTP id qa44-20020a17090786ac00b0072afc1598cfmr5087099ejc.474.1657308513789;
+        Fri, 08 Jul 2022 12:28:33 -0700 (PDT)
+Received: from ?IPV6:2001:1c00:c1e:bf00:d69d:5353:dba5:ee81? (2001-1c00-0c1e-bf00-d69d-5353-dba5-ee81.cable.dynamic.v6.ziggo.nl. [2001:1c00:c1e:bf00:d69d:5353:dba5:ee81])
+        by smtp.gmail.com with ESMTPSA id h17-20020a1709060f5100b00705cdfec71esm20550294ejj.7.2022.07.08.12.28.32
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 08 Jul 2022 12:28:33 -0700 (PDT)
+Message-ID: <b7d937bc-d7c3-6f7a-047c-fc6e5756a5a0@redhat.com>
+Date:   Fri, 8 Jul 2022 21:28:32 +0200
 MIME-Version: 1.0
-References: <20220602163330.317-1-mario.limonciello@amd.com>
- <20220608222922.GA429328@bhelgaas> <MN0PR12MB610188F2F289EFA12872D8E2E2AB9@MN0PR12MB6101.namprd12.prod.outlook.com>
-In-Reply-To: <MN0PR12MB610188F2F289EFA12872D8E2E2AB9@MN0PR12MB6101.namprd12.prod.outlook.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Fri, 8 Jul 2022 21:28:02 +0200
-Message-ID: <CAJZ5v0jzJBABqsbxNwhjojdkgQdreuU5+SVnenm48GOyLioZQg@mail.gmail.com>
-Subject: Re: [PATCH] Documentation: PM: Drop pme_interrupt reference
-To:     "Limonciello, Mario" <Mario.Limonciello@amd.com>
-Cc:     Bjorn Helgaas <helgaas@kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        "open list:SUSPEND TO RAM" <linux-pm@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Subject: Re: [PATCH 1/5] drm/modes: parse_cmdline: Handle empty mode name part
+Content-Language: en-US
+To:     Geert Uytterhoeven <geert@linux-m68k.org>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>
+Cc:     dri-devel@lists.freedesktop.org, linux-fbdev@vger.kernel.org,
+        linux-m68k@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <cover.1657301107.git.geert@linux-m68k.org>
+ <64e2e9b14c26df28908789374253fd12072c26c2.1657301107.git.geert@linux-m68k.org>
+From:   Hans de Goede <hdegoede@redhat.com>
+In-Reply-To: <64e2e9b14c26df28908789374253fd12072c26c2.1657301107.git.geert@linux-m68k.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Sorry for the delay.
+Hi Geert,
 
-On Mon, Jun 13, 2022 at 5:57 PM Limonciello, Mario
-<Mario.Limonciello@amd.com> wrote:
->
-> [Public]
->
->
->
-> > -----Original Message-----
-> > From: Bjorn Helgaas <helgaas@kernel.org>
-> > Sent: Wednesday, June 8, 2022 17:29
-> > To: Limonciello, Mario <Mario.Limonciello@amd.com>
-> > Cc: Rafael J. Wysocki <rafael@kernel.org>; Len Brown <len.brown@intel.com>;
-> > Pavel Machek <pavel@ucw.cz>; Bjorn Helgaas <bhelgaas@google.com>; Mika
-> > Westerberg <mika.westerberg@linux.intel.com>; open list:SUSPEND TO RAM
-> > <linux-pm@vger.kernel.org>; open list <linux-kernel@vger.kernel.org>
-> > Subject: Re: [PATCH] Documentation: PM: Drop pme_interrupt reference
-> >
-> > On Thu, Jun 02, 2022 at 11:33:30AM -0500, Mario Limonciello wrote:
-> > > `pme_interrupt` was dropped from `struct pci_dev` as part of commit
-> > > 8370c2dc4c7b ("PCI / PM: Drop pme_interrupt flag from struct pci_dev"),
-> > > but the Documentation still includes this member.
-> > >
-> > > Remove it from the documentation as well and update it to have the missing
-> > > `pme_poll` member instead.
-> > >
-> > > Fixes: 8370c2dc4c7b ("PCI / PM: Drop pme_interrupt flag from struct pci_dev")
-> > > Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
-> > > ---
-> > >  Documentation/power/pci.rst | 2 +-
-> > >  1 file changed, 1 insertion(+), 1 deletion(-)
-> > >
-> > > diff --git a/Documentation/power/pci.rst b/Documentation/power/pci.rst
-> > > index b04fb18cc4e2..a125544b4cb6 100644
-> > > --- a/Documentation/power/pci.rst
-> > > +++ b/Documentation/power/pci.rst
-> > > @@ -315,7 +315,7 @@ that these callbacks operate on::
-> > >                                        configuration space */
-> > >     unsigned int    pme_support:5;  /* Bitmask of states from which PME#
-> > >                                        can be generated */
-> > > -   unsigned int    pme_interrupt:1;/* Is native PCIe PME signaling used?
-> > */
-> > > +   unsigned int    pme_poll:1;     /* Poll device's PME status bit */
-> > >     unsigned int    d1_support:1;   /* Low power state D1 is supported */
-> > >     unsigned int    d2_support:1;   /* Low power state D2 is supported */
-> > >     unsigned int    no_d1d2:1;      /* D1 and D2 are forbidden */
-> >
-> > I'm OK with this patch if Rafael wants to take it.
-> >
-> > But I'm not sure how much value this section of the doc really adds.
-> > The doc basically says "the PCI PM callbacks operate on several of
-> > these fields of the struct pci_dev" and goes on to quote part of the
-> > struct pci_dev.
->
-> The reason that the patch came up is that someone who doesn't normally look
-> at kernel code but looked at documentation reached out asking questions about
-> these variables at the time a bug was occurring.  I was baffled how they were referring
-> to pme_interrupt until I found that it's only mentioned in documentation since the linked
-> Fixes tag.  So I figured we should make the documentation match the code.
->
-> >
-> > But "pm_cap" is the only one of those fields that is mentioned
-> > elsewhere in the doc, and that one is only incidental.
-> >
-> > For example, is it really useful to say "the PCI PM callbacks use
-> > pci_dev.pme_poll" without any other details about pme_poll?
-> >
-> > I think I would consider just removing everything from "The structure
-> > representing a PCI device ..." to the end of the section, i.e., lines
-> > 308-329 at [1].
-> >
->
-> That's perfectly fine to me too.
+On 7/8/22 20:21, Geert Uytterhoeven wrote:
+> If no mode name part was specified, mode_end is zero, and the "ret ==
+> mode_end" check does the wrong thing.
+> 
+> Fix this by checking for a non-zero return value instead.
 
-I've decided to apply the patch, because it is fine as is and the
-cleanup mentioned above can be done on top of it just fine.
+Which is wrong to do, since now if you have e.g. a mode list
+with:
 
-Applied as 5.20 material, thanks!
+"dblntsc",
+"dblntsc-ff"
+
+in there and the cmdline contains "dblntsc-ff" then you
+will already stop with a (wrong!) match at "dblntsc".
+
+> While at it, skip all named mode handling when mode_end is zero, as it
+> is futile.
+
+AFAICT, this is actually what needs to be done to fix this, while keeping
+the ret == mode_end check.
+
+Regards,
+
+Hans
+
+
+> 
+> Fixes: 7b1cce760afe38b4 ("drm/modes: parse_cmdline: Allow specifying stand-alone options")
+> Signed-off-by: Geert Uytterhoeven <geert@linux-m68k.org>
+> ---
+>  drivers/gpu/drm/drm_modes.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/gpu/drm/drm_modes.c b/drivers/gpu/drm/drm_modes.c
+> index 14b746f7ba975954..30a7be97707bfb16 100644
+> --- a/drivers/gpu/drm/drm_modes.c
+> +++ b/drivers/gpu/drm/drm_modes.c
+> @@ -1823,9 +1823,9 @@ bool drm_mode_parse_command_line_for_connector(const char *mode_option,
+>  	}
+>  
+>  	/* First check for a named mode */
+> -	for (i = 0; i < ARRAY_SIZE(drm_named_modes_whitelist); i++) {
+> +	for (i = 0; mode_end && i < ARRAY_SIZE(drm_named_modes_whitelist); i++) {
+>  		ret = str_has_prefix(name, drm_named_modes_whitelist[i]);
+> -		if (ret == mode_end) {
+> +		if (ret) {
+>  			if (refresh_ptr)
+>  				return false; /* named + refresh is invalid */
+>  
+

@@ -2,110 +2,328 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C1DF56B3A1
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 09:34:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 388FE56B3A4
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 09:36:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237111AbiGHHcA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Jul 2022 03:32:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43546 "EHLO
+        id S237616AbiGHHey (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Jul 2022 03:34:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46158 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237597AbiGHHb6 (ORCPT
+        with ESMTP id S237279AbiGHHex (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Jul 2022 03:31:58 -0400
-Received: from out30-44.freemail.mail.aliyun.com (out30-44.freemail.mail.aliyun.com [115.124.30.44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E19F27B379
-        for <linux-kernel@vger.kernel.org>; Fri,  8 Jul 2022 00:31:57 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R171e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046049;MF=xianting.tian@linux.alibaba.com;NM=1;PH=DS;RN=5;SR=0;TI=SMTPD_---0VIiXsyp_1657265514;
-Received: from localhost(mailfrom:xianting.tian@linux.alibaba.com fp:SMTPD_---0VIiXsyp_1657265514)
-          by smtp.aliyun-inc.com;
-          Fri, 08 Jul 2022 15:31:55 +0800
-From:   Xianting Tian <xianting.tian@linux.alibaba.com>
-To:     palmer@dabbelt.com
-Cc:     linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
-        guoren@kernel.org, Xianting Tian <xianting.tian@linux.alibaba.com>
-Subject: [RESEND PATCH V5 2/2] RISC-V: use __smp_processor_id() instead of smp_processor_id()
-Date:   Fri,  8 Jul 2022 15:31:50 +0800
-Message-Id: <20220708073150.352830-3-xianting.tian@linux.alibaba.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20220708073150.352830-1-xianting.tian@linux.alibaba.com>
-References: <20220708073150.352830-1-xianting.tian@linux.alibaba.com>
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        Fri, 8 Jul 2022 03:34:53 -0400
+Received: from mail-yw1-x1133.google.com (mail-yw1-x1133.google.com [IPv6:2607:f8b0:4864:20::1133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75C6D7C1A1
+        for <linux-kernel@vger.kernel.org>; Fri,  8 Jul 2022 00:34:51 -0700 (PDT)
+Received: by mail-yw1-x1133.google.com with SMTP id 00721157ae682-2ef5380669cso190839197b3.9
+        for <linux-kernel@vger.kernel.org>; Fri, 08 Jul 2022 00:34:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=cQe9ZGR3pEtZfJ9nwwiuu+mwJ6qeeO7zImIcxmMIjmY=;
+        b=JNFnGezuZAXvQ5Vz5dJpm+28514NIZgaEUg4Gp26QoywPmr6Nlbx0yqzXzouaz7N/o
+         +X3MuvMOanp1mA61vUgvZwjd80NIbcRxXjzQeVWVGoNX119z4Wxm1fK42FPt56zcehTl
+         mIWqCCw15NQ8XhtTkVbvb9vBYSpVGVDo878P0ahK4+VHWUjFmAHjtL03jLCHb2JYra/g
+         8MNyRBtRRV4PUKMR8ismi+dSPDrSlzhFc1y7skc0Rvkbx9Rk7Ws1Olfo+Tg5mRoQPPW1
+         iCaPwG37vXsRkJHtBy/U6a053V492MZq61Pc/tALjVw13kYyXSpJqqnMzCM5FIJUdWla
+         vD/A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=cQe9ZGR3pEtZfJ9nwwiuu+mwJ6qeeO7zImIcxmMIjmY=;
+        b=pGWfq5WVUoH48k/O0Qy3g6AUWxJVy61BEIfN2071pEUiVp1lP5lgFyBFN/8ao81Jfk
+         tcluXnZ2Ee03y7H86u+wKiQ7E7nmtCkigZ2AH6SHQfCVyHEf0ilHpCT41sGhIP1hlkmZ
+         YHAxqoWmfcPy8c4iUyCSrwIINaujdS3yN7Aow88APCJJ2MaQCwPfSN0WkemvmHjwEwKH
+         HJ6tNPlk9jrlMQcvb8kTw2VC6p++wkJMqUr7ujrXpIIQ3ToXLAu44JrMJ9ErF1eAVOR7
+         m3/Zbiqu3RLkB7Vum1jfypbZoRiEVZyRVcEESsk8utbEjzSAtiXBUr1UJjAUa2uPNXFS
+         /fSw==
+X-Gm-Message-State: AJIora+8mFb54SMGsAUna2/dhyWvJcES5QowY3HEaBgQqyza2XJO6jLv
+        kM2PElhVq0ZzRrHFfBTmvCd62vY+RQgaUO3u3eYsNQ==
+X-Google-Smtp-Source: AGRyM1vixSPdmMupMhCZ98wWGozcNESVFUfotmlUbBtb1eAZhtaVgdygDRdl7V6UvjRlGrp/Py2IxrRKkws65nowqaA=
+X-Received: by 2002:a81:7284:0:b0:31d:4c3:a3cc with SMTP id
+ n126-20020a817284000000b0031d04c3a3ccmr2451308ywc.319.1657265690710; Fri, 08
+ Jul 2022 00:34:50 -0700 (PDT)
+MIME-Version: 1.0
+References: <20220525065050.38905-1-songmuchun@bytedance.com>
+ <YqIU3U+l1EDy7OgZ@bombadil.infradead.org> <CAMZfGtXj29Q-VeYRmU5VnW51tSyqCKbXsHCa9bi2z5WifEK_9w@mail.gmail.com>
+ <YscUtVytP/fWyrkP@bombadil.infradead.org>
+In-Reply-To: <YscUtVytP/fWyrkP@bombadil.infradead.org>
+From:   Muchun Song <songmuchun@bytedance.com>
+Date:   Fri, 8 Jul 2022 15:34:13 +0800
+Message-ID: <CAMZfGtXZ2Dx_CXAs7GmFZ2HebTMiYGD2KCZ4=WwfKwoa-=+hkQ@mail.gmail.com>
+Subject: Re: [PATCH v3] sysctl: handle table->maxlen robustly for proc_dobool
+To:     Luis Chamberlain <mcgrof@kernel.org>
+Cc:     hejianet@gmail.com, Kees Cook <keescook@chromium.org>,
+        Pan Xinhui <xinhui@linux.vnet.ibm.com>,
+        Thomas Huth <thuth@redhat.com>,
+        Chuck Lever <chuck.lever@oracle.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
+        Matthew Wilcox <willy@infradead.org>,
+        Xiongchun duan <duanxiongchun@bytedance.com>,
+        Iurii Zaikin <yzaikin@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Use __smp_processor_id() to avoid check the preemption context when
-CONFIG_DEBUG_PREEMPT enabled, as we will enter crash kernel and no
-return.
+On Fri, Jul 8, 2022 at 1:15 AM Luis Chamberlain <mcgrof@kernel.org> wrote:
+>
+> On Fri, Jun 10, 2022 at 11:38:28AM +0800, Muchun Song wrote:
+> > On Thu, Jun 9, 2022 at 11:42 PM Luis Chamberlain <mcgrof@kernel.org> wrote:
+> > >
+> > > Please Cc the original authors of code if sending some follow up
+> > > possible enhancements.
+> >
+> > Will do. +Jia He
+> >
+> > >
+> > > On Wed, May 25, 2022 at 02:50:50PM +0800, Muchun Song wrote:
+> > > > Setting ->proc_handler to proc_dobool at the same time setting ->maxlen
+> > > > to sizeof(int) is counter-intuitive, it is easy to make mistakes in the
+> > > > future (When I first use proc_dobool() in my driver, I assign
+> > > > sizeof(variable) to table->maxlen.  Then I found it was wrong, it should
+> > > > be sizeof(int) which was very counter-intuitive).
+> > >
+> > > How did you find this out? If I change fs/lockd/svc.c's use I get
+> > > compile warnings on at least x86_64.
+> >
+> > I am writing a code like:
+> >
+> > static bool optimize_vmemmap_enabled;
+> >
+> > static struct ctl_table hugetlb_vmemmap_sysctls[] = {
+> >         {
+> >                 .procname = "hugetlb_optimize_vmemmap",
+> >                 .data = &optimize_vmemmap_enabled,
+> >                 .maxlen = sizeof(optimize_vmemmap_enabled),
+> >                 .mode = 0644,
+> >                 .proc_handler = proc_dobool,
+> >         },
+> >         { }
+> > };
+> >
+> > At least I don't see any warnings from compiler. And I found
+> > the assignment of ".data" should be "sizeof(int)", otherwise,
+> > it does not work properly. It is a little weird to me.
+>
+> This is still odd to me but please clarify in your commit logs
+> how you found an issue. You don't need to specify the exact code
+> snippet, but just mentioning how you found it helps during
+> patch review.
 
-Without the patch,
-[  103.781044] sysrq: Trigger a crash
-[  103.784625] Kernel panic - not syncing: sysrq triggered crash
-[  103.837634] CPU1: off
-[  103.889668] CPU2: off
-[  103.933479] CPU3: off
-[  103.939424] Starting crashdump kernel...
-[  103.943442] BUG: using smp_processor_id() in preemptible [00000000] code: sh/346
-[  103.950884] caller is debug_smp_processor_id+0x1c/0x26
-[  103.956051] CPU: 0 PID: 346 Comm: sh Kdump: loaded Not tainted 5.10.113-00002-gce03f03bf4ec-dirty #149
-[  103.965355] Call Trace:
-[  103.967805] [<ffffffe00020372a>] walk_stackframe+0x0/0xa2
-[  103.973206] [<ffffffe000bcf1f4>] show_stack+0x32/0x3e
-[  103.978258] [<ffffffe000bd382a>] dump_stack_lvl+0x72/0x8e
-[  103.983655] [<ffffffe000bd385a>] dump_stack+0x14/0x1c
-[  103.988705] [<ffffffe000bdc8fe>] check_preemption_disabled+0x9e/0xaa
-[  103.995057] [<ffffffe000bdc926>] debug_smp_processor_id+0x1c/0x26
-[  104.001150] [<ffffffe000206c64>] machine_kexec+0x22/0xd0
-[  104.006463] [<ffffffe000291a7e>] __crash_kexec+0x6a/0xa4
-[  104.011774] [<ffffffe000bcf3fa>] panic+0xfc/0x2b0
-[  104.016480] [<ffffffe000656ca4>] sysrq_reset_seq_param_set+0x0/0x70
-[  104.022745] [<ffffffe000657310>] __handle_sysrq+0x8c/0x154
-[  104.028229] [<ffffffe0006577e8>] write_sysrq_trigger+0x5a/0x6a
-[  104.034061] [<ffffffe0003d90e0>] proc_reg_write+0x58/0xd4
-[  104.039459] [<ffffffe00036cff4>] vfs_write+0x7e/0x254
-[  104.044509] [<ffffffe00036d2f6>] ksys_write+0x58/0xbe
-[  104.049558] [<ffffffe00036d36a>] sys_write+0xe/0x16
-[  104.054434] [<ffffffe000201b9a>] ret_from_syscall+0x0/0x2
-[  104.067863] Will call new kernel at ecc00000 from hart id 0
-[  104.074939] FDT image at fc5ee000
-[  104.079523] Bye...
+Will do.
 
-With the patch we can got clear output,
-[   67.740553] sysrq: Trigger a crash
-[   67.744166] Kernel panic - not syncing: sysrq triggered crash
-[   67.809123] CPU1: off
-[   67.865210] CPU2: off
-[   67.909075] CPU3: off
-[   67.919123] Starting crashdump kernel...
-[   67.924900] Will call new kernel at ecc00000 from hart id 0
-[   67.932045] FDT image at fc5ee000
-[   67.935560] Bye...
+>
+> > > > For robustness,
+> > > > rework proc_dobool() robustly.
+> > >
+> > > You mention robustness twice. Just say something like:
+> > >
+> > > To help make things clear, make the logic used by proc_dobool() very
+> > > clear with regards to its requirement with working with bools.
+> >
+> > Clearer! Thanks.
+> >
+> > >
+> > > > So it is an improvement not a real bug
+> > > > fix.
+> > > >
+> > > > Signed-off-by: Muchun Song <songmuchun@bytedance.com>
+> > > > Cc: Luis Chamberlain <mcgrof@kernel.org>
+> > > > Cc: Kees Cook <keescook@chromium.org>
+> > > > Cc: Iurii Zaikin <yzaikin@google.com>
+> > > > ---
+> > > > v3:
+> > > >  - Update commit log.
+> > > >
+> > > > v2:
+> > > >  - Reimplementing proc_dobool().
+> > > >
+> > > >  fs/lockd/svc.c  |  2 +-
+> > > >  kernel/sysctl.c | 38 +++++++++++++++++++-------------------
+> > > >  2 files changed, 20 insertions(+), 20 deletions(-)
+> > > >
+> > > > diff --git a/fs/lockd/svc.c b/fs/lockd/svc.c
+> > > > index 59ef8a1f843f..6e48ee787f49 100644
+> > > > --- a/fs/lockd/svc.c
+> > > > +++ b/fs/lockd/svc.c
+> > > > @@ -496,7 +496,7 @@ static struct ctl_table nlm_sysctls[] = {
+> > > >       {
+> > > >               .procname       = "nsm_use_hostnames",
+> > > >               .data           = &nsm_use_hostnames,
+> > > > -             .maxlen         = sizeof(int),
+> > > > +             .maxlen         = sizeof(nsm_use_hostnames),
+> > > >               .mode           = 0644,
+> > > >               .proc_handler   = proc_dobool,
+> > > >       },
+> > >
+> > > Should this be a separate patch? What about the rest of the kernel?
+> >
+> > I afraid not. Since this change of proc_dobool will break the
+> > "nsm_use_hostnames". It should be changed to
+> > sizeof(nsm_use_hostnames) at the same time.
+>
+> OK!
+>
+> > > I see it is only used once so the one commit should mention that also.
+> >
+> > Well, will do.
+>
+> OK
+>
+> > > Or did chaning this as you have it now alter the way the kernel
+> > > treats this sysctl? All these things would be useful to clarify
+> > > in the commit log.
+> >
+> > Make sense. I'll mention those things into commit log.
+> >
+> > >
+> > > > diff --git a/kernel/sysctl.c b/kernel/sysctl.c
+> > > > index e52b6e372c60..50a2c29efc94 100644
+> > > > --- a/kernel/sysctl.c
+> > > > +++ b/kernel/sysctl.c
+> > > > @@ -423,21 +423,6 @@ static void proc_put_char(void **buf, size_t *size, char c)
+> > > >       }
+> > > >  }
+> > > >
+> > > > -static int do_proc_dobool_conv(bool *negp, unsigned long *lvalp,
+> > > > -                             int *valp,
+> > > > -                             int write, void *data)
+> > > > -{
+> > > > -     if (write) {
+> > > > -             *(bool *)valp = *lvalp;
+> > > > -     } else {
+> > > > -             int val = *(bool *)valp;
+> > > > -
+> > > > -             *lvalp = (unsigned long)val;
+> > > > -             *negp = false;
+> > > > -     }
+> > > > -     return 0;
+> > > > -}
+> > > > -
+> > > >  static int do_proc_dointvec_conv(bool *negp, unsigned long *lvalp,
+> > > >                                int *valp,
+> > > >                                int write, void *data)
+> > > > @@ -708,16 +693,31 @@ int do_proc_douintvec(struct ctl_table *table, int write,
+> > > >   * @lenp: the size of the user buffer
+> > > >   * @ppos: file position
+> > > >   *
+> > > > - * Reads/writes up to table->maxlen/sizeof(unsigned int) integer
+> > > > - * values from/to the user buffer, treated as an ASCII string.
+> > > > + * Reads/writes up to table->maxlen/sizeof(bool) bool values from/to
+> > > > + * the user buffer, treated as an ASCII string.
+> > > >   *
+> > > >   * Returns 0 on success.
+> > > >   */
+> > > >  int proc_dobool(struct ctl_table *table, int write, void *buffer,
+> > > >               size_t *lenp, loff_t *ppos)
+> > > >  {
+> > > > -     return do_proc_dointvec(table, write, buffer, lenp, ppos,
+> > > > -                             do_proc_dobool_conv, NULL);
+> > > > +     struct ctl_table tmp = *table;
+> > > > +     bool *data = table->data;
+> > >
+> > > Previously do_proc_douintvec() is called, and that checks if table->data
+> > > is NULL previously before reading it and if so bails on
+> > > __do_proc_dointvec() as follows:
+> > >
+> > >         if (!tbl_data || !table->maxlen || !*lenp || (*ppos && !write)) {
+> > >                 *lenp = 0;
+> > >                 return 0;
+> > >         }
+> > >
+> > > Is it possible to have table->data be NULL? I think that's where the
+> > > above check comes from.
+> >
+> > At least now it cannot be NULL (no users do this now).
+>
+> It does not mean new users where it is NULL can't be introduced.
 
-Fixes: 0e105f1d0037 ("riscv: use hart id instead of cpu id on machine_kexec")
-Reviewed-by: Guo Ren <guoren@kernel.org>
-Signed-off-by: Xianting Tian <xianting.tian@linux.alibaba.com>
----
- arch/riscv/kernel/machine_kexec.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Got it.
 
-diff --git a/arch/riscv/kernel/machine_kexec.c b/arch/riscv/kernel/machine_kexec.c
-index df8e24559035..86d1b5f9dfb5 100644
---- a/arch/riscv/kernel/machine_kexec.c
-+++ b/arch/riscv/kernel/machine_kexec.c
-@@ -171,7 +171,7 @@ machine_kexec(struct kimage *image)
- 	struct kimage_arch *internal = &image->arch;
- 	unsigned long jump_addr = (unsigned long) image->start;
- 	unsigned long first_ind_entry = (unsigned long) &image->head;
--	unsigned long this_cpu_id = smp_processor_id();
-+	unsigned long this_cpu_id = __smp_processor_id();
- 	unsigned long this_hart_id = cpuid_to_hartid_map(this_cpu_id);
- 	unsigned long fdt_addr = internal->fdt_addr;
- 	void *control_code_buffer = page_address(image->control_code_page);
--- 
-2.17.1
+>
+> > > And, so if it was false but not NULL, would it never do anything?
+> >
+> > I think we can add the check of NULL in the future if it could be
+> > happened, just like proc_dou8vec_minmax and proc_do_static_key
+> > do (they do not check ->data as well).
+>
+> Preventing bad uses ahead of time is definitely prefered.
 
+Agree. Will do.
+
+>
+> > > You can use lib/test_sysctl.c for this to proove / disprove correct
+> > > functionality.
+> >
+> > I didn't see the test for proc_bool in lib/test_sysctl.c. I think we can
+> > add a separate patch later to add a test for proc_bool.
+>
+> Yes please.
+
+OK.
+
+>
+> > >
+> > > > +     unsigned int val = READ_ONCE(*data);
+> > > > +     int ret;
+> > > > +
+> > > > +     /* Do not support arrays yet. */
+>
+> BTW I'd go furether. We don't want to add any more array
+> support for anything new. So "we don't support arrays" is better.
+>
+> > > > +     if (table->maxlen != sizeof(bool))
+> > > > +             return -EINVAL;
+> > >
+> > > This is a separate change, and while I agree with it, as it simplifies
+> > > our implementation and we don't want to add more array crap support,
+> > > this should *alone* should be a separate commit.
+> >
+> > If you agree reusing do_proc_douintvec to implement proc_dobool(),
+> > I think a separate commit may be not suitable since do_proc_douintvec()
+> > only support non-array. Mentioning this in commit log makes sense to me.
+> >
+> > >
+> > > > +
+> > > > +     tmp.maxlen = sizeof(val);
+> > >
+> > > Why even set this as you do when we know it must be sizeof(bool)?
+> > > Or would this break things given do_proc_douintvec() is used?
+> >
+> > Since we reuse do_proc_douintvec(), which requires a uint type, to
+> > get/set the value from/to the users. I think you can refer to the implementation
+> > of proc_dou8vec_minmax().
+> >
+> > >
+> > > > +     tmp.data = &val;
+> > > > +     ret = do_proc_douintvec(&tmp, write, buffer, lenp, ppos, NULL, NULL);
+> > >
+> > > Ugh, since we are avoiding arrays and we are only dealing with bools
+> > > I'm inclined to just ask we simpify this a bool implementation which
+> > > does something like do_proc_do_bool() but without array and is optimized
+> > > just for bools.
+> >
+> > The current implementation of __do_proc_douintvec() is already only deal
+> > with non-array. Maybe it is better to reuse __do_proc_douintvec()? Otherwise,
+> > we need to implement a similar functionality (do_proc_do_bool) like it but just
+> > process bool type. I suspect the changes will be not small. I am wondering is it
+> > value to do this? If yes, should we also rework proc_dou8vec_minmax() as well?
+>
+> I hate code which is obfuscates. Even if it s longer. My preference is
+> to open code a few things here even if it is adding new code.
+>
+
+All right. Let's recreate a good start.
+
+Thanks.
+
+>   Luis

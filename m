@@ -2,169 +2,207 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D256C56C1C2
-	for <lists+linux-kernel@lfdr.de>; Sat,  9 Jul 2022 01:12:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 79DFF56C415
+	for <lists+linux-kernel@lfdr.de>; Sat,  9 Jul 2022 01:15:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240319AbiGHVRe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Jul 2022 17:17:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37392 "EHLO
+        id S240449AbiGHVSt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Jul 2022 17:18:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38536 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231845AbiGHVRd (ORCPT
+        with ESMTP id S231845AbiGHVSr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Jul 2022 17:17:33 -0400
-Received: from alexa-out-sd-02.qualcomm.com (alexa-out-sd-02.qualcomm.com [199.106.114.39])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CF1D1A07D
-        for <linux-kernel@vger.kernel.org>; Fri,  8 Jul 2022 14:17:32 -0700 (PDT)
+        Fri, 8 Jul 2022 17:18:47 -0400
+Received: from mail-qk1-x72c.google.com (mail-qk1-x72c.google.com [IPv6:2607:f8b0:4864:20::72c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F0232A73F
+        for <linux-kernel@vger.kernel.org>; Fri,  8 Jul 2022 14:18:45 -0700 (PDT)
+Received: by mail-qk1-x72c.google.com with SMTP id b24so16721688qkn.4
+        for <linux-kernel@vger.kernel.org>; Fri, 08 Jul 2022 14:18:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1657315052; x=1688851052;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=Uaw0+e6VdRRhzLG+PpHuDpifABwLHhRV1vkNysKJ3Pk=;
-  b=LXD5vj6g1VKJne60TchK0Lq76Xh+bUna7ULV4CgiGLvmR0A8kzH9W565
-   qH9MUcoyTq3nyfO15VaqKc0NmMxhehRXENoLBHyxVP6zO5a7+8nQ3Ulrk
-   VYlosC7gd0xIitN1e7wv7kfnoz7dcyFEkCkY2aQqiW7v1dGVjNvwnfikV
-   E=;
-Received: from unknown (HELO ironmsg03-sd.qualcomm.com) ([10.53.140.143])
-  by alexa-out-sd-02.qualcomm.com with ESMTP; 08 Jul 2022 14:17:32 -0700
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg03-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jul 2022 14:17:31 -0700
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Fri, 8 Jul 2022 14:17:31 -0700
-Received: from [10.111.160.191] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Fri, 8 Jul 2022
- 14:17:28 -0700
-Message-ID: <f4a9e0a6-fe8d-cec5-6b46-30ca4cdaeb0a@quicinc.com>
-Date:   Fri, 8 Jul 2022 14:17:26 -0700
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=q4qwJ3oH3c96s2+W+UPsxF8YxUBe2XAcgFyN/VJQi4o=;
+        b=Rs4+WNVg7uXE9Tw/n8Z+70CqyKSO2A4ndXvYqdEYdc/X8DQyO9fJmbmzrDqhdjIIw2
+         5bcGT1d4AmyiBNNX5SvPKHMeMr1M8aNS5RjaWapahVPMK83ibkzoXh3CMjCzQrFHODl5
+         0WPp7AubZ1+Rk61AhRJjlqefOZj5EfAZZXmbUmCXCheOPd0ZrPGwgW96ImAoZ2aavMMd
+         unhMX8z+l9BlNyT143K5tIfjkasmVrB6ggq47sBRVRSXyU3qAeSBx5Oe+KaR5oomVRaQ
+         ihe0iVkLAaMnzgULpDw856lQt21i4UV+mJ1UaOyXjFEX/AZePel3TryhmRxedJkTxCez
+         6kKA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=q4qwJ3oH3c96s2+W+UPsxF8YxUBe2XAcgFyN/VJQi4o=;
+        b=jZoVNb4Wj8nu7i97tRuhI3ZYqoacGumBiUtxcNw66kWAXPxHeTV4uReyVrhh9d4gtg
+         ctZJXQz6PmcWNCrmXcReS7UZBODm0dVX3vgyufap/504mRxIp6MY7+JWWc86U3+3lbsa
+         rzjSXg6hLZq7yB6KNv0c9BcVmMqnu/SF1YgYzS3bysRBrX7VZHs0ayAplOrVPW/uwhoQ
+         bEZWD+5wI66acLB/FJnH+Au8RihMvsWnAE9+E8LFGrhQ5GzxQYX11zYl1r5BHgsX2/AN
+         TBKgMTZU9MabD2EyKAvW8isVX9742XXvTqTVkbQ1kNijPE4r1+CTwuaqIhLywh5kRhcY
+         78hQ==
+X-Gm-Message-State: AJIora8KirSZUSwuBXeLEIiWI9IJPlCnmgXO7iekit0xj9GdoH5eAJwD
+        949OzaI7Bds9gThACU/46WI=
+X-Google-Smtp-Source: AGRyM1ur/HI9IvmtO0cpRDLwlzQlAkuVmkBnkENvXklYyEVvcCGc/auoaPylbekK9J++hlI6GeKXtQ==
+X-Received: by 2002:a37:69c6:0:b0:6b4:7c2b:d54c with SMTP id e189-20020a3769c6000000b006b47c2bd54cmr3934586qkc.474.1657315124780;
+        Fri, 08 Jul 2022 14:18:44 -0700 (PDT)
+Received: from MBP.hobot.cc (ec2-13-59-0-164.us-east-2.compute.amazonaws.com. [13.59.0.164])
+        by smtp.gmail.com with ESMTPSA id ew7-20020a05622a514700b0031e9d9635d4sm3659728qtb.23.2022.07.08.14.18.34
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Fri, 08 Jul 2022 14:18:39 -0700 (PDT)
+From:   Schspa Shi <schspa@gmail.com>
+To:     mingo@redhat.com, peterz@infradead.org, juri.lelli@redhat.com,
+        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
+        rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
+        bristot@redhat.com, vschneid@redhat.com
+Cc:     linux-kernel@vger.kernel.org, zhaohui.shi@horizon.ai,
+        Schspa Shi <schspa@gmail.com>
+Subject: [PATCH v4 1/2] sched/rt: fix bad task migration for rt tasks
+Date:   Sat,  9 Jul 2022 05:17:54 +0800
+Message-Id: <20220708211755.73637-1-schspa@gmail.com>
+X-Mailer: git-send-email 2.29.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.2
-Subject: Re: [PATCH] drm/msm/dsi: Set panel orientation when directly
- connected
-Content-Language: en-US
-To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-CC:     Doug Anderson <dianders@chromium.org>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Rob Clark <robdclark@gmail.com>,
-        LKML <linux-kernel@vger.kernel.org>, <patches@lists.linux.dev>,
-        Sean Paul <sean@poorly.run>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        freedreno <freedreno@lists.freedesktop.org>,
-        Hsin-Yi Wang <hsinyi@chromium.org>
-References: <20220706191442.1150634-1-swboyd@chromium.org>
- <CAD=FV=UrYCwm2ByN_5EN3fq-ayMJNjmWfJ5sooRy51ZiCoMcjA@mail.gmail.com>
- <60252405-81f2-2465-bc20-5f91a9072031@quicinc.com>
- <ffad2e39-f775-00de-3119-f9b0ca3fe4f7@quicinc.com>
- <CAA8EJpo-CS9ZUzA7wDZ05W+Wcz9P_1fXHYPaZACEhMOjnJv_Yg@mail.gmail.com>
-From:   Abhinav Kumar <quic_abhinavk@quicinc.com>
-In-Reply-To: <CAA8EJpo-CS9ZUzA7wDZ05W+Wcz9P_1fXHYPaZACEhMOjnJv_Yg@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Commit 95158a89dd50 ("sched,rt: Use the full cpumask for balancing")
+allow find_lock_lowest_rq to pick a task with migration disabled.
+This commit is intended to push the current running task on this CPU
+away.
 
+There is a race scenarios, which allows a migration disabled task to
+be migrated to another CPU.
 
-On 7/8/2022 1:58 PM, Dmitry Baryshkov wrote:
-> On Fri, 8 Jul 2022 at 22:42, Abhinav Kumar <quic_abhinavk@quicinc.com> wrote:
->>
->>
->>
->> On 7/8/2022 9:00 AM, Abhinav Kumar wrote:
->>>
->>>
->>> On 7/8/2022 8:25 AM, Doug Anderson wrote:
->>>> Hi,
->>>>
->>>> On Wed, Jul 6, 2022 at 12:14 PM Stephen Boyd <swboyd@chromium.org> wrote:
->>>>>
->>>>> Set the panel orientation in drm when the panel is directly connected,
->>>>> i.e. we're not using an external bridge. The external bridge case is
->>>>> already handled by the panel bridge code, so we only update the path we
->>>>> take when the panel is directly connected/internal. This silences a
->>>>> warning splat coming from __drm_mode_object_add() on Wormdingler boards.
->>>>>
->>>>> Cc: Hsin-Yi Wang <hsinyi@chromium.org>
->>>>> Cc: Douglas Anderson <dianders@chromium.org>
->>>>> Signed-off-by: Stephen Boyd <swboyd@chromium.org>
->>>>> ---
->>>>>
->>>>> This relies on commit 5e41b01a7808 ("drm/panel: Add an API to allow drm
->>>>> to set orientation from panel") which is in drm-misc
->>>>>
->>>>>    drivers/gpu/drm/msm/dsi/dsi_manager.c | 2 ++
->>>>>    1 file changed, 2 insertions(+)
->>>>
->>>> I don't personally have objections to this, but (to my understanding)
->>>> "the future" is that everyone should use panel_bridge. If we made the
->>>> move to panel_bridge today then we wouldn't need to do this. In
->>>> general I think panel_bridge would end up letting us delete a bunch of
->>>> code...
->>>>
->>>> See commit 4e5763f03e10 ("drm/bridge: ti-sn65dsi86: Wrap panel with
->>>> panel-bridge") for when this was done by ti-sn65dsi86.
->>>>
->>>> Then again, I spent a small amount of time looking into this and it's
->>>> definitely non-trivial. Still likely worthwhile, but not worth
->>>> blocking a tiny fix like this. It also should be fairly obvious that
->>>> we should delete this when we switch to panel_bridge.
->>>
->>> Right, from what I saw on IRC, panel_bridge is the way forward and
->>> dmitry did push a change to do that
->>>
->>> https://patchwork.freedesktop.org/patch/492585/
->>>
->>> But I think we can go ahead with this change because its simple enough.
->>>
->>> Regarding the panel_bridge migration, I am going to start reviewing that
->>> as well.
->>>
->>
->> I did some more digging up on the panel_bridge migration.
->>
->> Dmitry has posted this towards december last year
->>
->> https://patches.linaro.org/project/dri-devel/patch/20211207222901.988484-3-dmitry.baryshkov@linaro.org/
->>
->>
->> and I had given my R-b on this already in Jan.
->>
->> I am not sure why this change was dropped OR was not part of msm-next
->> already.
->>
->> Dmitry, any reason this change was left out so long and why the R-b was
->> not retained and this was reposted?
->>
->>   From what i can see the change looks identical.
-> 
-> I don't remember if it is identical or not. Basically it was postponed
-> to allow DSC to flow in. We used drm_panel to pass DSC pps data. And
-> if we use panel-bridge, we don't get a handle of the panel.
-> Later on I have posted the series moving DSC pps pointer from
-> drm_panel to mipi_dsi_device (which is logical anyway, since it's not
-> only the panel, who can provide the DSC pps info, some bridges can
-> process DSC-compressed data). But since that time it received no
-> feedback.
+When there is a RT task with higher priority, rt sched class was
+intended to migrate higher priority task to lowest rq via push_rt_tasks,
+this BUG will happen here.
 
-Thanks for the details.
+With the system running on PREEMPT_RT, rt_spin_lock will disable
+migration, this will make the problem easier to reproduce.
 
-I will try to review the DRM core bits. But I guess for them to land, we 
-need some of the core maintainers to pitch in on that.
+I have seen this crash on PREEMPT_RT, from the logs, there is a race
+when trying to migrate higher priority tasks to the lowest rq.
 
+Please refer to the following scenarios.
 
-> 
-> 
+           CPU0                                  CPU1
+------------------------------------------------------------------
+push_rt_task
+  check is_migration_disabled(next_task)
+                                        task not running and
+                                        migration_disabled == 0
+  find_lock_lowest_rq(next_task, rq);
+    _double_lock_balance(this_rq, busiest);
+      raw_spin_rq_unlock(this_rq);
+      double_rq_lock(this_rq, busiest);
+        <<wait for busiest rq>>
+                                            <wakeup>
+                                        task become running
+                                        migrate_disable();
+                                          <context out>
+  deactivate_task(rq, next_task, 0);
+  set_task_cpu(next_task, lowest_rq->cpu);
+    WARN_ON_ONCE(is_migration_disabled(p));
+      ---------OOPS-------------
+
+Crash logs as fellowing:
+[123671.996430] WARNING: CPU: 2 PID: 13470 at kernel/sched/core.c:2485
+set_task_cpu+0x8c/0x108
+[123671.996800] pstate: 20400009 (nzCv daif +PAN -UAO -TCO BTYPE=--)
+[123671.996811] pc : set_task_cpu+0x8c/0x108
+[123671.996820] lr : set_task_cpu+0x7c/0x108
+[123671.996828] sp : ffff80001268bd30
+[123671.996832] pmr_save: 00000060
+[123671.996835] x29: ffff80001268bd30 x28: ffff0001a3d68e80
+[123671.996844] x27: ffff80001225f4a8 x26: ffff800010ab62cb
+[123671.996854] x25: ffff80026d95e000 x24: 0000000000000005
+[123671.996864] x23: ffff00019746c1b0 x22: 0000000000000000
+[123671.996873] x21: ffff00027ee33a80 x20: 0000000000000000
+[123671.996882] x19: ffff00019746ba00 x18: 0000000000000000
+[123671.996890] x17: 0000000000000000 x16: 0000000000000000
+[123671.996899] x15: 000000000000000a x14: 000000000000349e
+[123671.996908] x13: ffff800012f4503d x12: 0000000000000001
+[123671.996916] x11: 0000000000000000 x10: 0000000000000000
+[123671.996925] x9 : 00000000000c0000 x8 : ffff00027ee58700
+[123671.996933] x7 : ffff00027ee8da80 x6 : ffff00027ee8e580
+[123671.996942] x5 : ffff00027ee8dcc0 x4 : 0000000000000005
+[123671.996951] x3 : ffff00027ee8e338 x2 : 0000000000000000
+[123671.996959] x1 : 00000000000000ff x0 : 0000000000000002
+[123671.996969] Call trace:
+[123671.996975]  set_task_cpu+0x8c/0x108
+[123671.996984]  push_rt_task.part.0+0x144/0x184
+[123671.996995]  push_rt_tasks+0x28/0x3c
+[123671.997002]  task_woken_rt+0x58/0x68
+[123671.997009]  ttwu_do_wakeup+0x5c/0xd0
+[123671.997019]  ttwu_do_activate+0xc0/0xd4
+[123671.997028]  try_to_wake_up+0x244/0x288
+[123671.997036]  wake_up_process+0x18/0x24
+[123671.997045]  __irq_wake_thread+0x64/0x80
+[123671.997056]  __handle_irq_event_percpu+0x110/0x124
+[123671.997064]  handle_irq_event_percpu+0x50/0xac
+[123671.997072]  handle_irq_event+0x84/0xfc
+
+To fix it, we need to check migration_disabled flag again to avoid
+bad migration.
+
+Fixes: 95158a89dd50 ("sched,rt: Use the full cpumask for balancing")
+
+Signed-off-by: Schspa Shi <schspa@gmail.com>
+
+--
+
+Changelog:
+v1 -> v2:
+        - Modify commit message to add fixed commit information.
+        - Going to retry to push the current running task on this CPU
+          away, instead doing nothing for this migrate disabled task.
+v2 -> v3:
+        - Change migration disabled check to the correct position
+v3 -> v4:
+        - Check migrate disabled in find_lock_lowest_rq to avoid not
+        necessary check when task rq is not released as Steven adviced.
+---
+ kernel/sched/deadline.c | 1 +
+ kernel/sched/rt.c       | 3 +++
+ 2 files changed, 4 insertions(+)
+
+diff --git a/kernel/sched/deadline.c b/kernel/sched/deadline.c
+index b5152961b7432..cb3b886a081c3 100644
+--- a/kernel/sched/deadline.c
++++ b/kernel/sched/deadline.c
+@@ -2238,6 +2238,7 @@ static struct rq *find_lock_later_rq(struct task_struct *task, struct rq *rq)
+ 				     !cpumask_test_cpu(later_rq->cpu, &task->cpus_mask) ||
+ 				     task_running(rq, task) ||
+ 				     !dl_task(task) ||
++				     is_migration_disabled(task) ||
+ 				     !task_on_rq_queued(task))) {
+ 				double_unlock_balance(rq, later_rq);
+ 				later_rq = NULL;
+diff --git a/kernel/sched/rt.c b/kernel/sched/rt.c
+index 8c9ed96648409..0e0bc9aeaa394 100644
+--- a/kernel/sched/rt.c
++++ b/kernel/sched/rt.c
+@@ -1998,11 +1998,14 @@ static struct rq *find_lock_lowest_rq(struct task_struct *task, struct rq *rq)
+ 			 * the mean time, task could have
+ 			 * migrated already or had its affinity changed.
+ 			 * Also make sure that it wasn't scheduled on its rq.
++			 * It is possible the task has running for a while,
++			 * And we check task migration disable flag here.
+ 			 */
+ 			if (unlikely(task_rq(task) != rq ||
+ 				     !cpumask_test_cpu(lowest_rq->cpu, &task->cpus_mask) ||
+ 				     task_running(rq, task) ||
+ 				     !rt_task(task) ||
++				     is_migration_disabled(task) ||
+ 				     !task_on_rq_queued(task))) {
+ 
+ 				double_unlock_balance(rq, lowest_rq);
+-- 
+2.37.0
+

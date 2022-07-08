@@ -2,201 +2,174 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F08C256B1C7
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 06:48:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9948256B1CC
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 06:48:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236881AbiGHEpX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Jul 2022 00:45:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46794 "EHLO
+        id S236934AbiGHEqA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Jul 2022 00:46:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47586 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235631AbiGHEpQ (ORCPT
+        with ESMTP id S237019AbiGHEp4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Jul 2022 00:45:16 -0400
-Received: from mx0b-0016f401.pphosted.com (mx0b-0016f401.pphosted.com [67.231.156.173])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BDEF307;
-        Thu,  7 Jul 2022 21:45:15 -0700 (PDT)
-Received: from pps.filterd (m0045851.ppops.net [127.0.0.1])
-        by mx0b-0016f401.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 2684ZlUu011020;
-        Thu, 7 Jul 2022 21:45:09 -0700
-Received: from nam10-dm6-obe.outbound.protection.outlook.com (mail-dm6nam10lp2109.outbound.protection.outlook.com [104.47.58.109])
-        by mx0b-0016f401.pphosted.com (PPS) with ESMTPS id 3h635w2d4s-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 07 Jul 2022 21:45:09 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=TD3UTwL1tPcYKANSTEIIU9W3Il5ZKKK6z0hOY0I38zwhJTuDySRMsHlK61FvI3IpNHDTxEWV8O6V/L4Ie5mJv/iKvBSrjzr2yV0qKW7J3opggqodQuOkT/BSbk9KCJF10A2x2yeXKjnj04+leYG3CFlu5+4o0hr5kdGL5R3ZORRgozRQrMObtL2bIPLrMR3gxNBnskJgB53Cslqp1p3cbYK3tqwy+k17tfOWC8KOucSD/zhq8QuRRTJycMgk3SmcvbNTMgsByJBunwIzZCfRUfvp8qMYeLvc0ZsWtPMETTGov92LjW07yKpZJ8PlCy3LdP8+MP2k3zQQDJjBtj007A==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=jHqnUIKKmXFAe907scuRXFx6lK3Dx7RyhtsTi4eIrgg=;
- b=N7EYBTx0rjIKsJdq3O2xJZ/uVOp1iKt7ucnJMxq+Ii2Tp01p6/Lnt+eND7i3/cnE5/QHLe7tTP0Qm3q4V4ZVJRx6p0xLE3koTQC7jUdgFj3C9/5cR+/mXlNKqySeRGp33TW4PsjdwmObSh5h6OrgLo0cz3vkMep5MDQhD3oEBweTgf8WxCZQwJg55PdSPrSMfn1SPdHjtXA7sAivYgI59syd6MWg73XhA4X2OnazT9xFQswCyw/+o8JWZq3UUAS3IfQDLEMC+y0MSLqn71YUw4PGNs8N5qdznLhPtjr7RZ4x/mVYBZ6EYYAZwXg+oNZemKNAn37IXjIAhVLcbga3nw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=marvell.com; dmarc=pass action=none header.from=marvell.com;
- dkim=pass header.d=marvell.com; arc=none
+        Fri, 8 Jul 2022 00:45:56 -0400
+Received: from mail-qt1-x82b.google.com (mail-qt1-x82b.google.com [IPv6:2607:f8b0:4864:20::82b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FF46261E
+        for <linux-kernel@vger.kernel.org>; Thu,  7 Jul 2022 21:45:54 -0700 (PDT)
+Received: by mail-qt1-x82b.google.com with SMTP id r2so5157124qtx.6
+        for <linux-kernel@vger.kernel.org>; Thu, 07 Jul 2022 21:45:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=marvell.onmicrosoft.com; s=selector1-marvell-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=jHqnUIKKmXFAe907scuRXFx6lK3Dx7RyhtsTi4eIrgg=;
- b=q7z6WL824pWHuxBGDU4iyhtOTXlon37tibaFRx17DGHmN0mZI4vjcwd0FIwkFQ+j//gMkWat3vWS68Qn8S/nvYdedMr6UYBSQxEQf3OM//sF9/k4xFGP4o1ozlorFiN71/daaPuugNj+kUILLu6t8SKmgwiyUk151VL1+EJEHOI=
-Received: from MWHPR1801MB1918.namprd18.prod.outlook.com
- (2603:10b6:301:68::33) by BN6PR18MB1202.namprd18.prod.outlook.com
- (2603:10b6:404:e6::13) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5417.20; Fri, 8 Jul
- 2022 04:45:05 +0000
-Received: from MWHPR1801MB1918.namprd18.prod.outlook.com
- ([fe80::b489:f25f:d89c:ff0a]) by MWHPR1801MB1918.namprd18.prod.outlook.com
- ([fe80::b489:f25f:d89c:ff0a%7]) with mapi id 15.20.5417.020; Fri, 8 Jul 2022
- 04:45:05 +0000
-From:   Ratheesh Kannoth <rkannoth@marvell.com>
-To:     Jakub Kicinski <kuba@kernel.org>
-CC:     "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Sunil Kovvuri Goutham <sgoutham@marvell.com>,
-        "davem@davemloft.net" <davem@davemloft.net>,
-        "edumazet@google.com" <edumazet@google.com>,
-        "pabeni@redhat.com" <pabeni@redhat.com>
-Subject: RE: [EXT] Re: [net-next PATCH V3 06/12] octeontx2-af: Drop rules for
- NPC MCAM
-Thread-Topic: [EXT] Re: [net-next PATCH V3 06/12] octeontx2-af: Drop rules for
- NPC MCAM
-Thread-Index: AQHYkdQksQfuD7Vtm0qA5q2Ok6/vvq1zpuQAgAA8qSA=
-Date:   Fri, 8 Jul 2022 04:45:05 +0000
-Message-ID: <MWHPR1801MB1918C2542BC344601E837721D3829@MWHPR1801MB1918.namprd18.prod.outlook.com>
-References: <20220707073353.2752279-1-rkannoth@marvell.com>
-        <20220707073353.2752279-7-rkannoth@marvell.com>
- <20220707175428.127006ba@kernel.org>
-In-Reply-To: <20220707175428.127006ba@kernel.org>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: b869444c-d7f2-4592-c282-08da609ca0a7
-x-ms-traffictypediagnostic: BN6PR18MB1202:EE_
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: 0YZTwn9hFx852Yg4o4DhdVt4yUKx8Z83Y5HBsjRwpsvrnGnpYiWf5HYAzNb0dXUnBdlGIfpPIExZZEtXCI+JHgyS7Zt1sRwaRl5LbfFPHOC9LSFnz5D91w4dNOE4v+kKPwR4hmM1fzyu3hDTCti2XJ9zQF7dwuV2OLxTThtc47qTvoDiO6DNhWu4JJxg2iYNQWVmNTB3yE2c7XYSj9RrVheTd2VZsAGHqsoL3p7YJHkz58TV050Obxr9gCwytq70wZwOypwUREBQ4p20ZmJb3o2gV/Wv7WhEp7loxzvC7s6gY7//ayo9GeEWuEZXA1GnkplNTPfM0SD1cwZgiWxAwcuhyU/OJ8wsCTwsFO5HW3wr+M+i3spsTISRk+cRRM+Awj7FRBoM3hoJ5+oHaRNU5tjKzC+FO6cvS+eo7rDxaKzKAXuQXGE6xMBVpBTLf71A/wKX0+8UZvu6qB2/mW4CaWyzHffIIJ+/+f1crSiogCr0uqtK13PVGHKEByLwzWXBGH0gIZMA1dVovw5Zb3hTTIZxiqEndmuWyQzOyHoKypuKIxamA83/jhxzpPsoPnkuemToLjTHfWeMdtnhxkUXUpyjrv77o6tk8t/moYJ+4xd/UTOir9Fnk+nkBkTv5o6XAiINoBAI0Mhj2O6J3h5sO5UwoglWep2TMWxawVAeyndNiuAj26QJuf2aq1s8y05lfO0/xvVu60T7pqkVV/itHoHjITbCQg0v3PL5/VKqSsiOxSN34UFddxbCZ+grM5vOdkx0M2dnFADfc+Cd0/cC1ZIUmwwMHSbopaYf9MIj+zPRZ/Me0LmFWuC5AB/TB7r5
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MWHPR1801MB1918.namprd18.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(376002)(136003)(346002)(39860400002)(366004)(396003)(38100700002)(122000001)(83380400001)(66446008)(55016003)(186003)(64756008)(66556008)(8676002)(76116006)(66476007)(54906003)(66946007)(4326008)(316002)(71200400001)(6916009)(33656002)(26005)(5660300002)(52536014)(86362001)(2906002)(53546011)(478600001)(41300700001)(6506007)(7696005)(9686003)(8936002)(38070700005);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?4VAtXsiZhTNOIsYvWd/TdfMoMclj81+/SaY4e56PCajMqHfkv3jjY1ZKrw7m?=
- =?us-ascii?Q?pwAYHEoSSClSczTQYcdMQmisS2cftp4pHMDVlEas1Nxw/cSq8EzPpknr9XmG?=
- =?us-ascii?Q?+914Q4d8YAhpxBN22nNE/4A8xWz+KrKxfZpKf2cAqF4CkTQgsNXpam2tng+u?=
- =?us-ascii?Q?fjY+mVJCKnJRw10NTjIqWUrgAutHuA0Q9RAgRznrgiVhzmhPmk20gKq+lGNR?=
- =?us-ascii?Q?3l/nyJd3V+EwJujl5wUdGIijEicFJXRbfiA4xEAWTw1mXkfd2MGueT+tKWcY?=
- =?us-ascii?Q?OJHrPOuv1AKQWeHwG3s7FJwkH9F/e8pcoX31B0IQC4GXKRzisJeDjvfN/Epi?=
- =?us-ascii?Q?xsQyYPbbHVGpaVPpffGxu/4KoWRCza7iG+etBUE3FWrdKK7BU6evhuziTXsK?=
- =?us-ascii?Q?dyC1WAI8cLVTci1zHKLWVprJ12I+otupljRxbVU1JuPwycCUa2avzr8dhIGV?=
- =?us-ascii?Q?XVSMX3xRUoVyxL8eXeMdbOhMb6buvT5rl4smxLRW6L//CQ7CPR3nRhyJIiOD?=
- =?us-ascii?Q?34GY7Y8NXkQD+Smy/tMyocwFg+FxyVB5x4hTCGNyDdnbGxOWl298FJO5zrLz?=
- =?us-ascii?Q?/S8vSkqYF8l3f/xaT20hFWv6Meafyi6BFOH15x53jRS2E1FicsaQ3ogU0pbL?=
- =?us-ascii?Q?cszooOzClC8NBmnq/pBRy/fKZPws9MNNKJSXf0nJrGVcigs8+QxyoWh03lbg?=
- =?us-ascii?Q?CHGSPFefx6gohO4UdqdVy2cOehsQbWlsFp+9XtiPgc3vpfT3466vUsjDc+Tr?=
- =?us-ascii?Q?0ntNoC6uwT5GV4+EfArp4XepVbWfVs0kqkJKzJL/U6OIz3LKBpZIO0QuoeIp?=
- =?us-ascii?Q?2VlYjEdfRyS21IG3sAMzFvffzgbUn5bnhu2+IoRx393PbAcKhJS9LKKU/DPT?=
- =?us-ascii?Q?pDuYrbtTmwIKNDBz/HjIW5p1zp69/u61POPlXlVuBGuvTXrgqm6JCMTABIfY?=
- =?us-ascii?Q?HTPfrUgQcB/nbOaF84DfoQ1PLb4N1LOxpVUXu3lnkQDh88zSGZUdWzqPOGNk?=
- =?us-ascii?Q?TKcwWyM6ejsYpaCsAxbQybTYV9D+dieGqX/jIsgQxn7mgVtzXsUAIcIRDM94?=
- =?us-ascii?Q?ShFW/q50NHycJz6KL+UyibXCmGoI+9sVZch+KzrQPCL7ykkKK6Vwd03HgdVd?=
- =?us-ascii?Q?B+FK7C+mOrCkoj8fvxTXZvbAR2y6sQTA3sLQCh6DCu6SyYlUwWUQ9Bs7q4ZA?=
- =?us-ascii?Q?B3y0M3kM9sq7geECsdrTUtS2KfGO4Su0PMdnRjpTAuXNeHR8ChQc0rkG2jAO?=
- =?us-ascii?Q?xYoJuXsEnF451HuTFljZGwaSfRV3+VRp+DFYVMIfiE+pQF3qAURGD+0PSJN5?=
- =?us-ascii?Q?5HdF9iCDA6p7Cj4UIxBDxqebMYJLMZOTZ+NiI/IceY7Mqi5cZqFQhxEpyEmY?=
- =?us-ascii?Q?+jXjmv/QLHw7Latu7ta+B19SOeVtMMTR4pJorIbCR0Auhmk8ufji+ooXrgIt?=
- =?us-ascii?Q?dtA2dCfLReufmdrBRsPm63CQoImeMxC/Oq4Yi5AUa4ayYjv4PqFdGIzWjuMi?=
- =?us-ascii?Q?hJi5UTIVuV5l7bVLohKrwBnuZwyBRaNkZp40zgTy3JWIZnLQNiyhCfuR74Rv?=
- =?us-ascii?Q?9gOBzgEyjEPJrNgtoKpJ6zyFIo87Bl4oOjT95mY+?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=/TH1DEH3ugKVlgLwwZhwhLtP7cgOEydE2KiN+E9aH/A=;
+        b=MUYvvC0zBGI32l5G5tdnDbzHons4WfJEL3AqGOV8mpLskmYbv5/nGC1s1BJxGYmPMP
+         IlrbpNnXmYA13jWrlfMiGXOj0AQhUtaERuEXKr3+yTgOmWZih1r7kX5v2wNW/h5aRdji
+         98wa7fkAZnnwwB8wJUULC8vGNgkkz6/JWAC78=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=/TH1DEH3ugKVlgLwwZhwhLtP7cgOEydE2KiN+E9aH/A=;
+        b=Oj1cxlF+KGaEO5VqPTQ4wcccKKAm0G8TnmIMoGdcSbZJRArbZqeQ8Dypfla61U+hcT
+         Dqsr67CtLBfg41uDH3fvzqwbpEy3VklMIcZ8bpSxeOZskm0EMgHfFSRKRK/FGLjUa+9t
+         JzvCkF4dJ68r6/JpS1qhWf8bf+Gv+6Of4CtmlFxnte+y8lcozAFjRixkI9D/m1uwjVOw
+         mZaDTP+fyZ9HvwgI6LJF5fyr6h71YJJ42PctczuCW8wn5uC4DjCmaJoT9GGndYkcJQ29
+         fLlDcX5VYPygY+NuYU5fzAgUskzrvaTURIUjde4HzvBceNWNOSQIzy2rAvZCR7w+psG+
+         EKXw==
+X-Gm-Message-State: AJIora9fLo1Cxb3pXIipZ/+8aIxvBaKSf9kNW0a1sNsyH93w3230shlR
+        VLcmdr8sTAEz9GZeBhM6x6EgJ09nMqJ2nwLX
+X-Google-Smtp-Source: AGRyM1tTI3/CNJBb0b3yZ2opSxEfLiXOBHfNzEBWDq7+C+SEToIuRqTiFkk9BXHNe06ZOGyyIlCj0Q==
+X-Received: by 2002:a05:6214:19cc:b0:472:f402:5ba4 with SMTP id j12-20020a05621419cc00b00472f4025ba4mr1194910qvc.46.1657255553419;
+        Thu, 07 Jul 2022 21:45:53 -0700 (PDT)
+Received: from mail-yb1-f170.google.com (mail-yb1-f170.google.com. [209.85.219.170])
+        by smtp.gmail.com with ESMTPSA id u5-20020a37ab05000000b006b4748535a1sm10005855qke.16.2022.07.07.21.45.49
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 07 Jul 2022 21:45:49 -0700 (PDT)
+Received: by mail-yb1-f170.google.com with SMTP id g4so36029710ybg.9
+        for <linux-kernel@vger.kernel.org>; Thu, 07 Jul 2022 21:45:49 -0700 (PDT)
+X-Received: by 2002:a25:1583:0:b0:668:e74a:995f with SMTP id
+ 125-20020a251583000000b00668e74a995fmr1662451ybv.1.1657255548819; Thu, 07 Jul
+ 2022 21:45:48 -0700 (PDT)
 MIME-Version: 1.0
-X-OriginatorOrg: marvell.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: MWHPR1801MB1918.namprd18.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: b869444c-d7f2-4592-c282-08da609ca0a7
-X-MS-Exchange-CrossTenant-originalarrivaltime: 08 Jul 2022 04:45:05.2547
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 70e1fb47-1155-421d-87fc-2e58f638b6e0
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: M+tsu4avaLSlyMV+KeJGnaLZt7qnA4po2ueZ8+SHmlWogD4/AjbrBy9b+c2JdFiT92TthnjdPrMKOhXzIQd2Bg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN6PR18MB1202
-X-Proofpoint-GUID: _ESowbfAKOzLvlCQLw0AeqzRJFkFCJ11
-X-Proofpoint-ORIG-GUID: _ESowbfAKOzLvlCQLw0AeqzRJFkFCJ11
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
- definitions=2022-07-08_02,2022-06-28_01,2022-06-22_01
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220706182657.210650-1-ezequiel@vanguardiasur.com.ar> <20220706182657.210650-9-ezequiel@vanguardiasur.com.ar>
+In-Reply-To: <20220706182657.210650-9-ezequiel@vanguardiasur.com.ar>
+From:   Tomasz Figa <tfiga@chromium.org>
+Date:   Fri, 8 Jul 2022 13:45:35 +0900
+X-Gmail-Original-Message-ID: <CAAFQd5Cxn+HVun+H66-RvUh6SUqnSbug0vpmFFanmrGywfqHeg@mail.gmail.com>
+Message-ID: <CAAFQd5Cxn+HVun+H66-RvUh6SUqnSbug0vpmFFanmrGywfqHeg@mail.gmail.com>
+Subject: Re: [PATCH 8/8] videobuf2: Remove vb2_find_timestamp()
+To:     Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
+Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Marek Szyprowski <m.szyprowski@samsung.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
------Original Message-----
-From: Jakub Kicinski <kuba@kernel.org>=20
-Sent: Friday, July 8, 2022 6:24 AM
-To: Ratheesh Kannoth <rkannoth@marvell.com>
-Cc: netdev@vger.kernel.org; linux-kernel@vger.kernel.org; Sunil Kovvuri Gou=
-tham <sgoutham@marvell.com>; davem@davemloft.net; edumazet@google.com; pabe=
-ni@redhat.com
-Subject: [EXT] Re: [net-next PATCH V3 06/12] octeontx2-af: Drop rules for N=
-PC MCAM
+Hi Ezequiel,
 
-External Email
+On Thu, Jul 7, 2022 at 3:27 AM Ezequiel Garcia
+<ezequiel@vanguardiasur.com.ar> wrote:
+>
+> Now that we've transitioned all users to vb2_find_buffer API,
+> remove the unused vb2_find_timestamp().
+>
+> Signed-off-by: Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
+> ---
+>  .../media/common/videobuf2/videobuf2-v4l2.c   | 12 ++++-----
+>  include/media/videobuf2-v4l2.h                | 26 +------------------
+>  2 files changed, 7 insertions(+), 31 deletions(-)
+>
+> diff --git a/drivers/media/common/videobuf2/videobuf2-v4l2.c b/drivers/media/common/videobuf2/videobuf2-v4l2.c
+> index 075d24ebf44c..a9696442dfba 100644
+> --- a/drivers/media/common/videobuf2/videobuf2-v4l2.c
+> +++ b/drivers/media/common/videobuf2/videobuf2-v4l2.c
+> @@ -625,18 +625,18 @@ static const struct vb2_buf_ops v4l2_buf_ops = {
+>         .copy_timestamp         = __copy_timestamp,
+>  };
+>
+> -int vb2_find_timestamp(const struct vb2_queue *q, u64 timestamp,
+> -                      unsigned int start_idx)
+> +struct vb2_buffer *vb2_find_buffer(struct vb2_queue *q, u64 timestamp)
+>  {
+>         unsigned int i;
+>
+> -       for (i = start_idx; i < q->num_buffers; i++)
+> +       for (i = 0; i < q->num_buffers; i++)
+>                 if (q->bufs[i]->copied_timestamp &&
+>                     q->bufs[i]->timestamp == timestamp)
+> -                       return i;
+> -       return -1;
+> +                       return vb2_get_buffer(q, i);
+> +
+> +       return NULL;
+>  }
+> -EXPORT_SYMBOL_GPL(vb2_find_timestamp);
+> +EXPORT_SYMBOL_GPL(vb2_find_buffer);
+>
+>  /*
+>   * vb2_querybuf() - query video buffer information
+> diff --git a/include/media/videobuf2-v4l2.h b/include/media/videobuf2-v4l2.h
+> index 7f9ae5b39b78..5a845887850b 100644
+> --- a/include/media/videobuf2-v4l2.h
+> +++ b/include/media/videobuf2-v4l2.h
+> @@ -62,22 +62,6 @@ struct vb2_v4l2_buffer {
+>  #define to_vb2_v4l2_buffer(vb) \
+>         container_of(vb, struct vb2_v4l2_buffer, vb2_buf)
+>
+> -/**
+> - * vb2_find_timestamp() - Find buffer with given timestamp in the queue
+> - *
+> - * @q:         pointer to &struct vb2_queue with videobuf2 queue.
+> - * @timestamp: the timestamp to find.
+> - * @start_idx: the start index (usually 0) in the buffer array to start
+> - *             searching from. Note that there may be multiple buffers
+> - *             with the same timestamp value, so you can restart the search
+> - *             by setting @start_idx to the previously found index + 1.
+> - *
+> - * Returns the buffer index of the buffer with the given @timestamp, or
+> - * -1 if no buffer with @timestamp was found.
+> - */
+> -int vb2_find_timestamp(const struct vb2_queue *q, u64 timestamp,
+> -                      unsigned int start_idx);
+> -
+>  /**
+>   * vb2_find_buffer() - Find a buffer with given timestamp
+>   *
+> @@ -86,15 +70,7 @@ int vb2_find_timestamp(const struct vb2_queue *q, u64 timestamp,
+>   *
+>   * Returns the buffer with the given @timestamp, or NULL if not found.
+>   */
+> -static inline struct vb2_buffer *vb2_find_buffer(struct vb2_queue *q,
+> -                                                u64 timestamp)
+> -{
+> -       int index = vb2_find_timestamp(q, timestamp, 0);
+> -
+> -       if (index < 0)
+> -               return NULL;
+> -       return vb2_get_buffer(q, index);
+> -}
+> +struct vb2_buffer *vb2_find_buffer(struct vb2_queue *q, u64 timestamp);
 
-----------------------------------------------------------------------
-On Thu, 7 Jul 2022 13:03:47 +0530 Ratheesh Kannoth wrote:
-> NPC exact match table installs drop on hit rules in NPC mcam for each=20
-> channel. This rule has broadcast and multicast bits cleared. Exact=20
-> match bit cleared and channel bits set. If exact match table hit bit=20
-> is 0, corresponding NPC mcam drop rule will be hit for the packet and=20
-> will be dropped.
+Was there any specific reason to add it as an inline initially rather
+than just having it close to the final shape from the very beginning?
+Sorry for being picky, but I find it more difficult to review this
+way.
 
->kdoc:
+Best regards,
+Tomasz
 
->drivers/net/ethernet/marvell/octeontx2/af/rvu_npc_hash.c:1462: warning: ba=
-d line:         u8 cgx_id, lmac_id;
-
-Done. Posted new patch set.
-
->clang:
-
-.>/drivers/net/ethernet/marvell/octeontx2/af/rvu_npc_hash.c:1228:6: warning=
-: variable 'disable_cam' is used uninitialized whenever 'if' condition is f=
-alse [-Wsometimes-uninitialized]
-        if (entry->cmd)
-            ^~~~~~~~~~
->../drivers/net/ethernet/marvell/octeontx2/af/rvu_npc_hash.c:1232:6: note: =
-uninitialized use occurs here
-        if (disable_cam) {
-            ^~~~~~~~~~~
->./drivers/net/ethernet/marvell/octeontx2/af/rvu_npc_hash.c:1228:2: note: r=
-emove the 'if' if its condition is always true
-  >      if (entry->cmd)
-        ^~~~~~~~~~~~~~~
->../drivers/net/ethernet/marvell/octeontx2/af/rvu_npc_hash.c:1201:18: note:=
- initialize the variable 'disable_cam' to silence this warning
-        bool disable_cam;
-                        ^
-                         =3D 0
->../drivers/net/ethernet/marvell/octeontx2/af/rvu_npc_hash.c:1308:6: warnin=
-g: variable 'enable_cam' is used uninitialized whenever 'if' condition is f=
-alse [-Wsometimes-uninitialized]
- >       if (cmd)
-            ^~~
->../drivers/net/ethernet/marvell/octeontx2/af/rvu_npc_hash.c:1312:6: note: =
-uninitialized use occurs here
->        if (enable_cam) {
-            ^~~~~~~~~~
->../drivers/net/ethernet/marvell/octeontx2/af/rvu_npc_hash.c:1308:2: note: =
-remove the 'if' if its condition is always true
- >       if (cmd)
- >       ^~~~~~~~
->../drivers/net/ethernet/marvell/octeontx2/af/rvu_npc_hash.c:1275:17: note:=
- initialize the variable 'enable_cam' to silence this warning
- >       bool enable_cam;
-                       ^
- >                       =3D 0
-
-Done. Posted new patch.
+>
+>  int vb2_querybuf(struct vb2_queue *q, struct v4l2_buffer *b);
+>
+> --
+> 2.34.3
+>

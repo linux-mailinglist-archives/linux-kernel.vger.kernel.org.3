@@ -2,83 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2937356C019
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 20:36:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0AA0A56C0A9
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 20:37:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238339AbiGHRGS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Jul 2022 13:06:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48948 "EHLO
+        id S238709AbiGHRB7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Jul 2022 13:01:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45410 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238286AbiGHRGP (ORCPT
+        with ESMTP id S238121AbiGHRB5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Jul 2022 13:06:15 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E1A66050E
-        for <linux-kernel@vger.kernel.org>; Fri,  8 Jul 2022 10:06:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1657299975; x=1688835975;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=+ADmw6cOsgad1wiEE7DfCGuDQIqQwPGnx5VrvFmZZDU=;
-  b=AF9LI4FfmSYo/fV+eCyDc8zE1/CQGgRbSqeTOTQkO74c+23R/aP7GQGi
-   Osquo9jM1gk4XtnDkaiJdQ9YBBA9npRd8ImX1amizv5aKDlC+5bSDToz7
-   gmc6xkjyBtPT1wWu20c68zv5aoVVCrd7SR71Tvd77No6ngf39+Ztuwj9w
-   AAwqFxI0Gkcib3ezhxV22hNn8WtUtj0QLuYRih61IuoSjkKOsbf5HbP1z
-   WIYJmGwg9cEHjp7FgAdCub3DPBmHLhQguA/4YsFRq3doqaR7Uxfiq/ALT
-   XkOoQcesZ7aiLD3D5K7uaXDJZ14OLNFB+g+yiu3XcXGOiRjqOAnPLTT/A
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10402"; a="283078441"
-X-IronPort-AV: E=Sophos;i="5.92,256,1650956400"; 
-   d="scan'208";a="283078441"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jul 2022 10:01:46 -0700
-X-IronPort-AV: E=Sophos;i="5.92,256,1650956400"; 
-   d="scan'208";a="626764382"
-Received: from yyan2-mobl2.amr.corp.intel.com (HELO [10.212.242.16]) ([10.212.242.16])
-  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jul 2022 10:01:45 -0700
-Message-ID: <a486ad3f-8fb6-c37b-9e7e-c6ba1a841b57@intel.com>
-Date:   Fri, 8 Jul 2022 10:01:37 -0700
+        Fri, 8 Jul 2022 13:01:57 -0400
+Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C13D41F2C1
+        for <linux-kernel@vger.kernel.org>; Fri,  8 Jul 2022 10:01:56 -0700 (PDT)
+Received: by mail-wm1-x334.google.com with SMTP id v10-20020a05600c15ca00b003a2db8aa2c4so1081881wmf.2
+        for <linux-kernel@vger.kernel.org>; Fri, 08 Jul 2022 10:01:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=sifive.com; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=nNGh1W8H58m6hFFntBGmQsDqckIMVcWoGWG9fndPhMM=;
+        b=k9sejQ7A6A9E+qrCG5qv+EmdgbxLhOer9B71faYs4psVSsAx38ujk2CS/BjFyeie8J
+         6KxjTJGLDwAxsId8EWU0gTQV72j2VrUNZWyzv/EcnMUQ7Dtq/z+TVxX+p1hSID+1qwKR
+         iBRSGPu3tyWEH8a8vDbPYVV6nTS3+EgJIlkrV24zQCc9HTc3J8hGfD3CiHLsjl32iIJw
+         TWyeIQW+5S4gBOap8WChbFj7WGwz5OeXgvoEhQqFrH3KofVhAF6pieHn+3z73Oke0HIx
+         DVi9Sgta8slOptnG524nZiY+QluAr7TdoCE7vnrbnYbgbWw01JlfVPn9fjQ5hq5RGdO+
+         xbmQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=nNGh1W8H58m6hFFntBGmQsDqckIMVcWoGWG9fndPhMM=;
+        b=Io56HngQ5AvAFluGH5/MSvbrgAnXFTFwjpuG/JJVh91einBH89fQVuOB8+z/67VNwD
+         flGJguldBF3AxwhtlPzD/12iD0oW3tchTf+RfF1LGcy3HccCQJAJ/J0ZWx9UcAhyHGya
+         AMlWVlhUtjMhoWyrdL2SkicnaOr1jv7/Q69PgXglKfR6vz4TlbW2i7JSkcTLW7N3izPz
+         F73C/YGU7emDjFmU/jbGHrWeARWF3eoKpNwHMivwr6WMLz6Qym3iZaLenGPwuqb7vN+h
+         5gOZKXrwA7qB+xDamdy/9zncsWVQimu0q2vlYu9PFiQX4SjcwStihWhmhpnz7ltn1IuZ
+         nxJw==
+X-Gm-Message-State: AJIora9Tz2zrn5WywPVbvdMfQavLbvSZ/cHvXmQTT5BxpOQ2awJjTSm2
+        Az1DckIwCxLa5vaA0W7WYvg41Tn+MqrGpEtA
+X-Google-Smtp-Source: AGRyM1vAsw25xWmDPWaTpZqim2pT5kgw/MFKz+pCKh7uV8A1c/wMqM5nhOB/HHOpxMId0FtDZwls9w==
+X-Received: by 2002:a05:600c:3b14:b0:3a2:de1d:fe0c with SMTP id m20-20020a05600c3b1400b003a2de1dfe0cmr799786wms.49.1657299715270;
+        Fri, 08 Jul 2022 10:01:55 -0700 (PDT)
+Received: from rainbowdash.office.codethink.co.uk ([167.98.27.226])
+        by smtp.gmail.com with ESMTPSA id t5-20020adfe105000000b002103bd9c5acsm41336252wrz.105.2022.07.08.10.01.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 08 Jul 2022 10:01:54 -0700 (PDT)
+From:   Ben Dooks <ben.dooks@sifive.com>
+To:     dmaengine@vger.kernel.org, Eugeniy.Paltsev@synopsys.com
+Cc:     linux-kernel@vger.kernel.org, vkoul@kernel.org,
+        Sudip Mukherjee <sudip.mukherjee@sifive.com>,
+        Jude Onyenegecha <jude.onyenegecha@sifive.com>
+Subject: dw-axi-dmac updates (debug, minor bugfixes)
+Date:   Fri,  8 Jul 2022 18:01:50 +0100
+Message-Id: <20220708170153.269991-1-ben.dooks@sifive.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH] x86/mm/tlb: ignore f->new_tlb_gen when zero
-Content-Language: en-US
-To:     Nadav Amit <namit@vmware.com>
-Cc:     David Hildenbrand <david@redhat.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Hugh Dickins <hughd@google.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        X86 ML <x86@kernel.org>, Linux MM <linux-mm@kvack.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Andy Lutomirski <luto@kernel.org>
-References: <20220708003053.158480-1-namit@vmware.com>
- <b573a9c6-2ee0-20dc-1f28-84d3a81d40a2@redhat.com>
- <283d7660-000a-81af-1d6b-4fdedcb6dfd8@intel.com>
- <A604C6DA-5E5D-43F1-B63F-EF9D145CACCE@vmware.com>
-From:   Dave Hansen <dave.hansen@intel.com>
-In-Reply-To: <A604C6DA-5E5D-43F1-B63F-EF9D145CACCE@vmware.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 7/8/22 09:54, Nadav Amit wrote:
-> Since the bug was not during MADV_DONTNEED there is no reason for the
-> results to be any different.
-> 
-> Famous last words?
+During some recent testing, it was useful to have a dump of the
+registers during an channel dump and a couple of minor bugs were
+found with issues where a slow response or race condition occured.
 
-Considering that your patch broke the kernel a way that surprised us
-all, I think caution is warranted.  Re-running a microbenchmark that
-takes five minutes and stresses things a bit is the least you can do, I
-think.
+

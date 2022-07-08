@@ -2,73 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E7BA56B343
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 09:18:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 741B956B349
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 09:18:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237374AbiGHHQT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Jul 2022 03:16:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57492 "EHLO
+        id S230395AbiGHHRw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Jul 2022 03:17:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58568 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237206AbiGHHQQ (ORCPT
+        with ESMTP id S237495AbiGHHRs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Jul 2022 03:16:16 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1D1E796BB;
-        Fri,  8 Jul 2022 00:16:15 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 264CB21A46;
-        Fri,  8 Jul 2022 07:16:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1657264573; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=AR73VFU4xhO2Wv5kLjdkzS0nSTAgkRpNRvkdlCke4Ak=;
-        b=Bpppd1GEhso3X+/xusk2NqO2VthvZZ9NUM/R8rzwUFiPbL+NqMmBcNvU0Y72/EsGaFxXNU
-        4BfsCGl1HPqsjjHOq58R82LNgbxVRH9gj7A6ERHrhWCiuZKf6OaPTin+rWsQQgmPwARIQm
-        T7zP516fEPOXztnSV5wvWwaADdlN4KQ=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1657264573;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=AR73VFU4xhO2Wv5kLjdkzS0nSTAgkRpNRvkdlCke4Ak=;
-        b=s1QhdVaXv0j+QjrUNzPD2yeNaEJaxE+XelKwd6DEh3mzpEv69+0f6R1pG8r2pcWrhF0928
-        rvplMhWpotDhgRBA==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id E5A1E13A7D;
-        Fri,  8 Jul 2022 07:16:12 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id elb8NrzZx2IwDQAAMHmgww
-        (envelope-from <jslaby@suse.cz>); Fri, 08 Jul 2022 07:16:12 +0000
-Message-ID: <98363f27-e7a4-7351-fad7-361f7e465b7e@suse.cz>
-Date:   Fri, 8 Jul 2022 09:16:12 +0200
+        Fri, 8 Jul 2022 03:17:48 -0400
+Received: from mail-yb1-xb30.google.com (mail-yb1-xb30.google.com [IPv6:2607:f8b0:4864:20::b30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B707B7B343
+        for <linux-kernel@vger.kernel.org>; Fri,  8 Jul 2022 00:17:43 -0700 (PDT)
+Received: by mail-yb1-xb30.google.com with SMTP id 6so7550697ybc.8
+        for <linux-kernel@vger.kernel.org>; Fri, 08 Jul 2022 00:17:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=4Yu0KW7+9Bd1rQhLTjrom6E2qGYCiTJNNljSOfnndPM=;
+        b=JrcfjTQ8LHKEMMcb5dxkAmlHlqVeuPfADlXkw2C2PQhtaJ1pXR6CyBGjHT4pEcMGcm
+         YLR3biXzIovOVzkv4joNlDbIN/TyoWM71wumrnUUNkPBl6YyHPo7ukNdQNjEEwzDSKPb
+         xVj08BVEBGrds/Tu8SRaSyEABXD6QmpkskCig0FaWOCN3s15v8MJVeVXhLBBHESvAZAg
+         qXvbdLYoFwXgxzEg5XGq0y54Sz23VFHcefgBqcDsktTT9d1crgHDdhgqz8ZGD/8rY1cU
+         hy9oTTTIQq9H5tkAkITj5ebMiq02/NHxuoXvhvSdVBlSD6DdYltubRK+XHl4os7qY4wO
+         IWNA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=4Yu0KW7+9Bd1rQhLTjrom6E2qGYCiTJNNljSOfnndPM=;
+        b=I6TP325Ay4QDR1bfAyG+x/w1OSZLmqYiA/bJymrhzliPLPUSHMOrJJmhRwOMhHOkjU
+         8qMyqRR+XtoPvQHuQ5YCfmvv6/BX/aAN1jWewd++0RsmrHM4uOrjTCi2UEXScQ+5NRWQ
+         duCLXaOJi36F41vCWyzl8vGfnctPxAEKu/RiltagACDvOrCgVF2OjI91spXpxEc+5teG
+         6y+OpuxmMqq9C4Goly9m0yqt+QZJJMTm4rpoTrjijTlDhsTY27jXmyo/acCnZGx6Um5U
+         P81Qik7aA2D06xv53kMEx4RONZ9aBZEKDjKL5qXAI2fEJ/AWUxxwrnuCVfsJhcMGzLcG
+         2Baw==
+X-Gm-Message-State: AJIora/qJ0/dQpXsQsLYbTYb1L5+tuqAR87JjDLn+Fdje8CsTItnN27m
+        r8gSDIfiiGrG6BmZGhznNeS7otpyanc7dPZqAn6AFA==
+X-Google-Smtp-Source: AGRyM1u7uT/Kv8PBtbHJC9b5FUuKjWc8tpcS0l7j6DRjTU8hb8ZMubKhHHgCCE+Zv019Cj0LLP1wOCOIYRPwmoiw6bY=
+X-Received: by 2002:a25:3085:0:b0:66e:4440:f42e with SMTP id
+ w127-20020a253085000000b0066e4440f42emr1978855ybw.403.1657264662727; Fri, 08
+ Jul 2022 00:17:42 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH 1/2] clk: pistachio: Fix initconst confusion
-Content-Language: en-US
-To:     Stephen Boyd <sboyd@kernel.org>, mturquette@baylibre.com
-Cc:     mliska@suse.cz, linux-kernel@vger.kernel.org,
-        Andi Kleen <ak@linux.intel.com>, linux-clk@vger.kernel.org
-References: <20220623083217.26433-1-jslaby@suse.cz>
- <20220624004225.0DE4AC3411D@smtp.kernel.org>
- <0edab0e2-5355-a3da-445d-b6f45e3082ed@suse.cz>
- <20220629082104.E25D2C34114@smtp.kernel.org>
-From:   Jiri Slaby <jslaby@suse.cz>
-In-Reply-To: <20220629082104.E25D2C34114@smtp.kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+References: <20220702045254.22922-1-vincent.guittot@linaro.org> <88fab4b6-8e5c-3a4e-e32b-a0867d51398b@arm.com>
+In-Reply-To: <88fab4b6-8e5c-3a4e-e32b-a0867d51398b@arm.com>
+From:   Vincent Guittot <vincent.guittot@linaro.org>
+Date:   Fri, 8 Jul 2022 09:17:30 +0200
+Message-ID: <CAKfTPtA07H=nkXdyCto9=7Zzixwnu_N_4L-vfn+0ONCQ464biA@mail.gmail.com>
+Subject: Re: [PATCH] sched/fair: fix case with reduced capacity CPU
+To:     Dietmar Eggemann <dietmar.eggemann@arm.com>
+Cc:     mingo@redhat.com, peterz@infradead.org, juri.lelli@redhat.com,
+        rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
+        bristot@redhat.com, vschneid@redhat.com,
+        linux-kernel@vger.kernel.org, david.chen@nutanix.com,
+        zhangqiao22@huawei.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -77,75 +69,146 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 29. 06. 22, 10:21, Stephen Boyd wrote:
-> Quoting Jiri Slaby (2022-06-27 00:46:15)
->> On 24. 06. 22, 2:42, Stephen Boyd wrote:
->>> Quoting Jiri Slaby (2022-06-23 01:32:16)
->>>> From: Andi Kleen <ak@linux.intel.com>
->>>>
->>>> A variable pointing to const isn't const itself. It'd have to contain
->>>> "const" keyword after "*" too. Therefore, PNAME() cannot put the strings
->>>> to "rodata".  Hence use __initdata instead of __initconst to fix this.
->>>>
->>>> [js] more explanatory commit message.
->>>>
->>>> Cc: Michael Turquette <mturquette@baylibre.com>
->>>> Cc: Stephen Boyd <sboyd@kernel.org>
->>>> Cc: linux-clk@vger.kernel.org
->>>> Signed-off-by: Andi Kleen <ak@linux.intel.com>
->>>> Signed-off-by: Jiri Slaby <jslaby@suse.cz>
->>>> ---
->>>>    drivers/clk/pistachio/clk.h | 2 +-
->>>>    1 file changed, 1 insertion(+), 1 deletion(-)
->>>>
->>>> diff --git a/drivers/clk/pistachio/clk.h b/drivers/clk/pistachio/clk.h
->>>> index f9c31e3a0e47..742e5fab00c0 100644
->>>> --- a/drivers/clk/pistachio/clk.h
->>>> +++ b/drivers/clk/pistachio/clk.h
->>>> @@ -34,7 +34,7 @@ struct pistachio_mux {
->>>>           const char **parents;
->>>>    };
->>>>    
->>>> -#define PNAME(x) static const char *x[] __initconst
->>>> +#define PNAME(x) static const char *x[] __initdata
->>>
->>> Can it be const char * const and left as __initconst?
->>
->> Let me check, IIRC the struct where this is assigned would need to be
->> updated too.
->>
->> I will get into it only some time next week.
->>
-> 
-> Ok, sounds good. This seems to at least compile locally.
+On Thu, 7 Jul 2022 at 18:43, Dietmar Eggemann <dietmar.eggemann@arm.com> wrote:
+>
+> On 02/07/2022 06:52, Vincent Guittot wrote:
+> > The capacity of the CPU available for CFS tasks can be reduced because of
+> > other activities running on the latter. In such case, it's worth trying to
+> > move CFS tasks on a CPU with more available capacity.
+> >
+> > The rework of the load balance has filterd the case when the CPU is
+> > classified to be fully busy but its capacity is reduced.
+> >
+> > Check if CPU's capacity is reduced while gathering load balance statistics
+> > and classify it group_misfit_task instead of group_fully_busy so we can
+> > try to move the load on another CPU.
+> >
+> > Reported-by: David Chen <david.chen@nutanix.com>
+> > Reported-by: Zhang Qiao <zhangqiao22@huawei.com>
+> > Signed-off-by: Vincent Guittot <vincent.guittot@linaro.org>
+> > ---
+> >
+> > David, Zhang,
+> >
+> > I haven't put your tested-by because I have reworked and cleaned the patch to
+> > cover more cases.
+> >
+> > Could you run some tests with this version ?
+> >
+> > Thanks
+> >
+> >  kernel/sched/fair.c | 50 ++++++++++++++++++++++++++++++++++++---------
+> >  1 file changed, 40 insertions(+), 10 deletions(-)
+> >
+> > diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
+> > index a78d2e3b9d49..126b82ef4279 100644
+> > --- a/kernel/sched/fair.c
+> > +++ b/kernel/sched/fair.c
+> > @@ -8798,6 +8798,19 @@ sched_asym(struct lb_env *env, struct sd_lb_stats *sds,  struct sg_lb_stats *sgs
+> >       return sched_asym_prefer(env->dst_cpu, group->asym_prefer_cpu);
+> >  }
+> >
+> > +static inline bool
+> > +sched_reduced_capacity(struct rq *rq, struct sched_domain *sd)
+> > +{
+> > +     /*
+> > +      * When there is more than 1 task, the group_overloaded case already
+> > +      * takes care of cpu with reduced capacity
+> > +      */
+> > +     if (rq->cfs.h_nr_running != 1)
+> > +             return false;
+> > +
+> > +     return check_cpu_capacity(rq, sd);
+> > +}
+> > +
+> >  /**
+> >   * update_sg_lb_stats - Update sched_group's statistics for load balancing.
+> >   * @env: The load balancing environment.
+> > @@ -8820,8 +8833,9 @@ static inline void update_sg_lb_stats(struct lb_env *env,
+> >
+> >       for_each_cpu_and(i, sched_group_span(group), env->cpus) {
+> >               struct rq *rq = cpu_rq(i);
+> > +             unsigned long load = cpu_load(rq);
+> >
+> > -             sgs->group_load += cpu_load(rq);
+> > +             sgs->group_load += load;
+> >               sgs->group_util += cpu_util_cfs(i);
+> >               sgs->group_runnable += cpu_runnable(rq);
+> >               sgs->sum_h_nr_running += rq->cfs.h_nr_running;
+> > @@ -8851,11 +8865,17 @@ static inline void update_sg_lb_stats(struct lb_env *env,
+> >               if (local_group)
+> >                       continue;
+> >
+> > -             /* Check for a misfit task on the cpu */
+> > -             if (env->sd->flags & SD_ASYM_CPUCAPACITY &&
+> > -                 sgs->group_misfit_task_load < rq->misfit_task_load) {
+> > -                     sgs->group_misfit_task_load = rq->misfit_task_load;
+> > -                     *sg_status |= SG_OVERLOAD;
+> > +             if (env->sd->flags & SD_ASYM_CPUCAPACITY) {
+> > +                     /* Check for a misfit task on the cpu */
+> > +                     if (sgs->group_misfit_task_load < rq->misfit_task_load) {
+> > +                             sgs->group_misfit_task_load = rq->misfit_task_load;
+> > +                             *sg_status |= SG_OVERLOAD;
+> > +                     }
+> > +             } else if ((env->idle != CPU_NOT_IDLE) &&
+> > +                        sched_reduced_capacity(rq, env->sd) &&
+> > +                        (sgs->group_misfit_task_load < load)) {
+> > +                     /* Check for a task running on a CPU with reduced capacity */
+> > +                     sgs->group_misfit_task_load = load;
+> >               }
+> >       }
+> >
+> > @@ -8908,7 +8928,8 @@ static bool update_sd_pick_busiest(struct lb_env *env,
+> >        * CPUs in the group should either be possible to resolve
+> >        * internally or be covered by avg_load imbalance (eventually).
+> >        */
+> > -     if (sgs->group_type == group_misfit_task &&
+> > +     if ((env->sd->flags & SD_ASYM_CPUCAPACITY) &&
+> > +         (sgs->group_type == group_misfit_task) &&
+> >           (!capacity_greater(capacity_of(env->dst_cpu), sg->sgc->max_capacity) ||
+> >            sds->local_stat.group_type != group_has_spare))
+> >               return false;
+> > @@ -9517,9 +9538,18 @@ static inline void calculate_imbalance(struct lb_env *env, struct sd_lb_stats *s
+> >       busiest = &sds->busiest_stat;
+> >
+> >       if (busiest->group_type == group_misfit_task) {
+> > -             /* Set imbalance to allow misfit tasks to be balanced. */
+> > -             env->migration_type = migrate_misfit;
+> > -             env->imbalance = 1;
+> > +             if (env->sd->flags & SD_ASYM_CPUCAPACITY) {
+> > +                     /* Set imbalance to allow misfit tasks to be balanced. */
+> > +                     env->migration_type = migrate_misfit;
+> > +                     env->imbalance = 1;
+> > +             } else {
+> > +                     /*
+> > +                      * Set load imbalance to allow moving task from cpu
+> > +                      * with reduced capacity
+> > +                      */
+> > +                     env->migration_type = migrate_load;
+> > +                     env->imbalance = busiest->group_misfit_task_load;
+>
+> I'm wondering why you've chosen that hybrid approach `group_misfit_task
+> -> migrate_load` and not `group_misfit_task -> migrate_misfit`.
 
-Yeah, that works. I've sent a v2.
+because, it means enabling the tracking of misfit task on rq at each
+task enqueue/dequeue/tick ...  Then mistfit for heterogeneous platform
+checks max_cpu_capacity what we don't care and will trigger unwanted
+misfit migration for smp
 
-BTW is the code intended to put the actual strings to .init.rodata? As 
-that was never the case. Only those PNAME defined arrays (pointers to 
-strings) end up in .init.rodata now and the strings are in .rodata.
+>
+> It looks like this `rq->cfs.h_nr_running = 1` case almost (since we
+> check `busiest->nr_running > 1`) always ends up in the load_balance()
+> `if (!ld_moved)` condition and need_active_balance() can return 1 in
+> case `if ((env->idle != CPU_NOT_IDLE) && ...` condition. This leads to
+> active load_balance and this
+>
+> IMHO, the same you can achieve when you would stay with
+> `group_misfit_task -> migrate_misfit`.
+>
+> I think cpu_load(rq) can be used instead of `rq->misfit_task_load` in
+> the migrate_misfit case of find_busiest_queue() too.
 
-> ----8<---
-> 
-> diff --git a/drivers/clk/pistachio/clk.h b/drivers/clk/pistachio/clk.h
-> index f9c31e3a0e47..8be02ac2d909 100644
-> --- a/drivers/clk/pistachio/clk.h
-> +++ b/drivers/clk/pistachio/clk.h
-> @@ -31,10 +31,10 @@ struct pistachio_mux {
->   	unsigned int shift;
->   	unsigned int num_parents;
->   	const char *name;
-> -	const char **parents;
-> +	const char * const *parents;
->   };
->   
-> -#define PNAME(x) static const char *x[] __initconst
-> +#define PNAME(x) static const char * const x[] __initconst
->   
->   #define MUX(_id, _name, _pnames, _reg, _shift)			\
->   	{							\
+I don't think because you can have a higher cpu_load() but not being misfit
 
-
--- 
-js
-suse labs
+>
+> [...]

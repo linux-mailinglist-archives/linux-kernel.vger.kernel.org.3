@@ -2,231 +2,225 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 34E9B56B155
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 06:24:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4878E56B184
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 06:26:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236708AbiGHEXu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Jul 2022 00:23:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58654 "EHLO
+        id S237051AbiGHEZO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Jul 2022 00:25:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59414 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229957AbiGHEXs (ORCPT
+        with ESMTP id S229957AbiGHEZM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Jul 2022 00:23:48 -0400
-Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6661FF5B5
-        for <linux-kernel@vger.kernel.org>; Thu,  7 Jul 2022 21:23:47 -0700 (PDT)
-Received: by mail-pl1-x633.google.com with SMTP id j12so8594372plj.8
-        for <linux-kernel@vger.kernel.org>; Thu, 07 Jul 2022 21:23:47 -0700 (PDT)
+        Fri, 8 Jul 2022 00:25:12 -0400
+Received: from mail-qt1-x829.google.com (mail-qt1-x829.google.com [IPv6:2607:f8b0:4864:20::829])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 691421E3F1
+        for <linux-kernel@vger.kernel.org>; Thu,  7 Jul 2022 21:25:11 -0700 (PDT)
+Received: by mail-qt1-x829.google.com with SMTP id g14so25762413qto.9
+        for <linux-kernel@vger.kernel.org>; Thu, 07 Jul 2022 21:25:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:subject:from:in-reply-to:date:cc
-         :content-transfer-encoding:message-id:references:to;
-        bh=cXx67UAEHDEms/ZWdhD86sRM6wFjqHtEAMk+ffjRrxE=;
-        b=JFSekI06NM32A65VsCUGKY5q7uKVQrOkBNr0f/7Me7qwFMfpuKcMw4eV0gHCTpzq8y
-         q9WzUxmA91ezdxkWfSvUgECuEq8neZW3wtKRx9wzJ0/5ZDdrfGejiqVNsdzP/33wUevE
-         XQVHAbLCDj8f8fEKk79Q6Sv5l+duvSg4uZnqsh+gpv9fJvQwv+CIyDA2rZULrV9rzX6L
-         WXWBVZLo/CdxLUNpnJAnj3/otAN51nHHm5/mPaeyt7OP/x2yWrLSp+xWyEfHJ9kzYBem
-         ScX4Xueawd2Gtl8EKfbIWyuNUsOi2YNjQUk0SfDSNYhJn4/NlzKRBASrB2yyRdjr4aQ9
-         6m9A==
+        d=joelfernandes.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=YiRIQ6EPldvCAHBc1vkFltTFtFZvbbQuV3XjMnACSEk=;
+        b=NYg2Enet/cCdMjqU2+zIl2w2yOoLVLg20hXZUY/snkVK9j+WCy1MK4DUh4vggQ2W11
+         LHqX9Hw53quV+9/HR9Btw+5zueHn9KtKFXRkFynXa615UoQcdaMr+/4UQwqsq3v5UhMg
+         C/IzFHyyJkMnnzmjArg1yY5KLMu3xD1V9zeVI=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:subject:from:in-reply-to:date:cc
-         :content-transfer-encoding:message-id:references:to;
-        bh=cXx67UAEHDEms/ZWdhD86sRM6wFjqHtEAMk+ffjRrxE=;
-        b=2O87faAKZF6kXfDObOZdNKdU/bAgVQZhgo5gaDXvfIdx3yPrwlQkyxOA2JLKwtf9VY
-         TIZZdQ86ECOqJiP/GV0h6UG/NQFrYmEW927wzUT2zf9PrMyAMVq26NhdRO9HyYDVoQbB
-         bpORx9Y3kg2zFZAIOQ5WawnNBskRAir/3D7avkRCkA+PTvKEG/3+OC2/O2w9pSJlQMAd
-         7nPp3G/4r/vsNcSbeDC2Y79HEx1HDdijJKRrEK+OFwz+hkmaKtOGfhXtKx1/8NkNFDCK
-         ANUldfpOXA0BaOKHpLHPqPcSnVZA5JwerbvdRyinRVKEn4ji7kC7njBdd7l6Yb2Ykolv
-         Z+ZQ==
-X-Gm-Message-State: AJIora9Ab2YbCImmk5oQcEHRpn8m1b55LIGQW+fRH667YyubcxsXDY99
-        HpmXiIyjsn0+tvb3J4s4GLk=
-X-Google-Smtp-Source: AGRyM1uBTt9rPkZ3Sgf5UWN0qyjSLmOVDBH6bD8Gpgk2mUCSmEImTx7E15TRBWxg5odBsQbtkdoYPw==
-X-Received: by 2002:a17:902:7881:b0:16b:c4a6:1dc9 with SMTP id q1-20020a170902788100b0016bc4a61dc9mr1652435pll.83.1657254226580;
-        Thu, 07 Jul 2022 21:23:46 -0700 (PDT)
-Received: from smtpclient.apple (c-24-6-216-183.hsd1.ca.comcast.net. [24.6.216.183])
-        by smtp.gmail.com with ESMTPSA id 123-20020a621481000000b00527bb6fff6csm20668884pfu.119.2022.07.07.21.23.45
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Thu, 07 Jul 2022 21:23:46 -0700 (PDT)
-Content-Type: text/plain;
-        charset=utf-8
-Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3696.100.31\))
-Subject: Re: [PATCH v2] x86/mm/tlb: avoid reading mm_tlb_gen when possible
-From:   Nadav Amit <nadav.amit@gmail.com>
-In-Reply-To: <df9e416a-a6a2-34a-9fa9-dcb92fe6cee2@google.com>
-Date:   Thu, 7 Jul 2022 21:23:44 -0700
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@kernel.org>,
-        Andy Lutomirski <luto@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>, x86@kernel.org,
-        linux-mm@kvack.org
-Content-Transfer-Encoding: quoted-printable
-Message-Id: <904C4BCE-78E7-4FEE-BD8D-03DCE75A5B8B@gmail.com>
-References: <20220606180123.2485171-1-namit@vmware.com>
- <df9e416a-a6a2-34a-9fa9-dcb92fe6cee2@google.com>
-To:     Hugh Dickins <hughd@google.com>
-X-Mailer: Apple Mail (2.3696.100.31)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=YiRIQ6EPldvCAHBc1vkFltTFtFZvbbQuV3XjMnACSEk=;
+        b=UM3/PbQjctu/fU6NoktupGVYfR93lejAs+SLxEx8I2OXQA5XAuUrfb8y5DLNqPcwnp
+         PFwIJk3iAtDBBhw9dP80gruWOP36kP6cmKMx210GLNhiWfgCS3aQYmblYYTIoI4/gScx
+         JqxHrO6OOz4JYWZEtQcbFsjvHd+RV5oNNNbmy+LLreGaGcQx/74L+qBY696ozEMJ/ww7
+         v3v5qNkADvk8oPHHymjOocgwoo1mkHHPzknQ70FnJEnK2vyribFENrVm20gekEF+qNTi
+         EDD6nPR79w9Y4MQGXabKRVphyzL3JKWDiUpCQ5FtbjWdip8uA9x1ZonVFxZZVuKIurag
+         2Y+A==
+X-Gm-Message-State: AJIora8smOsRlqoIw4r2ueJcV5JJkAXv/o0YSGt77gyF8hOh+H4cRS5H
+        1BsJFQEol/nLg80aAFLH/GYCOQ==
+X-Google-Smtp-Source: AGRyM1ssQj2JdzzT4Tsaqj33dtrnhGQjDMwLgzAtQgLZpFL2OO+fD9YINggJS2PRhhleidHfdUeeMA==
+X-Received: by 2002:a05:6214:d66:b0:470:4528:bbd5 with SMTP id 6-20020a0562140d6600b004704528bbd5mr1186921qvs.73.1657254310548;
+        Thu, 07 Jul 2022 21:25:10 -0700 (PDT)
+Received: from localhost (228.221.150.34.bc.googleusercontent.com. [34.150.221.228])
+        by smtp.gmail.com with ESMTPSA id ay4-20020a05622a228400b002f39b99f69csm26560294qtb.54.2022.07.07.21.25.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 07 Jul 2022 21:25:09 -0700 (PDT)
+Date:   Fri, 8 Jul 2022 04:25:09 +0000
+From:   Joel Fernandes <joel@joelfernandes.org>
+To:     "Paul E. McKenney" <paulmck@kernel.org>
+Cc:     rcu@vger.kernel.org, linux-kernel@vger.kernel.org,
+        rushikesh.s.kadam@intel.com, urezki@gmail.com,
+        neeraj.iitr10@gmail.com, frederic@kernel.org, rostedt@goodmis.org,
+        vineeth@bitbyteword.org
+Subject: Re: [PATCH v2 6/8] rcuscale: Add test for using call_rcu_lazy() to
+ emulate kfree_rcu()
+Message-ID: <YsexpcG2iaplKPIs@google.com>
+References: <20220622225102.2112026-1-joel@joelfernandes.org>
+ <20220622225102.2112026-8-joel@joelfernandes.org>
+ <20220626041327.GN1790663@paulmck-ThinkPad-P17-Gen-1>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220626041327.GN1790663@paulmck-ThinkPad-P17-Gen-1>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Jul 7, 2022, at 8:27 PM, Hugh Dickins <hughd@google.com> wrote:
+On Sat, Jun 25, 2022 at 09:13:27PM -0700, Paul E. McKenney wrote:
+> On Wed, Jun 22, 2022 at 10:51:00PM +0000, Joel Fernandes (Google) wrote:
+> > Reuse the kfree_rcu() test in order to be able to compare the memory reclaiming
+> > properties of call_rcu_lazy() with kfree_rcu().
+> > 
+> > With this test, we find similar memory footprint and time call_rcu_lazy()
+> > free'ing takes compared to kfree_rcu(). Also we confirm that call_rcu_lazy()
+> > can survive OOM during extremely frequent calls.
+> > 
+> > If we really push it, i.e. boot system with low memory and compare
+> > kfree_rcu() with call_rcu_lazy(), I find that call_rcu_lazy() is more
+> > resilient and is much harder to produce OOM as compared to kfree_rcu().
+> 
+> Another approach would be to make rcutorture's forward-progress testing
+> able to use call_rcu_lazy().  This would test lazy callback flooding.
+> 
+> Yet another approach would be to keep one CPU idle other than a
+> kthread doing call_rcu_lazy().  Of course "idle" includes redirecting
+> those pesky interrupts.
+> 
+> It is almost certainly necessary for rcutorture to exercise the
+> call_rcu_lazy() path regularly.
 
-> On Mon, 6 Jun 2022, Nadav Amit wrote:
->=20
->> From: Nadav Amit <namit@vmware.com>
->>=20
->> On extreme TLB shootdown storms, the mm's tlb_gen cacheline is highly
->> contended and reading it should (arguably) be avoided as much as
->> possible.
->>=20
->> Currently, flush_tlb_func() reads the mm's tlb_gen unconditionally,
->> even when it is not necessary (e.g., the mm was already switched).
->> This is wasteful.
->>=20
->> Moreover, one of the existing optimizations is to read mm's tlb_gen =
-to
->> see if there are additional in-flight TLB invalidations and flush the
->> entire TLB in such a case. However, if the request's tlb_gen was =
-already
->> flushed, the benefit of checking the mm's tlb_gen is likely to be =
-offset
->> by the overhead of the check itself.
->>=20
->> Running will-it-scale with tlb_flush1_threads show a considerable
->> benefit on 56-core Skylake (up to +24%):
->>=20
->> threads		Baseline (v5.17+)	+Patch
->> 1		159960			160202
->> 5		310808			308378 (-0.7%)
->> 10		479110			490728
->> 15		526771			562528
->> 20		534495			587316
->> 25		547462			628296
->> 30		579616			666313
->> 35		594134			701814
->> 40		612288			732967
->> 45		617517			749727
->> 50		637476			735497
->> 55		614363			778913 (+24%)
->>=20
->> Acked-by: Peter Zijlstra (Intel) <peterz@infradead.org>
->> Cc: Dave Hansen <dave.hansen@linux.intel.com>
->> Cc: Ingo Molnar <mingo@kernel.org>
->> Cc: Andy Lutomirski <luto@kernel.org>
->> Cc: Thomas Gleixner <tglx@linutronix.de>
->> Cc: x86@kernel.org
->> Signed-off-by: Nadav Amit <namit@vmware.com>
->>=20
->> --
->>=20
->> Note: The benchmarked kernels include Dave's revert of commit
->> 6035152d8eeb ("x86/mm/tlb: Open-code on_each_cpu_cond_mask() for
->> tlb_is_not_lazy()
->> ---
->> arch/x86/mm/tlb.c | 18 +++++++++++++++++-
->> 1 file changed, 17 insertions(+), 1 deletion(-)
->>=20
->> diff --git a/arch/x86/mm/tlb.c b/arch/x86/mm/tlb.c
->> index d400b6d9d246..d9314cc8b81f 100644
->> --- a/arch/x86/mm/tlb.c
->> +++ b/arch/x86/mm/tlb.c
->> @@ -734,10 +734,10 @@ static void flush_tlb_func(void *info)
->> 	const struct flush_tlb_info *f =3D info;
->> 	struct mm_struct *loaded_mm =3D =
-this_cpu_read(cpu_tlbstate.loaded_mm);
->> 	u32 loaded_mm_asid =3D =
-this_cpu_read(cpu_tlbstate.loaded_mm_asid);
->> -	u64 mm_tlb_gen =3D atomic64_read(&loaded_mm->context.tlb_gen);
->> 	u64 local_tlb_gen =3D =
-this_cpu_read(cpu_tlbstate.ctxs[loaded_mm_asid].tlb_gen);
->> 	bool local =3D smp_processor_id() =3D=3D f->initiating_cpu;
->> 	unsigned long nr_invalidate =3D 0;
->> +	u64 mm_tlb_gen;
->>=20
->> 	/* This code cannot presently handle being reentered. */
->> 	VM_WARN_ON(!irqs_disabled());
->> @@ -771,6 +771,22 @@ static void flush_tlb_func(void *info)
->> 		return;
->> 	}
->>=20
->> +	if (f->new_tlb_gen <=3D local_tlb_gen) {
->> +		/*
->> +		 * The TLB is already up to date in respect to =
-f->new_tlb_gen.
->> +		 * While the core might be still behind mm_tlb_gen, =
-checking
->> +		 * mm_tlb_gen unnecessarily would have negative caching =
-effects
->> +		 * so avoid it.
->> +		 */
->> +		return;
->> +	}
->> +
->> +	/*
->> +	 * Defer mm_tlb_gen reading as long as possible to avoid cache
->> +	 * contention.
->> +	 */
->> +	mm_tlb_gen =3D atomic64_read(&loaded_mm->context.tlb_gen);
->> +
->> 	if (unlikely(local_tlb_gen =3D=3D mm_tlb_gen)) {
->> 		/*
->> 		 * There's nothing to do: we're already up to date.  =
-This can
->> --=20
->> 2.25.1
->=20
-> I'm sorry, but bisection and reversion show that this commit,
-> aa44284960d550eb4d8614afdffebc68a432a9b4 in current linux-next,
-> is responsible for the "internal compiler error: Segmentation fault"s
-> I get when running kernel builds on tmpfs in 1G memory, lots of =
-swapping.
->=20
-> That tmpfs is using huge pages as much as it can, so splitting and
-> collapsing, compaction and page migration entailed, in case that's
-> relevant (maybe this commit is perfect, but there's a TLB flushing
-> bug over there in mm which this commit just exposes).
->=20
-> Whether those segfaults happen without the huge page element,
-> I have not done enough testing to tell - there are other bugs with
-> swapping in current linux-next, indeed, I wouldn't even have found
-> this one, if I hadn't already been on a bisection for another bug,
-> and got thrown off course by these segfaults.
->=20
-> I hope that you can work out what might be wrong with this,
-> but meantime I think it needs to be reverted.
+Currently I added a test like the following which adds a new torture type, my
+thought was to stress the new code to make sure nothing crashed or hung the
+kernel. That is working well except I don't exactly understand the total-gps
+print showing 0, which the other print shows 1188 GPs. I'll go dig into that
+tomorrow.. thanks!
 
-I find it always surprising how trivial one liners fail.
+The print shows
+TREE11 ------- 1474 GPs (12.2833/s) [rcu_lazy: g0 f0x0 total-gps=0]
+TREE11 no success message, 7 successful version messages
 
-As you probably know, debugging these kind of things is hard. I see two
-possible cases:
-
-1. The failure is directly related to this optimization. The immediate
-suspect in my mind is something to do with PCID/ASID.
-
-2. The failure is due to another bug that was papered by =E2=80=9Cenough=E2=
-=80=9D TLB
-flushes.
-
-I will look into the code. But if it is possible, it would be helpful to
-know whether you get the failure with the =E2=80=9Cnopcid=E2=80=9D =
-kernel parameter. If it
-passes, it wouldn=E2=80=99t say much, but if it fails, I think (2) is =
-more likely.
-
-Not arguing about a revert, but, in some way, if the test fails, it can
-indicate that the optimization =E2=80=9Cworks=E2=80=9D=E2=80=A6
-
-I=E2=80=99ll put some time to look deeper into the code, but it would be =
-very
-helpful if you can let me know what happens with nopcid.
+diff --git a/kernel/rcu/rcutorture.c b/kernel/rcu/rcutorture.c
+index 7120165a9342..cc6b7392d801 100644
+--- a/kernel/rcu/rcutorture.c
++++ b/kernel/rcu/rcutorture.c
+@@ -872,6 +872,64 @@ static struct rcu_torture_ops tasks_rude_ops = {
+ 
+ #endif // #else #ifdef CONFIG_TASKS_RUDE_RCU
+ 
++#ifdef CONFIG_RCU_LAZY
++
++/*
++ * Definitions for lazy RCU torture testing.
++ */
++unsigned long orig_jiffies_till_flush;
++
++static void rcu_sync_torture_init_lazy(void)
++{
++	rcu_sync_torture_init();
++
++	orig_jiffies_till_flush = rcu_lazy_get_jiffies_till_flush();
++	rcu_lazy_set_jiffies_till_flush(50);
++}
++
++static void rcu_lazy_cleanup(void)
++{
++	rcu_lazy_set_jiffies_till_flush(orig_jiffies_till_flush);
++}
++
++static struct rcu_torture_ops rcu_lazy_ops = {
++	.ttype			= RCU_LAZY_FLAVOR,
++	.init			= rcu_sync_torture_init_lazy,
++	.cleanup		= rcu_lazy_cleanup,
++	.readlock		= rcu_torture_read_lock,
++	.read_delay		= rcu_read_delay,
++	.readunlock		= rcu_torture_read_unlock,
++	.readlock_held		= torture_readlock_not_held,
++	.get_gp_seq		= rcu_get_gp_seq,
++	.gp_diff		= rcu_seq_diff,
++	.deferred_free		= rcu_torture_deferred_free,
++	.sync			= synchronize_rcu,
++	.exp_sync		= synchronize_rcu_expedited,
++	.get_gp_state		= get_state_synchronize_rcu,
++	.start_gp_poll		= start_poll_synchronize_rcu,
++	.poll_gp_state		= poll_state_synchronize_rcu,
++	.cond_sync		= cond_synchronize_rcu,
++	.call			= call_rcu_lazy,
++	.cb_barrier		= rcu_barrier,
++	.fqs			= rcu_force_quiescent_state,
++	.stats			= NULL,
++	.gp_kthread_dbg		= show_rcu_gp_kthreads,
++	.check_boost_failed	= rcu_check_boost_fail,
++	.stall_dur		= rcu_jiffies_till_stall_check,
++	.irq_capable		= 1,
++	.can_boost		= IS_ENABLED(CONFIG_RCU_BOOST),
++	.extendables		= RCUTORTURE_MAX_EXTEND,
++	.name			= "rcu_lazy"
++};
++
++#define LAZY_OPS &rcu_lazy_ops,
++
++#else // #ifdef CONFIG_RCU_LAZY
++
++#define LAZY_OPS
++
++#endif // #else #ifdef CONFIG_RCU_LAZY
++
+ 
+ #ifdef CONFIG_TASKS_TRACE_RCU
+ 
+@@ -3145,7 +3203,7 @@ rcu_torture_init(void)
+ 	unsigned long gp_seq = 0;
+ 	static struct rcu_torture_ops *torture_ops[] = {
+ 		&rcu_ops, &rcu_busted_ops, &srcu_ops, &srcud_ops, &busted_srcud_ops,
+-		TASKS_OPS TASKS_RUDE_OPS TASKS_TRACING_OPS
++		TASKS_OPS TASKS_RUDE_OPS TASKS_TRACING_OPS LAZY_OPS
+ 		&trivial_ops,
+ 	};
+ 
+diff --git a/tools/testing/selftests/rcutorture/configs/rcu/TREE11 b/tools/testing/selftests/rcutorture/configs/rcu/TREE11
+new file mode 100644
+index 000000000000..436013f3e015
+--- /dev/null
++++ b/tools/testing/selftests/rcutorture/configs/rcu/TREE11
+@@ -0,0 +1,18 @@
++CONFIG_SMP=y
++CONFIG_PREEMPT_NONE=n
++CONFIG_PREEMPT_VOLUNTARY=n
++CONFIG_PREEMPT=y
++#CHECK#CONFIG_PREEMPT_RCU=y
++CONFIG_HZ_PERIODIC=n
++CONFIG_NO_HZ_IDLE=y
++CONFIG_NO_HZ_FULL=n
++CONFIG_RCU_TRACE=y
++CONFIG_HOTPLUG_CPU=y
++CONFIG_MAXSMP=y
++CONFIG_CPUMASK_OFFSTACK=y
++CONFIG_RCU_NOCB_CPU=y
++CONFIG_DEBUG_LOCK_ALLOC=n
++CONFIG_RCU_BOOST=n
++CONFIG_DEBUG_OBJECTS_RCU_HEAD=n
++CONFIG_RCU_EXPERT=y
++CONFIG_RCU_LAZY=y
+diff --git a/tools/testing/selftests/rcutorture/configs/rcu/TREE11.boot b/tools/testing/selftests/rcutorture/configs/rcu/TREE11.boot
+new file mode 100644
+index 000000000000..9b6f720d4ccd
+--- /dev/null
++++ b/tools/testing/selftests/rcutorture/configs/rcu/TREE11.boot
+@@ -0,0 +1,8 @@
++maxcpus=8 nr_cpus=43
++rcutree.gp_preinit_delay=3
++rcutree.gp_init_delay=3
++rcutree.gp_cleanup_delay=3
++rcu_nocbs=0-7
++rcutorture.torture_type=rcu_lazy
++rcutorture.nocbs_nthreads=8
++rcutorture.fwd_progress=0
+-- 
+2.37.0.rc0.161.g10f37bed90-goog
 

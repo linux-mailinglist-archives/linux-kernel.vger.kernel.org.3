@@ -2,116 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E17D56BA00
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 14:48:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 48E4856BA07
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 14:49:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237443AbiGHMrP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Jul 2022 08:47:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36952 "EHLO
+        id S237641AbiGHMsR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Jul 2022 08:48:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38074 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237030AbiGHMrL (ORCPT
+        with ESMTP id S237469AbiGHMsP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Jul 2022 08:47:11 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0C5B057238
-        for <linux-kernel@vger.kernel.org>; Fri,  8 Jul 2022 05:47:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1657284427;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=dE7am2qZLWCC7z65J2aM6/B2V9+Pl8ooChSgECZZn1k=;
-        b=AosZpzKWR+iqHiXmQFkUnGRJ82eZzEyRwlmTSkdWReFeVHQ2DJQ7a9EBY1ripC5WnOvYhb
-        5C4gH/R3aa0JSJ2ow3glzv/PXy0Xc+gNcBxM7wNnJ1yx0Sf3CUVtCXAXg0/YUrjoVU6TOt
-        /JX4+1Md9d1751/Ih2g9gsx89St8D2o=
-Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com
- [209.85.208.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-112-inQJhO0FPyieZiuvM-V42w-1; Fri, 08 Jul 2022 08:47:03 -0400
-X-MC-Unique: inQJhO0FPyieZiuvM-V42w-1
-Received: by mail-ed1-f72.google.com with SMTP id s1-20020a056402520100b00439658fad14so16373083edd.20
-        for <linux-kernel@vger.kernel.org>; Fri, 08 Jul 2022 05:47:02 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=dE7am2qZLWCC7z65J2aM6/B2V9+Pl8ooChSgECZZn1k=;
-        b=snH9xZqh/KsiY/EeYPP8Gu2SDuKzhfHEa25gNnbwLHrvPBSNmOuWH1PzHIWeX/lUmP
-         hfEkQTt8eO9sQV05HddQ2DeT9mmyxWx4e881D1QbxUwDfF7jjJox+RhyefMSuzSsekEs
-         M/iIJkXpZS+e5yk8kE2xbx+lBYC8Aq/faTR+iVJ+31oYVPNLKGKY0UvhHu6vM125EYg+
-         zDfK3VXapLr2g9ql5NDNhyLcv9GNzfR2gssUdHMNz7VWwBPudPa/dZfx2c5EoeVDY51P
-         cG+tecAQ6vpM7ysIKF22xTYnFmXE2P1IbhYE52ZD8I4x2M8xoSPPlEK1+HkPx6mQw6pU
-         fJ0g==
-X-Gm-Message-State: AJIora82JtiDOQmbjmsJQ687AJMEnZ3QGcDc4OYjmk/ca9Br1FeAIj8D
-        2Av5uJbYgokJexNnYn7VIjCmuhxKg2m7epY6U8KAi/lbFn6RKkpq9Cwr6cUSna7StpiZkZLk1nm
-        yAdi2kn2I0a9cH8oTNDue7rn5uarNH7sTxnL1wmM3
-X-Received: by 2002:a05:6402:3551:b0:43a:a5c0:2fbc with SMTP id f17-20020a056402355100b0043aa5c02fbcmr4533859edd.288.1657284422067;
-        Fri, 08 Jul 2022 05:47:02 -0700 (PDT)
-X-Google-Smtp-Source: AGRyM1t0baia0qjnBRPMWggkVJVUHjsBDBJIk0iKohafPMy/4sJgj8fQu1EU9tbAdY4QzjAnUHsY+KoFz7Su7AFx8yk=
-X-Received: by 2002:a05:6402:3551:b0:43a:a5c0:2fbc with SMTP id
- f17-20020a056402355100b0043aa5c02fbcmr4533846edd.288.1657284421915; Fri, 08
- Jul 2022 05:47:01 -0700 (PDT)
+        Fri, 8 Jul 2022 08:48:15 -0400
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.21])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CA2C73922;
+        Fri,  8 Jul 2022 05:48:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1657284456;
+        bh=2oifC1piO8UrA5RD6gRdN5bklPa6gY2fh5BSHJmbwxI=;
+        h=X-UI-Sender-Class:Date:Subject:To:Cc:References:From:In-Reply-To;
+        b=gY1zx0EzZhRpeFKj2v6WyGFl44GFcPeiRc006HBcMP8J3NVqHYZ5Xs46WeKGlJyPo
+         OONBRczA7wqQQVJTSkY6KTfkeZSfv2ukD6B+bV5lh3kf6n+QFpJtm2K3OlbAFTf1y8
+         AcnwpNatfUdsx6AKKztLUiLRgvFLgpmFcIFqadYc=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from [192.168.20.60] ([92.116.171.120]) by mail.gmx.net (mrgmx105
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1MXGvG-1o4tp000dC-00YfQI; Fri, 08
+ Jul 2022 14:47:36 +0200
+Message-ID: <a665668a-4a10-d39e-d879-7f43aafad333@gmx.de>
+Date:   Fri, 8 Jul 2022 14:47:00 +0200
 MIME-Version: 1.0
-References: <20220620131618.952133-1-vdronov@redhat.com> <20220627195144.976741-1-vdronov@redhat.com>
- <YsfappxjOaj99WEV@gondor.apana.org.au>
-In-Reply-To: <YsfappxjOaj99WEV@gondor.apana.org.au>
-From:   Vlad Dronov <vdronov@redhat.com>
-Date:   Fri, 8 Jul 2022 14:46:51 +0200
-Message-ID: <CAMusb+Q=Y8CSAnHDF3W56s=SvqNKYV=EYQ9+J=Me35mCA8ZYig@mail.gmail.com>
-Subject: Re: [PATCH v3] crypto: fips - make proc files report fips module name
- and version
-To:     Herbert Xu <herbert@gondor.apana.org.au>
-Cc:     "David S . Miller" <davem@davemloft.net>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        linux-crypto@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
-        Simo Sorce <simo@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH v6 1/2] highmem: Make __kunmap_{local,atomic}() take
+ "const void *"
+Content-Language: en-US
+To:     Andrew Morton <akpm@linux-foundation.org>,
+        "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
+Cc:     David Sterba <dsterba@suse.com>, Chris Mason <clm@fb.com>,
+        Josef Bacik <josef@toxicpanda.com>,
+        Nick Terrell <terrelln@fb.com>, linux-btrfs@vger.kernel.org,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        Ira Weiny <ira.weiny@intel.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Kees Cook <keescook@chromium.org>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        "James E. J. Bottomley" <James.Bottomley@HansenPartnership.com>,
+        John David Anglin <dave.anglin@bell.net>,
+        linux-parisc@vger.kernel.org, David Sterba <dsterba@suse.cz>
+References: <20220706111520.12858-1-fmdefrancesco@gmail.com>
+ <20220706111520.12858-2-fmdefrancesco@gmail.com>
+ <20220706120712.31b4313f17cb7ae08618c90e@linux-foundation.org>
+From:   Helge Deller <deller@gmx.de>
+In-Reply-To: <20220706120712.31b4313f17cb7ae08618c90e@linux-foundation.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:mxaLCL8eT7tSvJnbIMGyZhGv6tob6iP9FCVQevHsK9zdzyMY+LV
+ f/cNx/A9qwklApoQaPBkepG+YxURZwrf10v/sf77ErAtg1z0vmEDVeZSaqmj+x+bIa7vsnN
+ iv4nzt/Ht+4cfiRu9XLCcq29qabamyXOs0/qydsVdroxagQvO4VAYeBTlo6p1zdPJ48MuX7
+ vIx3z5DeNODaOqp/EQGuw==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:k0uTu86fgK0=:rSa2j3/Xwq0fb+19DZDIbQ
+ FbNfrrTpSNR4BuG9FxPHFpskMQOj9z/NpeTY2u9wFCl36L1y5xOsrpbX/A+x35Q5BDkv+hgZZ
+ r84rhu6btQtT/flkWnrlkE9W3IYPksptQJylHTzVy9eO/hgIAUpVhOqwrHfzZndyhvh4mqo8u
+ WnWNfsQLtfVoIugwOpF6qwNc4yDPdfv1ncv+JIgXCzXmfgOWgb3RI1PvTYWQtQQI1o2glzA93
+ ByyFBe8YclOTPxV7c4M8f2P7+DtyTebzdZ63gjPURxz0KnoBtZgg/kihQB/wM6R2DnwPu8cEX
+ sjK+KNSQpfOef6lZR3dI4TIBgTaNYMn7J/5RzVzof49w3HpnM6QIdjXbRumoy2kUFkzPFAuNV
+ aT6DXE1t7EzfCdASbXgCynwD/HfwfiCNlDzBFRM2FzeLdk8oFJ1cPnsoeDgTnWYFI4H1Dn4YW
+ ubY/vUD2SnrEOZQUzIYTj/7QvTSqm/P6oiDidgKxiB2Zea5sb/0Ful0rL2TwzB44/KdWcZJcL
+ gn4MRCoCxY329Opg9F4Ppt3ZwodJHj9Lu3lTb8SmoC0RoWTzW8mfj4MCDzJPF67x9ZS5xsLI/
+ mw69TL+ZRbnVotnaorcEwj8DkgfhrewdkDBL9n45hX/zVTsiDe03HKHLG8rLCeqKJC3oPQyvn
+ LGJGKawd4jNowIlDsNO1oUAqumDrhBCz5wdTgI/9SAHJapkjRcsi4hKs1jvEWkTxR6+2/IlgK
+ BMrE1C3ADfNXH8eDDg5y67rDpASMd2hEAjYcJFcQb9p0rL4PgZFbVR+dudwHaH6ReCJL2BTBa
+ 9mARIcEdzGEvnRgqP/PG9EVKKdkjlrzaEJszVsXIIIFMnA+Q1o2hNoJIwTm09EFuv8puAVLgn
+ SpHCZqpFoyx+6vlpJJYYJPgAJXwy6yqIEHVxmg20SzjYCcH4n9e0/Ik8VTu94LP3yGwXuObNP
+ JE8rS8FQGdXFiWUQHM6xkJmqF5482OfLubW3B/U6w2r93PDegp/Uk0K5OzUkzHluHMesBaFFA
+ tshXCGJhhFp2vYLH4bAwxG3g7Ort30TgjWUner7hYcWtoay/dwC32o98xyHafIS24vxr5StHb
+ 8mWFazgIKvmvYklLTDOeD5fENvAVPIFct7hrmJY3aKV1vs2e/JWH8u87A==
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, Herbert,
-
-On Fri, Jul 8, 2022 at 10:27 AM Herbert Xu <herbert@gondor.apana.org.au> wrote:
+On 7/6/22 21:07, Andrew Morton wrote:
+> On Wed,  6 Jul 2022 13:15:19 +0200 "Fabio M. De Francesco" <fmdefrancesc=
+o@gmail.com> wrote:
 >
-> On Mon, Jun 27, 2022 at 09:51:44PM +0200, Vladis Dronov wrote:
-> >
-> > diff --git a/crypto/fips.c b/crypto/fips.c
-> > index 7b1d8caee669..d820f83cb878 100644
-> > --- a/crypto/fips.c
-> > +++ b/crypto/fips.c
-> > @@ -30,13 +30,37 @@ static int fips_enable(char *str)
-> >
-> >  __setup("fips=", fips_enable);
-> >
-> > +#define FIPS_MODULE_NAME CONFIG_CRYPTO_FIPS_NAME
-> > +#ifdef CONFIG_CRYPTO_FIPS_CUSTOM_VERSION
-> > +#define FIPS_MODULE_VERSION CONFIG_CRYPTO_FIPS_VERSION
-> > +#else
-> > +#define FIPS_MODULE_VERSION UTS_RELEASE
-> > +#endif
-> > +
-> > +static char fips_name[] = FIPS_MODULE_NAME;
-> > +static char fips_version[] = FIPS_MODULE_VERSION;
+>> __kunmap_ {local,atomic}() currently take pointers to void. However, th=
+is
+>> is semantically incorrect, since these functions do not change the memo=
+ry
+>> their arguments point to.
+>>
+>> Therefore, make this semantics explicit by modifying the
+>> __kunmap_{local,atomic}() prototypes to take pointers to const void.
+>>
+>> As a side effect, compilers will likely produce more efficient code.
+>>
 >
-> This doesn't compile for me because you need to include
-> generated/utsrelease.h.
+> Acked-by: Andrew Morton <akpm@linux-foundation.org>
 
-Dang, it does not build now indeed. I'm not sure how my previous
-build succeeded so I've assumed utsrelease.h is included in fips.c
-via some other .h file.
+Acked-by: Helge Deller <deller@gmx.de>  # parisc
 
-I've posted v4 to this same thread below, it just adds the "#include
-<generated/utsrelease.h>" line.
+> Please include this in the btrfs tree if/when [2/2] is added.
 
-I'm sorry for the noise.
+Yes, agreed. Please take both through btrfs.
 
-Best regards,
-Vladis Dronov | Red Hat, Inc. | The Core Kernel | Senior Software Engineer
-
+Helge

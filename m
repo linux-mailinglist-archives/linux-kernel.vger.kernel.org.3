@@ -2,73 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6DC8256B51D
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 11:09:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F3AD956B524
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 11:10:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237850AbiGHJIN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Jul 2022 05:08:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33040 "EHLO
+        id S237776AbiGHJKV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Jul 2022 05:10:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35174 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237847AbiGHJIK (ORCPT
+        with ESMTP id S237381AbiGHJKT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Jul 2022 05:08:10 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E664922BC6;
-        Fri,  8 Jul 2022 02:08:08 -0700 (PDT)
-Received: from kwepemi500013.china.huawei.com (unknown [172.30.72.53])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4LfS7w3r6BzhXYy;
-        Fri,  8 Jul 2022 17:06:36 +0800 (CST)
-Received: from [10.67.111.192] (10.67.111.192) by
- kwepemi500013.china.huawei.com (7.221.188.120) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Fri, 8 Jul 2022 17:08:05 +0800
-Message-ID: <bbca91f2-d770-af69-8e6d-bfd18c7f1ec1@huawei.com>
-Date:   Fri, 8 Jul 2022 17:08:04 +0800
+        Fri, 8 Jul 2022 05:10:19 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B5903DEC;
+        Fri,  8 Jul 2022 02:10:18 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id C03CFD6E;
+        Fri,  8 Jul 2022 02:10:18 -0700 (PDT)
+Received: from [10.57.42.20] (unknown [10.57.42.20])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 5A03E3F792;
+        Fri,  8 Jul 2022 02:10:17 -0700 (PDT)
+Message-ID: <b9da8d22-6896-68a3-b4e5-e8fd7b82b711@arm.com>
+Date:   Fri, 8 Jul 2022 10:10:15 +0100
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Subject: Re: [PATCH bpf-next v6 4/4] bpf, arm64: bpf trampoline for arm64
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH] perf/core: Add macros for possible
+ sysctl_perf_event_paranoid values
 Content-Language: en-US
-To:     Jean-Philippe Brucker <jean-philippe@linaro.org>
-CC:     <bpf@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <netdev@vger.kernel.org>,
+To:     Anshuman Khandual <anshuman.khandual@arm.com>,
+        linux-kernel@vger.kernel.org
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
         Mark Rutland <mark.rutland@arm.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Zi Shen Lim <zlim.lnx@gmail.com>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        "David S . Miller" <davem@davemloft.net>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        David Ahern <dsahern@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, <x86@kernel.org>,
-        "H . Peter Anvin" <hpa@zytor.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        Russell King <rmk+kernel@armlinux.org.uk>,
-        James Morse <james.morse@arm.com>,
-        Hou Tao <houtao1@huawei.com>,
-        Jason Wang <wangborong@cdjrlc.com>
-References: <20220625161255.547944-1-xukuohai@huawei.com>
- <20220625161255.547944-5-xukuohai@huawei.com> <YscL4t1pYHYApIiK@larix>
- <a24109d5-b79a-99de-0fd5-66b0ec34e5ed@huawei.com> <YsfptiexC0wFABFL@myrica>
-From:   Xu Kuohai <xukuohai@huawei.com>
-In-Reply-To: <YsfptiexC0wFABFL@myrica>
-Content-Type: text/plain; charset="UTF-8"
+        linux-perf-users@vger.kernel.org
+References: <20220701063949.1769434-1-anshuman.khandual@arm.com>
+From:   James Clark <james.clark@arm.com>
+In-Reply-To: <20220701063949.1769434-1-anshuman.khandual@arm.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.67.111.192]
-X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
- kwepemi500013.china.huawei.com (7.221.188.120)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,81 +50,133 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 7/8/2022 4:24 PM, Jean-Philippe Brucker wrote:
-> On Fri, Jul 08, 2022 at 12:35:33PM +0800, Xu Kuohai wrote:
->>>> +
->>>> +	emit(A64_ADD_I(1, A64_R(0), A64_SP, args_off), ctx);
->>>> +	if (!p->jited)
->>>> +		emit_addr_mov_i64(A64_R(1), (const u64)p->insnsi, ctx);
->>>> +
->>>> +	emit_call((const u64)p->bpf_func, ctx);
->>>> +
->>>> +	/* store return value */
->>>> +	if (save_ret)
->>>> +		emit(A64_STR64I(r0, A64_SP, retval_off), ctx);
->>>
->>> Here too I think it should be x0. I'm guessing r0 may work for jitted
->>> functions but not interpreted ones
->>>
->>
->> Yes, r0 is only correct for jitted code, will fix it to:
->>
->> if (save_ret)
->>         emit(A64_STR64I(p->jited ? r0 : A64_R(0), A64_SP, retval_off),
->>              ctx);
-> 
-> I don't think we need this test because x0 should be correct in all cases.
-> x7 happens to equal x0 when jitted due to the way build_epilogue() builds
-> the function at the moment, but we shouldn't rely on that.
-> 
-> 
->>>> +	if (flags & BPF_TRAMP_F_CALL_ORIG) {
->>>> +		restore_args(ctx, args_off, nargs);
->>>> +		/* call original func */
->>>> +		emit(A64_LDR64I(A64_R(10), A64_SP, retaddr_off), ctx);
->>>> +		emit(A64_BLR(A64_R(10)), ctx);
->>>
->>> I don't think we can do this when BTI is enabled because we're not jumping
->>> to a BTI instruction. We could introduce one in a patched BPF function
->>> (there currently is one if CONFIG_ARM64_PTR_AUTH_KERNEL), but probably not
->>> in a kernel function.
->>>
->>> We could fo like FUNCTION_GRAPH_TRACER does and return to the patched
->>> function after modifying its LR. Not sure whether that works with pointer
->>> auth though.
->>>
->>
->> Yes, the blr instruction should be replaced with ret instruction, thanks!
->>
->> The layout for bpf prog and regular kernel function is as follows, with
->> bti always coming first and paciasp immediately after patchsite, so the
->> ret instruction should work in all cases.
->>
->> bpf prog or kernel function:
->>         bti c // if BTI
->>         mov x9, lr
->>         bl <trampoline>    ------> trampoline:
->>                                            ...
->>                                            mov lr, <return_entry>
->>                                            mov x10, <ORIG_CALL_entry>
->> ORIG_CALL_entry:           <-------        ret x10
->>                                    return_entry:
->>                                            ...
->>         paciasp // if PA
->>         ...
-> 
-> Actually I just noticed that CONFIG_ARM64_BTI_KERNEL depends on
-> CONFIG_ARM64_PTR_AUTH_KERNEL, so we should be able to rely on there always
-> being a PACIASP at ORIG_CALL_entry, and since it's a landing pad for BLR
-> we don't need to make this a RET
-> 
->  92e2294d870b ("arm64: bti: Support building kernel C code using BTI")
-> 
 
-oh, yeah, thanks
 
-> Thanks,
-> Jean
+On 01/07/2022 07:39, Anshuman Khandual wrote:
+> sysctl_perf_event_paranoid can have values from [-1, 0, 1, 2] which decides
+> on perf event restrictions for unprivileged users. But using them directly
+> makes it difficult to correlate exact restriction level they might impose.
+> This just adds macros for those numerical restriction values, making them
+> clear and improving readability.
 > 
-> .
+> Cc: Peter Zijlstra <peterz@infradead.org>
+> Cc: Ingo Molnar <mingo@redhat.com>
+> Cc: Arnaldo Carvalho de Melo <acme@kernel.org>
+> Cc: Mark Rutland <mark.rutland@arm.com>
+> Cc: linux-perf-users@vger.kernel.org
+> Cc: linux-kernel@vger.kernel.org
+> Signed-off-by: Anshuman Khandual <anshuman.khandual@arm.com>
+> ---
+>  include/linux/perf_event.h | 22 ++++++++++++++++++----
+>  kernel/events/core.c       |  9 +--------
+>  kernel/kallsyms.c          |  3 ++-
+>  3 files changed, 21 insertions(+), 13 deletions(-)
+> 
+> diff --git a/include/linux/perf_event.h b/include/linux/perf_event.h
+> index da759560eec5..78156b9154df 100644
+> --- a/include/linux/perf_event.h
+> +++ b/include/linux/perf_event.h
+> @@ -1359,14 +1359,28 @@ int perf_event_max_stack_handler(struct ctl_table *table, int write,
+>  #define PERF_SECURITY_KERNEL		2
+>  #define PERF_SECURITY_TRACEPOINT	3
+>  
+> +/*
+> + * perf event paranoia level:
+> + *  -1 - not paranoid at all
+> + *   0 - disallow raw tracepoint access for unpriv
+> + *   1 - disallow cpu events for unpriv
+> + *   2 - disallow kernel profiling for unpriv
+> + */
+> +enum {
+> +	PERF_EVENT_DISALLOW_NONE	= -1,
+> +	PERF_EVENT_DISALLOW_TRACE,
+> +	PERF_EVENT_DISALLOW_CPU,
+> +	PERF_EVENT_DISALLOW_KERNEL
+> +};
+> +
+>  static inline int perf_is_paranoid(void)
+>  {
+> -	return sysctl_perf_event_paranoid > -1;
+> +	return sysctl_perf_event_paranoid > PERF_EVENT_DISALLOW_NONE;
+>  }
+>  
 
+Hi Anshuman,
+
+There are quite a few other instances of integers left in the tools code.
+If you search for perf_event_paranoid_check() and perf_event_paranoid()
+you will find them.
+
+I'm also wondering if it makes sense to return your new enum from all of
+the helper functions instead of an int and make it explicit that it's
+an instance of this new type? Although the compiler doesn't seem to warn
+about using integers so maybe it's not worth doing this.
+
+James
+
+>  static inline int perf_allow_kernel(struct perf_event_attr *attr)
+>  {
+> -	if (sysctl_perf_event_paranoid > 1 && !perfmon_capable())
+> +	if (sysctl_perf_event_paranoid >= PERF_EVENT_DISALLOW_KERNEL && !perfmon_capable())
+>  		return -EACCES;
+>  
+>  	return security_perf_event_open(attr, PERF_SECURITY_KERNEL);
+> @@ -1374,7 +1388,7 @@ static inline int perf_allow_kernel(struct perf_event_attr *attr)
+>  
+>  static inline int perf_allow_cpu(struct perf_event_attr *attr)
+>  {
+> -	if (sysctl_perf_event_paranoid > 0 && !perfmon_capable())
+> +	if (sysctl_perf_event_paranoid >= PERF_EVENT_DISALLOW_CPU && !perfmon_capable())
+>  		return -EACCES;
+>  
+>  	return security_perf_event_open(attr, PERF_SECURITY_CPU);
+> @@ -1382,7 +1396,7 @@ static inline int perf_allow_cpu(struct perf_event_attr *attr)
+>  
+>  static inline int perf_allow_tracepoint(struct perf_event_attr *attr)
+>  {
+> -	if (sysctl_perf_event_paranoid > -1 && !perfmon_capable())
+> +	if (sysctl_perf_event_paranoid >= PERF_EVENT_DISALLOW_TRACE && !perfmon_capable())
+>  		return -EPERM;
+>  
+>  	return security_perf_event_open(attr, PERF_SECURITY_TRACEPOINT);
+> diff --git a/kernel/events/core.c b/kernel/events/core.c
+> index 80782cddb1da..6fdfdc731bab 100644
+> --- a/kernel/events/core.c
+> +++ b/kernel/events/core.c
+> @@ -408,14 +408,7 @@ static struct srcu_struct pmus_srcu;
+>  static cpumask_var_t perf_online_mask;
+>  static struct kmem_cache *perf_event_cache;
+>  
+> -/*
+> - * perf event paranoia level:
+> - *  -1 - not paranoid at all
+> - *   0 - disallow raw tracepoint access for unpriv
+> - *   1 - disallow cpu events for unpriv
+> - *   2 - disallow kernel profiling for unpriv
+> - */
+> -int sysctl_perf_event_paranoid __read_mostly = 2;
+> +int sysctl_perf_event_paranoid __read_mostly = PERF_EVENT_DISALLOW_KERNEL;
+>  
+>  /* Minimum for 512 kiB + 1 user control page */
+>  int sysctl_perf_event_mlock __read_mostly = 512 + (PAGE_SIZE / 1024); /* 'free' kiB per user */
+> diff --git a/kernel/kallsyms.c b/kernel/kallsyms.c
+> index fbdf8d3279ac..705f7d7d81dc 100644
+> --- a/kernel/kallsyms.c
+> +++ b/kernel/kallsyms.c
+> @@ -18,6 +18,7 @@
+>  #include <linux/fs.h>
+>  #include <linux/kdb.h>
+>  #include <linux/err.h>
+> +#include <linux/perf_event.h>
+>  #include <linux/proc_fs.h>
+>  #include <linux/sched.h>	/* for cond_resched */
+>  #include <linux/ctype.h>
+> @@ -803,7 +804,7 @@ static inline int kallsyms_for_perf(void)
+>  {
+>  #ifdef CONFIG_PERF_EVENTS
+>  	extern int sysctl_perf_event_paranoid;
+> -	if (sysctl_perf_event_paranoid <= 1)
+> +	if (sysctl_perf_event_paranoid <= PERF_EVENT_DISALLOW_CPU)
+>  		return 1;
+>  #endif
+>  	return 0;

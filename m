@@ -2,201 +2,163 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D7A8956B208
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 07:01:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 94B1956B21C
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 07:05:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237400AbiGHEtx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Jul 2022 00:49:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51656 "EHLO
+        id S237009AbiGHFFD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Jul 2022 01:05:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35740 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237377AbiGHEtY (ORCPT
+        with ESMTP id S229957AbiGHFFA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Jul 2022 00:49:24 -0400
-Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BE9E76EAF
-        for <linux-kernel@vger.kernel.org>; Thu,  7 Jul 2022 21:49:21 -0700 (PDT)
-Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-31c936387fbso94006627b3.2
-        for <linux-kernel@vger.kernel.org>; Thu, 07 Jul 2022 21:49:21 -0700 (PDT)
+        Fri, 8 Jul 2022 01:05:00 -0400
+Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A778675AA
+        for <linux-kernel@vger.kernel.org>; Thu,  7 Jul 2022 22:04:59 -0700 (PDT)
+Received: by mail-pf1-x42a.google.com with SMTP id y9so8390940pff.12
+        for <linux-kernel@vger.kernel.org>; Thu, 07 Jul 2022 22:04:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
-         :cc;
-        bh=6xul3k/V0LAkdN8g3oGpIo31VJu1MYmTbIXu79NJSDg=;
-        b=aDpNy+75E3mcPP7KBpLgdT1SAr2dHsw4eslbdLBX/r7lYjiVoZ5cmPc2M43Pj11P3f
-         kch7BTM4NXRiKbDt1CEtWwTky4QK7BNwrceAWe9L9iFHFzGmyZzFCSebngXHlz23wP07
-         8Zc9T9OuQq6Yx/2mKR3gkcZLHi1ZzV/cJBz8V4q8XyVlgDx7yYZfuO9k0BvSms5Mwipp
-         7XBGBkrrqobYx+QyXkcvyy3n/4lqHSpK6HIVBByT1kcqKGdFNhBYVXNiyaG+gXOukYDq
-         zHsgIg6IueqEnTtY1qwpCH6I9VzIQaGjYPPtIk8pdO9eXemcYgGF58/en3Ub4BCrsYgi
-         tOZQ==
+        d=gmail.com; s=20210112;
+        h=references:user-agent:from:to:cc:subject:date:in-reply-to
+         :message-id:mime-version;
+        bh=zIEl5tMY+9vBsh6WFIJ3m1tpOczyfy8m3a0O0+lcfTs=;
+        b=PyfAo3s3EsSZYj4QyvoZaTv3sL8JV0QnFICCqe5AQUAWpJ6ddroW9pc8GJw9tC4Fhm
+         dKAGznSzVnwEuwVE2a1my38PC8B9q31YVnB7YxX3TSkc5IT70/3/vmlu1wPeBdF5GyAs
+         To5WsmV1LBk+G7DI9esgU9sMpqw3jzxOAJ68SNVse8bJSiC9/kRS9C7zmlLGh2W0VYbt
+         JoZKESulrrhjht7CFfNV7iT7//JpPKx0qMg+GZ4CfJJf1BsQnp1n5oahQwnwnaoQY3Jl
+         D75BIx8V3jcIksMyYyGGHPbGnbKqfFVHAQ7cFXrOkoFNnCc7SUi8Ve1WF7W3QsavWQly
+         zaNw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
-         :references:subject:from:to:cc;
-        bh=6xul3k/V0LAkdN8g3oGpIo31VJu1MYmTbIXu79NJSDg=;
-        b=nCCchZ++mY2yLgnA5jLfsHCc5CKNu4icUfznBO0V+JCPsaoEumEPrSqnAG9QL3tfHH
-         6dL5T4Qd3D49Ej7renfsMPt8MiHVb/agxCmqbHeZFo+qxEkMhrRtGgiT+Wm7aJxJYOCE
-         42ssc8utq09IbFqBsopjpe1IRv27wCfd5gZ4fiWUbllXDIagsSonPDeqeo6fkOXKtr42
-         e6kZZtFsYFX+WcIXRjS893m4aSv6KtJh6mzAVjOz1yNg9AsVb6L8ABi7fANhs9vqAKyJ
-         B1+q7K4VwpUMroYC4GQurKcg9YSNENnvp/3MZCL/RmVXRRNIRm+f67pUXCs7SsLhal4H
-         vlRQ==
-X-Gm-Message-State: AJIora8j23cE5lExS35uES9YgHyBTfqAd/V1gJgt+Aq00BPSjQIPuoNN
-        Yskcu5cleTloUDDh41L+1pwARvgkT3UAtg==
-X-Google-Smtp-Source: AGRyM1vYICx6sgyLY0eIH4w2y44yetzDaPhW0JYcwhxcz1tqUNq1ZpnKz/fW69P77v4SNqIXkp2pqBHUOkQkNg==
-X-Received: from slicestar.c.googlers.com ([fda3:e722:ac3:cc00:4f:4b78:c0a8:20a1])
- (user=davidgow job=sendgmr) by 2002:a05:6902:1508:b0:66d:212e:78c0 with SMTP
- id q8-20020a056902150800b0066d212e78c0mr1657158ybu.184.1657255761071; Thu, 07
- Jul 2022 21:49:21 -0700 (PDT)
-Date:   Fri,  8 Jul 2022 12:48:47 +0800
-In-Reply-To: <20220708044847.531566-1-davidgow@google.com>
-Message-Id: <20220708044847.531566-4-davidgow@google.com>
-Mime-Version: 1.0
-References: <20220708044847.531566-1-davidgow@google.com>
-X-Mailer: git-send-email 2.37.0.rc0.161.g10f37bed90-goog
-Subject: [PATCH v6 4/4] selftest: Taint kernel when test module loaded
-From:   David Gow <davidgow@google.com>
-To:     Brendan Higgins <brendanhiggins@google.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Kees Cook <keescook@chromium.org>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Nathan Chancellor <nathan@kernel.org>
-Cc:     David Gow <davidgow@google.com>,
-        "Guilherme G . Piccoli" <gpiccoli@igalia.com>,
-        Sebastian Reichel <sre@kernel.org>,
-        John Ogness <john.ogness@linutronix.de>,
-        Joe Fradley <joefradley@google.com>,
-        Daniel Latypov <dlatypov@google.com>,
-        kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        Lucas De Marchi <lucas.demarchi@intel.com>,
-        Aaron Tomlin <atomlin@redhat.com>,
-        linux-fsdevel@vger.kernel.org, linux-block@vger.kernel.org,
-        Michal Marek <michal.lkml@markovi.net>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        linux-kbuild@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        h=x-gm-message-state:references:user-agent:from:to:cc:subject:date
+         :in-reply-to:message-id:mime-version;
+        bh=zIEl5tMY+9vBsh6WFIJ3m1tpOczyfy8m3a0O0+lcfTs=;
+        b=uYhtIGIVaiWgKvdXCM9fFChLsaEoP+OsSUucURJDaNZuaf3l57PAesPN1Ql5yh4eKe
+         etm/5+4YJYL4J+/pGKnb4QcTY1DG6onSDTpQ3gVjHt6nJ0Zf4c5JG7M+ZL6sNfHrK9GD
+         1jaD0jYY0Oyk28X/cKC5CSBrybwsuVDOIELDcdcaMuBhGuqlk3UtNL52W7tKXNdf4BgL
+         9gp1d/DXsFpu18iLAo/5xegdx6qCcr7fZB/WaJBIfT4fz3r/WGGbCV+mY5RWTvKNsjWR
+         dzto+CXDQ20/MiwimcuCqrQlfKKWQuv08LcJ/wSz1fwWh6XWs0rgxQtF3cBb2bmMBQ+Y
+         WmPA==
+X-Gm-Message-State: AJIora/AzPIdmCoDTx7Muc1+3AuD2lLrI2sMbt9JB6P5oVMTsaMsZfwm
+        nZmV/bRvXmmA+LBu2NYt72vx0aqylDPqIQ==
+X-Google-Smtp-Source: AGRyM1tCPPrTG9HBvwURrlzqB1NujM4ycF44x72nAoLRZNMmNKIWG3ay3HG1ncxKVShDuJunDpHGZQ==
+X-Received: by 2002:a05:6a00:2181:b0:51b:560b:dd30 with SMTP id h1-20020a056a00218100b0051b560bdd30mr2076024pfi.44.1657256698591;
+        Thu, 07 Jul 2022 22:04:58 -0700 (PDT)
+Received: from MBP ([39.170.101.209])
+        by smtp.gmail.com with ESMTPSA id oa15-20020a17090b1bcf00b001ef8bf3c29fsm504726pjb.57.2022.07.07.22.04.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 07 Jul 2022 22:04:57 -0700 (PDT)
+References: <20220707165014.77127-1-schspa@gmail.com>
+ <20220707135329.08cf74b0@gandalf.local.home>
+User-agent: mu4e 1.6.10; emacs 27.2
+From:   Schspa Shi <schspa@gmail.com>
+To:     Steven Rostedt <rostedt@goodmis.org>
+Cc:     mingo@redhat.com, peterz@infradead.org, juri.lelli@redhat.com,
+        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
+        bsegall@google.com, mgorman@suse.de, bristot@redhat.com,
+        vschneid@redhat.com, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3] sched/rt: fix bad task migration for rt tasks
+Date:   Fri, 08 Jul 2022 12:51:14 +0800
+In-reply-to: <20220707135329.08cf74b0@gandalf.local.home>
+Message-ID: <m2h73snqja.fsf@gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; format=flowed
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Make any kselftest test module (using the kselftest_module framework)
-taint the kernel with TAINT_TEST on module load.
 
-Also mark the module as a test module using MODULE_INFO(test, "Y") so
-that other tools can tell this is a test module. We can't rely solely
-on this, though, as these test modules are also often built-in.
 
-Finally, update the kselftest documentation to mention that the kernel
-should be tainted, and how to do so manually (as below).
+Steven Rostedt <rostedt@goodmis.org> writes:
 
-Note that several selftests use kernel modules which are not based on
-the kselftest_module framework, and so will not automatically taint the
-kernel.
+> On Fri,  8 Jul 2022 00:50:14 +0800
+> Schspa Shi <schspa@gmail.com> wrote:
+>
+>> Please refer to the following scenarios.
+>
+> I'm not sure this is what is happening. Do you have a trace to 
+> back this up?
+>
 
-This can be done in two ways:
-- Moving the module to the tools/testing directory. All modules under
-  this directory will taint the kernel.
-- Adding the 'test' module property with:
-  MODULE_INFO(test, "Y")
+I don't have a trace. This is inferred from the exception log.
 
-Similarly, selftests which do not load modules into the kernel generally
-should not taint the kernel (or possibly should only do so on failure),
-as it's assumed that testing from user-space should be safe. Regardless,
-they can write to /proc/sys/kernel/tainted if required.
+>> 
+>>            CPU0                                  CPU1
+>> ------------------------------------------------------------------
+>> push_rt_task
+>>   check is_migration_disabled(next_task)
+>>                                         task not running and
+>>                                         migration_disabled == 0
+>>   find_lock_lowest_rq(next_task, rq);
+>>     _double_lock_balance(this_rq, busiest);
+>>       raw_spin_rq_unlock(this_rq);
+>>       double_rq_lock(this_rq, busiest);
+>>         <<wait for busiest rq>>
+>>                                             <wakeup>
+>
+> Here's the problem I have. next_task is queued on CPU0, 
+> (otherwise CPU0
+> would not be pushing it). As CPU0 is currently running 
+> push_rt_task, how
+> did next_task start running to set its migrate_disable flag?
 
-Reviewed-by: Luis Chamberlain <mcgrof@kernel.org>
-Acked-by: Brendan Higgins <brendanhiggins@google.com>
-Signed-off-by: David Gow <davidgow@google.com>
----
+THe next_task wasn't queued on CPU0, it's queued on CPU1 in this
+scenarios.
 
-Changes since v5:
-https://lore.kernel.org/linux-kselftest/20220702040959.3232874-4-davidgow@google.com/
-- Add Brendan's Acked-by tag.
+And it's because when task wakup, the rq argument is not the
+current running CPU rq, it's next_task's rq
+(i.e. CPU1's rq in this sample scenarios).
 
-Changes since v4:
-https://lore.kernel.org/lkml/20220513083212.3537869-3-davidgow@google.com/
-- Actually use the new TAINT_TEST name, instead of TAINT_KUNIT
-(Thanks, kernel-test-robot)
-- Document how to use this (or MODULE_INFO()) to taint the kernel.
-(Thanks, Luis)
-- Also add MODULE_INFO(test, "Y") to embed the fact that this is a
-test module into the .ko
-  - Nothing depends on it now, but it should allow us to tell this is
-a test module without executing it in the future.
+And you can check this with the Call trace from the crash log.
 
-No changes since v3:
-https://lore.kernel.org/lkml/20220513083212.3537869-3-davidgow@google.com/
+    [123671.996969] Call trace:
+    [123671.996975]  set_task_cpu+0x8c/0x108
+    [123671.996984]  push_rt_task.part.0+0x144/0x184
+    [123671.996995]  push_rt_tasks+0x28/0x3c
+    [123671.997002]  task_woken_rt+0x58/0x68
+    [123671.997009]  ttwu_do_wakeup+0x5c/0xd0
+    [123671.997019]  ttwu_do_activate+0xc0/0xd4
+    [123671.997028]  try_to_wake_up+0x244/0x288
+    [123671.997036]  wake_up_process+0x18/0x24
+    [123671.997045]  __irq_wake_thread+0x64/0x80
+    [123671.997056]  __handle_irq_event_percpu+0x110/0x124
 
----
- Documentation/dev-tools/kselftest.rst      | 9 +++++++++
- tools/testing/selftests/kselftest_module.h | 4 ++++
- 2 files changed, 13 insertions(+)
+Function ttwu_do_wakeup will lock the task's rq, not current 
+running
+cpu rq.
 
-diff --git a/Documentation/dev-tools/kselftest.rst b/Documentation/dev-tools/kselftest.rst
-index a833ecf12fbc..1096a9833550 100644
---- a/Documentation/dev-tools/kselftest.rst
-+++ b/Documentation/dev-tools/kselftest.rst
-@@ -250,6 +250,14 @@ assist writing kernel modules that are for use with kselftest:
- - ``tools/testing/selftests/kselftest_module.h``
- - ``tools/testing/selftests/kselftest/module.sh``
- 
-+Note that test modules should taint the kernel with TAINT_TEST. This will
-+happen automatically for modules which are in the ``tools/testing/``
-+directory, or for modules which use the ``kselftest_module.h`` header above.
-+Otherwise, you'll need to add ``MODULE_INFO(test, "Y")`` to your module
-+source. selftests which do not load modules typically should not taint the
-+kernel, but in cases where a non-test module is loaded, TEST_TAINT can be
-+applied from userspace by writing to ``/proc/sys/kernel/tainted``.
-+
- How to use
- ----------
- 
-@@ -308,6 +316,7 @@ A bare bones test module might look like this:
-    KSTM_MODULE_LOADERS(test_foo);
-    MODULE_AUTHOR("John Developer <jd@fooman.org>");
-    MODULE_LICENSE("GPL");
-+   MODULE_INFO(test, "Y");
- 
- Example test script
- -------------------
-diff --git a/tools/testing/selftests/kselftest_module.h b/tools/testing/selftests/kselftest_module.h
-index e2ea41de3f35..63cd7487373f 100644
---- a/tools/testing/selftests/kselftest_module.h
-+++ b/tools/testing/selftests/kselftest_module.h
-@@ -3,6 +3,7 @@
- #define __KSELFTEST_MODULE_H
- 
- #include <linux/module.h>
-+#include <linux/panic.h>
- 
- /*
-  * Test framework for writing test modules to be loaded by kselftest.
-@@ -41,6 +42,7 @@ static inline int kstm_report(unsigned int total_tests, unsigned int failed_test
- static int __init __module##_init(void)			\
- {							\
- 	pr_info("loaded.\n");				\
-+	add_taint(TAINT_TEST, LOCKDEP_STILL_OK);	\
- 	selftest();					\
- 	return kstm_report(total_tests, failed_tests, skipped_tests);	\
- }							\
-@@ -51,4 +53,6 @@ static void __exit __module##_exit(void)		\
- module_init(__module##_init);				\
- module_exit(__module##_exit)
- 
-+MODULE_INFO(test, "Y");
-+
- #endif	/* __KSELFTEST_MODULE_H */
+>
+> Even if it was woken up on another CPU and ran there, by setting
+> migrate_disable, it would not be put back to CPU0, because its
+> migrate_disable flag is set (if it is, then there's the bug).
+>
+
+It no needs to put it back to CPU0 for this issue, it's still on 
+CPU1.
+
+> After releasing the rq lock and retaking it, we check that the 
+> next_task is
+> still the next task on CPU0 to push.
+>
+>
+>>                                         task become running
+>>                                         migrate_disable();
+>>                                           <context out>
+>>   deactivate_task(rq, next_task, 0);
+>>   set_task_cpu(next_task, lowest_rq->cpu);
+>>     WARN_ON_ONCE(is_migration_disabled(p));
+>>       ---------OOPS-------------
+>
+> I don't see how this can happen.
+>
+> -- Steve
+
 -- 
-2.37.0.rc0.161.g10f37bed90-goog
-
+BRs
+Schspa Shi

@@ -2,111 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 48E4856BA07
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 14:49:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A5D556BA10
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 14:51:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237641AbiGHMsR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Jul 2022 08:48:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38074 "EHLO
+        id S237813AbiGHMt2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Jul 2022 08:49:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39596 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237469AbiGHMsP (ORCPT
+        with ESMTP id S237613AbiGHMt1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Jul 2022 08:48:15 -0400
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.21])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CA2C73922;
-        Fri,  8 Jul 2022 05:48:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1657284456;
-        bh=2oifC1piO8UrA5RD6gRdN5bklPa6gY2fh5BSHJmbwxI=;
-        h=X-UI-Sender-Class:Date:Subject:To:Cc:References:From:In-Reply-To;
-        b=gY1zx0EzZhRpeFKj2v6WyGFl44GFcPeiRc006HBcMP8J3NVqHYZ5Xs46WeKGlJyPo
-         OONBRczA7wqQQVJTSkY6KTfkeZSfv2ukD6B+bV5lh3kf6n+QFpJtm2K3OlbAFTf1y8
-         AcnwpNatfUdsx6AKKztLUiLRgvFLgpmFcIFqadYc=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from [192.168.20.60] ([92.116.171.120]) by mail.gmx.net (mrgmx105
- [212.227.17.168]) with ESMTPSA (Nemesis) id 1MXGvG-1o4tp000dC-00YfQI; Fri, 08
- Jul 2022 14:47:36 +0200
-Message-ID: <a665668a-4a10-d39e-d879-7f43aafad333@gmx.de>
-Date:   Fri, 8 Jul 2022 14:47:00 +0200
+        Fri, 8 Jul 2022 08:49:27 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFA0018375;
+        Fri,  8 Jul 2022 05:49:26 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 658B862731;
+        Fri,  8 Jul 2022 12:49:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 466F5C341C0;
+        Fri,  8 Jul 2022 12:49:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1657284565;
+        bh=y3uOgzP8/1oD6loS+5aG+kabJ0xwbf5tnpouDRqeJ9I=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=RLUvr3duWQ4+6vdOFSNT8z543LC7P0xRKqI6yHYtY1i4p0Cm7fnHAnkZCXDtQzZCa
+         ZPtyVWI9UnS1wQvzy3/8YIrd6h1PZ2pWlzVLc8uZ0Y+hv+cX9PtImuAgsPThL4DdJ1
+         Ntltfdvff7g+ac/EA6DlVwQ+OOI3vu9U6oC3Gvk4=
+Date:   Fri, 8 Jul 2022 14:49:22 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Khalid Masum <khalid.masum.92@gmail.com>
+Cc:     linux-kernel-mentees@lists.linuxfoundation.org,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Pavel Skripkin <paskripkin@gmail.com>,
+        Felipe Balbi <balbi@kernel.org>
+Subject: Re: [PATCH] usb: dwc3: Describe function parameter 'mult'
+Message-ID: <Ysgn0hxHkt3pvzAB@kroah.com>
+References: <20220703192448.13763-1-khalid.masum.92@gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH v6 1/2] highmem: Make __kunmap_{local,atomic}() take
- "const void *"
-Content-Language: en-US
-To:     Andrew Morton <akpm@linux-foundation.org>,
-        "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
-Cc:     David Sterba <dsterba@suse.com>, Chris Mason <clm@fb.com>,
-        Josef Bacik <josef@toxicpanda.com>,
-        Nick Terrell <terrelln@fb.com>, linux-btrfs@vger.kernel.org,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        Ira Weiny <ira.weiny@intel.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Kees Cook <keescook@chromium.org>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        "James E. J. Bottomley" <James.Bottomley@HansenPartnership.com>,
-        John David Anglin <dave.anglin@bell.net>,
-        linux-parisc@vger.kernel.org, David Sterba <dsterba@suse.cz>
-References: <20220706111520.12858-1-fmdefrancesco@gmail.com>
- <20220706111520.12858-2-fmdefrancesco@gmail.com>
- <20220706120712.31b4313f17cb7ae08618c90e@linux-foundation.org>
-From:   Helge Deller <deller@gmx.de>
-In-Reply-To: <20220706120712.31b4313f17cb7ae08618c90e@linux-foundation.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:mxaLCL8eT7tSvJnbIMGyZhGv6tob6iP9FCVQevHsK9zdzyMY+LV
- f/cNx/A9qwklApoQaPBkepG+YxURZwrf10v/sf77ErAtg1z0vmEDVeZSaqmj+x+bIa7vsnN
- iv4nzt/Ht+4cfiRu9XLCcq29qabamyXOs0/qydsVdroxagQvO4VAYeBTlo6p1zdPJ48MuX7
- vIx3z5DeNODaOqp/EQGuw==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:k0uTu86fgK0=:rSa2j3/Xwq0fb+19DZDIbQ
- FbNfrrTpSNR4BuG9FxPHFpskMQOj9z/NpeTY2u9wFCl36L1y5xOsrpbX/A+x35Q5BDkv+hgZZ
- r84rhu6btQtT/flkWnrlkE9W3IYPksptQJylHTzVy9eO/hgIAUpVhOqwrHfzZndyhvh4mqo8u
- WnWNfsQLtfVoIugwOpF6qwNc4yDPdfv1ncv+JIgXCzXmfgOWgb3RI1PvTYWQtQQI1o2glzA93
- ByyFBe8YclOTPxV7c4M8f2P7+DtyTebzdZ63gjPURxz0KnoBtZgg/kihQB/wM6R2DnwPu8cEX
- sjK+KNSQpfOef6lZR3dI4TIBgTaNYMn7J/5RzVzof49w3HpnM6QIdjXbRumoy2kUFkzPFAuNV
- aT6DXE1t7EzfCdASbXgCynwD/HfwfiCNlDzBFRM2FzeLdk8oFJ1cPnsoeDgTnWYFI4H1Dn4YW
- ubY/vUD2SnrEOZQUzIYTj/7QvTSqm/P6oiDidgKxiB2Zea5sb/0Ful0rL2TwzB44/KdWcZJcL
- gn4MRCoCxY329Opg9F4Ppt3ZwodJHj9Lu3lTb8SmoC0RoWTzW8mfj4MCDzJPF67x9ZS5xsLI/
- mw69TL+ZRbnVotnaorcEwj8DkgfhrewdkDBL9n45hX/zVTsiDe03HKHLG8rLCeqKJC3oPQyvn
- LGJGKawd4jNowIlDsNO1oUAqumDrhBCz5wdTgI/9SAHJapkjRcsi4hKs1jvEWkTxR6+2/IlgK
- BMrE1C3ADfNXH8eDDg5y67rDpASMd2hEAjYcJFcQb9p0rL4PgZFbVR+dudwHaH6ReCJL2BTBa
- 9mARIcEdzGEvnRgqP/PG9EVKKdkjlrzaEJszVsXIIIFMnA+Q1o2hNoJIwTm09EFuv8puAVLgn
- SpHCZqpFoyx+6vlpJJYYJPgAJXwy6yqIEHVxmg20SzjYCcH4n9e0/Ik8VTu94LP3yGwXuObNP
- JE8rS8FQGdXFiWUQHM6xkJmqF5482OfLubW3B/U6w2r93PDegp/Uk0K5OzUkzHluHMesBaFFA
- tshXCGJhhFp2vYLH4bAwxG3g7Ort30TgjWUner7hYcWtoay/dwC32o98xyHafIS24vxr5StHb
- 8mWFazgIKvmvYklLTDOeD5fENvAVPIFct7hrmJY3aKV1vs2e/JWH8u87A==
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220703192448.13763-1-khalid.masum.92@gmail.com>
+X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 7/6/22 21:07, Andrew Morton wrote:
-> On Wed,  6 Jul 2022 13:15:19 +0200 "Fabio M. De Francesco" <fmdefrancesc=
-o@gmail.com> wrote:
->
->> __kunmap_ {local,atomic}() currently take pointers to void. However, th=
-is
->> is semantically incorrect, since these functions do not change the memo=
-ry
->> their arguments point to.
->>
->> Therefore, make this semantics explicit by modifying the
->> __kunmap_{local,atomic}() prototypes to take pointers to const void.
->>
->> As a side effect, compilers will likely produce more efficient code.
->>
->
-> Acked-by: Andrew Morton <akpm@linux-foundation.org>
+On Mon, Jul 04, 2022 at 01:24:48AM +0600, Khalid Masum wrote:
+> Currently the parameter is not described. Which triggers warning when using
+> make htmldocs. Fix it by describing the parameter.
+> 
+> Signed-off-by: Khalid Masum <khalid.masum.92@gmail.com>
+> ---
+>  drivers/usb/dwc3/gadget.c | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
+> index 8716bece1072..e8c86b08cd83 100644
+> --- a/drivers/usb/dwc3/gadget.c
+> +++ b/drivers/usb/dwc3/gadget.c
+> @@ -657,6 +657,7 @@ static int dwc3_gadget_set_ep_config(struct dwc3_ep *dep, unsigned int action)
+>  /**
+>   * dwc3_gadget_calc_tx_fifo_size - calculates the txfifo size value
+>   * @dwc: pointer to the DWC3 context
+> + * @mult: multiplier, 'mult' value for SS Isoc EPs
+>   *
+>   * Calculates the size value based on the equation below:
+>   *
+> -- 
+> 2.36.1
+> 
 
-Acked-by: Helge Deller <deller@gmx.de>  # parisc
-
-> Please include this in the btrfs tree if/when [2/2] is added.
-
-Yes, agreed. Please take both through btrfs.
-
-Helge
+Does not apply to my usb-next branch :(

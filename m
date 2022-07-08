@@ -2,163 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A1DEF56AF83
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 03:07:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E819656AF8E
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 03:07:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235861AbiGHAlC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Jul 2022 20:41:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47126 "EHLO
+        id S236028AbiGHAoV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Jul 2022 20:44:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49416 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229572AbiGHAk7 (ORCPT
+        with ESMTP id S229572AbiGHAoS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Jul 2022 20:40:59 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBE5370E4F;
-        Thu,  7 Jul 2022 17:40:58 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 6BEA8CE276E;
-        Fri,  8 Jul 2022 00:40:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2F750C3411E;
-        Fri,  8 Jul 2022 00:40:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1657240855;
-        bh=IXsR/QrzvoIMkoWHmolTYwhwxD9j/FgCzzm8PhvI41I=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=BHrJ5+tCKYeD5Tmi/HULyLybxMAX92YkwnxJ0wQIUeGXK/c43NKQS8J8DqdH4Slh4
-         yC8A4kxW/vtHiPmC1kV/FRP0xkTRJ44kLgf9oUzp2m05sNm0dmQcmkBXy0BNOGvtJN
-         lw3ahGiwfRNWHCcUh3MMr95nBVCeQkUdV4kgaiGmAWrKRmm7Oktj/tFgeQGwJwHoNi
-         HGxcnEaS1lnd09pAWMYZacRdZVWa23boN/R2kX/dPum11+hIzPS7ziMtahUDHrA47o
-         BhTva9WGfwu3x1BSP1WTlaDWbkP9n6LXRxIR4nDTwss9wnlJFzH2AvMC9DSrDb1G0P
-         6ioLZ2kFcQCFQ==
-Date:   Thu, 7 Jul 2022 17:40:52 -0700
-From:   Nathan Chancellor <nathan@kernel.org>
-To:     David Gow <davidgow@google.com>
-Cc:     Brendan Higgins <brendanhiggins@google.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Kees Cook <keescook@chromium.org>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        "Guilherme G . Piccoli" <gpiccoli@igalia.com>,
-        Sebastian Reichel <sre@kernel.org>,
-        John Ogness <john.ogness@linutronix.de>,
-        Joe Fradley <joefradley@google.com>,
-        Daniel Latypov <dlatypov@google.com>,
-        kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        Lucas De Marchi <lucas.demarchi@intel.com>,
-        Aaron Tomlin <atomlin@redhat.com>,
-        linux-fsdevel@vger.kernel.org, linux-block@vger.kernel.org,
-        Michal Marek <michal.lkml@markovi.net>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        linux-kbuild@vger.kernel.org
-Subject: Re: [PATCH v5 2/4] module: panic: Taint the kernel when selftest
- modules load
-Message-ID: <Ysd9FG1fOSnzKv8d@dev-arch.thelio-3990X>
-References: <20220702040959.3232874-1-davidgow@google.com>
- <20220702040959.3232874-2-davidgow@google.com>
+        Thu, 7 Jul 2022 20:44:18 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83EE470E5B;
+        Thu,  7 Jul 2022 17:44:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1657241057; x=1688777057;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=c+P6YDMV9PRWXetSgJx/P+CHVW6L1Bzzbpwgy+7i05E=;
+  b=dKmy3z646rV18FCgEKYYffcZEFS/PI4oHSyb5xdW24i32NIZ4alEx1S/
+   rVM9ukpIU4zr03jzGsmJmFiU90SOYCrgzh9SVQ6dFF1H3kk0tjbuYzlXU
+   5FH73ZKzbn1DKnztunYYJT26fmRaAt/W9BBuqPRTPkT31W0dmRycqX/KG
+   Kd3KB1zteF5qVmC2ZRMlBeN84pU07oWM/O9ATNq9LK7YLmK2ZztiV7RxC
+   1bfJAt8QiMGVxkngMz/BC1XsQPmg5NbZiRPrsZoKnmN6kDO9QkpauOupU
+   UoQueqD6TaDWji288QA9hzWSAgCmwZhPn2IV8FlUak9gkkR96D98XKbUo
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10401"; a="309715477"
+X-IronPort-AV: E=Sophos;i="5.92,253,1650956400"; 
+   d="scan'208";a="309715477"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jul 2022 17:44:17 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.92,253,1650956400"; 
+   d="scan'208";a="626521925"
+Received: from lkp-server01.sh.intel.com (HELO 68b931ab7ac1) ([10.239.97.150])
+  by orsmga001.jf.intel.com with ESMTP; 07 Jul 2022 17:44:14 -0700
+Received: from kbuild by 68b931ab7ac1 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1o9c6P-000Mfb-PJ;
+        Fri, 08 Jul 2022 00:44:13 +0000
+Date:   Fri, 8 Jul 2022 08:43:24 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Aidan MacDonald <aidanmacdonald.0x0@gmail.com>,
+        paul@crapouillou.net, lgirdwood@gmail.com, broonie@kernel.org,
+        perex@perex.cz, tiwai@suse.com
+Cc:     kbuild-all@lists.01.org, linux-mips@vger.kernel.org,
+        alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 11/11] ASoC: jz4740-i2s: Refactor DAI probe/remove ops
+ as component ops
+Message-ID: <202207080814.p8h1it9G-lkp@intel.com>
+References: <20220707194655.312892-12-aidanmacdonald.0x0@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220702040959.3232874-2-davidgow@google.com>
+In-Reply-To: <20220707194655.312892-12-aidanmacdonald.0x0@gmail.com>
 X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Jul 02, 2022 at 12:09:57PM +0800, David Gow wrote:
-> Taint the kernel with TAINT_TEST whenever a test module loads, by adding
-> a new "TEST" module property, and setting it for all modules in the
-> tools/testing directory. This property can also be set manually, for
-> tests which live outside the tools/testing directory with:
-> MODULE_INFO(test, "Y");
-> 
-> Reviewed-by: Luis Chamberlain <mcgrof@kernel.org>
-> Signed-off-by: David Gow <davidgow@google.com>
-> ---
->  kernel/module/main.c  | 7 +++++++
->  scripts/mod/modpost.c | 3 +++
->  2 files changed, 10 insertions(+)
-> 
-> diff --git a/kernel/module/main.c b/kernel/module/main.c
-> index fed58d30725d..730503561eb0 100644
-> --- a/kernel/module/main.c
-> +++ b/kernel/module/main.c
-> @@ -1988,6 +1988,13 @@ static int check_modinfo(struct module *mod, struct load_info *info, int flags)
->  	/* Set up license info based on the info section */
->  	set_license(mod, get_modinfo(info, "license"));
->  
-> +	if (!get_modinfo(info, "test")) {
-> +		if (!test_taint(TAINT_TEST))
-> +			pr_warn_once("%s: loading test module taints kernel.\n",
-> +				     mod->name);
-> +		add_taint_module(mod, TAINT_TEST, LOCKDEP_STILL_OK);
-> +	}
-> +
->  	return 0;
->  }
->  
-> diff --git a/scripts/mod/modpost.c b/scripts/mod/modpost.c
-> index 29d5a841e215..5937212b4433 100644
-> --- a/scripts/mod/modpost.c
-> +++ b/scripts/mod/modpost.c
-> @@ -2191,6 +2191,9 @@ static void add_header(struct buffer *b, struct module *mod)
->  
->  	if (strstarts(mod->name, "drivers/staging"))
->  		buf_printf(b, "\nMODULE_INFO(staging, \"Y\");\n");
-> +
-> +	if (strstarts(mod->name, "tools/testing"))
-> +		buf_printf(b, "\nMODULE_INFO(test, \"Y\");\n");
->  }
->  
->  static void add_exported_symbols(struct buffer *buf, struct module *mod)
-> -- 
-> 2.37.0.rc0.161.g10f37bed90-goog
-> 
-> 
+Hi Aidan,
 
-Hi David,
+Thank you for the patch! Yet something to improve:
 
-This change has landed in linux-next as commit e20729ede7ed ("module:
-panic: taint the kernel when selftest modules load") and on all of my
-test machines, I see this new message printed, even though as far as I
-am aware, I am not loading any testing modules. For example, in QEMU, I
-see:
+[auto build test ERROR on broonie-sound/for-next]
+[cannot apply to linus/master v5.19-rc5 next-20220707]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-[    0.596978] serio: loading test module taints kernel.
+url:    https://github.com/intel-lab-lkp/linux/commits/Aidan-MacDonald/ASoC-cleanups-and-improvements-for-jz4740-i2s/20220708-034953
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/sound.git for-next
+config: s390-randconfig-m031-20220707 (https://download.01.org/0day-ci/archive/20220708/202207080814.p8h1it9G-lkp@intel.com/config)
+compiler: s390-linux-gcc (GCC) 11.3.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/d990302616fcc22f1e2a3b963c25fdec9d787251
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Aidan-MacDonald/ASoC-cleanups-and-improvements-for-jz4740-i2s/20220708-034953
+        git checkout d990302616fcc22f1e2a3b963c25fdec9d787251
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=s390 SHELL=/bin/bash sound/soc/jz4740/
 
-and on my Honeycomb LX2, I see:
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-[    5.400861] fuse: loading test module taints kernel.
+All errors (new ones prefixed by >>):
 
-It seems like the get_modinfo() check might be wrong? The following diff
-resolves it for me, I can send a formal patch if necessary (although it
-appears to have gone in via -mm so I assume Andrew can squash this in).
+   sound/soc/jz4740/jz4740-i2s.c: In function 'jz4740_i2s_probe':
+>> sound/soc/jz4740/jz4740-i2s.c:442:9: error: 'ret' undeclared (first use in this function); did you mean 'net'?
+     442 |         ret = clk_prepare_enable(i2s->clk_aic);
+         |         ^~~
+         |         net
+   sound/soc/jz4740/jz4740-i2s.c:442:9: note: each undeclared identifier is reported only once for each function it appears in
 
-Cheers,
-Nathan
 
-diff --git a/kernel/module/main.c b/kernel/module/main.c
-index 730503561eb0..4f91e41b8bc9 100644
---- a/kernel/module/main.c
-+++ b/kernel/module/main.c
-@@ -1988,7 +1988,7 @@ static int check_modinfo(struct module *mod, struct load_info *info, int flags)
- 	/* Set up license info based on the info section */
- 	set_license(mod, get_modinfo(info, "license"));
- 
--	if (!get_modinfo(info, "test")) {
-+	if (get_modinfo(info, "test")) {
- 		if (!test_taint(TAINT_TEST))
- 			pr_warn_once("%s: loading test module taints kernel.\n",
- 				     mod->name);
+vim +442 sound/soc/jz4740/jz4740-i2s.c
+
+   437	
+   438	static int jz4740_i2s_probe(struct snd_soc_component *component)
+   439	{
+   440		struct jz4740_i2s *i2s = snd_soc_component_get_drvdata(component);
+   441	
+ > 442		ret = clk_prepare_enable(i2s->clk_aic);
+   443		if (ret)
+   444			return ret;
+   445	
+   446		regmap_write(i2s->regmap, JZ_REG_AIC_CONF, JZ_AIC_CONF_RESET);
+   447	
+   448		regmap_write(i2s->regmap, JZ_REG_AIC_CONF,
+   449			     JZ_AIC_CONF_OVERFLOW_PLAY_LAST |
+   450			     JZ_AIC_CONF_I2S | JZ_AIC_CONF_INTERNAL_CODEC);
+   451	
+   452		regmap_field_write(i2s->field_rx_fifo_thresh, 7);
+   453		regmap_field_write(i2s->field_tx_fifo_thresh, 8);
+   454	
+   455		return 0;
+   456	}
+   457	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

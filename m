@@ -2,240 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 11F9A56C32F
-	for <lists+linux-kernel@lfdr.de>; Sat,  9 Jul 2022 01:14:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8AC6D56C26A
+	for <lists+linux-kernel@lfdr.de>; Sat,  9 Jul 2022 01:13:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239765AbiGHSvK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Jul 2022 14:51:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43290 "EHLO
+        id S239245AbiGHSyS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Jul 2022 14:54:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46774 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238951AbiGHSvJ (ORCPT
+        with ESMTP id S238146AbiGHSyR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Jul 2022 14:51:09 -0400
-Received: from mail-oa1-f50.google.com (mail-oa1-f50.google.com [209.85.160.50])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B6991F622;
-        Fri,  8 Jul 2022 11:51:08 -0700 (PDT)
-Received: by mail-oa1-f50.google.com with SMTP id 586e51a60fabf-10c0119dd16so19327969fac.6;
-        Fri, 08 Jul 2022 11:51:08 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=QKBnPVbAi9JjRpPAaVbdkPlqRXpWIKRAY3cWemlixrk=;
-        b=aUbSiNvwmx6Ez25WYSk9W2cYhQ62dAPr90XXSlQjB6KNl2nMFwiK3fDcunVw5Ig16c
-         RbhsKHSlGqhZ1dpBIBtb5QLffjSsyAUO1Weo7+IFhu0f7LrjkBl0hpAXF/lEB8n5fJqm
-         qdr1Jf6ndwb/9kQP1OgTA/VAFTVek/K+m/gC3XfxIzoKn/xnQKFiPWYmGcRr+Fs6DQv+
-         BhGfAkptcFbIsbRLvWnClT3l/FCgpBDjhvdFIH97f8GJgG7PhuN5xOvC+43su0uQnOwk
-         ZeHy8XIhPPKGkXpn4dS47xjO4MmNKrCkoJmLo6+LRAua0na6E/XFlswBHNP5QqL/xddj
-         14lw==
-X-Gm-Message-State: AJIora/EW8+hqKHSyK7iwNPmV1NvTyvVthjDlp13zrTO3ba642Zys8bX
-        IMsnsn7CXwAitnzPPZXKvibBPxmbpRPDbZEwaWw=
-X-Google-Smtp-Source: AGRyM1uAUEAp4sDW3fQy4rhjT7eelrc+zNoIqnLU0R/sBFHVpxV8n4q0fvXje92ZqE1Jie9jS9v4XI2+Zng/I9yGFPc=
-X-Received: by 2002:a05:6870:a182:b0:10b:efbe:e65d with SMTP id
- a2-20020a056870a18200b0010befbee65dmr768547oaf.5.1657306267508; Fri, 08 Jul
- 2022 11:51:07 -0700 (PDT)
+        Fri, 8 Jul 2022 14:54:17 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1476E18376
+        for <linux-kernel@vger.kernel.org>; Fri,  8 Jul 2022 11:54:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1657306457; x=1688842457;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=b23vSjsdeOkIyTIQwYwog34KD9buj9nWZwXKb+E8F1M=;
+  b=jgCGVHTEaeKjgxg0c5o1ZCAtIJVkv0AZK6o6ByBNoHyTGStgDNhBc0JD
+   4MUGp4yWSh2seXGw5k9MBrjn0L5nOOYPKDtUMjX8WH16ydDSYEblk+WQw
+   R4I3zcD4igkOCQ8YeRMhRxEFVfnfcL8F5tSl9uBqYNasuNzXhB4MiyCQH
+   KJQYPCvnEXBD7KlVEqqVIO+S3cTqLK7G0kYSd9k2zx3zx//Y/XpvJI+Xp
+   TbP3iEDmTbZ0GB0gjUm8y3IsXUdvuy0xG/A5/5PCYTD/+EIveppd0oW5Z
+   avdeSP3XX5j39/BetByeTEhnAJ0+01ZiWkR4BQ/bxSRGBb7mg4LxK4cEd
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10402"; a="285472827"
+X-IronPort-AV: E=Sophos;i="5.92,256,1650956400"; 
+   d="scan'208";a="285472827"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jul 2022 11:54:16 -0700
+X-IronPort-AV: E=Sophos;i="5.92,256,1650956400"; 
+   d="scan'208";a="626796171"
+Received: from yyan2-mobl2.amr.corp.intel.com (HELO [10.212.242.16]) ([10.212.242.16])
+  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jul 2022 11:54:16 -0700
+Message-ID: <2e4d0193-1c5a-ec30-53a1-8009370cde36@intel.com>
+Date:   Fri, 8 Jul 2022 11:54:07 -0700
 MIME-Version: 1.0
-References: <20220707215606.2409166-1-rsilvera@google.com>
-In-Reply-To: <20220707215606.2409166-1-rsilvera@google.com>
-From:   Namhyung Kim <namhyung@kernel.org>
-Date:   Fri, 8 Jul 2022 11:50:56 -0700
-Message-ID: <CAM9d7cgcvQTZWPFh+ebC-68CrjuQDw5C8biko+KtWPtN9gYT7Q@mail.gmail.com>
-Subject: Re: [PATCH v2] perf inject: Add a command line option to specify
- build ids
-To:     Raul Silvera <rsilvera@google.com>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        linux-perf-users <linux-perf-users@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH] x86/mm/tlb: ignore f->new_tlb_gen when zero
+Content-Language: en-US
+To:     Nadav Amit <namit@vmware.com>
+Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Hugh Dickins <hughd@google.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        "x86@kernel.org" <x86@kernel.org>, Linux MM <linux-mm@kvack.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Andy Lutomirski <luto@kernel.org>
+References: <20220708003053.158480-1-namit@vmware.com>
+ <c5edb95c-3ca3-9339-47d6-6304f9bfd708@intel.com>
+ <4F7D1BBF-9695-4DE2-A40E-2D2546B2BAAE@vmware.com>
+From:   Dave Hansen <dave.hansen@intel.com>
+In-Reply-To: <4F7D1BBF-9695-4DE2-A40E-2D2546B2BAAE@vmware.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Raul,
+On 7/8/22 10:04, Nadav Amit wrote:
+> On Jul 8, 2022, at 7:49 AM, Dave Hansen <dave.hansen@intel.com> wrote:
+>> On 7/7/22 17:30, Nadav Amit wrote:
+>> You might want to fix the clock on the system from which you sent this.
+>> I was really scratching my head trying to figure out how you got this
+>> patch out before Hugh's bug report.
+>>
+>>> From: Nadav Amit <namit@vmware.com>
+>>>
+>>> Commit aa44284960d5 ("x86/mm/tlb: Avoid reading mm_tlb_gen when
+>>> possible") introduced an optimization of skipping the flush if the TLB
+>>> generation that is flushed (as provided in flush_tlb_info) was already
+>>> flushed.
+>>>
+>>> However, arch_tlbbatch_flush() does not provide any generation in
+>>> flush_tlb_info. As a result, try_to_unmap_one() would not perform any
+>>> TLB flushes.
+>>>
+>>> Fix it by checking whether f->new_tlb_gen is nonzero. Zero value is
+>>> anyhow is an invalid generation value.
+>>
+>> It is, but the check below uses 'f->end == TLB_FLUSH_ALL' as the marker
+>> for f->new_tlb_gen being invalid.  Being consistent seems like a good
+>> idea on this stuff.
+> 
+> If we get a request to do a flush, regardless whether full or partial,
+> that logically we have already done, there is not reason to do it.
+> 
+> I therefore do not see a reason to look on f->end. I think that looking
+> at the generation is very intuitive. If you want, I can add a constant
+> such as TLB_GENERATION_INVALID.
 
-On Thu, Jul 7, 2022 at 2:56 PM Raul Silvera <rsilvera@google.com> wrote:
->
-> This commit adds the option --known-build-ids to perf inject.
-> It allows the user to explicitly specify the build id for a given
-> path, instead of retrieving it from the current system. This is
-> useful in cases where a perf.data file is processed on a different
-> system from where it was collected, or if some of the binaries are
-> no longer available.
->
-> The build ids and paths are specified in pairs in the command line.
-> Using the file:// specifier, build ids can be loaded from a file
-> directly generated by perf buildid-list. This is convenient to copy
-> build ids from one perf.data file to another.
->
-> ** Example: In this example we use perf record to create two
-> perf.data files, one with build ids and another without, and use
-> perf buildid-list and perf inject to copy the build ids from the
-> first file to the second.
->
->  $ perf record ls /tmp
->  $ perf record --no-buildid -o perf.data.no-buildid ls /tmp
->  $ perf buildid-list > /tmp/build-ids.txt
->  $ perf inject -b --known-build-ids='file:///tmp/build-ids.txt' \
->         -i perf.data.no-buildid -o perf.data.buildid
+That's a good point.
 
-Please add documentation for new options.  Some nit pickings below.
+But, _my_ point was that there was only really one read site of
+f->new_tlb_gen in flush_tlb_func().  That site is guarded by the "f->end
+!= TLB_FLUSH_ALL" check which prevented it from making the same error
+that your patch did.
 
->
-> Signed-off-by: Raul Silvera <rsilvera@google.com>
-> ---
->  V1 -> V2: Cleaned up patch description, deleted the strlist during
->            cleanup, and updated validation of the build id strings
->
->  tools/perf/builtin-inject.c | 60 +++++++++++++++++++++++++++++++++++++
->  1 file changed, 60 insertions(+)
->
-> diff --git a/tools/perf/builtin-inject.c b/tools/perf/builtin-inject.c
-> index a75bf11585b5..4efb992ed1a0 100644
-> --- a/tools/perf/builtin-inject.c
-> +++ b/tools/perf/builtin-inject.c
-> @@ -21,6 +21,7 @@
->  #include "util/data.h"
->  #include "util/auxtrace.h"
->  #include "util/jit.h"
-> +#include "util/string2.h"
->  #include "util/symbol.h"
->  #include "util/synthetic-events.h"
->  #include "util/thread.h"
-> @@ -35,6 +36,7 @@
->
->  #include <linux/list.h>
->  #include <linux/string.h>
-> +#include <ctype.h>
->  #include <errno.h>
->  #include <signal.h>
->
-> @@ -59,6 +61,8 @@ struct perf_inject {
->         struct itrace_synth_opts itrace_synth_opts;
->         char                    event_copy[PERF_SAMPLE_MAX_SIZE];
->         struct perf_file_section secs[HEADER_FEAT_BITS];
-> +       const char              *known_build_ids_source;
+Whatever we do, it would be nice to have a *single* way to check for
+"does f->new_tlb_gen have an actual, valid bit of tlb gen data in it?"
 
-Nit: It doesn't need to be here.  You can use a local variable in
-cmd_inject for parsing.
+Using something like TLB_GENERATION_INVALID seems reasonable to me.
 
-
-> +       struct strlist          *known_build_ids;
->  };
->
->  struct event_entry {
-> @@ -570,9 +574,45 @@ static int dso__read_build_id(struct dso *dso)
->         return dso->has_build_id ? 0 : -1;
->  }
->
-> +static bool perf_inject__lookup_known_build_id(struct perf_inject *inject,
-> +                                              struct dso *dso)
-> +{
-> +       struct str_node *pos;
-> +       int bid_len;
-> +
-> +       strlist__for_each_entry(pos, inject->known_build_ids) {
-> +               const char *build_id, *dso_name;
-> +
-> +               build_id = skip_spaces(pos->s);
-> +               dso_name = strchr(build_id, ' ');
-> +               if (dso_name == NULL)
-> +                       continue;
-> +               bid_len = dso_name - pos->s;
-> +               dso_name = skip_spaces(dso_name);
-> +               if (strcmp(dso->long_name, dso_name))
-> +                       continue;
-> +               if (bid_len % 2 != 0 || bid_len >= SBUILD_ID_SIZE)
-> +                       return false;
-> +               for (int ix = 0; 2 * ix + 1 < bid_len; ++ix) {
-> +                       if (!isxdigit(build_id[2 * ix]) ||
-> +                           !isxdigit(build_id[2 * ix + 1]))
-> +                               return false;
-> +
-> +                       dso->bid.data[ix] = (hex(build_id[2 * ix]) << 4 |
-> +                                            hex(build_id[2 * ix + 1]));
-> +               }
-> +               dso->bid.size = bid_len / 2;
-> +               dso->has_build_id = 1;
-> +               return true;
-> +       }
-> +       return false;
-> +}
-> +
->  static int dso__inject_build_id(struct dso *dso, struct perf_tool *tool,
->                                 struct machine *machine, u8 cpumode, u32 flags)
->  {
-> +       struct perf_inject *inject = container_of(tool, struct perf_inject,
-> +                                                 tool);
->         int err;
->
->         if (is_anon_memory(dso->long_name) || flags & MAP_HUGETLB)
-> @@ -580,6 +620,10 @@ static int dso__inject_build_id(struct dso *dso, struct perf_tool *tool,
->         if (is_no_dso_memory(dso->long_name))
->                 return 0;
->
-> +       if (inject->known_build_ids != NULL &&
-> +           perf_inject__lookup_known_build_id(inject, dso))
-> +               return 1;
-> +
->         if (dso__read_build_id(dso) < 0) {
->                 pr_debug("no build_id found for %s\n", dso->long_name);
->                 return -1;
-> @@ -1082,6 +1126,9 @@ int cmd_inject(int argc, const char **argv)
->                             "Inject build-ids into the output stream"),
->                 OPT_BOOLEAN(0, "buildid-all", &inject.build_id_all,
->                             "Inject build-ids of all DSOs into the output stream"),
-> +               OPT_STRING(0, "known-build-ids", &inject.known_build_ids_source,
-> +                          "buildid path [buildid path...]",
-> +                          "build-ids to use for specific files"),
->                 OPT_STRING('i', "input", &inject.input_name, "file",
->                            "input file name"),
->                 OPT_STRING('o', "output", &inject.output.path, "file",
-> @@ -1215,6 +1262,18 @@ int cmd_inject(int argc, const char **argv)
->                  */
->                 inject.tool.ordered_events = true;
->                 inject.tool.ordering_requires_timestamps = true;
-> +               if (inject.known_build_ids_source != NULL) {
-> +                       struct strlist *known_build_ids;
-
-Nit: I think you can use inject.known_build_ids directly.
-
-Thanks,
-Namhyung
-
-
-> +
-> +                       known_build_ids = strlist__new(
-> +                           inject.known_build_ids_source, NULL);
-> +
-> +                       if (known_build_ids == NULL) {
-> +                               pr_err("Couldn't parse known build ids.\n");
-> +                               goto out_delete;
-> +                       }
-> +                       inject.known_build_ids = known_build_ids;
-> +               }
->         }
->
->         if (inject.sched_stat) {
-> @@ -1241,6 +1300,7 @@ int cmd_inject(int argc, const char **argv)
->         ret = __cmd_inject(&inject);
->
->  out_delete:
-> +       strlist__delete(inject.known_build_ids);
->         zstd_fini(&(inject.session->zstd_data));
->         perf_session__delete(inject.session);
->  out_close_output:
-> --
-> 2.37.0.rc0.161.g10f37bed90-goog
->

@@ -2,56 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 22D0B56C57A
-	for <lists+linux-kernel@lfdr.de>; Sat,  9 Jul 2022 02:30:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2BB9856C53D
+	for <lists+linux-kernel@lfdr.de>; Sat,  9 Jul 2022 02:29:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238731AbiGHX1Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Jul 2022 19:27:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59460 "EHLO
+        id S239344AbiGHX1W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Jul 2022 19:27:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59478 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237520AbiGHX1O (ORCPT
+        with ESMTP id S230501AbiGHX1O (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 8 Jul 2022 19:27:14 -0400
-Received: from fllv0016.ext.ti.com (fllv0016.ext.ti.com [198.47.19.142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9AB65419BB
-        for <linux-kernel@vger.kernel.org>; Fri,  8 Jul 2022 16:27:12 -0700 (PDT)
-Received: from lelv0266.itg.ti.com ([10.180.67.225])
-        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 268NQtSp059322;
-        Fri, 8 Jul 2022 18:26:55 -0500
+Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 743293C142
+        for <linux-kernel@vger.kernel.org>; Fri,  8 Jul 2022 16:27:13 -0700 (PDT)
+Received: from fllv0035.itg.ti.com ([10.64.41.0])
+        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 268NR2vY050721;
+        Fri, 8 Jul 2022 18:27:02 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1657322815;
-        bh=+bm3Wh1/TDP6a3e59S4Ynn5UhkVTq89RAIYkfdv0mkY=;
+        s=ti-com-17Q1; t=1657322822;
+        bh=/l66EDmlTvebaz7rMBT5nrrxoVxvFD53AWlGdpXy5Ww=;
         h=Date:From:To:CC:Subject;
-        b=Qo0rFyjzMv1E+wWw90kEN8hPGJjXhoKgszuD2E0cZxMvCyBEQGM3C+A3pOHCxL3k3
-         7u2OIT3oiCVXSn83deHx0FPpXQaIAnmRD/cZXNkQ7p6cGOHEU068L0rt7tdm4wjqL5
-         eKmGU9hB3/rAx2Ohn5eqfGIkYGfZGPLSsRZuHbDk=
-Received: from DFLE112.ent.ti.com (dfle112.ent.ti.com [10.64.6.33])
-        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 268NQtvo122764
+        b=M2Px2fQDy1ofEYPyvS4+embTgEBmv6DE/XhNeKGzg2DkUJ/mqrH/9UlNSzQWMEFmT
+         c4hxJ6RAJYa1G7lDLmdChSTYKpvz6Ud7KdyRUSBnnUrAQ1DN/T2sSkop7yVR/dpUel
+         mtSXq+MSqFUBpoHg8b3LxDWX9+jxiY16Htla23eA=
+Received: from DLEE110.ent.ti.com (dlee110.ent.ti.com [157.170.170.21])
+        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 268NR2iB050786
         (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Fri, 8 Jul 2022 18:26:55 -0500
-Received: from DFLE101.ent.ti.com (10.64.6.22) by DFLE112.ent.ti.com
- (10.64.6.33) with Microsoft SMTP Server (version=TLS1_2,
+        Fri, 8 Jul 2022 18:27:02 -0500
+Received: from DLEE101.ent.ti.com (157.170.170.31) by DLEE110.ent.ti.com
+ (157.170.170.21) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Fri, 8
- Jul 2022 18:26:55 -0500
-Received: from lelv0327.itg.ti.com (10.180.67.183) by DFLE101.ent.ti.com
- (10.64.6.22) with Microsoft SMTP Server (version=TLS1_2,
+ Jul 2022 18:27:01 -0500
+Received: from fllv0040.itg.ti.com (10.64.41.20) by DLEE101.ent.ti.com
+ (157.170.170.31) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
- Frontend Transport; Fri, 8 Jul 2022 18:26:55 -0500
+ Frontend Transport; Fri, 8 Jul 2022 18:27:01 -0500
 Received: from localhost (ileax41-snat.itg.ti.com [10.172.224.153])
-        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 268NQtku112567;
-        Fri, 8 Jul 2022 18:26:55 -0500
-Date:   Fri, 8 Jul 2022 18:26:55 -0500
+        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 268NR1VH025318;
+        Fri, 8 Jul 2022 18:27:01 -0500
+Date:   Fri, 8 Jul 2022 18:27:01 -0500
 From:   Nishanth Menon <nm@ti.com>
-To:     Arnd <arnd@arndb.de>, Olof <olof@lixom.net>, SoC <soc@kernel.org>
-CC:     <arm@kernel.org>, <linux-arm-kernel@lists.infradead.org>,
+To:     Olof Johansson <olof@lixom.net>, Arnd Bergmann <arnd@arndb.de>,
+        <arm@kernel.org>, <soc@kernel.org>
+CC:     Tero Kristo <kristo@kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
         <linux-kernel@vger.kernel.org>,
-        Santosh Shilimkar <ssantosh@kernel.org>,
-        Tony Lindgren <tony@atomide.com>
-Subject: [GIT PULL 1/3] TI SoC driver updates for v5.20
-Message-ID: <20220708232655.reqjdbib52ejdja4@unadvised>
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Nishanth Menon <nm@ti.com>
+Subject: [GIT PULL 2/3] arm64: dts: TI K3 updates for v5.20
+Message-ID: <20220708232701.vpk45lwogpasaaay@enchilada>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="ay7qkbfwj2qln4rf"
+        protocol="application/pgp-signature"; boundary="jj3fhufvf7wg5wfs"
 Content-Disposition: inline
 User-Agent: NeoMutt/20171215
 X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
@@ -65,74 +67,94 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---ay7qkbfwj2qln4rf
+--jj3fhufvf7wg5wfs
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
 Hi ARM SoC maintainers,
 
-Please pull
+Please pull (baseline used is v5.19-rc1 based
+ti-k3-dt-fixes-for-v5.19[1] which was merged in 5.19 rc cycle).
 
-The following changes since commit f2906aa863381afb0015a9eb7fefad885d4e5a56:
+The following changes since commit 0c0af88f3f318e73237f7fadd02d0bf2b6c996bb:
 
-  Linux 5.19-rc1 (2022-06-05 17:18:54 -0700)
+  arm64: dts: ti: k3-am64-main: Remove support for HS400 speed mode (2022-0=
+6-17 20:24:01 -0500)
 
 are available in the Git repository at:
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/ti/linux.git tags/ti-driver=
--soc-for-v5.20
+  git://git.kernel.org/pub/scm/linux/kernel/git/ti/linux.git tags/ti-k3-dt-=
+for-v5.20
 
-for you to fetch changes up to f16afe238a7ff3c71a943cf74392538974c29b22:
+for you to fetch changes up to 8af893654c027fb679f67851aedb569ce7acb1e4:
 
-  soc: ti: pruss: Enable support for PRUSS-M subsystem on K3 AM62x SoCs (20=
-22-07-06 19:34:45 -0500)
-
-----------------------------------------------------------------
-TI Driver updates for v5.20
-
-* pruss: Enable support for AM62, bindings cleanups
-* wkup_m3_ipc: cosmetic cleanup
+  arm64: dts: ti: k3-am62-main: Enable crypto accelerator (2022-07-06 19:34=
+:30 -0500)
 
 ----------------------------------------------------------------
-Kishon Vijay Abraham I (3):
-      dt-bindings: soc: ti: pruss: Re-arrange "compatible" in alphabetic or=
-der
-      dt-bindings: soc: ti: pruss: Update bindings for K3 AM62x SoCs
-      soc: ti: pruss: Enable support for PRUSS-M subsystem on K3 AM62x SoCs
+TI K3 device tree updates for v5.20
 
-Yang Li (1):
-      soc: ti: wkup_m3_ipc: Remove unneeded semicolon
+* AM62: fixups, sa2ul enabled, ramoops for sk
+* others: whitespace and gpio-key cleanup.
 
- Documentation/devicetree/bindings/soc/ti/ti,pruss.yaml | 5 +++--
- drivers/soc/ti/pruss.c                                 | 1 +
- drivers/soc/ti/wkup_m3_ipc.c                           | 2 +-
- 3 files changed, 5 insertions(+), 3 deletions(-)
+----------------------------------------------------------------
+Aswath Govindraju (1):
+      arm64: dts: ti: k3-am642-sk: Add pinmux corresponding to main_uart0
 
+Guillaume La Roque (1):
+      arm64: dts: ti: k3-am625-sk: Enable ramoops
+
+Jayesh Choudhary (1):
+      arm64: dts: ti: k3-am62-main: Enable crypto accelerator
+
+Krzysztof Kozlowski (2):
+      arm64: dts: ti: Adjust whitespace around '=3D'
+      arm64: dts: ti: Align gpio-key node names with dtschema
+
+ arch/arm64/boot/dts/ti/k3-am62-main.dtsi              | 17 +++++++++++++++=
+--
+ arch/arm64/boot/dts/ti/k3-am625-sk.dts                | 11 ++++++++++-
+ arch/arm64/boot/dts/ti/k3-am64-main.dtsi              |  4 ++--
+ arch/arm64/boot/dts/ti/k3-am642-evm.dts               |  2 +-
+ arch/arm64/boot/dts/ti/k3-am642-sk.dts                | 16 +++++++++++++++-
+ arch/arm64/boot/dts/ti/k3-am65-iot2050-common.dtsi    |  4 ++--
+ arch/arm64/boot/dts/ti/k3-am65-main.dtsi              | 14 +++++++-------
+ arch/arm64/boot/dts/ti/k3-am65-wakeup.dtsi            |  4 ++--
+ arch/arm64/boot/dts/ti/k3-am654-base-board.dts        |  8 ++++----
+ arch/arm64/boot/dts/ti/k3-j7200-mcu-wakeup.dtsi       |  4 ++--
+ arch/arm64/boot/dts/ti/k3-j721e-common-proc-board.dts |  4 ++--
+ arch/arm64/boot/dts/ti/k3-j721e-mcu-wakeup.dtsi       |  4 ++--
+ arch/arm64/boot/dts/ti/k3-j721s2-main.dtsi            |  4 ++--
+ arch/arm64/boot/dts/ti/k3-j721s2-mcu-wakeup.dtsi      |  4 ++--
+ 14 files changed, 68 insertions(+), 32 deletions(-)
+
+[1] https://lore.kernel.org/all/165608641371.3411.17669885978824514952.git-=
+patchwork-summary@kernel.org/
 --=20
 Regards,
 Nishanth Menon
 Key (0xDDB5849D1736249D) / Fingerprint: F8A2 8693 54EB 8232 17A3  1A34 DDB5=
  849D 1736 249D
 
---ay7qkbfwj2qln4rf
+--jj3fhufvf7wg5wfs
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEE+KKGk1TrgjIXoxo03bWEnRc2JJ0FAmLIvTgACgkQ3bWEnRc2
-JJ1dSg//WDPjB2UiAEo8F7eh3WTgsW1vngaKgHX4++rhyE1QjpSsFRrvGH0bWUXp
-niRg0fiZ1UEkCkXZ7ZvGKIrol+UfQtjXSLo4jv3/y+wETlqAjDAiEV6Rk1B6J9WT
-ipdcU3fe+dBMncFFbLkA0gYC3NhtLLdwysi7E2aOf5Hf1HmQxAmRnlLDTNfPKXWA
-L6jCoHy13RBUW1YU9xxeYEaWBJdCDWqPCkqXuZ8CxoWwQjmsQAgi0zm5Pew7rJ8c
-qDpaA9fWwv9ck/eRtrgvHT5CqH4WIPiXFLdg3qiPhqKLypvSnl5aoSbbVFDmoapA
-y7Q91MLdo1Wbm5J5Rp14mmuk1ls7z5hqI02z8K8/lSHKSEqAp25U61qnUojgz9MM
-3CjoPkzFIbdBvZE4rALPH+PH4WUTHNeGY2jQ5aIucjVxRMpYa65MHcKm2Oaf9oNo
-Dil2f0bFKa0vVXV4qwI3iXDbtoNYpvvKuOrJgo1KLmbXU4nwGkY/G6H4nfV5Py9g
-eKcQ1G+uR2Qjjc/LEdPGLUVvs9ZgjPBAaiHH2zItCA6Sj0DsI2gfsXEUq1pDvCOR
-NbjL0UgUz9qfqB+sdW94bemGvBTvQTP/EPPGDHlInwz2HS2rtMuX3T+hxkKkrx4N
-4S1GuViC+GfOeJdzQQV9PaTnoyVCb2b7p/EonQFVdLbJBOeMQ4E=
-=twhQ
+iQIzBAABCgAdFiEE+KKGk1TrgjIXoxo03bWEnRc2JJ0FAmLIvT4ACgkQ3bWEnRc2
+JJ3wbQ/+MBG3CjdJDxvz9COgCQuH/NXvRF8cbdF1CxCqdenvILPQJcFtncQ2Fyda
+WrsmHEho1r7XU4kqE04Kex4a5CW9vgBhVL+dQjSsIw+sIZzawtSr4WXW1mEM3p/m
+ATXDqT2jRafM8wmIG1wVJ63jtniO4ImJBzIvZf9RYLZymmwIeFAmJ4L0jm4cZJWa
+CFOG+f9ebi33wrqkygdCOKpdhNw8AM01k1qQ/utkdxLaCIIWrM/OaNi51tjo2Fxg
++TFBpkYx2D+cla2fHnKb6XSM3grBCe/F+tv+dTLm4k+uNOn47hrOWZWwfR0N+K80
+IP/u3ouVDXRrvihk1iryc3Fq5ECliqn1NHDg1WmdoHQaP4uYBCLtbDf3TUr9IKF7
+Un0PvGcFjDKENy53IKuVe9gV3mmdVbNcA9q/jTZ6rbn3Xkc8ByMaYdXlecC00WqV
+PdG/3PBO3YcDLBGJV38hVjYobvVOCMEhmzGSR6jEYRZImhkCj7SsuPNrBcIs8g5g
+PeIliIHYNAzX768G1EX+PFl3EfQZ0Hv5jguG7Pmq/03cj805MXdDxt5m2Q+EIXQE
+jaU0bbR+KSyspkfPL44MDJh0oKZ3vl/hxMsZsNkGAyAJhPZkFxrXxmOa0n5vuOFh
+UFfghk2GXA0KO/BHKnyJAXRCZ0NyMtTflDL3P6GBnBl2vsBDj7o=
+=TI/X
 -----END PGP SIGNATURE-----
 
---ay7qkbfwj2qln4rf--
+--jj3fhufvf7wg5wfs--

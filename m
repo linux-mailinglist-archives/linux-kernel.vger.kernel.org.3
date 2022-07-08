@@ -2,89 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BC45D56BEEC
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 20:35:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C31356BED1
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 20:35:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238522AbiGHQRR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Jul 2022 12:17:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59280 "EHLO
+        id S238700AbiGHQSZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Jul 2022 12:18:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60030 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238559AbiGHQRN (ORCPT
+        with ESMTP id S236500AbiGHQSY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Jul 2022 12:17:13 -0400
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5026F7B367;
-        Fri,  8 Jul 2022 09:17:11 -0700 (PDT)
-Received: from fraeml745-chm.china.huawei.com (unknown [172.18.147.207])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4Lfdbm5bSbz686M3;
-        Sat,  9 Jul 2022 00:12:52 +0800 (CST)
-Received: from lhreml724-chm.china.huawei.com (10.201.108.75) by
- fraeml745-chm.china.huawei.com (10.206.15.226) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Fri, 8 Jul 2022 18:17:08 +0200
-Received: from [10.195.34.23] (10.195.34.23) by lhreml724-chm.china.huawei.com
- (10.201.108.75) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Fri, 8 Jul
- 2022 17:17:07 +0100
-Message-ID: <5fd4814a-81b1-0e71-58e0-57a747eb684e@huawei.com>
-Date:   Fri, 8 Jul 2022 17:17:06 +0100
+        Fri, 8 Jul 2022 12:18:24 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 22D76796BA;
+        Fri,  8 Jul 2022 09:18:23 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 1FDB7106F;
+        Fri,  8 Jul 2022 09:18:23 -0700 (PDT)
+Received: from [10.57.86.102] (unknown [10.57.86.102])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id C2FDB3F66F;
+        Fri,  8 Jul 2022 09:18:20 -0700 (PDT)
+Message-ID: <5611d1c5-44db-4144-3c46-256323d39fe3@arm.com>
+Date:   Fri, 8 Jul 2022 17:17:22 +0100
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.1
-Subject: Re: [PATCH v5 0/5] DMA mapping changes for SCSI core
-To:     "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Christoph Hellwig <hch@lst.de>
-CC:     <damien.lemoal@opensource.wdc.com>, <joro@8bytes.org>,
-        <will@kernel.org>, <jejb@linux.ibm.com>,
-        <m.szyprowski@samsung.com>, <robin.murphy@arm.com>,
-        <linux-doc@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-ide@vger.kernel.org>, <iommu@lists.linux-foundation.org>,
-        <iommu@lists.linux.dev>, <linux-scsi@vger.kernel.org>,
-        <linuxarm@huawei.com>
-References: <1656590892-42307-1-git-send-email-john.garry@huawei.com>
- <b5f80062-e8ef-9597-1b0c-393140950dfb@huawei.com>
- <20220706134447.GA23753@lst.de> <yq1y1x47jgn.fsf@ca-mkp.ca.oracle.com>
-From:   John Garry <john.garry@huawei.com>
-In-Reply-To: <yq1y1x47jgn.fsf@ca-mkp.ca.oracle.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.195.34.23]
-X-ClientProxiedBy: lhreml748-chm.china.huawei.com (10.201.108.198) To
- lhreml724-chm.china.huawei.com (10.201.108.75)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH 1/2] rtc: hym8563: try multiple times to init device
+Content-Language: en-GB
+To:     Frank Wunderlich <linux@fw-web.de>,
+        linux-rockchip@lists.infradead.org
+Cc:     Frank Wunderlich <frank-w@public-files.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-rtc@vger.kernel.org,
+        Peter Geis <pgwipeout@gmail.com>
+References: <20220608161150.58919-1-linux@fw-web.de>
+ <20220608161150.58919-2-linux@fw-web.de>
+From:   Robin Murphy <robin.murphy@arm.com>
+In-Reply-To: <20220608161150.58919-2-linux@fw-web.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 07/07/2022 21:35, Martin K. Petersen wrote:
-> Christoph,
+On 2022-06-08 17:11, Frank Wunderlich wrote:
+> From: Peter Geis <pgwipeout@gmail.com>
 > 
->> Yes, I've mostly been waiting for an ACK from Martin.
-> Sorry, I'm on vacation this week. The series looks OK to me although I
-> do agree that it would be great if the max was reflected in the queue's
-> hard limit and opt in the soft limit.
+> RTC sometimes does not respond the first time in init.
+> Try multiple times to get a response.
 
-Ah, I think that I misunderstood Damien's question. I thought he was 
-asking why not keep shost max_sectors at dma_max_mapping_size() and then 
-init each sdev request queue max hw sectors at dma_opt_mapping_size().
+FWIW, given that HYM8563 is fairly common on RK3288 boards - I can't say 
+I've ever noticed an issue with mine, for instance - it seems dubious 
+that this would be a general issue of the chip itself. Are you sure it's 
+not a SoC or board-level issue with the I2C bus being in a funny initial 
+state, timings being marginal, or suchlike?
 
-But he seems that you want to know why not have the request queue max 
-sectors at dma_opt_mapping_size(). The answer is related to meaning of 
-dma_opt_mapping_size(). If we get any mappings which exceed this size 
-then it can have a big dma mapping performance hit. So I set max hw 
-sectors at this ‘opt’ mapping size to ensure that we get no mappings 
-which exceed this size. Indeed, I think max sectors is 128Kb today for 
-my host, which would be same as dma_opt_mapping_size() value with an 
-IOMMU enabled. And I find that only a small % of request size may exceed 
-this 128kb size, but it still has a big performance impact.
+Robin.
 
+> Signed-off-by: Peter Geis <pgwipeout@gmail.com>
+> Signed-off-by: Frank Wunderlich <frank-w@public-files.de>
+> ---
+>   drivers/rtc/rtc-hym8563.c | 11 +++++++++--
+>   1 file changed, 9 insertions(+), 2 deletions(-)
 > 
-> Acked-by: Martin K. Petersen<martin.petersen@oracle.com>
-
-Thanks,
-John
+> diff --git a/drivers/rtc/rtc-hym8563.c b/drivers/rtc/rtc-hym8563.c
+> index 90e602e99d03..9adcedaa4613 100644
+> --- a/drivers/rtc/rtc-hym8563.c
+> +++ b/drivers/rtc/rtc-hym8563.c
+> @@ -13,6 +13,7 @@
+>   #include <linux/clk-provider.h>
+>   #include <linux/i2c.h>
+>   #include <linux/bcd.h>
+> +#include <linux/delay.h>
+>   #include <linux/rtc.h>
+>   
+>   #define HYM8563_CTL1		0x00
+> @@ -438,10 +439,16 @@ static irqreturn_t hym8563_irq(int irq, void *dev_id)
+>   
+>   static int hym8563_init_device(struct i2c_client *client)
+>   {
+> -	int ret;
+> +	int ret, i;
+>   
+>   	/* Clear stop flag if present */
+> -	ret = i2c_smbus_write_byte_data(client, HYM8563_CTL1, 0);
+> +	for (i = 0; i < 3; i++) {
+> +		ret = i2c_smbus_write_byte_data(client, HYM8563_CTL1, 0);
+> +		if (ret == 0)
+> +			break;
+> +		msleep(20);
+> +	}
+> +
+>   	if (ret < 0)
+>   		return ret;
+>   

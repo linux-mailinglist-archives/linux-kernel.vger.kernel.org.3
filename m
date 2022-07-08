@@ -2,125 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5516956BB07
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 15:39:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B1E056BB19
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 15:46:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238380AbiGHNjD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Jul 2022 09:39:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45396 "EHLO
+        id S238148AbiGHNpy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Jul 2022 09:45:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49330 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238374AbiGHNix (ORCPT
+        with ESMTP id S231905AbiGHNpw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Jul 2022 09:38:53 -0400
-Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B41FA2BB21;
-        Fri,  8 Jul 2022 06:38:51 -0700 (PDT)
-Received: by mail-ed1-x529.google.com with SMTP id k30so18785848edk.8;
-        Fri, 08 Jul 2022 06:38:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=oAqZrnSh0jfK0LLUnYpJumK2YJTHAZakB+MOOLiwb1E=;
-        b=qTAkjs0kVjAAymmJCjSX4J2vmljnLyYcmlOXHQVQn2Fxqwt6KKRkteXrNzXATnFfEv
-         m0DTfnS4GK7//pTEZ4KWYcBkBoNNe0hvG78GUlXo20Q84Xrk++zSQiss8o03+De70uAh
-         YaogOiH3wbPpmYVyl++NqI8XY7fL/Y1utlSa2VJaOCzZ3rUshikRvCipT4nuAvvhsdUz
-         Tk0U8Euoxw/MmGakUOoLtrG1EIfBlKGPyreYy9ilZL6gWhcPP664CHfZihEei7u24JOS
-         ZXaXtCjxoG8dMsY0OGvNR1WOKoDSOpqDFlDqEKQ3qN+1F0v1pGxnUHslmsVCftSrG9JV
-         BeLA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=oAqZrnSh0jfK0LLUnYpJumK2YJTHAZakB+MOOLiwb1E=;
-        b=la7ioUnEmO7oXMX4vzQZx/8ojuQUMW4JrE/r4oVMf8E98p3ywuHPBDh0eR5elesemR
-         n/y0O/d7GpX1DIMEuZ1B43L9pD7iiT0Dzsl+J48szAvxnOLSIqk4DWbk5Osy1dxy70CJ
-         hmW0/BluuIpgvGqtCdwvIY1BEqtwsue8V/8kWQOgTfZf1IBZx1vMII4LDs9uA/b8BcwX
-         m10c5d55V6LzQHSwyMB2owj8uwwMLGgORLBTvILkf1KveapTd86nUSiLonpR0cOQwGF3
-         nLHXhFV74Bj4wNJy0kiLScRTylwaQSpvckGKc5ifeMiJVANQJjxsFJQTtoC2LwYmEFB/
-         19fg==
-X-Gm-Message-State: AJIora9sspAJwIZfUNonorwfxIQ85Ff42+eEBfzpULXoKQpZlq6Zr9YB
-        pvH77w03ezez5ZbT3z+xy3b14ns6ZblzXQ==
-X-Google-Smtp-Source: AGRyM1te1UekoZ265JltFHL8NaJrPkjaM3+R9oxrHh1QBzOxt9jn/M8TJntQ9R2KNhYmrJiBIU2Clg==
-X-Received: by 2002:a05:6402:4144:b0:431:6ef0:bef7 with SMTP id x4-20020a056402414400b004316ef0bef7mr4732556eda.151.1657287530176;
-        Fri, 08 Jul 2022 06:38:50 -0700 (PDT)
-Received: from fedora.robimarko.hr (dh207-96-250.xnet.hr. [88.207.96.250])
-        by smtp.googlemail.com with ESMTPSA id d8-20020a056402000800b0043a71c376a2sm9583016edu.33.2022.07.08.06.38.49
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 08 Jul 2022 06:38:49 -0700 (PDT)
-From:   Robert Marko <robimarko@gmail.com>
-To:     agross@kernel.org, bjorn.andersson@linaro.org,
-        konrad.dybcio@somainline.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, linux-arm-msm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Robert Marko <robimarko@gmail.com>
-Subject: [PATCH 2/2] arm64: dts: qcom: ipq8074: add interrupt-parent to DTSI
-Date:   Fri,  8 Jul 2022 15:38:46 +0200
-Message-Id: <20220708133846.599735-2-robimarko@gmail.com>
-X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220708133846.599735-1-robimarko@gmail.com>
-References: <20220708133846.599735-1-robimarko@gmail.com>
+        Fri, 8 Jul 2022 09:45:52 -0400
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.17.13])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28996237D7;
+        Fri,  8 Jul 2022 06:45:49 -0700 (PDT)
+Received: from mail-oo1-f42.google.com ([209.85.161.42]) by
+ mrelayeu.kundenserver.de (mreue106 [213.165.67.113]) with ESMTPSA (Nemesis)
+ id 1M5xDJ-1oCpNP0p1H-007Sud; Fri, 08 Jul 2022 15:45:48 +0200
+Received: by mail-oo1-f42.google.com with SMTP id n11-20020a4ad12b000000b00425b01c3326so4030431oor.8;
+        Fri, 08 Jul 2022 06:45:47 -0700 (PDT)
+X-Gm-Message-State: AJIora/NkYcFzv3biE/No2vIDOOovKULoW3sHuFORcS70u6rD/tcQxwD
+        WHvv0luOX90EwN8N1eFlEGwsMCDJ4RxlvhapwXE=
+X-Google-Smtp-Source: AGRyM1vy4rbxR1Ytn0Zk8NhNJ9KORyOPGe3ZQtW5xW3Of3raZdxBwA3+N0Uu+YK+RloM8boTybyN5UBcBgQVHJwdeE0=
+X-Received: by 2002:a5b:b47:0:b0:66e:3617:d262 with SMTP id
+ b7-20020a5b0b47000000b0066e3617d262mr3516820ybr.106.1657287935403; Fri, 08
+ Jul 2022 06:45:35 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20220706165406.117349-1-tmaimon77@gmail.com> <CACPK8Xd0n5cpsCJ6guPzEj8JfXkz_ERzU3VdXW-Xx2QX8ssNKg@mail.gmail.com>
+In-Reply-To: <CACPK8Xd0n5cpsCJ6guPzEj8JfXkz_ERzU3VdXW-Xx2QX8ssNKg@mail.gmail.com>
+From:   Arnd Bergmann <arnd@arndb.de>
+Date:   Fri, 8 Jul 2022 15:45:18 +0200
+X-Gmail-Original-Message-ID: <CAK8P3a0Ojf1hm5Q2FJZEGLygku+qkPmKnKpBD8eAZPeRZtb=gw@mail.gmail.com>
+Message-ID: <CAK8P3a0Ojf1hm5Q2FJZEGLygku+qkPmKnKpBD8eAZPeRZtb=gw@mail.gmail.com>
+Subject: Re: [PATCH v7 00/16] Introduce Nuvoton Arbel NPCM8XX BMC SoC
+To:     Joel Stanley <joel@jms.id.au>
+Cc:     Tomer Maimon <tmaimon77@gmail.com>,
+        Avi Fishman <avifishman70@gmail.com>,
+        Tali Perry <tali.perry1@gmail.com>,
+        Patrick Venture <venture@google.com>,
+        Nancy Yuen <yuenn@google.com>,
+        Benjamin Fair <benjaminfair@google.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+        Olof Johansson <olof@lixom.net>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Marcel Ziswiler <marcel.ziswiler@toradex.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Biju Das <biju.das.jz@bp.renesas.com>,
+        Nobuhiro Iwamatsu <nobuhiro1.iwamatsu@toshiba.co.jp>,
+        Robert Hancock <robert.hancock@calian.com>,
+        =?UTF-8?Q?Jonathan_Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
+        Lubomir Rintel <lkundrak@v3.sk>,
+        devicetree <devicetree@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-clk <linux-clk@vger.kernel.org>,
+        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
+        LINUXWATCHDOG <linux-watchdog@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Qin Jian <qinjian@cqplus1.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Provags-ID: V03:K1:p60fzRZH6lXRcjLjsToh4E1dS5TOvz9nhqrmXYCRlR7go2qMZu4
+ Al1+phUcp+UEblx0TNia+VpZ4BLL7cAU4JntVEikn1/mZJU/GX7vB8fMZJ7iYaOHyLuMz/x
+ v/4jUzEmJYh3evJyJWk9Nb3HgrSlCvNPxcdcM53ZGG5VL8b9T/dGJmue9B5B+swz3KBnBsO
+ O6lbHITMeKW9cQvi7Cr9w==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:WmPl8rkq1kE=:fiJt4rwFRraSb7IQg6gC+r
+ PUrDoHeJD6QSQo2lMYkl31KUSL18tnsEUT+YDsrrsO2g9pDzekoZz4QZMOlGIzs8ZJeyBPdBY
+ 2Ix5249rUjt9CMvN5pSIgea1jcOQz+xoJNGXjPyNEFbfVeo+GpTvD6LbTF94M6OB2zHV07tYs
+ XoXK9wU+gogG1nQuu6aveipUAZTWShwJmU/wWbB1W4ea672X4LM1VghzccWc5xZ3A7SbpWAqH
+ 89ck8OaNmH8ENc3ciAV8DVwd3/q9zXwSr1f747kLq4fY1SuTlLyqA9omhuNqLDFsBYcpeggOa
+ RXHv4U0Ks79Vz2sopK41/3bd2+9HjVolj40aCWfKx3na1bmT9an7BX4DtbDIt29+n4t+DVMLW
+ jv5XCpEqH3Y0wN5FQNR8MVutmkjXj5w0SWXpJvOCoBFl8Fu4O7SSu8mV0gCC0rdH7cTt3Vf5n
+ AlTYSAbD0GzmMll2foy9vwfIT3h/c6ypTV1jiZgCrmF0N32K49sQ6uPDTQ7Xx4JUwHlXvS7EM
+ e7l1iMD6l4Vnt52QvG9ZzNn9x/E8hsq9SVR93PrbE+iOhaZXKe2asQ+IDgATgh6lPFCopq9IW
+ z9I7yt2P3GfqPSO3k/IqnwFNnbZKXSGgZMi7s7W36YruHe3PYxZuHCjSdAiuEp14uDnb/eSfp
+ PolNTm7i+Bw29cRvlSwyeXbHPcQ1vVReVjjsJuuQskxRRXWPHDBIm8I1rUAMFEwfKIR1CH3c4
+ UhuEnPD88k1BbDVVHhKw4UQBHb0h3ujAdRi82WPFZQNHTpAboi4fpA587Zhlxr7/A0epC77mN
+ dBB7/FPuoSRda3v6xLht9mR2WepSSZcCL2r0ZYIryn3z01owlQu2skj8+BpcZOL6U9mA2+cjA
+ fmcQPV9DfAzIDexPD0mA==
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add interrupt-parent to the SoC DTSI to avoid duplicating it in each board
-DTS file.
+On Fri, Jul 8, 2022 at 8:50 AM Joel Stanley <joel@jms.id.au> wrote:
+>
+> Hi Arnd,
+>
+> On Wed, 6 Jul 2022 at 16:54, Tomer Maimon <tmaimon77@gmail.com> wrote:
+> >
+> > This patchset  adds initial support for the Nuvoton
+> > Arbel NPCM8XX Board Management controller (BMC) SoC family.
+>
+> Are you happy with a cross tree new soc branch for this series? If so
+> I can put them in a branch and get some build coverage before sending
+> them out.
+>
+> (I notice the clock and reset changes are waiting on acks still)
+>
 
-Remove interrupt-parent from existing board DTS files.
+Hi Joel,
 
-Signed-off-by: Robert Marko <robimarko@gmail.com>
----
- arch/arm64/boot/dts/qcom/ipq8074-hk01.dts  | 1 -
- arch/arm64/boot/dts/qcom/ipq8074-hk10.dtsi | 2 --
- arch/arm64/boot/dts/qcom/ipq8074.dtsi      | 1 +
- 3 files changed, 1 insertion(+), 3 deletions(-)
+Yes, I think we should merge the parts that are reviewed already, but I'd
+leave out the clk (4/16) and reset (9/16) patches in this case.
 
-diff --git a/arch/arm64/boot/dts/qcom/ipq8074-hk01.dts b/arch/arm64/boot/dts/qcom/ipq8074-hk01.dts
-index 9dfa2eefef29..b788e1605476 100644
---- a/arch/arm64/boot/dts/qcom/ipq8074-hk01.dts
-+++ b/arch/arm64/boot/dts/qcom/ipq8074-hk01.dts
-@@ -8,7 +8,6 @@
- / {
- 	model = "Qualcomm Technologies, Inc. IPQ8074-HK01";
- 	compatible = "qcom,ipq8074-hk01", "qcom,ipq8074";
--	interrupt-parent = <&intc>;
- 
- 	aliases {
- 		serial0 = &blsp1_uart5;
-diff --git a/arch/arm64/boot/dts/qcom/ipq8074-hk10.dtsi b/arch/arm64/boot/dts/qcom/ipq8074-hk10.dtsi
-index c67181b173ca..40415d988e4a 100644
---- a/arch/arm64/boot/dts/qcom/ipq8074-hk10.dtsi
-+++ b/arch/arm64/boot/dts/qcom/ipq8074-hk10.dtsi
-@@ -7,8 +7,6 @@
- #include "ipq8074.dtsi"
- 
- / {
--	interrupt-parent = <&intc>;
--
- 	aliases {
- 		serial0 = &blsp1_uart5;
- 	};
-diff --git a/arch/arm64/boot/dts/qcom/ipq8074.dtsi b/arch/arm64/boot/dts/qcom/ipq8074.dtsi
-index 73e7e9aad194..a38b4f21ab9b 100644
---- a/arch/arm64/boot/dts/qcom/ipq8074.dtsi
-+++ b/arch/arm64/boot/dts/qcom/ipq8074.dtsi
-@@ -13,6 +13,7 @@ / {
- 
- 	model = "Qualcomm Technologies, Inc. IPQ8074";
- 	compatible = "qcom,ipq8074";
-+	interrupt-parent = <&intc>;
- 
- 	clocks: clocks {
- 		sleep_clk: sleep_clk {
--- 
-2.36.1
+Krzysztof has reviewed the binding changes, so I don't mind having
+the DT nodes added in the soc tree even if the two drivers are still
+missing.
 
+I would do the same thing for the sunplus SP7021 platform that
+Qin Jian has been posting, as this is also waiting for a final Ack
+on the clk driver.
+
+I would put both of the new platforms into a single branch in the
+SoC tree, separate from the usual dt/drivers/soc/defconfig
+branches. I was already planning to pick npcm8xx up myself,
+but if you can do a pull request, that would be even better.
+
+       Arnd

@@ -2,115 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A869A56B42E
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 10:13:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 795C456B447
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 10:16:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237350AbiGHIMk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Jul 2022 04:12:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46556 "EHLO
+        id S237553AbiGHINO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Jul 2022 04:13:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46774 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237648AbiGHIMh (ORCPT
+        with ESMTP id S237260AbiGHINJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Jul 2022 04:12:37 -0400
-Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 487FA804B7
-        for <linux-kernel@vger.kernel.org>; Fri,  8 Jul 2022 01:12:36 -0700 (PDT)
-Received: by mail-pl1-x630.google.com with SMTP id c13so12008167pla.6
-        for <linux-kernel@vger.kernel.org>; Fri, 08 Jul 2022 01:12:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=Vc+eezlfPnzWYHGSMVP9Zv55im3/1gxewNG9+41SKHQ=;
-        b=GEuY25tkvfR+qMvbD0fCszzdfYTU4NF5Ad0EdTtSbTbd5b4ECbjymsy5SjPeuDYENL
-         PKHzDRk1W56+xDKWluThcfnIudP5kv7vhviC78tW9yJONmwWlQYDhdK4NBCehRygfd9H
-         DX7CiJv2JVaT4Vb2Y9mnpNlF5TrSRUUSoqt65o8gukiEqQ/Gi82UzaIuapKefZ6XrMem
-         T6ljE7wt0qZ7c9fiG22d+N1VoY+HGdDNglqniIlbjYr6yXbDq5DSojuosLT4gSK7O7V1
-         APYsyiGYQg2RAhndyVGT/aJD1S+HVPtNnXA+SngnAjbMSfuCRvU3uCH/IuswwT9T24Xj
-         wzwA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=Vc+eezlfPnzWYHGSMVP9Zv55im3/1gxewNG9+41SKHQ=;
-        b=Rtnn6SGAXO3b5J6oyDiVfT7XZAZcQUoltLURZb2KgoNxRfBt/h4VJtSUhhx0ABx6bb
-         Tg8khS9r8DZolg7Noe2uFqIsFqFMJ2hqtysOrCLiwH3TBOy4STYIp09AszOMppDDVGFs
-         OUr9ST97kFzAehFAsEzHg7v17LxIsTA3Haudb97rNZDVZx3udnGEXDJw3TtepFlDG244
-         dRjP7vIPYKm31GeqPcxP8YVPrQfksvgjYMXdhCqDFR08UhXqmCDlDwA675tUK3FvOJEX
-         9c/s+O54Yb3Y+pfA0hC3RCOERYDIl9oWA5P589u7f9dnbxmT6JmaV/qjahamDqE6MCIC
-         XKAQ==
-X-Gm-Message-State: AJIora8Yh/nuS6pNZC9+1sQ9H/NU/2nVelkDg9ZjUtFZ0d5MJMaMQgRh
-        iXwxwL5SW3AIlBAKzo50ZpYauw==
-X-Google-Smtp-Source: AGRyM1tB6s3CEGsSYt8UjK8u2lu2OyolxM22P8Pu7PnItHcD07cQTGZypwxfxyU28F9ynAVDHrwFTA==
-X-Received: by 2002:a17:902:b198:b0:16c:1c13:cd8d with SMTP id s24-20020a170902b19800b0016c1c13cd8dmr2566479plr.92.1657267955732;
-        Fri, 08 Jul 2022 01:12:35 -0700 (PDT)
-Received: from localhost ([122.171.18.80])
-        by smtp.gmail.com with ESMTPSA id j14-20020a170902da8e00b0016bd67bc868sm2679388plx.210.2022.07.08.01.12.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 08 Jul 2022 01:12:35 -0700 (PDT)
-Date:   Fri, 8 Jul 2022 13:42:33 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Dmitry Osipenko <dmitry.osipenko@collabora.com>
-Cc:     Chanwoo Choi <cw00.choi@samsung.com>,
-        Dmitry Osipenko <digetx@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Kyungmin Park <kyungmin.park@samsung.com>,
-        MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Nishanth Menon <nm@ti.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Viresh Kumar <vireshk@kernel.org>, linux-pm@vger.kernel.org,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-tegra@vger.kernel.org,
-        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-        Rob Herring <robh@kernel.org>
-Subject: Re: [PATCH V2 00/13] OPP: Add support for multiple clocks*
-Message-ID: <20220708081233.pncnill6dqe4ghko@vireshk-i7>
-References: <cover.1657003420.git.viresh.kumar@linaro.org>
- <d557bbd0-2afb-12dc-1287-1aeb44ef55f5@collabora.com>
- <20220708071926.zehurtbcf35s5tv6@vireshk-i7>
- <8c52e1d2-6c6d-9a09-e426-e5292f68a3f0@collabora.com>
+        Fri, 8 Jul 2022 04:13:09 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF4387E034;
+        Fri,  8 Jul 2022 01:13:08 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 9A9AD1FDCD;
+        Fri,  8 Jul 2022 08:13:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1657267987; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=O72/ULjlx1PPQxVgkKAhi3HE1nEYzbRyfStC39U6aww=;
+        b=XvIyS2rnvR1sDwnGj6PqQ0qU1WcH6P5xyL1PttlBCTFSs1sS/RDyIRgY/dlv75tgVSeRXs
+        5QIZ+S/riisSa8RNJFeVtxgcpGElifbkEhrIkaJSZ+OsaGMuDdmrTIcTu3eR4Ti+UBCtz8
+        ruHn2kcGFY1NyZ4vDxIWhzMB46b7ruE=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1657267987;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=O72/ULjlx1PPQxVgkKAhi3HE1nEYzbRyfStC39U6aww=;
+        b=hvoQFgVOf/qzagXOrxMRqCJabbNmSMKTxATQ4uzLWrs2xtna62JpY859zxethlufWQm8DF
+        CJREkEXrSFjPdzCQ==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 8DAD813A80;
+        Fri,  8 Jul 2022 08:13:07 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id MGWPIhPnx2J5JwAAMHmgww
+        (envelope-from <bp@suse.de>); Fri, 08 Jul 2022 08:13:07 +0000
+Date:   Fri, 8 Jul 2022 10:13:03 +0200
+From:   Borislav Petkov <bp@suse.de>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Theodore Ts'o <tytso@mit.edu>,
+        "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Jonathan McDowell <noodles@fb.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: manual merge of the random tree with the tip tree
+Message-ID: <YsfnDyOaKXA3iIj4@zn.tnic>
+References: <20220708171030.135b12cd@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <8c52e1d2-6c6d-9a09-e426-e5292f68a3f0@collabora.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220708171030.135b12cd@canb.auug.org.au>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 08-07-22, 10:26, Dmitry Osipenko wrote:
-> On 7/8/22 10:19, Viresh Kumar wrote:
-> > On 07-07-22, 22:43, Dmitry Osipenko wrote:
-> >> This patch breaks Tegra again, please take a look:
-> > 
-> > Damn, not again :(
-> > 
-> >>    OPP: Remove dev{m}_pm_opp_of_add_table_noclk()
-> > 
-> > Why did you mention this patch ? This just removed an unused API,
-> > Tegra should have broke because of something else, isn't it ?
+On Fri, Jul 08, 2022 at 05:10:30PM +1000, Stephen Rothwell wrote:
+> Hi all,
 > 
-> This patch is the cause.
+> Today's linux-next merge of the random tree got conflicts in:
+> 
+>   arch/x86/include/uapi/asm/bootparam.h
+>   arch/x86/kernel/kexec-bzimage64.c
+>   arch/x86/kernel/setup.c
+> 
+> between commit:
+> 
+>   b69a2afd5afc ("x86/kexec: Carry forward IMA measurement log on kexec")
+> 
+> from the tip tree and commit:
+> 
+>   c337d5c7ec9b ("x86/setup: Use rng seeds from setup_data")
 
-I was tracking the crash too closely it seems. :(
+Why is a x86 patch in the random tree?
 
-> I see that previously dev_pm_opp_set_config() had "_add_opp_table(dev,
-> false)", now it's "_add_opp_table(dev, true)".
+And it doesn't even have a single x86 person ack?
 
-That's definitely a mistake, I still don't understand though how it
-can lead to the crash we got.
+https://git.kernel.org/pub/scm/linux/kernel/git/crng/random.git/commit/?id=c337d5c7ec9bc1d11006fd628e99c65f08455803
 
-I have fixed this in my tree now, can you check again please.
+This is not now the process works.
 
 -- 
-viresh
+Regards/Gruss,
+    Boris.
+
+SUSE Software Solutions Germany GmbH
+GF: Ivo Totev, Andrew Myers, Andrew McDonald, Martje Boudien Moerman
+(HRB 36809, AG Nürnberg)

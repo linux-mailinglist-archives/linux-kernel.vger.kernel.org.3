@@ -2,124 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F07F156B436
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 10:13:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A869A56B42E
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 10:13:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237685AbiGHILs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Jul 2022 04:11:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46290 "EHLO
+        id S237350AbiGHIMk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Jul 2022 04:12:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46556 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237303AbiGHILp (ORCPT
+        with ESMTP id S237648AbiGHIMh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Jul 2022 04:11:45 -0400
-Received: from mail-il1-x130.google.com (mail-il1-x130.google.com [IPv6:2607:f8b0:4864:20::130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E75F47E034
-        for <linux-kernel@vger.kernel.org>; Fri,  8 Jul 2022 01:11:44 -0700 (PDT)
-Received: by mail-il1-x130.google.com with SMTP id p18so7354580ilm.4
-        for <linux-kernel@vger.kernel.org>; Fri, 08 Jul 2022 01:11:44 -0700 (PDT)
+        Fri, 8 Jul 2022 04:12:37 -0400
+Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 487FA804B7
+        for <linux-kernel@vger.kernel.org>; Fri,  8 Jul 2022 01:12:36 -0700 (PDT)
+Received: by mail-pl1-x630.google.com with SMTP id c13so12008167pla.6
+        for <linux-kernel@vger.kernel.org>; Fri, 08 Jul 2022 01:12:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=D0Qf6XYpQVz6j4kI9S9/dfIfwmKCeXho7yxm3tWLHDw=;
-        b=a8PcvC8T4pJniQ7yqIayMgWH+3gEkHFNYRNhxRMkOr+jhG/UVyB81CyvGH1U4WYubR
-         kpQ6Xx8kAmsRhSqkwvV2Wmt1lbaLqIT2v8NsFZiAJfZYikttPD39vSH//rSSnRJNKWvP
-         Fd4GpgmjsxOTqwJVm5oWb5g1hbTgrTWJmgv1ydYr/5ZIGUfX/Ra4U9VsVHtVb3hTNdC0
-         Ba3uPYLrjTDGkbr9WrQnt3A/kHsQWVzo7qPGW7Xl3yeTNshhdwpBPg/bkWBk8iaMDxys
-         n64woJm5X85Tw/NZHT+GJG3SJJ0xSGbjYzuTIWnKfkKwxKgVg1VaWrTs9U4crZuba7d/
-         LIWA==
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=Vc+eezlfPnzWYHGSMVP9Zv55im3/1gxewNG9+41SKHQ=;
+        b=GEuY25tkvfR+qMvbD0fCszzdfYTU4NF5Ad0EdTtSbTbd5b4ECbjymsy5SjPeuDYENL
+         PKHzDRk1W56+xDKWluThcfnIudP5kv7vhviC78tW9yJONmwWlQYDhdK4NBCehRygfd9H
+         DX7CiJv2JVaT4Vb2Y9mnpNlF5TrSRUUSoqt65o8gukiEqQ/Gi82UzaIuapKefZ6XrMem
+         T6ljE7wt0qZ7c9fiG22d+N1VoY+HGdDNglqniIlbjYr6yXbDq5DSojuosLT4gSK7O7V1
+         APYsyiGYQg2RAhndyVGT/aJD1S+HVPtNnXA+SngnAjbMSfuCRvU3uCH/IuswwT9T24Xj
+         wzwA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=D0Qf6XYpQVz6j4kI9S9/dfIfwmKCeXho7yxm3tWLHDw=;
-        b=6FgxwMW7U4mBQfc5JtMDqtIobyCNBViEC8YmejaVqHWqoBM+Vs4Yb3gg1pq4g8fiMp
-         ti1LuqtCnh63wyQ5gkLC5V6PVysIGBS0DKcGTSYH5NIkuR3Wm3RPnJdbLETJxBzEY+9E
-         MHz7MDSCbB60s0Vp3EMWMF0XF6yArUctWypcSxTRJYsJe/W/Fjs75bylZMCiygUlm87K
-         jrg0opGJ70Jsts7t9nIxwFapc0eyI86UuJI+Ubd8uBr0BAoOyEJ08mHjZpd66OvalA9h
-         jfeD6iT+uBHDRPN2jg3QFKjAhtisl7+QewWiiGbBMwsDCC1oOYXVw+C7ZdANmYUvj9Sc
-         zrUg==
-X-Gm-Message-State: AJIora+hn0rryx8pwlA+IlPp0sFQ0kYjVeA/buAzlie4INlJP5sseWt/
-        kgUIzgfcyGax4CGrX6n+ZMY=
-X-Google-Smtp-Source: AGRyM1v57jK2+8qNDptU7lzeTTrC2OcvyKTWnuxBMkLgal9tNGKAfuHo96gs8C1loeyjFe61SHiZww==
-X-Received: by 2002:a05:6e02:1848:b0:2da:af35:e7c3 with SMTP id b8-20020a056e02184800b002daaf35e7c3mr1352620ilv.265.1657267904342;
-        Fri, 08 Jul 2022 01:11:44 -0700 (PDT)
-Received: from [192.168.1.145] ([207.188.167.132])
-        by smtp.gmail.com with ESMTPSA id z62-20020a0293c4000000b0033f258426c0sm960209jah.108.2022.07.08.01.11.41
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 08 Jul 2022 01:11:43 -0700 (PDT)
-Message-ID: <624e365e-0f00-9640-74a7-c16e7c7d3469@gmail.com>
-Date:   Fri, 8 Jul 2022 10:11:39 +0200
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=Vc+eezlfPnzWYHGSMVP9Zv55im3/1gxewNG9+41SKHQ=;
+        b=Rtnn6SGAXO3b5J6oyDiVfT7XZAZcQUoltLURZb2KgoNxRfBt/h4VJtSUhhx0ABx6bb
+         Tg8khS9r8DZolg7Noe2uFqIsFqFMJ2hqtysOrCLiwH3TBOy4STYIp09AszOMppDDVGFs
+         OUr9ST97kFzAehFAsEzHg7v17LxIsTA3Haudb97rNZDVZx3udnGEXDJw3TtepFlDG244
+         dRjP7vIPYKm31GeqPcxP8YVPrQfksvgjYMXdhCqDFR08UhXqmCDlDwA675tUK3FvOJEX
+         9c/s+O54Yb3Y+pfA0hC3RCOERYDIl9oWA5P589u7f9dnbxmT6JmaV/qjahamDqE6MCIC
+         XKAQ==
+X-Gm-Message-State: AJIora8Yh/nuS6pNZC9+1sQ9H/NU/2nVelkDg9ZjUtFZ0d5MJMaMQgRh
+        iXwxwL5SW3AIlBAKzo50ZpYauw==
+X-Google-Smtp-Source: AGRyM1tB6s3CEGsSYt8UjK8u2lu2OyolxM22P8Pu7PnItHcD07cQTGZypwxfxyU28F9ynAVDHrwFTA==
+X-Received: by 2002:a17:902:b198:b0:16c:1c13:cd8d with SMTP id s24-20020a170902b19800b0016c1c13cd8dmr2566479plr.92.1657267955732;
+        Fri, 08 Jul 2022 01:12:35 -0700 (PDT)
+Received: from localhost ([122.171.18.80])
+        by smtp.gmail.com with ESMTPSA id j14-20020a170902da8e00b0016bd67bc868sm2679388plx.210.2022.07.08.01.12.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 08 Jul 2022 01:12:35 -0700 (PDT)
+Date:   Fri, 8 Jul 2022 13:42:33 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     Dmitry Osipenko <dmitry.osipenko@collabora.com>
+Cc:     Chanwoo Choi <cw00.choi@samsung.com>,
+        Dmitry Osipenko <digetx@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Kyungmin Park <kyungmin.park@samsung.com>,
+        MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Nishanth Menon <nm@ti.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Viresh Kumar <vireshk@kernel.org>, linux-pm@vger.kernel.org,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-tegra@vger.kernel.org,
+        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+        Rob Herring <robh@kernel.org>
+Subject: Re: [PATCH V2 00/13] OPP: Add support for multiple clocks*
+Message-ID: <20220708081233.pncnill6dqe4ghko@vireshk-i7>
+References: <cover.1657003420.git.viresh.kumar@linaro.org>
+ <d557bbd0-2afb-12dc-1287-1aeb44ef55f5@collabora.com>
+ <20220708071926.zehurtbcf35s5tv6@vireshk-i7>
+ <8c52e1d2-6c6d-9a09-e426-e5292f68a3f0@collabora.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH] ASoC: mediatek: mt8186: Remove condition with no effect
-Content-Language: en-US
-To:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Zhongjun Tan <hbut_tan@163.com>, lgirdwood@gmail.com,
-        broonie@kernel.org, perex@perex.c, tiwai@suse.com,
-        jiaxin.yu@mediatek.com, tanzhongjun@coolpad.com,
-        colin.king@intel.com
-Cc:     alsa-devel@alsa-project.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <20220708024651.42999-1-hbut_tan@163.com>
- <ee0d9788-b742-21bb-9cc5-7b729897408b@collabora.com>
-From:   Matthias Brugger <matthias.bgg@gmail.com>
-In-Reply-To: <ee0d9788-b742-21bb-9cc5-7b729897408b@collabora.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <8c52e1d2-6c6d-9a09-e426-e5292f68a3f0@collabora.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 08/07/2022 10:01, AngeloGioacchino Del Regno wrote:
-> Il 08/07/22 04:46, Zhongjun Tan ha scritto:
->> From: Zhongjun Tan <tanzhongjun@coolpad.com>
->>
->> Remove condition with no effect
->>
->> Signed-off-by: Zhongjun Tan <tanzhongjun@coolpad.com>
->> ---
->>   sound/soc/mediatek/mt8186/mt8186-dai-adda.c | 2 --
->>   1 file changed, 2 deletions(-)
->>
->> diff --git a/sound/soc/mediatek/mt8186/mt8186-dai-adda.c 
->> b/sound/soc/mediatek/mt8186/mt8186-dai-adda.c
->> index db71b032770d..6be6d4f3b585 100644
->> --- a/sound/soc/mediatek/mt8186/mt8186-dai-adda.c
->> +++ b/sound/soc/mediatek/mt8186/mt8186-dai-adda.c
->> @@ -295,8 +295,6 @@ static int mtk_adda_pad_top_event(struct 
->> snd_soc_dapm_widget *w,
->>       case SND_SOC_DAPM_PRE_PMU:
->>           if (afe_priv->mtkaif_protocol == MTKAIF_PROTOCOL_2_CLK_P2)
->>               regmap_write(afe->regmap, AFE_AUD_PAD_TOP, 0x39);
->> -        else if (afe_priv->mtkaif_protocol == MTKAIF_PROTOCOL_2)
->> -            regmap_write(afe->regmap, AFE_AUD_PAD_TOP, 0x31);
+On 08-07-22, 10:26, Dmitry Osipenko wrote:
+> On 7/8/22 10:19, Viresh Kumar wrote:
+> > On 07-07-22, 22:43, Dmitry Osipenko wrote:
+> >> This patch breaks Tegra again, please take a look:
+> > 
+> > Damn, not again :(
+> > 
+> >>    OPP: Remove dev{m}_pm_opp_of_add_table_noclk()
+> > 
+> > Why did you mention this patch ? This just removed an unused API,
+> > Tegra should have broke because of something else, isn't it ?
 > 
-> I think that this needs some clarification from MediaTek: was 0x31 a typo here?
-> 
+> This patch is the cause.
 
-Looks like the write is covered by the else case already, so we don't need the 
-else if here. In any case commit message could be improved.
+I was tracking the crash too closely it seems. :(
 
-Regards,
-Matthias
+> I see that previously dev_pm_opp_set_config() had "_add_opp_table(dev,
+> false)", now it's "_add_opp_table(dev, true)".
 
-> Regards,
-> Angelo
-> 
->>           else
->>               regmap_write(afe->regmap, AFE_AUD_PAD_TOP, 0x31);
->>           break;
-> 
-> 
+That's definitely a mistake, I still don't understand though how it
+can lead to the crash we got.
+
+I have fixed this in my tree now, can you check again please.
+
+-- 
+viresh

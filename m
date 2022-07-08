@@ -2,266 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 70EB856BF42
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 20:35:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5037856C0FB
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Jul 2022 20:38:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239160AbiGHQ25 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Jul 2022 12:28:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40904 "EHLO
+        id S239100AbiGHQaU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Jul 2022 12:30:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43354 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239359AbiGHQ2i (ORCPT
+        with ESMTP id S239341AbiGHQ3s (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Jul 2022 12:28:38 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 947BA20B;
-        Fri,  8 Jul 2022 09:27:44 -0700 (PDT)
-Received: from [IPV6:2a01:e0a:120:3210:3cab:61a1:2b1f:896b] (unknown [IPv6:2a01:e0a:120:3210:3cab:61a1:2b1f:896b])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        Fri, 8 Jul 2022 12:29:48 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 083AF208;
+        Fri,  8 Jul 2022 09:29:27 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        (Authenticated sender: benjamin.gaignard)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id AD7BD66015BF;
-        Fri,  8 Jul 2022 17:27:42 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1657297663;
-        bh=M2XcgqYs6U+1Gi7Jie82t46uoCuX+14uCwhy1mBpf+M=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=d2km7C3FWFcz1KTim3I9/kIUdFITsY+FuaSR8gBCBJAfljtekinzQ0OzUVNyjua2q
-         /A4wTU80QYAD7JrR8LVMZkMwpooLuSp/jpvgv9m1nc1Z8DI3jBr3qqb5dQbbTVkYgJ
-         32HyiO486LLwBRY5eB/CYt/YcWhiiwUzLvthcObej84XGW3sRNk4OZ017mV0ncmBVp
-         l7WAf1P88rnD8NMstdzMwqABH71kyyEYJ8L7PTvl08bdzDyZJpT+mfMbx7GVwco7Rx
-         kQQNT15xNA5JpXc/yMqqDdG7ZAfNHxAyd7etOKrAfwwQDnGe0DJkgJiGvS7X27R3BB
-         NZGtgtBAR94Iw==
-Message-ID: <7041df2a-e248-56d4-da6a-343b610de8b4@collabora.com>
-Date:   Fri, 8 Jul 2022 18:27:40 +0200
+        by ams.source.kernel.org (Postfix) with ESMTPS id AEDEDB828A6;
+        Fri,  8 Jul 2022 16:29:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AFBF9C341C6;
+        Fri,  8 Jul 2022 16:29:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1657297764;
+        bh=bnYt7XSKQbcRefHIMdh+InQ9CqN2VQX7nimG9Okphro=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=WomL5vW9a8IMxo80M+xawgDmjrK4aQEofHM5wARWcZI3nmY8mvW+pUSgA3j4jvMHx
+         3uDUpjNmfWdXC7CoDq9d3/M1Do/B+1JNrk+f5IQyv031tmQBWDJeuvfssvcLwthm/y
+         Ym9oHPbagYNWXUvK7MRD2FSKo/DdGTxPBSHNOEi6uoqqbTT2QwhaJ5cryZiC7nrqd/
+         Dqt/kFUzUAGEg4QrbVNJq/+/pbJeEiOMlf3TFPbhJ7KIPM6LvZpI9sEUCfChmsMBvR
+         UYt0F33WWEfHs8UYvp6diua1X/c7m26CKRgEPSJiJeDpfSdKOjeOlKuSg3YGmCSoL+
+         oF1qDHA092R6g==
+Date:   Fri, 8 Jul 2022 18:29:19 +0200
+From:   Marek =?UTF-8?B?QmVow7pu?= <kabel@kernel.org>
+To:     Pali =?UTF-8?B?Um9ow6Fy?= <pali@kernel.org>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Pavel Machek <pavel@ucw.cz>, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-leds@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 1/2] [RFT] dt-bindings: leds: Add
+ cznic,turris1x-leds.yaml binding
+Message-ID: <20220708182919.2a1e4a52@thinkpad>
+In-Reply-To: <20220708160528.ysy4lzxfpwobfiwr@pali>
+References: <20220705000448.14337-1-pali@kernel.org>
+        <20220705155929.25565-1-pali@kernel.org>
+        <20220706131507.353f0bed@thinkpad>
+        <20220706111912.hz2mx4dc35lgq6l5@pali>
+        <20220706172732.6228d180@thinkpad>
+        <25b43586-eeb3-4b7b-7362-2d599aa89cf0@linaro.org>
+        <20220708160528.ysy4lzxfpwobfiwr@pali>
+X-Mailer: Claws Mail 3.19.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH v12 11/17] media: uapi: Add
- V4L2_CID_STATELESS_HEVC_ENTRY_POINT_OFFSETS control
-Content-Language: en-US
-To:     =?UTF-8?Q?Jernej_=c5=a0krabec?= <jernej.skrabec@gmail.com>,
-        mchehab@kernel.org, hverkuil@xs4all.nl,
-        ezequiel@vanguardiasur.com.ar, p.zabel@pengutronix.de,
-        gregkh@linuxfoundation.org, mripard@kernel.org,
-        paul.kocialkowski@bootlin.com, wens@csie.org, samuel@sholland.org,
-        nicolas.dufresne@collabora.com, andrzej.p@collabora.com
-Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-rockchip@lists.infradead.org, linux-staging@lists.linux.dev,
-        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
-        kernel@collabora.com
-References: <20220708120554.495495-1-benjamin.gaignard@collabora.com>
- <2106581.irdbgypaU6@jernej-laptop>
- <5e346689-5a0c-8fc7-129d-53a6f28e5349@collabora.com>
- <4604967.rnE6jSC6OK@kista>
-From:   Benjamin Gaignard <benjamin.gaignard@collabora.com>
-In-Reply-To: <4604967.rnE6jSC6OK@kista>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Fri, 8 Jul 2022 18:05:28 +0200
+Pali Roh=C3=A1r <pali@kernel.org> wrote:
 
-Le 08/07/2022 à 18:11, Jernej Škrabec a écrit :
-> Dne petek, 08. julij 2022 ob 18:00:24 CEST je Benjamin Gaignard napisal(a):
->> Le 08/07/2022 à 16:02, Jernej Škrabec a écrit :
->>> Hi Benjamin!
->>>
->>> Dne petek, 08. julij 2022 ob 14:05:48 CEST je Benjamin Gaignard
-> napisal(a):
->>>> The number of 'entry point offset' can be very variable.
->>>> Instead of using a large static array define a v4l2 dynamic array
->>>> of U32 (V4L2_CTRL_TYPE_U32).
->>>> The number of entry point offsets is reported by the elems field
->>>> and in struct v4l2_ctrl_hevc_slice_params.num_entry_point_offsets
->>>> field.
->>>>
->>>> Signed-off-by: Benjamin Gaignard <benjamin.gaignard@collabora.com>
->>>> Acked-by: Nicolas Dufresne <nicolas.dufresne@collabora.com>
->>>> Tested-by: Jernej Skrabec <jernej.skrabec@gmail.com>
->>>> ---
->>>> version 12:
->>>> - Reword num_entry_point_offsets documentation
->>>>
->>>>    .../userspace-api/media/v4l/ext-ctrls-codec.rst     | 13 +++++++++++++
->>>>    drivers/media/v4l2-core/v4l2-ctrls-defs.c           |  5 +++++
->>>>    include/media/hevc-ctrls.h                          |  5 ++++-
->>>>    3 files changed, 22 insertions(+), 1 deletion(-)
->>>>
->>>> diff --git a/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst
->>>> b/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst index
->>>> c2e0adece613..0cd967126fdf 100644
->>>> --- a/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst
->>>> +++ b/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst
->>>> @@ -3010,6 +3010,11 @@ enum v4l2_mpeg_video_hevc_size_of_length_field -
->>>>
->>>>        * - __u32
->>>>        
->>>>          - ``data_bit_offset``
->>>>          - Offset (in bits) to the video data in the current slice data.
->>>>
->>>> +    * - __u32
->>>> +      - ``num_entry_point_offsets``
->>>> +      - Specifies the number of entry point offset syntax elements in
->>>> the
->>>> slice header. +        When the driver supports it, the
->>>> ``V4L2_CID_STATELESS_HEVC_ENTRY_POINT_OFFSETS`` +        must be set.
->>>>
->>>>        * - __u8
->>>>        
->>>>          - ``nal_unit_type``
->>>>          - Specifies the coding type of the slice (B, P or I).
->>>>
->>>> @@ -3150,6 +3155,14 @@ enum v4l2_mpeg_video_hevc_size_of_length_field -
->>>>
->>>>        \normalsize
->>>>
->>>> +``V4L2_CID_STATELESS_HEVC_ENTRY_POINT_OFFSETS (integer)``
->>>> +    Specifies entry point offsets in bytes.
->>>> +    This control is a dynamically sized array. The number of entry point
->>>> +    offsets is reported by the ``elems`` field.
->>>> +    This bitstream parameter is defined according to :ref:`hevc`.
->>>> +    They are described in section 7.4.7.1 "General slice segment header
->>>> +    semantics" of the specification.
->>> You forgot to update above description per Ezequiel comment.
->> No it was num_entry_point_offsets which was needed to be updated
->> not this control.
-> Both needs to be updated. Ezequiel said:
->
-> "I would add Jernej's clarification about the length of the control
-> here, where the control is documented."
->
-> ""
-> This control is a dynamically sized array. The number of entry point
-> offsets is reported by the ``elems`` field.
-> This bitstream parameter is defined according to :ref:`hevc`.
-> They are described in section 7.4.7.1 "General slice segment header
-> semantics" of the specification.
-> When multiple slices are submitted in a request, the length
-> of this array must be the sum of num_entry_point_offsets
-> of all the slices in the request.
-> ""
+> On Wednesday 06 July 2022 17:36:43 Krzysztof Kozlowski wrote:
+> > On 06/07/2022 17:27, Marek Beh=C3=BAn wrote: =20
+> > > On Wed, 6 Jul 2022 13:19:12 +0200
+> > > Pali Roh=C3=A1r <pali@kernel.org> wrote:
+> > >  =20
+> > >> On Wednesday 06 July 2022 13:15:07 Marek Beh=C3=BAn wrote: =20
+> > >>> On Tue,  5 Jul 2022 17:59:28 +0200
+> > >>> Pali Roh=C3=A1r <pali@kernel.org> wrote:
+> > >>>    =20
+> > >>>> +examples:
+> > >>>> +  - |
+> > >>>> +    #include <dt-bindings/leds/common.h>
+> > >>>> +
+> > >>>> +    cpld@3,0 {   =20
+> > >>>
+> > >>> The generic node name should be just "bus". That it is a CPLD
+> > >>> implementation should come from compatible string.   =20
+> > >>
+> > >> Sorry, I do not understand why "bus". Why other memory chips are nam=
+ed
+> > >> e.g. "nand" or "nor" and not "bus" too? =20
+> > >=20
+> > > As far as I understand this is because that is the preferred name for
+> > > busses and this is a bus, since there is also the simple-bus compatib=
+le.
+> > >  =20
+> > >> By this logic should not be _every_ node called just "bus"? Hm... an=
+d=20
+> > >> are names needed at all then? =20
+> > >=20
+> > > :-)
+> > >=20
+> > > The schema
+> > >   https://github.com/devicetree-org/dt-schema/blob/main/dtschema/sche=
+mas/simple-bus.yaml
+> > > allows for different names (soc|axi|ahb|*-bus) to avoid warnings on
+> > > existing old dts files.
+> > >=20
+> > > The preferred way is to not have the implementation in nodename,
+> > > similar to how we use 'switch' instead of 'mv88e6xxx', or
+> > > 'ethernet-phy' instead of 'mv88e151x', or 'led-controller', ... =20
+> >=20
+> > Thanks Marek for detailed explanation.
+> > The cases above rather trigger my comments and this one here, after
+> > Pali's explanation, do not fit them. pld is a generic class of a device,
+> > so it is okay here. cpld probably as well (although one could argue that
+> > it is a subset of pld, so the generic name is pld, but then one would
+> > say fpga also should be called pld). For me it does not have to be bus,
+> > just don't want mv88e6xxx or any other vendor/model names. Therefore
+> > cpld is fine. =20
+>=20
+> Exactly. cpld, fpga, nor, nand, soc... all of them are not real buses.
+>=20
+> simple-bus here is just name invented by device tree and without which
+> existing kernel drivers refuse to work.
 
-I have totally miss the last part.
-It is fix in v13.
+OK, then cpld seems correct. I thought it was considered a bus in a way,
+since "simple-bus" is used in compatible.
 
-Thanks for your review.
-Regards,
-Benjamin
-
->
-> Best regards,
-> Jernej
->
->> Regards,
->> Benjamin
->>
->>> Best regards,
->>> Jernej
->>>
->>>> +
->>>>
->>>>    ``V4L2_CID_STATELESS_HEVC_SCALING_MATRIX (struct)``
->>>>    
->>>>        Specifies the HEVC scaling matrix parameters used for the scaling
->>>>
->>>> process for transform coefficients.
->>>> diff --git a/drivers/media/v4l2-core/v4l2-ctrls-defs.c
->>>> b/drivers/media/v4l2-core/v4l2-ctrls-defs.c index
->>>> d594efbcbb93..e22921e7ea61 100644
->>>> --- a/drivers/media/v4l2-core/v4l2-ctrls-defs.c
->>>> +++ b/drivers/media/v4l2-core/v4l2-ctrls-defs.c
->>>> @@ -1188,6 +1188,7 @@ const char *v4l2_ctrl_get_name(u32 id)
->>>>
->>>>    	case V4L2_CID_STATELESS_HEVC_DECODE_PARAMS:		return
->>> "HEVC Decode
->>>
->>>> Parameters"; case V4L2_CID_STATELESS_HEVC_DECODE_MODE:		return
->>> "HEVC Decode
->>>
->>>> Mode"; case V4L2_CID_STATELESS_HEVC_START_CODE:		return
->>> "HEVC Start Code";
->>>
->>>> +	case V4L2_CID_STATELESS_HEVC_ENTRY_POINT_OFFSETS:	return
->>> "HEVC Entry
->>>
->>>> Point Offsets";
->>>>
->>>>    	/* Colorimetry controls */
->>>>    	/* Keep the order of the 'case's the same as in v4l2-controls.h!
->>> */
->>>
->>>> @@ -1518,6 +1519,10 @@ void v4l2_ctrl_fill(u32 id, const char **name,
->>>> enum
->>>>
->>>> v4l2_ctrl_type *type, case V4L2_CID_STATELESS_HEVC_DECODE_PARAMS:
->>>>    		*type = V4L2_CTRL_TYPE_HEVC_DECODE_PARAMS;
->>>>    		break;
->>>>
->>>> +	case V4L2_CID_STATELESS_HEVC_ENTRY_POINT_OFFSETS:
->>>> +		*type = V4L2_CTRL_TYPE_U32;
->>>> +		*flags |= V4L2_CTRL_FLAG_DYNAMIC_ARRAY;
->>>> +		break;
->>>>
->>>>    	case V4L2_CID_STATELESS_VP9_COMPRESSED_HDR:
->>>>    		*type = V4L2_CTRL_TYPE_VP9_COMPRESSED_HDR;
->>>>    		break;
->>>>
->>>> diff --git a/include/media/hevc-ctrls.h b/include/media/hevc-ctrls.h
->>>> index a372c184689e..3a6601a46ced 100644
->>>> --- a/include/media/hevc-ctrls.h
->>>> +++ b/include/media/hevc-ctrls.h
->>>> @@ -20,6 +20,7 @@
->>>>
->>>>    #define V4L2_CID_STATELESS_HEVC_DECODE_PARAMS	
-> (V4L2_CID_CODEC_BASE
->>> + 1012)
->>>
->>>>    #define V4L2_CID_STATELESS_HEVC_DECODE_MODE	(V4L2_CID_CODEC_BASE
-> +
->>>>    1015)
->>>>    #define V4L2_CID_STATELESS_HEVC_START_CODE	(V4L2_CID_CODEC_BASE + 1016)
->>>>
->>>> +#define V4L2_CID_STATELESS_HEVC_ENTRY_POINT_OFFSETS (V4L2_CID_CODEC_BASE
->>>> +
->>>> 1017)
->>>>
->>>>    /* enum v4l2_ctrl_type type values */
->>>>    #define V4L2_CTRL_TYPE_HEVC_SPS 0x0120
->>>>
->>>> @@ -316,6 +317,8 @@ struct v4l2_hevc_pred_weight_table {
->>>>
->>>>     *
->>>>     * @bit_size: size (in bits) of the current slice data
->>>>     * @data_bit_offset: offset (in bits) to the video data in the current
->>>>
->>>> slice data + * @num_entry_point_offsets: specifies the number of entry
->>>> point offset syntax + *			     elements in the slice
->>> header.
->>>
->>>>     * @nal_unit_type: specifies the coding type of the slice (B, P or I)
->>>>     * @nuh_temporal_id_plus1: minus 1 specifies a temporal identifier for
->>>>     the
->>>>
->>>> NAL unit * @slice_type: see V4L2_HEVC_SLICE_TYPE_{}
->>>> @@ -358,7 +361,7 @@ struct v4l2_hevc_pred_weight_table {
->>>>
->>>>    struct v4l2_ctrl_hevc_slice_params {
->>>>    
->>>>    	__u32	bit_size;
->>>>    	__u32	data_bit_offset;
->>>>
->>>> -
->>>> +	__u32	num_entry_point_offsets;
->>>>
->>>>    	/* ISO/IEC 23008-2, ITU-T Rec. H.265: NAL unit header */
->>>>    	__u8	nal_unit_type;
->>>>    	__u8	nuh_temporal_id_plus1;
->
+Marek

@@ -2,196 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C87256C609
-	for <lists+linux-kernel@lfdr.de>; Sat,  9 Jul 2022 04:47:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6413456C60C
+	for <lists+linux-kernel@lfdr.de>; Sat,  9 Jul 2022 04:51:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229535AbiGICrV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Jul 2022 22:47:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60928 "EHLO
+        id S229566AbiGICu6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Jul 2022 22:50:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34690 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229452AbiGICrT (ORCPT
+        with ESMTP id S229452AbiGICu5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Jul 2022 22:47:19 -0400
-Received: from mail-oa1-x34.google.com (mail-oa1-x34.google.com [IPv6:2001:4860:4864:20::34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D86A78211;
-        Fri,  8 Jul 2022 19:47:17 -0700 (PDT)
-Received: by mail-oa1-x34.google.com with SMTP id 586e51a60fabf-10bffc214ffso883702fac.1;
-        Fri, 08 Jul 2022 19:47:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=6BGKZlQ2XgPXargm2Wo7BrmlFidyoAhj3y0XxGiXJm0=;
-        b=JykCDruTogaWu6LLxNnu8Hd8UnhoJw4HRRvDIpLjJ3ArGe9cb7eNVrYGXxOlZhf9HH
-         pNklBJZxZ9Gy29spJTJqCHrIDxvRTBr1RSvwrqhV9UE9qvzQsf6Z4GN885ZZHNiRFmmA
-         fqLPZ4oaPvYSZINiq45OiSReXqi+isfQ/BkcqEqqNnRaFEqMj/H2x5c/dnWhmUS9UCjr
-         XxUmLujFcDkNylO/H6/dwgjdP2R3DweSb3MShtbRT6m4DfROYxmJy0w9YxTlnic5PNKc
-         C8UNMkn6QSIyAaxy9mHISrYyUojjBYxmmPBqNeMbgBpD/+Bbux/0oH011IRwfZae8dPq
-         J04Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=6BGKZlQ2XgPXargm2Wo7BrmlFidyoAhj3y0XxGiXJm0=;
-        b=LoNeawgfiTLmTfnjjtI7P5Gj9KqGHSR0YY5AjEJynqSTgOuiYH5MFI8N1RwwIRL2+A
-         JiBBRu0lleUnBqsRwykabJxlS6QxcvPjzz/DhpZEoVlPoRkUN+PQFEdp9i+g4x6o6LoI
-         X6km3bQ/5I8hlQJzeJt13oYl5DGVLdfv0Sb3ASwAQ7CqBb97QNgyXdoAThjPAXiZKNJT
-         nJ7H1o9naglli0aMtOz3Cmzf9EzRkVardM0hjo041QliPQM9fP6QgSpKb1RUyvXP2VTb
-         gBUhA4cfonYvBr+0pH8kpNSrDSvls+L979dKhu9RXNrtGGerMIlgUGthu8codgNjIzFV
-         DmaA==
-X-Gm-Message-State: AJIora++Q235eP20/mXjr7NQKr8tMKBnDd7WqUfnjF7aa0himvzr5Emm
-        1rQ/qgTR3zTwqDhzQ6JChDU93iqCdSbM8q1j7EFoNw==
-X-Google-Smtp-Source: AGRyM1vEOmXQ0e6DzN+O8R9g1l8g+u86gRu6KOjY6pNieru/kNk84RuiD7FmFu2uEYfiHCgH1y6KvA==
-X-Received: by 2002:a05:6870:c0ce:b0:10c:4d83:8e15 with SMTP id e14-20020a056870c0ce00b0010c4d838e15mr1624440oad.137.1657334836236;
-        Fri, 08 Jul 2022 19:47:16 -0700 (PDT)
-Received: from ubuntu.lan ([136.175.179.221])
-        by smtp.gmail.com with ESMTPSA id u65-20020acaab44000000b0032eb81e352asm274880oie.38.2022.07.08.19.47.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 08 Jul 2022 19:47:15 -0700 (PDT)
-From:   Hawkins Jiawei <yin31149@gmail.com>
-To:     syzbot+5f26f85569bd179c18ce@syzkaller.appspotmail.com
-Cc:     andrii@kernel.org, ast@kernel.org, borisp@nvidia.com,
-        bpf@vger.kernel.org, daniel@iogearbox.net, davem@davemloft.net,
-        edumazet@google.com, guwen@linux.alibaba.com,
-        yoshfuji@linux-ipv6.org, dsahern@kernel.org,
-        john.fastabend@gmail.com, kafai@fb.com, kgraul@linux.ibm.com,
-        kpsingh@kernel.org, kuba@kernel.org, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, pabeni@redhat.com, songliubraving@fb.com,
-        syzkaller-bugs@googlegroups.com, yhs@fb.com,
-        skhan@linuxfoundation.org, 18801353760@163.com,
-        paskripkin@gmail.com,
-        linux-kernel-mentees@lists.linuxfoundation.org
-Subject: [PATCH] smc: fix refcount bug in sk_psock_get (2)
-Date:   Sat,  9 Jul 2022 10:46:59 +0800
-Message-Id: <20220709024659.6671-1-yin31149@gmail.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <00000000000026328205e08cdbeb@google.com>
-References: <00000000000026328205e08cdbeb@google.com>
+        Fri, 8 Jul 2022 22:50:57 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E13F17AB1A;
+        Fri,  8 Jul 2022 19:50:55 -0700 (PDT)
+Received: from dggpeml500023.china.huawei.com (unknown [172.30.72.54])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4Lfvgl3RtRzTgtg;
+        Sat,  9 Jul 2022 10:47:15 +0800 (CST)
+Received: from dggpeml500008.china.huawei.com (7.185.36.147) by
+ dggpeml500023.china.huawei.com (7.185.36.114) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Sat, 9 Jul 2022 10:50:53 +0800
+Received: from [127.0.0.1] (10.67.111.83) by dggpeml500008.china.huawei.com
+ (7.185.36.147) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Sat, 9 Jul
+ 2022 10:50:53 +0800
+Message-ID: <cdaf434f-90d5-696f-2a60-5946ecefcf0b@huawei.com>
+Date:   Sat, 9 Jul 2022 10:50:53 +0800
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH -next] PCI: endpoint: Fix Kconfig dependency
+To:     Randy Dunlap <rdunlap@infradead.org>,
+        Bjorn Helgaas <helgaas@kernel.org>,
+        Jon Mason <jdmason@kudzu.us>
+CC:     <kishon@ti.com>, <lpieralisi@kernel.org>, <kw@linux.com>,
+        <bhelgaas@google.com>, <Frank.Li@nxp.com>,
+        <linux-pci@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+References: <20220627202528.GA1775049@bhelgaas>
+ <687deec4-b799-0abc-5cf1-c65021c36ebd@infradead.org>
+From:   Ren Zhijie <renzhijie2@huawei.com>
+In-Reply-To: <687deec4-b799-0abc-5cf1-c65021c36ebd@infradead.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Originating-IP: [10.67.111.83]
+X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
+ dggpeml500008.china.huawei.com (7.185.36.147)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: hawk <18801353760@163.com>
+Hi, Bjorn and jon
 
-Syzkaller reportes refcount bug as follows:
-------------[ cut here ]------------
-refcount_t: saturated; leaking memory.
-WARNING: CPU: 1 PID: 3605 at lib/refcount.c:19 refcount_warn_saturate+0xf4/0x1e0 lib/refcount.c:19
-Modules linked in:
-CPU: 1 PID: 3605 Comm: syz-executor208 Not tainted 5.18.0-syzkaller-03023-g7e062cda7d90 #0
-...
-Call Trace:
- <TASK>
- __refcount_add_not_zero include/linux/refcount.h:163 [inline]
- __refcount_inc_not_zero include/linux/refcount.h:227 [inline]
- refcount_inc_not_zero include/linux/refcount.h:245 [inline]
- sk_psock_get+0x3bc/0x410 include/linux/skmsg.h:439
- tls_data_ready+0x6d/0x1b0 net/tls/tls_sw.c:2091
- tcp_data_ready+0x106/0x520 net/ipv4/tcp_input.c:4983
- tcp_data_queue+0x25f2/0x4c90 net/ipv4/tcp_input.c:5057
- tcp_rcv_state_process+0x1774/0x4e80 net/ipv4/tcp_input.c:6659
- tcp_v4_do_rcv+0x339/0x980 net/ipv4/tcp_ipv4.c:1682
- sk_backlog_rcv include/net/sock.h:1061 [inline]
- __release_sock+0x134/0x3b0 net/core/sock.c:2849
- release_sock+0x54/0x1b0 net/core/sock.c:3404
- inet_shutdown+0x1e0/0x430 net/ipv4/af_inet.c:909
- __sys_shutdown_sock net/socket.c:2331 [inline]
- __sys_shutdown_sock net/socket.c:2325 [inline]
- __sys_shutdown+0xf1/0x1b0 net/socket.c:2343
- __do_sys_shutdown net/socket.c:2351 [inline]
- __se_sys_shutdown net/socket.c:2349 [inline]
- __x64_sys_shutdown+0x50/0x70 net/socket.c:2349
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x46/0xb0
- </TASK>
+Just a friendly ping ...
 
-syzbot is try to setup TLS on a SMC socket.
+Is this patch be merged or squashed?
 
-During SMC fallback process in connect syscall, kernel will sets the
-smc->sk.sk_socket->file->private_data to smc->clcsock
-in smc_switch_to_fallback(), and set smc->clcsock->sk_user_data
-to origin smc in smc_fback_replace_callbacks().
-
-When syzbot makes a setsockopt syscall, its argument sockfd
-actually points to smc->clcsock, which is not a smc_sock type,
-So it won't call smc_setsockopt() in setsockopt syscall,
-instead it will call do_tcp_setsockopt() to setup TLS, which
-bypasses the fixes 734942cc4ea6, its content is shown as below
-> diff --git a/net/smc/af_smc.c b/net/smc/af_smc.c
-> index be3e80b3e27f1..5eff7cccceffc 100644
-> --- a/net/smc/af_smc.c
-> +++ b/net/smc/af_smc.c
-> @@ -2161,6 +2161,9 @@ static int smc_setsockopt(struct socket *sock,
-> 			int level, int optname,
->  	struct smc_sock *smc;
->  	int val, rc;
+在 2022/6/30 2:51, Randy Dunlap 写道:
 >
-> +	if (level == SOL_TCP && optname == TCP_ULP)
-> +		return -EOPNOTSUPP;
-> +
->  	smc = smc_sk(sk);
+> On 6/27/22 13:25, Bjorn Helgaas wrote:
+>> On Mon, Jun 27, 2022 at 03:07:50PM -0500, Bjorn Helgaas wrote:
+>>> On Mon, Jun 27, 2022 at 02:57:14PM -0500, Bjorn Helgaas wrote:
+>>>> On Fri, Jun 24, 2022 at 09:19:11AM +0800, Ren Zhijie wrote:
+>>>>> If CONFIG_NTB is not set and CONFIG_PCI_EPF_VNTB is y.
+>>>>>
+>>>>> make ARCH=x86_64 CROSS_COMPILE=x86_64-linux-gnu-, will be failed, like this:
+>>>>>
+>>>>> drivers/pci/endpoint/functions/pci-epf-vntb.o: In function `epf_ntb_cmd_handler':
+>>>>> pci-epf-vntb.c:(.text+0x95e): undefined reference to `ntb_db_event'
+>>>>> pci-epf-vntb.c:(.text+0xa1f): undefined reference to `ntb_link_event'
+>>>>> pci-epf-vntb.c:(.text+0xa42): undefined reference to `ntb_link_event'
+>>>>> drivers/pci/endpoint/functions/pci-epf-vntb.o: In function `pci_vntb_probe':
+>>>>> pci-epf-vntb.c:(.text+0x1250): undefined reference to `ntb_register_device'
+>>>>>
+>>>>> The functions ntb_*() are defined in drivers/ntb/core.c, which need CONFIG_NTB setting y to be build-in.
+>>>>> To fix this build error, add depends on NTB.
+>>>>>
+>>>>> Reported-by: Hulk Robot <hulkci@huawei.com>
+>>>>> Fixes: ff32fac00d97("NTB: EPF: support NTB transfer between PCI RC and EP connection")
+>>>>> Signed-off-by: Ren Zhijie <renzhijie2@huawei.com>
+>>>>> Acked-by: Frank Li <frank.li@nxp.com>
+>>>> Am I missing something?
+>>>>
+>>>>    02:54:01 ~/linux (next)$ git checkout -b wip/ren-endpoint-ntb v5.19-rc1
+>>>>    Switched to a new branch 'wip/ren-endpoint-ntb'
+>>>>    02:54:23 ~/linux (wip/ren-endpoint-ntb)$ b4 am -om/ https://lore.kernel.org/r/20220624011911.164146-1-renzhijie2@huawei.com
+>>>>    02:54:47 ~/linux (wip/ren-endpoint-ntb)$ git am m/20220624_renzhijie2_pci_endpoint_fix_kconfig_dependency.mbx
+>>>>    Applying: PCI: endpoint: Fix Kconfig dependency
+>>>>    error: patch failed: drivers/pci/endpoint/functions/Kconfig:29
+>>>>
+>>>> Obviously I could fix this manually, but if there's something wrong
+>>>> with your patch posting process, we should fix it.
+>>> Oh, I see the problem.  This patch depends on some other VNTB patch
+>>> that hasn't been merged yet.  That means this fix should be squashed
+>>> into the VNTB patch that adds "config PCI_EPF_VNTB".
+>> Well, I saw *part* of the problem.  This fixes something that is in
+>> -next, added by ff32fac00d97 ("NTB: EPF: support NTB transfer between
+>> PCI RC and EP connection") [1], which was merged by Jon.
+>>
+>> So I guess Jon will squash and update his branch or merge the
+>> fixup(s).
+>>
+>> (Jon, if you squash, note there are several typos in the commit log:
+>> s/Virtual NTB/virtual NTB/, s/include/includes/, s/3 part/3 parts/,
+>> s/virutal/virtual, s/pci/PCI/, s/BUS/Bus/)
+>>
+>> [1] https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit/?id=ff32fac00d97
+>>
+>>>>> ---
+>>>>> v2: Fix some commit message errors
+>>>>> ---
+>>>>>   drivers/pci/endpoint/functions/Kconfig | 1 +
+>>>>>   1 file changed, 1 insertion(+)
+>>>>>
+>>>>> diff --git a/drivers/pci/endpoint/functions/Kconfig b/drivers/pci/endpoint/functions/Kconfig
+>>>>> index 362555b024e8..9beee4f0f4ee 100644
+>>>>> --- a/drivers/pci/endpoint/functions/Kconfig
+>>>>> +++ b/drivers/pci/endpoint/functions/Kconfig
+>>>>> @@ -29,6 +29,7 @@ config PCI_EPF_NTB
+>>>>>   config PCI_EPF_VNTB
+>>>>>           tristate "PCI Endpoint NTB driver"
+>>>>>           depends on PCI_ENDPOINT
+>>>>> +        depends on NTB
+>>>>>           select CONFIGFS_FS
+>>>>>           help
+>>>>>             Select this configuration option to enable the Non-Transparent
+>>>>> -- 
+> Works for me. Thanks.
 >
->  	/* generic setsockopts reaching us here always apply to the
-> @@ -2185,7 +2188,6 @@ static int smc_setsockopt(struct socket *sock,
->			int level, int optname,
->  	if (rc || smc->use_fallback)
->  		goto out;
->  	switch (optname) {
-> -	case TCP_ULP:
->  	case TCP_FASTOPEN:
->  	case TCP_FASTOPEN_CONNECT:
->  	case TCP_FASTOPEN_KEY:
-> --
-
-Later, sk_psock_get() will treat the smc->clcsock->sk_user_data
-as sk_psock type, which triggers the refcnt warning.
-
-So Just disallow this setup in do_tcp_setsockopt() is OK,
-by checking whether sk_user_data points to a SMC socket.
-
-Reported-and-tested-by: syzbot+5f26f85569bd179c18ce@syzkaller.appspotmail.com
-Signed-off-by: hawk <18801353760@163.com>
----
- net/ipv4/tcp.c | 13 +++++++++++++
- 1 file changed, 13 insertions(+)
-
-diff --git a/net/ipv4/tcp.c b/net/ipv4/tcp.c
-index 9984d23a7f3e..a1e6cab2c748 100644
---- a/net/ipv4/tcp.c
-+++ b/net/ipv4/tcp.c
-@@ -3395,10 +3395,23 @@ static int do_tcp_setsockopt(struct sock *sk, int level, int optname,
- 	}
- 	case TCP_ULP: {
- 		char name[TCP_ULP_NAME_MAX];
-+		struct sock *smc_sock;
- 
- 		if (optlen < 1)
- 			return -EINVAL;
- 
-+		/* SMC sk_user_data may be treated as psock,
-+		 * which triggers a refcnt warning.
-+		 */
-+		rcu_read_lock();
-+		smc_sock = rcu_dereference_sk_user_data(sk);
-+		if (level == SOL_TCP && smc_sock &&
-+		    smc_sock->__sk_common.skc_family == AF_SMC) {
-+			rcu_read_unlock();
-+			return -EOPNOTSUPP;
-+		}
-+		rcu_read_unlock();
-+
- 		val = strncpy_from_sockptr(name, optval,
- 					min_t(long, TCP_ULP_NAME_MAX - 1,
- 					      optlen));
--- 
-2.25.1
+> Acked-by: Randy Dunlap <rdunlap@infradead.org>
+> Tested-by: Randy Dunlap <rdunlap@infradead.org> # build-tested
+>
+> maybe even
+> Reported-by: Randy Dunlap <rdunlap@infradead.org>
+> (see https://lore.kernel.org/linux-next/835b844b-9d9d-615c-af11-44154c2a8102@infradead.org/)
+>
 

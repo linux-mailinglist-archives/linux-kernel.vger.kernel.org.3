@@ -2,67 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1BC3E56CAB0
-	for <lists+linux-kernel@lfdr.de>; Sat,  9 Jul 2022 18:38:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 666CF56CAB8
+	for <lists+linux-kernel@lfdr.de>; Sat,  9 Jul 2022 18:46:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229656AbiGIQin convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Sat, 9 Jul 2022 12:38:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33508 "EHLO
+        id S229513AbiGIQq4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 9 Jul 2022 12:46:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36816 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229641AbiGIQii (ORCPT
+        with ESMTP id S229447AbiGIQqz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 9 Jul 2022 12:38:38 -0400
-Received: from relay.hostedemail.com (smtprelay0010.hostedemail.com [216.40.44.10])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1C2CE0C1
-        for <linux-kernel@vger.kernel.org>; Sat,  9 Jul 2022 09:38:36 -0700 (PDT)
-Received: from omf14.hostedemail.com (a10.router.float.18 [10.200.18.1])
-        by unirelay06.hostedemail.com (Postfix) with ESMTP id 32846353BB;
-        Sat,  9 Jul 2022 16:38:35 +0000 (UTC)
-Received: from [HIDDEN] (Authenticated sender: joe@perches.com) by omf14.hostedemail.com (Postfix) with ESMTPA id 7B11333;
-        Sat,  9 Jul 2022 16:38:33 +0000 (UTC)
-Message-ID: <3cbbd8c924c2d8105115535de6b9b35b618a6eb6.camel@perches.com>
-Subject: Re: [PATCH] wifi: mvm: fix repeated words in comments
-From:   Joe Perches <joe@perches.com>
-To:     Jilin Yuan <yuanjilin@cdjrlc.com>, gregory.greenman@intel.com,
-        kvalo@kernel.org, davem@davemloft.net, edumazet@google.com,
-        kuba@kernel.org, pabeni@redhat.com, quic_srirrama@quicinc.com
-Cc:     linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Date:   Sat, 09 Jul 2022 09:38:32 -0700
-In-Reply-To: <20220709141259.60127-1-yuanjilin@cdjrlc.com>
-References: <20220709141259.60127-1-yuanjilin@cdjrlc.com>
-Content-Type: text/plain; charset="ISO-8859-1"
-Content-Transfer-Encoding: 8BIT
-User-Agent: Evolution 3.44.1-0ubuntu1 
+        Sat, 9 Jul 2022 12:46:55 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8B24120A4;
+        Sat,  9 Jul 2022 09:46:54 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8E0CB60F40;
+        Sat,  9 Jul 2022 16:46:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 63481C3411C;
+        Sat,  9 Jul 2022 16:46:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1657385214;
+        bh=nhQge+HRyXaWCUN57TcS9nHh2S2Nlsi4P8r8FUfHZHE=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=U3gePJoxxzBd3VmKhoooo4vix4ueROdXcwSJeiOMejhROwk1Dp+LBKuYpNhR0uAMR
+         D3g7Gdvb4ifwK2cnb24+KMWWKGXoLBqXPmHDWmG2jQNuVV7utHp/+k6fk/uSBleidv
+         oSTkB+6cf5/h1Y8RKLh6XcTOczUFlMnTn2W6qKAHqfJz4eyJNMSWungD2Wa0kcWbJm
+         zX0ui4hWIL7sL8SQmIP74noOe23quRTiuMWDKno7y66XV43VKvBMTUywrXailxyT22
+         70eGVTdLGfiFbQmXBLTnG9aAZhh77fXkaUf8XyDtzSQCRR5c4OZAclkwQMBIha90t2
+         3ncYRd+fq4Eng==
+Date:   Sat, 9 Jul 2022 17:46:45 +0100
+From:   Mauro Carvalho Chehab <mchehab@kernel.org>
+To:     Hans de Goede <hdegoede@redhat.com>
+Cc:     "Fabio M. De Francesco" <fmdefrancesco@gmail.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Tsuchiya Yuto <kitakar@gmail.com>,
+        Martiros Shakhzadyan <vrzh@vrzh.net>,
+        linux-media@vger.kernel.org, linux-staging@lists.linux.dev,
+        linux-kernel@vger.kernel.org, Ira Weiny <ira.weiny@intel.com>
+Subject: Re: [RESEND PATCH 0/3] staging: media: atomisp: Convert to
+ kmap_local_page()
+Message-ID: <20220709174645.080fc795@sal.lan>
+In-Reply-To: <becfe58a-b4c3-4ae1-4ab2-456057ac7d22@redhat.com>
+References: <20220707200718.26398-1-fmdefrancesco@gmail.com>
+        <becfe58a-b4c3-4ae1-4ab2-456057ac7d22@redhat.com>
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-X-Stat-Signature: c71kasigjg54jxiquqf9dabaiu1qytzz
-X-Rspamd-Server: rspamout07
-X-Rspamd-Queue-Id: 7B11333
-X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=no
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
-X-Session-Marker: 6A6F6540706572636865732E636F6D
-X-Session-ID: U2FsdGVkX188vpeTFgqpyYLvMefLfVV9ZatXLOnW/XQ=
-X-HE-Tag: 1657384713-908630
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, 2022-07-09 at 22:12 +0800, Jilin Yuan wrote:
->  Delete the redundant word 'to'.
->  Delete the redundant word 'the'.
-[]
-> diff --git a/drivers/net/wireless/intel/iwlwifi/mvm/d3.c b/drivers/net/wireless/intel/iwlwifi/mvm/d3.c
-[]
-> @@ -251,7 +251,7 @@ static void iwl_mvm_wowlan_get_rsc_tsc_data(struct ieee80211_hw *hw,
->  
->  		/*
->  		 * For non-QoS this relies on the fact that both the uCode and
-> -		 * mac80211 use TID 0 (as they need to to avoid replay attacks)
-> +		 * mac80211 use TID 0 (as they need to avoid replay attacks)
+Em Fri, 8 Jul 2022 17:55:26 +0200
+Hans de Goede <hdegoede@redhat.com> escreveu:
 
-Maybe ok as is, could be "as required to" or "as they must to"
+> Hi,
+> 
+> On 7/7/22 22:07, Fabio M. De Francesco wrote:
+> > After waiting months, I'm resending three conversions to
+> > kmap_local_page(). I'd like to ask if there is anything which prevents
+> > these patches from being accepted.
+> > 
+> > Please note that these patches were submitted on April 2022.
+> > 
+> > For you convenience here are the links to the patches, the "Reviewed-by:" 
+> > and "Tested-by:" tags:
+> > 
+> > [PATCH] staging: media: atomisp: Use kmap_local_page() in hmm_store()
+> > https://lore.kernel.org/lkml/20220413225531.9425-1-fmdefrancesco@gmail.com/
+> > https://lore.kernel.org/lkml/Yli+R7iLZKqO8kVP@iweiny-desk3/
+> > https://lore.kernel.org/lkml/2d096f20-dbaa-1d49-96e9-a7ae6c19f7fe@redhat.com/
+> > 
+> > [PATCH] staging: media: atomisp: Use kmap_local_page() in hmm_set()
+> > https://lore.kernel.org/lkml/20220413212210.18494-1-fmdefrancesco@gmail.com/
+> > https://lore.kernel.org/lkml/YldNhErgt53RqYp7@iweiny-desk3/
+> > https://lore.kernel.org/lkml/0b04ad1a-e442-1728-ef2c-bab386a4c64c@redhat.com/
+> > 
+> > [PATCH] staging: media: atomisp: Convert kmap() to kmap_local_page()
+> > https://lore.kernel.org/lkml/20220408223129.3844-1-fmdefrancesco@gmail.com/
+> > https://lore.kernel.org/lkml/b0aed731-b56f-4378-b50e-fc0cbccbdb84@redhat.com/
+> > 
+> > Fabio M. De Francesco (3):
+> >   staging: media: atomisp: Convert kmap() to kmap_local_page()
+> >   staging: media: atomisp: Use kmap_local_page() in hmm_set()
+> >   staging: media: atomisp: Use kmap_local_page() in hmm_store()  
+> 
+> Thanks, the entire series looks good to me:
+> 
+> Reviewed-by: Hans de Goede <hdegoede@redhat.com>
 
+Yesterday, I applied all pending patches at media-stage, including those. 
+Please check if  everything is ok, as I had to solve some trivial 
+conflicts.
+
+Regards,
+Mauro

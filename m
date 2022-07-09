@@ -2,79 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E7D5356C7C9
-	for <lists+linux-kernel@lfdr.de>; Sat,  9 Jul 2022 09:58:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5CA5F56C7CB
+	for <lists+linux-kernel@lfdr.de>; Sat,  9 Jul 2022 10:00:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229482AbiGIH6y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 9 Jul 2022 03:58:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47710 "EHLO
+        id S229547AbiGIH75 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 9 Jul 2022 03:59:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48330 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229379AbiGIH6w (ORCPT
+        with ESMTP id S229379AbiGIH7y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 9 Jul 2022 03:58:52 -0400
-Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 211ED3FA03
-        for <linux-kernel@vger.kernel.org>; Sat,  9 Jul 2022 00:58:51 -0700 (PDT)
-Received: by mail-pj1-x102f.google.com with SMTP id y14-20020a17090a644e00b001ef775f7118so3934350pjm.2
-        for <linux-kernel@vger.kernel.org>; Sat, 09 Jul 2022 00:58:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=ZktL6pWVxWtO8JEUAfFR8KFdmXT8IyrBysT9NTOXmkA=;
-        b=N/BiYGuIB6y6lsusYzSTEj3rMEznNOz53heND4CajXFuyZ6gSgon+IXbF9L2lKWYxv
-         pPQQa986MSI8kKSwde/2h8K/E0GnhQUb//K+lWH9mE+AvRskXu8kSlrIbs2x04ssehzq
-         ZjGmtEUp/303ToJTE7HhiB7Re9JrL/t28rHcKze0zij1kG1lLB2GsFW2VQPUdqEtihIk
-         1YjVyG1y0A2whjMH+Fo+04z1SgyMWuCd6x5XmY+NM4zUNBujaARtgW50M/Z7SdduiMA6
-         f81oG99SLVrHG8sWgOoOSPdKtBrhaWlR1L+bE1m/hbqQ/Z9n2/JWVPFIilaIA14EQyO7
-         qX3w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=ZktL6pWVxWtO8JEUAfFR8KFdmXT8IyrBysT9NTOXmkA=;
-        b=dsjxU+8//zeFrrLfA6uRCi1JQUWK85ppL5K6QkTshX6NvwUh5W4npLjtwv3Gmf5Dam
-         4jmR8Qd8SYEUFtFwohJ9CEYZu38x+OU00sXNCYCh9tg19i6GMPOns9e22QkqJHaat5C8
-         fj5UsrdSVttFzTKjhgQl5YkN0lAtsrWcBa/sitrNxD0hLAIyIBPFHuyUHYaFQ8XtzikS
-         M++h5SnbKM0hzsFq6QOmevLYLLoSWGfqC1PSOAHwbEpHcjLeWH5mvl0f8vHblbt/QGGm
-         ASbfiwx8Osze8IuFQkF7S9q7K8XvVT1dc/VXZoQhTTDexNl7zYpKYbJMLNofCQUj+4qx
-         jEhA==
-X-Gm-Message-State: AJIora+ksv8JdAxJi0mvwzkAfUTwx9z08nt/B9bxhmJVVBfn8cZKzxmf
-        gm50wYgNhp7Yl+psJJTCabUO
-X-Google-Smtp-Source: AGRyM1svGE0duh2gyQzidPCAWVGxgd7PJRFONpnpjftZ1stb7vU/v+bCnO+IUiJDvkfDVCrz4rxYvg==
-X-Received: by 2002:a17:90b:278b:b0:1ef:b15e:61e3 with SMTP id pw11-20020a17090b278b00b001efb15e61e3mr4519506pjb.143.1657353530524;
-        Sat, 09 Jul 2022 00:58:50 -0700 (PDT)
-Received: from thinkpad ([117.207.26.140])
-        by smtp.gmail.com with ESMTPSA id p6-20020a625b06000000b0052abc2438f1sm596742pfb.55.2022.07.09.00.58.44
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 09 Jul 2022 00:58:50 -0700 (PDT)
-Date:   Sat, 9 Jul 2022 13:28:39 +0530
-From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-To:     Johan Hovold <johan+linaro@kernel.org>
-Cc:     Bjorn Helgaas <bhelgaas@google.com>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Stanimir Varbanov <svarbanov@mm-sol.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        linux-arm-msm@vger.kernel.org, linux-pci@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 03/10] dt-bindings: PCI: qcom: Enumerate platforms with
- single msi interrupt
-Message-ID: <20220709075839.GJ5063@thinkpad>
-References: <20220629141000.18111-1-johan+linaro@kernel.org>
- <20220629141000.18111-4-johan+linaro@kernel.org>
+        Sat, 9 Jul 2022 03:59:54 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9C6654C91;
+        Sat,  9 Jul 2022 00:59:53 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2AC5B60C97;
+        Sat,  9 Jul 2022 07:59:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D14F3C3411C;
+        Sat,  9 Jul 2022 07:59:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1657353592;
+        bh=7jAiWLYz3PeSlOtmhefxB/mS+5thanzSxGjma8acUM4=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=DMdshz3DCA93e3kF8/hTyueCZsiEmTECnhGqIOFc169DQ4gvNUOap0HqxTXuZQuCK
+         H7L4wuSC9dxw/bwBMVJ1a8T4mwDj1hPLLtW8xsAPieK2FSYe2CN6FIutTtgitCzMkj
+         AS0nnLX0fOMiRzjjrk8w+sK5KZzWkCiSguYt3p07mzhehnv7mEhQJZAmJxEEv4qvUq
+         Kf7QR6uRoXQ45+PEDse+BLdRW8pE/0n253Mr1MOxyV32ILiU18GJnwvJa2M1kFfzWL
+         GGhtu3rDYEpwRi4Dx06Ce0k0YNWNP9RIviK2aGvH6bxjB906qoLcl2ejdq2N9HeD+0
+         SXqfdswVLVPPQ==
+Date:   Sat, 9 Jul 2022 08:59:46 +0100
+From:   Mauro Carvalho Chehab <mchehab@kernel.org>
+To:     Akira Yokosawa <akiyks@gmail.com>
+Cc:     Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, mchehab+huawei@kernel.org
+Subject: Re: Expectation to --no-pdf option (was Re: [PATCH v2 0/5] Address
+ some issues with sphinx detection)
+Message-ID: <20220709085946.083025aa@sal.lan>
+In-Reply-To: <02a76970-78fb-5d09-6890-cc1dc11ca4db@gmail.com>
+References: <cover.1656756450.git.mchehab@kernel.org>
+        <d0e1a08a-b965-ada6-e026-4e1cc38fbd90@gmail.com>
+        <20220707211558.438a27d4@sal.lan>
+        <3ba5a52e-cab6-05cf-a66e-adc58c467e1f@gmail.com>
+        <87bktzhfcj.fsf@meer.lwn.net>
+        <20220708155910.7c4ea35c@sal.lan>
+        <d54415bb-9bad-6fd8-5636-218c04d5615a@gmail.com>
+        <02a76970-78fb-5d09-6890-cc1dc11ca4db@gmail.com>
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220629141000.18111-4-johan+linaro@kernel.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -83,66 +63,123 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 29, 2022 at 04:09:53PM +0200, Johan Hovold wrote:
-> Explicitly enumerate the older platforms that have a single msi host
-> interrupt. This allows for adding further platforms without resorting
-> to nested conditionals.
+Em Sat, 9 Jul 2022 08:01:02 +0900
+Akira Yokosawa <akiyks@gmail.com> escreveu:
+
+> [-CC: ksummit-discuss]
+> On Sat, 9 Jul 2022 00:27:25 +0900, Akira Yokosawa wrote:
+> > On Fri, 8 Jul 2022 15:59:10 +0100,
+> > Mauro Carvalho Chehab wrote:  
+> >> Em Fri, 08 Jul 2022 08:02:52 -0600
+> >> Jonathan Corbet <corbet@lwn.net> escreveu:
+> >>  
+> >>> Akira Yokosawa <akiyks@gmail.com> writes:
+> >>>  
+> >>>> In my tests, the mathjax extension works with all the versions of Sphinx
+> >>>> I tested (1.7.9, 2.4.4, 3.4.3 (debian bullseye), 4.2.0 (openSUSE LEAP 15.4),
+> >>>> and 5.0.2).
+> >>>> Note that math expressions should look much sharper (vector fonts)
+> >>>> than those from imgmath (pixel images).
+> >>>> The time for a browser to complete the rendering might be longer than
+> >>>> with imgmath, especially for pages with a lot of math expressions,
+> >>>> though.  (Yes, I see some of media documents have a lot of them.)
+> >>>>
+> >>>> When you are detached from network connections, browsers will give
+> >>>> up and show those expressions in mathjax source code.   
+> >>  
+> >>> -extensions.append("sphinx.ext.imgmath")
+> >>> +extensions.append("sphinx.ext.mathjax")  
+> >>
+> >> There are two problems with this:
+> >>
+> >> 1. mathjax doesn't work for PDF output - nor would work if we add support
+> >>    for man pages some day;  
+> > 
+> > Hmm, if I understand what is written in the following page:
+> >     https://www.sphinx-doc.org/en/master/usage/extensions/math.html
+> > 
+> > , both imgmath and mathjax extensions are relevant only for HTML output.
+> > 
+> > It says:
+> > 
+> >     Changed in version 1.8: Math support for non-HTML builders is integrated
+> >     to sphinx-core. So mathbase extension is no longer needed.
+> > 
+> > When did you see the issue of "mathjax doesn't work for PDF output" ?  
 > 
-> Drop the redundant comment about older chipsets instead of moving it.
+> For the record,
 > 
-> Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
-
-With the comment from Krzysztof on wording mentioned in patch 4/10
-addressed,
-
-Reviewed-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-
-Thanks,
-Mani
-
-
-> ---
->  .../devicetree/bindings/pci/qcom,pcie.yaml      | 17 +++++++++++++++--
->  1 file changed, 15 insertions(+), 2 deletions(-)
+> I tested mathjax and PDF output with Sphinx 1.7.9, whose latex mode
+> can't handle nested tables.
+> I had no problem in building userspace-api.pdf and math expressions
+> in it look perfect.
 > 
-> diff --git a/Documentation/devicetree/bindings/pci/qcom,pcie.yaml b/Documentation/devicetree/bindings/pci/qcom,pcie.yaml
-> index a1b4fc70e162..8560c65e6f0b 100644
-> --- a/Documentation/devicetree/bindings/pci/qcom,pcie.yaml
-> +++ b/Documentation/devicetree/bindings/pci/qcom,pcie.yaml
-> @@ -625,7 +625,6 @@ allOf:
->          - reset-names
->  
->      # On newer chipsets support either 1 or 8 msi interrupts
-> -    # On older chipsets it's always 1 msi interrupt
->    - if:
->        properties:
->          compatible:
-> @@ -660,7 +659,21 @@ allOf:
->                  - const: msi5
->                  - const: msi6
->                  - const: msi7
-> -    else:
-> +
-> +  - if:
-> +      properties:
-> +        compatible:
-> +          contains:
-> +            enum:
-> +              - qcom,pcie-apq8064
-> +              - qcom,pcie-apq8084
-> +              - qcom,pcie-ipq4019
-> +              - qcom,pcie-ipq6018
-> +              - qcom,pcie-ipq8064
-> +              - qcom,pcie-ipq8064-v2
-> +              - qcom,pcie-ipq8074
-> +              - qcom,pcie-qcs404
-> +    then:
->        properties:
->          interrupts:
->            maxItems: 1
-> -- 
-> 2.35.1
-> 
+> So I believe mathjax does not affect PDF output.
 
--- 
-மணிவண்ணன் சதாசிவம்
+Did you also test epubdocs?
+
+It was an issue when we decided to use imgmath. If this got fixed for
+both supported non-html outputs, we can start using mathjax and get
+rid of installing latex and dvipng.
+
+> Mauro wrote:
+> > As imgmath works everywere, we opted to use it instead. We were
+> > actually hoping that the lack of proper math support on Sphinx were
+> > something that later Sphinx versions after 1.3.1 would have fixed.   
+> 
+> I'm not going to test earlier versions of Sphinx and I have no idea
+> of what issue Mauro saw at the time, but it sounds to me the issue
+> has been fixed since.
+
+Good.
+ 
+> >   
+> >> 2. Some Kernel developers disable javascript.  
+> > OK, mathjax has no chance, then...  
+> 
+> On the second thought, I think mathjax (latex-free "make htmldocs")
+> is good enough for test build purposes.  When javascript is disabled,
+> math expressions are rendered in mathjax source.
+
+Hmm... are there a way to use it with javascript disabled? If so, maybe
+we can force it to always render math expressions during the build, instead
+or relying on javascript at exec time.
+
+> As conf.py is programmable, it is possible to choose sphinx.ext.imgmath
+> when dvipng is found on the build system.
+
+Not sure I like the idea. This would actually mean in practice that
+all developers that are currently doing doc builds will keep using
+imgmath, because they all have it already installed.
+
+> As for sphinx-pre-install, what about adding an option
+> 
+>     --no-js   For those who disable javascript in their browser.
+> 
+> which provide the list of required packages for dvipng?
+
+It is not that simple.
+
+Sphinx has a configurable theme engine. On our builds, we're using
+since the beginning the RTD (readthedocs) theme as default, but
+recent versions default to classic if sphinx_rtd_theme package is
+not installed.
+
+All themes I know that provide a search button use JS to implement
+such feature.
+
+So, a "--no-js" won't provide a javascript-free build environment.
+
+-
+
+On a side discussion, should we keep recommending the install of 
+sphinx_rtd_theme? It is not mandatory anymore to have it installed,
+and the theme is more a matter of personal preferences. 
+
+Also, when testing or modifying the docs, the theme doesn't really
+matter.
+
+So, IMHO, we could stop recommending it.
+
+Regards,
+Mauro   

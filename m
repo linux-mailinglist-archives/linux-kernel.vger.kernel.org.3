@@ -2,249 +2,375 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 47A2E56C65F
-	for <lists+linux-kernel@lfdr.de>; Sat,  9 Jul 2022 05:25:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C228356C664
+	for <lists+linux-kernel@lfdr.de>; Sat,  9 Jul 2022 05:28:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229472AbiGIDZZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Jul 2022 23:25:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54568 "EHLO
+        id S229515AbiGID2e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Jul 2022 23:28:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55872 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229453AbiGIDZV (ORCPT
+        with ESMTP id S229453AbiGID2b (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Jul 2022 23:25:21 -0400
-Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20F7F6BC11
-        for <linux-kernel@vger.kernel.org>; Fri,  8 Jul 2022 20:25:19 -0700 (PDT)
-Received: by mail-wm1-x32e.google.com with SMTP id l22-20020a05600c4f1600b003a2e10c8cdeso67205wmq.1
-        for <linux-kernel@vger.kernel.org>; Fri, 08 Jul 2022 20:25:19 -0700 (PDT)
+        Fri, 8 Jul 2022 23:28:31 -0400
+Received: from alexa-out-sd-02.qualcomm.com (alexa-out-sd-02.qualcomm.com [199.106.114.39])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFB756BC26;
+        Fri,  8 Jul 2022 20:28:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=lZbMWUKPMl0WwY6+bcSTj0OuA/V0g+HHmcpdLXe43Ww=;
-        b=k+Fq1VRzddwqHgcOHAEfti9s/j0Pyfhzhdtzg+kMJoVe8e1UpjCbdmypHXhPq2jzev
-         AzpXJw5MpSu2tRZ2pDZ5gzPAzxV4/ez7V41n/00RHCB3JHslxwkzc+ecSBhX3ih+UAhc
-         hA/ytjC7sxPc7hoeb1ZwJ/+D2wE4dSoPv+X/VZntaww9+cm9wkOV4aM2oAX46XEBy8pN
-         spoJh0fCncakMKVecjuSTB6776imvkEeeU9LUEI4oLVTDHzGGV0l+iPz6NHAPo/ysXlD
-         usZ2L3iszbNeYIUWVZK17IGJ9T/IyMSAfE6wjxkP0jP6Mv3odKSieEBce9ORZTxCHg+V
-         uITA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=lZbMWUKPMl0WwY6+bcSTj0OuA/V0g+HHmcpdLXe43Ww=;
-        b=XORGXH3JLAOEZxmbvi37LQgBpr7SohUmHp3PewFgTs/GvFtjW7u5t2wqWKnlzlUrPw
-         4Vu0+sVc73JH+1AD0zM13YEPadkDo5zhSzyKUJZuYr3R8Ks6Udriu6LHtO0KG5dq/wfa
-         aYguiADdyOi2+n5/F7kal7o/tCdLwOGmE3+xRCk1cMffa+44pAqW18D0rP60SdiosqeI
-         RIapVsDQ1TBzdjs5FrlCB3Qterr+SrsYjSqkm79bolSCG4KcAOYjJzIefZkTycM6Ci9l
-         752j8sTYaWWCPg8nnsJKfrQn40ENbpmEbQCHsiv161vz+Sv1r4/yxUpysb7l7ufwssH1
-         c3mg==
-X-Gm-Message-State: AJIora9p0cxfHYfS/DXi0LP70H8Jva4y7MydbtgX45HWCCbM2pdV1egh
-        xyrj28gEFAEuNLc23QBXJR5namonCD7JMmpbHJC4/g==
-X-Google-Smtp-Source: AGRyM1swXGC1sfaXQRy1Xn69Dt8GxfoLuFYMy74dgllMBgXsH8MqmBm3CWHwxaQO0WXjO23yCp57TBd/Ze4MIb/YpdM=
-X-Received: by 2002:a05:600c:4fc8:b0:3a1:99cf:800 with SMTP id
- o8-20020a05600c4fc800b003a199cf0800mr3054967wmq.60.1657337117577; Fri, 08 Jul
- 2022 20:25:17 -0700 (PDT)
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1657337306; x=1688873306;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=vs1tdf74lU0YUImAAcNBcLxGTg77qAoLk254Htgr/CI=;
+  b=CFi8e+mvUIV9UKffw92QfpOjA1p8B3+3APmI+C83WWotPWoArW4TB3ss
+   3Rka1osO+qFJuhdLWTNqfwVk1SaC3LkElcreQcSO1IR9tG30ScFzTo3Nt
+   o379YOQwXTIUx/Jp/6EvUlsDi+0tFezw/BzO3Oa+xYM559LSYTjaF33CX
+   o=;
+Received: from unknown (HELO ironmsg02-sd.qualcomm.com) ([10.53.140.142])
+  by alexa-out-sd-02.qualcomm.com with ESMTP; 08 Jul 2022 20:28:26 -0700
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg02-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jul 2022 20:28:26 -0700
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Fri, 8 Jul 2022 20:28:25 -0700
+Received: from [10.111.182.196] (10.49.16.6) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Fri, 8 Jul 2022
+ 20:28:24 -0700
+Message-ID: <847485d7-0b4b-43f2-c115-d3afeac4ed6b@quicinc.com>
+Date:   Fri, 8 Jul 2022 20:28:22 -0700
 MIME-Version: 1.0
-References: <20220625050838.1618469-1-davidgow@google.com> <20220625050838.1618469-2-davidgow@google.com>
- <CAGS_qxrGwVL37AOUWCxwx=qg6YvXCDSSu4p_PSt7_87N3RxJZw@mail.gmail.com>
-In-Reply-To: <CAGS_qxrGwVL37AOUWCxwx=qg6YvXCDSSu4p_PSt7_87N3RxJZw@mail.gmail.com>
-From:   David Gow <davidgow@google.com>
-Date:   Sat, 9 Jul 2022 11:25:06 +0800
-Message-ID: <CABVgOS=AfJ7X5xqEKvXCzQ=UzOWrmR9KBO_TnkQw4Ti3fmKHBw@mail.gmail.com>
-Subject: Re: [PATCH v3 1/5] kunit: unify module and builtin suite definitions
-To:     Daniel Latypov <dlatypov@google.com>
-Cc:     Brendan Higgins <brendanhiggins@google.com>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        Jeremy Kerr <jk@codeconstruct.com.au>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Andrew Jeffery <andrew@aj.id.au>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Andra Paraschiv <andraprs@amazon.com>,
-        Longpeng <longpeng2@huawei.com>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        KUnit Development <kunit-dev@googlegroups.com>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        =?UTF-8?B?TWHDrXJhIENhbmFs?= <maira.canal@usp.br>,
-        linux-mmc <linux-mmc@vger.kernel.org>,
-        linux-aspeed <linux-aspeed@lists.ozlabs.org>,
-        OpenBMC Maillist <openbmc@lists.ozlabs.org>,
-        linux-usb@vger.kernel.org, linux-modules@vger.kernel.org,
-        Matt Johnston <matt@codeconstruct.com.au>
-Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-        boundary="0000000000002f7d0e05e356de4a"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Subject: Re: [RFC 0/3] SCMI Vhost and Virtio backend implementation
+Content-Language: en-US
+To:     Cristian Marussi <cristian.marussi@arm.com>,
+        Neeraj Upadhyay <quic_neeraju@quicinc.com>
+CC:     <mst@redhat.com>, <jasowang@redhat.com>, <sudeep.holla@arm.com>,
+        <quic_sramana@quicinc.com>, <vincent.guittot@linaro.org>,
+        <linux-arm-kernel@lists.infradead.org>, <kvm@vger.kernel.org>,
+        <virtualization@lists.linux-foundation.org>,
+        <linux-kernel@vger.kernel.org>,
+        Souvik Chakravarty <Souvik.Chakravarty@arm.com>,
+        Stephen Boyd <sboyd@kernel.org>
+References: <20220609071956.5183-1-quic_neeraju@quicinc.com>
+ <Yqdxz9lZo5qedTG4@e120937-lin>
+From:   Mike Tipton <quic_mdtipton@quicinc.com>
+In-Reply-To: <Yqdxz9lZo5qedTG4@e120937-lin>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.49.16.6]
+X-ClientProxiedBy: nalasex01b.na.qualcomm.com (10.47.209.197) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---0000000000002f7d0e05e356de4a
-Content-Type: text/plain; charset="UTF-8"
+I'll let Neeraj respond to more of the core backend details and policy 
+enforcement options, but I can provide some details for our prototype 
+clock protocol handler. Note that it's a pretty simple proof-of-concept 
+handler that's implemented entirely outside of the common clock 
+framework. It operates as just another client to the framework. This 
+approach has some limitations. And a more full-featured implementation 
+could benefit from being implemented in the clock framework itself. But 
+that level of support hasn't been necessary for our purposes yet.
 
-On Sat, Jul 9, 2022 at 2:23 AM Daniel Latypov <dlatypov@google.com> wrote:
->
-> On Fri, Jun 24, 2022 at 10:10 PM David Gow <davidgow@google.com> wrote:
-> > diff --git a/include/kunit/test.h b/include/kunit/test.h
-> > index 8ffcd7de9607..54306271cfbf 100644
-> > --- a/include/kunit/test.h
-> > +++ b/include/kunit/test.h
-> > @@ -250,41 +250,8 @@ static inline int kunit_run_all_tests(void)
-> >  }
-> >  #endif /* IS_BUILTIN(CONFIG_KUNIT) */
-> >
-> > -#ifdef MODULE
-> > -/**
-> > - * kunit_test_suites_for_module() - used to register one or more
-> > - *                      &struct kunit_suite with KUnit.
-> > - *
-> > - * @__suites: a statically allocated list of &struct kunit_suite.
-> > - *
-> > - * Registers @__suites with the test framework. See &struct kunit_suite for
-> > - * more information.
-> > - *
-> > - * If a test suite is built-in, module_init() gets translated into
-> > - * an initcall which we don't want as the idea is that for builtins
-> > - * the executor will manage execution.  So ensure we do not define
-> > - * module_{init|exit} functions for the builtin case when registering
-> > - * suites via kunit_test_suites() below.
-> > - */
-> > -#define kunit_test_suites_for_module(__suites)                         \
->
-> Deleting this bit now causes merge conflicts with Shuah's kunit
-> branch, due to https://patchwork.kernel.org/project/linux-kselftest/patch/20220702040959.3232874-3-davidgow@google.com/
-> I.e. We added in a MODULE_INFO(test, "Y") in this to-be-deleted section.
+On 6/13/2022 10:20 AM, Cristian Marussi wrote:
+> +CC: Souvik
+> 
+> On Thu, Jun 09, 2022 at 12:49:53PM +0530, Neeraj Upadhyay wrote:
+>> This RFC series, provides ARM System Control and Management Interface (SCMI)
+>> protocol backend implementation for Virtio transport. The purpose of this
+> 
+> Hi Neeraj,
+> 
+> Thanks for this work, I only glanced through the series at first to
+> grasp a general understanding of it (without goind into much details for
+> now) and I'd have a few questions/concerns that I'll noted down below.
+> 
+> I focused mainly on the backend server aims/functionalities/issues ignoring
+> at first the vhost-scmi entry-point since the vost-scmi accelerator is just
+> a (more-or-less) standard means of configuring and grabbing SCMI traffic
+> from the VMs into the Host Kernel and so I found more interesting at first
+> to understand what we can do with such traffic at first.
+> (IOW the vhost-scmi layer is welcome but remain to see what to do with it...)
+> 
+>> feature is to provide para-virtualized interfaces to guest VMs, to various
+>> hardware blocks like clocks, regulators. This allows the guest VMs to
+>> communicate their resource needs to the host, in the absence of direct
+>> access to those resources.
+> 
+> In an SCMI stack the agents (like VMs) issue requests to an SCMI platform
+> backend that is in charge of policying and armonizing such requests
+> eventually denying some of these (possibly malicious) while allowing others
+> (possibly armonizing/merging such reqs); with your solution basically the
+> SCMI backend in Kernel marshals/conveys all of such SCMI requests to the
+> proper Linux Kernel subsystem that is usually in charge of it, using
+> dedicated protocol handlers that basically translates SCMI requests to
+> Linux APIs calls to the Host. (I may have oversimplified or missed
+> something...)
+> 
+> At the price of a bit of overhead and code-duplication introduced by
+> this SCMI Backend you can indeed leverage the existing mechanisms for
+> resource accounting and sharing included in such Linux subsystems (like
+> Clock framework), and that's nice and useful, BUT how do you policy/filter
+> (possibly dinamically as VMs come and go) what these VMs can see and do
+> with these resources ?
+> 
 
-Nice catch. I've rebased this series on top of the taint stuff:
-https://lore.kernel.org/linux-kselftest/20220709032001.819487-2-davidgow@google.com/T/#u
+Currently, our only level of filtering is for which clocks we choose to 
+expose over SCMI. Those chosen clocks are exposed to all VMs equally. 
+The clock protocol handler exposes a registration function, which we 
+call from our clock drivers. Which clocks we register are currently 
+hardcoded in the drivers themselves. We often want to register all the 
+clocks in a given driver, since we have separate drivers for each clock 
+controller and many clock controllers are already dedicated to a 
+particular core or subsystem. So if that core or subsystem needs to be 
+controlled by a VM, then we give the VM all of its clocks. This can mean 
+exposing a large number of clocks (in the hundreds).
 
-> Perhaps something like this would be a fix?
 
-Thanks.The rebased version is basically this, but without the #ifdef
-MODULE indirection, as MODULE_INFO() will decay to nothing if MODULE
-is not defined, anyway.
+> ... MORE importantly how do you protect the Host (or another VM) from
+> unacceptable (or possibly malicious) requests conveyed from one VM request
+> vqueue into the Linux subsystems (like clocks) ?
+> 
 
->   #ifdef MODULE
->   #define _kunit_mark_test_module MODULE_INFO(test, "Y")
->   #else
->   #define _kunit_mark_test_module
->   #endif /* MODULE */
->
->   #define __kunit_test_suites(unique_array, unique_suites, ...)
->           \
->           _kunit_mark_test_module;
->           \
->           static struct kunit_suite *unique_array[] = { __VA_ARGS__,
-> NULL };     \
->           static struct kunit_suite **unique_suites
->           \
->           __used __section(".kunit_test_suites") = unique_array
->
->
-> > -       static int __init kunit_test_suites_init(void)                  \
-> > -       {                                                               \
-> > -               return __kunit_test_suites_init(__suites);              \
-> > -       }                                                               \
-> > -       module_init(kunit_test_suites_init);                            \
-> > -                                                                       \
-> > -       static void __exit kunit_test_suites_exit(void)                 \
-> > -       {                                                               \
-> > -               return __kunit_test_suites_exit(__suites);              \
-> > -       }                                                               \
-> > -       module_exit(kunit_test_suites_exit)
-> > -#else
-> > -#define kunit_test_suites_for_module(__suites)
-> > -#endif /* MODULE */
-> > -
-> >  #define __kunit_test_suites(unique_array, unique_suites, ...)                 \
-> >         static struct kunit_suite *unique_array[] = { __VA_ARGS__, NULL };     \
-> > -       kunit_test_suites_for_module(unique_array);                            \
-> >         static struct kunit_suite **unique_suites                              \
-> >         __used __section(".kunit_test_suites") = unique_array
-> >
+The clock protocol handler tracks its own reference counts for each 
+clock that's been registered with it. It'll only enable clocks through 
+the host framework when the reference count increases from 0 -> 1, and 
+it'll only disable clocks through host framework when the reference 
+count decreases from 1 -> 0. And since the clock framework has its own 
+internal reference counts, then it's not possible for a VM to disable 
+clocks that the host itself has enabled.
 
---0000000000002f7d0e05e356de4a
-Content-Type: application/pkcs7-signature; name="smime.p7s"
-Content-Transfer-Encoding: base64
-Content-Disposition: attachment; filename="smime.p7s"
-Content-Description: S/MIME Cryptographic Signature
+We don't support frequency aggregation, so a VM could override the 
+frequency request of another VM or of the host. We could support max 
+aggregation across VMs, so that a VM couldn't reduce the frequency below 
+what another VM has requested. But without clock framework changes, we 
+can't aggregate with the local host clients. So a VM could reduce the 
+frequency below what the host has requested.
 
-MIIPnwYJKoZIhvcNAQcCoIIPkDCCD4wCAQExDzANBglghkgBZQMEAgEFADALBgkqhkiG9w0BBwGg
-ggz5MIIEtjCCA56gAwIBAgIQeAMYYHb81ngUVR0WyMTzqzANBgkqhkiG9w0BAQsFADBMMSAwHgYD
-VQQLExdHbG9iYWxTaWduIFJvb3QgQ0EgLSBSMzETMBEGA1UEChMKR2xvYmFsU2lnbjETMBEGA1UE
-AxMKR2xvYmFsU2lnbjAeFw0yMDA3MjgwMDAwMDBaFw0yOTAzMTgwMDAwMDBaMFQxCzAJBgNVBAYT
-AkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMSowKAYDVQQDEyFHbG9iYWxTaWduIEF0bGFz
-IFIzIFNNSU1FIENBIDIwMjAwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQCvLe9xPU9W
-dpiHLAvX7kFnaFZPuJLey7LYaMO8P/xSngB9IN73mVc7YiLov12Fekdtn5kL8PjmDBEvTYmWsuQS
-6VBo3vdlqqXZ0M9eMkjcKqijrmDRleudEoPDzTumwQ18VB/3I+vbN039HIaRQ5x+NHGiPHVfk6Rx
-c6KAbYceyeqqfuJEcq23vhTdium/Bf5hHqYUhuJwnBQ+dAUcFndUKMJrth6lHeoifkbw2bv81zxJ
-I9cvIy516+oUekqiSFGfzAqByv41OrgLV4fLGCDH3yRh1tj7EtV3l2TngqtrDLUs5R+sWIItPa/4
-AJXB1Q3nGNl2tNjVpcSn0uJ7aFPbAgMBAAGjggGKMIIBhjAOBgNVHQ8BAf8EBAMCAYYwHQYDVR0l
-BBYwFAYIKwYBBQUHAwIGCCsGAQUFBwMEMBIGA1UdEwEB/wQIMAYBAf8CAQAwHQYDVR0OBBYEFHzM
-CmjXouseLHIb0c1dlW+N+/JjMB8GA1UdIwQYMBaAFI/wS3+oLkUkrk1Q+mOai97i3Ru8MHsGCCsG
-AQUFBwEBBG8wbTAuBggrBgEFBQcwAYYiaHR0cDovL29jc3AyLmdsb2JhbHNpZ24uY29tL3Jvb3Ry
-MzA7BggrBgEFBQcwAoYvaHR0cDovL3NlY3VyZS5nbG9iYWxzaWduLmNvbS9jYWNlcnQvcm9vdC1y
-My5jcnQwNgYDVR0fBC8wLTAroCmgJ4YlaHR0cDovL2NybC5nbG9iYWxzaWduLmNvbS9yb290LXIz
-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
-z/tQRXr3iPeVmZCr7nttMEwGA1UdIARFMEMwQQYJKwYBBAGgMgEoMDQwMgYIKwYBBQUHAgEWJmh0
-dHBzOi8vd3d3Lmdsb2JhbHNpZ24uY29tL3JlcG9zaXRvcnkvMAwGA1UdEwEB/wQCMAAwgZoGCCsG
-AQUFBwEBBIGNMIGKMD4GCCsGAQUFBzABhjJodHRwOi8vb2NzcC5nbG9iYWxzaWduLmNvbS9jYS9n
-c2F0bGFzcjNzbWltZWNhMjAyMDBIBggrBgEFBQcwAoY8aHR0cDovL3NlY3VyZS5nbG9iYWxzaWdu
-LmNvbS9jYWNlcnQvZ3NhdGxhc3Izc21pbWVjYTIwMjAuY3J0MB8GA1UdIwQYMBaAFHzMCmjXouse
-LHIb0c1dlW+N+/JjMEYGA1UdHwQ/MD0wO6A5oDeGNWh0dHA6Ly9jcmwuZ2xvYmFsc2lnbi5jb20v
-Y2EvZ3NhdGxhc3Izc21pbWVjYTIwMjAuY3JsMA0GCSqGSIb3DQEBCwUAA4IBAQAx+EQjLATc/sze
-VoZkH7OLz+/no1+y31x4BQ3wjW7lKfay9DAAVym896b7ECttSo95GEvS7pYMikzud57WypK7Bjpi
-ep8YLarLRDrvyyvBuYtyDrIewkuASHtV1oy5E6QZZe2VOxMm6e2oJnFFjbflot4A08D3SwqDwV0i
-OOYwT0BUtHYR/3903Dmdx5Alq+NDvUHDjozgo0f6oIkwDXT3yBV36utQ/jFisd36C8RD5mM+NFpu
-3aqLXARRbKtxw29ErCwulof2dcAonG7cd5j+gmS84sLhKU+BhL1OQVXnJ5tj7xZ5Ri5I23brcwk0
-lk/gWqfgs3ppT9Xk7zVit9q8MYICajCCAmYCAQEwaDBUMQswCQYDVQQGEwJCRTEZMBcGA1UEChMQ
-R2xvYmFsU2lnbiBudi1zYTEqMCgGA1UEAxMhR2xvYmFsU2lnbiBBdGxhcyBSMyBTTUlNRSBDQSAy
-MDIwAhABh9LgIPnlfMFHR0Die8n7MA0GCWCGSAFlAwQCAQUAoIHUMC8GCSqGSIb3DQEJBDEiBCBl
-JmrHJzQ0vK1xYKaDEDYwR3rzNd2KyrVjy2GQK6mVbzAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcB
-MBwGCSqGSIb3DQEJBTEPFw0yMjA3MDkwMzI1MTdaMGkGCSqGSIb3DQEJDzFcMFowCwYJYIZIAWUD
-BAEqMAsGCWCGSAFlAwQBFjALBglghkgBZQMEAQIwCgYIKoZIhvcNAwcwCwYJKoZIhvcNAQEKMAsG
-CSqGSIb3DQEBBzALBglghkgBZQMEAgEwDQYJKoZIhvcNAQEBBQAEggEAlhD8Y9l2qJpJSHbsezKz
-AoI+Xv+FHHBzuTK2N9hJyGjtt7jFiiPYYf4bGpzIFX/sSTpd0Z7xOXtE5UpyA1lArMmWvWnFshJk
-JaaeTfJqrFEnPBv2QLVKFb+oBSjSFF6SbymFOnqs3v83Wu4ICwP+iZNYqaMSPsv4V4qEbIoUtKm7
-gl8ecAoPtoZRoek0wE49XtF1yCBLS3gKvrcCfpKw0L8ZSKPLssfO4gUakft6tLpi9PG+96CTGK1Z
-wXl8h+QlaYFi/oP83EPkJbc08GIegicX/2Y2q0T7h2v2v6QV7/Xz/jRYTrz1+rbFZ8hjWpZydZRy
-vZ8yWuqbB0qhxbm59Q==
---0000000000002f7d0e05e356de4a--
+Generally speaking we don't expect more than one entity (VM or host) to 
+control a given clock at a time. But all we can currently enforce is 
+that clocks only turn off when *all* entities (including the the host) 
+request them to be off.
+
+
+> I saw you have added a good deal of DT bindings for the backend
+> describing protocols, so you could just expose only some protocols via
+> the backend (if I get it right) but you cannot anyway selectively expose
+> only a subset of resources to the different agents, so, if you expose the
+> clock protocol, that will be visible by any VMs and an agent could potentially
+> kill the Host or mount some clock related attack acting on the right clock.
+> (I mean you cannot describe in the Host DT a number X of clocks to be
+> supported by the Host Linux Clock framework BUT then expose selectively to
+> the SCMI agents only a subset Y < X to shield the Host from misbehaviour...
+> ...at least not in a dynamic way avoiding to bake a fixed policy into
+> the backend...or maybe I'm missing how you can do that, in such a case
+> please explain...)
+> 
+> Moreover, in a normal SCMI stack the server resides out of reach from the
+> OSPM agents since the server, wherever it sits, has the last word and can
+> deny and block unreasonable/malicious requests while armonizing others: this
+> means the typical SCMI platform fw is configured in such a way that clearly
+> defines a set of policies to be enforced between the access of the various
+> agents. (and it can reside in the trusted codebase given its 'reduced'
+> size...even though this policies are probably at the moment not so
+> dynamically modificable there either...)
+> 
+> With your approach of a Linux Kernel based SCMI platform backend you are
+> certainly using all the good and well proven mechanisms offered by the
+> Kernel to share and co-ordinate access to such resources, which is good
+> (.. even though Linux is not so small in term of codebase to be used as
+> a TCB to tell the truth :D), BUT I don't see the same level of policying
+> or filtering applied anywhere in the proposed RFCs, especially to protect
+> the Host which at the end is supposed to use the same Linux subsystems and
+> possibly share some of those resources for its own needs.
+> 
+> I saw the Base protocol basic implementation you provided to expose the
+> supported backend protocols to the VMs, it would be useful to see how
+> you plan to handle something like the Clock protocol you mention in the
+> example below. (if you have Clock protocol backend that as WIP already
+> would be interesting to see it...)
+> 
+> Another issue/criticality that comes to my mind is how do you gather in
+> general basic resources states/descriptors from the existing Linux subsystems
+> (even leaving out any policying concerns): as an example, how do you gather
+> from the Host Clock framework the list of available clocks and their rates
+> descriptors that you're going expose to a specific VMs once this latter will
+> issue the related SCMI commands to get to know which SCMI Clock domain are
+> available ?
+> (...and I mean in a dynamic way not using a builtin per-platform baked set of
+>   resources known to be made available... I doubt that any sort of DT
+>   description would be accepted in this regards ...)
+> 
+
+As mentioned, the list of clocks we choose to expose are currently 
+hardcoded in the clock drivers outside of the clock framework. There is 
+no dynamic policy in place.
+
+For supported rates, we currently just implement the 
+CLOCK_DESCRIBE_RATES command using rate ranges, rather than lists of 
+discrete rates (num_rates_flags[12] = 1). And we just communicate the 
+full u32 range 0..U32_MAX with step_size=1. We do this for simplicity. 
+Many of our clocks only support a small list of discrete rates (though 
+some support large ranges). If a VM requests a rate not aligned to these 
+discrete rates, then we'll just round up to what the host supports. We 
+currently operate under the assumption that the VM knows what it needs 
+and doesn't need to query the specific supported rates from the host. 
+That's fine for our current use cases, at least. Publishing 
+clock-specific rate lists and/or proper ranges would be more complicated 
+and require some amount of clock framework changes to get this information.
+
+
+>>
+>> 1. Architecture overview
+>> ---------------------
+>>
+>> Below diagram shows the overall software architecture of SCMI communication
+>> between guest VM and the host software. In this diagram, guest is a linux
+>> VM; also, host uses KVM linux.
+>>
+>>           GUEST VM                   HOST
+>>   +--------------------+    +---------------------+    +--------------+
+>>   |   a. Device A      |    |   k. Device B       |    |      PLL     |
+>>   |  (Clock consumer)  |    |  (Clock consumer)   |    |              |
+>>   +--------------------+    +---------------------+    +--------------+
+>>            |                         |                         ^
+>>            v                         v                         |
+>>   +--------------------+    +---------------------+    +-----------------+
+>>   | b. Clock Framework |    | j. Clock Framework  | -->| l. Clock Driver |
+>>   +-- -----------------+    +---------------------+    +-----------------+
+>>            |                         ^
+>>            v                         |
+>>   +--------------------+    +------------------------+
+>>   |  c. SCMI Clock     |    | i. SCMI Virtio Backend |
+>>   +--------------------+    +------------------------+
+>>            |                         ^
+>>            v                         |
+>>   +--------------------+    +----------------------+
+>>   |  d. SCMI Virtio    |    |   h. SCMI Vhost      |<-----------+
+>>   +--------------------+    +----------------------+            |
+>>            |                         ^                          |
+>>            v                         |                          |
+>> +-------------------------------------------------+    +-----------------+
+>> |              e. Virtio Infra                    |    |    g. VMM       |
+>> +-------------------------------------------------+    +-----------------+
+>>            |                         ^                           ^
+>>            v                         |                           |
+>> +-------------------------------------------------+             |
+>> |                f. Hypervisor                    |-------------
+>> +-------------------------------------------------+
+>>
+> 
+> Looking at the above schema and thinking out loud where any dynamic
+> policying against the resources can fit (..and trying desperately NOT to push
+> that into the Kernel too :P...) ... I think that XEN was trying something similar
+> (with a real backend SCMI platform FW at the end of the pipe though I think...) and
+> in their case the per-VMs resource allocation was performed using SCMI
+> BASE_SET_DEVICE_PERMISSIONS commands issued by the Hypervisor/VMM itself
+> I think or by a Dom0 elected as a trusted agent and so allowed to configure
+> such resource partitioning ...
+> 
+> https://www.mail-archive.com/xen-devel@lists.xenproject.org/msg113868.html
+> 
+> ...maybe a similar approach, with some sort of SCMI Trusted Agent living within
+> the VMM and in charge of directing such resources' partitioning between
+> VMs by issuing BASE_SET_DEVICE_PERMISSIONS towards the Kernel SCMI Virtio
+> Backend, could help keeping at least the policy bits related to the VMs out of
+> the kernel/DTs and possibly dynamically configurable following VMs lifecycle.
+> 
+> Even though, in our case ALL the resource management by device ID would have to
+> happen in the Kernel SCMI backend at the end, given that is where the SCMI
+> platform resides indeed, BUT at least you could keep the effective policy out of
+> kernel space, doing something like:
+> 
+> 1. VMM/TrustedAgent query Kernel_SCMI_Virtio_backend for available resources
+> 
+> 2. VMM/TrustedAg decides resources allocation between VMs (and/or possibly the Host
+>     based on some configured policy)
+> 
+> 3. VMM/TrustedAgent issues BASE_SET_DEVICE_PERMISSIONS/PROTOCOLS to the
+>     Kernel_SCMI_Virtio_backend
+> 
+> 4. Kernel_SCMI_Virtio_backend enforces resource partioning and sharing
+>     when processing subsequent VMs SCMI requests coming via Vhost-SCMI
+> 
+> ...where the TrustedAgent here could be (I guess) the VMM or the Host or
+> both with different level of privilege if you don't want the VMM to be able
+> to configure resources access for the whole Host.
+> 
+>> a. Device A             This is the client kernel driver in guest VM,
+>>                          for ex. diplay driver, which uses standard
+>>                          clock framework APIs to vote for a clock.
+>>
+>> b. Clock Framework      Underlying kernel clock framework on
+>>                          guest.
+>>
+>> c. SCMI Clock           SCMI interface based clock driver.
+>>
+>> d. SCMI Virtio          Underlying SCMI framework, using Virtio as
+>>                          transport driver.
+>>
+>> e. Virtio Infra         Virtio drivers on guest VM. These drivers
+>>                          initiate virtqueue requests over Virtio
+>>                          transport (MMIO/PCI), and forwards response
+>>                          to SCMI Virtio registered callbacks.
+>>
+>> f. Hypervisor           Hosted Hypervisor (KVM for ex.), which traps
+>>                          and forwards requests on virtqueue ring
+>>                          buffers to the VMM.
+>>
+>> g. VMM                  Virtual Machine Monitor, running on host userspace,
+>>                          which manages the lifecycle of guest VMs, and forwards
+>>                          guest initiated virtqueue requests as IOCTLs to the
+>>                          Vhost driver on host.
+>>
+>> h. SCMI Vhost           In kernel driver, which handles SCMI virtqueue
+>>                          requests from guest VMs. This driver forwards the
+>>                          requests to SCMI Virtio backend driver, and returns
+>>                          the response from backend, over the virtqueue ring
+>>                          buffers.
+>>
+>> i. SCMI Virtio Backend  SCMI backend, which handles the incoming SCMI messages
+>>                          from SCMI Vhost driver, and forwards them to the
+>>                          backend protocols like clock and voltage protocols.
+>>                          The backend protocols uses the host apis for those
+>>                          resources like clock APIs provided by clock framework,
+>>                          to vote/request for the resource. The response from
+>>                          the host api is parceled into a SCMI response message,
+>>                          and is returned to the SCMI Vhost driver. The SCMI
+>>                          Vhost driver in turn, returns the reponse over the
+>>                          Virtqueue reponse buffers.
+>>
+> 
+> Last but not least, this SCMI Virtio Backend layer in charge of
+> processing incoming SCMI packets, interfacing with the Linux subsystems
+> final backend and building SCMI replies from Linux will introduce a
+> certain level of code/funcs duplication given that this same SCMI basic
+> processing capabilities have been already baked in the SCMI stacks found in
+> SCP and in TF-A (.. and maybe a few other other proprietary backends)...
+> 
+> ... but this is something maybe to be addressed in general in a
+> different context not something that can be addressed by this series.
+> 
+> Sorry for the usual flood of words :P ... I'll have a more in deep
+> review of the series in the next days, for now I wanted just to share my
+> concerns and (maybe wrong) understanding and see what you or Sudeep and
+> Souvik think about.
+> 
+> Thanks,
+> Cristian
+> 
+> 
+> _______________________________________________
+> linux-arm-kernel mailing list
+> linux-arm-kernel@lists.infradead.org
+> http://lists.infradead.org/mailman/listinfo/linux-arm-kernel

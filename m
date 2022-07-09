@@ -2,50 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 267A856C864
-	for <lists+linux-kernel@lfdr.de>; Sat,  9 Jul 2022 11:45:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D275356C863
+	for <lists+linux-kernel@lfdr.de>; Sat,  9 Jul 2022 11:45:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229628AbiGIJpQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 9 Jul 2022 05:45:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44968 "EHLO
+        id S229639AbiGIJpT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 9 Jul 2022 05:45:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44988 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229599AbiGIJpL (ORCPT
+        with ESMTP id S229456AbiGIJpM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 9 Jul 2022 05:45:11 -0400
-Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABC44655AC
-        for <linux-kernel@vger.kernel.org>; Sat,  9 Jul 2022 02:45:10 -0700 (PDT)
-Received: by mail-ed1-x52e.google.com with SMTP id m16so1066437edb.11
-        for <linux-kernel@vger.kernel.org>; Sat, 09 Jul 2022 02:45:10 -0700 (PDT)
+        Sat, 9 Jul 2022 05:45:12 -0400
+Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5449E655A0
+        for <linux-kernel@vger.kernel.org>; Sat,  9 Jul 2022 02:45:11 -0700 (PDT)
+Received: by mail-ed1-x529.google.com with SMTP id fd6so1090069edb.5
+        for <linux-kernel@vger.kernel.org>; Sat, 09 Jul 2022 02:45:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=w86aGmls26RXvVaGDrDa2oejtOB5CMWP3E/5Lu9xKXA=;
-        b=JLBKU6up+BFrYN4tFgccOC2Wdv63Oq+hgnfnDMLNhsMzD80qGt9DQT+frlKh4dWnvV
-         No5k6c3DkO2ZZ8nbTXKWTYTH3Cu2yL1+0WPIYfbfR4pK0CJRbYLdia0JMQoZYwMfp1Ka
-         TKsT09Ey2R7gCjA1N6OC/9CR7vsjxGbj1GL2wXEo9rPfOOz8l2Uc3GLAvzunxZ6uqVYP
-         pD94YWuOIJSvIGmbrA7t2OkzFD7Dh7Rav6x/+rsrHaEmILOIj1LeBNbDlA5y4Crk/Qaf
-         Bjt+HfKi7R35Aqx5Vafv97QgU/VCuk0Y19NWB4WtbOSN2xPhYn9vvUxC9ma1MKrXwDqb
-         VYUw==
+        bh=nbBU8UprlApT8SHp7GiSQfbEyFFyRSEAF6EEqDhE6/s=;
+        b=V6tncGnOADVLNrE7fjnOCUfh6ztrvwBvEEZLMU7ipcT6SpTirZpnZw7yQrTQLrLWVA
+         Yj/lnGmkcPpyYCMgvd8gQIYr9QNqFrtRq9M9VNP+Xu63hxxtsIYaKg1HdHUmD5ugrDG9
+         xTrMgWeUaL4EsAahLuxuXvAiQDGf5VPmfgLW2CyN1KirAhMt0DGXXDDdBOcAhWY8E5BJ
+         /GXUHUZCF39FmXoDOUFZo5+QDYPvuYIl6+kITZda5pFqrRIrcSeSdfz+J9GqcQ7z9nPK
+         T7Qtv/bOQ9rksSqUElmhldq5NcQ8R3MLpHrMjsl3UBMvoM+TaQDZ5XKgj1kiqHfKs3sI
+         gxMA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=w86aGmls26RXvVaGDrDa2oejtOB5CMWP3E/5Lu9xKXA=;
-        b=5SpCJopio5jKGUhHkHw8PooON4e+1tZYj7vlZEUiWh+DCeK8FsYlxzbcJwFIbqL0sf
-         joPNmcOKvnIwf2LPsae5wMuH/6Ty1GidUlmQr8pzVUSbE7WRyZi2q+xkIBxKnUEUjAjk
-         Tbt0Weqs9RLRLkmNWSJ5XW6ks4AsO+kaIr3FpmNJz5qVONr8gzu0OVBQw9kNxsKARXR1
-         +EOUKCABwzgMDmu5+n9Kg5B6WDFy11e/DtwcZzcSlsVSBxd5COFmE5NqroNn8QPdA/0y
-         iWhdbn9DiTELou+UQmH/eAsSRo5kR4uPdPn9H2Qky+hLuVrlQWMylISTrbKso76JCBpi
-         bn+Q==
-X-Gm-Message-State: AJIora+YaRBOD0F2QV9QPI8MMxrCZ27PykAUS+K0B6+t4FW/xUbHMBYq
-        v9kwHfYmSHKkMVPGG0V/Q9wt/uZg/MQ=
-X-Google-Smtp-Source: AGRyM1tKpt8g5xTPRgX/Pz6gDnRX4LHSFu/rOPzS/jEOd4gmnpBK9cBqHnkHcNjOlelVWW9BMNWLkg==
-X-Received: by 2002:aa7:cb05:0:b0:439:aa77:6193 with SMTP id s5-20020aa7cb05000000b00439aa776193mr10503355edt.368.1657359909366;
+        bh=nbBU8UprlApT8SHp7GiSQfbEyFFyRSEAF6EEqDhE6/s=;
+        b=U5yXJmLl53zcwHkxuZoezk2cE6GJCRBtC4ihZ5nYSVAsg4BdUCreaSMCjYTzOdOaDH
+         cIcrxoE19A+Y9da2ki1xV0brMwichVrPmpBI9q9kAKRnA/75IMSOGM13/R571I3jDbtb
+         KfX7ir6boaGwtzXUlnkdqyNvOpG/LeiP4TCYxGo6wOKLSNRWnKk1qIZ8YyhN5TfjuZED
+         MwG4NxQuKLSg9zjPiiX7EomAsK58FEd0abKB+u2S4KwTn/EP/g/qFF4cce2CGLAP3f6t
+         SQu/IlPYBdK/TqiA/XWDzj1tBkiforFlSgO6qq6eJr3eBDdtAhB93Um4/hEk2A1r0SSq
+         Gh2Q==
+X-Gm-Message-State: AJIora/mWA4amiXbFwyg1d2xTSwDD+rcuUWOKIz7nbBT9ON+ykl8pQlN
+        Mhnm0b6pQPURGdhqBak0NdU=
+X-Google-Smtp-Source: AGRyM1uXi7EtOQUYimG8GwZOl6d3x0dFALtNJvmk5jrwS+VVfp4c4asw1VQ1rh8uRPjDMXtY9DXaEQ==
+X-Received: by 2002:a05:6402:4306:b0:43a:b794:9f9f with SMTP id m6-20020a056402430600b0043ab7949f9fmr4993122edc.205.1657359909923;
         Sat, 09 Jul 2022 02:45:09 -0700 (PDT)
 Received: from localhost.localdomain (ip5f5abb6f.dynamic.kabel-deutschland.de. [95.90.187.111])
-        by smtp.gmail.com with ESMTPSA id hy10-20020a1709068a6a00b00704757b1debsm441521ejc.9.2022.07.09.02.45.08
+        by smtp.gmail.com with ESMTPSA id hy10-20020a1709068a6a00b00704757b1debsm441521ejc.9.2022.07.09.02.45.09
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
         Sat, 09 Jul 2022 02:45:09 -0700 (PDT)
 From:   Michael Straube <straube.linux@gmail.com>
@@ -53,9 +53,9 @@ To:     gregkh@linuxfoundation.org
 Cc:     Larry.Finger@lwfinger.net, phil@philpotter.co.uk,
         linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
         Michael Straube <straube.linux@gmail.com>
-Subject: [PATCH 2/5] staging: r8188eu: remove HW_VAR_DM_FUNC_OP from SetHwReg8188EU()
-Date:   Sat,  9 Jul 2022 11:44:55 +0200
-Message-Id: <20220709094458.9578-3-straube.linux@gmail.com>
+Subject: [PATCH 3/5] staging: r8188eu: remove HW_VAR_DM_FLAG from SetHwReg8188EU()
+Date:   Sat,  9 Jul 2022 11:44:56 +0200
+Message-Id: <20220709094458.9578-4-straube.linux@gmail.com>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220709094458.9578-1-straube.linux@gmail.com>
 References: <20220709094458.9578-1-straube.linux@gmail.com>
@@ -71,74 +71,71 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Remove the HW_VAR_DM_FUNC_OP case from SetHwReg8188EU() and move the
-functionality to the functions that call SetHwReg8188EU() with
-HW_VAR_DM_FUNC_OP. This is part of the ongoing effort to get rid of
-SetHwReg8188EU().
+Remove the HW_VAR_DM_FLAG case from SetHwReg8188EU() and move its
+functionality to a static function. This is part of the ongoing
+effort to get rid of SetHwReg8188EU().
 
 Signed-off-by: Michael Straube <straube.linux@gmail.com>
 ---
- drivers/staging/r8188eu/core/rtw_wlan_util.c | 10 ++++++----
- drivers/staging/r8188eu/hal/usb_halinit.c    |  6 ------
+ drivers/staging/r8188eu/hal/usb_halinit.c    |  3 ---
  drivers/staging/r8188eu/include/hal_intf.h   |  1 -
- 3 files changed, 6 insertions(+), 11 deletions(-)
+ drivers/staging/r8188eu/os_dep/ioctl_linux.c | 10 +++++++++-
+ 3 files changed, 9 insertions(+), 5 deletions(-)
 
-diff --git a/drivers/staging/r8188eu/core/rtw_wlan_util.c b/drivers/staging/r8188eu/core/rtw_wlan_util.c
-index 60c49e161c12..b48e0b9dfd7b 100644
---- a/drivers/staging/r8188eu/core/rtw_wlan_util.c
-+++ b/drivers/staging/r8188eu/core/rtw_wlan_util.c
-@@ -264,16 +264,18 @@ void UpdateBrateTblForSoftAP(u8 *bssrateset, u32 bssratelen)
- 
- void Save_DM_Func_Flag(struct adapter *padapter)
- {
--	u8	saveflag = true;
-+	struct hal_data_8188e *haldata = &padapter->haldata;
-+	struct odm_dm_struct *odmpriv = &haldata->odmpriv;
- 
--	SetHwReg8188EU(padapter, HW_VAR_DM_FUNC_OP, (u8 *)(&saveflag));
-+	odmpriv->BK_SupportAbility = odmpriv->SupportAbility;
- }
- 
- void Restore_DM_Func_Flag(struct adapter *padapter)
- {
--	u8	saveflag = false;
-+	struct hal_data_8188e *haldata = &padapter->haldata;
-+	struct odm_dm_struct *odmpriv = &haldata->odmpriv;
- 
--	SetHwReg8188EU(padapter, HW_VAR_DM_FUNC_OP, (u8 *)(&saveflag));
-+	odmpriv->SupportAbility = odmpriv->BK_SupportAbility;
- }
- 
- void Set_MSR(struct adapter *padapter, u8 type)
 diff --git a/drivers/staging/r8188eu/hal/usb_halinit.c b/drivers/staging/r8188eu/hal/usb_halinit.c
-index 97893543d861..0aae713d2c1c 100644
+index 0aae713d2c1c..ece57565b082 100644
 --- a/drivers/staging/r8188eu/hal/usb_halinit.c
 +++ b/drivers/staging/r8188eu/hal/usb_halinit.c
-@@ -1160,12 +1160,6 @@ void SetHwReg8188EU(struct adapter *Adapter, u8 variable, u8 *val)
- 	case HW_VAR_DM_FLAG:
- 		podmpriv->SupportAbility = *((u8 *)val);
+@@ -1157,9 +1157,6 @@ void SetHwReg8188EU(struct adapter *Adapter, u8 variable, u8 *val)
+ 			rtw_write32(Adapter, REG_RCR, reg32 | RCR_CBSSID_BCN);
+ 		}
  		break;
--	case HW_VAR_DM_FUNC_OP:
--		if (val[0])
--			podmpriv->BK_SupportAbility = podmpriv->SupportAbility;
--		else
--			podmpriv->SupportAbility = podmpriv->BK_SupportAbility;
+-	case HW_VAR_DM_FLAG:
+-		podmpriv->SupportAbility = *((u8 *)val);
 -		break;
  	case HW_VAR_DM_FUNC_RESET:
  		podmpriv->SupportAbility = pdmpriv->InitODMFlag;
  		break;
 diff --git a/drivers/staging/r8188eu/include/hal_intf.h b/drivers/staging/r8188eu/include/hal_intf.h
-index 3e0ee33aa131..261823e7e8e8 100644
+index 261823e7e8e8..89aeb6c2229f 100644
 --- a/drivers/staging/r8188eu/include/hal_intf.h
 +++ b/drivers/staging/r8188eu/include/hal_intf.h
-@@ -13,7 +13,6 @@ enum hw_variables {
+@@ -12,7 +12,6 @@ enum hw_variables {
+ 	HW_VAR_SET_OPMODE,
  	HW_VAR_CORRECT_TSF,
  	HW_VAR_MLME_SITESURVEY,
- 	HW_VAR_DM_FLAG,
--	HW_VAR_DM_FUNC_OP,
+-	HW_VAR_DM_FLAG,
  	HW_VAR_DM_FUNC_RESET,
  	HW_VAR_DM_FUNC_CLR,
  };
+diff --git a/drivers/staging/r8188eu/os_dep/ioctl_linux.c b/drivers/staging/r8188eu/os_dep/ioctl_linux.c
+index 047e9c7d38c3..930bb4aea435 100644
+--- a/drivers/staging/r8188eu/os_dep/ioctl_linux.c
++++ b/drivers/staging/r8188eu/os_dep/ioctl_linux.c
+@@ -3221,6 +3221,14 @@ static void rtw_set_dynamic_functions(struct adapter *adapter, u8 dm_func)
+ 	}
+ }
+ 
++static void rtw_set_dm_func_flag(struct adapter *adapter, u32 odm_flag)
++{
++	struct hal_data_8188e *haldata = &adapter->haldata;
++	struct odm_dm_struct *odmpriv = &haldata->odmpriv;
++
++	odmpriv->SupportAbility = odm_flag;
++}
++
+ static int rtw_dbg_port(struct net_device *dev,
+ 			       struct iw_request_info *info,
+ 			       union iwreq_data *wrqu, char *extra)
+@@ -3459,7 +3467,7 @@ static int rtw_dbg_port(struct net_device *dev,
+ 		case 0x06:
+ 			{
+ 				u32 ODMFlag = (u32)(0x0f & arg);
+-				SetHwReg8188EU(padapter, HW_VAR_DM_FLAG, (u8 *)(&ODMFlag));
++				rtw_set_dm_func_flag(padapter, ODMFlag);
+ 			}
+ 			break;
+ 		case 0x07:
 -- 
 2.36.1
 

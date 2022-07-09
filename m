@@ -2,177 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D65256CA55
-	for <lists+linux-kernel@lfdr.de>; Sat,  9 Jul 2022 17:25:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3EF7356CA60
+	for <lists+linux-kernel@lfdr.de>; Sat,  9 Jul 2022 17:38:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229567AbiGIPYx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 9 Jul 2022 11:24:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56490 "EHLO
+        id S229547AbiGIPhu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 9 Jul 2022 11:37:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33040 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229538AbiGIPYp (ORCPT
+        with ESMTP id S229478AbiGIPht (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 9 Jul 2022 11:24:45 -0400
-Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C26C713E88
-        for <linux-kernel@vger.kernel.org>; Sat,  9 Jul 2022 08:24:43 -0700 (PDT)
-Received: by mail-wr1-x42b.google.com with SMTP id v14so1859152wra.5
-        for <linux-kernel@vger.kernel.org>; Sat, 09 Jul 2022 08:24:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=conchuod.ie; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=e7OziW02Y/9peL0FmHLT2XkVqPVR8DGTtiJWYX8th9g=;
-        b=ECZOuvVPNJv4pwuzvrO842PwGYJwOVKmO+ePMzvMb2kiTRVtLSAGqq0e8HvKfnAoev
-         XwWbnXBDPV7oUrxaHTMMCTA7ZrD3zrxzMKO3H43E3lHT8OiWHNMJahLSJ2aQpJKNnkxz
-         DR7dBbK/xncoYRSghBvFnBFDf7pd1eFaR+Dq+r2peG656ErDx+tqLFcZHxyjrV1TVvOR
-         JMe0VByofu+6AGcXSNmPaB3ZHm0n+/koQ98BaXg9Pnm3gpnt3Tx4PbplmbCw4rd8Pl7S
-         rsgZrPPV825g3ar4sbMq9eDFKlj/mFEMjRm4PxtZD0jeW5r33d32r2r9X6r9YGTEg5nM
-         lU/A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=e7OziW02Y/9peL0FmHLT2XkVqPVR8DGTtiJWYX8th9g=;
-        b=P4kaFxzFJZ7GEUKc7gG8/nWg+POKTRHpoFczZgEai+Di3LRtvkrL76BLih8s7IPExU
-         uXfGVanQ41icEtUaTsXhl4m/ctkTcMlM4w2c7WsJhchBXUzwpkWTYz/ObAa+x3BdFt7Y
-         01nTYejdt3Ok406Gf9wctLlVgLsUmdP0PgbFt1ng4OrDSgPonbhN1u85ltVHXolKiqYJ
-         S4roStI7Bo0vNjjSiRQFcOwraVt91OqqVRx3qCPNN4mE0GfJ2r1aivucq6LxMrWAcl14
-         ZkAD1/DrpBEElCze2IMqU4UjNMLwHyNUWr6LoLcXDxKYRF+R/me2jO4D2ffCaDHpblE0
-         cLlg==
-X-Gm-Message-State: AJIora9yeNlHGHszVKL5x7jfX9vhR9UxOkMOSf3oLEkLjUGoui4i8Z2N
-        TN42XSWAKnS5cYOEl9yOd30ajQ==
-X-Google-Smtp-Source: AGRyM1sTW2QGHBhqujHGrijOa1mBvsISG5gFuOmbHCFky2pxJAj8MH78/S0Xmj+pnEx/aUFb6oMnnQ==
-X-Received: by 2002:a5d:6a01:0:b0:21a:338c:4862 with SMTP id m1-20020a5d6a01000000b0021a338c4862mr8262063wru.631.1657380282203;
-        Sat, 09 Jul 2022 08:24:42 -0700 (PDT)
-Received: from henark71.. ([51.37.234.167])
-        by smtp.gmail.com with ESMTPSA id y12-20020a5d620c000000b0021d63fe0f03sm1626730wru.12.2022.07.09.08.24.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 09 Jul 2022 08:24:41 -0700 (PDT)
-From:   Conor Dooley <mail@conchuod.ie>
-To:     Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Palmer Dabbelt <palmer@rivosinc.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J . Wysocki" <rafael@kernel.org>
-Cc:     Daire McNamara <daire.mcnamara@microchip.com>,
-        Conor Dooley <conor.dooley@microchip.com>,
-        Niklas Cassel <niklas.cassel@wdc.com>,
-        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Zong Li <zong.li@sifive.com>,
-        Emil Renner Berthing <kernel@esmil.dk>,
-        Jonas Hahnfeld <hahnjo@hahnjo.de>, Guo Ren <guoren@kernel.org>,
-        Anup Patel <anup@brainfault.org>,
-        Atish Patra <atishp@atishpatra.org>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Philipp Tomsich <philipp.tomsich@vrull.eu>,
-        Rob Herring <robh@kernel.org>, Marc Zyngier <maz@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        Brice Goglin <Brice.Goglin@inria.fr>
-Subject: [PATCH v3 2/2] riscv: topology: fix default topology reporting
-Date:   Sat,  9 Jul 2022 16:23:55 +0100
-Message-Id: <20220709152354.2856586-3-mail@conchuod.ie>
-X-Mailer: git-send-email 2.37.0
-In-Reply-To: <20220709152354.2856586-1-mail@conchuod.ie>
-References: <20220709152354.2856586-1-mail@conchuod.ie>
+        Sat, 9 Jul 2022 11:37:49 -0400
+Received: from outgoing.mit.edu (outgoing-auth-1.mit.edu [18.9.28.11])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55D161260A;
+        Sat,  9 Jul 2022 08:37:47 -0700 (PDT)
+Received: from cwcc.thunk.org (pool-173-48-118-63.bstnma.fios.verizon.net [173.48.118.63])
+        (authenticated bits=0)
+        (User authenticated as tytso@ATHENA.MIT.EDU)
+        by outgoing.mit.edu (8.14.7/8.12.4) with ESMTP id 269FbTwk024416
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Sat, 9 Jul 2022 11:37:30 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mit.edu; s=outgoing;
+        t=1657381052; bh=9DitvARArg4OKL8NQwK5saaEpS4clc1oleOnJJ3e2rA=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To;
+        b=WnkeauIe0vsGvZqf4Iq3fZsUY55/p1pMzrArEgVExy5wAUZnCd6FF0kYKcxz4eRfu
+         8rh2wjw6exfCHhaWhplj7gUEEfV2iMCkKUILxUGpnZbHqIKHMJueNmgjH47yttn5Vd
+         D7fg7gO29jyUtYlV8/kfDMvjgxbB/i6kwqJE1vfK6AT2NMEBNH++57saXq0adaB0Yl
+         DA7cki0QU8OtP5aSt8jUyjKmaHRYRLoPBgb/zil9QBcfyGmc5FOKLDyD0BFO+8Ez8k
+         FrRuksLI2Qe2f1yS5mgXYSBK7Jq1noJlVe8S2CCxH+xdbUtKRalQ2ROItoyDRqY3HA
+         EXWUE5nsa/CHg==
+Received: by cwcc.thunk.org (Postfix, from userid 15806)
+        id 7164D15C4331; Sat,  9 Jul 2022 11:37:29 -0400 (EDT)
+Date:   Sat, 9 Jul 2022 11:37:29 -0400
+From:   "Theodore Ts'o" <tytso@mit.edu>
+To:     Mauro Carvalho Chehab <mchehab@kernel.org>
+Cc:     Linux Doc Mailing List <linux-doc@vger.kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        Andreas Dilger <adilger.kernel@dilger.ca>,
+        linux-ext4@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 15/21] docs: ext4: blockmap.rst: fix a broken table
+Message-ID: <YsmguYemOmrLLXt9@mit.edu>
+References: <cover.1657360984.git.mchehab@kernel.org>
+ <29d2a3787e46de72db8563b8c08f593b6b6f0c14.1657360984.git.mchehab@kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <29d2a3787e46de72db8563b8c08f593b6b6f0c14.1657360984.git.mchehab@kernel.org>
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Conor Dooley <conor.dooley@microchip.com>
+On Sat, Jul 09, 2022 at 11:07:28AM +0100, Mauro Carvalho Chehab wrote:
+> There's one missing space, causing a long error message when
+> building the docs.
+> 
+> Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
 
-RISC-V has no sane defaults to fall back on where there is no cpu-map
-in the devicetree.
-Without sane defaults, the package, core and thread IDs are all set to
--1. This causes user-visible inaccuracies for tools like hwloc/lstopo
-which rely on the sysfs cpu topology files to detect a system's
-topology.
-
-On a PolarFire SoC, which should have 4 harts with a thread each,
-lstopo currently reports:
-
-Machine (793MB total)
-  Package L#0
-    NUMANode L#0 (P#0 793MB)
-    Core L#0
-      L1d L#0 (32KB) + L1i L#0 (32KB) + PU L#0 (P#0)
-      L1d L#1 (32KB) + L1i L#1 (32KB) + PU L#1 (P#1)
-      L1d L#2 (32KB) + L1i L#2 (32KB) + PU L#2 (P#2)
-      L1d L#3 (32KB) + L1i L#3 (32KB) + PU L#3 (P#3)
-
-Adding calls to store_cpu_topology() in {boot,smp} hart bringup code
-results in the correct topolgy being reported:
-
-Machine (793MB total)
-  Package L#0
-    NUMANode L#0 (P#0 793MB)
-    L1d L#0 (32KB) + L1i L#0 (32KB) + Core L#0 + PU L#0 (P#0)
-    L1d L#1 (32KB) + L1i L#1 (32KB) + Core L#1 + PU L#1 (P#1)
-    L1d L#2 (32KB) + L1i L#2 (32KB) + Core L#2 + PU L#2 (P#2)
-    L1d L#3 (32KB) + L1i L#3 (32KB) + Core L#3 + PU L#3 (P#3)
-
-CC: stable@vger.kernel.org
-Fixes: 03f11f03dbfe ("RISC-V: Parse cpu topology during boot.")
-Reported-by: Brice Goglin <Brice.Goglin@inria.fr>
-Link: https://github.com/open-mpi/hwloc/issues/536
-Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
----
----
- arch/riscv/Kconfig          | 2 +-
- arch/riscv/kernel/smpboot.c | 4 +++-
- 2 files changed, 4 insertions(+), 2 deletions(-)
-
-diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
-index 2af0701b7518..4b6c2fdbb57c 100644
---- a/arch/riscv/Kconfig
-+++ b/arch/riscv/Kconfig
-@@ -52,7 +52,7 @@ config RISCV
- 	select COMMON_CLK
- 	select CPU_PM if CPU_IDLE
- 	select EDAC_SUPPORT
--	select GENERIC_ARCH_TOPOLOGY if SMP
-+	select GENERIC_ARCH_TOPOLOGY
- 	select GENERIC_ATOMIC64 if !64BIT
- 	select GENERIC_CLOCKEVENTS_BROADCAST if SMP
- 	select GENERIC_EARLY_IOREMAP
-diff --git a/arch/riscv/kernel/smpboot.c b/arch/riscv/kernel/smpboot.c
-index f1e4948a4b52..a1c861f84fe2 100644
---- a/arch/riscv/kernel/smpboot.c
-+++ b/arch/riscv/kernel/smpboot.c
-@@ -40,6 +40,8 @@ static DECLARE_COMPLETION(cpu_running);
- void __init smp_prepare_boot_cpu(void)
- {
- 	init_cpu_topology();
-+
-+	store_cpu_topology(smp_processor_id());
- }
- 
- void __init smp_prepare_cpus(unsigned int max_cpus)
-@@ -161,9 +163,9 @@ asmlinkage __visible void smp_callin(void)
- 	mmgrab(mm);
- 	current->active_mm = mm;
- 
-+	store_cpu_topology(curr_cpuid);
- 	notify_cpu_starting(curr_cpuid);
- 	numa_add_cpu(curr_cpuid);
--	update_siblings_masks(curr_cpuid);
- 	set_cpu_online(curr_cpuid, 1);
- 
- 	/*
--- 
-2.37.0
-
+Acked-by: Theodore Ts'o <tytso@mit.edu>

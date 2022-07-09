@@ -2,199 +2,158 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1AE8F56C67B
-	for <lists+linux-kernel@lfdr.de>; Sat,  9 Jul 2022 05:40:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 26C3156C67A
+	for <lists+linux-kernel@lfdr.de>; Sat,  9 Jul 2022 05:40:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229547AbiGIDks (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Jul 2022 23:40:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34552 "EHLO
+        id S229656AbiGIDkj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Jul 2022 23:40:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34310 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229570AbiGIDka (ORCPT
+        with ESMTP id S229607AbiGIDkZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Jul 2022 23:40:30 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96E2385D57
-        for <linux-kernel@vger.kernel.org>; Fri,  8 Jul 2022 20:40:24 -0700 (PDT)
+        Fri, 8 Jul 2022 23:40:25 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D86A82FB4
+        for <linux-kernel@vger.kernel.org>; Fri,  8 Jul 2022 20:40:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1657338024; x=1688874024;
+  t=1657338023; x=1688874023;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=FlItoKzgG1e2LfT/0c16eahk8s9C2BA0261gC6/zr1Q=;
-  b=W30PlrItttxLF5oxcdDe1yzQ1K89alV9GYPTxUiAHqnf2VEYKJSYxOjr
-   b/WxyJ4m0u0ctdF+rseEJJu3Wk/WU+i8ENAVpgkMyxQzPoOrybFtKWRN2
-   9QpAsjbyKNstO+2YscbXr3hZ5n5hYJaafag5B5WRg6HZXbx25l5f1Mw6M
-   GeOgI/E/E3pSo4bp2TXlB3iu1ocfvPtxFP4EENKQgP11+KDfmkP0jpwIg
-   4OPRlTacZoRmDLRoRvlS0Vd0tN9Rktwj0YeBI5z1hjJP1a8zsV9pIZVpE
-   XbwDTCfD38ldGbgdbx3z2MrXQyByWUZWtHyNDRWUvHO/2tY7cYvMnA39h
+  bh=YdLfOHEdJiJw3cVN/etqKWUnHalJodNayeVPziKaIvg=;
+  b=QiUCTn3tCHczU4bu7QU0kIC2Aq5NNiD48K+FpNO9/1NgXZ4nVX6HHAun
+   TwbbGoJSotxVXHOyAtrJZpbr9HsbFicoDZNcksUUcwnQT1kL4U8ZrNyJD
+   7Gr1Z6z8T87ComlDNw2JSgWOcQ4HdB4q8nT/h2KbmiNedmkiZplWlkwxN
+   uNE0Js7ssYWXh4Ja28SqtqKynnxQaKt9goJDkk4wsjwIYu2C4jLUZpBa8
+   px7bf6lbBxoOBcxs6TvE5s1GGAfYHKg17jGMfIRpuq3RN4PHWQX3y+uCb
+   UBKkenzAqS1QlHZeBwlcMLZC2ecTxfROZL0G4er3rCjgPFTLuPE1JIWQK
    A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10402"; a="346090266"
+X-IronPort-AV: E=McAfee;i="6400,9594,10402"; a="285531293"
 X-IronPort-AV: E=Sophos;i="5.92,256,1650956400"; 
-   d="scan'208";a="346090266"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jul 2022 20:40:23 -0700
+   d="scan'208";a="285531293"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jul 2022 20:40:22 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.92,256,1650956400"; 
-   d="scan'208";a="661975102"
+   d="scan'208";a="921204205"
 Received: from lkp-server01.sh.intel.com (HELO 68b931ab7ac1) ([10.239.97.150])
-  by fmsmga004.fm.intel.com with ESMTP; 08 Jul 2022 20:40:21 -0700
+  by fmsmga005.fm.intel.com with ESMTP; 08 Jul 2022 20:40:21 -0700
 Received: from kbuild by 68b931ab7ac1 with local (Exim 4.95)
         (envelope-from <lkp@intel.com>)
-        id 1oA1KO-000OGM-QU;
+        id 1oA1KO-000OGO-Qz;
         Sat, 09 Jul 2022 03:40:20 +0000
-Date:   Sat, 9 Jul 2022 11:39:53 +0800
+Date:   Sat, 9 Jul 2022 11:40:05 +0800
 From:   kernel test robot <lkp@intel.com>
-To:     Pankaj Raghav <p.raghav@samsung.com>
+To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        Hannes Reinecke <hare@suse.de>,
-        Bart Van Assche <bvanassche@acm.org>
-Subject: [mcgrof-next:20220707-dm-zoned-npo2 1/13] block/ioctl.c:496:39:
- error: implicit declaration of function 'bdev_zone_sectors'; did you mean
- 'bdev_nr_sectors'?
-Message-ID: <202207091112.sD4WmjCs-lkp@intel.com>
+        Rob Clark <robdclark@chromium.org>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>
+Subject: [drm-msm:msm-next 9/29]
+ drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c:904:28: warning: variable 'top' set
+ but not used
+Message-ID: <202207091145.lpVXwHu5-lkp@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/linux-next.git 20220707-dm-zoned-npo2
-head:   3d1b6e41f76394610669e380da4f65bc5e7cf8ac
-commit: a37ed4b355c02ec383a85c961f0e121df104cc1a [1/13] block: make bdev_nr_zones and disk_zone_no generic for npo2 zsze
-config: x86_64-defconfig (https://download.01.org/0day-ci/archive/20220709/202207091112.sD4WmjCs-lkp@intel.com/config)
-compiler: gcc-11 (Debian 11.3.0-3) 11.3.0
+tree:   https://gitlab.freedesktop.org/drm/msm.git msm-next
+head:   cb77085b1f0a86ef9dfba86b5f3ed6c3340c2ea3
+commit: 9403f9a42c881d59396a454347540108d787685f [9/29] drm/msm/dpu: merge base_off with blk_off in struct dpu_hw_blk_reg_map
+config: arm-defconfig (https://download.01.org/0day-ci/archive/20220709/202207091145.lpVXwHu5-lkp@intel.com/config)
+compiler: arm-linux-gnueabi-gcc (GCC) 11.3.0
 reproduce (this is a W=1 build):
-        # https://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/linux-next.git/commit/?id=a37ed4b355c02ec383a85c961f0e121df104cc1a
-        git remote add mcgrof-next https://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/linux-next.git
-        git fetch --no-tags mcgrof-next 20220707-dm-zoned-npo2
-        git checkout a37ed4b355c02ec383a85c961f0e121df104cc1a
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        git remote add drm-msm https://gitlab.freedesktop.org/drm/msm.git
+        git fetch --no-tags drm-msm msm-next
+        git checkout 9403f9a42c881d59396a454347540108d787685f
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash drivers/gpu/drm/msm/
 
 If you fix the issue, kindly add following tag where applicable
 Reported-by: kernel test robot <lkp@intel.com>
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
-   block/ioctl.c: In function 'blkdev_common_ioctl':
->> block/ioctl.c:496:39: error: implicit declaration of function 'bdev_zone_sectors'; did you mean 'bdev_nr_sectors'? [-Werror=implicit-function-declaration]
-     496 |                 return put_uint(argp, bdev_zone_sectors(bdev));
-         |                                       ^~~~~~~~~~~~~~~~~
-         |                                       bdev_nr_sectors
-   cc1: some warnings being treated as errors
---
-   drivers/md/dm-table.c: In function 'device_area_is_invalid':
->> drivers/md/dm-table.c:251:45: error: implicit declaration of function 'bdev_zone_sectors'; did you mean 'bdev_nr_sectors'? [-Werror=implicit-function-declaration]
-     251 |                 unsigned int zone_sectors = bdev_zone_sectors(bdev);
-         |                                             ^~~~~~~~~~~~~~~~~
-         |                                             bdev_nr_sectors
-   cc1: some warnings being treated as errors
+   drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c: In function 'dpu_kms_mdp_snapshot':
+>> drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c:904:28: warning: variable 'top' set but not used [-Wunused-but-set-variable]
+     904 |         struct dpu_hw_mdp *top;
+         |                            ^~~
 
 
-vim +496 block/ioctl.c
+vim +/top +904 drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c
 
-d8e4bb8103df02a Christoph Hellwig  2015-10-15  464  
-d8e4bb8103df02a Christoph Hellwig  2015-10-15  465  /*
-9b81648cb5e3ae7 Arnd Bergmann      2019-11-29  466   * Common commands that are handled the same way on native and compat
-9b81648cb5e3ae7 Arnd Bergmann      2019-11-29  467   * user space. Note the separate arg/argp parameters that are needed
-9b81648cb5e3ae7 Arnd Bergmann      2019-11-29  468   * to deal with the compat_ptr() conversion.
-d8e4bb8103df02a Christoph Hellwig  2015-10-15  469   */
-9b81648cb5e3ae7 Arnd Bergmann      2019-11-29  470  static int blkdev_common_ioctl(struct block_device *bdev, fmode_t mode,
-9b81648cb5e3ae7 Arnd Bergmann      2019-11-29  471  				unsigned cmd, unsigned long arg, void __user *argp)
-d8e4bb8103df02a Christoph Hellwig  2015-10-15  472  {
-d8e4bb8103df02a Christoph Hellwig  2015-10-15  473  	unsigned int max_sectors;
-d8e4bb8103df02a Christoph Hellwig  2015-10-15  474  
-d8e4bb8103df02a Christoph Hellwig  2015-10-15  475  	switch (cmd) {
-d8e4bb8103df02a Christoph Hellwig  2015-10-15  476  	case BLKFLSBUF:
-d8e4bb8103df02a Christoph Hellwig  2015-10-15  477  		return blkdev_flushbuf(bdev, mode, cmd, arg);
-d8e4bb8103df02a Christoph Hellwig  2015-10-15  478  	case BLKROSET:
-d8e4bb8103df02a Christoph Hellwig  2015-10-15  479  		return blkdev_roset(bdev, mode, cmd, arg);
-d8e4bb8103df02a Christoph Hellwig  2015-10-15  480  	case BLKDISCARD:
-44abff2c0b970ae Christoph Hellwig  2022-04-15  481  		return blk_ioctl_discard(bdev, mode, arg);
-d8e4bb8103df02a Christoph Hellwig  2015-10-15  482  	case BLKSECDISCARD:
-44abff2c0b970ae Christoph Hellwig  2022-04-15  483  		return blk_ioctl_secure_erase(bdev, mode, argp);
-d8e4bb8103df02a Christoph Hellwig  2015-10-15  484  	case BLKZEROOUT:
-d8e4bb8103df02a Christoph Hellwig  2015-10-15  485  		return blk_ioctl_zeroout(bdev, mode, arg);
-7957d93bf32bc21 Matteo Croce       2021-07-13  486  	case BLKGETDISKSEQ:
-7957d93bf32bc21 Matteo Croce       2021-07-13  487  		return put_u64(argp, bdev->bd_disk->diskseq);
-3ed05a987e0f63b Shaun Tancheff     2016-10-18  488  	case BLKREPORTZONE:
-3ed05a987e0f63b Shaun Tancheff     2016-10-18  489  		return blkdev_report_zones_ioctl(bdev, mode, cmd, arg);
-3ed05a987e0f63b Shaun Tancheff     2016-10-18  490  	case BLKRESETZONE:
-e876df1fe0ad1b1 Ajay Joshi         2019-10-27  491  	case BLKOPENZONE:
-e876df1fe0ad1b1 Ajay Joshi         2019-10-27  492  	case BLKCLOSEZONE:
-e876df1fe0ad1b1 Ajay Joshi         2019-10-27  493  	case BLKFINISHZONE:
-e876df1fe0ad1b1 Ajay Joshi         2019-10-27  494  		return blkdev_zone_mgmt_ioctl(bdev, mode, cmd, arg);
-72cd87576d1d885 Damien Le Moal     2018-10-12  495  	case BLKGETZONESZ:
-9b81648cb5e3ae7 Arnd Bergmann      2019-11-29 @496  		return put_uint(argp, bdev_zone_sectors(bdev));
-65e4e3eee83d7a4 Damien Le Moal     2018-10-12  497  	case BLKGETNRZONES:
-b623e347323f646 Christoph Hellwig  2022-07-06  498  		return put_uint(argp, bdev_nr_zones(bdev));
-45048d0961cdbf7 Al Viro            2008-09-18  499  	case BLKROGET:
-9b81648cb5e3ae7 Arnd Bergmann      2019-11-29  500  		return put_int(argp, bdev_read_only(bdev) != 0);
-ac481c20ef8f6c6 Martin K. Petersen 2009-10-03  501  	case BLKSSZGET: /* get block device logical block size */
-9b81648cb5e3ae7 Arnd Bergmann      2019-11-29  502  		return put_int(argp, bdev_logical_block_size(bdev));
-ac481c20ef8f6c6 Martin K. Petersen 2009-10-03  503  	case BLKPBSZGET: /* get block device physical block size */
-9b81648cb5e3ae7 Arnd Bergmann      2019-11-29  504  		return put_uint(argp, bdev_physical_block_size(bdev));
-ac481c20ef8f6c6 Martin K. Petersen 2009-10-03  505  	case BLKIOMIN:
-9b81648cb5e3ae7 Arnd Bergmann      2019-11-29  506  		return put_uint(argp, bdev_io_min(bdev));
-ac481c20ef8f6c6 Martin K. Petersen 2009-10-03  507  	case BLKIOOPT:
-9b81648cb5e3ae7 Arnd Bergmann      2019-11-29  508  		return put_uint(argp, bdev_io_opt(bdev));
-ac481c20ef8f6c6 Martin K. Petersen 2009-10-03  509  	case BLKALIGNOFF:
-9b81648cb5e3ae7 Arnd Bergmann      2019-11-29  510  		return put_int(argp, bdev_alignment_offset(bdev));
-98262f2762f0067 Martin K. Petersen 2009-12-03  511  	case BLKDISCARDZEROES:
-9b81648cb5e3ae7 Arnd Bergmann      2019-11-29  512  		return put_uint(argp, 0);
-45048d0961cdbf7 Al Viro            2008-09-18  513  	case BLKSECTGET:
-63f264965947ac6 Akinobu Mita       2014-05-25  514  		max_sectors = min_t(unsigned int, USHRT_MAX,
-63f264965947ac6 Akinobu Mita       2014-05-25  515  				    queue_max_sectors(bdev_get_queue(bdev)));
-9b81648cb5e3ae7 Arnd Bergmann      2019-11-29  516  		return put_ushort(argp, max_sectors);
-ef00f59c95fe6e0 Martin K. Petersen 2012-01-11  517  	case BLKROTATIONAL:
-10f0d2a517796b8 Christoph Hellwig  2022-04-15  518  		return put_ushort(argp, !bdev_nonrot(bdev));
-45048d0961cdbf7 Al Viro            2008-09-18  519  	case BLKRASET:
-45048d0961cdbf7 Al Viro            2008-09-18  520  	case BLKFRASET:
-45048d0961cdbf7 Al Viro            2008-09-18  521  		if(!capable(CAP_SYS_ADMIN))
-45048d0961cdbf7 Al Viro            2008-09-18  522  			return -EACCES;
-a11d7fc2d05fb50 Christoph Hellwig  2021-08-09  523  		bdev->bd_disk->bdi->ra_pages = (arg * 512) / PAGE_SIZE;
-45048d0961cdbf7 Al Viro            2008-09-18  524  		return 0;
-45048d0961cdbf7 Al Viro            2008-09-18  525  	case BLKRRPART:
-e16e506ccd673a3 Christoph Hellwig  2021-11-22  526  		if (!capable(CAP_SYS_ADMIN))
-e16e506ccd673a3 Christoph Hellwig  2021-11-22  527  			return -EACCES;
-e16e506ccd673a3 Christoph Hellwig  2021-11-22  528  		if (bdev_is_partition(bdev))
-e16e506ccd673a3 Christoph Hellwig  2021-11-22  529  			return -EINVAL;
-e16e506ccd673a3 Christoph Hellwig  2021-11-22  530  		return disk_scan_partitions(bdev->bd_disk, mode & ~FMODE_EXCL);
-45048d0961cdbf7 Al Viro            2008-09-18  531  	case BLKTRACESTART:
-45048d0961cdbf7 Al Viro            2008-09-18  532  	case BLKTRACESTOP:
-45048d0961cdbf7 Al Viro            2008-09-18  533  	case BLKTRACETEARDOWN:
-d8e4bb8103df02a Christoph Hellwig  2015-10-15  534  		return blk_trace_ioctl(bdev, cmd, argp);
-bbd3e064362e505 Christoph Hellwig  2015-10-15  535  	case IOC_PR_REGISTER:
-bbd3e064362e505 Christoph Hellwig  2015-10-15  536  		return blkdev_pr_register(bdev, argp);
-bbd3e064362e505 Christoph Hellwig  2015-10-15  537  	case IOC_PR_RESERVE:
-bbd3e064362e505 Christoph Hellwig  2015-10-15  538  		return blkdev_pr_reserve(bdev, argp);
-bbd3e064362e505 Christoph Hellwig  2015-10-15  539  	case IOC_PR_RELEASE:
-bbd3e064362e505 Christoph Hellwig  2015-10-15  540  		return blkdev_pr_release(bdev, argp);
-bbd3e064362e505 Christoph Hellwig  2015-10-15  541  	case IOC_PR_PREEMPT:
-bbd3e064362e505 Christoph Hellwig  2015-10-15  542  		return blkdev_pr_preempt(bdev, argp, false);
-bbd3e064362e505 Christoph Hellwig  2015-10-15  543  	case IOC_PR_PREEMPT_ABORT:
-bbd3e064362e505 Christoph Hellwig  2015-10-15  544  		return blkdev_pr_preempt(bdev, argp, true);
-bbd3e064362e505 Christoph Hellwig  2015-10-15  545  	case IOC_PR_CLEAR:
-bbd3e064362e505 Christoph Hellwig  2015-10-15  546  		return blkdev_pr_clear(bdev, argp);
-45048d0961cdbf7 Al Viro            2008-09-18  547  	default:
-9b81648cb5e3ae7 Arnd Bergmann      2019-11-29  548  		return -ENOIOCTLCMD;
-9b81648cb5e3ae7 Arnd Bergmann      2019-11-29  549  	}
-9b81648cb5e3ae7 Arnd Bergmann      2019-11-29  550  }
-9b81648cb5e3ae7 Arnd Bergmann      2019-11-29  551  
+220b856a3d3742 Tanmay Shah      2020-08-27  898  
+eb9d6c7ebe44df Dmitry Baryshkov 2021-04-27  899  static void dpu_kms_mdp_snapshot(struct msm_disp_state *disp_state, struct msm_kms *kms)
+a698b5cdfe6366 Abhinav Kumar    2021-04-16  900  {
+a698b5cdfe6366 Abhinav Kumar    2021-04-16  901  	int i;
+a698b5cdfe6366 Abhinav Kumar    2021-04-16  902  	struct dpu_kms *dpu_kms;
+3208496720a180 Dmitry Baryshkov 2022-06-02  903  	const struct dpu_mdss_cfg *cat;
+a698b5cdfe6366 Abhinav Kumar    2021-04-16 @904  	struct dpu_hw_mdp *top;
+a698b5cdfe6366 Abhinav Kumar    2021-04-16  905  
+a698b5cdfe6366 Abhinav Kumar    2021-04-16  906  	dpu_kms = to_dpu_kms(kms);
+a698b5cdfe6366 Abhinav Kumar    2021-04-16  907  
+a698b5cdfe6366 Abhinav Kumar    2021-04-16  908  	cat = dpu_kms->catalog;
+a698b5cdfe6366 Abhinav Kumar    2021-04-16  909  	top = dpu_kms->hw_mdp;
+a698b5cdfe6366 Abhinav Kumar    2021-04-16  910  
+a698b5cdfe6366 Abhinav Kumar    2021-04-16  911  	pm_runtime_get_sync(&dpu_kms->pdev->dev);
+a698b5cdfe6366 Abhinav Kumar    2021-04-16  912  
+a698b5cdfe6366 Abhinav Kumar    2021-04-16  913  	/* dump CTL sub-blocks HW regs info */
+a698b5cdfe6366 Abhinav Kumar    2021-04-16  914  	for (i = 0; i < cat->ctl_count; i++)
+a698b5cdfe6366 Abhinav Kumar    2021-04-16  915  		msm_disp_snapshot_add_block(disp_state, cat->ctl[i].len,
+a698b5cdfe6366 Abhinav Kumar    2021-04-16  916  				dpu_kms->mmio + cat->ctl[i].base, "ctl_%d", i);
+a698b5cdfe6366 Abhinav Kumar    2021-04-16  917  
+a698b5cdfe6366 Abhinav Kumar    2021-04-16  918  	/* dump DSPP sub-blocks HW regs info */
+a698b5cdfe6366 Abhinav Kumar    2021-04-16  919  	for (i = 0; i < cat->dspp_count; i++)
+a698b5cdfe6366 Abhinav Kumar    2021-04-16  920  		msm_disp_snapshot_add_block(disp_state, cat->dspp[i].len,
+a698b5cdfe6366 Abhinav Kumar    2021-04-16  921  				dpu_kms->mmio + cat->dspp[i].base, "dspp_%d", i);
+a698b5cdfe6366 Abhinav Kumar    2021-04-16  922  
+a698b5cdfe6366 Abhinav Kumar    2021-04-16  923  	/* dump INTF sub-blocks HW regs info */
+a698b5cdfe6366 Abhinav Kumar    2021-04-16  924  	for (i = 0; i < cat->intf_count; i++)
+a698b5cdfe6366 Abhinav Kumar    2021-04-16  925  		msm_disp_snapshot_add_block(disp_state, cat->intf[i].len,
+a698b5cdfe6366 Abhinav Kumar    2021-04-16  926  				dpu_kms->mmio + cat->intf[i].base, "intf_%d", i);
+a698b5cdfe6366 Abhinav Kumar    2021-04-16  927  
+a698b5cdfe6366 Abhinav Kumar    2021-04-16  928  	/* dump PP sub-blocks HW regs info */
+a698b5cdfe6366 Abhinav Kumar    2021-04-16  929  	for (i = 0; i < cat->pingpong_count; i++)
+a698b5cdfe6366 Abhinav Kumar    2021-04-16  930  		msm_disp_snapshot_add_block(disp_state, cat->pingpong[i].len,
+a698b5cdfe6366 Abhinav Kumar    2021-04-16  931  				dpu_kms->mmio + cat->pingpong[i].base, "pingpong_%d", i);
+a698b5cdfe6366 Abhinav Kumar    2021-04-16  932  
+a698b5cdfe6366 Abhinav Kumar    2021-04-16  933  	/* dump SSPP sub-blocks HW regs info */
+a698b5cdfe6366 Abhinav Kumar    2021-04-16  934  	for (i = 0; i < cat->sspp_count; i++)
+a698b5cdfe6366 Abhinav Kumar    2021-04-16  935  		msm_disp_snapshot_add_block(disp_state, cat->sspp[i].len,
+a698b5cdfe6366 Abhinav Kumar    2021-04-16  936  				dpu_kms->mmio + cat->sspp[i].base, "sspp_%d", i);
+a698b5cdfe6366 Abhinav Kumar    2021-04-16  937  
+3a905438887bf0 Abhinav Kumar    2021-12-15  938  	/* dump LM sub-blocks HW regs info */
+3a905438887bf0 Abhinav Kumar    2021-12-15  939  	for (i = 0; i < cat->mixer_count; i++)
+3a905438887bf0 Abhinav Kumar    2021-12-15  940  		msm_disp_snapshot_add_block(disp_state, cat->mixer[i].len,
+3a905438887bf0 Abhinav Kumar    2021-12-15  941  				dpu_kms->mmio + cat->mixer[i].base, "lm_%d", i);
+3a905438887bf0 Abhinav Kumar    2021-12-15  942  
+4448d59104151c Abhinav Kumar    2022-04-26  943  	/* dump WB sub-blocks HW regs info */
+4448d59104151c Abhinav Kumar    2022-04-26  944  	for (i = 0; i < cat->wb_count; i++)
+4448d59104151c Abhinav Kumar    2022-04-26  945  		msm_disp_snapshot_add_block(disp_state, cat->wb[i].len,
+4448d59104151c Abhinav Kumar    2022-04-26  946  				dpu_kms->mmio + cat->wb[i].base, "wb_%d", i);
+4448d59104151c Abhinav Kumar    2022-04-26  947  
+1e5df24b996c1c Dmitry Baryshkov 2022-06-01  948  	msm_disp_snapshot_add_block(disp_state, cat->mdp[0].len,
+9403f9a42c881d Dmitry Baryshkov 2022-06-01  949  			dpu_kms->mmio + cat->mdp[0].base, "top");
+a698b5cdfe6366 Abhinav Kumar    2021-04-16  950  
+a698b5cdfe6366 Abhinav Kumar    2021-04-16  951  	pm_runtime_put_sync(&dpu_kms->pdev->dev);
+a698b5cdfe6366 Abhinav Kumar    2021-04-16  952  }
+a698b5cdfe6366 Abhinav Kumar    2021-04-16  953  
 
-:::::: The code at line 496 was first introduced by commit
-:::::: 9b81648cb5e3ae7296825f0c8d2f98e50631ee84 compat_ioctl: simplify up block/ioctl.c
+:::::: The code at line 904 was first introduced by commit
+:::::: a698b5cdfe63663dc6d5cb4c19109cd9757f8daf drm/msm/disp/dpu1: add API to take DPU register snapshot
 
-:::::: TO: Arnd Bergmann <arnd@arndb.de>
-:::::: CC: Arnd Bergmann <arnd@arndb.de>
+:::::: TO: Abhinav Kumar <abhinavk@codeaurora.org>
+:::::: CC: Rob Clark <robdclark@chromium.org>
 
 -- 
 0-DAY CI Kernel Test Service

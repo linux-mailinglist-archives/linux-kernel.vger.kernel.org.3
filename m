@@ -2,66 +2,40 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B748E56C9B9
-	for <lists+linux-kernel@lfdr.de>; Sat,  9 Jul 2022 15:57:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BE77456CA16
+	for <lists+linux-kernel@lfdr.de>; Sat,  9 Jul 2022 16:32:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229522AbiGIN5M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 9 Jul 2022 09:57:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35148 "EHLO
+        id S229647AbiGIObd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 9 Jul 2022 10:31:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56634 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229478AbiGIN5H (ORCPT
+        with ESMTP id S229599AbiGIObV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 9 Jul 2022 09:57:07 -0400
-Received: from mailrelay4-1.pub.mailoutpod1-cph3.one.com (mailrelay4-1.pub.mailoutpod1-cph3.one.com [46.30.210.185])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3127C491D1
-        for <linux-kernel@vger.kernel.org>; Sat,  9 Jul 2022 06:57:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ravnborg.org; s=rsa1;
-        h=in-reply-to:content-transfer-encoding:content-type:mime-version:references:
-         message-id:subject:cc:to:from:date:from;
-        bh=QDvYa9cFEorN1ILaq5p0/t/GBxoIQgB2tyKasIexqXs=;
-        b=uHxHgDorQxChvH4gH2fuo2MNARVNejJimVx6FLSWFl/wA01O2eLtrgFIQbsYwJRP/im+6jA2ffGBX
-         Ic+bJZAUf3QMQugASocmdQQCjGyHUgzIP78TPUjvQZJUMAAe1ob1xDGCTDIKLGogh9sdontAFn5NDf
-         7l+K6QNVGW3WLl+jiCdyT4e6OzNo3zmnPTu9DR3zF95QERBperdvqKnQsP0/g79v3ffuLc8B/azhhi
-         sytiEsNxMM2sDaCKU9BpcSscUqS82ls8KL7++GkaE+rrbjSCsTxlnJEnfigoDyWX3j0prPhyF1HdBc
-         V2zLMM+RPs9L5/BI0R69GiCNpi+h7KQ==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed;
-        d=ravnborg.org; s=ed1;
-        h=in-reply-to:content-transfer-encoding:content-type:mime-version:references:
-         message-id:subject:cc:to:from:date:from;
-        bh=QDvYa9cFEorN1ILaq5p0/t/GBxoIQgB2tyKasIexqXs=;
-        b=OJYGdGwmD39yIGuezDD0shzbCZ80kbR/J8mg/gZnpYSmcwSzAvbTO8P3kVlx4THYAdM1qwFICXjmS
-         xWE8pO6Ag==
-X-HalOne-Cookie: e9bc3fa241fdae21be51ef3314c024f593f38501
-X-HalOne-ID: 03389c65-ff8f-11ec-823c-d0431ea8bb10
-Received: from mailproxy1.cst.dirpod4-cph3.one.com (2-105-2-98-cable.dk.customer.tdc.net [2.105.2.98])
-        by mailrelay4.pub.mailoutpod1-cph3.one.com (Halon) with ESMTPSA
-        id 03389c65-ff8f-11ec-823c-d0431ea8bb10;
-        Sat, 09 Jul 2022 13:57:04 +0000 (UTC)
-Date:   Sat, 9 Jul 2022 15:57:02 +0200
-From:   Sam Ravnborg <sam@ravnborg.org>
-To:     Martin =?iso-8859-1?Q?J=FCcker?= <martin.juecker@gmail.com>
-Cc:     linux-samsung-soc@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        David Airlie <airlied@linux.ie>,
-        Thierry Reding <thierry.reding@gmail.com>
-Subject: Re: [PATCH 1/3] dt-bindings: display: simple: add support for
- Samsung LTL101AL01
-Message-ID: <YsmJLhHBUGPHh7nL@ravnborg.org>
-References: <20220516193709.10037-1-martin.juecker@gmail.com>
+        Sat, 9 Jul 2022 10:31:21 -0400
+Received: from smtpbg.qq.com (biz-43-154-54-12.mail.qq.com [43.154.54.12])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D67C13123C;
+        Sat,  9 Jul 2022 07:31:15 -0700 (PDT)
+X-QQ-Spam: true
+X-QQ-mid: bizesmtp86t1657375080t8mj947j
+Received: from localhost.localdomain ( [182.148.15.109])
+        by bizesmtp.qq.com (ESMTP) with 
+        id ; Sat, 09 Jul 2022 21:57:57 +0800 (CST)
+X-QQ-SSF: 01000000002000B0C000C00A0000000
+From:   Jilin Yuan <yuanjilin@cdjrlc.com>
+To:     kvalo@kernel.org, davem@davemloft.net, edumazet@google.com,
+        kuba@kernel.org, pabeni@redhat.com, gregory.greenman@intel.com
+Cc:     linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Jilin Yuan <yuanjilin@cdjrlc.com>
+Subject: [PATCH] wifi: dvm: fix repeated words in comments
+Date:   Sat,  9 Jul 2022 21:57:41 +0800
+Message-Id: <20220709135741.45904-1-yuanjilin@cdjrlc.com>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220516193709.10037-1-martin.juecker@gmail.com>
-X-Spam-Status: No, score=-0.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLACK autolearn=no
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:cdjrlc.com:qybglogicsvr:qybglogicsvr5
+X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,RDNS_DYNAMIC,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,T_SPF_HELO_TEMPERROR autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,13 +43,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Martin,
+ Delete the redundant word 'to'.
+ Delete the redundant word 'when'.
 
-On Mon, May 16, 2022 at 09:37:07PM +0200, Martin Jücker wrote:
-> Add the Samsung LTL101AL01 WXGA LCD panel to the list.
-> 
-> Signed-off-by: Martin Jücker <martin.juecker@gmail.com>
+Signed-off-by: Jilin Yuan <yuanjilin@cdjrlc.com>
+---
+ drivers/net/wireless/intel/iwlwifi/dvm/lib.c | 2 +-
+ drivers/net/wireless/intel/iwlwifi/dvm/tt.h  | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Applied to drm-misc (drm-misc-next).
+diff --git a/drivers/net/wireless/intel/iwlwifi/dvm/lib.c b/drivers/net/wireless/intel/iwlwifi/dvm/lib.c
+index 40d790b36d85..83ceb3b5d918 100644
+--- a/drivers/net/wireless/intel/iwlwifi/dvm/lib.c
++++ b/drivers/net/wireless/intel/iwlwifi/dvm/lib.c
+@@ -931,7 +931,7 @@ static void iwlagn_wowlan_program_keys(struct ieee80211_hw *hw,
+ 
+ 		/*
+ 		 * For non-QoS this relies on the fact that both the uCode and
+-		 * mac80211 use TID 0 (as they need to to avoid replay attacks)
++		 * mac80211 use TID 0 (as they need to avoid replay attacks)
+ 		 * for checking the IV in the frames.
+ 		 */
+ 		for (i = 0; i < IWLAGN_NUM_RSC; i++) {
+diff --git a/drivers/net/wireless/intel/iwlwifi/dvm/tt.h b/drivers/net/wireless/intel/iwlwifi/dvm/tt.h
+index 7ace052fc78a..f9bae2b40752 100644
+--- a/drivers/net/wireless/intel/iwlwifi/dvm/tt.h
++++ b/drivers/net/wireless/intel/iwlwifi/dvm/tt.h
+@@ -69,7 +69,7 @@ struct iwl_tt_trans {
+  * @state:          current Thermal Throttling state
+  * @tt_power_mode:  Thermal Throttling power mode index
+  *		    being used to set power level when
+- *		    when thermal throttling state != IWL_TI_0
++ *		    thermal throttling state != IWL_TI_0
+  *		    the tt_power_mode should set to different
+  *		    power mode based on the current tt state
+  * @tt_previous_temperature: last measured temperature
+-- 
+2.36.1
 
-	Sam

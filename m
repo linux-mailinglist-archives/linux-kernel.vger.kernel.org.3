@@ -2,57 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B8B356C503
-	for <lists+linux-kernel@lfdr.de>; Sat,  9 Jul 2022 02:29:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B12AC56C55D
+	for <lists+linux-kernel@lfdr.de>; Sat,  9 Jul 2022 02:30:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229675AbiGIAFC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Jul 2022 20:05:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45966 "EHLO
+        id S229749AbiGIAFG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Jul 2022 20:05:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46242 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229640AbiGIAEx (ORCPT
+        with ESMTP id S229672AbiGIAE6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Jul 2022 20:04:53 -0400
-Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF731A1265
-        for <linux-kernel@vger.kernel.org>; Fri,  8 Jul 2022 17:04:51 -0700 (PDT)
-Received: by mail-yb1-xb49.google.com with SMTP id w2-20020a25ef42000000b0066d68be3fbcso113135ybm.13
-        for <linux-kernel@vger.kernel.org>; Fri, 08 Jul 2022 17:04:51 -0700 (PDT)
+        Fri, 8 Jul 2022 20:04:58 -0400
+Received: from mail-pl1-x64a.google.com (mail-pl1-x64a.google.com [IPv6:2607:f8b0:4864:20::64a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8ADFEA7D6D
+        for <linux-kernel@vger.kernel.org>; Fri,  8 Jul 2022 17:04:53 -0700 (PDT)
+Received: by mail-pl1-x64a.google.com with SMTP id k11-20020a170902c40b00b0016bac120046so98068plk.0
+        for <linux-kernel@vger.kernel.org>; Fri, 08 Jul 2022 17:04:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=date:in-reply-to:message-id:mime-version:references:subject:from:to
          :cc;
-        bh=IqjL6yZGTqZ3Qe1XCgaEl6Fvh17NMPAOr7heTy9DUWI=;
-        b=sgi3aVUrpzBWfebO0eixVS0qfo5Xt0wVCPW7ELzk3n4yMTtTrcclhOKlRVXJ1RmLUA
-         9YQfDzxLvHW4dQVosJREPn4Niv6/YVO4lwQctTJkGW4lHPxXY4SKXvJGucNbaX6IfLUz
-         t6rDR5WEeCcw/g318JGwbL+CqPH6ReaRv2xTNI0j2QM8BBWS8W5TzaKTO3uPfcFtiI6h
-         /K+AEn9xXXbg6EmwFKHBaSMOy8kDnkOIICWxXn0oTE0kCLUHjB20+RRazYIHIGQukycM
-         xeHWcswZban+jsAKB71K7reqzFvxxfU55QTsB6Mjr/uVx78vP6CIOkmnjlDiACm4XIvU
-         slnA==
+        bh=Z+JHBwxAxDgScZtO1p/+es4hJDW+SiPZzqWzOE/0rOo=;
+        b=FM9Dmst+4r/eCIlrO0NIewdKZfGIpGWmXrkjfyiCnHGlO+FW3rZHJdcwkrNHgDaTY+
+         cvSYpDa2VVz8F5b/HJk2BsfHzDEHYzxa91MpEdZrSY4qCNp+aQGUemw3B+BBN2wVTepD
+         IMDuPcDtlPxcTr/9vxUCX+eFJDXNBb+wibjvwy3nMSfNb27E8YxtzMH96QbzdtOJNFWi
+         GDPEPDNWf0f1RW1m8z9GtmDs2h6Q2PqyNj6+5ie+TBMvfXKwUN8BGxbqZXCks4Nl8kEE
+         u5szkY6eBbLmh9vcfQeF7tEyiY5MgEIXNcmRC9xkHn1LF9PtT+MBlXQoXha+si78OTkH
+         13MQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:in-reply-to:message-id:mime-version
          :references:subject:from:to:cc;
-        bh=IqjL6yZGTqZ3Qe1XCgaEl6Fvh17NMPAOr7heTy9DUWI=;
-        b=2b5Rt2JGg1g7HbBcaTmd3rgh2YVNHTEFyRsTUCBxCXxi+/DFazFs+rAT3jlRtjcTbg
-         Om1dawZ/Wsd8+gdRcPaAh2Vzvj20yKhTOEx/QDvma7MhZgFVgk7DY2tMNL8dAxhEbM9J
-         fIu6nkIzOUbbPRVxAXjLeOO5p5uboeRiYV3WuDbr4da1N8io3MhSI+8PAMUAoXf5DNNX
-         D4sRx++uEOj9fO3aNL7puEYDTGZT6tvbDUg+MOPIrTZOlap/dYPfqK7+wlQIwyINxZ2y
-         5lE6qUnD7epknPQAMIUWEo3ixPuHFWVxFLAk41jWvfwdKzFYiEsIqCtCPjvMOyAFHkG3
-         wvJw==
-X-Gm-Message-State: AJIora/cvMoJjWLrw5JsOo4mMTTUP4dsi4YuTXy3X/jvnea4YHHiOSZk
-        hw5JtAoXbvij/Pi6VKvsgg33AOhqY6qWpzHH
-X-Google-Smtp-Source: AGRyM1sDgVvHNokF8WKVncgONh5iqmlzWfQXnKSbXZYREuF4EPtY2k5g0mdUxyJ5JYmKP/blrEFtkDRoB7kjysJv
+        bh=Z+JHBwxAxDgScZtO1p/+es4hJDW+SiPZzqWzOE/0rOo=;
+        b=OWSLov6wK6oP9AZgzqv3aPSmVzxW65xPrtbwELr3PxJykGOu9wYFMbi5q38Sc+tR+c
+         xbWSmMQ63+E8KELSTRNOaVMca8MQT2W7sGlJ6x0HODzsqY4QBSpIxsm0ta1J7fqwyu6z
+         rivOC/0OOfPnl3aIra3z86R3FDL75nhHRWAYVEnWFlLSS6j2f/G1jTbxW0N6Pcm5geof
+         4MajGrNA+jSd6y4sFNpjn1RGtLQoFUiKwYEQKSuHaFZetdS1rgopYJTjKa0AArY4rmiB
+         ncL4IoHC41MZV41x92Dj7Ofj7Vn6hWzeduTHHfp4jPGe06JDDr22UtskdABEQ/e7JuiH
+         dCjA==
+X-Gm-Message-State: AJIora/Phrw78rBBVUkwMpA7V1aE+tUsgRgHXq7kXUidf5rFZdZ4gLzR
+        2roy7jyuBFRLWN8FyjT2VCcxAkAs+8x84R84
+X-Google-Smtp-Source: AGRyM1ufvN6zG8QX4o7lGTyaqM53ImlvEYlHfwqxbRh1DGpIE6etmZTIKsXrAdCkxaqLrYyu8O+dj0LKvGFHdfxm
 X-Received: from yosry.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:2327])
- (user=yosryahmed job=sendgmr) by 2002:a25:9d11:0:b0:66e:4fad:e153 with SMTP
- id i17-20020a259d11000000b0066e4fade153mr6406533ybp.484.1657325090922; Fri,
- 08 Jul 2022 17:04:50 -0700 (PDT)
-Date:   Sat,  9 Jul 2022 00:04:33 +0000
+ (user=yosryahmed job=sendgmr) by 2002:a17:902:d191:b0:16b:ea2d:60f2 with SMTP
+ id m17-20020a170902d19100b0016bea2d60f2mr5961637plb.24.1657325092664; Fri, 08
+ Jul 2022 17:04:52 -0700 (PDT)
+Date:   Sat,  9 Jul 2022 00:04:34 +0000
 In-Reply-To: <20220709000439.243271-1-yosryahmed@google.com>
-Message-Id: <20220709000439.243271-3-yosryahmed@google.com>
+Message-Id: <20220709000439.243271-4-yosryahmed@google.com>
 Mime-Version: 1.0
 References: <20220709000439.243271-1-yosryahmed@google.com>
 X-Mailer: git-send-email 2.37.0.rc0.161.g10f37bed90-goog
-Subject: [PATCH bpf-next v3 2/8] cgroup: enable cgroup_get_from_file() on cgroup1
+Subject: [PATCH bpf-next v3 3/8] bpf, iter: Fix the condition on p when
+ calling stop.
 From:   Yosry Ahmed <yosryahmed@google.com>
 To:     Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
@@ -87,34 +88,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-cgroup_get_from_file() currently fails with -EBADF if called on cgroup
-v1. However, the current implementation works on cgroup v1 as well, so
-the restriction is unnecessary.
+From: Hao Luo <haoluo@google.com>
 
-This enabled cgroup_get_from_fd() to work on cgroup v1, which would be
-the only thing stopping bpf cgroup_iter from supporting cgroup v1.
+In bpf_seq_read, seq->op->next() could return an ERR and jump to
+the label stop. However, the existing code in stop does not handle
+the case when p (returned from next()) is an ERR. Adds the handling
+of ERR of p by converting p into an error and jumping to done.
 
+Because all the current implementations do not have a case that
+returns ERR from next(), so this patch doesn't have behavior changes
+right now.
+
+Signed-off-by: Hao Luo <haoluo@google.com>
 Signed-off-by: Yosry Ahmed <yosryahmed@google.com>
+Acked-by: Yonghong Song <yhs@fb.com>
 ---
- kernel/cgroup/cgroup.c | 5 -----
- 1 file changed, 5 deletions(-)
+ kernel/bpf/bpf_iter.c | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-diff --git a/kernel/cgroup/cgroup.c b/kernel/cgroup/cgroup.c
-index 1779ccddb734d..9943fcb1e574d 100644
---- a/kernel/cgroup/cgroup.c
-+++ b/kernel/cgroup/cgroup.c
-@@ -6090,11 +6090,6 @@ static struct cgroup *cgroup_get_from_file(struct file *f)
- 		return ERR_CAST(css);
- 
- 	cgrp = css->cgroup;
--	if (!cgroup_on_dfl(cgrp)) {
--		cgroup_put(cgrp);
--		return ERR_PTR(-EBADF);
--	}
--
- 	return cgrp;
- }
- 
+diff --git a/kernel/bpf/bpf_iter.c b/kernel/bpf/bpf_iter.c
+index 7e8fd49406f64..4688ba39ef25c 100644
+--- a/kernel/bpf/bpf_iter.c
++++ b/kernel/bpf/bpf_iter.c
+@@ -198,6 +198,11 @@ static ssize_t bpf_seq_read(struct file *file, char __user *buf, size_t size,
+ 	}
+ stop:
+ 	offs = seq->count;
++	if (IS_ERR(p)) {
++		seq->op->stop(seq, NULL);
++		err = PTR_ERR(p);
++		goto done;
++	}
+ 	/* bpf program called if !p */
+ 	seq->op->stop(seq, p);
+ 	if (!p) {
 -- 
 2.37.0.rc0.161.g10f37bed90-goog
 

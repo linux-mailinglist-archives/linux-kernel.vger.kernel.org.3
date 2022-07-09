@@ -2,67 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 731D256C959
-	for <lists+linux-kernel@lfdr.de>; Sat,  9 Jul 2022 14:11:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4930956C95C
+	for <lists+linux-kernel@lfdr.de>; Sat,  9 Jul 2022 14:20:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229545AbiGIMLJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 9 Jul 2022 08:11:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38996 "EHLO
+        id S229497AbiGIMUs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 9 Jul 2022 08:20:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43952 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229448AbiGIMLI (ORCPT
+        with ESMTP id S229448AbiGIMUq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 9 Jul 2022 08:11:08 -0400
-Received: from mail-qt1-x835.google.com (mail-qt1-x835.google.com [IPv6:2607:f8b0:4864:20::835])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D35D3B97A
-        for <linux-kernel@vger.kernel.org>; Sat,  9 Jul 2022 05:11:07 -0700 (PDT)
-Received: by mail-qt1-x835.google.com with SMTP id w1so1372678qtv.9
-        for <linux-kernel@vger.kernel.org>; Sat, 09 Jul 2022 05:11:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=6y+gf5qlxQAaiM8b3uWJIfmIrsnZxYXc/XCTsQKVRj4=;
-        b=ZvVojauf19KhzPhUuctojGidWLuDwlOOrMFbPdJqlCDhFFxb2yx6SyY0lWOCqsK3bS
-         ZIviqkeyjJODwEffQmrB8TC6dLZqLAzo61C6T+h0NDArZn3xHLQurzGql3pXcy8TlqL2
-         27SX8UB7fuPGOl9sv1QcaQviseB6cji9ZgQmJ0kq3I2Cxax//bZ7D2fuOk285n4nLr6S
-         jg8D1LuhSAttz8oJmVJ04X6a8DreWWISafg6YV32ckPlNowYPiIA4TTg5UKDZDhDmaFz
-         F4Eyt1dNkX7+IkcaHzOWkq5bFcW7w5/iOWA7iXxThjkWrCNrrq46cvmk2+T9fdwMbunc
-         ls9g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=6y+gf5qlxQAaiM8b3uWJIfmIrsnZxYXc/XCTsQKVRj4=;
-        b=fBvjFO4XhfMjvJkwcYufyoNTIRBmc3K5A88+/z0KQo1i4bz2AYTlrrDya0DWNbDHj6
-         8zTBxDC8fbqKARZ9Hed0Bk0QblUYEUepb5yck/UJkvFMxNOETliUWirQX0ot4qh6yxGz
-         yTmaWd6JqVdYzClNZ2sYjKY4uMUY9FUW3dnPL3Mq0mMCd5237IGVSMyUEaIMBQQlD2Lf
-         fZs2PlkqTGKU12OsSae624CCpiZRN3UAe5SUGiKtlMBldz6oVZYo7bfA2ntvJN9P7r6G
-         xBOeF3IPw9ROIiwhIqQ235LwIRFuOKJHUhArCNXt5Z0GBvAd02ZBj5H85BpxhNIcoVa/
-         k6Dw==
-X-Gm-Message-State: AJIora/la7HE4+0+zKcQL80GmqosHfB8UOEQQlXl8ADEzcyIi45iyA+J
-        aL5PH27E/xkbZSDNgakKZfU411gA32zdGUf7yJc=
-X-Google-Smtp-Source: AGRyM1u47jmjtouPYZhldTvkDx/fdwwZsK+Xhk97JVxvEXkodogAoEJOv7nc+NRn8fpA5s3D3vinVczNI9dMmdu1ZNA=
-X-Received: by 2002:a05:622a:190d:b0:31d:2ac7:9dc2 with SMTP id
- w13-20020a05622a190d00b0031d2ac79dc2mr7146672qtc.233.1657368665951; Sat, 09
- Jul 2022 05:11:05 -0700 (PDT)
+        Sat, 9 Jul 2022 08:20:46 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CC9E205D9
+        for <linux-kernel@vger.kernel.org>; Sat,  9 Jul 2022 05:20:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1657369244; x=1688905244;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=6TccN//6JSbICF5i25NIMGonOEIsuoLLf0GoDWUYcjE=;
+  b=njxhfAFEv6xDlvF4/uD6BMapfEgKFoGI6p72cias9Zxe5VQYbgv2lZe4
+   GjZaM4ZAiU3gkwj+8gQMMjqm//5cvVoiPNOGOLOljda3DuYWScWdtIUKM
+   H0JROugoL2f7dcSgc/eeN4FXjBnu5qgttKoOhWA7HiAUMMS9K2AR0Kfm1
+   DKksz1cjjNq5+t5Wg1Hiw9L5HBmjxde+chS1PlXMKlu++glossyxxT6nq
+   x5jGz50Fud/2J3BHMsX8Y+aLp9XpKU7hI+r7XGafBRCHW0couRp6bNT81
+   QADSfcVvBFjI3EqlmhM+GAd2P95ipg6BQvRP5n7oTNy/ID5D73YMPtDu7
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10402"; a="348415925"
+X-IronPort-AV: E=Sophos;i="5.92,258,1650956400"; 
+   d="scan'208";a="348415925"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Jul 2022 05:20:43 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.92,258,1650956400"; 
+   d="scan'208";a="921282352"
+Received: from lkp-server01.sh.intel.com (HELO 68b931ab7ac1) ([10.239.97.150])
+  by fmsmga005.fm.intel.com with ESMTP; 09 Jul 2022 05:20:41 -0700
+Received: from kbuild by 68b931ab7ac1 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1oA9Rx-000Ojg-4b;
+        Sat, 09 Jul 2022 12:20:41 +0000
+Date:   Sat, 9 Jul 2022 20:20:30 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Jonathan Cameron <Jonathan.Cameron@huawei.com>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org,
+        Alexandru Ardelean <ardeleanalex@gmail.com>
+Subject: drivers/iio/adc/ad7476.c:39:8: warning: Excessive padding in 'struct
+ ad7476_state' (72 padding bytes, where 8 is optimal). Optimal fields order:
+ data, spi, chip_info, ref_reg, convst_gpio, msg, xfer, consider reordering
+ the fields or adding explicit paddi...
+Message-ID: <202207092005.Rutj9g0E-lkp@intel.com>
 MIME-Version: 1.0
-References: <CABXGCsP920dX-gFOHjk0Xo-yTaQfoFwP7YT2VsG1=b9X6kYhHg@mail.gmail.com>
- <CABXGCsOywmEoKC1Gt4JMSAH5C=E9Rvjj+X+X8FY7QeBV-13YWQ@mail.gmail.com> <8876a42f-aef0-8322-b95d-704ac6476333@gmail.com>
-In-Reply-To: <8876a42f-aef0-8322-b95d-704ac6476333@gmail.com>
-From:   Mikhail Gavrilov <mikhail.v.gavrilov@gmail.com>
-Date:   Sat, 9 Jul 2022 17:10:55 +0500
-Message-ID: <CABXGCsNrnYZO6NfF624j0xrBkdF9vjZhcyF8iZrEr4eGcjpSCA@mail.gmail.com>
-Subject: Re: [Bug][5.19-rc0] Between commits fdaf9a5840ac and babf0bb978e3 GPU
- stopped entering in graphic mode.
-To:     =?UTF-8?Q?Christian_K=C3=B6nig?= <ckoenig.leichtzumerken@gmail.com>
-Cc:     amd-gfx list <amd-gfx@lists.freedesktop.org>,
-        Linux List Kernel Mailing <linux-kernel@vger.kernel.org>,
-        tzimmermann@suse.de
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,265 +65,464 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jul 7, 2022 at 2:50 PM Christian K=C3=B6nig
-<ckoenig.leichtzumerken@gmail.com> wrote:
->
-> Am 07.07.22 um 02:20 schrieb Mikhail Gavrilov:
-> > On Tue, Jun 28, 2022 at 2:21 PM Mikhail Gavrilov
-> > <mikhail.v.gavrilov@gmail.com> wrote:
-> > Christian can you look why
-> > drm_aperture_remove_conflicting_pci_framebuffers cause this kernel bug
-> > on my machine?
->
-> That looks like a problem outside of the amdgpu driver.
->
-> What happens is that during load amdgpu requests whatever driver
-> (vesafb,vgafb or efifb) is currently handling the framebuffer to unload.
-> This unload in turn now crashes for some reason.
->
-> My best suggestion is to try to bisect this.
+Hi Jonathan,
 
-Hi Christian,
-if you read my initial post. You should see that I tried to bisect the issu=
-e.
-But it is very problematic because on each step I see different symptomes.
-And if mark different symptoms with skip step we got at end lot of
-possible commits:
-Here is my bisect from initial post: https://pastebin.com/AhLMNfyv
+First bad commit (maybe != root cause):
 
-If you want that I ended bisection successfully please help how to fix
-this oops:
-[    8.291177] page:00000000af2b6334 refcount:0 mapcount:0
-mapping:0000000000000000 index:0x0 pfn:0x102a000
-[    8.291202] head:00000000af2b6334 order:0 compound_mapcount:-1226
-compound_pincount:0
-[    8.291221] flags: 0x17ffffc0010000(head|node=3D0|zone=3D2|lastcpupid=3D=
-0x1fffff)
-[    8.291239] raw: 0017ffffc0010000 fffffb35c0a80008 fffffb35c0a80008
-0000000000000000
-[    8.291257] raw: 0000000000000000 0000000000000000 00000000ffffffff
-0000000000000000
-[    8.291275] page dumped because: VM_BUG_ON_PAGE(compound &&
-compound_order(page) !=3D order)
-[    8.291298] ------------[ cut here ]------------
-[    8.291309] kernel BUG at mm/page_alloc.c:1329!
-[    8.291324] invalid opcode: 0000 [#1] PREEMPT SMP NOPTI
-[    8.291328] CPU: 8 PID: 599 Comm: systemd-udevd Not tainted
-5.18.0-rc2-003-790b45f1bc6736a8dd48ba5731b6871e0217311e+ #361
-[    8.291333] Hardware name: System manufacturer System Product
-Name/ROG STRIX X570-I GAMING, BIOS 4403 04/27/2022
-[    8.291338] RIP: 0010:free_pcp_prepare+0x58d/0x5a0
-[    8.291343] Code: c6 18 a2 85 a7 e8 d3 b7 fc ff 0f 0b 31 f6 48 89
-df e8 97 cf 06 00 e9 29 ff ff ff 48 c7 c6 00 f1 85 a7 48 89 df e8 b3
-b7 fc ff <0f> 0b 48 c7 c6 58 92 85 a7 e8 a5 b7 fc ff 0f 0b 0f 1f 00 0f
-1f 44
-[    8.291351] RSP: 0018:ffffb07c023ab9d8 EFLAGS: 00010296
-[    8.291354] RAX: 000000000000004e RBX: fffffb35c0a80000 RCX: 00000000000=
-00000
-[    8.291358] RDX: 0000000000000001 RSI: ffffffffa789dbaf RDI: 00000000fff=
-fffff
-[    8.291361] RBP: 0000000000000009 R08: 0000000000000000 R09: ffffb07c023=
-ab7c0
-[    8.291365] R10: 0000000000000003 R11: ffff92ee2e2fffe8 R12: 00000000000=
-00000
-[    8.291368] R13: ffff92ee2a55d180 R14: 00000000fffffe00 R15: fffffb35c0a=
-80000
-[    8.291371] FS:  00007f80aa398680(0000) GS:ffff92edda200000(0000)
-knlGS:0000000000000000
-[    8.291376] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-[    8.291379] CR2: 00007f80aa38e616 CR3: 000000017d726000 CR4: 00000000003=
-50ee0
-[    8.291382] Call Trace:
-[    8.291384]  <TASK>
-[    8.291386]  ? find_held_lock+0x32/0x80
-[    8.291391]  free_unref_page+0x25/0x2a0
-[    8.291395]  __vunmap+0x261/0x3d0
-[    8.291399]  drm_fbdev_cleanup+0x6b/0xc0
-[    8.291403]  drm_fbdev_fb_destroy+0x15/0x30
-[    8.291407]  unregister_framebuffer+0x2e/0x40
-[    8.291411]  drm_client_dev_unregister+0x6e/0xe0
-[    8.291416]  drm_dev_unregister+0x34/0x90
-[    8.291419]  drm_dev_unplug+0x24/0x40
-[    8.291422]  simpledrm_remove+0x11/0x20
-[    8.291426]  platform_remove+0x1f/0x40
-[    8.291429]  device_release_driver_internal+0x1b8/0x220
-[    8.291433]  bus_remove_device+0xef/0x160
-[    8.291437]  device_del+0x18c/0x3f0
-[    8.291440]  platform_device_del.part.0+0x13/0x70
-[    8.291444]  platform_device_unregister+0x1c/0x30
-[    8.291447]  drm_aperture_detach_drivers+0xa3/0xd0
-[    8.291452]  drm_aperture_remove_conflicting_pci_framebuffers+0x3f/0x70
-[    8.291457]  amdgpu_pci_probe+0x126/0x3c0 [amdgpu]
-[    8.291599]  local_pci_probe+0x41/0x80
-[    8.291604]  pci_device_probe+0xaa/0x200
-[    8.291607]  really_probe+0x1a0/0x370
-[    8.291611]  __driver_probe_device+0xfb/0x170
-[    8.291615]  driver_probe_device+0x1f/0x90
-[    8.291618]  __driver_attach+0xbe/0x1a0
-[    8.291622]  ? __device_attach_driver+0xe0/0xe0
-[    8.291625]  bus_for_each_dev+0x65/0x90
-[    8.291629]  bus_add_driver+0x150/0x1f0
-[    8.291632]  driver_register+0x89/0xd0
-[    8.291636]  ? 0xffffffffc067b000
-[    8.291641]  do_one_initcall+0x69/0x350
-[    8.291645]  ? do_init_module+0x22/0x260
-[    8.291650]  ? rcu_read_lock_sched_held+0x3b/0x70
-[    8.291654]  ? trace_kmalloc+0x3b/0x100
-[    8.291658]  ? kmem_cache_alloc_trace+0x1eb/0x3a0
-[    8.291662]  do_init_module+0x4a/0x260
-[    8.291666]  __do_sys_finit_module+0x93/0xf0
-[    8.291673]  do_syscall_64+0x3a/0x80
-[    8.291677]  entry_SYSCALL_64_after_hwframe+0x44/0xae
-[    8.291681] RIP: 0033:0x7f80aaf4507d
-[    8.291685] Code: 5d c3 66 2e 0f 1f 84 00 00 00 00 00 90 f3 0f 1e
-fa 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24
-08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 8b 0d 73 dd 0c 00 f7 d8 64 89
-01 48
-[    8.291694] RSP: 002b:00007ffe43973ce8 EFLAGS: 00000246 ORIG_RAX:
-0000000000000139
-[    8.291699] RAX: ffffffffffffffda RBX: 000055ce603a3fe0 RCX: 00007f80aaf=
-4507d
-[    8.291702] RDX: 0000000000000000 RSI: 000055ce60395ac0 RDI: 00000000000=
-00011
-[    8.291706] RBP: 000055ce60395ac0 R08: 0000000000000000 R09: 00007f80ab0=
-13c80
-[    8.291709] R10: 0000000000000011 R11: 0000000000000246 R12: 00000000000=
-20000
-[    8.291713] R13: 000055ce60387c30 R14: 0000000000000000 R15: 000055ce603=
-8ede0
-[    8.291718]  </TASK>
-[    8.291719] Modules linked in: amdgpu(+) drm_ttm_helper ttm
-crct10dif_pclmul crc32_pclmul iommu_v2 crc32c_intel gpu_sched ucsi_ccg
-typec_ucsi nvme drm_buddy igb ccp ghash_clmulni_intel typec
-drm_dp_helper sp5100_tco nvme_core dca wmi ip6_tables ip_tables
-ipmi_devintf ipmi_msghandler fuse
-[    8.291740] ---[ end trace 0000000000000000 ]---
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   e5524c2a1fc4002a52e16236659e779767617a4f
+commit: 396f7234856956eb29f009da6e5d846f29f87ebd iio: core: move @chrdev from struct iio_dev to struct iio_dev_opaque
+date:   1 year, 2 months ago
+config: arm-randconfig-c002-20220702 (https://download.01.org/0day-ci/archive/20220709/202207092005.Rutj9g0E-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project f7a80c3d08d4821e621fc88d6a2e435291f82dff)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install arm cross compiling tool for clang build
+        # apt-get install binutils-arm-linux-gnueabi
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=396f7234856956eb29f009da6e5d846f29f87ebd
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout 396f7234856956eb29f009da6e5d846f29f87ebd
+        # save the config file
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross ARCH=arm clang-analyzer 
+
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
 
-> Thanks for reporting. This bug has been fixed in
->
->
-> https://cgit.freedesktop.org/drm/drm/commit/?h=3Ddrm-fixes&id=3Dee7a69aa3=
-8d87a3bbced7b8245c732c05ed0c6ec
->
-> The patch should reach mainline next week or so.
+clang-analyzer warnings: (new ones prefixed by >>)
+                          ^~~~~~~~~~~~~~~~
+   net/core/filter.c:2813:3: note: Loop condition is false. Execution continues on line 2827
+                   while (i != msg->sg.end) {
+                   ^
+   net/core/filter.c:2829:2: note: Calling '__clear_bit'
+           __clear_bit(new, &msg->sg.copy);
+           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/asm-generic/bitops/non-atomic.h:26:23: note: The result of the left shift is undefined because the right operand is negative
+           unsigned long mask = BIT_MASK(nr);
+                                ^
+   include/linux/bits.h:10:30: note: expanded from macro 'BIT_MASK'
+   #define BIT_MASK(nr)            (UL(1) << ((nr) % BITS_PER_LONG))
+                                          ^  ~~~~~~~~~~~~~~~~~~~~~~
+   net/core/filter.c:1736:2: warning: Null pointer passed as 1st argument to memory set function [clang-analyzer-unix.cstring.NullArg]
+           memset(to, 0, len);
+           ^      ~~
+   net/core/filter.c:1725:15: note: Assuming 'offset' is <= 65535
+           if (unlikely(offset > 0xffff))
+                        ^
+   include/linux/compiler.h:78:42: note: expanded from macro 'unlikely'
+   # define unlikely(x)    __builtin_expect(!!(x), 0)
+                                               ^
+   net/core/filter.c:1725:2: note: Taking false branch
+           if (unlikely(offset > 0xffff))
+           ^
+   net/core/filter.c:1729:15: note: Assuming 'ptr' is null
+           if (unlikely(!ptr))
+                        ^
+   include/linux/compiler.h:78:42: note: expanded from macro 'unlikely'
+   # define unlikely(x)    __builtin_expect(!!(x), 0)
+                                               ^
+   net/core/filter.c:1729:2: note: Taking true branch
+           if (unlikely(!ptr))
+           ^
+   net/core/filter.c:1730:3: note: Control jumps to line 1736
+                   goto err_clear;
+                   ^
+   net/core/filter.c:1736:2: note: Null pointer passed as 1st argument to memory set function
+           memset(to, 0, len);
+           ^      ~~
+   net/core/filter.c:1770:2: warning: Null pointer passed as 1st argument to memory set function [clang-analyzer-unix.cstring.NullArg]
+           memset(to, 0, len);
+           ^      ~~
+   net/core/filter.c:1756:15: note: Assuming 'offset' is <= 65535
+           if (unlikely(offset > 0xffff))
+                        ^
+   include/linux/compiler.h:78:42: note: expanded from macro 'unlikely'
+   # define unlikely(x)    __builtin_expect(!!(x), 0)
+                                               ^
+   net/core/filter.c:1756:2: note: Taking false branch
+           if (unlikely(offset > 0xffff))
+           ^
+   net/core/filter.c:1759:15: note: Assuming field 'skb' is non-null
+           if (unlikely(!ctx->skb))
+                        ^
+   include/linux/compiler.h:78:42: note: expanded from macro 'unlikely'
+   # define unlikely(x)    __builtin_expect(!!(x), 0)
+                                               ^
+   net/core/filter.c:1759:2: note: Taking false branch
+           if (unlikely(!ctx->skb))
+           ^
+   net/core/filter.c:1763:15: note: Assuming 'ptr' is null
+           if (unlikely(!ptr))
+                        ^
+   include/linux/compiler.h:78:42: note: expanded from macro 'unlikely'
+   # define unlikely(x)    __builtin_expect(!!(x), 0)
+                                               ^
+   net/core/filter.c:1763:2: note: Taking true branch
+           if (unlikely(!ptr))
+           ^
+   net/core/filter.c:1764:3: note: Control jumps to line 1770
+                   goto err_clear;
+                   ^
+   net/core/filter.c:1770:2: note: Null pointer passed as 1st argument to memory set function
+           memset(to, 0, len);
+           ^      ~~
+   net/core/filter.c:5136:15: warning: Value stored to 'sk' during its initialization is never read [clang-analyzer-deadcode.DeadStores]
+           struct sock *sk = bpf_sock->sk;
+                        ^~   ~~~~~~~~~~~~
+   net/core/filter.c:5136:15: note: Value stored to 'sk' during its initialization is never read
+           struct sock *sk = bpf_sock->sk;
+                        ^~   ~~~~~~~~~~~~
+   net/core/filter.c:5137:6: warning: Value stored to 'val' during its initialization is never read [clang-analyzer-deadcode.DeadStores]
+           int val = argval & BPF_SOCK_OPS_ALL_CB_FLAGS;
+               ^~~   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   net/core/filter.c:5137:6: note: Value stored to 'val' during its initialization is never read
+           int val = argval & BPF_SOCK_OPS_ALL_CB_FLAGS;
+               ^~~   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   Suppressed 17 warnings (17 in non-user code).
+   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
+   17 warnings generated.
+   drivers/iio/adc/ad7298.c:40:8: warning: Excessive padding in 'struct ad7298_state' (72 padding bytes, where 8 is optimal). Optimal fields order: rx_buf, spi, reg, ext_ref, ring_msg, scan_single_msg, scan_single_xfer, ring_xfer, tx_buf, consider reordering the fields or adding explicit padding members [clang-analyzer-optin.performance.Padding]
+   struct ad7298_state {
+   ~~~~~~~^~~~~~~~~~~~~~
+   drivers/iio/adc/ad7298.c:40:8: note: Excessive padding in 'struct ad7298_state' (72 padding bytes, where 8 is optimal). Optimal fields order: rx_buf, spi, reg, ext_ref, ring_msg, scan_single_msg, scan_single_xfer, ring_xfer, tx_buf, consider reordering the fields or adding explicit padding members
+   struct ad7298_state {
+   ~~~~~~~^~~~~~~~~~~~~~
+   Suppressed 16 warnings (16 in non-user code).
+   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
+   17 warnings generated.
+>> drivers/iio/adc/ad7476.c:39:8: warning: Excessive padding in 'struct ad7476_state' (72 padding bytes, where 8 is optimal). Optimal fields order: data, spi, chip_info, ref_reg, convst_gpio, msg, xfer, consider reordering the fields or adding explicit padding members [clang-analyzer-optin.performance.Padding]
+   struct ad7476_state {
+   ~~~~~~~^~~~~~~~~~~~~~
+   drivers/iio/adc/ad7476.c:39:8: note: Excessive padding in 'struct ad7476_state' (72 padding bytes, where 8 is optimal). Optimal fields order: data, spi, chip_info, ref_reg, convst_gpio, msg, xfer, consider reordering the fields or adding explicit padding members
+   struct ad7476_state {
+   ~~~~~~~^~~~~~~~~~~~~~
+   Suppressed 16 warnings (16 in non-user code).
+   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
+   16 warnings generated.
+   Suppressed 16 warnings (16 in non-user code).
+   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
+   16 warnings generated.
+   Suppressed 16 warnings (16 in non-user code).
+   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
+   18 warnings generated.
+   Suppressed 18 warnings (18 in non-user code).
+   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
+   17 warnings generated.
+   net/netlink/genetlink.c:1471:24: warning: Access to field 'genl_sock' results in a dereference of a null pointer (loaded from variable 'prev') [clang-analyzer-core.NullDereference]
+           err = nlmsg_multicast(prev->genl_sock, skb, portid, group, flags);
+                                 ^
+   net/netlink/genetlink.c:1429:8: note: Calling 'genl_register_family'
+           err = genl_register_family(&genl_ctrl);
+                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   net/netlink/genetlink.c:398:6: note: 'err' is 0
+           if (err)
+               ^~~
+   net/netlink/genetlink.c:398:2: note: Taking false branch
+           if (err)
+           ^
+   net/netlink/genetlink.c:403:6: note: Assuming the condition is false
+           if (genl_family_find_byname(family->name)) {
+               ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   net/netlink/genetlink.c:403:2: note: Taking false branch
+           if (genl_family_find_byname(family->name)) {
+           ^
+   net/netlink/genetlink.c:415:2: note: Taking true branch
+           if (family == &genl_ctrl) {
+           ^
+   net/netlink/genetlink.c:426:6: note: Assuming field 'id' is >= 0
+           if (family->id < 0) {
+               ^~~~~~~~~~~~~~
+   net/netlink/genetlink.c:426:2: note: Taking false branch
+           if (family->id < 0) {
+           ^
+   net/netlink/genetlink.c:432:6: note: Assuming 'err' is 0
+           if (err)
+               ^~~
+   net/netlink/genetlink.c:432:2: note: Taking false branch
+           if (err)
+           ^
+   net/netlink/genetlink.c:438:2: note: Calling 'genl_ctrl_event'
+           genl_ctrl_event(CTRL_CMD_NEWFAMILY, family, NULL, 0);
+           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   net/netlink/genetlink.c:1079:6: note: Assuming field 'genl_sock' is non-null
+           if (!init_net.genl_sock)
+               ^~~~~~~~~~~~~~~~~~~
+   net/netlink/genetlink.c:1079:2: note: Taking false branch
+           if (!init_net.genl_sock)
+           ^
+   net/netlink/genetlink.c:1082:2: note: Control jumps to 'case CTRL_CMD_NEWFAMILY:'  at line 1083
+           switch (event) {
+           ^
+   net/netlink/genetlink.c:1085:3: note: Taking false branch
+                   WARN_ON(grp);
+                   ^
+   include/asm-generic/bug.h:120:2: note: expanded from macro 'WARN_ON'
+           if (unlikely(__ret_warn_on))                                    \
+           ^
+   net/netlink/genetlink.c:1087:3: note:  Execution continues on line 1097
+                   break;
+                   ^
+   net/netlink/genetlink.c:1097:2: note: Taking false branch
+           if (IS_ERR(msg))
+           ^
+   net/netlink/genetlink.c:1100:6: note: Assuming field 'netnsok' is not equal to 0
+           if (!family->netnsok) {
+               ^~~~~~~~~~~~~~~~
+   net/netlink/genetlink.c:1100:2: note: Taking false branch
+           if (!family->netnsok) {
+           ^
+   net/netlink/genetlink.c:1105:3: note: Calling 'genlmsg_multicast_allns'
+                   genlmsg_multicast_allns(&genl_ctrl, msg, 0,
+                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   net/netlink/genetlink.c:1486:19: note: Assuming 'group' is < field 'n_mcgrps'
+           if (WARN_ON_ONCE(group >= family->n_mcgrps))
+                            ^
+   include/asm-generic/bug.h:145:27: note: expanded from macro 'WARN_ON_ONCE'
+           int __ret_warn_once = !!(condition);                    \
+                                    ^~~~~~~~~
+   net/netlink/genetlink.c:1486:6: note: '__ret_warn_once' is 0
+           if (WARN_ON_ONCE(group >= family->n_mcgrps))
+               ^
+   include/asm-generic/bug.h:147:15: note: expanded from macro 'WARN_ON_ONCE'
+           if (unlikely(__ret_warn_once && !__warned)) {           \
+                        ^~~~~~~~~~~~~~~
+   include/linux/compiler.h:78:42: note: expanded from macro 'unlikely'
+   # define unlikely(x)    __builtin_expect(!!(x), 0)
+                                               ^
+   net/netlink/genetlink.c:1486:6: note: Left side of '&&' is false
+           if (WARN_ON_ONCE(group >= family->n_mcgrps))
+--
+               ^~~~~~~~
+   net/core/dev.c:6121:2: note: Taking true branch
+           if (grow > 0)
+           ^
+   net/core/dev.c:6122:3: note: Calling 'gro_pull_from_frag0'
+                   gro_pull_from_frag0(skb, grow);
+                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   net/core/dev.c:5992:9: note: Assuming the condition is false
+           BUG_ON(skb->end - skb->tail < grow);
+                  ^
+   include/asm-generic/bug.h:63:45: note: expanded from macro 'BUG_ON'
+   #define BUG_ON(condition) do { if (unlikely(condition)) BUG(); } while (0)
+                                               ^~~~~~~~~
+   include/linux/compiler.h:78:42: note: expanded from macro 'unlikely'
+   # define unlikely(x)    __builtin_expect(!!(x), 0)
+                                               ^
+   net/core/dev.c:5992:2: note: Taking false branch
+           BUG_ON(skb->end - skb->tail < grow);
+           ^
+   include/asm-generic/bug.h:63:32: note: expanded from macro 'BUG_ON'
+   #define BUG_ON(condition) do { if (unlikely(condition)) BUG(); } while (0)
+                                  ^
+   net/core/dev.c:5992:2: note: Loop condition is false.  Exiting loop
+           BUG_ON(skb->end - skb->tail < grow);
+           ^
+   include/asm-generic/bug.h:63:27: note: expanded from macro 'BUG_ON'
+   #define BUG_ON(condition) do { if (unlikely(condition)) BUG(); } while (0)
+                             ^
+   net/core/dev.c:5994:2: note: Null pointer passed as 2nd argument to memory copy function
+           memcpy(skb_tail_pointer(skb), NAPI_GRO_CB(skb)->frag0, grow);
+           ^
+   net/core/dev.c:7751:19: warning: Access to field 'lower_level' results in a dereference of a null pointer (loaded from variable 'dev') [clang-analyzer-core.NullDereference]
+           dev->lower_level = __netdev_lower_depth(dev) + 1;
+                            ^
+   net/core/dev.c:8210:33: note: Passing value via 2nd parameter 'upper_dev'
+           __netdev_upper_dev_unlink(dev, upper_dev, &priv);
+                                          ^~~~~~~~~
+   net/core/dev.c:8210:2: note: Calling '__netdev_upper_dev_unlink'
+           __netdev_upper_dev_unlink(dev, upper_dev, &priv);
+           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   net/core/dev.c:8174:2: note: Assuming the condition is false
+           ASSERT_RTNL();
+           ^
+   include/linux/rtnetlink.h:110:12: note: expanded from macro 'ASSERT_RTNL'
+           WARN_ONCE(!rtnl_is_locked(), \
+                     ^~~~~~~~~~~~~~~~~
+   include/asm-generic/bug.h:157:27: note: expanded from macro 'WARN_ONCE'
+           int __ret_warn_once = !!(condition);                    \
+                                    ^~~~~~~~~
+   net/core/dev.c:8174:2: note: '__ret_warn_once' is 0
+           ASSERT_RTNL();
+           ^
+   include/linux/rtnetlink.h:110:2: note: expanded from macro 'ASSERT_RTNL'
+           WARN_ONCE(!rtnl_is_locked(), \
+           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/asm-generic/bug.h:159:15: note: expanded from macro 'WARN_ONCE'
+           if (unlikely(__ret_warn_once && !__warned)) {           \
+                        ^~~~~~~~~~~~~~~
+   include/linux/compiler.h:78:42: note: expanded from macro 'unlikely'
+   # define unlikely(x)    __builtin_expect(!!(x), 0)
+                                               ^
+   net/core/dev.c:8174:2: note: Left side of '&&' is false
+           ASSERT_RTNL();
+           ^
+   include/linux/rtnetlink.h:110:2: note: expanded from macro 'ASSERT_RTNL'
+           WARN_ONCE(!rtnl_is_locked(), \
+           ^
+   include/asm-generic/bug.h:159:31: note: expanded from macro 'WARN_ONCE'
+           if (unlikely(__ret_warn_once && !__warned)) {           \
+                                        ^
+   net/core/dev.c:8174:2: note: Taking false branch
+           ASSERT_RTNL();
+           ^
+   include/linux/rtnetlink.h:110:2: note: expanded from macro 'ASSERT_RTNL'
+           WARN_ONCE(!rtnl_is_locked(), \
+           ^
+   include/asm-generic/bug.h:159:2: note: expanded from macro 'WARN_ONCE'
+           if (unlikely(__ret_warn_once && !__warned)) {           \
+           ^
+   net/core/dev.c:8176:28: note: Assuming pointer value is null
+           changeupper_info.master = netdev_master_upper_dev_get(dev) == upper_dev;
+                                     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   net/core/dev.c:8189:30: note: Passing null pointer value via 1st parameter 'dev'
+           __netdev_update_lower_level(upper_dev, priv);
+                                       ^~~~~~~~~
+   net/core/dev.c:8189:2: note: Calling '__netdev_update_lower_level'
+           __netdev_update_lower_level(upper_dev, priv);
+           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   net/core/dev.c:7751:19: note: Access to field 'lower_level' results in a dereference of a null pointer (loaded from variable 'dev')
+           dev->lower_level = __netdev_lower_depth(dev) + 1;
+           ~~~              ^
+   net/core/dev.c:10820:2: warning: Call to function 'strcpy' is insecure as it does not provide bounding of the memory buffer. Replace unbounded copy functions with analogous functions that support length arguments such as 'strlcpy'. CWE-119 [clang-analyzer-security.insecureAPI.strcpy]
+           strcpy(dev->name, name);
+           ^~~~~~
+   net/core/dev.c:10820:2: note: Call to function 'strcpy' is insecure as it does not provide bounding of the memory buffer. Replace unbounded copy functions with analogous functions that support length arguments such as 'strlcpy'. CWE-119
+           strcpy(dev->name, name);
+           ^~~~~~
+   Suppressed 18 warnings (16 in non-user code, 2 with check filters).
+   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
+   17 warnings generated.
+>> drivers/iio/adc/ad7476.c:39:8: warning: Excessive padding in 'struct ad7476_state' (72 padding bytes, where 8 is optimal). Optimal fields order: data, spi, chip_info, ref_reg, convst_gpio, msg, xfer, consider reordering the fields or adding explicit padding members [clang-analyzer-optin.performance.Padding]
+   struct ad7476_state {
+   ~~~~~~~^~~~~~~~~~~~~~
+   drivers/iio/adc/ad7476.c:39:8: note: Excessive padding in 'struct ad7476_state' (72 padding bytes, where 8 is optimal). Optimal fields order: data, spi, chip_info, ref_reg, convst_gpio, msg, xfer, consider reordering the fields or adding explicit padding members
+   struct ad7476_state {
+   ~~~~~~~^~~~~~~~~~~~~~
+   Suppressed 16 warnings (16 in non-user code).
+   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
+   16 warnings generated.
+   Suppressed 16 warnings (16 in non-user code).
+   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
+   16 warnings generated.
+   Suppressed 16 warnings (16 in non-user code).
+   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
+   16 warnings generated.
+   Suppressed 16 warnings (16 in non-user code).
+   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
+   16 warnings generated.
+   Suppressed 16 warnings (16 in non-user code).
+   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
+   16 warnings generated.
+   Suppressed 16 warnings (16 in non-user code).
+   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
+   16 warnings generated.
+   Suppressed 16 warnings (16 in non-user code).
+   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
+   16 warnings generated.
+   Suppressed 16 warnings (16 in non-user code).
+   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
+   18 warnings generated.
+   net/decnet/af_decnet.c:1765:4: warning: Value stored to 'rv' is never read [clang-analyzer-deadcode.DeadStores]
+                           rv = -EFAULT;
+                           ^    ~~~~~~~
+   net/decnet/af_decnet.c:1765:4: note: Value stored to 'rv' is never read
+                           rv = -EFAULT;
+                           ^    ~~~~~~~
+   net/decnet/af_decnet.c:1962:2: warning: Value stored to 'mss' is never read [clang-analyzer-deadcode.DeadStores]
+           mss = scp->segsize_rem;
+           ^     ~~~~~~~~~~~~~~~~
+   net/decnet/af_decnet.c:1962:2: note: Value stored to 'mss' is never read
+           mss = scp->segsize_rem;
+           ^     ~~~~~~~~~~~~~~~~
+   Suppressed 16 warnings (16 in non-user code).
+   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
+   17 warnings generated.
+   net/decnet/dn_nsp_in.c:763:3: warning: Value stored to 'ptr' is never read [clang-analyzer-deadcode.DeadStores]
+                   ptr += 2;
+                   ^      ~
+   net/decnet/dn_nsp_in.c:763:3: note: Value stored to 'ptr' is never read
+                   ptr += 2;
+                   ^      ~
+   Suppressed 16 warnings (16 in non-user code).
+   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
+   16 warnings generated.
+   Suppressed 16 warnings (16 in non-user code).
+   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
+   19 warnings generated.
+   net/decnet/dn_route.c:827:20: warning: Value stored to 'cb' during its initialization is never read [clang-analyzer-deadcode.DeadStores]
+           struct dn_skb_cb *cb = DN_SKB_CB(skb);
+                             ^~
+   net/decnet/dn_route.c:827:20: note: Value stored to 'cb' during its initialization is never read
+           struct dn_skb_cb *cb = DN_SKB_CB(skb);
+                             ^~
+   net/decnet/dn_route.c:839:20: warning: Value stored to 'cb' during its initialization is never read [clang-analyzer-deadcode.DeadStores]
+           struct dn_skb_cb *cb = DN_SKB_CB(skb);
+                             ^~
+   net/decnet/dn_route.c:839:20: note: Value stored to 'cb' during its initialization is never read
+           struct dn_skb_cb *cb = DN_SKB_CB(skb);
+                             ^~
+   net/decnet/dn_route.c:890:39: warning: Access to field 'mtu' results in a dereference of a null pointer (loaded from field 'dev') [clang-analyzer-core.NullDereference]
+           if (dst_metric(&rt->dst, RTAX_MTU) > rt->dst.dev->mtu)
+                                                ^
+   net/decnet/dn_route.c:1652:2: note: Taking false branch
+           if (!net_eq(net, &init_net))
+           ^
+   net/decnet/dn_route.c:1657:6: note: Assuming 'err' is >= 0
+           if (err < 0)
+               ^~~~~~~
+   net/decnet/dn_route.c:1657:2: note: Taking false branch
+           if (err < 0)
+           ^
+   net/decnet/dn_route.c:1664:6: note: Assuming 'skb' is not equal to NULL
+           if (skb == NULL)
+               ^~~~~~~~~~~
+   net/decnet/dn_route.c:1664:2: note: Taking false branch
+           if (skb == NULL)
+           ^
+   net/decnet/dn_route.c:1669:6: note: Assuming the condition is true
+           if (tb[RTA_SRC])
+               ^~~~~~~~~~~
+   net/decnet/dn_route.c:1669:2: note: Taking true branch
+           if (tb[RTA_SRC])
+           ^
+   net/decnet/dn_route.c:1672:6: note: Assuming the condition is false
+           if (tb[RTA_DST])
+               ^~~~~~~~~~~
+   net/decnet/dn_route.c:1672:2: note: Taking false branch
+           if (tb[RTA_DST])
+           ^
+   net/decnet/dn_route.c:1675:6: note: Assuming the condition is true
+           if (tb[RTA_IIF])
 
-Hi Thomas,
-thanks for the patch, this patch fixes oops
-But this patch does not fix the initial issue when a lot of processes
-blocked by mutex which applied by amdgpu_ctx_mgr_entity_flush
-[  249.491425] INFO: task (brt-dbus):1634 blocked for more than 122 seconds=
-.
-[  249.491520]       Tainted: G        W    L   --------  ---
-5.19.0-0.rc5.20220707git9f09069cde34.43.fc37.x86_64 #1
-[  249.491526] "echo 0 > /proc/sys/kernel/hung_task_timeout_secs"
-disables this message.
-[  249.491529] task:(brt-dbus)      state:D stack:14504 pid: 1634
-ppid:     1 flags:0x00000002
-[  249.491541] Call Trace:
-[  249.491545]  <TASK>
-[  249.491556]  __schedule+0x492/0x1620
-[  249.491565]  ? lock_is_held_type+0xe8/0x140
-[  249.491575]  ? find_held_lock+0x32/0x80
-[  249.491590]  schedule+0x4e/0xb0
-[  249.491597]  schedule_preempt_disabled+0x14/0x20
-[  249.491603]  __mutex_lock+0x423/0x890
-[  249.491609]  ? __lock_acquire+0x387/0x1ee0
-[  249.491618]  ? amdgpu_ctx_mgr_entity_flush+0x32/0xc0 [amdgpu]
-[  249.491849]  ? amdgpu_ctx_mgr_entity_flush+0x32/0xc0 [amdgpu]
-[  249.492040]  amdgpu_ctx_mgr_entity_flush+0x32/0xc0 [amdgpu]
-[  249.492237]  amdgpu_flush+0x25/0x40 [amdgpu]
-[  249.492420]  filp_close+0x31/0x70
-[  249.492429]  __close_range+0x1f3/0x490
-[  249.492441]  __x64_sys_close_range+0x13/0x20
-[  249.492446]  do_syscall_64+0x5b/0x80
-[  249.492452]  ? lockdep_hardirqs_on+0x7d/0x100
-[  249.492459]  ? do_syscall_64+0x67/0x80
-[  249.492467]  ? asm_exc_page_fault+0x27/0x30
-[  249.492473]  ? lockdep_hardirqs_on+0x7d/0x100
-[  249.492480]  entry_SYSCALL_64_after_hwframe+0x46/0xb0
-[  249.492486] RIP: 0033:0x7f789d4c23cb
-[  249.492512] RSP: 002b:00007ffe10773198 EFLAGS: 00000246 ORIG_RAX:
-00000000000001b4
-[  249.492518] RAX: ffffffffffffffda RBX: 00007ffe107731a0 RCX: 00007f789d4=
-c23cb
-[  249.492523] RDX: 0000000000000000 RSI: 00000000ffffffff RDI: 00000000000=
-00027
-[  249.492527] RBP: 00007ffe10773220 R08: 0000000000000000 R09: 00007ffe107=
-73270
-[  249.492531] R10: 00007ffe107730e0 R11: 0000000000000246 R12: 00000000000=
-00002
-[  249.492534] R13: 00007ffe10773230 R14: 0000000000000000 R15: 00000000000=
-00002
-[  249.492555]  </TASK>
-[  249.492559] INFO: task (time-dir):1640 blocked for more than 122 seconds=
-.
-[  249.492564]       Tainted: G        W    L   --------  ---
-5.19.0-0.rc5.20220707git9f09069cde34.43.fc37.x86_64 #1
-[  249.492568] "echo 0 > /proc/sys/kernel/hung_task_timeout_secs"
-disables this message.
-[  249.492571] task:(time-dir)      state:D stack:14504 pid: 1640
-ppid:     1 flags:0x00000002
-[  249.492580] Call Trace:
-[  249.492584]  <TASK>
-[  249.492592]  __schedule+0x492/0x1620
-[  249.492597]  ? lock_is_held_type+0xe8/0x140
-[  249.492605]  ? find_held_lock+0x32/0x80
-[  249.492620]  schedule+0x4e/0xb0
-[  249.492627]  schedule_preempt_disabled+0x14/0x20
-[  249.492632]  __mutex_lock+0x423/0x890
-[  249.492638]  ? __lock_acquire+0x387/0x1ee0
-[  249.492646]  ? amdgpu_ctx_mgr_entity_flush+0x32/0xc0 [amdgpu]
-[  249.492859]  ? amdgpu_ctx_mgr_entity_flush+0x32/0xc0 [amdgpu]
-[  249.493049]  amdgpu_ctx_mgr_entity_flush+0x32/0xc0 [amdgpu]
-[  249.493245]  amdgpu_flush+0x25/0x40 [amdgpu]
-[  249.493428]  filp_close+0x31/0x70
-[  249.493436]  __close_range+0x1f3/0x490
-[  249.493447]  __x64_sys_close_range+0x13/0x20
-[  249.493452]  do_syscall_64+0x5b/0x80
-[  249.493457]  ? lockdep_hardirqs_on+0x7d/0x100
-[  249.493465]  entry_SYSCALL_64_after_hwframe+0x46/0xb0
-[  249.493470] RIP: 0033:0x7f789d4c23cb
-[  249.493478] RSP: 002b:00007ffe10773198 EFLAGS: 00000246 ORIG_RAX:
-00000000000001b4
-[  249.493484] RAX: ffffffffffffffda RBX: 00007ffe107731a0 RCX: 00007f789d4=
-c23cb
-[  249.493488] RDX: 0000000000000000 RSI: 00000000ffffffff RDI: 00000000000=
-00027
-[  249.493492] RBP: 00007ffe10773220 R08: 0000000000000000 R09: 00007ffe107=
-73270
-[  249.493496] R10: 00007ffe107730e0 R11: 0000000000000246 R12: 00000000000=
-00002
-[  249.493499] R13: 00007ffe10773230 R14: 0000000000000000 R15: 00000000000=
-00002
-[  249.493519]  </TASK>
-[  249.493528]
-               Showing all locks held in the system:
-[  249.493537] 1 lock held by khungtaskd/182:
-[  249.493542]  #0: ffffffffba168e20 (rcu_read_lock){....}-{1:2}, at:
-debug_show_all_locks+0x15/0x16b
-[  249.493565] 1 lock held by systemd-journal/879:
-[  249.493575] 3 locks held by gnome-shell/1633:
-[  249.493579]  #0: ffff9bd4be4f8c00
-(&sig->cred_guard_mutex){+.+.}-{3:3}, at: bprm_execve+0x3c/0x880
-[  249.493593]  #1: ffff9bd4be4f8ca8
-(&sig->exec_update_lock){++++}-{3:3}, at: begin_new_exec+0x384/0xca0
-[  249.493607]  #2: ffff9bd441f20c58 (&mgr->lock#3){+.+.}-{3:3}, at:
-amdgpu_ctx_mgr_entity_flush+0x32/0xc0 [amdgpu]
-[  249.493807] 1 lock held by (brt-dbus)/1634:
-[  249.493811]  #0: ffff9bd441f20c58 (&mgr->lock#3){+.+.}-{3:3}, at:
-amdgpu_ctx_mgr_entity_flush+0x32/0xc0 [amdgpu]
-[  249.494025] 1 lock held by (time-dir)/1640:
-[  249.494029]  #0: ffff9bd441f20c58 (&mgr->lock#3){+.+.}-{3:3}, at:
-amdgpu_ctx_mgr_entity_flush+0x32/0xc0 [amdgpu]
-[  249.494229] 1 lock held by (ostnamed)/1723:
-[  249.494233]  #0: ffff9bd441f20c58 (&mgr->lock#3){+.+.}-{3:3}, at:
-amdgpu_ctx_mgr_entity_flush+0x32/0xc0 [amdgpu]
-[  249.494432] 1 lock held by (pcscd)/1748:
-[  249.494436]  #0: ffff9bd441f20c58 (&mgr->lock#3){+.+.}-{3:3}, at:
-amdgpu_ctx_mgr_entity_flush+0x32/0xc0 [amdgpu]
+vim +39 drivers/iio/adc/ad7476.c
 
-[  249.494639] =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+7a28fe3c93d6cd drivers/staging/iio/adc/ad7476.c Lars-Peter Clausen 2012-09-10  38  
+7a28fe3c93d6cd drivers/staging/iio/adc/ad7476.c Lars-Peter Clausen 2012-09-10 @39  struct ad7476_state {
+7a28fe3c93d6cd drivers/staging/iio/adc/ad7476.c Lars-Peter Clausen 2012-09-10  40  	struct spi_device		*spi;
+7a28fe3c93d6cd drivers/staging/iio/adc/ad7476.c Lars-Peter Clausen 2012-09-10  41  	const struct ad7476_chip_info	*chip_info;
+7bf50a968a1cd0 drivers/iio/adc/ad7476.c         Jonathan Cameron   2021-04-25  42  	struct regulator		*ref_reg;
+af37e4703d00ce drivers/iio/adc/ad7476.c         Dragos Bogdan      2020-03-11  43  	struct gpio_desc		*convst_gpio;
+7a28fe3c93d6cd drivers/staging/iio/adc/ad7476.c Lars-Peter Clausen 2012-09-10  44  	struct spi_transfer		xfer;
+7a28fe3c93d6cd drivers/staging/iio/adc/ad7476.c Lars-Peter Clausen 2012-09-10  45  	struct spi_message		msg;
+7a28fe3c93d6cd drivers/staging/iio/adc/ad7476.c Lars-Peter Clausen 2012-09-10  46  	/*
+7a28fe3c93d6cd drivers/staging/iio/adc/ad7476.c Lars-Peter Clausen 2012-09-10  47  	 * DMA (thus cache coherency maintenance) requires the
+7a28fe3c93d6cd drivers/staging/iio/adc/ad7476.c Lars-Peter Clausen 2012-09-10  48  	 * transfer buffers to live in their own cache lines.
+7a28fe3c93d6cd drivers/staging/iio/adc/ad7476.c Lars-Peter Clausen 2012-09-10  49  	 * Make the buffer large enough for one 16 bit sample and one 64 bit
+7a28fe3c93d6cd drivers/staging/iio/adc/ad7476.c Lars-Peter Clausen 2012-09-10  50  	 * aligned 64 bit timestamp.
+7a28fe3c93d6cd drivers/staging/iio/adc/ad7476.c Lars-Peter Clausen 2012-09-10  51  	 */
+7a28fe3c93d6cd drivers/staging/iio/adc/ad7476.c Lars-Peter Clausen 2012-09-10  52  	unsigned char data[ALIGN(2, sizeof(s64)) + sizeof(s64)]
+7a28fe3c93d6cd drivers/staging/iio/adc/ad7476.c Lars-Peter Clausen 2012-09-10  53  			____cacheline_aligned;
+7a28fe3c93d6cd drivers/staging/iio/adc/ad7476.c Lars-Peter Clausen 2012-09-10  54  };
+7a28fe3c93d6cd drivers/staging/iio/adc/ad7476.c Lars-Peter Clausen 2012-09-10  55  
 
-Here is pastebin from initial post: https://pastebin.com/0YHs6wyB
+:::::: The code at line 39 was first introduced by commit
+:::::: 7a28fe3c93d6cd920c84678a1bf45af8b4248577 staging:iio:ad7476: Squash driver into a single file.
+
+:::::: TO: Lars-Peter Clausen <lars@metafoo.de>
+:::::: CC: Jonathan Cameron <jic23@kernel.org>
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

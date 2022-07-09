@@ -2,79 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1FE6256C804
-	for <lists+linux-kernel@lfdr.de>; Sat,  9 Jul 2022 10:25:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B33F56C80D
+	for <lists+linux-kernel@lfdr.de>; Sat,  9 Jul 2022 10:31:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229448AbiGIIZW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 9 Jul 2022 04:25:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60818 "EHLO
+        id S229509AbiGIIbe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 9 Jul 2022 04:31:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36094 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229492AbiGIIZT (ORCPT
+        with ESMTP id S229456AbiGIIbc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 9 Jul 2022 04:25:19 -0400
+        Sat, 9 Jul 2022 04:31:32 -0400
 Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D29B976E83
-        for <linux-kernel@vger.kernel.org>; Sat,  9 Jul 2022 01:25:17 -0700 (PDT)
-Received: by mail-pj1-x102a.google.com with SMTP id w24so893048pjg.5
-        for <linux-kernel@vger.kernel.org>; Sat, 09 Jul 2022 01:25:17 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E53650196
+        for <linux-kernel@vger.kernel.org>; Sat,  9 Jul 2022 01:31:32 -0700 (PDT)
+Received: by mail-pj1-x102a.google.com with SMTP id o31-20020a17090a0a2200b001ef7bd037bbso686200pjo.0
+        for <linux-kernel@vger.kernel.org>; Sat, 09 Jul 2022 01:31:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=/Sx0YWTOU70ldR3qqRLiimjlPwcJ9/ZDdFLcC6JdMgc=;
-        b=GFukNcWocDEKQ8p1Vr7y9wt8wzLNjfnf3r0mCzRBEbpO+N4nhKVlsoBIlYgNke4OIE
-         kcN6ptLfXPAuhhRQWeEmyLZMaXmJQEuPxHfh5V2uuBPE51gtC7yJOPm5/zFqTrKUiDiG
-         J7BxP0bL80mby6CoXKv91M6+/96Ye4vJ/JI9oza8IWlK/+q3LXFfU8c6EYsY29imoStr
-         XAGmZu19TYrQHd+p3RoyQ4FomGPbjMfLwAv8M8TKx207RxpRLRTdR21KbT/EnLmZ9nNT
-         wKlGglJxQRWf7Gm3LnO/W1+KASmkj190IoIy/ztV1fVJdemmOZYwJ4ZVSs+gjJm/+bIn
-         8bug==
+        bh=R138oFD5OXPog61ZjjUULV7qM4LmxY5ZWnBjLCIhJ3A=;
+        b=eo6k0oi0O9tY1GVEX+jXGlhjdRjvJ/p3qJNJfLKICJkl1STJbHQr0n8Nm0MNQAif6D
+         Bs7A9C3KNCrgmnzbHmIYtH+cU3XEvJzPJSe9/m/XaUY4eu40DX05ocNjVQ2+zhXRGQ2W
+         Z1duOXCCRYUZNG5XPufQWwyIk6rjgsZlesO3LesvMvjgRoRvdh1ak4AhUX3XBRBKcV7s
+         I/7n9FylgYxV/yK3LIh8W5EH57gKFC1x9TX2/qHahEexU4MD5jNMaLN6VaeLkzNGzx1h
+         AOf7X3fEh3lgC0w7ww3tA73W+lrBKxIsPmIpWQvXg005AdBUSGE//nGm8QISRobaprYa
+         jZmQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:content-transfer-encoding
          :in-reply-to;
-        bh=/Sx0YWTOU70ldR3qqRLiimjlPwcJ9/ZDdFLcC6JdMgc=;
-        b=zF11EA04di2XE1v2QWyMabqGMl5Mz2bFvyHqxuB1HiGPAD2ybMRUE20KyvnGg0NyBp
-         nl/yILmFus9Pcd6qwD6seS2mJ4J78n6mucCnJKukS7Ox4wJVblmA+5ndoK06Y8oU2KxR
-         +rMl9pf4CaHFj78KeI71ohUHBqy7ybTT5M76Ig2dilYanrONxuYk1S1+EbTIK7troYuo
-         TnuJUPsFjQmkpfZ0qsGGLVjK8gGAz47gfW4z5YVGwi0j+IqzCi592YE7xIPhOP2flCoz
-         I09BPzkh96HrQ1a1IRukTc70mb1s2LWrRdpljvQjWwUWm8bBKKIBGpdZXXYS340unBrS
-         qoOg==
-X-Gm-Message-State: AJIora+7VTVr/RkzQiFxBA/KBTSASOMN4EEj4pJnjn2wjEGflI804h5n
-        UUyPmWBPBNxVu9TtuO7YsqNOsmk0qBYW
-X-Google-Smtp-Source: AGRyM1ufOWTPz98QGa9I0QzB1DRe7WPSkiwMrjR3T/xAs6zT96KF64La56lHoPYR55s6Ev1/9xDfxA==
-X-Received: by 2002:a17:90b:4ac1:b0:1ef:c1ba:e73e with SMTP id mh1-20020a17090b4ac100b001efc1bae73emr4717331pjb.47.1657355117339;
-        Sat, 09 Jul 2022 01:25:17 -0700 (PDT)
+        bh=R138oFD5OXPog61ZjjUULV7qM4LmxY5ZWnBjLCIhJ3A=;
+        b=DJao/RhGbyt0jxmnlzhTidkkfFKmSLro2qz//RBs75hT2+yTbkYRY8e+iAOWq3rLcg
+         qUXA++DaWraG5cxI+n9uwho6EZbYQ70Pejh1sdlbGHKBq5F2aZwOu4MQ4ippiH0hoYeK
+         Cd1aqvKfVnxdj9aWyv/qALWIw2+wdMuMtGftuqUFo7jZISuxXUHSZ1tqvjCS6ltbSsCv
+         44qFgGHQgwIutunBsRGmgsyTVSnyUIYbIykNWHgMB1Bt0xxMby7aULJVy2FHuJ8oFz6E
+         1Oz7UadLU/kxiApT2ZWx7kl3n/DQ1ZVTC7kgwrPMWnsQ6KJ8i27LoZXZAHKhit//VnzF
+         XnyQ==
+X-Gm-Message-State: AJIora8J+Ttkn7KVitxSmrHYZr2goI/kBzIiSRdWj+3o5ax793vDDilv
+        EMUoHnPdEPVBqIX20k/R4Dxq
+X-Google-Smtp-Source: AGRyM1u6MLWsD3OzMYBdC5Q0lI5mvhbGGTX65Il1VYUH+N1jXPz5K+gmp9+DRdeO2/6t/RcH3rHN9A==
+X-Received: by 2002:a17:90a:408f:b0:1e3:23a:2370 with SMTP id l15-20020a17090a408f00b001e3023a2370mr4700263pjg.84.1657355491510;
+        Sat, 09 Jul 2022 01:31:31 -0700 (PDT)
 Received: from thinkpad ([117.207.26.140])
-        by smtp.gmail.com with ESMTPSA id u188-20020a6260c5000000b0050dc7628183sm939074pfb.93.2022.07.09.01.25.12
+        by smtp.gmail.com with ESMTPSA id q6-20020aa78426000000b00525714c3e07sm930353pfn.48.2022.07.09.01.31.25
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 09 Jul 2022 01:25:17 -0700 (PDT)
-Date:   Sat, 9 Jul 2022 13:55:09 +0530
+        Sat, 09 Jul 2022 01:31:31 -0700 (PDT)
+Date:   Sat, 9 Jul 2022 14:01:22 +0530
 From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-To:     Johan Hovold <johan+linaro@kernel.org>
-Cc:     Bjorn Helgaas <bhelgaas@google.com>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Stanimir Varbanov <svarbanov@mm-sol.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
+To:     Serge Semin <Sergey.Semin@baikalelectronics.ru>
+Cc:     Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
+        Vinod Koul <vkoul@kernel.org>, Rob Herring <robh@kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Jingoo Han <jingoohan1@gmail.com>, Frank Li <Frank.Li@nxp.com>,
+        Serge Semin <fancer.lancer@gmail.com>,
+        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
         Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        linux-arm-msm@vger.kernel.org, linux-pci@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 09/10] PCI: qcom: Clean up IP configurations
-Message-ID: <20220709082509.GP5063@thinkpad>
-References: <20220629141000.18111-1-johan+linaro@kernel.org>
- <20220629141000.18111-10-johan+linaro@kernel.org>
+        linux-pci@vger.kernel.org, dmaengine@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 22/24] dmaengine: dw-edma: Bypass dma-ranges mapping
+ for the local setup
+Message-ID: <20220709083122.GQ5063@thinkpad>
+References: <20220610091459.17612-1-Sergey.Semin@baikalelectronics.ru>
+ <20220610091459.17612-23-Sergey.Semin@baikalelectronics.ru>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220629141000.18111-10-johan+linaro@kernel.org>
+In-Reply-To: <20220610091459.17612-23-Sergey.Semin@baikalelectronics.ru>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -82,151 +83,73 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 29, 2022 at 04:09:59PM +0200, Johan Hovold wrote:
-> The various IP versions have different configurations that are encoded
-> in separate sets of operation callbacks. Currently, there is no need for
-> also maintaining corresponding sets of data parameters, but it is
-> conceivable that these may again be found useful (e.g. to implement
-> minor variations of the operation callbacks).
+On Fri, Jun 10, 2022 at 12:14:57PM +0300, Serge Semin wrote:
+> DW eDMA doesn't perform any translation of the traffic generated on the
+> CPU/Application side. It just generates read/write AXI-bus requests with
+> the specified addresses. But in case if the dma-ranges DT-property is
+> specified for a platform device node, Linux will use it to map the CPU
+> memory regions into the DMAable bus ranges. This isn't what we want for
+> the eDMA embedded into the locally accessed DW PCIe Root Port and
+> End-point. In order to work that around let's set the chan_dma_dev flag
+> for each DW eDMA channel thus forcing the client drivers to getting a
+> custom dma-ranges-less parental device for the mappings.
 > 
-> Rename the default configuration structures after the IP version they
-> apply to so that they can more easily be reused by different SoCs.
+> Note it will only work for the client drivers using the
+> dmaengine_get_dma_device() method to get the parental DMA device.
 > 
-> Note that SoC specific configurations can be added later if need arises
-> (e.g. cfg_sc8280xp).
-> 
-> Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
+> Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
 
 Reviewed-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
 
 Thanks,
 Mani
 
-> ---
->  drivers/pci/controller/dwc/pcie-qcom.c | 85 ++++++++------------------
->  1 file changed, 27 insertions(+), 58 deletions(-)
 > 
-> diff --git a/drivers/pci/controller/dwc/pcie-qcom.c b/drivers/pci/controller/dwc/pcie-qcom.c
-> index 1a564f624bb1..567601679465 100644
-> --- a/drivers/pci/controller/dwc/pcie-qcom.c
-> +++ b/drivers/pci/controller/dwc/pcie-qcom.c
-> @@ -1433,65 +1433,34 @@ static const struct qcom_pcie_ops ops_1_9_0 = {
->  	.config_sid = qcom_pcie_config_sid_sm8250,
->  };
+> ---
+> 
+> Changelog v2:
+> - Fix the comment a bit to being clearer. (@Manivannan)
+> 
+> Changelog v3:
+> - Conditionally set dchan->dev->device.dma_coherent field since it can
+>   be missing on some platforms. (@Manivannan)
+> - Remove Manivannan' rb and tb tags since the patch content has been
+>   changed.
+> ---
+>  drivers/dma/dw-edma/dw-edma-core.c | 20 ++++++++++++++++++++
+>  1 file changed, 20 insertions(+)
+> 
+> diff --git a/drivers/dma/dw-edma/dw-edma-core.c b/drivers/dma/dw-edma/dw-edma-core.c
+> index 6a8282eaebaf..4f56149dc8d8 100644
+> --- a/drivers/dma/dw-edma/dw-edma-core.c
+> +++ b/drivers/dma/dw-edma/dw-edma-core.c
+> @@ -716,6 +716,26 @@ static int dw_edma_alloc_chan_resources(struct dma_chan *dchan)
+>  	if (chan->status != EDMA_ST_IDLE)
+>  		return -EBUSY;
 >  
-> -static const struct qcom_pcie_cfg apq8084_cfg = {
-> +static const struct qcom_pcie_cfg cfg_1_0_0 = {
->  	.ops = &ops_1_0_0,
->  };
->  
-> -static const struct qcom_pcie_cfg ipq8064_cfg = {
-> +static const struct qcom_pcie_cfg cfg_1_9_0 = {
-> +	.ops = &ops_1_9_0,
-> +};
+> +	/* Bypass the dma-ranges based memory regions mapping for the eDMA
+> +	 * controlled from the CPU/Application side since in that case
+> +	 * the local memory address is left untranslated.
+> +	 */
+> +	if (chan->dw->chip->flags & DW_EDMA_CHIP_LOCAL) {
+> +		dchan->dev->chan_dma_dev = true;
 > +
-> +static const struct qcom_pcie_cfg cfg_2_1_0 = {
->  	.ops = &ops_2_1_0,
->  };
+> +#if defined(CONFIG_ARCH_HAS_SYNC_DMA_FOR_DEVICE) || \
+> +    defined(CONFIG_ARCH_HAS_SYNC_DMA_FOR_CPU) || \
+> +    defined(CONFIG_ARCH_HAS_SYNC_DMA_FOR_CPU_ALL)
+> +		dchan->dev->device.dma_coherent = chan->dw->chip->dev->dma_coherent;
+> +#endif
+> +
+> +		dma_coerce_mask_and_coherent(&dchan->dev->device,
+> +					     dma_get_mask(chan->dw->chip->dev));
+> +		dchan->dev->device.dma_parms = chan->dw->chip->dev->dma_parms;
+> +	} else {
+> +		dchan->dev->chan_dma_dev = false;
+> +	}
+> +
+>  	pm_runtime_get(chan->dw->chip->dev);
 >  
-> -static const struct qcom_pcie_cfg msm8996_cfg = {
-> +static const struct qcom_pcie_cfg cfg_2_3_2 = {
->  	.ops = &ops_2_3_2,
->  };
->  
-> -static const struct qcom_pcie_cfg ipq8074_cfg = {
-> +static const struct qcom_pcie_cfg cfg_2_3_3 = {
->  	.ops = &ops_2_3_3,
->  };
->  
-> -static const struct qcom_pcie_cfg ipq4019_cfg = {
-> +static const struct qcom_pcie_cfg cfg_2_4_0 = {
->  	.ops = &ops_2_4_0,
->  };
->  
-> -static const struct qcom_pcie_cfg sa8540p_cfg = {
-> -	.ops = &ops_1_9_0,
-> -};
-> -
-> -static const struct qcom_pcie_cfg sc8280xp_cfg = {
-> -	.ops = &ops_1_9_0,
-> -};
-> -
-> -static const struct qcom_pcie_cfg sdm845_cfg = {
-> +static const struct qcom_pcie_cfg cfg_2_7_0 = {
->  	.ops = &ops_2_7_0,
->  };
->  
-> -static const struct qcom_pcie_cfg sm8150_cfg = {
-> -	/* sm8150 has qcom IP rev 1.5.0. However 1.5.0 ops are same as
-> -	 * 1.9.0, so reuse the same.
-> -	 */
-> -	.ops = &ops_1_9_0,
-> -};
-> -
-> -static const struct qcom_pcie_cfg sm8250_cfg = {
-> -	.ops = &ops_1_9_0,
-> -};
-> -
-> -static const struct qcom_pcie_cfg sm8450_pcie0_cfg = {
-> -	.ops = &ops_1_9_0,
-> -};
-> -
-> -static const struct qcom_pcie_cfg sm8450_pcie1_cfg = {
-> -	.ops = &ops_1_9_0,
-> -};
-> -
-> -static const struct qcom_pcie_cfg sc7280_cfg = {
-> -	.ops = &ops_1_9_0,
-> -};
-> -
-> -static const struct qcom_pcie_cfg sc8180x_cfg = {
-> -	.ops = &ops_1_9_0,
-> -};
-> -
->  static const struct dw_pcie_ops dw_pcie_ops = {
->  	.link_up = qcom_pcie_link_up,
->  	.start_link = qcom_pcie_start_link,
-> @@ -1603,23 +1572,23 @@ static int qcom_pcie_remove(struct platform_device *pdev)
->  }
->  
->  static const struct of_device_id qcom_pcie_match[] = {
-> -	{ .compatible = "qcom,pcie-apq8084", .data = &apq8084_cfg },
-> -	{ .compatible = "qcom,pcie-ipq8064", .data = &ipq8064_cfg },
-> -	{ .compatible = "qcom,pcie-ipq8064-v2", .data = &ipq8064_cfg },
-> -	{ .compatible = "qcom,pcie-apq8064", .data = &ipq8064_cfg },
-> -	{ .compatible = "qcom,pcie-msm8996", .data = &msm8996_cfg },
-> -	{ .compatible = "qcom,pcie-ipq8074", .data = &ipq8074_cfg },
-> -	{ .compatible = "qcom,pcie-ipq4019", .data = &ipq4019_cfg },
-> -	{ .compatible = "qcom,pcie-qcs404", .data = &ipq4019_cfg },
-> -	{ .compatible = "qcom,pcie-sa8540p", .data = &sa8540p_cfg },
-> -	{ .compatible = "qcom,pcie-sdm845", .data = &sdm845_cfg },
-> -	{ .compatible = "qcom,pcie-sm8150", .data = &sm8150_cfg },
-> -	{ .compatible = "qcom,pcie-sm8250", .data = &sm8250_cfg },
-> -	{ .compatible = "qcom,pcie-sc8180x", .data = &sc8180x_cfg },
-> -	{ .compatible = "qcom,pcie-sc8280xp", .data = &sc8280xp_cfg },
-> -	{ .compatible = "qcom,pcie-sm8450-pcie0", .data = &sm8450_pcie0_cfg },
-> -	{ .compatible = "qcom,pcie-sm8450-pcie1", .data = &sm8450_pcie1_cfg },
-> -	{ .compatible = "qcom,pcie-sc7280", .data = &sc7280_cfg },
-> +	{ .compatible = "qcom,pcie-apq8084", .data = &cfg_1_0_0 },
-> +	{ .compatible = "qcom,pcie-ipq8064", .data = &cfg_2_1_0 },
-> +	{ .compatible = "qcom,pcie-ipq8064-v2", .data = &cfg_2_1_0 },
-> +	{ .compatible = "qcom,pcie-apq8064", .data = &cfg_2_1_0 },
-> +	{ .compatible = "qcom,pcie-msm8996", .data = &cfg_2_3_2 },
-> +	{ .compatible = "qcom,pcie-ipq8074", .data = &cfg_2_3_3 },
-> +	{ .compatible = "qcom,pcie-ipq4019", .data = &cfg_2_4_0 },
-> +	{ .compatible = "qcom,pcie-qcs404", .data = &cfg_2_4_0 },
-> +	{ .compatible = "qcom,pcie-sa8540p", .data = &cfg_1_9_0 },
-> +	{ .compatible = "qcom,pcie-sdm845", .data = &cfg_2_7_0 },
-> +	{ .compatible = "qcom,pcie-sm8150", .data = &cfg_1_9_0 },
-> +	{ .compatible = "qcom,pcie-sm8250", .data = &cfg_1_9_0 },
-> +	{ .compatible = "qcom,pcie-sc8180x", .data = &cfg_1_9_0 },
-> +	{ .compatible = "qcom,pcie-sc8280xp", .data = &cfg_1_9_0 },
-> +	{ .compatible = "qcom,pcie-sm8450-pcie0", .data = &cfg_1_9_0 },
-> +	{ .compatible = "qcom,pcie-sm8450-pcie1", .data = &cfg_1_9_0 },
-> +	{ .compatible = "qcom,pcie-sc7280", .data = &cfg_1_9_0 },
->  	{ }
->  };
->  MODULE_DEVICE_TABLE(of, qcom_pcie_match);
+>  	return 0;
 > -- 
 > 2.35.1
 > 

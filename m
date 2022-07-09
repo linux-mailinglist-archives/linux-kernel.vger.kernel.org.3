@@ -2,53 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A449756C7A3
-	for <lists+linux-kernel@lfdr.de>; Sat,  9 Jul 2022 09:02:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ED2C756C7A7
+	for <lists+linux-kernel@lfdr.de>; Sat,  9 Jul 2022 09:13:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229558AbiGIHCy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 9 Jul 2022 03:02:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51304 "EHLO
+        id S229471AbiGIHN2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 9 Jul 2022 03:13:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55204 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229379AbiGIHCw (ORCPT
+        with ESMTP id S229379AbiGIHN0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 9 Jul 2022 03:02:52 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A093774B6
-        for <linux-kernel@vger.kernel.org>; Sat,  9 Jul 2022 00:02:52 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D1E6D60C85
-        for <linux-kernel@vger.kernel.org>; Sat,  9 Jul 2022 07:02:51 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BD556C3411C;
-        Sat,  9 Jul 2022 07:02:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1657350171;
-        bh=ywY5wSpDb5M0M/Sepmd8IRCwLxEaxwxwZ2IywAl4hRc=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=hMyQ+dpRIlGge7oPY2dZLbR6gjlPuAcvsTZ8noFmYooPehCTP7ogL299JK6WfMlqy
-         Ol3OrtdKW+51e0SdD9YjY9nfo/aaSP0F5arhuqq8c9XIEqy7vMEvnBu+240oqYJtEn
-         Mn9KNGG4g0JNQggCpYDF/fhFEGuOOBVH3H7jcBOw=
-Date:   Sat, 9 Jul 2022 09:02:46 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Joe Perches <joe@perches.com>
-Cc:     Philipp Hortmann <philipp.g.hortmann@gmail.com>,
-        Forest Bond <forest@alittletooquiet.net>,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/2] staging: vt6655: Use loop in
- vt6655_mac_write_bssid_addr
-Message-ID: <YskoFoksrQyDstyc@kroah.com>
-References: <cover.1657134099.git.philipp.g.hortmann@gmail.com>
- <b3b93ae7ce41562565e9007eb4580b9c47a2881f.1657134099.git.philipp.g.hortmann@gmail.com>
- <YsgjOPUDDtD48tMO@kroah.com>
- <2c1717b23896bc95a9ba9de79c9dbf112aa35460.camel@perches.com>
+        Sat, 9 Jul 2022 03:13:26 -0400
+Received: from mail-il1-f198.google.com (mail-il1-f198.google.com [209.85.166.198])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4105578203
+        for <linux-kernel@vger.kernel.org>; Sat,  9 Jul 2022 00:13:24 -0700 (PDT)
+Received: by mail-il1-f198.google.com with SMTP id x5-20020a923005000000b002d1a91c4d13so537023ile.4
+        for <linux-kernel@vger.kernel.org>; Sat, 09 Jul 2022 00:13:24 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
+        bh=YNjDCWN7v9Gcshr/FrnIxWh4qyNpKpJS7nTPejRH6ns=;
+        b=NTrqgH51cK5ld/T0CmCW4K9jzsSGYRLgvCpeyz6Q3wLTog6fcIm7iiJ3qtByWtkpfo
+         SLr0g92TQHgyqpULFmdE2jnY7ICVi1U3It3Fyqdb+sp4cuIoyxeQyrVQdmHYPBOuNIVS
+         kgrf93cQoFA81o6cuVzU56e5S/noVr4oG2EA/K2Ix0g0kd8AbRB0KMgwdCt6NVODuX31
+         hbM5b5g/fekFULf5iTnKMcpqsyBYqCbNMISVWk5ysGh4q+tb61owdCITeBcIlv11nbAf
+         1kw5x/ON60wAkku/ywe5o/t1ba7IPB7TfwW8uGrqhrLVwqXFoIAs57O6arB2kD5ZLcLr
+         4iNA==
+X-Gm-Message-State: AJIora8iLxu3aV8Q2jPJT/CNkp2loXp6WTk3oqbYk/zlSG6fo00fIPFl
+        RtV1MZsDXYlamLo9g1GHs1oakOxdOpdsAATuFtdLiuqj5hQo
+X-Google-Smtp-Source: AGRyM1smuz787MixueMSePd3errsnBxIJ1iHqS6CFU4MwcPMrANcCEOr4I7OXyQXTI4BMMaDTWZWFwM1DqAFUQu4NOawf7JOmhzp
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <2c1717b23896bc95a9ba9de79c9dbf112aa35460.camel@perches.com>
-X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-Received: by 2002:a05:6638:154:b0:339:e14c:867e with SMTP id
+ y20-20020a056638015400b00339e14c867emr4245883jao.190.1657350803629; Sat, 09
+ Jul 2022 00:13:23 -0700 (PDT)
+Date:   Sat, 09 Jul 2022 00:13:23 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000eb2d6c05e35a0d73@google.com>
+Subject: [syzbot] memory leak in xas_create
+From:   syzbot <syzbot+a785d07959bc94837d51@syzkaller.appspotmail.com>
+To:     akpm@linux-foundation.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -56,28 +53,141 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jul 08, 2022 at 09:07:43PM -0700, Joe Perches wrote:
-> On Fri, 2022-07-08 at 14:29 +0200, Greg Kroah-Hartman wrote:
-> > On Wed, Jul 06, 2022 at 09:19:01PM +0200, Philipp Hortmann wrote:
-> > > Use loop in vt6655_mac_write_bssid_addr to avoid multiple
-> > > similar statements.
-> []
-> > > diff --git a/drivers/staging/vt6655/device_main.c b/drivers/staging/vt6655/device_main.c
-> []
-> > > @@ -192,12 +192,8 @@ device_set_options(struct vnt_private *priv)
-> > >  static void vt6655_mac_write_bssid_addr(void __iomem *iobase, const u8 *mac_addr)
-> []
-> > > +	for (int i = 0; i < 6; i++)
-> > 
-> > Taking advantage of the new compiler level I see, nice :)
-> 
-> Not sure this is altogether a great idea as it may
-> make backporting a bit difficult, but it's already
-> in the kernel in a few places.
+Hello,
 
-That's for the stable kernels to worry about, don't let that stop new
-development from happening for that reason please.
+syzbot found the following issue on:
 
-thanks,
+HEAD commit:    c1084b6c5620 Merge tag 'soc-fixes-5.19-2' of git://git.ker..
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=14967ccc080000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=916233b7694a38ff
+dashboard link: https://syzkaller.appspot.com/bug?extid=a785d07959bc94837d51
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=122ae834080000
 
-greg k-h
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+a785d07959bc94837d51@syzkaller.appspotmail.com
+
+2022/07/05 05:22:17 executed programs: 828
+2022/07/05 05:22:23 executed programs: 846
+2022/07/05 05:22:30 executed programs: 866
+2022/07/05 05:22:37 executed programs: 875
+BUG: memory leak
+unreferenced object 0xffff888113662480 (size 576):
+  comm "khugepaged", pid 32, jiffies 4295002751 (age 22.940s)
+  hex dump (first 32 bytes):
+    06 15 08 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+    58 08 46 1d 81 88 ff ff 98 24 66 13 81 88 ff ff  X.F......$f.....
+  backtrace:
+    [<ffffffff824aa006>] xas_alloc+0xf6/0x120 lib/xarray.c:377
+    [<ffffffff824acc55>] xas_create+0x395/0x820 lib/xarray.c:679
+    [<ffffffff824ad180>] xas_create_range+0xa0/0x1c0 lib/xarray.c:719
+    [<ffffffff815957f3>] collapse_file+0x283/0x2870 mm/khugepaged.c:1670
+    [<ffffffff8159b52c>] khugepaged_scan_file mm/khugepaged.c:2072 [inline]
+    [<ffffffff8159b52c>] khugepaged_scan_mm_slot mm/khugepaged.c:2167 [inline]
+    [<ffffffff8159b52c>] khugepaged_do_scan mm/khugepaged.c:2251 [inline]
+    [<ffffffff8159b52c>] khugepaged+0x227c/0x43a0 mm/khugepaged.c:2296
+    [<ffffffff8127b8b5>] kthread+0x125/0x160 kernel/kthread.c:376
+    [<ffffffff8100222f>] ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:302
+
+BUG: memory leak
+unreferenced object 0xffff8881136e2900 (size 576):
+  comm "khugepaged", pid 32, jiffies 4295002751 (age 22.940s)
+  hex dump (first 32 bytes):
+    00 07 00 00 00 00 00 00 80 24 66 13 81 88 ff ff  .........$f.....
+    58 08 46 1d 81 88 ff ff 18 29 6e 13 81 88 ff ff  X.F......)n.....
+  backtrace:
+    [<ffffffff824aa006>] xas_alloc+0xf6/0x120 lib/xarray.c:377
+    [<ffffffff824acc55>] xas_create+0x395/0x820 lib/xarray.c:679
+    [<ffffffff824ad180>] xas_create_range+0xa0/0x1c0 lib/xarray.c:719
+    [<ffffffff815957f3>] collapse_file+0x283/0x2870 mm/khugepaged.c:1670
+    [<ffffffff8159b52c>] khugepaged_scan_file mm/khugepaged.c:2072 [inline]
+    [<ffffffff8159b52c>] khugepaged_scan_mm_slot mm/khugepaged.c:2167 [inline]
+    [<ffffffff8159b52c>] khugepaged_do_scan mm/khugepaged.c:2251 [inline]
+    [<ffffffff8159b52c>] khugepaged+0x227c/0x43a0 mm/khugepaged.c:2296
+    [<ffffffff8127b8b5>] kthread+0x125/0x160 kernel/kthread.c:376
+    [<ffffffff8100222f>] ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:302
+
+BUG: memory leak
+unreferenced object 0xffff8881136e0480 (size 576):
+  comm "khugepaged", pid 32, jiffies 4295002751 (age 22.940s)
+  hex dump (first 32 bytes):
+    00 06 00 00 00 00 00 00 80 24 66 13 81 88 ff ff  .........$f.....
+    58 08 46 1d 81 88 ff ff 98 04 6e 13 81 88 ff ff  X.F.......n.....
+  backtrace:
+    [<ffffffff824aa006>] xas_alloc+0xf6/0x120 lib/xarray.c:377
+    [<ffffffff824acc55>] xas_create+0x395/0x820 lib/xarray.c:679
+    [<ffffffff824ad180>] xas_create_range+0xa0/0x1c0 lib/xarray.c:719
+    [<ffffffff815957f3>] collapse_file+0x283/0x2870 mm/khugepaged.c:1670
+    [<ffffffff8159b52c>] khugepaged_scan_file mm/khugepaged.c:2072 [inline]
+    [<ffffffff8159b52c>] khugepaged_scan_mm_slot mm/khugepaged.c:2167 [inline]
+    [<ffffffff8159b52c>] khugepaged_do_scan mm/khugepaged.c:2251 [inline]
+    [<ffffffff8159b52c>] khugepaged+0x227c/0x43a0 mm/khugepaged.c:2296
+    [<ffffffff8127b8b5>] kthread+0x125/0x160 kernel/kthread.c:376
+    [<ffffffff8100222f>] ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:302
+
+BUG: memory leak
+unreferenced object 0xffff8881136de900 (size 576):
+  comm "khugepaged", pid 32, jiffies 4295002751 (age 22.940s)
+  hex dump (first 32 bytes):
+    00 05 00 00 00 00 00 00 80 24 66 13 81 88 ff ff  .........$f.....
+    58 08 46 1d 81 88 ff ff 18 e9 6d 13 81 88 ff ff  X.F.......m.....
+  backtrace:
+    [<ffffffff824aa006>] xas_alloc+0xf6/0x120 lib/xarray.c:377
+    [<ffffffff824acc55>] xas_create+0x395/0x820 lib/xarray.c:679
+    [<ffffffff824ad180>] xas_create_range+0xa0/0x1c0 lib/xarray.c:719
+    [<ffffffff815957f3>] collapse_file+0x283/0x2870 mm/khugepaged.c:1670
+    [<ffffffff8159b52c>] khugepaged_scan_file mm/khugepaged.c:2072 [inline]
+    [<ffffffff8159b52c>] khugepaged_scan_mm_slot mm/khugepaged.c:2167 [inline]
+    [<ffffffff8159b52c>] khugepaged_do_scan mm/khugepaged.c:2251 [inline]
+    [<ffffffff8159b52c>] khugepaged+0x227c/0x43a0 mm/khugepaged.c:2296
+    [<ffffffff8127b8b5>] kthread+0x125/0x160 kernel/kthread.c:376
+    [<ffffffff8100222f>] ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:302
+
+BUG: memory leak
+unreferenced object 0xffff88811371b6c0 (size 576):
+  comm "khugepaged", pid 32, jiffies 4295002751 (age 22.940s)
+  hex dump (first 32 bytes):
+    00 04 00 00 00 00 00 00 80 24 66 13 81 88 ff ff  .........$f.....
+    58 08 46 1d 81 88 ff ff d8 b6 71 13 81 88 ff ff  X.F.......q.....
+  backtrace:
+    [<ffffffff824aa006>] xas_alloc+0xf6/0x120 lib/xarray.c:377
+    [<ffffffff824acc55>] xas_create+0x395/0x820 lib/xarray.c:679
+    [<ffffffff824ad180>] xas_create_range+0xa0/0x1c0 lib/xarray.c:719
+    [<ffffffff815957f3>] collapse_file+0x283/0x2870 mm/khugepaged.c:1670
+    [<ffffffff8159b52c>] khugepaged_scan_file mm/khugepaged.c:2072 [inline]
+    [<ffffffff8159b52c>] khugepaged_scan_mm_slot mm/khugepaged.c:2167 [inline]
+    [<ffffffff8159b52c>] khugepaged_do_scan mm/khugepaged.c:2251 [inline]
+    [<ffffffff8159b52c>] khugepaged+0x227c/0x43a0 mm/khugepaged.c:2296
+    [<ffffffff8127b8b5>] kthread+0x125/0x160 kernel/kthread.c:376
+    [<ffffffff8100222f>] ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:302
+
+BUG: memory leak
+unreferenced object 0xffff888113666d80 (size 576):
+  comm "khugepaged", pid 32, jiffies 4295002751 (age 22.940s)
+  hex dump (first 32 bytes):
+    00 03 00 00 00 00 00 00 80 24 66 13 81 88 ff ff  .........$f.....
+    58 08 46 1d 81 88 ff ff 98 6d 66 13 81 88 ff ff  X.F......mf.....
+  backtrace:
+    [<ffffffff824aa006>] xas_alloc+0xf6/0x120 lib/xarray.c:377
+    [<ffffffff824acc55>] xas_create+0x395/0x820 lib/xarray.c:679
+    [<ffffffff824ad180>] xas_create_range+0xa0/0x1c0 lib/xarray.c:719
+    [<ffffffff815957f3>] collapse_file+0x283/0x2870 mm/khugepaged.c:1670
+    [<ffffffff8159b52c>] khugepaged_scan_file mm/khugepaged.c:2072 [inline]
+    [<ffffffff8159b52c>] khugepaged_scan_mm_slot mm/khugepaged.c:2167 [inline]
+    [<ffffffff8159b52c>] khugepaged_do_scan mm/khugepaged.c:2251 [inline]
+    [<ffffffff8159b52c>] khugepaged+0x227c/0x43a0 mm/khugepaged.c:2296
+    [<ffffffff8127b8b5>] kthread+0x125/0x160 kernel/kthread.c:376
+    [<ffffffff8100222f>] ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:302
+
+
+
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+syzbot can test patches for this issue, for details see:
+https://goo.gl/tpsmEJ#testing-patches

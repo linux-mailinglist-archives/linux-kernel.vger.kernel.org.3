@@ -2,106 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F94756CB45
-	for <lists+linux-kernel@lfdr.de>; Sat,  9 Jul 2022 21:31:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D8F2256CB49
+	for <lists+linux-kernel@lfdr.de>; Sat,  9 Jul 2022 21:51:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229535AbiGITb5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 9 Jul 2022 15:31:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48190 "EHLO
+        id S229534AbiGITu4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 9 Jul 2022 15:50:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54190 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229450AbiGITb4 (ORCPT
+        with ESMTP id S229448AbiGITuz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 9 Jul 2022 15:31:56 -0400
-Received: from mail-vs1-xe36.google.com (mail-vs1-xe36.google.com [IPv6:2607:f8b0:4864:20::e36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C867FD1A
-        for <linux-kernel@vger.kernel.org>; Sat,  9 Jul 2022 12:31:55 -0700 (PDT)
-Received: by mail-vs1-xe36.google.com with SMTP id j65so1599886vsc.3
-        for <linux-kernel@vger.kernel.org>; Sat, 09 Jul 2022 12:31:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=xlsWHsy+WSigsg0uYZliDjxgP+p+SBFZhCdQ1FFyqWg=;
-        b=WEZ0ILURpKh8sbC8lm/EYHEdBpmUWlb1LIJP7fEVKuC5/tseDNMcSLwQZv0oudbI9y
-         tNTRCeyQcMhr2SaIgvMUo06GRD8mbBY4jKcQBq6EswCLk+C517DmNnfQfnuf3CRollfm
-         vKzGsPUk+VYFJT+uTZt7I+hPqd39NPcIUnqqWgifLAuFqIrlBAWptVI24I2xIbAfDkdz
-         N+Sh/VSK/15lMLEhN/syOHbsXSgOzqUly9kYLSYdqe2I1CrUOCzvlTxJEpydXosxlCeE
-         jDhtsUH6m8Ik0vNuP4p+j/T0RrozPRiYdtTxTGW+lpRUd/D0UJN6LhBI6WkOBMq9ImPl
-         /J/w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=xlsWHsy+WSigsg0uYZliDjxgP+p+SBFZhCdQ1FFyqWg=;
-        b=6snOBt+3myv89YhkReHOYUwWY4Ayxrkkfwumr/QDSZJfbMi4WLvIvf9PJW8PqYkqL7
-         bC8Fx+cX7OWAh87htDaj+XYTZ/E9l/7AmS784KOPIG1QysB3alQKTU1T6Hn2hydQeczS
-         v2QzetoY7pPx/LIxCfcsGl2h6LECKN35MX0jPME+Llzf7PK7yf4sLFJQof5kAtkBpXw+
-         uq7eFGZkM7qTcBI/9/G4YqE1zcLUpZCZdw/zSI+73MjOVKbqsGcBP/XgxPMhR7E14O3Y
-         N8BSwFXaP/DjEEBYznh4qjY7gOGJZSRjfVp/f8yHPYkqX0vz5PRoVlCohkJs77THRC72
-         owgA==
-X-Gm-Message-State: AJIora/iuzKFpzNDWfx1EGpAqBNAE9h7xu8J29waEjI+lKQAgWj9o1VG
-        HY61W5EQiBSbGqrQQwBGu4Yy5jt6VGwYPgsnHbPvCw==
-X-Google-Smtp-Source: AGRyM1uC2aQTpOv2bSpzFZ97reIMfr0s6VV8RvjoUaHE3jCQW7GzZMlqog/s6RGckY3SERJErgCsgEwk3HW3QVCGG0w=
-X-Received: by 2002:a05:6102:3656:b0:357:406e:54a3 with SMTP id
- s22-20020a056102365600b00357406e54a3mr3173785vsu.50.1657395114649; Sat, 09
- Jul 2022 12:31:54 -0700 (PDT)
+        Sat, 9 Jul 2022 15:50:55 -0400
+Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BC272F662
+        for <linux-kernel@vger.kernel.org>; Sat,  9 Jul 2022 12:50:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=ZE0PQ0MZrLyaJYHo2cd45HOu0b/fLPvPR3wyfIGYWYE=; b=NMFVOz8OCDZFbynDpHumuV62vw
+        0nUuhix3V56rMW0YyYvRr3Khh1VKXXudSddVUDIoii+AnLHJBB/bBHDD0mdF+aw3/WvY6ft1YKdWb
+        CJ+MiYGMmV6VFRGvhFggvC48MEgKoPqMvlRc8PUK01qdEXWA3Ub1vyE/PcyreSMCVuxNRJZExMwzW
+        FVu9kXPtlela1A/k14i3dbeWWJXxbRjsnlheKBSPtDy6NPbMx7nS5wpP7/yUhOGxtJFFSA2pXVncX
+        jKflxNsCaAp5c1EI90HZNf8SAVOkeB0l0dWyUw5/c4GnEC1LKiHLPuWEWo3H6tUctAgPGxb+B3TcP
+        dlj1t2mA==;
+Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:33270)
+        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <linux@armlinux.org.uk>)
+        id 1oAGTB-0006wR-1F; Sat, 09 Jul 2022 20:50:25 +0100
+Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
+        (envelope-from <linux@shell.armlinux.org.uk>)
+        id 1oAGT3-0000l1-MC; Sat, 09 Jul 2022 20:50:17 +0100
+Date:   Sat, 9 Jul 2022 20:50:17 +0100
+From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
+To:     Conor.Dooley@microchip.com
+Cc:     paul.walmsley@sifive.com, palmer@dabbelt.com, palmer@rivosinc.com,
+        aou@eecs.berkeley.edu, sudeep.holla@arm.com,
+        catalin.marinas@arm.com, will@kernel.org,
+        gregkh@linuxfoundation.org, rafael@kernel.org, arnd@arndb.de,
+        Daire.McNamara@microchip.com, niklas.cassel@wdc.com,
+        damien.lemoal@opensource.wdc.com, geert@linux-m68k.org,
+        zong.li@sifive.com, kernel@esmil.dk, hahnjo@hahnjo.de,
+        guoren@kernel.org, anup@brainfault.org, atishp@atishpatra.org,
+        heiko@sntech.de, philipp.tomsich@vrull.eu, robh@kernel.org,
+        maz@kernel.org, viresh.kumar@linaro.org,
+        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, Brice.Goglin@inria.fr
+Subject: Re: [PATCH v2 1/2] arm64: topology: move store_cpu_topology() to
+ shared code
+Message-ID: <Ysnb+VNniRBF1Hh0@shell.armlinux.org.uk>
+References: <20220708203342.256459-1-mail@conchuod.ie>
+ <20220708203342.256459-2-mail@conchuod.ie>
+ <fb8534d9-baaa-2643-5119-602dfa5de758@microchip.com>
+ <efa89122-b428-7691-49d3-f5867206f05a@microchip.com>
 MIME-Version: 1.0
-References: <20220706220022.968789-1-yuzhao@google.com> <c576d1cc-9f67-4cf7-a851-48bc0e9f0082@gmail.com>
-In-Reply-To: <c576d1cc-9f67-4cf7-a851-48bc0e9f0082@gmail.com>
-From:   Yu Zhao <yuzhao@google.com>
-Date:   Sat, 9 Jul 2022 13:31:18 -0600
-Message-ID: <CAOUHufbhmma8phX4arNwF10xBf7as=gtc1Y7k01f6CD3v04-QQ@mail.gmail.com>
-Subject: Re: [PATCH v13 00/14] Multi-Gen LRU Framework
-To:     Bagas Sanjaya <bagasdotme@gmail.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Andi Kleen <ak@linux.intel.com>,
-        Aneesh Kumar <aneesh.kumar@linux.ibm.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Hillf Danton <hdanton@sina.com>, Jens Axboe <axboe@kernel.dk>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Matthew Wilcox <willy@infradead.org>,
-        Mel Gorman <mgorman@suse.de>,
-        Michael Larabel <Michael@michaellarabel.com>,
-        Michal Hocko <mhocko@kernel.org>,
-        Mike Rapoport <rppt@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Tejun Heo <tj@kernel.org>, Vlastimil Babka <vbabka@suse.cz>,
-        Will Deacon <will@kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        Linux-MM <linux-mm@kvack.org>,
-        "the arch/x86 maintainers" <x86@kernel.org>,
-        Kernel Page Reclaim v2 <page-reclaim@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <efa89122-b428-7691-49d3-f5867206f05a@microchip.com>
+Sender: Russell King (Oracle) <linux@armlinux.org.uk>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jul 6, 2022 at 9:03 PM Bagas Sanjaya <bagasdotme@gmail.com> wrote:
->
-> On 7/7/22 05:00, Yu Zhao wrote:
-> > TLDR
-> > ====
-> > The current page reclaim is too expensive in terms of CPU usage and it
-> > often makes poor choices about what to evict. This patchset offers an
-> > alternative solution that is performant, versatile and
-> > straightforward.
-> >
->
-> On what tree this series is based on? I tried to apply on top of mm-everything
-> tree but it didn't apply cleanly, so I had to abort.
+On Sat, Jul 09, 2022 at 12:58:57PM +0000, Conor.Dooley@microchip.com wrote:
+> +CC Russel, Arnd
+> 
+> On 08/07/2022 21:45, Conor Dooley - M52691 wrote:
+> > On 08/07/2022 21:33, Conor Dooley wrote:
+> >> From: Conor Dooley <conor.dooley@microchip.com>
+> >>
+> >> arm64's method of defining a default cpu topology requires only minimal
+> >> changes to apply to RISC-V also. The current arm64 implementation exits
+> >> early in a uniprocessor configuration by reading MPIDR & claiming that
+> >> uniprocessor can rely on the default values.
+> >>
+> >> This is appears to be a hangover from prior to '3102bc0e6ac7 ("arm64:
+> >> topology: Stop using MPIDR for topology information")', because the
+> >> current code just assigns default values for multiprocessor systems.
+> >>
+> >> With the MPIDR references removed, store_cpu_topolgy() can be moved to
+> >> the common arch_topology code.
+> >>
+> >> CC: stable@vger.kernel.org
+> >> Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
+> >> ---
+> ---8<---
+> >>  #ifdef CONFIG_ACPI
+> >>  static bool __init acpi_cpu_is_threaded(int cpu)
+> >>  {
+> >> diff --git a/drivers/base/arch_topology.c b/drivers/base/arch_topology.c
+> >> index 441e14ac33a4..07e84c6ac5c2 100644
+> >> --- a/drivers/base/arch_topology.c
+> >> +++ b/drivers/base/arch_topology.c
+> >> @@ -765,6 +765,25 @@ void update_siblings_masks(unsigned int cpuid)
+> >>  	}
+> >>  }
+> >>  
+> >> +void __weak store_cpu_topology(unsigned int cpuid)
+> > 
+> > Ahh crap, I forgot to remove the __weak.
+> > I won't immediately respin since it is minor. I've pushed it (without
+> > the __weak) to https://git.kernel.org/conor/h/arch-topo so it'll get
+> > the lkp coverage.
+> 
+> And build failure for arm32:
+> 
+> > tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/conor/linux.git arch-topo
+> > branch HEAD: df379c4b12f6b22fb8c07c2be16fd821a4fcbfc5  riscv: topology: fix default topology reporting
+> > 
+> > Error/Warning: (recently discovered and may have been fixed)
+> > 
+> > arch_topology.c:(.text+0xbac): multiple definition of `store_cpu_topology'; arch/arm/kernel/topology.o:topology.c:(.text+0x0): first defined here
+> > 
+> > Error/Warning ids grouped by kconfigs:
+> > 
+> > gcc_recent_errors
+> > `-- arm-defconfig
+> >     `-- multiple-definition-of-store_cpu_topology-arch-arm-kernel-topology.o:topology.c:(.text):first-defined-here
+> > 
+> > elapsed time: 721m
+> 
+> Looking at the arm32 implementation - it appears to be mostly the sort of MPIDR
+> stuff that was removed from the arm64 implementation in 3102bc0e6ac7 ("arm64:
+> topology: Stop using MPIDR for topology information"). Could arm32 benefit from
+> the same shared implemenation too, or is usage of MPIDR only invalid for arm64?
 
-If you are on the latest mm-unstable, then please
-git pull https://github.com/yuzhaogoogle/linux.git
-for-mm-unstable-2022-07-09-03-05
+Don't look at me... this code was contributed by Linaro, presumably for
+systems they have. I've never had anything that would require this so
+the code never interested me, so I never took much notice of it.
+
+Sorry, I can't be of more help.
+
+-- 
+RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
+FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!

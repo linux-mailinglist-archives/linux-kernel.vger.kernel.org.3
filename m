@@ -2,95 +2,173 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A9F656CA9C
-	for <lists+linux-kernel@lfdr.de>; Sat,  9 Jul 2022 18:24:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9AD8A56CAA0
+	for <lists+linux-kernel@lfdr.de>; Sat,  9 Jul 2022 18:27:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229560AbiGIQYz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 9 Jul 2022 12:24:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55652 "EHLO
+        id S229607AbiGIQ1i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 9 Jul 2022 12:27:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56834 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229481AbiGIQYx (ORCPT
+        with ESMTP id S229469AbiGIQ1h (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 9 Jul 2022 12:24:53 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24EB92D1E4
-        for <linux-kernel@vger.kernel.org>; Sat,  9 Jul 2022 09:24:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1657383893; x=1688919893;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=ZZ9lbxa7dIrj/IE1hyK6OS6d2Ha02XShiO2IltDuxWw=;
-  b=IHb5l4J6Dk7FdSnOIBTG9GUePqU/WFle+Bw+Yiy731J1GI9pNwaHRJJf
-   D7TXTTISpYd/2jBR5QrjpWJR2V5scDH6rPXdhaxHQre9phbWWchy4rfpj
-   ew2ST70ICfjvluCaamIt6njgA3O+RxkSw1Drq0vgkjEsBLXqDwQDMgJaP
-   Fx3OhpddIWAdpo6IbHT6LwqAYeD74nePpCrHR0PleGh3o+ub2xd35T2e/
-   8PgCknIhBGFO+SUYrnWICHyPSSaN1trnHfnlRx+lTok2wieIQPCHss9lj
-   9l2vjO+sqbWjb+ZwI6T95+nYvRGgyfKcFTDbnZ9SmVTVwUD8A5kOsRWep
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10403"; a="281997599"
-X-IronPort-AV: E=Sophos;i="5.92,258,1650956400"; 
-   d="scan'208";a="281997599"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Jul 2022 09:24:52 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,258,1650956400"; 
-   d="scan'208";a="621577994"
-Received: from lkp-server01.sh.intel.com (HELO 68b931ab7ac1) ([10.239.97.150])
-  by orsmga008.jf.intel.com with ESMTP; 09 Jul 2022 09:24:51 -0700
-Received: from kbuild by 68b931ab7ac1 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1oADGE-000Ouc-Ob;
-        Sat, 09 Jul 2022 16:24:50 +0000
-Date:   Sun, 10 Jul 2022 00:24:31 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Linus Walleij <linus.walleij@linaro.org>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Subject: [arm-integrator:kernel-in-vmalloc-v5.19-rc1 27/35] collect2: error:
- ld returned 1 exit status
-Message-ID: <202207100051.GAEQG09J-lkp@intel.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Sat, 9 Jul 2022 12:27:37 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BE002F3BD
+        for <linux-kernel@vger.kernel.org>; Sat,  9 Jul 2022 09:27:36 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 199C01FF53;
+        Sat,  9 Jul 2022 16:27:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1657384055; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=7uxtvX/a+1MK1A3Gv9mOnjsFc38a4bxWl6LuLZXUfbg=;
+        b=C3PZSrhaXh0JXDE57k3kHWJl/ElK/sHRD2z5Io2DOgb63nftn9gFtro1jfXSFQA+H0iKv3
+        dqet1CFb4Oh+BmO7LP0WyR9pYGQe/TMbOMx5pnjCdqIyZuDSi7Tmqk6UTOeFsHsBdEASuz
+        7HOD2yf2wltZEiRjdpTeuSOFSCP5S3g=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1657384055;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=7uxtvX/a+1MK1A3Gv9mOnjsFc38a4bxWl6LuLZXUfbg=;
+        b=JAJdUacHTJWPuypLSBNnawJgdZvKNQjyPH6ARwYBOwkJYTcJOHfcEomDrIFSiwfX1vFizk
+        hCCT795zNFt1YkCw==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id E60C713482;
+        Sat,  9 Jul 2022 16:27:34 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id 3ueJN3asyWKhYwAAMHmgww
+        (envelope-from <tiwai@suse.de>); Sat, 09 Jul 2022 16:27:34 +0000
+Date:   Sat, 09 Jul 2022 18:27:34 +0200
+Message-ID: <87a69ii749.wl-tiwai@suse.de>
+From:   Takashi Iwai <tiwai@suse.de>
+To:     Mark Brown <broonie@kernel.org>
+Cc:     Vitaly Rodionov <vitalyr@opensource.cirrus.com>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>, <alsa-devel@alsa-project.org>,
+        <patches@opensource.cirrus.com>, <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v8 00/14] ALSA: hda: cirrus: Add initial DSP support and firmware loading
+In-Reply-To: <87zghpxcsh.wl-tiwai@suse.de>
+References: <20220630002335.366545-1-vitalyr@opensource.cirrus.com>
+        <87zghpxcsh.wl-tiwai@suse.de>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) Emacs/27.2 Mule/6.0
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-integrator.git kernel-in-vmalloc-v5.19-rc1
-head:   144435741b0a6f31403d3084103678da3b4f9d11
-commit: 67a0731f120a735a7d6f8685d1fed092e460902e [27/35] powerpc: Make virt_to_pfn() a static inline
-config: powerpc-motionpro_defconfig (https://download.01.org/0day-ci/archive/20220710/202207100051.GAEQG09J-lkp@intel.com/config)
-compiler: powerpc-linux-gcc (GCC) 11.3.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-integrator.git/commit/?id=67a0731f120a735a7d6f8685d1fed092e460902e
-        git remote add arm-integrator https://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-integrator.git
-        git fetch --no-tags arm-integrator kernel-in-vmalloc-v5.19-rc1
-        git checkout 67a0731f120a735a7d6f8685d1fed092e460902e
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=powerpc prepare
+On Mon, 04 Jul 2022 14:50:06 +0200,
+Takashi Iwai wrote:
+> 
+> On Thu, 30 Jun 2022 02:23:21 +0200,
+> Vitaly Rodionov wrote:
+> > 
+> > The CS35L41 Amplifier contains a DSP, capable of running firmware.
+> > The firmware can run algorithms such as Speaker Protection, to ensure
+> > that playback at high gains do not harm the speakers.
+> > Adding support for CS35L41 firmware into the CS35L41 HDA driver also
+> > allows us to support several extra features, such as hiberation 
+> > and interrupts.
+> > 
+> > The chain adds support in stages:
+> > - General fixes to improve generalization and code re-use inside
+> >   the CS35L41 HDA driver.
+> > - Add support for interrupts into the driver, which is required
+> >   for complete support of the firmware.
+> > - Refactor ASoC CS35L41 code which deals with firmware to allow
+> >   for code re-use inside the CS35L41 HDA driver.
+> > - Add support for loading firmware and tuning files from file system,
+> >   and creating alsa controls to control it.
+> > - Support firmware load paths for different hardware systems.
+> > - Support suspend/resume in the driver when using firmware. The firmware
+> >   supports hibernation, which allows the CS35L41 to drop into a low
+> >   power mode during suspend.
+> > - Support the ability to unload firmware, swap and reload the firmware.
+> >   This is to allow different firmware to run during calibration.
+> > 
+> > The intended use-case is to load the firmware once on boot, and the driver
+> > autmatically tries to load the firmware after it binds to the HDA driver.
+> > This behaviour can be switched off using a kconfig, if desired.
+> > 
+> > changes since v7:
+> >  - Use private_data rather than private_value to save control info
+> >  - Clean up alsa control memory allocation/deallocation
+> >  - Remove unnecessary whitespace
+> >  - Get subsystem id from codec, rather than saving it separately
+> > 
+> > changes since v6:
+> >  - Fix warning by kernel test robot <lkp@intel.com>
+> >  
+> > changes since v5:
+> >  - Fix warning by kernel test robot <lkp@intel.com>
+> >  
+> > changes since v4:
+> > - Fully remove tlv remnants from control add apis
+> > - Remove unnecessary debug
+> > - Rename variable to be more generic
+> > - Remove redundent length check from read/write control apis
+> > 
+> > 
+> > - Use SNDRV_CTL_ELEM_IFACE_CARD for firmware load controls
+> > - Make kcontrol add/remove synchronous
+> > - Load firmware asynchronous when loading via control
+> > - Used cached controls when reloading firmware; only delete
+> > controls when removing the driver itself
+> > 
+> > 
+> > - Improve kcontrol remove
+> > - Fix control write + notify
+> > - Cleanup of unnecessary code
+> > - Fix race condition when loading firmware before playback
+> > - Ensure errors are properly propogated
+> > - Fix include for Module parameters
+> > 
+> > Stefan Binding (13):
+> >   ALSA: hda: hda_cs_dsp_ctl: Add Library to support CS_DSP ALSA controls
+> >   ALSA: hda: hda_cs_dsp_ctl: Add apis to write the controls directly
+> >   ALSA: hda: cs35l41: Save codec object inside component struct
+> >   ALSA: hda: cs35l41: Save Subsystem ID inside CS35L41 Driver
+> >   ALSA: hda: cs35l41: Support reading subsystem id from ACPI
+> >   ALSA: hda: cs35l41: Support multiple load paths for firmware
+> >   ALSA: hda: cs35l41: Support Speaker ID for laptops
+> >   ALSA: hda: cs35l41: Support Hibernation during Suspend
+> >   ALSA: hda: cs35l41: Read Speaker Calibration data from UEFI variables
+> >   ALSA: hda: hda_cs_dsp_ctl: Add fw id strings
+> >   ALSA: hda: cs35l41: Add defaulted values into dsp bypass config
+> >     sequence
+> >   ALSA: hda: cs35l41: Support Firmware switching and reloading
+> >   ALSA: hda: cs35l41: Add module parameter to control firmware load
+> > 
+> > Vitaly Rodionov (1):
+> >   ALSA: hda: cs35l41: Add initial DSP support and firmware loading
+> 
+> Thanks, this version looks better than previous ones, and I'm fine to
+> apply as is, to make things going forward.  But this seems requiring
+> the prerequisite in ASoC codec side.
+> 
+> Mark, could you send a PR to merge into my tree so that I can apply
+> those series?
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+Mark?
 
-All errors (new ones prefixed by >>):
+This series need the ASoC for-next change as prerequisite.
 
-   /opt/cross/gcc-11.3.0-nolibc/powerpc-linux/bin/../lib/gcc/powerpc-linux/11.3.0/../../../../powerpc-linux/bin/ld:arch/powerpc/kernel/vdso/vdso32.lds:242: syntax error
->> collect2: error: ld returned 1 exit status
-   make[2]: *** [arch/powerpc/kernel/vdso/Makefile:66: arch/powerpc/kernel/vdso/vdso32.so.dbg] Error 1
-   make[2]: Target 'include/generated/vdso32-offsets.h' not remade because of errors.
-   make[1]: *** [arch/powerpc/Makefile:422: vdso_prepare] Error 2
-   make[1]: Target 'prepare' not remade because of errors.
-   make: *** [Makefile:219: __sub-make] Error 2
-   make: Target 'prepare' not remade because of errors.
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+thanks,
+
+Takashi

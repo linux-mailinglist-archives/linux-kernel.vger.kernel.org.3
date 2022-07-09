@@ -2,63 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8247A56C993
-	for <lists+linux-kernel@lfdr.de>; Sat,  9 Jul 2022 15:38:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 888B156C999
+	for <lists+linux-kernel@lfdr.de>; Sat,  9 Jul 2022 15:43:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229621AbiGINil (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 9 Jul 2022 09:38:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51084 "EHLO
+        id S229600AbiGINnP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 9 Jul 2022 09:43:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53042 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229581AbiGINig (ORCPT
+        with ESMTP id S229640AbiGINnL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 9 Jul 2022 09:38:36 -0400
-Received: from mailrelay3-1.pub.mailoutpod1-cph3.one.com (mailrelay3-1.pub.mailoutpod1-cph3.one.com [46.30.210.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A402B878
-        for <linux-kernel@vger.kernel.org>; Sat,  9 Jul 2022 06:38:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ravnborg.org; s=rsa1;
-        h=in-reply-to:content-type:mime-version:references:message-id:subject:cc:to:
-         from:date:from;
-        bh=XmkcfsDh57jd1J2jvUdL+BZKRd9qAe04YaTvDGQ4b5o=;
-        b=Zo5LqVUaSgfH1W5v9cXv82HIf2UTJGKnsGbh9Q5tzQ5DCQVt79EHEiPIYgGqC+LE6cN0xxGkryJDx
-         Sp02VZSmTBldxoUo61et9Qo2JEd9uUmzNkIIKYq559XURbuO8uDvFwZs+u32a+rWhq/PQyS+SnSw89
-         HimmnJkdp5Ju4TTcVkXNMc+L2IeyHNsCPV2femt6bvayQs9DetIkw6DnJsrkIu6ezP+gWpDC4pnLst
-         MmlDrPUqgq5sjtMzIVIKVwzsiOI0OI5XKk+7BUokSL7RTJio7Y5RPlUoZCByQ+PeVKO4Mp7rt24cRZ
-         p4HI8rrjcytPKML9EX1DQLjkw3fSQDg==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed;
-        d=ravnborg.org; s=ed1;
-        h=in-reply-to:content-type:mime-version:references:message-id:subject:cc:to:
-         from:date:from;
-        bh=XmkcfsDh57jd1J2jvUdL+BZKRd9qAe04YaTvDGQ4b5o=;
-        b=6o3gycdRpEHGoNrAwURicgyEGwLg1iuyxseqGoOk4kRzw82swxTrUITH5wBxDFk1KMBrTPUNWvZOh
-         dt2Z1nrAQ==
-X-HalOne-Cookie: aedeed65c7618423d082425d94c8b2f248725526
-X-HalOne-ID: 6b4eb816-ff8c-11ec-be7e-d0431ea8bb03
-Received: from mailproxy2.cst.dirpod3-cph3.one.com (2-105-2-98-cable.dk.customer.tdc.net [2.105.2.98])
-        by mailrelay3.pub.mailoutpod1-cph3.one.com (Halon) with ESMTPSA
-        id 6b4eb816-ff8c-11ec-be7e-d0431ea8bb03;
-        Sat, 09 Jul 2022 13:38:30 +0000 (UTC)
-Date:   Sat, 9 Jul 2022 15:38:28 +0200
-From:   Sam Ravnborg <sam@ravnborg.org>
-To:     Geert Uytterhoeven <geert@linux-m68k.org>
-Cc:     Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>, linux-fbdev@vger.kernel.org,
-        linux-m68k@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 00/10] drm: Add support for low-color frame buffer
- formats
-Message-ID: <YsmE1D8lGp4XKs99@ravnborg.org>
-References: <cover.1657294931.git.geert@linux-m68k.org>
+        Sat, 9 Jul 2022 09:43:11 -0400
+Received: from smtpbg.qq.com (biz-43-154-54-12.mail.qq.com [43.154.54.12])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D67F2A71C
+        for <linux-kernel@vger.kernel.org>; Sat,  9 Jul 2022 06:43:04 -0700 (PDT)
+X-QQ-mid: bizesmtp70t1657374138txfaxags
+Received: from localhost.localdomain ( [182.148.15.109])
+        by bizesmtp.qq.com (ESMTP) with 
+        id ; Sat, 09 Jul 2022 21:42:14 +0800 (CST)
+X-QQ-SSF: 01000000002000B0C000C00A0000000
+X-QQ-FEAT: Usw2mCIyiSDpjfIrte+Fl+Lo8sSPiNz4BAYDaZ/JV3XiWuZwayuWMprIlc94I
+        eSHl15N30NOqM4kEt7CN+QLjcKrA86Zb/0wFJBGdBCT/jRGCyhaQlF/6zUHcM+WE/wtRfz4
+        CdmXsrTWid9HbNhMpY4ykazdBMgL+ZYZQqsissfVCPoWN+M0eJh+IU34rg+AgVzmOFMkcue
+        po7LucFeuyQzc6vYI18bJIYfDWGNQJ1Yse8N5ffuT9M/xTmDRHNxSeN8Rb19oGE7tHxim0b
+        ouRS5N21iTmVe9JAw2n2YRY8OoQW1oLwYXVNd600aeb/HD3s9+8pk00xlf3/6j5Fl5RKGJB
+        ENQY+9qjpn7ivBAgL3P5eq3m7igvb4cOWYKrnRGn2xI/lFnGYhu5CsICDUy/Q==
+X-QQ-GoodBg: 0
+From:   Jilin Yuan <yuanjilin@cdjrlc.com>
+To:     aspriel@gmail.com, franky.lin@broadcom.com,
+        hante.meuleman@broadcom.com, kvalo@kernel.org, davem@davemloft.net,
+        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com
+Cc:     linux-wireless@vger.kernel.org,
+        brcm80211-dev-list.pdl@broadcom.com,
+        SHA-cyfmac-dev-list@infineon.com, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Jilin Yuan <yuanjilin@cdjrlc.com>
+Subject: [PATCH] wifi: brcmsmac: fix repeated words in comments
+Date:   Sat,  9 Jul 2022 21:42:07 +0800
+Message-Id: <20220709134207.30856-1-yuanjilin@cdjrlc.com>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <cover.1657294931.git.geert@linux-m68k.org>
-X-Spam-Status: No, score=-0.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLACK autolearn=no
+Content-Transfer-Encoding: 8bit
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:cdjrlc.com:qybglogicsvr:qybglogicsvr4
+X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,RDNS_DYNAMIC,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,T_SPF_HELO_TEMPERROR autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -66,37 +52,26 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Geert,
+ Delete the redundant word 'the'.
 
-On Fri, Jul 08, 2022 at 08:20:45PM +0200, Geert Uytterhoeven wrote:
-> 	Hi all,
-> 
-> A long outstanding issue with the DRM subsystem has been the lack of
-> support for low-color displays, as used typically on older desktop
-> systems, and on small embedded displays.
+Signed-off-by: Jilin Yuan <yuanjilin@cdjrlc.com>
+---
+ drivers/net/wireless/broadcom/brcm80211/brcmsmac/main.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-IT is super to have this addressed - thanks!
+diff --git a/drivers/net/wireless/broadcom/brcm80211/brcmsmac/main.c b/drivers/net/wireless/broadcom/brcm80211/brcmsmac/main.c
+index 8ddfc3d06687..11b33e78127c 100644
+--- a/drivers/net/wireless/broadcom/brcm80211/brcmsmac/main.c
++++ b/drivers/net/wireless/broadcom/brcm80211/brcmsmac/main.c
+@@ -3800,7 +3800,7 @@ static void brcms_b_set_shortslot(struct brcms_hardware *wlc_hw, bool shortslot)
+ }
+ 
+ /*
+- * Suspend the the MAC and update the slot timing
++ * Suspend the MAC and update the slot timing
+  * for standard 11b/g (20us slots) or shortslot 11g (9us slots).
+  */
+ static void brcms_c_switch_shortslot(struct brcms_c_info *wlc, bool shortslot)
+-- 
+2.36.1
 
-> 
-> This patch series adds support for color-indexed frame buffer formats
-> with 2, 4, and 16 colors.  It has been tested on ARAnyM using a
-> work-in-progress Atari DRM driver supporting 2, 4, 16, 256, and 65536
-> colors, with text console operation, fbtest, and modetest.
-> 
-> Overview:
->   - Patch 1 introduces a helper, to be used by later patches in the
->     series,
->   - Patch 2 introduces a flag to indicate color-indexed formats,
->   - Patches 3 and 4 correct calculations of bits per pixel for sub-byte
->     pixel formats,
->   - Patches 5 and 6 introduce the new C[124] formats,
->   - Patch 7 fixes an untested code path,
->   - Patch 8 documents the use of "red" for light-on-dark displays,
->   - Patches 9 and 10 add more fourcc codes for light-on-dark and
->     dark-on-light frame buffer formats, which may be useful for e.g. the
->     ssd130x and repaper drivers.
-
-Applied all patches to drm-misc (drm-misc-next), including the last two
-RFC patches as we then have the formats ready when a user pops up.
-
-	Sam

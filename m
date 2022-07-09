@@ -2,126 +2,220 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E6FC156CB15
-	for <lists+linux-kernel@lfdr.de>; Sat,  9 Jul 2022 20:30:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B662D56CB18
+	for <lists+linux-kernel@lfdr.de>; Sat,  9 Jul 2022 20:37:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229541AbiGISag (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 9 Jul 2022 14:30:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51090 "EHLO
+        id S229555AbiGIShM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 9 Jul 2022 14:37:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53260 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229450AbiGISaf (ORCPT
+        with ESMTP id S229450AbiGIShL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 9 Jul 2022 14:30:35 -0400
-Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D60F22BF1;
-        Sat,  9 Jul 2022 11:30:34 -0700 (PDT)
-Received: by mail-wr1-x42a.google.com with SMTP id z12so2198512wrq.7;
-        Sat, 09 Jul 2022 11:30:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=UzXTEzvirVIfQgpRsZ+S3IQH5KHrdqAU7esxyuqlcI4=;
-        b=azFPTNNmWWMPgUFKlPXqmgq48Ky1+NFueWA8CeF4u6bOZNNqI/ZouXYtrZzIQI8369
-         tHNRrJbP3Sk+Qceww9e7NnrcuDgJ6oXsFN+7UXhcMdUokeJ6YJlHAlJxMvos2ldKLn3j
-         7qnyIMJNcvc4n+99h6ZoUqIl96IBxZcSLUP2Row3p9htPHtQDjaOVGMxEPZIg0ThAzku
-         JP/YMWoEj/7gz/zYLt8XR5fUmxUTGzc7A4L/NsKoD1clU44nb9/glj7xUMteE9ztqdCY
-         xScs/VQryAk4+7BFaPGN8I56D8qyIDvJpCmOtxLQds1DYNF1pzvoTJw1JwfwK48t37Iw
-         OhgA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=UzXTEzvirVIfQgpRsZ+S3IQH5KHrdqAU7esxyuqlcI4=;
-        b=1WErL9gRAaSUpnV0O/zACf4Otbi+i9fUONTvA1FYoTZAuIbhVSkeUPGZjUQ9YyBTmH
-         s73OnP6+Oug3htKeQDoK+MOhoQhiB9xFNUQuY8oBrN/yBEMa3cdGA6cXoAJ6sUZ9HTsK
-         yHGXkUcZDxjfmf3XV03kem1hgF9T5ARn3kgGHjLCjwOcr5Pht+NRpLe/W+c5BAcbDZNI
-         l42wgKlTbWBBQM01NTFuj33NUKD7y5/Vq6bfSpXBVmrMvp0cugi8Gp/6blFABvnjIysU
-         NJ1nrL4RBcbwmAIklKSndGKM9ENUo7ACqT9gr+Vr+JlWSXVpAPfAb11/A4eJZYtig5vI
-         sgYg==
-X-Gm-Message-State: AJIora9C/tSKcYWnLs92tN6Gylh1OvJFoP3SKmiI/ZQb9pgeOKR+QzKe
-        +aHHJOBSOFWVU6I0rcBk1Bk=
-X-Google-Smtp-Source: AGRyM1tAtrtLBOTNfS7tOy8h/BBFOAIT9pR7nVNc89ZMI3mrlIbdzOc1A9K2XpDn13ZLjn4N3vi0ng==
-X-Received: by 2002:adf:e0c9:0:b0:21b:8271:2348 with SMTP id m9-20020adfe0c9000000b0021b82712348mr8620979wri.222.1657391432677;
-        Sat, 09 Jul 2022 11:30:32 -0700 (PDT)
-Received: from opensuse.localnet (host-95-235-102-55.retail.telecomitalia.it. [95.235.102.55])
-        by smtp.gmail.com with ESMTPSA id j9-20020a05600c190900b0039db31f6372sm6358721wmq.2.2022.07.09.11.30.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 09 Jul 2022 11:30:31 -0700 (PDT)
-From:   "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
-To:     Ira Weiny <ira.weiny@intel.com>
-Cc:     Benjamin LaHaise <bcrl@kvack.org>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Eric Biederman <ebiederm@xmission.com>,
-        Kees Cook <keescook@chromium.org>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Matthew Wilcox <willy@infradead.org>, Jan Kara <jack@suse.cz>,
-        Jeff Layton <jlayton@kernel.org>,
-        Chuck Lever <chuck.lever@oracle.com>,
-        Jens Axboe <axboe@kernel.dk>,
-        Pavel Begunkov <asml.silence@gmail.com>,
+        Sat, 9 Jul 2022 14:37:11 -0400
+Received: from mx-out.tlen.pl (mx-out.tlen.pl [193.222.135.142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9E1F2E6BB
+        for <linux-kernel@vger.kernel.org>; Sat,  9 Jul 2022 11:37:07 -0700 (PDT)
+Received: (wp-smtpd smtp.tlen.pl 9058 invoked from network); 9 Jul 2022 20:37:03 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=o2.pl; s=1024a;
+          t=1657391824; bh=PnTIgijObtdHBzPdGf97iNIAxypJwO/J5OJygIk/A+Q=;
+          h=From:To:Cc:Subject;
+          b=M3xXvXPo44c/oTFtofd97vXupQxZZRnHZ1QXVOSPw4+yIaVOyozndF1N0qedu+hmX
+           iWYIpTCxTwdLyxWyxyXo8glXqq/SXci9daFK2ahe4hCDn9SitX/S1V2jzUdBdh2lJb
+           YcIJlSh1Z7Kc4K1csdNYZhmnvjQHx4D8GzINnbz4=
+Received: from aafi210.neoplus.adsl.tpnet.pl (HELO localhost.localdomain) (mat.jonczyk@o2.pl@[83.4.138.210])
+          (envelope-sender <mat.jonczyk@o2.pl>)
+          by smtp.tlen.pl (WP-SMTPD) with SMTP
+          for <linux-kernel@vger.kernel.org>; 9 Jul 2022 20:37:03 +0200
+From:   =?UTF-8?q?Mateusz=20Jo=C5=84czyk?= <mat.jonczyk@o2.pl>
+To:     linux-kernel@vger.kernel.org
+Cc:     =?UTF-8?q?Mateusz=20Jo=C5=84czyk?= <mat.jonczyk@o2.pl>,
         Thomas Gleixner <tglx@linutronix.de>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Tom Rix <trix@redhat.com>, linux-aio@kvack.org,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, nvdimm@lists.linux.dev,
-        io-uring@vger.kernel.org, linux-riscv@lists.infradead.org,
-        llvm@lists.linux.dev
-Subject: Re: [PATCH] fs: Replace kmap{,_atomic}() with kmap_local_page()
-Date:   Sat, 09 Jul 2022 20:30:28 +0200
-Message-ID: <5600017.DvuYhMxLoT@opensuse>
-In-Reply-To: <YsiQptk19txHrG4c@iweiny-desk3>
-References: <20220630163527.9776-1-fmdefrancesco@gmail.com> <YsiQptk19txHrG4c@iweiny-desk3>
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>
+Subject: [PATCH v3 1/2] x86/rtc: rewrite mach_get_cmos_time to delete duplicated code
+Date:   Sat,  9 Jul 2022 20:36:49 +0200
+Message-Id: <20220709183650.74955-1-mat.jonczyk@o2.pl>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset="utf-8"
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-WP-MailID: 9d5acd286c9464547322a3e133dbf717
+X-WP-AV: skaner antywirusowy Poczty o2
+X-WP-SPAM: NO 0000000 [UWOE]                               
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On venerd=C3=AC 8 luglio 2022 22:18:35 CEST Ira Weiny wrote:
-> On Thu, Jun 30, 2022 at 06:35:27PM +0200, Fabio M. De Francesco wrote:
-> > The use of kmap() and kmap_atomic() are being deprecated in favor of
-> > kmap_local_page().
-> >=20
-> > With kmap_local_page(), the mappings are per thread, CPU local and not
-> > globally visible. Furthermore, the mappings can be acquired from any
-> > context (including interrupts).
-> >=20
-> > Therefore, use kmap_local_page() in exec.c because these mappings are=20
-per
-> > thread, CPU local, and not globally visible.
-> >=20
-> > Tested with xfstests on a QEMU + KVM 32-bits VM booting a kernel with
-> > HIGHMEM64GB enabled.
-> >=20
-> > Suggested-by: Ira Weiny <ira.weiny@intel.com>
->=20
-> This looks good but there is a kmap_atomic() in this file which I _think_=
-=20
-can
-> be converted as well.  But that is good as a separate patch.
->=20
-> Reviewed-by: Ira Weiny <ira.weiny@intel.com>
->=20
+There are functions in drivers/rtc/rtc-mc146818-lib.c that handle
+reading from / writing to the CMOS RTC clock. mach_get_cmos_time() in
+arch/x86/kernel/rtc.c did not use them and was mostly a duplicate of
+mc146818_get_time(). Modify mach_get_cmos_time() to use
+mc146818_get_time() and remove the duplicated code.
 
-Thanks for your review!
+mach_get_cmos_time() used a different algorithm than
+mc146818_get_time(), but these functions are equivalent. The major
+differences are:
 
-I didn't notice that kmap_atomic(). I'll send a conversion with a separate=
-=20
-patch.
+- mc146818_get_time() is better refined and handles various edge
+  conditions,
 
-=46abio
+- when the UIP ("Update in progress") bit of the RTC is set,
+  mach_get_cmos_time() was busy waiting with cpu_relax() while
+  mc146818_get_time() is using mdelay(1) in every loop iteration.
+  (However, there is my commit queued for Linux 5.20
+  in Mr Alexandre Belloni's tree to decrease this period to 100us:
+commit d2a632a8a117 ("rtc: mc146818-lib: reduce RTC_UIP polling period")
+  ),
 
+- mach_get_cmos_time() assumed that the RTC year is >= 2000, which
+  may not be true on some old boxes with a dead battery,
 
+- mach_get_cmos_time() was holding the rtc_lock for a long time
+  and could hang if the RTC is broken or not present.
+
+The RTC writing counterpart, mach_set_rtc_mmss() is already using
+mc146818_get_time() from drivers/rtc. This was done in
+        commit 3195ef59cb42 ("x86: Do full rtc synchronization with ntp")
+It appears that mach_get_cmos_time() was simply forgotten.
+
+mach_get_cmos_time() is really used only in read_persistent_clock64(),
+which is called only in a few places in kernel/time/timekeeping.c .
+
+Tested on 3 computers.
+
+Signed-off-by: Mateusz Jończyk <mat.jonczyk@o2.pl>
+Cc: Thomas Gleixner <tglx@linutronix.de>
+Cc: Ingo Molnar <mingo@redhat.com>
+Cc: Borislav Petkov <bp@alien8.de>
+Cc: Dave Hansen <dave.hansen@linux.intel.com>
+Cc: x86@kernel.org
+Cc: "H. Peter Anvin" <hpa@zytor.com>
+Cc: Alessandro Zummo <a.zummo@towertech.it>
+Cc: Alexandre Belloni <alexandre.belloni@bootlin.com>
+Acked-by: Alexandre Belloni <alexandre.belloni@bootlin.com>
+
+---
+
+v2:
+  - use pr_err() in place of pr_err_ratelimited(). mach_get_cmos_time()
+    is not called frequently, so ratelimiting is not necessary.
+  - tweak the commit description.
+v3:
+  - update the commit description,
+  - drop the cover letter.
+
+ arch/x86/kernel/rtc.c | 59 +++++--------------------------------------
+ 1 file changed, 7 insertions(+), 52 deletions(-)
+
+diff --git a/arch/x86/kernel/rtc.c b/arch/x86/kernel/rtc.c
+index 586f718b8e95..1cadc8a15267 100644
+--- a/arch/x86/kernel/rtc.c
++++ b/arch/x86/kernel/rtc.c
+@@ -4,11 +4,8 @@
+  */
+ #include <linux/platform_device.h>
+ #include <linux/mc146818rtc.h>
+-#include <linux/acpi.h>
+-#include <linux/bcd.h>
+ #include <linux/export.h>
+ #include <linux/pnp.h>
+-#include <linux/of.h>
+ 
+ #include <asm/vsyscall.h>
+ #include <asm/x86_init.h>
+@@ -20,15 +17,12 @@
+ /*
+  * This is a special lock that is owned by the CPU and holds the index
+  * register we are working with.  It is required for NMI access to the
+- * CMOS/RTC registers.  See include/asm-i386/mc146818rtc.h for details.
++ * CMOS/RTC registers.  See arch/x86/include/asm/mc146818rtc.h for details.
+  */
+ volatile unsigned long cmos_lock;
+ EXPORT_SYMBOL(cmos_lock);
+ #endif /* CONFIG_X86_32 */
+ 
+-/* For two digit years assume time is always after that */
+-#define CMOS_YEARS_OFFS 2000
+-
+ DEFINE_SPINLOCK(rtc_lock);
+ EXPORT_SYMBOL(rtc_lock);
+ 
+@@ -62,8 +56,7 @@ int mach_set_rtc_mmss(const struct timespec64 *now)
+ 
+ void mach_get_cmos_time(struct timespec64 *now)
+ {
+-	unsigned int status, year, mon, day, hour, min, sec, century = 0;
+-	unsigned long flags;
++	struct rtc_time tm;
+ 
+ 	/*
+ 	 * If pm_trace abused the RTC as storage, set the timespec to 0,
+@@ -74,51 +67,13 @@ void mach_get_cmos_time(struct timespec64 *now)
+ 		return;
+ 	}
+ 
+-	spin_lock_irqsave(&rtc_lock, flags);
+-
+-	/*
+-	 * If UIP is clear, then we have >= 244 microseconds before
+-	 * RTC registers will be updated.  Spec sheet says that this
+-	 * is the reliable way to read RTC - registers. If UIP is set
+-	 * then the register access might be invalid.
+-	 */
+-	while ((CMOS_READ(RTC_FREQ_SELECT) & RTC_UIP))
+-		cpu_relax();
+-
+-	sec = CMOS_READ(RTC_SECONDS);
+-	min = CMOS_READ(RTC_MINUTES);
+-	hour = CMOS_READ(RTC_HOURS);
+-	day = CMOS_READ(RTC_DAY_OF_MONTH);
+-	mon = CMOS_READ(RTC_MONTH);
+-	year = CMOS_READ(RTC_YEAR);
+-
+-#ifdef CONFIG_ACPI
+-	if (acpi_gbl_FADT.header.revision >= FADT2_REVISION_ID &&
+-	    acpi_gbl_FADT.century)
+-		century = CMOS_READ(acpi_gbl_FADT.century);
+-#endif
+-
+-	status = CMOS_READ(RTC_CONTROL);
+-	WARN_ON_ONCE(RTC_ALWAYS_BCD && (status & RTC_DM_BINARY));
+-
+-	spin_unlock_irqrestore(&rtc_lock, flags);
+-
+-	if (RTC_ALWAYS_BCD || !(status & RTC_DM_BINARY)) {
+-		sec = bcd2bin(sec);
+-		min = bcd2bin(min);
+-		hour = bcd2bin(hour);
+-		day = bcd2bin(day);
+-		mon = bcd2bin(mon);
+-		year = bcd2bin(year);
++	if (mc146818_get_time(&tm)) {
++		pr_err("Unable to read current time from RTC\n");
++		now->tv_sec = now->tv_nsec = 0;
++		return;
+ 	}
+ 
+-	if (century) {
+-		century = bcd2bin(century);
+-		year += century * 100;
+-	} else
+-		year += CMOS_YEARS_OFFS;
+-
+-	now->tv_sec = mktime64(year, mon, day, hour, min, sec);
++	now->tv_sec = rtc_tm_to_time64(&tm);
+ 	now->tv_nsec = 0;
+ }
+ 
+-- 
+2.25.1
 

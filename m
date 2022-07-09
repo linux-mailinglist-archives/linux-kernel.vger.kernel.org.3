@@ -2,133 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 839CB56C794
-	for <lists+linux-kernel@lfdr.de>; Sat,  9 Jul 2022 08:40:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EDCE256C78E
+	for <lists+linux-kernel@lfdr.de>; Sat,  9 Jul 2022 08:33:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229577AbiGIGkb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 9 Jul 2022 02:40:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41424 "EHLO
+        id S229545AbiGIGc6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 9 Jul 2022 02:32:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37164 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229516AbiGIGka (ORCPT
+        with ESMTP id S229456AbiGIGc5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 9 Jul 2022 02:40:30 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B1A4419A6
-        for <linux-kernel@vger.kernel.org>; Fri,  8 Jul 2022 23:40:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1657348829; x=1688884829;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=G+BoR8wm+nr7ZKLBztHNG61qEu73r2abCgp17a+KsP8=;
-  b=nAOdXqNVIa9fAAvoGOMLqxWBxaG8kbqZjLF4Avb8V4mfyQFX25oMadEb
-   zn6RJxdD+dZoIkOCrDTV45WzBOnTvUpLYmqonsp4m3E1jZjzFTMiR0DlC
-   vQKz9I8R9qbrFj7OcqnQ+JR2OuRq6uGeQDnFcBeTX3zmWWV6r3eTwdEYh
-   5m8yyp4LgcvVXZLWxPwkTduKeCJum041/ENYxryQZbwWwPmQzRL8waAgx
-   lUH65DHjC+c0IdYVzeJlvpLJJD7I56kZiq3HsiOZQtyDvEKZyoKV2sudT
-   EVfplA0MVmRVyZJPsU1amKoTxyagqHXqJ/q9cobalhvJHWDRCWN6gO+hW
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10402"; a="310004272"
-X-IronPort-AV: E=Sophos;i="5.92,256,1650956400"; 
-   d="scan'208";a="310004272"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jul 2022 23:40:28 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,256,1650956400"; 
-   d="scan'208";a="626937272"
-Received: from lkp-server01.sh.intel.com (HELO 68b931ab7ac1) ([10.239.97.150])
-  by orsmga001.jf.intel.com with ESMTP; 08 Jul 2022 23:40:26 -0700
-Received: from kbuild by 68b931ab7ac1 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1oA48g-000OOk-9k;
-        Sat, 09 Jul 2022 06:40:26 +0000
-Date:   Sat, 9 Jul 2022 14:40:09 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Mark Rutland <mark.rutland@arm.com>
-Cc:     kbuild-all@lists.01.org,
-        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
-        linux-kernel@vger.kernel.org, Sasha Levin <sashal@kernel.org>,
-        Marc Zyngier <maz@kernel.org>
-Subject: [ammarfaizi2-block:stable/linux-stable-rc/queue/5.15 156/161]
- drivers/irqchip/irq-gic-v3.c:666:9: error: expected ';' before 'err'
-Message-ID: <202207091422.mERbR7Ce-lkp@intel.com>
+        Sat, 9 Jul 2022 02:32:57 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2AFEA66BB7
+        for <linux-kernel@vger.kernel.org>; Fri,  8 Jul 2022 23:32:55 -0700 (PDT)
+Received: from dggemv703-chm.china.huawei.com (unknown [172.30.72.54])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4Lg0bs3LMmzTgm0;
+        Sat,  9 Jul 2022 14:29:13 +0800 (CST)
+Received: from kwepemm600015.china.huawei.com (7.193.23.52) by
+ dggemv703-chm.china.huawei.com (10.3.19.46) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Sat, 9 Jul 2022 14:32:51 +0800
+Received: from huawei.com (10.175.127.227) by kwepemm600015.china.huawei.com
+ (7.193.23.52) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Sat, 9 Jul
+ 2022 14:32:50 +0800
+From:   ChenXiaoSong <chenxiaosong2@huawei.com>
+To:     <anton@tuxera.com>, <akpm@linux-foundation.org>
+CC:     <linux-ntfs-dev@lists.sourceforge.net>,
+        <linux-kernel@vger.kernel.org>, <yin31149@gmail.com>
+Subject: [PATCH v3] ntfs: fix use-after-free in ntfs_ucsncmp()
+Date:   Sat, 9 Jul 2022 14:45:11 +0800
+Message-ID: <20220709064511.3304299-1-chenxiaosong2@huawei.com>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,
-        RCVD_IN_DNSWL_HI,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.127.227]
+X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
+ kwepemm600015.china.huawei.com (7.193.23.52)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/ammarfaizi2/linux-block stable/linux-stable-rc/queue/5.15
-head:   ab88938c957f2e2edc60e19ab6df7830fc1c6914
-commit: 66b9343ecbdd4d09a72bc854094a03ca858c2077 [156/161] irqchip/gic-v3: Ensure pseudo-NMIs have an ISB between ack and handling
-config: arm-defconfig (https://download.01.org/0day-ci/archive/20220709/202207091422.mERbR7Ce-lkp@intel.com/config)
-compiler: arm-linux-gnueabi-gcc (GCC) 11.3.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/ammarfaizi2/linux-block/commit/66b9343ecbdd4d09a72bc854094a03ca858c2077
-        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
-        git fetch --no-tags ammarfaizi2-block stable/linux-stable-rc/queue/5.15
-        git checkout 66b9343ecbdd4d09a72bc854094a03ca858c2077
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash drivers/
+Syzkaller reported use-after-free bug as follows:
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+==================================================================
+BUG: KASAN: use-after-free in ntfs_ucsncmp+0x123/0x130
+Read of size 2 at addr ffff8880751acee8 by task a.out/879
 
-All errors (new ones prefixed by >>):
+CPU: 7 PID: 879 Comm: a.out Not tainted 5.19.0-rc4-next-20220630-00001-gcc5218c8bd2c-dirty #7
+Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS rel-1.16.0-0-gd239552ce722-prebuilt.qemu.org 04/01/2014
+Call Trace:
+ <TASK>
+ dump_stack_lvl+0x1c0/0x2b0
+ print_address_description.constprop.0.cold+0xd4/0x484
+ print_report.cold+0x55/0x232
+ kasan_report+0xbf/0xf0
+ ntfs_ucsncmp+0x123/0x130
+ ntfs_are_names_equal.cold+0x2b/0x41
+ ntfs_attr_find+0x43b/0xb90
+ ntfs_attr_lookup+0x16d/0x1e0
+ ntfs_read_locked_attr_inode+0x4aa/0x2360
+ ntfs_attr_iget+0x1af/0x220
+ ntfs_read_locked_inode+0x246c/0x5120
+ ntfs_iget+0x132/0x180
+ load_system_files+0x1cc6/0x3480
+ ntfs_fill_super+0xa66/0x1cf0
+ mount_bdev+0x38d/0x460
+ legacy_get_tree+0x10d/0x220
+ vfs_get_tree+0x93/0x300
+ do_new_mount+0x2da/0x6d0
+ path_mount+0x496/0x19d0
+ __x64_sys_mount+0x284/0x300
+ do_syscall_64+0x3b/0xc0
+ entry_SYSCALL_64_after_hwframe+0x46/0xb0
+RIP: 0033:0x7f3f2118d9ea
+Code: 48 8b 0d a9 f4 0b 00 f7 d8 64 89 01 48 83 c8 ff c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 44 00 00 49 89 ca b8 a5 00 00 00 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 8b 0d 76 f4 0b 00 f7 d8 64 89 01 48
+RSP: 002b:00007ffc269deac8 EFLAGS: 00000202 ORIG_RAX: 00000000000000a5
+RAX: ffffffffffffffda RBX: 0000000000000000 RCX: 00007f3f2118d9ea
+RDX: 0000000020000000 RSI: 0000000020000100 RDI: 00007ffc269dec00
+RBP: 00007ffc269dec80 R08: 00007ffc269deb00 R09: 00007ffc269dec44
+R10: 0000000000000000 R11: 0000000000000202 R12: 000055f81ab1d220
+R13: 0000000000000000 R14: 0000000000000000 R15: 0000000000000000
+ </TASK>
 
-   drivers/irqchip/irq-gic-v3.c: In function 'gic_handle_nmi':
->> drivers/irqchip/irq-gic-v3.c:666:9: error: expected ';' before 'err'
-     666 |         err = handle_domain_nmi(gic_data.domain, irqnr, regs);
-         |         ^~~
+The buggy address belongs to the physical page:
+page:0000000085430378 refcount:1 mapcount:1 mapping:0000000000000000 index:0x555c6a81d pfn:0x751ac
+memcg:ffff888101f7e180
+anon flags: 0xfffffc00a0014(uptodate|lru|mappedtodisk|swapbacked|node=0|zone=1|lastcpupid=0x1fffff)
+raw: 000fffffc00a0014 ffffea0001bf2988 ffffea0001de2448 ffff88801712e201
+raw: 0000000555c6a81d 0000000000000000 0000000100000000 ffff888101f7e180
+page dumped because: kasan: bad access detected
 
+Memory state around the buggy address:
+ ffff8880751acd80: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+ ffff8880751ace00: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+>ffff8880751ace80: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+                                                          ^
+ ffff8880751acf00: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+ ffff8880751acf80: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+==================================================================
 
-vim +666 drivers/irqchip/irq-gic-v3.c
+The reason is that struct ATTR_RECORD->name_offset is 6485, end address of
+name string is out of bounds.
 
-f32c926651dcd1 Julien Thierry 2019-01-31  646  
-f32c926651dcd1 Julien Thierry 2019-01-31  647  static inline void gic_handle_nmi(u32 irqnr, struct pt_regs *regs)
-f32c926651dcd1 Julien Thierry 2019-01-31  648  {
-17ce302f3117e9 Julien Thierry 2019-06-11  649  	bool irqs_enabled = interrupts_enabled(regs);
-f32c926651dcd1 Julien Thierry 2019-01-31  650  	int err;
-f32c926651dcd1 Julien Thierry 2019-01-31  651  
-17ce302f3117e9 Julien Thierry 2019-06-11  652  	if (irqs_enabled)
-17ce302f3117e9 Julien Thierry 2019-06-11  653  		nmi_enter();
-17ce302f3117e9 Julien Thierry 2019-06-11  654  
-f32c926651dcd1 Julien Thierry 2019-01-31  655  	if (static_branch_likely(&supports_deactivate_key))
-f32c926651dcd1 Julien Thierry 2019-01-31  656  		gic_write_eoir(irqnr);
-66b9343ecbdd4d Mark Rutland   2022-05-13  657  	else
-66b9343ecbdd4d Mark Rutland   2022-05-13  658  		isb()
-66b9343ecbdd4d Mark Rutland   2022-05-13  659  
-f32c926651dcd1 Julien Thierry 2019-01-31  660  	/*
-f32c926651dcd1 Julien Thierry 2019-01-31  661  	 * Leave the PSR.I bit set to prevent other NMIs to be
-f32c926651dcd1 Julien Thierry 2019-01-31  662  	 * received while handling this one.
-f32c926651dcd1 Julien Thierry 2019-01-31  663  	 * PSR.I will be restored when we ERET to the
-f32c926651dcd1 Julien Thierry 2019-01-31  664  	 * interrupted context.
-f32c926651dcd1 Julien Thierry 2019-01-31  665  	 */
-f32c926651dcd1 Julien Thierry 2019-01-31 @666  	err = handle_domain_nmi(gic_data.domain, irqnr, regs);
-f32c926651dcd1 Julien Thierry 2019-01-31  667  	if (err)
-f32c926651dcd1 Julien Thierry 2019-01-31  668  		gic_deactivate_unhandled(irqnr);
-17ce302f3117e9 Julien Thierry 2019-06-11  669  
-17ce302f3117e9 Julien Thierry 2019-06-11  670  	if (irqs_enabled)
-17ce302f3117e9 Julien Thierry 2019-06-11  671  		nmi_exit();
-f32c926651dcd1 Julien Thierry 2019-01-31  672  }
-f32c926651dcd1 Julien Thierry 2019-01-31  673  
+Fix this by adding sanity check on end address of attibute name string.
 
-:::::: The code at line 666 was first introduced by commit
-:::::: f32c926651dcd1683f4d896ee52609000a62a3dc irqchip/gic-v3: Handle pseudo-NMIs
+Signed-off-by: ChenXiaoSong <chenxiaosong2@huawei.com>
+Signed-off-by: Hawkins Jiawei <yin31149@gmail.com>
+---
+v1->v2: remove redundant statement
 
-:::::: TO: Julien Thierry <julien.thierry@arm.com>
-:::::: CC: Catalin Marinas <catalin.marinas@arm.com>
+v2->v3: 
+End address of name string is attribute + name_offset + name_length*sizeof(ntfschar).
+Thanks for Hawkins Jiawei's reply.
 
+ fs/ntfs/attrib.c | 8 ++++++--
+ 1 file changed, 6 insertions(+), 2 deletions(-)
+
+diff --git a/fs/ntfs/attrib.c b/fs/ntfs/attrib.c
+index 4de597a83b88..3077bb45cf01 100644
+--- a/fs/ntfs/attrib.c
++++ b/fs/ntfs/attrib.c
+@@ -592,8 +592,12 @@ static int ntfs_attr_find(const ATTR_TYPE type, const ntfschar *name,
+ 		a = (ATTR_RECORD*)((u8*)ctx->attr +
+ 				le32_to_cpu(ctx->attr->length));
+ 	for (;;	a = (ATTR_RECORD*)((u8*)a + le32_to_cpu(a->length))) {
+-		if ((u8*)a < (u8*)ctx->mrec || (u8*)a > (u8*)ctx->mrec +
+-				le32_to_cpu(ctx->mrec->bytes_allocated))
++		u8 *mrec_end = (u8 *)ctx->mrec +
++		               le32_to_cpu(ctx->mrec->bytes_allocated);
++		u8 *name_end = (u8 *)a + le16_to_cpu(a->name_offset) +
++		               a->name_length * sizeof(ntfschar);
++		if ((u8*)a < (u8*)ctx->mrec || (u8*)a > mrec_end ||
++		    name_end > mrec_end)
+ 			break;
+ 		ctx->attr = a;
+ 		if (unlikely(le32_to_cpu(a->type) > le32_to_cpu(type) ||
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+2.31.1
+

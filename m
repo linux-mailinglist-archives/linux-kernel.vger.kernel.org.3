@@ -2,139 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A25B56C62B
-	for <lists+linux-kernel@lfdr.de>; Sat,  9 Jul 2022 05:17:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9AEA656C632
+	for <lists+linux-kernel@lfdr.de>; Sat,  9 Jul 2022 05:20:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229504AbiGIDR0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Jul 2022 23:17:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48738 "EHLO
+        id S229504AbiGIDUM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Jul 2022 23:20:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50376 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229379AbiGIDRX (ORCPT
+        with ESMTP id S229508AbiGIDUJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Jul 2022 23:17:23 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C98D75E310
-        for <linux-kernel@vger.kernel.org>; Fri,  8 Jul 2022 20:17:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1657336642; x=1688872642;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=1/YlEfGURF5k3pwIh7EE5UdiFOfwrHwAaIC9aKkOk5I=;
-  b=ivj2/kdq8fXmpKNOJVw68Yfrv6TK3Qf+OgY34X2ama8S1ZTOiwuTQ8rr
-   gkIy04P/iKaqAkwB3+CKSbfY6d5fxkyFktnzyQsWwWfPcBGWwUE67rTcz
-   5SCCKC7oQxyONoUWNIzXCkG5YAa0J15m47UOD4YjaKn+sPaon7CeQLP/y
-   ortiP2IHKvqmD7CZxU0rfbXxFn+LnVFkQBlGVA9+zRT0l+fG3ziUUoW+E
-   iyATSlSPdtN4YPjT+zvmLzerUUA54VnIEAW0XD3w+Ovy2fzmqqQgNqvZy
-   4GSuRTiKeHSlLOY0Upo31UAp3TyUD78St/Ihbg17G+A22m/Wm1F0qLdAC
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10402"; a="267444611"
-X-IronPort-AV: E=Sophos;i="5.92,256,1650956400"; 
-   d="scan'208";a="267444611"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jul 2022 20:17:22 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,256,1650956400"; 
-   d="scan'208";a="626904148"
-Received: from lkp-server01.sh.intel.com (HELO 68b931ab7ac1) ([10.239.97.150])
-  by orsmga001.jf.intel.com with ESMTP; 08 Jul 2022 20:17:20 -0700
-Received: from kbuild by 68b931ab7ac1 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1oA0y7-000OFU-OT;
-        Sat, 09 Jul 2022 03:17:19 +0000
-Date:   Sat, 9 Jul 2022 11:17:04 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Pankaj Raghav <p.raghav@samsung.com>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org, Luis Chamberlain <mcgrof@kernel.org>,
-        Hannes Reinecke <hare@suse.de>,
-        Bart Van Assche <bvanassche@acm.org>
-Subject: [mcgrof-next:20220707-dm-zoned-npo2 1/13] fs/btrfs/zoned.h:311:5:
- error: call to undeclared function 'bdev_zone_sectors'; ISO C99 and later do
- not support implicit function declarations
-Message-ID: <202207091156.CM7phKD9-lkp@intel.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        Fri, 8 Jul 2022 23:20:09 -0400
+Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7EAA66BA2
+        for <linux-kernel@vger.kernel.org>; Fri,  8 Jul 2022 20:20:07 -0700 (PDT)
+Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-31ce88f9ab8so4307657b3.16
+        for <linux-kernel@vger.kernel.org>; Fri, 08 Jul 2022 20:20:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=+6mxQwenuketJNKTw2AgKFfZAqlF6au6yl4FTcttxec=;
+        b=msMkA6mMPXw2DPMUq74vBSihilJyTAYJuh/S0rF3IC0cPUdu0AeobvaBuBjtiEaNII
+         NOmrLvdaC1siW8gfkU3VdyX8XWubTcJ7N8ejX2AMWIS5YBFys+TvqXBYHaVHSNltPLp6
+         CM75KN3k6KbthTszveXONoTcH1G34XiQSURviEVH+ZIXVpH3TnRoS7XDEp/Qr0A2GlZA
+         HkmtaJ6ydDOGq7aPzND/i9cUqwLgaFgrR2XFBj59P6jnvpTM44S4ioqga7l/HAa/G62h
+         9QLhIfp9lXOjBKlQtkjDngTTNxcgLxNwQGMEnAZiyi+8f0Xv4XD9xt1Y25zBorh7w2vw
+         qFyg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=+6mxQwenuketJNKTw2AgKFfZAqlF6au6yl4FTcttxec=;
+        b=ePgO8hrbbdMLd8EtLwkIqQf3/4lxnrvSyXIqnJzHv+PV6VLDlUxpG45/xpY7Hphp5H
+         GU6cqZsRfKj9L807l12t1lQqzOOmQUxTJaRWlGVLxqwPvVaqDUsfW+4SWF8b7abrwn2Y
+         zPM4kYQ2Da58k+H0QIyimkfgJ8Nl2p9PKyMfAa+jZNFvAUNY6DFxmJWGuhs5Jex5Gudr
+         NBPdRKFVRV3YDwzHpnfVoJxpith3r0ZUlpJDJ+Ha+flGJuRn0xnuGqqqEqqUofRmUhtG
+         n+EvI2YU2btN7TNT2wxeLnHHR5HS5KFGOtbzjreiL7Kq7HXlhXxFxMac36dV/GakJTe3
+         BSzw==
+X-Gm-Message-State: AJIora+BExesjxGtgwvVOOUBzh69dBcl6XxHdaE1i4tM6y3UfQeFql5h
+        c4lInFPZAOupKw4XqrMZEgkfT4xMv9IGAg==
+X-Google-Smtp-Source: AGRyM1tgsnBX7aPla1Mr0qumw/V3OTEIp6cC1PNLFxa8hu9gpm9EJthrRffSNiaj4BlnO6ehELCNCbFGypYSnw==
+X-Received: from slicestar.c.googlers.com ([fda3:e722:ac3:cc00:4f:4b78:c0a8:20a1])
+ (user=davidgow job=sendgmr) by 2002:a25:13c6:0:b0:669:33b:97cb with SMTP id
+ 189-20020a2513c6000000b00669033b97cbmr6543203ybt.583.1657336806987; Fri, 08
+ Jul 2022 20:20:06 -0700 (PDT)
+Date:   Sat,  9 Jul 2022 11:19:56 +0800
+Message-Id: <20220709032001.819487-1-davidgow@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.37.0.rc0.161.g10f37bed90-goog
+Subject: [PATCH v4 0/5] Rework KUnit test execution in modules
+From:   David Gow <davidgow@google.com>
+To:     Brendan Higgins <brendanhiggins@google.com>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        Jeremy Kerr <jk@codeconstruct.com.au>,
+        Daniel Latypov <dlatypov@google.com>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Andrew Jeffery <andrew@aj.id.au>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Andra Paraschiv <andraprs@amazon.com>,
+        Longpeng <longpeng2@huawei.com>,
+        Greg KH <gregkh@linuxfoundation.org>
+Cc:     David Gow <davidgow@google.com>, kunit-dev@googlegroups.com,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        "=?UTF-8?q?Ma=C3=ADra=20Canal?=" <maira.canal@usp.br>,
+        linux-mmc@vger.kernel.org, linux-aspeed@lists.ozlabs.org,
+        openbmc@lists.ozlabs.org, linux-usb@vger.kernel.org,
+        linux-modules@vger.kernel.org,
+        Matt Johnston <matt@codeconstruct.com.au>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/linux-next.git 20220707-dm-zoned-npo2
-head:   3d1b6e41f76394610669e380da4f65bc5e7cf8ac
-commit: a37ed4b355c02ec383a85c961f0e121df104cc1a [1/13] block: make bdev_nr_zones and disk_zone_no generic for npo2 zsze
-config: hexagon-randconfig-r041-20220707 (https://download.01.org/0day-ci/archive/20220709/202207091156.CM7phKD9-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 77a38f6839980bfac61babb40d83772c51427011)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/linux-next.git/commit/?id=a37ed4b355c02ec383a85c961f0e121df104cc1a
-        git remote add mcgrof-next https://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/linux-next.git
-        git fetch --no-tags mcgrof-next 20220707-dm-zoned-npo2
-        git checkout a37ed4b355c02ec383a85c961f0e121df104cc1a
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash block/ fs/btrfs/
+This patch series makes two changes to how KUnit test suites are stored
+and executed:
+- The .kunit_test_suites section is now used for tests in modules (in
+  lieu of a module_init funciton), as well as for built-in tests. The
+  module loader will now trigger test execution. This frees up the
+  module_init function for other uses.
+- Instead of storing an array of arrays of suites, have the
+  kunit_test_suite() and kunit_test_suites() macros append to one global
+  (or per-module) list of test suites. This removes a needless layer of
+  indirection, and removes the need to NULL-terminate suite_sets.
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+The upshot of this is that it should now be possible to use the
+kunit_test_suite() and kunit_test_suites() macros to register test
+suites even from within modules which otherwise had module_init
+functions. This was proving to be quite a common issue, resulting in
+several modules calling into KUnit's private suite execution functions
+to run their tests (often introducing incompatibilities with the KUnit
+tooling).
 
-All errors (new ones prefixed by >>):
+This series also fixes the thunderbolt, nitro_enclaves, and
+sdhci-of-aspeed tests to use kunit_test_suite() now that it works. This
+is required, as otherwise the first two patches may break these tests
+entirely.
 
-   In file included from fs/btrfs/extent_io.c:30:
->> fs/btrfs/zoned.h:311:5: error: call to undeclared function 'bdev_zone_sectors'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-                           (bdev_zone_sectors(bdev) << SECTOR_SHIFT);
-                            ^
-   fs/btrfs/zoned.h:311:5: note: did you mean 'bdev_nr_sectors'?
-   include/linux/blkdev.h:807:24: note: 'bdev_nr_sectors' declared here
-   static inline sector_t bdev_nr_sectors(struct block_device *bdev)
-                          ^
-   1 error generated.
---
->> block/ioctl.c:496:25: error: call to undeclared function 'bdev_zone_sectors'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-                   return put_uint(argp, bdev_zone_sectors(bdev));
-                                         ^
-   block/ioctl.c:496:25: note: did you mean 'bdev_nr_sectors'?
-   include/linux/blkdev.h:807:24: note: 'bdev_nr_sectors' declared here
-   static inline sector_t bdev_nr_sectors(struct block_device *bdev)
-                          ^
-   1 error generated.
+Huge thanks to Jeremy Kerr, who designed and implemented the module
+loader changes, and to Daniel Latypov for pushing the simplification of
+the nested arrays in .kunit_test_suites.
 
+I've tested this series both with builtin tests on a number of
+architectures, and with modules on x86_64, and it seems good-to-go to
+me. More testing (particularly of modules) with more interesting setups
+never hurts, though!
 
-vim +/bdev_zone_sectors +311 fs/btrfs/zoned.h
+Cheers,
+-- David
 
-5b316468983dfa9 Naohiro Aota       2020-11-10  298  
-b70f509774ad4b7 Naohiro Aota       2020-11-10  299  static inline bool btrfs_check_device_zone_type(const struct btrfs_fs_info *fs_info,
-b70f509774ad4b7 Naohiro Aota       2020-11-10  300  						struct block_device *bdev)
-b70f509774ad4b7 Naohiro Aota       2020-11-10  301  {
-b70f509774ad4b7 Naohiro Aota       2020-11-10  302  	if (btrfs_is_zoned(fs_info)) {
-3c9daa09ccd43f6 Johannes Thumshirn 2021-02-04  303  		/*
-3c9daa09ccd43f6 Johannes Thumshirn 2021-02-04  304  		 * We can allow a regular device on a zoned filesystem, because
-3c9daa09ccd43f6 Johannes Thumshirn 2021-02-04  305  		 * we will emulate the zoned capabilities.
-3c9daa09ccd43f6 Johannes Thumshirn 2021-02-04  306  		 */
-3c9daa09ccd43f6 Johannes Thumshirn 2021-02-04  307  		if (!bdev_is_zoned(bdev))
-3c9daa09ccd43f6 Johannes Thumshirn 2021-02-04  308  			return true;
-3c9daa09ccd43f6 Johannes Thumshirn 2021-02-04  309  
-3c9daa09ccd43f6 Johannes Thumshirn 2021-02-04  310  		return fs_info->zone_size ==
-3c9daa09ccd43f6 Johannes Thumshirn 2021-02-04 @311  			(bdev_zone_sectors(bdev) << SECTOR_SHIFT);
-b70f509774ad4b7 Naohiro Aota       2020-11-10  312  	}
-b70f509774ad4b7 Naohiro Aota       2020-11-10  313  
-b70f509774ad4b7 Naohiro Aota       2020-11-10  314  	/* Do not allow Host Manged zoned device */
-b70f509774ad4b7 Naohiro Aota       2020-11-10  315  	return bdev_zoned_model(bdev) != BLK_ZONED_HM;
-b70f509774ad4b7 Naohiro Aota       2020-11-10  316  }
-b70f509774ad4b7 Naohiro Aota       2020-11-10  317  
+Changes since v3:
+https://lore.kernel.org/linux-kselftest/20220625050838.1618469-1-davidgow@google.com/
+- Rebase on top of the TAINT_TEST patch series. This should now apply
+  cleanly on top of the kunit branch:
+  https://lore.kernel.org/linux-kselftest/20220708044847.531566-1-davidgow@google.com/T/#u
+- Add Brendan's Reviewed/Acked-by tags.
 
-:::::: The code at line 311 was first introduced by commit
-:::::: 3c9daa09ccd43f68104634020b364d834c01738c btrfs: zoned: allow zoned filesystems on non-zoned block devices
+Daniel Latypov (1):
+  kunit: flatten kunit_suite*** to kunit_suite** in .kunit_test_suites
 
-:::::: TO: Johannes Thumshirn <johannes.thumshirn@wdc.com>
-:::::: CC: David Sterba <dsterba@suse.com>
+David Gow (3):
+  thunderbolt: test: Use kunit_test_suite() macro
+  nitro_enclaves: test: Use kunit_test_suite() macro
+  mmc: sdhci-of-aspeed: test: Use kunit_test_suite() macro
+
+Jeremy Kerr (1):
+  kunit: unify module and builtin suite definitions
+
+ drivers/mmc/host/Kconfig                      |   5 +-
+ drivers/mmc/host/sdhci-of-aspeed-test.c       |   8 +-
+ drivers/mmc/host/sdhci-of-aspeed.c            |  34 +----
+ drivers/thunderbolt/Kconfig                   |   6 +-
+ drivers/thunderbolt/domain.c                  |   3 -
+ drivers/thunderbolt/tb.h                      |   8 -
+ drivers/thunderbolt/test.c                    |  12 +-
+ drivers/virt/nitro_enclaves/Kconfig           |   5 +-
+ drivers/virt/nitro_enclaves/ne_misc_dev.c     |  27 ----
+ .../virt/nitro_enclaves/ne_misc_dev_test.c    |   5 +-
+ include/kunit/test.h                          |  62 ++------
+ include/linux/module.h                        |   5 +
+ kernel/module/main.c                          |   6 +
+ lib/kunit/executor.c                          | 115 ++++----------
+ lib/kunit/executor_test.c                     | 144 +++++-------------
+ lib/kunit/test.c                              |  54 ++++++-
+ 16 files changed, 155 insertions(+), 344 deletions(-)
 
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+2.37.0.rc0.161.g10f37bed90-goog
+

@@ -2,81 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 700F856CB3E
-	for <lists+linux-kernel@lfdr.de>; Sat,  9 Jul 2022 21:14:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F94756CB45
+	for <lists+linux-kernel@lfdr.de>; Sat,  9 Jul 2022 21:31:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229587AbiGITOt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 9 Jul 2022 15:14:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41638 "EHLO
+        id S229535AbiGITb5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 9 Jul 2022 15:31:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48190 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229579AbiGITOs (ORCPT
+        with ESMTP id S229450AbiGITb4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 9 Jul 2022 15:14:48 -0400
-Received: from mail-qt1-x842.google.com (mail-qt1-x842.google.com [IPv6:2607:f8b0:4864:20::842])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DF8315A2E
-        for <linux-kernel@vger.kernel.org>; Sat,  9 Jul 2022 12:14:47 -0700 (PDT)
-Received: by mail-qt1-x842.google.com with SMTP id cf13so654493qtb.13
-        for <linux-kernel@vger.kernel.org>; Sat, 09 Jul 2022 12:14:47 -0700 (PDT)
+        Sat, 9 Jul 2022 15:31:56 -0400
+Received: from mail-vs1-xe36.google.com (mail-vs1-xe36.google.com [IPv6:2607:f8b0:4864:20::e36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C867FD1A
+        for <linux-kernel@vger.kernel.org>; Sat,  9 Jul 2022 12:31:55 -0700 (PDT)
+Received: by mail-vs1-xe36.google.com with SMTP id j65so1599886vsc.3
+        for <linux-kernel@vger.kernel.org>; Sat, 09 Jul 2022 12:31:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=yFjPBwfof55JxbmPqLU/8pTY0KXsIbs+GUr373EysuM=;
-        b=aPW2jAvVmuhNLR+c5htyB+zDi4OnTDULd1fxcN3eSTbHwJNEOOJgmj3fTYWk7vHHCh
-         l1fvjuAxY3beLoJuryNCjix4noRjXUJ96flcnt0Ag3b/W7KNFAm6awKYiAo5K47q8kWt
-         MeFmGc9M8gY62wmfmmi0RFya1KWEiH8+8MA4GFRapC/d8t8rVojKnISibCYnqA3uIC9n
-         OPokFty2m5Y+Xj/czcYf58YtbU8T9JXUP4t4rrmkkaMmP4OIbOeI4cVOaGhhAia+7wfo
-         rXUbuw846m1yySMZtfQrB/2vW8Mtx5yT0sCSD4sS3Ihg0txQGl/NxBD/U+Hb53LHRXY1
-         dNlA==
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=xlsWHsy+WSigsg0uYZliDjxgP+p+SBFZhCdQ1FFyqWg=;
+        b=WEZ0ILURpKh8sbC8lm/EYHEdBpmUWlb1LIJP7fEVKuC5/tseDNMcSLwQZv0oudbI9y
+         tNTRCeyQcMhr2SaIgvMUo06GRD8mbBY4jKcQBq6EswCLk+C517DmNnfQfnuf3CRollfm
+         vKzGsPUk+VYFJT+uTZt7I+hPqd39NPcIUnqqWgifLAuFqIrlBAWptVI24I2xIbAfDkdz
+         N+Sh/VSK/15lMLEhN/syOHbsXSgOzqUly9kYLSYdqe2I1CrUOCzvlTxJEpydXosxlCeE
+         jDhtsUH6m8Ik0vNuP4p+j/T0RrozPRiYdtTxTGW+lpRUd/D0UJN6LhBI6WkOBMq9ImPl
+         /J/w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=yFjPBwfof55JxbmPqLU/8pTY0KXsIbs+GUr373EysuM=;
-        b=3zXieP6fzcdnEc/mlI8ModTQ6kVOBLrEm2j2t2W7S78bnFwK6MgOqf4bMRZH/2xga2
-         NwrD/RmdvkoWgt6y61sBrmXh0o930HKhaMUUKV4owBP2pQB8psWbGkHOAzWfyC7OOqGm
-         /iE7YupPQ0vghoi2jQ2ywMocw/y2+tb9yLZrAQ4QGXxHXte7EShB0QIw4AiDVlKhDKEL
-         AwzCycDgqgOhao5VyIk12xQsNAR0Jf/tSqRO58L5atjBqu9A96zTunKSfdjodoyeR7tw
-         uuMm1XfXd/PK3wZbkBddk0SJYPiZmkHK7HgeFDLAcd9fPmYhHL+NJ7gjXGGcICVwsdT+
-         CEGw==
-X-Gm-Message-State: AJIora/DpVYEj7RpmwpYMXJWvQaYVANAbTQEb6IHFXo3SsM4h0SDvAPY
-        EmN+gvA7nFA6OdYffuDY0unXQ29vGUHYn+xsNqc=
-X-Google-Smtp-Source: AGRyM1s8Uc00XbGXmfBqcFMckxxCmi4IWvyOr3ucunfbRWdYVZlLl2PNQoJuWPow7udoUHd+a9F0Wn05n+xiL+FYTck=
-X-Received: by 2002:a05:622a:490:b0:31d:2a47:c221 with SMTP id
- p16-20020a05622a049000b0031d2a47c221mr8350459qtx.212.1657394086000; Sat, 09
- Jul 2022 12:14:46 -0700 (PDT)
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=xlsWHsy+WSigsg0uYZliDjxgP+p+SBFZhCdQ1FFyqWg=;
+        b=6snOBt+3myv89YhkReHOYUwWY4Ayxrkkfwumr/QDSZJfbMi4WLvIvf9PJW8PqYkqL7
+         bC8Fx+cX7OWAh87htDaj+XYTZ/E9l/7AmS784KOPIG1QysB3alQKTU1T6Hn2hydQeczS
+         v2QzetoY7pPx/LIxCfcsGl2h6LECKN35MX0jPME+Llzf7PK7yf4sLFJQof5kAtkBpXw+
+         uq7eFGZkM7qTcBI/9/G4YqE1zcLUpZCZdw/zSI+73MjOVKbqsGcBP/XgxPMhR7E14O3Y
+         N8BSwFXaP/DjEEBYznh4qjY7gOGJZSRjfVp/f8yHPYkqX0vz5PRoVlCohkJs77THRC72
+         owgA==
+X-Gm-Message-State: AJIora/iuzKFpzNDWfx1EGpAqBNAE9h7xu8J29waEjI+lKQAgWj9o1VG
+        HY61W5EQiBSbGqrQQwBGu4Yy5jt6VGwYPgsnHbPvCw==
+X-Google-Smtp-Source: AGRyM1uC2aQTpOv2bSpzFZ97reIMfr0s6VV8RvjoUaHE3jCQW7GzZMlqog/s6RGckY3SERJErgCsgEwk3HW3QVCGG0w=
+X-Received: by 2002:a05:6102:3656:b0:357:406e:54a3 with SMTP id
+ s22-20020a056102365600b00357406e54a3mr3173785vsu.50.1657395114649; Sat, 09
+ Jul 2022 12:31:54 -0700 (PDT)
 MIME-Version: 1.0
-Received: by 2002:a05:6214:1d2f:0:0:0:0 with HTTP; Sat, 9 Jul 2022 12:14:45
- -0700 (PDT)
-Reply-To: stanleydenford100@gmail.com
-From:   Stanley Denford <sanjosarees@gmail.com>
-Date:   Sat, 9 Jul 2022 12:14:45 -0700
-Message-ID: <CAMXaW2gae6RAtp72J5LXGYzLEfkMuOjz02J257wSZbQ6xT4MmQ@mail.gmail.com>
-Subject: Good day
-To:     undisclosed-recipients:;
+References: <20220706220022.968789-1-yuzhao@google.com> <c576d1cc-9f67-4cf7-a851-48bc0e9f0082@gmail.com>
+In-Reply-To: <c576d1cc-9f67-4cf7-a851-48bc0e9f0082@gmail.com>
+From:   Yu Zhao <yuzhao@google.com>
+Date:   Sat, 9 Jul 2022 13:31:18 -0600
+Message-ID: <CAOUHufbhmma8phX4arNwF10xBf7as=gtc1Y7k01f6CD3v04-QQ@mail.gmail.com>
+Subject: Re: [PATCH v13 00/14] Multi-Gen LRU Framework
+To:     Bagas Sanjaya <bagasdotme@gmail.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Andi Kleen <ak@linux.intel.com>,
+        Aneesh Kumar <aneesh.kumar@linux.ibm.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Hillf Danton <hdanton@sina.com>, Jens Axboe <axboe@kernel.dk>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Matthew Wilcox <willy@infradead.org>,
+        Mel Gorman <mgorman@suse.de>,
+        Michael Larabel <Michael@michaellarabel.com>,
+        Michal Hocko <mhocko@kernel.org>,
+        Mike Rapoport <rppt@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Tejun Heo <tj@kernel.org>, Vlastimil Babka <vbabka@suse.cz>,
+        Will Deacon <will@kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        Linux-MM <linux-mm@kvack.org>,
+        "the arch/x86 maintainers" <x86@kernel.org>,
+        Kernel Page Reclaim v2 <page-reclaim@google.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=4.7 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FREEMAIL_REPLYTO,
-        FREEMAIL_REPLYTO_END_DIGIT,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,UNDISC_FREEM autolearn=no autolearn_force=no
-        version=3.4.6
-X-Spam-Level: ****
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
--- 
-Good day, How are you doing today
+On Wed, Jul 6, 2022 at 9:03 PM Bagas Sanjaya <bagasdotme@gmail.com> wrote:
+>
+> On 7/7/22 05:00, Yu Zhao wrote:
+> > TLDR
+> > ====
+> > The current page reclaim is too expensive in terms of CPU usage and it
+> > often makes poor choices about what to evict. This patchset offers an
+> > alternative solution that is performant, versatile and
+> > straightforward.
+> >
+>
+> On what tree this series is based on? I tried to apply on top of mm-everything
+> tree but it didn't apply cleanly, so I had to abort.
 
-I am Stanley Denford, a Client Relations officer. I got your name and
-contact information in my quest for her existing extended family, I am
-writing to you on highly confidential grounds with mutual benefit in
-respect to the estate of Frances...
-
-The estate is worth millions of Dollars.I'd appreciate it if you get back
-to me by confirming to me if this medium is safe and confidential enough to
-enable me divulge to you details on why I contacted you.
-
-Regards,
-Stanley Denford
+If you are on the latest mm-unstable, then please
+git pull https://github.com/yuzhaogoogle/linux.git
+for-mm-unstable-2022-07-09-03-05

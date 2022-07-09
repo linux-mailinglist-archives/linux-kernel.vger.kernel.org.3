@@ -2,66 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3853656C838
-	for <lists+linux-kernel@lfdr.de>; Sat,  9 Jul 2022 11:07:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 33AB956C83C
+	for <lists+linux-kernel@lfdr.de>; Sat,  9 Jul 2022 11:12:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229570AbiGIJHN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 9 Jul 2022 05:07:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54840 "EHLO
+        id S229535AbiGIJLz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 9 Jul 2022 05:11:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57128 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229471AbiGIJHL (ORCPT
+        with ESMTP id S229463AbiGIJLy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 9 Jul 2022 05:07:11 -0400
-Received: from mailrelay3-1.pub.mailoutpod1-cph3.one.com (mailrelay3-1.pub.mailoutpod1-cph3.one.com [46.30.210.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C57AC72
-        for <linux-kernel@vger.kernel.org>; Sat,  9 Jul 2022 02:07:08 -0700 (PDT)
+        Sat, 9 Jul 2022 05:11:54 -0400
+Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC6E854C91
+        for <linux-kernel@vger.kernel.org>; Sat,  9 Jul 2022 02:11:51 -0700 (PDT)
+Received: by mail-ej1-x62e.google.com with SMTP id j22so1337064ejs.2
+        for <linux-kernel@vger.kernel.org>; Sat, 09 Jul 2022 02:11:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ravnborg.org; s=rsa1;
-        h=in-reply-to:content-type:mime-version:references:message-id:subject:cc:to:
-         from:date:from;
-        bh=bQao0uhcvp+1LML5tn0jIDi+JBcfo6KzruckDKC3200=;
-        b=Zx7kpXndr5SVSWcRnKMCgbXGc41CeI+YBqFqw9lfB9KyhGx7kx6LILIip5cIKSq66lnHckwdThCH6
-         EvkXHVzjn4AWSTT8FaGwVS/OK3j1w9BazJy/bg9s5aosL293b1f4BzssBH0bvj4D3hLzQiPXt2YYhf
-         U3nRlwzNTuOvRMCG47AqXDryAjBS2v0B1rlKkgplcw9xa0cPxistjxJrO0ATmUPVOOck0PfEyAm/de
-         Gy8X5kUDOipjR5Sf2i/DoCaoBPOFed4YxKx0+ikFATPhp0Kcv20pK581tYO2ztkqTLTCMJbfDwGzti
-         v4E0foZa6DWsS7Wefq2UC7JaRzVLMGg==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed;
-        d=ravnborg.org; s=ed1;
-        h=in-reply-to:content-type:mime-version:references:message-id:subject:cc:to:
-         from:date:from;
-        bh=bQao0uhcvp+1LML5tn0jIDi+JBcfo6KzruckDKC3200=;
-        b=iLvft4rlxwG6L3oaWSPOLOufdauTPHbYccYyEMqEW2sMLdLHTEJovzFCWbf0h//uiGB67ygy/dCmC
-         5NjgJFQCg==
-X-HalOne-Cookie: d1d041af6dd76b0adfe09725c6a117cc2310e10a
-X-HalOne-ID: 811e08aa-ff66-11ec-be7e-d0431ea8bb03
-Received: from mailproxy3.cst.dirpod3-cph3.one.com (2-105-2-98-cable.dk.customer.tdc.net [2.105.2.98])
-        by mailrelay3.pub.mailoutpod1-cph3.one.com (Halon) with ESMTPSA
-        id 811e08aa-ff66-11ec-be7e-d0431ea8bb03;
-        Sat, 09 Jul 2022 09:07:06 +0000 (UTC)
-Date:   Sat, 9 Jul 2022 11:07:04 +0200
-From:   Sam Ravnborg <sam@ravnborg.org>
-To:     MollySophia <mollysophia379@gmail.com>
-Cc:     Thierry Reding <thierry.reding@gmail.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org
-Subject: Re: [PATCH 2/2] dt-bindings: display: panel: Add Novatek NT35596S
- panel bindings
-Message-ID: <YslFOHQMSSVG7czY@ravnborg.org>
-References: <20220708021824.9167-1-mollysophia379@gmail.com>
- <20220708021824.9167-2-mollysophia379@gmail.com>
+        d=tessares.net; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to;
+        bh=GwRPDPz0wAqQuQjReGGFUUa9OBEO/j7dclJ1wvnbWbw=;
+        b=3Bk7y61bJci89ZJ+gdYXv/2I2Jd2H107ZgBpjScH3iI0MvbkdyNoFcIWlrEWTU+jHi
+         sOyDWGsQZSVr58Nwhv30399lkGvsSY2T5wh3bw0vteP3vfYQMjy6qnrEzVxwz1BRbCGL
+         FcMEaJFEI+vHHH4aOsmLrNqg8sDJY78xw6zBEucJoR7pVc+F9BqhoWS1G1DO4jI/ZEQi
+         pbBy3ATNb5ZEbfNIp59CTRxcOYn2aUoprsExPnCOWiC4Y893cGlZrEf51ifyWB5U38rR
+         lB3fhZ6uepYs9Wadql+/NECLavybhDnZAXCP1Ut9suIE9nn8LemPquOuiVYksMRcToGz
+         1AEQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to;
+        bh=GwRPDPz0wAqQuQjReGGFUUa9OBEO/j7dclJ1wvnbWbw=;
+        b=yx4eo6rpnHb+b2xC/xgCIV9Mpj75bLjZI3Evi1UEbeKbUyTRalCC0O1hJE5GQoH55P
+         6QTcKJF/tTKq7CjvhbI0fROyjICfYqtJK33EbVmPHp/FRULNSngCGLSLMIuRGQl9kIDT
+         McB1P6LlLKFY/iugiJCqs0gpZ23JsWveORSNeK13BzSL9QM+e2i3zxSIi1vpFlEJVzZr
+         DOYtlPuEAWcyS+doTJVffSng0Ja8Ao5/4UGBR91AZfcs/Zoebug92St5y79O2MJJADs5
+         oIurfn6ia+U4PzPxL3hrDRpdpZoyoJYfiwdoX6LdLx6wAm6BACiJG4hbsIiBp82Ue4Bs
+         WHtQ==
+X-Gm-Message-State: AJIora9bB39ay6eoScE2iHt3cxEjb0e5eiiW97binanokwBn9eNF+0Mr
+        ybpbKyf1vjjXQhtI5Wz166iUWQ==
+X-Google-Smtp-Source: AGRyM1vI7m5nS7zEdVam2tmvN320LNjtUyI/YEZCStnztWbPDuR7Wt5qMJTystEcWIBSj3QF/E84fg==
+X-Received: by 2002:a17:906:cc52:b0:72b:114e:c56c with SMTP id mm18-20020a170906cc5200b0072b114ec56cmr8008533ejb.144.1657357909909;
+        Sat, 09 Jul 2022 02:11:49 -0700 (PDT)
+Received: from ?IPV6:2a02:578:8593:1200:e51f:3772:e05:89c3? ([2a02:578:8593:1200:e51f:3772:e05:89c3])
+        by smtp.gmail.com with ESMTPSA id y26-20020a056402135a00b00435a742e350sm636472edw.75.2022.07.09.02.11.48
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 09 Jul 2022 02:11:49 -0700 (PDT)
+Content-Type: multipart/mixed; boundary="------------3cL3LDjvU14fMcomcm3uA5J9"
+Message-ID: <6dddf3f2-40c1-a08b-ec0e-c4feafcad118@tessares.net>
+Date:   Sat, 9 Jul 2022 11:11:47 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220708021824.9167-2-mollysophia379@gmail.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH v2 net 09/12] net: Fix data-races around sysctl_mem.
+Content-Language: en-GB
+To:     Kuniyuki Iwashima <kuniyu@amazon.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        Iurii Zaikin <yzaikin@google.com>
+Cc:     Kuniyuki Iwashima <kuni1840@gmail.com>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        MPTCP Upstream <mptcp@lists.linux.dev>
+References: <20220706234003.66760-1-kuniyu@amazon.com>
+ <20220706234003.66760-10-kuniyu@amazon.com>
+From:   Matthieu Baerts <matthieu.baerts@tessares.net>
+In-Reply-To: <20220706234003.66760-10-kuniyu@amazon.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,145 +81,59 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Molly,
+This is a multi-part message in MIME format.
+--------------3cL3LDjvU14fMcomcm3uA5J9
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Fri, Jul 08, 2022 at 10:18:24AM +0800, MollySophia wrote:
-> Add documentation for "novatek,nt35596s" panel.
+Hello,
 
-As a general note, we cannot apply a driver without the binding.
-So this patch should be the first in the series.
+On 07/07/2022 01:40, Kuniyuki Iwashima wrote:
+> While reading .sysctl_mem, it can be changed concurrently.
+> So, we need to add READ_ONCE() to avoid data-races.
 
-Not a big deal, but it makes it easier on the committer later.
+FYI, we got a small conflict when merging -net in net-next in the MPTCP
+tree due to this patch applied in -net:
 
-A few comments below.
+  310731e2f161 ("net: Fix data-races around sysctl_mem.")
 
-	Sam
+and this one from net-next:
 
-> 
-> Signed-off-by: MollySophia <mollysophia379@gmail.com>
-> ---
->  .../display/panel/novatek,nt35596s.yaml       | 88 +++++++++++++++++++
->  1 file changed, 88 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/display/panel/novatek,nt35596s.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/display/panel/novatek,nt35596s.yaml b/Documentation/devicetree/bindings/display/panel/novatek,nt35596s.yaml
-> new file mode 100644
-> index 000000000000..937b194a6f18
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/display/panel/novatek,nt35596s.yaml
-> @@ -0,0 +1,88 @@
-> +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/display/panel/novatek,nt35596s.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Novatek NT35596S based DSI display Panels
-> +
-> +maintainers:
-> +  - Molly Sophia <mollysophia379@gmail.com>
-> +
-> +description: |
-> +  The nt35596s IC from Novatek is a generic DSI Panel IC used to drive dsi
-> +  panels.
-> +  Right now, support is added only for a JDI FHD+ LCD display panel with a
-> +  resolution of 1080x2160. It is a video mode DSI panel.
-> +
-> +allOf:
-> +  - $ref: panel-common.yaml#
-> +
-> +properties:
-> +  compatible:
-> +    items:
-> +      - enum:
-> +          - jdi,fhd-nt35596s
-> +      - const: novatek,nt35596s
-> +    description: This indicates the panel manufacturer of the panel that is
-> +      in turn using the NT35596S panel driver. This compatible string
-> +      determines how the NT35596S panel driver is configured for the indicated
-> +      panel. The novatek,nt35596s compatible shall always be provided as a fallback.
-> +
-> +  reset-gpios:
-> +    maxItems: 1
-> +    description: phandle of gpio for reset line - This should be 8mA, gpio
-> +      can be configured using mux, pinctrl, pinctrl-names (active high)
-reset-gpios is part of panel-common and there is no need to describe it
-here. The description, which looks like a copy from another binding,
-does not really tell anything that is specific for this HW.
-So replace it with a
-    reset-gpios: true
-later in the binding would be better.
+  e70f3c701276 ("Revert "net: set SK_MEM_QUANTUM to 4096"")
 
-> +
-> +  vddi0-supply:
-> +    description: phandle of the regulator that provides the supply voltage
-> +      Power IC supply
-Please drop the "phandle of the" part. This is implicit and does not
-provide any extra info on the actual HW.
-This comments applies for all *-supply.
+The conflict has been resolved on our side[1] and the resolution we
+suggest is attached to this email.
 
-> +
-> +  vddpos-supply:
-> +    description: phandle of the positive boost supply regulator
-> +
-> +  vddneg-supply:
-> +    description: phandle of the negative boost supply regulator
-> +
-> +  reg: true
-> +  port: true
-> +  backlight: true
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +  - vddi0-supply
-> +  - vddpos-supply
-> +  - vddneg-supply
-> +  - reset-gpios
-> +  - port
-> +
-> +unevaluatedProperties: false
+I'm sharing this thinking it can help others but if it only creates
+noise, please tell me! :)
 
-Use:
-additionalProperties: false
+Cheers,
+Matt
 
-This will catch if the DT file contains any properties that is not
-mentioned here.
-The use of unevaluatedProperties in the file you copied from looks
-wrong.
+[1] https://github.com/multipath-tcp/mptcp_net-next/commit/b01bda9d0fe6
+-- 
+Tessares | Belgium | Hybrid Access Solutions
+www.tessares.net
+--------------3cL3LDjvU14fMcomcm3uA5J9
+Content-Type: text/x-patch; charset=UTF-8; name="b01bda9d0fe6.patch"
+Content-Disposition: attachment; filename="b01bda9d0fe6.patch"
+Content-Transfer-Encoding: base64
 
-> +
-> +examples:
-> +  - |+
-No need for the + sign here.
+ZGlmZiAtLWNjIGluY2x1ZGUvbmV0L3NvY2suaAppbmRleCAwZGQ0M2MzZGY0OWIsOWZhNTQ3
+NjJlMDc3Li5mN2FkMWE3NzA1ZTkKLS0tIGEvaW5jbHVkZS9uZXQvc29jay5oCisrKyBiL2lu
+Y2x1ZGUvbmV0L3NvY2suaApAQEAgLTE1NDEsMTAgLTE1MjEsMjIgKzE1NDEsMTAgQEBAIHZv
+aWQgX19za19tZW1fcmVjbGFpbShzdHJ1Y3Qgc29jayAqc2ssIAogICNkZWZpbmUgU0tfTUVN
+X1NFTkQJMAogICNkZWZpbmUgU0tfTUVNX1JFQ1YJMQogIAogLS8qIHN5c2N0bF9tZW0gdmFs
+dWVzIGFyZSBpbiBwYWdlcywgd2UgY29udmVydCB0aGVtIGluIFNLX01FTV9RVUFOVFVNIHVu
+aXRzICovCiArLyogc3lzY3RsX21lbSB2YWx1ZXMgYXJlIGluIHBhZ2VzICovCiAgc3RhdGlj
+IGlubGluZSBsb25nIHNrX3Byb3RfbWVtX2xpbWl0cyhjb25zdCBzdHJ1Y3Qgc29jayAqc2ss
+IGludCBpbmRleCkKICB7Ci0gCXJldHVybiBzay0+c2tfcHJvdC0+c3lzY3RsX21lbVtpbmRl
+eF07CiAtCWxvbmcgdmFsID0gUkVBRF9PTkNFKHNrLT5za19wcm90LT5zeXNjdGxfbWVtW2lu
+ZGV4XSk7CiAtCiAtI2lmIFBBR0VfU0laRSA+IFNLX01FTV9RVUFOVFVNCiAtCXZhbCA8PD0g
+UEFHRV9TSElGVCAtIFNLX01FTV9RVUFOVFVNX1NISUZUOwogLSNlbGlmIFBBR0VfU0laRSA8
+IFNLX01FTV9RVUFOVFVNCiAtCXZhbCA+Pj0gU0tfTUVNX1FVQU5UVU1fU0hJRlQgLSBQQUdF
+X1NISUZUOwogLSNlbmRpZgogLQlyZXR1cm4gdmFsOworKwlyZXR1cm4gUkVBRF9PTkNFKHNr
+LT5za19wcm90LT5zeXNjdGxfbWVtW2luZGV4XSk7CiAgfQogIAogIHN0YXRpYyBpbmxpbmUg
+aW50IHNrX21lbV9wYWdlcyhpbnQgYW10KQo=
 
-> +    #include <dt-bindings/gpio/gpio.h>
-> +
-> +    dsi0 {
-dsi {
-
-
-> +        #address-cells = <1>;
-> +        #size-cells = <0>;
-> +
-> +        panel@0 {
-> +            compatible = "jdi,fhd-nt35596s", "novatek,nt35596s";
-> +            reg = <0>;
-> +            vddi0-supply = <&vreg_l14a_1p88>;
-> +            vddpos-supply = <&lab>;
-> +            vddneg-supply = <&ibb>;
-> +
-> +            backlight = <&pmi8998_wled>;
-> +            reset-gpios = <&tlmm 6 GPIO_ACTIVE_HIGH>;
-> +
-> +            port {
-> +                jdi_nt35596s_in_0: endpoint {
-> +                    remote-endpoint = <&dsi0_out>;
-> +                };
-> +            };
-> +        };
-> +    };
-> +
-> +...
-> -- 
-> 2.37.0
+--------------3cL3LDjvU14fMcomcm3uA5J9--

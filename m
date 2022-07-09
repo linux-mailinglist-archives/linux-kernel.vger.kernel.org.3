@@ -2,96 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E6AB56CB63
-	for <lists+linux-kernel@lfdr.de>; Sat,  9 Jul 2022 22:38:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 41D5656CB67
+	for <lists+linux-kernel@lfdr.de>; Sat,  9 Jul 2022 22:41:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229561AbiGIUiR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 9 Jul 2022 16:38:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42804 "EHLO
+        id S229570AbiGIUl1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 9 Jul 2022 16:41:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44384 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229448AbiGIUiQ (ORCPT
+        with ESMTP id S229448AbiGIUlY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 9 Jul 2022 16:38:16 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DCC4E0A2;
-        Sat,  9 Jul 2022 13:38:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1657399095; x=1688935095;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=UsCG2LP+eMsf8h/hHDidHHdX1fTkku1D4E2O+r5yQcI=;
-  b=dz6Vi8IDVGbIB6uWAnW4SDM41rN0BiDYsIFp8lO/i0oncLNroEo68775
-   SP5q3IF/kxwmJqOG3FncotyWL54151nri4bTaB+KoDAfYpPcsm59nKuqU
-   ub6+BbhfMijwNhvrepWS/umGdXRMIBWo/EdcswdOLhi0is1Agc+UqxFIF
-   stQI/h84rfdQ2lmwbNhlQKeNuiyiFoGMdr/9Q2dIFoG0VKlVCAaWmus9z
-   efoXStWszqFDhTkJzGHoNL0Wff7MNc1eebdjXF4K+Bw6eBR8xjHcgTIs7
-   Oz5PEU7hBJfHrpJDd9EDTanDy3yPrDt28sjgjjuL9G5pUIb3vuypuZL5J
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10403"; a="285202639"
-X-IronPort-AV: E=Sophos;i="5.92,259,1650956400"; 
-   d="scan'208";a="285202639"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Jul 2022 13:38:14 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,259,1650956400"; 
-   d="scan'208";a="621617706"
-Received: from lkp-server01.sh.intel.com (HELO 68b931ab7ac1) ([10.239.97.150])
-  by orsmga008.jf.intel.com with ESMTP; 09 Jul 2022 13:38:13 -0700
-Received: from kbuild by 68b931ab7ac1 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1oAHDQ-000P4i-J3;
-        Sat, 09 Jul 2022 20:38:12 +0000
-Date:   Sun, 10 Jul 2022 04:37:49 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Chao Peng <chao.p.peng@linux.intel.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Isaku Yamahata <isaku.yamahata@intel.com>,
-        Yu Zhang <yu.c.zhang@linux.intel.com>,
-        linux-doc@vger.kernel.org
-Subject: [intel-tdx:kvm-upstream-workaround 295/418] htmldocs:
- Documentation/virt/kvm/api.rst:1364: WARNING: Inline emphasis start-string
- without end-string.
-Message-ID: <202207100439.e7j8H8ek-lkp@intel.com>
+        Sat, 9 Jul 2022 16:41:24 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1ED61DE92;
+        Sat,  9 Jul 2022 13:41:24 -0700 (PDT)
+From:   John Ogness <john.ogness@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1657399282;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=7XCPZYdFJvPl/+Lq/KH22t+YauCj8En8BB2tojor6b8=;
+        b=HeLcSAxQmEJQcC6GvlmkZDTH5ZtG49b3ykeV2EIVRUeI2rxgNIyKXJKs9ryRVK7rXZmH88
+        wKwSW37aO9U+f6rLRLzBhwuMmyjG4xfQ81koAon7+3SscTt6TLu21zzU9CCEGtGzDnps44
+        2AtxdanRGr/145a5chmNqB4ThE6VXAUtKZYd00n1Q2bDHbXoVmeIaU6q3SHcc+IxqKZ4K5
+        +Dw7hjQjyNikDpbTrKqx8qoiK+qncNhRdj+UdzosVyE+6i1eA+mif4cuIR2nqQ/2isQu2e
+        L94b7sxYxgmULo5UTSz4wob6xvkKWQBffqKWAxlXH41mTncZYDFX2j6gqXHFKQ==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1657399282;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=7XCPZYdFJvPl/+Lq/KH22t+YauCj8En8BB2tojor6b8=;
+        b=CDcPk9JxNXrHs6qzr3ETW9n1LgZiKi2wz+2s6K3eAe0PAiq/G1DNqmZcGJ089Wa6piWAla
+        INv1+CdxaMjuJEDQ==
+To:     todd.e.brandt@linux.intel.com, pmladek@suse.com
+Cc:     linux-kernel@vger.kernel.org, linux-serial@vger.kernel.org,
+        senozhatsky@chromium.org, rostedt@goodmis.org
+Subject: Re: PNP0501 serial driver takes almost 2 seconds to suspend/resume
+ (printk issue)
+In-Reply-To: <045ebee30af2b80aaeace1dab18ecd113e3f17c7.camel@linux.intel.com>
+References: <12fb98fe27e23e3f74a139e5e8eb83a97a343372.camel@linux.intel.com>
+ <51b9e2cc3baf61a604bd239b736ec2d12f1f6695.camel@linux.intel.com>
+ <87czegxccb.fsf@jogness.linutronix.de>
+ <045ebee30af2b80aaeace1dab18ecd113e3f17c7.camel@linux.intel.com>
+Date:   Sat, 09 Jul 2022 22:47:21 +0206
+Message-ID: <87tu7qvx1q.fsf@jogness.linutronix.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,INVALID_DATE_TZ_ABSURD,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/intel/tdx.git kvm-upstream-workaround
-head:   c2b43d6ee32b2f2de54395e7b2d7ba9bfa727608
-commit: 4a84476dadcc3d7640c22b327464bdc9488787fd [295/418] KVM: Extend the memslot to support fd-based private memory
-reproduce: make htmldocs
+On 2022-07-08, Todd Brandt <todd.e.brandt@linux.intel.com> wrote:
+> The dmesg logs are in the html timelines themselves, just click the
+> "dmesg" button in the upper right hand corner. The log button shows
+> all kinds of system info as well.
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+Since the beginning of the kernel log is missing, I still do not see
+information about which serial driver you are using. But since it is
+x86, I'll assume it is an 8250.
 
-All warnings (new ones prefixed by >>):
+Looking at freeze-5.19.0-rc1-bad.html, at 3431.221039 we see that
+suspend_console() was called. The additional 1-second delay you are
+referring to would be 3432.436187, where serial is suspended. pr_flush()
+would have been satisfied when the message at 3431.221039 was
+printed. So the question is, why is there still printing going on?
 
->> Documentation/virt/kvm/api.rst:1364: WARNING: Inline emphasis start-string without end-string.
+@Todd: I assume you actually see all the messages up to and including
+3431.506391 when it suspends? But the next message does not appear on
+suspend?
 
-vim +1364 Documentation/virt/kvm/api.rst
+I wonder if the console_lock()/console_unlock() within __pr_flush() is
+allowing extra printing to occur, for example if another CPU was calling
+printk.
 
-4a84476dadcc3d Documentation/virt/kvm/api.rst    Chao Peng      2021-11-15  1363  
-0f2d8f4dd0663d Documentation/kvm/api.txt         Avi Kivity     2010-03-25 @1364    /* for kvm_memory_region::flags */
-4d8b81abc47b83 Documentation/virtual/kvm/api.txt Xiao Guangrong 2012-08-21  1365    #define KVM_MEM_LOG_DIRTY_PAGES	(1UL << 0)
-4d8b81abc47b83 Documentation/virtual/kvm/api.txt Xiao Guangrong 2012-08-21  1366    #define KVM_MEM_READONLY	(1UL << 1)
-4a84476dadcc3d Documentation/virt/kvm/api.rst    Chao Peng      2021-11-15  1367    #define KVM_MEM_PRIVATE		(1UL << 2)
-0f2d8f4dd0663d Documentation/kvm/api.txt         Avi Kivity     2010-03-25  1368  
+@Todd: Could you build your kernel with CONFIG_PRINTK_CALLER enabled?
+Also, please provide the last line you _see_ after a suspend. And
+finally, please make sure you are using the latest 5.19-rc. Thanks!
 
-:::::: The code at line 1364 was first introduced by commit
-:::::: 0f2d8f4dd0663defff8c1738d33478c1fb65a4f5 KVM: Document KVM_SET_USER_MEMORY_REGION
-
-:::::: TO: Avi Kivity <avi@redhat.com>
-:::::: CC: Avi Kivity <avi@redhat.com>
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+John Ogness

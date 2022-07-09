@@ -2,50 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ED2C756C7A7
-	for <lists+linux-kernel@lfdr.de>; Sat,  9 Jul 2022 09:13:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F0B056C7AB
+	for <lists+linux-kernel@lfdr.de>; Sat,  9 Jul 2022 09:21:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229471AbiGIHN2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 9 Jul 2022 03:13:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55204 "EHLO
+        id S229513AbiGIHVc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 9 Jul 2022 03:21:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58662 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229379AbiGIHN0 (ORCPT
+        with ESMTP id S229379AbiGIHVb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 9 Jul 2022 03:13:26 -0400
-Received: from mail-il1-f198.google.com (mail-il1-f198.google.com [209.85.166.198])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4105578203
-        for <linux-kernel@vger.kernel.org>; Sat,  9 Jul 2022 00:13:24 -0700 (PDT)
-Received: by mail-il1-f198.google.com with SMTP id x5-20020a923005000000b002d1a91c4d13so537023ile.4
-        for <linux-kernel@vger.kernel.org>; Sat, 09 Jul 2022 00:13:24 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
-        bh=YNjDCWN7v9Gcshr/FrnIxWh4qyNpKpJS7nTPejRH6ns=;
-        b=NTrqgH51cK5ld/T0CmCW4K9jzsSGYRLgvCpeyz6Q3wLTog6fcIm7iiJ3qtByWtkpfo
-         SLr0g92TQHgyqpULFmdE2jnY7ICVi1U3It3Fyqdb+sp4cuIoyxeQyrVQdmHYPBOuNIVS
-         kgrf93cQoFA81o6cuVzU56e5S/noVr4oG2EA/K2Ix0g0kd8AbRB0KMgwdCt6NVODuX31
-         hbM5b5g/fekFULf5iTnKMcpqsyBYqCbNMISVWk5ysGh4q+tb61owdCITeBcIlv11nbAf
-         1kw5x/ON60wAkku/ywe5o/t1ba7IPB7TfwW8uGrqhrLVwqXFoIAs57O6arB2kD5ZLcLr
-         4iNA==
-X-Gm-Message-State: AJIora8iLxu3aV8Q2jPJT/CNkp2loXp6WTk3oqbYk/zlSG6fo00fIPFl
-        RtV1MZsDXYlamLo9g1GHs1oakOxdOpdsAATuFtdLiuqj5hQo
-X-Google-Smtp-Source: AGRyM1smuz787MixueMSePd3errsnBxIJ1iHqS6CFU4MwcPMrANcCEOr4I7OXyQXTI4BMMaDTWZWFwM1DqAFUQu4NOawf7JOmhzp
+        Sat, 9 Jul 2022 03:21:31 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64AE466AE9;
+        Sat,  9 Jul 2022 00:21:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1657351290; x=1688887290;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=mK3h89NOmsA9IEWTgtnuN+xw4CIUfxdxOLlCl9s+Q60=;
+  b=Jta57/Umvu8Vz5CRHGk1g0bnP+d4b+VfzDUQMNE1km6tdq5j97wXCewn
+   VRqfn1wokPZS5KrlhGRWN0477jJd8dXBzzo7zreT5otjMVrfqJG36U9rd
+   hdwc/rKDDKyAy7yBB2E+fcXufm7Ioz0kPf5pAPpEXb+UBApo+eWY7uVsn
+   0QOtRTT87mJv0M/RUVZbtgoYM5jL9hmc60sZi+Bdcwg6H50AmKOsPSmnI
+   Pj6aYlo77wbIG3a+SbCMafjZdLGhtW/s8VBP9MgI+33ajWwv+K5pPanm8
+   kbTP8aGI7kDJhRcrvq6lBlEEWKx9ART0TBhdEZvn5ssCR1VBaBWRdUyrB
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10402"; a="285541959"
+X-IronPort-AV: E=Sophos;i="5.92,256,1650956400"; 
+   d="scan'208";a="285541959"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Jul 2022 00:21:30 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.92,256,1650956400"; 
+   d="scan'208";a="626942379"
+Received: from lkp-server01.sh.intel.com (HELO 68b931ab7ac1) ([10.239.97.150])
+  by orsmga001.jf.intel.com with ESMTP; 09 Jul 2022 00:21:27 -0700
+Received: from kbuild by 68b931ab7ac1 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1oA4mN-000OQU-5Q;
+        Sat, 09 Jul 2022 07:21:27 +0000
+Date:   Sat, 9 Jul 2022 15:21:01 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Xin Ji <xji@analogixsemi.com>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     kbuild-all@lists.01.org, bliang@analogixsemi.com,
+        qwen@analogixsemi.com, jli@analogixsemi.com,
+        Xin Ji <xji@analogixsemi.com>, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org
+Subject: Re: [PATCH v14 3/3] usb: typec: anx7411: Add Analogix PD ANX7411
+ support
+Message-ID: <202207091509.VXtuoiWm-lkp@intel.com>
+References: <20220706083433.2415524-3-xji@analogixsemi.com>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6638:154:b0:339:e14c:867e with SMTP id
- y20-20020a056638015400b00339e14c867emr4245883jao.190.1657350803629; Sat, 09
- Jul 2022 00:13:23 -0700 (PDT)
-Date:   Sat, 09 Jul 2022 00:13:23 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000eb2d6c05e35a0d73@google.com>
-Subject: [syzbot] memory leak in xas_create
-From:   syzbot <syzbot+a785d07959bc94837d51@syzkaller.appspotmail.com>
-To:     akpm@linux-foundation.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220706083433.2415524-3-xji@analogixsemi.com>
+X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -53,141 +69,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+Hi Xin,
 
-syzbot found the following issue on:
+Thank you for the patch! Perhaps something to improve:
 
-HEAD commit:    c1084b6c5620 Merge tag 'soc-fixes-5.19-2' of git://git.ker..
-git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=14967ccc080000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=916233b7694a38ff
-dashboard link: https://syzkaller.appspot.com/bug?extid=a785d07959bc94837d51
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=122ae834080000
+[auto build test WARNING on usb/usb-testing]
+[also build test WARNING on linus/master v5.19-rc5 next-20220708]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+a785d07959bc94837d51@syzkaller.appspotmail.com
+url:    https://github.com/intel-lab-lkp/linux/commits/Xin-Ji/usb-typec-tcpci-move-tcpci-h-to-include-linux-usb/20220706-163653
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
+config: arm-randconfig-s032-20220707 (https://download.01.org/0day-ci/archive/20220709/202207091509.VXtuoiWm-lkp@intel.com/config)
+compiler: arm-linux-gnueabi-gcc (GCC) 11.3.0
+reproduce:
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # apt-get install sparse
+        # sparse version: v0.6.4-39-gce1a6720-dirty
+        # https://github.com/intel-lab-lkp/linux/commit/6dc890db91c87d455e5a4588fa3c1182dfe2e65a
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Xin-Ji/usb-typec-tcpci-move-tcpci-h-to-include-linux-usb/20220706-163653
+        git checkout 6dc890db91c87d455e5a4588fa3c1182dfe2e65a
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=arm SHELL=/bin/bash drivers/usb/typec/
 
-2022/07/05 05:22:17 executed programs: 828
-2022/07/05 05:22:23 executed programs: 846
-2022/07/05 05:22:30 executed programs: 866
-2022/07/05 05:22:37 executed programs: 875
-BUG: memory leak
-unreferenced object 0xffff888113662480 (size 576):
-  comm "khugepaged", pid 32, jiffies 4295002751 (age 22.940s)
-  hex dump (first 32 bytes):
-    06 15 08 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
-    58 08 46 1d 81 88 ff ff 98 24 66 13 81 88 ff ff  X.F......$f.....
-  backtrace:
-    [<ffffffff824aa006>] xas_alloc+0xf6/0x120 lib/xarray.c:377
-    [<ffffffff824acc55>] xas_create+0x395/0x820 lib/xarray.c:679
-    [<ffffffff824ad180>] xas_create_range+0xa0/0x1c0 lib/xarray.c:719
-    [<ffffffff815957f3>] collapse_file+0x283/0x2870 mm/khugepaged.c:1670
-    [<ffffffff8159b52c>] khugepaged_scan_file mm/khugepaged.c:2072 [inline]
-    [<ffffffff8159b52c>] khugepaged_scan_mm_slot mm/khugepaged.c:2167 [inline]
-    [<ffffffff8159b52c>] khugepaged_do_scan mm/khugepaged.c:2251 [inline]
-    [<ffffffff8159b52c>] khugepaged+0x227c/0x43a0 mm/khugepaged.c:2296
-    [<ffffffff8127b8b5>] kthread+0x125/0x160 kernel/kthread.c:376
-    [<ffffffff8100222f>] ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:302
-
-BUG: memory leak
-unreferenced object 0xffff8881136e2900 (size 576):
-  comm "khugepaged", pid 32, jiffies 4295002751 (age 22.940s)
-  hex dump (first 32 bytes):
-    00 07 00 00 00 00 00 00 80 24 66 13 81 88 ff ff  .........$f.....
-    58 08 46 1d 81 88 ff ff 18 29 6e 13 81 88 ff ff  X.F......)n.....
-  backtrace:
-    [<ffffffff824aa006>] xas_alloc+0xf6/0x120 lib/xarray.c:377
-    [<ffffffff824acc55>] xas_create+0x395/0x820 lib/xarray.c:679
-    [<ffffffff824ad180>] xas_create_range+0xa0/0x1c0 lib/xarray.c:719
-    [<ffffffff815957f3>] collapse_file+0x283/0x2870 mm/khugepaged.c:1670
-    [<ffffffff8159b52c>] khugepaged_scan_file mm/khugepaged.c:2072 [inline]
-    [<ffffffff8159b52c>] khugepaged_scan_mm_slot mm/khugepaged.c:2167 [inline]
-    [<ffffffff8159b52c>] khugepaged_do_scan mm/khugepaged.c:2251 [inline]
-    [<ffffffff8159b52c>] khugepaged+0x227c/0x43a0 mm/khugepaged.c:2296
-    [<ffffffff8127b8b5>] kthread+0x125/0x160 kernel/kthread.c:376
-    [<ffffffff8100222f>] ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:302
-
-BUG: memory leak
-unreferenced object 0xffff8881136e0480 (size 576):
-  comm "khugepaged", pid 32, jiffies 4295002751 (age 22.940s)
-  hex dump (first 32 bytes):
-    00 06 00 00 00 00 00 00 80 24 66 13 81 88 ff ff  .........$f.....
-    58 08 46 1d 81 88 ff ff 98 04 6e 13 81 88 ff ff  X.F.......n.....
-  backtrace:
-    [<ffffffff824aa006>] xas_alloc+0xf6/0x120 lib/xarray.c:377
-    [<ffffffff824acc55>] xas_create+0x395/0x820 lib/xarray.c:679
-    [<ffffffff824ad180>] xas_create_range+0xa0/0x1c0 lib/xarray.c:719
-    [<ffffffff815957f3>] collapse_file+0x283/0x2870 mm/khugepaged.c:1670
-    [<ffffffff8159b52c>] khugepaged_scan_file mm/khugepaged.c:2072 [inline]
-    [<ffffffff8159b52c>] khugepaged_scan_mm_slot mm/khugepaged.c:2167 [inline]
-    [<ffffffff8159b52c>] khugepaged_do_scan mm/khugepaged.c:2251 [inline]
-    [<ffffffff8159b52c>] khugepaged+0x227c/0x43a0 mm/khugepaged.c:2296
-    [<ffffffff8127b8b5>] kthread+0x125/0x160 kernel/kthread.c:376
-    [<ffffffff8100222f>] ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:302
-
-BUG: memory leak
-unreferenced object 0xffff8881136de900 (size 576):
-  comm "khugepaged", pid 32, jiffies 4295002751 (age 22.940s)
-  hex dump (first 32 bytes):
-    00 05 00 00 00 00 00 00 80 24 66 13 81 88 ff ff  .........$f.....
-    58 08 46 1d 81 88 ff ff 18 e9 6d 13 81 88 ff ff  X.F.......m.....
-  backtrace:
-    [<ffffffff824aa006>] xas_alloc+0xf6/0x120 lib/xarray.c:377
-    [<ffffffff824acc55>] xas_create+0x395/0x820 lib/xarray.c:679
-    [<ffffffff824ad180>] xas_create_range+0xa0/0x1c0 lib/xarray.c:719
-    [<ffffffff815957f3>] collapse_file+0x283/0x2870 mm/khugepaged.c:1670
-    [<ffffffff8159b52c>] khugepaged_scan_file mm/khugepaged.c:2072 [inline]
-    [<ffffffff8159b52c>] khugepaged_scan_mm_slot mm/khugepaged.c:2167 [inline]
-    [<ffffffff8159b52c>] khugepaged_do_scan mm/khugepaged.c:2251 [inline]
-    [<ffffffff8159b52c>] khugepaged+0x227c/0x43a0 mm/khugepaged.c:2296
-    [<ffffffff8127b8b5>] kthread+0x125/0x160 kernel/kthread.c:376
-    [<ffffffff8100222f>] ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:302
-
-BUG: memory leak
-unreferenced object 0xffff88811371b6c0 (size 576):
-  comm "khugepaged", pid 32, jiffies 4295002751 (age 22.940s)
-  hex dump (first 32 bytes):
-    00 04 00 00 00 00 00 00 80 24 66 13 81 88 ff ff  .........$f.....
-    58 08 46 1d 81 88 ff ff d8 b6 71 13 81 88 ff ff  X.F.......q.....
-  backtrace:
-    [<ffffffff824aa006>] xas_alloc+0xf6/0x120 lib/xarray.c:377
-    [<ffffffff824acc55>] xas_create+0x395/0x820 lib/xarray.c:679
-    [<ffffffff824ad180>] xas_create_range+0xa0/0x1c0 lib/xarray.c:719
-    [<ffffffff815957f3>] collapse_file+0x283/0x2870 mm/khugepaged.c:1670
-    [<ffffffff8159b52c>] khugepaged_scan_file mm/khugepaged.c:2072 [inline]
-    [<ffffffff8159b52c>] khugepaged_scan_mm_slot mm/khugepaged.c:2167 [inline]
-    [<ffffffff8159b52c>] khugepaged_do_scan mm/khugepaged.c:2251 [inline]
-    [<ffffffff8159b52c>] khugepaged+0x227c/0x43a0 mm/khugepaged.c:2296
-    [<ffffffff8127b8b5>] kthread+0x125/0x160 kernel/kthread.c:376
-    [<ffffffff8100222f>] ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:302
-
-BUG: memory leak
-unreferenced object 0xffff888113666d80 (size 576):
-  comm "khugepaged", pid 32, jiffies 4295002751 (age 22.940s)
-  hex dump (first 32 bytes):
-    00 03 00 00 00 00 00 00 80 24 66 13 81 88 ff ff  .........$f.....
-    58 08 46 1d 81 88 ff ff 98 6d 66 13 81 88 ff ff  X.F......mf.....
-  backtrace:
-    [<ffffffff824aa006>] xas_alloc+0xf6/0x120 lib/xarray.c:377
-    [<ffffffff824acc55>] xas_create+0x395/0x820 lib/xarray.c:679
-    [<ffffffff824ad180>] xas_create_range+0xa0/0x1c0 lib/xarray.c:719
-    [<ffffffff815957f3>] collapse_file+0x283/0x2870 mm/khugepaged.c:1670
-    [<ffffffff8159b52c>] khugepaged_scan_file mm/khugepaged.c:2072 [inline]
-    [<ffffffff8159b52c>] khugepaged_scan_mm_slot mm/khugepaged.c:2167 [inline]
-    [<ffffffff8159b52c>] khugepaged_do_scan mm/khugepaged.c:2251 [inline]
-    [<ffffffff8159b52c>] khugepaged+0x227c/0x43a0 mm/khugepaged.c:2296
-    [<ffffffff8127b8b5>] kthread+0x125/0x160 kernel/kthread.c:376
-    [<ffffffff8100222f>] ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:302
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
 
+sparse warnings: (new ones prefixed by >>)
+>> drivers/usb/typec/anx7411.c:295:9: sparse: sparse: cast truncates bits from constant value (1f29 becomes 29)
+>> drivers/usb/typec/anx7411.c:297:21: sparse: sparse: cast truncates bits from constant value (7411 becomes 11)
 
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
+vim +295 drivers/usb/typec/anx7411.c
 
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-syzbot can test patches for this issue, for details see:
-https://goo.gl/tpsmEJ#testing-patches
+   293	
+   294	static u8 snk_identity[] = {
+ > 295		LOBYTE(VID_ANALOGIX), HIBYTE(VID_ANALOGIX), 0x00, 0x82, /* snk_id_hdr */
+   296		0x00, 0x00, 0x00, 0x00,                                 /* snk_cert */
+ > 297		0x00, 0x00, LOBYTE(PID_ANALOGIX), HIBYTE(PID_ANALOGIX), /* 5snk_ama */
+   298	};
+   299	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

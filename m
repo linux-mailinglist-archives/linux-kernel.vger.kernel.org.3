@@ -2,94 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 30E1756CC8C
-	for <lists+linux-kernel@lfdr.de>; Sun, 10 Jul 2022 06:00:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CBCA656CA3B
+	for <lists+linux-kernel@lfdr.de>; Sat,  9 Jul 2022 17:02:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229538AbiGJEAN convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Sun, 10 Jul 2022 00:00:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36926 "EHLO
+        id S229607AbiGIPBG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 9 Jul 2022 11:01:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44290 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229450AbiGJEAJ (ORCPT
+        with ESMTP id S229461AbiGIPBD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 10 Jul 2022 00:00:09 -0400
-X-Greylist: delayed 6766 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sat, 09 Jul 2022 21:00:05 PDT
-Received: from astra4050.startdedicated.net (mail.wseas.org [62.138.2.54])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE3961758D
-        for <linux-kernel@vger.kernel.org>; Sat,  9 Jul 2022 21:00:04 -0700 (PDT)
-Received: from localhost (localhost [127.0.0.1])
-        by astra4050.startdedicated.net (Postfix) with ESMTP id 755326EA5701
-        for <linux-kernel@vger.kernel.org>; Sun, 10 Jul 2022 02:33:44 +0200 (CEST)
-Received: from astra4050.startdedicated.net ([127.0.0.1])
-        by localhost (astra4050.startdedicated.net [127.0.0.1]) (amavisd-new, port 10032)
-        with ESMTP id K4dV3nqyG2_A for <linux-kernel@vger.kernel.org>;
-        Sun, 10 Jul 2022 02:33:44 +0200 (CEST)
-Received: from localhost (localhost [127.0.0.1])
-        by astra4050.startdedicated.net (Postfix) with ESMTP id B19E36E8C71A
-        for <linux-kernel@vger.kernel.org>; Sat,  9 Jul 2022 22:45:37 +0200 (CEST)
-X-Virus-Scanned: amavisd-new at wseas.org
-Received: from astra4050.startdedicated.net ([127.0.0.1])
-        by localhost (astra4050.startdedicated.net [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id PwYqkLOd-vNV for <linux-kernel@vger.kernel.org>;
-        Sat,  9 Jul 2022 22:45:37 +0200 (CEST)
-Received: from 10.0.2.15 (astra4050.startdedicated.net [62.138.2.54])
-        by astra4050.startdedicated.net (Postfix) with SMTP id F231C6E0B205
-        for <linux-kernel@vger.kernel.org>; Sat,  9 Jul 2022 16:56:42 +0200 (CEST)
-From:   "MCSI 2022 - with IEEE" <maria.papadopoulou@kathimerini.gr>
-To:     <linux-kernel@vger.kernel.org>
-Subject: 6th International Conference on Mathematical Models & Computational Techniques in Science & Engineering
-Sender: "MCSI 2022 - with IEEE" <maria.papadopoulou@kathimerini.gr>
-Mime-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Date:   Sat, 9 Jul 2022 17:58:07 +0300
-Reply-To: "MCSI 2022 - with IEEE" <maria.managing.editor@gmail.com>
-Message-Id: <20220709145643.F231C6E0B205@astra4050.startdedicated.net>
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=4.9 required=5.0 tests=BAYES_50,
-        FREEMAIL_FORGED_REPLYTO,RCVD_IN_MSPIKE_H2,RCVD_IN_VALIDITY_RPBL,
-        SPF_HELO_NONE,SPF_SOFTFAIL,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
-X-Spam-Level: ****
+        Sat, 9 Jul 2022 11:01:03 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7B8833344;
+        Sat,  9 Jul 2022 08:01:01 -0700 (PDT)
+From:   Kurt Kanzenbach <kurt@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1657378859;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=YNuUR8IL7aWclVdQQDh0X9l3C15Kxd+TTJgxbaYvY0c=;
+        b=PAJ14VyDYmiYKSFIGzL/wof4GiClOzGdd9FIPluYfWm/q48+I6nQGprnSkf2EFWWPrMpvG
+        125U3BAC0FKAgPNp1FKYjn0S02eSaQ1KL2wFR7QqJ+v7/B5ZaKM5uiClK5KD/fjT6Yr+FH
+        N27XVUhexSjaEd756NX0GHgWmQX8NlReeLzuJZhXcxtxWYxZUZXivGsSAF6qfIYIjiXjjy
+        1CWpfg+6BC8GLos/EZBDqpaVXz6aGROmtc/Qub53HlGVx4Cjd0UrmUf8K48jIzwQl/ySD4
+        WroW2eFuYZsWPXRPA8nu9ZpcxcYf7sGejOGxDdjad6k2AVSHj5Kfb3a7sZJJ1A==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1657378859;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=YNuUR8IL7aWclVdQQDh0X9l3C15Kxd+TTJgxbaYvY0c=;
+        b=9Y7/kaztxrdaYUpDWU//5btk0J0TwQm9A3hZBBRrNoBrVkmlEjMMeGpN4QMoe01KBOTBsY
+        bBL2vMvwujCGboDA==
+To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>
+Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        netdev@vger.kernel.org
+Subject: Re: [PATCH] net: dsa: hellcreek: Use the bitmap API to allocate
+ bitmaps
+In-Reply-To: <8306e2ae69a5d8553691f5d10a86a4390daf594b.1657376651.git.christophe.jaillet@wanadoo.fr>
+References: <8306e2ae69a5d8553691f5d10a86a4390daf594b.1657376651.git.christophe.jaillet@wanadoo.fr>
+Date:   Sat, 09 Jul 2022 17:00:58 +0200
+Message-ID: <874jzq8h5h.fsf@kurt>
+MIME-Version: 1.0
+Content-Type: multipart/signed; boundary="=-=-=";
+        micalg=pgp-sha512; protocol="application/pgp-signature"
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Dear Colleagues
+--=-=-=
+Content-Type: text/plain
 
-We would like to invite you to present an invited article in the 
-6th International Conference on Mathematical Models & Computational Techniques in Science
-& Engineering
-www.mmctse.org
-Marathon Beach, Athens, Greece, September 20-22, 
+On Sat Jul 09 2022, Christophe JAILLET wrote:
+> Use devm_bitmap_zalloc() instead of hand-writing them.
+>
+> It is less verbose and it improves the semantic.
+>
+> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
 
-The Proceedings will be published by IEEE and will be indexed in ISI Web of Science,
-Scopus, DOAJ, ACM, EI Compended as well as in various Scopus, DOAJ, Web of Science etc
-indexed Journals (like MDPI, Hindawi) without other additional cost. Upload your paper now
+Acked-by: Kurt Kanzenbach <kurt@linutronix.de>
 
-Should you want to present a Plenary Lecture contact me
+--=-=-=
+Content-Type: application/pgp-signature; name="signature.asc"
 
+-----BEGIN PGP SIGNATURE-----
 
-Other Conference
-==============================
-7th Int. Conf. on Mathematics and Computers on Sciences and Industry - IEEE
-              MCSI 2022 Multiconference 
-              http://mcsi-conf.org/
-
-that will be held in Marathon Beach, 40 Kms away from Athens and 30 Kms away from the
-Athens International Airport. 
-
-
-The Proceedings will be published by IEEE
-and will be indexed in ISI Web of Science, Scopus, DOAJ, ACM, EI Compended as well as in
-various Scopus, DOAJ, Web of Science etc indexed Journals (like MDPI) without other
-additional cost. Upload your paper now
-
-Should you want to present a Plenary Lecture contact me
-
-
-
-
-Thanks
-
-Maria Papadopoulou
+iQJHBAEBCgAxFiEEvLm/ssjDfdPf21mSwZPR8qpGc4IFAmLJmCoTHGt1cnRAbGlu
+dXRyb25peC5kZQAKCRDBk9HyqkZzgh3FD/wP4e1qoeYNeVmgedgEvaPd+DndGK0L
+sbXrHXnL1WttLs1FBc79XvkmO7yfO/5Hy8IuiA8U88UZL3F9aMtrziJBwoQW5DgS
+bUceauMkrLGVYjNMxmzRUgUGtrn5maNtFyjvu4S2/55I3fKoS5P9M93BY3+fYtem
+xhYcU9GB2BadnIMtItiImDKyP9UFDeu/o30n17uGciJZq8cg16cqHsYqIhZvDs6F
+OUrLNIy0IHcl4UBhokzXqTnAZjGIRbjwwWH9kXQPsoFw2KZhJ8U+EPyOjF9AfVP1
+gBblLyE3vStnD3FG8DFkxX2/NHGAYbDD7/9evRxLjXJxWUiRPB2nn9+/ceBYrikh
+y3E7mqG0CbPBjS5WNYtsP4DUCs0ugED/2oja84ncWyGwCK7ZCPeJ/4zUWuk+Mlkp
+SuSOgLvlL2aNK5q9KHsGLzZ3sgfK+QOnt6npDIiwpgaISbAmNqivh0d8WeYZN4Ws
+DATBhfpi79BR78gKh5J/uYbE0e9dqYeNc2aOnzK8Vb45ESR8DWH68XsP5gQrATOm
+VdqN8lhsT5RI/401trMwdiaT04d4CUnAaAlzidl5KeZc4Bu/jJk/9IRDEv2XZ7NE
+TDq7o67nFIqNOVaekUOnDJ1+yK0kwTiBIz/YDzSui3ifG/PLW5ukGIwmPhQnBkhE
+aD+4o2y0W4NkLg==
+=zwcA
+-----END PGP SIGNATURE-----
+--=-=-=--

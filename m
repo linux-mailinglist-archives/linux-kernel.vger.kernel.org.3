@@ -2,57 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B7E0956CB9C
-	for <lists+linux-kernel@lfdr.de>; Sat,  9 Jul 2022 23:30:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 918B256CBA0
+	for <lists+linux-kernel@lfdr.de>; Sat,  9 Jul 2022 23:45:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229582AbiGIV3z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 9 Jul 2022 17:29:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37318 "EHLO
+        id S229613AbiGIVpu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 9 Jul 2022 17:45:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43858 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229448AbiGIV3y (ORCPT
+        with ESMTP id S229448AbiGIVps (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 9 Jul 2022 17:29:54 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03F1A1EAEB;
-        Sat,  9 Jul 2022 14:29:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1657402194; x=1688938194;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=JqqCIX6BzWrb0wRSLBHBCbSD+Lo6FJrWps5xHRHZg+E=;
-  b=O55zKGoxlzu8Snes40fvEQJq95ocoYMiakqh1b+Wbh8S5vVX03MHjl3W
-   /GHHAQWyJBCfCmPk4wMHfv8Bw2P8xSuOsaZs0eTDh6NQpvlRu04NUef54
-   gQizCtC/f46CB5IFgKDRWx0+P2fGKQ+/B33b1Nhr9LwRxgANjRShtyCyR
-   F7TnJpKvvUdh6xBqlGd1vajjeYZx23eCQ5U80UAQaRIeqVRbJ2GXtYU4s
-   38Zn0d+YKO7d8xNZlR/2lZQa6tgb5s1YOy3K4bxyUU53sUQrXaDnUMLfB
-   /Pe5axyR16DcmhAtv7mkc1Z2FyxoBrDAXxLHglz8J41kUUtNBk0NBElhY
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10403"; a="348445719"
-X-IronPort-AV: E=Sophos;i="5.92,259,1650956400"; 
-   d="scan'208";a="348445719"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Jul 2022 14:29:53 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,259,1650956400"; 
-   d="scan'208";a="921352980"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by fmsmga005.fm.intel.com with ESMTP; 09 Jul 2022 14:29:51 -0700
-Received: by black.fi.intel.com (Postfix, from userid 1003)
-        id F25541A0; Sun, 10 Jul 2022 00:29:58 +0300 (EEST)
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Mark Brown <broonie@kernel.org>, linux-spi@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Subject: [PATCH v1 1/1] spi: Return deferred probe error when controller isn't yet available
-Date:   Sun, 10 Jul 2022 00:29:56 +0300
-Message-Id: <20220709212956.25530-1-andriy.shevchenko@linux.intel.com>
-X-Mailer: git-send-email 2.35.1
+        Sat, 9 Jul 2022 17:45:48 -0400
+Received: from mail.zytor.com (terminus.zytor.com [198.137.202.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27A98101CC
+        for <linux-kernel@vger.kernel.org>; Sat,  9 Jul 2022 14:45:46 -0700 (PDT)
+Received: from [IPV6:2601:646:8600:40c0:425:cd56:6750:e1bf] ([IPv6:2601:646:8600:40c0:425:cd56:6750:e1bf])
+        (authenticated bits=0)
+        by mail.zytor.com (8.17.1/8.15.2) with ESMTPSA id 269LjU0T2266948
+        (version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NO);
+        Sat, 9 Jul 2022 14:45:30 -0700
+DKIM-Filter: OpenDKIM Filter v2.11.0 mail.zytor.com 269LjU0T2266948
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zytor.com;
+        s=2022070501; t=1657403131;
+        bh=aXOKja45dVtca40iHk9WQuXR+H/NtJR+jgzp7l5Qntk=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=qdL7SHdLKcelbFK201Bs60r2segRQXhbe77S19iNy4XtjTlIutqgRL0vVbF/QKfjZ
+         +mFfsQTbamN+IwI3nmXVeN4N3el27XDUb2yatMdVOPCuqe+ftHsTXa77hmh0VcHo2e
+         J3ZgIJ0mUtmyhHf3rapSAtxMCzxNCVFB8kl4jx9AHZEeH+S+1D/ZWolQ+TCB119vqa
+         cPT3iueZx245DmnbpKDenLzgMZfnb4iXPTg81SFYWJAyYrJO8DC2vzhI8S23kJmGzI
+         Nl4YwM4vPhSKxq6Sb6ZgL2bqQdxsi+J+YFFVwe6QNfUdogcnh5MfQ8jSc8BjTVj9gM
+         2vuRnV6rn32uQ==
+Message-ID: <191d8f96-7573-bd0e-9ca4-3fc22c5c9a49@zytor.com>
+Date:   Sat, 9 Jul 2022 14:45:24 -0700
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH tip v8] x86/setup: Use rng seeds from setup_data
+Content-Language: en-US
+To:     Borislav Petkov <bp@alien8.de>
+Cc:     "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, X86 ML <x86@kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Andy Lutomirski <luto@kernel.org>
+References: <20220707000852.523788-1-Jason@zx2c4.com>
+ <20220708113907.891319-1-Jason@zx2c4.com>
+ <ddba81dd-cc92-699c-5274-785396a17fb5@zytor.com> <YslPKbrmwF0uSm7p@zn.tnic>
+From:   "H. Peter Anvin" <hpa@zytor.com>
+In-Reply-To: <YslPKbrmwF0uSm7p@zn.tnic>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -60,30 +61,16 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-If the controller is not available, it might be in the future and
-we would like to re-probe the peripheral again. For that purpose
-return deferred probe.
+On 7/9/22 02:49, Borislav Petkov wrote:
+> On Fri, Jul 08, 2022 at 06:51:16PM -0700, H. Peter Anvin wrote:
+>> #define SETUP_ENUM_MAX	SETUP_RNG_SEED
+>> #define SETUP_INDIRECT	(1<<31)
+>> #define SETUP_TYPE_MAX	(SETUP_ENUM_MAX | SETUP_INDIRECT)
+> 
+> Wait, if we get to add a new number, SETUP_ENUM_MAX and thus
+> SETUP_TYPE_MAX will change. And they're uapi too...
 
-BugLink: https://bugzilla.kernel.org/show_bug.cgi?id=215993
-Fixes: 87e59b36e5e2 ("spi: Support selection of the index of the ACPI Spi Resource before alloc")
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
----
- drivers/spi/spi.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Talking API here rather than ABI, i.e. the semantics of those symbols.
 
-diff --git a/drivers/spi/spi.c b/drivers/spi/spi.c
-index 9b080dafa52c..119a2de8a8cb 100644
---- a/drivers/spi/spi.c
-+++ b/drivers/spi/spi.c
-@@ -2478,7 +2478,7 @@ static int acpi_spi_add_resource(struct acpi_resource *ares, void *data)
- 
- 				ctlr = acpi_spi_find_controller_by_adev(adev);
- 				if (!ctlr)
--					return -ENODEV;
-+					return -EPROBE_DEFER;
- 
- 				lookup->ctlr = ctlr;
- 			}
--- 
-2.35.1
+	-hpa
 

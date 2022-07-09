@@ -2,86 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F07656C86C
-	for <lists+linux-kernel@lfdr.de>; Sat,  9 Jul 2022 11:47:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 31FB356C886
+	for <lists+linux-kernel@lfdr.de>; Sat,  9 Jul 2022 11:49:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229485AbiGIJrU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 9 Jul 2022 05:47:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47060 "EHLO
+        id S229795AbiGIJtK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 9 Jul 2022 05:49:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48166 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229448AbiGIJrS (ORCPT
+        with ESMTP id S229624AbiGIJsq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 9 Jul 2022 05:47:18 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 06441655AC
-        for <linux-kernel@vger.kernel.org>; Sat,  9 Jul 2022 02:47:17 -0700 (PDT)
+        Sat, 9 Jul 2022 05:48:46 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 95B9C71BD1
+        for <linux-kernel@vger.kernel.org>; Sat,  9 Jul 2022 02:48:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1657360037;
+        s=mimecast20190719; t=1657360086;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=oVjul2vVFMPSpvmkVCAUVdXizXpt78M3xwKxWk3zHY0=;
-        b=V9tHx/L3ecaAbsW7nYGPbvKyxCYu37BxUNYyK7njXO7tJzrWVV1omMbLrVN1jch/2g94dG
-        DSeNj85/wP4f7bmo/Urkz1NTfTTGwXGcZ9BtJjUC1PYfLS/nv/5WSrGMZl1sJHStCK00nn
-        6GAyQwZW1JXmc0ZaI20F92MzQkALDVw=
-Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com
- [209.85.208.72]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=BlyBQAyYHr94kaXAtNbsePMNGWU7xxVjNP6Ohft23ow=;
+        b=I+AleDTy2reGvQpCgJk9H+G6BlFWut+Ub2yjbvCrnv4hz9KCRIs7ZJ8CVBKprYiPcA0Udc
+        7qKll8TdzeaHH6PaCsgyoWkJq1tr2ZBdGnO5ar2tvSugoMutEHIWNpiIjFUefgiML1u7rW
+        zu+XLcez2z8z94p76zwn5cY7D7b4I2M=
+Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com
+ [209.85.208.70]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-281-W1T-PDzEPD2QTFnxBn6k6Q-1; Sat, 09 Jul 2022 05:47:15 -0400
-X-MC-Unique: W1T-PDzEPD2QTFnxBn6k6Q-1
-Received: by mail-ed1-f72.google.com with SMTP id h16-20020a05640250d000b00435bab1a7b4so827204edb.10
-        for <linux-kernel@vger.kernel.org>; Sat, 09 Jul 2022 02:47:14 -0700 (PDT)
+ us-mta-610-VEbdloxNOQaQmD785OTP2g-1; Sat, 09 Jul 2022 05:48:05 -0400
+X-MC-Unique: VEbdloxNOQaQmD785OTP2g-1
+Received: by mail-ed1-f70.google.com with SMTP id z17-20020a05640235d100b0043762b1e1e3so815617edc.21
+        for <linux-kernel@vger.kernel.org>; Sat, 09 Jul 2022 02:48:05 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:from
+         :subject:to:cc:references:content-language:in-reply-to
          :content-transfer-encoding;
-        bh=oVjul2vVFMPSpvmkVCAUVdXizXpt78M3xwKxWk3zHY0=;
-        b=ENGWXuz/yvJqSZq30GUUSDkTbCv8RF30LdErX1t+pGklmtrPTkcJSy0ERS/XOkeuzn
-         qBXFuMVIGkusprkLcXBPFW2oiiZogGC5H4MMMsbCdIQt2kBPkpNySDy+Nsev9M5cp4HC
-         hjV4WzrSPO9NNjvKeNVHNhxHCb7vx8nshOb2ibX0HCHMhQOmhwcSxnsE9DN/rPE0atWl
-         y/A4a87mWm1ORAl8eVUvsc+w8v6Qt1DY3Eo2+bVLaOjYCdES27kDK1nMWt0EB6d9JsLN
-         /e3h570rREuwcsLCjk7C/bkLzzZQvQgAS2lx3N8w7ZAaaMt1vj//lIV5GrVCvropagsz
-         BxJQ==
-X-Gm-Message-State: AJIora+VcxesPSqnLA5aFNmvMc0DfXwTlNi74Nh7yLwvscjkhCKJstGK
-        Co2oKtuIN/N7Cz4ke5Z3XJualyAIUzmmZiqOsV5prab/csXwbF0fW1BQnmhULu38ohGCB5Se6u7
-        XrckkFQHjJOEioR+8kI2ipRO5
-X-Received: by 2002:a05:6402:26c8:b0:43a:c404:a553 with SMTP id x8-20020a05640226c800b0043ac404a553mr972156edd.53.1657360033898;
-        Sat, 09 Jul 2022 02:47:13 -0700 (PDT)
-X-Google-Smtp-Source: AGRyM1tXnhUx6P1aaMUqcqU4AG0UIrUqo7LsszkPewfUUVM8I3enoWg8y6z1maxgws7Of6Id+JDpwQ==
-X-Received: by 2002:a05:6402:26c8:b0:43a:c404:a553 with SMTP id x8-20020a05640226c800b0043ac404a553mr972140edd.53.1657360033730;
-        Sat, 09 Jul 2022 02:47:13 -0700 (PDT)
+        bh=BlyBQAyYHr94kaXAtNbsePMNGWU7xxVjNP6Ohft23ow=;
+        b=Sw7oouMHTFLA3hb9o1pcx7GS5YT2iDdyPg+wpr7zU4skCVz1pIak8HXi2Z79wyoMVO
+         LCj/MorjiJo+KZPgm/FfM0i9hi9sumk9440ZT98RZZGtDJZNINcwqWKOSQRc3rV7XcG9
+         eOcTyK1QafREIpEp5q6X51B1uuO99qmEFfk/Oxv/hL+01MDpKQgMZjiA8U3jjBfxoLZP
+         XTn73TtQxKKYhg7PeJv80TJsIEKAqndJ1PYhdf4z2uB36X772tXG3TDlUezDjxPfewYG
+         z/1OrKjUYQ9Pu07zfceDQsN7hySNtDzSm2DwWx9Fd4G0TRAXOMy+YaAQ/pP2hP0edMpK
+         De4A==
+X-Gm-Message-State: AJIora+u8n5qR4+HBMnnVmq3c/gIKc+ag1mS95aGKTBR30rIdC2OJCTd
+        5KMkNCD+3EjYa+EHpTboAhO5XdfuLJodvB1q77DmKUivMOqDwwaagIkQChuBAxbYVRm+ue7KCGg
+        mlrMw3vtDYlvKK53b1dgeRt+L
+X-Received: by 2002:a05:6402:7da:b0:43a:6fe3:b7a9 with SMTP id u26-20020a05640207da00b0043a6fe3b7a9mr10483555edy.410.1657360084322;
+        Sat, 09 Jul 2022 02:48:04 -0700 (PDT)
+X-Google-Smtp-Source: AGRyM1uCp3mRdrtnkzP+ynBSq50nc9ST/sufvKQLSHaXJ+i+49NH7M0ZCD5q8Pppa2o0iJgLjgnwHg==
+X-Received: by 2002:a05:6402:7da:b0:43a:6fe3:b7a9 with SMTP id u26-20020a05640207da00b0043a6fe3b7a9mr10483532edy.410.1657360084113;
+        Sat, 09 Jul 2022 02:48:04 -0700 (PDT)
 Received: from ?IPV6:2001:1c00:c1e:bf00:d69d:5353:dba5:ee81? (2001-1c00-0c1e-bf00-d69d-5353-dba5-ee81.cable.dynamic.v6.ziggo.nl. [2001:1c00:c1e:bf00:d69d:5353:dba5:ee81])
-        by smtp.gmail.com with ESMTPSA id l1-20020aa7c301000000b0043ab5939ecbsm684940edq.59.2022.07.09.02.47.13
+        by smtp.gmail.com with ESMTPSA id a25-20020aa7cf19000000b0043a56c0ededsm680948edy.74.2022.07.09.02.48.03
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 09 Jul 2022 02:47:13 -0700 (PDT)
-Message-ID: <9826f272-ed7d-1daa-c852-6f353258bb2b@redhat.com>
-Date:   Sat, 9 Jul 2022 11:47:12 +0200
+        Sat, 09 Jul 2022 02:48:03 -0700 (PDT)
+Message-ID: <edba69a1-3404-d20f-2a9c-6359de37b6ee@redhat.com>
+Date:   Sat, 9 Jul 2022 11:48:03 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.8.0
+From:   Hans de Goede <hdegoede@redhat.com>
 Subject: Re: [PATCH v1 2/7] platform/x86: serial-multi-instantiate: Improve
  autodetection
-Content-Language: en-US
 To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Mark Gross <markgross@kernel.org>
+        platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Stefan Binding <sbinding@opensource.cirrus.com>
+Cc:     Mark Gross <markgross@kernel.org>, patches@opensource.cirrus.com
 References: <20220709000636.35550-1-andriy.shevchenko@linux.intel.com>
  <20220709000636.35550-2-andriy.shevchenko@linux.intel.com>
-From:   Hans de Goede <hdegoede@redhat.com>
+Content-Language: en-US
 In-Reply-To: <20220709000636.35550-2-andriy.shevchenko@linux.intel.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
+
+<resend with Stefan added to the To list>
 
 Hi,
 

@@ -2,62 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C5E4F56C9B1
-	for <lists+linux-kernel@lfdr.de>; Sat,  9 Jul 2022 15:53:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C84B556C9B4
+	for <lists+linux-kernel@lfdr.de>; Sat,  9 Jul 2022 15:54:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229626AbiGINxD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 9 Jul 2022 09:53:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32904 "EHLO
+        id S229682AbiGINx5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 9 Jul 2022 09:53:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33690 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229462AbiGINxC (ORCPT
+        with ESMTP id S229608AbiGINxx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 9 Jul 2022 09:53:02 -0400
-Received: from mailrelay4-1.pub.mailoutpod1-cph3.one.com (mailrelay4-1.pub.mailoutpod1-cph3.one.com [46.30.210.185])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C908C3CBE7
-        for <linux-kernel@vger.kernel.org>; Sat,  9 Jul 2022 06:53:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ravnborg.org; s=rsa1;
-        h=in-reply-to:content-type:mime-version:references:message-id:subject:cc:to:
-         from:date:from;
-        bh=NQ+Zwi2Q9/fCClfU3sukRpl2ejgpU77vzKaL4tBUEjw=;
-        b=ME3WDeR29M6SMHqQOM+ikF5SvR2BBDrlmBZceQIb9nqXOTaBIKuo/N9txDvC1fFJVczTVHErFsFlf
-         DQrHq3cHKLyTD1tJbdi/ziIVhqIXIlACJSNaV2j9Hqc6tNN00IP2ITGFBsWpm+4GRAEByln+2kMCzI
-         0wDcySZ5JiyhRblWlVch4zqwNFkNUYbXMdbsKGneEPryB9UB7oydzyHUiF/waCCdOFHz4Lsr/VViAu
-         DjS5U9qMftQ2dRU+dRQgMupbCr+oSoGbhkUKq+5iouDaTR7ZhmQhZFcM8ERw7X0Slgega+vgkOPQ3S
-         Hwolkfq3FnonWooY9XzaSkGhpDWYJCg==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed;
-        d=ravnborg.org; s=ed1;
-        h=in-reply-to:content-type:mime-version:references:message-id:subject:cc:to:
-         from:date:from;
-        bh=NQ+Zwi2Q9/fCClfU3sukRpl2ejgpU77vzKaL4tBUEjw=;
-        b=k3r4EraXV5lgTmKhrPZJGhkFQY+ryKHT591eXbjuSaONqK8U+EomVBs4dxYD3vXyrRfUR6n3FF5yW
-         O0fXJkkAA==
-X-HalOne-Cookie: 94693e2b6d199659f5373a004bd3d3b9dbebd666
-X-HalOne-ID: 7082032f-ff8e-11ec-823c-d0431ea8bb10
-Received: from mailproxy4.cst.dirpod4-cph3.one.com (2-105-2-98-cable.dk.customer.tdc.net [2.105.2.98])
-        by mailrelay4.pub.mailoutpod1-cph3.one.com (Halon) with ESMTPSA
-        id 7082032f-ff8e-11ec-823c-d0431ea8bb10;
-        Sat, 09 Jul 2022 13:52:58 +0000 (UTC)
-Date:   Sat, 9 Jul 2022 15:52:56 +0200
-From:   Sam Ravnborg <sam@ravnborg.org>
-To:     Geert Uytterhoeven <geert@linux-m68k.org>
-Cc:     Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        Simon Ser <contact@emersion.fr>
-Subject: Re: [PATCH v3] drm/mode: Improve drm_mode_fb_cmd2 documentation
-Message-ID: <YsmIOG7o5lgyJptW@ravnborg.org>
-References: <536de72eab09242e1faf22fa58d91c9005d6ea51.1657113597.git.geert@linux-m68k.org>
+        Sat, 9 Jul 2022 09:53:53 -0400
+Received: from smtpbg.qq.com (unknown [43.155.67.158])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33F031120;
+        Sat,  9 Jul 2022 06:53:45 -0700 (PDT)
+X-QQ-mid: bizesmtp88t1657374806tsc63ebp
+Received: from localhost.localdomain ( [182.148.15.109])
+        by bizesmtp.qq.com (ESMTP) with 
+        id ; Sat, 09 Jul 2022 21:53:22 +0800 (CST)
+X-QQ-SSF: 01000000002000B0C000C00A0000000
+X-QQ-FEAT: rl11S5XfjROmodCS3QjJDmHwffQNuDJ6HOK8x0NH5FW6lTuC5ig1Ym3b4yQrx
+        nElxIau1yJDjh+A4vmQVH17OPlXcRmErNPbjUNTzkeu7zFusCqGQfVE8Aku752c0u0KIv/7
+        z8DWKw3Ox6rNjx1ncw1bgUQg8lYI00BFZqh9VrFUXnrQ+RG/6+cAvCdhdkCsd1WwXECeFDu
+        qsLVrp/aHcV1P63wOD3iCtaBH7p8c3uulq2yTLM+3r3UAMzNtNssLXsdJ3c09HRgO5xgbqW
+        H9sy0h6+SH6ang/dG/0WzOyatALL2aW25fcEVmwbZfsgtXwZXUJ50w6MUp1q86/kG6rMhLQ
+        UyOYjJv6U+S+nx9P9ohTGQrafoQ7tSVv7OsJEZ7pBoEyfKTjqiaIwJ6TRLsHw==
+X-QQ-GoodBg: 0
+From:   Jilin Yuan <yuanjilin@cdjrlc.com>
+To:     kvalo@kernel.org, davem@davemloft.net, edumazet@google.com,
+        kuba@kernel.org, pabeni@redhat.com, stf_xl@wp.pl
+Cc:     linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Jilin Yuan <yuanjilin@cdjrlc.com>
+Subject: [PATCH] wifi: iwlegacy: fix repeated words in comments
+Date:   Sat,  9 Jul 2022 21:53:16 +0800
+Message-Id: <20220709135316.41425-1-yuanjilin@cdjrlc.com>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <536de72eab09242e1faf22fa58d91c9005d6ea51.1657113597.git.geert@linux-m68k.org>
-X-Spam-Status: No, score=-0.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLACK autolearn=no
+Content-Transfer-Encoding: 8bit
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:cdjrlc.com:qybglogicsvr:qybglogicsvr4
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,RDNS_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,T_SPF_HELO_TEMPERROR autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -65,20 +49,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Geert,
+ Delete the redundant word 'to'.
+ Delete the redundant word 'if'.
 
-On Wed, Jul 06, 2022 at 03:20:18PM +0200, Geert Uytterhoeven wrote:
-> Fix various grammar mistakes in the kerneldoc comments documenting the
-> drm_mode_fb_cmd2 structure:
->   - s/is/are/,
->   - s/8 bit/8-bit/.
-> 
-> Signed-off-by: Geert Uytterhoeven <geert@linux-m68k.org>
-> Acked-by: Sam Ravnborg <sam@ravnborg.org>
-> Reviewed-by: Simon Ser <contact@emersion.fr>
+Signed-off-by: Jilin Yuan <yuanjilin@cdjrlc.com>
+---
+ drivers/net/wireless/intel/iwlegacy/4965-mac.c | 2 +-
+ drivers/net/wireless/intel/iwlegacy/common.c   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Thanks, documentation updates are always good.
-Applied to drm-misc (drm-misc-next).
+diff --git a/drivers/net/wireless/intel/iwlegacy/4965-mac.c b/drivers/net/wireless/intel/iwlegacy/4965-mac.c
+index d93900e62e3d..943de47170c7 100644
+--- a/drivers/net/wireless/intel/iwlegacy/4965-mac.c
++++ b/drivers/net/wireless/intel/iwlegacy/4965-mac.c
+@@ -6690,7 +6690,7 @@ il4965_pci_remove(struct pci_dev *pdev)
+ 	sysfs_remove_group(&pdev->dev.kobj, &il_attribute_group);
+ 
+ 	/* ieee80211_unregister_hw call wil cause il_mac_stop to
+-	 * to be called and il4965_down since we are removing the device
++	 * be called and il4965_down since we are removing the device
+ 	 * we need to set S_EXIT_PENDING bit.
+ 	 */
+ 	set_bit(S_EXIT_PENDING, &il->status);
+diff --git a/drivers/net/wireless/intel/iwlegacy/common.c b/drivers/net/wireless/intel/iwlegacy/common.c
+index 8299d89e7505..e40c4c41de10 100644
+--- a/drivers/net/wireless/intel/iwlegacy/common.c
++++ b/drivers/net/wireless/intel/iwlegacy/common.c
+@@ -4816,7 +4816,7 @@ il_check_stuck_queue(struct il_priv *il, int cnt)
+ #define IL_WD_TICK(timeout) ((timeout) / 4)
+ 
+ /*
+- * Watchdog timer callback, we check each tx queue for stuck, if if hung
++ * Watchdog timer callback, we check each tx queue for stuck, if hung
+  * we reset the firmware. If everything is fine just rearm the timer.
+  */
+ void
+-- 
+2.36.1
 
-
-	Sam
